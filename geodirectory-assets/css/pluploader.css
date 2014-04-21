@@ -1,0 +1,77 @@
+/* Pluplodar
+----------------------------------------------------------------------------------------------------*/
+.upload-error {background: red;border: 3px black dashed;display:block !important;clear:both;padding:3px 0;color:#FFF;font-weight:bold;}
+#upload-msg{display:block;clear:both;}
+
+/* SMALL THUMBS START */
+#content .category_grid_view li a.post_img {height:65px;width:90%;overflow:hidden;}
+#content .category_grid_view li a.post_img img{margin:0 auto;display:block;height:65px;}
+
+#content .category_list_view li a.post_img {height:110px;width:165px;overflow:hidden;}
+#content .category_list_view li a.post_img img{margin:0 auto;display:block;height:110px;}
+
+#sidebar .recent_comments li img.thumb {width:40px;}
+.post_img_tiny img{width:35px;}
+.single_post_blog img.alignleft{width:96%;height:auto;}
+.ecu_images {width:100%;}
+/* SMALL THUMBS END */
+
+
+.filelist {
+    width: 100%;
+}
+.filelist .file {
+    padding: 5px;
+    background: #ececec;
+    border: solid 1px #ccc;
+    margin-bottom: 4px;
+	clear:both;
+}
+.filelist .fileprogress {
+    width: 0%;
+    background: #B7C53D;
+    height: 5px;
+}
+.plupload-thumbs {
+	clear:both;
+	margin:20px 0px;
+ 
+}
+.plupload-thumbs .thumb {
+    border: 1px solid #EBEBEB;
+    float: left;
+    height: 50px;
+    margin-right: 15px;
+    width: 50px;
+	margin-bottom:15px;
+	position:relative;
+	padding:5px;
+}
+.plupload-thumbs .thumb.geodir_file {
+    border:none;
+		width:auto;
+   
+}
+.plupload-thumbs .thumb img {
+    width: 100% !important;
+    height: 100% !important;
+}
+.ui-sortable  .thumb img {
+    cursor: pointer;
+	width: 100% !important;
+    height:100% !important;
+}
+
+.plupload-thumbs .thumb .thumbi{
+position:absolute;
+right:-10px;
+top:-8px;
+height:18px;
+width:18px;
+}
+
+.plupload-thumbs .thumb .thumbi a{
+background:url(../images/delete.png) no-repeat 0px 0px;
+text-indent:-8000px;
+display:block;
+}

@@ -1,0 +1,559 @@
+<?php 
+
+function geodir_post_package_info($package_info, $post='', $post_type = '')
+{
+	$package_info['pid'] = 0;
+	$package_info['days'] = 0 ;
+	$package_info['amount'] = 0 ;
+	$package_info['is_featured'] = 0 ;
+	$package_info['image_limit'] = 0 ;
+	$package_info['google_analytics'] = 0 ;
+	
+	return (object)apply_filters('geodir_post_package_info' , $package_info, $post, $post_type);
+	
+}
+
+
+function geodir_send_inquiry($request){
+	global $wpdb;
+	$yourname = $request['inq_name'];
+	$youremail = $request['inq_email'];
+	$inq_phone = $request['inq_phone'];
+	$frnd_comments = $request['inq_msg'];
+	$pid = $request['pid'];
+	
+	$author_id = '';
+	$post_title = '';
+		
+	if($request['pid'])
+	{
+		
+		$productinfosql = $wpdb->prepare(
+												"select ID,post_author,post_title from $wpdb->posts where ID =%d", 
+												array($request['pid'])
+											);
+		$productinfo = $wpdb->get_row($productinfosql);
+		
+		$author_id = $productinfo->post_author;
+		$post_title = $productinfo->post_title;
+	}
+	
+	$post_title = '<a href="'.get_permalink($pid).'">'.$post_title.'</a>'; 
+			
+	$user_info = get_userdata($author_id);
+	$to_email = $user_info->user_email;
+	$to_name = $user_info->first_name;
+	
+	if($to_email=='')
+	{
+		$to_email = get_option('admin_email');	
+	}
+	
+	do_action('geodir_after_send_enquiry', $request, 'Enquiry');
+	
+	$client_message = $frnd_comments;
+	$client_message .= '<br>'.__('From : ',GEODIRECTORY_TEXTDOMAIN).$yourname.'<br>'.__('Phone : ',GEODIRECTORY_TEXTDOMAIN).$inq_phone.'<br><br>'. __('Send from',GEODIRECTORY_TEXTDOMAIN).' - <b><a href="'.get_option('siteurl').'">'.get_option('blogname').'</a></b>.';
+
+	if($to_email)
+	{	
+		geodir_sendEmail($youremail,$yourname,$to_email,$to_name,'',$client_message,$extra='','send_enquiry',$request['pid']);//To client email
+	}
+	
+	$url = get_permalink($pid);
+	if(strstr($url,'?'))
+	  {
+		  $url = $url."&send_inquiry=success";
+	  }else
+	  {
+			$url = $url."?send_inquiry=success";			  
+	  }
+	wp_redirect($url);
+	exit;
+
+}
+
+function geodir_send_friend($request){
+
+	global $wpdb;
+	
+	$yourname = $request['yourname'];
+	$youremail = $request['youremail'];
+	$frnd_subject = $request['frnd_subject'];
+	$frnd_comments = $request['frnd_comments'];
+	$pid = $request['pid'];
+	$to_email = $request['to_email'];
+	$to_name = $request['to_name'];
+	if($request['pid'])
+	{
+		$productinfosql = $wpdb->prepare(
+												"select ID,post_title from $wpdb->posts where ID =%d", 
+												array($request['pid'])
+											);
+		$productinfo = $wpdb->get_results($productinfosql);
+		foreach($productinfo as $productinfoObj)
+		{
+			$post_title = $productinfoObj->post_title; 
+		}
+	}
+	
+	geodir_sendEmail($youremail,$yourname,$to_email,$to_name,$frnd_subject,$frnd_comments,$extra='','send_friend',$request['pid']);//To client email
+		
+	$url = get_permalink($pid);
+	if(strstr($url,'?'))
+	  {
+		  $url = $url."&sendtofrnd=success";
+	  }else
+	  {
+			$url = $url."?sendtofrnd=success";			  
+	  }
+	wp_redirect($url);
+	exit;
+}
+
+function geodir_before_tab_content($hash_key)
+{
+	switch($hash_key)
+	{
+		case 'post_info' :
+			echo '<div class="geodir-company_info field-group">' ;
+			break;
+		case 'post_images' :
+			echo ' <div id="geodir-post-gallery" class="clearfix" >' ;
+			break;
+		case 'reviews' :
+			echo '<div id="reviews-wrap" class="clearfix"> ' ;
+			break;
+		case 'post_video':
+			echo ' <div id="post_video-wrap" class="clearfix">';
+			break;
+		case 'special_offers':
+			echo '<div id="special_offers-wrap" class="clearfix">' ;
+			break;
+	}
+}
+
+function geodir_after_tab_content($hash_key)
+{
+	switch($hash_key)
+	{
+		case 'post_info' :
+			echo '</div>' ;
+			break;
+		case 'post_images' :
+			echo '</div>' ;
+			break;
+		case 'reviews' :
+			echo '</div>' ;
+			break;
+		case 'post_video':
+			echo '</div>';
+			break;
+		case 'special_offers':
+			echo '</div>' ;
+			break;
+	}
+}
+
+
+function geodir_display_tax_sort_options(){
+	
+	global $wp_query;
+	
+	$sort_by = '';
+	
+	if(isset($wp_query->tax_query->queries) && $wp_query->tax_query->queries){
+		$current_term = $wp_query->get_queried_object();
+	}
+	
+	if(isset($_REQUEST['sort_by'])) $sort_by = $_REQUEST['sort_by'];
+	
+	$sort_options = array(
+		'newest' => __('Newest',GEODIRECTORY_TEXTDOMAIN),
+		'oldest' => __('Oldest',GEODIRECTORY_TEXTDOMAIN),
+		'high_rating' => __('Highest Rating',GEODIRECTORY_TEXTDOMAIN),
+		'low_rating' => __('Lowest Rating',GEODIRECTORY_TEXTDOMAIN),
+		'high_review' => __('Highest Reviews',GEODIRECTORY_TEXTDOMAIN),
+		'low_review' => __('Lowest Reviews',GEODIRECTORY_TEXTDOMAIN)
+	);
+	
+	$sort_options = apply_filters('geodir_sort_options', $sort_options); 	
+	
+	if(empty($sort_options) || !isset($current_term->term_id))
+		return false;
+	
+	?>
+		
+		<div class="geodir-tax-sort">
+		
+		<select name="sort_by" id="sort_by" onchange="javascript:window.location=this.value;">
+		
+			<option value="<?php echo add_query_arg( 'sort_by', '' );?>" <?php if($sort_by == '') echo 'selected="selected"';?>>
+			<?php _e('Sort By',GEODIRECTORY_TEXTDOMAIN);?></option>
+			
+			<?php foreach($sort_options as $key => $lable) { ?>
+			
+				<option value="<?php echo add_query_arg( 'sort_by', $key );?>" 
+				<?php if($sort_by == $key) echo 'selected="selected"';?> >
+				<?php echo $lable;?></option>
+			
+			<?php } ?>
+		
+		</select>
+		
+	</div>
+	<?php
+
+}
+
+
+function geodir_get_posts_default_sort($post_type){
+	
+	global $wpdb;
+	
+	if($post_type != ''){
+	
+		$all_postypes = geodir_get_posttypes();
+	
+		if(!in_array($post_type, $all_postypes))
+			return false;
+		
+		$sort_field_info =	$wpdb->get_var($wpdb->prepare("select default_order from ".GEODIR_CUSTOM_SORT_FIELDS_TABLE." where	post_type= %s and is_active=%d and is_default=%d",array($post_type, 1, 1)));
+		
+		if(!empty($sort_field_info))
+			return $sort_field_info;
+		
+	}
+
+}
+
+
+function geodir_get_sort_options($post_type){
+	global $wpdb;
+	
+	if($post_type != ''){
+	
+		$all_postypes = geodir_get_posttypes();
+	
+		if(!in_array($post_type, $all_postypes))
+			return false;
+			
+		
+		$sort_field_info =	$wpdb->get_results($wpdb->prepare("select * from ".GEODIR_CUSTOM_SORT_FIELDS_TABLE." where	post_type= %s and is_active=%d and (sort_asc=1 ||	sort_desc=1 || field_type='random') order by sort_order asc",array($post_type, 1)));
+		
+		return $sort_field_info;
+	}
+
+}
+
+
+function geodir_display_sort_options(){
+	
+	global $wp_query;
+	
+	$sort_by = '';
+		
+	if(isset($_REQUEST['sort_by'])) $sort_by = $_REQUEST['sort_by'];
+	
+	$gd_post_type = geodir_get_current_posttype();
+	
+	$sort_options = geodir_get_sort_options($gd_post_type);
+	
+	
+	$sort_field_options = '';
+			
+	if(!empty($sort_options)){
+		foreach($sort_options as $sort) { 
+			
+			$label = $sort->site_title;
+			
+			if($sort->field_type == 'random'){
+				$key = $sort->field_type;
+				($sort_by == $key || ($sort->is_default == '1' && !isset($_REQUEST['sort_by'])) ) ? $selected = 'selected="selected"' :  $selected = '';	
+				$sort_field_options .= '<option '.$selected.' value="'.add_query_arg( 'sort_by', $key ).'">'.$label.'</option>';
+			}
+			
+			if($sort->sort_asc){
+				 $key = $sort->htmlvar_name.'_asc';
+				 $label = $sort->site_title;
+				 if($sort->asc_title)
+					$label = $sort->asc_title;
+				 ($sort_by == $key || ($sort->is_default == '1' && !isset($_REQUEST['sort_by']))) ? $selected = 'selected="selected"' :  $selected = '';	
+				 $sort_field_options .= '<option '.$selected.' value="'.add_query_arg( 'sort_by', $key ).'">'.$label.'</option>';
+			}
+			
+			if($sort->sort_desc){
+				$key = $sort->htmlvar_name.'_desc';
+				$label = $sort->site_title;
+				if($sort->desc_title)
+					$label = $sort->desc_title;
+				($sort_by == $key || ($sort->is_default == '1' && !isset($_REQUEST['sort_by']))) ? $selected = 'selected="selected"' :  $selected = '';	
+				$sort_field_options .= '<option '.$selected.' value="'.add_query_arg( 'sort_by', $key ).'">'.$label.'</option>';
+			}
+			
+		}
+	}
+	
+	if($sort_field_options != ''){
+		
+		?>
+		
+		<div class="geodir-tax-sort">
+		
+			<select name="sort_by" id="sort_by" onchange="javascript:window.location=this.value;">
+			
+				<option value="<?php echo add_query_arg( 'sort_by', '' );?>" <?php if($sort_by == '') echo 'selected="selected"';?>><?php _e('Sort By',GEODIRECTORY_TEXTDOMAIN);?></option><?php 
+			
+				echo $sort_field_options;?>
+			
+			</select>
+		
+		</div>
+		<?php
+	
+	}
+
+}
+
+
+function geodir_sort_options_update($sort_options){
+	
+	global $wp_query, $default_sort;
+	
+	if(isset($wp_query->tax_query->queries) && $wp_query->tax_query->queries){
+		$current_term = $wp_query->get_queried_object();
+	}
+	
+	if(isset($current_term->term_id)){
+		
+		$hide_review = get_tax_meta($current_term->term_id,'ct_cat_exclude_reviews');
+
+		if($hide_review){
+			unset($sort_options['high_review']);
+			unset($sort_options['low_review']);
+		}
+		
+		$hide_rating = get_tax_meta($current_term->term_id,'ct_cat_exclude_rating');
+
+		if($hide_rating){
+			unset($sort_options['high_rating']);
+			unset($sort_options['low_rating']);
+		}
+		
+		$hide_newest = get_tax_meta($current_term->term_id,'ct_cat_include_newest');
+		
+		if(!$hide_newest){
+			unset($sort_options['newest']);
+			unset($sort_options['oldest']);
+		}
+		
+		$show_random = get_tax_meta($current_term->term_id,'ct_cat_include_random');
+
+		if($show_random)
+			$sort_options['random'] = __('Random',GEODIRECTORY_TEXTDOMAIN);
+		
+		$show_az = get_tax_meta($current_term->term_id,'ct_cat_include_az');
+
+		if($show_az)
+			$sort_options['az'] = __('Alphabetical',GEODIRECTORY_TEXTDOMAIN);
+				
+	}
+	
+	return $sort_options;
+}
+
+function geodir_advance_customfields_heading($title, $field_type){
+	
+	if(in_array($field_type,array('multiselect','textarea', 'taxonomy'))){
+		$title = '';
+	}
+	return $title;
+}
+
+
+function geodir_related_posts_display($request){
+	
+	if(!empty($request)){
+		
+		$title =( isset($request['title']) && !empty($request['title'])) ? $request['title'] : __('Related Listing',GEODIRECTORY_TEXTDOMAIN);
+		$post_number =(isset($request['post_number']) && !empty($request['post_number'])) ? $request['post_number'] : '5' ;
+		$relate_to = (isset($request['relate_to']) && !empty($request['relate_to'])) ? $request['relate_to'] : 'category';
+		$layout = (isset($request['layout']) && !empty($request['layout'])) ? $request['layout'] : 'gridview_onehalf';
+		$add_location_filter = (isset($request['add_location_filter']) && !empty($request['add_location_filter'])) ? $request['add_location_filter'] : '0';
+		$listing_width = (isset($request['listing_width']) && !empty($request['listing_width'])) ? $request['listing_width'] : '';
+		$list_sort = (isset($request['list_sort']) && !empty($request['list_sort'])) ? $request['list_sort'] : 'latest';
+		$character_count = (isset($request['character_count']) && !empty($request['character_count'])) ? $request['character_count'] : 20;
+		
+		global $wpdb,$post;
+		
+		$post_type = '';
+		$post_id = '';
+		$category_taxonomy = '';
+		$tax_field = 'id';
+		$category = array();
+		
+		if(isset($_REQUEST['backandedit'])){
+			$post = (object)unserialize($_SESSION['listing']);
+			$post_type = $post->listing_type;	
+			if(isset($_REQUEST['pid']) && $_REQUEST['pid'] != '')
+				$post_id = $_REQUEST['pid'];
+		}elseif(isset($_REQUEST['pid']) && $_REQUEST['pid'] != ''){
+			$post = geodir_get_post_info($_REQUEST['pid']);
+			$post_type = $post->post_type;
+			$post_id = $_REQUEST['pid'];
+		}elseif(isset($post->post_type) && $post->post_type != ''){
+			$post_type = $post->post_type;
+			$post_id = $post->ID;
+		}
+		
+		if($relate_to == 'category'){
+		
+			$category_taxonomy = $post_type.$relate_to;
+			if($post->$category_taxonomy!= '')
+				$category = explode(',',trim($post->$category_taxonomy, ','));
+				
+		}elseif($relate_to == 'tags'){
+		
+			$category_taxonomy = $post_type.'_'.$relate_to;
+			if($post->post_tags!= '')
+				$category = explode(',',trim($post->post_tags, ','));
+			$tax_field = 'name';
+		}
+		
+		/* --- return false in invalid request --- */
+		if(empty($category))
+			return false;
+		
+		$all_postypes = geodir_get_posttypes();
+	
+		if(!in_array($post_type, $all_postypes))
+			return false;
+		
+		/* --- return false in invalid request --- */
+			
+		$location_url = '';
+		if($add_location_filter != '0'){
+			$location_url = array();
+			if( get_query_var('gd_city') ){
+				
+				if(get_option('geodir_show_location_url') == 'all'){
+					if($country = get_query_var('gd_country'))
+						$location_url[] = $country;
+					
+					if($region = get_query_var('gd_region'))
+						$location_url[] = $region;
+				}		
+				
+				if($city = get_query_var('gd_city'))
+					$location_url[] = $city;
+				
+			}else{
+			
+				$location = geodir_get_default_location();
+				
+				if(get_option('geodir_show_location_url') == 'all'){
+					$location_url[] = isset($location->country_slug) ? $location->country_slug : '';
+					$location_url[] = isset($location->region_slug) ? $location->region_slug : '';
+				}
+				$location_url[] = isset($location->city_slug) ? $location->city_slug : '';
+			}
+			
+			$location_url = implode("/",$location_url);
+			
+		}
+		
+		
+		if(!empty($category)){
+			global $geodir_add_location_url;
+			$geodir_add_location_url = '0';
+			if($add_location_filter != '0'){
+				$geodir_add_location_url = '1';
+			}
+			$viewall_url = get_term_link( (int)$category[0], $post_type.$category_taxonomy);
+			$geodir_add_location_url = NULL;
+		}
+		
+		ob_start();
+		?>
+		
+		
+				<div class="geodir_locations geodir_location_listing">
+   						
+							<?php if(isset($request['is_widget']) && $request['is_widget'] == '1'){?>
+							<div class="locatin_list_heading clearfix">
+								<h3><?php echo ucfirst($title);?></h3> 
+							</div><?php }
+							
+					
+								$query_args = array(
+									'posts_per_page' => $post_number,
+									'is_geodir_loop' => true,
+									'gd_location' 	 => ($add_location_filter) ? true : false,
+									'post_type' => $post_type,
+									'order_by' =>$list_sort,
+									'post__not_in'   => array($post_id),
+									'excerpt_length' => $character_count,
+									);
+									
+									$tax_query = array( 'taxonomy' => $category_taxonomy,
+														'field' => $tax_field,
+														'terms' => $category
+														);
+									
+									$query_args['tax_query'] = array( $tax_query );
+								
+								
+								global $gridview_columns;
+							
+								query_posts( $query_args );
+								
+								if(strstr($layout,'gridview')){
+									
+									$listing_view_exp = explode('_',$layout);
+									
+									$gridview_columns = $layout;
+									
+									$layout = $listing_view_exp[0];
+									
+								}
+								
+								if($layout == 'gridview'){
+									
+									$template = apply_filters( "geodir_template_part-related-listing-gridview", geodir_plugin_path() . '/geodirectory-templates/listing-gridview.php' );
+								
+								}else{
+									
+									$template = apply_filters( "geodir_template_part-related-listing-listview", geodir_plugin_path() . '/geodirectory-templates/listing-listview.php' );
+								}
+								
+								include( $template );
+							  
+								wp_reset_query();
+							 ?>
+						   
+						</div>						
+		<?php
+		return $html = ob_get_clean();
+		
+	}
+
+}
+//-----count post according term --------
+add_action('wp_footer','geodir_category_count_script',10);
+function geodir_category_count_script()
+{
+	global $geodir_post_category_str;
+	$all_var['post_category_array'] = html_entity_decode( (string) $geodir_post_category_str, ENT_QUOTES, 'UTF-8');
+	$script = "var post_category_array = ".json_encode($all_var).';';
+	echo '<script>';
+		echo $script ;	
+	echo '</script>';
+
+}
+
+function geodir_get_map_default_language()
+{
+	$geodir_default_map_language = get_option('geodir_default_map_language');
+	if(empty($geodir_default_map_language))
+		$geodir_default_map_language ='en' ;
+	return apply_filters('geodir_default_map_language' , $geodir_default_map_language);
+}
