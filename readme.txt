@@ -1,14 +1,14 @@
 === GeoDirectory ===
 Contributors: stiofansisland, paoltaia, rightmentor
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=payments@nomaddevs.com&item_name=Donation+for+WPLF
-Tags: directory, local directory, global directory, regional directory, city directory,  niche directory, geolocation, googlemaps, city portal, custom post type, widgets, front end submission, 
+Tags:  address book, addressbook, addresses, bio, biographies, bios, business, business directory plugin, business-directory, businesses, church, connect, connections, contact, contacts, directories, directory, directory plugin, directory widget, hcalendar, hcard, ical, icalendar, image, images, list, listings, lists, member directory, members directories, members directory, microformat, microformats, page, pages, people, plugin, Post, posts, profile, profiles, shortcode, staff, user, users, vcard, wordpress business directory, wordpress directory, wordpress directory plugin 
 Requires at least: 3.1
 Tested up to: 3.9
 Stable tag: 1.0.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-A superior and extendible Directory plugin to create beautiful local directories.
+A superior and extendible Directory plugin to create beautiful local, business  directories.
 
 == Description ==
 
@@ -105,3 +105,4 @@ initial release
 == Upgrade Notice ==
 
 = none =
+
