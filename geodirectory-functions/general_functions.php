@@ -58,8 +58,9 @@ function geodir_getlink($url,$params=array(),$use_existing_arguments=false) {
     if($use_existing_arguments) $params = $params + $_GET;
     if(!$params) return $url;
     $link = $url;
-    if(strpos($link,'?') === false) $link .= '?'; //If there is no '?' add one at the end
-    elseif(!preg_match('/(\?|\&(amp;)?)$/',$link)) $link .= '&'; //If there is no '&' at the END, add one.
+   if(strpos($link,'?') === false) $link .= '?'; //If there is no '?' add one at the end
+   elseif(strpos($link,'//maps.google.com/maps/api/js?sensor=false&language=')) $link .= '&amp;'; //If there is no '&' at the END, add one.
+   elseif(!preg_match('/(\?|\&(amp;)?)$/',$link)) $link .= '&'; //If there is no '&' at the END, add one.
     
     $params_arr = array();
     foreach($params as $key=>$value) {
@@ -347,9 +348,9 @@ function geodir_sendEmail($fromEmail,$fromEmailName,$toEmail,$toEmailName,$to_su
 		$posted_date = $post_info->post_date;
 		$listingLink ='<a href="'.$productlink.'"><b>'.$post_info->post_title.'</b></a>';
 	}
-	$siteurl = site_url();
+	$siteurl = home_url();
 	$siteurl_link = '<a href="'.$siteurl.'">'.$siteurl.'</a>';
-	$loginurl = site_url().'/?geodir_signup=true';
+	$loginurl = home_url().'/?geodir_signup=true';
 	$loginurl_link = '<a href="'.$loginurl.'">login</a>';
 	
 	if($fromEmail==''){$fromEmail = get_option('site_email_name');}
@@ -474,7 +475,7 @@ function geodir_breadcrumb($saprator = ' > ') {
 			elseif( get_query_var($gd_post_type.'_tags') )
 				$gd_taxonomy = $gd_post_type.'_tags';
 			
-			$breadcrumb .= $saprator.'<a href="'.$archive_link.'">' . ucfirst($post_type_info->label) .'</a>';
+			$breadcrumb .= $saprator.'<a href="'.$listing_link.'">' . ucfirst($post_type_info->label) .'</a>';
 				
 				
 			if(!empty($gd_taxonomy)){
@@ -515,10 +516,15 @@ function geodir_breadcrumb($saprator = ' > ') {
 						$link = $cat_link.$current_term_link;
 					}else{
 						$cat_link .= $request_term."/";
-						$link = $cat_link.$current_term_link;
+						//$link = $cat_link.$current_term_link;
 					}
 					
-					$breadcrumb .= $saprator.'<a href="'.$link.'">' . ucwords($cat_name) .'</a>';
+					if($link)
+						$breadcrumb .= $saprator.'<a href="'.$link.'">' . ucwords($cat_name) .'</a>';
+					else
+						$breadcrumb .= $saprator.'<a href="'.$cat_link.'">' . ucwords($cat_name) .'</a>';
+					
+					
 				}
 			
 			}
@@ -541,7 +547,7 @@ function geodir_breadcrumb($saprator = ' > ') {
 			if(is_post_type_archive() && empty($gd_taxonomy))
 				$breadcrumb .= $saprator . ucwords($post_type_info->label);	
 			else
-				$breadcrumb .= $saprator.'<a href="'.$archive_link.'">' . ucwords($post_type_info->label) .'</a>';
+				$breadcrumb .= $saprator.'<a href="'.$listing_link.'">' . ucwords($post_type_info->label) .'</a>';
 				
 			if(!empty($gd_taxonomy)){
 						
@@ -615,7 +621,7 @@ function geodir_breadcrumb($saprator = ' > ') {
 			if(isset($_REQUEST['list'])){
 				$author_link = geodir_getlink($author_link,array('geodir_dashbord'=>'true','stype'=>$_REQUEST['stype']),false);
 				$breadcrumb .= $saprator.'<a href="'.$author_link.'">' . ucfirst($post_type_info->label).'</a>';
-				$breadcrumb .= $saprator . ucfirst(__('My ',GEODIRECTORY_TEXTDOMAIN).$_REQUEST['list']);
+				$breadcrumb .= $saprator . ucfirst(__('My',GEODIRECTORY_TEXTDOMAIN).' '.$_REQUEST['list']);
 			}else
 				$breadcrumb .= $saprator . ucfirst($post_type_info->label);
 				
@@ -634,9 +640,9 @@ function geodir_breadcrumb($saprator = ' > ') {
             $breadcrumb .= stripslashes(get_the_title());
             $breadcrumb .= '</li>';}
 		elseif (is_tag()) {$saprator.single_tag_title();}
-		elseif (is_day()) {$breadcrumb .= "<li> ".$saprator.__(" Archive for ",GEODIRECTORY_TEXTDOMAIN); the_time('F jS, Y'); $breadcrumb .=  '</li>';}
-		elseif (is_month()) {$breadcrumb .= "<li> ".$saprator.__(" Archive for ",GEODIRECTORY_TEXTDOMAIN); the_time('F, Y'); $breadcrumb .=  '</li>';}
-		elseif (is_year()) {$breadcrumb .=   "<li> ".$saprator.__(" Archive for ",GEODIRECTORY_TEXTDOMAIN); the_time('Y'); $breadcrumb .= '</li>';}
+		elseif (is_day()) {$breadcrumb .= "<li> ".$saprator.__(" Archive for",GEODIRECTORY_TEXTDOMAIN)." "; the_time('F jS, Y'); $breadcrumb .=  '</li>';}
+		elseif (is_month()) {$breadcrumb .= "<li> ".$saprator.__(" Archive for",GEODIRECTORY_TEXTDOMAIN)." "; the_time('F, Y'); $breadcrumb .=  '</li>';}
+		elseif (is_year()) {$breadcrumb .=   "<li> ".$saprator.__(" Archive for",GEODIRECTORY_TEXTDOMAIN)." "; the_time('Y'); $breadcrumb .= '</li>';}
 		elseif (is_author()) {$breadcrumb .= "<li> ".$saprator.__(" Author Archive",GEODIRECTORY_TEXTDOMAIN); $breadcrumb .= '</li>';}
 		elseif (isset($_GET['paged']) && !empty($_GET['paged'])) {$breadcrumb .= "<li>".$saprator.__("Blog Archives",GEODIRECTORY_TEXTDOMAIN); $breadcrumb .= '</li>';}
 		elseif (is_search()) {$breadcrumb .= "<li> ".$saprator.__(" Search Results",GEODIRECTORY_TEXTDOMAIN); $breadcrumb .= '</li>';}
@@ -670,6 +676,7 @@ function geodir_allow_wpadmin(){
 /* Move Images from a url to upload directory */
 function fetch_remote_file( $url ) {
 	// extract the file name and extension from the url
+	require_once(ABSPATH . 'wp-includes/pluggable.php');
 	$file_name = basename( $url );
 
 	// get placeholder file in the upload dir with a unique, sanitized filename

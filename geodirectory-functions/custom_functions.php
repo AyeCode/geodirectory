@@ -6,7 +6,7 @@ function geodir_post_package_info($package_info, $post='', $post_type = '')
 	$package_info['days'] = 0 ;
 	$package_info['amount'] = 0 ;
 	$package_info['is_featured'] = 0 ;
-	$package_info['image_limit'] = 0 ;
+	$package_info['image_limit'] ='';
 	$package_info['google_analytics'] = 0 ;
 	
 	return (object)apply_filters('geodir_post_package_info' , $package_info, $post, $post_type);
@@ -41,7 +41,7 @@ function geodir_send_inquiry($request){
 	$post_title = '<a href="'.get_permalink($pid).'">'.$post_title.'</a>'; 
 			
 	$user_info = get_userdata($author_id);
-	$to_email = $user_info->user_email;
+	$to_email = geodir_get_post_meta($pid,'geodir_email',true);
 	$to_name = $user_info->first_name;
 	
 	if($to_email=='')
@@ -52,7 +52,7 @@ function geodir_send_inquiry($request){
 	do_action('geodir_after_send_enquiry', $request, 'Enquiry');
 	
 	$client_message = $frnd_comments;
-	$client_message .= '<br>'.__('From : ',GEODIRECTORY_TEXTDOMAIN).$yourname.'<br>'.__('Phone : ',GEODIRECTORY_TEXTDOMAIN).$inq_phone.'<br><br>'. __('Send from',GEODIRECTORY_TEXTDOMAIN).' - <b><a href="'.get_option('siteurl').'">'.get_option('blogname').'</a></b>.';
+	$client_message .= '<br>'.__('From :',GEODIRECTORY_TEXTDOMAIN).' '.$yourname.'<br>'.__('Phone :',GEODIRECTORY_TEXTDOMAIN).' '.$inq_phone.'<br><br>'. __('Send from',GEODIRECTORY_TEXTDOMAIN).' - <b><a href="'.get_option('siteurl').'">'.get_option('blogname').'</a></b>.';
 
 	if($to_email)
 	{	
@@ -542,7 +542,12 @@ add_action('wp_footer','geodir_category_count_script',10);
 function geodir_category_count_script()
 {
 	global $geodir_post_category_str;
-	$all_var['post_category_array'] = html_entity_decode( (string) $geodir_post_category_str, ENT_QUOTES, 'UTF-8');
+	
+	if(!empty($geodir_post_category_str)){
+		$geodir_post_category_str = serialize($geodir_post_category_str);
+	}
+	
+	$all_var['post_category_array']  = html_entity_decode( (string) $geodir_post_category_str, ENT_QUOTES, 'UTF-8');
 	$script = "var post_category_array = ".json_encode($all_var).';';
 	echo '<script>';
 		echo $script ;	
@@ -556,4 +561,348 @@ function geodir_get_map_default_language()
 	if(empty($geodir_default_map_language))
 		$geodir_default_map_language ='en' ;
 	return apply_filters('geodir_default_map_language' , $geodir_default_map_language);
+}
+
+
+function geodir_add_meta_keywords()
+{
+	global $post,$wp_query;
+	
+	$current_term = $wp_query->get_queried_object();
+	
+	$all_postypes = geodir_get_posttypes();
+	
+	?>
+		<meta name="description" content="<?php if (have_posts() && is_single() OR is_page()){while(have_posts()){the_post();
+					$out_excerpt = str_replace(array("\r\n", "\r", "\n"), "", get_the_excerpt());
+					echo strip_tags($out_excerpt);
+				}
+			}
+			elseif(is_category() || is_tag()){
+				if(is_category()){
+					echo __("Posts related to Category:", GEODIRECTORY_TEXTDOMAIN)." ".ucfirst(single_cat_title("", FALSE));
+				}elseif(is_tag()){ 
+					echo __("Posts related to Tag:", GEODIRECTORY_TEXTDOMAIN)." ".ucfirst(single_tag_title("", FALSE));
+				}
+			}
+			elseif(isset($current_term->taxonomy)){
+				echo isset($current_term->description) ? $current_term->description : '';
+			}
+			 ?>" />
+		
+		<meta name="keywords" content="<?php 
+		if(isset($post->post_type) && in_array($post->post_type, $all_postypes)){
+		
+			$place_tags = wp_get_post_terms($post->ID, $post->post_type.'_tags', array("fields" => "names"));
+			$place_cats = wp_get_post_terms($post->ID, $post->post_type.'category', array("fields" => "names"));	
+			echo implode(", ", array_merge((array)$place_cats, (array)$place_tags));	
+		
+		}else{
+		
+			$posttags = get_the_tags();
+			
+			if ($posttags) {
+				foreach($posttags as $tag) {
+					echo $tag->name . ' '; 
+				}
+				
+			}else{
+			
+				$tags = get_tags(array('orderby' => 'count', 'order' => 'DESC'));
+				
+				$xt = 1;
+					foreach ($tags as $tag) {
+						if ($xt <= 20) {
+							echo $tag->name.", ";
+						}
+						$xt++;
+					}
+			}
+		}
+		?>" />
+		<?php
+}
+
+/* =================================== start code for detail page tabs */
+
+
+function geodir_detail_page_tabs_key_value_array()
+{
+	$geodir_detail_page_tabs_key_value_array = array();
+	
+	$geodir_detail_page_tabs_array = geodir_detail_page_tabs_array();
+	
+	foreach($geodir_detail_page_tabs_array as $key => $tabs_obj)
+	{
+		$geodir_detail_page_tabs_key_value_array[$key] = $tabs_obj['heading_text'];
+	}
+	return 	$geodir_detail_page_tabs_key_value_array;
+}
+/**/
+
+function geodir_detail_page_tabs_array(){
+
+		$arr_tabs = array();
+		$arr_tabs['post_profile'] =	array( 
+																'heading_text' =>  __('Profile',GEODIRECTORY_TEXTDOMAIN),
+																'is_active_tab' => true,
+																'is_display' => apply_filters('geodir_detail_page_tab_is_display', true, 'post_profile'),
+																'tab_content' => ''
+																);
+		$arr_tabs['post_info'] = 		array( 
+																'heading_text' =>  __('More Info',GEODIRECTORY_TEXTDOMAIN),
+																'is_active_tab' => false,
+																'is_display' => apply_filters('geodir_detail_page_tab_is_display', true, 'post_info'),
+																'tab_content' => ''
+																);
+
+		$arr_tabs['post_images'] = 	array( 
+																'heading_text' =>  __('Photo',GEODIRECTORY_TEXTDOMAIN),
+																'is_active_tab' => false,
+																'is_display' => apply_filters('geodir_detail_page_tab_is_display', true, 'post_images'),
+																'tab_content' => ''
+																);
+
+		$arr_tabs['post_video'] =	array( 
+															'heading_text' =>  __('Video',GEODIRECTORY_TEXTDOMAIN),
+															'is_active_tab' => false,
+															'is_display' =>  apply_filters('geodir_detail_page_tab_is_display', true, 'post_video'),
+															'tab_content' => ''
+															);
+
+		$arr_tabs['special_offers'] = array( 
+															'heading_text' =>  __('Special Offers',GEODIRECTORY_TEXTDOMAIN),
+															'is_active_tab' => false,
+															'is_display' =>  apply_filters('geodir_detail_page_tab_is_display', true, 'special_offers'),
+															'tab_content' => ''
+															);
+
+		$arr_tabs['post_map'] = 	array(
+														'heading_text' =>  __('Map',GEODIRECTORY_TEXTDOMAIN),
+														'is_active_tab' => false,
+														'is_display' =>  apply_filters('geodir_detail_page_tab_is_display', true, 'post_map'),
+														'tab_content' => ''
+														);
+	
+		$arr_tabs['reviews'] = 	array( 
+														'heading_text' =>  __('Reviews',GEODIRECTORY_TEXTDOMAIN),
+														'is_active_tab' => false,
+														'is_display' =>  apply_filters('geodir_detail_page_tab_is_display', true, 'reviews'),
+														'tab_content' => 'review display'
+														);
+		
+		$arr_tabs['related_listing'] = array( 
+														'heading_text' =>  __('Related Listing',GEODIRECTORY_TEXTDOMAIN),
+														'is_active_tab' => false,
+														'is_display' =>  apply_filters('geodir_detail_page_tab_is_display', true, 'related_listing'),
+														'tab_content' => ''
+														);
+	
+	return apply_filters('geodir_detail_page_tab_list_extend' ,$arr_tabs )	;
+	
+	
+}
+
+
+function geodir_detail_page_tabs_list(){
+	
+	
+	$tabs_excluded  = get_option('geodir_detail_page_tabs_excluded');
+	$tabs_array = geodir_detail_page_tabs_array();
+	if(!empty($tabs_excluded)){
+			foreach($tabs_excluded as $tab)
+			{
+				if(array_key_exists($tab, $tabs_array))
+					unset($tabs_array[$tab]);
+			}
+	}
+	return $tabs_array ;
+
+}
+
+
+
+function geodir_show_detail_page_tabs(){
+	
+	global $post,$post_images,$video,$special_offers, $related_listing,$geodir_post_detail_fields;
+	
+	$geodir_post_detail_fields = geodir_show_listing_info('detail');
+	
+	if(geodir_is_page('detail')){
+	
+		$video = geodir_get_video($post->ID);
+		$special_offers = geodir_get_special_offers($post->ID);
+		$related_listing_array = array();
+		if(get_option('geodir_add_related_listing_posttypes'))
+			$related_listing_array = get_option('geodir_add_related_listing_posttypes');
+		
+		$related_listing = '';
+		if(in_array($post->post_type, $related_listing_array))
+		{	
+			$request = array('post_number'=>get_option('geodir_related_post_count'),
+								'relate_to'=>get_option('geodir_related_post_relate_to'),
+								'layout'=>get_option('geodir_related_post_listing_view'),
+								'add_location_filter'=>get_option('geodir_related_post_location_filter'),
+								'list_sort'=>get_option('geodir_related_post_sortby'),
+								'character_count'=>get_option('geodir_related_post_excerpt'));
+						
+						$related_listing = geodir_related_posts_display($request);
+		}
+		
+		$post_images = geodir_get_images($post->ID,'thumbnail');
+		$thumb_image = '';
+		if(!empty($post_images)){
+			foreach($post_images as $image){
+				$thumb_image .=	'<a href="'.$image->src.'">';
+				$thumb_image .= geodir_show_image($image,'thumbnail',true,false);
+				$thumb_image .= '</a>';
+			}
+		}
+		
+		$map_args = array();
+		$map_args['map_canvas_name'] = 'detail_page_map_canvas' ;
+		$map_args['width'] = '600';
+		$map_args['height'] = '300';
+		if($post->post_mapzoom){$map_args['zoom'] = ''.$post->post_mapzoom.'';}
+		$map_args['autozoom'] = false;
+		$map_args['child_collapse'] = '0';
+		$map_args['enable_cat_filters'] = false;
+		$map_args['enable_text_search'] = false;
+		$map_args['enable_post_type_filters'] = false;
+		$map_args['enable_location_filters'] = false;
+		$map_args['enable_jason_on_load'] = true;
+		$map_args['enable_map_direction'] = true;
+		
+	}elseif(geodir_is_page('preview')){
+		
+		$video = isset($post->geodir_video) ? $post->geodir_video : '';
+		$special_offers = isset($post->geodir_special_offers) ? $post->geodir_special_offers : '';
+		
+		if(isset($post->post_images))
+		$post->post_images = trim($post->post_images,",");
+		
+		if(isset($post->post_images) && !empty($post->post_images))
+			$post_images = explode(",",$post->post_images);
+		
+		$thumb_image = '';
+		if(!empty($post_images)){
+			foreach($post_images as $image){
+				if($image != ''){	   
+					$thumb_image .=	'<a href="'.$image.'">';
+					$thumb_image .= geodir_show_image(array('src'=>$image),'thumbnail',true,false);
+					$thumb_image .= '</a>';	
+				}
+			}
+		}
+		
+		global $map_jason ;
+		$map_jason[] = $post->marker_json;
+		
+		$address_latitude = isset($post->post_latitude) ? $post->post_latitude : '';
+		$address_longitude = isset($post->post_longitude) ? $post->post_longitude : '';
+		$mapview = isset($post->post_mapview) ? $post->post_mapview : '';
+		$mapzoom = isset($post->post_mapzoom) ? $post->post_mapzoom : '';
+		if(!$mapzoom){$mapzoom=12;}
+		
+		$map_args = array();
+		$map_args['map_canvas_name'] = 'preview_map_canvas' ;
+		$map_args['width'] = '950';
+		$map_args['height'] = '300';
+		$map_args['child_collapse'] = '0';
+		$map_args['maptype'] = $mapview;
+		$map_args['autozoom'] =  false;
+		$map_args['zoom'] =  "$mapzoom";
+		$map_args['latitude'] = $address_latitude;
+		$map_args['longitude'] = $address_longitude;
+		$map_args['enable_cat_filters'] = false;
+		$map_args['enable_text_search'] = false;
+		$map_args['enable_post_type_filters'] = false;
+		$map_args['enable_location_filters'] = false;
+		$map_args['enable_jason_on_load'] = true;
+		$map_args['enable_map_direction'] = true;
+
+	}
+	
+	?>
+	
+	<div class="geodir-tabs" id="gd-tabs" style="position:relative;">
+                   <dl class="geodir-tab-head">
+                   <?php do_action('geodir_before_tab_list') ; ?>
+                   <?php 
+				   		$arr_detail_page_tabs = geodir_detail_page_tabs_list();
+						foreach($arr_detail_page_tabs as $tab_index => $detail_page_tab)
+						{
+							if($detail_page_tab['is_display'])
+							{
+						?>	<dt></dt> <!-- added to comply with validation -->
+                            <dd <?php if($detail_page_tab['is_active_tab']){?>class="geodir-tab-active"<?php }?> >
+                                <a data-tab="#<?php echo $tab_index;?>" data-status="enable"><?php echo $detail_page_tab['heading_text'] ;?></a>
+                            </dd>
+                            
+							<?php
+                            ob_start() // start tab content buffering 
+                            ?>
+							 <li id="<?php echo $tab_index;?>Tab" <?php if($tab_index=='post_profile'){echo 'itemprop="description"';}?>>
+                             	<div id="<?php echo $tab_index;?>"  class="hash-offset"></div>
+                             <?php 
+							 	do_action('geodir_before_tab_content' ,$tab_index );
+								do_action('geodir_before_' . $tab_index.'_tab_content');
+						   		/// write a code to generate content of each tab 
+								switch($tab_index){
+						   			case 'post_profile':
+											do_action('geodir_before_description_on_listing_detail');
+											if(geodir_is_page('detail')){ the_content(); }else { echo apply_filters( 'the_content', stripslashes($post->post_desc) ) ;}
+											do_action('geodir_after_description_on_listing_detail');
+										break;
+						  	 	case 'post_info':
+								        echo $geodir_post_detail_fields;
+                               			break;
+								case 'post_images':
+								       echo $thumb_image;
+									break;
+								case 'post_video':
+									echo $video; 
+									break;
+								case 'special_offers':
+									echo wpautop(stripslashes($special_offers));
+								
+                                  	break;
+								case 'post_map':
+									geodir_draw_map($map_args);
+									break;	
+								case 'reviews':
+									comments_template(); 
+									break;
+								case 'related_listing':
+									echo $related_listing;
+									break;		
+								default:
+									break;
+						   	}
+							do_action('geodir_after_tab_content' ,$tab_index );
+						   	do_action('geodir_after_' . $tab_index.'_tab_content');
+							?> </li>
+                           <?php 
+						  	$arr_detail_page_tabs[$tab_index]['tab_content'] = apply_filters("geodir_modify_" .$detail_page_tab['tab_content']. "_tab_content"  ,  ob_get_clean()) ;
+						  } // end of if for is_display
+						}// end of foreach
+						
+						do_action('geodir_after_tab_list') ; 
+					 ?>
+                    </dl>
+                   <ul class="geodir-tabs-content entry-content" style="z-index:-999; position:relative;">
+                   		<?php 
+						foreach($arr_detail_page_tabs as $detail_page_tab)
+						{
+							if($detail_page_tab['is_display'] && !empty($detail_page_tab['tab_content']))
+							{
+								echo $detail_page_tab['tab_content'] ;
+                        	}// end of if 
+						}// end of foreach 
+						 do_action('geodir_add_tab_content') ; ?>
+                    </ul> <!--gd-tabs-content ul end-->
+               </div>
+	
+	<?php
+
 }

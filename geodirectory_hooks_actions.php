@@ -168,7 +168,7 @@ add_action('wp_footer','geodir_localize_all_js_msg');
 add_action('admin_head-media-upload-popup','geodir_localize_all_js_msg');
 add_action('customize_controls_print_footer_scripts','geodir_localize_all_js_msg');
 
-
+add_action('wp_head', 'geodir_add_meta_keywords');
 
 /* Sharelocation scripts */
 //global $geodir_addon_list;
@@ -349,13 +349,16 @@ function geodir_social_sharing_buttons()
                 <div class="likethis">
                     	 <a href="http://twitter.com/share" class="twitter-share-button"><?php _e('Tweet',GEODIRECTORY_TEXTDOMAIN);?></a>
                         <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script> 
-                    	<iframe <?php if (isset($_SERVER['HTTP_USER_AGENT']) && (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)){echo 'allowtransparency="true"'; }?> class="facebook" src="http://www.facebook.com/plugins/like.php?href=<?php echo urlencode(get_permalink($post->ID)); ?>&amp;layout=button_count&amp;show_faces=false&amp;width=100&amp;action=like&amp;colorscheme=light" scrolling="no" frameborder="0"  style="border:none; overflow:hidden; width:100px; height:20px"></iframe> 
+                    	<iframe <?php if (isset($_SERVER['HTTP_USER_AGENT']) && (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)){echo 'allowtransparency="true"'; }?> class="facebook" src="http://www.facebook.com/plugins/like.php?href=<?php echo urlencode(get_permalink($post->ID)); ?>&amp;layout=button_count&amp;show_faces=false&amp;width=100&amp;action=like&amp;colorscheme=light" style="border:none; overflow:hidden; width:100px; height:20px"></iframe> 
                     
-                        <div id="plusone-div"></div>
-                        <script type="text/javascript" src="https://apis.google.com/js/plusone.js">
-                         { parsetags: 'explicit' }
-                         </script>
-                        <script type="text/javascript">gapi.plusone.render('plusone-div', {"size": "medium", "count": "true" });</script>                    
+                        <div id="plusone-div" class="g-plusone" data-size="small"></div>
+                        <script type="text/javascript">
+						  (function() {
+							var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+							po.src = 'https://apis.google.com/js/platform.js';
+							var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+						  })();
+						</script>                    
                  </div>
 <?php
 	}// end of if, if its a preview or not
@@ -379,10 +382,19 @@ function geodir_share_this_button()
                 <div class="share clearfix">
                 	
                     <div class="addthis_toolbox addthis_default_style">
+                     <span id='st_sharethis' ></span>
                         <script type="text/javascript">var switchTo5x=false;</script>
                         <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
-                        <script type="text/javascript">stLight.options({publisher: "f47874ba-eaf2-4978-a27d-52ad4db5140e", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
-                        <span class='st_sharethis' displayText='Share'></span>
+                        <script type="text/javascript">stLight.options({publisher: "f47874ba-eaf2-4978-a27d-52ad4db5140e", doNotHash: false, doNotCopy: false, hashAddressBar: false});
+						stWidget.addEntry({
+						"service":"sharethis",
+						"element":document.getElementById('st_sharethis'),
+						"url":"http://sharethis.com",
+						"title":"sharethis",
+						"type":"chicklet",
+						"text":"<?php _e( 'Share', GEODIRECTORY_TEXTDOMAIN );?>"    
+						});</script>
+                       
                     </div>
                     
                 </div>
@@ -483,23 +495,22 @@ function geodir_detail_page_review_rating()
 		
 			$html .= geodir_get_rating_stars($post_avgratings,$post->ID);
 			
-			$html .= '<div class="hreview-aggregate">';
+			$html .= '<div class="average-review" itemscope itemtype="http://data-vocabulary.org/Review-aggregate">';
 			 
 		 	$post_avgratings = is_float($post_avgratings) ? number_format($post_avgratings, 1, '.', '') : $post_avgratings;
 		 
 		 	if($comment_count>1){
-		 		$html .= '<span><span class="rating">'.$post_avgratings.'</span> / 5 '.__("based on",GEODIRECTORY_TEXTDOMAIN).' <span class="count">'.$comment_count.'</span> '.__("reviews",GEODIRECTORY_TEXTDOMAIN).'</span><br />';
+		 		$html .= '<span itemprop="rating" itemscope itemtype="http://data-vocabulary.org/Rating"><span class="rating" itemprop="average">'.$post_avgratings.'</span> /  <span itemprop="best">5</span> '.__("based on",GEODIRECTORY_TEXTDOMAIN).' <span class="count" itemprop="count">'.$comment_count.'</span> '.__("reviews",GEODIRECTORY_TEXTDOMAIN).'</span><br />';
 		 	}else{
-		 		$html .= '<span><span class="rating">'.$post_avgratings.'</span> / 5 '.__("based on",GEODIRECTORY_TEXTDOMAIN).' <span class="count">'.$comment_count.'</span> '.__("review",GEODIRECTORY_TEXTDOMAIN).'</span><br />';	 
+		 		$html .= '<span itemprop="rating" itemscope itemtype="http://data-vocabulary.org/Rating"><span class="rating" itemprop="average">'.$post_avgratings.'</span> /  <span itemprop="best">5</span> '.__("based on",GEODIRECTORY_TEXTDOMAIN).' <span class="count" itemprop="count">'.$comment_count.'</span> '.__("review",GEODIRECTORY_TEXTDOMAIN).'</span><br />';	 
 		 	}
 		 	$html .= '<span class="item">';
-		 	$html .= '<span class="fn">'.$post->post_title.'</span>';
+		 	$html .= '<span class="fn" itemprop="itemreviewed">'.$post->post_title.'</span>';
 		 	if($post_images){foreach($post_images as $img){$post_img = $img->src;break;}}
-		 	if($post_img){$html .= '<br /><img src="'.$post_img.'" class="photo hreview-img" height="50px" alt="'.$post->post_title.'" />';}
+		 	if($post_img){$html .= '<br /><img src="'.$post_img.'" class="photo hreview-img"  alt="'.$post->post_title.'" itemprop="photo" />';}
 		 	$html .= '</span>';
 
-		 	$html .= '</div>';
-			echo $html .= '</p>';
+		 	echo $html .= '</div>';
 		
 		do_action('geodir_after_review_rating_stars_on_detail' , $post_avgratings , $post->ID);
 		
@@ -579,6 +590,8 @@ function geodir_localize_all_js_msg()
 						
 							'invalid_char_listing_det_url_separator_msg' =>	__('Invalid character in listing detail url separator', GEODIRECTORY_TEXTDOMAIN),
 							'loading_listing_error_favorite' =>  __('Error loading listing.',GEODIRECTORY_TEXTDOMAIN),
+							'geodir_field_id_required' =>  __('This field is required.',GEODIRECTORY_TEXTDOMAIN),
+							'geodir_valid_email_address_msg' =>  __('Please enter valid email address.',GEODIRECTORY_TEXTDOMAIN),
 							// end not show alert msg
 							
 						);
@@ -701,8 +714,92 @@ function geodir_script_loader_src($url)
 add_filter('clean_url', 'so_handle_038', 99, 3);
 function so_handle_038($url, $original_url, $_context) {
     if (strstr($url, "maps.google.com/maps/api/js") !== false) {
-      	$url = str_replace("&#038;", "&", $url); // or $url = $original_url
+      	$url = str_replace("&#038;", "&amp;", $url); // or $url = $original_url
     }
 
     return $url;
 }
+
+
+add_action('geodir_after_main_form_fields', 'geodir_after_main_form_fields', 1);
+function geodir_after_main_form_fields(){
+	
+	if(get_option('geodir_accept_term_condition')){
+		global $post;
+		$term_condition = '';
+		if(isset($_REQUEST['backandedit'])){
+			$post = (object)unserialize($_SESSION['listing']);
+			$term_condition = isset($post->geodir_accept_term_condition) ? $post->geodir_accept_term_condition : '';	
+		}
+		
+	?>
+	<div class="required_field geodir_form_row clearfix">
+				<label>&nbsp;</label>
+				<div class="geodir_taxonomy_field" style="float:left; width:70%;">
+				<span style="display:block"> 
+				<input class="main_list_selecter" type="checkbox" <?php if($term_condition == '1'){echo 'checked="checked"';} ?> field_type="checkbox" name="geodir_accept_term_condition" id="geodir_accept_term_condition" class="geodir_textfield" value="1" style="display:inline-block"/><?php echo stripslashes(get_option('geodir_term_condition_content')); ?> 
+				</span>
+			</div>
+			 <span class="geodir_message_error"><?php if(isset($required_msg)){ echo $required_msg;}?></span>
+		</div>
+	<?php
+	
+	}
+}
+
+
+/* ------------------------------START CODE FOR HIDE/DISPLAY TABS */
+
+add_filter('geodir_detail_page_tab_is_display', 'geodir_detail_page_tab_is_display', 0, 2);
+
+function geodir_detail_page_tab_is_display($is_display, $tab){
+
+	global $post,$post_images,$video,$special_offers, $related_listing,$geodir_post_detail_fields;
+	
+	if($tab == 'post_info')
+		$is_display = (!empty($geodir_post_detail_fields)) ? true : false;
+	
+	if($tab == 'post_images')
+		$is_display = (!empty($post_images)) ? true : false;
+	
+	if($tab == 'post_video')
+		$is_display = (!empty($video)) ? true : false;
+	
+	if($tab == 'special_offers')
+		$is_display = (!empty($special_offers)) ? true : false;
+	
+	if($tab == 'reviews')
+		$is_display = (geodir_is_page('detail')) ? true : false;
+	
+	if($tab == 'related_listing')
+		$is_display = ((strpos($related_listing,__('No listings found which match your selection.',GEODIRECTORY_TEXTDOMAIN)) !== false || $related_listing == '' || !geodir_is_page('detail')) ) ? false : true;	
+	
+	
+	return $is_display;
+}
+
+
+/*======================================*/
+/*	Add an action to show a message on core plugin row for deactivation. */
+/*=======================================*/
+global $plugin_file_name;
+add_action( 'after_plugin_row_' . $plugin_file_name, 'geodir_after_core_plugin_row' , 3, 3);
+
+
+function geodir_after_core_plugin_row($plugin_file, $plugin_data, $status)
+{
+	//echo $plugin_file . " " .  $plugin_data . " " . $status ;
+	if(is_plugin_active($plugin_file))
+	{
+		$wp_list_table = _get_list_table('WP_Plugins_List_Table');
+	
+		echo '<tr class="plugin-update-tr"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange"><div class="geodir-plugin-row-warning">';
+		_e('Deactivate all GeoDirectory depended adons first before deactivating GeoDirectory.',GEODIRECTORY_TEXTDOMAIN)  ;
+		echo '</div></td></tr>';	
+	}
+}
+
+
+
+
+

@@ -258,6 +258,15 @@ function list_markers(input, map_canvas_var)
 
 }	
 
+
+function geodir_htmlEscape(str) {
+    return String(str)
+            .replace(/&prime;/g,"'")
+            .replace(/&frasl;/g, '/')
+            .replace(/&ndash;/g, '-')
+            .replace(/&ldquo;/g, '"')
+            .replace(/&gt;/g, '>');
+}
 	
 // create the marker and set up the event window
 function create_marker(input,map_canvas_var ) 
@@ -265,21 +274,24 @@ function create_marker(input,map_canvas_var )
 //alert(map_canvas)
 	jQuery("#"+ map_canvas_var).goMap();
 	
-	if(input.lat_pos && input.long_pos){
-		var coord = new google.maps.LatLng(input.lat_pos,input.long_pos);
+	if(input.lt && input.ln){
+		var coord = new google.maps.LatLng(input.lt,input.ln);
 		var marker_id = 0 ;
 		if(eval(map_canvas_var).enable_cat_filters)
-			marker_id = input.marker_id
+			marker_id = input.mk_id
 		else
 			marker_id = input.id
 			
+			
+		var title = geodir_htmlEscape(input.t);
+		
 		var marker  = jQuery.goMap.createMarker({
 							id: marker_id ,
+							title: title ,
 							position: coord,
 							visible: true,
 							clickable: true,
-							icon: input.icon,
-							group: input.group
+							icon: input.i
 						});
 
 

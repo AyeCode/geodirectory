@@ -18,7 +18,7 @@
     <div class="clearfix geodir-common">
     	
         <?php if( get_option('geodir_show_home_left_section') ) { ?> 
-        <div class="geodir-onethird" <?php if($width = get_option('geodir_width_home_left_section') ) { echo 'style="width:'.$width.'%;"'; } ?> >
+        <div class="geodir-onethird gd-third-left" <?php if($width = get_option('geodir_width_home_left_section') ) { echo 'style="width:'.$width.'%;"'; } ?> >
         	<div class="geodir-content-left">
            <?php dynamic_sidebar('geodir_home_left');?>
            </div>
@@ -26,7 +26,7 @@
         <?php } ?>
         
         <?php if( get_option('geodir_show_home_contant_section') ) { ?> 
-        <div class="geodir-onethird" <?php if($width = get_option('geodir_width_home_contant_section') ) { echo'style="width:'.$width.'%;"';} ?> >
+        <div class="geodir-onethird gd-third-middle" <?php if($width = get_option('geodir_width_home_contant_section') ) { echo'style="width:'.$width.'%;"';} ?> >
         	<div class="geodir-content-content">
             <?php dynamic_sidebar('geodir_home_contant');?>
             </div>
@@ -34,7 +34,7 @@
         <?php } ?>
       
          <?php if( get_option('geodir_show_home_right_section') ) { ?> 
-        <div class="geodir-onethird" <?php if($width = get_option('geodir_width_home_right_section') ) { echo 'style="width:'.$width.'%;"';} ?> >
+        <div class="geodir-onethird gd-third-right" <?php if($width = get_option('geodir_width_home_right_section') ) { echo 'style="width:'.$width.'%;"';} ?> >
         	<div class="geodir-content-right">
             <?php dynamic_sidebar('geodir_home_right');?>
             </div>

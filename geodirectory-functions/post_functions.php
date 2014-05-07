@@ -329,6 +329,24 @@ function geodir_save_listing($request_info = array(),$dummy = false){
 			}
 			else
 				geodir_save_post_images($last_post_id,$request_info['post_images'], $dummy);
+				
+		}elseif(!isset($request_info['post_images']) || $request_info['post_images'] == ''){
+			
+			/* Delete Attachments*/
+			$postcurr_images = geodir_get_images($last_post_id);
+			
+			$wpdb->query(
+				$wpdb->prepare(
+					"DELETE FROM ".GEODIR_ATTACHMENT_TABLE." WHERE `post_id` = %d",
+					array($last_post_id)
+				)
+			);
+			geodir_remove_attachments($postcurr_images);
+			
+			$gd_post_featured_img = array();
+			$gd_post_featured_img['featured_image'] = '';
+			geodir_save_post_info($last_post_id, $gd_post_featured_img); 
+		
 		}
 		
 		geodir_remove_temp_images();
@@ -819,7 +837,7 @@ function geodir_remove_temp_images(){
 	$uploads = wp_upload_dir(); 
 	$uploads_dir = $uploads['path'];
 	
-	if(is_dir($uploads_dir.'/temp_'.$current_user->data->ID)){
+/*	if(is_dir($uploads_dir.'/temp_'.$current_user->data->ID)){
 					
 			$dirPath = $uploads_dir.'/temp_'.$current_user->data->ID;
 			if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
@@ -834,8 +852,33 @@ function geodir_remove_temp_images(){
 				}
 			}
 			rmdir($dirPath);
-	}	
+	}	*/
+	
+	$dirname = $uploads_dir.'/temp_'.$current_user->data->ID;
+	geodir_delete_directory($dirname);
 }
+
+
+function geodir_delete_directory($dirname) {
+	$dir_handle = '';
+	if (is_dir($dirname))
+	 $dir_handle = opendir($dirname);
+	if (!$dir_handle)
+			return false;
+	while($file = readdir($dir_handle)) {
+			 if ($file != "." && $file != "..") {
+						if (!is_dir($dirname."/".$file))
+							unlink($dirname."/".$file);
+						else
+							geodir_delete_directory($dirname.'/'.$file);
+			 }
+	}
+	closedir($dir_handle);
+	rmdir($dirname);
+	return true;
+	
+}
+
 
 /**
  * Remove post attachments
@@ -1120,8 +1163,7 @@ function geodir_show_image( $request = array(), $size = 'thumbnail' ,$no_image =
 					$width_per = 100;
 			}
 			
-			
-			$html = '<div class="geodir_thumbnail"><img style="max-height:'. $max_size->h .'px;" src="' . $image->src . '"  /></div>';
+			$html = '<div class="geodir_thumbnail"><img style="max-height:'. $max_size->h .'px;" alt="place image" src="' . $image->src . '"  /></div>';
 			
 			
 			/*$html = '<div style="text-align: center;max-height:'.$max_size->h.'px;line-height:'.$max_size->h.'px;">';
@@ -1381,7 +1423,7 @@ function geodir_get_infowindow_html($postinfo_obj, $post_preview = ''){
 			if($ID != ''){
 				$rating_star = '';
 				//$comment_count = get_comments_number($ID); // for some reason the filter is not applied here.
-				$comment_count = $postinfo_obj->rating_count;
+				$comment_count = isset($postinfo_obj->rating_count) ? $postinfo_obj->rating_count : 0;
 				//$comment_count = geodir_get_comments_number($ID); 
 							$post_ratings = geodir_get_postoverall($ID);
 						 // $post_ratings = geodir_get_commentoverall_number($ID);
@@ -1637,7 +1679,7 @@ function geodir_favourite_html($user_id,$post_id){
 
 	if(!empty($user_meta_data) && in_array($post_id,$user_meta_data))
 	{
-		?><span id="favorite_property_<?php echo $post_id;?>" class="geodir-addtofav favorite_property_<?php echo $post_id;?>"  > <a class="geodir-removetofav-icon" href="javascript:void(0);" onclick="javascript:addToFavourite(<?php echo $post_id;?>,'remove');"><?php echo REMOVE_FAVOURITE_TEXT;?></a>   </span><?php
+		?><span class="geodir-addtofav favorite_property_<?php echo $post_id;?>"  > <a class="geodir-removetofav-icon" href="javascript:void(0);" onclick="javascript:addToFavourite(<?php echo $post_id;?>,'remove');"><?php echo REMOVE_FAVOURITE_TEXT;?></a>   </span><?php
 
 	}else{
 			
@@ -1648,7 +1690,7 @@ function geodir_favourite_html($user_id,$post_id){
 			else
 				$script_text ='javascript:addToFavourite('.$post_id.',\'add\')';
 
-		?><span id="favorite_property_<?php echo $post_id;?>" class="geodir-addtofav favorite_property_<?php echo $post_id;?>"><a class="geodir-addtofav-icon" href="javascript:void(0);" onclick="<?php echo $script_text ;?>"><?php echo ADD_FAVOURITE_TEXT;?></a></span>
+		?><span class="geodir-addtofav favorite_property_<?php echo $post_id;?>"><a class="geodir-addtofav-icon" href="javascript:void(0);" onclick="<?php echo $script_text ;?>"><?php echo ADD_FAVOURITE_TEXT;?></a></span>
 	<?php }     
 } 
 }  

@@ -330,7 +330,8 @@ class Tax_Meta_Class {
 			check_admin_referer( "at-delete-mupload_".urldecode($field_id));
 			if ($term_id > 0)
 				$this->delete_tax_meta( $term_id, $field_id );
-			$ok = wp_delete_attachment( $attachment_id );
+			//$ok = wp_delete_attachment( $attachment_id );
+			$ok = 1;
 		}else{
 			$f = explode('[',urldecode($field_id));
 			$f_fiexed = array();
@@ -501,9 +502,9 @@ class Tax_Meta_Class {
 				$meta = is_array( $meta ) ? array_map( 'esc_attr', $meta ) : esc_attr( $meta );
 			
 			if($field['validate_func']){
-				echo '<tr class="form-field form-required">';
+				echo '<tr class="form-field form-required '.$field['style'].'">';
 			}else{
-				echo '<tr class="form-field">';
+				echo '<tr class="form-field '.$field['style'].'">';
 			}
 			
 			// Call Separated methods for displaying each type of field.
@@ -907,7 +908,28 @@ class Tax_Meta_Class {
 			if(isset($meta[0]) && is_array($meta[0]))
 			$meta = $meta[0];
 		}
+		
+		$uploads = wp_upload_dir(); 
 		if (is_array($meta) && isset($meta['src']) && $meta['src'] != ''){
+			
+			$file_info = pathinfo($meta['src']);
+			
+			if($file_info['dirname'] != '.' && $file_info['dirname'] != '..')
+				$sub_dir = $file_info['dirname'];
+			
+			$uploads = wp_upload_dir(trim($sub_dir, '/')); // Array of key => value pairs	
+			$uploads_baseurl = $uploads['baseurl'];
+			$uploads_path = $uploads['path'];
+			
+			$file_name =  $file_info['basename'];
+			
+			$sub_dir = str_replace($uploads_baseurl,'',$sub_dir);
+			
+			$uploads_url = $uploads_baseurl.$sub_dir;
+			
+			$meta['src'] = $uploads_url.'/'.$file_name ;
+			
+			
 			$html .= "<span class='mupload_img_holder'><img src='".$meta['src']."' style='max-height: 150px;max-width: 150px;' /></span>";
 			$html .= "<input type='hidden' name='".$field['id']."[id]' id='".$field['id']."[id]' value='".$meta['id']."' />";
 			$html .= "<input type='hidden' class='".$field['id']."[src]' name='".$field['id']."[src]' id='".$field['id']."[src]' value='".$meta['src']."' />";
@@ -1112,17 +1134,49 @@ class Tax_Meta_Class {
 				$upload_dir = wp_upload_dir();
 				
 				$image_name_arr = explode('/',$new['src']);
-				$old_filename = end($image_name_arr);
-				$img_name_arr = explode('.',$old_filename);
-				$old_filename = $upload_dir['path'].'/'.$old_filename;
+				//$old_filename = end($image_name_arr);
+				//$img_name_arr = explode('.',$old_filename);
 				
-				$new_filename = $upload_dir['path'].'/'.'cat_icon_'.$term_id.'.png';
+				//$old_filename = $upload_dir['path'].'/'.$old_filename;
 				
-				rename($old_filename, $new_filename);
+				$new_filename = $upload_dir['path'].'/'.'cat_icon_'.$term_id.'.png'; 
 				
+				/*rename($old_filename, $new_filename);
+				
+				//subdir
 				$new['src'] = $upload_dir['url'].'/'.'cat_icon_'.$term_id.'.png';
 				
-				update_attached_file( $new['id'], $new['src'] );
+				update_attached_file( $new['id'], $new['src'] );*/
+				
+			
+				
+				
+				
+	/*	
+		
+		$new['src'] = $upload_dir['url'].'/'.'cat_icon_'.$term_id.'.png';
+		
+		$filename = $new_filename;
+		
+		
+		$filetype = wp_check_filetype( basename( $filename ), null );
+		
+	
+		$wp_upload_dir = wp_upload_dir();
+		
+		
+		$attachment = array(
+			'guid'           => $wp_upload_dir['url'] . '/' . basename( $filename ), 
+			'post_mime_type' => $filetype['type'],
+			'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $filename ) ),
+			'post_content'   => '',
+			'post_status'    => 'inherit'
+		);
+		
+	
+		$attach_id = wp_insert_attachment( $attachment, $filename);*/
+				
+				
 				
 			}
 			
@@ -1488,7 +1542,7 @@ class Tax_Meta_Class {
 	 *  @param $repeater bool  is this a field inside a repeatr? true|false(default) 
 	 */
 	public function addParagraph($id,$args,$repeater=false){
-		$new_field = array('type' => 'paragraph','id'=> $id,'value' => '');
+		$new_field = array('type' => 'paragraph','id'=> $id,'value' => '','style' =>'');
 		$new_field = array_merge($new_field, $args);
 		if(false === $repeater){
 			$this->_fields[] = $new_field;
@@ -1705,7 +1759,7 @@ class Tax_Meta_Class {
 	 *  @param $repeater bool  is this a field inside a repeatr? true|false(default) 
 	 */
 	public function addImage($id,$args,$repeater=false){
-		$new_field = array('type' => 'image','id'=> $id,'desc' => '','name' => __('Image Field',GEODIRECTORY_TEXTDOMAIN));
+		$new_field = array('type' => 'image','id'=> $id,'desc' => '','style' =>'','name' => __('Image Field',GEODIRECTORY_TEXTDOMAIN));
 		$new_field = array_merge($new_field, $args);
 		
 		if(false === $repeater){
@@ -1728,7 +1782,7 @@ class Tax_Meta_Class {
 	 *  @param $repeater bool  is this a field inside a repeatr? true|false(default)
 	 */
 	public function addFile($id,$args,$repeater=false){
-		$new_field = array('type' => 'file','id'=> $id,'desc' => '','name' => __('File Field',GEODIRECTORY_TEXTDOMAIN));
+		$new_field = array('type' => 'file','id'=> $id,'desc' => '','style' =>'','name' => __('File Field',GEODIRECTORY_TEXTDOMAIN));
 		$new_field = array_merge($new_field, $args);
 		if(false === $repeater){
 			$this->_fields[] = $new_field;

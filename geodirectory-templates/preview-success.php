@@ -10,10 +10,10 @@
 			$posted_date = $post_info->post_date;
 			$productlink = get_permalink($post_id);
 			$siteName = get_bloginfo('name');
-			$siteurl = site_url();
+			$siteurl = home_url();
 			$siteurl_link = '<a href="'.$siteurl.'">'.$siteurl.'</a>';
 			
-			$loginurl = site_url().'/?geodir_signup=true';
+			$loginurl = home_url().'/?geodir_signup=true';
 			$loginurl_link = '<a href="'.$loginurl.'">login</a>';
 			
 			$post_author = $post_info->post_author;

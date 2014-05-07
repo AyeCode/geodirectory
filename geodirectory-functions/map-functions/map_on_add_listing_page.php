@@ -274,8 +274,8 @@ function geocodePosition() {
 			
 			<?php if($is_map_restrict){?>
 			
-			if(getCity != '<?php echo $city;?>'){
-			
+			if(getCity.toLowerCase() != '<?php echo strtolower($city);?>'){
+				
 				alert('<?php printf(__('Please choose any address of the (%s) city only.',GEODIRECTORY_TEXTDOMAIN), $city);?>');
 				
 				$("#<?php echo $prefix.'map';?>").goMap();

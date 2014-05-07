@@ -74,7 +74,7 @@ function geodir_add_nav_menu_items(  ) {
 										
 											$items .=	'<li class="menu-item '.$menu_class.'">
 													<a href="'. get_post_type_archive_link( $post_type ) .'">
-														'.__(ucfirst($args->labels->singular_name)).'
+														'.__(ucfirst($args->labels->name)).'
 													</a>
 												</li>';
 									}
@@ -113,7 +113,7 @@ function geodir_add_nav_menu_items(  ) {
 									
 										$items .=	'<li class="menu-item '.$menu_class.'">
 											<a href="'. geodir_get_addlisting_link( $post_type ) .'">
-												'.__('Add ',GEODIRECTORY_TEXTDOMAIN).$args->labels->singular_name.'
+												'.__('Add',GEODIRECTORY_TEXTDOMAIN).' '.$args->labels->singular_name.'
 											</a>
 										</li>';
 								}
@@ -150,7 +150,7 @@ function geodir_add_nav_menu_items(  ) {
 											
 												$items .=	'<li class="menu-item '.$menu_class.'">
 													<a href="'. geodir_get_addlisting_link( $post_type ) .'">
-														'.__('Add ',GEODIRECTORY_TEXTDOMAIN).$args->labels->singular_name.'
+														'.__('Add',GEODIRECTORY_TEXTDOMAIN).' '.$args->labels->singular_name.'
 													</a>
 												</li>';
 											}
@@ -675,7 +675,7 @@ function geodir_custom_taxonomy_walker2($cat_taxonomy, $cat_limit = '')
 					maincat_obj.find('.chosen_select').chosen();	
 				}
 						
-			
+				maincat_obj.find('.chosen_select').trigger("chosen:updated");
 				jQuery('#'+cat_taxonomy).find('#post_category').val(cat_ids);
 				jQuery('#'+cat_taxonomy).find('#post_category_str').val(post_cat_str);
 				
@@ -727,7 +727,7 @@ function geodir_addpost_categories_html($request_taxonomy, $parrent, $selected =
         <div class="post_default_category" >
         <input type="radio" name="post_default_category"  value="<?php echo $main_cat->term_id;?>" onchange="update_listing_cat()" <?php if($default) echo ' checked="checked" ';?>   />
         <span> 
-        <?php printf( __('Set %s as default category ',GEODIRECTORY_TEXTDOMAIN), ucwords($main_cat->name) );?> 
+        <?php printf( __('Set %s as default category',GEODIRECTORY_TEXTDOMAIN), ucwords($main_cat->name) );?> 
         </span>
         </div>
         

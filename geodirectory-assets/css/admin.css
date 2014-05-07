@@ -215,6 +215,8 @@ body.edit-tags-php .form-field input, .form-field textarea {width: auto !importa
 .side-sortables .inside ul li.advance-custom-sorting-opt{float: left; width: 50%;}
 
 .field_row_main_sort .field_sort_icon{ margin-right:5px;}
+
+#geodir_wrapper .geodir_form_row label{ float:left; width:29%!important; font-size:14px;}
 /***********************---------------MEDIA CSS-------------*****************************/
 
 @media screen and (min-width:860px) and (max-width:960px)

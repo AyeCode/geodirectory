@@ -16,7 +16,7 @@
 		
 		while (have_posts()) : the_post(); global $post,$wpdb,$listing_width; ?>
         
-			 <li class="<?php echo $grid_view_class;?>" id="post-<?php echo $post->ID;?>" 	<?php if($listing_width) echo "style='width:{$listing_width}%;'"; // Width for widget listing ?> > 
+			 <li class="<?php echo $grid_view_class;?> post-<?php echo $post->ID;?>" <?php if($listing_width) echo "style='width:{$listing_width}%;'"; // Width for widget listing ?> > 
 					
 		<div class="geodir-post-img"> 
 					
@@ -101,8 +101,11 @@
 						 $show_pin_point = $wp_query->is_main_query();
 			if( !empty($show_pin_point) && is_active_widget( false, "","geodir_map_v3_listing_map" ) ){ 
 			
-					if($json_info = json_decode($post->marker_json))
-						$marker_icon = $json_info->icon;
+					/*if($json_info = json_decode($post->marker_json))
+						$marker_icon = $json_info->icon;*/
+						
+						$term_icon_url = get_tax_meta($post->default_category,'ct_cat_icon');
+						$marker_icon = $term_icon_url['src'];
 			?>
 							
 							<span class="geodir-pinpoint" ><a href="javascript:void(0)" onclick="openMarker('listing_map_canvas' ,'<?php echo $post->ID; ?>')" onmouseover="animate_marker('listing_map_canvas' ,'<?php echo $post->ID; ?>')" onmouseout="stop_marker_animation('listing_map_canvas' , '<?php echo $post->ID; ?>')" style=" background:url('<?php if(isset($marker_icon)){ echo $marker_icon;}?>') no-repeat scroll left center transparent; background-size:auto 60%; -webkit-background-size:auto 60%; -moz-background-size:auto 60%;"><?php _e('Pinpoint',GEODIRECTORY_TEXTDOMAIN);?></a></span>

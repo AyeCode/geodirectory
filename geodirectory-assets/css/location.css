@@ -24,8 +24,6 @@ a:focus{ outline:none;}
     font-size: 15px;
     font-weight: bold;
     margin-bottom: 5px;
-    padding:1%;
-	width:98%;
 }
 #geodir_wrapper .geodir_location_listing .locatin_list_heading h3{ float:left; margin:0; font-size:15px;}
 #geodir_wrapper .geodir_location_listing .locatin_list_heading a.viewall{ float:right; font:bold 11px arial; color:#21759B; padding-top:5px;}

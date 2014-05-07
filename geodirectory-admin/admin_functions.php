@@ -290,7 +290,10 @@ function geodir_handle_option_form_submit($current_tab)
 		do_action( 'geodir_update_options_' . $current_tab, $geodir_settings[$current_tab]);
 		
 		flush_rewrite_rules( false );
-		$redirect_url =admin_url('admin.php?page=geodirectory&tab='.$_REQUEST['tab'].'&active_tab='.$_REQUEST['active_tab'].'&msg=success');
+		
+		$current_tab = isset($_REQUEST['tab']) ? $_REQUEST['tab'] : '';
+		
+		$redirect_url =admin_url('admin.php?page=geodirectory&tab='.$current_tab.'&active_tab='.$_REQUEST['active_tab'].'&msg=success');
 		
 		wp_redirect($redirect_url);
 		exit();
@@ -495,10 +498,7 @@ function geodir_default_taxonomies()
 	$last_term = get_term($last_catid, 'gd_placecategory');
 			
 	$uploads = wp_upload_dir(); // Array of key => value pairs
-		
-	$uploads_dir = $uploads['path'];	
-	$uploads_url = $uploads['url'];	
-	
+	//print_r($uploads) ;
 	for($i=0;$i < count($category_array); $i++)
 	{
 		$parent_catid = 0;
@@ -534,7 +534,7 @@ function geodir_default_taxonomies()
 					$wp_filetype = wp_check_filetype(basename($new_path), null );
 				    
 				    $attachment = array(
-					 'guid' => $uploads['url'] . '/' . basename( $new_path ), 
+					 'guid' => $uploads['baseurl'] . '/' . basename( $new_path ), 
 					 'post_mime_type' => $wp_filetype['type'],
 					 'post_title' => preg_replace('/\.[^.]+$/', '', basename($new_path)),
 					 'post_content' => '',
@@ -557,7 +557,8 @@ function geodir_default_taxonomies()
 		{
 			$catname = $category_array[$i];
 			
-			if(!term_exists( $catname, 'gd_placecategory' )){
+			if(!term_exists( $catname, 'gd_placecategory' ))
+			{
 				$last_catid = wp_insert_term( $catname, 'gd_placecategory' );
 				
 				if(geodir_dummy_folder_exists())
@@ -576,12 +577,13 @@ function geodir_default_taxonomies()
 				$wp_filetype = wp_check_filetype(basename($new_path), null );
 				    
 				    $attachment = array(
-					 'guid' => $uploads['url'] . '/' . basename( $new_path ), 
+					 'guid' => $uploads['baseurl'] .  '/' . basename( $new_path ), 
 					 'post_mime_type' => $wp_filetype['type'],
 					 'post_title' => preg_replace('/\.[^.]+$/', '', basename($new_path)),
 					 'post_content' => '',
 					 'post_status' => 'inherit'
 				    );
+					
 					$attach_id = wp_insert_attachment( $attachment, $new_path );
 
 				  	
@@ -592,7 +594,7 @@ function geodir_default_taxonomies()
 				    wp_update_attachment_metadata( $attach_id, $attach_data );
 				
 				if(!get_tax_meta($last_catid['term_id'], 'ct_cat_icon'))
-				{update_tax_meta($last_catid['term_id'], 'ct_cat_icon', array( 'id' => $attach_id, 'src' => $new_url));}
+					{update_tax_meta($last_catid['term_id'], 'ct_cat_icon', array( 'id' => $attach_id, 'src' => $new_url));}
 			}
 		}
 		
@@ -739,10 +741,10 @@ function places_custom_fields_tab($tabs){
 		 		$tabs[$geodir_post_type.'_fields_settings'] = array( 
 																			'label' =>__( ucfirst($listing_slug).' Settings', GEODIRECTORY_TEXTDOMAIN ),
 																			'subtabs' => array(
-																				array('subtab' => __( 'custom_fields'),
+																				array('subtab' => 'custom_fields',
 																							'label' =>__( 'Custom Fields', GEODIRECTORY_TEXTDOMAIN),
 																							'request' => array('listing_type'=>$geodir_post_type)),
-																				array('subtab' => __( 'sorting_options'),
+																				array('subtab' => 'sorting_options',
 																							'label' =>__( 'Sorting Options', GEODIRECTORY_TEXTDOMAIN),
 																							'request' => array('listing_type'=>$geodir_post_type)),
 																				),
@@ -760,7 +762,7 @@ function places_custom_fields_tab($tabs){
 
 function geodir_extend_geodirectory_setting_tab($tabs)
 {
-	$tabs['extend_geodirectory_settings'] = array('label'=> __( 'Extend Geodirectory ', GEODIRECTORY_TEXTDOMAIN 		) , 'url'=>'http://wpgeodirectory.com') ;
+	$tabs['extend_geodirectory_settings'] = array('label'=> __( 'Extend Geodirectory', GEODIRECTORY_TEXTDOMAIN 		) , 'url'=>'http://wpgeodirectory.com') ;
 	return $tabs ;
 }
 
@@ -1109,8 +1111,9 @@ if (!function_exists('geodir_import_data')) {
 						
 						$post_tags = trim($buffer[4]); // comma seperated tags
 						
+						$tag_arr = '';
 						if($post_tags){
-							$tag_arr = array();
+							
 							$tag_arr = explode(',',$post_tags);	
 						}
 						
@@ -1202,7 +1205,18 @@ if (!function_exists('geodir_import_data')) {
 								$location_result = geodir_get_default_location();
 								if($location_result->location_id == 0 ){
 								
-									if((!isset($gd_post_info['post_city']) || $gd_post_info['post_city'] != $location_result->city) || (!isset($gd_post_info['post_region']) || $gd_post_info['post_region'] != $location_result->region) || (!isset($gd_post_info['post_country']) || $gd_post_info['post_country'] != $location_result->country) || (!isset($gd_post_info['post_address']) || $gd_post_info['post_address']=='') || (!isset($gd_post_info['post_latitude']) || $gd_post_info['post_latitude'] == '') || (!isset($gd_post_info['post_longitude']) || $gd_post_info['post_longitude'] == '')){
+									if((!isset($gd_post_info['post_city']) || 
+									strtolower($gd_post_info['post_city']) != strtolower($location_result->city)) || 
+									(!isset($gd_post_info['post_region']) || 
+									strtolower($gd_post_info['post_region']) != strtolower($location_result->region)) || 
+									(!isset($gd_post_info['post_country']) || 
+									strtolower($gd_post_info['post_country']) != strtolower($location_result->country)) || 
+									(!isset($gd_post_info['post_address']) || 
+									$gd_post_info['post_address']=='') || 
+									(!isset($gd_post_info['post_latitude']) || 
+									$gd_post_info['post_latitude'] == '') || 
+									(!isset($gd_post_info['post_longitude']) || 
+									$gd_post_info['post_longitude'] == '')){
 										$address_invalid++;
 										continue;
 										
@@ -1239,44 +1253,6 @@ if (!function_exists('geodir_import_data')) {
 							
 							$last_postid = wp_insert_post( $my_post );
 							$countpost++;
-							
-							
-							if(!empty($image_names))
-							{
-								$menu_order = 1;
-								foreach($image_names as $image_name){
-									
-									$img_name_arr = explode('.',$image_name);
-									
-									$uploads = wp_upload_dir(); 
-									$sub_dir = $uploads['subdir'];
-									
-									$arr_file_type = wp_check_filetype($image_name);
-									$uploaded_file_type = $arr_file_type['type'];
-									
-									$attachment = array(); 
-									$attachment['post_id'] = $last_postid;
-									$attachment['title'] = $img_name_arr[0];
-									$attachment['content'] = '';
-									$attachment['file'] = $sub_dir.'/'.$image_name;					
-									$attachment['mime_type'] = $uploaded_file_type;
-									$attachment['menu_order'] = $menu_order;
-									$attachment['is_featured'] = 0;
-									
-									$attachment_set = '';
-									
-									foreach($attachment as $key=>$val){
-										if($val != '')
-										$attachment_set .= $key." = '".$val."', ";
-									}
-									
-									$attachment_set = trim($attachment_set,", ");
-									
-									$wpdb->query("INSERT INTO ".GEODIR_ATTACHMENT_TABLE." SET ".$attachment_set);
-									
-									$menu_order++;
-								}
-							}
 							
 							
 							// Check if we need to save post location as new location 
@@ -1338,6 +1314,51 @@ if (!function_exists('geodir_import_data')) {
 							$table = $plugin_prefix . $post_type . '_detail';
 							
 							geodir_save_post_info($last_postid, $gd_post_info);
+							
+							if(!empty($image_names))
+							{
+								$menu_order = 1;
+								foreach($image_names as $image_name){
+									
+									$img_name_arr = explode('.',$image_name);
+									
+									$uploads = wp_upload_dir(); 
+									$sub_dir = $uploads['subdir'];
+									
+									$arr_file_type = wp_check_filetype($image_name);
+									$uploaded_file_type = $arr_file_type['type'];
+									
+									$attachment = array(); 
+									$attachment['post_id'] = $last_postid;
+									$attachment['title'] = $img_name_arr[0];
+									$attachment['content'] = '';
+									$attachment['file'] = $sub_dir.'/'.$image_name;					
+									$attachment['mime_type'] = $uploaded_file_type;
+									$attachment['menu_order'] = $menu_order;
+									$attachment['is_featured'] = 0;
+									
+									$attachment_set = '';
+									
+									foreach($attachment as $key=>$val){
+										if($val != '')
+										$attachment_set .= $key." = '".$val."', ";
+									}
+									
+									$attachment_set = trim($attachment_set,", ");
+									
+									$wpdb->query("INSERT INTO ".GEODIR_ATTACHMENT_TABLE." SET ".$attachment_set);
+									
+									if($menu_order == 1){
+										
+										$post_type = get_post_type( $last_postid );
+							
+										$wpdb->query($wpdb->prepare("UPDATE ".$table." SET featured_image = %s where post_id =%d", array($sub_dir.'/'.$image_name,$last_postid)));
+									
+									}
+									
+									$menu_order++;
+								}
+							}
 							
 							$gd_post_info['package_id'] = $package_id;
 							
@@ -1755,7 +1776,7 @@ function geodir_admin_fields($options){
             	?>
 	            <fieldset><legend class="screen-reader-text"><span><?php echo $value['name'] ?></span></legend>
 					<label for="<?php echo $value['id'];?>">
-					<input name="<?php echo esc_attr( $value['id'] ); ?>" id="<?php echo esc_attr( $value['id'].$value['value'] ); ?>" type="radio" value="<?php echo $value['value'] ?>" <?php if( get_option($value['id'])==$value['value'] || $value['std'] == $value['value']){echo 'checked="checked"';} ?> />
+					<input name="<?php echo esc_attr( $value['id'] ); ?>" id="<?php echo esc_attr( $value['id'].$value['value'] ); ?>" type="radio" value="<?php echo $value['value'] ?>" <?php if( get_option($value['id'])==$value['value']){echo 'checked="checked"';} ?> />
 					<?php echo $value['desc']; ?></label><br>
 				</fieldset>
 				<?php

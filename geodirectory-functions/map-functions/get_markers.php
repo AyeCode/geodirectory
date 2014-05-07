@@ -58,19 +58,45 @@ function get_markers(){
 	
 	$search = '';
 	$main_query_array ;
+	
+	$srcharr = array("'","/","-",'"','\\');
+	$replarr = array("&prime;","&frasl;","&ndash;","&ldquo;",'');
+	
+	$post_type = isset($_REQUEST['gd_posttype']) ? $_REQUEST['gd_posttype'] : 'gd_place';
+	
 	$map_cat_ids_array = array('0');
+	$cat_find_array = array(" FIND_IN_SET(%d, pd.".$post_type."category)");
+	
+	
+	$field_default_cat = '';
 	if(isset($_REQUEST['cat_id']) && $_REQUEST['cat_id'] != ''){	
 		$map_cat_arr = mysql_real_escape_string($_REQUEST['cat_id']);
 		
 		if(!empty($map_cat_arr))
 		{
 			$map_cat_ids_array = explode(',',$map_cat_arr);
+			$cat_find_array = array();
+			foreach($map_cat_ids_array as $cat_id){
+				$field_default_cat .= "when   ( find_in_set($cat_id,  `".$post_type."category`) > 0) then $cat_id ";
+				$cat_find_array[] = " FIND_IN_SET(%d, pd.".$post_type."category)";
+				$main_query_array[] = $cat_id;
+			}
+			
 		}	
 	}
+	
+	if(!empty($field_default_cat))
+		$field_default_cat = ', case '.$field_default_cat.' end as default_icon ';
+	
+	if(!empty($cat_find_array))
+		$search .= "AND (". implode(' OR ', $cat_find_array). ")";
+	
+	
+	
 	$main_query_array = $map_cat_ids_array ;
-	$map_cat_length = count($map_cat_ids_array);
+	/*$map_cat_length = count($map_cat_ids_array);
 	$map_cat_format = array_fill(0, $map_cat_length, '%d');
-	$format = implode(',', $map_cat_format);	
+	$format = implode(',', $map_cat_format);	*/
 	
 	if(isset($_REQUEST['search']) && !empty($_REQUEST['search'])){
 		
@@ -90,17 +116,24 @@ function get_markers(){
 	}else
 		$table = $plugin_prefix .'gd_place_detail';	
 	
-	$join = $table." as pd,"
-					.GEODIR_ICON_TABLE." as pi ";
+	/*$join = $table." as pd,"
+					.GEODIR_ICON_TABLE." as pi ";*/
 	
+	$join = $table." as pd ";
+					
 	$join = apply_filters('geodir_home_map_listing_join', $join);
 	$search = apply_filters('geodir_home_map_listing_where', $search);
 		
-	$catsql = 	$wpdb->prepare("SELECT pi.* FROM "
+	/*$catsql = 	$wpdb->prepare("SELECT pi.* FROM "
 				.$wpdb->posts." as p," 
 				.$join." WHERE p.ID = pd.post_id 
 				AND pd.post_id = pi.post_id 
-				AND p.post_status = 'publish'  AND pi.cat_id in ($format) " . $search . $gd_posttype , $main_query_array);
+				AND p.post_status = 'publish'  AND pi.cat_id in ($format) " . $search . $gd_posttype , $main_query_array);*/
+	
+	$catsql = 	$wpdb->prepare("SELECT pd.* $field_default_cat FROM "
+				.$wpdb->posts." as p," 
+				.$join." WHERE p.ID = pd.post_id 
+				AND p.post_status = 'publish' " . $search . $gd_posttype , $main_query_array);
 		
 	
 	$catsql = apply_filters('geodir_home_map_listing_query' , $catsql , $search) ;
@@ -114,7 +147,23 @@ function get_markers(){
 	
 	foreach($catinfo as $catinfo_obj)
 	{ 	
-		$content_data[] = $catinfo_obj->json; 
+		//$content_data[] = $catinfo_obj->json; 
+		
+		$icon = '';
+		$default_cat = $catinfo_obj->default_icon;
+		
+	 if($default_cat != ''){
+	 	
+		$term_icon_url = get_tax_meta($default_cat,'ct_cat_icon');
+		$icon = $term_icon_url['src'];
+		
+	 }
+	 
+		$post_title = $catinfo_obj->post_title;
+		$title = str_replace($srcharr,$replarr,$post_title);
+	 
+		$content_data[] = '{"id":"'.$catinfo_obj->post_id.'","t": "'.$title.'","lt": "'.$catinfo_obj->post_latitude.'","ln": "'.$catinfo_obj->post_longitude.'","mk_id":"'.$catinfo_obj->post_id.'_'.$catinfo_obj->default_category.'","i":"'.$icon.'"}';
+		
 		$post_ids[] = $catinfo_obj->post_id; 
 	}
 	

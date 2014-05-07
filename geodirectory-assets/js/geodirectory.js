@@ -11,7 +11,7 @@ jQuery( document ).ready(function() {
 		imageBlank : geodir_var.geodir_plugin_url+'/geodirectory-assets/images/lightbox-blank.gif'
 	});		
 	
-	 jQuery('#carousel').flexslider({
+	 jQuery('#geodir_carousel').flexslider({
         animation: "slide",
         controlNav: false,
 		directionNav: false,   
@@ -19,19 +19,19 @@ jQuery( document ).ready(function() {
         slideshow: false,
         itemWidth: 75,
         itemMargin: 5,
-        asNavFor: '#slider'
+        asNavFor: '#geodir_slider'
       });
       
-      jQuery('#slider').flexslider({
+      jQuery('#geodir_slider').flexslider({
         animation: "slide",
         controlNav: true,
         animationLoop: true,
 		slideshow: true,
         sync: "#carousel",
         start: function(slider){
-			jQuery('.flex-loader').hide();
-			jQuery('#slider').css({'visibility':'visible'});
-			jQuery('#carousel').css({'visibility':'visible'});
+			jQuery('.geodir_flex-loader').hide();
+			jQuery('#geodir_slider').css({'visibility':'visible'});
+			jQuery('#geodir_carousel').css({'visibility':'visible'});
         }
       }); 
 	  
@@ -275,7 +275,7 @@ jQuery(document).ready(function() {
 
 /* Show Hide Rating for reply */
 jQuery(document).ready(function(){
-	jQuery('#gd_comment_replaylink a').bind('click',function(){
+	jQuery('.gd_comment_replaylink a').bind('click',function(){
 		jQuery('#commentform .gd_rating').hide();
 		jQuery('#respond .form-submit input#submit').val('Post Reply');
 		jQuery('#respond .comment-form-comment label').html('Reply text');
@@ -293,11 +293,12 @@ jQuery(document).ready(function(){
 jQuery(document).ready(function(){
 	
 	jQuery("#showFilters").click(function () {
-		jQuery("#customize_filter").slideToggle("slow",function(){
-			if(jQuery('#listing_search .geodir_submit_search:first').css('visibility') == 'visible')													
-				jQuery('#listing_search .geodir_submit_search:first').css({'visibility':'hidden'});
+		var $form = jQuery(this).closest('form');
+		jQuery(".customize_filter",$form).slideToggle("slow",function(){
+			if(jQuery('.geodir_submit_search:first',$form).css('visibility') == 'visible')													
+				jQuery('.geodir_submit_search:first',$form).css({'visibility':'hidden'});
 			else
-				jQuery('#listing_search .geodir_submit_search:first').css({'visibility':'visible'});	
+				jQuery('.geodir_submit_search:first',$form).css({'visibility':'visible'});	
 		});
 	});
 	
@@ -306,7 +307,7 @@ jQuery(document).ready(function(){
 
 jQuery(document).ready(function(){
 
-	jQuery('#search_by_post').change(function(){
+	jQuery('.search_by_post').change(function(){
 		window.location = jQuery(this).find('option:selected').attr('opt_label');
 	});
 	
@@ -328,22 +329,21 @@ jQuery(window).load(function(){
 //-------count post according to term--
 function geodir_count_post_term(val)
 {
-		var url = geodir_all_js_msg.geodir_admin_ajax_url+'/?action=geodir_ajax_action&term_id='+val+'&ajax_action=geodir_get_term_count';
-	jQuery.ajax({
-		url: url ,
-		type: 'GET',
-		success: function(html){
-				if(html != "" )
-				{
-					var data_array = jQuery.parseJSON(html);
-						 resultObj = eval (data_array);
-						 for (var index in resultObj){
-							jQuery('.'+index).html(resultObj[index]);
-						}
-				}
-			}
+	jQuery.post( geodir_all_js_msg.geodir_admin_ajax_url+'/?action=geodir_ajax_action', { ajax_action: "geodir_get_term_count", term_array: val })
+	.done(function( data ) {
+		
+		if(jQuery.trim(data) != ''){
+			
+				var data_array = jQuery.parseJSON(data);
+				resultObj = eval (data_array);
+				
+				for (var index in resultObj){
+					jQuery('.'+index).html(resultObj[index]);
+				}	
+		}
+		
 	});
- 	 
+	
 }
 
 jQuery(document).ready(function() {

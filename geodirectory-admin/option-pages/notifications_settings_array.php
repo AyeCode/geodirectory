@@ -115,15 +115,15 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
 	
 	array(  
 		'name' => __( 'Post submit success to admin email', GEODIRECTORY_TEXTDOMAIN ),
-		'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+		'desc' 		=> '',
 		'id' 		=> 'geodir_post_submited_success_email_subject_admin',
 		'type' 		=> 'text',
 		'css' 		=> 'min-width:300px;',
 		'std' 		=> 'Post Submitted Successfully' // Default value for the page title - changed in settings
 	),
 	array(  
-		'name' => __( '', GEODIRECTORY_TEXTDOMAIN ),
-		'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+		'name' => '',
+		'desc' 		=> '',
 		'id' 		=> 'geodir_post_submited_success_email_content_admin',
 		'css' 		=> 'width:500px; height: 150px;',
 		'type' 		=> 'textarea',
@@ -140,15 +140,15 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
 	
 	array(  
 		'name' => __( 'Post submit success to client email', GEODIRECTORY_TEXTDOMAIN ),
-		'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+		'desc' 		=> '',
 		'id' 		=> 'geodir_post_submited_success_email_subject',
 		'type' 		=> 'text',
 		'css' 		=> 'min-width:300px;',
 		'std' 		=> 'Post Submitted Successfully' // Default value for the page title - changed in settings
 	),
 	array(  
-		'name' => __( '', GEODIRECTORY_TEXTDOMAIN ),
-		'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+		'name' => '',
+		'desc' 		=> '',
 		'id' 		=> 'geodir_post_submited_success_email_content',
 		'css' 		=> 'width:500px; height: 150px;',
 		'type' 		=> 'textarea',
@@ -158,15 +158,15 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
 	
 	array(  
 		'name' => __( 'User forgot password email', GEODIRECTORY_TEXTDOMAIN ),
-		'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+		'desc' 		=> '',
 		'id' 		=> 'geodir_forgot_password_subject',
 		'type' 		=> 'text',
 		'css' 		=> 'min-width:300px;',
 		'std' 		=> '[#site_name#] - Your new password' // Default value for the page title - changed in settings
 	),
 	array(  
-		'name' => __( '', GEODIRECTORY_TEXTDOMAIN ),
-		'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+		'name' => '',
+		'desc' 		=> '',
 		'id' 		=> 'geodir_forgot_password_content',
 		'css' 		=> 'width:500px; height: 150px;',
 		'type' 		=> 'textarea',
@@ -175,15 +175,15 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
 	
 	array(  
 		'name' => __( 'Registration success email', GEODIRECTORY_TEXTDOMAIN ),
-		'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+		'desc' 		=> '',
 		'id' 		=> 'geodir_registration_success_email_subject',
 		'type' 		=> 'text',
 		'css' 		=> 'min-width:300px;',
 		'std' 		=> 'Your Log In Details' // Default value for the page title - changed in settings
 	),
 	array(  
-		'name' => __( '', GEODIRECTORY_TEXTDOMAIN ),
-		'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+		'name' => '',
+		'desc' 		=> '',
 		'id' 		=> 'geodir_registration_success_email_content',
 		'css' 		=> 'width:500px; height: 150px;',
 		'type' 		=> 'textarea',
@@ -198,15 +198,15 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
 	
 	array(  
 		'name' => __( 'Send to friend', GEODIRECTORY_TEXTDOMAIN ),
-		'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+		'desc' 		=> '',
 		'id' 		=> 'geodir_email_friend_subject',
 		'type' 		=> 'text',
 		'css' 		=> 'min-width:300px;',
 		'std' 		=> '[#from_name#] thought you might be interested in..'
 	),
 	array(  
-		'name' => __( '', GEODIRECTORY_TEXTDOMAIN ),
-		'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+		'name' => '',
+		'desc' 		=> '',
 		'id' 		=> 'geodir_email_friend_content',
 		'css' 		=> 'width:500px; height: 150px;',
 		'type' 		=> 'textarea',
@@ -215,15 +215,15 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
 	
 	array(  
 		'name' => __( 'Email enquiry', GEODIRECTORY_TEXTDOMAIN ),
-		'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+		'desc' 		=> '',
 		'id' 		=> 'geodir_email_enquiry_subject',
 		'type' 		=> 'text',
 		'css' 		=> 'min-width:300px;',
 		'std' 		=> __('Website Enquiry',GEODIRECTORY_TEXTDOMAIN)
 	),
 	array(  
-		'name' => __( '', GEODIRECTORY_TEXTDOMAIN ),
-		'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+		'name' => '',
+		'desc' 		=> '',
 		'id' 		=> 'geodir_email_enquiry_content',
 		'css' 		=> 'width:500px; height: 150px;',
 		'type' 		=> 'textarea',
@@ -240,7 +240,7 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
 	
 	array(  
 		'name' => __( 'Post submitted success', GEODIRECTORY_TEXTDOMAIN ),
-		'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+		'desc' 		=> '',
 		'id' 		=> 'geodir_post_added_success_msg_content',
 		'css' 		=> 'width:500px; height: 150px;',
 		'type' 		=> 'textarea',

@@ -9,15 +9,13 @@ $post_type_info = get_post_type_object( $gd_post_type );
 	
 if(is_search())
 {
-	$list_title = __('Search ',GEODIRECTORY_TEXTDOMAIN).$post_type_info->labels->name. __(' For :',GEODIRECTORY_TEXTDOMAIN)." '".get_search_query()."'";
+	$list_title = __('Search',GEODIRECTORY_TEXTDOMAIN).' '.$post_type_info->labels->name. __(' For :',GEODIRECTORY_TEXTDOMAIN)." '".get_search_query()."'";
 
 }	
 
 ?>
 
-<div id="geodir_wrapper">
-	
-    <?php geodir_breadcrumb(); ?>
+<div id="geodir_wrapper">    
     
     <?php if(get_option('geodir_show_search_top_section')) { ?>
     
@@ -26,6 +24,8 @@ if(is_search())
 	</div><!-- clearfix ends here-->
     
     <?php } ?>
+    
+    <?php geodir_breadcrumb(); ?>
     
     <h1><?php echo apply_filters('geodir_search_page_title',wptexturize($list_title)); ?></h1>
     
@@ -36,14 +36,14 @@ if(is_search())
     <div class="clearfix geodir-common">
     	
         <?php if( get_option('geodir_show_search_left_section') ) { ?> 
-        <div class="geodir-onethird" <?php if($width = get_option('geodir_width_search_left_section') ) { echo 'style="width:'.$width.'%;"'; } ?> >
+        <div class="geodir-onethird gd-third-left" <?php if($width = get_option('geodir_width_search_left_section') ) { echo 'style="width:'.$width.'%;"'; } ?> >
            <div class="geodir-content-left">
 		   <?php dynamic_sidebar('geodir_search_left_sidebar');?>
            </div>
         </div>
         <?php } ?>
         
-        <div class="geodir-onethird" <?php if($width = get_option('geodir_width_search_contant_section') ) { echo'style="width:'.$width.'%;"';} ?> >
+        <div class="geodir-onethird gd-third-middle" <?php if($width = get_option('geodir_width_search_contant_section') ) { echo'style="width:'.$width.'%;"';} ?> >
        		<div class="geodir-content-content">
 					
 					<div class="clearfix">
@@ -81,7 +81,7 @@ if(is_search())
         <?php
 	    	
 		 if( get_option('geodir_show_search_right_section') ) { ?> 
-        <div class="geodir-onethird" <?php if($width = get_option('geodir_width_search_right_section') ) { echo 'style="width:'.$width.'%;"';} ?> >
+        <div class="geodir-onethird gd-third-right" <?php if($width = get_option('geodir_width_search_right_section') ) { echo 'style="width:'.$width.'%;"';} ?> >
         	<div class="geodir-content-right">
             <?php   
 			dynamic_sidebar('geodir_search_right_sidebar');?>

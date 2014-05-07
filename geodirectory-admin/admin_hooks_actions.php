@@ -210,6 +210,21 @@ function geodir_enable_editor_on_notifications($notification){
 }
 
 
+add_filter('geodir_design_settings', 'geodir_enable_editor_on_design_settings', 1);
+
+function geodir_enable_editor_on_design_settings($design_setting){
+	
+	if(!empty($design_setting) && get_option('geodir_tiny_editor')=='1'){
+		
+		foreach($design_setting as $key => $value){
+			if($value['type'] == 'textarea' && $value['id'] == 'geodir_term_condition_content')
+				$design_setting[$key]['type'] = 'editor';
+		}
+		
+	}
+	
+	return $design_setting;
+}
 
 /* ----------- START MANAGE CUSTOM FIELDS ---------------- */
 
@@ -484,6 +499,24 @@ function geodir_cf_panel_selected_fields_note($note , $sub_tab , $listing_type)
 			break;
 	}
 	return $note;
+}
+
+
+
+add_action('admin_init', 'geodir_remove_unnecessary_fields');
+
+function geodir_remove_unnecessary_fields(){
+	global $wpdb, $plugin_prefix;
+	
+	if(!get_option('geodir_remove_unnecessary_fields')){
+	
+		if($wpdb->get_var("SHOW COLUMNS FROM ".$plugin_prefix."gd_place_detail WHERE field = 'categories'"))
+			$wpdb->query("ALTER TABLE `".$plugin_prefix."gd_place_detail` DROP `categories`");
+		
+		update_option('geodir_remove_unnecessary_fields', '1');
+	
+	}
+	
 }
 
 

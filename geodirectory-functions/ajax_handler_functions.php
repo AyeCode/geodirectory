@@ -62,50 +62,38 @@ function geodir_on_init(){
 		geodir_getGoogleAnalytics($_REQUEST['ga_page'],$_REQUEST['ga_start'],$_REQUEST['ga_end']);
 		die;	
 	}
-	
+	 
 	if(isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action']=='geodir_get_term_count')
 	{
 			global $wpdb,$plugin_prefix;	
+		
+			$term_array = unserialize(stripslashes($_REQUEST['term_array']));
 			
-			$where_condition = '';
-			
-			$trem_id_array = array();
-			$trem_id_array = explode(',',$_REQUEST['term_id']);
 			$counting_array = array();
 			$total_count = 0;
 			
-			foreach($trem_id_array as $value)
+			
+			foreach($term_array as $value)
 			{
-			
-				$term_texonomy =  $wpdb->get_var($wpdb->prepare("SELECT taxonomy FROM ".$wpdb->prefix."term_taxonomy where term_id=%s",array($value)));
-			
-				$post_type = str_replace('category','',$term_texonomy);
+				$term_id = $value['termid'];
+				$post_type = $value['posttype'];
 				$table_name = $plugin_prefix.$post_type.'_detail';
-				$field_name = $term_texonomy;
+				$field_name = $post_type.'category';
 				
 				$table_join = '';
 				$join_condition = '';
 				$where_condition = '';
 				
-				if($post_type =='gd_event')
-				{
+				$table_join = apply_filters('geodir_cat_post_count_join',$table_join,$post_type);
+				$where_condition = apply_filters('geodir_cat_post_count_where',$where_condition,$post_type);
 				
-					$table_join = apply_filters('geodir_cat_post_count_join',$table_join,$post_type);
-			
-					$where_condition = apply_filters('geodir_cat_post_count_where',$where_condition,$post_type);
-				}
-					
-				$total_count =  $wpdb->get_var("SELECT count(post_id) FROM ".$table_name." $table_join WHERE FIND_IN_SET($value, $field_name) $where_condition");
-				
-				
-					
-				//remove_all_filters( 'geodir_cat_post_count_join' );
-				//remove_all_filters( 'geodir_cat_post_count_where' );
-				
+				$total_count =  $wpdb->get_var("SELECT count(post_id) FROM ".$table_name." $table_join WHERE FIND_IN_SET($term_id, $field_name) $where_condition");
 				
 				if($total_count>0)
-					$counting_array['geodir_category_class'.$value] = $total_count; 
+					$counting_array['geodir_category_class_'.$post_type.'_'.$term_id] = $total_count; 
+					
 			}
+			
 				echo json_encode( $counting_array );
 				exit();
 			
@@ -180,7 +168,13 @@ function geodir_ajax_handler()
 		}
 	}
 	
-	
+	if(isset($_REQUEST['popuptype']) && $_REQUEST['popuptype'] != '' && isset($_REQUEST['post_id']) && $_REQUEST['post_id'] != ''){
+		
+		if($_REQUEST['popuptype'] == 'b_send_inquiry' || $_REQUEST['popuptype'] == 'b_sendtofriend')
+			require_once (geodir_plugin_path().'/geodirectory-templates/popup-forms.php');
+		
+		exit;
+	}
 	
 	/*if(isset($_REQUEST['geodir_ajax']) && $_REQUEST['geodir_ajax'] == 'filter_ajax'){
 		include_once ( geodir_plugin_path() . '/geodirectory-templates/advance-search-form.php'); 
