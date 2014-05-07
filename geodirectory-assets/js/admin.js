@@ -26,6 +26,15 @@ jQuery(document).ready(function(){
 		
 	});
 	
+	 
+	if(jQuery('#geodir_add_location_url').is(':checked')){
+			jQuery('#geodir_add_location_url').closest('td').find('input').not(jQuery('#geodir_add_location_url')).prop('disabled', false);
+	}else{
+		jQuery('#geodir_add_location_url').closest('td').find('input').not(jQuery('#geodir_add_location_url')).prop('disabled', true);
+	}
+	
+
+	
 	jQuery('#geodir_add_categories_url').click(function(){
 		
 		if(jQuery(this).is(':checked')){

@@ -26,8 +26,13 @@ get_header(); ?>
 	<?php } ?>
 </script>
 
-<div id="geodir_wrapper">
-	<div class="geodir_full_page clearfix">
+<div id="geodir_wrapper" class="geodir-login">
+	
+
+				<div class="clearfix geodir-common">       
+
+
+					<div id="geodir_content" class="" role="main">
             
        
             <?php dynamic_sidebar('Reg/Login Top Section'); ?>
@@ -73,7 +78,7 @@ get_header(); ?>
                 </div>
             
             <?php }?>
-       
+       </div>
 	</div>
 </div>
 <script type="text/javascript">
@@ -82,7 +87,7 @@ get_header(); ?>
 
 
 	<?php if((isset($errors->errors['invalidcombo']) && $errors->errors['invalidcombo'] != '') || (isset($errors->errors['empty_username']) && $errors->errors['empty_username'] != '')) {?>
-		<script language="javascript">document.getElementById('lostpassword_form').style.display = '';</script>
+		<script type="text/javascript">document.getElementById('lostpassword_form').style.display = '';</script>
 	<?php }   
 
 get_footer();  

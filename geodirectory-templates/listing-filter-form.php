@@ -5,7 +5,7 @@ $curr_post_type = geodir_get_current_posttype();
 ?>
 
 
- <form id="listing_search" name="listing_search" action="<?php echo home_url();?>" method="get" >
+ <form class="listing_search" name="listing_search" action="<?php echo home_url();?>" method="get" >
     <input type="hidden" name="geodir_search" value="1"  />
     
     <div class="geodir-loc-bar">
@@ -21,10 +21,10 @@ $curr_post_type = geodir_get_current_posttype();
 				
 				if(!empty($post_types) && count((array)$post_types) > 1 ):
 				?>
-                <select name="stype" id="search_by_post" >
+                <select name="stype" class="search_by_post" >
 				<?php foreach( $post_types as $post_type => $info ): ?>
                         
-                    <option opt_label="<?php echo get_post_type_archive_link($post_type);?>" value="<?php echo $post_type;?>" <?php if(isset($_REQUEST['stype'])){if($post_type == $_REQUEST['stype']){echo 'selected="selected"';}}elseif($curr_post_type==$post_type){echo 'selected="selected"';}?>><?php _e(ucfirst($info->labels->singular_name),GEODIRECTORY_TEXTDOMAIN);?></option>
+                    <option opt_label="<?php echo get_post_type_archive_link($post_type);?>" value="<?php echo $post_type;?>" <?php if(isset($_REQUEST['stype'])){if($post_type == $_REQUEST['stype']){echo 'selected="selected"';}}elseif($curr_post_type==$post_type){echo 'selected="selected"';}?>><?php _e(ucfirst($info->labels->name),GEODIRECTORY_TEXTDOMAIN);?></option>
                         
                	<?php endforeach; ?>
                 </select>
@@ -32,7 +32,7 @@ $curr_post_type = geodir_get_current_posttype();
 					echo '<input type="hidden" name="stype" value="'. key($post_types) .'"  />';    
                 endif; ?>
                 
-                <input id="search_text" name="s" value="<?php if(isset($_REQUEST['s']) && trim($_REQUEST['s']) != '' ){ echo $_REQUEST['s'];}else{echo SEARCH_FOR_TEXT;} ?>" type="text" onblur="if (this.value == '') {this.value = '<?php echo SEARCH_FOR_TEXT;?>';}"  onfocus="if (this.value == '<?php echo SEARCH_FOR_TEXT;?>') {this.value = '';}" >
+                <input class="search_text" name="s" value="<?php if(isset($_REQUEST['s']) && trim($_REQUEST['s']) != '' ){ echo $_REQUEST['s'];}else{echo SEARCH_FOR_TEXT;} ?>" type="text" onblur="if (this.value == '') {this.value = '<?php echo SEARCH_FOR_TEXT;?>';}"  onfocus="if (this.value == '<?php echo SEARCH_FOR_TEXT;?>') {this.value = '';}" >
                 
                 
                 <?php 
@@ -41,7 +41,7 @@ $curr_post_type = geodir_get_current_posttype();
 				}else{$near = NEAR_TEXT;}
 				
 				?>
-                <input name="snear" id="snear" type="text" value="<?php echo $near;?>" onblur="if (this.value == '') {this.value = '<?php echo NEAR_TEXT;?>';}"  onfocus="if (this.value == '<?php echo NEAR_TEXT;?>') {this.value = '';}"   />
+                <input name="snear" class="snear" type="text" value="<?php echo $near;?>" onblur="if (this.value == '') {this.value = '<?php echo NEAR_TEXT;?>';}"  onfocus="if (this.value == '<?php echo NEAR_TEXT;?>') {this.value = '';}"   />
                
                 <input type="button" value="Search" class="geodir_submit_search">
                
@@ -58,6 +58,6 @@ $curr_post_type = geodir_get_current_posttype();
 		             
         
     </div>				
-	<input name="sgeo_lat" id="sgeo_lat" type="hidden" value="" />
-    <input name="sgeo_lon" id="sgeo_lon" type="hidden" value="" />   
+	<input name="sgeo_lat" class="sgeo_lat" type="hidden" value="" />
+    <input name="sgeo_lon" class="sgeo_lon" type="hidden" value="" />   
 </form>

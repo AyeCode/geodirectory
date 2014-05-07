@@ -21,7 +21,25 @@ function create_marker_jason_of_posts($post){
 	
 	if( ( is_main_query() || $add_post_in_marker_array ) && $post->marker_json != '')
 	{	
-		$map_jason[] =  $post->marker_json;
+			
+			$srcharr = array("'","/","-",'"','\\');
+			$replarr = array("&prime;","&frasl;","&ndash;","&ldquo;",'');
+		
+		 $icon = '';
+		 if($post->default_category != ''){
+			
+			$term_icon_url = get_tax_meta($post->default_category,'ct_cat_icon');
+			$icon = $term_icon_url['src'];
+			
+		 }
+		
+			$post_title = $post->post_title;
+			$title = str_replace($srcharr,$replarr,$post_title);
+				
+		$map_jason[] =  '{"id":"'.$post->ID.'","t": "'.$title.'","lt": "'.$post->post_latitude.'","ln": "'.$post->post_longitude.'","mk_id":"'.$post->ID.'_'.$post->default_category.'","i":"'.$icon.'"}';
+		
+		//$map_jason[] =  $post->marker_json;
+		
 	}
 }
 

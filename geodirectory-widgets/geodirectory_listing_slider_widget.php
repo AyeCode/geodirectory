@@ -46,7 +46,7 @@ class geodir_listing_slider_widget extends WP_Widget {
 		
 		?>
 		
-<script type="text/javascript" language="javascript">
+<script type="text/javascript" >
 
 	jQuery(window).load(function(){
 	
@@ -141,7 +141,7 @@ class geodir_listing_slider_widget extends WP_Widget {
 											$widget_main_slides .=	$title.'<img src="'.$widget_image->src.'"  alt="'.$widget_image->title.'" title="'.$widget_image->title.'" style="max-height:200px;margin:0 auto;" /></li>';
 												
 												
-											$nav_slides .=	'<li><img src="'.$widget_image->src.'"  alt="'.$widget_image->title.'" title="'.$widget_image->title.'"style="max-height:48px;margin:0 auto;" /></li>';
+											$nav_slides .=	'<li><img src="'.$widget_image->src.'"  alt="'.$widget_image->title.'" title="'.$widget_image->title.'" style="max-height:48px;margin:0 auto;" /></li>';
 																
 											$widget_slides++;
 										}

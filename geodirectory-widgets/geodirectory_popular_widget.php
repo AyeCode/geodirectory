@@ -32,7 +32,7 @@ class geodir_popular_post_category extends WP_Widget {
 		if($gd_post_type):
 			$post_type_info = get_post_type_object( $gd_post_type );
 			$single_name = $post_type_info->labels->singular_name;
-			$title = __('Popular ',GEODIRECTORY_TEXTDOMAIN) .$single_name. __(' Categories',GEODIRECTORY_TEXTDOMAIN);
+			$title = __('Popular',GEODIRECTORY_TEXTDOMAIN).' '.$single_name. __(' Categories',GEODIRECTORY_TEXTDOMAIN);
 		endif;
 		
 		$taxonomy = geodir_get_taxonomies( $gd_post_type );
@@ -54,47 +54,32 @@ class geodir_popular_post_category extends WP_Widget {
 					global $geodir_post_category_str;
 					$cat_count = 0;
 					
-					
-					
+					$geodir_post_category_str = array();
 					
 					echo '<ul>'; 
 					
-				
 					foreach($terms as $cat){ 
 					
 					$taxonomy_obj = get_taxonomy($cat->taxonomy);
-			
+					
 					$post_type = $taxonomy_obj->object_type[0];	
 						
 						if($cat_count%15 == 0 )
 							echo '</ul><ul class="geodir-more-contant">';
 							
-							//$total_post = geodir_get_cat_postcount($cat);
 							$total_post = 0;
 							
 							echo '<li><a href="'.get_term_link($cat,$cat->taxonomy).'">';
-							echo ucwords($cat->name).' (<span class="geodir_term_class geodir_link_span geodir_category_class'.$cat->term_id.'" >'.$total_post.'</span>) ';
-							if($geodir_post_category_str != '')
-							{
-								$geodir_post_category_array = explode(',' , $geodir_post_category_str) ;
-								
-								if(is_array($geodir_post_category_array ))
-								{
-									if(!in_array( $cat->term_id , $geodir_post_category_array))
-										$geodir_post_category_str.=','.$cat->term_id;	
-								}
-								/*else if(strpos($geodir_post_category_str, $cat->term_id)===false) 
-								{ 
-									$geodir_post_category_str.=','.$cat->term_id;	
-								}*/
-							}
-							else
-								$geodir_post_category_str = $cat->term_id;
+							echo ucwords($cat->name).' (<span class="geodir_term_class geodir_link_span geodir_category_class_'.$post_type.'_'.$cat->term_id.'" >'.$total_post.'</span>) ';
+							
+							$geodir_post_category_str[] = array('posttype'=>$post_type, 'termid'=>$cat->term_id);
+							
 							echo '</a></li>';
 							
 							$cat_count++;
 					 } 
 					 echo '</ul>'; 
+					 
 					 
 					// do_action('geodir_term_array_count',$post_category_array); 
 					

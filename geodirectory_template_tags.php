@@ -234,7 +234,7 @@ function geodir_listingsearch_scripts()
 	if($dist <= 50) $dist_dif = 5;
 	
 	?>
-	<script language="javascript">
+	<script type="text/javascript">
 	
 		jQuery(function($) {
 			$( "#distance_slider" ).slider({
@@ -305,55 +305,58 @@ function geodir_add_sharelocation_scripts()
         
         
         jQuery('.geodir_submit_search').click(function(){
-            var s = ' '
+            var s = ' ';
+			
+			var $form = jQuery(this).closest('form');
+
            
             if(jQuery("#sdist input[type='radio']:checked").length != 0)
                 dist = jQuery("#sdist input[type='radio']:checked").val();
             
-            if(jQuery('#listing_search #search_text').val() == '' || jQuery('#listing_search #search_text').val() == '<?php echo SEARCH_FOR_TEXT;?>')
-                jQuery('#listing_search #search_text').val(s);            
-				if(dist > 0 || (jQuery('select[name="sort_by"]').val() == 'nearest' || jQuery('select[name="sort_by"]').val() == 'farthest')  || ( jQuery("#snear").val() != '' && jQuery("#snear").val() != '<?php echo NEAR_TEXT;?>') )
-            { geodir_setsearch(); }
+            if(jQuery('.search_text',$form).val() == '' || jQuery('.search_text',$form ).val() == '<?php echo SEARCH_FOR_TEXT;?>')
+                jQuery('.search_text',$form).val(s);            
+				if(dist > 0 || (jQuery('select[name="sort_by"]').val() == 'nearest' || jQuery('select[name="sort_by"]',$form).val() == 'farthest')  || ( jQuery(".snear",$form ).val() != '' && jQuery(".snear",$form ).val() != '<?php echo NEAR_TEXT;?>') )
+            { geodir_setsearch($form); }
             else
             { 
-                jQuery("#snear").val('');
-                jQuery("#listing_search").submit(); 
+                jQuery(".snear",$form ).val('');
+                jQuery($form).submit(); 
             }
             
         });
         
-        function geodir_setsearch()
-        {            if( ( dist > 0 || (jQuery('select[name="sort_by"]').val() == 'nearest' || jQuery('select[name="sort_by"]').val() == 'farthest')) && (jQuery("#snear").val() == '' || jQuery("#snear").val() == '<?php echo NEAR_TEXT;?>' ) )
-                jQuery("#snear").val(default_location);
+        function geodir_setsearch($form)
+        {            if( ( dist > 0 || (jQuery('select[name="sort_by"]',$form).val() == 'nearest' || jQuery('select[name="sort_by"]',$form).val() == 'farthest')) && (jQuery(".snear",$form).val() == '' || jQuery(".snear",$form).val() == '<?php echo NEAR_TEXT;?>' ) )
+                jQuery(".snear",$form).val(default_location);
                 
-            geocodeAddress();
+            geocodeAddress($form);
         }
         
-        function updateSearchPosition(latLng) {
-            jQuery('#sgeo_lat').val(latLng.lat());
-            jQuery('#sgeo_lon').val(latLng.lng());
-            jQuery("#listing_search").submit(); // submit form after insering the lat long positions
+        function updateSearchPosition(latLng,$form) {
+            jQuery('.sgeo_lat').val(latLng.lat());
+            jQuery('.sgeo_lon').val(latLng.lng());
+            jQuery($form).submit(); // submit form after insering the lat long positions
         }
         
-        function geocodeAddress() {
+        function geocodeAddress($form) {
             Sgeocoder = new google.maps.Geocoder(); // Call the geocode function
             
-            if(jQuery('#snear').val() == ''){
-                jQuery("#listing_search").submit();
+            if(jQuery('.snear',$form).val() == ''){
+                jQuery($form).submit();
             }else{
             
-                var address = jQuery("#snear").val();
+                var address = jQuery(".snear",$form).val();
                 
-                if(jQuery('#snear').val() == '<?php echo NEAR_TEXT;?>'){
+                if(jQuery('.snear',$form).val() == '<?php echo NEAR_TEXT;?>'){
                     initialise2();
                 }else{
                 
                     Sgeocoder.geocode( { 'address': address<?php //gt_advanced_near_search();?> }, 
                     function(results, status) {
                         if (status == google.maps.GeocoderStatus.OK) {
-                            updateSearchPosition(results[0].geometry.location);
+                            updateSearchPosition(results[0].geometry.location,$form);
                         } else {
-                            alert("<?php _e('Search was not successful for the following reason: ',GEODIRECTORY_TEXTDOMAIN);?>" + status);
+                            alert("<?php _e('Search was not successful for the following reason:',GEODIRECTORY_TEXTDOMAIN);?>" + status);
                         }
                     });
                 }
@@ -403,10 +406,10 @@ function geodir_add_sharelocation_scripts()
      
         function positionSuccess(position) {
             var coords = position.coords || position.coordinate || position;
-            jQuery('#sgeo_lat').val(coords.latitude);
-            jQuery('#sgeo_lon').val(coords.longitude);
+            jQuery('.sgeo_lat').val(coords.latitude);
+            jQuery('.sgeo_lon').val(coords.longitude);
               
-            jQuery("#listing_search").submit(); 
+            jQuery($form).submit(); 
         }
      
     
@@ -422,7 +425,7 @@ function geodir_location_header_scripts()
 	
 	?>
 	
-	<script language="javascript" type="text/javascript">
+	<script  type="text/javascript">
 
 	jQuery(document).ready(function () {
 		jQuery(".chosen_select").each(function(){

@@ -55,6 +55,6 @@ if ( post_password_required() )
 
 	<?php endif; // have_comments() ?>
 
-	<?php comment_form( array( 'title_reply' => __('Leave a Review',GEODIRECTORY_TEXTDOMAIN), 'label_submit' => __('Post Review',GEODIRECTORY_TEXTDOMAIN),'comment_field' => '<p class="comment-form-comment"><label for="comment">' . _x( 'Review text', 'noun',GEODIRECTORY_TEXTDOMAIN ) . '</label><textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p>' ) ); ?>
+	<?php comment_form( array( 'title_reply' => __('Leave a Review',GEODIRECTORY_TEXTDOMAIN), 'label_submit' => __('Post Review',GEODIRECTORY_TEXTDOMAIN),'comment_field' => '<p class="comment-form-comment"><label for="comment">' . __( 'Review text', GEODIRECTORY_TEXTDOMAIN ) . '</label><textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p>' ) ); ?>
 
 </div><!-- #comments .comments-area -->

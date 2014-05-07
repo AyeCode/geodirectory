@@ -38,9 +38,11 @@ if (is_admin()){
 	 * Initiate your meta box
 	 */
 	$my_meta =  new Tax_Meta_Class($config);
-	$my_meta->addWysiwyg($prefix.'cat_top_desc',array('name'=> __('Category Top Description ' , GEODIRECTORY_TEXTDOMAIN),'desc' => __('This will appear at the top of the category lsiting. Use', GEODIRECTORY_TEXTDOMAIN) . ' %location_name% '. __('to show the current locations name.', GEODIRECTORY_TEXTDOMAIN)));
-	$my_meta->addImage($prefix.'cat_default_img',array('name'=> __('Default Listing Image ' , GEODIRECTORY_TEXTDOMAIN),'desc' => __('Choose a default "no image"',GEODIRECTORY_TEXTDOMAIN)));
-	$my_meta->addImage($prefix.'cat_icon',array('name'=> __('Category Icon ', GEODIRECTORY_TEXTDOMAIN),'desc' => __('Choose a category icon',GEODIRECTORY_TEXTDOMAIN) ,'validate_func' => '!empty'));
+	$my_meta->addWysiwyg($prefix.'cat_top_desc',array('name'=> __('Category Top Description' , GEODIRECTORY_TEXTDOMAIN),'desc' => __('This will appear at the top of the category lsiting. Use', GEODIRECTORY_TEXTDOMAIN) . ' %location_name% '. __('to show the current locations name.', GEODIRECTORY_TEXTDOMAIN)));
+	$my_meta->addImage($prefix.'cat_default_img',array('name'=> __('Default Listing Image' , GEODIRECTORY_TEXTDOMAIN),'desc' => __('Choose a default "no image"',GEODIRECTORY_TEXTDOMAIN)));
+	$my_meta->addImage($prefix.'cat_icon',array('name'=> __('Category Icon', GEODIRECTORY_TEXTDOMAIN),'desc' => __('Choose a category icon',GEODIRECTORY_TEXTDOMAIN) ,'validate_func' => '!empty'));
+	$my_meta->addCheckbox($prefix.'pointless',array('name'=> __('<b>Exclude</b> Rating sort option',GEODIRECTORY_TEXTDOMAIN),'style'=>'hidden'));// hidden setting to trick WPML
+
 	/*$my_meta->addSelect($prefix.'cat_sort',array(''=>__('Default' , GEODIRECTORY_TEXTDOMAIN),
 	'random'=>__('Random',GEODIRECTORY_TEXTDOMAIN),
 	'az'=>__('Alphabetical' , GEODIRECTORY_TEXTDOMAIN),
@@ -50,7 +52,7 @@ if (is_admin()){
 	'low_rating'=>__('Lowest Rating',GEODIRECTORY_TEXTDOMAIN),
 	'high_review'=>__('Highest Reviews',GEODIRECTORY_TEXTDOMAIN),
 	'low_review'=>__('Lowest Reviews',GEODIRECTORY_TEXTDOMAIN)),
-	array('name'=> __('Sort By ',GEODIRECTORY_TEXTDOMAIN),'desc' => __('Select the default sort option.' ,GEODIRECTORY_TEXTDOMAIN), 'std'=> array('selectkey2')));*/
+	array('name'=> __('Sort By',GEODIRECTORY_TEXTDOMAIN),'desc' => __('Select the default sort option.' ,GEODIRECTORY_TEXTDOMAIN), 'std'=> array('selectkey2')));*/
 	
 	// Show options for placecategories only
 /*	if(isset($_REQUEST['taxonomy']) && in_array($_REQUEST['taxonomy'],$config['pages']) ){
@@ -106,8 +108,27 @@ function manage_category_custom_fields($deprecated,$column_name,$term_id)
 	if ($column_name == 'cat_icon') {
 		 $term_icon_url = get_tax_meta($term_id,'ct_cat_icon');
 		
-		 if($term_icon_url !='')
+		 if($term_icon_url !=''){
+		 
+			$file_info = pathinfo($term_icon_url['src']);
+			
+			if($file_info['dirname'] != '.' && $file_info['dirname'] != '..')
+				$sub_dir = $file_info['dirname'];
+			
+			$uploads = wp_upload_dir(trim($sub_dir, '/')); // Array of key => value pairs	
+			$uploads_baseurl = $uploads['baseurl'];
+			$uploads_path = $uploads['path'];
+			
+			$file_name =  $file_info['basename'];
+			
+			$sub_dir = str_replace($uploads_baseurl,'',$sub_dir);
+			
+			$uploads_url = $uploads_baseurl.$sub_dir;
+			
+			$term_icon_url['src'] = $uploads_url.'/'.$file_name ;
 			echo '<img src="'.$term_icon_url['src'].'" />';
+			
+		}
 	} 
 	
 	if ($column_name == 'cat_default_img') {

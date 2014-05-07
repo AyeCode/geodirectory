@@ -337,7 +337,7 @@ jQuery(document).ready(function($) {
 	//upload button
 		var formfield1;
 		var formfield2;
-		jQuery('.at-upload_image_button').live('click',function(e){
+	/*	jQuery('.at-upload_image_button').live('click',function(e){
 			formfield1 = jQuery(this).prev();
 			formfield2 = jQuery(this).prev().prev();			
 			tb_show('', 'media-upload.php?type=image&amp;TB_iframe=true');
@@ -362,5 +362,55 @@ jQuery(document).ready(function($) {
 				window.send_to_editor = window.restore_send_to_editor;
 			}
 			return false;
-		});
+		});*/
+	
+	
+	
+	
+	// Uploading files
+var file_frame;
+ 
+  jQuery('.at-upload_image_button').live('click', function( event ){
+ 			formfield1 = jQuery(this).prev();
+			formfield2 = jQuery(this).prev().prev();
+    event.preventDefault();
+ 
+    // If the media frame already exists, reopen it.
+    if ( file_frame ) {
+      file_frame.open();
+      return;
+    }
+ 
+    // Create the media frame.
+    file_frame = wp.media.frames.file_frame = wp.media({
+      title: jQuery( this ).data( 'uploader_title' ),
+      button: {
+        text: jQuery( this ).data( 'uploader_button_text' ),
+      },
+      multiple: false,  // Set to true to allow multiple files to be selected
+	  library: {
+            type: 'image' //Only allow images
+        },
+    });
+ 
+    // When an image is selected, run a callback.
+    file_frame.on( 'select', function() {
+      // We set multiple to false so only get one image from the uploader
+      attachment = file_frame.state().get('selection').first().toJSON();
+ 
+      // Do something with attachment.id and/or attachment.url here
+	  jQuery(formfield2).val(attachment.id);
+	  jQuery(formfield1).val(attachment.url);
+	  load_images_muploader();
+    });
+ 
+    // Finally, open the modal
+    file_frame.open();
+  });
+  
+  
 });
+
+
+
+

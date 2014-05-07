@@ -5,7 +5,7 @@ function geodir_is_login($redirect = false){
 	if(!$current_user->ID){
 		if($redirect){
 			?>
-			<script language="javascript" ?> 
+			<script type="text/javascript" > 
 				window.location.href = '<?php echo home_url().'?geodir_signup=true';?>';
             </script>
 			<?php
@@ -271,8 +271,8 @@ function geodir_register_new_user($user_login, $user_email) {
 		$fromEmail = geodir_get_site_email_id();
 		$fromEmailName = get_site_emailName();
 		$message = __('<p><b>'.__('Your login Information :',GEODIRECTORY_TEXTDOMAIN).'</b></p>
-<p>'.__('Username: ',GEODIRECTORY_TEXTDOMAIN).$user_login.'</p>
-<p>'.__('Password: ',GEODIRECTORY_TEXTDOMAIN).$user_pass.'</p>');
+<p>'.__('Username:',GEODIRECTORY_TEXTDOMAIN).' '.$user_login.'</p>
+<p>'.__('Password:',GEODIRECTORY_TEXTDOMAIN).' '.$user_pass.'</p>');
 		
 		/////////////customer email//////////////
 		//geodir_sendEmail($fromEmail,$fromEmailName,$user_email,$userName,$subject,$client_message,$extra='');///To client email
@@ -308,7 +308,7 @@ function geodir_user_signup(){
 			$_SERVER['PHP_SELF'] = str_replace( $_SERVER['PATH_INFO'], '', $_SERVER['PHP_SELF'] );
 	
 		$schema = ( isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ) ? 'https://' : 'http://';
-		if ( dirname($schema . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']) != site_url() )
+		if ( dirname($schema . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']) != home_url() )
 			update_option('siteurl', dirname($schema . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']) );
 	}
 	

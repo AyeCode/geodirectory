@@ -227,7 +227,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 		
 		array(  
 			'name' => __( 'Upload listing no image', GEODIRECTORY_TEXTDOMAIN ),
-			'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> '',
 			'id' 		=> 'geodir_listing_no_img',
 			'type' 		=> 'file',
 			'std' 		=> '0' // Default value to show home top section
@@ -235,7 +235,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 		
 		array(  
 			'name' => __( 'Description word limit', GEODIRECTORY_TEXTDOMAIN ),
-			'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> '',
 			'id' 		=> 'geodir_desc_word_limit',
 			'type' 		=> 'text',
 			'css' 		=> 'min-width:300px;',
@@ -276,6 +276,23 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 	
 	array( 'name' => __( 'Add Listing Form Settings', GEODIRECTORY_TEXTDOMAIN ), 'type' => 'sectionstart', 'desc' => '', 'id' => 'geodir_add_listing_gen_settings' ),
 	
+	array(  
+			'name' => __( 'Enable "Accept Terms and Conditions"', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> __( 'Show the "Accept Terms and Conditions" field on add listing.', GEODIRECTORY_TEXTDOMAIN ),
+			'id' 		=> 'geodir_accept_term_condition',
+			'type' 		=> 'checkbox',
+			'std' 		=> '1' // Default value to show home top section
+		),
+		
+		array(  
+			'name' => __( 'Terms and Conditions Content', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> '',
+			'id' 		=> 'geodir_term_condition_content',
+			'type' 		=> 'textarea',
+			'css' 		=> 'width:500px; height: 150px;',
+			'std' 		=> 'Please accept <a href="" target"_blank">terms and conditions</a>'
+		),
+		
 	array(  
 	'name' => __( 'Show description field as editor', GEODIRECTORY_TEXTDOMAIN ),
 		'desc' 		=> __( 'Select post types to show advanced editor on add listing page.', GEODIRECTORY_TEXTDOMAIN ),
@@ -392,7 +409,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 	
 	array( 'name' => __( 'Detail', GEODIRECTORY_TEXTDOMAIN ), 'type' => 'title', 'desc' => '', 'id' => 'geodir_detail_settings ' ),
 	
-	array( 'name' => __( 'Detail/Single Page Settings ', GEODIRECTORY_TEXTDOMAIN ), 'type' => 'sectionstart', 'desc' => '', 'id' => 'detail_page_settings ' ),
+	array( 'name' => __( 'Detail/Single Page Settings', GEODIRECTORY_TEXTDOMAIN ), 'type' => 'sectionstart', 'desc' => '', 'id' => 'detail_page_settings ' ),
 	
 	array(  
 			'name' => __( 'Detail top section', GEODIRECTORY_TEXTDOMAIN ),
@@ -412,9 +429,32 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 	
 	array( 'type' => 'sectionend', 'id' => 'detail_page_settings'),
 	
+	
+	
+	/* ---------- DETAIL PAGE TAB SETTING START*/
+	
+	array( 'name' => __( 'Detail Page Tab Settings', GEODIRECTORY_TEXTDOMAIN ), 'type' => 'sectionstart', 'desc' => '', 'id' => 'geodir_detail_page_tab_settings ' ),
+	
+	array(
+		'name' => __( 'Exclude selected tabs from detail page', GEODIRECTORY_TEXTDOMAIN ),
+		'desc' 		=> __( 'Select tabs to exclude from the list of all appearing tabs on detail page.', GEODIRECTORY_TEXTDOMAIN ),
+		'tip' 		=> '',
+		'id' 		=> 'geodir_detail_page_tabs_excluded',
+		'css' 		=> 'min-width:300px;',
+		'std' 		=> geodir_get_posttypes(),
+		'type' 		=> 'multiselect',
+		'placeholder_text' => __( 'Select tabs', GEODIRECTORY_TEXTDOMAIN ),
+		'class'		=> 'chosen_select',
+		'options' => array_unique( geodir_detail_page_tabs_key_value_array())
+	),
+	
+	
+	array( 'type' => 'sectionend', 'id' => 'geodir_detail_page_tab_settings'),
+	/* ---------- DETAIL PAGE TAB SETTING END*/
+	
 	/* Detail related post settings start */
 		
-		array( 'name' => __( 'Related Post Settings ', GEODIRECTORY_TEXTDOMAIN ), 'type' => 'sectionstart', 'desc' => '', 'id' => 'detail_page_related_post_settings ' ),
+		array( 'name' => __( 'Related Post Settings', GEODIRECTORY_TEXTDOMAIN ), 'type' => 'sectionstart', 'desc' => '', 'id' => 'detail_page_related_post_settings ' ),
 	
 	array(
 		'name' => __( 'Show related post listing on', GEODIRECTORY_TEXTDOMAIN ),
@@ -588,7 +628,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 		
 		array(  
 			'name' => __( 'Description word limit', GEODIRECTORY_TEXTDOMAIN ),
-			'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> '',
 			'id' 		=> 'geodir_author_desc_word_limit',
 			'type' 		=> 'text',
 			'css' 		=> 'min-width:300px;',
@@ -613,7 +653,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 	
 	array(  
 		'name' => __( 'Show geodirectory navigation in selected menu locations', GEODIRECTORY_TEXTDOMAIN ),
-		'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+		'desc' 		=> '',
 		'tip' 		=> '',
 		'id' 		=> 'geodir_theme_location_nav',
 		'css' 		=> 'min-width:300px;',
@@ -660,7 +700,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 				'id' => 'geodir_post_type_navigation_layout' ),
 	array(  
 		'name' => __( 'Show listing link in main navigation', GEODIRECTORY_TEXTDOMAIN ),
-		'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+		'desc' 		=> '',
 		'tip' 		=> '',
 		'id' 		=> 'geodir_add_posttype_in_main_nav',
 		'css' 		=> 'min-width:300px;',
@@ -673,7 +713,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 	
 	array(  
 		'name' => __( 'Show listing link in listing navigation', GEODIRECTORY_TEXTDOMAIN ),
-		'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+		'desc' 		=> '',
 		'tip' 		=> '',
 		'id' 		=> 'geodir_add_posttype_in_listing_nav',
 		'css' 		=> 'min-width:300px;',
@@ -686,7 +726,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 	
 	array(  
 		'name' => __( 'Allow post type to add from frontend', GEODIRECTORY_TEXTDOMAIN ),
-		'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+		'desc' 		=> '',
 		'tip' 		=> '',
 		'id' 		=> 'geodir_allow_posttype_frontend',
 		'css' 		=> 'min-width:300px;',
@@ -699,7 +739,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 	
 	array(  
 		'name' => __( 'Show add listing link in main navigation', GEODIRECTORY_TEXTDOMAIN ),
-		'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+		'desc' 		=> '',
 		'tip' 		=> '',
 		'id' 		=> 'geodir_add_listing_link_main_nav',
 		'css' 		=> 'min-width:300px;',
@@ -712,7 +752,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 	
 	array(  
 		'name' => __( 'Show add listing link in add listing navigation', GEODIRECTORY_TEXTDOMAIN ),
-		'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+		'desc' 		=> '',
 		'tip' 		=> '',
 		'id' 		=> 'geodir_add_listing_link_add_listing_nav',
 		'css' 		=> 'min-width:300px;',
@@ -730,7 +770,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 	
 	array(  
 		'name' => __( 'Show add listing link in user dashboard', GEODIRECTORY_TEXTDOMAIN ),
-		'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+		'desc' 		=> '',
 		'tip' 		=> '',
 		'id' 		=> 'geodir_add_listing_link_user_dashboard',
 		'css' 		=> 'min-width:300px;',
@@ -743,7 +783,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 	
 	array(  
 		'name' => __( 'Show listing link in user dashboard', GEODIRECTORY_TEXTDOMAIN ),
-		'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+		'desc' 		=> '',
 		'tip' 		=> '',
 		'id' 		=> 'geodir_listing_link_user_dashboard',
 		'css' 		=> 'min-width:300px;',
@@ -792,7 +832,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 	
 		array(  
 			'name' => __( 'Custom style css code', GEODIRECTORY_TEXTDOMAIN ),
-			'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> '',
 			'id' 		=> 'geodir_coustem_css',
 			'type' 		=> 'textarea',
 			'css' 		=> 'min-width:300px;',
@@ -801,7 +841,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 		
 		array(  
 			'name' => __( 'Header script code', GEODIRECTORY_TEXTDOMAIN ),
-			'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> '',
 			'id' 		=> 'geodir_header_scripts',
 			'type' 		=> 'textarea',
 			'css' 		=> 'min-width:300px;',
@@ -810,7 +850,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 		
 		array(  
 			'name' => __( 'Footer script code', GEODIRECTORY_TEXTDOMAIN ),
-			'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> '',
 			'id' 		=> 'geodir_footer_scripts',
 			'type' 		=> 'textarea',
 			'css' 		=> 'min-width:300px;',
@@ -828,8 +868,8 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 				'id' => 'geodir_map_default_settings' ),
 	
 	array(  
-			'name' => __( '', GEODIRECTORY_TEXTDOMAIN ),
-			'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+			'name' => '',
+			'desc' 		=> '',
 			'id' 		=> 'map_default_settings',
 			'type' 		=> 'map_default_settings',
 			'css' 		=> 'min-width:300px;',
@@ -845,7 +885,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 	
 		array(  
 			'name' => __( 'Select Map Category', GEODIRECTORY_TEXTDOMAIN ),
-			'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> '',
 			'id' 		=> 'geodir_map_settings',
 			'type' 		=> 'map',
 			'css' 		=> 'min-width:300px;',

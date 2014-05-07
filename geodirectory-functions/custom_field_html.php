@@ -31,13 +31,13 @@ if(isset($field_info->admin_title))
 		{
 		?>
         
-        <b style="cursor:pointer;" onclick="show_hide('field_frm<?php echo $result_str;?>')"><?php echo ucwords(__('Fieldset: ',GEODIRECTORY_TEXTDOMAIN).$field_admin_title);?></b>
+        <b style="cursor:pointer;" onclick="show_hide('field_frm<?php echo $result_str;?>')"><?php echo ucwords(__('Fieldset:',GEODIRECTORY_TEXTDOMAIN).' '.$field_admin_title);?></b>
          <?php
          }
 		 else
 		 {
 		 ?>
-         <b style="cursor:pointer;" onclick="show_hide('field_frm<?php echo $result_str;?>')"><?php echo ucwords(__('Field: ',GEODIRECTORY_TEXTDOMAIN).$field_admin_title.' ('.$field_type.')');?></b>
+         <b style="cursor:pointer;" onclick="show_hide('field_frm<?php echo $result_str;?>')"><?php echo ucwords(__('Field:',GEODIRECTORY_TEXTDOMAIN).' '.$field_admin_title.' ('.$field_type.')');?></b>
         <?php
         }
 		?>
@@ -59,7 +59,7 @@ if(isset($field_info->admin_title))
         <?php }else{?> 
         
             <tr>
-            	<td width="30%"><strong><?php _e('Field Data Type ? : ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+            	<td width="30%"><strong><?php _e('Field Data Type ? :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                 <td align="left">
                    
                     <select name="data_type" id="data_type" >
@@ -75,21 +75,21 @@ if(isset($field_info->admin_title))
         <?php } ?>
         
             <tr>
-                <td width="30%"><strong><?php _e('Admin title : ' ,GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                <td width="30%"><strong><?php _e('Admin title :' ,GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                 <td align="left">
                 	<input type="text" name="admin_title" id="admin_title" value="<?php if(isset($field_info->admin_title)){ echo $field_info->admin_title;}?>" />
                		<br /><span><?php _e('Personal comment, it would not be displayed anywhere except in custom field settings',GEODIRECTORY_TEXTDOMAIN);?></span>
                 </td>
             </tr>
             <tr>
-                <td ><strong><?php _e('Frontend title : ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                <td ><strong><?php _e('Frontend title :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                 <td align="left">
                 	<input type="text" name="site_title" id="site_title" value="<?php if(isset($field_info->site_title)){ echo $field_info->site_title;}?>" />
                 	<br /><span><?php _e('Section title which you wish to display in frontend',GEODIRECTORY_TEXTDOMAIN);?></span>
                 </td>
             </tr>
             <tr>
-                <td ><strong><?php _e('Frontend description : ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                <td ><strong><?php _e('Frontend description :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                 <td align="left">
                 	<input type="text" name="admin_desc" id="admin_desc" value="<?php if(isset($field_info->admin_desc)){ echo $field_info->admin_desc;}?>" />
                 	<br /><span><?php _e('Section description which will appear in frontend',GEODIRECTORY_TEXTDOMAIN);?></span>
@@ -99,7 +99,7 @@ if(isset($field_info->admin_title))
 				{?>
 		
         	<tr>
-                <td ><strong><?php _e('HTML variable name : ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                <td ><strong><?php _e('HTML variable name :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                 <td align="left">
                     <input type="text" name="htmlvar_name" id="htmlvar_name" value="<?php if(isset($field_info->htmlvar_name)){ echo preg_replace('/geodir_/', '', $field_info->htmlvar_name, 1);}?>" <?php if($default) { echo 'readonly="readonly"';}?> />
                     <br />    <span><?php _e('HTML variable name must not be blank',GEODIRECTORY_TEXTDOMAIN);?></span>
@@ -109,7 +109,7 @@ if(isset($field_info->admin_title))
             </tr>
           <?php }?>
             <tr>
-                <td ><strong><?php _e('Admin label : ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                <td ><strong><?php _e('Admin label :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                 <td align="left"><input type="text" name="clabels" id="clabels" value="<?php if(isset($field_info->clabels)){ echo $field_info->clabels;}?>" />
                 <br />    <span><?php _e('Section Title which will appear in backend',GEODIRECTORY_TEXTDOMAIN);?></span>
                 </td>
@@ -125,7 +125,7 @@ if(isset($field_info->admin_title))
 							
 		 ?>
         	<tr >
-                <td ><strong><?php _e('Default value : ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                <td ><strong><?php _e('Default value :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                 <td align="left"><input type="text" name="default_value" id="default_value" value="<?php if(isset($field_info->default_value)){ echo $field_info->default_value;}?>" />
                 <br />    <span><?php _e('Enter the default value (for "link" this will be used as the link text)',GEODIRECTORY_TEXTDOMAIN);?></span>
                 </td>
@@ -133,14 +133,14 @@ if(isset($field_info->admin_title))
             		<?php
                     	}?>
             <tr>
-                <td ><strong><?php _e('Display order : ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                <td ><strong><?php _e('Display order :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                 <td align="left"><input type="text" readonly="readonly" name="sort_order" id="sort_order"  value="<?php if(isset($field_info->sort_order)){ echo $field_info->sort_order;}?>" />
-                <br />    <span><?php _e('Enter the display order of this field in backend. e.g. 5 ',GEODIRECTORY_TEXTDOMAIN);?></span>
+                <br />    <span><?php _e('Enter the display order of this field in backend. e.g. 5',GEODIRECTORY_TEXTDOMAIN);?></span>
                 </td>
             </tr>
            
             <tr>
-                <td ><strong><?php _e('Show in sidebar : ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                <td ><strong><?php _e('Show in sidebar :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                 <td align="left">
                     <select name="is_default" id="is_default"   <?php if(isset($field_info->is_default) && $field_info->is_default=='admin'){ echo 'disabled="disabled"';}?> >
                     <option value="0" <?php if(!isset($field_info->is_default) || $field_info->is_default=='0'){ echo 'selected="selected"';}?>><?php _e('No',GEODIRECTORY_TEXTDOMAIN);?></option>
@@ -156,7 +156,7 @@ if(isset($field_info->admin_title))
 						<?php if($field_type == 'textarea' && isset($field_info->htmlvar_name) && $field_info->htmlvar_name == 'geodir_special_offers'){?>
 						
 							<tr>
-								<td><strong><?php _e('Show advanced editor : ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+								<td><strong><?php _e('Show advanced editor :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
 								
 								<td>
 								
@@ -208,7 +208,7 @@ if(isset($field_info->admin_title))
 			?>
 
 				<tr>
-                    <td ><strong><?php _e('Is active : ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                    <td ><strong><?php _e('Is active :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                     <td align="left">
                         <select name="is_active" id="is_active" >
                         <option value="1" <?php if(isset($field_info->is_active) && $field_info->is_active=='1'){ echo 'selected="selected"';}?>><?php _e('Yes',GEODIRECTORY_TEXTDOMAIN);?></option>
@@ -220,7 +220,7 @@ if(isset($field_info->admin_title))
 								
 								<?php if($field_type != 'fieldset'){?>
                 <tr>
-                    <td ><strong><?php _e('Is required : ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                    <td ><strong><?php _e('Is required :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                     <td align="left">
                         <select name="is_required" id="is_required">
                         <option value="1" <?php if(isset($field_info->is_required) && $field_info->is_required=='1'){ echo 'selected="selected"';}?>><?php _e('Yes',GEODIRECTORY_TEXTDOMAIN);?></option>
@@ -232,7 +232,7 @@ if(isset($field_info->admin_title))
                <?php }?>
 							  
                 <tr>
-                    <td ><strong><?php _e('Required message: ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                    <td ><strong><?php _e('Required message:',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                     <td align="left">
                     <input type="text" name="required_msg" id="required_msg" value="<?php if(isset($field_info->required_msg)){ echo $field_info->required_msg;}?>" />
                     <span>
@@ -243,7 +243,7 @@ if(isset($field_info->admin_title))
                 </tr>
                 
                 <tr>
-                    <td ><strong><?php _e('Show on listing page ? : ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                    <td ><strong><?php _e('Show on listing page ? :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                     <td align="left">
                         <select  name="show_on_listing" id="show_on_listing" >
                         <option value="1" <?php if(isset($field_info->show_on_listing) && $field_info->show_on_listing=='1'){ echo 'selected="selected"';}?>><?php _e('Yes',GEODIRECTORY_TEXTDOMAIN);?></option>                        
@@ -253,7 +253,7 @@ if(isset($field_info->admin_title))
                     </td>
                 </tr>
                 <tr>
-                    <td ><strong><?php _e('Show on detail page ? : ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                    <td ><strong><?php _e('Show on detail page ? :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                     <td align="left">
                         <select name="show_on_detail" id="show_on_detail" >
                         <option value="1" <?php if(isset($field_info->show_on_detail) && $field_info->show_on_detail=='1'){ echo 'selected="selected"';}?>><?php _e('Yes',GEODIRECTORY_TEXTDOMAIN);?></option>
@@ -270,7 +270,7 @@ if(isset($field_info->admin_title))
 				{              
               ?>  
                 <tr>
-                    <td ><strong><?php _e('Select taxonomy: ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                    <td ><strong><?php _e('Select taxonomy:',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                     <td align="left">
                         <select name="htmlvar_name" id="htmlvar_name">
                         <?php
@@ -288,7 +288,7 @@ if(isset($field_info->admin_title))
                 </tr>
 								
 								<tr>
-                    <td ><strong><?php _e('Category display type : ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                    <td ><strong><?php _e('Category display type :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                     <td align="left">
 										
                         <select name="cat_display_type" id="cat_display_type">
@@ -312,59 +312,59 @@ if(isset($field_info->admin_title))
 					<?php do_action('geodir_address_extra_admin_fields', $address, $field_info); ?>
 						
             <tr>
-                <td ><strong><?php _e('Display zip/post code : ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                <td ><strong><?php _e('Display zip/post code :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                 <td align="left">
                 	<input type="checkbox"  name="extra[show_zip]" id="show_zip"  value="1" <?php if(isset($address['show_zip']) && $address['show_zip']=='1'){ echo 'checked="checked"';}?>/>
-                 	<span><?php _e('Select if you want to show zip/post code field in address section. ',GEODIRECTORY_TEXTDOMAIN);?></span>
+                 	<span><?php _e('Select if you want to show zip/post code field in address section.',GEODIRECTORY_TEXTDOMAIN);?></span>
                 </td>
             </tr>
             
             <tr>
-                <td ><strong><?php _e('Zip/Post code label : ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                <td ><strong><?php _e('Zip/Post code label :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                 <td align="left">
                 	<input type="text" name="extra[zip_lable]" id="zip_lable"  value="<?php if(isset($address['zip_lable'])){ echo $address['zip_lable'];}?>" />
-                 	<span><?php _e('Enter zip/post code field label in address section. ',GEODIRECTORY_TEXTDOMAIN);?></span>
+                 	<span><?php _e('Enter zip/post code field label in address section.',GEODIRECTORY_TEXTDOMAIN);?></span>
                 </td>
             </tr>
             
              <tr style="display:none;">
-                <td ><strong><?php _e('Display map : ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                <td ><strong><?php _e('Display map :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                 <td align="left">
                 	<input type="checkbox"  name="extra[show_map]" id="show_map"  value="1" <?php if(isset($address['show_map']) && $address['show_map']=='1'){ echo 'checked="checked"';}?>/>
-                 	<span><?php _e('Select if you want to `set address on map` field in address section. ',GEODIRECTORY_TEXTDOMAIN);?></span>
+                 	<span><?php _e('Select if you want to `set address on map` field in address section.',GEODIRECTORY_TEXTDOMAIN);?></span>
                 </td>
             </tr>
             
              <tr>
-                <td ><strong><?php _e('Map button label : ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                <td ><strong><?php _e('Map button label :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                 <td align="left">
                 	<input type="text"  name="extra[map_lable]" id="map_lable"  value="<?php if(isset($address['map_lable'])){ echo $address['map_lable'];}?>" />
-                 	<span><?php _e('Enter text for  `set address on map` button in address section. ',GEODIRECTORY_TEXTDOMAIN);?></span>
+                 	<span><?php _e('Enter text for  `set address on map` button in address section.',GEODIRECTORY_TEXTDOMAIN);?></span>
                 </td>
             </tr>
             
             <tr>
-                <td ><strong><?php _e('Use user zoom level: ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                <td ><strong><?php _e('Use user zoom level:',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                 <td align="left">
                 	<input type="checkbox"  name="extra[show_mapzoom]" id="show_mapzoom"  value="1" <?php if(isset($address['show_mapzoom']) && $address['show_mapzoom']=='1'){ echo 'checked="checked"';}?>/>
-                 	<span><?php _e('Select if you want to use the user defined map zoom level. ',GEODIRECTORY_TEXTDOMAIN);?></span>
+                 	<span><?php _e('Select if you want to use the user defined map zoom level.',GEODIRECTORY_TEXTDOMAIN);?></span>
                 </td>
             </tr>
             
             <tr>
-                <td ><strong><?php _e('Display map view: ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                <td ><strong><?php _e('Display map view:',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                 <td align="left">
                 	<input type="checkbox"  name="extra[show_mapview]" id="show_mapview"  value="1" <?php if(isset($address['show_mapview']) && $address['show_mapview']=='1'){ echo 'checked="checked"';}?>/>
-                 	<span><?php _e('Select if you want to `set default map` options in address section. ',GEODIRECTORY_TEXTDOMAIN);?></span>
+                 	<span><?php _e('Select if you want to `set default map` options in address section.',GEODIRECTORY_TEXTDOMAIN);?></span>
                 </td>
             </tr>
             
                         
             <tr>
-                <td ><strong><?php _e('Map view label : ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                <td ><strong><?php _e('Map view label :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                 <td align="left">
                 	<input type="text" name="extra[mapview_lable]" id="mapview_lable"  value="<?php if(isset($address['mapview_lable'])){ echo $address['mapview_lable'];}?>" />
-                 	<span><?php _e('Enter mapview field label in address section. ',GEODIRECTORY_TEXTDOMAIN);?></span>
+                 	<span><?php _e('Enter mapview field label in address section.',GEODIRECTORY_TEXTDOMAIN);?></span>
                 </td>
             </tr>	
 		<?php } // end of extra fields for address field type
@@ -377,7 +377,7 @@ if(isset($field_info->admin_title))
 								
 								?>
 								<tr>
-                    <td ><strong><?php _e('Multiselect display type : ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                    <td ><strong><?php _e('Multiselect display type :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                     <td align="left">
 										
                         <select name="multi_display_type" id="multi_display_type">
@@ -393,7 +393,7 @@ if(isset($field_info->admin_title))
 							}
 			?>
             	<tr >
-                <td ><strong><?php _e('Option Values : ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                <td ><strong><?php _e('Option Values :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                 <td align="left">
                     <input type="text" name="option_values" id="option_values" value="<?php if(isset($field_info->option_values)){ echo $field_info->option_values;}?>" />
                     <br />    <span><?php _e('Option Values should be separated by comma.',GEODIRECTORY_TEXTDOMAIN);?></span>
@@ -410,7 +410,7 @@ if(isset($field_info->admin_title))
 				{	$extra = unserialize($field_info->extra_fields); }
 			?>
             	<tr>
-                <td ><strong><?php _e('Date Format : ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                <td ><strong><?php _e('Date Format :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                 <td align="left" style="overflow:inherit;">
                     <input type="text" name="extra[date_format]" id="date_format" value="<?php if(isset($extra['date_format'])){echo $extra['date_format'];}?>" />
                     <div style="position:relative; cursor:pointer;">
@@ -487,7 +487,7 @@ if(isset($field_info->admin_title))
                 </tr>
                             
                             <tr>
-                    <td ><strong><?php _e('Upload icon: ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                    <td ><strong><?php _e('Upload icon:',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                     <td align="left">
                     <input type="text" name="field_icon" id="field_icon" value="<?php if(isset($field_info->field_icon)){ echo $field_info->field_icon;}?>" />
                     <span>
@@ -498,7 +498,7 @@ if(isset($field_info->admin_title))
                 </tr>
                             
                             <tr>
-                    <td ><strong><?php _e('Css class: ',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                    <td ><strong><?php _e('Css class:',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                     <td align="left">
                     <input type="text" name="css_class" id="css_class" value="<?php if(isset($field_info->css_class)){ echo $field_info->css_class;}?>" />
                     <span>
@@ -537,7 +537,7 @@ if(isset($field_info->admin_title))
 					<td><?php _e('Include this field in sort option',GEODIRECTORY_TEXTDOMAIN);?></td>
 						<td>:
                         <input type="checkbox"  name="cat_sort[]" id="cat_sort"  value="1" <?php if(isset($field_info->cat_sort[0]) && $field_info->cat_sort[0]=='1'){ echo 'checked="checked"';}?>/>
-                 		<span><?php _e('Select if you want to show option in sort. ',GEODIRECTORY_TEXTDOMAIN);?></span>
+                 		<span><?php _e('Select if you want to show option in sort.',GEODIRECTORY_TEXTDOMAIN);?></span>
                 		</td>
 				</tr>
 				<?php } ?>
@@ -549,7 +549,7 @@ if(isset($field_info->admin_title))
 					<td><?php _e('Add category tick filter',GEODIRECTORY_TEXTDOMAIN);?></td>
 					<td>:
                     	 <input type="checkbox"  name="cat_filter[]" id="cat_filter"  value="1" <?php if(isset($field_info->cat_filter[0])=='1'){ echo 'checked="checked"';}?>/>
-                 		<span><?php _e('Select if you want to show option in filter. ',GEODIRECTORY_TEXTDOMAIN);?></span>
+                 		<span><?php _e('Select if you want to show option in filter.',GEODIRECTORY_TEXTDOMAIN);?></span>
 					</td>
 				</tr>
 				<?php }*/ ?>

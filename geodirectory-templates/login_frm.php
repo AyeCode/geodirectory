@@ -42,13 +42,13 @@ else
             <div class="form_row clearfix">
                 <label><?php echo (USERNAME_TEXT) ?> <span>*</span> </label>
                 <input type="text" name="log" id="user_login" value="<?php echo esc_attr($user_login); ?>" size="20" class="textfield" />
-                <span id="user_loginInfo"></span>
+                <span class="user_loginInfo"></span>
             </div> 
         
             <div class="form_row clearfix">
                 <label><?php echo (PASSWORD_TEXT) ?> <span>*</span></label>
                 <input type="password" name="pwd" id="user_pass" class="textfield" value="" size="20"  />
-                <span id="user_passInfo"></span>
+                <span class="user_passInfo"></span>
             </div>
             
             <?php do_action('login_form'); ?>
@@ -70,7 +70,7 @@ else
                 <input type="hidden" name="action" value="lostpassword" />	 
                 <div class="form_row clearfix"> 
                     <label><?php echo (USERNAME_EMAIL_TEXT) ?>: </label>
-                    <input type="text" name="user_login" id="user_login1" value="<?php echo esc_attr($user_login); ?>" size="20" class="textfield" />
+                    <input type="text" name="user_login" value="<?php echo esc_attr($user_login); ?>" size="20" class="user_login1 textfield" />
                     <?php do_action('lostpassword_form'); ?>
                 </div>
                 <input type="submit" name="get_new_password" value="<?php echo (GET_NEW_PW_TEXT);?>" class="geodir_button" />

@@ -27,7 +27,7 @@ global $cat_display,$post_cat, $current_user;
 			$post_cat = $post->post_category;	
 			
 		$kw_tags = $post->post_tags;
-		$curImages = $post->post_images;
+		$curImages = isset($post->post_images) ? $post->post_images : '';
 	}elseif(isset($_REQUEST['pid']) && $_REQUEST['pid'] != ''){
 		
 		global $post,$post_images;
@@ -45,7 +45,7 @@ global $cat_display,$post_cat, $current_user;
 		$listing_type = $post->post_type;
 		$title = $post->post_title;
 		$desc = $post->post_content;
-		$post_cat = $post->categories;
+		//$post_cat = $post->categories;
 		$kw_tags = $post->post_tags;
 		$kw_tags = implode(",",wp_get_object_terms($post->ID,$listing_type.'_tags' ,array('fields'=>'names')));
 	}else{
@@ -57,17 +57,17 @@ global $cat_display,$post_cat, $current_user;
 
 
 <div id="geodir_wrapper">
-<div class="clearfix">
+<div class="clearfix geodir-common">
     <div id="geodir_content">
                           
         <h1><?php 
             
             if(isset($_REQUEST['pid']) && $_REQUEST['pid']!= ''){
                 $post_type_info = geodir_get_posttype_info($listing_type);	
-                echo apply_filters('geodir_add_listing_page_title',( ucwords(__('Edit ',GEODIRECTORY_TEXTDOMAIN).$post_type_info['labels']['singular_name'])));
+                echo apply_filters('geodir_add_listing_page_title',( ucwords(__('Edit',GEODIRECTORY_TEXTDOMAIN).' '.$post_type_info['labels']['singular_name'])));
             }elseif(isset($listing_type)){ 
                 $post_type_info = geodir_get_posttype_info($listing_type);	
-                 echo apply_filters('geodir_add_listing_page_title',( ucwords(__('Add ',GEODIRECTORY_TEXTDOMAIN).$post_type_info['labels']['singular_name'])));
+                 echo apply_filters('geodir_add_listing_page_title',( ucwords(__('Add',GEODIRECTORY_TEXTDOMAIN).' '.$post_type_info['labels']['singular_name'])));
             }else{ apply_filters('geodir_add_listing_page_title',the_title()); } ?>
             
         </h1>
@@ -156,7 +156,8 @@ global $cat_display,$post_cat, $current_user;
 					if(isset($_REQUEST['backandedit']) && empty($_REQUEST['pid']))
 					{
 						$post = (object)unserialize($_SESSION['listing']);
-						$curImages  = trim($post->post_images,",");
+						if(isset($post->post_images))
+							$curImages  = trim($post->post_images,",");
 						
 						
 						if($curImages != ''){
@@ -193,12 +194,15 @@ global $cat_display,$post_cat, $current_user;
 					$svalue = '';		
                     
 					$image_limit = $package_info->image_limit;
+					$show_image_input_box = ($image_limit != '0') ;
+					$show_image_input_box = apply_filters('geodir_image_uploader_on_add_listing' , $show_image_input_box  ,$listing_type  ) ;
+					if($show_image_input_box){
                     ?>
                     
-					<h5 class="geodir-form_title"> <?php echo  PRO_PHOTO_TEXT;?>
-                         <?php if($image_limit!=0 && $image_limit==1 ){echo '<br /><small>('.__('You can upload',GEODIRECTORY_TEXTDOMAIN).' '.$image_limit.' '.__('image with this package',GEODIRECTORY_TEXTDOMAIN).')</small>';} ?>
-                         <?php if($image_limit!=0 && $image_limit>1 ){echo '<br /><small>('.__('You can upload',GEODIRECTORY_TEXTDOMAIN).' '.$image_limit.' '.__('images with this package',GEODIRECTORY_TEXTDOMAIN).')</small>';} ?>
-                         <?php if($image_limit==0){echo '<br /><small>('.__('You can upload unlimited images with this package',GEODIRECTORY_TEXTDOMAIN).')</small>';} ?>
+						<h5 class="geodir-form_title"> <?php echo  PRO_PHOTO_TEXT;?>
+													 <?php if( $image_limit==1 ){echo '<br /><small>('.__('You can upload',GEODIRECTORY_TEXTDOMAIN).' '.$image_limit.' '.__('image with this package',GEODIRECTORY_TEXTDOMAIN).')</small>';} ?>
+													 <?php if($image_limit>1 ){echo '<br /><small>('.__('You can upload',GEODIRECTORY_TEXTDOMAIN).' '.$image_limit.' '.__('images with this package',GEODIRECTORY_TEXTDOMAIN).')</small>';} ?>
+													 <?php if($image_limit==''){echo '<br /><small>('.__('You can upload unlimited images with this package',GEODIRECTORY_TEXTDOMAIN).')</small>';} ?>
                     </h5>
 					 
                     <div class="geodir_form_row clearfix" id="<?php echo $id; ?>dropbox" align="center" style="border:1px solid #ccc; min-height:100px; height:auto; padding:10px;">
@@ -222,6 +226,8 @@ global $cat_display,$post_cat, $current_user;
                         <span id="upload-msg" ><?php _e('Please drag &amp; drop the images to rearrange the order',GEODIRECTORY_TEXTDOMAIN);?></span>
                         <span id="<?php echo $id; ?>upload-error" style="display:none"></span>
                     </div>
+										
+					<?php } ?>
                 
 								<?php do_action('geodir_after_main_form_fields');?>
 								

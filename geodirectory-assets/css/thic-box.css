@@ -6,7 +6,7 @@
 #simplemodal-container { display:block; }
 #simplemodal-container a.modalCloseImg { width:25px; height:29px; display:inline; z-index:3200; position:absolute; top:-15px; right:-16px; cursor:pointer;}
 #simplemodal-container h3 { margin:0 0 20px 0; padding:0 0 5px 0; font:22px Georgia, "Times New Roman", Times, serif; } 
-#simplemodal-container .row {    margin-right:10px; margin-bottom:10px;   }
+#simplemodal-container .row {    margin-right:10px; margin-bottom:0px;   }
 #simplemodal-container .row  label  { display:block; float:left; font-size:12px; color:#333; padding:5px 0; width:95px;  }
 #simplemodal-container .row textarea {  height:150px;  }
 #simplemodal-container h5{ display:none;}
@@ -24,14 +24,14 @@
 #basic-modal-content2 {   width:390px;height:500px;  background-color:#fff; border:4px solid #ddd; padding:15px;  -moz-border-radius:5px;  -webkit-border-radius:5px;    }
 #basic-modal-content { width:400px; height:500px;  background-color:#fff; border:4px solid #ddd; padding:15px; -moz-border-radius:5px;  -webkit-border-radius:5px;    }
 #basic-modal-content4 { width:450px; height:500px;  background-color:#fff; border:4px solid #ddd; padding:15px; -moz-border-radius:5px;  -webkit-border-radius:5px;    }
-#basic-modal-content .message_error2, #basic-modal-content2 .message_error2 { padding-left:95px; font:11px Arial, Helvetica, sans-serif; color:#900;  }
+#basic-modal-content .message_error2, #basic-modal-content2 .message_error2 { padding-left:95px; font:11px Arial, Helvetica, sans-serif; color:#900; display:none;  }
 /* popup window ---------*/
 #simplemodal-overlay { background-color:#000;}
 #simplemodal-container { color:#666;}
 #simplemodal-container a.modalCloseImg {background:url(../images/x.png) no-repeat; }
 #simplemodal-container h3 { color:#970101; border-bottom:1px solid #ccc; } 
 #simplemodal-container .row  label  { color:#333; }
-#simplemodal-container .row  input, #simplemodal-container .row  textarea { border:1px solid #ccc;}
+#simplemodal-container .row  input, #simplemodal-container .row  textarea { border:1px solid #ccc; margin-bottom:6px;}
 #simplemodal-container .button { background:#333; color:#fff; border:none; }
 #simplemodal-container .button:hover { background:#970101; }
 .sucess_msg { font:14px Arial, Helvetica, sans-serif; clear:both; text-align:center; padding:8px; margin-bottom:20px; color:#4b6b0d; background:#dfe9b5; border-top:1px solid #8c9f42; border-bottom:1px solid #8c9f42; }

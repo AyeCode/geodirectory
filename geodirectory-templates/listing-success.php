@@ -9,7 +9,7 @@ do_action('geodir_before_main_content');
     
 	
     
-    <div class="clearfix">
+    <div class="clearfix geodir-common">
         <div id="geodir_content">                        
             
 						<?php geodir_get_template_part('preview','success'); ?> 

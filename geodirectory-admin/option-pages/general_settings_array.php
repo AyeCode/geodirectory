@@ -61,7 +61,7 @@ global $geodir_settings;
 			'name' => __( 'Allow user to see wp-admin area', GEODIRECTORY_TEXTDOMAIN ),
 			'desc' 		=> __( 'No', GEODIRECTORY_TEXTDOMAIN ),
 			'id' 		=> 'geodir_allow_wpadmin',
-			'std' 		=> '',
+			'std' 		=> '0',
 			'type' 		=> 'radio',
 			'value'		=> '0',
 			'radiogroup' => 'end'
@@ -80,9 +80,9 @@ global $geodir_settings;
 		array('name' => __( 'Google Analytic Settings', GEODIRECTORY_TEXTDOMAIN ), 'type' => 'sectionstart', 'id' => 'google_analytic_settings'),
 			
 		array(  
-			'name' => __( 'Google analytics "Profile ID(ie: ga:12345678)? ' ,  GEODIRECTORY_TEXTDOMAIN).
+			'name' => __( 'Google analytics "Profile ID(ie: ga:12345678)?' , GEODIRECTORY_TEXTDOMAIN).' '.
 	'<a target="_blank" href="http://www.geotheme.com/support-forum/geotheme-support-forum-group1/documentation-forum5/general-settings-thread16/">' . __('help',  GEODIRECTORY_TEXTDOMAIN) . '</a>',
-			'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> '',
 			'id' 		=> 'geodir_ga_id',
 			'type' 		=> 'text',
 			'css' 		=> 'min-width:300px;',
@@ -102,7 +102,7 @@ global $geodir_settings;
 			'name' => __( 'Show business owner Google Analytics stats?', GEODIRECTORY_TEXTDOMAIN ),
 			'desc' 		=> __( 'No', GEODIRECTORY_TEXTDOMAIN ),
 			'id' 		=> 'geodir_ga_stats',
-			'std' 		=> '',
+			'std' 		=> '1',
 			'type' 		=> 'radio',
 			'value'		=> '0',
 			'radiogroup'		=> 'end'
@@ -110,7 +110,7 @@ global $geodir_settings;
 		
 		array(  
 			'name' => __( 'Google analytics username for api?', GEODIRECTORY_TEXTDOMAIN ),
-			'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> '',
 			'id' 		=> 'geodir_ga_user',
 			'type' 		=> 'text',
 			'css' 		=> 'min-width:300px;',
@@ -119,7 +119,7 @@ global $geodir_settings;
 		
 		array(  
 			'name' => __( 'Google analytics password for api?', GEODIRECTORY_TEXTDOMAIN ),
-			'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> '',
 			'id' 		=> 'geodir_ga_pass',
 			'type' 		=> 'password',
 			'css' 		=> 'min-width:300px;',
@@ -129,7 +129,7 @@ global $geodir_settings;
 		
 		array(  
 			'name' => __( 'Google analytics tracking code', GEODIRECTORY_TEXTDOMAIN ),
-			'desc' 		=> __( '', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> '',
 			'id' 		=> 'geodir_ga_tracking_code',
 			'type' 		=> 'textarea',
 			'css' 		=> 'min-width:300px;',

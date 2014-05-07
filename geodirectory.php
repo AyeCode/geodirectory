@@ -3,7 +3,7 @@
 Plugin Name: GeoDirectory
 Plugin URI: http://wpgeodirectory.com/
 Description: GeoDirectory plugin for wordpress.
-Version: 1.0.0
+Version: 1.0.1
 Author: GeoDirectory
 Author URI: http://wpgeodirectory.com
 Requires at least: 3.1
@@ -11,17 +11,17 @@ Tested up to: 3.9
 */
 
 
-define("GEODIRECTORY_VERSION", "1.0.0");
+define("GEODIRECTORY_VERSION", "1.0.1");
 
 if (!session_id()) session_start();
 
 /**
  * Globals
  **/ 
-global $wpdb,$plugin_prefix,$geodir_addon_list;
+global $wpdb,$plugin_prefix,$geodir_addon_list, $plugin_file_name;
 $plugin_prefix = 'geodir_';
 
-
+$plugin_file_name = basename(plugin_dir_path(__FILE__)). '/' . basename(__FILE__);
 /**
  * Constants
  **/
@@ -45,10 +45,13 @@ if (!defined('GEODIR_CUSTOM_SORT_FIELDS_TABLE')) define('GEODIR_CUSTOM_SORT_FIEL
 /**
  * Localisation
  **/
-if (!defined('GEODIRECTORY_TEXTDOMAIN')) define('GEODIRECTORY_TEXTDOMAIN', 'geodirectory');	
+ 
+if (!defined('GEODIRECTORY_TEXTDOMAIN')) define('GEODIRECTORY_TEXTDOMAIN', 'geodirectory');
+
+load_plugin_textdomain(GEODIRECTORY_TEXTDOMAIN, false, dirname( plugin_basename( __FILE__ ) ).'/geodirectory-languages');
+
 require_once( 'language.php' ); // Define language constants
 
-load_plugin_textdomain('geodirectory', false, dirname( plugin_basename( __FILE__ ) ).'/geodirectory-languages');
 
 
 /**

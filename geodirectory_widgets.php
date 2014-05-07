@@ -263,7 +263,7 @@ function register_geodir_widgets(){
 									  	if (status == google.maps.GeocoderStatus.OK) {
 											updateSearchPosition(results[0].geometry.location);
 									 	} else {
-											alert("<?php _e('Search was not successful for the following reason: ',GEODIRECTORY_TEXTDOMAIN);?>" + status);
+											alert("<?php _e('Search was not successful for the following reason:',GEODIRECTORY_TEXTDOMAIN);?>" + status);
 									  	}
 									});
 								}
@@ -395,7 +395,7 @@ function register_geodir_widgets(){
 												
 													echo '<li class="menu-item '.$menu_class.'">
 														<a href="'. geodir_get_addlisting_link( $post_type ) .'">
-															'.__('Add ',GEODIRECTORY_TEXTDOMAIN).$args->labels->singular_name.'
+															'.__('Add',GEODIRECTORY_TEXTDOMAIN).' '.$args->labels->singular_name.'
 														</a>
 													</li>';
 											}
@@ -418,7 +418,7 @@ function register_geodir_widgets(){
 							$post_type_link = geodir_getlink($author_link,array('stype'=>$post_type),false);
 							//$post_type = explode('_',$post_type);
 							$name = $args->labels->name;
-							echo '<li><a href="'.$post_type_link.'">'.__('My ',GEODIRECTORY_TEXTDOMAIN). ucfirst($name) .'</a></li>';
+							echo '<li><a href="'.$post_type_link.'">'.__('My',GEODIRECTORY_TEXTDOMAIN).' '. ucfirst($name) .'</a></li>';
 						}
 					}
 				}
@@ -428,9 +428,9 @@ function register_geodir_widgets(){
 			}else{ 
 			?>
                 
-				<form name="loginform" id="loginform1" action="<?php echo get_option('home').'/index.php?geodir_signup=true'; ?>" method="post" >
-					<div class="form_row"><label><?php _e('Email');?>  <span>*</span></label>  <input name="log" id="user_login1" type="text" class="textfield" /> <span id="user_loginInfo"></span> </div>
-					<div class="form_row"><label><?php _e('Password');?>  <span>*</span></label>  <input name="pwd" id="user_pass1" type="password" class="textfield" /><span id="user_passInfo"></span>  </div>
+				<form name="loginform" class="loginform1" action="<?php echo get_option('home').'/index.php?geodir_signup=true'; ?>" method="post" >
+					<div class="form_row"><label><?php _e('Email', GEODIRECTORY_TEXTDOMAIN);?>  <span>*</span></label>  <input name="log" type="text" class="textfield user_login1" /> <span class="user_loginInfo"></span> </div>
+					<div class="form_row"><label><?php _e('Password', GEODIRECTORY_TEXTDOMAIN);?>  <span>*</span></label>  <input name="pwd" type="password" class="textfield user_pass1" /><span class="user_passInfo"></span>  </div>
 					
 					<input type="hidden" name="redirect_to" value="<?php echo geodir_curPageURL(); ?>" />
 					<input type="hidden" name="testcookie" value="1" />

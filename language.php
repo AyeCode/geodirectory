@@ -9,7 +9,7 @@
 define('NEAR_TEXT',__('Near',GEODIRECTORY_TEXTDOMAIN));
 define('SEARCH_FOR_TEXT',__('Search for',GEODIRECTORY_TEXTDOMAIN));
 define('SEARCH_FOR_MSG',__('food, products or place',GEODIRECTORY_TEXTDOMAIN));
-define('SEARCH_NEAR_MSG',__('Zip code or address ',GEODIRECTORY_TEXTDOMAIN));
+define('SEARCH_NEAR_MSG',__('Zip code or address',GEODIRECTORY_TEXTDOMAIN));
 define('SEARCH',__('Search',GEODIRECTORY_TEXTDOMAIN));
 
 
@@ -34,8 +34,8 @@ define('SELECT_PACKAGE_TEXT',__('Select Package',GEODIRECTORY_TEXTDOMAIN));
 
 define('LISTING_DETAILS_TEXT',__('Enter Listing Details',GEODIRECTORY_TEXTDOMAIN));
 
-define('PLACE_TITLE_TEXT',__('Listing Title ',GEODIRECTORY_TEXTDOMAIN));
-define('PLACE_DESC_TEXT',__('Listing Description ',GEODIRECTORY_TEXTDOMAIN));
+define('PLACE_TITLE_TEXT',__('Listing Title',GEODIRECTORY_TEXTDOMAIN));
+define('PLACE_DESC_TEXT',__('Listing Description',GEODIRECTORY_TEXTDOMAIN));
 
 define('COUPON_CODE_TITLE_TEXT',__('Coupon Code',GEODIRECTORY_TEXTDOMAIN));
 define('PRO_ADD_COUPON_TEXT',__('Enter Coupon Code',GEODIRECTORY_TEXTDOMAIN));
@@ -128,7 +128,7 @@ define('CONTACT_MSG',__('You can enter phone number,cell phone number etc.',GEOD
 define('WEBSITE_MSG',__('Enter website URL. eg. : <b>http://myplace.com</b>',GEODIRECTORY_TEXTDOMAIN));
 define('TWITTER_MSG',__('Enter twitter URL. eg. : <b>http://twitter.com/myplace</b>',GEODIRECTORY_TEXTDOMAIN));
 define('FACEBOOK_MSG',__('Enter facebook URL. eg. : <b>http://facebook.com/myplace</b>',GEODIRECTORY_TEXTDOMAIN));
-define('CATEGORY_MSG',__('Select listing category from here. Select atleast one category',GEODIRECTORY_TEXTDOMAIN));
+define('CATEGORY_MSG',__('Select listing category from here. Select at least one category',GEODIRECTORY_TEXTDOMAIN));
 define('TAGKW_MSG',__('Tags are short keywords, with no space within.(eg: tag1, tag2, tag3) Up to 40 characters only.',GEODIRECTORY_TEXTDOMAIN));
 define('HTML_TAGS_ALLOW_MSG',__('Note : Basic HTML tags are allowed',GEODIRECTORY_TEXTDOMAIN));
 define('HTML_SPECIAL_TEXT',__('Note: List out any special offers (optional)',GEODIRECTORY_TEXTDOMAIN));
@@ -183,7 +183,7 @@ define('DASHBOARD_TEXT',__('Dashboard',GEODIRECTORY_TEXTDOMAIN));
 define('EDIT_PROFILE_PAGE_TITLE',__('Edit Profile',GEODIRECTORY_TEXTDOMAIN));
 define('CHANGE_PW_TEXT',__('Change Password',GEODIRECTORY_TEXTDOMAIN));
 define('LOGOUT_TEXT',__('Logout',GEODIRECTORY_TEXTDOMAIN));
-define('WELCOME_TEXT',__('Welcome ',GEODIRECTORY_TEXTDOMAIN));
+define('WELCOME_TEXT',__('Welcome',GEODIRECTORY_TEXTDOMAIN));
 
 
 //registration.php

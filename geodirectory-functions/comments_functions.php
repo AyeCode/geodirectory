@@ -56,7 +56,7 @@ if(in_array($post->post_type,$post_types)){
 add_filter('comment_reply_link', 'geodir_comment_replaylink');
 function geodir_comment_replaylink($link){
 	
-	$link = '<div id="gd_comment_replaylink">'.$link.'</div>';
+	$link = '<div class="gd_comment_replaylink">'.$link.'</div>';
 	
 	return $link;
 }
@@ -64,7 +64,7 @@ function geodir_comment_replaylink($link){
 add_filter('cancel_comment_reply_link', 'geodir_cancle_replaylink');
 function geodir_cancle_replaylink($link){
 	
-	$link = '<div id="gd_cancle_replaylink">'.$link.'</div>';
+	$link = '<span id="gd_cancle_replaylink">'.$link.'</span>';
 	
 	return $link;
 }
@@ -83,16 +83,17 @@ function geodir_save_rating($comment = 0){
 	if(isset($_REQUEST['geodir_overallrating'])){
 		
 		$overall_rating = $_REQUEST['geodir_overallrating'];
-						
+					
 				$sqlqry = $wpdb->prepare("INSERT INTO ".GEODIR_REVIEW_TABLE." SET
 						post_id		= %d,
+						post_type = %s,
 						post_title	= %s,
 						user_id		= %d,
 						comment_id	= %d,
 						rating_ip	= %s,
 						overall_rating = %f,
 						status		= %s ",
-						array($post_id,$post->post_title,$user_ID,$comment,$rating_ip,$overall_rating,$status)
+						array($post_id,$post->post_type,$post->post_title,$user_ID,$comment,$rating_ip,$overall_rating,$status)
 						);		
 		
 		$wpdb->query($sqlqry);
@@ -248,13 +249,13 @@ function geodir_comment_delete_comment( $comment_id )
 	
 }
 
-add_filter('comment_text', 'geodir_wrap_comment_text',10,2);
+add_filter('comment_text', 'geodir_wrap_comment_text',2000,2);
 function geodir_wrap_comment_text($content,$comment=''){
 		$rating = 0;
 		if(!empty($comment))
 			$rating = geodir_get_commentoverall($comment->comment_ID);
 		if($rating != 0 && !is_admin()){
-			return '<span>Overall Rating: <span class="rating">'.$rating.'</span>'.geodir_get_rating_stars($rating,$comment->comment_ID).'</span><br/><p class="description">'.$content.'</p>';
+return '<div>'.__('Overall Rating',GEODIRECTORY_TEXTDOMAIN).': <div class="rating">'.$rating.'</div>'.geodir_get_rating_stars($rating,$comment->comment_ID).'</div><div class="description">'.$content.'</div>';
 		}else
 			return 	$content;
 	
@@ -547,11 +548,11 @@ function geodir_get_rating_stars($rating, $post_id, $small=false){
 	$a_rating = $rating/5*100;
 	
 	if($small){
-		$r_html = '<span class="rating"><div class="gd_rating_map" data-average="'.$rating.'" data-id="'.$post_id.'"><div class="geodir_RatingColor" ></div><div class="geodir_RatingAverage_small" style="width: '.$a_rating.'%;"></div><div class="geodir_Star_small"></div></div></span>';
+		$r_html = '<div class="rating"><div class="gd_rating_map" data-average="'.$rating.'" data-id="'.$post_id.'"><div class="geodir_RatingColor" ></div><div class="geodir_RatingAverage_small" style="width: '.$a_rating.'%;"></div><div class="geodir_Star_small"></div></div></div>';
 		
 	}else{
 	
-	$r_html = '<span class="geodir-rating"><div class="gd_rating_show" data-average="'.$rating.'" data-id="'.$post_id.'"><div class="geodir_RatingColor"></div><div class="geodir_RatingAverage" style="width: '.$a_rating.'%;"></div><div class="geodir_Star"></div></div></span>';
+	$r_html = '<div class="geodir-rating"><div class="gd_rating_show" data-average="'.$rating.'" data-id="'.$post_id.'"><div class="geodir_RatingColor"></div><div class="geodir_RatingAverage" style="width: '.$a_rating.'%;"></div><div class="geodir_Star"></div></div></div>';
 	}
 	return $r_html;
 	
