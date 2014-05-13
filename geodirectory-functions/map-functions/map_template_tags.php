@@ -69,6 +69,11 @@ function geodir_draw_map($map_args = array())
 		}
 	}	
 	
+	if (strpos($geodir_map_options['height'],'%') !== false || strpos($geodir_map_options['height'],'px') !== false) {
+	}else{$geodir_map_options['height']= $geodir_map_options['height'].'px';}
+	
+	if (strpos($geodir_map_options['width'],'%') !== false || strpos($geodir_map_options['width'],'px') !== false) {
+	}else{$geodir_map_options['width']= $geodir_map_options['width'].'px';}
 	
 	$geodir_map_options  = apply_filters('geodir_map_options_' . $map_canvas_name  , $geodir_map_options) ;
 	
@@ -87,24 +92,24 @@ function geodir_draw_map($map_args = array())
 		wp_localize_script( 'geodir-map-widget',  $map_canvas_name, $geodir_map_options );
 		
 		if($map_canvas_name=='detail_page_map_canvas' || $map_canvas_name=='preview_map_canvas'){$map_width = '100%';}
-		else{$map_width = $geodir_map_options['width'].'px';}
+		else{$map_width = $geodir_map_options['width'];}
 		
 		$map_width = apply_filters('geodir_change_map_width', $map_width);
 	?>
     <div id="catcher_<?php echo $map_canvas_name;?>"></div>
     <div class="stick_trigger_container" >
     <div class="trigger_sticky triggeroff_sticky" ></div>
-     <div class="top_banner_section geodir_map_container"  id="sticky_map_<?php echo $map_canvas_name;?>"  style="height:<?php echo $geodir_map_options['height'];?>px;width:<?php echo $map_width;?>;">
+     <div class="top_banner_section geodir_map_container"  id="sticky_map_<?php echo $map_canvas_name;?>"  style="height:<?php echo $geodir_map_options['height'];?>;width:<?php echo $map_width;?>;">
      
      	<div class="map_background">
             <div class="top_banner_section_in clearfix" >
                 <div class="<?php echo $map_canvas_name;?>_TopLeft TopLeft"><span class="triggermap" id="<?php echo $map_canvas_name;?>_triggermap" <?php if(!$geodir_map_options['enable_map_resize_button']){ ?>style="display:none;" <?php }?>></span></div>
                 <div class="<?php echo $map_canvas_name;?>_TopRight TopRight"></div>
-                <div id="<?php echo $map_canvas_name;?>_wrapper" class="main_map_wrapper" style="height:<?php echo $geodir_map_options['height'];?>px;width:<?php echo $map_width;?>;">
+                <div id="<?php echo $map_canvas_name;?>_wrapper" class="main_map_wrapper" style="height:<?php echo $geodir_map_options['height'];?>;width:<?php echo $map_width;?>;">
                     <!-- new map start -->
                     <div class="iprelative">     
-                        <div class="geodir_marker_cluster" id="<?php echo $map_canvas_name;?>" style="height:<?php echo $geodir_map_options['height'];?>px;width:<?php echo $map_width;?>;"></div>  
-                        <div id="<?php echo $map_canvas_name;?>_loading_div" class="loading_div" style=" height:<?php echo $geodir_map_options['height'];?>px;width:<?php echo $map_width;?>;"></div> 
+                        <div class="geodir_marker_cluster" id="<?php echo $map_canvas_name;?>" style="height:<?php echo $geodir_map_options['height'];?>;width:<?php echo $map_width;?>;"></div>  
+                        <div id="<?php echo $map_canvas_name;?>_loading_div" class="loading_div" style=" height:<?php echo $geodir_map_options['height'];?>;width:<?php echo $map_width;?>;"></div> 
                         <!--<div id="home_map_counter"></div>        -->
                         <div id="<?php echo $map_canvas_name;?>_map_nofound" class="advmap_nofound"><?php echo MAP_NO_RESULTS; ?></div>     
                     </div>   

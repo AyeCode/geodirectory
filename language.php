@@ -30,17 +30,10 @@ define('CONTACT_NAME_TEXT',__('Name',GEODIRECTORY_TEXTDOMAIN));
 define('CONTACT_TEXT',__('Contact Number',GEODIRECTORY_TEXTDOMAIN));
 define('EMAIL_TEXT',__('Email',GEODIRECTORY_TEXTDOMAIN));
 
-define('SELECT_PACKAGE_TEXT',__('Select Package',GEODIRECTORY_TEXTDOMAIN));
-
 define('LISTING_DETAILS_TEXT',__('Enter Listing Details',GEODIRECTORY_TEXTDOMAIN));
-
+ 
 define('PLACE_TITLE_TEXT',__('Listing Title',GEODIRECTORY_TEXTDOMAIN));
 define('PLACE_DESC_TEXT',__('Listing Description',GEODIRECTORY_TEXTDOMAIN));
-
-define('COUPON_CODE_TITLE_TEXT',__('Coupon Code',GEODIRECTORY_TEXTDOMAIN));
-define('PRO_ADD_COUPON_TEXT',__('Enter Coupon Code',GEODIRECTORY_TEXTDOMAIN));
-define('COUPON_NOTE_TEXT',__('Enter coupon code here (optional)',GEODIRECTORY_TEXTDOMAIN));
-
 
 define('LISTING_ADDRESS_TEXT',__('Listing Address:',GEODIRECTORY_TEXTDOMAIN));
 define('PLACE_ADDRESS',__('Address:',GEODIRECTORY_TEXTDOMAIN));
@@ -96,19 +89,15 @@ define('UNLIMITED',__('Unlimited',GEODIRECTORY_TEXTDOMAIN));
 define('BASIC_INFO_TEXT',__('Home Information',GEODIRECTORY_TEXTDOMAIN));
 define('PRO_BACK_AND_EDIT_TEXT',__('&laquo; Go Back and Edit',GEODIRECTORY_TEXTDOMAIN));
 define('PRO_UPDATE_BUTTON',__('Update Now',GEODIRECTORY_TEXTDOMAIN));
-define('PRO_RENEW_BUTTON',__('Renew Now',GEODIRECTORY_TEXTDOMAIN)); ### ADDED BY STIOFAN
-define('PRO_UPGRADE_BUTTON',__('Upgrade Now',GEODIRECTORY_TEXTDOMAIN)); ### ADDED BY STIOFAN
 define('PRO_SUBMIT_BUTTON',__('Publish',GEODIRECTORY_TEXTDOMAIN));
 define('PRO_CANCEL_BUTTON',__('Cancel',GEODIRECTORY_TEXTDOMAIN));
-define('PRO_SUBMIT_PAY_BUTTON',__('Pay & Publish',GEODIRECTORY_TEXTDOMAIN));
+
 
 
 
 define('PUBLISH_DAYS_TEXT',__('%s : number of publish days are %s (<span id="%s">%s %s</span>)',GEODIRECTORY_TEXTDOMAIN));
 define('SELECT_PAY_MEHTOD_TEXT',__('Select Payment Method',GEODIRECTORY_TEXTDOMAIN));
 
-
-define('WRONG_COUPON_MSG',__('Invalid Coupon Code',GEODIRECTORY_TEXTDOMAIN));
 
 /* ---- favourite ---- */
 define('MY_FAVOURITE_TEXT',__('My Favorites',GEODIRECTORY_TEXTDOMAIN));
@@ -137,7 +126,6 @@ define('IMAGE_SAVE_ORDERING_MSG',__('Note : You can sort images once the post is
 
 
 /* ---- Place Detail ---- */
-define('OWNER_VERIFIED_EVENT',__('Owner Verified Event',GEODIRECTORY_TEXTDOMAIN));
 define('SEND_TO_FRIEND',__('Send To Friend',GEODIRECTORY_TEXTDOMAIN));
 define('VERIFY_PAGE_TITLE',__('Verify Listing',GEODIRECTORY_TEXTDOMAIN));
 define('SEND_TO_FRIEND_SAMPLE_CONTENT',__('Hi there, check out this site, I think you might be interested in..',GEODIRECTORY_TEXTDOMAIN));

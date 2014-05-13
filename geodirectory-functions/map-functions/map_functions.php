@@ -28,8 +28,8 @@ function create_marker_jason_of_posts($post){
 		 $icon = '';
 		 if($post->default_category != ''){
 			
-			$term_icon_url = get_tax_meta($post->default_category,'ct_cat_icon');
-			$icon = $term_icon_url['src'];
+			$term_icon_url = get_tax_meta($post->default_category,'ct_cat_icon', false, $post->post_type);
+			$icon = isset($term_icon_url['src']) ? $term_icon_url['src'] : '';
 			
 		 }
 		
@@ -117,16 +117,17 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0,$hide_empty = t
 		$out = '<ul class="treeview '.$list_class.'" style="margin-left:'.$p.'px;'.$display.';">';
 		foreach ($cat_terms as $cat_term):
 			
+			$post_type = isset($_REQUEST['post_type']) ? $_REQUEST['post_type']: 'gd_place';
 			//Get Term icon
-			$term_icon_url = get_tax_meta($cat_term->term_id, 'ct_cat_icon');
+			$term_icon_url = get_tax_meta($cat_term->term_id, 'ct_cat_icon', false, $post_type);
 			if($term_icon_url){$icon =  $term_icon_url['src'];}
-			else{$icon = geodir_plugin_url().'/geodirectory-functions/map-functions/icons/pin.png';}
+			else{$icon = get_option('geodir_default_marker_icon');}
 			if(!in_array($cat_term->term_id,$exclude_categories)):
 				//Secret sauce.  Function calls itself to display child elements, if any
 				$term_check = '<input type="checkbox" checked="checked" class="group_selector '.$main_list_class.'"'; 
 				$term_check .= ' name="'.$map_canvas_name.'_cat[]" group="catgroup'.$cat_term->term_id.'"'; 
 				$term_check .= ' alt="'.$cat_term->taxonomy.'" title="'.ucfirst($cat_term->name).'" value="'.$cat_term->term_id.'" " onclick="javascript:build_map_ajax_search_param(\''.$map_canvas_name.'\',false)">';
-				$term_check .= '<img height="15" width="15" alt="" src="'.$icon.'"/>';
+				$term_check .= '<img height="15" width="15" alt="" src="'.$icon.'" title="'.ucfirst($cat_term->name).'"/>';
 				$out .= '<li>'.$term_check.'<label>'.ucfirst($cat_term->name).'</label>'; 
 			endif;
 			

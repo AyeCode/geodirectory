@@ -402,9 +402,7 @@ function geodir_custom_selected_fields(){
 									$field_type = $field->field_type;
 									$field_ins_upd = 'display';
 									
-									($field->is_default == 'admin') ? $default = true : $default = false;
-									
-									geodir_custom_field_adminhtml($field_type, $result_str, $field_ins_upd, $default);
+									geodir_custom_field_adminhtml($field_type, $result_str, $field_ins_upd);
 								}
 							}
 						?></ul>

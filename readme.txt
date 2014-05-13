@@ -3,8 +3,8 @@ Contributors: stiofansisland, paoltaia, rightmentor
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=payments@nomaddevs.com&item_name=Donation+for+WPGD
 Tags:  address book, addressbook, addresses, bio, biographies, bios, business, business directory plugin, business-directory, businesses, church, directories, directory, directory plugin, directory widget, googlemap, googlemaps, google maps, list, listings, lists, member directory, members directories, members directory, microformat, microformats, profile, profiles, staff, user, users, vcard, wordpress business directory, wordpress directory, wordpress directory plugin, yelp clone, tripadvisor clone, yellow pages clone, wordpress business directory plugin, wordpress directory theme, wordpress business directory theme, wordpress city directory plugin, wordpress local directory plugin
 Requires at least: 3.1
-Tested up to: 3.9
-Stable tag: 1.0.1
+Tested up to: 3.9.1
+Stable tag: 1.0.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -36,6 +36,15 @@ GeoDirectory was developed to work with any theme. If you need help getting your
 * The default search widget allows you to also search by zip code or location name. Listings can be filtered by rating, reviews or date.
 * Our optimized database structure allows for hundreds of thousands of businesses to be listed. 
 * GeoDirectory is 100% WPML compatible for multilanguage directories.
+
+= GDF - Directory Theme Framework =
+
+GeoDirectory Framework was designed to be used with the GeoDirectory plugin, though it can be used without it. You can enable and disable widget areas and also style almost any area of your website from within the Framework Options Page.
+
+It is extremely easy to build a child theme using GeoDirectory framework as a solid base foundation. We will start releasing our own child themes very soon. 
+
+GeoDirectory Framework is 100% responsive and adapts perfectly to any device screen resolution. It also provides 2 App look-alike sliding menus. 
+
 = Premium Addons =
 
 Premium [Addons](http://wpgeodirectory.com/addons/ "Premium addons for GeoDirectory") are provided to extend GeoDirectory and make it a money making global directory toolkit.
@@ -50,10 +59,11 @@ Premium [Addons](http://wpgeodirectory.com/addons/ "Premium addons for GeoDirect
 * [Marker Cluster](http://wpgeodirectory.com/addons/marker-cluster/ "To avoid overcrowded maps") - Adds numbered markers at high zoom levels.
 * [Search Autocompleter](http://wpgeodirectory.com/addons/search-autocompleter/ "Great usere search experience") - Adds ajax search autocompleter to search.
 * [Duplicate alert](http://wpgeodirectory.com/addons/ajax-duplicate-alert/ "Listing already exists?") - Alert users when adding a listing with the same title as another listing.
+* [GeoDirectory Theme Framework](http://wpgeodirectory.com/themes/geodirectory-theme-framework/ "The theme framework for GD") - Easily customizable, GDF is a solid base foundation for awesome Child Themes.
 
-Membership(all addons) can be bought on [wpgeodirectory.com](http://wpgeodirectory.com/ "Get GeoDirectory membership.")
+Membership (all addons and themes) can be purchased  on [wpgeodirectory.com](http://wpgeodirectory.com/ "Get GeoDirectory membership.")
 
-Individual Addons can be bought on [themetailors.com](http://geodirectory.themetailors.com/ "Get individual addons on Theme Tailors.")
+Individual Addons can be purchased on [themetailors.com](http://geodirectory.themetailors.com/ "Get individual addons on Theme Tailors.")
 
 = Support =
 
@@ -101,6 +111,10 @@ GeoDirectory comes with some dummy data you can use to see how listings look. Yo
 
 == Changelog ==
 
+= 1.0.2 =
+
+[GeoDirectory changelog for version 1.0.2](http://wpgeodirectory.com/change-logs/#v1.0.2).
+
 = 1.0.1 =
 
 [GeoDirectory changelog for version 1.0.1](http://wpgeodirectory.com/change-logs/#v1.0.1).
@@ -112,3 +126,4 @@ initial release
 == Upgrade Notice ==
 
 = none =
+

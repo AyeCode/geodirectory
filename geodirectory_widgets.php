@@ -161,6 +161,18 @@ function geodir_register_sidebar(){
 		/* Author page sidebars end         */
 		/*==================================*/
 		
+		/*==================================*/
+		/* Add listing page sidebars start       */
+		/*==================================*/
+		
+		register_sidebars(1,array('id'=> 'geodir_add_listing_sidebar','name' => __('GD Add Listing Right Sidebar',GEODIRECTORY_TEXTDOMAIN),'before_widget' => '<div class="widget">','after_widget' => '</div>','before_title' => '<h3><span>','after_title' => '</span></h3>'));
+		
+		$geodir_sidebars[] ='geodir_add_listing_sidebar' ;
+		
+		/*==================================*/
+		/* Add listing page sidebars end         */
+		/*==================================*/
+		
 	}
 } 
 
@@ -367,61 +379,122 @@ function register_geodir_widgets(){
 			 	$add_listurl = get_permalink( get_option('geodir_add_listing_page') );
 				$add_listurl = geodir_getlink( $add_listurl, array('listing_type'=>'gd_place') );
 				
-                $author_link = get_author_posts_url( $current_user->data->ID );
-                $author_link = geodir_getlink($author_link,array('geodir_dashbord'=>'true'),false);
-                $authorfav_link = geodir_getlink($author_link,array('stype'=>'gd_place','list'=>'favourite'),false);
+				$author_link = get_author_posts_url( $current_user->data->ID );
+				$author_link = geodir_getlink($author_link,array('geodir_dashbord'=>'true'),false);
+                
 				echo '<ul class="blogroll">';
 				ob_start();
-             ?>
-			 	    <li><a class="signin" href="<?php echo wp_logout_url( home_url() );?>"><?php _e('Logout',GEODIRECTORY_TEXTDOMAIN);?></a></li>
-                    <?php 
-					$post_types = geodir_get_posttypes('object');
+					 ?>
+				<li><a class="signin" href="<?php echo wp_logout_url( home_url() );?>"><?php _e('Logout',GEODIRECTORY_TEXTDOMAIN);?></a></li>
+									<?php 
+				$post_types = geodir_get_posttypes('object');
+				
+				$show_add_listing_post_types_main_nav = get_option('geodir_add_listing_link_user_dashboard');
+				
+				$geodir_allow_posttype_frontend = get_option('geodir_allow_posttype_frontend');
+				
+			
+				if(!empty($show_add_listing_post_types_main_nav)){
 					
-					$show_add_listing_post_types_main_nav = get_option('geodir_add_listing_link_user_dashboard');
-					
-					$geodir_allow_posttype_frontend = get_option('geodir_allow_posttype_frontend');
-					
-					if(!empty($post_types)){
-						foreach($post_types as $post_type => $args){
-							if(!empty($geodir_allow_posttype_frontend)){
-								if ( in_array($post_type, $geodir_allow_posttype_frontend)) {	
-									if(!empty($show_add_listing_post_types_main_nav)){
-										if ( in_array($post_type, $show_add_listing_post_types_main_nav)) {	
-											if(geodir_get_addlisting_link( $post_type )){
-											
-													$menu_class = '';
-													if(geodir_get_current_posttype() == $post_type && geodir_is_page('add-listing'))
-													$menu_class = 'current-menu-item';
-												
-													echo '<li class="menu-item '.$menu_class.'">
-														<a href="'. geodir_get_addlisting_link( $post_type ) .'">
-															'.__('Add',GEODIRECTORY_TEXTDOMAIN).' '.$args->labels->singular_name.'
-														</a>
-													</li>';
-											}
-										}
-									}
-								}
-							}			
+					$addlisting_links = '';
+					foreach($show_add_listing_post_types_main_nav as $addobj){
+						
+						if(array_key_exists($addobj, $post_types) && is_array($geodir_allow_posttype_frontend) && in_array($addobj, $geodir_allow_posttype_frontend)){
+							
+							if($add_link = geodir_get_addlisting_link( $addobj )){
+								
+								$name = $post_types->$addobj->labels->singular_name;
+								
+								$selected = '';
+								if(geodir_get_current_posttype() == $addobj && geodir_is_page('add-listing')) 
+									$selected = 'selected="selected"';
+								
+								$addlisting_links .= '<option '.$selected.' value="'.$add_link.'">'.ucfirst($name).'</option>';
+								
+							}
 						}
+						
+					}	
+					
+					if($addlisting_links != ''){ ?>
+					
+						<li><select id="geodir_add_listing" class="chosen_select" onchange="window.location.href=this.value" option-autoredirect="1" name="geodir_add_listing" style="display: none;" option-ajaxchosen="false" >
+						<option value="<?php echo home_url();?>"><?php _e('Add Listing',GEODIRECTORY_TEXTDOMAIN);?></option>
+						<?php echo $addlisting_links;?>
+						</select></li> <?php 
+						
 					}
-					?>
-                    <!--<li><a href="<?php echo $add_listurl;?>"><?php _e('Add Listing',GEODIRECTORY_TEXTDOMAIN);?></a></li>-->
-                    <li><a href="<?php echo $authorfav_link;?>"><?php _e('My Favorites',GEODIRECTORY_TEXTDOMAIN);?></a></li>
-            	<?php 
+				
+				}
+					
+				
+				$show_favorite_link_user_dashboard = get_option('geodir_favorite_link_user_dashboard');
+				
+				if(!empty($show_favorite_link_user_dashboard)){
+					
+					$favourite_links = '';
+					
+					foreach($show_favorite_link_user_dashboard as $favobj){
+						
+						if(array_key_exists($favobj, $post_types)){
+							
+							$name = $post_types->$favobj->labels->name;
+							$post_type_link = geodir_getlink($author_link,array('stype'=>$favobj,'list'=>'favourite'),false);
+							
+							$selected = '';
+							if(isset($_REQUEST['list']) && $_REQUEST['list'] == 'favourite' && isset($_REQUEST['stype']) && $_REQUEST['stype'] == $favobj && isset($_REQUEST['geodir_dashbord'])) $selected = 'selected="selected"';
+							
+							$favourite_links .= '<option '.$selected.' value="'.$post_type_link.'">'.ucfirst($name).'</option>';
+							
+						}
+						
+					}
+					
+					if($favourite_links != ''){ ?>
+						
+						<li><select id="geodir_my_favourites" class="chosen_select" onchange="window.location.href=this.value" option-autoredirect="1" name="geodir_my_favourites" style="display: none;" option-ajaxchosen="false" >
+						<option value="<?php echo home_url();?>"><?php _e('My Favorite',GEODIRECTORY_TEXTDOMAIN);?></option>
+						<?php echo $favourite_links;?>
+						</select></li> <?php 
+						
+					}
+				
+				}
+				
 				
 				$show_listing_link_user_dashboard = get_option('geodir_listing_link_user_dashboard');
-				foreach($post_types as $post_type => $args){
+				
+				if(!empty($show_listing_link_user_dashboard)){
 					
-					if(!empty($show_listing_link_user_dashboard)){
-						if ( in_array($post_type, $show_listing_link_user_dashboard)) {
-							$post_type_link = geodir_getlink($author_link,array('stype'=>$post_type),false);
-							//$post_type = explode('_',$post_type);
-							$name = $args->labels->name;
-							echo '<li><a href="'.$post_type_link.'">'.__('My',GEODIRECTORY_TEXTDOMAIN).' '. ucfirst($name) .'</a></li>';
+					$listing_links = '';
+					foreach($show_listing_link_user_dashboard as $listobj){
+						
+						if(array_key_exists($listobj, $post_types)){
+							
+							$name = $post_types->$listobj->labels->name;
+							$listing_link = geodir_getlink($author_link,array('stype'=>$listobj),false);
+							
+							$selected = '';
+							if(!isset($_REQUEST['list']) && isset($_REQUEST['geodir_dashbord']) && isset($_REQUEST['stype']) && $_REQUEST['stype'] == $listobj) $selected = 'selected="selected"';
+							
+							$listing_links .= '<option '.$selected.' value="'.$listing_link.'">'.ucfirst($name).'</option>';
+							
 						}
+					
 					}
+					
+					if($listing_links != ''){ ?>
+						
+						<li><select id="geodir_my_listings" class="chosen_select" onchange="window.location.href=this.value" option-autoredirect="1" name="geodir_my_listings" style="display: none;" option-ajaxchosen="false" >
+						<option value="<?php echo home_url();?>"><?php _e('Listing',GEODIRECTORY_TEXTDOMAIN);?></option>
+						<?php echo $listing_links;?>
+						</select></li> <?php 
+						
+					}
+				
 				}
+				
+				
 				$dashboard_link = ob_get_clean();
 				echo apply_filters('geodir_dashboard_links',$dashboard_link);
 				echo '</ul>';
@@ -434,7 +507,7 @@ function register_geodir_widgets(){
 					
 					<input type="hidden" name="redirect_to" value="<?php echo geodir_curPageURL(); ?>" />
 					<input type="hidden" name="testcookie" value="1" />
-					<div class="form_row clearfix"><label class="labelblank">&nbsp;</label>  <input type="submit" name="submit" value="<?php _e(SIGN_IN_BUTTON);?>" class="b_signin"/><p class="forgot_link">   <a href="<?php echo home_url(); ?>/?geodir_signup=true&amp;page1=sign_up"><?php _e(NEW_USER_TEXT);?></a>  <br /> <a href="<?php echo home_url(); ?>/?geodir_signup=true&amp;page1=sign_in"><?php _e(FORGOT_PW_TEXT);?></a> </p> </div>
+					<div class="form_row clearfix"><label class="labelblank">&nbsp;</label>  <input type="submit" name="submit" value="<?php echo SIGN_IN_BUTTON;?>" class="b_signin"/><p class="forgot_link">   <a href="<?php echo home_url(); ?>/?geodir_signup=true&amp;page1=sign_up"><?php echo NEW_USER_TEXT;?></a>  <br /> <a href="<?php echo home_url(); ?>/?geodir_signup=true&amp;page1=sign_in"><?php echo FORGOT_PW_TEXT;?></a> </p> </div>
 					
 				 </form>           
 				<?php }?>

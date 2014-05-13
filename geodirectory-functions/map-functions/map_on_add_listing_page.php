@@ -330,11 +330,13 @@ var baseMarker = $.goMap.createMarker({
 	
 	id: 'baseMarker',
 	
-	icon: {
+	icon: '<?php echo get_option('geodir_default_marker_icon');?>',
+	
+	<?php /*?>icon: {
 	
 	image: new google.maps.MarkerImage (
 	
-	'<?php echo geodir_plugin_url();?>/geodirectory-functions/map-functions/icons/pin.png',
+	'<?php echo get_option('geodir_default_marker_icon');?>',
 	
 	new google.maps.Size(20, 32),
 	
@@ -342,7 +344,7 @@ var baseMarker = $.goMap.createMarker({
 	
 	)
 	
-	},
+	},<?php */?>
 	
 	draggable: true
 

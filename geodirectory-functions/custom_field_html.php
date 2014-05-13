@@ -13,7 +13,7 @@ $field_admin_title = '';
 if(isset($field_info->admin_title))
 	$field_admin_title = $field_info->admin_title;
 
-	
+$default = isset($field_info->is_admin)	 ? $field_info->is_admin : '';
 ?>
 <li class="text" id="licontainer_<?php echo $result_str;?>">
     <div class="title title<?php echo $result_str;?> gt-fieldset"   title="<?php _e('Double Click to toggle and drag-drop to sort',GEODIRECTORY_TEXTDOMAIN);?>" ondblclick="show_hide('field_frm<?php echo $result_str;?>')">
@@ -142,12 +142,9 @@ if(isset($field_info->admin_title))
             <tr>
                 <td ><strong><?php _e('Show in sidebar :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                 <td align="left">
-                    <select name="is_default" id="is_default"   <?php if(isset($field_info->is_default) && $field_info->is_default=='admin'){ echo 'disabled="disabled"';}?> >
+                    <select name="is_default" id="is_default" >
                     <option value="0" <?php if(!isset($field_info->is_default) || $field_info->is_default=='0'){ echo 'selected="selected"';}?>><?php _e('No',GEODIRECTORY_TEXTDOMAIN);?></option>
                     <option value="1" <?php if( isset($field_info->is_default) && $field_info->is_default=='1'){ echo 'selected="selected"';}?>><?php _e('Yes',GEODIRECTORY_TEXTDOMAIN);?></option>
-                      <?php if(isset($field_info->is_default) && $field_info->is_default=='admin'){ ?>	
-                     <option value="admin" <?php if($field_info->is_default=='admin'){ echo 'selected="selected"';}?>><?php _e('Admin Field',GEODIRECTORY_TEXTDOMAIN);?></option>
-                     <?php }?>
                     </select>
                     <br />    <span><?php _e('Select yes or no. If no is selected then the field will be displayed as main form field or additional field',GEODIRECTORY_TEXTDOMAIN);?></span>
                 </td>

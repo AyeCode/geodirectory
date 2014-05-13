@@ -31,6 +31,8 @@ function set_listing_request(){
 		print_r($query);exit;}
 	
 	/* remove all pre filters */
+	remove_all_filters('query');
+	remove_all_filters('posts_search');
 	remove_all_filters('posts_fields');
 	remove_all_filters('posts_join');
 	remove_all_filters('posts_orderby');
@@ -213,7 +215,7 @@ function geodir_listing_loop_filter($query){
 			$request_term = explode("/",$wp_query->query[$taxonomies[0]]);
 			$request_term = end($request_term);
 			if(!term_exists($request_term ))
-			{
+			{	if(!is_array($term)){$term = array();}
 				$term['name']=ucwords(str_replace('-' , ' ' ,$request_term))  ;
 				$term['taxonomy']=$taxonomies[0] ;
 				

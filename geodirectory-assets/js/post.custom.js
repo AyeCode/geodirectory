@@ -1,10 +1,13 @@
 
-function geodir_get_popup_forms(e, clk_class, popup_id){
+function geodir_get_popup_forms(e, ele, clk_class, popup_id){
 	
 	var ajax_url = geodir_var.geodir_ajax_url;
-	var post_id = jQuery('input[name="geodir_popup_post_id"]').val()
 	
-	var append_class = jQuery('.'+clk_class).closest('.geodir-company_info');
+	var append_class = ele.closest('li');
+	if(ele.closest('.geodir-company_info').length > 0)
+		append_class = ele.closest('.geodir-company_info');
+	
+	var post_id = append_class.find('input[name="geodir_popup_post_id"]').val()
 	
 	jQuery.modal('<div id="basic-modal-content" class="clearfix simplemodal-data" style="display: block;"><div id="modal-loading"></div></div>');// show popup right away
 
@@ -29,40 +32,18 @@ jQuery.post( ajax_url, { popuptype: clk_class, post_id: post_id })
 }
 
 jQuery(document).ready(function () {
-	
-	var geodir_popup_timer;
-	
+
 	jQuery('a.b_sendtofriend').click(function (e) {
-																						 
-		//clearInterval(geodir_popup_timer);
-		//geodir_popup_timer = setTimeout(function() {
-				
-			geodir_get_popup_forms(e, 'b_sendtofriend', 'basic-modal-content');
-			
-		//}, 1000);
+		
+			geodir_get_popup_forms(e, jQuery(this), 'b_sendtofriend', 'basic-modal-content');
 		
 	});
 	
 	jQuery('a.b_send_inquiry' ).click(function (e) {
-		
-		//clearInterval(geodir_popup_timer);
-		//geodir_popup_timer = setTimeout(function() {
-				
-			geodir_get_popup_forms(e, 'b_send_inquiry', 'basic-modal-content2');
+																							
+			geodir_get_popup_forms(e, jQuery(this), 'b_send_inquiry', 'basic-modal-content2');
 			
-		//}, 1000);
-		
 	});
-	
-	/*jQuery('a.b_claim_listing').click(function (e) {
-		e.preventDefault();
-		jQuery('#basic-modal-content4').modal({persist:true});
-	});
-	
-	jQuery('p.links a.a_image_sort').click(function (e) {
-		e.preventDefault();
-		jQuery('#basic-modal-content3').modal({persist:true});
-	});*/
 	
 });
 

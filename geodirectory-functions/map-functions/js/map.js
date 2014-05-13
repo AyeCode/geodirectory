@@ -267,11 +267,13 @@ function geodir_htmlEscape(str) {
             .replace(/&ldquo;/g, '"')
             .replace(/&gt;/g, '>');
 }
-	
+gd_single_marker_lat = '';	
+gd_single_marker_lon = '';	
 // create the marker and set up the event window
 function create_marker(input,map_canvas_var ) 
 {
-//alert(map_canvas)
+	gd_single_marker_lat = input.lt;
+	gd_single_marker_lon = input.ln;
 	jQuery("#"+ map_canvas_var).goMap();
 	
 	if(input.lt && input.ln){
@@ -515,7 +517,7 @@ function calcRoute(map_canvas){
 		
 		var request = {
 			origin: from_address,
-			destination: map_options.latitude +','+ map_options.longitude,
+			destination: gd_single_marker_lat +','+ gd_single_marker_lon,
 			travelMode: gdGetTravelMode(),
      	    unitSystem: gdGetTravelUnits()
 		};

@@ -241,7 +241,7 @@ global $cat_display,$post_cat, $current_user;
     <div id="gd-sidebar-wrapper">
     <div class="geodir-sidebar-main" >
         <div class="geodir-gd-sidebar">
-            <?php do_action('geodir_sidebar'); ?>
+            <?php dynamic_sidebar('geodir_add_listing_sidebar'); do_action('geodir_sidebar'); ?>
         </div>
     </div>
 </div>  <!-- gd-sidebar-wrapper ends here-->

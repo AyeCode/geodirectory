@@ -41,7 +41,7 @@ if (is_admin()){
 	$my_meta->addWysiwyg($prefix.'cat_top_desc',array('name'=> __('Category Top Description' , GEODIRECTORY_TEXTDOMAIN),'desc' => __('This will appear at the top of the category lsiting. Use', GEODIRECTORY_TEXTDOMAIN) . ' %location_name% '. __('to show the current locations name.', GEODIRECTORY_TEXTDOMAIN)));
 	$my_meta->addImage($prefix.'cat_default_img',array('name'=> __('Default Listing Image' , GEODIRECTORY_TEXTDOMAIN),'desc' => __('Choose a default "no image"',GEODIRECTORY_TEXTDOMAIN)));
 	$my_meta->addImage($prefix.'cat_icon',array('name'=> __('Category Icon', GEODIRECTORY_TEXTDOMAIN),'desc' => __('Choose a category icon',GEODIRECTORY_TEXTDOMAIN) ,'validate_func' => '!empty'));
-	$my_meta->addCheckbox($prefix.'pointless',array('name'=> __('<b>Exclude</b> Rating sort option',GEODIRECTORY_TEXTDOMAIN),'style'=>'hidden'));// hidden setting to trick WPML
+	/*$my_meta->addCheckbox($prefix.'pointless',array('name'=> __('<b>Exclude</b> Rating sort option',GEODIRECTORY_TEXTDOMAIN),'style'=>'hidden'));*/// hidden setting to trick WPML
 
 	/*$my_meta->addSelect($prefix.'cat_sort',array(''=>__('Default' , GEODIRECTORY_TEXTDOMAIN),
 	'random'=>__('Random',GEODIRECTORY_TEXTDOMAIN),
@@ -138,10 +138,9 @@ function manage_category_custom_fields($deprecated,$column_name,$term_id)
 	
 	}
 }
-
-function geodir_get_default_catimage($term_id){
+function geodir_get_default_catimage($term_id,$post_type='gd_place'){
 	
-	if($cat_default_img = get_tax_meta($term_id,'ct_cat_default_img'))
+	if($cat_default_img = get_tax_meta($term_id,'ct_cat_default_img','',$post_type))
 		return $cat_default_img;
 	else 
 		return false;	

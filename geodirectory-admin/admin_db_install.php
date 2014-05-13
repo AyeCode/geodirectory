@@ -351,7 +351,8 @@ if (!function_exists('geodir_create_tables')) {
 							  `option_values` text NULL DEFAULT NULL,
 							  `clabels` text NULL DEFAULT NULL,
 							  `is_active` ENUM( '0', '1' ) NOT NULL DEFAULT '1',
-							  `is_default` ENUM( '0', '1', 'admin' ) NOT NULL DEFAULT '0',
+							  `is_default` ENUM( '0', '1' ) NOT NULL DEFAULT '0',
+								`is_admin` ENUM( '0', '1' ) NOT NULL DEFAULT '0',
 							  `is_required` ENUM( '0', '1' ) NOT NULL DEFAULT '0',
 							  `required_msg` varchar(255) NULL DEFAULT NULL,
 							  `show_on_listing` ENUM( '0', '1' ) NOT NULL DEFAULT '1',
@@ -491,7 +492,8 @@ function geodir_create_default_fields(){
 							'site_title' 	=> __('Category', GEODIRECTORY_TEXTDOMAIN ), 
 							'htmlvar_name' 	=> 'gd_placecategory', 
 							'default_value'	=> '', 
-							'is_default'  	=> 'admin',
+							'is_default'  	=> '1',
+							'is_admin'			=> '1',
 							'is_required'	=> '1', 
 							'clabels'		=> __('Category', GEODIRECTORY_TEXTDOMAIN ));
 	
@@ -504,7 +506,8 @@ function geodir_create_default_fields(){
 							'htmlvar_name' 	=> 'post', 
 							'default_value'	=> '', 
 							'option_values' => '', 
-							'is_default'  	=> 'admin',
+							'is_default'  	=> '1',
+							'is_admin'			=> '1',
 							'is_required'	=> '1',
 							'required_msg'	=> __('Address fields are required',  GEODIRECTORY_TEXTDOMAIN  ),
 							'clabels'		=> __('Address',  GEODIRECTORY_TEXTDOMAIN ),
@@ -525,7 +528,8 @@ function geodir_create_default_fields(){
 							'htmlvar_name' 	=> 'timing', 
 							'default_value'	=> '', 
 							'option_values' => '',
-							'is_default'  	=> 'admin', 
+							'is_default'  	=> '1',
+							'is_admin'			=> '1', 
 							'clabels'		=> __('Time',  GEODIRECTORY_TEXTDOMAIN ));
 	
 	$fields[]	= array(	'listing_type' 	=> 'gd_place', 
@@ -537,7 +541,8 @@ function geodir_create_default_fields(){
 							'htmlvar_name' 	=> 'contact', 
 							'default_value'	=> '', 
 							'option_values' => '',
-							'is_default'  	=> 'admin', 
+							'is_default'  	=> '1',
+							'is_admin'			=> '1',
 							'clabels'		=> __('Phone',  GEODIRECTORY_TEXTDOMAIN ));
 	
 	$fields[]	= array(	'listing_type' 	=> 'gd_place', 
@@ -549,7 +554,8 @@ function geodir_create_default_fields(){
 							'htmlvar_name' 	=> 'email', 
 							'default_value'	=> '', 
 							'option_values' => '',
-							'is_default'  	=> 'admin', 
+							'is_default'  	=> '1',
+							'is_admin'			=> '1', 
 							'clabels'		=> __('Email',  GEODIRECTORY_TEXTDOMAIN ));												
 							
 	$fields[]	= array(	'listing_type' 	=> 'gd_place', 
@@ -561,7 +567,8 @@ function geodir_create_default_fields(){
 							'htmlvar_name' 	=> 'website', 
 							'default_value'	=> '', 
 							'option_values' => '',
-							'is_default'  	=> 'admin', 
+							'is_default'  	=> '1',
+							'is_admin'			=> '1', 
 							'clabels'		=> __('Website',  GEODIRECTORY_TEXTDOMAIN ));
 	
 	$fields[]	= array(	'listing_type' 	=> 'gd_place', 
@@ -573,7 +580,8 @@ function geodir_create_default_fields(){
 							'htmlvar_name' 	=> 'twitter', 
 							'default_value'	=> '', 
 							'option_values' => '',
-							'is_default'  	=> 'admin', 
+							'is_default'  	=> '1',
+							'is_admin'			=> '1', 
 							'clabels'		=> __('Twitter',  GEODIRECTORY_TEXTDOMAIN  ) );
 	
 	$fields[]	= array(	'listing_type' 	=> 'gd_place', 
@@ -585,7 +593,8 @@ function geodir_create_default_fields(){
 							'htmlvar_name' 	=> 'facebook', 
 							'default_value'	=> '', 
 							'option_values' => '',
-							'is_default'  	=> 'admin', 
+							'is_default'  	=> '1',
+							'is_admin'			=> '1', 
 							'clabels'		=> __('Facebook', GEODIRECTORY_TEXTDOMAIN ));
 							
 	$fields[]	= array(	'listing_type' 	=> 'gd_place', 
@@ -597,7 +606,8 @@ function geodir_create_default_fields(){
 							'htmlvar_name' 	=> 'video', 
 							'default_value'	=> '', 
 							'option_values' => '',
-							'is_default'  	=> 'admin', 
+							'is_default'  	=> '0',
+							'is_admin'			=> '1', 
 							'clabels'		=> __('Video',  GEODIRECTORY_TEXTDOMAIN ));
 	
 	$fields[]	= array(	'listing_type' 	=> 'gd_place', 
@@ -609,7 +619,8 @@ function geodir_create_default_fields(){
 							'htmlvar_name' 	=> 'special_offers', 
 							'default_value'	=> '', 
 							'option_values' => '',
-							'is_default'  	=> 'admin', 
+							'is_default'  	=> '0',
+							'is_admin'			=> '1', 
 							'clabels'		=> __('Special Offers' ,  GEODIRECTORY_TEXTDOMAIN ));																								
 	
 	$fields = apply_filters('geodir_before_default_custom_fields_saved'  , $fields)	 ;		

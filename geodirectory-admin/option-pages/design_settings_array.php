@@ -398,9 +398,39 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 		),
 		
 		array( 'type' => 'sectionend', 'id' => 'geodir_search_layout'),
+				
+				
+		array( 	'name' => __( 'Search form default text settings', GEODIRECTORY_TEXTDOMAIN ), 'type' => 'sectionstart', 'desc' => '', 'id' => 'geodir_search_form_default_text_settings' ),
 		
-	
-	
+		array(  
+			'name' => __( 'Search field default value', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> __( 'Show the search text box \'placeholder\' value on search form.', GEODIRECTORY_TEXTDOMAIN ),
+			'id' 		=> 'geodir_search_field_default_text',
+			'type' 		=> 'text',
+			'css' 		=> 'min-width:300px;',
+			'std' 		=> 'Search for' // show on the listing page.
+			),
+		
+		array(  
+			'name' => __( 'Near field default value', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> __( 'Show the near text box \'placeholder\' value on search form.', GEODIRECTORY_TEXTDOMAIN ),
+			'id' 		=> 'geodir_near_field_default_text',
+			'type' 		=> 'text',
+			'css' 		=> 'min-width:300px;',
+			'std' 		=> 'Near' // show on the listing page.
+		),
+		
+		array(  
+			'name' => __( 'Search button label', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> __( 'Show the search button label on search form.', GEODIRECTORY_TEXTDOMAIN ),
+			'id' 		=> 'geodir_search_button_label',
+			'type' 		=> 'text',
+			'css' 		=> 'min-width:300px;',
+			'std' 		=> 'Search' // show on the listing page.
+		),
+		
+		array( 'type' => 'sectionend', 'id' => 'geodir_search_form_default_text_settings'),
+			
 	/* Listing Layout Settings end */
 	
 	
@@ -782,6 +812,19 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 	),
 	
 	array(  
+		'name' => __( 'Show favorite link in user dashboard', GEODIRECTORY_TEXTDOMAIN ),
+		'desc' 		=> '',
+		'tip' 		=> '',
+		'id' 		=> 'geodir_favorite_link_user_dashboard',
+		'css' 		=> 'min-width:300px;',
+		'std' 		=> geodir_get_posttypes(),
+		'type' 		=> 'multiselect',
+		'placeholder_text' => __( 'Select post types', GEODIRECTORY_TEXTDOMAIN ),
+		'class'		=> 'chosen_select',
+		'options' => array_unique( geodir_post_type_setting_fun())
+	),
+	
+	array(  
 		'name' => __( 'Show listing link in user dashboard', GEODIRECTORY_TEXTDOMAIN ),
 		'desc' 		=> '',
 		'tip' 		=> '',
@@ -874,6 +917,15 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 			'type' 		=> 'map_default_settings',
 			'css' 		=> 'min-width:300px;',
 			'std' 		=> '' // Default value for the page title - changed in settings
+		),
+		
+	array(  
+			'name' => __( 'Upload map default marker icon', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> '',
+			'id' 		=> 'geodir_default_marker_icon',
+			'type' 		=> 'file',
+			'std' 		=> '0',
+			'value' =>  geodir_plugin_url().'/geodirectory-functions/map-functions/icons/pin.png'// Default value to show home top section
 		),
 	
 	array( 'type' => 'sectionend', 'id' => 'geodir_map_default_settings'),			

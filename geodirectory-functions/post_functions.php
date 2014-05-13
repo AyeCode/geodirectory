@@ -956,7 +956,7 @@ function geodir_get_featured_image( $post_id = '', $size = '' ,$no_image = false
 		$default_img = '';
 		$default_cat = geodir_get_post_meta($post_id, 'default_category', true);
 		
-		if($default_catimg = geodir_get_default_catimage($default_cat))
+		if($default_catimg = geodir_get_default_catimage($default_cat,$post_type))
 			$default_img = $default_catimg['src'];
 		elseif($no_image){
 			$default_img = get_option('geodir_listing_no_img');
@@ -1086,8 +1086,8 @@ function geodir_get_images($post_id = 0, $img_size='', $no_images =false, $add_f
 	else if($no_images){
 		$default_img = '';
 		$default_cat = geodir_get_post_meta($post_id, 'default_category', true);
-		
-		if($default_catimg = geodir_get_default_catimage($default_cat))
+		$post_type = get_post_type( $post_id );
+		if($default_catimg = geodir_get_default_catimage($default_cat,$post_type))
 			$default_img = $default_catimg['src'];
 		elseif($no_images){
 			$default_img = get_option('geodir_listing_no_img');
@@ -1247,8 +1247,8 @@ function geodir_set_post_terms($post_id, $terms, $tt_ids, $taxonomy){
 		
 			foreach($post_term as $cat_id):
 				
-				$term_icon_url = get_tax_meta($cat_id,'ct_cat_icon');
-				$term_icon = $term_icon_url['src'];
+				$term_icon_url = get_tax_meta($cat_id,'ct_cat_icon', false, $post_type);
+				$term_icon = isset($term_icon_url['src']) ? $term_icon_url['src'] : '';
 				
 				$post_title = $post_obj->title;
 				$title = str_replace($srcharr,$replarr,$post_title);
@@ -1773,7 +1773,7 @@ function geodir_excerpt_length($length) {
 
 function geodir_excerpt_more($more) {
 global $post;
-return ' <a href="'.get_permalink($post->ID).'">'._(READ_MORE_TXT).'</a>';
+return ' <a href="'.get_permalink($post->ID).'">'.READ_MORE_TXT.'</a>';
 }
 
 

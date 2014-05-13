@@ -35,7 +35,7 @@ function geodir_post_custom_fields($package_id = '',$default = 'all',$post_type 
 	$default_query = '';
 	
 	if($default == 'default')
-		$default_query = " and is_default IN ('1','admin') ";	
+		$default_query = " and is_default IN ('1') ";	
 	elseif($default == 'custom')
 		$default_query = " and is_default = '0' ";	
 	
@@ -266,7 +266,13 @@ function geodir_custom_field_save( $request_field = array() , $default = false )
 		if(isset($request_field['is_default']) && $request_field['is_default'] != '')
 			$is_default = $request_field['is_default'];
 		else
-			$is_default = 'admin';	
+			$is_default = '0';	
+			
+		if(isset($request_field['is_admin']) && $request_field['is_admin'] != '')
+			$is_admin = $request_field['is_admin'];
+		else
+			$is_admin = '0';	
+			
 		
 		if($is_active == '') $is_active = 1;
 		if($is_required == '') $is_required = 0;
@@ -825,6 +831,7 @@ function geodir_custom_field_save( $request_field = array() , $default = false )
 					sort_order = %d,
 					is_active = %s,
 					is_default  = %s,
+					is_admin = %s,
 					is_required = %s,
 					required_msg = %s,
 					css_class = %s,
@@ -838,7 +845,7 @@ function geodir_custom_field_save( $request_field = array() , $default = false )
 					data_type = %s,
 					extra_fields = %s ",
 					
-					array($post_type,$admin_title,$site_title,$field_type,$htmlvar_name,$admin_desc,$clabels,$default_value,$sort_order,$is_active,$is_default,$is_required,$required_msg,$css_class,$field_icon,$show_on_listing,$show_on_detail,$option_values,$price_pkg,$cat_sort,$cat_filter,$data_type,$extra_field_query)
+					array($post_type,$admin_title,$site_title,$field_type,$htmlvar_name,$admin_desc,$clabels,$default_value,$sort_order,$is_active,$is_default,$is_admin,$is_required,$required_msg,$css_class,$field_icon,$show_on_listing,$show_on_detail,$option_values,$price_pkg,$cat_sort,$cat_filter,$data_type,$extra_field_query)
 					
 				)
 			
@@ -906,6 +913,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 		$option_values = $val['option_values'];
 		$is_required = $val['is_required'];
 		$is_default =  $val['is_default'];
+		$is_admin =  $val['is_admin'];
 		$required_msg = $val['required_msg'];
 		$extra_fields = unserialize($val['extra_fields']);
 		$value='';
@@ -976,8 +984,8 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 				if(empty($lng)) $lng = isset($location->city_longitude) ? $location->city_longitude : '';
 				
 				
-				$lat = apply_filters('geodir_default_latitude', $lat, $is_default);
-				$lng = apply_filters('geodir_default_longitude', $lng, $is_default);
+				$lat = apply_filters('geodir_default_latitude', $lat, $is_admin);
+				$lng = apply_filters('geodir_default_longitude', $lng, $is_admin);
 				
 				?>
 			
@@ -1415,7 +1423,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 			
 			$exclude_cats = array();
 			
-			if($is_default == 'admin'){
+			if($is_admin == '1'){
 			
 				$post_type = get_post_type();
 				
@@ -1933,7 +1941,7 @@ function geodir_show_listing_info($fields_location=''){
 				case 'email':
 				
 						
-						if( $type['htmlvar_name'] == 'geodir_email'){ 
+						if( $type['htmlvar_name'] == 'geodir_email' && ((isset($package_info->sendtofriend) && $package_info->sendtofriend) || $post->$type['htmlvar_name'])){ 
 								
 								$b_send_inquiry = '';
 								$b_sendtofriend = '';
@@ -1946,15 +1954,18 @@ function geodir_show_listing_info($fields_location=''){
 									}
 								
 									$html .= '<p class="'.$type['css_class'].'"><span class="geodir-i-email" style="'.$field_icon.'">';
+								$seperator = '';
+								if($post->$type['htmlvar_name']){
+									$html .= '<a href="javascript:void(0);" class="'.$b_send_inquiry.'" >'.SEND_INQUIRY.'</a>';
+									$seperator = ' | ';
+								}
 								
-								if($post->$type['htmlvar_name'])
-									$html .= '<a href="javascript:void(0);" class="'.$b_send_inquiry.'" >'.SEND_INQUIRY.'</a> | ';
-								
-								$html .= '<a href="javascript:void(0);" class="'.$b_sendtofriend.'">'.SEND_TO_FRIEND.'</a>';
+								if(isset($package_info->sendtofriend) && $package_info->sendtofriend)
+									$html .= $seperator.'<a href="javascript:void(0);" class="'.$b_sendtofriend.'">'.SEND_TO_FRIEND.'</a>';
 							
 								$html .= '</span></p>';
 								
-            
+            		
                 if(isset($_REQUEST['send_inquiry']) && $_REQUEST['send_inquiry']=='success'){
                     $html .= '<p class="sucess_msg">'.SEND_INQUIRY_SUCCESS.'</p>';
                  }elseif(isset($_REQUEST['sendtofrnd']) && $_REQUEST['sendtofrnd']=='success'){
@@ -2026,7 +2037,8 @@ function geodir_show_listing_info($fields_location=''){
 				break;
 				
 				case 'textarea':
-						if((($fields_location == 'detail' || $fields_location == 'listing') || $type['is_default'] != 'admin' )&& !empty($post->$type['htmlvar_name']) && ($type['htmlvar_name']!='geodir_video' && $type['htmlvar_name']!='geodir_special_offers')){
+				
+						if( !empty($post->$type['htmlvar_name']) ){
 							
 							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-text" style="'.$field_icon.'">'.__($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': </span>'.stripslashes($post->$type['htmlvar_name']).'</p>';	
 							
@@ -2034,7 +2046,7 @@ function geodir_show_listing_info($fields_location=''){
 				break;
 				
 				case 'html':
-						if((($fields_location == 'detail' || $fields_location == 'listing') || $type['is_default'] != 'admin' )&& !empty($post->$type['htmlvar_name'])){
+						if(!empty($post->$type['htmlvar_name'])){
 							
 							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-text" style="'.$field_icon.'">'.__($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': </span>'.stripslashes($post->$type['htmlvar_name']).'</p>';	
 							
