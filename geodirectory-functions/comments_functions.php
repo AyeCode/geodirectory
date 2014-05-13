@@ -249,7 +249,7 @@ function geodir_comment_delete_comment( $comment_id )
 	
 }
 
-add_filter('comment_text', 'geodir_wrap_comment_text',2000,2);
+add_filter('comment_text', 'geodir_wrap_comment_text',10,2);
 function geodir_wrap_comment_text($content,$comment=''){
 		$rating = 0;
 		if(!empty($comment))

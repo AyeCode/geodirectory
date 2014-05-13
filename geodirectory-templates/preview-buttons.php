@@ -66,7 +66,7 @@ ob_start()// start publish listing form buffering
 					
 					ob_start(); // start go back and edit / cancel buffering		 
             ?>
-            <a href="<?php echo $postlink;?>" class="geodir_goback" ><?php echo (PRO_BACK_AND_EDIT_TEXT);?></a>
+            <a href="<?php echo $postlink;?>" class="geodir_goback" ><?php echo PRO_BACK_AND_EDIT_TEXT;?></a>
            <input type="button" name="Cancel" value="<?php echo (PRO_CANCEL_BUTTON);?>" class="geodir_button cancle_button"  onclick="window.location.href='<?php echo geodir_get_ajax_url().'&geodir_ajax=add_listing&ajax_action=cancel&pid='.$post_id.'&listing_type='.$post_type;?>'" />
         	<?php
             	

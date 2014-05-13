@@ -161,7 +161,7 @@ margin-left:0px!important;
 
 .top_banner_section_in { width:100%; padding:0px; margin:0 auto;  position:relative; }
 
-.map_category { position:absolute; right:10px; bottom:0; padding:10px; z-index:10; background:url(../images/transparent-bg.png) repeat; color:#FFFFFF;  }
+.map_category { position:absolute; right:0px; bottom:0; padding:10px; z-index:10; background:url(../images/transparent-bg.png) repeat; color:#FFFFFF;  }
 
 .map_category label { display:inline-block; padding:2px 0;  font:bold 13px Arial, Helvetica, sans-serif; }
 

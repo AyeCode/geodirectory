@@ -618,10 +618,8 @@ function geodir_admin_bar_site_menu($wp_admin_bar)
 	}
 }
 
-//add_action('geodir_tax_sort_options', 'geodir_display_tax_sort_options'); /*function in custom_functions.php*/
-add_action('geodir_before_listing', 'geodir_display_sort_options'); /*function in custom_functions.php*/
 
-//add_filter('geodir_sort_options', 'geodir_sort_options_update'); /*function in custom_functions.php*/
+add_action('geodir_before_listing', 'geodir_display_sort_options'); /*function in custom_functions.php*/
 
 add_filter('geodir_posts_order_by_sort', 'geodir_posts_order_by_custom_sort', 0, 3);
 
@@ -800,6 +798,75 @@ function geodir_after_core_plugin_row($plugin_file, $plugin_data, $status)
 }
 
 
+/* ----------- Geodirectory updated custom field table(add field and change show in sidebar value in db) */
 
+add_action('wp', 'geodir_changes_in_custom_fields_table');
+add_action('wp_admin', 'geodir_changes_in_custom_fields_table');
 
+function geodir_changes_in_custom_fields_table(){
+	
+	global $wpdb,$plugin_prefix;
+	
+	if(!get_option('geodir_changes_in_custom_fields_table')){
+	
+		$post_types = geodir_get_posttypes();
+	
+		if(!$wpdb->get_var("SHOW COLUMNS FROM ".GEODIR_CUSTOM_FIELDS_TABLE." WHERE field = 'is_admin'"))
+					$wpdb->query("ALTER TABLE `".GEODIR_CUSTOM_FIELDS_TABLE."` ADD `is_admin` ENUM( '0', '1' ) NOT NULL DEFAULT '0' AFTER `is_default`");
+		
+		$wpdb->query(
+			$wpdb->prepare(
+				"UPDATE ".GEODIR_CUSTOM_FIELDS_TABLE." SET is_default=%s, is_admin=%s WHERE is_default=%s",
+				array('1','1','admin')
+			)
+		);
+		
+		
+		/* --- terms meta value set --- */
+		
+		update_option('geodir_default_marker_icon', geodir_plugin_url().'/geodirectory-functions/map-functions/icons/pin.png');
+		
+		$options_data = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".$wpdb->prefix."options WHERE option_name LIKE %s", array('%tax_meta_%')));
+		
+		if(!empty($options_data)){
+			
+			foreach($options_data as $optobj){
+				
+				$option_val = str_replace('tax_meta_', '', $optobj->option_name);
+				
+				$taxonomies_data = $wpdb->get_results($wpdb->prepare("SELECT taxonomy FROM ".$wpdb->prefix."term_taxonomy WHERE taxonomy LIKE %s AND term_id=%d",array('%category%',$option_val)));
+				
+				if(!empty($taxonomies_data)){
+					
+					foreach($taxonomies_data as $taxobj){
+						
+						$taxObject = get_taxonomy($taxobj->taxonomy);
+						$post_type = $taxObject->object_type[0];
+						
+						$opt_value = 'tax_meta_'.$post_type.'_'.$option_val;
+						
+						$duplicate_data = $wpdb->get_var($wpdb->prepare("SELECT option_id FROM ".$wpdb->prefix."options WHERE option_name=%s",array('tax_meta_'.$option_val)));
+						
+						if($duplicate_data){
+							
+							$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."options SET	option_name=%s WHERE option_id=%d",array($opt_value, $optobj->option_id)));
+							
+						}else{
+							
+							$wpdb->query($wpdb->prepare("INSERT INTO ".$wpdb->prefix."options (option_name,option_value,autoload) VALUES (%s, %s, %s)",array($opt_value,$optobj->option_value,$optobj->autoload)));
+							
+						}
+					
+					}
+				
+				}
+			
+			}
+		}
+		
+		update_option('geodir_changes_in_custom_fields_table', '1');
+		
+	}
+	
+}
 

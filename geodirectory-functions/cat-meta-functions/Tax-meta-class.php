@@ -1939,9 +1939,15 @@ class Tax_Meta_Class {
 	
 	
 	//get term meta field
-	public function get_tax_meta($term_id,$key,$multi = false){
+	public function get_tax_meta($term_id,$key,$multi = false, $post_type = ''){
+		
+		if(empty($gd_post_type) && isset($_REQUEST['taxonomy'])){
+				$taxObject = get_taxonomy($_REQUEST['taxonomy']);
+				$post_type = $taxObject->object_type[0];
+		}
+		
 		$t_id = (is_object($term_id))? $term_id->term_id: $term_id;
-		$m = get_option( 'tax_meta_'.$t_id);	
+		$m = get_option( 'tax_meta_'.$post_type.'_'.$t_id);
 		if (isset($m[$key])){
 			return $m[$key];
 		}else{
@@ -1950,19 +1956,31 @@ class Tax_Meta_Class {
 	}
 	
 	//delete meta
-	public function delete_tax_meta($term_id,$key){
-		$m = get_option( 'tax_meta_'.$term_id);
+	public function delete_tax_meta($term_id,$key, $post_type = ''){
+	
+		if(empty($gd_post_type) && isset($_REQUEST['taxonomy'])){
+				$taxObject = get_taxonomy($_REQUEST['taxonomy']);
+				$post_type = $taxObject->object_type[0];
+		}
+		
+		$m = get_option( 'tax_meta_'.$post_type.'_'.$term_id);
 		if (isset($m[$key])){
 			unset($m[$key]);
 		}
-		update_option('tax_meta_'.$term_id,$m);
+		update_option('tax_meta_'.$post_type.'_'.$term_id,$m);
 	}
 	
 	//update meta
-	public function update_tax_meta($term_id,$key,$value){
-		$m = get_option( 'tax_meta_'.$term_id);
+	public function update_tax_meta($term_id,$key,$value, $post_type = ''){
+	
+		if(empty($gd_post_type) && isset($_REQUEST['taxonomy'])){
+			$taxObject = get_taxonomy($_REQUEST['taxonomy']);
+			$post_type = $taxObject->object_type[0];
+		}
+		
+		$m = get_option( 'tax_meta_'.$post_type.'_'.$term_id);
 		$m[$key] = $value;
-		update_option('tax_meta_'.$term_id,$m);
+		update_option('tax_meta_'.$post_type.'_'.$term_id,$m);
 	}
 	
 	
@@ -1976,9 +1994,15 @@ endif; // End Check Class Exists
 
 	//get term meta field
 	if (!function_exists('get_tax_meta')){
-		function get_tax_meta($term_id,$key,$multi = false){
+		function get_tax_meta($term_id,$key,$multi = false, $post_type=''){
+			
+			if(empty($gd_post_type) && isset($_REQUEST['taxonomy'])){
+				$taxObject = get_taxonomy($_REQUEST['taxonomy']);
+				$post_type = $taxObject->object_type[0];
+			}
+				
 			$t_id = (is_object($term_id))? $term_id->term_id: $term_id;
-			$m = get_option( 'tax_meta_'.$t_id);	
+			$m = get_option( 'tax_meta_'.$post_type.'_'.$t_id);	
 			if (isset($m[$key])){
 				return $m[$key];
 			}else{
@@ -1990,19 +2014,29 @@ endif; // End Check Class Exists
 	//delete meta
 	if (!function_exists('delete_tax_meta')){
 		function delete_tax_meta($term_id,$key){
-			$m = get_option( 'tax_meta_'.$term_id);
+		
+			$taxObject = get_taxonomy($_REQUEST['taxonomy']);
+			$post_type = $taxObject->object_type[0];
+				
+			$m = get_option( 'tax_meta_'.$post_type.'_'.$term_id);
 			if (isset($m[$key])){
 				unset($m[$key]);
 			}
-			update_option('tax_meta_'.$term_id,$m);
+			update_option('tax_meta_'.$post_type.'_'.$term_id,$m);
 		}
 	}
 	
 	//update meta
 	if (!function_exists('update_tax_meta')){
-		function update_tax_meta($term_id,$key,$value){
-			$m = get_option( 'tax_meta_'.$term_id);
+		function update_tax_meta($term_id,$key,$value,$post_type = ''){
+		
+			if(empty($gd_post_type) && isset($_REQUEST['taxonomy'])){
+				$taxObject = get_taxonomy($_REQUEST['taxonomy']);
+				$post_type = $taxObject->object_type[0];
+			}
+				
+			$m = get_option( 'tax_meta_'.$post_type.'_'.$term_id);
 			$m[$key] = $value;
-			update_option('tax_meta_'.$term_id,$m);
+			update_option('tax_meta_'.$post_type.'_'.$term_id,$m);
 		}
 	}

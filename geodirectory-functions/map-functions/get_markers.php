@@ -153,9 +153,9 @@ function get_markers(){
 		$default_cat = $catinfo_obj->default_icon;
 		
 	 if($default_cat != ''){
-	 	
-		$term_icon_url = get_tax_meta($default_cat,'ct_cat_icon');
-		$icon = $term_icon_url['src'];
+	 	$post_type = isset($_REQUEST['gd_posttype']) ? $_REQUEST['gd_posttype'] : '';
+		$term_icon_url = get_tax_meta($default_cat,'ct_cat_icon', false, $post_type);
+		$icon = isset($term_icon_url['src']) ? $term_icon_url['src'] : '';
 		
 	 }
 	 

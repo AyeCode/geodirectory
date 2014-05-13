@@ -8,6 +8,7 @@ function geodir_post_package_info($package_info, $post='', $post_type = '')
 	$package_info['is_featured'] = 0 ;
 	$package_info['image_limit'] ='';
 	$package_info['google_analytics'] = 0 ;
+	$package_info['sendtofriend'] =1;
 	
 	return (object)apply_filters('geodir_post_package_info' , $package_info, $post, $post_type);
 	
@@ -155,57 +156,6 @@ function geodir_after_tab_content($hash_key)
 }
 
 
-function geodir_display_tax_sort_options(){
-	
-	global $wp_query;
-	
-	$sort_by = '';
-	
-	if(isset($wp_query->tax_query->queries) && $wp_query->tax_query->queries){
-		$current_term = $wp_query->get_queried_object();
-	}
-	
-	if(isset($_REQUEST['sort_by'])) $sort_by = $_REQUEST['sort_by'];
-	
-	$sort_options = array(
-		'newest' => __('Newest',GEODIRECTORY_TEXTDOMAIN),
-		'oldest' => __('Oldest',GEODIRECTORY_TEXTDOMAIN),
-		'high_rating' => __('Highest Rating',GEODIRECTORY_TEXTDOMAIN),
-		'low_rating' => __('Lowest Rating',GEODIRECTORY_TEXTDOMAIN),
-		'high_review' => __('Highest Reviews',GEODIRECTORY_TEXTDOMAIN),
-		'low_review' => __('Lowest Reviews',GEODIRECTORY_TEXTDOMAIN)
-	);
-	
-	$sort_options = apply_filters('geodir_sort_options', $sort_options); 	
-	
-	if(empty($sort_options) || !isset($current_term->term_id))
-		return false;
-	
-	?>
-		
-		<div class="geodir-tax-sort">
-		
-		<select name="sort_by" id="sort_by" onchange="javascript:window.location=this.value;">
-		
-			<option value="<?php echo add_query_arg( 'sort_by', '' );?>" <?php if($sort_by == '') echo 'selected="selected"';?>>
-			<?php _e('Sort By',GEODIRECTORY_TEXTDOMAIN);?></option>
-			
-			<?php foreach($sort_options as $key => $lable) { ?>
-			
-				<option value="<?php echo add_query_arg( 'sort_by', $key );?>" 
-				<?php if($sort_by == $key) echo 'selected="selected"';?> >
-				<?php echo $lable;?></option>
-			
-			<?php } ?>
-		
-		</select>
-		
-	</div>
-	<?php
-
-}
-
-
 function geodir_get_posts_default_sort($post_type){
 	
 	global $wpdb;
@@ -314,52 +264,6 @@ function geodir_display_sort_options(){
 
 }
 
-
-function geodir_sort_options_update($sort_options){
-	
-	global $wp_query, $default_sort;
-	
-	if(isset($wp_query->tax_query->queries) && $wp_query->tax_query->queries){
-		$current_term = $wp_query->get_queried_object();
-	}
-	
-	if(isset($current_term->term_id)){
-		
-		$hide_review = get_tax_meta($current_term->term_id,'ct_cat_exclude_reviews');
-
-		if($hide_review){
-			unset($sort_options['high_review']);
-			unset($sort_options['low_review']);
-		}
-		
-		$hide_rating = get_tax_meta($current_term->term_id,'ct_cat_exclude_rating');
-
-		if($hide_rating){
-			unset($sort_options['high_rating']);
-			unset($sort_options['low_rating']);
-		}
-		
-		$hide_newest = get_tax_meta($current_term->term_id,'ct_cat_include_newest');
-		
-		if(!$hide_newest){
-			unset($sort_options['newest']);
-			unset($sort_options['oldest']);
-		}
-		
-		$show_random = get_tax_meta($current_term->term_id,'ct_cat_include_random');
-
-		if($show_random)
-			$sort_options['random'] = __('Random',GEODIRECTORY_TEXTDOMAIN);
-		
-		$show_az = get_tax_meta($current_term->term_id,'ct_cat_include_az');
-
-		if($show_az)
-			$sort_options['az'] = __('Alphabetical',GEODIRECTORY_TEXTDOMAIN);
-				
-	}
-	
-	return $sort_options;
-}
 
 function geodir_advance_customfields_heading($title, $field_type){
 	
@@ -574,7 +478,8 @@ function geodir_add_meta_keywords()
 	
 	?>
 		<meta name="description" content="<?php if (have_posts() && is_single() OR is_page()){while(have_posts()){the_post();
-					$out_excerpt = str_replace(array("\r\n", "\r", "\n"), "", get_the_excerpt());
+					if(has_excerpt()){$out_excerpt = str_replace(array("\r\n", "\r", "\n"), "", get_the_excerpt());}
+					else{$out_excerpt = str_replace(array("\r\n", "\r", "\n"), "", substr($post->post_content,0,160));}
 					echo strip_tags($out_excerpt);
 				}
 			}

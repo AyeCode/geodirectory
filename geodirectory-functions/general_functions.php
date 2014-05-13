@@ -871,3 +871,17 @@ function gd_lang_object_ids($ids_array, $type) {
   return $ids_array;
  }
 }
+
+
+
+// function to add class to body when multi post type is active
+function geodir_custom_posts_body_class($classes) {
+	global $wpdb;
+	$post_types = geodir_get_posttypes('object'); 
+	if(!empty($post_types) && count((array)$post_types) > 1 ){
+    $classes[] = 'geodir_custom_posts';
+	}
+    return $classes;
+}
+
+add_filter('body_class', 'geodir_custom_posts_body_class'); // let's add a class to the body so we can style the new addition to the search

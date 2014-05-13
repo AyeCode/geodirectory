@@ -115,7 +115,8 @@ jQuery(document).ready(function($) {
             });
  
             uploader.bind('UploadProgress', function(up, file) {
- 
+ 													  //alert('progress'+file.percent);
+
                 $('#' + file.id + " .fileprogress").width(file.percent + "%");
                 $('#' + file.id + " span").html(plupload.formatSize(parseInt(file.size * file.percent / 100)));
             });
@@ -134,8 +135,8 @@ jQuery(document).ready(function($) {
 							clearInterval(timer);
 							timer = setTimeout(function() {
 									
-								geodir_remove_file_index(indexes);
-								
+								//geodir_remove_file_index(indexes);
+								console.log(indexes);
 							}, 1000);
 							i++;
 							
@@ -173,7 +174,7 @@ jQuery(document).ready(function($) {
 });
 
 function geodir_remove_file_index(indexes){
-	
+
 	for (var i = 0; i < indexes.length; i++) {
     
 		if(indexes[i].files.length>0){indexes[i].removeFile(indexes[i].files[0]);}

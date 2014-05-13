@@ -1,7 +1,7 @@
 <?php get_header(); 
 
 
-global $term,$post,$current_term, $gridview_columns;
+global $term,$post,$current_term,$wp_query, $gridview_columns;
 //global $wp_query; echo $wp_query->request;
 $gd_post_type = geodir_get_current_posttype();
 $post_type_info = get_post_type_object( $gd_post_type );
@@ -14,12 +14,21 @@ if(isset($_REQUEST['list']) && $_REQUEST['list'] == 'favourite'){
 $list_title = $add_string_in_title.$post_type_info->labels->name;
 $single_name = $post_type_info->labels->singular_name;
 
-$taxonomy = geodir_get_taxonomies( $gd_post_type );
+$taxonomy = geodir_get_taxonomies( $gd_post_type , true);
 
 if( !empty($term) )
 {	$current_term = get_term_by('slug',$term,$taxonomy[0]);
 	if(!empty($current_term))
 		$list_title .= __(' in',GEODIRECTORY_TEXTDOMAIN). " '". ucwords( $current_term->name )."'";
+	else
+	{
+		if(count($taxonomy) > 1)
+		{
+			$current_term = get_term_by('slug',$term,$taxonomy[1]);
+			if(!empty($current_term))
+				$list_title .= __(' in',GEODIRECTORY_TEXTDOMAIN). " '". ucwords( $current_term->name )."'";
+		}
+	}	
 }
 	
 if(is_search())
@@ -27,6 +36,7 @@ if(is_search())
 	$list_title = __('Search',GEODIRECTORY_TEXTDOMAIN).' '.$post_type_info->labels->name. __(' For :',GEODIRECTORY_TEXTDOMAIN)." '".get_search_query()."'";
 
 }	
+//$current_term = $wp_query->get_queried_object();
 
 ?>
 
@@ -46,9 +56,23 @@ if(is_search())
     
     <h1><?php echo apply_filters('geodir_listing_page_title',wptexturize($list_title)); ?></h1>
     
-    <?php if (isset($current_term->description) && $current_term->description) : ?>
-        <div class="term_description"><?php _e( wpautop(wptexturize($current_term->description)), GEODIRECTORY_TEXTDOMAIN ) ; ?></div>
-    <?php endif; ?>
+    
+         
+				 <?php
+				 if(isset($current_term->term_id) && $current_term->term_id != ''){
+					
+					$term_desc = term_description( $current_term->term_id, $gd_post_type.'_tags' ) ;
+					$saved_data = stripslashes(get_tax_meta($current_term->term_id,'ct_cat_top_desc', false, $gd_post_type));
+					if($term_desc && !$saved_data){ $saved_data = $term_desc;}
+					$cat_description =  apply_filters( 'the_content', $saved_data );
+					if($cat_description){?>
+					
+						<div class="term_description"><?php echo $cat_description;?></div> <?php
+					}
+					
+				}
+				?>
+	
     
     <div class="clearfix geodir-common">
     	
