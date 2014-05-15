@@ -17,7 +17,13 @@ if(isset($_GET['redirect_to']) && $_GET['redirect_to'] != '')
 }
 else
 {
+	//echo $_SERVER['HTTP_HOST'] ;
 	$redirect_to = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+	if(strpos($redirect_to,$_SERVER['HTTP_HOST'] )===false)
+	{	
+		$redirect_to = home_url();
+	}
+	
 }
 
 ?>

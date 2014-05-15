@@ -54,7 +54,7 @@ if( isset( $_REQUEST['ajax_action'] ) && $_REQUEST['ajax_action'] == 'cat' ){
 	
 function get_markers(){	
 	
-	global $wpdb, $plugin_prefix;
+	global $wpdb, $plugin_prefix,$geodir_cat_icons;
 	
 	$search = '';
 	$main_query_array ;
@@ -153,9 +153,20 @@ function get_markers(){
 		$default_cat = $catinfo_obj->default_icon;
 		
 	 if($default_cat != ''){
-	 	$post_type = isset($_REQUEST['gd_posttype']) ? $_REQUEST['gd_posttype'] : '';
-		$term_icon_url = get_tax_meta($default_cat,'ct_cat_icon', false, $post_type);
-		$icon = isset($term_icon_url['src']) ? $term_icon_url['src'] : '';
+	 	
+		if(!empty($geodir_cat_icons) && is_array($geodir_cat_icons) && array_key_exists($default_cat,$geodir_cat_icons)){
+				
+				$icon = $geodir_cat_icons[$default_cat];		
+				
+		}else{
+		
+	 		$post_type = isset($_REQUEST['gd_posttype']) ? $_REQUEST['gd_posttype'] : '';
+			$term_icon_url = get_tax_meta($default_cat,'ct_cat_icon', false, $post_type);
+			$icon = isset($term_icon_url['src']) ? $term_icon_url['src'] : '';
+			
+			$geodir_cat_icons[$default_cat] = $icon;
+			
+		}
 		
 	 }
 	 

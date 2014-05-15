@@ -329,7 +329,7 @@ add_action('geodir_after_edit_post_link' , 'geodir_add_to_favourite_link',1) ;
 function geodir_add_to_favourite_link()
 {
 	global $post,$preview;
-    if(!$preview)
+    if(!$preview && geodir_is_page('detail'))
     {
 	?>
     <p class="edit_link">

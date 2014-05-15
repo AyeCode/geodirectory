@@ -17,7 +17,7 @@ function geodir_init_map_canvas_array()
 
 /* Create marker jason for map script */
 function create_marker_jason_of_posts($post){
-	global $wpdb,$map_jason,$add_post_in_marker_array;
+	global $wpdb,$map_jason,$add_post_in_marker_array,$geodir_cat_icons;
 	
 	if( ( is_main_query() || $add_post_in_marker_array ) && $post->marker_json != '')
 	{	
@@ -28,8 +28,19 @@ function create_marker_jason_of_posts($post){
 		 $icon = '';
 		 if($post->default_category != ''){
 			
-			$term_icon_url = get_tax_meta($post->default_category,'ct_cat_icon', false, $post->post_type);
-			$icon = isset($term_icon_url['src']) ? $term_icon_url['src'] : '';
+			if(!empty($geodir_cat_icons) && is_array($geodir_cat_icons) && array_key_exists($post->default_category,$geodir_cat_icons)){
+				
+				$icon = $geodir_cat_icons[$post->default_category];
+				
+			}else{
+				
+				$term_icon_url = get_tax_meta($post->default_category,'ct_cat_icon', false, $post->post_type);
+				$icon = isset($term_icon_url['src']) ? $term_icon_url['src'] : '';
+				
+				$geodir_cat_icons[$post->default_category] = $icon;
+				
+			}
+
 			
 		 }
 		
@@ -85,7 +96,7 @@ function send_marker_jason_to_js(){
 /* Home map Taxonomy walker */
 function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0,$hide_empty = true,$pading = 0 , $map_canvas_name ='',$child_collapse)
 {
-	global $cat_count;
+	global $cat_count,$geodir_cat_icons;
 	$exclude_categories = get_option('geodir_exclude_cat_on_map');;
 	$exclude_cat_str = implode(',' , $exclude_categories );
 	if($exclude_cat_str =='')
@@ -118,9 +129,24 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0,$hide_empty = t
 		foreach ($cat_terms as $cat_term):
 			
 			$post_type = isset($_REQUEST['post_type']) ? $_REQUEST['post_type']: 'gd_place';
-			//Get Term icon
-			$term_icon_url = get_tax_meta($cat_term->term_id, 'ct_cat_icon', false, $post_type);
-			if($term_icon_url){$icon =  $term_icon_url['src'];}
+			
+			$term_icon_url = '';
+			if(!empty($geodir_cat_icons) && is_array($geodir_cat_icons) && array_key_exists($cat_term->term_id,$geodir_cat_icons)){
+				
+				$term_icon_url = $geodir_cat_icons[$cat_term->term_id];
+				
+			}else{
+			
+				$term_icon_url_arr = get_tax_meta($cat_term->term_id, 'ct_cat_icon', false, $post_type);
+				
+				$term_icon_url = isset($term_icon_url_arr['src']) ? $term_icon_url_arr['src'] : '';
+				
+				$geodir_cat_icons[$cat_term->term_id] = $term_icon_url;
+			}
+			
+			
+			
+			if($term_icon_url){$icon =  $term_icon_url;}
 			else{$icon = get_option('geodir_default_marker_icon');}
 			if(!in_array($cat_term->term_id,$exclude_categories)):
 				//Secret sauce.  Function calls itself to display child elements, if any

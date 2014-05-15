@@ -27,7 +27,7 @@ jQuery( document ).ready(function() {
         controlNav: true,
         animationLoop: true,
 		slideshow: true,
-        sync: "#carousel",
+        sync: "#geodir_carousel",
         start: function(slider){
 			jQuery('.geodir_flex-loader').hide();
 			jQuery('#geodir_slider').css({'visibility':'visible'});

@@ -50,7 +50,7 @@ class geodir_listing_slider_widget extends WP_Widget {
 
 	jQuery(window).load(function(){
 	
-			jQuery('#widget_carousel').flexslider({
+			jQuery('#geodir_widget_carousel').flexslider({
 				animation: "slide",
 				controlNav: false,
 				directionNav: false,   
@@ -58,10 +58,10 @@ class geodir_listing_slider_widget extends WP_Widget {
 				slideshow: false,
 				itemWidth: 75,
 				itemMargin: 5,
-				asNavFor: '#widget_slider'
+				asNavFor: '#geodir_widget_slider'
 			});
 			
-			jQuery('#widget_slider').flexslider({
+			jQuery('#geodir_widget_slider').flexslider({
 				animation: "<?php echo $animation;?>",
 				controlNav: true,
 				animationLoop: <?php echo $animationLoop;?>,
@@ -69,11 +69,11 @@ class geodir_listing_slider_widget extends WP_Widget {
 				slideshowSpeed: <?php echo $slideshowSpeed;?>,  
     		animationSpeed: <?php echo $animationSpeed;?>,            
 				directionNav: <?php echo $directionNav;?>, 
-				sync: "#widget_carousel",
+				sync: "#geodir_widget_carousel",
 				start: function(slider){
-				jQuery('.flex-loader').hide();
-				jQuery('#widget_slider').css({'visibility':'visible'});
-				jQuery('#widget_carousel').css({'visibility':'visible'});
+				jQuery('.geodir-listing-flex-loader').hide();
+				jQuery('#geodir_widget_slider').css({'visibility':'visible'});
+				jQuery('#geodir_widget_carousel').css({'visibility':'visible'});
 				}
 			});
 			
@@ -151,15 +151,15 @@ class geodir_listing_slider_widget extends WP_Widget {
 							 ?>		
 							 
 							 <div class="flex-container" style="min-height:200px;" >	
-                <div class="flex-loader"></div> 
+                <div class="geodir-listing-flex-loader"></div> 
                
-                <div id="widget_slider" class="flexslider">
+                <div id="geodir_widget_slider" class="geodir_flexslider">
                   <ul class="slides clearfix">
                         <?php echo $widget_main_slides;?>
                   </ul>
                 </div>
                 <?php if( $widget_slides > 1){ ?>
-                    <div id="widget_carousel" class="flexslider">
+                    <div id="geodir_widget_carousel" class="geodir_flexslider">
                       <ul class="slides clearfix">
                             <?php echo $nav_slides;?>
                       </ul>

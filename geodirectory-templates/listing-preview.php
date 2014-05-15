@@ -124,7 +124,7 @@ do_action('geodir_before_main_content');
 				if(isset($post->post_default_category))
 					$default_cat = $post->post_default_category;
 				
-				if($default_catimg = geodir_get_default_catimage($default_cat,$post->post_type))
+				if($default_catimg = geodir_get_default_catimage($default_cat,$post_type))
 					$default_img = $default_catimg['src'];
 				elseif($no_images = get_option('geodir_listing_no_img')){
 					$default_img = $no_images;

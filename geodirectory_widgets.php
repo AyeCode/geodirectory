@@ -393,20 +393,20 @@ function register_geodir_widgets(){
 				
 				$geodir_allow_posttype_frontend = get_option('geodir_allow_posttype_frontend');
 				
-			
+				
 				if(!empty($show_add_listing_post_types_main_nav)){
 					
 					$addlisting_links = '';
-					foreach($show_add_listing_post_types_main_nav as $addobj){
+					foreach($post_types as $key => $postobj){
 						
-						if(array_key_exists($addobj, $post_types) && is_array($geodir_allow_posttype_frontend) && in_array($addobj, $geodir_allow_posttype_frontend)){
+						if(in_array($key, $show_add_listing_post_types_main_nav)){
 							
-							if($add_link = geodir_get_addlisting_link( $addobj )){
+							if($add_link = geodir_get_addlisting_link( $key )){
 								
-								$name = $post_types->$addobj->labels->singular_name;
+								$name = $postobj->labels->name;
 								
 								$selected = '';
-								if(geodir_get_current_posttype() == $addobj && geodir_is_page('add-listing')) 
+								if(geodir_get_current_posttype() == $key && geodir_is_page('add-listing')) 
 									$selected = 'selected="selected"';
 								
 								$addlisting_links .= '<option '.$selected.' value="'.$add_link.'">'.ucfirst($name).'</option>';
@@ -434,15 +434,15 @@ function register_geodir_widgets(){
 					
 					$favourite_links = '';
 					
-					foreach($show_favorite_link_user_dashboard as $favobj){
+					foreach($post_types as $key => $postobj){
 						
-						if(array_key_exists($favobj, $post_types)){
+						if(in_array($key, $show_favorite_link_user_dashboard)){
 							
-							$name = $post_types->$favobj->labels->name;
-							$post_type_link = geodir_getlink($author_link,array('stype'=>$favobj,'list'=>'favourite'),false);
+							$name = $postobj->labels->name;
+							$post_type_link = geodir_getlink($author_link,array('stype'=>$key,'list'=>'favourite'),false);
 							
 							$selected = '';
-							if(isset($_REQUEST['list']) && $_REQUEST['list'] == 'favourite' && isset($_REQUEST['stype']) && $_REQUEST['stype'] == $favobj && isset($_REQUEST['geodir_dashbord'])) $selected = 'selected="selected"';
+							if(isset($_REQUEST['list']) && $_REQUEST['list'] == 'favourite' && isset($_REQUEST['stype']) && $_REQUEST['stype'] == $key && isset($_REQUEST['geodir_dashbord'])) $selected = 'selected="selected"';
 							
 							$favourite_links .= '<option '.$selected.' value="'.$post_type_link.'">'.ucfirst($name).'</option>';
 							
@@ -467,15 +467,15 @@ function register_geodir_widgets(){
 				if(!empty($show_listing_link_user_dashboard)){
 					
 					$listing_links = '';
-					foreach($show_listing_link_user_dashboard as $listobj){
+					foreach($post_types as $key => $postobj){
 						
-						if(array_key_exists($listobj, $post_types)){
+						if(in_array($key, $show_listing_link_user_dashboard)){
 							
-							$name = $post_types->$listobj->labels->name;
-							$listing_link = geodir_getlink($author_link,array('stype'=>$listobj),false);
+							$name = $postobj->labels->name;
+							$listing_link = geodir_getlink($author_link,array('stype'=>$key),false);
 							
 							$selected = '';
-							if(!isset($_REQUEST['list']) && isset($_REQUEST['geodir_dashbord']) && isset($_REQUEST['stype']) && $_REQUEST['stype'] == $listobj) $selected = 'selected="selected"';
+							if(!isset($_REQUEST['list']) && isset($_REQUEST['geodir_dashbord']) && isset($_REQUEST['stype']) && $_REQUEST['stype'] == $key) $selected = 'selected="selected"';
 							
 							$listing_links .= '<option '.$selected.' value="'.$listing_link.'">'.ucfirst($name).'</option>';
 							

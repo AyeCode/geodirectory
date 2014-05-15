@@ -559,8 +559,9 @@ $default = isset($field_info->is_admin)	 ? $field_info->is_admin : '';
                 <td align="left">
                 
                 <input type="button" class="button" name="save" id="save" value="Save" onclick="save_field('<?php echo $result_str;?>')" /> 
-                
+                <?php if(!$default):?>
                 <a href="javascript:void(0)"><input type="button" name="delete" value="Delete" onclick="delete_field('<?php echo $result_str;?>', '<?php echo $nonce;?>')" class="button_n" /></a>
+								<?php endif;?>
                 
                 </td>
             </tr>

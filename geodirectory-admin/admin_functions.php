@@ -905,6 +905,9 @@ function geodir_post_information_save( $post_id )
 		/*if ( !wp_verify_nonce( $_POST['geodir_post_setting_noncename'], plugin_basename( __FILE__ ) ) )
 		return;*/
 		
+		if(isset($_REQUEST['action']) && ($_REQUEST['action'] == 'trash' || $_REQUEST['action'] == 'untrash'))
+			return;
+		
 		if ( !wp_verify_nonce( $_POST['geodir_post_info_noncename'], plugin_basename( __FILE__ ) ) )
 		return;
 		
