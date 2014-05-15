@@ -2,9 +2,7 @@
 
 <div id="geodir_wrapper" class="geodir-home">
 	
-    <?php geodir_breadcrumb(); 
-		//geodir_draw_map('home_map_canvas');
-	?>
+    
     
     <?php if(get_option('geodir_show_home_top_section')) { ?>
     
@@ -14,6 +12,10 @@
 	</div><!-- clearfix ends here-->
     
     <?php } ?>
+    
+    <?php geodir_breadcrumb(); 
+		//geodir_draw_map('home_map_canvas');
+	?>
     
     <div class="clearfix geodir-common">
     	

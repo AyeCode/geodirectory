@@ -254,9 +254,9 @@ function geodir_listingsearch_scripts()
 			
 		});
 	
-		jQuery(".showFilters").click(function () {
+		/*jQuery(".showFilters").click(function () {
 			jQuery(".gdFilterOptions").slideToggle("slow");
-		});
+		});*/
 	
 		jQuery("#cat_all").click(function () {
 			jQuery('.cat_check').attr('checked', this.checked);
@@ -428,27 +428,35 @@ function geodir_location_header_scripts()
 	<script  type="text/javascript">
 
 	jQuery(document).ready(function () {
-		jQuery(".chosen_select").each(function(){
-			
-			var curr_chosen = jQuery(this);
+		//jQuery(".chosen_select").each(function(){
+						listfor = 'city';						 
+				jQuery('.geodir_location_tabs').click(function() {
+				  listfor = this.id;gd_int_location()
+				});								 
+			function gd_listfor(){
+				return listfor;
+				
+			}
+			function gd_int_location(){
+			var curr_chosen = jQuery(".geodir_location_sugestion .chosen_select");
 			var autoredirect = curr_chosen.attr('option-autoredirect');
 			var countrySearch= curr_chosen.attr('option-countrySearch');
 			if(curr_chosen.attr('option-ajaxChosen') === true || curr_chosen.attr('option-ajaxChosen') === undefined){
-				if(curr_chosen.closest('.geodir_location_tab_contenor').find('.selected_location').length > 0)
-					var listfor = curr_chosen.closest('.geodir_location_tab_contenor').find('.selected_location').val();
+				if(curr_chosen.closest('.geodir_location_tab_container').find('.selected_location').length > 0)
+					var listfor = curr_chosen.closest('.geodir_location_tab_container').find('.selected_location').val();
 				else
 					var listfor = curr_chosen.attr('option-listfore');
 				
 				var show_everywhere = curr_chosen.attr('option-showEveryWhere');
 				
-				curr_chosen.ajaxChosen({
+				jQuery(".geodir_location_sugestion .chosen_select").ajaxChosen({
 					addSearchTermOnNorecord: curr_chosen.attr('option-addSearchTermOnNorecord'),
 					noLocationUrl: curr_chosen.attr('option-noLocationUrl'),
-					jsonTermKeyObject: listfor,
+					jsonTermKeyObject: gd_listfor(),
 					keepTypingMsg: "Please wait...",
 					lookingForMsg: "We are searching for",
 					type: 'GET',
-					url: '<?php echo geodir_get_ajax_url(); ?>&autofill=ajax_chosen_search_locations&autoredirect='+autoredirect+'&location_type='+listfor+'&show_everywhere='+show_everywhere+'&countrySearch='+countrySearch,
+					url: '<?php echo geodir_get_ajax_url(); ?>&autofill=ajax_chosen_search_locations&autoredirect='+autoredirect+'&location_type='+gd_listfor()+'&show_everywhere='+show_everywhere+'&countrySearch='+countrySearch,
 					dataType: 'json'
 				}, 
 				function (data) {
@@ -463,8 +471,9 @@ function geodir_location_header_scripts()
 					placeholder_text: "Translate place holder text"
 				});
 			}	
-			
-		});
+			}
+			gd_int_location();
+		//});
 	});
 	
 	

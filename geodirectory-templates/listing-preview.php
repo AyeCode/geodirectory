@@ -52,12 +52,14 @@ do_action('geodir_before_main_content');
 						if($cat_id != ''){
 							/*if($term_icon_url = get_tax_meta($cat_id,'ct_cat_icon'))
 								$term_icon = $term_icon_url['src'];*/
-							
+							$term_icon = get_option('geodir_default_marker_icon');
 							if(isset($post->post_default_category) && $post->post_default_category == $cat_id)
 							{
-								if($term_icon_url = get_tax_meta($cat_id,'ct_cat_icon'))
-									$term_icon = $term_icon_url['src'];
-								break;
+								if($term_icon_url = get_tax_meta($cat_id, 'ct_cat_icon', false, $post_type)){
+									if(isset($term_icon_url['src']) && $term_icon_url['src'] != '')
+									 $term_icon = $term_icon_url['src'];
+										break;
+								}
 							}
 						}
 						
@@ -68,7 +70,6 @@ do_action('geodir_before_main_content');
 	
 	$post_latitude = isset($post->post_latitude) ? $post->post_latitude : '';
 	$post_longitude = isset($post->post_longitude) ? $post->post_longitude : '';
-	
 	
 	$srcharr = array("'","/","-",'"','\\');
 	$replarr = array("&prime;","&frasl;","&ndash;","&ldquo;",'');
@@ -123,7 +124,7 @@ do_action('geodir_before_main_content');
 				if(isset($post->post_default_category))
 					$default_cat = $post->post_default_category;
 				
-				if($default_catimg = geodir_get_default_catimage($default_cat))
+				if($default_catimg = geodir_get_default_catimage($default_cat,$post_type))
 					$default_img = $default_catimg['src'];
 				elseif($no_images = get_option('geodir_listing_no_img')){
 					$default_img = $no_images;

@@ -40,7 +40,7 @@ function geodir_add_nav_menu_items(  ) {
 					
 					$items .=	'<li class="menu-item '.$menu_class.'">
 									<a href="'. get_post_type_archive_link( $post_type ) .'">
-										'.__(ucfirst($args->labels->singular_name)).'
+										'.__(ucfirst($args->labels->name)).'
 									</a>
 								</li>';
 				}
@@ -113,7 +113,7 @@ function geodir_add_nav_menu_items(  ) {
 									
 										$items .=	'<li class="menu-item '.$menu_class.'">
 											<a href="'. geodir_get_addlisting_link( $post_type ) .'">
-												'.__('Add',GEODIRECTORY_TEXTDOMAIN).' '.$args->labels->singular_name.'
+												'.__('Add',GEODIRECTORY_TEXTDOMAIN).' '.$args->labels->name.'
 											</a>
 										</li>';
 								}
@@ -150,7 +150,7 @@ function geodir_add_nav_menu_items(  ) {
 											
 												$items .=	'<li class="menu-item '.$menu_class.'">
 													<a href="'. geodir_get_addlisting_link( $post_type ) .'">
-														'.__('Add',GEODIRECTORY_TEXTDOMAIN).' '.$args->labels->singular_name.'
+														'.__('Add',GEODIRECTORY_TEXTDOMAIN).' '.$args->labels->name.'
 													</a>
 												</li>';
 											}

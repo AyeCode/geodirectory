@@ -53,11 +53,18 @@ if (!function_exists('geodir_admin_panel')) {
                                 if(!empty($args['request']))
                                     $tab_link = geodir_getlink($tab_link,$args['request']);
                               	
+								if(isset($args['target']) && $args['target'] != '')
+								{
+									$tab_target = " target='" .$args['target']."' ";
+								}
+								else
+									$tab_target ='';
+									
 								$tab_active = '';
 							    if( $current_tab == $name ) 
 									$tab_active = ' class="tab-active" ';
 										do_action('geodir_before_settings_tabs',$name);								
-                                echo '<li '.$tab_active.' ><a href="' . $tab_link . '" >' . $label . '</a></li>';
+                                echo '<li '.$tab_active.' ><a href="' . $tab_link . '"  '. $tab_target .' >' . $label . '</a></li>';
            				 do_action('geodir_after_settings_tabs',$name);                    
                             endforeach;
                             
@@ -320,23 +327,6 @@ function geodir_admin_option_form($tab_name)
             
                 <h3><?php _e('Set Default Location',GEODIRECTORY_TEXTDOMAIN);?></h3>
                 
-                <?php if(isset($_REQUEST['msg']) && $_REQUEST['msg']=='success'){ ?>
-                            
-                    <div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204); margin-left:0px; margin-top:0px; margin-bottom:10px;" >
-                        <p><?php _e('Location saved successfully.' , GEODIRECTORY_TEXTDOMAIN); ?></p>
-                    
-                    </div>
-                    
-                <?php }?>
-                
-                <?php if(isset($_REQUEST['msg']) && $_REQUEST['msg']=='error'){ ?>
-                
-                    <div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204); margin-left:0px; margin-top:0px; margin-bottom:10px;" >
-                        <p><?php _e('Location already exits.' , GEODIRECTORY_TEXTDOMAIN); ?></p>
-                    
-                    </div>
-                    
-                <?php }?>
                 <input type="hidden" name="add_location" value="location">
                     
                 <input type="hidden" name="update_city" value="<?php if(isset($location_result->location_id)){ echo $location_result->location_id;} ?>">

@@ -9,9 +9,9 @@
         <h4>
 			<?php 
             if(isset($_REQUEST['page']) && $_REQUEST['page']=='login' && isset($_REQUEST['page1']) && $_REQUEST['page1']=='sign_up')
-            {echo apply_filters('geodir_registration_page_title',(REGISTRATION_NOW_TEXT));}
+            {echo apply_filters('geodir_registration_page_title',REGISTRATION_NOW_TEXT);}
             else 
-            { echo apply_filters('geodir_registration_page_title',(REGISTRATION_NOW_TEXT)); }
+            { echo apply_filters('geodir_registration_page_title',REGISTRATION_NOW_TEXT); }
             ?>
         </h4> 
     
@@ -30,17 +30,17 @@
         	<input type="hidden" name="redirect_to" value="<?php if(isset($_SERVER['HTTP_REFERER'])){ echo $_SERVER['HTTP_REFERER'];}?>" />	 
         
             <div class="form_row clearfix">
-            	<label><?php echo (EMAIL_TEXT) ?><span class="indicates">*</span></label>
+            	<label><?php echo EMAIL_TEXT; ?><span class="indicates">*</span></label>
             	<input type="text" name="user_email" id="user_email" class="textfield" value="<?php echo esc_attr(stripslashes($user_email)); ?>" size="25" />
                 <div id="reg_passmail">
-                    <?php echo (REGISTRATION_MESSAGE) ?>
+                    <?php echo REGISTRATION_MESSAGE; ?>
                 </div>
             	<span id="user_emailInfo"></span>
             </div>
        
             <div class="row_spacer_registration clearfix" >
                 <div class="form_row clearfix">
-                    <label><?php echo (FIRST_NAME_TEXT) ?><span class="indicates">*</span></label>
+                    <label><?php echo FIRST_NAME_TEXT; ?><span class="indicates">*</span></label>
                    	<input type="text" name="user_fname" id="user_fname" class="textfield" value="<?php if(isset($user_fname)){ echo esc_attr(stripslashes($user_fname));} ?>" size="25"  />
                     <span id="user_fnameInfo"></span>
                 </div>
@@ -50,7 +50,7 @@
            
             <div class="row_spacer_registration clearfix" >
                 <div class="form_row clearfix">
-                <label><?php echo (PASSWORD_TEXT) ?><span class="indicates">*</span></label>
+                <label><?php echo PASSWORD_TEXT; ?><span class="indicates">*</span></label>
                 <input type="password" name="user_pass" id="user_pass" class="textfield" value="" size="25"  />
                 <span id="user_fnameInfo"></span>
                 </div>
@@ -58,7 +58,7 @@
         
             <div class="row_spacer_registration clearfix" >
                 <div class="form_row clearfix">
-                <label><?php echo (CONFIRM_PASSWORD_TEXT) ?><span class="indicates">*</span></label>
+                <label><?php echo CONFIRM_PASSWORD_TEXT; ?><span class="indicates">*</span></label>
                 <input type="password" name="user_pass2" id="user_pass2" class="textfield" value="" size="25"  />
                 <span id="user_fnameInfo"></span>
                 </div>
@@ -67,7 +67,7 @@
         	<?php }?>
       
         	<?php do_action( 'social_connect_form' ); ?>
-        	<input type="submit" name="registernow" value="<?php echo (REGISTER_NOW_TEXT);?>" class="geodir_button" />
+        	<input type="submit" name="registernow" value="<?php echo REGISTER_NOW_TEXT;?>" class="geodir_button" />
         </form>
     </div>
     

@@ -67,10 +67,7 @@
 											</h3>
 									<?php } ?>
 									
-									<span class="geodir-address">
-					<?php echo ucfirst($post->post_address);?>
-									</span>
-									
+							
 								 <?php do_action('geodir_before_listing_post_excerpt', $post ); ?>
 								 <?php echo geodir_show_listing_info('listing');?>       
 				<?php the_excerpt(); ?>
@@ -109,8 +106,8 @@
 						/*if($json_info = json_decode($post->marker_json))
 							$marker_icon = $json_info->icon;*/
 						
-						$term_icon_url = get_tax_meta($post->default_category,'ct_cat_icon');
-						$marker_icon = $term_icon_url['src'];
+						$term_icon_url = get_tax_meta($post->default_category,'ct_cat_icon', false, $post->post_type);
+						$marker_icon = isset($term_icon_url['src']) ? $term_icon_url['src'] : '';
 				 ?>
 								 <span class="geodir-pinpoint" style=" background:url('<?php if(isset($marker_icon)){ echo $marker_icon;}?>') no-repeat scroll left center transparent; background-size:auto 60%;"><a href="javascript:void(0)" onclick="openMarker('listing_map_canvas' ,'<?php echo $post->ID; ?>')" onmouseover="animate_marker('listing_map_canvas' ,'<?php echo $post->ID; ?>')" onmouseout="stop_marker_animation('listing_map_canvas' ,'<?php echo $post->ID; ?>')" ><?php _e('Pinpoint',GEODIRECTORY_TEXTDOMAIN);?></a></span>
 								 <?php } ?>

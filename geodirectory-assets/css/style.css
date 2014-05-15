@@ -858,7 +858,7 @@ display: inline;
 
 #geodir_wrapper .top_banner_section{ position:relative;}
 
-.map-places-listing{ background:url(../images/transparent-bg.png) repeat; padding:8px 0px 8px 0px; position:absolute; max-width:960px; width:100%; margin-top:-29px;}
+.map-places-listing{ background:url(../images/transparent-bg.png) repeat; padding:8px 0px 8px 0px; position:absolute; max-width:100%; width:100%; margin-top:-40px;}
 .map-places-listing ul.place-list{ padding:0 25px;margin: 0px;}
 .map-places-listing ul.place-list li{ display:block; float:left; padding:0 15px; border-right:2px #d2d2d2 solid;}
 .map-places-listing ul.place-list li a{ color:#fff; font-size:13px; font-weight:700;}
@@ -876,7 +876,8 @@ display: inline;
 .map-navigation ul li.rightarrow a:hover{ background-position:100% 100%;}
 
 .map-category-listing-main{}
-.map-category-listing{  right:0; position:absolute; width:20%; height:auto;bottom:53px;}
+.map-category-listing{  right:0; position:absolute; width:20%; height:auto;bottom:0px;}
+.geodir_custom_posts .map-category-listing{bottom:40px;}
 .map-category-listing form{ padding:10px;}
 .map-category-listing form input[type="text"]{ background:#e5e5e5; color:#000; font-size:13px; margin-bottom:5px;}
 .map-category-listing form span{ padding-top:5px; display:block;}
@@ -888,6 +889,10 @@ display: inline;
 
 .trigger-icon{ position:absolute; right:8px; margin-top:-65px;}
 
+.stick_trigger_container input {
+float: none;
+margin-top: 5px;
+}
 #gd-sidebar-wrapper .likethis{ width:400px; }
 
 .hidden{display:none;}
@@ -930,7 +935,6 @@ display: inline;
 .geodir-content-right form.loginform1 .b_signin{ margin-bottom:10px;}
 
 .geodir-content-right form.loginform1 .form_row, #gd-sidebar-wrapper form.loginform1 .form_row{ padding-bottom:10px; }
-
 
 .geodir-listing-slider-widget{ position:relative;}
 .geodir-slider-title{
@@ -1075,3 +1079,5 @@ ul.blogroll{ padding-left:0;}
     margin: 0 8px 0 -2px;
     vertical-align: top;
 }
+
+.geodir-widget ul.blogroll .chosen-results li{ display:block; padding-bottom:5px; border-bottom:0; margin-bottom:5px;}

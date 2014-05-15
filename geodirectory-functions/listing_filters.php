@@ -31,6 +31,8 @@ function set_listing_request(){
 		print_r($query);exit;}
 	
 	/* remove all pre filters */
+	remove_all_filters('query');
+	remove_all_filters('posts_search');
 	remove_all_filters('posts_fields');
 	remove_all_filters('posts_join');
 	remove_all_filters('posts_orderby');
@@ -199,11 +201,11 @@ function set_listing_request(){
 
 /* ====== Place Listing Geodir loop filters ===== */
 
+
 function geodir_listing_loop_filter($query){
 	
 	global $wp_query,$geodir_post_type,$table,$plugin_prefix,$table,$term;
-	//echo "<pre >";
-	//print_r($wp_query) ;
+	
 	$geodir_post_type = geodir_get_current_posttype();
 	
 	if(isset($wp_query->tax_query->queries) && $wp_query->tax_query->queries){
@@ -213,11 +215,16 @@ function geodir_listing_loop_filter($query){
 			$request_term = explode("/",$wp_query->query[$taxonomies[0]]);
 			$request_term = end($request_term);
 			if(!term_exists($request_term ))
-			{
-				$term['name']=ucwords(str_replace('-' , ' ' ,$request_term))  ;
-				$term['taxonomy']=$taxonomies[0] ;
-				
-				$wp_query->queried_object =  (object)$term;
+			{	
+				$args = array('number' => '1',);
+				$terms_arr = get_terms($taxonomies[0], $args );
+				foreach( $terms_arr as $location_term ){
+					$term_arr = $location_term ;
+					$term_arr->name =ucwords(str_replace('-' , ' ' ,$request_term))  ;
+				}
+				$wp_query->queried_object_id= 1 ; 
+				$wp_query->queried_object =  $term_arr;
+				//print_r($wp_query) ;
 			}
 		}
 		

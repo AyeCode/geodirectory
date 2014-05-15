@@ -548,8 +548,8 @@ function geodir_default_taxonomies()
 				    $attach_data = wp_generate_attachment_metadata( $attach_id, $new_path );
 				    wp_update_attachment_metadata( $attach_id, $attach_data );
 					
-					if(!get_tax_meta($last_catid['term_id'], 'ct_cat_icon'))
-					{update_tax_meta($last_catid['term_id'], 'ct_cat_icon', array( 'id' => 'icon', 'src' => $new_url));}
+					if(!get_tax_meta($last_catid['term_id'], 'ct_cat_icon', false, 'gd_place'))
+					{update_tax_meta($last_catid['term_id'], 'ct_cat_icon', array( 'id' => 'icon', 'src' => $new_url), 'gd_place');}
 				}
 			}
 			
@@ -593,8 +593,8 @@ function geodir_default_taxonomies()
 				    $attach_data = wp_generate_attachment_metadata( $attach_id, $new_path );
 				    wp_update_attachment_metadata( $attach_id, $attach_data );
 				
-				if(!get_tax_meta($last_catid['term_id'], 'ct_cat_icon'))
-					{update_tax_meta($last_catid['term_id'], 'ct_cat_icon', array( 'id' => $attach_id, 'src' => $new_url));}
+				if(!get_tax_meta($last_catid['term_id'], 'ct_cat_icon', false, 'gd_place'))
+					{update_tax_meta($last_catid['term_id'], 'ct_cat_icon', array( 'id' => $attach_id, 'src' => $new_url), 'gd_place');}
 			}
 		}
 		
@@ -687,7 +687,7 @@ function geodir_update_options($options, $dummy = false) {
 					
 					foreach($uploadedfile as $key => $uplaod):
 						if($key=='name'):
-							$uplaods[$key] = 'listing-no-image.'.$ext;
+							$uplaods[$key] = $filename;
 						else :
 							$uplaods[$key] = $uplaod;
 						endif;
@@ -695,20 +695,25 @@ function geodir_update_options($options, $dummy = false) {
 					
 					$uploads = wp_upload_dir();
 					
-					if(get_option('geodir_listing_no_img')){
-						$image_name_arr = explode('/',get_option('geodir_listing_no_img'));
+					if(get_option($value['id'])){
+						$image_name_arr = explode('/',get_option($value['id']));
 						$noimg_name = end($image_name_arr);
 						$img_path = $uploads['path'].'/'.$noimg_name;
 						if( file_exists($img_path) )
 							unlink($img_path);
 					}
 					
-					$img_url = $uploads['url'].'/'.'listing-no-image.'.$ext;
-					update_option($value['id'], $img_url);
-					
 					$upload_overrides = array( 'test_form' => false );
 					$movefile = wp_handle_upload( $uplaods, $upload_overrides );
+					
+					update_option($value['id'], $movefile['url']);
+					
 				endif;
+				
+				if(!get_option($value['id']) && isset($value['value']) ):
+					update_option($value['id'], $value['value']);
+				endif;
+				
 					
 		else :
 			
@@ -762,7 +767,7 @@ function places_custom_fields_tab($tabs){
 
 function geodir_extend_geodirectory_setting_tab($tabs)
 {
-	$tabs['extend_geodirectory_settings'] = array('label'=> __( 'Extend Geodirectory', GEODIRECTORY_TEXTDOMAIN 		) , 'url'=>'http://wpgeodirectory.com') ;
+	$tabs['extend_geodirectory_settings'] = array('label'=> __( 'Extend Geodirectory', GEODIRECTORY_TEXTDOMAIN 		) , 'url'=>'http://wpgeodirectory.com' , 'target' => '_blank') ;
 	return $tabs ;
 }
 
@@ -900,6 +905,9 @@ function geodir_post_information_save( $post_id )
 		/*if ( !wp_verify_nonce( $_POST['geodir_post_setting_noncename'], plugin_basename( __FILE__ ) ) )
 		return;*/
 		
+		if(isset($_REQUEST['action']) && ($_REQUEST['action'] == 'trash' || $_REQUEST['action'] == 'untrash'))
+			return;
+		
 		if ( !wp_verify_nonce( $_POST['geodir_post_info_noncename'], plugin_basename( __FILE__ ) ) )
 		return;
 		
@@ -936,7 +944,7 @@ if(!function_exists('geodir_insert_csv_post_data') && get_option('geodir_install
 								//alert(data);
 								window.location.href=data;
 						});
-					}else{ alert('<?php echo (PLZ_SELECT_CSV_FILE); ?>'); }
+					}else{ alert('<?php echo PLZ_SELECT_CSV_FILE; ?>'); }
 				});
 				
 				jQuery(".uploadcsv_button").click(function() {
@@ -958,7 +966,7 @@ if(!function_exists('geodir_insert_csv_post_data') && get_option('geodir_install
 			if(isset($_REQUEST['msg']) && $_REQUEST['msg']=='success'){ $rowcount = $_REQUEST['rowcount']; $uploads = wp_upload_dir();  ?>
 					
 			<div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204); margin-left:0px; margin-top:0px; margin-bottom:10px;" >
-				<p><?php echo (CSV_INSERT_DATA); ?></p>
+				<p><?php echo CSV_INSERT_DATA; ?></p>
 				<p><?php printf(CSV_TOTAL_RECORD, $rowcount); ?></p>
 				<?php
 				if(isset($_REQUEST['invalidcount']) && $_REQUEST['invalidcount'] > 0){
@@ -973,7 +981,7 @@ if(!function_exists('geodir_insert_csv_post_data') && get_option('geodir_install
 		<?php if(isset($_REQUEST['emsg']) && $_REQUEST['emsg']=='wrong'){ ?>
 		
 			<div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204); margin-left:0px; margin-top:0px; margin-bottom:10px;  color:#FF0000;" >
-				<p><?php echo(CSV_INVAILD_FILE); ?></p>
+				<p><?php echo CSV_INVAILD_FILE; ?></p>
 			
 			</div>
 			
@@ -982,7 +990,7 @@ if(!function_exists('geodir_insert_csv_post_data') && get_option('geodir_install
 		 <?php if(isset($_REQUEST['emsg'])=='csvonly'){ ?>
 		
 			<div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204); margin-left:0px; margin-top:0px; margin-bottom:10px; color:#FF0000;" >
-				<p><?php echo (CSV_UPLOAD_ONLY); ?></p>
+				<p><?php echo CSV_UPLOAD_ONLY; ?></p>
 			
 			</div>
 			
@@ -992,7 +1000,7 @@ if(!function_exists('geodir_insert_csv_post_data') && get_option('geodir_install
     <table class="form-table">
         <tbody>
             <tr valign="top" class="single_select_page">
-                <th class="titledesc" scope="row"><?php echo (SELECT_CSV_FILE);?></th>
+                <th class="titledesc" scope="row"><?php echo SELECT_CSV_FILE;?></th>
                 <td class="forminp">
                 
 					<?php  
@@ -1003,7 +1011,7 @@ if(!function_exists('geodir_insert_csv_post_data') && get_option('geodir_install
                         <div class="gtd-form_row clearfix" id="<?php echo $id; ?>dropbox">
                         
                         <div class="plupload-upload-uic hide-if-no-js" id="<?php echo $id; ?>plupload-upload-ui">
-                        <input type="text" readonly="readonly" name="<?php echo $id; ?>" class="csv_filename" id="<?php echo $id; ?>" value="<?php echo $svalue; ?>" /><input id="<?php echo $id; ?>plupload-browse-button" type="button" value="<?php echo (SELECT_UPLOAD_CSV); ?>" class="uploadcsv_button" /><br />
+                        <input type="text" readonly="readonly" name="<?php echo $id; ?>" class="csv_filename" id="<?php echo $id; ?>" value="<?php echo $svalue; ?>" /><input id="<?php echo $id; ?>plupload-browse-button" type="button" value="<?php echo SELECT_UPLOAD_CSV; ?>" class="uploadcsv_button" /><br />
                        <a href="<?php echo geodir_plugin_url() . '/geodirectory-assets/place_listing.csv'?>" ><?php _e("Download sample csv", GEODIRECTORY_TEXTDOMAIN)?></a>
                         <span class="ajaxnonceplu" id="ajaxnonceplu<?php echo wp_create_nonce($id . 'pluploadan'); ?>"></span><br /><br />
     						<div class="filelist"></div>
@@ -1014,7 +1022,7 @@ if(!function_exists('geodir_insert_csv_post_data') && get_option('geodir_install
                     <span id="upload-error" style="display:none"></span>
                 	<span class="description"></span><br />
                     <div class="csv_button_div" style="display:none;">
-                    <input type="hidden" class="geodir_import_data" name="geodir_import_data" value="save" />					        			<input type="button" value="<?php echo (CSV_IMPORT_DATA); ?>" id="import_data" class="button-primary" name="save">				</div>
+                    <input type="hidden" class="geodir_import_data" name="geodir_import_data" value="save" />					        			<input type="button" value="<?php echo CSV_IMPORT_DATA; ?>" id="import_data" class="button-primary" name="save">				</div>
                     
                 </td>
             </tr> 
@@ -1546,7 +1554,7 @@ function geodir_admin_fields($options){
 			case 'multiselect':
             	?><tr valign="top">
 					<th scope="row" class="titledesc"><?php echo $value['name']; ?></th>
-                    <td class="forminp"><select multiple="multiple" name="<?php echo esc_attr( $value['id'] ); ?>[]" id="<?php echo esc_attr( $value['id'] ); ?>" style="<?php echo esc_attr( $value['css'] ); ?>" class="<?php if (isset($value['class'])) echo $value['class']; ?>" data-placeholder="<?php if(isset($value['placeholder_text'])) echo $value['placeholder_text'] ;?>">
+                    <td class="forminp"><select multiple="multiple" name="<?php echo esc_attr( $value['id'] ); ?>[]" id="<?php echo esc_attr( $value['id'] ); ?>" style="<?php echo esc_attr( $value['css'] ); ?>" class="<?php if (isset($value['class'])) echo $value['class']; ?>" data-placeholder="<?php if(isset($value['placeholder_text'])) echo $value['placeholder_text'] ;?>" option-ajaxchosen="false">
                         <?php
                         foreach ($value['options'] as $key => $val) {
                         ?>
@@ -1570,121 +1578,118 @@ function geodir_admin_fields($options){
             break;	
 			case 'map_default_settings' :
 			?>	
-            	<tr valign="top">
-					<td class="forminp">
-                    <table width="100%">
-                    <tr>
-                    	<th class="titledesc" width="40%"><?php _e('Default map language', GEODIRECTORY_TEXTDOMAIN);?></th>
-                        <td width="60%">
-                          <select name="geodir_default_map_language" style="width:60%" >
-                        <?php 
-							$arr_map_langages = array(
-							'ar' =>  __('ARABIC', GEODIRECTORY_TEXTDOMAIN) ,
-							'eu' =>  __('BASQUE', GEODIRECTORY_TEXTDOMAIN) ,
-							'bg' =>  __('BULGARIAN' , GEODIRECTORY_TEXTDOMAIN),
-							'bn' =>  __('BENGALI' , GEODIRECTORY_TEXTDOMAIN),
-							'ca' =>  __('CATALAN' , GEODIRECTORY_TEXTDOMAIN),
-							'cs' =>  __('CZECH', GEODIRECTORY_TEXTDOMAIN) ,
-							'da' =>  __('DANISH' , GEODIRECTORY_TEXTDOMAIN),
-							'de' =>  __('GERMAN', GEODIRECTORY_TEXTDOMAIN) ,
-							'el' =>  __('GREEK' , GEODIRECTORY_TEXTDOMAIN),
-							'en' =>  __('ENGLISH' , GEODIRECTORY_TEXTDOMAIN),
-							'en-AU' =>  __('ENGLISH (AUSTRALIAN)', GEODIRECTORY_TEXTDOMAIN) ,
-							'en-GB' =>  __('ENGLISH (GREAT BRITAIN)' , GEODIRECTORY_TEXTDOMAIN),
-							'es' =>  __('SPANISH' , GEODIRECTORY_TEXTDOMAIN),
-							'eu' =>  __('BASQUE' , GEODIRECTORY_TEXTDOMAIN),
-							'fa' =>  __('FARSI' , GEODIRECTORY_TEXTDOMAIN),
-							'fi' =>  __('FINNISH' , GEODIRECTORY_TEXTDOMAIN),
-							'fil' =>  __('FILIPINO' , GEODIRECTORY_TEXTDOMAIN),
-							'fr' =>  __('FRENCH', GEODIRECTORY_TEXTDOMAIN) ,
-							'gl' =>  __('GALICIAN' , GEODIRECTORY_TEXTDOMAIN),
-							'gu' =>  __('GUJARATI', GEODIRECTORY_TEXTDOMAIN) ,
-							'hi' =>  __('HINDI' , GEODIRECTORY_TEXTDOMAIN),
-							'hr' =>  __('CROATIAN' , GEODIRECTORY_TEXTDOMAIN),
-							'hu' =>  __('HUNGARIAN', GEODIRECTORY_TEXTDOMAIN),
-							'id' =>  __('INDONESIAN' , GEODIRECTORY_TEXTDOMAIN),
-							'it' =>  __('ITALIAN', GEODIRECTORY_TEXTDOMAIN) ,
-							'iw' =>  __('HEBREW', GEODIRECTORY_TEXTDOMAIN) ,
-							'ja' =>  __('JAPANESE' , GEODIRECTORY_TEXTDOMAIN),
-							'kn' =>  __('KANNADA' , GEODIRECTORY_TEXTDOMAIN),
-							'ko' =>  __('KOREAN', GEODIRECTORY_TEXTDOMAIN) ,
-							'lt' =>  __('LITHUANIAN' , GEODIRECTORY_TEXTDOMAIN),
-							'lv' =>  __('LATVIAN', GEODIRECTORY_TEXTDOMAIN) ,
-							'ml' =>  __('MALAYALAM' , GEODIRECTORY_TEXTDOMAIN),
-							'mr' =>  __('MARATHI', GEODIRECTORY_TEXTDOMAIN) ,
-							'nl' =>  __('DUTCH' , GEODIRECTORY_TEXTDOMAIN),
-							'no' =>  __('NORWEGIAN' , GEODIRECTORY_TEXTDOMAIN),
-							'pl' => __( 'POLISH' , GEODIRECTORY_TEXTDOMAIN),
-							'pt' =>  __('PORTUGUESE' , GEODIRECTORY_TEXTDOMAIN),
-							'pt-BR' =>  __('PORTUGUESE (BRAZIL)' , GEODIRECTORY_TEXTDOMAIN),
-							'pt-PT' =>  __('PORTUGUESE (PORTUGAL)', GEODIRECTORY_TEXTDOMAIN) ,
-							'ro' =>  __('ROMANIAN' , GEODIRECTORY_TEXTDOMAIN),
-							'ru' =>  __('RUSSIAN', GEODIRECTORY_TEXTDOMAIN) ,
-							'ru' =>  __('RUSSIAN', GEODIRECTORY_TEXTDOMAIN) ,
-							'sk' =>  __('SLOVAK' , GEODIRECTORY_TEXTDOMAIN),
-							'sl' =>  __('SLOVENIAN' , GEODIRECTORY_TEXTDOMAIN),
-							'sr' => __( 'SERBIAN', GEODIRECTORY_TEXTDOMAIN) ,
-							'sv' =>  __('	SWEDISH', GEODIRECTORY_TEXTDOMAIN) ,
-							'tl' =>  __('TAGALOG' , GEODIRECTORY_TEXTDOMAIN),
-							'ta' =>  __('TAMIL', GEODIRECTORY_TEXTDOMAIN) ,
-							'te' =>  __('TELUGU' , GEODIRECTORY_TEXTDOMAIN),
-							'th' =>  __('THAI', GEODIRECTORY_TEXTDOMAIN) ,
-							'tr' =>  __('TURKISH' , GEODIRECTORY_TEXTDOMAIN),
-							'uk' =>  __('UKRAINIAN' , GEODIRECTORY_TEXTDOMAIN) ,
-							'vi' => __( 'VIETNAMESE' , GEODIRECTORY_TEXTDOMAIN),
-							'zh-CN' =>  __('CHINESE (SIMPLIFIED)', GEODIRECTORY_TEXTDOMAIN) ,
-				      		'zh-TW' => __('CHINESE (TRADITIONAL)', GEODIRECTORY_TEXTDOMAIN),
-							);
-							$geodir_default_map_language = get_option('geodir_default_map_language');
-							if(empty($geodir_default_map_language))
-								$geodir_default_map_language ='en';
-							foreach($arr_map_langages as $language_key =>  $language_txt )
-							{
-								if(!empty($geodir_default_map_language) && $language_key==$geodir_default_map_language)
-									$geodir_default_language_selected = "selected='selected'" ;
-								else
-									$geodir_default_language_selected ='';
-									
-					?>
-							<option value="<?php echo $language_key?>" <?php echo $geodir_default_language_selected  ; ?>><?php echo $language_txt; ?></option>
-					
-					<?php	} 
-						?>
-                        </select>
-                        </td>
-                    </tr>
-                    <tr>
-                    	<th class="titledesc" width="40%" ><?php _e('Default post type search on map' , GEODIRECTORY_TEXTDOMAIN);?></th>
-                        <td width="60%">
-                        <select name="geodir_default_map_search_pt" style="width:60%" >
-                        <?php 
-							$post_types = geodir_get_posttypes('array');
-							$geodir_default_map_search_pt = get_option('geodir_default_map_search_pt');
-							if(empty($geodir_default_map_search_pt))
-								$geodir_default_map_search_pt='gd_place';
-							if(is_array($post_types))
-							{
-								foreach($post_types as $key => $post_types_obj)
-								{
-									if(!empty($geodir_default_map_search_pt) && $key==$geodir_default_map_search_pt)
-										$geodir_search_pt_selected = "selected='selected'" ;
-									else
-										$geodir_search_pt_selected ='';
-										
-						?>
-                        		<option value="<?php echo $key?>" <?php echo $geodir_search_pt_selected  ; ?>><?php echo $post_types_obj['labels']['singular_name']; ?></option>
-                        
-                        <?php	} 
-							
-							}
-							
-						?>
-                        </select>
-                        </td>
-                    </tr>  
-                    </table>	
-                    </td>
-                    </tr>
+
+				<tr valign="top">
+					<th class="titledesc" width="40%"><?php _e('Default map language', GEODIRECTORY_TEXTDOMAIN);?></th>
+						<td width="60%">
+							<select name="geodir_default_map_language" style="width:60%" >
+						<?php 
+	$arr_map_langages = array(
+	'ar' =>  __('ARABIC', GEODIRECTORY_TEXTDOMAIN) ,
+	'eu' =>  __('BASQUE', GEODIRECTORY_TEXTDOMAIN) ,
+	'bg' =>  __('BULGARIAN' , GEODIRECTORY_TEXTDOMAIN),
+	'bn' =>  __('BENGALI' , GEODIRECTORY_TEXTDOMAIN),
+	'ca' =>  __('CATALAN' , GEODIRECTORY_TEXTDOMAIN),
+	'cs' =>  __('CZECH', GEODIRECTORY_TEXTDOMAIN) ,
+	'da' =>  __('DANISH' , GEODIRECTORY_TEXTDOMAIN),
+	'de' =>  __('GERMAN', GEODIRECTORY_TEXTDOMAIN) ,
+	'el' =>  __('GREEK' , GEODIRECTORY_TEXTDOMAIN),
+	'en' =>  __('ENGLISH' , GEODIRECTORY_TEXTDOMAIN),
+	'en-AU' =>  __('ENGLISH (AUSTRALIAN)', GEODIRECTORY_TEXTDOMAIN) ,
+	'en-GB' =>  __('ENGLISH (GREAT BRITAIN)' , GEODIRECTORY_TEXTDOMAIN),
+	'es' =>  __('SPANISH' , GEODIRECTORY_TEXTDOMAIN),
+	'eu' =>  __('BASQUE' , GEODIRECTORY_TEXTDOMAIN),
+	'fa' =>  __('FARSI' , GEODIRECTORY_TEXTDOMAIN),
+	'fi' =>  __('FINNISH' , GEODIRECTORY_TEXTDOMAIN),
+	'fil' =>  __('FILIPINO' , GEODIRECTORY_TEXTDOMAIN),
+	'fr' =>  __('FRENCH', GEODIRECTORY_TEXTDOMAIN) ,
+	'gl' =>  __('GALICIAN' , GEODIRECTORY_TEXTDOMAIN),
+	'gu' =>  __('GUJARATI', GEODIRECTORY_TEXTDOMAIN) ,
+	'hi' =>  __('HINDI' , GEODIRECTORY_TEXTDOMAIN),
+	'hr' =>  __('CROATIAN' , GEODIRECTORY_TEXTDOMAIN),
+	'hu' =>  __('HUNGARIAN', GEODIRECTORY_TEXTDOMAIN),
+	'id' =>  __('INDONESIAN' , GEODIRECTORY_TEXTDOMAIN),
+	'it' =>  __('ITALIAN', GEODIRECTORY_TEXTDOMAIN) ,
+	'iw' =>  __('HEBREW', GEODIRECTORY_TEXTDOMAIN) ,
+	'ja' =>  __('JAPANESE' , GEODIRECTORY_TEXTDOMAIN),
+	'kn' =>  __('KANNADA' , GEODIRECTORY_TEXTDOMAIN),
+	'ko' =>  __('KOREAN', GEODIRECTORY_TEXTDOMAIN) ,
+	'lt' =>  __('LITHUANIAN' , GEODIRECTORY_TEXTDOMAIN),
+	'lv' =>  __('LATVIAN', GEODIRECTORY_TEXTDOMAIN) ,
+	'ml' =>  __('MALAYALAM' , GEODIRECTORY_TEXTDOMAIN),
+	'mr' =>  __('MARATHI', GEODIRECTORY_TEXTDOMAIN) ,
+	'nl' =>  __('DUTCH' , GEODIRECTORY_TEXTDOMAIN),
+	'no' =>  __('NORWEGIAN' , GEODIRECTORY_TEXTDOMAIN),
+	'pl' => __( 'POLISH' , GEODIRECTORY_TEXTDOMAIN),
+	'pt' =>  __('PORTUGUESE' , GEODIRECTORY_TEXTDOMAIN),
+	'pt-BR' =>  __('PORTUGUESE (BRAZIL)' , GEODIRECTORY_TEXTDOMAIN),
+	'pt-PT' =>  __('PORTUGUESE (PORTUGAL)', GEODIRECTORY_TEXTDOMAIN) ,
+	'ro' =>  __('ROMANIAN' , GEODIRECTORY_TEXTDOMAIN),
+	'ru' =>  __('RUSSIAN', GEODIRECTORY_TEXTDOMAIN) ,
+	'ru' =>  __('RUSSIAN', GEODIRECTORY_TEXTDOMAIN) ,
+	'sk' =>  __('SLOVAK' , GEODIRECTORY_TEXTDOMAIN),
+	'sl' =>  __('SLOVENIAN' , GEODIRECTORY_TEXTDOMAIN),
+	'sr' => __( 'SERBIAN', GEODIRECTORY_TEXTDOMAIN) ,
+	'sv' =>  __('	SWEDISH', GEODIRECTORY_TEXTDOMAIN) ,
+	'tl' =>  __('TAGALOG' , GEODIRECTORY_TEXTDOMAIN),
+	'ta' =>  __('TAMIL', GEODIRECTORY_TEXTDOMAIN) ,
+	'te' =>  __('TELUGU' , GEODIRECTORY_TEXTDOMAIN),
+	'th' =>  __('THAI', GEODIRECTORY_TEXTDOMAIN) ,
+	'tr' =>  __('TURKISH' , GEODIRECTORY_TEXTDOMAIN),
+	'uk' =>  __('UKRAINIAN' , GEODIRECTORY_TEXTDOMAIN) ,
+	'vi' => __( 'VIETNAMESE' , GEODIRECTORY_TEXTDOMAIN),
+	'zh-CN' =>  __('CHINESE (SIMPLIFIED)', GEODIRECTORY_TEXTDOMAIN) ,
+			'zh-TW' => __('CHINESE (TRADITIONAL)', GEODIRECTORY_TEXTDOMAIN),
+	);
+	$geodir_default_map_language = get_option('geodir_default_map_language');
+	if(empty($geodir_default_map_language))
+		$geodir_default_map_language ='en';
+	foreach($arr_map_langages as $language_key =>  $language_txt )
+	{
+		if(!empty($geodir_default_map_language) && $language_key==$geodir_default_map_language)
+			$geodir_default_language_selected = "selected='selected'" ;
+		else
+			$geodir_default_language_selected ='';
+			
+?>
+	<option value="<?php echo $language_key?>" <?php echo $geodir_default_language_selected  ; ?>><?php echo $language_txt; ?></option>
+
+<?php	} 
+?>
+						</select>
+						</td>
+				</tr>
+				
+				<tr valign="top">
+					<th class="titledesc" width="40%" ><?php _e('Default post type search on map' , GEODIRECTORY_TEXTDOMAIN);?></th>
+						<td width="60%">
+						<select name="geodir_default_map_search_pt" style="width:60%" >
+						<?php 
+	$post_types = geodir_get_posttypes('array');
+	$geodir_default_map_search_pt = get_option('geodir_default_map_search_pt');
+	if(empty($geodir_default_map_search_pt))
+		$geodir_default_map_search_pt='gd_place';
+	if(is_array($post_types))
+	{
+		foreach($post_types as $key => $post_types_obj)
+		{
+			if(!empty($geodir_default_map_search_pt) && $key==$geodir_default_map_search_pt)
+				$geodir_search_pt_selected = "selected='selected'" ;
+			else
+				$geodir_search_pt_selected ='';
+				
+?>
+								<option value="<?php echo $key?>" <?php echo $geodir_search_pt_selected  ; ?>><?php echo $post_types_obj['labels']['singular_name']; ?></option>
+						
+						<?php	} 
+	
+	}
+	
+?>
+						</select>
+						</td>
+				</tr>  
+                    
 			<?php 
             break ;
 						
@@ -1711,9 +1716,9 @@ function geodir_admin_fields($options){
                         <table width="70%" class="widefat">
 												<thead>
                         	<tr>
-                        		<th><b><?php echo (DESIGN_POST_TYPE_SNO); ?></b></th>
-                                <th><b><?php echo(DESIGN_POST_TYPE); ?></b></th>
-                                <th><b><?php echo (DESIGN_POST_TYPE_CAT); ?></b></th>
+                        		<th><b><?php echo DESIGN_POST_TYPE_SNO; ?></b></th>
+                                <th><b><?php echo DESIGN_POST_TYPE; ?></b></th>
+                                <th><b><?php echo DESIGN_POST_TYPE_CAT; ?></b></th>
                             </tr>
                         	<?php foreach($post_types as $key => $post_types_obj):
 							 		

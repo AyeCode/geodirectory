@@ -27,7 +27,7 @@ jQuery( document ).ready(function() {
         controlNav: true,
         animationLoop: true,
 		slideshow: true,
-        sync: "#carousel",
+        sync: "#geodir_carousel",
         start: function(slider){
 			jQuery('.geodir_flex-loader').hide();
 			jQuery('#geodir_slider').css({'visibility':'visible'});
@@ -289,25 +289,11 @@ jQuery(document).ready(function(){
 	
 });
 
-/* Show Hide Filters Start*/
-jQuery(document).ready(function(){
-	
-	jQuery("#showFilters").click(function () {
-		var $form = jQuery(this).closest('form');
-		jQuery(".customize_filter",$form).slideToggle("slow",function(){
-			if(jQuery('.geodir_submit_search:first',$form).css('visibility') == 'visible')													
-				jQuery('.geodir_submit_search:first',$form).css({'visibility':'hidden'});
-			else
-				jQuery('.geodir_submit_search:first',$form).css({'visibility':'visible'});	
-		});
-	});
-	
-});
 
 
 jQuery(document).ready(function(){
 
-	jQuery('.search_by_post').change(function(){
+	jQuery('.search_by_post').change(function(){ 
 		window.location = jQuery(this).find('option:selected').attr('opt_label');
 	});
 	

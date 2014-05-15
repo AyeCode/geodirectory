@@ -36,7 +36,7 @@ border:1px #DFDFDF solid;}
 
 .gt-draggable-form-items b{ background-color:transparent; background:url(../images/sprite.png); display:inline-block; height:16px; left:8px; line-height:16px; position:absolute; width:18px;}
 .menu-item-handle.fieldset, .gt-fieldset{}
-
+.gt-taxonomy b{ background-position:-10px -10px;}
 .gt-text b{ background-position:-10px -91px;}
 .gt-link b{ background-position:-10px -91px;}
 .gt-textarea b{ background-position:-10px -176px;}

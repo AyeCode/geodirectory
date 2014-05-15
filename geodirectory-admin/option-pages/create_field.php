@@ -11,11 +11,6 @@ $field_id = isset($_REQUEST['field_id']) ? trim($_REQUEST['field_id'],'_') : '';
 
 $field_action = isset($_REQUEST['field_ins_upd']) ? trim($_REQUEST['field_ins_upd']) : '';
 
-if(isset($_REQUEST['is_default']) )
-	$default = $_REQUEST['is_default'];
-else
-	$default = 'admin';
-
 
 /* ------- check nonce field ------- */
 
@@ -81,8 +76,7 @@ if($field_id != '' && $field_action == 'submit' && isset($_REQUEST['_wpnonce']) 
 	
 	if( is_int($return) ){ 
 		$lastid = $return; 
-		($default == 'admin') ? $default=true : $default=false;
-		geodir_custom_field_adminhtml( $field_type, $lastid, 'submit', $default); 
+		geodir_custom_field_adminhtml( $field_type, $lastid, 'submit'); 
 	}else{
 		echo $return;
 	}
