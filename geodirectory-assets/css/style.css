@@ -1081,3 +1081,6 @@ ul.blogroll{ padding-left:0;}
 }
 
 .geodir-widget ul.blogroll .chosen-results li{ display:block; padding-bottom:5px; border-bottom:0; margin-bottom:5px;}
+
+
+#geodir_filled_by_spam_bot_top_form{ display:none;}

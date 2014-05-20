@@ -231,6 +231,22 @@ global $cat_display,$post_cat, $current_user;
                 
 								<?php do_action('geodir_after_main_form_fields');?>
 								
+								
+								<!-- add captcha code -->
+								
+						<script>
+							document.write('<inp'+'ut type="hidden" id="geodir_sp'+'amblocker_top_form" name="geodir_sp'+'amblocker" value="64"/>')
+						</script>
+						<noscript>
+						<div>
+						<label><?php _e('Type 64 into this box',GEODIRECTORY_TEXTDOMAIN);?></label>
+						<input type="text" id="geodir_spamblocker_top_form" name="geodir_spamblocker" value="" maxlength="10" />
+						</div>
+						</noscript><input type="text" id="geodir_filled_by_spam_bot_top_form" name="geodir_filled_by_spam_bot" value=""  />
+	
+	
+								<!-- end captcha code -->
+								
                     <div id="geodir-add-listing-submit" class="geodir_form_row clear_both" align="center" style="padding:2px;">            			<input type="submit" value="<?php echo PRO_PREVIEW_BUTTON;?>" class="geodir_button" <?php echo $submit_button;?>/>
                         <span class="geodir_message_note" style="padding-left:0px;"> <?php _e('Note: You will be able to see a preview in the next page',GEODIRECTORY_TEXTDOMAIN);?></span>
                     </div>

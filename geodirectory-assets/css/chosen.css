@@ -11,6 +11,8 @@
   user-select: none;
   width:100%!important;
 }
+
+.geodir_form_row.geodir_custom_fields .chosen-container {width:70%!important;}
 .chosen-container .chosen-drop {
   position: absolute;
   top: 100%;

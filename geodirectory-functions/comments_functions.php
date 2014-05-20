@@ -561,9 +561,17 @@ function geodir_get_rating_stars($rating, $post_id, $small=false){
 }
 
 
-
-
-
+function geodir_is_reviews_show($pageview = ''){
+	
+	$active_tabs = get_option('geodir_detail_page_tabs_excluded');
+	
+	$is_display = true;
+	if(!empty($active_tabs) && in_array('reviews', $active_tabs))
+		$is_display = false;
+		
+	return apply_filters('geodir_is_reviews_show', $is_display, $pageview);
+	
+}
 
 
 

@@ -118,7 +118,7 @@ add_filter( 'template_include', 'geodir_template_loader' );
 /* CATEGORY / TAXONOMY / CUSTOM POST ACTIONS */
 /////////////////////////
 
-add_action('edited_term','geodir_update_markers_oncatedit',10,3);
+//add_action('edited_term','geodir_update_markers_oncatedit',10,3);
 
 add_filter('term_link', 'geodir_get_term_link', 10, 3);
 

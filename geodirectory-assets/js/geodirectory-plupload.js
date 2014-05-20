@@ -47,12 +47,12 @@ jQuery(document).ready(function($) {
  
  			uploader.bind('Error', function(up, files){
 			if(files.code == -600){	
-			jQuery('#upload-error').addClass('upload-error');
-			jQuery('#upload-error').html(files.message+ ' : You tried to upload a image over '+ gd_plupload.upload_img_size);
+			jQuery('#'+imgId+'upload-error').addClass('upload-error');
+			jQuery('#'+imgId+'upload-error').html(files.message+ ' : You tried to upload a image over '+ gd_plupload.upload_img_size);
 			}
 			else{
-			jQuery('#upload-error').addClass('upload-error');
-			jQuery('#upload-error').html(files.message);
+			jQuery('#'+imgId+'upload-error').addClass('upload-error');
+			jQuery('#'+imgId+'upload-error').html(files.message);
 			}
 			});
 			
@@ -85,12 +85,12 @@ jQuery(document).ready(function($) {
 				return false;
 				}
 				
-				if((parseInt(up.files.length)+parseInt(totalImg)>parseInt(limitImg)) && parseInt(limitImg) > 0){
+				/*if((parseInt(up.files.length)+parseInt(totalImg)>parseInt(limitImg)) && parseInt(limitImg) > 0){
 				while(up.files.length > 0) {up.removeFile(up.files[0]);} // remove images
 				jQuery('#'+imgId+'upload-error').addClass('upload-error');
 				jQuery('#'+imgId+'upload-error').html('You may only upload another '+(parseInt(limitImg)-parseInt(totalImg))+' with this package, please try again.');
 				return false;
-				}
+				}*/
 				
 				
 				
@@ -115,10 +115,11 @@ jQuery(document).ready(function($) {
             });
  
             uploader.bind('UploadProgress', function(up, file) {
- 													  //alert('progress'+file.percent);
+ 													  
 
                 $('#' + file.id + " .fileprogress").width(file.percent + "%");
                 $('#' + file.id + " span").html(plupload.formatSize(parseInt(file.size * file.percent / 100)));
+				//alert('progress'+file.percent);
             });
  
  

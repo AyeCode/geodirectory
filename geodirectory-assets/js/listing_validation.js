@@ -125,7 +125,7 @@ jQuery(document).ready(function(){
 		var is_validate = true;
 		
 		jQuery(this).find(".required_field:visible").each(function(){
-			jQuery(this).find("[field_type]:visible, .chosen_select, .editor, .event_recurring_dates").each(function(){
+			jQuery(this).find("[field_type]:visible, .chosen_select, .editor, .event_recurring_dates, .geodir-custom-file-upload").each(function(){
 				
 				if(jQuery(this).hasClass('chosen_select')){ 
 					var chosen_ele = jQuery(this);

@@ -15,6 +15,7 @@ class geodir_homepage_map extends WP_Widget {
 	$width = empty($instance['width']) ? '960' : apply_filters('widget_width', $instance['width']);
 	$height = empty($instance['heigh']) ? '425' : apply_filters('widget_heigh', $instance['heigh']);
 	$maptype = empty($instance['maptype']) ? 'ROADMAP' : apply_filters('widget_maptype', $instance['maptype']);
+	$autozoom = empty($instance['autozoom']) ? '' : apply_filters('widget_autozoom', $instance['autozoom']);
 	$child_collapse = empty($instance['child_collapse']) ? '0' : apply_filters('widget_child_collapse', $instance['child_collapse']);
 	$scrollwheel = empty($instance['scrollwheel']) ? '0' : apply_filters('widget_scrollwheel', $instance['scrollwheel']);
 	
@@ -26,6 +27,7 @@ class geodir_homepage_map extends WP_Widget {
 	$map_args['height'] = $height;
 	$map_args['maptype'] = $maptype;
 	$map_args['scrollwheel'] = $scrollwheel;
+	$map_args['autozoom'] = $autozoom;
 	$map_args['child_collapse'] = $child_collapse;
 	$map_args['enable_cat_filters'] = true;
 	$map_args['enable_text_search'] = true;
@@ -44,6 +46,7 @@ class geodir_homepage_map extends WP_Widget {
 		$instance['width'] = strip_tags($new_instance['width']);
 		$instance['heigh'] = ($new_instance['heigh']);
 		$instance['maptype'] = ($new_instance['maptype']);
+		$instance['autozoom'] = isset($new_instance['autozoom']) ? $new_instance['autozoom'] : '';
 		$instance['child_collapse'] = isset($new_instance['child_collapse']) ? ($new_instance['child_collapse']) : '';
 		$instance['scrollwheel'] = isset($new_instance['scrollwheel']) ? ($new_instance['scrollwheel']) : '';
 
@@ -52,10 +55,11 @@ class geodir_homepage_map extends WP_Widget {
 	function form($instance) {
 	//widgetform in backend
 	
-		$instance = wp_parse_args( (array) $instance, array( 'width' => '', 'heigh' => '', 'maptype' =>'', 'child_collapse'=>'0','scrollwheel'=>'0') );		
+		$instance = wp_parse_args( (array) $instance, array( 'width' => '', 'heigh' => '', 'maptype' =>'', 'autozoom' => '','child_collapse'=>'0','scrollwheel'=>'0') );		
 		$width = strip_tags($instance['width']);
 		$heigh = strip_tags($instance['heigh']);
 		$maptype = strip_tags($instance['maptype']);
+		$autozoom = strip_tags($instance['autozoom']);
 		$child_collapse = strip_tags($instance['child_collapse']);
 		$scrollwheel = strip_tags($instance['scrollwheel']);
 	?> 	
@@ -83,6 +87,11 @@ class geodir_homepage_map extends WP_Widget {
       </label>
     </p>
     
+		<p>
+				<label for="<?php echo $this->get_field_id('autozoom'); ?>"><?php _e('Map Auto Zoom ?',GEODIRECTORY_TEXTDOMAIN);?>:
+				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('autozoom'); ?>" name="<?php echo $this->get_field_name('autozoom'); ?>"<?php if($autozoom){echo 'checked="checked"';}?> /></label>
+		</p>
+		
     <p>
       <label for="<?php echo $this->get_field_id('child_collapse'); ?>"><?php _e('Collapse child/sub categories ?',GEODIRECTORY_TEXTDOMAIN);?>:
       <input id="<?php echo $this->get_field_id('child_collapse'); ?>" name="<?php echo $this->get_field_name('child_collapse'); ?>" type="checkbox"  value="1"  <?php if($child_collapse){ ?>checked="checked" <?php }?> />
