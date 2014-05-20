@@ -36,6 +36,7 @@ function geodir_set_postcat_structure($post_id, $taxonomy, $default_cat = '' , $
 	}
 	
 	update_post_meta($post_id, 'post_categories', $category_str);		
+	
 }
 
 
@@ -1320,7 +1321,41 @@ function geodir_set_post_terms($post_id, $terms, $tt_ids, $taxonomy){
 							array($categories,$post_marker_json,$post_id)
 						)
 					);
+					
+					if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'inline-save'){
+					
+						$categories = trim($categories,',');
+						
+						if($categories){
+							
+							$categories = explode(',', $categories);
+							
+							$default_category = geodir_get_post_meta($post_id,'default_category',true);
+							
+							if(!in_array($default_category, $categories)){
 								
+								$wpdb->query(
+									$wpdb->prepare(
+										"UPDATE ".$table." SET 
+										default_category = %s
+										where post_id = %d",
+										array($categories[0],$post_id)
+									)
+								);
+								
+								$default_category = $categories[0];
+								
+							}
+							
+							if($default_category == '')
+								$default_category = $categories[0];
+							
+							geodir_set_postcat_structure($post_id,$taxonomy,$default_category,'');
+		
+						}
+
+					}
+					
 								
 			}else
 			{

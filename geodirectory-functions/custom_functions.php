@@ -476,6 +476,8 @@ function geodir_add_meta_keywords()
 	
 	$all_postypes = geodir_get_posttypes();
 	
+	$geodir_taxonomies = geodir_get_taxonomies('',true);
+
 	?>
 		<meta name="description" content="<?php if (have_posts() && is_single() OR is_page()){while(have_posts()){the_post();
 					if(has_excerpt()){$out_excerpt = str_replace(array("\r\n", "\r", "\n"), "", get_the_excerpt());}
@@ -483,14 +485,14 @@ function geodir_add_meta_keywords()
 					echo strip_tags($out_excerpt);
 				}
 			}
-			elseif(is_category() || is_tag()){
+			elseif((is_category() || is_tag()) && isset($current_term->taxonomy) && in_array($current_term->taxonomy,$geodir_taxonomies) ){
 				if(is_category()){
 					echo __("Posts related to Category:", GEODIRECTORY_TEXTDOMAIN)." ".ucfirst(single_cat_title("", FALSE));
 				}elseif(is_tag()){ 
 					echo __("Posts related to Tag:", GEODIRECTORY_TEXTDOMAIN)." ".ucfirst(single_tag_title("", FALSE));
 				}
 			}
-			elseif(isset($current_term->taxonomy)){
+			elseif(isset($current_term->taxonomy) && in_array($current_term->taxonomy,$geodir_taxonomies)){
 				echo isset($current_term->description) ? $current_term->description : '';
 			}
 			 ?>" />

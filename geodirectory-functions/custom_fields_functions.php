@@ -1217,12 +1217,12 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 		
 		<?php }
 		elseif($type=='select'){	?>
-		<div class="<?php if($is_required) echo 'required_field';?> geodir_form_row clearfix">
+		<div class="<?php if($is_required) echo 'required_field';?> geodir_form_row geodir_custom_fields clearfix">
 			<label>
 				<?php echo $site_title; ?>
 				<?php if($is_required) echo '<span>*</span>';?>
 			</label>
-			<select field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>" class="geodir_textfield textfield_x chosen_select" data-placeholder="<?php echo  __('Choose',GEODIRECTORY_TEXTDOMAIN ) .' '.$site_title .'&hellip;' ;?>" >
+			<select field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>" class="geodir_textfield textfield_x chosen_select" data-placeholder="<?php echo  __('Choose',GEODIRECTORY_TEXTDOMAIN ) .' '.$site_title .'&hellip;' ;?>" option-ajaxchosen="false" >
 	
 			<?php if($option_values){   $option_values_arr = explode(',',$option_values);
 			
@@ -1561,9 +1561,11 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 				 <?php if($file_image_limit==0){echo '<br /><small>('.__('You can upload unlimited images with this package').')</small>';} ?>
 			</h5>   <?php */?>
 			      
-			<div class="geodir_form_row clearfix" id="<?php echo $file_id; ?>dropbox" align="center" style="">
-			<label style="text-align:left; padding-top:10px;"><?php echo $site_title; ?></label>
-				<input type="hidden" name="<?php echo $file_id; ?>" id="<?php echo $file_id; ?>" value="<?php echo $file_value; ?>" />
+			<div class="<?php if($is_required) echo 'required_field';?> geodir_form_row clearfix" >
+			
+			<div id="<?php echo $file_id; ?>dropbox" align="center" style="">
+			<label style="text-align:left; padding-top:10px;"><?php echo $site_title; ?><?php if($is_required) echo '<span>*</span>';?></label>
+				<input class="geodir-custom-file-upload" field_type="file" type="hidden" name="<?php echo $file_id; ?>" id="<?php echo $file_id; ?>" value="<?php echo $file_value; ?>" />
 				<input type="hidden" name="<?php echo $file_id; ?>image_limit" id="<?php echo $file_id; ?>image_limit" value="<?php echo $file_image_limit; ?>" />
 				<input type="hidden" name="<?php echo $file_id; ?>totImg" id="<?php echo $file_id; ?>totImg" value="<?php if(isset($file_totImg)){ echo $file_totImg;}else{ echo '0';} ?>" />
 				<div style="float:left; width:55%;">
@@ -1581,8 +1583,14 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 				<div class="plupload-thumbs <?php if ($file_multiple): ?>plupload-thumbs-multiple<?php endif; ?> " id="<?php echo $file_id; ?>plupload-thumbs" style=" clear:inherit; margin-top:0; margin-left:15px; padding-top:10px; float:left; width:50%;">
 				</div>
 				<?php /*?><span id="upload-msg" ><?php _e('Please drag &amp; drop the images to rearrange the order');?></span><?php */?>
+								
 				<span id="<?php echo $file_id; ?>upload-error" style="display:none"></span>
-			</div>
+				
+			</div></div>
+			<span class="geodir_message_note"><?php echo $admin_desc;?></span>
+			<?php if($is_required) {?>
+			<span class="geodir_message_error"><?php echo $required_msg?></span> 
+			<?php } ?>
 			</div>
 		
 			

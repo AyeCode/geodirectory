@@ -166,7 +166,7 @@ function geodir_set_default_widgets()
 	
 	$widget_option_list['geodir_home_top'] 	=  
 	array(	'popular_post_category' => array("title" => __('Popular Categories',GEODIRECTORY_TEXTDOMAIN)),
-			'geodir_map_v3_home_map' => array("width" => '940', "heigh" => '425'),
+			'geodir_map_v3_home_map' => array("autozoom"=> 1,"width" => '940', "heigh" => '425'),
 			'geodir_advance_search' => array() );
 
 	$widget_option_list['geodir_home_contant'] 	=  

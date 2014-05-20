@@ -1144,65 +1144,68 @@ function geodir_listing_permalink_structure($post_link, $post, $leavename, $samp
 
 
 function geodir_term_link($termlink, $term, $taxonomy) {
-    
-	global $geodir_add_location_url;
-	$include_location = false;
-	$request_term = array();
-	
-	$listing_slug = geodir_get_listing_slug($taxonomy);
-	
-	
-	if($geodir_add_location_url != NULL && $geodir_add_location_url != '')
-	{	
-		if($geodir_add_location_url && get_option('geodir_add_location_url'))
-		{	$include_location = true; }
+   
+   	$geodir_taxonomies = geodir_get_taxonomies('',true);
+	if(isset($taxonomy) && in_array($taxonomy,$geodir_taxonomies)){
+		global $geodir_add_location_url;
+		$include_location = false;
+		$request_term = array();
 		
-	}elseif(get_option('geodir_add_location_url'))
-		$include_location = true;
-	
-	if($include_location ){
+		$listing_slug = geodir_get_listing_slug($taxonomy);
 		
-		if(get_option('geodir_show_location_url') == 'all'){
-			
-			$country = get_query_var('gd_country');
-			if( $country != '' )
-				$request_term['gd_country'] = $country;	
-			
-			$region = get_query_var('gd_region');
-			if( $region != '' )
-				$request_term['gd_region'] = $region;
-			
-			$city = get_query_var('gd_city');
-			if( $city != '' )
-				$request_term['gd_city'] = $city;	
-		}else{
-			$city = get_query_var('gd_city');
-			if( $city != '' )
-				$request_term['gd_city'] = $city;
-		}		
 		
-		if(!empty($request_term)){
+		if($geodir_add_location_url != NULL && $geodir_add_location_url != '')
+		{	
+			if($geodir_add_location_url && get_option('geodir_add_location_url'))
+			{	$include_location = true; }
 			
-			$url_separator = get_option('geodir_listingurl_separator');	
+		}elseif(get_option('geodir_add_location_url'))
+			$include_location = true;
+		
+		if($include_location ){
 			
-			if ( get_option('permalink_structure') != '' ){
+			if(get_option('geodir_show_location_url') == 'all'){
 				
-				$old_listing_slug = '/'.$listing_slug.'/';
+				$country = get_query_var('gd_country');
+				if( $country != '' )
+					$request_term['gd_country'] = $country;	
 				
-				$request_term = implode("/",$request_term);
-				$new_listing_slug = '/'.$listing_slug.'/'.rtrim($request_term,'/').'/'.$url_separator.'/';
+				$region = get_query_var('gd_region');
+				if( $region != '' )
+					$request_term['gd_region'] = $region;
 				
-				$termlink = substr_replace($termlink, $new_listing_slug, strpos($termlink, $old_listing_slug), strlen($old_listing_slug));
-					
+				$city = get_query_var('gd_city');
+				if( $city != '' )
+					$request_term['gd_city'] = $city;	
 			}else{
-				$termlink = geodir_getlink($termlink,$request_term);
+				$city = get_query_var('gd_city');
+				if( $city != '' )
+					$request_term['gd_city'] = $city;
+			}		
+			
+			if(!empty($request_term)){
+				
+				$url_separator = get_option('geodir_listingurl_separator');	
+				
+				if ( get_option('permalink_structure') != '' ){
+					
+					$old_listing_slug = '/'.$listing_slug.'/';
+					
+					$request_term = implode("/",$request_term);
+					$new_listing_slug = '/'.$listing_slug.'/'.rtrim($request_term,'/').'/'.$url_separator.'/';
+					
+					$termlink = substr_replace($termlink, $new_listing_slug, strpos($termlink, $old_listing_slug), strlen($old_listing_slug));
+						
+				}else{
+					$termlink = geodir_getlink($termlink,$request_term);
+				}
+			
 			}
-		
-		}
-		
-		//$termlink = preg_replace( '/\/'.$listing_slug.'\//', '/'.$listing_slug.'/'.rtrim($request_term,'/').'/'.$url_separator.'/', $termlink, $count = 1 );  
-		
-	}	
+			
+			//$termlink = preg_replace( '/\/'.$listing_slug.'\//', '/'.$listing_slug.'/'.rtrim($request_term,'/').'/'.$url_separator.'/', $termlink, $count = 1 );  
+			
+		}	
+	}
 	
     return $termlink;
 }

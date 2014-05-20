@@ -26,14 +26,20 @@
 									<a  href="<?php the_permalink(); ?>">
 											<?php echo $fimage;?>
 									</a>
+                                    <?php 
+									do_action('geodir_before_badge_on_image', $post) ;
+									if($post->is_featured){
+										echo geodir_show_badges_on_image('featured' , $post) ;
+									}
 									
-									<?php if($post->is_featured){?>
-									<a><span class="geodir_featured_img">&nbsp;</span></a>
-									<?php } ?>
-									
-									<?php if(round(abs(strtotime($post->post_date)-strtotime(date('Y-m-d')))/86400)<30){?>                    <span class="geodir_new_listing"><?php _e('new',GEODIRECTORY_TEXTDOMAIN); ?></span>
-									<?php } ?>
+									$geodir_days_new = (int)get_option('geodir_listing_new_days');
 								
+									if(round(abs(strtotime($post->post_date)-strtotime(date('Y-m-d')))/86400)<$geodir_days_new){
+                                    	echo geodir_show_badges_on_image('new' , $post) ;
+									}
+                                    do_action('geodir_after_badge_on_image', $post) ;
+									?>
+                                   
 							<?php } ?>
 									
 							 
@@ -78,10 +84,12 @@
 					<?php } ?>
 							 
 					<?php 
+		
+					$review_show = geodir_is_reviews_show('gridview');
 					
 					$comment_count = $post->rating_count; 
 					$post_ratings = $post->overall_rating;
-					if($post_ratings != 0 && !isset($preview)){
+					if($post_ratings != 0 && !isset($preview) && $review_show){
 						 if($comment_count > 0)
 				$post_avgratings = ($post_ratings / $comment_count);
 			else
@@ -94,9 +102,11 @@
 					}
 					?> 
 					<div class="clearfix">
+						<?php if($review_show){ ?>
 							<a href="<?php comments_link(); ?>" class="geodir-pcomments">
 									<?php comments_number( __('no review',GEODIRECTORY_TEXTDOMAIN), __('1 review',GEODIRECTORY_TEXTDOMAIN), __('% reviews',GEODIRECTORY_TEXTDOMAIN) );  ?>
 							</a>
+						<?php } ?>
 							<?php  geodir_favourite_html($post->post_author,$post->ID); ?>
 							<?php  global $wp_query ;
 						 $show_pin_point = $wp_query->is_main_query();

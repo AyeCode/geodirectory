@@ -122,7 +122,7 @@ function geodir_get_country_dl($post_country = '',$prefix=''){
 			$selected = 'selected="selected"';
 	
 	
-	$out_put = '<select field_type="select" name="'.$prefix.'country" id="'.$prefix.'country" data-placeholder="'.__('Choose a country&hellip;',GEODIRECTORY_TEXTDOMAIN).'" class="chosen_select" option-listfore="country" option-showEveryWhere="no" option-addSearchTermOnNorecord="1" option-noLocationUrl="1" option-countrySearch="1" >';
+	$out_put = '<select field_type="select" name="'.$prefix.'country" id="'.$prefix.'country" data-placeholder="'.__('Choose a country&hellip;',GEODIRECTORY_TEXTDOMAIN).'" class="chosen_select" option-listfore="country" option-showEveryWhere="no" option-addSearchTermOnNorecord="1" option-ajaxchosen="false" option-noLocationUrl="1" option-countrySearch="1" >';
 	
 	/*$out_put = '<select field_type="select" name="'.$prefix.'country" id="'.$prefix.'country" data-placeholder="'.__('Choose a country&hellip;',GEODIRECTORY_TEXTDOMAIN).'" class="chosen_select" option-listfore="country" option-ajaxChosen="false" >';*/ 
 	

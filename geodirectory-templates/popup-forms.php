@@ -11,34 +11,46 @@ if($_REQUEST['popuptype'] == 'b_sendtofriend'){ ?>
 		<h3><?php echo apply_filters('geodir_send_to_friend_page_title',SEND_TO_FRIEND);?></h3>
 			<p id="reply_send_success" class="sucess_msg" style="display:none;"></p>
 		<div class="row clearfix" >
-			<label><?php _e('Friend Name',GEODIRECTORY_TEXTDOMAIN);?> : <span>*</span></label>
+			<div class="geodir_popup_heading">
+			<label><?php _e('Friend Name',GEODIRECTORY_TEXTDOMAIN);?> : <span>*</span></label></div>
+			<div class="geodir_popup_field">
 			<input class="is_required" field_type="text" name="to_name" id="to_name" type="text" value=""  />
-			<span class="message_error2" id="to_nameInfo"></span>
+			<span class="message_error2" id="to_nameInfo"></span></div>
 		</div>
 		<div class="row  clearfix" >
-			<label> <?php _e('Email',GEODIRECTORY_TEXTDOMAIN);?> : <span>*</span></label>
+		<div class="geodir_popup_heading">
+			<label> <?php _e('Email',GEODIRECTORY_TEXTDOMAIN);?> : <span>*</span></label></div>
+			<div class="geodir_popup_field">
 			<input class="is_required" field_type="email" name="to_email" id="to_email" type="text" value="" />
-			<span class="message_error2" id="to_emailInfo"></span>
+			<span class="message_error2" id="to_emailInfo"></span></div>
 		</div>
 		<div class="row  clearfix" >
-			<label><?php _e('Your Name',GEODIRECTORY_TEXTDOMAIN);?> : <span>*</span></label>
+			<div class="geodir_popup_heading">
+			<label><?php _e('Your Name',GEODIRECTORY_TEXTDOMAIN);?> : <span>*</span></label></div>
+			<div class="geodir_popup_field">
 			<input class="is_required" field_type="text" name="yourname" id="yourname" type="text" value="" />
-			<span class="message_error2" id="yournameInfo"></span>
+			<span class="message_error2" id="yournameInfo"></span></div>
 		</div>
 		<div class="row  clearfix" >
-			<label> <?php _e('Email',GEODIRECTORY_TEXTDOMAIN);?> : <span>*</span></label>
+		<div class="geodir_popup_heading">
+			<label> <?php _e('Email',GEODIRECTORY_TEXTDOMAIN);?> : <span>*</span></label></div>
+			<div class="geodir_popup_field">
 			<input class="is_required" field_type="email" name="youremail" id="youremail" type="text" value="" />
-			<span class="message_error2" id="youremailInfo"></span>
+			<span class="message_error2" id="youremailInfo"></span></div>
 		</div>
 		<div class="row  clearfix" >
-			<label><?php _e('Subject',GEODIRECTORY_TEXTDOMAIN);?> : <span>*</span></label>
+			<div class="geodir_popup_heading">
+			<label><?php _e('Subject',GEODIRECTORY_TEXTDOMAIN);?> : <span>*</span></label></div>
+			<div class="geodir_popup_field">
 			<input class="is_required" field_type="text" name="frnd_subject" value="<?php echo __('About',GEODIRECTORY_TEXTDOMAIN).' '.$post_info->post_title;?>" id="frnd_subject" type="text" value="" />
-			<span class="message_error2" id="frnd_subjectInfo"></span>
+			<span class="message_error2" id="frnd_subjectInfo"></span></div>
 		</div>
 		<div class="row  clearfix" >
-			<label><?php _e('Comments',GEODIRECTORY_TEXTDOMAIN);?> : <span>*</span></label>
+			<div class="geodir_popup_heading">
+			<label><?php _e('Comments',GEODIRECTORY_TEXTDOMAIN);?> : <span>*</span></label></div>
+			<div class="geodir_popup_field">
 			<textarea class="is_required" field_type="textarea" name="frnd_comments" id="frnd_comments" cols="" rows="" ><?php echo SEND_TO_FRIEND_SAMPLE_CONTENT;?></textarea>
-			<span class="message_error2" id="frnd_commentsInfo"></span>
+			<span class="message_error2" id="frnd_commentsInfo"></span></div>
 		</div>
 			<?php if(function_exists('geodir_get_captch')){geodir_get_captch('-1'); }?>
 		<input name="Send" type="submit" value="<?php _e('Send',GEODIRECTORY_TEXTDOMAIN)?> " class="button " />
@@ -53,23 +65,33 @@ if($_REQUEST['popuptype'] == 'b_sendtofriend'){ ?>
 		<input type="hidden" name="pid" id="agt_mail_agent_pid" value="<?php echo $post_info->ID;?>" />
 		<h3><?php echo apply_filters('geodir_send_inquiry_page_title',SEND_INQUIRY);?> </h3>
 			<p id="inquiry_send_success" class="sucess_msg" style="display:none;"></p>
-		<div class="row  clearfix" ><label><?php _e('Your Name',GEODIRECTORY_TEXTDOMAIN);?> :  <span>*</span></label>			
+		<div class="row  clearfix" >
+			<div class="geodir_popup_heading"><label><?php _e('Your Name',GEODIRECTORY_TEXTDOMAIN);?> :  <span>*</span></label>	</div>
+			<div class="geodir_popup_field">		
 			<input class="is_required" field_type="text" name="inq_name" id="agt_mail_name" type="text" value=""  />
-			<span class="message_error2" id="span_agt_mail_name"></span>
+			<span class="message_error2" id="span_agt_mail_name"></span></div>
 		</div>
 		<div class="row  clearfix" >
-			<label><?php _e('Email',GEODIRECTORY_TEXTDOMAIN);?> :  <span>*</span></label>
+			<div class="geodir_popup_heading">
+			<label><?php _e('Email',GEODIRECTORY_TEXTDOMAIN);?> :  <span>*</span></label></div>
+			<div class="geodir_popup_field">
 			<input class="is_required" field_type="email" name="inq_email" id="agt_mail_email" type="text" value=""  />
 			<span class="message_error2" id="span_agt_mail_email"></span>
+			</div>
 		</div>
 		<div class="row  clearfix" >
-			<label><?php _e('Contact Info',GEODIRECTORY_TEXTDOMAIN);?> :</label>
+			<div class="geodir_popup_heading">
+			<label><?php _e('Contact Info',GEODIRECTORY_TEXTDOMAIN);?> :</label></div>
+			<div class="geodir_popup_field">
 			<input name="inq_phone" id="agt_mail_phone" type="text"  value="" />
+			</div>
 		</div>
 		<div class="row  clearfix" >
-			<label><?php _e('Comments',GEODIRECTORY_TEXTDOMAIN);?> :  <span>*</span></label>
+			<div class="geodir_popup_heading">
+			<label><?php _e('Comments',GEODIRECTORY_TEXTDOMAIN);?> :  <span>*</span></label></div>
+			<div class="geodir_popup_field">
 			<textarea class="is_required" field_type="textarea" name="inq_msg" id="agt_mail_msg" cols="" rows="" ><?php echo SEND_INQUIRY_SAMPLE_CONTENT;?></textarea>
-			<span class="message_error2" id="span_agt_mail_msg"></span>
+			<span class="message_error2" id="span_agt_mail_msg"></span></div>
 		</div>
 			<input name="Send" type="submit"  value="<?php _e('Send',GEODIRECTORY_TEXTDOMAIN);?>" class="button clearfix" />
 	 </form>

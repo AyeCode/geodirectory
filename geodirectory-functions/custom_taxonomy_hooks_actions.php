@@ -20,8 +20,19 @@ function geodir_register_taxonomies() {
 		// Sort taxonomies
 		ksort( $taxonomies );
 		
+		
+		
 		// Register taxonomies
 		foreach ( $taxonomies as $taxonomy => $args ){
+			
+			// Allow taxonomie names to be translated
+			if(!empty($args['args']['labels'])){
+				foreach($args['args']['labels'] as $key=>$tax_label){
+					$args['args']['labels'][$key] = __($tax_label, GEODIRECTORY_TEXTDOMAIN);
+					}
+				}
+			
+			
 			$tax = register_taxonomy( $taxonomy, $args['object_type'], $args['args'] );
 			
 			if ( taxonomy_exists( $taxonomy ) ) {
