@@ -103,7 +103,7 @@ function geodir_draw_map($map_args = array())
      
      	<div class="map_background">
             <div class="top_banner_section_in clearfix" >
-                <div class="<?php echo $map_canvas_name;?>_TopLeft TopLeft"><span class="triggermap" id="<?php echo $map_canvas_name;?>_triggermap" <?php if(!$geodir_map_options['enable_map_resize_button']){ ?>style="display:none;" <?php }?>></span></div>
+                <div class="<?php echo $map_canvas_name;?>_TopLeft TopLeft"><span class="triggermap" id="<?php echo $map_canvas_name;?>_triggermap" <?php if(!$geodir_map_options['enable_map_resize_button']){ ?> <?php }?>><i class="fa fa-arrows-alt"></i></span></div>
                 <div class="<?php echo $map_canvas_name;?>_TopRight TopRight"></div>
                 <div id="<?php echo $map_canvas_name;?>_wrapper" class="main_map_wrapper" style="height:<?php echo $geodir_map_options['height'];?>;width:<?php echo $map_width;?>;">
                     <!-- new map start -->
@@ -160,7 +160,7 @@ function geodir_draw_map($map_args = array())
 		$geodir_available_pt_on_map =  count(geodir_get_posttypes('array')) - count($exclude_post_types ) ;
 		?>
             <div class="map-category-listing <?php if($geodir_map_options['enable_post_type_filters'] && $geodir_available_pt_on_map <2){echo "map-cat-floor";}?>">                 
-                  <div class="trigger triggeroff" ></div>
+                  <div class="trigger triggeroff" ><i class="fa fa-compress"></i><i class="fa fa-expand"></i></div>
                		<div id="<?php echo $map_canvas_name;?>_cat" class="<?php echo $map_canvas_name;?>_map_category  map_category" <?php if($child_collapse){ ?>checked="checked" <?php }?>>
                         <input  onkeydown="if(event.keyCode == 13){build_map_ajax_search_param('<?php echo $map_canvas_name;?>' , false)}" type="<?php if($geodir_map_options['enable_text_search']) echo "text" ; else echo 'hidden' ;?>" class="inputbox" id="<?php echo $map_canvas_name;?>_search_string" name="search" value="<?php _e('Title or Keyword',GEODIRECTORY_TEXTDOMAIN);?>" onclick="this.value=''" />
                      <?php if($geodir_map_options['enable_cat_filters']){?>
@@ -224,6 +224,7 @@ function geodir_draw_map($map_args = array())
          <?php if($geodir_map_options['enable_post_type_filters']){
 			 $post_types = geodir_get_posttypes('object'); 
 			 if(count((array)($post_types))>1){?>
+             <style>.map_category, .trigger {margin-bottom:30px;}</style>
         <div class="map-places-listing" id="<?php echo $map_canvas_name;?>_posttype_menu" style="max-width:<?php echo $map_width;?>!important;">        
           
             <ul class="clearfix place-list">
@@ -239,10 +240,10 @@ function geodir_draw_map($map_args = array())
                
               
             </ul>
-            <div class="map-navigation">
+            <div class="geodir-map-navigation">
                 <ul>
-                   <li class="leftarrow"><a href="#">&nbsp;</a></li>
-                   <li class="rightarrow"><a href="#">&nbsp;</a></li>
+                   <li class="geodir-leftarrow"><a href="#"><i class="fa fa-chevron-left"></i></a></li>
+                   <li class="geodir-rightarrow"><a href="#"><i class="fa fa-chevron-right"></i></a></li>
                 </ul>
             </div>
           
@@ -254,7 +255,7 @@ function geodir_draw_map($map_args = array())
 	<script type="text/javascript">
 			
 			jQuery(document).ready(function(){
-				initMap('<?php echo $map_canvas_name;?>');
+				//initMap('<?php echo $map_canvas_name;?>'); // depreciated, no need to load this twice
 				build_map_ajax_search_param('<?php echo $map_canvas_name;?>' , true);
 				map_sticky('<?php echo $map_canvas_name;?>');
 			});

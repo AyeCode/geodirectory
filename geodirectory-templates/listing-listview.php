@@ -1,4 +1,13 @@
-<?php do_action('geodir_before_listing_listview'); //global $wp_query; echo $wp_query->request; ?>
+<?php do_action('geodir_before_listing_listview'); global $gridview_columns;
+$grid_view_class = apply_filters('geodir_grid_view_widget_columns' ,$gridview_columns);
+if(isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view']!='' && !isset($before_widget)){
+	if($_SESSION['gd_listing_view']=='1'){$grid_view_class = '';}
+	if($_SESSION['gd_listing_view']=='2'){$grid_view_class = 'gridview_onehalf';}
+	if($_SESSION['gd_listing_view']=='3'){$grid_view_class = 'gridview_onethird ';}
+	if($_SESSION['gd_listing_view']=='4'){$grid_view_class = 'gridview_onefourth';}
+	if($_SESSION['gd_listing_view']=='5'){$grid_view_class = 'gridview_onefifth';}
+}
+?>
 
 <ul class="geodir_category_list_view clearfix">
 	
@@ -8,8 +17,8 @@
 					
          while (have_posts()) : the_post(); global $post,$wpdb,$listing_width,$preview;  ?> 
             
-					<li id="post-<?php echo $post->ID;?>" class="clearfix" <?php if($listing_width) echo "style='width:{$listing_width}%;'"; // Width for widget listing ?> >
-							
+					<li id="post-<?php echo $post->ID;?>" class="<?php if($grid_view_class){ echo 'geodir-gridview '.$grid_view_class;}?> clearfix" <?php if($listing_width) echo "style='width:{$listing_width}%;'"; // Width for widget listing ?> >
+					<article class="geodir-category-listing">		
 			<div class="geodir-post-img"> 
 			<?php if($fimage = geodir_show_featured_image($post->ID, 'list-thumb', true, false, $post->featured_image)){ ?>
 							
@@ -19,13 +28,13 @@
 								<?php 
 									do_action('geodir_before_badge_on_image', $post) ;
 									if($post->is_featured){
-										echo geodir_show_badges_on_image('featured' , $post) ;
+										echo geodir_show_badges_on_image('featured' , $post,get_permalink());
 									}
 									
 									$geodir_days_new = (int)get_option('geodir_listing_new_days');
 									
 									if(round(abs(strtotime($post->post_date)-strtotime(date('Y-m-d')))/86400)<$geodir_days_new){
-                                    	echo geodir_show_badges_on_image('new' , $post) ;
+                                    	echo geodir_show_badges_on_image('new' , $post,get_permalink());
 									}
                                     do_action('geodir_after_badge_on_image', $post) ;
 									?>
@@ -39,13 +48,13 @@
 						 				
 									<?php do_action('geodir_before_listing_post_title', 'listview', $post ); ?>
 										                          
-									<h3>
+									<header class="geodir-entry-header"><h3 class="geodir-entry-title">
 											<a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>">
 													
 													<?php the_title(); ?>
 											
 											</a>	
-								</h3>
+								</h3></header><!-- .entry-header -->
 									
 									<?php do_action('geodir_after_listing_post_title', 'listview', $post ); ?>
 								
@@ -76,11 +85,13 @@
 							
 								 <?php do_action('geodir_before_listing_post_excerpt', $post ); ?>
 								 <?php echo geodir_show_listing_info('listing');?>       
-				<?php the_excerpt(); ?>
+				<div class="geodir-entry-content"><?php if(isset($character_count)){
+				
+				echo geodir_max_excerpt($character_count);}else{ the_excerpt(); }?></div>
 									
 									<?php do_action('geodir_after_listing_post_excerpt', $post ); ?>
 							</div><!-- gd-content ends here-->
-							<div class="geodir-addinfo clearfix">
+							<footer class="geodir-entry-meta"><div class="geodir-addinfo clearfix">
 								 
 								 <?php 
 					
@@ -90,7 +101,8 @@
 					
 					$comment_count = $post->rating_count; 
 					$post_ratings = $post->overall_rating;
-					if($post_ratings != 0 && !$preview){
+					//if($post_ratings != 0 && !$preview){
+					if(!$preview){
 						 if($comment_count > 0)
 				$post_avgratings = ($post_ratings / $comment_count);
 			else
@@ -101,8 +113,8 @@
 					}
 				?>
 								 
-								 <a href="<?php comments_link(); ?>" class="geodir-pcomments">
-						<?php comments_number( __('no review',GEODIRECTORY_TEXTDOMAIN), __('1 review',GEODIRECTORY_TEXTDOMAIN), __('% reviews',GEODIRECTORY_TEXTDOMAIN) ); ?>
+								 <a href="<?php comments_link(); ?>" class="geodir-pcomments"><i class="fa fa-comments"></i>
+						<?php comments_number( __('No Reviews',GEODIRECTORY_TEXTDOMAIN), __('1 Review',GEODIRECTORY_TEXTDOMAIN), __('% Reviews',GEODIRECTORY_TEXTDOMAIN) ); ?>
 								 </a>
 									
 			<?php } ?>
@@ -120,7 +132,7 @@
 						$term_icon_url = get_tax_meta($post->default_category,'ct_cat_icon', false, $post->post_type);
 						$marker_icon = isset($term_icon_url['src']) ? $term_icon_url['src'] : '';
 				 ?>
-								 <span class="geodir-pinpoint" style=" background:url('<?php if(isset($marker_icon)){ echo $marker_icon;}?>') no-repeat scroll left center transparent; background-size:auto 60%;"><a href="javascript:void(0)" onclick="openMarker('listing_map_canvas' ,'<?php echo $post->ID; ?>')" onmouseover="animate_marker('listing_map_canvas' ,'<?php echo $post->ID; ?>')" onmouseout="stop_marker_animation('listing_map_canvas' ,'<?php echo $post->ID; ?>')" ><?php _e('Pinpoint',GEODIRECTORY_TEXTDOMAIN);?></a></span>
+								 <span class="geodir-pinpoint" style=" background:url('<?php if(isset($marker_icon)){ echo $marker_icon;}?>') no-repeat scroll left top transparent; background-size:auto 100%; -webkit-background-size:auto 75%; -moz-background-size:auto 100%;"><a href="javascript:void(0)" onclick="openMarker('listing_map_canvas' ,'<?php echo $post->ID; ?>')" onmouseover="animate_marker('listing_map_canvas' ,'<?php echo $post->ID; ?>')" onmouseout="stop_marker_animation('listing_map_canvas' ,'<?php echo $post->ID; ?>')" ><?php _e('Pinpoint',GEODIRECTORY_TEXTDOMAIN);?></a></span>
 								 <?php } ?>
 								 
 								 <?php if( $post->post_author == get_current_user_id() ){ ?>
@@ -151,6 +163,8 @@
 								 <?php }?>
 								 
 							</div><!-- geodir-addinfo ends here-->
+                            </footer><!-- .entry-meta -->
+                         </article>
 					</li>
     		
 				<?php 

@@ -58,9 +58,11 @@ add_filter( 'rewrite_rules_array','geodir_listing_rewrite_rules' );
 /* QUERY VARS */
 ////////////////////////
 
-add_filter('query_vars', 'add_location_var');
+add_filter('query_vars', 'geodir_add_location_var');
 
-add_action('wp', 'add_page_id_in_query_var'); // problem fix in wordpress 3.8
+add_action('wp', 'geodir_add_page_id_in_query_var'); // problem fix in wordpress 3.8
+if ( get_option('permalink_structure') != '' )
+	add_filter('parse_request' , 'geodir_set_location_var_in_session_in_core');
 
 add_filter('parse_query', 'geodir_modified_query');
 
@@ -80,10 +82,6 @@ add_action( 'wp_head', 'geodir_header_scripts');
 
 add_action( 'admin_head', 'geodir_header_scripts');
 
-
-add_action( 'wp_head', 'geodir_location_header_scripts');
-	
-add_action( 'admin_head', 'geodir_location_header_scripts');
 	
 
 add_action('wp_head','geodir_init_map_jason'); // Related to MAP
@@ -176,6 +174,11 @@ add_action('wp_head', 'geodir_add_meta_keywords');
 add_action('wp_footer','geodir_add_sharelocation_scripts'); 
 //}
 
+// Add fontawesome
+add_action('wp_head','geodir_add_fontawesome'); 
+function geodir_add_fontawesome(){
+	echo apply_filters('geodir_fontawesome','<link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">');
+}
 
 /// add action for theme switch to blank previous theme navigation location setting 
 add_action("switch_theme", "geodir_unset_prev_theme_nav_location", 10 , 2); 
@@ -304,7 +307,7 @@ add_action('geodir_detail_page_sidebar', 'geodir_detail_page_sidebar_content_sor
 function geodir_detail_page_sidebar_content_sorting()
 {
 	$arr_detail_page_sidebar_content =
-	apply_filters('geodir_detail_page_sitebar_content' , 
+	apply_filters('geodir_detail_page_sidebar_content' , 
 					array( 	'geodir_social_sharing_buttons',
 							'geodir_share_this_button',
 							'geodir_detail_page_google_analytics',
@@ -351,7 +354,7 @@ function geodir_social_sharing_buttons()
                         <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script> 
                     	<iframe <?php if (isset($_SERVER['HTTP_USER_AGENT']) && (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)){echo 'allowtransparency="true"'; }?> class="facebook" src="http://www.facebook.com/plugins/like.php?href=<?php echo urlencode(get_permalink($post->ID)); ?>&amp;layout=button_count&amp;show_faces=false&amp;width=100&amp;action=like&amp;colorscheme=light" style="border:none; overflow:hidden; width:100px; height:20px"></iframe> 
                     
-                        <div id="plusone-div" class="g-plusone" data-size="small"></div>
+                        <div id="plusone-div" class="g-plusone" data-size="medium"></div>
                         <script type="text/javascript">
 						  (function() {
 							var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
@@ -385,12 +388,12 @@ function geodir_share_this_button()
                      <span id='st_sharethis' ></span>
                         <script type="text/javascript">var switchTo5x=false;</script>
                         <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
-                        <script type="text/javascript">stLight.options({publisher: "f47874ba-eaf2-4978-a27d-52ad4db5140e", doNotHash: false, doNotCopy: false, hashAddressBar: false});
+                        <script type="text/javascript">stLight.options({publisher: "2bee0c38-7c7d-4ce7-9d9a-05e920d509b4", doNotHash: false, doNotCopy: false, hashAddressBar: false});
 						stWidget.addEntry({
 						"service":"sharethis",
 						"element":document.getElementById('st_sharethis'),
-						"url":"http://sharethis.com",
-						"title":"sharethis",
+						"url":"<?php echo geodir_curPageURL();?>",
+						"title":"<?php echo $post->post_title;?>",
 						"type":"chicklet",
 						"text":"<?php _e( 'Share', GEODIRECTORY_TEXTDOMAIN );?>"    
 						});</script>
@@ -431,7 +434,7 @@ function geodir_edit_post_link()
                                         
             $postlink = get_permalink( get_option('geodir_add_listing_page') );
             $editlink = geodir_getlink($postlink,array('pid'=>$post_id),false);
-            echo ' <p class="edit_link"><a href="'.$editlink.'">'.__('Edit this Post',GEODIRECTORY_TEXTDOMAIN).'</a></p>';
+            echo ' <p class="edit_link"><i class="fa fa-pencil"></i> <a href="'.$editlink.'">'.__('Edit this Post',GEODIRECTORY_TEXTDOMAIN).'</a></p>';
         } 
     }// end of if, if its a preview or not
 	do_action('geodir_after_edit_post_link') ;
@@ -618,7 +621,6 @@ function geodir_admin_bar_site_menu($wp_admin_bar)
 	}
 }
 
-
 add_action('geodir_before_listing', 'geodir_display_sort_options'); /*function in custom_functions.php*/
 
 add_filter('geodir_posts_order_by_sort', 'geodir_posts_order_by_custom_sort', 0, 3);
@@ -735,7 +737,7 @@ function geodir_after_main_form_fields(){
 				<label>&nbsp;</label>
 				<div class="geodir_taxonomy_field" style="float:left; width:70%;">
 				<span style="display:block"> 
-				<input class="main_list_selecter" type="checkbox" <?php if($term_condition == '1'){echo 'checked="checked"';} ?> field_type="checkbox" name="geodir_accept_term_condition" id="geodir_accept_term_condition" class="geodir_textfield" value="1" style="display:inline-block"/><?php echo stripslashes(get_option('geodir_term_condition_content')); ?> 
+				<input class="main_list_selecter" type="checkbox" <?php if($term_condition == '1'){echo 'checked="checked"';} ?> field_type="checkbox" name="geodir_accept_term_condition" id="geodir_accept_term_condition" class="geodir_textfield" value="1" style="display:inline-block"/><?php echo __( stripslashes(get_option('geodir_term_condition_content')), GEODIRECTORY_TEXTDOMAIN); ?>
 				</span>
 			</div>
 			 <span class="geodir_message_error"><?php if(isset($required_msg)){ echo $required_msg;}?></span>
@@ -870,3 +872,193 @@ function geodir_changes_in_custom_fields_table(){
 	
 }
 
+
+add_filter('geodir_location_slug_check', 'geodir_location_slug_check');
+function geodir_location_slug_check($slug){
+	
+	global $wpdb, $table_prefix;
+	
+	$slug_exists = $wpdb->get_var($wpdb->prepare("SELECT slug FROM ".$table_prefix."terms WHERE slug=%s", array($slug)));
+	
+	if($slug_exists){
+		
+		$suffix = 1;
+		do {
+			$alt_location_name = _truncate_post_slug( $slug, 200 - ( strlen( $suffix ) + 1 ) ) . "-$suffix";
+			$location_slug_check = $wpdb->get_var($wpdb->prepare("SELECT slug FROM ".$table_prefix."terms WHERE slug=%s", array($alt_location_name)));
+			$suffix++;
+		} while ( $location_slug_check );
+		
+		$slug = $alt_location_name;	
+		
+	}
+	
+	return $slug;
+	
+}
+
+
+add_action('edited_term', 'geodir_update_term_slug', '1', 3);
+add_action('create_term', 'geodir_update_term_slug', '1', 3);
+
+
+function geodir_update_term_slug( $term_id, $tt_id, $taxonomy){
+	
+	global $wpdb, $plugin_prefix, $table_prefix;
+	
+	$tern_data = get_term_by( 'id', $term_id, $taxonomy) ;
+	
+	$slug = $tern_data->slug;
+	
+	$slug_exists = apply_filters('geodir_term_slug_is_exists', false, $slug, $term_id);
+	
+	if($slug_exists){
+		
+		$suffix = 1;
+		do {
+			$new_slug = _truncate_post_slug( $slug, 200 - ( strlen( $suffix ) + 1 ) ) . "-$suffix";
+			
+			$term_slug_check = apply_filters('geodir_term_slug_is_exists', false, $new_slug, $term_id);
+			
+			$suffix++;
+		} while ( $term_slug_check );
+		
+		$slug = $new_slug;
+		
+		//wp_update_term( $term_id, $taxonomy, array('slug' => $slug) );
+		
+		$wpdb->query($wpdb->prepare("UPDATE ".$table_prefix."terms SET slug=%s WHERE term_id=%d", array($slug, $term_id)));
+		
+	}
+
+}
+
+
+add_filter('geodir_term_slug_is_exists', 'geodir_term_slug_is_exists', 0, 3); //in core plugin
+function geodir_term_slug_is_exists($slug_exists, $slug, $term_id){
+	
+	global $wpdb, $table_prefix;
+	
+	$default_location = geodir_get_default_location();
+	
+	$country_slug = $default_location->country_slug;
+  $region_slug = $default_location->region_slug;
+  $city_slug = $default_location->city_slug;
+	
+	if($country_slug == $slug || $region_slug ==  $slug || $city_slug == $slug)
+		return $slug_exists = true;
+	
+	if($wpdb->get_var($wpdb->prepare("SELECT slug FROM ".$table_prefix."terms WHERE slug=%s AND term_id != %d", array($slug, $term_id))))
+		return $slug_exists = true;
+	
+	return $slug_exists;
+}
+
+
+add_filter('wp_title' , 'geodir_custom_page_title', 100, 2);
+function geodir_custom_page_title($title, $sep)
+{
+	global $wp;
+	
+	//print_r($wp->query_vars) ;
+	if(isset($wp->query_vars['pagename']) && $wp->query_vars['pagename'] != '')
+		$page = get_page_by_path($wp->query_vars['pagename']);
+	if(!empty($page))
+	{
+		$listing_page_id = get_option( 'geodir_add_listing_page' );
+		if($listing_page_id!='' && $page->ID == $listing_page_id )
+		{
+			if(isset($_REQUEST['listing_type']) &&  $_REQUEST['listing_type']!='')
+			{
+				$listing_type = $_REQUEST['listing_type'];
+				$post_type_info = geodir_get_posttype_info($listing_type);	
+				if(!empty($title))
+				{
+					$title_array = explode($sep , $title);
+					$title_array[0] = ucwords(__('Add',GEODIRECTORY_TEXTDOMAIN).' '.$post_type_info['labels']['singular_name']).' ';
+					$title = implode($sep, $title_array);
+				}
+				else
+					$title = ucwords(__('Add',GEODIRECTORY_TEXTDOMAIN).' '.$post_type_info['labels']['singular_name']);
+				//$title .= " " . $gd_country . $gd_region . $gd_city  . "$sep ";
+			}
+		}
+	}
+	return $title;
+	
+}
+
+
+
+/* --- set attachments for all geodir posts --- */ 
+
+add_action('init', 'geodir_set_post_attachment');
+
+function geodir_set_post_attachment(){
+	
+	if(!get_option('geodir_set_post_attachments')){
+	
+		require_once(ABSPATH . 'wp-admin/includes/image.php');
+		require_once(ABSPATH . 'wp-admin/includes/file.php');
+	
+		$all_postypes = geodir_get_posttypes();
+		
+		$args = array(
+				'posts_per_page'   => -1,
+				'post_type'        => $all_postypes,
+				'post_status'      => 'publish' ); 
+			
+		$posts_array = get_posts( $args ); 
+		
+		if(!empty($posts_array)){
+		
+			foreach($posts_array as $post){
+			
+				geodir_set_wp_featured_image($post->ID);
+				
+			}
+			
+		}
+		
+		update_option('geodir_set_post_attachments', '1');
+	
+	}
+	
+}
+
+
+/*   --------- geodir remove url seperator ------- */
+
+add_action('init', 'geodir_remove_url_seperator');
+function geodir_remove_url_seperator(){
+
+ if(!get_option('geodir_remove_url_seperator')){
+  
+  if(get_option('geodir_listingurl_separator'))
+   delete_option('geodir_listingurl_separator');
+  
+  if(get_option('geodir_detailurl_separator'))
+   delete_option('geodir_detailurl_separator');
+  
+  flush_rewrite_rules( false );
+  
+  update_option('geodir_remove_url_seperator', '1');
+  
+ }
+ 
+}
+
+add_filter('geodir_permalink_settings', 'geodir_remove_url_seperator_form_permalink_settings', 0, 1);
+
+function geodir_remove_url_seperator_form_permalink_settings($permalink_arr){
+ 
+ foreach($permalink_arr as $key => $value){
+ 
+  if($value['id'] == 'geodir_listingurl_separator' || $value['id'] == 'geodir_detailurl_separator')
+   unset($permalink_arr[$key]);
+ 
+ }
+ 
+ return $permalink_arr;
+ 
+}

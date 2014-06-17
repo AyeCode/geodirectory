@@ -9,14 +9,14 @@ function geodir_get_popup_forms(e, ele, clk_class, popup_id){
 	
 	var post_id = append_class.find('input[name="geodir_popup_post_id"]').val()
 	
-	jQuery.modal('<div id="basic-modal-content" class="clearfix simplemodal-data" style="display: block;"><div id="modal-loading"></div></div>');// show popup right away
+	jQuery.modal('<div id="basic-modal-content" class="clearfix simplemodal-data" style="display: block;"><div class="geodir-modal-loading"><i class="fa fa-refresh fa-spin "></i></div></div>');// show popup right away
 
 jQuery.post( ajax_url, { popuptype: clk_class, post_id: post_id })
 	.done(function( data ) {
 		
 		append_class.find('.geodir_display_popup_forms').append(data);
 		e.preventDefault();
-		jQuery.modal.close();// close popup and show new one with new data, will be son fast user will not see it
+		jQuery.modal.close();// close popup and show new one with new data, will be so fast user will not see it
 		jQuery('#'+popup_id).modal({
 									  persist:true,
 									onClose: function(){

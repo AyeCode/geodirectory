@@ -23,18 +23,18 @@ class geodir_popular_post_category extends WP_Widget {
 		
 		echo $before_widget;
 		
-		$title = empty($instance['title']) ? __('Popular Categories',GEODIRECTORY_TEXTDOMAIN) : apply_filters('widget_title', $instance['title']);
+		$title = empty($instance['title']) ? __('Popular Categories',GEODIRECTORY_TEXTDOMAIN) : apply_filters('widget_title', __($instance['title'],GEODIRECTORY_TEXTDOMAIN));
 		
 		global $plugin_prefix, $wpdb;
 			
 		$gd_post_type = geodir_get_current_posttype();
-		
+		/*
 		if($gd_post_type):
 			$post_type_info = get_post_type_object( $gd_post_type );
 			$single_name = $post_type_info->labels->singular_name;
 			$title = __('Popular',GEODIRECTORY_TEXTDOMAIN).' '.$single_name. __(' Categories',GEODIRECTORY_TEXTDOMAIN);
 		endif;
-		
+		*/
 		$taxonomy = geodir_get_taxonomies( $gd_post_type );
 			
 		$args = array(
@@ -45,10 +45,9 @@ class geodir_popular_post_category extends WP_Widget {
 		
 		if(!empty($terms)): ?>
 		
-		<div id="geodir-category-list">              
 			<div class="geodir-category-list-in clearfix">
 				<div class="geodir-cat-list clearfix">
-				  <span><?php _e($title);?></span>
+				  <?php echo $before_title.__($title).$after_title;?>
 					
 					<?php 
 					global $geodir_post_category_str;
@@ -56,7 +55,7 @@ class geodir_popular_post_category extends WP_Widget {
 					
 					$geodir_post_category_str = array();
 					
-					echo '<ul>'; 
+					echo '<ul class="geodir-popular-cat-list">'; 
 					
 					foreach($terms as $cat){ 
 					
@@ -65,11 +64,10 @@ class geodir_popular_post_category extends WP_Widget {
 					$post_type = $taxonomy_obj->object_type[0];	
 						
 						if($cat_count%15 == 0 )
-							echo '</ul><ul class="geodir-more-contant">';
 							
 							$total_post = 0;
 							
-							echo '<li><a href="'.get_term_link($cat,$cat->taxonomy).'">';
+							echo '<li><a href="'.get_term_link($cat,$cat->taxonomy).'"><i class="fa fa-caret-right"></i> ';
 							echo ucwords($cat->name).' (<span class="geodir_term_class geodir_link_span geodir_category_class_'.$post_type.'_'.$cat->term_id.'" >'.$total_post.'</span>) ';
 							
 							$geodir_post_category_str[] = array('posttype'=>$post_type, 'termid'=>$cat->term_id);
@@ -92,21 +90,12 @@ class geodir_popular_post_category extends WP_Widget {
                 
 				<?php if($cat_count > 15)	 echo '<a class="geodir-morecat">'.__('More Categories',GEODIRECTORY_TEXTDOMAIN).'</a>'; ?>  
 			</div>
-		</div>
      
-    	<?php endif; ?> 
-		
-		
-		<?php 
-		
-		
+    	<?php endif; 
 		
 		echo $after_widget;
 
- 
 
-	
-	
 	}
 	
 	function update($new_instance, $old_instance) {
@@ -162,7 +151,7 @@ class geodir_popular_postview extends WP_Widget {
 		
 		echo $before_widget;
 		
-		$title = empty($instance['title']) ? ucwords($instance['category_title']) : apply_filters('widget_title', $instance['title']);
+		$title = empty($instance['title']) ? ucwords($instance['category_title']) : apply_filters('widget_title', __($instance['title'],GEODIRECTORY_TEXTDOMAIN));
 		
 		$post_type = empty($instance['post_type']) ? 'gd_place' : apply_filters('widget_post_type', $instance['post_type']);
 		
@@ -178,8 +167,9 @@ class geodir_popular_postview extends WP_Widget {
 		
 		$list_sort = empty($instance['list_sort']) ? 'latest' : apply_filters('widget_list_sort', $instance['list_sort']);
 		
-		$character_count = empty($instance['character_count']) ? 20 : apply_filters('widget_list_sort', $instance['character_count']);
-		
+		//$character_count = empty($instance['character_count']) ? '0' : apply_filters('widget_list_sort', $instance['character_count']);
+		if(isset($instance['character_count'])){$character_count = apply_filters('widget_list_character_count', $instance['character_count']);}
+		else{$character_count ='';}
 		
 		if(empty($title) || $title == 'All' ){
 			$title .= ' '.get_post_type_plural_label($post_type);
@@ -244,9 +234,9 @@ class geodir_popular_postview extends WP_Widget {
 		?>
 			<div class="geodir_locations geodir_location_listing">
             <?php do_action('geodir_before_view_all_link_in_widget') ; ?>
-							<div class="locatin_list_heading clearfix">
-								<h3><?php echo ucfirst($title);?></h3>
-								 <a href="<?php echo $viewall_url;?>" class="viewall">
+							<div class="geodir_list_heading clearfix">
+								<?php echo $before_title.$title.$after_title;?>
+								 <a href="<?php echo $viewall_url;?>" class="geodir-viewall">
 									<?php _e('View all',GEODIRECTORY_TEXTDOMAIN);?>
 								 </a>
 							</div>
@@ -292,14 +282,10 @@ class geodir_popular_postview extends WP_Widget {
 									
 								}
 								
-								if($layout == 'gridview'){
-									//geodir_get_template_part('listing','gridview'); 
-									$template = apply_filters( "geodir_template_part-listing-gridview", geodir_plugin_path() . '/geodirectory-templates/listing-gridview.php' );
-			
-								}else{
-									//geodir_get_template_part('listing','listview'); 
-									$template = apply_filters( "geodir_template_part-listing-listview", geodir_plugin_path() . '/geodirectory-templates/listing-listview.php' );
-								}	
+								
+								$template = apply_filters( "geodir_template_part-listing-listview", geodir_plugin_path() . '/geodirectory-templates/listing-listview.php' );
+
+						
 								
 								include( $template );
 							   

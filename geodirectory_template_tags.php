@@ -186,7 +186,9 @@ function geodir_pagination($before = '', $after = '', $prelabel = '', $nxtlabel 
 
 	$half_pages_to_show = round($pages_to_show/2);
 
-
+	if(get_option('geodir_set_as_home') && is_home()) // dont apply default  pagination for geodirectory home page.
+		return ;
+		
 	if (!is_single()) {
 		
 		$numposts = $wp_query->found_posts;
@@ -284,7 +286,17 @@ function geodir_listingsearch_scripts()
 }
 
 function geodir_add_sharelocation_scripts()
-{  ?>
+{ 
+
+$default_search_for_text = SEARCH_FOR_TEXT;
+				if(get_option('geodir_search_field_default_text'))
+					$default_search_for_text = __(get_option('geodir_search_field_default_text'), GEODIRECTORY_TEXTDOMAIN);
+				
+				$default_near_text = NEAR_TEXT;
+				if(get_option('geodir_near_field_default_text'))
+						$default_near_text = __(get_option('geodir_near_field_default_text'), GEODIRECTORY_TEXTDOMAIN);	
+				
+?>
 		
     <script type="text/javascript" src="http://gmaps-samples-v3.googlecode.com/svn/trunk/geolocate/geometa.js"></script> 
     
@@ -302,7 +314,7 @@ function geodir_add_sharelocation_scripts()
             jQuery('.geodir_submit_search:first').click();
 				
         });*/
-        
+      
         
         jQuery('.geodir_submit_search').click(function(){
             var s = ' ';
@@ -313,9 +325,9 @@ function geodir_add_sharelocation_scripts()
             if(jQuery("#sdist input[type='radio']:checked").length != 0)
                 dist = jQuery("#sdist input[type='radio']:checked").val();
             
-            if(jQuery('.search_text',$form).val() == '' || jQuery('.search_text',$form ).val() == '<?php echo SEARCH_FOR_TEXT;?>')
+            if(jQuery('.search_text',$form).val() == '' || jQuery('.search_text',$form ).val() == '<?php echo $default_search_for_text;?>')
                 jQuery('.search_text',$form).val(s);            
-				if(dist > 0 || (jQuery('select[name="sort_by"]').val() == 'nearest' || jQuery('select[name="sort_by"]',$form).val() == 'farthest')  || ( jQuery(".snear",$form ).val() != '' && jQuery(".snear",$form ).val() != '<?php echo NEAR_TEXT;?>') )
+				if(dist > 0 || (jQuery('select[name="sort_by"]').val() == 'nearest' || jQuery('select[name="sort_by"]',$form).val() == 'farthest')  || ( jQuery(".snear",$form ).val() != '' && jQuery(".snear",$form ).val() != '<?php echo $default_near_text;?>') )
             { geodir_setsearch($form); }
             else
             { 
@@ -326,7 +338,7 @@ function geodir_add_sharelocation_scripts()
         });
         
         function geodir_setsearch($form)
-        {            if( ( dist > 0 || (jQuery('select[name="sort_by"]',$form).val() == 'nearest' || jQuery('select[name="sort_by"]',$form).val() == 'farthest')) && (jQuery(".snear",$form).val() == '' || jQuery(".snear",$form).val() == '<?php echo NEAR_TEXT;?>' ) )
+        {            if( ( dist > 0 || (jQuery('select[name="sort_by"]',$form).val() == 'nearest' || jQuery('select[name="sort_by"]',$form).val() == 'farthest')) && (jQuery(".snear",$form).val() == '' || jQuery(".snear",$form).val() == '<?php echo $default_near_text;?>' ) )
                 jQuery(".snear",$form).val(default_location);
                 
             geocodeAddress($form);
@@ -347,7 +359,7 @@ function geodir_add_sharelocation_scripts()
             
                 var address = jQuery(".snear",$form).val();
                 
-                if(jQuery('.snear',$form).val() == '<?php echo NEAR_TEXT;?>'){
+                if(jQuery('.snear',$form).val() == '<?php echo $default_near_text;?>'){
                     initialise2();
                 }else{
                 
@@ -420,147 +432,15 @@ function geodir_add_sharelocation_scripts()
 
 
 
-function geodir_location_header_scripts()
-{ 
-	
-	?>
-	
-	<script  type="text/javascript">
-
-	jQuery(document).ready(function(){
-		
-		jQuery('.geodir_location_tabs').click(function() {
-			geodir_chosen_select_init();
-		});	
-		
-		geodir_chosen_select_init();
-		
-	});
-	
-	
-	function geodir_chosen_select_init(){
-		jQuery(".chosen_select").each(function(){
-			
-			var curr_chosen = jQuery(this);
-			var autoredirect = curr_chosen.attr('option-autoredirect');
-			var countrySearch= curr_chosen.attr('option-countrySearch');
-			if(curr_chosen.attr('option-ajaxChosen') === true || curr_chosen.attr('option-ajaxChosen') === undefined){
-				if(curr_chosen.closest('.geodir_location_tab_container').find('.selected_location').length > 0)
-					var listfor = curr_chosen.closest('.geodir_location_tab_container').find('.selected_location').val();
-				else
-					var listfor = curr_chosen.attr('option-listfore');
-				
-				var show_everywhere = curr_chosen.attr('option-showEveryWhere');
-				
-				curr_chosen.ajaxChosen({
-					addSearchTermOnNorecord: curr_chosen.attr('option-addSearchTermOnNorecord'),
-					noLocationUrl: curr_chosen.attr('option-noLocationUrl'),
-					jsonTermKeyObject: listfor,
-					keepTypingMsg: "Please wait...",
-					lookingForMsg: "We are searching for",
-					type: 'GET',
-					url: '<?php echo geodir_get_ajax_url(); ?>&autofill=ajax_chosen_search_locations&autoredirect='+autoredirect+'&location_type='+listfor+'&show_everywhere='+show_everywhere+'&countrySearch='+countrySearch,
-					dataType: 'json'
-				}, 
-				function (data) {
-					var terms = {};
-					jQuery.each(data.states, function (i, val) {
-						terms[i] = val;
-					});
-					return terms;
-				},
-				{   // option for chosen jquery plugin..
-					no_results_text: "Translated No results matched",
-					placeholder_text: "Translate place holder text"
-				});
-			}	
-			
-		});
-	}
-	
-	
-	jQuery(document).ready(function(){
-	
-		jQuery('.chosen_select').bind('change',function(){
-			
-			var obj_id = jQuery(this).prop('id');
-			var obbj_info = obj_id.split('_');
-			var prefix = obbj_info[0];
-			var update_for = obbj_info[1];
-			var update_for_val = jQuery(this).val();
-			
-			var $loader = '<div id="location_dl_loader" align="center" style="width:100%;"><img src="'+geodir_all_js_msg.geodir_plugin_url+'/geodirectory-assets/images/loadingAnimation.gif"  /></div>';
-			
-			
-			if(update_for == 'country'){
-				
-				if(jQuery(this).attr('name') != 'post_country')
-					return false;
-					
-				jQuery('#'+prefix+'_region_container').hide();  
-				jQuery('#'+prefix+'_region_container').after($loader);
-				
-				jQuery.get(geodir_all_js_msg.geodir_ajax_url,
-					{	autofill:'fill_post_locations',
-						fill:'region',
-						autoredirect:0,
-						update_for:update_for,
-						update_for_val:update_for_val
-					},
-					 function(data){
-					 
-						if(data){
-							jQuery('#'+prefix+'_region_container').next('#location_dl_loader').remove();
-							jQuery('#'+prefix+'_region_container').show();
-							jQuery('#'+prefix+'_region').html(data).chosen().trigger("chosen:updated");
-							jQuery('#'+prefix+'_region').trigger("change");	
-						}
-				});
-			}
-			
-			if(update_for == 'region'){
-				jQuery('#'+prefix+'_city_container').hide();
-				jQuery('#'+prefix+'_city_container').after($loader);
-				
-				
-				jQuery.get(geodir_all_js_msg.geodir_ajax_url,
-					{	autofill:'fill_post_locations',
-						fill:'city',
-						autoredirect:0,
-						update_for:update_for,
-						update_for_val:update_for_val
-					},
-					 function(data){
-					 
-						if(data){
-							jQuery('#'+prefix+'_city_container').next('#location_dl_loader').remove();
-							jQuery('#'+prefix+'_city_container').show();
-							jQuery('#'+prefix+'_city').html(data).chosen().trigger("chosen:updated");	
-							jQuery('#'+prefix+'_city').trigger("change");	
-						}
-				});
-			}	
-			
-		})	
-								
-	});
-	
-	</script>
-
-	<?php 
-
-		
-}
-
-function geodir_show_badges_on_image($which, $post)
+function geodir_show_badges_on_image($which, $post,$link)
 {
 	switch ($which)
 	{
 		case 'featured':
-			return apply_filters('geodir_featured_badge_on_image' , '<a><span class="geodir_featured_img">&nbsp;</span></a>') ;
+			return apply_filters('geodir_featured_badge_on_image' , '<a href="'.$link.'"><span class="geodir_featured_img">&nbsp;</span></a>') ;
 			break;
 		case 'new' :
-			return apply_filters('geodir_new_badge_on_image' , '<a><span class="geodir_new_listing">&nbsp;</span></a>') ;
+			return apply_filters('geodir_new_badge_on_image' , '<a href="'.$link.'"><span class="geodir_new_listing">&nbsp;</span></a>') ;
 			break;
 	
 	}

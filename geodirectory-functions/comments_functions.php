@@ -552,7 +552,8 @@ function geodir_get_rating_stars($rating, $post_id, $small=false){
 		
 	}else{
 	
-	$r_html = '<div class="geodir-rating"><div class="gd_rating_show" data-average="'.$rating.'" data-id="'.$post_id.'"><div class="geodir_RatingColor"></div><div class="geodir_RatingAverage" style="width: '.$a_rating.'%;"></div><div class="geodir_Star"></div></div></div>';
+	$rating_img = '<img src="'.geodir_plugin_url().'/geodirectory-assets/images/stars.png" />';
+	$r_html = '<div class="geodir-rating"><div class="gd_rating_show" data-average="'.$rating.'" data-id="'.$post_id.'"><div class="geodir_RatingAverage" style="width: '.$a_rating.'%;"></div><div class="geodir_Star">'.$rating_img.$rating_img.$rating_img.$rating_img.$rating_img.'</div></div></div>';
 	}
 	return $r_html;
 	

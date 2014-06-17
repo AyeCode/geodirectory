@@ -15,11 +15,13 @@ class geodir_homepage_map extends WP_Widget {
 	$width = empty($instance['width']) ? '960' : apply_filters('widget_width', $instance['width']);
 	$height = empty($instance['heigh']) ? '425' : apply_filters('widget_heigh', $instance['heigh']);
 	$maptype = empty($instance['maptype']) ? 'ROADMAP' : apply_filters('widget_maptype', $instance['maptype']);
+	$zoom = empty($instance['zoom']) ? '13' : apply_filters('widget_zoom', $instance['zoom']);
 	$autozoom = empty($instance['autozoom']) ? '' : apply_filters('widget_autozoom', $instance['autozoom']);
 	$child_collapse = empty($instance['child_collapse']) ? '0' : apply_filters('widget_child_collapse', $instance['child_collapse']);
 	$scrollwheel = empty($instance['scrollwheel']) ? '0' : apply_filters('widget_scrollwheel', $instance['scrollwheel']);
 	
 	//$str = createRandomString();
+	
 	
 	$map_args = array();
 	$map_args['map_canvas_name'] = str_replace('-' , '_' , $args['widget_id']); //'home_map_canvas'.$str ;
@@ -27,6 +29,7 @@ class geodir_homepage_map extends WP_Widget {
 	$map_args['height'] = $height;
 	$map_args['maptype'] = $maptype;
 	$map_args['scrollwheel'] = $scrollwheel;
+	$map_args['zoom'] = $zoom ;
 	$map_args['autozoom'] = $autozoom;
 	$map_args['child_collapse'] = $child_collapse;
 	$map_args['enable_cat_filters'] = true;
@@ -46,6 +49,7 @@ class geodir_homepage_map extends WP_Widget {
 		$instance['width'] = strip_tags($new_instance['width']);
 		$instance['heigh'] = ($new_instance['heigh']);
 		$instance['maptype'] = ($new_instance['maptype']);
+		$instance['zoom'] = ($new_instance['zoom']);
 		$instance['autozoom'] = isset($new_instance['autozoom']) ? $new_instance['autozoom'] : '';
 		$instance['child_collapse'] = isset($new_instance['child_collapse']) ? ($new_instance['child_collapse']) : '';
 		$instance['scrollwheel'] = isset($new_instance['scrollwheel']) ? ($new_instance['scrollwheel']) : '';
@@ -55,10 +59,11 @@ class geodir_homepage_map extends WP_Widget {
 	function form($instance) {
 	//widgetform in backend
 	
-		$instance = wp_parse_args( (array) $instance, array( 'width' => '', 'heigh' => '', 'maptype' =>'', 'autozoom' => '','child_collapse'=>'0','scrollwheel'=>'0') );		
+		$instance = wp_parse_args( (array) $instance, array( 'width' => '', 'heigh' => '', 'maptype' =>'', 'zoom' => '', 'autozoom' => '','child_collapse'=>'0','scrollwheel'=>'0') );		
 		$width = strip_tags($instance['width']);
 		$heigh = strip_tags($instance['heigh']);
 		$maptype = strip_tags($instance['maptype']);
+		$zoom = strip_tags($instance['zoom']);
 		$autozoom = strip_tags($instance['autozoom']);
 		$child_collapse = strip_tags($instance['child_collapse']);
 		$scrollwheel = strip_tags($instance['scrollwheel']);
@@ -79,14 +84,36 @@ class geodir_homepage_map extends WP_Widget {
       <label for="<?php echo $this->get_field_id('maptype'); ?>"><?php _e(' Select Map View',GEODIRECTORY_TEXTDOMAIN);?>:
       <select class="widefat" id="<?php echo $this->get_field_id('maptype'); ?>" name="<?php echo $this->get_field_name('maptype'); ?>" >
         
-					<option <?php if(isset($maptype) && $maptype=='ROADMAP'){ echo 'selected="selected"';} ?> value="ROADMAP">Road Map</option>
-					<option <?php if(isset($maptype) && $maptype=='SATELLITE'){ echo 'selected="selected"';} ?> value="SATELLITE">Satellite Map</option>
-					<option <?php if(isset($maptype) && $maptype=='HYBRID'){ echo 'selected="selected"';} ?> value="HYBRID">Hybrid Map</option>
+					<option <?php if(isset($maptype) && $maptype=='ROADMAP'){ echo 'selected="selected"';} ?> value="ROADMAP"><?php _e('Road Map',GEODIRECTORY_TEXTDOMAIN);?></option>
+					<option <?php if(isset($maptype) && $maptype=='SATELLITE'){ echo 'selected="selected"';} ?> value="SATELLITE"><?php _e('Satellite Map',GEODIRECTORY_TEXTDOMAIN);?></option>
+					<option <?php if(isset($maptype) && $maptype=='HYBRID'){ echo 'selected="selected"';} ?> value="HYBRID"><?php _e('Hybrid Map',GEODIRECTORY_TEXTDOMAIN);?></option>
                 
        </select>
       </label>
     </p>
     
+		<?php
+			$map_zoom_level = geodir_map_zoom_level();
+		?>
+		
+		<p>
+      <label for="<?php echo $this->get_field_id('zoom'); ?>"><?php _e('Map Zoom level',GEODIRECTORY_TEXTDOMAIN);?>:
+      <select class="widefat" id="<?php echo $this->get_field_id('zoom'); ?>" name="<?php echo $this->get_field_name('zoom'); ?>" > <?php
+        
+				foreach($map_zoom_level as $level){
+					$selected = '';
+					if($level == $zoom)
+						$selected = 'selected="selected"';
+					
+					echo '<option '.$selected.' value="'.$level.'">'.$level.'</option>';
+					
+				}?>
+        
+       </select>
+      </label>
+    </p>
+		
+		
 		<p>
 				<label for="<?php echo $this->get_field_id('autozoom'); ?>"><?php _e('Map Auto Zoom ?',GEODIRECTORY_TEXTDOMAIN);?>:
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('autozoom'); ?>" name="<?php echo $this->get_field_name('autozoom'); ?>"<?php if($autozoom){echo 'checked="checked"';}?> /></label>

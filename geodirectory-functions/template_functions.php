@@ -15,13 +15,6 @@ function geodir_locate_template($template = '')
 						$post_type = $_REQUEST['listing_type'];
 				return $template = locate_template( array( "add-{$post_type}.php","add-listing.php" ));
 		break;
-		case 'preview':
-				$preview_page_id = get_option( 'geodir_preview_page' );
-				if( $preview_page_id != '' && is_page( $preview_page_id )  && isset($_REQUEST['listing_type'])
-					&& in_array( $_REQUEST['listing_type'], geodir_get_posttypes() ) )
-					$post_type = $_REQUEST['listing_type'];
-				return $template = locate_template(array("{$post_type}-preview.php","listing-preview.php"));
-		break;
 		case 'success':
 				$success_page_id = get_option( 'geodir_success_page' );
 				if( $success_page_id != '' && is_page( $success_page_id )  && isset($_REQUEST['listing_type'])
@@ -30,6 +23,7 @@ function geodir_locate_template($template = '')
 				return $template = locate_template(array("{$post_type}-success.php","listing-success.php"));
 		break;  
 		case 'detail':
+		case 'preview':
 				if ( in_array( get_post_type(), geodir_get_posttypes() ) )
 					$post_type = get_post_type();
 				return $template = locate_template( array("single-{$post_type}.php","listing-detail.php"));
@@ -154,8 +148,7 @@ function geodir_template_loader( $template ) {
 		
 		$template = geodir_locate_template('preview');
 		
-		if ( ! $template ) $template = geodir_plugin_path() . '/geodirectory-templates/listing-preview.php';
-		
+		if ( ! $template ) $template = geodir_plugin_path() . '/geodirectory-templates/listing-detail.php';
 		return $template = apply_filters('geodir_template_preview',$template);
 		
 	}

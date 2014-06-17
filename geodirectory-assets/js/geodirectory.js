@@ -13,6 +13,8 @@ jQuery( document ).ready(function() {
 	
 	 jQuery('#geodir_carousel').flexslider({
         animation: "slide",
+		namespace: "geodir-",
+		selector: ".geodir-slides > li",
         controlNav: false,
 		directionNav: false,   
         animationLoop: false,
@@ -24,6 +26,8 @@ jQuery( document ).ready(function() {
       
       jQuery('#geodir_slider').flexslider({
         animation: "slide",
+		selector: ".geodir-slides > li",
+		namespace: "geodir-",
         controlNav: true,
         animationLoop: true,
 		slideshow: true,

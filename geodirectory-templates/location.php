@@ -1,8 +1,12 @@
-<?php get_header(); ?>
+<?php 
+// get header
+get_header(); 
 
-<div id="geodir_wrapper">
-    
-    <?php geodir_breadcrumb(); 
+###### WRAPPER OPEN ######
+// this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='')
+do_action( 'geodir_wrapper_open', 'location-page', 'geodir-wrapper','');
+
+do_action('geodir_breadcrumb'); 
     	
 		if(is_page() && get_query_var('page_id') == get_option( 'geodir_locations_page' ))		
      		geodir_get_template_part('location','locations');
@@ -10,7 +14,10 @@
 			geodir_get_template_part('location','populars'); 
 			
 	 
-    ?>    
-</div>  <!-- geodir-wrapper ends here-->
-    
-<?php get_footer();      
+
+# WRAPPER CLOSE ######	
+// this adds the closing html tags to the wrapper div :: ($type='')
+do_action( 'geodir_wrapper_close', 'location-page');
+
+// get footer
+get_footer();      

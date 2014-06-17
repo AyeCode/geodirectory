@@ -25,35 +25,7 @@ function geodir_on_init(){
 		geodir_send_friend($_REQUEST); // function in custom_functions.php
 		
 	}
-	
-	
-	if(isset($_REQUEST['autofill']) && $_REQUEST['autofill'] != '')
-	{	
-		switch($_REQUEST['autofill']):
-			case "post_city" :
-				geodir_get_city_dl($_REQUEST['fill_str']);
-			break;
-			case "post_region" :
-				geodir_get_region_dl($_REQUEST['fill_str']);
-			break;
-			case "post_neighbourhood" :
-				geodir_get_neighbourhoods_dl($_REQUEST['cityname'],'',true);
-			break;
-			case "ajax_chosen_search_locations" :
-				 geodir_chosen_search_locations($_REQUEST['term'],$_REQUEST['location_type'],$_REQUEST['autoredirect']);
-			break;
-			case "fill_post_locations" :
-				 $update_for = array();
-				 if( isset($_REQUEST['update_for']) ){
-				 	$update_for[$_REQUEST['update_for']] = $_REQUEST['update_for_val']; 
-					geodir_fill_locations($_REQUEST['fill'],$_REQUEST['autoredirect'],true,$update_for);
-				}else if( isset($_REQUEST['gdlocationtype']) ) 	
-					 geodir_fill_locations($_REQUEST['gdlocationtype'],$_REQUEST['autoredirect'],true,$update_for);
-			break;
-		endswitch;
-		die;
-	}
-	
+		
 	if(isset($_REQUEST['ptype']) && $_REQUEST['ptype'] == 'get_markers')
 	{ include_once ( geodir_plugin_path() . '/geodirectory-functions/map-functions/get_markers.php'); die; }
 	
@@ -107,6 +79,9 @@ function geodir_on_init(){
 function geodir_ajax_handler()
 {
 	global $wpdb;
+	
+	if(isset($_REQUEST['gd_listing_view']) && $_REQUEST['gd_listing_view'] != ''){$_SESSION['gd_listing_view'] = $_REQUEST['gd_listing_view'];echo '1';}
+
 	
 	if(isset($_REQUEST['geodir_ajax']) && $_REQUEST['geodir_ajax'] == 'category_ajax'){
 		

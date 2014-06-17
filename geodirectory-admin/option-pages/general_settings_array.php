@@ -81,7 +81,7 @@ global $geodir_settings;
 			
 		array(  
 			'name' => __( 'Google analytics "Profile ID(ie: ga:12345678)?' , GEODIRECTORY_TEXTDOMAIN).' '.
-	'<a target="_blank" href="http://www.geotheme.com/support-forum/geotheme-support-forum-group1/documentation-forum5/general-settings-thread16/">' . __('help',  GEODIRECTORY_TEXTDOMAIN) . '</a>',
+	'<a target="_blank" href="http://wpgeodirectory.com/docs/google-analytics/">' . __('help',  GEODIRECTORY_TEXTDOMAIN) . '</a>',
 			'desc' 		=> '',
 			'id' 		=> 'geodir_ga_id',
 			'type' 		=> 'text',

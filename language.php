@@ -58,7 +58,7 @@ define('WEBSITE_TEXT',__('Website',GEODIRECTORY_TEXTDOMAIN));
 define('TWITTER_TEXT',__('Twitter',GEODIRECTORY_TEXTDOMAIN));
 define('FACEBOOK_TEXT',__('Facebook',GEODIRECTORY_TEXTDOMAIN));
 
-define('PLACE_CATETORY_TEXT',__('Category',GEODIRECTORY_TEXTDOMAIN));
+define('PLACE_CATEGORY_TEXT',__('Category',GEODIRECTORY_TEXTDOMAIN));
 define('TAGKW_TEXT',__('Tag Keyword\'s',GEODIRECTORY_TEXTDOMAIN));
 
 define('PRO_PHOTO_TEXT',__('Add Images : <small>(You can upload more than one images to create image gallery on detail page)</small>',GEODIRECTORY_TEXTDOMAIN));
@@ -100,6 +100,8 @@ define('SELECT_PAY_MEHTOD_TEXT',__('Select Payment Method',GEODIRECTORY_TEXTDOMA
 
 
 /* ---- favourite ---- */
+define('FAVOURITE_TEXT',__('Favorite',GEODIRECTORY_TEXTDOMAIN));
+define('UNFAVOURITE_TEXT',__('Unfavorite',GEODIRECTORY_TEXTDOMAIN));
 define('MY_FAVOURITE_TEXT',__('My Favorites',GEODIRECTORY_TEXTDOMAIN));
 define('ADD_FAVOURITE_TEXT',__('Add to Favorites',GEODIRECTORY_TEXTDOMAIN));
 define('REMOVE_FAVOURITE_TEXT',__('Remove from Favorites',GEODIRECTORY_TEXTDOMAIN));

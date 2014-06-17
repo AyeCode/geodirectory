@@ -30,8 +30,7 @@
         	<input type="hidden" name="redirect_to" value="<?php if(isset($_SERVER['HTTP_REFERER'])){ echo $_SERVER['HTTP_REFERER'];}?>" />	 
         
             <div class="form_row clearfix">
-            	<label><?php echo EMAIL_TEXT; ?><span class="indicates">*</span></label>
-            	<input type="text" name="user_email" id="user_email" class="textfield" value="<?php echo esc_attr(stripslashes($user_email)); ?>" size="25" />
+            	<input placeholder='<?php echo EMAIL_TEXT; ?>' type="text" name="user_email" id="user_email" class="textfield" value="<?php global $user_email; if(!isset($user_email)){$user_email='';} echo esc_attr(stripslashes($user_email)); ?>" size="25" />
                 <div id="reg_passmail">
                     <?php echo REGISTRATION_MESSAGE; ?>
                 </div>
@@ -40,8 +39,7 @@
        
             <div class="row_spacer_registration clearfix" >
                 <div class="form_row clearfix">
-                    <label><?php echo FIRST_NAME_TEXT; ?><span class="indicates">*</span></label>
-                   	<input type="text" name="user_fname" id="user_fname" class="textfield" value="<?php if(isset($user_fname)){ echo esc_attr(stripslashes($user_fname));} ?>" size="25"  />
+                   	<input placeholder='<?php echo FIRST_NAME_TEXT; ?>' type="text" name="user_fname" id="user_fname" class="textfield" value="<?php if(isset($user_fname)){ echo esc_attr(stripslashes($user_fname));} ?>" size="25"  />
                     <span id="user_fnameInfo"></span>
                 </div>
             </div>
@@ -50,16 +48,14 @@
            
             <div class="row_spacer_registration clearfix" >
                 <div class="form_row clearfix">
-                <label><?php echo PASSWORD_TEXT; ?><span class="indicates">*</span></label>
-                <input type="password" name="user_pass" id="user_pass" class="textfield" value="" size="25"  />
+                <input placeholder='<?php echo PASSWORD_TEXT; ?>'  type="password" name="user_pass" id="user_pass" class="textfield" value="" size="25"  />
                 <span id="user_fnameInfo"></span>
                 </div>
             </div>
         
             <div class="row_spacer_registration clearfix" >
                 <div class="form_row clearfix">
-                <label><?php echo CONFIRM_PASSWORD_TEXT; ?><span class="indicates">*</span></label>
-                <input type="password" name="user_pass2" id="user_pass2" class="textfield" value="" size="25"  />
+                <input placeholder='<?php echo CONFIRM_PASSWORD_TEXT; ?>' type="password" name="user_pass2" id="user_pass2" class="textfield" value="" size="25"  />
                 <span id="user_fnameInfo"></span>
                 </div>
             </div>

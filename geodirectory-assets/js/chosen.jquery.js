@@ -512,8 +512,8 @@
     Chosen.prototype.set_up_html = function() {
       var container_classes, container_props;
 
-      container_classes = ["chosen-container"];
-      container_classes.push("chosen-container-" + (this.is_multiple ? "multi" : "single"));
+      container_classes = ["geodir-chosen-container"];
+      container_classes.push("geodir-chosen-container-" + (this.is_multiple ? "multi" : "single"));
       if (this.inherit_select_classes && this.form_field.className) {
         container_classes.push(this.form_field.className);
       }
@@ -683,7 +683,7 @@
     };
 
     Chosen.prototype.blur_test = function(evt) {
-      if (!this.active_field && this.container.hasClass("chosen-container-active")) {
+      if (!this.active_field && this.container.hasClass("geodir-chosen-container-active")) {
         return this.close_field();
       }
     };
@@ -692,21 +692,21 @@
       $(document).unbind("click.chosen", this.click_test_action);
       this.active_field = false;
       this.results_hide();
-      this.container.removeClass("chosen-container-active");
+      this.container.removeClass("geodir-chosen-container-active");
       this.clear_backstroke();
       this.show_search_field_default();
       return this.search_field_scale();
     };
 
     Chosen.prototype.activate_field = function() {
-      this.container.addClass("chosen-container-active");
+      this.container.addClass("geodir-chosen-container-active");
       this.active_field = true;
       this.search_field.val(this.search_field.val());
       return this.search_field.focus();
     };
 
     Chosen.prototype.test_active_click = function(evt) {
-      if (this.container.is($(evt.target).closest('.chosen-container'))) {
+      if (this.container.is($(evt.target).closest('.geodir-chosen-container'))) {
         return this.active_field = true;
       } else {
         return this.close_field();
@@ -723,10 +723,10 @@
         this.single_set_selected_text();
         if (this.disable_search || this.form_field.options.length <= this.disable_search_threshold) {
           this.search_field[0].readOnly = true;
-          this.container.addClass("chosen-container-single-nosearch");
+          this.container.addClass("geodir-chosen-container-single-nosearch");
         } else {
           this.search_field[0].readOnly = false;
-          this.container.removeClass("chosen-container-single-nosearch");
+          this.container.removeClass("geodir-chosen-container-single-nosearch");
         }
       }
       this.update_results_content(this.results_option_build({
@@ -1032,8 +1032,10 @@
     Chosen.prototype.no_results = function(terms) {
       var no_results_html;
 
-      no_results_html = $('<li class="no-results">' + this.results_none_found + ' "<span></span>"</li>');
+   	  no_results_html = $('<li class="no-results">' + this.results_none_found + ' "<span></span>"</li>');
+	  //no_results_html = $('<li class="active-result highlighted"></li>');
       no_results_html.find("span").first().html(terms);
+	 // no_results_html.html(terms);
       return this.search_results.append(no_results_html);
     };
 

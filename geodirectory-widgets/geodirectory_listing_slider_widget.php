@@ -21,7 +21,7 @@ class geodir_listing_slider_widget extends WP_Widget {
 		
 		echo $before_widget;
 		
-		$title = empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);
+		$title = empty($instance['title']) ? '' : apply_filters('widget_title', __($instance['title'],GEODIRECTORY_TEXTDOMAIN));
 		
 		$post_type = empty($instance['post_type']) ? 'gd_place' : apply_filters('widget_post_type', $instance['post_type']);
 		
@@ -52,6 +52,8 @@ class geodir_listing_slider_widget extends WP_Widget {
 	
 			jQuery('#geodir_widget_carousel').flexslider({
 				animation: "slide",
+				selector: ".geodir-slides > li",
+				namespace: "geodir-",
 				controlNav: false,
 				directionNav: false,   
 				animationLoop: false,
@@ -63,6 +65,8 @@ class geodir_listing_slider_widget extends WP_Widget {
 			
 			jQuery('#geodir_widget_slider').flexslider({
 				animation: "<?php echo $animation;?>",
+				selector: ".geodir-slides > li",
+				namespace: "geodir-",
 				controlNav: true,
 				animationLoop: <?php echo $animationLoop;?>,
 				slideshow: <?php echo $slideshow;?>,
@@ -103,15 +107,9 @@ class geodir_listing_slider_widget extends WP_Widget {
 								query_posts( $query_args );
 								
 								
-						if(have_posts()): ?>
-								
-								<div class="geodir_locations geodir_location_listing">
-							
-							<?php if($title):?>
-								<div class="locatin_list_heading clearfix">
-									<h3><?php echo (ucfirst($title));?></h3>
-								</div>
-							<?php endif;?>
+						if(have_posts()):  
+						
+						if($title){echo $before_title.$title.$after_title;}?>
 							
 							<?php
 								
@@ -151,16 +149,16 @@ class geodir_listing_slider_widget extends WP_Widget {
 							 ?>		
 							 
 							 <div class="flex-container" style="min-height:200px;" >	
-                <div class="geodir-listing-flex-loader"></div> 
+                <div class="geodir-listing-flex-loader"><i class="fa fa-refresh fa-spin"></i></div> 
                
                 <div id="geodir_widget_slider" class="geodir_flexslider">
-                  <ul class="slides clearfix">
+                  <ul class="geodir-slides clearfix">
                         <?php echo $widget_main_slides;?>
                   </ul>
                 </div>
                 <?php if( $widget_slides > 1){ ?>
                     <div id="geodir_widget_carousel" class="geodir_flexslider">
-                      <ul class="slides clearfix">
+                      <ul class="geodir-slides clearfix">
                             <?php echo $nav_slides;?>
                       </ul>
                     </div>
@@ -168,12 +166,10 @@ class geodir_listing_slider_widget extends WP_Widget {
                     
             </div>		
 						   
-						</div>
 		
 		
 		<?php 
 				wp_reset_query();
-		
 			endif;
 		
 		echo $after_widget;

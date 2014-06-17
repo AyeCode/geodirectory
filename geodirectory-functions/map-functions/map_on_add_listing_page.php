@@ -13,7 +13,9 @@ $lat = isset($default_location->city_latitude) ? $default_location->city_latitud
 $default_lng = isset($default_location->city_longitude) ? $default_location->city_longitude : '';
 $default_lat = isset($default_location->city_latitude) ? $default_location->city_latitude : '';
 if(is_admin() && isset($_REQUEST['tab']) && $mapzoom == ''){
-$mapzoom = 4;
+	$mapzoom = 4;
+	if(isset($_REQUEST['add_hood']))
+		$mapzoom = 10;
 }
 ?>
 <script type="text/javascript">
@@ -243,9 +245,6 @@ address = address + ',' + zip + ',' + city + ',' + region + ',' + country;
 }
 <?php $codeAddress = ob_get_clean();
 echo apply_filters('geodir_codeaddress', $codeAddress);
-
-do_action('geodir_add_listing_codeaddress_js_vars');
-
 ?>
 geocoder.geocode( { 'address': address}, 
 function(results, status) {
@@ -254,9 +253,9 @@ if (status == google.maps.GeocoderStatus.OK) {
 baseMarker.setPosition(results[0].geometry.location);
 jQuery.goMap.map.setCenter(results[0].geometry.location);
 updateMarkerPosition(baseMarker.getPosition());
-if(set_on_map && is_restrict){
+//if(set_on_map && is_restrict){
 geocodePosition(baseMarker.getPosition());
-}
+//}
 } else {
 alert("<?php _e('Geocode was not successful for the following reason:',GEODIRECTORY_TEXTDOMAIN);?> " + status);
 }

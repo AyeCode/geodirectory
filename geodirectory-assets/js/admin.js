@@ -35,7 +35,7 @@ jQuery(document).ready(function(){
 	
 
 	
-	jQuery('#geodir_add_categories_url').click(function(){
+	/*jQuery('#geodir_add_categories_url').click(function(){
 		
 		if(jQuery(this).is(':checked')){
 			jQuery('#geodir_listingurl_separator').prop('disabled', false);
@@ -43,7 +43,7 @@ jQuery(document).ready(function(){
 			jQuery('#geodir_listingurl_separator').prop('disabled', true);
 		}
 		
-	});
+	});*/
 	
 	
 	jQuery('#submit').click(function(){

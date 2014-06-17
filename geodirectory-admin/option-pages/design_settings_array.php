@@ -290,7 +290,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 			'id' 		=> 'geodir_term_condition_content',
 			'type' 		=> 'textarea',
 			'css' 		=> 'width:500px; height: 150px;',
-			'std' 		=> 'Please accept <a href="" target"_blank">terms and conditions</a>'
+			'std' 		=> __('Please accept <a href="" target"_blank">terms and conditions</a>', GEODIRECTORY_TEXTDOMAIN )
 		),
 		
 	array(  

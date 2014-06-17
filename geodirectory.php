@@ -3,7 +3,7 @@
 Plugin Name: GeoDirectory
 Plugin URI: http://wpgeodirectory.com/
 Description: GeoDirectory plugin for wordpress.
-Version: 1.0.4
+Version: 1.1.0
 Author: GeoDirectory
 Author URI: http://wpgeodirectory.com
 Requires at least: 3.1
@@ -11,7 +11,7 @@ Tested up to: 3.9.1
 */
 
 
-define("GEODIRECTORY_VERSION", "1.0.4");
+define("GEODIRECTORY_VERSION", "1.1.0");
 
 if (!session_id()) session_start();
 
@@ -30,7 +30,7 @@ $plugin_file_name = basename(plugin_dir_path(__FILE__)). '/' . basename(__FILE__
 
 $geodir_post_custom_fields_cache = array();// This will store the cached post custome fields per package for each page load so not to run for each listing
 
-if (!defined('GEODIRECTORY_TEMPLATE_URL')) define('GEODIRECTORY_TEMPLATE_URL', 'geodirectory/');	
+// depreciated //if (!defined('GEODIRECTORY_TEMPLATE_URL')) define('GEODIRECTORY_TEMPLATE_URL', 'geodirectory/');	
 
 /* ---- Table Names ---- */
 if (!defined('GEODIR_COUNTRIES_TABLE')) define('GEODIR_COUNTRIES_TABLE', $plugin_prefix . 'countries' );	
@@ -47,7 +47,8 @@ if (!defined('GEODIR_CUSTOM_SORT_FIELDS_TABLE')) define('GEODIR_CUSTOM_SORT_FIEL
  **/
  
 if (!defined('GEODIRECTORY_TEXTDOMAIN')) define('GEODIRECTORY_TEXTDOMAIN', 'geodirectory');
-
+$locale = apply_filters('plugin_locale', get_locale(), GEODIRECTORY_TEXTDOMAIN);
+load_textdomain(GEODIRECTORY_TEXTDOMAIN, WP_LANG_DIR.'/'.GEODIRECTORY_TEXTDOMAIN.'/'.GEODIRECTORY_TEXTDOMAIN.'-'.$locale.'.mo');
 load_plugin_textdomain(GEODIRECTORY_TEXTDOMAIN, false, dirname( plugin_basename( __FILE__ ) ).'/geodirectory-languages');
 
 require_once( 'language.php' ); // Define language constants
@@ -61,6 +62,8 @@ include_once( 'geodirectory_functions.php' );
 include_once( 'geodirectory_hooks_actions.php' ); 
 include_once( 'geodirectory_widgets.php' ); 
 include_once( 'geodirectory_template_tags.php' );
+include_once( 'geodirectory_template_actions.php' );
+
 
 /**
  * Admin init + activation hooks

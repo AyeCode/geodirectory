@@ -1,4 +1,8 @@
-
+		
+function geodir_click_search($this){
+jQuery($this).parent().find('.geodir_submit_search').click();
+}
+  
 function addToFavourite(post_id,action)
 {
     
@@ -91,7 +95,7 @@ function addToFavourite(post_id,action)
 				jQuery('#geodir_location_prefix').focus();
 				error = true; }
 			
-			if(listingurl_separator==''){
+			/*if(listingurl_separator==''){
 				alert(geodir_all_js_msg.location_and_cat_url_separator_msg);
 				jQuery('#geodir_listingurl_separator').focus();
 				error = true; }
@@ -114,6 +118,7 @@ function addToFavourite(post_id,action)
 				
 				jQuery('#geodir_detailurl_separator').focus();
 				error = true; }
+				*/
 				
 			if(error==true){
 				return false;

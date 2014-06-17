@@ -5,7 +5,7 @@ $curr_post_type = geodir_get_current_posttype();
 ?>
 
 
- <form class="listing_search" name="listing_search" action="<?php echo home_url();?>" method="get" >
+ <form class="geodir-listing-search" name="geodir-listing-search" action="<?php echo home_url();?>" method="get" >
     <input type="hidden" name="geodir_search" value="1"  />
     
     <div class="geodir-loc-bar">
@@ -45,7 +45,7 @@ $curr_post_type = geodir_get_current_posttype();
 					echo '<input type="hidden" name="stype" value="'. key($post_types) .'"  />';    
                 endif; ?>
                 
-                <input class="search_text" name="s" value="<?php if(isset($_REQUEST['s']) && trim($_REQUEST['s']) != '' ){ echo $_REQUEST['s'];}else{echo $default_search_for_text;} ?>" type="text" onblur="if (this.value == '') {this.value = '<?php echo $default_search_for_text;?>';}"  onfocus="if (this.value == '<?php echo $default_search_for_text;?>') {this.value = '';}" >
+                <input class="search_text" name="s" value="<?php if(isset($_REQUEST['s']) && trim($_REQUEST['s']) != '' ){ echo $_REQUEST['s'];}else{echo $default_search_for_text;} ?>" type="text" onblur="if (this.value == '') {this.value = '<?php echo $default_search_for_text;?>';}"  onfocus="if (this.value == '<?php echo $default_search_for_text;?>') {this.value = '';}" onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);">
                 
                 
                 <?php 
@@ -54,7 +54,7 @@ $curr_post_type = geodir_get_current_posttype();
 				}else{$near = $default_near_text;}
 				
 				?>
-                <input name="snear" class="snear" type="text" value="<?php echo $near;?>" onblur="if (this.value == '') {this.value = '<?php echo $default_near_text;?>';}"  onfocus="if (this.value == '<?php echo $default_near_text;?>') {this.value = '';}"   />
+                <input name="snear" class="snear" type="text" value="<?php echo $near;?>" onblur="if (this.value == '') {this.value = '<?php echo $default_near_text;?>';}"  onfocus="if (this.value == '<?php echo $default_near_text;?>') {this.value = '';}" onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);"  />
                
                 <input type="button" value="<?php echo $default_search_button_label; ?>" class="geodir_submit_search">
                <?php do_action('geodir_after_search_button');?> 
