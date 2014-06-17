@@ -11,7 +11,7 @@ Tested up to: 3.9.1
 */
 
 
-define("GEODIRECTORY_VERSION", "1.1.0");
+define("GEODIRECTORY_VERSION", "1.1.2");
 
 if (!session_id()) session_start();
 
