@@ -3,7 +3,7 @@
 Plugin Name: GeoDirectory
 Plugin URI: http://wpgeodirectory.com/
 Description: GeoDirectory plugin for wordpress.
-Version: 1.1.0
+Version: 1.1.2
 Author: GeoDirectory
 Author URI: http://wpgeodirectory.com
 Requires at least: 3.1
