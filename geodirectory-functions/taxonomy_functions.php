@@ -867,7 +867,7 @@ function geodir_register_defaults() {
 	
 	global $wpdb;
 	
-	$menu_icon  = file_exists(GEODIRECTORY_TEMPLATE_URL . 'images/favicon.ico') ? GEODIRECTORY_TEMPLATE_URL . 'images/favicon.ico' : geodir_plugin_url() . '/geodirectory-assets/images/favicon.ico';
+	$menu_icon  = geodir_plugin_url() . '/geodirectory-assets/images/favicon.ico';
 	
 	if(!$listing_slug = get_option('geodir_listing_prefix'))
 		$listing_slug = 'places';
@@ -1003,13 +1003,16 @@ function geodir_register_defaults() {
 
 function geodir_listing_permalink_structure($post_link, $post, $leavename, $sample)
 {
+	//echo $post_link."<br />" ;
 	global $wpdb, $wp_query ,$plugin_prefix;
 	
 	if(in_array( $post->post_type, geodir_get_posttypes() ) ){
 		
-		if ( false !== strpos( $post_link, '%gd_taxonomy%' ) ) {
+		if ( false !== strpos( $post_link, '%gd_taxonomy%' ) ) 
+		{
 			
-			if(get_option('geodir_add_location_url')){
+			if(get_option('geodir_add_location_url'))
+			{
 				$location_request = '';
 				if(!empty($post->post_locations))
 				{
@@ -1083,61 +1086,70 @@ function geodir_listing_permalink_structure($post_link, $post, $leavename, $samp
 				}		
 			}
 			
-			if(get_option('geodir_add_categories_url')){
+			if(get_option('geodir_add_categories_url'))
+			{
 				
 				$term_request = '';
 				$taxonomies = geodir_get_taxonomies($post->post_type);
 				
 				$taxonomies = end($taxonomies);
 				
-				if(!empty($post->default_category)){
+				if(!empty($post->default_category))
+				{
 					$post_terms = $post->default_category;
-				}else{
+				}
+				else
+				{
 					$post_terms = explode(",", trim($post->$taxonomies,","));
 					$post_terms = $post_terms[0];
 					
 					if(!$post_terms)
 						$post_terms = geodir_get_post_meta($post->ID, 'default_category',true);
 					
-					if(!$post_terms){
-					
+					if(!$post_terms)
+					{
 						$post_terms = geodir_get_post_meta($post->ID, $taxonomies,true);
 						
-						if($post_terms){
+						if($post_terms)
+						{
 							$post_terms = explode(",", trim($post_terms,","));
 							$post_terms = $post_terms[0];
 						}
-						
 					}
 				}	
 				
 				$term = get_term_by( 'id', $post_terms, $taxonomies );
 				
 				if(!empty($term))
-					$term_request = $term->slug.'/';
-				
+					$term_request = $term->slug;
+					//$term_request = $term->slug.'/';
 			}
-			
 			
 			$request_term = '';
 			$listingurl_separator = '';
-			$detailurl_separator = get_option('geodir_detailurl_separator');
-			
+			//$detailurl_separator = get_option('geodir_detailurl_separator');
+			$detailurl_separator ='';
 			if(isset($location_request) && $location_request != '' && isset($term_request) && $term_request != '')
 			{	
 				$request_term = $location_request;
-				$listingurl_separator = get_option('geodir_listingurl_separator');
-				$request_term .= $listingurl_separator.'/'.$term_request;
+				//$listingurl_separator = get_option('geodir_listingurl_separator');
+				//$request_term .= $listingurl_separator.'/'.$term_request;
+				$request_term .= $term_request;
 				
 			}else{
 				if(isset($location_request) && $location_request != '') $request_term = $location_request;
 				
 				if(isset($term_request) && $term_request != '')	$request_term .= $term_request;	
 			}
-								
-			$post_link = str_replace( '%gd_taxonomy%', $request_term.$detailurl_separator, $post_link );
+			$request_term =trim($request_term,'/');
+			if(!empty($request_term))					
+				$post_link = str_replace( '%gd_taxonomy%', $request_term.$detailurl_separator, $post_link );
+			else
+				$post_link = str_replace( '/%gd_taxonomy%', $request_term.$detailurl_separator, $post_link );
+			//echo $post_link ;
 		}
 	}	
+	//echo $post_link ;
     return $post_link;
 
 }
@@ -1152,7 +1164,7 @@ function geodir_term_link($termlink, $term, $taxonomy) {
 		$request_term = array();
 		
 		$listing_slug = geodir_get_listing_slug($taxonomy);
-		
+		//echo $listing_slug ;
 		
 		if($geodir_add_location_url != NULL && $geodir_add_location_url != '')
 		{	
@@ -1164,35 +1176,39 @@ function geodir_term_link($termlink, $term, $taxonomy) {
 		
 		if($include_location ){
 			
-			if(get_option('geodir_show_location_url') == 'all'){
+			if(get_option('geodir_show_location_url') == 'all')
+			{
 				
-				$country = get_query_var('gd_country');
+				$country =  (isset($_SESSION['gd_country']) && $_SESSION['gd_country']!='') ? $_SESSION['gd_country'] : '';  
 				if( $country != '' )
 					$request_term['gd_country'] = $country;	
 				
-				$region = get_query_var('gd_region');
+				$region = (isset($_SESSION['gd_region']) && $_SESSION['gd_region']!='') ? $_SESSION['gd_region'] : ''; 
 				if( $region != '' )
 					$request_term['gd_region'] = $region;
 				
-				$city = get_query_var('gd_city');
+				$city = (isset($_SESSION['gd_city']) && $_SESSION['gd_city']!='') ? $_SESSION['gd_city'] : ''; 
 				if( $city != '' )
 					$request_term['gd_city'] = $city;	
-			}else{
-				$city = get_query_var('gd_city');
+			}
+			else
+			{
+				$city = (isset($_SESSION['gd_city']) && $_SESSION['gd_city']!='') ? $_SESSION['gd_city'] : ''; 
 				if( $city != '' )
 					$request_term['gd_city'] = $city;
 			}		
 			
 			if(!empty($request_term)){
 				
-				$url_separator = get_option('geodir_listingurl_separator');	
+				$url_separator = '';//get_option('geodir_listingurl_separator');	
 				
 				if ( get_option('permalink_structure') != '' ){
 					
 					$old_listing_slug = '/'.$listing_slug.'/';
 					
 					$request_term = implode("/",$request_term);
-					$new_listing_slug = '/'.$listing_slug.'/'.rtrim($request_term,'/').'/'.$url_separator.'/';
+					//$new_listing_slug = '/'.$listing_slug.'/'.rtrim($request_term,'/').'/'.$url_separator.'/';
+					$new_listing_slug = '/'.$listing_slug.'/'. $request_term.'/';
 					
 					$termlink = substr_replace($termlink, $new_listing_slug, strpos($termlink, $old_listing_slug), strlen($old_listing_slug));
 						
@@ -1214,29 +1230,32 @@ function geodir_term_link($termlink, $term, $taxonomy) {
 function geodir_posttype_link($link, $post_type){
 	global $geodir_add_location_url;
 	$request_term = array();
+	if(in_array($post_type, geodir_get_posttypes()) ){
 
-	if(in_array($post_type, geodir_get_posttypes()) && $geodir_add_location_url != NULL){
-		
 		if(get_option('geodir_add_location_url')){
 		
-			if(get_option('geodir_show_location_url') == 'all'){
+			if(get_option('geodir_show_location_url') == 'all')
+			{
 				
-				$country = get_query_var('gd_country');
+				$country =  (isset($_SESSION['gd_country']) && $_SESSION['gd_country']!='') ? $_SESSION['gd_country'] : '';  
 				if( $country != '' )
 					$request_term['gd_country'] = $country;	
 				
-				$region = get_query_var('gd_region');
+				$region = (isset($_SESSION['gd_region']) && $_SESSION['gd_region']!='') ? $_SESSION['gd_region'] : ''; 
 				if( $region != '' )
 					$request_term['gd_region'] = $region;
 				
-				$city = get_query_var('gd_city');
+				$city = (isset($_SESSION['gd_city']) && $_SESSION['gd_city']!='') ? $_SESSION['gd_city'] : ''; 
 				if( $city != '' )
 					$request_term['gd_city'] = $city;	
-			}else{
-				$city = get_query_var('gd_city');
+			}
+			else
+			{
+				$city = (isset($_SESSION['gd_city']) && $_SESSION['gd_city']!='') ? $_SESSION['gd_city'] : ''; 
 				if( $city != '' )
 					$request_term['gd_city'] = $city;
-			}
+			}	
+			
 			
 			if(!empty($request_term)){
 		

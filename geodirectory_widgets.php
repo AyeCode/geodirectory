@@ -8,32 +8,37 @@ function geodir_register_sidebar(){
 		/* Home page sidebars start*/
 		/*===========================*/
 		
+		$before_widget = apply_filters( 'geodir_before_widget','<section id="%1$s" class="widget geodir-widget %2$s">' );
+		$after_widget = apply_filters( 'geodir_after_widget','</section>' );
+		$before_title = apply_filters( 'geodir_before_title','<h3 class="widget-title">' );
+		$after_title = apply_filters( 'geodir_after_title','</h3>' );
+		
 		if(get_option('geodir_show_home_top_section')){
-		register_sidebars(1,array('id'=> 'geodir_home_top','name' => __('GD Home Top Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => '<div class="widget">','after_widget' => '</div>','before_title' => '<h3><span>','after_title' => '</span></h3>'));
+		register_sidebars(1,array('id'=> 'geodir_home_top','name' => __('GD Home Top Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => $before_widget,'after_widget' => $after_widget,'before_title' => $before_title,'after_title' => $after_title));
 		
 		$geodir_sidebars[] ='geodir_home_top' ;
 		}
 		
 		if( get_option('geodir_show_home_contant_section') ) {
-		register_sidebars(1,array('id'=> 'geodir_home_contant','name' => __('GD Home Content Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => '<div class="geodir-widget">','after_widget' => '</div>','before_title' => '<h3><span>','after_title' => '</span></h3>'));
+		register_sidebars(1,array('id'=> 'geodir_home_content','name' => __('GD Home Content Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => $before_widget,'after_widget' => $after_widget,'before_title' => $before_title,'after_title' => $after_title));
 		
-		$geodir_sidebars[] ='geodir_home_contant' ;
+		$geodir_sidebars[] ='geodir_home_content' ;
 		}
 		
 		if( get_option('geodir_show_home_right_section') ) {
-		register_sidebars(1,array('id'=> 'geodir_home_right','name' => __('GD Home Right Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => '<div class="widget">','after_widget' => '</div>','before_title' => '<h3><span>','after_title' => '</span></h3>'));
+		register_sidebars(1,array('id'=> 'geodir_home_right','name' => __('GD Home Right Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => $before_widget,'after_widget' => $after_widget,'before_title' => $before_title,'after_title' => $after_title));
 		
 		$geodir_sidebars[] ='geodir_home_right' ;
 		}
 		
 		if( get_option('geodir_show_home_left_section') ) {
-		register_sidebars(1,array('id'=> 'geodir_home_left','name' => __('GD Home Left Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => '<div class="widget">','after_widget' => '</div>','before_title' => '<h3><span>','after_title' => '</span></h3>'));
+		register_sidebars(1,array('id'=> 'geodir_home_left','name' => __('GD Home Left Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => $before_widget,'after_widget' => $after_widget,'before_title' => $before_title,'after_title' => $after_title));
 		
 		$geodir_sidebars[] ='geodir_home_left' ;
 		}
 		
 		if(get_option('geodir_show_home_bottom_section')) {
-		register_sidebars(1,array('id'=> 'geodir_home_bottom','name' => __('GD Home Bottom Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => '<div class="widget">','after_widget' => '</div>','before_title' => '<h3><span>','after_title' => '</span></h3>'));
+		register_sidebars(1,array('id'=> 'geodir_home_bottom','name' => __('GD Home Bottom Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => $before_widget,'after_widget' => $after_widget,'before_title' => $before_title,'after_title' => $after_title));
 		
 		$geodir_sidebars[] ='geodir_home_bottom' ;
 		}
@@ -47,25 +52,25 @@ function geodir_register_sidebar(){
 		/*===========================*/
 		
 		if(get_option('geodir_show_listing_top_section')) {
-		register_sidebars(1,array('id'=> 'geodir_listing_top','name' => __('GD Listing Top Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => '<div class="widget">','after_widget' => '</div>','before_title' => '<h3><span>','after_title' => '</span></h3>'));
+		register_sidebars(1,array('id'=> 'geodir_listing_top','name' => __('GD Listing Top Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => $before_widget,'after_widget' => $after_widget,'before_title' => $before_title,'after_title' => $after_title));
 		
 		$geodir_sidebars[] ='geodir_listing_top' ;
 		}
 		
 		if( get_option('geodir_show_listing_left_section') ) {
-		register_sidebars(1,array('id'=> 'geodir_listing_left_sidebar','name' => __('GD Listing Left Sidebar',GEODIRECTORY_TEXTDOMAIN),'before_widget' => '<div class="widget">','after_widget' => '</div>','before_title' => '<h3><span>','after_title' => '</span></h3>'));
+		register_sidebars(1,array('id'=> 'geodir_listing_left_sidebar','name' => __('GD Listing Left Sidebar',GEODIRECTORY_TEXTDOMAIN),'before_widget' => $before_widget,'after_widget' => $after_widget,'before_title' => $before_title,'after_title' => $after_title));
 		
 		$geodir_sidebars[] ='geodir_listing_left_sidebar' ;
 		}
 		
 		if( get_option('geodir_show_listing_right_section') ) {
-		register_sidebars(1,array('id'=> 'geodir_listing_right_sidebar','name' => __('GD Listing Right Sidebar',GEODIRECTORY_TEXTDOMAIN),'before_widget' => '<div class="widget">','after_widget' => '</div>','before_title' => '<h3><span>','after_title' => '</span></h3>'));
+		register_sidebars(1,array('id'=> 'geodir_listing_right_sidebar','name' => __('GD Listing Right Sidebar',GEODIRECTORY_TEXTDOMAIN),'before_widget' => $before_widget,'after_widget' => $after_widget,'before_title' => $before_title,'after_title' => $after_title));
 		
 		$geodir_sidebars[] ='geodir_listing_right_sidebar' ;
 		}
 		
 		if(get_option('geodir_show_listing_bottom_section')) {
-		register_sidebars(1,array('id'=> 'geodir_listing_bottom','name' => __('GD Listing Bottom Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => '<div class="widget">','after_widget' => '</div>','before_title' => '<h3><span>','after_title' => '</span></h3>'));
+		register_sidebars(1,array('id'=> 'geodir_listing_bottom','name' => __('GD Listing Bottom Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => $before_widget,'after_widget' => $after_widget,'before_title' => $before_title,'after_title' => $after_title));
 		
 		$geodir_sidebars[] ='geodir_listing_bottom' ;
 		}
@@ -79,25 +84,25 @@ function geodir_register_sidebar(){
 		/*===========================*/
 		
 		if(get_option('geodir_show_search_top_section')) {
-		register_sidebars(1,array('id'=> 'geodir_search_top','name' => __('GD Search Top Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => '<div class="widget">','after_widget' => '</div>','before_title' => '<h3><span>','after_title' => '</span></h3>'));
+		register_sidebars(1,array('id'=> 'geodir_search_top','name' => __('GD Search Top Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => $before_widget,'after_widget' => $after_widget,'before_title' => $before_title,'after_title' => $after_title));
 		
 		$geodir_sidebars[] ='geodir_search_top' ;
 		}
 		
 		if( get_option('geodir_show_search_left_section') ) {
-		register_sidebars(1,array('id'=> 'geodir_search_left_sidebar','name' => __('GD Search Left Sidebar',GEODIRECTORY_TEXTDOMAIN),'before_widget' => '<div class="widget">','after_widget' => '</div>','before_title' => '<h3><span>','after_title' => '</span></h3>'));
+		register_sidebars(1,array('id'=> 'geodir_search_left_sidebar','name' => __('GD Search Left Sidebar',GEODIRECTORY_TEXTDOMAIN),'before_widget' => $before_widget,'after_widget' => $after_widget,'before_title' => $before_title,'after_title' => $after_title));
 		
 		$geodir_sidebars[] ='geodir_search_left_sidebar' ;
 		}
 		
 		if( get_option('geodir_show_search_right_section') ) {
-		register_sidebars(1,array('id'=> 'geodir_search_right_sidebar','name' => __('GD Search Right Sidebar',GEODIRECTORY_TEXTDOMAIN),'before_widget' => '<div class="widget">','after_widget' => '</div>','before_title' => '<h3><span>','after_title' => '</span></h3>'));
+		register_sidebars(1,array('id'=> 'geodir_search_right_sidebar','name' => __('GD Search Right Sidebar',GEODIRECTORY_TEXTDOMAIN),'before_widget' => $before_widget,'after_widget' => $after_widget,'before_title' => $before_title,'after_title' => $after_title));
 		
 		$geodir_sidebars[] ='geodir_search_right_sidebar' ;
 		}
 		
 		if(get_option('geodir_show_search_bottom_section')) {
-		register_sidebars(1,array('id'=> 'geodir_search_bottom','name' => __('GD Search Bottom Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => '<div class="widget">','after_widget' => '</div>','before_title' => '<h3><span>','after_title' => '</span></h3>'));
+		register_sidebars(1,array('id'=> 'geodir_search_bottom','name' => __('GD Search Bottom Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => $before_widget,'after_widget' => $after_widget,'before_title' => $before_title,'after_title' => $after_title));
 		
 		$geodir_sidebars[] ='geodir_search_bottom' ;
 		}
@@ -110,17 +115,17 @@ function geodir_register_sidebar(){
 		/* Detail/Single page sidebars start*/
 		/*==================================*/
 		if(get_option('geodir_show_detail_top_section')) {
-		register_sidebars(1,array('id'=> 'geodir_detail_top','name' => __('GD Detail Top Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => '<div class="widget">','after_widget' => '</div>','before_title' => '<h3><span>','after_title' => '</span></h3>'));
+		register_sidebars(1,array('id'=> 'geodir_detail_top','name' => __('GD Detail Top Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => $before_widget,'after_widget' => $after_widget,'before_title' => $before_title,'after_title' => $after_title));
 		
 		$geodir_sidebars[] ='geodir_detail_top' ;
 		}
 		
-		register_sidebars(1,array('id'=> 'geodir_detail_sidebar','name' => __('GD Detail Sidebar',GEODIRECTORY_TEXTDOMAIN),'before_widget' => '<div class="widget">','after_widget' => '</div>','before_title' => '<h3><span>','after_title' => '</span></h3>'));
+		register_sidebars(1,array('id'=> 'geodir_detail_sidebar','name' => __('GD Detail Sidebar',GEODIRECTORY_TEXTDOMAIN),'before_widget' => $before_widget,'after_widget' => $after_widget,'before_title' => $before_title,'after_title' => $after_title));
 		
 		$geodir_sidebars[] ='geodir_detail_sidebar' ;
 		
 		if(get_option('geodir_show_detail_bottom_section')){
-		register_sidebars(1,array('id'=> 'geodir_detail_bottom','name' => __('GD Detail Bottom Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => '<div class="widget">','after_widget' => '</div>','before_title' => '<h3><span>','after_title' => '</span></h3>'));
+		register_sidebars(1,array('id'=> 'geodir_detail_bottom','name' => __('GD Detail Bottom Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => $before_widget,'after_widget' => $after_widget,'before_title' => $before_title,'after_title' => $after_title));
 		
 		$geodir_sidebars[] ='geodir_detail_bottom' ;
 		}
@@ -134,25 +139,25 @@ function geodir_register_sidebar(){
 		/*==================================*/
 		
 		if(get_option('geodir_show_author_top_section')) { 
-		register_sidebars(1,array('id'=> 'geodir_author_top','name' => __('GD Author Top Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => '<div class="widget">','after_widget' => '</div>','before_title' => '<h3><span>','after_title' => '</span></h3>'));
+		register_sidebars(1,array('id'=> 'geodir_author_top','name' => __('GD Author Top Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => $before_widget,'after_widget' => $after_widget,'before_title' => $before_title,'after_title' => $after_title));
 		
 		$geodir_sidebars[] ='geodir_author_top' ;
 		}
 		
 		if( get_option('geodir_show_author_left_section') ) {
-		register_sidebars(1,array('id'=> 'geodir_author_left_sidebar','name' => __('GD Author Left Sidebar',GEODIRECTORY_TEXTDOMAIN),'before_widget' => '<div class="widget">','after_widget' => '</div>','before_title' => '<h3><span>','after_title' => '</span></h3>'));
+		register_sidebars(1,array('id'=> 'geodir_author_left_sidebar','name' => __('GD Author Left Sidebar',GEODIRECTORY_TEXTDOMAIN),'before_widget' => $before_widget,'after_widget' => $after_widget,'before_title' => $before_title,'after_title' => $after_title));
 		
 		$geodir_sidebars[] ='geodir_author_left_sidebar' ;
 		}
 		
 		if( get_option('geodir_show_author_right_section') ) {
-		register_sidebars(1,array('id'=> 'geodir_author_right_sidebar','name' => __('GD Author Right Sidebar',GEODIRECTORY_TEXTDOMAIN),'before_widget' => '<div class="widget">','after_widget' => '</div>','before_title' => '<h3><span>','after_title' => '</span></h3>'));
+		register_sidebars(1,array('id'=> 'geodir_author_right_sidebar','name' => __('GD Author Right Sidebar',GEODIRECTORY_TEXTDOMAIN),'before_widget' => $before_widget,'after_widget' => $after_widget,'before_title' => $before_title,'after_title' => $after_title));
 		
 		$geodir_sidebars[] ='geodir_author_right_sidebar' ;
 		}
 		
 		if(get_option('geodir_show_author_bottom_section')) { 
-		register_sidebars(1,array('id'=> 'geodir_author_bottom','name' => __('GD Author Bottom Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => '<div class="widget">','after_widget' => '</div>','before_title' => '<h3><span>','after_title' => '</span></h3>'));
+		register_sidebars(1,array('id'=> 'geodir_author_bottom','name' => __('GD Author Bottom Section',GEODIRECTORY_TEXTDOMAIN),'before_widget' => $before_widget,'after_widget' => $after_widget,'before_title' => $before_title,'after_title' => $after_title));
 		
 		$geodir_sidebars[] ='geodir_author_bottom' ;
 		}
@@ -165,7 +170,7 @@ function geodir_register_sidebar(){
 		/* Add listing page sidebars start       */
 		/*==================================*/
 		
-		register_sidebars(1,array('id'=> 'geodir_add_listing_sidebar','name' => __('GD Add Listing Right Sidebar',GEODIRECTORY_TEXTDOMAIN),'before_widget' => '<div class="widget">','after_widget' => '</div>','before_title' => '<h3><span>','after_title' => '</span></h3>'));
+		register_sidebars(1,array('id'=> 'geodir_add_listing_sidebar','name' => __('GD Add Listing Right Sidebar',GEODIRECTORY_TEXTDOMAIN),'before_widget' => $before_widget,'after_widget' => $after_widget,'before_title' => $before_title,'after_title' => $after_title));
 		
 		$geodir_sidebars[] ='geodir_add_listing_sidebar' ;
 		
@@ -179,183 +184,7 @@ function geodir_register_sidebar(){
 
 if(!function_exists('register_geodir_widgets')){
 function register_geodir_widgets(){
-	
-	// ====================== Geodirectory Search Widget==================================
-	class geodir_search_widget extends WP_Widget {
-		function geodir_search_widget() {
-		//Constructor
-			$widget_ops = array('classname' => 'geodir_list', 'description' => __('Geodirectory search. It should be once on the page.',GEODIRECTORY_TEXTDOMAIN) );		
-			$this->WP_Widget('geodir_search_widget', __('GD > Search',GEODIRECTORY_TEXTDOMAIN), $widget_ops);
-		}
-		function widget($args, $instance) {
-		// prints the widget
-			extract($args, EXTR_SKIP);
-			$title = empty($instance['title']) ? __('Search',GEODIRECTORY_TEXTDOMAIN) : apply_filters('widget_title', $instance['title']);
-			$desc1 = empty($instance['desc']) ? '&nbsp;' : apply_filters('widget_desc', $instance['desc']);
-			 ?>						
-				
-			<div class="geodir-widget">
-            	
-				<?php if(!empty($title)) { ?>
-                <h3 class="widget-title"><?php echo $title; ?> </h3>
-            	<?php } ?>
-                
-                <div class="searchform">
-                    <form method="get" id="searchform2" action="<?php bloginfo('home'); ?>/" > 
-                       <input type="hidden" name="place_search" value="1" />
-                        <span class="searchfor"><input type="text" value="<?php if(isset($_REQUEST['s']) && $_REQUEST['s']!='cal_event'){echo trim(stripslashes($_REQUEST['s']));}else{echo SEARCH_FOR_TEXT;}?>" name="s" id="sr" class="s"  onfocus="if (this.value == '<?php echo SEARCH_FOR_TEXT; ?>') {this.value = '';}" onblur="if (this.value == '') {this.value = '<?php echo SEARCH_FOR_TEXT; ?>';}" /><br/>
-                         <small class="text"><?php echo SEARCH_FOR_MSG;?> </small>
-                         </span>
-                         
-                         <span id="set_NEAR ME" class="near" ><span id="set_near"></span><input name="sn" id="sn" type="text" class="s" value="<?php if(isset($_REQUEST['sn'])){echo stripslashes($_REQUEST['sn']);}else{echo NEAR_TEXT;}?>" onblur="if (this.value == '') {this.value = '<?php echo NEAR_TEXT;?>';}"  onfocus="if (this.value == '<?php echo NEAR_TEXT;?>') {this.value = '';}"   /> 						<br/>	
-                          <small class="text"><?php echo SEARCH_NEAR_MSG;?></small>
-                         </span>
-                         <input name="Sgeo_lat" id="Sgeo_lat" type="hidden" value="" />
-                         <input name="Sgeo_lon" id="Sgeo_lon" type="hidden" value="" />
-                        <input type="button" class="search_btn" value="<?php echo SEARCH;?>" alt="<?php echo SEARCH;?>"  />
-                      </form>
-                    </div>
-                    <script type="text/javascript" src="http://gmaps-samples-v3.googlecode.com/svn/trunk/geolocate/geometa.js"></script> 
-                    <script type="text/javascript">
-                    var latlng;
-                    var Sgeocoder;
-                    var address;
-                    var Sgeocoder = new google.maps.Geocoder();
-					jQuery(document).ready(function(){
-						
-						jQuery('#sr,#sn').keydown(function(event){
-							if(event.keyCode == 13){set_srch();}
-						});
-						
-						jQuery('.search_btn').click(function(){
-							set_srch();
-						});
-						
-						jQuery('#set_near').click(function() {
-							jQuery('#sn').val('<?php echo NEAR_TEXT;?>');
-						});
-						
-						function set_srch()
-						{ 		    
-							
-							if(jQuery(".searchfor").css("display") == "none"){
-								jQuery(".searchfor").slideDown(2000);
-								jQuery("#set_NEAR ME").slideDown(2000);
-								return false;
-							}
-						
-							if(jQuery('#sr').val() == '' || jQuery('#sr').val() == '<?php echo SEARCH_FOR_TEXT; ?>')
-								jQuery('#sr').val(' ');	
-						   
-							if(jQuery('#sn').val() == '<?php echo NEAR_TEXT; ?>')
-								jQuery('#sn').val('<?php echo NEAR_TEXT;?>');
-						   
-							 geocodeAddress();
-						}
-					
-						 function updateSearchPosition(latLng) {
-							jQuery('#Sgeo_lat').val(latLng.lat());
-							jQuery('#Sgeo_lon').val(latLng.lng());
-							jQuery("#searchform2").submit(); // submit form after insering the lat long positions
-						}
-						
-						function geocodeAddress() {
-							Sgeocoder = new google.maps.Geocoder(); // Call the geocode function
-							
-							if(jQuery('#sn').val() == ''){
-								jQuery("#searchform2").submit();
-							}else{
-							
-								var address = jQuery("#sn").val();
-								if(jQuery('#sn').val() == '<?php echo NEAR_TEXT;?>'){
-									initialise2();
-								}else{
-									Sgeocoder.geocode( { 'address': address<?php //gt_advanced_near_search();?> }, 
-									function(results, status) {
-									  	if (status == google.maps.GeocoderStatus.OK) {
-											updateSearchPosition(results[0].geometry.location);
-									 	} else {
-											alert("<?php _e('Search was not successful for the following reason:',GEODIRECTORY_TEXTDOMAIN);?>" + status);
-									  	}
-									});
-								}
-							}
-                      	}
-						
-						function initialise2() {
-							var latlng = new google.maps.LatLng(56.494343,-4.205446);
-							var myOptions = {
-							  zoom: 4,
-							  mapTypeId: google.maps.MapTypeId.TERRAIN,
-							  disableDefaultUI: true
-							}
-							//alert(latLng);
-							prepareGeolocation();
-							doGeolocation();
-						}
-						
-                      function doGeolocation() {
-                        if (navigator.geolocation) {
-                          navigator.geolocation.getCurrentPosition(positionSuccess, positionError);
-                        } else {
-                          positionError(-1);
-                        }
-                      }
-                     
-                      function positionError(err) {
-                        var msg;
-                        switch(err.code) {
-                          case err.UNKNOWN_ERROR:
-                            msg = "<?php _e('Unable to find your location',GEODIRECTORY_TEXTDOMAIN);?>";
-                            break;
-                          case err.PERMISSION_DENINED:
-                            msg = "<?php _e('Permission denied in finding your location',GEODIRECTORY_TEXTDOMAIN);?>";
-                            break;
-                          case err.POSITION_UNAVAILABLE:
-                            msg = "<?php _e('Your location is currently unknown',GEODIRECTORY_TEXTDOMAIN);?>";
-                            break;
-                          case err.BREAK:
-                            msg = "<?php _e('Attempt to find location took too long',GEODIRECTORY_TEXTDOMAIN);?>";
-                            break;
-                          default:
-                            msg = "<?php _e('Location detection not supported in browser',GEODIRECTORY_TEXTDOMAIN);?>";
-                        }
-                        jQuery('#info').html(msg);
-                      }
-                     
-						function positionSuccess(position) {
-							var coords = position.coords || position.coordinate || position;
-							jQuery('#Sgeo_lat').val(coords.latitude);
-							jQuery('#Sgeo_lon').val(coords.longitude);
-							  
-							jQuery("#searchform2").submit(); 
-						}
-                     
-					
-					});
-				</script> 
-            </div>
-			
-		<?php
-		}
-		function update($new_instance, $old_instance) {
-		//save the widget
-			$instance = $old_instance;		
-			$instance['title'] = strip_tags($new_instance['title']);
-			$instance['desc'] = ($new_instance['desc']);
-			return $instance;
-		}
-		function form($instance) {
-		//widgetform in backend
-			$instance = wp_parse_args( (array) $instance, array( 'title' => '', 'desc' => '' ) );		
-			$title = strip_tags($instance['title']);
-			$desc = ($instance['desc']);
-	?>
-			<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget Title',GEODIRECTORY_TEXTDOMAIN);?>: <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" /></label></p>
-	<?php
-		}
-	}//Class end
-	//register_widget('geodir_search_widget');
+
 	
 	
 	// =============================== Login Widget ======================================
@@ -368,11 +197,13 @@ function register_geodir_widgets(){
 		function widget($args, $instance) {
 		// prints the widget
 			extract($args, EXTR_SKIP);
-			$title = empty($instance['title']) ? __('My Dashboard',GEODIRECTORY_TEXTDOMAIN) : apply_filters('widget_title', $instance['title']);
+			$title = empty($instance['title']) ? __('My Dashboard',GEODIRECTORY_TEXTDOMAIN) : apply_filters('widget_title', __($instance['title'],GEODIRECTORY_TEXTDOMAIN));
+			
+			echo $before_widget;
+			echo $before_title.$title.$after_title;
 			?>						
 				
-			<div class="geodir-widget">
-			 <h3 class="widget-title"><?php echo $title; ?> </h3>	
+			 	
              <?php if(is_user_logged_in()) {
 			  	global $current_user;
 			 	$login_url = geodir_getlink(home_url(),array('geodir_signup'=>'true'),false);
@@ -382,7 +213,7 @@ function register_geodir_widgets(){
 				$author_link = get_author_posts_url( $current_user->data->ID );
 				$author_link = geodir_getlink($author_link,array('geodir_dashbord'=>'true'),false);
                 
-				echo '<ul class="blogroll">';
+				echo '<ul class="geodir-loginbox-list">';
 				ob_start();
 					 ?>
 				<li><a class="signin" href="<?php echo wp_logout_url( home_url() );?>"><?php _e('Logout',GEODIRECTORY_TEXTDOMAIN);?></a></li>
@@ -502,18 +333,19 @@ function register_geodir_widgets(){
 			?>
                 
 				<form name="loginform" class="loginform1" action="<?php echo get_option('home').'/index.php?geodir_signup=true'; ?>" method="post" >
-					<div class="form_row"><label><?php _e('Email', GEODIRECTORY_TEXTDOMAIN);?>  <span>*</span></label>  <input name="log" type="text" class="textfield user_login1" /> <span class="user_loginInfo"></span> </div>
-					<div class="form_row"><label><?php _e('Password', GEODIRECTORY_TEXTDOMAIN);?>  <span>*</span></label>  <input name="pwd" type="password" class="textfield user_pass1" /><span class="user_passInfo"></span>  </div>
+					<div class="geodir_form_row"><input placeholder="<?php _e('Email', GEODIRECTORY_TEXTDOMAIN);?>" name="log" type="text" class="textfield user_login1" /> <span class="user_loginInfo"></span> </div>
+					<div class="geodir_form_row"><input placeholder="<?php _e('Password', GEODIRECTORY_TEXTDOMAIN);?>" name="pwd" type="password" class="textfield user_pass1" /><span class="user_passInfo"></span>  </div>
 					
 					<input type="hidden" name="redirect_to" value="<?php echo geodir_curPageURL(); ?>" />
 					<input type="hidden" name="testcookie" value="1" />
-					<div class="form_row clearfix"><label class="labelblank">&nbsp;</label>  <input type="submit" name="submit" value="<?php echo SIGN_IN_BUTTON;?>" class="b_signin"/><p class="forgot_link">   <a href="<?php echo home_url(); ?>/?geodir_signup=true&amp;page1=sign_up"><?php echo NEW_USER_TEXT;?></a>  <br /> <a href="<?php echo home_url(); ?>/?geodir_signup=true&amp;page1=sign_in"><?php echo FORGOT_PW_TEXT;?></a> </p> </div>
-					
+					<div class="geodir_form_row clearfix"><input type="submit" name="submit" value="<?php echo SIGN_IN_BUTTON;?>" class="b_signin"/><p class="geodir-new-forgot-link">   
+                    <a href="<?php echo home_url(); ?>/?geodir_signup=true&amp;page1=sign_up" class="goedir-newuser-link"><?php echo NEW_USER_TEXT;?></a>  
+                    
+                    <a href="<?php echo home_url(); ?>/?geodir_signup=true&amp;page1=sign_in"class="goedir-forgot-link"><?php echo FORGOT_PW_TEXT;?></a> </p> </div>
 				 </form>           
-				<?php }?>
-				</div>
-			
-		<?php
+				<?php }
+				
+				echo $after_widget;
 		}
 		function update($new_instance, $old_instance) {
 		//save the widget
@@ -554,27 +386,25 @@ function register_geodir_widgets(){
 			$title = empty($instance['title']) ? '&nbsp;' : apply_filters('widget_title', $instance['title']);
 			
 			global $current_user,$post;
-			
+			echo $before_widget;
 			?>
-			
-			<div class="geodir-widget likethis_widget">
-			
-			<?php if ( get_option('gd_tweet_button') ) { ?>
+						
+			<?php //if ( get_option('gd_tweet_button') ) { ?>
 			
 				<a href="http://twitter.com/share" class="twitter-share-button"><?php _e('Tweet',GEODIRECTORY_TEXTDOMAIN);?></a>
 				
 				<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script> 
 			
-			<?php } ?>
+			<?php //} ?>
 			
-			<?php if ( get_option('gd_facebook_button') ) { ?>
+			<?php // if ( get_option('gd_facebook_button') ) { ?>
 			
-				<iframe <?php if (isset($_SERVER['HTTP_USER_AGENT']) && (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)){echo 'allowtransparency="true"'; }?> class="facebook" src="http://www.facebook.com/plugins/like.php?href=<?php echo urlencode(get_permalink($post->ID)); ?>&amp;layout=button_count&amp;show_faces=false&amp;width=100&amp;action=like&amp;colorscheme=light" scrolling="no" frameborder="0"  style="border:none; overflow:hidden; width:100px; height:20px"></iframe> 
+				<iframe <?php if (isset($_SERVER['HTTP_USER_AGENT']) && (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)){echo 'allowtransparency="true"'; }?> class="facebook" src="http://www.facebook.com/plugins/like.php?href=<?php echo urlencode(geodir_curPageURL()); ?>&amp;layout=button_count&amp;show_faces=false&amp;width=100&amp;action=like&amp;colorscheme=light" scrolling="no" frameborder="0"  style="border:none; overflow:hidden; width:100px; height:20px"></iframe> 
 			
 			
-			<?php } ?>
+			<?php //} ?>
 			
-			<?php if ( get_option('gd_google_button') ) { ?>
+			<?php //if ( get_option('gd_google_button') ) { ?>
 			
 				<script type="text/javascript" src="https://apis.google.com/js/plusone.js">
 				{ parsetags: 'explicit' }
@@ -582,12 +412,8 @@ function register_geodir_widgets(){
 				
 				<div id="plusone-div"></div>
 				<script type="text/javascript">gapi.plusone.render('plusone-div', {"size": "medium", "count": "true" });</script>                    
-			<?php } ?>
-			
-			</div>
-			
-			
-			<?php
+			<?php //} 
+			echo $after_widget;
 			
 		}
 		
@@ -620,7 +446,7 @@ function register_geodir_widgets(){
 		function geodirsubscribeWidget()
 		{
 			//Constructor
-			$widget_ops = array('classname' => 'GD Subscribe', 'description' => __('GD > Google Feedburner Subscribe',GEODIRECTORY_TEXTDOMAIN) );		
+			$widget_ops = array('classname' => 'geodir-subscribe', 'description' => __('GD > Google Feedburner Subscribe',GEODIRECTORY_TEXTDOMAIN) );		
 			$this->WP_Widget('widget_subscribeWidget', __('GD > Subscribe',GEODIRECTORY_TEXTDOMAIN), $widget_ops);
 		}
 		
@@ -631,24 +457,14 @@ function register_geodir_widgets(){
 			
 			$id = empty($instance['id']) ? '' : apply_filters('widget_id', $instance['id']);
 			
-			$title = empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);
+			$title = empty($instance['title']) ? '' : apply_filters('widget_title', __($instance['title'],GEODIRECTORY_TEXTDOMAIN));
 			
 			$text = empty($instance['text']) ? '' : apply_filters('widget_text', $instance['text']);
 			
-			/*$twitter = empty($instance['twitter']) ? '' : apply_filters('widget_twitter', $instance['twitter']);
-			
-			$facebook = empty($instance['facebook']) ? '' : apply_filters('widget_facebook', $instance['facebook']);
-			
-			$digg = empty($instance['digg']) ? '' : apply_filters('widget_digg', $instance['digg']);
-			
-			$myspace = empty($instance['myspace']) ? '' : apply_filters('widget_myspace', $instance['myspace']);
-			
-			$rss = empty($instance['rss']) ? '' : apply_filters('widget_rss', $instance['rss']);*/
+			echo $before_widget;
 			?>
-			
-			<div class="geodir-widget subscribe clearfix" >
-			
-			<h3><?php echo $title; ?>  <a href="<?php if($id){echo 'http://feeds2.feedburner.com/'.$id;}else{bloginfo('rss_url');} ?>" ><img  src="<?php echo geodir_plugin_url(); ?>/geodirectory-assets/images/i_rss.png" alt="" class="i_rss"  /> </a> </h3>
+						
+			<?php echo $before_title.$title; ?>  <a href="<?php if($id){echo 'http://feeds2.feedburner.com/'.$id;}else{bloginfo('rss_url');} ?>" ><i class="fa fa-rss-square"></i> </a><?php echo $after_title;?>
 			
 			<?php if ( $text <> "" ) { ?>	 
 			
@@ -656,7 +472,7 @@ function register_geodir_widgets(){
 			
 			<?php } ?>
 			
-			<form class="subscribe_form"  action="http://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow"  onsubmit="window.open('http://feedburner.google.com/fb/a/mailverify?uri=<?php echo $id; ?>', 'popupwindow', 'scrollbars=yes,width=550,height=520');return true"> 
+			<form class="geodir-subscribe-form"  action="http://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow"  onsubmit="window.open('http://feedburner.google.com/fb/a/mailverify?uri=<?php echo $id; ?>', 'popupwindow', 'scrollbars=yes,width=550,height=520');return true"> 
 			   
 				<input type="text" class="field" onfocus="if (this.value == '<?php _e('Your Email Address',GEODIRECTORY_TEXTDOMAIN)?>') {this.value = '';}" onblur="if (this.value == '') {this.value = '<?php _e('Your Email Address',GEODIRECTORY_TEXTDOMAIN)?>';}" name="email" value="<?php _e('Your Email Address',GEODIRECTORY_TEXTDOMAIN)?>" />
 				
@@ -665,9 +481,9 @@ function register_geodir_widgets(){
 				<input class="btn_submit" type="submit" name="submit" value="Submit" /> 
 				
 			</form>
-			</div>  <!-- #end -->
 			
 			<?php
+			echo $after_widget;
 			
 		}
 		
@@ -679,10 +495,7 @@ function register_geodir_widgets(){
 			$instance['id'] = strip_tags($new_instance['id']);
 			$instance['title'] = ($new_instance['title']);
 			$instance['text'] = ($new_instance['text']);
-			/*$instance['twitter'] = ($new_instance['twitter']);
-			$instance['facebook'] = ($new_instance['facebook']);
-			$instance['digg'] = ($new_instance['digg']);
-			$instance['myspace'] = ($new_instance['myspace']);*/
+	
 			
 			return $instance;
 		}
@@ -698,13 +511,7 @@ function register_geodir_widgets(){
 			
 			$text = strip_tags($instance['text']);
 			
-			/*$twitter = strip_tags($instance['twitter']);
-			
-			$facebook = strip_tags($instance['facebook']);
-			
-			$digg = strip_tags($instance['digg']);
-			
-			$myspace = strip_tags($instance['myspace']);*/
+	
 		
 		?>
 			<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title',GEODIRECTORY_TEXTDOMAIN);?>: <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" /></label></p>
@@ -736,14 +543,12 @@ function register_geodir_widgets(){
 			extract($args, EXTR_SKIP);
 			
 			$desc1 = empty($instance['desc1']) ? '&nbsp;' : apply_filters('widget_desc1', $instance['desc1']);
+			echo $before_widget;
 		?>						
-			<div class="geodir-widget advt_single">    
 				<?php if ( $desc1 <> "" ) { ?>	
 					<?php echo $desc1; ?> 
-				<?php } ?>
-			</div>
-		
-		<?php
+				<?php } 
+				echo $after_widget;
 		}
 		
 		function update($new_instance, $old_instance)
@@ -789,20 +594,17 @@ function register_geodir_widgets(){
 			$id = empty($instance['id']) ? '&nbsp;' : apply_filters('widget_id', $instance['id']);
 			
 			$number = empty($instance['number']) ? '&nbsp;' : apply_filters('widget_number', $instance['number']);
-		
+			echo $before_title.__('Photo Gallery',GEODIRECTORY_TEXTDOMAIN).$after_title;
 		?> 
-        	<div class="geodir-widget">
-			<h3 ><span><?php _e('Photo Gallery',GEODIRECTORY_TEXTDOMAIN);?></span> </h3>
 		
-			<div class="flickr clearfix">
+			<div class="geodir-flickr clearfix">
 			
 				<script type="text/javascript" src="http://www.flickr.com/badge_code_v2.gne?count=<?php echo $number; ?>&amp;display=latest&amp;size=s&amp;layout=x&amp;source=user&amp;user=<?php echo $id; ?>"></script>
 			
 			</div>
-            </div>
 		
 		
-		<?php
+		<?php echo $after_widget;
 		}
 		
 		function update($new_instance, $old_instance) 
@@ -860,14 +662,9 @@ function register_geodir_widgets(){
 			extract($args, EXTR_SKIP);
 			
 			$desc1 = empty($instance['gd_tw_desc1']) ? '&nbsp;' : apply_filters('gd_tw_widget_desc1', $instance['gd_tw_desc1']);
-		?>						
-			<div class="geodir-widget gd_twitter">    
-				<?php if ( $desc1 <> "" ) { ?>	
-					<?php echo $desc1; ?> 
-				<?php } ?>
-			</div>
-		
-		<?php
+			echo $before_widget;
+		 if ( $desc1 <> "" ) { echo $desc1; } 
+			echo $after_widget;
 		}
 		
 		function update($new_instance, $old_instance)
@@ -915,7 +712,7 @@ class geodir_advance_search_widget extends WP_Widget {
 		
 		echo $before_widget;
 		
-		$title = empty($instance['title']) ? __('Search',GEODIRECTORY_TEXTDOMAIN) : apply_filters('widget_title', $instance['title']);
+		$title = empty($instance['title']) ? __('Search',GEODIRECTORY_TEXTDOMAIN) : apply_filters('widget_title', __($instance['title'],GEODIRECTORY_TEXTDOMAIN));
 		
 		geodir_get_template_part('listing','filter-form'); 
 		

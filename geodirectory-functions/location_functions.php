@@ -102,32 +102,24 @@ function create_location_slug($location_string) {
 	$slug = str_replace(" ", "_", $lvalue);*/
 	
 	
-	return sanitize_title($location_string);
+	return apply_filters('geodir_location_slug_check', sanitize_title($location_string));
 	
 }
 
-function geodir_get_location($id = ''){
-
+function geodir_get_location($id = '')
+{
 	return $location_result = apply_filters('geodir_get_location_by_id', get_option('geodir_default_location'),$id);
 }
 
-function geodir_get_country_dl($post_country = '',$prefix=''){
-
+function geodir_get_country_dl($post_country = '',$prefix='')
+{
 	global $wpdb;
-	
 	$countries =	$wpdb->get_col("SELECT Country FROM ".GEODIR_COUNTRIES_TABLE);
-	
 	$selected = '';
 	if($post_country == '')
 			$selected = 'selected="selected"';
 	
-	
-	$out_put = '<select field_type="select" name="'.$prefix.'country" id="'.$prefix.'country" data-placeholder="'.__('Choose a country&hellip;',GEODIRECTORY_TEXTDOMAIN).'" class="chosen_select" option-listfore="country" option-showEveryWhere="no" option-addSearchTermOnNorecord="1" option-ajaxchosen="false" option-noLocationUrl="1" option-countrySearch="1" >';
-	
-	/*$out_put = '<select field_type="select" name="'.$prefix.'country" id="'.$prefix.'country" data-placeholder="'.__('Choose a country&hellip;',GEODIRECTORY_TEXTDOMAIN).'" class="chosen_select" option-listfore="country" option-ajaxChosen="false" >';*/ 
-	
-	$out_put .= '<option '.$selected.' value="">'.__('Select Country',GEODIRECTORY_TEXTDOMAIN).'</option>'; 
-	
+	$out_put = '<option '.$selected.' value="">'.__('Select Country',GEODIRECTORY_TEXTDOMAIN).'</option>'; 
 	foreach($countries as $country) 
 	{
 		$selected = '';
@@ -137,60 +129,9 @@ function geodir_get_country_dl($post_country = '',$prefix=''){
 		$out_put .= '<option '.$selected.' value="'.$country.'">'.$country.'</option>';
     } 
 	
-	$out_put .= '</select>'; 
-	
 	echo $out_put;
 }
 
-
-function geodir_chosen_search_locations($term='', $location_type='', $autoredirect = false){	
-	global $wpdb;
-	$locationlist = '';
-	$all_location = '';
-
-	$location_list_arr  = array();
-	
-	if(isset($_REQUEST['countrySearch']) && $_REQUEST['countrySearch'] == '1'){
-		
-		$country_info = $wpdb->get_col($wpdb->prepare("SELECT Country FROM ".GEODIR_COUNTRIES_TABLE.' WHERE Country LIKE %s ', array($term.'%')));
-		
-		$location_list_arr = array();
-		foreach($country_info as $country){
-			
-				$location_slug_arr = array();
-				$selected = '';
-		
-			$location_slug_arr[] = trim($country);
-			$location_name = trim($country);
-			
-			if($autoredirect)
-				$location_value = geodir_get_location_link($location_slug_arr); 
-			else
-				$location_value =  implode(",", $location_slug_arr);
-				
-			if(isset($_REQUEST['noLocationUrl']) && $_REQUEST['noLocationUrl'] == 1){
-				$location_list_arr[] =  "{\"value\":\"".$location_name."\" , \"text\":\"".$location_name."\"}"; 
-			}else{
-				$location_list_arr[] =  "{\"value\":\"".$location_value."\" , \"text\":\"".$location_name."\"}"; 
-			}
-			
-		}
-	}
-	
-	
-	$all_location = '';
-	if(!empty($location_list_arr))
-		$locationlist = implode(',',$location_list_arr);
-	elseif( isset($_REQUEST['add_searchkey_on_no_record']) && $_REQUEST['add_searchkey_on_no_record']){
-		$locationlist = "{\"value\":\"$_REQUEST[term]\" , \"text\":\"$_REQUEST[term]\"}";	
-		
-	}	
-	
-	$locationlist = apply_filters('geodir_chosen_search_locations', $locationlist, $term, $location_type, $autoredirect);
-		
-	?> { "states": [ <?php echo $locationlist; ?> ] } <?php   
-	
-}
 
 
 function geodir_location_form_submit() 
@@ -262,8 +203,8 @@ function geodir_location_form_submit()
 /**
  * Save add new location
  */
-function geodir_add_new_location( $location_info = array()){
-	
+function geodir_add_new_location( $location_info = array())
+{
 	global $wpdb;
 	
 	if(!empty($location_info)){

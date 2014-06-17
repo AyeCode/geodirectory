@@ -64,6 +64,8 @@ function initMap(map_options){
 		jQuery('#' + map_canvas+'_loading_div').toggleClass('loading_div_fullscreen');
 		jQuery('#' + map_canvas +'_map_nofound').toggleClass('nofound_fullscreen');
 		jQuery('#' + map_canvas +'_triggermap').toggleClass('triggermap_fullscreen');
+		jQuery('.trigger').toggleClass('triggermap_fullscreen');
+		jQuery('.map-places-listing').toggleClass('triggermap_fullscreen');
 		jQuery('.' + map_canvas +'_TopLeft').toggleClass('TopLeft_fullscreen');
 		
 		window.setTimeout(function() { 
@@ -195,6 +197,10 @@ function map_ajax_search(map_canvas_var, search_query_string, marker_jason)
 // read the data, create markers
 function parse_marker_jason(data, map_canvas_var)
 {
+if(jQuery('#'+map_canvas_var).val()==''){// if map not loaded then load it
+initMap(map_canvas_var);
+}	
+
 	jQuery("#"+ map_canvas_var).goMap();
 	
 	// get the bounds of the map
@@ -240,7 +246,7 @@ function parse_marker_jason(data, map_canvas_var)
 		}
 	}
 	
-	jQuery('#' + map_canvas_var + '_loader').hide();
+	jQuery('#' + map_canvas_var + '_loading_div').hide();
 }	
 
 	
@@ -286,7 +292,7 @@ function create_marker(input,map_canvas_var )
 			
 			
 		var title = geodir_htmlEscape(input.t);
-		
+		if(!input.i){return;}
 		var marker  = jQuery.goMap.createMarker({
 							id: marker_id ,
 							title: title ,
@@ -404,7 +410,8 @@ function map_sticky(map_options) {
 			return this.scrollTop() + this.height(); 
 		};			
 	
-		var content = jQuery("#geodir_wrapper").closest('div').scrollBottom();
+		//var content = jQuery("#geodir_wrapper").closest('div').scrollBottom();
+		var content = jQuery("#geodir-main-content").closest('div').scrollBottom();
 		var stickymap = jQuery("#sticky_map_"+optionsname+"").scrollBottom();
 		var catcher = jQuery('#catcher_'+optionsname+'');
 		var sticky = jQuery('#sticky_map_'+optionsname+'');		
@@ -423,6 +430,11 @@ function map_sticky(map_options) {
 			
 				//alert(catcher.offset().top);
 			//sticky.css({'min-width':'300px'});
+			//alert(content);
+			//alert(stickymap);
+			//if(content > stickymap ) {alert(1);}
+			//if(jQuery(window).scrollTop() >= catcher.offset().top ) {alert(2);}
+				
 			if(jQuery(window).scrollTop() >= catcher.offset().top && content > stickymap ) {
 				if(!sticky.hasClass('stickymap')){ 	
 					sticky.addClass('stickymap');

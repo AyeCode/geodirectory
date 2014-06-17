@@ -1,5 +1,70 @@
 <?php 
 
+function geodir_list_view_select(){
+?>
+<script type="text/javascript">
+function geodir_list_view_select(list){
+	//alert(listval);
+val = list.value;	
+if(!val){return;}
+
+//var listSel = jQuery(list).closest('.geodir_category_list_view');
+var listSel = jQuery(list).parent().parent().next('.geodir_category_list_view');
+if(val!=1){jQuery(listSel).children('li').addClass('geodir-gridview');}
+
+if(val==1){jQuery(listSel).children('li').removeClass('geodir-gridview gridview_onehalf gridview_onethird gridview_onefourth gridview_onefifth');}
+else if(val==2){jQuery(listSel).children('li').switchClass('gridview_onethird gridview_onefourth gridview_onefifth','gridview_onehalf',600);}
+else if(val==3){jQuery(listSel).children('li').switchClass('gridview_onehalf gridview_onefourth gridview_onefifth','gridview_onethird',600);}
+else if(val==4){jQuery(listSel).children('li').switchClass('gridview_onehalf gridview_onethird gridview_onefifth','gridview_onefourth',600);}
+else if(val==5){jQuery(listSel).children('li').switchClass('gridview_onehalf gridview_onethird gridview_onefourth','gridview_onefifth',600);}
+
+jQuery.post( "<?php echo geodir_get_ajax_url();?>&gd_listing_view="+val, function( data ) {
+  //alert(data );
+});
+
+}
+</script>
+<div class="geodir-list-view-select">
+	<select name="gd_list_view" id="gd_list_view" onchange="geodir_list_view_select(this);">
+<?php if(isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view']!=''){$sel=$_SESSION['gd_listing_view'];}else{$sel='';}?>			
+		<option  value=""><?php _e('View:',GEODIRECTORY_TEXTDOMAIN);?></option>
+		<option value="1" <?php if($sel=='1'){echo 'selected="selected"';}?> ><?php _e('View: List',GEODIRECTORY_TEXTDOMAIN);?></option>
+		<option value="2" <?php if($sel=='2'){echo 'selected="selected"';}?>><?php _e('View: Grid 2',GEODIRECTORY_TEXTDOMAIN);?></option>
+		<option value="3" <?php if($sel=='3'){echo 'selected="selected"';}?>><?php _e('View: Grid 3',GEODIRECTORY_TEXTDOMAIN);?></option>
+		<option value="4" <?php if($sel=='4'){echo 'selected="selected"';}?>><?php _e('View: Grid 4',GEODIRECTORY_TEXTDOMAIN);?></option>
+		<option value="5" <?php if($sel=='5'){echo 'selected="selected"';}?>><?php _e('View: Grid 5',GEODIRECTORY_TEXTDOMAIN);?></option>
+			
+	</select>
+</div>
+<?php	
+	
+}
+
+
+//add_action('geodir_before_listing_post_listview', 'geodir_list_view_select');
+add_action('geodir_before_listing', 'geodir_list_view_select', 100);
+
+
+function geodir_max_excerpt($charlength) {
+	if($charlength=='0'){return;}
+	$excerpt = get_the_excerpt();
+	$charlength++;
+
+	if ( mb_strlen( $excerpt ) > $charlength ) {
+		$subex = mb_substr( $excerpt, 0, $charlength - 5 );
+		$exwords = explode( ' ', $subex );
+		$excut = - ( mb_strlen( $exwords[ count( $exwords ) - 1 ] ) );
+		if ( $excut < 0 ) {
+			echo mb_substr( $subex, 0, $excut );
+		} else {
+			echo $subex;
+		}
+		echo apply_filters('geodir_max_excerpt_end','[...]');
+	} else {
+		echo $excerpt;
+	}
+}
+
 function geodir_post_package_info($package_info, $post='', $post_type = '')
 {
 	$package_info['pid'] = 0;
@@ -383,8 +448,8 @@ function geodir_related_posts_display($request){
 				<div class="geodir_locations geodir_location_listing">
    						
 							<?php if(isset($request['is_widget']) && $request['is_widget'] == '1'){?>
-							<div class="locatin_list_heading clearfix">
-								<h3><?php echo ucfirst($title);?></h3> 
+							<div class="location_list_heading clearfix">
+								<?php echo $before_title.$title.$after_title;?> 
 							</div><?php }
 							
 					
@@ -420,14 +485,8 @@ function geodir_related_posts_display($request){
 									
 								}
 								
-								if($layout == 'gridview'){
-									
-									$template = apply_filters( "geodir_template_part-related-listing-gridview", geodir_plugin_path() . '/geodirectory-templates/listing-gridview.php' );
-								
-								}else{
-									
-									$template = apply_filters( "geodir_template_part-related-listing-listview", geodir_plugin_path() . '/geodirectory-templates/listing-listview.php' );
-								}
+								$template = apply_filters( "geodir_template_part-related-listing-listview", geodir_plugin_path() . '/geodirectory-templates/listing-listview.php' );
+							
 								
 								include( $template );
 							  
@@ -813,3 +872,70 @@ function geodir_show_detail_page_tabs(){
 	<?php
 
 }
+
+
+function geodir_exif($file) {
+        //This line reads the EXIF data and passes it into an array
+		$file['file']=$file['tmp_name'];
+        $exif = read_exif_data($file['file']);
+
+        //We're only interested in the orientation
+        $exif_orient = isset($exif['Orientation'])?$exif['Orientation']:0;
+        $rotateImage = 0;
+
+        //We convert the exif rotation to degrees for further use
+        if (6 == $exif_orient) {
+            $rotateImage = 90;
+            $imageOrientation = 1;
+        } elseif (3 == $exif_orient) {
+            $rotateImage = 180;
+            $imageOrientation = 1;
+        } elseif (8 == $exif_orient) {
+            $rotateImage = 270;
+            $imageOrientation = 1;
+        }
+
+        //if the image is rotated
+        if ($rotateImage) {
+
+            //WordPress 3.5+ have started using Imagick, if it is available since there is a noticeable difference in quality
+            //Why spoil beautiful images by rotating them with GD, if the user has Imagick
+
+            if (class_exists('Imagick')) {
+                $imagick = new Imagick();
+                $imagick->readImage($file['file']);
+                $imagick->rotateImage(new ImagickPixel(), $rotateImage);
+                $imagick->setImageOrientation($imageOrientation);
+                $imagick->writeImage($file['file']);
+                $imagick->clear();
+                $imagick->destroy();
+            } else {
+
+                //if no Imagick, fallback to GD
+                //GD needs negative degrees
+                $rotateImage = -$rotateImage;
+
+                switch ($file['type']) {
+                    case 'image/jpeg':
+                        $source = imagecreatefromjpeg($file['file']);
+                        $rotate = imagerotate($source, $rotateImage, 0);
+                        imagejpeg($rotate, $file['file']);
+                        break;
+                    case 'image/png':
+                        $source = imagecreatefrompng($file['file']);
+                        $rotate = imagerotate($source, $rotateImage, 0);
+                        imagepng($rotate, $file['file']);
+                        break;
+                    case 'image/gif':
+                        $source = imagecreatefromgif($file['file']);
+                        $rotate = imagerotate($source, $rotateImage, 0);
+                        imagegif($rotate, $file['file']);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        // The image orientation is fixed, pass it back for further processing
+        return $file;
+    }

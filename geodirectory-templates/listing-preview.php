@@ -2,7 +2,7 @@
 header("X-XSS-Protection: 0");
 get_header(); 
 
-do_action('geodir_before_main_content'); 
+do_action('geodir_before_main_content','listing-preview-page'); 
 
 	
 	foreach($_REQUEST as $pkey=>$pval){
@@ -191,7 +191,7 @@ do_action('geodir_before_main_content');
              <?php } ?>
             
             <!-- Post terms start --> 
-            <p class="geodir_post_bottom clearfix"> 
+            <p class="geodir_post_taxomomies clearfix"> 
                 <?php 
                     $taxonomies = array();
                     

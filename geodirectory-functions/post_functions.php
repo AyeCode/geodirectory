@@ -331,9 +331,10 @@ function geodir_save_listing($request_info = array(),$dummy = false){
 			else
 				geodir_save_post_images($last_post_id,$request_info['post_images'], $dummy);
 				
-		}elseif(!isset($request_info['post_images']) || $request_info['post_images'] == ''){
+		}elseif(!isset($request_info['post_images']) || $request_info['post_images'] == '')
+		{
 			
-			/* Delete Attachments*/
+			/* Delete Attachments
 			$postcurr_images = geodir_get_images($last_post_id);
 			
 			$wpdb->query(
@@ -347,11 +348,12 @@ function geodir_save_listing($request_info = array(),$dummy = false){
 			$gd_post_featured_img = array();
 			$gd_post_featured_img['featured_image'] = '';
 			geodir_save_post_info($last_post_id, $gd_post_featured_img); 
+			*/
 		
 		}
 		
 		geodir_remove_temp_images();
-		
+		geodir_set_wp_featured_image($last_post_id);
 		do_action('geodir_after_save_listing',$last_post_id,$request_info);
 		
 		//die;
@@ -567,7 +569,7 @@ function geodir_delete_post_meta($post_id,$postmeta){
  
 if (!function_exists('geodir_get_post_meta')) {
 function geodir_get_post_meta( $post_id, $meta_key, $single = false ){
-	
+	if(!$post_id){return false;}
 	global $wpdb,$plugin_prefix;
 	
 	$all_postypes = geodir_get_posttypes();
@@ -689,13 +691,20 @@ function geodir_save_post_images($post_id = 0, $post_image = array(), $dummy = f
 					if(!is_dir($geodir_uploadpath))
 						mkdir($geodir_uploadpath);
 					
-					if($dummy){
+					$external_img = false;
+					if (strpos($curr_img_url,$uploads['baseurl']) !== false) {}
+					else{
+						$external_img = true;
+					}
+					
+					if($dummy || $external_img ){
 						$uploaded_file = array();
 						$uploaded =  (array)fetch_remote_file($curr_img_url);
 						if(empty($uploaded['error'])){
 							$new_name = basename($uploaded['file']);
 							$uploaded_file = $uploaded;
 						}	
+						$external_img = false;
 					}else{
 						
 						$new_name = $post_id.'_'.$img_name_arr[0].'.'.$img_name_arr[1];
@@ -1164,8 +1173,12 @@ function geodir_show_image( $request = array(), $size = 'thumbnail' ,$no_image =
 					$width_per = 100;
 			}
 			
-			$html = '<div class="geodir_thumbnail"><img style="max-height:'. $max_size->h .'px;" alt="place image" src="' . $image->src . '"  /></div>';
-			
+			//$html = '<div class="geodir_thumbnail"><img style="max-height:'. $max_size->h .'px;" alt="place image" src="' . $image->src . '"  /></div>';
+			if(is_admin()):
+				$html = '<div class="geodir_thumbnail"><img style="max-height:'. $max_size->h .'px;" alt="place image" src="' . $image->src . '"  /></div>';
+			else : 
+				$html = '<div class="geodir_thumbnail" style="background-image:url(\''.$image->src.'\');"></div>';
+			endif;
 			
 			/*$html = '<div style="text-align: center;max-height:'.$max_size->h.'px;line-height:'.$max_size->h.'px;">';
 			
@@ -1425,33 +1438,7 @@ function geodir_get_infowindow_html($postinfo_obj, $post_preview = ''){
 	<div class="bubble">
 		<div style="position: relative;margin:5px 0px; ">
 			<?php 
-			if(isset($_SESSION['listing']) && isset($post_preview) && $post_preview != ''){
-				
-				$post_images = array();
-				if(!empty($postinfo_obj->post_images))
-					$post_images = explode(",",$postinfo_obj->post_images);
-				
-				if(!empty($post_images)){?>
-					
-					<div class="bubble_image" style=" max-width:75px;">
-					<a href="<?php if($plink!= ''){ echo $plink;}else{ echo 'javascript:void(0);';}?>">
-					<img style="max-height:50px;" src="<?php echo $post_images[0];?>" />
-					</a>
-					</div> 
-				<?php
-				}
-				
-			}else{
-			
-				if($image = geodir_show_featured_image($ID,'widget-thumb',true,false,$postinfo_obj->featured_image)){ ?>
-				<div class="bubble_image" style=" max-width:75px;">
-					<a href="<?php echo $plink;?>">
-					<?php echo $image; ?>
-					</a>
-				</div> 
-				<?php 
-				}
-			} 
+			 
 			
 			$comment_count = '';
 			$rating_star = '';
@@ -1462,13 +1449,14 @@ function geodir_get_infowindow_html($postinfo_obj, $post_preview = ''){
 				//$comment_count = geodir_get_comments_number($ID); 
 							$post_ratings = geodir_get_postoverall($ID);
 						 // $post_ratings = geodir_get_commentoverall_number($ID);
-							if($post_ratings != 0 && !$preview){
+							if(!$preview){
 								 if($comment_count > 0)
 						$post_avgratings = ($post_ratings / $comment_count);
 					else
 						$post_avgratings = $post_ratings;	
 					
-					$rating_star = geodir_get_rating_stars($post_avgratings,$ID,true);
+					//$rating_star = geodir_get_rating_stars($post_avgratings,$ID,true);
+					$rating_star = geodir_get_rating_stars($post_avgratings,$ID,false);
 					
 					$rating_star = apply_filters('geodir_review_rating_stars_on_infowindow', $rating_star, $post_avgratings, $ID);
 				} 
@@ -1476,14 +1464,113 @@ function geodir_get_infowindow_html($postinfo_obj, $post_preview = ''){
 			}
 			?>
 				
-			<div class="bubble_desc">
+			<div class="geodir-bubble_desc">
 				<h4>
 					<a href="<?php if($plink!= ''){ echo $plink;}else{ echo 'javascript:void(0);';}?>"><?php echo $title;?></a>
 				</h4>
-				<?php echo $rating_star;?>
-				<span class="geodir_address"><?php echo $address;?></span><br>
-				<span class="geodir_contact"><?php echo $contact;?></span><br>
-				<span class="geodir_timing"><?php echo $timing;?></span>
+               <?php
+			   if(isset($_SESSION['listing']) && isset($post_preview) && $post_preview != ''){
+				
+				$post_images = array();
+				if(!empty($postinfo_obj->post_images))
+					$post_images = explode(",",$postinfo_obj->post_images);
+				
+				if(!empty($post_images)){?>
+					
+					<div class="geodir-bubble_image" >
+					<a href="<?php if($plink!= ''){ echo $plink;}else{ echo 'javascript:void(0);';}?>">
+					<img style="max-height:50px;" src="<?php echo $post_images[0];?>" />
+					</a>
+					</div> 
+				<?php
+				}
+				
+			}else{
+			
+				if($image = geodir_show_featured_image($ID,'widget-thumb',true,false,$postinfo_obj->featured_image)){ ?>
+				<div class="geodir-bubble_image" >
+					<a href="<?php echo $plink;?>">
+					<?php echo $image; ?>
+					</a>
+				</div> 
+				<?php 
+				}
+			}
+			?>
+                
+                
+                
+				
+                
+              <div class="geodir-bubble-meta-side">
+				<span class="geodir_address"><i class="fa fa-home"></i> <?php echo $address;?></span>
+				<?php if($contact){?><span class="geodir_contact"><i class="fa fa-phone"></i> <?php echo $contact;?></span><?php }?>
+				<?php if($timing){?><span class="geodir_timing"><i class="fa fa-clock-o"></i> <?php echo $timing;?></span><?php }?>
+              </div>
+             
+            <?php 
+		if(isset($postinfo_obj->recurring_dates)){		
+		$recuring_data = unserialize($postinfo_obj->recurring_dates); 
+		//print_r($recuring_data); echo '###';
+			$output = '';
+					
+					
+					$output .= '<div class="geodir_event_schedule">';	
+					
+					$event_recurring_dates = explode(',', $recuring_data['event_recurring_dates']);
+					
+					$starttimes = isset($recuring_data['starttime']) ? $recuring_data['starttime'] : '';
+					$endtimes = isset($recuring_data['endtime']) ? $recuring_data['endtime'] : '';
+					$e=0;		
+					foreach($event_recurring_dates as $key => $date){
+						
+						if(strtotime($date) < strtotime(date("Y-m-d"))){continue;} // if the event is old don't show it on the map
+						$e++;
+						if($e==2){break;}// only show 3 event dates
+						$output .=  '<p>';
+						$geodir_num_dates++;
+						if(isset($recuring_data['different_times']) && $recuring_data['different_times'] == '1'){
+							$starttimes = isset($recuring_data['starttimes'][$key]) ? $recuring_data['starttimes'][$key] : '';
+							$endtimes = isset($recuring_data['endtimes'][$key]) ? $recuring_data['endtimes'][$key] : '';
+						}	
+						
+						$sdate = strtotime($date.' '.$starttimes);
+						$edate = strtotime($date.' '.$endtimes);
+						
+						if($starttimes > $endtimes){
+							$edate = strtotime($date.' '.$endtimes . " +1 day");
+						}
+						
+						
+
+						global $geodir_date_time_format; 	
+						
+						$output .=  '<i class="fa fa-caret-right"></i>'.date($geodir_date_time_format, $sdate);
+							//$output .=  __(' To', GEODIREVENTS_TEXTDOMAIN).' ';
+							$output .= '<br />';
+						$output .=  '<i class="fa fa-caret-left"></i>'.date($geodir_date_time_format, $edate);//.'<br />';
+						$output .=  '</p>';	
+					}
+					
+					$output .= '</div>';
+					
+					echo $output;
+		}
+					?>
+             
+             
+             
+             
+              <div class="geodir-bubble-meta-bottom">
+                  <span class="geodir-bubble-rating"><?php echo $rating_star;?></span>
+                  
+                  <span class="geodir-bubble-fav"><?php echo geodir_favourite_html($postinfo_obj->post_author,$ID);?></span>
+                  <span class="geodir-bubble-reviews"><a href="<?php echo get_comments_link( $ID ); ?>" class="geodir-pcomments"><i class="fa fa-comments"></i>
+                            <?php echo get_comments_number( $ID ); ?>
+                                     </a></span>
+              </div>
+ 
+              
 			</div>             					
 		</div>
 	</div>
@@ -1661,7 +1748,7 @@ function geodir_add_to_favorite($post_id){
 	
 	do_action('geodir_before_add_from_favorite', $post_id);
 	
-	echo '<a href="javascript:void(0);" class="gd-addtofav geodir-removetofav-icon" onclick="javascript:addToFavourite(\''.$post_id.'\',\'remove\');">'.REMOVE_FAVOURITE_TEXT.'</a>';
+	echo '<a href="javascript:void(0);" title="'.REMOVE_FAVOURITE_TEXT.'" class="geodir-addtofav geodir-removetofav-icon" onclick="javascript:addToFavourite(\''.$post_id.'\',\'remove\');"><i class="fa fa-heart"></i> '.UNFAVOURITE_TEXT.'</a>';
 	
 	do_action('geodir_after_add_from_favorite', $post_id);
 
@@ -1692,7 +1779,7 @@ function geodir_remove_from_favorite($post_id){
 	
 	do_action('geodir_before_remove_from_favorite', $post_id);
 	
-	echo '<a href="javascript:void(0);"  class="gd-addtofav geodir-addtofav-icon" onclick="javascript:addToFavourite(\''.$post_id.'\',\'add\');">'.ADD_FAVOURITE_TEXT.'</a>';
+	echo '<a href="javascript:void(0);"  title="'.ADD_FAVOURITE_TEXT.'" class="geodir-addtofav geodir-addtofav-icon" onclick="javascript:addToFavourite(\''.$post_id.'\',\'add\');"><i class="fa fa-heart"></i> '.FAVOURITE_TEXT.'</a>';
 	
 	do_action('geodir_after_remove_from_favorite', $post_id);
 
@@ -1714,18 +1801,18 @@ function geodir_favourite_html($user_id,$post_id){
 
 	if(!empty($user_meta_data) && in_array($post_id,$user_meta_data))
 	{
-		?><span class="geodir-addtofav favorite_property_<?php echo $post_id;?>"  > <a class="geodir-removetofav-icon" href="javascript:void(0);" onclick="javascript:addToFavourite(<?php echo $post_id;?>,'remove');"><?php echo REMOVE_FAVOURITE_TEXT;?></a>   </span><?php
+		?><span class="geodir-addtofav favorite_property_<?php echo $post_id;?>"  ><a class="geodir-removetofav-icon" href="javascript:void(0);" onclick="javascript:addToFavourite(<?php echo $post_id;?>,'remove');" title="<?php echo REMOVE_FAVOURITE_TEXT;?>"><i class="fa fa-heart"></i> <?php echo UNFAVOURITE_TEXT;?></a>   </span><?php
 
 	}else{
 			
 			if(!isset($current_user->data->ID) || $current_user->data->ID=='')
 			{
-				$script_text = 'javascript:window.location.href=\''.wp_login_url( get_permalink($post->ID) ).'\'' ;
+				$script_text = 'javascript:window.location.href=\''.home_url('/?geodir_signup=true&amp;page1=sign_up').'\'' ;
 			}
 			else
 				$script_text ='javascript:addToFavourite('.$post_id.',\'add\')';
 
-		?><span class="geodir-addtofav favorite_property_<?php echo $post_id;?>"><a class="geodir-addtofav-icon" href="javascript:void(0);" onclick="<?php echo $script_text ;?>"><?php echo ADD_FAVOURITE_TEXT;?></a></span>
+		?><span class="geodir-addtofav favorite_property_<?php echo $post_id;?>"><a class="geodir-addtofav-icon" href="javascript:void(0);" onclick="<?php echo $script_text ;?>" title="<?php echo ADD_FAVOURITE_TEXT;?>"><i class="fa fa-heart"></i> <?php echo FAVOURITE_TEXT;?></a></span>
 	<?php }     
 } 
 }  
@@ -1788,19 +1875,17 @@ function geodir_allow_post_type_frontend()
 
 // Changing excerpt length
 
-function geodir_excerpt_length($length) {
-	
+function geodir_excerpt_length($length)
+{
 	global $wp_query;
-
-	if(get_option('geodir_desc_word_limit'))
+	if(isset($wp_query->query_vars['is_geodir_loop']) && $wp_query->query_vars['is_geodir_loop'] && get_option('geodir_desc_word_limit'))
 		$length = get_option('geodir_desc_word_limit');
-	
+	elseif(get_query_var('excerpt_length'))
+			$length = get_query_var('excerpt_length');
+			
 	if(geodir_is_page('author') && get_option('geodir_author_desc_word_limit'))
 		$length = get_option('geodir_author_desc_word_limit');
-			
-	if(get_query_var('excerpt_length'))
-		$length = get_query_var('excerpt_length');
-			
+	
 	return $length;
 }
 
@@ -1915,6 +2000,76 @@ function geodir_listing_belong_to_current_user($listing_id='', $exclude_admin = 
 	
 	return  geodir_lisiting_belong_to_user($listing_id ,  $current_user->ID);
 }
+//geodir_set_wp_featured_image(16);
+// Written by Vikas on 13-06-2014 to set first image and wordpress post's featured image 
+function geodir_set_wp_featured_image($post_id)
+{
+	
+	global $wpdb;
+	$uploads = wp_upload_dir();
+//	print_r($uploads ) ;
+	$post_first_image =	$wpdb->get_results(
+									$wpdb->prepare(
+										"SELECT * FROM ".GEODIR_ATTACHMENT_TABLE." WHERE post_id = %d and menu_order = 1  ",	array($post_id)
+									)
+								);
+	
+	$old_attachment_name = '';
+	$post_thumbnail_id = '';
+	if(has_post_thumbnail( $post_id )){
+		
+		if(has_post_thumbnail( $post_id )){
+		
+			$post_thumbnail_id = get_post_thumbnail_id( $post_id );
+			
+			$old_attachment_name = basename ( get_attached_file( $post_thumbnail_id ) );
+			
+		}
+	}
+	
+	if(!empty($post_first_image))
+	{
+		
+		$new_attachment_name = basename ( $post_first_image[0]->file );
+		
+		if(strtolower($new_attachment_name) != strtolower($old_attachment_name)){
+			
+			if(has_post_thumbnail( $post_id ) && $post_thumbnail_id != '')
+				wp_delete_attachment( $post_thumbnail_id );
+			
+			$filename =$uploads['basedir'] . $post_first_image[0]->file ;
+			
+			$attachment = array(
+				'post_mime_type' => $post_first_image[0]->mime_type ,
+				'guid' => $uploads['baseurl'] . $post_first_image[0]->file,
+				'post_parent' => $post_id,
+				'post_title' => preg_replace('/\.[^.]+$/', '',  $post_first_image[0]->title ),
+				'post_content' => ''
+			);
+			
+			
+			$id = wp_insert_attachment( $attachment, $filename, $post_id );
+			
+			if ( ! is_wp_error( $id ) ) {
+				
+				set_post_thumbnail($post_id,$id);
+				wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $filename ) );
+				
+			}
+			
+		}
+		
+	}
+	else
+	{
+		//set_post_thumbnail($post_id,-1);
+		
+		if(has_post_thumbnail( $post_id ) && $post_thumbnail_id != '')
+				wp_delete_attachment( $post_thumbnail_id );
+		
+	}
+}
+
 
 /*
 Function to copy custom meta inof on WPML copy.

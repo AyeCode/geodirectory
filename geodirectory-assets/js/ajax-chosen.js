@@ -17,7 +17,7 @@
 		noLocationUrl:0,
 	  jsonTermKey: "term",
 	  jsonTermKeyObject: "term",
-	  jsonLocationKey:"location_type" ,
+	 
       keepTypingMsg: "Keep typing...",
       lookingForMsg: "Looking for"
     };
@@ -28,7 +28,7 @@
     this.chosen(chosenOptions ? chosenOptions : {});
     return this.each(function() {
 	
-    return $(this).next('.chosen-container').find(".search-field > input, .chosen-search > input").bind('keyup', function() {
+    return $(this).next('.geodir-chosen-container').find(".search-field > input, .chosen-search > input").bind('keyup', function() {
        
 		var field, msg, success, untrimmed_val, val;
 		
@@ -37,7 +37,7 @@
         untrimmed_val = $(this).val();
         val = $.trim($(this).val());
         msg = val.length < options.minTermLength ? options.keepTypingMsg : options.lookingForMsg + (" '" + val + "'");
-        select.next('.chosen-container').find('.no-results').text(msg);
+        select.next('.geodir-chosen-container').find('.no-results').text(msg);
         /*if (val === $(this).data('prevVal') && val != '') {
 		  return false;
         }*/
@@ -68,20 +68,15 @@
         }
         options.data[options.jsonTermKey] = val;
 		
-		options.data[options.jsonLocationKey] = options.jsonTermKeyObject; 
-		
-		if(options.noLocationUrl)
-			options.data['noLocationUrl'] = options.noLocationUrl;
-			
-		if(options.addSearchTermOnNorecord)
-			options.data['add_searchkey_on_no_record'] = options.addSearchTermOnNorecord;
 		
 		if (options.dataCallback != null) {
           options.data = options.dataCallback(options.data);
         }
 		
 		success = options.success;
-        options.success = function(data) {
+		if ( options.success == null)
+		{
+        	options.success = function(data) {
 		//alert('success');
 		
           var items, nbItems, selected_values;
@@ -155,6 +150,8 @@
 		  //alert(untrimmed_val)
          // return field.val(untrimmed_val);
         };
+		}
+		
         return this.timer = setTimeout(function() {
 												
           if (chosenXhr) {

@@ -1149,10 +1149,13 @@ if (!function_exists('geodir_import_data')) {
 								
 								if($customKeyarray[$c]=='IMAGE')
 								{
-									$image_names[] = $buffer[$c];
+									$buffer[$c] = trim($buffer[$c]) ;
+									if(!empty($buffer[$c]))
+									{
+										$image_names[] = $buffer[$c];
+									}
 									
 								}
-								
 								
 								if($customKeyarray[$c]=='alive_days'){
 									if($buffer[$c] != '0' && $buffer[$c]!=''){
@@ -1882,6 +1885,15 @@ function geodir_admin_fields($options){
                		</td>
                	</tr>
                 
+				<?php        
+						            	
+            break;
+						
+						case 'field_seperator' :
+            
+            	?><tr valign="top">
+                    <td colspan="2" class="forminp geodir_line_seperator"></td>
+    						</tr>
 				<?php        
 						            	
             break;

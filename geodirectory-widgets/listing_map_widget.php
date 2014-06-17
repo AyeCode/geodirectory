@@ -125,7 +125,9 @@ class geodir_map_listingpage extends WP_Widget {
 			$map_args['autozoom'] = $autozoom;
 			$map_args['bubble_size'] = 'small';	
 			
+			echo $before_widget;
 			geodir_draw_map($map_args);
+			echo $after_widget;
 		
 		endif;	
 	}
@@ -165,10 +167,27 @@ class geodir_map_listingpage extends WP_Widget {
             <input class="widefat" id="<?php echo $this->get_field_id('heigh'); ?>" name="<?php echo $this->get_field_name('heigh'); ?>" type="text" value="<?php echo esc_attr($heigh); ?>" />
             </label>
         </p>
+				
+				<?php
+					$map_zoom_level = geodir_map_zoom_level();
+				?>
         
         <p>
-            <label for="<?php echo $this->get_field_id('zoom'); ?>"><?php _e('Map Zoom level(1-19) <small>(Default is : 13)</small>',GEODIRECTORY_TEXTDOMAIN);?>:
-            <input class="widefat" id="<?php echo $this->get_field_id('zoom'); ?>" name="<?php echo $this->get_field_name('zoom'); ?>" type="text" value="<?php echo esc_attr($zoom); ?>" />
+            <label for="<?php echo $this->get_field_id('zoom'); ?>"><?php _e('Map Zoom level',GEODIRECTORY_TEXTDOMAIN);?>:
+           
+						<select class="widefat" id="<?php echo $this->get_field_id('zoom'); ?>" name="<?php echo $this->get_field_name('zoom'); ?>" > <?php
+        
+					foreach($map_zoom_level as $level){
+						$selected = '';
+						if($level == $zoom)
+							$selected = 'selected="selected"';
+						
+						echo '<option '.$selected.' value="'.$level.'">'.$level.'</option>';
+						
+					}?>
+        
+      		 </select>
+			 
             </label>
         </p>
         

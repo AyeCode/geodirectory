@@ -362,8 +362,10 @@ function geodir_admin_option_form($tab_name)
                                   <?php 
 																	
 																	$country_result = isset($location_result->country) ? $location_result->country : '';
-																	geodir_get_country_dl($country_result,$prefix); ?>
-																	
+																	?>
+                                                                   <select id="<?php echo $prefix ?>country" class="chosen_select"data-location_type="country" name="<?php echo $prefix ?>country"  data-placeholder="<?php _e('Choose a country.', GEODIRLOCATION_TEXTDOMAIN) ;?>" data-addsearchtermonnorecord="1" data-ajaxchosen="0" data-autoredirect="0" data-showeverywhere="0" >
+			<?php geodir_get_country_dl($country,$prefix); ?>
+			</select>								
 																	<div class="gd-location_message_error"><?php _e('This field is required.' , GEODIRECTORY_TEXTDOMAIN); ?></div>
 																	
                                 </div>

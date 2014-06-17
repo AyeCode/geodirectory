@@ -488,7 +488,7 @@ $default = isset($field_info->is_admin)	 ? $field_info->is_admin : '';
                     <td align="left">
                     <input type="text" name="field_icon" id="field_icon" value="<?php if(isset($field_info->field_icon)){ echo $field_info->field_icon;}?>" />
                     <span>
-                        <?php _e('Upload icon using media and enter its url path.',GEODIRECTORY_TEXTDOMAIN);?>
+                        <?php _e('Upload icon using media and enter its url path, or enter <a href="http://fortawesome.github.io/Font-Awesome/icons/" target="_blank" >font awesome </a>class eg:"fa fa-home"',GEODIRECTORY_TEXTDOMAIN);?>
                     </span>
                     </td>
                     </td>

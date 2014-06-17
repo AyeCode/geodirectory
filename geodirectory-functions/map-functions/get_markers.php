@@ -170,7 +170,26 @@ function get_markers(){
 		
 	 }
 	 
-		$post_title = $catinfo_obj->post_title;
+
+		$e_dates = '';
+		if($post_type=='gd_event'){//print_r($catinfo_obj);
+
+		$event_arr = unserialize($catinfo_obj->recurring_dates);
+		$e_arr = explode(",",$event_arr['event_recurring_dates']);
+		global $geodir_date_format;
+		$e=0;
+		foreach($e_arr as $e_date){
+			//echo '###'.strtotime($e_date);
+			if(strtotime($e_date) >= strtotime(date("Y-m-d"))){
+				$e++;
+				$e_dates .= ' :: '.date($geodir_date_format,strtotime($e_date));
+				if($e==3){break;}// only show 3 event dates
+				}
+		}
+		
+		if($e_dates == ''){ continue;} // if the event is old don't show it on the map
+		}
+		$post_title = $catinfo_obj->post_title.$e_dates;
 		$title = str_replace($srcharr,$replarr,$post_title);
 	 
 		$content_data[] = '{"id":"'.$catinfo_obj->post_id.'","t": "'.$title.'","lt": "'.$catinfo_obj->post_latitude.'","ln": "'.$catinfo_obj->post_longitude.'","mk_id":"'.$catinfo_obj->post_id.'_'.$catinfo_obj->default_category.'","i":"'.$icon.'"}';

@@ -1,58 +1,44 @@
-<?php get_header(); ?>
+<?php 
+// get header
+get_header(); 
 
-<div id="geodir_wrapper" class="geodir-home">
-	
-    
-    
-    <?php if(get_option('geodir_show_home_top_section')) { ?>
-    
-    <div class="geodir_full_page clearfix">
-   	    <?php 
-		dynamic_sidebar('geodir_home_top');?>
-	</div><!-- clearfix ends here-->
-    
-    <?php } ?>
-    
-    <?php geodir_breadcrumb(); 
-		//geodir_draw_map('home_map_canvas');
-	?>
-    
-    <div class="clearfix geodir-common">
-    	
-        <?php if( get_option('geodir_show_home_left_section') ) { ?> 
-        <div class="geodir-onethird gd-third-left" <?php if($width = get_option('geodir_width_home_left_section') ) { echo 'style="width:'.$width.'%;"'; } ?> >
-        	<div class="geodir-content-left">
-           <?php dynamic_sidebar('geodir_home_left');?>
-           </div>
-        </div>
-        <?php } ?>
+###### WRAPPER OPEN ######
+// this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='')
+do_action( 'geodir_wrapper_open', 'home-page', 'geodir-wrapper','');
+
+    ###### TOP CONTENT ######
+	// action called before the main content and the page specific content
+	do_action('geodir_top_content', 'home-page');
+	// template specific, this can add the sidebar top section and breadcrums
+	do_action('geodir_home_before_main_content');
+	// action called before the main content
+	do_action('geodir_before_main_content', 'home-page');
+
+		###### SIDEBAR ######
+		do_action('geodir_home_sidebar_left');
+			
+			###### MAIN CONTENT WRAPPERS OPEN ######
+			// this adds the opening html tags to the content div, this required the closing tag below :: ($type='',$id='',$class='')
+			do_action( 'geodir_wrapper_content_open', 'home-page', 'geodir-wrapper-content','');
+			
+					###### MAIN CONTENT ######
+					// this call the main page content
+        			do_action('geodir_home_content');
         
-        <?php if( get_option('geodir_show_home_contant_section') ) { ?> 
-        <div class="geodir-onethird gd-third-middle" <?php if($width = get_option('geodir_width_home_contant_section') ) { echo'style="width:'.$width.'%;"';} ?> >
-        	<div class="geodir-content-content">
-            <?php dynamic_sidebar('geodir_home_contant');?>
-            </div>
-        </div>
-        <?php } ?>
+	   		###### MAIN CONTENT WRAPPERS CLOSE ######
+			// this adds the closing html tags to the wrapper_content div :: ($type='')
+			do_action( 'geodir_wrapper_content_close', 'home-page');
       
-         <?php if( get_option('geodir_show_home_right_section') ) { ?> 
-        <div class="geodir-onethird gd-third-right" <?php if($width = get_option('geodir_width_home_right_section') ) { echo 'style="width:'.$width.'%;"';} ?> >
-        	<div class="geodir-content-right">
-            <?php dynamic_sidebar('geodir_home_right');?>
-            </div>
-        </div>
-        <?php } ?>
+        ###### SIDEBAR ######
+		do_action('geodir_home_sidebar_right');
         
-    </div> 
-    
-    
-    <?php if(get_option('geodir_show_home_bottom_section')) { ?>
-    
-    <div class="geodir_full_page clearfix">
-   	    <?php dynamic_sidebar('geodir_home_bottom');?>
-	</div><!-- clearfix ends here-->
-    
-    <?php } ?>   
-    
-</div> 
-<?php get_footer();    
+    ###### BOTTOM SECTION WIDGET AREA ######
+	// adds the details bottom section widget area, you can add more classes via ''
+	do_action('geodir_sidebar_home_bottom_section'); 
+	
+# WRAPPER CLOSE ######	
+// this adds the closing html tags to the wrapper div :: ($type='')
+do_action( 'geodir_wrapper_close', 'home-page');
+
+//get footer
+get_footer();    

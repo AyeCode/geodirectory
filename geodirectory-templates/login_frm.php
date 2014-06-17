@@ -46,14 +46,12 @@ else
         <form name="cus_loginform" id="cus_loginform" action="" method="post" >
         
             <div class="form_row clearfix">
-                <label><?php echo USERNAME_TEXT; ?> <span>*</span> </label>
-                <input type="text" name="log" id="user_login" value="<?php echo esc_attr($user_login); ?>" size="20" class="textfield" />
+                <input placeholder='<?php echo USERNAME_TEXT; ?>' type="text" name="log" id="user_login" value="<?php global $user_login; if(!isset($user_login)){$user_login='';} echo esc_attr($user_login); ?>" size="20" class="textfield" />
                 <span class="user_loginInfo"></span>
             </div> 
         
             <div class="form_row clearfix">
-                <label><?php echo PASSWORD_TEXT; ?> <span>*</span></label>
-                <input type="password" name="pwd" id="user_pass" class="textfield" value="" size="20"  />
+                <input placeholder='<?php echo PASSWORD_TEXT; ?>' type="password" name="pwd" id="user_pass" class="textfield" value="" size="20"  />
                 <span class="user_passInfo"></span>
             </div>
             
@@ -75,8 +73,7 @@ else
             <form name="lostpasswordform" id="lostpasswordform" action="" method="post">
                 <input type="hidden" name="action" value="lostpassword" />	 
                 <div class="form_row clearfix"> 
-                    <label><?php echo USERNAME_EMAIL_TEXT; ?>: </label>
-                    <input type="text" name="user_login" value="<?php echo esc_attr($user_login); ?>" size="20" class="user_login1 textfield" />
+                    <input placeholder='<?php echo USERNAME_EMAIL_TEXT; ?>' type="text" name="user_login" value="<?php echo esc_attr($user_login); ?>" size="20" class="user_login1 textfield" />
                     <?php do_action('lostpassword_form'); ?>
                 </div>
                 <input type="submit" name="get_new_password" value="<?php echo GET_NEW_PW_TEXT;?>" class="geodir_button" />

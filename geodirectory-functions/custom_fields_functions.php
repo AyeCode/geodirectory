@@ -918,7 +918,13 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 		$extra_fields = unserialize($val['extra_fields']);
 		$value='';
 		
-		if(is_admin()){ global $post; $_REQUEST['pid'] = $post->ID;}
+		if(is_admin()){ 
+			
+			global $post; 
+			
+			if(isset($_REQUEST['post']))
+				$_REQUEST['pid'] = $_REQUEST['post'];
+		}
 		
 		if( isset($_REQUEST['backandedit']) && $_REQUEST['backandedit'] && isset($_SESSION['listing']) ){ 
 			$post = unserialize($_SESSION['listing']);
@@ -991,13 +997,13 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 			
 				<div class="<?php if($is_required) echo 'required_field';?> geodir_form_row clearfix">
 					<label>
-						<?php echo $address_title; ?>
+						<?php _e($address_title,GEODIRECTORY_TEXTDOMAIN); ?>
 						<?php if($is_required) echo '<span>*</span>';?>
 					</label>
 					<input type="text" field_type="<?php echo $type;?>" name="<?php echo $prefix.'address';?>" id="<?php echo $prefix.'address';?>" class="geodir_textfield" value="<?php echo esc_attr(stripslashes($address)); ?>"  />
-					<span class="geodir_message_note"><?php echo $admin_desc;?></span>
+					<span class="geodir_message_note"><?php _e($admin_desc,GEODIRECTORY_TEXTDOMAIN);?></span>
 					<?php if($is_required) {?> 
-						<span class="geodir_message_error"><?php echo $required_msg?></span> 
+						<span class="geodir_message_error"><?php _e($required_msg,GEODIRECTORY_TEXTDOMAIN);?></span> 
 					<?php } ?>
 				</div>
 				
@@ -1010,7 +1016,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 				  
 				<div class="<?php /*if($is_required) echo 'required_field';*/?> geodir_form_row clearfix">
 					<label>
-						<?php echo $zip_title;?>
+						<?php _e($zip_title,GEODIRECTORY_TEXTDOMAIN);?>
 						<?php /*if($is_required) echo '<span>*</span>';*/?>
 					</label>
 					<input type="text" field_type="<?php echo $type;?>" name="<?php echo $prefix.'zip';?>" id="<?php echo $prefix.'zip';?>" class="geodir_textfield autofill" value="<?php echo esc_attr(stripslashes($zip)); ?>"  />
@@ -1035,7 +1041,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 					<input type="text" field_type="<?php echo $type;?>" name="<?php echo $prefix.'latitude';?>" id="<?php echo $prefix.'latitude';?>" class="geodir_textfield" value="<?php echo esc_attr(stripslashes($lat)); ?>" size="25"  />
 					<span class="geodir_message_note"><?php echo GET_LATITUDE_MSG;?></span>
 					<?php if($is_required) {?>
-					<span class="geodir_message_error"><?php echo $required_msg?></span> 
+					<span class="geodir_message_error"><?php _e($required_msg,GEODIRECTORY_TEXTDOMAIN);?></span> 
 					<?php } ?>
 				 </div>
 				 
@@ -1047,14 +1053,14 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 					<input type="text" field_type="<?php echo $type;?>" name="<?php echo $prefix.'longitude';?>" id="<?php echo $prefix.'longitude';?>" class="geodir_textfield" value="<?php echo esc_attr(stripslashes($lng)); ?>" size="25"  />
 					<span class="geodir_message_note"><?php echo GET_LOGNGITUDE_MSG;?></span>
 					<?php if($is_required) {?>
-					<span class="geodir_message_error"><?php echo $required_msg?></span> 
+					<span class="geodir_message_error"><?php _e($required_msg,GEODIRECTORY_TEXTDOMAIN);?></span> 
 					<?php } ?>
 				 </div>
 				<?php } ?>
 				
 				<?php if(isset($extra_fields['show_mapview']) && $extra_fields['show_mapview']) {?>  
 						<div class="geodir_form_row clearfix ">
-							<label><?php echo $mapview_title;?></label>
+							<label><?php _e($mapview_title,GEODIRECTORY_TEXTDOMAIN);?></label>
 							
 						   
 							
@@ -1075,13 +1081,13 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 		 
 		 <div class="<?php if($is_required) echo 'required_field';?> geodir_form_row clearfix">
 			<label>
-				<?php echo $site_title; ?>
+				<?php $site_title = __($site_title,GEODIRECTORY_TEXTDOMAIN); echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
 				<?php if($is_required) echo '<span>*</span>';?>
 			</label>
 			<input field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>" value="<?php echo stripslashes($value);?>" type="text" class="geodir_textfield" />
-			<span class="geodir_message_note"><?php echo $admin_desc;?></span>
+			<span class="geodir_message_note"><?php _e($admin_desc,GEODIRECTORY_TEXTDOMAIN);?></span>
 			<?php if($is_required) {?>
-			<span class="geodir_message_error"><?php echo $required_msg?></span> 
+			<span class="geodir_message_error"><?php _e($required_msg,GEODIRECTORY_TEXTDOMAIN);?></span> 
 			<?php } ?>
 		 </div>
 		
@@ -1091,13 +1097,13 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 		 
 			<div class="<?php if($is_required) echo 'required_field';?> geodir_form_row clearfix">
 				<label>
-					<?php echo $site_title; ?>
+					<?php $site_title = __($site_title,GEODIRECTORY_TEXTDOMAIN); echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
 					<?php if($is_required) echo '<span>*</span>';?>
 				</label>
 				<input field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>" value="<?php echo stripslashes($value);?>" type="text" class="geodir_textfield" />
-				<span class="geodir_message_note"><?php echo $admin_desc;?></span>
+				<span class="geodir_message_note"><?php _e($admin_desc,GEODIRECTORY_TEXTDOMAIN);?></span>
 				<?php if($is_required) {?>
-				<span class="geodir_message_error"><?php echo $required_msg?></span> 
+				<span class="geodir_message_error"><?php _e($required_msg,GEODIRECTORY_TEXTDOMAIN);?></span> 
 				<?php } ?>
 			</div>
 		
@@ -1107,13 +1113,13 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 			  
 				<div class="<?php if($is_required) echo 'required_field';?> geodir_form_row clearfix">
 					<label>
-						<?php echo $site_title; ?>
+						<?php $site_title = __($site_title,GEODIRECTORY_TEXTDOMAIN); echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
 						<?php if($is_required) echo '<span>*</span>';?>
 					</label>
 					<input field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>" value="<?php echo stripslashes($value);?>" type="text" class="geodir_textfield" />
-					<span class="geodir_message_note"><?php echo $admin_desc;?></span>
+					<span class="geodir_message_note"><?php _e($admin_desc,GEODIRECTORY_TEXTDOMAIN);?></span>
 					<?php if($is_required) {?>
-					<span class="geodir_message_error"><?php echo $required_msg?></span> 
+					<span class="geodir_message_error"><?php _e($required_msg,GEODIRECTORY_TEXTDOMAIN);?></span> 
 					<?php } ?>
 				</div> 
 		
@@ -1123,13 +1129,13 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 		
 			<div class="<?php if($is_required) echo 'required_field';?> geodir_form_row clearfix">
 				<label>
-					<?php echo $site_title; ?>
+					<?php $site_title = __($site_title,GEODIRECTORY_TEXTDOMAIN); echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
 					<?php if($is_required) echo '<span>*</span>';?>
 				</label>
 				<input field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>" value="<?php echo stripslashes($value);?>" type="text" class="geodir_textfield" />
-				<span class="geodir_message_note"><?php echo $admin_desc;?></span>
+				<span class="geodir_message_note"><?php _e($admin_desc,GEODIRECTORY_TEXTDOMAIN);?></span>
 				<?php if($is_required) {?>
-				<span class="geodir_message_error"><?php echo $required_msg?></span> 
+				<span class="geodir_message_error"><?php _e($required_msg,GEODIRECTORY_TEXTDOMAIN);?></span> 
 				<?php } ?>
 			 </div>
 	
@@ -1137,7 +1143,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 		elseif($type=='radio'){ ?>     
 			<div class="<?php if($is_required) echo 'required_field';?> geodir_form_row clearfix">
 				<label>
-					<?php echo $site_title; ?>
+					<?php $site_title = __($site_title,GEODIRECTORY_TEXTDOMAIN); echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
 					<?php if($is_required) echo '<span>*</span>';?>
 				</label>
 				
@@ -1161,9 +1167,9 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 						} 
 					}	
 				?>
-				<span class="geodir_message_note"><?php echo $admin_desc;?></span>
+				<span class="geodir_message_note"><?php _e($admin_desc,GEODIRECTORY_TEXTDOMAIN);?></span>
 				<?php if($is_required) {?>
-				<span class="geodir_message_error"><?php echo $required_msg?></span> 
+				<span class="geodir_message_error"><?php _e($required_msg,GEODIRECTORY_TEXTDOMAIN);?></span> 
 				<?php } ?>
 			</div>
 			
@@ -1172,15 +1178,15 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 		
 		<div class="<?php if($is_required) echo 'required_field';?> geodir_form_row clearfix">
 			<label>
-				<?php echo $site_title; ?>
+				<?php $site_title = __($site_title,GEODIRECTORY_TEXTDOMAIN); echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
 				<?php if($is_required) echo '<span>*</span>';?>
 			</label>
 					<?php	if($value != '1'){	$value = '0';}?>
 					<input type="hidden" name="<?php echo $name;?>" id="<?php echo $name;?>" value="<?php echo $value;?>" />
 			<input  <?php if($value == '1'){ echo 'checked="checked"';}?>  value="1" class="gd-checkbox" field_type="<?php echo $type;?>" type="checkbox" onchange="if(this.checked){jQuery('#<?php echo $name;?>').val('1');} else{ jQuery('#<?php echo $name;?>').val('0');}" /> 
-			<span class="geodir_message_note"><?php echo $admin_desc;?></span>
+			<span class="geodir_message_note"><?php _e($admin_desc,GEODIRECTORY_TEXTDOMAIN);?></span>
 			<?php if($is_required) {?>
-			<span class="geodir_message_error"><?php echo $required_msg?></span> 
+			<span class="geodir_message_error"><?php _e($required_msg,GEODIRECTORY_TEXTDOMAIN);?></span> 
 			<?php } ?>
 		</div>
 		
@@ -1189,7 +1195,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 		
 		<div class="<?php if($is_required) echo 'required_field';?> geodir_form_row clearfix">
 			<label>
-				<?php echo $site_title; ?>
+				<?php $site_title = __($site_title,GEODIRECTORY_TEXTDOMAIN); echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
 				<?php if($is_required) echo '<span>*</span>';?>
 			</label><?php
 			
@@ -1209,9 +1215,9 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 			}?>
 			
 			
-			<span class="geodir_message_note"><?php echo $admin_desc;?></span>
+			<span class="geodir_message_note"><?php _e($admin_desc,GEODIRECTORY_TEXTDOMAIN);?></span>
 			<?php if($is_required) {?>
-			<span class="geodir_message_error"><?php echo $required_msg?></span> 
+			<span class="geodir_message_error"><?php _e($required_msg,GEODIRECTORY_TEXTDOMAIN);?></span> 
 			<?php } ?>
 		</div>     
 		
@@ -1219,7 +1225,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 		elseif($type=='select'){	?>
 		<div class="<?php if($is_required) echo 'required_field';?> geodir_form_row geodir_custom_fields clearfix">
 			<label>
-				<?php echo $site_title; ?>
+				<?php $site_title = __($site_title,GEODIRECTORY_TEXTDOMAIN); echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
 				<?php if($is_required) echo '<span>*</span>';?>
 			</label>
 			<select field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>" class="geodir_textfield textfield_x chosen_select" data-placeholder="<?php echo  __('Choose',GEODIRECTORY_TEXTDOMAIN ) .' '.$site_title .'&hellip;' ;?>" option-ajaxchosen="false" >
@@ -1243,9 +1249,9 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 				}
 			?>
 			</select>
-			<span class="geodir_message_note"><?php echo $admin_desc;?></span>
+			<span class="geodir_message_note"><?php _e($admin_desc,GEODIRECTORY_TEXTDOMAIN);?></span>
 			<?php if($is_required) {?>
-			<span class="geodir_message_error"><?php echo $required_msg?></span> 
+			<span class="geodir_message_error"><?php _e($required_msg,GEODIRECTORY_TEXTDOMAIN);?></span> 
 			<?php } ?>
 		</div>
 			
@@ -1258,7 +1264,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 		
 		<div class="<?php if($is_required) echo 'required_field';?> geodir_form_row clearfix">
 			<label>
-				<?php echo $site_title; ?>
+				<?php $site_title = __($site_title,GEODIRECTORY_TEXTDOMAIN); echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
 				<?php if($is_required) echo '<span>*</span>';?>
 			</label>
 					<?php if($multi_display == 'select'){?>
@@ -1315,9 +1321,9 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 						if($multi_display = 'select'){?>
 					</select>
 					<?php }else{ echo '</ul>';}?>
-			<span class="geodir_message_note"><?php echo $admin_desc;?></span>
+			<span class="geodir_message_note"><?php _e($admin_desc,GEODIRECTORY_TEXTDOMAIN);?></span>
 			<?php if($is_required) {?>
-			<span class="geodir_message_error"><?php echo $required_msg?></span> 
+			<span class="geodir_message_error"><?php _e($required_msg,GEODIRECTORY_TEXTDOMAIN);?></span> 
 			<?php } ?>
 		</div>
 			<?php
@@ -1326,7 +1332,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 
 		<div class="<?php if($is_required) echo 'required_field';?> geodir_form_row clearfix">
 			<label>
-				<?php echo $site_title; ?>
+				<?php $site_title = __($site_title,GEODIRECTORY_TEXTDOMAIN); echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
 				<?php if($is_required) echo '<span>*</span>';?>
 			</label>
 			
@@ -1336,9 +1342,9 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 			<?php wp_editor( stripslashes($value), $name, $editor_settings ); ?>
 			</div>
 			
-			<span class="geodir_message_note"><?php echo $admin_desc;?></span>
+			<span class="geodir_message_note"><?php _e($admin_desc,GEODIRECTORY_TEXTDOMAIN);?></span>
 			<?php if($is_required) {?>
-			<span class="geodir_message_error"><?php echo $required_msg?></span> 
+			<span class="geodir_message_error"><?php _e($required_msg,GEODIRECTORY_TEXTDOMAIN);?></span> 
 			<?php } ?>
 		     
 		</div>
@@ -1367,15 +1373,15 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 		 <div class="<?php if($is_required) echo 'required_field';?> geodir_form_row clearfix">
 			<label>
 				
-				<?php echo $site_title; ?>
+				<?php $site_title = __($site_title,GEODIRECTORY_TEXTDOMAIN); echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
 				<?php if($is_required) echo '<span>*</span>';?>
 		  </label>
 				
 			<input field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>" value="<?php echo $value;?>" type="text" class="geodir_textfield"  />
 					
-			<span class="geodir_message_note"><?php echo $admin_desc;?></span>
+			<span class="geodir_message_note"><?php _e($admin_desc,GEODIRECTORY_TEXTDOMAIN);?></span>
 			<?php if($is_required) {?>
-			<span class="geodir_message_error"><?php echo $required_msg?></span> 
+			<span class="geodir_message_error"><?php _e($required_msg,GEODIRECTORY_TEXTDOMAIN);?></span> 
 			<?php } ?>
 		 </div>
 		
@@ -1398,14 +1404,14 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 		 <div class="<?php if($is_required) echo 'required_field';?> geodir_form_row clearfix">
 			<label>
 				
-				<?php echo $site_title; ?>
+				<?php $site_title = __($site_title,GEODIRECTORY_TEXTDOMAIN); echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
 				<?php if($is_required) echo '<span>*</span>';?>
 		  </label>
 			<input readonly="readonly" field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>" value="<?php echo $value;?>" type="text" class="geodir_textfield"  />
 					
-			<span class="geodir_message_note"><?php echo $admin_desc;?></span>
+			<span class="geodir_message_note"><?php _e($admin_desc,GEODIRECTORY_TEXTDOMAIN);?></span>
 			<?php if($is_required) {?>
-			<span class="geodir_message_error"><?php echo $required_msg?></span> 
+			<span class="geodir_message_error"><?php _e($required_msg,GEODIRECTORY_TEXTDOMAIN);?></span> 
 			<?php } ?>
 		 </div>
 		
@@ -1413,7 +1419,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 		elseif($type=='taxonomy'){	if($value == $val['default']){$value='';} ?>
 		<div class="<?php if($is_required) echo 'required_field';?> geodir_form_row clearfix">
 			<label>
-				<?php echo $site_title; ?>
+				<?php $site_title = __($site_title,GEODIRECTORY_TEXTDOMAIN); echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
 				<?php if($is_required) echo '<span>*</span>';?>
 			</label>
 			
@@ -1511,9 +1517,9 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 			?>
 			</div>
 			
-			<span class="geodir_message_note"><?php echo $admin_desc;?></span>
+			<span class="geodir_message_note"><?php _e($admin_desc,GEODIRECTORY_TEXTDOMAIN);?></span>
 			<?php if($is_required) {?>
-			<span class="geodir_message_error"><?php echo $required_msg?></span> 
+			<span class="geodir_message_error"><?php _e($required_msg,GEODIRECTORY_TEXTDOMAIN);?></span> 
 			<?php } ?>
 		</div>
 			
@@ -1564,7 +1570,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 			<div class="<?php if($is_required) echo 'required_field';?> geodir_form_row clearfix" >
 			
 			<div id="<?php echo $file_id; ?>dropbox" align="center" style="">
-			<label style="text-align:left; padding-top:10px;"><?php echo $site_title; ?><?php if($is_required) echo '<span>*</span>';?></label>
+			<label style="text-align:left; padding-top:10px;"><?php $site_title = __($site_title,GEODIRECTORY_TEXTDOMAIN); echo $site_title; ?><?php if($is_required) echo '<span>*</span>';?></label>
 				<input class="geodir-custom-file-upload" field_type="file" type="hidden" name="<?php echo $file_id; ?>" id="<?php echo $file_id; ?>" value="<?php echo $file_value; ?>" />
 				<input type="hidden" name="<?php echo $file_id; ?>image_limit" id="<?php echo $file_id; ?>image_limit" value="<?php echo $file_image_limit; ?>" />
 				<input type="hidden" name="<?php echo $file_id; ?>totImg" id="<?php echo $file_id; ?>totImg" value="<?php if(isset($file_totImg)){ echo $file_totImg;}else{ echo '0';} ?>" />
@@ -1587,9 +1593,9 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 				<span id="<?php echo $file_id; ?>upload-error" style="display:none"></span>
 				
 			</div></div>
-			<span class="geodir_message_note"><?php echo $admin_desc;?></span>
+			<span class="geodir_message_note"><?php _e($admin_desc,GEODIRECTORY_TEXTDOMAIN);?></span>
 			<?php if($is_required) {?>
-			<span class="geodir_message_error"><?php echo $required_msg?></span> 
+			<span class="geodir_message_error"><?php _e($required_msg,GEODIRECTORY_TEXTDOMAIN);?></span> 
 			<?php } ?>
 			</div>
 		
@@ -1667,10 +1673,16 @@ function geodir_show_listing_info($fields_location=''){
 					$variables_array['value'] = $post->$type['htmlvar_name'];
 			endif;
 			
-			if($type['field_icon'])
+			//if($type['field_icon'])
+			
+			if (strpos($type['field_icon'],'http') !== false)
 			{
-				$field_icon = ' background: url('.$type['field_icon'].') no-repeat left center;background-size:18px 18px;';
+				$field_icon = ' background: url('.$type['field_icon'].') no-repeat left center;background-size:18px 18px;padding-left: 21px;';
 			}
+			elseif (strpos($type['field_icon'],'fa fa-') !== false){
+				$field_icon = '<i class="'.$type['field_icon'].'"></i>';
+			}
+			//else{$field_icon = $type['field_icon'];}
 			
 			
 			switch($type['type'])
@@ -1774,9 +1786,15 @@ function geodir_show_listing_info($fields_location=''){
 						}*/
 						
 						if($post->$html_var):
+						
+							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){$field_icon_af = '<i class="fa fa-home"></i>';}
+							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-							$html = '<p class="'.$type['css_class'].'" style="clear:both;" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
-							<span class="geodir-i-location" style="'.$field_icon.'">'.__($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': </span>';
+							$html = '<p class="'.$type['css_class'].'" style="clear:both;" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';
+							$html .= '<span class="geodir-i-location" style="'.$field_icon.'">'.$field_icon_af;
+							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '&nbsp;';
+							$html .= '</span>';
 							//print_r($_POST);
 							if($preview){	$html .= stripslashes($post->$html_var).$addition_fields.'</p>' ;}
 							else{
@@ -1800,13 +1818,23 @@ function geodir_show_listing_info($fields_location=''){
 						$html_var = $type['htmlvar_name'];
 						
 						if($post->$type['htmlvar_name']):
-						
+							
+							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){
+								
+								if($type['name']=='geodir_facebook'){$field_icon_af = '<i class="fa fa-facebook-square"></i>';}
+								elseif($type['name']=='geodir_twitter'){$field_icon_af = '<i class="fa fa-twitter-square"></i>';}
+								else{$field_icon_af = '<i class="fa fa-link"></i>';}
+								
+								}
+							else{$field_icon_af = $field_icon; $field_icon='';}
+							
 							if(!strstr($post->$type['htmlvar_name'],'http'))
 							$website = 'http://'.$post->$type['htmlvar_name'];
 							else
 							$website = $post->$type['htmlvar_name'];	
 							
-							$html = '<p class="'.$type['css_class'].'"><span class="geodir-i-website" style="'.$field_icon.'"><a href="'.$website.'" target="_blank" ><strong>'.stripslashes(__($type['site_title'],GEODIRECTORY_TEXTDOMAIN)).'</strong></a></span></p>';
+							$html = '<p class="'.$type['css_class'].'"><span class="geodir-i-website" style="'.$field_icon.'">'.$field_icon_af.'<a href="'.$website.'" target="_blank" ><strong>'.stripslashes(__($type['site_title'],GEODIRECTORY_TEXTDOMAIN)).'</strong></a></span></p>';
 						
 						endif;
 						
@@ -1817,8 +1845,14 @@ function geodir_show_listing_info($fields_location=''){
 						$html_var = $type['htmlvar_name'];
 						
 						if($post->$type['htmlvar_name']):
+						
+							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){$field_icon_af = '<i class="fa fa-phone"></i>';}
+							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-contact" style="'.$field_icon.'">'.__($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': </span>'.stripslashes($post->$type['htmlvar_name']).'</p>';
+							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-contact" style="'.$field_icon.'">'.$field_icon_af.
+							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '&nbsp;';
+							$html .= '</span>'.stripslashes($post->$type['htmlvar_name']).'</p>';
 										
 						endif;
 						
@@ -1834,7 +1868,13 @@ function geodir_show_listing_info($fields_location=''){
 							if($post->$type['htmlvar_name'] != '')
 								$value = date('h:i',strtotime($post->$type['htmlvar_name']));
 							
-							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-time" style="'.$field_icon.'">'.__($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': </span>'.stripslashes($value).'</p>';
+							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){$field_icon_af = '<i class="fa fa-clock-o"></i>';}
+							else{$field_icon_af = $field_icon; $field_icon='';}
+							
+							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-time" style="'.$field_icon.'">'.$field_icon_af;
+							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '&nbsp;';
+							$html .= '</span>'.stripslashes($value).'</p>';
 
 						endif;
 						
@@ -1859,7 +1899,13 @@ function geodir_show_listing_info($fields_location=''){
 							if($post->$type['htmlvar_name'] != '')
 								$value = date($date_format,strtotime($post->$type['htmlvar_name']));
 							
-							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-datepicker" style="'.$field_icon.'">'.__($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': </span>'.$value.'</p>';
+							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){$field_icon_af = '<i class="fa fa-calendar"></i>';}
+							else{$field_icon_af = $field_icon; $field_icon='';}
+							
+							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-datepicker" style="'.$field_icon.'">'.$field_icon_af;
+							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
+							$html .= '</span>'.$value.'</p>';
 						
 						endif;
 						
@@ -1870,12 +1916,24 @@ function geodir_show_listing_info($fields_location=''){
 						$html_var = $type['htmlvar_name'];
 						
 						if($post->$type['htmlvar_name'] != '' && $type['htmlvar_name'] == 'geodir_timing'):
-				
-							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-time" style="'.$field_icon.'">'.__($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': </span>'.stripslashes($post->$type['htmlvar_name']).'</p>';
+							
+							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){$field_icon_af = '<i class="fa fa-clock-o"></i>';}
+							else{$field_icon_af = $field_icon; $field_icon='';}
+							
+							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-time" style="'.$field_icon.'">'.$field_icon_af;
+							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '&nbsp;';
+							$html .= '</span>'.stripslashes($post->$type['htmlvar_name']).'</p>';
 							
 						elseif($post->$type['htmlvar_name']):
-			
-							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-text" style="'.$field_icon.'">'.__($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': </span>'.stripslashes($post->$type['htmlvar_name']).'</p>';	
+							
+							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){$field_icon_af = '';}
+							else{$field_icon_af = $field_icon; $field_icon='';}
+							
+							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-text" style="'.$field_icon.'">'.$field_icon_af;
+							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
+							$html .= '</span>'.stripslashes($post->$type['htmlvar_name']).'</p>';	
 								
 						endif;
 						
@@ -1893,7 +1951,13 @@ function geodir_show_listing_info($fields_location=''){
 								$html_val = 'Yes';
 							endif;
 							
-							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-radio" style="'.$field_icon.'">'.__($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': </span>'.$html_val.'</p>';		
+							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){$field_icon_af = '';}
+							else{$field_icon_af = $field_icon; $field_icon='';}
+							
+							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-radio" style="'.$field_icon.'">'.$field_icon_af ;
+							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
+							$html .= '</span>'.$html_val.'</p>';		
 						endif;
 						
 				break;
@@ -1912,7 +1976,13 @@ function geodir_show_listing_info($fields_location=''){
 									$html_val = 'No';
 							endif;
 							
-							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-checkbox" style="'.$field_icon.'">'.__($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': </span>'.$html_val.'</p>';		
+							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){$field_icon_af = '';}
+							else{$field_icon_af = $field_icon; $field_icon='';}
+							
+							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-checkbox" style="'.$field_icon.'">'.$field_icon_af;
+							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
+							$html .= '</span>'.$html_val.'</p>';		
 						endif;
 						
 				break;
@@ -1922,7 +1992,14 @@ function geodir_show_listing_info($fields_location=''){
 						$html_var = $type['htmlvar_name'];
 						
 						if($post->$type['htmlvar_name']):
-							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-select" style="'.$field_icon.'">'.__($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': </span>'.stripslashes($post->$type['htmlvar_name']).'</p>';		
+						
+						if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){$field_icon_af = '';}
+							else{$field_icon_af = $field_icon; $field_icon='';}
+							
+							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-select" style="'.$field_icon.'">'.$field_icon_af;
+							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
+							$html .= '</span>'.stripslashes($post->$type['htmlvar_name']).'</p>';		
 						endif;
 						
 				break;
@@ -1939,7 +2016,13 @@ function geodir_show_listing_info($fields_location=''){
 								$post->$type['htmlvar_name'] = implode(', ', $post->$type['htmlvar_name']);
 							}
 							
-							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-select" style="'.$field_icon.'">'.__($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': </span>'.stripslashes(trim($post->$type['htmlvar_name'], ',')).'</p>';
+							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){$field_icon_af = '';}
+							else{$field_icon_af = $field_icon; $field_icon='';}
+							
+							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-select" style="'.$field_icon.'">'.$field_icon_af;
+							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
+							$html .= '</span>'.stripslashes(trim($post->$type['htmlvar_name'], ',')).'</p>';
 									
 						endif;
 						
@@ -1960,8 +2043,12 @@ function geodir_show_listing_info($fields_location=''){
 										$b_sendtofriend = 'b_sendtofriend';
 										$html = '<input type="hidden" name="geodir_popup_post_id" value="'.$post->ID.'" /><div class="geodir_display_popup_forms"></div>';
 									}
-								
-									$html .= '<p class="'.$type['css_class'].'"><span class="geodir-i-email" style="'.$field_icon.'">';
+									
+									if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){$field_icon_af = '<i class="fa fa-envelope"></i>';}
+							else{$field_icon_af = $field_icon; $field_icon='';}
+							
+									$html .= '<p class="'.$type['css_class'].'"><span class="geodir-i-email" style="'.$field_icon.'">'.$field_icon_af;
 								$seperator = '';
 								if($post->$type['htmlvar_name']){
 									$html .= '<a href="javascript:void(0);" class="'.$b_send_inquiry.'" >'.SEND_INQUIRY.'</a>';
@@ -1989,8 +2076,14 @@ function geodir_show_listing_info($fields_location=''){
 						{
 							
 							if($post->$type['htmlvar_name'])
-							{
-								$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-email" style="'.$field_icon.'">'.__($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': </span>'.stripslashes($post->$type['htmlvar_name']).'</p>';
+							{	
+							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){$field_icon_af = '<i class="fa fa-envelope"></i>';}
+							else{$field_icon_af = $field_icon; $field_icon='';}
+							
+								$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-email" style="'.$field_icon.'">'.$field_icon_af;
+								$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
+								$html .= '</span>'.stripslashes($post->$type['htmlvar_name']).'</p>';
 							}
 					
 						}
@@ -2029,15 +2122,23 @@ function geodir_show_listing_info($fields_location=''){
 										$filename = explode($ext_path, $filename);
 										
 										$file_paths .= '<a href="'.$file.'" target="_blank">'.$filename[count($filename)-1].'</a>';	
-														
+										
 									}else{
-										$file_paths .= '<img src="'.$file.'"  />';	
+										
+										$file_paths .= geodir_show_image(array('src'=>$file),'thumbnail',false,false);
+										//$file_paths .= '<img src="'.$file.'"  />';	
 									}
 									
 								}
 							}
 							
-							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-select" style="'.$field_icon.'">'.__($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': '.$file_paths.'</span></p>';
+							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){$field_icon_af = '';}
+							else{$field_icon_af = $field_icon; $field_icon='';}
+							
+							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-select" style="'.$field_icon.'">'.$field_icon_af;
+							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
+							$html .= $file_paths.'</span></p>';
 							
 						endif;
 					endif;
@@ -2048,7 +2149,13 @@ function geodir_show_listing_info($fields_location=''){
 				
 						if( !empty($post->$type['htmlvar_name']) ){
 							
-							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-text" style="'.$field_icon.'">'.__($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': </span>'.stripslashes($post->$type['htmlvar_name']).'</p>';	
+							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){$field_icon_af = '';}
+							else{$field_icon_af = $field_icon; $field_icon='';}
+							
+							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-text" style="'.$field_icon.'">'.$field_icon_af;
+							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
+							$html .= '</span>'.stripslashes($post->$type['htmlvar_name']).'</p>';	
 							
 						}
 				break;
@@ -2056,7 +2163,13 @@ function geodir_show_listing_info($fields_location=''){
 				case 'html':
 						if(!empty($post->$type['htmlvar_name'])){
 							
-							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-text" style="'.$field_icon.'">'.__($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': </span>'.stripslashes($post->$type['htmlvar_name']).'</p>';	
+							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){$field_icon_af = '';}
+							else{$field_icon_af = $field_icon; $field_icon='';}
+							
+							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-text" style="'.$field_icon.'">'.$field_icon_af;
+							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
+							$html .= '</span>'.stripslashes($post->$type['htmlvar_name']).'</p>';	
 							
 						}
 				break;
@@ -2272,9 +2385,12 @@ if (!function_exists('geodir_plupload_action')) {
 	 	
 		// handle custom file uploaddir
 		add_filter('upload_dir', 'geodir_upload_dir');
+		
+		// change file orinetation if needed
+		$fixed_file = geodir_exif($_FILES[$imgid . 'async-upload']);
 				
 		// handle file upload
-		$status = wp_handle_upload($_FILES[$imgid . 'async-upload'], array('test_form' => true, 'action' => 'plupload_action'));
+		$status = wp_handle_upload($fixed_file, array('test_form' => true, 'action' => 'plupload_action'));
 	 	// remove handle custom file uploaddir
 	 	remove_filter('upload_dir', 'geodir_upload_dir');
 	 
