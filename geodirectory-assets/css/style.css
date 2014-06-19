@@ -70,12 +70,12 @@ width:67%;
 .geodir-sidebar-right{
 float: right;
 width: 30%;
-padding-left: 3%;
+margin-left: 3%;
 }
 .geodir-sidebar-left{
 float: left;
 width: 30%;
-padding-right: 3%;
+margin-right: 3%;
 }
 .geodir-tabs-content.entry-content li {
 margin: 0px 2%;

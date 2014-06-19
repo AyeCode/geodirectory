@@ -105,7 +105,7 @@ getCountry = addr.long_name;//city
 */
 }
 if(street_number.long_name)
-getAddress += street_number.long_name+', ';//street_number
+getAddress += street_number.long_name+' ';//street_number
 if(route.long_name)
 getAddress += route.long_name;//route
 getZip = postal_code.long_name;//postal_code
@@ -131,7 +131,7 @@ if(postal_code.long_name){getZip = postal_code.long_name;}
 //alert(getState);
 <?php do_action('geodir_add_listing_geocode_js_vars');?>
 <?php if($is_map_restrict){?>
-if(getCity.toLowerCase() != '<?php echo strtolower($city);?>'){
+if(getCity.toLowerCase() != '<?php echo mb_strtolower(esc_attr($city));?>'){
 alert('<?php printf(__('Please choose any address of the (%s) city only.',GEODIRECTORY_TEXTDOMAIN), $city);?>');
 jQuery("#<?php echo $prefix.'map';?>").goMap();
 jQuery.goMap.map.setCenter(new google.maps.LatLng('<?php echo $default_lat; ?>', '<?php echo $default_lng; ?>'));

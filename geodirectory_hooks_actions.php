@@ -992,7 +992,7 @@ function geodir_custom_page_title($title, $sep)
 
 /* --- set attachments for all geodir posts --- */ 
 
-add_action('init', 'geodir_set_post_attachment');
+//add_action('init', 'geodir_set_post_attachment'); // we need to make a tool somwhere to run this function maybe via ajax or something in batch form, it is crashing servers with lots of listings
 
 function geodir_set_post_attachment(){
 	

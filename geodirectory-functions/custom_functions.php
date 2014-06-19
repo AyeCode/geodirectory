@@ -827,7 +827,7 @@ function geodir_show_detail_page_tabs(){
 								       echo $thumb_image;
 									break;
 								case 'post_video':
-									echo $video; 
+									echo apply_filters( 'the_content', $video );// we apply the_content filter so oembed works also; 
 									break;
 								case 'special_offers':
 									echo wpautop(stripslashes($special_offers));
@@ -877,6 +877,7 @@ function geodir_show_detail_page_tabs(){
 function geodir_exif($file) {
         //This line reads the EXIF data and passes it into an array
 		$file['file']=$file['tmp_name'];
+		 if($file['type']=="image/jpg" || $file['type']=="image/jpeg" || $file['type']=="image/pjpeg"){}else{return $file;}
         $exif = read_exif_data($file['file']);
 
         //We're only interested in the orientation
