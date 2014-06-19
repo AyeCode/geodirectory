@@ -1528,7 +1528,7 @@ function geodir_get_infowindow_html($postinfo_obj, $post_preview = ''){
 						$e++;
 						if($e==2){break;}// only show 3 event dates
 						$output .=  '<p>';
-						$geodir_num_dates++;
+						//$geodir_num_dates++;
 						if(isset($recuring_data['different_times']) && $recuring_data['different_times'] == '1'){
 							$starttimes = isset($recuring_data['starttimes'][$key]) ? $recuring_data['starttimes'][$key] : '';
 							$endtimes = isset($recuring_data['endtimes'][$key]) ? $recuring_data['endtimes'][$key] : '';
@@ -1556,21 +1556,24 @@ function geodir_get_infowindow_html($postinfo_obj, $post_preview = ''){
 					
 					echo $output;
 		}
-					?>
-             
-             
-             
-             
+		
+		
+					if($ID){
+		
+						$post_author = isset($postinfo_obj->post_author) ? $postinfo_obj->post_author : get_post_field( 'post_author', $ID );
+						?>
+
               <div class="geodir-bubble-meta-bottom">
                   <span class="geodir-bubble-rating"><?php echo $rating_star;?></span>
                   
-                  <span class="geodir-bubble-fav"><?php echo geodir_favourite_html($postinfo_obj->post_author,$ID);?></span>
+                  <span class="geodir-bubble-fav"><?php echo geodir_favourite_html($post_author,$ID);?></span>
                   <span class="geodir-bubble-reviews"><a href="<?php echo get_comments_link( $ID ); ?>" class="geodir-pcomments"><i class="fa fa-comments"></i>
                             <?php echo get_comments_number( $ID ); ?>
                                      </a></span>
               </div>
  
-              
+       <?php }?> 
+			       
 			</div>             					
 		</div>
 	</div>
@@ -2051,8 +2054,10 @@ function geodir_set_wp_featured_image($post_id)
 			$id = wp_insert_attachment( $attachment, $filename, $post_id );
 			
 			if ( ! is_wp_error( $id ) ) {
-				
+			
 				set_post_thumbnail($post_id,$id);
+				
+				require_once(ABSPATH . 'wp-admin/includes/image.php');
 				wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $filename ) );
 				
 			}

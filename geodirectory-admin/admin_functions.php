@@ -24,31 +24,31 @@ function geodir_uninstall(){
 if (!function_exists('geodir_admin_styles')) {
 	function geodir_admin_styles(){ 
 		
-		wp_register_style( 'geodirectory-admin-css', geodir_plugin_url().'/geodirectory-assets/css/admin.css' );
+		wp_register_style( 'geodirectory-admin-css', geodir_plugin_url().'/geodirectory-assets/css/admin.css',array(),GEODIRECTORY_VERSION );
 		wp_enqueue_style( 'geodirectory-admin-css' );
 		
-		wp_register_style( 'geodirectory-frontend-style', geodir_plugin_url().'/geodirectory-assets/css/style.css' );
+		wp_register_style( 'geodirectory-frontend-style', geodir_plugin_url().'/geodirectory-assets/css/style.css',array(),GEODIRECTORY_VERSION );
 		wp_enqueue_style( 'geodirectory-frontend-style' );
 		
-		wp_register_style( 'geodir-chosen-style', geodir_plugin_url() .'/geodirectory-assets/css/chosen.css' );
+		wp_register_style( 'geodir-chosen-style', geodir_plugin_url() .'/geodirectory-assets/css/chosen.css' ,array(),GEODIRECTORY_VERSION);
 		wp_enqueue_style( 'geodir-chosen-style' );
 		
-		wp_register_style( 'geodirectory-jquery-ui-timepicker-css', geodir_plugin_url().'/geodirectory-assets/ui/jquery.ui.timepicker.css' );
+		wp_register_style( 'geodirectory-jquery-ui-timepicker-css', geodir_plugin_url().'/geodirectory-assets/ui/jquery.ui.timepicker.css' ,array(),GEODIRECTORY_VERSION);
 		wp_enqueue_style( 'geodirectory-jquery-ui-timepicker-css' );
 		
-		wp_register_style( 'geodir-jslider-style', geodir_plugin_url() .'/geodirectory-assets/css/jslider.css' );
+		wp_register_style( 'geodir-jslider-style', geodir_plugin_url() .'/geodirectory-assets/css/jslider.css' ,array(),GEODIRECTORY_VERSION);
 	wp_enqueue_style( 'geodir-jslider-style' );
 		
-		wp_register_style( 'geodirectory-jquery-ui-css', geodir_plugin_url().'/geodirectory-assets/ui/jquery-ui.css' );
+		wp_register_style( 'geodirectory-jquery-ui-css', geodir_plugin_url().'/geodirectory-assets/ui/jquery-ui.css' ,array(),GEODIRECTORY_VERSION);
 		wp_enqueue_style( 'geodirectory-jquery-ui-css' );
 		
-		wp_register_style( 'geodirectory-custom-fields-css', geodir_plugin_url().'/geodirectory-assets/css/custom_field.css' );
+		wp_register_style( 'geodirectory-custom-fields-css', geodir_plugin_url().'/geodirectory-assets/css/custom_field.css' ,array(),GEODIRECTORY_VERSION);
 		wp_enqueue_style( 'geodirectory-custom-fields-css' );
 		
-		wp_register_style( 'geodirectory-pluplodar-css', geodir_plugin_url().'/geodirectory-assets/css/pluploader.css' );
+		wp_register_style( 'geodirectory-pluplodar-css', geodir_plugin_url().'/geodirectory-assets/css/pluploader.css',array(),GEODIRECTORY_VERSION );
 		wp_enqueue_style( 'geodirectory-pluplodar-css' );
 		
-		wp_register_style( 'geodir-rating-style', geodir_plugin_url() .'/geodirectory-assets/css/jRating.jquery.css' );
+		wp_register_style( 'geodir-rating-style', geodir_plugin_url() .'/geodirectory-assets/css/jRating.jquery.css',array(),GEODIRECTORY_VERSION );
 		wp_enqueue_style( 'geodir-rating-style' );		
 	}
 }	
@@ -69,14 +69,14 @@ if (!function_exists('geodir_admin_scripts'))
 		
 		wp_enqueue_script( 'geodirectory-jquery-ui-timepicker-js',geodir_plugin_url().'/geodirectory-assets/ui/jquery.ui.timepicker.js',array( 'jquery-ui-datepicker','jquery-ui-slider' ),'',true  );
 		
-		wp_register_script( 'geodirectory-chosen-jquery', geodir_plugin_url().'/geodirectory-assets/js/chosen.jquery.js' );
+		wp_register_script( 'geodirectory-chosen-jquery', geodir_plugin_url().'/geodirectory-assets/js/chosen.jquery.js' ,array(),GEODIRECTORY_VERSION);
 		wp_enqueue_script( 'geodirectory-chosen-jquery');
 		
-		wp_register_script( 'geodirectory-choose-ajax', geodir_plugin_url().'/geodirectory-assets/js/ajax-chosen.js' );
+		wp_register_script( 'geodirectory-choose-ajax', geodir_plugin_url().'/geodirectory-assets/js/ajax-chosen.js' ,array(),GEODIRECTORY_VERSION);
 		wp_enqueue_script( 'geodirectory-choose-ajax' );
     
 		if(isset($_REQUEST['listing_type'])){
-		wp_register_script( 'geodirectory-custom-fields-script', geodir_plugin_url().'/geodirectory-assets/js/custom_fields.js' );}
+		wp_register_script( 'geodirectory-custom-fields-script', geodir_plugin_url().'/geodirectory-assets/js/custom_fields.js' ,array(),GEODIRECTORY_VERSION);}
 		
 		wp_enqueue_script( 'geodirectory-custom-fields-script' );
 		$plugin_path = geodir_plugin_url().'/geodirectory-functions/cat-meta-functions';
@@ -86,13 +86,13 @@ if (!function_exists('geodir_admin_scripts'))
 		$map_lang="&language=" . geodir_get_map_default_language() ; 
 		wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?sensor=false'.$map_lang,'',NULL);
         
-		wp_register_script( 'geodirectory-goMap-script', geodir_plugin_url().'/geodirectory-assets/js/goMap.js' );
+		wp_register_script( 'geodirectory-goMap-script', geodir_plugin_url().'/geodirectory-assets/js/goMap.js' ,array(),GEODIRECTORY_VERSION);
 		wp_enqueue_script( 'geodirectory-goMap-script' );
 		
-		wp_register_script( 'geodir-jRating-js', geodir_plugin_url() .'/geodirectory-assets/js/jRating.jquery.js' );
+		wp_register_script( 'geodir-jRating-js', geodir_plugin_url() .'/geodirectory-assets/js/jRating.jquery.js' ,array(),GEODIRECTORY_VERSION);
 		wp_enqueue_script( 'geodir-jRating-js' );
 		
-		wp_register_script( 'geodir-on-document-load', geodir_plugin_url() .'/geodirectory-assets/js/on_document_load.js' );
+		wp_register_script( 'geodir-on-document-load', geodir_plugin_url() .'/geodirectory-assets/js/on_document_load.js' ,array(),GEODIRECTORY_VERSION);
 		wp_enqueue_script( 'geodir-on-document-load' );
 		
 		
@@ -100,7 +100,7 @@ if (!function_exists('geodir_admin_scripts'))
 		wp_enqueue_script('plupload-all');
 		wp_enqueue_script('jquery-ui-sortable');	 
 		
-		wp_register_script( 'geodirectory-plupload-script', geodir_plugin_url().'/geodirectory-assets/js/geodirectory-plupload.js' );
+		wp_register_script( 'geodirectory-plupload-script', geodir_plugin_url().'/geodirectory-assets/js/geodirectory-plupload.js' ,array(),GEODIRECTORY_VERSION);
 		wp_enqueue_script( 'geodirectory-plupload-script' );
 		
 		// SCRIPT FOR UPLOAD END
@@ -162,7 +162,7 @@ if (!function_exists('geodir_admin_scripts'))
 		
 		
 		       
-		wp_register_script( 'geodirectory-admin-script', geodir_plugin_url().'/geodirectory-assets/js/admin.js');
+		wp_register_script( 'geodirectory-admin-script', geodir_plugin_url().'/geodirectory-assets/js/admin.js',array(),GEODIRECTORY_VERSION);
 		wp_enqueue_script( 'geodirectory-admin-script' );
 		
 		$ajax_cons_data = array( 'url' => __( get_option('siteurl').'?geodir_ajax=true' ) ); 
