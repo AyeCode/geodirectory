@@ -219,7 +219,7 @@ add_action( 'geodir_details_slider', 'geodir_action_details_slider',10,1 );
 function geodir_action_details_slider(){
 	global $preview,$post;
 
-	if($preview){
+	if($preview){//print_r($post);
 		if(isset($post->post_images))
             	$post->post_images = trim($post->post_images,",");
 							
@@ -237,7 +237,7 @@ function geodir_action_details_slider(){
 				if(isset($post->post_default_category))
 					$default_cat = $post->post_default_category;
 				
-				if($default_catimg = geodir_get_default_catimage($default_cat,$post_type))
+				if($default_catimg = geodir_get_default_catimage($default_cat,$post->listing_type))
 					$default_img = $default_catimg['src'];
 				elseif($no_images = get_option('geodir_listing_no_img')){
 					$default_img = $no_images;
@@ -662,6 +662,13 @@ function geodir_action_main_content_close(){echo '</main><!-- sidebar ends here-
 
 
 function geodir_action_listings_content_inside(){
+	global $gridview_columns;
+	$listing_view = get_option('geodir_listing_view');
+			if(strstr($listing_view,'gridview')){
+				$gridview_columns = $listing_view;
+				$listing_view_exp = explode('_',$listing_view);
+				$listing_view = $listing_view_exp[0];
+			}
 			geodir_get_template_part('listing','listview');
 }
 
@@ -1161,6 +1168,13 @@ do_action( 'geodir_sidebar_right_close', 'author-page');
 }
 
 function geodir_action_author_content_inside(){
+	global $gridview_columns;
+	$listing_view = get_option('geodir_author_view');
+			if(strstr($listing_view,'gridview')){
+				$gridview_columns = $listing_view;
+				$listing_view_exp = explode('_',$listing_view);
+				$listing_view = $listing_view_exp[0];
+			}
 			geodir_get_template_part('listing','listview');
 }
 
@@ -1275,6 +1289,13 @@ if(get_option('geodir_show_search_bottom_section')) { ?>
 }
 
 function geodir_action_search_content_inside(){
+	global $gridview_columns;
+	$listing_view = get_option('geodir_search_view');
+			if(strstr($listing_view,'gridview')){
+				$gridview_columns = $listing_view;
+				$listing_view_exp = explode('_',$listing_view);
+				$listing_view = $listing_view_exp[0];
+			}
 			geodir_get_template_part('listing','listview');
 }
 

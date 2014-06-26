@@ -462,15 +462,29 @@ function geodir_breadcrumb() {
 	
 		$post_type_for_location_link =str_replace('http://' , '' ,$post_type_for_location_link , $http_replace_count ) ;
 		
+		/*
 		$gd_country = 	get_query_var('gd_country') ;
 		$gd_region = get_query_var('gd_region') ;
 		$gd_city= get_query_var('gd_city') ;
 		
-		$post_type_for_location_link = str_replace($gd_country , '' ,$post_type_for_location_link ) ;
-		$post_type_for_location_link = str_replace($gd_region , '' ,$post_type_for_location_link ) ;
-		$post_type_for_location_link = str_replace($gd_city , '' ,$post_type_for_location_link ) ;
+		$post_type_for_location_link = preg_replace( '/' .$gd_country .'/', '' ,$post_type_for_location_link ,1  ) ;
+		$post_type_for_location_link = preg_replace( '/' .$gd_country .'/', '' ,$post_type_for_location_link ,1) ;
+		$post_type_for_location_link = preg_replace( '/' .$gd_country .'/', '' ,$post_type_for_location_link,1 ) ;
+		$post_type_for_location_link=str_replace('///' , '/' ,$post_type_for_location_link ) ;
+		echo $post_type_for_location_link=str_replace('//' , '/' ,$post_type_for_location_link ) ;
+		*/
+		$location_terms = geodir_get_current_location_terms('query_vars') ;
+		if(!empty($location_terms))
+		{
+			foreach($location_terms as $location_term)
+			{
+				$post_type_for_location_link = preg_replace( '/' .$location_term .'/', '' ,$post_type_for_location_link ,1  ) ;
+			}
+		}
+		
 		$post_type_for_location_link=str_replace('///' , '/' ,$post_type_for_location_link ) ;
 		$post_type_for_location_link=str_replace('//' , '/' ,$post_type_for_location_link ) ;
+		
 		if($https_replace_count>0)
 			$post_type_for_location_link = 'https://' . $post_type_for_location_link;
 		
@@ -502,81 +516,98 @@ function geodir_breadcrumb() {
 				$is_taxonomy_last = true ;
 			else
 				$is_taxonomy_last = false ;
-				
-			if($gd_country !='')
-			{
-				$gd_country_link_text =  preg_replace('/-(\d+)$/', '',  $gd_country);
-				$gd_country_link_text =preg_replace('/[_-]/', ' ', $gd_country_link_text);
-				if($is_location_last && $gd_region =='' && $gd_city =='')
+			
+			if(!empty($location_terms))
+			{	
+				foreach($location_terms as $key => $location_term)
 				{
-					$breadcrumb .= $separator . ucwords( $gd_country_link_text  ) ;
-				}
-				else
-				{
-					if ( get_option('permalink_structure') != '' )
+					if($location_term !='')
 					{
-						$location_link 	.=  $gd_country . '/';
+						$gd_location_link_text =  preg_replace('/-(\d+)$/', '',  $location_term );
+						$gd_location_link_text =preg_replace('/[_-]/', ' ', $gd_location_link_text);
 						
+						if($is_location_last && $key =='gd_country' && !(isset($location_terms['gd_region'])&& $location_terms['gd_region'] !='') && !(isset($location_terms['gd_city'])&& $location_terms['gd_city'] !='') )
+						{
+							$breadcrumb .= $separator . ucwords( $gd_location_link_text  ) ;
+						}
+						elseif($is_location_last && $key =='gd_region'  && !(isset($location_terms['gd_city'])&& $location_terms['gd_city'] !=''))
+						{
+							$breadcrumb .= $separator . ucwords( $gd_location_link_text  ) ;
+						}
+						elseif($is_location_last && $key =='gd_city'  )
+						{
+							$breadcrumb .= $separator . ucwords( $gd_location_link_text  ) ;
+						}
+						else
+						{
+							if ( get_option('permalink_structure') != '' )
+							{
+								$location_link 	.=  $location_term . '/';
+								
+							}
+							else	
+								$location_link .= "&$key=".$location_term;
+							
+							
+							$breadcrumb .= $separator.'<a href="'.$location_link.'">' 
+										. ucwords( $gd_location_link_text) .'</a>';
+							
+						}
+					}	
+					
+					/*
+					if($gd_region !='')
+					{
+						$gd_region_link_text =  preg_replace('/-(\d+)$/', '',  $gd_region);
+						$gd_region_link_text =preg_replace('/[_-]/', ' ', $gd_region_link_text);
+						if($is_location_last &&  $gd_city =='')
+						{
+							$breadcrumb .= $separator . ucwords( $gd_region_link_text  ) ;
+						}
+						else
+						{
+							if ( get_option('permalink_structure') != '' )
+							{
+								$location_link 	.=  $gd_region . '/';
+								
+							}
+							else	
+								$location_link .= '&gd_region='.$gd_region;
+							
+							
+							$breadcrumb .= $separator.'<a href="'.$location_link.'">' 
+										. ucwords( $gd_region_link_text) .'</a>';
+							
+						}
 					}
-					else	
-						$location_link .= '&gd_country='.$gd_country;
 					
-					
-					$breadcrumb .= $separator.'<a href="'.$location_link.'">' 
-								. ucwords( $gd_country_link_text) .'</a>';
-					
+					if($gd_city!='')
+					{
+						$gd_city_link_text =  preg_replace('/-(\d+)$/', '',  $gd_city);
+						$gd_city_link_text =preg_replace('/[_-]/', ' ', $gd_city_link_text);
+						if($is_location_last )
+						{
+							$breadcrumb .= $separator . ucwords( $gd_city_link_text  ) ;
+						}
+						else
+						{
+							if ( get_option('permalink_structure') != '' )
+							{
+								$location_link 	.=  $gd_city . '/';
+								
+							}
+							else	
+								$location_link .= '&gd_city='.$gd_city;
+							
+							
+							$breadcrumb .= $separator.'<a href="'.$location_link.'">' 
+										. ucwords( $gd_city_link_text) .'</a>';
+							
+						}
+					}
+					*/
 				}
 			}	
-			
-			if($gd_region !='')
-			{
-				$gd_region_link_text =  preg_replace('/-(\d+)$/', '',  $gd_region);
-				$gd_region_link_text =preg_replace('/[_-]/', ' ', $gd_region_link_text);
-				if($is_location_last &&  $gd_city =='')
-				{
-					$breadcrumb .= $separator . ucwords( $gd_region_link_text  ) ;
-				}
-				else
-				{
-					if ( get_option('permalink_structure') != '' )
-					{
-						$location_link 	.=  $gd_region . '/';
-						
-					}
-					else	
-						$location_link .= '&gd_region='.$gd_region;
-					
-					
-					$breadcrumb .= $separator.'<a href="'.$location_link.'">' 
-								. ucwords( $gd_region_link_text) .'</a>';
-					
-				}
-			}
-			if($gd_city!='')
-			{
-				$gd_city_link_text =  preg_replace('/-(\d+)$/', '',  $gd_city);
-				$gd_city_link_text =preg_replace('/[_-]/', ' ', $gd_city_link_text);
-				if($is_location_last )
-				{
-					$breadcrumb .= $separator . ucwords( $gd_city_link_text  ) ;
-				}
-				else
-				{
-					if ( get_option('permalink_structure') != '' )
-					{
-						$location_link 	.=  $gd_city . '/';
-						
-					}
-					else	
-						$location_link .= '&gd_city='.$gd_city;
-					
-					
-					$breadcrumb .= $separator.'<a href="'.$location_link.'">' 
-								. ucwords( $gd_city_link_text) .'</a>';
-					
-				}
-			}
-				
 				
 				
 			if(!empty($gd_taxonomy))
@@ -902,3 +933,15 @@ function geodir_map_zoom_level(){
 	return apply_filters('geodir_map_zoom_level', array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19));
 
 }
+
+
+function geodir_option_version_backup($geodir_option_name)
+{
+	$version_date = time();
+	$geodir_option = get_option($geodir_option_name);
+	
+	if(!empty($geodir_option))
+	{
+		add_option($geodir_option_name.'_'.$version_date ,$geodir_option);
+	}
+} 

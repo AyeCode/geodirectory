@@ -33,6 +33,8 @@ function geocodePosition() {
 geocoder.geocode({
 latLng: baseMarker.getPosition()
 }, function(responses) {
+
+
 if (responses && responses.length > 0) {
 var getAddress = '';
 var getZip = '';
@@ -51,6 +53,7 @@ locality  = '';
 country = '';
 postal_code = '';
 rr = '';
+
 for (var i = 0; i < responses[0].address_components.length; i++)
 {
 var addr = responses[0].address_components[i];
@@ -63,6 +66,13 @@ if (addr.types[0] == 'postal_town'){postal_town = addr;}
 if (addr.types[0] == 'locality'){locality = addr;}
 if (addr.types[0] == 'country'){country = addr;}
 if (addr.types[0] == 'postal_code'){postal_code = addr;}
+if(responses[0].formatted_address!='')
+{
+	address_array = responses[0].formatted_address.split(",", 2) ;
+	if(address_array.length > 0 )
+		getAddress = address_array[0] ;
+}
+//alert(responses[0].formatted_address)Str.split("-", 2)
 /*
 if (addr.types[0] == 'street_number')
 {
@@ -104,10 +114,15 @@ getCountry = addr.long_name;//city
 }
 */
 }
-if(street_number.long_name)
-getAddress += street_number.long_name+' ';//street_number
-if(route.long_name)
-getAddress += route.long_name;//route
+
+if(getAddress == '')
+{
+	if(street_number.long_name)
+		getAddress += street_number.long_name+' ';//street_number
+	if(route.long_name)
+	getAddress += route.long_name;//route
+}
+
 getZip = postal_code.long_name;//postal_code
 //getCity
 if(postal_town.long_name){getCity = postal_town.long_name;}
@@ -116,8 +131,8 @@ else if(administrative_area_level_3.long_name){getCity = administrative_area_lev
 //getCountry 
 if(country.long_name){getCountry = country.long_name;}
 //getState
-if(country.long_name){rr = country.long_name;}
-if(rr=="United States" || rr=="Canada" || rr=="India"){
+if(country.short_name){rr = country.short_name;}
+if(rr=="US" || rr=="CA" || rr=="IN" || rr=="DE" || rr=="NL"){
 if(administrative_area_level_1.long_name){getState = administrative_area_level_1.long_name;}
 else if(administrative_area_level_2.long_name){getState = administrative_area_level_2.long_name;}
 }else{

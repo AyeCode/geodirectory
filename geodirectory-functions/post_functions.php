@@ -24,6 +24,7 @@ function geodir_set_postcat_structure($post_id, $taxonomy, $default_cat = '' , $
 		
 	if(isset($category_str) && empty($category_str))
 	{
+		
 		$post_cat_str = '';
 		$post_categories = array();
 		if(isset($post_cat_array) && is_array($post_cat_array) && !empty($post_cat_array)){
@@ -34,6 +35,18 @@ function geodir_set_postcat_structure($post_id, $taxonomy, $default_cat = '' , $
 		$post_categories[$taxonomy] = $post_cat_str;
 		$category_str = $post_categories;
 	}
+	
+	$change_cat_str = $category_str[$taxonomy];
+	
+	$default_pos = strpos($change_cat_str, 'd:');
+	
+	if ($default_pos === false) {
+			
+		$change_cat_str = str_replace($default_cat.',y:', $default_cat.',y,d:', $change_cat_str);
+		
+	}
+	
+	$category_str[$taxonomy] = $change_cat_str;
 	
 	update_post_meta($post_id, 'post_categories', $category_str);		
 	
@@ -1173,8 +1186,11 @@ function geodir_show_image( $request = array(), $size = 'thumbnail' ,$no_image =
 					$width_per = 100;
 			}
 			
+			//$html = '<div class="geodir_thumbnail" style="background-image:url(\''.$image->src.'\');"></div>';
+
 			//$html = '<div class="geodir_thumbnail"><img style="max-height:'. $max_size->h .'px;" alt="place image" src="' . $image->src . '"  /></div>';
-			if(is_admin()):
+			//print_r($_REQUEST);
+			if(is_admin() && !isset($_REQUEST['geodir_ajax'])):
 				$html = '<div class="geodir_thumbnail"><img style="max-height:'. $max_size->h .'px;" alt="place image" src="' . $image->src . '"  /></div>';
 			else : 
 				$html = '<div class="geodir_thumbnail" style="background-image:url(\''.$image->src.'\');"></div>';
@@ -1696,6 +1712,11 @@ function geodir_delete_listing_info($deleted_postid, $force = false){
 	global $wpdb,$plugin_prefix;
 	
 	$post_type = get_post_type( $deleted_postid );
+	
+	$all_postypes = geodir_get_posttypes();
+
+	if(!in_array($post_type, $all_postypes))
+		return false;
 	
 	$table = $plugin_prefix . $post_type . '_detail';
 	

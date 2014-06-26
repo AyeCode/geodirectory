@@ -1162,9 +1162,9 @@ function geodir_listing_permalink_structure($post_link, $post, $leavename, $samp
 }
 
 
-function geodir_term_link($termlink, $term, $taxonomy) {
-   
-   	$geodir_taxonomies = geodir_get_taxonomies('',true);
+function geodir_term_link($termlink, $term, $taxonomy) 
+{
+  	$geodir_taxonomies = geodir_get_taxonomies('',true);
 	if(isset($taxonomy) && in_array($taxonomy,$geodir_taxonomies)){
 		global $geodir_add_location_url;
 		$include_location = false;
@@ -1178,12 +1178,12 @@ function geodir_term_link($termlink, $term, $taxonomy) {
 			if($geodir_add_location_url && get_option('geodir_add_location_url'))
 			{	$include_location = true; }
 			
-		}elseif(get_option('geodir_add_location_url'))
+		}elseif(get_option('geodir_add_location_url') && isset($_SESSION['gd_multi_location']) && $_SESSION['gd_multi_location']==1)
 			$include_location = true;
 		
 		if($include_location ){
 			
-			if(get_option('geodir_show_location_url') == 'all')
+		/*	if(get_option('geodir_show_location_url') == 'all')
 			{
 				
 				$country =  (isset($_SESSION['gd_country']) && $_SESSION['gd_country']!='') ? $_SESSION['gd_country'] : '';  
@@ -1204,6 +1204,9 @@ function geodir_term_link($termlink, $term, $taxonomy) {
 				if( $city != '' )
 					$request_term['gd_city'] = $city;
 			}		
+			*/
+			
+			$request_term = geodir_get_current_location_terms('query_vars') ;
 			
 			if(!empty($request_term)){
 				
@@ -1236,12 +1239,12 @@ function geodir_term_link($termlink, $term, $taxonomy) {
 
 function geodir_posttype_link($link, $post_type){
 	global $geodir_add_location_url;
-	$request_term = array();
+	$location_terms = array();
 	if(in_array($post_type, geodir_get_posttypes()) ){
 
-		if(get_option('geodir_add_location_url')){
+		if(get_option('geodir_add_location_url') && isset($_SESSION['gd_multi_location']) && $_SESSION['gd_multi_location']==1){
 		
-			if(get_option('geodir_show_location_url') == 'all')
+			/*if(get_option('geodir_show_location_url') == 'all')
 			{
 				
 				$country =  (isset($_SESSION['gd_country']) && $_SESSION['gd_country']!='') ? $_SESSION['gd_country'] : '';  
@@ -1262,17 +1265,17 @@ function geodir_posttype_link($link, $post_type){
 				if( $city != '' )
 					$request_term['gd_city'] = $city;
 			}	
-			
-			
-			if(!empty($request_term)){
+			*/
+			$location_terms = geodir_get_current_location_terms('query_vars');
+			if(!empty($location_terms)){
 		
 				if ( get_option('permalink_structure') != '' ){
 					
-					$request_term = implode("/",$request_term);
-					$request_term = rtrim($request_term,'/');
-					return $link . $request_term;  		
+					$location_terms = implode("/",$location_terms);
+					$location_terms = rtrim($location_terms,'/');
+					return $link . $location_terms;  		
 				}else{
-					return geodir_getlink($link,$request_term);
+					return geodir_getlink($link,$location_terms);
 				}
 			
 			}

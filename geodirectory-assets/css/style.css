@@ -398,7 +398,7 @@ padding-left: 30%;
 padding-top: 5px;
 color: #999;
 }
-#geodir_filled_by_spam_bot_top_form{display:none;}
+#geodir_filled_by_spam_bot_top_form{display:none !important;}
 /* ########################################
 signup/reg page 
 ######################################### */
@@ -817,3 +817,45 @@ box-shadow: none;
 margin:0px;
 padding:0px;
 }
+
+
+/* - custom field field style -- */
+.geodir-custom-post-gallery{
+margin-right: 6px;
+margin-bottom: 5px;
+display: inline-block;
+text-align: center;
+border: 1px solid #CCCCCC;
+}
+
+
+.geodir-custom-post-gallery{
+box-sizing: border-box;
+	display: inline-block;
+    position: relative;
+    width: 24%;	
+		
+}
+.geodir-custom-post-gallery:after{
+	  content: '';
+    display: block;
+    margin-top: 65%;
+}
+
+.geodir-custom-post-gallery .geodir_thumbnail{
+padding: 0px;
+float: left;
+background-position: 50% 50%;
+background-repeat: no-repeat;
+background-size: cover;
+min-width: 92%;
+position: absolute;
+top: 0;
+bottom: 0;
+left: 0;
+right: 0;
+margin:4%;
+}
+
+.geodir-custom-file-box{clear:both; border-bottom:1px #eee solid;margin: 5px 0 10px;
+    padding: 5px 0 15px;}
