@@ -80,7 +80,7 @@ function addToFavourite(post_id,action)
 				jQuery('#geodir_listing_prefix').focus();
 				error = true; }
 			
-			if (!characterReg.test(listing_prefix) && listing_prefix!=''){
+			if (/^[a-z0-90\_9_-]*$/.test(listing_prefix) == false && listing_prefix!=''){
 				jQuery('#geodir_listing_prefix').focus();
 				alert(geodir_all_js_msg.invalid_listing_prefix_msg);
 				error = true; }

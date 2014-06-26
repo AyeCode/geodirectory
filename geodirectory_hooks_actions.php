@@ -267,9 +267,9 @@ if(!function_exists('geodir_restrict_widget')){
 	} 
 }
 
-add_filter( 'sidebars_widgets', 'widget_logic_filter_sidebars_widgets', 10);
-if(!function_exists( 'widget_logic_filter_sidebars_widgets')){	
-	function widget_logic_filter_sidebars_widgets($sidebars_widgets)
+add_filter( 'sidebars_widgets', 'geodir_widget_logic_filter_sidebars_widgets', 10);
+if(!function_exists( 'geodir_widget_logic_filter_sidebars_widgets')){	
+	function geodir_widget_logic_filter_sidebars_widgets($sidebars_widgets)
 	{	
 		global $is_listing,$is_single_place;		
 		
@@ -452,13 +452,13 @@ function geodir_detail_page_google_analytics()
 	global $post,$preview,$post_images; 
 	$package_info = array();
 	$package_info = geodir_post_package_info( $package_info , $post);
-	if(isset($package_info->google_analytics))
-		$package_info->google_analytics = false;
+	//if(isset($package_info->google_analytics))
+	//	$package_info->google_analytics = false;
 	ob_start() ; // Start buffering;
 	do_action('geodir_before_google_analytics') ;
-	if(	get_option('geodir_ga_stats') && get_edit_post_link() && is_user_logged_in() && ( isset($package_info->google_analytics) && $package_info->google_analytics != '' ) )
+	if(	get_option('geodir_ga_stats') && get_edit_post_link() && is_user_logged_in() && ( isset($package_info->google_analytics) && $package_info->google_analytics == '1' ) )
 	{ 
-		$page_url = $postlink; 
+		$page_url =  $_SERVER['REQUEST_URI'];
 	?>
 				
 			<script type="text/javascript">
@@ -595,6 +595,7 @@ function geodir_localize_all_js_msg()
 							'loading_listing_error_favorite' =>  __('Error loading listing.',GEODIRECTORY_TEXTDOMAIN),
 							'geodir_field_id_required' =>  __('This field is required.',GEODIRECTORY_TEXTDOMAIN),
 							'geodir_valid_email_address_msg' =>  __('Please enter valid email address.',GEODIRECTORY_TEXTDOMAIN),
+							'geodir_default_marker_icon' => get_option('geodir_default_marker_icon'),
 							// end not show alert msg
 							
 						);
@@ -652,6 +653,7 @@ function geodir_store_sidebars()
 		} 
 	}
 	update_option('geodir_sidebars' ,$geodir_old_sidebars );
+	geodir_option_version_backup('geodir_sidebars') ;
 	
 }
 
@@ -956,9 +958,21 @@ function geodir_term_slug_is_exists($slug_exists, $slug, $term_id){
 
 
 add_filter('wp_title' , 'geodir_custom_page_title', 100, 2);
-function geodir_custom_page_title($title, $sep)
+function geodir_custom_page_title($title='', $sep='')
 {
 	global $wp;
+	
+	if($sep=='' )
+	{
+		$sep = apply_filters('geodir_page_title_separator' , '|') ;
+	}
+	
+	if($title == '')
+	{
+		$sitename = get_bloginfo('name');
+		$site_description = get_bloginfo('description');
+		$title =  $sitename . ' ' .  $sep . ' ' . $site_description ;
+	}
 	
 	//print_r($wp->query_vars) ;
 	if(isset($wp->query_vars['pagename']) && $wp->query_vars['pagename'] != '')
@@ -992,7 +1006,7 @@ function geodir_custom_page_title($title, $sep)
 
 /* --- set attachments for all geodir posts --- */ 
 
-add_action('init', 'geodir_set_post_attachment');
+//add_action('init', 'geodir_set_post_attachment'); // we need to make a tool somwhere to run this function maybe via ajax or something in batch form, it is crashing servers with lots of listings
 
 function geodir_set_post_attachment(){
 	
@@ -1061,4 +1075,18 @@ function geodir_remove_url_seperator_form_permalink_settings($permalink_arr){
  
  return $permalink_arr;
  
+}
+
+add_filter('posts_results' , 'geodir_set_status_draft_to_publish_for_own_post');
+function geodir_set_status_draft_to_publish_for_own_post($post)
+{
+	global $wp;
+	$user_id = get_current_user_id();
+	
+	if(!empty($post) && $post[0]->post_author== $user_id)
+	{
+		$post[0]->post_status = 'publish' ; 
+	}
+	//print_r($post) ;
+	return $post ;
 }

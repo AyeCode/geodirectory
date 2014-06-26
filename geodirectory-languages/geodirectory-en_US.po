@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GeoDirectory 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-17 20:20-0000\n"
-"PO-Revision-Date: 2014-06-17 20:21-0000\n"
+"POT-Creation-Date: 2014-06-19 20:41-0000\n"
+"PO-Revision-Date: 2014-06-19 20:41-0000\n"
 "Last-Translator: Stiofan <info@geotheme.com>\n"
 "Language-Team: GeoDirectory <info@wpgeodirectory.com>\n"
 "MIME-Version: 1.0\n"
@@ -150,7 +150,7 @@ msgstr ""
 
 #: geodirectory_hooks_actions.php:978
 #: geodirectory_hooks_actions.php:982
-#: geodirectory_template_actions.php:680
+#: geodirectory_template_actions.php:710
 msgid "Add"
 msgstr ""
 
@@ -163,78 +163,81 @@ msgid "Next"
 msgstr ""
 
 #: geodirectory_template_actions.php:501
-#: geodirectory_template_actions.php:1046
+#: geodirectory_template_actions.php:1076
 msgid "All"
 msgstr ""
 
 #: geodirectory_template_actions.php:503
-#: geodirectory_template_actions.php:1048
+#: geodirectory_template_actions.php:1078
 msgid "My Favourite"
 msgstr ""
 
 #: geodirectory_template_actions.php:514
 #: geodirectory_template_actions.php:521
-#: geodirectory_template_actions.php:1059
+#: geodirectory_template_actions.php:536
+#: geodirectory_template_actions.php:542
+#: geodirectory_template_actions.php:548
+#: geodirectory_template_actions.php:1089
 msgid " in"
 msgstr ""
 
-#: geodirectory_template_actions.php:528
-#: geodirectory_template_actions.php:1064
-#: geodirectory_template_actions.php:1165
+#: geodirectory_template_actions.php:554
+#: geodirectory_template_actions.php:1096
+#: geodirectory_template_actions.php:1201
 #: geodirectory_widgets.php:715
 #: language.php:13
 msgid "Search"
 msgstr ""
 
-#: geodirectory_template_actions.php:528
-#: geodirectory_template_actions.php:1064
-#: geodirectory_template_actions.php:1165
+#: geodirectory_template_actions.php:554
+#: geodirectory_template_actions.php:1096
+#: geodirectory_template_actions.php:1201
 msgid " For :"
 msgstr ""
 
-#: geodirectory_template_actions.php:677
+#: geodirectory_template_actions.php:707
 #: language.php:165
 msgid "Edit"
 msgstr ""
 
-#: geodirectory_template_actions.php:870
-#: geodirectory_template_actions.php:871
+#: geodirectory_template_actions.php:900
+#: geodirectory_template_actions.php:901
 #: geodirectory-admin/admin_functions.php:2024
 #: geodirectory-admin/admin_functions.php:2025
 #: geodirectory-admin/admin_functions.php:2026
 msgid "You can upload"
 msgstr ""
 
-#: geodirectory_template_actions.php:870
+#: geodirectory_template_actions.php:900
 #: geodirectory-admin/admin_functions.php:2024
 msgid "image with this package"
 msgstr ""
 
-#: geodirectory_template_actions.php:871
+#: geodirectory_template_actions.php:901
 #: geodirectory-admin/admin_functions.php:2025
 #: geodirectory-admin/admin_functions.php:2026
 msgid "images with this package"
 msgstr ""
 
-#: geodirectory_template_actions.php:872
+#: geodirectory_template_actions.php:902
 msgid "You can upload unlimited images with this package"
 msgstr ""
 
-#: geodirectory_template_actions.php:880
+#: geodirectory_template_actions.php:910
 #: geodirectory-admin/admin_functions.php:2062
 msgid "Drop files to upload"
 msgstr ""
 
-#: geodirectory_template_actions.php:893
+#: geodirectory_template_actions.php:923
 #: geodirectory-admin/admin_functions.php:2074
 msgid "Please drag &amp; drop the images to rearrange the order"
 msgstr ""
 
-#: geodirectory_template_actions.php:909
+#: geodirectory_template_actions.php:939
 msgid "Type 64 into this box"
 msgstr ""
 
-#: geodirectory_template_actions.php:918
+#: geodirectory_template_actions.php:948
 msgid "Note: You will be able to see a preview in the next page"
 msgstr ""
 
@@ -3249,7 +3252,7 @@ msgstr ""
 msgid "Photo"
 msgstr ""
 
-#: geodirectory-functions/custom_taxonomy_hooks_actions.php:488
+#: geodirectory-functions/custom_taxonomy_hooks_actions.php:486
 #, php-format
 msgid "Virtual <span class=\"count\">(%s)</span>"
 msgid_plural "Virtual <span class=\"count\">(%s)</span>"
@@ -3308,47 +3311,47 @@ msgstr ""
 msgid "Given image size is not valid"
 msgstr ""
 
-#: geodirectory-functions/general_functions.php:715
+#: geodirectory-functions/general_functions.php:633
 msgid "My"
 msgstr ""
 
-#: geodirectory-functions/general_functions.php:734
-#: geodirectory-functions/general_functions.php:735
-#: geodirectory-functions/general_functions.php:736
+#: geodirectory-functions/general_functions.php:652
+#: geodirectory-functions/general_functions.php:653
+#: geodirectory-functions/general_functions.php:654
 msgid " Archive for"
 msgstr ""
 
-#: geodirectory-functions/general_functions.php:737
+#: geodirectory-functions/general_functions.php:655
 msgid " Author Archive"
 msgstr ""
 
-#: geodirectory-functions/general_functions.php:738
+#: geodirectory-functions/general_functions.php:656
 msgid "Blog Archives"
 msgstr ""
 
-#: geodirectory-functions/general_functions.php:739
+#: geodirectory-functions/general_functions.php:657
 msgid " Search Results"
 msgstr ""
 
-#: geodirectory-functions/general_functions.php:788
+#: geodirectory-functions/general_functions.php:706
 msgid "Remote server did not respond"
 msgstr ""
 
-#: geodirectory-functions/general_functions.php:794
+#: geodirectory-functions/general_functions.php:712
 #, php-format
 msgid "Remote server returned error response %1$d %2$s"
 msgstr ""
 
-#: geodirectory-functions/general_functions.php:801
+#: geodirectory-functions/general_functions.php:719
 msgid "Remote file is incorrect size"
 msgstr ""
 
-#: geodirectory-functions/general_functions.php:806
+#: geodirectory-functions/general_functions.php:724
 msgid "Zero size file downloaded"
 msgstr ""
 
-#: geodirectory-functions/general_functions.php:930
-#: geodirectory-functions/general_functions.php:932
+#: geodirectory-functions/general_functions.php:848
+#: geodirectory-functions/general_functions.php:850
 #: geodirectory-functions/signup_function.php:275
 msgid "Password:"
 msgstr ""
@@ -3485,197 +3488,197 @@ msgstr ""
 msgid "<strong>ERROR</strong>: Cookies are blocked or not supported by your browser. You must <a href='http://www.google.com/cookies.html'>enable cookies</a> to use WordPress."
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:724
+#: geodirectory-functions/taxonomy_functions.php:731
 #, php-format
 msgid "Add listing in %s category"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:730
+#: geodirectory-functions/taxonomy_functions.php:737
 #, php-format
 msgid "Set %s as default category"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:738
+#: geodirectory-functions/taxonomy_functions.php:745
 msgid "Add listing in category"
-msgstr ""
-
-#: geodirectory-functions/taxonomy_functions.php:844
-#, php-format
-msgid "%s updated. <a href=\"%s\">View %s</a>"
-msgstr ""
-
-#: geodirectory-functions/taxonomy_functions.php:845
-msgid "Custom field updated."
-msgstr ""
-
-#: geodirectory-functions/taxonomy_functions.php:846
-msgid "Custom field deleted."
-msgstr ""
-
-#: geodirectory-functions/taxonomy_functions.php:847
-#, php-format
-msgid "%s updated."
-msgstr ""
-
-#: geodirectory-functions/taxonomy_functions.php:848
-#, php-format
-msgid "%s restored to revision from %s"
-msgstr ""
-
-#: geodirectory-functions/taxonomy_functions.php:849
-#, php-format
-msgid "%s published. <a href=\"%s\">View %s</a>"
-msgstr ""
-
-#: geodirectory-functions/taxonomy_functions.php:850
-#, php-format
-msgid "%s saved."
 msgstr ""
 
 #: geodirectory-functions/taxonomy_functions.php:851
 #, php-format
-msgid "%s submitted. <a target=\"_blank\" href=\"%s\">Preview %s</a>"
+msgid "%s updated. <a href=\"%s\">View %s</a>"
 msgstr ""
 
 #: geodirectory-functions/taxonomy_functions.php:852
+msgid "Custom field updated."
+msgstr ""
+
+#: geodirectory-functions/taxonomy_functions.php:853
+msgid "Custom field deleted."
+msgstr ""
+
+#: geodirectory-functions/taxonomy_functions.php:854
+#, php-format
+msgid "%s updated."
+msgstr ""
+
+#: geodirectory-functions/taxonomy_functions.php:855
+#, php-format
+msgid "%s restored to revision from %s"
+msgstr ""
+
+#: geodirectory-functions/taxonomy_functions.php:856
+#, php-format
+msgid "%s published. <a href=\"%s\">View %s</a>"
+msgstr ""
+
+#: geodirectory-functions/taxonomy_functions.php:857
+#, php-format
+msgid "%s saved."
+msgstr ""
+
+#: geodirectory-functions/taxonomy_functions.php:858
+#, php-format
+msgid "%s submitted. <a target=\"_blank\" href=\"%s\">Preview %s</a>"
+msgstr ""
+
+#: geodirectory-functions/taxonomy_functions.php:859
 #, php-format
 msgid "%s scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Preview %s</a>"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:852
+#: geodirectory-functions/taxonomy_functions.php:859
 msgid "M j, Y @ G:i"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:853
+#: geodirectory-functions/taxonomy_functions.php:860
 #, php-format
 msgid "%s draft updated. <a target=\"_blank\" href=\"%s\">Preview %s</a>"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:891
+#: geodirectory-functions/taxonomy_functions.php:898
 msgid "Place Tags"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:892
+#: geodirectory-functions/taxonomy_functions.php:899
 msgid "Place Tag"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:893
+#: geodirectory-functions/taxonomy_functions.php:900
 msgid "Search Place Tags"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:894
+#: geodirectory-functions/taxonomy_functions.php:901
 msgid "Popular Place Tags"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:895
+#: geodirectory-functions/taxonomy_functions.php:902
 msgid "All Place Tags"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:896
+#: geodirectory-functions/taxonomy_functions.php:903
 msgid "Edit Place Tag"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:897
+#: geodirectory-functions/taxonomy_functions.php:904
 msgid "Update Place Tag"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:898
+#: geodirectory-functions/taxonomy_functions.php:905
 msgid "Add New Place Tag"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:899
+#: geodirectory-functions/taxonomy_functions.php:906
 msgid "New Place Tag Name"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:900
+#: geodirectory-functions/taxonomy_functions.php:907
 msgid "Add or remove Place tags"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:901
+#: geodirectory-functions/taxonomy_functions.php:908
 msgid "Choose from the most used Place tags"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:902
+#: geodirectory-functions/taxonomy_functions.php:909
 msgid "Separate Place tags with commas"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:929
+#: geodirectory-functions/taxonomy_functions.php:936
 msgid "Place Categories"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:930
+#: geodirectory-functions/taxonomy_functions.php:937
 msgid "Place Category"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:931
+#: geodirectory-functions/taxonomy_functions.php:938
 msgid "Search Place Categories"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:932
+#: geodirectory-functions/taxonomy_functions.php:939
 msgid "Popular Place Categories"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:933
+#: geodirectory-functions/taxonomy_functions.php:940
 msgid "All Place Categories"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:934
+#: geodirectory-functions/taxonomy_functions.php:941
 msgid "Edit Place Category"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:935
+#: geodirectory-functions/taxonomy_functions.php:942
 msgid "Update Place Category"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:936
+#: geodirectory-functions/taxonomy_functions.php:943
 msgid "Add New Place Category"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:937
+#: geodirectory-functions/taxonomy_functions.php:944
 msgid "New Place Category"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:938
+#: geodirectory-functions/taxonomy_functions.php:945
 msgid "Add or remove Place categories"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:959
+#: geodirectory-functions/taxonomy_functions.php:966
 msgid "Places"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:960
+#: geodirectory-functions/taxonomy_functions.php:967
 msgid "Place"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:961
+#: geodirectory-functions/taxonomy_functions.php:968
 msgid "Add New"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:962
+#: geodirectory-functions/taxonomy_functions.php:969
 msgid "Add New Place"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:963
+#: geodirectory-functions/taxonomy_functions.php:970
 msgid "Edit Place"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:964
+#: geodirectory-functions/taxonomy_functions.php:971
 msgid "New Place"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:965
+#: geodirectory-functions/taxonomy_functions.php:972
 msgid "View Place"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:966
+#: geodirectory-functions/taxonomy_functions.php:973
 msgid "Search Places"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:967
+#: geodirectory-functions/taxonomy_functions.php:974
 msgid "No Place Found"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:968
+#: geodirectory-functions/taxonomy_functions.php:975
 msgid "No Place Found In Trash"
 msgstr ""
 
@@ -3928,18 +3931,18 @@ msgstr ""
 
 #: geodirectory-widgets/geodirectory_listing_slider_widget.php:240
 #: geodirectory-widgets/geodirectory_popular_widget.php:120
-#: geodirectory-widgets/geodirectory_popular_widget.php:374
+#: geodirectory-widgets/geodirectory_popular_widget.php:375
 #: geodirectory-widgets/geodirectory_related_listing_widget.php:120
 msgid "Title:"
 msgstr ""
 
 #: geodirectory-widgets/geodirectory_listing_slider_widget.php:247
-#: geodirectory-widgets/geodirectory_popular_widget.php:381
+#: geodirectory-widgets/geodirectory_popular_widget.php:382
 msgid "Post Type:"
 msgstr ""
 
 #: geodirectory-widgets/geodirectory_listing_slider_widget.php:265
-#: geodirectory-widgets/geodirectory_popular_widget.php:400
+#: geodirectory-widgets/geodirectory_popular_widget.php:401
 msgid "Post Category:"
 msgstr ""
 
@@ -3985,31 +3988,31 @@ msgstr ""
 msgid "GD > Popular Post View"
 msgstr ""
 
-#: geodirectory-widgets/geodirectory_popular_widget.php:240
+#: geodirectory-widgets/geodirectory_popular_widget.php:241
 msgid "View all"
 msgstr ""
 
-#: geodirectory-widgets/geodirectory_popular_widget.php:439
+#: geodirectory-widgets/geodirectory_popular_widget.php:440
 #: geodirectory-widgets/geodirectory_related_listing_widget.php:127
 msgid "Sort by:"
 msgstr ""
 
-#: geodirectory-widgets/geodirectory_popular_widget.php:467
+#: geodirectory-widgets/geodirectory_popular_widget.php:468
 #: geodirectory-widgets/geodirectory_related_listing_widget.php:167
 msgid "Layout:"
 msgstr ""
 
-#: geodirectory-widgets/geodirectory_popular_widget.php:480
+#: geodirectory-widgets/geodirectory_popular_widget.php:481
 #: geodirectory-widgets/geodirectory_related_listing_widget.php:180
 msgid "Listing width:"
 msgstr ""
 
-#: geodirectory-widgets/geodirectory_popular_widget.php:487
+#: geodirectory-widgets/geodirectory_popular_widget.php:488
 #: geodirectory-widgets/geodirectory_related_listing_widget.php:187
 msgid "Post Content excerpt character count :"
 msgstr ""
 
-#: geodirectory-widgets/geodirectory_popular_widget.php:494
+#: geodirectory-widgets/geodirectory_popular_widget.php:495
 #: geodirectory-widgets/geodirectory_related_listing_widget.php:194
 msgid "Enable Location Filter:"
 msgstr ""

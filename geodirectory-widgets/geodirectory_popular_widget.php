@@ -217,9 +217,10 @@ class geodir_popular_postview extends WP_Widget {
 		//}
 		
 		if ( get_option('permalink_structure') )
-			$viewall_url = get_post_type_archive_link($post_type).$location_url;
+			$viewall_url = get_post_type_archive_link($post_type);
 		else
-			$viewall_url = get_post_type_archive_link($post_type).'&'.$post_type.'category='.$location_url;
+			$viewall_url = get_post_type_archive_link($post_type);
+		
 		
 		if(!empty($category) && $category[0] != '0'){
 			global $geodir_add_location_url;
