@@ -97,7 +97,7 @@ function geodir_template_loader( $template ) {
 		
 		$template = geodir_locate_template('signup');
 		
-		if ( ! $template ) $template = geodir_plugin_path() . '/geodirectory-templates/geodir_signup.php';
+		if ( ! $template ) $template = geodir_plugin_path() . '/geodirectory-templates/geodir-signup.php';
 		
 		return $template = apply_filters('geodir_template_signup',$template);
 	}
