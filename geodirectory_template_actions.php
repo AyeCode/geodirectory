@@ -219,7 +219,7 @@ add_action( 'geodir_details_slider', 'geodir_action_details_slider',10,1 );
 function geodir_action_details_slider(){
 	global $preview,$post;
 
-	if($preview){
+	if($preview){//print_r($post);
 		if(isset($post->post_images))
             	$post->post_images = trim($post->post_images,",");
 							
@@ -237,7 +237,7 @@ function geodir_action_details_slider(){
 				if(isset($post->post_default_category))
 					$default_cat = $post->post_default_category;
 				
-				if($default_catimg = geodir_get_default_catimage($default_cat,$post_type))
+				if($default_catimg = geodir_get_default_catimage($default_cat,$post->listing_type))
 					$default_img = $default_catimg['src'];
 				elseif($no_images = get_option('geodir_listing_no_img')){
 					$default_img = $no_images;
@@ -522,6 +522,32 @@ if( !empty($term) )
 		}
 	}	
 }
+else
+{
+	global $wp ;
+	$gd_country = (isset($wp->query_vars['gd_country']) && $wp->query_vars['gd_country'] !='') ? $wp->query_vars['gd_country'] : '' ;
+			
+	$gd_region = (isset($wp->query_vars['gd_region']) && $wp->query_vars['gd_region'] !='') ? $wp->query_vars['gd_region'] : '' ;
+	$gd_city = (isset($wp->query_vars['gd_city']) && $wp->query_vars['gd_city'] !='') ? $wp->query_vars['gd_city'] : '' ;
+	if($gd_city != '')
+	{
+		$gd_city = preg_replace('/-(\d+)$/', '',  $gd_city);
+		$gd_city = preg_replace('/[_-]/', ' ', $gd_city);
+		$list_title .= __(' in',GEODIRECTORY_TEXTDOMAIN). " '". ucwords( $gd_city )."'";
+	}
+	else if($gd_region != '')
+	{
+		$gd_region = preg_replace('/-(\d+)$/', '',  $gd_region);
+		$gd_region = preg_replace('/[_-]/', ' ', $gd_region);
+		$list_title .= __(' in',GEODIRECTORY_TEXTDOMAIN). " '". ucwords( $gd_region )."'";
+	}
+	else if($gd_country != '')
+	{
+		$gd_country = preg_replace('/-(\d+)$/', '',  $gd_country);
+		$gd_country = preg_replace('/[_-]/', ' ', $gd_country);
+		$list_title .= __(' in',GEODIRECTORY_TEXTDOMAIN). " '". ucwords( $gd_country )."'";
+	}
+}
 	
 if(is_search())
 {
@@ -593,10 +619,12 @@ add_action( 'geodir_listings_sidebar_left_inside', 'geodir_listing_left_section'
 
 add_action( 'geodir_listings_sidebar_left', 'geodir_action_listings_sidebar_left', 10 );
 function geodir_action_listings_sidebar_left(){
+if( get_option('geodir_show_listing_left_section') ) {
 // this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
 do_action( 'geodir_sidebar_left_open', 'listings-page', 'geodir-sidebar-left','geodir-sidebar-left geodir-listings-sidebar-left', 'http://schema.org/WPSideBar');
 do_action('geodir_listings_sidebar_left_inside');
 do_action( 'geodir_sidebar_left_close', 'listings-page');
+}
 }
 
 
@@ -613,10 +641,12 @@ add_action( 'geodir_listings_sidebar_right_inside', 'geodir_listing_right_sectio
 
 add_action( 'geodir_listings_sidebar_right', 'geodir_action_listings_sidebar_right', 10 );
 function geodir_action_listings_sidebar_right(){
+if( get_option('geodir_show_listing_right_section') ) {
 // this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
 do_action( 'geodir_sidebar_right_open', 'listings-page', 'geodir-sidebar-right','geodir-sidebar-right geodir-listings-sidebar-right', 'http://schema.org/WPSideBar');
 do_action('geodir_listings_sidebar_right_inside');
 do_action( 'geodir_sidebar_right_close', 'listings-page');
+}
 }
 
 
@@ -632,6 +662,13 @@ function geodir_action_main_content_close(){echo '</main><!-- sidebar ends here-
 
 
 function geodir_action_listings_content_inside(){
+	global $gridview_columns;
+	$listing_view = get_option('geodir_listing_view');
+			if(strstr($listing_view,'gridview')){
+				$gridview_columns = $listing_view;
+				$listing_view_exp = explode('_',$listing_view);
+				$listing_view = $listing_view_exp[0];
+			}
 			geodir_get_template_part('listing','listview');
 }
 
@@ -1058,6 +1095,8 @@ if( !empty($term) )
 	if(!empty($current_term))
 		$list_title .= __(' in',GEODIRECTORY_TEXTDOMAIN). " '". ucwords( $current_term->name )."'";
 }
+
+
 	
 if(is_search())
 {
@@ -1100,10 +1139,12 @@ add_action( 'geodir_author_sidebar_left_inside', 'geodir_author_left_section', 1
 
 add_action( 'geodir_author_sidebar_left', 'geodir_action_author_sidebar_left', 10 );
 function geodir_action_author_sidebar_left(){
+if( get_option('geodir_show_author_left_section') ) {
 // this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
 do_action( 'geodir_sidebar_left_open', 'author-page', 'geodir-sidebar-left','geodir-sidebar-left geodir-listings-sidebar-left', 'http://schema.org/WPSideBar');
 do_action('geodir_author_sidebar_left_inside');
 do_action( 'geodir_sidebar_left_close', 'author-page');
+}
 }
 
 function geodir_author_right_section(){
@@ -1118,13 +1159,22 @@ add_action( 'geodir_author_sidebar_right_inside', 'geodir_author_right_section',
 
 add_action( 'geodir_author_sidebar_right', 'geodir_action_author_sidebar_right', 10 );
 function geodir_action_author_sidebar_right(){
+if( get_option('geodir_show_author_right_section') ) {
 // this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
 do_action( 'geodir_sidebar_right_open', 'author-page', 'geodir-sidebar-right','geodir-sidebar-right geodir-listings-sidebar-right', 'http://schema.org/WPSideBar');
 do_action('geodir_author_sidebar_right_inside');
 do_action( 'geodir_sidebar_right_close', 'author-page');
 }
+}
 
 function geodir_action_author_content_inside(){
+	global $gridview_columns;
+	$listing_view = get_option('geodir_author_view');
+			if(strstr($listing_view,'gridview')){
+				$gridview_columns = $listing_view;
+				$listing_view_exp = explode('_',$listing_view);
+				$listing_view = $listing_view_exp[0];
+			}
 			geodir_get_template_part('listing','listview');
 }
 
@@ -1200,10 +1250,12 @@ add_action( 'geodir_search_sidebar_left_inside', 'geodir_search_left_section', 1
 
 add_action( 'geodir_search_sidebar_left', 'geodir_action_search_sidebar_left', 10 );
 function geodir_action_search_sidebar_left(){
+if( get_option('geodir_show_search_left_section') ) {
 // this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
 do_action( 'geodir_sidebar_left_open', 'search-page', 'geodir-sidebar-left','geodir-sidebar-left geodir-listings-sidebar-left', 'http://schema.org/WPSideBar');
 do_action('geodir_search_sidebar_left_inside');
 do_action( 'geodir_sidebar_left_close', 'search-page');
+}
 }
 
 function geodir_search_right_section(){
@@ -1218,10 +1270,12 @@ add_action( 'geodir_search_sidebar_right_inside', 'geodir_search_right_section',
 
 add_action( 'geodir_search_sidebar_right', 'geodir_action_search_sidebar_right', 10 );
 function geodir_action_search_sidebar_right(){
+if( get_option('geodir_show_search_right_section') ) {
 // this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
 do_action( 'geodir_sidebar_right_open', 'search-page', 'geodir-sidebar-right','geodir-sidebar-right geodir-listings-sidebar-right', 'http://schema.org/WPSideBar');
 do_action('geodir_search_sidebar_right_inside');
 do_action( 'geodir_sidebar_right_close', 'search-page');
+}
 }
 
 
@@ -1235,6 +1289,13 @@ if(get_option('geodir_show_search_bottom_section')) { ?>
 }
 
 function geodir_action_search_content_inside(){
+	global $gridview_columns;
+	$listing_view = get_option('geodir_search_view');
+			if(strstr($listing_view,'gridview')){
+				$gridview_columns = $listing_view;
+				$listing_view_exp = explode('_',$listing_view);
+				$listing_view = $listing_view_exp[0];
+			}
 			geodir_get_template_part('listing','listview');
 }
 
@@ -1278,10 +1339,12 @@ add_action( 'geodir_home_sidebar_left_inside', 'geodir_home_left_section', 10 );
 
 add_action( 'geodir_home_sidebar_left', 'geodir_action_home_sidebar_left', 10 );
 function geodir_action_home_sidebar_left(){
+if( get_option('geodir_show_home_left_section') ) {
 // this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
 do_action( 'geodir_sidebar_left_open', 'home-page', 'geodir-sidebar-left','geodir-sidebar geodir-sidebar-left geodir-listings-sidebar-left', 'http://schema.org/WPSideBar');
 do_action('geodir_home_sidebar_left_inside');
 do_action( 'geodir_sidebar_left_close', 'home-page');
+}
 }
 
 function geodir_home_right_section(){
@@ -1296,10 +1359,12 @@ add_action( 'geodir_home_sidebar_right_inside', 'geodir_home_right_section', 10 
 
 add_action( 'geodir_home_sidebar_right', 'geodir_action_home_sidebar_right', 10 );
 function geodir_action_home_sidebar_right(){
+if( get_option('geodir_show_home_right_section') ) {
 // this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
 do_action( 'geodir_sidebar_right_open', 'home-page', 'geodir-sidebar-right','geodir-sidebar-right geodir-listings-sidebar-right', 'http://schema.org/WPSideBar');
 do_action('geodir_home_sidebar_right_inside');
 do_action( 'geodir_sidebar_right_close', 'home-page');
+}
 }
 
 

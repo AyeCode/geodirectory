@@ -1946,9 +1946,9 @@ function geodir_show_listing_info($fields_location=''){
 						if($post->$type['htmlvar_name'] != ''):
 							
 							if($post->$type['htmlvar_name'] == 'f' || $post->$type['htmlvar_name'] == '0'):
-								$html_val = 'No';
+								$html_val = __('No',GEODIRECTORY_TEXTDOMAIN);
 							elseif($post->$type['htmlvar_name'] == 't' || $post->$type['htmlvar_name'] == '1'):
-								$html_val = 'Yes';
+								$html_val = __('Yes',GEODIRECTORY_TEXTDOMAIN);
 							endif;
 							
 							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
@@ -1971,9 +1971,9 @@ function geodir_show_listing_info($fields_location=''){
 						if($post->$type['htmlvar_name'] != ''):
 							
 							if($post->$type['htmlvar_name'] == '1'):
-									$html_val = 'Yes';
+									$html_val = __('Yes',GEODIRECTORY_TEXTDOMAIN);
 							else:
-									$html_val = 'No';
+									$html_val = __('No',GEODIRECTORY_TEXTDOMAIN);
 							endif;
 							
 							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
@@ -2124,9 +2124,11 @@ function geodir_show_listing_info($fields_location=''){
 										$file_paths .= '<a href="'.$file.'" target="_blank">'.$filename[count($filename)-1].'</a>';	
 										
 									}else{
-										
+									
+										$file_paths .= '<div class="geodir-custom-post-gallery" class="clearfix">';
 										$file_paths .= geodir_show_image(array('src'=>$file),'thumbnail',false,false);
 										//$file_paths .= '<img src="'.$file.'"  />';	
+										$file_paths .= '</div>';
 									}
 									
 								}
@@ -2136,9 +2138,11 @@ function geodir_show_listing_info($fields_location=''){
 							elseif($field_icon==''){$field_icon_af = '';}
 							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-							$html = '<p class="'.$type['css_class'].'" style="clear:both;"><span class="geodir-i-select" style="'.$field_icon.'">'.$field_icon_af;
+							$html = '<div class="'.$type['css_class'].' geodir-custom-file-box"><div class="geodir-i-select" style="'.$field_icon.'">'.$field_icon_af;
+							$html .= '<span style="display: inline-block; vertical-align: top; padding-right: 14px;">';
 							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
-							$html .= $file_paths.'</span></p>';
+							$html .= '</span>';
+							$html .= $file_paths.'</div></div>';
 							
 						endif;
 					endif;

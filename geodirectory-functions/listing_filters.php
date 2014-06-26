@@ -45,19 +45,19 @@ function set_listing_request(){
 		//if(isset($_REQUEST['s']) && $_REQUEST['s'] == '+') $_REQUEST['s'] = '';
 		
 		if(isset($_REQUEST['sdist'])){
-			($_REQUEST['sdist'] != '0' && $_REQUEST['sdist'] != '') ? $dist=mysql_real_escape_string($_REQUEST['sdist']) : $dist = 25000;
+			($_REQUEST['sdist'] != '0' && $_REQUEST['sdist'] != '') ? $dist= $_REQUEST['sdist'] : $dist = 25000;
 		}elseif(get_option('gd_search_dist')!=''){$dist = get_option('gd_search_dist');
 		}else{$dist = 25000;} //  Distance
 		
-		if(isset($_REQUEST['sgeo_lat'])){$mylat=(float)mysql_real_escape_string($_REQUEST['sgeo_lat']);}
+		if(isset($_REQUEST['sgeo_lat'])){$mylat=(float)$_REQUEST['sgeo_lat'];}
 		else{$mylat= (float)geodir_get_current_city_lat();} //  Latatude
 		
-		if(isset($_REQUEST['sgeo_lon'])){$mylon=(float)mysql_real_escape_string($_REQUEST['sgeo_lon']);}
+		if(isset($_REQUEST['sgeo_lon'])){$mylon=(float)$_REQUEST['sgeo_lon'];}
 		else{$mylon= (float)geodir_get_current_city_lng();} //  Distance 
 		
-		if(isset($_REQUEST['snear'])){$snear = mysql_real_escape_string(trim($_REQUEST['snear']));}
+		if(isset($_REQUEST['snear'])){$snear = trim($_REQUEST['snear']);}
 		
-		if(isset($_REQUEST['s'])){$s = mysql_real_escape_string(trim($_REQUEST['s']));}
+		if(isset($_REQUEST['s'])){$s = trim($_REQUEST['s']);}
 		
 		if($snear == 'NEAR ME'){
 			$ip = $_SERVER['REMOTE_ADDR'];
@@ -457,9 +457,26 @@ function geodir_post_where(){
 		
 		if( !geodir_is_page('detail') )
 			add_filter('posts_where', 'geodir_default_where', 1);/**/
+			
+		//add_filter( 'user_has_cap', 'geodir_preview_post_cap', 10, 3 );// let subscribers edit their own posts
 		
 	}
 }
+
+/*
+* Preivepost cap *
+*/
+function geodir_preview_post_cap($allcaps, $caps, $args ){
+	$user_id = get_current_user_id();
+	if($user_id && isset($_REQUEST['post_type']) && $_REQUEST['post_type']!='' && isset($_REQUEST['p']) && $_REQUEST['p']!='' && $args[0]=='edit_post' &&  $_REQUEST['p']==$args[2] ){
+		
+	$allcaps['edit_posts']=true;	
+	}
+	//print_r($allcaps);
+  return $allcaps;
+}
+
+
 
 /*
 * Listing edit filter *

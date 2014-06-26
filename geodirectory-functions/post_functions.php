@@ -24,6 +24,7 @@ function geodir_set_postcat_structure($post_id, $taxonomy, $default_cat = '' , $
 		
 	if(isset($category_str) && empty($category_str))
 	{
+		
 		$post_cat_str = '';
 		$post_categories = array();
 		if(isset($post_cat_array) && is_array($post_cat_array) && !empty($post_cat_array)){
@@ -34,6 +35,18 @@ function geodir_set_postcat_structure($post_id, $taxonomy, $default_cat = '' , $
 		$post_categories[$taxonomy] = $post_cat_str;
 		$category_str = $post_categories;
 	}
+	
+	$change_cat_str = $category_str[$taxonomy];
+	
+	$default_pos = strpos($change_cat_str, 'd:');
+	
+	if ($default_pos === false) {
+			
+		$change_cat_str = str_replace($default_cat.',y:', $default_cat.',y,d:', $change_cat_str);
+		
+	}
+	
+	$category_str[$taxonomy] = $change_cat_str;
 	
 	update_post_meta($post_id, 'post_categories', $category_str);		
 	
@@ -1173,8 +1186,11 @@ function geodir_show_image( $request = array(), $size = 'thumbnail' ,$no_image =
 					$width_per = 100;
 			}
 			
+			//$html = '<div class="geodir_thumbnail" style="background-image:url(\''.$image->src.'\');"></div>';
+
 			//$html = '<div class="geodir_thumbnail"><img style="max-height:'. $max_size->h .'px;" alt="place image" src="' . $image->src . '"  /></div>';
-			if(is_admin()):
+			//print_r($_REQUEST);
+			if(is_admin() && !isset($_REQUEST['geodir_ajax'])):
 				$html = '<div class="geodir_thumbnail"><img style="max-height:'. $max_size->h .'px;" alt="place image" src="' . $image->src . '"  /></div>';
 			else : 
 				$html = '<div class="geodir_thumbnail" style="background-image:url(\''.$image->src.'\');"></div>';
@@ -1528,7 +1544,7 @@ function geodir_get_infowindow_html($postinfo_obj, $post_preview = ''){
 						$e++;
 						if($e==2){break;}// only show 3 event dates
 						$output .=  '<p>';
-						$geodir_num_dates++;
+						//$geodir_num_dates++;
 						if(isset($recuring_data['different_times']) && $recuring_data['different_times'] == '1'){
 							$starttimes = isset($recuring_data['starttimes'][$key]) ? $recuring_data['starttimes'][$key] : '';
 							$endtimes = isset($recuring_data['endtimes'][$key]) ? $recuring_data['endtimes'][$key] : '';
@@ -1556,21 +1572,24 @@ function geodir_get_infowindow_html($postinfo_obj, $post_preview = ''){
 					
 					echo $output;
 		}
-					?>
-             
-             
-             
-             
+		
+		
+					if($ID){
+		
+						$post_author = isset($postinfo_obj->post_author) ? $postinfo_obj->post_author : get_post_field( 'post_author', $ID );
+						?>
+
               <div class="geodir-bubble-meta-bottom">
                   <span class="geodir-bubble-rating"><?php echo $rating_star;?></span>
                   
-                  <span class="geodir-bubble-fav"><?php echo geodir_favourite_html($postinfo_obj->post_author,$ID);?></span>
+                  <span class="geodir-bubble-fav"><?php echo geodir_favourite_html($post_author,$ID);?></span>
                   <span class="geodir-bubble-reviews"><a href="<?php echo get_comments_link( $ID ); ?>" class="geodir-pcomments"><i class="fa fa-comments"></i>
                             <?php echo get_comments_number( $ID ); ?>
                                      </a></span>
               </div>
  
-              
+       <?php }?> 
+			       
 			</div>             					
 		</div>
 	</div>
@@ -1693,6 +1712,11 @@ function geodir_delete_listing_info($deleted_postid, $force = false){
 	global $wpdb,$plugin_prefix;
 	
 	$post_type = get_post_type( $deleted_postid );
+	
+	$all_postypes = geodir_get_posttypes();
+
+	if(!in_array($post_type, $all_postypes))
+		return false;
 	
 	$table = $plugin_prefix . $post_type . '_detail';
 	
@@ -2051,8 +2075,10 @@ function geodir_set_wp_featured_image($post_id)
 			$id = wp_insert_attachment( $attachment, $filename, $post_id );
 			
 			if ( ! is_wp_error( $id ) ) {
-				
+			
 				set_post_thumbnail($post_id,$id);
+				
+				require_once(ABSPATH . 'wp-admin/includes/image.php');
 				wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $filename ) );
 				
 			}

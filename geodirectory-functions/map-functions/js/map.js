@@ -292,7 +292,10 @@ function create_marker(input,map_canvas_var )
 			
 			
 		var title = geodir_htmlEscape(input.t);
-		if(!input.i){return;}
+		
+		//if(!input.i){return;}
+		if(!input.i){input.i = geodir_all_js_msg.geodir_default_marker_icon;}
+		
 		var marker  = jQuery.goMap.createMarker({
 							id: marker_id ,
 							title: title ,

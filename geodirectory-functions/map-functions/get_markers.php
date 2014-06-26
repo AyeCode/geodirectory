@@ -17,7 +17,7 @@ if( isset( $_REQUEST['ajax_action'] ) && $_REQUEST['ajax_action'] == 'cat' ){
 
 	global $wpdb,$plugin_prefix;
 	
-	if( $_REQUEST['m_id'] != ''){$pid = mysql_real_escape_string($_REQUEST['m_id']);}
+	if( $_REQUEST['m_id'] != ''){$pid = $_REQUEST['m_id'];}
 	else{ echo 'no marker data found'; exit;}
 
 	if(isset($_REQUEST['post_preview']) && $_REQUEST['post_preview'] != '' && isset($_SESSION['listing'])){
@@ -70,7 +70,7 @@ function get_markers(){
 	
 	$field_default_cat = '';
 	if(isset($_REQUEST['cat_id']) && $_REQUEST['cat_id'] != ''){	
-		$map_cat_arr = mysql_real_escape_string($_REQUEST['cat_id']);
+		$map_cat_arr = $_REQUEST['cat_id'];
 		
 		if(!empty($map_cat_arr))
 		{
@@ -101,7 +101,7 @@ function get_markers(){
 	if(isset($_REQUEST['search']) && !empty($_REQUEST['search'])){
 		
 			$search .= " AND p.post_title like %s";
-			$main_query_array[] = "%".mysql_real_escape_string($_REQUEST['search'])."%";
+			$main_query_array[] = "%".$_REQUEST['search']."%";
 			
 	}
 	
@@ -111,7 +111,7 @@ function get_markers(){
 	{	
 		$table = $plugin_prefix . $_REQUEST['gd_posttype'].'_detail';
 		$gd_posttype = " AND p.post_type = %s";
-		$main_query_array[] = mysql_real_escape_string($_REQUEST['gd_posttype']);
+		$main_query_array[] = $_REQUEST['gd_posttype'];
 		
 	}else
 		$table = $plugin_prefix .'gd_place_detail';	
