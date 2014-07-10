@@ -19,6 +19,7 @@ jQuery.post( ajax_url, { popuptype: clk_class, post_id: post_id })
 		jQuery.modal.close();// close popup and show new one with new data, will be so fast user will not see it
 		jQuery('#'+popup_id).modal({
 									  persist:true,
+									  overlayClose:true,
 									onClose: function(){
 											  jQuery.modal.close({
 												  overlayClose:true

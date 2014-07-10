@@ -6,32 +6,32 @@ function geodir_locate_template($template = '')
 	
 	switch($template):
 		case 'signup':
-				return $template = locate_template( array( "geodir-signup.php" ));
+				return $template = locate_template( array( "geodirectory/geodir-signup.php" ));
 		break;
 		case 'add-listing':
 				$listing_page_id = get_option( 'geodir_add_listing_page' );
 				if( $listing_page_id != '' && is_page( $listing_page_id ) && isset($_REQUEST['listing_type'])
 					&& in_array( $_REQUEST['listing_type'], geodir_get_posttypes() ) )
 						$post_type = $_REQUEST['listing_type'];
-				return $template = locate_template( array( "add-{$post_type}.php","add-listing.php" ));
+				return $template = locate_template( array( "geodirectory/add-{$post_type}.php","geodirectory/add-listing.php" ));
 		break;
 		case 'success':
 				$success_page_id = get_option( 'geodir_success_page' );
 				if( $success_page_id != '' && is_page( $success_page_id )  && isset($_REQUEST['listing_type'])
 					&& in_array( $_REQUEST['listing_type'], geodir_get_posttypes() ) )
 					$post_type = $_REQUEST['listing_type'];
-				return $template = locate_template(array("{$post_type}-success.php","listing-success.php"));
+				return $template = locate_template(array("geodirectory/{$post_type}-success.php","geodirectory/listing-success.php"));
 		break;  
 		case 'detail':
 		case 'preview':
 				if ( in_array( get_post_type(), geodir_get_posttypes() ) )
 					$post_type = get_post_type();
-				return $template = locate_template( array("single-{$post_type}.php","listing-detail.php"));
+				return $template = locate_template( array("geodirectory/single-{$post_type}.php","geodirectory/listing-detail.php"));
 		break;
 		case 'listing':
 				$templates = array();
 				if ( is_post_type_archive() && in_array( get_post_type(), geodir_get_posttypes() ) )
-				{	$post_type = get_post_type(); $templates[] =  "archive-$post_type.php"; 	}
+				{	$post_type = get_post_type(); $templates[] =  "geodirectory/archive-$post_type.php"; 	}
 				
 				
 				if(is_tax() && geodir_get_taxonomy_posttype() )
@@ -39,28 +39,28 @@ function geodir_locate_template($template = '')
 					$query_obj = get_queried_object();
 					$curr_taxonomy = isset($query_obj->taxonomy) ? $query_obj->taxonomy : '';
 					$curr_term = isset($query_obj->slug) ? $query_obj->slug : '';
-					$templates[] =  "taxonomy-$curr_taxonomy-$curr_term.php";
-					$templates[] =  "taxonomy-$curr_taxonomy.php";
+					$templates[] =  "geodirectory/taxonomy-$curr_taxonomy-$curr_term.php";
+					$templates[] =  "geodirectory/taxonomy-$curr_taxonomy.php";
 				}
 				
-				$templates[] =  "geodir-listing.php";	
+				$templates[] =  "geodirectory/geodir-listing.php";	
 				
 				return $template = locate_template( $templates );
 		break;
 		case 'information':
-				return $template = locate_template( array( "geodir-information.php" ) );
+				return $template = locate_template( array( "geodirectory/geodir-information.php" ) );
 		break;
 		case 'author':
-				return $template = locate_template( array( "geodir-author.php" ) );
+				return $template = locate_template( array( "geodirectory/geodir-author.php" ) );
 		break;
 		case 'search':
-				return $template = locate_template( array( "geodir-search.php" ) );
+				return $template = locate_template( array( "geodirectory/geodir-search.php" ) );
 		break;
 		case 'location':
-				return $template = locate_template( array( "geodir-location.php" ) );
+				return $template = locate_template( array( "geodirectory/geodir-location.php" ) );
 		break;
 		case 'geodir-home':
-				return $template = locate_template( array( "geodir-home.php" ) );
+				return $template = locate_template( array( "geodirectory/geodir-home.php" ) );
 		break;
 	endswitch;
 	
@@ -97,7 +97,7 @@ function geodir_template_loader( $template ) {
 		
 		$template = geodir_locate_template('signup');
 		
-		if ( ! $template ) $template = geodir_plugin_path() . '/geodirectory-templates/geodir_signup.php';
+		if ( ! $template ) $template = geodir_plugin_path() . '/geodirectory-templates/geodir-signup.php';
 		
 		return $template = apply_filters('geodir_template_signup',$template);
 	}
@@ -214,7 +214,7 @@ function geodir_template_loader( $template ) {
 			
 			$template = geodir_locate_template('geodir-home');
 			
-			if ( ! $template ) $template = geodir_plugin_path() . '/geodirectory-templates/home_page.php';
+			if ( ! $template ) $template = geodir_plugin_path() . '/geodirectory-templates/geodir-home.php';
 	
 			return $template = apply_filters('geodir_template_homepage',$template);
 	
@@ -222,7 +222,7 @@ function geodir_template_loader( $template ) {
 		
 			$template = geodir_locate_template('location');
 			
-			if ( ! $template ) $template = geodir_plugin_path() . '/geodirectory-templates/home_page.php';
+			if ( ! $template ) $template = geodir_plugin_path() . '/geodirectory-templates/geodir-home.php';
 			
 			return $template = apply_filters('geodir_template_homepage',$template);
 			
@@ -247,12 +247,12 @@ function geodir_get_template_part( $slug = '', $name = NULL )
 		$template_name = "{$slug}.php";
 	}		
 	
-	if ( !locate_template(array($template_name)) ) :
+	if ( !locate_template(array("geodirectory/" .$template_name)) ) :
 		
 		$template = apply_filters( "geodir_template_part-{$slug}-{$name}", geodir_plugin_path() . '/geodirectory-templates/' . $template_name );
 		include( $template );
 	else:
-		locate_template(array($template_name), true, false);
+		locate_template(array("geodirectory/" .$template_name), true, false);
 	endif;
 	
 }

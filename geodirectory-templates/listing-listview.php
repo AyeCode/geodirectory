@@ -130,7 +130,7 @@ if(isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view']!='' && !i
 							$marker_icon = $json_info->icon;*/
 						
 						$term_icon_url = get_tax_meta($post->default_category,'ct_cat_icon', false, $post->post_type);
-						$marker_icon = isset($term_icon_url['src']) ? $term_icon_url['src'] : '';
+						$marker_icon = isset($term_icon_url['src']) ? $term_icon_url['src'] : get_option('geodir_default_marker_icon');
 				 ?>
 								 <span class="geodir-pinpoint" style=" background:url('<?php if(isset($marker_icon)){ echo $marker_icon;}?>') no-repeat scroll left top transparent; background-size:auto 100%; -webkit-background-size:auto 75%; -moz-background-size:auto 100%;"><a href="javascript:void(0)" onclick="openMarker('listing_map_canvas' ,'<?php echo $post->ID; ?>')" onmouseover="animate_marker('listing_map_canvas' ,'<?php echo $post->ID; ?>')" onmouseout="stop_marker_animation('listing_map_canvas' ,'<?php echo $post->ID; ?>')" ><?php _e('Pinpoint',GEODIRECTORY_TEXTDOMAIN);?></a></span>
 								 <?php } ?>

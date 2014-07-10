@@ -72,7 +72,7 @@ function geodir_post_package_info($package_info, $post='', $post_type = '')
 	$package_info['amount'] = 0 ;
 	$package_info['is_featured'] = 0 ;
 	$package_info['image_limit'] ='';
-	$package_info['google_analytics'] = 0 ;
+	$package_info['google_analytics'] = 1 ;
 	$package_info['sendtofriend'] =1;
 	
 	return (object)apply_filters('geodir_post_package_info' , $package_info, $post, $post_type);
@@ -827,7 +827,7 @@ function geodir_show_detail_page_tabs(){
 								       echo $thumb_image;
 									break;
 								case 'post_video':
-									echo $video; 
+									echo apply_filters( 'the_content', stripslashes($video) );// we apply the_content filter so oembed works also; 
 									break;
 								case 'special_offers':
 									echo wpautop(stripslashes($special_offers));
@@ -877,6 +877,8 @@ function geodir_show_detail_page_tabs(){
 function geodir_exif($file) {
         //This line reads the EXIF data and passes it into an array
 		$file['file']=$file['tmp_name'];
+		 if($file['type']=="image/jpg" || $file['type']=="image/jpeg" || $file['type']=="image/pjpeg"){}else{return $file;}
+		if(!function_exists('read_exif_data')){return $file;}
         $exif = read_exif_data($file['file']);
 
         //We're only interested in the orientation
