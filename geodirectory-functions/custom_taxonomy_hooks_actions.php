@@ -152,6 +152,7 @@ function geodir_flush_rewrite_rules() {
 
 function geodir_listing_rewrite_rules( $rules )
 {
+
 	$newrules = array();
 	$taxonomies = array();
 	$taxonomies = get_option('geodir_taxonomies');
@@ -164,7 +165,11 @@ function geodir_listing_rewrite_rules( $rules )
 			$listing_slug = $args['listing_slug'];
 			
 			if(strpos($taxonomy,'tags'))
+			{
+				$newrules[$listing_slug.'/(.+?)/page/?([0-9]{1,})/?$'] = 'index.php?'.$taxonomy.'=$matches[1]&paged=$matches[2]';
 				$newrules[$listing_slug.'/(.+?)/?$'] = 'index.php?'.$taxonomy.'=$matches[1]';
+				
+			}
 			
 		/*	$newrules[$listing_slug.'/'.$detail_url_seprator.'/([^/]+)/?$'] = 'index.php?'.$post_type.'=$matches[1]';
 			$newrules[$listing_slug.'/(.+?)/'.$detail_url_seprator.'/([^/]+)/?$'] = 'index.php?'.$taxonomy.'=$matches[1]&'.$post_type.'=$matches[2]';
@@ -204,6 +209,12 @@ function geodir_add_location_var($public_query_vars) {
 	return $public_query_vars;
 }
 
+function geodir_add_geodir_page_var($public_query_vars) 
+{
+	$public_query_vars[] = 'gd_is_geodir_page' ;
+	return $public_query_vars;
+}
+
 
 function geodir_add_page_id_in_query_var(){
 	global $wp_query;
@@ -226,19 +237,32 @@ function geodir_set_location_var_in_session_in_core($wp)
 
 // Query Vars will have page_id parameter
 // check if query var has page_id and that page id is location page 
-	if(isset($wp->query_vars['page_id']) && $wp->query_vars['page_id'] = get_option('geodir_location_page'))
+	geodir_set_is_geodir_page($wp) ;
+	if(!get_option('geodir_set_as_home'))
+	{
+		
+		if ( empty($wp->query_vars) || !array_diff( array_keys($wp->query_vars), array('preview', 'page', 'paged', 'cpage') ) )
+		{
+			if( 'page' == get_option('show_on_front'))
+				$wp->query_vars['page_id'] = get_option('page_on_front');
+		}
+			
+	}
+	
+	
+	if(isset($wp->query_vars['page_id']) && $wp->query_vars['page_id'] == get_option('geodir_location_page'))
 	{
 		$gd_country = '' ;
 		$gd_region = '' ;
 		$gd_city = '' ;
 		if(isset($wp->query_vars['gd_country']) &&  $wp->query_vars['gd_country'] != '')
-			$gd_country =$wp->query_vars['gd_country'] ;
+			$gd_country =urldecode($wp->query_vars['gd_country']) ;
 		
 		if(isset($wp->query_vars['gd_region']) &&  $wp->query_vars['gd_region'] != '')
-			$gd_region =$wp->query_vars['gd_region'] ; 
+			$gd_region =urldecode($wp->query_vars['gd_region']) ;  
 		
 		if(isset($wp->query_vars['gd_city']) &&  $wp->query_vars['gd_city'] != '')
-			$gd_city =$wp->query_vars['gd_city'] ; 
+			$gd_city =urldecode($wp->query_vars['gd_city']) ;
 		
 		if(!($gd_country=='' && $gd_region == '' && $gd_city == '' ))
 		{
@@ -410,18 +434,18 @@ function geodir_set_location_var_in_session_in_core($wp)
 				{
 					if(count($geodir_terms) >=3)
 					{
-						$gd_country= $geodir_terms[0];
-						$gd_region = $geodir_terms[1] ;
-						$gd_city =  $geodir_terms[2] ;
+						$gd_country= urldecode($geodir_terms[0]);
+						$gd_region = urldecode($geodir_terms[1]) ;
+						$gd_city =  urldecode($geodir_terms[2]) ;
 					}
 					else if(count($geodir_terms) >=2)
 					{
-						$gd_country= $geodir_terms[0];
-						$gd_region = $geodir_terms[1] ;
+						$gd_country= urldecode($geodir_terms[0]);
+						$gd_region = urldecode($geodir_terms[1]) ;
 					}
 					else if(count($geodir_terms) >=1)
 					{
-						$gd_country= $geodir_terms[0];
+						$gd_country= urldecode($geodir_terms[0]);
 					}
 						
 						if(  strtolower($default_location->country_slug)== strtolower($gd_country) &&
@@ -496,13 +520,13 @@ function geodir_set_location_var_in_session_in_core($wp)
 			$wp->query_vars[$geodir_taxonomy] = $geodir_term ;
 			// eliminate location related terms from taxonomy term 
 			if($gd_country !='')
-				$wp->query_vars[$geodir_taxonomy] = preg_replace( '/' .$gd_country .'/', ''  , $wp->query_vars[$geodir_taxonomy],1) ;
+				$wp->query_vars[$geodir_taxonomy] = preg_replace( '/' .urlencode($gd_country) .'/', ''  , $wp->query_vars[$geodir_taxonomy],1) ;
 			
 			if($gd_region !='')
-				$wp->query_vars[$geodir_taxonomy] = preg_replace('/' . $gd_region.'/' , ''  , $wp->query_vars[$geodir_taxonomy],1)	;
+				$wp->query_vars[$geodir_taxonomy] = preg_replace('/' .  urlencode($gd_region).'/' , ''  , $wp->query_vars[$geodir_taxonomy],1)	;
 				
 			if($gd_city !='')
-				$wp->query_vars[$geodir_taxonomy] = preg_replace( '/' .$gd_city  .'/' , ''  , $wp->query_vars[$geodir_taxonomy],1)	;
+				$wp->query_vars[$geodir_taxonomy] = preg_replace( '/' .urlencode($gd_city)  .'/' , ''  , $wp->query_vars[$geodir_taxonomy],1)	;
 				
 			
 			

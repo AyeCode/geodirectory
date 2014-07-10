@@ -160,8 +160,8 @@ function build_map_ajax_search_param(map_canvas_var,reload_cat_list)
 	if(gd_posttype != '')
 		search_query_string = search_query_string+gd_posttype;	
 	
-	if(location_string != '')
-		search_query_string = search_query_string+location_string;	
+//	if(location_string != '')
+	//	search_query_string = search_query_string+location_string;	
 	
 	
 	map_ajax_search(map_canvas_var , search_query_string, ''); 

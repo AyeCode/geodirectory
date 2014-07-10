@@ -20,6 +20,12 @@ if(is_admin() && isset($_REQUEST['tab']) && $mapzoom == ''){
 ?>
 <script type="text/javascript">
 /* <![CDATA[ */
+user_address = false;
+
+jQuery('#<?php echo $prefix.'address';?>').keypress(function() {
+  user_address = true;
+});
+
 baseMarker = '';
 geocoder = '';
 var <?php echo $prefix;?>CITY_MAP_CENTER_LAT = <?php echo ($lat) ? $lat :  '39.952484'; ?>;	
@@ -44,6 +50,7 @@ var getCountry = '';
 //alert(JSON.stringify(responses[0].address_components));
 console.log( responses );
 street_number = '';
+premise=''; // In Russian ;
 route = '';
 administrative_area_level_1 = '';
 administrative_area_level_2 = '';
@@ -53,12 +60,13 @@ locality  = '';
 country = '';
 postal_code = '';
 rr = '';
-
+has_address_been_set = false ;
 for (var i = 0; i < responses[0].address_components.length; i++)
 {
 var addr = responses[0].address_components[i];
 if (addr.types[0] == 'street_number'){street_number = addr;}
 if (addr.types[0] == 'route'){route = addr;}
+if (addr.types[0] == 'premise'){premise = addr;}
 if (addr.types[0] == 'administrative_area_level_1'){administrative_area_level_1 = addr;}
 if (addr.types[0] == 'administrative_area_level_2'){administrative_area_level_2 = addr;}
 if (addr.types[0] == 'administrative_area_level_3'){administrative_area_level_3 = addr;}
@@ -69,8 +77,41 @@ if (addr.types[0] == 'postal_code'){postal_code = addr;}
 if(responses[0].formatted_address!='')
 {
 	address_array = responses[0].formatted_address.split(",", 2) ;
-	if(address_array.length > 0 )
-		getAddress = address_array[0] ;
+	if(address_array.length > 1 )
+	{
+	
+	
+		if(!(typeof(street_number.long_name) == 'undefined' || street_number.long_name == null) && street_number.long_name.toLowerCase()==  address_array[0].toLowerCase().trim())
+			getAddress = street_number.long_name+', '+ address_array[1] ;
+			
+		if(getAddress=='' && !(typeof(street_number.long_name) == 'undefined' || street_number.long_name == null) && street_number.long_name.toLowerCase()==  address_array[1].toLowerCase().trim())
+			getAddress =  address_array[0] + ', ' + street_number.long_name ;
+		 
+		 
+		if(getAddress=='' && !(typeof(street_number.short_name) == 'undefined' || street_number.short_name == null) && street_number.short_name.toLowerCase()==  address_array[0].toLowerCase().trim())
+			getAddress = street_number.short_name+', '+ address_array[1] ;
+		
+		if(getAddress=='' && !(typeof(street_number.short_name) == 'undefined' || street_number.short_name == null) && street_number.short_name.toLowerCase()==  address_array[1].toLowerCase().trim())
+			getAddress =  address_array[0] + ', ' + street_number.short_name ;
+			
+		
+		if(getAddress=='' && !(typeof(premise.long_name) == 'undefined' || premise.long_name == null) && premise.long_name.toLowerCase()==  address_array[0].toLowerCase().trim())
+			getAddress = premise.long_name+', '+ address_array[1] ;
+			
+		if(getAddress=='' && !(typeof(premise.long_name) == 'undefined' || premise.long_name == null) && premise.long_name.toLowerCase()==  address_array[1].toLowerCase().trim())
+			getAddress =  address_array[0] + ', ' + premise.long_name ;
+		
+		 
+		if(getAddress=='' && !(typeof(premise.short_name) == 'undefined' || premise.short_name == null) && premise.short_name.toLowerCase()==  address_array[0].toLowerCase().trim())
+			getAddress = premise.short_name+', '+ address_array[1] ;
+			
+		if(getAddress=='' && !(typeof(premise.short_name) == 'undefined' || premise.short_name == null) && premise.short_name.toLowerCase()==  address_array[1].toLowerCase().trim())
+			getAddress =  address_array[0] + ', ' + premise.short_name ;
+			 
+		if(getAddress=='')
+			getAddress =  address_array[0]
+			
+	}
 }
 //alert(responses[0].formatted_address)Str.split("-", 2)
 /*
@@ -120,7 +161,7 @@ if(getAddress == '')
 	if(street_number.long_name)
 		getAddress += street_number.long_name+' ';//street_number
 	if(route.long_name)
-	getAddress += route.long_name;//route
+		getAddress += route.long_name;//route
 }
 
 getZip = postal_code.long_name;//postal_code
@@ -185,7 +226,9 @@ var set_map_val_in_fields = '<?php echo apply_filters('geodir_auto_change_map_fi
 var old_country = jQuery("#<?php echo $prefix.'country';?>").val();
 var old_region = jQuery("#<?php echo $prefix.'region';?>").val();
 //if (getAddress){
+if(user_address==false){
 jQuery("#<?php echo $prefix.'address';?>").val(getAddress);
+}
 if(getAddress){oldstr_address = getAddress;}
 // }
 //if (getZip){
@@ -228,6 +271,9 @@ var zip = jQuery('#<?php echo $prefix.'zip';?>').val();
 var city = jQuery('#<?php echo $prefix.'city';?>').val();
 var region = jQuery('#<?php echo $prefix.'region';?>').val();
 var country = jQuery('#<?php echo $prefix.'country';?>').val();
+var country_selected = jQuery('#<?php echo $prefix.'country';?>').find('option:selected');
+var ISO2 = country_selected.data('country_code');
+if(ISO2=='--'){ISO2='';}
 if(typeof zip == "undefined"){
 zip = '';
 }
@@ -246,23 +292,30 @@ $defaultregion =isset($default_location->region) ? $default_location->region : '
 $defaultcountry =isset($default_location->country) ? $default_location->country : '';
 ?>
 if(set_on_map && is_restrict){
-if(zip != '' && address != ''){
-address = address + ',' + zip;
-}
+	if(zip != '' && address != ''){
+		address = address + ',' + zip;
+	}
 }else{
-if(typeof address === 'undefined')
-address = '';
-<?php
-if(is_admin() && isset($_REQUEST['tab'])){?> 
-if(jQuery.trim(city) == '' || jQuery.trim(region) == ''){address = '';} <?php
-}?>
-address = address + ',' + zip + ',' + city + ',' + region + ',' + country; 
+	if(typeof address === 'undefined')
+		address = '';
+	<?php
+	if(is_admin() && isset($_REQUEST['tab'])){?> 
+	if(jQuery.trim(city) == '' || jQuery.trim(region) == ''){address = '';} <?php
+	}?>
+	
+	if(ISO2=='GB'){
+		address = address + ',' + city + ',' + country + ',' + zip; // UK is funny with regions
+	}else{
+		address = address + ',' + city + ',' + region + ',' + country + ',' + zip; 
+	}
 }
 <?php $codeAddress = ob_get_clean();
 echo apply_filters('geodir_codeaddress', $codeAddress);
 ?>
-geocoder.geocode( { 'address': address}, 
+geocoder.geocode( { 'address': address,'country':   ISO2}, 
 function(results, status) {
+console.log( results );
+console.log( status );
 jQuery("#<?php echo $prefix.'map';?>").goMap();
 if (status == google.maps.GeocoderStatus.OK) {
 baseMarker.setPosition(results[0].geometry.location);

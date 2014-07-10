@@ -796,7 +796,7 @@ global $cat_display,$post_cat, $current_user;
                    
 									  <?php do_action('geodir_before_main_form_fields');?>
 										
-                    <div class="required_field geodir_form_row clearfix">
+                    <div id="geodir_post_title_row" class="required_field geodir_form_row clearfix">
                         <label><?php echo PLACE_TITLE_TEXT;?><span>*</span> </label>
                         <input type="text" field_type="text" name="post_title" id="post_title" class="geodir_textfield" value="<?php echo esc_attr(stripslashes($title)); ?>"  />
                        <span class="geodir_message_error"><?php echo $required_msg?></span>
@@ -804,7 +804,7 @@ global $cat_display,$post_cat, $current_user;
                     
 										<?php do_action('geodir_before_description_field'); ?>
 										
-                    <div class="required_field geodir_form_row clearfix">
+                    <div id="geodir_post_desc_row" class="required_field geodir_form_row clearfix">
                         <label><?php echo PLACE_DESC_TEXT;?><span>*</span> </label>
 												
 												<?php
@@ -829,7 +829,7 @@ global $cat_display,$post_cat, $current_user;
 										
 										<?php do_action('geodir_after_description_field'); ?>
                   
-                    <div class="geodir_form_row clearfix" >
+                    <div id="geodir_post_tags_row" class="geodir_form_row clearfix" >
                         <label><?php echo TAGKW_TEXT; ?></label>
                          <input name="post_tags" id="post_tags" value="<?php echo esc_attr(stripslashes($kw_tags)); ?>" type="text" class="geodir_textfield" maxlength="<?php echo TAGKW_TEXT_COUNT;?>"  />
                          <span class="geodir_message_note"><?php echo TAGKW_MSG;?></span>
@@ -903,7 +903,7 @@ global $cat_display,$post_cat, $current_user;
 					if($show_image_input_box){
                     ?>
                     
-						<h5 class="geodir-form_title"> <?php echo  PRO_PHOTO_TEXT;?>
+						<h5 id="geodir_form_title_row" class="geodir-form_title"> <?php echo  PRO_PHOTO_TEXT;?>
 													 <?php if( $image_limit==1 ){echo '<br /><small>('.__('You can upload',GEODIRECTORY_TEXTDOMAIN).' '.$image_limit.' '.__('image with this package',GEODIRECTORY_TEXTDOMAIN).')</small>';} ?>
 													 <?php if($image_limit>1 ){echo '<br /><small>('.__('You can upload',GEODIRECTORY_TEXTDOMAIN).' '.$image_limit.' '.__('images with this package',GEODIRECTORY_TEXTDOMAIN).')</small>';} ?>
 													 <?php if($image_limit==''){echo '<br /><small>('.__('You can upload unlimited images with this package',GEODIRECTORY_TEXTDOMAIN).')</small>';} ?>

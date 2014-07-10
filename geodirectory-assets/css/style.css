@@ -44,6 +44,25 @@ margin-bottom: 15px;
 /* ########################################
 details page 
 ######################################### */
+#post_video-wrap,
+.geodir-company_info p.geodir_video:last-child,
+.geodir-company_info p.geodir_video {
+position: relative;
+padding-bottom: 75%;
+height: 0;
+overflow: hidden;
+}
+#post_video-wrap iframe,
+.geodir-company_info p.geodir_video iframe,  
+.geodir-company_info p.geodir_video object,  
+.geodir-company_info p.geodir_video embed {
+position: absolute;
+top: 15%;
+left: 0;
+width: 100%;
+height: 85%;
+}
+#post_video-wrap iframe{top:0%;}
 .geodir-company_info p:last-child{border-bottom:none;margin-bottom: 0px;
 padding-bottom: 8px;}
 .geodir-company_info img.hreview-img {
@@ -859,3 +878,5 @@ margin:4%;
 
 .geodir-custom-file-box{clear:both; border-bottom:1px #eee solid;margin: 5px 0 10px;
     padding: 5px 0 15px;}
+
+.geodir-sidebar-wrap{overflow:visible;}	

@@ -144,59 +144,60 @@ function get_markers(){
 	$cat_content_info = array();
 	$content_data = array();
 	$post_ids = array();
+	if(!empty($catinfo))
+	{
+		foreach($catinfo as $catinfo_obj)
+		{ 	
+			//$content_data[] = $catinfo_obj->json; 
+			
+			$icon = '';
+			$default_cat = $catinfo_obj->default_icon;
+			
+		 if($default_cat != ''){
+			
+			if(!empty($geodir_cat_icons) && is_array($geodir_cat_icons) && array_key_exists($default_cat,$geodir_cat_icons)){
+					
+					$icon = $geodir_cat_icons[$default_cat];		
+					
+			}else{
+			
+				$post_type = isset($_REQUEST['gd_posttype']) ? $_REQUEST['gd_posttype'] : '';
+				$term_icon_url = get_tax_meta($default_cat,'ct_cat_icon', false, $post_type);
+				$icon = isset($term_icon_url['src']) ? $term_icon_url['src'] : '';
+				
+				$geodir_cat_icons[$default_cat] = $icon;
+				
+			}
+			
+		 }
+		 
 	
-	foreach($catinfo as $catinfo_obj)
-	{ 	
-		//$content_data[] = $catinfo_obj->json; 
-		
-		$icon = '';
-		$default_cat = $catinfo_obj->default_icon;
-		
-	 if($default_cat != ''){
-	 	
-		if(!empty($geodir_cat_icons) && is_array($geodir_cat_icons) && array_key_exists($default_cat,$geodir_cat_icons)){
-				
-				$icon = $geodir_cat_icons[$default_cat];		
-				
-		}else{
-		
-	 		$post_type = isset($_REQUEST['gd_posttype']) ? $_REQUEST['gd_posttype'] : '';
-			$term_icon_url = get_tax_meta($default_cat,'ct_cat_icon', false, $post_type);
-			$icon = isset($term_icon_url['src']) ? $term_icon_url['src'] : '';
+			$e_dates = '';
+			if($post_type=='gd_event'){//print_r($catinfo_obj);
+	
+			$event_arr = unserialize($catinfo_obj->recurring_dates);
+			$e_arr = explode(",",$event_arr['event_recurring_dates']);
+			global $geodir_date_format;
+			$e=0;
+			foreach($e_arr as $e_date){
+				//echo '###'.strtotime($e_date);
+				if(strtotime($e_date) >= strtotime(date("Y-m-d"))){
+					$e++;
+					$e_dates .= ' :: '.date($geodir_date_format,strtotime($e_date));
+					if($e==3){break;}// only show 3 event dates
+					}
+			}
 			
-			$geodir_cat_icons[$default_cat] = $icon;
+			if($e_dates == ''){ continue;} // if the event is old don't show it on the map
+			}
+			$post_title = $catinfo_obj->post_title.$e_dates;
+			$title = str_replace($srcharr,$replarr,$post_title);
+		 
+			$content_data[] = '{"id":"'.$catinfo_obj->post_id.'","t": "'.$title.'","lt": "'.$catinfo_obj->post_latitude.'","ln": "'.$catinfo_obj->post_longitude.'","mk_id":"'.$catinfo_obj->post_id.'_'.$catinfo_obj->default_category.'","i":"'.$icon.'"}';
 			
+			$post_ids[] = $catinfo_obj->post_id; 
 		}
-		
-	 }
-	 
-
-		$e_dates = '';
-		if($post_type=='gd_event'){//print_r($catinfo_obj);
-
-		$event_arr = unserialize($catinfo_obj->recurring_dates);
-		$e_arr = explode(",",$event_arr['event_recurring_dates']);
-		global $geodir_date_format;
-		$e=0;
-		foreach($e_arr as $e_date){
-			//echo '###'.strtotime($e_date);
-			if(strtotime($e_date) >= strtotime(date("Y-m-d"))){
-				$e++;
-				$e_dates .= ' :: '.date($geodir_date_format,strtotime($e_date));
-				if($e==3){break;}// only show 3 event dates
-				}
-		}
-		
-		if($e_dates == ''){ continue;} // if the event is old don't show it on the map
-		}
-		$post_title = $catinfo_obj->post_title.$e_dates;
-		$title = str_replace($srcharr,$replarr,$post_title);
-	 
-		$content_data[] = '{"id":"'.$catinfo_obj->post_id.'","t": "'.$title.'","lt": "'.$catinfo_obj->post_latitude.'","ln": "'.$catinfo_obj->post_longitude.'","mk_id":"'.$catinfo_obj->post_id.'_'.$catinfo_obj->default_category.'","i":"'.$icon.'"}';
-		
-		$post_ids[] = $catinfo_obj->post_id; 
 	}
-	
 	if(!empty($content_data))
 	{	$cat_content_info[]= implode(',',$content_data); }
 			

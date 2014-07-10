@@ -741,7 +741,7 @@ function geodir_save_post_images($post_id = 0, $post_image = array(), $dummy = f
 						}elseif(file_exists($uploads['basedir'].$curr_img_dir.$filename)){$uploaded_file = true;$file_path = $curr_img_dir.'/'.$filename;}
 						
 						
-						if($curr_img_dir != $geodir_uploaddir)	
+						if($curr_img_dir != $geodir_uploaddir && file_exists($img_path))	
 							unlink($img_path);
 						
 					}		

@@ -1182,31 +1182,8 @@ function geodir_term_link($termlink, $term, $taxonomy)
 			$include_location = true;
 		
 		if($include_location ){
-			
-		/*	if(get_option('geodir_show_location_url') == 'all')
-			{
-				
-				$country =  (isset($_SESSION['gd_country']) && $_SESSION['gd_country']!='') ? $_SESSION['gd_country'] : '';  
-				if( $country != '' )
-					$request_term['gd_country'] = $country;	
-				
-				$region = (isset($_SESSION['gd_region']) && $_SESSION['gd_region']!='') ? $_SESSION['gd_region'] : ''; 
-				if( $region != '' )
-					$request_term['gd_region'] = $region;
-				
-				$city = (isset($_SESSION['gd_city']) && $_SESSION['gd_city']!='') ? $_SESSION['gd_city'] : ''; 
-				if( $city != '' )
-					$request_term['gd_city'] = $city;	
-			}
-			else
-			{
-				$city = (isset($_SESSION['gd_city']) && $_SESSION['gd_city']!='') ? $_SESSION['gd_city'] : ''; 
-				if( $city != '' )
-					$request_term['gd_city'] = $city;
-			}		
-			*/
-			
-			$request_term = geodir_get_current_location_terms('query_vars') ;
+		
+			$request_term = geodir_get_current_location_terms('session') ;
 			
 			if(!empty($request_term)){
 				
@@ -1227,9 +1204,6 @@ function geodir_term_link($termlink, $term, $taxonomy)
 				}
 			
 			}
-			
-			//$termlink = preg_replace( '/\/'.$listing_slug.'\//', '/'.$listing_slug.'/'.rtrim($request_term,'/').'/'.$url_separator.'/', $termlink, $count = 1 );  
-			
 		}	
 	}
 	
@@ -1243,37 +1217,14 @@ function geodir_posttype_link($link, $post_type){
 	if(in_array($post_type, geodir_get_posttypes()) ){
 
 		if(get_option('geodir_add_location_url') && isset($_SESSION['gd_multi_location']) && $_SESSION['gd_multi_location']==1){
-		
-			/*if(get_option('geodir_show_location_url') == 'all')
-			{
-				
-				$country =  (isset($_SESSION['gd_country']) && $_SESSION['gd_country']!='') ? $_SESSION['gd_country'] : '';  
-				if( $country != '' )
-					$request_term['gd_country'] = $country;	
-				
-				$region = (isset($_SESSION['gd_region']) && $_SESSION['gd_region']!='') ? $_SESSION['gd_region'] : ''; 
-				if( $region != '' )
-					$request_term['gd_region'] = $region;
-				
-				$city = (isset($_SESSION['gd_city']) && $_SESSION['gd_city']!='') ? $_SESSION['gd_city'] : ''; 
-				if( $city != '' )
-					$request_term['gd_city'] = $city;	
-			}
-			else
-			{
-				$city = (isset($_SESSION['gd_city']) && $_SESSION['gd_city']!='') ? $_SESSION['gd_city'] : ''; 
-				if( $city != '' )
-					$request_term['gd_city'] = $city;
-			}	
-			*/
-			$location_terms = geodir_get_current_location_terms('query_vars');
+			$location_terms = geodir_get_current_location_terms('session');
 			if(!empty($location_terms)){
 		
 				if ( get_option('permalink_structure') != '' ){
 					
 					$location_terms = implode("/",$location_terms);
 					$location_terms = rtrim($location_terms,'/');
-					return $link . $location_terms;  		
+					return $link . urldecode($location_terms);  		
 				}else{
 					return geodir_getlink($link,$location_terms);
 				}

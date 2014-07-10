@@ -1057,6 +1057,8 @@ if (!function_exists('geodir_import_data')) {
 			
 			$csv_target_path = $target_path;
 			
+			ini_set('auto_detect_line_endings', true);
+			
 			$fd = fopen ($target_path, "rt");
 			
 			$rowcount = 0;
@@ -1102,7 +1104,7 @@ if (!function_exists('geodir_import_data')) {
 							$post_cat_arr = explode(',',$post_cat);
 							
 							for($c=0;$c<count($post_cat_arr);$c++){
-								$catid = trim($post_cat_arr[$c]);
+								$catid = wp_kses_normalize_entities(trim($post_cat_arr[$c]));
 								if(!empty($buffer[5])){
 									if(in_array($buffer[5],geodir_get_posttypes())){
 										$p_taxonomy = geodir_get_taxonomies(addslashes($buffer[5]));

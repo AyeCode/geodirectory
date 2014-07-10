@@ -59,7 +59,7 @@ add_filter( 'rewrite_rules_array','geodir_listing_rewrite_rules' );
 ////////////////////////
 
 add_filter('query_vars', 'geodir_add_location_var');
-
+add_filter('query_vars', 'geodir_add_geodir_page_var');
 add_action('wp', 'geodir_add_page_id_in_query_var'); // problem fix in wordpress 3.8
 if ( get_option('permalink_structure') != '' )
 	add_filter('parse_request' , 'geodir_set_location_var_in_session_in_core');
@@ -596,6 +596,9 @@ function geodir_localize_all_js_msg()
 							'geodir_field_id_required' =>  __('This field is required.',GEODIRECTORY_TEXTDOMAIN),
 							'geodir_valid_email_address_msg' =>  __('Please enter valid email address.',GEODIRECTORY_TEXTDOMAIN),
 							'geodir_default_marker_icon' => get_option('geodir_default_marker_icon'),
+							'geodir_latitude_error_msg' => GEODIR_LATITUDE_ERROR_MSG,
+							'geodir_longgitude_error_msg' => GEODIR_LOGNGITUDE_ERROR_MSG,
+							
 							// end not show alert msg
 							
 						);
@@ -735,7 +738,7 @@ function geodir_after_main_form_fields(){
 		}
 		
 	?>
-	<div class="required_field geodir_form_row clearfix">
+	<div id="geodir_accept_term_condition_row" class="required_field geodir_form_row clearfix">
 				<label>&nbsp;</label>
 				<div class="geodir_taxonomy_field" style="float:left; width:70%;">
 				<span style="display:block"> 
@@ -796,7 +799,7 @@ function geodir_after_core_plugin_row($plugin_file, $plugin_data, $status)
 		$wp_list_table = _get_list_table('WP_Plugins_List_Table');
 	
 		echo '<tr class="plugin-update-tr"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange"><div class="geodir-plugin-row-warning">';
-		_e('Deactivate all GeoDirectory depended adons first before deactivating GeoDirectory.',GEODIRECTORY_TEXTDOMAIN)  ;
+		_e('Deactivate all GeoDirectory dependent add-ons first before deactivating GeoDirectory.',GEODIRECTORY_TEXTDOMAIN)  ;
 		echo '</div></td></tr>';	
 	}
 }
@@ -889,7 +892,7 @@ function geodir_location_slug_check($slug){
 			$alt_location_name = _truncate_post_slug( $slug, 200 - ( strlen( $suffix ) + 1 ) ) . "-$suffix";
 			$location_slug_check = $wpdb->get_var($wpdb->prepare("SELECT slug FROM ".$table_prefix."terms WHERE slug=%s", array($alt_location_name)));
 			$suffix++;
-		} while ( $location_slug_check );
+		} while ( $location_slug_check &&  $suffix<100 );
 		
 		$slug = $alt_location_name;	
 		
@@ -923,7 +926,7 @@ function geodir_update_term_slug( $term_id, $tt_id, $taxonomy){
 			$term_slug_check = apply_filters('geodir_term_slug_is_exists', false, $new_slug, $term_id);
 			
 			$suffix++;
-		} while ( $term_slug_check );
+		} while ( $term_slug_check &&  $suffix<100 );
 		
 		$slug = $new_slug;
 		
@@ -1090,3 +1093,53 @@ function geodir_set_status_draft_to_publish_for_own_post($post)
 	//print_r($post) ;
 	return $post ;
 }
+
+
+/* ----- Detail Page Tab Headings Change ---- */
+
+add_filter('geodir_detail_page_tab_list_extend', 'geodir_detail_page_tab_headings_change');
+function geodir_detail_page_tab_headings_change($tabs_arr){
+
+	global $wpdb;
+	
+	$post_type = geodir_get_current_posttype();
+
+	$all_postypes = geodir_get_posttypes();
+		
+	if(!empty($tabs_arr) && $post_type != '' && in_array($post_type, $all_postypes)){
+		
+		if(array_key_exists('post_video', $tabs_arr)){
+			
+			$field_title = 	$wpdb->get_var($wpdb->prepare("select site_title from ".GEODIR_CUSTOM_FIELDS_TABLE." where htmlvar_name = %s and post_type = %s ",array('geodir_video', $post_type)));
+			
+			if(isset($tabs_arr['post_video']['heading_text']) && $field_title != '')
+				$tabs_arr['post_video']['heading_text'] = $field_title;
+		}
+		
+		if(array_key_exists('special_offers', $tabs_arr)){
+			
+			$field_title = 	$wpdb->get_var($wpdb->prepare("select site_title from ".GEODIR_CUSTOM_FIELDS_TABLE." where htmlvar_name = %s and post_type = %s ",array('geodir_special_offers', $post_type)));
+			
+			if(isset($tabs_arr['special_offers']['heading_text']) && $field_title != '')
+				$tabs_arr['special_offers']['heading_text'] = $field_title;
+		}
+	
+	}
+	
+	return $tabs_arr;
+
+}
+
+add_action('init' , 'geodir_remove_template_redirect_actions',100);
+function geodir_remove_template_redirect_actions()
+{
+	if(isset( $_REQUEST['geodir_signup']))
+	{
+		remove_all_actions('template_redirect');
+		remove_action('init', 'avia_modify_front', 10);
+	}
+}
+
+
+
+

@@ -319,7 +319,7 @@ jQuery(window).load(function(){
 //-------count post according to term--
 function geodir_count_post_term(val)
 {
-	jQuery.post( geodir_all_js_msg.geodir_admin_ajax_url+'/?action=geodir_ajax_action', { ajax_action: "geodir_get_term_count", term_array: val })
+	jQuery.post( geodir_all_js_msg.geodir_admin_ajax_url+'?action=geodir_ajax_action', { ajax_action: "geodir_get_term_count", term_array: val })
 	.done(function( data ) {
 		
 		if(jQuery.trim(data) != ''){

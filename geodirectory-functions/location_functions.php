@@ -45,7 +45,7 @@ function create_location_slug($location_string) {
 	$slug = str_replace(" ", "_", $lvalue);*/
 	
 	
-	return apply_filters('geodir_location_slug_check', sanitize_title($location_string));
+	return urldecode(apply_filters('geodir_location_slug_check', sanitize_title($location_string)));
 	
 }
 
@@ -58,18 +58,26 @@ function geodir_get_country_dl($post_country = '',$prefix='')
 {
 	global $wpdb;
 	$countries =	$wpdb->get_col("SELECT Country FROM ".GEODIR_COUNTRIES_TABLE);
+	$countries_ISO2 =	$wpdb->get_results("SELECT Country,ISO2 FROM ".GEODIR_COUNTRIES_TABLE);
+	
+	foreach($countries_ISO2 as $c2){
+	$ISO2[$c2->Country] = $c2->ISO2;
+	}
+	
+	//print_r($ISO2);
 	$selected = '';
 	if($post_country == '')
 			$selected = 'selected="selected"';
 	
 	$out_put = '<option '.$selected.' value="">'.__('Select Country',GEODIRECTORY_TEXTDOMAIN).'</option>'; 
 	foreach($countries as $country) 
-	{
+	{	$ccode = $ISO2[$country];
+		
 		$selected = '';
 		if($post_country == $country)
 			$selected = ' selected="selected" '; 
 			
-		$out_put .= '<option '.$selected.' value="'.$country.'">'.$country.'</option>';
+		$out_put .= '<option '.$selected.' value="'.$country.'" data-country_code="'.$ccode.'">'.$country.'</option>';
     } 
 	
 	echo $out_put;
@@ -231,15 +239,15 @@ function geodir_get_current_location_terms($location_array_from='session')
 	{
 		$country =  (isset($_SESSION['gd_country']) && $_SESSION['gd_country']!='') ? $_SESSION['gd_country'] : '';  
 		if( $country != '' )
-			$location_array['gd_country'] = $country;	
+			$location_array['gd_country'] = urldecode($country);	
 		
 		$region = (isset($_SESSION['gd_region']) && $_SESSION['gd_region']!='') ? $_SESSION['gd_region'] : ''; 
 		if( $region != '' )
-			$location_array['gd_region'] = $region;
+			$location_array['gd_region'] = urldecode($region);
 		
 		$city = (isset($_SESSION['gd_city']) && $_SESSION['gd_city']!='') ? $_SESSION['gd_city'] : ''; 
 		if( $city != '' )
-			$location_array['gd_city'] = $city;
+			$location_array['gd_city'] = urldecode($city);
 	}
 	else
 	{
@@ -250,13 +258,13 @@ function geodir_get_current_location_terms($location_array_from='session')
 		$city = (isset($wp->query_vars['gd_city']) && $wp->query_vars['gd_city'] !='') ? $wp->query_vars['gd_city'] : '' ;
 				
 		if( $country != '' )
-			$location_array['gd_country'] = $country;	
+			$location_array['gd_country'] = urldecode($country);	
 		
 		if( $region != '' )
-			$location_array['gd_region'] = $region;
+			$location_array['gd_region'] = urldecode($region);
 		
 		if( $city != '' )
-			$location_array['gd_city'] = $city;
+			$location_array['gd_city'] = urldecode($city);
 	}
 	
 	return $location_array ;

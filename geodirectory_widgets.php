@@ -249,7 +249,7 @@ function register_geodir_widgets(){
 					
 					if($addlisting_links != ''){ ?>
 					
-						<li><select id="geodir_add_listing" class="chosen_select" onchange="window.location.href=this.value" option-autoredirect="1" name="geodir_add_listing" style="display: none;" option-ajaxchosen="false" >
+						<li><select id="geodir_add_listing" class="chosen_select" onchange="window.location.href=this.value" option-autoredirect="1" name="geodir_add_listing" option-ajaxchosen="false" >
 						<option value="<?php echo home_url();?>"><?php _e('Add Listing',GEODIRECTORY_TEXTDOMAIN);?></option>
 						<?php echo $addlisting_links;?>
 						</select></li> <?php 
@@ -283,7 +283,7 @@ function register_geodir_widgets(){
 					
 					if($favourite_links != ''){ ?>
 						
-						<li><select id="geodir_my_favourites" class="chosen_select" onchange="window.location.href=this.value" option-autoredirect="1" name="geodir_my_favourites" style="display: none;" option-ajaxchosen="false" >
+						<li><select id="geodir_my_favourites" class="chosen_select" onchange="window.location.href=this.value" option-autoredirect="1" name="geodir_my_favourites" option-ajaxchosen="false" >
 						<option value="<?php echo home_url();?>"><?php _e('My Favorites',GEODIRECTORY_TEXTDOMAIN);?></option>
 						<?php echo $favourite_links;?>
 						</select></li> <?php 
@@ -316,7 +316,7 @@ function register_geodir_widgets(){
 					
 					if($listing_links != ''){ ?>
 						
-						<li><select id="geodir_my_listings" class="chosen_select" onchange="window.location.href=this.value" option-autoredirect="1" name="geodir_my_listings" style="display: none;" option-ajaxchosen="false" >
+						<li><select id="geodir_my_listings" class="chosen_select" onchange="window.location.href=this.value" option-autoredirect="1" name="geodir_my_listings"  option-ajaxchosen="false" >
 						<option value="<?php echo home_url();?>"><?php _e('My Listings',GEODIRECTORY_TEXTDOMAIN);?></option>
 						<?php echo $listing_links;?>
 						</select></li> <?php 
