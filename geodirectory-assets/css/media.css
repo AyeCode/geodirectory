@@ -12,11 +12,11 @@
   dl.geodir-tab-head dd{width:100%;}
   dl.geodir-tab-head {margin: 0px; display: table; width: 100%; border-right: 1px solid #e1e1e1; }
   
-  .geodir-rating {width:114px;}
-  .geodir-rating .geodir_RatingAverage{top:-webkit-calc(-20px - 25%);top:-moz-calc(-20px - 25%);top:calc(-20px - 25%);}
-  .geodir-rating .gd_rating_show{ width:-webkit-calc(111px - 25%);width:-moz-calc(111px - 25%);width:calc(111px - 25%);}
+  .geodir-rating {max-width:114px;}
+  /* .geodir-rating .geodir_RatingAverage{top:-webkit-calc(-20px - 25%);top:-moz-calc(-20px - 25%);top:calc(-20px - 25%);}
+ .geodir-rating .gd_rating_show{ width:-webkit-calc(111px - 25%);width:-moz-calc(111px - 25%);width:calc(111px - 25%);}
   .geodir-rating .gd_rating_show .geodir_Star{ width:-webkit-calc(114px - 25%);width:-moz-calc(114px - 25%);width:calc(114px - 25%);
-  height:-webkit-calc(20px - 25%);height:-moz-calc(20px - 25%);height:calc(20px - 25%);background-size:contain;}
+  height:-webkit-calc(20px - 25%);height:-moz-calc(20px - 25%);height:calc(20px - 25%);background-size:contain;}*/
   .login_form_l{margin-left:0px;}
   .registration_form_r{margin-right:0px;}
   .geodir-list-view-select{display:none;}
@@ -44,12 +44,12 @@
   .geodir_category_list_view li.gridview_onehalf, 
   .geodir_category_list_view li.gridview_onefourth,
   .geodir_category_list_view li.gridview_onefifth{ width: -webkit-calc(50% - 4px);width: -moz-calc(50% - 4px);width: calc(50% - 4px);}
-  .geodir-sidebar-right, geodir-sidebar-left, #geodir-wrapper-content{width:100%;min-width:100%;}
+  .geodir-sidebar-right, .geodir-sidebar-left, #geodir-wrapper-content{width:100%;min-width:100%;}
   .geodir-onethird{ float:none; width:auto!important;}
   #geodir_content{ width:auto; float:none;} 
   .geodir_category_list_view, .geodir_category_list_view li{margin-left:0px;}
   .login_form_l,
-  .registration_form_r{margin-left:auto;margin-right:auto;float:none;}
+  .registration_form_r{margin-left:auto;margin-right:auto;float:none;width:96%;}
 }
 
 

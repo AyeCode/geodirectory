@@ -397,6 +397,10 @@ right: 0px !important;
 	max-width:inherit!important;
 	width:auto;
 }
+.geodir_map_container .main_list img{
+	height:15px;
+}
+
 .geodir_map_container {
 	z-index:80;
 	position:relative;

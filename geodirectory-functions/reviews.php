@@ -34,7 +34,9 @@ if ( post_password_required() )
 		</h2>
 
 		<ol class="commentlist">
-			<?php wp_list_comments( array( 'callback' => 'geodir_comment', 'style' => 'ol' ) ); ?>
+			<?php  wp_list_comments( array( 'callback' => 'geodir_comment', 'style' => 'ol' ) );
+			//wp_list_comments( );
+			 ?>
 		</ol><!-- .commentlist -->
 
 		<?php if ( get_comment_pages_count() > 1 && get_option( 'page_comments' ) ) : // are there comments to navigate through ?>

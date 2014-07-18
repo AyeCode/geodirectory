@@ -50,42 +50,44 @@ function geodir_add_nav_menu_items(  ) {
 	}
 	//END LISTING OF POST TYPE IN MAIN NAVIGATION
 	
-	
-	
-	
-	$items .= '<li class="menu-item '.$menu_class.'">
-				<a href="#">'.__('Listing',GEODIRECTORY_TEXTDOMAIN).'</a>
-				<ul class="sub-menu">';
-					$post_types = geodir_get_posttypes('object');
-					
-					$show_listing_post_types = get_option('geodir_add_posttype_in_listing_nav');
-					
-					if(!empty($post_types)){
-						global $geodir_add_location_url;
-						$geodir_add_location_url = true;
-						foreach($post_types as $post_type => $args){
-							if(!empty($show_listing_post_types)){
-								if ( in_array($post_type, $show_listing_post_types)) {
-									if(get_post_type_archive_link( $post_type )){
-									
-											$menu_class = '';
-											if(geodir_get_current_posttype() == $post_type && geodir_is_page('listing'))
-											$menu_class = 'current-menu-item';
+	$view_posttype_listing = get_option('geodir_add_posttype_in_listing_nav') ;
+	$is_listing_sub_meny_exists = (!empty($view_posttype_listing)) ? true : false ;	
+	if($is_listing_sub_meny_exists)
+	{
+		$items .= '<li class="menu-item '.$menu_class.'">
+					<a href="#">'.__('Listing',GEODIRECTORY_TEXTDOMAIN).'</a>
+					<ul class="sub-menu">';
+						$post_types = geodir_get_posttypes('object');
+						
+						$show_listing_post_types = get_option('geodir_add_posttype_in_listing_nav');
+						
+						if(!empty($post_types)){
+							global $geodir_add_location_url;
+							$geodir_add_location_url = true;
+							foreach($post_types as $post_type => $args){
+								if(!empty($show_listing_post_types)){
+									if ( in_array($post_type, $show_listing_post_types)) {
+										if(get_post_type_archive_link( $post_type )){
 										
-											$items .=	'<li class="menu-item '.$menu_class.'">
-													<a href="'. get_post_type_archive_link( $post_type ) .'">
-														'.__(ucfirst($args->labels->name)).'
-													</a>
-												</li>';
+												$menu_class = '';
+												if(geodir_get_current_posttype() == $post_type && geodir_is_page('listing'))
+												$menu_class = 'current-menu-item';
+											
+												$items .=	'<li class="menu-item '.$menu_class.'">
+														<a href="'. get_post_type_archive_link( $post_type ) .'">
+															'.__(ucfirst($args->labels->name)).'
+														</a>
+													</li>';
+										}
 									}
-								}
-							}			
-						}	
-						$geodir_add_location_url = NULL;
-					}
-					
-				$items .= '	</ul>
-			</li>';
+								}			
+							}	
+							$geodir_add_location_url = NULL;
+						}
+						
+					$items .= '	</ul>
+				</li>';
+		}
 	}
 	
 	if(get_option('geodir_show_addlisting_nav')){
@@ -126,45 +128,50 @@ function geodir_add_nav_menu_items(  ) {
 		//END SHOW ADD LISTING POST TYPE IN MAIN NAVIGATION 
 	}
 	
-	if(get_option('geodir_show_addlisting_nav')){		
+	$view_add_posttype_listing = get_option('geodir_add_listing_link_add_listing_nav') ;
+	$is_add_listing_sub_meny_exists = (!empty($view_add_posttype_listing)) ? true : false ;	
+	if($is_add_listing_sub_meny_exists)
+	{
 	
-	$items .= '<li  class="menu-item '.$menu_class.'">
-				<a href="#">'.__('Add Listing',GEODIRECTORY_TEXTDOMAIN).'</a>
-				<ul class="sub-menu">';
-				
-					$post_types = geodir_get_posttypes('object');
+		if(get_option('geodir_show_addlisting_nav')){		
+		
+		$items .= '<li  class="menu-item '.$menu_class.'">
+					<a href="#">'.__('Add Listing',GEODIRECTORY_TEXTDOMAIN).'</a>
+					<ul class="sub-menu">';
 					
-					$show_add_listing_post_types = get_option('geodir_add_listing_link_add_listing_nav');
-					
-					if(!empty($post_types)){
-						foreach($post_types as $post_type => $args){
-							if(!empty($geodir_allow_posttype_frontend)){
-								if ( in_array($post_type, $geodir_allow_posttype_frontend)) {
-									if(!empty($show_add_listing_post_types)){
-										if ( in_array($post_type, $show_add_listing_post_types)) {	
-											if(geodir_get_addlisting_link( $post_type )){
-											
-												$menu_class = '';
-												if(geodir_get_current_posttype() == $post_type && geodir_is_page('add-listing'))
-												$menu_class = 'current-menu-item';
-											
-												$items .=	'<li class="menu-item '.$menu_class.'">
-													<a href="'. geodir_get_addlisting_link( $post_type ) .'">
-														'.__('Add',GEODIRECTORY_TEXTDOMAIN).' '.$args->labels->name.'
-													</a>
-												</li>';
+						$post_types = geodir_get_posttypes('object');
+						
+						$show_add_listing_post_types = get_option('geodir_add_listing_link_add_listing_nav');
+						
+						if(!empty($post_types)){
+							foreach($post_types as $post_type => $args){
+								if(!empty($geodir_allow_posttype_frontend)){
+									if ( in_array($post_type, $geodir_allow_posttype_frontend)) {
+										if(!empty($show_add_listing_post_types)){
+											if ( in_array($post_type, $show_add_listing_post_types)) {	
+												if(geodir_get_addlisting_link( $post_type )){
+												
+													$menu_class = '';
+													if(geodir_get_current_posttype() == $post_type && geodir_is_page('add-listing'))
+													$menu_class = 'current-menu-item';
+												
+													$items .=	'<li class="menu-item '.$menu_class.'">
+														<a href="'. geodir_get_addlisting_link( $post_type ) .'">
+															'.__('Add',GEODIRECTORY_TEXTDOMAIN).' '.$args->labels->name.'
+														</a>
+													</li>';
+												}
 											}
 										}
-									}
-								}	
-							}			
+									}	
+								}			
+							}
 						}
-					}
-					
-				$items .= '	</ul>
-			</li>';
+						
+					$items .= '	</ul>
+				</li>';
+		}
 	}
-	
 	// apply filter to add more navigations // -Filter-Location-Manager
 	return $items;
 }
@@ -1155,9 +1162,9 @@ function geodir_listing_permalink_structure($post_link, $post, $leavename, $samp
 }
 
 
-function geodir_term_link($termlink, $term, $taxonomy) {
-   
-   	$geodir_taxonomies = geodir_get_taxonomies('',true);
+function geodir_term_link($termlink, $term, $taxonomy) 
+{
+  	$geodir_taxonomies = geodir_get_taxonomies('',true);
 	if(isset($taxonomy) && in_array($taxonomy,$geodir_taxonomies)){
 		global $geodir_add_location_url;
 		$include_location = false;
@@ -1171,32 +1178,12 @@ function geodir_term_link($termlink, $term, $taxonomy) {
 			if($geodir_add_location_url && get_option('geodir_add_location_url'))
 			{	$include_location = true; }
 			
-		}elseif(get_option('geodir_add_location_url'))
+		}elseif(get_option('geodir_add_location_url') && isset($_SESSION['gd_multi_location']) && $_SESSION['gd_multi_location']==1)
 			$include_location = true;
 		
 		if($include_location ){
-			
-			if(get_option('geodir_show_location_url') == 'all')
-			{
-				
-				$country =  (isset($_SESSION['gd_country']) && $_SESSION['gd_country']!='') ? $_SESSION['gd_country'] : '';  
-				if( $country != '' )
-					$request_term['gd_country'] = $country;	
-				
-				$region = (isset($_SESSION['gd_region']) && $_SESSION['gd_region']!='') ? $_SESSION['gd_region'] : ''; 
-				if( $region != '' )
-					$request_term['gd_region'] = $region;
-				
-				$city = (isset($_SESSION['gd_city']) && $_SESSION['gd_city']!='') ? $_SESSION['gd_city'] : ''; 
-				if( $city != '' )
-					$request_term['gd_city'] = $city;	
-			}
-			else
-			{
-				$city = (isset($_SESSION['gd_city']) && $_SESSION['gd_city']!='') ? $_SESSION['gd_city'] : ''; 
-				if( $city != '' )
-					$request_term['gd_city'] = $city;
-			}		
+		
+			$request_term = geodir_get_current_location_terms('session') ;
 			
 			if(!empty($request_term)){
 				
@@ -1217,9 +1204,6 @@ function geodir_term_link($termlink, $term, $taxonomy) {
 				}
 			
 			}
-			
-			//$termlink = preg_replace( '/\/'.$listing_slug.'\//', '/'.$listing_slug.'/'.rtrim($request_term,'/').'/'.$url_separator.'/', $termlink, $count = 1 );  
-			
 		}	
 	}
 	
@@ -1229,43 +1213,20 @@ function geodir_term_link($termlink, $term, $taxonomy) {
 
 function geodir_posttype_link($link, $post_type){
 	global $geodir_add_location_url;
-	$request_term = array();
+	$location_terms = array();
 	if(in_array($post_type, geodir_get_posttypes()) ){
 
-		if(get_option('geodir_add_location_url')){
-		
-			if(get_option('geodir_show_location_url') == 'all')
-			{
-				
-				$country =  (isset($_SESSION['gd_country']) && $_SESSION['gd_country']!='') ? $_SESSION['gd_country'] : '';  
-				if( $country != '' )
-					$request_term['gd_country'] = $country;	
-				
-				$region = (isset($_SESSION['gd_region']) && $_SESSION['gd_region']!='') ? $_SESSION['gd_region'] : ''; 
-				if( $region != '' )
-					$request_term['gd_region'] = $region;
-				
-				$city = (isset($_SESSION['gd_city']) && $_SESSION['gd_city']!='') ? $_SESSION['gd_city'] : ''; 
-				if( $city != '' )
-					$request_term['gd_city'] = $city;	
-			}
-			else
-			{
-				$city = (isset($_SESSION['gd_city']) && $_SESSION['gd_city']!='') ? $_SESSION['gd_city'] : ''; 
-				if( $city != '' )
-					$request_term['gd_city'] = $city;
-			}	
-			
-			
-			if(!empty($request_term)){
+		if(get_option('geodir_add_location_url') && isset($_SESSION['gd_multi_location']) && $_SESSION['gd_multi_location']==1){
+			$location_terms = geodir_get_current_location_terms('session');
+			if(!empty($location_terms)){
 		
 				if ( get_option('permalink_structure') != '' ){
 					
-					$request_term = implode("/",$request_term);
-					$request_term = rtrim($request_term,'/');
-					return $link . $request_term;  		
+					$location_terms = implode("/",$location_terms);
+					$location_terms = rtrim($location_terms,'/');
+					return $link . urldecode($location_terms);  		
 				}else{
-					return geodir_getlink($link,$request_term);
+					return geodir_getlink($link,$location_terms);
 				}
 			
 			}
@@ -1302,3 +1263,52 @@ function get_post_type_plural_label($post_type, $echo=false)
 		return $obj_post_type->labels->name;
 
 }
+
+function geodir_term_exists($term, $taxonomy = '', $parent = 0) {
+	global $wpdb;
+
+	$select = "SELECT term_id FROM $wpdb->terms as t WHERE ";
+	$tax_select = "SELECT tt.term_id, tt.term_taxonomy_id FROM $wpdb->terms AS t INNER JOIN $wpdb->term_taxonomy as tt ON tt.term_id = t.term_id WHERE ";
+
+	if ( is_int($term) ) {
+		if ( 0 == $term )
+			return 0;
+		$where = 't.term_id = %d';
+		if ( !empty($taxonomy) )
+			return $wpdb->get_row( $wpdb->prepare( $tax_select . $where . " AND tt.taxonomy = %s", $term, $taxonomy ), ARRAY_A );
+		else
+			return $wpdb->get_var( $wpdb->prepare( $select . $where, $term ) );
+	}
+
+	$term = trim( wp_unslash( $term ) );
+
+	if ( '' === $slug = sanitize_title($term) )
+		return 0;
+
+	$where = 't.slug = %s';
+
+	$where_fields = array($slug);
+	if ( !empty($taxonomy) ) {
+		$parent = (int) $parent;
+		if ( $parent > 0 ) {
+			$where_fields[] = $parent;
+			$else_where_fields[] = $parent;
+			$where .= ' AND tt.parent = %d';
+			
+		}
+
+		$where_fields[] = $taxonomy;
+		
+
+		if ( $result = $wpdb->get_row( $wpdb->prepare("SELECT tt.term_id, tt.term_taxonomy_id FROM $wpdb->terms AS t INNER JOIN $wpdb->term_taxonomy as tt ON tt.term_id = t.term_id WHERE $where AND tt.taxonomy = %s", $where_fields), ARRAY_A) )
+			return $result;
+
+		return false;
+	}
+
+	if ( $result = $wpdb->get_var( $wpdb->prepare("SELECT term_id FROM $wpdb->terms as t WHERE $where", $where_fields) ) )
+		return $result;
+
+	return false;
+}
+
