@@ -53,16 +53,17 @@ height: 0;
 overflow: hidden;
 }
 #post_video-wrap iframe,
-.geodir-company_info p.geodir_video iframe,  
-.geodir-company_info p.geodir_video object,  
-.geodir-company_info p.geodir_video embed {
-position: absolute;
+.geodir-company_info .geodir_video iframe,  
+.geodir-company_info .geodir_video object,  
+.geodir-company_info .geodir_video embed {
+/*position: absolute;*/
 top: 15%;
 left: 0;
 width: 100%;
 height: 85%;
 }
-#post_video-wrap iframe{top:0%;}
+
+#post_video-wrap iframe{top:0%;position: absolute;}
 .geodir-company_info p:last-child{border-bottom:none;margin-bottom: 0px;
 padding-bottom: 8px;}
 .geodir-company_info img.hreview-img {
