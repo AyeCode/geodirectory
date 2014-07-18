@@ -93,7 +93,7 @@ global $geodir_settings;
 			'name' => __( 'Show business owner google analytics stats?', GEODIRECTORY_TEXTDOMAIN ),
 			'desc' 		=> __( 'Yes', GEODIRECTORY_TEXTDOMAIN ),
 			'id' 		=> 'geodir_ga_stats',
-			'std' 		=> '1',
+			'std' 		=> '0',
 			'type' 		=> 'radio',
 			'value'		=> '1',
 			'radiogroup'		=> 'start'

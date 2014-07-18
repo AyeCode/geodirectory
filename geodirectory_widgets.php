@@ -368,6 +368,8 @@ function register_geodir_widgets(){
 	}
 	register_widget('geodir_loginwidget');
 	
+	
+	
 		// =============================== GeoDirectory Social Like Widget ===================
 	class geodir_social_like_widget extends WP_Widget { 
 		
@@ -438,6 +440,8 @@ function register_geodir_widgets(){
 		}
  }
 	register_widget('geodir_social_like_widget');
+
+
 
 	// ===============================GeoDirectory Feedburner Subscribe widget ============
 	class geodirsubscribeWidget extends WP_Widget {
@@ -738,7 +742,7 @@ register_widget('geodir_advance_search_widget');
 	include_once ('geodirectory-widgets/geodirectory_listing_slider_widget.php');
 	include_once ('geodirectory-widgets/home_map_widget.php');
 	include_once ( 'geodirectory-widgets/listing_map_widget.php');
-	
+	include_once ('geodirectory-widgets/geodirectory_reviews_widget.php');
 	include_once ('geodirectory-widgets/geodirectory_related_listing_widget.php');
 }
 

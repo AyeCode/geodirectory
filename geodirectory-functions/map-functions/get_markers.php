@@ -140,7 +140,7 @@ function get_markers(){
 	
 	$catinfo = $wpdb->get_results($catsql);
 	
-	
+	//print_r($catinfo);
 	$cat_content_info = array();
 	$content_data = array();
 	$post_ids = array();
@@ -152,6 +152,7 @@ function get_markers(){
 			
 			$icon = '';
 			$default_cat = $catinfo_obj->default_icon;
+			//$default_cat = $catinfo_obj->default_category;
 			
 		 if($default_cat != ''){
 			
@@ -198,6 +199,7 @@ function get_markers(){
 			$post_ids[] = $catinfo_obj->post_id; 
 		}
 	}
+	
 	if(!empty($content_data))
 	{	$cat_content_info[]= implode(',',$content_data); }
 			

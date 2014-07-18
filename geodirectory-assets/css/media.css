@@ -44,7 +44,7 @@
   .geodir_category_list_view li.gridview_onehalf, 
   .geodir_category_list_view li.gridview_onefourth,
   .geodir_category_list_view li.gridview_onefifth{ width: -webkit-calc(50% - 4px);width: -moz-calc(50% - 4px);width: calc(50% - 4px);}
-  .geodir-sidebar-right, geodir-sidebar-left, #geodir-wrapper-content{width:100%;min-width:100%;}
+  .geodir-sidebar-right, .geodir-sidebar-left, #geodir-wrapper-content{width:100%;min-width:100%;}
   .geodir-onethird{ float:none; width:auto!important;}
   #geodir_content{ width:auto; float:none;} 
   .geodir_category_list_view, .geodir_category_list_view li{margin-left:0px;}

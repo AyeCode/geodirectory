@@ -226,7 +226,7 @@ var set_map_val_in_fields = '<?php echo apply_filters('geodir_auto_change_map_fi
 var old_country = jQuery("#<?php echo $prefix.'country';?>").val();
 var old_region = jQuery("#<?php echo $prefix.'region';?>").val();
 //if (getAddress){
-if(user_address==false){
+if(user_address==false || jQuery('#<?php echo $prefix.'address';?>').val()==''){
 jQuery("#<?php echo $prefix.'address';?>").val(getAddress);
 }
 if(getAddress){oldstr_address = getAddress;}

@@ -1,7 +1,7 @@
 <?php
 function geodir_locate_template($template = '')
 {
-	global $post_type;
+	global $post_type,$wp;
 	$fields = array();
 	
 	switch($template):
@@ -13,6 +13,15 @@ function geodir_locate_template($template = '')
 				if( $listing_page_id != '' && is_page( $listing_page_id ) && isset($_REQUEST['listing_type'])
 					&& in_array( $_REQUEST['listing_type'], geodir_get_posttypes() ) )
 						$post_type = $_REQUEST['listing_type'];
+				if(empty($post_type) && !isset($_REQUEST['pid']))
+				{
+					$pagename = $wp->query_vars['pagename'] ;
+					$post_types = geodir_get_posttypes();
+					if(!empty($post_types))
+						$post_type 	= $post_types[0] ;
+					wp_redirect(home_url().'/'.$pagename .'?listing_type='.$post_type);
+					exit();		
+				}
 				return $template = locate_template( array( "geodirectory/add-{$post_type}.php","geodirectory/add-listing.php" ));
 		break;
 		case 'success':

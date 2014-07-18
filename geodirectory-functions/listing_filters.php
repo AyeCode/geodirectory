@@ -46,7 +46,8 @@ function set_listing_request(){
 		
 		if(isset($_REQUEST['sdist'])){
 			($_REQUEST['sdist'] != '0' && $_REQUEST['sdist'] != '') ? $dist= $_REQUEST['sdist'] : $dist = 25000;
-		}elseif(get_option('gd_search_dist')!=''){$dist = get_option('gd_search_dist');
+		}elseif(get_option('geodir_search_dist')!=''){$dist = get_option('geodir_search_dist');
+		
 		}else{$dist = 25000;} //  Distance
 		
 		if(isset($_REQUEST['sgeo_lat'])){$mylat=(float)$_REQUEST['sgeo_lat'];}
@@ -645,8 +646,10 @@ function author_filter_where($where){
 	
 	global $wpdb,$geodir_post_type,$table,$curr;
 	
-		
-	$user_id = get_current_user_id();
+	$curauth = (get_query_var('author_name')) ? get_user_by('slug', get_query_var('author_name')) : get_userdata(get_query_var('author'));
+	
+	//$user_id = get_current_user_id();
+	$user_id = $curauth->ID;
 	if(isset($_REQUEST['stype'])){
 		$where = " AND $wpdb->posts.post_type IN ('".$_REQUEST['stype']."') ";
 	}else{

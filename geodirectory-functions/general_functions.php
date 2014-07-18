@@ -234,7 +234,7 @@ function geodir_set_is_geodir_page($wp)
 				$wp->query_vars['gd_is_geodir_page'] = true;	
 		}
 		
-		if(!$wp->query_vars['gd_is_geodir_page'] && isset($wp->query_vars['post_type']) && $wp->query_vars['post_type']!= '')
+		if(!isset($wp->query_vars['gd_is_geodir_page']) && isset($wp->query_vars['post_type']) && $wp->query_vars['post_type']!= '')
 		{
 			$requested_post_type = $wp->query_vars['post_type'] ;
 				// check if this post type is geodirectory post types 
@@ -245,7 +245,7 @@ function geodir_set_is_geodir_page($wp)
 			}
 		}
 		
-		if(!$wp->query_vars['gd_is_geodir_page'])
+		if(!isset($wp->query_vars['gd_is_geodir_page']))
 		{
 			$geodir_taxonomis = geodir_get_taxonomies('',true ); 
 			foreach($geodir_taxonomis as $taxonomy)
@@ -258,11 +258,11 @@ function geodir_set_is_geodir_page($wp)
 			}
 		}
 		
-		if(!$wp->query_vars['gd_is_geodir_page'] && isset($wp->query_vars['author_name']) && isset($_REQUEST['geodir_dashbord']))
+		if(!isset($wp->query_vars['gd_is_geodir_page']) && isset($wp->query_vars['author_name']) && isset($_REQUEST['geodir_dashbord']))
 			$wp->query_vars['gd_is_geodir_page'] = true;
 		
 		
-		if(!$wp->query_vars['gd_is_geodir_page'] && isset($_REQUEST['geodir_search']))
+		if(!isset($wp->query_vars['gd_is_geodir_page']) && isset($_REQUEST['geodir_search']))
 			$wp->query_vars['gd_is_geodir_page'] = true;
 		//echo $wp->query_vars['gd_is_geodir_page'] ;
 	/*echo "<pre>" ;
@@ -389,6 +389,7 @@ function geodir_calculateDistanceFromLatLong($point1,$point2,$uom='km') {
 	$c = 2 * atan2(sqrt($a), sqrt(1-$a));
 	$distance = $earthMeanRadius * $c;
 	return $distance;
+	
 }
 }
 

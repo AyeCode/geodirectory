@@ -647,7 +647,7 @@ function geodir_save_post_images($post_id = 0, $post_image = array(), $dummy = f
 		
 		$geodir_uploadpath = $uploads['path'];
 		$geodir_uploadurl = $uploads['url']; 	
-		$sub_dir = $uploads['subdir'];
+		$sub_dir = isset($uploads['subdir']) ? $uploads['subdir'] : '';
 		
 		$invalid_files = array();
 		$postcurr_images = array();
@@ -946,9 +946,9 @@ function geodir_get_featured_image( $post_id = '', $size = '' ,$no_image = false
 	 $img_arr = array();
 	 
 	 $file_info = pathinfo($file);
-			
+			$sub_dir = '';
 		if($file_info['dirname'] != '.' && $file_info['dirname'] != '..')
-			$sub_dir = $file_info['dirname'];
+			$sub_dir = stripslashes_deep($file_info['dirname']);
 		
 			$uploads = wp_upload_dir(trim($sub_dir, '/')); // Array of key => value pairs	
 			$uploads_baseurl = $uploads['baseurl'];
@@ -1051,6 +1051,7 @@ function geodir_get_images($post_id = 0, $img_size='', $no_images =false, $add_f
 	global $wpdb;
 	
 	$not_featured = '';
+	$sub_dir = '';
 	if(!$add_featured)
 		$not_featured = " AND is_featured = 0 ";
 	
@@ -1075,9 +1076,8 @@ function geodir_get_images($post_id = 0, $img_size='', $no_images =false, $add_f
 			
 			$file_info = pathinfo($attechment->file);
 			
-			
 			if($file_info['dirname'] != '.' && $file_info['dirname'] != '..')
-				$sub_dir = $file_info['dirname'];
+				$sub_dir = stripslashes_deep($file_info['dirname']);
 			
 			$uploads = wp_upload_dir(trim($sub_dir, '/')); // Array of key => value pairs	
 			$uploads_baseurl = $uploads['baseurl'];
@@ -1595,7 +1595,7 @@ function geodir_get_infowindow_html($postinfo_obj, $post_preview = ''){
 	</div>
 	<?php 
 	$html = ob_get_clean();
-	
+	$html = apply_filters('geodir_custom_infowindow_html' ,$html ,$postinfo_obj, $post_preview   ) ;
 	return $html;
 	}
 }
@@ -2159,7 +2159,49 @@ add_action('wp_ajax_gd_copy_original_translation', 'gd_copy_original_translation
 
 
 
-
+function geodir_get_custom_fields_type($listing_type = ''){
+	
+	global $wpdb;
+	
+	if($listing_type == '')
+		$listing_type = 'gd_place';
+	
+	$fields_info = array();
+	
+	$get_data = $wpdb->get_results(
+		$wpdb->prepare(
+			"SELECT htmlvar_name, field_type, extra_fields FROM ".GEODIR_CUSTOM_FIELDS_TABLE." WHERE post_type=%s AND is_active='1'",
+			array($listing_type)
+		)
+	);
+	
+	if(!empty($get_data)){
+		
+		foreach($get_data as $data){
+			
+			if($data->field_type == 'address'){
+				
+				$extra_fields = unserialize($data->extra_fields);
+				
+				$prefix = $data->htmlvar_name.'_';
+				
+				$fields_info[$prefix.'address'] = $data->field_type;
+				
+				if(isset($extra_fields['show_zip']) && $extra_fields['show_zip'])
+					$fields_info[$prefix.'zip'] = $data->field_type;
+					
+			}else{
+				
+				$fields_info[$data->htmlvar_name] = $data->field_type;
+				
+			}
+			
+		}
+		
+	}
+	
+	return apply_filters('geodir_get_custom_fields_type', $fields_info, $listing_type);
+}
 
 
 

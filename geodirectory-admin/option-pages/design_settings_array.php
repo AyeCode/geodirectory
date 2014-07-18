@@ -392,7 +392,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 		array(  
 			'name' => __( 'Search bottom section', GEODIRECTORY_TEXTDOMAIN ),
 			'desc' 		=> __( 'Show the bottom section of search page', GEODIRECTORY_TEXTDOMAIN ),
-			'id' 		=> 'geodir_show_listing_bottom_section',
+			'id' 		=> 'geodir_show_search_bottom_section',
 			'type' 		=> 'checkbox',
 			'std' 		=> '0' // Default value to show home top section
 		),

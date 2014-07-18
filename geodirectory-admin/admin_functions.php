@@ -966,14 +966,61 @@ if(!function_exists('geodir_insert_csv_post_data') && get_option('geodir_install
 			if(isset($_REQUEST['msg']) && $_REQUEST['msg']=='success'){ $rowcount = $_REQUEST['rowcount']; $uploads = wp_upload_dir();  ?>
 					
 			<div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204); margin-left:0px; margin-top:0px; margin-bottom:10px;" >
-				<p><?php echo CSV_INSERT_DATA; ?></p>
-				<p><?php printf(CSV_TOTAL_RECORD, $rowcount); ?></p>
+				
 				<?php
-				if(isset($_REQUEST['invalidcount']) && $_REQUEST['invalidcount'] > 0){
-					?><p><?php printf(CSV_INVALID_TOTAL_RECORD, $_REQUEST['invalidcount']); ?></p><?php
+				
+				if($_REQUEST['invalidcount'] == 0 && $_REQUEST['blank_address']==0 && $_REQUEST['invalid_post_type'] == 0 && $_REQUEST['invalid_title'] == 0){
+					
+					echo '<p>'.CSV_INSERT_DATA.'</p>';
+				
 				}
+				
+				echo '<p>';
+				printf(CSV_TOTAL_RECORD, $rowcount);
+				echo '</p>';
+				
+				if(isset($_REQUEST['invalidcount']) && $_REQUEST['invalidcount'] > 0){
+					
+					echo '<p>';
+					printf(CSV_INVALID_DEFUALT_ADDRESS, $_REQUEST['invalidcount'], $_REQUEST['total_records']);
+					echo '</p>';
+				}
+				
+				if(isset($_REQUEST['blank_address']) && $_REQUEST['blank_address'] > 0){
+					
+					echo '<p>'; 
+					printf(CSV_INVALID_TOTAL_RECORD, $_REQUEST['blank_address'], $_REQUEST['total_records']);
+					echo '</p>';
+					
+				}
+				
+				if(isset($_REQUEST['invalid_post_type']) && $_REQUEST['invalid_post_type'] > 0){
+					
+					echo '<p>';
+					printf(CSV_INVALID_POST_TYPE, $_REQUEST['invalid_post_type'], $_REQUEST['total_records']);	
+					echo '</p>';
+				
+				}
+				
+				if(isset($_REQUEST['invalid_title']) && $_REQUEST['invalid_title'] > 0){
+					
+					echo '<p>';
+					printf(CSV_BLANK_POST_TITLE, $_REQUEST['invalid_title'], $_REQUEST['total_records']);	
+					echo '</p>';
+				
+				}
+				
+				if(isset($_REQUEST['upload_files']) && $_REQUEST['upload_files'] > 0){
+					
+					echo '<p>';
+					printf(CSV_TRANSFER_IMG_FOLDER, $uploads['subdir']);	
+					echo '</p>';
+				
+				}
+				
+				
 				?>			
-				<p><?php printf(CSV_TRANSFER_IMG_FOLDER, $uploads['subdir']); ?></p>
+				
 			</div>
 			
 		<?php }?>
@@ -1061,8 +1108,14 @@ if (!function_exists('geodir_import_data')) {
 			
 			$fd = fopen ($target_path, "rt");
 			
+			$total_records = 0;
 			$rowcount = 0;
 			$address_invalid = 0;
+			$blank_address = 0;
+			$upload_files = 0;
+			$invalid_post_type = 0;
+			$invalid_title = 0;
+			
 			$customKeyarray = array();
 			
 			$gd_post_info = array();
@@ -1090,8 +1143,11 @@ if (!function_exists('geodir_import_data')) {
 						exit;	
 						}
 					}
-					else
+					elseif(!empty($buffer))
 					{
+						
+						$total_records++;
+						
 						$post_title = addslashes($buffer[0]);
 						$current_post_author = $buffer[1];
 						$post_desc = addslashes($buffer[2]);
@@ -1132,6 +1188,7 @@ if (!function_exists('geodir_import_data')) {
 						$error = '';
 						if($wpdb->get_var("SHOW TABLES LIKE '".$table."'") != $table){
 							
+							$invalid_post_type++;
 							continue;
 							
 						}
@@ -1215,37 +1272,25 @@ if (!function_exists('geodir_import_data')) {
 							
 							/* ================ before array create ============== */
 							
-								$location_result = geodir_get_default_location();
-								if($location_result->location_id == 0 ){
-								
-									if((!isset($gd_post_info['post_city']) || 
-									strtolower($gd_post_info['post_city']) != strtolower($location_result->city)) || 
-									(!isset($gd_post_info['post_region']) || 
-									strtolower($gd_post_info['post_region']) != strtolower($location_result->region)) || 
-									(!isset($gd_post_info['post_country']) || 
-									strtolower($gd_post_info['post_country']) != strtolower($location_result->country)) || 
-									(!isset($gd_post_info['post_address']) || 
-									$gd_post_info['post_address']=='') || 
-									(!isset($gd_post_info['post_latitude']) || 
-									$gd_post_info['post_latitude'] == '') || 
-									(!isset($gd_post_info['post_longitude']) || 
-									$gd_post_info['post_longitude'] == '')){
-										$address_invalid++;
-										continue;
-										
-									}
-									
-								}else{
-								
-									if((!isset($gd_post_info['post_city']) || $gd_post_info['post_city'] == '') || (!isset($gd_post_info['post_region']) || $gd_post_info['post_region'] == '') || (!isset($gd_post_info['post_country']) || $gd_post_info['post_country'] == '') || (!isset($gd_post_info['post_address']) || $gd_post_info['post_address']=='') || (!isset($gd_post_info['post_latitude']) || $gd_post_info['post_latitude'] == '') || (!isset($gd_post_info['post_longitude']) || $gd_post_info['post_longitude'] == '')){
-										
-										$address_invalid++;
-										continue;
-										
-									}
-								
-								}
+						$location_result = geodir_get_default_location();
 							
+						if((!isset($gd_post_info['post_city']) || $gd_post_info['post_city'] == '') || (!isset($gd_post_info['post_region']) || $gd_post_info['post_region'] == '') || (!isset($gd_post_info['post_country']) || $gd_post_info['post_country'] == '') || (!isset($gd_post_info['post_address']) || $gd_post_info['post_address']=='') || (!isset($gd_post_info['post_latitude']) || $gd_post_info['post_latitude'] == '') || (!isset($gd_post_info['post_longitude']) || $gd_post_info['post_longitude'] == '')){
+								
+								$blank_address++;
+								continue;
+								
+							}elseif($location_result->location_id == 0){
+								
+								if((strtolower($gd_post_info['post_city']) != strtolower($location_result->city)) || 
+								(strtolower($gd_post_info['post_region']) != strtolower($location_result->region)) || 
+								(strtolower($gd_post_info['post_country']) != strtolower($location_result->country))){
+									
+									$address_invalid++;
+									continue;
+									
+								}
+								
+							}
 							
 							
 							$my_post['post_title'] = $post_title;
@@ -1330,6 +1375,7 @@ if (!function_exists('geodir_import_data')) {
 							
 							if(!empty($image_names))
 							{
+								$upload_files++;
 								$menu_order = 1;
 								foreach($image_names as $image_name){
 									
@@ -1394,7 +1440,7 @@ if (!function_exists('geodir_import_data')) {
 								
 							}
 							 
-						}
+						}else{$invalid_title++;}
 					}				
 					$rowcount++;
 				}
@@ -1404,7 +1450,8 @@ if (!function_exists('geodir_import_data')) {
 				if(!empty($filename))
 					geodir_remove_temp_images();
 				
-				echo $geodir_url = admin_url().'admin.php?page=geodirectory&tab=general_settings&active_tab=csv_upload_settings&msg=success&rowcount='.$countpost.'&invalidcount='.$address_invalid;
+				
+				echo $geodir_url = admin_url().'admin.php?page=geodirectory&tab=general_settings&active_tab=csv_upload_settings&msg=success&rowcount='.$countpost.'&invalidcount='.$address_invalid.'&blank_address='.$blank_address.'&upload_files='.$upload_files.'&invalid_post_type='.$invalid_post_type.'&invalid_title='.$invalid_title.'&total_records='.$total_records;
 				exit;
 			}else{
 				echo $geodir_url = admin_url().'admin.php?page=geodirectory&tab=general_settings&active_tab=csv_upload_settings&emsg=csvonly';

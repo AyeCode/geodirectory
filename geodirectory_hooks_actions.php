@@ -96,7 +96,7 @@ add_action( 'wp_head', 'geodir_restrict_widget' ); // Related to widgets
 
 add_action( 'wp_enqueue_scripts', 'geodir_templates_scripts');
 
-add_action( 'wp_enqueue_scripts', 'geodir_templates_styles',100);
+add_action( 'wp_enqueue_scripts', 'geodir_templates_styles',8);
 
 ////////////////////////
 /* ON MAIN NAVIGATION */
@@ -1140,6 +1140,90 @@ function geodir_remove_template_redirect_actions()
 	}
 }
 
+/// add loction variables in geodirectory title parameter 
+add_filter('post_type_archive_title' , 'geodir_post_type_archive_title');
+function geodir_post_type_archive_title($title)
+{
+	global $wp ;
+	if(geodir_is_geodir_page())
+	{
+		$location_array = geodir_get_current_location_terms('query_vars') ;
+		if(!empty($location_array))
+		{
+			foreach($location_array as $location )
+			{
+				$gd_location_link_text =  preg_replace('/-(\d+)$/', '',  $location );
+				$gd_location_link_text =preg_replace('/[_-]/', ' ', $gd_location_link_text);
+						
+				$title .= ' ' . ucwords( $gd_location_link_text) ;
+			}
+			
+			$gd_post_type = geodir_get_current_posttype();
+			$post_type_info = get_post_type_object( $gd_post_type );
+			if( get_query_var($gd_post_type.'category') )
+				$gd_taxonomy = $gd_post_type.'category';
+			elseif( get_query_var($gd_post_type.'_tags') )
+				$gd_taxonomy = $gd_post_type.'_tags';
+				
+			if(!empty($gd_taxonomy))
+			{
+				$term_array = explode( "/", trim($wp->query_vars[$gd_taxonomy],"/" ) );
+				if(!empty($term_array ))
+				{
+					foreach($term_array as $term)
+					{
+						$term_link_text = preg_replace('/-(\d+)$/', '',  $term);
+						$term_link_text = preg_replace('/[_-]/', ' ', $term_link_text);
+					}
+					
+					$title .= ' ' . ucwords( $term_link_text) ;
+				}
+			}
+		}
+	}
+	return $title;
+}
 
-
+add_filter('single_post_title' , 'geodir_single_post_title',10,2);
+function geodir_single_post_title($title , $post)
+{
+	global $wp ;
+	if($post->post_title=='Location' && geodir_is_geodir_page())
+	{
+		$location_array = geodir_get_current_location_terms('query_vars') ;
+		if(!empty($location_array))
+		{
+			foreach($location_array as $location )
+			{
+				$gd_location_link_text =  preg_replace('/-(\d+)$/', '',  $location );
+				$gd_location_link_text =preg_replace('/[_-]/', ' ', $gd_location_link_text);
+						
+				$title .= ' ' . ucwords( $gd_location_link_text) ;
+			}
+			
+			$gd_post_type = geodir_get_current_posttype();
+			$post_type_info = get_post_type_object( $gd_post_type );
+			if( get_query_var($gd_post_type.'category') )
+				$gd_taxonomy = $gd_post_type.'category';
+			elseif( get_query_var($gd_post_type.'_tags') )
+				$gd_taxonomy = $gd_post_type.'_tags';
+				
+			if(!empty($gd_taxonomy))
+			{
+				$term_array = explode( "/", trim($wp->query_vars[$gd_taxonomy],"/" ) );
+				if(!empty($term_array ))
+				{
+					foreach($term_array as $term)
+					{
+						$term_link_text = preg_replace('/-(\d+)$/', '',  $term);
+						$term_link_text = preg_replace('/[_-]/', ' ', $term_link_text);
+					}
+					
+					$title .= ' ' . ucwords( $term_link_text) ;
+				}
+			}
+		}
+	}
+	return $title ;
+}
 

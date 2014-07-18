@@ -389,9 +389,18 @@ font-size: 14px;
 }
 .geodir_form_row .geodir_textfield, 
 .geodir_textarea,
-.geodir_form_row select {
+.geodir_form_row select{
 float: left;
 padding: 6px;
+width: 70%;
+margin-bottom: 5px;
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;
+}
+
+.geodir_form_row ul{
+float: left;
 width: 70%;
 margin-bottom: 5px;
 -webkit-box-sizing: border-box;
@@ -880,3 +889,50 @@ margin:4%;
     padding: 5px 0 15px;}
 
 .geodir-sidebar-wrap{overflow:visible;}	
+
+/* GD > Recent Reviews */
+.geodir_reviewer_content {
+    float: left;
+    width: 86%;
+}
+ul.geodir_recent_reviews li {
+    border-bottom: 1px solid #ccc;
+    min-height: 60px;
+    padding: 20px 0;
+}
+.geodir_reviewer_image {
+    float: left;
+    margin: 0 4% 0 0;
+    width: 10%;
+}
+.geodir_recent_reviews .geodir-rating {
+    padding: 5px 0 0;
+}
+.geodir_reviewer_text {
+    line-height: 20px;
+}
+.geodir_reviewer_image img{
+max-width: 100%;
+height: auto;
+}
+
+
+/* ----- 18-07-2014 ----*/
+
+.geodir-company_info .geodir_more_info {
+    border-bottom: 1px solid #eee;
+    line-height: 19px;
+    margin: 5px 0 10px;
+    padding: 5px 0 15px;
+}
+
+.geodir-company_info .geodir_more_info ul{ padding-left:20px;}
+
+.geodir-company_info .geodir_more_info ul li{ list-style:none;}
+
+.geodir-content .geodir_more_info {
+    font-size: 12px;
+    line-height: 17px;
+    margin-bottom: 0;
+    padding: 5px 0;
+}

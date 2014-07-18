@@ -1,12 +1,15 @@
 <?php do_action('geodir_before_listing_listview'); global $gridview_columns;
 $grid_view_class = apply_filters('geodir_grid_view_widget_columns' ,$gridview_columns);
-if(isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view']!='' && !isset($before_widget)){
+if(isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view']!='' && !isset($before_widget) && !isset($related_posts)){
 	if($_SESSION['gd_listing_view']=='1'){$grid_view_class = '';}
 	if($_SESSION['gd_listing_view']=='2'){$grid_view_class = 'gridview_onehalf';}
 	if($_SESSION['gd_listing_view']=='3'){$grid_view_class = 'gridview_onethird ';}
 	if($_SESSION['gd_listing_view']=='4'){$grid_view_class = 'gridview_onefourth';}
 	if($_SESSION['gd_listing_view']=='5'){$grid_view_class = 'gridview_onefifth';}
 }
+
+$post_view_class = apply_filters('geodir_post_view_extra_class' ,$grid_view_class);
+$post_view_article_class = apply_filters('geodir_post_view_article_extra_class' ,$grid_view_class);
 ?>
 
 <ul class="geodir_category_list_view clearfix">
@@ -17,8 +20,8 @@ if(isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view']!='' && !i
 					
          while (have_posts()) : the_post(); global $post,$wpdb,$listing_width,$preview;  ?> 
             
-					<li id="post-<?php echo $post->ID;?>" class="<?php if($grid_view_class){ echo 'geodir-gridview '.$grid_view_class;}?> clearfix" <?php if($listing_width) echo "style='width:{$listing_width}%;'"; // Width for widget listing ?> >
-					<article class="geodir-category-listing">		
+					<li id="post-<?php echo $post->ID;?>" class="<?php if($grid_view_class){ echo 'geodir-gridview '.$grid_view_class;}?> <?php if($post_view_class){echo $post_view_class;}?>clearfix" <?php if($listing_width) echo "style='width:{$listing_width}%;'"; // Width for widget listing ?> >
+					<article class="geodir-category-listing <?php if($post_view_article_class){echo $post_view_article_class;}?>">		
 			<div class="geodir-post-img"> 
 			<?php if($fimage = geodir_show_featured_image($post->ID, 'list-thumb', true, false, $post->featured_image)){ ?>
 							

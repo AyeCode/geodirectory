@@ -56,14 +56,21 @@ add_action( 'geodir_detail_before_main_content', 'geodir_action_geodir_preview_c
 add_action( 'geodir_detail_before_main_content', 'geodir_action_geodir_sidebar_detail_top', 10 );
 add_action( 'geodir_detail_before_main_content', 'geodir_breadcrumb', 20 );
 
+
 function geodir_action_geodir_set_preview_post(){
 	global $post,$preview;
 	if(!$preview){return;}// bail if not previewing
-		
+	
+	$listing_type = isset($_REQUEST['listing_type']) ? $_REQUEST['listing_type'] : '';
+	
+	$fields_info = geodir_get_custom_fields_type($listing_type);
+	
 	foreach($_REQUEST as $pkey=>$pval){
 	if($pkey=='geodir_video'){$tags= '<iframe>';}
   elseif($pkey=='post_desc'){$tags= '<p><a><b><i><em><h1><h2><h3><h4><h5><ul><ol><li><img><div><del><ins><span><cite><code><strike><strong><blockquote>';}
-  elseif($pkey=='geodir_special_offers'){$tags= '<p><a><b><i><em><h1><h2><h3><h4><h5><ul><ol><li><img><div><del><ins><span><cite><code><strike><strong><blockquote>';}
+	elseif(is_array($fields_info) && isset($fields_info[$pkey]) && ($fields_info[$pkey] == 'textarea' || $fields_info[$pkey] == 'html')){
+	$tags= '<p><a><b><i><em><h1><h2><h3><h4><h5><ul><ol><li><img><div><del><ins><span><cite><code><strike><strong><blockquote>';
+	}
   elseif(is_array($_REQUEST[$pkey])){$tags='skip_field';}
   else{$tags='';}
 

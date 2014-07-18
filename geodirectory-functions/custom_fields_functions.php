@@ -1270,7 +1270,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 					<?php if($multi_display == 'select'){?>
 					<select field_type="<?php echo $type;?>" name="<?php echo $name;?>[]" id="<?php echo $name;?>" multiple="multiple" class="geodir_textfield textfield_x"><?php 
 					}else{
-					echo '<input name="'. $name.'[]" value="" type="hidden" />';
+					//echo '<input name="'. $name.'[]" value="" type="hidden" />';
 					echo  '<ul class="gd_multi_choice">';
 					}
 					if($option_values){ $option_values_arr = explode(',',$option_values);
@@ -1318,7 +1318,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 										}
 							}
 						}
-						if($multi_display = 'select'){?>
+						if($multi_display == 'select'){?>
 					</select>
 					<?php }else{ echo '</ul>';}?>
 			<span class="geodir_message_note"><?php _e($admin_desc,GEODIRECTORY_TEXTDOMAIN);?></span>
@@ -1656,6 +1656,10 @@ function geodir_show_listing_info($fields_location=''){
 		//echo '<div class="geodir-company_info field-group">';
 		$field_set_start = 0;
 		
+		
+		if($fields_location == 'detail')
+		
+		$i = 1;
 		foreach($fields_info as $type)
 		{
 			$html = '';
@@ -1786,12 +1790,22 @@ function geodir_show_listing_info($fields_location=''){
 						}*/
 						
 						if($post->$html_var):
-						
+							
 							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
 							elseif($field_icon==''){$field_icon_af = '<i class="fa fa-home"></i>';}
 							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-							$html = '<p class="'.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';
+							$geodir_odd_even = '';
+							if($fields_location == 'detail'){
+								
+								$geodir_odd_even = 'geodir_more_info_odd';
+								if($i%2==0)
+									$geodir_odd_even = 'geodir_more_info_even';
+							
+								$i++;
+							}
+							
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';
 							$html .= '<span class="geodir-i-location" style="'.$field_icon.'">'.$field_icon_af;
 							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '&nbsp;';
 							$html .= '</span>';
@@ -1803,7 +1817,7 @@ function geodir_show_listing_info($fields_location=''){
 								if($post->post_region){ $html .= '<span itemprop="addressRegion">'.$post->post_region.'</span><br>';}
 								if($post->post_zip){ $html .= '<span itemprop="postalCode">'.$post->post_zip.'</span><br>';}
 								if($post->post_country){ $html .= '<span itemprop="addressCountry">'.$post->post_country.'</span><br>';}
-								$html .= '</p>';
+								$html .= '</div>';
 							}
 							
 										
@@ -1834,7 +1848,19 @@ function geodir_show_listing_info($fields_location=''){
 							else
 							$website = $post->$type['htmlvar_name'];	
 							
-							$html = '<p class="'.$type['css_class'].' '.$type['htmlvar_name'].'"><span class="geodir-i-website" style="'.$field_icon.'">'.$field_icon_af.'<a href="'.$website.'" target="_blank" ><strong>'.stripslashes(__($type['site_title'],GEODIRECTORY_TEXTDOMAIN)).'</strong></a></span></p>';
+							
+							$geodir_odd_even = '';
+							if($fields_location == 'detail'){
+								
+								$geodir_odd_even = 'geodir_more_info_odd';
+								if($i%2==0)
+									$geodir_odd_even = 'geodir_more_info_even';
+							
+								$i++;
+							}
+							
+							
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'"><span class="geodir-i-website" style="'.$field_icon.'">'.$field_icon_af.'<a href="'.$website.'" target="_blank" ><strong>'.stripslashes(__($type['site_title'],GEODIRECTORY_TEXTDOMAIN)).'</strong></a></span></div>';
 						
 						endif;
 						
@@ -1850,9 +1876,19 @@ function geodir_show_listing_info($fields_location=''){
 							elseif($field_icon==''){$field_icon_af = '<i class="fa fa-phone"></i>';}
 							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-							$html = '<p class="'.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-contact" style="'.$field_icon.'">'.$field_icon_af.
+							$geodir_odd_even = '';
+							if($fields_location == 'detail'){
+								
+								$geodir_odd_even = 'geodir_more_info_odd';
+								if($i%2==0)
+									$geodir_odd_even = 'geodir_more_info_even';
+							
+								$i++;
+							}
+							
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-contact" style="'.$field_icon.'">'.$field_icon_af.
 							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '&nbsp;';
-							$html .= '</span>'.stripslashes($post->$type['htmlvar_name']).'</p>';
+							$html .= '</span>'.stripslashes($post->$type['htmlvar_name']).'</div>';
 										
 						endif;
 						
@@ -1872,9 +1908,19 @@ function geodir_show_listing_info($fields_location=''){
 							elseif($field_icon==''){$field_icon_af = '<i class="fa fa-clock-o"></i>';}
 							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-							$html = '<p class="'.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-time" style="'.$field_icon.'">'.$field_icon_af;
+							$geodir_odd_even = '';
+							if($fields_location == 'detail'){
+								
+								$geodir_odd_even = 'geodir_more_info_odd';
+								if($i%2==0)
+									$geodir_odd_even = 'geodir_more_info_even';
+							
+								$i++;
+							}
+							
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-time" style="'.$field_icon.'">'.$field_icon_af;
 							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '&nbsp;';
-							$html .= '</span>'.stripslashes($value).'</p>';
+							$html .= '</span>'.stripslashes($value).'</div>';
 
 						endif;
 						
@@ -1903,9 +1949,19 @@ function geodir_show_listing_info($fields_location=''){
 							elseif($field_icon==''){$field_icon_af = '<i class="fa fa-calendar"></i>';}
 							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-							$html = '<p class="'.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-datepicker" style="'.$field_icon.'">'.$field_icon_af;
+							$geodir_odd_even = '';
+							if($fields_location == 'detail'){
+								
+								$geodir_odd_even = 'geodir_more_info_odd';
+								if($i%2==0)
+									$geodir_odd_even = 'geodir_more_info_even';
+							
+								$i++;
+							}
+							
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-datepicker" style="'.$field_icon.'">'.$field_icon_af;
 							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
-							$html .= '</span>'.$value.'</p>';
+							$html .= '</span>'.$value.'</div>';
 						
 						endif;
 						
@@ -1921,9 +1977,19 @@ function geodir_show_listing_info($fields_location=''){
 							elseif($field_icon==''){$field_icon_af = '<i class="fa fa-clock-o"></i>';}
 							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-							$html = '<p class="'.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-time" style="'.$field_icon.'">'.$field_icon_af;
+							$geodir_odd_even = '';
+							if($fields_location == 'detail'){
+								
+								$geodir_odd_even = 'geodir_more_info_odd';
+								if($i%2==0)
+									$geodir_odd_even = 'geodir_more_info_even';
+							
+								$i++;
+							}
+							
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-time" style="'.$field_icon.'">'.$field_icon_af;
 							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '&nbsp;';
-							$html .= '</span>'.stripslashes($post->$type['htmlvar_name']).'</p>';
+							$html .= '</span>'.stripslashes($post->$type['htmlvar_name']).'</div>';
 							
 						elseif($post->$type['htmlvar_name']):
 							
@@ -1931,9 +1997,19 @@ function geodir_show_listing_info($fields_location=''){
 							elseif($field_icon==''){$field_icon_af = '';}
 							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-							$html = '<p class="'.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-text" style="'.$field_icon.'">'.$field_icon_af;
+							$geodir_odd_even = '';
+							if($fields_location == 'detail'){
+								
+								$geodir_odd_even = 'geodir_more_info_odd';
+								if($i%2==0)
+									$geodir_odd_even = 'geodir_more_info_even';
+							
+								$i++;
+							}
+							
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-text" style="'.$field_icon.'">'.$field_icon_af;
 							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
-							$html .= '</span>'.stripslashes($post->$type['htmlvar_name']).'</p>';	
+							$html .= '</span>'.stripslashes($post->$type['htmlvar_name']).'</div>';	
 								
 						endif;
 						
@@ -1955,9 +2031,19 @@ function geodir_show_listing_info($fields_location=''){
 							elseif($field_icon==''){$field_icon_af = '';}
 							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-							$html = '<p class="'.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-radio" style="'.$field_icon.'">'.$field_icon_af ;
+							$geodir_odd_even = '';
+							if($fields_location == 'detail'){
+								
+								$geodir_odd_even = 'geodir_more_info_odd';
+								if($i%2==0)
+									$geodir_odd_even = 'geodir_more_info_even';
+							
+								$i++;
+							}
+							
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-radio" style="'.$field_icon.'">'.$field_icon_af ;
 							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
-							$html .= '</span>'.$html_val.'</p>';		
+							$html .= '</span>'.$html_val.'</div>';		
 						endif;
 						
 				break;
@@ -1980,9 +2066,19 @@ function geodir_show_listing_info($fields_location=''){
 							elseif($field_icon==''){$field_icon_af = '';}
 							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-							$html = '<p class="'.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-checkbox" style="'.$field_icon.'">'.$field_icon_af;
+							$geodir_odd_even = '';
+							if($fields_location == 'detail'){
+								
+								$geodir_odd_even = 'geodir_more_info_odd';
+								if($i%2==0)
+									$geodir_odd_even = 'geodir_more_info_even';
+							
+								$i++;
+							}
+							
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-checkbox" style="'.$field_icon.'">'.$field_icon_af;
 							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
-							$html .= '</span>'.$html_val.'</p>';		
+							$html .= '</span>'.$html_val.'</div>';		
 						endif;
 						
 				break;
@@ -1997,9 +2093,19 @@ function geodir_show_listing_info($fields_location=''){
 							elseif($field_icon==''){$field_icon_af = '';}
 							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-							$html = '<p class="'.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-select" style="'.$field_icon.'">'.$field_icon_af;
+							$geodir_odd_even = '';
+							if($fields_location == 'detail'){
+								
+								$geodir_odd_even = 'geodir_more_info_odd';
+								if($i%2==0)
+									$geodir_odd_even = 'geodir_more_info_even';
+							
+								$i++;
+							}
+							
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-select" style="'.$field_icon.'">'.$field_icon_af;
 							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
-							$html .= '</span>'.stripslashes($post->$type['htmlvar_name']).'</p>';		
+							$html .= '</span>'.stripslashes($post->$type['htmlvar_name']).'</div>';		
 						endif;
 						
 				break;
@@ -2020,9 +2126,62 @@ function geodir_show_listing_info($fields_location=''){
 							elseif($field_icon==''){$field_icon_af = '';}
 							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-							$html = '<p class="'.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-select" style="'.$field_icon.'">'.$field_icon_af;
+							
+							$option_values = explode(',', $post->$type['htmlvar_name']);
+							
+							if($type['option_values'])
+							{
+								
+								if(strstr($type['option_values'],"/")){
+									
+									$option_values = array();
+									
+									$field_values = explode(',', $type['option_values']);
+									
+									foreach($field_values as $data){
+										
+										$val = explode('/', $data);
+										
+										if( isset($val[1]) && in_array($val[1], explode(',', $post->$type['htmlvar_name'])))
+											$option_values[] = $val[0];
+									
+									}
+									
+								}
+							
+							}
+							
+							$geodir_odd_even = '';
+							if($fields_location == 'detail'){
+								
+								$geodir_odd_even = 'geodir_more_info_odd';
+								if($i%2==0)
+									$geodir_odd_even = 'geodir_more_info_even';
+							
+								$i++;
+							}
+							
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-select" style="'.$field_icon.'">'.$field_icon_af;
 							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
-							$html .= '</span>'.stripslashes(trim($post->$type['htmlvar_name'], ',')).'</p>';
+							$html .= '</span>';
+							
+							if(count($option_values) > 1){
+								
+								$html .= '<ul>';
+									
+									foreach($option_values as $val){
+									
+										$html .= '<li>'.stripslashes($val).'</li>';
+										
+									}
+								
+								$html .= '</ul>';
+							
+							}else{
+								$html .= stripslashes(trim($post->$type['htmlvar_name'], ','));
+							}
+							
+							$html .= '</div>';
 									
 						endif;
 						
@@ -2048,7 +2207,17 @@ function geodir_show_listing_info($fields_location=''){
 							elseif($field_icon==''){$field_icon_af = '<i class="fa fa-envelope"></i>';}
 							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-									$html .= '<p class="'.$type['css_class'].' '.$type['htmlvar_name'].'"><span class="geodir-i-email" style="'.$field_icon.'">'.$field_icon_af;
+							$geodir_odd_even = '';
+							if($fields_location == 'detail'){
+								
+								$geodir_odd_even = 'geodir_more_info_odd';
+								if($i%2==0)
+									$geodir_odd_even = 'geodir_more_info_even';
+							
+								$i++;
+							}
+							
+									$html .= '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'"><span class="geodir-i-email" style="'.$field_icon.'">'.$field_icon_af;
 								$seperator = '';
 								if($post->$type['htmlvar_name']){
 									$html .= '<a href="javascript:void(0);" class="'.$b_send_inquiry.'" >'.SEND_INQUIRY.'</a>';
@@ -2058,7 +2227,7 @@ function geodir_show_listing_info($fields_location=''){
 								if(isset($package_info->sendtofriend) && $package_info->sendtofriend)
 									$html .= $seperator.'<a href="javascript:void(0);" class="'.$b_sendtofriend.'">'.SEND_TO_FRIEND.'</a>';
 							
-								$html .= '</span></p>';
+								$html .= '</span></div>';
 								
             		
                 if(isset($_REQUEST['send_inquiry']) && $_REQUEST['send_inquiry']=='success'){
@@ -2081,9 +2250,19 @@ function geodir_show_listing_info($fields_location=''){
 							elseif($field_icon==''){$field_icon_af = '<i class="fa fa-envelope"></i>';}
 							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-								$html = '<p class="'.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-email" style="'.$field_icon.'">'.$field_icon_af;
+								$geodir_odd_even = '';
+								if($fields_location == 'detail'){
+									
+									$geodir_odd_even = 'geodir_more_info_odd';
+									if($i%2==0)
+										$geodir_odd_even = 'geodir_more_info_even';
+								
+									$i++;
+								}
+								
+								$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-email" style="'.$field_icon.'">'.$field_icon_af;
 								$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
-								$html .= '</span>'.stripslashes($post->$type['htmlvar_name']).'</p>';
+								$html .= '</span>'.stripslashes($post->$type['htmlvar_name']).'</div>';
 							}
 					
 						}
@@ -2138,7 +2317,17 @@ function geodir_show_listing_info($fields_location=''){
 							elseif($field_icon==''){$field_icon_af = '';}
 							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-							$html = '<div class="'.$type['css_class'].' geodir-custom-file-box '.$type['htmlvar_name'].'"><div class="geodir-i-select" style="'.$field_icon.'">'.$field_icon_af;
+							$geodir_odd_even = '';
+								if($fields_location == 'detail'){
+									
+									$geodir_odd_even = 'geodir_more_info_odd';
+									if($i%2==0)
+										$geodir_odd_even = 'geodir_more_info_even';
+								
+									$i++;
+								}
+								
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' geodir-custom-file-box '.$type['htmlvar_name'].'"><div class="geodir-i-select" style="'.$field_icon.'">'.$field_icon_af;
 							$html .= '<span style="display: inline-block; vertical-align: top; padding-right: 14px;">';
 							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
 							$html .= '</span>';
@@ -2157,9 +2346,19 @@ function geodir_show_listing_info($fields_location=''){
 							elseif($field_icon==''){$field_icon_af = '';}
 							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-							$html = '<p class="'.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-text" style="'.$field_icon.'">'.$field_icon_af;
+							$geodir_odd_even = '';
+								if($fields_location == 'detail'){
+									
+									$geodir_odd_even = 'geodir_more_info_odd';
+									if($i%2==0)
+										$geodir_odd_even = 'geodir_more_info_even';
+								
+									$i++;
+								}
+								
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-text" style="'.$field_icon.'">'.$field_icon_af;
 							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
-							$html .= '</span>'.stripslashes($post->$type['htmlvar_name']).'</p>';	
+							$html .= '</span>'.stripslashes($post->$type['htmlvar_name']).'</div>';	
 							
 						}
 				break;
@@ -2171,9 +2370,19 @@ function geodir_show_listing_info($fields_location=''){
 							elseif($field_icon==''){$field_icon_af = '';}
 							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-							$html = '<p class="'.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-text" style="'.$field_icon.'">'.$field_icon_af;
+								$geodir_odd_even = '';
+								if($fields_location == 'detail'){
+									
+									$geodir_odd_even = 'geodir_more_info_odd';
+									if($i%2==0)
+										$geodir_odd_even = 'geodir_more_info_even';
+								
+									$i++;
+								}
+								
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-text" style="'.$field_icon.'">'.$field_icon_af;
 							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
-							$html .= '</span>'.stripslashes($post->$type['htmlvar_name']).'</p>';	
+							$html .= '</span>'.stripslashes($post->$type['htmlvar_name']).'</div>';	
 							
 						}
 				break;
