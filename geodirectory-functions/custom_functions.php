@@ -72,7 +72,7 @@ function geodir_post_package_info($package_info, $post='', $post_type = '')
 	$package_info['amount'] = 0 ;
 	$package_info['is_featured'] = 0 ;
 	$package_info['image_limit'] ='';
-	$package_info['google_analytics'] = 0 ;
+	$package_info['google_analytics'] = 1 ;
 	$package_info['sendtofriend'] =1;
 	
 	return (object)apply_filters('geodir_post_package_info' , $package_info, $post, $post_type);
@@ -184,7 +184,7 @@ function geodir_before_tab_content($hash_key)
 			echo '<div class="geodir-company_info field-group">' ;
 			break;
 		case 'post_images' :
-			echo ' <div id="geodir-post-gallery" class="clearfix" >' ;
+			echo ' <div id="'. apply_filters('geodir_post_gallery_id' ,'geodir-post-gallery') .'" class="clearfix" >' ;
 			break;
 		case 'reviews' :
 			echo '<div id="reviews-wrap" class="clearfix"> ' ;
@@ -484,7 +484,7 @@ function geodir_related_posts_display($request){
 									$layout = $listing_view_exp[0];
 									
 								}
-								
+								$related_posts = true;
 								$template = apply_filters( "geodir_template_part-related-listing-listview", geodir_plugin_path() . '/geodirectory-templates/listing-listview.php' );
 							
 								
@@ -827,7 +827,7 @@ function geodir_show_detail_page_tabs(){
 								       echo $thumb_image;
 									break;
 								case 'post_video':
-									echo $video; 
+									echo apply_filters( 'the_content', stripslashes($video) );// we apply the_content filter so oembed works also; 
 									break;
 								case 'special_offers':
 									echo wpautop(stripslashes($special_offers));
@@ -877,6 +877,8 @@ function geodir_show_detail_page_tabs(){
 function geodir_exif($file) {
         //This line reads the EXIF data and passes it into an array
 		$file['file']=$file['tmp_name'];
+		 if($file['type']=="image/jpg" || $file['type']=="image/jpeg" || $file['type']=="image/pjpeg"){}else{return $file;}
+		if(!function_exists('read_exif_data')){return $file;}
         $exif = read_exif_data($file['file']);
 
         //We're only interested in the orientation
@@ -939,3 +941,106 @@ function geodir_exif($file) {
         // The image orientation is fixed, pass it back for further processing
         return $file;
     }
+	
+###########################################
+############ RECENT REVIEWS ###############
+###########################################
+function geodir_get_recent_reviews($g_size = 30, $no_comments = 10, $comment_lenth = 60, $show_pass_post = false) {
+        global $wpdb, $tablecomments, $tableposts,$rating_table_name;
+		$tablecomments = $wpdb->comments;
+		$tableposts = $wpdb->posts;
+		
+		$comments_echo ='';
+		
+		$review_table = GEODIR_REVIEW_TABLE;
+		$request = "SELECT p.ID, r.post_type, c.comment_ID, c.comment_content, c.comment_author, c.comment_date,r.overall_rating, r.user_id, c.comment_author_email,c.comment_author FROM $review_table as r LEFT JOIN $wpdb->comments as c ON r.comment_id=c.comment_ID LEFT JOIN $wpdb->posts as p ON r.post_id=p.ID WHERE p.post_status = 'publish' AND c.comment_parent=0 AND comment_approved = '1' ORDER BY c.comment_date DESC LIMIT $no_comments";
+	 	/*echo $request;
+		$comments = $wpdb->get_results($request);
+		
+		print_r($comments);
+		return;*/
+		
+################################### FIX BY STIOFAN HEBTECH.CO.UK TO HIDE BLOG COMMENTS IN REVIEWS #####################################		
+		//$request = "SELECT ID, comment_ID, comment_content, comment_author,comment_post_ID, comment_author_email FROM $tableposts, $tablecomments WHERE $tableposts.ID=$tablecomments.comment_post_ID AND post_status = 'publish' ";
+		/*$city_id = mysql_real_escape_string ($_SESSION['multi_city']);
+		if($_SESSION['multi_city']){$request = "SELECT p.ID, p.post_type, co.comment_ID, co.user_id, co.comment_content, co.comment_author,co.comment_post_ID, co.comment_author_email FROM $tableposts  as p join $tablecomments co on p.ID=co.comment_post_ID join $wpdb->postmeta pm on pm.post_id=p.ID WHERE  p.post_status = 'publish' AND co.comment_parent=0 AND p.post_type IN('place','event') AND pm.meta_key='post_city_id' and pm.meta_value in ($city_id) AND co.comment_approved = '1' ORDER BY co.comment_date DESC LIMIT $no_comments";
+		}
+		else{$request = "SELECT ID, post_type, comment_ID, comment_content, comment_author,comment_post_ID, user_id, comment_author_email FROM $tableposts, $tablecomments WHERE $tableposts.ID=$tablecomments.comment_post_ID AND post_status = 'publish' AND $tablecomments.comment_parent=0 AND post_type IN('place','event') AND comment_approved = '1' ORDER BY $tablecomments.comment_date DESC LIMIT $no_comments";
+		}*/
+        $comments = $wpdb->get_results($request);
+
+        foreach ($comments as $comment) {
+		$comment_id ='';
+		$comment_id = $comment->comment_ID;
+		$comment_content = strip_tags($comment->comment_content);
+		
+		$comment_content = preg_replace('#(\\[img\\]).+(\\[\\/img\\])#', '', $comment_content);
+		$comment_excerpt = mb_substr($comment_content, 0, $comment_lenth)."";
+		$permalink = get_permalink($comment->ID)."#comment-".$comment->comment_ID;
+		$comment_author_email = $comment->comment_author_email;
+		$comment_post_ID = $comment->ID;
+
+		$na=true;
+		if(function_exists('icl_object_id') && icl_object_id($comment_post_ID, $comment->post_type, true)){
+		$comment_post_ID2 = icl_object_id($comment_post_ID, $comment->post_type, false);
+		if($comment_post_ID==$comment_post_ID2){}else{$na=false;}
+		}
+		
+		$post_title = get_the_title($comment_post_ID);
+		$permalink = get_permalink($comment_post_ID);
+		if($comment->user_id){$user_profile_url = get_author_posts_url($comment->user_id);}
+		else{$user_profile_url ='';}
+		
+		if($comment_id && $na){
+   $comments_echo .= '<li class="clearfix">';
+  $comments_echo .=  "<span class=\"li".$comment_id." geodir_reviewer_image\">";
+		if (function_exists('get_avatar')) {
+					  if (!isset($comment->comment_type) ) {
+						 if($user_profile_url){ $comments_echo .=   '<a href="'.$user_profile_url.'">';}
+						 $comments_echo .=  get_avatar($comment->comment_author_email, 60, get_bloginfo('template_directory').'/images/gravatar2.png');
+						if($user_profile_url){ $comments_echo .=  '</a>';}
+					  } elseif ( (isset($comment->comment_type) && $comment->comment_type == 'trackback') || (isset($comment->comment_type) && $comment->comment_type=='pingback') ) {
+					if($user_profile_url){	 $comments_echo .=   '<a href="'.$user_profile_url.'">';}
+						 $comments_echo .=  get_avatar($comment->comment_author_url, 60, get_bloginfo('template_directory').'/images/gravatar2.png');
+					  }
+				   } elseif (function_exists('gravatar')) {
+					if($user_profile_url){  $comments_echo .=   '<a href="'.$user_profile_url.'">';}
+					  $comments_echo .=  "<img src=\"";
+					  if ('' == $comment->comment_type) {
+						 $comments_echo .=  gravatar($comment->comment_author_email,60, get_bloginfo('template_directory').'/images/gravatar2.png');
+						if($user_profile_url){  $comments_echo .=  '</a>';}
+					  } elseif ( ('trackback' == $comment->comment_type) || ('pingback' == $comment->comment_type) ) {
+					if($user_profile_url){	$comments_echo .=   '<a href="'.$user_profile_url.'">';}
+						$comments_echo .=  gravatar($comment->comment_author_url,60, get_bloginfo('template_directory').'/images/gravatar2.png');
+						if($user_profile_url){ $comments_echo .=  '</a>';}
+					  }
+					 $comments_echo .=  "\" alt=\"\" class=\"avatar\" />";
+				   }
+    $comments_echo .=  "</span>\n";
+	
+    $comments_echo .=  '<span class="geodir_reviewer_content">' ;
+
+           //if($comment->user_id){$comments_echo .=   '<a href="'.get_author_posts_url( $comment->user_id ).'">';}
+		   
+ 			$comments_echo .=   '<span class="geodir_reviewer_author">'.$comment->comment_author.'</span> ';
+			
+			$comments_echo .= '<span class="geodir_reviewer_reviewed">'.__('reviewed',GEODIRECTORY_TEXTDOMAIN).'</span> ';
+			//if($comment->user_id){'</a> ';}
+			
+ 			$comments_echo .=   '<a href="'.$permalink.'" class="geodir_reviewer_title">'.$post_title.'</a>';
+			$comments_echo .=  geodir_get_rating_stars($comment->overall_rating, $comment_post_ID);
+			 
+ 			//$comments_echo .=  "<a class=\"comment_excerpt\" href=\"" . $permalink . "\" title=\"View the entire comment\">";
+			$comments_echo .=  '<span class="geodir_reviewer_text">'.$comment_excerpt.'</span>';
+			//echo preg_replace('#(\\[img\\]).+(\\[\\/img\\])#', '', $comment_excerpt);
+			//$comments_echo .=  "</a>";
+			
+	$comments_echo .=  "</span>\n";
+			
+			$comments_echo .=  '</li>';
+
+	            }
+		}
+
+return $comments_echo;
+}

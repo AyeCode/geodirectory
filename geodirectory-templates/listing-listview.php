@@ -1,12 +1,15 @@
 <?php do_action('geodir_before_listing_listview'); global $gridview_columns;
 $grid_view_class = apply_filters('geodir_grid_view_widget_columns' ,$gridview_columns);
-if(isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view']!='' && !isset($before_widget)){
+if(isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view']!='' && !isset($before_widget) && !isset($related_posts)){
 	if($_SESSION['gd_listing_view']=='1'){$grid_view_class = '';}
 	if($_SESSION['gd_listing_view']=='2'){$grid_view_class = 'gridview_onehalf';}
 	if($_SESSION['gd_listing_view']=='3'){$grid_view_class = 'gridview_onethird ';}
 	if($_SESSION['gd_listing_view']=='4'){$grid_view_class = 'gridview_onefourth';}
 	if($_SESSION['gd_listing_view']=='5'){$grid_view_class = 'gridview_onefifth';}
 }
+
+$post_view_class = apply_filters('geodir_post_view_extra_class' ,$grid_view_class);
+$post_view_article_class = apply_filters('geodir_post_view_article_extra_class' ,$grid_view_class);
 ?>
 
 <ul class="geodir_category_list_view clearfix">
@@ -17,8 +20,8 @@ if(isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view']!='' && !i
 					
          while (have_posts()) : the_post(); global $post,$wpdb,$listing_width,$preview;  ?> 
             
-					<li id="post-<?php echo $post->ID;?>" class="<?php if($grid_view_class){ echo 'geodir-gridview '.$grid_view_class;}?> clearfix" <?php if($listing_width) echo "style='width:{$listing_width}%;'"; // Width for widget listing ?> >
-					<article class="geodir-category-listing">		
+					<li id="post-<?php echo $post->ID;?>" class="<?php if($grid_view_class){ echo 'geodir-gridview '.$grid_view_class;}?> <?php if($post_view_class){echo $post_view_class;}?>clearfix" <?php if($listing_width) echo "style='width:{$listing_width}%;'"; // Width for widget listing ?> >
+					<article class="geodir-category-listing <?php if($post_view_article_class){echo $post_view_article_class;}?>">		
 			<div class="geodir-post-img"> 
 			<?php if($fimage = geodir_show_featured_image($post->ID, 'list-thumb', true, false, $post->featured_image)){ ?>
 							
@@ -130,7 +133,7 @@ if(isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view']!='' && !i
 							$marker_icon = $json_info->icon;*/
 						
 						$term_icon_url = get_tax_meta($post->default_category,'ct_cat_icon', false, $post->post_type);
-						$marker_icon = isset($term_icon_url['src']) ? $term_icon_url['src'] : '';
+						$marker_icon = isset($term_icon_url['src']) ? $term_icon_url['src'] : get_option('geodir_default_marker_icon');
 				 ?>
 								 <span class="geodir-pinpoint" style=" background:url('<?php if(isset($marker_icon)){ echo $marker_icon;}?>') no-repeat scroll left top transparent; background-size:auto 100%; -webkit-background-size:auto 75%; -moz-background-size:auto 100%;"><a href="javascript:void(0)" onclick="openMarker('listing_map_canvas' ,'<?php echo $post->ID; ?>')" onmouseover="animate_marker('listing_map_canvas' ,'<?php echo $post->ID; ?>')" onmouseout="stop_marker_animation('listing_map_canvas' ,'<?php echo $post->ID; ?>')" ><?php _e('Pinpoint',GEODIRECTORY_TEXTDOMAIN);?></a></span>
 								 <?php } ?>

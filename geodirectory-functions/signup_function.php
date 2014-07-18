@@ -179,8 +179,8 @@ function geodir_register_new_user($user_login, $user_email) {
 
 
 	if(get_option('ptthemes_show_user_pass')){
-	$user_pass  = mysql_real_escape_string($_REQUEST['user_pass'] );
-	$user_pass2 = mysql_real_escape_string($_REQUEST['user_pass2'] );
+	$user_pass  = $_REQUEST['user_pass'] ;
+	$user_pass2 = $_REQUEST['user_pass2'] ;
 	// Check the password
 	if ( $user_pass != $user_pass2){
 		$errors->add('pass_match', __('ERROR: Passwords do not match.',GEODIRECTORY_TEXTDOMAIN));
