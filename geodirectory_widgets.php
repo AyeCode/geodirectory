@@ -224,7 +224,6 @@ function register_geodir_widgets(){
 				
 				$geodir_allow_posttype_frontend = get_option('geodir_allow_posttype_frontend');
 				
-				
 				if(!empty($show_add_listing_post_types_main_nav)){
 					
 					$addlisting_links = '';
@@ -249,7 +248,7 @@ function register_geodir_widgets(){
 					
 					if($addlisting_links != ''){ ?>
 					
-						<li><select id="geodir_add_listing" class="chosen_select" onchange="window.location.href=this.value" option-autoredirect="1" name="geodir_add_listing" style="display: none;" option-ajaxchosen="false" >
+						<li><select id="geodir_add_listing" class="chosen_select" onchange="window.location.href=this.value" option-autoredirect="1" name="geodir_add_listing" option-ajaxchosen="false" >
 						<option value="<?php echo home_url();?>"><?php _e('Add Listing',GEODIRECTORY_TEXTDOMAIN);?></option>
 						<?php echo $addlisting_links;?>
 						</select></li> <?php 
@@ -261,13 +260,15 @@ function register_geodir_widgets(){
 				
 				$show_favorite_link_user_dashboard = get_option('geodir_favorite_link_user_dashboard');
 				
-				if(!empty($show_favorite_link_user_dashboard)){
+				$user_favourite = geodir_user_favourite_listing_count();
+				
+				if(!empty($show_favorite_link_user_dashboard) && !empty($user_favourite)){
 					
 					$favourite_links = '';
 					
 					foreach($post_types as $key => $postobj){
 						
-						if(in_array($key, $show_favorite_link_user_dashboard)){
+						if(in_array($key, $show_favorite_link_user_dashboard) && array_key_exists($key,$user_favourite)){
 							
 							$name = $postobj->labels->name;
 							$post_type_link = geodir_getlink($author_link,array('stype'=>$key,'list'=>'favourite'),false);
@@ -283,8 +284,8 @@ function register_geodir_widgets(){
 					
 					if($favourite_links != ''){ ?>
 						
-						<li><select id="geodir_my_favourites" class="chosen_select" onchange="window.location.href=this.value" option-autoredirect="1" name="geodir_my_favourites" style="display: none;" option-ajaxchosen="false" >
-						<option value="<?php echo home_url();?>"><?php _e('My Favorite',GEODIRECTORY_TEXTDOMAIN);?></option>
+						<li><select id="geodir_my_favourites" class="chosen_select" onchange="window.location.href=this.value" option-autoredirect="1" name="geodir_my_favourites" option-ajaxchosen="false" >
+						<option value="<?php echo home_url();?>"><?php _e('My Favorites',GEODIRECTORY_TEXTDOMAIN);?></option>
 						<?php echo $favourite_links;?>
 						</select></li> <?php 
 						
@@ -295,12 +296,14 @@ function register_geodir_widgets(){
 				
 				$show_listing_link_user_dashboard = get_option('geodir_listing_link_user_dashboard');
 				
-				if(!empty($show_listing_link_user_dashboard)){
+				$user_listing = geodir_user_post_listing_count();
+				
+				if(!empty($show_listing_link_user_dashboard) && !empty($user_listing)){
 					
 					$listing_links = '';
 					foreach($post_types as $key => $postobj){
 						
-						if(in_array($key, $show_listing_link_user_dashboard)){
+						if(in_array($key, $show_listing_link_user_dashboard) && array_key_exists($key,$user_listing)){
 							
 							$name = $postobj->labels->name;
 							$listing_link = geodir_getlink($author_link,array('stype'=>$key),false);
@@ -316,8 +319,8 @@ function register_geodir_widgets(){
 					
 					if($listing_links != ''){ ?>
 						
-						<li><select id="geodir_my_listings" class="chosen_select" onchange="window.location.href=this.value" option-autoredirect="1" name="geodir_my_listings" style="display: none;" option-ajaxchosen="false" >
-						<option value="<?php echo home_url();?>"><?php _e('Listing',GEODIRECTORY_TEXTDOMAIN);?></option>
+						<li><select id="geodir_my_listings" class="chosen_select" onchange="window.location.href=this.value" option-autoredirect="1" name="geodir_my_listings"  option-ajaxchosen="false" >
+						<option value="<?php echo home_url();?>"><?php _e('My Listings',GEODIRECTORY_TEXTDOMAIN);?></option>
 						<?php echo $listing_links;?>
 						</select></li> <?php 
 						
@@ -367,6 +370,8 @@ function register_geodir_widgets(){
 		}
 	}
 	register_widget('geodir_loginwidget');
+	
+	
 	
 		// =============================== GeoDirectory Social Like Widget ===================
 	class geodir_social_like_widget extends WP_Widget { 
@@ -438,6 +443,8 @@ function register_geodir_widgets(){
 		}
  }
 	register_widget('geodir_social_like_widget');
+
+
 
 	// ===============================GeoDirectory Feedburner Subscribe widget ============
 	class geodirsubscribeWidget extends WP_Widget {
@@ -738,7 +745,7 @@ register_widget('geodir_advance_search_widget');
 	include_once ('geodirectory-widgets/geodirectory_listing_slider_widget.php');
 	include_once ('geodirectory-widgets/home_map_widget.php');
 	include_once ( 'geodirectory-widgets/listing_map_widget.php');
-	
+	include_once ('geodirectory-widgets/geodirectory_reviews_widget.php');
 	include_once ('geodirectory-widgets/geodirectory_related_listing_widget.php');
 }
 

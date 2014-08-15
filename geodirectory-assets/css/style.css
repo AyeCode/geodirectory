@@ -44,6 +44,26 @@ margin-bottom: 15px;
 /* ########################################
 details page 
 ######################################### */
+#post_video-wrap,
+.geodir-company_info p.geodir_video:last-child,
+.geodir-company_info p.geodir_video {
+position: relative;
+padding-bottom: 75%;
+height: 0;
+overflow: hidden;
+}
+#post_video-wrap iframe,
+.geodir-company_info .geodir_video iframe,  
+.geodir-company_info .geodir_video object,  
+.geodir-company_info .geodir_video embed {
+/*position: absolute;*/
+top: 15%;
+left: 0;
+width: 100%;
+height: 85%;
+}
+
+#post_video-wrap iframe{top:0%;position: absolute;}
 .geodir-company_info p:last-child{border-bottom:none;margin-bottom: 0px;
 padding-bottom: 8px;}
 .geodir-company_info img.hreview-img {
@@ -70,12 +90,12 @@ width:67%;
 .geodir-sidebar-right{
 float: right;
 width: 30%;
-padding-left: 3%;
+margin-left: 3%;
 }
 .geodir-sidebar-left{
 float: left;
 width: 30%;
-padding-right: 3%;
+margin-right: 3%;
 }
 .geodir-tabs-content.entry-content li {
 margin: 0px 2%;
@@ -348,8 +368,10 @@ float: right;
 .geodir_category_list_view li .geodir-addinfo a.geodir-pcomments,
 .geodir_category_list_view li .geodir-addinfo span{
 display:block;}
+.geodir-addtofav{margin-left:2px;}
 .geodir-addtofav-icon i{color:#999;text-shadow: 0px 0px 2px rgba(150, 150, 150, 1);}
 .geodir-removetofav-icon i{color:#FF2828;text-shadow: 0px 0px 2px rgba(150, 150, 150, 1);}
+.geodir-pcomments{margin-left:2px;}
 .geodir-pcomments i{color:#999;}
 /* ########################################
 add listings page 
@@ -370,9 +392,18 @@ font-size: 14px;
 }
 .geodir_form_row .geodir_textfield, 
 .geodir_textarea,
-.geodir_form_row select {
+.geodir_form_row select{
 float: left;
 padding: 6px;
+width: 70%;
+margin-bottom: 5px;
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;
+}
+
+.geodir_form_row ul{
+float: left;
 width: 70%;
 margin-bottom: 5px;
 -webkit-box-sizing: border-box;
@@ -398,7 +429,7 @@ padding-left: 30%;
 padding-top: 5px;
 color: #999;
 }
-#geodir_filled_by_spam_bot_top_form{display:none;}
+#geodir_filled_by_spam_bot_top_form{display:none !important;}
 /* ########################################
 signup/reg page 
 ######################################### */
@@ -589,7 +620,9 @@ display:inline-block;vertical-align: baseline;}/* This migh be changed to match 
 .geodir_list_heading a {display:inline-block;width:50%;text-align:right;vertical-align: baseline;}
 .geodir_category_list_view h3,
 .geodir_category_list_view p{margin:0px;}
-.geodir-pinpoint {padding-left:17px;}
+.geodir-pinpoint {margin-left:2px;  display:inline-block !important; vertical-align: text-bottom;}
+/*.geodir-pinpoint a{margin-left:2px;}*/
+.geodir-pinpoint-link {margin-left:2px; display:inline-block;}
 .geodir_category_list_view li.geodir-gridview {
 border: 1px #e1e1e1 solid;
 width: auto;
@@ -717,13 +750,13 @@ text-overflow: ellipsis;
 overflow: hidden;
 white-space: nowrap;
 }
-.geodir_category_list_view li.gridview_onefifth{ width: -webkit-calc(20% - 5.2px);width: -moz-calc(20% - 5.2px);width: calc(20% - 5.2px);}
+.geodir_category_list_view li.gridview_onefifth{ width:19%; width: -webkit-calc(20% - 5.2px);width: -moz-calc(20% - 5.2px);width: calc(20% - 5.2px);}
 .geodir_category_list_view li.gridview_onefifth:nth-child(5n+5){margin-right:0px;}
-.geodir_category_list_view li.gridview_onefourth{ width: -webkit-calc(25% - 5px);width: -moz-calc(25% - 5px);width: calc(25% - 5px);}
+.geodir_category_list_view li.gridview_onefourth{ width:24%; width: -webkit-calc(25% - 5px);width: -moz-calc(25% - 5px);width: calc(25% - 5px);}
 .geodir_category_list_view li.gridview_onefourth:nth-child(4n+4){margin-right:0px;}
-.geodir_category_list_view li.gridview_onethird{ width: -webkit-calc(33.3% - 4.8px);width: -moz-calc(33.3% - 4.8px);width: calc(33.3% - 4.8px);}
+.geodir_category_list_view li.gridview_onethird{ width: 32%; width: -webkit-calc(33.3% - 4.8px);width: -moz-calc(33.3% - 4.8px);width: calc(33.3% - 4.8px);}
 .geodir_category_list_view li.gridview_onethird:nth-child(3n+3){margin-right:0px;}
-.geodir_category_list_view li.gridview_onehalf{ width: -webkit-calc(50% - 4px);width: -moz-calc(50% - 4px);width: calc(50% - 4px);}
+.geodir_category_list_view li.gridview_onehalf{ width: 48%; width: -webkit-calc(50% - 4px);width: -moz-calc(50% - 4px);width: calc(50% - 4px);}
 .geodir_category_list_view li.gridview_onehalf:nth-child(2n+2){margin-right:0px;}
 /* GD > Loginbox */
 .geodir-loginbox-list li{
@@ -816,4 +849,95 @@ border-radius: 0px;
 box-shadow: none;
 margin:0px;
 padding:0px;
+}
+
+
+/* - custom field field style -- */
+.geodir-custom-post-gallery{
+margin-right: 6px;
+margin-bottom: 5px;
+display: inline-block;
+text-align: center;
+border: 1px solid #CCCCCC;
+}
+
+
+.geodir-custom-post-gallery{
+box-sizing: border-box;
+	display: inline-block;
+    position: relative;
+    width: 24%;	
+		
+}
+.geodir-custom-post-gallery:after{
+	  content: '';
+    display: block;
+    margin-top: 65%;
+}
+
+.geodir-custom-post-gallery .geodir_thumbnail{
+padding: 0px;
+float: left;
+background-position: 50% 50%;
+background-repeat: no-repeat;
+background-size: cover;
+min-width: 92%;
+position: absolute;
+top: 0;
+bottom: 0;
+left: 0;
+right: 0;
+margin:4%;
+}
+
+.geodir-custom-file-box{clear:both; border-bottom:1px #eee solid;margin: 5px 0 10px;
+    padding: 5px 0 15px;}
+
+.geodir-sidebar-wrap{overflow:visible;}	
+
+/* GD > Recent Reviews */
+.geodir_reviewer_content {
+    float: left;
+    width: 86%;
+}
+ul.geodir_recent_reviews li {
+    border-bottom: 1px solid #ccc;
+    min-height: 60px;
+    padding: 20px 0;
+}
+.geodir_reviewer_image {
+    float: left;
+    margin: 0 4% 0 0;
+    width: 10%;
+}
+.geodir_recent_reviews .geodir-rating {
+    padding: 5px 0 0;
+}
+.geodir_reviewer_text {
+    line-height: 20px;
+}
+.geodir_reviewer_image img{
+max-width: 100%;
+height: auto;
+}
+
+
+/* ----- 18-07-2014 ----*/
+
+.geodir-company_info .geodir_more_info {
+    border-bottom: 1px solid #eee;
+    line-height: 19px;
+    margin: 5px 0 10px;
+    padding: 5px 0 15px;
+}
+
+.geodir-company_info .geodir_more_info ul{ padding-left:20px;}
+
+.geodir-company_info .geodir_more_info ul li{ list-style:none;}
+
+.geodir-content .geodir_more_info {
+    font-size: 12px;
+    line-height: 17px;
+    margin-bottom: 0;
+    padding: 5px 0;
 }

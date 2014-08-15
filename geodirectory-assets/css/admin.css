@@ -217,6 +217,11 @@ body.edit-tags-php .form-field input, .form-field textarea {width: auto !importa
 .field_row_main_sort .field_sort_icon{ margin-right:5px;}
 
 #geodir_wrapper .geodir_form_row label{ float:left; width:29%!important; font-size:14px;}
+
+
+.geodir_problem_info{ border:1px #9f9f82 dotted; background:#ffe0c7; font-style:italic; padding:10px;}
+
+.geodir_noproblem_info{ border:1px #9f9f82 dotted; background:#d8ffdc; font-style:italic; padding:10px;}
 /***********************---------------MEDIA CSS-------------*****************************/
 
 @media screen and (min-width:860px) and (max-width:960px)

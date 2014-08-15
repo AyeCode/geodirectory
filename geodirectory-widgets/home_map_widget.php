@@ -75,7 +75,7 @@ class geodir_homepage_map extends WP_Widget {
       </label>
     </p>
      <p>
-      <label for="<?php echo $this->get_field_id('heigh'); ?>"><?php _e('Map Heigh <small>(Default is : 425px)</small>',GEODIRECTORY_TEXTDOMAIN);?>:
+      <label for="<?php echo $this->get_field_id('heigh'); ?>"><?php _e('Map Height <small>(Default is : 425px)</small>',GEODIRECTORY_TEXTDOMAIN);?>:
       <input class="widefat" id="<?php echo $this->get_field_id('heigh'); ?>" name="<?php echo $this->get_field_name('heigh'); ?>" type="text" value="<?php echo esc_attr($heigh); ?>" />
       </label>
     </p>

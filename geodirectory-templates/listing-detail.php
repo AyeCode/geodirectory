@@ -20,7 +20,7 @@ do_action( 'geodir_wrapper_open', 'details-page', 'geodir-wrapper','');
 			// this adds the opening html tags to the content div, this required the closing tag below :: ($type='',$id='',$class='')
 			do_action( 'geodir_wrapper_content_open', 'details-page', 'geodir-wrapper-content','');
 			// this adds the opening html tags to the <article>, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
-			do_action( 'geodir_article_open', 'details-page', 'post-'.get_the_ID(),get_post_class(array('hentry','vCard')),'http://schema.org/LocalBusiness');
+			do_action( 'geodir_article_open', 'details-page', 'post-'.get_the_ID(),get_post_class(),'http://schema.org/LocalBusiness');
 			
 					###### MAIN CONTENT ######
 					// this call the main page content
