@@ -1,7 +1,7 @@
 <?php 
 // get header
 get_header(); 
-	
+
 ###### WRAPPER OPEN ######
 // this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='')
 do_action( 'geodir_wrapper_open', 'author-page', 'geodir-wrapper','');
