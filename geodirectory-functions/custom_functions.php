@@ -118,21 +118,25 @@ function geodir_send_inquiry($request){
 	do_action('geodir_after_send_enquiry', $request, 'Enquiry');
 	
 	$client_message = $frnd_comments;
-	$client_message .= '<br>'.__('From :',GEODIRECTORY_TEXTDOMAIN).' '.$yourname.'<br>'.__('Phone :',GEODIRECTORY_TEXTDOMAIN).' '.$inq_phone.'<br><br>'. __('Send from',GEODIRECTORY_TEXTDOMAIN).' - <b><a href="'.get_option('siteurl').'">'.get_option('blogname').'</a></b>.';
+	$client_message .= '<br>'.__('From :',GEODIRECTORY_TEXTDOMAIN).' '.$yourname.'<br>'.__('Phone :',GEODIRECTORY_TEXTDOMAIN).' '.$inq_phone.'<br><br>'. __('Sent from',GEODIRECTORY_TEXTDOMAIN).' - <b><a href="'.get_option('siteurl').'">'.get_option('blogname').'</a></b>.';
 
+	$client_message = apply_filters('geodir_inquiry_email_msg' , $client_message) ;
+	do_action('geodir_before_send_enquiry_email', $request);
 	if($to_email)
 	{	
 		geodir_sendEmail($youremail,$yourname,$to_email,$to_name,'',$client_message,$extra='','send_enquiry',$request['pid']);//To client email
 	}
 	
+	do_action('geodir_after_send_enquiry_email', $request);
 	$url = get_permalink($pid);
 	if(strstr($url,'?'))
-	  {
-		  $url = $url."&send_inquiry=success";
-	  }else
-	  {
-			$url = $url."?send_inquiry=success";			  
-	  }
+	{
+	  $url = $url."&send_inquiry=success";
+	}else
+	{
+		$url = $url."?send_inquiry=success";			  
+	}
+	$url = apply_filters('geodir_send_enquiry_after_submit_redirect' , $url) ;
 	wp_redirect($url);
 	exit;
 
@@ -162,16 +166,19 @@ function geodir_send_friend($request){
 		}
 	}
 	
+	do_action('geodir_before_send_to_friend_email', $request) ;
 	geodir_sendEmail($youremail,$yourname,$to_email,$to_name,$frnd_subject,$frnd_comments,$extra='','send_friend',$request['pid']);//To client email
-		
+	do_action('geodir_after_send_to_friend_email', $request) ;	
+	
 	$url = get_permalink($pid);
 	if(strstr($url,'?'))
-	  {
-		  $url = $url."&sendtofrnd=success";
-	  }else
-	  {
-			$url = $url."?sendtofrnd=success";			  
-	  }
+	{
+	  	$url = $url."&sendtofrnd=success";
+	}else
+	{
+		$url = $url."?sendtofrnd=success";			  
+	}
+	$url = apply_filters('geodir_send_to_friend_after_submit_redirect' , $url) ;
 	wp_redirect($url);
 	exit;
 }
@@ -350,7 +357,7 @@ function geodir_related_posts_display($request){
 		$add_location_filter = (isset($request['add_location_filter']) && !empty($request['add_location_filter'])) ? $request['add_location_filter'] : '0';
 		$listing_width = (isset($request['listing_width']) && !empty($request['listing_width'])) ? $request['listing_width'] : '';
 		$list_sort = (isset($request['list_sort']) && !empty($request['list_sort'])) ? $request['list_sort'] : 'latest';
-		$character_count = (isset($request['character_count']) && !empty($request['character_count'])) ? $request['character_count'] : 20;
+		$character_count = (isset($request['character_count']) && !empty($request['character_count'])) ? $request['character_count'] : '';
 		
 		global $wpdb,$post;
 		
@@ -951,25 +958,43 @@ function geodir_get_recent_reviews($g_size = 30, $no_comments = 10, $comment_len
 		$tableposts = $wpdb->posts;
 		
 		$comments_echo ='';
+		//print_r($_SESSION);
+		
+		$city_filter = '';
+		$region_filter = '';
+		$country_filter = '';
+		
+		if(isset($_SESSION['gd_multi_location'])){
+			
+			if(isset($_SESSION['gd_country']) && $_SESSION['gd_country']){
+			$country_filter = $wpdb->prepare(" AND r.post_country=%s ",str_replace("-"," ",$_SESSION['gd_country']));	
+			}
+			
+			if(isset($_SESSION['gd_region']) && $_SESSION['gd_region']){
+			$region_filter = $wpdb->prepare(" AND r.post_region=%s ",str_replace("-"," ",$_SESSION['gd_region']));	
+			}
+			
+			if(isset($_SESSION['gd_city']) && $_SESSION['gd_city']){
+			$city_filter = $wpdb->prepare(" AND r.post_city=%s ",str_replace("-"," ",$_SESSION['gd_city']));	
+			}
+			
+			
+		}
 		
 		$review_table = GEODIR_REVIEW_TABLE;
-		$request = "SELECT p.ID, r.post_type, c.comment_ID, c.comment_content, c.comment_author, c.comment_date,r.overall_rating, r.user_id, c.comment_author_email,c.comment_author FROM $review_table as r LEFT JOIN $wpdb->comments as c ON r.comment_id=c.comment_ID LEFT JOIN $wpdb->posts as p ON r.post_id=p.ID WHERE p.post_status = 'publish' AND c.comment_parent=0 AND comment_approved = '1' ORDER BY c.comment_date DESC LIMIT $no_comments";
-	 	/*echo $request;
-		$comments = $wpdb->get_results($request);
-		
-		print_r($comments);
-		return;*/
-		
-################################### FIX BY STIOFAN HEBTECH.CO.UK TO HIDE BLOG COMMENTS IN REVIEWS #####################################		
-		//$request = "SELECT ID, comment_ID, comment_content, comment_author,comment_post_ID, comment_author_email FROM $tableposts, $tablecomments WHERE $tableposts.ID=$tablecomments.comment_post_ID AND post_status = 'publish' ";
-		/*$city_id = mysql_real_escape_string ($_SESSION['multi_city']);
-		if($_SESSION['multi_city']){$request = "SELECT p.ID, p.post_type, co.comment_ID, co.user_id, co.comment_content, co.comment_author,co.comment_post_ID, co.comment_author_email FROM $tableposts  as p join $tablecomments co on p.ID=co.comment_post_ID join $wpdb->postmeta pm on pm.post_id=p.ID WHERE  p.post_status = 'publish' AND co.comment_parent=0 AND p.post_type IN('place','event') AND pm.meta_key='post_city_id' and pm.meta_value in ($city_id) AND co.comment_approved = '1' ORDER BY co.comment_date DESC LIMIT $no_comments";
-		}
-		else{$request = "SELECT ID, post_type, comment_ID, comment_content, comment_author,comment_post_ID, user_id, comment_author_email FROM $tableposts, $tablecomments WHERE $tableposts.ID=$tablecomments.comment_post_ID AND post_status = 'publish' AND $tablecomments.comment_parent=0 AND post_type IN('place','event') AND comment_approved = '1' ORDER BY $tablecomments.comment_date DESC LIMIT $no_comments";
-		}*/
+		$request = "SELECT r.id as ID, r.post_type, r.comment_id as comment_ID, r.post_date as comment_date,r.overall_rating, r.user_id FROM $review_table as r WHERE r.post_status = 1 AND r.status =1 $country_filter $region_filter $city_filter ORDER BY r.post_date DESC LIMIT $no_comments";
+		//echo $request;
         $comments = $wpdb->get_results($request);
 
         foreach ($comments as $comment) {
+			
+		// Set the extra comment info needed.	
+		$comment_extra = $wpdb->get_row("SELECT * FROM $wpdb->comments WHERE comment_ID =$comment->ID");	
+		$comment->comment_content = $comment_extra->comment_content;
+		$comment->comment_author = $comment_extra->comment_author;
+		$comment->comment_author_email = $comment_extra->comment_author_email;
+		
+			
 		$comment_id ='';
 		$comment_id = $comment->comment_ID;
 		$comment_content = strip_tags($comment->comment_content);

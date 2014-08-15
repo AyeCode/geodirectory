@@ -70,10 +70,14 @@ function get_markers(){
 	
 	$field_default_cat = '';
 	if(isset($_REQUEST['cat_id']) && $_REQUEST['cat_id'] != ''){	
-		$map_cat_arr = $_REQUEST['cat_id'];
+		
+		$map_cat_arr = trim($_REQUEST['cat_id'], ',');
 		
 		if(!empty($map_cat_arr))
 		{
+			
+			$field_default_cat .= "when (default_category IN (".$map_cat_arr.")) then default_category ";
+			
 			$map_cat_ids_array = explode(',',$map_cat_arr);
 			$cat_find_array = array();
 			foreach($map_cat_ids_array as $cat_id){

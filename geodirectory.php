@@ -3,7 +3,7 @@
 Plugin Name: GeoDirectory
 Plugin URI: http://wpgeodirectory.com/
 Description: GeoDirectory plugin for wordpress.
-Version: 1.1.8
+Version: 1.1.9
 Author: GeoDirectory
 Author URI: http://wpgeodirectory.com
 Requires at least: 3.1
@@ -11,7 +11,7 @@ Tested up to: 3.9.1
 */
 
 
-define("GEODIRECTORY_VERSION", "1.1.8");
+define("GEODIRECTORY_VERSION", "1.1.9");
 
 if (!session_id()) session_start();
 
@@ -73,6 +73,7 @@ if ( is_admin() ) :
 	require_once( 'geodirectory-admin/admin_functions.php' );
 	require_once( 'geodirectory-admin/admin_hooks_actions.php' );
 	require_once( 'geodirectory-admin/admin_template_tags.php' );
+	require_once(geodir_plugin_path() . '/upgrade.php');
 	if (get_option('geodir_installed') != 1)
 	{ 
 		require_once( 'geodirectory-admin/admin_install.php' );

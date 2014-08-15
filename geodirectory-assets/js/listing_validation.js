@@ -116,7 +116,7 @@ function validate_field(field){
 	if(is_error)
 	{
 		if(jQuery(field).closest('.required_field').find('span.geodir_message_error').html() == '')
-		{jQuery(field).closest('.required_field').find('span.geodir_message_error').html('This field is required.')}
+		{jQuery(field).closest('.required_field').find('span.geodir_message_error').html(geodir_all_js_msg.geodir_field_id_required)}
 		
 		jQuery(field).closest('.required_field').find('span.geodir_message_error').fadeIn();
 		

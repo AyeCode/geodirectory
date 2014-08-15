@@ -41,6 +41,10 @@ function initMap(map_options){
 			 ]
 		   }
 	];
+	
+	if(!(typeof geodir_custom_map_style ==='undefined' ))
+		styles = geodir_custom_map_style ;
+		
 	jQuery.goMap.map.setOptions({styles: styles});
 	
 	
@@ -67,6 +71,7 @@ function initMap(map_options){
 		jQuery('.trigger').toggleClass('triggermap_fullscreen');
 		jQuery('.map-places-listing').toggleClass('triggermap_fullscreen');
 		jQuery('.' + map_canvas +'_TopLeft').toggleClass('TopLeft_fullscreen');
+		jQuery('#' + map_canvas +'_triggermap').closest('.geodir_map_container').toggleClass('geodir_map_container_fullscreen');
 		
 		window.setTimeout(function() { 
 			var center = jQuery.goMap.map.getCenter(); 
@@ -108,6 +113,7 @@ function build_map_ajax_search_param(map_canvas_var,reload_cat_list)
 			if(data){
 				jQuery('#'+map_canvas_var+'_cat .toggle').html(data);
 				//show_category_filter(map_canvas_var);
+				geodir_show_sub_cat_collapse_button();
 				build_map_ajax_search_param(map_canvas_var,false) ;
 				return false;
 			}
@@ -165,6 +171,57 @@ function build_map_ajax_search_param(map_canvas_var,reload_cat_list)
 	
 	
 	map_ajax_search(map_canvas_var , search_query_string, ''); 
+}
+
+function geodir_show_sub_cat_collapse_button()
+{
+	jQuery('ul.main_list li').each(function(i){
+		var sub_cat_list = jQuery(this).find('ul.sub_list')	;
+		//alert((typeof sub_cat_list.attr('class') ==='undefined')) ;
+		if(!(typeof sub_cat_list.attr('class') ==='undefined') )
+		{
+			
+			if(sub_cat_list.is(':visible'))
+			{
+				jQuery(this).find('i').removeClass('fa-long-arrow-down');
+				jQuery(this).find('i').addClass('fa-long-arrow-up');
+			}
+			else
+			{
+				jQuery(this).find('i').removeClass('fa-long-arrow-up');
+				jQuery(this).find('i').addClass('fa-long-arrow-down');	
+			}
+			
+				
+			jQuery(this).find('i').show();/**/
+		}
+		else
+			jQuery(this).find('i').hide();/**/
+	})	
+	geodir_activate_collapse_pan();
+}
+
+function geodir_activate_collapse_pan()
+{
+	jQuery('ul.main_list').find('i').click(function(){
+		jQuery(this)
+		.parent('li')
+		.find('ul.sub_list')
+		.toggle(200 , 
+				function(){
+								if(jQuery(this).is(':visible'))
+								{
+									jQuery(this).parent('li').find('i').removeClass('fa-long-arrow-down');
+									jQuery(this).parent('li').find('i').addClass('fa-long-arrow-up');
+								}
+								else
+								{
+									jQuery(this).parent('li').find('i').removeClass('fa-long-arrow-up');
+									jQuery(this).parent('li').find('i').addClass('fa-long-arrow-down');
+								}
+						   });	
+		
+	});	
 }
 
 function map_ajax_search(map_canvas_var, search_query_string, marker_jason)
@@ -414,7 +471,9 @@ function map_sticky(map_options) {
 		};			
 	
 		//var content = jQuery("#geodir_wrapper").closest('div').scrollBottom();
-		var content = jQuery("#geodir-main-content").closest('div').scrollBottom();
+		//var content = jQuery("#geodir-main-content").closest('div').scrollBottom();
+		var content = jQuery(".geodir-sidebar-wrap").scrollBottom();
+		
 		var stickymap = jQuery("#sticky_map_"+optionsname+"").scrollBottom();
 		var catcher = jQuery('#catcher_'+optionsname+'');
 		var sticky = jQuery('#sticky_map_'+optionsname+'');		
@@ -578,3 +637,4 @@ function computeTotalDistance(result, map_canvas) {
 		totalm_round = Math.round(totalm * 100)/100
 		//document.getElementById(map_canvas+"_directionsPanel").innerHTML = "<p>Total Distance: <span id='totalk'>" + totalk_round + " km</span></p><p>Total Distance: <span id='totalm'>" + totalm_round + " miles</span></p>";
 	} 
+

@@ -71,7 +71,7 @@ function geodir_cancle_replaylink($link){
 
 add_action('comment_post','geodir_save_rating');
 function geodir_save_rating($comment = 0){
-	global $wpdb, $user_ID, $post;
+	global $wpdb, $user_ID, $post,$plugin_prefix;
 	
 	$comment_info = get_comment($comment);
 	
@@ -79,7 +79,9 @@ function geodir_save_rating($comment = 0){
 	$status = $comment_info->comment_approved;
 	$rating_ip = getenv("REMOTE_ADDR");	
 	
-	
+	$post_details = $wpdb->get_row("SELECT * FROM ".$plugin_prefix.$post->post_type."_detail WHERE post_id =".$post->ID);
+
+	if($post->post_status=='publish'){$post_status='1';}else{$post_status='0';}
 	if(isset($_REQUEST['geodir_overallrating'])){
 		
 		$overall_rating = $_REQUEST['geodir_overallrating'];
@@ -92,8 +94,14 @@ function geodir_save_rating($comment = 0){
 						comment_id	= %d,
 						rating_ip	= %s,
 						overall_rating = %f,
-						status		= %s ",
-						array($post_id,$post->post_type,$post->post_title,$user_ID,$comment,$rating_ip,$overall_rating,$status)
+						status		= %s,
+						post_status		= %s, 
+						post_date		= %s, 
+						post_city		= %s, 
+						post_region		= %s, 
+						post_country	= %s 
+						",
+						array($post_id,$post->post_type,$post->post_title,$user_ID,$comment,$rating_ip,$overall_rating,$status,$post_status,date("Y-m-d H:i:s"),$post_details->post_city,$post_details->post_region,$post_details->post_country)
 						);		
 		
 		$wpdb->query($sqlqry);
@@ -552,7 +560,9 @@ function geodir_get_rating_stars($rating, $post_id, $small=false){
 		
 	}else{
 	
-	$rating_img = '<img src="'.geodir_plugin_url().'/geodirectory-assets/images/stars.png" />';
+	//$rating_img = '<img src="'.geodir_plugin_url().'/geodirectory-assets/images/stars.png" />';
+	$rating_img = '<img src="'.get_option('geodir_default_rating_star_icon').'" />';
+	
 	$r_html = '<div class="geodir-rating"><div class="gd_rating_show" data-average="'.$rating.'" data-id="'.$post_id.'"><div class="geodir_RatingAverage" style="width: '.$a_rating.'%;"></div><div class="geodir_Star">'.$rating_img.$rating_img.$rating_img.$rating_img.$rating_img.'</div></div></div>';
 	}
 	return $r_html;

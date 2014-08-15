@@ -54,11 +54,11 @@
 
 
 @media only screen and (max-width:480px)
-{
+{	
   .geodir_form_row label{ float:none; width:auto; display:block;}
   .geodir_form_row .geodir_textfield, .geodir_textarea{ float:none; width:100%; display:block; margin-top:10px;}
   .geodir_message_note{ padding-left:0;}
-  .geodir_category_list_view li .geodir-content, .geodir_category_list_view li .geodir-post-img, .geodir_category_list_view li .geodir-addinfo{ float:none; width:auto; margin:10px 0;}
+  .geodir_category_list_view li .geodir-content, .geodir_category_list_view li .geodir-post-img, .geodir_category_list_view li .geodir-addinfo{ float:none; width:100%; margin:10px 0;}
   .geodir_form_row .geodir_textfield,
   .geodir_textarea,
   .geodir_form_row select{width:100%;}
@@ -73,7 +73,8 @@
 {
   .geodir-search input[type="text"],
   .geodir-search select,
-  .geodir-search input[type="button"]{width:100%;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;}	
+  .geodir-search input[type="button"]{width:100%;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;}
+  .geodir_flexslider .geodir-slides img {max-height: 255px !important;}
 }
 
 @media only screen and (max-width:320px)
@@ -82,4 +83,5 @@
   .geodir-content-right .geodir_category_list_view li.gridview_onehalf{ width:100%;}
   .geodir-content-right .loginform1 input[type="text"], .geodir-content-right .loginform1 input[type="password"], #gd-sidebar-wrapper .loginform1 input[type="text"], #gd-sidebar-wrapper .loginform1 input[type="password"]{ width:95%; margin-top:5px;}
   .geodir-content-right form.loginform1 label, #gd-sidebar-wrapper form.loginform1 label{ width:auto;}
+  .geodir_flexslider .geodir-slides img {max-height: 200px !important;}
 }

@@ -58,9 +58,9 @@ function geodir_register_post_types() {
 	if ( is_array( $post_types ) ):
 		
 		foreach ( $post_types as $post_type => $args ):
-		
+		if($post_type=='gd_place' && get_option('geodir_disable_place_tax')){continue;}
 			if(!empty($args['rewrite']['slug'])){$args['rewrite']['slug'] = _x( $args['rewrite']['slug'], 'URL slug', GEODIRECTORY_TEXTDOMAIN );}
-			
+			$args = stripslashes_deep(  $args);
 			$args = apply_filters('geodir_post_type_args' ,    $args , $post_type ) ;
 			$post_type = register_post_type( $post_type, $args );
 			
@@ -266,6 +266,34 @@ function geodir_set_location_var_in_session_in_core($wp)
 		
 		if(!($gd_country=='' && $gd_region == '' && $gd_city == '' ))
 		{
+			$default_location = geodir_get_default_location();
+			
+			if( get_option('geodir_add_location_url'))
+			{
+				if(get_option('geodir_show_location_url')!='all')
+				{
+					if($gd_region=='' )
+					{
+						if(isset($_SESSION['gd_region']))
+							$gd_region = $_SESSION['gd_region'];
+						else
+							$gd_region =$default_location->region_slug;
+					}
+					
+					if($gd_city=='' )
+					{
+						if(isset($_SESSION['gd_city']))
+							$gd_city = $_SESSION['gd_city'];
+						else
+							$gd_city =$default_location->city_slug;
+						
+						$base_location_link = geodir_get_location_link('base') ;
+						wp_redirect($base_location_link . '/' .$gd_country . '/' . $gd_region . '/' . $gd_city )	;
+						exit();
+					}
+					
+				}
+			}
 			
 			$args  = 	array(
 									'what'=> 'city' , 
@@ -555,7 +583,12 @@ function geodir_set_location_var_in_session_in_core($wp)
 		}
 	}
 	
-	
+	if(isset($_SESSION['gd_multi_location']) && $_SESSION['gd_multi_location']==1)
+	{
+		$wp->query_vars['gd_country'] =  $_SESSION['gd_country'] ;
+		$wp->query_vars['gd_region'] =  $_SESSION['gd_region'] ;
+		$wp->query_vars['gd_city'] =  $_SESSION['gd_city'] ;
+	}
 	
 	// now check if there is location parts in the url or not
 	if( get_option('geodir_add_location_url'))
@@ -581,14 +614,9 @@ function geodir_set_location_var_in_session_in_core($wp)
 			$wp->query_vars['gd_city']='' ;
 				
 	}	
-	/*				
-	if(isset($_SESSION['gd_multi_location']) && $_SESSION['gd_multi_location']==1)
-	{
-		$wp->query_vars['gd_country'] =  $_SESSION['gd_country'] ;
-		$wp->query_vars['gd_region'] =  $_SESSION['gd_region'] ;
-		$wp->query_vars['gd_city'] =  $_SESSION['gd_city'] ;
-	}
-	*/
+					
+	
+	/**/
 	//print_r($_SESSION);
 /*
 	echo "<pre>" ;

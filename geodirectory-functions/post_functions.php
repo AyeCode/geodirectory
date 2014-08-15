@@ -131,7 +131,7 @@ function geodir_save_listing($request_info = array(),$dummy = false){
 	
 	do_action_ref_array('geodir_before_save_listing',$post);
 	
-	
+	$send_post_submit_mail = false;
 	if(isset($request_info['pid']) && $request_info['pid'] != ''){	
 		$post['ID'] = $request_info['pid'];
 		$last_post_id =  wp_update_post( $post );
@@ -142,7 +142,8 @@ function geodir_save_listing($request_info = array(),$dummy = false){
 		
 		if(!$dummy && $last_post_id){
 			
-			geodir_sendEmail('','',$current_user->user_email,$current_user->display_name,'','',$extra='','post_submit',$last_post_id,$current_user->ID);
+			$send_post_submit_mail = true; // we move post_submit email from here so the rest of the variables are added to the db first(was breaking permalink in email)
+			//geodir_sendEmail('','',$current_user->user_email,$current_user->display_name,'','',$request_info,'post_submit',$last_post_id,$current_user->ID);
 			
 		}
 	}
@@ -370,6 +371,10 @@ function geodir_save_listing($request_info = array(),$dummy = false){
 		do_action('geodir_after_save_listing',$last_post_id,$request_info);
 		
 		//die;
+		
+		if($send_post_submit_mail){ // if new post send out email
+			geodir_sendEmail('','',$current_user->user_email,$current_user->display_name,'','',$request_info,'post_submit',$last_post_id,$current_user->ID);
+		}
 		return $last_post_id;
 		
 	}	
@@ -2024,12 +2029,30 @@ function geodir_listing_belong_to_current_user($listing_id='', $exclude_admin = 
 	
 	return  geodir_lisiting_belong_to_user($listing_id ,  $current_user->ID);
 }
+
+
+function geodir_only_supportable_attachments_remove($file){
+	
+		global $wpdb;
+		
+		$matches = array();
+		
+		$pattern = '/-\d+x\d+\./';
+		preg_match($pattern, $file, $matches, PREG_OFFSET_CAPTURE);
+		
+		if(empty($matches))
+			return '';
+		else
+			return $file;
+	
+}
+
 //geodir_set_wp_featured_image(16);
 // Written by Vikas on 13-06-2014 to set first image and wordpress post's featured image 
 function geodir_set_wp_featured_image($post_id)
 {
 	
-	global $wpdb;
+	global $wpdb, $plugin_prefix;
 	$uploads = wp_upload_dir();
 //	print_r($uploads ) ;
 	$post_first_image =	$wpdb->get_results(
@@ -2054,13 +2077,23 @@ function geodir_set_wp_featured_image($post_id)
 	if(!empty($post_first_image))
 	{
 		
+		$post_type = get_post_type( $post_id ) ;
+		
+		$table_name = $plugin_prefix.$post_type.'_detail';
+			
+		$wpdb->query("UPDATE ".$table_name." SET featured_image='".$post_first_image[0]->file."' WHERE post_id =".$post_id);
+		
 		$new_attachment_name = basename ( $post_first_image[0]->file );
 		
 		if(strtolower($new_attachment_name) != strtolower($old_attachment_name)){
 			
-			if(has_post_thumbnail( $post_id ) && $post_thumbnail_id != '')
+			if(has_post_thumbnail( $post_id ) && $post_thumbnail_id != '' && (!isset($_REQUEST['action']) || $_REQUEST['action'] != 'delete')){
+				
+				add_filter( 'wp_delete_file', 'geodir_only_supportable_attachments_remove' );
+				
 				wp_delete_attachment( $post_thumbnail_id );
 			
+			}
 			$filename =$uploads['basedir'] . $post_first_image[0]->file ;
 			
 			$attachment = array(
@@ -2090,7 +2123,7 @@ function geodir_set_wp_featured_image($post_id)
 	{
 		//set_post_thumbnail($post_id,-1);
 		
-		if(has_post_thumbnail( $post_id ) && $post_thumbnail_id != '')
+		if(has_post_thumbnail( $post_id ) && $post_thumbnail_id != '' && (!isset($_REQUEST['action']) || $_REQUEST['action'] != 'delete'))
 				wp_delete_attachment( $post_thumbnail_id );
 		
 	}

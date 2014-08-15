@@ -176,6 +176,7 @@ add_action('wp_footer','geodir_add_sharelocation_scripts');
 
 // Add fontawesome
 add_action('wp_head','geodir_add_fontawesome'); 
+add_action('admin_head','geodir_add_fontawesome'); 
 function geodir_add_fontawesome(){
 	echo apply_filters('geodir_fontawesome','<link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">');
 }
@@ -598,6 +599,7 @@ function geodir_localize_all_js_msg()
 							'geodir_default_marker_icon' => get_option('geodir_default_marker_icon'),
 							'geodir_latitude_error_msg' => GEODIR_LATITUDE_ERROR_MSG,
 							'geodir_longgitude_error_msg' => GEODIR_LOGNGITUDE_ERROR_MSG,
+							'geodir_default_rating_star_icon' => get_option('geodir_default_rating_star_icon'),
 							
 							// end not show alert msg
 							
@@ -721,7 +723,7 @@ function so_handle_038($url, $original_url, $_context) {
     if (strstr($url, "maps.google.com/maps/api/js") !== false) {
       	$url = str_replace("&#038;", "&amp;", $url); // or $url = $original_url
     }
-
+	
     return $url;
 }
 
@@ -745,7 +747,7 @@ function geodir_after_main_form_fields(){
 				<input class="main_list_selecter" type="checkbox" <?php if($term_condition == '1'){echo 'checked="checked"';} ?> field_type="checkbox" name="geodir_accept_term_condition" id="geodir_accept_term_condition" class="geodir_textfield" value="1" style="display:inline-block"/><?php echo __( stripslashes(get_option('geodir_term_condition_content')), GEODIRECTORY_TEXTDOMAIN); ?>
 				</span>
 			</div>
-			 <span class="geodir_message_error"><?php if(isset($required_msg)){ echo $required_msg;}?></span>
+			 <span class="geodir_message_error"><?php if(isset($required_msg)){ _e($required_msg,GEODIRECTORY_TEXTDOMAIN);}?></span>
 		</div>
 	<?php
 	
@@ -1227,3 +1229,227 @@ function geodir_single_post_title($title , $post)
 	return $title ;
 }
 
+
+/* ---------- temp function to delete media post */
+
+add_action('delete_attachment', 'geodirectory_before_featured_image_delete');
+
+function geodirectory_before_featured_image_delete($attachment_id){
+	
+	global $wpdb, $plugin_prefix;
+	
+	$post_id = get_post_field( 'post_parent', $attachment_id );
+	
+	$attachment_url = wp_get_attachment_url( $attachment_id );
+	
+	if($post_id > 0 && (isset($_REQUEST['action']) && $_REQUEST['action']=='delete')){
+		
+		 $post_type = get_post_type( $post_id ) ;
+		 
+		 $all_postypes = geodir_get_posttypes();
+			
+			if(!in_array($post_type, $all_postypes) || !is_admin())
+				return false;
+			
+			$uploads = wp_upload_dir();
+			
+			$split_img_path = explode($uploads['baseurl'], $attachment_url);
+			
+			$split_img_file_path = isset($split_img_path[1]) ? $split_img_path[1] : '';
+			
+			$wpdb->query(
+				$wpdb->prepare("DELETE FROM ".GEODIR_ATTACHMENT_TABLE." WHERE post_id = %d AND file=%s ",
+					array($post_id, $split_img_file_path)
+				)
+			);
+			
+			$attachment_data = $wpdb->get_row(
+				$wpdb->prepare("SELECT ID, MIN(`menu_order`) FROM ".GEODIR_ATTACHMENT_TABLE." WHERE post_id=%d",
+					array($post_id)
+				)
+			);
+			
+			if(!empty($attachment_data)){
+				$wpdb->query("UPDATE ".GEODIR_ATTACHMENT_TABLE. " SET menu_order=1 WHERE ID=".$attachment_data->ID);
+			}
+			
+			
+			$table_name = $plugin_prefix.$post_type.'_detail';
+			
+			$wpdb->query("UPDATE ".$table_name." SET featured_image='' WHERE post_id =".$post_id);
+		
+			geodir_set_wp_featured_image($post_id);
+			
+	}
+	
+}
+
+
+
+
+add_action('wp', 'geodir_temp_set_post_attachment');
+
+function geodir_temp_set_post_attachment(){
+
+	global $wpdb, $plugin_prefix;
+	
+	$all_postypes = geodir_get_posttypes();
+	
+	foreach($all_postypes as $posttype){
+	
+		$tablename = $plugin_prefix.$posttype.'_detail';
+		
+		$get_post_data = $wpdb->get_results("SELECT post_id FROM ".$tablename);
+		
+		if(!empty($get_post_data)){
+		
+			foreach($get_post_data as $data){
+				
+				$post_id = $data->post_id;
+				
+				$attachment_data = $wpdb->get_results("SELECT * FROM ".GEODIR_ATTACHMENT_TABLE." WHERE post_id =".$post_id." AND file!=''");
+				
+				if(!empty($attachment_data)){
+					
+					foreach($attachment_data as $attach){
+						
+						$file_info = pathinfo($attach->file);
+						
+						$sub_dir = '';
+						if($file_info['dirname'] != '.' && $file_info['dirname'] != '..')
+							$sub_dir = stripslashes_deep($file_info['dirname']);
+						
+							$uploads = wp_upload_dir(trim($sub_dir, '/')); // Array of key => value pairs	
+							$uploads_baseurl = $uploads['baseurl'];
+							$uploads_path = $uploads['basedir'];
+							
+							$file_name =  $file_info['basename'];
+							
+							$img_arr['path'] = $uploads_path.$sub_dir.'/'.$file_name;
+							
+							if(!file_exists($img_arr['path'])){
+								
+								$wpdb->query("DELETE FROM ".GEODIR_ATTACHMENT_TABLE." WHERE ID=".$attach->ID);
+								
+							}
+					
+					}
+					
+					$attachment_data = $wpdb->get_row("SELECT ID, MIN(`menu_order`) FROM ".GEODIR_ATTACHMENT_TABLE." WHERE post_id=".$post_id." GROUP BY post_id");
+					
+					if(!empty($attachment_data)){
+					
+						if($attachment_data->ID)
+							$wpdb->query("UPDATE ".GEODIR_ATTACHMENT_TABLE. " SET menu_order=1 WHERE ID=".$attachment_data->ID);
+							
+					}else{
+						
+						if(has_post_thumbnail( $post_id )){
+							
+							$post_thumbnail_id = get_post_thumbnail_id( $post_id );
+							
+							wp_delete_attachment( $post_thumbnail_id );
+							
+						}
+						
+					}
+					
+					$wpdb->query("UPDATE ".$tablename." SET featured_image='' WHERE post_id =".$post_id);
+					
+					geodir_set_wp_featured_image($post_id);	
+					
+				}
+			
+			}
+		
+		}
+	
+	}	
+	
+}
+
+
+/* -------- GEODIR FUNCTION TO UPDATE geodir_default_rating_star_icon ------ */
+
+add_action('init', 'geodir_default_rating_star_icon');
+
+function geodir_default_rating_star_icon(){
+
+	if(!get_option('geodir_default_rating_star_icon')){
+		update_option('geodir_default_rating_star_icon', geodir_plugin_url().'/geodirectory-assets/images/stars.png');
+	}
+
+}
+
+
+
+/* ------- GET CURRENT USER POST LISTING -------*/
+
+function geodir_user_post_listing_count(){
+	
+	global $wpdb,$plugin_prefix, $current_user;
+	
+	$user_id = $current_user->ID;
+	
+	$all_postypes = geodir_get_posttypes();
+	
+	$all_posts = get_option('geodir_allow_posttype_frontend');
+	
+	$user_listing = array();
+	
+	if(is_array($all_posts) && !empty($all_posts)){
+		
+		foreach($all_posts as $ptype){
+			
+			$total_posts = $wpdb->get_var("SELECT count( ID )
+											FROM ".$wpdb->prefix."posts
+											WHERE post_author=".$user_id." AND post_type='".$ptype."' AND post_status = 'publish' ");
+			
+			if($total_posts > 0 )
+				$user_listing[$ptype] = $total_posts;
+			
+		}
+		
+	}
+	
+	return $user_listing;
+	
+}
+
+
+/* ------- GET CURRENT USER FAVOURITE LISTING -------*/
+
+function geodir_user_favourite_listing_count(){
+	
+	global $wpdb,$plugin_prefix, $current_user;
+	
+	$user_id = $current_user->ID;
+	
+	$all_postypes = geodir_get_posttypes();
+	
+	$all_posts = get_option('geodir_allow_posttype_frontend');
+	
+	$user_listing = array();
+	
+	$user_favorites = get_user_meta($user_id, 'gd_user_favourite_post', true);
+	
+	if(is_array($all_posts) && !empty($all_posts) && is_array($user_favorites) && !empty($user_favorites)){
+		
+		$user_favorites = "'".implode("','",$user_favorites)."'";
+		
+		foreach($all_posts as $ptype){
+		
+			$total_posts = $wpdb->get_var("SELECT count( ID )
+											FROM ".$wpdb->prefix."posts
+											WHERE post_author=".$user_id." AND post_type='".$ptype."' AND post_status = 'publish' AND ID IN (".$user_favorites.")");
+			
+			if($total_posts > 0)
+				$user_listing[$ptype] = $total_posts;
+			
+		}
+		
+	}
+	
+	return $user_listing;
+	
+}

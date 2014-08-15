@@ -23,8 +23,9 @@ function geodir_templates_scripts()
 	
 		//if( get_option('geodir_enqueue_google_api_script')==1)
 		
-		$map_lang="&language=" . geodir_get_map_default_language() ; 
-		wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?sensor=false'.$map_lang,'',NULL);
+		$map_lang="&language=" . geodir_get_map_default_language() ;
+		$map_extra = apply_filters( 'geodir_googlemap_script_extra', '' );
+		wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?sensor=false'.$map_lang.$map_extra,'',NULL);
 	/*	{	
 			wp_register_script( 'geodirectory-googlemap-script', "//maps.google.com/maps/api/js?sensor=false&language=en" );
 			wp_enqueue_script( 'geodirectory-googlemap-script' );
@@ -363,7 +364,7 @@ $default_search_for_text = SEARCH_FOR_TEXT;
                     initialise2();
                 }else{
                 
-                    Sgeocoder.geocode( { 'address': address<?php //gt_advanced_near_search();?> }, 
+                    Sgeocoder.geocode( { 'address': address<?php if($near_add = get_option('geodir_search_near_addition')){echo '+", '.$near_add.'"';} if($near_add2 = apply_filters('geodir_search_near_addition','')){echo $near_add2;}//gt_advanced_near_search();?> }, 
                     function(results, status) {
                         if (status == google.maps.GeocoderStatus.OK) {
                             updateSearchPosition(results[0].geometry.location,$form);

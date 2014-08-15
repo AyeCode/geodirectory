@@ -84,7 +84,8 @@ if (!function_exists('geodir_admin_scripts'))
 		wp_enqueue_script( 'tax-meta-clss', $plugin_path . '/js/tax-meta-clss.js', array( 'jquery' ), null, true );
 		
 		$map_lang="&language=" . geodir_get_map_default_language() ; 
-		wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?sensor=false'.$map_lang,'',NULL);
+		$map_extra = apply_filters( 'geodir_googlemap_script_extra', '' );
+		wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?sensor=false'.$map_lang.$map_extra,'',NULL);
         
 		wp_register_script( 'geodirectory-goMap-script', geodir_plugin_url().'/geodirectory-assets/js/goMap.js' ,array(),GEODIRECTORY_VERSION);
 		wp_enqueue_script( 'geodirectory-goMap-script' );
@@ -740,7 +741,7 @@ function places_custom_fields_tab($tabs){
 	{
 		 
 		 foreach($geodir_post_types as $geodir_post_type => $geodir_posttype_info):
-		 		
+		 		if($geodir_post_type=='gd_place' && get_option('geodir_disable_place_tax')){continue;}
 				$listing_slug = $geodir_posttype_info['labels']['singular_name'];
 				
 		 		$tabs[$geodir_post_type.'_fields_settings'] = array( 
@@ -762,6 +763,13 @@ function places_custom_fields_tab($tabs){
 	}
 	
 	return $tabs; 
+}
+
+
+function geodir_tools_setting_tab($tabs)
+{
+	$tabs['tools_settings'] = array('label'=> __( 'GD Tools', GEODIRECTORY_TEXTDOMAIN 		) ) ;
+	return $tabs ;
 }
 
 
@@ -1060,6 +1068,8 @@ if(!function_exists('geodir_insert_csv_post_data') && get_option('geodir_install
                         <div class="plupload-upload-uic hide-if-no-js" id="<?php echo $id; ?>plupload-upload-ui">
                         <input type="text" readonly="readonly" name="<?php echo $id; ?>" class="csv_filename" id="<?php echo $id; ?>" value="<?php echo $svalue; ?>" /><input id="<?php echo $id; ?>plupload-browse-button" type="button" value="<?php echo SELECT_UPLOAD_CSV; ?>" class="uploadcsv_button" /><br />
                        <a href="<?php echo geodir_plugin_url() . '/geodirectory-assets/place_listing.csv'?>" ><?php _e("Download sample csv", GEODIRECTORY_TEXTDOMAIN)?></a>
+                       <?php do_action('geodir_sample_csv_download_link'); ?>
+											 
                         <span class="ajaxnonceplu" id="ajaxnonceplu<?php echo wp_create_nonce($id . 'pluploadan'); ?>"></span><br /><br />
     						<div class="filelist"></div>
          
@@ -1239,35 +1249,6 @@ if (!function_exists('geodir_import_data')) {
 								if($customKeyarray[$c]=='post_longitude')
 								{ $post_longitude = addslashes($buffer[$c]); }
 								
-							
-																
-								//event recurring code
-								
-								if($customKeyarray[$c]=='event_start')
-								{ $event_start = addslashes($buffer[$c]); }
-								
-								if($customKeyarray[$c]=='event_end')
-								{ $event_end = addslashes($buffer[$c]); }
-								
-								if($customKeyarray[$c]=='event_start_time')
-								{ $event_start_time = addslashes($buffer[$c]); }
-								
-								if($customKeyarray[$c]=='event_end_time')
-								{ $event_end_time = addslashes($buffer[$c]); }
-								
-								if($buffer[5]=='gd_event'){
-									$event_shedule_info = array("Recurring"	=> '',
-										"event_day"			=> '',
-										"event_week"		=> '',
-										"event_month"		=> '',
-										"event_year"		=> '',
-										"event_start"		=> date('Y-m-d',strtotime($event_start)),
-										"event_end"			=> date('Y-m-d',strtotime($event_end)),
-										"event_start_time"	=> $event_start_time,
-										"event_end_time"	=> $event_end_time);
-							
-								}	
-								
 							}
 							
 							/* ================ before array create ============== */
@@ -1359,12 +1340,6 @@ if (!function_exists('geodir_import_data')) {
 							}
 							
 							
-							global $geodir_addon_list;
-							if(!empty($geodir_addon_list) && array_key_exists('geodir_events_manager', $geodir_addon_list) && $geodir_addon_list['geodir_events_manager'] == 'yes') {
-									if(in_array($buffer[5],geodir_get_posttypes())){
-										$gd_post_info['recurring_dates'] = serialize($event_shedule_info);			 											geodir_save_event_schedule($event_shedule_info, $last_postid);
-									}
-							}
 							$gd_post_info['post_location_id'] = $post_location_id;
 							
 							$post_type = get_post_type( $last_postid );

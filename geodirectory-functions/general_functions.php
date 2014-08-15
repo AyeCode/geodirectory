@@ -781,7 +781,8 @@ function fetch_remote_file( $url ) {
 }
 
 function geodir_max_upload_size() {
-	return '2mb'; 
+	//return '2mb'; 
+	return apply_filters('geodir_default_image_upload_size_limit', '2mb');
 }
 
 /* ------------------------------------------------------------------*/

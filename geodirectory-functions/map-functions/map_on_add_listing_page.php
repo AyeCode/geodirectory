@@ -3,7 +3,9 @@ global $is_default, $mapzoom;
 $is_map_restrict = apply_filters('geodir_add_listing_map_restrict' ,true );
 $default_location = geodir_get_default_location();
 $defaultcity = isset($default_location->city) ? $default_location->city : '';
+$lat_lng_blank = false;
 if($lat == '' && $lng == ''){
+$lat_lng_blank = true;
 $city = $defaultcity;
 $region =isset($default_location->region) ? $default_location->region : '';
 $country =isset($default_location->country) ? $default_location->country : '';
@@ -20,6 +22,7 @@ if(is_admin() && isset($_REQUEST['tab']) && $mapzoom == ''){
 ?>
 <script type="text/javascript">
 /* <![CDATA[ */
+<?php do_action('geodir_add_listing_js_start', $prefix);?>
 user_address = false;
 
 jQuery('#<?php echo $prefix.'address';?>').keypress(function() {
@@ -30,15 +33,23 @@ baseMarker = '';
 geocoder = '';
 var <?php echo $prefix;?>CITY_MAP_CENTER_LAT = <?php echo ($lat) ? $lat :  '39.952484'; ?>;	
 var <?php echo $prefix;?>CITY_MAP_CENTER_LNG = <?php echo ($lng) ? $lng :  '-75.163786'; ?>;
+<?php if($lat_lng_blank){$lat='';$lng='';}?>
 var <?php echo $prefix;?>CITY_MAP_ZOOMING_FACT = <?php echo ($mapzoom) ? $mapzoom : 12;?>;
 var minZoomLevel = <?php echo ($is_map_restrict) ? 5 : 0; ?>;
 var oldstr_address;
 var oldstr_zip;
 var strictBounds;
-function geocodePosition() {
-geocoder.geocode({
+function geocodePosition(latLon,address) {
+if(address){doGeoCode = address;}else{doGeoCode={
 latLng: baseMarker.getPosition()
-}, function(responses) {
+};}
+	
+	
+geocoder.geocode(doGeoCode, function(responses) {geocodeResponse(responses)});
+}
+
+function geocodeResponse(responses){
+
 
 
 if (responses && responses.length > 0) {
@@ -47,6 +58,7 @@ var getZip = '';
 var getCity = '';
 var getState = '';
 var getCountry = '';
+getCountryISO = '';
 //alert(JSON.stringify(responses[0].address_components));
 console.log( responses );
 street_number = '';
@@ -55,10 +67,12 @@ route = '';
 administrative_area_level_1 = '';
 administrative_area_level_2 = '';
 administrative_area_level_3 = '';
+sublocality_level_1 = '';
 postal_town = '';
 locality  = '';
 country = '';
 postal_code = '';
+postal_code_prefix = '';
 rr = '';
 has_address_been_set = false ;
 for (var i = 0; i < responses[0].address_components.length; i++)
@@ -70,15 +84,19 @@ if (addr.types[0] == 'premise'){premise = addr;}
 if (addr.types[0] == 'administrative_area_level_1'){administrative_area_level_1 = addr;}
 if (addr.types[0] == 'administrative_area_level_2'){administrative_area_level_2 = addr;}
 if (addr.types[0] == 'administrative_area_level_3'){administrative_area_level_3 = addr;}
+if (addr.types[0] == 'sublocality_level_1'){sublocality_level_1 = addr;}
 if (addr.types[0] == 'postal_town'){postal_town = addr;}
 if (addr.types[0] == 'locality'){locality = addr;}
 if (addr.types[0] == 'country'){country = addr;}
 if (addr.types[0] == 'postal_code'){postal_code = addr;}
+if (addr.types[0] == 'postal_code_prefix'){postal_code_prefix = addr;}
+
+if(postal_code==''){postal_code=postal_code_prefix;}
 if(responses[0].formatted_address!='')
 {
 	address_array = responses[0].formatted_address.split(",", 2) ;
 	if(address_array.length > 1 )
-	{
+	{//alert(1);
 	
 	
 		if(!(typeof(street_number.long_name) == 'undefined' || street_number.long_name == null) && street_number.long_name.toLowerCase()==  address_array[0].toLowerCase().trim())
@@ -113,47 +131,7 @@ if(responses[0].formatted_address!='')
 			
 	}
 }
-//alert(responses[0].formatted_address)Str.split("-", 2)
-/*
-if (addr.types[0] == 'street_number')
-{
-getAddress += addr.long_name+', ';//street_number
-}
-if (addr.types[0] == 'route')
-{
-getAddress += addr.long_name;//route
-}
-if (addr.types[0] == 'postal_code')
-{
-getZip = addr.long_name;//postal_code
-}
-if(addr.types[0] == 'administrative_area_level_2')
-{
-if(getCity == ''){
-getCity = addr.long_name;//city
-}
-getState = addr.long_name;//set the region incase there is not one later on.
-}
-if(addr.types[0] == 'postal_town')
-{
-getCity = addr.long_name;//city
-}
-if(getCity == '')
-{
-if(addr.types[0] == 'locality')
-{
-getCity = addr.long_name;//city
-}
-}
-if(addr.types[0] == 'administrative_area_level_1')
-{
-getState = addr.long_name;//city
-}
-if(addr.types[0] == 'country')
-{
-getCountry = addr.long_name;//city
-}
-*/
+
 }
 
 if(getAddress == '')
@@ -166,20 +144,33 @@ if(getAddress == '')
 
 getZip = postal_code.long_name;//postal_code
 //getCity
+//if(locality.long_name){getCity = locality.long_name;}
+//else if(postal_town.long_name){getCity = postal_town.long_name;}
 if(postal_town.long_name){getCity = postal_town.long_name;}
 else if(locality.long_name){getCity = locality.long_name;}
+else if(sublocality_level_1.long_name){getCity = sublocality_level_1.long_name;}
 else if(administrative_area_level_3.long_name){getCity = administrative_area_level_3.long_name;}
 //getCountry 
 if(country.long_name){getCountry = country.long_name;}
+if(country.short_name){getCountryISO = country.short_name;}
+
 //getState
 if(country.short_name){rr = country.short_name;}
-if(rr=="US" || rr=="CA" || rr=="IN" || rr=="DE" || rr=="NL"){
-if(administrative_area_level_1.long_name){getState = administrative_area_level_1.long_name;}
-else if(administrative_area_level_2.long_name){getState = administrative_area_level_2.long_name;}
+
+//$country_arr = ["US", "CA", "IN","DE","NL"];
+$country_arr = ["GB"];
+//alert(rr);
+if(jQuery.inArray(rr, $country_arr)!==-1){
+	if(administrative_area_level_2.long_name){getState = administrative_area_level_2.long_name;}
+	else if(administrative_area_level_1.long_name){getState = administrative_area_level_1.long_name;}
 }else{
-if(administrative_area_level_2.long_name){getState = administrative_area_level_2.long_name;}
-else if(administrative_area_level_1.long_name){getState = administrative_area_level_1.long_name;}
+	if(administrative_area_level_1.long_name){getState = administrative_area_level_1.long_name;}
+	else if(administrative_area_level_2.long_name){getState = administrative_area_level_2.long_name;}
 }
+
+/*if(administrative_area_level_1.long_name){getState = administrative_area_level_1.long_name;}
+else if(administrative_area_level_2.long_name){getState = administrative_area_level_2.long_name;}*/
+
 //getCountry 
 if(country.long_name){getCountry = country.long_name;}
 //getZip 
@@ -200,7 +191,8 @@ updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry);
 } else {
 updateMarkerAddress('<?php _e('Cannot determine address at this location.',GEODIRECTORY_TEXTDOMAIN);?>');
 }
-});
+	
+	
 }
 function centerMap() { 
 jQuery("#<?php echo $prefix.'map';?>").goMap();
@@ -247,7 +239,10 @@ jQuery("#<?php echo $prefix.'country';?>").append('<option value="'+getCountry+'
 }
 jQuery('#<?php echo $prefix.'country';?> option[value="'+getCountry+'"]').attr("selected",true);
 jQuery("#<?php echo $prefix.'country';?>").trigger("chosen:updated");
-}	
+}
+if (jQuery('#<?php echo $prefix;?>country_ISO2').length){
+ jQuery('#<?php echo $prefix;?>country_ISO2').val(jQuery('#<?php echo $prefix;?>country').find(':selected').data('country_code'));
+}
 }
 if (getState){
 if(jQuery('input[id="<?php echo $prefix.'region';?>"]').attr('id')){
@@ -322,7 +317,8 @@ baseMarker.setPosition(results[0].geometry.location);
 jQuery.goMap.map.setCenter(results[0].geometry.location);
 updateMarkerPosition(baseMarker.getPosition());
 //if(set_on_map && is_restrict){
-geocodePosition(baseMarker.getPosition());
+//geocodePosition({ 'address': address,'country':   ISO2});
+geocodePosition(baseMarker.getPosition(),{ 'address': address,'country':   ISO2});
 //}
 } else {
 alert("<?php _e('Geocode was not successful for the following reason:',GEODIRECTORY_TEXTDOMAIN);?> " + status);

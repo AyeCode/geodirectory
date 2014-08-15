@@ -429,6 +429,10 @@ function geodir_admin_option_form($tab_name)
 				geodir_custom_post_type_form();
 				
 			break;
+		case 'tools_settings' :
+			geodir_diagnostic_tools_setting_page();
+			break;
+			
 		
 	}// end of switch
 }
@@ -484,6 +488,35 @@ function geodir_custom_post_type_form()
 					</div>  <!--general-form-builder-frame -->
 				</div> <!--container_general -->
 				
+<?php
+}
+
+function geodir_diagnostic_tools_setting_page()
+{
+?>
+	<div class="inner_content_tab_main">
+            <div class="gd-content-heading" >
+           
+            
+                <h3><?php _e('GD Diagnostic Tool',GEODIRECTORY_TEXTDOMAIN);?></h3>
+                
+                 <table class="form-table">
+                    <tbody>
+                        <tr valign="top" >
+                           
+                            <td class="forminp"><?php _e('Geodirectory default pages diagnosis',GEODIRECTORY_TEXTDOMAIN);?>
+                            <input type="button" value="<?php _e('Run',GEODIRECTORY_TEXTDOMAIN);?>" class="geodir_diagnosis_button" data-diagnose="default_pages" />
+                            <div class="geodir_diagnostic_result"></div>        
+                            </td>
+                            
+                        </tr>
+                        <?php do_action('geodir_diagnostic_tool');?>
+                        
+                    </tbody>
+                </table>
+                
+          	</div>
+	</div>
 <?php
 }
 ?>

@@ -67,6 +67,26 @@ global $geodir_settings;
 			'radiogroup' => 'end'
 		),
 		
+		/*array(  
+			'name' => __( 'Disable standard place taxonomie?', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> __( 'Yes', GEODIRECTORY_TEXTDOMAIN ),
+			'id' 		=> 'geodir_disable_place_tax',
+			'std' 		=> '0',
+			'type' 		=> 'radio',
+			'value'		=> '1',
+			'radiogroup' => 'start'
+		),
+		array(  
+			'name' => __( 'Disable standard place taxonomie?', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> __( 'No', GEODIRECTORY_TEXTDOMAIN ),
+			'id' 		=> 'geodir_disable_place_tax',
+			'std' 		=> '1',
+			'type' 		=> 'radio',
+			'value'		=> '0',
+			'radiogroup' => 'end'
+		),*/
+		
+			
 		
 		array( 'type' => 'sectionend', 'id' => 'general_options'), 
 		
@@ -195,6 +215,15 @@ global $geodir_settings;
 			'type' 		=> 'radio',
 			'value'		=> 'feet',
 			'radiogroup'=> 'end'
+		),
+		
+		array(  
+			'name' => __( 'Add location specific text to (Near) search for Google', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> __( 'This is usefull if your directory is limted to one location such as: New York or Australia (this setting should be blank if using default country, regions etc with multilocation addon as it will automatically add them)', GEODIRECTORY_TEXTDOMAIN ),
+			'id' 		=> 'geodir_search_near_addition',
+			'type' 		=> 'text',
+			'css' 		=> 'min-width:300px;',
+			'std' 		=> '' 
 		),
 		
 		

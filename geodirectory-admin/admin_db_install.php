@@ -455,6 +455,11 @@ if (!function_exists('geodir_create_tables')) {
 			`comment_images` TEXT NULL DEFAULT NULL,
 			`wasthis_review` INT NOT NULL,
 			`status` VARCHAR( 100 ) NOT NULL,
+			`post_status` INT(11) DEFAULT NULL,
+			`post_date` DATETIME NOT NULL,
+			`post_city` varchar(30) NULL DEFAULT NULL,
+			`post_region` varchar(30) NULL DEFAULT NULL,
+			`post_country` varchar(30) NULL DEFAULT NULL,
 			PRIMARY KEY (id)) $collate  " ;
 			$review_table = apply_filters('geodir_before_review_table_create' , $review_table) ;		
 			$wpdb->query($review_table);
@@ -473,7 +478,7 @@ if (!function_exists('geodir_create_tables')) {
 			$wpdb->query("ALTER TABLE $wpdb->terms ADD `term_icon` TEXT NULL DEFAULT NULL");
 		}
 		
-		require_once(geodir_plugin_path() . '/upgrade.php');
+		//require_once(geodir_plugin_path() . '/upgrade.php');
 			
 	
 	}

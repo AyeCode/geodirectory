@@ -290,7 +290,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 			'id' 		=> 'geodir_term_condition_content',
 			'type' 		=> 'textarea',
 			'css' 		=> 'width:500px; height: 150px;',
-			'std' 		=> __('Please accept <a href="" target"_blank">terms and conditions</a>', GEODIRECTORY_TEXTDOMAIN )
+			'std' 		=> __('Please accept <a href="" target="_blank">terms and conditions</a>', GEODIRECTORY_TEXTDOMAIN )
 		),
 		
 	array(  
@@ -481,6 +481,22 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 	
 	array( 'type' => 'sectionend', 'id' => 'geodir_detail_page_tab_settings'),
 	/* ---------- DETAIL PAGE TAB SETTING END*/
+	
+	/* START DEFAULT STAR IMAGE*/
+	array( 'name' => __( 'Default Rating Settings', GEODIRECTORY_TEXTDOMAIN ), 'type' => 'sectionstart', 'desc' => '', 'id' => 'geodir_rating_settings ' ),
+		
+	array(  
+			'name' => __( 'Upload default rating star icon', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> '',
+			'id' 		=> 'geodir_default_rating_star_icon',
+			'type' 		=> 'file',
+			'std' 		=> '0',
+			'value' =>  geodir_plugin_url().'/geodirectory-assets/images/stars.png'// Default value to show home top section
+		),
+	
+	array( 'type' => 'sectionend', 'id' => 'geodir_detail_page_tab_settings'),
+	
+	/* END DEFAULT STAR IMAGE*/
 	
 	/* Detail related post settings start */
 		
@@ -813,7 +829,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 	
 	array(  
 		'name' => __( 'Show favorite link in user dashboard', GEODIRECTORY_TEXTDOMAIN ),
-		'desc' 		=> '',
+		'desc' 		=> __( 'Option will not appear if user does not have a favorite of that post type', GEODIRECTORY_TEXTDOMAIN ),
 		'tip' 		=> '',
 		'id' 		=> 'geodir_favorite_link_user_dashboard',
 		'css' 		=> 'min-width:300px;',
@@ -826,7 +842,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 	
 	array(  
 		'name' => __( 'Show listing link in user dashboard', GEODIRECTORY_TEXTDOMAIN ),
-		'desc' 		=> '',
+		'desc' 		=> __( 'Option will not appear if user does not have his/her own listing of that post type', GEODIRECTORY_TEXTDOMAIN ),
 		'tip' 		=> '',
 		'id' 		=> 'geodir_listing_link_user_dashboard',
 		'css' 		=> 'min-width:300px;',

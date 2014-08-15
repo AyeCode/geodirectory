@@ -51,8 +51,15 @@ add_action('geodir_before_admin_panel', 'geodir_before_admin_panel') ; // this f
 //add_action('geodir_before_admin_panel', 'geodir_autoinstall_admin_header');
 
 /* Admin scripts loader */
-add_action( 'admin_enqueue_scripts', 'geodir_admin_scripts' );
-add_action( 'admin_enqueue_scripts', 'geodir_admin_styles' );
+
+
+if((isset($_REQUEST['page']) && $_REQUEST['page'] =='geodirectory' ) || ($pagenow == 'post.php' || $pagenow == 'post-new.php' || $pagenow == 'edit.php' || $pagenow == 'edit-tags.php' || $pagenow == 'edit-comments.php' || $pagenow == 'comment.php') )
+{
+	add_action( 'admin_enqueue_scripts', 'geodir_admin_scripts' );
+	add_action( 'admin_enqueue_scripts', 'geodir_admin_styles' );
+	
+}
+
 
 
 /**
@@ -78,6 +85,7 @@ function create_default_admin_main_nav()
 {
 	add_filter('geodir_settings_tabs_array' , 'geodir_default_admin_main_tabs' ,1 ) ;
 	add_filter('geodir_settings_tabs_array','places_custom_fields_tab',2); 
+	//add_filter('geodir_settings_tabs_array','geodir_tools_setting_tab',99); 
 	add_filter('geodir_settings_tabs_array','geodir_extend_geodirectory_setting_tab',100); 
 	//add_filter('geodir_settings_tabs_array', 'geodir_hide_set_location_default',3);
 	
@@ -520,6 +528,166 @@ function geodir_remove_unnecessary_fields(){
 
 /* ----------- END MANAGE CUSTOM FIELDS ---------------- */
 
+/* Ajax Handler Start */
+add_action('wp_ajax_geodir_admin_ajax', "geodir_admin_ajax_handler");
+
+function geodir_admin_ajax_handler()
+{
+	if(isset($_REQUEST['geodir_admin_ajax_action']) && $_REQUEST['geodir_admin_ajax_action']!='')
+	{
+		$geodir_admin_ajax_action = $_REQUEST['geodir_admin_ajax_action'] ; 
+		switch ($geodir_admin_ajax_action)
+		{
+			case 'diagnosis' :
+				if(isset($_REQUEST['diagnose_this']) && $_REQUEST['diagnose_this']!='')
+					$diagnose_this = $_REQUEST['diagnose_this'] ;
+					call_user_func('geodir_diagnose_' . $diagnose_this) ;
+					exit();
+				break;
+		}
+	}
+	exit();
+}
+
+function geodir_diagnose_default_pages()
+{
+	global $wpdb;
+	$is_error_during_diagnose = false ;
+	$output_str = '' ; 
+	
+	//////////////////////////////////
+	/* Diagnose Listing Page Starts */
+	//////////////////////////////////
+	$option_value = get_option('geodir_listing_page'); 
+	$page_found =	$wpdb->get_var(
+									$wpdb->prepare(
+										"SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s LIMIT 1;",
+										array('listings')
+									)
+								);
+	
+	if (!empty($option_value) && !empty($page_found ) && $option_value==$page_found) 
+		$output_str .= "<li>Listing page exists with proper setting.</li>" ;
+	else
+	{
+		$is_error_during_diagnose = true ;
+		$output_str .= "<li><strong>Listing page is missing.</strong></li>" ;
+	}
+	
+	////////////////////////////////
+	/* Diagnose Listing Page Ends */
+	////////////////////////////////
+	
+	//////////////////////////////////
+	/* Diagnose Add Listing Page Starts */
+	//////////////////////////////////
+	$option_value = get_option('geodir_add_listing_page'); 
+	$page_found =	$wpdb->get_var(
+									$wpdb->prepare(
+										"SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s LIMIT 1;",
+										array('add-listing')
+									)
+								);
+	
+	if (!empty($option_value) && !empty($page_found) && $option_value==$page_found) 
+		$output_str .= "<li>Add Listing page exists with proper setting.</li>" ;
+	else
+	{
+		$is_error_during_diagnose = true ;
+		$output_str .= "<li><strong>Add Listing page is missing.</strong></li>" ;
+	}
+	
+	////////////////////////////////
+	/* Diagnose Add Listing Page Ends */
+	////////////////////////////////
+	
+	
+	//////////////////////////////////
+	/* Diagnose Listing Preview Page Starts */
+	//////////////////////////////////
+	$option_value = get_option('geodir_preview_page'); 
+	$page_found =	$wpdb->get_var(
+									$wpdb->prepare(
+										"SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s LIMIT 1;",
+										array('listing-preview')
+									)
+								);
+	
+	if (!empty($option_value) && !empty($page_found) && $option_value==$page_found) 
+		$output_str .= "<li>Listing Preview page exists with proper setting.</li>" ;
+	else
+	{
+		$is_error_during_diagnose = true ;
+		$output_str .= "<li><strong>Listing Preview page is missing.</strong></li>" ;
+	}
+	
+	////////////////////////////////
+	/* Diagnose Listing Preview Page Ends */
+	////////////////////////////////
+	
+	//////////////////////////////////
+	/* Diagnose Listing Success Page Starts */
+	//////////////////////////////////
+	$option_value = get_option('geodir_success_page'); 
+	$page_found =	$wpdb->get_var(
+									$wpdb->prepare(
+										"SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s LIMIT 1;",
+										array('listing-success')
+									)
+								);
+	
+	if (!empty($option_value) && !empty($page_found) && $option_value==$page_found) 
+		$output_str .= "<li>Listing Success page exists with proper setting.</li>" ;
+	else
+	{
+		$is_error_during_diagnose = true ;
+		$output_str .= "<li><strong>Listing Success page is missing.</strong></li>" ;
+	}
+	
+	////////////////////////////////
+	/* Diagnose Listing Sucess Page Ends */
+	////////////////////////////////
+	
+	//////////////////////////////////
+	/* Diagnose Location Page Starts */
+	//////////////////////////////////
+	$option_value = get_option('geodir_location_page'); 
+	$page_found =	$wpdb->get_var(
+									$wpdb->prepare(
+										"SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s LIMIT 1;",
+										array('location')
+									)
+								);
+	
+	if (!empty($option_value) && !empty($page_found) && $option_value==$page_found) 
+		$output_str .= "<li>Location page exists with proper setting.</li>" ;
+	else
+	{
+		$is_error_during_diagnose = true ;
+		$output_str .= "<li><strong>Location page is missing.</strong></li>" ;
+	}
+	
+	////////////////////////////////
+	/* Diagnose Location Page Ends */
+	////////////////////////////////
+	
+	if($is_error_during_diagnose)
+	{
+		$info_div_class =  "geodir_problem_info" ;
+		$fix_button_txt = "<input type='button' value='".__('Fix' , GEODIRECTORY_TEXTDOMAIN)."' class='geodir_fix_diagnostic_issue' data-diagnostic-issue='default_pages' />";
+	}
+	else
+	{
+		$info_div_class =  "geodir_noproblem_info" ;
+		$fix_button_txt = '';
+	}
+	echo "<ul class='$info_div_class'>" ;
+	echo $output_str ;
+	echo  $fix_button_txt;
+	echo "</ul>" ;
+	
+}
+/* Ajax Handler Ends*/
 
 
 

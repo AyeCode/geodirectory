@@ -59,7 +59,7 @@ define('TWITTER_TEXT',__('Twitter',GEODIRECTORY_TEXTDOMAIN));
 define('FACEBOOK_TEXT',__('Facebook',GEODIRECTORY_TEXTDOMAIN));
 
 define('PLACE_CATEGORY_TEXT',__('Category',GEODIRECTORY_TEXTDOMAIN));
-define('TAGKW_TEXT',__('Tag Keyword\'s',GEODIRECTORY_TEXTDOMAIN));
+define('TAGKW_TEXT',__('Tag Keywords',GEODIRECTORY_TEXTDOMAIN));
 
 define('PRO_PHOTO_TEXT',__('Add Images : <small>(You can upload more than one images to create image gallery on detail page)</small>',GEODIRECTORY_TEXTDOMAIN));
 define('PHOTOES_BUTTON',__('Select Images',GEODIRECTORY_TEXTDOMAIN));
@@ -105,7 +105,7 @@ define('UNFAVOURITE_TEXT',__('Unfavorite',GEODIRECTORY_TEXTDOMAIN));
 define('MY_FAVOURITE_TEXT',__('My Favorites',GEODIRECTORY_TEXTDOMAIN));
 define('ADD_FAVOURITE_TEXT',__('Add to Favorites',GEODIRECTORY_TEXTDOMAIN));
 define('REMOVE_FAVOURITE_TEXT',__('Remove from Favorites',GEODIRECTORY_TEXTDOMAIN));
-define('FAVOURITE_NOT_AVAIL_MSG',__('You have not added any favourites yet.',GEODIRECTORY_TEXTDOMAIN));
+define('FAVOURITE_NOT_AVAIL_MSG',__('You have not added any favorites yet.',GEODIRECTORY_TEXTDOMAIN));
 
 
 /* ---- Messages ---- */
@@ -115,8 +115,8 @@ define('EMAIL_TEXT_MSG',__('Enter valid Email otherwise you will face an error.'
 define('GET_MAP_MSG',__('Click on "Set Address on Map" and then you can also drag pinpoint to locate the correct address',GEODIRECTORY_TEXTDOMAIN));
 define('GET_LATITUDE_MSG',__('Please enter latitude for google map perfection. eg. : <b>39.955823048131286</b>',GEODIRECTORY_TEXTDOMAIN));
 define('GET_LOGNGITUDE_MSG',__('Please enter longitude for google map perfection. eg. : <b>-75.14408111572266</b>',GEODIRECTORY_TEXTDOMAIN));
-define('GEODIR_LATITUDE_ERROR_MSG',__('A numeric value is required.',GEODIRECTORY_TEXTDOMAIN));
-define('GEODIR_LOGNGITUDE_ERROR_MSG',__('A numeric value is required.',GEODIRECTORY_TEXTDOMAIN));
+define('GEODIR_LATITUDE_ERROR_MSG',__('A numeric value is required. Please make sure you have either draged the marker or clicked the button: Set Address On Map',GEODIRECTORY_TEXTDOMAIN));
+define('GEODIR_LOGNGITUDE_ERROR_MSG',__('A numeric value is required. Please make sure you have either draged the marker or clicked the button: Set Address On Map',GEODIRECTORY_TEXTDOMAIN));
 define('CONTACT_MSG',__('You can enter phone number,cell phone number etc.',GEODIRECTORY_TEXTDOMAIN));
 define('WEBSITE_MSG',__('Enter website URL. eg. : <b>http://myplace.com</b>',GEODIRECTORY_TEXTDOMAIN));
 define('TWITTER_MSG',__('Enter twitter URL. eg. : <b>http://twitter.com/myplace</b>',GEODIRECTORY_TEXTDOMAIN));

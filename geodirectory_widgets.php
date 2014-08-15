@@ -224,7 +224,6 @@ function register_geodir_widgets(){
 				
 				$geodir_allow_posttype_frontend = get_option('geodir_allow_posttype_frontend');
 				
-				
 				if(!empty($show_add_listing_post_types_main_nav)){
 					
 					$addlisting_links = '';
@@ -261,13 +260,15 @@ function register_geodir_widgets(){
 				
 				$show_favorite_link_user_dashboard = get_option('geodir_favorite_link_user_dashboard');
 				
-				if(!empty($show_favorite_link_user_dashboard)){
+				$user_favourite = geodir_user_favourite_listing_count();
+				
+				if(!empty($show_favorite_link_user_dashboard) && !empty($user_favourite)){
 					
 					$favourite_links = '';
 					
 					foreach($post_types as $key => $postobj){
 						
-						if(in_array($key, $show_favorite_link_user_dashboard)){
+						if(in_array($key, $show_favorite_link_user_dashboard) && array_key_exists($key,$user_favourite)){
 							
 							$name = $postobj->labels->name;
 							$post_type_link = geodir_getlink($author_link,array('stype'=>$key,'list'=>'favourite'),false);
@@ -295,12 +296,14 @@ function register_geodir_widgets(){
 				
 				$show_listing_link_user_dashboard = get_option('geodir_listing_link_user_dashboard');
 				
-				if(!empty($show_listing_link_user_dashboard)){
+				$user_listing = geodir_user_post_listing_count();
+				
+				if(!empty($show_listing_link_user_dashboard) && !empty($user_listing)){
 					
 					$listing_links = '';
 					foreach($post_types as $key => $postobj){
 						
-						if(in_array($key, $show_listing_link_user_dashboard)){
+						if(in_array($key, $show_listing_link_user_dashboard) && array_key_exists($key,$user_listing)){
 							
 							$name = $postobj->labels->name;
 							$listing_link = geodir_getlink($author_link,array('stype'=>$key),false);

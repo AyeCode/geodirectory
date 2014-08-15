@@ -268,6 +268,7 @@ function geodir_get_current_posttype(){
 	
 	
 	$all_postypes = geodir_get_posttypes();
+	$all_postypes = stripslashes_deep($all_postypes);
 	
 	if(!in_array($geodir_post_type, $all_postypes))
 		$geodir_post_type = '';
@@ -279,6 +280,7 @@ function geodir_get_current_posttype(){
 function geodir_get_posttypes($output = 'names'){
 	$post_types = array();
 	$post_types = get_option('geodir_post_types');
+	$post_types = stripslashes_deep($post_types);
 	if(!empty($post_types)){	
 		switch($output):
 			case 'object':
@@ -307,6 +309,7 @@ function geodir_get_posttypes($output = 'names'){
 function geodir_get_posttype_info($post_type = ''){
 	$post_types = array();
 	$post_types = get_option('geodir_post_types');
+	$post_types = stripslashes_deep($post_types);
 	if(!empty($post_types) && $post_type != ''){
 		return $post_types[$post_type];
 	}else
@@ -1183,7 +1186,7 @@ function geodir_term_link($termlink, $term, $taxonomy)
 		
 		if($include_location ){
 		
-			$request_term = geodir_get_current_location_terms('session') ;
+			$request_term = geodir_get_current_location_terms('query_vars') ;
 			
 			if(!empty($request_term)){
 				
@@ -1217,7 +1220,7 @@ function geodir_posttype_link($link, $post_type){
 	if(in_array($post_type, geodir_get_posttypes()) ){
 
 		if(get_option('geodir_add_location_url') && isset($_SESSION['gd_multi_location']) && $_SESSION['gd_multi_location']==1){
-			$location_terms = geodir_get_current_location_terms('session');
+			$location_terms = geodir_get_current_location_terms('query_vars');
 			if(!empty($location_terms)){
 		
 				if ( get_option('permalink_structure') != '' ){

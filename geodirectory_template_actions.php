@@ -353,11 +353,27 @@ function geodir_action_details_taxonomies(){
 	global $preview,$post;?>
 <p class="geodir_post_taxomomies clearfix">  
 <?php
-if($preview){
-$taxonomies = array();
-$post_type = $post->listing_type;
 
-                    if(!empty($post->post_tags)){
+$taxonomies = array();
+//print_r($post) ;
+
+if($preview)
+{
+	$post_type = $post->listing_type;
+	$post_taxonomy  = 	$post_type.'category' ;
+	$post->$post_taxonomy = $post->post_category[$post_taxonomy ] ;
+}
+else
+{
+	$post_type = $post->post_type;
+	$post_taxonomy  = 	$post_type.'category' ;
+}
+//{	
+$post_type_info = get_post_type_object( $post_type );
+$listing_label = $post_type_info->labels->singular_name;
+
+                    if(!empty($post->post_tags))
+					{
                        
                         if(taxonomy_exists($post_type.'_tags')):
                             $links = array();
@@ -382,39 +398,34 @@ $post_type = $post->listing_type;
                                 }
                             }
                         	if(!isset($listing_label)){$listing_label='';}
-                            $taxonomies[$post_type.'_tags'] = wp_sprintf('%s: %l.', ucwords($listing_label.' Tags'), $links, (object)$terms);
+                            $taxonomies[$post_type.'_tags'] = wp_sprintf('%s: %l', ucwords($listing_label.' '. __('Tags' , GEODIRECTORY_TEXTDOMAIN) ), $links, (object)$terms);
                         endif;	
                         
                     }
                     
-					if(!empty($post->post_category)){
+					if(!empty($post->$post_taxonomy))
+					{
 					
 						$links = array();
                         $terms = array();
-                        
-                        foreach($post->post_category as $post_taxonomy => $post_term){
-														
-														if($post_term != '' && !is_array($post_term))
-															$post_term = explode(',', trim($post_term,','));
-														
-                            $post_term = array_unique($post_term);
-							
-							if(!empty($post_term)){
-								foreach($post_term as $post_term){
-									$post_term = trim($post_term);
-									
-									if($post_term != ''):	
-										$term = get_term_by( 'id', $post_term, $post_taxonomy); 
-									  
-										$links[] = "<a href='".esc_attr( get_term_link($term,$post_taxonomy) ) . "'>$term->name</a>";
-										$terms[] = $term;
-									endif;
-								}
+						$post_term = explode(",",trim($post->$post_taxonomy,","));
+						
+						$post_term = array_unique($post_term);
+						if(!empty($post_term)){
+							foreach($post_term as $post_term){
+								$post_term = trim($post_term);
+								
+								if($post_term != ''):	
+									$term = get_term_by( 'id', $post_term, $post_taxonomy); 
+								  
+									$links[] = "<a href='".esc_attr( get_term_link($term,$post_taxonomy) ) . "'>$term->name</a>";
+									$terms[] = $term;
+								endif;
 							}
-							break;
 						}
+						
 						if(!isset($listing_label)){$listing_label='';}
-                        $taxonomies[$post_taxonomy] = wp_sprintf('%s: %l.', ucwords($listing_label.' Category'), $links, (object)$terms);
+                        $taxonomies[$post_taxonomy] = wp_sprintf('%s: %l', ucwords($listing_label.' '. __('Category' , GEODIRECTORY_TEXTDOMAIN)), $links, (object)$terms);
                         
                     }
                     
@@ -423,21 +434,33 @@ $post_type = $post->listing_type;
 										
 										if(isset($taxonomies[$post_type.'_tags']))		
                     echo '<span class="geodir-tags">' . $taxonomies[$post_type.'_tags'] . '</span>';	
-	}
+//}
+	/*
 else{
-the_taxonomies(array('before'=>'<span class="geodir-tags">','sep'=>'</span><span class="geodir-category">','after'=>'</span>'));}
+
+the_taxonomies(array('before'=>'<span class="geodir-tags">','sep'=>'</span><span class="geodir-category">','after'=>'</span>'));
+}*/
 ?>
 </p><?php 
 }
 
 add_action( 'geodir_details_micordata', 'geodir_action_details_micordata',10);
 function geodir_action_details_micordata(){global $post,$preview;
-if(!$preview){?>
-<span style="display:none;" class="url"><?php echo $post->guid;?></span>
+if(!$preview){
+$c_url = geodir_curPageURL();
+$c_url = strtok($c_url, "#");
+$c_url = strtok($c_url, "?");
+	?>
+<span style="display:none;" class="url"><?php echo $c_url;?></span>
 <span class="updated" style="display:none;" ><?php the_modified_date('c');?></span>
-<span class="vcard author" style="display:none;"><span class="fn"><?php echo get_the_author(); ?></span></span>
+<span class="vcard author" style="display:none;">
+	<span class="fn"><?php echo get_the_author(); ?></span>
+    <span class="org"><?php the_title();?></span>
+    <span class="role"><?php _e('Admin',GEODIRECTORY_TEXTDOMAIN)?></span>
+</span>
 <meta itemprop="name" content="<?php the_title();?>" />
-<meta itemprop="url" content="<?php echo $post->guid;?>" />
+
+<meta itemprop="url" content="<?php echo $c_url;?>" />
 <?php if($post->geodir_contact){echo '<meta itemprop="telephone" content="'.$post->geodir_contact.'" />'; }
 }}
 
@@ -507,7 +530,7 @@ $post_type_info = get_post_type_object( $gd_post_type );
 
 $add_string_in_title = __('All',GEODIRECTORY_TEXTDOMAIN).' ';
 if(isset($_REQUEST['list']) && $_REQUEST['list'] == 'favourite'){	
-	$add_string_in_title = __('My Favourite',GEODIRECTORY_TEXTDOMAIN).' ';
+	$add_string_in_title = __('My Favorite',GEODIRECTORY_TEXTDOMAIN).' ';
 }
 
 $list_title = $add_string_in_title.$post_type_info->labels->name;
@@ -714,7 +737,8 @@ function geodir_action_add_listing_page_title(){
 if(isset($_REQUEST['listing_type']) &&  $_REQUEST['listing_type']!='')
 	$listing_type = $_REQUEST['listing_type'];
 $class = apply_filters( 'geodir_page_title_class', 'entry-title fn' );
-			echo '<h1 class="'.$class.'">';
+$class_header = apply_filters( 'geodir_page_title_header_class', 'entry-header' );
+echo '<header class="'.$class_header.'"><h1 class="'.$class.'">';
             
             if(isset($_REQUEST['pid']) && $_REQUEST['pid']!= ''){
                 $post_type_info = geodir_get_posttype_info(get_post_type( $_REQUEST['pid'] ));	
@@ -723,7 +747,7 @@ $class = apply_filters( 'geodir_page_title_class', 'entry-title fn' );
                 $post_type_info = geodir_get_posttype_info($listing_type);	
 				 echo apply_filters('geodir_add_listing_page_title_text',( ucwords(__('Add',GEODIRECTORY_TEXTDOMAIN).' '.$post_type_info['labels']['singular_name'])));
             }else{ apply_filters('geodir_add_listing_page_title_text',the_title()); } 
-			echo '</h1>';
+			echo '</h1></header>';
 }
 
 add_action( 'geodir_add_listing_page_mandatory', 'geodir_action_add_listing_page_mandatory',10);
@@ -806,7 +830,7 @@ global $cat_display,$post_cat, $current_user;
                     <div id="geodir_post_title_row" class="required_field geodir_form_row clearfix">
                         <label><?php echo PLACE_TITLE_TEXT;?><span>*</span> </label>
                         <input type="text" field_type="text" name="post_title" id="post_title" class="geodir_textfield" value="<?php echo esc_attr(stripslashes($title)); ?>"  />
-                       <span class="geodir_message_error"><?php echo $required_msg?></span>
+                       <span class="geodir_message_error"><?php _e($required_msg,GEODIRECTORY_TEXTDOMAIN);?></span>
                     </div>
                     
 										<?php do_action('geodir_before_description_field'); ?>
@@ -831,7 +855,7 @@ global $cat_display,$post_cat, $current_user;
 											 
 												} ?>
 											 
-                       <span class="geodir_message_error"><?php echo $required_msg?></span>
+                       <span class="geodir_message_error"><?php echo _e($required_msg,GEODIRECTORY_TEXTDOMAIN);?></span>
                     </div>
 										
 										<?php do_action('geodir_after_description_field'); ?>
@@ -1000,6 +1024,9 @@ function geodir_action_geodir_sidebar_signup_top(){
 // action for adding the details page top widget area
 add_action( 'geodir_signup_forms', 'geodir_action_signup_forms', 10 );
 function geodir_action_signup_forms(){
+
+	global $user_login;
+	
 	?>
 <script type="text/javascript" >
 	<?php if ( $user_login ) { ?>
@@ -1089,7 +1116,7 @@ $post_type_info = get_post_type_object( $gd_post_type );
 
 $add_string_in_title = __('All',GEODIRECTORY_TEXTDOMAIN).' ';
 if(isset($_REQUEST['list']) && $_REQUEST['list'] == 'favourite'){	
-	$add_string_in_title = __('My Favourite',GEODIRECTORY_TEXTDOMAIN).' ';
+	$add_string_in_title = __('My Favorite',GEODIRECTORY_TEXTDOMAIN).' ';
 }
 
 $list_title = $add_string_in_title.$post_type_info->labels->name;
@@ -1110,7 +1137,9 @@ if(is_search())
 	$list_title = __('Search',GEODIRECTORY_TEXTDOMAIN).' '.$post_type_info->labels->name. __(' For :',GEODIRECTORY_TEXTDOMAIN)." '".get_search_query()."'";
 
 }
-echo '<h1>'.apply_filters('geodir_author_page_title_text',wptexturize($list_title)).'</h1>';
+$class = apply_filters( 'geodir_page_title_class', 'entry-title fn' );
+$class_header = apply_filters( 'geodir_page_title_header_class', 'entry-header' );
+echo '<header class="'.$class_header.'"><h1 class="'.$class.'">'.apply_filters('geodir_author_page_title_text',wptexturize($list_title)).'</h1></header>';
 }
 
 
@@ -1213,7 +1242,6 @@ if(get_option('geodir_show_author_bottom_section')) { ?>
 
 add_action( 'geodir_search_page_title', 'geodir_action_search_page_title',10);
 function geodir_action_search_page_title(){
-$class = apply_filters( 'geodir_page_title_class', 'entry-title fn' );
 $gd_post_type = geodir_get_current_posttype();
 $post_type_info = get_post_type_object( $gd_post_type );
 
@@ -1222,7 +1250,9 @@ if(is_search())
 	$list_title = __('Search',GEODIRECTORY_TEXTDOMAIN).' '.$post_type_info->labels->name. __(' For :',GEODIRECTORY_TEXTDOMAIN)." '".get_search_query()."'";
 
 }
-echo '<h1 class="'.$class.'">'.apply_filters('geodir_author_page_title_text',wptexturize($list_title)).'</h1>';
+$class = apply_filters( 'geodir_page_title_class', 'entry-title fn' );
+$class_header = apply_filters( 'geodir_page_title_header_class', 'entry-header' );
+echo '<header class="'.$class_header.'"><h1 class="'.$class.'">'.apply_filters('geodir_listing_page_title',wptexturize($list_title)).'</h1></header>';
 }
 
 // action for adding the listings page top widget area
