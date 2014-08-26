@@ -13,63 +13,6 @@ function geodir_get_current_city_lng(){
 	return $lng;
 }
 
-function geodir_get_location_link($request_location = '',$post_type =''){
-	global $wpdb, $geodir_add_location_url;
-	$location_link = '';
-	
-	
-	
-	$add_categories = get_option('geodir_add_categories_url');
-	if($add_categories)
-		$url_separator = get_option('geodir_listingurl_separator');
-	
-	if( (!empty($post_type) || is_post_type_archive()) && $request_location != 'all' && $request_location != 'location' ){
-		
-		if(empty($post_type)){
-			$post_type = geodir_get_current_posttype();	
-			
-			$geodir_add_location_url = NULL;
-			$location_link = get_post_type_archive_link( $post_type );
-			
-		}	
-		
-	}elseif( is_tax() && $request_location != 'all'){
-		global $wp_query,$term;
-		
-		$taxonomies = wp_list_pluck( $wp_query->tax_query->queries, 'taxonomy' );
-		
-		$post_type = geodir_get_current_posttype();	
-		$location_link = get_post_type_archive_link( $post_type );
-
-		if( term_exists( $term, $taxonomies[0]) && $add_categories)
-		{	
-			if ( get_option('permalink_structure') != '' )
-				$term_slug = end($wp_query->query);	
-			else
-				$term_slug = $wp_query->query[$taxonomies[0]];	
-			
-			if(strpos($term_slug,'/'.$url_separator.'/'))
-			{
-				$term_slug = explode('/'.$url_separator.'/',$term_slug);
-				$term_slug = $term_slug[1];
-			}	
-		}
-		//$location_link = get_permalink(get_option('geodir_location_page'));
-		
-	}else{
-		$location_link = get_permalink(get_option('geodir_location_page'));
-		
-		if ( get_option('permalink_structure') != '' ){
-		
-		$location_prefix = get_option('geodir_location_prefix');
-		$location_link = substr_replace($location_link, $location_prefix, strpos($location_link, 'location'), strlen('location'));
-		}	
-		
-	}	
-	
-	return $location_link = apply_filters('geodir_get_new_location_link', $location_link, $request_location, $post_type);
-	
-}
 
 function geodir_get_default_location(){
 	return $location_result = apply_filters('geodir_get_default_location', get_option('geodir_default_location'));
@@ -102,7 +45,7 @@ function create_location_slug($location_string) {
 	$slug = str_replace(" ", "_", $lvalue);*/
 	
 	
-	return apply_filters('geodir_location_slug_check', sanitize_title($location_string));
+	return urldecode(apply_filters('geodir_location_slug_check', sanitize_title($location_string)));
 	
 }
 
@@ -115,18 +58,26 @@ function geodir_get_country_dl($post_country = '',$prefix='')
 {
 	global $wpdb;
 	$countries =	$wpdb->get_col("SELECT Country FROM ".GEODIR_COUNTRIES_TABLE);
+	$countries_ISO2 =	$wpdb->get_results("SELECT Country,ISO2 FROM ".GEODIR_COUNTRIES_TABLE);
+	
+	foreach($countries_ISO2 as $c2){
+	$ISO2[$c2->Country] = $c2->ISO2;
+	}
+	
+	//print_r($ISO2);
 	$selected = '';
 	if($post_country == '')
 			$selected = 'selected="selected"';
 	
 	$out_put = '<option '.$selected.' value="">'.__('Select Country',GEODIRECTORY_TEXTDOMAIN).'</option>'; 
 	foreach($countries as $country) 
-	{
+	{	$ccode = $ISO2[$country];
+		
 		$selected = '';
 		if($post_country == $country)
 			$selected = ' selected="selected" '; 
 			
-		$out_put .= '<option '.$selected.' value="'.$country.'">'.$country.'</option>';
+		$out_put .= '<option '.$selected.' value="'.$country.'" data-country_code="'.$ccode.'">'.__($country,GEODIRECTORY_TEXTDOMAIN).'</option>';
     } 
 	
 	echo $out_put;
@@ -279,6 +230,79 @@ function geodir_get_address_by_lat_lan($lat,$lng)
 		return false;
 }
 
+/// New location functions added on 23-06-2014
+function geodir_get_current_location_terms($location_array_from='session')
+{
+	global $wp ;
+	$location_array=array();
+	if($location_array_from=='session')
+	{
+		$country =  (isset($_SESSION['gd_country']) && $_SESSION['gd_country']!='') ? $_SESSION['gd_country'] : '';  
+		if( $country != '' )
+			$location_array['gd_country'] = urldecode($country);	
+		
+		$region = (isset($_SESSION['gd_region']) && $_SESSION['gd_region']!='') ? $_SESSION['gd_region'] : ''; 
+		if( $region != '' )
+			$location_array['gd_region'] = urldecode($region);
+		
+		$city = (isset($_SESSION['gd_city']) && $_SESSION['gd_city']!='') ? $_SESSION['gd_city'] : ''; 
+		if( $city != '' )
+			$location_array['gd_city'] = urldecode($city);
+	}
+	else
+	{
+		$country = (isset($wp->query_vars['gd_country']) && $wp->query_vars['gd_country'] !='') ? $wp->query_vars['gd_country'] : '' ;
+			
+		$region = (isset($wp->query_vars['gd_region']) && $wp->query_vars['gd_region'] !='') ? $wp->query_vars['gd_region'] : '' ;
+		
+		$city = (isset($wp->query_vars['gd_city']) && $wp->query_vars['gd_city'] !='') ? $wp->query_vars['gd_city'] : '' ;
+				
+		if( $country != '' )
+			$location_array['gd_country'] = urldecode($country);	
+		
+		if( $region != '' )
+			$location_array['gd_region'] = urldecode($region);
+		
+		if( $city != '' )
+			$location_array['gd_city'] = urldecode($city);
+	}
+	
+	return $location_array ;
+	
+}
 
+function geodir_get_location_link($which_location='current')
+{
+	
+	$location_link = get_permalink(get_option('geodir_location_page'));
+	
+	if ( get_option('permalink_structure') != '' )
+	{
+	
+		$location_prefix = get_option('geodir_location_prefix');
+		$location_link = substr_replace($location_link, $location_prefix, strpos($location_link, 'location'), strlen('location'));
+	
+	}
+	
+	if($which_location == 'base'){
+		return $location_link;
+	}
+	else
+	{
+		$location_terms=geodir_get_current_location_terms();
+		
+		if(!empty($location_terms))
+		{
+			if ( get_option('permalink_structure') != '' ){
+				$location_terms = implode("/",$location_terms);
+				$location_terms = rtrim($location_terms,'/');
+				$location_link .= $location_terms;  		
+			}else{
+				$location_link = geodir_getlink($location_link,$location_terms);
+			}
+		}		
+	}	
+	return  $location_link;
+}
 
 

@@ -59,7 +59,7 @@ define('TWITTER_TEXT',__('Twitter',GEODIRECTORY_TEXTDOMAIN));
 define('FACEBOOK_TEXT',__('Facebook',GEODIRECTORY_TEXTDOMAIN));
 
 define('PLACE_CATEGORY_TEXT',__('Category',GEODIRECTORY_TEXTDOMAIN));
-define('TAGKW_TEXT',__('Tag Keyword\'s',GEODIRECTORY_TEXTDOMAIN));
+define('TAGKW_TEXT',__('Tag Keywords',GEODIRECTORY_TEXTDOMAIN));
 
 define('PRO_PHOTO_TEXT',__('Add Images : <small>(You can upload more than one images to create image gallery on detail page)</small>',GEODIRECTORY_TEXTDOMAIN));
 define('PHOTOES_BUTTON',__('Select Images',GEODIRECTORY_TEXTDOMAIN));
@@ -105,7 +105,7 @@ define('UNFAVOURITE_TEXT',__('Unfavorite',GEODIRECTORY_TEXTDOMAIN));
 define('MY_FAVOURITE_TEXT',__('My Favorites',GEODIRECTORY_TEXTDOMAIN));
 define('ADD_FAVOURITE_TEXT',__('Add to Favorites',GEODIRECTORY_TEXTDOMAIN));
 define('REMOVE_FAVOURITE_TEXT',__('Remove from Favorites',GEODIRECTORY_TEXTDOMAIN));
-define('FAVOURITE_NOT_AVAIL_MSG',__('You have not added any favourites yet.',GEODIRECTORY_TEXTDOMAIN));
+define('FAVOURITE_NOT_AVAIL_MSG',__('You have not added any favorites yet.',GEODIRECTORY_TEXTDOMAIN));
 
 
 /* ---- Messages ---- */
@@ -115,6 +115,8 @@ define('EMAIL_TEXT_MSG',__('Enter valid Email otherwise you will face an error.'
 define('GET_MAP_MSG',__('Click on "Set Address on Map" and then you can also drag pinpoint to locate the correct address',GEODIRECTORY_TEXTDOMAIN));
 define('GET_LATITUDE_MSG',__('Please enter latitude for google map perfection. eg. : <b>39.955823048131286</b>',GEODIRECTORY_TEXTDOMAIN));
 define('GET_LOGNGITUDE_MSG',__('Please enter longitude for google map perfection. eg. : <b>-75.14408111572266</b>',GEODIRECTORY_TEXTDOMAIN));
+define('GEODIR_LATITUDE_ERROR_MSG',__('A numeric value is required. Please make sure you have either draged the marker or clicked the button: Set Address On Map',GEODIRECTORY_TEXTDOMAIN));
+define('GEODIR_LOGNGITUDE_ERROR_MSG',__('A numeric value is required. Please make sure you have either draged the marker or clicked the button: Set Address On Map',GEODIRECTORY_TEXTDOMAIN));
 define('CONTACT_MSG',__('You can enter phone number,cell phone number etc.',GEODIRECTORY_TEXTDOMAIN));
 define('WEBSITE_MSG',__('Enter website URL. eg. : <b>http://myplace.com</b>',GEODIRECTORY_TEXTDOMAIN));
 define('TWITTER_MSG',__('Enter twitter URL. eg. : <b>http://twitter.com/myplace</b>',GEODIRECTORY_TEXTDOMAIN));
@@ -218,8 +220,19 @@ define('DESIGN_POST_TYPE_SNO',__('S.No.',GEODIRECTORY_TEXTDOMAIN));
 define('DESIGN_POST_TYPE',__('Post Type',GEODIRECTORY_TEXTDOMAIN));
 define('DESIGN_POST_TYPE_CAT',__('Category',GEODIRECTORY_TEXTDOMAIN));
 define('CSV_INSERT_DATA',__('Data inserted successfully.',GEODIRECTORY_TEXTDOMAIN));
-define('CSV_TOTAL_RECORD',__('Total of %s records inserted.',GEODIRECTORY_TEXTDOMAIN));
-define('CSV_INVALID_TOTAL_RECORD',__('Total of %s records not inserted due to invalid address.',GEODIRECTORY_TEXTDOMAIN));
+define('CSV_TOTAL_RECORD',__('%s record(s) inserted.',GEODIRECTORY_TEXTDOMAIN));
+
+
+define('CSV_INVALID_TOTAL_RECORD',__('%s out of %s record(s) could not be inserted due to blank address. Address fields post_address, post_country, post_region, post_city, post_latitude and post_longitude are mandatory fields.',GEODIRECTORY_TEXTDOMAIN));
+
+define('CSV_INVALID_DEFUALT_ADDRESS',__('%s out of %s record(s) could not be inserted due to invalid address. You can import data in default location only as you do not have multilocation ad-on enabled.',GEODIRECTORY_TEXTDOMAIN));
+
+
+define('CSV_INVALID_POST_TYPE',__('%s out of %s record(s) could not be inserted due to invalid/blank post type. Only use geodirectory\'s post type.',GEODIRECTORY_TEXTDOMAIN));
+
+
+define('CSV_BLANK_POST_TITLE',__('%s out of %s record(s) could not be inserted due to blank post title.',GEODIRECTORY_TEXTDOMAIN));
+
 define('CSV_TRANSFER_IMG_FOLDER',__("Please trasfer all images in <b>'/wp_content/uploads %s '</b> folder.",GEODIRECTORY_TEXTDOMAIN));
 define('CSV_INVAILD_FILE',__('File you are uploading is not valid. First colum should be "Post Title".',GEODIRECTORY_TEXTDOMAIN));
 define('CSV_UPLOAD_ONLY',__('Please upload CSV file only.',GEODIRECTORY_TEXTDOMAIN));

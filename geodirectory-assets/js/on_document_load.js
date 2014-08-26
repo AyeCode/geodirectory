@@ -35,7 +35,8 @@ function addToFavourite(post_id,action)
 	
 		jQuery('.gd_rating').jRating({
 			/** String vars **/
-			bigStarsPath : geodir_all_js_msg.geodir_plugin_url+'/geodirectory-assets/images/stars.png', 
+			//bigStarsPath : geodir_all_js_msg.geodir_plugin_url+'/geodirectory-assets/images/stars.png',
+			bigStarsPath : geodir_all_js_msg.geodir_default_rating_star_icon,
 			smallStarsPath : geodir_all_js_msg.geodir_plugin_url+'/geodirectory-assets/images/small.png', 
 			phpPath : geodir_all_js_msg.geodir_plugin_url+ '/jRating.php',
 			type : 'big', // can be set to 'small' or 'big'
@@ -80,7 +81,7 @@ function addToFavourite(post_id,action)
 				jQuery('#geodir_listing_prefix').focus();
 				error = true; }
 			
-			if (!characterReg.test(listing_prefix) && listing_prefix!=''){
+			if (/^[a-z0-90\_9_-]*$/.test(listing_prefix) == false && listing_prefix!=''){
 				jQuery('#geodir_listing_prefix').focus();
 				alert(geodir_all_js_msg.invalid_listing_prefix_msg);
 				error = true; }
