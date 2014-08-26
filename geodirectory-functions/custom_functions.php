@@ -982,14 +982,14 @@ function geodir_get_recent_reviews($g_size = 30, $no_comments = 10, $comment_len
 		}
 		
 		$review_table = GEODIR_REVIEW_TABLE;
-		$request = "SELECT r.id as ID, r.post_type, r.comment_id as comment_ID, r.post_date as comment_date,r.overall_rating, r.user_id FROM $review_table as r WHERE r.post_status = 1 AND r.status =1 $country_filter $region_filter $city_filter ORDER BY r.post_date DESC LIMIT $no_comments";
+		$request = "SELECT r.id as ID, r.post_type, r.comment_id as comment_ID, r.post_date as comment_date,r.overall_rating, r.user_id, r.post_id FROM $review_table as r WHERE r.post_status = 1 AND r.status =1 $country_filter $region_filter $city_filter ORDER BY r.post_date DESC, r.id DESC LIMIT $no_comments";
 		//echo $request;
         $comments = $wpdb->get_results($request);
 
         foreach ($comments as $comment) {
 			
 		// Set the extra comment info needed.	
-		$comment_extra = $wpdb->get_row("SELECT * FROM $wpdb->comments WHERE comment_ID =$comment->ID");	
+		$comment_extra = $wpdb->get_row("SELECT * FROM $wpdb->comments WHERE comment_ID =$comment->comment_ID");	
 		$comment->comment_content = $comment_extra->comment_content;
 		$comment->comment_author = $comment_extra->comment_author;
 		$comment->comment_author_email = $comment_extra->comment_author_email;
@@ -1003,7 +1003,7 @@ function geodir_get_recent_reviews($g_size = 30, $no_comments = 10, $comment_len
 		$comment_excerpt = mb_substr($comment_content, 0, $comment_lenth)."";
 		$permalink = get_permalink($comment->ID)."#comment-".$comment->comment_ID;
 		$comment_author_email = $comment->comment_author_email;
-		$comment_post_ID = $comment->ID;
+		$comment_post_ID = $comment->post_id;
 
 		$na=true;
 		if(function_exists('icl_object_id') && icl_object_id($comment_post_ID, $comment->post_type, true)){
@@ -1022,21 +1022,21 @@ function geodir_get_recent_reviews($g_size = 30, $no_comments = 10, $comment_len
 		if (function_exists('get_avatar')) {
 					  if (!isset($comment->comment_type) ) {
 						 if($user_profile_url){ $comments_echo .=   '<a href="'.$user_profile_url.'">';}
-						 $comments_echo .=  get_avatar($comment->comment_author_email, 60, get_bloginfo('template_directory').'/images/gravatar2.png');
+						 $comments_echo .=  get_avatar($comment->comment_author_email, 60, geodir_plugin_url().'/geodirectory-assets/images/gravatar2.png');
 						if($user_profile_url){ $comments_echo .=  '</a>';}
 					  } elseif ( (isset($comment->comment_type) && $comment->comment_type == 'trackback') || (isset($comment->comment_type) && $comment->comment_type=='pingback') ) {
 					if($user_profile_url){	 $comments_echo .=   '<a href="'.$user_profile_url.'">';}
-						 $comments_echo .=  get_avatar($comment->comment_author_url, 60, get_bloginfo('template_directory').'/images/gravatar2.png');
+						 $comments_echo .=  get_avatar($comment->comment_author_url, 60, geodir_plugin_url().'/geodirectory-assets/images/gravatar2.png');
 					  }
 				   } elseif (function_exists('gravatar')) {
 					if($user_profile_url){  $comments_echo .=   '<a href="'.$user_profile_url.'">';}
 					  $comments_echo .=  "<img src=\"";
 					  if ('' == $comment->comment_type) {
-						 $comments_echo .=  gravatar($comment->comment_author_email,60, get_bloginfo('template_directory').'/images/gravatar2.png');
+						 $comments_echo .=  gravatar($comment->comment_author_email,60, geodir_plugin_url().'/geodirectory-assets/images/gravatar2.png');
 						if($user_profile_url){  $comments_echo .=  '</a>';}
 					  } elseif ( ('trackback' == $comment->comment_type) || ('pingback' == $comment->comment_type) ) {
 					if($user_profile_url){	$comments_echo .=   '<a href="'.$user_profile_url.'">';}
-						$comments_echo .=  gravatar($comment->comment_author_url,60, get_bloginfo('template_directory').'/images/gravatar2.png');
+						$comments_echo .=  gravatar($comment->comment_author_url,60, geodir_plugin_url().'/geodirectory-assets/images/gravatar2.png');
 						if($user_profile_url){ $comments_echo .=  '</a>';}
 					  }
 					 $comments_echo .=  "\" alt=\"\" class=\"avatar\" />";

@@ -254,6 +254,10 @@ function geodir_save_listing($request_info = array(),$dummy = false){
 					{ $gd_post_info[$prefix.'mapzoom'] = $request_info[$prefix.'mapzoom']; }
 				
 				}
+				
+				// show lat lng
+				if(isset($extrafields['show_latlng']) && $extrafields['show_latlng'] && isset($request_info[$prefix.'latlng']))
+				{ $gd_post_info[$prefix.'latlng'] = $request_info[$prefix.'latlng']; }
 			}
 			
 		}
@@ -441,6 +445,8 @@ function geodir_save_post_info($post_id, $postinfo_array = array()){
 		}
 		
 		$post_meta_set_query = trim($post_meta_set_query,", ");
+		
+		$post_meta_set_query = str_replace('%', '%%',  $post_meta_set_query);// escape %
 		
 		do_action('geodir_before_save_listinginfo',$postinfo_array, $post_id);
 		
@@ -725,7 +731,7 @@ function geodir_save_post_images($post_id = 0, $post_image = array(), $dummy = f
 						$external_img = false;
 					}else{
 						
-						$new_name = $post_id.'_'.$img_name_arr[0].'.'.$img_name_arr[1];
+						$new_name = $post_id.'_'.$img_name_arr[0].'.'.end($img_name_arr);
 						
 						
 						if($curr_img_dir == $sub_dir)

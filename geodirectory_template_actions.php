@@ -382,6 +382,7 @@ $listing_label = $post_type_info->labels->singular_name;
                         	
 							foreach($post_tags as $post_term){
         						
+								/*
 								$post_term = trim($post_term);
 							   
 							    if($insert_term = term_exists( $post_term, $post_type.'_tags' )){
@@ -393,9 +394,46 @@ $listing_label = $post_type_info->labels->singular_name;
                                 
                                 if(! is_wp_error( $term ))
                                 {	
-                                    $links[] = "<a href='" . esc_attr( get_tag_link($term->term_id) ) . "'>$term->name</a>";
-                                    $terms[] = $term;
+                                    //$links[] = "<a href='" . esc_attr( get_tag_link($term->term_id) ) . "'>$term->name</a>";
+									// fix tag link on detail page
+									$links[] = "<a href='" . esc_attr( get_term_link($term->term_id, $term->taxonomy) ) . "'>$term->name</a>";
+									$terms[] = $term;
                                 }
+								*/
+								// fix slug creation order for tags & location
+								$post_term = trim($post_term);
+							   	
+								$priority_location = false;
+								if($insert_term = term_exists( $post_term, $post_type.'_tags' )){
+                                    $term = get_term_by( 'name', $post_term, $post_type.'_tags'); 
+                                }else{
+                                    $post_country = isset($_REQUEST['post_country']) && $_REQUEST['post_country']!='' ? $_REQUEST['post_country'] : NULL;
+									$post_region = isset($_REQUEST['post_region']) && $_REQUEST['post_region']!='' ? $_REQUEST['post_region'] : NULL;
+									$post_city = isset($_REQUEST['post_city']) && $_REQUEST['post_city']!='' ? $_REQUEST['post_city'] : NULL;
+									$match_country = $post_country && sanitize_title($post_term) == sanitize_title($post_country) ? true : false;
+									$match_region = $post_region && sanitize_title($post_term) == sanitize_title($post_region) ? true : false;
+									$match_city = $post_city && sanitize_title($post_term) == sanitize_title($post_city) ? true : false;
+								    if ($match_country || $match_region || $match_city) {
+										$priority_location = true;
+										$term = get_term_by( 'name', $post_term, $post_type.'_tags');
+									} else {
+								    	$insert_term = wp_insert_term($post_term, $post_type.'_tags');
+                                    	$term = get_term_by( 'name', $post_term, $post_type.'_tags');
+									}
+                                }	
+                                
+                                if(! is_wp_error( $term ))
+                                {	
+                                    //$links[] = "<a href='" . esc_attr( get_tag_link($term->term_id) ) . "'>$term->name</a>";
+									// fix tag link on detail page
+									if ($priority_location) {
+										$links[] = "<a href=''>$post_term</a>";
+									} else {
+										$links[] = "<a href='" . esc_attr( get_term_link($term->term_id, $term->taxonomy) ) . "'>$term->name</a>";
+									}
+									$terms[] = $term;
+                                }
+								//
                             }
                         	if(!isset($listing_label)){$listing_label='';}
                             $taxonomies[$post_type.'_tags'] = wp_sprintf('%s: %l', ucwords($listing_label.' '. __('Tags' , GEODIRECTORY_TEXTDOMAIN) ), $links, (object)$terms);

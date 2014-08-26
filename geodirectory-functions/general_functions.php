@@ -453,7 +453,7 @@ function geodir_sendEmail($fromEmail,$fromEmailName,$toEmail,$toEmailName,$to_su
 	$headers  = 'MIME-Version: 1.0' . "\r\n";
 	$headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
 	$headers .= "Reply-To: ".$fromEmail. "\r\n";
-	$headers .= 'To: '.$toEmailName.' <'.$toEmail.'>' . "\r\n";
+	//$headers .= 'To: '.$toEmailName.' <'.$toEmail.'>' . "\r\n"; //  this causes wp_mail to fail on some servers, best just leave it out
 	$headers .= 'From: '.$sitefromEmailName.' <'.$sitefromEmail.'>' . "\r\n";
 	
 	
@@ -465,7 +465,7 @@ function geodir_sendEmail($fromEmail,$fromEmailName,$toEmail,$toEmailName,$to_su
 	$headers  = 'MIME-Version: 1.0' . "\r\n";
 	$headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
 	$headers .= "Reply-To: ".$fromEmail. "\r\n";
-	$headers .= 'To: <'.$adminEmail.'>' . "\r\n";
+	//$headers .= 'To: <'.$adminEmail.'>' . "\r\n";//  this causes wp_mail to fail on some servers, best just leave it out
 	$headers .= 'From: '.$sitefromEmailName.' <'.$sitefromEmail.'>' . "\r\n";
 	
 	
@@ -686,15 +686,16 @@ function geodir_breadcrumb() {
 				$breadcrumb .= $separator . ucfirst($post_type_info->label);
 				
 			$breadcrumb .= '</li>';
-		}else
-	    if (is_category() || is_single()) {
-            $breadcrumb .= '<li>';
-            the_category(' </li><li>'.$separator);
-            if (is_single()) {
-                $breadcrumb .= "</li><li>";
-                $separator.get_the_title();
-                $breadcrumb .= '</li>';
-            }
+		}elseif ( is_category() || is_single() ) {
+			$category = get_the_category();
+			if ( is_category() ) {
+				$breadcrumb .= '<li>' . $separator . $category[0]->cat_name . '</li>';
+			}
+			if ( is_single() ) {
+				$breadcrumb .= '<li>' . $separator . '<a href="' . get_category_link($category[0]->term_id ) . '">' . $category[0]->cat_name . '</a></li>';
+				$breadcrumb .= '<li>' . $separator . get_the_title() . '</li>';
+			}
+			/* End of my version ##################################################### */
         }elseif (is_page()) {
             $breadcrumb .= '<li>'.$separator;
             $breadcrumb .= stripslashes(get_the_title());

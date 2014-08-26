@@ -29,6 +29,11 @@ function set_listing_request(){
 	
 	if(get_query_var('ignore_sticky_posts')){
 		print_r($query);exit;}
+		
+	// fix woocommerce shop products filtered by language for GD + WPML + Woocommerce
+	if(!geodir_is_geodir_page()){
+		return;
+	}
 	
 	/* remove all pre filters */
 	remove_all_filters('query');

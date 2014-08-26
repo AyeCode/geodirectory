@@ -325,6 +325,9 @@ width: 26%;
 float: left;
 margin-right: 3%;
 }
+.geodir_thumbnail {
+image-rendering:optimizequality; /* fix for firefox shaking images bug */	
+}
 .geodir_thumbnail img {
 max-width: 100%;
 width: auto;

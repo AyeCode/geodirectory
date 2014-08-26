@@ -77,7 +77,7 @@ function geodir_get_country_dl($post_country = '',$prefix='')
 		if($post_country == $country)
 			$selected = ' selected="selected" '; 
 			
-		$out_put .= '<option '.$selected.' value="'.$country.'" data-country_code="'.$ccode.'">'.$country.'</option>';
+		$out_put .= '<option '.$selected.' value="'.$country.'" data-country_code="'.$ccode.'">'.__($country,GEODIRECTORY_TEXTDOMAIN).'</option>';
     } 
 	
 	echo $out_put;

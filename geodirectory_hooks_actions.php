@@ -369,7 +369,7 @@ function geodir_social_sharing_buttons()
 	do_action('geodir_after_social_sharing_buttons') ;
 	$content_html = ob_get_clean();
 	if(trim($content_html) != '')
-		$content_html = '<div class="geodir-company_info">' . $content_html . '</div>' ;
+		$content_html = '<div class="geodir-company_info geodir-details-sidebar-social-sharing">' . $content_html . '</div>' ;
 	echo $content_html = apply_filters('geodir_social_sharing_buttons_html' , $content_html) ;
 			
 		
@@ -407,7 +407,7 @@ function geodir_share_this_button()
 	do_action('geodir_after_share_this_button') ;
 	$content_html = ob_get_clean();
 	if(trim($content_html) != '')
-		$content_html = '<div class="geodir-company_info">' . $content_html . '</div>' ;
+		$content_html = '<div class="geodir-company_info geodir-details-sidebar-sharethis">' . $content_html . '</div>' ;
 	echo $content_html = apply_filters('geodir_share_this_button_html' , $content_html) ;
 
 }
@@ -441,7 +441,7 @@ function geodir_edit_post_link()
 	do_action('geodir_after_edit_post_link') ;
 	$content_html = ob_get_clean();
 	if(trim($content_html) != '')
-		$content_html  = '<div class="geodir-company_info">' . $content_html . '</div>' ;
+		$content_html  = '<div class="geodir-company_info geodir-details-sidebar-user-links">' . $content_html . '</div>' ;
 	echo $content_html = apply_filters('geodir_edit_post_link_html' , $content_html) ;
 			
 		
@@ -474,7 +474,7 @@ function geodir_detail_page_google_analytics()
     do_action('geodir_after_google_analytics') ;
 	$content_html = ob_get_clean();
 	if(trim($content_html) != '')
-		$content_html  = '<div class="geodir-company_info">' . $content_html . '</div>' ;
+		$content_html  = '<div class="geodir-company_info geodir-details-sidebar-google-analytics">' . $content_html . '</div>' ;
 	echo $content_html = apply_filters('geodir_google_analytic_html' , $content_html) ;
 }
 
@@ -522,7 +522,7 @@ function geodir_detail_page_review_rating()
 	do_action('geodir_after_detail_page_review_rating') ;
 	$content_html = ob_get_clean();
 	if(trim($content_html) != '')
-		$content_html  = '<div class="geodir-company_info">' . $content_html . '</div>' ;
+		$content_html  = '<div class="geodir-company_info geodir-details-sidebar-rating">' . $content_html . '</div>' ;
 	echo $content_html = apply_filters('geodir_detail_page_review_rating_html' , $content_html) ;
 	
 }
@@ -540,7 +540,7 @@ function geodir_detail_page_more_info()
 	
 	$content_html = ob_get_clean();
 	if(trim($content_html) != '')
-		$content_html  = '<div class="geodir-company_info">' . $content_html . '</div>' ;
+		$content_html  = '<div class="geodir-company_info geodir-details-sidebar-listing-info">' . $content_html . '</div>' ;
 	echo $content_html = apply_filters('geodir_detail_page_more_info_html' , $content_html) ;
 }
 
@@ -1082,7 +1082,9 @@ function geodir_remove_url_seperator_form_permalink_settings($permalink_arr){
  
 }
 
-add_filter('posts_results' , 'geodir_set_status_draft_to_publish_for_own_post');
+if(!is_admin()){
+	add_filter('posts_results' , 'geodir_set_status_draft_to_publish_for_own_post');
+}
 function geodir_set_status_draft_to_publish_for_own_post($post)
 {
 	global $wp;
@@ -1287,7 +1289,7 @@ function geodirectory_before_featured_image_delete($attachment_id){
 
 
 
-add_action('wp', 'geodir_temp_set_post_attachment');
+//add_action('wp', 'geodir_temp_set_post_attachment'); //WTF 
 
 function geodir_temp_set_post_attachment(){
 

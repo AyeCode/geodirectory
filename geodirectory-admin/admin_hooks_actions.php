@@ -152,7 +152,8 @@ function geodir_meta_box_add()
 		
 		add_meta_box( 'geodir_post_info', $post_typename.' '. __('Information',GEODIRECTORY_TEXTDOMAIN), 'geodir_post_info_setting', $geodir_posttype,'normal', 'high' );
 		
-		add_meta_box( 'geodir_post_addinfo', $post_typename. ' ' .__('Additional Information' , GEODIRECTORY_TEXTDOMAIN), 'geodir_post_addinfo_setting', $geodir_posttype,'normal', 'high' );
+		// no need of this box as all fields moved to main informain box
+		//add_meta_box( 'geodir_post_addinfo', $post_typename. ' ' .__('Additional Information' , GEODIRECTORY_TEXTDOMAIN), 'geodir_post_addinfo_setting', $geodir_posttype,'normal', 'high' );
 	
 	endif;
 	

@@ -1,5 +1,11 @@
 <?php 
 include_once('geodirectory-functions/map-functions/map_template_tags.php');
+
+function geodir_core_dequeue_script() {
+   wp_dequeue_script( 'flexslider' );
+}
+add_action( 'wp_print_scripts', 'geodir_core_dequeue_script', 100 );
+
 function geodir_templates_scripts()
 {
 
@@ -12,6 +18,7 @@ function geodir_templates_scripts()
 		{
 			wp_register_script( 'geodirectory-jquery-flexslider-js', geodir_plugin_url().'/geodirectory-assets/js/jquery.flexslider.js',array(),GEODIRECTORY_VERSION );
 			wp_enqueue_script( 'geodirectory-jquery-flexslider-js' );
+			
 		}
 		
 		wp_register_script( 'geodirectory-lightbox-jquery', geodir_plugin_url().'/geodirectory-assets/js/jquery.lightbox-0.5.js',array(),GEODIRECTORY_VERSION );

@@ -493,6 +493,25 @@ function geodir_custom_field_save( $request_field = array() , $default = false )
 							}
 							
 						}
+						// show lat lng
+						if (isset($extra_fields['show_latlng']) && $extra_fields['show_latlng']) {
+							$is_column = $wpdb->get_var("SHOW COLUMNS FROM ".$detail_table." where field='".$old_prefix."latlng'");
+							
+							if ($is_column) {
+								$meta_field_add = "ALTER TABLE ".$detail_table." CHANGE `".$old_prefix."latlng` `".$prefix."latlng` VARCHAR( 3 ) NULL";
+								$meta_field_add .= " DEFAULT '1'";
+						
+								$wpdb->query($meta_field_add);
+							} else {
+								$meta_field_add = "ALTER TABLE ".$detail_table." ADD `".$prefix."latlng` VARCHAR( 3 ) NULL";
+							
+								$meta_field_add = "VARCHAR( 3 ) NULL";	
+								$meta_field_add .= " DEFAULT '1'";
+							
+								geodir_add_column_if_not_exist( $detail_table,$prefix."latlng",$meta_field_add );
+							}
+							
+						}
 					}// end extra
 					
 					break;
@@ -716,6 +735,16 @@ function geodir_custom_field_save( $request_field = array() , $default = false )
 						
 							geodir_add_column_if_not_exist( $detail_table,$prefix."mapzoom",$meta_field_add );
 						
+							//$wpdb->query($meta_field_add);
+						}
+						// show lat lng
+						if (isset($extra_fields['show_latlng']) && $extra_fields['show_latlng']) {
+							$meta_field_add = "ALTER TABLE ".$detail_table." ADD `".$prefix."latlng` VARCHAR( 3 ) NULL";
+							
+							$meta_field_add = "VARCHAR( 3 ) NULL";
+							$meta_field_add .= " DEFAULT '1'";
+							
+							geodir_add_column_if_not_exist( $detail_table,$prefix."latlng",$meta_field_add );
 							//$wpdb->query($meta_field_add);
 						}
 					}
@@ -1041,8 +1070,10 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 					?>
 					<span class="geodir_message_note"><?php echo GET_MAP_MSG;?></span>
 				</div> 
-				
-				<div id="geodir_<?php echo $prefix.'latitude';?>_row" class="<?php if($is_required) echo 'required_field';?> geodir_form_row clearfix">
+				<?php 
+				/* show lat lng */
+				$style_latlng = ((isset($extra_fields['show_latlng']) && $extra_fields['show_latlng']) || is_admin()) ? '' : 'style="display:none"';?>
+				<div id="geodir_<?php echo $prefix.'latitude';?>_row" class="<?php if($is_required) echo 'required_field';?> geodir_form_row clearfix" <?php echo $style_latlng;?>>
 					<label>
 						<?php echo PLACE_ADDRESS_LAT;?>
 						<?php if($is_required) echo '<span>*</span>';?>
@@ -1054,7 +1085,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 					<?php } ?>
 				 </div>
 				 
-				 <div id="geodir_<?php echo $prefix.'longitude';?>_row" class="<?php if($is_required) echo 'required_field';?> geodir_form_row clearfix">
+				 <div id="geodir_<?php echo $prefix.'longitude';?>_row" class="<?php if($is_required) echo 'required_field';?> geodir_form_row clearfix" <?php echo $style_latlng;?>>
 					<label>
 						<?php echo PLACE_ADDRESS_LNG;?>
 						<?php if($is_required) echo '<span>*</span>';?>
@@ -1868,8 +1899,8 @@ function geodir_show_listing_info($fields_location=''){
 								$i++;
 							}
 							
-							
-							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'"><span class="geodir-i-website" style="'.$field_icon.'">'.$field_icon_af.'<a href="'.$website.'" target="_blank" ><strong>'.stripslashes(__($type['site_title'],GEODIRECTORY_TEXTDOMAIN)).'</strong></a></span></div>';
+														
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'"><span class="geodir-i-website" style="'.$field_icon.'">'.$field_icon_af.'<a href="'.$website.'" target="_blank" ><strong>'.apply_filters( 'geodir_custom_field_website_name', stripslashes(__($type['site_title'],GEODIRECTORY_TEXTDOMAIN)),$website, $post->ID ).'</strong></a></span></div>';
 						
 						endif;
 						

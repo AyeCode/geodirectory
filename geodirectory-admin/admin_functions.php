@@ -2006,7 +2006,9 @@ function geodir_post_info_setting()
 	wp_nonce_field( plugin_basename( __FILE__ ), 'geodir_post_info_noncename' );
 	echo '<div id="geodir_wrapper">';
 	do_action('geodir_before_default_field_in_meta_box');
-	geodir_get_custom_fields_html($package_info->pid,'default',$post_type); 
+	//geodir_get_custom_fields_html($package_info->pid,'default',$post_type); 
+	// to display all fields in one information box
+	geodir_get_custom_fields_html($package_info->pid,'all',$post_type); 
 	do_action('geodir_after_default_field_in_meta_box');
 	echo '</div>';
 }

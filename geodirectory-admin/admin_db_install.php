@@ -522,7 +522,8 @@ function geodir_create_default_fields(){
 												'show_zip' => 1, 'zip_lable' => __('Zip/Post Code',  GEODIRECTORY_TEXTDOMAIN ),
 												'show_map' => 1, 'map_lable' => __('Set Address On Map',  GEODIRECTORY_TEXTDOMAIN ),
 												'show_mapview' => 1, 'mapview_lable' => __('Select Map View' ,  GEODIRECTORY_TEXTDOMAIN ),
-												'show_mapzoom' => 1, 'mapzoom_lable' => 'hidden'));
+												'show_mapzoom' => 1, 'mapzoom_lable' => 'hidden',
+												'show_latlng' => 1));
 							
 	$fields[]	= array(	'listing_type' 	=> 'gd_place', 
 							'data_type' 	=> 'VARCHAR', 

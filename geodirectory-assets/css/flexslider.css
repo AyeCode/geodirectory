@@ -87,6 +87,14 @@ html[xmlns] .geodir-slides {display: block;}
 #geodir_widget_carousel li img{display: block; opacity: .5; cursor: pointer;}
 #geodir_widget_carousel li.geodir-active-slide img {opacity: 1; cursor: default;}
 
+/* added to fix geodir flexsldier with genesis flexslider by avoid genesis flexslider script */
+.flex-direction-nav li .flex-next{background-position:-52px 0;right:-60px;}
+.flex-direction-nav li .flex-next:hover{background-position:-52px -50px;}
+.flex-direction-nav li .flex-prev{left:-60px;}
+.flex-direction-nav li .flex-prev:hover{background-position:0 -50px;}
+.flex-container a:flex-active,.flexslider a:flex-active{outline:none;}
+.flex-control-nav li a.flex-active{background-position:0 -26px;cursor:default;}
+
 @media screen and (max-width: 860px) {
   .geodir-direction-nav .geodir-prev {opacity: 1; left: 0;}
   .geodir-direction-nav .geodir-next {opacity: 1; right: 0;}

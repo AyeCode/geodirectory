@@ -229,20 +229,9 @@ if(getZip){oldstr_zip = getZip;}
 //}	
 if(set_map_val_in_fields){
 if (getCountry){
-if(jQuery('input[id="<?php echo $prefix.'country';?>"]').attr('id')){
-jQuery("#<?php echo $prefix.'country';?>").val(getCountry);
-}else{
-<?php /*?>jQuery('#<?php echo $prefix.'country';?> option[value="'+getCountry+'"]').attr("selected",true);
-jQuery("#<?php echo $prefix.'country';?>").trigger("chosen:updated");<?php */?>
-if(jQuery("#<?php echo $prefix.'country';?> option:contains('"+getCountry+"')").length == 0){
-jQuery("#<?php echo $prefix.'country';?>").append('<option value="'+getCountry+'">'+getCountry+'</option>');
-}
-jQuery('#<?php echo $prefix.'country';?> option[value="'+getCountry+'"]').attr("selected",true);
-jQuery("#<?php echo $prefix.'country';?>").trigger("chosen:updated");
-}
-if (jQuery('#<?php echo $prefix;?>country_ISO2').length){
- jQuery('#<?php echo $prefix;?>country_ISO2').val(jQuery('#<?php echo $prefix;?>country').find(':selected').data('country_code'));
-}
+	jQuery('#<?php echo $prefix.'country';?> option[data-country_code="'+getCountryISO+'"]').attr("selected",true);
+	jQuery("#<?php echo $prefix.'country';?>").trigger("chosen:updated");
+
 }
 if (getState){
 if(jQuery('input[id="<?php echo $prefix.'region';?>"]').attr('id')){
