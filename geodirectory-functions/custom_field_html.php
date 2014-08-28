@@ -363,6 +363,13 @@ $default = isset($field_info->is_admin)	 ? $field_info->is_admin : '';
                 	<input type="text" name="extra[mapview_lable]" id="mapview_lable"  value="<?php if(isset($address['mapview_lable'])){ echo $address['mapview_lable'];}?>" />
                  	<span><?php _e('Enter mapview field label in address section.',GEODIRECTORY_TEXTDOMAIN);?></span>
                 </td>
+            </tr>
+			<tr>
+                <td ><strong><?php _e('Show latitude and logatude from front-end :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                <td align="left">
+                	<input type="checkbox"  name="extra[show_latlng]" id="show_latlng"  value="1" <?php if(isset($address['show_latlng']) && $address['show_latlng']=='1'){ echo 'checked="checked"';}?>/>
+                 	<span><?php _e('Select if you want to show latitude and logatude fields in address section from front-end.',GEODIRECTORY_TEXTDOMAIN);?></span>
+                </td>
             </tr>	
 		<?php } // end of extra fields for address field type
 				break;

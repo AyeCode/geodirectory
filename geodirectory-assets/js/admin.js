@@ -166,6 +166,34 @@ function gd_copy_translation(url){
     });
 }
 	
+// Diagnosis related js starts here
+/* Check Uncheck All Related Options Start*/
+jQuery(document).ready(function(){
+	jQuery('.geodir_diagnosis_button').click(function(){
+		var diagnose = (jQuery(this).data('diagnose'))
+		var result_container = jQuery(this).parents('td').find("div")
+		jQuery.ajax({
+				url: geodir_all_js_msg.geodir_admin_ajax_url,
+				type: 'POST',
+				dataType: 'html',
+				data: {action:'geodir_admin_ajax',geodir_admin_ajax_action:'diagnosis',diagnose_this:diagnose},
+				beforeSend: function () {
+				},
+				success: function (data, textStatus, xhr) {
+					result_container.html(data) ;
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					alert(textStatus);
+					
+				}
+    	}); // end of ajax 
+		
+	});	
+	
+	
+								
+});
+
 
 	
 	

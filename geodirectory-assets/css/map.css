@@ -391,12 +391,19 @@ right: 0px !important;
 	top:auto!important;
 	bottom:0px;
 }
+.geodir_map_container_fullscreen{
+z-index: 99999 !important;	
+}
 /* MAP FULL SCREEN CSS END ########################################################################## */
 
 .geodir_map_container img {
 	max-width:inherit!important;
 	width:auto;
 }
+.geodir_map_container .main_list img{
+	height:15px;
+}
+
 .geodir_map_container {
 	z-index:80;
 	position:relative;
@@ -471,3 +478,5 @@ font-weight: 700;
 height: 16px;
 width: 10px;
 }
+
+.fa-long-arrow-down, .fa-long-arrow-up{margin-left:4px; cursor:pointer; }

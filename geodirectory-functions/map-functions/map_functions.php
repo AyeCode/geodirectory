@@ -103,7 +103,6 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0,$hide_empty = t
 		$exclude_cat_str='0' ;
 	$cat_terms = get_terms($cat_taxonomy, array('parent' => $cat_parent,'exclude'=> $exclude_cat_str , 'hide_empty ' => $hide_empty));
 	
-		
 	$main_list_class = '';
 	//exit();
 	//If there are terms, start displaying
@@ -123,6 +122,7 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0,$hide_empty = t
 			else
 				$display = 'display:none';
 		}
+		
 		
 		$exclude_categories = get_option('geodir_exclude_cat_on_map');
 		$out = '<ul class="treeview '.$list_class.'" style="margin-left:'.$p.'px;'.$display.';">';
@@ -154,7 +154,7 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0,$hide_empty = t
 				$term_check .= ' name="'.$map_canvas_name.'_cat[]" group="catgroup'.$cat_term->term_id.'"'; 
 				$term_check .= ' alt="'.$cat_term->taxonomy.'" title="'.ucfirst($cat_term->name).'" value="'.$cat_term->term_id.'" " onclick="javascript:build_map_ajax_search_param(\''.$map_canvas_name.'\',false)">';
 				$term_check .= '<img height="15" width="15" alt="" src="'.$icon.'" title="'.ucfirst($cat_term->name).'"/>';
-				$out .= '<li>'.$term_check.'<label>'.ucfirst($cat_term->name).'</label>'; 
+				$out .= '<li>'.$term_check.'<label>'.ucfirst($cat_term->name).'</label><i class="fa fa-long-arrow-down"></i>'; 
 			endif;
 			
 			

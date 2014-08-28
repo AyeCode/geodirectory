@@ -227,7 +227,8 @@ function geodir_draw_map($map_args = array())
              <style>.map_category, .trigger {margin-bottom:30px;}</style>
         <div class="map-places-listing" id="<?php echo $map_canvas_name;?>_posttype_menu" style="max-width:<?php echo $map_width;?>!important;">        
           
-            <ul class="clearfix place-list">
+             <?php if(isset($geodir_map_options['is_geodir_home_map_widget']) && $map_args['is_geodir_home_map_widget']) { ?><div class="geodir-map-posttype-list"><?php } ?>
+			 <ul class="clearfix place-list">
             	<?php 
 				
 				$exclude_post_types = get_option('geodir_exclude_post_type_on_map');
@@ -240,6 +241,7 @@ function geodir_draw_map($map_args = array())
                
               
             </ul>
+			<?php if(isset($geodir_map_options['is_geodir_home_map_widget']) && $map_args['is_geodir_home_map_widget']) { ?></div><?php } ?>
             <div class="geodir-map-navigation">
                 <ul>
                    <li class="geodir-leftarrow"><a href="#"><i class="fa fa-chevron-left"></i></a></li>
