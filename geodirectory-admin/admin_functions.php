@@ -919,8 +919,8 @@ function geodir_post_information_save( $post_id )
 		if ( !wp_verify_nonce( $_POST['geodir_post_info_noncename'], plugin_basename( __FILE__ ) ) )
 		return;
 		
-		if ( !wp_verify_nonce( $_POST['geodir_post_addinfo_noncename'], plugin_basename( __FILE__ ) ) )
-		return;
+		/*if ( !wp_verify_nonce( $_POST['geodir_post_addinfo_noncename'], plugin_basename( __FILE__ ) ) )
+		return;*/
 		
 		if ( !wp_verify_nonce( $_POST['geodir_post_attachments_noncename'], plugin_basename( __FILE__ ) ) )
 		return;

@@ -40,7 +40,15 @@ class geodir_homepage_map extends WP_Widget {
 	$map_args['enable_marker_cluster'] = false;
 	$map_args['enable_map_resize_button'] = true;
 	
+	$is_geodir_home_map_widget = true;
+	$map_args['is_geodir_home_map_widget'] = $is_geodir_home_map_widget;
+	
 	geodir_draw_map($map_args);
+	
+	/* home map post type slider */
+	if ($is_geodir_home_map_widget) {
+		add_action( 'wp_footer', array($this, geodir_home_map_add_script), 100 );
+	}
 	
 }
 	function update($new_instance, $old_instance) {
@@ -132,6 +140,66 @@ class geodir_homepage_map extends WP_Widget {
     </p>
     
     <?php
-	}}
+	}
+	
+	function geodir_home_map_add_script() {
+		echo '<style>.geodir_map_container .map-places-listing ul.place-list{padding-left:0;margin-left:0;}.geodir_map_container .map-places-listing ul.place-list > li{display:inline-block;float:none}.geodir_map_container .map-places-listing ul.place-list>li:first-child{padding-left:0;}.geodir-map-posttype-list{display:block;overflow:hidden;white-space:nowrap;width:100%;word-wrap:normal;position:relative;}</style>';
+		?>
+<script type="text/javascript">
+jQuery(document).ready(function(){				
+	var $objMpList = jQuery('.geodir_map_container .geodir-map-posttype-list');
+	var $objPlList = jQuery('.geodir_map_container .map-places-listing ul.place-list');
+	var wArrL = parseFloat(jQuery('.geodir-map-navigation .geodir-leftarrow').outerWidth(true));
+	var wArrR = parseFloat(jQuery('.geodir-map-navigation .geodir-rightarrow').outerWidth(true));
+	var ptw1 = parseFloat($objMpList.width());
+	$objMpList.css({'margin-left':wArrL+'px'});
+	$objMpList.attr('data-width', ptw1);
+	ptw1 = ptw1 - (wArrL + wArrR);
+	$objMpList.width(ptw1);
+	var ptw = $objPlList.width();
+	var ptw2 = 0;
+	$objPlList.find('li').each(function(){
+		var ptw21 = jQuery(this).outerWidth();
+		ptw2 += parseFloat(ptw21);
+	});
+	var of = ptw2 - ptw1;
+	jQuery('.geodir-leftarrow a').click(function(e){
+		e.preventDefault();
+		var cm = $objPlList.css('margin-left');		
+		cm = parseFloat(cm);
+		if (cm<0) { cm = cm * -1; }
+		var rm = 0 + cm;
+		if (rm>0) {
+			var domargin = 0;
+			if (rm>=ptw) { domargin = ptw;
+			} else { domargin = rm; }
+			domargin = cm - domargin;
+			if (domargin>=ptw) { domargin = domargin + parseFloat(ptw / 12); }
+			domargin = domargin * -1;
+			
+			$objPlList.animate({'margin-left':domargin+'px'}, 1000);
+		}
+	});
+	jQuery('.geodir-rightarrow a').click(function(e){
+		e.preventDefault();
+		var cm = $objPlList.css('margin-left');		
+		cm = parseFloat(cm);
+		if (cm<0) { cm = cm * -1; }
+		var rm = of - cm;
+		if (rm>0) {
+			var domargin = 0;
+			if (rm>=ptw) { domargin = ptw;
+			} else { domargin = rm; }
+			domargin = domargin + cm;
+			if (domargin>=ptw) { domargin = domargin - parseFloat(ptw / 12); }
+			domargin = domargin * -1;
+			$objPlList.animate({'margin-left':domargin+'px'}, 1000);
+		}
+	});
+});
+</script>
+		<?php
+	}	
+}
 register_widget('geodir_homepage_map');
 ?>
