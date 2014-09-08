@@ -79,12 +79,14 @@ class geodir_map_listingpage extends WP_Widget {
 			$autozoom = empty($instance['autozoom']) ? '' : apply_filters('widget_autozoom', $instance['autozoom']);
 			$sticky = empty($instance['sticky']) ? '' : apply_filters('widget_sticky', $instance['sticky']);
 			$scrollwheel = empty($instance['scrollwheel']) ? '0' : apply_filters('widget_scrollwheel', $instance['scrollwheel']);
+			$showall = empty($instance['showall']) ? '0' : apply_filters('widget_showall', $instance['showall']);
 			
 			$map_args = array();
 			$map_args['map_canvas_name'] = str_replace('-' , '_' , $args['widget_id']);
 			$map_args['width'] = $width;
 			$map_args['height'] = $height;
 			$map_args['scrollwheel'] = $scrollwheel;
+			$map_args['showall'] = $scrollwheel;
 			$map_args['child_collapse'] = '0';
 			$map_args['sticky'] = $sticky;
 			$map_args['enable_cat_filters'] = false;
@@ -118,6 +120,7 @@ class geodir_map_listingpage extends WP_Widget {
 			$map_args['zoom'] = $zoom ;
 			//$map_args['scrollwheel'] = true; 
 			$map_args['scrollwheel'] = $scrollwheel;
+			$map_args['showall'] = $showall;
 			$map_args['streetViewControl'] = true;
 			$map_args['maptype'] = $mapview;  
 			$map_args['showPreview'] = '0'; 
@@ -141,6 +144,7 @@ class geodir_map_listingpage extends WP_Widget {
 		$instance['autozoom'] = isset($new_instance['autozoom']) ? $new_instance['autozoom'] : '';
 		$instance['sticky'] = isset($new_instance['sticky']) ? $new_instance['sticky'] : '';
 		$instance['scrollwheel'] = isset($new_instance['scrollwheel']) ? ($new_instance['scrollwheel']) : '';
+		$instance['showall'] = isset($new_instance['showall']) ? ($new_instance['showall']) : '';
 		
 		return $instance;
 	}
@@ -148,13 +152,14 @@ class geodir_map_listingpage extends WP_Widget {
 	
 	function form($instance) {
 		//widgetform in backend
-		$instance = wp_parse_args( (array) $instance, array( 'width' => '', 'heigh' => '', 'zoom' => '', 'autozoom' => '', 'sticky' => '','scrollwheel'=>'0') );		
+		$instance = wp_parse_args( (array) $instance, array( 'width' => '', 'heigh' => '', 'zoom' => '', 'autozoom' => '', 'sticky' => '','scrollwheel'=>'0','showall'=>'0') );		
 		$width = strip_tags($instance['width']);
 		$heigh = strip_tags($instance['heigh']);
 		$zoom = strip_tags($instance['zoom']);
 		$autozoom = strip_tags($instance['autozoom']);
 		$sticky = strip_tags($instance['sticky']);
 		$scrollwheel = strip_tags($instance['scrollwheel']);
+		$showall = strip_tags($instance['showall']);
 		?>
         <p>
             <label for="<?php echo $this->get_field_id('width'); ?>"><?php _e('Map Width <small>(Default is : 294)</small>',GEODIRECTORY_TEXTDOMAIN);?>:
@@ -163,7 +168,7 @@ class geodir_map_listingpage extends WP_Widget {
         </p>
 	
         <p>
-            <label for="<?php echo $this->get_field_id('heigh'); ?>"><?php _e('Map Heigh <small>(Default is : 370)</small>',GEODIRECTORY_TEXTDOMAIN);?>:
+            <label for="<?php echo $this->get_field_id('heigh'); ?>"><?php _e('Map Height <small>(Default is : 370)</small>',GEODIRECTORY_TEXTDOMAIN);?>:
             <input class="widefat" id="<?php echo $this->get_field_id('heigh'); ?>" name="<?php echo $this->get_field_name('heigh'); ?>" type="text" value="<?php echo esc_attr($heigh); ?>" />
             </label>
         </p>
@@ -207,6 +212,12 @@ class geodir_map_listingpage extends WP_Widget {
       </label>
     </p>
         
+   <!-- <p>
+      <label for="<?php echo $this->get_field_id('showall'); ?>"><?php _e('Show all listings on map? (not just page list)',GEODIRECTORY_TEXTDOMAIN);?>:
+      <input id="<?php echo $this->get_field_id('showall'); ?>" name="<?php echo $this->get_field_name('showall'); ?>" type="checkbox"  value="1"  <?php if($showall){ ?>checked="checked" <?php }?> />
+      </label>
+    </p> -->
+    
 	<?php 
 	}
 } 

@@ -97,7 +97,8 @@ function geodir_retrieve_password() {
 		$errors->add('empty_username', __('<strong>ERROR</strong>: Enter a username or e-mail address.',GEODIRECTORY_TEXTDOMAIN));
 
 	if ( strpos($_POST['user_login'], '@') ) {
-		$user_data = get_user_by_email(trim($_POST['user_login']));
+		//$user_data = get_user_by_email(trim($_POST['user_login']));
+		$user_data = get_user_by( 'email', trim($_POST['user_login']) );
 		if ( empty($user_data) )
 			$errors->add('invalid_email', __('<strong>ERROR</strong>: There is no user registered with that email address.',GEODIRECTORY_TEXTDOMAIN));
 	} else {
@@ -123,7 +124,7 @@ function geodir_retrieve_password() {
 	do_action('retrieve_password', $user_login);
 
 	////////////////////////////////////
-	$user_email = $_POST['user_email'];
+	$user_email = isset($_POST['user_email']) ? $_POST['user_email'] : '';
 	$user_login = $_POST['user_login'];
 	
 	$user =	$wpdb->get_row(
@@ -179,8 +180,8 @@ function geodir_register_new_user($user_login, $user_email) {
 
 
 	if(get_option('ptthemes_show_user_pass')){
-	$user_pass  = mysql_real_escape_string($_REQUEST['user_pass'] );
-	$user_pass2 = mysql_real_escape_string($_REQUEST['user_pass2'] );
+	$user_pass  = $_REQUEST['user_pass'] ;
+	$user_pass2 = $_REQUEST['user_pass2'] ;
 	// Check the password
 	if ( $user_pass != $user_pass2){
 		$errors->add('pass_match', __('ERROR: Passwords do not match.',GEODIRECTORY_TEXTDOMAIN));
@@ -342,7 +343,7 @@ function geodir_user_signup(){
 		case 'retrievepassword' :
 			if ( $http_post ) {
 				$errors = geodir_retrieve_password();
-				$error_message = $errors->errors['invalid_email'][0];
+				$error_message = isset($errors->errors['invalid_email'][0]) ? $errors->errors['invalid_email'][0] : '';
 				if ( !is_wp_error($errors) ) {
 					wp_redirect(home_url().'/?geodir_signup=true&checkemail=confirm');
 					exit();

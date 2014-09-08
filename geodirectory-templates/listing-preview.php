@@ -215,7 +215,9 @@ do_action('geodir_before_main_content','listing-preview-page');
                                 
                                 if(! is_wp_error( $term ))
                                 {	
-                                    $links[] = "<a href='" . esc_attr( get_tag_link($term->term_id) ) . "'>$term->name</a>";
+									//$links[] = "<a href='" . esc_attr( get_tag_link($term->term_id) ) . "'>$term->name</a>";
+									// fix tag link on detail page
+									$links[] = "<a href='" . esc_attr( get_term_link($term->term_id, $term->taxonomy) ) . "'>$term->name</a>";
                                     $terms[] = $term;
                                 }
                             }

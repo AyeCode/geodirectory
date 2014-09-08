@@ -133,7 +133,7 @@ function geodir_draw_map($map_args = array())
 		 
 		<?php if($geodir_map_options['enable_map_direction']){?>
 			
-			<input type="text"  id="<?php echo $map_canvas_name;?>_fromAddress" name="from" class="textfield"  value="Enter Your Location"  onblur="if (this.value == '') {this.value = 'Enter Your Location';}" onfocus="if (this.value == 'Enter Your Location') {this.value = '';}" />
+			<input type="text"  id="<?php echo $map_canvas_name;?>_fromAddress" name="from" class="textfield"  value="<?php echo ENTER_LOCATION_TEXT;?>"  onblur="if (this.value == '') {this.value = '<?php echo ENTER_LOCATION_TEXT;?>';}" onfocus="if (this.value == '<?php echo ENTER_LOCATION_TEXT;?>') {this.value = '';}" />
 			<input type="button" value="<?php _e('Get Directions',GEODIRECTORY_TEXTDOMAIN);?>" class="<?php echo $map_canvas_name;?>_getdirection" id="directions" onclick="calcRoute('<?php echo $map_canvas_name;?>')" />
             
             <div id='directions-options' class="hidden">
@@ -146,7 +146,7 @@ function geodir_draw_map($map_args = array())
                 
                 <select id="travel-units" onchange="calcRoute('<?php echo $map_canvas_name;?>')">
                     <option value="miles"><?php _e('Miles',GEODIRECTORY_TEXTDOMAIN); ?></option>
-                    <option value="kilometers" ><?php _e('Kilometers',GEODIRECTORY_TEXTDOMAIN); ?></option>
+                    <option <?php if(get_option('geodir_search_dist_1')=='km'){echo 'selected="selected"';}?> value="kilometers" ><?php _e('Kilometers',GEODIRECTORY_TEXTDOMAIN); ?></option>
                 </select>
             </div>
 
@@ -227,7 +227,8 @@ function geodir_draw_map($map_args = array())
              <style>.map_category, .trigger {margin-bottom:30px;}</style>
         <div class="map-places-listing" id="<?php echo $map_canvas_name;?>_posttype_menu" style="max-width:<?php echo $map_width;?>!important;">        
           
-            <ul class="clearfix place-list">
+             <?php if(isset($geodir_map_options['is_geodir_home_map_widget']) && $map_args['is_geodir_home_map_widget']) { ?><div class="geodir-map-posttype-list"><?php } ?>
+			 <ul class="clearfix place-list">
             	<?php 
 				
 				$exclude_post_types = get_option('geodir_exclude_post_type_on_map');
@@ -240,6 +241,7 @@ function geodir_draw_map($map_args = array())
                
               
             </ul>
+			<?php if(isset($geodir_map_options['is_geodir_home_map_widget']) && $map_args['is_geodir_home_map_widget']) { ?></div><?php } ?>
             <div class="geodir-map-navigation">
                 <ul>
                    <li class="geodir-leftarrow"><a href="#"><i class="fa fa-chevron-left"></i></a></li>

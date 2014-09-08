@@ -17,7 +17,6 @@ class geodir_popular_post_category extends WP_Widget {
 	
 	function widget($args, $instance) 
 	{
-		
 		// prints the widget
 		extract($args, EXTR_SKIP);
 		
@@ -217,9 +216,10 @@ class geodir_popular_postview extends WP_Widget {
 		//}
 		
 		if ( get_option('permalink_structure') )
-			$viewall_url = get_post_type_archive_link($post_type).$location_url;
+			$viewall_url = get_post_type_archive_link($post_type);
 		else
-			$viewall_url = get_post_type_archive_link($post_type).'&'.$post_type.'category='.$location_url;
+			$viewall_url = get_post_type_archive_link($post_type);
+		
 		
 		if(!empty($category) && $category[0] != '0'){
 			global $geodir_add_location_url;
@@ -230,7 +230,7 @@ class geodir_popular_postview extends WP_Widget {
 			$viewall_url = get_term_link( (int)$category[0], $post_type.'category');
 			$geodir_add_location_url = NULL; 
 		}
-		
+				
 		?>
 			<div class="geodir_locations geodir_location_listing">
             <?php do_action('geodir_before_view_all_link_in_widget') ; ?>
@@ -248,8 +248,20 @@ class geodir_popular_postview extends WP_Widget {
 									'gd_location' 	 => ($add_location_filter) ? true : false,
 									'post_type' => $post_type,
 									'order_by' =>$list_sort,
-									'excerpt_length' => $character_count,
+									'excerpt_length' => $character_count
 									);
+								if (!empty($instance['show_featured_only'])) {
+									$query_args['show_featured_only'] = 1;
+								}
+								if (!empty($instance['show_special_only'])) {
+									$query_args['show_special_only'] = 1;
+								}
+								if (!empty($instance['with_pics_only'])) {
+									$query_args['with_pics_only'] = 1;
+								}
+								if (!empty($instance['with_videos_only'])) {
+									$query_args['with_videos_only'] = 1;
+								}
 								
 								if(!empty($category) && $category[0] != '0'){
 									
@@ -271,7 +283,6 @@ class geodir_popular_postview extends WP_Widget {
 								global $gridview_columns;
 								
 								query_posts( $query_args );
-								
 								if(strstr($layout,'gridview')){
 									
 									$listing_view_exp = explode('_',$layout);
@@ -280,8 +291,7 @@ class geodir_popular_postview extends WP_Widget {
 									
 									$layout = $listing_view_exp[0];
 									
-								}
-								
+								}else{$gridview_columns = '';}
 								
 								$template = apply_filters( "geodir_template_part-listing-listview", geodir_plugin_path() . '/geodirectory-templates/listing-listview.php' );
 
@@ -325,6 +335,11 @@ class geodir_popular_postview extends WP_Widget {
 		else
 		$instance['add_location_filter'] = '0';
 		
+		$instance['show_featured_only'] = isset($new_instance['show_featured_only']) && $new_instance['show_featured_only'] ? 1 : 0;
+		$instance['show_special_only'] = isset($new_instance['show_special_only']) && $new_instance['show_special_only'] ? 1 : 0;
+		$instance['with_pics_only'] = isset($new_instance['with_pics_only']) && $new_instance['with_pics_only'] ? 1 : 0;
+		$instance['with_videos_only'] = isset($new_instance['with_videos_only']) && $new_instance['with_videos_only'] ? 1 : 0;
+		
 		
 		return $instance;
 	}
@@ -343,7 +358,11 @@ class geodir_popular_postview extends WP_Widget {
 											'layout'=> 'gridview_onehalf',
 											'listing_width' => '',
 											'add_location_filter'=>'1',
-											'character_count'=>'20') 
+											'character_count'=>'20',
+											'show_featured_only' => '',
+											'show_special_only' => '',
+											'with_pics_only' => '',
+											'with_videos_only' => '') 
 								 );
 		
 		$title = strip_tags($instance['title']);
@@ -367,6 +386,11 @@ class geodir_popular_postview extends WP_Widget {
 		$add_location_filter = strip_tags($instance['add_location_filter']);
 		
 		$character_count = $instance['character_count'];
+		
+		$show_featured_only = isset($instance['show_featured_only']) && $instance['show_featured_only'] ? true : false;
+		$show_special_only = isset($instance['show_special_only']) && $instance['show_special_only'] ? true : false;
+		$with_pics_only = isset($instance['with_pics_only']) && $instance['with_pics_only'] ? true : false;
+		$with_videos_only = isset($instance['with_videos_only']) && $instance['with_videos_only'] ? true : false;
 		
 		?>
         
@@ -495,6 +519,26 @@ class geodir_popular_postview extends WP_Widget {
            	<input type="checkbox" id="<?php echo $this->get_field_id('add_location_filter'); ?>" name="<?php echo $this->get_field_name('add_location_filter'); ?>" <?php if($add_location_filter) echo 'checked="checked"';?>  value="1"  />
             </label>
         </p>
+		<p>
+			<label for="<?php echo $this->get_field_id('show_featured_only'); ?>">
+				<?php _e('Show only featured listings:',GEODIRECTORY_TEXTDOMAIN);?> <input type="checkbox" id="<?php echo $this->get_field_id('show_featured_only'); ?>" name="<?php echo $this->get_field_name('show_featured_only'); ?>" <?php if($show_featured_only) echo 'checked="checked"';?>  value="1"  />
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id('show_special_only'); ?>">
+				<?php _e('Show only listings with special offers:',GEODIRECTORY_TEXTDOMAIN);?> <input type="checkbox" id="<?php echo $this->get_field_id('show_special_only'); ?>" name="<?php echo $this->get_field_name('show_special_only'); ?>" <?php if($show_special_only) echo 'checked="checked"';?>  value="1"  />
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id('with_pics_only'); ?>">
+				<?php _e('Show only listings with pics:',GEODIRECTORY_TEXTDOMAIN);?> <input type="checkbox" id="<?php echo $this->get_field_id('with_pics_only'); ?>" name="<?php echo $this->get_field_name('with_pics_only'); ?>" <?php if($with_pics_only) echo 'checked="checked"';?>  value="1"  />
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id('with_videos_only'); ?>">
+				<?php _e('Show only listings with videos:',GEODIRECTORY_TEXTDOMAIN);?> <input type="checkbox" id="<?php echo $this->get_field_id('with_videos_only'); ?>" name="<?php echo $this->get_field_name('with_videos_only'); ?>" <?php if($with_videos_only) echo 'checked="checked"';?>  value="1"  />
+			</label>
+		</p>
 				
         
         <script type="text/javascript">
