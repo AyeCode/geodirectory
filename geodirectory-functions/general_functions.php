@@ -941,9 +941,24 @@ function gd_lang_object_ids($ids_array, $type) {
 function geodir_custom_posts_body_class($classes) {
 	global $wpdb;
 	$post_types = geodir_get_posttypes('object'); 
-	if(!empty($post_types) && count((array)$post_types) > 1 ){
-    $classes[] = 'geodir_custom_posts';
+	if (!empty($post_types) && count((array)$post_types) > 1 ) {
+    	$classes[] = 'geodir_custom_posts';
 	}
+	
+	// fix body class for signup page
+	if (isset( $_REQUEST['geodir_signup'])) {
+		$new_classes = array();
+		$new_classes[] = 'signup page-geodir-signup';
+		if (!empty($classes)) {
+			foreach ($classes as $class) {
+				if ($class && $class != 'home' && $class != 'blog') {
+					$new_classes[] = $class;
+				}
+			}
+		}
+		$classes = $new_classes;
+	}
+	
     return $classes;
 }
 

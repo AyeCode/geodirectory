@@ -244,6 +244,15 @@ function geodir_listing_loop_filter($query){
 		geodir_post_where();
 		if(!is_admin())
 			add_filter('posts_orderby', 'geodir_posts_orderby' ,1 );
+			
+		// advanced filter for popular post view widget
+		global $wp_query;
+		if(!is_admin()) {
+			if (!empty($wp_query->query['with_pics_only'])) {
+				add_filter('posts_join', 'geodir_filter_widget_join',1000);
+			}
+			add_filter('posts_where', 'geodir_filter_widget_where', 1000);
+		}
 		
 	}
 	
@@ -679,6 +688,32 @@ function author_filter_where($where){
 	}
 	########### WPML ###########
 	
+	return $where;
+}
+
+// advanced filter for popular post view widget
+function geodir_filter_widget_join($join) {
+	global $wp_query, $table;
+	if (!empty($wp_query->query['with_pics_only'])) {
+		$join .= " LEFT JOIN ".GEODIR_ATTACHMENT_TABLE." ON ( ".GEODIR_ATTACHMENT_TABLE.".post_id=".$table.".post_id AND ".GEODIR_ATTACHMENT_TABLE.".mime_type LIKE '%image%' )";
+	}
+	return $join;
+}
+
+function geodir_filter_widget_where($where) {
+	global $wp_query, $table;
+	if (!empty($wp_query->query['show_featured_only'])) {
+		$where .= " AND ".$table.".is_featured = '1'";
+	}
+	if (!empty($wp_query->query['show_special_only'])) {
+		$where .= " AND ( ".$table.".geodir_special_offers != '' AND ".$table.".geodir_special_offers IS NOT NULL )";
+	}
+	if (!empty($wp_query->query['with_pics_only'])) {
+		$where .= " AND ".GEODIR_ATTACHMENT_TABLE.".ID IS NOT NULL GROUP BY ".$table.".post_id";
+	}
+	if (!empty($wp_query->query['with_videos_only'])) {
+		$where .= " AND ( ".$table.".geodir_video != '' AND ".$table.".geodir_video IS NOT NULL )";
+	}
 	return $where;
 }
 

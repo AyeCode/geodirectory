@@ -222,6 +222,11 @@ function geodir_add_page_id_in_query_var(){
 	$page_id = $wp_query->get_queried_object_id();
 	
 	if(!get_query_var('page_id')){
+		// fix for WP tags conflict with enfold theme
+		$theme_name = strtolower(wp_get_theme());
+		if (!geodir_is_geodir_page() && strpos($theme_name, 'enfold')!==false) {
+			return $wp_query;
+		}
 		$wp_query->set( 'page_id', $page_id );
 	}
 	
@@ -307,7 +312,7 @@ function geodir_set_location_var_in_session_in_core($wp)
 									'compare_operator' =>'' 
 								);
 								
-			$location_array= geodir_get_location_array($args) ;
+			$location_array = function_exists('geodir_get_location_array') ? geodir_get_location_array($args) : array();
 			if(!empty($location_array))
 			{
 				$_SESSION['gd_multi_location']=1 ;

@@ -2049,7 +2049,7 @@ function geodir_post_attachments()
     <h5 class="form_title"> 
     	<?php if($image_limit!=0 && $image_limit==1 ){echo '<br /><small>('.__('You can upload' , GEODIRECTORY_TEXTDOMAIN).' '.$image_limit.' '.__('image with this package' , GEODIRECTORY_TEXTDOMAIN).')</small>';} ?>
         <?php if($image_limit!=0 && $image_limit>1 ){echo '<br /><small>('.__('You can upload' , GEODIRECTORY_TEXTDOMAIN).' '.$image_limit.' '.__('images with this package' , GEODIRECTORY_TEXTDOMAIN).')</small>';} ?>
-        <?php if($image_limit==0){echo '<br /><small>('.__('You can upload' , GEODIRECTORY_TEXTDOMAIN).' '.$image_limit.' '.__('images with this package' , GEODIRECTORY_TEXTDOMAIN).')</small>';} ?>
+        <?php if($image_limit==0){echo '<br /><small>('.__('You can upload unlimited images with this package' , GEODIRECTORY_TEXTDOMAIN).')</small>';} ?>
     </h5>
 
 

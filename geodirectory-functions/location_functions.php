@@ -108,13 +108,12 @@ function geodir_location_form_submit()
 		
 		//UPDATE AND DELETE LISTING
 		$posttype = geodir_get_posttypes(); 
-		if(isset($_REQUEST['listing_action']) && $_REQUEST['listing_action'] == 'delete')
-		{
+		if (isset($_REQUEST['listing_action']) && $_REQUEST['listing_action'] == 'delete') {
+		
+			foreach ($posttype as $posttypeobj) {
 			
-			foreach($posttype as $posttypeobj)
-			{
-						
-				if($old_location->city_latitude != $_REQUEST['latitude'] || $old_location->city_longitude != $_REQUEST['longitude']){
+				/* do not update latitude and longitude otrherwise all listings will be spotted on one point on map
+				if ($old_location->city_latitude != $_REQUEST['latitude'] || $old_location->city_longitude != $_REQUEST['longitude']) {
 					
 					$del_post_sql = $wpdb->get_results(
 						$wpdb->prepare(
@@ -122,31 +121,33 @@ function geodir_location_form_submit()
 							array($locationid,$_REQUEST['city'],$_REQUEST['region'])
 						)
 					);
-					
-					if(!empty($del_post_sql)){
-						foreach($del_post_sql as $del_post_info)
-						{
-							$postid = $del_post_info->post_id;
-							wp_delete_post($postid);
+					$sql = $wpdb->prepare(
+							"SELECT post_id from ".$plugin_prefix.$posttypeobj."_detail WHERE post_location_id = %d AND (post_city != %s OR post_region != %s)",
+							array($locationid,$_REQUEST['city'],$_REQUEST['region'])
+						);
+					if (!empty($del_post_sql)) {
+						foreach ($del_post_sql as $del_post_info) {
+							$postid = (int)$del_post_info->post_id;
+							//wp_delete_post($postid); // update post location instead of delete post
+							$sql = $wpdb->prepare(
+								"UPDATE ".$plugin_prefix.$posttypeobj."_detail SET post_latitude=%s, post_longitude=%s WHERE post_location_id=%d AND post_id=%d", 
+								array( $_REQUEST['latitude'], $_REQUEST['longitude'], $locationid, $postid )
+							);
+							$wpdb->query($sql);
 						}
 					}
-				
 				}
+				*/
 				
-				$default_location = geodir_get_default_location();
+				$post_locations =  '['.$default_location->city_slug.'],['.$default_location->region_slug.'],['.$default_location->country_slug.']'; // set all overall post location
 				
-			$post_locations =  '['.$default_location->city_slug.'],['.$default_location->region_slug.'],['.$default_location->country_slug.']'; // set all overall post location
-		
-				$wpdb->query(
-					$wpdb->prepare(
+				$sql = $wpdb->prepare(
 						"UPDATE ".$plugin_prefix.$posttypeobj."_detail SET post_city=%s, post_region=%s, post_country=%s, post_locations=%s
 						WHERE post_location_id=%d AND ( post_city!=%s OR post_region!=%s OR post_country!=%s)", 
 						array($_REQUEST['city'],$_REQUEST['region'],$_REQUEST['country'],$post_locations,$locationid,$_REQUEST['city'],$_REQUEST['region'],$_REQUEST['country'])
-					)
-				);
-				
+					);
+				$wpdb->query($sql);
 			}
-			
 		}
 	}
 }

@@ -1458,6 +1458,23 @@ function geodir_get_infowindow_html($postinfo_obj, $post_preview = ''){
 		$timing = str_replace($srcharr,$replarr,(geodir_get_post_meta($ID,'geodir_timing',true)));
 		
 	}
+	
+	// filter field as per price package
+	global $geodir_addon_list;
+	if (isset($geodir_addon_list['geodir_payment_manager']) && $geodir_addon_list['geodir_payment_manager']=='yes') {
+		$post_type = get_post_type($ID);
+		$package_id = isset($postinfo_obj->package_id) && $postinfo_obj->package_id ? $postinfo_obj->package_id : NULL;		
+		$field_name = 'geodir_contact';
+		if (!check_field_visibility($package_id, $field_name, $post_type)) {
+			$contact = '';
+		}
+		
+		$field_name = 'geodir_timing';
+		if (!check_field_visibility($package_id, $field_name, $post_type)) {
+			$timing = '';
+		}
+	}
+	
 	if($lat && $lng){
 	
 	ob_start(); ?>

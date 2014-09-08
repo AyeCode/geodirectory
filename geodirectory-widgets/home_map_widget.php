@@ -47,7 +47,7 @@ class geodir_homepage_map extends WP_Widget {
 	
 	/* home map post type slider */
 	if ($is_geodir_home_map_widget) {
-		add_action( 'wp_footer', array($this, geodir_home_map_add_script), 100 );
+		add_action( 'wp_footer', array($this, 'geodir_home_map_add_script'), 100 );
 	}
 	
 }

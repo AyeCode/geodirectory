@@ -1900,7 +1900,10 @@ function geodir_show_listing_info($fields_location=''){
 							}
 							
 														
-							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'"><span class="geodir-i-website" style="'.$field_icon.'">'.$field_icon_af.'<a href="'.$website.'" target="_blank" ><strong>'.apply_filters( 'geodir_custom_field_website_name', stripslashes(__($type['site_title'],GEODIRECTORY_TEXTDOMAIN)),$website, $post->ID ).'</strong></a></span></div>';
+							// all search engines that use the nofollow value exclude links that use it from their ranking calculation
+							$rel = strpos($website, get_site_url())!==false ? '' : 'rel="nofollow"';
+														
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'"><span class="geodir-i-website" style="'.$field_icon.'">'.$field_icon_af.'<a href="'.$website.'" target="_blank" '.$rel.' ><strong>'.apply_filters( 'geodir_custom_field_website_name', stripslashes(__($type['site_title'],GEODIRECTORY_TEXTDOMAIN)),$website, $post->ID ).'</strong></a></span></div>';
 						
 						endif;
 						
@@ -3107,5 +3110,25 @@ function geodir_custom_sort_field_adminhtml($field_type , $result_str, $field_in
 		</div>
 	</li> <?php
 	
+}
+}
+
+// filter field as per price package
+if (!function_exists('check_field_visibility')) {
+function check_field_visibility($package_id, $field_name, $post_type) {
+	global $wpdb, $geodir_addon_list;
+	if (!(isset($geodir_addon_list['geodir_payment_manager']) && $geodir_addon_list['geodir_payment_manager']=='yes')) {
+		return true;
+	}
+	global $wpdb;
+	if (!$package_id || !$field_name || !$post_type) {
+		return true;
+	}
+	$sql = $wpdb->prepare("SELECT id FROM ".GEODIR_CUSTOM_FIELDS_TABLE." WHERE is_active='1' AND htmlvar_name=%s AND post_type=%s AND FIND_IN_SET(%s, packages)",array($field_name, $post_type, (int)$package_id));
+
+	if ($wpdb->get_var($sql)) {
+		return true;
+	}
+	return false;
 }
 }

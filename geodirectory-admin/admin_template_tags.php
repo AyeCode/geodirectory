@@ -408,7 +408,7 @@ function geodir_admin_option_form($tab_name)
                                 <td class="forminp">
                                     <div class="gtd-formfeild" style="padding-top:10px;">
                                        <input style="display:none;" type="radio" name="listing_action" checked="checked" value="delete" /> 
-                                      <label><?php _e('Post will be deleted if both city and map marker position has been changed.',GEODIRECTORY_TEXTDOMAIN);?></label> 
+                                      <label><?php _e('Post will be updated if both city and map marker position has been changed.',GEODIRECTORY_TEXTDOMAIN);?></label> 
                                     </div>
                                 </td>
                             </tr>

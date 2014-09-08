@@ -178,7 +178,7 @@ add_action('wp_footer','geodir_add_sharelocation_scripts');
 add_action('wp_head','geodir_add_fontawesome'); 
 add_action('admin_head','geodir_add_fontawesome'); 
 function geodir_add_fontawesome(){
-	echo apply_filters('geodir_fontawesome','<link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">');
+	echo apply_filters('geodir_fontawesome','<link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">');
 }
 
 /// add action for theme switch to blank previous theme navigation location setting 
@@ -1144,13 +1144,52 @@ function geodir_remove_template_redirect_actions()
 	}
 }
 
+
+
+add_filter('wpseo_title' , 'geodir_post_type_archive_title',11, 1 );
+
 /// add loction variables in geodirectory title parameter 
-add_filter('post_type_archive_title' , 'geodir_post_type_archive_title');
+add_filter('post_type_archive_title' , 'geodir_post_type_archive_title',10, 1 );
 function geodir_post_type_archive_title($title)
-{
-	global $wp ;
-	if(geodir_is_geodir_page())
+{		
+	global $wp_query,$wp,$wpdb;
+	$wpseo_edit = false;
+	$current_term = $wp_query->get_queried_object();
+	if(!isset($current_term->ID)){$current_term->ID='';}
+	if(geodir_is_geodir_page() && (is_tax() || $current_term->ID==get_option('geodir_location_page')))
 	{
+		
+####### FIX FOR YOAST SEO START ########
+
+$separator_options = array(
+			'sc-dash'    => '-',
+			'sc-ndash'   => '&ndash;',
+			'sc-mdash'   => '&mdash;',
+			'sc-middot'  => '&middot;',
+			'sc-bull'    => '&bull;',
+			'sc-star'    => '*',
+			'sc-smstar'  => '&#8902;',
+			'sc-pipe'    => '|',
+			'sc-tilde'   => '~',
+			'sc-laquo'   => '&laquo;',
+			'sc-raquo'   => '&raquo;',
+			'sc-lt'      => '&lt;',
+			'sc-gt'      => '&gt;',
+		);
+
+
+$wpseo = get_option('wpseo_titles');
+if(is_array($wpseo) && is_plugin_active( 'wordpress-seo/wp-seo.php' )){
+	
+$sep = $separator_options[$wpseo['separator']];
+$title_parts = explode(' '.$sep.' ',$title,2);
+$title = $title_parts[0];
+$wpseo_edit = true;
+}
+####### FIX FOR YOAST SEO END ########
+
+
+		
 		$location_array = geodir_get_current_location_terms('query_vars') ;
 		if(!empty($location_array))
 		{
@@ -1185,6 +1224,9 @@ function geodir_post_type_archive_title($title)
 			}
 		}
 	}
+####### FIX FOR YOAST SEO START ########	
+	if($wpseo_edit){$title = $title.' '.$sep.' '.$title_parts[1];}
+####### FIX FOR YOAST SEO END ########	
 	return $title;
 }
 
@@ -1455,3 +1497,4 @@ function geodir_user_favourite_listing_count(){
 	return $user_listing;
 	
 }
+
