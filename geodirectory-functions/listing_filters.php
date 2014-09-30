@@ -206,15 +206,17 @@ function set_listing_request(){
 
 
 /* ====== Place Listing Geodir loop filters ===== */
-
-
-function geodir_listing_loop_filter($query){
-	
-	global $wp_query,$geodir_post_type,$table,$plugin_prefix,$table,$term;
+function geodir_listing_loop_filter( $query ) {
+	global $wp_query, $geodir_post_type, $table, $plugin_prefix, $table,$term;
+		
+	// fix wp_reset_query for popular post view widget
+	if ( !geodir_is_geodir_page() ) {
+		return;
+	}
 	
 	$geodir_post_type = geodir_get_current_posttype();
-	
-	if(isset($wp_query->tax_query->queries) && $wp_query->tax_query->queries){
+		
+	if( isset( $wp_query->tax_query->queries ) && $wp_query->tax_query->queries ) {
 		$taxonomies = wp_list_pluck( $wp_query->tax_query->queries, 'taxonomy' );
 		
 		if(isset($wp_query->query[$taxonomies[0]])){
@@ -255,7 +257,6 @@ function geodir_listing_loop_filter($query){
 		}
 		
 	}
-	
 	return $query;
 }
 

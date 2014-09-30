@@ -10,9 +10,7 @@
  */
 global $flush_rewrite_rules;
  
-
 function geodir_register_taxonomies() {
-
 	$taxonomies = array();
 	$taxonomies = get_option('geodir_taxonomies');
 	// If custom taxonomies are present, register them
@@ -20,19 +18,15 @@ function geodir_register_taxonomies() {
 		// Sort taxonomies
 		ksort( $taxonomies );
 		
-		
-		
 		// Register taxonomies
-		foreach ( $taxonomies as $taxonomy => $args ){
-			
+		foreach ( $taxonomies as $taxonomy => $args ) {
 			// Allow taxonomie names to be translated
-			if(!empty($args['args']['labels'])){
-				foreach($args['args']['labels'] as $key=>$tax_label){
-					$args['args']['labels'][$key] = __($tax_label, GEODIRECTORY_TEXTDOMAIN);
-					}
+			if ( !empty( $args['args']['labels'] ) ) {
+				foreach ( $args['args']['labels'] as $key => $tax_label ) {
+					$args['args']['labels'][$key] = __( $tax_label, GEODIRECTORY_TEXTDOMAIN );
 				}
-			
-			
+			}
+
 			$tax = register_taxonomy( $taxonomy, $args['object_type'], $args['args'] );
 			
 			if ( taxonomy_exists( $taxonomy ) ) {

@@ -690,5 +690,27 @@ function geodir_diagnose_default_pages()
 }
 /* Ajax Handler Ends*/
 
+/* sort by expire */
+add_filter('posts_clauses_request', 'geodir_posts_clauses_request');
+function geodir_posts_clauses_request($clauses) {
+	global $wpdb, $wp_query, $plugin_prefix;
+	
+	if (is_admin() && !empty($wp_query->query_vars) && !empty($wp_query->query_vars['is_geodir_loop']) && !empty($wp_query->query_vars['orderby']) && $wp_query->query_vars['orderby']=='expire' && !empty($wp_query->query_vars['post_type']) && in_array( $wp_query->query_vars['post_type'], geodir_get_posttypes()) && !empty($wp_query->query_vars['orderby']) && isset($clauses['join']) && isset($clauses['orderby']) && isset($clauses['fields'])) {
+		$table = $plugin_prefix . $wp_query->query_vars['post_type'] . '_detail';
+		
+		$join = $clauses['join'] . ' INNER JOIN ' . $table . ' AS gd_posts ON (gd_posts.post_id = ' . $wpdb->posts . '.ID)';
+		$clauses['join'] = $join;
+		
+		$fields = $clauses['fields'] != '' ? $clauses['fields'] . ', ' : '';
+		$fields .= 'IF(UNIX_TIMESTAMP(DATE_FORMAT(gd_posts.expire_date, "%Y-%m-%d")), UNIX_TIMESTAMP(DATE_FORMAT(gd_posts.expire_date, "%Y-%m-%d")), 253402300799) AS gd_expire';
+		$clauses['fields'] = $fields;
+		
+		$order = !empty($wp_query->query_vars['order']) ? $wp_query->query_vars['order'] : 'ASC';
+		$orderby = 'gd_expire ' . $order;
+		$clauses['orderby'] = $orderby;
+	}
+	return $clauses;
+}
 
-
+/* display add listing page for wpml */
+add_action( 'admin_init', 'geodir_wpml_check_element_id', 10, 2 );

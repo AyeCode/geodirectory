@@ -78,6 +78,7 @@ function initMap(map_options){
 			jQuery("#"+map_canvas).goMap();
 			google.maps.event.trigger(jQuery.goMap.map, 'resize');
 			jQuery.goMap.map.setCenter(center); 
+			setGeodirMapSize(true);
 		}, 100);
 	}
 }
@@ -638,3 +639,51 @@ function computeTotalDistance(result, map_canvas) {
 		//document.getElementById(map_canvas+"_directionsPanel").innerHTML = "<p>Total Distance: <span id='totalk'>" + totalk_round + " km</span></p><p>Total Distance: <span id='totalm'>" + totalm_round + " miles</span></p>";
 	} 
 
+jQuery(function($){
+	setGeodirMapSize(false);
+	$(window).resize(function() {
+		setGeodirMapSize(true);
+	});
+})
+function setGeodirMapSize(resize) {
+	var isAndroid = navigator.userAgent.toLowerCase().indexOf("android")>-1 ? true : false;
+	var dW = parseInt(jQuery(window).width());
+	var dH = parseInt(jQuery(window).height());
+	if(GeodirIsiPhone() || ( isAndroid && (((dW>dH && dW==640 && dH==360) || (dH>dW && dW==360 && dH==640)) || ((dW>dH && dW==533 && dH==320) || (dH>dW && dW==320 && dH==533)) || ((dW>dH && dW==960 && dH==540) || (dH>dW && dW==540 && dH==960))))) {
+		jQuery(document).find('.geodir_map_container').each(function(){
+			jQuery(this).addClass('geodir-map-iphone');
+		});
+	}
+	else {
+		jQuery(document).find('.geodir_map_container').each(function(){
+			var $this = this;
+			var gmcW = parseInt(jQuery($this).width());
+			var gmcH = parseInt(jQuery($this).height());
+			if (gmcW>=400 && gmcH>=350) {
+				jQuery($this).removeClass('geodir-map-small').addClass('geodir-map-full');
+			} else {
+				jQuery($this).removeClass('geodir-map-full').addClass('geodir-map-small');
+			}
+		});
+		if (resize) {
+			jQuery(document).find('.geodir_map_container_fullscreen').each(function(){
+				var $this = this;
+				var gmcW = parseInt(jQuery(this).find('.gm-style').width());
+				var gmcH = parseInt(jQuery(this).find('.gm-style').height());
+				if (gmcW>=400 && gmcH>=370) {
+					jQuery($this).removeClass('geodir-map-small').addClass('geodir-map-full');
+				} else {
+					jQuery($this).removeClass('geodir-map-full').addClass('geodir-map-small');
+				}
+			});
+		}
+	}
+}
+
+function GeodirIsiPhone(){
+	if ((navigator.userAgent.toLowerCase().indexOf("iphone")>-1) || (navigator.userAgent.toLowerCase().indexOf("ipod")>-1) || (navigator.userAgent.toLowerCase().indexOf("ipad")>-1)) {
+		return true;
+	} else {
+		return false;
+	}
+}

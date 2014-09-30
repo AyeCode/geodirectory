@@ -39,6 +39,7 @@ class geodir_homepage_map extends WP_Widget {
 	$map_args['enable_jason_on_load'] = false;
 	$map_args['enable_marker_cluster'] = false;
 	$map_args['enable_map_resize_button'] = true;
+	$map_args['map_class_name'] = 'geodir-map-home-page';
 	
 	$is_geodir_home_map_widget = true;
 	$map_args['is_geodir_home_map_widget'] = $is_geodir_home_map_widget;

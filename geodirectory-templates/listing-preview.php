@@ -200,7 +200,6 @@ do_action('geodir_before_main_content','listing-preview-page');
                         if(taxonomy_exists($post_type.'_tags')):
                             $links = array();
                             $terms = array();
-                            $post_tags = explode(",",trim($post->post_tags,","));
                         	
 							foreach($post_tags as $post_term){
         						

@@ -31,24 +31,24 @@ function sec2hms($sec, $padHours = false) {
 	return $hms;
 }
 
-function geodir_getGoogleAnalytics($page,$ga_start,$ga_end) {
+function geodir_getGoogleAnalytics( $page, $ga_start, $ga_end) {
 	
 	include_once ('analytics_api.php');
 	
 	// enter your login, password and id into the variables below to try it out
-	$login = get_option('geodir_ga_user');
-	$password = get_option('geodir_ga_pass');
+	$login = get_option( 'geodir_ga_user' );
+	$password = get_option( 'geodir_ga_pass' );
 
 	// NOTE: the id is in the form ga:12345 and not just 12345
 	// if you do e.g. 12345 then no data will be returned
 	// read http://www.electrictoolbox.com/get-id-for-google-analytics-api/ for info about how to get this id from the GA web interface
 	// or load the accounts (see below) and get it from there
 	// if you don't specify an id here, then you'll get the "Badly formatted request to the Google Analytics API..." error message
-	$id = trim(get_option('geodir_ga_id'));
+	$id = trim( get_option( 'geodir_ga_id' ) );
 	
 	$api = new analytics_api();
 	
-	if($api->login($login, $password)) {
+	if( $api->login( $login, $password ) ) {
 	
 		$testr = $page;
 		$metrics['ga:pageviews'] ='0';
@@ -57,15 +57,19 @@ function geodir_getGoogleAnalytics($page,$ga_start,$ga_end) {
 			
 			$data = $api->data($id, 'ga:pagePath', 'ga:pageviews,ga:uniquePageviews,ga:bounces,ga:entrances,ga:exits,ga:newVisits,ga:timeOnPage', '', $ga_start, $ga_end, 10, 1, $filters, false);
 			
-			foreach($data as $dimension => $metrics) {
+			foreach( $data as $dimension => $metrics ) {
 				$time = sec2hms($metrics['ga:timeOnPage'] / ($metrics['ga:pageviews'] - $metrics['ga:exits']));
-				echo "<b>Google Analytics (Last 30 Days)</b><br>Total pageviews: {$metrics['ga:pageviews']} <br>Unique visitors: {$metrics['ga:uniquePageviews']}<br>Average time on page: {$time}<br>\n";
+				
+				echo "<b>" . __( "Google Analytics (Last 30 Days)", GEODIRECTORY_TEXTDOMAIN ) . "</b><br>" . __( "Total pageviews:", GEODIRECTORY_TEXTDOMAIN ) . " {$metrics['ga:pageviews']} <br>" . __( "Unique visitors:", GEODIRECTORY_TEXTDOMAIN ) . " {$metrics['ga:uniquePageviews']}<br>" . __( "Average time on page:", GEODIRECTORY_TEXTDOMAIN ) . " {$time}<br>\n";
 			}
 		
-		}else{echo '<b>Google Analytics (Last 30 Days)</b><br>No Stats Yet';}		
+		} else {
+			echo '<b>' . __( 'Google Analytics (Last 30 Days)', GEODIRECTORY_TEXTDOMAIN ) . '</b><br>' . __( 'No Stats Yet', GEODIRECTORY_TEXTDOMAIN );
+		}		
 	
-	}else {echo "login failed\n"; }
-
+	} else {
+		echo __( 'Login failed', GEODIRECTORY_TEXTDOMAIN ) . "\n";
+	}
 }// end GA function
 
 

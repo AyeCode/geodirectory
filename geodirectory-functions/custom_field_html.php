@@ -259,6 +259,18 @@ $default = isset($field_info->is_admin)	 ? $field_info->is_admin : '';
                         <br />    <span><?php _e('Want to show this on detail page ?',GEODIRECTORY_TEXTDOMAIN);?></span>
                     </td>
                 </tr>
+				<?php if (!$default && in_array($field_type, array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html'))) { ?>
+				<tr>
+					<td><strong><?php _e('Show as a Tab on detail page? :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+					<td align="left">
+						<select name="show_as_tab" id="show_as_tab" >
+							<option value="1" <?php if(isset($field_info->show_as_tab) && $field_info->show_as_tab=='1'){ echo 'selected="selected"';}?>><?php _e('Yes',GEODIRECTORY_TEXTDOMAIN);?></option>
+							<option value="0" <?php if((isset($field_info->show_as_tab) && ($field_info->show_as_tab=='0' || $field_info->show_as_tab=='')) || !isset($field_info->show_as_tab)){ echo 'selected="selected"';}?>><?php _e('No',GEODIRECTORY_TEXTDOMAIN);?></option>
+						</select>
+						<br /><span><?php _e('Want to display this as a tab on detail page? If "Yes" then "Show on detail page?" must be Yes.',GEODIRECTORY_TEXTDOMAIN);?></span>
+					</td>
+				</tr>
+				<?php } ?>
                 
   <?php 
 			

@@ -531,15 +531,22 @@ function geodir_comment( $comment, $args, $depth ) {
 add_filter('get_comments_number', 'geodir_fix_comment_count', 10, 2);
 if ( ! function_exists( 'geodir_fix_comment_count' ) ) {
 function geodir_fix_comment_count( $count, $post_id) {
-	if ( ! is_admin() || strpos($_SERVER['REQUEST_URI'],'admin-ajax.php') ) {
-		//$arr_comments = get_comments('status=approve&post_id=' . $post_id . '&parent=0') ;
-		//$comments_by_type = separate_comments( $arr_comments );
-		//return count($comments_by_type['comment']);
-		global $post; //print_r($post);
+	if ( !is_admin() || strpos($_SERVER['REQUEST_URI'],'admin-ajax.php') ) {
+		global $post;
 		$post_types = geodir_get_posttypes();
 		
-		//if(in_array(get_post_type( $post_id ),$post_types)){return geodir_get_comments_number($post_id);}else{return $count;}
-		if(in_array(get_post_type( $post_id ),$post_types)){if($post && isset($post->rating_count)){return $post->rating_count;}else{return geodir_get_comments_number($post_id);}}else{return $count;}
+		if (in_array(get_post_type( $post_id ), $post_types)) {
+			$review_count = geodir_get_review_count_total($post_id);
+			return $review_count;
+			
+			if ($post && isset($post->rating_count)) { 
+				return $post->rating_count;
+			} else {
+				return geodir_get_comments_number($post_id);
+			}
+		} else {
+			return $count;
+		}
 	} else {
 		return $count;
 	}

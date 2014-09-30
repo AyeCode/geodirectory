@@ -9,7 +9,8 @@ function geodir_draw_map($map_args = array())
 {
 	global $map_canvas_arr ;
 	
-	$map_canvas_name =  (!empty($map_args) && $map_args['map_canvas_name'] !='') ? $map_args['map_canvas_name'] : 'home_map_canvas' ;
+	$map_canvas_name =  (!empty($map_args) && $map_args['map_canvas_name'] !='') ? $map_args['map_canvas_name'] : 'home_map_canvas';
+	$map_class_name =  (!empty($map_args) && isset($map_args['map_class_name'])) ? $map_args['map_class_name'] : '';
 	
 	$default_location  = geodir_get_default_location();
 
@@ -99,7 +100,7 @@ function geodir_draw_map($map_args = array())
     <div id="catcher_<?php echo $map_canvas_name;?>"></div>
     <div class="stick_trigger_container" >
     <div class="trigger_sticky triggeroff_sticky" ></div>
-     <div class="top_banner_section geodir_map_container"  id="sticky_map_<?php echo $map_canvas_name;?>"  style="height:<?php echo $geodir_map_options['height'];?>;width:<?php echo $map_width;?>;">
+     <div class="top_banner_section geodir_map_container <?php echo $map_class_name;?>"  id="sticky_map_<?php echo $map_canvas_name;?>"  style="height:<?php echo $geodir_map_options['height'];?>;width:<?php echo $map_width;?>;">
      
      	<div class="map_background">
             <div class="top_banner_section_in clearfix" >

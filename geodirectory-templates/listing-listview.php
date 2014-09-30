@@ -88,7 +88,7 @@ $post_view_article_class = apply_filters('geodir_post_view_article_extra_class' 
 							
 								 <?php do_action('geodir_before_listing_post_excerpt', $post ); ?>
 								 <?php echo geodir_show_listing_info('listing');?>       
-				<div class="geodir-entry-content"><p><?php if(isset($character_count)){
+				<div class="geodir-entry-content"><p><?php if(isset($character_count)&& $character_count){
 				
 				echo geodir_max_excerpt($character_count);}else{ the_excerpt(); }?></p></div>
 									
@@ -100,34 +100,28 @@ $post_view_article_class = apply_filters('geodir_post_view_article_extra_class' 
 					
 					$review_show = geodir_is_reviews_show('listview');
 					
-					if($review_show){
-					
-					$comment_count = $post->rating_count; 
-					$post_ratings = $post->overall_rating;
-					//if($post_ratings != 0 && !$preview){
-					if(!$preview){
-						 if($comment_count > 0)
-				$post_avgratings = ($post_ratings / $comment_count);
-			else
-				$post_avgratings = $post_ratings;
-						do_action('geodir_before_review_rating_stars_on_listview' , $post_avgratings , $post->ID) ;
-						echo geodir_get_rating_stars($post_avgratings,$post->ID);
-						do_action('geodir_after_review_rating_stars_on_listview' , $post_avgratings , $post->ID);
+					if ($review_show) {
+						$comment_count = geodir_get_review_count_total($post->ID); 
+						$post_ratings = geodir_get_review_total($post->ID);
+						
+						if (!$preview) {
+							$post_avgratings = geodir_get_commentoverall_number($post->ID);
+							
+							do_action('geodir_before_review_rating_stars_on_listview' , $post_avgratings , $post->ID) ;
+							echo geodir_get_rating_stars($post_avgratings,$post->ID);
+							do_action('geodir_after_review_rating_stars_on_listview' , $post_avgratings , $post->ID);
+						}
+						?>
+						<a href="<?php comments_link(); ?>" class="geodir-pcomments"><i class="fa fa-comments"></i>
+						<?php comments_number( __('No Reviews',GEODIRECTORY_TEXTDOMAIN), __('1 Review',GEODIRECTORY_TEXTDOMAIN), __('% Reviews',GEODIRECTORY_TEXTDOMAIN) ); ?></a>
+					<?php 
 					}
-				?>
-								 
-								 <a href="<?php comments_link(); ?>" class="geodir-pcomments"><i class="fa fa-comments"></i>
-						<?php comments_number( __('No Reviews',GEODIRECTORY_TEXTDOMAIN), __('1 Review',GEODIRECTORY_TEXTDOMAIN), __('% Reviews',GEODIRECTORY_TEXTDOMAIN) ); ?>
-								 </a>
-									
-			<?php } ?>
-								 
-								 <?php  geodir_favourite_html($post->post_author,$post->ID); ?>
-								 
-								 <?php
-				 global $wp_query ;
+					geodir_favourite_html($post->post_author,$post->ID);
+					
+					global $wp_query ;
+					
 					$show_pin_point = $wp_query->is_main_query();
-				 if( !empty( $show_pin_point) && is_active_widget( false, "","geodir_map_v3_listing_map" ) ){ 
+				 	if( !empty( $show_pin_point) && is_active_widget( false, "","geodir_map_v3_listing_map" ) ){ 
 				 
 						/*if($json_info = json_decode($post->marker_json))
 							$marker_icon = $json_info->icon;*/

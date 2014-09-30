@@ -59,7 +59,16 @@ function geodir_templates_scripts()
 		
 		// SCRIPT FOR UPLOAD END
 		
-		
+		// check_ajax_referer function is used to make sure no files are uplaoded remotly but it will fail if used between https and non https so we do the check below of the urls
+		if(str_replace("https","http",admin_url('admin-ajax.php')) && !empty($_SERVER['HTTPS'])){
+		$ajax_url =	 admin_url('admin-ajax.php');
+		}elseif(!str_replace("https","http",admin_url('admin-ajax.php')) && empty($_SERVER['HTTPS'])){
+		$ajax_url =	 admin_url('admin-ajax.php');	
+		}elseif(str_replace("https","http",admin_url('admin-ajax.php')) && empty($_SERVER['HTTPS'])){
+		$ajax_url =	 str_replace("https","http",admin_url('admin-ajax.php'));	
+		}elseif(!str_replace("https","http",admin_url('admin-ajax.php')) && !empty($_SERVER['HTTPS'])){
+		$ajax_url =	 str_replace("http","https",admin_url('admin-ajax.php'));	
+		}
 		
 		// place js config array for plupload
 		$plupload_init = array(
@@ -70,7 +79,7 @@ function geodir_templates_scripts()
 			'file_data_name' => 'async-upload', // will be adjusted per uploader
 			'multiple_queues' => true,
 			'max_file_size' => geodir_max_upload_size(),
-			'url' => admin_url('admin-ajax.php'),
+			'url' =>  $ajax_url,
 			'flash_swf_url' => includes_url('js/plupload/plupload.flash.swf'),
 			'silverlight_xap_url' => includes_url('js/plupload/plupload.silverlight.xap'),
 			'filters' => array(array('title' => __('Allowed Files',GEODIRECTORY_TEXTDOMAIN), 'extensions' => '*')),

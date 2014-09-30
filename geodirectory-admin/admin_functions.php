@@ -641,28 +641,29 @@ function geodir_update_options($options, $dummy = false) {
 			}	
 	   
 		elseif (isset($value['type']) && $value['type']=='map') :
-		
 				$post_types = array();
 				$categories = array();
 				$i=0;
 				
-				if(!empty($_POST['home_map_post_types'])):
-					foreach($_POST['home_map_post_types'] as $post_type):
+				if( !empty( $_POST['home_map_post_types'] ) ) :
+					foreach( $_POST['home_map_post_types'] as $post_type ) :
 							$post_types[] = $post_type;
 					endforeach;
 				endif;
 				
-				update_option('geodir_exclude_post_type_on_map', $post_types);
+				update_option( 'geodir_exclude_post_type_on_map', $post_types );
 				
-				if(!empty($_POST['post_category'])):
-					foreach($_POST['post_category'] as $texonomy => $cat_arr):
-						foreach($cat_arr as $category):
-							$categories[] = $category;
+				if( !empty( $_POST['post_category'] ) ) :
+					foreach( $_POST['post_category'] as $texonomy => $cat_arr ) :
+						$categories[$texonomy] = array();
+						foreach( $cat_arr as $category ) :
+							$categories[$texonomy][] = $category;
 						endforeach;
+						$categories[$texonomy] = !empty( $categories[$texonomy] ) ? array_unique( $categories[$texonomy] ) : array();
 					endforeach;
 				endif;
-				
-				update_option('geodir_exclude_cat_on_map', $categories);
+				update_option( 'geodir_exclude_cat_on_map', $categories );
+				update_option( 'geodir_exclude_cat_on_map_upgrade', 1 );
 		elseif (isset($value['type']) && $value['type']=='map_default_settings') :
 		
 				
@@ -808,23 +809,17 @@ if (!function_exists('geodir_manage_post_columns')) {
 		switch( $column ):
 			/* If displaying the 'city' column. */
 			case 'location' :
-
-					$location_id = geodir_get_post_meta($post->ID,'post_location_id',true);
-					$location = geodir_get_location($location_id );
-					/* If no city is found, output a default message. */
-					if ( empty( $location) )
-						 _e( 'Unknown' , GEODIRECTORY_TEXTDOMAIN );
+				$location_id = geodir_get_post_meta( $post->ID, 'post_location_id', true );
+				$location = geodir_get_location( $location_id );
+				/* If no city is found, output a default message. */
+				if ( empty( $location) ) {
+					_e( 'Unknown' , GEODIRECTORY_TEXTDOMAIN );
+				} else {
 					/* If there is a city id, append 'city name' to the text string. */
-					else{
-						$add_location_id = '';
-						if($location_id > 0)
-							$add_location_id = ' ('.$location_id.') ';
-						
-						echo ($location->country .'-'.$location->region.'-'.$location->city.$add_location_id);
-						}
-			break;
-		
-			
+					$add_location_id = $location_id > 0 ? ' ('.$location_id.')' : '';
+					echo ( __( $location->country, GEODIRECTORY_TEXTDOMAIN ) . '-' . $location->region . '-' . $location->city . $add_location_id );
+				}
+			break;		
 					
 			/* If displaying the 'expire' column. */
 			case 'expire' :
@@ -1722,50 +1717,52 @@ function geodir_admin_fields($options){
 						
 			case 'map':
             	?>	
-							<tr valign="top">
-					<!--<th scope="row" class="titledesc"><?php //echo $value['name']; ?></th>-->
-                    <td class="forminp">
-                    	<?php $post_types = geodir_get_posttypes('object');
-						
-							global $post_cat,$cat_display;
-							
-							$cat_display = 'checkbox';
-							
-							$gd_post_types = get_option('geodir_exclude_post_type_on_map');
-							
-							$gd_cats = get_option('geodir_exclude_cat_on_map');
-							$post_cat = implode(',',$gd_cats);
-							/*if($gd_post_types)
-								$p_types = array_keys($gd_post_types);*/
-							
-							$count = 1;	
-											 ?>
-                        <table width="70%" class="widefat">
-												<thead>
-                        	<tr>
-                        		<th><b><?php echo DESIGN_POST_TYPE_SNO; ?></b></th>
-                                <th><b><?php echo DESIGN_POST_TYPE; ?></b></th>
-                                <th><b><?php echo DESIGN_POST_TYPE_CAT; ?></b></th>
-                            </tr>
-                        	<?php foreach($post_types as $key => $post_types_obj):
-							 		
-									/*if($gd_post_types && in_array($key, $p_types) && !empty($gd_post_types[$key])){
-											$post_cat = implode(',',$gd_post_types[$key]);}	*/								
-							?>
-                                    <tr>
-                                    	<td valign="top" width="5%"><?php echo $count; ?></td>
-                                        <td valign="top" width="25%" id="td_post_types">
-                                            <input type="checkbox" name="home_map_post_types[]" id="<?php echo esc_attr( $value['id'] ); ?>" value="<?php echo $key; ?>" class="map_post_type" <?php if(is_array($gd_post_types)){ if ( in_array($key, $gd_post_types)) { ?> checked="checked"  <?php }} ?> /><?php echo $post_types_obj->labels->singular_name; ?></td>
-                                            <td width="40%">
-                                            <div class="home_map_category" style="overflow:auto; width:200px;  height:100px;" id="<?php echo $key; ?>"><?php $gd_taxonomy = geodir_get_taxonomies($key); echo geodir_custom_taxonomy_walker($gd_taxonomy); ?></div>
-																				</td>
-                                    </tr>
-                            <?php $count++; endforeach; ?>
-														</thead>
-                        </table>
-                        <p  ><?php _e('Note: Tick respective post type or categories which you want to hide from home page map widget.', GEODIRECTORY_TEXTDOMAIN)?></p>
-                    </td>
-                </tr><?php
+				<tr valign="top">
+				  <td class="forminp">
+				<?php 
+					global $post_cat, $cat_display;
+					$post_types = geodir_get_posttypes( 'object' );
+					$cat_display = 'checkbox';
+					$gd_post_types = get_option( 'geodir_exclude_post_type_on_map' );
+					$gd_cats = get_option( 'geodir_exclude_cat_on_map' );
+					$gd_cats_upgrade = (int)get_option( 'geodir_exclude_cat_on_map_upgrade' );				
+					$count = 1;
+				?>
+				<table width="70%" class="widefat">
+					<thead>
+						<tr>
+							<th><b><?php echo DESIGN_POST_TYPE_SNO; ?></b></th>
+							<th><b><?php echo DESIGN_POST_TYPE; ?></b></th>
+							<th><b><?php echo DESIGN_POST_TYPE_CAT; ?></b></th>
+						</tr>
+						<?php 
+					$gd_categs = $gd_cats;
+					foreach( $post_types as $key => $post_types_obj ) :
+						$checked = is_array( $gd_post_types ) && in_array( $key, $gd_post_types ) ? 'checked="checked"' : '';
+						$gd_taxonomy = geodir_get_taxonomies( $key );
+						if( $gd_cats_upgrade ) {
+							$gd_cat_taxonomy = isset( $gd_taxonomy[0] ) ? $gd_taxonomy[0] : '';
+							$gd_cats = isset( $gd_categs[$gd_cat_taxonomy] ) ? $gd_categs[$gd_cat_taxonomy] : array();
+							$gd_cats = !empty( $gd_cats ) && is_array( $gd_cats ) ? array_unique( $gd_cats ) : array();
+						}
+						$post_cat = implode( ',', $gd_cats );
+						$gd_taxonomy_list = geodir_custom_taxonomy_walker( $gd_taxonomy );
+					?>
+						<tr>
+						  <td valign="top" width="5%"><?php echo $count; ?></td>
+						  <td valign="top" width="25%" id="td_post_types"><input type="checkbox" name="home_map_post_types[]" id="<?php echo esc_attr( $value['id'] ); ?>" value="<?php echo $key; ?>" class="map_post_type" <?php echo $checked;?> />
+							<?php echo $post_types_obj->labels->singular_name; ?></td>
+						  <td width="40%">
+							<div class="home_map_category" style="overflow:auto;width:200px;height:100px;" id="<?php echo $key; ?>"><?php echo $gd_taxonomy_list; ?></div>
+						  </td>
+						</tr>
+					<?php $count++; endforeach; ?>
+					  </thead>
+					</table>
+					<p><?php _e('Note: Tick respective post type or categories which you want to hide from home page map widget.', GEODIRECTORY_TEXTDOMAIN)?></p>
+				   </td>
+				</tr>
+				<?php
             break;
 						
             case 'checkbox' :

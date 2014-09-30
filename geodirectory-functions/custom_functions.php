@@ -46,25 +46,44 @@ add_action('geodir_before_listing', 'geodir_list_view_select', 100);
 
 
 function geodir_max_excerpt($charlength) {
-	if($charlength=='0'){return;}
+	if ($charlength=='0') {
+		return;
+	}
 	$excerpt = get_the_excerpt();
 	$charlength++;
-
+	$excerpt_more = function_exists('geodirf_excerpt_more') ? geodirf_excerpt_more('') : geodir_excerpt_more('');
 	if ( mb_strlen( $excerpt ) > $charlength ) {
-		$subex = mb_substr( $excerpt, 0, $charlength - 5 );
-		$exwords = explode( ' ', $subex );
-		$excut = - ( mb_strlen( $exwords[ count( $exwords ) - 1 ] ) );
-		if ( $excut < 0 ) {
-			echo mb_substr( $subex, 0, $excut );
-		} else {
+		if (mb_strlen($excerpt_more)>0 && mb_strpos($excerpt, $excerpt_more)!==false) {
+			$excut = -(mb_strlen($excerpt_more));
+			$subex = mb_substr( $excerpt, 0, $excut );
+			if ($charlength > 0 && mb_strlen( $subex ) > $charlength) {
+				$subex = mb_substr( $subex, 0, $charlength );
+			}
 			echo $subex;
+		} else {
+			$subex = mb_substr( $excerpt, 0, $charlength - 5 );
+			$exwords = explode( ' ', $subex );
+			$excut = - ( mb_strlen( $exwords[ count( $exwords ) - 1 ] ) );
+			if ( $excut < 0 ) {
+				echo mb_substr( $subex, 0, $excut );
+			} else {
+				echo $subex;
+			}
 		}
 		echo ' <a class="excerpt-read-more" href="'.get_permalink().'" title="'.get_the_title().'">'; 
 		echo apply_filters('geodir_max_excerpt_end',__('Read more [...]',GEODIRECTORY_TEXTDOMAIN));
 		echo '</a>'; 
 
 	} else {
-		echo $excerpt;
+		if (mb_strlen($excerpt_more)>0 && mb_strpos($excerpt, $excerpt_more)!==false) {
+			$excut = - (mb_strlen($excerpt_more));
+			echo mb_substr( $excerpt, 0, $excut );
+			echo ' <a class="excerpt-read-more" href="'.get_permalink().'" title="'.get_the_title().'">'; 
+			echo apply_filters('geodir_max_excerpt_end',__('Read more [...]',GEODIRECTORY_TEXTDOMAIN));
+			echo '</a>';
+		} else {
+			echo $excerpt;
+		}
 	}
 }
 
@@ -450,19 +469,22 @@ function geodir_related_posts_display($request){
 			$viewall_url = get_term_link( (int)$category[0], $post_type.$category_taxonomy);
 			$geodir_add_location_url = NULL;
 		}
-		
 		ob_start();
 		?>
 		
 		
 				<div class="geodir_locations geodir_location_listing">
    						
-							<?php if(isset($request['is_widget']) && $request['is_widget'] == '1'){?>
+							<?php 
+							if (isset($request['is_widget']) && $request['is_widget'] == '1') {
+								$before_title = isset($before_title) ? $before_title : apply_filters( 'geodir_before_title','<h3 class="widget-title">' );
+								$after_title = isset($after_title) ? $after_title : apply_filters( 'geodir_after_title','</h3>' );
+							?>
 							<div class="location_list_heading clearfix">
 								<?php echo $before_title.$title.$after_title;?> 
-							</div><?php }
-							
-					
+							</div>
+							<?php 
+							}
 								$query_args = array(
 									'posts_per_page' => $post_number,
 									'is_geodir_loop' => true,
@@ -606,6 +628,7 @@ function geodir_add_meta_keywords()
 			$replace_location = geodir_get_current_location(array('what' => 'region' , 'echo'=>false));
 		} elseif ($location_type == 'country') {
 			$replace_location = geodir_get_current_location(array('what' => 'country' , 'echo'=>false));
+			$replace_location = __( $replace_location, GEODIRECTORY_TEXTDOMAIN );
 		}
 	}
 	
@@ -641,17 +664,18 @@ function geodir_add_meta_keywords()
 			}
 		}
 	}
-	
+	$geodir_meta_desc = $meta_desc;
 	if ($geodir_meta_desc!='') {
 		$geodir_meta_desc = strip_tags($geodir_meta_desc);
 		$geodir_meta_desc = esc_html($geodir_meta_desc);
 		$geodir_meta_desc = wp_html_excerpt($geodir_meta_desc, 1000, '.');
-		$geodir_meta_desc = str_replace('%location%', $replace_location, $geodir_meta_desc);
+		$geodir_meta_desc = isset($replace_location) ? str_replace('%location%', $replace_location, $geodir_meta_desc) : $geodir_meta_desc;
 		
 		$meta_desc = $geodir_meta_desc!='' ? $geodir_meta_desc : $meta_desc;
 	}
 	
 	if ($meta_desc) {
+		$meta_desc = stripslashes_deep($meta_desc);
 		echo apply_filters('geodir_seo_meta_description','<meta name="description" content="'.$meta_desc.'" />',$meta_desc);
 	}
 	
@@ -693,6 +717,7 @@ function geodir_add_meta_keywords()
 	}
 	
 	if ($meta_key) {
+		$meta_key = stripslashes_deep($meta_key);
 		echo apply_filters('geodir_seo_meta_keywords','<meta name="keywords" content="'.$meta_key.'" />',$meta_key);
 	}
 		
@@ -847,6 +872,7 @@ function geodir_show_detail_page_tabs(){
 		$map_args['enable_location_filters'] = false;
 		$map_args['enable_jason_on_load'] = true;
 		$map_args['enable_map_direction'] = true;
+		$map_args['map_class_name'] = 'geodir-map-detail-page';
 		
 	}elseif(geodir_is_page('preview')){
 		
@@ -895,6 +921,7 @@ function geodir_show_detail_page_tabs(){
 		$map_args['enable_location_filters'] = false;
 		$map_args['enable_jason_on_load'] = true;
 		$map_args['enable_map_direction'] = true;
+		$map_args['map_class_name'] = 'geodir-map-preview-page';
 
 	}
 	
@@ -951,7 +978,11 @@ function geodir_show_detail_page_tabs(){
 								case 'related_listing':
 									echo $related_listing;
 									break;		
-								default:
+								default: {
+									if (isset($post->$tab_index) && !empty($detail_page_tab['tab_content'])) {
+										echo $detail_page_tab['tab_content'];
+									}
+								}
 									break;
 						   	}
 							do_action('geodir_after_tab_content' ,$tab_index );

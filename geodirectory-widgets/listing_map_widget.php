@@ -54,7 +54,7 @@ class geodir_map_listingpage extends WP_Widget {
 	//Constructor
 	function geodir_map_listingpage() {
 		
-		$widget_ops = array('classname' => 'widget Google Map for Listing page', 'description' => __('Google Map for Listing page. It will show you google map V3 for Listing page.',GEODIRECTORY_TEXTDOMAIN) );		
+		$widget_ops = array('classname' => 'widget geodir-map-listing-page Google Map for Listing page', 'description' => __('Google Map for Listing page. It will show you google map V3 for Listing page.',GEODIRECTORY_TEXTDOMAIN) );		
 		$this->WP_Widget('geodir_map_v3_listing_map', __('GD > GMap - Listing page',GEODIRECTORY_TEXTDOMAIN), $widget_ops);
 		
 		
@@ -102,12 +102,14 @@ class geodir_map_listingpage extends WP_Widget {
 				$map_default_lng = $address_longitude = $post->post_longitude;
 				$mapview = $post->post_mapview;
 				$mapzoom = $post->post_mapzoom;
+				$map_args['map_class_name'] = 'geodir-map-listing-page-single';
 				
 			}else{
 				$default_location  = geodir_get_default_location();
 		
 				$map_default_lat 	=  	isset($default_location->city_latitude) ? $default_location->city_latitude : '';
 				$map_default_lng 	=  	isset($default_location->city_longitude) ? $default_location->city_longitude : '';
+				$map_args['map_class_name'] = 'geodir-map-listing-page';
 			}
 			
 			if(empty($mapview)) $mapview = 'ROADMAP';

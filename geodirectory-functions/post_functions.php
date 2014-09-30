@@ -57,97 +57,100 @@ function geodir_set_postcat_structure($post_id, $taxonomy, $default_cat = '' , $
  * Save Listing
  */
  
-if (!function_exists('geodir_save_listing')) {
-function geodir_save_listing($request_info = array(),$dummy = false){
+if ( !function_exists( 'geodir_save_listing' ) ) {
+function geodir_save_listing( $request_info = array(), $dummy = false ) {
+	global $wpdb, $current_user; 
 	
-	global $wpdb,$current_user; 
-	//print_r($request_info);
 	$last_post_id = '';
-	if(isset($_SESSION['listing']) && !$dummy){
-		
-		$request_info = array();
-		
-		$request_session = unserialize($_SESSION['listing']);
-		
-		$request_info = array_merge($_REQUEST,$request_session);
 	
-	}elseif(!isset($_SESSION['listing']) && !$dummy){
-		
+	if( isset( $_SESSION['listing'] ) && !$dummy) {
+		$request_info = array();
+		$request_session = unserialize( $_SESSION['listing'] );
+		$request_info = array_merge( $_REQUEST, $request_session );
+	} else if ( !isset( $_SESSION['listing'] ) && !$dummy ) {
 		global $post;
 		$request_info['pid'] = $post->ID;
 		$request_info['post_title'] = $request_info['post_title'];
 		$request_info['listing_type'] = $post->post_type;
 		$request_info['post_desc'] = $request_info['content'];
-		
-	}elseif(!$dummy)
-	{
+	} else if( !$dummy ) {
 		return false;
 	}
 	
+	$request_info = apply_filters( 'geodir_action_get_request_info', $request_info );	
 	
 	// Check if we need to save post location as new location 
 	$location_result = geodir_get_default_location();
 	
-	if($location_result->location_id > 0 )
-	{
-		if(isset($request_info['post_city']) && isset($request_info['post_region']))
-		{
-		
-			$request_info['post_location'] = array( 'city' => $request_info['post_city'], 
-											'region' => isset($request_info['post_region']) ? $request_info['post_region'] : '', 
-											'country' => isset($request_info['post_country']) ? $request_info['post_country'] : '',
-											'geo_lat' => isset($request_info['post_latitude']) ? $request_info['post_latitude'] : '',
-											'geo_lng' => isset($request_info['post_longitude']) ? $request_info['post_longitude'] : '' );
+	if ($location_result->location_id > 0 ) {
+		if ( isset( $request_info['post_city'] ) && isset( $request_info['post_region'] ) ) {
+			$request_info['post_location'] = array( 
+												'city' => $request_info['post_city'], 
+												'region' => isset($request_info['post_region']) ? $request_info['post_region'] : '', 
+												'country' => isset($request_info['post_country']) ? $request_info['post_country'] : '',
+												'geo_lat' => isset($request_info['post_latitude']) ? $request_info['post_latitude'] : '',
+												'geo_lng' => isset($request_info['post_longitude']) ? $request_info['post_longitude'] : ''
+											);
 											
 			$post_location_info = $request_info['post_location'];
-			if($location_id = geodir_add_new_location($post_location_info))
-				$post_location_id = $location_id;
 			
+			if ( $location_id = geodir_add_new_location( $post_location_info ) ) {
+				$post_location_id = $location_id;
+			}			
+		} else {
+			$post_location_id = $location_result->location_id;
 		}
-		else
-			$post_location_id = $location_result->location_id;	
-	}
-	else
+	} else {
 		$post_location_id = $location_result->location_id;
-		
+	}
 	
-	
-	if($dummy)
+	if ( $dummy ) {
 		$post_status = 'publish';
-	else
-		$post_status = geodir_new_post_default_status();	
+	} else {
+		$post_status = geodir_new_post_default_status();
+	}	
 	
-	if(isset($request_info['pid']) && $request_info['pid'] != ''){ 
+	if ( isset( $request_info['pid'] ) && $request_info['pid'] != '' ) { 
 		$post_status = get_post_status( $request_info['pid'] );	
 	}
-	
-	
-	$post = array(
-				  'post_content'   => $request_info['post_desc'],
-				  'post_status'    => $post_status,
-				  'post_title'     => $request_info['post_title'],
-				  'post_name'      => $request_info['post_title'],
-				  'post_type'      => $request_info['listing_type'] );  
-	
-	do_action_ref_array('geodir_before_save_listing',$post);
-	
-	$send_post_submit_mail = false;
-	if(isset($request_info['pid']) && $request_info['pid'] != ''){	
-		$post['ID'] = $request_info['pid'];
-		$last_post_id =  wp_update_post( $post );
-		//unset($_SESSION['listing']);
-	}else{
-		//unset($_SESSION['listing']);
-		$last_post_id =  wp_insert_post( $post );
+
+	/* fix change of slug on every title edit */
+	if ( !isset( $request_info['post_name'] ) ) {
+		$request_info['post_name'] = $request_info['post_title'];
 		
-		if(!$dummy && $last_post_id){
+		if ( !empty( $request_info['pid'] ) ) {
+			$post_info = get_post( $request_info['pid'] );
 			
-			$send_post_submit_mail = true; // we move post_submit email from here so the rest of the variables are added to the db first(was breaking permalink in email)
-			//geodir_sendEmail('','',$current_user->user_email,$current_user->display_name,'','',$request_info,'post_submit',$last_post_id,$current_user->ID);
-			
+			if ( !empty( $post_info ) && isset( $post_info->post_name ) ) {
+				$request_info['post_name'] = $post_info->post_name;
+			}
 		}
 	}
+
+	$post = array(
+				'post_content'   => $request_info['post_desc'],
+				'post_status'    => $post_status,
+				'post_title'     => $request_info['post_title'],
+				'post_name'      => $request_info['post_name'],
+				'post_type'      => $request_info['listing_type']
+			);  
 	
+	do_action_ref_array( 'geodir_before_save_listing', $post );
+	
+	$send_post_submit_mail = false;
+	if ( isset( $request_info['pid'] ) && $request_info['pid'] != '' ){	
+		$post['ID'] = $request_info['pid'];
+		
+		$last_post_id =  wp_update_post( $post );
+	} else {
+		$last_post_id =  wp_insert_post( $post );
+		
+		if ( !$dummy && $last_post_id ) {
+			$send_post_submit_mail = true; // we move post_submit email from here so the rest of the variables are added to the db first(was breaking permalink in email)
+			//geodir_sendEmail('','',$current_user->user_email,$current_user->display_name,'','',$request_info,'post_submit',$last_post_id,$current_user->ID);
+		}
+	}
+		
 	$post_tags = '';
 	if(!isset($request_info['post_tags'])){
 			
@@ -681,7 +684,7 @@ function geodir_save_post_images($post_id = 0, $post_image = array(), $dummy = f
 				/* --------- end ------- */
 				
 				$curr_img_url =  $post_image[$m];
-				
+				//echo $curr_img_url; exit;
 				$image_name_arr = explode('/',$curr_img_url);
 				
 				$count_image_name_arr = count($image_name_arr)-2;
@@ -692,7 +695,10 @@ function geodir_save_post_images($post_id = 0, $post_image = array(), $dummy = f
 								
 				
 				$filename = end($image_name_arr);
-				
+				if (strpos($filename,'?') !== false) {
+    			list($filename)=explode('?', $filename);
+				}
+				//echo $filename;exit;
 				$curr_img_dir = str_replace($uploads['baseurl'], "", $curr_img_url);
 				$curr_img_dir = str_replace($filename, "", $curr_img_dir);
 				
@@ -724,6 +730,7 @@ function geodir_save_post_images($post_id = 0, $post_image = array(), $dummy = f
 					if($dummy || $external_img ){
 						$uploaded_file = array();
 						$uploaded =  (array)fetch_remote_file($curr_img_url);
+						
 						if(empty($uploaded['error'])){
 							$new_name = basename($uploaded['file']);
 							$uploaded_file = $uploaded;
@@ -1422,143 +1429,107 @@ function geodir_set_post_terms($post_id, $terms, $tt_ids, $taxonomy){
 /**
  * Set post Map Marker Info Html
  **/
- 
 if (!function_exists('geodir_get_infowindow_html')) {
-function geodir_get_infowindow_html($postinfo_obj, $post_preview = ''){
-	global $preview;
-	$srcharr = array("'","/","-",'"','\\');
-	$replarr = array("&prime;","&frasl;","&ndash;","&ldquo;",'');
+	function geodir_get_infowindow_html($postinfo_obj, $post_preview = '') {
+		global $preview;
+		$srcharr = array("'","/","-",'"','\\');
+		$replarr = array("&prime;","&frasl;","&ndash;","&ldquo;",'');
 		
-	if(isset($_SESSION['listing']) && isset($post_preview) && $post_preview != ''){
-				
-		$ID = '';
-		$plink = '';
+		if (isset($_SESSION['listing']) && isset($post_preview) && $post_preview != '') {	
+			$ID = '';
+			$plink = '';
 			
-		if(isset($postinfo_obj->pid)){
-			$ID = $postinfo_obj->pid;
+			if (isset($postinfo_obj->pid)) {
+				$ID = $postinfo_obj->pid;
+				$plink = get_permalink($ID);
+			}
+		
+			$title = str_replace($srcharr,$replarr,($postinfo_obj->post_title));
+			$lat = $postinfo_obj->post_latitude;
+			$lng = $postinfo_obj->post_longitude;
+			$address = str_replace($srcharr,$replarr,($postinfo_obj->post_address));
+			$contact = str_replace($srcharr,$replarr,($postinfo_obj->geodir_contact));
+			$timing = str_replace($srcharr,$replarr,($postinfo_obj->geodir_timing));
+		} else {
+			$ID = $postinfo_obj->post_id;
+			$title = str_replace($srcharr,$replarr,htmlentities($postinfo_obj->post_title, ENT_COMPAT, 'UTF-8')); // fix by Stiofan
 			$plink = get_permalink($ID);
+			$lat = htmlentities(geodir_get_post_meta($ID,'post_latitude',true));
+			$lng = htmlentities(geodir_get_post_meta($ID,'post_longitude',true));
+			$address = str_replace($srcharr,$replarr,htmlentities(geodir_get_post_meta($ID,'post_address',true), ENT_COMPAT, 'UTF-8')); // fix by Stiofan
+			$contact = str_replace($srcharr,$replarr,htmlentities(geodir_get_post_meta($ID,'geodir_contact',true), ENT_COMPAT, 'UTF-8'));
+			$timing = str_replace($srcharr,$replarr,(geodir_get_post_meta($ID,'geodir_timing',true)));
 		}
-		
-		$title = str_replace($srcharr,$replarr,($postinfo_obj->post_title));
-		$lat = $postinfo_obj->post_latitude;
-		$lng = $postinfo_obj->post_longitude;
-		$address = str_replace($srcharr,$replarr,($postinfo_obj->post_address));
-		$contact = str_replace($srcharr,$replarr,($postinfo_obj->geodir_contact));
-		$timing = str_replace($srcharr,$replarr,($postinfo_obj->geodir_timing));
-		
-	}else{
 	
-		$ID = $postinfo_obj->post_id;
-		$title = str_replace($srcharr,$replarr,htmlentities($postinfo_obj->post_title, ENT_COMPAT, 'UTF-8')); // fix by Stiofan
-		$plink = get_permalink($ID);
-		$lat = htmlentities(geodir_get_post_meta($ID,'post_latitude',true));
-		$lng = htmlentities(geodir_get_post_meta($ID,'post_longitude',true));
-		$address = str_replace($srcharr,$replarr,htmlentities(geodir_get_post_meta($ID,'post_address',true), ENT_COMPAT, 'UTF-8')); // fix by Stiofan
-		$contact = str_replace($srcharr,$replarr,htmlentities(geodir_get_post_meta($ID,'geodir_contact',true), ENT_COMPAT, 'UTF-8'));
-		$timing = str_replace($srcharr,$replarr,(geodir_get_post_meta($ID,'geodir_timing',true)));
-		
-	}
-	
-	// filter field as per price package
-	global $geodir_addon_list;
-	if (isset($geodir_addon_list['geodir_payment_manager']) && $geodir_addon_list['geodir_payment_manager']=='yes') {
-		$post_type = get_post_type($ID);
-		$package_id = isset($postinfo_obj->package_id) && $postinfo_obj->package_id ? $postinfo_obj->package_id : NULL;		
-		$field_name = 'geodir_contact';
-		if (!check_field_visibility($package_id, $field_name, $post_type)) {
-			$contact = '';
-		}
-		
-		$field_name = 'geodir_timing';
-		if (!check_field_visibility($package_id, $field_name, $post_type)) {
-			$timing = '';
-		}
-	}
-	
-	if($lat && $lng){
-	
-	ob_start(); ?>
-
-	<div class="bubble">
-		<div style="position: relative;margin:5px 0px; ">
-			<?php 
-			 
+		// filter field as per price package
+		global $geodir_addon_list;
+		if (isset($geodir_addon_list['geodir_payment_manager']) && $geodir_addon_list['geodir_payment_manager']=='yes') {
+			$post_type = get_post_type($ID);
+			$package_id = isset($postinfo_obj->package_id) && $postinfo_obj->package_id ? $postinfo_obj->package_id : NULL;		
+			$field_name = 'geodir_contact';
+			if (!check_field_visibility($package_id, $field_name, $post_type)) {
+				$contact = '';
+			}
 			
+			$field_name = 'geodir_timing';
+			if (!check_field_visibility($package_id, $field_name, $post_type)) {
+				$timing = '';
+			}
+		}
+	
+		if ($lat && $lng) {
+			ob_start(); ?>
+			<div class="bubble">
+				<div style="position: relative;margin:5px 0px;">
+				<?php
 			$comment_count = '';
 			$rating_star = '';
-			if($ID != ''){
+			if ($ID != '') {
 				$rating_star = '';
-				//$comment_count = get_comments_number($ID); // for some reason the filter is not applied here.
-				$comment_count = isset($postinfo_obj->rating_count) ? $postinfo_obj->rating_count : 0;
-				//$comment_count = geodir_get_comments_number($ID); 
-							$post_ratings = geodir_get_postoverall($ID);
-						 // $post_ratings = geodir_get_commentoverall_number($ID);
-							if(!$preview){
-								 if($comment_count > 0)
-						$post_avgratings = ($post_ratings / $comment_count);
-					else
-						$post_avgratings = $post_ratings;	
-					
-					//$rating_star = geodir_get_rating_stars($post_avgratings,$ID,true);
-					$rating_star = geodir_get_rating_stars($post_avgratings,$ID,false);
-					
-					$rating_star = apply_filters('geodir_review_rating_stars_on_infowindow', $rating_star, $post_avgratings, $ID);
-				} 
-			
-			}
-			?>
+				$comment_count = geodir_get_review_count_total($ID);
+				$post_ratings = geodir_get_review_total($ID);
 				
+				if (!$preview) {
+					$post_avgratings = geodir_get_commentoverall_number($ID);
+					
+					$rating_star = geodir_get_rating_stars($post_avgratings,$ID,false);
+					$rating_star = apply_filters('geodir_review_rating_stars_on_infowindow', $rating_star, $post_avgratings, $ID);
+				}
+			}
+			?>	
 			<div class="geodir-bubble_desc">
 				<h4>
 					<a href="<?php if($plink!= ''){ echo $plink;}else{ echo 'javascript:void(0);';}?>"><?php echo $title;?></a>
 				</h4>
-               <?php
-			   if(isset($_SESSION['listing']) && isset($post_preview) && $post_preview != ''){
-				
+            <?php
+			if (isset($_SESSION['listing']) && isset($post_preview) && $post_preview != '') {
 				$post_images = array();
-				if(!empty($postinfo_obj->post_images))
+				if (!empty($postinfo_obj->post_images)) {
 					$post_images = explode(",",$postinfo_obj->post_images);
-				
-				if(!empty($post_images)){?>
-					
-					<div class="geodir-bubble_image" >
-					<a href="<?php if($plink!= ''){ echo $plink;}else{ echo 'javascript:void(0);';}?>">
-					<img style="max-height:50px;" src="<?php echo $post_images[0];?>" />
-					</a>
-					</div> 
-				<?php
 				}
 				
-			}else{
-			
-				if($image = geodir_show_featured_image($ID,'widget-thumb',true,false,$postinfo_obj->featured_image)){ ?>
-				<div class="geodir-bubble_image" >
-					<a href="<?php echo $plink;?>">
-					<?php echo $image; ?>
-					</a>
-				</div> 
+				if (!empty($post_images)) {
+				?>
+				<div class="geodir-bubble_image"><a href="<?php if($plink!= ''){ echo $plink;}else{ echo 'javascript:void(0);';}?>"><img style="max-height:50px;" src="<?php echo $post_images[0];?>" /></a></div> 
+				<?php
+				}
+			} else {
+				if ($image = geodir_show_featured_image($ID,'widget-thumb',true,false,$postinfo_obj->featured_image)) {
+				?>
+				<div class="geodir-bubble_image" ><a href="<?php echo $plink;?>"><?php echo $image; ?></a></div>
 				<?php 
 				}
 			}
 			?>
-                
-                
-                
-				
-                
-              <div class="geodir-bubble-meta-side">
+			<div class="geodir-bubble-meta-side">
 				<span class="geodir_address"><i class="fa fa-home"></i> <?php echo $address;?></span>
 				<?php if($contact){?><span class="geodir_contact"><i class="fa fa-phone"></i> <?php echo $contact;?></span><?php }?>
 				<?php if($timing){?><span class="geodir_timing"><i class="fa fa-clock-o"></i> <?php echo $timing;?></span><?php }?>
-              </div>
-             
-            <?php 
-		if(isset($postinfo_obj->recurring_dates)){		
-		$recuring_data = unserialize($postinfo_obj->recurring_dates); 
-		//print_r($recuring_data); echo '###';
-			$output = '';
-					
-					
+			</div>
+			<?php
+				if (isset($postinfo_obj->recurring_dates)) {
+					$recuring_data = unserialize($postinfo_obj->recurring_dates);
+					$output = '';
 					$output .= '<div class="geodir_event_schedule">';	
 					
 					$event_recurring_dates = explode(',', $recuring_data['event_recurring_dates']);
@@ -1566,7 +1537,7 @@ function geodir_get_infowindow_html($postinfo_obj, $post_preview = ''){
 					$starttimes = isset($recuring_data['starttime']) ? $recuring_data['starttime'] : '';
 					$endtimes = isset($recuring_data['endtime']) ? $recuring_data['endtime'] : '';
 					$e=0;		
-					foreach($event_recurring_dates as $key => $date){
+					foreach ($event_recurring_dates as $key => $date) {
 						
 						if(strtotime($date) < strtotime(date("Y-m-d"))){continue;} // if the event is old don't show it on the map
 						$e++;

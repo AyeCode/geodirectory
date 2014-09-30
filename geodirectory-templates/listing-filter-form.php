@@ -35,7 +35,12 @@ $curr_post_type = geodir_get_current_posttype();
 				if(!empty($post_types) && count((array)$post_types) > 1 ):
 				?>
                 <select name="stype" class="search_by_post" >
-				<?php foreach( $post_types as $post_type => $info ): ?>
+				<?php foreach( $post_types as $post_type => $info ): 
+				global $wpdb;
+				$has_posts = '';
+				$has_posts = $wpdb->get_row($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE post_type = %s LIMIT 1",$post_type) ) ;
+				if(!$has_posts){continue;}
+				?>
                         
                     <option opt_label="<?php echo get_post_type_archive_link($post_type);?>" value="<?php echo $post_type;?>" <?php if(isset($_REQUEST['stype'])){if($post_type == $_REQUEST['stype']){echo 'selected="selected"';}}elseif($curr_post_type==$post_type){echo 'selected="selected"';}?>><?php _e(ucfirst($info->labels->name),GEODIRECTORY_TEXTDOMAIN);?></option>
                         

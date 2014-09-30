@@ -115,7 +115,7 @@ function geodir_add_nav_menu_items(  ) {
 									
 										$items .=	'<li class="menu-item '.$menu_class.'">
 											<a href="'. geodir_get_addlisting_link( $post_type ) .'">
-												'.__('Add',GEODIRECTORY_TEXTDOMAIN).' '.$args->labels->name.'
+												'.__('Add',GEODIRECTORY_TEXTDOMAIN).' '.__( $args->labels->singular_name, GEODIRECTORY_TEXTDOMAIN ).'
 											</a>
 										</li>';
 								}
@@ -270,7 +270,7 @@ function geodir_get_current_posttype(){
 	$all_postypes = geodir_get_posttypes();
 	$all_postypes = stripslashes_deep($all_postypes);
 	
-	if(!in_array($geodir_post_type, $all_postypes))
+	if(is_array($all_postypes) && !in_array($geodir_post_type, $all_postypes))
 		$geodir_post_type = '';
 	
 	
@@ -300,7 +300,7 @@ function geodir_get_posttypes($output = 'names'){
 	if(!empty($post_types))
 		return $post_types;
 	else
-		return false;		
+		return array();		
 }
 
 /**

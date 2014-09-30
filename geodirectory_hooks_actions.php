@@ -478,53 +478,55 @@ function geodir_detail_page_google_analytics()
 	echo $content_html = apply_filters('geodir_google_analytic_html' , $content_html) ;
 }
 
-function geodir_detail_page_review_rating()
-{ 
-	global $post,$preview,$post_images; 
+function geodir_detail_page_review_rating() { 
+	global $post, $preview, $post_images; 
 	ob_start() ; // Start  buffering;
 	do_action('geodir_before_detail_page_review_rating') ;
-	$comment_count = isset($post->rating_count) ? $post->rating_count : 0;
+	
+	$comment_count = geodir_get_review_count_total($post->ID);
 	$post_ratings = geodir_get_postoverall($post->ID);
-	 
-	if($post_ratings != 0 && !$preview){
+	
+	if ($post_ratings != 0 && !$preview) {
+		$post_avgratings = geodir_get_commentoverall_number($post->ID);
 		
-		if($comment_count > 0)
-			$post_avgratings = ($post_ratings / $comment_count);
-		else
-			$post_avgratings = $post_ratings;
-			
-			do_action('geodir_before_review_rating_stars_on_detail' , $post_avgratings , $post->ID) ;
-			
-			$html = '<p style=" float:left;">';
+		do_action('geodir_before_review_rating_stars_on_detail' , $post_avgratings , $post->ID) ;
 		
-			$html .= geodir_get_rating_stars($post_avgratings,$post->ID);
-			
-			$html .= '<div class="average-review" itemscope itemtype="http://data-vocabulary.org/Review-aggregate">';
-			 
-		 	$post_avgratings = is_float($post_avgratings) ? number_format($post_avgratings, 1, '.', '') : $post_avgratings;
-		 
-		 	if($comment_count>1){
-		 		$html .= '<span itemprop="rating" itemscope itemtype="http://data-vocabulary.org/Rating"><span class="rating" itemprop="average">'.$post_avgratings.'</span> /  <span itemprop="best">5</span> '.__("based on",GEODIRECTORY_TEXTDOMAIN).' <span class="count" itemprop="count">'.$comment_count.'</span> '.__("reviews",GEODIRECTORY_TEXTDOMAIN).'</span><br />';
-		 	}else{
-		 		$html .= '<span itemprop="rating" itemscope itemtype="http://data-vocabulary.org/Rating"><span class="rating" itemprop="average">'.$post_avgratings.'</span> /  <span itemprop="best">5</span> '.__("based on",GEODIRECTORY_TEXTDOMAIN).' <span class="count" itemprop="count">'.$comment_count.'</span> '.__("review",GEODIRECTORY_TEXTDOMAIN).'</span><br />';	 
-		 	}
-		 	$html .= '<span class="item">';
-		 	$html .= '<span class="fn" itemprop="itemreviewed">'.$post->post_title.'</span>';
-		 	if($post_images){foreach($post_images as $img){$post_img = $img->src;break;}}
-		 	if($post_img){$html .= '<br /><img src="'.$post_img.'" class="photo hreview-img"  alt="'.$post->post_title.'" itemprop="photo" />';}
-		 	$html .= '</span>';
+		$html = '<p style=" float:left;">';
+		$html .= geodir_get_rating_stars($post_avgratings,$post->ID);
+		$html .= '<div class="average-review" itemscope itemtype="http://data-vocabulary.org/Review-aggregate">';
+		$post_avgratings = ( is_float($post_avgratings) || (strpos($post_avgratings, ".", 1)==1 && strlen($post_avgratings)>3) ) ? number_format($post_avgratings, 1, '.', '') : $post_avgratings;
+		if ($comment_count>1) {
+			$html .= '<span itemprop="rating" itemscope itemtype="http://data-vocabulary.org/Rating"><span class="rating" itemprop="average">'.$post_avgratings.'</span> /  <span itemprop="best">5</span> '.__("based on",GEODIRECTORY_TEXTDOMAIN).' <span class="count" itemprop="count">'.$comment_count.'</span> '.__("reviews",GEODIRECTORY_TEXTDOMAIN).'</span><br />';
+		} else {
+			$html .= '<span itemprop="rating" itemscope itemtype="http://data-vocabulary.org/Rating"><span class="rating" itemprop="average">'.$post_avgratings.'</span> /  <span itemprop="best">5</span> '.__("based on",GEODIRECTORY_TEXTDOMAIN).' <span class="count" itemprop="count">'.$comment_count.'</span> '.__("review",GEODIRECTORY_TEXTDOMAIN).'</span><br />';	 
+		}
+		
+		$html .= '<span class="item">';
+		$html .= '<span class="fn" itemprop="itemreviewed">'.$post->post_title.'</span>';
+		
+		if ($post_images) {
+			foreach ($post_images as $img) {
+				$post_img = $img->src;break;
+			}
+		}
+		
+		if (isset($post_img) && $post_img) {
+			$html .= '<br /><img src="'.$post_img.'" class="photo hreview-img"  alt="'.$post->post_title.'" itemprop="photo" />';
+		}
+		
+		$html .= '</span>';
 
-		 	echo $html .= '</div>';
+		echo $html .= '</div>';
 		
 		do_action('geodir_after_review_rating_stars_on_detail' , $post_avgratings , $post->ID);
-		
 	}
+	
 	do_action('geodir_after_detail_page_review_rating') ;
 	$content_html = ob_get_clean();
-	if(trim($content_html) != '')
+	if(trim($content_html) != '') {
 		$content_html  = '<div class="geodir-company_info geodir-details-sidebar-rating">' . $content_html . '</div>' ;
+	}
 	echo $content_html = apply_filters('geodir_detail_page_review_rating_html' , $content_html) ;
-	
 }
 
 
@@ -815,6 +817,11 @@ add_action('wp_admin', 'geodir_changes_in_custom_fields_table');
 function geodir_changes_in_custom_fields_table(){
 	
 	global $wpdb,$plugin_prefix;
+	
+	// updated custom field table(add field to show custom field as a tab)
+	if (!$wpdb->get_var("SHOW COLUMNS FROM ".GEODIR_CUSTOM_FIELDS_TABLE." WHERE field = 'show_as_tab'")) {
+		$wpdb->query("ALTER TABLE `".GEODIR_CUSTOM_FIELDS_TABLE."` ADD `show_as_tab` ENUM( '0', '1' ) NOT NULL DEFAULT '0' AFTER `show_on_detail`");
+	}
 	
 	if(!get_option('geodir_changes_in_custom_fields_table')){
 	
@@ -1155,7 +1162,12 @@ function geodir_post_type_archive_title($title)
 	global $wp_query,$wp,$wpdb;
 	$wpseo_edit = false;
 	$current_term = $wp_query->get_queried_object();
-	if(!isset($current_term->ID)){$current_term->ID='';}
+	if (!isset($current_term->ID)) {
+		if (empty($current_term) || !is_object($current_term)) {
+			$current_term = new stdClass();
+		}
+		$current_term->ID = '';
+	}
 	if(geodir_is_geodir_page() && (is_tax() || $current_term->ID==get_option('geodir_location_page')))
 	{
 		
@@ -1498,3 +1510,245 @@ function geodir_user_favourite_listing_count(){
 	
 }
 
+add_filter('geodir_detail_page_tab_list_extend', 'geodir_detail_page_custom_field_tab');
+function geodir_detail_page_custom_field_tab($tabs_arr) {
+	global $post;
+	
+	$post_type = geodir_get_current_posttype();
+	$all_postypes = geodir_get_posttypes();
+		
+	if (!empty($tabs_arr) && $post_type != '' && in_array($post_type, $all_postypes) && (geodir_is_page('detail') || geodir_is_page('preview'))) {			
+		$package_info = array();
+		$package_info = geodir_post_package_info($package_info, $post);
+		$post_package_id = $package_info->pid;
+		$fields_location = 'detail';
+				
+		$custom_fields = geodir_post_custom_fields($post_package_id, 'default', $post_type, $fields_location);
+		if (!empty($custom_fields)) {
+			foreach ( $custom_fields as $field ) {
+				$field_name = $field['htmlvar_name'];
+				if (isset($field['show_as_tab']) && $field['show_as_tab']==1 && !empty($post->$field_name) && in_array($field['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html'))) {
+					$label = $field['site_title']!='' ? $field['site_title'] : $field['admin_title'];
+					$type = $field;
+					$html = '';
+					$html_var = $field_name;
+					$field_icon = '';
+					
+					$variables_array = array();
+					
+					$variables_array['post_id'] = $post->ID;
+					$variables_array['label'] = __($type['site_title'],GEODIRECTORY_TEXTDOMAIN);
+					$variables_array['value']= '';
+					$variables_array['value'] = $post->$type['htmlvar_name'];
+					
+					if (strpos($type['field_icon'],'http') !== false) {
+						$field_icon = ' background: url('.$type['field_icon'].') no-repeat left center;background-size:18px 18px;padding-left: 21px;';
+					}
+					elseif (strpos($type['field_icon'],'fa fa-') !== false){
+						$field_icon = '<i class="'.$type['field_icon'].'"></i>';
+					}
+					
+					switch ($type['type']) {
+						case 'url':								
+							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){
+								
+								if($type['name']=='geodir_facebook'){$field_icon_af = '<i class="fa fa-facebook-square"></i>';}
+								elseif($type['name']=='geodir_twitter'){$field_icon_af = '<i class="fa fa-twitter-square"></i>';}
+								else{$field_icon_af = '<i class="fa fa-link"></i>';}
+								
+								}
+							else{$field_icon_af = $field_icon; $field_icon='';}
+							
+							if(!strstr($post->$type['htmlvar_name'],'http'))
+							$website = 'http://'.$post->$type['htmlvar_name'];
+							else
+							$website = $post->$type['htmlvar_name'];	
+							
+							
+							$geodir_odd_even = 'geodir_more_info_even';			
+														
+							// all search engines that use the nofollow value exclude links that use it from their ranking calculation
+							$rel = strpos($website, get_site_url())!==false ? '' : 'rel="nofollow"';
+														
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'"><span class="geodir-i-website" style="'.$field_icon.'">'.$field_icon_af.' <a href="'.$website.'" target="_blank" '.$rel.' ><strong>'.apply_filters( 'geodir_custom_field_website_name', stripslashes(__($type['site_title'],GEODIRECTORY_TEXTDOMAIN)),$website, $post->ID ).'</strong></a></span></div>';								
+						break;
+						
+						case 'phone':
+							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){$field_icon_af = '<i class="fa fa-phone"></i>';}
+							else{$field_icon_af = $field_icon; $field_icon='';}
+							
+							$geodir_odd_even = 'geodir_more_info_even';
+							
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-contact" style="'.$field_icon.'">'.$field_icon_af.
+							//$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '&nbsp;';
+							$html .= ' </span>'.stripslashes($post->$type['htmlvar_name']).'</div>';								
+						break;
+						case 'time': {						
+								$value = '';
+								if($post->$type['htmlvar_name'] != '')
+									//$value = date('h:i',strtotime($post->$type['htmlvar_name']));
+									$value = date(get_option( 'time_format' ),strtotime($post->$type['htmlvar_name']));
+								
+								if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+								elseif($field_icon==''){$field_icon_af = '<i class="fa fa-clock-o"></i>';}
+								else{$field_icon_af = $field_icon; $field_icon='';}
+								
+								$geodir_odd_even = 'geodir_more_info_even';
+												
+								$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-time" style="'.$field_icon.'">'.$field_icon_af;
+								//$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '&nbsp;';
+								$html .= ' </span>'.stripslashes($value).'</div>';
+						}
+						break;
+						case 'datepicker': {
+							$date_format = geodir_default_date_format();
+							if($type['extra_fields'] != ''){
+								$date_format = unserialize($type['extra_fields']);
+								$date_format = $date_format['date_format'];
+							}
+							
+							$search = array('dd', 'mm', 'yy');
+							$replace = array('d', 'm', 'Y');
+							
+							$date_format = str_replace($search, $replace, $date_format);
+							
+							$value = '';
+							if($post->$type['htmlvar_name'] != '')
+								$value = date($date_format,strtotime($post->$type['htmlvar_name']));
+							
+							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){$field_icon_af = '<i class="fa fa-calendar"></i>';}
+							else{$field_icon_af = $field_icon; $field_icon='';}
+							
+							$geodir_odd_even = 'geodir_more_info_even';
+											
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-datepicker" style="'.$field_icon.'">'.$field_icon_af;
+							//$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
+							$html .= ' </span>'.$value.'</div>';
+						}								
+						break;
+						case 'text': {
+								if (strpos($field_icon,'http') !== false) {
+									$field_icon_af = '';
+								}
+								elseif($field_icon==''){$field_icon_af = '';}
+								else{$field_icon_af = $field_icon; $field_icon='';}
+								
+								$geodir_odd_even = 'geodir_more_info_even';
+								
+								$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-text" style="'.$field_icon.'">'.$field_icon_af;
+								//$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
+								$html .= ' </span>'.stripslashes($post->$type['htmlvar_name']).'</div>';	
+						}								
+						break;
+						case 'select': {
+							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){$field_icon_af = '';}
+							else{$field_icon_af = $field_icon; $field_icon='';}
+							
+							$geodir_odd_even = 'geodir_more_info_even';
+							
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-select" style="'.$field_icon.'">'.$field_icon_af;
+							//$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
+							$html .= ' </span>'.stripslashes($post->$type['htmlvar_name']).'</div>';
+						}								
+						break;
+						case 'multiselect': {
+							if(is_array($post->$type['htmlvar_name'])) {
+								$post->$type['htmlvar_name'] = implode(', ', $post->$type['htmlvar_name']);
+							}
+							
+							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){$field_icon_af = '';}
+							else{$field_icon_af = $field_icon; $field_icon='';}
+							
+							
+							$option_values = explode(',', $post->$type['htmlvar_name']);
+							
+							if($type['option_values']) {
+								if(strstr($type['option_values'],"/")){
+									$option_values = array();
+									$field_values = explode(',', $type['option_values']);
+									foreach($field_values as $data){
+										$val = explode('/', $data);
+										if( isset($val[1]) && in_array($val[1], explode(',', $post->$type['htmlvar_name'])))
+											$option_values[] = $val[0];
+									}
+								}
+							}
+							
+							$geodir_odd_even = 'geodir_more_info_even';
+							
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-select" style="'.$field_icon.'">'.$field_icon_af;
+							//$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
+							$html .= ' </span>';
+							
+							if(count($option_values) > 1){
+								$html .= '<ul>';
+									foreach($option_values as $val){
+										$html .= '<li>'.stripslashes($val).'</li>';
+									}
+								$html .= '</ul>';
+							} else {
+								$html .= stripslashes(trim($post->$type['htmlvar_name'], ','));
+							}
+							$html .= '</div>';		
+						}	
+						break;
+						case 'email': {
+							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){$field_icon_af = '<i class="fa fa-envelope"></i>';}
+							else{$field_icon_af = $field_icon; $field_icon='';}
+							
+							$geodir_odd_even = 'geodir_more_info_even';
+								
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-email" style="'.$field_icon.'">'.$field_icon_af;
+							//$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
+							$html .= ' </span>'.stripslashes($post->$type['htmlvar_name']).'</div>';
+						}	
+						break;
+						case 'textarea': {
+							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){$field_icon_af = '';}
+							else{$field_icon_af = $field_icon; $field_icon='';}
+							
+							$geodir_odd_even = 'geodir_more_info_even';
+								
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-text" style="'.$field_icon.'">'.$field_icon_af;
+							//$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
+							$html .= '</span>'.wpautop(stripslashes($post->$type['htmlvar_name'])).'</div>';
+						}
+						break;
+						case 'html': {
+							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
+							elseif($field_icon==''){$field_icon_af = '';}
+							else{$field_icon_af = $field_icon; $field_icon='';}
+							
+							$geodir_odd_even = 'geodir_more_info_even';
+							
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-text" style="'.$field_icon.'">'.$field_icon_af;
+							//$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
+							$html .= ' </span>'.wpautop(stripslashes($post->$type['htmlvar_name'])).'</div>';	
+						}
+						break;
+					}
+					
+					if ($html!='') {
+						$tabs_arr[$field['htmlvar_name']] = array( 
+															'heading_text' =>  __($label, GEODIRECTORY_TEXTDOMAIN),
+															'is_active_tab' => false,
+															'is_display' => apply_filters('geodir_detail_page_tab_is_display', true, $field['htmlvar_name']),
+															'tab_content' => $html
+														);
+					}
+				}
+			}
+		}
+	}
+	return $tabs_arr;
+}
+
+/* display add listing page for wpml */
+add_filter( 'option_geodir_add_listing_page', 'get_page_id_geodir_add_listing_page', 10, 2 );

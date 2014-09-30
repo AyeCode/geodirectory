@@ -84,6 +84,11 @@ function geodir_post_custom_fields($package_id = '',$default = 'all',$post_type 
 		}
 	}
 	$geodir_post_custom_fields_cache[$cache_stored] = $return_arr;
+	
+	if(has_filter('geodir_filter_geodir_post_custom_fields')){
+	 	$return_arr = apply_filters('geodir_filter_geodir_post_custom_fields', $return_arr, $package_id, $post_type, $fields_location);
+	}
+	
 	return $return_arr;
 }
 
@@ -234,6 +239,7 @@ function geodir_custom_field_save( $request_field = array() , $default = false )
 		$field_icon = isset($request_field['field_icon']) ? $request_field['field_icon'] : '';
 		$show_on_listing = isset($request_field['show_on_listing']) ? $request_field['show_on_listing'] : '';
 		$show_on_detail = isset($request_field['show_on_detail']) ? $request_field['show_on_detail'] : '';
+		$show_as_tab = isset($request_field['show_as_tab']) ? $request_field['show_as_tab'] : '';
 		
 		if($field_type != 'address' && $field_type != 'taxonomy' && $field_type != 'fieldset'){
 			$htmlvar_name = 'geodir_'.$htmlvar_name;
@@ -604,6 +610,7 @@ function geodir_custom_field_save( $request_field = array() , $default = false )
 					field_icon = %s,
 					show_on_listing = %s,
 					show_on_detail = %s, 
+					show_as_tab = %s, 
 					option_values = %s, 
 					packages = %s, 
 					cat_sort = %d, 
@@ -612,7 +619,7 @@ function geodir_custom_field_save( $request_field = array() , $default = false )
 					extra_fields = %s 
 					where id = %d",
 					
-					array($post_type,$admin_title,$site_title,$field_type,$htmlvar_name,$admin_desc,$clabels,$default_value,$sort_order,$is_active,$is_default,$is_required,$required_msg,$css_class,$field_icon,$field_icon,$show_on_listing,$show_on_detail,$option_values,$price_pkg,$cat_sort,$cat_filter,$data_type,$extra_field_query,$cf)
+					array($post_type,$admin_title,$site_title,$field_type,$htmlvar_name,$admin_desc,$clabels,$default_value,$sort_order,$is_active,$is_default,$is_required,$required_msg,$css_class,$field_icon,$field_icon,$show_on_listing,$show_on_detail,$show_as_tab,$option_values,$price_pkg,$cat_sort,$cat_filter,$data_type,$extra_field_query,$cf)
 				)
 				
 			);
@@ -868,6 +875,7 @@ function geodir_custom_field_save( $request_field = array() , $default = false )
 					field_icon = %s,
 					show_on_listing = %s,
 					show_on_detail = %s, 
+					show_as_tab = %s, 
 					option_values = %s, 
 					packages = %s, 
 					cat_sort = %s, 
@@ -875,7 +883,7 @@ function geodir_custom_field_save( $request_field = array() , $default = false )
 					data_type = %s,
 					extra_fields = %s ",
 					
-					array($post_type,$admin_title,$site_title,$field_type,$htmlvar_name,$admin_desc,$clabels,$default_value,$sort_order,$is_active,$is_default,$is_admin,$is_required,$required_msg,$css_class,$field_icon,$show_on_listing,$show_on_detail,$option_values,$price_pkg,$cat_sort,$cat_filter,$data_type,$extra_field_query)
+					array($post_type,$admin_title,$site_title,$field_type,$htmlvar_name,$admin_desc,$clabels,$default_value,$sort_order,$is_active,$is_default,$is_admin,$is_required,$required_msg,$css_class,$field_icon,$show_on_listing,$show_on_detail,$show_as_tab,$option_values,$price_pkg,$cat_sort,$cat_filter,$data_type,$extra_field_query)
 					
 				)
 			
@@ -1708,6 +1716,10 @@ function geodir_show_listing_info($fields_location=''){
 			
 			$variables_array = array();
 			
+			if ($fields_location == 'detail' && isset($type['show_as_tab']) && (int)$type['show_as_tab']==1 && in_array($type['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html'))) {
+				continue;
+			}
+			
 			
 			if($type['type'] != 'fieldset'):
 				$variables_array['post_id'] = $post->ID;
@@ -1856,7 +1868,7 @@ function geodir_show_listing_info($fields_location=''){
 								if($post->post_city){ $html .= '<span itemprop="addressLocality">'.$post->post_city.'</span><br>';}
 								if($post->post_region){ $html .= '<span itemprop="addressRegion">'.$post->post_region.'</span><br>';}
 								if($post->post_zip){ $html .= '<span itemprop="postalCode">'.$post->post_zip.'</span><br>';}
-								if($post->post_country){ $html .= '<span itemprop="addressCountry">'.$post->post_country.'</span><br>';}
+								if($post->post_country){ $html .= '<span itemprop="addressCountry">'.__( $post->post_country, GEODIRECTORY_TEXTDOMAIN ).'</span><br>';}
 								$html .= '</div>';
 							}
 							
@@ -2095,10 +2107,9 @@ function geodir_show_listing_info($fields_location=''){
 				case 'checkbox':
 				
 						$html_var = $type['htmlvar_name'];
-						
 						$html_val = $type['htmlvar_name'];
 						
-						if($post->$type['htmlvar_name'] != ''):
+						if( (int)$post->$html_var == 1 ):
 							
 							if($post->$type['htmlvar_name'] == '1'):
 									$html_val = __('Yes',GEODIRECTORY_TEXTDOMAIN);
