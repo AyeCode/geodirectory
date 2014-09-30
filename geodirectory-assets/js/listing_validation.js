@@ -56,7 +56,9 @@ function validate_field(field){
 		break;
 		
 		case 'email':
-			var filter = /^[a-zA-Z0-9]+[a-zA-Z0-9_.-]+@[a-zA-Z0-9]+[a-zA-Z0-9.-]+[a-zA-Z0-9]+.[a-z]{2,4}$/;
+			//var filter = /^[a-zA-Z0-9]+[a-zA-Z0-9_.-]+@[a-zA-Z0-9]+[a-zA-Z0-9.-]+[a-zA-Z0-9]+.[a-z]{2,4}$/;
+			/* fix for email with domain @me.com */
+			var filter = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
    			if(field.value !='' && filter.test(field.value))
 			{ is_error = false; }
 		break;
@@ -80,6 +82,31 @@ function validate_field(field){
 			{ is_error = false;	}
 		break;
 		
+		case 'address':
+		
+			if(jQuery(field).attr('id') == 'post_latitude' || jQuery(field).attr('id') == 'post_longitude'){
+					
+					if(/^[0-90\-.]*$/.test(field.value) == true && field.value != ''){
+						is_error = false;
+					}else{
+						
+						var error_msg = geodir_all_js_msg.geodir_latitude_error_msg;
+						if(jQuery(field).attr('id') == 'post_longitude')
+							error_msg = geodir_all_js_msg.geodir_longgitude_error_msg;
+						
+						jQuery(field).closest('.required_field').find('.geodir_message_error').show();
+						jQuery(field).closest('.required_field').find('.geodir_message_error').html(error_msg);
+						
+					}
+					
+				}else{
+					
+					if(field.value != '')
+						is_error = false;
+				}
+				
+		break;
+		
 		default:
 			if(field.value != '')
 			{ is_error = false;	}
@@ -91,7 +118,7 @@ function validate_field(field){
 	if(is_error)
 	{
 		if(jQuery(field).closest('.required_field').find('span.geodir_message_error').html() == '')
-		{jQuery(field).closest('.required_field').find('span.geodir_message_error').html('This field is required.')}
+		{jQuery(field).closest('.required_field').find('span.geodir_message_error').html(geodir_all_js_msg.geodir_field_id_required)}
 		
 		jQuery(field).closest('.required_field').find('span.geodir_message_error').fadeIn();
 		
@@ -125,9 +152,9 @@ jQuery(document).ready(function(){
 		var is_validate = true;
 		
 		jQuery(this).find(".required_field:visible").each(function(){
-			jQuery(this).find("[field_type]:visible, .chosen_select, .editor, .event_recurring_dates, .geodir-custom-file-upload").each(function(){
+			jQuery(this).find("[field_type]:visible, .chosen_select, .geodir_location_add_listing_chosen, .editor, .event_recurring_dates, .geodir-custom-file-upload").each(function(){
 				
-				if(jQuery(this).hasClass('chosen_select')){ 
+				if(jQuery(this).is('.chosen_select, .geodir_location_add_listing_chosen')){ 
 					var chosen_ele = jQuery(this);
 					jQuery('#'+jQuery(this).attr('id')+'_chzn').mouseleave(function(){
 						validate_field( chosen_ele );		

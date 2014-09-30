@@ -259,6 +259,18 @@ $default = isset($field_info->is_admin)	 ? $field_info->is_admin : '';
                         <br />    <span><?php _e('Want to show this on detail page ?',GEODIRECTORY_TEXTDOMAIN);?></span>
                     </td>
                 </tr>
+				<?php if (!$default && in_array($field_type, array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html'))) { ?>
+				<tr>
+					<td><strong><?php _e('Show as a Tab on detail page? :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+					<td align="left">
+						<select name="show_as_tab" id="show_as_tab" >
+							<option value="1" <?php if(isset($field_info->show_as_tab) && $field_info->show_as_tab=='1'){ echo 'selected="selected"';}?>><?php _e('Yes',GEODIRECTORY_TEXTDOMAIN);?></option>
+							<option value="0" <?php if((isset($field_info->show_as_tab) && ($field_info->show_as_tab=='0' || $field_info->show_as_tab=='')) || !isset($field_info->show_as_tab)){ echo 'selected="selected"';}?>><?php _e('No',GEODIRECTORY_TEXTDOMAIN);?></option>
+						</select>
+						<br /><span><?php _e('Want to display this as a tab on detail page? If "Yes" then "Show on detail page?" must be Yes.',GEODIRECTORY_TEXTDOMAIN);?></span>
+					</td>
+				</tr>
+				<?php } ?>
                 
   <?php 
 			
@@ -362,6 +374,13 @@ $default = isset($field_info->is_admin)	 ? $field_info->is_admin : '';
                 <td align="left">
                 	<input type="text" name="extra[mapview_lable]" id="mapview_lable"  value="<?php if(isset($address['mapview_lable'])){ echo $address['mapview_lable'];}?>" />
                  	<span><?php _e('Enter mapview field label in address section.',GEODIRECTORY_TEXTDOMAIN);?></span>
+                </td>
+            </tr>
+			<tr>
+                <td ><strong><?php _e('Show latitude and logatude from front-end :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                <td align="left">
+                	<input type="checkbox"  name="extra[show_latlng]" id="show_latlng"  value="1" <?php if(isset($address['show_latlng']) && $address['show_latlng']=='1'){ echo 'checked="checked"';}?>/>
+                 	<span><?php _e('Select if you want to show latitude and logatude fields in address section from front-end.',GEODIRECTORY_TEXTDOMAIN);?></span>
                 </td>
             </tr>	
 		<?php } // end of extra fields for address field type

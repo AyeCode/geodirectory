@@ -1,10 +1,10 @@
 === GeoDirectory - Ultimate Business Directory ===
-Contributors: stiofansisland, paoltaia, rightmentor
+Contributors: stiofansisland, paoltaia
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=payments@nomaddevs.com&item_name=Donation+for+WPGD
-Tags:  address book, addressbook, addresses, bio, biographies, bios, business, business directory plugin, business-directory, businesses, church, directories, directory, directory plugin, directory widget, googlemap, googlemaps, google maps, list, listings, lists, member directory, members directories, members directory, microformat, microformats, profile, profiles, staff, user, users, vcard, wordpress business directory, wordpress directory, wordpress directory plugin, yelp clone, tripadvisor clone, yellow pages clone, wordpress business directory plugin, wordpress directory theme, wordpress business directory theme, wordpress city directory plugin, wordpress local directory plugin
+Tags:  address book, addressbook, addresses, bio, biographies, bios, business, business directory plugin, business-directory, businesses, church, directories, directory, directory plugin, directory widget, geodirectory, googlemap, googlemaps, google maps, list, listings, lists, member directory, members directories, members directory, microformat, microformats, profile, profiles, staff, user, users, vcard, wordpress business directory, wordpress directory, wordpress directory plugin, yelp clone, tripadvisor clone, yellow pages clone, wordpress business directory plugin, wordpress directory theme, wordpress business directory theme, wordpress city directory plugin, wordpress local directory plugin
 Requires at least: 3.1
-Tested up to: 3.9.1
-Stable tag: 1.1.1
+Tested up to: 4.0
+Stable tag: 1.2.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -111,9 +111,54 @@ GeoDirectory comes with some dummy data you can use to see how listings look. Yo
 
 == Changelog ==
 
-= 1.1.0 =
+= 1.2.4 =
 
-[GeoDirectory changelog for version 1.1.0](http://wpgeodirectory.com/change-logs/#v1.1.0).
+[GeoDirectory changelog for version 1.2.4](http://wpgeodirectory.com/change-logs/#v1.2.4).
+
+= 1.2.3 =
+
+[GeoDirectory changelog for version 1.2.3](http://wpgeodirectory.com/change-logs/#v1.2.3).
+
+= 1.2.2 =
+
+[GeoDirectory changelog for version 1.2.2](http://wpgeodirectory.com/change-logs/#v1.2.2).
+
+= 1.2.1 =
+
+[GeoDirectory changelog for version 1.2.1](http://wpgeodirectory.com/change-logs/#v1.2.1).
+
+= 1.2.0 =
+
+[GeoDirectory changelog for version 1.2.0](http://wpgeodirectory.com/change-logs/#v1.2.0).
+
+= 1.1.8 =
+
+[GeoDirectory changelog for version 1.1.8](http://wpgeodirectory.com/change-logs/#v1.1.8).
+
+= 1.1.7 =
+
+[GeoDirectory changelog for version 1.1.7](http://wpgeodirectory.com/change-logs/#v1.1.7).
+
+= 1.1.6 =
+
+[GeoDirectory changelog for version 1.1.6](http://wpgeodirectory.com/change-logs/#v1.1.6).
+
+= 1.1.5 =
+
+[GeoDirectory changelog for version 1.1.5](http://wpgeodirectory.com/change-logs/#v1.1.5).
+
+= 1.1.4 =
+
+[GeoDirectory changelog for version 1.1.4](http://wpgeodirectory.com/change-logs/#v1.1.4).
+
+
+= 1.1.3 =
+
+[GeoDirectory changelog for version 1.1.3](http://wpgeodirectory.com/change-logs/#v1.1.3).
+
+= 1.1.2 =
+
+[GeoDirectory changelog for version 1.1.2](http://wpgeodirectory.com/change-logs/#v1.1.2).
 
 = 1.0.4 =
 

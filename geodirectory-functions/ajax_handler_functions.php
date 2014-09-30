@@ -31,7 +31,9 @@ function geodir_on_init(){
 	
 	if(isset($_REQUEST['ptype']) && $_REQUEST['ptype'] == 'ga')
 	{	
-		geodir_getGoogleAnalytics($_REQUEST['ga_page'],$_REQUEST['ga_start'],$_REQUEST['ga_end']);
+		if(isset($_REQUEST['ga_start'])){$ga_start = $_REQUEST['ga_start'];}else{$ga_start = '';}
+		if(isset($_REQUEST['ga_end'])){$ga_end = $_REQUEST['ga_end'];}else{$ga_end ='';}
+		geodir_getGoogleAnalytics($_REQUEST['ga_page'],$ga_start,$ga_end);
 		die;	
 	}
 	 

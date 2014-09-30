@@ -1,7 +1,7 @@
 /* Popup */
 #basic-modal-content, #basic-modal-content2, #basic-modal-content4  {display:none;}
 /* Overlay */
-#simplemodal-overlay { cursor:wait; position:relative;   }
+#simplemodal-overlay {  position:relative;   }
 /* Container */
 #simplemodal-container { display:block; }
 #simplemodal-container a.modalCloseImg { width:25px; height:29px; display:inline; z-index:3200; position:absolute; top:-15px; right:-16px; cursor:pointer;}

@@ -196,6 +196,7 @@
 					default :
 						var note = Math.round(noteBrut*1)/1;
 				}
+				if(note>opts.rateMax){note = opts.rateMax;}
 				return note;
 			};
 

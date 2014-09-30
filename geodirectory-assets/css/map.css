@@ -391,12 +391,19 @@ right: 0px !important;
 	top:auto!important;
 	bottom:0px;
 }
+.geodir_map_container_fullscreen{
+z-index: 99999 !important;	
+}
 /* MAP FULL SCREEN CSS END ########################################################################## */
 
 .geodir_map_container img {
 	max-width:inherit!important;
 	width:auto;
 }
+.geodir_map_container .main_list img{
+	height:15px;
+}
+
 .geodir_map_container {
 	z-index:80;
 	position:relative;
@@ -471,3 +478,24 @@ font-weight: 700;
 height: 16px;
 width: 10px;
 }
+
+.fa-long-arrow-down, .fa-long-arrow-up{margin-left:4px; cursor:pointer; }
+/*
+.geodir-map-home-page .map_background .TopLeft{}
+.geodir-map-home-page .map_background span.triggermap{left:2px;top:-3px}
+*/
+.geodir_map_container .map_background .TopLeft,.geodir_map_container .map_background span.triggermap{line-height:normal}
+/*
+.geodir-map-listing-page .map_background .TopLeft{}
+.geodir-map-listing-page .map_background span.triggermap{}
+*/
+
+.geodir-map-small .map_background .triggermap{left:10.5px!important;top:87px!important;margin:auto!important;font-size:17px}
+.geodir-map-small .map_background .triggermap:hover{font-size:18px}
+.geodir-map-full .map_background .triggermap{left:2px;top:-3px}
+
+.geodir-map-small .map_background span.triggermap_fullscreen{left:10.5px!important;top:90px!important;margin:auto!important;font-size:17px}
+.geodir-map-small .map_background span.triggermap_fullscreen:hover{font-size:18px}
+.geodir-map-full .map_background span.triggermap_fullscreen{left:2px!important;top:-3px!important;margin:auto!important}
+
+div.geodir_map_container.geodir-map-iphone .map_background .triggermap{left:9px!important;top:45px!important;margin:auto!important}

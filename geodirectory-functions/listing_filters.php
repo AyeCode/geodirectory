@@ -29,6 +29,11 @@ function set_listing_request(){
 	
 	if(get_query_var('ignore_sticky_posts')){
 		print_r($query);exit;}
+		
+	// fix woocommerce shop products filtered by language for GD + WPML + Woocommerce
+	if(!geodir_is_geodir_page()){
+		return;
+	}
 	
 	/* remove all pre filters */
 	remove_all_filters('query');
@@ -45,19 +50,20 @@ function set_listing_request(){
 		//if(isset($_REQUEST['s']) && $_REQUEST['s'] == '+') $_REQUEST['s'] = '';
 		
 		if(isset($_REQUEST['sdist'])){
-			($_REQUEST['sdist'] != '0' && $_REQUEST['sdist'] != '') ? $dist=mysql_real_escape_string($_REQUEST['sdist']) : $dist = 25000;
-		}elseif(get_option('gd_search_dist')!=''){$dist = get_option('gd_search_dist');
+			($_REQUEST['sdist'] != '0' && $_REQUEST['sdist'] != '') ? $dist= $_REQUEST['sdist'] : $dist = 25000;
+		}elseif(get_option('geodir_search_dist')!=''){$dist = get_option('geodir_search_dist');
+		
 		}else{$dist = 25000;} //  Distance
 		
-		if(isset($_REQUEST['sgeo_lat'])){$mylat=(float)mysql_real_escape_string($_REQUEST['sgeo_lat']);}
+		if(isset($_REQUEST['sgeo_lat'])){$mylat=(float)$_REQUEST['sgeo_lat'];}
 		else{$mylat= (float)geodir_get_current_city_lat();} //  Latatude
 		
-		if(isset($_REQUEST['sgeo_lon'])){$mylon=(float)mysql_real_escape_string($_REQUEST['sgeo_lon']);}
+		if(isset($_REQUEST['sgeo_lon'])){$mylon=(float)$_REQUEST['sgeo_lon'];}
 		else{$mylon= (float)geodir_get_current_city_lng();} //  Distance 
 		
-		if(isset($_REQUEST['snear'])){$snear = mysql_real_escape_string(trim($_REQUEST['snear']));}
+		if(isset($_REQUEST['snear'])){$snear = trim($_REQUEST['snear']);}
 		
-		if(isset($_REQUEST['s'])){$s = mysql_real_escape_string(trim($_REQUEST['s']));}
+		if(isset($_REQUEST['s'])){$s = trim($_REQUEST['s']);}
 		
 		if($snear == 'NEAR ME'){
 			$ip = $_SERVER['REMOTE_ADDR'];
@@ -200,15 +206,17 @@ function set_listing_request(){
 
 
 /* ====== Place Listing Geodir loop filters ===== */
-
-
-function geodir_listing_loop_filter($query){
-	
-	global $wp_query,$geodir_post_type,$table,$plugin_prefix,$table,$term;
+function geodir_listing_loop_filter( $query ) {
+	global $wp_query, $geodir_post_type, $table, $plugin_prefix, $table,$term;
+		
+	// fix wp_reset_query for popular post view widget
+	if ( !geodir_is_geodir_page() ) {
+		return;
+	}
 	
 	$geodir_post_type = geodir_get_current_posttype();
-	
-	if(isset($wp_query->tax_query->queries) && $wp_query->tax_query->queries){
+		
+	if( isset( $wp_query->tax_query->queries ) && $wp_query->tax_query->queries ) {
 		$taxonomies = wp_list_pluck( $wp_query->tax_query->queries, 'taxonomy' );
 		
 		if(isset($wp_query->query[$taxonomies[0]])){
@@ -238,9 +246,17 @@ function geodir_listing_loop_filter($query){
 		geodir_post_where();
 		if(!is_admin())
 			add_filter('posts_orderby', 'geodir_posts_orderby' ,1 );
+			
+		// advanced filter for popular post view widget
+		global $wp_query;
+		if(!is_admin()) {
+			if (!empty($wp_query->query['with_pics_only'])) {
+				add_filter('posts_join', 'geodir_filter_widget_join',1000);
+			}
+			add_filter('posts_where', 'geodir_filter_widget_where', 1000);
+		}
 		
 	}
-	
 	return $query;
 }
 
@@ -457,9 +473,26 @@ function geodir_post_where(){
 		
 		if( !geodir_is_page('detail') )
 			add_filter('posts_where', 'geodir_default_where', 1);/**/
+			
+		//add_filter( 'user_has_cap', 'geodir_preview_post_cap', 10, 3 );// let subscribers edit their own posts
 		
 	}
 }
+
+/*
+* Preivepost cap *
+*/
+function geodir_preview_post_cap($allcaps, $caps, $args ){
+	$user_id = get_current_user_id();
+	if($user_id && isset($_REQUEST['post_type']) && $_REQUEST['post_type']!='' && isset($_REQUEST['p']) && $_REQUEST['p']!='' && $args[0]=='edit_post' &&  $_REQUEST['p']==$args[2] ){
+		
+	$allcaps['edit_posts']=true;	
+	}
+	//print_r($allcaps);
+  return $allcaps;
+}
+
+
 
 /*
 * Listing edit filter *
@@ -628,8 +661,10 @@ function author_filter_where($where){
 	
 	global $wpdb,$geodir_post_type,$table,$curr;
 	
-		
-	$user_id = get_current_user_id();
+	$curauth = (get_query_var('author_name')) ? get_user_by('slug', get_query_var('author_name')) : get_userdata(get_query_var('author'));
+	
+	//$user_id = get_current_user_id();
+	$user_id = $curauth->ID;
 	if(isset($_REQUEST['stype'])){
 		$where = " AND $wpdb->posts.post_type IN ('".$_REQUEST['stype']."') ";
 	}else{
@@ -654,6 +689,32 @@ function author_filter_where($where){
 	}
 	########### WPML ###########
 	
+	return $where;
+}
+
+// advanced filter for popular post view widget
+function geodir_filter_widget_join($join) {
+	global $wp_query, $table;
+	if (!empty($wp_query->query['with_pics_only'])) {
+		$join .= " LEFT JOIN ".GEODIR_ATTACHMENT_TABLE." ON ( ".GEODIR_ATTACHMENT_TABLE.".post_id=".$table.".post_id AND ".GEODIR_ATTACHMENT_TABLE.".mime_type LIKE '%image%' )";
+	}
+	return $join;
+}
+
+function geodir_filter_widget_where($where) {
+	global $wp_query, $table;
+	if (!empty($wp_query->query['show_featured_only'])) {
+		$where .= " AND ".$table.".is_featured = '1'";
+	}
+	if (!empty($wp_query->query['show_special_only'])) {
+		$where .= " AND ( ".$table.".geodir_special_offers != '' AND ".$table.".geodir_special_offers IS NOT NULL )";
+	}
+	if (!empty($wp_query->query['with_pics_only'])) {
+		$where .= " AND ".GEODIR_ATTACHMENT_TABLE.".ID IS NOT NULL GROUP BY ".$table.".post_id";
+	}
+	if (!empty($wp_query->query['with_videos_only'])) {
+		$where .= " AND ( ".$table.".geodir_video != '' AND ".$table.".geodir_video IS NOT NULL )";
+	}
 	return $where;
 }
 
