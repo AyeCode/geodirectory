@@ -255,17 +255,15 @@ do_action('geodir_before_main_content','listing-preview-page');
                         $taxonomies[$post_taxonomy] = wp_sprintf('%s: %l.', ucwords($listing_label.' Category'), $links, (object)$terms);
                         
                     }
-                    
-                    
                     echo '<span class="geodir-category">' . $taxonomies[$post_taxonomy] . '</span>';	
 										
-										if(isset($taxonomies[$post_type.'_tags']))		
-                    echo '<span class="geodir-tags">' . $taxonomies[$post_type.'_tags'] . '</span>';
-                    ?>
-                    
+					if ( isset( $taxonomies[$post_type.'_tags'] ) ) {		
+                   		echo '<span class="geodir-tags">' . $taxonomies[$post_type.'_tags'] . '</span>';
+					}
+                    ?>   
             </p>
-            <!-- Post terms end --> 
-            
+            <!-- Post terms end -->
+			<?php if( (int)get_option( 'geodir_disable_gb_modal' ) != 1 ) { ?>
             <!-- Post info tabs start -->     
             <script type="text/javascript">
                jQuery(function() {
@@ -279,14 +277,10 @@ do_action('geodir_before_main_content','listing-preview-page');
                     });
                 });
             </script>
-         
-			   
-            <!-- Post info tabs start -->       
-
-						<?php geodir_show_detail_page_tabs(); ?>
-         
+			<?php } ?>			   
+            <!-- Post info tabs start -->
+			<?php geodir_show_detail_page_tabs(); ?>
             <?php do_action('geodir_after_post_preview', $post);?>
-            
         </div>		
 		<?php     
         

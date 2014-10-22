@@ -163,7 +163,8 @@ function geodir_draw_map($map_args = array())
             <div class="map-category-listing <?php if($geodir_map_options['enable_post_type_filters'] && $geodir_available_pt_on_map <2){echo "map-cat-floor";}?>">                 
                   <div class="trigger triggeroff" ><i class="fa fa-compress"></i><i class="fa fa-expand"></i></div>
                		<div id="<?php echo $map_canvas_name;?>_cat" class="<?php echo $map_canvas_name;?>_map_category  map_category" <?php if($child_collapse){ ?>checked="checked" <?php }?>>
-                        <input  onkeydown="if(event.keyCode == 13){build_map_ajax_search_param('<?php echo $map_canvas_name;?>' , false)}" type="<?php if($geodir_map_options['enable_text_search']) echo "text" ; else echo 'hidden' ;?>" class="inputbox" id="<?php echo $map_canvas_name;?>_search_string" name="search" value="<?php _e('Title or Keyword',GEODIRECTORY_TEXTDOMAIN);?>" onclick="this.value=''" />
+					<input onkeydown="if(event.keyCode == 13){build_map_ajax_search_param('<?php echo $map_canvas_name; ?>', false)}" 
+type="<?php echo ( $geodir_map_options['enable_text_search'] ? 'text' : 'hidden' ); ?>" class="inputbox" id="<?php echo $map_canvas_name; ?>_search_string" name="search" placeholder="<?php _e( 'Title', GEODIRECTORY_TEXTDOMAIN ); ?>" />
                      <?php if($geodir_map_options['enable_cat_filters']){?>
                      			<?php if($geodir_map_options['child_collapse']){ ?>
                                 	<input type="hidden" id="<?php echo $map_canvas_name;?>_child_collapse" value="1" />
@@ -231,16 +232,14 @@ function geodir_draw_map($map_args = array())
              <?php if(isset($geodir_map_options['is_geodir_home_map_widget']) && $map_args['is_geodir_home_map_widget']) { ?><div class="geodir-map-posttype-list"><?php } ?>
 			 <ul class="clearfix place-list">
             	<?php 
-				
 				$exclude_post_types = get_option('geodir_exclude_post_type_on_map');
 				
 				foreach($post_types as $post_type => $args){
 					if(!in_array($post_type,$exclude_post_types)){
 						echo '<li id="'.$post_type.'"><a href="javascript:void(0);" onclick="jQuery(\'#'.  $map_canvas_name .'_posttype\').val(\''.$post_type.'\');build_map_ajax_search_param(\''.$map_canvas_name .'\', true)">'.__(ucfirst($args->labels->name)).'</a></li>';
 					 }
-				}?>
-               
-              
+				}
+				?>
             </ul>
 			<?php if(isset($geodir_map_options['is_geodir_home_map_widget']) && $map_args['is_geodir_home_map_widget']) { ?></div><?php } ?>
             <div class="geodir-map-navigation">

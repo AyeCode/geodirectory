@@ -58,7 +58,8 @@ add_action( 'geodir_detail_before_main_content', 'geodir_breadcrumb', 20 );
 
 function geodir_action_geodir_set_preview_post() {
 	global $post, $preview;
-	if (!$preview) {
+	$is_backend_preview = ( is_single() && !empty( $_REQUEST['post_type'] ) && !empty( $_REQUEST['preview'] ) && !empty( $_REQUEST['p'] ) ) && is_super_admin() ? true : false; // skip if preview from backend
+	if (!$preview || $is_backend_preview ) {
 		return;
 	}// bail if not previewing
 	
@@ -166,10 +167,16 @@ function geodir_action_geodir_set_preview_post() {
 	setup_postdata( $post );
 }
 
-function geodir_action_geodir_preview_code(){
+function geodir_action_geodir_preview_code() {
 	global $preview;
-if(!$preview){return;}// bail if not previewing
-geodir_get_template_part('preview','buttons');	
+	
+	$is_backend_preview = ( is_single() && !empty( $_REQUEST['post_type'] ) && !empty( $_REQUEST['preview'] ) && !empty( $_REQUEST['p'] ) ) && is_super_admin() ? true : false; // skip if preview from backend
+	
+	if( !$preview || $is_backend_preview ) {
+		return;
+	}// bail if not previewing
+	
+	geodir_get_template_part( 'preview', 'buttons' );	
 }
 
 // action for adding the details page top widget area
@@ -220,155 +227,144 @@ add_action( 'geodir_page_title', 'geodir_action_page_title',10);
 function geodir_action_page_title(){
 $class = apply_filters( 'geodir_page_title_class', 'entry-title fn' );
 $class_header = apply_filters( 'geodir_page_title_header_class', 'entry-header' );
-echo '<header class="'.$class_header.'"><h1 class="'.$class.'">'.get_the_title().'</h1></header>';
+echo '<header class="'.$class_header.'"><h1 class="'.$class.'">'.stripslashes(get_the_title()).'</h1></header>';
 }
 
 
-add_action( 'geodir_details_slider', 'geodir_action_details_slider',10,1 );
-function geodir_action_details_slider(){
-	global $preview,$post;
-
-	if($preview){//print_r($post);
-		if(isset($post->post_images))
-            	$post->post_images = trim($post->post_images,",");
-							
-            if(isset($post->post_images) && !empty($post->post_images))
-		    	$post_images = explode(",",$post->post_images);
-       
-			 
-			 $main_slides = '';
-			 $nav_slides = '';     
-			
-			if(empty($post_images)){
-				$default_img = '';
-				
-				$default_cat = '';
-				if(isset($post->post_default_category))
-					$default_cat = $post->post_default_category;
-				
-				if($default_catimg = geodir_get_default_catimage($default_cat,$post->listing_type))
-					$default_img = $default_catimg['src'];
-				elseif($no_images = get_option('geodir_listing_no_img')){
-					$default_img = $no_images;
-				}
-				
-				if(!empty($default_img)){
-					$post_images[] = $default_img;
-				}
-			}        
-            $slides = 0;
-            
-            if(!empty($post_images)){
-                foreach($post_images as $image){
-                 if(!empty($image)){
-					@list($width, $height) = getimagesize(trim($image));
-		
-					if ( $image && $width && $height )
-							$image = (object)array( 'src' => $image, 'width' => $width, 'height' => $height );    
-					
-					
-					if(isset($image->src)){
-					
-						if($image->height >= 400){
-							$spacer_height = 0;
-						}else{
-							$spacer_height = ((400-$image->height)/2);
-						}
-							
-							$image_title = isset($image->title) ? $image->title : '';
-							
-						$main_slides .=	'<li><img src="'.geodir_plugin_url()."/geodirectory-assets/images/spacer.gif".'"  alt="'.$image_title.'" title="'.$image_title.'" style="max-height:'.$spacer_height.'px;margin:0 auto;" />';
-						$main_slides .=	'<img src="'.$image->src.'"  alt="'.$image_title.'" title="'.$image_title.'" style="max-height:400px;margin:0 auto;" /></li>';
-							
-							
-						$nav_slides .=	'<li><img src="'.$image->src.'"  alt="'.$image_title.'" title="'.$image_title.'" style="max-height:48px;margin:0 auto;" /></li>';
-						
-					
-											
-											$slides++;
-						}
-					}					
-                }// endfore
-            } //end if
-			
-	}else{
+add_action( 'geodir_details_slider', 'geodir_action_details_slider', 10, 1 );
+function geodir_action_details_slider() {
+	global $preview, $post;
 	
-	global $post;
+	$is_backend_preview = ( is_single() && !empty( $_REQUEST['post_type'] ) && !empty( $_REQUEST['preview'] ) && !empty( $_REQUEST['p'] ) ) && is_super_admin() ? true : false; // preview from backend
+	
+	if ( $is_backend_preview && !empty( $post ) && !empty( $post->ID ) && !isset( $post->post_images ) ) {
+		$preview_get_images = geodir_get_images( $post->ID, 'thumbnail', get_option( 'geodir_listing_no_img' ) );
+		
+		$preview_post_images = array();
+		if ( $preview_get_images ) {
+			foreach ( $preview_get_images as $row ) {
+				$preview_post_images[] = $row->src;
+			}
+		}
+		if ( !empty( $preview_post_images ) ) {
+			$post->post_images = implode( ',', $preview_post_images );
+		}
+	}
 
-			$main_slides = '';
-            $nav_slides = '';
-						   
-            $post_images = geodir_get_images($post->ID,'thumbnail',get_option('geodir_listing_no_img'));
-             
-            $slides = 0;
-            
-           if(empty($post_images) && get_option('geodir_listing_no_img')){
-							$post_images = (object)array((object)array('src'=>get_option('geodir_listing_no_img')));
+	if ( $preview ) {
+		if( isset( $post->post_images ) && !empty( $post->post_images ) ) {
+			$post->post_images = trim( $post->post_images, "," );
+			$post_images = explode( ",", $post->post_images );
+		}
+		
+		$main_slides = '';
+		$nav_slides = '';
+		$slides = 0;
+		
+		if( empty( $post_images ) ) {
+			$default_img = '';
+			$default_cat = '';
+			
+			if( isset( $post->post_default_category ) ) {
+				$default_cat = $post->post_default_category;
+			}
+				
+			if ( $default_catimg = geodir_get_default_catimage( $default_cat,$post->listing_type ) ) {
+				$default_img = $default_catimg['src'];
+			} else if( $no_images = get_option( 'geodir_listing_no_img' ) ) {
+				$default_img = $no_images;
+			}
+				
+			if ( !empty( $default_img ) ) {
+				$post_images[] = $default_img;
+			}
+		}
+				
+		if ( !empty( $post_images ) ) {
+			foreach ( $post_images as $image ) {
+				if ( !empty( $image ) ) {
+					@list( $width, $height ) = getimagesize( trim( $image ) );
+		
+					if ( $image && $width && $height ) {
+						$image = (object)array( 'src' => $image, 'width' => $width, 'height' => $height ); 
+					}
+					
+					if( isset( $image->src ) ) {
+						if ( $image->height >= 400 ) {
+							$spacer_height = 0;
+						} else {
+							$spacer_height = ( ( 400 - $image->height ) / 2 );
 						}
 						
-          
-					if(!empty($post_images)){
-					foreach($post_images as $image){
-                
-					if($image->height >= 400){
-						$spacer_height = 0;
-					}else{
-						$spacer_height = ((400 - $image->height)/2);
+						$image_title = isset( $image->title ) ? $image->title : '';
+							
+						$main_slides .= '<li><img src="'.geodir_plugin_url()."/geodirectory-assets/images/spacer.gif".'" alt="'.$image_title.'" title="'.$image_title.'" style="max-height:'.$spacer_height.'px;margin:0 auto;" />';
+						$main_slides .= '<img src="'.$image->src.'" alt="'.$image_title.'" title="'.$image_title.'" style="max-height:400px;margin:0 auto;" /></li>';
+						$nav_slides .= '<li><img src="'.$image->src.'" alt="'.$image_title.'" title="'.$image_title.'" style="max-height:48px;margin:0 auto;" /></li>';
+						$slides++;
 					}
-				    
-               
-					$main_slides .=	'<li><img src="'.geodir_plugin_url()."/geodirectory-assets/images/spacer.gif".'"  alt="'.$image->title.'" title="'.$image->title.'" style="max-height:'.$spacer_height.'px;margin:0 auto;"  />';
-					$main_slides .=	'<img src="'.$image->src.'"  alt="'.$image->title.'" title="'.$image->title.'" style="max-height:400px;margin:0 auto;" itemprop="image"/></li>';
-						
-						
-					$nav_slides .=	'<li><img src="'.$image->src.'"  alt="'.$image->title.'" title="'.$image->title.'" style="max-height:48px;margin:0 auto;" /></li>';
-                    
-                    $slides++;
-                }}// endfore
-	}
+				}
+			}// endfore
+		} //end if
+	} else {
+		$main_slides = '';
+		$nav_slides = '';
+		$post_images = geodir_get_images( $post->ID, 'thumbnail', get_option( 'geodir_listing_no_img' ) );
+		$slides = 0;
+		
+		if ( empty( $post_images ) && get_option( 'geodir_listing_no_img' ) ) {
+			$post_images = (object)array( (object)array( 'src' => get_option( 'geodir_listing_no_img' ) ) );
+		}
+		
+		if ( !empty( $post_images ) ) {
+			foreach ( $post_images as $image ) {
+				if ( $image->height >= 400 ) {
+					$spacer_height = 0;
+				} else {
+					$spacer_height = ( ( 400 - $image->height ) / 2 );
+				}
 				
-            if(!empty($post_images)){
-            ?>
-            <div class="geodir_flex-container" >	
-                <div class="geodir_flex-loader"><i class="fa fa-refresh fa-spin"></i></div> 
-               
-                <div id="geodir_slider" class="geodir_flexslider ">
-                  <ul class="geodir-slides clearfix">
-                        <?php echo $main_slides;?>
-                  </ul>
-                </div>
-                <?php if( $slides > 1){ ?>
-                    <div id="geodir_carousel" class="geodir_flexslider">
-                      <ul class="geodir-slides clearfix">
-                            <?php echo $nav_slides;?>
-                      </ul>
-                    </div>
-                <?php } ?>
-                    
-            </div>
-               <?php } 
+				$main_slides .= '<li><img src="'.geodir_plugin_url()."/geodirectory-assets/images/spacer.gif".'" alt="'.$image->title.'" title="'.$image->title.'" style="max-height:'.$spacer_height.'px;margin:0 auto;" />';
+				$main_slides .= '<img src="'.$image->src.'" alt="'.$image->title.'" title="'.$image->title.'" style="max-height:400px;margin:0 auto;" itemprop="image"/></li>';
+				$nav_slides .= '<li><img src="'.$image->src.'" alt="'.$image->title.'" title="'.$image->title.'" style="max-height:48px;margin:0 auto;" /></li>';
+				$slides++;
+			}
+		}// endfore
+	}
+	
+	if ( !empty( $post_images ) ) {
+	?>
+		<div class="geodir_flex-container" >	
+			<div class="geodir_flex-loader"><i class="fa fa-refresh fa-spin"></i></div> 
+			<div id="geodir_slider" class="geodir_flexslider ">
+			  <ul class="geodir-slides clearfix"><?php echo $main_slides; ?></ul>
+			</div>
+			<?php if ( $slides > 1 ) { ?>
+				<div id="geodir_carousel" class="geodir_flexslider">
+				  <ul class="geodir-slides clearfix"><?php echo $nav_slides; ?></ul>
+				</div>
+			<?php } ?>
+		</div>
+	<?php
+	} 
 }
-
 
 add_action( 'geodir_details_taxonomies', 'geodir_action_details_taxonomies',10);
 function geodir_action_details_taxonomies(){
 	global $preview,$post;?>
 <p class="geodir_post_taxomomies clearfix">  
 <?php
-
 $taxonomies = array();
-//print_r($post) ;
 
-if($preview)
-{
+$is_backend_preview = ( is_single() && !empty( $_REQUEST['post_type'] ) && !empty( $_REQUEST['preview'] ) && !empty( $_REQUEST['p'] ) ) && is_super_admin() ? true : false; // skip if preview from backend
+
+if ( $preview && !$is_backend_preview ) {
 	$post_type = $post->listing_type;
-	$post_taxonomy  = 	$post_type.'category' ;
+	$post_taxonomy  = 	$post_type . 'category' ;
 	$post->$post_taxonomy = $post->post_category[$post_taxonomy ] ;
-}
-else
-{
+} else {
 	$post_type = $post->post_type;
-	$post_taxonomy  = 	$post_type.'category' ;
+	$post_taxonomy  = $post_type . 'category' ;
 }
 //{	
 $post_type_info = get_post_type_object( $post_type );
@@ -463,9 +459,10 @@ $listing_label = $post_type_info->labels->singular_name;
 								
 								if($post_term != ''):	
 									$term = get_term_by( 'id', $post_term, $post_taxonomy); 
-								  
+									if(is_object($term)){
 									$links[] = "<a href='".esc_attr( get_term_link($term,$post_taxonomy) ) . "'>$term->name</a>";
 									$terms[] = $term;
+									}
 								endif;
 							}
 						}
@@ -579,7 +576,7 @@ function geodir_action_listings_title() {
 		$add_string_in_title = __( 'My Favorite', GEODIRECTORY_TEXTDOMAIN ) . ' ';
 	}
 	
-	$list_title = $add_string_in_title . $post_type_info->labels->name;
+	$list_title = $add_string_in_title . __( ucfirst( $post_type_info->labels->name ), GEODIRECTORY_TEXTDOMAIN );
 	$single_name = $post_type_info->labels->singular_name;
 	
 	$taxonomy = geodir_get_taxonomies( $gd_post_type, true);
@@ -587,12 +584,12 @@ function geodir_action_listings_title() {
 	if( !empty( $term ) ) {
 		$current_term = get_term_by( 'slug', $term,$taxonomy[0] );
 		if( !empty( $current_term ) ) {
-			$list_title .= __( ' in', GEODIRECTORY_TEXTDOMAIN ) . " '" . ucwords( $current_term->name ) . "'";
+			$list_title .= __( ' in', GEODIRECTORY_TEXTDOMAIN ) . " '" . __( ucfirst( $current_term->name ), GEODIRECTORY_TEXTDOMAIN ) . "'";
 		} else {
 			if( count( $taxonomy ) > 1 ) {
 				$current_term = get_term_by( 'slug', $term,$taxonomy[1] );
 				if( !empty( $current_term ) ) {
-					$list_title .= __( ' in',GEODIRECTORY_TEXTDOMAIN ) . " '" . ucwords( $current_term->name ) . "'";
+					$list_title .= __( ' in',GEODIRECTORY_TEXTDOMAIN ) . " '" . __( ucfirst( $current_term->name ), GEODIRECTORY_TEXTDOMAIN ) . "'";
 				}
 			}
 		}	
@@ -615,7 +612,7 @@ function geodir_action_listings_title() {
 			} else {
 				$gd_city = preg_replace( '/-(\d+)$/', '', $gd_city );
 				$gd_city = preg_replace( '/[_-]/', ' ', $gd_city );
-				$gd_city = ucwords( $gd_city );
+				$gd_city = __( ucwords( $gd_city ), GEODIRECTORY_TEXTDOMAIN );
 			}
 			
 			$list_title .= __( ' in', GEODIRECTORY_TEXTDOMAIN ) . " '" . $gd_city . "'";
@@ -625,7 +622,7 @@ function geodir_action_listings_title() {
 			} else {
 				$gd_region = preg_replace( '/-(\d+)$/', '', $gd_region );
 				$gd_region = preg_replace( '/[_-]/', ' ', $gd_region );
-				$gd_region = ucwords( $gd_region );
+				$gd_region = __( ucwords( $gd_region), GEODIRECTORY_TEXTDOMAIN );
 			}
 			
 			$list_title .= __( ' in', GEODIRECTORY_TEXTDOMAIN ) . " '" . $gd_region . "'";
@@ -635,7 +632,7 @@ function geodir_action_listings_title() {
 			} else {
 				$gd_country = preg_replace('/-(\d+)$/', '',  $gd_country);
 				$gd_country = preg_replace('/[_-]/', ' ', $gd_country);
-				$gd_country = ucwords( $gd_country );
+				$gd_country = __( ucwords( $gd_country), GEODIRECTORY_TEXTDOMAIN );
 			}
 			
 			$list_title .= __( ' in', GEODIRECTORY_TEXTDOMAIN ) . " '" . $gd_country . "'";
@@ -643,7 +640,7 @@ function geodir_action_listings_title() {
 	}
 		
 	if( is_search() ) {
-		$list_title = __( 'Search', GEODIRECTORY_TEXTDOMAIN) . ' ' . $post_type_info->labels->name . __( ' For :',GEODIRECTORY_TEXTDOMAIN ) . " '" . get_search_query() . "'";
+		$list_title = __( 'Search', GEODIRECTORY_TEXTDOMAIN) . ' ' . __( ucfirst( $post_type_info->labels->name  ), GEODIRECTORY_TEXTDOMAIN ). __( ' For :',GEODIRECTORY_TEXTDOMAIN ) . " '" . get_search_query() . "'";
 	}
 	
 	$class = apply_filters( 'geodir_page_title_class', 'entry-title fn' );
@@ -963,9 +960,9 @@ global $cat_display,$post_cat, $current_user;
                      
                     $multiple = true; // allow multiple files upload
                      
-                    $width = 800; // If you want to automatically resize all uploaded images then provide width here (in pixels)
+                    $width = geodir_media_image_large_width(); // If you want to automatically resize all uploaded images then provide width here (in pixels)
                      
-                    $height = 800; // If you want to automatically resize all uploaded images then provide height here (in pixels)
+                    $height = geodir_media_image_large_height(); // If you want to automatically resize all uploaded images then provide height here (in pixels)
 					
 					$thumb_img_arr = array();
 					$totImg = 0;
@@ -1512,12 +1509,11 @@ if(get_option('geodir_show_home_bottom_section')) { ?>
 <?php }
 }
 
+add_filter( 'geodir_filter_widget_listings_fields', 'geodir_function_widget_listings_fields' );
+add_filter( 'geodir_filter_widget_listings_join', 'geodir_function_widget_listings_join' );
+add_filter( 'geodir_filter_widget_listings_where', 'geodir_function_widget_listings_where' );
+add_filter( 'geodir_filter_widget_listings_orderby', 'geodir_function_widget_listings_orderby' );
+add_filter( 'geodir_filter_widget_listings_limit', 'geodir_function_widget_listings_limit' );
 
-
-
-
-
-
-
-
-
+/* add class for listing row */
+add_filter( 'geodir_post_view_extra_class', 'geodir_core_post_view_extra_class' );
