@@ -602,9 +602,10 @@ function geodir_localize_all_js_msg()
 							'geodir_latitude_error_msg' => GEODIR_LATITUDE_ERROR_MSG,
 							'geodir_longgitude_error_msg' => GEODIR_LOGNGITUDE_ERROR_MSG,
 							'geodir_default_rating_star_icon' => get_option('geodir_default_rating_star_icon'),
-							
-							// end not show alert msg
-							
+							'gd_cmt_btn_post_reply' => __( 'Post Reply', GEODIRECTORY_TEXTDOMAIN ),
+							'gd_cmt_btn_reply_text' => __( 'Reply text', GEODIRECTORY_TEXTDOMAIN ),
+							'gd_cmt_btn_post_review' => __( 'Post Review', GEODIRECTORY_TEXTDOMAIN ),
+							'gd_cmt_btn_review_text' => __( 'Review text', GEODIRECTORY_TEXTDOMAIN ),
 						);
 	
 	foreach ( $arr_alert_msg as $key => $value ) 
@@ -821,6 +822,10 @@ function geodir_changes_in_custom_fields_table(){
 	// updated custom field table(add field to show custom field as a tab)
 	if (!$wpdb->get_var("SHOW COLUMNS FROM ".GEODIR_CUSTOM_FIELDS_TABLE." WHERE field = 'show_as_tab'")) {
 		$wpdb->query("ALTER TABLE `".GEODIR_CUSTOM_FIELDS_TABLE."` ADD `show_as_tab` ENUM( '0', '1' ) NOT NULL DEFAULT '0' AFTER `show_on_detail`");
+	}
+	
+	if (!$wpdb->get_var("SHOW COLUMNS FROM ".GEODIR_CUSTOM_FIELDS_TABLE." WHERE field = 'for_admin_use'")) {
+		$wpdb->query("ALTER TABLE `".GEODIR_CUSTOM_FIELDS_TABLE."` ADD `for_admin_use` ENUM( '0', '1' ) NOT NULL DEFAULT '0'");
 	}
 	
 	if(!get_option('geodir_changes_in_custom_fields_table')){
@@ -1151,133 +1156,170 @@ function geodir_remove_template_redirect_actions()
 	}
 }
 
-
-
 add_filter('wpseo_title' , 'geodir_post_type_archive_title',11, 1 );
 
 /// add loction variables in geodirectory title parameter 
-add_filter('post_type_archive_title' , 'geodir_post_type_archive_title',10, 1 );
-function geodir_post_type_archive_title($title)
-{		
-	global $wp_query,$wp,$wpdb;
+add_filter( 'post_type_archive_title', 'geodir_post_type_archive_title', 10, 1 );
+function geodir_post_type_archive_title( $title )
+{
+	global $wp_query, $wp, $wpdb;
+	
 	$wpseo_edit = false;
 	$current_term = $wp_query->get_queried_object();
-	if (!isset($current_term->ID)) {
-		if (empty($current_term) || !is_object($current_term)) {
+	
+	if ( !isset( $current_term->ID ) ) {
+		if ( empty( $current_term ) || !is_object( $current_term ) ) {
 			$current_term = new stdClass();
 		}
 		$current_term->ID = '';
 	}
-	if(geodir_is_geodir_page() && (is_tax() || $current_term->ID==get_option('geodir_location_page')))
-	{
-		
-####### FIX FOR YOAST SEO START ########
-
-$separator_options = array(
-			'sc-dash'    => '-',
-			'sc-ndash'   => '&ndash;',
-			'sc-mdash'   => '&mdash;',
-			'sc-middot'  => '&middot;',
-			'sc-bull'    => '&bull;',
-			'sc-star'    => '*',
-			'sc-smstar'  => '&#8902;',
-			'sc-pipe'    => '|',
-			'sc-tilde'   => '~',
-			'sc-laquo'   => '&laquo;',
-			'sc-raquo'   => '&raquo;',
-			'sc-lt'      => '&lt;',
-			'sc-gt'      => '&gt;',
-		);
-
-
-$wpseo = get_option('wpseo_titles');
-if(is_array($wpseo) && is_plugin_active( 'wordpress-seo/wp-seo.php' )){
 	
-$sep = $separator_options[$wpseo['separator']];
-$title_parts = explode(' '.$sep.' ',$title,2);
-$title = $title_parts[0];
-$wpseo_edit = true;
-}
-####### FIX FOR YOAST SEO END ########
-
-
+	if( geodir_is_geodir_page() && ( is_tax() || $current_term->ID == get_option( 'geodir_location_page' ) || ( is_archive() && !$current_term->ID && !( is_tax() || $current_term->ID == get_option( 'geodir_location_page' ) ) ) ) ) {
 		
-		$location_array = geodir_get_current_location_terms('query_vars') ;
-		if(!empty($location_array))
-		{
-			foreach($location_array as $location )
-			{
-				$gd_location_link_text =  preg_replace('/-(\d+)$/', '',  $location );
-				$gd_location_link_text =preg_replace('/[_-]/', ' ', $gd_location_link_text);
-						
-				$title .= ' ' . ucwords( $gd_location_link_text) ;
-			}
-			
-			$gd_post_type = geodir_get_current_posttype();
-			$post_type_info = get_post_type_object( $gd_post_type );
-			if( get_query_var($gd_post_type.'category') )
-				$gd_taxonomy = $gd_post_type.'category';
-			elseif( get_query_var($gd_post_type.'_tags') )
-				$gd_taxonomy = $gd_post_type.'_tags';
+		####### FIX FOR YOAST SEO START ########
+		$separator_options = array(
+					'sc-dash'    => '-',
+					'sc-ndash'   => '&ndash;',
+					'sc-mdash'   => '&mdash;',
+					'sc-middot'  => '&middot;',
+					'sc-bull'    => '&bull;',
+					'sc-star'    => '*',
+					'sc-smstar'  => '&#8902;',
+					'sc-pipe'    => '|',
+					'sc-tilde'   => '~',
+					'sc-laquo'   => '&laquo;',
+					'sc-raquo'   => '&raquo;',
+					'sc-lt'      => '&lt;',
+					'sc-gt'      => '&gt;',
+				);
+
+
+		$wpseo = get_option( 'wpseo_titles' );
+		
+		if ( is_array($wpseo) && is_plugin_active( 'wordpress-seo/wp-seo.php' ) ) {
+			$sep = $separator_options[$wpseo['separator']];
+			$title_parts = explode( ' '.$sep.' ', $title, 2 );
+			$title = $title_parts[0];
+			$wpseo_edit = true;
+		}
+		####### FIX FOR YOAST SEO END ########
 				
-			if(!empty($gd_taxonomy))
-			{
-				$term_array = explode( "/", trim($wp->query_vars[$gd_taxonomy],"/" ) );
-				if(!empty($term_array ))
-				{
-					foreach($term_array as $term)
-					{
-						$term_link_text = preg_replace('/-(\d+)$/', '',  $term);
-						$term_link_text = preg_replace('/[_-]/', ' ', $term_link_text);
-					}
-					
-					$title .= ' ' . ucwords( $term_link_text) ;
+		$location_array = geodir_get_current_location_terms( 'query_vars' );
+		if ( !empty( $location_array ) ) {
+			$location_titles = array();
+			$actual_location_name = function_exists( 'get_actual_location_name' ) ? true : false;
+			$location_array = array_reverse( $location_array );
+			
+			foreach ( $location_array as $location_type => $location ) {
+				$gd_location_link_text = preg_replace( '/-(\d+)$/', '',  $location );
+				$gd_location_link_text = preg_replace( '/[_-]/', ' ', $gd_location_link_text );
+						
+				$location_name = ucwords( $gd_location_link_text );
+				$location_name = __( $location_name, GEODIRECTORY_TEXTDOMAIN );
+				
+				if ( $actual_location_name ) {
+					$location_type = strpos( $location_type, 'gd_' ) === 0 ? substr( $location_type, 3 ) : $location_type;
+					$location_name = get_actual_location_name( $location_type, $location, true );
 				}
+				
+				$location_titles[] = $location_name;
+			}
+			if ( !empty( $location_titles ) ) { 
+				$location_titles = array_unique( $location_titles );
+				$title .= __( ' in ', GEODIRECTORY_TEXTDOMAIN ) . implode( ", ", $location_titles );
 			}
 		}
+		
+		$gd_post_type = geodir_get_current_posttype();
+		$post_type_info = get_post_type_object( $gd_post_type );
+		
+		if( get_query_var( $gd_post_type . 'category' ) ) {
+			$gd_taxonomy = $gd_post_type . 'category';
+			$taxonomy_title = __( ' with category ', GEODIRECTORY_TEXTDOMAIN );
+		}
+		else if( get_query_var( $gd_post_type . '_tags' ) ) {
+			$gd_taxonomy = $gd_post_type . '_tags';
+			$taxonomy_title = __( ' with tag ', GEODIRECTORY_TEXTDOMAIN );
+		}
+			
+		if ( !empty( $gd_taxonomy ) ) {
+			$taxonomy_titles = array();
+			$term_array = explode( "/", trim( $wp->query_vars[$gd_taxonomy], "/" ) );
+			
+			if ( !empty( $term_array ) ) {
+				foreach ( $term_array as $term ) {
+					$term_link_text = preg_replace( '/-(\d+)$/', '',  $term );
+					$term_link_text = preg_replace( '/[_-]/', ' ', $term_link_text );
+				}
+				
+				//$title .= ' ' . ucwords( $term_link_text );
+				$taxonomy_titles[] = ucwords( $term_link_text );
+			}
+		}
+		
+		if ( !empty( $taxonomy_titles ) ) { 
+			$taxonomy_titles = array_unique( $taxonomy_titles );
+			$title .= ( !empty( $location_titles ) ? $taxonomy_title : __( ' in ', GEODIRECTORY_TEXTDOMAIN ) );
+			$title .= implode( ", ", $taxonomy_titles );
+		}
 	}
-####### FIX FOR YOAST SEO START ########	
-	if($wpseo_edit){$title = $title.' '.$sep.' '.$title_parts[1];}
-####### FIX FOR YOAST SEO END ########	
+	
+	####### FIX FOR YOAST SEO START ########	
+	if( $wpseo_edit ) {
+		$title = $title . ' ' . $sep . ' '. $title_parts[1];
+	}
+	####### FIX FOR YOAST SEO END ########
+		
 	return $title;
 }
 
-add_filter('single_post_title' , 'geodir_single_post_title',10,2);
-function geodir_single_post_title($title , $post)
+add_filter( 'single_post_title', 'geodir_single_post_title', 10, 2 );
+function geodir_single_post_title( $title , $post )
 {
-	global $wp ;
-	if($post->post_title=='Location' && geodir_is_geodir_page())
-	{
-		$location_array = geodir_get_current_location_terms('query_vars') ;
-		if(!empty($location_array))
-		{
-			foreach($location_array as $location )
-			{
-				$gd_location_link_text =  preg_replace('/-(\d+)$/', '',  $location );
-				$gd_location_link_text =preg_replace('/[_-]/', ' ', $gd_location_link_text);
+	global $wp;
+	if ( $post->post_title == 'Location' && geodir_is_geodir_page() ) {
+		$title = defined( 'GD_LOCATION' ) ? GD_LOCATION : __( 'Location', GEODIRECTORY_TEXTDOMAIN );
+		
+		$location_array = geodir_get_current_location_terms( 'query_vars' );
+		
+		if ( !empty( $location_array ) ) {
+			$location_array = array_reverse( $location_array );
+			$actual_location_name = function_exists( 'get_actual_location_name' ) ? true : false;
+			
+			foreach( $location_array as $location_type => $location ) {
+				$gd_location_link_text = preg_replace('/-(\d+)$/', '', $location );
+				$gd_location_link_text = preg_replace('/[_-]/', ' ', $gd_location_link_text );
+				
+				$gd_location_link_text = ucwords( $gd_location_link_text );
+				$gd_location_link_text = __( $gd_location_link_text, GEODIRECTORY_TEXTDOMAIN );
+				
+				if ( $actual_location_name ) {
+					$location_type = strpos( $location_type, 'gd_' ) === 0 ? substr( $location_type, 3 ) : $location_type;
+					$gd_location_link_text = get_actual_location_name( $location_type, $location, true );
+				}
 						
-				$title .= ' ' . ucwords( $gd_location_link_text) ;
+				$title .= ' ' . $gd_location_link_text;
 			}
 			
 			$gd_post_type = geodir_get_current_posttype();
 			$post_type_info = get_post_type_object( $gd_post_type );
-			if( get_query_var($gd_post_type.'category') )
-				$gd_taxonomy = $gd_post_type.'category';
-			elseif( get_query_var($gd_post_type.'_tags') )
+			
+			if ( get_query_var( $gd_post_type . 'category' ) ) {
+				$gd_taxonomy = $gd_post_type . 'category';
+			} else if ( get_query_var( $gd_post_type . '_tags' ) ) {
 				$gd_taxonomy = $gd_post_type.'_tags';
+			}
 				
-			if(!empty($gd_taxonomy))
-			{
-				$term_array = explode( "/", trim($wp->query_vars[$gd_taxonomy],"/" ) );
-				if(!empty($term_array ))
-				{
-					foreach($term_array as $term)
-					{
-						$term_link_text = preg_replace('/-(\d+)$/', '',  $term);
-						$term_link_text = preg_replace('/[_-]/', ' ', $term_link_text);
+			if ( !empty( $gd_taxonomy ) ) {
+				$term_array = explode( "/", trim( $wp->query_vars[$gd_taxonomy], "/" ) );
+				
+				if ( !empty( $term_array ) ) {
+					foreach ( $term_array as $term ) {
+						$term_link_text = preg_replace( '/-(\d+)$/', '', $term );
+						$term_link_text = preg_replace( '/[_-]/', ' ', $term_link_text );
 					}
 					
-					$title .= ' ' . ucwords( $term_link_text) ;
+					$title .= ' ' . ucwords( $term_link_text ) ;
 				}
 			}
 		}
@@ -1440,74 +1482,55 @@ function geodir_default_rating_star_icon(){
 
 
 /* ------- GET CURRENT USER POST LISTING -------*/
-
-function geodir_user_post_listing_count(){
-	
+function geodir_user_post_listing_count() {
 	global $wpdb,$plugin_prefix, $current_user;
 	
 	$user_id = $current_user->ID;
-	
 	$all_postypes = geodir_get_posttypes();
-	
-	$all_posts = get_option('geodir_allow_posttype_frontend');
+	$all_posts = get_option('geodir_listing_link_user_dashboard');
 	
 	$user_listing = array();
-	
-	if(is_array($all_posts) && !empty($all_posts)){
-		
-		foreach($all_posts as $ptype){
-			
-			$total_posts = $wpdb->get_var("SELECT count( ID )
+	if ( is_array( $all_posts ) && !empty( $all_posts ) ) {
+		foreach ( $all_posts as $ptype ) {
+			$total_posts = $wpdb->get_var( "SELECT count( ID )
 											FROM ".$wpdb->prefix."posts
-											WHERE post_author=".$user_id." AND post_type='".$ptype."' AND post_status = 'publish' ");
+											WHERE post_author=".$user_id." AND post_type='".$ptype."' AND post_status = 'publish'" );
 			
-			if($total_posts > 0 )
+			if( $total_posts > 0 ) {
 				$user_listing[$ptype] = $total_posts;
-			
+			}
 		}
-		
 	}
 	
 	return $user_listing;
-	
 }
 
 
 /* ------- GET CURRENT USER FAVOURITE LISTING -------*/
-
 function geodir_user_favourite_listing_count(){
-	
-	global $wpdb,$plugin_prefix, $current_user;
+	global $wpdb, $plugin_prefix, $current_user;
 	
 	$user_id = $current_user->ID;
-	
 	$all_postypes = geodir_get_posttypes();
-	
-	$all_posts = get_option('geodir_allow_posttype_frontend');
+	$user_favorites = get_user_meta( $user_id, 'gd_user_favourite_post', true );
+	$all_posts = get_option('geodir_favorite_link_user_dashboard');
 	
 	$user_listing = array();
-	
-	$user_favorites = get_user_meta($user_id, 'gd_user_favourite_post', true);
-	
-	if(is_array($all_posts) && !empty($all_posts) && is_array($user_favorites) && !empty($user_favorites)){
+	if ( is_array( $all_posts ) && !empty( $all_posts ) && is_array( $user_favorites ) && !empty( $user_favorites ) ) {
+		$user_favorites = "'" . implode( "','", $user_favorites ) . "'";
 		
-		$user_favorites = "'".implode("','",$user_favorites)."'";
-		
-		foreach($all_posts as $ptype){
-		
-			$total_posts = $wpdb->get_var("SELECT count( ID )
+		foreach ( $all_posts as $ptype ) {
+			$total_posts = $wpdb->get_var( "SELECT count( ID )
 											FROM ".$wpdb->prefix."posts
-											WHERE post_author=".$user_id." AND post_type='".$ptype."' AND post_status = 'publish' AND ID IN (".$user_favorites.")");
+											WHERE post_author=".$user_id." AND post_type='".$ptype."' AND post_status = 'publish' AND ID IN (".$user_favorites.")" );
 			
-			if($total_posts > 0)
+			if ( $total_posts > 0 ) {
 				$user_listing[$ptype] = $total_posts;
-			
-		}
-		
+			}			
+		}		
 	}
 	
 	return $user_listing;
-	
 }
 
 add_filter('geodir_detail_page_tab_list_extend', 'geodir_detail_page_custom_field_tab');
@@ -1525,21 +1548,42 @@ function geodir_detail_page_custom_field_tab($tabs_arr) {
 				
 		$custom_fields = geodir_post_custom_fields($post_package_id, 'default', $post_type, $fields_location);
 		if (!empty($custom_fields)) {
+			$field_set_start = 0;
+			$fieldset_count = 0;
+			$fieldset = '';
+			$total_fields = count( $custom_fields );
+			$count_field = 0;
+			$fieldset_arr = array();
+			$i = 0;
+			$geodir_post_info = isset( $post->ID ) && !empty( $post->ID ) ? geodir_get_post_info( $post->ID ) : NULL;
+
 			foreach ( $custom_fields as $field ) {
+				$count_field++;
 				$field_name = $field['htmlvar_name'];
-				if (isset($field['show_as_tab']) && $field['show_as_tab']==1 && !empty($post->$field_name) && in_array($field['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html'))) {
+				if ( empty( $geodir_post_info ) && geodir_is_page('preview') && $field_name != '' && !isset($post->$field_name) && isset( $_REQUEST[$field_name] ) ) {
+					$post->$field_name = $_REQUEST[$field_name];
+				}
+				
+				if (isset($field['show_as_tab']) && $field['show_as_tab']==1 && ( ( isset($post->$field_name) && $post->$field_name != '' ) || $field['type'] == 'fieldset' ) && in_array($field['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox'))) {
 					$label = $field['site_title']!='' ? $field['site_title'] : $field['admin_title'];
+					$site_title = trim( $field['site_title'] );
 					$type = $field;
 					$html = '';
 					$html_var = $field_name;
 					$field_icon = '';
-					
 					$variables_array = array();
 					
-					$variables_array['post_id'] = $post->ID;
-					$variables_array['label'] = __($type['site_title'],GEODIRECTORY_TEXTDOMAIN);
-					$variables_array['value']= '';
-					$variables_array['value'] = $post->$type['htmlvar_name'];
+					if ( $type['type'] == 'datepicker' && ( $post->$type['htmlvar_name'] == '' || $post->$type['htmlvar_name'] == '0000-00-00' ) ) {
+						continue;
+					}
+					
+					if( $type['type'] != 'fieldset' ) {
+						$i++;
+						$variables_array['post_id'] = $post->ID;
+						$variables_array['label'] = __($type['site_title'],GEODIRECTORY_TEXTDOMAIN);
+						$variables_array['value']= '';
+						$variables_array['value'] = $post->$type['htmlvar_name'];
+					}
 					
 					if (strpos($type['field_icon'],'http') !== false) {
 						$field_icon = ' background: url('.$type['field_icon'].') no-repeat left center;background-size:18px 18px;padding-left: 21px;';
@@ -1549,7 +1593,15 @@ function geodir_detail_page_custom_field_tab($tabs_arr) {
 					}
 					
 					switch ($type['type']) {
-						case 'url':								
+						case 'fieldset': {
+							$i = 0;
+							$fieldset_count++;
+							$field_set_start = 1;
+							$fieldset_arr[$fieldset_count]['htmlvar_name'] = 'gd_tab_' . $fieldset_count;
+							$fieldset_arr[$fieldset_count]['label'] = $label;
+						}
+						break;
+						case 'url':	{							
 							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
 							elseif($field_icon==''){
 								
@@ -1563,27 +1615,29 @@ function geodir_detail_page_custom_field_tab($tabs_arr) {
 							if(!strstr($post->$type['htmlvar_name'],'http'))
 							$website = 'http://'.$post->$type['htmlvar_name'];
 							else
-							$website = $post->$type['htmlvar_name'];	
+							$website = $post->$type['htmlvar_name'];							
 							
-							
-							$geodir_odd_even = 'geodir_more_info_even';			
+							$geodir_odd_even = $field_set_start == 1 && $i%2==0 ? 'geodir_more_info_even' : 'geodir_more_info_odd';
 														
 							// all search engines that use the nofollow value exclude links that use it from their ranking calculation
 							$rel = strpos($website, get_site_url())!==false ? '' : 'rel="nofollow"';
 														
-							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'"><span class="geodir-i-website" style="'.$field_icon.'">'.$field_icon_af.' <a href="'.$website.'" target="_blank" '.$rel.' ><strong>'.apply_filters( 'geodir_custom_field_website_name', stripslashes(__($type['site_title'],GEODIRECTORY_TEXTDOMAIN)),$website, $post->ID ).'</strong></a></span></div>';								
-						break;
-						
-						case 'phone':
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'"><span class="geodir-i-website" style="'.$field_icon.'">'.$field_icon_af.' <a href="'.$website.'" target="_blank" '.$rel.' ><strong>'.apply_filters( 'geodir_custom_field_website_name', stripslashes(__($type['site_title'],GEODIRECTORY_TEXTDOMAIN)),$website, $post->ID ).'</strong></a></span></div>';
+						}								
+						break;						
+						case 'phone': {
 							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
 							elseif($field_icon==''){$field_icon_af = '<i class="fa fa-phone"></i>';}
 							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-							$geodir_odd_even = 'geodir_more_info_even';
+							$geodir_odd_even = $field_set_start == 1 && $i%2==0 ? 'geodir_more_info_even' : 'geodir_more_info_odd';
 							
-							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-contact" style="'.$field_icon.'">'.$field_icon_af.
-							//$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '&nbsp;';
-							$html .= ' </span>'.stripslashes($post->$type['htmlvar_name']).'</div>';								
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-contact" style="'.$field_icon.'">'.$field_icon_af;
+							if ( $field_set_start == 1 && $site_title != '' ) {
+								$html .= ' '.__( $site_title, GEODIRECTORY_TEXTDOMAIN ).': ';
+							}
+							$html .= ' </span>'.stripslashes($post->$type['htmlvar_name']).'</div>';
+						}							
 						break;
 						case 'time': {						
 								$value = '';
@@ -1595,10 +1649,12 @@ function geodir_detail_page_custom_field_tab($tabs_arr) {
 								elseif($field_icon==''){$field_icon_af = '<i class="fa fa-clock-o"></i>';}
 								else{$field_icon_af = $field_icon; $field_icon='';}
 								
-								$geodir_odd_even = 'geodir_more_info_even';
+								$geodir_odd_even = $field_set_start == 1 && $i%2==0 ? 'geodir_more_info_even' : 'geodir_more_info_odd';
 												
 								$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-time" style="'.$field_icon.'">'.$field_icon_af;
-								//$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '&nbsp;';
+								if ( $field_set_start == 1 && $site_title != '' ) {
+									$html .= ' '.__( $site_title, GEODIRECTORY_TEXTDOMAIN ).': ';
+								}
 								$html .= ' </span>'.stripslashes($value).'</div>';
 						}
 						break;
@@ -1614,44 +1670,114 @@ function geodir_detail_page_custom_field_tab($tabs_arr) {
 							
 							$date_format = str_replace($search, $replace, $date_format);
 							
+							$post_htmlvar_value = $date_format == 'd/m/Y' ? str_replace( '/', '-', $post->$type['htmlvar_name'] ) : $post->$type['htmlvar_name']; // PHP doesn't work well with dd/mm/yyyy format
+							
 							$value = '';
 							if($post->$type['htmlvar_name'] != '')
-								$value = date($date_format,strtotime($post->$type['htmlvar_name']));
+								$value = date($date_format,strtotime($post_htmlvar_value));
 							
 							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
 							elseif($field_icon==''){$field_icon_af = '<i class="fa fa-calendar"></i>';}
 							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-							$geodir_odd_even = 'geodir_more_info_even';
+							$geodir_odd_even = $field_set_start == 1 && $i%2==0 ? 'geodir_more_info_even' : 'geodir_more_info_odd';
 											
 							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-datepicker" style="'.$field_icon.'">'.$field_icon_af;
-							//$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
+							if ( $field_set_start == 1 && $site_title != '' ) {
+								$html .= ' '.__( $site_title, GEODIRECTORY_TEXTDOMAIN ).': ';
+							}
 							$html .= ' </span>'.$value.'</div>';
 						}								
 						break;
 						case 'text': {
-								if (strpos($field_icon,'http') !== false) {
-									$field_icon_af = '';
-								}
-								elseif($field_icon==''){$field_icon_af = '';}
-								else{$field_icon_af = $field_icon; $field_icon='';}
-								
-								$geodir_odd_even = 'geodir_more_info_even';
-								
-								$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-text" style="'.$field_icon.'">'.$field_icon_af;
-								//$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
-								$html .= ' </span>'.stripslashes($post->$type['htmlvar_name']).'</div>';	
+							if (strpos($field_icon,'http') !== false) {
+								$field_icon_af = '';
+							}
+							elseif($field_icon==''){$field_icon_af = '';}
+							else{$field_icon_af = $field_icon; $field_icon='';}
+							
+							$geodir_odd_even = $field_set_start == 1 && $i%2==0 ? 'geodir_more_info_even' : 'geodir_more_info_odd';
+							
+							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-text" style="'.$field_icon.'">'.$field_icon_af;
+							if ( $field_set_start == 1 && $site_title != '' ) {
+								$html .= ' '.__( $site_title, GEODIRECTORY_TEXTDOMAIN ).': ';
+							}
+							$html .= ' </span>'.stripslashes($post->$type['htmlvar_name']).'</div>';	
 						}								
+						break;
+						case 'radio': {
+							if ( $post->$type['htmlvar_name'] != '' ) {
+								if( $post->$type['htmlvar_name'] == 'f' || $post->$type['htmlvar_name'] == '0' ) {
+									$html_val = __( 'No', GEODIRECTORY_TEXTDOMAIN );
+								} else if( $post->$type['htmlvar_name'] == 't' || $post->$type['htmlvar_name'] == '1' ) {
+									$html_val = __( 'Yes', GEODIRECTORY_TEXTDOMAIN );
+								}
+							
+								if ( strpos( $field_icon, 'http' ) !== false ) {
+									$field_icon_af = '';
+								} else if( $field_icon == '' ) {
+									$field_icon_af = '';
+								} else { 
+									$field_icon_af = $field_icon;
+									$field_icon = '';
+								}
+								
+								$geodir_odd_even = $field_set_start == 1 && $i%2==0 ? 'geodir_more_info_even' : 'geodir_more_info_odd';
+								
+								$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-radio" style="'.$field_icon.'">'.$field_icon_af;
+								
+								if ( $field_set_start == 1 && $site_title != '' ) {
+									$html .= ' '.__( $site_title, GEODIRECTORY_TEXTDOMAIN ).': ';
+								}
+								
+								$html .= ' </span>'.$html_val.'</div>';
+							}
+						}
+						break;
+						case 'checkbox': {
+							$html_var = $type['htmlvar_name'];
+							$html_val = $type['htmlvar_name'];
+							
+							if ( (int)$post->$html_var == 1 ) {
+								
+								if ( $post->$type['htmlvar_name'] == '1' ) {
+									$html_val = __( 'Yes', GEODIRECTORY_TEXTDOMAIN );
+								} else {
+									$html_val = __( 'No', GEODIRECTORY_TEXTDOMAIN );
+								}
+								
+								if ( strpos( $field_icon, 'http' ) !== false ) {
+									$field_icon_af = '';
+								} else if( $field_icon == '' ) {
+									$field_icon_af = '';
+								} else { 
+									$field_icon_af = $field_icon;
+									$field_icon = '';
+								}
+								
+								$geodir_odd_even = $field_set_start == 1 && $i%2==0 ? 'geodir_more_info_even' : 'geodir_more_info_odd';
+								
+								$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-checkbox" style="'.$field_icon.'">'.$field_icon_af;
+									
+								if ( $field_set_start == 1 && $site_title != '' ) {
+									$html .= ' '.__( $site_title, GEODIRECTORY_TEXTDOMAIN ).': ';
+								}
+								
+								$html .= ' </span>'.$html_val.'</div>';
+							}
+						}
 						break;
 						case 'select': {
 							if (strpos($field_icon,'http') !== false) {$field_icon_af = '';}
 							elseif($field_icon==''){$field_icon_af = '';}
 							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-							$geodir_odd_even = 'geodir_more_info_even';
+							$geodir_odd_even = $field_set_start == 1 && $i%2==0 ? 'geodir_more_info_even' : 'geodir_more_info_odd';
 							
 							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-select" style="'.$field_icon.'">'.$field_icon_af;
-							//$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
+							if ( $field_set_start == 1 && $site_title != '' ) {
+								$html .= ' '.__( $site_title, GEODIRECTORY_TEXTDOMAIN ).': ';
+							}
 							$html .= ' </span>'.stripslashes($post->$type['htmlvar_name']).'</div>';
 						}								
 						break;
@@ -1679,10 +1805,12 @@ function geodir_detail_page_custom_field_tab($tabs_arr) {
 								}
 							}
 							
-							$geodir_odd_even = 'geodir_more_info_even';
+							$geodir_odd_even = $field_set_start == 1 && $i%2==0 ? 'geodir_more_info_even' : 'geodir_more_info_odd';
 							
 							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-select" style="'.$field_icon.'">'.$field_icon_af;
-							//$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
+							if ( $field_set_start == 1 && $site_title != '' ) {
+								$html .= ' '.__( $site_title, GEODIRECTORY_TEXTDOMAIN ).': ';
+							}
 							$html .= ' </span>';
 							
 							if(count($option_values) > 1){
@@ -1702,10 +1830,12 @@ function geodir_detail_page_custom_field_tab($tabs_arr) {
 							elseif($field_icon==''){$field_icon_af = '<i class="fa fa-envelope"></i>';}
 							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-							$geodir_odd_even = 'geodir_more_info_even';
+							$geodir_odd_even = $field_set_start == 1 && $i%2==0 ? 'geodir_more_info_even' : 'geodir_more_info_odd';
 								
 							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-email" style="'.$field_icon.'">'.$field_icon_af;
-							//$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
+							if ( $field_set_start == 1 && $site_title != '' ) {
+								$html .= ' '.__( $site_title, GEODIRECTORY_TEXTDOMAIN ).': ';
+							}
 							$html .= ' </span>'.stripslashes($post->$type['htmlvar_name']).'</div>';
 						}	
 						break;
@@ -1714,10 +1844,12 @@ function geodir_detail_page_custom_field_tab($tabs_arr) {
 							elseif($field_icon==''){$field_icon_af = '';}
 							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-							$geodir_odd_even = 'geodir_more_info_even';
+							$geodir_odd_even = $field_set_start == 1 && $i%2==0 ? 'geodir_more_info_even' : 'geodir_more_info_odd';
 								
 							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-text" style="'.$field_icon.'">'.$field_icon_af;
-							//$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
+							if ( $field_set_start == 1 && $site_title != '' ) {
+								$html .= ' '.__( $site_title, GEODIRECTORY_TEXTDOMAIN ).': ';
+							}
 							$html .= '</span>'.wpautop(stripslashes($post->$type['htmlvar_name'])).'</div>';
 						}
 						break;
@@ -1726,22 +1858,53 @@ function geodir_detail_page_custom_field_tab($tabs_arr) {
 							elseif($field_icon==''){$field_icon_af = '';}
 							else{$field_icon_af = $field_icon; $field_icon='';}
 							
-							$geodir_odd_even = 'geodir_more_info_even';
+							$geodir_odd_even = $field_set_start == 1 && $i%2==0 ? 'geodir_more_info_even' : 'geodir_more_info_odd';
 							
 							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-text" style="'.$field_icon.'">'.$field_icon_af;
-							//$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '';
+							if ( $field_set_start == 1 && $site_title != '' ) {
+								$html .= ' '.__( $site_title, GEODIRECTORY_TEXTDOMAIN ).': ';
+							}
 							$html .= ' </span>'.wpautop(stripslashes($post->$type['htmlvar_name'])).'</div>';	
 						}
 						break;
 					}
-					
-					if ($html!='') {
-						$tabs_arr[$field['htmlvar_name']] = array( 
-															'heading_text' =>  __($label, GEODIRECTORY_TEXTDOMAIN),
+					if ( $field_set_start == 1 ) {
+						$add_html = false;
+						if ( $type['type'] == 'fieldset' && $fieldset_count > 1 ) {
+							if ( $fieldset != '' ) {
+								$add_html = true;
+								$label = $fieldset_arr[$fieldset_count-1]['label'];
+								$htmlvar_name = $fieldset_arr[$fieldset_count-1]['htmlvar_name'];
+							}
+							$fieldset_html = $fieldset;
+							$fieldset = '';
+						} else {
+							$fieldset .= $html;
+							if ( $total_fields == $count_field && $fieldset != '' ) {
+								$add_html = true;
+								$label = $fieldset_arr[$fieldset_count]['label'];
+								$htmlvar_name = $fieldset_arr[$fieldset_count]['htmlvar_name'];
+								$fieldset_html = $fieldset;
+							}
+						}
+						
+						if ( $add_html ) {
+							$tabs_arr[$htmlvar_name] = array( 
+															'heading_text' =>  __( $label, GEODIRECTORY_TEXTDOMAIN ),
 															'is_active_tab' => false,
-															'is_display' => apply_filters('geodir_detail_page_tab_is_display', true, $field['htmlvar_name']),
-															'tab_content' => $html
+															'is_display' => apply_filters( 'geodir_detail_page_tab_is_display', true, $htmlvar_name ),
+															'tab_content' => '<div class="geodir-company_info field-group">'.$fieldset_html.'</html>'
 														);
+						}
+					} else {					
+						if ($html!='') {
+							$tabs_arr[$field['htmlvar_name']] = array( 
+																'heading_text' =>  __($label, GEODIRECTORY_TEXTDOMAIN),
+																'is_active_tab' => false,
+																'is_display' => apply_filters('geodir_detail_page_tab_is_display', true, $field['htmlvar_name']),
+																'tab_content' => $html
+															);
+						}
 					}
 				}
 			}

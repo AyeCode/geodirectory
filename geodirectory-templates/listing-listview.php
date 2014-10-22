@@ -7,9 +7,6 @@ if(isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view']!='' && !i
 	if($_SESSION['gd_listing_view']=='4'){$grid_view_class = 'gridview_onefourth';}
 	if($_SESSION['gd_listing_view']=='5'){$grid_view_class = 'gridview_onefifth';}
 }
-
-$post_view_class = apply_filters('geodir_post_view_extra_class' ,'');
-$post_view_article_class = apply_filters('geodir_post_view_article_extra_class' ,'');
 ?>
 
 <ul class="geodir_category_list_view clearfix">
@@ -18,7 +15,12 @@ $post_view_article_class = apply_filters('geodir_post_view_article_extra_class' 
     		
 				do_action('geodir_before_listing_post_listview');
 					
-         while (have_posts()) : the_post(); global $post,$wpdb,$listing_width,$preview;  ?> 
+         while (have_posts()) : the_post(); 
+		 	global $post, $wpdb, $listing_width, $preview;
+			
+			$post_view_class = apply_filters( 'geodir_post_view_extra_class', '' );
+			$post_view_article_class = apply_filters( 'geodir_post_view_article_extra_class', '' );
+		 ?> 
             
 					<li id="post-<?php echo $post->ID;?>" class="clearfix <?php if($grid_view_class){ echo 'geodir-gridview '.$grid_view_class;}?> <?php if($post_view_class){echo $post_view_class;}?>" <?php if($listing_width) echo "style='width:{$listing_width}%;'"; // Width for widget listing ?> >
 					<article class="geodir-category-listing <?php if($post_view_article_class){echo $post_view_article_class;}?>">		
@@ -88,7 +90,7 @@ $post_view_article_class = apply_filters('geodir_post_view_article_extra_class' 
 							
 								 <?php do_action('geodir_before_listing_post_excerpt', $post ); ?>
 								 <?php echo geodir_show_listing_info('listing');?>       
-				<div class="geodir-entry-content"><p><?php if(isset($character_count)&& $character_count){
+				<div class="geodir-entry-content"><p><?php if( isset( $character_count ) && ( $character_count || $character_count=='0' ) ) {
 				
 				echo geodir_max_excerpt($character_count);}else{ the_excerpt(); }?></p></div>
 									

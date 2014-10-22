@@ -572,9 +572,10 @@ function geodir_add_meta_keywords()
 	$meta_desc = '';
 	$meta_key = '';
 	if (isset($current_term->ID) && $current_term->ID==get_option('geodir_location_page')) {
-		$meta_desc .= apply_filters('geodir_seo_meta_location_description','');
+		$meta_desc = apply_filters( 'geodir_seo_meta_location_description', '' );
+		$meta_desc .= '';
 	}
-	elseif (have_posts() && is_single() OR is_page()) {
+	if (have_posts() && is_single() OR is_page()) {
 		while(have_posts()) {
 			the_post();
 			
@@ -616,7 +617,7 @@ function geodir_add_meta_keywords()
 	$gd_city = $geodir_location_manager && isset($godir_location_terms['gd_city']) ? $godir_location_terms['gd_city'] : NULL;
 	$gd_region = $geodir_location_manager && isset($godir_location_terms['gd_region']) ? $godir_location_terms['gd_region'] : NULL;
 	$gd_country = $geodir_location_manager && isset($godir_location_terms['gd_country']) ? $godir_location_terms['gd_country'] : NULL;
-	$replace_location = __('Everywhere', GEODIRLOCATION_TEXTDOMAIN);
+	$replace_location = __('Everywhere', GEODIRECTORY_TEXTDOMAIN);
 	$location_id = NULL;
 	if ($geodir_location_manager) {
 		$sql = $wpdb->prepare("SELECT location_id FROM ".POST_LOCATION_TABLE." WHERE city_slug=%s ORDER BY location_id ASC LIMIT 1",array($gd_city));
@@ -630,6 +631,20 @@ function geodir_add_meta_keywords()
 			$replace_location = geodir_get_current_location(array('what' => 'country' , 'echo'=>false));
 			$replace_location = __( $replace_location, GEODIRECTORY_TEXTDOMAIN );
 		}
+		$country = get_query_var( 'gd_country' );
+		$region = get_query_var( 'gd_region' );
+		$city = get_query_var( 'gd_city' );
+		$current_location = '';
+		if ( $country != '' ) {
+			$current_location = get_actual_location_name( 'country', $country, true );
+		}
+		if ( $region != '' ) {
+			$current_location = get_actual_location_name( 'region', $region );
+		}
+		if ( $city != '' ) {
+			$current_location = get_actual_location_name( 'city', $city );
+		}
+		$replace_location = $current_location != '' ? $current_location : $replace_location;
 	}
 	
 	$geodir_meta_keys = '';
@@ -664,8 +679,9 @@ function geodir_add_meta_keywords()
 			}
 		}
 	}
-	$geodir_meta_desc = $meta_desc;
-	if ($geodir_meta_desc!='') {
+
+	$geodir_meta_desc = $geodir_meta_desc != '' ? $geodir_meta_desc : $meta_desc;
+	if ($geodir_meta_desc !='' ) {
 		$geodir_meta_desc = strip_tags($geodir_meta_desc);
 		$geodir_meta_desc = esc_html($geodir_meta_desc);
 		$geodir_meta_desc = wp_html_excerpt($geodir_meta_desc, 1000, '.');
@@ -705,15 +721,16 @@ function geodir_add_meta_keywords()
 		}
 	}
 
-	if ($geodir_meta_keys!='') {
+	$meta_key = $meta_key != '' ? rtrim( trim( $meta_key ), "," ) : $meta_key;
+	$geodir_meta_keys = $geodir_meta_keys != '' ? ( $meta_key != '' ? $meta_key . ', ' . $geodir_meta_keys : $geodir_meta_keys ) : $meta_key;
+	if ($geodir_meta_keys != '' ) {
 		$geodir_meta_keys = strip_tags($geodir_meta_keys);
 		$geodir_meta_keys = esc_html($geodir_meta_keys);
 		$geodir_meta_keys = mb_strtolower($geodir_meta_keys);
 		$geodir_meta_keys = wp_html_excerpt($geodir_meta_keys, 1000, '');
 		$geodir_meta_keys = str_replace('%location%', $replace_location, $geodir_meta_keys);
 		
-		$meta_key = $meta_key!='' ? rtrim(trim($meta_key), ",") : $meta_key;
-		$meta_key = $geodir_meta_keys!='' ? trim($meta_key . ', ' . $geodir_meta_keys) : $meta_key;
+		$meta_key = rtrim( trim( $geodir_meta_keys ), "," );
 	}
 	
 	if ($meta_key) {
@@ -825,6 +842,15 @@ function geodir_detail_page_tabs_list(){
 function geodir_show_detail_page_tabs(){
 	
 	global $post,$post_images,$video,$special_offers, $related_listing,$geodir_post_detail_fields;
+	
+	$post_id = !empty( $post ) && isset( $post->ID ) ? (int)$post->ID : 0;
+	$request_post_id = !empty( $_REQUEST['p'] ) ? (int)$_REQUEST['p'] : 0;
+	$is_backend_preview = ( is_single() && !empty( $_REQUEST['post_type'] ) && !empty( $_REQUEST['preview'] ) && !empty( $_REQUEST['p'] ) ) && is_super_admin() ? true : false; // skip if preview from backend
+	
+	if ( $is_backend_preview && !$post_id > 0 && $request_post_id > 0 ) {
+		$post = geodir_get_post_info( $request_post_id );
+		setup_postdata( $post );
+	}
 	
 	$geodir_post_detail_fields = geodir_show_listing_info('detail');
 	
@@ -979,7 +1005,7 @@ function geodir_show_detail_page_tabs(){
 									echo $related_listing;
 									break;		
 								default: {
-									if (isset($post->$tab_index) && !empty($detail_page_tab['tab_content'])) {
+									if ( ( isset( $post->$tab_index ) || !isset( $post->$tab_index ) && strpos( $tab_index, 'gd_tab_' ) !== false ) && !empty( $detail_page_tab['tab_content'] ) ) {
 										echo $detail_page_tab['tab_content'];
 									}
 								}
@@ -1119,40 +1145,39 @@ function geodir_get_recent_reviews($g_size = 30, $no_comments = 10, $comment_len
 		//echo $request;
         $comments = $wpdb->get_results($request);
 
-        foreach ($comments as $comment) {
+        foreach ( $comments as $comment ) {
+			// Set the extra comment info needed.	
+			$comment_extra = $wpdb->get_row("SELECT * FROM $wpdb->comments WHERE comment_ID =$comment->comment_ID");	
+			$comment->comment_content = $comment_extra->comment_content;
+			$comment->comment_author = $comment_extra->comment_author;
+			$comment->comment_author_email = $comment_extra->comment_author_email;
 			
-		// Set the extra comment info needed.	
-		$comment_extra = $wpdb->get_row("SELECT * FROM $wpdb->comments WHERE comment_ID =$comment->comment_ID");	
-		$comment->comment_content = $comment_extra->comment_content;
-		$comment->comment_author = $comment_extra->comment_author;
-		$comment->comment_author_email = $comment_extra->comment_author_email;
-		
+				
+			$comment_id ='';
+			$comment_id = $comment->comment_ID;
+			$comment_content = strip_tags($comment->comment_content);
 			
-		$comment_id ='';
-		$comment_id = $comment->comment_ID;
-		$comment_content = strip_tags($comment->comment_content);
-		
-		$comment_content = preg_replace('#(\\[img\\]).+(\\[\\/img\\])#', '', $comment_content);
-		$comment_excerpt = mb_substr($comment_content, 0, $comment_lenth)."";
-		$permalink = get_permalink($comment->ID)."#comment-".$comment->comment_ID;
-		$comment_author_email = $comment->comment_author_email;
-		$comment_post_ID = $comment->post_id;
-
-		$na=true;
-		if(function_exists('icl_object_id') && icl_object_id($comment_post_ID, $comment->post_type, true)){
-		$comment_post_ID2 = icl_object_id($comment_post_ID, $comment->post_type, false);
-		if($comment_post_ID==$comment_post_ID2){}else{$na=false;}
-		}
-		
-		$post_title = get_the_title($comment_post_ID);
-		$permalink = get_permalink($comment_post_ID);
-		if($comment->user_id){$user_profile_url = get_author_posts_url($comment->user_id);}
-		else{$user_profile_url ='';}
-		
-		if($comment_id && $na){
-   $comments_echo .= '<li class="clearfix">';
-  $comments_echo .=  "<span class=\"li".$comment_id." geodir_reviewer_image\">";
-		if (function_exists('get_avatar')) {
+			$comment_content = preg_replace('#(\\[img\\]).+(\\[\\/img\\])#', '', $comment_content);
+			$comment_excerpt = mb_substr($comment_content, 0, $comment_lenth)."";
+			$permalink = get_permalink($comment->ID)."#comment-".$comment->comment_ID;
+			$comment_author_email = $comment->comment_author_email;
+			$comment_post_ID = $comment->post_id;
+			
+			$na=true;
+			if(function_exists('icl_object_id') && icl_object_id($comment_post_ID, $comment->post_type, true)){
+			$comment_post_ID2 = icl_object_id($comment_post_ID, $comment->post_type, false);
+			if($comment_post_ID==$comment_post_ID2){}else{$na=false;}
+			}
+			
+			$post_title = get_the_title($comment_post_ID);
+			$permalink = get_permalink($comment_post_ID);
+			if($comment->user_id){$user_profile_url = get_author_posts_url($comment->user_id);}
+			else{$user_profile_url ='';}
+			
+			if($comment_id && $na){
+			$comments_echo .= '<li class="clearfix">';
+			$comments_echo .=  "<span class=\"li".$comment_id." geodir_reviewer_image\">";
+					if (function_exists('get_avatar')) {
 					  if (!isset($comment->comment_type) ) {
 						 if($user_profile_url){ $comments_echo .=   '<a href="'.$user_profile_url.'">';}
 						 $comments_echo .=  get_avatar($comment->comment_author_email, 60, geodir_plugin_url().'/geodirectory-assets/images/gravatar2.png');
@@ -1174,31 +1199,53 @@ function geodir_get_recent_reviews($g_size = 30, $no_comments = 10, $comment_len
 					  }
 					 $comments_echo .=  "\" alt=\"\" class=\"avatar\" />";
 				   }
-    $comments_echo .=  "</span>\n";
-	
-    $comments_echo .=  '<span class="geodir_reviewer_content">' ;
-
-           //if($comment->user_id){$comments_echo .=   '<a href="'.get_author_posts_url( $comment->user_id ).'">';}
-		   
- 			$comments_echo .=   '<span class="geodir_reviewer_author">'.$comment->comment_author.'</span> ';
-			
-			$comments_echo .= '<span class="geodir_reviewer_reviewed">'.__('reviewed',GEODIRECTORY_TEXTDOMAIN).'</span> ';
-			//if($comment->user_id){'</a> ';}
-			
- 			$comments_echo .=   '<a href="'.$permalink.'" class="geodir_reviewer_title">'.$post_title.'</a>';
-			$comments_echo .=  geodir_get_rating_stars($comment->overall_rating, $comment_post_ID);
-			 
- 			//$comments_echo .=  "<a class=\"comment_excerpt\" href=\"" . $permalink . "\" title=\"View the entire comment\">";
-			$comments_echo .=  '<span class="geodir_reviewer_text">'.$comment_excerpt.'</span>';
-			//echo preg_replace('#(\\[img\\]).+(\\[\\/img\\])#', '', $comment_excerpt);
-			//$comments_echo .=  "</a>";
-			
-	$comments_echo .=  "</span>\n";
-			
-			$comments_echo .=  '</li>';
-
+					
+					$comments_echo .=  "</span>\n";
+					
+					$comment_permalink = $permalink . "#comment-" . $comment->comment_ID;
+					
+					$comments_echo .= '<span class="geodir_reviewer_content">' ;
+					//if($comment->user_id){$comments_echo .= '<a href="'.get_author_posts_url( $comment->user_id ).'">';}
+					$comments_echo .= '<span class="geodir_reviewer_author">' . $comment->comment_author . '</span> ';
+					$comments_echo .= '<span class="geodir_reviewer_reviewed">'.__( 'reviewed', GEODIRECTORY_TEXTDOMAIN ) . '</span> ';
+					//if($comment->user_id){'</a> ';}
+					$comments_echo .= '<a href="' . $permalink . '" class="geodir_reviewer_title">' . $post_title . '</a>';
+					$comments_echo .= geodir_get_rating_stars( $comment->overall_rating, $comment_post_ID );
+					$comments_echo .= '<a class="comment_excerpt" href="' . $comment_permalink . '" title="'.__( 'View the entire comment', GEODIRECTORY_TEXTDOMAIN ) . '">';
+					$comments_echo .= '<span class="geodir_reviewer_text">' . $comment_excerpt . '</span>';
+					//echo preg_replace('#(\\[img\\]).+(\\[\\/img\\])#', '', $comment_excerpt);
+					$comments_echo .= '</a>';
+					
+					$comments_echo .= "</span>\n";
+					$comments_echo .= '</li>';
 	            }
 		}
 
 return $comments_echo;
+}
+
+// All post categories for all GD post types
+function geodir_home_map_cats_key_value_array() {
+	$post_types = geodir_get_posttypes( 'object' );
+	
+	$return = array();
+	if ( !empty( $post_types ) ) {
+		foreach ( $post_types as $key => $post_type ) {
+			$post_type_name = __( $post_type->labels->singular_name, GEODIRECTORY_TEXTDOMAIN ) . ' ' .__( 'Categories', GEODIRECTORY_TEXTDOMAIN );
+			$taxonomies = geodir_get_taxonomies( $key );
+			$cat_taxonomy = !empty( $taxonomies[0] ) ? $taxonomies[0] : NULL;
+			$cat_terms = $cat_taxonomy ? get_terms( $cat_taxonomy ) : NULL;
+			
+			if ( !empty( $cat_terms ) ) {
+				$return['optgroup_start-' . $key] = $post_type_name;
+				
+				foreach ( $cat_terms as $cat_term ) {
+					$return[$key . '_' . $cat_term->term_id] = $cat_term->name;
+				}
+				
+				$return['optgroup_end-' . $key] = $post_type_name;
+			}
+		}
+	}
+	return $return;
 }
