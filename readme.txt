@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=payments
 Tags:  address book, addressbook, addresses, bio, biographies, bios, business, business directory plugin, business-directory, businesses, church, directories, directory, directory plugin, directory widget, geodirectory, googlemap, googlemaps, google maps, list, listings, lists, member directory, members directories, members directory, microformat, microformats, profile, profiles, staff, user, users, vcard, wordpress business directory, wordpress directory, wordpress directory plugin, yelp clone, tripadvisor clone, yellow pages clone, wordpress business directory plugin, wordpress directory theme, wordpress business directory theme, wordpress city directory plugin, wordpress local directory plugin
 Requires at least: 3.1
 Tested up to: 4.0
-Stable tag: 1.2.5
+Stable tag: 1.2.7
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -111,9 +111,9 @@ GeoDirectory comes with some dummy data you can use to see how listings look. Yo
 
 == Changelog ==
 
-= 1.2.5 =
+= 1.2.7 =
 
-[GeoDirectory changelog for version 1.2.5](http://wpgeodirectory.com/change-logs/#v1.2.5).
+[GeoDirectory changelog for version 1.2.7](http://wpgeodirectory.com/change-logs/#v1.2.7).
 
 = 1.2.4 =
 
