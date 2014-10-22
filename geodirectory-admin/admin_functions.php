@@ -49,7 +49,10 @@ if (!function_exists('geodir_admin_styles')) {
 		wp_enqueue_style( 'geodirectory-pluplodar-css' );
 		
 		wp_register_style( 'geodir-rating-style', geodir_plugin_url() .'/geodirectory-assets/css/jRating.jquery.css',array(),GEODIRECTORY_VERSION );
-		wp_enqueue_style( 'geodir-rating-style' );		
+		wp_enqueue_style( 'geodir-rating-style' );
+		
+		wp_register_style( 'geodir-rtl-style', geodir_plugin_url() . '/geodirectory-assets/css/rtl.css', array(), GEODIRECTORY_VERSION );
+		wp_enqueue_style( 'geodir-rtl-style' );		
 	}
 }	
 
@@ -1579,9 +1582,15 @@ function geodir_admin_fields($options){
                     <td class="forminp"><select multiple="multiple" name="<?php echo esc_attr( $value['id'] ); ?>[]" id="<?php echo esc_attr( $value['id'] ); ?>" style="<?php echo esc_attr( $value['css'] ); ?>" class="<?php if (isset($value['class'])) echo $value['class']; ?>" data-placeholder="<?php if(isset($value['placeholder_text'])) echo $value['placeholder_text'] ;?>" option-ajaxchosen="false">
                         <?php
                         foreach ($value['options'] as $key => $val) {
+							if ( strpos( $key, 'optgroup_start-' ) === 0 ) {
+								?><optgroup label="<?php echo ucfirst( $val ); ?>"><?php
+							} else if ( strpos( $key, 'optgroup_end-' ) === 0 ) {
+								?></optgroup><?php
+							} else {
                         ?>
                             <option value="<?php echo esc_attr( $key ); ?>" <?php if(is_array(get_option($value['id']))){ if ( in_array($key, get_option($value['id']))) { ?> selected="selected" <?php }} ?>><?php echo ucfirst($val) ?></option>
                         <?php
+							}
                         }
                         ?>
                        </select> <span class="description"><?php echo $value['desc'] ?></span>
@@ -2073,9 +2082,9 @@ function geodir_post_attachments()
     
     $multiple = true; // allow multiple files upload
     
-    $width = 800; // If you want to automatically resize all uploaded images then provide width here (in pixels)
+    $width = geodir_media_image_large_width(); // If you want to automatically resize all uploaded images then provide width here (in pixels)
     
-    $height = 800; // If you want to automatically resize all uploaded images then provide height here (in pixels)
+    $height = geodir_media_image_large_height(); // If you want to automatically resize all uploaded images then provide height here (in pixels)
     
     ?>
 

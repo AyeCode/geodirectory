@@ -353,6 +353,21 @@ function geodir_posts_orderby($orderby) {
 			$sort_by = $default_sort;
 	}
 	
+	/* 
+	if search by term & no location then order always "relevance"
+	if search by location then order always "nearest"
+	*/
+	if ( is_main_query() && geodir_is_page( 'search' ) ) {
+		$search_term = get_query_var( 's' );
+		
+		if ( trim( $search_term ) != '' ) {
+			$sort_by = 'az';
+		}
+
+		if ( $snear != '' ) {
+			$sort_by = 'nearest';
+		}
+	}
 	
 	switch($sort_by):
 		case 'newest':

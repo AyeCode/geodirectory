@@ -191,7 +191,6 @@ function geodir_save_listing( $request_info = array(), $dummy = false ) {
 		
 		$custom_metaboxes = geodir_post_custom_fields('','all',$request_info['listing_type']);
 		
-		
 		foreach($custom_metaboxes as $key=>$val):
 		
 		$name = $val['name'];
@@ -277,18 +276,38 @@ function geodir_save_listing( $request_info = array(), $dummy = false ) {
 		}elseif(trim($type) == 'datepicker'){
 			$datetime = '';
 			if($request_info[$name] != ''){
-				$datetime = date("Y-m-d",strtotime($request_info[$name]));
+				$date_format = geodir_default_date_format();
+				if( isset( $val['extra_fields'] ) && $val['extra_fields'] != '' ){
+					$extra_fields = unserialize( $val['extra_fields'] );
+					$date_format = isset( $extra_fields['date_format'] ) && $extra_fields['date_format'] != '' ? $extra_fields['date_format'] : $date_format;
+				}
+				
+				$search = array('dd', 'mm', 'yy');
+				$replace = array('d', 'm', 'Y');
+				
+				$date_format = str_replace( $search, $replace, $date_format );
+				
+				$post_htmlvar_value = $date_format == 'd/m/Y' ? str_replace( '/', '-', $request_info[$name] ) : $request_info[$name]; // PHP doesn't work well with dd/mm/yyyy format
+							
+				$datetime = date( "Y-m-d", strtotime( $post_htmlvar_value ) );
 			}
 			$gd_post_info[$name] = $datetime;
+		} else if( $type == 'multiselect' ) {
+			if ( isset( $request_info[$name] ) ) {
+				$gd_post_info[$name] = $request_info[$name];
+			} else {
+				if ( isset( $request_info['gd_field_' . $name] ) ) {
+					$gd_post_info[$name] = ''; /* fix de-select for multiselect */
+				}
+			}
+		} else if( isset( $request_info[$name] ) ) {
+			$gd_post_info[$name] = $request_info[$name];
 		}
-		elseif(isset($request_info[$name]))
-		{ $gd_post_info[$name] = $request_info[$name]; }
 		
 		endforeach;
 		
 		if(isset($request_info['post_dummy']) && $request_info['post_dummy'] != '')
 		{ $gd_post_info['post_dummy'] = $request_info['post_dummy']; }
-		
 		
 		// Save post detail info in detail table
 		if(!empty($gd_post_info)){ 
@@ -682,9 +701,8 @@ function geodir_save_post_images($post_id = 0, $post_image = array(), $dummy = f
 			{
 				
 				/* --------- end ------- */
-				
 				$curr_img_url =  $post_image[$m];
-				//echo $curr_img_url; exit;
+				
 				$image_name_arr = explode('/',$curr_img_url);
 				
 				$count_image_name_arr = count($image_name_arr)-2;
@@ -693,36 +711,48 @@ function geodir_save_post_images($post_id = 0, $post_image = array(), $dummy = f
 				
 				$curr_img_dir = $image_name_arr[$count_image_name_arr];
 								
-				
-				$filename = end($image_name_arr);
-				if (strpos($filename,'?') !== false) {
-    			list($filename)=explode('?', $filename);
+				$filename = end( $image_name_arr );
+				if ( strpos( $filename, '?' ) !== false ) {
+    				list( $filename ) = explode( '?', $filename );
 				}
-				//echo $filename;exit;
-				$curr_img_dir = str_replace($uploads['baseurl'], "", $curr_img_url);
-				$curr_img_dir = str_replace($filename, "", $curr_img_dir);
+
+				$curr_img_dir = str_replace( $uploads['baseurl'], "", $curr_img_url );
+				$curr_img_dir = str_replace( $filename, "", $curr_img_dir );
 				
-				$img_name_arr = explode('.',$filename);
+				$img_name_arr = explode( '.', $filename );
 				
-				$arr_file_type = wp_check_filetype($filename);
+				$file_title = isset( $img_name_arr[0] ) ? $img_name_arr[0] : $filename;
+				if ( !empty( $img_name_arr ) && count( $img_name_arr ) > 2 ) {
+					$new_img_name_arr = $img_name_arr;
+					if ( isset( $new_img_name_arr[count( $img_name_arr )-1] ) ) {
+						unset( $new_img_name_arr[count( $img_name_arr )-1] );
+						$file_title = implode( '.', $new_img_name_arr );
+					}
+				}
+				$file_title = sanitize_file_name( $file_title );
+				$file_name = sanitize_file_name( $filename );
+				
+				$arr_file_type = wp_check_filetype( $filename );
+				
 				$uploaded_file_type = $arr_file_type['type'];
-				
+								
 				// Set an array containing a list of acceptable formats
 				$allowed_file_types = array('image/jpg','image/jpeg','image/gif','image/png');
 				
 				// If the uploaded file is the right format
 				if(in_array($uploaded_file_type, $allowed_file_types)) 
 				{
-					
-					if ( ! function_exists( 'wp_handle_upload' ) ) 
+					if ( ! function_exists( 'wp_handle_upload' ) ) {
 						require_once( ABSPATH . 'wp-admin/includes/file.php' );
+					}					
 					
-					
-					if(!is_dir($geodir_uploadpath))
+					if(!is_dir($geodir_uploadpath)) {
 						mkdir($geodir_uploadpath);
+					}
 					
 					$external_img = false;
-					if (strpos($curr_img_url,$uploads['baseurl']) !== false) {}
+					if (strpos($curr_img_url,$uploads['baseurl']) !== false) {
+					}
 					else{
 						$external_img = true;
 					}
@@ -736,35 +766,30 @@ function geodir_save_post_images($post_id = 0, $post_image = array(), $dummy = f
 							$uploaded_file = $uploaded;
 						}	
 						$external_img = false;
-					}else{
+					} else {
+						$new_name = $post_id . '_' . $file_name;
 						
-						$new_name = $post_id.'_'.$img_name_arr[0].'.'.end($img_name_arr);
-						
-						
-						if($curr_img_dir == $sub_dir)
-						{	
+						if ( $curr_img_dir == $sub_dir ) {	
 							$img_path = $geodir_uploadpath.'/'.$filename;
 							$img_url = $geodir_uploadurl.'/'.$filename;
-						}else
-						{
+						} else {
 							$img_path = $uploads_dir.'/temp_'.$current_user->data->ID.'/'.$filename;
 							$img_url = $uploads['url'].'/temp_'.$current_user->data->ID.'/'.$filename;
 						}	
-						
 						
 						$uploaded_file = '';
 						
 						if( file_exists($img_path) ){
 							$uploaded_file = copy($img_path, $geodir_uploadpath.'/'.$new_name);$file_path ='';
-						}elseif(file_exists($uploads['basedir'].$curr_img_dir.$filename)){$uploaded_file = true;$file_path = $curr_img_dir.'/'.$filename;}
-						
+						} else if (file_exists($uploads['basedir'].$curr_img_dir.$filename)) {
+							$uploaded_file = true;
+							$file_path = $curr_img_dir.'/'.$filename;
+						}
 						
 						if($curr_img_dir != $geodir_uploaddir && file_exists($img_path))	
 							unlink($img_path);
-						
-					}		
-							
-									
+					}
+										
 					if(!empty($uploaded_file)) 
 					{
 						if(!isset($file_path) || !$file_path){$file_path = $sub_dir.'/'.$new_name;}
@@ -780,7 +805,7 @@ function geodir_save_post_images($post_id = 0, $post_image = array(), $dummy = f
 						// Set up options array to add this file as an attachment
 						$attachment = array(); 
 						$attachment['post_id'] = $post_id;
-						$attachment['title'] = $img_name_arr[0];
+						$attachment['title'] = $file_title;
 						$attachment['content'] = '';
 						$attachment['file'] = $file_path;					
 						$attachment['mime_type'] = $uploaded_file_type;
@@ -825,7 +850,6 @@ function geodir_save_post_images($post_id = 0, $post_image = array(), $dummy = f
 			
 			
 		}
-		
 		
 		if(!empty($valid_file_ids)){
 			

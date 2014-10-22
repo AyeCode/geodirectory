@@ -1,9 +1,9 @@
 <?php 
-if( isset( $_REQUEST['ajax_action'] ) && $_REQUEST['ajax_action'] == 'homemap_catlist' ){
-	$post_taxonomy = geodir_get_taxonomies($_REQUEST['post_type']);
+if ( isset( $_REQUEST['ajax_action'] ) && $_REQUEST['ajax_action'] == 'homemap_catlist' ) {
+	$post_taxonomy = geodir_get_taxonomies( $_REQUEST['post_type'] );
 	$map_canvas_name = $_REQUEST['map_canvas'];
 	$child_collapse= $_REQUEST['child_collapse'];
-	echo home_map_taxonomy_walker($post_taxonomy, 0, true, 0 ,  $map_canvas_name,$child_collapse);
+	echo home_map_taxonomy_walker( $post_taxonomy, 0, true, 0, $map_canvas_name, $child_collapse, true );
 	die;
 }
 	 

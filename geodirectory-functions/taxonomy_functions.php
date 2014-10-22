@@ -1245,6 +1245,7 @@ function geodir_posttype_link($link, $post_type){
 function get_post_type_singular_label($post_type, $echo=false)
 {
 	$obj_post_type = get_post_type_object($post_type);
+	if(!is_object($obj_post_type)){return;}
 	if($echo)
 		echo $obj_post_type->labels->singular_name;
 	else
