@@ -498,18 +498,62 @@ function geodir_diagnostic_tools_setting_page()
             <div class="gd-content-heading" >
            
             
-                <h3><?php _e('GD Diagnostic Tool',GEODIRECTORY_TEXTDOMAIN);?></h3>
-                
-                 <table class="form-table">
+                <h3><?php _e('GD Diagnostic Tools',GEODIRECTORY_TEXTDOMAIN);?></h3>
+                <style>
+				.gd-tools-table{
+				width:100%;
+				border:1px solid #666;
+				}
+				.gd-tool-results, .gd-tool-results td{
+				padding: 0px;
+				}
+				.gd-tool-results-remove{
+				float: right;
+				margin-top: 10px;	
+				}
+				</style>
+                 <table class="form-table gd-tools-table">
                     <tbody>
-                        <tr valign="top" >
-                           
-                            <td class="forminp"><?php _e('Geodirectory default pages diagnosis',GEODIRECTORY_TEXTDOMAIN);?>
-                            <input type="button" value="<?php _e('Run',GEODIRECTORY_TEXTDOMAIN);?>" class="geodir_diagnosis_button" data-diagnose="default_pages" />
-                            <div class="geodir_diagnostic_result"></div>        
+                      <tr>
+                      	<td><strong><?php _e('Tool',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                      	<td><strong><?php _e('Description',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                      	<td><strong><?php _e('Action',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                      </tr>
+                    
+                    
+                        <tr>
+                            <td><?php _e('Virtual pages check',GEODIRECTORY_TEXTDOMAIN);?></td>
+                            <td><small><?php _e('Checks if the virtual pages are installed correctly or not.',GEODIRECTORY_TEXTDOMAIN);?></small></td>
+                            <td>
+                            <input type="button" value="<?php _e('Run',GEODIRECTORY_TEXTDOMAIN);?>" class="button-primary geodir_diagnosis_button" data-diagnose="default_pages" />
                             </td>
-                            
+                        </tr>  
+                         
+
+                        
+                        <tr>  
+                            <td><?php _e('Multisite DB conversion check',GEODIRECTORY_TEXTDOMAIN);?></td>
+                            <td><small><?php _e('Checks if the GD database tables have been converted to use multisite correctly.',GEODIRECTORY_TEXTDOMAIN);?></small></td>
+                            <td><input type="button" value="<?php _e('Run',GEODIRECTORY_TEXTDOMAIN);?>" class="button-primary geodir_diagnosis_button" data-diagnose="multisite_conversion" />
+                            </td>
+                         </tr>   
+                        
+                         <tr>  
+                            <td><?php _e('Ratings check',GEODIRECTORY_TEXTDOMAIN);?></td>
+                            <td><small><?php _e('Checks ratings for correct location and content settings',GEODIRECTORY_TEXTDOMAIN);?></small></td>
+                            <td><input type="button" value="<?php _e('Run',GEODIRECTORY_TEXTDOMAIN);?>" class="button-primary geodir_diagnosis_button" data-diagnose="ratings" />
+                            </td>
+                         </tr>   
+                        
+                          <tr> 
+                            <td><?php _e('Sync GD tags',GEODIRECTORY_TEXTDOMAIN);?></td>
+                            <td><small><?php _e('This tool can be used when tags are showing in the backend but missing from the front end.',GEODIRECTORY_TEXTDOMAIN);?></small></td>
+                            <td><input type="button" value="<?php _e('Run',GEODIRECTORY_TEXTDOMAIN);?>" class="button-primary geodir_diagnosis_button" data-diagnose="tags_sync" />
+                            </td>
                         </tr>
+                        
+                          
+                        
                         <?php do_action('geodir_diagnostic_tool');?>
                         
                     </tbody>

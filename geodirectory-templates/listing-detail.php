@@ -14,7 +14,11 @@ do_action( 'geodir_wrapper_open', 'details-page', 'geodir-wrapper','');
 	do_action('geodir_detail_before_main_content');
 	// action called before the main content
 	do_action('geodir_before_main_content', 'details-page');
-
+	
+	###### SIDEBAR ON LEFT ######
+	if ( get_option('geodir_detail_sidebar_left_section') ) {
+		do_action('geodir_detail_sidebar');
+	}
 	
 			###### MAIN CONTENT WRAPPERS OPEN ######
 			// this adds the opening html tags to the content div, this required the closing tag below :: ($type='',$id='',$class='')
@@ -43,8 +47,10 @@ do_action( 'geodir_wrapper_open', 'details-page', 'geodir-wrapper','');
 			// this adds the closing html tags to the wrapper_content div :: ($type='')
 			do_action( 'geodir_wrapper_content_close', 'details-page');
 			
-	###### SIDEBAR ######
-	do_action('geodir_detail_sidebar'); 
+	###### SIDEBAR ON RIGHT ######
+	if ( !get_option('geodir_detail_sidebar_left_section') ) {
+		do_action('geodir_detail_sidebar'); 
+	}
 	
 		
 	###### BOTTOM SECTION WIDGET AREA ######

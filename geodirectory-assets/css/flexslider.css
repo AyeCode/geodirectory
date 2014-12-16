@@ -101,9 +101,6 @@ html[xmlns] .geodir-slides {display: block;}
 }
 
 @media screen and (max-width: 480px) {
- 	
-	.geodir_flexslider {padding-bottom:50px;}
 	#geodir_slider .geodir-control-nav{ bottom:5px;}
 	#geodir_carousel{ display:none;}
- 
 }
