@@ -171,10 +171,10 @@ function geodir_custom_field_save( $request_field = array() , $default = false )
 	
 	$result_str = isset($request_field['field_id']) ? trim($request_field['field_id']) : '';
 	
-	geodir_add_column_if_not_exist(GEODIR_CUSTOM_FIELDS_TABLE, 'cat_sort', 'text NOT NULL');
-	geodir_add_column_if_not_exist(GEODIR_CUSTOM_FIELDS_TABLE, 'cat_filter', 'text NOT NULL');
+	//geodir_add_column_if_not_exist(GEODIR_CUSTOM_FIELDS_TABLE, 'cat_sort', 'text NOT NULL');
+	//geodir_add_column_if_not_exist(GEODIR_CUSTOM_FIELDS_TABLE, 'cat_filter', 'text NOT NULL');
 	// add column to store decimal point
-	geodir_add_column_if_not_exist( GEODIR_CUSTOM_FIELDS_TABLE, 'decimal_point', 'VARCHAR( 10 ) NOT NULL');
+	//geodir_add_column_if_not_exist( GEODIR_CUSTOM_FIELDS_TABLE, 'decimal_point', 'VARCHAR( 10 ) NOT NULL');
 	
 	$cf = trim($result_str, '_');
 	
@@ -1701,7 +1701,7 @@ function geodir_show_listing_info($fields_location=''){
 	$package_info = array();
 	
 	$package_info = geodir_post_package_info($package_info , $post);
-	
+	//return;
 	$post_package_id = $package_info->pid;
 	
 	ob_start();	$fields_info = geodir_post_custom_fields($post_package_id,'default',geodir_get_current_posttype(), $fields_location);

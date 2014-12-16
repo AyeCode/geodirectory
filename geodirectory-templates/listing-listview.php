@@ -17,12 +17,11 @@ if(isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view']!='' && !i
 					
          while (have_posts()) : the_post(); 
 		 	global $post, $wpdb, $listing_width, $preview;
-			
 			$post_view_class = apply_filters( 'geodir_post_view_extra_class', '' );
 			$post_view_article_class = apply_filters( 'geodir_post_view_article_extra_class', '' );
 		 ?> 
             
-					<li id="post-<?php echo $post->ID;?>" class="clearfix <?php if($grid_view_class){ echo 'geodir-gridview '.$grid_view_class;}?> <?php if($post_view_class){echo $post_view_class;}?>" <?php if($listing_width) echo "style='width:{$listing_width}%;'"; // Width for widget listing ?> >
+					<li id="post-<?php echo $post->ID;?>" class="clearfix <?php if($grid_view_class){ echo 'geodir-gridview '.$grid_view_class;}else{echo ' geodir-listview ';}?> <?php if($post_view_class){echo $post_view_class;}?>" <?php if($listing_width) echo "style='width:{$listing_width}%;'"; // Width for widget listing ?> >
 					<article class="geodir-category-listing <?php if($post_view_article_class){echo $post_view_article_class;}?>">		
 			<div class="geodir-post-img"> 
 			<?php if($fimage = geodir_show_featured_image($post->ID, 'list-thumb', true, false, $post->featured_image)){ ?>
@@ -68,8 +67,8 @@ if(isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view']!='' && !i
 				
 					$startPoint = array( 'latitude'	=> $_REQUEST['sgeo_lat'], 'longitude' => $_REQUEST['sgeo_lon']);	
 					
-					$endLat = geodir_get_post_meta($post->ID,'post_latitude',true);
-											$endLon = geodir_get_post_meta($post->ID,'post_longitude',true);
+											$endLat = $post->post_latitude; 
+											$endLon = $post->post_longitude;
 											$endPoint = array( 'latitude'	=> $endLat, 'longitude'	=> $endLon);
 											$uom = get_option('geodir_search_dist_1');
 											$distance = geodir_calculateDistanceFromLatLong ($startPoint,$endPoint,$uom);?>
@@ -79,9 +78,9 @@ if(isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view']!='' && !i
 					 if (round((int)$distance,2) == 0){
 												$uom = get_option('geodir_search_dist_2');
 												$distance = geodir_calculateDistanceFromLatLong ($startPoint,$endPoint,$uom);
-												echo round($distance).' '.$uom.'<br />';
+												echo round($distance).' '.__( $uom, GEODIRECTORY_TEXTDOMAIN ).'<br />';
 											}else{
-												echo round($distance,2).' '.$uom.'<br />';
+												echo round($distance,2).' '.__( $uom, GEODIRECTORY_TEXTDOMAIN ).'<br />';
 										}
 					?>
 											</h3>
@@ -103,9 +102,7 @@ if(isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view']!='' && !i
 					$review_show = geodir_is_reviews_show('listview');
 					
 					if ($review_show) {
-						$comment_count = geodir_get_review_count_total($post->ID); 
-						$post_ratings = geodir_get_review_total($post->ID);
-						
+					
 						if (!$preview) {
 							$post_avgratings = geodir_get_commentoverall_number($post->ID);
 							
@@ -115,7 +112,7 @@ if(isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view']!='' && !i
 						}
 						?>
 						<a href="<?php comments_link(); ?>" class="geodir-pcomments"><i class="fa fa-comments"></i>
-						<?php comments_number( __('No Reviews',GEODIRECTORY_TEXTDOMAIN), __('1 Review',GEODIRECTORY_TEXTDOMAIN), __('% Reviews',GEODIRECTORY_TEXTDOMAIN) ); ?></a>
+						<?php geodir_comments_number( $post->rating_count ); ?></a>
 					<?php 
 					}
 					geodir_favourite_html($post->post_author,$post->ID);

@@ -86,7 +86,7 @@ function geodir_save_rating($comment = 0){
 		
 		$overall_rating = $_REQUEST['geodir_overallrating'];
 		if ( isset( $comment_info->comment_parent ) && (int)$comment_info->comment_parent == 0 ) {
-			$overall_rating = $overall_rating > 0 ? $overall_rating : 1;
+			$overall_rating = $overall_rating > 0 ? $overall_rating : '0';
 						
 			$sqlqry = $wpdb->prepare("INSERT INTO ".GEODIR_REVIEW_TABLE." SET
 					post_id		= %d,
@@ -205,7 +205,7 @@ function geodir_update_rating($comment_id = 0){
 		$overall_rating = $_REQUEST['geodir_overallrating'];
 		
 		if ( isset( $comment_info->comment_parent ) && (int)$comment_info->comment_parent == 0 ) {
-			$overall_rating = $overall_rating > 0 ? $overall_rating : 1;
+			$overall_rating = $overall_rating > 0 ? $overall_rating : '0';
 			
 			if(isset($old_rating)){
 							
@@ -443,13 +443,21 @@ function geodir_get_commentoverall($comment_id = 0){
 		return false; 	
 }
 
-function geodir_get_commentoverall_number($comment_id = 0){
-	global $wpdb;
+function geodir_get_commentoverall_number($post_id = 0){
+	global $wpdb,$post;
+	
+	if(isset($post->ID) && $post->ID == $post_id){
+		if(isset($post->rating_count) && $post->rating_count>0 && isset($post->overall_rating) && $post->overall_rating>0){
+		return $post->overall_rating/$post->rating_count;
+		}else{
+		return 0;
+		}
+	}
 	
 	$ratings = $wpdb->get_var(
 		$wpdb->prepare(
 			"SELECT COALESCE(avg(overall_rating),0) FROM ".GEODIR_REVIEW_TABLE." WHERE post_id = %d AND status=1 AND overall_rating>0",
-			array($comment_id)
+			array($post_id)
 		)
 	);
 	
@@ -576,7 +584,12 @@ function geodir_get_rating_stars($rating, $post_id, $small=false){
 	//$rating_img = '<img src="'.geodir_plugin_url().'/geodirectory-assets/images/stars.png" />';
 	$rating_img = '<img src="'.get_option('geodir_default_rating_star_icon').'" />';
 	
-	$r_html = '<div class="geodir-rating"><div class="gd_rating_show" data-average="'.$rating.'" data-id="'.$post_id.'"><div class="geodir_RatingAverage" style="width: '.$a_rating.'%;"></div><div class="geodir_Star">'.$rating_img.$rating_img.$rating_img.$rating_img.$rating_img.'</div></div></div>';
+	/* fix rating star for safari */
+	$star_width = 23 * 5;
+	global $is_safari, $is_iphone, $ios, $is_chrome;
+	$attach_style = ( $is_safari || $is_iphone || $ios || $is_chrome ) && $star_width > 0 ? 'width:' . $star_width . 'px;max-width:none' : '';
+	
+	$r_html = '<div class="geodir-rating" style="' . $attach_style . '"><div class="gd_rating_show" data-average="'.$rating.'" data-id="'.$post_id.'"><div class="geodir_RatingAverage" style="width: '.$a_rating.'%;"></div><div class="geodir_Star">'.$rating_img.$rating_img.$rating_img.$rating_img.$rating_img.'</div></div></div>';
 	}
 	return $r_html;   
 }

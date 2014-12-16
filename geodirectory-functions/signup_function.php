@@ -381,7 +381,7 @@ function geodir_user_signup(){
 				exit();
 			}
 		############################### fix by Stiofan -  HebTech.co.uk ### SECURITY FIX ##############################
-			
+			global $user_email, $user_fname;
 			$user_login = '';
 			$user_email = '';
 			if ( $http_post ) {
@@ -389,9 +389,26 @@ function geodir_user_signup(){
 				$user_email = $_POST['user_email'];
 				$user_fname = $_POST['user_fname'];
 				
-						
 				$errors = geodir_register_new_user($user_login, $user_email);
 				
+				/* display error in registration form */
+				if ( is_wp_error($errors) ) {
+					$error_code 	= $errors->get_error_code();
+					$error_message	= $errors->get_error_message( $error_code );
+					if ( !isset( $_POST['user_login'] ) && ( $error_code == 'empty_username' || $error_code == 'invalid_username' || $error_code == 'username_exists' ) ) {
+						if ( $error_code == 'empty_username' ) {
+							$error_code = 'empty_email';
+						} else if ( $error_code == 'invalid_username' ) {
+							$error_code = 'invalid_email';
+						} else if ( $error_code == 'username_exists' ) {
+							$error_code = 'email_exists';
+						}
+						
+						$error_message	= $errors->get_error_message( $error_code );
+					}
+					global $geodir_signup_error;
+					$geodir_signup_error = $error_message;
+				}
 			
 				if ( !is_wp_error($errors) ) 
 				{

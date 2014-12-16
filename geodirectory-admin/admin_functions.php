@@ -52,7 +52,10 @@ if (!function_exists('geodir_admin_styles')) {
 		wp_enqueue_style( 'geodir-rating-style' );
 		
 		wp_register_style( 'geodir-rtl-style', geodir_plugin_url() . '/geodirectory-assets/css/rtl.css', array(), GEODIRECTORY_VERSION );
-		wp_enqueue_style( 'geodir-rtl-style' );		
+		wp_enqueue_style( 'geodir-rtl-style' );	
+		
+		wp_register_style( 'geodirectory-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css', array(), GEODIRECTORY_VERSION );
+		wp_enqueue_style( 'geodirectory-font-awesome');
 	}
 }	
 
@@ -169,6 +172,14 @@ if (!function_exists('geodir_admin_scripts'))
 		wp_register_script( 'geodirectory-admin-script', geodir_plugin_url().'/geodirectory-assets/js/admin.js',array(),GEODIRECTORY_VERSION);
 		wp_enqueue_script( 'geodirectory-admin-script' );
 		
+		wp_enqueue_style( 'farbtastic' );
+		wp_enqueue_script( 'farbtastic' );
+		
+		$screen = get_current_screen();
+		if($screen->base=='post' && in_array($screen->post_type,geodir_get_posttypes())){
+		wp_enqueue_script( 'geodirectory-listing-validation-script', geodir_plugin_url().'/geodirectory-assets/js/listing_validation_admin.js' );
+		}
+		
 		$ajax_cons_data = array( 'url' => __( get_option('siteurl').'?geodir_ajax=true' ) ); 
 		wp_localize_script( 'geodirectory-admin-script', 'geodir_ajax', $ajax_cons_data );
 				
@@ -273,6 +284,12 @@ function geodir_before_admin_panel()
 	if(!geodir_is_default_location_set())
 	{
 		echo '<div class="updated fade"><p><strong>' . sprintf( __( 'Please %sclick here%s to set a default location, this will make the plugin work properly.', GEODIRECTORY_TEXTDOMAIN ) , '<a href=\'' .admin_url('admin.php?page=geodirectory&tab=default_location_settings').'\'>' , '</a>') . '</strong></p></div>';
+		
+	}
+	
+	if(!function_exists('curl_init'))
+	{
+		echo '<div class="error"><p><strong>' .  __( 'CURL is not installed on this server, this can cause problems, please ask your server admin to install it.', GEODIRECTORY_TEXTDOMAIN ) . '</strong></p></div>';
 		
 	}
 }
@@ -721,6 +738,8 @@ function geodir_update_options($options, $dummy = false) {
 				
 					
 		else :
+			// same menu setting per theme.
+			if($value['id']=='geodir_theme_location_nav'){$theme = wp_get_theme();update_option('geodir_theme_location_nav_'.$theme->name, $_POST[$value['id']]);}
 			
 			if(isset($value['id']) && isset($_POST[$value['id']])) {
 				update_option($value['id'], $_POST[$value['id']]);
@@ -1278,10 +1297,10 @@ if (!function_exists('geodir_import_data')) {
 							$my_post['post_author'] = $current_post_author;
 							$my_post['post_status'] = 'publish';
 							$my_post['post_category'] = $catids_arr;
-							$my_post['tags_input'] = $tag_arr;
+							$my_post['post_tags'] = $tag_arr;
 							
 							
-							
+							$gd_post_info['post_tags'] = $tag_arr;
 							$gd_post_info['post_title'] = $post_title;
 							$gd_post_info['post_status'] = 'publish';
 							$gd_post_info['submit_time'] = time();
@@ -1400,7 +1419,7 @@ if (!function_exists('geodir_import_data')) {
 								if(in_array($buffer[5],geodir_get_posttypes())){
 								
 									$taxonomies = geodir_get_posttype_info(addslashes($buffer[5]));
-									wp_set_object_terms($last_postid, $my_post['tags_input'], $taxonomy=$taxonomies['taxonomies'][1]);
+									wp_set_object_terms($last_postid, $my_post['post_tags'], $taxonomy=$taxonomies['taxonomies'][1]);
 									wp_set_object_terms($last_postid, $my_post['post_category'], $taxonomy=$taxonomies['taxonomies'][0]);
 									
 									
@@ -2111,3 +2130,51 @@ function geodir_post_attachments()
 
 } 
 
+function geodir_action_post_updated( $post_ID, $post_after, $post_before ) {
+	$post_type = get_post_type( $post_ID );
+	
+	if ( isset( $_POST['action'] ) && $_POST['action'] == 'inline-save' ) {
+		if( $post_type != '' && in_array( $post_type, geodir_get_posttypes() ) && !wp_is_post_revision( $post_ID ) && !empty( $post_after->post_title ) && $post_after->post_title != $post_before->post_title ) {
+			geodir_save_post_meta( $post_ID, 'post_title', $post_after->post_title );
+		}
+	}
+}
+
+/*
+ * Add bcc option
+ */
+function geodir_notification_add_bcc_option($settings) {
+	if (!empty($settings)) {
+		$new_settings = array();
+		foreach ($settings as $setting) {
+			if (isset($setting['id']) && $setting['id']=='site_bcc_options' && isset($setting['type']) && $setting['type']=='sectionend') {				
+				$geodir_bcc_listing_published_yes = array(  
+											'name' => __( 'Listing published', GEODIRPAYMENT_TEXTDOMAIN ),
+											'desc' => __( 'Yes', GEODIRPAYMENT_TEXTDOMAIN ),
+											'id' => 'geodir_bcc_listing_published',
+											'std' => 'yes',
+											'type' => 'radio',
+											'value' => '1',
+											'radiogroup' => 'start'
+										);
+				
+				$geodir_bcc_listing_published_no = array(  
+											'name' => __( 'Listing published', GEODIRPAYMENT_TEXTDOMAIN ),
+											'desc' => __( 'No', GEODIRPAYMENT_TEXTDOMAIN ),
+											'id' => 'geodir_bcc_listing_published',
+											'std' => 'yes',
+											'type' => 'radio',
+											'value' => '0',
+											'radiogroup' => 'end'
+										);
+				
+				$new_settings[] = $geodir_bcc_listing_published_yes;
+				$new_settings[] = $geodir_bcc_listing_published_no;
+			}
+			$new_settings[] = $setting;
+		}
+		$settings = $new_settings;
+	}
+		
+	return $settings;
+}

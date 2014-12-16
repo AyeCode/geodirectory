@@ -1,16 +1,4 @@
 <?php
-
-
-if ( isset($_REQUEST['emsg']) && $_REQUEST['emsg']=='fw'){
-	echo "<p class=\"error_msg\"> ".INVALID_USER_FPW_MSG." </p>";
-}elseif ( isset($_REQUEST['logemsg']) && $_REQUEST['logemsg']==1){
-	echo "<p class=\"error_msg\"> ".INVALID_USER_PW_MSG." </p>";
-}
-
-if(isset($_REQUEST['checkemail']) && $_REQUEST['checkemail']=='confirm')
-	echo '<p class="sucess_msg">'.PW_SEND_CONFIRM_MSG.'</p>';
-
-
 if(isset($_GET['redirect_to']) && $_GET['redirect_to'] != '')
 {
 	$redirect_to = $_GET['redirect_to'];
@@ -42,7 +30,16 @@ else
             {	echo apply_filters('geodir_login_page_title',SIGN_IN_PAGE_TITLE);}
             ?>
         </h4>
-        
+        <?php
+		if ( isset($_REQUEST['emsg']) && $_REQUEST['emsg']=='fw'){
+			echo "<p class=\"error_msg\"> ".INVALID_USER_FPW_MSG." </p>";
+		}elseif ( isset($_REQUEST['logemsg']) && $_REQUEST['logemsg']==1){
+			echo "<p class=\"error_msg\"> ".INVALID_USER_PW_MSG." </p>";
+		}
+		
+		if(isset($_REQUEST['checkemail']) && $_REQUEST['checkemail']=='confirm')
+			echo '<p class="sucess_msg">'.PW_SEND_CONFIRM_MSG.'</p>';
+		?>
         <form name="cus_loginform" id="cus_loginform" action="" method="post" >
         
             <div class="form_row clearfix">

@@ -210,6 +210,7 @@ type="<?php echo ( $geodir_map_options['enable_text_search'] ? 'text' : 'hidden'
 		<input type="hidden" id="<?php echo $map_canvas_name;?>_country" name="gd_country" value="<?php if(isset($country)){ echo $country;}?>" /> 
 		<input type="hidden" id="<?php echo $map_canvas_name;?>_region" name="gd_region" value="<?php if(isset($region)){ echo $region;}?>" /> 
 		<input type="hidden" id="<?php echo $map_canvas_name;?>_city" name="gd_city" value="<?php if(isset($city)){ echo $city;}?>" /> 
+		<input type="hidden" id="<?php echo $map_canvas_name;?>_neighbourhood" name="gd_neighbourhood" value="<?php if(isset($_REQUEST['gd_neighbourhood'])){ echo $_REQUEST['gd_neighbourhood'];}?>" /> 
         <?php }else{ //end of location filter		?>
         	<input type="hidden" id="<?php echo $map_canvas_name;?>_location_enabled" value="0" />
         <?php }?>
@@ -236,7 +237,7 @@ type="<?php echo ( $geodir_map_options['enable_text_search'] ? 'text' : 'hidden'
 				
 				foreach($post_types as $post_type => $args){
 					if(!in_array($post_type,$exclude_post_types)){
-						echo '<li id="'.$post_type.'"><a href="javascript:void(0);" onclick="jQuery(\'#'.  $map_canvas_name .'_posttype\').val(\''.$post_type.'\');build_map_ajax_search_param(\''.$map_canvas_name .'\', true)">'.__(ucfirst($args->labels->name)).'</a></li>';
+						echo '<li id="'.$post_type.'"><a href="javascript:void(0);" onclick="jQuery(\'#'.  $map_canvas_name .'_posttype\').val(\''.$post_type.'\');build_map_ajax_search_param(\''.$map_canvas_name .'\', true)">'.__( ucfirst( $args->labels->name ), GEODIRECTORY_TEXTDOMAIN ).'</a></li>';
 					 }
 				}
 				?>

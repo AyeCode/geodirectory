@@ -96,19 +96,24 @@ jQuery(window).load(function(){
 			
 			$query_args['tax_query'] = array( $tax_query );					
 		}
-		
-		query_posts( $query_args );				
-		if ( have_posts() ):
+		if($post_type=='gd_event'){$query_args['geodir_event_listing_filter'] ='upcoming';}// show only upcomming events
+		$widget_listings = geodir_get_widget_listings( $query_args );
+		if ( !empty( $widget_listings ) || $with_no_results ) {
 			if ( $title ) {
 				echo $before_title . $title . $after_title;
 			}
+			
+			global $post;
+			
+			$current_post = $post;// keep current post info
 			
 			$widget_main_slides = '';
 			$nav_slides = '';
 			$widget_slides = 0;
 			 
-			while ( have_posts() ) : the_post();
-				global $post;
+			foreach ( $widget_listings as $widget_listing ) {
+				global $gd_widget_listing_type;
+				$post = $widget_listing;
 				$widget_image = geodir_get_featured_image($post->ID,'thumbnail', get_option('geodir_listing_no_img'));
 			
 				if ( !empty( $widget_image ) ) {
@@ -118,7 +123,7 @@ jQuery(window).load(function(){
 						$widget_spacer_height = ( ( 200 - $widget_image->height ) / 2 );
 					}
 					
-					$widget_main_slides .= '<li class="geodir-listing-slider-widget"><img src="'.geodir_plugin_url()."/geodirectory-assets/images/spacer.gif".'" alt="'.$widget_image->title.'" title="'.$widget_image->title.'" style="max-height:'.$widget_spacer_height.'px;margin:0 auto;" width="100%" />';
+					$widget_main_slides .= '<li class="geodir-listing-slider-widget"><img class="geodir-listing-slider-spacer" src="'.geodir_plugin_url()."/geodirectory-assets/images/spacer.gif".'" alt="'.$widget_image->title.'" title="'.$widget_image->title.'" style="max-height:'.$widget_spacer_height.'px !important;margin:0 auto;" width="100%" />';
 					
 					$title = '';
 					if($show_title){
@@ -129,7 +134,7 @@ jQuery(window).load(function(){
 					$nav_slides .= '<li><img src="'.$widget_image->src.'" alt="'.$widget_image->title.'" title="'.$widget_image->title.'" style="max-height:48px;margin:0 auto;" /></li>';			
 					$widget_slides++;
 				}
-			endwhile;
+			}
 			?>
 			 <div class="flex-container" style="min-height:200px;">	
 				<div class="geodir-listing-flex-loader"><i class="fa fa-refresh fa-spin"></i></div> 
@@ -143,8 +148,9 @@ jQuery(window).load(function(){
 				<?php } ?>
 			</div>			
 			<?php 
-			wp_reset_query();
-		endif;
+			$GLOBALS['post'] = $current_post;
+			setup_postdata( $current_post );
+		}
 		echo $after_widget;
 	}
 	

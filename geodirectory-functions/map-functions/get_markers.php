@@ -102,7 +102,7 @@ function get_markers(){
 	$map_cat_format = array_fill(0, $map_cat_length, '%d');
 	$format = implode(',', $map_cat_format);	*/
 	
-	if(isset($_REQUEST['search']) && !empty($_REQUEST['search'])){
+	if(isset($_REQUEST['search']) && !empty($_REQUEST['search']) && $_REQUEST['search']!=__( 'Title', GEODIRECTORY_TEXTDOMAIN )){
 		
 			$search .= " AND p.post_title like %s";
 			$main_query_array[] = "%".$_REQUEST['search']."%";
@@ -127,6 +127,7 @@ function get_markers(){
 					
 	$join = apply_filters('geodir_home_map_listing_join', $join);
 	$search = apply_filters('geodir_home_map_listing_where', $search);
+	$select = apply_filters('geodir_home_map_listing_select', 'SELECT pd.*');
 		
 	/*$catsql = 	$wpdb->prepare("SELECT pi.* FROM "
 				.$wpdb->posts." as p," 
@@ -134,16 +135,18 @@ function get_markers(){
 				AND pd.post_id = pi.post_id 
 				AND p.post_status = 'publish'  AND pi.cat_id in ($format) " . $search . $gd_posttype , $main_query_array);*/
 	
-	$catsql = 	$wpdb->prepare("SELECT pd.* $field_default_cat FROM "
+	$catsql = 	$wpdb->prepare("$select $field_default_cat FROM "
 				.$wpdb->posts." as p," 
 				.$join." WHERE p.ID = pd.post_id 
 				AND p.post_status = 'publish' " . $search . $gd_posttype , $main_query_array);
-		
+	//echo '###search'. $search;	
+	//echo '###$gd_posttype'. $gd_posttype;	
+	//echo '###$main_query_array'. $main_query_array;	
 	
 	$catsql = apply_filters('geodir_home_map_listing_query' , $catsql , $search) ;
 	
 	$catinfo = $wpdb->get_results($catsql);
-	
+	//echo $catsql;
 	//print_r($catinfo);
 	$cat_content_info = array();
 	$content_data = array();

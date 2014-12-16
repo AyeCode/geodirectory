@@ -272,14 +272,15 @@ function geodir_posts_fields($fields){
 		
 		//$fields .= ", ".$table.".*".", ".POST_LOCATION_TABLE.".* ";//===old code
 		$fields .= ", ".$table.".* ";
-		if($snear!=''){
+		if($snear!='' || isset($_SESSION['all_near_me'])){
 			$DistanceRadius = geodir_getDistanceRadius(get_option('geodir_search_dist_1'));
-			/*$lon1 = $mylon-$dist/abs(cos(deg2rad($mylat))*69); 
-			$lon2 = $mylon+$dist/abs(cos(deg2rad($mylat))*69);
-			$lat1 = $mylat-($dist/69);
-			$lat2 = $mylat+($dist/69);*/
+			if(isset($_SESSION['all_near_me'])){
+			$mylat = $_SESSION['user_lat'];
+			$mylon = $_SESSION['user_lon'];
 			
-			$fields .= " , (".$DistanceRadius." * 2 * ASIN(SQRT( POWER(SIN(($mylat - ABS(".$table.".post_latitude)) * pi()/180 / 2), 2) +COS($mylat * pi()/180) * COS( ABS(".$table.".post_latitude) * pi()/180) *POWER(SIN(($mylon - ".$table.".post_longitude) * pi()/180 / 2), 2) )))as distance ";
+			}
+			
+			$fields .= " , (".$DistanceRadius." * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(".$table.".post_latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(".$table.".post_latitude) * pi()/180) *POWER(SIN(($mylon - ".$table.".post_longitude) * pi()/180 / 2), 2) )))as distance ";
 		}
 	
 	return $fields;
@@ -618,13 +619,21 @@ function searching_filter_where($where) {
 	$taxonomies = geodir_get_taxonomies($post_types,true);
 	$taxonomies = implode("','",$taxonomies);	
 	$taxonomies = "'". $taxonomies ."'";
-		
+	
+	//if($snear!='' && strpos($snear,__('In:',GEODIRECTORY_TEXTDOMAIN)) !== false)
 	if($snear!='')
-	{
+	{		if(isset($_SESSION['near_me_range']) && is_numeric($_SESSION['near_me_range']) && !isset($_REQUEST['sdist'])){$dist = $_SESSION['near_me_range'];}
 			$lon1 = $mylon-$dist/abs(cos(deg2rad($mylat))*69); 
 			$lon2 = $mylon+$dist/abs(cos(deg2rad($mylat))*69);
 			$lat1 = $mylat-($dist/69);
 			$lat2 = $mylat+($dist/69);
+			
+			$rlon1 = is_numeric(min($lon1,$lon2)) ? min($lon1,$lon2) : '';
+			$rlon2 = is_numeric(max($lon1,$lon2)) ? max($lon1,$lon2) : '';
+			$rlat1 = is_numeric(min($lat1,$lat2)) ? min($lat1,$lat2) : '';
+			$rlat2 = is_numeric(max($lat1,$lat2)) ? max($lat1,$lat2) : '';
+			
+			
 			$where .= " AND ( ( $wpdb->posts.post_title LIKE \"%$s%\" $better_search_terms)
 								OR ($wpdb->posts.post_content LIKE \"%$s%\") 
 								OR ($wpdb->posts.ID IN( 
@@ -639,12 +648,12 @@ function searching_filter_where($where) {
 							)
 						AND $wpdb->posts.post_type in ('{$post_types}') 
 						AND ($wpdb->posts.post_status = 'publish') 
-						AND ( ".$table.".post_latitude between $lat1 and $lat2 ) 
-						AND ( ".$table.".post_longitude between $lon1 and $lon2 ) ";
+						AND ( ".$table.".post_latitude between $rlat1 and $rlat2 ) 
+						AND ( ".$table.".post_longitude between $rlon1 and $rlon2 ) ";
 						
 		if(isset($_REQUEST['sdist']) && $_REQUEST['sdist'] != 'all'){
 			$DistanceRadius = geodir_getDistanceRadius(get_option('geodir_search_dist_1'));
-			$where .= " AND CONVERT((".$DistanceRadius." * 2 * ASIN(SQRT( POWER(SIN(($mylat - ABS(".$table.".post_latitude)) * pi()/180 / 2), 2) +COS($mylat * pi()/180) * COS( ABS(".$table.".post_latitude) * pi()/180) *POWER(SIN(($mylon - ".$table.".post_longitude) * pi()/180 / 2), 2) ))),DECIMAL(64,4)) <= ".$dist;
+			$where .= " AND CONVERT((".$DistanceRadius." * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(".$table.".post_latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(".$table.".post_latitude) * pi()/180) *POWER(SIN(($mylon - ".$table.".post_longitude) * pi()/180 / 2), 2) ))),DECIMAL(64,4)) <= ".$dist;
 		}
 		
 	}else

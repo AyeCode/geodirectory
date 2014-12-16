@@ -10,7 +10,7 @@ if(!val){return;}
 
 //var listSel = jQuery(list).closest('.geodir_category_list_view');
 var listSel = jQuery(list).parent().parent().next('.geodir_category_list_view');
-if(val!=1){jQuery(listSel).children('li').addClass('geodir-gridview');}
+if(val!=1){jQuery(listSel).children('li').addClass('geodir-gridview');jQuery(listSel).children('li').removeClass('geodir-listview');}else{jQuery(listSel).children('li').addClass('geodir-listview');}
 
 if(val==1){jQuery(listSel).children('li').removeClass('geodir-gridview gridview_onehalf gridview_onethird gridview_onefourth gridview_onefifth');}
 else if(val==2){jQuery(listSel).children('li').switchClass('gridview_onethird gridview_onefourth gridview_onefifth','gridview_onehalf',600);}
@@ -46,10 +46,12 @@ add_action('geodir_before_listing', 'geodir_list_view_select', 100);
 
 
 function geodir_max_excerpt($charlength) {
+	global $post;
 	if ($charlength=='0') {
 		return;
 	}
 	$excerpt = get_the_excerpt();
+	return;
 	$charlength++;
 	$excerpt_more = function_exists('geodirf_excerpt_more') ? geodirf_excerpt_more('') : geodir_excerpt_more('');
 	if ( mb_strlen( $excerpt ) > $charlength ) {
@@ -371,6 +373,8 @@ function geodir_advance_customfields_heading($title, $field_type){
 function geodir_related_posts_display($request){
 	
 	if(!empty($request)){
+		$before_title = (isset($request['before_title']) && !empty($request['before_title'])) ? $request['before_title'] : '';
+		$after_title = (isset($request['after_title']) && !empty($request['after_title'])) ? $request['after_title'] : '';
 		
 		$title =( isset($request['title']) && !empty($request['title'])) ? $request['title'] : __('Related Listing',GEODIRECTORY_TEXTDOMAIN);
 		$post_number =(isset($request['post_number']) && !empty($request['post_number'])) ? $request['post_number'] : '5' ;
@@ -958,6 +962,7 @@ function geodir_show_detail_page_tabs(){
                    <?php do_action('geodir_before_tab_list') ; ?>
                    <?php 
 				   		$arr_detail_page_tabs = geodir_detail_page_tabs_list();
+
 						foreach($arr_detail_page_tabs as $tab_index => $detail_page_tab)
 						{
 							if($detail_page_tab['is_display'])
@@ -1140,14 +1145,47 @@ function geodir_get_recent_reviews($g_size = 30, $no_comments = 10, $comment_len
 			
 		}
 		
+		/*if(isset($_SESSION['all_near_me'])){
+		
+			$mylat = $_SESSION['user_lat'];
+			$mylon = $_SESSION['user_lon'];
+			
+			if(isset($_SESSION['near_me_range']) && is_numeric($_SESSION['near_me_range'])){$dist =$_SESSION['near_me_range']; }
+			elseif(get_option('geodir_near_me_dist')!=''){$dist = get_option('geodir_near_me_dist');}
+			else{ $dist = '200';  }
+			
+			$lon1 = $mylon- $dist/abs(cos(deg2rad($mylat))*69); 
+			$lon2 = $mylon+$dist/abs(cos(deg2rad($mylat))*69);
+			$lat1 = $mylat-($dist/69);
+			$lat2 = $mylat+($dist/69);	
+			
+			$rlon1 = is_numeric(min($lon1,$lon2)) ? min($lon1,$lon2) : '';
+			$rlon2 = is_numeric(max($lon1,$lon2)) ? max($lon1,$lon2) : '';
+			$rlat1 = is_numeric(min($lat1,$lat2)) ? min($lat1,$lat2) : '';
+			$rlat2 = is_numeric(max($lat1,$lat2)) ? max($lat1,$lat2) : '';
+			
+			$country_filter ='';
+			$region_filter = '';
+			$city_filter = " AND post_latitude between $rlat1 and $rlat2 
+			AND post_longitude between $rlon1 and $rlon2 ";
+			
+			$join = 
+	
+		}*/
+		
 		$review_table = GEODIR_REVIEW_TABLE;
 		$request = "SELECT r.id as ID, r.post_type, r.comment_id as comment_ID, r.post_date as comment_date,r.overall_rating, r.user_id, r.post_id FROM $review_table as r WHERE r.post_status = 1 AND r.status =1 $country_filter $region_filter $city_filter ORDER BY r.post_date DESC, r.id DESC LIMIT $no_comments";
+		
+		//$request = "SELECT r.*,c.* FROM $review_table r JOIN $wpdb->comments c ON r.comment_ID=c.comment_ID WHERE r.post_status = 1 AND r.status =1 $country_filter $region_filter $city_filter ORDER BY r.post_date DESC, r.id DESC LIMIT $no_comments";
 		//echo $request;
+		
         $comments = $wpdb->get_results($request);
-
+		
+	
         foreach ( $comments as $comment ) {
 			// Set the extra comment info needed.	
-			$comment_extra = $wpdb->get_row("SELECT * FROM $wpdb->comments WHERE comment_ID =$comment->comment_ID");	
+			$comment_extra = $wpdb->get_row("SELECT * FROM $wpdb->comments WHERE comment_ID =$comment->comment_ID");
+			//echo "SELECT * FROM $wpdb->comments WHERE comment_ID =$comment->comment_ID";
 			$comment->comment_content = $comment_extra->comment_content;
 			$comment->comment_author = $comment_extra->comment_author;
 			$comment->comment_author_email = $comment_extra->comment_author_email;

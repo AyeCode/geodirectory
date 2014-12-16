@@ -416,8 +416,10 @@ function geodir_sendEmail($fromEmail,$fromEmailName,$toEmail,$toEmailName,$to_su
 	}elseif($message_type=='post_submit'){
 		$subject = stripslashes(get_option('geodir_post_submited_success_email_subject')); 
 		$message = stripslashes(get_option('geodir_post_submited_success_email_content')); 
-	}
-	
+	}elseif($message_type=='listing_published'){
+		$subject = stripslashes_deep(get_option('geodir_post_published_email_subject')); 
+		$message = stripslashes_deep(get_option('geodir_post_published_email_content'));
+	}	
 	
 	$to_message = nl2br($to_message);
 	$sitefromEmail = get_option('site_email');
@@ -438,9 +440,9 @@ function geodir_sendEmail($fromEmail,$fromEmailName,$toEmail,$toEmailName,$to_su
 	$loginurl = home_url().'/?geodir_signup=true';
 	$loginurl_link = '<a href="'.$loginurl.'">login</a>';
 	
-	if($fromEmail==''){$fromEmail = get_option('site_email_name');}
+	if($fromEmail==''){$fromEmail = get_option('site_email');}
 	
-	if($fromEmailName==''){$fromEmailName = get_option('site_email');}
+	if($fromEmailName==''){$fromEmailName = get_option('site_email_name');}
 	
 	$search_array = array('[#listing_link#]','[#site_name_url#]','[#post_id#]','[#site_name#]','[#to_name#]','[#from_name#]','[#subject#]','[#comments#]','[#login_url#]','[#login_details#]','[#client_name#]', '[#posted_date#]');
 	$replace_array = array($listingLink,$siteurl_link,$post_id,$sitefromEmailName,$toEmailName,$fromEmailName,$to_subject,$to_message,$loginurl_link,$login_details,$toEmailName, $posted_date);
@@ -492,6 +494,7 @@ function geodir_sendEmail($fromEmail,$fromEmailName,$toEmail,$toEmailName,$to_su
 	if($message_type=='send_friend' && get_option('geodir_bcc_friend')){$subject.=' - ADMIN BCC COPY'; @wp_mail($adminEmail, $subject, $message, $headers);}
 	
 	if($message_type=='send_enquiry' && get_option('geodir_bcc_enquiry')){$subject.=' - ADMIN BCC COPY'; @wp_mail($adminEmail, $subject, $message, $headers);}
+	if($message_type=='listing_published' && get_option('geodir_bcc_listing_published')){$subject.=' - ADMIN BCC COPY'; @wp_mail($adminEmail, $subject, $message, $headers);}
 
 }}
 
@@ -926,8 +929,8 @@ $siteurl = home_url();
 $siteurl_link = '<a href="'.$siteurl.'">'.$siteurl.'</a>';
 $loginurl = home_url().'/?ptype=login';
 $loginurl_link = '<a href="'.$loginurl.'">login</a>';
-if($fromEmail==''){$fromEmail = get_option('site_email_name');}
-if($fromEmailName==''){$fromEmailName = get_option('site_email');}
+if($fromEmail==''){$fromEmail = get_option('site_email');}
+if($fromEmailName==''){$fromEmailName = get_option('site_email_name');}
 $search_array = array('[#listing_link#]','[#site_name_url#]','[#post_id#]','[#site_name#]','[#to_name#]','[#from_name#]','[#subject#]','[#comments#]','[#login_url#]','[#login_details#]','[#client_name#]');
 $replace_array = array($listingLink,$siteurl_link,$post_id,$sitefromEmailName,$toEmailName,$fromEmailName,$to_subject,$to_message,$loginurl_link,$login_details,$toEmailName);
 $message = str_replace($search_array,$replace_array,$message);
@@ -1131,35 +1134,35 @@ function geodir_get_widget_listings( $query_args = array() ) {
 	$table = $plugin_prefix . $post_type . '_detail';
 	
 	$fields = $wpdb->posts . ".*, " . $table . ".*";
-	$fields = apply_filters( 'geodir_filter_widget_listings_fields', $fields );
+	$fields = apply_filters( 'geodir_filter_widget_listings_fields', $fields,$table,$post_type );
 	
 	$join = "INNER JOIN " . $table ." ON (" . $table .".post_id = " . $wpdb->posts . ".ID)";
-	$join = apply_filters( 'geodir_filter_widget_listings_join', $join );
+	$join = apply_filters( 'geodir_filter_widget_listings_join', $join,$post_type  );
 	
 	$post_status = is_super_admin() ? " OR " . $wpdb->posts . ".post_status = 'private'" : '';
 		
 	$where = " AND ( " . $wpdb->posts . ".post_status = 'publish' " . $post_status . " ) AND " . $wpdb->posts . ".post_type = '" . $post_type . "'";
-	$where = apply_filters( 'geodir_filter_widget_listings_where', $where );
+	$where = apply_filters( 'geodir_filter_widget_listings_where', $where,$post_type );
 	$where = $where != '' ? " WHERE 1=1 " . $where : '';
 	
-	$groupby = "";
-	$groupby = apply_filters( 'geodir_filter_widget_listings_groupby', $groupby );
+	$groupby = " GROUP BY $wpdb->posts.ID ";
+	$groupby = apply_filters( 'geodir_filter_widget_listings_groupby', $groupby,$post_type );
 	
 	$orderby = geodir_widget_listings_get_order( $query_args );
-	$orderby = apply_filters( 'geodir_filter_widget_listings_orderby', $orderby );
+	$orderby = apply_filters( 'geodir_filter_widget_listings_orderby', $orderby,$table,$post_type);
 	$orderby .= $wpdb->posts . ".post_title ASC";
 	$orderby = $orderby != '' ? " ORDER BY " . $orderby : '';
 	
 	$limit = !empty( $query_args['posts_per_page'] ) ? $query_args['posts_per_page'] : 5;
-	$limit = apply_filters( 'geodir_filter_widget_listings_limit', $limit );
+	$limit = apply_filters( 'geodir_filter_widget_listings_limit', $limit,$post_type );
 	
 	$limit = $limit>0 ? " LIMIT " . (int)$limit : "";
 	
 	$sql =  "SELECT SQL_CALC_FOUND_ROWS " . $fields . " FROM " . $wpdb->posts . "
 		" . $join . "
 		" . $where . "
-		" . $orderby . "
 		" . $groupby . "
+		" . $orderby . "
 		" . $limit;
 	//echo '<pre>sql : '; print_r($sql); echo '</pre>';// exit;
 	
@@ -1227,13 +1230,12 @@ function geodir_function_widget_listings_where( $where ) {
 	if ( empty( $query_args ) || empty( $query_args['is_geodir_loop'] ) ) {
 		return $where;
 	}
-	
 	$post_type = empty( $query_args['post_type'] ) ? 'gd_place' : $query_args['post_type'];
 	$table = $plugin_prefix . $post_type . '_detail';
 	
 	if ( !empty( $query_args ) ) {
 		if ( !empty( $query_args['gd_location'] ) && function_exists( 'geodir_default_location_where' ) ) {
-			$where = geodir_default_location_where( $where );
+			$where = geodir_default_location_where( $where,$table );
 		}
 		
 		if ( !empty( $query_args['show_featured_only'] ) ) {
@@ -1245,7 +1247,7 @@ function geodir_function_widget_listings_where( $where ) {
 		}
 		
 		if ( !empty( $query_args['with_pics_only'] ) ) {
-			$where .= " AND " . GEODIR_ATTACHMENT_TABLE . ".ID IS NOT NULL GROUP BY " . $table . ".post_id";
+			$where .= " AND " . GEODIR_ATTACHMENT_TABLE . ".ID IS NOT NULL ";
 		}
 		
 		if ( !empty( $query_args['with_videos_only'] ) ) {
@@ -1327,3 +1329,39 @@ function geodir_media_image_large_height( $default = 800, $params = '' ) {
 	
 	return $large_size_h;
 }
+
+function geodir_sanitize_location_name( $type, $name, $translate = true ) {
+	if ( $name == '' ) {
+		return NULL;
+	}
+	
+	$type = $type == 'gd_country' ? 'country' : $type;
+	$type = $type == 'gd_region' ? 'region' : $type;
+	$type = $type == 'gd_city' ? 'city' : $type;
+	
+	$return = $name;
+	if ( function_exists( 'get_actual_location_name' ) ) {
+		$return = get_actual_location_name( $type, $name, $translate );
+	} else {
+		$return = preg_replace( '/-(\d+)$/', '', $return );
+		$return = preg_replace( '/[_-]/', ' ', $return );
+		$return = ucwords( $return );
+		$return = $translate ? __( $return, GEODIRECTORY_TEXTDOMAIN ) : $return;
+	}
+	
+	return $return;
+}
+
+
+function geodir_comments_number($number){
+	
+			if ( $number > 1 ) {
+	                $output = str_replace( '%', number_format_i18n( $number ), __( '% Reviews',GEODIRECTORY_TEXTDOMAIN ));
+	        } elseif ( $number == 0 ||  $number == '') {
+	                $output =  __( 'No Reviews',GEODIRECTORY_TEXTDOMAIN );
+	        } else { // must be one
+	                $output =  __( '1 Review',GEODIRECTORY_TEXTDOMAIN );
+        }
+	echo $output;
+}
+

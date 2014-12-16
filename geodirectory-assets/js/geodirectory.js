@@ -110,7 +110,15 @@ tabNoRun=false;
 			
 			
 			}else{
-		window.location.hash = urlHash;
+				
+					if(history.pushState ) {
+						//history.pushState(null, null, urlHash); 
+						history.replaceState(null, null, urlHash);// wont make the browser back button go back to prev has value
+					}
+					else {
+						window.location.hash = urlHash;
+					}
+		
 			}
 		}
 		
@@ -131,6 +139,12 @@ tabNoRun=false;
 				google.maps.event.trigger(jQuery.goMap.map, 'resize');
 				jQuery.goMap.map.setCenter(center); 
 			}, 100);
+		}
+		
+		if(history.pushState ) {
+			if(jQuery(window).width()<1060){
+				jQuery('html, body').animate({scrollTop: jQuery(urlHash).offset().top}, 500);
+			}
 		}
 	}
 
@@ -264,20 +278,54 @@ jQuery(document).ready(function() {
 /* Show Hide Rating for reply */
 jQuery(document).ready(function() {
 	jQuery('.gd_comment_replaylink a').bind('click', function() {
+		jQuery('#commentform #err_no_rating').remove();
 		jQuery('#commentform .gd_rating').hide();
 		jQuery('#respond .form-submit input#submit').val(geodir_all_js_msg.gd_cmt_btn_post_reply);
 		jQuery('#respond .comment-form-comment label').html(geodir_all_js_msg.gd_cmt_btn_reply_text);
 	});
 	jQuery('#gd_cancle_replaylink a').bind('click', function() {
+		jQuery('#commentform #err_no_rating').remove();
 		jQuery('#commentform .gd_rating').show();
 		jQuery('#respond .form-submit input#submit').val(geodir_all_js_msg.gd_cmt_btn_post_review);
 		jQuery('#respond .comment-form-comment label').html(geodir_all_js_msg.gd_cmt_btn_review_text);
+	});
+	jQuery('#commentform .gd_rating').each(function(){
+		var rat_obj = this;
+		var $frm_obj = jQuery(rat_obj).closest('#commentform');
+		if(parseInt($frm_obj.find('#comment_parent').val()) > 0) {
+			jQuery('#commentform #err_no_rating').remove();
+			jQuery('#commentform .gd_rating').hide();
+			jQuery('#respond .form-submit input#submit').val(geodir_all_js_msg.gd_cmt_btn_post_reply);
+			jQuery('#respond .comment-form-comment label').html(geodir_all_js_msg.gd_cmt_btn_reply_text);
+		}
+		$frm_obj.find('input[name="submit"]').click(function(e){
+			$frm_obj.find('#err_no_rating').remove();
+			var is_review = parseInt($frm_obj.find('#comment_parent').val());
+			is_review = is_review == 0 ? true : false;
+			if(is_review){
+				var btn_obj = this;
+				var invalid = 0;
+				$frm_obj.find('input[name^=geodir_overallrating]').each(function(){
+					var star_obj = this;
+					var star = parseInt(jQuery(star_obj).val());
+					if(!star>0){
+						invalid++;
+					}
+				});
+				if (invalid>0) {
+					jQuery(rat_obj).after('<div id="err_no_rating" class="err-no-rating">'+geodir_all_js_msg.gd_cmt_err_no_rating+'</div>');
+					return false;
+				}
+				return true;
+			}
+		});
 	});
 });
 
 jQuery(document).ready(function() {
 	jQuery('.search_by_post').change(function() {
-		window.location = jQuery(this).find('option:selected').attr('opt_label');
+		 jQuery('.geodir-listing-search').attr('action', jQuery(this).find('option:selected').attr('opt_label'));									  
+		//window.location = jQuery(this).find('option:selected').attr('opt_label');
 	});
 });
 
