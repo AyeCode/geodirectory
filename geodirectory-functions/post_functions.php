@@ -191,7 +191,6 @@ function geodir_save_listing( $request_info = array(), $dummy = false ) {
 		
 		$custom_metaboxes = geodir_post_custom_fields('','all',$request_info['listing_type']);
 		
-		
 		foreach($custom_metaboxes as $key=>$val):
 		
 		$name = $val['name'];
@@ -277,18 +276,38 @@ function geodir_save_listing( $request_info = array(), $dummy = false ) {
 		}elseif(trim($type) == 'datepicker'){
 			$datetime = '';
 			if($request_info[$name] != ''){
-				$datetime = date("Y-m-d",strtotime($request_info[$name]));
+				$date_format = geodir_default_date_format();
+				if( isset( $val['extra_fields'] ) && $val['extra_fields'] != '' ){
+					$extra_fields = unserialize( $val['extra_fields'] );
+					$date_format = isset( $extra_fields['date_format'] ) && $extra_fields['date_format'] != '' ? $extra_fields['date_format'] : $date_format;
+				}
+				
+				$search = array('dd', 'mm', 'yy');
+				$replace = array('d', 'm', 'Y');
+				
+				$date_format = str_replace( $search, $replace, $date_format );
+				
+				$post_htmlvar_value = $date_format == 'd/m/Y' ? str_replace( '/', '-', $request_info[$name] ) : $request_info[$name]; // PHP doesn't work well with dd/mm/yyyy format
+							
+				$datetime = date( "Y-m-d", strtotime( $post_htmlvar_value ) );
 			}
 			$gd_post_info[$name] = $datetime;
+		} else if( $type == 'multiselect' ) {
+			if ( isset( $request_info[$name] ) ) {
+				$gd_post_info[$name] = $request_info[$name];
+			} else {
+				if ( isset( $request_info['gd_field_' . $name] ) ) {
+					$gd_post_info[$name] = ''; /* fix de-select for multiselect */
+				}
+			}
+		} else if( isset( $request_info[$name] ) ) {
+			$gd_post_info[$name] = $request_info[$name];
 		}
-		elseif(isset($request_info[$name]))
-		{ $gd_post_info[$name] = $request_info[$name]; }
 		
 		endforeach;
 		
 		if(isset($request_info['post_dummy']) && $request_info['post_dummy'] != '')
 		{ $gd_post_info['post_dummy'] = $request_info['post_dummy']; }
-		
 		
 		// Save post detail info in detail table
 		if(!empty($gd_post_info)){ 
@@ -328,6 +347,9 @@ function geodir_save_listing( $request_info = array(), $dummy = false ) {
 		// Set tags to the listing
 		if(isset($request_info['post_tags']) && !is_array($request_info['post_tags']) && !empty($request_info['post_tags']) ){
 			$post_tags = explode(",",$request_info['post_tags']);	
+		}elseif(isset($request_info['post_tags']) && is_array($request_info['post_tags'])){
+			if($dummy)
+				$post_tags = $request_info['post_tags'];
 		}else{
 			if($dummy)
 				$post_tags = array($request_info['post_title']);
@@ -682,9 +704,8 @@ function geodir_save_post_images($post_id = 0, $post_image = array(), $dummy = f
 			{
 				
 				/* --------- end ------- */
-				
 				$curr_img_url =  $post_image[$m];
-				//echo $curr_img_url; exit;
+				
 				$image_name_arr = explode('/',$curr_img_url);
 				
 				$count_image_name_arr = count($image_name_arr)-2;
@@ -693,36 +714,48 @@ function geodir_save_post_images($post_id = 0, $post_image = array(), $dummy = f
 				
 				$curr_img_dir = $image_name_arr[$count_image_name_arr];
 								
-				
-				$filename = end($image_name_arr);
-				if (strpos($filename,'?') !== false) {
-    			list($filename)=explode('?', $filename);
+				$filename = end( $image_name_arr );
+				if ( strpos( $filename, '?' ) !== false ) {
+    				list( $filename ) = explode( '?', $filename );
 				}
-				//echo $filename;exit;
-				$curr_img_dir = str_replace($uploads['baseurl'], "", $curr_img_url);
-				$curr_img_dir = str_replace($filename, "", $curr_img_dir);
+
+				$curr_img_dir = str_replace( $uploads['baseurl'], "", $curr_img_url );
+				$curr_img_dir = str_replace( $filename, "", $curr_img_dir );
 				
-				$img_name_arr = explode('.',$filename);
+				$img_name_arr = explode( '.', $filename );
 				
-				$arr_file_type = wp_check_filetype($filename);
+				$file_title = isset( $img_name_arr[0] ) ? $img_name_arr[0] : $filename;
+				if ( !empty( $img_name_arr ) && count( $img_name_arr ) > 2 ) {
+					$new_img_name_arr = $img_name_arr;
+					if ( isset( $new_img_name_arr[count( $img_name_arr )-1] ) ) {
+						unset( $new_img_name_arr[count( $img_name_arr )-1] );
+						$file_title = implode( '.', $new_img_name_arr );
+					}
+				}
+				$file_title = sanitize_file_name( $file_title );
+				$file_name = sanitize_file_name( $filename );
+				
+				$arr_file_type = wp_check_filetype( $filename );
+				
 				$uploaded_file_type = $arr_file_type['type'];
-				
+								
 				// Set an array containing a list of acceptable formats
 				$allowed_file_types = array('image/jpg','image/jpeg','image/gif','image/png');
 				
 				// If the uploaded file is the right format
 				if(in_array($uploaded_file_type, $allowed_file_types)) 
 				{
-					
-					if ( ! function_exists( 'wp_handle_upload' ) ) 
+					if ( ! function_exists( 'wp_handle_upload' ) ) {
 						require_once( ABSPATH . 'wp-admin/includes/file.php' );
+					}					
 					
-					
-					if(!is_dir($geodir_uploadpath))
+					if(!is_dir($geodir_uploadpath)) {
 						mkdir($geodir_uploadpath);
+					}
 					
 					$external_img = false;
-					if (strpos($curr_img_url,$uploads['baseurl']) !== false) {}
+					if (strpos($curr_img_url,$uploads['baseurl']) !== false) {
+					}
 					else{
 						$external_img = true;
 					}
@@ -736,35 +769,30 @@ function geodir_save_post_images($post_id = 0, $post_image = array(), $dummy = f
 							$uploaded_file = $uploaded;
 						}	
 						$external_img = false;
-					}else{
+					} else {
+						$new_name = $post_id . '_' . $file_name;
 						
-						$new_name = $post_id.'_'.$img_name_arr[0].'.'.end($img_name_arr);
-						
-						
-						if($curr_img_dir == $sub_dir)
-						{	
+						if ( $curr_img_dir == $sub_dir ) {	
 							$img_path = $geodir_uploadpath.'/'.$filename;
 							$img_url = $geodir_uploadurl.'/'.$filename;
-						}else
-						{
+						} else {
 							$img_path = $uploads_dir.'/temp_'.$current_user->data->ID.'/'.$filename;
 							$img_url = $uploads['url'].'/temp_'.$current_user->data->ID.'/'.$filename;
 						}	
-						
 						
 						$uploaded_file = '';
 						
 						if( file_exists($img_path) ){
 							$uploaded_file = copy($img_path, $geodir_uploadpath.'/'.$new_name);$file_path ='';
-						}elseif(file_exists($uploads['basedir'].$curr_img_dir.$filename)){$uploaded_file = true;$file_path = $curr_img_dir.'/'.$filename;}
-						
+						} else if (file_exists($uploads['basedir'].$curr_img_dir.$filename)) {
+							$uploaded_file = true;
+							$file_path = $curr_img_dir.'/'.$filename;
+						}
 						
 						if($curr_img_dir != $geodir_uploaddir && file_exists($img_path))	
 							unlink($img_path);
-						
-					}		
-							
-									
+					}
+										
 					if(!empty($uploaded_file)) 
 					{
 						if(!isset($file_path) || !$file_path){$file_path = $sub_dir.'/'.$new_name;}
@@ -780,7 +808,7 @@ function geodir_save_post_images($post_id = 0, $post_image = array(), $dummy = f
 						// Set up options array to add this file as an attachment
 						$attachment = array(); 
 						$attachment['post_id'] = $post_id;
-						$attachment['title'] = $img_name_arr[0];
+						$attachment['title'] = $file_title;
 						$attachment['content'] = '';
 						$attachment['file'] = $file_path;					
 						$attachment['mime_type'] = $uploaded_file_type;
@@ -825,7 +853,6 @@ function geodir_save_post_images($post_id = 0, $post_image = array(), $dummy = f
 			
 			
 		}
-		
 		
 		if(!empty($valid_file_ids)){
 			
@@ -951,13 +978,20 @@ function geodir_remove_attachments($postcurr_images = array()){
 if (!function_exists('geodir_get_featured_image')) {
 function geodir_get_featured_image( $post_id = '', $size = '' ,$no_image = false, $file = false ) {
 	
-	global $wpdb,$plugin_prefix;
+	global $wpdb,$plugin_prefix,$post;
 	
+	if(isset($post->ID) && isset($post->post_type) && $post->ID == $post_id){
+	$post_type = $post->post_type;	
+	}else{
 	$post_type = get_post_type( $post_id );
+	}
 	
 	$table = $plugin_prefix . $post_type . '_detail';
 	
-	if(!$file){$file =	$wpdb->get_var($wpdb->prepare("SELECT featured_image FROM ".$table." WHERE post_id = %d", array($post_id)));}
+	if(!$file){
+		if(isset($post->featured_image)){$file =	$post->featured_image;}
+		else{$file =	$wpdb->get_var($wpdb->prepare("SELECT featured_image FROM ".$table." WHERE post_id = %d", array($post_id)));}
+		}
 	
 	if ( $file != NULL && $file!= '' && ( ($uploads = wp_upload_dir()) && false === $uploads['error'] )){
 	   
@@ -984,7 +1018,7 @@ function geodir_get_featured_image( $post_id = '', $size = '' ,$no_image = false
 			$img_arr['title'] = '';
 	
 	   		
-	}elseif($post_images = geodir_get_images($post_id, $size, $no_image)){ 
+	}elseif($post_images = geodir_get_images($post_id, $size, $no_image,1)){ 
 		
 		foreach($post_images as $image){
 			return $image;
@@ -995,7 +1029,8 @@ function geodir_get_featured_image( $post_id = '', $size = '' ,$no_image = false
 		$img_arr = array();
 		
 		$default_img = '';
-		$default_cat = geodir_get_post_meta($post_id, 'default_category', true);
+		if(isset($post->default_category) && $post->default_category){$default_cat = $post->default_category;}
+		else{$default_cat = geodir_get_post_meta($post_id, 'default_category', true);}
 		
 		if($default_catimg = geodir_get_default_catimage($default_cat,$post_type))
 			$default_img = $default_catimg['src'];
@@ -1064,10 +1099,10 @@ function geodir_show_featured_image( $post_id = '', $size = 'thumbnail', $no_ima
  */ 
 
 if (!function_exists('geodir_get_images')) {
-function geodir_get_images($post_id = 0, $img_size='', $no_images =false, $add_featured = true){
+function geodir_get_images($post_id = 0, $img_size='', $no_images =false, $add_featured = true, $limit=''){
 	
 	global $wpdb;
-	
+	if($limit){$limit_q = " LIMIT $limit ";}else{$limit_q = '';}
 	$not_featured = '';
 	$sub_dir = '';
 	if(!$add_featured)
@@ -1075,7 +1110,7 @@ function geodir_get_images($post_id = 0, $img_size='', $no_images =false, $add_f
 	
 	$arrImages =	$wpdb->get_results(
 									$wpdb->prepare(
-										"SELECT * FROM ".GEODIR_ATTACHMENT_TABLE." WHERE mime_type like %s AND post_id = %d". $not_featured . " ORDER BY menu_order ASC, ID DESC ",
+										"SELECT * FROM ".GEODIR_ATTACHMENT_TABLE." WHERE mime_type like %s AND post_id = %d". $not_featured . " ORDER BY menu_order ASC, ID DESC $limit_q ",
 										array('%image%',$post_id)
 									)
 								);
@@ -1242,186 +1277,187 @@ function geodir_show_image( $request = array(), $size = 'thumbnail' ,$no_image =
 
 if (!function_exists('geodir_set_post_terms')) {
 function geodir_set_post_terms($post_id, $terms, $tt_ids, $taxonomy){
-	
 	global $wpdb,$plugin_prefix;
 
 	$post_type = get_post_type( $post_id );
 	
 	$table = $plugin_prefix . $post_type . '_detail';
 	
-	if( in_array($post_type,geodir_get_posttypes()) 
-		&& !wp_is_post_revision( $post_id ) 
-		&& !strstr($taxonomy,'tag') ):
+	if( in_array( $post_type, geodir_get_posttypes() ) && !wp_is_post_revision( $post_id ) ) {
 		
-		$srcharr = array('"','\\');
-		$replarr = array("&quot;",''); 
-		
-		$post_obj = get_post($post_id);
-		
-		$cat_ids = array('0');
-		if(is_array($tt_ids))
-			$cat_ids = $tt_ids;
-		
-		
-		if(!empty($cat_ids)){
-			$cat_ids_array = $cat_ids;
-			$cat_ids_length = count($cat_ids_array);
-			$cat_ids_format = array_fill(0, $cat_ids_length, '%d');
-			$format = implode(',', $cat_ids_format);	
+		if ( strstr( $taxonomy, 'tag' ) ) {
+			if ( isset( $_POST['action'] ) && $_POST['action'] == 'inline-save' ) {
+				geodir_save_post_meta( $post_id, 'post_tags', $terms );
+			}
+		} else {
+			$srcharr = array('"','\\');
+			$replarr = array("&quot;",''); 
 			
-			$cat_ids_array_del = $cat_ids_array;
-			$cat_ids_array_del[] = $post_id;
+			$post_obj = get_post($post_id);
 			
-			$wpdb->get_var(
-				$wpdb->prepare(
-					"DELETE from ".GEODIR_ICON_TABLE." WHERE cat_id NOT IN ($format) AND post_id = %d ",
-					$cat_ids_array_del
-				)
-			);
+			$cat_ids = array('0');
+			if(is_array($tt_ids))
+				$cat_ids = $tt_ids;
 			
 			
-			$post_term =	$wpdb->get_col(
-											$wpdb->prepare(
-												"SELECT term_id FROM ".$wpdb->term_taxonomy ." WHERE term_taxonomy_id IN($format) GROUP BY term_id",
-												$cat_ids_array
-											)
-										);
-		
-		}
-		
-		$post_marker_json = '';
-		
-		if(!empty($post_term)):
-		
-			foreach($post_term as $cat_id):
+			if(!empty($cat_ids)){
+				$cat_ids_array = $cat_ids;
+				$cat_ids_length = count($cat_ids_array);
+				$cat_ids_format = array_fill(0, $cat_ids_length, '%d');
+				$format = implode(',', $cat_ids_format);	
 				
-				$term_icon_url = get_tax_meta($cat_id,'ct_cat_icon', false, $post_type);
-				$term_icon = isset($term_icon_url['src']) ? $term_icon_url['src'] : '';
+				$cat_ids_array_del = $cat_ids_array;
+				$cat_ids_array_del[] = $post_id;
 				
-				$post_title = $post_obj->title;
-				$title = str_replace($srcharr,$replarr,$post_title);
+				$wpdb->get_var(
+					$wpdb->prepare(
+						"DELETE from ".GEODIR_ICON_TABLE." WHERE cat_id NOT IN ($format) AND post_id = %d ",
+						$cat_ids_array_del
+					)
+				);
 				
-				$lat = geodir_get_post_meta($post_id,'post_latitude',true);
-				$lng = geodir_get_post_meta($post_id,'post_longitude',true);
+				
+				$post_term =	$wpdb->get_col(
+												$wpdb->prepare(
+													"SELECT term_id FROM ".$wpdb->term_taxonomy ." WHERE term_taxonomy_id IN($format) GROUP BY term_id",
+													$cat_ids_array
+												)
+											);
+			
+			}
+			
+			$post_marker_json = '';
+			
+			if(!empty($post_term)):
+			
+				foreach($post_term as $cat_id):
+					
+					$term_icon_url = get_tax_meta($cat_id,'ct_cat_icon', false, $post_type);
+					$term_icon = isset($term_icon_url['src']) ? $term_icon_url['src'] : '';
+					
+					$post_title = $post_obj->title;
+					$title = str_replace($srcharr,$replarr,$post_title);
+					
+					$lat = geodir_get_post_meta($post_id,'post_latitude',true);
+					$lng = geodir_get_post_meta($post_id,'post_longitude',true);
+							
+					$timing = ' - '.date('D M j, Y', strtotime(geodir_get_post_meta($post_id,'st_date',true)));			
+					$timing .= ' - '.geodir_get_post_meta($post_id,'st_time',true);			
+					
+					$json ='{';
+					$json .= '"id":"'.$post_id.'",';
+					$json .= '"lat_pos": "'.$lat.'",';
+					$json .= '"long_pos": "'.$lng.'",';
+					$json .= '"marker_id":"'.$post_id.'_'.$cat_id.'",';
+					$json .= '"icon":"'.$term_icon.'",';
+					$json .= '"group":"catgroup'.$cat_id.'"';
+					$json .= '}';
+					
+					
+					if($cat_id == geodir_get_post_meta($post_id, 'default_category',true))
+						$post_marker_json  = $json; 
+					
+					
+					if($wpdb->get_var($wpdb->prepare("SELECT post_id from ".GEODIR_ICON_TABLE." WHERE post_id = %d AND cat_id = %d",array($post_id,$cat_id) )))
+					{
 						
-				$timing = ' - '.date('D M j, Y', strtotime(geodir_get_post_meta($post_id,'st_date',true)));			
-				$timing .= ' - '.geodir_get_post_meta($post_id,'st_time',true);			
-				
-				$json ='{';
-				$json .= '"id":"'.$post_id.'",';
-				$json .= '"lat_pos": "'.$lat.'",';
-				$json .= '"long_pos": "'.$lng.'",';
-				$json .= '"marker_id":"'.$post_id.'_'.$cat_id.'",';
-				$json .= '"icon":"'.$term_icon.'",';
-				$json .= '"group":"catgroup'.$cat_id.'"';
-				$json .= '}';
-				
-				
-				if($cat_id == geodir_get_post_meta($post_id, 'default_category',true))
-					$post_marker_json  = $json; 
-				
-				
-				if($wpdb->get_var($wpdb->prepare("SELECT post_id from ".GEODIR_ICON_TABLE." WHERE post_id = %d AND cat_id = %d",array($post_id,$cat_id) )))
-				{
-					
-					$json_query = $wpdb->prepare("UPDATE ".GEODIR_ICON_TABLE." SET 
-									post_title = %s, 
-									json = %s 
-									WHERE post_id = %d AND cat_id = %d ",
-									array($post_title,$json,$post_id,$cat_id));
-									
-				}else{
-					
-					$json_query = $wpdb->prepare("INSERT INTO ".GEODIR_ICON_TABLE." SET 
-									post_id = %d, 
-									post_title = %s, 
-									cat_id = %d,
-									json = %s",
-									array($post_id,$post_title,$cat_id,$json));
-									
-				}
-				
-				$wpdb->query($json_query);
-				
-			endforeach;			
-		
-		endif;
-		
-		if(!empty($post_term) && is_array($post_term))
-		{
-			$categories = implode(',', $post_term);
-			
-			if($categories != '' && $categories != 0) $categories = ','.$categories.',';
-			
-			if(empty($post_marker_json))
-			 	$post_marker_json = isset($json) ? $json : '';
-			
-			if($wpdb->get_var($wpdb->prepare("SELECT post_id from ".$table." where post_id = %d",array($post_id))))
-			{
-
-					$wpdb->query(
-						$wpdb->prepare(
-							"UPDATE ".$table." SET 
-							".$taxonomy." = %s, 
-							marker_json = %s
-							where post_id = %d",
-							array($categories,$post_marker_json,$post_id)
-						)
-					);
-					
-					if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'inline-save'){
-					
-						$categories = trim($categories,',');
+						$json_query = $wpdb->prepare("UPDATE ".GEODIR_ICON_TABLE." SET 
+										post_title = %s, 
+										json = %s 
+										WHERE post_id = %d AND cat_id = %d ",
+										array($post_title,$json,$post_id,$cat_id));
+										
+					}else{
 						
-						if($categories){
-							
-							$categories = explode(',', $categories);
-							
-							$default_category = geodir_get_post_meta($post_id,'default_category',true);
-							
-							if(!in_array($default_category, $categories)){
-								
-								$wpdb->query(
-									$wpdb->prepare(
-										"UPDATE ".$table." SET 
-										default_category = %s
-										where post_id = %d",
-										array($categories[0],$post_id)
-									)
-								);
-								
-								$default_category = $categories[0];
-								
-							}
-							
-							if($default_category == '')
-								$default_category = $categories[0];
-							
-							geodir_set_postcat_structure($post_id,$taxonomy,$default_category,'');
-		
-						}
-
+						$json_query = $wpdb->prepare("INSERT INTO ".GEODIR_ICON_TABLE." SET 
+										post_id = %d, 
+										post_title = %s, 
+										cat_id = %d,
+										json = %s",
+										array($post_id,$post_title,$cat_id,$json));
+										
 					}
 					
-								
-			}else
-			{
+					$wpdb->query($json_query);
 					
-					$wpdb->query(
-						$wpdb->prepare(
-							"INSERT INTO ".$table." SET 
-							post_id = %d, 
-							".$taxonomy." = %s,
-							marker_json = %s ",
+				endforeach;			
+			
+			endif;
+			
+			if(!empty($post_term) && is_array($post_term))
+			{
+				$categories = implode(',', $post_term);
+				
+				if($categories != '' && $categories != 0) $categories = ','.$categories.',';
+				
+				if(empty($post_marker_json))
+					$post_marker_json = isset($json) ? $json : '';
+				
+				if($wpdb->get_var($wpdb->prepare("SELECT post_id from ".$table." where post_id = %d",array($post_id))))
+				{
+	
+						$wpdb->query(
+							$wpdb->prepare(
+								"UPDATE ".$table." SET 
+								".$taxonomy." = %s, 
+								marker_json = %s
+								where post_id = %d",
+								array($categories,$post_marker_json,$post_id)
+							)
+						);
+						
+						if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'inline-save'){
+						
+							$categories = trim($categories,',');
 							
-							array($post_id,$categories,$post_marker_json)
-						)
-					);
+							if($categories){
+								
+								$categories = explode(',', $categories);
+								
+								$default_category = geodir_get_post_meta($post_id,'default_category',true);
+								
+								if(!in_array($default_category, $categories)){
+									
+									$wpdb->query(
+										$wpdb->prepare(
+											"UPDATE ".$table." SET 
+											default_category = %s
+											where post_id = %d",
+											array($categories[0],$post_id)
+										)
+									);
+									
+									$default_category = $categories[0];
+									
+								}
+								
+								if($default_category == '')
+									$default_category = $categories[0];
+								
+								geodir_set_postcat_structure($post_id,$taxonomy,$default_category,'');
+			
+							}
+	
+						}
+						
+									
+				}else
+				{
+						
+						$wpdb->query(
+							$wpdb->prepare(
+								"INSERT INTO ".$table." SET 
+								post_id = %d, 
+								".$taxonomy." = %s,
+								marker_json = %s ",
+								
+								array($post_id,$categories,$post_marker_json)
+							)
+						);
+				}
 			}
 		}
-		
-	endif;
-
+	}
 }
 }
 
@@ -2230,19 +2266,52 @@ function geodir_get_custom_fields_type($listing_type = ''){
 	return apply_filters('geodir_get_custom_fields_type', $fields_info, $listing_type);
 }
 
+/* 
+ * Called when post updated
+ */
+function geodir_function_post_updated($post_ID, $post_after, $post_before) {
+	$post_type = get_post_type( $post_ID );
+	
+	if ($post_type != '' && in_array($post_type, geodir_get_posttypes())) {
+		// send notification to client when post moves from draft to publish
+		if (!empty($post_after->post_status) && $post_after->post_status == 'publish' && !empty($post_before->post_status) && ($post_before->post_status == 'draft' || $post_before->post_status == 'auto-draft')) {
+			$post_author_id = !empty($post_after->post_author) ? $post_after->post_author : NULL;
+			$post_author_data = get_userdata($post_author_id);
+			
+			$to_name = '';
+			if (!empty($post_author_data)) {
+				if (!empty($post_author_data->display_name)) {
+					$to_name = $post_author_data->display_name;
+				} else if ($post_author_data->user_nicename) {
+					$to_name = $post_author_data->user_nicename;
+				} else {
+					$to_name = $post_author_data->user_login;
+				}
+			}
+			
+			$from_email = geodir_get_site_email_id();
+			$from_name = get_site_emailName();
+			$to_email = geodir_get_post_meta($post_ID, 'geodir_email', true);
+			
+			if (!is_email($to_email) && !empty($post_author_data->user_email)) {
+				$to_email = $post_author_data->user_email;
+			}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+			$message_type = 'listing_published';
+			
+			if (get_option('geodir_post_published_email_subject')=='') {
+				update_option('geodir_post_published_email_subject', __('Listing Published Successfully', GEODIRECTORY_TEXTDOMAIN) );
+			}
+			
+			if (get_option('geodir_post_published_email_content')=='') {
+				update_option('geodir_post_published_email_content', __("<p>Dear [#client_name#],</p><p>Your listing [#listing_link#] has been published. This email is just for your information.</p><p>[#listing_link#]</p><br><p>Thank you for your contribution.</p><p>[#site_name#]</p>", GEODIRECTORY_TEXTDOMAIN));
+			}
+			
+			do_action('geodir_before_listing_published_email', $post_after, $post_before);
+			if (is_email($to_email)) {
+				geodir_sendEmail($from_email, $from_name, $to_email, $to_name, '', '', '', $message_type, $post_ID);
+			}
+			do_action('geodir_after_listing_published_email', $post_after, $post_before);
+		}
+	}
+}

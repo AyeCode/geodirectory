@@ -55,7 +55,15 @@ function geodir_register_post_types() {
 		if($post_type=='gd_place' && get_option('geodir_disable_place_tax')){continue;}
 			if(!empty($args['rewrite']['slug'])){$args['rewrite']['slug'] = _x( $args['rewrite']['slug'], 'URL slug', GEODIRECTORY_TEXTDOMAIN );}
 			$args = stripslashes_deep(  $args);
+			
+			if(!empty($args['labels'])){
+				foreach($args['labels'] as $key => $val){
+				$args['labels'][$key] = __($val, GEODIRECTORY_TEXTDOMAIN );// allow translation
+				}
+			}
+			
 			$args = apply_filters('geodir_post_type_args' ,    $args , $post_type ) ;
+			
 			$post_type = register_post_type( $post_type, $args );
 			
 		endforeach;

@@ -7,32 +7,27 @@ class geodir_recent_reviews_widget extends WP_Widget {
 		$this->WP_Widget('geodir_recent_reviews',  __('GD > Recent Reviews',GEODIRECTORY_TEXTDOMAIN), $widget_ops);
 	}
 	
-	function widget($args, $instance) {
-	// prints the widget
-		extract($args, EXTR_SKIP);
-		$title = empty($instance['title']) ? '' : apply_filters('widget_title', __($instance['title'],GEODIRECTORY_TEXTDOMAIN));
-		$count = empty($instance['count']) ? '5' : apply_filters('widget_count', $instance['count']);
- 		 
-		 
-		 $comments_li = geodir_get_recent_reviews(30, $count, 100, false);
-		 if($comments_li ){
-		 echo $before_widget;
-		 ?>				
-		 <div class="widget geodir_recent_reviews_section">
-        
-        <?php if($title){ echo $before_title.$title.$after_title;} ?>
-       
-       	<ul class="geodir_recent_reviews">
-		   <?php
-			echo $comments_li;
-		  
-		?>
-       </ul>
-            
-            </div> 
-          
-	<?php  echo $after_widget; }
+	function widget( $args, $instance ) {
+		// prints the widget
+		extract($args, EXTR_SKIP );
+		
+		$title = empty( $instance['title'] ) ? '' : apply_filters( 'widget_title', __( $instance['title'], GEODIRECTORY_TEXTDOMAIN ) );
+		$count = empty( $instance['count'] ) ? '5' : apply_filters( 'widget_count', $instance['count'] );
+		
+		$comments_li = geodir_get_recent_reviews( 30, $count, 100, false );
+		
+		if( $comments_li ) {
+			echo $before_widget;
+			?>
+			<div class="widget geodir_recent_reviews_section">
+			<?php if( $title ) { echo $before_title . $title . $after_title; } ?>
+			<ul class="geodir_recent_reviews"><?php echo $comments_li; ?></ul>
+			</div>
+			<?php 
+			echo $after_widget;
+		}
 	}
+	
 	function update($new_instance, $old_instance) {
 	//save the widget
 		$instance = $old_instance;		

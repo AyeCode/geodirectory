@@ -157,7 +157,7 @@ function geodir_add_nav_menu_items(  ) {
 												
 													$items .=	'<li class="menu-item '.$menu_class.'">
 														<a href="'. geodir_get_addlisting_link( $post_type ) .'">
-															'.__('Add',GEODIRECTORY_TEXTDOMAIN).' '.$args->labels->singular_name.'
+															'.__('Add',GEODIRECTORY_TEXTDOMAIN).' ' . __( $args->labels->singular_name, GEODIRECTORY_TEXTDOMAIN ) . '
 														</a>
 													</li>';
 												}
@@ -1010,13 +1010,37 @@ function geodir_register_defaults() {
 } 
 
 
-
-function geodir_listing_permalink_structure($post_link, $post, $leavename, $sample)
+$comment_post_cache = array();
+$gd_permalink_cache = array();
+function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $sample)
 {
 	//echo $post_link."<br />" ;
-	global $wpdb, $wp_query ,$plugin_prefix;
+
 	
-	if(in_array( $post->post_type, geodir_get_posttypes() ) ){
+	global $wpdb, $wp_query ,$plugin_prefix,$post,$comment_post_cache,$gd_permalink_cache;
+	if(isset($post_obj->ID) && isset($post->ID) && $post_obj->ID==$post->ID){}
+	elseif(isset($post_obj->post_status) && $post_obj->post_status=='auto-draft'){return $post_link;}
+	else{$orig_post = $post;$post = $post_obj;}
+
+		if(in_array( $post->post_type, geodir_get_posttypes() ) ){
+		
+		if(isset($comment_post_cache[$post->ID])){$post = $comment_post_cache[$post->ID];}
+		if(isset($gd_permalink_cache[$post->ID]) && $gd_permalink_cache[$post->ID]){if(isset($orig_post)){$post = $orig_post;} return $gd_permalink_cache[$post->ID];}
+		
+		if(!isset($post->post_locations)){
+			$post_type= $post->post_type;
+			$ID = $post->ID;
+				$post2 = $wpdb->get_row(
+						$wpdb->prepare(
+							"SELECT * from ".$plugin_prefix.$post->post_type."_detail WHERE post_id = %d ",
+							array($post->ID)
+						)
+					);
+				
+				$post = (object) array_merge((array) $post, (array) $post2);
+				
+				$comment_post_cache[$post->ID] = $post;
+				}
 		
 		if ( false !== strpos( $post_link, '%gd_taxonomy%' ) ) 
 		{
@@ -1024,6 +1048,8 @@ function geodir_listing_permalink_structure($post_link, $post, $leavename, $samp
 			if(get_option('geodir_add_location_url'))
 			{
 				$location_request = '';
+				
+				
 				if(!empty($post->post_locations))
 				{
 					$geodir_arr_locations = explode(',' , $post->post_locations);
@@ -1051,6 +1077,7 @@ function geodir_listing_permalink_structure($post_link, $post, $leavename, $samp
 				}
 				else
 				{
+				
 					$post_location_sql = $wpdb->get_results(
 						$wpdb->prepare(
 							"SELECT post_locations from ".$plugin_prefix.$post->post_type."_detail WHERE post_id = %d ",
@@ -1109,9 +1136,12 @@ function geodir_listing_permalink_structure($post_link, $post, $leavename, $samp
 					$post_terms = $post->default_category;
 				}
 				else
-				{
+				{	$post_terms='';
+				
+					if(isset($post->$taxonomies)){
 					$post_terms = explode(",", trim($post->$taxonomies,","));
 					$post_terms = $post_terms[0];
+					}
 					
 					if(!$post_terms)
 						$post_terms = geodir_get_post_meta($post->ID, 'default_category',true);
@@ -1158,7 +1188,10 @@ function geodir_listing_permalink_structure($post_link, $post, $leavename, $samp
 				$post_link = str_replace( '/%gd_taxonomy%', $request_term.$detailurl_separator, $post_link );
 			//echo $post_link ;
 		}
+		// temp cache the permalink
+		$gd_permalink_cache[$post->ID]=$post_link;
 	}	
+	if(isset($orig_post)){$post = $orig_post;}
 	//echo $post_link ;
     return $post_link;
 
@@ -1227,7 +1260,7 @@ function geodir_posttype_link($link, $post_type){
 					
 					$location_terms = implode("/",$location_terms);
 					$location_terms = rtrim($location_terms,'/');
-					return $link . urldecode($location_terms);  		
+					return $link . urldecode($location_terms) . '/';  		
 				}else{
 					return geodir_getlink($link,$location_terms);
 				}
@@ -1245,6 +1278,7 @@ function geodir_posttype_link($link, $post_type){
 function get_post_type_singular_label($post_type, $echo=false)
 {
 	$obj_post_type = get_post_type_object($post_type);
+	if(!is_object($obj_post_type)){return;}
 	if($echo)
 		echo $obj_post_type->labels->singular_name;
 	else

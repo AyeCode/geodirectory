@@ -57,6 +57,7 @@ function geodir_get_location($id = '')
 function geodir_get_country_dl($post_country = '',$prefix='')
 {
 	global $wpdb;
+	
 	$countries =	$wpdb->get_col("SELECT Country FROM ".GEODIR_COUNTRIES_TABLE);
 	$countries_ISO2 =	$wpdb->get_results("SELECT Country,ISO2 FROM ".GEODIR_COUNTRIES_TABLE);
 	
@@ -213,6 +214,7 @@ function geodir_random_float($min = 0, $max = 1) {
 function geodir_get_address_by_lat_lan($lat,$lng)
 {
 	$url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='.trim($lat).','.trim($lng).'&sensor=true';
+	
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -237,7 +239,9 @@ function geodir_get_current_location_terms($location_array_from='session')
 	global $wp ;
 	$location_array=array();
 	if($location_array_from=='session')
-	{
+	{	
+		if(isset($_SESSION['gd_country']) && $_SESSION['gd_country']=='me'){return $location_array;}
+		
 		$country =  (isset($_SESSION['gd_country']) && $_SESSION['gd_country']!='') ? $_SESSION['gd_country'] : '';  
 		if( $country != '' )
 			$location_array['gd_country'] = urldecode($country);	
@@ -251,7 +255,9 @@ function geodir_get_current_location_terms($location_array_from='session')
 			$location_array['gd_city'] = urldecode($city);
 	}
 	else
-	{
+	{	
+		if(isset($wp->query_vars['gd_country']) && $wp->query_vars['gd_country']=='me'){return $location_array;}
+		
 		$country = (isset($wp->query_vars['gd_country']) && $wp->query_vars['gd_country'] !='') ? $wp->query_vars['gd_country'] : '' ;
 			
 		$region = (isset($wp->query_vars['gd_region']) && $wp->query_vars['gd_region'] !='') ? $wp->query_vars['gd_region'] : '' ;
