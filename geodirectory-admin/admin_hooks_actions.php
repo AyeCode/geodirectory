@@ -560,7 +560,58 @@ function geodir_admin_ajax_handler()
 
 function geodir_diagnose_multisite_table($filter_arr,$table,$tabel_name,$fix){
   global $wpdb;
-  if($wpdb->query("SHOW TABLES LIKE '$table'")>0 && $wpdb->query("SHOW TABLES LIKE '".$wpdb->prefix."$table'")>0){
+  //$filter_arr['output_str'] .='###'.$table.'###';
+  if($wpdb->query("SHOW TABLES LIKE '".$table."_ms_bak2'")>0 && $wpdb->query("SHOW TABLES LIKE '".$table."_ms_bak'")>0){
+	$filter_arr['output_str'] .= "<li>".__('ERROR: You didnt follow instructions! Now you will need to contact support to manually fix things.' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;$filter_arr['is_error_during_diagnose']=true;
+ 
+  }
+  elseif($wpdb->query("SHOW TABLES LIKE '".$table."_ms_bak'")>0 && $wpdb->query("SHOW TABLES LIKE '".$wpdb->prefix."$table'")>0){
+  $filter_arr['output_str'] .= "<li>".sprintf( __('ERROR: %s_ms_bak table found' , GEODIRECTORY_TEXTDOMAIN), $tabel_name )."</li>" ;$filter_arr['is_error_during_diagnose']=true;
+  $filter_arr['output_str'] .= "<li>".__('IMPORTANT: This can be caused by out of date core or addons, please update core + addons before trying the fix OR YOU WILL HAVE A BAD TIME!' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;$filter_arr['is_error_during_diagnose']=true;
+	
+	if($fix){
+		$ms_bak_count = $wpdb->get_var("SELECT COUNT(*) FROM ".$table."_ms_bak");// get backup table count
+		$new_table_count = $wpdb->get_var("SELECT COUNT(*) FROM ".$wpdb->prefix."$table");// get new table count
+		
+		if($ms_bak_count==$new_table_count){// if they are the same count rename to bak2
+			//$filter_arr['output_str'] .= "<li>".sprintf( __('-->PROBLEM: %s table count is the same as new table, contact support' , GEODIRECTORY_TEXTDOMAIN), $table )."</li>" ;
+			
+			$wpdb->query("RENAME TABLE ".$table."_ms_bak TO ".$table."_ms_bak2");// rename bak table to new table
+			
+			if($wpdb->query("SHOW TABLES LIKE '".$table."_ms_bak2'") && $wpdb->query("SHOW TABLES LIKE '".$table."_ms_bak'")==0){
+			$filter_arr['output_str'] .= "<li>".__('-->FIXED: Renamed and backed up the tables' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;
+			}else{
+			$filter_arr['output_str'] .= "<li>".__('-->PROBLEM: Failed to rename tables, please contact support.' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;	
+			}
+			
+		}elseif($ms_bak_count>$new_table_count){//if backup is greater then restore it
+		
+			$wpdb->query("RENAME TABLE ".$wpdb->prefix."$table TO ".$table."_ms_bak2");// rename new table to bak2
+			$wpdb->query("RENAME TABLE ".$table."_ms_bak TO ".$wpdb->prefix."$table");// rename bak table to new table
+			
+			if($wpdb->query("SHOW TABLES LIKE '".$table."_ms_bak2'") && $wpdb->query("SHOW TABLES LIKE '".$wpdb->prefix."$table'") && $wpdb->query("SHOW TABLES LIKE '$table'")==0){
+			$filter_arr['output_str'] .= "<li>".sprintf( __('-->FIXED: restored largest table %s' , GEODIRECTORY_TEXTDOMAIN), $table )."</li>" ;
+			}else{
+			$filter_arr['output_str'] .= "<li>".__('-->PROBLEM: Failed to rename tables, please contact support.' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;	
+			}
+			
+		}elseif($new_table_count>$ms_bak_count){// we cant do much so rename the table to stop errors
+			
+			$wpdb->query("RENAME TABLE ".$table."_ms_bak TO ".$table."_ms_bak2");// rename ms_bak table to ms_bak2
+			
+			if($wpdb->query("SHOW TABLES LIKE '".$table."_ms_bak'")==0){
+			$filter_arr['output_str'] .= "<li>".sprintf( __('-->FIXED: table %s_ms_bak renamed and backedup' , GEODIRECTORY_TEXTDOMAIN), $table )."</li>" ;
+			}else{
+			$filter_arr['output_str'] .= "<li>".__('-->PROBLEM: Failed to rename tables, please contact support.' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;	
+			}
+			
+		}
+		
+	}
+  
+  
+  }
+  elseif($wpdb->query("SHOW TABLES LIKE '$table'")>0 && $wpdb->query("SHOW TABLES LIKE '".$wpdb->prefix."$table'")>0){
   $filter_arr['output_str'] .= "<li>".sprintf( __('ERROR: Two %s tables found' , GEODIRECTORY_TEXTDOMAIN), $tabel_name )."</li>" ;$filter_arr['is_error_during_diagnose']=true;
   
 	  if($fix){

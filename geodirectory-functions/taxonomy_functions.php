@@ -1136,9 +1136,12 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
 					$post_terms = $post->default_category;
 				}
 				else
-				{
+				{	$post_terms='';
+				
+					if(isset($post->$taxonomies)){
 					$post_terms = explode(",", trim($post->$taxonomies,","));
 					$post_terms = $post_terms[0];
+					}
 					
 					if(!$post_terms)
 						$post_terms = geodir_get_post_meta($post->ID, 'default_category',true);
