@@ -51,7 +51,7 @@ function geodir_max_excerpt($charlength) {
 		return;
 	}
 	$excerpt = get_the_excerpt();
-	return;
+	//return;
 	$charlength++;
 	$excerpt_more = function_exists('geodirf_excerpt_more') ? geodirf_excerpt_more('') : geodir_excerpt_more('');
 	if ( mb_strlen( $excerpt ) > $charlength ) {
@@ -376,7 +376,7 @@ function geodir_related_posts_display($request){
 		$before_title = (isset($request['before_title']) && !empty($request['before_title'])) ? $request['before_title'] : '';
 		$after_title = (isset($request['after_title']) && !empty($request['after_title'])) ? $request['after_title'] : '';
 		
-		$title =( isset($request['title']) && !empty($request['title'])) ? $request['title'] : __('Related Listing',GEODIRECTORY_TEXTDOMAIN);
+		$title =( isset($request['title']) && !empty($request['title'])) ? $request['title'] : __('Related Listings',GEODIRECTORY_TEXTDOMAIN);
 		$post_number =(isset($request['post_number']) && !empty($request['post_number'])) ? $request['post_number'] : '5' ;
 		$relate_to = (isset($request['relate_to']) && !empty($request['relate_to'])) ? $request['relate_to'] : 'category';
 		$layout = (isset($request['layout']) && !empty($request['layout'])) ? $request['layout'] : 'gridview_onehalf';
@@ -507,7 +507,8 @@ function geodir_related_posts_display($request){
 									$query_args['tax_query'] = array( $tax_query );
 								
 								
-								global $gridview_columns;
+								global $gridview_columns,$post;
+							$origi_post = $post;
 							
 								query_posts( $query_args );
 								
@@ -527,6 +528,7 @@ function geodir_related_posts_display($request){
 								include( $template );
 							  
 								wp_reset_query();
+								$post = $origi_post;
 							 ?>
 						   
 						</div>						
@@ -1027,7 +1029,7 @@ function geodir_show_detail_page_tabs(){
 						do_action('geodir_after_tab_list') ; 
 					 ?>
                     </dl>
-                   <ul class="geodir-tabs-content entry-content" style="z-index:-999; position:relative;">
+                   <ul class="geodir-tabs-content entry-content" style="position:relative;">
                    		<?php 
 						foreach($arr_detail_page_tabs as $detail_page_tab)
 						{
@@ -1039,6 +1041,21 @@ function geodir_show_detail_page_tabs(){
 						 do_action('geodir_add_tab_content') ; ?>
                     </ul> <!--gd-tabs-content ul end-->
                </div>
+<script>
+if (window.location.hash && jQuery(window.location.hash+'Tab').length) {
+	hashVal = window.location.hash;
+}else{
+	hashVal = jQuery('dl.geodir-tab-head dd.geodir-tab-active').find('a').attr('data-tab');
+}
+jQuery('dl.geodir-tab-head dd').each(function () {
+		//Get all tabs
+		var tabs = jQuery(this).children('dd');
+		var tab = '';
+		tab = jQuery(this).find('a').attr('data-tab');
+		if(hashVal!=tab){jQuery(tab+'Tab').hide();}
+		
+});
+</script>
 	
 	<?php
 

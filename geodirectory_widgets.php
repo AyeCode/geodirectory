@@ -385,7 +385,7 @@ function register_geodir_widgets() {
 			
 				<a href="http://twitter.com/share" class="twitter-share-button"><?php _e('Tweet',GEODIRECTORY_TEXTDOMAIN);?></a>
 				
-				<script type="text/javascript" src="://platform.twitter.com/widgets.js"></script> 
+				<script type="text/javascript" src="//platform.twitter.com/widgets.js"></script> 
 			
 			<?php //} ?>
 			

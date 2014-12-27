@@ -552,6 +552,13 @@ function geodir_diagnostic_tools_setting_page()
                             </td>
                         </tr>
                         
+                        <tr> 
+                            <td><?php _e('Clear all GD version numbers',GEODIRECTORY_TEXTDOMAIN);?></td>
+                            <td><small><?php _e('This tool will clear all GD version numbers so any upgrade functions will run again.',GEODIRECTORY_TEXTDOMAIN);?></small></td>
+                            <td><input type="button" value="<?php _e('Run',GEODIRECTORY_TEXTDOMAIN);?>" class="button-primary geodir_diagnosis_button" data-diagnose="version_clear" />
+                            </td>
+                        </tr>
+                        
                           
                         
                         <?php do_action('geodir_diagnostic_tool');?>

@@ -51,14 +51,21 @@ add_action('geodir_before_admin_panel', 'geodir_before_admin_panel') ; // this f
 //add_action('geodir_before_admin_panel', 'geodir_autoinstall_admin_header');
 
 /* Admin scripts loader */
+function geodir_conditional_admin_script_load(){
+global $pagenow;
+	if((isset($_REQUEST['page']) && $_REQUEST['page'] =='geodirectory' ) || ($pagenow == 'post.php' || $pagenow == 'post-new.php' || $pagenow == 'edit.php' || $pagenow == 'edit-tags.php' || $pagenow == 'edit-comments.php' || $pagenow == 'comment.php') )
+	{
+		add_action( 'admin_enqueue_scripts', 'geodir_admin_scripts' );
+		add_action( 'admin_enqueue_scripts', 'geodir_admin_styles' );
+		
+	}
 
-
-if((isset($_REQUEST['page']) && $_REQUEST['page'] =='geodirectory' ) || ($pagenow == 'post.php' || $pagenow == 'post-new.php' || $pagenow == 'edit.php' || $pagenow == 'edit-tags.php' || $pagenow == 'edit-comments.php' || $pagenow == 'comment.php') )
-{
-	add_action( 'admin_enqueue_scripts', 'geodir_admin_scripts' );
-	add_action( 'admin_enqueue_scripts', 'geodir_admin_styles' );
-	
 }
+
+add_action(  'init', 'geodir_conditional_admin_script_load');
+
+
+
 
 
 
@@ -721,6 +728,64 @@ if($is_error_during_diagnose)
 	{
 		$info_div_class =  "geodir_problem_info" ;
 		$fix_button_txt = "<input type='button' value='".__('Fix' , GEODIRECTORY_TEXTDOMAIN)."' class='button-primary geodir_fix_diagnostic_issue' data-diagnostic-issue='ratings' />";
+	}
+	else
+	{
+		$info_div_class =  "geodir_noproblem_info" ;
+		$fix_button_txt = '';
+	}
+	echo "<ul class='$info_div_class'>" ;
+	echo $output_str ;
+	echo  $fix_button_txt;
+	echo "</ul>" ;
+	
+}
+
+function geodir_diagnose_version_clear()
+{	global $wpdb,$plugin_prefix;
+	$fix =  isset($_POST['fix']) ? true : false;
+	
+	//if($fix){echo 'true';}else{echo 'false';}
+	$is_error_during_diagnose = false;
+	$output_str = '';
+	
+	
+	$gd_arr = array('GeoDirectory' => 'geodirectory_db_version',
+					'Payment Manager' => 'geodir_payments_db_version',
+					'GeoDirectory Framework' => 'gdf_db_version',
+					'Advanced Search' => 'geodiradvancesearch_db_version',
+					'Review Rating Manager' => 'geodir_reviewratings_db_version',
+					'Claim Manager' => 'geodirclaim_db_version',
+					'CPT Manager' => 'geodir_custom_posts_db_version',
+					'Location Manager' => 'geodirlocation_db_version',
+					'Payment Manager' => 'geodir_payments_db_version',
+					'Events Manager' => 'geodirevents_db_version',
+					);
+	
+	$ver_arr = apply_filters('geodir_db_version_name',$gd_arr);
+	
+	if(!empty($ver_arr))
+		{
+			foreach($ver_arr as $key=>$val)
+			{
+				if(delete_option( $val )){
+					$output_str .= "<li>".$key.__(' Version: Deleted' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;	
+				}else{
+					$output_str .= "<li>".$key.__(' Version: Not Found' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;	
+				}
+
+			}
+			
+			if($output_str){
+				$output_str .= "<li><strong>".__(' Upgrade/install scripts will run on next page reload.' , GEODIRECTORY_TEXTDOMAIN)."</strong></li>" ;
+			}
+			
+		}
+
+if($is_error_during_diagnose)
+	{
+		$info_div_class =  "geodir_problem_info" ;
+		$fix_button_txt = "";
 	}
 	else
 	{
