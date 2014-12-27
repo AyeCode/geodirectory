@@ -51,14 +51,21 @@ add_action('geodir_before_admin_panel', 'geodir_before_admin_panel') ; // this f
 //add_action('geodir_before_admin_panel', 'geodir_autoinstall_admin_header');
 
 /* Admin scripts loader */
+function geodir_conditional_admin_script_load(){
+global $pagenow;
+	if((isset($_REQUEST['page']) && $_REQUEST['page'] =='geodirectory' ) || ($pagenow == 'post.php' || $pagenow == 'post-new.php' || $pagenow == 'edit.php' || $pagenow == 'edit-tags.php' || $pagenow == 'edit-comments.php' || $pagenow == 'comment.php') )
+	{
+		add_action( 'admin_enqueue_scripts', 'geodir_admin_scripts' );
+		add_action( 'admin_enqueue_scripts', 'geodir_admin_styles' );
+		
+	}
 
-
-if((isset($_REQUEST['page']) && $_REQUEST['page'] =='geodirectory' ) || ($pagenow == 'post.php' || $pagenow == 'post-new.php' || $pagenow == 'edit.php' || $pagenow == 'edit-tags.php' || $pagenow == 'edit-comments.php' || $pagenow == 'comment.php') )
-{
-	add_action( 'admin_enqueue_scripts', 'geodir_admin_scripts' );
-	add_action( 'admin_enqueue_scripts', 'geodir_admin_styles' );
-	
 }
+
+add_action(  'init', 'geodir_conditional_admin_script_load');
+
+
+
 
 
 
@@ -85,7 +92,7 @@ function create_default_admin_main_nav()
 {
 	add_filter('geodir_settings_tabs_array' , 'geodir_default_admin_main_tabs' ,1 ) ;
 	add_filter('geodir_settings_tabs_array','places_custom_fields_tab',2); 
-	//add_filter('geodir_settings_tabs_array','geodir_tools_setting_tab',99); 
+	add_filter('geodir_settings_tabs_array','geodir_tools_setting_tab',99); 
 	add_filter('geodir_settings_tabs_array','geodir_extend_geodirectory_setting_tab',100); 
 	//add_filter('geodir_settings_tabs_array', 'geodir_hide_set_location_default',3);
 	
@@ -374,7 +381,7 @@ function geodir_custom_available_fields(){
 		<li><a id="gt-radio" class="gt-draggable-form-items gt-radio" href="javascript:void(0);"><b></b><?php _e('Radio', GEODIRECTORY_TEXTDOMAIN);?></a></li>
 		<li><a id="gt-email" class="gt-draggable-form-items gt-email" href="javascript:void(0);"><b></b><?php _e('Email' , GEODIRECTORY_TEXTDOMAIN);?></a></li>
 		<li><a id="gt-select" class="gt-draggable-form-items gt-select" href="javascript:void(0);"><b></b><?php _e('Select' , GEODIRECTORY_TEXTDOMAIN);?></a></li>
-		<li><a id="gt-taxonomy" class="gt-draggable-form-items gt-select" href="javascript:void(0);"><b></b><?php _e('Taxonomy' , GEODIRECTORY_TEXTDOMAIN);?></a></li>	
+		<!--<li><a id="gt-taxonomy" class="gt-draggable-form-items gt-select" href="javascript:void(0);"><b></b><?php _e('Taxonomy' , GEODIRECTORY_TEXTDOMAIN);?></a></li>-->	
 		<li><a id="gt-multiselect" class="gt-draggable-form-items gt-multiselect" href="javascript:void(0);"><b></b><?php _e('Multi Select' , GEODIRECTORY_TEXTDOMAIN);?></a></li>
 		 	<li><a id="gt-url" class="gt-draggable-form-items gt-url" href="javascript:void(0);"><b></b><?php _e('URL' , GEODIRECTORY_TEXTDOMAIN);?></a></li>
 		<li><a id="gt-html" class="gt-draggable-form-items gt-html" href="javascript:void(0);"><b></b><?php _e('HTML' , GEODIRECTORY_TEXTDOMAIN);?></a></li>
@@ -444,7 +451,7 @@ function geodir_cf_panel_available_fields_head($heading , $sub_tab , $listing_ty
 	switch($sub_tab)
 	{
 		case 'custom_fields':
-			$heading =	sprintf( __('Add new %s form field' , GEODIRECTORY_TEXTDOMAIN),  get_post_type_singular_label($listing_type));;
+			$heading =	sprintf( __('Add new %s form field' , GEODIRECTORY_TEXTDOMAIN),  get_post_type_singular_label($listing_type));
 		break;
 		
 		case 'sorting_options':
@@ -480,7 +487,7 @@ function geodir_cf_panel_selected_fields_head($heading , $sub_tab , $listing_typ
 	switch($sub_tab)
 	{
 		case 'custom_fields':
-			$heading =	sprintf( __('List of fields those will appear on add new %s listing form' , GEODIRECTORY_TEXTDOMAIN),  get_post_type_singular_label($listing_type));;
+			$heading =	sprintf( __('List of fields those will appear on add new %s listing form' , GEODIRECTORY_TEXTDOMAIN),  get_post_type_singular_label($listing_type));
 		break;
 		
 		case 'sorting_options':
@@ -545,9 +552,393 @@ function geodir_admin_ajax_handler()
 					call_user_func('geodir_diagnose_' . $diagnose_this) ;
 					exit();
 				break;
+				
+			case 'diagnosis-fix' :
+				if(isset($_REQUEST['diagnose_this']) && $_REQUEST['diagnose_this']!='')
+					$diagnose_this = $_REQUEST['diagnose_this'] ;
+					call_user_func('geodir_diagnose_' . $diagnose_this) ;
+					exit();
+				break;
 		}
 	}
 	exit();
+}
+
+
+function geodir_diagnose_multisite_table($filter_arr,$table,$tabel_name,$fix){
+  global $wpdb;
+  //$filter_arr['output_str'] .='###'.$table.'###';
+  if($wpdb->query("SHOW TABLES LIKE '".$table."_ms_bak2'")>0 && $wpdb->query("SHOW TABLES LIKE '".$table."_ms_bak'")>0){
+	$filter_arr['output_str'] .= "<li>".__('ERROR: You didnt follow instructions! Now you will need to contact support to manually fix things.' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;$filter_arr['is_error_during_diagnose']=true;
+ 
+  }
+  elseif($wpdb->query("SHOW TABLES LIKE '".$table."_ms_bak'")>0 && $wpdb->query("SHOW TABLES LIKE '".$wpdb->prefix."$table'")>0){
+  $filter_arr['output_str'] .= "<li>".sprintf( __('ERROR: %s_ms_bak table found' , GEODIRECTORY_TEXTDOMAIN), $tabel_name )."</li>" ;$filter_arr['is_error_during_diagnose']=true;
+  $filter_arr['output_str'] .= "<li>".__('IMPORTANT: This can be caused by out of date core or addons, please update core + addons before trying the fix OR YOU WILL HAVE A BAD TIME!' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;$filter_arr['is_error_during_diagnose']=true;
+	
+	if($fix){
+		$ms_bak_count = $wpdb->get_var("SELECT COUNT(*) FROM ".$table."_ms_bak");// get backup table count
+		$new_table_count = $wpdb->get_var("SELECT COUNT(*) FROM ".$wpdb->prefix."$table");// get new table count
+		
+		if($ms_bak_count==$new_table_count){// if they are the same count rename to bak2
+			//$filter_arr['output_str'] .= "<li>".sprintf( __('-->PROBLEM: %s table count is the same as new table, contact support' , GEODIRECTORY_TEXTDOMAIN), $table )."</li>" ;
+			
+			$wpdb->query("RENAME TABLE ".$table."_ms_bak TO ".$table."_ms_bak2");// rename bak table to new table
+			
+			if($wpdb->query("SHOW TABLES LIKE '".$table."_ms_bak2'") && $wpdb->query("SHOW TABLES LIKE '".$table."_ms_bak'")==0){
+			$filter_arr['output_str'] .= "<li>".__('-->FIXED: Renamed and backed up the tables' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;
+			}else{
+			$filter_arr['output_str'] .= "<li>".__('-->PROBLEM: Failed to rename tables, please contact support.' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;	
+			}
+			
+		}elseif($ms_bak_count>$new_table_count){//if backup is greater then restore it
+		
+			$wpdb->query("RENAME TABLE ".$wpdb->prefix."$table TO ".$table."_ms_bak2");// rename new table to bak2
+			$wpdb->query("RENAME TABLE ".$table."_ms_bak TO ".$wpdb->prefix."$table");// rename bak table to new table
+			
+			if($wpdb->query("SHOW TABLES LIKE '".$table."_ms_bak2'") && $wpdb->query("SHOW TABLES LIKE '".$wpdb->prefix."$table'") && $wpdb->query("SHOW TABLES LIKE '$table'")==0){
+			$filter_arr['output_str'] .= "<li>".sprintf( __('-->FIXED: restored largest table %s' , GEODIRECTORY_TEXTDOMAIN), $table )."</li>" ;
+			}else{
+			$filter_arr['output_str'] .= "<li>".__('-->PROBLEM: Failed to rename tables, please contact support.' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;	
+			}
+			
+		}elseif($new_table_count>$ms_bak_count){// we cant do much so rename the table to stop errors
+			
+			$wpdb->query("RENAME TABLE ".$table."_ms_bak TO ".$table."_ms_bak2");// rename ms_bak table to ms_bak2
+			
+			if($wpdb->query("SHOW TABLES LIKE '".$table."_ms_bak'")==0){
+			$filter_arr['output_str'] .= "<li>".sprintf( __('-->FIXED: table %s_ms_bak renamed and backedup' , GEODIRECTORY_TEXTDOMAIN), $table )."</li>" ;
+			}else{
+			$filter_arr['output_str'] .= "<li>".__('-->PROBLEM: Failed to rename tables, please contact support.' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;	
+			}
+			
+		}
+		
+	}
+  
+  
+  }
+  elseif($wpdb->query("SHOW TABLES LIKE '$table'")>0 && $wpdb->query("SHOW TABLES LIKE '".$wpdb->prefix."$table'")>0){
+  $filter_arr['output_str'] .= "<li>".sprintf( __('ERROR: Two %s tables found' , GEODIRECTORY_TEXTDOMAIN), $tabel_name )."</li>" ;$filter_arr['is_error_during_diagnose']=true;
+  
+	  if($fix){
+		  if($wpdb->get_var("SELECT COUNT(*) FROM $table")==0){// if first table is empty just delete it
+			 if($wpdb->query("DROP TABLE IF EXISTS $table")){
+			 $filter_arr['output_str'] .= "<li>".sprintf( __('-->FIXED: Deleted table %s' , GEODIRECTORY_TEXTDOMAIN), $table )."</li>" ;
+			 }else{
+			 $filter_arr['output_str'] .= "<li>".sprintf( __('-->PROBLEM: Delete table %s failed, please try manual delete from DB' , GEODIRECTORY_TEXTDOMAIN), $table )."</li>" ; 
+			 }
+
+		  }elseif($wpdb->get_var("SELECT COUNT(*) FROM ".$wpdb->prefix."$table")==0){// if main table is empty but original is not, delete main and rename original
+			  if($wpdb->query("DROP TABLE IF EXISTS ".$wpdb->prefix."$table")){
+			  $filter_arr['output_str'] .= "<li>".sprintf( __('-->FIXED: Deleted table %s' , GEODIRECTORY_TEXTDOMAIN), $wpdb->prefix.$table )."</li>" ;
+			  }else{
+			  $filter_arr['output_str'] .= "<li>".sprintf( __('-->PROBLEM: Delete table %s failed, please try manual delete from DB' , GEODIRECTORY_TEXTDOMAIN), $wpdb->prefix.$table )."</li>" ;			  			  }
+			  if($wpdb->query("RENAME TABLE $table TO ".$wpdb->prefix."$table") || $wpdb->query("SHOW TABLES LIKE '$table'")==0){
+			  $filter_arr['output_str'] .= "<li>".sprintf( __('-->FIXED: Table %s renamed to %s' , GEODIRECTORY_TEXTDOMAIN), $table,$wpdb->prefix.$table )."</li>" ;  
+			  }else{
+			  $filter_arr['output_str'] .= "<li>".sprintf( __('-->PROBLEM: Failed to rename table %s to %s, please try manually from DB' , GEODIRECTORY_TEXTDOMAIN), $table,$wpdb->prefix.$table )."</li>" ;  			  
+			  }
+		  }else{// else rename the original table to _ms_bak
+			 if($wpdb->query("RENAME TABLE $table TO ".$table."_ms_bak") || $wpdb->query("SHOW TABLES LIKE '$table'")==0){
+			 $filter_arr['output_str'] .= "<li>".sprintf( __('-->FIXED: Table contained info so we renamed %s to %s incase it is needed in future' , GEODIRECTORY_TEXTDOMAIN), $table,$table."_ms_bak" )."</li>" ;  			   
+			 }else{
+			 $filter_arr['output_str'] .= "<li>".sprintf( __('-->PROBLEM: Table %s could not be renamed to %s, this table has info so may need to be reviewed manually in the DB' , GEODIRECTORY_TEXTDOMAIN), $table,$table."_ms_bak" )."</li>" ;	 
+			 }
+		  }		  
+	  }
+  
+  }
+  elseif($wpdb->query("SHOW TABLES LIKE '$table'")>0 && $wpdb->query("SHOW TABLES LIKE '".$wpdb->prefix."$table'")==0){
+  $filter_arr['output_str'] .= "<li>".sprintf( __('ERROR: %s table not converted' , GEODIRECTORY_TEXTDOMAIN), $tabel_name )."</li>" ;$filter_arr['is_error_during_diagnose']=true;
+  		
+	  if($fix){
+		  // if orignal table exists but new does not, rename
+		  if($wpdb->query("RENAME TABLE $table TO ".$wpdb->prefix."$table") || $wpdb->query("SHOW TABLES LIKE '$table'")==0){
+			  $filter_arr['output_str'] .= "<li>".sprintf( __('-->FIXED: Table %s renamed to %s' , GEODIRECTORY_TEXTDOMAIN), $table,$wpdb->prefix.$table )."</li>" ;
+		  }else{
+			  $filter_arr['output_str'] .= "<li>".sprintf( __('-->PROBLEM: Failed to rename table %s to %s, please try manually from DB' , GEODIRECTORY_TEXTDOMAIN), $table,$wpdb->prefix.$table )."</li>" ;
+		  }
+		  
+	  }
+	  
+  }
+  elseif($wpdb->query("SHOW TABLES LIKE '$table'")==0 && $wpdb->query("SHOW TABLES LIKE '".$wpdb->prefix."$table'")==0){
+  $filter_arr['output_str'] .= "<li>".sprintf( __('ERROR: %s table does not exist' , GEODIRECTORY_TEXTDOMAIN), $tabel_name )."</li>" ;$filter_arr['is_error_during_diagnose']=true;
+  
+  	if($fix){
+		  // if orignal table does not exist try deleting db_vers of all addons so the initial db_install scripts run;
+		  delete_option('geodirlocation_db_version'); 
+		  delete_option('geodirevents_db_version'); 
+		  delete_option('geodir_reviewrating_db_version'); 
+		  delete_option('gdevents_db_version'); 
+		  delete_option('geodirectory_db_version'); 
+		  delete_option('geodirclaim_db_version'); 
+		  delete_option('geodir_custom_posts_db_version'); 
+		  delete_option('geodir_reviewratings_db_version'); 
+		  delete_option('geodiradvancesearch_db_version'); 
+		  $filter_arr['output_str'] .= "<li>".__('-->TRY: Please refresh page to run table install functions' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;
+	  }
+	  
+  }
+  else{
+  $filter_arr['output_str'] .= "<li>".sprintf( __('%s table converted correctly' , GEODIRECTORY_TEXTDOMAIN), $tabel_name )."</li>";	
+  }
+  return $filter_arr;
+}
+
+
+function geodir_diagnose_tags_sync()
+{	global $wpdb,$plugin_prefix;
+	$fix =  isset($_POST['fix']) ? true : false;
+	
+	//if($fix){echo 'true';}else{echo 'false';}
+	$is_error_during_diagnose = false;
+	$output_str = '';
+	
+	
+	$all_postypes = geodir_get_posttypes();
+	
+	if(!empty($all_postypes))
+		{
+			foreach($all_postypes as $key)
+			{
+			// update each GD CTP
+			$posts = $wpdb->get_results("SELECT post_id FROM ".$wpdb->prefix."geodir_".$key."_detail d");
+			
+					if(!empty($posts)){
+						
+							foreach($posts as $p){
+								$p->post_type = $key;
+							$raw_tags = wp_get_object_terms($p->post_id,$p->post_type.'_tags' ,array('fields'=>'names'));
+							if(empty($raw_tags)){$post_tags = '';}
+							else{$post_tags = implode(",",$raw_tags);}
+							$tablename = $plugin_prefix.$p->post_type.'_detail';
+							$wpdb->query($wpdb->prepare("UPDATE ".$tablename." SET post_tags=%s WHERE post_id =%d",$post_tags,$p->post_id));
+							
+							}
+			$output_str .= "<li>".$key.__(': Done' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;
+					  }
+				
+			}
+			
+		}
+
+if($is_error_during_diagnose)
+	{
+		$info_div_class =  "geodir_problem_info" ;
+		$fix_button_txt = "<input type='button' value='".__('Fix' , GEODIRECTORY_TEXTDOMAIN)."' class='button-primary geodir_fix_diagnostic_issue' data-diagnostic-issue='ratings' />";
+	}
+	else
+	{
+		$info_div_class =  "geodir_noproblem_info" ;
+		$fix_button_txt = '';
+	}
+	echo "<ul class='$info_div_class'>" ;
+	echo $output_str ;
+	echo  $fix_button_txt;
+	echo "</ul>" ;
+	
+}
+
+function geodir_diagnose_version_clear()
+{	global $wpdb,$plugin_prefix;
+	$fix =  isset($_POST['fix']) ? true : false;
+	
+	//if($fix){echo 'true';}else{echo 'false';}
+	$is_error_during_diagnose = false;
+	$output_str = '';
+	
+	
+	$gd_arr = array('GeoDirectory' => 'geodirectory_db_version',
+					'Payment Manager' => 'geodir_payments_db_version',
+					'GeoDirectory Framework' => 'gdf_db_version',
+					'Advanced Search' => 'geodiradvancesearch_db_version',
+					'Review Rating Manager' => 'geodir_reviewratings_db_version',
+					'Claim Manager' => 'geodirclaim_db_version',
+					'CPT Manager' => 'geodir_custom_posts_db_version',
+					'Location Manager' => 'geodirlocation_db_version',
+					'Payment Manager' => 'geodir_payments_db_version',
+					'Events Manager' => 'geodirevents_db_version',
+					);
+	
+	$ver_arr = apply_filters('geodir_db_version_name',$gd_arr);
+	
+	if(!empty($ver_arr))
+		{
+			foreach($ver_arr as $key=>$val)
+			{
+				if(delete_option( $val )){
+					$output_str .= "<li>".$key.__(' Version: Deleted' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;	
+				}else{
+					$output_str .= "<li>".$key.__(' Version: Not Found' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;	
+				}
+
+			}
+			
+			if($output_str){
+				$output_str .= "<li><strong>".__(' Upgrade/install scripts will run on next page reload.' , GEODIRECTORY_TEXTDOMAIN)."</strong></li>" ;
+			}
+			
+		}
+
+if($is_error_during_diagnose)
+	{
+		$info_div_class =  "geodir_problem_info" ;
+		$fix_button_txt = "";
+	}
+	else
+	{
+		$info_div_class =  "geodir_noproblem_info" ;
+		$fix_button_txt = '';
+	}
+	echo "<ul class='$info_div_class'>" ;
+	echo $output_str ;
+	echo  $fix_button_txt;
+	echo "</ul>" ;
+	
+}
+
+
+function geodir_diagnose_ratings()
+{	global $wpdb;
+	$fix =  isset($_POST['fix']) ? true : false;
+	
+	//if($fix){echo 'true';}else{echo 'false';}
+	$is_error_during_diagnose = false;
+	$output_str = '';
+	
+	// check review locations
+	if($wpdb->get_results("SELECT * FROM ".GEODIR_REVIEW_TABLE." WHERE post_city='' OR post_city IS NULL OR post_latitude='' OR post_latitude IS NULL")){		
+		$output_str .= "<li>".__('Review locations missing or broken' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;	$is_error_during_diagnose = true;
+		
+		if($fix){
+			if(geodir_fix_review_location()){
+				$output_str .= "<li><strong>".__('-->FIXED: Review locations fixed' , GEODIRECTORY_TEXTDOMAIN)."</strong></li>" ;
+			}else{
+				$output_str .= "<li><strong>".__('-->FAILED: Review locations fix failed' , GEODIRECTORY_TEXTDOMAIN)."</strong></li>" ;
+			}
+		}
+		
+	}else{
+		$output_str .= "<li>".__('Review locations ok' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;	
+	}
+	
+	// check review content
+	if($wpdb->get_results("SELECT * FROM ".GEODIR_REVIEW_TABLE." WHERE comment_content IS NULL")){		
+		$output_str .= "<li>".__('Review content missing or broken' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;	$is_error_during_diagnose = true;
+		
+		if($fix){
+			if(geodir_fix_review_content()){
+				$output_str .= "<li><strong>".__('-->FIXED: Review content fixed' , GEODIRECTORY_TEXTDOMAIN)."</strong></li>" ;
+			}else{
+				$output_str .= "<li><strong>".__('-->FAILED: Review content fix failed' , GEODIRECTORY_TEXTDOMAIN)."</strong></li>" ;
+			}
+		}
+		
+	}else{
+		$output_str .= "<li>".__('Review content ok' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;	
+	}
+	
+
+
+
+if($is_error_during_diagnose)
+	{
+		$info_div_class =  "geodir_problem_info" ;
+		$fix_button_txt = "<input type='button' value='".__('Fix' , GEODIRECTORY_TEXTDOMAIN)."' class='button-primary geodir_fix_diagnostic_issue' data-diagnostic-issue='ratings' />";
+	}
+	else
+	{
+		$info_div_class =  "geodir_noproblem_info" ;
+		$fix_button_txt = '';
+	}
+	echo "<ul class='$info_div_class'>" ;
+	echo $output_str ;
+	echo  $fix_button_txt;
+	echo "</ul>" ;
+	
+}
+
+
+function geodir_diagnose_multisite_conversion()
+{	global $wpdb;
+	$fix =  isset($_POST['fix']) ? true : false;
+	//if($fix){echo 'true';}else{echo 'false';}
+	$is_error_during_diagnose = false;
+	$output_str = '';
+	
+	$filter_arr=array();
+	$filter_arr['output_str']=$output_str;
+	$filter_arr['is_error_during_diagnose']=$is_error_during_diagnose;
+	$table_arr = array('geodir_countries'=>__('Countries' , GEODIRECTORY_TEXTDOMAIN),
+					   'geodir_custom_fields'=>__('Custom fields' , GEODIRECTORY_TEXTDOMAIN),					  
+					   'geodir_post_icon'=>__('Post icon' , GEODIRECTORY_TEXTDOMAIN),
+					   'geodir_attachments'=>__('Attachments' , GEODIRECTORY_TEXTDOMAIN),
+					   'geodir_post_review'=>__('Reviews' , GEODIRECTORY_TEXTDOMAIN),
+					   'geodir_custom_sort_fields'=>__('Custom sort fields' , GEODIRECTORY_TEXTDOMAIN),
+					   'geodir_gd_place_detail'=>__('Place detail' , GEODIRECTORY_TEXTDOMAIN)
+					   );
+	
+	// allow other addons to hook in and add their checks
+	$table_arr = apply_filters('geodir_diagnose_multisite_conversion',$table_arr);
+	
+	foreach($table_arr as $table=>$table_name){
+		// Diagnose table
+	$filter_arr = geodir_diagnose_multisite_table($filter_arr,$table,$table_name,$fix);	
+	}
+
+
+	
+	$output_str = $filter_arr['output_str'];
+	$is_error_during_diagnose = $filter_arr['is_error_during_diagnose'];
+	
+	
+	
+	if($is_error_during_diagnose)
+	{
+		$info_div_class =  "geodir_problem_info" ;
+		$fix_button_txt = "<input type='button' value='".__('Fix' , GEODIRECTORY_TEXTDOMAIN)."' class='button-primary geodir_fix_diagnostic_issue' data-diagnostic-issue='multisite_conversion' />";
+	}
+	else
+	{
+		$info_div_class =  "geodir_noproblem_info" ;
+		$fix_button_txt = '';
+	}
+	echo "<ul class='$info_div_class'>" ;
+	echo $output_str ;
+	echo  $fix_button_txt;
+	echo "</ul>" ;
+}
+
+function geodir_fix_virtual_page($slug,$page_title,$old_id,$option){
+	global $wpdb,$current_user;
+
+if(!empty($old_id)){wp_delete_post( $old_id, true );}//delete post if already there
+else{
+	$page_found =	$wpdb->get_var(
+									$wpdb->prepare(
+										"SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s LIMIT 1;",
+										array($slug)
+									)
+								);
+	wp_delete_post( $page_found, true );
+	
+	}
+									
+$page_data = array( 
+'post_status' => 'virtual', 
+'post_type' => 'page', 
+'post_author' => $current_user->ID, 
+'post_name' => $slug, 
+'post_title' => $page_title, 
+'post_content' => '', 
+'post_parent' => 0, 
+'comment_status' => 'closed' 
+); 
+$page_id = wp_insert_post($page_data); 
+update_option($option, $page_id); 
+if($page_id){return true;}else{return false;}
 }
 
 function geodir_diagnose_default_pages()
@@ -555,6 +946,10 @@ function geodir_diagnose_default_pages()
 	global $wpdb;
 	$is_error_during_diagnose = false ;
 	$output_str = '' ; 
+	$fix =  isset($_POST['fix']) ? true : false;
+	
+	
+	
 	
 	//////////////////////////////////
 	/* Diagnose Listing Page Starts */
@@ -562,17 +957,24 @@ function geodir_diagnose_default_pages()
 	$option_value = get_option('geodir_listing_page'); 
 	$page_found =	$wpdb->get_var(
 									$wpdb->prepare(
-										"SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s LIMIT 1;",
+										"SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_status='virtual' LIMIT 1;",
 										array('listings')
 									)
 								);
 	
 	if (!empty($option_value) && !empty($page_found ) && $option_value==$page_found) 
-		$output_str .= "<li>Listing page exists with proper setting.</li>" ;
+		$output_str .= "<li>".__('Listing page exists with proper setting.' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;
 	else
-	{
+	{	
 		$is_error_during_diagnose = true ;
-		$output_str .= "<li><strong>Listing page is missing.</strong></li>" ;
+		$output_str .= "<li><strong>".__('Listing page is missing.' , GEODIRECTORY_TEXTDOMAIN)."</strong></li>" ;
+		if($fix){
+			if(geodir_fix_virtual_page('listings',__('All Listings', GEODIRECTORY_TEXTDOMAIN),$page_found,'geodir_listing_page')){
+				$output_str .= "<li><strong>".__('-->FIXED: Listing page fixed' , GEODIRECTORY_TEXTDOMAIN)."</strong></li>" ;
+			}else{
+				$output_str .= "<li><strong>".__('-->FAILED: Listing page fix failed' , GEODIRECTORY_TEXTDOMAIN)."</strong></li>" ;
+			}
+		}
 	}
 	
 	////////////////////////////////
@@ -585,17 +987,24 @@ function geodir_diagnose_default_pages()
 	$option_value = get_option('geodir_add_listing_page'); 
 	$page_found =	$wpdb->get_var(
 									$wpdb->prepare(
-										"SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s LIMIT 1;",
+										"SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_status='virtual' LIMIT 1;",
 										array('add-listing')
 									)
 								);
 	
 	if (!empty($option_value) && !empty($page_found) && $option_value==$page_found) 
-		$output_str .= "<li>Add Listing page exists with proper setting.</li>" ;
+		$output_str .= "<li>".__('Add Listing page exists with proper setting.' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;
 	else
 	{
 		$is_error_during_diagnose = true ;
-		$output_str .= "<li><strong>Add Listing page is missing.</strong></li>" ;
+		$output_str .= "<li><strong>".__('Add Listing page is missing.' , GEODIRECTORY_TEXTDOMAIN)."</strong></li>" ;
+		if($fix){
+			if(geodir_fix_virtual_page('add-listing',__('Add Listing', GEODIRECTORY_TEXTDOMAIN),$page_found,'geodir_add_listing_page')){
+				$output_str .= "<li><strong>".__('-->FIXED: Add Listing page fixed' , GEODIRECTORY_TEXTDOMAIN)."</strong></li>" ;
+			}else{
+				$output_str .= "<li><strong>".__('-->FAILED: Add Listing page fix failed' , GEODIRECTORY_TEXTDOMAIN)."</strong></li>" ;
+			}
+		}
 	}
 	
 	////////////////////////////////
@@ -609,17 +1018,24 @@ function geodir_diagnose_default_pages()
 	$option_value = get_option('geodir_preview_page'); 
 	$page_found =	$wpdb->get_var(
 									$wpdb->prepare(
-										"SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s LIMIT 1;",
+										"SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_status='virtual' LIMIT 1;",
 										array('listing-preview')
 									)
 								);
 	
 	if (!empty($option_value) && !empty($page_found) && $option_value==$page_found) 
-		$output_str .= "<li>Listing Preview page exists with proper setting.</li>" ;
+		$output_str .= "<li>".__('Listing Preview page exists with proper setting.' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;
 	else
 	{
 		$is_error_during_diagnose = true ;
-		$output_str .= "<li><strong>Listing Preview page is missing.</strong></li>" ;
+		$output_str .= "<li><strong>".__('Listing Preview page is missing.' , GEODIRECTORY_TEXTDOMAIN)."</strong></li>" ;
+		if($fix){
+			if(geodir_fix_virtual_page('listing-preview',__('Listing Preview', GEODIRECTORY_TEXTDOMAIN),$page_found,'geodir_preview_page')){
+				$output_str .= "<li><strong>".__('-->FIXED: Listing Preview page fixed' , GEODIRECTORY_TEXTDOMAIN)."</strong></li>" ;
+			}else{
+				$output_str .= "<li><strong>".__('-->FAILED: Listing Preview page fix failed' , GEODIRECTORY_TEXTDOMAIN)."</strong></li>" ;
+			}
+		}
 	}
 	
 	////////////////////////////////
@@ -632,17 +1048,24 @@ function geodir_diagnose_default_pages()
 	$option_value = get_option('geodir_success_page'); 
 	$page_found =	$wpdb->get_var(
 									$wpdb->prepare(
-										"SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s LIMIT 1;",
+										"SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_status='virtual' LIMIT 1;",
 										array('listing-success')
 									)
 								);
 	
 	if (!empty($option_value) && !empty($page_found) && $option_value==$page_found) 
-		$output_str .= "<li>Listing Success page exists with proper setting.</li>" ;
+		$output_str .= "<li>".__('Listing Success page exists with proper setting.' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;
 	else
 	{
 		$is_error_during_diagnose = true ;
-		$output_str .= "<li><strong>Listing Success page is missing.</strong></li>" ;
+		$output_str .= "<li><strong>".__('Listing Success page is missing.' , GEODIRECTORY_TEXTDOMAIN)."</strong></li>" ;
+		if($fix){
+			if(geodir_fix_virtual_page('listing-success',__('Listing Success', GEODIRECTORY_TEXTDOMAIN),$page_found,'geodir_success_page')){
+				$output_str .= "<li><strong>".__('-->FIXED: Listing Success page fixed' , GEODIRECTORY_TEXTDOMAIN)."</strong></li>" ;
+			}else{
+				$output_str .= "<li><strong>".__('-->FAILED: Listing Success page fix failed' , GEODIRECTORY_TEXTDOMAIN)."</strong></li>" ;
+			}
+		}
 	}
 	
 	////////////////////////////////
@@ -655,17 +1078,24 @@ function geodir_diagnose_default_pages()
 	$option_value = get_option('geodir_location_page'); 
 	$page_found =	$wpdb->get_var(
 									$wpdb->prepare(
-										"SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s LIMIT 1;",
+										"SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_status='virtual' LIMIT 1;",
 										array('location')
 									)
 								);
 	
 	if (!empty($option_value) && !empty($page_found) && $option_value==$page_found) 
-		$output_str .= "<li>Location page exists with proper setting.</li>" ;
+		$output_str .= "<li>".__('Location page exists with proper setting.' , GEODIRECTORY_TEXTDOMAIN)."</li>" ;
 	else
 	{
 		$is_error_during_diagnose = true ;
-		$output_str .= "<li><strong>Location page is missing.</strong></li>" ;
+		$output_str .= "<li><strong>".__('Location page is missing.' , GEODIRECTORY_TEXTDOMAIN)."</strong></li>" ;
+		if($fix){
+			if(geodir_fix_virtual_page('location',__('Location', GEODIRECTORY_TEXTDOMAIN),$page_found,'geodir_location_page')){
+				$output_str .= "<li><strong>".__('-->FIXED: Location page fixed' , GEODIRECTORY_TEXTDOMAIN)."</strong></li>" ;
+			}else{
+				$output_str .= "<li><strong>".__('-->FAILED: Location page fix failed' , GEODIRECTORY_TEXTDOMAIN)."</strong></li>" ;
+			}
+		}
 	}
 	
 	////////////////////////////////
@@ -673,9 +1103,9 @@ function geodir_diagnose_default_pages()
 	////////////////////////////////
 	
 	if($is_error_during_diagnose)
-	{
+	{	if($fix){flush_rewrite_rules();}
 		$info_div_class =  "geodir_problem_info" ;
-		$fix_button_txt = "<input type='button' value='".__('Fix' , GEODIRECTORY_TEXTDOMAIN)."' class='geodir_fix_diagnostic_issue' data-diagnostic-issue='default_pages' />";
+		$fix_button_txt = "<input type='button' value='".__('Fix' , GEODIRECTORY_TEXTDOMAIN)."' class='button-primary geodir_fix_diagnostic_issue' data-diagnostic-issue='default_pages' />";
 	}
 	else
 	{
@@ -714,3 +1144,11 @@ function geodir_posts_clauses_request($clauses) {
 
 /* display add listing page for wpml */
 add_action( 'admin_init', 'geodir_wpml_check_element_id', 10, 2 );
+
+/* hook action for post updated */
+add_action( 'post_updated', 'geodir_action_post_updated', 15, 3 );
+
+/*
+ * hook to add option in bcc options
+ */
+add_filter('geodir_notifications_settings', 'geodir_notification_add_bcc_option', 1);

@@ -86,7 +86,7 @@ class geodir_map_listingpage extends WP_Widget {
 			$map_args['width'] = $width;
 			$map_args['height'] = $height;
 			$map_args['scrollwheel'] = $scrollwheel;
-			$map_args['showall'] = $scrollwheel;
+			$map_args['showall'] = $showall;
 			$map_args['child_collapse'] = '0';
 			$map_args['sticky'] = $sticky;
 			$map_args['enable_cat_filters'] = false;

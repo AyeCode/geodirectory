@@ -322,7 +322,7 @@ class analytics_api {
 		
 		if($data['ga:visits']) {
 			$data['average_time_on_site'] = $data['ga:timeOnSite'] / $data['ga:visits'];
-			$data['average_time_on_site_formatted'] = $this->sec2hms($data['ga:timeOnSite'] / $data['ga:visits']);
+			$data['average_time_on_site_formatted'] = $this->geodir_sec2hms($data['ga:timeOnSite'] / $data['ga:visits']);
 			$data['pages_per_visit'] = sprintf('%0.2f', ($data['ga:pageviews'] / $data['ga:visits']));
 		}
 		else {
@@ -330,7 +330,7 @@ class analytics_api {
 			$data['ga:pageviews'] = 0;
 			$data['ga:timeOnSite'] = "0.00";
 			$data['average_time_on_site'] = 0;
-			$data['average_time_on_site_formatted'] = $this->sec2hms(0);
+			$data['average_time_on_site_formatted'] = $this->geodir_sec2hms(0);
 			$data['pages_per_visit'] = "0.00";
 		}
 
@@ -400,12 +400,12 @@ class analytics_api {
 	}
 
 	/**
-	* This function formats seconds into h:m:s and comes from http://www.laughing-buddha.net/jon/php/sec2hms/
+	* This function formats seconds into h:m:s and comes from http://www.laughing-buddha.net/jon/php/geodir_sec2hms/
 	* 
 	* @param float $sec The number of seconds
 	* @param boolean $padHours If you want a leading zero for less than 10 hours, pass "true"
 	*/
-	public function sec2hms($sec, $padHours = false) {
+	public function geodir_sec2hms($sec, $padHours = false) {
 	//---------------------------------------------------------------------------------------------
 
 		// holds formatted string

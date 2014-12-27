@@ -45,6 +45,11 @@ function geodir_install() {
 		
 	}
 	
+	if(!get_option('geodir_default_data_installed_1.2.8')){
+		//geodir_create_tables(); // in admin db install.php
+		update_option('geodir_default_data_installed_1.2.8', 1);
+	}
+	
 	geodir_installation_end();
 	do_action('geodir_installation_end');
 	

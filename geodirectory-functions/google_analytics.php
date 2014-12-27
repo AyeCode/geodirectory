@@ -1,6 +1,6 @@
 <?php
 
-function sec2hms($sec, $padHours = false) {
+function geodir_sec2hms($sec, $padHours = false) {
 	// holds formatted string
 	$hms = "";
 	// there are 3600 seconds in an hour, so if we
@@ -58,7 +58,7 @@ function geodir_getGoogleAnalytics( $page, $ga_start, $ga_end) {
 			$data = $api->data($id, 'ga:pagePath', 'ga:pageviews,ga:uniquePageviews,ga:bounces,ga:entrances,ga:exits,ga:newVisits,ga:timeOnPage', '', $ga_start, $ga_end, 10, 1, $filters, false);
 			
 			foreach( $data as $dimension => $metrics ) {
-				$time = sec2hms($metrics['ga:timeOnPage'] / ($metrics['ga:pageviews'] - $metrics['ga:exits']));
+				$time = geodir_sec2hms($metrics['ga:timeOnPage'] / ($metrics['ga:pageviews'] - $metrics['ga:exits']));
 				
 				echo "<b>" . __( "Google Analytics (Last 30 Days)", GEODIRECTORY_TEXTDOMAIN ) . "</b><br>" . __( "Total pageviews:", GEODIRECTORY_TEXTDOMAIN ) . " {$metrics['ga:pageviews']} <br>" . __( "Unique visitors:", GEODIRECTORY_TEXTDOMAIN ) . " {$metrics['ga:uniquePageviews']}<br>" . __( "Average time on page:", GEODIRECTORY_TEXTDOMAIN ) . " {$time}<br>\n";
 			}
