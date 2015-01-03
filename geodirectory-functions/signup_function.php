@@ -179,7 +179,7 @@ function geodir_register_new_user($user_login, $user_email) {
 	$user_email = apply_filters( 'user_registration_email', $user_email );
 
 
-	if(get_option('ptthemes_show_user_pass')){
+	if(get_option('geodir_allow_cpass')){
 	$user_pass  = $_REQUEST['user_pass'] ;
 	$user_pass2 = $_REQUEST['user_pass2'] ;
 	// Check the password

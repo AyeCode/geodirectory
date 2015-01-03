@@ -183,6 +183,7 @@ define('FORGOT_PW_TEXT',__('Forgot Password?',GEODIRECTORY_TEXTDOMAIN));
 define('USERNAME_EMAIL_TEXT',__('E-mail',GEODIRECTORY_TEXTDOMAIN));
 define('USERNAME_TEXT',__('Email',GEODIRECTORY_TEXTDOMAIN));
 define('PASSWORD_TEXT',__('Password',GEODIRECTORY_TEXTDOMAIN));
+define('CONFIRM_PASSWORD_TEXT',__('Confirm Password',GEODIRECTORY_TEXTDOMAIN));
 
 define('PASSWORD_LENGTH_MSG',__('Enter your user password, must be 7 characters or more',GEODIRECTORY_TEXTDOMAIN));
 define('PASSWORD_LENGTH_TEXT',__('Password must be 7 characters or more',GEODIRECTORY_TEXTDOMAIN));

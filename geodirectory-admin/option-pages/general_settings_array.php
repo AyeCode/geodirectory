@@ -67,6 +67,24 @@ global $geodir_settings;
 			'radiogroup' => 'end'
 		),
 		
+		array(  
+			'name' => __( 'Allow user to choose own password', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> __( 'Yes', GEODIRECTORY_TEXTDOMAIN ),
+			'id' 		=> 'geodir_allow_cpass',
+			'std' 		=> '1',
+			'type' 		=> 'radio',
+			'value'		=> '1',
+			'radiogroup' => 'start'
+		),
+		array(  
+			'name' => __( 'Allow user to choose own password', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> __( 'No', GEODIRECTORY_TEXTDOMAIN ),
+			'id' 		=> 'geodir_allow_cpass',
+			'std' 		=> '0',
+			'type' 		=> 'radio',
+			'value'		=> '0',
+			'radiogroup' => 'end'
+		),
 		/*array(  
 			'name' => __( 'Disable standard place taxonomie?', GEODIRECTORY_TEXTDOMAIN ),
 			'desc' 		=> __( 'Yes', GEODIRECTORY_TEXTDOMAIN ),

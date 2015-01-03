@@ -100,7 +100,7 @@ function geodir_draw_map($map_args = array())
     <div id="catcher_<?php echo $map_canvas_name;?>"></div>
     <div class="stick_trigger_container" >
     <div class="trigger_sticky triggeroff_sticky" ></div>
-     <div class="top_banner_section geodir_map_container <?php echo $map_class_name;?>"  id="sticky_map_<?php echo $map_canvas_name;?>"  style="height:<?php echo $geodir_map_options['height'];?>;width:<?php echo $map_width;?>;">
+     <div class="top_banner_section geodir_map_container <?php echo $map_class_name;?>"  id="sticky_map_<?php echo $map_canvas_name;?>"  style="min-height:<?php echo $geodir_map_options['height'];?>;width:<?php echo $map_width;?>;">
      
      	<div class="map_background">
             <div class="top_banner_section_in clearfix" >

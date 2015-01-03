@@ -60,6 +60,8 @@ global $pagenow;
 		
 	}
 
+add_action( 'admin_enqueue_scripts', 'geodir_admin_styles_req' );
+
 }
 
 add_action(  'init', 'geodir_conditional_admin_script_load');

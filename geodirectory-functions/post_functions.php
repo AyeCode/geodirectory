@@ -1289,7 +1289,7 @@ function geodir_set_post_terms($post_id, $terms, $tt_ids, $taxonomy){
 			if ( isset( $_POST['action'] ) && $_POST['action'] == 'inline-save' ) {
 				geodir_save_post_meta( $post_id, 'post_tags', $terms );
 			}
-		} else {
+		} elseif($taxonomy == $post_type.'category') {
 			$srcharr = array('"','\\');
 			$replarr = array("&quot;",''); 
 			
@@ -2291,7 +2291,7 @@ function geodir_function_post_updated($post_ID, $post_after, $post_before) {
 			
 			$from_email = geodir_get_site_email_id();
 			$from_name = get_site_emailName();
-			$to_email = geodir_get_post_meta($post_ID, 'geodir_email', true);
+			$to_email = $post_author_data->user_email;
 			
 			if (!is_email($to_email) && !empty($post_author_data->user_email)) {
 				$to_email = $post_author_data->user_email;

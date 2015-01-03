@@ -44,7 +44,7 @@
                 </div>
             </div>
        
-       		<?php if(get_option('ptthemes_show_user_pass')){?>
+       		<?php if(get_option('geodir_allow_cpass')){?>
            
             <div class="row_spacer_registration clearfix" >
                 <div class="form_row clearfix">

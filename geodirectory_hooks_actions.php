@@ -1277,7 +1277,7 @@ function geodir_post_type_archive_title( $title )
 	}
 	
 	####### FIX FOR YOAST SEO START ########	
-	if( $wpseo_edit ) {
+	if( $wpseo_edit && isset($title_parts[1]) ) {
 		$title = $title . ' ' . $sep . ' '. $title_parts[1];
 	}
 	####### FIX FOR YOAST SEO END ########

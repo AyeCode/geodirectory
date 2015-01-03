@@ -54,7 +54,7 @@ function geodir_add_nav_menu_items(  ) {
 	$is_listing_sub_meny_exists = (!empty($view_posttype_listing)) ? true : false ;	
 	if($is_listing_sub_meny_exists)
 	{
-		$items .= '<li class="menu-item '.$menu_class.'">
+		$items .= '<li class="menu-item '.$menu_class.' '.apply_filters('geodir_sub_menu_li_class','').' ">
 					<a href="#">'.__('Listing',GEODIRECTORY_TEXTDOMAIN).'</a>
 					<ul class="sub-menu">';
 						$post_types = geodir_get_posttypes('object');
@@ -135,7 +135,7 @@ function geodir_add_nav_menu_items(  ) {
 	
 		if(get_option('geodir_show_addlisting_nav')){		
 		
-		$items .= '<li  class="menu-item '.$menu_class.'">
+		$items .= '<li  class="menu-item '.$menu_class.' '.apply_filters('geodir_sub_menu_li_class','').' ">
 					<a href="#">'.__('Add Listing',GEODIRECTORY_TEXTDOMAIN).'</a>
 					<ul class="sub-menu">';
 					
