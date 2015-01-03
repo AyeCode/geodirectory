@@ -1,10 +1,10 @@
 === GeoDirectory - Ultimate Business Directory ===
 Contributors: stiofansisland, paoltaia
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=payments@nomaddevs.com&item_name=Donation+for+WPGD
-Tags:  address book, addressbook, addresses, bio, biographies, bios, business, business directory plugin, business-directory, businesses, church, directories, directory, directory plugin, directory widget, geodirectory, googlemap, googlemaps, google maps, list, listings, lists, member directory, members directories, members directory, microformat, microformats, profile, profiles, staff, user, users, vcard, wordpress business directory, wordpress directory, wordpress directory plugin, yelp clone, tripadvisor clone, yellow pages clone, wordpress business directory plugin, wordpress directory theme, wordpress business directory theme, wordpress city directory plugin, wordpress local directory plugin
+Tags:  address book, addressbook, addresses, bio, biographies, bios, business, business directory plugin, business-directory, businesses, church, directories, directory, directory plugin, directory widget, geodirectory, googlemap, googlemaps, google maps, list, listings, lists, member directory, members directories, members directory, microformat, microformats, multisite, profile, profiles, staff, user, users, vcard, wordpress business directory, wordpress directory, wordpress directory plugin, yelp clone, tripadvisor clone, yellow pages clone, wordpress business directory plugin, wordpress directory theme, wordpress business directory theme, wordpress city directory plugin, wordpress local directory plugin
 Requires at least: 3.1
-Tested up to: 4.0
-Stable tag: 1.2.4
+Tested up to: 4.1.0
+Stable tag: 1.3.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -12,7 +12,7 @@ A superior and extendible Directory plugin to create beautiful location based bu
 
 == Description ==
 
-Turn your WordPress website into an interactive Business Directory!
+Turn your WordPress website into an interactive Business Directory, now 100% Multisite compatible! 
 
 Built based on over 3 years experience developing and supporting GeoTheme, one of the most succesful directory themes for wordpress, over one year of development and testing, GeoDirectory is finally released to the public.
 
@@ -36,6 +36,7 @@ GeoDirectory was developed to work with any theme. If you need help getting your
 * The default search widget allows you to also search by zip code or location name. Listings can be filtered by rating, reviews or date.
 * Our optimized database structure allows for hundreds of thousands of businesses to be listed. 
 * GeoDirectory is 100% WPML compatible for multilanguage directories.
+* GeoDirectory is multisite compatible.
 
 = GDF - Directory Theme Framework =
 
@@ -54,12 +55,18 @@ Premium [Addons](http://wpgeodirectory.com/addons/ "Premium addons for GeoDirect
 * [Prices and Payments](http://wpgeodirectory.com/addons/prices-and-payments/ "Allows to monetize your directory") - Allows to monetize your website using several payment systems. 
 * [Custom Post Types](http://wpgeodirectory.com/addons/custom-post-types/ "Allows to extend your directory categorization") - Adds any custom post type you want as well as "Places" 
 * [MultiRatings and Reviews](http://wpgeodirectory.com/addons/multiratings-and-reviews/ "Allows you to extend your rating and reviews categorization") - Extend the review system allowing multiple rating categories (example service, quality, price) and other cool features.
-* [Advance filters](http://wpgeodirectory.com/addons/advanced-search-filters/ "Allows you to extended search with custom filters") - Adds advance filters to the search widget (example: "pet friendly" filter).
+* [Advance search filters](http://wpgeodirectory.com/addons/advanced-search-filters/ "Allows you to extended search with custom filters") - Adds advance filters to the search widget, search autocompleter, geolocation and much more (example: "pet friendly" filter).
 * [Claim Listing Manger](http://wpgeodirectory.com/addons/claim-manager/ "Allows users to claim their business") - Allows business owners to take control of their listing.
 * [Marker Cluster](http://wpgeodirectory.com/addons/marker-cluster/ "To avoid overcrowded maps") - Adds numbered markers at high zoom levels.
-* [Search Autocompleter](http://wpgeodirectory.com/addons/search-autocompleter/ "Great usere search experience") - Adds ajax search autocompleter to search.
 * [Duplicate alert](http://wpgeodirectory.com/addons/ajax-duplicate-alert/ "Listing already exists?") - Alert users when adding a listing with the same title as another listing.
 * [GeoDirectory Theme Framework](http://wpgeodirectory.com/themes/geodirectory-theme-framework/ "The theme framework for GD") - Easily customizable, GDF is a solid base foundation for awesome Child Themes.
+* [Stripe Payment Gateway](http://wpgeodirectory.com/addons/stripe-payment-gateway/ "Extend Prices and Payments with Stripe Payment Geteway") - Stripe Payment Gateway for GeoDirectory perfectly integrates and extends the Prices and Payments Addon.
+* [GD Booster](http://wpgeodirectory.com/addons/gd-booster/ "Caching plugin for GeoDirectory") - GD Booster incorporate some of the smartest caching, compression and minifying methods available today for WordPress, modded to be 100% GeoDirectory compatible.
+* [Custom Google Maps](http://wpgeodirectory.com/addons/custom-google-maps/ "Customize your maps look and feel") - Custom Google Maps for GeoDirectory allows you to modify the look and feel of all Google Maps Widgets through an easy user interface with color pickers and simple to use options.
+* [Social Importer](http://wpgeodirectory.com/addons/social-importer/ "Import listings from Facebook and Yelp!") - with the Social Importer addon you can import pages and events from Facebook and listings from Yelp.
+* [GeoDirectory Theme Framework](http://wpgeodirectory.com/themes/geodirectory-theme-framework/ "The theme framework for GD") - Easily customizable, GDF is a solid base foundation for awesome Child Themes.
+* Other GD ready [Wordpress Directory Themes](http://wpgeodirectory.com/themes/ "All GD compatible themes") - The official Themes for GeoDirectory. Developed especially for the Core Plugin and Addons to create excelling Local and Business Directories.
+
 
 Membership (all addons and themes) can be purchased  on [wpgeodirectory.com](http://wpgeodirectory.com/ "Get GeoDirectory membership.")
 
@@ -110,6 +117,26 @@ GeoDirectory comes with some dummy data you can use to see how listings look. Yo
 7. GD WordPress Admin Page.
 
 == Changelog ==
+
+= 1.3.3 =
+
+[GeoDirectory changelog for version 1.3.3](http://wpgeodirectory.com/change-logs/#v1.3.3).
+
+= 1.3.2 =
+
+[GeoDirectory changelog for version 1.3.2](http://wpgeodirectory.com/change-logs/#v1.3.2).
+
+= 1.3.1 =
+
+[GeoDirectory changelog for version 1.3.1](http://wpgeodirectory.com/change-logs/#v1.3.1).
+
+= 1.3.0 =
+
+[GeoDirectory changelog for version 1.3.0](http://wpgeodirectory.com/change-logs/#v1.3.0).
+
+= 1.2.7 =
+
+[GeoDirectory changelog for version 1.2.7](http://wpgeodirectory.com/change-logs/#v1.2.7).
 
 = 1.2.4 =
 

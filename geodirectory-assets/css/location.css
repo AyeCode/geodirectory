@@ -43,7 +43,7 @@ a:focus{ outline:none;}
 #geodir_wrapper .geodir_locations > li{ float:left; width:30%; padding:7px 0; margin-right:3%; border-bottom:1px dotted #ccc; list-style:none;}
 #geodir_wrapper .geodir_locations > li a{ text-decoration:none;}
 
-.geodir_location_tab_container { border:1px solid #E6E6E6; background:none repeat scroll 0 0 #F3F3F3; padding:10px;display:block !important;opacity:1 !important; }
+.geodir_location_tab_container {/* border:1px solid #E6E6E6; background:none repeat scroll 0 0 #F3F3F3;*/ padding:10px;display:block !important;opacity:1 !important; }
 .geodir_location_tabs_head .geodir_location_tabs { float:left;  }
 .geodir_location_tabs_head .geodir_location_tabs a {background:none repeat scroll 0 0 #FFF;border:1px solid #E6E6E6; margin-bottom:8px; width:50px; text-align:center; padding:5px;}
 .geodir_location_tabs_head .geodir_location_tabs a:focus { outline:none;}
@@ -57,8 +57,9 @@ padding-left: 14px;
 }**/
 .gd-location-switcher .sub-menu a {background-image:none;}
 #menu-item-gd-location-switcher dl {width:200px;padding:0px;margin:0px;}
-#menu-item-gd-location-switcher dd{width:33%;}
-#menu-item-gd-location-switcher dd a{color:#444;padding:5px;margin:0px 0px 8px 0px;width:auto;font-size:12px;border:1px solid #ccc;}
+#menu-item-gd-location-switcher dd{width:33%; margin:0;padding:0;}
+#menu-item-gd-location-switcher .geodir_location_tab_container dd.geodir_location_tabs a{background:#FFF;color:#444;padding:5px;margin:0px 0px 8px 0px;width:auto;font-size:12px;border:1px solid #ccc;}
+#menu-item-gd-location-switcher .geodir_location_sugestion{width:200px;color:#444;}
 #menu-item-gd-location-switcher .geodir_location_sugestion a{width:auto;color:#444;padding:0px 0px 0px 8px;font-size:12px;}
 #menu-item-gd-location-switcher .geodir_location_sugestion a:hover,#menu-item-gd-location-switcher dd a:hover{color:#444;}
 #menu-item-gd-location-switcher .geodir_location_sugestion .geodir-chosen-container{background:#fff;}

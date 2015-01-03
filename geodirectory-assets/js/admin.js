@@ -171,7 +171,13 @@ function gd_copy_translation(url){
 jQuery(document).ready(function(){
 	jQuery('.geodir_diagnosis_button').click(function(){
 		var diagnose = (jQuery(this).data('diagnose'))
-		var result_container = jQuery(this).parents('td').find("div")
+		//var result_container = jQuery(this).parents('td').find("div")
+		jQuery('.tool-'+diagnose).remove();
+		var result_container = jQuery('.geodir_diagnostic_result-'+diagnose);
+		if(!result_container.length){
+		jQuery( '<tr class="gd-tool-results tool-'+diagnose+'" ><td colspan="3"><span class="gd-tool-results-remove" onclick="jQuery(this).closest(\'tr\').remove();"><i class="fa fa-spinner fa-spin"></i></span><div class="geodir_diagnostic_result-'+diagnose+'"></div></td></tr>' ).insertAfter( jQuery(this).parents('tr') );
+		var result_container = jQuery('.geodir_diagnostic_result-'+diagnose);
+		}
 		jQuery.ajax({
 				url: geodir_all_js_msg.geodir_admin_ajax_url,
 				type: 'POST',
@@ -180,7 +186,10 @@ jQuery(document).ready(function(){
 				beforeSend: function () {
 				},
 				success: function (data, textStatus, xhr) {
-					result_container.html(data) ;
+					jQuery('.tool-'+diagnose+' .gd-tool-results-remove').html('<i class="fa fa-times"></i>');
+					
+					result_container.html(data);
+					geodir_enable_fix_buttons();//enable new fix buttons
 				},
 				error: function (xhr, textStatus, errorThrown) {
 					alert(textStatus);
@@ -190,10 +199,36 @@ jQuery(document).ready(function(){
 		
 	});	
 	
+		
+geodir_enable_fix_buttons();// enabel fix buttons
 	
 								
 });
 
+function geodir_enable_fix_buttons(){
+	jQuery('.geodir_fix_diagnostic_issue').click(function(){
+		var diagnose = (jQuery(this).data('diagnostic-issue'))
+		var result_container = jQuery(this).parents('td').find("div")
+		jQuery.ajax({
+				url: geodir_all_js_msg.geodir_admin_ajax_url,
+				type: 'POST',
+				dataType: 'html',
+				data: {action:'geodir_admin_ajax',geodir_admin_ajax_action:'diagnosis-fix',diagnose_this:diagnose,fix:1},
+				beforeSend: function () {
+				},
+				success: function (data, textStatus, xhr) {
+					result_container.html(data);
+					geodir_enable_fix_buttons();//enable new fix buttons
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					alert(textStatus);
+					
+				}
+    	}); // end of ajax 
+		
+	});
+	
+}
 
 	
 	

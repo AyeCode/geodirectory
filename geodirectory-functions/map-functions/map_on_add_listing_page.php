@@ -143,13 +143,9 @@ if(getAddress == '')
 }
 
 getZip = postal_code.long_name;//postal_code
-//getCity
-//if(locality.long_name){getCity = locality.long_name;}
-//else if(postal_town.long_name){getCity = postal_town.long_name;}
-if(postal_town.long_name){getCity = postal_town.long_name;}
-else if(locality.long_name){getCity = locality.long_name;}
-else if(sublocality_level_1.long_name){getCity = sublocality_level_1.long_name;}
-else if(administrative_area_level_3.long_name){getCity = administrative_area_level_3.long_name;}
+
+
+
 //getCountry 
 if(country.long_name){getCountry = country.long_name;}
 if(country.short_name){getCountryISO = country.short_name;}
@@ -158,8 +154,8 @@ if(country.short_name){getCountryISO = country.short_name;}
 if(country.short_name){rr = country.short_name;}
 
 //$country_arr = ["US", "CA", "IN","DE","NL"];
-$country_arr = ["GB"];
-//alert(rr);
+// fix for regions in GB
+$country_arr = ["GB"]; 
 if(jQuery.inArray(rr, $country_arr)!==-1){
 	if(administrative_area_level_2.long_name){getState = administrative_area_level_2.long_name;}
 	else if(administrative_area_level_1.long_name){getState = administrative_area_level_1.long_name;}
@@ -167,6 +163,25 @@ if(jQuery.inArray(rr, $country_arr)!==-1){
 	if(administrative_area_level_1.long_name){getState = administrative_area_level_1.long_name;}
 	else if(administrative_area_level_2.long_name){getState = administrative_area_level_2.long_name;}
 }
+
+//getCity
+// fix for cities in Ireland
+$country_arr2 = ["IE"]; 
+if(jQuery.inArray(rr, $country_arr2)!==-1){
+		
+	if(administrative_area_level_2.long_name && administrative_area_level_2.long_name.indexOf(" City") >= 0){getCity = administrative_area_level_2.long_name;}
+	else if(locality.long_name){getCity = locality.long_name;}
+	else if(postal_town.long_name){getCity = postal_town.long_name;}
+	else if(sublocality_level_1.long_name){getCity = sublocality_level_1.long_name;}
+	else if(administrative_area_level_3.long_name){getCity = administrative_area_level_3.long_name;}
+}else{
+	if(postal_town.long_name){getCity = postal_town.long_name;}
+	else if(locality.long_name){getCity = locality.long_name;}
+	else if(sublocality_level_1.long_name){getCity = sublocality_level_1.long_name;}
+	else if(administrative_area_level_3.long_name){getCity = administrative_area_level_3.long_name;}
+}
+
+
 
 /*if(administrative_area_level_1.long_name){getState = administrative_area_level_1.long_name;}
 else if(administrative_area_level_2.long_name){getState = administrative_area_level_2.long_name;}*/
@@ -307,6 +322,7 @@ jQuery.goMap.map.setCenter(results[0].geometry.location);
 updateMarkerPosition(baseMarker.getPosition());
 //if(set_on_map && is_restrict){
 //geocodePosition({ 'address': address,'country':   ISO2});
+<?php do_action('geodir_add_listing_codeaddress_before_geocode');?>
 geocodePosition(baseMarker.getPosition(),{ 'address': address,'country':   ISO2});
 //}
 } else {
@@ -339,6 +355,7 @@ zoom: <?php echo $prefix;?>CITY_MAP_ZOOMING_FACT,
 maptype: 'ROADMAP', // Map type - HYBRID, ROADMAP, SATELLITE, TERRAIN
 <?php /*?>maptype: '<?php echo ($mapview) ? $mapview : 'ROADMAP';?>', <?php */?>
 streetViewControl:true,
+<?php if(get_option('geodir_add_listing_mouse_scroll')) { echo 'scrollwheel: false,';}?>
 });
 geocoder = new google.maps.Geocoder();
 	

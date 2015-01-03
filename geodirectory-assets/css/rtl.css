@@ -1,0 +1,121 @@
+/* RTL support */
+*[dir="rtl"] .wp-admin .geodirectory .gd-wrapper-vr .gd-content-wrapper {
+	margin-right:19.3%;
+	margin-left:inherit
+}
+*[dir="rtl"] .wp-admin .geodirectory dl.gd-tab-head dd {
+	float:right;
+	margin-right:0;
+	padding-right:0;
+}
+*[dir="rtl"] .wp-admin .geodirectory .side-sortables{float:right}
+*[dir="rtl"] .wp-admin #geodir_wrapper .geodir_form_row label{float:right}
+*[dir="rtl"] .wp-admin .geodir_message_note{padding-right:30%;padding-left:inherit}
+*[dir="rtl"] .wp-admin .form-field input[name="ct_cat_default_img[src]"],
+*[dir="rtl"] .wp-admin .form-field input[name="ct_cat_icon[src]"] {left:inherit!important;right:-500px!important}
+*[dir="rtl"] .wp-admin #sub_geodir_script_settings textarea,
+*[dir="rtl"] .wp-admin #sub_admin_emails textarea,
+*[dir="rtl"] .wp-admin #sub_client_emails textarea,
+*[dir="rtl"] .wp-admin #sub_other_emails textarea,
+*[dir="rtl"] .wp-admin #sub_messages textarea,
+*[dir="rtl"] .wp-admin .payment_notifications textarea,
+*[dir="rtl"] .wp-admin .geodir_claim_notification textarea{direction:ltr}
+
+/* @group Right to Left */
+*[dir="rtl"] .wp-admin .geodirectory .chosen-container,
+*[dir="rtl"] .wp-admin .geodirectory .geodir-chosen-container {
+  text-align: right;
+}
+*[dir="rtl"] .wp-admin .geodirectory .chosen-container .chosen-single,
+*[dir="rtl"] .wp-admin .geodirectory .geodir-chosen-container .chosen-single {
+  overflow: visible;
+  padding: 0 8px 0 0;
+}
+*[dir="rtl"] .wp-admin .geodirectory .chosen-container .chosen-single span,
+*[dir="rtl"] .wp-admin .geodirectory .geodir-chosen-container .chosen-single span {
+  margin-right: 0;
+  margin-left: 26px;
+  direction: rtl;
+}
+*[dir="rtl"] .wp-admin .geodirectory .chosen-container .chosen-single-with-deselect span,
+*[dir="rtl"] .wp-admin .geodirectory .geodir-chosen-container .chosen-single-with-deselect span {
+  margin-left: 38px;
+}
+*[dir="rtl"] .wp-admin .geodirectory .chosen-container .chosen-single div,
+*[dir="rtl"] .wp-admin .geodirectory .geodir-chosen-container .chosen-single div {
+  right: auto;
+  left: 3px;
+}
+*[dir="rtl"] .wp-admin .geodirectory .chosen-container .chosen-single abbr,
+*[dir="rtl"] .wp-admin .geodirectory .geodir-chosen-container .chosen-single abbr {
+  right: auto;
+  left: 26px;
+}
+*[dir="rtl"] .wp-admin .geodirectory .chosen-container .chosen-choices li,
+*[dir="rtl"] .wp-admin .geodirectory .geodir-chosen-container .chosen-choices li {
+  float: right;
+}
+*[dir="rtl"] .wp-admin .geodirectory .chosen-container .chosen-choices li.search-field input[type="text"],
+*[dir="rtl"] .wp-admin .geodirectory .geodir-chosen-container .chosen-choices li.search-field input[type="text"] {
+  direction: rtl;
+}
+*[dir="rtl"] .wp-admin .geodirectory .chosen-container .chosen-choices li.search-choice,
+*[dir="rtl"] .wp-admin .geodirectory .geodir-chosen-container .chosen-choices li.search-choice {
+  margin: 3px 5px 3px 0;
+  padding: 3px 5px 3px 19px;
+}
+*[dir="rtl"] .wp-admin .geodirectory .chosen-container .chosen-choices li.search-choice .search-choice-close,
+*[dir="rtl"] .wp-admin .geodirectory .geodir-chosen-container .chosen-choices li.search-choice .search-choice-close {
+  right: auto;
+  left: 4px;
+}
+*[dir="rtl"] .wp-admin .geodirectory .chosen-container.chosen-container-single-nosearch .chosen-search,
+*[dir="rtl"] .wp-admin .geodirectory .chosen-container .chosen-drop,
+*[dir="rtl"] .wp-admin .geodirectory .geodir-chosen-container.chosen-container-single-nosearch .chosen-search,
+*[dir="rtl"] .wp-admin .geodirectory .geodir-chosen-container .chosen-drop {
+  left: 9999px;
+}
+*[dir="rtl"] .wp-admin .geodirectory .chosen-container.chosen-container-single .chosen-results,
+*[dir="rtl"] .wp-admin .geodirectory .geodir-chosen-container.chosen-container-single .chosen-results {
+  margin: 0 0 4px 4px;
+  padding: 0 4px 0 0;
+}
+*[dir="rtl"] .wp-admin .geodirectory .chosen-container .chosen-results li.group-option,
+*[dir="rtl"] .wp-admin .geodirectory .geodir-chosen-container .chosen-results li.group-option {
+  padding-right: 15px;
+  padding-left: 0;
+}
+*[dir="rtl"] .wp-admin .geodirectory .chosen-container.chosen-container-active.chosen-with-drop .chosen-single div,
+*[dir="rtl"] .wp-admin .geodirectory .geodir-geodir-chosen-container.chosen-container-active.chosen-with-drop .chosen-single div {
+  border-right: none;
+}
+*[dir="rtl"] .wp-admin .geodirectory .chosen-container .chosen-search input[type="text"],
+*[dir="rtl"] .wp-admin .geodirectory .geodir-chosen-container .chosen-search input[type="text"] {
+  padding: 4px 5px 4px 20px;
+  background: white url('chosen-sprite.png') no-repeat -30px -20px;
+  background: url('chosen-sprite.png') no-repeat -30px -20px;
+  direction: rtl;
+}
+/* @group Retina compatibility */
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-resolution: 144dpi) {
+  *[dir="rtl"] .wp-admin .geodirectory .chosen-container .chosen-search input[type="text"],
+  *[dir="rtl"] .wp-admin .geodirectory .geodir-chosen-container .chosen-search input[type="text"] {
+    background-image: url('chosen-sprite@2x.png') !important;
+    background-size: 52px 37px !important;
+    background-repeat: no-repeat !important;
+  }
+}
+/* @end */
+*[dir="rtl"] .wp-admin .geodirectory .chosen-container.chosen-container-single .chosen-single div b,
+*[dir="rtl"] .wp-admin .geodirectory .geodir-chosen-container.chosen-container-single .chosen-single div b {
+  background-position: 6px 2px;
+}
+*[dir="rtl"] .wp-admin .geodirectory .chosen-container.chosen-container-single.chosen-with-drop .chosen-single div b,
+*[dir="rtl"] .wp-admin .geodirectory .geodir-chosen-container.chosen-container-single.chosen-with-drop .chosen-single div b {
+  background-position: -12px 2px;
+}
+*[dir="rtl"] .wp-admin .geodirectory .geodir-chosen-container .chosen-drop{right:-9999px;left:inherit}
+*[dir="rtl"] .wp-admin .geodirectory .geodir-chosen-container.chosen-with-drop .chosen-drop{right:0;left:inherit}
+*[dir="rtl"] .wp-admin .geodirectory .geodir-chosen-container-multi .chosen-choices li.search-choice{margin:3px 5px 3px 0}
+*[dir="rtl"] .wp-admin .geodirectory .geodir-chosen-container-multi .chosen-choices li{float:right}
+/* @end */

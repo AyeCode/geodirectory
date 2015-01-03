@@ -55,7 +55,15 @@ function geodir_register_post_types() {
 		if($post_type=='gd_place' && get_option('geodir_disable_place_tax')){continue;}
 			if(!empty($args['rewrite']['slug'])){$args['rewrite']['slug'] = _x( $args['rewrite']['slug'], 'URL slug', GEODIRECTORY_TEXTDOMAIN );}
 			$args = stripslashes_deep(  $args);
+			
+			if(!empty($args['labels'])){
+				foreach($args['labels'] as $key => $val){
+				$args['labels'][$key] = __($val, GEODIRECTORY_TEXTDOMAIN );// allow translation
+				}
+			}
+			
 			$args = apply_filters('geodir_post_type_args' ,    $args , $post_type ) ;
+			
 			$post_type = register_post_type( $post_type, $args );
 			
 		endforeach;
@@ -178,6 +186,8 @@ function geodir_listing_rewrite_rules( $rules )
 	$location_prefix = get_option('geodir_location_prefix');
 	if($location_prefix == '')
 		$location_prefix  = 'location';
+		
+	
 	
 //	if(get_option('geodir_show_location_url') == 'all'){
 		$newrules[$location_prefix.'/([^/]+)/([^/]+)/([^/]+)/?$'] = 'index.php?page_id='.$location_page.'&gd_country=$matches[1]&gd_region=$matches[2]&gd_city=$matches[3]';
@@ -194,8 +204,22 @@ function geodir_listing_rewrite_rules( $rules )
 	return $rules;
 }
 
-
-
+		
+function geodir_htaccess_contents( $rules )
+{ global $wpdb; 
+$location_prefix = get_option('geodir_location_prefix');
+	// if location page slug changed then add redirect
+	if($location_prefix=='location'){
+	 return $rules;
+	}
+$my_content = <<<EOD
+\n# BEGIN GeoDirectory Rules
+Redirect 301 /location/ /$location_prefix/
+# END GeoDirectory Rules\n\n
+EOD;
+    return $my_content . $rules;
+}
+add_filter('mod_rewrite_rules', 'geodir_htaccess_contents');
 function geodir_add_location_var($public_query_vars) {
 	$public_query_vars[] = 'gd_country';
 	$public_query_vars[] = 'gd_region';

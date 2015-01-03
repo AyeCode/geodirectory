@@ -296,6 +296,7 @@ margin-left: 48px;
 #reviewsTab .commentlist .children li.comment .fn {
 display: inline;
 }
+.err-no-rating{border:1px solid red;color:#fff;display:block;font-size:90%;margin:7px 0 5px 0;padding:5px 7px;background-color:red}
 /* ########################################
 listings page 
 ######################################### */
@@ -433,6 +434,14 @@ padding-top: 5px;
 color: #999;
 }
 #geodir_filled_by_spam_bot_top_form{display:none !important;}
+.geodir_form_row .geodir_multiselect_list{float:left;width:70%}
+.geodir_form_row .geodir_multiselect_list li.search-field input[type="text"]{height:auto}
+@media only screen and (max-width:480px)
+{
+	.geodir_form_row .geodir_multiselect_list{width:100%;margin-top:10px}
+	.geodir_link_business_chosen_div{width:100%!important;}
+	#geodir_link_business_autofill{margin-left:0!important}
+}
 /* ########################################
 signup/reg page 
 ######################################### */
@@ -944,3 +953,5 @@ height: auto;
     margin-bottom: 0;
     padding: 5px 0;
 }
+.geodir_recent_reviews a.comment_excerpt{text-decoration:none}
+.login_form_box .error_msg, .registration_form_box .error_msg{margin:7px 0 5px 0;border-left:2px solid #7ad03a;padding:5px 7px}

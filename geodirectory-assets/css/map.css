@@ -267,6 +267,11 @@ margin-left: -6px;
 	filter: alpha(opacity=50);
 	width:100%;
 }
+.loading_div_loc {
+	background: #000 url('../images/loading2.gif') 50% 50% no-repeat;
+	opacity: 0.5;
+	filter: alpha(opacity=50);
+}
 #loading_div {
 	z-index: 1;
 	display: block;
