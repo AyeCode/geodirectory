@@ -231,9 +231,9 @@ function geodir_template_loader( $template ) {
 		
 			$template = geodir_locate_template('location');
 			
-			if ( ! $template ) $template = geodir_plugin_path() . '/geodirectory-templates/geodir-home.php';
+			if ( ! $template ) $template = geodir_plugin_path() . '/geodirectory-templates/geodir-location.php';
 			
-			return $template = apply_filters('geodir_template_homepage',$template);
+			return $template = apply_filters('geodir_template_location',$template);
 			
 		}else
 			return $template;
@@ -264,4 +264,22 @@ function geodir_get_template_part( $slug = '', $name = NULL )
 		locate_template(array("geodirectory/" .$template_name), true, false);
 	endif;
 	
+}
+
+function geodir_core_post_view_extra_class( $class , $all_postypes='' ) {
+	global $post;
+	
+	if(!$all_postypes){$all_postypes = geodir_get_posttypes();}
+	
+	$gdp_post_id = !empty( $post ) && isset( $post->ID ) ? $post->ID : NULL;
+	$gdp_post_type = $gdp_post_id > 0 && isset( $post->post_type ) ? $post->post_type : NULL;
+	$gdp_post_type = $gdp_post_type != '' && !empty( $all_postypes ) && in_array( $gdp_post_type, $all_postypes ) ? $gdp_post_type : NULL;
+		
+	if ( $gdp_post_id && $gdp_post_type ) {
+		$append_class = 'gd-post-' . $gdp_post_type;
+		$append_class .= isset( $post->is_featured ) && $post->is_featured > 0 ? ' gd-post-featured' : '';
+		$class = $class != '' ? $class . ' ' . $append_class : $append_class;
+	}
+	
+	return $class;
 }

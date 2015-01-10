@@ -62,7 +62,7 @@ $default = isset($field_info->is_admin)	 ? $field_info->is_admin : '';
             	<td width="30%"><strong><?php _e('Field Data Type ? :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                 <td align="left">
                    
-                    <select name="data_type" id="data_type" >
+                    <select name="data_type" id="data_type" onchange="javascript:gd_data_type_changed(this, '<?php echo $result_str;?>');">
                         <option value="VARCHAR" <?php if(isset($field_info->data_type) && $field_info->data_type=='VARCHAR'){ echo 'selected="selected"';}?>><?php _e('CHARACTER',GEODIRECTORY_TEXTDOMAIN);?></option>
                         <option value="INT" <?php if(isset($field_info->data_type) && $field_info->data_type=='INT'){ echo 'selected="selected"';}?>><?php _e('NUMBER',GEODIRECTORY_TEXTDOMAIN);?></option>
                         <option value="FLOAT" <?php if(isset($field_info->data_type) && $field_info->data_type=='FLOAT'){ echo 'selected="selected"';}?>><?php _e('DECIMAL',GEODIRECTORY_TEXTDOMAIN);?></option>
@@ -70,7 +70,19 @@ $default = isset($field_info->is_admin)	 ? $field_info->is_admin : '';
                		<br /> <span><?php _e('Select Custom Field type',GEODIRECTORY_TEXTDOMAIN);?></span>
                     
                 </td>
-            </tr> 	
+            </tr>
+			<tr class="decimal-point-wrapper" style="<?php echo (isset($field_info->data_type) && $field_info->data_type=='FLOAT') ? '' : 'display:none'?>">
+				<td width="30%"><strong><?php _e( 'Select decimal point :', GEODIRECTORY_TEXTDOMAIN ); ?></strong></td>
+				<td align="left">
+				<select name="decimal_point" id="decimal_point" >
+					<option value=""><?php echo _e( 'Select', GEODIRECTORY_TEXTDOMAIN );?></option>
+					<?php for ( $i = 1; $i <= 10; $i++ ) { $decimal_point = isset( $field_info->decimal_point ) ? $field_info->decimal_point : ''; $selected = $i == $decimal_point ? 'selected="selected"' : ''; ?>
+					<option value="<?php echo $i;?>" <?php echo $selected;?>><?php echo $i;?></option>
+					<?php } ?>
+				</select>
+				<br /> <span><?php _e( 'Decimal point to display after point', GEODIRECTORY_TEXTDOMAIN );?></span>
+				</td>
+			</tr> 	
         
         <?php } ?>
         
@@ -214,6 +226,18 @@ $default = isset($field_info->is_admin)	 ? $field_info->is_admin : '';
                         <br />    <span><?php _e('Select yes or no. If no is selected then the field will not be displayed anywhere',GEODIRECTORY_TEXTDOMAIN);?></span>
                     </td>
                 </tr>
+				<?php if ( !$default ) { /* field for admin use only */ $for_admin_use = isset( $field_info->for_admin_use ) && $field_info->for_admin_use == '1' ? true : false; ?>
+				<tr>
+					<td><strong><?php _e( 'For admin use only? :', GEODIRECTORY_TEXTDOMAIN ); ?></strong></td>
+					<td align="left">
+						<select name="for_admin_use" id="for_admin_use" >
+							<option value="1" <?php echo ( $for_admin_use ? 'selected="selected"' : '' ); ?>><?php _e( 'Yes', GEODIRECTORY_TEXTDOMAIN ); ?></option>
+							<option value="0" <?php echo ( !$for_admin_use ? 'selected="selected"' : '' ); ?>><?php _e( 'No', GEODIRECTORY_TEXTDOMAIN ); ?></option>
+						</select>
+						<br /><span><?php _e( 'Select yes or no. If yes is selected then only site admin can edit this field.', GEODIRECTORY_TEXTDOMAIN ); ?></span>
+					</td>
+				</tr>
+				<?php } ?>
 								
 								<?php if($field_type != 'fieldset'){?>
                 <tr>
@@ -259,7 +283,7 @@ $default = isset($field_info->is_admin)	 ? $field_info->is_admin : '';
                         <br />    <span><?php _e('Want to show this on detail page ?',GEODIRECTORY_TEXTDOMAIN);?></span>
                     </td>
                 </tr>
-				<?php if (!$default && in_array($field_type, array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html'))) { ?>
+				<?php if ( !$default && in_array( $field_type, array( 'text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox' ) ) ) { ?>
 				<tr>
 					<td><strong><?php _e('Show as a Tab on detail page? :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
 					<td align="left">

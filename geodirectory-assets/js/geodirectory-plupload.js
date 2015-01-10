@@ -69,7 +69,7 @@ jQuery(document).ready(function($) {
 			jQuery('#'+imgId+'upload-error').removeClass('upload-error');
 			
 			
-			if(limitImg && $this.hasClass("plupload-upload-uic-multiple")){
+			if(limitImg && $this.hasClass("plupload-upload-uic-multiple") && jQuery("#"+imgId+"image_limit").val()){
 				
 				if(totalImg==limitImg && parseInt(limitImg) > 0){
 				while(up.files.length > 0) {up.removeFile(up.files[0]);} // remove images
@@ -121,67 +121,49 @@ jQuery(document).ready(function($) {
                 $('#' + file.id + " span").html(plupload.formatSize(parseInt(file.size * file.percent / 100)));
 				//alert('progress'+file.percent);
             });
- 
- 
-					var timer;
-					var i = 0;
-					var indexes = new Array();
-					uploader.bind('FileUploaded', function(up, file, response) {
-
-						//totalImg++;
-						//up.removeFile(up.files[0]); // remove images
-							
-							indexes[i] = up;
-							
-							clearInterval(timer);
-							timer = setTimeout(function() {
-									
-								//geodir_remove_file_index(indexes);
-								console.log(indexes);
-							}, 1000);
-							i++;
-							
-							
-										$('#' + file.id).fadeOut();
-										response=response["response"]
-										// add url to the hidden field
-										if($this.hasClass("plupload-upload-uic-multiple")) {
-												totalImg++;
-												// multiple
-												var v1=$.trim($("#" + imgId).val());
-												if(v1) {
-														v1 = v1 + "," + response;
-												}
-												else {
-														v1 = response;
-												}
-												$("#" + imgId).val(v1);
-										}
-										else {
-												// single
-												$("#" + imgId).val(response + "");
-										}
-		 
-										// show thumbs 
-										plu_show_thumbs(imgId);
-										
-										
-            });
- 
- 
- 
-        });
+			
+			var timer;
+			var i = 0;
+			var indexes = new Array();
+			uploader.bind('FileUploaded', function(up, file, response) {
+				//totalImg++;
+				//up.removeFile(up.files[0]); // remove images
+				indexes[i] = up;
+				clearInterval(timer);
+				timer = setTimeout(function() {
+					//geodir_remove_file_index(indexes);
+				}, 1000);
+				i++;
+				$('#' + file.id).fadeOut();
+				response = response["response"];
+				// add url to the hidden field
+				if($this.hasClass("plupload-upload-uic-multiple")) {
+					totalImg++;
+					// multiple
+					var v1 = $.trim($("#" + imgId).val());
+					if(v1) {
+						v1 = v1 + "," + response;
+					} else {
+						v1 = response;
+					}
+					$("#" + imgId).val(v1);
+				} else {
+					// single
+					$("#" + imgId).val(response + "");
+				}
+				// show thumbs 
+				plu_show_thumbs(imgId);
+			});
+		});
     }
 });
 
-function geodir_remove_file_index(indexes){
-
-	for (var i = 0; i < indexes.length; i++) {
-    
-		if(indexes[i].files.length>0){indexes[i].removeFile(indexes[i].files[0]);}
-		
+function geodir_remove_file_index(indexes) {
+	for(var i = 0; i < indexes.length; i++) {
+		if(indexes[i].files.length > 0) {
+			indexes[i].removeFile(indexes[i].files[0]);
+		}
 	}
-
 }
  
 function plu_show_thumbs(imgId) {

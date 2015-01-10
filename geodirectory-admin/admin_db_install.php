@@ -14,9 +14,20 @@ if (!function_exists('geodir_create_tables')) {
 		
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		
+		
+		
+// rename tables if we need to
+if($wpdb->query("SHOW TABLES LIKE 'geodir_countries'")>0 && $wpdb->query("SHOW TABLES LIKE '".$wpdb->prefix."geodir_countries'")==0){$wpdb->query("RENAME TABLE geodir_countries TO ".$wpdb->prefix."geodir_countries");}
+if($wpdb->query("SHOW TABLES LIKE 'geodir_custom_fields'")>0 && $wpdb->query("SHOW TABLES LIKE '".$wpdb->prefix."geodir_custom_fields'")==0){$wpdb->query("RENAME TABLE geodir_custom_fields TO ".$wpdb->prefix."geodir_custom_fields");}
+if($wpdb->query("SHOW TABLES LIKE 'geodir_post_icon'")>0 && $wpdb->query("SHOW TABLES LIKE '".$wpdb->prefix."geodir_post_icon'")==0){$wpdb->query("RENAME TABLE geodir_post_icon TO ".$wpdb->prefix."geodir_post_icon");}
+if($wpdb->query("SHOW TABLES LIKE 'geodir_attachments'")>0 && $wpdb->query("SHOW TABLES LIKE '".$wpdb->prefix."geodir_attachments'")==0){$wpdb->query("RENAME TABLE geodir_attachments TO ".$wpdb->prefix."geodir_attachments");}
+if($wpdb->query("SHOW TABLES LIKE 'geodir_post_review'")>0 && $wpdb->query("SHOW TABLES LIKE '".$wpdb->prefix."geodir_post_review'")==0){$wpdb->query("RENAME TABLE geodir_post_review TO ".$wpdb->prefix."geodir_post_review");}
+if($wpdb->query("SHOW TABLES LIKE 'geodir_custom_sort_fields'")>0 && $wpdb->query("SHOW TABLES LIKE '".$wpdb->prefix."geodir_custom_sort_fields'")==0){$wpdb->query("RENAME TABLE geodir_custom_sort_fields TO ".$wpdb->prefix."geodir_custom_sort_fields");}
+if($wpdb->query("SHOW TABLES LIKE 'geodir_gd_place_detail'")>0 && $wpdb->query("SHOW TABLES LIKE '".$wpdb->prefix."geodir_gd_place_detail'")==0){$wpdb->query("RENAME TABLE geodir_gd_place_detail TO ".$wpdb->prefix."geodir_gd_place_detail");}
+		
 			
 		// Table for storing Countries
-		$GEODIR_COUNTRIES_TABLE = "CREATE TABLE IF NOT EXISTS ".GEODIR_COUNTRIES_TABLE." (
+		$GEODIR_COUNTRIES_TABLE = "CREATE TABLE ".GEODIR_COUNTRIES_TABLE." (
 						CountryId smallint AUTO_INCREMENT NOT NULL ,
 						Country varchar (50) NOT NULL ,
 						FIPS104 varchar (2) NOT NULL ,
@@ -33,7 +44,7 @@ if (!function_exists('geodir_create_tables')) {
 						Population bigint NULL ,
 						Title varchar (50) NULL ,
 						Comment varchar (255) NULL ,
-						PRIMARY KEY(CountryId)) $collate ";
+						PRIMARY KEY  (CountryId)) $collate ";
 		$GEODIR_COUNTRIES_TABLE = apply_filters('geodir_before_country_table_create' , $GEODIR_COUNTRIES_TABLE)	 ;			
 		dbDelta($GEODIR_COUNTRIES_TABLE);
 		
@@ -323,13 +334,14 @@ if (!function_exists('geodir_create_tables')) {
 				
 		// Table for storing location attribute - these are user defined
 	
-		$icon_table = "CREATE TABLE IF NOT EXISTS ".GEODIR_ICON_TABLE." (
-						`id` INT NOT NULL AUTO_INCREMENT ,
-						`post_id` int( 10 ) NOT NULL ,
-						`post_title` varchar(254) NOT NULL,
-						`cat_id` int( 10 ) NOT NULL ,
-						`json` text NOT NULL ,
-						PRIMARY KEY ( `id` )) $collate ";
+		$icon_table = "CREATE TABLE ".GEODIR_ICON_TABLE." (
+						id int NOT NULL AUTO_INCREMENT,
+						post_id int( 10 ) NOT NULL,
+						post_title varchar(254) NOT NULL,
+						cat_id int( 10 ) NOT NULL,
+						json text NOT NULL,
+						PRIMARY KEY  (id)
+						) $collate ";
 		
 		$icon_table = apply_filters('geodir_before_icon_table_create' , $icon_table) ;		
 						
@@ -337,103 +349,111 @@ if (!function_exists('geodir_create_tables')) {
 		
 		// Table for storing post custom fields - these are user defined
 		
-		$post_custom_fields = "CREATE TABLE IF NOT EXISTS ".GEODIR_CUSTOM_FIELDS_TABLE." (
-							  `id` int(11) NOT NULL AUTO_INCREMENT,
-							  `post_type` varchar(100) NULL,
-							  `data_type` varchar(100) NULL DEFAULT NULL,
-							  `field_type` varchar(255) NOT NULL COMMENT 'text,checkbox,radio,select,textarea',
-							  `admin_title` varchar(255) NULL DEFAULT NULL,
-							  `admin_desc` text NULL DEFAULT NULL,
-							  `site_title` varchar(255) NULL DEFAULT NULL,
-							  `htmlvar_name` varchar(255) NULL DEFAULT NULL,
-							  `default_value` text NULL DEFAULT NULL,
-							  `sort_order` int(11) NOT NULL,
-							  `option_values` text NULL DEFAULT NULL,
-							  `clabels` text NULL DEFAULT NULL,
-							  `is_active` ENUM( '0', '1' ) NOT NULL DEFAULT '1',
-							  `is_default` ENUM( '0', '1' ) NOT NULL DEFAULT '0',
-							   `is_admin` ENUM( '0', '1' ) NOT NULL DEFAULT '0',
-							  `is_required` ENUM( '0', '1' ) NOT NULL DEFAULT '0',
-							  `required_msg` varchar(255) NULL DEFAULT NULL,
-							  `show_on_listing` ENUM( '0', '1' ) NOT NULL DEFAULT '1',
-							  `show_on_detail` ENUM( '0', '1' ) NOT NULL DEFAULT '1',
-							  `show_as_tab` ENUM( '0', '1' ) NOT NULL DEFAULT '0',
-							  `packages` varchar(255) NOT NULL DEFAULT ',0,',
-							  `cat_sort` text NULL DEFAULT NULL,
-							  `cat_filter` text NULL DEFAULT NULL,
-							  `extra_fields` text NULL DEFAULT NULL,
-							  `field_icon` varchar(255) NULL DEFAULT NULL,
-							  `css_class` varchar(255) NULL DEFAULT NULL,
-							  PRIMARY KEY (`id`)) $collate";
+		$post_custom_fields = "CREATE TABLE ".GEODIR_CUSTOM_FIELDS_TABLE." (
+							  id int(11) NOT NULL AUTO_INCREMENT,
+							  post_type varchar(100) NULL,
+							  data_type varchar(100) NULL DEFAULT NULL,
+							  field_type varchar(255) NOT NULL COMMENT 'text,checkbox,radio,select,textarea',
+							  admin_title varchar(255) NULL DEFAULT NULL,
+							  admin_desc text NULL DEFAULT NULL,
+							  site_title varchar(255) NULL DEFAULT NULL,
+							  htmlvar_name varchar(255) NULL DEFAULT NULL,
+							  default_value text NULL DEFAULT NULL,
+							  sort_order int(11) NOT NULL,
+							  option_values text NULL DEFAULT NULL,
+							  clabels text NULL DEFAULT NULL,
+							  is_active enum( '0', '1' ) NOT NULL DEFAULT '1',
+							  is_default enum( '0', '1' ) NOT NULL DEFAULT '0',
+							  is_admin enum( '0', '1' ) NOT NULL DEFAULT '0',
+							  is_required enum( '0', '1' ) NOT NULL DEFAULT '0',
+							  required_msg varchar(255) NULL DEFAULT NULL,
+							  show_on_listing enum( '0', '1' ) NOT NULL DEFAULT '1',
+							  show_on_detail enum( '0', '1' ) NOT NULL DEFAULT '1',
+							  show_as_tab enum( '0', '1' ) NOT NULL DEFAULT '0',
+							  for_admin_use enum( '0', '1' ) NOT NULL DEFAULT '0',
+							  packages varchar(255) NOT NULL DEFAULT ',0,',
+							  cat_sort text NULL DEFAULT NULL,
+							  cat_filter text NULL DEFAULT NULL,
+							  extra_fields text NULL DEFAULT NULL,
+							  field_icon varchar(255) NULL DEFAULT NULL,
+							  css_class varchar(255) NULL DEFAULT NULL,
+							  decimal_point varchar( 10 ) NOT NULL,
+							  PRIMARY KEY  (id)
+							  ) $collate";
 		
 		$post_custom_fields = apply_filters('geodir_before_custom_field_table_create' , $post_custom_fields) ;		
 		
 		dbDelta($post_custom_fields);
 		
 		// Table for storing place attribute - these are user defined
-		$post_detail = "CREATE TABLE IF NOT EXISTS ".$plugin_prefix."gd_place_detail (
-						`post_id` int(11) NOT NULL,
-						`post_title` varchar(100) NULL DEFAULT NULL,
-						`post_status` varchar(20) NULL DEFAULT NULL,
-						`default_category` INT NULL DEFAULT NULL,
-						`post_tags` varchar(254) NULL DEFAULT NULL,
-						`post_location_id` int(11) NOT NULL,
-						`marker_json` text NULL DEFAULT NULL,
-						`claimed` ENUM( '1', '0' ) NULL DEFAULT '0',
-						`businesses` ENUM( '1', '0' ) NULL DEFAULT '0',
-						`is_featured` ENUM( '1', '0' ) NULL DEFAULT '0',
-						`featured_image` VARCHAR( 254 ) NULL DEFAULT NULL,
-						`paid_amount` DOUBLE NOT NULL DEFAULT '0', 
-						`package_id` INT(11) NOT NULL DEFAULT '0',
-						`alive_days` INT(11) NOT NULL DEFAULT '0',
-						`paymentmethod` varchar(30) NULL DEFAULT NULL,
-					 	`expire_date` VARCHAR( 25 ) NULL DEFAULT NULL,
-						`submit_time` varchar(15) NULL DEFAULT NULL,
-						`submit_ip` varchar(20) NULL DEFAULT NULL,
-						`overall_rating` float(11) DEFAULT NULL, 
-						`rating_count` INT(11) DEFAULT '0', 
-						`post_locations` VARCHAR( 254 ) NULL DEFAULT NULL,
-						`post_dummy` ENUM( '1', '0' ) NULL DEFAULT '0', 
-						PRIMARY KEY (`post_id`)) $collate ";
+		$post_detail = "CREATE TABLE ".$plugin_prefix."gd_place_detail (
+						post_id int(11) NOT NULL,
+						post_title text NULL DEFAULT NULL,
+						post_status varchar(20) NULL DEFAULT NULL,
+						default_category INT NULL DEFAULT NULL,
+						post_tags varchar(254) NULL DEFAULT NULL,
+						post_location_id int(11) NOT NULL,
+						marker_json text NULL DEFAULT NULL,
+						claimed enum( '1', '0' ) NULL DEFAULT '0',
+						businesses enum( '1', '0' ) NULL DEFAULT '0',
+						is_featured enum( '1', '0' ) NULL DEFAULT '0',
+						featured_image varchar( 254 ) NULL DEFAULT NULL,
+						paid_amount double NOT NULL DEFAULT '0', 
+						package_id int(11) NOT NULL DEFAULT '0',
+						alive_days int(11) NOT NULL DEFAULT '0',
+						paymentmethod varchar(30) NULL DEFAULT NULL,
+					 	expire_date varchar( 25 ) NULL DEFAULT NULL,
+						submit_time varchar(15) NULL DEFAULT NULL,
+						submit_ip varchar(20) NULL DEFAULT NULL,
+						overall_rating int(11) DEFAULT '0', 
+						rating_count int(11) DEFAULT '0', 
+						post_locations varchar( 254 ) NULL DEFAULT NULL,
+						post_dummy enum( '1', '0' ) NULL DEFAULT '0', 
+						PRIMARY KEY  (post_id)
+						) $collate ";
 		$post_detail = apply_filters('geodir_before_post_detail_table_create' , $post_detail) ;		
 						
 		dbDelta($post_detail);
-	
+		
+		// alter post_title
+		//$wpdb->query("ALTER TABLE ".$wpdb->prefix."geodir_gd_place_detail MODIFY `post_title` text NULL");
 		
 		// Table for storing place images - these are user defined
 		
-		$attechment_table = "CREATE TABLE IF NOT EXISTS ".GEODIR_ATTACHMENT_TABLE." (
-						`ID` int(11) NOT NULL AUTO_INCREMENT,
-						`post_id` int(11) NOT NULL,
-						`title` varchar(254) NULL DEFAULT NULL,
-						`content` text NULL DEFAULT NULL,
-						`file` varchar(254) NOT NULL, 
-						`mime_type` varchar(150) NOT NULL,
-						`menu_order` int(11) NOT NULL DEFAULT '0',
-						`is_featured` ENUM( '1', '0' ) NULL DEFAULT '0',
-						`metadata` text NULL DEFAULT NULL,
-						PRIMARY KEY (`ID`)) $collate ";
+		$attechment_table = "CREATE TABLE ".GEODIR_ATTACHMENT_TABLE." (
+						ID int(11) NOT NULL AUTO_INCREMENT,
+						post_id int(11) NOT NULL,
+						title varchar(254) NULL DEFAULT NULL,
+						content text NULL DEFAULT NULL,
+						file varchar(254) NOT NULL, 
+						mime_type varchar(150) NOT NULL,
+						menu_order int(11) NOT NULL DEFAULT '0',
+						is_featured enum( '1', '0' ) NULL DEFAULT '0',
+						metadata text NULL DEFAULT NULL,
+						PRIMARY KEY  (ID)
+						) $collate ";
 		$attechment_table = apply_filters('geodir_before_attachment_table_create' , $attechment_table) ;		
 						
 		dbDelta($attechment_table);
 		
 		
-		$custom_sort_fields_table = "CREATE TABLE IF NOT EXISTS ".GEODIR_CUSTOM_SORT_FIELDS_TABLE." (
-			`id` int(11) NOT NULL AUTO_INCREMENT,
-			`post_type` varchar(255) NOT NULL,
-			`data_type` varchar(255) NOT NULL,
-			`field_type` varchar(255) NOT NULL,
-			`site_title` varchar(255) NOT NULL,
-			`htmlvar_name` varchar(255) NOT NULL,
-			`sort_order` int(11) NOT NULL,
-			`is_active` int(11) NOT NULL,
-			`is_default` int(11) NOT NULL,
-			`default_order` varchar(255) NOT NULL,
-			`sort_asc` int(11) NOT NULL,
-			`sort_desc` int(11) NOT NULL,
-			`asc_title` varchar(255) NOT NULL,
-			`desc_title` varchar(255) NOT NULL,
-			PRIMARY KEY (`id`)) $collate ";
+		$custom_sort_fields_table = "CREATE TABLE ".GEODIR_CUSTOM_SORT_FIELDS_TABLE." (
+			id int(11) NOT NULL AUTO_INCREMENT,
+			post_type varchar(255) NOT NULL,
+			data_type varchar(255) NOT NULL,
+			field_type varchar(255) NOT NULL,
+			site_title varchar(255) NOT NULL,
+			htmlvar_name varchar(255) NOT NULL,
+			sort_order int(11) NOT NULL,
+			is_active int(11) NOT NULL,
+			is_default int(11) NOT NULL,
+			default_order varchar(255) NOT NULL,
+			sort_asc int(11) NOT NULL,
+			sort_desc int(11) NOT NULL,
+			asc_title varchar(255) NOT NULL,
+			desc_title varchar(255) NOT NULL,
+			PRIMARY KEY  (id)
+			) $collate ";
 			
 		$custom_sort_fields_table = apply_filters('geodir_before_sort_fields_table_create' , $custom_sort_fields_table) ;		
 						
@@ -461,6 +481,9 @@ if (!function_exists('geodir_create_tables')) {
 			`post_city` varchar(30) NULL DEFAULT NULL,
 			`post_region` varchar(30) NULL DEFAULT NULL,
 			`post_country` varchar(30) NULL DEFAULT NULL,
+			`post_latitude` varchar(20) NULL DEFAULT NULL,
+			`post_longitude` varchar(20) NULL DEFAULT NULL,
+			`comment_content` TEXT NULL DEFAULT NULL,
 			PRIMARY KEY (id)) $collate  " ;
 			$review_table = apply_filters('geodir_before_review_table_create' , $review_table) ;		
 			$wpdb->query($review_table);

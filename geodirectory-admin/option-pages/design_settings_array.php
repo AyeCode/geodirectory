@@ -68,6 +68,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 	array( 'type' => 'sectionend', 'id' => 'geodir_home_top_section'),
 	
 	
+	
 	array( 	'name' => __( 'Home Page Layout Settings', GEODIRECTORY_TEXTDOMAIN ), 
 				'type' => 'sectionstart',
 				'desc' => '', 
@@ -130,6 +131,13 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 			'id' 		=> 'geodir_show_home_bottom_section',
 			'type' 		=> 'checkbox',
 			'std' 		=> '0' // Default value to show home top section
+		),
+		array(  
+			'name' 		=> __( 'Resize image large size', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> sprintf( __( 'Use default wordpress media image large size ( %s ) for featured image upload. If unchecked then default geodirectory image large size ( 800x800 ) will be used.', GEODIRECTORY_TEXTDOMAIN ), get_option( 'large_size_w' ) . 'x' . get_option( 'large_size_h' ) ),
+			'id' 		=> 'geodir_use_wp_media_large_size',
+			'type' 		=> 'checkbox',
+			'std' 		=> '0'
 		),
 		
 	array( 'type' => 'sectionend', 'id' => 'geodir_home_layout'),
@@ -383,7 +391,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 		array(  
 			'name' => __( 'Width of search left section', GEODIRECTORY_TEXTDOMAIN ),
 			'desc' 		=> __( 'Enter the width of left section of search in %', GEODIRECTORY_TEXTDOMAIN ),
-			'id' 		=> 'geodir_width_listing_left_section',
+			'id' 		=> 'geodir_width_search_left_section',
 			'type' 		=> 'text',
 			'css' 		=> 'min-width:300px;',
 			'std' 		=> '30' // Default value to show home top section
@@ -455,7 +463,21 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 			'id' 		=> 'geodir_show_detail_bottom_section',
 			'type' 		=> 'checkbox',
 			'std' 		=> '1' // Default value to show home top section
-		),	
+		),
+	array(  
+		'name' => __( 'Detail sidebar section on left side', GEODIRECTORY_TEXTDOMAIN ),
+		'desc' 		=> __( 'Display detail sidebar section on left side of the detail page', GEODIRECTORY_TEXTDOMAIN ),
+		'id' 		=> 'geodir_detail_sidebar_left_section',
+		'type' 		=> 'checkbox',
+		'std' 		=> '0'
+	),
+	array(  
+		'name'	=> __( 'Disable GD modal', GEODIRECTORY_TEXTDOMAIN ),
+		'desc'	=> __( 'Disable GD modal that displays slideshow images in popup', GEODIRECTORY_TEXTDOMAIN ),
+		'id'	=> 'geodir_disable_gb_modal',
+		'type'	=> 'checkbox',
+		'std'	=> '0'
+	),	
 	
 	array( 'type' => 'sectionend', 'id' => 'detail_page_settings'),
 	
@@ -921,6 +943,50 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 	
 	/* Map Settings Start */
 	array( 'name' => __( 'Map', GEODIRECTORY_TEXTDOMAIN ), 'type' => 'title', 'desc' => '', 'id' => 'geodir_map_settings ' ),
+	
+	/* Untick the category by default on home map */
+	array(
+		'name' => __( 'Home Map Settings', GEODIRECTORY_TEXTDOMAIN ),
+		'type' => 'sectionstart',
+		'desc' => '', 
+		'id' => 'geodir_home_map_section'
+	),
+	array(
+		'name' => __( 'Select category to untick by default on map', GEODIRECTORY_TEXTDOMAIN ),
+		'desc' => __( 'Select category to untick by default on the home map.', GEODIRECTORY_TEXTDOMAIN ),
+		'tip' => '',
+		'id' => 'geodir_home_map_untick',
+		'css' => 'min-width:300px;',
+		'std' => '',
+		'type' => 'multiselect',
+		'placeholder_text' => __( 'Select category', GEODIRECTORY_TEXTDOMAIN ),
+		'class'	=> 'chosen_select',
+		'options' => geodir_home_map_cats_key_value_array()
+	),
+	array(
+		'type' => 'sectionend',
+		'id' => 'geodir_home_map_section'
+	),	
+	
+	array(
+		'name' => __( 'Add Listing Map Settings', GEODIRECTORY_TEXTDOMAIN ),
+		'type' => 'sectionstart',
+		'desc' => '', 
+		'id' => 'geodir_add_listing_map_section'
+	),
+	array(  
+			'name' => __( 'Disable mouse scroll', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> __( 'Stops the mouse scroll zooming the map', GEODIRECTORY_TEXTDOMAIN ),
+			'id' 		=> 'geodir_add_listing_mouse_scroll',
+			'type' 		=> 'checkbox',
+			'std' 		=> '0' // Default value to show home top section
+		),
+	array(
+		'type' => 'sectionend',
+		'id' => 'geodir_add_listing_map_section'
+	),
+	
+	
 	array( 	'name' => __( 'Default map settings', GEODIRECTORY_TEXTDOMAIN ), 
 				'type' => 'sectionstart',
 				'desc' => '', 
