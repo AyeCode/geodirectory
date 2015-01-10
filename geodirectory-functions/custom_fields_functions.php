@@ -1586,7 +1586,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 		
 			 
 			// adjust values here
-			$file_id = $name; // this will be the name of form field. Image url(s) will be submitted in $_POST using this key. So if $id == “img1” then $_POST[“img1”] will have all the image urls
+			$file_id = $name; // this will be the name of form field. Image url(s) will be submitted in $_POST using this key. So if $id == ï¿½img1ï¿½ then $_POST[ï¿½img1ï¿½] will have all the image urls
 			 
 			if($value != ''){
 				
@@ -2449,6 +2449,69 @@ function geodir_show_listing_info($fields_location=''){
 							$html .= '</span>'.wpautop(stripslashes($post->$type['htmlvar_name'])).'</div>';	
 							
 						}
+				break;
+				case 'taxonomy': {
+					$html_var = $type['htmlvar_name'];
+					if ( $html_var == $post->post_type . 'category' && !empty( $post->$html_var ) ) {
+						$post_taxonomy = $post->post_type . 'category';
+						$field_value = $post->$html_var;
+						$links = array();
+                        $terms = array();
+						$termsOrdered = array();
+						if ( !is_array( $field_value ) ) {
+							$field_value = explode( ",", trim( $field_value, "," ) );
+						}
+						
+						$field_value = array_unique( $field_value );
+						
+						if ( !empty( $field_value ) ) {
+							foreach ( $field_value as $term ){
+								$term = trim( $term );
+								
+								if( $term != '' ) {
+									$term = get_term_by( 'id', $term, $html_var ); 
+									if ( is_object ( $term ) ) {
+										$links[] = "<a href='" . esc_attr( get_term_link( $term,$post_taxonomy ) ) . "'>" . $term->name . "</a>";
+										$terms[] = $term;
+									}
+								}
+							}
+							if ( !empty( $links ) ) {
+								// order alphabetically
+								asort( $links );
+								foreach ( array_keys( $links ) as $key ) {
+									$termsOrdered[$key] = $terms[$key];
+								}
+								$terms = $termsOrdered;
+							}
+						}
+						$html_value = !empty( $links ) && !empty( $terms ) ? wp_sprintf( '%l', $links, (object)$terms ) : '';
+						
+						if ( $html_value != '' ) {						
+							if ( strpos( $field_icon, 'http') !== false ) {
+								$field_icon_af = '';
+							} else if ( $field_icon == '' ) {
+								$field_icon_af = '';
+							} else {
+								$field_icon_af = $field_icon;
+								$field_icon = '';
+							}
+								
+							$geodir_odd_even = '';
+							if ( $fields_location == 'detail' ) {
+								$geodir_odd_even = 'geodir_more_info_odd';
+								if ( $i%2 == 0 ) {
+									$geodir_odd_even = 'geodir_more_info_even';
+								}
+								$i++;
+							}
+								
+							$html = '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $html_var . '" style="clear:both;"><span class="geodir-i-taxonomy geodir-i-category" style="' . $field_icon . '">' . $field_icon_af;
+							$html .= ( trim( $type['site_title'] ) ) ? __( $type['site_title'], GEODIRECTORY_TEXTDOMAIN ) . ': ' : '';
+							$html .= '</span> '. $html_value . '</div>';	
+						}
+					}
+				}
 				break;
 				
 			}

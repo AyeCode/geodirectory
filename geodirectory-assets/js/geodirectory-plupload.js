@@ -69,7 +69,7 @@ jQuery(document).ready(function($) {
 			jQuery('#'+imgId+'upload-error').removeClass('upload-error');
 			
 			
-			if(limitImg && $this.hasClass("plupload-upload-uic-multiple")){
+			if(limitImg && $this.hasClass("plupload-upload-uic-multiple") && jQuery("#"+imgId+"image_limit").val()){
 				
 				if(totalImg==limitImg && parseInt(limitImg) > 0){
 				while(up.files.length > 0) {up.removeFile(up.files[0]);} // remove images

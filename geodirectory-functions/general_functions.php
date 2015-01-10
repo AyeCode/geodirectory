@@ -1126,7 +1126,7 @@ function geodir_widget_listings_get_order( $query_args ) {
 }
 
 function geodir_get_widget_listings( $query_args = array() ) {
-	global $wpdb, $plugin_prefix;
+	global $wpdb, $plugin_prefix,$table_prefix;
 	$GLOBALS['gd_query_args_widgets'] = $query_args;
 	$gd_query_args_widgets = $query_args;
 	
@@ -1137,11 +1137,34 @@ function geodir_get_widget_listings( $query_args = array() ) {
 	$fields = apply_filters( 'geodir_filter_widget_listings_fields', $fields,$table,$post_type );
 	
 	$join = "INNER JOIN " . $table ." ON (" . $table .".post_id = " . $wpdb->posts . ".ID)";
+	
+	########### WPML ###########
+		
+		if(function_exists('icl_object_id')){
+		global $sitepress;
+		$lang_code = ICL_LANGUAGE_CODE;
+		$default_lang_code = $sitepress->get_default_language();
+			if($lang_code){
+			$join .= " JOIN ".$table_prefix."icl_translations icl_t ON icl_t.element_id = ".$table_prefix."posts.ID";
+			}
+
+		}
+	########### WPML ###########
+	
 	$join = apply_filters( 'geodir_filter_widget_listings_join', $join,$post_type  );
 	
 	$post_status = is_super_admin() ? " OR " . $wpdb->posts . ".post_status = 'private'" : '';
 		
 	$where = " AND ( " . $wpdb->posts . ".post_status = 'publish' " . $post_status . " ) AND " . $wpdb->posts . ".post_type = '" . $post_type . "'";
+	
+	########### WPML ###########
+	if(function_exists('icl_object_id')){
+		if($lang_code){
+			$where .= " AND icl_t.language_code = '$lang_code' ";
+		}
+	}
+	########### WPML ###########
+	
 	$where = apply_filters( 'geodir_filter_widget_listings_where', $where,$post_type );
 	$where = $where != '' ? " WHERE 1=1 " . $where : '';
 	

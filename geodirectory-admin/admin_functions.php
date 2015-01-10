@@ -205,7 +205,7 @@ if (!function_exists('geodir_admin_menu')) {
 		
 		if ( current_user_can( 'manage_options' ) ) $menu[] = array( '', 'read', 'separator-geodirectory', '', 'wp-menu-separator geodirectory' );
 			
-			add_menu_page(__('Geodirectory',  GEODIRECTORY_TEXTDOMAIN ), __('Geodirectory',  GEODIRECTORY_TEXTDOMAIN ), 'manage_options','geodirectory' , 'geodir_admin_panel', geodir_plugin_url() . '/geodirectory-assets/images/favicon.ico',55);
+			add_menu_page(__('Geodirectory',  GEODIRECTORY_TEXTDOMAIN ), __('Geodirectory',  GEODIRECTORY_TEXTDOMAIN ), 'manage_options','geodirectory' , 'geodir_admin_panel', geodir_plugin_url() . '/geodirectory-assets/images/favicon.ico','55.1984');
 		
 			
 	}       
@@ -2101,7 +2101,7 @@ function geodir_post_attachments()
     
     
     // adjust values here
-    $id = "post_images"; // this will be the name of form field. Image url(s) will be submitted in $_POST using this key. So if $id == “img1” then $_POST[“img1”] will have all the image urls
+    $id = "post_images"; // this will be the name of form field. Image url(s) will be submitted in $_POST using this key. So if $id == ï¿½img1ï¿½ then $_POST[ï¿½img1ï¿½] will have all the image urls
     
     $svalue = $curImages; // this will be initial value of the above form field. Image urls.
     

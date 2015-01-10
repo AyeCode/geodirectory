@@ -204,7 +204,7 @@ geocodePosition(baseMarker.getPosition());
 <?php } ?>
 updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry);
 } else {
-updateMarkerAddress('<?php _e('Cannot determine address at this location.',GEODIRECTORY_TEXTDOMAIN);?>');
+updateMarkerAddress('<?php echo addslashes(__('Cannot determine address at this location.',GEODIRECTORY_TEXTDOMAIN));?>');
 }
 	
 	

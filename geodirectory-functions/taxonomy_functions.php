@@ -534,7 +534,7 @@ function geodir_custom_taxonomy_walker($cat_taxonomy, $cat_parent = 0,$hide_empt
 /* secound test */
 if (!function_exists('geodir_custom_taxonomy_walker2')) {
 function geodir_custom_taxonomy_walker2($cat_taxonomy, $cat_limit = '')
-{
+{	
 	$post_category = '';
 	$post_category_str = '';
 	global $exclude_cats;
@@ -555,9 +555,29 @@ function geodir_custom_taxonomy_walker2($cat_taxonomy, $cat_limit = '')
 	
 	}elseif((geodir_is_page('add-listing') && isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') || (is_admin())) { 
 		global $post;
-		$post_category = geodir_get_post_meta($post->ID,$cat_taxonomy,true);
+	
+		$post_category =   geodir_get_post_meta($post->ID,$cat_taxonomy,true);
+		if(empty($post_category)){
+			$post_category =   $post->$cat_taxonomy;
+		}
+		
 		$post_categories = get_post_meta($post->ID,'post_categories',true);
 		
+		if(empty($post_category) && !empty($post_categories) && !empty($post_categories[$cat_taxonomy])){
+			foreach(explode(",", $post_categories[$cat_taxonomy] ) as $cat_part){
+					if(is_numeric($cat_part)){$cat_part_arr[] =$cat_part; }				
+			}
+			if(is_array($cat_part_arr)){
+			$post_category =   implode(',',$cat_part_arr);	
+			}
+		}
+		
+		if(!empty($post_category)){
+			$cat1 = array_filter(explode(',',$post_category));
+			$post_category = ','.implode(',',$cat1).',';
+			
+		}
+	
 		if($post_category != '' && is_array($exclude_cats) && !empty($exclude_cats)){
 
 			$post_category_upd = explode(',', $post_category);
@@ -573,9 +593,9 @@ function geodir_custom_taxonomy_walker2($cat_taxonomy, $cat_limit = '')
 		
 		
 		
-		if(!empty($post_categories) && array_key_exists($cat_taxonomy,$post_categories))
+		if(!empty($post_categories) && array_key_exists($cat_taxonomy,$post_categories)){
 			$post_category_str = $post_categories[$cat_taxonomy];	
-			
+		}
 	}
 	
     echo '<input type="hidden" id="cat_limit" value="'.$cat_limit.'" name="cat_limit['.$cat_taxonomy.']"  />'; 
@@ -1014,7 +1034,7 @@ $comment_post_cache = array();
 $gd_permalink_cache = array();
 function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $sample)
 {
-	//echo $post_link."<br />" ;
+	//echo $post_link."<br />".$sample ;
 
 	
 	global $wpdb, $wp_query ,$plugin_prefix,$post,$comment_post_cache,$gd_permalink_cache;
@@ -1189,7 +1209,7 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
 			//echo $post_link ;
 		}
 		// temp cache the permalink
-		$gd_permalink_cache[$post->ID]=$post_link;
+		if(!$sample){$gd_permalink_cache[$post->ID]=$post_link;}
 	}	
 	if(isset($orig_post)){$post = $orig_post;}
 	//echo $post_link ;
