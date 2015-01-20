@@ -1,7 +1,7 @@
 <?php 
 do_action('geodir_before_listing_listview');
-global $gridview_columns;
-$grid_view_class = apply_filters( 'geodir_grid_view_widget_columns', $gridview_columns );
+global $gridview_columns_widget;
+$grid_view_class = apply_filters( 'geodir_grid_view_widget_columns', $gridview_columns_widget  );
 if( isset( $_SESSION['gd_listing_view'] ) && $_SESSION['gd_listing_view'] != '' && !isset( $before_widget ) ) {
 	if( $_SESSION['gd_listing_view'] == '1' ) { $grid_view_class = ''; }
 	if( $_SESSION['gd_listing_view'] == '2' ) { $grid_view_class = 'gridview_onehalf'; }
@@ -68,12 +68,26 @@ if ( !empty( $widget_listings ) ) {
 			?>
 			<h3>
 			<?php
-			if (round((int)$distance,2) == 0){
+			if (round((int)$distance, 2) == 0) {
 				$uom = get_option('geodir_search_dist_2');
-				$distance = geodir_calculateDistanceFromLatLong ($startPoint,$endPoint,$uom);
-				echo round($distance).' '.__( $uom, GEODIRECTORY_TEXTDOMAIN ).'<br />';
+				$distance = geodir_calculateDistanceFromLatLong($startPoint, $endPoint, $uom);
+				if ($uom == 'feet') {
+					$uom = __('feet', GEODIRECTORY_TEXTDOMAIN);
+				} else {
+					$uom = __('meters', GEODIRECTORY_TEXTDOMAIN);
+				}
+				echo round($distance) . ' ' . __($uom, GEODIRECTORY_TEXTDOMAIN) . '
+			<br />
+			';
 			} else {
-				echo round($distance,2).' '.__( $uom, GEODIRECTORY_TEXTDOMAIN ).'<br />';
+				if ($uom == 'miles') {
+					$uom = __('miles', GEODIRECTORY_TEXTDOMAIN);
+				} else {
+					$uom = __('km', GEODIRECTORY_TEXTDOMAIN);
+				}
+				echo round($distance, 2) . ' ' . __($uom, GEODIRECTORY_TEXTDOMAIN) . '
+			<br />
+			';
 			}
 			?>
 			</h3>

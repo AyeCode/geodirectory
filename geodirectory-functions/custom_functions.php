@@ -318,6 +318,10 @@ function geodir_display_sort_options(){
 				$sort_field_options .= '<option '.$selected.' value="'.add_query_arg( 'sort_by', $key ).'">'.$label.'</option>';
 			}
 			
+			if($sort->htmlvar_name=='comment_count'){
+				$sort->htmlvar_name='rating_count';
+			}
+			
 			if($sort->sort_asc){
 				 $key = $sort->htmlvar_name.'_asc';
 				 $label = $sort->site_title;

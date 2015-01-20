@@ -42,8 +42,8 @@ function geodir_templates_scripts()
 		wp_enqueue_script( 'geodirectory-goMap-script' );
 		
 		
-		wp_register_script( 'geodirectory-chosen-jquery', geodir_plugin_url().'/geodirectory-assets/js/chosen.jquery.js',array(),GEODIRECTORY_VERSION );
-		wp_enqueue_script( 'geodirectory-chosen-jquery' );
+		wp_register_script( 'chosen', geodir_plugin_url().'/geodirectory-assets/js/chosen.jquery.js',array(),GEODIRECTORY_VERSION );
+		wp_enqueue_script( 'chosen' );
 		
 		wp_register_script( 'geodirectory-choose-ajax', geodir_plugin_url().'/geodirectory-assets/js/ajax-chosen.js',array(),GEODIRECTORY_VERSION );
 		wp_enqueue_script( 'geodirectory-choose-ajax' );

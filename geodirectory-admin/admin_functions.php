@@ -81,8 +81,8 @@ if (!function_exists('geodir_admin_scripts'))
 		
 		wp_enqueue_script( 'geodirectory-jquery-ui-timepicker-js',geodir_plugin_url().'/geodirectory-assets/ui/jquery.ui.timepicker.js',array( 'jquery-ui-datepicker','jquery-ui-slider' ),'',true  );
 		
-		wp_register_script( 'geodirectory-chosen-jquery', geodir_plugin_url().'/geodirectory-assets/js/chosen.jquery.js' ,array(),GEODIRECTORY_VERSION);
-		wp_enqueue_script( 'geodirectory-chosen-jquery');
+		wp_register_script( 'chosen', geodir_plugin_url().'/geodirectory-assets/js/chosen.jquery.js' ,array(),GEODIRECTORY_VERSION);
+		wp_enqueue_script( 'chosen');
 		
 		wp_register_script( 'geodirectory-choose-ajax', geodir_plugin_url().'/geodirectory-assets/js/ajax-chosen.js' ,array(),GEODIRECTORY_VERSION);
 		wp_enqueue_script( 'geodirectory-choose-ajax' );
@@ -1199,6 +1199,10 @@ if (!function_exists('geodir_import_data')) {
 										$p_taxonomy = geodir_get_taxonomies(addslashes($buffer[5]));
 										if(get_term_by( 'name', $catid, $p_taxonomy[0] )){
 											$cat = get_term_by( 'name', $catid, $p_taxonomy[0]);
+											$catids_arr[] = $cat->slug;
+										}
+										elseif(get_term_by( 'slug', $catid, $p_taxonomy[0] )){
+											$cat = get_term_by( 'slug', $catid, $p_taxonomy[0]);
 											$catids_arr[] = $cat->slug;
 										}
 									}

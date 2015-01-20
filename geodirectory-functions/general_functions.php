@@ -1112,7 +1112,7 @@ function geodir_widget_listings_get_order( $query_args ) {
 			$orderby = $wpdb->posts . ".comment_count DESC, ";
 		break;
 		case 'high_rating':
-			$orderby = $table . ".overall_rating DESC, ";
+			$orderby = "( " . $table . ".overall_rating / " . $table . ".rating_count ) DESC, ";
 		break;
 		case 'random':
 			$orderby = "RAND(), ";
@@ -1387,4 +1387,42 @@ function geodir_comments_number($number){
         }
 	echo $output;
 }
+
+function is_page_geodir_home(){
+	global $wpdb;
+	$cur_url = str_replace("https", "http", geodir_curPageURL());
+	$cur_url =  str_replace("www.", "",$cur_url);
+	$home_url = home_url( '', 'http');
+	$home_url = str_replace("www.", "",$home_url);
+	
+	if(($cur_url==$home_url || $cur_url==$home_url.'/') && get_option('geodir_set_as_home') ){
+		return true;
+	}else{
+		return false;
+	}
+	
+}
+
+
+function geodir_wpseo_homepage_canonical($url) {
+    global $post;
+
+    if ( is_page_geodir_home() ) {
+        return home_url();
+    } 
+	
+	return $url;
+}
+add_filter( 'wpseo_canonical', 'geodir_wpseo_homepage_canonical', 10 );
+add_filter( 'aioseop_canonical_url', 'geodir_wpseo_homepage_canonical', 10 );
+
+function geodir_googlemap_script_extra_details_page($extra){
+	
+	if(!str_replace('libraries=places', '', $extra) && geodir_is_page('detail') ){
+		$extra .= "&amp;libraries=places";
+	}
+	
+	return $extra;
+}
+add_filter( 'geodir_googlemap_script_extra', 'geodir_googlemap_script_extra_details_page', 101,1 );
 

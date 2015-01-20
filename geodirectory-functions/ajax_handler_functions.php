@@ -1,17 +1,9 @@
 <?php   
 /* ---- Geodirectory Post or Get request handler on INIT ---- */
 
-function geodir_on_init(){
-	
-	do_action('giodir_handle_request' );
+function geodir_on_wp_loaded(){
+	do_action('giodir_handle_request_plugins_loaded' );
 	global $wpdb;
-	
-	
-	if ( get_option('geodir_allow_wpadmin') == '0' && is_user_logged_in() && !current_user_can( 'manage_options' ) ) {
-		show_admin_bar( false );
-	}
-
-
 	if(isset($_REQUEST['geodir_signup']))
 	{ geodir_user_signup(); }	
 	
@@ -25,6 +17,20 @@ function geodir_on_init(){
 		geodir_send_friend($_REQUEST); // function in custom_functions.php
 		
 	}
+}
+
+function geodir_on_init(){
+	
+	do_action('giodir_handle_request' );
+	global $wpdb;
+	
+	
+	if ( get_option('geodir_allow_wpadmin') == '0' && is_user_logged_in() && !current_user_can( 'manage_options' ) ) {
+		show_admin_bar( false );
+	}
+
+
+	
 		
 	if(isset($_REQUEST['ptype']) && $_REQUEST['ptype'] == 'get_markers')
 	{ include_once ( geodir_plugin_path() . '/geodirectory-functions/map-functions/get_markers.php'); die; }

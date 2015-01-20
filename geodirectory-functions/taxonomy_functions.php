@@ -1045,7 +1045,7 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
 		if(in_array( $post->post_type, geodir_get_posttypes() ) ){
 		
 		if(isset($comment_post_cache[$post->ID])){$post = $comment_post_cache[$post->ID];}
-		if(isset($gd_permalink_cache[$post->ID]) && $gd_permalink_cache[$post->ID] && !$sample){if(isset($orig_post)){$post = $orig_post;} return $gd_permalink_cache[$post->ID];}
+		if(isset($gd_permalink_cache[$post->ID]) && $gd_permalink_cache[$post->ID] && !$sample){$post_id = $post->ID; if(isset($orig_post)){$post = $orig_post;} return $gd_permalink_cache[$post_id];}
 		
 		if(!isset($post->post_locations)){
 			$post_type= $post->post_type;

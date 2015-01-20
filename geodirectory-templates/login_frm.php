@@ -39,6 +39,7 @@ else
 		
 		if(isset($_REQUEST['checkemail']) && $_REQUEST['checkemail']=='confirm')
 			echo '<p class="sucess_msg">'.PW_SEND_CONFIRM_MSG.'</p>';
+		
 		?>
         <form name="cus_loginform" id="cus_loginform" action="" method="post" >
         

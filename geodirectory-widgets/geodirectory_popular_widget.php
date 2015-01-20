@@ -280,7 +280,7 @@ class geodir_popular_postview extends WP_Widget {
 			$query_args['tax_query'] = array( $tax_query );
 		}
 	
-		global $gridview_columns, $geodir_is_widget_listing;
+		global $gridview_columns_widget, $geodir_is_widget_listing;
 		
 		$widget_listings = geodir_get_widget_listings( $query_args );
 		
@@ -296,10 +296,10 @@ class geodir_popular_postview extends WP_Widget {
 			<?php 
 			if ( strstr( $layout, 'gridview' ) ) {
 				$listing_view_exp = explode( '_', $layout );
-				$gridview_columns = $layout;
+				$gridview_columns_widget = $layout;
 				$layout = $listing_view_exp[0];
 			} else {
-				$gridview_columns = '';
+				$gridview_columns_widget  = '';
 			}
 			
 			$template = apply_filters( "geodir_template_part-widget-listing-listview", geodir_plugin_path() . '/geodirectory-templates/widget-listing-listview.php' );

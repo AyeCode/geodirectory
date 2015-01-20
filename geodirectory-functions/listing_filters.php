@@ -361,7 +361,7 @@ function geodir_posts_orderby($orderby) {
 	if ( is_main_query() && geodir_is_page( 'search' ) ) {
 		$search_term = get_query_var( 's' );
 		
-		if ( trim( $search_term ) != '' ) {
+		if ( trim( $search_term ) != '' && !isset($_REQUEST['sort_by'])) {
 			$sort_by = 'az';
 		}
 
@@ -384,10 +384,10 @@ function geodir_posts_orderby($orderby) {
 			$orderby = "$wpdb->posts.comment_count desc, ";
 		break;
 		case 'low_rating':
-			$orderby = $table.".overall_rating asc, ";
+			$orderby = "( " . $table . ".overall_rating / " . $table . ".rating_count ) asc, ";
 		break;
 		case 'high_rating':
-			$orderby = $table.".overall_rating desc, ";
+			$orderby = "( " . $table . ".overall_rating / " . $table . ".rating_count ) desc, ";
 		break;
 		case 'featured':
 			$orderby = $table.".is_featured asc, ";
@@ -442,6 +442,11 @@ function geodir_posts_order_by_custom_sort($orderby, $sort_by, $table){
 				
 				case 'distance':
 					$orderby = $sort_by." ".$order.", ";
+				break;
+				
+				// sort by rating
+				case 'overall_rating':
+					$orderby = "( " . $table . "." . $sort_by . " / " . $table . ".rating_count ) ".$order.", ";
 				break;
 				
 				default:

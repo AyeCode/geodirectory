@@ -136,6 +136,32 @@ function geodir_draw_map($map_args = array())
 			
 			<input type="text"  id="<?php echo $map_canvas_name;?>_fromAddress" name="from" class="textfield"  value="<?php echo ENTER_LOCATION_TEXT;?>"  onblur="if (this.value == '') {this.value = '<?php echo ENTER_LOCATION_TEXT;?>';}" onfocus="if (this.value == '<?php echo ENTER_LOCATION_TEXT;?>') {this.value = '';}" />
 			<input type="button" value="<?php _e('Get Directions',GEODIRECTORY_TEXTDOMAIN);?>" class="<?php echo $map_canvas_name;?>_getdirection" id="directions" onclick="calcRoute('<?php echo $map_canvas_name;?>')" />
+
+            <script>
+            jQuery(function(){
+			gd_initialize_ac();
+			});
+
+            function gd_initialize_ac() {
+			  // Create the autocomplete object, restricting the search
+			  // to geographical location types.
+			  autocomplete = new google.maps.places.Autocomplete(
+			      /** @type {HTMLInputElement} */(document.getElementById('<?php echo $map_canvas_name;?>_fromAddress')),
+			      { types: ['geocode'] });
+			  // When the user selects an address from the dropdown,
+			  // populate the address fields in the form.
+			  google.maps.event.addListener(autocomplete, 'place_changed', function() {
+			    gd_fillInAddress_ac();
+			  });
+			}
+			
+			function gd_fillInAddress_ac() {
+			  //submit the form
+			  jQuery('#directions').trigger('click');
+			}
+            
+            </script>
+            
             
             <div id='directions-options' class="hidden">
                 <select id="travel-mode" onchange="calcRoute('<?php echo $map_canvas_name;?>')">

@@ -77,10 +77,23 @@ if(isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view']!='' && !i
 					
 					 if (round((int)$distance,2) == 0){
 												$uom = get_option('geodir_search_dist_2');
+						 						
 												$distance = geodir_calculateDistanceFromLatLong ($startPoint,$endPoint,$uom);
-												echo round($distance).' '.__( $uom, GEODIRECTORY_TEXTDOMAIN ).'<br />';
+												if($uom=='feet'){
+						 							$uom =__( 'feet', GEODIRECTORY_TEXTDOMAIN );
+						 						}
+												else{
+													$uom =__( 'meters', GEODIRECTORY_TEXTDOMAIN );
+												}
+												echo round($distance).' '.$uom.'<br />';
 											}else{
-												echo round($distance,2).' '.__( $uom, GEODIRECTORY_TEXTDOMAIN ).'<br />';
+												if($uom=='miles'){
+						 							$uom =__( 'miles', GEODIRECTORY_TEXTDOMAIN );
+						 						}
+												else{
+													$uom =__( 'km', GEODIRECTORY_TEXTDOMAIN );
+												}
+												echo round($distance,2).' '.$uom.'<br />';
 										}
 					?>
 											</h3>
