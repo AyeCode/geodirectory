@@ -42,8 +42,8 @@ function geodir_templates_scripts()
 		wp_enqueue_script( 'geodirectory-goMap-script' );
 		
 		
-		wp_register_script( 'geodirectory-chosen-jquery', geodir_plugin_url().'/geodirectory-assets/js/chosen.jquery.js',array(),GEODIRECTORY_VERSION );
-		wp_enqueue_script( 'geodirectory-chosen-jquery' );
+		wp_register_script( 'chosen', geodir_plugin_url().'/geodirectory-assets/js/chosen.jquery.js',array(),GEODIRECTORY_VERSION );
+		wp_enqueue_script( 'chosen' );
 		
 		wp_register_script( 'geodirectory-choose-ajax', geodir_plugin_url().'/geodirectory-assets/js/ajax-chosen.js',array(),GEODIRECTORY_VERSION );
 		wp_enqueue_script( 'geodirectory-choose-ajax' );
@@ -118,9 +118,12 @@ function geodir_templates_scripts()
 		
 		wp_localize_script( 'geodirectory-script', 'geodir_ajax', $ajax_cons_data );
 		
-		$geodir_cons_data = array( 	'siteurl' => get_option('siteurl'),
-									'geodir_plugin_url'=>geodir_plugin_url(), 
-									'geodir_ajax_url'=>geodir_get_ajax_url()); 
+		$geodir_cons_data = array( 	
+								'siteurl' => get_option( 'siteurl' ),
+								'geodir_plugin_url' => geodir_plugin_url(), 
+								'geodir_ajax_url' => geodir_get_ajax_url(),
+								'geodir_gd_modal' => (int)get_option( 'geodir_disable_gb_modal' )
+							); 
 		wp_localize_script( 'geodirectory-script', 'geodir_var', $geodir_cons_data );
 		
 		wp_register_script( 'geodir-jRating-js', geodir_plugin_url() .'/geodirectory-assets/js/jRating.jquery.js' ,array(),GEODIRECTORY_VERSION);
@@ -129,6 +132,8 @@ function geodir_templates_scripts()
 		wp_register_script( 'geodir-on-document-load', geodir_plugin_url() .'/geodirectory-assets/js/on_document_load.js' ,array(),GEODIRECTORY_VERSION);
 		wp_enqueue_script( 'geodir-on-document-load' );
 		
+		wp_register_script( 'google-geometa', geodir_plugin_url() .'/geodirectory-assets/js/geometa.js' ,array(),GEODIRECTORY_VERSION);
+		wp_enqueue_script( 'google-geometa' );
 } 
 
 function geodir_header_scripts()
@@ -181,6 +186,12 @@ function geodir_templates_styles()
 	
 	wp_register_style( 'geodir-chosen-style', geodir_plugin_url() .'/geodirectory-assets/css/chosen.css' ,array(),GEODIRECTORY_VERSION);
 	wp_enqueue_style( 'geodir-chosen-style' );
+	
+	wp_register_style( 'geodirectory-frontend-rtl-style', geodir_plugin_url().'/geodirectory-assets/css/rtl-frontend.css', array(), GEODIRECTORY_VERSION );
+	wp_enqueue_style( 'geodirectory-frontend-rtl-style' );
+	
+	wp_register_style( 'geodirectory-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css', array(), GEODIRECTORY_VERSION );
+	wp_enqueue_style( 'geodirectory-font-awesome');
 } 
 
 function geodir_get_sidebar() 
@@ -315,7 +326,6 @@ $default_search_for_text = SEARCH_FOR_TEXT;
 				
 ?>
 		
-    <script type="text/javascript" src="http://gmaps-samples-v3.googlecode.com/svn/trunk/geolocate/geometa.js"></script> 
     
     <script type="text/javascript">
     var default_location = '<?php if($search_location = geodir_get_default_location())  echo $search_location->city ;?>';
@@ -324,16 +334,11 @@ $default_search_for_text = SEARCH_FOR_TEXT;
     var address;
     var dist = 0;
     var Sgeocoder = new google.maps.Geocoder();
-    jQuery(document).ready(function(){
-        
-        /*jQuery('#sort_by').change(function(){
-						
-            jQuery('.geodir_submit_search:first').click();
-				
-        });*/
-      
-        
-        jQuery('.geodir_submit_search').click(function(){
+	
+	
+	function geodir_setup_submit_search(){
+		
+	jQuery('.geodir_submit_search').click(function(){
             var s = ' ';
 			
 			var $form = jQuery(this).closest('form');
@@ -352,8 +357,22 @@ $default_search_for_text = SEARCH_FOR_TEXT;
                 jQuery($form).submit(); 
             }
             
-        });
+        });	
+		
+	}
+	
+	
+    jQuery(document).ready(function(){
         
+        /*jQuery('#sort_by').change(function(){
+						
+            jQuery('.geodir_submit_search:first').click();
+				
+        });*/
+      
+        
+        geodir_setup_submit_search();
+     });  
         function geodir_setsearch($form)
         {            if( ( dist > 0 || (jQuery('select[name="sort_by"]',$form).val() == 'nearest' || jQuery('select[name="sort_by"]',$form).val() == 'farthest')) && (jQuery(".snear",$form).val() == '' || jQuery(".snear",$form).val() == '<?php echo $default_near_text;?>' ) )
                 jQuery(".snear",$form).val(default_location);
@@ -370,7 +389,8 @@ $default_search_for_text = SEARCH_FOR_TEXT;
         function geocodeAddress($form) {
             Sgeocoder = new google.maps.Geocoder(); // Call the geocode function
             
-            if(jQuery('.snear',$form).val() == ''){
+            if(jQuery('.snear',$form).val() == '' || ( jQuery('.sgeo_lat').val()!='' && jQuery('.sgeo_lon').val()!=''  ) || jQuery('.snear',$form).val().match("^<?php _e('In:',GEODIRECTORY_TEXTDOMAIN);?>")){
+				if(jQuery('.snear',$form).val().match("^<?php _e('In:',GEODIRECTORY_TEXTDOMAIN);?>")){jQuery(".snear",$form).val('');}
                 jQuery($form).submit();
             }else{
             
@@ -442,7 +462,7 @@ $default_search_for_text = SEARCH_FOR_TEXT;
         }
      
     
-    });
+    
     </script> 
 <?php
 }	

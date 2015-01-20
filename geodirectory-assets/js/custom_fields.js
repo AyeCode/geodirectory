@@ -1,54 +1,48 @@
 jQuery(document).ready(function() {
-
- 	jQuery("#gt-form-builder-tab ul li a").click(function() {
-		
-		var type = jQuery(this).attr('id').replace('gt-','');
-		
+	jQuery("#gt-form-builder-tab ul li a").click(function() {
+		var type = jQuery(this).attr('id').replace('gt-', '');
 		var post_type = jQuery(this).closest('#gt-form-builder-tab').find('#new_post_type').val();
-		
-		var id = 'new'+jQuery(".field_row_main ul.core li:last").index();
-		
+		var id = 'new' + jQuery(".field_row_main ul.core li:last").index();
 		var manage_field_type = jQuery(this).closest('#geodir-available-fields').find(".manage_field_type").val();
-		
-		if(manage_field_type == 'custom_fields' || manage_field_type == 'sorting_options')
-		{
-			jQuery.get(geodir_admin_ajax.url+'?action=geodir_ajax_action&create_field=true',{ field_type: type,listing_type:post_type, field_id: id, field_ins_upd: 'new', manage_field_type:manage_field_type },
-			function(data)
-			{
-				
+		if(manage_field_type == 'custom_fields' || manage_field_type == 'sorting_options') {
+			jQuery.get(geodir_admin_ajax.url + '?action=geodir_ajax_action&create_field=true', {
+				field_type: type,
+				listing_type: post_type,
+				field_id: id,
+				field_ins_upd: 'new',
+				manage_field_type: manage_field_type
+			}, function(data) {
 				jQuery('.field_row_main ul.core').append(data);
-				
-				jQuery('#licontainer_'+id).find('#sort_order').val( parseInt(jQuery('#licontainer_'+id).index()) + 1 );
-				
+				jQuery('#licontainer_' + id).find('#sort_order').val(parseInt(jQuery('#licontainer_' + id).index()) + 1);
 			});
-			
-			if(manage_field_type == 'sorting_options'){
+			if(manage_field_type == 'sorting_options') {
 				jQuery(this).closest('li').hide();
 			}
-		
 		}
-	
 	});
-	
-	
-	jQuery(".field_row_main ul.core").sortable({ opacity: 0.8, cursor: 'move', update: function() {
-			
+	jQuery(".field_row_main ul.core").sortable({
+		opacity: 0.8,
+		cursor: 'move',
+		update: function() {
 			var manage_field_type = jQuery(this).closest('#geodir-selected-fields').find(".manage_field_type").val();
-			
-			var order = jQuery(this).sortable("serialize") + '&update=update&manage_field_type='+manage_field_type;
-			
-			if(manage_field_type == 'custom_fields' || manage_field_type == 'sorting_options'){
-				jQuery.get(geodir_admin_ajax.url+'?action=geodir_ajax_action&create_field=true', order, function(theResponse){
+			var order = jQuery(this).sortable("serialize") + '&update=update&manage_field_type=' + manage_field_type;
+			if(manage_field_type == 'custom_fields' || manage_field_type == 'sorting_options') {
+				jQuery.get(geodir_admin_ajax.url + '?action=geodir_ajax_action&create_field=true', order, function(theResponse) {
 					//alert('Fields have been ordered.');
 				});
 			}
 		}
 	});
-		
-		
-		
 });
 
+function gd_data_type_changed(obj, cont) {
+	if(obj && cont) {
+		jQuery('#licontainer_' + cont).find('.decimal-point-wrapper').hide();
+		if(jQuery(obj).val() == 'FLOAT') {
+			jQuery('#licontainer_' + cont).find('.decimal-point-wrapper').show();
+		}
+	}
+}
 
 function save_field(id)
 {	

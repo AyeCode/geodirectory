@@ -75,6 +75,7 @@ class geodir_map_listingpage extends WP_Widget {
 			extract($args, EXTR_SKIP);
 			$width = empty($instance['width']) ? '294' : apply_filters('widget_width', $instance['width']);
 			$height = empty($instance['heigh']) ? '370' : apply_filters('widget_heigh', $instance['heigh']);
+			$maptype = empty($instance['maptype']) ? 'ROADMAP' : apply_filters('widget_maptype', $instance['maptype']);
 			$zoom = empty($instance['zoom']) ? '13' : apply_filters('widget_zoom', $instance['zoom']);
 			$autozoom = empty($instance['autozoom']) ? '' : apply_filters('widget_autozoom', $instance['autozoom']);
 			$sticky = empty($instance['sticky']) ? '' : apply_filters('widget_sticky', $instance['sticky']);
@@ -85,8 +86,9 @@ class geodir_map_listingpage extends WP_Widget {
 			$map_args['map_canvas_name'] = str_replace('-' , '_' , $args['widget_id']);
 			$map_args['width'] = $width;
 			$map_args['height'] = $height;
+			
 			$map_args['scrollwheel'] = $scrollwheel;
-			$map_args['showall'] = $scrollwheel;
+			$map_args['showall'] = $showall;
 			$map_args['child_collapse'] = '0';
 			$map_args['sticky'] = $sticky;
 			$map_args['enable_cat_filters'] = false;
@@ -110,6 +112,7 @@ class geodir_map_listingpage extends WP_Widget {
 				$map_default_lat 	=  	isset($default_location->city_latitude) ? $default_location->city_latitude : '';
 				$map_default_lng 	=  	isset($default_location->city_longitude) ? $default_location->city_longitude : '';
 				$map_args['map_class_name'] = 'geodir-map-listing-page';
+				$mapview = $maptype;
 			}
 			
 			if(empty($mapview)) $mapview = 'ROADMAP';
@@ -142,6 +145,7 @@ class geodir_map_listingpage extends WP_Widget {
 		$instance = $old_instance;		
 		$instance['width'] = strip_tags($new_instance['width']);
 		$instance['heigh'] = ($new_instance['heigh']);
+		$instance['maptype'] = ($new_instance['maptype']);
 		$instance['zoom'] = ($new_instance['zoom']);
 		$instance['autozoom'] = isset($new_instance['autozoom']) ? $new_instance['autozoom'] : '';
 		$instance['sticky'] = isset($new_instance['sticky']) ? $new_instance['sticky'] : '';
@@ -154,9 +158,10 @@ class geodir_map_listingpage extends WP_Widget {
 	
 	function form($instance) {
 		//widgetform in backend
-		$instance = wp_parse_args( (array) $instance, array( 'width' => '', 'heigh' => '', 'zoom' => '', 'autozoom' => '', 'sticky' => '','scrollwheel'=>'0','showall'=>'0') );		
+		$instance = wp_parse_args( (array) $instance, array( 'width' => '', 'heigh' => '', 'maptype' =>'', 'zoom' => '', 'autozoom' => '', 'sticky' => '','scrollwheel'=>'0','showall'=>'0') );		
 		$width = strip_tags($instance['width']);
 		$heigh = strip_tags($instance['heigh']);
+		$maptype = strip_tags($instance['maptype']);
 		$zoom = strip_tags($instance['zoom']);
 		$autozoom = strip_tags($instance['autozoom']);
 		$sticky = strip_tags($instance['sticky']);
@@ -174,6 +179,18 @@ class geodir_map_listingpage extends WP_Widget {
             <input class="widefat" id="<?php echo $this->get_field_id('heigh'); ?>" name="<?php echo $this->get_field_name('heigh'); ?>" type="text" value="<?php echo esc_attr($heigh); ?>" />
             </label>
         </p>
+        
+        <p>
+      <label for="<?php echo $this->get_field_id('maptype'); ?>"><?php _e(' Select Map View',GEODIRECTORY_TEXTDOMAIN);?>:
+      <select class="widefat" id="<?php echo $this->get_field_id('maptype'); ?>" name="<?php echo $this->get_field_name('maptype'); ?>" >
+        
+					<option <?php if(isset($maptype) && $maptype=='ROADMAP'){ echo 'selected="selected"';} ?> value="ROADMAP"><?php _e('Road Map',GEODIRECTORY_TEXTDOMAIN);?></option>
+					<option <?php if(isset($maptype) && $maptype=='SATELLITE'){ echo 'selected="selected"';} ?> value="SATELLITE"><?php _e('Satellite Map',GEODIRECTORY_TEXTDOMAIN);?></option>
+					<option <?php if(isset($maptype) && $maptype=='HYBRID'){ echo 'selected="selected"';} ?> value="HYBRID"><?php _e('Hybrid Map',GEODIRECTORY_TEXTDOMAIN);?></option>
+                
+       </select>
+      </label>
+    </p>
 				
 				<?php
 					$map_zoom_level = geodir_map_zoom_level();

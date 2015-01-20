@@ -4,7 +4,8 @@ img{ max-width:100%; height:auto; border:none; box-shadow:none; border-radius:0p
 a:focus{ outline:none;}
 .gd-wrapper-vr .gd-left-nav{ 
     background:#222222; text-align:center; 
-	position:absolute; width:19%; 
+	/*position:absolute; width:19%; */
+	position:relative; width:20%;float:left;
 	padding:1% 0 1% 0;}
 
 .gd-wrapper-vr .gd-left-nav ul { text-align:left;}

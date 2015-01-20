@@ -1,10 +1,11 @@
 /**
+ * CHANGED BY STIOFAN FOR RESPONSIVE ON MOBILE - 20/01/2015
  * jQuery lightBox plugin
  * This jQuery plugin was inspired and based on Lightbox 2 by Lokesh Dhakar (http://www.huddletogether.com/projects/lightbox2/)
  * and adapted to me for use like a plugin from jQuery.
  * @name jquery-lightbox-0.5.js
  * @author Leandro Vieira Pinho - http://leandrovieira.com
- * @version 0.5
+ * @version 0.6
  * @date April 11, 2008
  * @category jQuery plugin
  * @copyright (c) 2008 Leandro Vieira Pinho (leandrovieira.com)
@@ -42,7 +43,7 @@
 			keyToClose:				'c',		// (string) (c = close) Letter to close the jQuery lightBox interface. Beyond this letter, the letter X and the SCAPE key is used to.
 			keyToPrev:				'p',		// (string) (p = previous) Letter to show the previous image
 			keyToNext:				'n',		// (string) (n = next) Letter to show the next image.
-			// Don´t alter these variables in any way
+			// Donï¿½t alter these variables in any way
 			imageArray:				[],
 			activeImage:			0
 		},settings);
@@ -72,7 +73,7 @@
 			settings.imageArray.length = 0;
 			// Unset image active information
 			settings.activeImage = 0;
-			// We have an image set? Or just an image? Let´s see it.
+			// We have an image set? Or just an image? Letï¿½s see it.
 			if ( jQueryMatchedObj.length == 1 ) {
 				settings.imageArray.push(new Array(objClicked.getAttribute('href'),objClicked.getAttribute('title')));
 			} else {
@@ -132,7 +133,7 @@
 			$('#jquery-overlay').css({
 				backgroundColor:	settings.overlayBgColor,
 				opacity:			settings.overlayOpacity,
-				width:				arrPageSizes[0],
+				width:				'100%',
 				height:				arrPageSizes[1]
 			}).fadeIn();
 			// Get page scroll
@@ -157,7 +158,7 @@
 				var arrPageSizes = ___getPageSize();
 				// Style overlay and show it
 				$('#jquery-overlay').css({
-					width:		arrPageSizes[0],
+					width:		'100%',
 					height:		arrPageSizes[1]
 				});
 				// Get page scroll
@@ -170,7 +171,7 @@
 			});
 		}
 		/**
-		 * Prepares image exibition; doing a image´s preloader to calculate it´s size
+		 * Prepares image exibition; doing a imageï¿½s preloader to calculate itï¿½s size
 		 *
 		 */
 		function _set_image_to_view() { // show the loading
@@ -196,16 +197,34 @@
 		/**
 		 * Perfomance an effect in the image container resizing it
 		 *
-		 * @param integer intImageWidth The image´s width that will be showed
-		 * @param integer intImageHeight The image´s height that will be showed
+		 * @param integer intImageWidth The imageï¿½s width that will be showed
+		 * @param integer intImageHeight The imageï¿½s height that will be showed
 		 */
 		function _resize_container_image_box(intImageWidth,intImageHeight) {
 			// Get current width and height
 			var intCurrentWidth = $('#lightbox-container-image-box').width();
 			var intCurrentHeight = $('#lightbox-container-image-box').height();
+			
 			// Get the width and height of the selected image plus the padding
-			var intWidth = (intImageWidth + (settings.containerBorderSize * 2)); // Plus the image´s width and the left and right padding value
-			var intHeight = (intImageHeight + (settings.containerBorderSize * 2)); // Plus the image´s height and the left and right padding value
+			var intWidth = (intImageWidth + (settings.containerBorderSize * 2)); // Plus the imageï¿½s width and the left and right padding value
+			var intHeight = (intImageHeight + (settings.containerBorderSize * 2)); // Plus the imageï¿½s height and the left and right padding value
+			intImageWidthDataBox = intImageWidth;
+			intImageHeightBTN = intImageHeight + (settings.containerBorderSize * 2);
+			var arrPageSizes = ___getPageSize();
+			if(intWidth > arrPageSizes[0]){
+				intWidth = '100%';
+				intHeight = 'auto';
+				intImageWidthDataBox = '100%';
+				intImageHeightBTN = intHeight - (settings.containerBorderSize * 2);
+			}
+			
+			/*console.log(arrPageSizes);
+			if(intHeight > arrPageSizes[3]){
+				intWidth = 'auto';
+				intHeight = '100%';
+				intImageWidthDataBox = '100%';
+			}*/
+			
 			// Diferences
 			var intDiffW = intCurrentWidth - intWidth;
 			var intDiffH = intCurrentHeight - intHeight;
@@ -218,8 +237,8 @@
 					___pause(100);	
 				}
 			} 
-			$('#lightbox-container-image-data-box').css({ width: intImageWidth });
-			$('#lightbox-nav-btnPrev,#lightbox-nav-btnNext').css({ height: intImageHeight + (settings.containerBorderSize * 2) });
+			$('#lightbox-container-image-data-box').css({ width: intImageWidthDataBox });
+			$('#lightbox-nav-btnPrev,#lightbox-nav-btnNext').css({ height:  intImageHeightBTN});
 		};
 		/**
 		 * Show the prepared image
@@ -255,7 +274,7 @@
 		function _set_navigation() {
 			$('#lightbox-nav').show();
 
-			// Instead to define this configuration in CSS file, we define here. And it´s need to IE. Just.
+			// Instead to define this configuration in CSS file, we define here. And itï¿½s need to IE. Just.
 			$('#lightbox-nav-btnPrev,#lightbox-nav-btnNext').css({ 'background' : 'transparent url(' + settings.imageBlank + ') no-repeat' });
 			
 			// Show the prev button, if not the first image in set
@@ -346,7 +365,7 @@
 			}
 			// Verify the key to show the previous image
 			if ( ( key == settings.keyToPrev ) || ( keycode == 37 ) ) {
-				// If we´re not showing the first image, call the previous
+				// If weï¿½re not showing the first image, call the previous
 				if ( settings.activeImage != 0 ) {
 					settings.activeImage = settings.activeImage - 1;
 					_set_image_to_view();
@@ -355,7 +374,7 @@
 			}
 			// Verify the key to show the next image
 			if ( ( key == settings.keyToNext ) || ( keycode == 39 ) ) {
-				// If we´re not showing the last image, call the next
+				// If weï¿½re not showing the last image, call the next
 				if ( settings.activeImage != ( settings.imageArray.length - 1 ) ) {
 					settings.activeImage = settings.activeImage + 1;
 					_set_image_to_view();

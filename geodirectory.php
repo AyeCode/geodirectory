@@ -3,7 +3,7 @@
 Plugin Name: GeoDirectory
 Plugin URI: http://wpgeodirectory.com/
 Description: GeoDirectory plugin for wordpress.
-Version: 1.2.4
+Version: 1.3.5
 Author: GeoDirectory
 Author URI: http://wpgeodirectory.com
 Requires at least: 3.1
@@ -11,7 +11,7 @@ Tested up to: 4.0
 */
 
 
-define("GEODIRECTORY_VERSION", "1.2.4");
+define("GEODIRECTORY_VERSION", "1.3.5");
 
 if (!session_id()) session_start();
 
@@ -19,7 +19,7 @@ if (!session_id()) session_start();
  * Global
  **/ 
 global $wpdb,$plugin_prefix,$geodir_addon_list, $plugin_file_name;
-$plugin_prefix = 'geodir_';
+$plugin_prefix = $wpdb->prefix.'geodir_';
 
 $plugin_file_name = basename(plugin_dir_path(__FILE__)). '/' . basename(__FILE__);
 /**
@@ -33,6 +33,7 @@ $geodir_post_custom_fields_cache = array();// This will store the cached post cu
 // depreciated //if (!defined('GEODIRECTORY_TEMPLATE_URL')) define('GEODIRECTORY_TEMPLATE_URL', 'geodirectory/');	
 
 /* ---- Table Names ---- */
+
 if (!defined('GEODIR_COUNTRIES_TABLE')) define('GEODIR_COUNTRIES_TABLE', $plugin_prefix . 'countries' );	
 //if (!defined('GEODIR_PRICE_TABLE')) define('GEODIR_PRICE_TABLE', $plugin_prefix . 'price' );	
 //if (!defined('GEODIR_INVOICE_TABLE')) define('GEODIR_INVOICE_TABLE', $plugin_prefix . 'invoice' );	
@@ -42,6 +43,11 @@ if (!defined('GEODIR_ATTACHMENT_TABLE')) define('GEODIR_ATTACHMENT_TABLE', $plug
 if (!defined('GEODIR_REVIEW_TABLE')) define('GEODIR_REVIEW_TABLE', $plugin_prefix . 'post_review' );	
 if (!defined('GEODIR_CUSTOM_SORT_FIELDS_TABLE')) define('GEODIR_CUSTOM_SORT_FIELDS_TABLE', $plugin_prefix . 'custom_sort_fields' );	
 
+
+// disable cache on homepage
+if($_SERVER['REQUEST_URI']=='' || $_SERVER['REQUEST_URI']=='/'){
+define('DONOTCACHEPAGE', TRUE);
+}
 /**
  * Localisation
  **/
