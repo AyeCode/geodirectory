@@ -49,9 +49,21 @@ if (!function_exists('geodir_admin_styles')) {
 		wp_enqueue_style( 'geodirectory-pluplodar-css' );
 		
 		wp_register_style( 'geodir-rating-style', geodir_plugin_url() .'/geodirectory-assets/css/jRating.jquery.css',array(),GEODIRECTORY_VERSION );
-		wp_enqueue_style( 'geodir-rating-style' );		
+		wp_enqueue_style( 'geodir-rating-style' );
+		
+		wp_register_style( 'geodir-rtl-style', geodir_plugin_url() . '/geodirectory-assets/css/rtl.css', array(), GEODIRECTORY_VERSION );
+		wp_enqueue_style( 'geodir-rtl-style' );	
+		
 	}
 }	
+
+if (!function_exists('geodir_admin_styles_req')) {
+	function geodir_admin_styles_req(){ 
+
+		wp_register_style( 'geodirectory-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css', array(), GEODIRECTORY_VERSION );
+		wp_enqueue_style( 'geodirectory-font-awesome');
+	}
+}
 
 /**
  * Enque Admin Scripts
@@ -69,8 +81,8 @@ if (!function_exists('geodir_admin_scripts'))
 		
 		wp_enqueue_script( 'geodirectory-jquery-ui-timepicker-js',geodir_plugin_url().'/geodirectory-assets/ui/jquery.ui.timepicker.js',array( 'jquery-ui-datepicker','jquery-ui-slider' ),'',true  );
 		
-		wp_register_script( 'geodirectory-chosen-jquery', geodir_plugin_url().'/geodirectory-assets/js/chosen.jquery.js' ,array(),GEODIRECTORY_VERSION);
-		wp_enqueue_script( 'geodirectory-chosen-jquery');
+		wp_register_script( 'chosen', geodir_plugin_url().'/geodirectory-assets/js/chosen.jquery.js' ,array(),GEODIRECTORY_VERSION);
+		wp_enqueue_script( 'chosen');
 		
 		wp_register_script( 'geodirectory-choose-ajax', geodir_plugin_url().'/geodirectory-assets/js/ajax-chosen.js' ,array(),GEODIRECTORY_VERSION);
 		wp_enqueue_script( 'geodirectory-choose-ajax' );
@@ -166,6 +178,14 @@ if (!function_exists('geodir_admin_scripts'))
 		wp_register_script( 'geodirectory-admin-script', geodir_plugin_url().'/geodirectory-assets/js/admin.js',array(),GEODIRECTORY_VERSION);
 		wp_enqueue_script( 'geodirectory-admin-script' );
 		
+		wp_enqueue_style( 'farbtastic' );
+		wp_enqueue_script( 'farbtastic' );
+		
+		$screen = get_current_screen();
+		if($screen->base=='post' && in_array($screen->post_type,geodir_get_posttypes())){
+		wp_enqueue_script( 'geodirectory-listing-validation-script', geodir_plugin_url().'/geodirectory-assets/js/listing_validation_admin.js' );
+		}
+		
 		$ajax_cons_data = array( 'url' => __( get_option('siteurl').'?geodir_ajax=true' ) ); 
 		wp_localize_script( 'geodirectory-admin-script', 'geodir_ajax', $ajax_cons_data );
 				
@@ -185,7 +205,7 @@ if (!function_exists('geodir_admin_menu')) {
 		
 		if ( current_user_can( 'manage_options' ) ) $menu[] = array( '', 'read', 'separator-geodirectory', '', 'wp-menu-separator geodirectory' );
 			
-			add_menu_page(__('Geodirectory',  GEODIRECTORY_TEXTDOMAIN ), __('Geodirectory',  GEODIRECTORY_TEXTDOMAIN ), 'manage_options','geodirectory' , 'geodir_admin_panel', geodir_plugin_url() . '/geodirectory-assets/images/favicon.ico',55);
+			add_menu_page(__('Geodirectory',  GEODIRECTORY_TEXTDOMAIN ), __('Geodirectory',  GEODIRECTORY_TEXTDOMAIN ), 'manage_options','geodirectory' , 'geodir_admin_panel', geodir_plugin_url() . '/geodirectory-assets/images/favicon.ico','55.1984');
 		
 			
 	}       
@@ -270,6 +290,12 @@ function geodir_before_admin_panel()
 	if(!geodir_is_default_location_set())
 	{
 		echo '<div class="updated fade"><p><strong>' . sprintf( __( 'Please %sclick here%s to set a default location, this will make the plugin work properly.', GEODIRECTORY_TEXTDOMAIN ) , '<a href=\'' .admin_url('admin.php?page=geodirectory&tab=default_location_settings').'\'>' , '</a>') . '</strong></p></div>';
+		
+	}
+	
+	if(!function_exists('curl_init'))
+	{
+		echo '<div class="error"><p><strong>' .  __( 'CURL is not installed on this server, this can cause problems, please ask your server admin to install it.', GEODIRECTORY_TEXTDOMAIN ) . '</strong></p></div>';
 		
 	}
 }
@@ -718,6 +744,8 @@ function geodir_update_options($options, $dummy = false) {
 				
 					
 		else :
+			// same menu setting per theme.
+			if(isset($value['id']) && $value['id']=='geodir_theme_location_nav' && isset($_POST[$value['id']])){$theme = wp_get_theme();update_option('geodir_theme_location_nav_'.$theme->name, $_POST[$value['id']]);}
 			
 			if(isset($value['id']) && isset($_POST[$value['id']])) {
 				update_option($value['id'], $_POST[$value['id']]);
@@ -770,6 +798,12 @@ function places_custom_fields_tab($tabs){
 function geodir_tools_setting_tab($tabs)
 {
 	$tabs['tools_settings'] = array('label'=> __( 'GD Tools', GEODIRECTORY_TEXTDOMAIN 		) ) ;
+	return $tabs ;
+}
+
+function geodir_compatibility_setting_tab($tabs)
+{
+	$tabs['compatibility_settings'] = array('label'=> __( 'Theme Compatibility', GEODIRECTORY_TEXTDOMAIN 		) ) ;
 	return $tabs ;
 }
 
@@ -961,6 +995,16 @@ if(!function_exists('geodir_insert_csv_post_data') && get_option('geodir_install
 				
 				
 			});
+		jQuery(document).ready(function(){
+			jQuery(".gd_uploadcsv_button").click(function() {
+				setInterval(function() {
+					var checkvalue = jQuery('.gd_csv_filename').val();
+					if (checkvalue != '') {
+						jQuery('.gd_csv_button_div').show();
+					}
+				}, 1000);
+			});
+		});
     </script>
 		<?php 
 		
@@ -1046,7 +1090,7 @@ if(!function_exists('geodir_insert_csv_post_data') && get_option('geodir_install
 			
 		<?php }
 	}  ?>
-    
+    <?php /* ?>
     <table class="form-table">
         <tbody>
             <tr valign="top" class="single_select_page">
@@ -1081,6 +1125,375 @@ if(!function_exists('geodir_insert_csv_post_data') && get_option('geodir_install
                       
         </tbody>
     </table>
+	<?php */ ?>
+<?php
+$id = "gd_import_csv";
+$multiple = false; // allow multiple files upload
+$uploads = wp_upload_dir();
+?>
+<style>
+.gd-csv-form-table .filelist div.file:last-child{display:block!important;opacity:1!important}
+.gd-import-progress{margin-top:10px}
+.gd-import-file{background:#ececec;border:1px solid #ccc;clear:both;margin-bottom:4px;padding:5px;}
+.gd-fileprogress{background:#b7c53d;height:5px;width:0;margin-top:3px}
+.gd-csv-form-table .fileprogress{margin-top:3px} 
+#gd-import-msg{padding-top:12px}
+#gd-import-msg #message{background-color:rgb(255, 251, 204);}
+</style>
+<script type="text/javascript">
+var timout;
+function gdPrepareImport() {
+	jQuery('#gd-import-msg').hide();
+	var gd_prepared = jQuery('#gd_prepared').val();
+	var uploadedFile = jQuery('#gd_import_csv').val();
+	console.log('gdPrepareImport()');
+	if (gd_prepared == uploadedFile) {
+		gdContinueImport();
+		jQuery('#gd_import_data').attr('disabled', 'disabled');
+	} else {
+		var gddata = new Array();
+		gddata = {
+			'uploadedFile': uploadedFile,
+		}
+		jQuery.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			dataType: 'json',
+			data: {
+				'action': 'gdImportCsv',
+				'gddata': gddata,
+				'task': 'prepare'
+			},
+			success: function(data) {
+				if (typeof data == 'object') {
+					if (data.error) {
+						jQuery('#gd-import-msg').find('#message').removeClass('updated').addClass('error').html('<p>' + data.error + '</p>');
+						jQuery('#gd-import-msg').show();
+					} else {
+						jQuery('#gd_tmpcount').val('0');
+						jQuery('#gd_tot_records').val(data.rows);
+						jQuery('#gd_checktotal').val(data.rows);
+						jQuery('#gd_prepared').val(uploadedFile);
+						
+						jQuery('#gd_rowcount').val('0');
+						jQuery('#gd_invalidcount').val('0');
+						jQuery('#gd_blank_address').val('0');
+						jQuery('#gd_upload_files').val('0');
+						jQuery('#gd_invalid_post_type').val('0');
+						jQuery('#gd_invalid_title').val('0');
+						jQuery('#gd_total_records').val('0');
+						
+						gdStartImport();
+					}
+				}
+			},
+			error: function(errorThrown) {
+				console.log(errorThrown);
+			}
+		});
+	}
+}
+function gdTerminateImport() {
+	console.log('gdTerminateImport()');
+	jQuery('#gd_terminateaction').val('terminate');
+	jQuery('#gd_import_data').hide();
+	jQuery('#gd_stop_import').hide();
+	jQuery('#gd_process_data').hide();
+	jQuery('#gd_continue_data').show();
+}
+function gdContinueImport() {
+	var tmpCnt = jQuery('#gd_tmpcount').val();
+	var tot_no_of_records = jQuery('#gd_tot_records').val();
+	if (parseInt(tmpCnt) > parseInt(tot_no_of_records)) {
+		jQuery('#gd_stop_import').hide();
+	} else {
+		jQuery('#gd_stop_import').show();
+	}
+	jQuery('#gd_import_data').show();
+	jQuery('#gd_import_data').attr('disabled', 'disabled');
+	jQuery('#gd_process_data').css({
+		'display': 'inline-block'
+	});
+	jQuery('#gd_continue_data').hide();
+	jQuery('#gd_terminateaction').val('continue');
+	clearTimeout(timout);
+	timout = setTimeout(function() {
+		gdStartImport();
+	}, 0);
+}
+function gdStartImport(siteurl) {
+	var importlimit = 1;
+	var get_requested_count = importlimit;
+	var tot_no_of_records = jQuery('#gd_checktotal').val();
+	var uploadedFile = jQuery('#gd_import_csv').val();
+	var tmpCnt = jQuery('#gd_tmpcount').val();
+	var no_of_tot_records = jQuery('#gd_tot_records').val();
+	
+	if (!uploadedFile) {
+		jQuery('#gd_import_data').removeAttr('disabled');
+		jQuery('#gd_import_data').show();
+		jQuery('#gd_stop_import').hide();
+		jQuery('#gd_process_data').hide();
+		jQuery('#gd-import-progress').hide();
+		jQuery('.gd-fileprogress').width(0);
+		jQuery('#gd-import-done').text('0');
+		jQuery('#gd-import-total').text('0');
+		jQuery('#gd-import-perc').text('0%');
+		
+		jQuery('.gd-csv-form-table .filelist .file').remove();
+		jQuery('#gd-import-msg').find('#message').removeClass('updated').addClass('error').html("<p><?php echo esc_attr( PLZ_SELECT_CSV_FILE );?></p>");
+		jQuery('#gd-import-msg').show();
+		
+		return false;
+	}
+	
+	jQuery('#gd-import-total').text(tot_no_of_records);
+	jQuery('#gd_stop_import').show();
+	jQuery('#gd_process_data').css({
+		'display': 'inline-block'
+	});
+	jQuery('#gd-import-progress').show();
+	if ((parseInt(no_of_tot_records) / 100) > 0) {
+		importlimit = parseInt(parseInt(no_of_tot_records) / 100);
+	}
+	if (importlimit == 1) {
+		if (parseInt(no_of_tot_records) > 50) {
+			importlimit = 5;
+		} else if (parseInt(no_of_tot_records) > 10 && parseInt(no_of_tot_records) < 51) {
+			importlimit = 2;
+		}
+	}
+	if (importlimit > 10) {
+		importlimit = 10;
+	}
+	if (importlimit < 1) {
+		importlimit = 1;
+	}
+	
+	get_requested_count = importlimit;
+	
+	var tempCount = parseInt(tmpCnt);
+	var totalCount = parseInt(tot_no_of_records);
+	if (tempCount >= totalCount) {
+		jQuery('#gd_import_data').removeAttr('disabled');
+		jQuery('#gd_import_data').show();
+		jQuery('#gd_stop_import').hide();
+		jQuery('#gd_process_data').hide();
+		gd_showStatusMsg();
+		jQuery('#gd_import_csv').val('');
+		jQuery('#gd_prepared').val('');
+				
+		return false;
+	}
+	jQuery('#gd-import-msg').hide();
+	var gddata = new Array();
+	gddata = {
+		'importlimit': importlimit,
+		'totRecords': tot_no_of_records,
+		'uploadedFile': uploadedFile,
+		'tmpcount': tmpCnt,
+	}
+	var tmpLoc = jQuery('#tmpLoc').val();
+	
+	var gd_rowcount = parseInt(jQuery('#gd_rowcount').val());
+	var gd_invalidcount = parseInt(jQuery('#gd_invalidcount').val());
+	var gd_blank_address = parseInt(jQuery('#gd_blank_address').val());
+	var gd_upload_files = parseInt(jQuery('#gd_upload_files').val());
+	var gd_invalid_post_type = parseInt(jQuery('#gd_invalid_post_type').val());
+	var gd_invalid_title = parseInt(jQuery('#gd_invalid_title').val());
+	var gd_total_records = parseInt(jQuery('#gd_total_records').val());
+	
+	jQuery.ajax({
+		type: 'POST',
+		url: ajaxurl,
+		dataType: 'json',
+		data: {
+			'action': 'gdImportCsv',
+			'gddata': gddata,
+			'siteurl': siteurl,
+		},
+		success: function(data) {
+			if (typeof data == 'object') {
+				if (data.error) {
+					jQuery('#gd_import_data').removeAttr('disabled');
+					jQuery('#gd_import_data').show();
+					jQuery('#gd_stop_import').hide();
+					jQuery('#gd_process_data').hide();
+					jQuery('#gd-import-msg').find('#message').removeClass('updated').addClass('error').html('<p>' + data.error + '</p>');
+					jQuery('#gd-import-msg').show();
+				} else {
+					gd_rowcount = gd_rowcount + parseInt(data.rowcount);
+					gd_invalidcount = gd_invalidcount + parseInt(data.invalidcount);
+					gd_blank_address = gd_blank_address + parseInt(data.blank_address);
+					gd_upload_files = gd_upload_files + parseInt(data.upload_files);
+					gd_invalid_post_type = gd_invalid_post_type + parseInt(data.invalid_post_type);
+					gd_invalid_title = gd_invalid_post_type + parseInt(data.invalid_title);
+					gd_total_records = gd_total_records + parseInt(data.total_records);
+					
+					jQuery('#gd_rowcount').val(gd_rowcount);
+					jQuery('#gd_invalidcount').val(gd_invalidcount);
+					jQuery('#gd_blank_address').val(gd_blank_address);
+					jQuery('#gd_upload_files').val(gd_upload_files);
+					jQuery('#gd_invalid_post_type').val(gd_invalid_post_type);
+					jQuery('#gd_invalid_title').val(gd_invalid_title);
+					jQuery('#gd_total_records').val(gd_total_records);
+					
+					if (parseInt(tmpCnt) == parseInt(tot_no_of_records)) {
+						jQuery('#gd-import-done').text(tot_no_of_records);
+						jQuery('#gd-import-perc').text('100%');
+						jQuery('.gd-fileprogress').css({
+							'width': '100%'
+						});
+						jQuery('#gd_import_csv').val('');
+						jQuery('#gd_prepared').val('');
+						gd_showStatusMsg();
+						jQuery('#gd_stop_import').hide();
+					}
+					if (parseInt(tmpCnt) < parseInt(tot_no_of_records)) {
+						var terminate_action = jQuery('#gd_terminateaction').val();
+						if (terminate_action == 'continue') {
+							//console.log('Limit: ' + importlimit + ', Total: ' + tot_no_of_records);
+							var nTmpCnt = parseInt(tmpCnt) + parseInt(importlimit);
+							nTmpCnt = nTmpCnt > tot_no_of_records ? tot_no_of_records : nTmpCnt;
+							
+							jQuery('#gd_tmpcount').val(nTmpCnt);
+							
+							jQuery('#gd-import-done').text(nTmpCnt);
+							if (parseInt(tot_no_of_records) > 0) {
+								var percentage = ((parseInt(nTmpCnt) / parseInt(tot_no_of_records)) * 100);
+								percentage = percentage > 100 ? 100 : percentage;
+								jQuery('#gd-import-perc').text(parseInt(percentage) + '%');
+								jQuery('.gd-fileprogress').css({
+									'width': percentage + '%'
+								});
+							}
+					
+							clearTimeout(timout);
+							timout = setTimeout(function() {
+								gdStartImport();
+							}, 0);
+						} else {
+							jQuery('#gd_import_data').hide();
+							jQuery('#gd_stop_import').hide();
+							jQuery('#gd_process_data').hide();
+							jQuery('#gd_continue_data').show();
+							return false;
+						}
+					} else {
+						jQuery('#gd_import_data').removeAttr('disabled');
+						jQuery('#gd_import_data').show();
+						jQuery('#gd_stop_import').hide();
+						jQuery('#gd_process_data').hide();
+						return false;
+					}
+				}
+			}
+		},
+		error: function(errorThrown) {
+			jQuery('#gd_import_data').removeAttr('disabled');
+			jQuery('#gd_import_data').show();
+			jQuery('#gd_stop_import').hide();
+			jQuery('#gd_process_data').hide();
+			console.log(errorThrown);
+		}
+	});
+}
+function gd_showStatusMsg() {
+	var gd_rowcount = parseInt(jQuery('#gd_rowcount').val());
+	var gd_invalidcount = parseInt(jQuery('#gd_invalidcount').val());
+	var gd_blank_address = parseInt(jQuery('#gd_blank_address').val());
+	var gd_upload_files = parseInt(jQuery('#gd_upload_files').val());
+	var gd_invalid_post_type = parseInt(jQuery('#gd_invalid_post_type').val());
+	var gd_invalid_title = parseInt(jQuery('#gd_invalid_title').val());
+	var gd_total_records = parseInt(jQuery('#gd_total_records').val());
+	
+	var gdMsg = '<p></p>';
+	if (gd_invalidcount == 0 && gd_blank_address == 0 && gd_invalid_post_type == 0 && gd_invalid_title == 0) {
+		gdMsg += "<p><?php echo esc_attr( CSV_INSERT_DATA );?></p>";
+	}
+		
+	var msgParse = '<p><?php echo addslashes( CSV_TOTAL_RECORD );?></p>';
+	gdMsg += msgParse.replace("%s", gd_rowcount);
+	
+	if (gd_invalidcount > 0) {
+		msgParse = msgParse = '<p><?php echo sprintf( CSV_INVALID_DEFUALT_ADDRESS, '%s', '%d' );?></p>';
+		msgParse = msgParse.replace("%s", gd_invalidcount);
+		msgParse = msgParse.replace("%d", gd_total_records);
+		gdMsg += msgParse;
+	}
+	if (gd_blank_address > 0) {
+		msgParse = '<p><?php echo addslashes( sprintf( CSV_INVALID_TOTAL_RECORD, '%s', '%d' ) );?></p>';
+		msgParse = msgParse.replace("%s", gd_blank_address);
+		msgParse = msgParse.replace("%d", gd_total_records);
+		gdMsg += msgParse;
+	}
+	if (gd_invalid_post_type > 0) {
+		msgParse = '<p><?php echo addslashes( sprintf( CSV_INVALID_POST_TYPE, '%s', '%d' ) );?></p>';
+		msgParse = msgParse.replace("%s", gd_invalid_post_type);
+		msgParse = msgParse.replace("%d", gd_total_records);
+		gdMsg += msgParse;
+	}
+	if (gd_invalid_title > 0) {
+		msgParse = '<p><?php echo addslashes( sprintf( CSV_BLANK_POST_TITLE, '%s', '%d' ) );?></p>';
+		msgParse = msgParse.replace("%s", gd_invalid_title);
+		msgParse = msgParse.replace("%d", gd_total_records);
+		gdMsg += msgParse;
+	}
+	if (gd_upload_files > 0) {
+		gdMsg += '<p><?php echo addslashes( sprintf( CSV_TRANSFER_IMG_FOLDER, $uploads['subdir'] ) );?></p>';
+	}
+	gdMsg += '<p></p>';
+	jQuery('#gd-import-msg').find('#message').removeClass('error').addClass('updated').html(gdMsg);
+	jQuery('#gd-import-msg').show();
+}
+</script>
+<table class="form-table gd-csv-form-table">
+  <tbody>
+    <tr valign="top" class="single_select_page">
+      <th class="titledesc" scope="row"><?php echo SELECT_CSV_FILE;?></th>
+      <td class="forminp">
+        <div class="gtd-formfeild">
+          <div class="gtd-form_row clearfix" id="<?php echo $id; ?>dropbox">
+            <div class="plupload-upload-uic hide-if-no-js" id="<?php echo $id; ?>plupload-upload-ui">
+              <input type="text" readonly="readonly" name="<?php echo $id; ?>" class="gd_csv_filename" id="<?php echo $id; ?>" value="<?php echo $svalue; ?>" />
+              <input id="<?php echo $id; ?>plupload-browse-button" type="button" value="<?php echo SELECT_UPLOAD_CSV; ?>" class="gd_uploadcsv_button" />
+              <br />
+              <a href="<?php echo geodir_plugin_url() . '/geodirectory-assets/place_listing.csv'?>" ><?php _e("Download sample csv", GEODIRECTORY_TEXTDOMAIN)?></a>
+              <?php do_action('geodir_sample_csv_download_link'); ?>
+              <span class="ajaxnonceplu" id="ajaxnonceplu<?php echo wp_create_nonce($id . 'pluploadan'); ?>"></span><br />
+              <br />
+              <div class="filelist"></div>
+            </div>
+          </div>
+        </div>
+        <span id="upload-error" style="display:none"></span> <span class="description"></span><br />
+        <div class="gd_csv_button_div" style="display:none;">
+          <input type="hidden" class="geodir_import_file" name="geodir_import_file" value="save" />
+          <input onclick="gdPrepareImport()" type="button" value="<?php echo CSV_IMPORT_DATA; ?>" id="gd_import_data" class="button-primary" name="save">
+		  <input onclick="gdContinueImport()" type="button" value="Continue Import Data" id="gd_continue_data" class="button-primary" style="display:none" />
+		  <input type="button" value="<?php echo 'Terminate Import Data'; ?>" id="gd_stop_import" class="button-primary" name="gd_stop_import" style="display:none" onclick="gdTerminateImport()" />
+		  <div id="gd_process_data" style="display:none"><span class="spinner" style="display:inline-block;margin:0 5px 0 5px;float:left"></span>Wait, processing import data...</div>
+        </div>
+		<div id="gd_importer" style="display:none">
+		  <input type="hidden" id="gd_tmpcount" value="0" />
+		  <input type="hidden" id="gd_tot_records" value="100" />
+		  <input type="hidden" id="gd_checktotal" value="100" />
+		  <input type="hidden" id="gd_terminateaction" value="continue" />
+		  <input type="hidden" id="gd_prepared" value="continue" />
+		  <input type="hidden" id="gd_rowcount" value="0" />
+		  <input type="hidden" id="gd_invalidcount" value="0" />
+		  <input type="hidden" id="gd_blank_address" value="0" />
+		  <input type="hidden" id="gd_upload_files" value="0" />
+		  <input type="hidden" id="gd_invalid_post_type" value="0" />
+		  <input type="hidden" id="gd_invalid_title" value="0" />
+		  <input type="hidden" id="gd_total_records" value="0" />
+		</div>
+		<div class="gd-import-progress" id="gd-import-progress" style="display:none"><div class="gd-import-file"><b>Import Data Status : </b><font id="gd-import-done">0</font> / <font id="gd-import-total">0</font>&nbsp;( <font id="gd-import-perc">0%</font> )<div class="gd-fileprogress"></div></div></div>
+		<div class="gd-import-msg" id="gd-import-msg" style="display:none"><div id="message" class="message fade"></div></div>
+		</td>
+    </tr>
+  </tbody>
+</table>
      
 	<?php }
 }
@@ -1171,6 +1584,10 @@ if (!function_exists('geodir_import_data')) {
 										$p_taxonomy = geodir_get_taxonomies(addslashes($buffer[5]));
 										if(get_term_by( 'name', $catid, $p_taxonomy[0] )){
 											$cat = get_term_by( 'name', $catid, $p_taxonomy[0]);
+											$catids_arr[] = $cat->slug;
+										}
+										elseif(get_term_by( 'slug', $catid, $p_taxonomy[0] )){
+											$cat = get_term_by( 'slug', $catid, $p_taxonomy[0]);
 											$catids_arr[] = $cat->slug;
 										}
 									}
@@ -1275,10 +1692,10 @@ if (!function_exists('geodir_import_data')) {
 							$my_post['post_author'] = $current_post_author;
 							$my_post['post_status'] = 'publish';
 							$my_post['post_category'] = $catids_arr;
-							$my_post['tags_input'] = $tag_arr;
+							$my_post['post_tags'] = $tag_arr;
 							
 							
-							
+							$gd_post_info['post_tags'] = $tag_arr;
 							$gd_post_info['post_title'] = $post_title;
 							$gd_post_info['post_status'] = 'publish';
 							$gd_post_info['submit_time'] = time();
@@ -1397,7 +1814,7 @@ if (!function_exists('geodir_import_data')) {
 								if(in_array($buffer[5],geodir_get_posttypes())){
 								
 									$taxonomies = geodir_get_posttype_info(addslashes($buffer[5]));
-									wp_set_object_terms($last_postid, $my_post['tags_input'], $taxonomy=$taxonomies['taxonomies'][1]);
+									wp_set_object_terms($last_postid, $my_post['post_tags'], $taxonomy=$taxonomies['taxonomies'][1]);
 									wp_set_object_terms($last_postid, $my_post['post_category'], $taxonomy=$taxonomies['taxonomies'][0]);
 									
 									
@@ -1579,9 +1996,15 @@ function geodir_admin_fields($options){
                     <td class="forminp"><select multiple="multiple" name="<?php echo esc_attr( $value['id'] ); ?>[]" id="<?php echo esc_attr( $value['id'] ); ?>" style="<?php echo esc_attr( $value['css'] ); ?>" class="<?php if (isset($value['class'])) echo $value['class']; ?>" data-placeholder="<?php if(isset($value['placeholder_text'])) echo $value['placeholder_text'] ;?>" option-ajaxchosen="false">
                         <?php
                         foreach ($value['options'] as $key => $val) {
+							if ( strpos( $key, 'optgroup_start-' ) === 0 ) {
+								?><optgroup label="<?php echo ucfirst( $val ); ?>"><?php
+							} else if ( strpos( $key, 'optgroup_end-' ) === 0 ) {
+								?></optgroup><?php
+							} else {
                         ?>
                             <option value="<?php echo esc_attr( $key ); ?>" <?php if(is_array(get_option($value['id']))){ if ( in_array($key, get_option($value['id']))) { ?> selected="selected" <?php }} ?>><?php echo ucfirst($val) ?></option>
                         <?php
+							}
                         }
                         ?>
                        </select> <span class="description"><?php echo $value['desc'] ?></span>
@@ -2067,15 +2490,15 @@ function geodir_post_attachments()
     
     
     // adjust values here
-    $id = "post_images"; // this will be the name of form field. Image url(s) will be submitted in $_POST using this key. So if $id == “img1” then $_POST[“img1”] will have all the image urls
+    $id = "post_images"; // this will be the name of form field. Image url(s) will be submitted in $_POST using this key. So if $id == ï¿½img1ï¿½ then $_POST[ï¿½img1ï¿½] will have all the image urls
     
     $svalue = $curImages; // this will be initial value of the above form field. Image urls.
     
     $multiple = true; // allow multiple files upload
     
-    $width = 800; // If you want to automatically resize all uploaded images then provide width here (in pixels)
+    $width = geodir_media_image_large_width(); // If you want to automatically resize all uploaded images then provide width here (in pixels)
     
-    $height = 800; // If you want to automatically resize all uploaded images then provide height here (in pixels)
+    $height = geodir_media_image_large_height(); // If you want to automatically resize all uploaded images then provide height here (in pixels)
     
     ?>
 
@@ -2101,4 +2524,220 @@ function geodir_post_attachments()
 <?php    
 
 } 
+
+function geodir_action_post_updated( $post_ID, $post_after, $post_before ) {
+	$post_type = get_post_type( $post_ID );
+	
+	if ( isset( $_POST['action'] ) && $_POST['action'] == 'inline-save' ) {
+		if( $post_type != '' && in_array( $post_type, geodir_get_posttypes() ) && !wp_is_post_revision( $post_ID ) && !empty( $post_after->post_title ) && $post_after->post_title != $post_before->post_title ) {
+			geodir_save_post_meta( $post_ID, 'post_title', $post_after->post_title );
+		}
+	}
+}
+
+/*
+ * Add bcc option
+ */
+function geodir_notification_add_bcc_option($settings) {
+	if (!empty($settings)) {
+		$new_settings = array();
+		foreach ($settings as $setting) {
+			if (isset($setting['id']) && $setting['id']=='site_bcc_options' && isset($setting['type']) && $setting['type']=='sectionend') {				
+				$geodir_bcc_listing_published_yes = array(  
+											'name' => __( 'Listing published', GEODIRPAYMENT_TEXTDOMAIN ),
+											'desc' => __( 'Yes', GEODIRPAYMENT_TEXTDOMAIN ),
+											'id' => 'geodir_bcc_listing_published',
+											'std' => 'yes',
+											'type' => 'radio',
+											'value' => '1',
+											'radiogroup' => 'start'
+										);
+				
+				$geodir_bcc_listing_published_no = array(  
+											'name' => __( 'Listing published', GEODIRPAYMENT_TEXTDOMAIN ),
+											'desc' => __( 'No', GEODIRPAYMENT_TEXTDOMAIN ),
+											'id' => 'geodir_bcc_listing_published',
+											'std' => 'yes',
+											'type' => 'radio',
+											'value' => '0',
+											'radiogroup' => 'end'
+										);
+				
+				$new_settings[] = $geodir_bcc_listing_published_yes;
+				$new_settings[] = $geodir_bcc_listing_published_no;
+			}
+			$new_settings[] = $setting;
+		}
+		$settings = $new_settings;
+	}
+		
+	return $settings;
+}
+
+
+add_action( 'wp_ajax_get_gd_theme_compat_callback', 'get_gd_theme_compat_callback' );
+
+function get_gd_theme_compat_callback() {
+	global $wpdb; 
+	$themes = get_option('gd_theme_compats');
+	
+	if(isset($_POST['theme']) && isset($themes[$_POST['theme']]) && !empty($themes[$_POST['theme']])){
+		if(isset($_POST['export'])){
+			echo json_encode(array($_POST['theme'] => $themes[$_POST['theme']]));
+		}else{
+		    echo json_encode($themes[$_POST['theme']]);	
+		}
+		
+	}
+
+	die();
+}
+
+add_action( 'wp_ajax_get_gd_theme_compat_import_callback', 'get_gd_theme_compat_import_callback' );
+
+function get_gd_theme_compat_import_callback() {
+	global $wpdb; 
+	$themes = get_option('gd_theme_compats');
+	if(isset($_POST['theme']) && !empty($_POST['theme'])){
+		$json = json_decode(stripslashes($_POST['theme']), true);
+		if(!empty($json) && is_array($json)){
+			$key =  key($json);
+			$themes[$key]=$json[$key];
+			update_option('gd_theme_compats',$themes);
+			echo $key;
+			die();
+		}
+	}
+echo '0';
+	die();
+}
+
+
+function gd_set_theme_compat(){
+	global $wpdb;
+$theme = wp_get_theme();
+	
+if($theme->parent()){
+$theme_name = str_replace(" ","_",$theme->parent()->get( 'Name' ));	
+}else{
+$theme_name =  str_replace(" ","_",$theme->get( 'Name' ));
+}
+	
+	$theme_compats = get_option('gd_theme_compats');
+	$current_compat = get_option('gd_theme_compat');
+$current_compat = str_replace("_custom","",$current_compat);
+
+if($current_compat == $theme_name){return;}// if already running corect compat then bail
+
+if(isset($theme_compats[$theme_name])){// if there is a compat avail then set it
+	update_option('gd_theme_compat',$theme_name);
+	update_option('theme_compatibility_setting',$theme_compats[$theme_name]);
+	
+		// if there are default options to set then set them
+		if(isset($theme_compats[$theme_name]['geodir_theme_compat_default_options']) && !empty($theme_compats[$theme_name]['geodir_theme_compat_default_options'])){
+			
+			foreach($theme_compats[$theme_name]['geodir_theme_compat_default_options'] as $key=>$val){
+				update_option($key,$val);
+			}
+		}
+	
+}else{
+	update_option('gd_theme_compat','');
+	update_option('theme_compatibility_setting','');
+}
+
+	
+}
+
+
+
+// function to check if Avada needs header.php replaced
+add_action('wp_loaded','gd_check_avada_compat');
+function gd_check_avada_compat(){
+if(function_exists('avada_load_textdomain') && !get_option('avada_nag')){
+add_action('admin_notices', 'gd_avada_compat_warning');	
+}
+}
+
+
+
+function gd_avada_compat_warning(){
+	
+	/*
+	$msg_type = error
+	$msg_type = updated fade
+	$msg_type = update-nag	
+	*/
+	
+	$plugin = 'avada-nag';
+	$timestamp ='avada-nag123';
+	$message = __('Avada theme has no hooks for compatibility, because of this you must add two small changes to the header.php. <a href="http://docs.wpgeodirectory.com/avada-compatibility-header-php/" target="_blank">Instructions</a>',GEODIRECTORY_TEXTDOMAIN);
+	echo '<div id="'.$timestamp.'"  class="error">';
+	echo '<span class="gd-remove-noti" onclick="gdRemoveANotification(\''.$plugin.'\',\''.$timestamp.'\');" ><i class="fa fa-times"></i></span>';
+	echo "<img class='gd-icon-noti' src='".plugin_dir_url('')."geodirectory/geodirectory-assets/images/favicon.ico' > ";
+	echo "<p>$message</p>";
+	echo "</div>";
+	
+	?>
+    <script>
+	function gdRemoveANotification($plugin,$timestamp){
+		
+		jQuery('#'+$timestamp).css("background-color", "red");
+		jQuery('#'+$timestamp).fadeOut("slow");
+		// This does the ajax request
+		jQuery.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			data: {
+				'action':'geodir_avada_remove_notification',
+				'plugin' : $plugin,
+				'timestamp' : $timestamp
+			},
+			success:function(data) {
+				// This outputs the result of the ajax request
+				//alert(data);
+			},
+			error: function(errorThrown){
+				console.log(errorThrown);
+			}
+		}); 
+		
+	}
+	</script>
+    <style>
+	.gd-icon-noti{
+		float: left;
+		margin-top: 10px;
+		margin-right: 5px;
+	}
+	
+	.update-nag .gd-icon-noti{
+		margin-top: 2px;
+	}
+	.gd-remove-noti{
+		float: right;margin-top: -20px;margin-right: -20px;color:#FF0000;cursor:pointer;
+	}
+	
+	.updated .gd-remove-noti, .error .gd-remove-noti{
+		float: right;margin-top: -10px;margin-right: -17px;color:#FF0000;cursor:pointer;
+	}
+	
+	
+	</style>
+    <?php
+    	
+}
+
+
+function geodir_avada_remove_notification() {
+ 	update_option('avada_nag',TRUE);
+     
+    // Always die in functions echoing ajax content
+   die();
+}
+
+ 
+add_action( 'wp_ajax_geodir_avada_remove_notification', 'geodir_avada_remove_notification' );
+
+
 

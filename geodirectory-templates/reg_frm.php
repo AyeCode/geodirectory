@@ -1,11 +1,8 @@
 <div id="sign_up">
-
     <div class="login_content">
    		<?php echo stripslashes(get_option('ptthemes_reg_page_content'));?>
     </div>
-  
     <div class="registration_form_box">
-    
         <h4>
 			<?php 
             if(isset($_REQUEST['page']) && $_REQUEST['page']=='login' && isset($_REQUEST['page1']) && $_REQUEST['page1']=='sign_up')
@@ -13,16 +10,19 @@
             else 
             { echo apply_filters('geodir_registration_page_title',REGISTRATION_NOW_TEXT); }
             ?>
-        </h4> 
-    
+        </h4>
 		<?php
-        if ( isset($_REQUEST['emsg']) && $_REQUEST['emsg']==1)
-        {
-        	echo "<p class=\"error_msg\"> ".EMAIL_USERNAME_EXIST_MSG." </p>";
-        }elseif(isset($_REQUEST['emsg']) && $_REQUEST['emsg']=='regnewusr')
-        {
-        	echo "<p class=\"error_msg\"> ".REGISTRATION_DESABLED_MSG." </p>";
-        }
+		global $geodir_signup_error;
+        if ( $geodir_signup_error != '' ) {
+			echo '<p class="error_msg">' . $geodir_signup_error . '</p>';
+			unset( $geodir_signup_error );
+		} else {
+			if ( isset( $_REQUEST['emsg'] ) && $_REQUEST['emsg'] == 1 ) {
+				echo '<p class="error_msg">' . EMAIL_USERNAME_EXIST_MSG . '</p>';
+			} else if ( isset( $_REQUEST['emsg'] ) && $_REQUEST['emsg'] == 'regnewusr' ) {
+				echo '<p class="error_msg">' . REGISTRATION_DESABLED_MSG . '</p>';
+			}
+		}
         ?>
     
         <form name="cus_registerform" id="cus_registerform" action="" method="post">
@@ -44,18 +44,18 @@
                 </div>
             </div>
        
-       		<?php if(get_option('ptthemes_show_user_pass')){?>
+       		<?php if(get_option('geodir_allow_cpass')){?>
            
             <div class="row_spacer_registration clearfix" >
                 <div class="form_row clearfix">
-                <input placeholder='<?php echo PASSWORD_TEXT; ?>'  type="password" name="user_pass" id="user_pass" class="textfield" value="" size="25"  />
+                <input placeholder='<?php echo PASSWORD_TEXT; ?>'  type="password" name="user_pass" id="user_pass" class="textfield input-text" value="" size="25"  />
                 <span id="user_fnameInfo"></span>
                 </div>
             </div>
         
             <div class="row_spacer_registration clearfix" >
                 <div class="form_row clearfix">
-                <input placeholder='<?php echo CONFIRM_PASSWORD_TEXT; ?>' type="password" name="user_pass2" id="user_pass2" class="textfield" value="" size="25"  />
+                <input placeholder='<?php echo CONFIRM_PASSWORD_TEXT; ?>' type="password" name="user_pass2" id="user_pass2" class="textfield input-text" value="" size="25"  />
                 <span id="user_fnameInfo"></span>
                 </div>
             </div>

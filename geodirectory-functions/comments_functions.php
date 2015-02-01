@@ -85,31 +85,34 @@ function geodir_save_rating($comment = 0){
 	if(isset($_REQUEST['geodir_overallrating'])){
 		
 		$overall_rating = $_REQUEST['geodir_overallrating'];
-					
-				$sqlqry = $wpdb->prepare("INSERT INTO ".GEODIR_REVIEW_TABLE." SET
-						post_id		= %d,
-						post_type = %s,
-						post_title	= %s,
-						user_id		= %d,
-						comment_id	= %d,
-						rating_ip	= %s,
-						overall_rating = %f,
-						status		= %s,
-						post_status		= %s, 
-						post_date		= %s, 
-						post_city		= %s, 
-						post_region		= %s, 
-						post_country	= %s 
-						",
-						array($post_id,$post->post_type,$post->post_title,$user_ID,$comment,$rating_ip,$overall_rating,$status,$post_status,date("Y-m-d H:i:s"),$post_details->post_city,$post_details->post_region,$post_details->post_country)
-						);		
-		
-		$wpdb->query($sqlqry);
-		
-		do_action('geodir_after_save_comment', $_REQUEST, 'Comment Your Post');
-		
-		if($status){
-		geodir_update_postrating($post_id,$overall_rating);
+		if ( isset( $comment_info->comment_parent ) && (int)$comment_info->comment_parent == 0 ) {
+			$overall_rating = $overall_rating > 0 ? $overall_rating : '0';
+						
+			$sqlqry = $wpdb->prepare("INSERT INTO ".GEODIR_REVIEW_TABLE." SET
+					post_id		= %d,
+					post_type = %s,
+					post_title	= %s,
+					user_id		= %d,
+					comment_id	= %d,
+					rating_ip	= %s,
+					overall_rating = %f,
+					status		= %s,
+					post_status		= %s, 
+					post_date		= %s, 
+					post_city		= %s, 
+					post_region		= %s, 
+					post_country	= %s 
+					",
+					array($post_id,$post->post_type,$post->post_title,$user_ID,$comment,$rating_ip,$overall_rating,$status,$post_status,date("Y-m-d H:i:s"),$post_details->post_city,$post_details->post_region,$post_details->post_country)
+					);		
+			
+			$wpdb->query($sqlqry);
+			
+			do_action('geodir_after_save_comment', $_REQUEST, 'Comment Your Post');
+			
+			if($status){
+				geodir_update_postrating($post_id);
+			}
 		}
 	}
 
@@ -151,28 +154,8 @@ function geodir_update_rating_status_change($comment_id,$status){
 			
 			$wpdb->query($sqlqry);
 			
-			//$post_oldrating = geodir_get_postoverall($post_id);
-			$post_newrating = geodir_get_review_total($post_id);
-			$post_newrating_count = geodir_get_review_count_total($post_id);
-			
-			
-			//$post_newrating = ( (float)$post_oldrating - (float)$old_rating ) + (float)$overall_rating ;
-		
-			if ($wpdb->get_var("SHOW TABLES LIKE '".$detail_table."'") == $detail_table){
-								
-				$wpdb->query(
-					$wpdb->prepare(
-						"UPDATE ".$detail_table." SET 
-						overall_rating = %f,
-						rating_count = %f
-						where post_id =%d",
-						array($post_newrating, $post_newrating_count,$post_id)
-					)
-				);				
-								
-			}else{
-				update_post_meta( $post_id, 'overall_rating', $post_newrating );
-			} 
+			//update rating
+			geodir_update_postrating($post_id,$post_type);
 			
 		}
 		
@@ -201,37 +184,22 @@ function geodir_update_rating($comment_id = 0){
 		
 		$overall_rating = $_REQUEST['geodir_overallrating'];
 		
-		if(isset($old_rating)){
-						
-			$sqlqry = $wpdb->prepare("UPDATE ".GEODIR_REVIEW_TABLE." SET
-					overall_rating = %f,
-					status		= %s 
-					WHERE comment_id = %d ", array($overall_rating,$status,$comment_id));		
-		
-			$wpdb->query($sqlqry);
+		if ( isset( $comment_info->comment_parent ) && (int)$comment_info->comment_parent == 0 ) {
+			$overall_rating = $overall_rating > 0 ? $overall_rating : '0';
 			
-			//$post_oldrating = geodir_get_postoverall($post_id);
-			
-			$post_newrating = geodir_get_review_total($post_id);
-			$post_newrating_count = geodir_get_review_count_total($post_id);
-			//$post_newrating = ( (float)$post_oldrating - (float)$old_rating ) + (float)$overall_rating ;
-		
-			if ($wpdb->get_var("SHOW TABLES LIKE '".$detail_table."'") == $detail_table){
-								
-				$wpdb->query(
-					$wpdb->prepare(
-						"UPDATE ".$detail_table." SET 
+			if(isset($old_rating)){
+							
+				$sqlqry = $wpdb->prepare("UPDATE ".GEODIR_REVIEW_TABLE." SET
 						overall_rating = %f,
-						rating_count = %f
-						where post_id = %d",
-						array($post_newrating, $post_newrating_count,$post_id)
-					)
-				);	
-											
-			}else{
-				update_post_meta( $post_id, 'overall_rating', $post_newrating );
-			} 
+						status		= %s 
+						WHERE comment_id = %d ", array($overall_rating,$status,$comment_id));		
 			
+				$wpdb->query($sqlqry);
+				
+				//update rating
+				geodir_update_postrating($post_id,$post_type);
+				 
+			}
 		}
 	}
 	
@@ -245,7 +213,7 @@ function geodir_comment_delete_comment( $comment_id )
 	
 	$review_info = geodir_get_review($comment_id);
 	if($review_info){
-		geodir_update_postrating($review_info->post_id,$review_info->overall_rating,true);
+		geodir_update_postrating($review_info->post_id);
 	}	
 	
 	$wpdb->query(
@@ -269,11 +237,13 @@ return '<div>'.__('Overall Rating',GEODIRECTORY_TEXTDOMAIN).': <div class="ratin
 	
 }
 
-function geodir_update_postrating($post_id = 0, $overall , $delete = false ){
+
+// $delete epreciated since ver 1.3.6
+function geodir_update_postrating($post_id = 0, $post_type='' , $delete = false ){
 	global $wpdb, $plugin_prefix, $comment;
-	$post_type = get_post_type($post_id);
+	if(!$post_type){$post_type = get_post_type($post_id);}
 	$detail_table =  $plugin_prefix . $post_type . '_detail';
-	$post_newrating = geodir_get_review_total($post_id);
+	$post_newrating = geodir_get_post_rating($post_id,1);
 	$post_newrating_count = geodir_get_review_count_total($post_id);
 			
 			
@@ -291,42 +261,10 @@ function geodir_update_postrating($post_id = 0, $overall , $delete = false ){
 					)
 				);
 				
-			}else{
 				update_post_meta( $post_id, 'overall_rating', $post_newrating );
+				update_post_meta( $post_id, 'rating_count', $post_newrating_count );
 			} 
-		/*	
-			
-	$post_type = get_post_type($post_id);
-	$detail_table =  $plugin_prefix . $post_type . '_detail';
 	
-	$post_ratings = geodir_get_postoverall($post_id);
-	$rating = geodir_get_commentoverall($comment->comment_ID);
-	
-	if($delete){
-		
-		if($post_ratings && $rating)
-			$overall_rating =  (float)$post_ratings - (float)$rating;
-		else
-			$overall_rating =  (float)$post_ratings;	
-		
-	}elseif($overall){
-		
-		if($post_ratings)
-			$overall_rating =  (float)$post_ratings + (float)$overall;
-		else
-			$overall_rating =  (float)$overall;	
-	}	
-	
-	if($overall_rating){
-		if ( $wpdb->get_var("SHOW TABLES LIKE '".$detail_table."'") == $detail_table){
-			
-			$wpdb->query("UPDATE ".$detail_table." SET 
-							overall_rating = '$overall_rating'
-							where post_id =".$post_id );
-		}else{
-			update_post_meta( $post_id, 'overall_rating', $overall_rating );
-		} 
-	}*/	
 }
 
 function geodir_get_postoverall($post_id = 0){
@@ -388,6 +326,30 @@ function geodir_get_review_total($post_id = 0){
 		return false; 	
 }
 
+function geodir_get_post_rating($post_id = 0, $force_query = 0){
+	global $wpdb,$post;
+	
+	if(isset($post->ID) && $post->ID == $post_id && !$force_query){
+		if(isset($post->rating_count) && $post->rating_count>0 && isset($post->overall_rating) && $post->overall_rating>0){
+		return $post->overall_rating;
+		}else{
+		return 0;
+		}
+	}
+	
+	$results =	$wpdb->get_var(
+								$wpdb->prepare(
+									"SELECT COALESCE(avg(overall_rating),0) FROM ".GEODIR_REVIEW_TABLE." WHERE post_id = %d AND status=1 AND overall_rating>0",
+									array($post_id)
+								)
+							);
+	
+	if(!empty($results))
+		return $results; 
+	else
+		return false; 	
+}
+
 function geodir_get_review_count_total($post_id = 0){
 	global $wpdb;
 	
@@ -437,20 +399,9 @@ function geodir_get_commentoverall($comment_id = 0){
 		return false; 	
 }
 
-function geodir_get_commentoverall_number($comment_id = 0){
-	global $wpdb;
-	
-	$ratings = $wpdb->get_var(
-		$wpdb->prepare(
-			"SELECT COALESCE(avg(overall_rating),0) FROM ".GEODIR_REVIEW_TABLE." WHERE post_id = %d AND status=1 AND overall_rating>0",
-			array($comment_id)
-		)
-	);
-	
-	if($ratings)
-		return $ratings; 
-	else
-		return false; 	
+// depreciated since ver 1.3.6
+function geodir_get_commentoverall_number($post_id = 0){
+	return geodir_get_post_rating($post_id);	
 }
 
 
@@ -459,7 +410,7 @@ function geodir_comment_template( $comment_template ) {
 		 
 		 $post_types = geodir_get_posttypes();
 		 
-     if ( !( is_singular() && ( have_comments() || 'open' == $post->comment_status ) ) ) {
+     if ( !( is_singular() && ( have_comments() || (isset($post->comment_status) && 'open' == $post->comment_status) ) ) ) {
         return;
      }
      if(in_array($post->post_type, $post_types)){ // assuming there is a post type called business
@@ -570,14 +521,15 @@ function geodir_get_rating_stars($rating, $post_id, $small=false){
 	//$rating_img = '<img src="'.geodir_plugin_url().'/geodirectory-assets/images/stars.png" />';
 	$rating_img = '<img src="'.get_option('geodir_default_rating_star_icon').'" />';
 	
-	$r_html = '<div class="geodir-rating"><div class="gd_rating_show" data-average="'.$rating.'" data-id="'.$post_id.'"><div class="geodir_RatingAverage" style="width: '.$a_rating.'%;"></div><div class="geodir_Star">'.$rating_img.$rating_img.$rating_img.$rating_img.$rating_img.'</div></div></div>';
-	}
-	return $r_html;
+	/* fix rating star for safari */
+	$star_width = 23 * 5;
+	global $is_safari, $is_iphone, $ios, $is_chrome;
+	$attach_style = ( $is_safari || $is_iphone || $ios || $is_chrome ) && $star_width > 0 ? 'width:' . $star_width . 'px;max-width:none' : '';
 	
-
-    
+	$r_html = '<div class="geodir-rating" style="' . $attach_style . '"><div class="gd_rating_show" data-average="'.$rating.'" data-id="'.$post_id.'"><div class="geodir_RatingAverage" style="width: '.$a_rating.'%;"></div><div class="geodir_Star">'.$rating_img.$rating_img.$rating_img.$rating_img.$rating_img.'</div></div></div>';
+	}
+	return $r_html;   
 }
-
 
 function geodir_is_reviews_show($pageview = ''){
 	
@@ -588,15 +540,4 @@ function geodir_is_reviews_show($pageview = ''){
 		$is_display = false;
 		
 	return apply_filters('geodir_is_reviews_show', $is_display, $pageview);
-	
 }
-
-
-
-
-
-
-
-
-
-

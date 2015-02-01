@@ -42,7 +42,7 @@ function geodir_popup_validate_field(field) {
 		case 'email':
 			//var filter = /^[a-zA-Z0-9]+[a-zA-Z0-9_.-]+@[a-zA-Z0-9]+[a-zA-Z0-9.-]+[a-zA-Z0-9]+.[a-z]{2,4}$/;
 			/* fix for email with domain @me.com */
-			var filter = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+			var filter = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w+)+$/;
 			if(field.value == '') {
 				erro_msg = geodir_all_js_msg.geodir_field_id_required;
 			}

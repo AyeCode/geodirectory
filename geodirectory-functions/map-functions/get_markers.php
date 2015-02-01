@@ -1,9 +1,10 @@
 <?php 
-if( isset( $_REQUEST['ajax_action'] ) && $_REQUEST['ajax_action'] == 'homemap_catlist' ){
-	$post_taxonomy = geodir_get_taxonomies($_REQUEST['post_type']);
+
+if ( isset( $_REQUEST['ajax_action'] ) && $_REQUEST['ajax_action'] == 'homemap_catlist' ) {
+	$post_taxonomy = geodir_get_taxonomies( $_REQUEST['post_type'] );
 	$map_canvas_name = $_REQUEST['map_canvas'];
 	$child_collapse= $_REQUEST['child_collapse'];
-	echo home_map_taxonomy_walker($post_taxonomy, 0, true, 0 ,  $map_canvas_name,$child_collapse);
+	echo home_map_taxonomy_walker( $post_taxonomy, 0, true, 0, $map_canvas_name, $child_collapse, true );
 	die;
 }
 	 
@@ -55,6 +56,7 @@ if( isset( $_REQUEST['ajax_action'] ) && $_REQUEST['ajax_action'] == 'cat' ){
 function get_markers(){	
 	
 	global $wpdb, $plugin_prefix,$geodir_cat_icons;
+
 	
 	$search = '';
 	$main_query_array ;
@@ -90,7 +92,7 @@ function get_markers(){
 	}
 	
 	if(!empty($field_default_cat))
-		$field_default_cat = ', case '.$field_default_cat.' end as default_icon ';
+		$field_default_cat = '';//', case '.$field_default_cat.' end as default_icon ';
 	
 	if(!empty($cat_find_array))
 		$search .= "AND (". implode(' OR ', $cat_find_array). ")";
@@ -102,7 +104,7 @@ function get_markers(){
 	$map_cat_format = array_fill(0, $map_cat_length, '%d');
 	$format = implode(',', $map_cat_format);	*/
 	
-	if(isset($_REQUEST['search']) && !empty($_REQUEST['search'])){
+	if(isset($_REQUEST['search']) && !empty($_REQUEST['search']) && $_REQUEST['search']!=__( 'Title', GEODIRECTORY_TEXTDOMAIN )){
 		
 			$search .= " AND p.post_title like %s";
 			$main_query_array[] = "%".$_REQUEST['search']."%";
@@ -127,6 +129,9 @@ function get_markers(){
 					
 	$join = apply_filters('geodir_home_map_listing_join', $join);
 	$search = apply_filters('geodir_home_map_listing_where', $search);
+	$cat_type = $post_type.'category';
+	if($post_type=='gd_event'){$event_select = ",pd.recurring_dates";}else{$event_select ="";}
+	$select = apply_filters('geodir_home_map_listing_select', 'SELECT pd.default_category,pd.'.$cat_type.',pd.post_title,pd.post_id,pd.post_latitude,pd.post_longitude '.$event_select);
 		
 	/*$catsql = 	$wpdb->prepare("SELECT pi.* FROM "
 				.$wpdb->posts." as p," 
@@ -134,16 +139,20 @@ function get_markers(){
 				AND pd.post_id = pi.post_id 
 				AND p.post_status = 'publish'  AND pi.cat_id in ($format) " . $search . $gd_posttype , $main_query_array);*/
 	
-	$catsql = 	$wpdb->prepare("SELECT pd.* $field_default_cat FROM "
+	$catsql = 	$wpdb->prepare("$select $field_default_cat FROM "
 				.$wpdb->posts." as p," 
 				.$join." WHERE p.ID = pd.post_id 
 				AND p.post_status = 'publish' " . $search . $gd_posttype , $main_query_array);
-		
+	//echo '###search'. $search;	
+	//echo '###$gd_posttype'. $gd_posttype;	
+	//echo '###$main_query_array'. $main_query_array;	
 	
 	$catsql = apply_filters('geodir_home_map_listing_query' , $catsql , $search) ;
 	
-	$catinfo = $wpdb->get_results($catsql);
 	
+	
+	$catinfo = $wpdb->get_results($catsql);
+	//echo $catsql;
 	//print_r($catinfo);
 	$cat_content_info = array();
 	$content_data = array();
@@ -151,12 +160,16 @@ function get_markers(){
 	if(!empty($catinfo))
 	{
 		foreach($catinfo as $catinfo_obj)
-		{ 	
-			//$content_data[] = $catinfo_obj->json; 
-			
+		{ 	//echo '#';
+		
 			$icon = '';
-			$default_cat = $catinfo_obj->default_icon;
-			//$default_cat = $catinfo_obj->default_category;
+			if($catinfo_obj->default_category){
+			$default_cat = $catinfo_obj->default_category;	
+				
+			}else{
+			$cat_type = $post_type.'category';
+			$default_cat = reset(array_filter(explode(',', $catinfo_obj->$cat_type)));
+			}
 			
 		 if($default_cat != ''){
 			
@@ -199,9 +212,12 @@ function get_markers(){
 			$title = str_replace($srcharr,$replarr,$post_title);
 		 
 			$content_data[] = '{"id":"'.$catinfo_obj->post_id.'","t": "'.$title.'","lt": "'.$catinfo_obj->post_latitude.'","ln": "'.$catinfo_obj->post_longitude.'","mk_id":"'.$catinfo_obj->post_id.'_'.$catinfo_obj->default_category.'","i":"'.$icon.'"}';
+			//$content_data[] = '{"id":"'.$catinfo_obj->post_id.'","t": "'.$title.'","lt": "'.$catinfo_obj->post_latitude.'","ln": "'.$catinfo_obj->post_longitude.'","mk_id":"'.$catinfo_obj->post_id.'_'.$catinfo_obj->default_category.'"}';
 			
 			$post_ids[] = $catinfo_obj->post_id; 
 		}
+			
+		
 	}
 	
 	if(!empty($content_data))

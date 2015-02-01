@@ -179,7 +179,7 @@ function geodir_register_new_user($user_login, $user_email) {
 	$user_email = apply_filters( 'user_registration_email', $user_email );
 
 
-	if(get_option('ptthemes_show_user_pass')){
+	if(get_option('geodir_allow_cpass')){
 	$user_pass  = $_REQUEST['user_pass'] ;
 	$user_pass2 = $_REQUEST['user_pass2'] ;
 	// Check the password
@@ -381,7 +381,7 @@ function geodir_user_signup(){
 				exit();
 			}
 		############################### fix by Stiofan -  HebTech.co.uk ### SECURITY FIX ##############################
-			
+			global $user_email, $user_fname;
 			$user_login = '';
 			$user_email = '';
 			if ( $http_post ) {
@@ -389,9 +389,26 @@ function geodir_user_signup(){
 				$user_email = $_POST['user_email'];
 				$user_fname = $_POST['user_fname'];
 				
-						
 				$errors = geodir_register_new_user($user_login, $user_email);
 				
+				/* display error in registration form */
+				if ( is_wp_error($errors) ) {
+					$error_code 	= $errors->get_error_code();
+					$error_message	= $errors->get_error_message( $error_code );
+					if ( !isset( $_POST['user_login'] ) && ( $error_code == 'empty_username' || $error_code == 'invalid_username' || $error_code == 'username_exists' ) ) {
+						if ( $error_code == 'empty_username' ) {
+							$error_code = 'empty_email';
+						} else if ( $error_code == 'invalid_username' ) {
+							$error_code = 'invalid_email';
+						} else if ( $error_code == 'username_exists' ) {
+							$error_code = 'email_exists';
+						}
+						
+						$error_message	= $errors->get_error_message( $error_code );
+					}
+					global $geodir_signup_error;
+					$geodir_signup_error = $error_message;
+				}
 			
 				if ( !is_wp_error($errors) ) 
 				{
@@ -416,10 +433,22 @@ function geodir_user_signup(){
 					
 					$redirect_to = $_REQUEST['redirect_to'];
 					
-					if($_REQUEST['redirect_to']=='')
+					if(!isset($_REQUEST['redirect_to']) || $_REQUEST['redirect_to']=='')
 					{
-						$_REQUEST['redirect_to']=get_author_link($echo = false, $errors[0]);
+						if(isset($_SERVER['HTTP_REFERER']) && strstr($_SERVER['HTTP_REFERER'],home_url()))
+						{
+							$redirect_to = $_SERVER['HTTP_REFERER'];
+						}else{
+							$redirect_to = home_url();
+						}
+						
 					}
+					
+					if(isset($_REQUEST['redirect_add_listing']) || $_REQUEST['redirect_add_listing']!=''){
+						
+						$redirect_to = $_REQUEST['redirect_add_listing'];
+					}
+					
 					
 					if ( !$secure_cookie && is_ssl() && force_ssl_login() && !force_ssl_admin() && ( 0 !== strpos($redirect_to, 'https') ) && ( 0 === strpos($redirect_to, 'http') ) )
 						$secure_cookie = false;
@@ -500,7 +529,7 @@ function geodir_user_signup(){
 					wp_redirect($redirect_to);
 				}else
 				{
-					wp_redirect(get_author_link($echo = false, $user->data->ID));
+					wp_redirect(home_url());
 				}	exit();
 			}
 		
