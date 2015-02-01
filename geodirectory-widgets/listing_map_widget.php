@@ -169,13 +169,13 @@ class geodir_map_listingpage extends WP_Widget {
 		$showall = strip_tags($instance['showall']);
 		?>
         <p>
-            <label for="<?php echo $this->get_field_id('width'); ?>"><?php _e('Map Width <small>(Default is : 294)</small>',GEODIRECTORY_TEXTDOMAIN);?>:
+            <label for="<?php echo $this->get_field_id('width'); ?>"><?php _e('Map Width <small>(Default is : 294) you can use px or % here</small>',GEODIRECTORY_TEXTDOMAIN);?>:
             <input class="widefat" id="<?php echo $this->get_field_id('width'); ?>" name="<?php echo $this->get_field_name('width'); ?>" type="text" value="<?php echo esc_attr($width); ?>" />
             </label>
         </p>
 	
         <p>
-            <label for="<?php echo $this->get_field_id('heigh'); ?>"><?php _e('Map Height <small>(Default is : 370)</small>',GEODIRECTORY_TEXTDOMAIN);?>:
+            <label for="<?php echo $this->get_field_id('heigh'); ?>"><?php _e('Map Height <small>(Default is : 370) you can use px or vh here</small>',GEODIRECTORY_TEXTDOMAIN);?>:
             <input class="widefat" id="<?php echo $this->get_field_id('heigh'); ?>" name="<?php echo $this->get_field_name('heigh'); ?>" type="text" value="<?php echo esc_attr($heigh); ?>" />
             </label>
         </p>

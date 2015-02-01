@@ -66,6 +66,7 @@
   .geodir_form_row .event-single-dateto-inner{width:100%;float:none;}
   .map_category label {display: none;}
   .map_category .main_list img {height: 20px;width: auto;}
+  #simplemodal-container a.modalCloseImg{right:0px !important;}
 
 }
 

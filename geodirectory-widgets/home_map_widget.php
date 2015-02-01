@@ -79,12 +79,12 @@ class geodir_homepage_map extends WP_Widget {
 	?> 	
 
     <p>
-      <label for="<?php echo $this->get_field_id('width'); ?>"><?php _e('Map Width <small>(Default is : 960px)</small>',GEODIRECTORY_TEXTDOMAIN);?>:
+      <label for="<?php echo $this->get_field_id('width'); ?>"><?php _e('Map Width <small>(Default is : 960px) you can use px or % here</small>',GEODIRECTORY_TEXTDOMAIN);?>:
       <input class="widefat" id="<?php echo $this->get_field_id('width'); ?>" name="<?php echo $this->get_field_name('width'); ?>" type="text" value="<?php echo esc_attr($width); ?>" />
       </label>
     </p>
      <p>
-      <label for="<?php echo $this->get_field_id('heigh'); ?>"><?php _e('Map Height <small>(Default is : 425px)</small>',GEODIRECTORY_TEXTDOMAIN);?>:
+      <label for="<?php echo $this->get_field_id('heigh'); ?>"><?php _e('Map Height <small>(Default is : 425px) you can use px or vh here</small>',GEODIRECTORY_TEXTDOMAIN);?>:
       <input class="widefat" id="<?php echo $this->get_field_id('heigh'); ?>" name="<?php echo $this->get_field_name('heigh'); ?>" type="text" value="<?php echo esc_attr($heigh); ?>" />
       </label>
     </p>

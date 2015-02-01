@@ -384,10 +384,10 @@ function geodir_posts_orderby($orderby) {
 			$orderby = "$wpdb->posts.comment_count desc, ";
 		break;
 		case 'low_rating':
-			$orderby = "( " . $table . ".overall_rating / " . $table . ".rating_count ) asc, ";
+			$orderby = "( " . $table . ".overall_rating  ) asc, ";
 		break;
 		case 'high_rating':
-			$orderby = "( " . $table . ".overall_rating / " . $table . ".rating_count ) desc, ";
+			$orderby = "( " . $table . ".overall_rating ) desc, ";
 		break;
 		case 'featured':
 			$orderby = $table.".is_featured asc, ";
@@ -446,7 +446,7 @@ function geodir_posts_order_by_custom_sort($orderby, $sort_by, $table){
 				
 				// sort by rating
 				case 'overall_rating':
-					$orderby = "( " . $table . "." . $sort_by . " / " . $table . ".rating_count ) ".$order.", ";
+					$orderby = "( " . $table . "." . $sort_by . " ) ".$order.", ";
 				break;
 				
 				default:
@@ -618,6 +618,18 @@ function searching_filter_where($where) {
 		$post_types = $_REQUEST['stype'];
 	else
 		$post_types = 'gd_place';
+		
+	if ( $s != '' ) {
+		$adv_search_arr = explode( " ", $s );
+		if ( !empty( $adv_search_arr ) ) {
+			foreach( $adv_search_arr as $adv_search_val ) {
+				$adv_search_val = trim( $adv_search_val );
+				if ( $adv_search_val != '' ) {
+					$better_search_terms .= ' OR '.$wpdb->posts.'.post_title LIKE "%' . $adv_search_val . '%"';
+				}
+			}
+		}
+	}
 	
 	
 	/* get taxonomy */

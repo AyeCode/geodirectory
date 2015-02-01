@@ -557,7 +557,7 @@ function geodir_custom_taxonomy_walker2($cat_taxonomy, $cat_limit = '')
 		global $post;
 	
 		$post_category =   geodir_get_post_meta($post->ID,$cat_taxonomy,true);
-		if(empty($post_category)){
+		if(empty($post_category) && isset( $post->$cat_taxonomy ) ){
 			$post_category =   $post->$cat_taxonomy;
 		}
 		
@@ -651,6 +651,7 @@ function geodir_custom_taxonomy_walker2($cat_taxonomy, $cat_limit = '')
 																	
 					});
 				}
+				update_listing_cat();
 			}
 			
 			function update_listing_cat(){
@@ -711,6 +712,9 @@ function geodir_custom_taxonomy_walker2($cat_taxonomy, $cat_limit = '')
 				
 				
 			}
+			jQuery(function(){
+				update_listing_cat();
+			})
 			
 			
 		</script>	
@@ -731,8 +735,7 @@ function geodir_custom_taxonomy_walker2($cat_taxonomy, $cat_limit = '')
 }
 
 /* Category Slection Interface in add/edit listing form */
-function geodir_addpost_categories_html($request_taxonomy, $parrent, $selected = false, $main_selected = true, $default = false, $exclude='' ){ 
-				
+function geodir_addpost_categories_html( $request_taxonomy, $parrent, $selected = false, $main_selected = true, $default = false, $exclude='' ){ 
 				global $exclude_cats;
 				
 				if($exclude != ''){
@@ -748,13 +751,17 @@ function geodir_addpost_categories_html($request_taxonomy, $parrent, $selected =
     
     <div class="post_catlist_item" style="border:1px solid #CCCCCC; margin:5px auto; padding:5px;">
     	<img src="<?php echo geodir_plugin_url().'/geodirectory-assets/images/move.png';?>" onclick="jQuery(this).closest('div').remove();update_listing_cat();" align="right" /> 
+		<?php /* ?>
+		<img src="<?php echo geodir_plugin_url().'/geodirectory-assets/images/move.png';?>" onclick="jQuery(this).closest('div').remove();show_subcatlist();" align="right" /> 
+		<?php */ ?>
        
         <input type="checkbox" value="<?php echo $main_cat->term_id;?>" class="listing_main_cat"  onchange="if(jQuery(this).is(':checked')){jQuery(this).closest('div').find('.post_default_category').prop('checked',false).show();}else{jQuery(this).closest('div').find('.post_default_category').prop('checked',false).hide();};update_listing_cat()" checked="checked" disabled="disabled" />
        <span> 
         <?php printf( __('Add listing in %s category',GEODIRECTORY_TEXTDOMAIN), ucwords($main_cat->name) );?> 
         </span> 
         <br/>
-        <div class="post_default_category" >
+        
+		<div class="post_default_category" >
         <input type="radio" name="post_default_category"  value="<?php echo $main_cat->term_id;?>" onchange="update_listing_cat()" <?php if($default) echo ' checked="checked" ';?>   />
         <span> 
         <?php printf( __('Set %s as default category',GEODIRECTORY_TEXTDOMAIN), ucwords($main_cat->name) );?> 
@@ -832,10 +839,10 @@ function geodir_get_catlist($cat_taxonomy, $parrent = 0, $selected = false)
 	if(!empty($cat_terms)){
 	
 		$onchange = '';
-		if($parrent == '0')
+		//if($parrent == '0')
 			$onchange = ' onchange="show_subcatlist(this.value)"  ';
-		else
-			$onchange = ' onchange="update_listing_cat()"  ';
+		//else
+			//$onchange = ' onchange="update_listing_cat()"  ';
 		
 		$option_selected = '';	
 		if(!$selected)	

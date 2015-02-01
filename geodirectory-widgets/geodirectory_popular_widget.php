@@ -73,6 +73,7 @@ class geodir_popular_post_category extends WP_Widget {
 			echo '</ul>';
 			?>
 			</div> 
+			</div>
 		<?php 
 			if( $cat_count > $categ_limit ) {
 				echo '<a href="javascript:void(0)" class="geodir-morecat geodir-showcat">' . __( 'More Categories', GEODIRECTORY_TEXTDOMAIN ) . '</a>';
@@ -80,8 +81,9 @@ class geodir_popular_post_category extends WP_Widget {
 				/* add scripts */
 				add_action( 'wp_footer', array($this, 'geodir_popular_category_add_scripts'), 100 );
 			}
-			echo $after_widget;
+			
 		}
+		echo $after_widget;
 	}
 	
 	function geodir_popular_category_add_scripts() {

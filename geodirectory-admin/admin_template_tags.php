@@ -432,9 +432,543 @@ function geodir_admin_option_form($tab_name)
 		case 'tools_settings' :
 			geodir_diagnostic_tools_setting_page();
 			break;
+		case 'compatibility_settings' :
+			geodir_theme_compatibility_setting_page();
+			break;
 			
 		
 	}// end of switch
+}
+
+
+/*
+function gd_compat_read_write_code($code,$theme){
+
+$url = wp_nonce_url('admin.php?page=geodirectory&tab=compatibility_settings','gd-compat-theme-options');
+if (false === ($creds = request_filesystem_credentials($url, '', false, false, null) ) ) {
+	return; // stop processing here
+}
+
+if ( ! WP_Filesystem($creds) ) {
+	request_filesystem_credentials($url, '', true, false, null);
+	return;
+}
+
+global $wp_filesystem;
+
+$wp_filesystem->put_contents(
+  plugin_dir_path( __FILE__ ).'/geodirectory/geodirectory-templates/compatibility/'.$theme.'php',
+  'Example contents of a file',
+  FS_CHMOD_FILE // predefined mode settings for WP files
+);
+ 
+ 
+ }
+*/
+
+
+function geodir_update_options_compatibility_settings(){
+	
+global $wpdb;
+
+
+$theme_settings = array();
+
+$theme_settings['geodir_wrapper_open_id'] = $_POST['geodir_wrapper_open_id'];
+$theme_settings['geodir_wrapper_open_class'] = $_POST['geodir_wrapper_open_class'];
+$theme_settings['geodir_wrapper_open_replace'] = stripslashes($_POST['geodir_wrapper_open_replace']);
+
+$theme_settings['geodir_wrapper_close_replace'] = stripslashes($_POST['geodir_wrapper_close_replace']);
+
+$theme_settings['geodir_wrapper_content_open_id'] = $_POST['geodir_wrapper_content_open_id'];
+$theme_settings['geodir_wrapper_content_open_class'] = $_POST['geodir_wrapper_content_open_class'];
+$theme_settings['geodir_wrapper_content_open_replace'] = stripslashes($_POST['geodir_wrapper_content_open_replace']);
+
+$theme_settings['geodir_wrapper_content_close_replace'] = stripslashes($_POST['geodir_wrapper_content_close_replace']);
+
+$theme_settings['geodir_article_open_id'] = $_POST['geodir_article_open_id'];
+$theme_settings['geodir_article_open_class'] = $_POST['geodir_article_open_class'];
+$theme_settings['geodir_article_open_replace'] = stripslashes($_POST['geodir_article_open_replace']);
+
+$theme_settings['geodir_article_close_replace'] = stripslashes($_POST['geodir_article_close_replace']);
+
+$theme_settings['geodir_sidebar_right_open_id'] = $_POST['geodir_sidebar_right_open_id'];
+$theme_settings['geodir_sidebar_right_open_class'] = $_POST['geodir_sidebar_right_open_class'];
+$theme_settings['geodir_sidebar_right_open_replace'] = stripslashes($_POST['geodir_sidebar_right_open_replace']);
+
+$theme_settings['geodir_sidebar_right_close_replace'] = stripslashes($_POST['geodir_sidebar_right_close_replace']);
+
+$theme_settings['geodir_sidebar_left_open_id'] = $_POST['geodir_sidebar_left_open_id'];
+$theme_settings['geodir_sidebar_left_open_class'] = $_POST['geodir_sidebar_left_open_class'];
+$theme_settings['geodir_sidebar_left_open_replace'] = stripslashes($_POST['geodir_sidebar_left_open_replace']);
+
+$theme_settings['geodir_sidebar_left_close_replace'] = stripslashes($_POST['geodir_sidebar_left_close_replace']);
+
+$theme_settings['geodir_main_content_open_id'] = $_POST['geodir_main_content_open_id'];
+$theme_settings['geodir_main_content_open_class'] = $_POST['geodir_main_content_open_class'];
+$theme_settings['geodir_main_content_open_replace'] = stripslashes($_POST['geodir_main_content_open_replace']);
+
+$theme_settings['geodir_main_content_close_replace'] = stripslashes($_POST['geodir_main_content_close_replace']);
+
+// Other Actions
+$theme_settings['geodir_top_content_add'] = stripslashes($_POST['geodir_top_content_add']);
+$theme_settings['geodir_before_main_content_add'] = stripslashes($_POST['geodir_before_main_content_add']);
+
+// Filters
+$theme_settings['geodir_before_widget_filter'] = stripslashes($_POST['geodir_before_widget_filter']);
+$theme_settings['geodir_after_widget_filter'] = stripslashes($_POST['geodir_after_widget_filter']);
+
+// theme required css
+$theme_settings['geodir_theme_compat_css'] = stripslashes($_POST['geodir_theme_compat_css']);
+
+// theme required js
+$theme_settings['geodir_theme_compat_js'] = stripslashes($_POST['geodir_theme_compat_js']);
+
+// theme compat name
+$theme_settings['gd_theme_compat'] = $_POST['gd_theme_compat'];
+if($theme_settings['gd_theme_compat']==''){
+update_option('gd_theme_compat','');
+update_option('theme_compatibility_setting','');
+return;
+}
+
+// theme default options
+$theme_settings['geodir_theme_compat_default_options'] = '';
+
+
+//suported theme code
+$theme_settings['geodir_theme_compat_code'] = false;
+
+$theme = wp_get_theme();
+
+if($theme->parent()){
+$theme_name = str_replace(" ","_",$theme->parent()->get( 'Name' ));	
+}else{
+$theme_name =  str_replace(" ","_",$theme->get( 'Name' ));
+}
+
+if(in_array($theme_name,  array('Avada','Enfold','X','Divi','Genesis'))){// list of themes that have php files
+	$theme_settings['geodir_theme_compat_code'] = $theme_name;
+}
+
+
+
+
+$theme_name = $theme_name."_custom";
+$theme_arr = get_option('gd_theme_compats');
+update_option('gd_theme_compat',$theme_name);
+
+
+
+//if($_POST['gd_theme_compat'])==
+$theme_arr[$theme_name] = $theme_settings;
+update_option('gd_theme_compats',$theme_arr);
+
+
+//print_r($theme_settings);exit;
+update_option('theme_compatibility_setting',$theme_settings);
+	
+}
+
+function geodir_theme_compatibility_setting_page(){
+	global $wpdb;
+	$tc = get_option('theme_compatibility_setting');
+	//print_r($tc);
+	//print_r(wp_get_theme());
+	
+?>
+	<div class="inner_content_tab_main">
+            <div class="gd-content-heading" >
+           
+            
+                <h3><?php _e('Theme Compatability Settings',GEODIRECTORY_TEXTDOMAIN);?></h3>
+                <style>
+				.gd-theme-compat-table{
+				width:100%;
+				border:1px solid #666;
+				}
+				#gd-import-export-theme-comp,.gd-theme-compat-table textarea{width:100%;}
+				
+				.gd-theme-comp-out{border-bottom:#000000 solid 1px;}
+				
+				.gd-comp-import-export {display:none;}
+				#gd-compat-warnings h3{background-color: #FFA07A;}
+				
+				</style>
+				 
+				 <?php if(str_replace("_custom","",get_option('gd_theme_compat'))=='Avada'){?>
+				 <div id="gd-compat-warnings">
+				 	<h3><?php _e('Avada theme has no hooks for compatibility, because of this you must add two small changes to the header.php. <a href="http://docs.wpgeodirectory.com/avada-compatibility-header-php/" target="_blank">Instructions</a>',GEODIRECTORY_TEXTDOMAIN);?></h3>
+				 </div>
+				 <?php }?>
+				 
+				 <h4><?php _e('Select Theme Compatibility Pack',GEODIRECTORY_TEXTDOMAIN);?></h4>
+				 
+				 <select name="gd_theme_compat" id="gd_theme_compat">
+				 	<option value=""><?php _e('Select Theme',GEODIRECTORY_TEXTDOMAIN);?></option>
+				 	<option value="custom"><?php _e('Custom',GEODIRECTORY_TEXTDOMAIN);?></option>
+				 	<?php
+				 	$theme_arr = get_option('gd_theme_compats');
+				 	$theme_active = get_option('gd_theme_compat');
+					if(is_array($theme_arr)){
+						foreach($theme_arr as $key=>$theme){
+							$sel = '';
+							if($theme_active == $key){$sel="selected";}
+							echo "<option $sel>$key</option>";
+						}
+						
+						
+						
+					}
+				 	
+				 	?>
+				 </select>
+				 <button onclick="gd_comp_export();" type="button" class="button-primary"><?php _e('Export',GEODIRECTORY_TEXTDOMAIN);?></button>
+				 <button onclick="gd_comp_import();" type="button" class="button-primary"><?php _e('Import',GEODIRECTORY_TEXTDOMAIN);?></button>
+				 
+				 <div class="gd-comp-import-export">
+				 	<textarea id="gd-import-export-theme-comp" placeholder="<?php _e('Paste the JSON code here and then click import again',GEODIRECTORY_TEXTDOMAIN);?>"></textarea>
+				 </div>
+				 <script>
+				 	
+				 	function gd_comp_export(){
+				 		theme = jQuery('#gd_theme_compat').val();
+				 		if(theme=='' || theme=='custom'){
+				 		alert("<?php _e('Please select a theme to export',GEODIRECTORY_TEXTDOMAIN);?>");return false;	
+				 		}
+				 		jQuery('.gd-comp-import-export').show();
+						var data = {
+						'action': 'get_gd_theme_compat_callback',
+						'theme': theme,
+						'export':true
+						};
+				 		jQuery.post(ajaxurl, data, function(response){
+						jQuery('#gd-import-export-theme-comp').val(response);
+					});
+				 		return false;
+				 	}
+				 	
+				 	function gd_comp_import(){
+				 		if(jQuery('.gd-comp-import-export').css('display') == 'none'){
+						jQuery('#gd-import-export-theme-comp').val('');
+				 		jQuery('.gd-comp-import-export').show();	
+						return false;	
+						}
+				 		
+				 		json = jQuery('#gd-import-export-theme-comp').val();
+				 		if(json==''){return false;}
+				 		
+				 		var data = {
+						'action': 'get_gd_theme_compat_import_callback',
+						'theme': json
+						};
+					
+				 		jQuery.post(ajaxurl, data, function(response) {
+						 if(response=='0'){
+						 	alert("<?php _e('Something went wrong',GEODIRECTORY_TEXTDOMAIN);?>");
+						 }else{
+						 	alert("<?php _e('Theme Compatibility Imported',GEODIRECTORY_TEXTDOMAIN);?>");
+						 	jQuery('#gd-import-export-theme-comp').val('');
+				 			jQuery('.gd-comp-import-export').hide();
+				 		 	jQuery('#gd_theme_compat').append( new Option(response,response) );
+						 }
+						});
+				 		return false;
+				 	}
+				 	
+				 	jQuery( "#gd_theme_compat" ).change(function() {
+					  var data = {
+						'action': 'get_gd_theme_compat_callback',
+						'theme': jQuery(this).val()
+					};
+					
+					if(jQuery(this).val()=='custom'){return;}
+					if(jQuery(this).val()!=''){
+					  jQuery.post(ajaxurl, data, function(response) {
+						var obj = jQuery.parseJSON(response);
+						console.log(obj);
+						 gd_fill_compat_fields(obj);
+					});
+					}else{
+					    jQuery(this).closest('form').find("input[type=text], textarea").val("");
+	
+					}
+					  
+					});
+					
+					function gd_fill_compat_fields(obj){
+						
+						jQuery.each(obj, function(i, item) {
+							jQuery('[name="'+i+'"]').val(item);
+							});
+						
+					}
+									 	
+				 </script>
+				 
+				 <h4><?php _e('Main Wrapper Actions',GEODIRECTORY_TEXTDOMAIN);?></h4>
+
+                 <table class="form-table gd-theme-compat-table">
+                    <tbody>
+                      <tr>
+                      	<td><strong><?php _e('Hook',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                      	<td><strong><?php _e('ID',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                      	<td><strong><?php _e('Class',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                      </tr>
+                    
+                  
+                        <tr>
+                            <td><small>geodir_wrapper_open</small></td>
+                            <td><input value="<?php if(isset($tc['geodir_wrapper_open_id'])){echo $tc['geodir_wrapper_open_id'];}?>" type="text" name="geodir_wrapper_open_id" placeholder="geodir-wrapper"  /></td>
+                            <td><input value="<?php if(isset($tc['geodir_wrapper_open_class'])){echo $tc['geodir_wrapper_open_class'];}?>" type="text" name="geodir_wrapper_open_class" placeholder="" /></td>
+                        </tr>  
+                        
+						<tr class="gd-theme-comp-out">
+							<td colspan="3">
+								<span><?php _e('Output:',GEODIRECTORY_TEXTDOMAIN);?></span>
+								<textarea name="geodir_wrapper_open_replace" placeholder='<div id="[id]" class="[class]">'><?php if(isset($tc['geodir_wrapper_open_replace'])){echo $tc['geodir_wrapper_open_replace'];}?></textarea>
+							</td>
+						</tr>
+						
+			
+                         
+                         <tr>
+                            <td><small>geodir_wrapper_close</small></td>
+                            <td><input disabled="disabled" type="text" name="geodir_wrapper_open_id" placeholder="<?php _e('Not used',GEODIRECTORY_TEXTDOMAIN);?>"  /></td>
+                            <td><input disabled="disabled" type="text" name="geodir_wrapper_open_class" placeholder="<?php _e('Not used',GEODIRECTORY_TEXTDOMAIN);?>" /></td>
+                        </tr>  
+                        
+						<tr class="gd-theme-comp-out">
+							<td colspan="3">
+								<span><?php _e('Output:',GEODIRECTORY_TEXTDOMAIN);?></span>
+								<textarea name="geodir_wrapper_close_replace" placeholder='</div><!-- wrapper ends here-->'><?php if(isset($tc['geodir_wrapper_close_replace'])){echo $tc['geodir_wrapper_close_replace'];}?></textarea>
+							</td>
+						</tr>
+						
+						
+						<tr>
+                            <td><small>geodir_wrapper_content_open</small></td>
+                            <td><input value="<?php if(isset($tc['geodir_wrapper_content_open_id'])){echo $tc['geodir_wrapper_content_open_id'];}?>" type="text" name="geodir_wrapper_content_open_id" placeholder="geodir-wrapper-content"  /></td>
+                            <td><input value="<?php if(isset($tc['geodir_wrapper_content_open_class'])){echo $tc['geodir_wrapper_content_open_class'];}?>" type="text" name="geodir_wrapper_content_open_class" placeholder="" /></td>
+                        </tr>  
+                        
+						<tr class="gd-theme-comp-out">
+							<td colspan="3">
+								<span><?php _e('Output:',GEODIRECTORY_TEXTDOMAIN);?></span>
+								<textarea name="geodir_wrapper_content_open_replace" placeholder='<div id="[id]" class="[class]" role="main" [width_css]>'><?php if(isset($tc['geodir_wrapper_content_open_replace'])){echo $tc['geodir_wrapper_content_open_replace'];}?></textarea>
+							</td>
+						</tr>
+						
+						
+						<tr>
+                            <td><small>geodir_wrapper_content_close</small></td>
+                            <td><input disabled="disabled" type="text" name="geodir_wrapper_content_close_id" placeholder="<?php _e('Not used',GEODIRECTORY_TEXTDOMAIN);?>"  /></td>
+                            <td><input disabled="disabled" type="text" name="geodir_wrapper_content_close_class" placeholder="<?php _e('Not used',GEODIRECTORY_TEXTDOMAIN);?>" /></td>
+                        </tr>  
+                        
+						<tr class="gd-theme-comp-out">
+							<td colspan="3">
+								<span><?php _e('Output:',GEODIRECTORY_TEXTDOMAIN);?></span>
+								<textarea name="geodir_wrapper_content_close_replace" placeholder='</div><!-- content ends here-->'><?php if(isset($tc['geodir_wrapper_content_close_replace'])){echo $tc['geodir_wrapper_content_close_replace'];}?></textarea>
+							</td>
+						</tr>
+						
+						<tr>
+                            <td><small>geodir_article_open</small></td>
+                            <td><input value="<?php if(isset($tc['geodir_article_open_id'])){echo $tc['geodir_article_open_id'];}?>" type="text" name="geodir_article_open_id" placeholder="geodir-wrapper-content"  /></td>
+                            <td><input value="<?php if(isset($tc['geodir_article_open_class'])){echo $tc['geodir_article_open_class'];}?>" type="text" name="geodir_article_open_class" placeholder="" /></td>
+                        </tr>  
+                        
+						<tr class="gd-theme-comp-out">
+							<td colspan="3">
+								<span><?php _e('Output:',GEODIRECTORY_TEXTDOMAIN);?></span>
+								<textarea name="geodir_article_open_replace" placeholder='<article  id="[id]" class="[class]" itemscope itemtype="[itemtype]">'><?php if(isset($tc['geodir_article_open_replace'])){echo $tc['geodir_article_open_replace'];}?></textarea>
+							</td>
+						</tr>
+						
+						<tr>
+                            <td><small>geodir_article_close</small></td>
+                            <td><input disabled="disabled" type="text" name="geodir_article_close_id" placeholder="<?php _e('Not used',GEODIRECTORY_TEXTDOMAIN);?>"  /></td>
+                            <td><input disabled="disabled" type="text" name="geodir_article_close_class" placeholder="<?php _e('Not used',GEODIRECTORY_TEXTDOMAIN);?>" /></td>
+                        </tr>  
+                        
+						<tr class="gd-theme-comp-out">
+							<td colspan="3">
+								<span><?php _e('Output:',GEODIRECTORY_TEXTDOMAIN);?></span>
+								<textarea name="geodir_article_close_replace" placeholder='</article><!-- article ends here-->'><?php if(isset($tc['geodir_article_close_replace'])){echo $tc['geodir_article_close_replace'];}?></textarea>
+							</td>
+						</tr>
+						
+						<tr>
+                            <td><small>geodir_sidebar_right_open</small></td>
+                            <td><input value="<?php if(isset($tc['geodir_sidebar_right_open_id'])){echo $tc['geodir_sidebar_right_open_id'];}?>" type="text" name="geodir_sidebar_right_open_id" placeholder="geodir-sidebar-right"  /></td>
+                            <td><input value="<?php if(isset($tc['geodir_sidebar_right_open_class'])){echo $tc['geodir_sidebar_right_open_class'];}?>" type="text" name="geodir_sidebar_right_open_class" placeholder="geodir-sidebar-right geodir-listings-sidebar-right" /></td>
+                        </tr>  
+                        
+						<tr class="gd-theme-comp-out">
+							<td colspan="3">
+								<span><?php _e('Output:',GEODIRECTORY_TEXTDOMAIN);?></span>
+								<textarea name="geodir_sidebar_right_open_replace" placeholder='<aside  id="[id]" class="[class]" role="complementary" itemscope itemtype="[itemtype]" [width_css]>'><?php if(isset($tc['geodir_sidebar_right_open_replace'])){echo $tc['geodir_sidebar_right_open_replace'];}?></textarea>
+							</td>
+						</tr>
+						
+						<tr>
+                            <td><small>geodir_sidebar_right_close</small></td>
+                            <td><input disabled="disabled" type="text" name="geodir_sidebar_right_close_id" placeholder="<?php _e('Not used',GEODIRECTORY_TEXTDOMAIN);?>"  /></td>
+                            <td><input disabled="disabled" type="text" name="geodir_sidebar_right_close_class" placeholder="<?php _e('Not used',GEODIRECTORY_TEXTDOMAIN);?>" /></td>
+                        </tr>  
+                        
+						<tr class="gd-theme-comp-out">
+							<td colspan="3">
+								<span><?php _e('Output:',GEODIRECTORY_TEXTDOMAIN);?></span>
+								<textarea name="geodir_sidebar_right_close_replace" placeholder='</aside><!-- sidebar ends here-->'><?php if(isset($tc['geodir_sidebar_right_close_replace'])){echo $tc['geodir_sidebar_right_close_replace'];}?></textarea>
+							</td>
+						</tr>
+						
+						
+						<tr>
+                            <td><small>geodir_sidebar_left_open</small></td>
+                            <td><input value="<?php if(isset($tc['geodir_sidebar_left_open_id'])){echo $tc['geodir_sidebar_left_open_id'];}?>" type="text" name="geodir_sidebar_left_open_id" placeholder="geodir-sidebar-left"  /></td>
+                            <td><input value="<?php if(isset($tc['geodir_sidebar_left_open_class'])){echo $tc['geodir_sidebar_left_open_class'];}?>" type="text" name="geodir_sidebar_left_open_class" placeholder="geodir-sidebar-left geodir-listings-sidebar-left" /></td>
+                        </tr>  
+                        
+						<tr class="gd-theme-comp-out">
+							<td colspan="3">
+								<span><?php _e('Output:',GEODIRECTORY_TEXTDOMAIN);?></span>
+								<textarea name="geodir_sidebar_left_open_replace" placeholder='<aside  id="[id]" class="[class]" role="complementary" itemscope itemtype="[itemtype]" [width_css]>'><?php if(isset($tc['geodir_sidebar_left_open_replace'])){echo $tc['geodir_sidebar_left_open_replace'];}?></textarea>
+							</td>
+						</tr>
+						
+						<tr>
+                            <td><small>geodir_sidebar_left_close</small></td>
+                            <td><input disabled="disabled" type="text" name="geodir_sidebar_left_close_id" placeholder="<?php _e('Not used',GEODIRECTORY_TEXTDOMAIN);?>"  /></td>
+                            <td><input disabled="disabled" type="text" name="geodir_sidebar_left_close_class" placeholder="<?php _e('Not used',GEODIRECTORY_TEXTDOMAIN);?>" /></td>
+                        </tr>  
+                        
+						<tr class="gd-theme-comp-out">
+							<td colspan="3">
+								<span><?php _e('Output:',GEODIRECTORY_TEXTDOMAIN);?></span>
+								<textarea name="geodir_sidebar_left_close_replace" placeholder='</aside><!-- sidebar ends here-->'><?php if(isset($tc['geodir_sidebar_left_close_replace'])){echo $tc['geodir_sidebar_left_close_replace'];}?></textarea>
+							</td>
+						</tr>
+						
+						<tr>
+                            <td><small>geodir_main_content_open</small></td>
+                            <td><input value="<?php if(isset($tc['geodir_main_content_open_id'])){echo $tc['geodir_main_content_open_id'];}?>" type="text" name="geodir_main_content_open_id" placeholder="geodir-main-content"  /></td>
+                            <td><input value="<?php if(isset($tc['geodir_main_content_open_class'])){echo $tc['geodir_main_content_open_class'];}?>" type="text" name="geodir_main_content_open_class" placeholder="CURRENT-PAGE-page" /></td>
+                        </tr>  
+                        
+						<tr class="gd-theme-comp-out">
+							<td colspan="3">
+								<span><?php _e('Output:',GEODIRECTORY_TEXTDOMAIN);?></span>
+								<textarea name="geodir_main_content_open_replace" placeholder='<main  id="[id]" class="[class]"  role="main">'><?php if(isset($tc['geodir_main_content_open_replace'])){echo $tc['geodir_main_content_open_replace'];}?></textarea>
+							</td>
+						</tr>
+						
+						<tr>
+                            <td><small>geodir_main_content_close</small></td>
+                            <td><input disabled="disabled" type="text" name="geodir_main_content_close_id" placeholder="<?php _e('Not used',GEODIRECTORY_TEXTDOMAIN);?>"  /></td>
+                            <td><input disabled="disabled" type="text" name="geodir_main_content_close_class" placeholder="<?php _e('Not used',GEODIRECTORY_TEXTDOMAIN);?>" /></td>
+                        </tr>  
+                        
+						<tr class="gd-theme-comp-out">
+							<td colspan="3">
+								<span><?php _e('Output:',GEODIRECTORY_TEXTDOMAIN);?></span>
+								<textarea name="geodir_main_content_close_replace" placeholder='</main><!-- main ends here-->'><?php if(isset($tc['geodir_main_content_close_replace'])){echo $tc['geodir_main_content_close_replace'];}?></textarea>
+							</td>
+						</tr>
+						
+
+                        
+                    </tbody>
+                </table>
+                
+          	 <h4><?php _e('Other Actions',GEODIRECTORY_TEXTDOMAIN);?></h4>
+          	 
+          	   <table class="form-table gd-theme-compat-table">
+                    <tbody>
+                      <tr>
+                      	<td><strong><?php _e('Hook',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                      	<td><strong><?php _e('Content',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                      </tr>
+                    
+                  
+                        <tr>
+                            <td><small>geodir_top_content</small></td>
+                            <td><textarea name="geodir_top_content_add" placeholder=''><?php if(isset($tc['geodir_top_content_add'])){echo $tc['geodir_top_content_add'];}?></textarea></td>
+                        </tr>  
+                        
+                         <tr>
+                            <td><small>geodir_before_main_content</small></td>
+                            <td><textarea name="geodir_before_main_content_add" placeholder=''><?php if(isset($tc['geodir_before_main_content_add'])){echo $tc['geodir_before_main_content_add'];}?></textarea></td>
+                        </tr>  
+                        
+					
+						
+          	   </tbody>
+             </table>
+                
+                
+            <h4><?php _e('Other Filters',GEODIRECTORY_TEXTDOMAIN);?></h4>
+          	 
+          	   <table class="form-table gd-theme-compat-table">
+                    <tbody>
+                      <tr>
+                      	<td><strong><?php _e('Filter',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                      	<td><strong><?php _e('Content',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                      </tr>
+                    
+                  
+                        <tr>
+                            <td><small>geodir_before_widget</small></td>
+                            <td><textarea name="geodir_before_widget_filter" placeholder='<section id="%1$s" class="widget geodir-widget %2$s">'><?php if(isset($tc['geodir_before_widget_filter'])){echo $tc['geodir_before_widget_filter'];}?></textarea></td>
+                        </tr>  
+                        
+                         <tr>
+                            <td><small>geodir_after_widget</small></td>
+                            <td><textarea name="geodir_after_widget_filter" placeholder='</section>'><?php if(isset($tc['geodir_after_widget_filter'])){echo $tc['geodir_after_widget_filter'];}?></textarea></td>
+                        </tr>  
+                        
+					
+						
+          	   </tbody>
+             </table>
+                
+                
+           <h4><?php _e('Required CSS',GEODIRECTORY_TEXTDOMAIN);?></h4>
+          	 
+          	   <table class="form-table gd-theme-compat-table">
+                    <tbody>
+                      <tr>
+                        <td><textarea name="geodir_theme_compat_css" placeholder=''><?php if(isset($tc['geodir_theme_compat_css'])){echo $tc['geodir_theme_compat_css'];}?></textarea></td>
+                      </tr>
+              
+					
+						
+          	   </tbody>
+             </table>
+                
+           <h4><?php _e('Required JS',GEODIRECTORY_TEXTDOMAIN);?></h4>
+          	 
+          	   <table class="form-table gd-theme-compat-table">
+                    <tbody>
+                      <tr>
+                        <td><textarea name="geodir_theme_compat_js" placeholder=''><?php if(isset($tc['geodir_theme_compat_js'])){echo $tc['geodir_theme_compat_js'];}?></textarea></td>
+                      </tr>
+              
+					
+						
+          	   </tbody>
+             </table>
+             
+             
+           <p class="submit">
+            <input name="save" class="button-primary" type="submit" value="<?php _e('Save changes',GEODIRECTORY_TEXTDOMAIN);?>">
+           </p>
+                
+          	</div>
+	</div>
+<?php
 }
 
 

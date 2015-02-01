@@ -1551,7 +1551,8 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 					if($cat_display == 'multiselect')
 						$multiple = 'multiple="multiple"';
 							
-					echo '<select id="'.$name.'" '.$multiple.' type="'.$name.'" name="post_category['.$name.'][]" alt="'.$name.'" field_type="'.$cat_display.'">';
+					echo '<select id="'.$name.'" '.$multiple.' type="'.$name.'" name="post_category['.$name.'][]" alt="'.$name.'" field_type="'.$cat_display.'" class="geodir_textfield textfield_x chosen_select" data-placeholder="'.__( 'Select Category', GEODIRECTORY_TEXTDOMAIN ).'">';
+					
 					
 					if($cat_display == 'select')
 						echo '<option value="">'.__('Select Category',GEODIRECTORY_TEXTDOMAIN).'</option>';
@@ -1723,7 +1724,7 @@ function geodir_show_listing_info($fields_location=''){
 			
 			$variables_array = array();
 			
-			if ( $fields_location == 'detail' && isset( $type['show_as_tab'] ) && (int)$type['show_as_tab'] == 1 && in_array( $type['type'], array( 'text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox' ) ) ) {
+			if ( $fields_location == 'detail' && isset( $type['show_as_tab'] ) && (int)$type['show_as_tab'] == 1 && in_array( $type['type'], array( 'text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file' ) ) ) {
 				continue;
 			}			
 			
@@ -1949,7 +1950,7 @@ function geodir_show_listing_info($fields_location=''){
 							
 							$html = '<div class="geodir_more_info '.$geodir_odd_even.' '.$type['css_class'].' '.$type['htmlvar_name'].'" style="clear:both;"><span class="geodir-i-contact" style="'.$field_icon.'">'.$field_icon_af.
 							$html .= (trim($type['site_title'])) ? __($type['site_title'],GEODIRECTORY_TEXTDOMAIN).': ' : '&nbsp;';
-							$html .= '</span>'.stripslashes($post->$type['htmlvar_name']).'</div>';
+							$html .= '</span><a href="tel:'.stripslashes($post->$type['htmlvar_name']).'">'.stripslashes($post->$type['htmlvar_name']).'</a></div>';
 										
 						endif;
 						

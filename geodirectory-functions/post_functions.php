@@ -1523,10 +1523,9 @@ if (!function_exists('geodir_get_infowindow_html')) {
 			if ($ID != '') {
 				$rating_star = '';
 				$comment_count = geodir_get_review_count_total($ID);
-				$post_ratings = geodir_get_review_total($ID);
 				
 				if (!$preview) {
-					$post_avgratings = geodir_get_commentoverall_number($ID);
+					$post_avgratings = geodir_get_post_rating($ID);
 					
 					$rating_star = geodir_get_rating_stars($post_avgratings,$ID,false);
 					$rating_star = apply_filters('geodir_review_rating_stars_on_infowindow', $rating_star, $post_avgratings, $ID);

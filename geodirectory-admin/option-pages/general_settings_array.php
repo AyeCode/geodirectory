@@ -85,6 +85,13 @@ global $geodir_settings;
 			'value'		=> '0',
 			'radiogroup' => 'end'
 		),
+		array(  
+			'name' 		=> __( 'Disable rating on comments', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> __( 'Disable rating without disabling comments on listings', GEODIRECTORY_TEXTDOMAIN ),
+			'id' 		=> 'geodir_disable_rating',
+			'type' 		=> 'checkbox',
+			'std' 		=> '0'
+		),
 		/*array(  
 			'name' => __( 'Disable standard place taxonomie?', GEODIRECTORY_TEXTDOMAIN ),
 			'desc' 		=> __( 'Yes', GEODIRECTORY_TEXTDOMAIN ),

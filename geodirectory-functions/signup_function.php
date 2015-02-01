@@ -433,10 +433,22 @@ function geodir_user_signup(){
 					
 					$redirect_to = $_REQUEST['redirect_to'];
 					
-					if($_REQUEST['redirect_to']=='')
+					if(!isset($_REQUEST['redirect_to']) || $_REQUEST['redirect_to']=='')
 					{
-						$_REQUEST['redirect_to']=get_author_link($echo = false, $errors[0]);
+						if(isset($_SERVER['HTTP_REFERER']) && strstr($_SERVER['HTTP_REFERER'],home_url()))
+						{
+							$redirect_to = $_SERVER['HTTP_REFERER'];
+						}else{
+							$redirect_to = home_url();
+						}
+						
 					}
+					
+					if(isset($_REQUEST['redirect_add_listing']) || $_REQUEST['redirect_add_listing']!=''){
+						
+						$redirect_to = $_REQUEST['redirect_add_listing'];
+					}
+					
 					
 					if ( !$secure_cookie && is_ssl() && force_ssl_login() && !force_ssl_admin() && ( 0 !== strpos($redirect_to, 'https') ) && ( 0 === strpos($redirect_to, 'http') ) )
 						$secure_cookie = false;
@@ -517,7 +529,7 @@ function geodir_user_signup(){
 					wp_redirect($redirect_to);
 				}else
 				{
-					wp_redirect(get_author_link($echo = false, $user->data->ID));
+					wp_redirect(home_url());
 				}	exit();
 			}
 		

@@ -405,7 +405,7 @@ if($wpdb->query("SHOW TABLES LIKE 'geodir_gd_place_detail'")>0 && $wpdb->query("
 					 	expire_date varchar( 25 ) NULL DEFAULT NULL,
 						submit_time varchar(15) NULL DEFAULT NULL,
 						submit_ip varchar(20) NULL DEFAULT NULL,
-						overall_rating int(11) DEFAULT '0', 
+						overall_rating float(11) DEFAULT '0', 
 						rating_count int(11) DEFAULT '0', 
 						post_locations varchar( 254 ) NULL DEFAULT NULL,
 						post_dummy enum( '1', '0' ) NULL DEFAULT '0', 

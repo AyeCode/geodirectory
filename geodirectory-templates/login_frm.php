@@ -49,7 +49,7 @@ else
             </div> 
         
             <div class="form_row clearfix">
-                <input placeholder='<?php echo PASSWORD_TEXT; ?>' type="password" name="pwd" id="user_pass" class="textfield" value="" size="20"  />
+                <input placeholder='<?php echo PASSWORD_TEXT; ?>' type="password" name="pwd" id="user_pass" class="textfield input-text" value="" size="20"  />
                 <span class="user_passInfo"></span>
             </div>
             

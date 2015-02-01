@@ -1,16 +1,118 @@
 <?php
 ###############################################
+########### DYNAMIC CONTENT ###################
+###############################################
+
+function gd_compat_styles() {
+	$tc = get_option('theme_compatibility_setting');	
+      echo "<style id='gd-compat-styles' type='text/css'>";
+   	    echo $tc['geodir_theme_compat_css'];
+      echo "</style>";
+}
+
+function gd_compat_script() {
+	$tc = get_option('theme_compatibility_setting');	
+      echo "<script>";
+   	    echo $tc['geodir_theme_compat_js'];
+      echo " </script>";
+}
+
+
+function geodir_top_content_add_dynamic(){
+	$tc = get_option('theme_compatibility_setting');	
+	echo $tc['geodir_top_content_add'];
+}
+
+function geodir_before_main_content_add_dynamic(){
+	$tc = get_option('theme_compatibility_setting');	
+	echo $tc['geodir_before_main_content_add'];
+}
+ 
+ 
+function geodir_before_widget_dynamic(){
+	$tc = get_option('theme_compatibility_setting');
+	return $tc['geodir_before_widget_filter'];
+}
+
+function geodir_after_widget_dynamic(){
+	$tc = get_option('theme_compatibility_setting');
+	return $tc['geodir_after_widget_filter'];
+}
+
+add_action('setup_theme','geodir_content_actions_dynamic',10);
+function geodir_content_actions_dynamic(){
+	global $wpdb;
+	
+	$tc = get_option('theme_compatibility_setting');
+	if(empty($tc)){return;}
+	
+	//php
+	if(!empty($tc['geodir_theme_compat_code'])){
+		include_once('geodirectory-functions/compatibility/'.$tc['geodir_theme_compat_code'].'.php');
+	}
+
+	//widget before filter
+	if(!empty($tc['geodir_before_widget_filter'])){
+		add_filter('geodir_before_widget','geodir_before_widget_dynamic',10);
+	}
+
+	//widget after filter
+	if(!empty($tc['geodir_after_widget_filter'])){
+		add_filter('geodir_after_widget','geodir_after_widget_dynamic',10);
+	}
+	
+	// compat styles
+	if(!empty($tc['geodir_theme_compat_css'])){
+		add_action( 'wp_head', 'gd_compat_styles' );
+	}
+	
+	// compat js
+	if(!empty($tc['geodir_theme_compat_js'])){
+		add_action( 'wp_footer', 'gd_compat_script' );
+	}
+	
+
+	// geodir_top_content_add
+	if(!empty($tc['geodir_top_content_add'])){
+		add_action( 'geodir_top_content', 'geodir_top_content_add_dynamic', 10, 1 );
+	}
+	
+	// geodir_before_main_content_add
+	if(!empty($tc['geodir_before_main_content_add'])){
+		add_action( 'geodir_before_main_content', 'geodir_before_main_content_add_dynamic', 10, 1 );
+	}
+
+	
+	
+}
+
+###############################################
 ########### DETAILS PAGE ACTIONS ##############
 ###############################################
 
 // action for adding the wrapper div opening tag
 add_action( 'geodir_wrapper_open', 'geodir_action_wrapper_open', 10, 3 );
 function geodir_action_wrapper_open($type='',$id='',$class=''){
-echo '<div id="'.$id.'" class="'.$class.'">';
+	$tc = get_option('theme_compatibility_setting');
+	if(!empty($tc['geodir_wrapper_open_replace'])){$text = $tc['geodir_wrapper_open_replace'];}
+	else{$text = '<div id="[id]" class="[class]">';}
+	
+	if(!empty($tc['geodir_wrapper_open_id'])){$id = $tc['geodir_wrapper_open_id'];}
+	if(!empty($tc['geodir_wrapper_open_class'])){$class = $tc['geodir_wrapper_open_class'];}
+	
+	$text =  str_replace(array("[id]","[class]"), array($id,$class), $text );
+
+	echo $text;
 }
 // action for adding the wrapperdiv closing tag
 add_action( 'geodir_wrapper_close', 'geodir_action_wrapper_close', 10,1);
-function geodir_action_wrapper_close($type=''){echo '</div><!-- wrapper ends here-->';}
+function geodir_action_wrapper_close($type=''){
+	$tc = get_option('theme_compatibility_setting');
+	if(!empty($tc['geodir_wrapper_close_replace'])){$text = $tc['geodir_wrapper_close_replace'];}
+	else{$text = '</div><!-- wrapper ends here-->';}
+			
+	echo $text;
+}
 
 // action for adding the content div opening tag
 add_action( 'geodir_wrapper_content_open', 'geodir_action_wrapper_content_open', 10, 3 );
@@ -20,20 +122,49 @@ elseif($type=='listings-page' && $width = get_option('geodir_width_listing_conta
 elseif($type=='search-page' && $width = get_option('geodir_width_search_contant_section') ) { $width_css = 'style="width:'.$width.'%;"'; }
 elseif($type=='author-page' && $width = get_option('geodir_width_author_contant_section') ) { $width_css = 'style="width:'.$width.'%;"'; }else{$width_css = '';}
 
-echo '<div id="'.$id.'" class="'.$class.'" role="main" '. $width_css.'>';
+	$tc = get_option('theme_compatibility_setting');
+	if(!empty($tc['geodir_wrapper_content_open_replace'])){$text = $tc['geodir_wrapper_content_open_replace'];}
+	else{$text = '<div id="[id]" class="[class]" role="main" [width_css]>';}
+	
+	if(!empty($tc['geodir_wrapper_content_open_id'])){$id = $tc['geodir_wrapper_content_open_id'];}
+	if(!empty($tc['geodir_wrapper_content_open_class'])){$class = $tc['geodir_wrapper_content_open_class'];}
+	
+	$text =  str_replace(array("[id]","[class]","[width_css]"), array($id,$class,$width_css), $text );
+
+	echo $text;
 }
 // action for adding the primary div closing tag
 add_action( 'geodir_wrapper_content_close', 'geodir_action_wrapper_content_close', 10,1);
-function geodir_action_wrapper_content_close($type=''){echo '</div><!-- content ends here-->';}
+function geodir_action_wrapper_content_close($type=''){
+	$tc = get_option('theme_compatibility_setting');
+	if(!empty($tc['geodir_wrapper_content_close_replace'])){$text = $tc['geodir_wrapper_content_close_replace'];}
+	else{$text = '</div><!-- content ends here-->';}
+	echo $text;
+}
 
 // action for adding the <article> opening tag
 add_action( 'geodir_article_open', 'geodir_action_article_open', 10, 4 );
 function geodir_action_article_open($type='',$id='',$class='',$itemtype=''){
-echo '<article  id="'.$id.'" class="'.implode(" ",$class).'" itemscope itemtype="'.$itemtype.'">';
+	$class = implode(" ",$class);
+	$tc = get_option('theme_compatibility_setting');
+	if(!empty($tc['geodir_article_open_replace'])){$text = $tc['geodir_article_open_replace'];}
+	else{$text = '<article  id="[id]" class="[class]" itemscope itemtype="[itemtype]">';}
+	
+	if(!empty($tc['geodir_article_open_id'])){$id = $tc['geodir_article_open_id'];}
+	if(!empty($tc['geodir_article_open_class'])){$class = $tc['geodir_article_open_class'];}
+	
+	$text =  str_replace(array("[id]","[class]","[itemtype]"), array($id,$class,$itemtype), $text );
+	
+	echo $text;
 }
 // action for adding the primary div closing tag
 add_action( 'geodir_article_close', 'geodir_action_article_close', 10,1);
-function geodir_action_article_close($type=''){echo '</article><!-- article ends here-->';}
+function geodir_action_article_close($type=''){
+	$tc = get_option('theme_compatibility_setting');
+	if(!empty($tc['geodir_article_close_replace'])){$text = $tc['geodir_article_close_replace'];}
+	else{$text = '</article><!-- article ends here-->';}
+	echo $text;
+}
 
 // action for adding the sidebar opening tag
 add_action( 'geodir_sidebar_right_open', 'geodir_action_sidebar_right_open', 10, 4 );
@@ -43,11 +174,25 @@ elseif($type=='listings-page' && $width = get_option('geodir_width_listing_right
 elseif($type=='search-page' && $width = get_option('geodir_width_search_right_section') ) { $width_css = 'style="width:'.$width.'%;"'; }
 elseif($type=='author-page' && $width = get_option('geodir_width_author_right_section') ) { $width_css = 'style="width:'.$width.'%;"'; }else{$width_css = '';}
 
-echo '<aside  id="'.$id.'" class="'.$class.'" role="complementary" itemscope itemtype="'.$itemtype.'" '.$width_css.'>';
+	$tc = get_option('theme_compatibility_setting');
+	if(!empty($tc['geodir_sidebar_right_open_replace'])){$text = $tc['geodir_sidebar_right_open_replace'];}
+	else{$text = '<aside  id="[id]" class="[class]" role="complementary" itemscope itemtype="[itemtype]" [width_css]>';}
+	
+	if(!empty($tc['geodir_sidebar_right_open_id'])){$id = $tc['geodir_sidebar_right_open_id'];}
+	if(!empty($tc['geodir_sidebar_right_open_class'])){$class = $tc['geodir_sidebar_right_open_class'];}
+	
+	$text =  str_replace(array("[id]","[class]","[itemtype]","[width_css]"), array($id,$class,$itemtype,$width_css), $text );
+	
+	echo $text;
 }
 // action for adding the primary div closing tag
 add_action( 'geodir_sidebar_right_close', 'geodir_action_sidebar_right_close', 10,1);
-function geodir_action_sidebar_right_close($type=''){echo '</aside><!-- sidebar ends here-->';}
+function geodir_action_sidebar_right_close($type=''){
+	$tc = get_option('theme_compatibility_setting');
+	if(!empty($tc['geodir_sidebar_right_close_replace'])){$text = $tc['geodir_sidebar_right_close_replace'];}
+	else{$text = '</aside><!-- sidebar ends here-->';}
+	echo $text;	
+}
 
 
 // action for adding the details page top widget area
@@ -743,12 +888,27 @@ if($type=='home-page' && $width = get_option('geodir_width_home_left_section') )
 elseif($type=='listings-page' && $width = get_option('geodir_width_listing_left_section') ) { $width_css = 'style="width:'.$width.'%;"'; }
 elseif($type=='search-page' && $width = get_option('geodir_width_search_left_section') ) { $width_css = 'style="width:'.$width.'%;"'; }
 elseif($type=='author-page' && $width = get_option('geodir_width_author_left_section') ) { $width_css = 'style="width:'.$width.'%;"'; }else{$width_css = '';}
-
-echo '<aside  id="'.$id.'" class="'.$class.'" role="complementary" itemscope itemtype="'.$itemtype.'" '.$width_css .'>';
+	
+	$tc = get_option('theme_compatibility_setting');
+	if(!empty($tc['geodir_sidebar_left_open_replace'])){$text = $tc['geodir_sidebar_left_open_replace'];}
+	else{$text = '<aside  id="[id]" class="[class]" role="complementary" itemscope itemtype="[itemtype]" [width_css]>';}
+	
+	if(!empty($tc['geodir_sidebar_left_open_id'])){$id = $tc['geodir_sidebar_left_open_id'];}
+	if(!empty($tc['geodir_sidebar_left_open_class'])){$class = $tc['geodir_sidebar_left_open_class'];}
+	
+	$text =  str_replace(array("[id]","[class]","[itemtype]","[width_css]"), array($id,$class,$itemtype,$width_css), $text );
+	
+	echo $text;
 }
+
 // action for adding the primary div closing tag
 add_action( 'geodir_sidebar_left_close', 'geodir_action_sidebar_left_close', 10,1);
-function geodir_action_sidebar_left_close($type=''){echo '</aside><!-- sidebar ends here-->';}
+function geodir_action_sidebar_left_close($type=''){
+	$tc = get_option('theme_compatibility_setting');
+	if(!empty($tc['geodir_sidebar_left_close_replace'])){$text = $tc['geodir_sidebar_left_close_replace'];}
+	else{$text = '</aside><!-- sidebar ends here-->';}
+	echo $text;
+}
 
 
 function geodir_listing_left_section(){
@@ -797,11 +957,25 @@ do_action( 'geodir_sidebar_right_close', 'listings-page');
 // action for adding the sidebar opening tag
 add_action( 'geodir_main_content_open', 'geodir_action_main_content_open', 10, 3 );
 function geodir_action_main_content_open($type='',$id='',$class=''){
-echo '<main  id="'.$id.'" class="'.$class.'"  role="main">';
+	$tc = get_option('theme_compatibility_setting');
+	if(!empty($tc['geodir_main_content_open_replace'])){$text = $tc['geodir_main_content_open_replace'];}
+	else{$text = '<main id="[id]" class="[class]" role="main">';}
+	
+	if(!empty($tc['geodir_main_content_open_id'])){$id = $tc['geodir_main_content_open_id'];}
+	if(!empty($tc['geodir_main_content_open_class'])){$class = $tc['geodir_main_content_open_class'];}
+	
+	$text =  str_replace(array("[id]","[class]"), array($id,$class), $text );
+	
+	echo $text;
 }
 // action for adding the primary div closing tag
 add_action( 'geodir_main_content_close', 'geodir_action_main_content_close', 10);
-function geodir_action_main_content_close(){echo '</main><!-- sidebar ends here-->';}
+function geodir_action_main_content_close(){
+	$tc = get_option('theme_compatibility_setting');
+	if(!empty($tc['geodir_main_content_close_replace'])){$text = $tc['geodir_main_content_close_replace'];}
+	else{$text = '</main><!-- main ends here-->';}
+	echo $text;
+}
 
 
 
@@ -1010,7 +1184,7 @@ global $cat_display,$post_cat, $current_user;
                     
                     <?php 
                     // adjust values here
-                    $id = "post_images"; // this will be the name of form field. Image url(s) will be submitted in $_POST using this key. So if $id == “img1” then $_POST[“img1”] will have all the image urls
+                    $id = "post_images"; // this will be the name of form field. Image url(s) will be submitted in $_POST using this key. So if $id == ï¿½img1ï¿½ then $_POST[ï¿½img1ï¿½] will have all the image urls
                      
                     $multiple = true; // allow multiple files upload
                      

@@ -301,6 +301,11 @@ jQuery(document).ready(function() {
 		}
 		$frm_obj.find('input[name="submit"]').click(function(e){
 			$frm_obj.find('#err_no_rating').remove();
+			// skip rating stars validation if rating stars disabled
+			if ( typeof geodir_all_js_msg.gd_cmt_disable_rating != 'undefined' && geodir_all_js_msg.gd_cmt_disable_rating ) {
+				return true;
+			}
+			//
 			var is_review = parseInt($frm_obj.find('#comment_parent').val());
 			is_review = is_review == 0 ? true : false;
 			if(is_review){

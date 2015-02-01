@@ -3,7 +3,7 @@
 Plugin Name: GeoDirectory
 Plugin URI: http://wpgeodirectory.com/
 Description: GeoDirectory plugin for wordpress.
-Version: 1.3.5
+Version: 1.3.6
 Author: GeoDirectory
 Author URI: http://wpgeodirectory.com
 Requires at least: 3.1
@@ -11,9 +11,37 @@ Tested up to: 4.0
 */
 
 
-define("GEODIRECTORY_VERSION", "1.3.5");
+define("GEODIRECTORY_VERSION", "1.3.6");
 
 if (!session_id()) session_start();
+
+
+///CHECK FOR OLD COMPATIBILITY PACKS AND DISABLE IF THEY ARE ACTIVE
+if(is_admin()){
+include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+
+if(is_plugin_active('geodirectory-genesis-compatibility-pack/geodir_genesis_compatibility.php')){
+deactivate_plugins('geodirectory-genesis-compatibility-pack/geodir_genesis_compatibility.php');
+}
+
+if(is_plugin_active('geodirectory-x-theme-compatibility-pack/geodir_x_compatibility.php')){
+deactivate_plugins('geodirectory-x-theme-compatibility-pack/geodir_x_compatibility.php'); 
+}
+
+if(is_plugin_active('geodirectory-enfold-theme-compatibility-pack/geodir_enfold_compatibility.php')){
+deactivate_plugins('geodirectory-enfold-theme-compatibility-pack/geodir_enfold_compatibility.php'); 
+}
+
+if(is_plugin_active('geodir_avada_compatibility/geodir_avada_compatibility.php')){
+deactivate_plugins('geodir_avada_compatibility/geodir_avada_compatibility.php'); 
+}
+
+if(is_plugin_active('geodir_compat_pack_divi/geodir_divi_compatibility.php')){
+deactivate_plugins('geodir_compat_pack_divi/geodir_divi_compatibility.php'); 
+}
+
+}
+
 
 /**
  * Global

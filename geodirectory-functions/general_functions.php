@@ -100,7 +100,8 @@ function geodir_curPageURL() {
  } else {
   $pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
  }
- return str_replace("www.", "", $pageURL);
+ //return str_replace("www.", "", $pageURL);
+ return $pageURL;
 }
 
 
@@ -1112,7 +1113,7 @@ function geodir_widget_listings_get_order( $query_args ) {
 			$orderby = $wpdb->posts . ".comment_count DESC, ";
 		break;
 		case 'high_rating':
-			$orderby = "( " . $table . ".overall_rating / " . $table . ".rating_count ) DESC, ";
+			$orderby = "( " . $table . ".overall_rating  ) DESC, ";
 		break;
 		case 'random':
 			$orderby = "RAND(), ";
@@ -1425,4 +1426,8 @@ function geodir_googlemap_script_extra_details_page($extra){
 	return $extra;
 }
 add_filter( 'geodir_googlemap_script_extra', 'geodir_googlemap_script_extra_details_page', 101,1 );
+
+
+
+
 

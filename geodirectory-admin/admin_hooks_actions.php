@@ -45,6 +45,7 @@ function geodir_get_admin_option_form($current_tab)
 
 
 /* Is used to show success or error message at the top of admin option panel */
+add_action('geodir_update_options_compatibility_settings', 'geodir_update_options_compatibility_settings');
 add_action('geodir_update_options_default_location_settings', 'geodir_location_form_submit');
 add_action('geodir_before_admin_panel', 'geodir_before_admin_panel') ; // this function is in admin_functions.php
 
@@ -94,7 +95,8 @@ function create_default_admin_main_nav()
 {
 	add_filter('geodir_settings_tabs_array' , 'geodir_default_admin_main_tabs' ,1 ) ;
 	add_filter('geodir_settings_tabs_array','places_custom_fields_tab',2); 
-	add_filter('geodir_settings_tabs_array','geodir_tools_setting_tab',99); 
+	add_filter('geodir_settings_tabs_array','geodir_compatibility_setting_tab',90); 
+	add_filter('geodir_settings_tabs_array','geodir_tools_setting_tab',95); 
 	add_filter('geodir_settings_tabs_array','geodir_extend_geodirectory_setting_tab',100); 
 	//add_filter('geodir_settings_tabs_array', 'geodir_hide_set_location_default',3);
 	
@@ -1230,3 +1232,379 @@ add_action( 'post_updated', 'geodir_action_post_updated', 15, 3 );
  * hook to add option in bcc options
  */
 add_filter('geodir_notifications_settings', 'geodir_notification_add_bcc_option', 1);
+
+
+/*
+ * check if there is a compatibility pack when switching theme
+ */
+add_action('after_switch_theme', 'gd_theme_switch_compat_check');
+function gd_theme_switch_compat_check() {
+gd_set_theme_compat();
+}
+
+/**
+ * read string as csv array
+ */
+function geodir_str_getcsv( $input, $delimiter = ",", $enclosure = '"', $escape = "\\" ) {	
+	if ( function_exists( 'str_getcsv' ) ) {
+		$fgetcsv = str_getcsv( $input, $delimiter, $enclosure, $escape );
+	} else {
+		global $current_user;
+		$upload_dir = wp_upload_dir();
+	
+		$file = $upload_dir['path'] . '/temp_' . $current_user->data->ID . '/geodir_tmp.csv'; 
+		$handle = fopen( $file, 'w' );
+		
+		fwrite( $handle, $input );
+		fclose( $handle );
+		
+		$handle = fopen ( $file, 'rt' );
+		if(PHP_VERSION>='5.3.0'){
+		$fgetcsv = fgetcsv( $handle, 0, $delimiter, $enclosure, $escape );	
+		}else{
+		$fgetcsv = fgetcsv( $handle, 0, $delimiter, $enclosure );
+		}
+		fclose( $handle );
+	}
+	return $fgetcsv;
+}
+
+add_action( 'wp_ajax_gdImportCsv', 'geodir_ajax_import_csv' );
+function geodir_ajax_import_csv() {
+	global $wpdb, $plugin_prefix, $current_user;
+	$uploads = wp_upload_dir(); 
+	ini_set( 'auto_detect_line_endings', true );
+	
+	$task = isset( $_POST['task'] ) ? $_POST['task'] : '';
+	$uploadedFile = isset( $_POST['gddata']['uploadedFile'] ) ? $_POST['gddata']['uploadedFile'] : NULL;
+	$filename = $uploadedFile;
+	
+	$uploads = wp_upload_dir(); 
+	$uploads_dir = $uploads['path'];
+	$image_name_arr = explode( '/', $filename );
+	$filename = end( $image_name_arr );
+	$target_path = $uploads_dir . '/temp_' . $current_user->data->ID . '/' . $filename;
+	$return = array();
+	$return['file'] = $uploadedFile;
+	$return['error'] = __( 'The uploaded file is not a valid csv file. Please try again.' , GEODIRECTORY_TEXTDOMAIN );
+	if ( is_file( $target_path ) && file_exists( $target_path ) ) {
+		$wp_filetype = wp_check_filetype_and_ext( $target_path, $filename );
+		
+		if ( !empty( $wp_filetype ) && isset( $wp_filetype['ext'] ) && strtolower( $wp_filetype['ext'] ) == 'csv' ) {
+			$return['error'] = NULL;
+			$file = file( $target_path );
+			$return['rows'] = ( !empty( $file ) && count( $file ) > 1 ) ? count( $file ) - 1 : 0;
+			if ( !$return['rows'] > 0 ) {
+				$return['error'] = __( 'No data found in csv file.' , GEODIRECTORY_TEXTDOMAIN );
+			}
+		}
+	}
+	if ( $task == 'prepare' || !empty( $return['error'] ) ) {
+		echo json_encode($return); 
+		exit;
+	}
+	
+	$totRecords = isset( $_POST['gddata']['totRecords'] ) ? $_POST['gddata']['totRecords'] : NULL;
+	$importlimit = isset( $_POST['gddata']['importlimit'] ) ? $_POST['gddata']['importlimit'] : 1;
+	$count = $importlimit;
+	$requested_limit = $importlimit;
+	$tmpCnt = isset( $_POST['gddata']['tmpcount'] ) ? $_POST['gddata']['tmpcount'] : 0;
+	
+	if ( $count < $totRecords ) {
+		$count = $tmpCnt + $count;
+		if ( $count > $totRecords ) {
+			$count = $totRecords;
+		}
+	} else {
+		$count = $totRecords;
+	}
+	
+	$total_records = 0;
+	$rowcount = 0;
+	$address_invalid = 0;
+	$blank_address = 0;
+	$upload_files = 0;
+	$invalid_post_type = 0;
+	$invalid_title = 0;
+	$customKeyarray = array();
+	$gd_post_info = array();
+	$post_location = array();
+	$countpost = 0;
+	
+	if ( !empty( $file ) ) {
+		$columns = isset($file[0]) ? geodir_str_getcsv( $file[0] ) : NULL;
+		$customKeyarray = $columns;
+		
+		if ( empty( $columns ) || ( !empty( $columns ) && $columns[0] == '' ) ) {
+			$return['error'] = CSV_INVAILD_FILE;
+			echo json_encode($return); 
+			exit;
+		}
+				
+		for( $i = 1; $i <= $importlimit; $i++ ) {
+			$current_index = $tmpCnt + $i;
+			if ( isset($file[$current_index])) {
+				$total_records++;
+				
+				$buffer = geodir_str_getcsv( $file[$current_index] );
+				$post_title = addslashes( $buffer[0] );
+				$current_post_author = $buffer[1];
+				$post_desc = addslashes( $buffer[2] );
+				$post_cat = array();
+				$catids_arr = array();
+				$post_cat = trim( $buffer[3] ); // comma seperated category name
+				
+				if ( $post_cat ) {
+					$post_cat_arr = explode( ',', $post_cat );
+					
+					for ( $c=0; $c < count( $post_cat_arr ); $c++ ) {
+						$catid = wp_kses_normalize_entities( trim( $post_cat_arr[$c] ) );
+						
+						if ( !empty( $buffer[5] ) ) {
+							if ( in_array( $buffer[5], geodir_get_posttypes() ) ) {
+							
+								$p_taxonomy = geodir_get_taxonomies( addslashes( $buffer[5] ) );
+								
+								if ( get_term_by( 'name', $catid, $p_taxonomy[0] ) ) {
+									$cat = get_term_by( 'name', $catid, $p_taxonomy[0] );
+									$catids_arr[] = $cat->slug;
+								} else if( get_term_by( 'slug', $catid, $p_taxonomy[0] ) ) {
+									$cat = get_term_by( 'slug', $catid, $p_taxonomy[0] );
+									$catids_arr[] = $cat->slug;
+								} else {
+									$ret = wp_insert_term( $catid, $p_taxonomy[0] );
+									if ( $ret && !is_wp_error( $ret ) ) {
+										if(get_term_by( 'name', $catid, $p_taxonomy[0] )){
+											$cat = get_term_by( 'name', $catid, $p_taxonomy[0]);
+											$catids_arr[] = $cat->slug;
+										}
+										elseif(get_term_by( 'slug', $catid, $p_taxonomy[0] )){
+											$cat = get_term_by( 'slug', $catid, $p_taxonomy[0]);
+											$catids_arr[] = $cat->slug;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				
+				if ( !$catids_arr ){
+					$catids_arr[] = 1;
+				}
+
+				$post_tags = trim( $buffer[4] ); // comma seperated tags
+				
+				$tag_arr = '';
+				if ( $post_tags ) {
+					$tag_arr = explode( ',', $post_tags );	
+				}
+				
+				$table = $plugin_prefix . $buffer[5] . '_detail'; // check table in database
+				
+				$error = '';
+				if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $table . "'" ) != $table ) {
+					$invalid_post_type++;
+					continue;
+				}
+				
+				if ( $post_title != '' ) {
+					$menu_order = 0;
+					$image_folder_name = 'uplaod/';
+					
+					$image_names = array();
+					
+					for ( $c = 5; $c < count( $customKeyarray ); $c++ ) {
+						$gd_post_info[$customKeyarray[$c]] = addslashes( $buffer[$c] );
+						
+						if ( $customKeyarray[$c] == 'IMAGE' ) {
+							$buffer[$c] = trim( $buffer[$c] );
+							
+							if ( !empty( $buffer[$c] ) ) {
+								$image_names[] = $buffer[$c];
+							}
+						}
+						
+						if ( $customKeyarray[$c] == 'alive_days' ) {
+							if ( $buffer[$c] != '0' && $buffer[$c] != '' ) {
+								$submitdata = date( 'Y-m-d' );
+								
+								$gd_post_info['expire_date'] = date( 'Y-m-d', strtotime( $submitdata . "+" . addslashes( $buffer[$c] ) . " days" ) );
+							} else {
+								$gd_post_info['expire_date'] = 'Never';
+							}
+						}
+						
+						if ( $customKeyarray[$c] == 'post_city' ) {
+							$post_city = addslashes( $buffer[$c] );
+						}
+					
+						if ( $customKeyarray[$c] == 'post_region' ) {
+							$post_region = addslashes( $buffer[$c] );
+						}
+						
+						if ( $customKeyarray[$c] == 'post_country' ) {
+							$post_country = addslashes( $buffer[$c] );
+						}
+						
+						if ( $customKeyarray[$c] == 'post_latitude' ) {
+							$post_latitude = addslashes( $buffer[$c] );
+						}
+						
+						if ( $customKeyarray[$c] == 'post_longitude' ) {
+							$post_longitude = addslashes( $buffer[$c] );
+						}
+					}
+				
+					/* ================ before array create ============== */
+					$location_result = geodir_get_default_location();
+					if ( ( !isset( $gd_post_info['post_city'] ) || $gd_post_info['post_city'] == '') || ( !isset( $gd_post_info['post_region'] ) || $gd_post_info['post_region'] == '' ) || ( !isset( $gd_post_info['post_country'] ) || $gd_post_info['post_country'] == '' ) || ( !isset( $gd_post_info['post_address'] ) || $gd_post_info['post_address'] == '' ) || ( !isset( $gd_post_info['post_latitude'] ) || $gd_post_info['post_latitude'] == '' ) || ( !isset( $gd_post_info['post_longitude'] ) || $gd_post_info['post_longitude'] == '' ) ) {
+						$blank_address++;
+						continue;
+					} else if ( $location_result->location_id == 0 ) {
+						if ( ( strtolower( $gd_post_info['post_city'] ) != strtolower( $location_result->city ) ) || ( strtolower( $gd_post_info['post_region'] ) != strtolower( $location_result->region ) ) || ( strtolower( $gd_post_info['post_country'] ) != strtolower( $location_result->country ) ) ) {
+							$address_invalid++;
+							continue;
+						}
+					}
+				
+					$my_post['post_title'] = $post_title;
+					$my_post['post_content'] = $post_desc;
+					$my_post['post_type'] = addslashes( $buffer[5] );
+					$my_post['post_author'] = $current_post_author;
+					$my_post['post_status'] = 'publish';
+					$my_post['post_category'] = $catids_arr;
+					$my_post['post_tags'] = $tag_arr;
+					
+					$gd_post_info['post_tags'] = $tag_arr;
+					$gd_post_info['post_title'] = $post_title;
+					$gd_post_info['post_status'] = 'publish';
+					$gd_post_info['submit_time'] = time();
+					$gd_post_info['submit_ip'] = $_SERVER['REMOTE_ADDR'];
+				
+					$last_postid = wp_insert_post( $my_post );
+					$countpost++;
+				
+					// Check if we need to save post location as new location 
+					if ( $location_result->location_id > 0 ) {
+						if ( isset( $post_city ) && isset( $post_region ) ) {
+							$request_info['post_location'] = array( 
+																'city' => $post_city, 
+																'region' => $post_region, 
+																'country' => $post_country,
+																'geo_lat' => $post_latitude,
+																'geo_lng' => $post_longitude
+															);
+									
+							$post_location_info = $request_info['post_location'];
+							if ( $location_id = geodir_add_new_location( $post_location_info ) )
+								$post_location_id = $location_id;
+						} else {
+							$post_location_id = 0;
+						}
+					} else {
+						$post_location_id = 0;
+					}
+				
+					/* ------- get default package info ----- */
+					$payment_info = array();	
+					$package_info = array();
+				
+					$package_info = (array)geodir_post_package_info( $package_info , '', $buffer[5] );
+					$package_id = '';
+					if ( isset( $gd_post_info['package_id'] ) && $gd_post_info['package_id'] != '' ) {
+						$package_id = $gd_post_info['package_id'];
+					}
+				
+					if ( !empty( $package_info ) ) {
+						$payment_info['package_id'] = $package_info['pid'];
+						
+						if ( isset( $package_info['alive_days'] ) && $package_info['alive_days'] != 0 ) {
+							$payment_info['expire_date'] = date('Y-m-d', strtotime("+".$package_info['alive_days']." days"));
+						} else {
+							$payment_info['expire_date'] = 'Never';
+						}
+						
+						$gd_post_info = array_merge($gd_post_info,$payment_info);
+					}
+				
+					$gd_post_info['post_location_id'] = $post_location_id;
+				
+					$post_type = get_post_type( $last_postid );
+				
+					$table = $plugin_prefix . $post_type . '_detail';
+				
+					geodir_save_post_info( $last_postid, $gd_post_info );
+				
+					if ( !empty( $image_names ) ) {
+						$upload_files++;
+						$menu_order = 1;
+						
+						foreach ( $image_names as $image_name ) {
+							$img_name_arr = explode( '.', $image_name );
+							
+							$uploads = wp_upload_dir(); 
+							$sub_dir = $uploads['subdir'];
+				
+							$arr_file_type = wp_check_filetype($image_name);
+							$uploaded_file_type = $arr_file_type['type'];
+							
+							$attachment = array(); 
+							$attachment['post_id'] = $last_postid;
+							$attachment['title'] = $img_name_arr[0];
+							$attachment['content'] = '';
+							$attachment['file'] = $sub_dir.'/'.$image_name;					
+							$attachment['mime_type'] = $uploaded_file_type;
+							$attachment['menu_order'] = $menu_order;
+							$attachment['is_featured'] = 0;
+				
+							$attachment_set = '';
+				
+							foreach ( $attachment as $key=>$val ) {
+								if ( $val != '' )
+									$attachment_set .= $key." = '".$val."', ";
+							}
+							$attachment_set = trim($attachment_set,", ");
+							
+							$wpdb->query("INSERT INTO ".GEODIR_ATTACHMENT_TABLE." SET ".$attachment_set);
+				
+							if ( $menu_order == 1 ) {
+								$post_type = get_post_type( $last_postid );
+								$wpdb->query( $wpdb->prepare( "UPDATE ".$table." SET featured_image = %s where post_id =%d", array( $sub_dir.'/'.$image_name,$last_postid ) ) );
+							}
+							$menu_order++;
+						}
+					}
+					
+					$gd_post_info['package_id'] = $package_id;
+					
+					do_action( 'geodir_after_save_listing', $last_postid,$gd_post_info );
+					
+					if ( !empty( $buffer[5] ) ) {
+						if ( in_array( $buffer[5], geodir_get_posttypes() ) ) {
+							$taxonomies = geodir_get_posttype_info( addslashes( $buffer[5] ) );
+							wp_set_object_terms( $last_postid, $my_post['post_tags'], $taxonomy=$taxonomies['taxonomies'][1] );
+							wp_set_object_terms( $last_postid, $my_post['post_category'], $taxonomy=$taxonomies['taxonomies'][0] );
+							
+							$post_default_category = isset( $my_post['post_default_category'] ) ? $my_post['post_default_category'] : '';
+							$post_category_str = isset( $my_post['post_category_str'] ) ? $my_post['post_category_str'] : '';
+							geodir_set_postcat_structure( $last_postid,$taxonomy, $post_default_category,$post_category_str );
+						}
+					}
+				} else {
+					$invalid_title++;
+				}
+			}
+		}
+	}
+	$return['rowcount'] = $countpost;
+	$return['invalidcount'] = $address_invalid;
+	$return['blank_address'] = $blank_address;
+	$return['upload_files'] = $upload_files;
+	$return['invalid_post_type'] = $invalid_post_type;
+	$return['invalid_title'] = $invalid_title;
+	$return['total_records'] = $total_records;
+		
+	echo json_encode($return); 
+	exit;
+}

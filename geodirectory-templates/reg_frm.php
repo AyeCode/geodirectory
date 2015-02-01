@@ -48,14 +48,14 @@
            
             <div class="row_spacer_registration clearfix" >
                 <div class="form_row clearfix">
-                <input placeholder='<?php echo PASSWORD_TEXT; ?>'  type="password" name="user_pass" id="user_pass" class="textfield" value="" size="25"  />
+                <input placeholder='<?php echo PASSWORD_TEXT; ?>'  type="password" name="user_pass" id="user_pass" class="textfield input-text" value="" size="25"  />
                 <span id="user_fnameInfo"></span>
                 </div>
             </div>
         
             <div class="row_spacer_registration clearfix" >
                 <div class="form_row clearfix">
-                <input placeholder='<?php echo CONFIRM_PASSWORD_TEXT; ?>' type="password" name="user_pass2" id="user_pass2" class="textfield" value="" size="25"  />
+                <input placeholder='<?php echo CONFIRM_PASSWORD_TEXT; ?>' type="password" name="user_pass2" id="user_pass2" class="textfield input-text" value="" size="25"  />
                 <span id="user_fnameInfo"></span>
                 </div>
             </div>

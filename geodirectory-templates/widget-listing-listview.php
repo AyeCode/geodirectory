@@ -114,7 +114,7 @@ if ( !empty( $widget_listings ) ) {
 			$review_show = geodir_is_reviews_show('listview');
 			if ($review_show) {
 				
-				$post_avgratings = geodir_get_commentoverall_number($post->ID);
+				$post_avgratings = geodir_get_post_rating($post->ID);
 				
 				
 				do_action('geodir_before_review_rating_stars_on_listview' , $post_avgratings , $post->ID) ;

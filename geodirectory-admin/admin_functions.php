@@ -745,7 +745,7 @@ function geodir_update_options($options, $dummy = false) {
 					
 		else :
 			// same menu setting per theme.
-			if($value['id']=='geodir_theme_location_nav'){$theme = wp_get_theme();update_option('geodir_theme_location_nav_'.$theme->name, $_POST[$value['id']]);}
+			if(isset($value['id']) && $value['id']=='geodir_theme_location_nav' && isset($_POST[$value['id']])){$theme = wp_get_theme();update_option('geodir_theme_location_nav_'.$theme->name, $_POST[$value['id']]);}
 			
 			if(isset($value['id']) && isset($_POST[$value['id']])) {
 				update_option($value['id'], $_POST[$value['id']]);
@@ -798,6 +798,12 @@ function places_custom_fields_tab($tabs){
 function geodir_tools_setting_tab($tabs)
 {
 	$tabs['tools_settings'] = array('label'=> __( 'GD Tools', GEODIRECTORY_TEXTDOMAIN 		) ) ;
+	return $tabs ;
+}
+
+function geodir_compatibility_setting_tab($tabs)
+{
+	$tabs['compatibility_settings'] = array('label'=> __( 'Theme Compatibility', GEODIRECTORY_TEXTDOMAIN 		) ) ;
 	return $tabs ;
 }
 
@@ -989,6 +995,16 @@ if(!function_exists('geodir_insert_csv_post_data') && get_option('geodir_install
 				
 				
 			});
+		jQuery(document).ready(function(){
+			jQuery(".gd_uploadcsv_button").click(function() {
+				setInterval(function() {
+					var checkvalue = jQuery('.gd_csv_filename').val();
+					if (checkvalue != '') {
+						jQuery('.gd_csv_button_div').show();
+					}
+				}, 1000);
+			});
+		});
     </script>
 		<?php 
 		
@@ -1074,7 +1090,7 @@ if(!function_exists('geodir_insert_csv_post_data') && get_option('geodir_install
 			
 		<?php }
 	}  ?>
-    
+    <?php /* ?>
     <table class="form-table">
         <tbody>
             <tr valign="top" class="single_select_page">
@@ -1109,6 +1125,375 @@ if(!function_exists('geodir_insert_csv_post_data') && get_option('geodir_install
                       
         </tbody>
     </table>
+	<?php */ ?>
+<?php
+$id = "gd_import_csv";
+$multiple = false; // allow multiple files upload
+$uploads = wp_upload_dir();
+?>
+<style>
+.gd-csv-form-table .filelist div.file:last-child{display:block!important;opacity:1!important}
+.gd-import-progress{margin-top:10px}
+.gd-import-file{background:#ececec;border:1px solid #ccc;clear:both;margin-bottom:4px;padding:5px;}
+.gd-fileprogress{background:#b7c53d;height:5px;width:0;margin-top:3px}
+.gd-csv-form-table .fileprogress{margin-top:3px} 
+#gd-import-msg{padding-top:12px}
+#gd-import-msg #message{background-color:rgb(255, 251, 204);}
+</style>
+<script type="text/javascript">
+var timout;
+function gdPrepareImport() {
+	jQuery('#gd-import-msg').hide();
+	var gd_prepared = jQuery('#gd_prepared').val();
+	var uploadedFile = jQuery('#gd_import_csv').val();
+	console.log('gdPrepareImport()');
+	if (gd_prepared == uploadedFile) {
+		gdContinueImport();
+		jQuery('#gd_import_data').attr('disabled', 'disabled');
+	} else {
+		var gddata = new Array();
+		gddata = {
+			'uploadedFile': uploadedFile,
+		}
+		jQuery.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			dataType: 'json',
+			data: {
+				'action': 'gdImportCsv',
+				'gddata': gddata,
+				'task': 'prepare'
+			},
+			success: function(data) {
+				if (typeof data == 'object') {
+					if (data.error) {
+						jQuery('#gd-import-msg').find('#message').removeClass('updated').addClass('error').html('<p>' + data.error + '</p>');
+						jQuery('#gd-import-msg').show();
+					} else {
+						jQuery('#gd_tmpcount').val('0');
+						jQuery('#gd_tot_records').val(data.rows);
+						jQuery('#gd_checktotal').val(data.rows);
+						jQuery('#gd_prepared').val(uploadedFile);
+						
+						jQuery('#gd_rowcount').val('0');
+						jQuery('#gd_invalidcount').val('0');
+						jQuery('#gd_blank_address').val('0');
+						jQuery('#gd_upload_files').val('0');
+						jQuery('#gd_invalid_post_type').val('0');
+						jQuery('#gd_invalid_title').val('0');
+						jQuery('#gd_total_records').val('0');
+						
+						gdStartImport();
+					}
+				}
+			},
+			error: function(errorThrown) {
+				console.log(errorThrown);
+			}
+		});
+	}
+}
+function gdTerminateImport() {
+	console.log('gdTerminateImport()');
+	jQuery('#gd_terminateaction').val('terminate');
+	jQuery('#gd_import_data').hide();
+	jQuery('#gd_stop_import').hide();
+	jQuery('#gd_process_data').hide();
+	jQuery('#gd_continue_data').show();
+}
+function gdContinueImport() {
+	var tmpCnt = jQuery('#gd_tmpcount').val();
+	var tot_no_of_records = jQuery('#gd_tot_records').val();
+	if (parseInt(tmpCnt) > parseInt(tot_no_of_records)) {
+		jQuery('#gd_stop_import').hide();
+	} else {
+		jQuery('#gd_stop_import').show();
+	}
+	jQuery('#gd_import_data').show();
+	jQuery('#gd_import_data').attr('disabled', 'disabled');
+	jQuery('#gd_process_data').css({
+		'display': 'inline-block'
+	});
+	jQuery('#gd_continue_data').hide();
+	jQuery('#gd_terminateaction').val('continue');
+	clearTimeout(timout);
+	timout = setTimeout(function() {
+		gdStartImport();
+	}, 0);
+}
+function gdStartImport(siteurl) {
+	var importlimit = 1;
+	var get_requested_count = importlimit;
+	var tot_no_of_records = jQuery('#gd_checktotal').val();
+	var uploadedFile = jQuery('#gd_import_csv').val();
+	var tmpCnt = jQuery('#gd_tmpcount').val();
+	var no_of_tot_records = jQuery('#gd_tot_records').val();
+	
+	if (!uploadedFile) {
+		jQuery('#gd_import_data').removeAttr('disabled');
+		jQuery('#gd_import_data').show();
+		jQuery('#gd_stop_import').hide();
+		jQuery('#gd_process_data').hide();
+		jQuery('#gd-import-progress').hide();
+		jQuery('.gd-fileprogress').width(0);
+		jQuery('#gd-import-done').text('0');
+		jQuery('#gd-import-total').text('0');
+		jQuery('#gd-import-perc').text('0%');
+		
+		jQuery('.gd-csv-form-table .filelist .file').remove();
+		jQuery('#gd-import-msg').find('#message').removeClass('updated').addClass('error').html("<p><?php echo esc_attr( PLZ_SELECT_CSV_FILE );?></p>");
+		jQuery('#gd-import-msg').show();
+		
+		return false;
+	}
+	
+	jQuery('#gd-import-total').text(tot_no_of_records);
+	jQuery('#gd_stop_import').show();
+	jQuery('#gd_process_data').css({
+		'display': 'inline-block'
+	});
+	jQuery('#gd-import-progress').show();
+	if ((parseInt(no_of_tot_records) / 100) > 0) {
+		importlimit = parseInt(parseInt(no_of_tot_records) / 100);
+	}
+	if (importlimit == 1) {
+		if (parseInt(no_of_tot_records) > 50) {
+			importlimit = 5;
+		} else if (parseInt(no_of_tot_records) > 10 && parseInt(no_of_tot_records) < 51) {
+			importlimit = 2;
+		}
+	}
+	if (importlimit > 10) {
+		importlimit = 10;
+	}
+	if (importlimit < 1) {
+		importlimit = 1;
+	}
+	
+	get_requested_count = importlimit;
+	
+	var tempCount = parseInt(tmpCnt);
+	var totalCount = parseInt(tot_no_of_records);
+	if (tempCount >= totalCount) {
+		jQuery('#gd_import_data').removeAttr('disabled');
+		jQuery('#gd_import_data').show();
+		jQuery('#gd_stop_import').hide();
+		jQuery('#gd_process_data').hide();
+		gd_showStatusMsg();
+		jQuery('#gd_import_csv').val('');
+		jQuery('#gd_prepared').val('');
+				
+		return false;
+	}
+	jQuery('#gd-import-msg').hide();
+	var gddata = new Array();
+	gddata = {
+		'importlimit': importlimit,
+		'totRecords': tot_no_of_records,
+		'uploadedFile': uploadedFile,
+		'tmpcount': tmpCnt,
+	}
+	var tmpLoc = jQuery('#tmpLoc').val();
+	
+	var gd_rowcount = parseInt(jQuery('#gd_rowcount').val());
+	var gd_invalidcount = parseInt(jQuery('#gd_invalidcount').val());
+	var gd_blank_address = parseInt(jQuery('#gd_blank_address').val());
+	var gd_upload_files = parseInt(jQuery('#gd_upload_files').val());
+	var gd_invalid_post_type = parseInt(jQuery('#gd_invalid_post_type').val());
+	var gd_invalid_title = parseInt(jQuery('#gd_invalid_title').val());
+	var gd_total_records = parseInt(jQuery('#gd_total_records').val());
+	
+	jQuery.ajax({
+		type: 'POST',
+		url: ajaxurl,
+		dataType: 'json',
+		data: {
+			'action': 'gdImportCsv',
+			'gddata': gddata,
+			'siteurl': siteurl,
+		},
+		success: function(data) {
+			if (typeof data == 'object') {
+				if (data.error) {
+					jQuery('#gd_import_data').removeAttr('disabled');
+					jQuery('#gd_import_data').show();
+					jQuery('#gd_stop_import').hide();
+					jQuery('#gd_process_data').hide();
+					jQuery('#gd-import-msg').find('#message').removeClass('updated').addClass('error').html('<p>' + data.error + '</p>');
+					jQuery('#gd-import-msg').show();
+				} else {
+					gd_rowcount = gd_rowcount + parseInt(data.rowcount);
+					gd_invalidcount = gd_invalidcount + parseInt(data.invalidcount);
+					gd_blank_address = gd_blank_address + parseInt(data.blank_address);
+					gd_upload_files = gd_upload_files + parseInt(data.upload_files);
+					gd_invalid_post_type = gd_invalid_post_type + parseInt(data.invalid_post_type);
+					gd_invalid_title = gd_invalid_post_type + parseInt(data.invalid_title);
+					gd_total_records = gd_total_records + parseInt(data.total_records);
+					
+					jQuery('#gd_rowcount').val(gd_rowcount);
+					jQuery('#gd_invalidcount').val(gd_invalidcount);
+					jQuery('#gd_blank_address').val(gd_blank_address);
+					jQuery('#gd_upload_files').val(gd_upload_files);
+					jQuery('#gd_invalid_post_type').val(gd_invalid_post_type);
+					jQuery('#gd_invalid_title').val(gd_invalid_title);
+					jQuery('#gd_total_records').val(gd_total_records);
+					
+					if (parseInt(tmpCnt) == parseInt(tot_no_of_records)) {
+						jQuery('#gd-import-done').text(tot_no_of_records);
+						jQuery('#gd-import-perc').text('100%');
+						jQuery('.gd-fileprogress').css({
+							'width': '100%'
+						});
+						jQuery('#gd_import_csv').val('');
+						jQuery('#gd_prepared').val('');
+						gd_showStatusMsg();
+						jQuery('#gd_stop_import').hide();
+					}
+					if (parseInt(tmpCnt) < parseInt(tot_no_of_records)) {
+						var terminate_action = jQuery('#gd_terminateaction').val();
+						if (terminate_action == 'continue') {
+							//console.log('Limit: ' + importlimit + ', Total: ' + tot_no_of_records);
+							var nTmpCnt = parseInt(tmpCnt) + parseInt(importlimit);
+							nTmpCnt = nTmpCnt > tot_no_of_records ? tot_no_of_records : nTmpCnt;
+							
+							jQuery('#gd_tmpcount').val(nTmpCnt);
+							
+							jQuery('#gd-import-done').text(nTmpCnt);
+							if (parseInt(tot_no_of_records) > 0) {
+								var percentage = ((parseInt(nTmpCnt) / parseInt(tot_no_of_records)) * 100);
+								percentage = percentage > 100 ? 100 : percentage;
+								jQuery('#gd-import-perc').text(parseInt(percentage) + '%');
+								jQuery('.gd-fileprogress').css({
+									'width': percentage + '%'
+								});
+							}
+					
+							clearTimeout(timout);
+							timout = setTimeout(function() {
+								gdStartImport();
+							}, 0);
+						} else {
+							jQuery('#gd_import_data').hide();
+							jQuery('#gd_stop_import').hide();
+							jQuery('#gd_process_data').hide();
+							jQuery('#gd_continue_data').show();
+							return false;
+						}
+					} else {
+						jQuery('#gd_import_data').removeAttr('disabled');
+						jQuery('#gd_import_data').show();
+						jQuery('#gd_stop_import').hide();
+						jQuery('#gd_process_data').hide();
+						return false;
+					}
+				}
+			}
+		},
+		error: function(errorThrown) {
+			jQuery('#gd_import_data').removeAttr('disabled');
+			jQuery('#gd_import_data').show();
+			jQuery('#gd_stop_import').hide();
+			jQuery('#gd_process_data').hide();
+			console.log(errorThrown);
+		}
+	});
+}
+function gd_showStatusMsg() {
+	var gd_rowcount = parseInt(jQuery('#gd_rowcount').val());
+	var gd_invalidcount = parseInt(jQuery('#gd_invalidcount').val());
+	var gd_blank_address = parseInt(jQuery('#gd_blank_address').val());
+	var gd_upload_files = parseInt(jQuery('#gd_upload_files').val());
+	var gd_invalid_post_type = parseInt(jQuery('#gd_invalid_post_type').val());
+	var gd_invalid_title = parseInt(jQuery('#gd_invalid_title').val());
+	var gd_total_records = parseInt(jQuery('#gd_total_records').val());
+	
+	var gdMsg = '<p></p>';
+	if (gd_invalidcount == 0 && gd_blank_address == 0 && gd_invalid_post_type == 0 && gd_invalid_title == 0) {
+		gdMsg += "<p><?php echo esc_attr( CSV_INSERT_DATA );?></p>";
+	}
+		
+	var msgParse = '<p><?php echo addslashes( CSV_TOTAL_RECORD );?></p>';
+	gdMsg += msgParse.replace("%s", gd_rowcount);
+	
+	if (gd_invalidcount > 0) {
+		msgParse = msgParse = '<p><?php echo sprintf( CSV_INVALID_DEFUALT_ADDRESS, '%s', '%d' );?></p>';
+		msgParse = msgParse.replace("%s", gd_invalidcount);
+		msgParse = msgParse.replace("%d", gd_total_records);
+		gdMsg += msgParse;
+	}
+	if (gd_blank_address > 0) {
+		msgParse = '<p><?php echo addslashes( sprintf( CSV_INVALID_TOTAL_RECORD, '%s', '%d' ) );?></p>';
+		msgParse = msgParse.replace("%s", gd_blank_address);
+		msgParse = msgParse.replace("%d", gd_total_records);
+		gdMsg += msgParse;
+	}
+	if (gd_invalid_post_type > 0) {
+		msgParse = '<p><?php echo addslashes( sprintf( CSV_INVALID_POST_TYPE, '%s', '%d' ) );?></p>';
+		msgParse = msgParse.replace("%s", gd_invalid_post_type);
+		msgParse = msgParse.replace("%d", gd_total_records);
+		gdMsg += msgParse;
+	}
+	if (gd_invalid_title > 0) {
+		msgParse = '<p><?php echo addslashes( sprintf( CSV_BLANK_POST_TITLE, '%s', '%d' ) );?></p>';
+		msgParse = msgParse.replace("%s", gd_invalid_title);
+		msgParse = msgParse.replace("%d", gd_total_records);
+		gdMsg += msgParse;
+	}
+	if (gd_upload_files > 0) {
+		gdMsg += '<p><?php echo addslashes( sprintf( CSV_TRANSFER_IMG_FOLDER, $uploads['subdir'] ) );?></p>';
+	}
+	gdMsg += '<p></p>';
+	jQuery('#gd-import-msg').find('#message').removeClass('error').addClass('updated').html(gdMsg);
+	jQuery('#gd-import-msg').show();
+}
+</script>
+<table class="form-table gd-csv-form-table">
+  <tbody>
+    <tr valign="top" class="single_select_page">
+      <th class="titledesc" scope="row"><?php echo SELECT_CSV_FILE;?></th>
+      <td class="forminp">
+        <div class="gtd-formfeild">
+          <div class="gtd-form_row clearfix" id="<?php echo $id; ?>dropbox">
+            <div class="plupload-upload-uic hide-if-no-js" id="<?php echo $id; ?>plupload-upload-ui">
+              <input type="text" readonly="readonly" name="<?php echo $id; ?>" class="gd_csv_filename" id="<?php echo $id; ?>" value="<?php echo $svalue; ?>" />
+              <input id="<?php echo $id; ?>plupload-browse-button" type="button" value="<?php echo SELECT_UPLOAD_CSV; ?>" class="gd_uploadcsv_button" />
+              <br />
+              <a href="<?php echo geodir_plugin_url() . '/geodirectory-assets/place_listing.csv'?>" ><?php _e("Download sample csv", GEODIRECTORY_TEXTDOMAIN)?></a>
+              <?php do_action('geodir_sample_csv_download_link'); ?>
+              <span class="ajaxnonceplu" id="ajaxnonceplu<?php echo wp_create_nonce($id . 'pluploadan'); ?>"></span><br />
+              <br />
+              <div class="filelist"></div>
+            </div>
+          </div>
+        </div>
+        <span id="upload-error" style="display:none"></span> <span class="description"></span><br />
+        <div class="gd_csv_button_div" style="display:none;">
+          <input type="hidden" class="geodir_import_file" name="geodir_import_file" value="save" />
+          <input onclick="gdPrepareImport()" type="button" value="<?php echo CSV_IMPORT_DATA; ?>" id="gd_import_data" class="button-primary" name="save">
+		  <input onclick="gdContinueImport()" type="button" value="Continue Import Data" id="gd_continue_data" class="button-primary" style="display:none" />
+		  <input type="button" value="<?php echo 'Terminate Import Data'; ?>" id="gd_stop_import" class="button-primary" name="gd_stop_import" style="display:none" onclick="gdTerminateImport()" />
+		  <div id="gd_process_data" style="display:none"><span class="spinner" style="display:inline-block;margin:0 5px 0 5px;float:left"></span>Wait, processing import data...</div>
+        </div>
+		<div id="gd_importer" style="display:none">
+		  <input type="hidden" id="gd_tmpcount" value="0" />
+		  <input type="hidden" id="gd_tot_records" value="100" />
+		  <input type="hidden" id="gd_checktotal" value="100" />
+		  <input type="hidden" id="gd_terminateaction" value="continue" />
+		  <input type="hidden" id="gd_prepared" value="continue" />
+		  <input type="hidden" id="gd_rowcount" value="0" />
+		  <input type="hidden" id="gd_invalidcount" value="0" />
+		  <input type="hidden" id="gd_blank_address" value="0" />
+		  <input type="hidden" id="gd_upload_files" value="0" />
+		  <input type="hidden" id="gd_invalid_post_type" value="0" />
+		  <input type="hidden" id="gd_invalid_title" value="0" />
+		  <input type="hidden" id="gd_total_records" value="0" />
+		</div>
+		<div class="gd-import-progress" id="gd-import-progress" style="display:none"><div class="gd-import-file"><b>Import Data Status : </b><font id="gd-import-done">0</font> / <font id="gd-import-total">0</font>&nbsp;( <font id="gd-import-perc">0%</font> )<div class="gd-fileprogress"></div></div></div>
+		<div class="gd-import-msg" id="gd-import-msg" style="display:none"><div id="message" class="message fade"></div></div>
+		</td>
+    </tr>
+  </tbody>
+</table>
      
 	<?php }
 }
@@ -2188,3 +2573,171 @@ function geodir_notification_add_bcc_option($settings) {
 		
 	return $settings;
 }
+
+
+add_action( 'wp_ajax_get_gd_theme_compat_callback', 'get_gd_theme_compat_callback' );
+
+function get_gd_theme_compat_callback() {
+	global $wpdb; 
+	$themes = get_option('gd_theme_compats');
+	
+	if(isset($_POST['theme']) && isset($themes[$_POST['theme']]) && !empty($themes[$_POST['theme']])){
+		if(isset($_POST['export'])){
+			echo json_encode(array($_POST['theme'] => $themes[$_POST['theme']]));
+		}else{
+		    echo json_encode($themes[$_POST['theme']]);	
+		}
+		
+	}
+
+	die();
+}
+
+add_action( 'wp_ajax_get_gd_theme_compat_import_callback', 'get_gd_theme_compat_import_callback' );
+
+function get_gd_theme_compat_import_callback() {
+	global $wpdb; 
+	$themes = get_option('gd_theme_compats');
+	if(isset($_POST['theme']) && !empty($_POST['theme'])){
+		$json = json_decode(stripslashes($_POST['theme']), true);
+		if(!empty($json) && is_array($json)){
+			$key =  key($json);
+			$themes[$key]=$json[$key];
+			update_option('gd_theme_compats',$themes);
+			echo $key;
+			die();
+		}
+	}
+echo '0';
+	die();
+}
+
+
+function gd_set_theme_compat(){
+	global $wpdb;
+$theme = wp_get_theme();
+	
+if($theme->parent()){
+$theme_name = str_replace(" ","_",$theme->parent()->get( 'Name' ));	
+}else{
+$theme_name =  str_replace(" ","_",$theme->get( 'Name' ));
+}
+	
+	$theme_compats = get_option('gd_theme_compats');
+	$current_compat = get_option('gd_theme_compat');
+$current_compat = str_replace("_custom","",$current_compat);
+
+if($current_compat == $theme_name){return;}// if already running corect compat then bail
+
+if(isset($theme_compats[$theme_name])){// if there is a compat avail then set it
+	update_option('gd_theme_compat',$theme_name);
+	update_option('theme_compatibility_setting',$theme_compats[$theme_name]);
+	
+		// if there are default options to set then set them
+		if(isset($theme_compats[$theme_name]['geodir_theme_compat_default_options']) && !empty($theme_compats[$theme_name]['geodir_theme_compat_default_options'])){
+			
+			foreach($theme_compats[$theme_name]['geodir_theme_compat_default_options'] as $key=>$val){
+				update_option($key,$val);
+			}
+		}
+	
+}else{
+	update_option('gd_theme_compat','');
+	update_option('theme_compatibility_setting','');
+}
+
+	
+}
+
+
+
+// function to check if Avada needs header.php replaced
+add_action('wp_loaded','gd_check_avada_compat');
+function gd_check_avada_compat(){
+if(function_exists('avada_load_textdomain') && !get_option('avada_nag')){
+add_action('admin_notices', 'gd_avada_compat_warning');	
+}
+}
+
+
+
+function gd_avada_compat_warning(){
+	
+	/*
+	$msg_type = error
+	$msg_type = updated fade
+	$msg_type = update-nag	
+	*/
+	
+	$plugin = 'avada-nag';
+	$timestamp ='avada-nag123';
+	$message = __('Avada theme has no hooks for compatibility, because of this you must add two small changes to the header.php. <a href="http://docs.wpgeodirectory.com/avada-compatibility-header-php/" target="_blank">Instructions</a>',GEODIRECTORY_TEXTDOMAIN);
+	echo '<div id="'.$timestamp.'"  class="error">';
+	echo '<span class="gd-remove-noti" onclick="gdRemoveANotification(\''.$plugin.'\',\''.$timestamp.'\');" ><i class="fa fa-times"></i></span>';
+	echo "<img class='gd-icon-noti' src='".plugin_dir_url('')."geodirectory/geodirectory-assets/images/favicon.ico' > ";
+	echo "<p>$message</p>";
+	echo "</div>";
+	
+	?>
+    <script>
+	function gdRemoveANotification($plugin,$timestamp){
+		
+		jQuery('#'+$timestamp).css("background-color", "red");
+		jQuery('#'+$timestamp).fadeOut("slow");
+		// This does the ajax request
+		jQuery.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			data: {
+				'action':'geodir_avada_remove_notification',
+				'plugin' : $plugin,
+				'timestamp' : $timestamp
+			},
+			success:function(data) {
+				// This outputs the result of the ajax request
+				//alert(data);
+			},
+			error: function(errorThrown){
+				console.log(errorThrown);
+			}
+		}); 
+		
+	}
+	</script>
+    <style>
+	.gd-icon-noti{
+		float: left;
+		margin-top: 10px;
+		margin-right: 5px;
+	}
+	
+	.update-nag .gd-icon-noti{
+		margin-top: 2px;
+	}
+	.gd-remove-noti{
+		float: right;margin-top: -20px;margin-right: -20px;color:#FF0000;cursor:pointer;
+	}
+	
+	.updated .gd-remove-noti, .error .gd-remove-noti{
+		float: right;margin-top: -10px;margin-right: -17px;color:#FF0000;cursor:pointer;
+	}
+	
+	
+	</style>
+    <?php
+    	
+}
+
+
+function geodir_avada_remove_notification() {
+ 	update_option('avada_nag',TRUE);
+     
+    // Always die in functions echoing ajax content
+   die();
+}
+
+ 
+add_action( 'wp_ajax_geodir_avada_remove_notification', 'geodir_avada_remove_notification' );
+
+
+

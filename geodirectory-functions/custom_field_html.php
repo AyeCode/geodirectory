@@ -283,7 +283,7 @@ $default = isset($field_info->is_admin)	 ? $field_info->is_admin : '';
                         <br />    <span><?php _e('Want to show this on detail page ?',GEODIRECTORY_TEXTDOMAIN);?></span>
                     </td>
                 </tr>
-				<?php if ( !$default && in_array( $field_type, array( 'text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox' ) ) ) { ?>
+				<?php if ( !$default && in_array( $field_type, array( 'text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file' ) ) ) { ?>
 				<tr>
 					<td><strong><?php _e('Show as a Tab on detail page? :',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
 					<td align="left">

@@ -4,9 +4,7 @@
 function geodir_on_wp_loaded(){
 	do_action('giodir_handle_request_plugins_loaded' );
 	global $wpdb;
-	if(isset($_REQUEST['geodir_signup']))
-	{ geodir_user_signup(); }	
-	
+		
 	
 	if(isset($_POST['sendact']) && $_POST['sendact']=='send_inqury')
 	{
@@ -23,6 +21,9 @@ function geodir_on_init(){
 	
 	do_action('giodir_handle_request' );
 	global $wpdb;
+	
+	if(isset($_REQUEST['geodir_signup']))
+	{ geodir_user_signup(); }
 	
 	
 	if ( get_option('geodir_allow_wpadmin') == '0' && is_user_logged_in() && !current_user_can( 'manage_options' ) ) {

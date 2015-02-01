@@ -286,7 +286,7 @@ function geodir_get_sort_options($post_type){
 		
 		$sort_field_info =	$wpdb->get_results($wpdb->prepare("select * from ".GEODIR_CUSTOM_SORT_FIELDS_TABLE." where	post_type= %s and is_active=%d and (sort_asc=1 ||	sort_desc=1 || field_type='random') order by sort_order asc",array($post_type, 1)));
 		
-		return $sort_field_info;
+		return apply_filters( 'geodir_get_sort_options', $sort_field_info, $post_type );
 	}
 
 }

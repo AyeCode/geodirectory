@@ -374,6 +374,7 @@ right: 0px !important;
 	z-index:10;
 	background:url(../images/transparent-bg.png) repeat;
 	color:#FFFFFF;
+	overflow-y:auto;
 }
 .map_category label {
 	display:inline-block !important;
@@ -504,3 +505,18 @@ width: 10px;
 .geodir-map-full .map_background span.triggermap_fullscreen{left:2px!important;top:-3px!important;margin:auto!important}
 
 div.geodir_map_container.geodir-map-iphone .map_background .triggermap{left:9px!important;top:45px!important;margin:auto!important}
+/* fix info windows are too inconsistent in sizes and shapes */
+@media screen and (max-width:240px) {
+	.geodir-map-home-page .bubble,.geodir-map-small .bubble{width:100px;}
+	.geodir-map-home-page .geodir-bubble_image,.geodir-map-home-page .geodir-bubble-meta-side,.geodir-map-small .geodir-bubble_image,.geodir-map-small .geodir-bubble-meta-side{width:48px;}
+}
+@media screen and (min-width:241px) and (max-width:767px) {
+	.geodir-map-home-page .bubble,.geodir-map-small .bubble{width:160px;}
+	.geodir-map-home-page .geodir-bubble_image,.geodir-map-home-page .geodir-bubble-meta-side,.geodir-map-small .geodir-bubble_image,.geodir-map-small .geodir-bubble-meta-side{width:76px;}
+}
+@media screen and (min-width:768px) {
+	.geodir-map-home-page .bubble{width:340px;}
+	.geodir-map-home-page .geodir-bubble_image,.geodir-map-home-page .geodir-bubble-meta-side{width:163px;}
+	.geodir-map-small .bubble{width:240px;}
+	.geodir-map-small .geodir-bubble_image,.geodir-map-small .geodir-bubble-meta-side{width:115px;}
+}

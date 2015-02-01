@@ -117,7 +117,7 @@ if(isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view']!='' && !i
 					if ($review_show) {
 					
 						if (!$preview) {
-							$post_avgratings = geodir_get_commentoverall_number($post->ID);
+							$post_avgratings = geodir_get_post_rating($post->ID);
 							
 							do_action('geodir_before_review_rating_stars_on_listview' , $post_avgratings , $post->ID) ;
 							echo geodir_get_rating_stars($post_avgratings,$post->ID);

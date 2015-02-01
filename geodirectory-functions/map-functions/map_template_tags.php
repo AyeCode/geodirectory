@@ -70,7 +70,7 @@ function geodir_draw_map($map_args = array())
 		}
 	}	
 	
-	if (strpos($geodir_map_options['height'],'%') !== false || strpos($geodir_map_options['height'],'px') !== false) {
+	if (strpos($geodir_map_options['height'],'%') !== false || strpos($geodir_map_options['height'],'px') !== false || strpos($geodir_map_options['height'],'vh') !== false) {
 	}else{$geodir_map_options['height']= $geodir_map_options['height'].'px';}
 	
 	if (strpos($geodir_map_options['width'],'%') !== false || strpos($geodir_map_options['width'],'px') !== false) {
@@ -120,6 +120,10 @@ function geodir_draw_map($map_args = array())
             </div>
         </div>
        <?php 
+       
+      
+       
+       
 	   if($geodir_map_options['enable_jason_on_load']){ ?>
        	<input type="hidden" id="<?php echo $map_canvas_name;?>_jason_enabled" value="1" />
        <?php }else{?>
@@ -138,10 +142,12 @@ function geodir_draw_map($map_args = array())
 			<input type="button" value="<?php _e('Get Directions',GEODIRECTORY_TEXTDOMAIN);?>" class="<?php echo $map_canvas_name;?>_getdirection" id="directions" onclick="calcRoute('<?php echo $map_canvas_name;?>')" />
 
             <script>
+            <?php if(geodir_is_page('detail')){?>
             jQuery(function(){
 			gd_initialize_ac();
 			});
-
+			<?php }?>
+			
             function gd_initialize_ac() {
 			  // Create the autocomplete object, restricting the search
 			  // to geographical location types.
@@ -188,7 +194,7 @@ function geodir_draw_map($map_args = array())
 		?>
             <div class="map-category-listing <?php if($geodir_map_options['enable_post_type_filters'] && $geodir_available_pt_on_map <2){echo "map-cat-floor";}?>">                 
                   <div class="trigger triggeroff" ><i class="fa fa-compress"></i><i class="fa fa-expand"></i></div>
-               		<div id="<?php echo $map_canvas_name;?>_cat" class="<?php echo $map_canvas_name;?>_map_category  map_category" <?php if($child_collapse){ ?>checked="checked" <?php }?>>
+               		<div id="<?php echo $map_canvas_name;?>_cat" class="<?php echo $map_canvas_name;?>_map_category  map_category" <?php if($child_collapse){ ?>checked="checked" <?php }?> style="max-height:<?php echo $geodir_map_options['height'];?>;">
 					<input onkeydown="if(event.keyCode == 13){build_map_ajax_search_param('<?php echo $map_canvas_name; ?>', false)}" 
 type="<?php echo ( $geodir_map_options['enable_text_search'] ? 'text' : 'hidden' ); ?>" class="inputbox" id="<?php echo $map_canvas_name; ?>_search_string" name="search" placeholder="<?php _e( 'Title', GEODIRECTORY_TEXTDOMAIN ); ?>" />
                      <?php if($geodir_map_options['enable_cat_filters']){?>
@@ -291,6 +297,49 @@ type="<?php echo ( $geodir_map_options['enable_text_search'] ? 'text' : 'hidden'
 			
     </script>
 	<?php
+	
+	 if(strpos($geodir_map_options['height'],'vh')){
+       	?>
+       	<script>
+       		(function () {
+       			var screenH = jQuery(window).height();
+       			var heightVH  = "<?php echo str_replace("vh", "", $geodir_map_options['height']);?>";
+       			
+       			var ptypeH = '';
+       			if(jQuery("#<?php echo $map_canvas_name;?>_posttype_menu").length){
+       				ptypeH = jQuery("#<?php echo $map_canvas_name;?>_posttype_menu").outerHeight();
+       			}
+       			
+       			jQuery("#sticky_map_<?php echo $map_canvas_name;?>").css("min-height", screenH* (heightVH/100)+'px');
+				jQuery("#<?php echo $map_canvas_name;?>_wrapper").height(screenH* (heightVH/100)+'px');
+				jQuery("#<?php echo $map_canvas_name;?>").height(screenH* (heightVH/100)+'px');
+				jQuery("#<?php echo $map_canvas_name;?>_loading_div").height(screenH* (heightVH/100)+'px');
+				jQuery("#<?php echo $map_canvas_name;?>_cat").css("max-height",(screenH* (heightVH/100))-ptypeH+'px');
+
+			}());
+       	</script>
+       	
+       	<?php
+		
+       }elseif(strpos($geodir_map_options['height'],'px')){
+       	?>
+       		<script>
+       		(function () {
+       			var screenH = jQuery(window).height();
+       			var heightVH  = "<?php echo str_replace("px", "", $geodir_map_options['height']);?>";
+       			var ptypeH = '';
+       			if(jQuery("#<?php echo $map_canvas_name;?>_posttype_menu").length){
+       				ptypeH = jQuery("#<?php echo $map_canvas_name;?>_posttype_menu").outerHeight();
+       			}
+       			
+				jQuery("#<?php echo $map_canvas_name;?>_cat").css("max-height",heightVH-ptypeH+'px');
+
+			}());
+       	</script>
+       	<?php
+       }
+	
+	
 	endif; // Exclude posttypes if end
 }
 
