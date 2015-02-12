@@ -7,14 +7,12 @@ Version: 1.3.7
 Author: GeoDirectory
 Author URI: http://wpgeodirectory.com
 Requires at least: 3.1
-Tested up to: 4.0
+Tested up to: 4.1
 */
-
 
 define("GEODIRECTORY_VERSION", "1.3.7");
 
 if (!session_id()) session_start();
-
 
 ///CHECK FOR OLD COMPATIBILITY PACKS AND DISABLE IF THEY ARE ACTIVE
 if(is_admin()){
