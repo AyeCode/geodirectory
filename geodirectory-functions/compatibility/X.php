@@ -117,7 +117,7 @@ function geodir_x_home_sidebar() {
 
 // ADD OPENING WRAP TO SEARCHBAR
 function geodir_x_search_container_open() {
-	echo '<div class="x-container-fluid max">';
+	echo '<div class="x-container-fluid x-container max">';
 }
 
 // ADD CLOSING WRAP TO SEARCHBAR
@@ -128,10 +128,10 @@ function geodir_x_search_container_close() {
 // WRAPPER OPEN FUNCTIONS
 function geodir_x_action_wrapper_open(){
 	global $stack;
-	if ( $stack == 'integrity' ) { echo '<div class="x-container max width offset">'; }
-	elseif ( $stack == 'renew' ) { echo '<div class="x-container-fluid max width offset cf">'; }
+	if ( $stack == 'integrity' ) { echo '<div class="x-container-fluid x-container max width offset">'; }
+	elseif ( $stack == 'renew' ) { echo '<div class="x-container-fluid x-container max width offset cf">'; }
 	elseif ( $stack == 'icon' ) { echo '<div class="x-main full" role="main">'; }
-	elseif ( $stack == 'ethos' ) { echo '<div class="x-container-fluid max width main"><div class="offset cf">'; }
+	elseif ( $stack == 'ethos' ) { echo '<div class="x-container-fluid x-container max width main"><div class="offset cf">'; }
 }
 
 // WRAPPER CLOSE FUNCTIONS

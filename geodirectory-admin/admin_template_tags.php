@@ -517,6 +517,22 @@ $theme_settings['geodir_before_main_content_add'] = stripslashes($_POST['geodir_
 // Filters
 $theme_settings['geodir_before_widget_filter'] = stripslashes($_POST['geodir_before_widget_filter']);
 $theme_settings['geodir_after_widget_filter'] = stripslashes($_POST['geodir_after_widget_filter']);
+$theme_settings['geodir_before_title_filter'] = stripslashes($_POST['geodir_before_title_filter']);
+$theme_settings['geodir_after_title_filter'] = stripslashes($_POST['geodir_after_title_filter']);
+$theme_settings['geodir_menu_li_class_filter'] = stripslashes($_POST['geodir_menu_li_class_filter']);
+$theme_settings['geodir_sub_menu_ul_class_filter'] = stripslashes($_POST['geodir_sub_menu_ul_class_filter']);
+$theme_settings['geodir_sub_menu_li_class_filter'] = stripslashes($_POST['geodir_sub_menu_li_class_filter']);
+$theme_settings['geodir_menu_a_class_filter'] = stripslashes($_POST['geodir_menu_a_class_filter']);
+$theme_settings['geodir_sub_menu_a_class_filter'] = stripslashes($_POST['geodir_sub_menu_a_class_filter']);
+//location manager filters
+$theme_settings['geodir_location_switcher_menu_li_class_filter'] = stripslashes($_POST['geodir_location_switcher_menu_li_class_filter']);
+$theme_settings['geodir_location_switcher_menu_a_class_filter'] = stripslashes($_POST['geodir_location_switcher_menu_a_class_filter']);
+$theme_settings['geodir_location_switcher_menu_sub_ul_class_filter'] = stripslashes($_POST['geodir_location_switcher_menu_sub_ul_class_filter']);
+$theme_settings['geodir_location_switcher_menu_sub_li_class_filter'] = stripslashes($_POST['geodir_location_switcher_menu_sub_li_class_filter']);
+
+
+
+
 
 // theme required css
 $theme_settings['geodir_theme_compat_css'] = stripslashes($_POST['geodir_theme_compat_css']);
@@ -547,7 +563,7 @@ $theme_name = str_replace(" ","_",$theme->parent()->get( 'Name' ));
 $theme_name =  str_replace(" ","_",$theme->get( 'Name' ));
 }
 
-if(in_array($theme_name,  array('Avada','Enfold','X','Divi','Genesis'))){// list of themes that have php files
+if(in_array($theme_name,  array('Avada','Enfold','X','Divi','Genesis','Jupiter'))){// list of themes that have php files
 	$theme_settings['geodir_theme_compat_code'] = $theme_name;
 }
 
@@ -558,7 +574,7 @@ $theme_name = $theme_name."_custom";
 $theme_arr = get_option('gd_theme_compats');
 update_option('gd_theme_compat',$theme_name);
 
-
+do_action('gd_compat_save_settings',$theme_settings);
 
 //if($_POST['gd_theme_compat'])==
 $theme_arr[$theme_name] = $theme_settings;
@@ -929,7 +945,63 @@ function geodir_theme_compatibility_setting_page(){
                             <td><textarea name="geodir_after_widget_filter" placeholder='</section>'><?php if(isset($tc['geodir_after_widget_filter'])){echo $tc['geodir_after_widget_filter'];}?></textarea></td>
                         </tr>  
                         
-					
+                        <tr>
+                            <td><small>geodir_before_title</small></td>
+                            <td><textarea name="geodir_before_title_filter" placeholder='<h3 class="widget-title">'><?php if(isset($tc['geodir_before_title_filter'])){echo $tc['geodir_before_title_filter'];}?></textarea></td>
+                        </tr> 
+                        
+                        <tr>
+                            <td><small>geodir_after_title</small></td>
+                            <td><textarea name="geodir_after_title_filter" placeholder='</h3>'><?php if(isset($tc['geodir_after_title_filter'])){echo $tc['geodir_after_title_filter'];}?></textarea></td>
+                        </tr> 
+                        
+                         <tr>
+                            <td><small>geodir_menu_li_class</small></td>
+                            <td><textarea name="geodir_menu_li_class_filter" placeholder='menu-item'><?php if(isset($tc['geodir_menu_li_class_filter'])){echo $tc['geodir_menu_li_class_filter'];}?></textarea></td>
+                        </tr> 
+                        
+                         <tr>
+                            <td><small>geodir_sub_menu_ul_class</small></td>
+                            <td><textarea name="geodir_sub_menu_ul_class_filter" placeholder='sub-menu'><?php if(isset($tc['geodir_sub_menu_ul_class_filter'])){echo $tc['geodir_sub_menu_ul_class_filter'];}?></textarea></td>
+                        </tr>
+                        
+                        <tr>
+                            <td><small>geodir_sub_menu_li_class</small></td>
+                            <td><textarea name="geodir_sub_menu_li_class_filter" placeholder='menu-item'><?php if(isset($tc['geodir_sub_menu_li_class_filter'])){echo $tc['geodir_sub_menu_li_class_filter'];}?></textarea></td>
+                        </tr>
+                        
+                        <tr>
+                            <td><small>geodir_menu_a_class</small></td>
+                            <td><textarea name="geodir_menu_a_class_filter" placeholder=''><?php if(isset($tc['geodir_menu_a_class_filter'])){echo $tc['geodir_menu_a_class_filter'];}?></textarea></td>
+                        </tr>
+                        
+                        <tr>
+                            <td><small>geodir_sub_menu_a_class</small></td>
+                            <td><textarea name="geodir_sub_menu_a_class_filter" placeholder=''><?php if(isset($tc['geodir_sub_menu_a_class_filter'])){echo $tc['geodir_sub_menu_a_class_filter'];}?></textarea></td>
+                        </tr>
+                        
+                        
+                        <tr>
+							<td><small>geodir_location_switcher_menu_li_class</small></td>
+						   <td><textarea name="geodir_location_switcher_menu_li_class_filter" placeholder='menu-item menu-item-type-social menu-item-type-social gd-location-switcher'><?php if(isset($tc['geodir_location_switcher_menu_li_class_filter'])){echo $tc['geodir_location_switcher_menu_li_class_filter'];}?></textarea></td>
+						</tr>	
+						
+						<tr>
+							<td><small>geodir_location_switcher_menu_a_class</small></td>
+						   <td><textarea name="geodir_location_switcher_menu_a_class_filter" placeholder=''><?php if(isset($tc['geodir_location_switcher_menu_a_class_filter'])){echo $tc['geodir_location_switcher_menu_a_class_filter'];}?></textarea></td>
+						</tr>
+						
+						<tr>
+							<td><small>geodir_location_switcher_menu_sub_ul_class</small></td>
+						   <td><textarea name="geodir_location_switcher_menu_sub_ul_class_filter" placeholder='sub-menu'><?php if(isset($tc['geodir_location_switcher_menu_sub_ul_class_filter'])){echo $tc['geodir_location_switcher_menu_sub_ul_class_filter'];}?></textarea></td>
+						</tr>
+						
+						<tr>
+							<td><small>geodir_location_switcher_menu_sub_li_class</small></td>
+						   <td><textarea name="geodir_location_switcher_menu_sub_li_class_filter" placeholder='menu-item gd-location-switcher-menu-item'><?php if(isset($tc['geodir_location_switcher_menu_sub_li_class_filter'])){echo $tc['geodir_location_switcher_menu_sub_li_class_filter'];}?></textarea></td>
+						</tr>
+                        
+					<?php do_action('gd_compat_other_filters');?>
 						
           	   </tbody>
              </table>

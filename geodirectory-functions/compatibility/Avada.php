@@ -96,26 +96,27 @@ function gd_compat_php_avada() {
 	remove_action( 'geodir_detail_before_main_content', 'geodir_action_geodir_sidebar_detail_top', 10 );
 	remove_action( 'geodir_listings_before_main_content', 'geodir_action_geodir_sidebar_listings_top', 10 );
 	
-	gd_compat_add_top_section_back();
+	//gd_compat_add_top_section_back();
 
 }
 
+add_action('avada_before_main','gd_compat_add_top_section_back',10);
 function gd_compat_add_top_section_back(){
-	
+
 	if(is_page_geodir_home() || geodir_is_page('location')){
-		add_action( 'avada_before_main', 'geodir_action_geodir_sidebar_home_top', 10 );
+		geodir_action_geodir_sidebar_home_top();
 	}
 	elseif( geodir_is_page('listing')){
-		add_action( 'avada_before_main', 'geodir_action_geodir_sidebar_listings_top', 10 );
+		geodir_action_geodir_sidebar_listings_top();
 	}
 	elseif( geodir_is_page('detail')){
-		add_action( 'avada_before_main', 'geodir_action_geodir_sidebar_detail_top', 10 );
+		geodir_action_geodir_sidebar_detail_top();
 	}
 	elseif( geodir_is_page('search')){
-		add_action( 'avada_before_main', 'geodir_action_geodir_sidebar_search_top', 10 );
+		geodir_action_geodir_sidebar_search_top();
 	}
 	elseif( geodir_is_page('author')){
-		add_action( 'avada_before_main', 'geodir_action_geodir_sidebar_author_top', 10 );
+		geodir_action_geodir_sidebar_author_top();
 	}
 	
 	
@@ -141,6 +142,13 @@ function geodir_before_widget_compat($var){
 function geodir_after_widget_compat($var){
 	return '</div>';
 }
+
+add_filter('geodir_search_form_class','geodir_search_form_class_avada');
+function geodir_search_form_class_avada($class){
+	$class .= ' search';
+	return $class;
+}
+
 
 // run Avada compat
 gd_compat_php_avada();

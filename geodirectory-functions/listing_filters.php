@@ -283,6 +283,11 @@ function geodir_posts_fields($fields){
 			$fields .= " , (".$DistanceRadius." * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(".$table.".post_latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(".$table.".post_latitude) * pi()/180) *POWER(SIN(($mylon - ".$table.".post_longitude) * pi()/180 / 2), 2) )))as distance ";
 		}
 	
+	global $s;
+	if ( is_search() && isset( $_REQUEST['geodir_search'] ) && $s && trim( $s ) != '' ) {
+		$fields .= $wpdb->prepare(", CASE WHEN " . $table . ".is_featured='1' THEN 1 ELSE 0 END AS gd_featured, CASE WHEN " . $wpdb->posts . ".post_title=%s THEN 1 ELSE 0 END AS gd_exacttitle, CASE WHEN " . $wpdb->posts . ".post_title LIKE %s THEN 1 ELSE 0 END AS gd_titlematch, CASE WHEN " . $wpdb->posts . ".post_content LIKE %s THEN 2 ELSE 0 END AS gd_score", array( $s, '%' . $s . '%', '%' . $s . '%' ) );
+	}
+		
 	return $fields;
 }
 
@@ -409,10 +414,20 @@ function geodir_posts_orderby($orderby) {
 		break;
 	endswitch;
 	
+	global $s;
+	
+	if ( is_search() && isset( $_REQUEST['geodir_search'] ) && $s && trim( $s ) != '' ) {
+		if ( $sort_by == 'nearest' || $sort_by == 'farthest' ) {
+			$orderby = $orderby . " ( gd_titlematch * 1.5 + gd_featured * 5 + gd_exacttitle * 10 + gd_score ) DESC, ";
+		} else {
+			$orderby = "( gd_titlematch * 1.5 + gd_featured * 5 + gd_exacttitle * 10 + gd_score ) DESC, " . $orderby;
+		}
+	}
+	
 	$orderby = apply_filters('geodir_posts_order_by_sort', $orderby, $sort_by, $table);
 	
 	$orderby .= $table.".is_featured asc, $wpdb->posts.post_date desc, $wpdb->posts.post_title ";
-	
+		
 	return $orderby;
 }
 
@@ -619,7 +634,7 @@ function searching_filter_where($where) {
 	else
 		$post_types = 'gd_place';
 		
-	if ( $s != '' ) {
+	if ( trim( $s ) != '' ) {
 		$adv_search_arr = explode( " ", $s );
 		if ( !empty( $adv_search_arr ) ) {
 			foreach( $adv_search_arr as $adv_search_val ) {

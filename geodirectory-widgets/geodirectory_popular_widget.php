@@ -71,16 +71,19 @@ class geodir_popular_post_category extends WP_Widget {
 				echo '</a></li>';
 			}
 			echo '</ul>';
-			?>
+			 ?>
 			</div> 
-			</div>
-		<?php 
+		<?php
 			if( $cat_count > $categ_limit ) {
 				echo '<a href="javascript:void(0)" class="geodir-morecat geodir-showcat">' . __( 'More Categories', GEODIRECTORY_TEXTDOMAIN ) . '</a>';
 				echo '<a href="javascript:void(0)" class="geodir-morecat geodir-hidecat geodir-hide">' . __( 'Less Categories', GEODIRECTORY_TEXTDOMAIN ) . '</a>';
 				/* add scripts */
 				add_action( 'wp_footer', array($this, 'geodir_popular_category_add_scripts'), 100 );
 			}
+			
+			?>
+			</div>
+		<?php
 			
 		}
 		echo $after_widget;
@@ -92,7 +95,7 @@ class geodir_popular_post_category extends WP_Widget {
 <script type="text/javascript">
 jQuery(function($){
 	$('.geodir-showcat').click(function(){
-		var objCat = $(this).closest('.geodir-category-list-in');
+		var objCat = $(this).parents('.geodir-category-list-in');
 		$(objCat).find('li.geodir-pcat-hide').removeClass('geodir-hide');
 		$(objCat).find('a.geodir-showcat').addClass('geodir-hide');
 		$(objCat).find('a.geodir-hidecat').removeClass('geodir-hide');

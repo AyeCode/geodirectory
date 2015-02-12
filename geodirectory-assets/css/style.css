@@ -125,6 +125,7 @@ float: left;
 display: block;
 cursor: pointer;
 margin-left: 0;
+padding:0;
 }
 dl.geodir-tab-head dd a {
 font-weight: bold;

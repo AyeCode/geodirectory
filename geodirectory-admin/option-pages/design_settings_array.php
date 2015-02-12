@@ -1009,6 +1009,14 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 			'std' 		=> '0',
 			'value' =>  geodir_plugin_url().'/geodirectory-functions/map-functions/icons/pin.png'// Default value to show home top section
 		),
+		// add option that allows enable/disable map dragging to phone devices
+		array(  
+			'name' => __( 'Show button control on map to enable/disable dragging', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> __( 'If checked, it displays button control to enable/disable dragging on google maps for phone devices', GEODIRECTORY_TEXTDOMAIN ),
+			'id' 		=> 'geodir_map_onoff_dragging',
+			'type' 		=> 'checkbox',
+			'std' 		=> '0' // Default value to show home top section
+		),
 	
 	array( 'type' => 'sectionend', 'id' => 'geodir_map_default_settings'),			
 	

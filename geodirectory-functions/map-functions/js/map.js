@@ -61,7 +61,18 @@ function initMap(map_options){
 	
 	jQuery.goMap.map.setOptions({styles: styles});
 	
-	
+	/* add option that allows enable/disable map dragging to phone devices */
+	if (GeodirIsiPhone() && typeof geodir_all_js_msg.geodir_onoff_dragging != 'undefined' && geodir_all_js_msg.geodir_onoff_dragging) {
+		var centerControlDiv = document.createElement('div');
+		var centerControl = new gdCustomControl(centerControlDiv, options.enable_cat_filters);
+		
+		centerControlDiv.index = 1;
+		if (options.enable_cat_filters) {
+			jQuery.goMap.map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(centerControlDiv);
+		} else {
+			jQuery.goMap.map.controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(centerControlDiv);
+		}
+	}
 	
 	google.maps.event.addListenerOnce(jQuery.goMap.map, 'idle', function(){
 		jQuery("#"  + map_canvas).goMap();
@@ -96,6 +107,57 @@ function initMap(map_options){
 		}, 100);
 	}
 }
+
+function gdCustomControl(controlDiv, cat_filters) {
+  // Set CSS for the control border
+  var controlUI = document.createElement('div');
+  jQuery(controlUI).addClass('gd-dragg-ui');
+  if (cat_filters) {
+	  jQuery(controlUI).addClass('gd-dragg-with-cat');
+  }
+  jQuery.goMap.map.setOptions({draggable:false});
+  jQuery(controlUI).addClass('gd-drag-inactive');
+  controlUI.style.backgroundColor = '#fff';
+  controlUI.style.borderRadius = '2px';
+  controlUI.style.boxShadow = '0 1px 4px -1px rgba(0, 0, 0, 0.3)';
+  controlUI.style.cursor = 'pointer';
+  if (cat_filters) {
+  	controlUI.style.marginBottom = '40px';
+  } else {
+	controlUI.style.marginBottom = '5px';
+  }
+  controlUI.style.marginTop = '5px';
+  controlUI.style.textAlign = 'center';
+  controlDiv.appendChild(controlUI);
+
+  // Set CSS for the control interior
+  var controlText = document.createElement('div');
+  jQuery(controlText).addClass('gd-dragg-action');
+  controlUI.style.border = '1px solid rgba(0, 0, 0, 0.15)';
+  controlText.style.color = '#333';
+  controlText.style.fontSize = '11px';
+  controlText.style.lineHeight = '1.5';
+  controlText.style.paddingLeft = '6px';
+  controlText.style.paddingTop = '1px';
+  controlText.style.paddingBottom = '1px';
+  controlText.style.paddingRight = '6px';
+  controlText.innerHTML = geodir_all_js_msg.geodir_on_dragging_text;
+  controlUI.appendChild(controlText);
+
+  // Setup the click event listeners: simply set the map to
+  //
+  google.maps.event.addDomListener(controlUI, 'click', function() {
+		if(jQuery(this).hasClass('gd-drag-active')){
+			jQuery(this).removeClass('gd-drag-active').addClass('gd-drag-inactive').find('.gd-dragg-action').text(geodir_all_js_msg.geodir_on_dragging_text);
+			jQuery.goMap.map.setOptions({draggable:false});
+		} else {
+			jQuery(this).removeClass('gd-drag-inactive').addClass('gd-drag-active').find('.gd-dragg-action').text(geodir_all_js_msg.geodir_off_dragging_text);
+			jQuery.goMap.map.setOptions({draggable:true});
+		}
+  });
+
+}
+
 
 function build_map_ajax_search_param(map_canvas_var,reload_cat_list)
 {
@@ -520,7 +582,8 @@ function map_sticky(map_options) {
 		
 		var stickymap = jQuery("#sticky_map_"+optionsname+"").scrollBottom();
 		var catcher = jQuery('#catcher_'+optionsname+'');
-		var sticky = jQuery('#sticky_map_'+optionsname+'');		
+		var sticky = jQuery('#sticky_map_'+optionsname+'');	
+		var map_parent = sticky.parent();	
 		var sticky_show_hide_trigger = sticky.closest('.stick_trigger_container').find('.trigger_sticky');
 		var mapheight = jQuery("#sticky_map_"+optionsname+"").height();
 		//alert(mapheight)
@@ -541,10 +604,13 @@ function map_sticky(map_options) {
 			//if(content > stickymap ) {alert(1);}
 			//if(jQuery(window).scrollTop() >= catcher.offset().top ) {alert(2);}
 				
-			if(jQuery(window).scrollTop() >= catcher.offset().top && content > stickymap ) {
+			if(jQuery(window).scrollTop() >= catcher.offset().top ) {
 				if(!sticky.hasClass('stickymap')){ 	
 					sticky.addClass('stickymap');
 					sticky.hide();
+					
+					sticky.appendTo('body');
+					
 					sticky.css({'position':'fixed','right':'0','border':'1px solid red'});
 					//sticky.css({'top':'25%','width':'25%'});
 					sticky.css({'top':'25%'});
@@ -573,6 +639,7 @@ function map_sticky(map_options) {
 			
 			if(jQuery(window).scrollTop() < catcher.offset().top){	
 				if(sticky.hasClass('stickymap')){ 	
+					sticky.appendTo(map_parent);
 					sticky.hide();
 					sticky.removeClass('stickymap');
 					sticky.css({'position':'relative','border':'none'});

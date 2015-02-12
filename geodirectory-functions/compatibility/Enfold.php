@@ -191,9 +191,9 @@ function enfold_detail_breadcrum($trail, $args ){
 // WRAPPER CONTENT OPEN FUNCTIONS
 function enfold_action_wrapper_content_open($type='',$id='',$class=''){
 	if ( is_home() && isset($_GET['geodir_signup']) ) {
-		echo "<main class='template-page content twelve alpha units' ". avia_markup_helper(array('context' => 'content','post_type'=>'page','echo'=>false))." ".$class.">";
+		echo "<main class='template-page content twelve alpha units ".$class."' ". avia_markup_helper(array('context' => 'content','post_type'=>'page','echo'=>false)).">";
 	} else {
-		echo "<main class='template-page content ".avia_layout_class( 'content',false )." units' ". avia_markup_helper(array('context' => 'content','post_type'=>'page','echo'=>false))." ".$class.">";
+		echo "<main class='template-page content ".avia_layout_class( 'content',false )." units ".$class."' ". avia_markup_helper(array('context' => 'content','post_type'=>'page','echo'=>false)).">";
 	}
 	echo '<div class="entry-content-wrapper">';
 }

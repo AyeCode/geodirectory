@@ -136,18 +136,18 @@ function validate_field(field){
 jQuery(document).ready(function(){
 	
 	/// check validation on blur
-	jQuery('#post').find(".required_field:visible").find("[field_type]:visible, .editor textarea").blur(function(){
+	jQuery('#propertyform').find(".required_field:visible").find("[field_type]:visible, .editor textarea").blur(function(){
 		validate_field( this );
 	});
 	
-	jQuery('#post').find(".required_field:visible").find("input[type='checkbox'],input[type='radio']").click(function(){
+	jQuery('#propertyform').find(".required_field:visible").find("input[type='checkbox'],input[type='radio']").click(function(){
 		validate_field( this );
 		
 	});
 	
 	
 	/*jQuery('#propertyform').submit(function(ele){*/
-	jQuery(document).delegate("#post", "submit", function(ele){
+	jQuery(document).delegate("#propertyform", "submit", function(ele){
 		
 		var is_validate = true;
 		
@@ -172,8 +172,6 @@ jQuery(document).ready(function(){
 		}else{
 				
 			jQuery(window).scrollTop(jQuery(".geodir_message_error:visible:first").closest('.required_field').offset().top);
-			jQuery('#publishing-action .spinner').hide();
-			jQuery('#publishing-action #publish').removeClass('disabled');
 			return false;
 		}
 		

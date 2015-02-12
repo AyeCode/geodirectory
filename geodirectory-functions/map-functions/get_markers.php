@@ -129,6 +129,7 @@ function get_markers(){
 					
 	$join = apply_filters('geodir_home_map_listing_join', $join);
 	$search = apply_filters('geodir_home_map_listing_where', $search);
+	$search =  str_replace(array("'%","%'"),array("'%%","%%'"), $search);
 	$cat_type = $post_type.'category';
 	if($post_type=='gd_event'){$event_select = ",pd.recurring_dates";}else{$event_select ="";}
 	$select = apply_filters('geodir_home_map_listing_select', 'SELECT pd.default_category,pd.'.$cat_type.',pd.post_title,pd.post_id,pd.post_latitude,pd.post_longitude '.$event_select);
@@ -146,13 +147,13 @@ function get_markers(){
 	//echo '###search'. $search;	
 	//echo '###$gd_posttype'. $gd_posttype;	
 	//echo '###$main_query_array'. $main_query_array;	
-	
+	//echo '###'.$catsql;
 	$catsql = apply_filters('geodir_home_map_listing_query' , $catsql , $search) ;
 	
 	
 	
 	$catinfo = $wpdb->get_results($catsql);
-	//echo $catsql;
+	//echo '###'.$catsql;
 	//print_r($catinfo);
 	$cat_content_info = array();
 	$content_data = array();

@@ -520,3 +520,5 @@ div.geodir_map_container.geodir-map-iphone .map_background .triggermap{left:9px!
 	.geodir-map-small .bubble{width:240px;}
 	.geodir-map-small .geodir-bubble_image,.geodir-map-small .geodir-bubble-meta-side{width:115px;}
 }
+
+.gd-dragg-ui:hover{background-color:#ebebeb!important}

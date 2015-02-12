@@ -487,6 +487,10 @@ function geodir_user_signup(){
 				}
 			}
 			///////////////////////////
+			if(isset($_REQUEST['redirect_add_listing']) ){
+				$_REQUEST['redirect_to'] = $_REQUEST['redirect_add_listing'];
+			}
+			
 			
 			if(!isset($_REQUEST['redirect_to']) || $_REQUEST['redirect_to']=='')
 			{
@@ -494,6 +498,10 @@ function geodir_user_signup(){
 					 $user_ID  = isset( $user->ID ) ?  $user->ID : '';
 					$author_link = get_author_posts_url( $user_ID );
 					$default_author_link = geodir_getlink($author_link,array('geodir_dashbord'=>'true','stype'=>'gd_place'),false);
+					
+					// author page link
+					$default_author_link = apply_filters( 'geodir_dashboard_author_link', $default_author_link, $user_ID );
+					
 					$_REQUEST['redirect_to']=$default_author_link;
 				else:
 					$_REQUEST['redirect_to']= home_url();

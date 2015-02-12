@@ -439,6 +439,10 @@ $default = isset($field_info->is_admin)	 ? $field_info->is_admin : '';
                     <br />    <span><?php _e('Option Values should be separated by comma.',GEODIRECTORY_TEXTDOMAIN);?></span>
                     <br />    <span><?php _e('If using for a "tick filter" place a / and then either a 1 for true or 0 for false',GEODIRECTORY_TEXTDOMAIN);?></span>
                     <br />    <span><?php _e('eg: "No Dogs Allowed/0,Dogs Allowed/1" (Select only, not multiselect)',GEODIRECTORY_TEXTDOMAIN);?></span>
+					<?php if( $field_type == 'multiselect' || $field_type == 'select' ) { ?>
+					<br />    <span><?php _e('- If using OPTGROUP tag to grouping options, use "{optgroup}OPTGROUP-LABEL|OPTION-1,OPTION-2{/optgroup}"',GEODIRECTORY_TEXTDOMAIN);?></span>
+					<br />    <span><?php _e('eg: "{optgroup}Pets Allowed|No Dogs Allowed/0,Dogs Allowed/1{/optgroup},{optgroup}Sports|Cricket/Cricket,Football/Football,Hockey{/optgroup}"',GEODIRECTORY_TEXTDOMAIN);?></span>
+					<?php } ?>
                 </td>
             </tr>
             <?php 

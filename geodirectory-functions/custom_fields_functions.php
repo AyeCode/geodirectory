@@ -1279,27 +1279,26 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 				<?php $site_title = __($site_title,GEODIRECTORY_TEXTDOMAIN); echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
 				<?php if($is_required) echo '<span>*</span>';?>
 			</label>
-			<select field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>" class="geodir_textfield textfield_x chosen_select" data-placeholder="<?php echo  __('Choose',GEODIRECTORY_TEXTDOMAIN ) .' '.$site_title .'&hellip;' ;?>" option-ajaxchosen="false" >
-	
-			<?php if($option_values){   $option_values_arr = explode(',',$option_values);
-			
-					for($i=0;$i<count($option_values_arr);$i++)   {   
-					
-					if(strstr($option_values_arr[$i],"/")){
-							$select_attr = explode("/",$option_values_arr[$i]);
-							$select_lable = ucfirst($select_attr[0]);
-							$select_value = $select_attr[1];
-						}else{
-							$select_lable = ucfirst($option_values_arr[$i]);
-							$select_value = $option_values_arr[$i];
-						}
-					
-					?>
-							<option value="<?php echo $select_value; ?>" <?php if($value==$select_value){ echo 'selected="selected"';}?>><?php echo $select_lable; ?></option>
-					<?php }
+			<?php
+			$option_values_arr = geodir_string_values_to_options( $option_values );
+			$select_options = '';
+			if ( !empty( $option_values_arr ) ) {
+				foreach( $option_values_arr as $option_row ) {
+					if ( isset( $option_row['optgroup'] ) && ( $option_row['optgroup'] == 'start' || $option_row['optgroup'] == 'end' ) ) {
+						$option_label = isset( $option_row['label'] ) ? $option_row['label'] : '';
+						
+						$select_options .= $option_row['optgroup'] == 'start' ? '<optgroup label="' . esc_attr( $option_label ) . '">' : '</optgroup>';
+					} else {
+						$option_label = isset( $option_row['label'] ) ? $option_row['label'] : '';
+						$option_value = isset( $option_row['value'] ) ? $option_row['value'] : '';
+						$selected = $option_value == $value ? 'selected="selected"' : '';
+						
+						$select_options .= '<option value="' . esc_attr( $option_value ) . '" ' . $selected . '>' . $option_label . '</option>';
+					}
 				}
+			}
 			?>
-			</select>
+			<select field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>" class="geodir_textfield textfield_x chosen_select" data-placeholder="<?php echo  __('Choose',GEODIRECTORY_TEXTDOMAIN ) .' '.$site_title .'&hellip;' ;?>" option-ajaxchosen="false"><?php echo $select_options;?></select>
 			<span class="geodir_message_note"><?php _e($admin_desc,GEODIRECTORY_TEXTDOMAIN);?></span>
 			<?php if($is_required) {?>
 			<span class="geodir_message_error"><?php _e($required_msg,GEODIRECTORY_TEXTDOMAIN);?></span> 
@@ -1322,60 +1321,57 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom',$po
 				<?php if ( $multi_display == 'select' ) { ?>
 				<div class="geodir_multiselect_list">
 					<select field_type="<?php echo $type;?>" name="<?php echo $name;?>[]" id="<?php echo $name;?>" multiple="multiple" class="geodir_textfield textfield_x chosen_select" data-placeholder="<?php _e( 'Select', GEODIRECTORY_TEXTDOMAIN );?>" option-ajaxchosen="false">					
-			<?php 
-			} else {
-				echo '<ul class="gd_multi_choice">';
-			}
-			
-			if ( $option_values ) {
-				$option_values_arr = explode( ',', $option_values );
-				
-				for ( $i=0; $i < count( $option_values_arr ); $i++ ) { 
-									
-					if ( strstr( $option_values_arr[$i], "/" ) ) {
-						$multi_select_attr = explode( "/", $option_values_arr[$i] );
-						$multi_select_lable = ucfirst( $multi_select_attr[0] );
-						$multi_select_value = $multi_select_attr[1];
-					} else {
-						$multi_select_lable = ucfirst( $option_values_arr[$i] );
-						$multi_select_value = $option_values_arr[$i];
-					}
-									
-					$selected = '';
-					$checked = '';
-					
-					if ( ( !is_array( $value ) && trim( $value ) != '' ) || ( is_array( $value ) && !empty( $value ) ) ) {
-						if ( !is_array( $value ) ) {
-							$value_array = explode( ',', $value );
+				<?php 
+				} else {
+					echo '<ul class="gd_multi_choice">';
+				}
+
+				$option_values_arr = geodir_string_values_to_options( $option_values );
+				$select_options = '';
+				if ( !empty( $option_values_arr ) ) {
+					foreach( $option_values_arr as $option_row ) {
+						if ( isset( $option_row['optgroup'] ) && ( $option_row['optgroup'] == 'start' || $option_row['optgroup'] == 'end' ) ) {
+							$option_label = isset( $option_row['label'] ) ? $option_row['label'] : '';
+							
+							if ( $multi_display == 'select' ) {
+								$select_options .= $option_row['optgroup'] == 'start' ? '<optgroup label="' . esc_attr( $option_label ) . '">' : '</optgroup>';
+							} else {
+								$select_options .= $option_row['optgroup'] == 'start' ? '<li>' . $option_label . '</li>' : '';
+							}
 						} else {
-							$value_array = $value;
-						}
-						
-						if ( is_array( $value_array ) ) {
-							if ( in_array( $multi_select_value, $value_array ) ) {
-								$selected = 'selected="selected"';
-								$checked = 'checked="checked"';
+							$option_label = isset( $option_row['label'] ) ? $option_row['label'] : '';
+							$option_value = isset( $option_row['value'] ) ? $option_row['value'] : '';
+							$selected = $option_value == $value ? 'selected="selected"' : '';
+							$selected = '';
+							$checked = '';
+							
+							if ( ( !is_array( $value ) && trim( $value ) != '' ) || ( is_array( $value ) && !empty( $value ) ) ) {
+								if ( !is_array( $value ) ) {
+									$value_array = explode( ',', $value );
+								} else {
+									$value_array = $value;
+								}
+								
+								if ( is_array( $value_array ) ) {
+									if ( in_array( $option_value, $value_array ) ) {
+										$selected = 'selected="selected"';
+										$checked = 'checked="checked"';
+									}
+								}
+							}
+							
+							if ( $multi_display == 'select' ) {
+								$select_options .= '<option value="' . esc_attr( $option_value ) . '" ' . $selected . '>' . $option_label . '</option>';
+							} else {
+								$select_options .= '<li><input name="'. $name .'[]" ' . $checked . ' value="' . esc_attr( $option_value ) . '" class="gd-' . $multi_display . '" field_type="' . $multi_display . '" type="' . $multi_display . '" />&nbsp;' . $option_label . ' </li>';
 							}
 						}
 					}
-					
-					if ( $multi_display == 'select' ) {
-					?>
-						<option value="<?php echo $multi_select_value; ?>" <?php echo $selected; ?>><?php echo $multi_select_lable; ?></option>
-					<?php
-					} else {
-					?> 
-						<li>
-							<input name="<?php echo $name;?>[]" <?php echo $checked;?>  value="<?php echo $multi_select_value; ?>" class="gd-<?php echo $multi_display; ?>" field_type="<?php echo $multi_display;?>" type="<?php echo $multi_display; ?>" /> <?php echo $multi_select_lable; ?>
-						</li>
-					<?php
-					}
 				}
-			}
+				echo $select_options;
 			
-			if ( $multi_display == 'select' ) { ?>
-				</select></div>
-			<?php } else { ?></ul><?php } ?>
+				if ( $multi_display == 'select' ) { ?></select></div>
+				<?php } else { ?></ul><?php } ?>
 			<span class="geodir_message_note"><?php _e($admin_desc,GEODIRECTORY_TEXTDOMAIN);?></span>
 			<?php if($is_required) {?>
 			<span class="geodir_message_error"><?php _e($required_msg,GEODIRECTORY_TEXTDOMAIN);?></span> 
@@ -1704,8 +1700,8 @@ function geodir_show_listing_info($fields_location=''){
 	$package_info = geodir_post_package_info($package_info , $post);
 	//return;
 	$post_package_id = $package_info->pid;
-	
-	ob_start();	$fields_info = geodir_post_custom_fields($post_package_id,'default',geodir_get_current_posttype(), $fields_location);
+	$p_type = (geodir_get_current_posttype()) ? geodir_get_current_posttype() : $post->post_type;
+	ob_start();	$fields_info = geodir_post_custom_fields($post_package_id,'default',$p_type , $fields_location);
 	
 	if(!empty($fields_info))
 	{
@@ -3215,4 +3211,91 @@ function check_field_visibility($package_id, $field_name, $post_type) {
 	}
 	return false;
 }
+}
+
+/*
+ * Parse label & values from string
+ */
+function geodir_string_to_options( $input = '' ) {
+	$return = array();
+	if ( $input != '' ) {
+		$input = trim( $input );
+		$input = rtrim( $input, "," );
+		$input = ltrim( $input, "," );
+		$input = trim( $input );
+	}
+	
+	$input_arr = explode( ',', $input );
+
+	if ( !empty( $input_arr ) ) {
+		foreach( $input_arr as $input_str ) {
+			$input_str = trim( $input_str );
+			
+			if ( strpos( $input_str, "/" ) !== false ) {
+				$input_str = explode( "/", $input_str, 2 );
+				$label = trim( $input_str[0] );
+				$label = ucfirst( $label );
+				$value = trim( $input_str[1] );
+			} else {
+				$label = ucfirst( $input_str );
+				$value = $input_str;
+			}
+			
+			if ( $label != '' ) {
+				$return[] = array( 'label' => $label, 'value' => $value, 'optgroup' => NULL );
+			}
+		}
+	}
+	
+	return $return;
+}
+
+/*
+ * Parse option values string to array
+ */
+function geodir_string_values_to_options( $option_values = '' ) {
+	$options = array();
+	if ( $option_values == '' ) {
+		return NULL;
+	}
+	
+	if ( strpos( $option_values, "{/optgroup}" ) !== false ) {
+		$option_values_arr = explode( "{/optgroup}", $option_values );
+		
+		foreach( $option_values_arr as $optgroup ) {
+			if ( strpos( $optgroup, "{optgroup}" ) !== false ) {
+				$optgroup_arr = explode( "{optgroup}", $optgroup );
+	
+				$count = 0;
+				foreach( $optgroup_arr as $optgroup_str ) {
+					$count++;
+					$optgroup_str = trim( $optgroup_str );
+					
+					$optgroup_label = '';
+					if ( strpos( $optgroup_str, "|" ) !== false ) {
+						$optgroup_str_arr = explode( "|", $optgroup_str, 2 );
+						$optgroup_label = trim( $optgroup_str_arr[0] );
+						$optgroup_label = ucfirst( $optgroup_label );
+						$optgroup_str = $optgroup_str_arr[1];
+					}
+					
+					$optgroup3 = geodir_string_to_options( $optgroup_str );
+								
+					if ( $count > 1 && $optgroup_label != '' && !empty( $optgroup3 ) ) {
+						$optgroup_start = array( array( 'label' => $optgroup_label, 'value' => NULL, 'optgroup' => 'start' ) );
+						$optgroup_end = array( array( 'label' => $optgroup_label, 'value' => NULL, 'optgroup' => 'end' ) );
+						$optgroup3 = array_merge( $optgroup_start, $optgroup3, $optgroup_end );
+					}
+					$options = array_merge( $options, $optgroup3 );
+				}
+			} else {
+				$optgroup1 = geodir_string_to_options( $optgroup );
+				$options = array_merge( $options, $optgroup1 );
+			}
+		}
+	} else {
+		$options = geodir_string_to_options( $option_values );
+	}
+	
+	return $options;
 }

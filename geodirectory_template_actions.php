@@ -39,6 +39,63 @@ function geodir_after_widget_dynamic(){
 	return $tc['geodir_after_widget_filter'];
 }
 
+
+function geodir_before_title_dynamic(){
+	$tc = get_option('theme_compatibility_setting');
+	return $tc['geodir_before_title_filter'];
+}
+
+function geodir_after_title_dynamic(){
+	$tc = get_option('theme_compatibility_setting');
+	return $tc['geodir_after_title_filter'];
+}
+
+function geodir_menu_li_class_dynamic(){
+	$tc = get_option('theme_compatibility_setting');
+	return $tc['geodir_menu_li_class_filter'];
+}
+
+function geodir_sub_menu_ul_class_dynamic(){
+	$tc = get_option('theme_compatibility_setting');
+	return $tc['geodir_sub_menu_ul_class_filter'];
+}
+
+function geodir_sub_menu_li_class_dynamic(){
+	$tc = get_option('theme_compatibility_setting');
+	return $tc['geodir_sub_menu_li_class_filter'];
+}
+
+function geodir_menu_a_class_dynamic(){
+	$tc = get_option('theme_compatibility_setting');
+	return $tc['geodir_menu_a_class_filter'];
+}
+
+function geodir_sub_menu_a_class_dynamic(){
+	$tc = get_option('theme_compatibility_setting');
+	return $tc['geodir_sub_menu_a_class_filter'];
+}
+
+function geodir_location_switcher_menu_li_class_dynamic(){
+	$tc = get_option('theme_compatibility_setting');
+	return $tc['geodir_location_switcher_menu_li_class_filter'];
+}
+
+function geodir_location_switcher_menu_a_class_dynamic(){
+	$tc = get_option('theme_compatibility_setting');
+	return $tc['geodir_location_switcher_menu_a_class_filter'];
+}
+
+function geodir_location_switcher_menu_sub_ul_class_dynamic(){
+	$tc = get_option('theme_compatibility_setting');
+	return $tc['geodir_location_switcher_menu_sub_ul_class_filter'];
+}
+
+function geodir_location_switcher_menu_sub_li_class_dynamic(){
+	$tc = get_option('theme_compatibility_setting');
+	return $tc['geodir_location_switcher_menu_sub_li_class_filter'];
+}
+
+
 add_action('setup_theme','geodir_content_actions_dynamic',10);
 function geodir_content_actions_dynamic(){
 	global $wpdb;
@@ -59,6 +116,61 @@ function geodir_content_actions_dynamic(){
 	//widget after filter
 	if(!empty($tc['geodir_after_widget_filter'])){
 		add_filter('geodir_after_widget','geodir_after_widget_dynamic',10);
+	}
+	
+	//widget before title filter
+	if(!empty($tc['geodir_before_title_filter'])){
+		add_filter('geodir_before_title','geodir_before_title_dynamic',10);
+	}
+
+	//widget before title filter
+	if(!empty($tc['geodir_after_title_filter'])){
+		add_filter('geodir_after_title','geodir_after_title_dynamic',10);
+	}
+	
+	//menu li class
+	if(!empty($tc['geodir_menu_li_class_filter'])){
+		add_filter('geodir_menu_li_class','geodir_menu_li_class_dynamic',10);
+	}
+	
+	//menu ul class
+	if(!empty($tc['geodir_sub_menu_ul_class_filter'])){
+		add_filter('geodir_sub_menu_ul_class','geodir_sub_menu_ul_class_dynamic',10);
+	}
+	
+	//menu sub li class
+	if(!empty($tc['geodir_sub_menu_li_class_filter'])){
+		add_filter('geodir_sub_menu_li_class','geodir_sub_menu_li_class_dynamic',10);
+	}
+	
+	//menu a class
+	if(!empty($tc['geodir_menu_a_class_filter'])){
+		add_filter('geodir_menu_a_class','geodir_menu_a_class_dynamic',10);
+	}
+	
+	//menu sub a class
+	if(!empty($tc['geodir_sub_menu_a_class_filter'])){
+		add_filter('geodir_sub_menu_a_class','geodir_sub_menu_a_class_dynamic',10);
+	}
+	
+	//location menu li class
+	if(!empty($tc['geodir_location_switcher_menu_li_class_filter'])){
+		add_filter('geodir_location_switcher_menu_li_class','geodir_location_switcher_menu_li_class_dynamic',10);
+	}
+
+	//location menu sub ul class
+	if(!empty($tc['geodir_location_switcher_menu_sub_ul_class_filter'])){
+		add_filter('geodir_location_switcher_menu_sub_ul_class','geodir_location_switcher_menu_sub_ul_class_dynamic',10);
+	}
+
+	//location menu sub li class
+	if(!empty($tc['geodir_location_switcher_menu_sub_li_class_filter'])){
+		add_filter('geodir_location_switcher_menu_sub_li_class','geodir_location_switcher_menu_sub_li_class_dynamic',10);
+	}
+
+	//location menu a class
+	if(!empty($tc['geodir_location_switcher_menu_a_class_filter'])){
+		add_filter('geodir_location_switcher_menu_a_class','geodir_location_switcher_menu_a_class_dynamic',10);
 	}
 	
 	// compat styles

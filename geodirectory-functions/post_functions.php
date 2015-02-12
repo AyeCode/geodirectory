@@ -1745,6 +1745,9 @@ if (!function_exists('geodir_delete_listing_info')) {
 function geodir_delete_listing_info($deleted_postid, $force = false){
 	global $wpdb,$plugin_prefix;
 	
+	// check for multisite deletions
+	if (strpos($wpdb->prefix,$plugin_prefix) !== false) {}else{return;}
+	
 	$post_type = get_post_type( $deleted_postid );
 	
 	$all_postypes = geodir_get_posttypes();

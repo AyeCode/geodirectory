@@ -703,11 +703,19 @@ function geodir_breadcrumb() {
 			$user_id = get_current_user_id();
 			$author_link = get_author_posts_url( $user_id );
 			$default_author_link = geodir_getlink($author_link,array('geodir_dashbord'=>'true','stype'=>'gd_place'),false);
+			
+			// author page link
+			$default_author_link = apply_filters( 'geodir_dashboard_author_link', $default_author_link, $user_id );
+			
 			$breadcrumb .= '<li>';
 			$breadcrumb .= $separator.'<a href="'.$default_author_link.'">' . __('My Dashboard',GEODIRECTORY_TEXTDOMAIN) .'</a>';
 			
 			if(isset($_REQUEST['list'])){
 				$author_link = geodir_getlink($author_link,array('geodir_dashbord'=>'true','stype'=>$_REQUEST['stype']),false);
+				
+				// author page link
+				$author_link = apply_filters( 'geodir_dashboard_author_link', $author_link, $user_id, $_REQUEST['stype'] );
+					
 				$breadcrumb .= $separator.'<a href="'.$author_link.'">' . __( ucfirst( $post_type_info->label ), GEODIRECTORY_TEXTDOMAIN ).'</a>';
 				$breadcrumb .= $separator . ucfirst(__('My',GEODIRECTORY_TEXTDOMAIN).' '.$_REQUEST['list']);
 			}else
@@ -1391,12 +1399,10 @@ function geodir_comments_number($number){
 
 function is_page_geodir_home(){
 	global $wpdb;
-	$cur_url = str_replace("https", "http", geodir_curPageURL());
-	$cur_url =  str_replace("www.", "",$cur_url);
+	$cur_url = str_replace(array("https://", "http://","www."),array('','',''), geodir_curPageURL());
 	$home_url = home_url( '', 'http');
 	$home_url = str_replace("www.", "",$home_url);
-	
-	if(($cur_url==$home_url || $cur_url==$home_url.'/') && get_option('geodir_set_as_home') ){
+	if(  (strpos($home_url,$cur_url) !== false  ||   strpos($home_url.'/',$cur_url) !== false) && get_option('geodir_set_as_home') ){
 		return true;
 	}else{
 		return false;

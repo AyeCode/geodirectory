@@ -53,7 +53,8 @@ jQuery(window).load(function(){
 		slideshow: false,
 		itemWidth: 75,
 		itemMargin: 5,
-		asNavFor: '#geodir_widget_slider'
+		asNavFor: '#geodir_widget_slider',
+		rtl: <?php echo ( is_rtl() ? 'true' : 'false' ); /* fix rtl issue */ ?>
 	});
 	
 	jQuery('#geodir_widget_slider').flexslider({
@@ -71,7 +72,8 @@ jQuery(window).load(function(){
 		jQuery('.geodir-listing-flex-loader').hide();
 		jQuery('#geodir_widget_slider').css({'visibility':'visible'});
 		jQuery('#geodir_widget_carousel').css({'visibility':'visible'});
-		}
+		},
+		rtl: <?php echo ( is_rtl() ? 'true' : 'false' ); /* fix rtl issue */ ?>
 	});
 });		
 </script>

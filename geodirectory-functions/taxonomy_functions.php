@@ -19,7 +19,7 @@ function geodir_add_nav_menu_items(  ) {
 	$items = '';
 	// apply filter to add more navigations // -Filter-Location-Manager
 	
-	if(get_option('geodir_show_listing_nav')){	
+	if(get_option('geodir_show_listing_nav')){
 	
 	$menu_class = '';
 	if(geodir_is_page('listing'))
@@ -37,9 +37,10 @@ function geodir_add_nav_menu_items(  ) {
 					$menu_class = '';
 					if(geodir_get_current_posttype() == $post_type && geodir_is_page('listing'))
 					$menu_class = 'current-menu-item';
-					
-					$items .=	'<li class="menu-item '.$menu_class.'">
-									<a href="'. get_post_type_archive_link( $post_type ) .'">
+					$li_class = apply_filters('geodir_menu_li_class','menu-item '.$menu_class);
+					$a_class = apply_filters('geodir_menu_a_class','');
+					$items .=	'<li class="'.$li_class.'">
+									<a href="'. get_post_type_archive_link( $post_type ) .'" class="'.$a_class.'">
 										'.__(ucfirst($args->labels->name)).'
 									</a>
 								</li>';
@@ -53,10 +54,14 @@ function geodir_add_nav_menu_items(  ) {
 	$view_posttype_listing = get_option('geodir_add_posttype_in_listing_nav') ;
 	$is_listing_sub_meny_exists = (!empty($view_posttype_listing)) ? true : false ;	
 	if($is_listing_sub_meny_exists)
-	{
-		$items .= '<li class="menu-item '.$menu_class.' '.apply_filters('geodir_sub_menu_li_class','').' ">
-					<a href="#">'.__('Listing',GEODIRECTORY_TEXTDOMAIN).'</a>
-					<ul class="sub-menu">';
+	{	$li_class = apply_filters('geodir_menu_li_class','menu-item '.$menu_class);
+		$sub_li_class = apply_filters('geodir_sub_menu_li_class','menu-item '.$menu_class);
+		$sub_ul_class = apply_filters('geodir_sub_menu_ul_class' ,'sub-menu' );
+		$a_class = apply_filters('geodir_menu_a_class','');
+		$sub_a_class = apply_filters('geodir_sub_menu_a_class','');
+		$items .= '<li class="'.$li_class.'">
+					<a href="#" class="'.$a_class.'">'.__('Listing',GEODIRECTORY_TEXTDOMAIN).'</a>
+					<ul class="'.$sub_ul_class .'">';
 						$post_types = geodir_get_posttypes('object');
 						
 						$show_listing_post_types = get_option('geodir_add_posttype_in_listing_nav');
@@ -73,8 +78,8 @@ function geodir_add_nav_menu_items(  ) {
 												if(geodir_get_current_posttype() == $post_type && geodir_is_page('listing'))
 												$menu_class = 'current-menu-item';
 											
-												$items .=	'<li class="menu-item '.$menu_class.'">
-														<a href="'. get_post_type_archive_link( $post_type ) .'">
+												$items .=	'<li class="'.$sub_li_class.'">
+														<a href="'. get_post_type_archive_link( $post_type ) .'" class="'.$sub_a_class.'">
 															'.__(ucfirst($args->labels->name)).'
 														</a>
 													</li>';
@@ -112,9 +117,10 @@ function geodir_add_nav_menu_items(  ) {
 										$menu_class = '';
 										if(geodir_get_current_posttype() == $post_type && geodir_is_page('add-listing'))
 										$menu_class = 'current-menu-item';
-									
-										$items .=	'<li class="menu-item '.$menu_class.'">
-											<a href="'. geodir_get_addlisting_link( $post_type ) .'">
+										$li_class = apply_filters('geodir_menu_li_class','menu-item '.$menu_class);
+										$a_class = apply_filters('geodir_menu_a_class','');
+										$items .=	'<li class="'.$li_class .'">
+											<a href="'. geodir_get_addlisting_link( $post_type ) .'" class="'.$a_class.'">
 												'.__('Add',GEODIRECTORY_TEXTDOMAIN).' '.__( $args->labels->singular_name, GEODIRECTORY_TEXTDOMAIN ).'
 											</a>
 										</li>';
@@ -134,10 +140,14 @@ function geodir_add_nav_menu_items(  ) {
 	{
 	
 		if(get_option('geodir_show_addlisting_nav')){		
-		
-		$items .= '<li  class="menu-item '.$menu_class.' '.apply_filters('geodir_sub_menu_li_class','').' ">
-					<a href="#">'.__('Add Listing',GEODIRECTORY_TEXTDOMAIN).'</a>
-					<ul class="sub-menu">';
+		$li_class = apply_filters('geodir_menu_li_class','menu-item '.$menu_class);
+		$sub_li_class = apply_filters('geodir_sub_menu_li_class','menu-item '.$menu_class);
+		$sub_ul_class = apply_filters('geodir_sub_menu_ul_class' ,'sub-menu' );
+		$a_class = apply_filters('geodir_menu_a_class','');
+		$sub_a_class = apply_filters('geodir_sub_menu_a_class','');
+		$items .= '<li  class="'.$li_class.'">
+					<a href="#" class="'.$a_class.'">'.__('Add Listing',GEODIRECTORY_TEXTDOMAIN).'</a>
+					<ul class="'.$sub_ul_class .'">';
 					
 						$post_types = geodir_get_posttypes('object');
 						
@@ -154,9 +164,9 @@ function geodir_add_nav_menu_items(  ) {
 													$menu_class = '';
 													if(geodir_get_current_posttype() == $post_type && geodir_is_page('add-listing'))
 													$menu_class = 'current-menu-item';
-												
-													$items .=	'<li class="menu-item '.$menu_class.'">
-														<a href="'. geodir_get_addlisting_link( $post_type ) .'">
+												$li_class = apply_filters('geodir_menu_li_class','menu-item '.$menu_class);
+													$items .=	'<li class="'.$li_class.'">
+														<a href="'. geodir_get_addlisting_link( $post_type ) .'" class="'.$sub_a_class.'">
 															'.__('Add',GEODIRECTORY_TEXTDOMAIN).' ' . __( $args->labels->singular_name, GEODIRECTORY_TEXTDOMAIN ) . '
 														</a>
 													</li>';

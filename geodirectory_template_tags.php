@@ -122,7 +122,8 @@ function geodir_templates_scripts()
 								'siteurl' => get_option( 'siteurl' ),
 								'geodir_plugin_url' => geodir_plugin_url(), 
 								'geodir_ajax_url' => geodir_get_ajax_url(),
-								'geodir_gd_modal' => (int)get_option( 'geodir_disable_gb_modal' )
+								'geodir_gd_modal' => (int)get_option( 'geodir_disable_gb_modal' ),
+								'is_rtl' => is_rtl() ? 1 : 0 // fix rtl issue
 							); 
 		wp_localize_script( 'geodirectory-script', 'geodir_var', $geodir_cons_data );
 		

@@ -5,7 +5,7 @@ $curr_post_type = geodir_get_current_posttype();
 ?>
 
 
- <form class="geodir-listing-search" name="geodir-listing-search" action="<?php echo home_url();?>" method="get" >
+ <form class="<?php echo apply_filters( 'geodir_search_form_class',  'geodir-listing-search');?>" name="geodir-listing-search" action="<?php echo home_url();?>" method="get" >
     <input type="hidden" name="geodir_search" value="1"  />
     
     <div class="geodir-loc-bar">

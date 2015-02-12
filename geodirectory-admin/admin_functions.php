@@ -262,6 +262,8 @@ function geodir_admin_custom_menu_order() {
 }
 }
 
+
+
 // Function to show success or error message on admin option form submittion
 function geodir_before_admin_panel()
 {
@@ -2627,7 +2629,7 @@ $theme_name =  str_replace(" ","_",$theme->get( 'Name' ));
 	$current_compat = get_option('gd_theme_compat');
 $current_compat = str_replace("_custom","",$current_compat);
 
-if($current_compat == $theme_name){return;}// if already running corect compat then bail
+if($current_compat == $theme_name && strpos("_custom", get_option('gd_theme_compat')) !== false){return;}// if already running corect compat then bail
 
 if(isset($theme_compats[$theme_name])){// if there is a compat avail then set it
 	update_option('gd_theme_compat',$theme_name);

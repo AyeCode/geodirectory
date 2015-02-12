@@ -26,7 +26,8 @@ jQuery(document).ready(function() {
 		slideshow: false,
 		itemWidth: 75,
 		itemMargin: 5,
-		asNavFor: '#geodir_slider'
+		asNavFor: '#geodir_slider',
+		rtl: parseInt(geodir_var.is_rtl)==1 ? true : false/* fix rtl issue */
 	});
 	jQuery('#geodir_slider').flexslider({
 		animation: "slide",
@@ -44,7 +45,8 @@ jQuery(document).ready(function() {
 			jQuery('#geodir_carousel').css({
 				'visibility': 'visible'
 			});
-		}
+		},
+		rtl: parseInt(geodir_var.is_rtl)==1 ? true : false/* fix rtl issue */
 	});
 	// Chosen selects
 	if(jQuery("select.chosen_select").length > 0) {
@@ -140,8 +142,8 @@ tabNoRun=false;
 				jQuery.goMap.map.setCenter(center); 
 			}, 100);
 		}
-		
-		if(history.pushState ) {
+
+		if(history.pushState && window.location.hash) {
 			if(jQuery(window).width()<1060){
 				jQuery('html, body').animate({scrollTop: jQuery(urlHash).offset().top}, 500);
 			}
@@ -328,12 +330,6 @@ jQuery(document).ready(function() {
 	});
 });
 
-jQuery(document).ready(function() {
-	jQuery('.search_by_post').change(function() {
-		 jQuery('.geodir-listing-search').attr('action', jQuery(this).find('option:selected').attr('opt_label'));									  
-		//window.location = jQuery(this).find('option:selected').attr('opt_label');
-	});
-});
 
 /* Show Hide Filters End*/
 /* Hide Pinpoint If Listing MAP Not On Page*/
