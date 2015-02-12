@@ -499,6 +499,9 @@ transition: all 0.5s ease;
 section.widget{margin-bottom:20px;}
 .geodir_full_page section.widget{margin-bottom:0px;padding:0px;}
 /* GD > Popular post categories */
+.geodir-hide {
+	display: none;
+}
 .geodir-popular-cat-list{
 margin:0px;}
 .geodir-popular-cat-list li{clear:none;}

@@ -299,9 +299,7 @@ if ( ! ( function_exists( 'geodir_home_map_add_script' ) ) ) {
 
 function geodir_popular_category_add_scripts() {
 	?>
-	<style>.geodir-hide {
-			display: none
-		}</style>
+
 	<script type="text/javascript">
 		jQuery(function ($) {
 			$('.geodir-showcat').click(function () {

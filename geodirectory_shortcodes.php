@@ -28,6 +28,7 @@ function geodir_sc_add_listing( $atts ) {
 
 add_shortcode( 'homepage_map', 'geodir_sc_home_map' );
 function geodir_sc_home_map( $atts ) {
+	ob_start();
 	$defaults = array(
 		'width'          => '960',
 		'height'         => '425',
@@ -65,11 +66,17 @@ function geodir_sc_home_map( $atts ) {
 	geodir_draw_map( $map_args );
 
 	add_action( 'wp_footer', 'geodir_home_map_add_script', 100 );
+
+	$output = ob_get_contents();
+
+	ob_end_clean();
+
+	return $output;
 }
 
 add_shortcode( 'listing_map', 'geodir_sc_listing_map' );
 function geodir_sc_listing_map( $atts ) {
-
+	ob_start();
 	add_action( 'wp_head', 'init_listing_map_script' ); // Initialize the map object and marker array
 
 	add_action( 'the_post', 'create_list_jsondata' ); // Add marker in json array
@@ -141,10 +148,17 @@ function geodir_sc_listing_map( $atts ) {
 	$map_args['bubble_size']       = 'small';
 
 	geodir_draw_map( $map_args );
+
+	$output = ob_get_contents();
+
+	ob_end_clean();
+
+	return $output;
 }
 
 add_shortcode( 'listing_slider', 'geodir_sc_listing_slider' );
 function geodir_sc_listing_slider( $atts ) {
+	ob_start();
 	$defaults = array(
 		'post_type'          => 'gd_place',
 		'category'           => '0',
@@ -303,10 +317,17 @@ function geodir_sc_listing_slider( $atts ) {
 	<?php
 	} // End if not empty $results
 	wp_reset_query();
+
+	$output = ob_get_contents();
+
+	ob_end_clean();
+
+	return $output;
 }
 
 add_shortcode( 'login_box', 'geodir_sc_login_box' );
 function geodir_sc_login_box( $atts ) {
+	ob_start();
 	// @todo: Extract most of this into a set of re-usable functions so it's not duplicated with the widget
 	if ( is_user_logged_in() ) {
 		global $current_user;
@@ -450,69 +471,41 @@ function geodir_sc_login_box( $atts ) {
 		</form>
 	<?php
 	}
+
+	$output = ob_get_contents();
+
+	ob_end_clean();
+
+	return $output;
 }
 
 add_shortcode( 'popular_post_category', 'geodir_sc_popular_post_category' );
 function geodir_sc_popular_post_category( $atts ) {
+	ob_start();
 	global $geodir_post_category_str;
 	$defaults = array(
 		'category_limit' => 15,
+		'before_widget'=> '',
+		'after_widget'=> '',
+		'before_title'=> '',
+		'after_title'=> '',
+		'title'=> '',
 	);
 
-	$params = shortcode_atts( $defaults, $atts );
-
+	$params = shortcode_atts( $defaults, $atts ,'popular_post_category');
 	$params['category_limit'] = absint( $params['category_limit'] );
+	geodir_popular_post_category_output($params,$params);
 
-	if ( 0 === $params['category_limit'] ) {
-		$params['category_limit'] = 15;
-	}
+	$output = ob_get_contents();
 
-	$gd_post_type = geodir_get_current_posttype();
+	ob_end_clean();
 
-	$taxonomy = geodir_get_taxonomies( $gd_post_type );
-
-	$terms = get_terms( $taxonomy );
-
-	if ( ! empty( $terms ) ) {
-		?>
-		<div class="geodir-category-list-in clearfix">
-		<div class="geodir-cat-list clearfix">
-			<?php
-			echo '<ul class="geodir-popular-cat-list">';
-
-			$cat_count                = 0;
-			$geodir_post_category_str = array();
-
-			foreach ( $terms as $cat ) {
-				$cat_count ++;
-
-				$taxonomy_obj = get_taxonomy( $cat->taxonomy );
-				$post_type    = $taxonomy_obj->object_type[0];
-
-				$geodir_post_category_str[] = array( 'posttype' => $post_type, 'termid' => $cat->term_id );
-
-				$class_row  = $cat_count > $params['category_limit'] ? 'geodir-pcat-hide geodir-hide' : 'geodir-pcat-show';
-				$total_post = 0;
-
-				echo '<li class="' . $class_row . '"><a href="' . get_term_link( $cat, $cat->taxonomy ) . '"><i class="fa fa-caret-right"></i> ';
-				echo ucwords( $cat->name ) . ' (<span class="geodir_term_class geodir_link_span geodir_category_class_' . $post_type . '_' . $cat->term_id . '" >' . $total_post . '</span>) ';
-				echo '</a></li>';
-			}
-			echo '</ul>';
-			?>
-		</div>
-		<?php
-		if ( $cat_count > $params['category_limit'] ) {
-			echo '<a href="javascript:void(0)" class="geodir-morecat geodir-showcat">' . __( 'More Categories', GEODIRECTORY_TEXTDOMAIN ) . '</a>';
-			echo '<a href="javascript:void(0)" class="geodir-morecat geodir-hidecat geodir-hide">' . __( 'Less Categories', GEODIRECTORY_TEXTDOMAIN ) . '</a>';
-			/* add scripts */
-			add_action( 'wp_footer', 'geodir_popular_category_add_scripts', 100 );
-		}
-	}
+	return $output;
 }
 
 add_shortcode( 'popular_post_view', 'geodir_sc_popular_post_view' );
 function geodir_sc_popular_post_view( $atts ) {
+	ob_start();
 	$defaults = array(
 		'post_type'             => 'gd_place',
 		'category'              => '0',
@@ -721,10 +714,16 @@ function geodir_sc_popular_post_view( $atts ) {
 		</div>
 	<?php
 	}
+	$output = ob_get_contents();
+
+	ob_end_clean();
+
+	return $output;
 }
 
 add_shortcode( 'recent_reviews', 'geodir_sc_recent_reviews' );
 function geodir_sc_recent_reviews( $atts ) {
+	ob_start();
 	$defaults = array(
 		'count' => 5,
 	);
@@ -745,10 +744,16 @@ function geodir_sc_recent_reviews( $atts ) {
 		</div>
 	<?php
 	}
+	$output = ob_get_contents();
+
+	ob_end_clean();
+
+	return $output;
 }
 
 add_shortcode( 'related_listings', 'geodir_sc_related_listings' );
 function geodir_sc_related_listings( $atts ) {
+	ob_start();
 	$defaults = array(
 		'post_number'         => 5,
 		'relate_to'           => 'category',
@@ -801,10 +806,21 @@ function geodir_sc_related_listings( $atts ) {
 	if ( $related_display = geodir_related_posts_display( $params ) ) {
 		echo $related_display;
 	}
+	$output = ob_get_contents();
+
+	ob_end_clean();
+
+	return $output;
 }
 
 add_shortcode( 'advanced_search', 'geodir_sc_advanced_search' );
 function geodir_sc_advanced_search( $atts ){
+	ob_start();
 	geodir_get_template_part('listing','filter-form');
+	$output = ob_get_contents();
+
+	ob_end_clean();
+
+	return $output;
 }
 

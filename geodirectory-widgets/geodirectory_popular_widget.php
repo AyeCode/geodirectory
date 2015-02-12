@@ -16,117 +16,26 @@ class geodir_popular_post_category extends WP_Widget {
 	
 	
 	function widget( $args, $instance ) {
-		// prints the widget
-		extract( $args, EXTR_SKIP );
-		
-		echo $before_widget;
-		
-		$title = empty( $instance['title'] ) ? __( 'Popular Categories',GEODIRECTORY_TEXTDOMAIN ) : apply_filters( 'widget_title', __( $instance['title'],GEODIRECTORY_TEXTDOMAIN ) );
-		
-		global $wpdb, $plugin_prefix, $geodir_post_category_str;
-			
-		$gd_post_type = geodir_get_current_posttype();
-		/*
-		if($gd_post_type):
-			$post_type_info = get_post_type_object( $gd_post_type );
-			$single_name = $post_type_info->labels->singular_name;
-			$title = __('Popular',GEODIRECTORY_TEXTDOMAIN).' '.$single_name. __(' Categories',GEODIRECTORY_TEXTDOMAIN);
-		endif;
-		*/
-		$taxonomy = geodir_get_taxonomies( $gd_post_type );
-			
-		$args = array(
-					'orderby'       => 'count', 
-					'order'			=> 'DESC',
-					'pad_counts'  	=> true
-				); 
-		$terms = get_terms( $taxonomy );
-		$categ_limit = isset( $instance['categ_limit'] ) && $instance['categ_limit']>0 ? (int)$instance['categ_limit'] : 15;
-		
-		if( !empty( $terms ) ) {
-		?>
-			<div class="geodir-category-list-in clearfix">
-				<div class="geodir-cat-list clearfix">
-			<?php
-			$identifier = 'geodir-' . substr( md5( microtime() ), 0, 6 );
-			echo $before_title . __( $title ) . $after_title;
-			echo '<ul class="geodir-popular-cat-list">';
-			  
-			$cat_count = 0;
-			$geodir_post_category_str = array();
-			
-			foreach( $terms as $cat ) {
-				$cat_count++;
-				
-				$taxonomy_obj = get_taxonomy( $cat->taxonomy );
-				$post_type = $taxonomy_obj->object_type[0];
-				
-				$geodir_post_category_str[] = array( 'posttype' => $post_type, 'termid' => $cat->term_id );
-				
-				$class_row = $cat_count > $categ_limit ? 'geodir-pcat-hide geodir-hide' : 'geodir-pcat-show';
-				$total_post =  0;
-						
-				echo '<li class="' . $class_row . '"><a href="' . get_term_link( $cat, $cat->taxonomy ) . '"><i class="fa fa-caret-right"></i> ';
-				echo ucwords( $cat->name ) . ' (<span class="geodir_term_class geodir_link_span geodir_category_class_' . $post_type . '_' . $cat->term_id . '" >' . $total_post . '</span>) ';							
-				echo '</a></li>';
-			}
-			echo '</ul>';
-			 ?>
-			</div> 
-		<?php
-			if( $cat_count > $categ_limit ) {
-				echo '<a href="javascript:void(0)" class="geodir-morecat geodir-showcat">' . __( 'More Categories', GEODIRECTORY_TEXTDOMAIN ) . '</a>';
-				echo '<a href="javascript:void(0)" class="geodir-morecat geodir-hidecat geodir-hide">' . __( 'Less Categories', GEODIRECTORY_TEXTDOMAIN ) . '</a>';
-				/* add scripts */
-				add_action( 'wp_footer', array($this, 'geodir_popular_category_add_scripts'), 100 );
-			}
-			
-			?>
-			</div>
-		<?php
-			
-		}
-		echo $after_widget;
+		geodir_popular_post_category_output($args,$instance);
 	}
-	
-	function geodir_popular_category_add_scripts() {
-		?>
-<style>.geodir-hide{display:none}</style>
-<script type="text/javascript">
-jQuery(function($){
-	$('.geodir-showcat').click(function(){
-		var objCat = $(this).parents('.geodir-category-list-in');
-		$(objCat).find('li.geodir-pcat-hide').removeClass('geodir-hide');
-		$(objCat).find('a.geodir-showcat').addClass('geodir-hide');
-		$(objCat).find('a.geodir-hidecat').removeClass('geodir-hide');
-	});
-	$('.geodir-hidecat').click(function(){
-		var objCat = $(this).closest('.geodir-category-list-in');
-		$(objCat).find('li.geodir-pcat-hide').addClass('geodir-hide');
-		$(objCat).find('a.geodir-hidecat').addClass('geodir-hide');
-		$(objCat).find('a.geodir-showcat').removeClass('geodir-hide');
-	});
-});
-</script>
-		<?php
-	}
+
 	
 	function update($new_instance, $old_instance) {
 		//save the widget
 		$instance = $old_instance;
 		$instance['title'] = strip_tags( $new_instance['title'] );
-		$categ_limit = (int)$new_instance['categ_limit'];
-		$instance['categ_limit'] = $categ_limit > 0 ? $categ_limit : 15; 
+		$categ_limit = (int)$new_instance['category_limit'];
+		$instance['category_limit'] = $category_limit > 0 ? $category_limit : 15;
 		return $instance;
 	}
 	
 	function form( $instance ) {
 		//widgetform in backend
-		$instance = wp_parse_args( (array)$instance, array( 'title' => '', 'categ_limit' => 15 ) );
+		$instance = wp_parse_args( (array)$instance, array( 'title' => '', 'category_limit' => 15 ) );
 		
 		$title = strip_tags($instance['title']);
-		$categ_limit = (int)$instance['categ_limit'];
-		$categ_limit = $categ_limit > 0 ? $categ_limit : 15; 
+		$category_limit = (int)$instance['category_limit'];
+		$category_limit = $category_limit > 0 ? $category_limit : 15;
 		?>
         <p>
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', GEODIRECTORY_TEXTDOMAIN );?>
@@ -134,8 +43,8 @@ jQuery(function($){
 			</label>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'categ_limit' ); ?>"><?php _e( 'Customize categories count to appear by default:', GEODIRECTORY_TEXTDOMAIN );?>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'categ_limit' ); ?>" name="<?php echo $this->get_field_name( 'categ_limit' ); ?>" type="text" value="<?php echo (int)esc_attr( $categ_limit );?>" />
+			<label for="<?php echo $this->get_field_id( 'category_limit' ); ?>"><?php _e( 'Customize categories count to appear by default:', GEODIRECTORY_TEXTDOMAIN );?>
+			<input class="widefat" id="<?php echo $this->get_field_id( 'category_limit' ); ?>" name="<?php echo $this->get_field_name( 'category_limit' ); ?>" type="text" value="<?php echo (int)esc_attr( $category_limit );?>" />
 			<p class="description" style="padding:0"><?php _e( 'After categories count reaches this limit option More Categories / Less Categoris will be displayed to show/hide categories. Default: 15', GEODIRECTORY_TEXTDOMAIN );?></p>
 			</label>
 		</p>
