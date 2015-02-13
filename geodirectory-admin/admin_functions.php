@@ -1468,13 +1468,13 @@ function gd_showStatusMsg() {
             </div>
           </div>
         </div>
-        <span id="upload-error" style="display:none"></span> <span class="description"></span><br />
+        <span id="<?php echo $id; ?>upload-error" style="display:none"></span> <span class="description"></span><br />
         <div class="gd_csv_button_div" style="display:none;">
           <input type="hidden" class="geodir_import_file" name="geodir_import_file" value="save" />
           <input onclick="gdPrepareImport()" type="button" value="<?php echo CSV_IMPORT_DATA; ?>" id="gd_import_data" class="button-primary" name="save">
 		  <input onclick="gdContinueImport()" type="button" value="Continue Import Data" id="gd_continue_data" class="button-primary" style="display:none" />
-		  <input type="button" value="<?php echo 'Terminate Import Data'; ?>" id="gd_stop_import" class="button-primary" name="gd_stop_import" style="display:none" onclick="gdTerminateImport()" />
-		  <div id="gd_process_data" style="display:none"><span class="spinner" style="display:inline-block;margin:0 5px 0 5px;float:left"></span>Wait, processing import data...</div>
+		  <input type="button" value="<?php _e( "Terminate Import Data", GEODIRECTORY_TEXTDOMAIN );?>" id="gd_stop_import" class="button-primary" name="gd_stop_import" style="display:none" onclick="gdTerminateImport()" />
+		  <div id="gd_process_data" style="display:none"><span class="spinner" style="display:inline-block;margin:0 5px 0 5px;float:left"></span><?php _e( "Wait, processing import data...", GEODIRECTORY_TEXTDOMAIN );?></div>
         </div>
 		<div id="gd_importer" style="display:none">
 		  <input type="hidden" id="gd_tmpcount" value="0" />
@@ -1490,7 +1490,7 @@ function gd_showStatusMsg() {
 		  <input type="hidden" id="gd_invalid_title" value="0" />
 		  <input type="hidden" id="gd_total_records" value="0" />
 		</div>
-		<div class="gd-import-progress" id="gd-import-progress" style="display:none"><div class="gd-import-file"><b>Import Data Status : </b><font id="gd-import-done">0</font> / <font id="gd-import-total">0</font>&nbsp;( <font id="gd-import-perc">0%</font> )<div class="gd-fileprogress"></div></div></div>
+		<div class="gd-import-progress" id="gd-import-progress" style="display:none"><div class="gd-import-file"><b><?php _e( "Import Data Status :", GEODIRECTORY_TEXTDOMAIN );?> </b><font id="gd-import-done">0</font> / <font id="gd-import-total">0</font>&nbsp;( <font id="gd-import-perc">0%</font> )<div class="gd-fileprogress"></div></div></div>
 		<div class="gd-import-msg" id="gd-import-msg" style="display:none"><div id="message" class="message fade"></div></div>
 		</td>
     </tr>

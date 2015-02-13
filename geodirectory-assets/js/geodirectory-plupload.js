@@ -48,7 +48,7 @@ jQuery(document).ready(function($) {
  			uploader.bind('Error', function(up, files){
 			if(files.code == -600){	
 			jQuery('#'+imgId+'upload-error').addClass('upload-error');
-			jQuery('#'+imgId+'upload-error').html(files.message+ ' : You tried to upload a image over '+ gd_plupload.upload_img_size);
+			jQuery('#'+imgId+'upload-error').html(files.message+ ' : You tried to upload a file over '+ gd_plupload.upload_img_size);
 			}
 			else{
 			jQuery('#'+imgId+'upload-error').addClass('upload-error');

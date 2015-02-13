@@ -168,7 +168,7 @@ function geodir_add_new_location( $location_info = array())
 		$location_lat	= ($location_info['geo_lat'] != '') ? $location_info['geo_lat'] : '';
 		$location_lng	= ($location_info['geo_lng'] != '') ? $location_info['geo_lng'] : '';
 		$is_default	= isset($location_info['is_default'])	? $location_info['is_default'] : '';
-		$country_slug = create_location_slug($location_country);
+		$country_slug = create_location_slug( __( $location_country, GEODIRECTORY_TEXTDOMAIN ) );
 		$region_slug = create_location_slug($location_region);
 		$city_slug = create_location_slug($location_city);
 		

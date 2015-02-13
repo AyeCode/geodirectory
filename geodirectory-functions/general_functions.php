@@ -840,8 +840,15 @@ function fetch_remote_file( $url ) {
 }
 
 function geodir_max_upload_size() {
-	//return '2mb'; 
-	return apply_filters('geodir_default_image_upload_size_limit', '2mb');
+	$max_filesize = (float)get_option( 'geodir_upload_max_filesize', 2 );
+		
+	if ( $max_filesize > 0 && $max_filesize < 1 ) {
+		$max_filesize = (int)( $max_filesize * 1024 ) . 'kb';
+	} else {
+		$max_filesize = $max_filesize > 0 ? $max_filesize . 'mb' : '2mb';
+	}
+	
+	return apply_filters( 'geodir_default_image_upload_size_limit', $max_filesize );
 }
 
 /* ------------------------------------------------------------------*/

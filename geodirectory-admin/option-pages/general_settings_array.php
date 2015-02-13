@@ -92,6 +92,14 @@ global $geodir_settings;
 			'type' 		=> 'checkbox',
 			'std' 		=> '0'
 		),
+		array(  
+			'name' => __( 'Maxi upload file size(in mb)', GEODIRECTORY_TEXTDOMAIN ),
+			'desc' 		=> __( '(Maximum upload file size in MB, 1 MB = 1024 KB. Must be greater then 0(ZERO), for ex: 2 )', GEODIRECTORY_TEXTDOMAIN ),
+			'id' 		=> 'geodir_upload_max_filesize',
+			'type' 		=> 'text',
+			'css' 		=> 'min-width:300px;',
+			'std' 		=> '2'
+		),
 		/*array(  
 			'name' => __( 'Disable standard place taxonomie?', GEODIRECTORY_TEXTDOMAIN ),
 			'desc' 		=> __( 'Yes', GEODIRECTORY_TEXTDOMAIN ),

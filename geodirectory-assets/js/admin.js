@@ -114,6 +114,12 @@ jQuery(document).ready(function(){
 		location_validation(jQuery(this));
 	});
 	
+	jQuery('.gd-cats-display-checkbox input[type="checkbox"]').click(function(){
+		var isChecked = jQuery(this).is(':checked');
+		var chkVal = jQuery(this).val();
+		jQuery(this).closest('.gd-parent-cats-list').find('.gd-cat-row-'+chkVal+' input[type="checkbox"]').prop("checked", isChecked);
+	});
+	
 });
 /* Check Uncheck All Related Options End*/
 
