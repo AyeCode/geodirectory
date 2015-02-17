@@ -5,7 +5,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 require_once( 'geodirectory-functions/shortcode_functions.php' );
 
-add_shortcode( 'add_listing', 'geodir_sc_add_listing' );
+add_shortcode( 'gd_add_listing', 'geodir_sc_add_listing' );
 function geodir_sc_add_listing( $atts ) {
 	ob_start();
 	$defaults = array(
@@ -50,7 +50,7 @@ function geodir_sc_add_listing( $atts ) {
 	return $output;
 }
 
-add_shortcode( 'homepage_map', 'geodir_sc_home_map' );
+add_shortcode( 'gd_homepage_map', 'geodir_sc_home_map' );
 function geodir_sc_home_map( $atts ) {
 	ob_start();
 	$defaults = array(
@@ -98,7 +98,7 @@ function geodir_sc_home_map( $atts ) {
 	return $output;
 }
 
-add_shortcode( 'listing_map', 'geodir_sc_listing_map' );
+add_shortcode( 'gd_listing_map', 'geodir_sc_listing_map' );
 function geodir_sc_listing_map( $atts ) {
 	ob_start();
 	add_action( 'wp_head', 'init_listing_map_script' ); // Initialize the map object and marker array
@@ -180,7 +180,7 @@ function geodir_sc_listing_map( $atts ) {
 	return $output;
 }
 
-add_shortcode( 'listing_slider', 'geodir_sc_listing_slider' );
+add_shortcode( 'gd_listing_slider', 'geodir_sc_listing_slider' );
 function geodir_sc_listing_slider( $atts ) {
 	ob_start();
 	$defaults = array(
@@ -289,7 +289,7 @@ function geodir_sc_listing_slider( $atts ) {
 	return $output;
 }
 
-add_shortcode( 'login_box', 'geodir_sc_login_box' );
+add_shortcode( 'gd_login_box', 'geodir_sc_login_box' );
 function geodir_sc_login_box( $atts ) {
 	ob_start();
 
@@ -309,7 +309,7 @@ function geodir_sc_login_box( $atts ) {
 	return $output;
 }
 
-add_shortcode( 'popular_post_category', 'geodir_sc_popular_post_category' );
+add_shortcode( 'gd_popular_post_category', 'geodir_sc_popular_post_category' );
 function geodir_sc_popular_post_category( $atts ) {
 	ob_start();
 	global $geodir_post_category_str;
@@ -333,7 +333,7 @@ function geodir_sc_popular_post_category( $atts ) {
 	return $output;
 }
 
-add_shortcode( 'popular_post_view', 'geodir_sc_popular_post_view' );
+add_shortcode( 'gd_popular_post_view', 'geodir_sc_popular_post_view' );
 function geodir_sc_popular_post_view( $atts ) {
 	ob_start();
 	$defaults = array(
@@ -428,7 +428,7 @@ function geodir_sc_popular_post_view( $atts ) {
 	return $output;
 }
 
-add_shortcode( 'recent_reviews', 'geodir_sc_recent_reviews' );
+add_shortcode( 'gd_recent_reviews', 'geodir_sc_recent_reviews' );
 function geodir_sc_recent_reviews( $atts ) {
 	ob_start();
 	$defaults = array(
@@ -458,7 +458,7 @@ function geodir_sc_recent_reviews( $atts ) {
 	return $output;
 }
 
-add_shortcode( 'related_listings', 'geodir_sc_related_listings' );
+add_shortcode( 'gd_related_listings', 'geodir_sc_related_listings' );
 function geodir_sc_related_listings( $atts ) {
 	ob_start();
 	$defaults = array(
@@ -520,7 +520,7 @@ function geodir_sc_related_listings( $atts ) {
 	return $output;
 }
 
-add_shortcode( 'advanced_search', 'geodir_sc_advanced_search' );
+add_shortcode( 'gd_advanced_search', 'geodir_sc_advanced_search' );
 function geodir_sc_advanced_search( $atts ){
 	ob_start();
 	geodir_get_template_part('listing','filter-form');
