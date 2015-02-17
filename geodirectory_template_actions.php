@@ -499,7 +499,7 @@ echo '<header class="'.$class_header.'"><h1 class="'.$class.'">'.stripslashes(ge
 add_action( 'geodir_details_slider', 'geodir_action_details_slider', 10, 1 );
 function geodir_action_details_slider() {
 	global $preview, $post;
-	
+
 	$is_backend_preview = ( is_single() && !empty( $_REQUEST['post_type'] ) && !empty( $_REQUEST['preview'] ) && !empty( $_REQUEST['p'] ) ) && is_super_admin() ? true : false; // preview from backend
 	
 	if ( $is_backend_preview && !empty( $post ) && !empty( $post->ID ) && !isset( $post->post_images ) ) {
@@ -549,11 +549,11 @@ function geodir_action_details_slider() {
 			foreach ( $post_images as $image ) {
 				if ( !empty( $image ) ) {
 					@list( $width, $height ) = getimagesize( trim( $image ) );
-		
+
 					if ( $image && $width && $height ) {
-						$image = (object)array( 'src' => $image, 'width' => $width, 'height' => $height ); 
+						$image = (object)array( 'src' => $image, 'width' => $width, 'height' => $height );
 					}
-					
+
 					if( isset( $image->src ) ) {
 						if ( $image->height >= 400 ) {
 							$spacer_height = 0;
@@ -1160,6 +1160,7 @@ $class = apply_filters( 'geodir_page_title_class', 'entry-title fn' );?>
 add_action( 'geodir_add_listing_form', 'geodir_action_add_listing_form',10);
 function geodir_action_add_listing_form(){
 global $cat_display,$post_cat, $current_user;
+	$page_id = get_the_ID();
  $post = '';
  $title = '';
  $desc = '';
@@ -1214,7 +1215,8 @@ global $cat_display,$post_cat, $current_user;
 	?>
 <form name="propertyform" id="propertyform" action="<?php echo get_page_link(get_option('geodir_preview_page'));?>" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="preview" value="<?php echo $listing_type;?>" />
-                <input type="hidden" name="listing_type" value="<?php echo $listing_type;?>" />
+				<input type="hidden" name="listing_type" value="<?php echo $listing_type;?>" />
+			<?php if($page_id){?><input type="hidden" name="add_listing_page_id" value="<?php echo $page_id;?>" /><?php }?>
                	<?php if(isset($_REQUEST['pid']) && $_REQUEST['pid'] !='') { ?>
                 <input type="hidden" name="pid" value="<?php echo $_REQUEST['pid'];?>" />
                 <?php } ?>

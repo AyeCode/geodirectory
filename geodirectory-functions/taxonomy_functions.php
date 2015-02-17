@@ -503,7 +503,7 @@ function geodir_custom_taxonomy_walker($cat_taxonomy, $cat_parent = 0,$hide_empt
 		}					
 		
 		if($cat_display == 'checkbox' || $cat_display == 'radio') {
-			$p = 20;
+			$p = 0;
 			$out = '<div class="'.$list_class.' gd-cat-row-' . $cat_parent . '" style="margin-left:'.$p.'px;'.$display.';">';
 		}
 		 
@@ -1240,7 +1240,8 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
 function geodir_term_link($termlink, $term, $taxonomy) 
 {
   	$geodir_taxonomies = geodir_get_taxonomies('',true);
-	if(isset($taxonomy) && in_array($taxonomy,$geodir_taxonomies)){
+
+	if(isset($taxonomy) && !empty($geodir_taxonomies) && in_array($taxonomy,$geodir_taxonomies)){
 		global $geodir_add_location_url;
 		$include_location = false;
 		$request_term = array();

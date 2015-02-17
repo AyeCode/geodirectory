@@ -61,9 +61,13 @@ ob_start()// start publish listing form buffering
 					}elseif(isset($_REQUEST['pid'])){
 						$post_id = $_REQUEST['pid'];
 					}
-					$postlink = get_permalink( get_option('geodir_add_listing_page') );
+
+				  if(isset($_REQUEST['add_listing_page_id']) ) {$page_id =$_REQUEST['add_listing_page_id'];}
+				  else{$page_id = get_option( 'geodir_add_listing_page' );}
+
+					$postlink = get_permalink( $page_id );
 					$postlink = geodir_getlink($postlink,array('pid'=>$post_id,'backandedit'=>'1','listing_type'=>$post_type),false);
-					
+
 					ob_start(); // start go back and edit / cancel buffering		 
             ?>
             <a href="<?php echo $postlink;?>" class="geodir_goback" ><?php echo PRO_BACK_AND_EDIT_TEXT;?></a>

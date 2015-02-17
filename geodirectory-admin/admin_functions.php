@@ -7,6 +7,9 @@ function geodir_deactivation() {
 	
 	// Update installed variable
 	update_option( "geodir_installed", 0 );
+	
+	// Remove rewrite rules and then recreate rewrite rules.
+	flush_rewrite_rules();
 }
 
 
@@ -636,7 +639,7 @@ function geodir_default_taxonomies()
  * Updates the options on the geodirectory settings pages. Returns true if saved.
  */
 function geodir_update_options($options, $dummy = false) {
-    
+	//print_r($_POST);exit;
    	if((!isset($_POST) || !$_POST) && !$dummy) return false;
    
   	foreach ($options as $value) {
@@ -707,7 +710,21 @@ function geodir_update_options($options, $dummy = false) {
 				
 						
 		elseif (isset($value['type']) && $value['type']=='file') :
-				
+
+
+				if(isset($_POST[$value['id'].'_remove']) && $_POST[$value['id'].'_remove']){// if remove is set then remove the file
+
+					if(get_option($value['id'])){
+						$image_name_arr = explode('/',get_option($value['id']));
+						$noimg_name = end($image_name_arr);
+						$img_path = $uploads['path'].'/'.$noimg_name;
+						if( file_exists($img_path) )
+							unlink($img_path);
+					}
+
+					update_option($value['id'],'');
+				}
+
 				$uploadedfile = isset($_FILES[$value['id']]) ? $_FILES[$value['id']] : '';
 				$filename = isset($_FILES[$value['id']]['name']) ? $_FILES[$value['id']]['name'] : '';
 				
@@ -2018,7 +2035,10 @@ function geodir_admin_fields($options){
 					<th scope="row" class="titledesc"><?php echo $value['name']; ?></th>
                     <td class="forminp">
                     <input type="file" name="<?php echo esc_attr( $value['id'] ); ?>" id="<?php echo esc_attr( $value['id'] ); ?>" style="<?php echo esc_attr( $value['css'] ); ?>" class="<?php if (isset($value['class'])) echo $value['class']; ?>" />
-                    <?php if(get_option($value['id'])){ ?>	<span class="description"> <?php $uploads = wp_upload_dir(); ?> <a href="<?php echo get_option($value['id']); ?>" target="_blank"><?php echo get_option($value['id']); ?></a></span>
+                    <?php if(get_option($value['id'])){ ?>
+						<input type="hidden" name="<?php echo esc_attr( $value['id'] ); ?>_remove"  id="<?php echo esc_attr( $value['id'] ); ?>_remove" value="0">
+						<span class="description"> <?php $uploads = wp_upload_dir(); ?> <a href="<?php echo get_option($value['id']); ?>" target="_blank"><?php echo get_option($value['id']); ?></a> <i title="<?php _e('remove file (set to empty)', GEODIRECTORY_TEXTDOMAIN);?>" onclick="jQuery('#<?php echo esc_attr( $value['id'] ); ?>_remove').val('1'); jQuery( this ).parent().text('<?php _e('save to remove file', GEODIRECTORY_TEXTDOMAIN);?>');" class="fa fa-times gd-remove-file" ></i></span>
+
                     <?php } ?>
                     </td>
                 </tr><?php

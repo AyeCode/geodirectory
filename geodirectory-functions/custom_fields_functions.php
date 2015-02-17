@@ -2330,6 +2330,7 @@ function geodir_show_listing_info($fields_location=''){
 						
 				break;
 				
+
 				case 'file':
 					$html_var = $type['htmlvar_name'];
 						

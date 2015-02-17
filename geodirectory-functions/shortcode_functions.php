@@ -180,7 +180,7 @@ function gdsc_listing_loop_filter( $query ) {
 }
 
 function gdsc_manage_category_choice( $post_type, $category ) {
-	if ( 0 != $category && '' != $category ) {
+	if ( 0 == $category || '' == $category ) {
 		return '';
 	}
 
@@ -190,13 +190,13 @@ function gdsc_manage_category_choice( $post_type, $category ) {
 
 	$taxonomies = geodir_get_taxonomies( $post_type );
 
-	$categories = get_categories( array( 'taxonomy' => $taxonomies[0] ) );
+	$categories = get_terms( array( 'taxonomy' => $taxonomies[0] ) );
 
 	$cat_id = 0;
 
 	foreach ( $categories as $cat ) {
 		if ( is_numeric( $category ) ) {
-			if ( absint( $category ) === $cat->term_id ) {
+			if ( absint( $category ) == $cat->term_id ) {
 				$cat_id = $cat->term_id;
 				break;
 			}
@@ -325,6 +325,7 @@ function gdsc_validate_layout_choice( $layout_choice ) {
 		case 'one';
 		case 'one_column';
 		case 'onecolumn';
+		case '1';
 			$layout_choice = 'list';
 			break;
 		case 'gridview_onehalf';
@@ -333,6 +334,7 @@ function gdsc_validate_layout_choice( $layout_choice ) {
 		case 'two_columns';
 		case 'twocolumn';
 		case 'twocolumns';
+		case '2';
 			$layout_choice = 'gridview_onehalf';
 			break;
 		case 'gridview_onethird';
@@ -341,6 +343,7 @@ function gdsc_validate_layout_choice( $layout_choice ) {
 		case 'three_columns';
 		case 'threecolumn';
 		case 'threecolumns';
+		case '3';
 			$layout_choice = 'gridview_onethird';
 			break;
 		case 'gridview_onefourth';
@@ -349,6 +352,7 @@ function gdsc_validate_layout_choice( $layout_choice ) {
 		case 'four_columns';
 		case 'fourcolumn';
 		case 'fourcolumns';
+		case '4';
 			$layout_choice = 'gridview_onefourth';
 			break;
 		case 'gridview_onefifth';
@@ -357,6 +361,7 @@ function gdsc_validate_layout_choice( $layout_choice ) {
 		case 'five_columns';
 		case 'fivecolumn';
 		case 'fivecolumns';
+		case '5';
 			$layout_choice = 'gridview_onefifth';
 			break;
 		default:
