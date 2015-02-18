@@ -81,7 +81,7 @@ function geodir_save_listing( $request_info = array(), $dummy = false ) {
 	
 	// Check if we need to save post location as new location 
 	$location_result = geodir_get_default_location();
-	
+
 	if ($location_result->location_id > 0 ) {
 		if ( isset( $request_info['post_city'] ) && isset( $request_info['post_region'] ) ) {
 			$request_info['post_location'] = array( 
@@ -172,7 +172,7 @@ function geodir_save_listing( $request_info = array(), $dummy = false ) {
 						
 		$payment_info = array();	
 		$package_info = array();
-		
+
 		$package_info = (array)geodir_post_package_info( $package_info ,$post );
 		
 		$post_package_id = geodir_get_post_meta($last_post_id,'package_id');
@@ -202,7 +202,7 @@ function geodir_save_listing( $request_info = array(), $dummy = false ) {
 		{
 			$prefix = $name.'_';
 			$address = $prefix.'address';
-			
+
 			if(isset($request_info[$address]) && $request_info[$address] != '')
 			{ $gd_post_info[$address] = $request_info[$address]; }
 			
@@ -229,13 +229,13 @@ function geodir_save_listing( $request_info = array(), $dummy = false ) {
 				
 					//----------set post locations when import dummy data-------
 					$location_result = geodir_get_default_location();
-					
+
 					$gd_post_info['post_locations'] =  '['.$location_result->city_slug.'],['.$location_result->region_slug.'],['.$location_result->country_slug.']'; // set all overall post location
 					//-----------------------------------------------------------------
 					
 				}
-				
-				
+
+
 				if(isset($extrafields['show_zip']) && $extrafields['show_zip'] && isset($request_info[$prefix.'zip']))
 				{ $gd_post_info[$prefix.'zip'] = $request_info[$prefix.'zip']; }
 

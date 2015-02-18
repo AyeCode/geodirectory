@@ -223,6 +223,9 @@ body.edit-tags-php .form-field input, .form-field textarea {width: auto !importa
 .geodir_problem_info{ border:1px #9f9f82 dotted; background:#ffe0c7; font-style:italic; padding:10px;}
 
 .geodir_noproblem_info{ border:1px #9f9f82 dotted; background:#d8ffdc; font-style:italic; padding:10px;}
+
+
+.gd-remove-file{color: #FF0000;cursor: pointer;}
 /***********************---------------MEDIA CSS-------------*****************************/
 
 @media screen and (min-width:860px) and (max-width:960px)

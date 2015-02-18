@@ -57,6 +57,13 @@ jQuery(document).ready(function() {
 			allow_single_deselect: 'true'
 		});
 	}
+	
+	jQuery('.gd-cats-display-checkbox input[type="checkbox"]').click(function(){
+		var isChecked = jQuery(this).is(':checked');
+		var chkVal = jQuery(this).val();
+		jQuery(this).closest('.gd-parent-cats-list').find('.gd-cat-row-'+chkVal+' input[type="checkbox"]').prop("checked", isChecked);
+	});
+	
 });
 
 jQuery(document).ready(function(){

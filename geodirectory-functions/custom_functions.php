@@ -589,13 +589,16 @@ function geodir_add_meta_keywords()
 		while(have_posts()) {
 			the_post();
 			
-			if (has_excerpt()) {
-				$out_excerpt = str_replace(array("\r\n", "\r", "\n"), "", get_the_excerpt());
+			if ( has_excerpt() ) {
+				$out_excerpt = str_replace( array( "\r\n", "\r", "\n" ), "", $out_excerpt );
+				$out_excerpt = strip_tags( do_shortcode( get_the_excerpt() ) );
 			} else {
-				$out_excerpt = str_replace(array("\r\n", "\r", "\n"), "", substr($post->post_content,0,160));
+				$out_excerpt = str_replace( array( "\r\n", "\r", "\n" ), "", $post->post_content );
+				$out_excerpt = strip_tags( do_shortcode( $out_excerpt ) ); // parse short code from content
+				$out_excerpt = trim( wp_trim_words( $out_excerpt, 35, '' ), '.!?,;:-' );
 			}
 			
-			$meta_desc .= strip_tags($out_excerpt);
+			$meta_desc .= $out_excerpt;
 		}
 	}
 	elseif ((is_category() || is_tag()) && isset($current_term->taxonomy) && in_array($current_term->taxonomy,$geodir_taxonomies) ) {

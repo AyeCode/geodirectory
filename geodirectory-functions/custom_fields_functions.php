@@ -2330,6 +2330,7 @@ function geodir_show_listing_info($fields_location=''){
 						
 				break;
 				
+
 				case 'file':
 					$html_var = $type['htmlvar_name'];
 						
@@ -2763,11 +2764,19 @@ function geodir_get_special_offers($post_id){
 		
 }
 
-if(!function_exists('geodir_max_upload_size')) {
-function geodir_max_upload_size() {
-	//return  '2mb'; 
-	return apply_filters('geodir_default_image_upload_size_limit', '2mb');
-}}
+if (!function_exists( 'geodir_max_upload_size' ) ) {
+	function geodir_max_upload_size() {
+		$max_filesize = (float)get_option( 'geodir_upload_max_filesize', 2 );
+		
+		if ( $max_filesize > 0 && $max_filesize < 1 ) {
+			$max_filesize = (int)( $max_filesize * 1024 ) . 'kb';
+		} else {
+			$max_filesize = $max_filesize > 0 ? $max_filesize . 'mb' : '2mb';
+		}
+		
+		return apply_filters( 'geodir_default_image_upload_size_limit', $max_filesize );
+	}
+}
 
 
 

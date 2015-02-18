@@ -30,13 +30,13 @@ function geodir_is_default_location_set()
 function create_location_slug($location_string) {
 
 	/*$spec_arr = array(
-		'Š'=>'S', 'š'=>'s', 'Ð'=>'Dj','Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 
-		'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E', 'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 
-		'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U', 'Ú'=>'U', 
-		'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss','à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 
-		'å'=>'a', 'æ'=>'a', 'ç'=>'c', 'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 
-		'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o', 'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 
-		'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y', 'ƒ'=>'f'
+		'ï¿½'=>'S', 'ï¿½'=>'s', 'ï¿½'=>'Dj','ï¿½'=>'Z', 'ï¿½'=>'z', 'ï¿½'=>'A', 'ï¿½'=>'A', 'ï¿½'=>'A', 'ï¿½'=>'A', 'ï¿½'=>'A', 
+		'ï¿½'=>'A', 'ï¿½'=>'A', 'ï¿½'=>'C', 'ï¿½'=>'E', 'ï¿½'=>'E', 'ï¿½'=>'E', 'ï¿½'=>'E', 'ï¿½'=>'I', 'ï¿½'=>'I', 'ï¿½'=>'I', 
+		'ï¿½'=>'I', 'ï¿½'=>'N', 'ï¿½'=>'O', 'ï¿½'=>'O', 'ï¿½'=>'O', 'ï¿½'=>'O', 'ï¿½'=>'O', 'ï¿½'=>'O', 'ï¿½'=>'U', 'ï¿½'=>'U', 
+		'ï¿½'=>'U', 'ï¿½'=>'U', 'ï¿½'=>'Y', 'ï¿½'=>'B', 'ï¿½'=>'Ss','ï¿½'=>'a', 'ï¿½'=>'a', 'ï¿½'=>'a', 'ï¿½'=>'a', 'ï¿½'=>'a', 
+		'ï¿½'=>'a', 'ï¿½'=>'a', 'ï¿½'=>'c', 'ï¿½'=>'e', 'ï¿½'=>'e', 'ï¿½'=>'e', 'ï¿½'=>'e', 'ï¿½'=>'i', 'ï¿½'=>'i', 'ï¿½'=>'i', 
+		'ï¿½'=>'i', 'ï¿½'=>'o', 'ï¿½'=>'n', 'ï¿½'=>'o', 'ï¿½'=>'o', 'ï¿½'=>'o', 'ï¿½'=>'o', 'ï¿½'=>'o', 'ï¿½'=>'o', 'ï¿½'=>'u', 
+		'ï¿½'=>'u', 'ï¿½'=>'u', 'ï¿½'=>'y', 'ï¿½'=>'y', 'ï¿½'=>'b', 'ï¿½'=>'y', 'ï¿½'=>'f'
 	);
 	
 	sanitize_title
@@ -168,7 +168,7 @@ function geodir_add_new_location( $location_info = array())
 		$location_lat	= ($location_info['geo_lat'] != '') ? $location_info['geo_lat'] : '';
 		$location_lng	= ($location_info['geo_lng'] != '') ? $location_info['geo_lng'] : '';
 		$is_default	= isset($location_info['is_default'])	? $location_info['is_default'] : '';
-		$country_slug = create_location_slug($location_country);
+		$country_slug = create_location_slug( __( $location_country, GEODIRECTORY_TEXTDOMAIN ) );
 		$region_slug = create_location_slug($location_region);
 		$city_slug = create_location_slug($location_city);
 		
@@ -196,7 +196,7 @@ function geodir_add_new_location( $location_info = array())
 			}
 			
 		}
-		
+
 		if($geodir_location->is_default)	
 			update_option('geodir_default_location', $geodir_location);
 		

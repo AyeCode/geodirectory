@@ -139,14 +139,15 @@ function geodir_get_weeks() {
  **/
 function geodir_is_page($gdpage = ''){
 	
-	global $wp_query;
+	global $wp_query,$post;
 	//if(!is_admin()):
 	
 		switch($gdpage):
 			case 'add-listing':
 					
 					if(is_page() && get_query_var('page_id') == get_option( 'geodir_add_listing_page' ) )
-						return true;
+					{	return true;}
+					elseif(is_page() && isset($post->post_content) && has_shortcode( $post->post_content, 'add_listing' ) ) {return true;}
 				
 			break;
 			case 'preview':
@@ -840,8 +841,15 @@ function fetch_remote_file( $url ) {
 }
 
 function geodir_max_upload_size() {
-	//return '2mb'; 
-	return apply_filters('geodir_default_image_upload_size_limit', '2mb');
+	$max_filesize = (float)get_option( 'geodir_upload_max_filesize', 2 );
+		
+	if ( $max_filesize > 0 && $max_filesize < 1 ) {
+		$max_filesize = (int)( $max_filesize * 1024 ) . 'kb';
+	} else {
+		$max_filesize = $max_filesize > 0 ? $max_filesize . 'mb' : '2mb';
+	}
+	
+	return apply_filters( 'geodir_default_image_upload_size_limit', $max_filesize );
 }
 
 /* ------------------------------------------------------------------*/
@@ -1158,6 +1166,7 @@ function geodir_get_widget_listings( $query_args = array() ) {
 			}
 
 		}
+
 	########### WPML ###########
 	
 	$join = apply_filters( 'geodir_filter_widget_listings_join', $join,$post_type  );
@@ -1280,6 +1289,10 @@ function geodir_function_widget_listings_where( $where ) {
 		
 		if ( !empty( $query_args['with_pics_only'] ) ) {
 			$where .= " AND " . GEODIR_ATTACHMENT_TABLE . ".ID IS NOT NULL ";
+		}
+
+		if ( !empty( $query_args['featured_image_only'] ) ) {
+			$where .= " AND ".$table.".featured_image IS NOT NULL AND ".$table.".featured_image!='' ";
 		}
 		
 		if ( !empty( $query_args['with_videos_only'] ) ) {
@@ -1424,8 +1437,10 @@ add_filter( 'wpseo_canonical', 'geodir_wpseo_homepage_canonical', 10 );
 add_filter( 'aioseop_canonical_url', 'geodir_wpseo_homepage_canonical', 10 );
 
 function geodir_googlemap_script_extra_details_page($extra){
-	
-	if(!str_replace('libraries=places', '', $extra) && geodir_is_page('detail') ){
+	global $post;
+	$add_google_places_api = false;
+	if(isset($post->post_content) && has_shortcode( $post->post_content, 'add_listing' ) ) {$add_google_places_api = true;}
+	if(!str_replace('libraries=places', '', $extra) && (geodir_is_page('detail') || $add_google_places_api) ){
 		$extra .= "&amp;libraries=places";
 	}
 	
@@ -1505,5 +1520,495 @@ function geodir_popular_post_category_output($args='',$instance=''){
 
 }
 
+function geodir_listing_slider_widget_output($args='', $instance='')
+{
+	// prints the widget
+	extract($args, EXTR_SKIP);
+
+	echo $before_widget;
+
+	$title = empty($instance['title']) ? '' : apply_filters('widget_title', __($instance['title'],GEODIRECTORY_TEXTDOMAIN));
+
+	$post_type = empty($instance['post_type']) ? 'gd_place' : apply_filters('widget_post_type', $instance['post_type']);
+
+	$category = empty($instance['category']) ? '0' : apply_filters('widget_category', $instance['category']);
+
+	$post_number = empty($instance['post_number']) ? '5' : apply_filters('widget_post_number', $instance['post_number']);
+
+	$show_title = empty($instance['show_title']) ? '' : apply_filters('widget_show_title', $instance['show_title']);
+
+	$slideshow = empty($instance['slideshow']) ? 0 : apply_filters('widget_slideshow', $instance['slideshow']);
+
+	$animationLoop = empty($instance['animationLoop']) ? 0 : apply_filters('widget_animationLoop', $instance['animationLoop']);
+
+	$directionNav = empty($instance['directionNav']) ? 0 : apply_filters('widget_directionNav', $instance['directionNav']);
+
+	$slideshowSpeed = empty($instance['slideshowSpeed']) ? 5000 : apply_filters('widget_slideshowSpeed', $instance['slideshowSpeed']);
+
+	$animationSpeed = empty($instance['animationSpeed']) ? 600 : apply_filters('widget_animationSpeed', $instance['animationSpeed']);
+
+	$animation = empty( $instance['animation'] ) ? 'slide' : apply_filters( 'widget_animation', $instance['animation'] );
+	$list_sort = empty( $instance['list_sort'] ) ? 'latest' : apply_filters( 'widget_list_sort', $instance['list_sort'] );
+	$show_featured_only = !empty( $instance['show_featured_only'] ) ? 1 : NULL;
+	?>
+	<script type="text/javascript" >
+		jQuery(window).load(function(){
+			jQuery('#geodir_widget_carousel').flexslider({
+				animation: "slide",
+				selector: ".geodir-slides > li",
+				namespace: "geodir-",
+				controlNav: false,
+				directionNav: false,
+				animationLoop: false,
+				slideshow: false,
+				itemWidth: 75,
+				itemMargin: 5,
+				asNavFor: '#geodir_widget_slider',
+				rtl: <?php echo ( is_rtl() ? 'true' : 'false' ); /* fix rtl issue */ ?>
+			});
+
+			jQuery('#geodir_widget_slider').flexslider({
+				animation: "<?php echo $animation;?>",
+				selector: ".geodir-slides > li",
+				namespace: "geodir-",
+				controlNav: true,
+				animationLoop: <?php echo $animationLoop;?>,
+				slideshow: <?php echo $slideshow;?>,
+				slideshowSpeed: <?php echo $slideshowSpeed;?>,
+				animationSpeed: <?php echo $animationSpeed;?>,
+				directionNav: <?php echo $directionNav;?>,
+				sync: "#geodir_widget_carousel",
+				start: function(slider){
+					jQuery('.geodir-listing-flex-loader').hide();
+					jQuery('#geodir_widget_slider').css({'visibility':'visible'});
+					jQuery('#geodir_widget_carousel').css({'visibility':'visible'});
+				},
+				rtl: <?php echo ( is_rtl() ? 'true' : 'false' ); /* fix rtl issue */ ?>
+			});
+		});
+	</script>
+	<?php
+	$query_args = array(
+		'posts_per_page' => $post_number,
+		'is_geodir_loop'=> true,
+		'post_type' => $post_type,
+		'order_by' => $list_sort
+	);
+	if ( $show_featured_only ) {
+		$query_args['show_featured_only'] = 1;
+	}
+
+	if( $category != 0 || $category != '' ) {
+		$category_taxonomy = geodir_get_taxonomies($post_type);
+		$tax_query = array(
+			'taxonomy' => $category_taxonomy[0],
+			'field' => 'id',
+			'terms' => $category
+		);
+
+		$query_args['tax_query'] = array( $tax_query );
+	}
+
+	// we want listings with featured image only
+	$query_args['featured_image_only'] = 1;
+
+	if($post_type=='gd_event'){$query_args['gedir_event_listing_filter'] ='upcoming';}// show only upcomming events
+
+	$widget_listings = geodir_get_widget_listings( $query_args );
+	if ( !empty( $widget_listings ) || $with_no_results ) {
+		if ( $title ) {
+			echo $before_title . $title . $after_title;
+		}
+
+		global $post;
+
+		$current_post = $post;// keep current post info
+
+		$widget_main_slides = '';
+		$nav_slides = '';
+		$widget_slides = 0;
+
+		foreach ( $widget_listings as $widget_listing ) {
+			global $gd_widget_listing_type;
+			$post = $widget_listing;
+			$widget_image = geodir_get_featured_image($post->ID,'thumbnail', get_option('geodir_listing_no_img'));
+
+			if ( !empty( $widget_image ) ) {
+				if ( $widget_image->height >= 200 ) {
+					$widget_spacer_height = 0;
+				} else {
+					$widget_spacer_height = ( ( 200 - $widget_image->height ) / 2 );
+				}
+
+				$widget_main_slides .= '<li class="geodir-listing-slider-widget"><img class="geodir-listing-slider-spacer" src="'.geodir_plugin_url()."/geodirectory-assets/images/spacer.gif".'" alt="'.$widget_image->title.'" title="'.$widget_image->title.'" style="max-height:'.$widget_spacer_height.'px !important;margin:0 auto;" width="100%" />';
+
+				$title = '';
+				if($show_title){
+					$title = '<div class="geodir-slider-title"><a href="' . get_permalink( $post->ID ) . '">' . get_the_title( $post->ID ) . '</a></div>';
+				}
+
+				$widget_main_slides .= $title.'<img src="'.$widget_image->src.'" alt="'.$widget_image->title.'" title="'.$widget_image->title.'" style="max-height:200px;margin:0 auto;" /></li>';
+				$nav_slides .= '<li><img src="'.$widget_image->src.'" alt="'.$widget_image->title.'" title="'.$widget_image->title.'" style="max-height:48px;margin:0 auto;" /></li>';
+				$widget_slides++;
+			}
+		}
+		?>
+		<div class="flex-container" style="min-height:200px;">
+			<div class="geodir-listing-flex-loader"><i class="fa fa-refresh fa-spin"></i></div>
+			<div id="geodir_widget_slider" class="geodir_flexslider">
+				<ul class="geodir-slides clearfix"><?php echo $widget_main_slides; ?></ul>
+			</div>
+			<?php if( $widget_slides > 1 ) { ?>
+				<div id="geodir_widget_carousel" class="geodir_flexslider">
+					<ul class="geodir-slides clearfix"><?php echo $nav_slides; ?></ul>
+				</div>
+			<?php } ?>
+		</div>
+		<?php
+		$GLOBALS['post'] = $current_post;
+		setup_postdata( $current_post );
+	}
+	echo $after_widget;
+}
 
 
+function geodir_loginwidget_output($args='', $instance='')
+{
+	//print_r($args);
+	//print_r($instance);
+	// prints the widget
+	extract( $args, EXTR_SKIP );
+	$title = empty( $instance['title'] ) ? __( 'My Dashboard', GEODIRECTORY_TEXTDOMAIN ) : apply_filters( 'widget_title', __( $instance['title'],GEODIRECTORY_TEXTDOMAIN ) );
+
+	echo $before_widget;
+	echo $before_title.$title.$after_title;
+
+	if( is_user_logged_in() ) {
+		global $current_user;
+
+		$login_url = geodir_getlink( home_url(), array( 'geodir_signup' => 'true' ), false );
+		$add_listurl = get_permalink( get_option( 'geodir_add_listing_page' ) );
+		$add_listurl = geodir_getlink( $add_listurl, array( 'listing_type' => 'gd_place' ) );
+		$author_link = get_author_posts_url( $current_user->data->ID );
+		$author_link = geodir_getlink( $author_link, array( 'geodir_dashbord' => 'true' ), false );
+
+		echo '<ul class="geodir-loginbox-list">';
+		ob_start();
+		?>
+		<li><a class="signin" href="<?php echo wp_logout_url( home_url() );?>"><?php _e( 'Logout', GEODIRECTORY_TEXTDOMAIN );?></a></li>
+		<?php
+		$post_types = geodir_get_posttypes( 'object' );
+		$show_add_listing_post_types_main_nav = get_option( 'geodir_add_listing_link_user_dashboard' );
+		$geodir_allow_posttype_frontend = get_option( 'geodir_allow_posttype_frontend' );
+
+		if( !empty( $show_add_listing_post_types_main_nav ) ) {
+			$addlisting_links = '';
+			foreach($post_types as $key => $postobj){
+
+				if(in_array($key, $show_add_listing_post_types_main_nav)){
+
+					if($add_link = geodir_get_addlisting_link( $key )){
+
+						$name = $postobj->labels->name;
+
+						$selected = '';
+						if(geodir_get_current_posttype() == $key && geodir_is_page('add-listing'))
+							$selected = 'selected="selected"';
+
+						// hook for add listing link
+						$add_link = apply_filters( 'geodir_dashboard_link_add_listing', $add_link, $key, $current_user->ID );
+
+						$addlisting_links .= '<option '.$selected.' value="'.$add_link.'">'.__( ucfirst( $name  ), GEODIRECTORY_TEXTDOMAIN ).'</option>';
+
+					}
+				}
+
+			}
+
+			if($addlisting_links != ''){ ?>
+
+				<li><select id="geodir_add_listing" class="chosen_select" onchange="window.location.href=this.value" option-autoredirect="1" name="geodir_add_listing" option-ajaxchosen="false" data-placeholder="<?php echo esc_attr( __( 'Add Listing', GEODIRECTORY_TEXTDOMAIN ) );?>">
+						<option value=""></option>
+						<?php echo $addlisting_links;?>
+					</select></li> <?php
+
+			}
+
+		}
+		// My Favourites in Dashboard
+		$show_favorite_link_user_dashboard = get_option( 'geodir_favorite_link_user_dashboard' );
+		$user_favourite = geodir_user_favourite_listing_count();
+
+		if ( !empty( $show_favorite_link_user_dashboard ) && !empty( $user_favourite ) ) {
+			$favourite_links = '';
+
+			foreach ( $post_types as $key => $postobj ) {
+				if( in_array( $key, $show_favorite_link_user_dashboard ) && array_key_exists( $key, $user_favourite ) ) {
+					$name = $postobj->labels->name;
+					$post_type_link = geodir_getlink( $author_link, array( 'stype' => $key, 'list' => 'favourite' ), false );
+
+					$selected = '';
+
+					if( isset( $_REQUEST['list'] ) && $_REQUEST['list'] == 'favourite' && isset( $_REQUEST['stype'] ) && $_REQUEST['stype'] == $key && isset( $_REQUEST['geodir_dashbord'] ) ) {
+						$selected = 'selected="selected"';
+					}
+					// hook for favorite listing link
+					$post_type_link = apply_filters( 'geodir_dashboard_link_favorite_listing', $post_type_link, $key, $current_user->ID );
+
+					$favourite_links .= '<option ' . $selected . ' value="' . $post_type_link . '">' . __( ucfirst( $name  ), GEODIRECTORY_TEXTDOMAIN ) . '</option>';
+				}
+			}
+
+			if( $favourite_links != '' ) {
+				?>
+				<li>
+					<select id="geodir_my_favourites" class="chosen_select" onchange="window.location.href=this.value" option-autoredirect="1" name="geodir_my_favourites" option-ajaxchosen="false" data-placeholder="<?php echo esc_attr( __( 'My Favorites', GEODIRECTORY_TEXTDOMAIN ) );?>">
+						<option value=""></option>
+						<?php echo $favourite_links;?>
+					</select>
+				</li>
+			<?php
+			}
+		}
+
+
+		$show_listing_link_user_dashboard = get_option('geodir_listing_link_user_dashboard');
+		$user_listing = geodir_user_post_listing_count();
+
+		if ( !empty( $show_listing_link_user_dashboard ) && !empty( $user_listing ) ) {
+			$listing_links = '';
+
+			foreach ( $post_types as $key => $postobj ) {
+				if( in_array( $key, $show_listing_link_user_dashboard ) && array_key_exists( $key, $user_listing ) ) {
+					$name = $postobj->labels->name;
+					$listing_link = geodir_getlink( $author_link, array( 'stype' => $key ), false );
+
+					$selected = '';
+					if ( !isset( $_REQUEST['list'] ) && isset( $_REQUEST['geodir_dashbord'] ) && isset( $_REQUEST['stype'] ) && $_REQUEST['stype'] == $key ) {
+						$selected = 'selected="selected"';
+					}
+
+					// hook for my listing link
+					$listing_link = apply_filters( 'geodir_dashboard_link_my_listing', $listing_link, $key, $current_user->ID );
+
+					$listing_links .= '<option ' . $selected . ' value="' . $listing_link.'">' . __( ucfirst( $name  ), GEODIRECTORY_TEXTDOMAIN ) . '</option>';
+				}
+			}
+
+			if( $listing_links != '' ) {
+				?>
+				<li>
+					<select id="geodir_my_listings" class="chosen_select" onchange="window.location.href=this.value" option-autoredirect="1" name="geodir_my_listings"  option-ajaxchosen="false" data-placeholder="<?php echo esc_attr( __( 'My Listings', GEODIRECTORY_TEXTDOMAIN ) );?>">
+						<option value=""></option>
+						<?php echo $listing_links;?>
+					</select>
+				</li>
+			<?php
+			}
+		}
+
+		$dashboard_link = ob_get_clean();
+
+		echo apply_filters( 'geodir_dashboard_links', $dashboard_link );
+		echo '</ul>';
+	} else {
+		?>
+
+		<form name="loginform" class="loginform1" action="<?php echo apply_filters( 'geodir_signup_reg_submit_link', home_url() . '/index.php?geodir_signup=true' ); ?>" method="post" >
+			<div class="geodir_form_row"><input placeholder="<?php _e('Email', GEODIRECTORY_TEXTDOMAIN);?>" name="log" type="text" class="textfield user_login1" /> <span class="user_loginInfo"></span> </div>
+			<div class="geodir_form_row"><input placeholder="<?php _e('Password', GEODIRECTORY_TEXTDOMAIN);?>" name="pwd" type="password" class="textfield user_pass1 input-text" /><span class="user_passInfo"></span>  </div>
+
+			<input type="hidden" name="redirect_to" value="<?php echo geodir_curPageURL(); ?>" />
+			<input type="hidden" name="testcookie" value="1" />
+			<div class="geodir_form_row clearfix"><input type="submit" name="submit" value="<?php echo SIGN_IN_BUTTON;?>" class="b_signin"/><p class="geodir-new-forgot-link">
+					<a href="<?php echo apply_filters( 'geodir_signup_reg_form_link', home_url() . '/?geodir_signup=true&page1=sign_up' ); ?>" class="goedir-newuser-link"><?php echo NEW_USER_TEXT;?></a>
+
+					<a href="<?php echo apply_filters( 'geodir_signup_forgot_form_link', home_url() . '/?geodir_signup=true&page1=sign_in' ); ?>"class="goedir-forgot-link"><?php echo FORGOT_PW_TEXT;?></a> </p> </div>
+		</form>
+	<?php }
+
+	echo $after_widget;
+}
+
+
+function geodir_popular_postview_output($args='', $instance='')
+{
+	//print_r($args);
+	//print_r($instance);
+	// prints the widget
+	extract( $args, EXTR_SKIP );
+
+	echo $before_widget;
+
+	$title = empty( $instance['title'] ) ? ucwords( $instance['category_title'] ) : apply_filters( 'widget_title', __( $instance['title'],GEODIRECTORY_TEXTDOMAIN ) );
+	$post_type = empty( $instance['post_type'] ) ? 'gd_place' : apply_filters( 'widget_post_type', $instance['post_type'] );
+	$category = empty( $instance['category'] ) ? '0' : apply_filters( 'widget_category', $instance['category'] );
+	$post_number = empty( $instance['post_number'] ) ? '5' : apply_filters( 'widget_post_number', $instance['post_number'] );
+	$layout = empty( $instance['layout'] ) ? 'gridview_onehalf' : apply_filters( 'widget_layout', $instance['layout'] );
+	$add_location_filter = empty( $instance['add_location_filter'] ) ? '0' : apply_filters( 'widget_layout', $instance['add_location_filter'] );
+	$listing_width = empty( $instance['listing_width'] ) ? '' : apply_filters( 'widget_listing_width', $instance['listing_width'] );
+	$list_sort = empty( $instance['list_sort'] ) ? 'latest' : apply_filters( 'widget_list_sort', $instance['list_sort'] );
+	$use_viewing_post_type = !empty( $instance['use_viewing_post_type'] ) ? true : false;
+
+	// set post type to current viewing post type
+	if ( $use_viewing_post_type ) {
+		$current_post_type = geodir_get_current_posttype();
+		if ( $current_post_type != '' && $current_post_type != $post_type ) {
+			$post_type = $current_post_type;
+			$category = array(); // old post type category will not work for current changed post type
+		}
+	}
+	// replace widget title dynamically
+	$posttype_plural_label = __( get_post_type_plural_label( $post_type ), GEODIRECTORY_TEXTDOMAIN );
+	$posttype_singular_label = __( get_post_type_singular_label( $post_type ), GEODIRECTORY_TEXTDOMAIN );
+
+	$title = str_replace( "%posttype_plural_label%", $posttype_plural_label, $title );
+	$title = str_replace( "%posttype_singular_label%", $posttype_singular_label, $title );
+
+	if ( isset( $instance['character_count'] ) ) {
+		$character_count = apply_filters( 'widget_list_character_count', $instance['character_count'] );
+	} else {
+		$character_count = '';
+	}
+
+	if ( empty( $title ) || $title == 'All' ){
+		$title .= ' '. __( get_post_type_plural_label( $post_type ), GEODIRECTORY_TEXTDOMAIN );
+	}
+
+	$location_url = array();
+	$city = get_query_var( 'gd_city' );
+	if ( !empty( $city )  ){
+		if ( get_option( 'geodir_show_location_url' ) == 'all' ) {
+			$country = get_query_var( 'gd_country' );
+			$region = get_query_var( 'gd_region' );
+
+			if ( !empty( $country ) ) {
+				$location_url[] = $country;
+			}
+
+			if ( !empty( $region ) ) {
+				$location_url[] = $region;
+			}
+		}
+
+		$location_url[] = $city;
+	}
+
+	$location_url = implode( "/", $location_url );
+
+	if ( get_option( 'permalink_structure' ) ) {
+		$viewall_url = get_post_type_archive_link( $post_type );
+	} else {
+		$viewall_url = get_post_type_archive_link( $post_type );
+	}
+
+	if( !empty( $category ) && $category[0] != '0' ) {
+		global $geodir_add_location_url;
+
+		$geodir_add_location_url = '0';
+
+		if ( $add_location_filter != '0' ) {
+			$geodir_add_location_url = '1';
+		}
+
+		$viewall_url = get_term_link( (int)$category[0], $post_type . 'category' );
+
+		$geodir_add_location_url = NULL;
+	}
+	$query_args = array(
+		'posts_per_page' => $post_number,
+		'is_geodir_loop' => true,
+		'gd_location' 	 => $add_location_filter ? true : false,
+		'post_type' => $post_type,
+		'order_by' => $list_sort
+	);
+
+	if ( $character_count ) {
+		$query_args['excerpt_length'] = $character_count;
+	}
+
+	if ( !empty( $instance['show_featured_only'] ) ) {
+		$query_args['show_featured_only'] = 1;
+	}
+
+	if ( !empty( $instance['show_special_only'] ) ) {
+		$query_args['show_special_only'] = 1;
+	}
+
+	if ( !empty( $instance['with_pics_only'] ) ) {
+		$query_args['with_pics_only'] = 0;
+		$query_args['featured_image_only']=1;
+	}
+
+	if ( !empty( $instance['with_videos_only'] ) ) {
+		$query_args['with_videos_only'] = 1;
+	}
+	$with_no_results = !empty( $instance['without_no_results'] ) ? false : true;
+
+	if( !empty( $category ) && $category[0] != '0' ) {
+		$category_taxonomy = geodir_get_taxonomies( $post_type );
+
+		######### WPML #########
+		if ( function_exists( 'icl_object_id' ) ) {
+			$category = gd_lang_object_ids( $category, $category_taxonomy[0] );
+		}
+		######### WPML #########
+
+		$tax_query = array(
+			'taxonomy' => $category_taxonomy[0],
+			'field' => 'id',
+			'terms' => $category
+		);
+
+		$query_args['tax_query'] = array( $tax_query );
+	}
+
+	global $gridview_columns_widget, $geodir_is_widget_listing;
+
+	$widget_listings = geodir_get_widget_listings( $query_args );
+
+	if ( !empty( $widget_listings ) || $with_no_results ) {
+		?>
+		<div class="geodir_locations geodir_location_listing">
+			<?php do_action( 'geodir_before_view_all_link_in_widget' ); ?>
+			<div class="geodir_list_heading clearfix">
+				<?php echo $before_title . $title . $after_title;?>
+				<a href="<?php echo $viewall_url; ?>" class="geodir-viewall"><?php _e( 'View all', GEODIRECTORY_TEXTDOMAIN ); ?></a>
+			</div>
+			<?php do_action( 'geodir_after_view_all_link_in_widget' ); ?>
+			<?php
+			if ( strstr( $layout, 'gridview' ) ) {
+				$listing_view_exp = explode( '_', $layout );
+				$gridview_columns_widget = $layout;
+				$layout = $listing_view_exp[0];
+			} else {
+				$gridview_columns_widget  = '';
+			}
+
+			$template = apply_filters( "geodir_template_part-widget-listing-listview", geodir_plugin_path() . '/geodirectory-templates/widget-listing-listview.php' );
+			if ( !isset( $character_count ) ) {
+				$character_count = $character_count == '' ? 50 : apply_filters( 'widget_character_count', $character_count );
+			}
+
+			global $post, $map_jason, $map_canvas_arr;
+
+			$current_post = $post;
+			$current_map_jason = $map_jason;
+			$current_map_canvas_arr = $map_canvas_arr;
+			$geodir_is_widget_listing = true;
+
+			include( $template );
+
+			$geodir_is_widget_listing = false;
+
+			$GLOBALS['post'] = $current_post;
+			setup_postdata( $current_post );
+			$map_jason = $current_map_jason;
+			$map_canvas_arr = $current_map_canvas_arr;
+			?>
+		</div>
+	<?php
+	}
+	echo $after_widget;
+
+}

@@ -967,3 +967,15 @@ height: auto;
 /* fix menu issue for jquery light box */
 div#jquery-overlay{z-index:1510}
 div#jquery-lightbox{z-index:1520}
+
+
+.gd-cats-display-radio,
+.gd-cats-display-checkbox,
+.gd_multi_choice
+{
+	margin-left: 0px;
+	max-height: 150px;
+	overflow-y: scroll;
+	border: 1px #ccc solid;
+	padding: 10px;
+}
