@@ -515,6 +515,7 @@ $theme_settings['geodir_top_content_add'] = stripslashes($_POST['geodir_top_cont
 $theme_settings['geodir_before_main_content_add'] = stripslashes($_POST['geodir_before_main_content_add']);
 
 // Filters
+$theme_settings['geodir_full_page_class_filter'] = stripslashes($_POST['geodir_full_page_class_filter']);
 $theme_settings['geodir_before_widget_filter'] = stripslashes($_POST['geodir_before_widget_filter']);
 $theme_settings['geodir_after_widget_filter'] = stripslashes($_POST['geodir_after_widget_filter']);
 $theme_settings['geodir_before_title_filter'] = stripslashes($_POST['geodir_before_title_filter']);
@@ -563,7 +564,7 @@ $theme_name = str_replace(" ","_",$theme->parent()->get( 'Name' ));
 $theme_name =  str_replace(" ","_",$theme->get( 'Name' ));
 }
 
-if(in_array($theme_name,  array('Avada','Enfold','X','Divi','Genesis','Jupiter'))){// list of themes that have php files
+if(in_array($theme_name,  array('Avada','Enfold','X','Divi','Genesis','Jupiter','Multi_News'))){// list of themes that have php files
 	$theme_settings['geodir_theme_compat_code'] = $theme_name;
 }
 
@@ -933,8 +934,12 @@ function geodir_theme_compatibility_setting_page(){
                       	<td><strong><?php _e('Filter',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                       	<td><strong><?php _e('Content',GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                       </tr>
-                    
-                  
+
+                        <tr>
+                            <td><small>geodir_full_page_class</small></td>
+                            <td><textarea name="geodir_full_page_class_filter" placeholder='geodir_full_page clearfix'><?php if(isset($tc['geodir_full_page_class_filter'])){echo $tc['geodir_full_page_class_filter'];}?></textarea></td>
+                        </tr>
+
                         <tr>
                             <td><small>geodir_before_widget</small></td>
                             <td><textarea name="geodir_before_widget_filter" placeholder='<section id="%1$s" class="widget geodir-widget %2$s">'><?php if(isset($tc['geodir_before_widget_filter'])){echo $tc['geodir_before_widget_filter'];}?></textarea></td>
@@ -1000,8 +1005,10 @@ function geodir_theme_compatibility_setting_page(){
 							<td><small>geodir_location_switcher_menu_sub_li_class</small></td>
 						   <td><textarea name="geodir_location_switcher_menu_sub_li_class_filter" placeholder='menu-item gd-location-switcher-menu-item'><?php if(isset($tc['geodir_location_switcher_menu_sub_li_class_filter'])){echo $tc['geodir_location_switcher_menu_sub_li_class_filter'];}?></textarea></td>
 						</tr>
-                        
-					<?php do_action('gd_compat_other_filters');?>
+
+
+
+                      <?php do_action('gd_compat_other_filters');?>
 						
           	   </tbody>
              </table>
