@@ -58,8 +58,11 @@ function geodir_getGoogleAnalytics( $page, $ga_start, $ga_end) {
 			$data = $api->data($id, 'ga:pagePath', 'ga:pageviews,ga:uniquePageviews,ga:bounces,ga:entrances,ga:exits,ga:newVisits,ga:timeOnPage', '', $ga_start, $ga_end, 10, 1, $filters, false);
 			
 			foreach( $data as $dimension => $metrics ) {
-				$time = geodir_sec2hms($metrics['ga:timeOnPage'] / ($metrics['ga:pageviews'] - $metrics['ga:exits']));
-				
+				if($metrics['ga:pageviews'] - $metrics['ga:exits']>0) {
+					$time = geodir_sec2hms($metrics['ga:timeOnPage'] / ($metrics['ga:pageviews'] - $metrics['ga:exits']));
+				}else{
+					$time = "0";
+				}
 				echo "<b>" . __( "Google Analytics (Last 30 Days)", GEODIRECTORY_TEXTDOMAIN ) . "</b><br>" . __( "Total pageviews:", GEODIRECTORY_TEXTDOMAIN ) . " {$metrics['ga:pageviews']} <br>" . __( "Unique visitors:", GEODIRECTORY_TEXTDOMAIN ) . " {$metrics['ga:uniquePageviews']}<br>" . __( "Average time on page:", GEODIRECTORY_TEXTDOMAIN ) . " {$time}<br>\n";
 			}
 		
