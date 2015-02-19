@@ -27,8 +27,13 @@ function geodir_before_main_content_add_dynamic(){
 	$tc = get_option('theme_compatibility_setting');	
 	echo $tc['geodir_before_main_content_add'];
 }
+
  
- 
+function geodir_full_page_class_dynamic(){
+	$tc = get_option('theme_compatibility_setting');
+	return $tc['geodir_full_page_class_filter'];
+}
+
 function geodir_before_widget_dynamic(){
 	$tc = get_option('theme_compatibility_setting');
 	return $tc['geodir_before_widget_filter'];
@@ -106,6 +111,11 @@ function geodir_content_actions_dynamic(){
 	//php
 	if(!empty($tc['geodir_theme_compat_code'])){
 		include_once('geodirectory-functions/compatibility/'.$tc['geodir_theme_compat_code'].'.php');
+	}
+
+	//geodir_full_page_class
+	if(!empty($tc['geodir_full_page_class_filter'])){
+		add_filter('geodir_full_page_class','geodir_full_page_class_dynamic',10);
 	}
 
 	//widget before filter
@@ -440,7 +450,7 @@ function geodir_action_geodir_preview_code() {
 add_action( 'geodir_sidebar_detail_top', 'geodir_action_geodir_sidebar_detail_top', 10, 1 );
 function geodir_action_geodir_sidebar_detail_top($class=''){
 	 if(get_option('geodir_show_detail_top_section')) { ?>
-    <div class="geodir_full_page clearfix <?php echo $class;?>">
+    <div class="<?php echo apply_filters( 'geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_detail_top'); ?> <?php echo $class;?>">
       <?php dynamic_sidebar('geodir_detail_top'); ?>
     </div>
     <?php  } 
@@ -455,7 +465,9 @@ add_action( 'geodir_sidebar_detail_bottom_section', 'geodir_action_geodir_sideba
 
 function geodir_action_geodir_sidebar_detail_bottom_section($class=''){
 	 if(get_option('geodir_show_detail_bottom_section')) { ?>
-    <div class="geodir_full_page clearfix <?php echo $class;?>"><?php dynamic_sidebar('geodir_detail_bottom');?></div><!-- clearfix ends here-->
+    <div class="<?php echo apply_filters( 'geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_detail_bottom'); ?> <?php echo $class;?>">
+		<?php dynamic_sidebar('geodir_detail_bottom');?>
+	</div><!-- clearfix ends here-->
     <?php }  
 }
 
@@ -986,7 +998,7 @@ add_action( 'geodir_listings_before_main_content', 'geodir_breadcrumb', 20 );
 add_action( 'geodir_sidebar_listings_top', 'geodir_action_geodir_sidebar_listings_top', 10 );
 function geodir_action_geodir_sidebar_listings_top(){
 	 if(get_option('geodir_show_listing_top_section')) { ?>
-    <div class="geodir_full_page clearfix">
+    <div class="<?php echo apply_filters( 'geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_listing_top'); ?>">
    	    <?php dynamic_sidebar('geodir_listing_top');?>
 	</div><!-- clearfix ends here-->
     <?php } 
@@ -1121,7 +1133,7 @@ do_action( 'geodir_main_content_close', 'listings-page');
 add_action('geodir_sidebar_listings_bottom_section', 'geodir_action_sidebar_listings_bottom_section',10);
 function geodir_action_sidebar_listings_bottom_section(){
 if(get_option('geodir_show_listing_bottom_section')) { ?>
-<div class="geodir_full_page clearfix">
+<div class="<?php echo apply_filters( 'geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_listing_bottom'); ?>">
   <?php dynamic_sidebar('geodir_listing_bottom');?>
 </div><!-- clearfix ends here-->
 <?php }	
@@ -1435,7 +1447,7 @@ do_action( 'geodir_sidebar_right_close', 'details-page');
 add_action( 'geodir_sidebar_signup_top', 'geodir_action_geodir_sidebar_signup_top', 10 );
 function geodir_action_geodir_sidebar_signup_top(){
 ?>
-<div class="geodir_full_page clearfix">
+<div class="<?php echo apply_filters( 'geodir_full_page_class', 'geodir_full_page clearfix', 'Reg/Login Top Section'); ?>">
   <?php dynamic_sidebar('Reg/Login Top Section');?>
 </div><!-- clearfix ends here-->
 <?php  
@@ -1570,7 +1582,7 @@ add_action( 'geodir_author_before_main_content', 'geodir_breadcrumb', 20 );
 
 function geodir_action_geodir_sidebar_author_top(){
 if(get_option('geodir_show_author_top_section')) { ?>
-<div class="geodir_full_page clearfix">
+<div class="<?php echo apply_filters( 'geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_author_top'); ?>">
     <?php dynamic_sidebar('geodir_author_top');?>
 </div><!-- clearfix ends here-->
 <?php }
@@ -1651,7 +1663,7 @@ do_action('geodir_main_content_close', 'author-page');
 add_action('geodir_sidebar_author_bottom_section', 'geodir_action_sidebar_author_bottom_section',10);
 function geodir_action_sidebar_author_bottom_section(){
 if(get_option('geodir_show_author_bottom_section')) { ?>
-<div class="geodir_full_page clearfix">
+<div class="<?php echo apply_filters( 'geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_author_bottom'); ?>">
     <?php dynamic_sidebar('geodir_author_bottom');?>
 </div><!-- clearfix ends here-->
 <?php }
@@ -1681,7 +1693,7 @@ add_action( 'geodir_search_before_main_content', 'geodir_action_geodir_sidebar_s
 add_action( 'geodir_search_before_main_content', 'geodir_breadcrumb', 20 );
 function geodir_action_geodir_sidebar_search_top(){
 if(get_option('geodir_show_search_top_section')) { ?>
-<div class="geodir_full_page clearfix">
+<div class="<?php echo apply_filters( 'geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_search_top'); ?>">
     <?php dynamic_sidebar('geodir_search_top');?>
 </div><!-- clearfix ends here-->
 <?php }
@@ -1740,7 +1752,7 @@ do_action( 'geodir_sidebar_right_close', 'search-page');
 add_action('geodir_sidebar_search_bottom_section', 'geodir_action_sidebar_search_bottom_section',10);
 function geodir_action_sidebar_search_bottom_section(){
 if(get_option('geodir_show_search_bottom_section')) { ?>
-<div class="geodir_full_page clearfix">
+<div class="<?php echo apply_filters( 'geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_search_bottom'); ?>">
     <?php dynamic_sidebar('geodir_search_bottom');?>
 </div><!-- clearfix ends here-->
 <?php }
@@ -1782,7 +1794,7 @@ add_action( 'geodir_home_before_main_content', 'geodir_breadcrumb', 20 );
 
 function geodir_action_geodir_sidebar_home_top(){
 if(get_option('geodir_show_home_top_section')) { ?>
-<div class="geodir_full_page clearfix">
+<div class="<?php echo apply_filters( 'geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_home_top'); ?>">
 <?php  dynamic_sidebar('geodir_home_top');?>
 </div><!-- clearfix ends here-->
 <?php } 
@@ -1853,7 +1865,7 @@ add_action('geodir_sidebar_location_bottom_section', 'geodir_action_sidebar_home
 add_action('geodir_sidebar_home_bottom_section', 'geodir_action_sidebar_home_bottom_section',10);
 function geodir_action_sidebar_home_bottom_section(){
 if(get_option('geodir_show_home_bottom_section')) { ?>
-<div class="geodir_full_page clearfix">
+<div class="<?php echo apply_filters( 'geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_home_bottom'); ?>">
     <?php dynamic_sidebar('geodir_home_bottom');?>
 </div><!-- clearfix ends here-->
 <?php }
