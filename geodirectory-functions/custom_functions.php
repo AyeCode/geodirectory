@@ -572,7 +572,11 @@ function geodir_get_map_default_language()
 function geodir_add_meta_keywords()
 {
 	global $post, $wp_query, $wpdb, $geodir_addon_list;
-	
+
+	$is_geodir_page = geodir_is_geodir_page();
+
+	if(!$is_geodir_page){return;}// if non GD page, bail
+
 	$current_term = $wp_query->get_queried_object();
 	
 	$all_postypes = geodir_get_posttypes();
@@ -590,8 +594,8 @@ function geodir_add_meta_keywords()
 			the_post();
 			
 			if ( has_excerpt() ) {
-				$out_excerpt = str_replace( array( "\r\n", "\r", "\n" ), "", $out_excerpt );
 				$out_excerpt = strip_tags( do_shortcode( get_the_excerpt() ) );
+				$out_excerpt = str_replace( array( "\r\n", "\r", "\n" ), "", $out_excerpt );
 			} else {
 				$out_excerpt = str_replace( array( "\r\n", "\r", "\n" ), "", $post->post_content );
 				$out_excerpt = strip_tags( do_shortcode( $out_excerpt ) ); // parse short code from content
@@ -612,7 +616,7 @@ function geodir_add_meta_keywords()
 		$meta_desc .= isset($current_term->description) ? $current_term->description : '';
 	}
 
-	$is_geodir_page = geodir_is_geodir_page();
+
 	$geodir_post_type = geodir_get_current_posttype();
 	$geodir_post_type_info = get_post_type_object($geodir_post_type);
 	$geodir_is_page_listing = geodir_is_page('listing') ? true : false;
