@@ -61,17 +61,21 @@ function initMap(map_options){
 	
 	jQuery.goMap.map.setOptions({styles: styles});
 	
+	// check if control al ready triggered
+	var hasControl = jQuery('#' + map_canvas).find('.gd-control-div').hasClass( map_canvas + '-control-div' );
+	
 	/* add option that allows enable/disable map dragging to phone devices */
-	if (GeodirIsiPhone() && typeof geodir_all_js_msg.geodir_onoff_dragging != 'undefined' && geodir_all_js_msg.geodir_onoff_dragging) {
+	if (GeodirIsiPhone() && typeof geodir_all_js_msg.geodir_onoff_dragging != 'undefined' && geodir_all_js_msg.geodir_onoff_dragging && !hasControl) {
 		var centerControlDiv = document.createElement('div');
-		var centerControl = new gdCustomControl(centerControlDiv, options.enable_cat_filters);
-		
 		centerControlDiv.index = 1;
-		if (options.enable_cat_filters) {
-			jQuery.goMap.map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(centerControlDiv);
-		} else {
-			jQuery.goMap.map.controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(centerControlDiv);
-		}
+		
+		jQuery(centerControlDiv).addClass( 'gd-control-div' );
+		jQuery(centerControlDiv).addClass( map_canvas + '-control-div' );
+		
+		var centerControl = new gdCustomControl(centerControlDiv, options.enable_cat_filters, jQuery.goMap.map);
+		var controlPosition = options.enable_cat_filters ? google.maps.ControlPosition.BOTTOM_LEFT : google.maps.ControlPosition.BOTTOM_RIGHT;		
+		
+		jQuery.goMap.map.controls[controlPosition].push(centerControlDiv);
 	}
 	
 	google.maps.event.addListenerOnce(jQuery.goMap.map, 'idle', function(){
@@ -83,9 +87,11 @@ function initMap(map_options){
 	
 	
 	var maxMap = document.getElementById(map_canvas + '_triggermap' );
-	google.maps.event.addDomListener(maxMap, 'click', showAlert);
+	if (!jQuery(maxMap).hasClass('gd-triggered-map')) { // skip multiple click listener after reload map via ajax
+		jQuery(maxMap).addClass('gd-triggered-map');
+		google.maps.event.addDomListener(maxMap, 'click', showAlert);
+	}
 	function showAlert() {
-	
 		jQuery('#' + map_canvas).toggleClass('map-fullscreen');
 		jQuery('.' + map_canvas +'_map_category').toggleClass('map_category_fullscreen');
 		jQuery('#' + map_canvas +'_trigger').toggleClass('map_category_fullscreen');
@@ -108,14 +114,14 @@ function initMap(map_options){
 	}
 }
 
-function gdCustomControl(controlDiv, cat_filters) {
+function gdCustomControl(controlDiv, cat_filters, gdMap) {
   // Set CSS for the control border
   var controlUI = document.createElement('div');
   jQuery(controlUI).addClass('gd-dragg-ui');
   if (cat_filters) {
 	  jQuery(controlUI).addClass('gd-dragg-with-cat');
   }
-  jQuery.goMap.map.setOptions({draggable:false});
+  gdMap.setOptions({draggable:false});
   jQuery(controlUI).addClass('gd-drag-inactive');
   controlUI.style.backgroundColor = '#fff';
   controlUI.style.borderRadius = '2px';
@@ -149,10 +155,10 @@ function gdCustomControl(controlDiv, cat_filters) {
   google.maps.event.addDomListener(controlUI, 'click', function() {
 		if(jQuery(this).hasClass('gd-drag-active')){
 			jQuery(this).removeClass('gd-drag-active').addClass('gd-drag-inactive').find('.gd-dragg-action').text(geodir_all_js_msg.geodir_on_dragging_text);
-			jQuery.goMap.map.setOptions({draggable:false});
+			gdMap.setOptions({draggable:false});
 		} else {
 			jQuery(this).removeClass('gd-drag-inactive').addClass('gd-drag-active').find('.gd-dragg-action').text(geodir_all_js_msg.geodir_off_dragging_text);
-			jQuery.goMap.map.setOptions({draggable:true});
+			gdMap.setOptions({draggable:true});
 		}
   });
 
