@@ -1981,6 +1981,8 @@ class Tax_Meta_Class {
 		$m = get_option( 'tax_meta_'.$post_type.'_'.$term_id);
 		$m[$key] = $value;
 		update_option('tax_meta_'.$post_type.'_'.$term_id,$m);
+
+		do_action('gd_tax_meta_updated',false,true,$term_id,$post_type);
 	}
 	
 	
@@ -2038,5 +2040,7 @@ endif; // End Check Class Exists
 			$m = get_option( 'tax_meta_'.$post_type.'_'.$term_id);
 			$m[$key] = $value;
 			update_option('tax_meta_'.$post_type.'_'.$term_id,$m);
+
+			do_action('gd_tax_meta_updated',false,true,$term_id,$post_type);
 		}
 	}

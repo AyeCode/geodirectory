@@ -1451,64 +1451,86 @@ add_filter( 'geodir_googlemap_script_extra', 'geodir_googlemap_script_extra_deta
 
 function geodir_popular_post_category_output($args='',$instance=''){
 	// prints the widget
+	global $wpdb, $plugin_prefix, $geodir_post_category_str;
 	extract( $args, EXTR_SKIP );
 
 	echo $before_widget;
 
 	$title = empty( $instance['title'] ) ? __( 'Popular Categories',GEODIRECTORY_TEXTDOMAIN ) : apply_filters( 'widget_title', __( $instance['title'],GEODIRECTORY_TEXTDOMAIN ) );
 
-	global $wpdb, $plugin_prefix, $geodir_post_category_str;
-
-	$gd_post_type = geodir_get_current_posttype();
-
-	$taxonomy = geodir_get_taxonomies( $gd_post_type );
 	$category_limit = isset( $instance['category_limit'] ) && $instance['category_limit']>0 ? (int)$instance['category_limit'] : 15;
 
-	$args = array(
-		'orderby'       => 'count',
-		'order'			=> 'DESC',
-		'pad_counts'  	=> true,
-		//'number'		=> $category_limit
-	);
+
+	$gd_post_type = geodir_get_current_posttype();
+	$taxonomy = array();
+	if(!empty($gd_post_type)){
+		$taxonomy[] = $gd_post_type."category";
+	}else{
+		$taxonomy = geodir_get_taxonomies( $gd_post_type );
+	}
+
 	$terms = get_terms( $taxonomy );
 
-	if( !empty( $terms ) ) {
+
+	foreach( $terms as $term ) {
+
+
+		if($term->count > 0) {
+			$a_terms[$term->taxonomy][] = $term;
+		}
+
+	}
+
+	foreach ($a_terms as $b_key=>$b_val) {
+		$b_terms[$b_key] = geodir_sort_terms($b_val,'count' );
+	}
+
+	$tax_change_output = '';
+	if(count($b_terms)>1){
+		$tax_change_output .= "<ul class='geodir-cat-list-tax'>";
+		foreach($b_terms as $key=>$val){
+			$ptype = get_post_type_object( str_replace("category", "", $key) );
+			$tax_change_output .= "<li data-term='$key' data-limit='$category_limit' onclick='geodir_get_post_term(this);'>".__($ptype->labels->singular_name, GEODIRECTORY_TEXTDOMAIN)." ".__('Categories' , GEODIRECTORY_TEXTDOMAIN)."</li>";
+		}
+		$tax_change_output .= "</ul>";
+
+
+	}
+
+
+
+
+
+	if( !empty( $b_terms ) ) {
+
+		$terms =  reset($b_terms);// get the first array
+		global $cat_count;//make global so we can change via function
+		$cat_count = 0;
 		?>
 		<div class="geodir-category-list-in clearfix">
-			<div class="geodir-cat-list clearfix">
-				<?php
-				$identifier = 'geodir-' . substr( md5( microtime() ), 0, 6 );
-				echo $before_title . __( $title ) . $after_title;
-				echo '<ul class="geodir-popular-cat-list">';
+		<div class="geodir-cat-list clearfix">
+		<?php
+		echo $before_title . __( $title ) . $after_title;
 
-				$cat_count = 0;
-				$geodir_post_category_str = array();
+		echo $tax_change_output;
 
-				foreach( $terms as $cat ) {
-					$cat_count++;
+		echo '<ul class="geodir-popular-cat-list">';
 
-					$taxonomy_obj = get_taxonomy( $cat->taxonomy );
-					$post_type = $taxonomy_obj->object_type[0];
+		geodir_helper_cat_list_output($terms,$category_limit);
 
-					$geodir_post_category_str[] = array( 'posttype' => $post_type, 'termid' => $cat->term_id );
-
-					$class_row = $cat_count > $category_limit ? 'geodir-pcat-hide geodir-hide' : 'geodir-pcat-show';
-					$total_post =  0;
-
-					echo '<li class="' . $class_row . '"><a href="' . get_term_link( $cat, $cat->taxonomy ) . '"><i class="fa fa-caret-right"></i> ';
-					echo ucwords( $cat->name ) . ' (<span class="geodir_term_class geodir_link_span geodir_category_class_' . $post_type . '_' . $cat->term_id . '" >' . $total_post . '</span>) ';
-					echo '</a></li>';
-				}
-				echo '</ul>';
-				?>
-			</div>
+		echo '</ul>';
+		?>
+		</div>
 			<?php
-			if( $cat_count > $category_limit ) {
+				$hide = '';
+				if( $cat_count < $category_limit ) {$hide ='style="display:none;"';}
+				echo "<div class='geodir-cat-list-more' $hide >";
 				echo '<a href="javascript:void(0)" class="geodir-morecat geodir-showcat">' . __( 'More Categories', GEODIRECTORY_TEXTDOMAIN ) . '</a>';
 				echo '<a href="javascript:void(0)" class="geodir-morecat geodir-hidecat geodir-hide">' . __( 'Less Categories', GEODIRECTORY_TEXTDOMAIN ) . '</a>';
+				echo "</div>";
 				/* add scripts */
 				add_action( 'wp_footer', 'geodir_popular_category_add_scripts', 100 );
-			}
+
 
 			?>
 		</div>
@@ -1516,6 +1538,37 @@ function geodir_popular_post_category_output($args='',$instance=''){
 
 	}
 	echo $after_widget;
+
+
+}
+
+function geodir_helper_cat_list_output($terms,$category_limit)
+{	global $geodir_post_category_str,$cat_count;
+	$term_icons = geodir_get_term_icon();
+
+	$geodir_post_category_str = array();
+
+
+				foreach ($terms as $cat) {// print_r($cat);
+					$post_type = str_replace("category", "", $cat->taxonomy);
+
+					$term_icon_url = $term_icons[$cat->term_id];
+
+
+					$cat_count++;
+
+
+
+					$geodir_post_category_str[] = array('posttype' => $post_type, 'termid' => $cat->term_id);
+
+					$class_row = $cat_count > $category_limit ? 'geodir-pcat-hide geodir-hide' : 'geodir-pcat-show';
+					$total_post = $cat->count;
+
+					echo '<li class="' . $class_row . '"><a href="' . get_term_link($cat, $cat->taxonomy) . '">';
+					echo  '<img class="" style="height:20px;vertical-align:middle;" src="' . $term_icon_url . '"/> ';
+					echo ucwords($cat->name) . ' (<span class="geodir_term_class geodir_link_span geodir_category_class_' . $post_type . '_' . $cat->term_id . '" >' . $total_post . '</span>) ';
+					echo '</a></li>';
+				}
 
 
 }
@@ -2012,3 +2065,122 @@ function geodir_popular_postview_output($args='', $instance='')
 	echo $after_widget;
 
 }
+
+
+/*-----------------------------------------------------------------------------------*/
+/*  Review count functions
+/*-----------------------------------------------------------------------------------*/
+function geodir_count_reviews_by_term_id($term_id, $taxonomy, $post_type) {
+
+	global $wpdb, $plugin_prefix;
+	$detail_table =  $plugin_prefix . $post_type . '_detail';
+
+	$sql =  "SELECT COALESCE(SUM(rating_count),0) FROM " . $detail_table . " WHERE post_status = 'publish' AND rating_count > 0 AND FIND_IN_SET(" . $term_id . ", ".$taxonomy.")";
+	$count = $wpdb->get_var($sql);
+
+	return $count;
+}
+
+function geodir_count_reviews_by_terms($force_update=false) {
+
+	$option_data = apply_filters('geodir_count_reviews_by_terms_before','',$force_update);
+	if(!empty($option_data)){return $option_data;}
+
+	$option_data = get_option('geodir_global_review_count');
+
+	if(!$option_data OR $force_update) {
+		$post_types = geodir_get_posttypes();
+		$term_array = array();
+		foreach ($post_types as $post_type) {
+
+			$taxonomy = geodir_get_taxonomies($post_type);
+			$taxonomy = $taxonomy[0];
+
+			$args = array(
+				'hide_empty' => false
+			);
+
+			$terms = get_terms($taxonomy, $args);
+
+			foreach ($terms as $term) {
+				$count = geodir_count_reviews_by_term_id($term->term_id, $taxonomy, $post_type);
+				$children = get_term_children($term->term_id, $taxonomy);
+				/*if ( is_array( $children ) ) {
+					foreach ( $children as $child_id ) {
+						$child_count = geodir_count_reviews_by_term_id($child_id, $taxonomy, $post_type);
+						$count = $count + $child_count;
+					}
+				}*/
+				$term_array[$term->term_id] = $count;
+			}
+		}
+
+		update_option('geodir_global_review_count', $term_array);
+		//clear cache
+		wp_cache_delete('geodir_global_review_count');
+		return $term_array;
+	} else {
+		return $option_data;
+	}
+}
+
+function geodir_term_review_count_force_update() {
+	geodir_count_reviews_by_terms(true);
+	return true;
+}
+
+
+/*-----------------------------------------------------------------------------------*/
+/*  Term count functions
+/*-----------------------------------------------------------------------------------*/
+//function geodir_count_posts_by_term($data, $term) {
+function geodir_count_posts_by_term($data, $term) {
+
+	if ($data) {
+		if(isset($data[$term->term_id])) {
+			return $data[$term->term_id];
+		} else {
+			return 0;
+		}
+	} else {
+		return $term->count;
+	}
+}
+
+function geodir_sort_terms_by_count($terms)
+{
+	usort($terms, "geodir_sort_by_count_obj");
+	return $terms;
+}
+
+function geodir_sort_terms_by_review_count($terms)
+{
+	usort($terms, "geodir_sort_by_review_count_obj");
+	return $terms;
+}
+
+function geodir_sort_terms($terms, $sort = 'count')
+{
+	if ($sort == 'count') {
+		return geodir_sort_terms_by_count($terms);
+	}
+	if ($sort == 'review_count') {
+		return geodir_sort_terms_by_review_count($terms);
+	}
+}
+/*-----------------------------------------------------------------------------------*/
+/*  Utils
+/*-----------------------------------------------------------------------------------*/
+function geodir_sort_by_count($a, $b) {
+	return $a['count'] < $b['count'];
+}
+
+function geodir_sort_by_count_obj($a, $b) {
+	return $a->count < $b->count;
+}
+
+function geodir_sort_by_review_count_obj($a, $b) {
+	return $a->review_count < $b->review_count;
+}
+
+

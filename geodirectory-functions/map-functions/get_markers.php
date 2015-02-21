@@ -159,36 +159,11 @@ function get_markers(){
 	$content_data = array();
 	$post_ids = array();
 	if(!empty($catinfo))
-	{
+	{	$geodir_cat_icons = geodir_get_term_icon();
 		foreach($catinfo as $catinfo_obj)
-		{ 	//echo '#';
-		
-			$icon = '';
-			if($catinfo_obj->default_category){
-			$default_cat = $catinfo_obj->default_category;	
-				
-			}else{
-			$cat_type = $post_type.'category';
-			$default_cat = reset(array_filter(explode(',', $catinfo_obj->$cat_type)));
-			}
-			
-		 if($default_cat != ''){
-			
-			if(!empty($geodir_cat_icons) && is_array($geodir_cat_icons) && array_key_exists($default_cat,$geodir_cat_icons)){
-					
-					$icon = $geodir_cat_icons[$default_cat];		
-					
-			}else{
-			
-				$post_type = isset($_REQUEST['gd_posttype']) ? $_REQUEST['gd_posttype'] : '';
-				$term_icon_url = get_tax_meta($default_cat,'ct_cat_icon', false, $post_type);
-				$icon = isset($term_icon_url['src']) ? $term_icon_url['src'] : '';
-				
-				$geodir_cat_icons[$default_cat] = $icon;
-				
-			}
-			
-		 }
+		{
+
+			$icon = $geodir_cat_icons[$catinfo_obj->default_category];
 		 
 	
 			$e_dates = '';

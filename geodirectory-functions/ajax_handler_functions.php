@@ -44,43 +44,11 @@ function geodir_on_init(){
 		die;	
 	}
 	 
-	if(isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action']=='geodir_get_term_count')
-	{
-			global $wpdb,$plugin_prefix;	
-		
-			$term_array = unserialize(stripslashes($_REQUEST['term_array']));
-			
-			$counting_array = array();
-			$total_count = 0;
-			
-			
-			foreach($term_array as $value)
-			{
-				$term_id = $value['termid'];
-				$post_type = $value['posttype'];
-				$table_name = $plugin_prefix.$post_type.'_detail';
-				$field_name = $post_type.'category';
-				
-				$table_join = '';
-				$join_condition = '';
-				$where_condition = ' AND post_status="publish" ';
-				
-				$table_join = apply_filters('geodir_cat_post_count_join',$table_join,$post_type);
-				$where_condition = apply_filters('geodir_cat_post_count_where',$where_condition,$post_type);
-				
-				$total_count =  $wpdb->get_var("SELECT count(post_id) FROM ".$table_name." $table_join WHERE FIND_IN_SET($term_id, $field_name) $where_condition");
-				
-				if($total_count>0)
-					$counting_array['geodir_category_class_'.$post_type.'_'.$term_id] = $total_count; 
-					
-			}
-			
-				echo json_encode( $counting_array );
-				exit();
-			
-			}
+
 	
 }
+
+
 
  
 /* ---- Admin Ajax ---- */
@@ -305,6 +273,17 @@ function geodir_ajax_handler()
 		
 		include_once ( geodir_plugin_path().'/geodirectory-functions/geodirectory_reg.php') ;
 	}
+
+
+	if(isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action']=='geodir_get_term_list')
+	{
+		$terms_o = get_terms( sanitize_text_field($_REQUEST['term']) );
+		$terms = geodir_sort_terms($terms_o,'count' );
+		geodir_helper_cat_list_output($terms,intval($_REQUEST['limit']));
+		exit();
+
+	}
+
 	
 	die;
 	

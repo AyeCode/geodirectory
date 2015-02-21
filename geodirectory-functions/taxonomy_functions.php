@@ -1389,3 +1389,45 @@ function geodir_term_exists($term, $taxonomy = '', $parent = 0) {
 	return false;
 }
 
+function geodir_get_term_icon($term_id = false,$rebuild=false)
+{
+	if(!$rebuild){$terms_icons = get_option('gd_term_icons');}
+	else{$terms_icons = '';}
+
+	if(empty($terms_icons)){
+		$default_icon_url = get_option('geodir_default_marker_icon');
+		$taxonomy = geodir_get_taxonomies();
+		$terms = get_terms( $taxonomy );
+
+		foreach( $terms as $term ) {
+			$post_type = str_replace("category", "", $term->taxonomy);
+			$a_terms[$post_type][] = $term;
+
+		}
+
+		foreach ($a_terms as $pt=>$t2) {
+
+			foreach ($t2 as $term) {
+
+				//print_r($term);
+				$term_icon = get_tax_meta($term->term_id, 'ct_cat_icon', false, $pt);
+				if ($term_icon) {
+					$term_icon_url = $term_icon["src"];
+				} else {
+					$term_icon_url = $default_icon_url;
+				}
+				$terms_icons[$term->term_id] = $term_icon_url;
+			}
+		}
+
+		update_option('gd_term_icons',$terms_icons);
+	}
+
+	if ($term_id && isset($terms_icons[$term_id])) {
+		return $terms_icons[$term_id];
+	}elseif($term_id && !isset($terms_icons[$term_id])) {
+		return get_option('geodir_default_marker_icon');
+	}
+
+	return $terms_icons;
+}
