@@ -680,7 +680,7 @@ function geodir_breadcrumb() {
 						}
 						
 						if($term_index == count($term_array) &&  $is_taxonomy_last)
-							$breadcrumb .= $separator . $term_link_text .'</a>';
+							$breadcrumb .= $separator . $term_link_text;
 						else
 						{
 							$cat_link .= $term . '/' ;
