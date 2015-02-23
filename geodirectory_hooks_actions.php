@@ -150,6 +150,22 @@ add_action( 'set_object_terms', 'geodir_set_post_terms', 10, 4 );
 add_action('transition_post_status', 'geodir_update_poststatus',10,3);
 
 add_action('before_delete_post','geodir_delete_listing_info');
+
+
+////////////////////////
+/* WP REVIEW COUNT ACTIONS */
+////////////////////////
+
+add_action( 'geodir_update_postrating', 'geodir_term_review_count_force_update', 100);
+add_action( 'transition_post_status',  'geodir_term_review_count_force_update', 100 );
+add_action( 'created_term',  'geodir_term_review_count_force_update', 100 );
+add_action( 'edited_term',  'geodir_term_review_count_force_update', 100 );
+add_action( 'delete_term',  'geodir_term_review_count_force_update', 100 );
+
+////////////////////////
+/* WP CAT META UPDATE ACTIONS */
+////////////////////////
+add_action('gd_tax_meta_updated','geodir_get_term_icon',10,2);
 ////////////////////////
 /* WP FOOTER ACTIONS */
 ////////////////////////

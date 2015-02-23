@@ -50,6 +50,7 @@ function geodir_max_excerpt($charlength) {
 	if ($charlength=='0') {
 		return;
 	}
+	$out = '';
 	$excerpt = get_the_excerpt();
 	//return;
 	$charlength++;
@@ -61,32 +62,34 @@ function geodir_max_excerpt($charlength) {
 			if ($charlength > 0 && mb_strlen( $subex ) > $charlength) {
 				$subex = mb_substr( $subex, 0, $charlength );
 			}
-			echo $subex;
+			$out .= $subex;
 		} else {
 			$subex = mb_substr( $excerpt, 0, $charlength - 5 );
 			$exwords = explode( ' ', $subex );
 			$excut = - ( mb_strlen( $exwords[ count( $exwords ) - 1 ] ) );
 			if ( $excut < 0 ) {
-				echo mb_substr( $subex, 0, $excut );
+				$out .=  mb_substr( $subex, 0, $excut );
 			} else {
-				echo $subex;
+				$out .=  $subex;
 			}
 		}
-		echo ' <a class="excerpt-read-more" href="'.get_permalink().'" title="'.get_the_title().'">'; 
-		echo apply_filters('geodir_max_excerpt_end',__('Read more [...]',GEODIRECTORY_TEXTDOMAIN));
-		echo '</a>'; 
+		$out .= ' <a class="excerpt-read-more" href="'.get_permalink().'" title="'.get_the_title().'">';
+		$out .=  apply_filters('geodir_max_excerpt_end',__('Read more [...]',GEODIRECTORY_TEXTDOMAIN));
+		$out .=  '</a>';
 
 	} else {
 		if (mb_strlen($excerpt_more)>0 && mb_strpos($excerpt, $excerpt_more)!==false) {
 			$excut = - (mb_strlen($excerpt_more));
-			echo mb_substr( $excerpt, 0, $excut );
-			echo ' <a class="excerpt-read-more" href="'.get_permalink().'" title="'.get_the_title().'">'; 
-			echo apply_filters('geodir_max_excerpt_end',__('Read more [...]',GEODIRECTORY_TEXTDOMAIN));
-			echo '</a>';
+			$out .=  mb_substr( $excerpt, 0, $excut );
+			$out .=  ' <a class="excerpt-read-more" href="'.get_permalink().'" title="'.get_the_title().'">';
+			$out .=  apply_filters('geodir_max_excerpt_end',__('Read more [...]',GEODIRECTORY_TEXTDOMAIN));
+			$out .=  '</a>';
 		} else {
-			echo $excerpt;
+			$out .=  $excerpt;
 		}
 	}
+
+	return $out;
 }
 
 function geodir_post_package_info($package_info, $post='', $post_type = '')
@@ -572,7 +575,11 @@ function geodir_get_map_default_language()
 function geodir_add_meta_keywords()
 {
 	global $post, $wp_query, $wpdb, $geodir_addon_list;
-	
+
+	$is_geodir_page = geodir_is_geodir_page();
+
+	if(!$is_geodir_page){return;}// if non GD page, bail
+
 	$current_term = $wp_query->get_queried_object();
 	
 	$all_postypes = geodir_get_posttypes();
@@ -590,8 +597,8 @@ function geodir_add_meta_keywords()
 			the_post();
 			
 			if ( has_excerpt() ) {
-				$out_excerpt = str_replace( array( "\r\n", "\r", "\n" ), "", $out_excerpt );
 				$out_excerpt = strip_tags( do_shortcode( get_the_excerpt() ) );
+				$out_excerpt = str_replace( array( "\r\n", "\r", "\n" ), "", $out_excerpt );
 			} else {
 				$out_excerpt = str_replace( array( "\r\n", "\r", "\n" ), "", $post->post_content );
 				$out_excerpt = strip_tags( do_shortcode( $out_excerpt ) ); // parse short code from content
@@ -612,7 +619,7 @@ function geodir_add_meta_keywords()
 		$meta_desc .= isset($current_term->description) ? $current_term->description : '';
 	}
 
-	$is_geodir_page = geodir_is_geodir_page();
+
 	$geodir_post_type = geodir_get_current_posttype();
 	$geodir_post_type_info = get_post_type_object($geodir_post_type);
 	$geodir_is_page_listing = geodir_is_page('listing') ? true : false;

@@ -23,16 +23,10 @@ function create_marker_jason_of_posts( $post ) {
 		$srcharr = array( "'", "/", "-", '"', '\\' );
 		$replarr = array( "&prime;", "&frasl;", "&ndash;", "&ldquo;", '' );
 		
-		$icon = '';
-		if( $post->default_category != '' ) {
-			if( !empty( $geodir_cat_icons ) && is_array( $geodir_cat_icons ) && array_key_exists( $post->default_category, $geodir_cat_icons ) ) {
-				$icon = $geodir_cat_icons[$post->default_category];
-			} else {
-				$term_icon_url = get_tax_meta( $post->default_category, 'ct_cat_icon', false, $post->post_type );
-				$icon = isset( $term_icon_url['src'] ) ? $term_icon_url['src'] : '';
-				$geodir_cat_icons[$post->default_category] = $icon;
-			}
-		 }
+
+
+		$geodir_cat_icons = geodir_get_term_icon();
+		$icon = $geodir_cat_icons[$post->default_category];
 		 
 		 $post_title = $post->post_title;
 		 $title = str_replace( $srcharr, $replarr, $post_title );
@@ -120,25 +114,14 @@ function home_map_taxonomy_walker( $cat_taxonomy, $cat_parent = 0, $hide_empty =
 		foreach ($cat_terms as $cat_term):
 			
 			$post_type = isset($_REQUEST['post_type']) ? $_REQUEST['post_type']: 'gd_place';
+
+
+			$geodir_cat_icons = geodir_get_term_icon();
+
+
 			
-			$term_icon_url = '';
-			if(!empty($geodir_cat_icons) && is_array($geodir_cat_icons) && array_key_exists($cat_term->term_id,$geodir_cat_icons)){
-				
-				$term_icon_url = $geodir_cat_icons[$cat_term->term_id];
-				
-			}else{
-			
-				$term_icon_url_arr = get_tax_meta($cat_term->term_id, 'ct_cat_icon', false, $post_type);
-				
-				$term_icon_url = isset($term_icon_url_arr['src']) ? $term_icon_url_arr['src'] : '';
-				
-				$geodir_cat_icons[$cat_term->term_id] = $term_icon_url;
-			}
-			
-			
-			
-			if($term_icon_url){$icon =  $term_icon_url;}
-			else{$icon = get_option('geodir_default_marker_icon');}
+			$icon = $geodir_cat_icons[$cat_term->term_id];
+
 			if(!in_array($cat_term->term_id,$exclude_categories)):
 				//Secret sauce.  Function calls itself to display child elements, if any
 				$checked = 'checked="checked"';

@@ -349,24 +349,23 @@ jQuery(window).load(function() {
 });	
 
 //-------count post according to term--
-function geodir_count_post_term(val) {
+function geodir_get_post_term(el) {
+	limit = jQuery(el).data('limit');
+	term = jQuery(el).data('term');
+	jQuery(el).parent().parent().find('.geodir-popular-cat-list').html('<i class="fa fa-cog fa-spin"></i>');
+	jQuery(el).parent().parent().parent().find('.geodir-cat-list-more').hide();
 	jQuery.post(geodir_all_js_msg.geodir_admin_ajax_url + '?action=geodir_ajax_action', {
-		ajax_action: "geodir_get_term_count",
-		term_array: val
+		ajax_action: "geodir_get_term_list",
+		term: term,
+		limit: limit
 	}).done(function(data) {
 		if(jQuery.trim(data) != '') {
-			var data_array = jQuery.parseJSON(data);
-			resultObj = eval(data_array);
-			for(var index in resultObj) {
-				jQuery('.' + index).html(resultObj[index]);
+			jQuery(el).parent().parent().find('.geodir-popular-cat-list').hide().html(data).fadeIn('slow');
+			if(jQuery(el).parent().parent().find('.geodir-popular-cat-list li').length > limit){
+				jQuery(el).parent().parent().parent().find('.geodir-cat-list-more').fadeIn('slow');
 			}
 		}
 	});
 }
 
-jQuery(document).ready(function() {
-	if(jQuery('body').find('.geodir_term_class').length) {
-		var terms_ids = post_category_array.post_category_array;
-		geodir_count_post_term(terms_ids);
-	}
-});
+
