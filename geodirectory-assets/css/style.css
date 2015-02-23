@@ -1060,14 +1060,26 @@ div#jquery-lightbox{z-index:1520}
 	overflow: hidden;
 }
 .bestof-tabs-on-left .geodir-bestof-cat-list {
-	width: 20%;
-	float: left;
+    position: relative;
+    float: left;
+    width: 200px;
 }
 .bestof-tabs-on-left .geo-bestof-contentwrap {
-	width: 80%;
-	float: right;
+    position: relative;
+    float: right;
+    width: 100%;
+    margin-left: -200px;
 	border-top: 1px #e1e1e1 solid;
 	border-left: none;
+}
+.bestof-tabs-on-left #geodir-bestof-places {
+    position: relative;
+    margin-left: 200px;
+}
+@media only screen and (max-width: 1040px) {
+    .bestof-tabs-on-left dl.geodir-tab-head {
+        border-right: none;
+    }
 }
 .bestof-tabs-on-left dl.geodir-tab-head dd {
 	float: none;
@@ -1103,4 +1115,3 @@ div#jquery-lightbox{z-index:1520}
 	height: 30px;
 	margin-left: 0;
 }
-
