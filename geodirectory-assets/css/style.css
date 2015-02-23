@@ -1076,11 +1076,6 @@ div#jquery-lightbox{z-index:1520}
     position: relative;
     margin-left: 200px;
 }
-@media only screen and (max-width: 1040px) {
-    .bestof-tabs-on-left dl.geodir-tab-head {
-        border-right: none;
-    }
-}
 .bestof-tabs-on-left dl.geodir-tab-head dd {
 	float: none;
 }
