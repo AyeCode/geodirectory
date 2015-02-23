@@ -319,8 +319,7 @@ function geodir_bestof_places_by_term($query_args) {
     if ( !isset( $character_count ) ) {
         $character_count = $character_count == '' ? 50 : apply_filters( 'bestof_widget_character_count', $character_count );
     }
-    $template = apply_filters( "geodir_template_part-widget-listing-listview", geodir_plugin_path() . '/geodirectory-templates/widget-listing-listview.php' );
-
+    $template =  apply_filters( "geodir_template_part-widget-listing-listview",geodir_locate_template('widget-listing-listview'));
 
     global $post, $map_jason, $map_canvas_arr;
     $current_post = $post;

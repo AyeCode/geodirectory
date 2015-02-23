@@ -529,7 +529,7 @@ function geodir_related_posts_display($request){
 									
 								}
 								$related_posts = true;
-								$template = apply_filters( "geodir_template_part-related-listing-listview", geodir_plugin_path() . '/geodirectory-templates/listing-listview.php' );
+								$template = apply_filters( "geodir_template_part-related-listing-listview", geodir_locate_template('listing-listview'));
 							
 								
 								include( $template );

@@ -270,7 +270,7 @@ jQuery(document).ready(function() {
 		var duration = 500;
 		var tigger_sticky = jQuery(this);
 		tigger_sticky.hide();
-		jQuery(this).next().toggle(effect, options, duration, function() {
+		jQuery('div.stickymap').toggle(effect, options, duration, function() {
 			tigger_sticky.show();
 		});
 		if(tigger_sticky.hasClass("triggeroff_sticky")) {
@@ -351,7 +351,7 @@ jQuery(window).load(function() {
 //-------count post according to term--
 function geodir_get_post_term(el) {
 	limit = jQuery(el).data('limit');
-	term = jQuery(el).data('term');
+	term = jQuery(el).val();//data('term');
 	jQuery(el).parent().parent().find('.geodir-popular-cat-list').html('<i class="fa fa-cog fa-spin"></i>');
 	jQuery(el).parent().parent().parent().find('.geodir-cat-list-more').hide();
 	jQuery.post(geodir_all_js_msg.geodir_admin_ajax_url + '?action=geodir_ajax_action', {

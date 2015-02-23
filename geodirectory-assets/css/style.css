@@ -532,21 +532,12 @@ section.widget{margin-bottom:20px;}
 }
 
 .geodir-cat-list-tax{
-	width: 100%;
+	width: auto;
 	display: table;
 	overflow: auto;
 	background: #fff;
 }
 
-.geodir_full_page .geodir-cat-list ul.geodir-cat-list-tax li{
-	width: auto;
-	margin-bottom: 0px;
-	border: 1px solid #ccc;
-	padding-left: 15px;
-	padding-right: 15px;
-	margin-right: 0px;
-	cursor: pointer;
-}
 
 .geodir-popular-cat-list .fa{
 	margin-left: auto;

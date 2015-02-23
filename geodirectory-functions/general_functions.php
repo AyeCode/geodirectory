@@ -1487,12 +1487,12 @@ function geodir_popular_post_category_output($args='',$instance=''){
 
 	$tax_change_output = '';
 	if(count($b_terms)>1){
-		$tax_change_output .= "<ul class='geodir-cat-list-tax'>";
+		$tax_change_output .= "<select data-limit='$category_limit' class='geodir-cat-list-tax'  onchange='geodir_get_post_term(this);'>";
 		foreach($b_terms as $key=>$val){
 			$ptype = get_post_type_object( str_replace("category", "", $key) );
-			$tax_change_output .= "<li data-term='$key' data-limit='$category_limit' onclick='geodir_get_post_term(this);'>".__($ptype->labels->singular_name, GEODIRECTORY_TEXTDOMAIN)." ".__('Categories' , GEODIRECTORY_TEXTDOMAIN)."</li>";
+			$tax_change_output .= "<option value='$key' >".__($ptype->labels->singular_name, GEODIRECTORY_TEXTDOMAIN)." ".__('Categories' , GEODIRECTORY_TEXTDOMAIN)."</option>";
 		}
-		$tax_change_output .= "</ul>";
+		$tax_change_output .= "</select>";
 
 
 	}
@@ -2038,7 +2038,7 @@ function geodir_popular_postview_output($args='', $instance='')
 				$gridview_columns_widget  = '';
 			}
 
-			$template = apply_filters( "geodir_template_part-widget-listing-listview", geodir_plugin_path() . '/geodirectory-templates/widget-listing-listview.php' );
+			$template = apply_filters( "geodir_template_part-widget-listing-listview",geodir_locate_template('widget-listing-listview'));
 			if ( !isset( $character_count ) ) {
 				$character_count = $character_count == '' ? 50 : apply_filters( 'widget_character_count', $character_count );
 			}
