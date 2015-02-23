@@ -20,6 +20,7 @@
   .login_form_l{margin-left:0px;}
   .registration_form_r{margin-right:0px;}
   .geodir-list-view-select{display:none;}
+  .bestof-tabs-on-left dl.geodir-tab-head {  border-right: none !important; }
 }
 
 
