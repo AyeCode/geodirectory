@@ -38,7 +38,7 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                 $post_view_class = apply_filters('geodir_post_view_extra_class', '', $all_postypes);
                 $post_view_article_class = apply_filters('geodir_post_view_article_extra_class', '');
                 ?>
-                <li id="post-<?php echo $post->ID; ?>" class="clearfix <?php if ($grid_view_class) {
+                <li class="clearfix <?php if ($grid_view_class) {
                     echo 'geodir-gridview ' . $grid_view_class;
                 } else {
                     echo ' geodir-listview ';
