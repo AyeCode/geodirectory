@@ -1418,11 +1418,6 @@ div#jquery-lightbox {
 }
 
 .bestof-tabs-on-left .gd-bestof-tabs {
-    width: 100%;
-    overflow: hidden;
-}
-
-.bestof-tabs-on-left .geodir-bestof-cat-list {
     position: relative;
     float: left;
     width: 200px;
@@ -1484,4 +1479,7 @@ div#jquery-lightbox {
     margin: 8px;
     height: 30px;
     margin-left: 0;
+}
+.bestof-tabs-on-left section.widget.geodir_bestof_widget {
+    overflow: hidden;
 }
