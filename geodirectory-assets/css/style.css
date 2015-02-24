@@ -1483,3 +1483,9 @@ div#jquery-lightbox {
 .bestof-tabs-on-left section.widget.geodir_bestof_widget {
     overflow: hidden;
 }
+.bestof-tabs-on-left #geodir_bestof_tab_dd,
+.bestof-tabs-on-left #geodir_bestof_tab_dd_chosen,
+.bestof-tabs-on-top #geodir_bestof_tab_dd
+.bestof-tabs-on-top #geodir_bestof_tab_dd_chosen {
+    display: none;
+}
