@@ -179,7 +179,7 @@ class geodir_bestof_widget extends WP_Widget {
         <input type="hidden" id="bestof_widget_location_filter" name="bestof_widget_location_filter" value="<?php if($add_location_filter) { echo 1; } else { echo 0; }  ?>">
         <input type="hidden" id="bestof_widget_char_count" name="bestof_widget_char_count" value="<?php echo $character_count;  ?>">
         <div class="geo-bestof-contentwrap geodir-tabs-content" style="position: relative; z-index: 0;">
-            <p id="geodir-bestof-loading"><img src="<?php echo geodir_plugin_url().'/geodirectory-assets/images/ajax-loader.gif'; ?>" /></p>
+            <p id="geodir-bestof-loading"><i class="fa fa-cog fa-spin"></i></p>
             <?php
             echo '<div id="geodir-bestof-places">';
             if ($terms) {
@@ -319,8 +319,7 @@ function geodir_bestof_places_by_term($query_args) {
     if ( !isset( $character_count ) ) {
         $character_count = $character_count == '' ? 50 : apply_filters( 'bestof_widget_character_count', $character_count );
     }
-    $template = apply_filters( "geodir_template_part-widget-listing-listview", geodir_plugin_path() . '/geodirectory-templates/widget-listing-listview.php' );
-
+    $template =  apply_filters( "geodir_template_part-widget-listing-listview",geodir_locate_template('widget-listing-listview'));
 
     global $post, $map_jason, $map_canvas_arr;
     $current_post = $post;
@@ -393,7 +392,7 @@ function geodir_bestof_js() { ?>
                 loading.show();
             }).ajaxStop(function() {
                 loading.hide();
-                container.show();
+                container.fadeIn('slow');
             });
             e.preventDefault();
             var activeTab = jQuery(this).closest('dl').find('dd.geodir-tab-active');

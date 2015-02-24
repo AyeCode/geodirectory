@@ -74,6 +74,16 @@ function geodir_locate_template($template = '')
 		case 'geodir-home':
 				return $template = locate_template( array( "geodirectory/geodir-home.php" ) );
 		break;
+		case 'listing-listview':
+			$template = locate_template( array( "geodirectory/listing-listview.php" ) );
+			if(!$template){ $template = geodir_plugin_path() . '/geodirectory-templates/listing-listview.php';}
+			return $template;
+		break;
+		case 'widget-listing-listview':
+			$template = locate_template( array( "geodirectory/widget-listing-listview.php" ) );
+			if(!$template){ $template =  geodir_plugin_path() . '/geodirectory-templates/widget-listing-listview.php';}
+			return $template;
+		break;
 	endswitch;
 	
 	return false;	
@@ -148,7 +158,7 @@ function geodir_template_loader( $template ) {
 		//geodir_is_login(true);
 		global $current_user; 
 		if(!$current_user->ID){
-			wp_redirect( home_url().'?geodir_signup=true&redirect_add_listing='.urlencode(geodir_curPageURL()), 302 );exit;
+			wp_redirect( home_url().'?geodir_signup=true&amp;redirect_add_listing='.urlencode(geodir_curPageURL()), 302 );exit;
 		}
 		
 	 	$template = geodir_locate_template('add-listing');
