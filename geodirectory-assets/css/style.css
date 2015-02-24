@@ -1072,10 +1072,12 @@ div#jquery-lightbox{z-index:1520}
 	border-top: 1px #e1e1e1 solid;
 	border-left: none;
 }
-.bestof-tabs-on-left #geodir-bestof-places {
+.bestof-tabs-on-left #geodir-bestof-places,
+.bestof-tabs-on-left #geodir-bestof-loading {
     position: relative;
     margin-left: 200px;
 }
+
 .bestof-tabs-on-left dl.geodir-tab-head dd {
 	float: none;
 }
