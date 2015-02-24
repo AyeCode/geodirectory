@@ -1565,7 +1565,7 @@ function geodir_helper_cat_list_output($terms,$category_limit)
 					$total_post = $cat->count;
 
 					echo '<li class="' . $class_row . '"><a href="' . get_term_link($cat, $cat->taxonomy) . '">';
-					echo  '<img class="" style="height:20px;vertical-align:middle;" src="' . $term_icon_url . '"/> ';
+					echo  '<img alt="'.$cat->name.' icon" class="" style="height:20px;vertical-align:middle;" src="' . $term_icon_url . '"/> ';
 					echo ucwords($cat->name) . ' (<span class="geodir_term_class geodir_link_span geodir_category_class_' . $post_type . '_' . $cat->term_id . '" >' . $total_post . '</span>) ';
 					echo '</a></li>';
 				}
@@ -1693,7 +1693,7 @@ function geodir_listing_slider_widget_output($args='', $instance='')
 					$widget_spacer_height = ( ( 200 - $widget_image->height ) / 2 );
 				}
 
-				$widget_main_slides .= '<li class="geodir-listing-slider-widget"><img class="geodir-listing-slider-spacer" src="'.geodir_plugin_url()."/geodirectory-assets/images/spacer.gif".'" alt="'.$widget_image->title.'" title="'.$widget_image->title.'" style="max-height:'.$widget_spacer_height.'px !important;margin:0 auto;" width="100%" />';
+				$widget_main_slides .= '<li class="geodir-listing-slider-widget"><img class="geodir-listing-slider-spacer" src="'.geodir_plugin_url()."/geodirectory-assets/images/spacer.gif".'" alt="'.$widget_image->title.'" title="'.$widget_image->title.'" style="max-height:'.$widget_spacer_height.'px !important;margin:0 auto;" width="100" />';
 
 				$title = '';
 				if($show_title){
