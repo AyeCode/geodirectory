@@ -248,16 +248,18 @@ function register_geodir_widgets() {
 			
 			<?php // if ( get_option('gd_facebook_button') ) { ?>
 			
-				<iframe <?php if (isset($_SERVER['HTTP_USER_AGENT']) && (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)){echo 'allowtransparency="true"'; }?> class="facebook" src="//www.facebook.com/plugins/like.php?href=<?php echo urlencode(geodir_curPageURL()); ?>&amp;layout=button_count&amp;show_faces=false&amp;width=100&amp;action=like&amp;colorscheme=light" scrolling="no" frameborder="0"  style="border:none; overflow:hidden; width:100px; height:20px"></iframe> 
+				<iframe <?php if (isset($_SERVER['HTTP_USER_AGENT']) && (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)){echo 'allowtransparency="true"'; }?> class="facebook" src="//www.facebook.com/plugins/like.php?href=<?php echo urlencode(geodir_curPageURL()); ?>&amp;layout=button_count&amp;show_faces=false&amp;width=100&amp;action=like&amp;colorscheme=light" style="border:none; overflow:hidden; width:100px; height:20px"></iframe>
 			
 			
 			<?php //} ?>
 			
 			<?php //if ( get_option('gd_google_button') ) { ?>
-			
-				<script type="text/javascript" src="https://apis.google.com/js/plusone.js">
-				{ parsetags: 'explicit' }
-				</script>
+                <script>
+                    window.___gcfg = {
+                        parsetags: 'explicit'
+                    }
+                </script>
+				<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
 				
 				<div id="plusone-div"></div>
 				<script type="text/javascript">gapi.plusone.render('plusone-div', {"size": "medium", "count": "true" });</script>                    
