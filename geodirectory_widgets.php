@@ -254,10 +254,12 @@ function register_geodir_widgets() {
 			<?php //} ?>
 			
 			<?php //if ( get_option('gd_google_button') ) { ?>
-			
-				<script type="text/javascript" src="https://apis.google.com/js/plusone.js">
-				{ parsetags: 'explicit' }
-				</script>
+                <script>
+                    window.___gcfg = {
+                        parsetags: 'explicit'
+                    }
+                </script>
+				<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
 				
 				<div id="plusone-div"></div>
 				<script type="text/javascript">gapi.plusone.render('plusone-div', {"size": "medium", "count": "true" });</script>                    

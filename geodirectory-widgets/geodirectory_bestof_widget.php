@@ -158,6 +158,7 @@ class geodir_bestof_widget extends WP_Widget {
         } else {
             echo '</dl>';
         }
+        echo '</div>';
         //term navigation - end
 
         //first term listings by default - start
