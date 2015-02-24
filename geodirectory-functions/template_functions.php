@@ -74,6 +74,16 @@ function geodir_locate_template($template = '')
 		case 'geodir-home':
 				return $template = locate_template( array( "geodirectory/geodir-home.php" ) );
 		break;
+		case 'listing-listview':
+			$template = locate_template( array( "geodirectory/listing-listview.php" ) );
+			if(!$template){ $template = geodir_plugin_path() . '/geodirectory-templates/listing-listview.php';}
+			return $template;
+		break;
+		case 'widget-listing-listview':
+			$template = locate_template( array( "geodirectory/widget-listing-listview.php" ) );
+			if(!$template){ $template =  geodir_plugin_path() . '/geodirectory-templates/widget-listing-listview.php';}
+			return $template;
+		break;
 	endswitch;
 	
 	return false;	
