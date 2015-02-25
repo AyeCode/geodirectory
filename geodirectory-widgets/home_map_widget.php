@@ -144,7 +144,6 @@ class geodir_homepage_map extends WP_Widget {
 	}
 	
 	function geodir_home_map_add_script() {
-		echo '<style>.geodir-map-home-page .geodir-map-posttype-list li{margin-left:0;} .geodir-map-home-page.geodir_map_container .map-places-listing ul.place-list{padding-left:0;margin-left:0;}.geodir-map-home-page.geodir_map_container .map-places-listing ul.place-list > li{display:inline-block;float:none}.geodir-map-home-page.geodir_map_container .map-places-listing ul.place-list>li:first-child{padding-left:0;}.geodir-map-home-page .geodir-map-posttype-list{display:block;overflow:hidden;white-space:nowrap;width:100%;word-wrap:normal;position:relative;}</style>';
 		?>
 <script type="text/javascript">
 jQuery(document).ready(function(){	
