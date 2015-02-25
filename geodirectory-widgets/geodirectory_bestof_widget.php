@@ -115,6 +115,7 @@ class geodir_bestof_widget extends WP_Widget {
                 $nav_html .= '<option value=""></option>';
             } else {
                 $nav_html .= '<dl class="geodir-tab-head geodir-bestof-cat-list">';
+                $nav_html .= '<dt></dt>';
             }
 
 
