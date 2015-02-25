@@ -1271,6 +1271,8 @@ function geodir_str_getcsv( $input, $delimiter = ",", $enclosure = '"', $escape 
 
 add_action( 'wp_ajax_gdImportCsv', 'geodir_ajax_import_csv' );
 function geodir_ajax_import_csv() {
+	error_reporting(0); // hide error to get clean json response
+	
 	global $wpdb, $plugin_prefix, $current_user;
 	$uploads = wp_upload_dir(); 
 	ini_set( 'auto_detect_line_endings', true );
