@@ -165,7 +165,9 @@ class geodir_bestof_widget extends WP_Widget {
             }
             $final_html .= $nav_html;
         }
-        echo $final_html;
+        if($terms) {
+            echo $final_html;
+        }
         echo '</div>';
         //term navigation - end
 
