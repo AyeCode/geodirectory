@@ -196,7 +196,7 @@ function geodir_draw_map($map_args = array())
                   <div class="trigger triggeroff" ><i class="fa fa-compress"></i><i class="fa fa-expand"></i></div>
                		<div id="<?php echo $map_canvas_name;?>_cat" class="<?php echo $map_canvas_name;?>_map_category  map_category" <?php if($child_collapse){ ?>checked="checked" <?php }?> style="max-height:<?php echo $geodir_map_options['height'];?>;">
 					<input onkeydown="if(event.keyCode == 13){build_map_ajax_search_param('<?php echo $map_canvas_name; ?>', false)}" 
-type="text" class="inputbox" id="<?php echo $map_canvas_name; ?>_search_string" name="search" placeholder="<?php _e( 'Title', GEODIRECTORY_TEXTDOMAIN ); ?>" <?php echo ( $geodir_map_options['enable_text_search'] ? '' : 'class="geodir-hide"' ); ?> />
+type="text" class="inputbox <?php echo ( $geodir_map_options['enable_text_search'] ? '' : 'geodir-hide' ); ?>" id="<?php echo $map_canvas_name; ?>_search_string" name="search" placeholder="<?php _e( 'Title', GEODIRECTORY_TEXTDOMAIN ); ?>" />
                      <?php if($geodir_map_options['enable_cat_filters']){?>
                      			<?php if($geodir_map_options['child_collapse']){ ?>
                                 	<input type="hidden" id="<?php echo $map_canvas_name;?>_child_collapse" value="1" />
