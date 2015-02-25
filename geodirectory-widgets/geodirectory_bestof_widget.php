@@ -112,9 +112,9 @@ class geodir_bestof_widget extends WP_Widget {
 
             if ($is_dropdown) {
                 $nav_html .= '<select id="geodir_bestof_tab_dd" class="chosen_select" name="geodir_bestof_tab_dd" data-placeholder="<?php echo esc_attr( __( \'Select Category\', GEODIRECTORY_TEXTDOMAIN ) );?>">';
-                $nav_html .= '<option value=""></option>';
             } else {
                 $nav_html .= '<dl class="geodir-tab-head geodir-bestof-cat-list">';
+                $nav_html .= '<dt></dt>';
             }
 
 
@@ -136,7 +136,7 @@ class geodir_bestof_widget extends WP_Widget {
                     }
                     $term_icon_url = $term_icon[$cat->term_id];
                     $nav_html .= '<a data-termid="' . $cat->term_id . '" href="' . get_term_link($cat, $cat->taxonomy) . '">';
-                    $nav_html .= '<img class="bestof-cat-icon" src="' . $term_icon_url . '"/>';
+                    $nav_html .= '<img alt="'.$cat->name.' icon" class="bestof-cat-icon" src="' . $term_icon_url . '"/>';
                     $nav_html .= '<span>';
                     $nav_html .= ucwords($cat->name);
                     $nav_html .= '<small>';
@@ -164,7 +164,9 @@ class geodir_bestof_widget extends WP_Widget {
             }
             $final_html .= $nav_html;
         }
-        echo $final_html;
+        if($terms) {
+            echo $final_html;
+        }
         echo '</div>';
         //term navigation - end
 
