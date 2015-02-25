@@ -1,4 +1,11 @@
 <?php
+/**
+ * Language constants
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
+
 // ***** NOTE: when editing text in this file, a single apostrophe ( ' ) can cause the site to break
 // ***** Use an escaped apostrophe ( \' ) inside text in ALL cases
 // ***** Good Example: define('EXAMPLE_TEXT',__('It\'s a nice day.',GEODIRECTORY_TEXTDOMAIN));
