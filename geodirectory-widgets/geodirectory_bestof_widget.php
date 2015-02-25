@@ -13,7 +13,7 @@ class geodir_bestof_widget extends WP_Widget {
     {
         extract($args);
         $tab_layout = empty( $instance['tab_layout'] ) ? 'bestof-tabs-on-top' : apply_filters( 'bestof_widget_tab_layout', $instance['tab_layout'] );
-        echo '<div class="'.$tab_layout.'">';
+        echo '<div class="'.$tab_layout.'" id="bestof-widget-tab-layout">';
         echo $before_widget;
         $loc_terms = geodir_get_current_location_terms();
         if ($loc_terms) {
@@ -91,10 +91,12 @@ class geodir_bestof_widget extends WP_Widget {
             $query_args['excerpt_length'] = $character_count;
         }
 
+        $layout = array();
         if ($tab_layout == 'bestof-tabs-as-dropdown') {
-            $is_dropdown = true;
+            $layout[] = $tab_layout;
         } else {
-            $is_dropdown = false;
+            $layout[] = 'bestof-tabs-as-dropdown';
+            $layout[] = $tab_layout;
         }
 
 
@@ -102,39 +104,43 @@ class geodir_bestof_widget extends WP_Widget {
 
         //term navigation - start
         echo '<div class="geodir-tabs gd-bestof-tabs" id="gd-bestof-tabs" style="position:relative;">';
-        if ($is_dropdown) { ?>
-            <select id="geodir_bestof_tab_dd" class="chosen_select" name="geodir_bestof_tab_dd" data-placeholder="<?php echo esc_attr( __( 'Select Category', GEODIRECTORY_TEXTDOMAIN ) );?>">
-            <option value=""></option>
-        <?php } else {
-            echo '<dl class="geodir-tab-head geodir-bestof-cat-list">';
-        }
 
+        $final_html = '';
+        foreach($layout as $tab_layout) {
+            $nav_html = '';
+            $is_dropdown = ($tab_layout == 'bestof-tabs-as-dropdown') ? true : false;
 
-        $term_icon = geodir_get_term_icon();
-        $cat_count = 0;
-        foreach( $terms as $cat ) {
-            $cat_count++;
-            if ($cat_count > $categ_limit) {
-                break;
-            }
-            if ($is_dropdown) { ?>
-                <option <?php if ($cat_count == 1) { echo 'selected="selected"'; } ?> value="<?php echo $cat->term_id; ?>"><?php echo ucwords( $cat->name ); ?></option>
-            <?php
+            if ($is_dropdown) {
+                $nav_html .= '<select id="geodir_bestof_tab_dd" class="chosen_select" name="geodir_bestof_tab_dd" data-placeholder="<?php echo esc_attr( __( \'Select Category\', GEODIRECTORY_TEXTDOMAIN ) );?>">';
+                $nav_html .= '<option value=""></option>';
             } else {
-                if ($cat_count == 1) {
-                    echo '<dd class="geodir-tab-active">';
-                } else {
-                    echo '<dd class="">';
+                $nav_html .= '<dl class="geodir-tab-head geodir-bestof-cat-list">';
+            }
+
+
+            $term_icon = geodir_get_term_icon();
+            $cat_count = 0;
+            foreach ($terms as $cat) {
+                $cat_count++;
+                if ($cat_count > $categ_limit) {
+                    break;
                 }
-                $term_icon_url = $term_icon[$cat->term_id];
-                echo '<a data-termid="'.$cat->term_id.'" href="' . get_term_link( $cat, $cat->taxonomy ) . '">';
-                echo '<img class="bestof-cat-icon" src="'.$term_icon_url.'"/>';
-                echo '<span>';
-                echo ucwords( $cat->name );
-                ?>
-                <small>
-                    <?php
-                    if(isset($cat->review_count)) {
+                if ($is_dropdown) {
+                    $selected = ($cat_count == 1) ? 'selected="selected"' : '';
+                    $nav_html .= '<option ' . $selected . ' value="' . $cat->term_id . '">' . ucwords($cat->name) . '</option>';
+                } else {
+                    if ($cat_count == 1) {
+                        $nav_html .= '<dd class="geodir-tab-active">';
+                    } else {
+                        $nav_html .= '<dd class="">';
+                    }
+                    $term_icon_url = $term_icon[$cat->term_id];
+                    $nav_html .= '<a data-termid="' . $cat->term_id . '" href="' . get_term_link($cat, $cat->taxonomy) . '">';
+                    $nav_html .= '<img class="bestof-cat-icon" src="' . $term_icon_url . '"/>';
+                    $nav_html .= '<span>';
+                    $nav_html .= ucwords($cat->name);
+                    $nav_html .= '<small>';
+                    if (isset($cat->review_count)) {
                         $num_reviews = $cat->review_count;
                         if ($num_reviews == 0) {
                             $reviews = __('No Reviews', GEODIRECTORY_TEXTDOMAIN);
@@ -143,21 +149,23 @@ class geodir_bestof_widget extends WP_Widget {
                         } else {
                             $reviews = __('1 Review', GEODIRECTORY_TEXTDOMAIN);
                         }
-                        echo $reviews;
+                        $nav_html .= $reviews;
                     }
-                    ?>
-                </small>
-                <?php
-                echo '</span>';
-                echo '</a>';
-                echo '</dd>';
+                    $nav_html .= '</small>';
+                    $nav_html .= '</span>';
+                    $nav_html .= '</a>';
+                    $nav_html .= '</dd>';
+                }
             }
+            if ($is_dropdown) {
+                $nav_html .= '</select>';
+            } else {
+                $nav_html .= '</dl>';
+            }
+            $final_html .= $nav_html;
         }
-        if ($is_dropdown) {
-            echo '</select>';
-        } else {
-            echo '</dl>';
-        }
+        echo $final_html;
+        echo '</div>';
         //term navigation - end
 
         //first term listings by default - start
@@ -426,6 +434,15 @@ function geodir_bestof_js() { ?>
                 jQuery('.geodir_category_list_view li .geodir-post-img .geodir_thumbnail img').css('display','block');
             });
         })
+    });
+    jQuery(document).ready(function() {
+        if ( jQuery(window).width() < 660) {
+            if ( jQuery('#bestof-widget-tab-layout').hasClass('bestof-tabs-on-left') ) {
+                jQuery('#bestof-widget-tab-layout').removeClass('bestof-tabs-on-left').addClass('bestof-tabs-as-dropdown');
+            } else if ( jQuery('#bestof-widget-tab-layout').hasClass('bestof-tabs-on-top') ) {
+                jQuery('#bestof-widget-tab-layout').removeClass('bestof-tabs-on-top').addClass('bestof-tabs-as-dropdown');
+            }
+        }
     });
     </script>
     <?php
