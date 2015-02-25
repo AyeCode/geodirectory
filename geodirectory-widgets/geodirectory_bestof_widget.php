@@ -112,7 +112,6 @@ class geodir_bestof_widget extends WP_Widget {
 
             if ($is_dropdown) {
                 $nav_html .= '<select id="geodir_bestof_tab_dd" class="chosen_select" name="geodir_bestof_tab_dd" data-placeholder="<?php echo esc_attr( __( \'Select Category\', GEODIRECTORY_TEXTDOMAIN ) );?>">';
-                $nav_html .= '<option value=""></option>';
             } else {
                 $nav_html .= '<dl class="geodir-tab-head geodir-bestof-cat-list">';
                 $nav_html .= '<dt></dt>';
