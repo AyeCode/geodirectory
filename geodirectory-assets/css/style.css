@@ -1484,8 +1484,8 @@ div#jquery-lightbox {
     overflow: hidden;
 }
 .bestof-tabs-on-left #geodir_bestof_tab_dd,
-.bestof-tabs-on-left #geodir_bestof_tab_dd_chosen,
-.bestof-tabs-on-top #geodir_bestof_tab_dd
-.bestof-tabs-on-top #geodir_bestof_tab_dd_chosen {
+.bestof-tabs-on-left .geodir-chosen-container,
+.bestof-tabs-on-top #geodir_bestof_tab_dd,
+.bestof-tabs-on-top .geodir-chosen-container {
     display: none;
 }

@@ -52,10 +52,10 @@
   .login_form_l,
   .registration_form_r{margin-left:auto;margin-right:auto;float:none;width:96%;}
   .bestof-tabs-on-left #geodir_bestof_tab_dd,
-  .bestof-tabs-on-left #geodir_bestof_tab_dd_chosen,
-  .bestof-tabs-on-top #geodir_bestof_tab_dd
-  .bestof-tabs-on-top #geodir_bestof_tab_dd_chosen {
-      display: block;
+  .bestof-tabs-on-left .geodir-chosen-container,
+  .bestof-tabs-on-top #geodir_bestof_tab_dd,
+  .bestof-tabs-on-top .geodir-chosen-container {
+      display: inline-block;
   }
   .bestof-tabs-on-left .geodir-bestof-cat-list,
   .bestof-tabs-on-top .geodir-bestof-cat-list,
