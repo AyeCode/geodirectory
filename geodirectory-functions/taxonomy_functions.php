@@ -1055,17 +1055,17 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
 {
 	//echo $post_link."<br />".$sample ;
 
-	
+
 	global $wpdb, $wp_query ,$plugin_prefix,$post,$comment_post_cache,$gd_permalink_cache;
 	if(isset($post_obj->ID) && isset($post->ID) && $post_obj->ID==$post->ID){}
 	elseif(isset($post_obj->post_status) && $post_obj->post_status=='auto-draft'){return $post_link;}
 	else{$orig_post = $post;$post = $post_obj;}
 
 		if(in_array( $post->post_type, geodir_get_posttypes() ) ){
-		
+
 		if(isset($comment_post_cache[$post->ID])){$post = $comment_post_cache[$post->ID];}
 		if(isset($gd_permalink_cache[$post->ID]) && $gd_permalink_cache[$post->ID] && !$sample){$post_id = $post->ID; if(isset($orig_post)){$post = $orig_post;} return $gd_permalink_cache[$post_id];}
-		
+
 		if(!isset($post->post_locations)){
 			$post_type= $post->post_type;
 			$ID = $post->ID;
@@ -1228,7 +1228,7 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
 			//echo $post_link ;
 		}
 		// temp cache the permalink
-		if(!$sample){$gd_permalink_cache[$post->ID]=$post_link;}
+		if(!$sample && (!isset($_REQUEST['geodir_ajax']) || (isset($_REQUEST['geodir_ajax']) && $_REQUEST['geodir_ajax']!='add_listing' ))){$gd_permalink_cache[$post->ID]=$post_link;}
 	}	
 	if(isset($orig_post)){$post = $orig_post;}
 	//echo $post_link ;

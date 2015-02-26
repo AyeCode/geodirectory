@@ -81,7 +81,7 @@ function geodir_on_init()
  * @see geodir_get_ajax_url()
  * @since 1.0.0
  * @package GeoDirectory
- * @todo check if nonce is required her and if so add one.
+ * @todo check if nonce is required here and if so add one.
  */
 function geodir_ajax_handler()
 {

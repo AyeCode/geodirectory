@@ -597,11 +597,17 @@ function geodir_add_meta_keywords()
 			the_post();
 			
 			if ( has_excerpt() ) {
-				$out_excerpt = strip_tags( do_shortcode( get_the_excerpt() ) );
+				$out_excerpt = strip_tags( strip_shortcodes( get_the_excerpt() ) );
+				if(empty($out_excerpt)) {
+					$out_excerpt = strip_tags( do_shortcode( get_the_excerpt() ) );
+				}
 				$out_excerpt = str_replace( array( "\r\n", "\r", "\n" ), "", $out_excerpt );
 			} else {
 				$out_excerpt = str_replace( array( "\r\n", "\r", "\n" ), "", $post->post_content );
-				$out_excerpt = strip_tags( do_shortcode( $out_excerpt ) ); // parse short code from content
+				$out_excerpt = strip_tags( strip_shortcodes( $out_excerpt  ) );
+				if(empty($out_excerpt)) {
+					$out_excerpt = strip_tags( do_shortcode( $out_excerpt ) ); // parse short code from content
+				}
 				$out_excerpt = trim( wp_trim_words( $out_excerpt, 35, '' ), '.!?,;:-' );
 			}
 			
