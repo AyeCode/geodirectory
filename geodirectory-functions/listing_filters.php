@@ -286,9 +286,25 @@ function geodir_posts_fields($fields){
 	
 	global $s;
 	if ( is_search() && isset( $_REQUEST['geodir_search'] ) && $s && trim( $s ) != '' ) {
-		$fields .= $wpdb->prepare(", CASE WHEN " . $table . ".is_featured='1' THEN 1 ELSE 0 END AS gd_featured, CASE WHEN " . $wpdb->posts . ".post_title=%s THEN 1 ELSE 0 END AS gd_exacttitle, CASE WHEN " . $wpdb->posts . ".post_title LIKE %s THEN 1 ELSE 0 END AS gd_titlematch, CASE WHEN " . $wpdb->posts . ".post_content LIKE %s THEN 2 ELSE 0 END AS gd_score", array( $s, '%' . $s . '%', '%' . $s . '%' ) );
+        $keywords = explode(" ",$s);
+        if (count($keywords) > 1) {
+            $gd_titlematch_part = " CASE WHEN ";
+            $count = 0;
+            foreach ($keywords as $keyword) {
+                $count++;
+                if($count < count($keywords)) {
+                    $gd_titlematch_part .= $wpdb->posts . ".post_title LIKE '%".$keyword."%' OR ";
+                } else {
+                    $gd_titlematch_part .= $wpdb->posts . ".post_title LIKE '%".$keyword."%' ";
+                }
+
+            }
+            $gd_titlematch_part .= "THEN 1 ELSE 0 END AS gd_titlematch_part,";
+        } else {
+            $gd_titlematch_part = "";
+        }
+		$fields .= ", CASE WHEN " . $table . ".is_featured='1' THEN 1 ELSE 0 END AS gd_featured, CASE WHEN " . $wpdb->posts . ".post_title='".$s."' THEN 1 ELSE 0 END AS gd_exacttitle, CASE WHEN " . $wpdb->posts . ".post_title LIKE '%" . $s . "%' THEN 1 ELSE 0 END AS gd_titlematch,".$gd_titlematch_part." CASE WHEN " . $wpdb->posts . ".post_content LIKE '%" . $s . "%' THEN 1 ELSE 0 END AS gd_content";
 	}
-		
 	return $fields;
 }
 
@@ -418,10 +434,19 @@ function geodir_posts_orderby($orderby) {
 	global $s;
 	
 	if ( is_search() && isset( $_REQUEST['geodir_search'] ) && $s && trim( $s ) != '' ) {
+        $keywords = explode(" ",$s);
 		if ( $sort_by == 'nearest' || $sort_by == 'farthest' ) {
-			$orderby = $orderby . " ( gd_titlematch * 1.5 + gd_featured * 5 + gd_exacttitle * 10 + gd_score ) DESC, ";
+            if (count($keywords) > 1) {
+                $orderby = $orderby . " ( gd_titlematch * 1.5 + gd_featured * 5 + gd_exacttitle * 10 + gd_titlematch_part * 5 + gd_content * 2) DESC, ";
+            } else {
+                $orderby = $orderby . " ( gd_titlematch * 1.5 + gd_featured * 5 + gd_exacttitle * 10 + gd_content * 2) DESC, ";
+            }
 		} else {
-			$orderby = "( gd_titlematch * 1.5 + gd_featured * 5 + gd_exacttitle * 10 + gd_score ) DESC, " . $orderby;
+            if (count($keywords) > 1) {
+                $orderby = "( gd_titlematch * 1.5 + gd_featured * 5 + gd_exacttitle * 10 + gd_titlematch_part * 5 + gd_content * 2) DESC, " . $orderby;
+            } else {
+                $orderby = "( gd_titlematch * 1.5 + gd_featured * 5 + gd_exacttitle * 10 + gd_content * 2) DESC, " . $orderby;
+            }
 		}
 	}
 	
@@ -652,7 +677,17 @@ function searching_filter_where($where) {
 	$taxonomies = geodir_get_taxonomies($post_types,true);
 	$taxonomies = implode("','",$taxonomies);	
 	$taxonomies = "'". $taxonomies ."'";
-	
+
+    $keywords = explode(" ",$s);
+    if (count($keywords) > 1) {
+        $gd_titlematch_part = " ";
+        foreach ($keywords as $keyword) {
+            $gd_titlematch_part .= "OR ($wpdb->posts.post_title LIKE \"%$keyword%\") ";
+        }
+    } else {
+        $gd_titlematch_part = "";
+    }
+
 	//if($snear!='' && strpos($snear,__('In:',GEODIRECTORY_TEXTDOMAIN)) !== false)
 	if($snear!='')
 	{		if(isset($_SESSION['near_me_range']) && is_numeric($_SESSION['near_me_range']) && !isset($_REQUEST['sdist'])){$dist = $_SESSION['near_me_range'];}
@@ -665,9 +700,10 @@ function searching_filter_where($where) {
 			$rlon2 = is_numeric(max($lon1,$lon2)) ? max($lon1,$lon2) : '';
 			$rlat1 = is_numeric(min($lat1,$lat2)) ? min($lat1,$lat2) : '';
 			$rlat2 = is_numeric(max($lat1,$lat2)) ? max($lat1,$lat2) : '';
-			
-			
+
+
 			$where .= " AND ( ( $wpdb->posts.post_title LIKE \"%$s%\" $better_search_terms)
+			                    $gd_titlematch_part
 								OR ($wpdb->posts.post_content LIKE \"%$s%\") 
 								OR ($wpdb->posts.ID IN( 
 										SELECT $wpdb->term_relationships.object_id as post_id 
@@ -691,7 +727,8 @@ function searching_filter_where($where) {
 		
 	}else
 	{
-		$where .= " AND (	( $wpdb->posts.post_title LIKE \"%$s%\" $better_search_terms) 
+		$where .= " AND (	( $wpdb->posts.post_title LIKE \"%$s%\" $better_search_terms)
+                            $gd_titlematch_part
 							OR ( $wpdb->posts.post_content LIKE \"%$s%\") 
 							OR ( $wpdb->posts.ID IN(	
 									SELECT $wpdb->term_relationships.object_id as post_id                     
