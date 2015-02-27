@@ -293,9 +293,9 @@ function geodir_posts_fields($fields){
             foreach ($keywords as $keyword) {
                 $count++;
                 if($count < count($keywords)) {
-                    $gd_titlematch_part .= $wpdb->posts . ".post_title LIKE '%".$keyword."%' OR ";
+                    $gd_titlematch_part .= $wpdb->posts . ".post_title LIKE '%%".$keyword."%%' OR ";
                 } else {
-                    $gd_titlematch_part .= $wpdb->posts . ".post_title LIKE '%".$keyword."%' ";
+                    $gd_titlematch_part .= $wpdb->posts . ".post_title LIKE '%%".$keyword."%%' ";
                 }
 
             }
@@ -303,7 +303,7 @@ function geodir_posts_fields($fields){
         } else {
             $gd_titlematch_part = "";
         }
-		$fields .= ", CASE WHEN " . $table . ".is_featured='1' THEN 1 ELSE 0 END AS gd_featured, CASE WHEN " . $wpdb->posts . ".post_title='".$s."' THEN 1 ELSE 0 END AS gd_exacttitle, CASE WHEN " . $wpdb->posts . ".post_title LIKE '%" . $s . "%' THEN 1 ELSE 0 END AS gd_titlematch,".$gd_titlematch_part." CASE WHEN " . $wpdb->posts . ".post_content LIKE '%" . $s . "%' THEN 1 ELSE 0 END AS gd_content";
+        $fields .= $wpdb->prepare(", CASE WHEN " . $table . ".is_featured='1' THEN 1 ELSE 0 END AS gd_featured, CASE WHEN " . $wpdb->posts . ".post_title=%s THEN 1 ELSE 0 END AS gd_exacttitle,".$gd_titlematch_part." CASE WHEN " . $wpdb->posts . ".post_title LIKE %s THEN 1 ELSE 0 END AS gd_titlematch, CASE WHEN " . $wpdb->posts . ".post_content LIKE %s THEN 1 ELSE 0 END AS gd_content", array( $s, '%' . $s . '%', '%' . $s . '%' ) );
 	}
 	return $fields;
 }
