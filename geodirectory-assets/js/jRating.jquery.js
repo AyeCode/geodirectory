@@ -1,7 +1,7 @@
 /************************************************************************
 *************************************************************************
 @Name :       	jRating - jQuery Plugin
-@Revison :    	3.0
+@Revison :    	3.0 (Modified by Geodirectory Team)
 @Date : 		28/01/2013 
 @Author:     	 ALPIXEL - (www.myjqueryplugins.com - www.alpixel.fr) 
 @License :		 Open Source - MIT License : http://www.opensource.org/licenses/mit-license.php
@@ -33,7 +33,8 @@
 
 			/** Functions **/
 			onSuccess : null,
-			onError : null
+			onError : null,
+            onTouchstart: null
 		}; 
 
 		if(this.length>0)
@@ -178,8 +179,27 @@
 						},
 						'json'
 					);*/
-				}
-			});
+				},
+                touchstart : function(e){
+                    var element = this;
+                    var realOffsetLeft = findRealLeft(this);
+                    var xPos = e.originalEvent.touches[0].pageX;
+                    var relativeX = xPos - realOffsetLeft;
+                    //Taken from mousemove
+                    if(opts.step) newWidth = Math.floor(relativeX/starWidth)*starWidth + starWidth;
+                    else newWidth = relativeX;
+                    /*set vars*/
+                    hasRated = true;
+                    globalWidth = newWidth;
+                    nbOfRates--;
+                    if(!opts.canRateAgain || parseInt(nbOfRates) <= 0) $(this).unbind().css('cursor','default').addClass('jDisabled');
+                    if (opts.showRateInfo) $("p.jRatingInfos").fadeOut('fast',function(){$(this).remove();});
+                    e.preventDefault();
+                    var rate = getNote(newWidth);
+                    average.width(newWidth);
+                    if(opts.onTouchstart) opts.onTouchstart( element, rate );
+                }
+            });
 
 			function getNote(relativeX) {
 				var noteBrut = parseFloat((relativeX*100/widthRatingContainer)*opts.rateMax/100);
