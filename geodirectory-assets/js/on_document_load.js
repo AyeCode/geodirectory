@@ -59,6 +59,9 @@ function addToFavourite(post_id,action)
 			onSuccess : function(element, rate){
 				jQuery('#geodir_overallrating').val(rate);
 			},
+            onTouchstart : function(element, rate){
+                jQuery('#geodir_overallrating').val(rate);
+            },
 			onError : function(){
 				alert(geodir_all_js_msg.rating_error_msg);
 			}
