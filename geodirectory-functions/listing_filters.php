@@ -283,29 +283,35 @@ function geodir_posts_fields($fields){
 			
 			$fields .= " , (".$DistanceRadius." * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(".$table.".post_latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(".$table.".post_latitude) * pi()/180) *POWER(SIN(($mylon - ".$table.".post_longitude) * pi()/180 / 2), 2) )))as distance ";
 		}
-	
-	global $s;
-	if ( is_search() && isset( $_REQUEST['geodir_search'] ) && $s && trim( $s ) != '' ) {
+
+    global $s;
+    if ( is_search() && isset( $_REQUEST['geodir_search'] ) && $s && trim( $s ) != '' ) {
         $keywords = explode(" ",$s);
         if (count($keywords) > 1) {
-            $gd_titlematch_part = " CASE WHEN ";
-            $count = 0;
-            foreach ($keywords as $keyword) {
-                $count++;
-                if($count < count($keywords)) {
-                    $gd_titlematch_part .= $wpdb->posts . ".post_title LIKE '%%".$keyword."%%' OR ";
-                } else {
-                    $gd_titlematch_part .= $wpdb->posts . ".post_title LIKE '%%".$keyword."%%' ";
+            $parts = array(
+                'AND' => 'gd_alltitlematch_part',
+                'OR' => 'gd_titlematch_part'
+            );
+            $gd_titlematch_part = "";
+            foreach ($parts as $key => $part) {
+                $gd_titlematch_part .= " CASE WHEN ";
+                $count = 0;
+                foreach ($keywords as $keyword) {
+                    $count++;
+                    if($count < count($keywords)) {
+                        $gd_titlematch_part .= $wpdb->posts . ".post_title LIKE '%%".$keyword."%%' ".$key." ";
+                    } else {
+                        $gd_titlematch_part .= $wpdb->posts . ".post_title LIKE '%%".$keyword."%%' ";
+                    }
                 }
-
+                $gd_titlematch_part .= "THEN 1 ELSE 0 END AS ".$part.",";
             }
-            $gd_titlematch_part .= "THEN 1 ELSE 0 END AS gd_titlematch_part,";
         } else {
             $gd_titlematch_part = "";
         }
         $fields .= $wpdb->prepare(", CASE WHEN " . $table . ".is_featured='1' THEN 1 ELSE 0 END AS gd_featured, CASE WHEN " . $wpdb->posts . ".post_title=%s THEN 1 ELSE 0 END AS gd_exacttitle,".$gd_titlematch_part." CASE WHEN " . $wpdb->posts . ".post_title LIKE %s THEN 1 ELSE 0 END AS gd_titlematch, CASE WHEN " . $wpdb->posts . ".post_content LIKE %s THEN 1 ELSE 0 END AS gd_content", array( $s, '%' . $s . '%', '%' . $s . '%' ) );
-	}
-	return $fields;
+    }
+    return $fields;
 }
 
 
@@ -432,23 +438,23 @@ function geodir_posts_orderby($orderby) {
 	endswitch;
 	
 	global $s;
-	
-	if ( is_search() && isset( $_REQUEST['geodir_search'] ) && $s && trim( $s ) != '' ) {
+
+    if ( is_search() && isset( $_REQUEST['geodir_search'] ) && $s && trim( $s ) != '' ) {
         $keywords = explode(" ",$s);
-		if ( $sort_by == 'nearest' || $sort_by == 'farthest' ) {
+        if ( $sort_by == 'nearest' || $sort_by == 'farthest' ) {
             if (count($keywords) > 1) {
-                $orderby = $orderby . " ( gd_titlematch * 1.5 + gd_featured * 5 + gd_exacttitle * 10 + gd_titlematch_part * 5 + gd_content * 2) DESC, ";
+                $orderby = $orderby . " ( gd_titlematch * 1.5 + gd_featured * 5 + gd_exacttitle * 10 + gd_alltitlematch_part * 100 + gd_titlematch_part * 50 + gd_content * 2) DESC, ";
             } else {
                 $orderby = $orderby . " ( gd_titlematch * 1.5 + gd_featured * 5 + gd_exacttitle * 10 + gd_content * 2) DESC, ";
             }
-		} else {
+        } else {
             if (count($keywords) > 1) {
-                $orderby = "( gd_titlematch * 1.5 + gd_featured * 5 + gd_exacttitle * 10 + gd_titlematch_part * 5 + gd_content * 2) DESC, " . $orderby;
+                $orderby = "( gd_titlematch * 1.5 + gd_featured * 5 + gd_exacttitle * 10 + gd_alltitlematch_part * 100 + gd_titlematch_part * 50 + gd_content * 2) DESC, " . $orderby;
             } else {
                 $orderby = "( gd_titlematch * 1.5 + gd_featured * 5 + gd_exacttitle * 10 + gd_content * 2) DESC, " . $orderby;
             }
-		}
-	}
+        }
+    }
 	
 	$orderby = apply_filters('geodir_posts_order_by_sort', $orderby, $sort_by, $table);
 	
