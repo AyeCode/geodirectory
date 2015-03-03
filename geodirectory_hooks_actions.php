@@ -143,18 +143,12 @@ add_filter('post_type_link', 'geodir_listing_permalink_structure', 10, 4);
 ////////////////////////
 if (!is_admin()) {
     add_action('pre_get_posts', 'geodir_exclude_page', 100); /// Will help to exclude virtural page from everywhere
-
     add_filter('wp_list_pages_excludes', 'exclude_from_wp_list_pages', 100);
     /** Exclude Virtual Pages From Pages List **/
-
     add_action('pre_get_posts', 'set_listing_request', 0);
-
     add_action('pre_get_posts', 'geodir_listing_loop_filter', 1);
-
-    add_action('excerpt_more', 'geodir_excerpt_more');
-
-    add_action('excerpt_length', 'geodir_excerpt_length');
-
+	add_filter('excerpt_more', 'geodir_excerpt_more', 1000);
+	add_filter('excerpt_length', 'geodir_excerpt_length', 1000);
     add_action('the_post', 'create_marker_jason_of_posts'); // Add marker in json array, Map related filter
 }
 
