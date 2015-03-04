@@ -233,7 +233,9 @@ type="text" class="inputbox <?php echo ( $geodir_map_options['enable_text_search
 				if($region = get_query_var('gd_region')){}
 				if($city = get_query_var('gd_city')){}
 			
-			}	
+			}
+		    //fix for location/me page
+		    if(isset($country) && $country=='me'){$country ='';}
 			
 		//$gd_posttype = 'gd_place';
 		
