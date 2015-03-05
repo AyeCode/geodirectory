@@ -1165,7 +1165,6 @@ function gdPrepareImport() {
 	jQuery('#gd-import-msg').hide();
 	var gd_prepared = jQuery('#gd_prepared').val();
 	var uploadedFile = jQuery('#gd_import_csv').val();
-	console.log('gdPrepareImport()');
 	if (gd_prepared == uploadedFile) {
 		gdContinueImport();
 		jQuery('#gd_import_data').attr('disabled', 'disabled');

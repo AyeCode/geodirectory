@@ -143,18 +143,12 @@ add_filter('post_type_link', 'geodir_listing_permalink_structure', 10, 4);
 ////////////////////////
 if (!is_admin()) {
     add_action('pre_get_posts', 'geodir_exclude_page', 100); /// Will help to exclude virtural page from everywhere
-
     add_filter('wp_list_pages_excludes', 'exclude_from_wp_list_pages', 100);
     /** Exclude Virtual Pages From Pages List **/
-
     add_action('pre_get_posts', 'set_listing_request', 0);
-
     add_action('pre_get_posts', 'geodir_listing_loop_filter', 1);
-
-    add_action('excerpt_more', 'geodir_excerpt_more');
-
-    add_action('excerpt_length', 'geodir_excerpt_length');
-
+	add_filter('excerpt_more', 'geodir_excerpt_more', 1000);
+	add_filter('excerpt_length', 'geodir_excerpt_length', 1000);
     add_action('the_post', 'create_marker_jason_of_posts'); // Add marker in json array, Map related filter
 }
 
@@ -651,6 +645,10 @@ function geodir_localize_all_js_msg()
         'geodir_onoff_dragging' => get_option('geodir_map_onoff_dragging') ? true : false,
         'geodir_on_dragging_text' => __('Enable Dragging', GEODIRECTORY_TEXTDOMAIN),
         'geodir_off_dragging_text' => __('Disable Dragging', GEODIRECTORY_TEXTDOMAIN),
+		'geodir_err_max_file_size' => __( 'File size error : You tried to upload a file over %s', GEODIRECTORY_TEXTDOMAIN ),
+		'geodir_err_file_upload_limit' => __( 'You have reached your upload limit of %s files.', GEODIRECTORY_TEXTDOMAIN ),
+		'geodir_err_pkg_upload_limit' => __( 'You may only upload %s files with this package, please try again.', GEODIRECTORY_TEXTDOMAIN ),
+		'geodir_action_remove' => __( 'Remove', GEODIRECTORY_TEXTDOMAIN ),
     );
 
     $arr_alert_msg = apply_filters('geodir_all_js_msg', $arr_alert_msg);
