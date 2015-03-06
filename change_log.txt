@@ -12,3 +12,5 @@ Recent reviews widget can sometimes show replies as reviews - FIXED
 added filter to function geodir_curPageURL - ADDED
 Share this button JS not loaded over HTTPS if requested - FIXED
 Add listing page on mobile can sometime scroll to content section - FIXED
+Popular Categories widget improved loading time, reduced SQL queries and added ajax switcher per CPT - CHANGED
+GD > Best of widget added (similar to yelp best of section) - ADDED
