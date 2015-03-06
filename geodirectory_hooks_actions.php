@@ -408,7 +408,7 @@ function geodir_share_this_button()
             <div class="addthis_toolbox addthis_default_style">
                 <span id='st_sharethis'></span>
                 <script type="text/javascript">var switchTo5x = false;</script>
-                <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+                <script type="text/javascript" src="//ws.sharethis.com/button/buttons.js"></script>
                 <script type="text/javascript">stLight.options({
                         publisher: "2bee0c38-7c7d-4ce7-9d9a-05e920d509b4",
                         doNotHash: false,

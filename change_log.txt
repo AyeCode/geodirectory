@@ -9,3 +9,5 @@ Switching between listing types can add an aditional "enable dragging" message -
 Category widget has a default of 15 changing this in widget does not take affect - FIXED
 Dummy data can sometimes not delete post_details info - FIXED
 Recent reviews widget can sometimes show replies as reviews - FIXED
+added filter to function geodir_curPageURL - ADDED
+Share this button JS not loaded over HTTPS if requested - FIXED

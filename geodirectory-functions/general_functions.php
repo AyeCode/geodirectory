@@ -170,7 +170,7 @@ function geodir_curPageURL()
         $pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
     }
     //return str_replace("www.", "", $pageURL);
-    return $pageURL;
+    return apply_filters('geodir_curPageURL',$pageURL);
 }
 
 
