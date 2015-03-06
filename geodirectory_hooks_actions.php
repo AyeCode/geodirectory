@@ -157,7 +157,7 @@ add_action('set_object_terms', 'geodir_set_post_terms', 10, 4);
 
 add_action('transition_post_status', 'geodir_update_poststatus', 10, 3);
 
-add_action('before_delete_post', 'geodir_delete_listing_info');
+add_action('before_delete_post', 'geodir_delete_listing_info',10,1);
 
 
 ////////////////////////
