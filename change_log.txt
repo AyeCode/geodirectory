@@ -11,3 +11,4 @@ Dummy data can sometimes not delete post_details info - FIXED
 Recent reviews widget can sometimes show replies as reviews - FIXED
 added filter to function geodir_curPageURL - ADDED
 Share this button JS not loaded over HTTPS if requested - FIXED
+Add listing page on mobile can sometime scroll to content section - FIXED
