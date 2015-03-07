@@ -1,3 +1,6 @@
+v1.4.0
+New user registration disabled error not showing because of &amp; - FIXED
+
 v1.3.9
 Moved change log into core files as we lost 1.3.9 change log due to SSD failure - CHANGED
 Virgin islands have duplicate entries in country list, removed from db install script - FIXED
