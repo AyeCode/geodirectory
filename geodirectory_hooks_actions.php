@@ -143,18 +143,12 @@ add_filter('post_type_link', 'geodir_listing_permalink_structure', 10, 4);
 ////////////////////////
 if (!is_admin()) {
     add_action('pre_get_posts', 'geodir_exclude_page', 100); /// Will help to exclude virtural page from everywhere
-
     add_filter('wp_list_pages_excludes', 'exclude_from_wp_list_pages', 100);
     /** Exclude Virtual Pages From Pages List **/
-
     add_action('pre_get_posts', 'set_listing_request', 0);
-
     add_action('pre_get_posts', 'geodir_listing_loop_filter', 1);
-
-    add_action('excerpt_more', 'geodir_excerpt_more');
-
-    add_action('excerpt_length', 'geodir_excerpt_length');
-
+	add_filter('excerpt_more', 'geodir_excerpt_more', 1000);
+	add_filter('excerpt_length', 'geodir_excerpt_length', 1000);
     add_action('the_post', 'create_marker_jason_of_posts'); // Add marker in json array, Map related filter
 }
 
@@ -163,7 +157,7 @@ add_action('set_object_terms', 'geodir_set_post_terms', 10, 4);
 
 add_action('transition_post_status', 'geodir_update_poststatus', 10, 3);
 
-add_action('before_delete_post', 'geodir_delete_listing_info');
+add_action('before_delete_post', 'geodir_delete_listing_info',10,1);
 
 
 ////////////////////////
@@ -179,7 +173,7 @@ add_action('delete_term', 'geodir_term_review_count_force_update', 100);
 ////////////////////////
 /* WP CAT META UPDATE ACTIONS */
 ////////////////////////
-add_action('gd_tax_meta_updated', 'geodir_get_term_icon', 10, 2);
+add_action('gd_tax_meta_updated', 'geodir_get_term_icon_rebuild', 5000);
 ////////////////////////
 /* WP FOOTER ACTIONS */
 ////////////////////////
@@ -414,7 +408,7 @@ function geodir_share_this_button()
             <div class="addthis_toolbox addthis_default_style">
                 <span id='st_sharethis'></span>
                 <script type="text/javascript">var switchTo5x = false;</script>
-                <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+                <script type="text/javascript" src="//ws.sharethis.com/button/buttons.js"></script>
                 <script type="text/javascript">stLight.options({
                         publisher: "2bee0c38-7c7d-4ce7-9d9a-05e920d509b4",
                         doNotHash: false,
@@ -651,6 +645,10 @@ function geodir_localize_all_js_msg()
         'geodir_onoff_dragging' => get_option('geodir_map_onoff_dragging') ? true : false,
         'geodir_on_dragging_text' => __('Enable Dragging', GEODIRECTORY_TEXTDOMAIN),
         'geodir_off_dragging_text' => __('Disable Dragging', GEODIRECTORY_TEXTDOMAIN),
+		'geodir_err_max_file_size' => __( 'File size error : You tried to upload a file over %s', GEODIRECTORY_TEXTDOMAIN ),
+		'geodir_err_file_upload_limit' => __( 'You have reached your upload limit of %s files.', GEODIRECTORY_TEXTDOMAIN ),
+		'geodir_err_pkg_upload_limit' => __( 'You may only upload %s files with this package, please try again.', GEODIRECTORY_TEXTDOMAIN ),
+		'geodir_action_remove' => __( 'Remove', GEODIRECTORY_TEXTDOMAIN ),
     );
 
     $arr_alert_msg = apply_filters('geodir_all_js_msg', $arr_alert_msg);
