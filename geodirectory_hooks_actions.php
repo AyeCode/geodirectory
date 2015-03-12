@@ -390,7 +390,7 @@ function geodir_social_sharing_buttons()
     $content_html = ob_get_clean();
     if (trim($content_html) != '')
         $content_html = '<div class="geodir-company_info geodir-details-sidebar-social-sharing">' . $content_html . '</div>';
-	if( (int)get_option( 'geodir_disable_tfg_buttons_widget' ) != 1 ) {
+	if( (int)get_option( 'geodir_disable_tfg_buttons_section' ) != 1 ) {
 		echo $content_html = apply_filters( 'geodir_social_sharing_buttons_html', $content_html );
 	}
 
@@ -435,7 +435,7 @@ function geodir_share_this_button()
     $content_html = ob_get_clean();
     if (trim($content_html) != '')
         $content_html = '<div class="geodir-company_info geodir-details-sidebar-sharethis">' . $content_html . '</div>';
-	if( (int)get_option( 'geodir_disable_sharethis_button_widget' ) != 1 ) {
+	if( (int)get_option( 'geodir_disable_sharethis_button_section' ) != 1 ) {
 		echo $content_html = apply_filters( 'geodir_share_this_button_html', $content_html );
 	}
 
@@ -469,7 +469,7 @@ function geodir_edit_post_link()
     $content_html = ob_get_clean();
     if (trim($content_html) != '')
         $content_html = '<div class="geodir-company_info geodir-details-sidebar-user-links">' . $content_html . '</div>';
-	if( (int)get_option( 'geodir_disable_user_links_widget' ) != 1 ) {
+	if( (int)get_option( 'geodir_disable_user_links_section' ) != 1 ) {
 		echo $content_html = apply_filters( 'geodir_edit_post_link_html', $content_html );
 	}
 
@@ -505,7 +505,7 @@ function geodir_detail_page_google_analytics()
     $content_html = ob_get_clean();
     if (trim($content_html) != '')
         $content_html = '<div class="geodir-company_info geodir-details-sidebar-google-analytics">' . $content_html . '</div>';
-	if( (int)get_option( 'geodir_disable_google_analytics_widget' ) != 1 ) {
+	if( (int)get_option( 'geodir_disable_google_analytics_section' ) != 1 ) {
 		echo $content_html = apply_filters( 'geodir_google_analytic_html', $content_html );
 	}
 }
@@ -559,7 +559,7 @@ function geodir_detail_page_review_rating()
     if (trim($content_html) != '') {
         $content_html = '<div class="geodir-company_info geodir-details-sidebar-rating">' . $content_html . '</div>';
     }
-	if( (int)get_option( 'geodir_disable_rating_info_widget' ) != 1 ) {
+	if( (int)get_option( 'geodir_disable_rating_info_section' ) != 1 ) {
 		echo $content_html = apply_filters( 'geodir_detail_page_review_rating_html', $content_html );
 	}
 }
@@ -578,7 +578,7 @@ function geodir_detail_page_more_info()
     $content_html = ob_get_clean();
     if (trim($content_html) != '')
         $content_html = '<div class="geodir-company_info geodir-details-sidebar-listing-info">' . $content_html . '</div>';
-	if( (int)get_option( 'geodir_disable_listing_info_widget' ) != 1 ) {
+	if( (int)get_option( 'geodir_disable_listing_info_section' ) != 1 ) {
 		echo $content_html = apply_filters( 'geodir_detail_page_more_info_html', $content_html );
 	}
 }
