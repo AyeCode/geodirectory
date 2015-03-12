@@ -477,7 +477,49 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 		'id'	=> 'geodir_disable_gb_modal',
 		'type'	=> 'checkbox',
 		'std'	=> '0'
-	),	
+	),
+	array(
+		'name'	=> __( 'Disable Tweet, Fb Like, Google+ buttons widget', GEODIRECTORY_TEXTDOMAIN ),
+		'desc'	=> __( 'Disable Tweet, Fb Like, Google+ buttons widget that displays on Detail page sidebar', GEODIRECTORY_TEXTDOMAIN ),
+		'id'	=> 'geodir_disable_tfg_buttons_widget',
+		'type'	=> 'checkbox',
+		'std'	=> '0'
+	),
+	array(
+		'name'	=> __( 'Disable share this button widget', GEODIRECTORY_TEXTDOMAIN ),
+		'desc'	=> __( 'Disable share this button widget that displays on Detail page sidebar', GEODIRECTORY_TEXTDOMAIN ),
+		'id'	=> 'geodir_disable_sharethis_button_widget',
+		'type'	=> 'checkbox',
+		'std'	=> '0'
+	),
+	array(
+		'name'	=> __( 'Disable Google Analytics widget', GEODIRECTORY_TEXTDOMAIN ),
+		'desc'	=> __( 'Disable Google Analytics widget that displays on Detail page sidebar', GEODIRECTORY_TEXTDOMAIN ),
+		'id'	=> 'geodir_disable_google_analytics_widget',
+		'type'	=> 'checkbox',
+		'std'	=> '0'
+	),
+	array(
+		'name'	=> __( 'Disable User Links widget', GEODIRECTORY_TEXTDOMAIN ),
+		'desc'	=> __( 'Disable User Links widget (Edit post, Favorite etc..) that displays on Detail page sidebar', GEODIRECTORY_TEXTDOMAIN ),
+		'id'	=> 'geodir_disable_user_links_widget',
+		'type'	=> 'checkbox',
+		'std'	=> '0'
+	),
+	array(
+		'name'	=> __( 'Disable Rating Info widget', GEODIRECTORY_TEXTDOMAIN ),
+		'desc'	=> __( 'Disable Rating Info widget that displays on Detail page sidebar', GEODIRECTORY_TEXTDOMAIN ),
+		'id'	=> 'geodir_disable_rating_info_widget',
+		'type'	=> 'checkbox',
+		'std'	=> '0'
+	),
+	array(
+		'name'	=> __( 'Disable Listing Info widget', GEODIRECTORY_TEXTDOMAIN ),
+		'desc'	=> __( 'Disable Listing Info widget that displays on Detail page sidebar', GEODIRECTORY_TEXTDOMAIN ),
+		'id'	=> 'geodir_disable_listing_info_widget',
+		'type'	=> 'checkbox',
+		'std'	=> '0'
+	),
 	
 	array( 'type' => 'sectionend', 'id' => 'detail_page_settings'),
 	
