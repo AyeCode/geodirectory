@@ -292,7 +292,7 @@ class geodir_bestof_widget extends WP_Widget {
             </label>
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id('tab_layout'); ?>"><?php _e('Sort by:',GEODIRECTORY_TEXTDOMAIN);?>
+            <label for="<?php echo $this->get_field_id('tab_layout'); ?>"><?php _e('Tab Layout:',GEODIRECTORY_TEXTDOMAIN);?>
 
                 <select class="widefat" id="<?php echo $this->get_field_id('tab_layout'); ?>" name="<?php echo $this->get_field_name('tab_layout'); ?>">
 
@@ -329,15 +329,17 @@ function geodir_bestof_places_by_term($query_args) {
     if ( !isset( $character_count ) ) {
         $character_count = $character_count == '' ? 50 : apply_filters( 'bestof_widget_character_count', $character_count );
     }
-    $template =  apply_filters( "geodir_template_part-widget-listing-listview",geodir_locate_template('widget-listing-listview'));
 
-    global $post, $map_jason, $map_canvas_arr;
+    global $post, $map_jason, $map_canvas_arr, $gridview_columns;
     $current_post = $post;
     $current_map_jason = $map_jason;
     $current_map_canvas_arr = $map_canvas_arr;
     $geodir_is_widget_listing = true;
 
+    add_filter('geodir_grid_view_widget_columns', 'geodir_bestof_content_view_class');
+    $template =  apply_filters( "geodir_template_part-widget-listing-listview",geodir_locate_template('widget-listing-listview'));
     include( $template );
+    remove_filter('geodir_grid_view_widget_columns', 'geodir_bestof_content_view_class');
 
     $geodir_is_widget_listing = false;
 
@@ -448,4 +450,8 @@ function geodir_bestof_js() { ?>
     });
     </script>
     <?php
+}
+
+function geodir_bestof_content_view_class() {
+    return null;
 }
