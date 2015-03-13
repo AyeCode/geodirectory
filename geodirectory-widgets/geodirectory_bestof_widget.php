@@ -329,17 +329,17 @@ function geodir_bestof_places_by_term($query_args) {
     if ( !isset( $character_count ) ) {
         $character_count = $character_count == '' ? 50 : apply_filters( 'bestof_widget_character_count', $character_count );
     }
+    $template =  apply_filters( "geodir_template_part-widget-listing-listview",geodir_locate_template('widget-listing-listview'));
 
-    global $post, $map_jason, $map_canvas_arr;
+    global $post, $map_jason, $map_canvas_arr, $gridview_columns_widget;
     $current_post = $post;
     $current_map_jason = $map_jason;
     $current_map_canvas_arr = $map_canvas_arr;
+    $current_grid_view = $gridview_columns_widget;
+    $gridview_columns_widget = null;
     $geodir_is_widget_listing = true;
 
-    add_filter('geodir_grid_view_widget_columns', 'geodir_bestof_content_view_class');
-    $template =  apply_filters( "geodir_template_part-widget-listing-listview",geodir_locate_template('widget-listing-listview'));
     include( $template );
-    remove_filter('geodir_grid_view_widget_columns', 'geodir_bestof_content_view_class');
 
     $geodir_is_widget_listing = false;
 
@@ -347,7 +347,7 @@ function geodir_bestof_places_by_term($query_args) {
     setup_postdata( $current_post );
     $map_jason = $current_map_jason;
     $map_canvas_arr = $current_map_canvas_arr;
-
+    $gridview_columns_widget = $current_grid_view;
 }
 
 //Ajax functions
@@ -450,8 +450,4 @@ function geodir_bestof_js() { ?>
     });
     </script>
     <?php
-}
-
-function geodir_bestof_content_view_class() {
-    return null;
 }
