@@ -330,7 +330,7 @@ function geodir_bestof_places_by_term($query_args) {
         $character_count = $character_count == '' ? 50 : apply_filters( 'bestof_widget_character_count', $character_count );
     }
 
-    global $post, $map_jason, $map_canvas_arr, $gridview_columns;
+    global $post, $map_jason, $map_canvas_arr;
     $current_post = $post;
     $current_map_jason = $map_jason;
     $current_map_canvas_arr = $map_canvas_arr;
