@@ -539,9 +539,9 @@ function geodir_get_rating_stars($rating, $post_id, $small=false){
 
 	/* fix rating star for safari */
 	$star_width = 23 * 5;
-	global $is_safari, $is_iphone, $ios, $is_chrome;
-	$attach_style = ( $is_safari || $is_iphone || $ios || $is_chrome ) && $star_width > 0 ? 'width:' . $star_width . 'px;max-width:none' : '';
-	
+	//global $is_safari, $is_iphone, $ios, $is_chrome;
+	//$attach_style = ( $is_safari || $is_iphone || $ios || $is_chrome ) && $star_width > 0 ? 'width:' . $star_width . 'px;max-width:none' : '';
+	if($star_width>0){$attach_style = 'max-width:'.$star_width.'px';}else{$attach_style ='';}
 	$r_html = '<div class="geodir-rating" style="' . $attach_style . '"><div class="gd_rating_show" data-average="'.$rating.'" data-id="'.$post_id.'"><div class="geodir_RatingAverage" style="width: '.$a_rating.'%;"></div><div class="geodir_Star">'.$rating_img.$rating_img.$rating_img.$rating_img.$rating_img.'</div></div></div>';
 	}
 	return $r_html;   
