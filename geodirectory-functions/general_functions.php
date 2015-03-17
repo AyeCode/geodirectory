@@ -506,6 +506,10 @@ if (!function_exists('geodir_sendEmail')) {
     {
         $login_details = '';
 
+        // strip slashes from subject & message text
+        $to_subject = stripslashes_deep( $to_subject );
+        $to_message = stripslashes_deep( $to_message );
+
         if ($message_type == 'send_friend') {
             $subject = stripslashes(get_option('geodir_email_friend_subject'));
             $message = stripslashes(get_option('geodir_email_friend_content'));
