@@ -1,3 +1,6 @@
+v1.4.1
+Distances to listings should show miles/km until 0.01 rather than 1 before changing to ft/m - FIXED
+
 v1.4.0
 New user registration disabled error not showing because of &amp; - FIXED
 Category icons not always updated when changed - FIXED

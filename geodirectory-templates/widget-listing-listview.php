@@ -89,7 +89,7 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                                 ?>
                                 <h3>
                                     <?php
-                                    if (round((int)$distance, 2) == 0) {
+                                    if (round($distance, 2) == 0) {
                                         $uom = get_option('geodir_search_dist_2');
                                         $distance = geodir_calculateDistanceFromLatLong($startPoint, $endPoint, $uom);
                                         if ($uom == 'feet') {
