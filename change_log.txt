@@ -12,6 +12,7 @@ Slashes not stripped from message of send enquiry email - FIXED
 CSV upload not supports formatting in description - FIXED
 WPML bug, can show untranslated posts if category ID matches post ID - FIXED
 Star rating images have a line at the end on safari (fixed with jQuery) - FIXED
+Detail page tab content messed during page loading - FIXED
 
 v1.3.9
 Moved change log into core files as we lost 1.3.9 change log due to SSD failure - CHANGED
