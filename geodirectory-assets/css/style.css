@@ -195,6 +195,9 @@ ul.geodir-tabs-content {
     border: 1px #e1e1e1 solid;
     border-top: none;
 }
+.geodir-tabs-content > li {
+	clear: left;
+}
 
 /* post navigation next/prev */
 .geodir-pos_navigation {
