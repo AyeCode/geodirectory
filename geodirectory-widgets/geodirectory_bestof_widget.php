@@ -134,7 +134,7 @@ class geodir_bestof_widget extends WP_Widget {
                     } else {
                         $nav_html .= '<dd class="">';
                     }
-                    $term_icon_url = $term_icon[$cat->term_id];
+					$term_icon_url = !empty( $term_icon ) && isset( $term_icon[$cat->term_id] ) ? $term_icon[$cat->term_id] : '';
                     $nav_html .= '<a data-termid="' . $cat->term_id . '" href="' . get_term_link($cat, $cat->taxonomy) . '">';
                     $nav_html .= '<img alt="'.$cat->name.' icon" class="bestof-cat-icon" src="' . $term_icon_url . '"/>';
                     $nav_html .= '<span>';

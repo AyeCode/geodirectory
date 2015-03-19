@@ -1888,12 +1888,9 @@ function geodir_helper_cat_list_output($terms, $category_limit)
 
     foreach ($terms as $cat) {// print_r($cat);
         $post_type = str_replace("category", "", $cat->taxonomy);
-
-        $term_icon_url = $term_icons[$cat->term_id];
-
+		$term_icon_url = !empty( $term_icons ) && isset( $term_icons[$cat->term_id] ) ? $term_icons[$cat->term_id] : '';
 
         $cat_count++;
-
 
         $geodir_post_category_str[] = array('posttype' => $post_type, 'termid' => $cat->term_id);
 
