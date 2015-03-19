@@ -1,17 +1,17 @@
 <?php
-/*-------------------------------------------------*/
-/* All map related functions
-/*-------------------------------------------------*/
+/**
+ * Google Map related functions
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 
 /**
  * Creates a global variable for storing map json data
  *
  * @since 1.0.0
- *
- * @global array $map_jason
  * @package GeoDirectory
- *
- * @return void
+ * @global array $map_jason empty array
  */
 function  geodir_init_map_jason()
 {
@@ -23,11 +23,8 @@ function  geodir_init_map_jason()
  * Creates a global variable for storing map canvas data
  *
  * @since 1.0.0
- *
- * @global array $map_canvas_arr
  * @package GeoDirectory
- *
- * @return void
+ * @global array $map_canvas_arr empty array
  */
 function geodir_init_map_canvas_array()
 {
@@ -40,15 +37,12 @@ function geodir_init_map_canvas_array()
  * Creates marker json using given $post object.
  *
  * @since 1.0.0
- *
- * @param null|WP_Post $post post object
- * @global wpdb $wpdb
- * @global array $map_jason
- * @global $add_post_in_marker_array
- * @global array $geodir_cat_icons
  * @package GeoDirectory
- *
- * @return void
+ * @param null|WP_Post $post post object
+ * @global wpdb $wpdb wpdb global variable
+ * @global array $map_jason map data in json format
+ * @global bool $add_post_in_marker_array Displays posts in marker array when the value is true.
+ * @global array $geodir_cat_icons category icons array. syntax: array( 'category name' => 'icon url')
  */
 function create_marker_jason_of_posts($post)
 {
@@ -73,12 +67,9 @@ function create_marker_jason_of_posts($post)
  * Send jason data to script and show listing map
  *
  * @since 1.0.0
- *
- * @global array $map_jason
- * @global array $map_canvas_arr
  * @package GeoDirectory
- *
- * @return void
+ * @global array $map_jason map data in json format
+ * @global array $map_canvas_arr map canvas array
  */
 function send_marker_jason_to_js()
 {
@@ -106,7 +97,7 @@ function send_marker_jason_to_js()
                  * You can use this filter to modify map canvas json args.
                  *
                  * @since 1.0.0
-                 *
+                 * @package GeoDirectory
                  * @param string $canvas map canvas array key.
                  * @param array $map_canvas_jason_args map canvas args.
                  */
@@ -123,7 +114,7 @@ function send_marker_jason_to_js()
                  * You can use this filter to modify map canvas json args.
                  *
                  * @since 1.0.0
-                 *
+                 * @package GeoDirectory
                  * @param string $canvas map canvas array key.
                  * @param array $map_canvas_jason_args map canvas args.
                  */
@@ -139,7 +130,7 @@ function send_marker_jason_to_js()
  * Home map Taxonomy walker
  *
  * @since 1.0.0
- *
+ * @package GeoDirectory
  * @param string $cat_taxonomy Name of the taxonomy e.g place_category
  * @param int $cat_parent Parent term ID to retrieve its child terms. Default 0
  * @param bool $hide_empty Do you want to hide the terms that has no posts. Default true.
@@ -147,8 +138,6 @@ function send_marker_jason_to_js()
  * @param string $map_canvas_name Unique canvas name for your map
  * @param bool $child_collapse Do you want to collapse child terms by default?.
  * @param bool $is_home_map Is this a home page map? Default: false
- * @package GeoDirectory
- *
  * @return string|void
  */
 function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = true, $pading = 0, $map_canvas_name = '', $child_collapse, $is_home_map = false)
