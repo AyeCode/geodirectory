@@ -26,7 +26,7 @@ function create_marker_jason_of_posts( $post ) {
 
 
 		$geodir_cat_icons = geodir_get_term_icon();
-		$icon = @$geodir_cat_icons[$post->default_category];
+		$icon = !empty( $geodir_cat_icons ) && isset( $geodir_cat_icons[$post->default_category] ) ? $geodir_cat_icons[$post->default_category] : '';
 		 
 		 $post_title = $post->post_title;
 		 $title = str_replace( $srcharr, $replarr, $post_title );
@@ -111,16 +111,14 @@ function home_map_taxonomy_walker( $cat_taxonomy, $cat_parent = 0, $hide_empty =
 		
 		
 		$out = '<ul class="treeview '.$list_class.'" style="margin-left:'.$p.'px;'.$display.';">';
+		
+		$geodir_cat_icons = geodir_get_term_icon();
+		
 		foreach ($cat_terms as $cat_term):
 			
 			$post_type = isset($_REQUEST['post_type']) ? $_REQUEST['post_type']: 'gd_place';
-
-
-			$geodir_cat_icons = geodir_get_term_icon();
-
-
 			
-			$icon = $geodir_cat_icons[$cat_term->term_id];
+			$icon = !empty( $geodir_cat_icons ) && isset( $geodir_cat_icons[$cat_term->term_id] ) ? $geodir_cat_icons[$cat_term->term_id] : '';
 
 			if(!in_array($cat_term->term_id,$exclude_categories)):
 				//Secret sauce.  Function calls itself to display child elements, if any
@@ -135,7 +133,7 @@ function home_map_taxonomy_walker( $cat_taxonomy, $cat_parent = 0, $hide_empty =
 				
 				$term_check = '<input type="checkbox" ' . $checked . ' class="group_selector '.$main_list_class.'"'; 
 				$term_check .= ' name="'.$map_canvas_name.'_cat[]" group="catgroup'.$cat_term->term_id.'"'; 
-				$term_check .= ' alt="'.$cat_term->taxonomy.'" title="'.ucfirst($cat_term->name).'" value="'.$cat_term->term_id.'" " onclick="javascript:build_map_ajax_search_param(\''.$map_canvas_name.'\',false)">';
+				$term_check .= ' alt="'.$cat_term->taxonomy.'" title="'.esc_attr( ucfirst($cat_term->name) ).'" value="'.$cat_term->term_id.'" onclick="javascript:build_map_ajax_search_param(\''.$map_canvas_name.'\',false)">';
 				$term_check .= '<img height="15" width="15" alt="" src="'.$icon.'" title="'.ucfirst($cat_term->name).'"/>';
 				$out .= '<li>'.$term_check.'<label>'.ucfirst($cat_term->name).'</label><i class="fa fa-long-arrow-down"></i>'; 
 			endif;
