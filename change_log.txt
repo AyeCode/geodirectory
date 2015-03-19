@@ -1,3 +1,6 @@
+v1.4.1
+Distances to listings should show miles/km until 0.01 rather than 1 before changing to ft/m - FIXED
+
 v1.4.0
 New user registration disabled error not showing because of &amp; - FIXED
 Category icons not always updated when changed - FIXED
@@ -5,6 +8,14 @@ Search results not ordered correct if default sort_by changed - FIXED
 $_SESSION['listing'] being cleared too early for other addons - FIXED
 Options added for detail page default sections to be disabled - ADDED
 Best of widget doesn't set it's own view at first using the last set which is 2x grid - FIXED
+Category icons broken with WPML per language - FIXED
+Custom field wording "Show on detail page" changed for clarity - CHANGED
+Class menu-item-has-children added to GD menu items Listings & Add Listing - FIXED
+Slashes not stripped from message of send enquiry email - FIXED
+CSV upload not supports formatting in description - FIXED
+WPML bug, can show untranslated posts if category ID matches post ID - FIXED
+Star rating images have a line at the end on safari (fixed with jQuery) - FIXED
+Detail page tab content messed during page loading - FIXED
 
 v1.3.9
 Moved change log into core files as we lost 1.3.9 change log due to SSD failure - CHANGED

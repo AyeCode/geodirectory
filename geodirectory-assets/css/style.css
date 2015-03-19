@@ -51,6 +51,7 @@ preview details page
 /* ########################################
 details page 
 ######################################### */
+ul.geodir-tabs-content { list-style:none;}
 #post_video-wrap,
 .geodir-company_info p.geodir_video:last-child,
 .geodir-company_info p.geodir_video {
@@ -193,6 +194,9 @@ ul.geodir-tabs-content {
     min-height: 350px;
     border: 1px #e1e1e1 solid;
     border-top: none;
+}
+.geodir-tabs-content > li {
+	clear: left;
 }
 
 /* post navigation next/prev */

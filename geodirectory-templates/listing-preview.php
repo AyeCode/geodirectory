@@ -4,7 +4,7 @@ get_header();
 
 do_action('geodir_before_main_content','listing-preview-page'); 
 
-	
+
 	foreach($_REQUEST as $pkey=>$pval){
 	if($pkey=='geodir_video'){$tags= '<iframe>';}
   elseif($pkey=='post_desc'){$tags= '<p><a><b><i><em><h1><h2><h3><h4><h5><ul><ol><li><img><div><del><ins><span><cite><code><strike><strong><blockquote>';}

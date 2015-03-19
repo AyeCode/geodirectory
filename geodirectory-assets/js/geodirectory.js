@@ -369,3 +369,18 @@ function geodir_get_post_term(el) {
 }
 
 
+/*
+we recalc the stars because some browsers can't do subpixle percents, we should be able to remove this in a few years.
+ */
+jQuery(window).load(function() {
+    jQuery('.geodir-rating').each(function(){
+        var $this = jQuery(this);
+        var parent_width = $this.width();
+        if(!parent_width){return true;}
+        var star_width = $this.find(".geodir_Star img").width();
+        var star_count = $this.find(".geodir_Star img").length;
+        var width_calc = star_width*star_count;
+        $this.width(width_calc);
+    });
+});
+
