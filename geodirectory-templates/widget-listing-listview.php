@@ -164,10 +164,10 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                 if (isset($_REQUEST['geodir_dashbord']) && $_REQUEST['geodir_dashbord']) {
                     do_action('geodir_before_edit_post_link_on_listing');
                     ?>
-                    <a href="<?php echo $editlink;?>" class="geodir-edit"
-                       title="<?php _e('Edit Listing', GEODIRECTORY_TEXTDOMAIN);?>"><?php _e('edit', GEODIRECTORY_TEXTDOMAIN);?></a>
-                    <a href="<?php echo $deletelink;?>" class="geodir-delete"
-                       title="<?php _e('Delete Listing', GEODIRECTORY_TEXTDOMAIN);?>"><?php _e('delete', GEODIRECTORY_TEXTDOMAIN);?></a>
+                    <a href="<?php echo $editlink; ?>" class="geodir-edit"
+                       title="<?php _e('Edit Listing', GEODIRECTORY_TEXTDOMAIN); ?>"><?php _e('edit', GEODIRECTORY_TEXTDOMAIN); ?></a>
+                    <a href="<?php echo $deletelink; ?>" class="geodir-delete"
+                       title="<?php _e('Delete Listing', GEODIRECTORY_TEXTDOMAIN); ?>"><?php _e('delete', GEODIRECTORY_TEXTDOMAIN); ?></a>
                     <?php do_action('geodir_after_edit_post_link_on_listing');
                 } ?>
 					</span>

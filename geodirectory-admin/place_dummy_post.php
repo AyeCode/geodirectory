@@ -1,37 +1,35 @@
-<?php 
+<?php
 
-global $dummy_post_index,$city_bound_lat1,$city_bound_lng1,$city_bound_lat2,$city_bound_lng2 ;
+global $dummy_post_index, $city_bound_lat1, $city_bound_lng1, $city_bound_lat2, $city_bound_lng2;
 $post_info = array();
 $image_array = array();
 $post_meta = array();
 
-if(geodir_dummy_folder_exists())
-	$dummy_image_url = geodir_plugin_url(). "/geodirectory-admin/dummy";
+if (geodir_dummy_folder_exists())
+    $dummy_image_url = geodir_plugin_url() . "/geodirectory-admin/dummy";
 else
-	$dummy_image_url = 'http://www.wpgeodirectory.com/dummy';
+    $dummy_image_url = 'http://www.wpgeodirectory.com/dummy';
 
-switch($dummy_post_index) 
-{
+switch ($dummy_post_index) {
 
-	case(1):
-		$image_array[] = "$dummy_image_url/a1.jpg";
-		$image_array[] = "$dummy_image_url/a2.jpg";
-		$image_array[] = "$dummy_image_url/a3.jpg";
-		$image_array[] = "$dummy_image_url/a4.jpg";
-		$image_array[] = "$dummy_image_url/a5.jpg";
-		$image_array[] = "$dummy_image_url/a6.jpg";
-		$image_array[] = "$dummy_image_url/a7.jpg";
-		$image_array[] = "$dummy_image_url/a8.jpg";
-		$image_array[] = "$dummy_image_url/a9.jpg";
-		$image_array[] = "$dummy_image_url/a10.jpg";
-		$image_array[] = "$dummy_image_url/a11.jpg";
-		
-		
-		
-		$post_info[] = array(
-							"listing_type"	=> 'gd_place',
-							"post_title"=>	'Franklin Square',
-							"post_desc"	=>	' <h3> Location </h3>
+    case(1):
+        $image_array[] = "$dummy_image_url/a1.jpg";
+        $image_array[] = "$dummy_image_url/a2.jpg";
+        $image_array[] = "$dummy_image_url/a3.jpg";
+        $image_array[] = "$dummy_image_url/a4.jpg";
+        $image_array[] = "$dummy_image_url/a5.jpg";
+        $image_array[] = "$dummy_image_url/a6.jpg";
+        $image_array[] = "$dummy_image_url/a7.jpg";
+        $image_array[] = "$dummy_image_url/a8.jpg";
+        $image_array[] = "$dummy_image_url/a9.jpg";
+        $image_array[] = "$dummy_image_url/a10.jpg";
+        $image_array[] = "$dummy_image_url/a11.jpg";
+
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Franklin Square',
+            "post_desc" => ' <h3> Location </h3>
 		
 		6th and Race Streets in Historic Philadelphia
 		<h3>The Experience</h3>
@@ -66,42 +64,42 @@ switch($dummy_post_index)
 		Just in time for summer, Franklin Square has opened SquareBurger, a Stephen Starr-run “burger shack” selling summer staples: hot dogs, fries, milkshakes (made with Tasty Kakes) and, of course, hamburgers and cheeseburgers.
 		
 		SquareBurger is open until October - perfect for a couple bites between rounds of miniature golf!',
-							"post_images"	=>	$image_array,
-							"post_category"	=>	array('gd_placecategory' => array('Attractions','Feature') ),
-							"post_tags"		=>	array('Tags','Sample Tags'),
-							"geodir_video"			=> '',
-							"geodir_timing"		=> 'Open today until 1 p.m., Sunday 10 am to 9 pm',
-							"geodir_contact"		=> '(111) 677-4444',
-							"geodir_email"			=> 'info@franklinsq.com',
-							"geodir_website"		=> 'http://franklinsquare.com',
-							"geodir_twitter"		=> 'http://twitter.com/franklinsquare',
-							"geodir_facebook"		=> 'http://facebook.com/franklinsquare',
-							"post_dummy"	=>'1'
-							);		
-							
-		
-		break;
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Attractions', 'Feature')),
+            "post_tags" => array('Tags', 'Sample Tags'),
+            "geodir_video" => '',
+            "geodir_timing" => 'Open today until 1 p.m., Sunday 10 am to 9 pm',
+            "geodir_contact" => '(111) 677-4444',
+            "geodir_email" => 'info@franklinsq.com',
+            "geodir_website" => 'http://franklinsquare.com',
+            "geodir_twitter" => 'http://twitter.com/franklinsquare',
+            "geodir_facebook" => 'http://facebook.com/franklinsquare',
+            "post_dummy" => '1'
+        );
+
+
+        break;
     case 2:
-		$image_array = array();
-		$post_meta = array();
-		
-		/// Attractions ////post start 2///
-		$image_array[] = "$dummy_image_url/a6.jpg";
-		$image_array[] = "$dummy_image_url/a1.jpg";
-		$image_array[] = "$dummy_image_url/a3.jpg";
-		$image_array[] = "$dummy_image_url/a4.jpg";
-		$image_array[] = "$dummy_image_url/a5.jpg";
-		$image_array[] = "$dummy_image_url/a2.jpg";
-		$image_array[] = "$dummy_image_url/a7.jpg";
-		$image_array[] = "$dummy_image_url/a8.jpg";
-		$image_array[] = "$dummy_image_url/a9.jpg";
-		$image_array[] = "$dummy_image_url/a10.jpg";
-		$image_array[] = "$dummy_image_url/a11.jpg";
-		
-		$post_info[] = array(
-							"listing_type"	=> 'gd_place',
-							"post_title"	=>	'Please Touch Museum',
-							"post_desc"	=>	'<h3>New Location! </h3>
+        $image_array = array();
+        $post_meta = array();
+
+        /// Attractions ////post start 2///
+        $image_array[] = "$dummy_image_url/a6.jpg";
+        $image_array[] = "$dummy_image_url/a1.jpg";
+        $image_array[] = "$dummy_image_url/a3.jpg";
+        $image_array[] = "$dummy_image_url/a4.jpg";
+        $image_array[] = "$dummy_image_url/a5.jpg";
+        $image_array[] = "$dummy_image_url/a2.jpg";
+        $image_array[] = "$dummy_image_url/a7.jpg";
+        $image_array[] = "$dummy_image_url/a8.jpg";
+        $image_array[] = "$dummy_image_url/a9.jpg";
+        $image_array[] = "$dummy_image_url/a10.jpg";
+        $image_array[] = "$dummy_image_url/a11.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Please Touch Museum',
+            "post_desc" => '<h3>New Location! </h3>
 		
 		Who doesn&acute;t love the Please Touch Museum? And now, taking kids to the Museum is better than ever. The nation&acute;s premier children&acute;s museum - which has been a beloved landmark since it opened in 1976 - has a new home in Fairmount Park, opening its doors to a world of educational, hands-on fun.
 		
@@ -132,43 +130,43 @@ switch($dummy_post_index)
 		Buy Tickets Online In Advance
 		
 		You can buy admission tickets to the Please Touch Museum online through our partners at the Independence Visitor Center. Just click the button below.',
-		
-							"post_images"	=>	$image_array,
-							"post_category"	=>	array('gd_placecategory' =>array('Attractions','Feature') ),
-							"post_tags"		=>	array('Tags','Sample Tags'),
-							"geodir_video"			=> '',
-							"geodir_timing"		=> 'Open today until 1 p.m., Sunday 10 am to 9 pm',
-							"geodir_contact"		=> '(222) 777-1111',
-							"geodir_email"			=> 'info@pleasetouchmuseum.com',
-							"geodir_website"		=> 'http://pleasetouchmuseum.com',
-							"geodir_twitter"		=> 'http://twitter.com/pleasetouchmuseum',
-							"geodir_facebook"		=> 'http://facebook.com/pleasetouchmuseum',
-							"post_dummy"	=>'1'
-							);								
-			
-		break;
-    case 3: 
-		$image_array = array();
-		$post_meta = array();
-		
-		////post end///
-		/// Attractions ////post start 3///
-		$image_array[] = "$dummy_image_url/a9.jpg";
-		$image_array[] = "$dummy_image_url/a10.jpg";
-		$image_array[] = "$dummy_image_url/a3.jpg";
-		$image_array[] = "$dummy_image_url/a4.jpg";
-		$image_array[] = "$dummy_image_url/a5.jpg";
-		$image_array[] = "$dummy_image_url/a2.jpg";
-		$image_array[] = "$dummy_image_url/a7.jpg";
-		$image_array[] = "$dummy_image_url/a8.jpg";
-		$image_array[] = "$dummy_image_url/a6.jpg";
-		$image_array[] = "$dummy_image_url/a1.jpg";
-		$image_array[] = "$dummy_image_url/a11.jpg";
-		
-		$post_info[] = array(
-							"listing_type"	=> 'gd_place',
-							"post_title"	=>	'Longwood Gardens',
-							"post_desc"	=>	'<h3>The Experience </h3>
+
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Attractions', 'Feature')),
+            "post_tags" => array('Tags', 'Sample Tags'),
+            "geodir_video" => '',
+            "geodir_timing" => 'Open today until 1 p.m., Sunday 10 am to 9 pm',
+            "geodir_contact" => '(222) 777-1111',
+            "geodir_email" => 'info@pleasetouchmuseum.com',
+            "geodir_website" => 'http://pleasetouchmuseum.com',
+            "geodir_twitter" => 'http://twitter.com/pleasetouchmuseum',
+            "geodir_facebook" => 'http://facebook.com/pleasetouchmuseum',
+            "post_dummy" => '1'
+        );
+
+        break;
+    case 3:
+        $image_array = array();
+        $post_meta = array();
+
+        ////post end///
+        /// Attractions ////post start 3///
+        $image_array[] = "$dummy_image_url/a9.jpg";
+        $image_array[] = "$dummy_image_url/a10.jpg";
+        $image_array[] = "$dummy_image_url/a3.jpg";
+        $image_array[] = "$dummy_image_url/a4.jpg";
+        $image_array[] = "$dummy_image_url/a5.jpg";
+        $image_array[] = "$dummy_image_url/a2.jpg";
+        $image_array[] = "$dummy_image_url/a7.jpg";
+        $image_array[] = "$dummy_image_url/a8.jpg";
+        $image_array[] = "$dummy_image_url/a6.jpg";
+        $image_array[] = "$dummy_image_url/a1.jpg";
+        $image_array[] = "$dummy_image_url/a11.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Longwood Gardens',
+            "post_desc" => '<h3>The Experience </h3>
 		
 		When you&acute;re at Longwood Gardens, it&acute;s easy to imagine that you&acute;re at a giant, royal garden in Europe. Stroll along the many paths through acres of exquisitely maintained grounds featuring 11,000 different types of plants.
 		
@@ -193,42 +191,42 @@ switch($dummy_post_index)
 		<h3>Buy Tickets Online In Advance </h3>
 		
 		You can buy admission tickets to Longwood Gardens online through our partners at the Independence Visitor Center. Just click the button below.',
-							"post_images"	=>	$image_array,
-							"post_category"	=>	array('gd_placecategory' =>array('Attractions') ),
-							"post_tags"		=>		array('wood','garden'),
-							"geodir_video"			=> '',
-							"geodir_timing"		=> 'Open today until 1 p.m., Sunday 10 am to 9 pm',
-							"geodir_contact"		=> '(111) 888-1111',
-							"geodir_email"			=> 'info@longwoodgardens.com',
-							"geodir_website"		=> 'http://longwoodgardens.com',
-							"geodir_twitter"		=> 'http://twitter.com/longwoodgardens',
-							"geodir_facebook"		=> 'http://facebook.com/longwoodgardens',
-							"post_dummy"	=>'1'
-							);	
-		break;	
-		////post end///
-		/// Attractions ////post start 4///	
-	 
-    case 4:				
-		
-		$image_array = array();
-		$post_meta = array();
-		$image_array[] = "$dummy_image_url/a11.jpg";
-		$image_array[] = "$dummy_image_url/a10.jpg";
-		$image_array[] = "$dummy_image_url/a3.jpg";
-		$image_array[] = "$dummy_image_url/a4.jpg";
-		$image_array[] = "$dummy_image_url/a5.jpg";
-		$image_array[] = "$dummy_image_url/a2.jpg";
-		$image_array[] = "$dummy_image_url/a7.jpg";
-		$image_array[] = "$dummy_image_url/a8.jpg";
-		$image_array[] = "$dummy_image_url/a6.jpg";
-		$image_array[] = "$dummy_image_url/a1.jpg";
-		$image_array[] = "$dummy_image_url/a9.jpg";
-		
-		$post_info[] = array(
-							"listing_type"	=> 'gd_place',
-							"post_title"	=>	'The Philadelphia Zoo',
-							"post_desc"	=>	'<h3>The Zoo 150th Birthday</h3>
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Attractions')),
+            "post_tags" => array('wood', 'garden'),
+            "geodir_video" => '',
+            "geodir_timing" => 'Open today until 1 p.m., Sunday 10 am to 9 pm',
+            "geodir_contact" => '(111) 888-1111',
+            "geodir_email" => 'info@longwoodgardens.com',
+            "geodir_website" => 'http://longwoodgardens.com',
+            "geodir_twitter" => 'http://twitter.com/longwoodgardens',
+            "geodir_facebook" => 'http://facebook.com/longwoodgardens',
+            "post_dummy" => '1'
+        );
+        break;
+    ////post end///
+    /// Attractions ////post start 4///
+
+    case 4:
+
+        $image_array = array();
+        $post_meta = array();
+        $image_array[] = "$dummy_image_url/a11.jpg";
+        $image_array[] = "$dummy_image_url/a10.jpg";
+        $image_array[] = "$dummy_image_url/a3.jpg";
+        $image_array[] = "$dummy_image_url/a4.jpg";
+        $image_array[] = "$dummy_image_url/a5.jpg";
+        $image_array[] = "$dummy_image_url/a2.jpg";
+        $image_array[] = "$dummy_image_url/a7.jpg";
+        $image_array[] = "$dummy_image_url/a8.jpg";
+        $image_array[] = "$dummy_image_url/a6.jpg";
+        $image_array[] = "$dummy_image_url/a1.jpg";
+        $image_array[] = "$dummy_image_url/a9.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'The Philadelphia Zoo',
+            "post_desc" => '<h3>The Zoo 150th Birthday</h3>
 		
 		The Philadelphia Zoo celebrated its 150th anniversary in 2009. So stop by and celebrate this major achievement at America&acute;s first zoo!
 		
@@ -263,45 +261,45 @@ switch($dummy_post_index)
 		The nation&acute;s oldest zoo was chartered in 1859, but the impending Civil War delayed its opening until 1874. In addition to its animals, the zoo is known for its historic architecture, which includes the country home of William Penn&acute;s grandson; its botanical collections of over 500 plant species; its groundbreaking research and its fine veterinary facilities.
 		
 		The Primate Reserve, Carnivore Kingdom, and Rare Animal Conservation Center, with its tree kangaroos and blue-eyed lemurs, are brand new, but there&acute;s still fun to be had in the historic, old-style bird, pachyderm and carnivore houses. In the Treehouse, kids can investigate the world from an animal&acute;s perspective; outdoors, the Zoo Balloon lifts passengers 400 feet into the air for a bird&acute;s-eye view of the zoo.',
-							"post_images"	=>	$image_array,
-							"post_category"	=>	array('gd_placecategory' =>array('Attractions') ),
-							"post_tags"		=>	array('wood','garden'),
-							"geodir_video"			=> '',
-							"geodir_timing"		=> 'Open today until 11.30 a.m., Sunday 11 am to 7 pm',
-							"geodir_contact"		=>  '(211) 143-1900',
-							"geodir_email"			=> 'info@philadelphiazoo.com',
-							"geodir_website"		=> 'http://philadelphiazoo.com',
-							"geodir_twitter"		=> 'http://twitter.com/philadelphiazoo',
-							"geodir_facebook"		=> 'http://facebook.com/philadelphiazoo',
-							"post_dummy"	=>'1'
-							);	
-							
-							////post end///
-				/// Attractions ////post start 4///				
-		break;
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Attractions')),
+            "post_tags" => array('wood', 'garden'),
+            "geodir_video" => '',
+            "geodir_timing" => 'Open today until 11.30 a.m., Sunday 11 am to 7 pm',
+            "geodir_contact" => '(211) 143-1900',
+            "geodir_email" => 'info@philadelphiazoo.com',
+            "geodir_website" => 'http://philadelphiazoo.com',
+            "geodir_twitter" => 'http://twitter.com/philadelphiazoo',
+            "geodir_facebook" => 'http://facebook.com/philadelphiazoo',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Attractions ////post start 4///
+        break;
     case 5:
-	
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Attractions ////post start 5///
-	$image_array[] = "$dummy_image_url/a12.jpg";
-	$image_array[] = "$dummy_image_url/a13.jpg";
-	$image_array[] = "$dummy_image_url/a3.jpg";
-	$image_array[] = "$dummy_image_url/a4.jpg";
-	$image_array[] = "$dummy_image_url/a5.jpg";
-	$image_array[] = "$dummy_image_url/a2.jpg";
-	$image_array[] = "$dummy_image_url/a7.jpg";
-	$image_array[] = "$dummy_image_url/a8.jpg";
-	$image_array[] = "$dummy_image_url/a6.jpg";
-	$image_array[] = "$dummy_image_url/a1.jpg";
-	$image_array[] = "$dummy_image_url/a9.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'National Constitution Center',
-						"post_desc"	=>	'<h3>The Experience</h3>
+
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Attractions ////post start 5///
+        $image_array[] = "$dummy_image_url/a12.jpg";
+        $image_array[] = "$dummy_image_url/a13.jpg";
+        $image_array[] = "$dummy_image_url/a3.jpg";
+        $image_array[] = "$dummy_image_url/a4.jpg";
+        $image_array[] = "$dummy_image_url/a5.jpg";
+        $image_array[] = "$dummy_image_url/a2.jpg";
+        $image_array[] = "$dummy_image_url/a7.jpg";
+        $image_array[] = "$dummy_image_url/a8.jpg";
+        $image_array[] = "$dummy_image_url/a6.jpg";
+        $image_array[] = "$dummy_image_url/a1.jpg";
+        $image_array[] = "$dummy_image_url/a9.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'National Constitution Center',
+            "post_desc" => '<h3>The Experience</h3>
 	
 	It only four pages long, but the U.S. Constitution is among the most influential and important documents in the history of the world.
 	
@@ -323,45 +321,45 @@ switch($dummy_post_index)
 	<h3>Kids Stuff </h3>
 	
 	The Center frequently hosts special events with a focus on children that include informative and engaging hands-on activities. For specific information, check out the Center website.',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Attractions','Feature') ),
-						"post_tags"		=>	array('Tag','Center'),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'Open today until 9.30 a.m., Sunday 11 am to 7 pm',
-						"geodir_contact"		=> '(111) 111-1111',
-						"geodir_email"			=> 'info@ncc.com',
-						"geodir_website"		=> 'http://ncc.com',
-						"geodir_twitter"		=> 'http://twitter.com/ncc',
-						"geodir_facebook"		=> 'http://facebook.com/ncc',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Attractions ////post start 5///				
-	 break;
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Attractions', 'Feature')),
+            "post_tags" => array('Tag', 'Center'),
+            "geodir_video" => '',
+            "geodir_timing" => 'Open today until 9.30 a.m., Sunday 11 am to 7 pm',
+            "geodir_contact" => '(111) 111-1111',
+            "geodir_email" => 'info@ncc.com',
+            "geodir_website" => 'http://ncc.com',
+            "geodir_twitter" => 'http://twitter.com/ncc',
+            "geodir_facebook" => 'http://facebook.com/ncc',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Attractions ////post start 5///
+        break;
     case 6:
-	
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Attractions ////post start 6///
-	$image_array[] = "$dummy_image_url/a14.jpg";
-	$image_array[] = "$dummy_image_url/a13.jpg";
-	$image_array[] = "$dummy_image_url/a3.jpg";
-	$image_array[] = "$dummy_image_url/a4.jpg";
-	$image_array[] = "$dummy_image_url/a5.jpg";
-	$image_array[] = "$dummy_image_url/a2.jpg";
-	$image_array[] = "$dummy_image_url/a7.jpg";
-	$image_array[] = "$dummy_image_url/a8.jpg";
-	$image_array[] = "$dummy_image_url/a6.jpg";
-	$image_array[] = "$dummy_image_url/a1.jpg";
-	$image_array[] = "$dummy_image_url/a9.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'Sadsbury Woods Preserve',
-						"post_desc"	=>	'A more than 500-acre nature preserve ideal for walking and hiking, Sadsbury Woods is also an important habitat for interior nesting birds and small mammals. An increasingly rare area of interior woodlands, defined as an area at least 300 feet from any road, lawn or meadow, provides a critical habitat for many species of birds, especially neo-tropical migrant songbirds.
+
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Attractions ////post start 6///
+        $image_array[] = "$dummy_image_url/a14.jpg";
+        $image_array[] = "$dummy_image_url/a13.jpg";
+        $image_array[] = "$dummy_image_url/a3.jpg";
+        $image_array[] = "$dummy_image_url/a4.jpg";
+        $image_array[] = "$dummy_image_url/a5.jpg";
+        $image_array[] = "$dummy_image_url/a2.jpg";
+        $image_array[] = "$dummy_image_url/a7.jpg";
+        $image_array[] = "$dummy_image_url/a8.jpg";
+        $image_array[] = "$dummy_image_url/a6.jpg";
+        $image_array[] = "$dummy_image_url/a1.jpg";
+        $image_array[] = "$dummy_image_url/a9.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Sadsbury Woods Preserve',
+            "post_desc" => 'A more than 500-acre nature preserve ideal for walking and hiking, Sadsbury Woods is also an important habitat for interior nesting birds and small mammals. An increasingly rare area of interior woodlands, defined as an area at least 300 feet from any road, lawn or meadow, provides a critical habitat for many species of birds, especially neo-tropical migrant songbirds.
 	
 	Situated on the western edge of Chester County, the land remains much as it did centuries ago, and now serves as a permanent refuge in an area facing dramatically increasing development pressure.
 	
@@ -377,45 +375,45 @@ switch($dummy_post_index)
 	Outsider Tip
 	
 	The deep forest is a great place for spotting neo-tropical songbirds in the spring and summer months',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Attractions') ),
-						"post_tags"		=>	array('sample','tags'),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'Open today until 12.30 p.m., Sunday 12 pm to 7 pm',
-						"geodir_contact"		=> '(222) 999-9999',
-						"geodir_email"			=> 'info@swp.com',
-						"geodir_website"		=> 'http://swp.com',
-						"geodir_twitter"		=> 'http://twitter.com/swp',
-						"geodir_facebook"		=> 'http://facebook.com/swp',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Attractions ////post start 6///				
-	
-	 break;
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Attractions')),
+            "post_tags" => array('sample', 'tags'),
+            "geodir_video" => '',
+            "geodir_timing" => 'Open today until 12.30 p.m., Sunday 12 pm to 7 pm',
+            "geodir_contact" => '(222) 999-9999',
+            "geodir_email" => 'info@swp.com',
+            "geodir_website" => 'http://swp.com',
+            "geodir_twitter" => 'http://twitter.com/swp',
+            "geodir_facebook" => 'http://facebook.com/swp',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Attractions ////post start 6///
+
+        break;
     case 7:
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Attractions ////post start 7///
-	$image_array[] = "$dummy_image_url/a15.jpg";
-	$image_array[] = "$dummy_image_url/a16.jpg";
-	$image_array[] = "$dummy_image_url/a17.jpg";
-	$image_array[] = "$dummy_image_url/a4.jpg";
-	$image_array[] = "$dummy_image_url/a5.jpg";
-	$image_array[] = "$dummy_image_url/a2.jpg";
-	$image_array[] = "$dummy_image_url/a7.jpg";
-	$image_array[] = "$dummy_image_url/a8.jpg";
-	$image_array[] = "$dummy_image_url/a6.jpg";
-	$image_array[] = "$dummy_image_url/a1.jpg";
-	$image_array[] = "$dummy_image_url/a9.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'Museum Without Walls',
-						"post_desc"	=>	'<h3>The Experience </h3>
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Attractions ////post start 7///
+        $image_array[] = "$dummy_image_url/a15.jpg";
+        $image_array[] = "$dummy_image_url/a16.jpg";
+        $image_array[] = "$dummy_image_url/a17.jpg";
+        $image_array[] = "$dummy_image_url/a4.jpg";
+        $image_array[] = "$dummy_image_url/a5.jpg";
+        $image_array[] = "$dummy_image_url/a2.jpg";
+        $image_array[] = "$dummy_image_url/a7.jpg";
+        $image_array[] = "$dummy_image_url/a8.jpg";
+        $image_array[] = "$dummy_image_url/a6.jpg";
+        $image_array[] = "$dummy_image_url/a1.jpg";
+        $image_array[] = "$dummy_image_url/a9.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Museum Without Walls',
+            "post_desc" => '<h3>The Experience </h3>
 	
 	Museum Without Walls: AUDIO is a multi-platform, interactive audio tour, designed to allow locals and visitors alike to experience Philadelphia extensive collection of public art and outdoor sculpture along the Benjamin Franklin Parkway and Kelly Drive. This innovative program invites passersby to stop, look, listen and see this city public art in a new way. Discover the untold histories of the 51 outdoor sculptures at 35 stops through these professionally produced three-minute interpretive audio segments. The many narratives have been spoken by more than 100 individuals, all with personal connections to the pieces of art.
 	
@@ -425,45 +423,45 @@ switch($dummy_post_index)
 	<h3>History </h3>
 	
 	Philadelphia has more outdoor sculpture than any other American city, yet this extensive collection often goes unnoticed. This program is intended to reveal the distinct stories behind each of these works, that have become visual white noise for so many of the city residents and visitors. ',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Attractions') ),
-						"post_tags"		=>	array('Museum'),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'Open today until 10.30 a.m., Sunday 10 am to 7 pm',
-						"geodir_contact"		=> '(222) 999-9999',
-						"geodir_email"			=> 'info@mwwalls.com',
-						"geodir_website"		=> 'http://museumwithoutwallsaudio.org/',
-						"geodir_twitter"		=> 'http://twitter.com/mwwalls',
-						"geodir_facebook"		=> 'http://facebook.com/mwwalls',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Attractions ////post start 7///				
-	
-	 break;
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Attractions')),
+            "post_tags" => array('Museum'),
+            "geodir_video" => '',
+            "geodir_timing" => 'Open today until 10.30 a.m., Sunday 10 am to 7 pm',
+            "geodir_contact" => '(222) 999-9999',
+            "geodir_email" => 'info@mwwalls.com',
+            "geodir_website" => 'http://museumwithoutwallsaudio.org/',
+            "geodir_twitter" => 'http://twitter.com/mwwalls',
+            "geodir_facebook" => 'http://facebook.com/mwwalls',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Attractions ////post start 7///
+
+        break;
     case 8:
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Attractions ////post start 8///
-	$image_array[] = "$dummy_image_url/a18.jpg";
-	$image_array[] = "$dummy_image_url/a10.jpg";
-	$image_array[] = "$dummy_image_url/a3.jpg";
-	$image_array[] = "$dummy_image_url/a4.jpg";
-	$image_array[] = "$dummy_image_url/a5.jpg";
-	$image_array[] = "$dummy_image_url/a2.jpg";
-	$image_array[] = "$dummy_image_url/a7.jpg";
-	$image_array[] = "$dummy_image_url/a8.jpg";
-	$image_array[] = "$dummy_image_url/a6.jpg";
-	$image_array[] = "$dummy_image_url/a1.jpg";
-	$image_array[] = "$dummy_image_url/a9.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'Audacious Freedom',
-						"post_desc"	=>'Audacious Freedom, the major, new exhibit at the African American Museum in Philadelphia , explores the lives of people of African descent living in Philadelphia between 1776 and 1876.
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Attractions ////post start 8///
+        $image_array[] = "$dummy_image_url/a18.jpg";
+        $image_array[] = "$dummy_image_url/a10.jpg";
+        $image_array[] = "$dummy_image_url/a3.jpg";
+        $image_array[] = "$dummy_image_url/a4.jpg";
+        $image_array[] = "$dummy_image_url/a5.jpg";
+        $image_array[] = "$dummy_image_url/a2.jpg";
+        $image_array[] = "$dummy_image_url/a7.jpg";
+        $image_array[] = "$dummy_image_url/a8.jpg";
+        $image_array[] = "$dummy_image_url/a6.jpg";
+        $image_array[] = "$dummy_image_url/a1.jpg";
+        $image_array[] = "$dummy_image_url/a9.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Audacious Freedom',
+            "post_desc" => 'Audacious Freedom, the major, new exhibit at the African American Museum in Philadelphia , explores the lives of people of African descent living in Philadelphia between 1776 and 1876.
 	
 	Discover how African Americans in Philadelphia lived and worked while helping to shape the young nation in its formative stages.
 	
@@ -471,45 +469,45 @@ switch($dummy_post_index)
 	
 	The groundbreaking exhibit allows visitors to “walk the streets” of Historic Philadelphia using a large-scale map. Young children can join the action with Children&acute;s Corner, which highlights the daily lives of children during that period.
 	',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Attractions') ),
-						"post_tags"		=>	array('Tag1'),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'Open today until 11.30 a.m., Sunday 1 pm to 7 pm',
-						"geodir_contact"		=> '(777) 777-7777',
-						"geodir_email"			=> 'info@aampmuseum.com',
-						"geodir_website"		=> 'http://www.aampmuseum.org/',
-						"geodir_twitter"		=> 'http://twitter.com/aampmuseum',
-						"geodir_facebook"		=> 'http://facebook.com/aampmuseum',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Attractions ////post start 8///				
-	
-	
-	 break;
-    case 9: 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Attractions ////post start 9///
-	$image_array[] = "$dummy_image_url/a19.jpg";
-	$image_array[] = "$dummy_image_url/a20.jpg";
-	$image_array[] = "$dummy_image_url/a3.jpg";
-	$image_array[] = "$dummy_image_url/a4.jpg";
-	$image_array[] = "$dummy_image_url/a5.jpg";
-	$image_array[] = "$dummy_image_url/a2.jpg";
-	$image_array[] = "$dummy_image_url/a7.jpg";
-	$image_array[] = "$dummy_image_url/a8.jpg";
-	$image_array[] = "$dummy_image_url/a6.jpg";
-	$image_array[] = "$dummy_image_url/a1.jpg";
-	$image_array[] = "$dummy_image_url/a9.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'The Liberty Bell Center',
-						"post_desc"	=>	'<h3>The Experience </h3>
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Attractions')),
+            "post_tags" => array('Tag1'),
+            "geodir_video" => '',
+            "geodir_timing" => 'Open today until 11.30 a.m., Sunday 1 pm to 7 pm',
+            "geodir_contact" => '(777) 777-7777',
+            "geodir_email" => 'info@aampmuseum.com',
+            "geodir_website" => 'http://www.aampmuseum.org/',
+            "geodir_twitter" => 'http://twitter.com/aampmuseum',
+            "geodir_facebook" => 'http://facebook.com/aampmuseum',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Attractions ////post start 8///
+
+
+        break;
+    case 9:
+        $image_array = array();
+        $post_meta = array();
+
+        /// Attractions ////post start 9///
+        $image_array[] = "$dummy_image_url/a19.jpg";
+        $image_array[] = "$dummy_image_url/a20.jpg";
+        $image_array[] = "$dummy_image_url/a3.jpg";
+        $image_array[] = "$dummy_image_url/a4.jpg";
+        $image_array[] = "$dummy_image_url/a5.jpg";
+        $image_array[] = "$dummy_image_url/a2.jpg";
+        $image_array[] = "$dummy_image_url/a7.jpg";
+        $image_array[] = "$dummy_image_url/a8.jpg";
+        $image_array[] = "$dummy_image_url/a6.jpg";
+        $image_array[] = "$dummy_image_url/a1.jpg";
+        $image_array[] = "$dummy_image_url/a9.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'The Liberty Bell Center',
+            "post_desc" => '<h3>The Experience </h3>
 	
 	The Liberty Bell has a new home, and it is as powerful and dramatic as the Bell itself. Throughout the expansive, light-filled Center, larger-than-life historic documents and graphic images explore the facts and the myths surrounding the Bell.
 	
@@ -530,46 +528,45 @@ switch($dummy_post_index)
 	The Bell is suspended from what is believed to be its original yoke, made of American elm.
 	
 	The Liberty Bell weighs 2,080 pounds. The yoke weighs about 100 pounds.',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Attractions','Feature') ),
-						"post_tags"		=>	array(''),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'The center is open year round, 9 a.m. – 5 p.m., with extended hours in the summer.',
-						"geodir_contact"		=> '(777) 666-6666',
-						"geodir_email"			=> 'info@nps.com',
-						"geodir_website"		=> 'http://www.nps.gov/inde',
-						"geodir_twitter"		=> 'http://twitter.com/nps',
-						"geodir_facebook"		=> 'http://facebook.com/nps',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Attractions ////post start 9///				
-	 break;
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Attractions', 'Feature')),
+            "post_tags" => array(''),
+            "geodir_video" => '',
+            "geodir_timing" => 'The center is open year round, 9 a.m. – 5 p.m., with extended hours in the summer.',
+            "geodir_contact" => '(777) 666-6666',
+            "geodir_email" => 'info@nps.com',
+            "geodir_website" => 'http://www.nps.gov/inde',
+            "geodir_twitter" => 'http://twitter.com/nps',
+            "geodir_facebook" => 'http://facebook.com/nps',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Attractions ////post start 9///
+        break;
     case 10:
-			
-	
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Attractions ////post start 10///
-	$image_array[] = "$dummy_image_url/a19.jpg";
-	$image_array[] = "$dummy_image_url/a20.jpg";
-	$image_array[] = "$dummy_image_url/a3.jpg";
-	$image_array[] = "$dummy_image_url/a4.jpg";
-	$image_array[] = "$dummy_image_url/a5.jpg";
-	$image_array[] = "$dummy_image_url/a2.jpg";
-	$image_array[] = "$dummy_image_url/a7.jpg";
-	$image_array[] = "$dummy_image_url/a8.jpg";
-	$image_array[] = "$dummy_image_url/a6.jpg";
-	$image_array[] = "$dummy_image_url/a1.jpg";
-	$image_array[] = "$dummy_image_url/a9.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'Rittenhouse Square',
-						"post_desc"	=>	'
+
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Attractions ////post start 10///
+        $image_array[] = "$dummy_image_url/a19.jpg";
+        $image_array[] = "$dummy_image_url/a20.jpg";
+        $image_array[] = "$dummy_image_url/a3.jpg";
+        $image_array[] = "$dummy_image_url/a4.jpg";
+        $image_array[] = "$dummy_image_url/a5.jpg";
+        $image_array[] = "$dummy_image_url/a2.jpg";
+        $image_array[] = "$dummy_image_url/a7.jpg";
+        $image_array[] = "$dummy_image_url/a8.jpg";
+        $image_array[] = "$dummy_image_url/a6.jpg";
+        $image_array[] = "$dummy_image_url/a1.jpg";
+        $image_array[] = "$dummy_image_url/a9.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Rittenhouse Square',
+            "post_desc" => '
 	
 	Unlike the other squares, the early Southwest Square was never used as a burial ground, although it offered pasturage for local livestock and a convenient dumping spot for “night soil”.
 	<h3> History </h3>
@@ -602,46 +599,45 @@ switch($dummy_post_index)
 	
 	Meanwhile, several more restaurants, bars and clubs have opened along the surrounding blocks in recent years, like Parc, Tria, Continental Midtown, Alfa, Walnut Room, and Twenty Manning just to name a few.
 	',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Attractions') ),
-						"post_tags"		=>	array('Museum'),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'The center is open year round, 9 a.m. – 5 p.m., with extended hours in the summer.',
-						"geodir_contact"		=> '(777) 666-6666',
-						"geodir_email"			=> 'info@fairmountpark.com',
-						"geodir_website"		=> 'http://www.fairmountpark.org/rittenhousesquare.asp',
-						"geodir_twitter"		=> 'http://twitter.com/fairmountpark',
-						"geodir_facebook"		=> 'http://facebook.com/fairmountpark',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Attractions ////post start 10///				
-	 break;
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Attractions')),
+            "post_tags" => array('Museum'),
+            "geodir_video" => '',
+            "geodir_timing" => 'The center is open year round, 9 a.m. – 5 p.m., with extended hours in the summer.',
+            "geodir_contact" => '(777) 666-6666',
+            "geodir_email" => 'info@fairmountpark.com',
+            "geodir_website" => 'http://www.fairmountpark.org/rittenhousesquare.asp',
+            "geodir_twitter" => 'http://twitter.com/fairmountpark',
+            "geodir_facebook" => 'http://facebook.com/fairmountpark',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Attractions ////post start 10///
+        break;
     case 11:
-				
-	
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Hotels ////post start 1///
-	$image_array[] = "$dummy_image_url/hotels1.jpg";
-	$image_array[] = "$dummy_image_url/hotels2.jpg";
-	$image_array[] = "$dummy_image_url/hotels3.jpg";
-	$image_array[] = "$dummy_image_url/hotels4.jpg";
-	$image_array[] = "$dummy_image_url/hotels5.jpg";
-	$image_array[] = "$dummy_image_url/hotels6.jpg";
-	$image_array[] = "$dummy_image_url/hotels7.jpg";
-	$image_array[] = "$dummy_image_url/hotels8.jpg";
-	$image_array[] = "$dummy_image_url/hotels9.jpg";
-	$image_array[] = "$dummy_image_url/hotels10.jpg";
-	$image_array[] = "$dummy_image_url/hotels11.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'Loews Philadelphia Hotel',
-						"post_desc"	=>	'
+
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Hotels ////post start 1///
+        $image_array[] = "$dummy_image_url/hotels1.jpg";
+        $image_array[] = "$dummy_image_url/hotels2.jpg";
+        $image_array[] = "$dummy_image_url/hotels3.jpg";
+        $image_array[] = "$dummy_image_url/hotels4.jpg";
+        $image_array[] = "$dummy_image_url/hotels5.jpg";
+        $image_array[] = "$dummy_image_url/hotels6.jpg";
+        $image_array[] = "$dummy_image_url/hotels7.jpg";
+        $image_array[] = "$dummy_image_url/hotels8.jpg";
+        $image_array[] = "$dummy_image_url/hotels9.jpg";
+        $image_array[] = "$dummy_image_url/hotels10.jpg";
+        $image_array[] = "$dummy_image_url/hotels11.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Loews Philadelphia Hotel',
+            "post_desc" => '
 	
 	<h3>OVERVIEW </h3>
 	
@@ -708,45 +704,45 @@ switch($dummy_post_index)
 	
 	SoleFood Restaurant is proud to be serving Starbucks. Come in and enjoy a fresh cup of coffee during your morning rush. The Coffee Bar also offer small breakfast items for your enjoyment.
 	',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Hotels','Feature') ),
-						"post_tags"		=>	array(''),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'Daily, 6:30 am – 12:00 pm',
-						"geodir_contact"		=> '(111) 111-0000',
-						"geodir_email"			=> 'info@loewshotels.com',
-						"geodir_website"		=> 'http://www.loewshotels.com/en/hotels/philadelphia-hotel/overview.aspx',
-						"geodir_twitter"		=> 'http://twitter.com/loewshotels',
-						"geodir_facebook"		=> 'http://facebook.com/loewshotels',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Hotels ////post start 1///	
-	 break;
-    case 12:		
-	
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Hotels ////post start 2///
-	$image_array[] = "$dummy_image_url/hotels5.jpg";
-	$image_array[] = "$dummy_image_url/hotels2.jpg";
-	$image_array[] = "$dummy_image_url/hotels3.jpg";
-	$image_array[] = "$dummy_image_url/hotels4.jpg";
-	$image_array[] = "$dummy_image_url/hotels1.jpg";
-	$image_array[] = "$dummy_image_url/hotels6.jpg";
-	$image_array[] = "$dummy_image_url/hotels7.jpg";
-	$image_array[] = "$dummy_image_url/hotels8.jpg";
-	$image_array[] = "$dummy_image_url/hotels9.jpg";
-	$image_array[] = "$dummy_image_url/hotels10.jpg";
-	$image_array[] = "$dummy_image_url/hotels11.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'Embassy Suites Philadelphia',
-						"post_desc"	=>	'
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Hotels', 'Feature')),
+            "post_tags" => array(''),
+            "geodir_video" => '',
+            "geodir_timing" => 'Daily, 6:30 am – 12:00 pm',
+            "geodir_contact" => '(111) 111-0000',
+            "geodir_email" => 'info@loewshotels.com',
+            "geodir_website" => 'http://www.loewshotels.com/en/hotels/philadelphia-hotel/overview.aspx',
+            "geodir_twitter" => 'http://twitter.com/loewshotels',
+            "geodir_facebook" => 'http://facebook.com/loewshotels',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Hotels ////post start 1///
+        break;
+    case 12:
+
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Hotels ////post start 2///
+        $image_array[] = "$dummy_image_url/hotels5.jpg";
+        $image_array[] = "$dummy_image_url/hotels2.jpg";
+        $image_array[] = "$dummy_image_url/hotels3.jpg";
+        $image_array[] = "$dummy_image_url/hotels4.jpg";
+        $image_array[] = "$dummy_image_url/hotels1.jpg";
+        $image_array[] = "$dummy_image_url/hotels6.jpg";
+        $image_array[] = "$dummy_image_url/hotels7.jpg";
+        $image_array[] = "$dummy_image_url/hotels8.jpg";
+        $image_array[] = "$dummy_image_url/hotels9.jpg";
+        $image_array[] = "$dummy_image_url/hotels10.jpg";
+        $image_array[] = "$dummy_image_url/hotels11.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Embassy Suites Philadelphia',
+            "post_desc" => '
 	The newly renovated Embassy Suites Philadelphia – Center City hotel is conveniently situated in the heart of downtown Philadelphia, Pennsylvania and Philadelphia&acute;s Center City business district. This hotel in Philadelphia is located only eight miles from Philadelphia International Airport and just minutes from top Philadelphia attractions, including:
 	
 	Philadelphia Museum of Art
@@ -762,45 +758,45 @@ switch($dummy_post_index)
 	
 	A delicious, complimentary cooked-to-order breakfast is offered each morning, and a hotel Manager&acute;s Reception every night – featuring complimentary refreshments and great company.
 	',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Hotels') ),
-						"post_tags"		=>	array(''),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'Daily, 10:30 am – 10 pm',
-						"geodir_contact"		=> '(111) 111-0000',
-						"geodir_email"			=> 'info@embassysuites1.com',
-						"geodir_website"		=> 'http://embassysuites1.hilton.com/en_US/es/hotel/PHLDTES-Embassy-Suites-Philadelphia-Center-City-Pennsylvania/index.do',
-						"geodir_twitter"		=> 'http://twitter.com/embassysuites1',
-						"geodir_facebook"		=> 'http://facebook.com/embassysuites1',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Hotels ////post start 2///				
-				
-	 break;
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Hotels')),
+            "post_tags" => array(''),
+            "geodir_video" => '',
+            "geodir_timing" => 'Daily, 10:30 am – 10 pm',
+            "geodir_contact" => '(111) 111-0000',
+            "geodir_email" => 'info@embassysuites1.com',
+            "geodir_website" => 'http://embassysuites1.hilton.com/en_US/es/hotel/PHLDTES-Embassy-Suites-Philadelphia-Center-City-Pennsylvania/index.do',
+            "geodir_twitter" => 'http://twitter.com/embassysuites1',
+            "geodir_facebook" => 'http://facebook.com/embassysuites1',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Hotels ////post start 2///
+
+        break;
     case 13:
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Hotels ////post start 3///
-	$image_array[] = "$dummy_image_url/hotels10.jpg";
-	$image_array[] = "$dummy_image_url/hotels11.jpg";
-	$image_array[] = "$dummy_image_url/hotels12.jpg";
-	$image_array[] = "$dummy_image_url/hotels4.jpg";
-	$image_array[] = "$dummy_image_url/hotels1.jpg";
-	$image_array[] = "$dummy_image_url/hotels6.jpg";
-	$image_array[] = "$dummy_image_url/hotels7.jpg";
-	$image_array[] = "$dummy_image_url/hotels8.jpg";
-	$image_array[] = "$dummy_image_url/hotels9.jpg";
-	$image_array[] = "$dummy_image_url/hotels1.jpg";
-	$image_array[] = "$dummy_image_url/hotels2.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'Doubletree Hotel Philadelphia',
-						"post_desc"	=>	'
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Hotels ////post start 3///
+        $image_array[] = "$dummy_image_url/hotels10.jpg";
+        $image_array[] = "$dummy_image_url/hotels11.jpg";
+        $image_array[] = "$dummy_image_url/hotels12.jpg";
+        $image_array[] = "$dummy_image_url/hotels4.jpg";
+        $image_array[] = "$dummy_image_url/hotels1.jpg";
+        $image_array[] = "$dummy_image_url/hotels6.jpg";
+        $image_array[] = "$dummy_image_url/hotels7.jpg";
+        $image_array[] = "$dummy_image_url/hotels8.jpg";
+        $image_array[] = "$dummy_image_url/hotels9.jpg";
+        $image_array[] = "$dummy_image_url/hotels1.jpg";
+        $image_array[] = "$dummy_image_url/hotels2.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Doubletree Hotel Philadelphia',
+            "post_desc" => '
 	With 434 rooms, the Doubletree Hotel is a great option for your upcoming stay in Philadelphia.
 	
 	<h3>Location </h3>
@@ -829,48 +825,48 @@ switch($dummy_post_index)
 	
 	Stop in the restaurant - which serves lunch and dinner daily - for a drink and some light fare. With its location right on Broad Street, you&acute;re close to everything you could ever want in a night on the town.
 	',
-	
-						"post_images"	=>	$image_array,
-	
-						"post_category"	=>	array('gd_placecategory' =>array('Hotels') ),
-						"post_tags"		=>	array(''),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'Daily, 10:30 am – 10 pm',
-						"geodir_contact"		=> '(111) 111-0000',
-						"geodir_email"			=> 'info@doubletree1.com',
-						"geodir_website"		=> 'http://doubletree1.hilton.com/en_US/dt/hotel/PHLBLDT-Doubletree-Hotel-Philadelphia-Pennsylvania/index.do',
-						"geodir_twitter"		=> 'http://twitter.com/doubletree1',
-						"geodir_facebook"		=> 'http://facebook.com/doubletree1',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Hotels ////post start 3///				
-	
-	 break;
+
+            "post_images" => $image_array,
+
+            "post_category" => array('gd_placecategory' => array('Hotels')),
+            "post_tags" => array(''),
+            "geodir_video" => '',
+            "geodir_timing" => 'Daily, 10:30 am – 10 pm',
+            "geodir_contact" => '(111) 111-0000',
+            "geodir_email" => 'info@doubletree1.com',
+            "geodir_website" => 'http://doubletree1.hilton.com/en_US/dt/hotel/PHLBLDT-Doubletree-Hotel-Philadelphia-Pennsylvania/index.do',
+            "geodir_twitter" => 'http://twitter.com/doubletree1',
+            "geodir_facebook" => 'http://facebook.com/doubletree1',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Hotels ////post start 3///
+
+        break;
     case 14:
-	
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Hotels ////post start 4///
-	$image_array[] = "$dummy_image_url/hotels15.jpg";
-	$image_array[] = "$dummy_image_url/hotels16.jpg";
-	$image_array[] = "$dummy_image_url/hotels12.jpg";
-	$image_array[] = "$dummy_image_url/hotels4.jpg";
-	$image_array[] = "$dummy_image_url/hotels1.jpg";
-	$image_array[] = "$dummy_image_url/hotels6.jpg";
-	$image_array[] = "$dummy_image_url/hotels7.jpg";
-	$image_array[] = "$dummy_image_url/hotels8.jpg";
-	$image_array[] = "$dummy_image_url/hotels9.jpg";
-	$image_array[] = "$dummy_image_url/hotels1.jpg";
-	$image_array[] = "$dummy_image_url/hotels2.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'Philadelphia Marriott Downtown',
-						"post_desc"	=>	'
+
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Hotels ////post start 4///
+        $image_array[] = "$dummy_image_url/hotels15.jpg";
+        $image_array[] = "$dummy_image_url/hotels16.jpg";
+        $image_array[] = "$dummy_image_url/hotels12.jpg";
+        $image_array[] = "$dummy_image_url/hotels4.jpg";
+        $image_array[] = "$dummy_image_url/hotels1.jpg";
+        $image_array[] = "$dummy_image_url/hotels6.jpg";
+        $image_array[] = "$dummy_image_url/hotels7.jpg";
+        $image_array[] = "$dummy_image_url/hotels8.jpg";
+        $image_array[] = "$dummy_image_url/hotels9.jpg";
+        $image_array[] = "$dummy_image_url/hotels1.jpg";
+        $image_array[] = "$dummy_image_url/hotels2.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Philadelphia Marriott Downtown',
+            "post_desc" => '
 	Get ready to stay and play at the new aloft Philadelphia Airport!
 	
 	This incredibly modern hotel is located just five minutes from Philadelphia International Airport, offering a great convenience to travelers looking for fresh and fun accommodations.
@@ -897,45 +893,45 @@ switch($dummy_post_index)
 	
 	Aahh…breathe deep at Aloft. This hotel is smoke-free.
 	',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Hotels','Feature') ),
-						"post_tags"		=>	array(''),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> '24 Hours',
-						"geodir_contact"		=> '(123) 111-2222',
-						"geodir_email"			=> 'info@marriott.com',
-						"geodir_website"		=> 'http://www.marriott.com/hotels/travel/phldt-philadelphia-marriott-downtown/',
-						"geodir_twitter"		=> 'http://twitter.com/marriott',
-						"geodir_facebook"		=> 'http://facebook.com/marriott',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Hotels ////post start 4///				
-	 break;
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Hotels', 'Feature')),
+            "post_tags" => array(''),
+            "geodir_video" => '',
+            "geodir_timing" => '24 Hours',
+            "geodir_contact" => '(123) 111-2222',
+            "geodir_email" => 'info@marriott.com',
+            "geodir_website" => 'http://www.marriott.com/hotels/travel/phldt-philadelphia-marriott-downtown/',
+            "geodir_twitter" => 'http://twitter.com/marriott',
+            "geodir_facebook" => 'http://facebook.com/marriott',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Hotels ////post start 4///
+        break;
     case 15:
-	
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Hotels ////post start 5///
-	$image_array[] = "$dummy_image_url/hotels10.jpg";
-	$image_array[] = "$dummy_image_url/hotels16.jpg";
-	$image_array[] = "$dummy_image_url/hotels12.jpg";
-	$image_array[] = "$dummy_image_url/hotels4.jpg";
-	$image_array[] = "$dummy_image_url/hotels1.jpg";
-	$image_array[] = "$dummy_image_url/hotels6.jpg";
-	$image_array[] = "$dummy_image_url/hotels7.jpg";
-	$image_array[] = "$dummy_image_url/hotels8.jpg";
-	$image_array[] = "$dummy_image_url/hotels9.jpg";
-	$image_array[] = "$dummy_image_url/hotels1.jpg";
-	$image_array[] = "$dummy_image_url/hotels2.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'Hilton Inn at Penn',
-						"post_desc"	=>	'
+
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Hotels ////post start 5///
+        $image_array[] = "$dummy_image_url/hotels10.jpg";
+        $image_array[] = "$dummy_image_url/hotels16.jpg";
+        $image_array[] = "$dummy_image_url/hotels12.jpg";
+        $image_array[] = "$dummy_image_url/hotels4.jpg";
+        $image_array[] = "$dummy_image_url/hotels1.jpg";
+        $image_array[] = "$dummy_image_url/hotels6.jpg";
+        $image_array[] = "$dummy_image_url/hotels7.jpg";
+        $image_array[] = "$dummy_image_url/hotels8.jpg";
+        $image_array[] = "$dummy_image_url/hotels9.jpg";
+        $image_array[] = "$dummy_image_url/hotels1.jpg";
+        $image_array[] = "$dummy_image_url/hotels2.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Hilton Inn at Penn',
+            "post_desc" => '
 	Located in the heart of Penn&acute;s campus in the beautiful University City neighborhood of Philadelphia, The Hilton Inn at Penn is a great choice for accommodations during your upcoming visit to Philadelphia.
 	
 	The location puts you right in the middle of the prestigious University of Pennsylvania and its many nearby educational, medical and corporate centers. And Center City Philadelphia is only a short cab ride away. So if you want to get out and explore the city, you are set.
@@ -951,45 +947,45 @@ switch($dummy_post_index)
 	
 	The pasta is handmade right in front of you and then dished up along side delectable entrées such as grilled veal tenderloin and honey glazed sea scallops. And the wine bar offers more than 30 varieties by the glass and more than 100 by the bottle.  
 	',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' => array('Hotels','Food Nightlife') ),
-						"post_tags"		=>	array(''),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'Daily : 11 am to 11 pm',
-						"geodir_contact"		=> '(888) 888-8888',
-						"geodir_email"			=> 'info@theinnatpenn.com',
-						"geodir_website"		=> 'http://www.theinnatpenn.com/',
-						"geodir_twitter"		=> 'http://twitter.com/theinnatpenn',
-						"geodir_facebook"		=> 'http://facebook.com/theinnatpenn',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Hotels ////post start 5///				
-	 break;
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Hotels', 'Food Nightlife')),
+            "post_tags" => array(''),
+            "geodir_video" => '',
+            "geodir_timing" => 'Daily : 11 am to 11 pm',
+            "geodir_contact" => '(888) 888-8888',
+            "geodir_email" => 'info@theinnatpenn.com',
+            "geodir_website" => 'http://www.theinnatpenn.com/',
+            "geodir_twitter" => 'http://twitter.com/theinnatpenn',
+            "geodir_facebook" => 'http://facebook.com/theinnatpenn',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Hotels ////post start 5///
+        break;
     case 16:
-	
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Hotels ////post start 6///
-	$image_array[] = "$dummy_image_url/hotels17.jpg";
-	$image_array[] = "$dummy_image_url/hotels18.jpg";
-	$image_array[] = "$dummy_image_url/hotels12.jpg";
-	$image_array[] = "$dummy_image_url/hotels4.jpg";
-	$image_array[] = "$dummy_image_url/hotels1.jpg";
-	$image_array[] = "$dummy_image_url/hotels6.jpg";
-	$image_array[] = "$dummy_image_url/hotels7.jpg";
-	$image_array[] = "$dummy_image_url/hotels8.jpg";
-	$image_array[] = "$dummy_image_url/hotels9.jpg";
-	$image_array[] = "$dummy_image_url/hotels1.jpg";
-	$image_array[] = "$dummy_image_url/hotels2.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'Courtyard Philadelphia Downtown',
-						"post_desc"	=>	'
+
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Hotels ////post start 6///
+        $image_array[] = "$dummy_image_url/hotels17.jpg";
+        $image_array[] = "$dummy_image_url/hotels18.jpg";
+        $image_array[] = "$dummy_image_url/hotels12.jpg";
+        $image_array[] = "$dummy_image_url/hotels4.jpg";
+        $image_array[] = "$dummy_image_url/hotels1.jpg";
+        $image_array[] = "$dummy_image_url/hotels6.jpg";
+        $image_array[] = "$dummy_image_url/hotels7.jpg";
+        $image_array[] = "$dummy_image_url/hotels8.jpg";
+        $image_array[] = "$dummy_image_url/hotels9.jpg";
+        $image_array[] = "$dummy_image_url/hotels1.jpg";
+        $image_array[] = "$dummy_image_url/hotels2.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Courtyard Philadelphia Downtown',
+            "post_desc" => '
 	<h3>Overview </h3>
 	
 	The Philadelphia Downtown Courtyard opened it&acute;s doors after a grand $75 million restoration, recapturing the grandeur of its 1926 origins while incorporating state of the art systems throughout.
@@ -1019,45 +1015,45 @@ switch($dummy_post_index)
 	
 	Recently featured on WE TV&acute;s “My Fair Wedding”, the Courtyard Marriott Philadelphia is one of the city&acute;s leading venues for corporate and social affairs with over 10,000 sq ft of flexible meeting space, including two Grand Ballrooms each with over 3,000 square feet accommodating up to 250 people. In addition, the hotel has a total of 11 meeting rooms making it an ideal home for all occasions. The hotel boasts an experienced full-service Event and Culinary Teams, ready to take care of all the details and ensure your event is not only a success, but a lasting memory. 
 	',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Hotels','Food Nightlife') ),
-						"post_tags"		=>		array(''),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'Daily : 11 am to 11 pm',
-						"geodir_contact"		=> '(888) 888-8888',
-						"geodir_email"			=> 'info@theinnatpenn.com',
-						"geodir_website"		=> 'http://www.theinnatpenn.com/',
-						"geodir_twitter"		=> 'http://twitter.com/theinnatpenn',
-						"geodir_facebook"		=> 'http://facebook.com/theinnatpenn',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Hotels ////post start 6///				
-	
-	 break;
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Hotels', 'Food Nightlife')),
+            "post_tags" => array(''),
+            "geodir_video" => '',
+            "geodir_timing" => 'Daily : 11 am to 11 pm',
+            "geodir_contact" => '(888) 888-8888',
+            "geodir_email" => 'info@theinnatpenn.com',
+            "geodir_website" => 'http://www.theinnatpenn.com/',
+            "geodir_twitter" => 'http://twitter.com/theinnatpenn',
+            "geodir_facebook" => 'http://facebook.com/theinnatpenn',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Hotels ////post start 6///
+
+        break;
     case 17:
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Hotels ////post start 7///
-	$image_array[] = "$dummy_image_url/hotels11.jpg";
-	$image_array[] = "$dummy_image_url/hotels10.jpg";
-	$image_array[] = "$dummy_image_url/hotels12.jpg";
-	$image_array[] = "$dummy_image_url/hotels4.jpg";
-	$image_array[] = "$dummy_image_url/hotels1.jpg";
-	$image_array[] = "$dummy_image_url/hotels6.jpg";
-	$image_array[] = "$dummy_image_url/hotels7.jpg";
-	$image_array[] = "$dummy_image_url/hotels8.jpg";
-	$image_array[] = "$dummy_image_url/hotels9.jpg";
-	$image_array[] = "$dummy_image_url/hotels1.jpg";
-	$image_array[] = "$dummy_image_url/hotels2.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'Four Seasons Philadelphia',
-						"post_desc"	=>	'
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Hotels ////post start 7///
+        $image_array[] = "$dummy_image_url/hotels11.jpg";
+        $image_array[] = "$dummy_image_url/hotels10.jpg";
+        $image_array[] = "$dummy_image_url/hotels12.jpg";
+        $image_array[] = "$dummy_image_url/hotels4.jpg";
+        $image_array[] = "$dummy_image_url/hotels1.jpg";
+        $image_array[] = "$dummy_image_url/hotels6.jpg";
+        $image_array[] = "$dummy_image_url/hotels7.jpg";
+        $image_array[] = "$dummy_image_url/hotels8.jpg";
+        $image_array[] = "$dummy_image_url/hotels9.jpg";
+        $image_array[] = "$dummy_image_url/hotels1.jpg";
+        $image_array[] = "$dummy_image_url/hotels2.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Four Seasons Philadelphia',
+            "post_desc" => '
 	<h3>Overview </h3>
 	
 	The Philadelphia Downtown Courtyard opened it&acute;s doors after a grand $75 million restoration, recapturing the grandeur of its 1926 origins while incorporating state of the art systems throughout.
@@ -1087,45 +1083,45 @@ switch($dummy_post_index)
 	
 	Recently featured on WE TV&acute;s “My Fair Wedding”, the Courtyard Marriott Philadelphia is one of the city&acute;s leading venues for corporate and social affairs with over 10,000 sq ft of flexible meeting space, including two Grand Ballrooms each with over 3,000 square feet accommodating up to 250 people. In addition, the hotel has a total of 11 meeting rooms making it an ideal home for all occasions. The hotel boasts an experienced full-service Event and Culinary Teams, ready to take care of all the details and ensure your event is not only a success, but a lasting memory. 
 	',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Hotels','Food Nightlife') ),
-						"post_tags"		=>	array(''),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'Daily : 11 am to 11 pm',
-						"geodir_contact"		=> '(143) 888-8888',
-						"geodir_email"			=> 'info@fourseasons.com',
-						"geodir_website"		=> 'http://www.fourseasons.com/philadelphia/',
-						"geodir_twitter"		=> 'http://twitter.com/fourseasons',
-						"geodir_facebook"		=> 'http://facebook.com/fourseasons',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Hotels ////post start 7///				
-	 break;
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Hotels', 'Food Nightlife')),
+            "post_tags" => array(''),
+            "geodir_video" => '',
+            "geodir_timing" => 'Daily : 11 am to 11 pm',
+            "geodir_contact" => '(143) 888-8888',
+            "geodir_email" => 'info@fourseasons.com',
+            "geodir_website" => 'http://www.fourseasons.com/philadelphia/',
+            "geodir_twitter" => 'http://twitter.com/fourseasons',
+            "geodir_facebook" => 'http://facebook.com/fourseasons',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Hotels ////post start 7///
+        break;
     case 18:
-	
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Hotels ////post start 8///
-	$image_array[] = "$dummy_image_url/hotels11.jpg";
-	$image_array[] = "$dummy_image_url/hotels10.jpg";
-	$image_array[] = "$dummy_image_url/hotels12.jpg";
-	$image_array[] = "$dummy_image_url/hotels4.jpg";
-	$image_array[] = "$dummy_image_url/hotels1.jpg";
-	$image_array[] = "$dummy_image_url/hotels6.jpg";
-	$image_array[] = "$dummy_image_url/hotels7.jpg";
-	$image_array[] = "$dummy_image_url/hotels8.jpg";
-	$image_array[] = "$dummy_image_url/hotels9.jpg";
-	$image_array[] = "$dummy_image_url/hotels1.jpg";
-	$image_array[] = "$dummy_image_url/hotels2.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'Alexander Inn',
-						"post_desc"	=>	'
+
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Hotels ////post start 8///
+        $image_array[] = "$dummy_image_url/hotels11.jpg";
+        $image_array[] = "$dummy_image_url/hotels10.jpg";
+        $image_array[] = "$dummy_image_url/hotels12.jpg";
+        $image_array[] = "$dummy_image_url/hotels4.jpg";
+        $image_array[] = "$dummy_image_url/hotels1.jpg";
+        $image_array[] = "$dummy_image_url/hotels6.jpg";
+        $image_array[] = "$dummy_image_url/hotels7.jpg";
+        $image_array[] = "$dummy_image_url/hotels8.jpg";
+        $image_array[] = "$dummy_image_url/hotels9.jpg";
+        $image_array[] = "$dummy_image_url/hotels1.jpg";
+        $image_array[] = "$dummy_image_url/hotels2.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Alexander Inn',
+            "post_desc" => '
 	The Alexander Inn is one of Philadelphia&acute;s most popular and reasonably priced small hotels.
 	
 	Conveniently located in the heart of the Washington Square West neighborhood in Center City Philadelphia, the Alexander Inn is a great place to base your stay in Philadelphia.
@@ -1134,45 +1130,45 @@ switch($dummy_post_index)
 	
 	Rooms are also fitted with DirecTV (including many complimentary channels like CNN, ESPN, eight movie channels, etc.) and telephones with modem ports and direct dial. You will also have access to the hotel&acute;s free 24-hour fitness and e-mail centers.  
 	',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Hotels') ),
-						"post_tags"		=>	array(''),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'Daily : 11 am to 11 pm',
-						"geodir_contact"		=> '(143) 888-8888',
-						"geodir_email"			=> 'info@alexanderinn.com',
-						"geodir_website"		=> 'http://www.alexanderinn.com/',
-						"geodir_twitter"		=> 'http://twitter.com/alexanderinn',
-						"geodir_facebook"		=> 'http://facebook.com/alexanderinn',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Hotels ////post start 8///				
-	 break;
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Hotels')),
+            "post_tags" => array(''),
+            "geodir_video" => '',
+            "geodir_timing" => 'Daily : 11 am to 11 pm',
+            "geodir_contact" => '(143) 888-8888',
+            "geodir_email" => 'info@alexanderinn.com',
+            "geodir_website" => 'http://www.alexanderinn.com/',
+            "geodir_twitter" => 'http://twitter.com/alexanderinn',
+            "geodir_facebook" => 'http://facebook.com/alexanderinn',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Hotels ////post start 8///
+        break;
     case 19:
-	
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Hotels ////post start 9///
-	$image_array[] = "$dummy_image_url/hotels5.jpg";
-	$image_array[] = "$dummy_image_url/hotels10.jpg";
-	$image_array[] = "$dummy_image_url/hotels12.jpg";
-	$image_array[] = "$dummy_image_url/hotels4.jpg";
-	$image_array[] = "$dummy_image_url/hotels1.jpg";
-	$image_array[] = "$dummy_image_url/hotels6.jpg";
-	$image_array[] = "$dummy_image_url/hotels7.jpg";
-	$image_array[] = "$dummy_image_url/hotels8.jpg";
-	$image_array[] = "$dummy_image_url/hotels9.jpg";
-	$image_array[] = "$dummy_image_url/hotels1.jpg";
-	$image_array[] = "$dummy_image_url/hotels2.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'Best Western Center City Hotel',
-						"post_desc"	=>	'
+
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Hotels ////post start 9///
+        $image_array[] = "$dummy_image_url/hotels5.jpg";
+        $image_array[] = "$dummy_image_url/hotels10.jpg";
+        $image_array[] = "$dummy_image_url/hotels12.jpg";
+        $image_array[] = "$dummy_image_url/hotels4.jpg";
+        $image_array[] = "$dummy_image_url/hotels1.jpg";
+        $image_array[] = "$dummy_image_url/hotels6.jpg";
+        $image_array[] = "$dummy_image_url/hotels7.jpg";
+        $image_array[] = "$dummy_image_url/hotels8.jpg";
+        $image_array[] = "$dummy_image_url/hotels9.jpg";
+        $image_array[] = "$dummy_image_url/hotels1.jpg";
+        $image_array[] = "$dummy_image_url/hotels2.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Best Western Center City Hotel',
+            "post_desc" => '
 	The Alexander Inn is one of Philadelphia&acute;s most popular and reasonably priced small hotels.
 	
 	Conveniently located in the heart of the Washington Square West neighborhood in Center City Philadelphia, the Alexander Inn is a great place to base your stay in Philadelphia.
@@ -1181,92 +1177,91 @@ switch($dummy_post_index)
 	
 	Rooms are also fitted with DirecTV (including many complimentary channels like CNN, ESPN, eight movie channels, etc.) and telephones with modem ports and direct dial. You will also have access to the hotel&acute;s free 24-hour fitness and e-mail centers.  
 	',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Hotels','Food Nightlife') ),
-						"post_tags"		=>	array(''),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'Daily : 10 am to 11 pm',
-						"geodir_contact"		=> '(243) 222-12344',
-						"geodir_email"			=> 'info@alexanderinn.com',
-						"geodir_website"		=> 'http://book.bestwestern.com/bestwestern/productInfo.do?propertyCode=39087',
-						"geodir_twitter"		=> 'http://twitter.com/bestwestern',
-						"geodir_facebook"		=> 'http://facebook.com/bestwestern',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Hotels ////post start 9///				
-	 break;
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Hotels', 'Food Nightlife')),
+            "post_tags" => array(''),
+            "geodir_video" => '',
+            "geodir_timing" => 'Daily : 10 am to 11 pm',
+            "geodir_contact" => '(243) 222-12344',
+            "geodir_email" => 'info@alexanderinn.com',
+            "geodir_website" => 'http://book.bestwestern.com/bestwestern/productInfo.do?propertyCode=39087',
+            "geodir_twitter" => 'http://twitter.com/bestwestern',
+            "geodir_facebook" => 'http://facebook.com/bestwestern',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Hotels ////post start 9///
+        break;
     case 20:
-		
-	
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Hotels ////post start 10///
-	$image_array[] = "$dummy_image_url/hotels7.jpg";
-	$image_array[] = "$dummy_image_url/hotels10.jpg";
-	$image_array[] = "$dummy_image_url/hotels12.jpg";
-	$image_array[] = "$dummy_image_url/hotels4.jpg";
-	$image_array[] = "$dummy_image_url/hotels1.jpg";
-	$image_array[] = "$dummy_image_url/hotels6.jpg";
-	$image_array[] = "$dummy_image_url/hotels12.jpg";
-	$image_array[] = "$dummy_image_url/hotels8.jpg";
-	$image_array[] = "$dummy_image_url/hotels9.jpg";
-	$image_array[] = "$dummy_image_url/hotels1.jpg";
-	$image_array[] = "$dummy_image_url/hotels2.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'Chestnut Hill Hotel',
-						"post_desc"	=>	'
+
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Hotels ////post start 10///
+        $image_array[] = "$dummy_image_url/hotels7.jpg";
+        $image_array[] = "$dummy_image_url/hotels10.jpg";
+        $image_array[] = "$dummy_image_url/hotels12.jpg";
+        $image_array[] = "$dummy_image_url/hotels4.jpg";
+        $image_array[] = "$dummy_image_url/hotels1.jpg";
+        $image_array[] = "$dummy_image_url/hotels6.jpg";
+        $image_array[] = "$dummy_image_url/hotels12.jpg";
+        $image_array[] = "$dummy_image_url/hotels8.jpg";
+        $image_array[] = "$dummy_image_url/hotels9.jpg";
+        $image_array[] = "$dummy_image_url/hotels1.jpg";
+        $image_array[] = "$dummy_image_url/hotels2.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Chestnut Hill Hotel',
+            "post_desc" => '
 	The Chestnut Hill Hotel is located in the historic community of Chestnut Hill, approximately nine miles northwest from Center City Philadelphia. Although Chestnut Hill is close to Center City by today&acute;s standards, it was originally a distant “suburb” on the outskirts of the Philadelphia countryside.
 	
 	Today, it is one of the region&acute;s most charming neighborhoods. Tree-lined streets and grand estates surround its main street, Germantown Avenue, where you can stroll and shop at more than 200 specialty shops and restaurants, along with trendy salons and other modern boutiques.
 	
 	The Chestnut Hill Hotel fits perfectly in this setting - the hotel&acute;s 36 rooms and suites, decorated in an 18th-century style, hold the hotel to its boutique roots. It&acute;s a perfect place at which to enjoy a romantic getaway in Philadelphia. 
 	',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Hotels','Feature') ),
-						"post_tags"		=>	array(''),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'Daily : 10 am to 11 pm',
-						"geodir_contact"		=> '(243) 222-12344',
-						"geodir_email"			=> 'info@chestnuthillhotel.com',
-						"geodir_website"		=> 'http://www.chestnuthillhotel.com/',
-						"geodir_twitter"		=> 'http://twitter.com/chestnuthillhotel',
-						"geodir_facebook"		=> 'http://facebook.com/chestnuthillhotel',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Hotels ////post start 10///		
-			
-	 break;
-    case 21:	
-	
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Restaurants ////post start 1//
-	$image_array[] = "$dummy_image_url/restaurants1.jpg";
-	$image_array[] = "$dummy_image_url/restaurants2.jpg";
-	$image_array[] = "$dummy_image_url/restaurants3.jpg";
-	$image_array[] = "$dummy_image_url/restaurants4.jpg";
-	$image_array[] = "$dummy_image_url/restaurants5.jpg";
-	$image_array[] = "$dummy_image_url/restaurants6.jpg";
-	$image_array[] = "$dummy_image_url/restaurants7.jpg";
-	$image_array[] = "$dummy_image_url/restaurants8.jpg";
-	$image_array[] = "$dummy_image_url/restaurants9.jpg";
-	$image_array[] = "$dummy_image_url/restaurants10.jpg";
-	$image_array[] = "$dummy_image_url/restaurants11.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'Village Whiskey',
-						"post_desc"	=>	'
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Hotels', 'Feature')),
+            "post_tags" => array(''),
+            "geodir_video" => '',
+            "geodir_timing" => 'Daily : 10 am to 11 pm',
+            "geodir_contact" => '(243) 222-12344',
+            "geodir_email" => 'info@chestnuthillhotel.com',
+            "geodir_website" => 'http://www.chestnuthillhotel.com/',
+            "geodir_twitter" => 'http://twitter.com/chestnuthillhotel',
+            "geodir_facebook" => 'http://facebook.com/chestnuthillhotel',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Hotels ////post start 10///
+
+        break;
+    case 21:
+
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Restaurants ////post start 1//
+        $image_array[] = "$dummy_image_url/restaurants1.jpg";
+        $image_array[] = "$dummy_image_url/restaurants2.jpg";
+        $image_array[] = "$dummy_image_url/restaurants3.jpg";
+        $image_array[] = "$dummy_image_url/restaurants4.jpg";
+        $image_array[] = "$dummy_image_url/restaurants5.jpg";
+        $image_array[] = "$dummy_image_url/restaurants6.jpg";
+        $image_array[] = "$dummy_image_url/restaurants7.jpg";
+        $image_array[] = "$dummy_image_url/restaurants8.jpg";
+        $image_array[] = "$dummy_image_url/restaurants9.jpg";
+        $image_array[] = "$dummy_image_url/restaurants10.jpg";
+        $image_array[] = "$dummy_image_url/restaurants11.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Village Whiskey',
+            "post_desc" => '
 	
 	
 	Located in a Rittenhouse Square space evoking the free-wheeling spirit of a speakeasy, Village Whiskey is prolific Chef Jose Garces’ intimate, 30-seat tribute to the time-honored liquor.
@@ -1292,45 +1287,45 @@ switch($dummy_post_index)
 	
 	During the warmer months, diners can sit at large, wooden tables placed along Sansom Street for whiskey alfresco.
 	',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Restaurants','Feature') ),
-						"post_tags"		=>	array('Sample Tag1'),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'Daily : 10 am to 11 pm',
-						"geodir_contact"		=> '(243) 222-12344',
-						"geodir_email"			=> 'info@villagewhiskey.com',
-						"geodir_website"		=> 'http://www.villagewhiskey.com/',
-						"geodir_twitter"		=> 'http://twitter.com/villagewhiskey',
-						"geodir_facebook"		=> 'http://facebook.com/villagewhiskey',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Restaurants ////post start 1///				
-	 break;
-    case 22:	
-	
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Restaurants ////post start 2//
-	$image_array[] = "$dummy_image_url/restaurants4.jpg";
-	$image_array[] = "$dummy_image_url/restaurants2.jpg";
-	$image_array[] = "$dummy_image_url/restaurants3.jpg";
-	$image_array[] = "$dummy_image_url/restaurants1.jpg";
-	$image_array[] = "$dummy_image_url/restaurants5.jpg";
-	$image_array[] = "$dummy_image_url/restaurants6.jpg";
-	$image_array[] = "$dummy_image_url/restaurants7.jpg";
-	$image_array[] = "$dummy_image_url/restaurants8.jpg";
-	$image_array[] = "$dummy_image_url/restaurants9.jpg";
-	$image_array[] = "$dummy_image_url/restaurants10.jpg";
-	$image_array[] = "$dummy_image_url/restaurants11.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'Zavino Pizzeria and Wine Bar',
-						"post_desc"	=>	'
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Restaurants', 'Feature')),
+            "post_tags" => array('Sample Tag1'),
+            "geodir_video" => '',
+            "geodir_timing" => 'Daily : 10 am to 11 pm',
+            "geodir_contact" => '(243) 222-12344',
+            "geodir_email" => 'info@villagewhiskey.com',
+            "geodir_website" => 'http://www.villagewhiskey.com/',
+            "geodir_twitter" => 'http://twitter.com/villagewhiskey',
+            "geodir_facebook" => 'http://facebook.com/villagewhiskey',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Restaurants ////post start 1///
+        break;
+    case 22:
+
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Restaurants ////post start 2//
+        $image_array[] = "$dummy_image_url/restaurants4.jpg";
+        $image_array[] = "$dummy_image_url/restaurants2.jpg";
+        $image_array[] = "$dummy_image_url/restaurants3.jpg";
+        $image_array[] = "$dummy_image_url/restaurants1.jpg";
+        $image_array[] = "$dummy_image_url/restaurants5.jpg";
+        $image_array[] = "$dummy_image_url/restaurants6.jpg";
+        $image_array[] = "$dummy_image_url/restaurants7.jpg";
+        $image_array[] = "$dummy_image_url/restaurants8.jpg";
+        $image_array[] = "$dummy_image_url/restaurants9.jpg";
+        $image_array[] = "$dummy_image_url/restaurants10.jpg";
+        $image_array[] = "$dummy_image_url/restaurants11.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Zavino Pizzeria and Wine Bar',
+            "post_desc" => '
 	Zavino is a new pizzeria and wine bar located at the epicenter of the city&acute;s trendy Midtown Village neighborhood. The restaurant features a seasonal menu, classic cocktails, an approachable selection of wine and beer and some of the best late night menu offerings in the area.
 	
 	The restaurant&acute;s interior looks great - it has a simple, rustic feel with an original brick wall, large picture windows, a long bar and a large outdoor cafe coming this spring.
@@ -1349,46 +1344,46 @@ switch($dummy_post_index)
 	
 	Pizzas vary in price from $8 to $12.
 	',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Restaurants') ),
-						"post_tags"		=>	array('Sample Tag1'),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'Daily : 10 am to 11 pm',
-						"geodir_contact"		=> '(243) 222-12344',
-						"geodir_email"			=> 'info@chestnuthillhotel.com',
-						"geodir_website"		=> 'http://www.villagewhiskey.com/',
-						"geodir_twitter"		=> 'http://twitter.com/villagewhiskey',
-						"geodir_facebook"		=> 'http://facebook.com/villagewhiskey',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Restaurants ////post start 2///				
-	
-	 break;
-    case 23:		
-	
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Restaurants ////post start 3//
-	$image_array[] = "$dummy_image_url/restaurants5.jpg";
-	$image_array[] = "$dummy_image_url/restaurants6.jpg";
-	$image_array[] = "$dummy_image_url/restaurants7.jpg";
-	$image_array[] = "$dummy_image_url/restaurants1.jpg";
-	$image_array[] = "$dummy_image_url/restaurants2.jpg";
-	$image_array[] = "$dummy_image_url/restaurants3.jpg";
-	$image_array[] = "$dummy_image_url/restaurants4.jpg";
-	$image_array[] = "$dummy_image_url/restaurants8.jpg";
-	$image_array[] = "$dummy_image_url/restaurants9.jpg";
-	$image_array[] = "$dummy_image_url/restaurants10.jpg";
-	$image_array[] = "$dummy_image_url/restaurants11.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'Parc',
-						"post_desc"	=>	'
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Restaurants')),
+            "post_tags" => array('Sample Tag1'),
+            "geodir_video" => '',
+            "geodir_timing" => 'Daily : 10 am to 11 pm',
+            "geodir_contact" => '(243) 222-12344',
+            "geodir_email" => 'info@chestnuthillhotel.com',
+            "geodir_website" => 'http://www.villagewhiskey.com/',
+            "geodir_twitter" => 'http://twitter.com/villagewhiskey',
+            "geodir_facebook" => 'http://facebook.com/villagewhiskey',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Restaurants ////post start 2///
+
+        break;
+    case 23:
+
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Restaurants ////post start 3//
+        $image_array[] = "$dummy_image_url/restaurants5.jpg";
+        $image_array[] = "$dummy_image_url/restaurants6.jpg";
+        $image_array[] = "$dummy_image_url/restaurants7.jpg";
+        $image_array[] = "$dummy_image_url/restaurants1.jpg";
+        $image_array[] = "$dummy_image_url/restaurants2.jpg";
+        $image_array[] = "$dummy_image_url/restaurants3.jpg";
+        $image_array[] = "$dummy_image_url/restaurants4.jpg";
+        $image_array[] = "$dummy_image_url/restaurants8.jpg";
+        $image_array[] = "$dummy_image_url/restaurants9.jpg";
+        $image_array[] = "$dummy_image_url/restaurants10.jpg";
+        $image_array[] = "$dummy_image_url/restaurants11.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Parc',
+            "post_desc" => '
 	If you love Paris in the springtime, Parc is a veritable grand cru.
 	
 	With Parc, famed restaurateur Stephen Starr brings a certain je ne sais quoi to Rittenhouse Square. Parc offers an authentic French bistro experience, fully equipped with a chic Parisian ambiance and gorgeous sidewalk seating overlooking the Square.
@@ -1416,46 +1411,45 @@ switch($dummy_post_index)
 	
 	To put it simply, Parc is nothing short of an authentic Parisian dining experience - right here in the heart of Rittenhouse Square.
 	',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Restaurants') ),
-						"post_tags"		=>	array('Sample Tag1'),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'Daily : 10 am to 12 pm',
-						"geodir_contact"		=> '(143) 222-12344',
-						"geodir_email"			=> 'info@parc-restaurant.com',
-						"geodir_website"		=> 'http://www.parc-restaurant.com/',
-						"geodir_twitter"		=> 'http://twitter.com/parc-restaurant',
-						"geodir_facebook"		=> 'http://facebook.com/parc-restaurant',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Restaurants ////post start 3///				
-	 break;
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Restaurants')),
+            "post_tags" => array('Sample Tag1'),
+            "geodir_video" => '',
+            "geodir_timing" => 'Daily : 10 am to 12 pm',
+            "geodir_contact" => '(143) 222-12344',
+            "geodir_email" => 'info@parc-restaurant.com',
+            "geodir_website" => 'http://www.parc-restaurant.com/',
+            "geodir_twitter" => 'http://twitter.com/parc-restaurant',
+            "geodir_facebook" => 'http://facebook.com/parc-restaurant',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Restaurants ////post start 3///
+        break;
     case 24:
-			
-	
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Restaurants ////post start 4//
-	$image_array[] = "$dummy_image_url/restaurants9.jpg";
-	$image_array[] = "$dummy_image_url/restaurants10.jpg";
-	$image_array[] = "$dummy_image_url/restaurants3.jpg";
-	$image_array[] = "$dummy_image_url/restaurants1.jpg";
-	$image_array[] = "$dummy_image_url/restaurants5.jpg";
-	$image_array[] = "$dummy_image_url/restaurants6.jpg";
-	$image_array[] = "$dummy_image_url/restaurants7.jpg";
-	$image_array[] = "$dummy_image_url/restaurants8.jpg";
-	$image_array[] = "$dummy_image_url/restaurants9.jpg";
-	$image_array[] = "$dummy_image_url/restaurants2.jpg";
-	$image_array[] = "$dummy_image_url/restaurants4.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'Percy Street Barbecue',
-						"post_desc"	=>		'
+
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Restaurants ////post start 4//
+        $image_array[] = "$dummy_image_url/restaurants9.jpg";
+        $image_array[] = "$dummy_image_url/restaurants10.jpg";
+        $image_array[] = "$dummy_image_url/restaurants3.jpg";
+        $image_array[] = "$dummy_image_url/restaurants1.jpg";
+        $image_array[] = "$dummy_image_url/restaurants5.jpg";
+        $image_array[] = "$dummy_image_url/restaurants6.jpg";
+        $image_array[] = "$dummy_image_url/restaurants7.jpg";
+        $image_array[] = "$dummy_image_url/restaurants8.jpg";
+        $image_array[] = "$dummy_image_url/restaurants9.jpg";
+        $image_array[] = "$dummy_image_url/restaurants2.jpg";
+        $image_array[] = "$dummy_image_url/restaurants4.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Percy Street Barbecue',
+            "post_desc" => '
 	Percy Street Barbecue sees the South Street debut of restaurateurs Steven Cook and Michael Solomonov (Zahav, Xochitl).
 	
 	Serving a straightforward selection of slowly smoked meats and homey side dishes alongside craft beers and tasty cocktails, Percy Street is an ideal venue for Chef Erin OShea much-lauded Southern cooking, and is on its way to become the city top spot for barbecue.
@@ -1481,46 +1475,46 @@ switch($dummy_post_index)
 	
 	Seating in the form of repurposed church pews, and bare light bulbs overhead in the dining room lend to the restaurant Texas-esque aesthetic.
 	',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Restaurants','Feature') ),
-						"post_tags"		=>	array('Sample Tag1'),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'Percy Street is closed on Mondays. The restaurant is also open for weekend lunch/brunch from 11:30 a.m. to 2:30 p.m.',
-						"geodir_contact"		=> '(143) 222-12344',
-						"geodir_email"			=> 'info@percystreet.com',
-						"geodir_website"		=> 'http://www.percystreet.com/',
-						"geodir_twitter"		=> 'http://twitter.com/percystreet',
-						"geodir_facebook"		=> 'http://facebook.com/percystreet',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Restaurants ////post start 4///				
-	
-	 break;
-    case 25:		
-	
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Restaurants ////post start 5//
-	$image_array[] = "$dummy_image_url/restaurants4.jpg";
-	$image_array[] = "$dummy_image_url/restaurants10.jpg";
-	$image_array[] = "$dummy_image_url/restaurants3.jpg";
-	$image_array[] = "$dummy_image_url/restaurants1.jpg";
-	$image_array[] = "$dummy_image_url/restaurants5.jpg";
-	$image_array[] = "$dummy_image_url/restaurants6.jpg";
-	$image_array[] = "$dummy_image_url/restaurants7.jpg";
-	$image_array[] = "$dummy_image_url/restaurants8.jpg";
-	$image_array[] = "$dummy_image_url/restaurants9.jpg";
-	$image_array[] = "$dummy_image_url/restaurants2.jpg";
-	$image_array[] = "$dummy_image_url/restaurants4.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'The Fountain Restaurant',
-						"post_desc"	=>	'
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Restaurants', 'Feature')),
+            "post_tags" => array('Sample Tag1'),
+            "geodir_video" => '',
+            "geodir_timing" => 'Percy Street is closed on Mondays. The restaurant is also open for weekend lunch/brunch from 11:30 a.m. to 2:30 p.m.',
+            "geodir_contact" => '(143) 222-12344',
+            "geodir_email" => 'info@percystreet.com',
+            "geodir_website" => 'http://www.percystreet.com/',
+            "geodir_twitter" => 'http://twitter.com/percystreet',
+            "geodir_facebook" => 'http://facebook.com/percystreet',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Restaurants ////post start 4///
+
+        break;
+    case 25:
+
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Restaurants ////post start 5//
+        $image_array[] = "$dummy_image_url/restaurants4.jpg";
+        $image_array[] = "$dummy_image_url/restaurants10.jpg";
+        $image_array[] = "$dummy_image_url/restaurants3.jpg";
+        $image_array[] = "$dummy_image_url/restaurants1.jpg";
+        $image_array[] = "$dummy_image_url/restaurants5.jpg";
+        $image_array[] = "$dummy_image_url/restaurants6.jpg";
+        $image_array[] = "$dummy_image_url/restaurants7.jpg";
+        $image_array[] = "$dummy_image_url/restaurants8.jpg";
+        $image_array[] = "$dummy_image_url/restaurants9.jpg";
+        $image_array[] = "$dummy_image_url/restaurants2.jpg";
+        $image_array[] = "$dummy_image_url/restaurants4.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'The Fountain Restaurant',
+            "post_desc" => '
 	The Fountain Restaurant in the Four Seasons Hotel Philadelphia has received seemingly every type of accolade there is, from top honors in Gourmet magazine to Forbes Travel Guide&acute;s 2010 Five Star award to a perfect Five Diamond rating from AAA. It&acute;s been a Philadelphia favorite for special occasion meals for decades.
 	
 	Additionally rated as the best restaurant in Philadelphia by Zagat&acute;s, the Fountain Restaurant overlooks the majestic Swann Memorial Fountain sculpture by Alexander Stirling Calder in the center of Logan Square. You&acute;ll also enjoy sweeping views of the grand Benjamin Franklin Parkway and its gorgeous Beaux Arts architecture.
@@ -1530,45 +1524,45 @@ switch($dummy_post_index)
 	You can order a la carte or select the prix fix option to enjoy the “spontaneous tastes” menu which gives the chef control of a few courses. The menu changes regularly, but you can expect to see globaly influenced items like Pan-fried Veal Sweetbreads, Braised Dover Sole Roulade, Sautéed Venison Medallions and Roasted Australian Lamb Saddle.
 	
 	',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Restaurants') ),
-						"post_tags"		=>	array('food'),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'The restaurant is also open for weekend lunch/brunch from 11:30 a.m. to 2:30 p.m.',
-						"geodir_contact"		=> '(103) 100-12344',
-						"geodir_email"			=> 'info@fourseasons.com',
-						"geodir_website"		=> 'http://www.fourseasons.com/philadelphia/dining',
-						"geodir_twitter"		=> 'http://twitter.com/fourseasons',
-						"geodir_facebook"		=> 'http://facebook.com/fourseasons',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Restaurants ////post start 5///				
-	 break;
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Restaurants')),
+            "post_tags" => array('food'),
+            "geodir_video" => '',
+            "geodir_timing" => 'The restaurant is also open for weekend lunch/brunch from 11:30 a.m. to 2:30 p.m.',
+            "geodir_contact" => '(103) 100-12344',
+            "geodir_email" => 'info@fourseasons.com',
+            "geodir_website" => 'http://www.fourseasons.com/philadelphia/dining',
+            "geodir_twitter" => 'http://twitter.com/fourseasons',
+            "geodir_facebook" => 'http://facebook.com/fourseasons',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Restaurants ////post start 5///
+        break;
     case 26:
-	
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Restaurants ////post start 6//
-	$image_array[] = "$dummy_image_url/restaurants11.jpg";
-	$image_array[] = "$dummy_image_url/restaurants10.jpg";
-	$image_array[] = "$dummy_image_url/restaurants3.jpg";
-	$image_array[] = "$dummy_image_url/restaurants1.jpg";
-	$image_array[] = "$dummy_image_url/restaurants5.jpg";
-	$image_array[] = "$dummy_image_url/restaurants6.jpg";
-	$image_array[] = "$dummy_image_url/restaurants7.jpg";
-	$image_array[] = "$dummy_image_url/restaurants8.jpg";
-	$image_array[] = "$dummy_image_url/restaurants9.jpg";
-	$image_array[] = "$dummy_image_url/restaurants2.jpg";
-	$image_array[] = "$dummy_image_url/restaurants4.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'Lacroix at The Rittenhouse',
-						"post_desc"	=>	'
+
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Restaurants ////post start 6//
+        $image_array[] = "$dummy_image_url/restaurants11.jpg";
+        $image_array[] = "$dummy_image_url/restaurants10.jpg";
+        $image_array[] = "$dummy_image_url/restaurants3.jpg";
+        $image_array[] = "$dummy_image_url/restaurants1.jpg";
+        $image_array[] = "$dummy_image_url/restaurants5.jpg";
+        $image_array[] = "$dummy_image_url/restaurants6.jpg";
+        $image_array[] = "$dummy_image_url/restaurants7.jpg";
+        $image_array[] = "$dummy_image_url/restaurants8.jpg";
+        $image_array[] = "$dummy_image_url/restaurants9.jpg";
+        $image_array[] = "$dummy_image_url/restaurants2.jpg";
+        $image_array[] = "$dummy_image_url/restaurants4.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Lacroix at The Rittenhouse',
+            "post_desc" => '
 	A deluxe hotel like The Rittenhouse deserves a deluxe restaurant, a fitting description for Lacroix, named “Restaurant of the Year” in 2003 by Esquire magazine.
 	
 	Located on the second floor of the Rittenhouse Hotel, Lacroix features elegant décor and a broad view of Rittenhouse Square, which combine to make the ambiance at Lacroix as enjoyable as the meal itself.
@@ -1579,46 +1573,46 @@ switch($dummy_post_index)
 	
 	Sunday Brunch at Lacroix - which features such delectable dishes as baby lamb chops with garlic crust and banyuls sauce, niman ranch smoked bacon, quail eggs with artichoke, golden beet and shiitakes, and french baguette toast with apple, raspberry and rosemary jam - is also highly recommended.
 	',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Restaurants') ),
-						"post_tags"		=>	array('food'),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'The restaurant is also open for weekend lunch/brunch from 10:30 a.m. to 6:30 p.m.',
-						"geodir_contact"		=> '(113) 121-12344',
-						"geodir_email"			=> 'info@rittenhousehotel.com',
-						"geodir_website"		=> 'http://www.rittenhousehotel.com/lacroix.cfm',
-						"geodir_twitter"		=> 'http://twitter.com/rittenhousehotel',
-						"geodir_facebook"		=> 'http://facebook.com/rittenhousehotel',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Restaurants ////post start 6///				
-	
-	 break;
-    case 27:		
-	
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Restaurants ////post start 7//
-	$image_array[] = "$dummy_image_url/restaurants12.jpg";
-	$image_array[] = "$dummy_image_url/restaurants13.jpg";
-	$image_array[] = "$dummy_image_url/restaurants14.jpg";
-	$image_array[] = "$dummy_image_url/restaurants15.jpg";
-	$image_array[] = "$dummy_image_url/restaurants5.jpg";
-	$image_array[] = "$dummy_image_url/restaurants6.jpg";
-	$image_array[] = "$dummy_image_url/restaurants7.jpg";
-	$image_array[] = "$dummy_image_url/restaurants8.jpg";
-	$image_array[] = "$dummy_image_url/restaurants9.jpg";
-	$image_array[] = "$dummy_image_url/restaurants2.jpg";
-	$image_array[] = "$dummy_image_url/restaurants4.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'Lacroix at The Rittenhouse',
-						"post_desc"	=>'
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Restaurants')),
+            "post_tags" => array('food'),
+            "geodir_video" => '',
+            "geodir_timing" => 'The restaurant is also open for weekend lunch/brunch from 10:30 a.m. to 6:30 p.m.',
+            "geodir_contact" => '(113) 121-12344',
+            "geodir_email" => 'info@rittenhousehotel.com',
+            "geodir_website" => 'http://www.rittenhousehotel.com/lacroix.cfm',
+            "geodir_twitter" => 'http://twitter.com/rittenhousehotel',
+            "geodir_facebook" => 'http://facebook.com/rittenhousehotel',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Restaurants ////post start 6///
+
+        break;
+    case 27:
+
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Restaurants ////post start 7//
+        $image_array[] = "$dummy_image_url/restaurants12.jpg";
+        $image_array[] = "$dummy_image_url/restaurants13.jpg";
+        $image_array[] = "$dummy_image_url/restaurants14.jpg";
+        $image_array[] = "$dummy_image_url/restaurants15.jpg";
+        $image_array[] = "$dummy_image_url/restaurants5.jpg";
+        $image_array[] = "$dummy_image_url/restaurants6.jpg";
+        $image_array[] = "$dummy_image_url/restaurants7.jpg";
+        $image_array[] = "$dummy_image_url/restaurants8.jpg";
+        $image_array[] = "$dummy_image_url/restaurants9.jpg";
+        $image_array[] = "$dummy_image_url/restaurants2.jpg";
+        $image_array[] = "$dummy_image_url/restaurants4.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Lacroix at The Rittenhouse',
+            "post_desc" => '
 	A deluxe hotel like The Rittenhouse deserves a deluxe restaurant, a fitting description for Lacroix, named “Restaurant of the Year” in 2003 by Esquire magazine.
 	
 	Located on the second floor of the Rittenhouse Hotel, Lacroix features elegant décor and a broad view of Rittenhouse Square, which combine to make the ambiance at Lacroix as enjoyable as the meal itself.
@@ -1629,45 +1623,45 @@ switch($dummy_post_index)
 	
 	Sunday Brunch at Lacroix - which features such delectable dishes as baby lamb chops with garlic crust and banyuls sauce, niman ranch smoked bacon, quail eggs with artichoke, golden beet and shiitakes, and french baguette toast with apple, raspberry and rosemary jam - is also highly recommended.
 	',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Restaurants','Food Nightlife') ),
-						"post_tags"		=>	array('food'),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'The restaurant is also open for weekend lunch/brunch from 10:30 a.m. to 6:30 p.m.',
-						"geodir_contact"		=> '(113) 121-12344',
-						"geodir_email"			=> 'info@zamarestaurant.com',
-						"geodir_website"		=> 'http://www.zamarestaurant.com/',
-						"geodir_twitter"		=> 'http://twitter.com/zamarestaurant',
-						"geodir_facebook"		=> 'http://facebook.com/zamarestaurant',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Restaurants ////post start 7///				
-	
-	 break;
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Restaurants', 'Food Nightlife')),
+            "post_tags" => array('food'),
+            "geodir_video" => '',
+            "geodir_timing" => 'The restaurant is also open for weekend lunch/brunch from 10:30 a.m. to 6:30 p.m.',
+            "geodir_contact" => '(113) 121-12344',
+            "geodir_email" => 'info@zamarestaurant.com',
+            "geodir_website" => 'http://www.zamarestaurant.com/',
+            "geodir_twitter" => 'http://twitter.com/zamarestaurant',
+            "geodir_facebook" => 'http://facebook.com/zamarestaurant',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Restaurants ////post start 7///
+
+        break;
     case 28:
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Restaurants ////post start 8//
-	$image_array[] = "$dummy_image_url/restaurants16.jpg";
-	$image_array[] = "$dummy_image_url/restaurants17.jpg";
-	$image_array[] = "$dummy_image_url/restaurants18.jpg";
-	$image_array[] = "$dummy_image_url/restaurants19.jpg";
-	$image_array[] = "$dummy_image_url/restaurants5.jpg";
-	$image_array[] = "$dummy_image_url/restaurants6.jpg";
-	$image_array[] = "$dummy_image_url/restaurants7.jpg";
-	$image_array[] = "$dummy_image_url/restaurants8.jpg";
-	$image_array[] = "$dummy_image_url/restaurants9.jpg";
-	$image_array[] = "$dummy_image_url/restaurants2.jpg";
-	$image_array[] = "$dummy_image_url/restaurants4.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'Sampan',
-						"post_desc"	=>'
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Restaurants ////post start 8//
+        $image_array[] = "$dummy_image_url/restaurants16.jpg";
+        $image_array[] = "$dummy_image_url/restaurants17.jpg";
+        $image_array[] = "$dummy_image_url/restaurants18.jpg";
+        $image_array[] = "$dummy_image_url/restaurants19.jpg";
+        $image_array[] = "$dummy_image_url/restaurants5.jpg";
+        $image_array[] = "$dummy_image_url/restaurants6.jpg";
+        $image_array[] = "$dummy_image_url/restaurants7.jpg";
+        $image_array[] = "$dummy_image_url/restaurants8.jpg";
+        $image_array[] = "$dummy_image_url/restaurants9.jpg";
+        $image_array[] = "$dummy_image_url/restaurants2.jpg";
+        $image_array[] = "$dummy_image_url/restaurants4.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Sampan',
+            "post_desc" => '
 	Chef and charismatic television star Michael Schulson returns to Philadelphia with the opening of Sampan, a modern Asian restaurant where he serves the acclaimed cuisine that has made him one of the country&acute;s highly sought-after culinary talents.
 	
 	Schulson returns to Philadelphia after having opened Buddakan in New York City for Stephen Starr and Izakaya at the Borgata in Atlantic City and then having gone on to star in Style network&acute;s popular series Pantry Raid and TLC Ultimate Cake Off.
@@ -1686,45 +1680,45 @@ switch($dummy_post_index)
 	
 	Prices range from $5 to $19.
 	',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Restaurants','Food Nightlife') ),
-						"post_tags"		=>	array('restaurant'),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'The restaurant is also open for weekend lunch/brunch from 10:30 a.m. to 6:30 p.m.',
-						"geodir_contact"		=> '(000) 111-2222',
-						"geodir_email"			=> 'info@sampanphilly.com',
-						"geodir_website"		=> 'http://www.sampanphilly.com/',
-						"geodir_twitter"		=> 'http://twitter.com/sampanphilly',
-						"geodir_facebook"		=> 'http://facebook.com/sampanphilly',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Restaurants ////post start 8///				
-	
-	 break;
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Restaurants', 'Food Nightlife')),
+            "post_tags" => array('restaurant'),
+            "geodir_video" => '',
+            "geodir_timing" => 'The restaurant is also open for weekend lunch/brunch from 10:30 a.m. to 6:30 p.m.',
+            "geodir_contact" => '(000) 111-2222',
+            "geodir_email" => 'info@sampanphilly.com',
+            "geodir_website" => 'http://www.sampanphilly.com/',
+            "geodir_twitter" => 'http://twitter.com/sampanphilly',
+            "geodir_facebook" => 'http://facebook.com/sampanphilly',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Restaurants ////post start 8///
+
+        break;
     case 29:
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Restaurants ////post start 9//
-	$image_array[] = "$dummy_image_url/restaurants17.jpg";
-	$image_array[] = "$dummy_image_url/restaurants16.jpg";
-	$image_array[] = "$dummy_image_url/restaurants18.jpg";
-	$image_array[] = "$dummy_image_url/restaurants19.jpg";
-	$image_array[] = "$dummy_image_url/restaurants5.jpg";
-	$image_array[] = "$dummy_image_url/restaurants6.jpg";
-	$image_array[] = "$dummy_image_url/restaurants7.jpg";
-	$image_array[] = "$dummy_image_url/restaurants8.jpg";
-	$image_array[] = "$dummy_image_url/restaurants9.jpg";
-	$image_array[] = "$dummy_image_url/restaurants2.jpg";
-	$image_array[] = "$dummy_image_url/restaurants4.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'Morimoto',
-						"post_desc"	=>	'
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Restaurants ////post start 9//
+        $image_array[] = "$dummy_image_url/restaurants17.jpg";
+        $image_array[] = "$dummy_image_url/restaurants16.jpg";
+        $image_array[] = "$dummy_image_url/restaurants18.jpg";
+        $image_array[] = "$dummy_image_url/restaurants19.jpg";
+        $image_array[] = "$dummy_image_url/restaurants5.jpg";
+        $image_array[] = "$dummy_image_url/restaurants6.jpg";
+        $image_array[] = "$dummy_image_url/restaurants7.jpg";
+        $image_array[] = "$dummy_image_url/restaurants8.jpg";
+        $image_array[] = "$dummy_image_url/restaurants9.jpg";
+        $image_array[] = "$dummy_image_url/restaurants2.jpg";
+        $image_array[] = "$dummy_image_url/restaurants4.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Morimoto',
+            "post_desc" => '
 	Stephen Starr creative Japanese restaurant has garnered all kinds of national and international attention since opening a few years back. Located a block from Independence Hall on Chestnut Street, Morimoto has an interior - awash in glass and colors - that is both striking and serene in its design.
 	
 	The restaurant&acute;s namesake and head chef, Morimoto (of Food Network&acute;s Iron Chef fame), has created a menu offering the very best in contemporary Japanese cusine. While regulars flock here for the exquisitely prepared sushi, Morimoto offers diners a broad spectrum of flavors that delve beyond nigiri and sashimi.
@@ -1737,45 +1731,45 @@ switch($dummy_post_index)
 	
 	The mezzanine level lounge is a great spot to have a pre-meal cocktail while waiting for your table. You can enjoy a sake or try a “Sakura” - a cosmo made with Sake - in the sleek space that overlooks the brilliant restaurant below.
 	',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Restaurants','Food Nightlife','Feature') ),
-						"post_tags"		=>	array('America'),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'The restaurant is also open for weekend lunch/brunch from 10:30 a.m. to 6:30 p.m.',
-						"geodir_contact"		=> '(000) 111-2222',
-						"geodir_email"			=> 'info@morimotorestaurant.com',
-						"geodir_website"		=> 'http://www.morimotorestaurant.com/',
-						"geodir_twitter"		=> 'http://twitter.com/morimotorestaurant',
-						"geodir_facebook"		=> 'http://facebook.com/morimotorestaurant',
-						"post_dummy"	=>'1'
-						);	
-						
-						////post end///
-			/// Restaurants ////post start 9///				
-	 break;
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Restaurants', 'Food Nightlife', 'Feature')),
+            "post_tags" => array('America'),
+            "geodir_video" => '',
+            "geodir_timing" => 'The restaurant is also open for weekend lunch/brunch from 10:30 a.m. to 6:30 p.m.',
+            "geodir_contact" => '(000) 111-2222',
+            "geodir_email" => 'info@morimotorestaurant.com',
+            "geodir_website" => 'http://www.morimotorestaurant.com/',
+            "geodir_twitter" => 'http://twitter.com/morimotorestaurant',
+            "geodir_facebook" => 'http://facebook.com/morimotorestaurant',
+            "post_dummy" => '1'
+        );
+
+        ////post end///
+        /// Restaurants ////post start 9///
+        break;
     case 30:
-	
-	 
-	$image_array = array();
-	$post_meta = array();
-	
-	/// Restaurants ////post start 10//
-	$image_array[] = "$dummy_image_url/restaurants19.jpg";
-	$image_array[] = "$dummy_image_url/restaurants17.jpg";
-	$image_array[] = "$dummy_image_url/restaurants18.jpg";
-	$image_array[] = "$dummy_image_url/restaurants16.jpg";
-	$image_array[] = "$dummy_image_url/restaurants5.jpg";
-	$image_array[] = "$dummy_image_url/restaurants6.jpg";
-	$image_array[] = "$dummy_image_url/restaurants7.jpg";
-	$image_array[] = "$dummy_image_url/restaurants8.jpg";
-	$image_array[] = "$dummy_image_url/restaurants9.jpg";
-	$image_array[] = "$dummy_image_url/restaurants2.jpg";
-	$image_array[] = "$dummy_image_url/restaurants4.jpg";
-	
-	$post_info[] = array(
-						"listing_type"	=> 'gd_place',
-						"post_title"	=>	'Buddakan',
-						"post_desc"	=>	'
+
+
+        $image_array = array();
+        $post_meta = array();
+
+        /// Restaurants ////post start 10//
+        $image_array[] = "$dummy_image_url/restaurants19.jpg";
+        $image_array[] = "$dummy_image_url/restaurants17.jpg";
+        $image_array[] = "$dummy_image_url/restaurants18.jpg";
+        $image_array[] = "$dummy_image_url/restaurants16.jpg";
+        $image_array[] = "$dummy_image_url/restaurants5.jpg";
+        $image_array[] = "$dummy_image_url/restaurants6.jpg";
+        $image_array[] = "$dummy_image_url/restaurants7.jpg";
+        $image_array[] = "$dummy_image_url/restaurants8.jpg";
+        $image_array[] = "$dummy_image_url/restaurants9.jpg";
+        $image_array[] = "$dummy_image_url/restaurants2.jpg";
+        $image_array[] = "$dummy_image_url/restaurants4.jpg";
+
+        $post_info[] = array(
+            "listing_type" => 'gd_place',
+            "post_title" => 'Buddakan',
+            "post_desc" => '
 	<h3>The Experience </h3>
 	
 	A towering gilded statue of the Buddha generates elegant calm in this 175-seat, Pan Asian restaurant with sleek, modern decor. Immensely popular, Buddakan is a restaurant that is great for both large parties and intimate dinners.
@@ -1786,96 +1780,88 @@ switch($dummy_post_index)
 	
 	Be sure to make your reservation before coming to town as Buddakan fills up quickly especially on weekends. Better yet, make your reservation right now .
 	',
-						"post_images"	=>	$image_array,
-						"post_category"	=>	array('gd_placecategory' =>array('Restaurants','Food Nightlife') ),
-						"post_tags"		=>	array('America'),
-						"geodir_video"			=> '',
-						"geodir_timing"		=> 'The restaurant is also open for weekend lunch/brunch from 10:30 a.m. to 6:30 p.m.',
-						"geodir_contact"		=> '(000) 111-2222',
-						"geodir_email"			=> 'info@buddakan.com',
-						"geodir_website"		=> 'http://www.buddakan.com/',
-						"geodir_twitter"		=> 'http://twitter.com/buddakan',
-						"geodir_facebook"		=> 'http://facebook.com/buddakan',
-						"post_dummy"	=>'1'
-						);	
-		 break;
-    				
-						////post end///
-			/// Restaurants ////post start 10///				
+            "post_images" => $image_array,
+            "post_category" => array('gd_placecategory' => array('Restaurants', 'Food Nightlife')),
+            "post_tags" => array('America'),
+            "geodir_video" => '',
+            "geodir_timing" => 'The restaurant is also open for weekend lunch/brunch from 10:30 a.m. to 6:30 p.m.',
+            "geodir_contact" => '(000) 111-2222',
+            "geodir_email" => 'info@buddakan.com',
+            "geodir_website" => 'http://www.buddakan.com/',
+            "geodir_twitter" => 'http://twitter.com/buddakan',
+            "geodir_facebook" => 'http://facebook.com/buddakan',
+            "post_dummy" => '1'
+        );
+        break;
+
+    ////post end///
+    /// Restaurants ////post start 10///
 } // end of switch
-				
 
 
-foreach($post_info as $post_info){
-	$default_location = geodir_get_default_location();
-	if($city_bound_lat1>$city_bound_lat2)	
-		$dummy_post_latitude  = geodir_random_float(geodir_random_float($city_bound_lat1, $city_bound_lat2), geodir_random_float($city_bound_lat2, $city_bound_lat1));
-	else
-		$dummy_post_latitude  = geodir_random_float(geodir_random_float($city_bound_lat2,$city_bound_lat1),geodir_random_float($city_bound_lat1,$city_bound_lat2));	
-		
+foreach ($post_info as $post_info) {
+    $default_location = geodir_get_default_location();
+    if ($city_bound_lat1 > $city_bound_lat2)
+        $dummy_post_latitude = geodir_random_float(geodir_random_float($city_bound_lat1, $city_bound_lat2), geodir_random_float($city_bound_lat2, $city_bound_lat1));
+    else
+        $dummy_post_latitude = geodir_random_float(geodir_random_float($city_bound_lat2, $city_bound_lat1), geodir_random_float($city_bound_lat1, $city_bound_lat2));
 
-	if($city_bound_lng1>$city_bound_lng2)
-		$dummy_post_longitude = geodir_random_float(geodir_random_float($city_bound_lng1,$city_bound_lng2),geodir_random_float($city_bound_lng2,$city_bound_lng1));
-	else
-		$dummy_post_longitude = geodir_random_float(geodir_random_float($city_bound_lng2,$city_bound_lng1),geodir_random_float($city_bound_lng1,$city_bound_lng2));
-	$post_address=array() ;
-	$postal_code='';
-	$address='';
-	
-	$post_address = geodir_get_address_by_lat_lan($dummy_post_latitude,$dummy_post_longitude)	;
-	
-	
-	if(!empty($post_address))
-	{
-		foreach($post_address as $add_key=>$add_value)
-		{
-			if($add_value->types[0]=='postal_code')
-			{
-				$postal_code = $add_value->long_name;
-			}
-			
-			if($add_value->types[0]=='street_number')
-			{
-				if($address!='')
-					$address.= ','.$add_value->long_name;
-				else
-					$address.= $add_value->long_name;	
-			}
-			if($add_value->types[0]=='route')
-			{
-				if($address!='')
-					$address.= ','.$add_value->long_name;
-				else
-					$address.= $add_value->long_name;	
-			}
-			if($add_value->types[0]=='neighborhood')
-			{
-				if($address!='')
-					$address.= ','.$add_value->long_name;
-				else
-					$address.= $add_value->long_name;	
-			}
-			if($add_value->types[0]=='sublocality')
-			{
-				if($address!='')
-					$address.= ','.$add_value->long_name;
-				else
-					$address.= $add_value->long_name;	
-			}
-			
-		}
-		
-		$post_info['post_address'] =$address;
-		$post_info['post_city'] =$default_location->city;
-		$post_info['post_region'] =$default_location->region;
-		$post_info['post_country'] =$default_location->country;	
-		$post_info['post_zip'] =$postal_code;
-		$post_info['post_latitude'] = $dummy_post_latitude;
-		$post_info['post_longitude'] = $dummy_post_longitude;
-		
-	}
-	geodir_save_listing($post_info, true);
-	
+
+    if ($city_bound_lng1 > $city_bound_lng2)
+        $dummy_post_longitude = geodir_random_float(geodir_random_float($city_bound_lng1, $city_bound_lng2), geodir_random_float($city_bound_lng2, $city_bound_lng1));
+    else
+        $dummy_post_longitude = geodir_random_float(geodir_random_float($city_bound_lng2, $city_bound_lng1), geodir_random_float($city_bound_lng1, $city_bound_lng2));
+    $post_address = array();
+    $postal_code = '';
+    $address = '';
+
+    $post_address = geodir_get_address_by_lat_lan($dummy_post_latitude, $dummy_post_longitude);
+
+
+    if (!empty($post_address)) {
+        foreach ($post_address as $add_key => $add_value) {
+            if ($add_value->types[0] == 'postal_code') {
+                $postal_code = $add_value->long_name;
+            }
+
+            if ($add_value->types[0] == 'street_number') {
+                if ($address != '')
+                    $address .= ',' . $add_value->long_name;
+                else
+                    $address .= $add_value->long_name;
+            }
+            if ($add_value->types[0] == 'route') {
+                if ($address != '')
+                    $address .= ',' . $add_value->long_name;
+                else
+                    $address .= $add_value->long_name;
+            }
+            if ($add_value->types[0] == 'neighborhood') {
+                if ($address != '')
+                    $address .= ',' . $add_value->long_name;
+                else
+                    $address .= $add_value->long_name;
+            }
+            if ($add_value->types[0] == 'sublocality') {
+                if ($address != '')
+                    $address .= ',' . $add_value->long_name;
+                else
+                    $address .= $add_value->long_name;
+            }
+
+        }
+
+        $post_info['post_address'] = $address;
+        $post_info['post_city'] = $default_location->city;
+        $post_info['post_region'] = $default_location->region;
+        $post_info['post_country'] = $default_location->country;
+        $post_info['post_zip'] = $postal_code;
+        $post_info['post_latitude'] = $dummy_post_latitude;
+        $post_info['post_longitude'] = $dummy_post_longitude;
+
+    }
+    geodir_save_listing($post_info, true);
+
 }
 
 /*if( $dummy_post_index==1);	

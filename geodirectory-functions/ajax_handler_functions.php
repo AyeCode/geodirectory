@@ -74,7 +74,6 @@ function geodir_on_init()
 }
 
 
-
 /**
  * Processes GeoDirectory ajax url calls.
  *
@@ -251,7 +250,7 @@ function geodir_ajax_handler()
 
                             $lastid = wp_update_post($new_post);
 
-                            if (isset($_SESSION['listing']))unset($_SESSION['listing']);
+                            if (isset($_SESSION['listing'])) unset($_SESSION['listing']);
                             wp_redirect(get_permalink($lastid));
                         } else {
 
@@ -266,13 +265,13 @@ function geodir_ajax_handler()
                             } else
                                 $redirect_to = get_permalink(get_option('geodir_add_listing_page'));
 
-                            if (isset($_SESSION['listing']))unset($_SESSION['listing']);
+                            if (isset($_SESSION['listing'])) unset($_SESSION['listing']);
                             wp_redirect($redirect_to);
                         }
 
                     } else {
 
-                        if (isset($_SESSION['listing']))unset($_SESSION['listing']);
+                        if (isset($_SESSION['listing'])) unset($_SESSION['listing']);
                         wp_redirect(home_url());
 
                     }

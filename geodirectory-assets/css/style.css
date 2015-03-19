@@ -51,7 +51,10 @@ preview details page
 /* ########################################
 details page 
 ######################################### */
-ul.geodir-tabs-content { list-style:none;}
+ul.geodir-tabs-content {
+    list-style: none;
+}
+
 #post_video-wrap,
 .geodir-company_info p.geodir_video:last-child,
 .geodir-company_info p.geodir_video {
@@ -195,8 +198,9 @@ ul.geodir-tabs-content {
     border: 1px #e1e1e1 solid;
     border-top: none;
 }
+
 .geodir-tabs-content > li {
-	clear: left;
+    clear: left;
 }
 
 /* post navigation next/prev */
@@ -678,21 +682,23 @@ homepage
 li.menu-item, #menu-item-gd-location-switcher {
     z-index: 1500;
 }
-li.menu-item li{
+
+li.menu-item li {
     z-index: 1501;
 }
 
-li.menu-item li li{
+li.menu-item li li {
     z-index: 1502;
 }
 
-li.menu-item li li li{
+li.menu-item li li li {
     z-index: 1503;
 }
 
-li.menu-item li li li li{
+li.menu-item li li li li {
     z-index: 15004;
 }
+
 /* ########################################
 widgets 
 ######################################### */
@@ -1498,9 +1504,11 @@ div#jquery-lightbox {
     height: 30px;
     margin-left: 0;
 }
+
 .bestof-tabs-on-left section.widget.geodir_bestof_widget {
     overflow: hidden;
 }
+
 .bestof-tabs-on-left #geodir_bestof_tab_dd,
 .bestof-tabs-on-left .geodir-chosen-container,
 .bestof-tabs-on-top #geodir_bestof_tab_dd,
@@ -1510,4 +1518,29 @@ div#jquery-lightbox {
 
 /*shortcode styles*/
 
-.geodir-map-home-page .geodir-map-posttype-list li{margin-left:0;} .geodir-map-home-page.geodir_map_container .map-places-listing ul.place-list{padding-left:0;margin-left:0;}.geodir-map-home-page.geodir_map_container .map-places-listing ul.place-list > li{display:inline-block;float:none}.geodir-map-home-page.geodir_map_container .map-places-listing ul.place-list>li:first-child{padding-left:0;}.geodir-map-home-page .geodir-map-posttype-list{display:block;overflow:hidden;white-space:nowrap;width:100%;word-wrap:normal;position:relative;}
+.geodir-map-home-page .geodir-map-posttype-list li {
+    margin-left: 0;
+}
+
+.geodir-map-home-page.geodir_map_container .map-places-listing ul.place-list {
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.geodir-map-home-page.geodir_map_container .map-places-listing ul.place-list > li {
+    display: inline-block;
+    float: none
+}
+
+.geodir-map-home-page.geodir_map_container .map-places-listing ul.place-list > li:first-child {
+    padding-left: 0;
+}
+
+.geodir-map-home-page .geodir-map-posttype-list {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+    word-wrap: normal;
+    position: relative;
+}

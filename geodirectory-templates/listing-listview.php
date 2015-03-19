@@ -91,7 +91,7 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                                 $endLon = $post->post_longitude;
                                 $endPoint = array('latitude' => $endLat, 'longitude' => $endLon);
                                 $uom = get_option('geodir_search_dist_1');
-                                $distance = geodir_calculateDistanceFromLatLong($startPoint, $endPoint, $uom);?>
+                                $distance = geodir_calculateDistanceFromLatLong($startPoint, $endPoint, $uom); ?>
                                 <h3>
                                     <?php
 
@@ -174,11 +174,11 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                                     <span class="geodir-pinpoint"
                                           style=" background:url('<?php if (isset($marker_icon)) {
                                               echo $marker_icon;
-                                          }?>') no-repeat scroll left top transparent; background-size:auto 100%; -webkit-background-size:auto 100%; -moz-background-size:auto 100%; height:9px; width:14px; "></span>
+                                          } ?>') no-repeat scroll left top transparent; background-size:auto 100%; -webkit-background-size:auto 100%; -moz-background-size:auto 100%; height:9px; width:14px; "></span>
                                     <a class="geodir-pinpoint-link" href="javascript:void(0)"
                                        onclick="openMarker('listing_map_canvas' ,'<?php echo $post->ID; ?>')"
                                        onmouseover="animate_marker('listing_map_canvas' ,'<?php echo $post->ID; ?>')"
-                                       onmouseout="stop_marker_animation('listing_map_canvas' ,'<?php echo $post->ID; ?>')"><?php _e('Pinpoint', GEODIRECTORY_TEXTDOMAIN);?></a>
+                                       onmouseout="stop_marker_animation('listing_map_canvas' ,'<?php echo $post->ID; ?>')"><?php _e('Pinpoint', GEODIRECTORY_TEXTDOMAIN); ?></a>
                                 <?php } ?>
 
                                 <?php if ($post->post_author == get_current_user_id()) { ?>
