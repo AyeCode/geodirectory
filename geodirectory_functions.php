@@ -29,7 +29,7 @@ include_once('geodirectory-functions/custom_functions.php');
  *
  * @since 1.0.0
  */
-include_once('geodirectory-functions/listing_filters.php' );
+include_once('geodirectory-functions/listing_filters.php');
 /**
  * Contains functions for calling the templates for the plugin.
  *

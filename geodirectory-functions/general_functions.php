@@ -105,7 +105,7 @@ function geodir_get_formated_time($time)
  *
  * @param string $url The main url to be used.
  * @param array $params
- * @param bool  $use_existing_arguments
+ * @param bool $use_existing_arguments
  * @return string
  */
 function geodir_getlink($url, $params = array(), $use_existing_arguments = false)
@@ -168,7 +168,7 @@ function geodir_curPageURL()
         $pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
     }
     //return str_replace("www.", "", $pageURL);
-    return apply_filters('geodir_curPageURL',$pageURL);
+    return apply_filters('geodir_curPageURL', $pageURL);
 }
 
 
@@ -507,8 +507,8 @@ if (!function_exists('geodir_sendEmail')) {
         $login_details = '';
 
         // strip slashes from subject & message text
-        $to_subject = stripslashes_deep( $to_subject );
-        $to_message = stripslashes_deep( $to_message );
+        $to_subject = stripslashes_deep($to_subject);
+        $to_message = stripslashes_deep($to_message);
 
         if ($message_type == 'send_friend') {
             $subject = stripslashes(get_option('geodir_email_friend_subject'));
@@ -1631,7 +1631,7 @@ function geodir_function_widget_listings_limit($limit)
 
 // wp media large width
 /**
- * @param int    $default
+ * @param int $default
  * @param string $params
  * @return int|mixed|void
  */
@@ -1651,7 +1651,7 @@ function geodir_media_image_large_width($default = 800, $params = '')
 
 // wp media large height
 /**
- * @param int    $default
+ * @param int $default
  * @param string $params
  * @return int|mixed|void
  */
@@ -1811,7 +1811,7 @@ function geodir_popular_post_category_output($args = '', $instance = '')
 
     }
 
-    if(!empty($a_terms)) {
+    if (!empty($a_terms)) {
         foreach ($a_terms as $b_key => $b_val) {
             $b_terms[$b_key] = geodir_sort_terms($b_val, 'count');
         }
@@ -1888,7 +1888,7 @@ function geodir_helper_cat_list_output($terms, $category_limit)
 
     foreach ($terms as $cat) {// print_r($cat);
         $post_type = str_replace("category", "", $cat->taxonomy);
-		$term_icon_url = !empty( $term_icons ) && isset( $term_icons[$cat->term_id] ) ? $term_icons[$cat->term_id] : '';
+        $term_icon_url = !empty($term_icons) && isset($term_icons[$cat->term_id]) ? $term_icons[$cat->term_id] : '';
 
         $cat_count++;
 

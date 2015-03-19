@@ -478,11 +478,20 @@ function geodir_share_this_button()
  * @package GeoDirectory
  * @see geodir_before_edit_post_link action.
  * @see geodir_edit_post_link_html filter.
+ * @see geodir_after_edit_post_link action.
  */
 function geodir_edit_post_link()
 {
     global $post, $preview;
     ob_start(); // Start buffering;
+    /**
+     * This is called before the edit post link html in the function geodir_edit_post_link()
+     *
+     * @since 1.0.0
+     * @see geodir_edit_post_link function.
+     * @see geodir_edit_post_link_html filter.
+     * @see geodir_after_edit_post_link action.
+     */
     do_action('geodir_before_edit_post_link');
     if (!$preview) {
         //if(is_user_logged_in() && $post->post_author == get_current_user_id())
@@ -502,26 +511,60 @@ function geodir_edit_post_link()
             echo ' <p class="edit_link"><i class="fa fa-pencil"></i> <a href="' . $editlink . '">' . __('Edit this Post', GEODIRECTORY_TEXTDOMAIN) . '</a></p>';
         }
     }// end of if, if its a preview or not
+    /**
+     * This is called after the edit post link html in the function geodir_edit_post_link()
+     *
+     * @since 1.0.0
+     * @see geodir_edit_post_link function.
+     * @see geodir_edit_post_link_html filter.
+     * @see geodir_before_edit_post_link action.
+     */
     do_action('geodir_after_edit_post_link');
     $content_html = ob_get_clean();
     if (trim($content_html) != '')
         $content_html = '<div class="geodir-company_info geodir-details-sidebar-user-links">' . $content_html . '</div>';
     if ((int)get_option('geodir_disable_user_links_section') != 1) {
+        /**
+         * Filter the geodir_edit_post_link() function content.
+         *
+         * @param string $content_html The output html of the geodir_edit_post_link() function.
+         * @see geodir_edit_post_link function.
+         * @see geodir_before_edit_post_link action.
+         * @see geodir_after_edit_post_link action.
+         */
         echo $content_html = apply_filters('geodir_edit_post_link_html', $content_html);
     }
 
 
 }
 
-
+/**
+ * Outputs the google analytics section on details page.
+ *
+ * Outputs the google analytics html if the current logged in user owns the post.
+ *
+ * @global WP_Post|null $post The current post, if available.
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @see geodir_before_google_analytics action.
+ * @see geodir_after_google_analytics action.
+ * @see geodir_google_analytic_html filter.
+ */
 function geodir_detail_page_google_analytics()
 {
-    global $post, $preview, $post_images;
+    global $post;
     $package_info = array();
     $package_info = geodir_post_package_info($package_info, $post);
-    //if(isset($package_info->google_analytics))
-    //	$package_info->google_analytics = false;
+
     ob_start(); // Start buffering;
+    /**
+     * This is called before the edit post link html in the function geodir_detail_page_google_analytics()
+     *
+     * @since 1.0.0
+     * @see geodir_detail_page_google_analytics function.
+     * @see geodir_google_analytic_html filter.
+     * @see geodir_after_google_analytics action.
+     */
     do_action('geodir_before_google_analytics');
     if (get_option('geodir_ga_stats') && get_edit_post_link() && is_user_logged_in() && (isset($package_info->google_analytics) && $package_info->google_analytics == '1')) {
         $page_url = $_SERVER['REQUEST_URI'];
@@ -538,15 +581,42 @@ function geodir_detail_page_google_analytics()
 
     <?php
     }
+    /**
+     * This is called after the edit post link html in the function geodir_detail_page_google_analytics()
+     *
+     * @since 1.0.0
+     * @see geodir_detail_page_google_analytics function.
+     * @see geodir_google_analytic_html filter.
+     * @see geodir_before_google_analytics action.
+     */
     do_action('geodir_after_google_analytics');
     $content_html = ob_get_clean();
     if (trim($content_html) != '')
         $content_html = '<div class="geodir-company_info geodir-details-sidebar-google-analytics">' . $content_html . '</div>';
     if ((int)get_option('geodir_disable_google_analytics_section') != 1) {
+        /**
+         * Filter the geodir_edit_post_link() function content.
+         *
+         * @param string $content_html The output html of the geodir_edit_post_link() function.
+         * @see geodir_detail_page_google_analytics function.
+         * @see geodir_before_google_analytics action.
+         * @see geodir_after_google_analytics action.
+         */
         echo $content_html = apply_filters('geodir_google_analytic_html', $content_html);
     }
 }
 
+/**
+ * Output the current post overall review and a small image compatible with google hreviews.
+ *
+ * @global WP_Post|null $post The current post, if available.
+ * @global bool $preview True if the current page is add listing preview page. False if not.
+ * @global object $post_images An array of post image objects of current post images if exist.
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @see geodir_before_detail_page_review_rating action.
+ * @see
+ */
 function geodir_detail_page_review_rating()
 {
     global $post, $preview, $post_images;
