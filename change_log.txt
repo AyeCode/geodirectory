@@ -1,6 +1,8 @@
 v1.4.1
 Distances to listings should show miles/km until 0.01 rather than 1 before changing to ft/m - FIXED
 Function geodir_save_listing() now unsets the listing session before returning - CHANGED
+Error in google review rich snippets when review rating manager plugin not active - FIXED
+Some DocBlocks added for documentation - ADDED
 
 v1.4.0
 New user registration disabled error not showing because of &amp; - FIXED
