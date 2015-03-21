@@ -102,6 +102,7 @@ if (is_admin() && isset($_REQUEST['tab']) && $mapzoom == '') {
             console.log(responses);
             street_number = '';
             premise = ''; // In Russian ;
+            establishment = '';
             route = '';
             administrative_area_level_1 = '';
             administrative_area_level_2 = '';
@@ -153,48 +154,66 @@ if (is_admin() && isset($_REQUEST['tab']) && $mapzoom == '') {
                     postal_code_prefix = addr;
                 }
 
+                if (addr.types[0] == 'establishment') {
+                    establishment = addr;
+                }
+
                 if (postal_code == '') {
                     postal_code = postal_code_prefix;
                 }
                 if (responses[0].formatted_address != '') {
+
                     address_array = responses[0].formatted_address.split(",", 2);
+                    console.log(address_array);
                     if (address_array.length > 1) {//alert(1);
 
 
                         if (!(typeof(street_number.long_name) == 'undefined' || street_number.long_name == null) && street_number.long_name.toLowerCase() == address_array[0].toLowerCase().trim())
-                            getAddress = street_number.long_name + ', ' + address_array[1];
+                        {getAddress = street_number.long_name + ', ' + address_array[1];}
 
                         if (getAddress == '' && !(typeof(street_number.long_name) == 'undefined' || street_number.long_name == null) && street_number.long_name.toLowerCase() == address_array[1].toLowerCase().trim())
-                            getAddress = address_array[0] + ', ' + street_number.long_name;
+                        {getAddress = address_array[0] + ', ' + street_number.long_name;}
 
 
                         if (getAddress == '' && !(typeof(street_number.short_name) == 'undefined' || street_number.short_name == null) && street_number.short_name.toLowerCase() == address_array[0].toLowerCase().trim())
-                            getAddress = street_number.short_name + ', ' + address_array[1];
+                        { getAddress = street_number.short_name + ', ' + address_array[1];}
 
                         if (getAddress == '' && !(typeof(street_number.short_name) == 'undefined' || street_number.short_name == null) && street_number.short_name.toLowerCase() == address_array[1].toLowerCase().trim())
-                            getAddress = address_array[0] + ', ' + street_number.short_name;
+                        {getAddress = address_array[0] + ', ' + street_number.short_name;}
 
 
                         if (getAddress == '' && !(typeof(premise.long_name) == 'undefined' || premise.long_name == null) && premise.long_name.toLowerCase() == address_array[0].toLowerCase().trim())
-                            getAddress = premise.long_name + ', ' + address_array[1];
+                        {getAddress = premise.long_name + ', ' + address_array[1];}
 
                         if (getAddress == '' && !(typeof(premise.long_name) == 'undefined' || premise.long_name == null) && premise.long_name.toLowerCase() == address_array[1].toLowerCase().trim())
-                            getAddress = address_array[0] + ', ' + premise.long_name;
+                        {getAddress = address_array[0] + ', ' + premise.long_name;}
 
 
                         if (getAddress == '' && !(typeof(premise.short_name) == 'undefined' || premise.short_name == null) && premise.short_name.toLowerCase() == address_array[0].toLowerCase().trim())
-                            getAddress = premise.short_name + ', ' + address_array[1];
+                        {getAddress = premise.short_name + ', ' + address_array[1];}
 
                         if (getAddress == '' && !(typeof(premise.short_name) == 'undefined' || premise.short_name == null) && premise.short_name.toLowerCase() == address_array[1].toLowerCase().trim())
-                            getAddress = address_array[0] + ', ' + premise.short_name;
+                        {getAddress = address_array[0] + ', ' + premise.short_name;}
+
+
 
                         if (getAddress == '')
-                            getAddress = address_array[0]
+                        { getAddress = 'none'}
 
                     }
                 }
 
             }
+
+
+            // if establishment then grab second arr
+            if (getAddress == 'none' && typeof(establishment.long_name) !== 'undefined' && typeof(address_array[1]) !== 'undefined'){
+                getAddress = address_array[1];
+            }else{
+                getAddress = address_array[0];
+            }
+
+
 
             if (getAddress == '') {
                 if (street_number.long_name)
