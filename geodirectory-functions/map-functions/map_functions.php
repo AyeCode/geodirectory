@@ -1,17 +1,17 @@
 <?php
 /**
- * Google Map related functions
+ * Google Map related functions.
  *
  * @since 1.0.0
  * @package GeoDirectory
  */
 
 /**
- * Creates a global variable for storing map json data
+ * Creates a global variable for storing map json data.
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @global array $map_jason empty array
+ * @global array $map_jason empty array.
  */
 function  geodir_init_map_jason()
 {
@@ -20,11 +20,11 @@ function  geodir_init_map_jason()
 }
 
 /**
- * Creates a global variable for storing map canvas data
+ * Creates a global variable for storing map canvas data.
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @global array $map_canvas_arr empty array
+ * @global array $map_canvas_arr empty array.
  */
 function geodir_init_map_canvas_array()
 {
@@ -38,11 +38,11 @@ function geodir_init_map_canvas_array()
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param null|WP_Post $post post object
- * @global wpdb $wpdb wpdb global variable
- * @global array $map_jason map data in json format
+ * @param null|WP_Post $post post object.
+ * @global wpdb $wpdb wpdb global variable.
+ * @global array $map_jason map data in json format.
  * @global bool $add_post_in_marker_array Displays posts in marker array when the value is true.
- * @global array $geodir_cat_icons category icons array. syntax: array( 'category name' => 'icon url')
+ * @global array $geodir_cat_icons category icons array. syntax: array( 'category name' => 'icon url').
  */
 function create_marker_jason_of_posts($post)
 {
@@ -64,12 +64,12 @@ function create_marker_jason_of_posts($post)
 }
 
 /**
- * Send jason data to script and show listing map
+ * Send jason data to script and show listing map.
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @global array $map_jason map data in json format
- * @global array $map_canvas_arr map canvas array
+ * @global array $map_jason map data in json format.
+ * @global array $map_canvas_arr map canvas array.
  */
 function send_marker_jason_to_js()
 {
@@ -92,7 +92,7 @@ function send_marker_jason_to_js()
                 $map_canvas_jason_args = array($canvas . '_jason' => $canvas_jason);
 
                 /**
-                 * Filter for map canvas json args
+                 * Filter for map canvas json args.
                  *
                  * You can use this filter to modify map canvas json args.
                  *
@@ -109,7 +109,7 @@ function send_marker_jason_to_js()
                 $map_canvas_jason_args = array($canvas . '_jason' => $canvas_jason);
 
                 /**
-                 * Filter for map canvas json args
+                 * Filter for map canvas json args.
                  *
                  * You can use this filter to modify map canvas json args.
                  *
@@ -127,17 +127,17 @@ function send_marker_jason_to_js()
 }
 
 /**
- * Home map Taxonomy walker
+ * Home map Taxonomy walker.
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param string $cat_taxonomy Name of the taxonomy e.g place_category
- * @param int $cat_parent Parent term ID to retrieve its child terms. Default 0
- * @param bool $hide_empty Do you want to hide the terms that has no posts. Default true.
- * @param int $pading css padding value in pixels. e.g: 12 will be considers as 12px
- * @param string $map_canvas_name Unique canvas name for your map
+ * @param string $cat_taxonomy Name of the taxonomy e.g place_category.
+ * @param int $cat_parent Optional. Parent term ID to retrieve its child terms. Default 0.
+ * @param bool $hide_empty Optional. Do you want to hide the terms that has no posts. Default true.
+ * @param int $pading Optional. css padding value in pixels. e.g: 12 will be considers as 12px.
+ * @param string $map_canvas_name Unique canvas name for your map.
  * @param bool $child_collapse Do you want to collapse child terms by default?.
- * @param bool $is_home_map Is this a home page map? Default: false
+ * @param bool $is_home_map Optional. Is this a home page map? Default: false.
  * @return string|void
  */
 function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = true, $pading = 0, $map_canvas_name = '', $child_collapse, $is_home_map = false)
