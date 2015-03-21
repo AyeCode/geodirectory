@@ -11,7 +11,7 @@
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @global array $map_jason empty array.
+ * @global array $map_jason Empty array.
  */
 function  geodir_init_map_jason()
 {
@@ -24,7 +24,7 @@ function  geodir_init_map_jason()
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @global array $map_canvas_arr empty array.
+ * @global array $map_canvas_arr Empty array.
  */
 function geodir_init_map_canvas_array()
 {
@@ -38,11 +38,11 @@ function geodir_init_map_canvas_array()
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param null|WP_Post $post post object.
- * @global wpdb $wpdb wpdb global variable.
- * @global array $map_jason map data in json format.
+ * @param null|WP_Post $post Post object.
+ * @global wpdb $wpdb wpdb Global variable.
+ * @global array $map_jason Map data in json format.
  * @global bool $add_post_in_marker_array Displays posts in marker array when the value is true.
- * @global array $geodir_cat_icons category icons array. syntax: array( 'category name' => 'icon url').
+ * @global array $geodir_cat_icons Category icons array. syntax: array( 'category name' => 'icon url').
  */
 function create_marker_jason_of_posts($post)
 {
@@ -68,8 +68,8 @@ function create_marker_jason_of_posts($post)
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @global array $map_jason map data in json format.
- * @global array $map_canvas_arr map canvas array.
+ * @global array $map_jason Map data in json format.
+ * @global array $map_canvas_arr Map canvas array.
  */
 function send_marker_jason_to_js()
 {
@@ -92,14 +92,14 @@ function send_marker_jason_to_js()
                 $map_canvas_jason_args = array($canvas . '_jason' => $canvas_jason);
 
                 /**
-                 * Filter for map canvas json args.
+                 * Filter the send_marker_jason_to_js() function map canvas json args.
                  *
                  * You can use this filter to modify map canvas json args.
                  *
                  * @since 1.0.0
                  * @package GeoDirectory
-                 * @param string $canvas map canvas array key.
-                 * @param array $map_canvas_jason_args map canvas args.
+                 * @param string $canvas Map canvas array key.
+                 * @param array $map_canvas_jason_args Map canvas args.
                  */
                 $map_canvas_jason_args = apply_filters('geodir_map_canvas_jason_' . $canvas, $map_canvas_jason_args);
 
@@ -109,14 +109,14 @@ function send_marker_jason_to_js()
                 $map_canvas_jason_args = array($canvas . '_jason' => $canvas_jason);
 
                 /**
-                 * Filter for map canvas json args.
+                 * Filter the send_marker_jason_to_js() function map canvas json args.
                  *
                  * You can use this filter to modify map canvas json args.
                  *
                  * @since 1.0.0
                  * @package GeoDirectory
-                 * @param string $canvas map canvas array key.
-                 * @param array $map_canvas_jason_args map canvas args.
+                 * @param string $canvas Map canvas array key.
+                 * @param array $map_canvas_jason_args Map canvas args.
                  */
                 $map_canvas_jason_args = apply_filters('geodir_map_canvas_jason_' . $canvas, $map_canvas_jason_args);
                 wp_localize_script('geodir-map-widget', $canvas . '_jason_args', $map_canvas_jason_args);
@@ -134,7 +134,7 @@ function send_marker_jason_to_js()
  * @param string $cat_taxonomy Name of the taxonomy e.g place_category.
  * @param int $cat_parent Optional. Parent term ID to retrieve its child terms. Default 0.
  * @param bool $hide_empty Optional. Do you want to hide the terms that has no posts. Default true.
- * @param int $pading Optional. css padding value in pixels. e.g: 12 will be considers as 12px.
+ * @param int $pading Optional. CSS padding value in pixels. e.g: 12 will be considers as 12px.
  * @param string $map_canvas_name Unique canvas name for your map.
  * @param bool $child_collapse Do you want to collapse child terms by default?.
  * @param bool $is_home_map Optional. Is this a home page map? Default: false.
