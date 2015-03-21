@@ -406,6 +406,10 @@ if (!function_exists('geodir_save_listing')) {
         if ($send_post_submit_mail) { // if new post send out email
             geodir_sendEmail('', '', $current_user->user_email, $current_user->display_name, '', '', $request_info, 'post_submit', $last_post_id, $current_user->ID);
         }
+        /*
+         * Unset the session so we don't loop.
+         */
+        if (isset($_SESSION['listing'])) unset($_SESSION['listing']);
         return $last_post_id;
 
     }
