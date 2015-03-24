@@ -1,5 +1,6 @@
 v1.4.2
 Google api establishment term can override street address - FIXED
+Added action geodir_infowindow_meta_after to infowindow - ADDED
 
 v1.4.1
 Distances to listings should show miles/km until 0.01 rather than 1 before changing to ft/m - FIXED

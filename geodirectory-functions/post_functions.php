@@ -1579,7 +1579,19 @@ if (!function_exists('geodir_get_infowindow_html')) {
                             <?php if ($contact) { ?><span class="geodir_contact"><i
                                 class="fa fa-phone"></i> <?php echo $contact; ?></span><?php } ?>
                             <?php if ($timing) { ?><span class="geodir_timing"><i
-                                class="fa fa-clock-o"></i> <?php echo $timing; ?></span><?php } ?>
+                                class="fa fa-clock-o"></i> <?php echo $timing; ?></span><?php }
+
+                            /**
+                             * Fires after the meta info in the map info window.
+                             *
+                             * This can be used to add more info to the map info window after the normal meta info.
+                             *
+                             * @since 1.4.2
+                             * @param object $postinfo_obj The posts info as an object.
+                             * @param bool|string $post_preview True if currently in post preview page. Empty string if not.                           *
+                             */
+                            do_action('geodir_infowindow_meta_after',$postinfo_obj,$post_preview );
+                            ?>
                         </div>
                         <?php
                         if (isset($postinfo_obj->recurring_dates)) {
