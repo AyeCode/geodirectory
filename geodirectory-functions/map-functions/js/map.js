@@ -172,16 +172,23 @@ function build_map_ajax_search_param(map_canvas_var, reload_cat_list) {
 
     var gd_posttype = '';
     var gd_cat_posttype = '';
+	var gd_pt = '';
 
     if (jQuery('#' + map_canvas_var + '_posttype').val() != '' && jQuery('#' + map_canvas_var + '_posttype').val() != '0') {
         gd_posttype = jQuery('#' + map_canvas_var + '_posttype').val();
+		gd_pt = gd_posttype;
         gd_cat_posttype = jQuery('#' + map_canvas_var + '_posttype').val();
         gd_posttype = '&gd_posttype=' + gd_posttype;
     }
-
+	
+	// Set class for searched post type
+	if (gd_pt && gd_pt !='') {
+		var elList = jQuery('#' + map_canvas_var + '_posttype_menu .geodir-map-posttype-list ul');
+		jQuery(elList).find('li').removeClass('gd-map-search-pt');
+		jQuery(elList).find('li#'+ gd_pt).addClass('gd-map-search-pt');
+	}
 
     if (jQuery('#' + map_canvas_var + '_jason_enabled').val() == 1) {
-
         parse_marker_jason(eval(map_canvas_var + '_jason_args.' + map_canvas_var + '_jason'), map_canvas_var)
         return false;
     }

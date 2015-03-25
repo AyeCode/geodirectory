@@ -523,6 +523,10 @@
     text-decoration: none;
 }
 
+.geodir-map-posttype-list ul.place-list li.gd-map-search-pt a {
+    color: #ccc;
+}
+
 .geodir-map-navigation {
     position: initial;
     margin: 0 12px;

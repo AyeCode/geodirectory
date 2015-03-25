@@ -376,7 +376,8 @@ function geodir_draw_map($map_args = array())
 
                                     foreach ($post_types as $post_type => $args) {
                                         if (!in_array($post_type, $exclude_post_types)) {
-                                            echo '<li id="' . $post_type . '"><a href="javascript:void(0);" onclick="jQuery(\'#' . $map_canvas_name . '_posttype\').val(\'' . $post_type . '\');build_map_ajax_search_param(\'' . $map_canvas_name . '\', true)">' . __(ucfirst($args->labels->name), GEODIRECTORY_TEXTDOMAIN) . '</a></li>';
+                                            $class = $map_search_pt == $post_type ? 'class="gd-map-search-pt"' : '';
+											echo '<li id="' . $post_type . '" ' . $class . '><a href="javascript:void(0);" onclick="jQuery(\'#' . $map_canvas_name . '_posttype\').val(\'' . $post_type . '\');build_map_ajax_search_param(\'' . $map_canvas_name . '\', true)">' . __(ucfirst($args->labels->name), GEODIRECTORY_TEXTDOMAIN) . '</a></li>';
                                         }
                                     }
                                     ?>
