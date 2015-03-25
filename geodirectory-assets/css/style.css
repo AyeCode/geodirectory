@@ -51,6 +51,11 @@ preview details page
 /* ########################################
 details page 
 ######################################### */
+
+#geodir-wrapper {
+    overflow: hidden;
+}
+
 ul.geodir-tabs-content {
     list-style: none;
 }
