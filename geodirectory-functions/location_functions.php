@@ -274,6 +274,11 @@ function geodir_get_current_location_terms($location_array_from = 'session')
 
         if ($city != '')
             $location_array['gd_city'] = urldecode($city);
+			
+		// Fix category link in ajax popular category widget on change post type
+		if (empty($location_array) && defined('DOING_AJAX') && DOING_AJAX) {
+			$location_array = geodir_get_current_location_terms('session');
+		}
     }
 
     return $location_array;
