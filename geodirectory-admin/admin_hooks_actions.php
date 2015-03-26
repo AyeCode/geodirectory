@@ -55,10 +55,14 @@ add_action('geodir_before_admin_panel', 'geodir_before_admin_panel'); // this fu
 function geodir_conditional_admin_script_load()
 {
     global $pagenow;
-    if ((isset($_REQUEST['page']) && $_REQUEST['page'] == 'geodirectory') || ($pagenow == 'post.php' || $pagenow == 'post-new.php' || $pagenow == 'edit.php' || $pagenow == 'edit-tags.php' || $pagenow == 'edit-comments.php' || $pagenow == 'comment.php')) {
+	
+	// Get the current post type
+	$post_type = geodir_admin_current_post_type();
+	$geodir_post_types = geodir_get_posttypes();
+    
+	if ((isset($_REQUEST['page']) && $_REQUEST['page'] == 'geodirectory') || (($pagenow == 'post.php' || $pagenow == 'post-new.php' || $pagenow == 'edit.php') && $post_type && in_array($post_type, $geodir_post_types)) || ($pagenow == 'edit-tags.php' || $pagenow == 'edit-comments.php' || $pagenow == 'comment.php')) {
         add_action('admin_enqueue_scripts', 'geodir_admin_scripts');
         add_action('admin_enqueue_scripts', 'geodir_admin_styles');
-
     }
 
     add_action('admin_enqueue_scripts', 'geodir_admin_styles_req');

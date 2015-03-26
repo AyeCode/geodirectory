@@ -2931,5 +2931,35 @@ function geodir_avada_remove_notification()
 
 add_action('wp_ajax_geodir_avada_remove_notification', 'geodir_avada_remove_notification');
 
+/**
+ * Get the current post type in the wordPress admin
+ *
+ * @since 1.4.2
+ *
+ * @global null|WP_Post $post Post object.
+ * @global string Post type.
+ * @global object|WP_Screen $current_screen Current screen object
+ *
+ * @return string Post type ex: gd_place
+ */
+function geodir_admin_current_post_type() {
+	global $post, $typenow, $current_screen;
+	
+	$post_type = NULL;
+	
+	if ($post && isset($post->post_type))
+		$post_type = $post->post_type;
+	elseif ($typenow)
+		$post_type = $typenow;
+	elseif ($current_screen && isset($current_screen->post_type))
+		$post_type = $current_screen->post_type;
+	elseif (isset($_REQUEST['post_type']))
+		$post_type = sanitize_key($_REQUEST['post_type']);
+	elseif (get_post_type($_REQUEST['post']))
+		$post_type = get_post_type($_REQUEST['post']);
+
+	return $post_type;
+}
+
 
 

@@ -1379,7 +1379,7 @@ function geodir_widget_listings_get_order($query_args)
             $orderby = $wpdb->posts . ".post_title ASC, ";
             break;
         case 'high_review':
-            $orderby = $wpdb->posts . ".comment_count DESC, ";
+			$orderby = $table . ".rating_count DESC, " . $table . ".overall_rating DESC, ";
             break;
         case 'high_rating':
             $orderby = "( " . $table . ".overall_rating  ) DESC, ";
