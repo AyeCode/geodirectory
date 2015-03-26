@@ -2955,7 +2955,7 @@ function geodir_admin_current_post_type() {
 		$post_type = $current_screen->post_type;
 	elseif (isset($_REQUEST['post_type']))
 		$post_type = sanitize_key($_REQUEST['post_type']);
-	elseif (get_post_type($_REQUEST['post']))
+	elseif (isset($_REQUEST['post']) && get_post_type($_REQUEST['post']))
 		$post_type = get_post_type($_REQUEST['post']);
 
 	return $post_type;
