@@ -3,6 +3,8 @@ Google api establishment term can override street address - FIXED
 Added action geodir_infowindow_meta_after to infowindow - ADDED
 On home page map css class added to highlight searched post type - FIXED
 Popular category count not working with ajax - FIXED
+In backend geodirectory style conflicts with some themes style - FIXED
+Sort by most reviews not working in widget and shortcode popular post view - FIXED
 
 v1.4.1
 Distances to listings should show miles/km until 0.01 rather than 1 before changing to ft/m - FIXED
