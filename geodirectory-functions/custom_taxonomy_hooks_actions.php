@@ -79,7 +79,8 @@ function geodir_register_post_types()
 
 function geodir_post_type_args_modify($args, $post_type)
 {
-    if (isset($_REQUEST['geodir_listing_prefix']) && $_REQUEST['geodir_listing_prefix'] != '') {
+    $geodir_location_prefix = isset($_REQUEST['geodir_location_prefix']) ? trim($_REQUEST['geodir_location_prefix']) : get_option('geodir_location_prefix');
+	if (isset($_REQUEST['geodir_listing_prefix']) && $_REQUEST['geodir_listing_prefix'] != '' && strtolower($_REQUEST['geodir_listing_prefix']) != strtolower($geodir_location_prefix)) {
 
         $listing_slug = htmlentities(trim($_REQUEST['geodir_listing_prefix']));
 

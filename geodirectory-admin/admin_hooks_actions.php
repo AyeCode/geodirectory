@@ -1037,36 +1037,6 @@ function geodir_diagnose_default_pages()
     $output_str = '';
     $fix = isset($_POST['fix']) ? true : false;
 
-
-    //////////////////////////////////
-    /* Diagnose Listing Page Starts */
-    //////////////////////////////////
-    $option_value = get_option('geodir_listing_page');
-    $page_found = $wpdb->get_var(
-        $wpdb->prepare(
-            "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_status='virtual' LIMIT 1;",
-            array('listings')
-        )
-    );
-
-    if (!empty($option_value) && !empty($page_found) && $option_value == $page_found)
-        $output_str .= "<li>" . __('Listing page exists with proper setting.', GEODIRECTORY_TEXTDOMAIN) . "</li>";
-    else {
-        $is_error_during_diagnose = true;
-        $output_str .= "<li><strong>" . __('Listing page is missing.', GEODIRECTORY_TEXTDOMAIN) . "</strong></li>";
-        if ($fix) {
-            if (geodir_fix_virtual_page('listings', __('All Listings', GEODIRECTORY_TEXTDOMAIN), $page_found, 'geodir_listing_page')) {
-                $output_str .= "<li><strong>" . __('-->FIXED: Listing page fixed', GEODIRECTORY_TEXTDOMAIN) . "</strong></li>";
-            } else {
-                $output_str .= "<li><strong>" . __('-->FAILED: Listing page fix failed', GEODIRECTORY_TEXTDOMAIN) . "</strong></li>";
-            }
-        }
-    }
-
-    ////////////////////////////////
-    /* Diagnose Listing Page Ends */
-    ////////////////////////////////
-
     //////////////////////////////////
     /* Diagnose Add Listing Page Starts */
     //////////////////////////////////

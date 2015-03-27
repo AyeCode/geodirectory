@@ -1092,10 +1092,14 @@ function geodir_after_core_plugin_row($plugin_file, $plugin_data, $status)
 add_action('wp', 'geodir_changes_in_custom_fields_table');
 add_action('wp_admin', 'geodir_changes_in_custom_fields_table');
 
-function geodir_changes_in_custom_fields_table()
-{
-
+function geodir_changes_in_custom_fields_table() {
     global $wpdb, $plugin_prefix;
+	
+	// Remove unused virtual page
+	$listings_page_id = (int)get_option('geodir_listing_page');
+	if ($listings_page_id) {
+		$wpdb->query($wpdb->prepare("DELETE FROM " . $wpdb->posts . " WHERE ID=%d AND post_name = %s AND post_type=%s", array($listings_page_id, 'listings', 'page')));
+	}
 
     // updated custom field table(add field to show custom field as a tab)
     /*if (!$wpdb->get_var("SHOW COLUMNS FROM ".GEODIR_CUSTOM_FIELDS_TABLE." WHERE field = 'show_as_tab'")) {
