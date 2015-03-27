@@ -48,6 +48,7 @@ function geodir_get_admin_option_form($current_tab)
 add_action('geodir_update_options_compatibility_settings', 'geodir_update_options_compatibility_settings');
 add_action('geodir_update_options_default_location_settings', 'geodir_location_form_submit');
 add_action('geodir_before_admin_panel', 'geodir_before_admin_panel'); // this function is in admin_functions.php
+add_action('geodir_before_update_options', 'geodir_before_update_options');
 
 //add_action('geodir_before_admin_panel', 'geodir_autoinstall_admin_header');
 
