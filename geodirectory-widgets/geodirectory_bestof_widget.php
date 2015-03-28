@@ -89,7 +89,7 @@ class geodir_bestof_widget extends WP_Widget
             'gd_location' => $add_location_filter ? true : false,
             'order_by' => 'high_rating'
         );
-        if ($character_count) {
+        if ($character_count >= 0) {
             $query_args['excerpt_length'] = $character_count;
         }
 
@@ -200,7 +200,7 @@ class geodir_bestof_widget extends WP_Widget
         <input type="hidden" id="bestof_widget_char_count" name="bestof_widget_char_count"
                value="<?php echo $character_count; ?>">
         <div class="geo-bestof-contentwrap geodir-tabs-content" style="position: relative; z-index: 0;">
-            <p id="geodir-bestof-loading"><i class="fa fa-cog fa-spin"></i></p>
+            <p id="geodir-bestof-loading" class="geodir-bestof-loading"><i class="fa fa-cog fa-spin"></i></p>
             <?php
             echo '<div id="geodir-bestof-places">';
             if ($terms) {
@@ -371,7 +371,7 @@ function geodir_bestof_places_by_term($query_args)
 
     $widget_listings = geodir_get_widget_listings($query_args);
 
-    $character_count = $query_args['excerpt_length'];
+    $character_count = isset($query_args['excerpt_length']) ? $query_args['excerpt_length'] : '';
 
     if (!isset($character_count)) {
         $character_count = $character_count == '' ? 50 : apply_filters('bestof_widget_character_count', $character_count);
@@ -421,7 +421,7 @@ function geodir_bestof_callback()
         'order_by' => 'high_rating'
     );
 
-    if ($character_count) {
+    if ($character_count >= 0) {
         $query_args['excerpt_length'] = $character_count;
     }
 
@@ -442,65 +442,73 @@ function geodir_bestof_callback()
 
 //Javascript
 add_action('wp_footer', 'geodir_bestof_js');
-function geodir_bestof_js()
-{
+function geodir_bestof_js() {
+	$ajax_nonce = wp_create_nonce("geodir-bestof-nonce");
 ?>
-    <script type="text/javascript">
-        jQuery(document).ready(function () {
-            <?php $ajax_nonce = wp_create_nonce( "geodir-bestof-nonce" ); ?>
-            jQuery('.geodir-bestof-cat-list a, #geodir_bestof_tab_dd').on("click change", function (e) {
-                var widgetBox = jQuery(this).closest('.geodir_bestof_widget');
-				var loading = jQuery(widgetBox).find("#geodir-bestof-loading");
-                var container = jQuery(widgetBox).find('#geodir-bestof-places');
-				jQuery(document).ajaxStart(function () {
-                    container.hide();
-                    loading.show();
-                }).ajaxStop(function () {
-                    loading.hide();
-                    container.fadeIn('slow');
-                });
-                e.preventDefault();
-                var activeTab = jQuery(this).closest('dl').find('dd.geodir-tab-active');
-                activeTab.removeClass('geodir-tab-active');
-                jQuery(this).parent().addClass('geodir-tab-active');
-                var term_id = 0;
-                if (e.type === "change") {
-                    term_id = jQuery(this).val();
-                } else if (e.type === "click") {
-                    term_id = jQuery(this).attr('data-termid');
-                }
-                var post_type = jQuery(widgetBox).find('#bestof_widget_post_type').val();
-                var post_limit = jQuery(widgetBox).find('#bestof_widget_post_limit').val();
-                var taxonomy = jQuery(widgetBox).find('#bestof_widget_taxonomy').val();
-                var char_count = jQuery(widgetBox).find('#bestof_widget_char_count').val();
-                var add_location_filter = jQuery(widgetBox).find('#bestof_widget_location_filter').val();
-                var data = {
-                    'action': 'geodir_bestof',
-                    'geodir_bestof_nonce': '<?php echo $ajax_nonce; ?>',
-                    'post_type': post_type,
-                    'post_limit': post_limit,
-                    'taxonomy': taxonomy,
-                    'geodir_ajax': true,
-                    'term_id': term_id,
-                    'char_count': char_count,
-                    'add_location_filter': add_location_filter
-                };
-
-                jQuery.post(geodir_var.geodir_ajax_url, data, function (response) {
-                    container.html(response);
-                    jQuery(widgetBox).find('.geodir_category_list_view li .geodir-post-img .geodir_thumbnail img').css('display', 'block');
-                });
-            })
-        });
-        jQuery(document).ready(function () {
-            if (jQuery(window).width() < 660) {
-                if (jQuery('#bestof-widget-tab-layout').hasClass('bestof-tabs-on-left')) {
-                    jQuery('#bestof-widget-tab-layout').removeClass('bestof-tabs-on-left').addClass('bestof-tabs-as-dropdown');
-                } else if (jQuery('#bestof-widget-tab-layout').hasClass('bestof-tabs-on-top')) {
-                    jQuery('#bestof-widget-tab-layout').removeClass('bestof-tabs-on-top').addClass('bestof-tabs-as-dropdown');
-                }
-            }
-        });
-    </script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+	jQuery('.geodir-bestof-cat-list a, #geodir_bestof_tab_dd').on("click change", function(e) {
+		var widgetBox = jQuery(this).closest('.geodir_bestof_widget');
+		var loading = jQuery(widgetBox).find("#geodir-bestof-loading");
+		var container = jQuery(widgetBox).find('#geodir-bestof-places');
+		
+		jQuery(document).ajaxStart(function() {
+			//container.hide(); // Not working when more then one widget on page
+			//loading.show();
+		}).ajaxStop(function() {
+			loading.hide();
+			container.fadeIn('slow');
+		});
+		
+		e.preventDefault();
+		
+		var activeTab = jQuery(this).closest('dl').find('dd.geodir-tab-active');
+		activeTab.removeClass('geodir-tab-active');
+		jQuery(this).parent().addClass('geodir-tab-active');
+		
+		var term_id = 0;
+		if (e.type === "change") {
+			term_id = jQuery(this).val();
+		} else if (e.type === "click") {
+			term_id = jQuery(this).attr('data-termid');
+		}
+		
+		var post_type = jQuery(widgetBox).find('#bestof_widget_post_type').val();
+		var post_limit = jQuery(widgetBox).find('#bestof_widget_post_limit').val();
+		var taxonomy = jQuery(widgetBox).find('#bestof_widget_taxonomy').val();
+		var char_count = jQuery(widgetBox).find('#bestof_widget_char_count').val();
+		var add_location_filter = jQuery(widgetBox).find('#bestof_widget_location_filter').val();
+		
+		var data = {
+			'action': 'geodir_bestof',
+			'geodir_bestof_nonce': '<?php echo $ajax_nonce; ?>',
+			'post_type': post_type,
+			'post_limit': post_limit,
+			'taxonomy': taxonomy,
+			'geodir_ajax': true,
+			'term_id': term_id,
+			'char_count': char_count,
+			'add_location_filter': add_location_filter
+		};
+		
+		container.hide();
+		loading.show();
+		
+		jQuery.post(geodir_var.geodir_ajax_url, data, function(response) {
+			container.html(response);
+			jQuery(widgetBox).find('.geodir_category_list_view li .geodir-post-img .geodir_thumbnail img').css('display', 'block');
+		});
+	})
+});
+jQuery(document).ready(function() {
+	if (jQuery(window).width() < 660) {
+		if (jQuery('#bestof-widget-tab-layout').hasClass('bestof-tabs-on-left')) {
+			jQuery('#bestof-widget-tab-layout').removeClass('bestof-tabs-on-left').addClass('bestof-tabs-as-dropdown');
+		} else if (jQuery('#bestof-widget-tab-layout').hasClass('bestof-tabs-on-top')) {
+			jQuery('#bestof-widget-tab-layout').removeClass('bestof-tabs-on-top').addClass('bestof-tabs-as-dropdown');
+		}
+	}
+});
+</script>
 <?php
 }

@@ -553,12 +553,12 @@ function geodir_sc_advanced_search($atts)
 /**
  * The best of widget shortcode.
  *
- * This implements the functionality of the best of widget Shortcode for displaying
+ * This implements the functionality of the best of widget shortcode for displaying
  * top rated listing.
  *
  * @since 1.4.2
  *
- * @param array $attr {
+ * @param array $atts {
  *     Attributes of the shortcode.
  *
  *     @type string $title         The title of the widget displayed.
@@ -584,7 +584,7 @@ function geodir_sc_advanced_search($atts)
 function geodir_sc_bestof_widget($atts, $content = '') {
 	$defaults = array(
 		'title' => '',
-		'post_type' => 'gd_event',
+		'post_type' => 'gd_place',
 		'post_limit' => 5,
 		'categ_limit' => 3,
 		'character_count' => 20,
