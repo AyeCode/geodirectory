@@ -561,22 +561,24 @@ function geodir_get_rating_stars($rating, $post_id, $small = false)
 
     if ($small) {
         $r_html = '<div class="rating"><div class="gd_rating_map" data-average="' . $rating . '" data-id="' . $post_id . '"><div class="geodir_RatingColor" ></div><div class="geodir_RatingAverage_small" style="width: ' . $a_rating . '%;"></div><div class="geodir_Star_small"></div></div></div>';
-
     } else {
-
-        //$rating_img = '<img src="'.geodir_plugin_url().'/geodirectory-assets/images/stars.png" />';
-        $rating_img = '<img alt="rating icon" src="' . get_option('geodir_default_rating_star_icon') . '" />';
-
-        /* fix rating star for safari */
-        $star_width = 23 * 5;
-        //global $is_safari, $is_iphone, $ios, $is_chrome;
-        //$attach_style = ( $is_safari || $is_iphone || $ios || $is_chrome ) && $star_width > 0 ? 'width:' . $star_width . 'px;max-width:none' : '';
-        if ($star_width > 0) {
-            $attach_style = 'max-width:' . $star_width . 'px';
-        } else {
-            $attach_style = '';
-        }
-        $r_html = '<div class="geodir-rating" style="' . $attach_style . '"><div class="gd_rating_show" data-average="' . $rating . '" data-id="' . $post_id . '"><div class="geodir_RatingAverage" style="width: ' . $a_rating . '%;"></div><div class="geodir_Star">' . $rating_img . $rating_img . $rating_img . $rating_img . $rating_img . '</div></div></div>';
+		if (function_exists('geodir_reviewrating_draw_overall_rating')) {
+			// Show rating stars from review rating manager
+			$r_html = geodir_reviewrating_draw_overall_rating($rating);
+		} else {
+			$rating_img = '<img alt="rating icon" src="' . get_option('geodir_default_rating_star_icon') . '" />';
+			
+			/* fix rating star for safari */
+			$star_width = 23 * 5;
+			//global $is_safari, $is_iphone, $ios, $is_chrome;
+			//$attach_style = ( $is_safari || $is_iphone || $ios || $is_chrome ) && $star_width > 0 ? 'width:' . $star_width . 'px;max-width:none' : '';
+			if ($star_width > 0) {
+				$attach_style = 'max-width:' . $star_width . 'px';
+			} else {
+				$attach_style = '';
+			}
+			$r_html = '<div class="geodir-rating" style="' . $attach_style . '"><div class="gd_rating_show" data-average="' . $rating . '" data-id="' . $post_id . '"><div class="geodir_RatingAverage" style="width: ' . $a_rating . '%;"></div><div class="geodir_Star">' . $rating_img . $rating_img . $rating_img . $rating_img . $rating_img . '</div></div></div>';
+		}
     }
     return $r_html;
 }
