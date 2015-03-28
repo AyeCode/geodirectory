@@ -153,7 +153,12 @@ function geodir_get_addlisting_link($post_type = '')
 }
 
 /**
- * @return string
+ * Get the current page URL.
+ *
+ * @since 1.0.0
+ * @since 1.4.2 Removed the port number from the URL if port 80 is not being used.
+ * @package GeoDirectory
+ * @return string The current URL.
  */
 function geodir_curPageURL()
 {
@@ -162,11 +167,7 @@ function geodir_curPageURL()
         $pageURL .= "s";
     }
     $pageURL .= "://";
-    if ($_SERVER["SERVER_PORT"] != "80") {
-        $pageURL .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];
-    } else {
-        $pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
-    }
+    $pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
     //return str_replace("www.", "", $pageURL);
     return apply_filters('geodir_curPageURL', $pageURL);
 }
