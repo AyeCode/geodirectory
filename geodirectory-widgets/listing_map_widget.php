@@ -19,7 +19,7 @@ function create_list_jsondata($post)
 {
     global $wpdb, $list_map_json, $add_post_in_marker_array;
 
-    if ((is_main_query() || $add_post_in_marker_array) && $post->marker_json != '') {
+    if ((is_main_query() || $add_post_in_marker_array) && isset($post->marker_json) && $post->marker_json != '') {
         $list_map_json[] = $post->marker_json;
     }
 

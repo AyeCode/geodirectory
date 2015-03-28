@@ -550,3 +550,92 @@ function geodir_sc_advanced_search($atts)
     return $output;
 }
 
+/**
+ * The best of widget shortcode.
+ *
+ * This implements the functionality of the best of widget shortcode for displaying
+ * top rated listing.
+ *
+ * @since 1.4.2
+ *
+ * @param array $atts {
+ *     Attributes of the shortcode.
+ *
+ *     @type string $title         The title of the widget displayed.
+ *     @type string $post_type     Post type of listing. Default gd_place.
+ *     @type int    $post_limit    No. of post to display. Default 5.
+ *     @type int    $categ_limit   No. of categories to display. Default 3.
+ *     @type int    $character_count       The excerpt length
+ *     @type int    $use_viewing_post_type Filter veiwing post type. Default 1.
+ *     @type int    $add_location_filter   Filter current location. Default 1.
+ *     @type string $tab_layout    Tab layout to display listing. Default 'bestof-tabs-on-top'.
+ *     @type string $before_widget HTML content to prepend to each widget's HTML output when
+ *                                 assigned to this sidebar. Default is an opening list item element.
+ *     @type string $after_widget  HTML content to append to each widget's HTML output when
+ *                                 assigned to this sidebar. Default is a closing list item element.
+ *     @type string $before_title  HTML content to prepend to the sidebar title when displayed.
+ *                                 Default is an opening h3 element.
+ *     @type string $after_title   HTML content to append to the sidebar title when displayed.
+ *                                 Default is a closing h3 element.
+ * }
+ * @param string $content Optional. Shortcode content.
+ * @return string HTML content to display video.
+ */
+function geodir_sc_bestof_widget($atts, $content = '') {
+	$defaults = array(
+		'title' => '',
+		'post_type' => 'gd_place',
+		'post_limit' => 5,
+		'categ_limit' => 3,
+		'character_count' => 20,
+		'use_viewing_post_type' => '1',
+		'add_location_filter' => '1',
+		'tab_layout' => 'bestof-tabs-on-top',
+		'before_widget' => '<section id="bestof_widget-1" class="widget geodir-widget geodir_bestof_widget geodir_sc_bestof_widget">',
+        'after_widget' => '</section>',
+        'before_title' => '<h3 class="widget-title">',
+        'after_title' => '</h3>',
+	);
+	$params = shortcode_atts($defaults, $atts);
+
+    /**
+     * Validate our incoming params
+     */
+
+    // Validate the selected post type, default to gd_place on fail
+    if (!(gdsc_is_post_type_valid($params['post_type']))) {
+        $params['post_type'] = 'gd_place';
+    }
+	
+	// Post limit needs to be a positive integer
+    $params['post_limit'] = absint($params['post_limit']);
+    if (0 == $params['post_limit']) {
+        $params['post_limit'] = 5;
+    }
+	
+	// Category limit needs to be a positive integer
+    $params['categ_limit'] = absint($params['categ_limit']);
+    if (0 == $params['categ_limit']) {
+        $params['categ_limit'] = 3;
+    }
+	
+	// Tab layout validation
+    $params['tab_layout'] = $params['tab_layout'];
+    if (!in_array($params['tab_layout'], array('bestof-tabs-on-top', 'bestof-tabs-on-left', 'bestof-tabs-as-dropdown'))) {
+        $params['tab_layout'] = 3;
+    }
+	
+	// Validate character_count
+    $params['character_count'] = absint($params['character_count']);
+    if ($params['character_count'] < 0) {
+        $params['character_count'] = 'bestof-tabs-on-top';
+    }
+
+	ob_start();
+	the_widget('geodir_bestof_widget', $params, $params);
+    $output = ob_get_contents();
+    ob_end_clean();
+
+    return $output;
+}
+add_shortcode('gd_bestof_widget', 'geodir_sc_bestof_widget');

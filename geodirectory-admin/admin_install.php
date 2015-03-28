@@ -74,7 +74,6 @@ function geodir_create_pages()
 {
 
     //geodir_create_page( esc_sql( _x('home-map', 'page_slug', 'geodirectory') ), 'geodir_home_map_page', __('Home Map', 'geodirectory'), '',0,'publish' );
-    geodir_create_page(esc_sql(_x('listings', 'page_slug', GEODIRECTORY_TEXTDOMAIN)), 'geodir_listing_page', __('All Listings', GEODIRECTORY_TEXTDOMAIN), '');
     geodir_create_page(esc_sql(_x('add-listing', 'page_slug', GEODIRECTORY_TEXTDOMAIN)), 'geodir_add_listing_page', __('Add Listing', GEODIRECTORY_TEXTDOMAIN), '');
     geodir_create_page(esc_sql(_x('listing-preview', 'page_slug', 'geodirectory')), 'geodir_preview_page', __('Listing Preview', GEODIRECTORY_TEXTDOMAIN), '');
     geodir_create_page(esc_sql(_x('listing-success', 'page_slug', GEODIRECTORY_TEXTDOMAIN)), 'geodir_success_page', __('Listing Success', GEODIRECTORY_TEXTDOMAIN), '');
