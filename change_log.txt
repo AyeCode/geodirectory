@@ -1,5 +1,22 @@
+v1.4.2
+Google api establishment term can override street address - FIXED
+Added action geodir_infowindow_meta_after to infowindow - ADDED
+On home page map css class added to highlight searched post type - FIXED
+Popular category count not working with ajax - FIXED
+In backend geodirectory style conflicts with some themes style - FIXED
+Sort by most reviews not working in widget and shortcode popular post view - FIXED
+Validation added for custom permalinks in GD -> General -> Permalinks - FIXED
+All Listings virtual page removed - CHANGED
+Shortcode added for best of widget - ADDED
+Recent reviews widget ratings stars color not changed with multirating color setting - FIXED
+geodir_curPageURL() changed slightly for https url's, we no longer add the port number - CHANGED
+Shortcode added for to display GeoDirectoy Listings with pagination - ADDED
+
 v1.4.1
 Distances to listings should show miles/km until 0.01 rather than 1 before changing to ft/m - FIXED
+Function geodir_save_listing() now unsets the listing session before returning - CHANGED
+Error in google review rich snippets when review rating manager plugin not active - FIXED
+Some DocBlocks added for documentation - ADDED
 
 v1.4.0
 New user registration disabled error not showing because of &amp; - FIXED

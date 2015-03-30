@@ -289,7 +289,14 @@ function geodir_before_admin_panel()
                 flush_rewrite_rules(false);
 
                 break;
-
+			case 'fail':
+				$gderr = isset($_REQUEST['gderr']) ? $_REQUEST['gderr'] : '';
+				
+				if ($gderr == 21)
+			    	echo '<div id="message" class="error fade"><p><strong>' . __('Error: You can not add same permalinks for both Listing and Location, please try again.', GEODIRECTORY_TEXTDOMAIN) . '</strong></p></div>';
+				else
+					echo '<div id="message" class="error fade"><p><strong>' . __('Error: Your settings have not been saved, please try again.', GEODIRECTORY_TEXTDOMAIN) . '</strong></p></div>';
+                break;
         }
     }
 
@@ -313,6 +320,17 @@ function geodir_handle_option_form_submit($current_tab)
     if (isset($_POST) && $_POST && isset($_REQUEST['page']) && $_REQUEST['page'] == 'geodirectory') :
         if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'geodir-settings')) die(__('Action failed. Please refresh the page and retry.', GEODIRECTORY_TEXTDOMAIN));
         if (!wp_verify_nonce($_REQUEST['_wpnonce-' . $current_tab], 'geodir-settings-' . $current_tab)) die(__('Action failed. Please refresh the page and retry.', GEODIRECTORY_TEXTDOMAIN));
+		
+		/**
+		 * Fires before updating geodirectory admin settings.
+		 *
+		 * @since 1.4.2
+		 *
+		 * @param string $current_tab Current tab in geodirectory settings.
+		 * @param array  $geodir_settings Array of geodirectory settings.
+		 */
+		do_action('geodir_before_update_options', $current_tab, $geodir_settings);		
+		
         if (!empty($geodir_settings[$current_tab]))
             geodir_update_options($geodir_settings[$current_tab]);
 
@@ -2931,5 +2949,57 @@ function geodir_avada_remove_notification()
 
 add_action('wp_ajax_geodir_avada_remove_notification', 'geodir_avada_remove_notification');
 
+/**
+ * Get the current post type in the wordPress admin
+ *
+ * @since 1.4.2
+ *
+ * @global null|WP_Post $post Post object.
+ * @global string Post type.
+ * @global object|WP_Screen $current_screen Current screen object
+ *
+ * @return string Post type ex: gd_place
+ */
+function geodir_admin_current_post_type() {
+	global $post, $typenow, $current_screen;
+	
+	$post_type = NULL;
+	
+	if ($post && isset($post->post_type))
+		$post_type = $post->post_type;
+	elseif ($typenow)
+		$post_type = $typenow;
+	elseif ($current_screen && isset($current_screen->post_type))
+		$post_type = $current_screen->post_type;
+	elseif (isset($_REQUEST['post_type']))
+		$post_type = sanitize_key($_REQUEST['post_type']);
+	elseif (isset($_REQUEST['post']) && get_post_type($_REQUEST['post']))
+		$post_type = get_post_type($_REQUEST['post']);
 
+	return $post_type;
+}
 
+/**
+ * Fires before updating geodirectory admin settings.
+ *
+ * @since 1.4.2
+ *
+ * @param string $current_tab Current tab in geodirectory settings.
+ * @param array  $geodir_settings Array of geodirectory settings.
+ */
+function geodir_before_update_options($current_tab, $geodir_settings) {
+	$active_tab = isset($_REQUEST['active_tab']) ? trim($_REQUEST['active_tab']) : '';
+		
+	// Permalink settings
+	if ($current_tab == 'permalink_settings') {
+		$listing_prefix = isset($_POST['geodir_listing_prefix']) ? trim($_POST['geodir_listing_prefix']) : '';
+		$location_prefix = isset($_POST['geodir_location_prefix']) ? trim($_POST['geodir_location_prefix']) : '';
+		
+		// Don't allow same slug url for listing and location
+		if (strtolower($listing_prefix) == strtolower($location_prefix)) {
+			$redirect_url = admin_url('admin.php?page=geodirectory&tab=' . $current_tab . '&active_tab=' . $active_tab . '&msg=fail&gderr=21');
+        	wp_redirect($redirect_url);
+			exit;
+		}
+	}
+}

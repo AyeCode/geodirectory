@@ -51,6 +51,11 @@ preview details page
 /* ########################################
 details page 
 ######################################### */
+
+#geodir-wrapper {
+    overflow: hidden;
+}
+
 ul.geodir-tabs-content {
     list-style: none;
 }
@@ -1543,4 +1548,30 @@ div#jquery-lightbox {
     width: 100%;
     word-wrap: normal;
     position: relative;
+}
+.page.hentry .geodir-sc-gd-listings {
+	position: relative;
+}
+.geodir-sc-gd-listings p.geodir-sclisting-loading {
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	top: 49%;
+	left: 49%;
+}
+.page.hentry .geodir-sc-gd-listings header.geodir-entry-header {
+	border-bottom: 0;
+	padding-bottom: 0;
+}
+.page.hentry .geodir-sc-gd-listings .geodir-content p {
+  margin-bottom: 0;
+}
+.page.hentry .geodir-sc-gd-listings footer.geodir-entry-meta {
+	border: none
+}
+.page.hentry .geodir-sc-gd-listings ul.geodir_category_list_view {
+	margin-bottom: 0;
+}
+.page.hentry .geodir-sc-gd-listings .geodir_category_list_view > li {
+	margin-left: 0;
 }

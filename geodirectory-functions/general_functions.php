@@ -153,7 +153,12 @@ function geodir_get_addlisting_link($post_type = '')
 }
 
 /**
- * @return string
+ * Get the current page URL.
+ *
+ * @since 1.0.0
+ * @since 1.4.2 Removed the port number from the URL if port 80 is not being used.
+ * @package GeoDirectory
+ * @return string The current URL.
  */
 function geodir_curPageURL()
 {
@@ -162,11 +167,7 @@ function geodir_curPageURL()
         $pageURL .= "s";
     }
     $pageURL .= "://";
-    if ($_SERVER["SERVER_PORT"] != "80") {
-        $pageURL .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];
-    } else {
-        $pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
-    }
+    $pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
     //return str_replace("www.", "", $pageURL);
     return apply_filters('geodir_curPageURL', $pageURL);
 }
@@ -1379,7 +1380,7 @@ function geodir_widget_listings_get_order($query_args)
             $orderby = $wpdb->posts . ".post_title ASC, ";
             break;
         case 'high_review':
-            $orderby = $wpdb->posts . ".comment_count DESC, ";
+			$orderby = $table . ".rating_count DESC, " . $table . ".overall_rating DESC, ";
             break;
         case 'high_rating':
             $orderby = "( " . $table . ".overall_rating  ) DESC, ";
@@ -1396,10 +1397,16 @@ function geodir_widget_listings_get_order($query_args)
 }
 
 /**
- * @param array $query_args
+ * Retrive lisitngs/count using requested filter parameters.
+ *
+ * @since 1.0.0
+ * @since 1.4.2 New paramater $count_only added
+ *
+ * @param  array $query_args
+ * @param  int|bool $count_only If true returns listings count only, otherwise returns array
  * @return mixed
  */
-function geodir_get_widget_listings($query_args = array())
+function geodir_get_widget_listings($query_args = array(), $count_only = false)
 {
     global $wpdb, $plugin_prefix, $table_prefix;
     $GLOBALS['gd_query_args_widgets'] = $query_args;
@@ -1422,7 +1429,6 @@ function geodir_get_widget_listings($query_args = array())
         if ($lang_code) {
             $join .= " JOIN " . $table_prefix . "icl_translations icl_t ON icl_t.element_id = " . $table_prefix . "posts.ID";
         }
-
     }
 
     ########### WPML ###########
@@ -1447,25 +1453,34 @@ function geodir_get_widget_listings($query_args = array())
     $groupby = " GROUP BY $wpdb->posts.ID ";
     $groupby = apply_filters('geodir_filter_widget_listings_groupby', $groupby, $post_type);
 
-    $orderby = geodir_widget_listings_get_order($query_args);
-    $orderby = apply_filters('geodir_filter_widget_listings_orderby', $orderby, $table, $post_type);
-    $orderby .= $wpdb->posts . ".post_title ASC";
-    $orderby = $orderby != '' ? " ORDER BY " . $orderby : '';
-
-    $limit = !empty($query_args['posts_per_page']) ? $query_args['posts_per_page'] : 5;
-    $limit = apply_filters('geodir_filter_widget_listings_limit', $limit, $post_type);
-
-    $limit = $limit > 0 ? " LIMIT " . (int)$limit : "";
-
-    $sql = "SELECT SQL_CALC_FOUND_ROWS " . $fields . " FROM " . $wpdb->posts . "
-		" . $join . "
-		" . $where . "
-		" . $groupby . "
-		" . $orderby . "
-		" . $limit;
-    //echo '<pre>sql : '; print_r($sql); echo '</pre>';// exit;
-
-    $rows = $wpdb->get_results($sql);
+    if ($count_only) {
+		$sql = "SELECT COUNT(DISTINCT(" . $wpdb->posts . ".ID)) AS total FROM " . $wpdb->posts . "
+			" . $join . "
+			" . $where;
+		$rows = (int)$wpdb->get_var($sql);
+	} else {
+		$orderby = geodir_widget_listings_get_order($query_args);
+		$orderby = apply_filters('geodir_filter_widget_listings_orderby', $orderby, $table, $post_type);
+		$orderby .= $wpdb->posts . ".post_title ASC";
+		$orderby = $orderby != '' ? " ORDER BY " . $orderby : '';
+			
+		$limit = !empty($query_args['posts_per_page']) ? $query_args['posts_per_page'] : 5;
+		$limit = apply_filters('geodir_filter_widget_listings_limit', $limit, $post_type);
+		
+		$page = !empty($query_args['pageno']) ? absint($query_args['pageno']) : 1;
+		if ( !$page )
+			$page = 1;
+		
+		$limit = (int)$limit > 0 ? " LIMIT " . absint( ( $page - 1 ) * (int)$limit ) . ", " . (int)$limit : "";
+		
+		$sql = "SELECT SQL_CALC_FOUND_ROWS " . $fields . " FROM " . $wpdb->posts . "
+			" . $join . "
+			" . $where . "
+			" . $groupby . "
+			" . $orderby . "
+			" . $limit;	
+		$rows = $wpdb->get_results($sql);
+	}
 
     unset($GLOBALS['gd_query_args_widgets']);
     unset($gd_query_args_widgets);

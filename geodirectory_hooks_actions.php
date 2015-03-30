@@ -660,11 +660,10 @@ function geodir_detail_page_review_rating()
         $html .= geodir_get_rating_stars($post_avgratings, $post->ID);
         $html .= '<div class="average-review" itemscope itemtype="http://data-vocabulary.org/Review-aggregate">';
         $post_avgratings = (is_float($post_avgratings) || (strpos($post_avgratings, ".", 1) == 1 && strlen($post_avgratings) > 3)) ? number_format($post_avgratings, 1, '.', '') : $post_avgratings;
-        if ($comment_count > 1) {
-            $html .= '<span itemprop="rating" itemscope itemtype="http://data-vocabulary.org/Rating"><span class="rating" itemprop="average">' . $post_avgratings . '</span> /  <span itemprop="best">5</span> ' . __("based on", GEODIRECTORY_TEXTDOMAIN) . ' <span class="count" itemprop="count">' . $comment_count . '</span> ' . __("reviews", GEODIRECTORY_TEXTDOMAIN) . '</span><br />';
-        } else {
-            $html .= '<span itemprop="rating" itemscope itemtype="http://data-vocabulary.org/Rating"><span class="rating" itemprop="average">' . $post_avgratings . '</span> /  <span itemprop="best">5</span> ' . __("based on", GEODIRECTORY_TEXTDOMAIN) . ' <span class="count" itemprop="count">' . $comment_count . '</span> ' . __("review", GEODIRECTORY_TEXTDOMAIN) . '</span><br />';
-        }
+       
+	   $reviews_text = $comment_count > 1 ? __("reviews", GEODIRECTORY_TEXTDOMAIN) : __("review", GEODIRECTORY_TEXTDOMAIN);
+	   
+	   $html .= '<span itemprop="rating" itemscope itemtype="http://data-vocabulary.org/Rating"><span class="rating" itemprop="average" content="' . $post_avgratings . '">' . $post_avgratings . '</span> / <span itemprop="best" content="5">5</span> ' . __("based on", GEODIRECTORY_TEXTDOMAIN) . ' </span><span class="count" itemprop="count" content="' . $comment_count . '">' . $comment_count . ' ' . $reviews_text . '</span><br />';
 
         $html .= '<span class="item">';
         $html .= '<span class="fn" itemprop="itemreviewed">' . $post->post_title . '</span>';
@@ -677,7 +676,7 @@ function geodir_detail_page_review_rating()
         }
 
         if (isset($post_img) && $post_img) {
-            $html .= '<br /><img src="' . $post_img . '" class="photo hreview-img"  alt="' . $post->post_title . '" itemprop="photo" />';
+            $html .= '<br /><img src="' . $post_img . '" class="photo hreview-img" alt="' . esc_attr($post->post_title) . '" itemprop="photo" content="' . $post_img . '" class="photo hreview-img" />';
         }
 
         $html .= '</span>';
@@ -786,6 +785,16 @@ function geodir_detail_page_more_info()
     }
 }
 
+
+/**
+ * Outputs translated JS text strings.
+ *
+ * This function outputs text strings used in JS fils as a json array of strings so they can be translated and still be used in JS files.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @see geodir_all_js_msg filter.
+ */
 function geodir_localize_all_js_msg()
 {// check_ajax_referer function is used to make sure no files are uplaoded remotly but it will fail if used between https and non https so we do the check below of the urls
     if (str_replace("https", "http", admin_url('admin-ajax.php')) && !empty($_SERVER['HTTPS'])) {
@@ -800,49 +809,27 @@ function geodir_localize_all_js_msg()
     $arr_alert_msg = array(
         'geodir_plugin_url' => geodir_plugin_url(),
         'geodir_admin_ajax_url' => $ajax_url,
-
         'custom_field_not_blank_var' => __('HTML Variable Name must not be blank', GEODIRECTORY_TEXTDOMAIN),
-
         'custom_field_not_special_char' => __('Please do not use special character and spaces in HTML Variable Name.', GEODIRECTORY_TEXTDOMAIN),
-
         'custom_field_unique_name' => __('HTML Variable Name should be a unique name.', GEODIRECTORY_TEXTDOMAIN),
-
         'custom_field_delete' => __('Are you wish to delete this field?', GEODIRECTORY_TEXTDOMAIN),
-
         //start not show alert msg
-
         'tax_meta_class_succ_del_msg' => __('File has been successfully deleted.', GEODIRECTORY_TEXTDOMAIN),
-
         'tax_meta_class_not_permission_to_del_msg' => __('You do NOT have permission to delete this file.', GEODIRECTORY_TEXTDOMAIN),
-
         'tax_meta_class_order_save_msg' => __('Order saved!', GEODIRECTORY_TEXTDOMAIN),
-
         'tax_meta_class_not_permission_record_img_msg' => __('You do not have permission to reorder images.', GEODIRECTORY_TEXTDOMAIN),
-
         'address_not_found_on_map_msg' => __('Address not found for:', GEODIRECTORY_TEXTDOMAIN),
-
         // end not show alert msg
-
         'my_place_listing_del' => __('Are you wish to delete this listing?', GEODIRECTORY_TEXTDOMAIN),
-
         //start not show alert msg
-
         'rating_error_msg' => __('Error : please retry', GEODIRECTORY_TEXTDOMAIN),
-
         'listing_url_prefix_msg' => __('Please enter listing url prefix', GEODIRECTORY_TEXTDOMAIN),
-
         'invalid_listing_prefix_msg' => __('Invalid character in listing url prefix', GEODIRECTORY_TEXTDOMAIN),
-
         'location_url_prefix_msg' => __('Please enter location url prefix', GEODIRECTORY_TEXTDOMAIN),
-
         'invalid_location_prefix_msg' => __('Invalid character in location url prefix', GEODIRECTORY_TEXTDOMAIN),
-
         'location_and_cat_url_separator_msg' => __('Please enter location and category url separator', GEODIRECTORY_TEXTDOMAIN),
-
         'invalid_char_and_cat_url_separator_msg' => __('Invalid character in location and category url separator', GEODIRECTORY_TEXTDOMAIN),
-
         'listing_det_url_separator_msg' => __('Please enter listing detail url separator', GEODIRECTORY_TEXTDOMAIN),
-
         'invalid_char_listing_det_url_separator_msg' => __('Invalid character in listing detail url separator', GEODIRECTORY_TEXTDOMAIN),
         'loading_listing_error_favorite' => __('Error loading listing.', GEODIRECTORY_TEXTDOMAIN),
         'geodir_field_id_required' => __('This field is required.', GEODIRECTORY_TEXTDOMAIN),
@@ -866,6 +853,15 @@ function geodir_localize_all_js_msg()
         'geodir_action_remove' => __('Remove', GEODIRECTORY_TEXTDOMAIN),
     );
 
+    /**
+     * Filters the translated JS strings from function geodir_localize_all_js_msg().
+     *
+     * With this filter you can add, remove or change translated JS strings.
+     * You should add your own translations to this if you are building an addon rather than adding another script block.
+     *
+     * @since 1.0.0
+     * @see geodir_localize_all_js_msg function.
+     */
     $arr_alert_msg = apply_filters('geodir_all_js_msg', $arr_alert_msg);
 
     foreach ($arr_alert_msg as $key => $value) {
@@ -881,6 +877,16 @@ function geodir_localize_all_js_msg()
 }
 
 add_action('admin_bar_menu', 'geodir_admin_bar_site_menu', 31);
+/**
+ * Add GeoDirectory link to the WordPress admin bar.
+ *
+ * This function adds a link to the GeoDirectory backend to the WP admin bar via a hook.
+ *    add_action('admin_bar_menu', 'geodir_admin_bar_site_menu', 31);
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param object $wp_admin_bar The admin bar object.
+ */
 function geodir_admin_bar_site_menu($wp_admin_bar)
 {
     if (get_option("geodir_installed")) {
@@ -896,6 +902,16 @@ add_filter('geodir_advance_custom_fields_heading', 'geodir_advance_customfields_
 
 
 add_action('switch_theme', 'geodir_store_sidebars');
+/**
+ * Stores the GeoDirectory widget locations in the theme widget areas.
+ *
+ * This function loops through the GeoDirectory widgets and saves their locations in the widget areas to an option
+ * so they can be restored later. This is called via hook.
+ *    add_action('switch_theme', 'geodir_store_sidebars');
+ *
+ * since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_store_sidebars()
 {
     global $geodir_sidebars;
@@ -1076,10 +1092,14 @@ function geodir_after_core_plugin_row($plugin_file, $plugin_data, $status)
 add_action('wp', 'geodir_changes_in_custom_fields_table');
 add_action('wp_admin', 'geodir_changes_in_custom_fields_table');
 
-function geodir_changes_in_custom_fields_table()
-{
-
+function geodir_changes_in_custom_fields_table() {
     global $wpdb, $plugin_prefix;
+	
+	// Remove unused virtual page
+	$listings_page_id = (int)get_option('geodir_listing_page');
+	if ($listings_page_id) {
+		$wpdb->query($wpdb->prepare("DELETE FROM " . $wpdb->posts . " WHERE ID=%d AND post_name = %s AND post_type=%s", array($listings_page_id, 'listings', 'page')));
+	}
 
     // updated custom field table(add field to show custom field as a tab)
     /*if (!$wpdb->get_var("SHOW COLUMNS FROM ".GEODIR_CUSTOM_FIELDS_TABLE." WHERE field = 'show_as_tab'")) {

@@ -48,6 +48,7 @@ function geodir_get_admin_option_form($current_tab)
 add_action('geodir_update_options_compatibility_settings', 'geodir_update_options_compatibility_settings');
 add_action('geodir_update_options_default_location_settings', 'geodir_location_form_submit');
 add_action('geodir_before_admin_panel', 'geodir_before_admin_panel'); // this function is in admin_functions.php
+add_action('geodir_before_update_options', 'geodir_before_update_options');
 
 //add_action('geodir_before_admin_panel', 'geodir_autoinstall_admin_header');
 
@@ -55,10 +56,14 @@ add_action('geodir_before_admin_panel', 'geodir_before_admin_panel'); // this fu
 function geodir_conditional_admin_script_load()
 {
     global $pagenow;
-    if ((isset($_REQUEST['page']) && $_REQUEST['page'] == 'geodirectory') || ($pagenow == 'post.php' || $pagenow == 'post-new.php' || $pagenow == 'edit.php' || $pagenow == 'edit-tags.php' || $pagenow == 'edit-comments.php' || $pagenow == 'comment.php')) {
+	
+	// Get the current post type
+	$post_type = geodir_admin_current_post_type();
+	$geodir_post_types = geodir_get_posttypes();
+    
+	if ((isset($_REQUEST['page']) && $_REQUEST['page'] == 'geodirectory') || (($pagenow == 'post.php' || $pagenow == 'post-new.php' || $pagenow == 'edit.php') && $post_type && in_array($post_type, $geodir_post_types)) || ($pagenow == 'edit-tags.php' || $pagenow == 'edit-comments.php' || $pagenow == 'comment.php')) {
         add_action('admin_enqueue_scripts', 'geodir_admin_scripts');
         add_action('admin_enqueue_scripts', 'geodir_admin_styles');
-
     }
 
     add_action('admin_enqueue_scripts', 'geodir_admin_styles_req');
@@ -1031,36 +1036,6 @@ function geodir_diagnose_default_pages()
     $is_error_during_diagnose = false;
     $output_str = '';
     $fix = isset($_POST['fix']) ? true : false;
-
-
-    //////////////////////////////////
-    /* Diagnose Listing Page Starts */
-    //////////////////////////////////
-    $option_value = get_option('geodir_listing_page');
-    $page_found = $wpdb->get_var(
-        $wpdb->prepare(
-            "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_status='virtual' LIMIT 1;",
-            array('listings')
-        )
-    );
-
-    if (!empty($option_value) && !empty($page_found) && $option_value == $page_found)
-        $output_str .= "<li>" . __('Listing page exists with proper setting.', GEODIRECTORY_TEXTDOMAIN) . "</li>";
-    else {
-        $is_error_during_diagnose = true;
-        $output_str .= "<li><strong>" . __('Listing page is missing.', GEODIRECTORY_TEXTDOMAIN) . "</strong></li>";
-        if ($fix) {
-            if (geodir_fix_virtual_page('listings', __('All Listings', GEODIRECTORY_TEXTDOMAIN), $page_found, 'geodir_listing_page')) {
-                $output_str .= "<li><strong>" . __('-->FIXED: Listing page fixed', GEODIRECTORY_TEXTDOMAIN) . "</strong></li>";
-            } else {
-                $output_str .= "<li><strong>" . __('-->FAILED: Listing page fix failed', GEODIRECTORY_TEXTDOMAIN) . "</strong></li>";
-            }
-        }
-    }
-
-    ////////////////////////////////
-    /* Diagnose Listing Page Ends */
-    ////////////////////////////////
 
     //////////////////////////////////
     /* Diagnose Add Listing Page Starts */
