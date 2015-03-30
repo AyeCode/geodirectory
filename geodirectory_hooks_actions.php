@@ -11,7 +11,7 @@
  *
  * This is used to run GeoDirectory specific functions via ajax.
  *
- * @return string|void
+ * @return string The GeoDirectory ajax URL.
  */
 function geodir_get_ajax_url()
 {
@@ -318,8 +318,6 @@ add_action('geodir_detail_page_sidebar', 'geodir_detail_page_sidebar_content_sor
  *
  * Builds an array fo functions to be called in the details page (post) sidebar, this array can be changed via hook or filter.
  *
- * @see geodir_detail_page_sidebar_content filter.
- * @see geodir_detail_page_sidebar action.
  * @since 1.0.0
  * @package GeoDirectory
  */
@@ -381,7 +379,7 @@ function geodir_add_to_favourite_link()
  * Outputs social sharing buttons twitter,facebook and google plus into a containing div if not on the add listing preview page.
  *
  * @global bool $preview True if the current page is add listing preview page. False if not.
- * since 1.0.0
+ * @since 1.0.0
  * @package GeoDirectory
  */
 function geodir_social_sharing_buttons()
@@ -413,8 +411,6 @@ function geodir_social_sharing_buttons()
          * Filter the geodir_social_sharing_buttons() function content.
          *
          * @param string $content_html The output html of the geodir_social_sharing_buttons() function.
-         * @see geodir_social_sharing_buttons function.
-         * @see geodir_after_social_sharing_buttons action.
          */
         echo $content_html = apply_filters('geodir_social_sharing_buttons_html', $content_html);
     }
@@ -439,8 +435,6 @@ function geodir_share_this_button()
      * This is called before the share this html in the function geodir_share_this_button()
      *
      * @since 1.0.0
-     * @see geodir_share_this_button function.
-     * @see geodir_share_this_button_html filter.
      */
     do_action('geodir_before_share_this_button');
     if (!$preview) {
@@ -459,8 +453,7 @@ function geodir_share_this_button()
          * Filter the geodir_share_this_button() function content.
          *
          * @param string $content_html The output html of the geodir_share_this_button() function.
-         * @see geodir_share_this_button function.
-         * @see geodir_before_share_this_button action.
+         * @since 1.0.0
          */
         echo $content_html = apply_filters('geodir_share_this_button_html', $content_html);
     }
@@ -476,9 +469,6 @@ function geodir_share_this_button()
  * @global WP_Post|null $post The current post, if available.
  * @since 1.0.0
  * @package GeoDirectory
- * @see geodir_before_edit_post_link action.
- * @see geodir_edit_post_link_html filter.
- * @see geodir_after_edit_post_link action.
  */
 function geodir_edit_post_link()
 {
@@ -488,9 +478,6 @@ function geodir_edit_post_link()
      * This is called before the edit post link html in the function geodir_edit_post_link()
      *
      * @since 1.0.0
-     * @see geodir_edit_post_link function.
-     * @see geodir_edit_post_link_html filter.
-     * @see geodir_after_edit_post_link action.
      */
     do_action('geodir_before_edit_post_link');
     if (!$preview) {
@@ -515,9 +502,6 @@ function geodir_edit_post_link()
      * This is called after the edit post link html in the function geodir_edit_post_link()
      *
      * @since 1.0.0
-     * @see geodir_edit_post_link function.
-     * @see geodir_edit_post_link_html filter.
-     * @see geodir_before_edit_post_link action.
      */
     do_action('geodir_after_edit_post_link');
     $content_html = ob_get_clean();
@@ -528,9 +512,6 @@ function geodir_edit_post_link()
          * Filter the geodir_edit_post_link() function content.
          *
          * @param string $content_html The output html of the geodir_edit_post_link() function.
-         * @see geodir_edit_post_link function.
-         * @see geodir_before_edit_post_link action.
-         * @see geodir_after_edit_post_link action.
          */
         echo $content_html = apply_filters('geodir_edit_post_link_html', $content_html);
     }
@@ -546,9 +527,6 @@ function geodir_edit_post_link()
  * @global WP_Post|null $post The current post, if available.
  * @since 1.0.0
  * @package GeoDirectory
- * @see geodir_before_google_analytics action.
- * @see geodir_after_google_analytics action.
- * @see geodir_google_analytic_html filter.
  */
 function geodir_detail_page_google_analytics()
 {
@@ -561,9 +539,6 @@ function geodir_detail_page_google_analytics()
      * This is called before the edit post link html in the function geodir_detail_page_google_analytics()
      *
      * @since 1.0.0
-     * @see geodir_detail_page_google_analytics function.
-     * @see geodir_google_analytic_html filter.
-     * @see geodir_after_google_analytics action.
      */
     do_action('geodir_before_google_analytics');
     if (get_option('geodir_ga_stats') && get_edit_post_link() && is_user_logged_in() && (isset($package_info->google_analytics) && $package_info->google_analytics == '1')) {
@@ -585,9 +560,6 @@ function geodir_detail_page_google_analytics()
      * This is called after the edit post link html in the function geodir_detail_page_google_analytics()
      *
      * @since 1.0.0
-     * @see geodir_detail_page_google_analytics function.
-     * @see geodir_google_analytic_html filter.
-     * @see geodir_before_google_analytics action.
      */
     do_action('geodir_after_google_analytics');
     $content_html = ob_get_clean();
@@ -598,9 +570,6 @@ function geodir_detail_page_google_analytics()
          * Filter the geodir_edit_post_link() function content.
          *
          * @param string $content_html The output html of the geodir_edit_post_link() function.
-         * @see geodir_detail_page_google_analytics function.
-         * @see geodir_before_google_analytics action.
-         * @see geodir_after_google_analytics action.
          */
         echo $content_html = apply_filters('geodir_google_analytic_html', $content_html);
     }
@@ -614,11 +583,6 @@ function geodir_detail_page_google_analytics()
  * @global object $post_images An array of post image objects of current post images if exist.
  * @since 1.0.0
  * @package GeoDirectory
- * @see geodir_before_detail_page_review_rating action.
- * @see geodir_before_review_rating_stars_on_detail action.
- * @see geodir_after_review_rating_stars_on_detail action.
- * @see geodir_after_detail_page_review_rating action.
- * @see geodir_detail_page_review_rating_html filter.
  */
 function geodir_detail_page_review_rating()
 {
@@ -630,11 +594,6 @@ function geodir_detail_page_review_rating()
      * This is called outside the check for an actual rating and the check for preview page.
      *
      * @since 1.0.0
-     * @see geodir_detail_page_review_rating function.
-     * @see geodir_before_review_rating_stars_on_detail action.
-     * @see geodir_after_review_rating_stars_on_detail action.
-     * @see geodir_after_detail_page_review_rating action.
-     * @see geodir_detail_page_review_rating_html filter.
      */
     do_action('geodir_before_detail_page_review_rating');
 
@@ -648,11 +607,6 @@ function geodir_detail_page_review_rating()
          * This is called inside the check for an actual rating and the check for preview page.
          *
          * @since 1.0.0
-         * @see geodir_detail_page_review_rating function.
-         * @see geodir_before_detail_page_review_rating action.
-         * @see geodir_after_review_rating_stars_on_detail action.
-         * @see geodir_after_detail_page_review_rating action.
-         * @see geodir_detail_page_review_rating_html filter.
          */
         do_action('geodir_before_review_rating_stars_on_detail', $post_avgratings, $post->ID);
 
@@ -688,11 +642,6 @@ function geodir_detail_page_review_rating()
          * This is called inside the check for an actual rating and the check for preview page.
          *
          * @since 1.0.0
-         * @see geodir_detail_page_review_rating function.
-         * @see geodir_before_detail_page_review_rating action.
-         * @see geodir_before_review_rating_stars_on_detail action.
-         * @see geodir_after_detail_page_review_rating action.
-         * @see geodir_detail_page_review_rating_html filter.
          */
         do_action('geodir_after_review_rating_stars_on_detail', $post_avgratings, $post->ID);
     }
@@ -702,11 +651,6 @@ function geodir_detail_page_review_rating()
      * This is called outside the check for an actual rating and the check for preview page.
      *
      * @since 1.0.0
-     * @see geodir_detail_page_review_rating function.
-     * @see geodir_before_review_rating_stars_on_detail action.
-     * @see geodir_after_review_rating_stars_on_detail action.
-     * @see geodir_before_detail_page_review_rating action.
-     * @see geodir_detail_page_review_rating_html filter.
      */
     do_action('geodir_after_detail_page_review_rating');
     $content_html = ob_get_clean();
@@ -719,11 +663,6 @@ function geodir_detail_page_review_rating()
          *
          * @since 1.0.0
          * @param string $content_html The output html of the geodir_detail_page_review_rating() function.
-         * @see geodir_detail_page_review_rating function.
-         * @see geodir_before_review_rating_stars_on_detail action.
-         * @see geodir_after_review_rating_stars_on_detail action.
-         * @see geodir_before_detail_page_review_rating action.
-         * @see geodir_after_detail_page_review_rating action.
          */
         echo $content_html = apply_filters('geodir_detail_page_review_rating_html', $content_html);
     }
@@ -735,10 +674,6 @@ function geodir_detail_page_review_rating()
  * This outputs the info section fo the details page which includes all the post custom fields.
  * @since 1.0.0
  * @package GeoDirectory
- * @see geodir_show_listing_info function.
- * @see geodir_before_detail_page_more_info action.
- * @see geodir_after_detail_page_more_info action.
- * @see geodir_detail_page_more_info_html filter.
  */
 function geodir_detail_page_more_info()
 {
@@ -747,10 +682,6 @@ function geodir_detail_page_more_info()
      * This is called before the info section html.
      *
      * @since 1.0.0
-     * @see geodir_detail_page_more_info function.
-     * @see geodir_show_listing_info function.
-     * @see geodir_after_detail_page_more_info action.
-     * @see geodir_detail_page_more_info_html filter.
      */
     do_action('geodir_before_detail_page_more_info');
     if ($geodir_post_detail_fields = geodir_show_listing_info()) {
@@ -760,10 +691,6 @@ function geodir_detail_page_more_info()
      * This is called after the info section html.
      *
      * @since 1.0.0
-     * @see geodir_detail_page_more_info function.
-     * @see geodir_show_listing_info function.
-     * @see geodir_before_detail_page_more_info action.
-     * @see geodir_detail_page_more_info_html filter.
      */
     do_action('geodir_after_detail_page_more_info');
 
@@ -776,10 +703,6 @@ function geodir_detail_page_more_info()
          *
          * @since 1.0.0
          * @param string $content_html The output html of the geodir_detail_page_more_info() function.
-         * @see geodir_detail_page_more_info function.
-         * @see geodir_show_listing_info function.
-         * @see geodir_before_detail_page_more_info action.
-         * @see geodir_after_detail_page_more_info action.
          */
         echo $content_html = apply_filters('geodir_detail_page_more_info_html', $content_html);
     }
@@ -793,7 +716,6 @@ function geodir_detail_page_more_info()
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @see geodir_all_js_msg filter.
  */
 function geodir_localize_all_js_msg()
 {// check_ajax_referer function is used to make sure no files are uplaoded remotly but it will fail if used between https and non https so we do the check below of the urls
@@ -860,7 +782,6 @@ function geodir_localize_all_js_msg()
      * You should add your own translations to this if you are building an addon rather than adding another script block.
      *
      * @since 1.0.0
-     * @see geodir_localize_all_js_msg function.
      */
     $arr_alert_msg = apply_filters('geodir_all_js_msg', $arr_alert_msg);
 
@@ -902,6 +823,7 @@ add_filter('geodir_advance_custom_fields_heading', 'geodir_advance_customfields_
 
 
 add_action('switch_theme', 'geodir_store_sidebars');
+
 /**
  * Stores the GeoDirectory widget locations in the theme widget areas.
  *
@@ -909,7 +831,7 @@ add_action('switch_theme', 'geodir_store_sidebars');
  * so they can be restored later. This is called via hook.
  *    add_action('switch_theme', 'geodir_store_sidebars');
  *
- * since 1.0.0
+ * @since 1.0.0
  * @package GeoDirectory
  */
 function geodir_store_sidebars()
