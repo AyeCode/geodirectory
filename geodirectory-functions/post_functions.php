@@ -1838,8 +1838,11 @@ if (!function_exists('geodir_add_to_favorite')) {
 
         global $current_user;
 
-        $user_meta_data = array();
+        $remove_favourite_text = apply_filters('geodir_remove_favourite_text', REMOVE_FAVOURITE_TEXT);
+        $unfavourite_text = apply_filters('geodir_unfavourite_text', UNFAVOURITE_TEXT);
+        $favourite_icon = apply_filters('geodir_favourite_icon', 'fa fa-heart');
 
+        $user_meta_data = array();
         $user_meta_data = get_user_meta($current_user->data->ID, 'gd_user_favourite_post', true);
 
         if (empty($user_meta_data) || (!empty($user_meta_data) && !in_array($post_id, $user_meta_data))) {
@@ -1850,7 +1853,7 @@ if (!function_exists('geodir_add_to_favorite')) {
 
         do_action('geodir_before_add_from_favorite', $post_id);
 
-        echo '<a href="javascript:void(0);" title="' . REMOVE_FAVOURITE_TEXT . '" class="geodir-addtofav geodir-removetofav-icon" onclick="javascript:addToFavourite(\'' . $post_id . '\',\'remove\');"><i class="fa fa-heart"></i> ' . UNFAVOURITE_TEXT . '</a>';
+        echo '<a href="javascript:void(0);" title="' . $remove_favourite_text . '" class="geodir-addtofav geodir-removetofav-icon" onclick="javascript:addToFavourite(\'' . $post_id . '\',\'remove\');"><i class="'. $favourite_icon .'"></i> ' . $unfavourite_text . '</a>';
 
         do_action('geodir_after_add_from_favorite', $post_id);
 
@@ -1866,8 +1869,11 @@ if (!function_exists('geodir_remove_from_favorite')) {
 
         global $current_user;
 
-        $user_meta_data = array();
+        $add_favourite_text = apply_filters('geodir_add_favourite_text', ADD_FAVOURITE_TEXT);
+        $favourite_text = apply_filters('geodir_favourite_text', FAVOURITE_TEXT);
+        $favourite_icon = apply_filters('geodir_favourite_icon', 'fa fa-heart');
 
+        $user_meta_data = array();
         $user_meta_data = get_user_meta($current_user->data->ID, 'gd_user_favourite_post', true);
 
         if (!empty($user_meta_data)) {
@@ -1882,7 +1888,7 @@ if (!function_exists('geodir_remove_from_favorite')) {
 
         do_action('geodir_before_remove_from_favorite', $post_id);
 
-        echo '<a href="javascript:void(0);"  title="' . ADD_FAVOURITE_TEXT . '" class="geodir-addtofav geodir-addtofav-icon" onclick="javascript:addToFavourite(\'' . $post_id . '\',\'add\');"><i class="fa fa-heart"></i> ' . FAVOURITE_TEXT . '</a>';
+        echo '<a href="javascript:void(0);"  title="' . $add_favourite_text . '" class="geodir-addtofav geodir-addtofav-icon" onclick="javascript:addToFavourite(\'' . $post_id . '\',\'add\');"><i class="'. $favourite_icon .'"></i> ' . $favourite_text . '</a>';
 
         do_action('geodir_after_remove_from_favorite', $post_id);
 
@@ -1899,6 +1905,12 @@ if (!function_exists('geodir_favourite_html')) {
 
         global $current_user, $post;
 
+        $add_favourite_text = apply_filters('geodir_add_favourite_text', ADD_FAVOURITE_TEXT);
+        $favourite_text = apply_filters('geodir_favourite_text', FAVOURITE_TEXT);
+        $remove_favourite_text = apply_filters('geodir_remove_favourite_text', REMOVE_FAVOURITE_TEXT);
+        $unfavourite_text = apply_filters('geodir_unfavourite_text', UNFAVOURITE_TEXT);
+        $favourite_icon = apply_filters('geodir_favourite_icon', 'fa fa-heart');
+
         $user_meta_data = '';
         if (isset($current_user->data->ID))
             $user_meta_data = get_user_meta($current_user->data->ID, 'gd_user_favourite_post', true);
@@ -1907,7 +1919,7 @@ if (!function_exists('geodir_favourite_html')) {
             ?><span class="geodir-addtofav favorite_property_<?php echo $post_id;?>"  ><a
                 class="geodir-removetofav-icon" href="javascript:void(0);"
                 onclick="javascript:addToFavourite(<?php echo $post_id;?>,'remove');"
-                title="<?php echo REMOVE_FAVOURITE_TEXT;?>"><i class="fa fa-heart"></i> <?php echo UNFAVOURITE_TEXT;?>
+                title="<?php echo $remove_favourite_text;?>"><i class="<?php echo $favourite_icon; ?>"></i> <?php echo $unfavourite_text;?>
             </a>   </span><?php
 
         } else {
@@ -1920,8 +1932,8 @@ if (!function_exists('geodir_favourite_html')) {
             ?><span class="geodir-addtofav favorite_property_<?php echo $post_id;?>"><a class="geodir-addtofav-icon"
                                                                                         href="javascript:void(0);"
                                                                                         onclick="<?php echo $script_text;?>"
-                                                                                        title="<?php echo ADD_FAVOURITE_TEXT;?>"><i
-                    class="fa fa-heart"></i> <?php echo FAVOURITE_TEXT;?></a></span>
+                                                                                        title="<?php echo $add_favourite_text;?>"><i
+                    class="<?php echo $favourite_icon; ?>"></i> <?php echo $favourite_text;?></a></span>
         <?php }
     }
 }
