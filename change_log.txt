@@ -9,6 +9,7 @@ Validation added for custom permalinks in GD -> General -> Permalinks - FIXED
 All Listings virtual page removed - CHANGED
 Shortcode added for best of widget - ADDED
 Recent reviews widget ratings stars color not changed with multirating color setting - FIXED
+geodir_curPageURL() changed slightly for https url's, we no longer add the port number - CHANGED
 
 v1.4.1
 Distances to listings should show miles/km until 0.01 rather than 1 before changing to ft/m - FIXED
