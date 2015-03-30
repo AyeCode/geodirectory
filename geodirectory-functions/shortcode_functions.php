@@ -433,3 +433,318 @@ function gdsc_validate_list_filter_choice($filter_choice)
 
     return $filter_choice;
 }
+
+/**
+ * Get the geodirectory listings.
+ *
+ * @since 1.4.2
+ *
+ * @global string $gridview_columns_widget WordPress database abstraction object.
+ * @global bool   $geodir_is_widget_listing Check that current listview is widget listing.
+ * @global bool   $geodir_event_widget_listview Check that current listview is event.
+ * @global null|WP_Post $post Post object.
+ * @global array $map_jason Map data in json format.
+ * @global array $map_canvas_arr Map canvas array.
+ *
+ * @param array $args Array of arguements to filter listings.
+ * @return string Listings HTML content.
+ */
+function geodir_sc_gd_listings_output($args = array()) {
+    $title				 = !empty($args['title']) ? __($args['title'], GEODIRECTORY_TEXTDOMAIN) : '';
+	$post_type 			 = !empty($args['post_type']) ? $args['post_type'] : 'gd_place';
+	$category 			 = !empty($args['category']) ? $args['category'] : '0';
+	$post_number		 = !empty($args['post_number']) ? $args['post_number'] : 10;
+	$add_location_filter = !empty($args['add_location_filter']) ? true : false;
+	$list_sort 			 = !empty($args['list_sort']) ? $args['list_sort'] : 'latest';
+	$character_count	 = isset($args['character_count']) ? $args['character_count'] : '';
+	$layout 			 = !empty($args['layout']) ? $args['layout'] : 'gridview_onehalf';
+	$with_pagination 	 = !empty($args['with_pagination']) ? true : false;
+	$event_type 	 	 = !empty($args['event_type']) ? $args['event_type'] : '';
+		
+	$top_pagination 	 = $with_pagination && !empty($args['top_pagination']) ? true : false;
+	$bottom_pagination 	 = $with_pagination && !empty($args['bottom_pagination']) ? true : false;
+	
+	$shortcode_atts		 = !empty($args['shortcode_atts']) ? $args['shortcode_atts'] : array();
+
+	// ajax mode
+	$geodir_ajax		 = !empty($args['geodir_ajax']) ? true : false;
+	$pageno 	 		 = $geodir_ajax && !empty($args['pageno']) ? $args['pageno'] : 1;
+	
+	$query_args = array(
+        'posts_per_page' => $post_number,
+        'is_geodir_loop' => true,
+        'gd_location' => $add_location_filter,
+        'post_type' => $post_type,
+        'order_by' => $list_sort,
+		'pageno' => $pageno
+    );
+
+    if ($character_count >= 0) {
+        $query_args['excerpt_length'] = $character_count;
+    }
+
+    if (!empty($args['show_featured_only'])) {
+        $query_args['show_featured_only'] = 1;
+    }
+
+    if (!empty($args['show_special_only'])) {
+        $query_args['show_special_only'] = 1;
+    }
+
+    if (!empty($args['with_pics_only'])) {
+        $query_args['with_pics_only'] = 0;
+        $query_args['featured_image_only'] = 1;
+    }
+
+    if (!empty($args['with_videos_only'])) {
+        $query_args['with_videos_only'] = 1;
+    }
+    $with_no_results = !empty($args['without_no_results']) ? false : true;
+
+    if (!empty($category) && $category[0] != '0') {
+        $category_taxonomy = geodir_get_taxonomies($post_type);
+
+        ######### WPML #########
+        if (function_exists('icl_object_id')) {
+            $category = gd_lang_object_ids($category, $category_taxonomy[0]);
+        }
+        ######### WPML #########
+
+        $tax_query = array(
+            'taxonomy' => $category_taxonomy[0],
+            'field' => 'id',
+            'terms' => $category
+        );
+
+        $query_args['tax_query'] = array($tax_query);
+    }
+
+    global $gridview_columns_widget, $geodir_is_widget_listing;
+
+    if ($post_type == 'gd_event' && function_exists('geodir_event_get_widget_events')) {
+		global $geodir_event_widget_listview;
+		$geodir_event_widget_listview = true;
+		
+		if ($event_type && in_array($event_type, array('past', 'today', 'upcoming'))) {
+			$query_args['geodir_event_type'] = $event_type;
+		}
+				
+		$total_posts = geodir_event_get_widget_events($query_args, true);
+		$widget_listings = $total_posts > 0 ? geodir_event_get_widget_events($query_args) : array();
+		
+	} else {
+		$total_posts = geodir_get_widget_listings($query_args, true);
+		$widget_listings = $total_posts > 0 ? geodir_get_widget_listings($query_args) : array();
+	}
+	$current_gridview_columns_widget = $gridview_columns_widget;
+
+    ob_start();
+	if (!empty($widget_listings) || $with_no_results) {
+		if (!$geodir_ajax) {
+		do_action('geodir_before_sc_gd_listings');
+		?>
+        <div class="geodir_locations geodir_location_listing geodir-sc-gd-listings">
+		<?php } ?>
+            <?php if ($title != '') { ?>
+            <div class="geodir_list_heading clearfix">
+                <?php echo $title; ?>
+            </div>
+			<?php } ?>
+            <?php
+            if (strstr($layout, 'gridview')) {
+                $listing_view_exp = explode('_', $layout);
+                $gridview_columns_widget = $layout;
+                $layout = $listing_view_exp[0];
+            } else {
+                $gridview_columns_widget = '';
+            }
+
+            /**
+			 * Filter the widget listing listview template.
+			 *
+			 * @param string The template file to display listing.
+			 */
+			$template = apply_filters("geodir_template_part-widget-listing-listview", geodir_locate_template('widget-listing-listview'));
+            			
+            global $post, $map_jason, $map_canvas_arr;
+
+            $current_post = $post;
+            $current_map_jason = $map_jason;
+            $current_map_canvas_arr = $map_canvas_arr;
+            $geodir_is_widget_listing = true;
+			if (isset($_SESSION['gd_listing_view'])) {
+				unset($_SESSION['gd_listing_view']);
+			}
+
+            if ($with_pagination && $top_pagination) {				
+				echo geodir_sc_listings_pagination($total_posts, $post_number, $pageno);
+			}
+
+			include($template);
+			
+			if ($with_pagination && $bottom_pagination) {				
+				echo geodir_sc_listings_pagination($total_posts, $post_number, $pageno);
+			}
+
+            $geodir_is_widget_listing = false;
+
+            $GLOBALS['post'] = $current_post;
+			if (!empty($current_post)) {
+            	setup_postdata($current_post);
+			}
+            $map_jason = $current_map_jason;
+            $map_canvas_arr = $current_map_canvas_arr;
+			global $gridview_columns_widget;
+			$gridview_columns_widget = $current_gridview_columns_widget;
+			?>
+			<p class="geodir-sclisting-loading" style="display:none;"><i class="fa fa-cog fa-spin"></i></p>
+			<?php
+            if (!$geodir_ajax) { 
+			?>
+        </div>
+		<script type="text/javascript">
+		  function gd_sc_gopage(obj, pid) {
+			var pid = parseInt(pid);
+			var container = jQuery(obj).closest('.geodir-sc-gd-listings');
+			if(!pid > 0 || !(container && typeof container != 'undefined')) {
+			  return false;
+			}
+			var scatts = "<?php echo addslashes(json_encode($shortcode_atts));?>";
+			
+			var data = {
+			  'action': 'geodir_sclistings',
+			  'geodir_sclistings_nonce': '<?php echo wp_create_nonce("geodir-sclistings-nonce"); ?>',
+			  'scatts': scatts,
+			  'geodir_ajax': true,
+			  'pageno': pid
+			};
+			
+			jQuery(document).ajaxStop(function() {
+			  jQuery(container).find('.geodir_category_list_view').css({'opacity': '1'});
+			  jQuery(container).find('.geodir-sclisting-loading').hide();
+			});
+			
+			jQuery(container).find('.geodir_category_list_view').css({'opacity': '0.4'});
+			jQuery(container).find('.geodir-sclisting-loading').show();
+			
+			jQuery.post(geodir_var.geodir_ajax_url, data, function(response) {
+			  if(response && response != '0') {
+				jQuery(container).html(response);
+			  }
+			});
+		  }
+		</script>
+		<?php } ?>
+    <?php
+    }
+	$output = ob_get_contents();
+    ob_end_clean();
+
+    return trim($output);
+}
+
+/**
+ * Get pagination for gd_listings shortcode.
+ *
+ * @since 1.4.2
+ *
+ * @global string $gridview_columns_widget Layout type of listing.
+ * @global bool   $geodir_is_widget_listing Check that current listview is widget listing.
+ * @global bool   $geodir_event_widget_listview Check that current listview is event.
+ * @global null|WP_Post $post Post object.
+ * @global array $map_jason Map data in json format.
+ * @global array $map_canvas_arr Map canvas array.
+ *
+ * @param int    $total_posts Total items count.
+ * @param int    $posts_per_page Number items displayed on one page.
+ * @param int    $pageno Current page number.
+ * @param string $before Display html before pagination. Default empty.
+ * @param string $after Display html after pagination. Default empty.
+ * @param string $prelabel Previous page label. Default empty.
+ * @param string $nxtlabel Next page label. Default empty.
+ * @param int    $pages_to_show Number pages to visible in pagination. Default 5.
+ * @param bool   $always_show Always display pagination when pagination not required.
+ * @return string Listings pagination HTML content.
+ */
+function geodir_sc_listings_pagination($total_posts, $posts_per_page, $pageno, $before = '', $after = '', $prelabel = '', $nxtlabel = '', $pages_to_show = 5, $always_show = false) {
+    if (empty($prelabel)) {
+        $prelabel = '<strong>&laquo;</strong>';
+    }
+
+    if (empty($nxtlabel)) {
+        $nxtlabel = '<strong>&raquo;</strong>';
+    }
+
+    $half_pages_to_show = round($pages_to_show / 2);
+
+	$numposts = $total_posts;
+
+	$max_page = ceil($numposts / $posts_per_page);
+
+	if (empty($pageno)) {
+		$pageno = 1;
+	}
+
+	ob_start();
+	if ($max_page > 1 || $always_show) {
+		echo "$before <div class='Navi geodir-ajax-pagination'>";		
+		if ($pageno > 1) {
+			echo '<a class="gd-page-sc-fst" href="javascript:void(0);" onclick="gd_sc_gopage(this, 1);">&laquo;</a>&nbsp;';
+		}
+		
+		if (($pageno - 1) > 0) {
+			echo '<a class="gd-page-sc-prev" href="javascript:void(0);" onclick="gd_sc_gopage(this, ' . (int)($pageno - 1) . ');">' . $prelabel . '</a>&nbsp;';
+		}
+		
+		for ($i = $pageno - $half_pages_to_show; $i <= $pageno + $half_pages_to_show; $i++) {
+			if ($i >= 1 && $i <= $max_page) {
+				if ($i == $pageno) {
+					echo "<strong class='on' class='gd-page-sc-act'>$i</strong>";
+				} else {
+					echo ' <a class="gd-page-sc-no" href="javascript:void(0);" onclick="gd_sc_gopage(this, ' . (int)$i . ');">' . $i . '</a> ';
+				}
+			}
+		}
+		
+		if (($pageno + 1) <= $max_page) {
+			echo '&nbsp;<a class="gd-page-sc-nxt" href="javascript:void(0);" onclick="gd_sc_gopage(this, ' . (int)($pageno + 1) . ');">' . $nxtlabel . '</a>';
+		}
+		
+		if ($pageno < $max_page) {
+			echo '&nbsp;<a class="gd-page-sc-lst" href="javascript:void(0);" onclick="gd_sc_gopage(this, ' . (int)$max_page . ');">&raquo;</a>';
+		}
+		echo "</div> $after";
+	}
+	$output = ob_get_contents();
+    ob_end_clean();
+
+    return trim($output);
+}
+
+/**
+ * Get the listings by using ajax request.
+ *
+ * @since 1.4.2
+ *
+ * @return string Listings HTML content.
+ */
+function geodir_sclistings_callback() {
+    check_ajax_referer('geodir-sclistings-nonce', 'geodir_sclistings_nonce');
+    //set variables
+    $scatts = isset($_POST['scatts']) ? $_POST['scatts'] : NULL;
+    $pageno = isset($_POST['pageno']) ? absint($_POST['pageno']) : 1;
+	
+	$shortcode_atts = !empty($scatts) ? (array)json_decode(stripslashes_deep($scatts)) : NULL;
+	
+	if (!empty($shortcode_atts) && is_array($shortcode_atts)) {
+		$shortcode_atts['pageno'] = $pageno;
+		$shortcode_atts['geodir_ajax'] = true;
+		
+		echo geodir_sc_gd_listings($shortcode_atts);
+	} else {
+		echo 0;
+	}
+    wp_die();
+}
+add_action('wp_ajax_geodir_sclistings', 'geodir_sclistings_callback');
+add_action('wp_ajax_nopriv_geodir_sclistings', 'geodir_sclistings_callback');
