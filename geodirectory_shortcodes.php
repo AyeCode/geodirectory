@@ -39,9 +39,10 @@ function geodir_sc_add_listing($atts)
 
     } else {
         ###### MAIN CONTENT ######
-        // this adds the mandatory message
+
+        /** This action is documented in geodirectory-templates/add-listing.php */
         do_action('geodir_add_listing_page_mandatory');
-        // this adds the add listing form
+        /** This action is documented in geodirectory-templates/add-listing.php */
         do_action('geodir_add_listing_form');
     }
     $output = ob_get_contents();

@@ -386,6 +386,11 @@ function geodir_social_sharing_buttons()
 {
     global $preview;
     ob_start(); // Start  buffering;
+    /**
+     * This action is called before the social buttons twitter,facebook and google plus are output in a containing div.
+     *
+     * @since 1.0.0
+     */
     do_action('geodir_before_social_sharing_buttons');
     if (!$preview) {
         ?>
@@ -444,6 +449,11 @@ function geodir_share_this_button()
         </div>
     <?php
     }// end of if, if its a preview or not
+    /**
+     * This is called after the share this html in the function geodir_share_this_button()
+     *
+     * @since 1.0.0
+     */
     do_action('geodir_after_share_this_button');
     $content_html = ob_get_clean();
     if (trim($content_html) != '')
@@ -607,6 +617,8 @@ function geodir_detail_page_review_rating()
          * This is called inside the check for an actual rating and the check for preview page.
          *
          * @since 1.0.0
+         * @param float $post_avgratings Average rating for the surrent post.
+         * @param int $post->ID Current post ID.
          */
         do_action('geodir_before_review_rating_stars_on_detail', $post_avgratings, $post->ID);
 
@@ -642,6 +654,8 @@ function geodir_detail_page_review_rating()
          * This is called inside the check for an actual rating and the check for preview page.
          *
          * @since 1.0.0
+         * @param float $post_avgratings Average rating for the surrent post.
+         * @param int $post->ID Current post ID.
          */
         do_action('geodir_after_review_rating_stars_on_detail', $post_avgratings, $post->ID);
     }
