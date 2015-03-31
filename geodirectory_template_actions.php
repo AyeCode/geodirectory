@@ -1493,11 +1493,27 @@ function geodir_action_add_listing_form()
         <?php if (isset($_REQUEST['backandedit'])) { ?>
             <input type="hidden" name="backandedit" value="<?php echo $_REQUEST['backandedit']; ?>"/>
         <?php } ?>
-        <?php do_action('geodir_before_detail_fields');?>
+        <?php
+        /**
+         * Called at the very top of the add listing page form for frontend.
+         *
+         * This is called just before the "Enter Listing Details" text.
+         *
+         * @since 1.0.0
+         */
+        do_action('geodir_before_detail_fields');?>
 
         <h5><?php echo LISTING_DETAILS_TEXT;?></h5>
 
-        <?php do_action('geodir_before_main_form_fields');?>
+        <?php
+        /**
+         * Called at the top of the add listing page form for frontend.
+         *
+         * This is called after the "Enter Listing Details" text.
+         *
+         * @since 1.0.0
+         */
+        do_action('geodir_before_main_form_fields');?>
 
         <div id="geodir_post_title_row" class="required_field geodir_form_row clearfix">
             <label><?php echo PLACE_TITLE_TEXT;?><span>*</span> </label>
@@ -1516,7 +1532,13 @@ function geodir_action_add_listing_form()
         $desc_limit_msg = '';
         $desc_limit_msg = apply_filters('geodir_description_field_desc_limit_msg', $desc_limit_msg, $desc_limit);
         ?>
-        <?php do_action('geodir_before_description_field'); ?>
+        <?php
+        /**
+         * Called on the add listing page form for frontend just before the description field.
+         *
+         * @since 1.0.0
+         */
+        do_action('geodir_before_description_field'); ?>
         <div id="geodir_post_desc_row" class="<?php if ($desc_limit != '0') {
             echo 'required_field';
         }?> geodir_form_row clearfix">
@@ -1544,7 +1566,13 @@ function geodir_action_add_listing_form()
             <?php } ?>
             <span class="geodir_message_error"><?php echo _e($required_msg, GEODIRECTORY_TEXTDOMAIN);?></span>
         </div>
-        <?php do_action('geodir_after_description_field'); ?>
+        <?php
+        /**
+         * Called on the add listing page form for frontend just after the description field.
+         *
+         * @since 1.0.0
+         */
+        do_action('geodir_after_description_field'); ?>
         <?php
         $kw_tags = esc_attr(stripslashes($kw_tags));
         $kw_tags_count = TAGKW_TEXT_COUNT;
@@ -1554,6 +1582,11 @@ function geodir_action_add_listing_form()
         $kw_tags_msg = apply_filters('geodir_listing_tags_field_tags_msg', $kw_tags_msg, $kw_tags_count);
         ?>
         <?php
+        /**
+         * Called on the add listing page form for frontend just before the tags field.
+         *
+         * @since 1.0.0
+         */
         do_action('geodir_before_listing_tags_field');
         ?>
         <div id="geodir_post_tags_row" class="geodir_form_row clearfix">
@@ -1562,7 +1595,13 @@ function geodir_action_add_listing_form()
                    maxlength="<?php echo $kw_tags_count;?>"/>
             <span class="geodir_message_note"><?php echo $kw_tags_msg;?></span>
         </div>
-        <?php do_action('geodir_after_listing_tags_field'); ?>
+        <?php
+        /**
+         * Called on the add listing page form for frontend just after the tags field.
+         *
+         * @since 1.0.0
+         */
+        do_action('geodir_after_listing_tags_field'); ?>
 
         <?php
 
@@ -1674,7 +1713,13 @@ function geodir_action_add_listing_form()
 
         <?php } ?>
 
-        <?php do_action('geodir_after_main_form_fields');?>
+        <?php
+        /**
+         * Called on the add listing page form for frontend just after the image upload field.
+         *
+         * @since 1.0.0
+         */
+        do_action('geodir_after_main_form_fields');?>
 
 
         <!-- add captcha code -->
@@ -1719,6 +1764,11 @@ function geodir_action_add_listing_sidebar()
 {
     /** This action is documented in geodirectory_template_actions.php */
     do_action('geodir_sidebar_right_open', 'add-listing-page', 'geodir-sidebar', 'geodir-sidebar-right', 'http://schema.org/WPSideBar');
+    /**
+     * This is used to add the content to the add listing page sidebar.
+     *
+     * @since 1.0.0
+     */
     do_action('geodir_add_listing_sidebar_inside');
     /** This action is documented in geodirectory_template_actions.php */
     do_action('geodir_sidebar_right_close', 'details-page');
@@ -1916,6 +1966,11 @@ function geodir_action_author_sidebar_left()
 // this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
         /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_left_open', 'author-page', 'geodir-sidebar-left', 'geodir-sidebar-left geodir-listings-sidebar-left', 'http://schema.org/WPSideBar');
+        /**
+         * This is used to add the content to the author page left sidebar (if active).
+         *
+         * @since 1.0.0
+         */
         do_action('geodir_author_sidebar_left_inside');
         /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_left_close', 'author-page');
@@ -1939,6 +1994,11 @@ function geodir_action_author_sidebar_right()
     if (get_option('geodir_show_author_right_section')) {
         /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_right_open', 'author-page', 'geodir-sidebar-right', 'geodir-sidebar-right geodir-listings-sidebar-right', 'http://schema.org/WPSideBar');
+        /**
+         * This is used to add the content to the author page right sidebar (if active).
+         *
+         * @since 1.0.0
+         */
         do_action('geodir_author_sidebar_right_inside');
         /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_right_close', 'author-page');
@@ -1969,6 +2029,11 @@ function geodir_action_author_content()
     /** This action is documented in geodirectory_template_actions.php */
     do_action('geodir_before_listing');
     echo '</div>';
+    /**
+     * This is used to add the content to the author page main content.
+     *
+     * @since 1.0.0
+     */
     do_action('geodir_author_content_inside');
     /** This action is documented in geodirectory_template_actions.php */
     do_action('geodir_after_listing');
@@ -2048,6 +2113,11 @@ function geodir_action_search_sidebar_left()
 // this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
         /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_left_open', 'search-page', 'geodir-sidebar-left', 'geodir-sidebar-left geodir-listings-sidebar-left', 'http://schema.org/WPSideBar');
+        /**
+         * This is used to add the content to the search page left sidebar (if active).
+         *
+         * @since 1.0.0
+         */
         do_action('geodir_search_sidebar_left_inside');
         /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_left_close', 'search-page');
@@ -2071,6 +2141,11 @@ function geodir_action_search_sidebar_right()
     if (get_option('geodir_show_search_right_section')) {
         /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_right_open', 'search-page', 'geodir-sidebar-right', 'geodir-sidebar-right geodir-listings-sidebar-right', 'http://schema.org/WPSideBar');
+        /**
+         * This is used to add the content to the search page right sidebar (if active).
+         *
+         * @since 1.0.0
+         */
         do_action('geodir_search_sidebar_right_inside');
         /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_right_close', 'search-page');
@@ -2113,6 +2188,11 @@ function geodir_action_search_content()
     /** This action is documented in geodirectory_template_actions.php */
     do_action('geodir_before_listing');
     echo '</div>';
+    /**
+     * This is used to add the content to the search page main content.
+     *
+     * @since 1.0.0
+     */
     do_action('geodir_search_content_inside');
     /** This action is documented in geodirectory_template_actions.php */
     do_action('geodir_after_listing');
@@ -2159,6 +2239,11 @@ function geodir_action_home_sidebar_left()
 // this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
         /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_left_open', 'home-page', 'geodir-sidebar-left', 'geodir-sidebar geodir-sidebar-left geodir-listings-sidebar-left', 'http://schema.org/WPSideBar');
+        /**
+         * This is used to add the content to the home page left sidebar (if active).
+         *
+         * @since 1.0.0
+         */
         do_action('geodir_home_sidebar_left_inside');
         /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_left_close', 'home-page');
@@ -2183,6 +2268,11 @@ function geodir_action_home_sidebar_right()
     if (get_option('geodir_show_home_right_section')) {
         /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_right_open', 'home-page', 'geodir-sidebar-right', 'geodir-sidebar-right geodir-listings-sidebar-right', 'http://schema.org/WPSideBar');
+        /**
+         * This is used to add the content to the home page right sidebar (if active).
+         *
+         * @since 1.0.0
+         */
         do_action('geodir_home_sidebar_right_inside');
         /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_right_close', 'home-page');
@@ -2204,8 +2294,23 @@ function geodir_action_home_content()
 {
     /** This action is documented in geodirectory_template_actions.php */
     do_action('geodir_main_content_open', 'home-page', 'geodir-main-content', 'home-page');
+    /**
+     * This called before the home page main content.
+     *
+     * @since 1.0.0
+     */
     do_action('geodir_before_home_content');
+    /**
+     * This is used to add the content to the home page main content.
+     *
+     * @since 1.0.0
+     */
     do_action('geodir_home_content_inside');
+    /**
+     * This is callec after the homepage main content.
+     *
+     * @since 1.0.0
+     */
     do_action('geodir_after_home_content');
     /** This action is documented in geodirectory_template_actions.php */
     do_action('geodir_main_content_close', 'home-page');
