@@ -17,7 +17,7 @@ foreach ($_REQUEST as $pkey => $pval) {
     } else {
         $tags = '';
     }
-
+    /** This action is documented in geodirectory_template_actions.php */
     $tags = apply_filters('geodir_save_post_key', $tags, $pkey);
     if ($tags != 'skip_field') {
         $_REQUEST[$pkey] = strip_tags($_REQUEST[$pkey], $tags);

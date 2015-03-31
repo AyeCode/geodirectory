@@ -433,7 +433,13 @@ function geodir_action_geodir_set_preview_post()
         } else {
             $tags = '';
         }
-
+        /**
+         * Allows the filtering of the allowed HTML tags per field when submitting from frontend add listing page.
+         *
+         * @since 1.0.0
+         * @param string $tags The allowed HTML tags for the field. Can be many things, for example the description allows these tags '<p><a><b><i><em><h1><h2><h3><h4><h5><ul><ol><li><img><div><del><ins><span><cite><code><strike><strong><blockquote>'.
+         * @param string|array $pkey The field id/name. If array then value is set as "skip_field".
+         */
         $tags = apply_filters('geodir_save_post_key', $tags, $pkey);
 
         if ($tags != 'skip_field') {
@@ -540,7 +546,18 @@ function geodir_action_geodir_sidebar_detail_top($class = '')
 {
     if (get_option('geodir_show_detail_top_section')) { ?>
         <div
-            class="<?php echo apply_filters('geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_detail_top'); ?> <?php echo $class; ?>">
+            class="<?php
+            /**
+             * Filter the div class for the wrapper of the full width widget areas.
+             *
+             * Allows you to filter the class of the div for the HTML Container wrapper for the full width widget areas referred to as "Top Section" or "Bottom Section" in the widget areas.
+             *
+             * @since 1.0.0
+             * @param string $class The class of the div.
+             * @param string $type The page type the widget area is being used on. Values can be 'geodir_detail_top', 'geodir_detail_bottom', 'geodir_listing_top', 'geodir_listing_bottom', 'Reg/Login Top Section',
+             *               'geodir_author_top','geodir_author_bottom', 'geodir_search_top', 'geodir_search_bottom', 'geodir_home_top' or 'geodir_home_bottom'.
+             */
+            echo apply_filters('geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_detail_top'); ?> <?php echo $class; ?>">
             <?php dynamic_sidebar('geodir_detail_top'); ?>
         </div>
     <?php }
@@ -557,7 +574,9 @@ function geodir_action_geodir_sidebar_detail_bottom_section($class = '')
 {
     if (get_option('geodir_show_detail_bottom_section')) { ?>
         <div
-            class="<?php echo apply_filters('geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_detail_bottom'); ?> <?php echo $class; ?>">
+            class="<?php
+            /** This action is documented in geodirectory_template_actions.php */
+            echo apply_filters('geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_detail_bottom'); ?> <?php echo $class; ?>">
             <?php dynamic_sidebar('geodir_detail_bottom'); ?>
         </div><!-- clearfix ends here-->
     <?php }
@@ -651,7 +670,19 @@ function geodir_action_details_sidebar()
 add_action('geodir_page_title', 'geodir_action_page_title', 10);
 function geodir_action_page_title()
 {
+    /**
+     * Filter the page title HTML h1 class.
+     *
+     * @since 1.0.0
+     * @param string $class The class to use. Default is 'entry-title fn'.
+     */
     $class = apply_filters('geodir_page_title_class', 'entry-title fn');
+    /**
+     * Filter the page title HTML header wrapper class.
+     *
+     * @since 1.0.0
+     * @param string $class The class to use. Default is 'entry-header'.
+     */
     $class_header = apply_filters('geodir_page_title_header_class', 'entry-header');
     echo '<header class="' . $class_header . '"><h1 class="' . $class . '">' . stripslashes(get_the_title()) . '</h1></header>';
 }
@@ -806,6 +837,15 @@ function geodir_action_details_taxonomies()
             // to limit post tags
             $post_tags = trim($post->post_tags, ",");
             $post_id = isset($post->ID) ? $post->ID : '';
+            /**
+             * Filter the post tags.
+             *
+             * Allows you to filter the post tags output on the details page of a post.
+             *
+             * @since 1.0.0
+             * @param string $post_tags A comma seperated list of tags.
+             * @param int $post_id The current post id.
+             */
             $post_tags = apply_filters('geodir_action_details_post_tags', $post_tags, $post_id);
 
             $post->post_tags = $post_tags;
@@ -1120,11 +1160,19 @@ function geodir_action_listings_title()
     if (is_search()) {
         $list_title = __('Search', GEODIRECTORY_TEXTDOMAIN) . ' ' . __(ucfirst($post_type_info->labels->name), GEODIRECTORY_TEXTDOMAIN) . __(' For :', GEODIRECTORY_TEXTDOMAIN) . " '" . get_search_query() . "'";
     }
-
+    /** This action is documented in geodirectory_template_actions.php */
     $class = apply_filters('geodir_page_title_class', 'entry-title fn');
+    /** This action is documented in geodirectory_template_actions.php */
     $class_header = apply_filters('geodir_page_title_header_class', 'entry-header');
 
-    echo '<header class="' . $class_header . '"><h1 class="' . $class . '">' . apply_filters('geodir_listing_page_title', wptexturize($list_title)) . '</h1></header>';
+    echo '<header class="' . $class_header . '"><h1 class="' . $class . '">' .
+        /**
+         * Filter the listing page title.
+         *
+         * @since 1.0.0
+         * @param string $list_title The title for the category page.
+         */
+        apply_filters('geodir_listing_page_title', wptexturize($list_title)) . '</h1></header>';
 }
 
 add_action('geodir_listings_page_description', 'geodir_action_listings_description', 10);
@@ -1139,6 +1187,14 @@ function geodir_action_listings_description()
         if ($term_desc && !$saved_data) {
             $saved_data = $term_desc;
         }
+        /**
+         * Apply the core filter `the_content` filter to the variable string.
+         *
+         * This is a WordPress core filter that does many things.
+         *
+         * @since 1.0.0
+         * @param string $var The string to apply the filter to.
+         */
         $cat_description = apply_filters('the_content', $saved_data);
         if ($cat_description) {
             ?>
@@ -1159,7 +1215,9 @@ function geodir_action_geodir_sidebar_listings_top()
 {
     if (get_option('geodir_show_listing_top_section')) { ?>
         <div
-            class="<?php echo apply_filters('geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_listing_top'); ?>">
+            class="<?php
+            /** This action is documented in geodirectory_template_actions.php */
+            echo apply_filters('geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_listing_top'); ?>">
             <?php dynamic_sidebar('geodir_listing_top'); ?>
         </div><!-- clearfix ends here-->
     <?php }
@@ -1381,7 +1439,9 @@ function geodir_action_sidebar_listings_bottom_section()
 {
     if (get_option('geodir_show_listing_bottom_section')) { ?>
         <div
-            class="<?php echo apply_filters('geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_listing_bottom'); ?>">
+            class="<?php
+            /** This action is documented in geodirectory_template_actions.php */
+            echo apply_filters('geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_listing_bottom'); ?>">
             <?php dynamic_sidebar('geodir_listing_bottom'); ?>
         </div><!-- clearfix ends here-->
     <?php }
@@ -1397,17 +1457,27 @@ function geodir_action_add_listing_page_title()
 {
     if (isset($_REQUEST['listing_type']) && $_REQUEST['listing_type'] != '')
         $listing_type = $_REQUEST['listing_type'];
+    /** This action is documented in geodirectory_template_actions.php */
     $class = apply_filters('geodir_page_title_class', 'entry-title fn');
+    /** This action is documented in geodirectory_template_actions.php */
     $class_header = apply_filters('geodir_page_title_header_class', 'entry-header');
     echo '<header class="' . $class_header . '"><h1 class="' . $class . '">';
 
     if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
         $post_type_info = geodir_get_posttype_info(get_post_type($_REQUEST['pid']));
+        /**
+         * Filter the add listing page title.
+         *
+         * @since 1.0.0
+         * @param string $title The page title. This is usually Edit/Add followed by the post type name.
+         */
         echo apply_filters('geodir_add_listing_page_title_text', (ucwords(__('Edit', GEODIRECTORY_TEXTDOMAIN) . ' ' . __($post_type_info['labels']['singular_name'], GEODIRECTORY_TEXTDOMAIN))));
     } elseif (isset($listing_type)) {
         $post_type_info = geodir_get_posttype_info($listing_type);
+        /** This action is documented in geodirectory_template_actions.php */
         echo apply_filters('geodir_add_listing_page_title_text', (ucwords(__('Add', GEODIRECTORY_TEXTDOMAIN) . ' ' . __($post_type_info['labels']['singular_name'], GEODIRECTORY_TEXTDOMAIN))));
     } else {
+        /** This action is documented in geodirectory_template_actions.php */
         apply_filters('geodir_add_listing_page_title_text', the_title());
     }
     echo '</h1></header>';
@@ -1416,6 +1486,7 @@ function geodir_action_add_listing_page_title()
 add_action('geodir_add_listing_page_mandatory', 'geodir_action_add_listing_page_mandatory', 10);
 function geodir_action_add_listing_page_mandatory()
 {
+    /** This action is documented in geodirectory_template_actions.php */
     $class = apply_filters('geodir_page_title_class', 'entry-title fn');?>
     <p class="geodir-note "><span class="geodir-required">*</span>&nbsp;<?php echo INDICATES_MANDATORY_FIELDS_TEXT;?>
     </p>
@@ -1527,9 +1598,31 @@ function geodir_action_add_listing_form()
 
         $desc = $show_editor ? stripslashes($desc) : esc_attr(stripslashes($desc));
         $desc_limit = '';
+        /**
+         * Filter the add listing description field character limit number.
+         *
+         * @since 1.0.0
+         * @param int $desc_limit The amount of characters to limit the description to.
+         */
         $desc_limit = apply_filters('geodir_description_field_desc_limit', $desc_limit);
+        /**
+         * Filter the add listing description field text.
+         *
+         * @since 1.0.0
+         * @param string $desc The text for the description field.
+         * @param int $desc_limit The character limit numer if any.
+         */
         $desc = apply_filters('geodir_description_field_desc', $desc, $desc_limit);
         $desc_limit_msg = '';
+        /**
+         * Filter the add listing description limit message.
+         *
+         * This is the message shown if there is a limit applied to the amount of characters the description can use.
+         *
+         * @since 1.0.0
+         * @param string $desc_limit_msg The limit message string if any.
+         * @param int $desc_limit The character limit numer if any.
+         */
         $desc_limit_msg = apply_filters('geodir_description_field_desc_limit_msg', $desc_limit_msg, $desc_limit);
         ?>
         <?php
@@ -1577,8 +1670,30 @@ function geodir_action_add_listing_form()
         $kw_tags = esc_attr(stripslashes($kw_tags));
         $kw_tags_count = TAGKW_TEXT_COUNT;
         $kw_tags_msg = TAGKW_MSG;
+        /**
+         * Filter the add listing tags character limit.
+         *
+         * @since 1.0.0
+         * @param int $kw_tags_count The character count limit if any.
+         */
         $kw_tags_count = apply_filters('geodir_listing_tags_field_tags_count', $kw_tags_count);
+        /**
+         * Filter the add listing tags field value.
+         *
+         * You can use the $_REQUEST values to check if this is a go back and edit value etc.
+         *
+         * @since 1.0.0
+         * @param string $kw_tags The tag field value, usually a comma separated list of tags.
+         * @param int $kw_tags_count The character count limit if any.
+         */
         $kw_tags = apply_filters('geodir_listing_tags_field_tags', $kw_tags, $kw_tags_count);
+        /**
+         * Filter the add listing tags field message text.
+         *
+         * @since 1.0.0
+         * @param string $kw_tags_msg The message shown under the field.
+         * @param int $kw_tags_count The character count limit if any.
+         */
         $kw_tags_msg = apply_filters('geodir_listing_tags_field_tags_msg', $kw_tags_msg, $kw_tags_count);
         ?>
         <?php
@@ -1663,6 +1778,13 @@ function geodir_action_add_listing_form()
 
         $image_limit = $package_info->image_limit;
         $show_image_input_box = ($image_limit != '0');
+        /**
+         * Filter to be able to show/hide the image upload section of the add listing form.
+         *
+         * @since 1.0.0
+         * @param bool $show_image_input_box Set true to show. Set false to not show.
+         * @param string $listing_type The custom post type slug.
+         */
         $show_image_input_box = apply_filters('geodir_image_uploader_on_add_listing', $show_image_input_box, $listing_type);
         if ($show_image_input_box) {
             ?>
@@ -1784,7 +1906,9 @@ function geodir_action_geodir_sidebar_signup_top()
 {
     ?>
     <div
-        class="<?php echo apply_filters('geodir_full_page_class', 'geodir_full_page clearfix', 'Reg/Login Top Section'); ?>">
+        class="<?php
+        /** This action is documented in geodirectory_template_actions.php */
+        echo apply_filters('geodir_full_page_class', 'geodir_full_page clearfix', 'Reg/Login Top Section'); ?>">
         <?php dynamic_sidebar('Reg/Login Top Section');?>
     </div><!-- clearfix ends here-->
 <?php
@@ -1918,9 +2042,18 @@ function geodir_action_author_page_title()
         $list_title = __('Search', GEODIRECTORY_TEXTDOMAIN) . ' ' . __($post_type_info->labels->name, GEODIRECTORY_TEXTDOMAIN) . __(' For :', GEODIRECTORY_TEXTDOMAIN) . " '" . get_search_query() . "'";
 
     }
+    /** This action is documented in geodirectory_template_actions.php */
     $class = apply_filters('geodir_page_title_class', 'entry-title fn');
+    /** This action is documented in geodirectory_template_actions.php */
     $class_header = apply_filters('geodir_page_title_header_class', 'entry-header');
-    echo '<header class="' . $class_header . '"><h1 class="' . $class . '">' . apply_filters('geodir_author_page_title_text', wptexturize($list_title)) . '</h1></header>';
+    echo '<header class="' . $class_header . '"><h1 class="' . $class . '">' .
+        /**
+         * Filter the author page title text.
+         *
+         * @since 1.0.0
+         * @param string $list_title The title for the page.
+         */
+        apply_filters('geodir_author_page_title_text', wptexturize($list_title)) . '</h1></header>';
 }
 
 
@@ -1932,7 +2065,9 @@ function geodir_action_geodir_sidebar_author_top()
 {
     if (get_option('geodir_show_author_top_section')) { ?>
         <div
-            class="<?php echo apply_filters('geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_author_top'); ?>">
+            class="<?php
+            /** This action is documented in geodirectory_template_actions.php */
+            echo apply_filters('geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_author_top'); ?>">
             <?php dynamic_sidebar('geodir_author_top'); ?>
         </div><!-- clearfix ends here-->
     <?php }
@@ -2046,7 +2181,9 @@ function geodir_action_sidebar_author_bottom_section()
 {
     if (get_option('geodir_show_author_bottom_section')) { ?>
         <div
-            class="<?php echo apply_filters('geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_author_bottom'); ?>">
+            class="<?php
+            /** This action is documented in geodirectory_template_actions.php */
+            echo apply_filters('geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_author_bottom'); ?>">
             <?php dynamic_sidebar('geodir_author_bottom'); ?>
         </div><!-- clearfix ends here-->
     <?php }
@@ -2066,9 +2203,13 @@ function geodir_action_search_page_title()
         $list_title = __('Search', GEODIRECTORY_TEXTDOMAIN) . ' ' . __($post_type_info->labels->name, GEODIRECTORY_TEXTDOMAIN) . __(' For :', GEODIRECTORY_TEXTDOMAIN) . " '" . get_search_query() . "'";
 
     }
+    /** This action is documented in geodirectory_template_actions.php */
     $class = apply_filters('geodir_page_title_class', 'entry-title fn');
+    /** This action is documented in geodirectory_template_actions.php */
     $class_header = apply_filters('geodir_page_title_header_class', 'entry-header');
-    echo '<header class="' . $class_header . '"><h1 class="' . $class . '">' . apply_filters('geodir_listing_page_title', wptexturize($list_title)) . '</h1></header>';
+    echo '<header class="' . $class_header . '"><h1 class="' . $class . '">' .
+        /** This action is documented in geodirectory_template_actions.php */
+        apply_filters('geodir_listing_page_title', wptexturize($list_title)) . '</h1></header>';
 }
 
 // action for adding the listings page top widget area
@@ -2078,7 +2219,9 @@ function geodir_action_geodir_sidebar_search_top()
 {
     if (get_option('geodir_show_search_top_section')) { ?>
         <div
-            class="<?php echo apply_filters('geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_search_top'); ?>">
+            class="<?php
+            /** This action is documented in geodirectory_template_actions.php */
+            echo apply_filters('geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_search_top'); ?>">
             <?php dynamic_sidebar('geodir_search_top'); ?>
         </div><!-- clearfix ends here-->
     <?php }
@@ -2158,7 +2301,9 @@ function geodir_action_sidebar_search_bottom_section()
 {
     if (get_option('geodir_show_search_bottom_section')) { ?>
         <div
-            class="<?php echo apply_filters('geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_search_bottom'); ?>">
+            class="<?php
+            /** This action is documented in geodirectory_template_actions.php */
+            echo apply_filters('geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_search_bottom'); ?>">
             <?php dynamic_sidebar('geodir_search_bottom'); ?>
         </div><!-- clearfix ends here-->
     <?php }
@@ -2214,7 +2359,9 @@ function geodir_action_geodir_sidebar_home_top()
 {
     if (get_option('geodir_show_home_top_section')) { ?>
         <div
-            class="<?php echo apply_filters('geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_home_top'); ?>">
+            class="<?php
+            /** This action is documented in geodirectory_template_actions.php */
+            echo apply_filters('geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_home_top'); ?>">
             <?php dynamic_sidebar('geodir_home_top'); ?>
         </div><!-- clearfix ends here-->
     <?php }
@@ -2322,7 +2469,9 @@ function geodir_action_sidebar_home_bottom_section()
 {
     if (get_option('geodir_show_home_bottom_section')) { ?>
         <div
-            class="<?php echo apply_filters('geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_home_bottom'); ?>">
+            class="<?php
+            /** This action is documented in geodirectory_template_actions.php */
+            echo apply_filters('geodir_full_page_class', 'geodir_full_page clearfix', 'geodir_home_bottom'); ?>">
             <?php dynamic_sidebar('geodir_home_bottom'); ?>
         </div><!-- clearfix ends here-->
     <?php }
