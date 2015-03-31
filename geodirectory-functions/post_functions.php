@@ -1,6 +1,6 @@
 <?php
 /**
- * Listing functions
+ * Post Listing functions.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -8,14 +8,14 @@
 
 
 /**
- * Set post category structure based on given parameters
+ * Set post category structure based on given parameters.
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param int $post_id
- * @param string $taxonomy
- * @param int $default_cat
- * @param array $category_str
+ * @param int $post_id The post ID.
+ * @param string $taxonomy Name of the taxonomy e.g place_category.
+ * @param string|int $default_cat Optional. The default category ID.
+ * @param array|string $category_str Optional. Blank string if no categories. Else array of categories to set.
  */
 
 function geodir_set_postcat_structure($post_id, $taxonomy, $default_cat = '', $category_str = '')
@@ -63,13 +63,13 @@ function geodir_set_postcat_structure($post_id, $taxonomy, $default_cat = '', $c
 
 if (!function_exists('geodir_save_listing')) {
     /**
-     * Save Listing
+     * Saves listing in the database using given information
      *
      * @since 1.0.0
      * @package GeoDirectory
-     * @param array $request_info
-     * @param bool $dummy
-     * @return int|string|WP_Error
+     * @param array $request_info Array of request info arguments.
+     * @param bool $dummy Optional. Is this a dummy listing? Default false.
+     * @return int|string|WP_Error Created post id.
      */
     function geodir_save_listing($request_info = array(), $dummy = false)
     {
@@ -430,10 +430,12 @@ if (!function_exists('geodir_save_listing')) {
 
 
 /**
- * Get post custome fields
+ * Get post custom fields.
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @param int|string $post_id Optional. The post ID.
+ * @return object|bool Returns full post details as an object. If no details returns false.
  */
 function geodir_get_post_info($post_id = '')
 {
@@ -466,12 +468,12 @@ function geodir_get_post_info($post_id = '')
 
 if (!function_exists('geodir_save_post_info')) {
     /**
-     * Save listing info
+     * Saves post detail info in detail table.
      *
      * @since 1.0.0
      * @package GeoDirectory
-     * @param $post_id
-     * @param array $postinfo_array
+     * @param int $post_id The post ID.
+     * @param array $postinfo_array Post info that needs to be saved in detail table.
      * @return bool
      */
     function geodir_save_post_info($post_id, $postinfo_array = array())
@@ -536,14 +538,14 @@ if (!function_exists('geodir_save_post_info')) {
 
 if (!function_exists('geodir_save_post_meta')) {
     /**
-     * Save post custome fields
+     * Save or update post custom fields.
      *
      * @since 1.0.0
      * @package GeoDirectory
-     * @param $post_id
-     * @param string $postmeta
-     * @param string $meta_value
-     * @return bool
+     * @param int $post_id The post ID.
+     * @param string $postmeta Detail table column name.
+     * @param string $meta_value Detail table column value.
+     * @return void|bool
      */
     function geodir_save_post_meta($post_id, $postmeta = '', $meta_value = '')
     {
@@ -587,12 +589,13 @@ if (!function_exists('geodir_save_post_meta')) {
 
 if (!function_exists('geodir_delete_post_meta')) {
     /**
-     * Delete post custome fields
+     * Delete post custom fields.
      *
      * @since 1.0.0
      * @package GeoDirectory
-     * @param $post_id
-     * @param $postmeta
+     * @param int $post_id The post ID.
+     * @param string $postmeta Detail table column name.
+     * @internal TODO: Fix unknown variable mval.
      * @return bool
      */
     function geodir_delete_post_meta($post_id, $postmeta)
@@ -647,14 +650,15 @@ if (!function_exists('geodir_delete_post_meta')) {
 
 if (!function_exists('geodir_get_post_meta')) {
     /**
-     * Get post custom meta
+     * Get post custom meta.
      *
      * @since 1.0.0
      * @package GeoDirectory
-     * @param $post_id
-     * @param $meta_key
-     * @param bool $single
-     * @return bool|mixed|null|string
+     * @param int $post_id The post ID.
+     * @param string $meta_key The meta key to retrieve.
+     * @param bool $single Optional. Whether to return a single value. Default false.
+     * @internal TODO: single variable not yet implemented.
+     * @return bool|mixed|null|string Will be an array if $single is false. Will be value of meta data field if $single is true.
      */
     function geodir_get_post_meta($post_id, $meta_key, $single = false)
     {
@@ -688,13 +692,13 @@ if (!function_exists('geodir_get_post_meta')) {
 
 if (!function_exists('geodir_save_post_images')) {
     /**
-     * Save post attachments
+     * Save post attachments.
      *
      * @since 1.0.0
      * @package GeoDirectory
-     * @param int $post_id
-     * @param array $post_image
-     * @param bool $dummy
+     * @param int $post_id The post ID.
+     * @param array $post_image Post image urls as an array.
+     * @param bool $dummy Optional. Is this a dummy listing? Default false.
      */
     function geodir_save_post_images($post_id = 0, $post_image = array(), $dummy = false)
     {
@@ -937,7 +941,7 @@ if (!function_exists('geodir_save_post_images')) {
 }
 
 /**
- * Remove users Temp images
+ * Remove current user's temporary images.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -973,10 +977,11 @@ function geodir_remove_temp_images()
 
 
 /**
+ * Delete a directory
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param $dirname
+ * @param string $dirname Directory name that needs to be deleted.
  * @return bool
  */
 function geodir_delete_directory($dirname)
@@ -1007,7 +1012,7 @@ if (!function_exists('geodir_remove_attachments')) {
      *
      * @since 1.0.0
      * @package GeoDirectory
-     * @param array $postcurr_images
+     * @param array $postcurr_images Array of image objects.
      */
     function geodir_remove_attachments($postcurr_images = array())
     {
@@ -1035,11 +1040,11 @@ if (!function_exists('geodir_get_featured_image')) {
      *
      * @since 1.0.0
      * @package GeoDirectory
-     * @param string $post_id
-     * @param string $size
-     * @param bool $no_image
-     * @param bool $file
-     * @return bool|object
+     * @param int|string $post_id The post ID.
+     * @param string $size Optional. Thumbnail size. Default: thumbnail.
+     * @param bool $no_image Optional. Do you want to return the default image when no image is available? Default: false.
+     * @param bool|string $file Optional. The file path from which you want to get the image details. Default: false.
+     * @return bool|object Image details as an object.
      */
     function geodir_get_featured_image($post_id = '', $size = '', $no_image = false, $file = false)
     {
@@ -1149,12 +1154,12 @@ if (!function_exists('geodir_show_featured_image')) {
      *
      * @since 1.0.0
      * @package GeoDirectory
-     * @param string $post_id
-     * @param string $size
-     * @param bool $no_image
-     * @param bool $echo
-     * @param bool $fimage
-     * @return bool|string
+     * @param int|string $post_id The post ID.
+     * @param string $size Optional. Thumbnail size. Default: thumbnail.
+     * @param bool $no_image Optional. Do you want to return the default image when no image is available? Default: false.
+     * @param bool $echo Optional. Do you want to print it instead of returning it? Default: true.
+     * @param bool|string $fimage Optional. The file path from which you want to get the image details. Default: false.
+     * @return bool|string Returns image html.
      */
     function geodir_show_featured_image($post_id = '', $size = 'thumbnail', $no_image = false, $echo = true, $fimage = false)
     {
@@ -1180,12 +1185,12 @@ if (!function_exists('geodir_get_images')) {
      *
      * @since 1.0.0
      * @package GeoDirectory
-     * @param int $post_id
-     * @param string $img_size
-     * @param bool $no_images
+     * @param int $post_id The post ID.
+     * @param string $img_size Optional. Thumbnail size.
+     * @param bool $no_images Optional. Do you want to return the default image when no image is available? Default: false.
      * @param bool $add_featured
-     * @param string $limit
-     * @return array|bool
+     * @param int|string $limit Optional. Number of images.
+     * @return array|bool Returns images as an array. Each item is an object.
      */
     function geodir_get_images($post_id = 0, $img_size = '', $no_images = false, $add_featured = true, $limit = '')
     {
@@ -1299,11 +1304,11 @@ if (!function_exists('geodir_show_image')) {
      *
      * @since 1.0.0
      * @package GeoDirectory
-     * @param array $request
-     * @param string $size
-     * @param bool $no_image
-     * @param bool $echo
-     * @return bool|string
+     * @param array|object $request Image info either as an array or object.
+     * @param string $size Optional. Thumbnail size. Default: thumbnail.
+     * @param bool $no_image Optional. Do you want to return the default image when no image is available? Default: false.
+     * @param bool $echo Optional. Do you want to print it instead of returning it? Default: true.
+     * @return bool|string Returns image html.
      */
     function geodir_show_image($request = array(), $size = 'thumbnail', $no_image = false, $echo = true)
     {
@@ -1373,10 +1378,10 @@ if (!function_exists('geodir_set_post_terms')) {
      *
      * @since 1.0.0
      * @package GeoDirectory
-     * @param $post_id
-     * @param $terms
-     * @param $tt_ids
-     * @param $taxonomy
+     * @param int $post_id The post ID.
+     * @param array $terms An array of object terms.
+     * @param array $tt_ids An array of term taxonomy IDs.
+     * @param string $taxonomy Taxonomy slug.
      */
     function geodir_set_post_terms($post_id, $terms, $tt_ids, $taxonomy)
     {
@@ -1562,12 +1567,12 @@ if (!function_exists('geodir_set_post_terms')) {
 
 if (!function_exists('geodir_get_infowindow_html')) {
     /**
-     * Set post Map Marker Info Html
+     * Set post Map Marker info html.
      *
      * @since 1.0.0
      * @package GeoDirectory
-     * @param $postinfo_obj
-     * @param string $post_preview
+     * @param object $postinfo_obj The post details object.
+     * @param string $post_preview Is this a post preview?.
      * @return mixed|string|void
      */
     function geodir_get_infowindow_html($postinfo_obj, $post_preview = '')
@@ -1772,11 +1777,11 @@ if (!function_exists('geodir_get_infowindow_html')) {
 
 if (!function_exists('geodir_new_post_default_status')) {
     /**
-     * Update post status
+     * Default post status for new posts.
      *
      * @since 1.0.0
      * @package GeoDirectory
-     * @return mixed|string|void
+     * @return string Returns the default post status for new posts. Ex: draft, publish etc.
      */
     function geodir_new_post_default_status()
     {
@@ -1790,8 +1795,10 @@ if (!function_exists('geodir_new_post_default_status')) {
 
 if (!function_exists('geodir_change_post_status')) {
     /**
-     * @param string $post_id
-     * @param string $status
+     * Change post status of a post.
+     *
+     * @param int|string $post_id The post ID.
+     * @param string $status New post status. Ex: draft, publish etc.
      */
     function geodir_change_post_status($post_id = '', $status = '')
     {
@@ -1813,11 +1820,12 @@ if (!function_exists('geodir_change_post_status')) {
 }
 
 /**
+ * Set post status of a post.
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param $pid
- * @param $status
+ * @param int $pid The post ID.
+ * @param string $status Post status. Ex: draft, publish etc.
  */
 function geodir_set_post_status($pid, $status)
 {
@@ -1832,12 +1840,13 @@ function geodir_set_post_status($pid, $status)
 
 
 /**
+ * Update post status of a post.
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param $new_status
- * @param $old_status
- * @param $post
+ * @param string $new_status New post status. Ex: draft, publish etc.
+ * @param string $old_status Old post status. Ex: draft, publish etc.
+ * @param object $post The post object.
  */
 function geodir_update_poststatus($new_status, $old_status, $post)
 {
@@ -1858,8 +1867,8 @@ if (!function_exists('geodir_update_listing_info')) {
      *
      * @since 1.0.0
      * @package GeoDirectory
-     * @param $updatingpost
-     * @param $temppost
+     * @param int $updatingpost The updating post ID.
+     * @param int $temppost The temporary post ID.
      */
     function geodir_update_listing_info($updatingpost, $temppost)
     {
@@ -1899,12 +1908,12 @@ if (!function_exists('geodir_update_listing_info')) {
 
 if (!function_exists('geodir_delete_listing_info')) {
     /**
-     * Delete Listing
+     * Delete Listing info from details table for the given post id.
      *
      * @since 1.0.0
      * @package GeoDirectory
-     * @param $deleted_postid
-     * @param bool $force
+     * @param int $deleted_postid The post ID.
+     * @param bool $force Optional. Do you want to force delete it? Default: false.
      */
     function geodir_delete_listing_info($deleted_postid, $force = false)
     {
@@ -1963,7 +1972,7 @@ if (!function_exists('geodir_add_to_favorite')) {
      *
      * @since 1.0.0
      * @package GeoDirectory
-     * @param $post_id
+     * @param int $post_id The post ID.
      */
     function geodir_add_to_favorite($post_id)
     {
@@ -1998,7 +2007,7 @@ if (!function_exists('geodir_remove_from_favorite')) {
      *
      * @since 1.0.0
      * @package GeoDirectory
-     * @param $post_id
+     * @param int $post_id The post ID.
      */
     function geodir_remove_from_favorite($post_id)
     {
@@ -2037,8 +2046,8 @@ if (!function_exists('geodir_favourite_html')) {
      *
      * @since 1.0.0
      * @package GeoDirectory
-     * @param $user_id
-     * @param $post_id
+     * @param int $user_id The user ID.
+     * @param int $post_id The post ID.
      */
     function geodir_favourite_html($user_id, $post_id)
     {
@@ -2080,11 +2089,12 @@ if (!function_exists('geodir_favourite_html')) {
 
 
 /**
+ * Get post count for the given category / term
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param array $term
- * @return bool|int|null|string
+ * @param object|array $term category / term object that need to be processed.
+ * @return bool|int|null|string Post count.
  */
 function geodir_get_cat_postcount($term = array())
 {
@@ -2151,8 +2161,8 @@ function geodir_allow_post_type_frontend()
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param $length
- * @return mixed|void
+ * @param int $length Optional. Old length.
+ * @return mixed|void Returns length.
  */
 function geodir_excerpt_length($length)
 {
@@ -2173,8 +2183,8 @@ function geodir_excerpt_length($length)
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param $more
- * @return string
+ * @param string $more Optional. Old string.
+ * @return string Returns read more link.
  */
 function geodir_excerpt_more($more)
 {
@@ -2184,11 +2194,13 @@ function geodir_excerpt_more($more)
 
 
 /**
+ * Update markers on category Edit.
+ *
  * @since 1.0.0
  * @package GeoDirectory
- * @param $term_id
- * @param $tt_id
- * @param $taxonomy
+ * @param string $term_id The term ID as string.
+ * @param int $tt_id The term taxonomy ID.
+ * @param string $taxonomy The taxonomy slug.
  */
 function geodir_update_markers_oncatedit($term_id, $tt_id, $taxonomy)
 {
@@ -2253,10 +2265,12 @@ function geodir_update_markers_oncatedit($term_id, $tt_id, $taxonomy)
 }
 
 /**
+ * Get listing author id.
+ *
  * @since 1.0.0
  * @package GeoDirectory
- * @param string $listing_id
- * @return string
+ * @param int|string $listing_id The post ID.
+ * @return string|int The author ID.
  */
 function geodir_get_listing_author($listing_id = '')
 {
@@ -2272,10 +2286,12 @@ function geodir_get_listing_author($listing_id = '')
 
 
 /**
+ * Check whether a listing belongs to a user or not.
+ *
  * @since 1.0.0
  * @package GeoDirectory
- * @param $listing_id
- * @param $user_id
+ * @param int|string $listing_id The post ID.
+ * @param int $user_id The user ID.
  * @return bool
  */
 function geodir_lisiting_belong_to_user($listing_id, $user_id)
@@ -2289,10 +2305,12 @@ function geodir_lisiting_belong_to_user($listing_id, $user_id)
 }
 
 /**
+ * Check whether a listing belongs to current user or not.
+ *
  * @since 1.0.0
  * @package GeoDirectory
- * @param string $listing_id
- * @param bool $exclude_admin
+ * @param int|string $listing_id The post ID.
+ * @param bool $exclude_admin Optional. Do you want to exclude admin from the check?. Default true.
  * @return bool
  */
 function geodir_listing_belong_to_current_user($listing_id = '', $exclude_admin = true)
@@ -2312,10 +2330,12 @@ function geodir_listing_belong_to_current_user($listing_id = '', $exclude_admin 
 
 
 /**
+ * Delete only supported attachments. This function is hooked to wp_delete_file filter.
+ *
  * @since 1.0.0
  * @package GeoDirectory
- * @param $file
- * @return string
+ * @param string $file. The File path.
+ * @return string File path if valid. Else empty string.
  */
 function geodir_only_supportable_attachments_remove($file)
 {
@@ -2336,12 +2356,11 @@ function geodir_only_supportable_attachments_remove($file)
 
 
 /**
- * Set first image as wordpress post's featured image.
+ * Set first image as post's featured image.
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param $post_id
- * @author Vikas
+ * @param int $post_id The post ID.
  */
 function geodir_set_wp_featured_image($post_id)
 {
@@ -2484,10 +2503,12 @@ add_action('wp_ajax_gd_copy_original_translation', 'gd_copy_original_translation
 
 
 /**
+ * Get custom fields info using listing post type.
+ *
  * @since 1.0.0
  * @package GeoDirectory
- * @param string $listing_type
- * @return mixed|void
+ * @param string $listing_type The listing post type.
+ * @return mixed|void|array custom fields info as an array
  */
 function geodir_get_custom_fields_type($listing_type = '')
 {
@@ -2540,9 +2561,9 @@ function geodir_get_custom_fields_type($listing_type = '')
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param $post_ID
- * @param $post_after
- * @param $post_before
+ * @param int $post_ID The post ID.
+ * @param object $post_after The post object after update.
+ * @param object $post_before The post object before update.
  */
 function geodir_function_post_updated($post_ID, $post_after, $post_before)
 {
