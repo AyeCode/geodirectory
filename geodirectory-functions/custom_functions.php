@@ -1055,6 +1055,7 @@ function geodir_show_detail_page_tabs()
                                 if (geodir_is_page('detail')) {
                                     the_content();
                                 } else {
+                                    /** This action is documented in geodirectory_template_actions.php */
                                     echo apply_filters('the_content', stripslashes($post->post_desc));
                                 }
                                 do_action('geodir_after_description_on_listing_detail');
@@ -1066,6 +1067,7 @@ function geodir_show_detail_page_tabs()
                                 echo $thumb_image;
                                 break;
                             case 'post_video':
+                                /** This action is documented in geodirectory_template_actions.php */
                                 echo apply_filters('the_content', stripslashes($video));// we apply the_content filter so oembed works also;
                                 break;
                             case 'special_offers':
