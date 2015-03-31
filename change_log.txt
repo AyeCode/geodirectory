@@ -12,6 +12,8 @@ Recent reviews widget ratings stars color not changed with multirating color set
 geodir_curPageURL() changed slightly for https url's, we no longer add the port number - CHANGED
 Shortcode added for to display GeoDirectoy Listings with pagination - ADDED
 Marker cluster not working in maps added via shortcode - FIXED
+Add to fav/remove from fav text now filterable - ADDED
+
 
 v1.4.1
 Distances to listings should show miles/km until 0.01 rather than 1 before changing to ft/m - FIXED

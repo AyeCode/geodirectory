@@ -25,9 +25,17 @@ do_action('geodir_wrapper_content_open', 'add-listing-page', 'geodir-wrapper-con
 ###### MAIN CONTENT ######
 // this adds the page title
 do_action('geodir_add_listing_page_title');
-// this adds th manditory message
+/**
+ * Called before the add listing page form. This adds the mandatory messages.
+ *
+ * @since 1.0.0
+ */
 do_action('geodir_add_listing_page_mandatory');
-// this adds the add listing form
+/**
+ * Adds the add listing form.
+ *
+ * @since 1.0.0
+ */
 do_action('geodir_add_listing_form');
 
 ###### MAIN CONTENT WRAPPERS CLOSE ######

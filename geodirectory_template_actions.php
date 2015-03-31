@@ -570,6 +570,11 @@ function geodir_details_sidebar_widget_area()
 
 function geodir_details_sidebar_place_details()
 {
+    /**
+     * Used to add items to the details page sidebar.
+     *
+     * @since 1.0.0
+     */
     do_action('geodir_detail_page_sidebar');
 }
 
@@ -581,18 +586,64 @@ function geodir_action_details_sidebar()
 {
     // this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
     if (get_option('geodir_detail_sidebar_left_section')) {
+        /**
+         * Called before the details page left sidebar is opened.
+         *
+         * This is used to add opening wrapper HTML to the details page left sidebar.
+         *
+         * @since 1.0.0
+         * @param string $type The current page type. Values can be 'details-page', 'listings-page', 'author-page', 'search-page' or 'home-page'.
+         * @param string $id Usually the ID of the sidebar wrapper. Values can be 'geodir-sidebar' or 'geodir-sidebar-left'.
+         * @param string $class The class of the sidebar wrapper. 'geodir-sidebar-left geodir-details-sidebar-left'.
+         * @param string $itemtype HTML itemtype 'http://schema.org/WPSideBar'.
+         */
         do_action('geodir_sidebar_left_open', 'details-page', 'geodir-sidebar', 'geodir-sidebar-left geodir-details-sidebar-left', 'http://schema.org/WPSideBar');
         ?>
         <div class="geodir-content-left geodir-sidebar-wrap"><?php
+        /**
+         * Called inside the HTML wrapper of the details sidebar for either the left and right sidebar.
+         *
+         * This is used to add all info to the details page sidebars.
+         *
+         * @since 1.0.0
+         */
         do_action('geodir_detail_sidebar_inside');
         ?></div><?php
+        /**
+         * Called after the details page left sidebar.
+         *
+         * This is used to add closing wrapper HTML to the details page left sidebar.
+         *
+         * @since 1.0.0
+         * @param string $type The current page type. Values can be 'details-page', 'listings-page', 'author-page', 'search-page' or 'home-page'.
+         */
         do_action('geodir_sidebar_left_close', 'details-page');
     } else {
+        /**
+         * Called before the details page right sidebar is opened.
+         *
+         * This is used to add opening wrapper HTML to the details page right sidebar.
+         *
+         * @since 1.0.0
+         * @param string $type The current page type. Values can be 'details-page', 'listings-page', 'add-listing-page', 'author-page', 'search-page' or 'home-page'.
+         * @param string $id Usually the ID of the sidebar wrapper. Values can be 'geodir-sidebar' or 'geodir-sidebar-right'.
+         * @param string $class The class of the sidebar wrapper. 'geodir-sidebar-right geodir-details-sidebar-right'.
+         * @param string $itemtype HTML itemtype 'http://schema.org/WPSideBar'.
+         */
         do_action('geodir_sidebar_right_open', 'details-page', 'geodir-sidebar', 'geodir-sidebar-right geodir-details-sidebar-right', 'http://schema.org/WPSideBar');
         ?>
         <div class="geodir-content-right geodir-sidebar-wrap"><?php
+        /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_detail_sidebar_inside');
         ?></div><?php
+        /**
+         * Called after the details page right sidebar.
+         *
+         * This is used to add closing wrapper HTML to the details page right sidebar.
+         *
+         * @since 1.0.0
+         * @param string $type The current page type. Values can be 'details-page', 'listings-page', 'author-page', 'search-page' or 'home-page'.
+         */
         do_action('geodir_sidebar_right_close', 'details-page');
     }
 }
@@ -921,11 +972,24 @@ function geodir_action_details_next_prev()
 function geodir_action_before_single_post()
 {
     global $post;
+    /**
+     * Called at the very start fo the details page output, before the title section.
+     *
+     * @since 1.0.0
+     * @param $post The current post object.
+     * @global WP_Post|null $post The current post, if available.
+     */
     do_action('geodir_before_single_post', $post); // extra action	
 }
 
 function geodir_action_after_single_post($post)
 {
+    /**
+     * Called on the details page after the details page tabs section and before the next/prev buttons.
+     *
+     * @since 1.0.0
+     * @param $post The current post object.
+     */
     do_action('geodir_after_single_post', $post); // extra action	
 }
 
@@ -938,30 +1002,6 @@ add_action('geodir_details_main_content', 'geodir_show_detail_page_tabs', 60);
 add_action('geodir_details_main_content', 'geodir_action_after_single_post', 70);
 add_action('geodir_details_main_content', 'geodir_action_details_next_prev', 80);
 
-
-function geodir_action_details_main_content()
-{
-    if (have_posts()) while (have_posts()) : the_post();
-        global $post, $post_images;
-
-
-
-        //do_action( 'geodir_page_title','entry-title fn');// page title
-
-        //do_action( 'geodir_details_slider',$post);// details page slider
-
-        // do_action( 'geodir_details_taxonomies');// details page taxonomies
-
-        // do_action( 'geodir_details_micordata',$post);// details page micordata
-
-        //do_action( 'geodir_details_tabs',$post);// details page tabs
-
-        //  do_action('geodir_after_single_post', $post); // extra action
-
-        // do_action( 'geodir_details_next_prev',$post);// details page next/prev post links
-
-    endwhile;
-}
 
 ###############################################
 ########### LISTINGS PAGE ACTIONS #############
@@ -1190,9 +1230,17 @@ add_action('geodir_listings_sidebar_left', 'geodir_action_listings_sidebar_left'
 function geodir_action_listings_sidebar_left()
 {
     if (get_option('geodir_show_listing_left_section')) {
-// this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
+        /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_left_open', 'listings-page', 'geodir-sidebar-left', 'geodir-sidebar-left geodir-listings-sidebar-left', 'http://schema.org/WPSideBar');
+        /**
+         * Calls the listings page (category) left sidebar content.
+         *
+         * All the content for the listings page left sidebar is added via this hook.
+         *
+         * @since 1.0.0
+         */
         do_action('geodir_listings_sidebar_left_inside');
+        /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_left_close', 'listings-page');
     }
 }
@@ -1213,9 +1261,17 @@ add_action('geodir_listings_sidebar_right', 'geodir_action_listings_sidebar_righ
 function geodir_action_listings_sidebar_right()
 {
     if (get_option('geodir_show_listing_right_section')) {
-// this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
+        /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_right_open', 'listings-page', 'geodir-sidebar-right', 'geodir-sidebar-right geodir-listings-sidebar-right', 'http://schema.org/WPSideBar');
+        /**
+         * Calls the listings page (category) right sidebar content.
+         *
+         * All the content for the listings page right sidebar is added via this hook.
+         *
+         * @since 1.0.0
+         */
         do_action('geodir_listings_sidebar_right_inside');
+        /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_right_close', 'listings-page');
     }
 }
@@ -1277,13 +1333,45 @@ add_action('geodir_listings_content_inside', 'geodir_pagination', 20);
 add_action('geodir_listings_content', 'geodir_action_listings_content', 10);
 function geodir_action_listings_content()
 {
-// this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
+    /**
+     * This is used to add HTML opening wrappers to the main content of most pages including listings, author, search, home etc.
+     *
+     * @since 1.0.0
+     * @param string $type The page type. Values can be 'listings-page', 'author-page', 'search-page' or 'home-page'.
+     * @param string $id The id for the div. Usually 'geodir-main-content'.
+     * @param string $class The class for the div. Values can be 'listings-page', 'author-page', 'search-page' or 'home-page'.
+     * @see 'geodir_main_content_close' Where the oposing closing tag is added.
+     */
     do_action('geodir_main_content_open', 'listings-page', 'geodir-main-content', 'listings-page');
     echo '<div class="clearfix">';
+    /**
+     * Called before the listings page content, inside the outer wrapper. Used on listings pages and search and author pages.
+     *
+     * @since 1.0.0
+     */
     do_action('geodir_before_listing');
     echo '</div>';
+
+    /**
+     * This actions calls the listings list content. Used on listings pages and search and author pages.
+     *
+     * @since 1.0.0
+     */
     do_action('geodir_listings_content_inside');
+
+    /**
+     * Called after the listings content, inside the outer wrapper HTML. Used on listings pages and search and author pages.
+     *
+     * @since 1.0.0
+     */
     do_action('geodir_after_listing');
+
+    /**
+     * This is used to add HTML closing wrappers to the main content of most pages including listings, author, search, home etc.
+     *
+     * @since 1.0.0
+     * @see 'geodir_main_content_open' Where the oposing opening tag is added.
+     */
     do_action('geodir_main_content_close', 'listings-page');
 }
 
@@ -1629,9 +1717,10 @@ add_action('geodir_add_listing_sidebar_inside', 'geodir_add_listing_sidebar_widg
 add_action('geodir_add_listing_sidebar', 'geodir_action_add_listing_sidebar', 10);
 function geodir_action_add_listing_sidebar()
 {
-// this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
+    /** This action is documented in geodirectory_template_actions.php */
     do_action('geodir_sidebar_right_open', 'add-listing-page', 'geodir-sidebar', 'geodir-sidebar-right', 'http://schema.org/WPSideBar');
     do_action('geodir_add_listing_sidebar_inside');
+    /** This action is documented in geodirectory_template_actions.php */
     do_action('geodir_sidebar_right_close', 'details-page');
 }
 
@@ -1825,8 +1914,10 @@ function geodir_action_author_sidebar_left()
 {
     if (get_option('geodir_show_author_left_section')) {
 // this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
+        /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_left_open', 'author-page', 'geodir-sidebar-left', 'geodir-sidebar-left geodir-listings-sidebar-left', 'http://schema.org/WPSideBar');
         do_action('geodir_author_sidebar_left_inside');
+        /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_left_close', 'author-page');
     }
 }
@@ -1846,9 +1937,10 @@ add_action('geodir_author_sidebar_right', 'geodir_action_author_sidebar_right', 
 function geodir_action_author_sidebar_right()
 {
     if (get_option('geodir_show_author_right_section')) {
-// this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
+        /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_right_open', 'author-page', 'geodir-sidebar-right', 'geodir-sidebar-right geodir-listings-sidebar-right', 'http://schema.org/WPSideBar');
         do_action('geodir_author_sidebar_right_inside');
+        /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_right_close', 'author-page');
     }
 }
@@ -1871,13 +1963,16 @@ add_action('geodir_author_content_inside', 'geodir_pagination', 20);
 add_action('geodir_author_content', 'geodir_action_author_content', 10);
 function geodir_action_author_content()
 {
-// this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
+    /** This action is documented in geodirectory_template_actions.php */
     do_action('geodir_main_content_open', 'author-page', 'geodir-main-content', 'author-page');
     echo '<div class="clearfix">';
+    /** This action is documented in geodirectory_template_actions.php */
     do_action('geodir_before_listing');
     echo '</div>';
     do_action('geodir_author_content_inside');
+    /** This action is documented in geodirectory_template_actions.php */
     do_action('geodir_after_listing');
+    /** This action is documented in geodirectory_template_actions.php */
     do_action('geodir_main_content_close', 'author-page');
 }
 
@@ -1951,8 +2046,10 @@ function geodir_action_search_sidebar_left()
 {
     if (get_option('geodir_show_search_left_section')) {
 // this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
+        /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_left_open', 'search-page', 'geodir-sidebar-left', 'geodir-sidebar-left geodir-listings-sidebar-left', 'http://schema.org/WPSideBar');
         do_action('geodir_search_sidebar_left_inside');
+        /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_left_close', 'search-page');
     }
 }
@@ -1972,9 +2069,10 @@ add_action('geodir_search_sidebar_right', 'geodir_action_search_sidebar_right', 
 function geodir_action_search_sidebar_right()
 {
     if (get_option('geodir_show_search_right_section')) {
-// this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
+        /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_right_open', 'search-page', 'geodir-sidebar-right', 'geodir-sidebar-right geodir-listings-sidebar-right', 'http://schema.org/WPSideBar');
         do_action('geodir_search_sidebar_right_inside');
+        /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_right_close', 'search-page');
     }
 }
@@ -2009,13 +2107,16 @@ add_action('geodir_search_content_inside', 'geodir_pagination', 20);
 add_action('geodir_search_content', 'geodir_action_search_content', 10);
 function geodir_action_search_content()
 {
-// this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
+    /** This action is documented in geodirectory_template_actions.php */
     do_action('geodir_main_content_open', 'search-page', 'geodir-main-content', 'search-page');
     echo '<div class="clearfix">';
+    /** This action is documented in geodirectory_template_actions.php */
     do_action('geodir_before_listing');
     echo '</div>';
     do_action('geodir_search_content_inside');
+    /** This action is documented in geodirectory_template_actions.php */
     do_action('geodir_after_listing');
+    /** This action is documented in geodirectory_template_actions.php */
     do_action('geodir_main_content_close', 'search-page');
 }
 
@@ -2056,8 +2157,10 @@ function geodir_action_home_sidebar_left()
 {
     if (get_option('geodir_show_home_left_section')) {
 // this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
+        /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_left_open', 'home-page', 'geodir-sidebar-left', 'geodir-sidebar geodir-sidebar-left geodir-listings-sidebar-left', 'http://schema.org/WPSideBar');
         do_action('geodir_home_sidebar_left_inside');
+        /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_left_close', 'home-page');
     }
 }
@@ -2078,9 +2181,10 @@ add_action('geodir_home_sidebar_right', 'geodir_action_home_sidebar_right', 10);
 function geodir_action_home_sidebar_right()
 {
     if (get_option('geodir_show_home_right_section')) {
-// this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
+        /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_right_open', 'home-page', 'geodir-sidebar-right', 'geodir-sidebar-right geodir-listings-sidebar-right', 'http://schema.org/WPSideBar');
         do_action('geodir_home_sidebar_right_inside');
+        /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_sidebar_right_close', 'home-page');
     }
 }
@@ -2098,11 +2202,12 @@ add_action('geodir_location_content', 'geodir_action_home_content', 10);
 add_action('geodir_home_content', 'geodir_action_home_content', 10);
 function geodir_action_home_content()
 {
-// this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
+    /** This action is documented in geodirectory_template_actions.php */
     do_action('geodir_main_content_open', 'home-page', 'geodir-main-content', 'home-page');
     do_action('geodir_before_home_content');
     do_action('geodir_home_content_inside');
     do_action('geodir_after_home_content');
+    /** This action is documented in geodirectory_template_actions.php */
     do_action('geodir_main_content_close', 'home-page');
 }
 
