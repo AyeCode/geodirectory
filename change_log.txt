@@ -13,6 +13,7 @@ geodir_curPageURL() changed slightly for https url's, we no longer add the port 
 Shortcode added for to display GeoDirectoy Listings with pagination - ADDED
 Marker cluster not working in maps added via shortcode - FIXED
 Add to fav/remove from fav text now filterable - ADDED
+Awesome font upgraded with new Awesome font version 4.3.0 - ADDED
 
 
 v1.4.1
