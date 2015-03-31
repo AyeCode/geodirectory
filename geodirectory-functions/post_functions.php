@@ -17,7 +17,6 @@
  * @param string|int $default_cat Optional. The default category ID.
  * @param array|string $category_str Optional. Blank string if no categories. Else array of categories to set.
  */
-
 function geodir_set_postcat_structure($post_id, $taxonomy, $default_cat = '', $category_str = '')
 {
 
@@ -63,7 +62,7 @@ function geodir_set_postcat_structure($post_id, $taxonomy, $default_cat = '', $c
 
 if (!function_exists('geodir_save_listing')) {
     /**
-     * Saves listing in the database using given information
+     * Saves listing in the database using given information.
      *
      * @since 1.0.0
      * @package GeoDirectory
@@ -595,7 +594,8 @@ if (!function_exists('geodir_delete_post_meta')) {
      * @package GeoDirectory
      * @param int $post_id The post ID.
      * @param string $postmeta Detail table column name.
-     * @internal TODO: Fix unknown variable mval.
+     * @todo check if this is depreciated
+     * @todo Fix unknown variable mval
      * @return bool
      */
     function geodir_delete_post_meta($post_id, $postmeta)
@@ -657,7 +657,7 @@ if (!function_exists('geodir_get_post_meta')) {
      * @param int $post_id The post ID.
      * @param string $meta_key The meta key to retrieve.
      * @param bool $single Optional. Whether to return a single value. Default false.
-     * @internal TODO: single variable not yet implemented.
+     * @todo single variable not yet implemented.
      * @return bool|mixed|null|string Will be an array if $single is false. Will be value of meta data field if $single is true.
      */
     function geodir_get_post_meta($post_id, $meta_key, $single = false)
@@ -977,7 +977,7 @@ function geodir_remove_temp_images()
 
 
 /**
- * Delete a directory
+ * Delete a directory.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -1008,7 +1008,7 @@ function geodir_delete_directory($dirname)
 
 if (!function_exists('geodir_remove_attachments')) {
     /**
-     * Remove post attachments
+     * Remove post attachments.
      *
      * @since 1.0.0
      * @package GeoDirectory
@@ -1036,7 +1036,7 @@ if (!function_exists('geodir_remove_attachments')) {
 
 if (!function_exists('geodir_get_featured_image')) {
     /**
-     * Gets the post featured image
+     * Gets the post featured image.
      *
      * @since 1.0.0
      * @package GeoDirectory
@@ -1150,7 +1150,7 @@ if (!function_exists('geodir_get_featured_image')) {
 
 if (!function_exists('geodir_show_featured_image')) {
     /**
-     * Gets the post featured image
+     * Gets the post featured image.
      *
      * @since 1.0.0
      * @package GeoDirectory
@@ -1181,14 +1181,14 @@ if (!function_exists('geodir_show_featured_image')) {
 
 if (!function_exists('geodir_get_images')) {
     /**
-     * Gets the post images
+     * Gets the post images.
      *
      * @since 1.0.0
      * @package GeoDirectory
      * @param int $post_id The post ID.
      * @param string $img_size Optional. Thumbnail size.
      * @param bool $no_images Optional. Do you want to return the default image when no image is available? Default: false.
-     * @param bool $add_featured
+     * @param bool $add_featured Optional. Do you want to include featured images too? Default: true.
      * @param int|string $limit Optional. Number of images.
      * @return array|bool Returns images as an array. Each item is an object.
      */
@@ -1300,7 +1300,7 @@ if (!function_exists('geodir_get_images')) {
 
 if (!function_exists('geodir_show_image')) {
     /**
-     * Show image
+     * Show image using image details.
      *
      * @since 1.0.0
      * @package GeoDirectory
@@ -1374,7 +1374,7 @@ if (!function_exists('geodir_show_image')) {
 
 if (!function_exists('geodir_set_post_terms')) {
     /**
-     * Set post Categories
+     * Set post Categories.
      *
      * @since 1.0.0
      * @package GeoDirectory
@@ -1863,12 +1863,13 @@ function geodir_update_poststatus($new_status, $old_status, $post)
 
 if (!function_exists('geodir_update_listing_info')) {
     /**
-     * Update post info
+     * Update post info.
      *
      * @since 1.0.0
      * @package GeoDirectory
      * @param int $updatingpost The updating post ID.
      * @param int $temppost The temporary post ID.
+     * @todo fix post_id variable
      */
     function geodir_update_listing_info($updatingpost, $temppost)
     {
@@ -1968,7 +1969,7 @@ if (!function_exists('geodir_delete_listing_info')) {
 
 if (!function_exists('geodir_add_to_favorite')) {
     /**
-     * This function would add listing to favorite listing
+     * This function would add listing to favorite listing.
      *
      * @since 1.0.0
      * @package GeoDirectory
@@ -2003,7 +2004,7 @@ if (!function_exists('geodir_add_to_favorite')) {
 
 if (!function_exists('geodir_remove_from_favorite')) {
     /**
-     * This function would remove the favourited property earlier
+     * This function would remove the favourited property earlier.
      *
      * @since 1.0.0
      * @package GeoDirectory
@@ -2042,7 +2043,7 @@ if (!function_exists('geodir_remove_from_favorite')) {
 
 if (!function_exists('geodir_favourite_html')) {
     /**
-     * This function would display the html content for add to favorite or remove from favorite
+     * This function would display the html content for add to favorite or remove from favorite.
      *
      * @since 1.0.0
      * @package GeoDirectory
@@ -2089,7 +2090,7 @@ if (!function_exists('geodir_favourite_html')) {
 
 
 /**
- * Get post count for the given category / term
+ * Get post count for the given category / term.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -2157,7 +2158,7 @@ function geodir_allow_post_type_frontend()
 }
 
 /**
- * Changing excerpt length
+ * Changing excerpt length.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -2179,7 +2180,7 @@ function geodir_excerpt_length($length)
 }
 
 /**
- * Changing excerpt more
+ * Changing excerpt more.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -2508,7 +2509,7 @@ add_action('wp_ajax_gd_copy_original_translation', 'gd_copy_original_translation
  * @since 1.0.0
  * @package GeoDirectory
  * @param string $listing_type The listing post type.
- * @return mixed|void|array custom fields info as an array
+ * @return mixed|void|array custom fields info as an array.
  */
 function geodir_get_custom_fields_type($listing_type = '')
 {
