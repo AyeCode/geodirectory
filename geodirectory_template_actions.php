@@ -1,8 +1,20 @@
 <?php
+/**
+ * Template functions that affect the output of most GeoDirectory pages
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 ###############################################
 ########### DYNAMIC CONTENT ###################
 ###############################################
 
+/**
+ * Outputs the CSS from the compatibility settings page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function gd_compat_styles()
 {
     $tc = get_option('theme_compatibility_setting');
@@ -11,6 +23,12 @@ function gd_compat_styles()
     echo "</style>";
 }
 
+/**
+ * Outputs the JS from the compatibility settings page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function gd_compat_script()
 {
     $tc = get_option('theme_compatibility_setting');
@@ -19,99 +37,224 @@ function gd_compat_script()
     echo " </script>";
 }
 
-
+/**
+ * Outputs the 'geodir_top_content_add' from the compatibility settings page.
+ *
+ * This is called via filter and should not really be used direct.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_top_content_add_dynamic()
 {
     $tc = get_option('theme_compatibility_setting');
     echo $tc['geodir_top_content_add'];
 }
 
+/**
+ * Outputs the 'geodir_before_main_content_add' from the compatibility settings page.
+ *
+ * This is called via filter and should not really be used direct.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_before_main_content_add_dynamic()
 {
     $tc = get_option('theme_compatibility_setting');
     echo $tc['geodir_before_main_content_add'];
 }
 
-
+/**
+ * Outputs the 'geodir_full_page_class_filter' from the compatibility settings page.
+ *
+ * This is called via filter and should not really be used direct.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_full_page_class_dynamic()
 {
     $tc = get_option('theme_compatibility_setting');
     return $tc['geodir_full_page_class_filter'];
 }
 
+/**
+ * Outputs the 'geodir_before_widget_filter' from the compatibility settings page.
+ *
+ * This is called via filter and should not really be used direct.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_before_widget_dynamic()
 {
     $tc = get_option('theme_compatibility_setting');
     return $tc['geodir_before_widget_filter'];
 }
 
+/**
+ * Outputs the 'geodir_after_widget_filter' from the compatibility settings page.
+ *
+ * This is called via filter and should not really be used direct.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_after_widget_dynamic()
 {
     $tc = get_option('theme_compatibility_setting');
     return $tc['geodir_after_widget_filter'];
 }
 
-
+/**
+ * Outputs the 'geodir_before_title_filter' from the compatibility settings page.
+ *
+ * This is called via filter and should not really be used direct.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_before_title_dynamic()
 {
     $tc = get_option('theme_compatibility_setting');
     return $tc['geodir_before_title_filter'];
 }
 
+/**
+ * Outputs the 'geodir_after_title_filter' from the compatibility settings page.
+ *
+ * This is called via filter and should not really be used direct.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_after_title_dynamic()
 {
     $tc = get_option('theme_compatibility_setting');
     return $tc['geodir_after_title_filter'];
 }
 
+/**
+ * Outputs the 'geodir_menu_li_class_filter' from the compatibility settings page.
+ *
+ * This is called via filter and should not really be used direct.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_menu_li_class_dynamic()
 {
     $tc = get_option('theme_compatibility_setting');
     return $tc['geodir_menu_li_class_filter'];
 }
 
+/**
+ * Outputs the 'geodir_sub_menu_ul_class_filter' from the compatibility settings page.
+ *
+ * This is called via filter and should not really be used direct.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_sub_menu_ul_class_dynamic()
 {
     $tc = get_option('theme_compatibility_setting');
     return $tc['geodir_sub_menu_ul_class_filter'];
 }
 
+/**
+ * Outputs the 'geodir_sub_menu_li_class_filter' from the compatibility settings page.
+ *
+ * This is called via filter and should not really be used direct.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_sub_menu_li_class_dynamic()
 {
     $tc = get_option('theme_compatibility_setting');
     return $tc['geodir_sub_menu_li_class_filter'];
 }
 
+/**
+ * Outputs the 'geodir_menu_a_class_filter' from the compatibility settings page.
+ *
+ * This is called via filter and should not really be used direct.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_menu_a_class_dynamic()
 {
     $tc = get_option('theme_compatibility_setting');
     return $tc['geodir_menu_a_class_filter'];
 }
 
+/**
+ * Outputs the 'geodir_sub_menu_a_class_filter' from the compatibility settings page.
+ *
+ * This is called via filter and should not really be used direct.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_sub_menu_a_class_dynamic()
 {
     $tc = get_option('theme_compatibility_setting');
     return $tc['geodir_sub_menu_a_class_filter'];
 }
 
+/**
+ * Outputs the 'geodir_location_switcher_menu_li_class_filter' from the compatibility settings page.
+ *
+ * This is called via filter and should not really be used direct.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_location_switcher_menu_li_class_dynamic()
 {
     $tc = get_option('theme_compatibility_setting');
     return $tc['geodir_location_switcher_menu_li_class_filter'];
 }
 
+/**
+ * Outputs the 'geodir_location_switcher_menu_a_class_filter' from the compatibility settings page.
+ *
+ * This is called via filter and should not really be used direct.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_location_switcher_menu_a_class_dynamic()
 {
     $tc = get_option('theme_compatibility_setting');
     return $tc['geodir_location_switcher_menu_a_class_filter'];
 }
 
+/**
+ * Outputs the 'geodir_location_switcher_menu_sub_ul_class_filter' from the compatibility settings page.
+ *
+ * This is called via filter and should not really be used direct.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_location_switcher_menu_sub_ul_class_dynamic()
 {
     $tc = get_option('theme_compatibility_setting');
     return $tc['geodir_location_switcher_menu_sub_ul_class_filter'];
 }
 
+/**
+ * Outputs the 'geodir_location_switcher_menu_sub_li_class_filter' from the compatibility settings page.
+ *
+ * This is called via filter and should not really be used direct.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_location_switcher_menu_sub_li_class_dynamic()
 {
     $tc = get_option('theme_compatibility_setting');
@@ -120,9 +263,17 @@ function geodir_location_switcher_menu_sub_li_class_dynamic()
 
 
 add_action('setup_theme', 'geodir_content_actions_dynamic', 10);
+
+/**
+ * Changed the output settings depending on the compatibility settings.
+ *
+ * This function checks the theme compatibility settings and filters the output accordingly.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_content_actions_dynamic()
 {
-    global $wpdb;
 
     $tc = get_option('theme_compatibility_setting');
     if (empty($tc)) {
@@ -234,6 +385,16 @@ function geodir_content_actions_dynamic()
 
 // action for adding the wrapper div opening tag
 add_action('geodir_wrapper_open', 'geodir_action_wrapper_open', 10, 3);
+
+/**
+ * Outputs the opening HTML wrapper div if the compatibility settings are present.
+ *
+ * @param string $type Optional. Depreciated.
+ * @param string $id Optional. The div id.
+ * @param string $class Optional. The div class.
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_wrapper_open($type = '', $id = '', $class = '')
 {
     $tc = get_option('theme_compatibility_setting');
@@ -257,6 +418,14 @@ function geodir_action_wrapper_open($type = '', $id = '', $class = '')
 
 // action for adding the wrapperdiv closing tag
 add_action('geodir_wrapper_close', 'geodir_action_wrapper_close', 10, 1);
+
+/**
+ * Outputs the closing HTML wrapper div if the compatibility settings are present.
+ *
+ * @param string $type Optional. Depreciated.
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_wrapper_close($type = '')
 {
     $tc = get_option('theme_compatibility_setting');
@@ -271,6 +440,15 @@ function geodir_action_wrapper_close($type = '')
 
 // action for adding the content div opening tag
 add_action('geodir_wrapper_content_open', 'geodir_action_wrapper_content_open', 10, 3);
+/**
+ * Outputs the opening HTML content wrapper div if the compatibility settings are present.
+ *
+ * @param string $type Optional. Page type.
+ * @param string $id Optional. The div id.
+ * @param string $class Optional. The div class.
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_wrapper_content_open($type = '', $id = '', $class = '')
 {
     if ($type == 'home-page' && $width = get_option('geodir_width_home_contant_section')) {
@@ -306,6 +484,13 @@ function geodir_action_wrapper_content_open($type = '', $id = '', $class = '')
 
 // action for adding the primary div closing tag
 add_action('geodir_wrapper_content_close', 'geodir_action_wrapper_content_close', 10, 1);
+/**
+ * Outputs the closing HTML content wrapper div if the compatibility settings are present.
+ *
+ * @param string $type Optional. Depreciated.
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_wrapper_content_close($type = '')
 {
     $tc = get_option('theme_compatibility_setting');
@@ -319,6 +504,16 @@ function geodir_action_wrapper_content_close($type = '')
 
 // action for adding the <article> opening tag
 add_action('geodir_article_open', 'geodir_action_article_open', 10, 4);
+/**
+ * Outputs the opening HTML article wrapper if the compatibility settings are present.
+ *
+ * @param string $type Optional. Depreciated.
+ * @param string $id Optional. The element id.
+ * @param string $class Optional. The element class.
+ * @param string $itemtype Optional. The element itemtype.
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_article_open($type = '', $id = '', $class = '', $itemtype = '')
 {
     $class = implode(" ", $class);
@@ -343,6 +538,13 @@ function geodir_action_article_open($type = '', $id = '', $class = '', $itemtype
 
 // action for adding the primary div closing tag
 add_action('geodir_article_close', 'geodir_action_article_close', 10, 1);
+/**
+ * Outputs the closing HTML article wrapper if the compatibility settings are present.
+ *
+ * @param string $type Optional. Depreciated.
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_article_close($type = '')
 {
     $tc = get_option('theme_compatibility_setting');
@@ -356,6 +558,16 @@ function geodir_action_article_close($type = '')
 
 // action for adding the sidebar opening tag
 add_action('geodir_sidebar_right_open', 'geodir_action_sidebar_right_open', 10, 4);
+/**
+ * Outputs the opening HTML aside right sidebar wrapper if the compatibility settings are present.
+ *
+ * @param string $type Optional. Page type.
+ * @param string $id Optional. The element id.
+ * @param string $class Optional. The element class.
+ * @param string $itemtype Optional. The element itemtype.
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_sidebar_right_open($type = '', $id = '', $class = '', $itemtype = '')
 {
     if ($type == 'home-page' && $width = get_option('geodir_width_home_right_section')) {
@@ -391,6 +603,13 @@ function geodir_action_sidebar_right_open($type = '', $id = '', $class = '', $it
 
 // action for adding the primary div closing tag
 add_action('geodir_sidebar_right_close', 'geodir_action_sidebar_right_close', 10, 1);
+/**
+ * Outputs the closing HTML aside right sidebar wrapper if the compatibility settings are present.
+ *
+ * @param string $type Optional. Depreciated.
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_sidebar_right_close($type = '')
 {
     $tc = get_option('theme_compatibility_setting');
@@ -409,6 +628,14 @@ add_action('geodir_detail_before_main_content', 'geodir_action_geodir_preview_co
 add_action('geodir_detail_before_main_content', 'geodir_action_geodir_sidebar_detail_top', 10);
 add_action('geodir_detail_before_main_content', 'geodir_breadcrumb', 20);
 
+/**
+ * Set the $post value if previewing a post.
+ *
+ * @global object $post The current post object.
+ * @global bool $preview True if the current page is a preview page. False if not.
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_geodir_set_preview_post()
 {
     global $post, $preview;
@@ -527,6 +754,13 @@ function geodir_action_geodir_set_preview_post()
     setup_postdata($post);
 }
 
+/**
+ * Outputs the preview page top section containing the messages and submit buttons.
+ *
+ * @global bool $preview True if the current page is a preview page. False if not.
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_geodir_preview_code()
 {
     global $preview;
@@ -542,6 +776,15 @@ function geodir_action_geodir_preview_code()
 
 // action for adding the details page top widget area
 add_action('geodir_sidebar_detail_top', 'geodir_action_geodir_sidebar_detail_top', 10, 1);
+/**
+ * Outputs the details page tops section widget area if enabled.
+ *
+ * Can be enabled/disabled from GD>Design>Detail page.
+ *
+ * @param string $class Optional. The class for the details page top section widget area.
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_geodir_sidebar_detail_top($class = '')
 {
     if (get_option('geodir_show_detail_top_section')) { ?>
@@ -570,6 +813,15 @@ add_action('geodir_add_breadcrumb', 'geodir_breadcrumb', 10, 1);
 // action for adding the details page top widget area
 add_action('geodir_sidebar_detail_bottom_section', 'geodir_action_geodir_sidebar_detail_bottom_section', 10, 1);
 
+/**
+ * Outputs the details page bottom section widget area if enabled.
+ *
+ * Can be enabled/disabled from GD>Design>Detail page.
+ *
+ * @param string $class Optional. The class for the details page top section widget area.
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_geodir_sidebar_detail_bottom_section($class = '')
 {
     if (get_option('geodir_show_detail_bottom_section')) { ?>
@@ -582,11 +834,23 @@ function geodir_action_geodir_sidebar_detail_bottom_section($class = '')
     <?php }
 }
 
+/**
+ * Outputs the details page sidebar widget area content.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_details_sidebar_widget_area()
 {
     dynamic_sidebar('geodir_detail_sidebar');
 }
 
+/**
+ * Outputs the details page sidebar place details content.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_details_sidebar_place_details()
 {
     /**
@@ -601,6 +865,12 @@ add_action('geodir_detail_sidebar_inside', 'geodir_details_sidebar_place_details
 add_action('geodir_detail_sidebar_inside', 'geodir_details_sidebar_widget_area', 20);
 
 add_action('geodir_detail_sidebar', 'geodir_action_details_sidebar', 10);
+/**
+ * Outputs the details page sidebar content including all HTML wrappers.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_details_sidebar()
 {
     // this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
@@ -668,6 +938,14 @@ function geodir_action_details_sidebar()
 }
 
 add_action('geodir_page_title', 'geodir_action_page_title', 10);
+/**
+ * Output the page title.
+ *
+ * Outputs the page title where the HTML wrappers classes are filterable.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_page_title()
 {
     /**
@@ -689,6 +967,14 @@ function geodir_action_page_title()
 
 
 add_action('geodir_details_slider', 'geodir_action_details_slider', 10, 1);
+/**
+ * Output the details page slider HTML.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global bool $preview True of on a preview page. False if not.
+ * @global object $post The current post object.
+ */
 function geodir_action_details_slider()
 {
     global $preview, $post;
@@ -808,6 +1094,14 @@ function geodir_action_details_slider()
 }
 
 add_action('geodir_details_taxonomies', 'geodir_action_details_taxonomies', 10);
+/**
+ * Output link to the posts categories and tags.
+ *
+ * @global bool $preview True of on a preview page. False if not.
+ * @global object $post The current post object.
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_details_taxonomies()
 {
     global $preview, $post;?>
@@ -853,24 +1147,6 @@ function geodir_action_details_taxonomies()
 
             foreach ($post_tags as $post_term) {
 
-                /*
-								$post_term = trim($post_term);
-							   
-							    if($insert_term = term_exists( $post_term, $post_type.'_tags' )){
-                                    $term = get_term_by( 'name', $post_term, $post_type.'_tags'); 
-                                }else{
-                                    $insert_term = wp_insert_term($post_term, $post_type.'_tags');
-                                     $term = get_term_by( 'name', $post_term, $post_type.'_tags');
-                                }	
-                                
-                                if(! is_wp_error( $term ))
-                                {	
-                                    //$links[] = "<a href='" . esc_attr( get_tag_link($term->term_id) ) . "'>$term->name</a>";
-									// fix tag link on detail page
-									$links[] = "<a href='" . esc_attr( get_term_link($term->term_id, $term->taxonomy) ) . "'>$term->name</a>";
-									$terms[] = $term;
-                                }
-								*/
                 // fix slug creation order for tags & location
                 $post_term = trim($post_term);
 
@@ -894,7 +1170,7 @@ function geodir_action_details_taxonomies()
                 }
 
                 if (!is_wp_error($term) && is_object($term)) {
-                    //$links[] = "<a href='" . esc_attr( get_tag_link($term->term_id) ) . "'>$term->name</a>";
+
                     // fix tag link on detail page
                     if ($priority_location) {
                         $links[] = "<a href=''>$post_term</a>";
@@ -959,17 +1235,23 @@ function geodir_action_details_taxonomies()
 
     if (isset($taxonomies[$post_type . '_tags']))
         echo '<span class="geodir-tags">' . $taxonomies[$post_type . '_tags'] . '</span>';
-//}
-    /*
-else{
 
-the_taxonomies(array('before'=>'<span class="geodir-tags">','sep'=>'</span><span class="geodir-category">','after'=>'</span>'));
-}*/
     ?>
     </p><?php
 }
 
 add_action('geodir_details_micordata', 'geodir_action_details_micordata', 10);
+
+/**
+ * Output the posts microdata in the source code.
+ *
+ * This micordata is used by things like Google as a standard way of declaring things like telephone numbers etc.
+ *
+ * @global bool $preview True of on a preview page. False if not.
+ * @global object $post The current post object.
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_details_micordata()
 {
     global $post, $preview;
@@ -998,6 +1280,14 @@ add_action('geodir_details_tabs', 'geodir_show_detail_page_tabs', 10);
 
 
 add_action('geodir_details_next_prev', 'geodir_action_details_next_prev', 10);
+/**
+ * Outputs the prev/next links of the post details page.
+ *
+ * This is called by a filter 'geodir_details_next_prev' and can be replaced.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_details_next_prev()
 {
     ?>
@@ -1009,6 +1299,12 @@ function geodir_action_details_next_prev()
     </div><?php
 }
 
+/**
+ * Outputs the action 'geodir_before_single_post' on the details page main content.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_before_single_post()
 {
     global $post;
@@ -1022,6 +1318,12 @@ function geodir_action_before_single_post()
     do_action('geodir_before_single_post', $post); // extra action	
 }
 
+/**
+ * Outputs the action 'geodir_after_single_post' on the details page main content.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_after_single_post($post)
 {
     /**
@@ -1047,9 +1349,17 @@ add_action('geodir_details_main_content', 'geodir_action_details_next_prev', 80)
 ########### LISTINGS PAGE ACTIONS #############
 ###############################################
 add_action('geodir_listings_page_title', 'geodir_action_listings_title', 10);
+/**
+ * Outputs the listings template title.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wp The WordPress object.
+ * @global string $term Current term slug.
+ */
 function geodir_action_listings_title()
 {
-    global $wp, $term, $post, $current_term, $wp_query, $gridview_columns;
+    global $wp, $term;
 
     $gd_post_type = geodir_get_current_posttype();
     $post_type_info = get_post_type_object($gd_post_type);
@@ -1176,6 +1486,13 @@ function geodir_action_listings_title()
 }
 
 add_action('geodir_listings_page_description', 'geodir_action_listings_description', 10);
+/**
+ * Outputs the listings page description HTML.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $current_term The current term object.
+ */
 function geodir_action_listings_description()
 {
     global $current_term;
@@ -1211,6 +1528,14 @@ add_action('geodir_listings_before_main_content', 'geodir_breadcrumb', 20);
 
 // action for adding the details page top widget area
 add_action('geodir_sidebar_listings_top', 'geodir_action_geodir_sidebar_listings_top', 10);
+/**
+ * Outputs the listings page top section widget area if enabled.
+ *
+ * Can be enabled disabled from GD>Design>Listings page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_geodir_sidebar_listings_top()
 {
     if (get_option('geodir_show_listing_top_section')) { ?>
@@ -1226,6 +1551,18 @@ function geodir_action_geodir_sidebar_listings_top()
 
 // action for adding the sidebar opening tag
 add_action('geodir_sidebar_left_open', 'geodir_action_sidebar_left_open', 10, 4);
+/**
+ * Outputs the listings page left sidebar opening HTML wrapper if enabled.
+ *
+ * Can be enabled disabled from GD>Design>Listings page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $type Optional. The page type.
+ * @param int $id Optional. The id for the HTML element.
+ * @param string $class Optional. The class for the HTML element.
+ * @param string $itemtype Optional The itemtype property of the HTML element.
+ */
 function geodir_action_sidebar_left_open($type = '', $id = '', $class = '', $itemtype = '')
 {
     if ($type == 'home-page' && $width = get_option('geodir_width_home_left_section')) {
@@ -1261,6 +1598,15 @@ function geodir_action_sidebar_left_open($type = '', $id = '', $class = '', $ite
 
 // action for adding the primary div closing tag
 add_action('geodir_sidebar_left_close', 'geodir_action_sidebar_left_close', 10, 1);
+/**
+ * Outputs the listings page left sidebar closing HTML wrapper if enabled.
+ *
+ * Can be enabled disabled from GD>Design>Listings page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $type Optional. Depreciated.
+ */
 function geodir_action_sidebar_left_close($type = '')
 {
     $tc = get_option('theme_compatibility_setting');
@@ -1272,7 +1618,14 @@ function geodir_action_sidebar_left_close($type = '')
     echo $text;
 }
 
-
+/**
+ * Outputs the listings page left sidebar content including inner wrapper if enabled.
+ *
+ * Can be enabled disabled from GD>Design>Listings page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_listing_left_section()
 {
     if (get_option('geodir_show_listing_left_section')) { ?>
@@ -1285,6 +1638,12 @@ function geodir_listing_left_section()
 add_action('geodir_listings_sidebar_left_inside', 'geodir_listing_left_section', 10);
 
 add_action('geodir_listings_sidebar_left', 'geodir_action_listings_sidebar_left', 10);
+/**
+ * Outputs the listings left sidebar via action call.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_listings_sidebar_left()
 {
     if (get_option('geodir_show_listing_left_section')) {
@@ -1303,7 +1662,14 @@ function geodir_action_listings_sidebar_left()
     }
 }
 
-
+/**
+ * Outputs the listings page right sidebar content including inner wrapper if enabled.
+ *
+ * Can be enabled disabled from GD>Design>Listings page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_listing_right_section()
 {
     if (get_option('geodir_show_listing_right_section')) { ?>
@@ -1316,6 +1682,12 @@ function geodir_listing_right_section()
 add_action('geodir_listings_sidebar_right_inside', 'geodir_listing_right_section', 10);
 
 add_action('geodir_listings_sidebar_right', 'geodir_action_listings_sidebar_right', 10);
+/**
+ * Outputs the listings right sidebar via action call.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_listings_sidebar_right()
 {
     if (get_option('geodir_show_listing_right_section')) {
@@ -1337,6 +1709,15 @@ function geodir_action_listings_sidebar_right()
 
 // action for adding the sidebar opening tag
 add_action('geodir_main_content_open', 'geodir_action_main_content_open', 10, 3);
+/**
+ * Outputs the main content opening HTML elements.
+ *
+ * @param string $type Optional. Depreciated.
+ * @param string $id Optional. The HTML element id.
+ * @param string $class Optional. The HTML element class.
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_main_content_open($type = '', $id = '', $class = '')
 {
     $tc = get_option('theme_compatibility_setting');
@@ -1360,6 +1741,12 @@ function geodir_action_main_content_open($type = '', $id = '', $class = '')
 
 // action for adding the primary div closing tag
 add_action('geodir_main_content_close', 'geodir_action_main_content_close', 10);
+/**
+ * Outputs the main content closing HTML elements.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_main_content_close()
 {
     $tc = get_option('theme_compatibility_setting');
@@ -1371,7 +1758,12 @@ function geodir_action_main_content_close()
     echo $text;
 }
 
-
+/**
+ * Calls the listing template part.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_listings_content_inside()
 {
     global $gridview_columns;
@@ -1389,6 +1781,12 @@ add_action('geodir_listings_content_inside', 'geodir_pagination', 20);
 
 
 add_action('geodir_listings_content', 'geodir_action_listings_content', 10);
+/**
+ * Builds and outputs the listings content via actions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_listings_content()
 {
     /**
@@ -1435,6 +1833,14 @@ function geodir_action_listings_content()
 
 
 add_action('geodir_sidebar_listings_bottom_section', 'geodir_action_sidebar_listings_bottom_section', 10);
+/**
+ * Outputs the listings page bottom widget area if enabled.
+ *
+ * Can be enabled/disabled via GD>Design>Listings page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_sidebar_listings_bottom_section()
 {
     if (get_option('geodir_show_listing_bottom_section')) { ?>
@@ -1453,6 +1859,12 @@ function geodir_action_sidebar_listings_bottom_section()
 
 
 add_action('geodir_add_listing_page_title', 'geodir_action_add_listing_page_title', 10);
+/**
+ * Outputs the add listings page title with HTML wrappers of which most can be filtered.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_add_listing_page_title()
 {
     if (isset($_REQUEST['listing_type']) && $_REQUEST['listing_type'] != '')
@@ -1484,16 +1896,27 @@ function geodir_action_add_listing_page_title()
 }
 
 add_action('geodir_add_listing_page_mandatory', 'geodir_action_add_listing_page_mandatory', 10);
+/**
+ * Outputs the add listing page mandatory message.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_add_listing_page_mandatory()
-{
-    /** This action is documented in geodirectory_template_actions.php */
-    $class = apply_filters('geodir_page_title_class', 'entry-title fn');?>
-    <p class="geodir-note "><span class="geodir-required">*</span>&nbsp;<?php echo INDICATES_MANDATORY_FIELDS_TEXT;?>
-    </p>
+{?>
+    <p class="geodir-note "><span class="geodir-required">*</span>&nbsp;<?php echo INDICATES_MANDATORY_FIELDS_TEXT;?></p>
 <?php
 }
 
 add_action('geodir_add_listing_form', 'geodir_action_add_listing_form', 10);
+/**
+ * Outputs the add listing form HTML content.
+ *
+ * Other things are needed to output a working add listing form, you should use the add listing shortcode if needed.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_add_listing_form()
 {
     global $cat_display, $post_cat, $current_user;
@@ -1873,7 +2296,12 @@ function geodir_action_add_listing_form()
     wp_reset_query();
 }
 
-
+/**
+ * Output the add listing sidebar.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_add_listing_sidebar_widget_area()
 {
     dynamic_sidebar('geodir_add_listing_sidebar');
@@ -1882,6 +2310,13 @@ function geodir_add_listing_sidebar_widget_area()
 add_action('geodir_add_listing_sidebar_inside', 'geodir_add_listing_sidebar_widget_area', 10);
 
 add_action('geodir_add_listing_sidebar', 'geodir_action_add_listing_sidebar', 10);
+
+/**
+ * Output the add listing sidebar including all HTML wrappers.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_add_listing_sidebar()
 {
     /** This action is documented in geodirectory_template_actions.php */
@@ -1902,6 +2337,12 @@ function geodir_action_add_listing_sidebar()
 
 // action for adding the details page top widget area
 add_action('geodir_sidebar_signup_top', 'geodir_action_geodir_sidebar_signup_top', 10);
+/**
+ * Output the signup/register page top section widget area.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_geodir_sidebar_signup_top()
 {
     ?>
@@ -1917,6 +2358,13 @@ function geodir_action_geodir_sidebar_signup_top()
 
 // action for adding the details page top widget area
 add_action('geodir_signup_forms', 'geodir_action_signup_forms', 10);
+/**
+ * Output the signup and register forms with included JS to make them work properly.
+ *
+ * @global bool $user_login True if user is logged in. False if not.
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_signup_forms()
 {
 
@@ -2014,10 +2462,17 @@ function geodir_action_signup_forms()
 ###############################################
 
 add_action('geodir_author_page_title', 'geodir_action_author_page_title', 10);
+/**
+ * Output the author page title including HTML wrappers.
+ *
+ * @global string $term Current term slug.
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_author_page_title()
 {
-    global $term, $post, $current_term, $gridview_columns;
-//global $wp_query; echo $wp_query->request;
+    global $term;
+
     $gd_post_type = geodir_get_current_posttype();
     $post_type_info = get_post_type_object($gd_post_type);
 
@@ -2061,6 +2516,14 @@ function geodir_action_author_page_title()
 add_action('geodir_author_before_main_content', 'geodir_action_geodir_sidebar_author_top', 10);
 add_action('geodir_author_before_main_content', 'geodir_breadcrumb', 20);
 
+/**
+ * Output the author page top sections widget area if enabled.
+ *
+ * Can be enabled/disabled from GD>Design>Author page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_geodir_sidebar_author_top()
 {
     if (get_option('geodir_show_author_top_section')) { ?>
@@ -2073,16 +2536,14 @@ function geodir_action_geodir_sidebar_author_top()
     <?php }
 }
 
-add_action('geodir_author_page_description', 'geodir_action_author_page_description', 10);
-function geodir_action_author_page_description()
-{
-    global $current_term;
-    if (isset($current_term->description) && $current_term->description) : ?>
-        <div
-            class="term_description"><?php _e(wpautop(wptexturize($current_term->description)), GEODIRECTORY_TEXTDOMAIN); ?></div>
-    <?php endif;
-}
-
+/**
+ * Output the author page left sidebar if enabled.
+ *
+ * Can be enabled/disabled from GD>Design>Author page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_author_left_section()
 {
     if (get_option('geodir_show_author_left_section')) { ?>
@@ -2095,6 +2556,15 @@ function geodir_author_left_section()
 add_action('geodir_author_sidebar_left_inside', 'geodir_author_left_section', 10);
 
 add_action('geodir_author_sidebar_left', 'geodir_action_author_sidebar_left', 10);
+
+/**
+ * Build the content via hooks for the author page left sidebar.
+ *
+ * Can be enabled/disabled from GD>Design>Author page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_author_sidebar_left()
 {
     if (get_option('geodir_show_author_left_section')) {
@@ -2112,6 +2582,14 @@ function geodir_action_author_sidebar_left()
     }
 }
 
+/**
+ * Output the author page right sidebar if enabled.
+ *
+ * Can be enabled/disabled from GD>Design>Author page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_author_right_section()
 {
     if (get_option('geodir_show_author_right_section')) { ?>
@@ -2124,6 +2602,14 @@ function geodir_author_right_section()
 add_action('geodir_author_sidebar_right_inside', 'geodir_author_right_section', 10);
 
 add_action('geodir_author_sidebar_right', 'geodir_action_author_sidebar_right', 10);
+/**
+ * Build the content via hooks for the author page right sidebar.
+ *
+ * Can be enabled/disabled from GD>Design>Author page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_author_sidebar_right()
 {
     if (get_option('geodir_show_author_right_section')) {
@@ -2140,6 +2626,13 @@ function geodir_action_author_sidebar_right()
     }
 }
 
+/**
+ * Calls and outputs the template for the author page content section.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global string $gridview_columns The girdview style of the listings.
+ */
 function geodir_action_author_content_inside()
 {
     global $gridview_columns;
@@ -2156,6 +2649,12 @@ add_action('geodir_author_content_inside', 'geodir_action_author_content_inside'
 add_action('geodir_author_content_inside', 'geodir_pagination', 20);
 
 add_action('geodir_author_content', 'geodir_action_author_content', 10);
+/**
+ * Build the content via hooks for the author page content.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_author_content()
 {
     /** This action is documented in geodirectory_template_actions.php */
@@ -2177,6 +2676,14 @@ function geodir_action_author_content()
 }
 
 add_action('geodir_sidebar_author_bottom_section', 'geodir_action_sidebar_author_bottom_section', 10);
+/**
+ * Output the author page bottom sections widget area if enabled.
+ *
+ * Can be enabled/disabled from GD>Design>Author page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_sidebar_author_bottom_section()
 {
     if (get_option('geodir_show_author_bottom_section')) { ?>
@@ -2194,6 +2701,12 @@ function geodir_action_sidebar_author_bottom_section()
 ###############################################
 
 add_action('geodir_search_page_title', 'geodir_action_search_page_title', 10);
+/**
+ * Output the search page title including HTML wrappers.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_search_page_title()
 {
     $gd_post_type = geodir_get_current_posttype();
@@ -2215,6 +2728,14 @@ function geodir_action_search_page_title()
 // action for adding the listings page top widget area
 add_action('geodir_search_before_main_content', 'geodir_action_geodir_sidebar_search_top', 10);
 add_action('geodir_search_before_main_content', 'geodir_breadcrumb', 20);
+/**
+ * Output the search page top section widget area if enabled.
+ *
+ * Can be enabled/disabled from GD>Design>Search page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_geodir_sidebar_search_top()
 {
     if (get_option('geodir_show_search_top_section')) { ?>
@@ -2227,17 +2748,14 @@ function geodir_action_geodir_sidebar_search_top()
     <?php }
 }
 
-
-add_action('geodir_search_page_description', 'geodir_action_search_page_description', 10);
-function geodir_action_search_page_description()
-{
-    global $current_term;
-    if (isset($current_term->description) && $current_term->description) : ?>
-        <div
-            class="term_description"><?php _e(wpautop(wptexturize($current_term->description)), GEODIRECTORY_TEXTDOMAIN); ?></div>
-    <?php endif;
-}
-
+/**
+ * Output the search page left sidebar widget area if enabled.
+ *
+ * Can be enabled/disabled from GD>Design>Search page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_search_left_section()
 {
     if (get_option('geodir_show_search_left_section')) { ?>
@@ -2250,6 +2768,14 @@ function geodir_search_left_section()
 add_action('geodir_search_sidebar_left_inside', 'geodir_search_left_section', 10);
 
 add_action('geodir_search_sidebar_left', 'geodir_action_search_sidebar_left', 10);
+/**
+ * Build the content for the search page left sidebar via hooks.
+ *
+ * Can be enabled/disabled from GD>Design>Search page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_search_sidebar_left()
 {
     if (get_option('geodir_show_search_left_section')) {
@@ -2267,6 +2793,14 @@ function geodir_action_search_sidebar_left()
     }
 }
 
+/**
+ * Output the search page right sidebar widget area if enabled.
+ *
+ * Can be enabled/disabled from GD>Design>Search page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_search_right_section()
 {
     if (get_option('geodir_show_search_right_section')) { ?>
@@ -2279,6 +2813,14 @@ function geodir_search_right_section()
 add_action('geodir_search_sidebar_right_inside', 'geodir_search_right_section', 10);
 
 add_action('geodir_search_sidebar_right', 'geodir_action_search_sidebar_right', 10);
+/**
+ * Build the content for the search page right sidebar via hooks.
+ *
+ * Can be enabled/disabled from GD>Design>Search page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_search_sidebar_right()
 {
     if (get_option('geodir_show_search_right_section')) {
@@ -2297,6 +2839,14 @@ function geodir_action_search_sidebar_right()
 
 
 add_action('geodir_sidebar_search_bottom_section', 'geodir_action_sidebar_search_bottom_section', 10);
+/**
+ * Output the search page bottom section widget area if enabled.
+ *
+ * Can be enabled/disabled from GD>Design>Search page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_sidebar_search_bottom_section()
 {
     if (get_option('geodir_show_search_bottom_section')) { ?>
@@ -2309,6 +2859,13 @@ function geodir_action_sidebar_search_bottom_section()
     <?php }
 }
 
+/**
+ * Calls and outputs the template for the search page content section.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global string $gridview_columns The girdview style of the listings.
+ */
 function geodir_action_search_content_inside()
 {
     global $gridview_columns;
@@ -2325,6 +2882,13 @@ add_action('geodir_search_content_inside', 'geodir_action_search_content_inside'
 add_action('geodir_search_content_inside', 'geodir_pagination', 20);
 
 add_action('geodir_search_content', 'geodir_action_search_content', 10);
+
+/**
+ * Build the content via hooks for the search page content.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_search_content()
 {
     /** This action is documented in geodirectory_template_actions.php */
@@ -2355,6 +2919,14 @@ add_action('geodir_location_before_main_content', 'geodir_breadcrumb', 20);
 add_action('geodir_home_before_main_content', 'geodir_action_geodir_sidebar_home_top', 10);
 add_action('geodir_home_before_main_content', 'geodir_breadcrumb', 20);
 
+/**
+ * Output the home page top section widget area if enabled.
+ *
+ * Can be enabled/disabled from GD>Design>Home page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_geodir_sidebar_home_top()
 {
     if (get_option('geodir_show_home_top_section')) { ?>
@@ -2367,6 +2939,14 @@ function geodir_action_geodir_sidebar_home_top()
     <?php }
 }
 
+/**
+ * Output the home page left sidebar widget area if enabled.
+ *
+ * Can be enabled/disabled from GD>Design>Home page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_home_left_section()
 {
     if (get_option('geodir_show_home_left_section')) { ?>
@@ -2380,6 +2960,15 @@ add_action('geodir_home_sidebar_left_inside', 'geodir_home_left_section', 10);
 
 add_action('geodir_location_sidebar_left', 'geodir_action_home_sidebar_left', 10);
 add_action('geodir_home_sidebar_left', 'geodir_action_home_sidebar_left', 10);
+
+/**
+ * Build the content for the home page left sidebar via hooks.
+ *
+ * Can be enabled/disabled from GD>Design>Home page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_home_sidebar_left()
 {
     if (get_option('geodir_show_home_left_section')) {
@@ -2397,6 +2986,14 @@ function geodir_action_home_sidebar_left()
     }
 }
 
+/**
+ * Output the home page right sidebar widget area if enabled.
+ *
+ * Can be enabled/disabled from GD>Design>Home page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_home_right_section()
 {
     if (get_option('geodir_show_home_right_section')) { ?>
@@ -2410,6 +3007,14 @@ add_action('geodir_home_sidebar_right_inside', 'geodir_home_right_section', 10);
 
 add_action('geodir_location_sidebar_right', 'geodir_action_home_sidebar_right', 10);
 add_action('geodir_home_sidebar_right', 'geodir_action_home_sidebar_right', 10);
+/**
+ * Build the content for the home page right sidebar via hooks.
+ *
+ * Can be enabled/disabled from GD>Design>Home page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_home_sidebar_right()
 {
     if (get_option('geodir_show_home_right_section')) {
@@ -2426,7 +3031,12 @@ function geodir_action_home_sidebar_right()
     }
 }
 
-
+/**
+ * Build and output the content of the home page via hooks.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_home_content_inside()
 {
     dynamic_sidebar('geodir_home_content');
@@ -2465,6 +3075,14 @@ function geodir_action_home_content()
 
 add_action('geodir_sidebar_location_bottom_section', 'geodir_action_sidebar_home_bottom_section', 10);
 add_action('geodir_sidebar_home_bottom_section', 'geodir_action_sidebar_home_bottom_section', 10);
+/**
+ * Output the home page bottom section widget area if enabled.
+ *
+ * Can be enabled/disabled from GD>Design>Home page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_sidebar_home_bottom_section()
 {
     if (get_option('geodir_show_home_bottom_section')) { ?>
@@ -2488,6 +3106,14 @@ add_filter('geodir_post_view_extra_class', 'geodir_core_post_view_extra_class');
 
 // filter for listing page title
 add_filter('geodir_listing_page_title', 'geodir_filter_listing_page_title', 1, 1);
+
+/**
+ * Output the home page title including HTML wrappers.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $list_title The home page title.
+ */
 function geodir_filter_listing_page_title($list_title)
 {
     if (is_search() && trim(get_search_query()) == '') {
