@@ -14,6 +14,7 @@ Shortcode added for to display GeoDirectoy Listings with pagination - ADDED
 Marker cluster not working in maps added via shortcode - FIXED
 Add to fav/remove from fav text now filterable - ADDED
 Awesome font upgraded with new Awesome font version 4.3.0 - ADDED
+After searching for a city not able to search city again without clearing Near input box - FIXED
 
 
 v1.4.1

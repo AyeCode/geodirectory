@@ -84,8 +84,8 @@ $curr_post_type = geodir_get_current_posttype();
                 ?>
 
                 <input name="snear" class="snear <?php echo $near_class; ?>" type="text" value="<?php echo $near; ?>"
-                       onblur="if (this.value == '') {this.value = '<?php echo $default_near_text; ?>';}"
-                       onfocus="if (this.value == '<?php echo $default_near_text; ?>') {this.value = '';}"
+                       onblur="if (this.value == '') {this.value = ('<?php echo $near; ?>' != '' ? '<?php echo $near; ?>' : '<?php echo $default_near_text; ?>');}"
+                       onfocus="if (this.value == '<?php echo $default_near_text; ?>' || this.value =='<?php echo $near; ?>') {this.value = '';}"
                        onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);"/>
 
                 <?php do_action('geodir_before_search_button'); ?>
