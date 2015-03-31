@@ -39,9 +39,10 @@ function geodir_sc_add_listing($atts)
 
     } else {
         ###### MAIN CONTENT ######
-        // this adds the mandatory message
+
+        /** This action is documented in geodirectory-templates/add-listing.php */
         do_action('geodir_add_listing_page_mandatory');
-        // this adds the add listing form
+        /** This action is documented in geodirectory-templates/add-listing.php */
         do_action('geodir_add_listing_form');
     }
     $output = ob_get_contents();
@@ -63,6 +64,7 @@ function geodir_sc_home_map($atts)
         'autozoom' => '',
         'child_collapse' => '0',
         'scrollwheel' => '0',
+		'marker_cluster' => false
     );
 
     $params = shortcode_atts($defaults, $atts);
@@ -88,6 +90,13 @@ function geodir_sc_home_map($atts)
         'map_class_name' => 'geodir-map-home-page',
         'is_geodir_home_map_widget' => true,
     );
+	
+	// Add marker cluster
+	if (isset($params['marker_cluster']) && gdsc_to_bool_val($params['marker_cluster']) && defined('GDCLUSTER_VERSION')) {
+		$map_args['enable_marker_cluster'] = true;
+	} else {
+		$map_args['enable_marker_cluster'] = false;
+	}
 
     geodir_draw_map($map_args);
 
@@ -120,6 +129,7 @@ function geodir_sc_listing_map($atts)
         'scrollwheel' => '0',
         'maptype' => 'ROADMAP',
         'child_collapse' => 0,
+		'marker_cluster' => false
     );
 
     $params = shortcode_atts($defaults, $atts);
@@ -173,6 +183,13 @@ function geodir_sc_listing_map($atts)
     $map_args['showPreview'] = '0';
     $map_args['maxZoom'] = 21;
     $map_args['bubble_size'] = 'small';
+	
+	// Add marker cluster
+	if (isset($params['marker_cluster']) && gdsc_to_bool_val($params['marker_cluster']) && defined('GDCLUSTER_VERSION')) {
+		$map_args['enable_marker_cluster'] = true;
+	} else {
+		$map_args['enable_marker_cluster'] = false;
+	}
 
     geodir_draw_map($map_args);
 
