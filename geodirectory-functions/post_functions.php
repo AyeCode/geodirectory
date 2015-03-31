@@ -1,16 +1,23 @@
 <?php
-
 /**
  * Listing functions
  *
- * @package        GeoDirectory
- * @category    functions
- * @author        WPGeoDirectory
- **/
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 
-/*
-	Set post category structure
-*/
+
+/**
+ * Set post category structure based on given parameters
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $post_id
+ * @param string $taxonomy
+ * @param int $default_cat
+ * @param array $category_str
+ */
+
 function geodir_set_postcat_structure($post_id, $taxonomy, $default_cat = '', $category_str = '')
 {
 
@@ -54,11 +61,16 @@ function geodir_set_postcat_structure($post_id, $taxonomy, $default_cat = '', $c
 }
 
 
-/**
- * Save Listing
- */
-
 if (!function_exists('geodir_save_listing')) {
+    /**
+     * Save Listing
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param array $request_info
+     * @param bool $dummy
+     * @return int|string|WP_Error
+     */
     function geodir_save_listing($request_info = array(), $dummy = false)
     {
         global $wpdb, $current_user;
@@ -419,6 +431,9 @@ if (!function_exists('geodir_save_listing')) {
 
 /**
  * Get post custome fields
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  */
 function geodir_get_post_info($post_id = '')
 {
@@ -449,10 +464,16 @@ function geodir_get_post_info($post_id = '')
 }
 
 
-/**
- * Save listing info
- */
 if (!function_exists('geodir_save_post_info')) {
+    /**
+     * Save listing info
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param $post_id
+     * @param array $postinfo_array
+     * @return bool
+     */
     function geodir_save_post_info($post_id, $postinfo_array = array())
     {
         global $wpdb, $plugin_prefix;
@@ -513,11 +534,17 @@ if (!function_exists('geodir_save_post_info')) {
 }
 
 
-/**
- * Save post custome fields
- */
-
 if (!function_exists('geodir_save_post_meta')) {
+    /**
+     * Save post custome fields
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param $post_id
+     * @param string $postmeta
+     * @param string $meta_value
+     * @return bool
+     */
     function geodir_save_post_meta($post_id, $postmeta = '', $meta_value = '')
     {
 
@@ -558,11 +585,16 @@ if (!function_exists('geodir_save_post_meta')) {
     }
 }
 
-/**
- * Delete post custome fields
- */
-
 if (!function_exists('geodir_delete_post_meta')) {
+    /**
+     * Delete post custome fields
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param $post_id
+     * @param $postmeta
+     * @return bool
+     */
     function geodir_delete_post_meta($post_id, $postmeta)
     {
 
@@ -613,11 +645,17 @@ if (!function_exists('geodir_delete_post_meta')) {
 }
 
 
-/**
- * Get post custome meta
- */
-
 if (!function_exists('geodir_get_post_meta')) {
+    /**
+     * Get post custom meta
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param $post_id
+     * @param $meta_key
+     * @param bool $single
+     * @return bool|mixed|null|string
+     */
     function geodir_get_post_meta($post_id, $meta_key, $single = false)
     {
         if (!$post_id) {
@@ -648,11 +686,16 @@ if (!function_exists('geodir_get_post_meta')) {
 }
 
 
-/**
- * Save post attachments
- */
-
 if (!function_exists('geodir_save_post_images')) {
+    /**
+     * Save post attachments
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param int $post_id
+     * @param array $post_image
+     * @param bool $dummy
+     */
     function geodir_save_post_images($post_id = 0, $post_image = array(), $dummy = false)
     {
 
@@ -894,7 +937,10 @@ if (!function_exists('geodir_save_post_images')) {
 }
 
 /**
- *Remove users Temp images
+ * Remove users Temp images
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  **/
 function geodir_remove_temp_images()
 {
@@ -926,6 +972,13 @@ function geodir_remove_temp_images()
 }
 
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $dirname
+ * @return bool
+ */
 function geodir_delete_directory($dirname)
 {
     $dir_handle = '';
@@ -948,10 +1001,14 @@ function geodir_delete_directory($dirname)
 }
 
 
-/**
- * Remove post attachments
- */
 if (!function_exists('geodir_remove_attachments')) {
+    /**
+     * Remove post attachments
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param array $postcurr_images
+     */
     function geodir_remove_attachments($postcurr_images = array())
     {
         // Unlink all past images of post
@@ -972,11 +1029,18 @@ if (!function_exists('geodir_remove_attachments')) {
     }
 }
 
-/**
- * Gets the post featured image
- */
-
 if (!function_exists('geodir_get_featured_image')) {
+    /**
+     * Gets the post featured image
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param string $post_id
+     * @param string $size
+     * @param bool $no_image
+     * @param bool $file
+     * @return bool|object
+     */
     function geodir_get_featured_image($post_id = '', $size = '', $no_image = false, $file = false)
     {
 
@@ -1079,12 +1143,19 @@ if (!function_exists('geodir_get_featured_image')) {
     }
 }
 
-
-/**
- * Gets the post featured image
- */
-
 if (!function_exists('geodir_show_featured_image')) {
+    /**
+     * Gets the post featured image
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param string $post_id
+     * @param string $size
+     * @param bool $no_image
+     * @param bool $echo
+     * @param bool $fimage
+     * @return bool|string
+     */
     function geodir_show_featured_image($post_id = '', $size = 'thumbnail', $no_image = false, $echo = true, $fimage = false)
     {
 
@@ -1103,11 +1174,19 @@ if (!function_exists('geodir_show_featured_image')) {
     }
 }
 
-/**
- * Gets the post images
- */
-
 if (!function_exists('geodir_get_images')) {
+    /**
+     * Gets the post images
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param int $post_id
+     * @param string $img_size
+     * @param bool $no_images
+     * @param bool $add_featured
+     * @param string $limit
+     * @return array|bool
+     */
     function geodir_get_images($post_id = 0, $img_size = '', $no_images = false, $add_featured = true, $limit = '')
     {
 
@@ -1214,11 +1293,18 @@ if (!function_exists('geodir_get_images')) {
 }
 
 
-/**
- * Show image
- */
-
 if (!function_exists('geodir_show_image')) {
+    /**
+     * Show image
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param array $request
+     * @param string $size
+     * @param bool $no_image
+     * @param bool $echo
+     * @return bool|string
+     */
     function geodir_show_image($request = array(), $size = 'thumbnail', $no_image = false, $echo = true)
     {
 
@@ -1281,11 +1367,17 @@ if (!function_exists('geodir_show_image')) {
     }
 }
 
-/**
- * Set post Categories
- **/
-
 if (!function_exists('geodir_set_post_terms')) {
+    /**
+     * Set post Categories
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param $post_id
+     * @param $terms
+     * @param $tt_ids
+     * @param $taxonomy
+     */
     function geodir_set_post_terms($post_id, $terms, $tt_ids, $taxonomy)
     {
         global $wpdb, $plugin_prefix;
@@ -1468,11 +1560,16 @@ if (!function_exists('geodir_set_post_terms')) {
     }
 }
 
-
-/**
- * Set post Map Marker Info Html
- **/
 if (!function_exists('geodir_get_infowindow_html')) {
+    /**
+     * Set post Map Marker Info Html
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param $postinfo_obj
+     * @param string $post_preview
+     * @return mixed|string|void
+     */
     function geodir_get_infowindow_html($postinfo_obj, $post_preview = '')
     {
         global $preview;
@@ -1673,11 +1770,14 @@ if (!function_exists('geodir_get_infowindow_html')) {
 }
 
 
-/**
- * Update post status
- */
-
 if (!function_exists('geodir_new_post_default_status')) {
+    /**
+     * Update post status
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @return mixed|string|void
+     */
     function geodir_new_post_default_status()
     {
         if (get_option('geodir_new_post_default_status'))
@@ -1689,6 +1789,10 @@ if (!function_exists('geodir_new_post_default_status')) {
 }
 
 if (!function_exists('geodir_change_post_status')) {
+    /**
+     * @param string $post_id
+     * @param string $status
+     */
     function geodir_change_post_status($post_id = '', $status = '')
     {
         global $wpdb, $plugin_prefix;
@@ -1708,6 +1812,13 @@ if (!function_exists('geodir_change_post_status')) {
     }
 }
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $pid
+ * @param $status
+ */
 function geodir_set_post_status($pid, $status)
 {
     if ($pid) {
@@ -1720,6 +1831,14 @@ function geodir_set_post_status($pid, $status)
 }
 
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $new_status
+ * @param $old_status
+ * @param $post
+ */
 function geodir_update_poststatus($new_status, $old_status, $post)
 {
     global $wpdb;
@@ -1733,10 +1852,15 @@ function geodir_update_poststatus($new_status, $old_status, $post)
 }
 
 
-/**
- * Update post info
- */
 if (!function_exists('geodir_update_listing_info')) {
+    /**
+     * Update post info
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param $updatingpost
+     * @param $temppost
+     */
     function geodir_update_listing_info($updatingpost, $temppost)
     {
 
@@ -1773,11 +1897,15 @@ if (!function_exists('geodir_update_listing_info')) {
 }
 
 
-/**
- * Delete Listing
- **/
-
 if (!function_exists('geodir_delete_listing_info')) {
+    /**
+     * Delete Listing
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param $deleted_postid
+     * @param bool $force
+     */
     function geodir_delete_listing_info($deleted_postid, $force = false)
     {
         global $wpdb, $plugin_prefix;
@@ -1829,10 +1957,14 @@ if (!function_exists('geodir_delete_listing_info')) {
 }
 
 
-/**
- * This function would add listing to favorite listing
- **/
 if (!function_exists('geodir_add_to_favorite')) {
+    /**
+     * This function would add listing to favorite listing
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param $post_id
+     */
     function geodir_add_to_favorite($post_id)
     {
 
@@ -1860,10 +1992,14 @@ if (!function_exists('geodir_add_to_favorite')) {
     }
 }
 
-/**
- * This function would remove the favorited property earlier
- **/
 if (!function_exists('geodir_remove_from_favorite')) {
+    /**
+     * This function would remove the favourited property earlier
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param $post_id
+     */
     function geodir_remove_from_favorite($post_id)
     {
 
@@ -1895,11 +2031,15 @@ if (!function_exists('geodir_remove_from_favorite')) {
     }
 }
 
-/**
- * This function would disply the html content for add to favorite or remove from favorite
- **/
-
 if (!function_exists('geodir_favourite_html')) {
+    /**
+     * This function would display the html content for add to favorite or remove from favorite
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param $user_id
+     * @param $post_id
+     */
     function geodir_favourite_html($user_id, $post_id)
     {
 
@@ -1939,6 +2079,13 @@ if (!function_exists('geodir_favourite_html')) {
 }
 
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $term
+ * @return bool|int|null|string
+ */
 function geodir_get_cat_postcount($term = array())
 {
 
@@ -1977,8 +2124,12 @@ function geodir_get_cat_postcount($term = array())
 }
 
 
-//ALLOW ADD POST TYPE FROM FRONT END
-
+/**
+ * Allow add post type from front end
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_allow_post_type_frontend()
 {
     $geodir_allow_posttype_frontend = get_option('geodir_allow_posttype_frontend');
@@ -1995,8 +2146,14 @@ function geodir_allow_post_type_frontend()
 
 }
 
-// Changing excerpt length
-
+/**
+ * Changing excerpt length
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $length
+ * @return mixed|void
+ */
 function geodir_excerpt_length($length)
 {
     global $wp_query;
@@ -2011,8 +2168,14 @@ function geodir_excerpt_length($length)
     return $length;
 }
 
-// Changing excerpt more
-
+/**
+ * Changing excerpt more
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $more
+ * @return string
+ */
 function geodir_excerpt_more($more)
 {
     global $post;
@@ -2020,6 +2183,13 @@ function geodir_excerpt_more($more)
 }
 
 
+/**
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $term_id
+ * @param $tt_id
+ * @param $taxonomy
+ */
 function geodir_update_markers_oncatedit($term_id, $tt_id, $taxonomy)
 {
     global $plugin_prefix, $wpdb;
@@ -2082,6 +2252,12 @@ function geodir_update_markers_oncatedit($term_id, $tt_id, $taxonomy)
 
 }
 
+/**
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $listing_id
+ * @return string
+ */
 function geodir_get_listing_author($listing_id = '')
 {
     if ($listing_id == '') {
@@ -2095,6 +2271,13 @@ function geodir_get_listing_author($listing_id = '')
 }
 
 
+/**
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $listing_id
+ * @param $user_id
+ * @return bool
+ */
 function geodir_lisiting_belong_to_user($listing_id, $user_id)
 {
     $listing_author_id = geodir_get_listing_author($listing_id);
@@ -2105,6 +2288,13 @@ function geodir_lisiting_belong_to_user($listing_id, $user_id)
 
 }
 
+/**
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $listing_id
+ * @param bool $exclude_admin
+ * @return bool
+ */
 function geodir_listing_belong_to_current_user($listing_id = '', $exclude_admin = true)
 {
     global $current_user;
@@ -2121,6 +2311,12 @@ function geodir_listing_belong_to_current_user($listing_id = '', $exclude_admin 
 }
 
 
+/**
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $file
+ * @return string
+ */
 function geodir_only_supportable_attachments_remove($file)
 {
 
@@ -2138,8 +2334,15 @@ function geodir_only_supportable_attachments_remove($file)
 
 }
 
-//geodir_set_wp_featured_image(16);
-// Written by Vikas on 13-06-2014 to set first image and wordpress post's featured image 
+
+/**
+ * Set first image as wordpress post's featured image.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $post_id
+ * @author Vikas
+ */
 function geodir_set_wp_featured_image($post_id)
 {
 
@@ -2218,11 +2421,12 @@ function geodir_set_wp_featured_image($post_id)
 }
 
 
-/*
-Function to copy custom meta inof on WPML copy.
-*/
-
-
+/**
+ * Function to copy custom meta info on WPML copy.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function gd_copy_original_translation()
 {
     if (function_exists('icl_object_id')) {
@@ -2279,6 +2483,12 @@ add_action('wp_ajax_gd_copy_original_translation', 'gd_copy_original_translation
 //add_action('wp_ajax_nopriv_dc_update_profile', 'dc_update_profile_callback');
 
 
+/**
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $listing_type
+ * @return mixed|void
+ */
 function geodir_get_custom_fields_type($listing_type = '')
 {
 
@@ -2324,8 +2534,15 @@ function geodir_get_custom_fields_type($listing_type = '')
     return apply_filters('geodir_get_custom_fields_type', $fields_info, $listing_type);
 }
 
-/* 
- * Called when post updated
+
+/**
+ * Called when post updated.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $post_ID
+ * @param $post_after
+ * @param $post_before
  */
 function geodir_function_post_updated($post_ID, $post_after, $post_before)
 {
