@@ -1171,6 +1171,29 @@ function geodir_diagnose_default_pages()
 
 }
 
+function geodir_diagnose_load_db_language() {
+    global $wpdb;
+	
+	$is_error_during_diagnose = geodirectory_load_db_language();
+
+    $output_str = '';
+
+    if ($is_error_during_diagnose) {
+        $output_str .= "<li>" . __('Fail to load custom fields in to file for translation, please check file permission:', GEODIRECTORY_TEXTDOMAIN) . ' ' . geodir_plugin_path() . '/db-language.php' . "</li>";
+		$info_div_class = "geodir_problem_info";
+    } else {
+        $output_str .= "<li>" . __('Load custom fields in to file for translation: ok', GEODIRECTORY_TEXTDOMAIN) . "</li>";
+		$info_div_class = "geodir_noproblem_info";
+        $fix_button_txt = '';
+    }
+    
+	echo "<ul class='$info_div_class'>";
+    echo $output_str;
+    echo $fix_button_txt;
+    echo "</ul>";
+
+}
+
 /* Ajax Handler Ends*/
 
 /* sort by expire */

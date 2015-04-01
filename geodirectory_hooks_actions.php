@@ -2414,3 +2414,5 @@ function geodir_wp_head_no_rating()
         echo '<script type="text/javascript">jQuery(function(){jQuery(".gd_rating_show").parent(".geodir-rating").remove();});</script>';
     }
 }
+
+add_filter('geodir_load_db_language', 'geodir_load_custom_field_translation');
