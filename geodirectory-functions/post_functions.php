@@ -1,16 +1,22 @@
 <?php
+/**
+ * Post Listing functions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
+
 
 /**
- * Listing functions
+ * Set post category structure based on given parameters.
  *
- * @package        GeoDirectory
- * @category    functions
- * @author        WPGeoDirectory
- **/
-
-/*
-	Set post category structure
-*/
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $post_id The post ID.
+ * @param string $taxonomy Name of the taxonomy e.g place_category.
+ * @param string|int $default_cat Optional. The default category ID.
+ * @param array|string $category_str Optional. Blank string if no categories. Else array of categories to set.
+ */
 function geodir_set_postcat_structure($post_id, $taxonomy, $default_cat = '', $category_str = '')
 {
 
@@ -54,11 +60,16 @@ function geodir_set_postcat_structure($post_id, $taxonomy, $default_cat = '', $c
 }
 
 
-/**
- * Save Listing
- */
-
 if (!function_exists('geodir_save_listing')) {
+    /**
+     * Saves listing in the database using given information.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param array $request_info Array of request info arguments.
+     * @param bool $dummy Optional. Is this a dummy listing? Default false.
+     * @return int|string|WP_Error Created post id.
+     */
     function geodir_save_listing($request_info = array(), $dummy = false)
     {
         global $wpdb, $current_user;
@@ -79,6 +90,15 @@ if (!function_exists('geodir_save_listing')) {
             return false;
         }
 
+        /**
+         * Filter the request_info array.
+         *
+         * You can use this filter to modify request_info array.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         * @param array $request_info Array of request info arguments.
+         */
         $request_info = apply_filters('geodir_action_get_request_info', $request_info);
 
         // Check if we need to save post location as new location 
@@ -418,7 +438,12 @@ if (!function_exists('geodir_save_listing')) {
 
 
 /**
- * Get post custome fields
+ * Get post custom fields.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int|string $post_id Optional. The post ID.
+ * @return object|bool Returns full post details as an object. If no details returns false.
  */
 function geodir_get_post_info($post_id = '')
 {
@@ -437,7 +462,14 @@ function geodir_get_post_info($post_id = '')
 
     $table = $plugin_prefix . $post_type . '_detail';
 
-    // Apply Filter to change Post info // Filter-Location-Manager
+    /**
+     * Apply Filter to change Post info
+     *
+     * You can use this filter to change Post info.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     */
     $query = apply_filters('geodir_post_info_query', "SELECT p.*,pd.* FROM " . $wpdb->posts . " p," . $table . " pd
 			  WHERE p.ID = pd.post_id 
 			  AND post_id = " . $post_id);
@@ -449,10 +481,16 @@ function geodir_get_post_info($post_id = '')
 }
 
 
-/**
- * Save listing info
- */
 if (!function_exists('geodir_save_post_info')) {
+    /**
+     * Saves post detail info in detail table.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param int $post_id The post ID.
+     * @param array $postinfo_array Post info that needs to be saved in detail table.
+     * @return bool
+     */
     function geodir_save_post_info($post_id, $postinfo_array = array())
     {
         global $wpdb, $plugin_prefix;
@@ -461,6 +499,16 @@ if (!function_exists('geodir_save_post_info')) {
 
         $table = $plugin_prefix . $post_type . '_detail';
 
+        /**
+         * Filter to change Post info
+         *
+         * You can use this filter to change Post info.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         * @param array $postinfo_array Post info that needs to be saved in detail table.
+         * @param int $post_id The post ID.
+         */
         $postmeta = apply_filters('geodir_listinginfo_request', $postinfo_array, $post_id);
 
         if (!empty($postmeta) && $post_id) {
@@ -480,6 +528,14 @@ if (!function_exists('geodir_save_post_info')) {
 
             $post_meta_set_query = str_replace('%', '%%', $post_meta_set_query);// escape %
 
+            /**
+             * Called before saving the listing info.
+             *
+             * @since 1.0.0
+             * @package GeoDirectory
+             * @param array $postinfo_array Post info that needs to be saved in detail table.
+             * @param int $post_id The post ID.
+             */
             do_action('geodir_before_save_listinginfo', $postinfo_array, $post_id);
 
             if ($wpdb->get_var($wpdb->prepare("SELECT post_id from " . $table . " where post_id = %d", array($post_id)))) {
@@ -503,6 +559,14 @@ if (!function_exists('geodir_save_post_info')) {
 
             }
 
+            /**
+             * Called after saving the listing info.
+             *
+             * @since 1.0.0
+             * @package GeoDirectory
+             * @param array $postinfo_array Post info that needs to be saved in detail table.
+             * @param int $post_id The post ID.
+             */
             do_action('geodir_after_save_listinginfo', $postinfo_array, $post_id);
 
             return true;
@@ -513,11 +577,17 @@ if (!function_exists('geodir_save_post_info')) {
 }
 
 
-/**
- * Save post custome fields
- */
-
 if (!function_exists('geodir_save_post_meta')) {
+    /**
+     * Save or update post custom fields.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param int $post_id The post ID.
+     * @param string $postmeta Detail table column name.
+     * @param string $meta_value Detail table column value.
+     * @return void|bool
+     */
     function geodir_save_post_meta($post_id, $postmeta = '', $meta_value = '')
     {
 
@@ -558,11 +628,18 @@ if (!function_exists('geodir_save_post_meta')) {
     }
 }
 
-/**
- * Delete post custome fields
- */
-
 if (!function_exists('geodir_delete_post_meta')) {
+    /**
+     * Delete post custom fields.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param int $post_id The post ID.
+     * @param string $postmeta Detail table column name.
+     * @todo check if this is depreciated
+     * @todo Fix unknown variable mval
+     * @return bool
+     */
     function geodir_delete_post_meta($post_id, $postmeta)
     {
 
@@ -613,11 +690,18 @@ if (!function_exists('geodir_delete_post_meta')) {
 }
 
 
-/**
- * Get post custome meta
- */
-
 if (!function_exists('geodir_get_post_meta')) {
+    /**
+     * Get post custom meta.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param int $post_id The post ID.
+     * @param string $meta_key The meta key to retrieve.
+     * @param bool $single Optional. Whether to return a single value. Default false.
+     * @todo single variable not yet implemented.
+     * @return bool|mixed|null|string Will be an array if $single is false. Will be value of meta data field if $single is true.
+     */
     function geodir_get_post_meta($post_id, $meta_key, $single = false)
     {
         if (!$post_id) {
@@ -648,11 +732,16 @@ if (!function_exists('geodir_get_post_meta')) {
 }
 
 
-/**
- * Save post attachments
- */
-
 if (!function_exists('geodir_save_post_images')) {
+    /**
+     * Save post attachments.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param int $post_id The post ID.
+     * @param array $post_image Post image urls as an array.
+     * @param bool $dummy Optional. Is this a dummy listing? Default false.
+     */
     function geodir_save_post_images($post_id = 0, $post_image = array(), $dummy = false)
     {
 
@@ -894,7 +983,10 @@ if (!function_exists('geodir_save_post_images')) {
 }
 
 /**
- *Remove users Temp images
+ * Remove current user's temporary images.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  **/
 function geodir_remove_temp_images()
 {
@@ -926,6 +1018,14 @@ function geodir_remove_temp_images()
 }
 
 
+/**
+ * Delete a directory.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $dirname Directory name that needs to be deleted.
+ * @return bool
+ */
 function geodir_delete_directory($dirname)
 {
     $dir_handle = '';
@@ -948,10 +1048,14 @@ function geodir_delete_directory($dirname)
 }
 
 
-/**
- * Remove post attachments
- */
 if (!function_exists('geodir_remove_attachments')) {
+    /**
+     * Remove post attachments.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param array $postcurr_images Array of image objects.
+     */
     function geodir_remove_attachments($postcurr_images = array())
     {
         // Unlink all past images of post
@@ -972,11 +1076,18 @@ if (!function_exists('geodir_remove_attachments')) {
     }
 }
 
-/**
- * Gets the post featured image
- */
-
 if (!function_exists('geodir_get_featured_image')) {
+    /**
+     * Gets the post featured image.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param int|string $post_id The post ID.
+     * @param string $size Optional. Thumbnail size. Default: thumbnail.
+     * @param bool $no_image Optional. Do you want to return the default image when no image is available? Default: false.
+     * @param bool|string $file Optional. The file path from which you want to get the image details. Default: false.
+     * @return bool|object Image details as an object.
+     */
     function geodir_get_featured_image($post_id = '', $size = '', $no_image = false, $file = false)
     {
 
@@ -1079,12 +1190,19 @@ if (!function_exists('geodir_get_featured_image')) {
     }
 }
 
-
-/**
- * Gets the post featured image
- */
-
 if (!function_exists('geodir_show_featured_image')) {
+    /**
+     * Gets the post featured image.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param int|string $post_id The post ID.
+     * @param string $size Optional. Thumbnail size. Default: thumbnail.
+     * @param bool $no_image Optional. Do you want to return the default image when no image is available? Default: false.
+     * @param bool $echo Optional. Do you want to print it instead of returning it? Default: true.
+     * @param bool|string $fimage Optional. The file path from which you want to get the image details. Default: false.
+     * @return bool|string Returns image html.
+     */
     function geodir_show_featured_image($post_id = '', $size = 'thumbnail', $no_image = false, $echo = true, $fimage = false)
     {
 
@@ -1103,11 +1221,19 @@ if (!function_exists('geodir_show_featured_image')) {
     }
 }
 
-/**
- * Gets the post images
- */
-
 if (!function_exists('geodir_get_images')) {
+    /**
+     * Gets the post images.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param int $post_id The post ID.
+     * @param string $img_size Optional. Thumbnail size.
+     * @param bool $no_images Optional. Do you want to return the default image when no image is available? Default: false.
+     * @param bool $add_featured Optional. Do you want to include featured images too? Default: true.
+     * @param int|string $limit Optional. Number of images.
+     * @return array|bool Returns images as an array. Each item is an object.
+     */
     function geodir_get_images($post_id = 0, $img_size = '', $no_images = false, $add_featured = true, $limit = '')
     {
 
@@ -1214,11 +1340,18 @@ if (!function_exists('geodir_get_images')) {
 }
 
 
-/**
- * Show image
- */
-
 if (!function_exists('geodir_show_image')) {
+    /**
+     * Show image using image details.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param array|object $request Image info either as an array or object.
+     * @param string $size Optional. Thumbnail size. Default: thumbnail.
+     * @param bool $no_image Optional. Do you want to return the default image when no image is available? Default: false.
+     * @param bool $echo Optional. Do you want to print it instead of returning it? Default: true.
+     * @return bool|string Returns image html.
+     */
     function geodir_show_image($request = array(), $size = 'thumbnail', $no_image = false, $echo = true)
     {
 
@@ -1281,11 +1414,17 @@ if (!function_exists('geodir_show_image')) {
     }
 }
 
-/**
- * Set post Categories
- **/
-
 if (!function_exists('geodir_set_post_terms')) {
+    /**
+     * Set post Categories.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param int $post_id The post ID.
+     * @param array $terms An array of object terms.
+     * @param array $tt_ids An array of term taxonomy IDs.
+     * @param string $taxonomy Taxonomy slug.
+     */
     function geodir_set_post_terms($post_id, $terms, $tt_ids, $taxonomy)
     {
         global $wpdb, $plugin_prefix;
@@ -1468,11 +1607,16 @@ if (!function_exists('geodir_set_post_terms')) {
     }
 }
 
-
-/**
- * Set post Map Marker Info Html
- **/
 if (!function_exists('geodir_get_infowindow_html')) {
+    /**
+     * Set post Map Marker info html.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param object $postinfo_obj The post details object.
+     * @param string $post_preview Is this a post preview?.
+     * @return mixed|string|void
+     */
     function geodir_get_infowindow_html($postinfo_obj, $post_preview = '')
     {
         global $preview;
@@ -1536,6 +1680,18 @@ if (!function_exists('geodir_get_infowindow_html')) {
                             $post_avgratings = geodir_get_post_rating($ID);
 
                             $rating_star = geodir_get_rating_stars($post_avgratings, $ID, false);
+
+                            /**
+                             * Filter to change rating stars
+                             *
+                             * You can use this filter to change Rating stars.
+                             *
+                             * @since 1.0.0
+                             * @package GeoDirectory
+                             * @param string $rating_star Rating stars.
+                             * @param float $post_avgratings Average ratings of the post.
+                             * @param int $ID The post ID.
+                             */
                             $rating_star = apply_filters('geodir_review_rating_stars_on_infowindow', $rating_star, $post_avgratings, $ID);
                         }
                     }
@@ -1666,6 +1822,17 @@ if (!function_exists('geodir_get_infowindow_html')) {
             </div>
             <?php
             $html = ob_get_clean();
+            /**
+             * Filter to change infowindow html
+             *
+             * You can use this filter to change infowindow html.
+             *
+             * @since 1.0.0
+             * @package GeoDirectory
+             * @param string $html Infowindow html.
+             * @param object $postinfo_obj The Post object.
+             * @param bool|string $post_preview Is this a post preview?
+             */
             $html = apply_filters('geodir_custom_infowindow_html', $html, $postinfo_obj, $post_preview);
             return $html;
         }
@@ -1673,11 +1840,14 @@ if (!function_exists('geodir_get_infowindow_html')) {
 }
 
 
-/**
- * Update post status
- */
-
 if (!function_exists('geodir_new_post_default_status')) {
+    /**
+     * Default post status for new posts.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @return string Returns the default post status for new posts. Ex: draft, publish etc.
+     */
     function geodir_new_post_default_status()
     {
         if (get_option('geodir_new_post_default_status'))
@@ -1689,6 +1859,12 @@ if (!function_exists('geodir_new_post_default_status')) {
 }
 
 if (!function_exists('geodir_change_post_status')) {
+    /**
+     * Change post status of a post.
+     *
+     * @param int|string $post_id The post ID.
+     * @param string $status New post status. Ex: draft, publish etc.
+     */
     function geodir_change_post_status($post_id = '', $status = '')
     {
         global $wpdb, $plugin_prefix;
@@ -1708,6 +1884,14 @@ if (!function_exists('geodir_change_post_status')) {
     }
 }
 
+/**
+ * Set post status of a post.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $pid The post ID.
+ * @param string $status Post status. Ex: draft, publish etc.
+ */
 function geodir_set_post_status($pid, $status)
 {
     if ($pid) {
@@ -1720,6 +1904,15 @@ function geodir_set_post_status($pid, $status)
 }
 
 
+/**
+ * Update post status of a post.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $new_status New post status. Ex: draft, publish etc.
+ * @param string $old_status Old post status. Ex: draft, publish etc.
+ * @param object $post The post object.
+ */
 function geodir_update_poststatus($new_status, $old_status, $post)
 {
     global $wpdb;
@@ -1733,10 +1926,16 @@ function geodir_update_poststatus($new_status, $old_status, $post)
 }
 
 
-/**
- * Update post info
- */
 if (!function_exists('geodir_update_listing_info')) {
+    /**
+     * Update post info.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param int $updatingpost The updating post ID.
+     * @param int $temppost The temporary post ID.
+     * @todo fix post_id variable
+     */
     function geodir_update_listing_info($updatingpost, $temppost)
     {
 
@@ -1773,11 +1972,15 @@ if (!function_exists('geodir_update_listing_info')) {
 }
 
 
-/**
- * Delete Listing
- **/
-
 if (!function_exists('geodir_delete_listing_info')) {
+    /**
+     * Delete Listing info from details table for the given post id.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param int $deleted_postid The post ID.
+     * @param bool $force Optional. Do you want to force delete it? Default: false.
+     */
     function geodir_delete_listing_info($deleted_postid, $force = false)
     {
         global $wpdb, $plugin_prefix;
@@ -1829,17 +2032,47 @@ if (!function_exists('geodir_delete_listing_info')) {
 }
 
 
-/**
- * This function would add listing to favorite listing
- **/
 if (!function_exists('geodir_add_to_favorite')) {
+    /**
+     * This function would add listing to favorite listing.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param int $post_id The post ID.
+     */
     function geodir_add_to_favorite($post_id)
     {
 
         global $current_user;
 
+        /**
+         * Filter to modify "Unfavorite" text
+         *
+         * You can use this filter to rename "Unfavorite" text to something else.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
         $remove_favourite_text = apply_filters('geodir_remove_favourite_text', REMOVE_FAVOURITE_TEXT);
+
+        /**
+         * Filter to modify "Remove from Favorites" text
+         *
+         * You can use this filter to rename "Remove from Favorites" text to something else.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
         $unfavourite_text = apply_filters('geodir_unfavourite_text', UNFAVOURITE_TEXT);
+
+        /**
+         * Filter to modify "fa fa-heart" icon
+         *
+         * You can use this filter to change "fa fa-heart" icon to something else.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
         $favourite_icon = apply_filters('geodir_favourite_icon', 'fa fa-heart');
 
         $user_meta_data = array();
@@ -1851,26 +2084,70 @@ if (!function_exists('geodir_add_to_favorite')) {
 
         update_user_meta($current_user->data->ID, 'gd_user_favourite_post', $user_meta_data);
 
+        /**
+         * Called before adding the post from favourites.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         * @param int $post_id The post ID.
+         */
         do_action('geodir_before_add_from_favorite', $post_id);
 
         echo '<a href="javascript:void(0);" title="' . $remove_favourite_text . '" class="geodir-addtofav geodir-removetofav-icon" onclick="javascript:addToFavourite(\'' . $post_id . '\',\'remove\');"><i class="'. $favourite_icon .'"></i> ' . $unfavourite_text . '</a>';
 
+        /**
+         * Called after adding the post from favourites.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         * @param int $post_id The post ID.
+         */
         do_action('geodir_after_add_from_favorite', $post_id);
 
     }
 }
 
-/**
- * This function would remove the favorited property earlier
- **/
 if (!function_exists('geodir_remove_from_favorite')) {
+    /**
+     * This function would remove the favourited property earlier.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param int $post_id The post ID.
+     */
     function geodir_remove_from_favorite($post_id)
     {
 
         global $current_user;
 
+        /**
+         * Filter to modify "Add to Favorites" text
+         *
+         * You can use this filter to rename "Add to Favorites" text to something else.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
         $add_favourite_text = apply_filters('geodir_add_favourite_text', ADD_FAVOURITE_TEXT);
+
+        /**
+         * Filter to modify "Favourite" text
+         *
+         * You can use this filter to rename "Favourite" text to something else.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
         $favourite_text = apply_filters('geodir_favourite_text', FAVOURITE_TEXT);
+
+        /**
+         * Filter to modify "fa fa-heart" icon
+         *
+         * You can use this filter to change "fa fa-heart" icon to something else.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
         $favourite_icon = apply_filters('geodir_favourite_icon', 'fa fa-heart');
 
         $user_meta_data = array();
@@ -1886,29 +2163,91 @@ if (!function_exists('geodir_remove_from_favorite')) {
 
         update_user_meta($current_user->data->ID, 'gd_user_favourite_post', $user_meta_data);
 
+        /**
+         * Called before removing the post from favourites.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         * @param int $post_id The post ID.
+         */
         do_action('geodir_before_remove_from_favorite', $post_id);
 
         echo '<a href="javascript:void(0);"  title="' . $add_favourite_text . '" class="geodir-addtofav geodir-addtofav-icon" onclick="javascript:addToFavourite(\'' . $post_id . '\',\'add\');"><i class="'. $favourite_icon .'"></i> ' . $favourite_text . '</a>';
 
+        /**
+         * Called after removing the post from favourites.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         * @param int $post_id The post ID.
+         */
         do_action('geodir_after_remove_from_favorite', $post_id);
 
     }
 }
 
-/**
- * This function would disply the html content for add to favorite or remove from favorite
- **/
-
 if (!function_exists('geodir_favourite_html')) {
+    /**
+     * This function would display the html content for add to favorite or remove from favorite.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param int $user_id The user ID.
+     * @param int $post_id The post ID.
+     */
     function geodir_favourite_html($user_id, $post_id)
     {
 
         global $current_user, $post;
 
+        /**
+         * Filter to modify "Add to Favorites" text
+         *
+         * You can use this filter to rename "Add to Favorites" text to something else.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
         $add_favourite_text = apply_filters('geodir_add_favourite_text', ADD_FAVOURITE_TEXT);
+
+        /**
+         * Filter to modify "Favourite" text
+         *
+         * You can use this filter to rename "Favourite" text to something else.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
         $favourite_text = apply_filters('geodir_favourite_text', FAVOURITE_TEXT);
+
+        /**
+         * Filter to modify "Unfavorite" text
+         *
+         * You can use this filter to rename "Unfavorite" text to something else.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
         $remove_favourite_text = apply_filters('geodir_remove_favourite_text', REMOVE_FAVOURITE_TEXT);
+
+        /**
+         * Filter to modify "Remove from Favorites" text
+         *
+         * You can use this filter to rename "Remove from Favorites" text to something else.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
         $unfavourite_text = apply_filters('geodir_unfavourite_text', UNFAVOURITE_TEXT);
+
+        /**
+         * Filter to modify "fa fa-heart" icon
+         *
+         * You can use this filter to change "fa fa-heart" icon to something else.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
         $favourite_icon = apply_filters('geodir_favourite_icon', 'fa fa-heart');
 
         $user_meta_data = '';
@@ -1939,6 +2278,14 @@ if (!function_exists('geodir_favourite_html')) {
 }
 
 
+/**
+ * Get post count for the given category / term.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param object|array $term category / term object that need to be processed.
+ * @return bool|int|null|string Post count.
+ */
 function geodir_get_cat_postcount($term = array())
 {
 
@@ -1955,7 +2302,24 @@ function geodir_get_cat_postcount($term = array())
 
             $table = $plugin_prefix . $post_type . '_detail';
 
+            /**
+             * Filter to modify the 'join' query
+             *
+             * @since 1.0.0
+             * @package GeoDirectory
+             * @param object|array $term category / term object that need to be processed.
+             * @param string $join The join query.
+             */
             $join = apply_filters('geodir_cat_post_count_join', $join, $term);
+
+            /**
+             * Filter to modify the 'where' query
+             *
+             * @since 1.0.0
+             * @package GeoDirectory
+             * @param object|array $term category / term object that need to be processed.
+             * @param string $where The where query.
+             */
             $where = apply_filters('geodir_cat_post_count_where', $where, $term);
 
             $count_query = "SELECT count(post_id) FROM 
@@ -1977,8 +2341,12 @@ function geodir_get_cat_postcount($term = array())
 }
 
 
-//ALLOW ADD POST TYPE FROM FRONT END
-
+/**
+ * Allow add post type from front end
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_allow_post_type_frontend()
 {
     $geodir_allow_posttype_frontend = get_option('geodir_allow_posttype_frontend');
@@ -1995,8 +2363,14 @@ function geodir_allow_post_type_frontend()
 
 }
 
-// Changing excerpt length
-
+/**
+ * Changing excerpt length.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $length Optional. Old length.
+ * @return mixed|void Returns length.
+ */
 function geodir_excerpt_length($length)
 {
     global $wp_query;
@@ -2011,8 +2385,14 @@ function geodir_excerpt_length($length)
     return $length;
 }
 
-// Changing excerpt more
-
+/**
+ * Changing excerpt more.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $more Optional. Old string.
+ * @return string Returns read more link.
+ */
 function geodir_excerpt_more($more)
 {
     global $post;
@@ -2020,6 +2400,15 @@ function geodir_excerpt_more($more)
 }
 
 
+/**
+ * Update markers on category Edit.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $term_id The term ID as string.
+ * @param int $tt_id The term taxonomy ID.
+ * @param string $taxonomy The taxonomy slug.
+ */
 function geodir_update_markers_oncatedit($term_id, $tt_id, $taxonomy)
 {
     global $plugin_prefix, $wpdb;
@@ -2082,6 +2471,14 @@ function geodir_update_markers_oncatedit($term_id, $tt_id, $taxonomy)
 
 }
 
+/**
+ * Get listing author id.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int|string $listing_id The post ID.
+ * @return string|int The author ID.
+ */
 function geodir_get_listing_author($listing_id = '')
 {
     if ($listing_id == '') {
@@ -2095,6 +2492,15 @@ function geodir_get_listing_author($listing_id = '')
 }
 
 
+/**
+ * Check whether a listing belongs to a user or not.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int|string $listing_id The post ID.
+ * @param int $user_id The user ID.
+ * @return bool
+ */
 function geodir_lisiting_belong_to_user($listing_id, $user_id)
 {
     $listing_author_id = geodir_get_listing_author($listing_id);
@@ -2105,6 +2511,15 @@ function geodir_lisiting_belong_to_user($listing_id, $user_id)
 
 }
 
+/**
+ * Check whether a listing belongs to current user or not.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int|string $listing_id The post ID.
+ * @param bool $exclude_admin Optional. Do you want to exclude admin from the check?. Default true.
+ * @return bool
+ */
 function geodir_listing_belong_to_current_user($listing_id = '', $exclude_admin = true)
 {
     global $current_user;
@@ -2121,6 +2536,14 @@ function geodir_listing_belong_to_current_user($listing_id = '', $exclude_admin 
 }
 
 
+/**
+ * Delete only supported attachments. This function is hooked to wp_delete_file filter.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $file. The File path.
+ * @return string File path if valid. Else empty string.
+ */
 function geodir_only_supportable_attachments_remove($file)
 {
 
@@ -2138,8 +2561,14 @@ function geodir_only_supportable_attachments_remove($file)
 
 }
 
-//geodir_set_wp_featured_image(16);
-// Written by Vikas on 13-06-2014 to set first image and wordpress post's featured image 
+
+/**
+ * Set first image as post's featured image.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $post_id The post ID.
+ */
 function geodir_set_wp_featured_image($post_id)
 {
 
@@ -2218,11 +2647,12 @@ function geodir_set_wp_featured_image($post_id)
 }
 
 
-/*
-Function to copy custom meta inof on WPML copy.
-*/
-
-
+/**
+ * Function to copy custom meta info on WPML copy.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function gd_copy_original_translation()
 {
     if (function_exists('icl_object_id')) {
@@ -2279,6 +2709,14 @@ add_action('wp_ajax_gd_copy_original_translation', 'gd_copy_original_translation
 //add_action('wp_ajax_nopriv_dc_update_profile', 'dc_update_profile_callback');
 
 
+/**
+ * Get custom fields info using listing post type.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $listing_type The listing post type.
+ * @return mixed|void|array custom fields info as an array.
+ */
 function geodir_get_custom_fields_type($listing_type = '')
 {
 
@@ -2321,11 +2759,26 @@ function geodir_get_custom_fields_type($listing_type = '')
 
     }
 
+    /**
+     * Filter to modify custom fields info using listing post type.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @return array $fields_info Custom fields info.
+     * @param string $listing_type The listing post type.
+     */
     return apply_filters('geodir_get_custom_fields_type', $fields_info, $listing_type);
 }
 
-/* 
- * Called when post updated
+
+/**
+ * Called when post updated.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $post_ID The post ID.
+ * @param object $post_after The post object after update.
+ * @param object $post_before The post object before update.
  */
 function geodir_function_post_updated($post_ID, $post_after, $post_before)
 {
@@ -2366,10 +2819,27 @@ function geodir_function_post_updated($post_ID, $post_after, $post_before)
                 update_option('geodir_post_published_email_content', __("<p>Dear [#client_name#],</p><p>Your listing [#listing_link#] has been published. This email is just for your information.</p><p>[#listing_link#]</p><br><p>Thank you for your contribution.</p><p>[#site_name#]</p>", GEODIRECTORY_TEXTDOMAIN));
             }
 
+            /**
+             * Called before sending the email when listing gets published.
+             *
+             * @since 1.0.0
+             * @package GeoDirectory
+             * @param object $post_after The post object after update.
+             * @param object $post_before The post object before update.
+             */
             do_action('geodir_before_listing_published_email', $post_after, $post_before);
             if (is_email($to_email)) {
                 geodir_sendEmail($from_email, $from_name, $to_email, $to_name, '', '', '', $message_type, $post_ID);
             }
+
+            /**
+             * Called after sending the email when listing gets published.
+             *
+             * @since 1.0.0
+             * @package GeoDirectory
+             * @param object $post_after The post object after update.
+             * @param object $post_before The post object before update.
+             */
             do_action('geodir_after_listing_published_email', $post_after, $post_before);
         }
     }
