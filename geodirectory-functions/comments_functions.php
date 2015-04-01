@@ -172,6 +172,13 @@ function geodir_save_rating($comment = 0)
 
             $wpdb->query($sqlqry);
 
+            /**
+             * Called after saving the comment.
+             *
+             * @since 1.0.0
+             * @package GeoDirectory
+             * @param array $_REQUEST The $_REQUEST variable.
+             */
             do_action('geodir_after_save_comment', $_REQUEST, 'Comment Your Post');
 
             if ($status) {
@@ -375,6 +382,12 @@ function geodir_update_postrating($post_id = 0, $post_type = '', $delete = false
         update_post_meta($post_id, 'overall_rating', $post_newrating);
         update_post_meta($post_id, 'rating_count', $post_newrating_count);
     }
+    /**
+     * Called after Updating post overall rating and rating count.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     */
     do_action('geodir_update_postrating');
 
 }
@@ -799,5 +812,15 @@ function geodir_is_reviews_show($pageview = '')
     if (!empty($active_tabs) && in_array('reviews', $active_tabs))
         $is_display = false;
 
+    /**
+     * Filter to change display value.
+     *
+     * You can use this filter to change the is_display value.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param bool $is_display Display ratings when set to true.
+     * @param string $pageview The view template. Ex: listview, gridview etc.
+     */
     return apply_filters('geodir_is_reviews_show', $is_display, $pageview);
 }
