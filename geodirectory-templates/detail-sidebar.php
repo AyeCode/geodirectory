@@ -1,4 +1,15 @@
-<?php global $post, $preview, $post_images;
+<?php
+/**
+ * Template for the details page sidebar
+ *
+ * You can make most changes via hooks or see the link below for info on how to replace the template in your theme.
+ *
+ * @link http://docs.wpgeodirectory.com/customizing-geodirectory-templates/
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
+
+global $post, $preview, $post_images;
 $package_info = array();
 
 $package_info = geodir_post_package_info($package_info, $post);

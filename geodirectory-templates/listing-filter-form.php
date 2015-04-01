@@ -1,4 +1,14 @@
-<?php global $wp_query, $current_term, $query;
+<?php
+/**
+ * Template for search bar used in the GD Search widget
+ *
+ * You can make most changes via hooks or see the link below for info on how to replace the template in your theme.
+ *
+ * @link http://docs.wpgeodirectory.com/customizing-geodirectory-templates/
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
+global $wp_query, $current_term, $query;
 
 $curr_post_type = geodir_get_current_posttype();
 

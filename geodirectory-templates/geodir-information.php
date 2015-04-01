@@ -1,4 +1,11 @@
 <?php
+/**
+ * Template used to output warning/info messages
+ *
+ * @link http://docs.wpgeodirectory.com/customizing-geodirectory-templates/
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 get_header();
 ?>
     <div id="geodir_wrapper">

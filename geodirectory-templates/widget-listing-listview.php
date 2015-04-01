@@ -1,4 +1,14 @@
 <?php
+/**
+ * Template for the list of places
+ *
+ * This is used mostly by widgets that produce a list of listings and outputs the actual grid or list of listings.
+ * See the link below for info on how to replace the template in your theme.
+ *
+ * @link http://docs.wpgeodirectory.com/customizing-geodirectory-templates/
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 do_action('geodir_before_listing_listview');
 global $gridview_columns_widget;
 $grid_view_class = apply_filters('geodir_grid_view_widget_columns', $gridview_columns_widget);
