@@ -1,5 +1,20 @@
 <?php
+/**
+ * Account Signup functions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 
+/**
+ * Check whether the user is logged in or not.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param bool $redirect Optional. Do you want to redirect to signup page, if user not logged in? Default: false.
+ * @global object $current_user WordPress Current User object.
+ * @return bool
+ */
 function geodir_is_login($redirect = false)
 {
     global $current_user;
@@ -16,6 +31,13 @@ function geodir_is_login($redirect = false)
         return true;
 }
 
+/**
+ * Redirect to SSL url, if SSL is being used.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @todo fix unknown $message variable
+ */
 function geodir_check_ssl()
 {
 
@@ -35,6 +57,13 @@ function geodir_check_ssl()
 
 }
 
+/**
+ * Get site email ID or site admin email ID.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @return string|mixed|void The email ID.
+ */
 function geodir_get_site_email_id()
 {
     if (get_option('site_email')) {
@@ -51,6 +80,13 @@ function geodir_get_site_email_id()
 
 
 if (!function_exists('get_site_emailName')) {
+    /**
+     * Get site name for sending emails.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @return string Site name.
+     */
     function get_site_emailName()
 
     {
@@ -69,6 +105,13 @@ if (!function_exists('get_site_emailName')) {
 }
 
 if (!function_exists('is_allow_user_register')) {
+    /**
+     * Checks whether the site allowing user registration or not.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @return bool|string
+     */
     function is_allow_user_register()
 
     {
@@ -81,9 +124,10 @@ if (!function_exists('is_allow_user_register')) {
 /**
  * Handles sending password retrieval email to user.
  *
- * @uses $wpdb WordPress Database object
- *
- * @return bool|WP_Error True: when finish. WP_Error on error
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @return bool|WP_Error True: when finish. WP_Error on error.
  */
 function geodir_retrieve_password()
 {
@@ -161,8 +205,11 @@ function geodir_retrieve_password()
 /**
  * Handles registering a new user.
  *
- * @param string $user_login User's username for logging in
- * @param string $user_email User's email address to send password and add
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $user_login User's username for logging in.
+ * @param string $user_email User's email address to send password and add.
+ * @global object $wpdb WordPress Database object.
  * @return int|WP_Error Either user's ID or error on failure.
  */
 function geodir_register_new_user($user_login, $user_email)
@@ -287,6 +334,13 @@ function geodir_register_new_user($user_login, $user_email)
     return array($user_id, $user_pass);
 }
 
+/**
+ * Handles user Authentication actions Ex. login, register, logout etc.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $errors WordPress Error object.
+ */
 function geodir_user_signup()
 {
     global $errors;
