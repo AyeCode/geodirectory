@@ -1,5 +1,19 @@
 <?php
+/**
+ * Custom functions
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 
+/**
+ * Front end listing view template selection.
+ *
+ * This function adds a drop down in front end listing page for selecting view template. Ex: list view, 2 column grid view, etc.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_list_view_select()
 {
     ?>
@@ -77,6 +91,17 @@ function geodir_list_view_select()
 add_action('geodir_before_listing', 'geodir_list_view_select', 100);
 
 
+/**
+ * Limit the listing excerpt.
+ *
+ * This function limits excerpt characters and display "read more" link.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string|int $charlength The character length.
+ * @global object $post The post object.
+ * @return string The modified excerpt.
+ */
 function geodir_max_excerpt($charlength)
 {
     global $post;
@@ -125,6 +150,16 @@ function geodir_max_excerpt($charlength)
     return $out;
 }
 
+/**
+ * Returns package information as an objects.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $package_info
+ * @param object|string $post The post object.
+ * @param string $post_type The post type.
+ * @return object
+ */
 function geodir_post_package_info($package_info, $post = '', $post_type = '')
 {
     $package_info['pid'] = 0;
@@ -140,6 +175,17 @@ function geodir_post_package_info($package_info, $post = '', $post_type = '')
 }
 
 
+/**
+ * Send enquiry to listing author
+ *
+ * This function let the user to send Enquiry to listing author. If listing author email not available, then admin email will be used.
+ * Email content will be used WP Admin -> Geodirectory -> Notifications -> Other Emails -> Email enquiry
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $request The request array that contains details like name, email, phone etc.
+ * @global object $wpdb WordPress Database object.
+ */
 function geodir_send_inquiry($request)
 {
     global $wpdb;
@@ -205,6 +251,17 @@ function geodir_send_inquiry($request)
 
 }
 
+/**
+ * Send Email to a friend.
+ *
+ * This function let the user to send Email to a friend.
+ * Email content will be used WP Admin -> Geodirectory -> Notifications -> Other Emails -> Send to friend
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $request
+ * @global object $wpdb WordPress Database object.
+ */
 function geodir_send_friend($request)
 {
     global $wpdb;
@@ -245,6 +302,15 @@ function geodir_send_friend($request)
     exit;
 }
 
+/**
+ * Adds open div before the tab content.
+ *
+ * This function adds open div before the tab content like post information, post images, reviews etc.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $hash_key
+ */
 function geodir_before_tab_content($hash_key)
 {
     switch ($hash_key) {
@@ -266,6 +332,15 @@ function geodir_before_tab_content($hash_key)
     }
 }
 
+/**
+ * Adds closing div after the tab content.
+ *
+ * This function adds closing div after the tab content like post information, post images, reviews etc.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $hash_key
+ */
 function geodir_after_tab_content($hash_key)
 {
     switch ($hash_key) {
@@ -288,6 +363,15 @@ function geodir_after_tab_content($hash_key)
 }
 
 
+/**
+ * Returns default sorting order of a post type.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $post_type The post type.
+ * @global object $wpdb WordPress Database object.
+ * @return bool|null|string
+ */
 function geodir_get_posts_default_sort($post_type)
 {
 
@@ -310,6 +394,15 @@ function geodir_get_posts_default_sort($post_type)
 }
 
 
+/**
+ * Returns sort options of a post type.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $post_type The post type.
+ * @global object $wpdb WordPress Database object.
+ * @return bool|mixed|void
+ */
 function geodir_get_sort_options($post_type)
 {
     global $wpdb;
@@ -330,6 +423,13 @@ function geodir_get_sort_options($post_type)
 }
 
 
+/**
+ * Display list of sort options available in front end using dropdown.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wp_query The wordpress query object.
+ */
 function geodir_display_sort_options()
 {
 
@@ -405,6 +505,19 @@ function geodir_display_sort_options()
 }
 
 
+/**
+ * Removes the section title
+ *
+ * Removes the section title "Posts sort options", if the custom field type is multiselect or textarea or taxonomy.
+ * Can be found here. WP Admin -> Geodirectory -> Place settings -> Custom fields
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $title The section title.
+ * @param string $field_type The field type.
+ *
+ * @return string
+ */
 function geodir_advance_customfields_heading($title, $field_type)
 {
 
@@ -415,6 +528,16 @@ function geodir_advance_customfields_heading($title, $field_type)
 }
 
 
+/**
+ * Returns related listings of a listing.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $request Related posts request array.
+ * @global object $wpdb WordPress Database object.
+ * @global object $post The post object.
+ * @return string
+ */
 function geodir_related_posts_display($request)
 {
 
@@ -585,8 +708,14 @@ function geodir_related_posts_display($request)
 
 }
 
-//-----count post according term --------
 add_action('wp_footer', 'geodir_category_count_script', 10);
+/**
+ * Adds the category post count javascript code
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global string $geodir_post_category_str The geodirectory post category.
+ */
 function geodir_category_count_script()
 {
     global $geodir_post_category_str;
@@ -603,6 +732,13 @@ function geodir_category_count_script()
 
 }
 
+/**
+ * Returns the default language of the map.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @return mixed|void
+ */
 function geodir_get_map_default_language()
 {
     $geodir_default_map_language = get_option('geodir_default_map_language');
@@ -612,6 +748,15 @@ function geodir_get_map_default_language()
 }
 
 
+/**
+ * Adds meta keywords and description for SEO.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global object $post The post object.
+ * @global object $wp_query The wordpress query object.
+ */
 function geodir_add_meta_keywords()
 {
     global $post, $wp_query, $wpdb, $geodir_addon_list;
@@ -806,9 +951,15 @@ function geodir_add_meta_keywords()
 
 }
 
-/* =================================== start code for detail page tabs */
-
-
+/**
+ * Returns list of options available for "Detail page tab settings"
+ *
+ * Options will be populated here. WP Admin -> Geodirectory -> Design -> Detail -> Detail page tab settings -> Exclude selected tabs from detail page
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @return array
+ */
 function geodir_detail_page_tabs_key_value_array()
 {
     $geodir_detail_page_tabs_key_value_array = array();
@@ -823,6 +974,13 @@ function geodir_detail_page_tabs_key_value_array()
 
 /**/
 
+/**
+ * Build and return the list of available tabs as an array.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @return mixed|array Tabs array.
+ */
 function geodir_detail_page_tabs_array()
 {
 
@@ -888,6 +1046,13 @@ function geodir_detail_page_tabs_array()
 }
 
 
+/**
+ * Returns the list of tabs available as an array.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @return mixed|array Tabs array.
+ */
 function geodir_detail_page_tabs_list()
 {
 
@@ -905,6 +1070,18 @@ function geodir_detail_page_tabs_list()
 }
 
 
+/**
+ * The main function responsible for displaying tabs in frontend detail page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $post The post object.
+ * @global array $post_images List of images attached to the post.
+ * @global string $video The video embed content.
+ * @global string $special_offers Special offers content.
+ * @global string $related_listing Related listing html.
+ * @global string $geodir_post_detail_fields Detail field html.
+ */
 function geodir_show_detail_page_tabs()
 {
 
@@ -1135,6 +1312,14 @@ function geodir_show_detail_page_tabs()
 }
 
 
+/**
+ * Fixes image orientation.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $file The image file.
+ * @return mixed
+ */
 function geodir_exif($file)
 {
     //This line reads the EXIF data and passes it into an array
@@ -1209,9 +1394,18 @@ function geodir_exif($file)
     return $file;
 }
 
-###########################################
-############ RECENT REVIEWS ###############
-###########################################
+/**
+ * Returns the recent reviews.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $g_size Optional. Avatar size in pixels. Default 60.
+ * @param int $no_comments Optional. Number of reviews you want to display. Default: 10.
+ * @param int $comment_lenth Optional. Maximum number of characters you want to display. After that read more link will appear.
+ * @param bool $show_pass_post Optional. Not yet implemented.
+ * @global object $wpdb WordPress Database object.
+ * @return string
+ */
 function geodir_get_recent_reviews($g_size = 60, $no_comments = 10, $comment_lenth = 60, $show_pass_post = false)
 {
     global $wpdb, $tablecomments, $tableposts, $rating_table_name;
@@ -1386,7 +1580,13 @@ function geodir_get_recent_reviews($g_size = 60, $no_comments = 10, $comment_len
     return $comments_echo;
 }
 
-// All post categories for all GD post types
+/**
+ * Returns All post categories from all GD post types
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @return array
+ */
 function geodir_home_map_cats_key_value_array()
 {
     $post_types = geodir_get_posttypes('object');
@@ -1413,7 +1613,13 @@ function geodir_home_map_cats_key_value_array()
     return $return;
 }
 
-// Social sharing buttons
+/**
+ * "Twitter tweet" button code.
+ *
+ * To display "Twitter tweet" button, you can call this function.
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_twitter_tweet_button()
 {
     ?>
@@ -1423,6 +1629,11 @@ function geodir_twitter_tweet_button()
 <?php
 }
 
+/**
+ * "Facebook like" button code.
+ *
+ * To display "Facebook like" button, you can call this function.
+ */
 function geodir_fb_like_button()
 {
     global $post;
@@ -1435,6 +1646,14 @@ function geodir_fb_like_button()
 <?php
 }
 
+/**
+ * "Google Plus" share button code.
+ *
+ * To display "Google Plus" share button, you can call this function.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_google_plus_button()
 {
     ?>
@@ -1452,6 +1671,14 @@ function geodir_google_plus_button()
 <?php
 }
 
+/**
+ * "Share this" button code.
+ *
+ * To display "share this" button, you can call this function.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_share_this_button_code()
 {
     global $post;
