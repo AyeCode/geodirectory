@@ -1,4 +1,14 @@
 <?php
+/**
+ * Template for the success page after submitting a listing
+ *
+ * You can make most changes via hooks or see the link below for info on how to replace the template in your theme.
+ *
+ * @link http://docs.wpgeodirectory.com/customizing-geodirectory-templates/
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @deprecated 1.4.2 listing-success.php
+ */
 get_header();
 
 do_action('geodir_before_main_content');

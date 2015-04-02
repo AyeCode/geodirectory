@@ -1,4 +1,14 @@
 <?php
+/**
+ * Template for the GD register/signup page
+ *
+ * You can make most changes via hooks or see the link below for info on how to replace the template in your theme.
+ *
+ * @link http://docs.wpgeodirectory.com/customizing-geodirectory-templates/
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
+
 if (get_current_user_id()) {
     wp_redirect(home_url(), 302);
     exit;

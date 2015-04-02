@@ -1443,11 +1443,15 @@ function geodir_diagnostic_tools_setting_page()
                                class="button-primary geodir_diagnosis_button" data-diagnose="version_clear"/>
                     </td>
                 </tr>
-
-
-
-
-
+				<tr>
+					<td><?php _e('Load custom fields translation', GEODIRECTORY_TEXTDOMAIN);?></td>
+					<td>
+						<small><?php _e('This tool will load strings from database into fie to translate via po editor.Ex: custom fields', GEODIRECTORY_TEXTDOMAIN);?></small>
+					</td>
+					<td>
+						<input type="button" value="<?php _e('Run', GEODIRECTORY_TEXTDOMAIN);?>" class="button-primary geodir_diagnosis_button" data-diagnose="load_db_language"/>
+					</td>
+				</tr>
                 <?php do_action('geodir_diagnostic_tool');?>
 
                 </tbody>
