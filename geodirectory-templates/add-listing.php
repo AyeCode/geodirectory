@@ -1,4 +1,14 @@
 <?php
+/**
+ * Template for add listings page
+ *
+ * You can make most changes via hooks or see the link below for info on how to replace the template in your theme.
+ *
+ * @link http://docs.wpgeodirectory.com/customizing-geodirectory-templates/
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
+
 if (!isset($_REQUEST['backandedit'])) {
     unset($_SESSION['listing']);
 }

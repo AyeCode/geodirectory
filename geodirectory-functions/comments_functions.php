@@ -1,7 +1,23 @@
 <?php
-// ADD THE COMMENTS META FIELDS TO THE COMMENTS ADMIN PAGE
+/**
+ * Comment related functions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 
 add_filter('comment_row_actions', 'geodir_comment_meta_row_action', 11, 1);
+/**
+ * Add the comment meta fields to the comments admin page.
+ *
+ * Adds rating stars below each comment of the WP Admin Dashboard -> Comments page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $a Comment row actions before filter.
+ * @global object $comment The comment object.
+ * @return mixed Comment row actions.
+ */
 function geodir_comment_meta_row_action($a)
 {
     global $comment;
@@ -14,13 +30,30 @@ function geodir_comment_meta_row_action($a)
     return $a;
 }
 
-
 add_action('add_meta_boxes_comment', 'geodir_comment_add_meta_box');
+/**
+ * Adds comment rating meta box.
+ *
+ * Adds meta box to Comments -> Edit page using hook {@see 'add_meta_boxes_comment'}.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param object $comment The comment object.
+ */
 function geodir_comment_add_meta_box($comment)
 {
     add_meta_box('gd-comment-rating', __('Comment Rating', GEODIRECTORY_TEXTDOMAIN), 'geodir_comment_rating_meta', 'comment', 'normal', 'high');
 }
 
+/**
+ * Add comment rating meta box form fields.
+ *
+ * Adds form fields to the function {@see 'geodir_comment_add_meta_box'}.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param object $comment The comment object.
+ */
 function geodir_comment_rating_meta($comment)
 {
     if ($rating = geodir_get_commentoverall($comment->comment_ID)) {
@@ -38,6 +71,16 @@ function geodir_comment_rating_meta($comment)
 
 add_action('comment_form_logged_in_after', 'geodir_comment_rating_fields');
 add_action('comment_form_before_fields', 'geodir_comment_rating_fields');
+
+/**
+ * Add rating fields in comment form.
+ *
+ * Adds a rating input field in comment form.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $post The post object.
+ */
 function geodir_comment_rating_fields()
 {
     global $post;
@@ -53,6 +96,14 @@ function geodir_comment_rating_fields()
 
 
 add_filter('comment_reply_link', 'geodir_comment_replaylink');
+/**
+ * Wrap comment reply link with custom div.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $link The HTML link.
+ * @return string The HTML link.
+ */
 function geodir_comment_replaylink($link)
 {
 
@@ -62,6 +113,14 @@ function geodir_comment_replaylink($link)
 }
 
 add_filter('cancel_comment_reply_link', 'geodir_cancle_replaylink');
+/**
+ * Wrap comment cancel reply link with custom div.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $link The HTML link.
+ * @return string The HTML link.
+ */
 function geodir_cancle_replaylink($link)
 {
 
@@ -71,6 +130,16 @@ function geodir_cancle_replaylink($link)
 }
 
 add_action('comment_post', 'geodir_save_rating');
+/**
+ * Save rating details for a comment.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $comment The comment ID.
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix
+ * @global int $user_ID The current user ID.
+ */
 function geodir_save_rating($comment = 0)
 {
     global $wpdb, $user_ID, $post, $plugin_prefix;
@@ -114,6 +183,13 @@ function geodir_save_rating($comment = 0)
 
             $wpdb->query($sqlqry);
 
+            /**
+             * Called after saving the comment.
+             *
+             * @since 1.0.0
+             * @package GeoDirectory
+             * @param array $_REQUEST The $_REQUEST variable.
+             */
             do_action('geodir_after_save_comment', $_REQUEST, 'Comment Your Post');
 
             if ($status) {
@@ -126,6 +202,17 @@ function geodir_save_rating($comment = 0)
 
 
 add_action('wp_set_comment_status', 'geodir_update_rating_status_change', 10, 2);
+/**
+ * Update comment status when changing the rating.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $comment_id The comment ID.
+ * @param int|string $status The comment status.
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @global int $user_ID The current user ID.
+ */
 function geodir_update_rating_status_change($comment_id, $status)
 {
 
@@ -175,6 +262,16 @@ function geodir_update_rating_status_change($comment_id, $status)
 
 
 add_action('edit_comment', 'geodir_update_rating');
+/**
+ * Update comment rating.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $comment_id The comment ID.
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @global int $user_ID The current user ID.
+ */
 function geodir_update_rating($comment_id = 0)
 {
 
@@ -217,6 +314,14 @@ function geodir_update_rating($comment_id = 0)
 }
 
 add_action('delete_comment', 'geodir_comment_delete_comment');
+/**
+ * Delete review details when deleting comment.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $comment_id The comment ID.
+ * @global object $wpdb WordPress Database object.
+ */
 function geodir_comment_delete_comment($comment_id)
 {
     global $wpdb;
@@ -236,6 +341,15 @@ function geodir_comment_delete_comment($comment_id)
 }
 
 add_filter('comment_text', 'geodir_wrap_comment_text', 10, 2);
+/**
+ * Add rating information in comment text.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $content The comment content.
+ * @param object|string $comment The comment object.
+ * @return string The comment content.
+ */
 function geodir_wrap_comment_text($content, $comment = '')
 {
     $rating = 0;
@@ -249,7 +363,17 @@ function geodir_wrap_comment_text($content, $comment = '')
 }
 
 
-// $delete epreciated since ver 1.3.6
+/**
+ * Update post overall rating and rating count.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $post_id The post ID.
+ * @param string $post_type The post type.
+ * @param bool $delete Depreciated since ver 1.3.6.
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ */
 function geodir_update_postrating($post_id = 0, $post_type = '', $delete = false)
 {
     global $wpdb, $plugin_prefix, $comment;
@@ -278,10 +402,28 @@ function geodir_update_postrating($post_id = 0, $post_type = '', $delete = false
         update_post_meta($post_id, 'overall_rating', $post_newrating);
         update_post_meta($post_id, 'rating_count', $post_newrating_count);
     }
+    /**
+     * Called after Updating post overall rating and rating count.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     */
     do_action('geodir_update_postrating');
 
 }
 
+/**
+ * Get post overall rating.
+ *
+ * Returns overall rating of a post. If no rating returns false.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $post_id The post ID.
+ * @return bool|mixed|null|string
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix
+ */
 function geodir_get_postoverall($post_id = 0)
 {
     global $wpdb, $plugin_prefix;
@@ -310,6 +452,17 @@ function geodir_get_postoverall($post_id = 0)
 }
 
 
+/**
+ * Get review details using comment ID.
+ *
+ * Returns review details using comment ID. If no reviews returns false.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $comment_id The comment ID.
+ * @global object $wpdb WordPress Database object.
+ * @return bool|mixed
+ */
 function geodir_get_review($comment_id = 0)
 {
     global $wpdb;
@@ -327,6 +480,17 @@ function geodir_get_review($comment_id = 0)
         return false;
 }
 
+/**
+ * Get review total of a Post.
+ *
+ * Returns review total of a post. If no results returns false.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $post_id The post ID.
+ * @global object $wpdb WordPress Database object.
+ * @return bool|null|string
+ */
 function geodir_get_review_total($post_id = 0)
 {
     global $wpdb;
@@ -344,6 +508,17 @@ function geodir_get_review_total($post_id = 0)
         return false;
 }
 
+/**
+ * Get review count by user ID.
+ *
+ * Returns review count of a user. If no results returns false.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $user_id
+ * @global object $wpdb WordPress Database object.
+ * @return bool|null|string
+ */
 function geodir_get_review_count_by_user_id($user_id = 0)
 {
     global $wpdb;
@@ -360,6 +535,18 @@ function geodir_get_review_count_by_user_id($user_id = 0)
         return false;
 }
 
+/**
+ * Get average overall rating of a Post.
+ *
+ * Returns average overall rating of a Post. If no results, returns false.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $post_id The post ID.
+ * @param int $force_query Optional. Do you want force run the query? Default: 0.
+ * @global object $wpdb WordPress Database object.
+ * @return array|bool|int|mixed|null|string
+ */
 function geodir_get_post_rating($post_id = 0, $force_query = 0)
 {
     global $wpdb, $post;
@@ -385,6 +572,17 @@ function geodir_get_post_rating($post_id = 0, $force_query = 0)
         return false;
 }
 
+/**
+ * Get review count of a Post.
+ *
+ * Returns review count of a Post. If no results, returns false.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $post_id The post ID.
+ * @global object $wpdb WordPress Database object.
+ * @return bool|null|string
+ */
 function geodir_get_review_count_total($post_id = 0)
 {
     global $wpdb;
@@ -402,6 +600,18 @@ function geodir_get_review_count_total($post_id = 0)
         return false;
 }
 
+/**
+ * Get comments count of a Post.
+ *
+ * Returns comments count of a Post. If no results, returns false.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $post_id The post ID.
+ * @global object $wpdb WordPress Database object.
+ * @return bool|null|string
+ * @todo It might be a duplicate function of geodir_get_review_count_total().
+ */
 function geodir_get_comments_number($post_id = 0)
 {
     global $wpdb;
@@ -420,6 +630,17 @@ function geodir_get_comments_number($post_id = 0)
         return false;
 }
 
+/**
+ * Get overall rating of a comment.
+ *
+ * Returns overall rating of a comment. If no results, returns false.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $comment_id The comment ID.
+ * @global object $wpdb WordPress Database object.
+ * @return bool|null|string
+ */
 function geodir_get_commentoverall($comment_id = 0)
 {
     global $wpdb;
@@ -437,13 +658,31 @@ function geodir_get_commentoverall($comment_id = 0)
         return false;
 }
 
-// depreciated since ver 1.3.6
+/**
+ * Returns average overall rating of a Post. Depreciated since ver 1.3.6.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $post_id The post ID.
+ * @internal Depreciated since ver 1.3.6.
+ * @return array|bool|int|mixed|null|string
+ */
 function geodir_get_commentoverall_number($post_id = 0)
 {
     return geodir_get_post_rating($post_id);
 }
 
 
+/**
+ * Sets the comment template.
+ *
+ * Sets the comment template using filter {@see 'comments_template'}.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $comment_template Old comment template.
+ * @return string New comment template.
+ */
 function geodir_comment_template($comment_template)
 {
     global $post;
@@ -462,6 +701,15 @@ add_filter("comments_template", "geodir_comment_template");
 
 
 if (!function_exists('geodir_comment')) {
+    /**
+     * Comment HTML markup.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param object $comment The comment object.
+     * @param array $args The comment args.
+     * @param int $depth Depth of comment.
+     */
     function geodir_comment($comment, $args, $depth)
     {
         $GLOBALS['comment'] = $comment;
@@ -522,9 +770,18 @@ if (!function_exists('geodir_comment')) {
 }
 
 
-#############################	 FUNCTION TO NOT LIST REPLIES AS REVIEWS
 add_filter('get_comments_number', 'geodir_fix_comment_count', 10, 2);
 if (!function_exists('geodir_fix_comment_count')) {
+    /**
+     * Fix comment count by not listing replies as reviews
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param int $count The comment count.
+     * @param int $post_id The post ID.
+     * @todo $post is unreachable since the function return the count before that variable.
+     * @return bool|null|string The comment count.
+     */
     function geodir_fix_comment_count($count, $post_id)
     {
         if (!is_admin() || strpos($_SERVER['REQUEST_URI'], 'admin-ajax.php')) {
@@ -549,11 +806,17 @@ if (!function_exists('geodir_fix_comment_count')) {
     }
 }
 
-##############################	 END FUNCTION TO NOT LIST REPLIES AS REVIEWS
-
-
 /**
  * HTML for rating stars
+ *
+ * This is the main HTML markup that displays rating stars.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param float $rating The post average rating.
+ * @param int $post_id The post ID.
+ * @param bool $small Optional. Display as small ratings? Default: false.
+ * @return string Rating HTML.
  */
 function geodir_get_rating_stars($rating, $post_id, $small = false)
 {
@@ -583,6 +846,14 @@ function geodir_get_rating_stars($rating, $post_id, $small = false)
     return $r_html;
 }
 
+/**
+ * Check whether to display ratings or not.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $pageview The view template. Ex: listview, gridview etc.
+ * @return mixed|void
+ */
 function geodir_is_reviews_show($pageview = '')
 {
 
@@ -592,5 +863,15 @@ function geodir_is_reviews_show($pageview = '')
     if (!empty($active_tabs) && in_array('reviews', $active_tabs))
         $is_display = false;
 
+    /**
+     * Filter to change display value.
+     *
+     * You can use this filter to change the is_display value.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param bool $is_display Display ratings when set to true.
+     * @param string $pageview The view template. Ex: listview, gridview etc.
+     */
     return apply_filters('geodir_is_reviews_show', $is_display, $pageview);
 }
