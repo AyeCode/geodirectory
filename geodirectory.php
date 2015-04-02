@@ -105,16 +105,10 @@ if ($_SERVER['REQUEST_URI'] == '' || $_SERVER['REQUEST_URI'] == '/') {
  * Localisation items.
  */
 if (!defined('GEODIRECTORY_TEXTDOMAIN')) define('GEODIRECTORY_TEXTDOMAIN', 'geodirectory');
-$locale = apply_filters('plugin_locale', get_locale(), GEODIRECTORY_TEXTDOMAIN);
-load_textdomain(GEODIRECTORY_TEXTDOMAIN, WP_LANG_DIR . '/' . GEODIRECTORY_TEXTDOMAIN . '/' . GEODIRECTORY_TEXTDOMAIN . '-' . $locale . '.mo');
-load_plugin_textdomain(GEODIRECTORY_TEXTDOMAIN, false, dirname(plugin_basename(__FILE__)) . '/geodirectory-languages');
 
-/**
- * Define language constants.
- *
- * @since 1.0.0
- */
-require_once('language.php');
+// Load geodirectory plugin textdomain.
+add_action( 'plugins_loaded', 'geodir_load_textdomain' );
+
 /**
  * Include all plugin functions.
  *

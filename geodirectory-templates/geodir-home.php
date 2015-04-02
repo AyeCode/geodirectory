@@ -1,4 +1,14 @@
 <?php
+/**
+ * Template for the GD homepage
+ *
+ * You can make most changes via hooks or see the link below for info on how to replace the template in your theme.
+ *
+ * @link http://docs.wpgeodirectory.com/customizing-geodirectory-templates/
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
+
 // get header
 get_header();
 

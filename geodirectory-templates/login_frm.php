@@ -1,4 +1,14 @@
 <?php
+/**
+ * Template for the login for box on the register/signin page
+ *
+ * You can make most changes via hooks or see the link below for info on how to replace the template in your theme.
+ *
+ * @link http://docs.wpgeodirectory.com/customizing-geodirectory-templates/
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
+
 if (isset($_GET['redirect_to']) && $_GET['redirect_to'] != '') {
     $redirect_to = $_GET['redirect_to'];
 } else {
