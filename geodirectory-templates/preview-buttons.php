@@ -18,11 +18,24 @@ if (isset($_REQUEST['preview']) && $_REQUEST['preview'] && isset($_REQUEST['pid'
     $form_action_url = geodir_get_ajax_url() . '&geodir_ajax=add_listing&ajax_action=publish&listing_type=' . $post_type;
 }
 
+/**
+ * Filter the URL for the publish listing form on the preview page.
+ *
+ * @since 1.0.0
+ * @param string $form_action_url The URL for the form.
+ */
 $form_action_url = apply_filters('geodir_publish_listing_form_action', $form_action_url);
 
 
 ?>
-<?php do_action('geodir_before_publish_listing_form');
+<?php
+/**
+ * Called on the add listing preview page before the publish listings form.
+ *
+ * @since 1.0.0
+ * @see 'geodir_after_publish_listing_form'
+ */
+do_action('geodir_before_publish_listing_form');
 ob_start()// start publish listing form buffering 
 ?>
     <div class="geodir_preview_section">
@@ -32,7 +45,14 @@ ob_start()// start publish listing form buffering
                 <input type="hidden" name="pid" value="<?php if (isset($post->pid)) {
                     echo $post->pid;
                 } ?>">
-                <?php do_action('geodir_publish_listing_form_before_msg'); ?>
+                <?php
+                /**
+                 * Called on the add listing preview page inside the publish listings form, before the publish message.
+                 *
+                 * @since 1.0.0
+                 * @see 'geodir_publish_listing_form_after_msg'
+                 */
+                do_action('geodir_publish_listing_form_before_msg'); ?>
                 <?php
                 $alive_days = UNLIMITED;
                 $type_title = '';
@@ -46,9 +66,21 @@ ob_start()// start publish listing form buffering
 
                 echo '</h5>';
                 $publish_listing_form_message = ob_get_clean();
+                /**
+                 * Filter the publish listing message on the preview page.
+                 *
+                 * @since 1.0.0
+                 * @param string $publish_listing_form_message The message to be filtered.
+                 */
                 $publish_listing_form_message = apply_filters('geodir_publish_listing_form_message', $publish_listing_form_message);
                 echo $publish_listing_form_message;
 
+                /**
+                 * Called on the add listing preview page inside the publish listings form, after the publish message.
+                 *
+                 * @since 1.0.0
+                 * @see 'geodir_publish_listing_form_before_msg'
+                 */
                 do_action('geodir_publish_listing_form_after_msg');
 
                 ob_start(); // start action button buffering
@@ -63,6 +95,12 @@ ob_start()// start publish listing form buffering
                 <?php
                 }
                 $publish_listing_form_button = ob_get_clean();
+                /**
+                 * Filter the HTML button for publishing the listing on the preview page.
+                 *
+                 * @since 1.0.0
+                 * @param string $publish_listing_form_button The HTML for the submit button.
+                 */
                 $publish_listing_form_button = apply_filters('geodir_publish_listing_form_button', $publish_listing_form_button);
                 echo $publish_listing_form_button;
 
@@ -92,6 +130,12 @@ ob_start()// start publish listing form buffering
                 <?php
 
                 $publish_listing_form_go_back = ob_get_clean();
+                /**
+                 * Filter the cancel and go back and edit HTML on the preview page.
+                 *
+                 * @since 1.0.0
+                 * @param string $publish_listing_form_go_back The HTML for the cancel and go back and edit button/link.
+                 */
                 $publish_listing_form_go_back = apply_filters('geodir_publish_listing_form_go_back', $publish_listing_form_go_back);
                 echo $publish_listing_form_go_back;
 
@@ -101,8 +145,20 @@ ob_start()// start publish listing form buffering
     </div>
 <?php
 $publish_listing_form = ob_get_clean();
+/**
+ * Filter the HTML for the entire publish listing form preview page message and buttons etc.
+ *
+ * @since 1.0.0
+ * @param string $publish_listing_form The publish listing HTML form.
+ */
 $publish_listing_form = apply_filters('geodir_publish_listing_form', $publish_listing_form);
 echo $publish_listing_form;
 
+/**
+ * Called on the add listing preview page after the publish listings form.
+ *
+ * @since 1.0.0
+ * @see 'geodir_before_publish_listing_form'
+ */
 do_action('geodir_after_publish_listing_form');
 ?>

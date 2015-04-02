@@ -13,48 +13,82 @@
 get_header();
 
 ###### WRAPPER OPEN ######
-// this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='')
+/** This action is documented in geodirectory-templates/add-listing.php */
 do_action('geodir_wrapper_open', 'author-page', 'geodir-wrapper', '');
 
 ###### TOP CONTENT ######
-// action called before the main content and the page specific content
+/** This action is documented in geodirectory-templates/add-listing.php */
 do_action('geodir_top_content', 'author-page');
-// template specific, this can add the sidebar top section and breadcrums
+/**
+ * Calls the top section widget area and the breadcrumbs on the author page.
+ *
+ * @since 1.1.0
+ */
 do_action('geodir_author_before_main_content');
-// action called before the main content
+/** This action is documented in geodirectory-templates/add-listing.php */
 do_action('geodir_before_main_content', 'author-page');
 
-// action, author page title
+/**
+ * Adds the title to the author page.
+ *
+ * This action adds the title to the author page.
+ *
+ * @since 1.1.0
+ */
 do_action('geodir_author_page_title');
 // action, author page description
+/**
+ * Called after the page title, can add a description to the page.
+ *
+ * @since 1.1.0
+ */
 do_action('geodir_author_page_description');
 
 
 ###### SIDEBAR ######
+/**
+ * Adds the author page left sidebar to the author template page if active.
+ *
+ * @since 1.1.0
+ */
 do_action('geodir_author_sidebar_left');
 
 ###### MAIN CONTENT WRAPPERS OPEN ######
-// this adds the opening html tags to the content div, this required the closing tag below :: ($type='',$id='',$class='')
+/** This action is documented in geodirectory-templates/add-listing.php */
 do_action('geodir_wrapper_content_open', 'author-page', 'geodir-wrapper-content', '');
 
 
 ###### MAIN CONTENT ######
-// this call the main page content
+/**
+ * Calls the author page content on the author template page.
+ *
+ * @since 1.1.0
+ */
 do_action('geodir_author_content');
 
 
 ###### MAIN CONTENT WRAPPERS CLOSE ######
-// this adds the closing html tags to the wrapper_content div :: ($type='')
+/** This action is documented in geodirectory-templates/add-listing.php */
 do_action('geodir_wrapper_content_close', 'author-page');
 
 ###### SIDEBAR ######
+/**
+ * Adds the author page right sidebar to the author template page if active.
+ *
+ * @since 1.1.0
+ */
 do_action('geodir_author_sidebar_right');
 
 ###### BOTTOM SECTION WIDGET AREA ######
-// adds the details bottom section widget area, you can add more classes via ''
+/**
+ * Adds the author page bottom widget area to the author template page if active.
+ *
+ * @since 1.1.0
+ */
 do_action('geodir_sidebar_author_bottom_section');
 
 ###### WRAPPER CLOSE ######	
-// this adds the closing html tags to the wrapper div :: ($type='')
+/** This action is documented in geodirectory-templates/add-listing.php */
 do_action('geodir_wrapper_close', 'author-page');
+
 get_footer();  

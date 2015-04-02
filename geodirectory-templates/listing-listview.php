@@ -10,8 +10,25 @@
  * @package GeoDirectory
  */
 
+/**
+ * Called before the listing template used to list listing of places.
+ *
+ * This is used anywhere you see a list of listings.
+ *
+ * @since 1.0.0
+ */
 do_action('geodir_before_listing_listview');
+
 global $gridview_columns;
+
+/**
+ * Filter the default grid view class.
+ *
+ * This can be used to filter the default grid view class but can be overridden by a user $_SESSION.
+ *
+ * @since 1.0.0
+ * @param string $gridview_columns The grid view class, can be '', 'gridview_onehalf', 'gridview_onethird', 'gridview_onefourth' or 'gridview_onefifth'.
+ */
 $grid_view_class = apply_filters('geodir_grid_view_widget_columns', $gridview_columns);
 if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' && !isset($before_widget) && !isset($related_posts)) {
     if ($_SESSION['gd_listing_view'] == '1') {
@@ -21,7 +38,7 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
         $grid_view_class = 'gridview_onehalf';
     }
     if ($_SESSION['gd_listing_view'] == '3') {
-        $grid_view_class = 'gridview_onethird ';
+        $grid_view_class = 'gridview_onethird';
     }
     if ($_SESSION['gd_listing_view'] == '4') {
         $grid_view_class = 'gridview_onefourth';
@@ -36,11 +53,33 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
 
         <?php if (have_posts()) :
 
+            /**
+             * Called inside the `ul` of the listings template, but before any `li` elements.
+             *
+             * When used by the widget view template then it will only show if there are listings to be shown.
+             *
+             * @since 1.0.0
+             * @see 'geodir_after_listing_post_listview'
+             */
             do_action('geodir_before_listing_post_listview');
 
             while (have_posts()) : the_post();
                 global $post, $wpdb, $listing_width, $preview;
+
+                /**
+                 * Add a class to the `li` element of the listings list template.
+                 *
+                 * @since 1.0.0
+                 * @param string $class The extra class for the `li` element, default empty.
+                 */
                 $post_view_class = apply_filters('geodir_post_view_extra_class', '');
+
+                /**
+                 * Add a class to the `article` tag inside the `li` element on the listings list template.
+                 *
+                 * @since 1.0.0
+                 * @param string $class The extra class for the `article` element, default empty.
+                 */
                 $post_view_article_class = apply_filters('geodir_post_view_article_extra_class', '');
                 ?>
 
@@ -61,6 +100,15 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                                     <?php echo $fimage; ?>
                                 </a>
                                 <?php
+                                /**
+                                 * Called before badges are output.
+                                 *
+                                 * Called on the listings template after the image has been output and before the badges like `new` or `featured` are output.
+                                 *
+                                 * @since 1.0.0
+                                 * @param object $post The post object.
+                                 * @see 'geodir_after_badge_on_image'
+                                 */
                                 do_action('geodir_before_badge_on_image', $post);
                                 if ($post->is_featured) {
                                     echo geodir_show_badges_on_image('featured', $post, get_permalink());
@@ -71,6 +119,16 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                                 if (round(abs(strtotime($post->post_date) - strtotime(date('Y-m-d'))) / 86400) < $geodir_days_new) {
                                     echo geodir_show_badges_on_image('new', $post, get_permalink());
                                 }
+
+                                /**
+                                 * Called after badges are output.
+                                 *
+                                 * Called on the listings template after the image and badges like `new` or `featured` have been output.
+                                 *
+                                 * @since 1.0.0
+                                 * @param object $post The post object.
+                                 * @see 'geodir_before_badge_on_image'
+                                 */
                                 do_action('geodir_after_badge_on_image', $post);
                                 ?>
 
@@ -81,7 +139,16 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
 
                         <div class="geodir-content">
 
-                            <?php do_action('geodir_before_listing_post_title', 'listview', $post); ?>
+                            <?php
+                            /**
+                             * Called before the post title on the listings view template.
+                             *
+                             * @since 1.0.0
+                             * @param string $type The template type, default 'listview'.
+                             * @param object $post The post object.
+                             * @see 'geodir_after_listing_post_title'
+                             */
+                            do_action('geodir_before_listing_post_title', 'listview', $post); ?>
 
                             <header class="geodir-entry-header"><h3 class="geodir-entry-title">
                                     <a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>">
@@ -92,7 +159,16 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                                 </h3></header>
                             <!-- .entry-header -->
 
-                            <?php do_action('geodir_after_listing_post_title', 'listview', $post); ?>
+                            <?php
+                            /**
+                             * Called after the post title on the listings view template.
+                             *
+                             * @since 1.0.0
+                             * @param string $type The template type, default 'listview'.
+                             * @param object $post The post object.
+                             * @see 'geodir_before_listing_post_title'
+                             */
+                            do_action('geodir_after_listing_post_title', 'listview', $post); ?>
 
                             <?php /// Print Distance
                             if (isset($_REQUEST['sgeo_lat']) && $_REQUEST['sgeo_lat'] != '') {
@@ -130,7 +206,15 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                             <?php } ?>
 
 
-                            <?php do_action('geodir_before_listing_post_excerpt', $post); ?>
+                            <?php
+                            /**
+                             * Called before the post excerpt on the listings view template.
+                             *
+                             * @since 1.0.0
+                             * @param object $post The post object.
+                             * @see 'geodir_after_listing_post_excerpt'
+                             */
+                            do_action('geodir_before_listing_post_excerpt', $post); ?>
                             <?php echo geodir_show_listing_info('listing'); ?>
                             <div class="geodir-entry-content">
 
@@ -145,7 +229,15 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                                 }
                                 ?></div>
 
-                            <?php do_action('geodir_after_listing_post_excerpt', $post); ?>
+                            <?php
+                            /**
+                             * Called after the post excerpt on the listings view template.
+                             *
+                             * @since 1.0.0
+                             * @param object $post The post object.
+                             * @see 'geodir_before_listing_post_excerpt'
+                             */
+                            do_action('geodir_after_listing_post_excerpt', $post); ?>
                         </div>
                         <!-- gd-content ends here-->
                         <footer class="geodir-entry-meta">
@@ -159,9 +251,26 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
 
                                     if (!$preview) {
                                         $post_avgratings = geodir_get_post_rating($post->ID);
-
+                                        /**
+                                         * Called before the rating stars are output on the listings view template.
+                                         *
+                                         * @since 1.0.0
+                                         * @param float $post_avgratings The average rating for the post.
+                                         * @param int $post->ID The post ID.
+                                         * @see 'geodir_after_review_rating_stars_on_listview'
+                                         */
                                         do_action('geodir_before_review_rating_stars_on_listview', $post_avgratings, $post->ID);
+
                                         echo geodir_get_rating_stars($post_avgratings, $post->ID);
+
+                                        /**
+                                         * Called after the rating stars are output on the listings view template.
+                                         *
+                                         * @since 1.0.0
+                                         * @param float $post_avgratings The average rating for the post.
+                                         * @param int $post->ID The post ID.
+                                         * @see 'geodir_before_review_rating_stars_on_listview'
+                                         */
                                         do_action('geodir_after_review_rating_stars_on_listview', $post_avgratings, $post->ID);
                                     }
                                     ?>
@@ -207,7 +316,12 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                                     <span class="geodir-authorlink clearfix">
 											
 											<?php if (isset($_REQUEST['geodir_dashbord']) && $_REQUEST['geodir_dashbord']) {
-
+                                                /**
+                                                 * Called before the edit post link on the listings view template used on the author page.
+                                                 *
+                                                 * @since 1.0.0
+                                                 * @see 'geodir_after_edit_post_link_on_listing'
+                                                 */
                                                 do_action('geodir_before_edit_post_link_on_listing');
                                                 ?>
 
@@ -216,6 +330,13 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                                                 <a href="<?php echo $deletelink; ?>" class="geodir-delete"
                                                    title="<?php _e('Delete Listing', GEODIRECTORY_TEXTDOMAIN); ?>"><?php _e('delete', GEODIRECTORY_TEXTDOMAIN); ?></a>
                                                 <?php
+
+                                                /**
+                                                 * Called after the edit post link on the listings view template used on the author page.
+                                                 *
+                                                 * @since 1.0.0
+                                                 * @see 'geodir_before_edit_post_link_on_listing'
+                                                 */
                                                 do_action('geodir_after_edit_post_link_on_listing');
                                             } ?>
 											</span>
@@ -232,6 +353,14 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
             <?php
             endwhile;
 
+            /**
+             * Called inside the `ul` of the listings template, but after all `li` elements.
+             *
+             * When used by the widget view template then it will only show if there are listings to be shown.
+             *
+             * @since 1.0.0
+             * @see 'geodir_before_listing_post_listview'
+             */
             do_action('geodir_after_listing_post_listview');
 
         else:
@@ -247,4 +376,10 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
     </ul>  <!-- geodir_category_list_view ends here-->
 
     <div class="clear"></div>
-<?php do_action('geodir_after_listing_listview');   
+<?php
+/**
+ * Called after the listings list view template, after all the wrapper at the very end.
+ *
+ * @since 1.0.0
+ */
+do_action('geodir_after_listing_listview');
