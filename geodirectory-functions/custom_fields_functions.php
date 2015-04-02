@@ -1,8 +1,25 @@
 <?php
+/**
+ * Custom fields functions
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
+
+
 global $wpdb, $table_prefix;
 
 if (!function_exists('geodir_column_exist')) {
-    function geodir_column_exist($db, $column)
+	/**
+	 * Check table column exist or not.
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 * @param string $db The table name.
+	 * @param string $column The column name.
+	 * @return bool
+	 */
+	function geodir_column_exist($db, $column)
     {
         global $wpdb;
         $exists = false;
@@ -18,7 +35,16 @@ if (!function_exists('geodir_column_exist')) {
 }
 
 if (!function_exists('geodir_add_column_if_not_exist')) {
-    function geodir_add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 255 ) NOT NULL")
+	/**
+	 * Add column if table column not exist.
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 * @param string $db The table name.
+	 * @param string $column The column name.
+	 * @param string $column_attr The column attributes.
+	 */
+	function geodir_add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 255 ) NOT NULL")
     {
         global $wpdb;
 
@@ -29,6 +55,17 @@ if (!function_exists('geodir_add_column_if_not_exist')) {
     }
 }
 
+/**
+ * Returns custom fields based on page type. (detail page, listing page).
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int|string $package_id The package ID.
+ * @param string $default Optional. When set to "default" it will display only default fields.
+ * @param string $post_type Optional. The wordpress post type.
+ * @param string $fields_location Optional. Where exactly are you going to place this custom fields?.
+ * @return array|mixed|void
+ */
 function geodir_post_custom_fields($package_id = '', $default = 'all', $post_type = 'gd_place', $fields_location = 'none')
 {
     global $wpdb, $geodir_post_custom_fields_cache;
@@ -101,7 +138,17 @@ function geodir_post_custom_fields($package_id = '', $default = 'all', $post_typ
 }
 
 if (!function_exists('geodir_custom_field_adminhtml')) {
-    function geodir_custom_field_adminhtml($field_type, $result_str, $field_ins_upd = '', $default = false)
+	/**
+	 * Adds admin html for custom fields.
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 * @param string $field_type The form field type.
+	 * @param object|int $result_str The custom field results object or row id.
+	 * @param string $field_ins_upd When set to "submit" displays form.
+	 * @param bool $default when set to true field will be for admin use only.
+	 */
+	function geodir_custom_field_adminhtml($field_type, $result_str, $field_ins_upd = '', $default = false)
     {
         global $wpdb;
         $cf = $result_str;
@@ -119,7 +166,15 @@ if (!function_exists('geodir_custom_field_adminhtml')) {
 }
 
 if (!function_exists('geodir_custom_field_delete')) {
-    function geodir_custom_field_delete($field_id = '')
+	/**
+	 * Delete custom field using field id.
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 * @param string $field_id The custom field ID.
+	 * @return int|string
+	 */
+	function geodir_custom_field_delete($field_id = '')
     {
 
         global $wpdb, $plugin_prefix;
@@ -167,7 +222,16 @@ if (!function_exists('geodir_custom_field_delete')) {
 }
 
 if (!function_exists('geodir_custom_field_save')) {
-    function geodir_custom_field_save($request_field = array(), $default = false)
+	/**
+	 * Save or Update custom fields into the database.
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 * @param array $request_field The request field array.
+	 * @param bool $default Not yet implemented.
+	 * @return int|string
+	 */
+	function geodir_custom_field_save($request_field = array(), $default = false)
     {
 
         global $wpdb, $plugin_prefix;
@@ -941,6 +1005,14 @@ if (!function_exists('geodir_custom_field_save')) {
     }
 }
 
+/**
+ * Set custom field order
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $field_ids List of field ids.
+ * @return array|bool
+ */
 function godir_set_field_order($field_ids = array())
 {
 
@@ -970,6 +1042,15 @@ function godir_set_field_order($field_ids = array())
 }
 
 
+/**
+ * Displays custom fields html.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int|string $package_id The package ID.
+ * @param string $default Optional. When set to "default" it will display only default fields.
+ * @param string $post_type Optional. The wordpress post type.
+ */
 function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $post_type = 'gd_place')
 {
 
@@ -1806,7 +1887,17 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
 
 
 if (!function_exists('geodir_get_field_infoby')) {
-    function geodir_get_field_infoby($key = '', $value = '', $geodir_post_type = '')
+	/**
+	 * Get custom field using key and value.
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 * @param string $key The key you want to look for.
+	 * @param string $value The value of the key you want to look for.
+	 * @param string $geodir_post_type The post type.
+	 * @return bool|mixed
+	 */
+	function geodir_get_field_infoby($key = '', $value = '', $geodir_post_type = '')
     {
 
         global $wpdb;
@@ -1829,7 +1920,15 @@ if (!function_exists('geodir_get_field_infoby')) {
 
 
 if (!function_exists('geodir_show_listing_info')) {
-    function geodir_show_listing_info($fields_location = '')
+	/**
+	 * Show listing info depending on field location.
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 * @param string $fields_location In which page you are going to place this custom fields?. Ex: listing, detail etc.
+	 * @return string
+	 */
+	function geodir_show_listing_info($fields_location = '')
     {
 
         global $post, $preview, $wpdb;
@@ -2752,11 +2851,15 @@ if (!function_exists('geodir_show_listing_info')) {
     }
 }
 
-
-/*----------------Funtion for get date and time format-----------------------------*/
-
 if (!function_exists('geodir_default_date_format')) {
-    function geodir_default_date_format()
+	/**
+	 * Returns default date format.
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 * @return mixed|string|void
+	 */
+	function geodir_default_date_format()
     {
         if ($format = get_option('date_format'))
             return $format;
@@ -2766,27 +2869,47 @@ if (!function_exists('geodir_default_date_format')) {
 }
 
 if (!function_exists('geodir_get_formated_date')) {
-    function geodir_get_formated_date($date)
+	/**
+	 * Returns formatted date.
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 * @param string $date Date string to convert.
+	 * @return bool|int|string
+	 */
+	function geodir_get_formated_date($date)
     {
         return mysql2date(get_option('date_format'), $date);
     }
 }
 
 if (!function_exists('geodir_get_formated_time')) {
-    function geodir_get_formated_time($time)
+	/**
+	 * Returns formatted time.
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 * @param string $time Time string to convert.
+	 * @return bool|int|string
+	 */
+	function geodir_get_formated_time($time)
     {
         return mysql2date(get_option('time_format'), $time, $translate = true);
     }
 }
 
 
-/**
- * Save post file fields
- */
-
-
 if (!function_exists('geodir_save_post_file_fields')) {
-    function geodir_save_post_file_fields($post_id = 0, $field_id = '', $post_image = array())
+	/**
+	 * Save post file fields
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 * @param int $post_id
+	 * @param string $field_id
+	 * @param array $post_image
+	 */
+	function geodir_save_post_file_fields($post_id = 0, $field_id = '', $post_image = array())
     {
 
         global $wpdb, $plugin_prefix, $current_user;
@@ -2894,10 +3017,15 @@ if (!function_exists('geodir_save_post_file_fields')) {
 }
 
 
-/* ============================ ADD BY COMP 5 =======================
-=============================== ADD BY COMP 5 ======================= */
-
 add_filter('upload_mimes', 'geodir_custom_upload_mimes');
+/**
+ * Returns list of supported mime types for upload handling.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $existing_mimes List of existing mime types.
+ * @return array
+ */
 function geodir_custom_upload_mimes($existing_mimes = array())
 {
     $existing_mimes['wif'] = 'text/plain';
@@ -2914,12 +3042,17 @@ function geodir_custom_upload_mimes($existing_mimes = array())
     return $existing_mimes;
 }
 
-/**
- * Pluploader
- **/
 if (!function_exists('geodir_plupload_action')) {
 
-    function geodir_upload_dir($upload)
+	/**
+	 * Get upload directory path details
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 * @param array $upload Array of upload directory data with keys of 'path','url', 'subdir, 'basedir', and 'error'.
+	 * @return mixed
+	 */
+	function geodir_upload_dir($upload)
     {
         global $current_user;
         $upload['subdir'] = $upload['subdir'] . '/temp_' . $current_user->data->ID;
@@ -2928,7 +3061,13 @@ if (!function_exists('geodir_plupload_action')) {
         return $upload;
     }
 
-    function geodir_plupload_action()
+	/**
+	 * Handles place file and image upload.
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 */
+	function geodir_plupload_action()
     {
 
         // check ajax noonce
@@ -2957,6 +3096,14 @@ if (!function_exists('geodir_plupload_action')) {
     }
 }
 
+/**
+ * Get video using post ID.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $post_id The post ID.
+ * @return mixed
+ */
 function geodir_get_video($post_id)
 {
     global $wpdb, $plugin_prefix;
@@ -2973,6 +3120,14 @@ function geodir_get_video($post_id)
 
 }
 
+/**
+ * Get special offers using post ID.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $post_id The post ID.
+ * @return mixed
+ */
 function geodir_get_special_offers($post_id)
 {
     global $wpdb, $plugin_prefix;
@@ -2990,7 +3145,14 @@ function geodir_get_special_offers($post_id)
 }
 
 if (!function_exists('geodir_max_upload_size')) {
-    function geodir_max_upload_size()
+	/**
+	 * Get max upload file size
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 * @return mixed|void
+	 */
+	function geodir_max_upload_size()
     {
         $max_filesize = (float)get_option('geodir_upload_max_filesize', 2);
 
@@ -3005,11 +3167,17 @@ if (!function_exists('geodir_max_upload_size')) {
 }
 
 
-/*	START SORTING OPTIONS IN BACKEND --------------------------*/
-
-
 add_filter('geodir_add_custom_sort_options', 'geodir_add_custom_sort_options', 0, 2);
 
+/**
+ * Get custom sort options for a post type
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $fields The sorting fields array
+ * @param $post_type The post type.
+ * @return array
+ */
 function geodir_add_custom_sort_options($fields, $post_type)
 {
     global $wpdb;
@@ -3042,6 +3210,14 @@ function geodir_add_custom_sort_options($fields, $post_type)
 }
 
 
+/**
+ * Get sort options based on post type.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $post_type The post type.
+ * @return bool|mixed|void
+ */
 function geodir_get_custom_sort_options($post_type = '')
 {
 
@@ -3102,6 +3278,14 @@ function geodir_get_custom_sort_options($post_type = '')
 }
 
 
+/**
+ * Set custom sort field order.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $field_ids List of field ids.
+ * @return array|bool
+ */
 function godir_set_sort_field_order($field_ids = array())
 {
 
@@ -3132,7 +3316,16 @@ function godir_set_sort_field_order($field_ids = array())
 
 
 if (!function_exists('geodir_custom_sort_field_save')) {
-    function geodir_custom_sort_field_save($request_field = array(), $default = false)
+	/**
+	 * Save or Update custom sort fields into the database.
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 * @param array $request_field The request field array.
+	 * @param bool $default Not yet implemented.
+	 * @return int
+	 */
+	function geodir_custom_sort_field_save($request_field = array(), $default = false)
     {
 
         global $wpdb, $plugin_prefix;
@@ -3250,7 +3443,14 @@ if (!function_exists('geodir_custom_sort_field_save')) {
 
 
 if (!function_exists('geodir_custom_sort_field_delete')) {
-    function geodir_custom_sort_field_delete($field_id = '')
+	/**
+	 * Delete a custom sort field using field id.
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 * @param string $field_id The field ID.
+	 * @return int|string
+	 */
+	function geodir_custom_sort_field_delete($field_id = '')
     {
 
         global $wpdb, $plugin_prefix;
@@ -3269,7 +3469,18 @@ if (!function_exists('geodir_custom_sort_field_delete')) {
 
 
 if (!function_exists('geodir_custom_sort_field_adminhtml')) {
-    function geodir_custom_sort_field_adminhtml($field_type, $result_str, $field_ins_upd = '', $default = false)
+	/**
+	 * Custom sort field admin html.
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 * @param string $field_type The form field type.
+	 * @param object|int $result_str The custom field results object or row id.
+	 * @param string $field_ins_upd When set to "submit" displays form.
+	 * @param bool $default when set to true field will be for admin use only.
+	 * @param bool $default
+	 */
+	function geodir_custom_sort_field_adminhtml($field_type, $result_str, $field_ins_upd = '', $default = false)
     {
         global $wpdb;
         $cf = $result_str;
@@ -3478,9 +3689,18 @@ if (!function_exists('geodir_custom_sort_field_adminhtml')) {
     }
 }
 
-// filter field as per price package
 if (!function_exists('check_field_visibility')) {
-    function check_field_visibility($package_id, $field_name, $post_type)
+	/**
+	 * Filter field as per price package.
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 * @param int|string $package_id The package ID.
+	 * @param string $field_name The field name.
+	 * @param string $post_type Optional. The wordpress post type.
+	 * @return bool
+	 */
+	function check_field_visibility($package_id, $field_name, $post_type)
     {
         global $wpdb, $geodir_addon_list;
         if (!(isset($geodir_addon_list['geodir_payment_manager']) && $geodir_addon_list['geodir_payment_manager'] == 'yes')) {
@@ -3499,8 +3719,13 @@ if (!function_exists('check_field_visibility')) {
     }
 }
 
-/*
- * Parse label & values from string
+/**
+ * Parse label & values from string.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $input The string input.
+ * @return array
  */
 function geodir_string_to_options($input = '')
 {
@@ -3537,8 +3762,13 @@ function geodir_string_to_options($input = '')
     return $return;
 }
 
-/*
+/**
  * Parse option values string to array
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $option_values The option values.
+ * @return array
  */
 function geodir_string_values_to_options($option_values = '')
 {
