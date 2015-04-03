@@ -25,11 +25,14 @@ if (isset($_GET['redirect_to']) && $_GET['redirect_to'] != '') {
     <div class="registration_form_box">
         <h4>
             <?php
-            if (isset($_REQUEST['page']) && $_REQUEST['page'] == 'login' && isset($_REQUEST['page1']) && $_REQUEST['page1'] == 'sign_up') {
-                echo apply_filters('geodir_registration_page_title', REGISTRATION_NOW_TEXT);
-            } else {
-                echo apply_filters('geodir_registration_page_title', REGISTRATION_NOW_TEXT);
-            }
+
+            /**
+             * Filter the `REGISTRATION_NOW_TEXT` title text on the register form template.
+             *
+             * @since 1.0.0
+             */
+            echo apply_filters('geodir_registration_page_title', REGISTRATION_NOW_TEXT);
+
             ?>
         </h4>
         <?php
@@ -95,7 +98,15 @@ if (isset($_GET['redirect_to']) && $_GET['redirect_to'] != '') {
 
             <?php } ?>
 
-            <?php do_action('social_connect_form'); ?>
+            <?php
+            /**
+             * Called just before the register new user button on the register form template.
+             *
+             * Also used by other plugins to add social connect buttons.
+             *
+             * @since 1.0.0
+             */
+            do_action('social_connect_form'); ?>
             <input type="submit" name="registernow" value="<?php echo REGISTER_NOW_TEXT; ?>" class="geodir_button"/>
         </form>
     </div>

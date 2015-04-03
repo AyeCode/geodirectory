@@ -15,13 +15,26 @@ $curr_post_type = geodir_get_current_posttype();
 ?>
 
 
-<form class="<?php echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
+<form class="<?php
+/**
+ * Filters the GD search form class.
+ *
+ * @since 1.0.0
+ * @param string $class The class for the search form, default: 'geodir-listing-search'.
+ */
+echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
       name="geodir-listing-search" action="<?php echo home_url(); ?>" method="get">
     <input type="hidden" name="geodir_search" value="1"/>
 
     <div class="geodir-loc-bar">
 
-        <?php do_action('geodir_before_search_form') ?>
+        <?php
+        /**
+         * Called inside the search form but before any of the fields.
+         *
+         * @since 1.0.0
+         */
+        do_action('geodir_before_search_form') ?>
 
         <div class="clearfix geodir-loc-bar-in">
 
@@ -87,9 +100,32 @@ $curr_post_type = geodir_get_current_posttype();
                 } else {
                     $near = $default_near_text;
                 }
-
+                /**
+                 * Filter the "Near" text value for the search form.
+                 *
+                 * This is the input "value" attribute and can change depending on what the user searches and is not always the default value.
+                 *
+                 * @since 1.0.0
+                 * @param string $near The current near value.
+                 * @param string $default_near_text The default near value.
+                 */
                 $near = apply_filters('geodir_search_near_text', $near, $default_near_text);
+                /**
+                 * Filter the default "Near" text value for the search form.
+                 *
+                 * This is the default value if nothing has been searched.
+                 *
+                 * @since 1.0.0
+                 * @param string $near The current near value.
+                 * @param string $default_near_text The default near value.
+                 */
                 $default_near_text = apply_filters('geodir_search_default_near_text', $default_near_text, $near);
+                /**
+                 * Filter the class for the near search input.
+                 *
+                 * @since 1.0.0
+                 * @param string $class The class for the HTML near input, default is blank.
+                 */
                 $near_class = apply_filters('geodir_search_near_class', '');
                 ?>
 
@@ -98,15 +134,33 @@ $curr_post_type = geodir_get_current_posttype();
                        onfocus="if (this.value == '<?php echo $default_near_text; ?>' || this.value =='<?php echo $near; ?>') {this.value = '';}"
                        onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);"/>
 
-                <?php do_action('geodir_before_search_button'); ?>
+                <?php
+                /**
+                 * Called on the GD search form just before the search button.
+                 *
+                 * @since 1.0.0
+                 */
+                do_action('geodir_before_search_button'); ?>
                 <input type="button" value="<?php echo $default_search_button_label; ?>" class="geodir_submit_search">
-                <?php do_action('geodir_after_search_button'); ?>
+                <?php
+                /**
+                 * Called on the GD search form just after the search button.
+                 *
+                 * @since 1.0.0
+                 */
+                do_action('geodir_after_search_button'); ?>
             </div>
 
 
         </div>
 
-        <?php do_action('geodir_after_search_form') ?>
+        <?php
+        /**
+         * Called inside the search form but after all the input fields.
+         *
+         * @since 1.0.0
+         */
+        do_action('geodir_after_search_form') ?>
 
 
     </div>
