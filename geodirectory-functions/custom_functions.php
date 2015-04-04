@@ -158,7 +158,7 @@ function geodir_max_excerpt($charlength)
  * @param array $package_info
  * @param object|string $post The post object.
  * @param string $post_type The post type.
- * @return object
+ * @return object Returns filtered package info as an object.
  */
 function geodir_post_package_info($package_info, $post = '', $post_type = '')
 {
@@ -370,7 +370,7 @@ function geodir_after_tab_content($hash_key)
  * @package GeoDirectory
  * @param string $post_type The post type.
  * @global object $wpdb WordPress Database object.
- * @return bool|null|string
+ * @return bool|null|string Returns default sort results, when the post type is valid. Otherwise returns false.
  */
 function geodir_get_posts_default_sort($post_type)
 {
@@ -401,7 +401,7 @@ function geodir_get_posts_default_sort($post_type)
  * @package GeoDirectory
  * @param string $post_type The post type.
  * @global object $wpdb WordPress Database object.
- * @return bool|mixed|void
+ * @return bool|mixed|void Returns sort results, when the post type is valid. Otherwise returns false.
  */
 function geodir_get_sort_options($post_type)
 {
@@ -515,8 +515,7 @@ function geodir_display_sort_options()
  * @package GeoDirectory
  * @param string $title The section title.
  * @param string $field_type The field type.
- *
- * @return string
+ * @return string Returns the section title.
  */
 function geodir_advance_customfields_heading($title, $field_type)
 {
@@ -536,7 +535,7 @@ function geodir_advance_customfields_heading($title, $field_type)
  * @param array $request Related posts request array.
  * @global object $wpdb WordPress Database object.
  * @global object $post The post object.
- * @return string
+ * @return string Returns related posts html.
  */
 function geodir_related_posts_display($request)
 {
@@ -737,7 +736,7 @@ function geodir_category_count_script()
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @return mixed|void
+ * @return string Returns the default language.
  */
 function geodir_get_map_default_language()
 {
@@ -958,7 +957,7 @@ function geodir_add_meta_keywords()
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @return array
+ * @return array eturns list of options available as an array.
  */
 function geodir_detail_page_tabs_key_value_array()
 {
@@ -971,8 +970,6 @@ function geodir_detail_page_tabs_key_value_array()
     }
     return $geodir_detail_page_tabs_key_value_array;
 }
-
-/**/
 
 /**
  * Build and return the list of available tabs as an array.
@@ -1318,7 +1315,7 @@ function geodir_show_detail_page_tabs()
  * @since 1.0.0
  * @package GeoDirectory
  * @param array $file The image file.
- * @return mixed
+ * @return mixed Image file.
  */
 function geodir_exif($file)
 {
@@ -1404,7 +1401,7 @@ function geodir_exif($file)
  * @param int $comment_lenth Optional. Maximum number of characters you want to display. After that read more link will appear.
  * @param bool $show_pass_post Optional. Not yet implemented.
  * @global object $wpdb WordPress Database object.
- * @return string
+ * @return string Returns the recent reviews html.
  */
 function geodir_get_recent_reviews($g_size = 60, $no_comments = 10, $comment_lenth = 60, $show_pass_post = false)
 {
@@ -1581,11 +1578,11 @@ function geodir_get_recent_reviews($g_size = 60, $no_comments = 10, $comment_len
 }
 
 /**
- * Returns All post categories from all GD post types
+ * Returns All post categories from all GD post types.
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @return array
+ * @return array Returns post categories as an array.
  */
 function geodir_home_map_cats_key_value_array()
 {
