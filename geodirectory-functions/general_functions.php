@@ -168,7 +168,12 @@ function geodir_curPageURL()
     }
     $pageURL .= "://";
     $pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
-    //return str_replace("www.", "", $pageURL);
+    /**
+     * Filter the current page URL returned by function geodir_curPageURL().
+     *
+     * @since 1.4.1
+     * @param string $pageURL The URL of the current page.
+     */
     return apply_filters('geodir_curPageURL', $pageURL);
 }
 
@@ -560,12 +565,12 @@ if (!function_exists('geodir_sendEmail')) {
             $fromEmailName = get_option('site_email_name');
         }
 
-        $search_array = array('[#listing_link#]', '[#site_name_url#]', '[#post_id#]', '[#site_name#]', '[#to_name#]', '[#from_name#]', '[#subject#]', '[#comments#]', '[#login_url#]', '[#login_details#]', '[#client_name#]', '[#posted_date#]');
-        $replace_array = array($listingLink, $siteurl_link, $post_id, $sitefromEmailName, $toEmailName, $fromEmailName, $to_subject, $to_message, $loginurl_link, $login_details, $toEmailName, $posted_date);
+        $search_array = array('[#listing_link#]', '[#site_name_url#]', '[#post_id#]', '[#site_name#]', '[#to_name#]', '[#from_name#]', '[#subject#]', '[#comments#]', '[#login_url#]', '[#login_details#]', '[#client_name#]', '[#posted_date#]','[#from_email#]');
+        $replace_array = array($listingLink, $siteurl_link, $post_id, $sitefromEmailName, $toEmailName, $fromEmailName, $to_subject, $to_message, $loginurl_link, $login_details, $toEmailName, $posted_date,$fromEmail);
         $message = str_replace($search_array, $replace_array, $message);
 
-        $search_array = array('[#listing_link#]', '[#site_name_url#]', '[#post_id#]', '[#site_name#]', '[#to_name#]', '[#from_name#]', '[#subject#]', '[#client_name#]', '[#posted_date#]');
-        $replace_array = array($listingLink, $siteurl_link, $post_id, $sitefromEmailName, $toEmailName, $fromEmailName, $to_subject, $toEmailName, $posted_date);
+        $search_array = array('[#listing_link#]', '[#site_name_url#]', '[#post_id#]', '[#site_name#]', '[#to_name#]', '[#from_name#]', '[#subject#]', '[#client_name#]', '[#posted_date#]','[#from_email#]');
+        $replace_array = array($listingLink, $siteurl_link, $post_id, $sitefromEmailName, $toEmailName, $fromEmailName, $to_subject, $toEmailName, $posted_date,$fromEmail);
         $subject = str_replace($search_array, $replace_array, $subject);
 
         $headers = 'MIME-Version: 1.0' . "\r\n";
