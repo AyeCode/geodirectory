@@ -14,26 +14,47 @@ header("X-XSS-Protection: 0"); // IE requirement
 get_header();
 
 ###### WRAPPER OPEN ######
-// this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='')
+/** This action is documented in geodirectory-templates/add-listing.php */
 do_action('geodir_wrapper_open', 'details-page', 'geodir-wrapper', '');
 
 ###### TOP CONTENT ######
-// action called before the main content and the page specific content
+/** This action is documented in geodirectory-templates/add-listing.php */
 do_action('geodir_top_content', 'details-page');
-// template specific, this can add the sidebar top section and breadcrums
+
+/**
+ * Calls the top section widget area and the breadcrumbs on the details page.
+ *
+ * @since 1.1.0
+ */
 do_action('geodir_detail_before_main_content');
-// action called before the main content
+
+/** This action is documented in geodirectory-templates/add-listing.php */
 do_action('geodir_before_main_content', 'details-page');
 
 ###### SIDEBAR ON LEFT ######
 if (get_option('geodir_detail_sidebar_left_section')) {
+    /**
+     * Adds the details page sidebar to the details template page.
+     *
+     * @since 1.1.0
+     */
     do_action('geodir_detail_sidebar');
 }
 
 ###### MAIN CONTENT WRAPPERS OPEN ######
-// this adds the opening html tags to the content div, this required the closing tag below :: ($type='',$id='',$class='')
+/** This action is documented in geodirectory-templates/add-listing.php */
 do_action('geodir_wrapper_content_open', 'details-page', 'geodir-wrapper-content', '');
-// this adds the opening html tags to the <article>, this required the closing tag below :: ($type='',$id='',$class='',$itemtype='')
+
+/**
+ * Adds the opening HTML wrapper for the article on the details page.
+ *
+ * @since 1.1.0
+ * @param string $type Page type.
+ * @param string $id The id of the HTML element.
+ * @param string $class The class of the HTML element.
+ * @param string $itemtype The itemtype value of the HTML element.
+ * @see 'geodir_article_close'
+ */
 do_action('geodir_article_open', 'details-page', 'post-' . get_the_ID(), get_post_class(), 'http://schema.org/LocalBusiness');
 
 ###### MAIN CONTENT ######
@@ -41,34 +62,59 @@ do_action('geodir_article_open', 'details-page', 'post-' . get_the_ID(), get_pos
 if (have_posts() && !$preview) {
     the_post();
     global $post, $post_images;
+    /**
+     * Calls the details page main content on the details template page.
+     *
+     * @since 1.1.0
+     * @param object $post The current post object.
+     */
     do_action('geodir_details_main_content', $post);
 } elseif ($preview) {
+    /**
+     * Called on the details page if the page is being previewed.
+     *
+     * This sets the value of `$post` to the preview values before the main content is called.
+     *
+     *@since 1.1.0
+     */
     do_action('geodir_action_geodir_set_preview_post'); // set the $post to the preview values
-    //print_r($post);
+    /** This action is documented in geodirectory-templates/listing-detail.php */
     do_action('geodir_details_main_content', $post);
 }
 
 
 ###### MAIN CONTENT WRAPPERS CLOSE ######
-// this adds the closing html tags to the </article> :: ($type='')
+/**
+ * Adds the closing HTML wrapper for the article on the details page.
+ *
+ * @since 1.1.0
+ * @param string $type Page type.
+ * @see 'geodir_article_open'
+ */
 do_action('geodir_article_close', 'details-page');
-// action called after the main content
+
+/** This action is documented in geodirectory-templates/add-listing.php */
 do_action('geodir_after_main_content');
-// this adds the closing html tags to the wrapper_content div :: ($type='')
+
+/** This action is documented in geodirectory-templates/add-listing.php */
 do_action('geodir_wrapper_content_close', 'details-page');
 
 ###### SIDEBAR ON RIGHT ######
 if (!get_option('geodir_detail_sidebar_left_section')) {
+    /** This action is documented in geodirectory-templates/listing-detail.php */
     do_action('geodir_detail_sidebar');
 }
 
 
 ###### BOTTOM SECTION WIDGET AREA ######
-// adds the details bottom section widget area, you can add more classes via ''
-do_action('geodir_sidebar_detail_bottom_section', '');
+/**
+ * Adds the details page bottom section widget area to the details template page.
+ *
+ * @since 1.1.0
+ */do_action('geodir_sidebar_detail_bottom_section', '');
 
 ###### WRAPPER CLOSE ######	
-// this adds the closing html tags to the wrapper div :: ($type='')
+/** This action is documented in geodirectory-templates/add-listing.php */
 do_action('geodir_wrapper_close', 'details-page');
 
 

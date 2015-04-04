@@ -13,48 +13,82 @@
 get_header();
 
 ###### WRAPPER OPEN ######
-// this adds the opening html tags to the primary div, this required the closing tag below :: ($type='',$id='',$class='')
+/** This action is documented in geodirectory-templates/add-listing.php */
 do_action('geodir_wrapper_open', 'listings-page', 'geodir-wrapper', '');
 
 ###### TOP CONTENT ######
-// action called before the main content and the page specific content
+/** This action is documented in geodirectory-templates/add-listing.php */
 do_action('geodir_top_content', 'listings-page');
-// template specific, this can add the sidebar top section and breadcrums
+/**
+ * Calls the top section widget area and the breadcrumbs on the listings page.
+ *
+ * @since 1.1.0
+ */
 do_action('geodir_listings_before_main_content');
-// action called before the main content
+/** This action is documented in geodirectory-templates/add-listing.php */
 do_action('geodir_before_main_content', 'listings-page');
 
-
-do_action('geodir_listings_page_title'); // add title
-do_action('geodir_listings_page_description'); // add description
+/**
+ * Adds the title to the listings page.
+ *
+ * This action adds the title to the listings page.
+ *
+ * @since 1.1.0
+ */
+do_action('geodir_listings_page_title');
+/**
+ * Called after the page title, can add a description to the page.
+ *
+ * @since 1.1.0
+ */
+do_action('geodir_listings_page_description');
 
 
 ###### SIDEBAR ######
+/**
+ * Adds the listings page left sidebar to the listings template page if active.
+ *
+ * @since 1.1.0
+ */
 do_action('geodir_listings_sidebar_left');
 
 ###### MAIN CONTENT WRAPPERS OPEN ######
-// this adds the opening html tags to the content div, this required the closing tag below :: ($type='',$id='',$class='')
+/** This action is documented in geodirectory-templates/add-listing.php */
 do_action('geodir_wrapper_content_open', 'listings-page', 'geodir-wrapper-content', '');
 
 
 ###### MAIN CONTENT ######
-// this call the main page content
+/**
+ * Calls the listings page main content area on the listings template page.
+ *
+ * @since 1.1.0
+ */
 do_action('geodir_listings_content');
 
 ###### MAIN CONTENT WRAPPERS CLOSE ######
-// this adds the closing html tags to the wrapper_content div :: ($type='')
+/** This action is documented in geodirectory-templates/add-listing.php */
 do_action('geodir_wrapper_content_close', 'listings-page');
 
 ###### SIDEBAR ######
+/**
+ * Adds the listings page right sidebar to the listings template page if active.
+ *
+ * @since 1.1.0
+ */
 do_action('geodir_listings_sidebar_right');
 
 
 ###### BOTTOM SECTION WIDGET AREA ######
-// adds the details bottom section widget area, you can add more classes via ''
+/**
+ * Adds the listings page bottom widget area to the listings template page if active.
+ *
+ * @since 1.1.0
+ */
 do_action('geodir_sidebar_listings_bottom_section');
 
 
 ###### WRAPPER CLOSE ######	
-// this adds the closing html tags to the wrapper div :: ($type='')
+/** This action is documented in geodirectory-templates/add-listing.php */
 do_action('geodir_wrapper_close', 'details-page');
+
 get_footer();  

@@ -30,11 +30,14 @@ if (isset($_GET['redirect_to']) && $_GET['redirect_to'] != '') {
 
     <h4>
         <?php
-        if (isset($_REQUEST['page']) && $_REQUEST['page'] == 'login' && isset($_REQUEST['page1']) && $_REQUEST['page1'] == 'sign_up') {
-            echo apply_filters('geodir_registration_page_title', REGISTRATION_NOW_TEXT);
-        } else {
+
+            /**
+             * Filter the `SIGN_IN_PAGE_TITLE` title text on login form template.
+             *
+             * @since 1.0.0
+             */
             echo apply_filters('geodir_login_page_title', SIGN_IN_PAGE_TITLE);
-        }
+
         ?>
     </h4>
     <?php
@@ -67,7 +70,15 @@ if (isset($_GET['redirect_to']) && $_GET['redirect_to'] != '') {
             <span class="user_passInfo"></span>
         </div>
 
-        <?php do_action('login_form'); ?>
+        <?php
+        /**
+         * This is a default WordPress action that calls any additional elements needed for any login forms.
+         *
+         * We use this action before the remember me checkbox on the sigin form.
+         *
+         * @since 1.0.0
+         */
+        do_action('login_form'); ?>
         <p class="rember">
             <input name="rememberme" type="checkbox" id="rememberme" value="forever" class="fl"/>
             <?php echo REMEMBER_ON_COMPUTER_TEXT; ?>
@@ -90,7 +101,13 @@ if (isset($_GET['redirect_to']) && $_GET['redirect_to'] != '') {
             <div class="form_row clearfix">
                 <input placeholder='<?php echo USERNAME_EMAIL_TEXT; ?>' type="text" name="user_login"
                        value="<?php echo esc_attr($user_login); ?>" size="20" class="user_login1 textfield"/>
-                <?php do_action('lostpassword_form'); ?>
+                <?php
+                /**
+                 * Called before the get new password button in the login box template.
+                 *
+                 * @since 1.0.0
+                 */
+                do_action('lostpassword_form'); ?>
             </div>
             <input type="submit" name="get_new_password" value="<?php echo GET_NEW_PW_TEXT; ?>" class="geodir_button"/>
         </form>
