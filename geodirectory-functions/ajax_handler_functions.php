@@ -292,7 +292,10 @@ function geodir_ajax_handler()
                     break;
             endswitch;
 
+            if (isset($_SESSION['listing'])) unset($_SESSION['listing']);
+
         } else {
+            if (isset($_SESSION['listing'])) unset($_SESSION['listing']);
             wp_redirect(home_url() . '/?geodir_signup=true');
             exit();
         }
