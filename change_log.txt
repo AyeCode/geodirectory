@@ -1,5 +1,6 @@
 v1.4.3
 In the map child categories should be checked/unchecked when parent category is checked/unchecked - FIXED
+Sorting by title not working correctly - FIXED
 
 v1.4.2
 Google api establishment term can override street address - FIXED
