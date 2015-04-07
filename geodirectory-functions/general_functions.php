@@ -2791,7 +2791,7 @@ function geodir_load_custom_field_translation($translation_texts = array()) {
 		}
 	}
 	
-	$contents_strings = !empty($contents_strings) ? array_unique($contents_strings) : $contents_strings;
+	$translation_texts = !empty($translation_texts) ? array_unique($translation_texts) : $translation_texts;
 	
 	return $translation_texts;
 }
