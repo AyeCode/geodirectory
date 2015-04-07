@@ -37,9 +37,16 @@ function geodir_flush_activation()
 function geodir_install()
 {
     global $geodir_settings;
-    // Do install
+
+    /**
+     * Called before the GD installation scripts have run.
+     *
+     * @since 1.0.0
+     * @see 'geodir_installation_end'
+     */
     do_action('geodir_installation_start');
 
+    // Do install
     if (!get_option('geodir_default_data_installed')) {
         geodir_create_tables(); // in admin db install.php
         geodir_register_defaults(); // geodir_functions/ taxonomy_functions.php
@@ -59,6 +66,12 @@ function geodir_install()
     }
 
     geodir_installation_end();
+    /**
+     * Called after the GD installation scripts have run.
+     *
+     * @since 1.0.0
+     * @see 'geodir_installation_start'
+     */
     do_action('geodir_installation_end');
 
 

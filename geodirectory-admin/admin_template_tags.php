@@ -15,6 +15,11 @@ if (!function_exists('geodir_admin_panel')) {
 
         <div id="gd-wrapper-main" class="wrap geodirectory">
             <?php
+            /**
+             * Called just after the opening wrapper div for the GD settings page in the admin area.
+             *
+             * @since 1.0.0
+             */
             do_action('geodir_before_admin_panel');
             ?>
 
@@ -62,11 +67,32 @@ if (!function_exists('geodir_admin_panel')) {
                             $tab_active = '';
                             if ($current_tab == $name)
                                 $tab_active = ' class="tab-active" ';
+                            /**
+                             * Called before the individual settings tabs are output.
+                             *
+                             * @since 1.0.0
+                             * @param string $name The name of the settings tab.
+                             * @see 'geodir_after_settings_tabs'
+                             */
                             do_action('geodir_before_settings_tabs', $name);
                             echo '<li ' . $tab_active . ' ><a href="' . $tab_link . '"  ' . $tab_target . ' >' . $label . '</a></li>';
+                            /**
+                             * Called after the individual settings tabs are output.
+                             *
+                             * @since 1.0.0
+                             * @param string $name The name of the settings tab.
+                             * @see 'geodir_before_settings_tabs'
+                             */
                             do_action('geodir_after_settings_tabs', $name);
                         endforeach;
 
+                        /**
+                         * Called after the GD settings tabs have been output.
+                         *
+                         * Called before the closing `ul` so can be used to add new settings tab links.
+                         *
+                         * @since 1.0.0
+                         */
                         do_action('geodir_settings_tabs');
                         ?>
                     </ul>
@@ -125,7 +151,13 @@ if (!function_exists('geodir_admin_panel')) {
                                        } ?>"/>
                                 <?php wp_nonce_field('geodir-settings', '_wpnonce', true, true); ?>
                                 <?php wp_nonce_field('geodir-settings-' . $current_tab, '_wpnonce-' . $current_tab, true, true); ?>
-                                <?php do_action('geodir_admin_option_form', $current_tab); ?>
+                                <?php
+                                /**
+                                 * Used to call the content of each GD settings tab page.
+                                 *
+                                 * @since 1.0.0
+                                 */
+                                do_action('geodir_admin_option_form', $current_tab); ?>
                             </form>
                         </div>
 
