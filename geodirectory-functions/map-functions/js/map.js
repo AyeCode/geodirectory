@@ -165,7 +165,7 @@ function gdCustomControl(controlDiv, cat_filters, gdMap) {
 }
 
 
-function build_map_ajax_search_param(map_canvas_var, reload_cat_list) {
+function build_map_ajax_search_param(map_canvas_var, reload_cat_list, catObj) {
     var child_collapse = jQuery('#' + map_canvas_var + '_child_collapse').val();
 
     var ptype = new Array(), search_string = '', stype = ''
@@ -186,6 +186,15 @@ function build_map_ajax_search_param(map_canvas_var, reload_cat_list) {
 		var elList = jQuery('#' + map_canvas_var + '_posttype_menu .geodir-map-posttype-list ul');
 		jQuery(elList).find('li').removeClass('gd-map-search-pt');
 		jQuery(elList).find('li#'+ gd_pt).addClass('gd-map-search-pt');
+	}
+	
+	// Check/uncheck child categories
+	if (typeof catObj == 'object') {
+		if (jQuery(catObj).is(':checked')) {
+			jQuery(catObj).parent('li').find('input[name="' + map_canvas_var + '_cat[]"]').attr('checked', true);
+		} else {
+			jQuery(catObj).parent('li').find('input[name="' + map_canvas_var + '_cat[]"]').attr('checked', false);
+		}
 	}
 
     if (jQuery('#' + map_canvas_var + '_jason_enabled').val() == 1) {
@@ -252,7 +261,6 @@ function build_map_ajax_search_param(map_canvas_var, reload_cat_list) {
     for (i = 0; i < mapcat.length; i++) {
         if (mapcat[i].checked) {
             checked += mapcat[i].value + ",";
-
         }
         else {
             none_checked += mapcat[i].value + ",";
