@@ -80,12 +80,24 @@ class geodir_map_listingpage extends WP_Widget
         ) :
 
             extract($args, EXTR_SKIP);
+            /** This action is documented in geodirectory_shortcodes.php */
             $width = empty($instance['width']) ? '294' : apply_filters('widget_width', $instance['width']);
+            /** This action is documented in geodirectory_shortcodes.php */
             $height = empty($instance['heigh']) ? '370' : apply_filters('widget_heigh', $instance['heigh']);
+            /** This action is documented in geodirectory_shortcodes.php */
             $maptype = empty($instance['maptype']) ? 'ROADMAP' : apply_filters('widget_maptype', $instance['maptype']);
+            /** This action is documented in geodirectory_shortcodes.php */
             $zoom = empty($instance['zoom']) ? '13' : apply_filters('widget_zoom', $instance['zoom']);
+            /** This action is documented in geodirectory_shortcodes.php */
             $autozoom = empty($instance['autozoom']) ? '' : apply_filters('widget_autozoom', $instance['autozoom']);
+            /**
+             * Filter the listing map value widget_sticky, to set if the map should be sticky or not (scroll with page).
+             *
+             * @since 1.0.0
+             * @param bool $sticky True if should be sticky, false if not
+             */
             $sticky = empty($instance['sticky']) ? '' : apply_filters('widget_sticky', $instance['sticky']);
+            /** This action is documented in geodirectory_shortcodes.php */
             $scrollwheel = empty($instance['scrollwheel']) ? '0' : apply_filters('widget_scrollwheel', $instance['scrollwheel']);
             $showall = empty($instance['showall']) ? '0' : apply_filters('widget_showall', $instance['showall']);
 

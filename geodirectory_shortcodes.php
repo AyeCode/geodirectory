@@ -73,16 +73,72 @@ function geodir_sc_home_map($atts)
 
     $map_args = array(
         'map_canvas_name' => 'gd_home_map',
+        /**
+         * Filter the widget width of the map on home/listings page.
+         *
+         * @since 1.0.0
+         * @param mixed(string|int|float) $params['width'] The map width.
+         */
         'width' => apply_filters('widget_width', $params['width']),
+        /**
+         * Filter the widget height of the map on home/listings page.
+         *
+         * @since 1.0.0
+         * @param mixed(string|int|float) $params['height'] The map height.
+         */
         'height' => apply_filters('widget_heigh', $params['height']),
+        /**
+         * Filter the widget maptype of the map on home/listings page.
+         *
+         * @since 1.0.0
+         * @param string $params['maptype'] The map type. Can be ROADMAP | SATELLITE | HYBRID.
+         */
         'maptype' => apply_filters('widget_maptype', $params['maptype']),
+        /**
+         * Filter the widget scrollwheel value of the map on home/listings page.
+         *
+         * Should the scrollwheel zoom the map or not.
+         *
+         * @since 1.0.0
+         * @param bool $params['scrollwheel'] True to allow scroll wheel to scroll map or false if not.
+         */
         'scrollwheel' => apply_filters('widget_scrollwheel', $params['scrollwheel']),
+        /**
+         * Filter the widget zoom level of the map on home/listings page.
+         *
+         * @since 1.0.0
+         * @param int $params['zoom'] The zoom level of the map. Between 1-19.
+         */
         'zoom' => apply_filters('widget_zoom', $params['zoom']),
+        /**
+         * Filter the widget auto zoom value of the map on home/listings page.
+         *
+         * If the map should autozoom to fit the markers shown.
+         *
+         * @since 1.0.0
+         * @param bool $params['autozoom'] True if the map should autozoom, false if not.
+         */
         'autozoom' => apply_filters('widget_autozoom', $params['autozoom']),
+        /**
+         * Filter the widget child_collapse value of the map on home/listings page.
+         *
+         * If the map should auto collapse the child categories if the category bar is present.
+         *
+         * @since 1.0.0
+         * @param bool $params['child_collapse'] True if the map should collapse the categories, false if not.
+         */
         'child_collapse' => apply_filters('widget_child_collapse', $params['child_collapse']),
         'enable_cat_filters' => true,
         'enable_text_search' => true,
         'enable_post_type_filters' => true,
+        /**
+         * Filter the widget enable_location_filters value of the map on home/listings page.
+         *
+         * This is used when the location addon is used.
+         *
+         * @since 1.0.0
+         * @param bool $val True if location filters should be used, false if not.
+         */
         'enable_location_filters' => apply_filters('geodir_home_map_enable_location_filters', false),
         'enable_jason_on_load' => false,
         'enable_marker_cluster' => false,
