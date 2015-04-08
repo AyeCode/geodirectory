@@ -244,8 +244,6 @@ function geodir_is_page($gdpage = '')
                 return true;
             break;
         case 'listing':
-            if (is_page() && get_query_var('page_id') == get_option('geodir_listing_page'))
-                return true;
             if (is_tax() && geodir_get_taxonomy_posttype()) {
                 global $current_term, $taxonomy, $term;
 
@@ -296,7 +294,6 @@ function geodir_set_is_geodir_page($wp)
                 $wp->query_vars['page_id'] == get_option('geodir_add_listing_page')
                 || $wp->query_vars['page_id'] == get_option('geodir_preview_page')
                 || $wp->query_vars['page_id'] == get_option('geodir_success_page')
-                || $wp->query_vars['page_id'] == get_option('geodir_listing_page')
                 || $wp->query_vars['page_id'] == get_option('geodir_location_page')
             )
                 $wp->query_vars['gd_is_geodir_page'] = true;
@@ -309,7 +306,6 @@ function geodir_set_is_geodir_page($wp)
                     $page->ID == get_option('geodir_add_listing_page')
                     || $page->ID == get_option('geodir_preview_page')
                     || $page->ID == get_option('geodir_success_page')
-                    || $page->ID == get_option('geodir_listing_page')
                     || $page->ID == get_option('geodir_location_page'))
             )
                 $wp->query_vars['gd_is_geodir_page'] = true;

@@ -1035,6 +1035,7 @@ function geodir_changes_in_custom_fields_table() {
 	$listings_page_id = (int)get_option('geodir_listing_page');
 	if ($listings_page_id) {
 		$wpdb->query($wpdb->prepare("DELETE FROM " . $wpdb->posts . " WHERE ID=%d AND post_name = %s AND post_type=%s", array($listings_page_id, 'listings', 'page')));
+        delete_option('geodir_listing_page');
 	}
 
     // updated custom field table(add field to show custom field as a tab)
