@@ -454,7 +454,15 @@ $default = isset($field_info->is_admin) ? $field_info->is_admin : '';
                         $address = unserialize($field_info->extra_fields);
                     }
                     ?>
-                    <?php do_action('geodir_address_extra_admin_fields', $address, $field_info); ?>
+                    <?php
+                    /**
+                     * Called on the add custom fields settings page before the address field is output.
+                     *
+                     * @since 1.0.0
+                     * @param array $address The address settings array.
+                     * @param object $field_info Extra fileds info.
+                     */
+                    do_action('geodir_address_extra_admin_fields', $address, $field_info); ?>
 
                     <tr>
                         <td><strong><?php _e('Display zip/post code :', GEODIRECTORY_TEXTDOMAIN);?></strong></td>
@@ -752,7 +760,16 @@ $default = isset($field_info->is_admin) ? $field_info->is_admin : '';
                     </tr>
                 <?php } ?>
 
-                    <?php do_action('geodir_advance_custom_fields', $field_info);?>
+                    <?php
+                    /**
+                     * Called at the end of the advanced custom fields settings page loop.
+                     *
+                     * Can be used to add or deal with different settings types.
+                     *
+                     * @since 1.0.0
+                     * @param object $field_info The current fields info.
+                     */
+                    do_action('geodir_advance_custom_fields', $field_info);?>
 
                     <?php /*if(!in_array($field_type,array() )){?>
 				<tr>

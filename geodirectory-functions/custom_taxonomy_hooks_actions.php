@@ -617,6 +617,13 @@ function geodir_custom_post_status()
         'label_count' => _n_noop('Virtual <span class="count">(%s)</span>', 'Virtual <span class="count">(%s)</span>', GEODIRECTORY_TEXTDOMAIN),
     ));
 
+    /**
+     * Called after we register the custom post status 'Virtual'.
+     *
+     * Can be use to add more post statuses.
+     *
+     * @since 1.0.0
+     */
     do_action('geodir_custom_post_status');
 }
 

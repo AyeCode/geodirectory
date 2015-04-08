@@ -147,6 +147,11 @@ function geodir_retrieve_password()
         $user_data = get_user_by('email', $login);
     }
 
+    /**
+     * Called in the geodir_retrieve_password() function before any errors are set or any emails are sent.
+     *
+     * @since 1.0.0
+     */
     do_action('lostpassword_post');
 
     if ($errors->get_error_code())
@@ -161,7 +166,12 @@ function geodir_retrieve_password()
     $user_login = $user_data->user_login;
     $user_email = $user_data->user_email;
 
-    do_action('retreive_password', $user_login);  // Misspelled and deprecated
+    /**
+     * Called in the geodir_retrieve_password() function before any emails are sent.
+     *
+     * @since 1.0.0
+     * @param string $user_login The users username.
+     */
     do_action('retrieve_password', $user_login);
 
     ////////////////////////////////////
@@ -180,6 +190,13 @@ function geodir_retrieve_password()
 
     $new_pass = wp_generate_password(12, false);
 
+    /**
+     * Called in the geodir_retrieve_password() function before any emails are sent.
+     *
+     * @since 1.0.0
+     * @param object $user The user object.
+     * @param string $new_pass The new pass being sent to the user.
+     */
     do_action('password_reset', $user, $new_pass);
 
     wp_set_password($new_pass, $user->ID);
@@ -253,6 +270,14 @@ function geodir_register_new_user($user_login, $user_email)
     } elseif (email_exists($user_email))
         $errors->add('email_exists', __('<strong>ERROR</strong>: This email is already registered, please choose another one.', GEODIRECTORY_TEXTDOMAIN));
 
+    /**
+     * Called when registering a new user.
+     *
+     * This is a WordPress core hook.
+     *
+     * @link https://codex.wordpress.org/Plugin_API/Action_Reference/register_post
+     * @since 1.0.0
+     */
     do_action('register_post', $user_login, $user_email, $errors);
 
     $errors = apply_filters('registration_errors', $errors);
@@ -312,6 +337,13 @@ function geodir_register_new_user($user_login, $user_email)
     global $upload_folder_path;
 
     if ($user_id) {
+
+        /**
+         * Called after registering a user and before the registration email is sent.
+         *
+         * @since 1.0.0
+         * @param int $user_id The user ID of the registered user.
+         */
         do_action('geodir_user_register', $user_id);
         ///////REGISTRATION EMAIL START//////
         $fromEmail = geodir_get_site_email_id();
@@ -372,7 +404,14 @@ function geodir_user_signup()
     if (SITECOOKIEPATH != COOKIEPATH)
         setcookie(TEST_COOKIE, 'WP Cookie check', 0, SITECOOKIEPATH, COOKIE_DOMAIN);
 
-    // allow plugins to override the default actions, and to add extra actions if they want
+    /**
+     * Allow plugins to override the default actions, and to add extra actions if they want on the register/signin page.
+     *
+     * Used dynamic hook login_form_$action
+     *
+     * @since 1.0.0
+     */
+
     do_action('login_form_' . $action);
 
     $http_post = ('POST' == $_SERVER['REQUEST_METHOD']);
@@ -407,7 +446,12 @@ function geodir_user_signup()
                 }
             }
             if (isset($_GET['error']) && 'invalidkey' == $_GET['error']) $errors->add('invalidkey', __('Sorry, that key does not appear to be valid.', GEODIRECTORY_TEXTDOMAIN));
-            do_action('lost_password');
+        /**
+         * Called in the geodir_user_signup() function during the lostpassword case.
+         *
+         * @since 1.0.0
+         */
+        do_action('lost_password');
             $message = '<div class="sucess_msg">' . ENTER_USER_EMAIL_NEW_PW_MSG . '</div>';
             $user_login = isset($_POST['user_login']) ? stripslashes($_POST['user_login']) : '';
 

@@ -271,6 +271,15 @@ function geodir_template_loader($template)
 function geodir_get_template_part($slug = '', $name = NULL)
 {
     global $geodirectory, $post;
+    /**
+     * Called at the start for the geodir_get_template_part() function.
+     *
+     * Used dynamic hook name: geodir_get_template_part_{$slug}
+     *
+     * @since 1.0.0
+     * @param string $slug The template slug.
+     * @param string $name The template name.
+     */
     do_action("geodir_get_template_part_{$slug}", $slug, $name);
     $templates = array();
     $name = (string)$name;

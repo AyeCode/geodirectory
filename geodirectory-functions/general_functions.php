@@ -2410,13 +2410,26 @@ function geodir_popular_postview_output($args = '', $instance = '')
     if (!empty($widget_listings) || $with_no_results) {
         ?>
         <div class="geodir_locations geodir_location_listing">
-            <?php do_action('geodir_before_view_all_link_in_widget'); ?>
+
+            <?php
+            /**
+             * Called before the div containing the title and view all link in popular post view widget.
+             *
+             * @since 1.0.0
+             */
+            do_action('geodir_before_view_all_link_in_widget'); ?>
             <div class="geodir_list_heading clearfix">
                 <?php echo $before_title . $title . $after_title; ?>
                 <a href="<?php echo $viewall_url; ?>"
                    class="geodir-viewall"><?php _e('View all', GEODIRECTORY_TEXTDOMAIN); ?></a>
             </div>
-            <?php do_action('geodir_after_view_all_link_in_widget'); ?>
+            <?php
+            /**
+             * Called after the div containing the title and view all link in popular post view widget.
+             *
+             * @since 1.0.0
+             */
+            do_action('geodir_after_view_all_link_in_widget'); ?>
             <?php
             if (strstr($layout, 'gridview')) {
                 $listing_view_exp = explode('_', $layout);
