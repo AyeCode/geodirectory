@@ -419,6 +419,14 @@ if (!function_exists('geodir_save_listing')) {
 
         geodir_remove_temp_images();
         geodir_set_wp_featured_image($last_post_id);
+        /**
+         * Called after a listing is saved to the database and before any email have been sent.
+         *
+         * @since 1.0.0
+         * @param int $last_post_id The saved post ID.
+         * @param array $request_info The post details in an array.
+         * @see 'geodir_after_save_listinginfo'
+         */
         do_action('geodir_after_save_listing', $last_post_id, $request_info);
 
         //die;
@@ -566,6 +574,7 @@ if (!function_exists('geodir_save_post_info')) {
              * @package GeoDirectory
              * @param array $postinfo_array Post info that needs to be saved in detail table.
              * @param int $post_id The post ID.
+             * @see 'geodir_after_save_listing'
              */
             do_action('geodir_after_save_listinginfo', $postinfo_array, $post_id);
 

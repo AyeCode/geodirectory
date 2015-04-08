@@ -334,7 +334,24 @@ function geodir_handle_option_form_submit($current_tab)
         if (!empty($geodir_settings[$current_tab]))
             geodir_update_options($geodir_settings[$current_tab]);
 
+        /**
+         * Called after GeoDirectory options settings are updated.
+         *
+         * @since 1.0.0
+         * @param array $geodir_settings The array of GeoDirectory settings.
+         * @see 'geodir_before_update_options'
+         */
         do_action('geodir_update_options', $geodir_settings);
+
+        /**
+         * Called after GeoDirectory options settings are updated.
+         *
+         * Provides tab specific settings.
+         *
+         * @since 1.0.0
+         * @param string $current_tab The current settings tab name.
+         * @param array $geodir_settings[$current_tab] The array of settings for the current settigns tab.
+         */
         do_action('geodir_update_options_' . $current_tab, $geodir_settings[$current_tab]);
 
         flush_rewrite_rules(false);
@@ -1523,7 +1540,13 @@ if (!function_exists('geodir_insert_csv_post_data') && get_option('geodir_instal
                                        value="<?php echo SELECT_UPLOAD_CSV; ?>" class="gd_uploadcsv_button"/>
                                 <br/>
                                 <a href="<?php echo geodir_plugin_url() . '/geodirectory-assets/place_listing.csv'?>"><?php _e("Download sample csv", GEODIRECTORY_TEXTDOMAIN)?></a>
-                                <?php do_action('geodir_sample_csv_download_link'); ?>
+                                <?php
+                                /**
+                                 * Called just after the sample CSV download link.
+                                 *
+                                 * @since 1.0.0
+                                 */
+                                do_action('geodir_sample_csv_download_link'); ?>
                                 <span class="ajaxnonceplu"
                                       id="ajaxnonceplu<?php echo wp_create_nonce($id . 'pluploadan'); ?>"></span><br/>
                                 <br/>
@@ -1889,6 +1912,7 @@ if (!function_exists('geodir_import_data')) {
 
                             $gd_post_info['package_id'] = $package_id;
 
+                            /** This action is documented in geodirectory-functions/post-functions.php */
                             do_action('geodir_after_save_listing', $last_postid, $gd_post_info);
 
                             if (!empty($buffer[5])) {
@@ -1984,6 +2008,13 @@ function geodir_admin_fields($options)
                     echo '<div id="sub_' . trim($tab_id) . '" class="gd-content-heading" style=" margin-bottom:10px;" >';
                 }
 
+                /**
+                 * Called after a GeoDirectory settings title is output in the GD settings page.
+                 *
+                 * The action is called dynamically geodir_settings_$value['id'].
+                 *
+                 * @since 1.0.0
+                 */
                 do_action('geodir_settings_' . sanitize_title($value['id']));
                 break;
 
@@ -1999,13 +2030,34 @@ function geodir_admin_fields($options)
                     $desc = '<span style=" text-transform:none;"> - ' . $value['desc'] . '</span>';
                 if (isset($value['name']) && $value['name'])
                     echo '<h3>' . $value['name'] . $desc . '</h3>';
+                /**
+                 * Called after a GeoDirectory settings sectionstart is output in the GD settings page.
+                 *
+                 * The action is called dynamically geodir_settings_$value['id']_start.
+                 *
+                 * @since 1.0.0
+                 */
                 if (isset($value['id']) && $value['id']) do_action('geodir_settings_' . sanitize_title($value['id']) . '_start');
                 echo '<table class="form-table">' . "\n\n";
 
                 break;
             case 'sectionend':
+                /**
+                 * Called before a GeoDirectory settings sectionend is output in the GD settings page.
+                 *
+                 * The action is called dynamically geodir_settings_$value['id']_end.
+                 *
+                 * @since 1.0.0
+                 */
                 if (isset($value['id']) && $value['id']) do_action('geodir_settings_' . sanitize_title($value['id']) . '_end');
                 echo '</table>';
+                /**
+                 * Called after a GeoDirectory settings sectionend is output in the GD settings page.
+                 *
+                 * The action is called dynamically geodir_settings_$value['id']_end.
+                 *
+                 * @since 1.0.0
+                 */
                 if (isset($value['id']) && $value['id']) do_action('geodir_settings_' . sanitize_title($value['id']) . '_after');
                 break;
             case 'text':
@@ -2606,10 +2658,22 @@ function geodir_post_info_setting()
     $package_info = geodir_post_package_info($package_info, $post, $post_type);
     wp_nonce_field(plugin_basename(__FILE__), 'geodir_post_info_noncename');
     echo '<div id="geodir_wrapper">';
+    /**
+     * Called before the GD custom fields are output in the wp-admin area.
+     *
+     * @since 1.0.0
+     * @see 'geodir_after_default_field_in_meta_box'
+     */
     do_action('geodir_before_default_field_in_meta_box');
     //geodir_get_custom_fields_html($package_info->pid,'default',$post_type);
     // to display all fields in one information box
     geodir_get_custom_fields_html($package_info->pid, 'all', $post_type);
+    /**
+     * Called after the GD custom fields are output in the wp-admin area.
+     *
+     * @since 1.0.0
+     * @see 'geodir_before_default_field_in_meta_box'
+     */
     do_action('geodir_after_default_field_in_meta_box');
     echo '</div>';
 }
