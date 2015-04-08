@@ -22,6 +22,11 @@ if (!function_exists('geodir_admin_init')) {
             $current_tab = (isset($_GET['tab']) && $_GET['tab'] != '') ? $_GET['tab'] : 'general_settings';
             if (!(isset($_REQUEST['action']))) // this will avoide Ajax requests
                 geodir_handle_option_form_submit($current_tab); // located in admin function.php
+            /**
+             * Called on the WordPress 'admin_init' hook this hookis used to call everything for the GD settings pages in the admin area.
+             *
+             * @since 1.0.0
+             */
             do_action('admin_panel_init');
             add_action('geodir_admin_option_form', 'geodir_get_admin_option_form', 1);
 
@@ -1593,6 +1598,7 @@ function geodir_ajax_import_csv()
 
                     $gd_post_info['package_id'] = $package_id;
 
+                    /** This action is documented in geodirectory-functions/post-functions.php */
                     do_action('geodir_after_save_listing', $last_postid, $gd_post_info);
 
                     if (!empty($buffer[5])) {
