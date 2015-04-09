@@ -1,6 +1,7 @@
 v1.4.3
 In the map child categories should be checked/unchecked when parent category is checked/unchecked - FIXED
 Sorting by title not working correctly - FIXED
+Added $post_id param to action 'geodir_update_postrating' - ADDED
 
 v1.4.2
 Google api establishment term can override street address - FIXED
