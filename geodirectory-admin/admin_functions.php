@@ -967,6 +967,14 @@ function geodir_post_information_save($post_id)
 
     global $wpdb, $current_user, $post;
 
+   /* echo '###post';
+    print_r($_POST);
+    echo '###request';
+    print_r($_REQUEST);
+    echo '###';
+    print_r($post);
+    exit;
+   */
     //unsetting the listing session here causes problems, it should be the last thing to be done.
     /*if(isset($_SESSION['listing'])){
 		unset($_SESSION['listing']);
@@ -3086,3 +3094,5 @@ function geodir_hide_admin_preview_button() {
 }
 add_action( 'admin_head-post-new.php', 'geodir_hide_admin_preview_button' );
 add_action( 'admin_head-post.php', 'geodir_hide_admin_preview_button' );
+
+

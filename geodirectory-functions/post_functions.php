@@ -160,6 +160,10 @@ if (!function_exists('geodir_save_listing')) {
         do_action_ref_array('geodir_before_save_listing', $post);
 
         $send_post_submit_mail = false;
+
+        // unhook this function so it doesn't loop infinitely
+        remove_action('save_post', 'geodir_post_information_save');
+
         if (isset($request_info['pid']) && $request_info['pid'] != '') {
             $post['ID'] = $request_info['pid'];
 
@@ -172,6 +176,9 @@ if (!function_exists('geodir_save_listing')) {
                 //geodir_sendEmail('','',$current_user->user_email,$current_user->display_name,'','',$request_info,'post_submit',$last_post_id,$current_user->ID);
             }
         }
+
+        // re-hook this function
+        add_action('save_post', 'geodir_post_information_save');
 
         $post_tags = '';
         if (!isset($request_info['post_tags'])) {
