@@ -1035,6 +1035,7 @@ function geodir_changes_in_custom_fields_table() {
 	$listings_page_id = (int)get_option('geodir_listing_page');
 	if ($listings_page_id) {
 		$wpdb->query($wpdb->prepare("DELETE FROM " . $wpdb->posts . " WHERE ID=%d AND post_name = %s AND post_type=%s", array($listings_page_id, 'listings', 'page')));
+        delete_option('geodir_listing_page');
 	}
 
     // updated custom field table(add field to show custom field as a tab)
@@ -1149,6 +1150,14 @@ function geodir_update_term_slug($term_id, $tt_id, $taxonomy)
 
     $slug = $tern_data->slug;
 
+    /**
+     * Filter if a term slug exists.
+     *
+     * @since 1.0.0
+     * @param bool $bool Default: false.
+     * @param string $slug The term slug.
+     * @param int $term_id The term ID.
+     */
     $slug_exists = apply_filters('geodir_term_slug_is_exists', false, $slug, $term_id);
 
     if ($slug_exists) {
@@ -1157,6 +1166,7 @@ function geodir_update_term_slug($term_id, $tt_id, $taxonomy)
         do {
             $new_slug = _truncate_post_slug($slug, 200 - (strlen($suffix) + 1)) . "-$suffix";
 
+            /** This action is documented in geodirectory_hooks_actions.php */
             $term_slug_check = apply_filters('geodir_term_slug_is_exists', false, $new_slug, $term_id);
 
             $suffix++;
@@ -1201,6 +1211,12 @@ function geodir_custom_page_title($title = '', $sep = '')
     global $wp;
 
     if ($sep == '') {
+        /**
+         * Filter the pae title separator.
+         *
+         * @since 1.0.0
+         * @param string $sep The separator, default: `|`.
+         */
         $sep = apply_filters('geodir_page_title_separator', '|');
     }
 
@@ -1866,7 +1882,16 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                             // all search engines that use the nofollow value exclude links that use it from their ranking calculation
                             $rel = strpos($website, get_site_url()) !== false ? '' : 'rel="nofollow"';
 
-                            $html = '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $type['htmlvar_name'] . '"><span class="geodir-i-website" style="' . $field_icon . '">' . $field_icon_af . ' <a href="' . $website . '" target="_blank" ' . $rel . ' ><strong>' . apply_filters('geodir_custom_field_website_name', stripslashes(__($type['site_title'], GEODIRECTORY_TEXTDOMAIN)), $website, $post->ID) . '</strong></a></span></div>';
+                            $html = '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $type['htmlvar_name'] . '"><span class="geodir-i-website" style="' . $field_icon . '">' . $field_icon_af . ' <a href="' . $website . '" target="_blank" ' . $rel . ' ><strong>' .
+                                /**
+                                 * Filer the custom field website name.
+                                 *
+                                 * @since 1.0.0
+                                 * @param string $type['site_title'] The field name default: "Website".
+                                 * @param string $website The website address.
+                                 * @param int $post->ID The post ID.
+                                 */
+                                apply_filters('geodir_custom_field_website_name', stripslashes(__($type['site_title'], GEODIRECTORY_TEXTDOMAIN)), $website, $post->ID) . '</strong></a></span></div>';
                         }
                             break;
                         case 'phone': {
@@ -2239,6 +2264,12 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                             $tabs_arr[$htmlvar_name] = array(
                                 'heading_text' => __($label, GEODIRECTORY_TEXTDOMAIN),
                                 'is_active_tab' => false,
+                                /**
+                                 * Filter if a custom field should be displayed on the details page tab.
+                                 *
+                                 * @since 1.0.0
+                                 * @param string $htmlvar_name The field HTML var name.
+                                 */
                                 'is_display' => apply_filters('geodir_detail_page_tab_is_display', true, $htmlvar_name),
                                 'tab_content' => '<div class="geodir-company_info field-group">' . $fieldset_html . '</html>'
                             );
@@ -2248,6 +2279,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                             $tabs_arr[$field['htmlvar_name']] = array(
                                 'heading_text' => __($label, GEODIRECTORY_TEXTDOMAIN),
                                 'is_active_tab' => false,
+                                /** This action is documented in geodirectory_hooks_actions.php */
                                 'is_display' => apply_filters('geodir_detail_page_tab_is_display', true, $field['htmlvar_name']),
                                 'tab_content' => $html
                             );
@@ -2296,6 +2328,12 @@ function geodir_add_post_status_author_page()
     }
 
     if ($html != '') {
+        /**
+         * Filter the post status text on the author page.
+         *
+         * @since 1.0.0
+         * @param string $html The HTML of the status.
+         */
         echo apply_filters('geodir_filter_status_text_on_author_page', $html);
     }
 

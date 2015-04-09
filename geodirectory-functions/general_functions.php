@@ -244,8 +244,6 @@ function geodir_is_page($gdpage = '')
                 return true;
             break;
         case 'listing':
-            if (is_page() && get_query_var('page_id') == get_option('geodir_listing_page'))
-                return true;
             if (is_tax() && geodir_get_taxonomy_posttype()) {
                 global $current_term, $taxonomy, $term;
 
@@ -296,7 +294,6 @@ function geodir_set_is_geodir_page($wp)
                 $wp->query_vars['page_id'] == get_option('geodir_add_listing_page')
                 || $wp->query_vars['page_id'] == get_option('geodir_preview_page')
                 || $wp->query_vars['page_id'] == get_option('geodir_success_page')
-                || $wp->query_vars['page_id'] == get_option('geodir_listing_page')
                 || $wp->query_vars['page_id'] == get_option('geodir_location_page')
             )
                 $wp->query_vars['gd_is_geodir_page'] = true;
@@ -309,7 +306,6 @@ function geodir_set_is_geodir_page($wp)
                     $page->ID == get_option('geodir_add_listing_page')
                     || $page->ID == get_option('geodir_preview_page')
                     || $page->ID == get_option('geodir_success_page')
-                    || $page->ID == get_option('geodir_listing_page')
                     || $page->ID == get_option('geodir_location_page'))
             )
                 $wp->query_vars['gd_is_geodir_page'] = true;
@@ -2410,13 +2406,26 @@ function geodir_popular_postview_output($args = '', $instance = '')
     if (!empty($widget_listings) || $with_no_results) {
         ?>
         <div class="geodir_locations geodir_location_listing">
-            <?php do_action('geodir_before_view_all_link_in_widget'); ?>
+
+            <?php
+            /**
+             * Called before the div containing the title and view all link in popular post view widget.
+             *
+             * @since 1.0.0
+             */
+            do_action('geodir_before_view_all_link_in_widget'); ?>
             <div class="geodir_list_heading clearfix">
                 <?php echo $before_title . $title . $after_title; ?>
                 <a href="<?php echo $viewall_url; ?>"
                    class="geodir-viewall"><?php _e('View all', GEODIRECTORY_TEXTDOMAIN); ?></a>
             </div>
-            <?php do_action('geodir_after_view_all_link_in_widget'); ?>
+            <?php
+            /**
+             * Called after the div containing the title and view all link in popular post view widget.
+             *
+             * @since 1.0.0
+             */
+            do_action('geodir_after_view_all_link_in_widget'); ?>
             <?php
             if (strstr($layout, 'gridview')) {
                 $listing_view_exp = explode('_', $layout);

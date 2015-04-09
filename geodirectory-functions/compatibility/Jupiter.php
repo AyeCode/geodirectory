@@ -158,6 +158,11 @@ function jupiter_geodir_page_title($title = '', $subtitle = '')
     }
     if ($mk_options['disable_breadcrumb'] == 'true') {
         if (get_post_meta($post_id, '_disable_breadcrumb', true) != 'false') {
+            /**
+             * Calls the theme breadcrumbs for Jupiter theme.
+             *
+             * @since 1.4.0
+             */
             do_action('theme_breadcrumbs', $post_id);
         }
     }

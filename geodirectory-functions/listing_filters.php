@@ -48,7 +48,7 @@ function set_listing_request()
     remove_all_filters('posts_where');
 
 
-    if ((is_page() && get_query_var('page_id') == get_option('geodir_listing_page')) || (is_search() && isset($_REQUEST['geodir_search']) && $_REQUEST['geodir_search'] != '')):
+    if ((is_search() && isset($_REQUEST['geodir_search']) && $_REQUEST['geodir_search'] != '')):
 
         if (isset($_REQUEST['scat']) && $_REQUEST['scat'] == 'all') $_REQUEST['scat'] = '';
         //if(isset($_REQUEST['s']) && $_REQUEST['s'] == '+') $_REQUEST['s'] = '';

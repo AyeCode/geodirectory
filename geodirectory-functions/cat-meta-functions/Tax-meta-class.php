@@ -2043,6 +2043,17 @@ if (!class_exists('Tax_Meta_Class')) :
             $m[$key] = $value;
             update_option('tax_meta_' . $post_type . '_' . $term_id, $m);
 
+            /**
+             * Called after the tax meta is updated.
+             *
+             * Used to update things after a GD category is saved.
+             *
+             * @since 1.0.0
+             * @param bool $false False.
+             * @param bool $true True.
+             * @param int $term_id The term id being updated.
+             * @param string $post_type The post type of the cat being updated.
+             */
             do_action('gd_tax_meta_updated', false, true, $term_id, $post_type);
         }
 
@@ -2105,6 +2116,7 @@ if (!function_exists('update_tax_meta')) {
         $m[$key] = $value;
         update_option('tax_meta_' . $post_type . '_' . $term_id, $m);
 
+        /** This action is documented in geodirectory-functions/cat-meta-functions/Tax-meta-class.php */
         do_action('gd_tax_meta_updated', false, true, $term_id, $post_type);
     }
 }
