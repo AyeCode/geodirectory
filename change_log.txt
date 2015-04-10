@@ -1,6 +1,8 @@
 v1.4.3
 In the map child categories should be checked/unchecked when parent category is checked/unchecked - FIXED
 Sorting by title not working correctly - FIXED
+Added $post_id param to action 'geodir_update_postrating' - ADDED
+Removed preview button from backend for GD posts - CHANGED
 
 v1.4.2
 Google api establishment term can override street address - FIXED
@@ -21,6 +23,7 @@ Awesome font upgraded with new Awesome font version 4.3.0 - ADDED
 After searching for a city not able to search city again without clearing Near input box - FIXED
 Custom fields texts translation added - FIXED
 [#from_email#] added as a shortcode in notification templates - ADDED
+Changed hook 'template_include' to priority 9 - CHANGED
 
 v1.4.1
 Distances to listings should show miles/km until 0.01 rather than 1 before changing to ft/m - FIXED

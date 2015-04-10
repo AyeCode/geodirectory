@@ -53,7 +53,7 @@ function geodir_get_admin_option_form($current_tab)
 add_action('geodir_update_options_compatibility_settings', 'geodir_update_options_compatibility_settings');
 add_action('geodir_update_options_default_location_settings', 'geodir_location_form_submit');
 add_action('geodir_before_admin_panel', 'geodir_before_admin_panel'); // this function is in admin_functions.php
-add_action('geodir_before_update_options', 'geodir_before_update_options');
+add_action('geodir_before_update_options', 'geodir_before_update_options',10,2);
 
 //add_action('geodir_before_admin_panel', 'geodir_autoinstall_admin_header');
 
@@ -179,6 +179,8 @@ function geodir_meta_box_add()
 }
 
 add_action('save_post', 'geodir_post_information_save');
+
+
 
 
 //add_filter('geodir_design_settings' , 'geodir_show_hide_location_switcher_nav' ) ;

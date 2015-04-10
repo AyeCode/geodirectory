@@ -967,6 +967,14 @@ function geodir_post_information_save($post_id)
 
     global $wpdb, $current_user, $post;
 
+   /* echo '###post';
+    print_r($_POST);
+    echo '###request';
+    print_r($_REQUEST);
+    echo '###';
+    print_r($post);
+    exit;
+   */
     //unsetting the listing session here causes problems, it should be the last thing to be done.
     /*if(isset($_SESSION['listing'])){
 		unset($_SESSION['listing']);
@@ -3067,3 +3075,24 @@ function geodir_before_update_options($current_tab, $geodir_settings) {
 		}
 	}
 }
+
+
+/**
+ * Removes the preview buttons from the wp-admin area for GD post types.
+ *
+ * This was removed as the preview page was causing bugs.
+ *
+ * @global string $post_type The current post type.
+ * @since 1.4.3
+ * @package GeoDirectory
+ */
+function geodir_hide_admin_preview_button() {
+    global $post_type;
+    $post_types = geodir_get_posttypes();
+    if(in_array($post_type, $post_types))
+        echo '<style type="text/css">#post-preview, #view-post-btn{display: none;}</style>';
+}
+add_action( 'admin_head-post-new.php', 'geodir_hide_admin_preview_button' );
+add_action( 'admin_head-post.php', 'geodir_hide_admin_preview_button' );
+
+
