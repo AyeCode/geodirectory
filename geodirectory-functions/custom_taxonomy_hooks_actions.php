@@ -399,7 +399,7 @@ function geodir_set_location_var_in_session_in_core($wp)
 
             $wp->query_vars['post_type'] = $geodir_post_type;
 
-            if(is_single()) {
+
                 // now check if last term is a post of geodirectory post types
                 $geodir_post = get_posts(array(
                     'name' => $geodir_last_term,
@@ -446,7 +446,7 @@ function geodir_set_location_var_in_session_in_core($wp)
                     $geodir_set_location_session = false;
                     //return ;
                 }
-            }
+
             $geodir_location_terms = '';
             // if last term is not a post then check if last term is a term of the specific texonomy or not
             if (geodir_term_exists($geodir_last_term, $geodir_taxonomy)) {

@@ -1958,6 +1958,8 @@ function geodir_listing_slider_widget_output($args = '', $instance = '')
     $animation = empty($instance['animation']) ? 'slide' : apply_filters('widget_animation', $instance['animation']);
     $list_sort = empty($instance['list_sort']) ? 'latest' : apply_filters('widget_list_sort', $instance['list_sort']);
     $show_featured_only = !empty($instance['show_featured_only']) ? 1 : NULL;
+
+    wp_enqueue_script('geodirectory-jquery-flexslider-js');
     ?>
     <script type="text/javascript">
         jQuery(window).load(function () {
