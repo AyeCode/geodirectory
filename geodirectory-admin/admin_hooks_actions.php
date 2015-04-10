@@ -862,6 +862,12 @@ function geodir_diagnose_version_clear()
         'Events Manager' => 'geodirevents_db_version',
     );
 
+    /**
+     * Filter the array of plugins to clear the version numbers for in the GD >Tools : clear all version numbers.
+     *
+     * @since 1.0.0
+     * @param array $gd_arr The array or addons to clear, array('GeoDirectory' => 'geodirectory_db_version',...
+     */
     $ver_arr = apply_filters('geodir_db_version_name', $gd_arr);
 
     if (!empty($ver_arr)) {
@@ -975,6 +981,15 @@ function geodir_diagnose_multisite_conversion()
     );
 
     // allow other addons to hook in and add their checks
+
+    /**
+     * Filter the array of tables.
+     *
+     * Filter the array of tables to check during the GD>Tools multisite DB conversion tool check, this allows adons to add their DB tables to the checks.
+     *
+     * @since 1.0.0
+     * @param array $table_arr The array of tables to check, array('geodir_countries' => __('Countries', GEODIRECTORY_TEXTDOMAIN),...
+     */
     $table_arr = apply_filters('geodir_diagnose_multisite_conversion', $table_arr);
 
     foreach ($table_arr as $table => $table_name) {

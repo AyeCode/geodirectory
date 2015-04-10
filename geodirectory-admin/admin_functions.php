@@ -103,6 +103,7 @@ if (!function_exists('geodir_admin_scripts')) {
         wp_enqueue_script('tax-meta-clss', $plugin_path . '/js/tax-meta-clss.js', array('jquery'), null, true);
 
         $map_lang = "&language=" . geodir_get_map_default_language();
+        /** This filter is documented in geodirectory_template_tags.php */
         $map_extra = apply_filters('geodir_googlemap_script_extra', '');
         wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?sensor=false' . $map_lang . $map_extra, '', NULL);
 

@@ -59,6 +59,13 @@ if (!function_exists('geodir_create_tables')) {
 						Title varchar (50) NULL ,
 						Comment varchar (255) NULL ,
 						PRIMARY KEY  (CountryId)) $collate ";
+
+        /**
+         * Filter the SQL query that creates/updates the country DB table structure.
+         *
+         * @since 1.0.0
+         * @param string $sql The SQL insert query string.
+         */
         $GEODIR_COUNTRIES_TABLE = apply_filters('geodir_before_country_table_create', $GEODIR_COUNTRIES_TABLE);
         dbDelta($GEODIR_COUNTRIES_TABLE);
 
@@ -338,6 +345,13 @@ if (!function_exists('geodir_create_tables')) {
 	(271, 'Zaire', '--', '--', '-- ', '--', '--', '', '', '', '', '', '', 0, 'Zaire', 'see Democratic Republic of the Congo'),
 	(272, 'Zambia', 'ZA', 'ZM', 'ZWB', '894', 'ZM', 'Lusaka ', 'Africa ', 'Zambian', 'Zambians', 'Kwacha', 'ZMK', 9770199, 'Zambia', ''),
 	(273, 'Zimbabwe', 'ZI', 'ZW', 'ZWE', '716', 'ZW', 'Harare ', 'Africa ', 'Zimbabwean', 'Zimbabweans', 'Zimbabwe Dollar', 'ZWD', 11365366, 'Zimbabwe', '')";
+
+            /**
+             * Filter the SQL query that inserts the country DB table data.
+             *
+             * @since 1.0.0
+             * @param string $sql The SQL insert query string.
+             */
             $countries_insert = apply_filters('geodir_before_country_data_insert', $countries_insert);
             $wpdb->query($countries_insert);
 
@@ -355,6 +369,12 @@ if (!function_exists('geodir_create_tables')) {
 						PRIMARY KEY  (id)
 						) $collate ";
 
+        /**
+         * Filter the SQL query that creates/updates the post_icon DB table structure.
+         *
+         * @since 1.0.0
+         * @param string $sql The SQL insert query string.
+         */
         $icon_table = apply_filters('geodir_before_icon_table_create', $icon_table);
 
         dbDelta($icon_table);
@@ -393,6 +413,12 @@ if (!function_exists('geodir_create_tables')) {
 							  PRIMARY KEY  (id)
 							  ) $collate";
 
+        /**
+         * Filter the SQL query that creates/updates the custom_fields DB table structure.
+         *
+         * @since 1.0.0
+         * @param string $sql The SQL insert query string.
+         */
         $post_custom_fields = apply_filters('geodir_before_custom_field_table_create', $post_custom_fields);
 
         dbDelta($post_custom_fields);
@@ -423,6 +449,13 @@ if (!function_exists('geodir_create_tables')) {
 						post_dummy enum( '1', '0' ) NULL DEFAULT '0', 
 						PRIMARY KEY  (post_id)
 						) $collate ";
+
+        /**
+         * Filter the SQL query that creates/updates the post_detail DB table structure.
+         *
+         * @since 1.0.0
+         * @param string $sql The SQL insert query string.
+         */
         $post_detail = apply_filters('geodir_before_post_detail_table_create', $post_detail);
 
         dbDelta($post_detail);
@@ -444,6 +477,13 @@ if (!function_exists('geodir_create_tables')) {
 						metadata text NULL DEFAULT NULL,
 						PRIMARY KEY  (ID)
 						) $collate ";
+
+        /**
+         * Filter the SQL query that creates/updates the attachments DB table structure.
+         *
+         * @since 1.0.0
+         * @param string $sql The SQL insert query string.
+         */
         $attechment_table = apply_filters('geodir_before_attachment_table_create', $attechment_table);
 
         dbDelta($attechment_table);
@@ -467,6 +507,12 @@ if (!function_exists('geodir_create_tables')) {
 			PRIMARY KEY  (id)
 			) $collate ";
 
+        /**
+         * Filter the SQL query that creates/updates the custom_sort_fields DB table structure.
+         *
+         * @since 1.0.0
+         * @param string $sql The SQL insert query string.
+         */
         $custom_sort_fields_table = apply_filters('geodir_before_sort_fields_table_create', $custom_sort_fields_table);
 
         dbDelta($custom_sort_fields_table);
@@ -495,6 +541,13 @@ if (!function_exists('geodir_create_tables')) {
 			`post_longitude` varchar(20) NULL DEFAULT NULL,
 			`comment_content` TEXT NULL DEFAULT NULL,
 			PRIMARY KEY (id)) $collate  ";
+
+            /**
+             * Filter the SQL query that creates the review DB table structure.
+             *
+             * @since 1.0.0
+             * @param string $sql The SQL insert query string.
+             */
             $review_table = apply_filters('geodir_before_review_table_create', $review_table);
             $wpdb->query($review_table);
         }
@@ -661,6 +714,12 @@ if (!function_exists('geodir_create_default_fields')) {
             'is_admin' => '1',
             'clabels' => __('Special Offers', GEODIRECTORY_TEXTDOMAIN));
 
+        /**
+         * Filter the array of default custom fields DB table data.
+         *
+         * @since 1.0.0
+         * @param string $fields The default custom fields as an array.
+         */
         $fields = apply_filters('geodir_before_default_custom_fields_saved', $fields);
         foreach ($fields as $field_index => $field) {
             geodir_custom_field_save($field);

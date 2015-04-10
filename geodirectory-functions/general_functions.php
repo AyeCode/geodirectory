@@ -1801,6 +1801,7 @@ function geodir_popular_post_category_output($args = '', $instance = '')
 
     echo $before_widget;
 
+    /** This filter is documented in geodirectory_widgets.php */
     $title = empty($instance['title']) ? __('Popular Categories', GEODIRECTORY_TEXTDOMAIN) : apply_filters('widget_title', __($instance['title'], GEODIRECTORY_TEXTDOMAIN));
 
     $category_limit = isset($instance['category_limit']) && $instance['category_limit'] > 0 ? (int)$instance['category_limit'] : 15;
@@ -1933,6 +1934,7 @@ function geodir_listing_slider_widget_output($args = '', $instance = '')
 
     echo $before_widget;
 
+    /** This filter is documented in geodirectory_widgets.php */
     $title = empty($instance['title']) ? '' : apply_filters('widget_title', __($instance['title'], GEODIRECTORY_TEXTDOMAIN));
 
     $post_type = empty($instance['post_type']) ? 'gd_place' : apply_filters('widget_post_type', $instance['post_type']);
@@ -2090,6 +2092,8 @@ function geodir_loginwidget_output($args = '', $instance = '')
     //print_r($instance);
     // prints the widget
     extract($args, EXTR_SKIP);
+
+    /** This filter is documented in geodirectory_widgets.php */
     $title = empty($instance['title']) ? __('My Dashboard', GEODIRECTORY_TEXTDOMAIN) : apply_filters('widget_title', __($instance['title'], GEODIRECTORY_TEXTDOMAIN));
 
     echo $before_widget;
@@ -2276,6 +2280,7 @@ function geodir_popular_postview_output($args = '', $instance = '')
 
     echo $before_widget;
 
+    /** This filter is documented in geodirectory_widgets.php */
     $title = empty($instance['title']) ? ucwords($instance['category_title']) : apply_filters('widget_title', __($instance['title'], GEODIRECTORY_TEXTDOMAIN));
     $post_type = empty($instance['post_type']) ? 'gd_place' : apply_filters('widget_post_type', $instance['post_type']);
     $category = empty($instance['category']) ? '0' : apply_filters('widget_category', $instance['category']);
