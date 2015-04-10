@@ -1286,6 +1286,8 @@ function geodir_ajax_import_csv()
     global $wpdb, $plugin_prefix, $current_user;
     $uploads = wp_upload_dir();
     ini_set('auto_detect_line_endings', true);
+	
+	$wp_post_statuses = get_post_statuses(); // All of the WordPress supported post statuses.
 
     $task = isset($_POST['task']) ? $_POST['task'] : '';
     $uploadedFile = isset($_POST['gddata']['uploadedFile']) ? $_POST['gddata']['uploadedFile'] : NULL;
@@ -1476,6 +1478,11 @@ function geodir_ajax_import_csv()
                         if ($customKeyarray[$c] == 'post_longitude') {
                             $post_longitude = addslashes($buffer[$c]);
                         }
+						
+						// Post status
+						if ($customKeyarray[$c] == 'post_status') {
+                            $post_status = sanitize_key( $buffer[$c] );
+                        }
                     }
 
                     /* ================ before array create ============== */
@@ -1489,18 +1496,23 @@ function geodir_ajax_import_csv()
                             continue;
                         }
                     }
+					
+					// Default post status
+					$default_status = 'publish';
+					$post_status = !empty( $post_status ) ? sanitize_key( $post_status ) : $default_status;
+					$post_status = !empty( $wp_post_statuses ) && !isset( $wp_post_statuses[$post_status] ) ? $default_status : $post_status;
 
                     $my_post['post_title'] = $post_title;
                     $my_post['post_content'] = $post_desc;
                     $my_post['post_type'] = addslashes($buffer[5]);
                     $my_post['post_author'] = $current_post_author;
-                    $my_post['post_status'] = 'publish';
+                    $my_post['post_status'] = $post_status;
                     $my_post['post_category'] = $catids_arr;
                     $my_post['post_tags'] = $tag_arr;
 
                     $gd_post_info['post_tags'] = $tag_arr;
                     $gd_post_info['post_title'] = $post_title;
-                    $gd_post_info['post_status'] = 'publish';
+                    $gd_post_info['post_status'] = $post_status;
                     $gd_post_info['submit_time'] = time();
                     $gd_post_info['submit_ip'] = $_SERVER['REMOTE_ADDR'];
 
