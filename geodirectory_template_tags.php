@@ -33,6 +33,14 @@ function geodir_templates_scripts()
     //if( get_option('geodir_enqueue_google_api_script')==1)
 
     $map_lang = "&language=" . geodir_get_map_default_language();
+    /**
+     * Filter the variables that are added to the end of the google maps script call.
+     *
+     * This i used to change things like google maps language etc.
+     *
+     * @since 1.0.0
+     * @param string $var The string to filter, default is empty string.
+     */
     $map_extra = apply_filters('geodir_googlemap_script_extra', '');
     wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?sensor=false' . $map_lang . $map_extra, '', NULL);
     /*	{
@@ -410,7 +418,15 @@ function geodir_add_sharelocation_scripts()
                     initialise2();
                 } else {
 
-                    Sgeocoder.geocode({'address': address<?php if($near_add = get_option('geodir_search_near_addition')){echo '+", '.$near_add.'"';} if($near_add2 = apply_filters('geodir_search_near_addition','')){echo $near_add2;}//gt_advanced_near_search();?>},
+                    Sgeocoder.geocode({'address': address<?php
+                    if($near_add = get_option('geodir_search_near_addition')){echo '+", '.$near_add.'"';}
+                    if($near_add2 =
+                    /**
+                     * Adds any extra info to the near search box query when trying to geolocate it via google api.
+                     *
+                     * @since 1.0.0
+                     */
+                    apply_filters('geodir_search_near_addition','')){echo $near_add2;}//gt_advanced_near_search();?>},
                         function (results, status) {
                             if (status == google.maps.GeocoderStatus.OK) {
                                 updateSearchPosition(results[0].geometry.location, $form);
@@ -481,10 +497,24 @@ function geodir_show_badges_on_image($which, $post, $link)
 {
     switch ($which) {
         case 'featured':
-            return apply_filters('geodir_featured_badge_on_image', '<a href="' . $link . '"><span class="geodir_featured_img">&nbsp;</span></a>');
+            /**
+             * Filter the featured image badge html that appears in the listings pages over the thumbnail.
+             *
+             * @since 1.0.0
+             * @param object $post The post object.
+             * @param string $link The link to the post.
+             */
+            return apply_filters('geodir_featured_badge_on_image', '<a href="' . $link . '"><span class="geodir_featured_img">&nbsp;</span></a>',$post,$link);
             break;
         case 'new' :
-            return apply_filters('geodir_new_badge_on_image', '<a href="' . $link . '"><span class="geodir_new_listing">&nbsp;</span></a>');
+            /**
+             * Filter the new image badge html that appears in the listings pages over the thumbnail.
+             *
+             * @since 1.0.0
+             * @param object $post The post object.
+             * @param string $link The link to the post.
+             */
+            return apply_filters('geodir_new_badge_on_image', '<a href="' . $link . '"><span class="geodir_new_listing">&nbsp;</span></a>',$post,$link);
             break;
 
     }

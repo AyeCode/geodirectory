@@ -8,9 +8,37 @@ function geodir_register_sidebar()
         /* Home page sidebars start*/
         /*===========================*/
 
+        /**
+         * Filter the `$before_widget` widget opening HTML tag.
+         *
+         * @since 1.0.0
+         * @param string $var The HTML string to filter. Default = '<section id="%1$s" class="widget geodir-widget %2$s">'.
+         * @see 'geodir_after_widget'
+         */
         $before_widget = apply_filters('geodir_before_widget', '<section id="%1$s" class="widget geodir-widget %2$s">');
+        /**
+         * Filter the `$after_widget` widget closing HTML tag.
+         *
+         * @since 1.0.0
+         * @param string $var The HTML string to filter. Default = '</section>'.
+         * @see 'geodir_before_widget'
+         */
         $after_widget = apply_filters('geodir_after_widget', '</section>');
+        /**
+         * Filter the `$before_title` widget title opening HTML tag.
+         *
+         * @since 1.0.0
+         * @param string $var The HTML string to filter. Default = '<h3 class="widget-title">'.
+         * @see 'geodir_after_title'
+         */
         $before_title = apply_filters('geodir_before_title', '<h3 class="widget-title">');
+        /**
+         * Filter the `$after_title` widget title closing HTML tag.
+         *
+         * @since 1.0.0
+         * @param string $var The HTML string to filter. Default = '</h3>'.
+         * @see 'geodir_before_title'
+         */
         $after_title = apply_filters('geodir_after_title', '</h3>');
 
         if (get_option('geodir_show_home_top_section')) {
@@ -246,6 +274,12 @@ if (!function_exists('register_geodir_widgets')) {
                 // prints the widget
                 extract($args, EXTR_SKIP);
 
+                /**
+                 * Filter the widget title text.
+                 *
+                 * @since 1.0.0
+                 * @param string $title The widget title text.
+                 */
                 $title = empty($instance['title']) ? '&nbsp;' : apply_filters('widget_title', $instance['title']);
 
                 global $current_user, $post;
@@ -336,10 +370,23 @@ if (!function_exists('register_geodir_widgets')) {
                 // prints the widget
                 extract($args, EXTR_SKIP);
 
+                /**
+                 * Filter the widget instance id.
+                 *
+                 * @since 1.0.0
+                 * @param string $id The widget instance id.
+                 */
                 $id = empty($instance['id']) ? '' : apply_filters('widget_id', $instance['id']);
 
+                /** This filter is documented in geodirectory_widgets.php */
                 $title = empty($instance['title']) ? '' : apply_filters('widget_title', __($instance['title'], GEODIRECTORY_TEXTDOMAIN));
 
+                /**
+                 * Filter the widget text.
+                 *
+                 * @since 1.0.0
+                 * @param string $text The widget text.
+                 */
                 $text = empty($instance['text']) ? '' : apply_filters('widget_text', $instance['text']);
 
                 echo $before_widget;
@@ -447,6 +494,12 @@ if (!function_exists('register_geodir_widgets')) {
 
                 extract($args, EXTR_SKIP);
 
+                /**
+                 * Filter the description text.
+                 *
+                 * @since 1.0.0
+                 * @param string $desc1 The widget description text.
+                 */
                 $desc1 = empty($instance['desc1']) ? '&nbsp;' : apply_filters('widget_desc1', $instance['desc1']);
                 echo $before_widget;
                 ?>
@@ -503,8 +556,17 @@ if (!function_exists('register_geodir_widgets')) {
 
                 echo $before_widget;
 
+                /** This filter is documented in geodirectory_widgets.php */
                 $id = empty($instance['id']) ? '&nbsp;' : apply_filters('widget_id', $instance['id']);
 
+                /**
+                 * Filter the widget number.
+                 *
+                 * This is used in the flicker widget to show how many images to show.
+                 *
+                 * @since 1.0.0
+                 * @param string $number The image count.
+                 */
                 $number = empty($instance['number']) ? '&nbsp;' : apply_filters('widget_number', $instance['number']);
                 echo $before_title . __('Photo Gallery', GEODIRECTORY_TEXTDOMAIN) . $after_title;
                 ?>
@@ -583,6 +645,12 @@ if (!function_exists('register_geodir_widgets')) {
 
                 extract($args, EXTR_SKIP);
 
+                /**
+                 * Filter the twitter widget description text.
+                 *
+                 * @since 1.0.0
+                 * @param string $desc1 The widget description text.
+                 */
                 $desc1 = empty($instance['gd_tw_desc1']) ? '&nbsp;' : apply_filters('gd_tw_widget_desc1', $instance['gd_tw_desc1']);
                 echo $before_widget;
                 if ($desc1 <> "") {
@@ -639,6 +707,7 @@ if (!function_exists('register_geodir_widgets')) {
 
                 echo $before_widget;
 
+                /** This filter is documented in geodirectory_widgets.php */
                 $title = empty($instance['title']) ? __('Search', GEODIRECTORY_TEXTDOMAIN) : apply_filters('widget_title', __($instance['title'], GEODIRECTORY_TEXTDOMAIN));
 
                 geodir_get_template_part('listing', 'filter-form');

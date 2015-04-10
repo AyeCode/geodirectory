@@ -15,6 +15,7 @@ class geodir_recent_reviews_widget extends WP_Widget
         // prints the widget
         extract($args, EXTR_SKIP);
 
+        /** This filter is documented in geodirectory_widgets.php */
         $title = empty($instance['title']) ? '' : apply_filters('widget_title', __($instance['title'], GEODIRECTORY_TEXTDOMAIN));
         $count = empty($instance['count']) ? '5' : apply_filters('widget_count', $instance['count']);
 
