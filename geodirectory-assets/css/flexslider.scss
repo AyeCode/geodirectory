@@ -1,0 +1,346 @@
+/*
+ * jQuery FlexSlider v2.0
+ * http://www.woothemes.com/flexslider/
+ *
+ * Copyright 2012 WooThemes
+ * Free to use under the GPLv2 license.
+ * http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Contributing author: Tyler Smith (@mbmufffin)
+ */
+
+/* Browser Resets */
+.geodir-slides li {
+    clear: none;
+}
+
+.geodir_flex-container a:active,
+.geodir_flexslider a:active,
+.geodir_flex-container a:focus,
+.geodir_flexslider a:focus {
+    outline: none;
+}
+
+.geodir-slides, .geodir-control-nav, .geodir-direction-nav {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* FlexSlider container Styles
+*********************************/
+.geodir_flex-container {
+    margin-bottom: 10px;
+    position: relative;
+}
+
+/* FlexSlider container Styles
+*********************************/
+.geodir_flex-loader, .geodir-listing-flex-loader {
+    background: #F0F0F0;
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+    position: absolute;
+    z-index: 10;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -o-border-radius: 4px;
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .2);
+    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, .2);
+    -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, .2);
+    -o-box-shadow: 0 1px 4px rgba(0, 0, 0, .2);
+    zoom: 1;
+}
+
+/* FlexSlider Necessary Styles
+*********************************/
+.geodir_flexslider {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+.geodir_flexslider .geodir-slides > li {
+    display: none;
+    -webkit-backface-visibility: hidden;
+}
+
+/* Hide the slides before the JS is loaded. Avoids image jumping */
+.geodir_flexslider .geodir-slides img {
+    max-width: 100%;
+    display: block;
+    margin: 0 auto;
+    box-shadow: none !important;
+}
+
+.geodir-pauseplay span {
+    text-transform: capitalize;
+}
+
+/* Clearfix for the .geodir-slides element */
+.geodir-slides:after {
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+}
+
+html[xmlns] .geodir-slides {
+    display: block;
+}
+
+* html .geodir-slides {
+    height: 1%;
+}
+
+/* No JavaScript Fallback */
+/* If you are not using another script, such as Modernizr, make sure you
+ * include js that eliminates this class on page load */
+.no-js .geodir-slides > li:first-child {
+    display: block;
+}
+
+/* FlexSlider Default Theme
+*********************************/
+.geodir_flexslider {
+    margin: 0px;
+    background: #fff;
+    border: 0px solid #fff;
+    position: relative;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -o-border-radius: 4px;
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .2);
+    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, .2);
+    -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, .2);
+    -o-box-shadow: 0 1px 4px rgba(0, 0, 0, .2);
+    zoom: 1;
+}
+
+.geodir-viewport {
+    max-height: 2000px;
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    transition: all 1s ease;
+}
+
+.loading .geodir-viewport {
+    max-height: 300px;
+}
+
+.geodir_flexslider .geodir-slides {
+    zoom: 1;
+}
+
+.carousel li {
+    margin-right: 5px
+}
+
+/* Direction Nav */
+.geodir-direction-nav {
+    *height: 0;
+}
+
+.geodir-direction-nav a {
+    width: 25px;
+    height: 30px;
+    margin: -20px 0 0;
+    display: block;
+    background: url(../images/bg_direction_nav.png) no-repeat 0 0;
+    position: absolute;
+    top: 50%;
+    z-index: 10;
+    cursor: pointer;
+    text-indent: -9999px;
+    opacity: 0.5;
+    -webkit-transition: all .3s ease;
+}
+
+.geodir-direction-nav .geodir-next {
+    background-position: 100% 0;
+    right: 5px;
+}
+
+.geodir-direction-nav .geodir-prev {
+    left: 5px;
+}
+
+.geodir_flexslider:hover .geodir-next {
+    opacity: 0.8;
+    right: 5px;
+}
+
+.geodir_flexslider:hover .geodir-prev {
+    opacity: 0.8;
+    left: 5px;
+}
+
+.geodir_flexslider:hover .geodir-next:hover, .geodir_flexslider:hover .geodir-prev:hover {
+    opacity: 1;
+}
+
+.geodir-direction-nav .geodir-disabled {
+    opacity: .2 !important;
+    filter: alpha(opacity=30);
+    cursor: default;
+}
+
+/* Control Nav */
+.geodir-control-nav {
+    width: 100%;
+    position: absolute;
+    bottom: -40px;
+    text-align: center;
+    display: none;
+}
+
+.geodir-control-nav li {
+    margin: 0 6px;
+    display: inline-block;
+    zoom: 1;
+    *display: inline;
+}
+
+.geodir-control-paging li a {
+    width: 11px;
+    height: 11px;
+    display: block;
+    background: #666;
+    background: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    text-indent: -9999px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -o-border-radius: 20px;
+    border-radius: 20px;
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+.geodir-control-paging li a:hover {
+    background: #333;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.geodir-control-paging li a.geodir-active {
+    background: #000;
+    background: rgba(0, 0, 0, 0.9);
+    cursor: default;
+}
+
+.geodir-control-thumbs {
+    margin: 5px 0 0;
+    position: static;
+    overflow: hidden;
+}
+
+.geodir-control-thumbs li {
+    width: 25%;
+    float: left;
+    margin: 0;
+}
+
+.geodir-control-thumbs img {
+    width: 100%;
+    display: block;
+    opacity: .7;
+    cursor: pointer;
+}
+
+.geodir-control-thumbs img:hover {
+    opacity: 1;
+}
+
+.geodir-control-thumbs .geodir-active {
+    opacity: 1;
+    cursor: default;
+}
+
+#geodir_slider {
+    margin: 0 0 -3px !important;
+}
+
+#geodir_carousel li {
+    margin-right: 5px;
+    border: 1px solid #CCCCCC;
+}
+
+#geodir_carousel img {
+    display: block;
+    opacity: .5;
+    cursor: pointer;
+}
+
+#geodir_carousel img:hover {
+    opacity: 1;
+}
+
+#geodir_carousel .geodir-active-slide img {
+    opacity: 1;
+    cursor: default;
+}
+
+#geodir_widget_carousel li img {
+    display: block;
+    opacity: .5;
+    cursor: pointer;
+}
+
+#geodir_widget_carousel li.geodir-active-slide img {
+    opacity: 1;
+    cursor: default;
+}
+
+/* added to fix geodir flexsldier with genesis flexslider by avoid genesis flexslider script */
+.flex-direction-nav li .flex-next {
+    background-position: -52px 0;
+    right: -60px;
+}
+
+.flex-direction-nav li .flex-next:hover {
+    background-position: -52px -50px;
+}
+
+.flex-direction-nav li .flex-prev {
+    left: -60px;
+}
+
+.flex-direction-nav li .flex-prev:hover {
+    background-position: 0 -50px;
+}
+
+.flex-container a:flex-active, .flexslider a:flex-active {
+    outline: none;
+}
+
+.flex-control-nav li a.flex-active {
+    background-position: 0 -26px;
+    cursor: default;
+}
+
+@media screen and (max-width: 860px) {
+    .geodir-direction-nav .geodir-prev {
+        opacity: 1;
+        left: 0;
+    }
+
+    .geodir-direction-nav .geodir-next {
+        opacity: 1;
+        right: 0;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #geodir_slider .geodir-control-nav {
+        bottom: 5px;
+    }
+
+    #geodir_carousel {
+        display: none;
+    }
+}
