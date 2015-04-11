@@ -2,6 +2,10 @@ v1.4.4
 In CSV upload file new column post_status added to set listing status - CHANGED
 term description sometimes not showing - FIXED
 Listing title displaying sanitized for title attribute - ADDED
+CSV upload not dealing with line breaks in fields - FIXED
+ADDRESS_MSG can't be translated because it contains HTML tags - FIXED
+CSS files minified and added to one file for frontend - CHANGED
+JS files minified for the frontend - CHANGED
 
 v1.4.3
 In the map child categories should be checked/unchecked when parent category is checked/unchecked - FIXED
