@@ -1,6 +1,7 @@
 v1.4.4
 In CSV upload file new column post_status added to set listing status - CHANGED
 term description sometimes not showing - FIXED
+Listing title displaying sanitized for title attribute - ADDED
 
 v1.4.3
 In the map child categories should be checked/unchecked when parent category is checked/unchecked - FIXED

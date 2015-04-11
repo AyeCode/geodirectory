@@ -1267,7 +1267,7 @@ function geodir_action_details_micordata()
     <span class="org"><?php the_title();?></span>
     <span class="role"><?php _e('Admin', GEODIRECTORY_TEXTDOMAIN)?></span>
 </span>
-        <meta itemprop="name" content="<?php the_title();?>"/>
+        <meta itemprop="name" content="<?php the_title_attribute();?>"/>
 
         <meta itemprop="url" content="<?php echo $c_url;?>"/>
         <?php if ($post->geodir_contact) {
