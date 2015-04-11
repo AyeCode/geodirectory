@@ -116,50 +116,7 @@
 gd_infowindow = new google.maps.InfoWindow();
 
 jQuery(document).ready(function () {
-    // disable gd modal
-    var disable_gd_modal = typeof geodir_var.geodir_gd_modal != 'undefined' && parseInt(geodir_var.geodir_gd_modal) == 1 ? true : false;
-    if (!disable_gd_modal) {
-        jQuery('#geodir-post-gallery a').lightBox({
-            overlayOpacity: 0.5,
-            imageLoading: geodir_var.geodir_plugin_url + '/geodirectory-assets/images/lightbox-ico-loading.gif',
-            imageBtnNext: geodir_var.geodir_plugin_url + '/geodirectory-assets/images/lightbox-btn-next.gif',
-            imageBtnPrev: geodir_var.geodir_plugin_url + '/geodirectory-assets/images/lightbox-btn-prev.gif',
-            imageBtnClose: geodir_var.geodir_plugin_url + '/geodirectory-assets/images/lightbox-btn-close.gif',
-            imageBlank: geodir_var.geodir_plugin_url + '/geodirectory-assets/images/lightbox-blank.gif'
-        });
-    }
-    jQuery('#geodir_carousel').flexslider({
-        animation: "slide",
-        namespace: "geodir-",
-        selector: ".geodir-slides > li",
-        controlNav: false,
-        directionNav: false,
-        animationLoop: false,
-        slideshow: false,
-        itemWidth: 75,
-        itemMargin: 5,
-        asNavFor: '#geodir_slider',
-        rtl: parseInt(geodir_var.is_rtl) == 1 ? true : false/* fix rtl issue */
-    });
-    jQuery('#geodir_slider').flexslider({
-        animation: "slide",
-        selector: ".geodir-slides > li",
-        namespace: "geodir-",
-        controlNav: true,
-        animationLoop: true,
-        slideshow: true,
-        sync: "#geodir_carousel",
-        start: function (slider) {
-            jQuery('.geodir_flex-loader').hide();
-            jQuery('#geodir_slider').css({
-                'visibility': 'visible'
-            });
-            jQuery('#geodir_carousel').css({
-                'visibility': 'visible'
-            });
-        },
-        rtl: parseInt(geodir_var.is_rtl) == 1 ? true : false/* fix rtl issue */
-    });
+
     // Chosen selects
     if (jQuery("select.chosen_select").length > 0) {
         jQuery("select.chosen_select").chosen({

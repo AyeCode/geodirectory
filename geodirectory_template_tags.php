@@ -10,6 +10,10 @@ add_action('wp_print_scripts', 'geodir_core_dequeue_script', 100);
 
 function geodir_templates_scripts()
 {
+    $is_detail_page = false;
+    if(is_single() && geodir_is_geodir_page()) {
+        $is_detail_page = true;
+    }
 
     wp_enqueue_script('jquery');
 
@@ -19,12 +23,14 @@ function geodir_templates_scripts()
     //if(get_option('geodir_enqueue_flexslider_script')==1)
     {
         wp_register_script('geodirectory-jquery-flexslider-js', geodir_plugin_url() . '/geodirectory-assets/js/jquery.flexslider.js', array(), GEODIRECTORY_VERSION);
-        wp_enqueue_script('geodirectory-jquery-flexslider-js');
+        if($is_detail_page){wp_enqueue_script('geodirectory-jquery-flexslider-js');}
 
     }
 
     wp_register_script('geodirectory-lightbox-jquery', geodir_plugin_url() . '/geodirectory-assets/js/jquery.lightbox-0.5.js', array(), GEODIRECTORY_VERSION);
-    wp_enqueue_script('geodirectory-lightbox-jquery');
+    if($is_detail_page){wp_enqueue_script('geodirectory-lightbox-jquery');}
+
+
 
     wp_register_script('geodirectory-jquery-simplemodal', geodir_plugin_url() . '/geodirectory-assets/js/jquery.simplemodal.js', array(), GEODIRECTORY_VERSION);
     wp_enqueue_script('geodirectory-jquery-simplemodal');
@@ -60,6 +66,8 @@ function geodir_templates_scripts()
 
 
     if (is_page() && geodir_is_page('add-listing')) {
+
+
 
         // SCRIPT FOR UPLOAD
         wp_enqueue_script('plupload-all');
@@ -119,7 +127,9 @@ function geodir_templates_scripts()
 
 
     wp_register_script('geodirectory-post-custom-js', geodir_plugin_url() . '/geodirectory-assets/js/post.custom.js', array(), GEODIRECTORY_VERSION);
-    wp_enqueue_script('geodirectory-post-custom-js');
+    if($is_detail_page){wp_enqueue_script('geodirectory-post-custom-js');}
+
+
 
     wp_register_script('geodirectory-script', geodir_plugin_url() . '/geodirectory-assets/js/geodirectory.js', array(), GEODIRECTORY_VERSION);
     wp_enqueue_script('geodirectory-script');
@@ -164,6 +174,12 @@ function geodir_footer_scripts()
 
 function geodir_templates_styles()
 {
+
+    $is_detail_page = false;
+    if(is_single() && geodir_is_geodir_page()) {
+        $is_detail_page = true;
+    }
+
     wp_register_style('geodirectory-frontend-style', geodir_plugin_url() . '/geodirectory-assets/css/style.css', array(), GEODIRECTORY_VERSION);
     wp_enqueue_style('geodirectory-frontend-style');
 
@@ -187,7 +203,7 @@ function geodir_templates_styles()
     wp_enqueue_style('geodirectory-pluplodar-css');
 
     wp_register_style('geodirectory-lightbox-css', geodir_plugin_url() . '/geodirectory-assets/css/jquery.lightbox-0.5.css', array(), GEODIRECTORY_VERSION);
-    wp_enqueue_style('geodirectory-lightbox-css');
+    if($is_detail_page){wp_enqueue_style('geodirectory-lightbox-css');}
 
 
     wp_register_style('geodir-rating-style', geodir_plugin_url() . '/geodirectory-assets/css/jRating.jquery.css', array(), GEODIRECTORY_VERSION);
@@ -204,6 +220,8 @@ function geodir_templates_styles()
 
     wp_register_style('geodirectory-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css', array(), GEODIRECTORY_VERSION);
     wp_enqueue_style('geodirectory-font-awesome');
+
+
 }
 
 function geodir_get_sidebar()

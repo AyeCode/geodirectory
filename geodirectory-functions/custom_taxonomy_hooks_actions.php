@@ -399,52 +399,53 @@ function geodir_set_location_var_in_session_in_core($wp)
 
             $wp->query_vars['post_type'] = $geodir_post_type;
 
-            // now check if last term is a post of geodirectory post types
-            $geodir_post = get_posts(array(
-                'name' => $geodir_last_term,
-                'posts_per_page' => 1,
-                'post_type' => $geodir_post_type,
 
-
-            ));
-
-            if (empty($geodir_post)) {
+                // now check if last term is a post of geodirectory post types
                 $geodir_post = get_posts(array(
                     'name' => $geodir_last_term,
                     'posts_per_page' => 1,
                     'post_type' => $geodir_post_type,
-                    'post_status' => 'draft',
-                    'suppress_filters' => false,
+
 
                 ));
-            }
 
-            if (!empty($geodir_post)) {
+                if (empty($geodir_post)) {
+                    $geodir_post = get_posts(array(
+                        'name' => $geodir_last_term,
+                        'posts_per_page' => 1,
+                        'post_type' => $geodir_post_type,
+                        'post_status' => 'draft',
+                        'suppress_filters' => false,
 
-                if ($geodir_post[0]->post_status != 'publish') {
-                    foreach ($wp->query_vars as $key => $vars) {
-                        unset($wp->query_vars[$key]);
-                    }
-                    $wp->query_vars['error'] = '404';
-                    // set it as 404 if post exists but its status is not published yet
-
-                } else {
-                    //$wp->query_vars[$geodir_taxonomy] = str_replace( '/'.$geodir_last_term , ''  , $geodir_term);
-                    $wp->query_vars[$geodir_post_type] = $geodir_last_term;
-                    $wp->query_vars['name'] = $geodir_last_term;
-
+                    ));
                 }
 
+                if (!empty($geodir_post)) {
 
-                $geodir_term = str_replace('/' . $geodir_last_term, '', $geodir_term, $post_title_replace_count);
-                if (!$post_title_replace_count)
-                    $geodir_term = str_replace($geodir_last_term, '', $geodir_term, $post_title_replace_count);
-                $geodir_terms = explode('/', $geodir_term);
-                $geodir_last_term = end($geodir_terms);
+                    if ($geodir_post[0]->post_status != 'publish') {
+                        foreach ($wp->query_vars as $key => $vars) {
+                            unset($wp->query_vars[$key]);
+                        }
+                        $wp->query_vars['error'] = '404';
+                        // set it as 404 if post exists but its status is not published yet
 
-                $geodir_set_location_session = false;
-                //return ;
-            }
+                    } else {
+                        //$wp->query_vars[$geodir_taxonomy] = str_replace( '/'.$geodir_last_term , ''  , $geodir_term);
+                        $wp->query_vars[$geodir_post_type] = $geodir_last_term;
+                        $wp->query_vars['name'] = $geodir_last_term;
+
+                    }
+
+
+                    $geodir_term = str_replace('/' . $geodir_last_term, '', $geodir_term, $post_title_replace_count);
+                    if (!$post_title_replace_count)
+                        $geodir_term = str_replace($geodir_last_term, '', $geodir_term, $post_title_replace_count);
+                    $geodir_terms = explode('/', $geodir_term);
+                    $geodir_last_term = end($geodir_terms);
+
+                    $geodir_set_location_session = false;
+                    //return ;
+                }
 
             $geodir_location_terms = '';
             // if last term is not a post then check if last term is a term of the specific texonomy or not

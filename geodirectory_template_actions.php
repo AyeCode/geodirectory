@@ -1495,7 +1495,9 @@ add_action('geodir_listings_page_description', 'geodir_action_listings_descripti
  */
 function geodir_action_listings_description()
 {
-    global $current_term;
+    global $wp_query;
+    $current_term = $wp_query->get_queried_object();
+
     $gd_post_type = geodir_get_current_posttype();
     if (isset($current_term->term_id) && $current_term->term_id != '') {
 
