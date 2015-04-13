@@ -1322,17 +1322,25 @@ function geodir_ajax_import_csv()
 
         if (!empty($wp_filetype) && isset($wp_filetype['ext']) && strtolower($wp_filetype['ext']) == 'csv') {
             $return['error'] = NULL;
-            $response = wp_remote_get($uploadedFile, array('sslverify' => false, 'timeout' => 360000));
 
             $return['rows'] = 0;
 
-            if (!is_wp_error($response) && 200 == wp_remote_retrieve_response_code($response)) {
-                $file_contents = wp_remote_retrieve_body($response);
-                $file_contents = trim($file_contents);
-                $file = explode(PHP_EOL, $file_contents);
 
-                $return['rows'] = (!empty($file) && count($file) > 1) && strpos($file_contents, PHP_EOL) !== false ? count($file) - 1 : 0;
-            }
+
+                if (($handle = fopen($target_path, "r")) !== FALSE) {
+                    while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                        if(is_array($data) && !empty($data)) {
+                            $file[] = '"' . implode('","', $data) . '"';
+                        }
+                    }
+                    fclose($handle);
+                    $file = $file;
+                }
+
+
+
+                $return['rows'] = (!empty($file) && count($file) > 1) ? count($file) - 1 : 0;
+
 
             if (!$return['rows'] > 0) {
                 $return['error'] = __('No data found in csv file.', GEODIRECTORY_TEXTDOMAIN);
