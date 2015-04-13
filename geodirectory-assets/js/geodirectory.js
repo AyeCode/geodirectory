@@ -113,9 +113,11 @@
     }), K.disable = K.nativeSupport ? e : i, K.enable = K.nativeSupport ? e : l
 }(this);
 
-gd_infowindow = new google.maps.InfoWindow();
+
 
 jQuery(document).ready(function () {
+
+    gd_infowindow = new google.maps.InfoWindow();
 
     // Chosen selects
     if (jQuery("select.chosen_select").length > 0) {

@@ -157,7 +157,7 @@ function geodir_templates_scripts()
 
 
 
-    wp_register_script('geodir-jRating-js', geodir_plugin_url() . '/geodirectory-assets/js/jRating.jquery.min.js#asyncload', array(), GEODIRECTORY_VERSION,true);
+    wp_register_script('geodir-jRating-js', geodir_plugin_url() . '/geodirectory-assets/js/jRating.jquery.min.js', array(), GEODIRECTORY_VERSION,true);
     wp_enqueue_script('geodir-jRating-js');
 
     wp_register_script('geodir-on-document-load', geodir_plugin_url() . '/geodirectory-assets/js/on_document_load.js#asyncload', array(), GEODIRECTORY_VERSION,true);
