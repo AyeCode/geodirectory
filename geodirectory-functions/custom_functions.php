@@ -740,13 +740,15 @@ function geodir_related_posts_display($request)
 
 }
 
-add_action('wp_footer', 'geodir_category_count_script', 10);
+
+//add_action('wp_footer', 'geodir_category_count_script', 10);
 /**
  * Adds the category post count javascript code
  *
  * @since 1.0.0
  * @package GeoDirectory
  * @global string $geodir_post_category_str The geodirectory post category.
+ * @depreciated No longer needed.
  */
 function geodir_category_count_script()
 {
