@@ -7,6 +7,7 @@ ADDRESS_MSG can't be translated because it contains HTML tags - FIXED
 CSS files minified and added to one file for frontend - CHANGED
 JS files minified for the frontend - CHANGED
 In Best of widget listings "Best of" text not translatable - FIXED
+Update for Avada 3.8+ compatibility that removes the need to edit and have the header.php in child theme - CHANGED
 
 v1.4.3
 In the map child categories should be checked/unchecked when parent category is checked/unchecked - FIXED

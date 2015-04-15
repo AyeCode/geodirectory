@@ -4,8 +4,9 @@
 add_filter('geodir_breadcrumb', 'gd_strip_breadcrumb_wrappers');
 function gd_strip_breadcrumb_wrappers($breadcrumb)
 {
-    $breadcrumb = str_replace('<div class="geodir-breadcrumb clearfix"><ul id="breadcrumbs">', '<ul class="breadcrumbs">', $breadcrumb);
-    $breadcrumb = str_replace('</ul></div>', '</ul>', $breadcrumb);
+    $breadcrumb = str_replace(array("<li>","</li>"), "", $breadcrumb);
+    $breadcrumb = str_replace('<div class="geodir-breadcrumb clearfix"><ul id="breadcrumbs">', '<ul class="fusion-breadcrumbs"><li>', $breadcrumb);
+    $breadcrumb = str_replace('</li></ul></div>', '</ul>', $breadcrumb);
     return $breadcrumb;
 }
 
@@ -18,15 +19,16 @@ function gd_change_breadcrumb_separator($separator)
 }
 
 // NEW TITLE BAR FUNCTIONS FOR GD PAGES
-add_filter('avada_current_page_title_bar_change', 'gd_avada_current_page_title_bar_change', 10, 1);
 
-function gd_avada_current_page_title_bar_change($val)
+add_action('avada_override_current_page_title_bar','gd_avada_current_page_title_bar_change');
+function gd_avada_current_page_title_bar_change($c_pageID)
 {
     if (geodir_is_geodir_page()) {
-        add_action('avada_replace_page_title', 'gd_avada_current_page_title_bar', 10);
-        return true;
+        gd_avada_current_page_title_bar();
+    }else{
+        avada_current_page_title_bar( $c_pageID );
     }
-    return $val;
+
 }
 
 function gd_avada_current_page_title_bar()
