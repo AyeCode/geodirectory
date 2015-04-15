@@ -712,7 +712,7 @@ function geodir_theme_compatibility_setting_page()
 
             <?php if (str_replace("_custom", "", get_option('gd_theme_compat')) == 'Avada') { ?>
                 <div id="gd-compat-warnings">
-                    <h3><?php _e('Avada theme has no hooks for compatibility, because of this you must add two small changes to the header.php. <a href="http://docs.wpgeodirectory.com/avada-compatibility-header-php/" target="_blank">Instructions</a>', GEODIRECTORY_TEXTDOMAIN); ?></h3>
+                    <h3><?php _e('Since Avada 3.8+ they have added hooks for compatibility for GeoDirectory so the header.php modification is no longer required. <a href="http://docs.wpgeodirectory.com/avada-compatibility-header-php/" target="_blank">See here</a>', GEODIRECTORY_TEXTDOMAIN); ?></h3>
                 </div>
             <?php }?>
 
