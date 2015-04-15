@@ -1,14 +1,34 @@
 <?php
-
+/**
+ * Contains all function for filtering listing.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
+ 
+/**
+ * Starts session if not started.
+ *
+ * @since 1.0.0
+ *
+ * @global bool $geodir_add_location_url If true it will add location name in url.
+ */
 function geodir_session_start()
 {
     if (!session_id()) session_start();
     global $geodir_add_location_url;
 
     $geodir_add_location_url = NULL;
-
 }
 
+/**
+ * Set geodir page variable in WP_Query instance.
+ *
+ * @since 1.0.0
+ *
+ * @param WP_Query The WP_Query instance.
+ * @return WP_Query
+ */
 function geodir_modified_query($query)
 {
     if ($query->is_main_query() && (
@@ -25,9 +45,25 @@ function geodir_modified_query($query)
     return $query;
 }
 
+/**
+ * Sets the location request parameters.
+ *
+ * @since 1.0.0
+ *
+ * @global object $wp_query The wordpress query object.
+ * @global object $wpdb WordPress Database object.
+ * @global string $geodir_post_type The post type.
+ * @global string $table Listing table name.
+ * @global float $dist Distance value to be filtered.
+ * @global string $mylat Current latitude.
+ * @global string $mylon Current longitude.
+ * @global string $s Search keyword.
+ * @global string $snear Nearest location to search.
+ * @global string $s_A Extra parameters.
+ * @global string $s_SA Extra parameters.
+ */
 function set_listing_request()
 {
-
     global $wp_query, $wpdb, $geodir_post_type, $table, $dist, $mylat, $mylon, $s, $snear, $s, $s_A, $s_SA;
 
     if (get_query_var('ignore_sticky_posts')) {
