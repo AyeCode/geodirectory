@@ -6,6 +6,7 @@ CSV upload not dealing with line breaks in fields - FIXED
 ADDRESS_MSG can't be translated because it contains HTML tags - FIXED
 CSS files minified and added to one file for frontend - CHANGED
 JS files minified for the frontend - CHANGED
+In Best of widget listings "Best of" text not translatable - FIXED
 
 v1.4.3
 In the map child categories should be checked/unchecked when parent category is checked/unchecked - FIXED
