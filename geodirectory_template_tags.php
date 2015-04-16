@@ -86,10 +86,11 @@ function geodir_templates_scripts()
     wp_register_script('geodirectory-choose-ajax', geodir_plugin_url() . '/geodirectory-assets/js/ajax-chosen.min.js', array(), GEODIRECTORY_VERSION);
     wp_enqueue_script('geodirectory-choose-ajax');
 
+    wp_enqueue_script('geodirectory-jquery-ui-timepicker-js', geodir_plugin_url() . '/geodirectory-assets/ui/jquery.ui.timepicker.min.js#asyncload', array('jquery-ui-datepicker', 'jquery-ui-slider', 'jquery-effects-core', 'jquery-effects-slide'), '', true);
+
 
     if (is_page() && geodir_is_page('add-listing')) {
 
-        wp_enqueue_script('geodirectory-jquery-ui-timepicker-js', geodir_plugin_url() . '/geodirectory-assets/ui/jquery.ui.timepicker.min.js#asyncload', array('jquery-ui-datepicker', 'jquery-ui-slider', 'jquery-effects-core', 'jquery-effects-slide'), '', true);
 
 
 
