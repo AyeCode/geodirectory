@@ -1,5 +1,20 @@
 <?php
+/**
+ * Google analystics related functions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 
+/**
+ * Formats seconds into to h:m:s.
+ *
+ * @since 1.0.0
+ *
+ * @param int  $sec The number of seconds.
+ * @param bool $padHours Whether add leading zero for less than 10 hours. Default false.
+ * @return string h:m:s format.
+ */
 function geodir_sec2hms($sec, $padHours = false)
 {
     // holds formatted string
@@ -32,10 +47,24 @@ function geodir_sec2hms($sec, $padHours = false)
     return $hms;
 }
 
+/**
+ * Get the google analytics via api.
+ *
+ * @since 1.0.0
+ *
+ * @param string $page Page url to use in analytics filters.
+ * @param bool   $ga_start The start date of the data to include in YYYY-MM-DD format.
+ * @param bool   $ga_end The end date of the data to include in YYYY-MM-DD format.
+ * @return string Html text content.
+ */
 function geodir_getGoogleAnalytics($page, $ga_start, $ga_end)
 {
-
-    include_once('analytics_api.php');
+	/**
+	 * Contains google analystics api function.
+	 *
+	 * @since 1.0.0
+	 */
+	include_once('analytics_api.php');
 
     // enter your login, password and id into the variables below to try it out
     $login = get_option('geodir_ga_user');

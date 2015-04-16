@@ -1,15 +1,16 @@
 <?php
 /**
- * Geodirectory Custom Post Types/Taxonomies
+ * Geodirectory custom post types/taxonomies related functions.
  *
- * Inits custom post types and taxonomies
- *
- * @package        GeoDirectory
- * @category    Core
- * @author        WPGeoDirectory
+ * @since 1.0.0
+ * @package GeoDirectory
  */
-global $flush_rewrite_rules;
 
+/**
+ * Register the texonomies.
+ *
+ * @since 1.0.0
+ */
 function geodir_register_taxonomies()
 {
     $taxonomies = array();
@@ -40,11 +41,18 @@ function geodir_register_taxonomies()
 
 /**
  * Get available custom posttypes and taxonomies and register them.
- **/
+ */
 _x('places', 'URL slug', GEODIRECTORY_TEXTDOMAIN);
-function geodir_register_post_types()
-{
 
+/**
+ * Register the post types.
+ *
+ * @since 1.0.0
+ *
+ * @global array $wp_post_types List of post types.
+ */
+function geodir_register_post_types() 
+{
     global $wp_post_types;
 
     $post_types = array();
@@ -76,7 +84,15 @@ function geodir_register_post_types()
     endif;
 }
 
-
+/**
+ * Filters arguments array for post type.
+ *
+ * @since 1.0.0
+ *
+ * @param  array $args Array or string of arguments for registering a post type.
+ * @param  string $post_type Post type name
+ * @return array Array or string of arguments.
+ */
 function geodir_post_type_args_modify($args, $post_type)
 {
     $geodir_location_prefix = isset($_REQUEST['geodir_location_prefix']) ? trim($_REQUEST['geodir_location_prefix']) : get_option('geodir_location_prefix');
@@ -147,18 +163,30 @@ function geodir_post_type_args_modify($args, $post_type)
     return $args;
 }
 
-//Give everyone else a chance to set rules etc.
-
+/**
+ * Remove rewrite rules and then recreate rewrite rules.
+ *
+ * @see WP_Rewrite::flush_rules()
+ * @since 1.0.0
+ *
+ * @global WP_Rewrite $wp_rewrite Used for default feeds.
+ */
 function geodir_flush_rewrite_rules()
 {
     global $wp_rewrite;
     $wp_rewrite->flush_rules(false);
 }
 
-
+/**
+ * Get the full set of generated rewrite rules.
+ *
+ * @since 1.0.0
+ *
+ * @param  array $rules The compiled array of rewrite rules.
+ * @return array Rewrite rules.
+ */
 function geodir_listing_rewrite_rules($rules)
 {
-
     $newrules = array();
     $taxonomies = array();
     $taxonomies = get_option('geodir_taxonomies');
@@ -206,7 +234,16 @@ function geodir_listing_rewrite_rules($rules)
     return $rules;
 }
 
-
+/**
+ * Get the list of rewrite rules formatted for output to an .htaccess file.
+ *
+ * @since 1.0.0
+ *
+ * @global wpdb $wpdb WordPress database abstraction object.
+ *
+ * @param string $rules mod_rewrite Rewrite rules formatted for .htaccess.
+ * @return array Rewrite rules.
+ */
 function geodir_htaccess_contents($rules)
 {
     global $wpdb;
@@ -222,8 +259,16 @@ Redirect 301 /location/ /$location_prefix/
 EOD;
     return $my_content . $rules;
 }
-
 add_filter('mod_rewrite_rules', 'geodir_htaccess_contents');
+
+/**
+ * Add the location variables to the query variables.
+ *
+ * @since 1.0.0
+ *
+ * @param array $public_query_vars The array of query variables.
+ * @return array Query variables.
+ */
 function geodir_add_location_var($public_query_vars)
 {
     $public_query_vars[] = 'gd_country';
@@ -232,13 +277,30 @@ function geodir_add_location_var($public_query_vars)
     return $public_query_vars;
 }
 
+/**
+ * Add the variable to the query variables to indentify geodir page.
+ *
+ * @since 1.0.0
+ *
+ * @param array $public_query_vars The array of query variables.
+ * @return array Query variables.
+ */
 function geodir_add_geodir_page_var($public_query_vars)
 {
     $public_query_vars[] = 'gd_is_geodir_page';
     return $public_query_vars;
 }
 
-
+/**
+ * Add the page id to the query variables.
+ *
+ * @since 1.0.0
+ *
+ * @global WP_Query $wp_query WordPress Query object.
+ *
+ * @param array $public_query_vars The array of query variables.
+ * @return array WordPress Query object.
+ */
 function geodir_add_page_id_in_query_var()
 {
     global $wp_query;
@@ -257,15 +319,20 @@ function geodir_add_page_id_in_query_var()
     return $wp_query;
 }
 
-
+/**
+ * Add the location variables in session.
+ *
+ * @since 1.0.0
+ *
+ * @param object $wp The WordPress object.
+ */
 function geodir_set_location_var_in_session_in_core($wp)
 {
-
-//$wp->geodir_query_vars = $wp->query_vars ;
-// this code will determine when a user wants to switch location 
-
-// Query Vars will have page_id parameter
-// check if query var has page_id and that page id is location page 
+	//$wp->geodir_query_vars = $wp->query_vars ;
+	// this code will determine when a user wants to switch location 
+	
+	// Query Vars will have page_id parameter
+	// check if query var has page_id and that page id is location page
     geodir_set_is_geodir_page($wp);
     if (!get_option('geodir_set_as_home')) {
 
@@ -360,9 +427,6 @@ function geodir_set_location_var_in_session_in_core($wp)
             $post_type_array = geodir_get_posttypes();
             if (in_array($requested_post_type, $post_type_array)) {
                 // now u can apply geodirectory related manipulation.
-
-                //echo "good: it is geodirectory post type<br />" ;
-                //print_r($wp->query_vars) ;
             }
         }
     } else {
@@ -398,7 +462,6 @@ function geodir_set_location_var_in_session_in_core($wp)
         {
 
             $wp->query_vars['post_type'] = $geodir_post_type;
-
 
                 // now check if last term is a post of geodirectory post types
                 $geodir_post = get_posts(array(
@@ -556,9 +619,7 @@ function geodir_set_location_var_in_session_in_core($wp)
                     }
                     $wp->query_vars['error'] = '404';
                 }
-
             }
-
         }
     }
 
@@ -586,28 +647,20 @@ function geodir_set_location_var_in_session_in_core($wp)
 
         if (isset($wp->query_vars['gd_city']))
             $wp->query_vars['gd_city'] = '';
-
     }
-
-
-    /**/
-    //print_r($_SESSION);
-    /*
-        echo "<pre>" ;
-        print_r($wp) ;
-        echo "</pre>" ;
-        exit();
-            */
 }
 
 /**
- * Ragister Custom Post Status
- **/
-// This will add a new post status in the system called: Virtual
-
+ * Ragister a custom post status.
+ *
+ * This will add a new post status in the system called: Virtual.
+ *
+ * @since 1.0.0
+ *
+ * @param object $wp The WordPress object.
+ */
 function geodir_custom_post_status()
 {
-
     // Vertual Page Status
     register_post_status('virtual', array(
         'label' => _x('Virtual', 'page', GEODIRECTORY_TEXTDOMAIN),
@@ -628,21 +681,45 @@ function geodir_custom_post_status()
     do_action('geodir_custom_post_status');
 }
 
-
+/**
+ * Retrieve the term link.
+ *
+ * @since 1.0.0
+ *
+ * @param string $termlink Term link URL.
+ * @param object $term Term object.
+ * @param string $taxonomy Taxonomy slug.
+ * $return string The term link
+ */
 function geodir_get_term_link($termlink, $term, $taxonomy)
 {
     return geodir_term_link($termlink, $term, $taxonomy); // taxonomy_functions.php
 }
 
-
+/**
+ * Retrieve the post type archive permalink.
+ *
+ * @since 1.0.0
+ *
+ * @param string $link The post type archive permalink.
+ * @param string $post_type Post type name.
+ * @param string The post type archive permalink.
+ */
 function geodir_get_posttype_link($link, $post_type)
 {
     return geodir_posttype_link($link, $post_type); // taxonomy_functions.php
 }
 
 /**
- * Exclude Virtual Pages From Pages List
- **/
+ * Retrieve the array of pages to exclude from the pages list.
+ *
+ * This will exclude pages from the pages list which has post_status virtual.
+ *
+ * @since 1.0.0
+ *
+ * @param array $exclude_array An array of page IDs to exclude.
+ * @param array $An array of page IDs.
+ */
 function exclude_from_wp_list_pages($exclude_array)
 {
     $pages_ids = array();
@@ -655,14 +732,29 @@ function exclude_from_wp_list_pages($exclude_array)
 }
 
 /**
- * Exclude Virtual Pages From Admin List
- **/
+ * Exclude the virtual pages from the admin list.
+ *
+ * @since 1.0.0
+ *
+ * @param WP_Query $query The WP_Query instance.
+ * @return WP_Query instance.
+ */
 function geodir_exclude_page($query)
 {
     add_filter('posts_where', 'geodir_exclude_page_where', 100);
     return $query;
 }
 
+/**
+ * Exclude the virtual pages from page list.
+ *
+ * @since 1.0.0
+ *
+ * @global wpdb $wpdb WordPress database abstraction object.
+ *
+ * @param string $where The SQL query where clause.
+ * @return string Query where clause.
+ */
 function geodir_exclude_page_where($where)
 {
     global $wpdb;

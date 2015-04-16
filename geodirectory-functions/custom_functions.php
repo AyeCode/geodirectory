@@ -465,8 +465,16 @@ function geodir_get_sort_options($post_type)
  */
 function geodir_display_sort_options()
 {
-
     global $wp_query;
+	
+	/**
+	 * On search pages there should be no sort options, sorting is done by search criteria.
+	 *
+	 * @since 1.4.4
+	 */
+	if ( is_search() ) {
+		return;
+	}
 
     $sort_by = '';
 
