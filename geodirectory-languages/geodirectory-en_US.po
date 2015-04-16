@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GeoDirectory 1.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-11 19:19-0000\n"
-"PO-Revision-Date: 2015-04-11 19:19-0000\n"
+"POT-Creation-Date: 2015-04-16 11:36-0000\n"
+"PO-Revision-Date: 2015-04-16 11:36-0000\n"
 "Last-Translator: \n"
 "Language-Team: GeoDirectory <info@wpgeodirectory.com>\n"
 "Language: en_US\n"
@@ -287,7 +287,7 @@ msgstr ""
 #: language.php:61 geodirectory-admin/admin_db_install.php:707
 #: geodirectory-admin/admin_db_install.php:709
 #: geodirectory-admin/admin_db_install.php:715
-#: geodirectory-functions/custom_functions.php:1046
+#: geodirectory-functions/custom_functions.php:1056
 msgid "Special Offers"
 msgstr ""
 
@@ -604,7 +604,7 @@ msgid "Comments"
 msgstr ""
 
 #: language.php:153 geodirectory-admin/admin_hooks_actions.php:978
-#: geodirectory-functions/custom_functions.php:1060
+#: geodirectory-functions/custom_functions.php:1070
 msgid "Reviews"
 msgstr ""
 
@@ -2095,7 +2095,7 @@ msgid "GD > Social Like"
 msgstr ""
 
 #: geodirectory_widgets.php:293
-#: geodirectory-functions/custom_functions.php:1717
+#: geodirectory-functions/custom_functions.php:1727
 msgid "Tweet"
 msgstr ""
 
@@ -2175,41 +2175,36 @@ msgid ""
 "This is a search widget to show advance search for gedodirectory listings."
 msgstr ""
 
-#: geodirectory_template_tags.php:104
+#: geodirectory_template_tags.php:129
 #: geodirectory-admin/admin_functions.php:142
 msgid "Allowed Files"
 msgstr ""
 
-#: geodirectory_template_tags.php:137
-#: geodirectory-admin/admin_functions.php:194
-msgid "?geodir_ajax=true"
-msgstr ""
-
-#: geodirectory_template_tags.php:438 geodirectory_template_tags.php:439
+#: geodirectory_template_tags.php:460 geodirectory_template_tags.php:461
 msgid "In:"
 msgstr ""
 
-#: geodirectory_template_tags.php:464
+#: geodirectory_template_tags.php:486
 msgid "Search was not successful for the following reason:"
 msgstr ""
 
-#: geodirectory_template_tags.php:495
+#: geodirectory_template_tags.php:517
 msgid "Unable to find your location"
 msgstr ""
 
-#: geodirectory_template_tags.php:498
+#: geodirectory_template_tags.php:520
 msgid "Permission denied in finding your location"
 msgstr ""
 
-#: geodirectory_template_tags.php:501
+#: geodirectory_template_tags.php:523
 msgid "Your location is currently unknown"
 msgstr ""
 
-#: geodirectory_template_tags.php:504
+#: geodirectory_template_tags.php:526
 msgid "Attempt to find location took too long"
 msgstr ""
 
-#: geodirectory_template_tags.php:507
+#: geodirectory_template_tags.php:529
 msgid "Location detection not supported in browser"
 msgstr ""
 
@@ -2949,7 +2944,7 @@ msgstr ""
 #: geodirectory-admin/admin_db_install.php:694
 #: geodirectory-admin/admin_db_install.php:696
 #: geodirectory-admin/admin_db_install.php:702
-#: geodirectory-functions/custom_functions.php:1039
+#: geodirectory-functions/custom_functions.php:1049
 msgid "Video"
 msgstr ""
 
@@ -2983,6 +2978,10 @@ msgstr ""
 #: geodirectory-admin/admin_install.php:227
 #: geodirectory-admin/admin_install.php:236
 msgid "Latest Places"
+msgstr ""
+
+#: geodirectory-admin/admin_functions.php:194
+msgid "?geodir_ajax=true"
 msgstr ""
 
 #: geodirectory-admin/admin_functions.php:213
@@ -3090,7 +3089,7 @@ msgstr ""
 #: geodirectory-admin/admin_functions.php:861
 #: geodirectory-admin/option-pages/design_settings_array.php:583
 #: geodirectory-functions/general_functions.php:1842
-#: geodirectory-functions/custom_functions.php:1687
+#: geodirectory-functions/custom_functions.php:1697
 #: geodirectory-widgets/geodirectory_related_listing_widget.php:180
 msgid "Categories"
 msgstr ""
@@ -3408,9 +3407,10 @@ msgstr ""
 #: geodirectory-admin/admin_functions.php:2947
 #: geodirectory-admin/admin_template_tags.php:715
 msgid ""
-"Avada theme has no hooks for compatibility, because of this you must add two "
-"small changes to the header.php. <a href=\"http://docs.wpgeodirectory.com/"
-"avada-compatibility-header-php/\" target=\"_blank\">Instructions</a>"
+"Since Avada 3.8+ they have added hooks for compatibility for GeoDirectory so "
+"the header.php modification is no longer required. <a href=\"http://docs."
+"wpgeodirectory.com/avada-compatibility-header-php/\" target=\"_blank\">See "
+"here</a>"
 msgstr ""
 
 #: geodirectory-admin/admin_template_tags.php:225
@@ -4653,7 +4653,7 @@ msgid "Footer script code"
 msgstr ""
 
 #: geodirectory-admin/option-pages/design_settings_array.php:991
-#: geodirectory-functions/custom_functions.php:1053
+#: geodirectory-functions/custom_functions.php:1063
 msgid "Map"
 msgstr ""
 
@@ -4954,35 +4954,35 @@ msgstr ""
 msgid "View all"
 msgstr ""
 
-#: geodirectory-functions/custom_taxonomy_hooks_actions.php:618
+#: geodirectory-functions/custom_taxonomy_hooks_actions.php:671
 #, php-format
 msgid "Virtual <span class=\"count\">(%s)</span>"
 msgid_plural "Virtual <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: geodirectory-functions/google_analytics.php:68
-#: geodirectory-functions/google_analytics.php:72
+#: geodirectory-functions/google_analytics.php:97
+#: geodirectory-functions/google_analytics.php:101
 msgid "Google Analytics (Last 30 Days)"
 msgstr ""
 
-#: geodirectory-functions/google_analytics.php:68
+#: geodirectory-functions/google_analytics.php:97
 msgid "Total pageviews:"
 msgstr ""
 
-#: geodirectory-functions/google_analytics.php:68
+#: geodirectory-functions/google_analytics.php:97
 msgid "Unique visitors:"
 msgstr ""
 
-#: geodirectory-functions/google_analytics.php:68
+#: geodirectory-functions/google_analytics.php:97
 msgid "Average time on page:"
 msgstr ""
 
-#: geodirectory-functions/google_analytics.php:72
+#: geodirectory-functions/google_analytics.php:101
 msgid "No Stats Yet"
 msgstr ""
 
-#: geodirectory-functions/google_analytics.php:76
+#: geodirectory-functions/google_analytics.php:105
 msgid "Login failed"
 msgstr ""
 
@@ -5784,54 +5784,54 @@ msgstr ""
 msgid "Sent from"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:527
+#: geodirectory-functions/custom_functions.php:535
 msgid "Sort By"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:580
+#: geodirectory-functions/custom_functions.php:588
 msgid "Related Listings"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:837
-#: geodirectory-functions/custom_functions.php:918
+#: geodirectory-functions/custom_functions.php:847
+#: geodirectory-functions/custom_functions.php:928
 msgid "Posts related to Category:"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:839
-#: geodirectory-functions/custom_functions.php:921
+#: geodirectory-functions/custom_functions.php:849
+#: geodirectory-functions/custom_functions.php:931
 msgid "Posts related to Tag:"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:863
+#: geodirectory-functions/custom_functions.php:873
 msgid "Everywhere"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:1019
+#: geodirectory-functions/custom_functions.php:1029
 msgid "Profile"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:1025
+#: geodirectory-functions/custom_functions.php:1035
 msgid "More Info"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:1032
+#: geodirectory-functions/custom_functions.php:1042
 msgid "Photo"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:1067
+#: geodirectory-functions/custom_functions.php:1077
 #: geodirectory-widgets/geodirectory_related_listing_widget.php:24
 msgid "Related Listing"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:1597
+#: geodirectory-functions/custom_functions.php:1607
 msgid "Read more"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:1657
+#: geodirectory-functions/custom_functions.php:1667
 msgid "reviewed"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:1792
+#: geodirectory-functions/custom_functions.php:1802
 msgid "Share"
 msgstr ""
 
@@ -6374,7 +6374,10 @@ msgid "GD > Best of widget"
 msgstr ""
 
 #: geodirectory-widgets/geodirectory_bestof_widget.php:28
-msgid "Best of "
+#: geodirectory-widgets/geodirectory_bestof_widget.php:207
+#: geodirectory-widgets/geodirectory_bestof_widget.php:437
+#, php-format
+msgid "Best of %s"
 msgstr ""
 
 #: geodirectory-widgets/geodirectory_bestof_widget.php:150
