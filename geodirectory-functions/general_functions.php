@@ -147,7 +147,7 @@ function geodir_get_addlisting_link($post_type = '')
 
         $add_listing_link = get_page_link(get_option('geodir_add_listing_page'));
 
-        return add_query_arg(array('listing_type' => $post_type), $add_listing_link);
+        return esc_url( add_query_arg(array('listing_type' => $post_type), $add_listing_link) );
     } else
         return get_bloginfo('url');
 }

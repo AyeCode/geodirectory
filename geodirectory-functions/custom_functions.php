@@ -495,7 +495,7 @@ function geodir_display_sort_options()
             if ($sort->field_type == 'random') {
                 $key = $sort->field_type;
                 ($sort_by == $key || ($sort->is_default == '1' && !isset($_REQUEST['sort_by']))) ? $selected = 'selected="selected"' : $selected = '';
-                $sort_field_options .= '<option ' . $selected . ' value="' . add_query_arg('sort_by', $key) . '">' . $label . '</option>';
+                $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg('sort_by', $key) ) . '">' . $label . '</option>';
             }
 
             if ($sort->htmlvar_name == 'comment_count') {
@@ -508,7 +508,7 @@ function geodir_display_sort_options()
                 if ($sort->asc_title)
                     $label = $sort->asc_title;
                 ($sort_by == $key || ($sort->is_default == '1' && !isset($_REQUEST['sort_by']))) ? $selected = 'selected="selected"' : $selected = '';
-                $sort_field_options .= '<option ' . $selected . ' value="' . add_query_arg('sort_by', $key) . '">' . $label . '</option>';
+                $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg('sort_by', $key) ) . '">' . $label . '</option>';
             }
 
             if ($sort->sort_desc) {
@@ -517,7 +517,7 @@ function geodir_display_sort_options()
                 if ($sort->desc_title)
                     $label = $sort->desc_title;
                 ($sort_by == $key || ($sort->is_default == '1' && !isset($_REQUEST['sort_by']))) ? $selected = 'selected="selected"' : $selected = '';
-                $sort_field_options .= '<option ' . $selected . ' value="' . add_query_arg('sort_by', $key) . '">' . $label . '</option>';
+                $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg('sort_by', $key) ) . '">' . $label . '</option>';
             }
 
         }
@@ -532,7 +532,7 @@ function geodir_display_sort_options()
             <select name="sort_by" id="sort_by" onchange="javascript:window.location=this.value;">
 
                 <option
-                    value="<?php echo add_query_arg('sort_by', '');?>" <?php if ($sort_by == '') echo 'selected="selected"';?>><?php _e('Sort By', GEODIRECTORY_TEXTDOMAIN);?></option><?php
+                    value="<?php echo esc_url( add_query_arg('sort_by', '') );?>" <?php if ($sort_by == '') echo 'selected="selected"';?>><?php _e('Sort By', GEODIRECTORY_TEXTDOMAIN);?></option><?php
 
                 echo $sort_field_options;?>
 

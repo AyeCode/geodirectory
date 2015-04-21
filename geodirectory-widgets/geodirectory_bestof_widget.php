@@ -204,7 +204,7 @@ class geodir_bestof_widget extends WP_Widget
             <?php
             echo '<div id="geodir-bestof-places">';
             if ($terms) {
-                echo '<h3 class="bestof-cat-title">' . wp_sprintf( __( 'Best of %s', GEODIRECTORY_TEXTDOMAIN ), $first_term->name ) . '<a href="' . add_query_arg(array('sort_by' => 'overall_rating_desc'), get_term_link($first_term, $first_term->taxonomy)) . '">' . __("View all", GEODIRECTORY_TEXTDOMAIN) . '</a></h3>';
+                echo '<h3 class="bestof-cat-title">' . wp_sprintf( __( 'Best of %s', GEODIRECTORY_TEXTDOMAIN ), $first_term->name ) . '<a href="' . esc_url(add_query_arg(array('sort_by' => 'overall_rating_desc'), get_term_link($first_term, $first_term->taxonomy))) . '">' . __("View all", GEODIRECTORY_TEXTDOMAIN) . '</a></h3>';
             }
             geodir_bestof_places_by_term($query_args);
             echo "</div>";
@@ -434,7 +434,7 @@ function geodir_bestof_callback()
     $query_args['tax_query'] = array($tax_query);
     if ($term_id && $taxonomy) {
         $term = get_term_by('id', $term_id, $taxonomy);
-        echo '<h3 class="bestof-cat-title">' . wp_sprintf( __( 'Best of %s', GEODIRECTORY_TEXTDOMAIN ), $term->name ) . '<a href="' . add_query_arg(array('sort_by' => 'overall_rating_desc'), get_term_link($term)) . '">' . __("View all", GEODIRECTORY_TEXTDOMAIN) . '</a></h3>';
+        echo '<h3 class="bestof-cat-title">' . wp_sprintf( __( 'Best of %s', GEODIRECTORY_TEXTDOMAIN ), $term->name ) . '<a href="' . esc_url( add_query_arg(array('sort_by' => 'overall_rating_desc'), get_term_link($term)) ) . '">' . __("View all", GEODIRECTORY_TEXTDOMAIN) . '</a></h3>';
     }
     geodir_bestof_places_by_term($query_args);
     wp_die();
