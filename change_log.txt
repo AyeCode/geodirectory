@@ -2,6 +2,7 @@ v1.4.5
 Slider JS missing from preview page - FIXED
 Checked for XSS vulnerabilities as per latest WP security update, found none but updated the code to new standards - SECURITY
 New filter added for term link in popular category widget - ADDED
+Validation added to avoid multiple times selection for same category - FIXED
 
 v1.4.4
 In CSV upload file new column post_status added to set listing status - CHANGED
