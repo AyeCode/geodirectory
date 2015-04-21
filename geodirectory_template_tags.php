@@ -11,7 +11,8 @@ add_action('wp_print_scripts', 'geodir_core_dequeue_script', 100);
 function geodir_templates_scripts()
 {
     $is_detail_page = false;
-    if(is_single() && geodir_is_geodir_page()) {
+
+    if((is_single() && geodir_is_geodir_page()) || (is_page() && geodir_is_page('preview') )) {
         $is_detail_page = true;
     }
 

@@ -1,3 +1,6 @@
+v1.4.5
+Slider JS missing from preview page - FIXED
+
 v1.4.4
 In CSV upload file new column post_status added to set listing status - CHANGED
 term description sometimes not showing - FIXED
