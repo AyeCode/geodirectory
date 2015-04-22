@@ -1914,7 +1914,8 @@ function geodir_helper_cat_list_output($terms, $category_limit)
         $class_row = $cat_count > $category_limit ? 'geodir-pcat-hide geodir-hide' : 'geodir-pcat-show';
         $total_post = $cat->count;
 
-        /**
+        $term_link = get_term_link( $cat, $cat->taxonomy );
+		/**
 		 * Filer the category term link.
 		 *
 		 * @since 1.4.5
