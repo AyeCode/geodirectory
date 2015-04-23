@@ -10,11 +10,11 @@
 Plugin Name: GeoDirectory
 Plugin URI: http://wpgeodirectory.com/
 Description: GeoDirectory plugin for wordpress.
-Version: 1.4.4
+Version: 1.4.5
 Author: GeoDirectory
 Author URI: http://wpgeodirectory.com
 Requires at least: 3.1
-Tested up to: 4.1.1
+Tested up to: 4.2
 */
 
 /**
@@ -22,7 +22,7 @@ Tested up to: 4.1.1
  *
  * @since 1.0.0
  */
-define("GEODIRECTORY_VERSION", "1.4.4");
+define("GEODIRECTORY_VERSION", "1.4.5");
 
 if (!session_id()) session_start();
 
