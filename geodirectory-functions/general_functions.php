@@ -1455,7 +1455,7 @@ function geodir_get_widget_listings($query_args = array(), $count_only = false)
     $groupby = apply_filters('geodir_filter_widget_listings_groupby', $groupby, $post_type);
 
     if ($count_only) {
-		$sql = "SELECT COUNT(DISTINCT(" . $wpdb->posts . ".ID)) AS total FROM " . $wpdb->posts . "
+		$sql = "SELECT COUNT(" . $wpdb->posts . ".ID) AS total FROM " . $wpdb->posts . "
 			" . $join . "
 			" . $where;
 		$rows = (int)$wpdb->get_var($sql);
@@ -1903,7 +1903,7 @@ function geodir_helper_cat_list_output($terms, $category_limit)
     $geodir_post_category_str = array();
 
 
-    foreach ($terms as $cat) {// print_r($cat);
+    foreach ($terms as $cat) {
         $post_type = str_replace("category", "", $cat->taxonomy);
         $term_icon_url = !empty($term_icons) && isset($term_icons[$cat->term_id]) ? $term_icons[$cat->term_id] : '';
 
@@ -1914,7 +1914,18 @@ function geodir_helper_cat_list_output($terms, $category_limit)
         $class_row = $cat_count > $category_limit ? 'geodir-pcat-hide geodir-hide' : 'geodir-pcat-show';
         $total_post = $cat->count;
 
-        echo '<li class="' . $class_row . '"><a href="' . get_term_link($cat, $cat->taxonomy) . '">';
+        $term_link = get_term_link( $cat, $cat->taxonomy );
+		/**
+		 * Filer the category term link.
+		 *
+		 * @since 1.4.5
+		 * @param string $term_link The term permalink.
+		 * @param int    $cat->term_id The term id.
+		 * @param string $post_type Wordpress post type.
+		 */
+		$term_link = apply_filters( 'geodir_category_term_link', $term_link, $cat->term_id, $post_type );
+
+        echo '<li class="' . $class_row . '"><a href="' . $term_link . '">';
         echo '<img alt="' . $cat->name . ' icon" class="" style="height:20px;vertical-align:middle;" src="' . $term_icon_url . '"/> ';
         echo ucwords($cat->name) . ' (<span class="geodir_term_class geodir_link_span geodir_category_class_' . $post_type . '_' . $cat->term_id . '" >' . $total_post . '</span>) ';
         echo '</a></li>';
