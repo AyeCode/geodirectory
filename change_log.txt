@@ -1,7 +1,11 @@
-v1.4.5
-Slider JS missing from preview page - FIXED
+v1.4.6
 New filter added for term link in popular category widget - ADDED
 Validation added to avoid multiple times selection for same category - FIXED
+Map ajax requests now specifically set to return utf-8 - CHANGED
+
+
+v1.4.5
+Slider JS missing from preview page - FIXED
 http://docs.wpgeodirectory.com/security-release-21-04-2015/ - SECURITY UPDATE
 
 v1.4.4
