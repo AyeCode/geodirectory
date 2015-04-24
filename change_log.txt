@@ -2,6 +2,7 @@ v1.4.6
 New filter added for term link in popular category widget - ADDED
 Validation added to avoid multiple times selection for same category - FIXED
 Map ajax requests now specifically set to return utf-8 - CHANGED
+Star ratings in sidebar not responsive for window size between 883x738 & 982x738 - FIXED
 
 
 v1.4.5
