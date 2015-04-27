@@ -687,7 +687,7 @@ function geodir_breadcrumb()
         $listing_link .= '/';
 
         $post_type_for_location_link = $listing_link;
-        $location_terms = geodir_get_current_location_terms('query_vars');
+        $location_terms = geodir_get_current_location_terms('query_vars', $gd_post_type);
         $location_link = $post_type_for_location_link;
 
         if (geodir_is_page('detail') || geodir_is_page('listing')) {
