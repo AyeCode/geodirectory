@@ -2470,7 +2470,8 @@ function geodir_popular_postview_output($args = '', $instance = '')
             $geodir_is_widget_listing = false;
 
             $GLOBALS['post'] = $current_post;
-            setup_postdata($current_post);
+            if (!empty($current_post))
+				setup_postdata($current_post);
             $map_jason = $current_map_jason;
             $map_canvas_arr = $current_map_canvas_arr;
             ?>

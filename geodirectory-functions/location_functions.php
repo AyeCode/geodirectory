@@ -281,6 +281,15 @@ function geodir_get_current_location_terms($location_array_from = 'session', $gd
 		}
     }
 	
+	/**
+	 * Filter the location terms.
+	 *
+	 * @since 1.4.6
+	 *
+	 * @param array $location_array Array of location terms. Default empty.
+	 * @param string $location_array_from Source type of location terms. Default session.
+	 * @param string $gd_post_type WP post type.
+	 */
 	$location_array = apply_filters( 'geodir_current_location_terms', $location_array, $location_array_from, $gd_post_type );
 
     return $location_array;
