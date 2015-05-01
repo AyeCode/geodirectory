@@ -15,7 +15,7 @@ if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'homemap_catl
 }
 
 // Send the content-type header with correct encoding
-header("Content-type: text/javascript");
+header("Content-type: text/javascript; charset=utf-8");
 
 if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'cat') { // Retrives markers data for categories
     echo get_markers();

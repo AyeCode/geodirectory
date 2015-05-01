@@ -541,7 +541,12 @@ function geodir_sc_gd_listings_output($args = array()) {
     ob_start();
 	if (!empty($widget_listings) || $with_no_results) {
 		if (!$geodir_ajax) {
-		do_action('geodir_before_sc_gd_listings');
+        /**
+         * Called before the shortcode [gd_listings] content is output.
+         *
+         * @since 1.0.0
+         */
+        do_action('geodir_before_sc_gd_listings');
 		?>
         <div class="geodir_locations geodir_location_listing geodir-sc-gd-listings">
 		<?php } ?>

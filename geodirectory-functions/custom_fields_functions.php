@@ -188,6 +188,14 @@ if (!function_exists('geodir_custom_field_delete')) {
 
                 $post_type = $field->post_type;
 
+                /**
+                 * Called after a custom field is deleted.
+                 *
+                 * @since 1.0.0
+                 * @param string $cf The fields ID.
+                 * @param string $field->htmlvar_name The html variable name for the field.
+                 * @param string $post_type The post type the field belongs to.
+                 */
                 do_action('geodir_after_custom_field_deleted', $cf, $field->htmlvar_name, $post_type);
 
                 if ($field->field_type == 'address') {
@@ -732,6 +740,12 @@ if (!function_exists('geodir_custom_field_save')) {
                     $wpdb->query($wpdb->prepare("delete from " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " where post_type = %s and htmlvar_name = %s", array($post_type, $htmlvar_name)));
 
 
+                /**
+                 * Called after all custom fields are saved for a post.
+                 *
+                 * @since 1.0.0
+                 * @param int $lastid The post ID.
+                 */
                 do_action('geodir_after_custom_fields_updated', $lastid);
 
             } else {
@@ -1099,6 +1113,17 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
             }
         }
 
+        /**
+         * Called before the custom fields info is output for submitting a post.
+         *
+         * Used dynamic hook type geodir_before_custom_form_field_$name.
+         *
+         * @since 1.0.0
+         * @param string $listing_type The post post type.
+         * @param int $package_id The price package ID for the post.
+         * @param array $val The settings array for the field.
+         * @see 'geodir_after_custom_form_field_$name'
+         */
         do_action('geodir_before_custom_form_field_' . $name, $listing_type, $package_id, $val);
 
         if ($type == 'fieldset') {
@@ -1182,7 +1207,14 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
 
 
             <?php
-
+            /**
+             * Called after the address input on the add listings.
+             *
+             * This is used by the location manage to add further locations info etc.
+             *
+             * @since 1.0.0
+             * @param array $val The array of setting for the custom field.
+             */
             do_action('geodir_address_extra_listing_fields', $val);
 
             if (isset($extra_fields['show_zip']) && $extra_fields['show_zip']) { ?>
@@ -1878,7 +1910,17 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
 
 
         <?php }
-
+        /**
+         * Called after the custom fields info is output for submitting a post.
+         *
+         * Used dynamic hook type geodir_after_custom_form_field_$name.
+         *
+         * @since 1.0.0
+         * @param string $listing_type The post post type.
+         * @param int $package_id The price package ID for the post.
+         * @param array $val The settings array for the field.
+         * @see 'geodir_before_custom_form_field_$name'
+         */
         do_action('geodir_after_custom_form_field_' . $name, $listing_type, $package_id, $val);
 
     }
@@ -2833,8 +2875,21 @@ if (!function_exists('geodir_show_listing_info')) {
 
                 if ($html):
 
+                    /**
+                     * Called before a custom fields is output on the frontend.
+                     *
+                     * @since 1.0.0
+                     * @param string $html_var The HTML variable name for the field.
+                     */
                     do_action('geodir_before_show_' . $html_var);
                     if ($html) echo apply_filters('geodir_show_' . $html_var, $html, $variables_array);
+
+                    /**
+                     * Called after a custom fields is output on the frontend.
+                     *
+                     * @since 1.0.0
+                     * @param string $html_var The HTML variable name for the field.
+                     */
                     do_action('geodir_after_show_' . $html_var);
 
                 endif;

@@ -15,6 +15,11 @@
  */
 function geodir_on_wp_loaded()
 {
+    /**
+     * Called on the wp_loaded WP hook and used to send the send inquiry and send to friend forms.
+     *
+     * @since 1.0.0
+     */
     do_action('giodir_handle_request_plugins_loaded');
     global $wpdb;
 
@@ -36,7 +41,11 @@ function geodir_on_wp_loaded()
  */
 function geodir_on_init()
 {
-
+    /**
+     * Called on the wp_init WP hook at the start of the geodir_on_init() function.
+     *
+     * @since 1.0.0
+     */
     do_action('giodir_handle_request');
     global $wpdb;
 
@@ -119,6 +128,13 @@ function geodir_ajax_handler()
                         return;
 
                     if (isset($_REQUEST['posttype']))
+                        /**
+                         * Used to delete the dummy post data per post type.
+                         *
+                         * Uses dynamic hook, geodir_delete_dummy_posts_$_REQUEST['posttype'].
+                         *
+                         * @since 1.0.0
+                         */
                         do_action('geodir_delete_dummy_posts_' . $_REQUEST['posttype']);
                     break;
                 case "geodir_dummy_insert" :
@@ -133,6 +149,13 @@ function geodir_ajax_handler()
                     $city_bound_lng2 = $_REQUEST['city_bound_lng2'];
 
                     if (isset($_REQUEST['posttype']))
+                        /**
+                         * Used to insert the dummy post data per post type.
+                         *
+                         * Uses dynamic hook, geodir_insert_dummy_posts_$_REQUEST['posttype'].
+                         *
+                         * @since 1.0.0
+                         */
                         do_action('geodir_insert_dummy_posts_' . $_REQUEST['posttype']);
 
                     break;

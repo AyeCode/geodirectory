@@ -15,12 +15,19 @@ class geodir_homepage_map extends WP_Widget
     function widget($args, $instance)
     {
         extract($args, EXTR_SKIP);
+        /** This action is documented in geodirectory_shortcodes.php */
         $width = empty($instance['width']) ? '960' : apply_filters('widget_width', $instance['width']);
+        /** This action is documented in geodirectory_shortcodes.php */
         $height = empty($instance['heigh']) ? '425' : apply_filters('widget_heigh', $instance['heigh']);
+        /** This action is documented in geodirectory_shortcodes.php */
         $maptype = empty($instance['maptype']) ? 'ROADMAP' : apply_filters('widget_maptype', $instance['maptype']);
+        /** This action is documented in geodirectory_shortcodes.php */
         $zoom = empty($instance['zoom']) ? '13' : apply_filters('widget_zoom', $instance['zoom']);
+        /** This action is documented in geodirectory_shortcodes.php */
         $autozoom = empty($instance['autozoom']) ? '' : apply_filters('widget_autozoom', $instance['autozoom']);
+        /** This action is documented in geodirectory_shortcodes.php */
         $child_collapse = empty($instance['child_collapse']) ? '0' : apply_filters('widget_child_collapse', $instance['child_collapse']);
+        /** This action is documented in geodirectory_shortcodes.php */
         $scrollwheel = empty($instance['scrollwheel']) ? '0' : apply_filters('widget_scrollwheel', $instance['scrollwheel']);
 
         //$str = createRandomString();
@@ -38,6 +45,7 @@ class geodir_homepage_map extends WP_Widget
         $map_args['enable_cat_filters'] = true;
         $map_args['enable_text_search'] = true;
         $map_args['enable_post_type_filters'] = true;
+        /** This action is documented in geodirectory_shortcodes.php */
         $map_args['enable_location_filters'] = apply_filters('geodir_home_map_enable_location_filters', false);
         $map_args['enable_jason_on_load'] = false;
         $map_args['enable_marker_cluster'] = false;

@@ -406,9 +406,11 @@ function geodir_update_postrating($post_id = 0, $post_type = '', $delete = false
      * Called after Updating post overall rating and rating count.
      *
      * @since 1.0.0
+     * @since 1.4.3 Added `$post_id` param.
      * @package GeoDirectory
+     * @param int $post_id The post ID.
      */
-    do_action('geodir_update_postrating');
+    do_action('geodir_update_postrating',$post_id);
 
 }
 

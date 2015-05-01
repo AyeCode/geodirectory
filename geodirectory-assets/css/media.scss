@@ -1,0 +1,239 @@
+@media only screen and (max-width: 1060px) {
+    .geodir_category_list_view li.gridview_onethird,
+    .geodir_category_list_view li.gridview_onehalf,
+    .geodir_category_list_view li.gridview_onefifth {
+        width: -webkit-calc(50% - 14px);
+        width: -moz-calc(50% - 14px);
+        width: calc(50% - 14px);
+    }
+
+    #gd-sidebar-wrapper .likethis {
+        width: auto;
+    }
+
+    .stick_trigger_container .geodir_map_container,
+    .stick_trigger_container .geodir_map_container .map_background .main_map_wrapper,
+    .stick_trigger_container .geodir_map_container .map_background .main_map_wrapper .geodir_marker_cluster,
+    .stick_trigger_container .geodir_map_container .map_background .main_map_wrapper .loading_div {
+        width: 100% !important;
+    }
+
+    .geodir_category_list_view li span.geodir-rating {
+        padding-left: 0px;
+    }
+
+    dl.geodir-tab-head dd {
+        width: 100%;
+    }
+
+    dl.geodir-tab-head {
+        margin: 0px;
+        display: table;
+        width: 100%;
+        border-right: 1px solid #e1e1e1;
+    }
+
+    .geodir-rating {
+        max-width: 114px;
+    }
+
+    /* .geodir-rating .geodir_RatingAverage{top:-webkit-calc(-20px - 25%);top:-moz-calc(-20px - 25%);top:calc(-20px - 25%);}
+   .geodir-rating .gd_rating_show{ width:-webkit-calc(111px - 25%);width:-moz-calc(111px - 25%);width:calc(111px - 25%);}
+    .geodir-rating .gd_rating_show .geodir_Star{ width:-webkit-calc(114px - 25%);width:-moz-calc(114px - 25%);width:calc(114px - 25%);
+    height:-webkit-calc(20px - 25%);height:-moz-calc(20px - 25%);height:calc(20px - 25%);background-size:contain;}*/
+    .login_form_l {
+        margin-left: 0px;
+    }
+
+    .registration_form_r {
+        margin-right: 0px;
+    }
+
+    .geodir-list-view-select {
+        display: none;
+    }
+
+    .bestof-tabs-on-left dl.geodir-tab-head {
+        border-right: none !important;
+    }
+}
+
+@media only screen and (max-width: 860px) {
+    .geodir_full_page .geodir-cat-list ul li {
+        width: auto;
+    }
+
+    .geodir-content-right .geodir_category_list_view li.gridview_onehalf,
+    .geodir-content-left .geodir_category_list_view li.gridview_onehalf {
+        width: 100%;
+    }
+
+    .geodir_category_list_view li.gridview_onefourth {
+        width: -webkit-calc(50% - 14px);
+        width: -moz-calc(50% - 14px);
+        width: calc(50% - 14px);
+    }
+
+    .geodir_category_list_view li .geodir-content {
+        width: 43%;
+    }
+
+    .geodir_thumbnail {
+        height: auto !important;
+    }
+
+    .geodir_category_list_view li span.geodir-rating {
+        padding-left: 4px;
+    }
+
+    .geodir-subscribe input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .geodir-new-forgot-link a {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 660px) {
+    .geodir-content-right .geodir_category_list_view li.gridview_onehalf,
+    .geodir-content-left .geodir_category_list_view li.gridview_onehalf,
+    .geodir_category_list_view li.gridview_onethird,
+    .geodir_category_list_view li.gridview_onehalf,
+    .geodir_category_list_view li.gridview_onefourth,
+    .geodir_category_list_view li.gridview_onefifth {
+        width: -webkit-calc(50% - 4px);
+        width: -moz-calc(50% - 4px);
+        width: calc(50% - 4px);
+    }
+
+    .geodir-sidebar-right, .geodir-sidebar-left, #geodir-wrapper-content {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .geodir-onethird {
+        float: none;
+        width: auto !important;
+    }
+
+    #geodir_content {
+        width: auto;
+        float: none;
+    }
+
+    .geodir_category_list_view, .geodir_category_list_view li {
+        margin-left: 0px;
+    }
+
+    .login_form_l,
+    .registration_form_r {
+        margin-left: auto;
+        margin-right: auto;
+        float: none;
+        width: 96%;
+    }
+
+    .bestof-tabs-on-left #geodir_bestof_tab_dd,
+    .bestof-tabs-on-left .geodir-chosen-container,
+    .bestof-tabs-on-top #geodir_bestof_tab_dd,
+    .bestof-tabs-on-top .geodir-chosen-container {
+        display: inline-block;
+    }
+
+    .bestof-tabs-on-left .geodir-bestof-cat-list,
+    .bestof-tabs-on-top .geodir-bestof-cat-list,
+    .bestof-tabs-as-dropdown .geodir-bestof-cat-list {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .geodir_form_row label {
+        float: none;
+        width: auto;
+        display: block;
+    }
+
+    .geodir_form_row .geodir_textfield, .geodir_textarea {
+        float: none;
+        width: 100%;
+        display: block;
+        margin-top: 10px;
+    }
+
+    .geodir_message_note {
+        padding-left: 0;
+    }
+
+    .geodir_category_list_view li .geodir-content, .geodir_category_list_view li .geodir-post-img, .geodir_category_list_view li .geodir-addinfo {
+        float: none;
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .geodir_form_row .geodir_textfield,
+    .geodir_textarea,
+    .geodir_form_row select {
+        width: 100%;
+    }
+
+    #gd_placecategory {
+        width: 100% !important;
+    }
+
+    .geodir_form_row .event-single-dateto-inner {
+        width: 100%;
+        float: none;
+    }
+
+    .map_category label {
+        display: none;
+    }
+
+    .map_category .main_list img {
+        height: 20px;
+        width: auto;
+    }
+
+    #simplemodal-container a.modalCloseImg {
+        right: 0px !important;
+    }
+
+}
+
+@media only screen and (max-width: 420px) {
+    .geodir-search input[type="text"],
+    .geodir-search select,
+    .geodir-search input[type="button"] {
+        width: 100%;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    /*.geodir_flexslider .geodir-slides img {max-height: 255px !important;}*/
+}
+
+@media only screen and (max-width: 320px) {
+    .geodir_category_list_view li.gridview_onethird, .geodir_category_list_view li.gridview_onefifth, .geodir_category_list_view li.gridview_onehalf, .geodir_category_list_view li.gridview_onefourth {
+        max-width: inherit;
+        width: 100%;
+    }
+
+    .geodir-content-right .geodir_category_list_view li.gridview_onehalf {
+        width: 100%;
+    }
+
+    .geodir-content-right .loginform1 input[type="text"], .geodir-content-right .loginform1 input[type="password"], #gd-sidebar-wrapper .loginform1 input[type="text"], #gd-sidebar-wrapper .loginform1 input[type="password"] {
+        width: 95%;
+        margin-top: 5px;
+    }
+
+    .geodir-content-right form.loginform1 label, #gd-sidebar-wrapper form.loginform1 label {
+        width: auto;
+    }
+
+    /*.geodir_flexslider .geodir-slides img {max-height: 200px !important;}*/
+}

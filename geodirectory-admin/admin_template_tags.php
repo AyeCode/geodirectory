@@ -33,6 +33,12 @@ if (!function_exists('geodir_admin_panel')) {
                     <ul>
                         <?php
                         $tabs = array();
+                        /**
+                         * Filter the GD admin settings tabs on the left of the admin menu.
+                         *
+                         * @since 1.0.0
+                         * @param array $tabs The array of tabs to display.
+                         */
                         $tabs = apply_filters('geodir_settings_tabs_array', $tabs);
                         update_option('geodir_tabs', $tabs);// Important to show settings menu dropdown
 
@@ -296,6 +302,12 @@ function geodir_admin_option_form($tab_name)
             else
                 $hide_save_button = '';
 
+            /**
+             * Filter weather the default save button in the GD admin settings pages should be shown.
+             *
+             * @since 1.0.0
+             * @param string $hide_save_button The style element, either blank or: style='display:none;'.
+             */
             $hide_save_button = apply_filters('geodir_hide_save_button', $hide_save_button);
             ?>
 
@@ -643,6 +655,12 @@ function geodir_update_options_compatibility_settings()
     $theme_arr = get_option('gd_theme_compats');
     update_option('gd_theme_compat', $theme_name);
 
+    /**
+     * Called before the theme compatibility settings are saved to the DB.
+     *
+     * @since 1.4.0
+     * @param array $theme_settings The theme compatibility settings as an array.
+     */
     do_action('gd_compat_save_settings', $theme_settings);
 
 //if($_POST['gd_theme_compat'])==
@@ -694,7 +712,7 @@ function geodir_theme_compatibility_setting_page()
 
             <?php if (str_replace("_custom", "", get_option('gd_theme_compat')) == 'Avada') { ?>
                 <div id="gd-compat-warnings">
-                    <h3><?php _e('Avada theme has no hooks for compatibility, because of this you must add two small changes to the header.php. <a href="http://docs.wpgeodirectory.com/avada-compatibility-header-php/" target="_blank">Instructions</a>', GEODIRECTORY_TEXTDOMAIN); ?></h3>
+                    <h3><?php _e('Since Avada 3.8+ they have added hooks for compatibility for GeoDirectory so the header.php modification is no longer required. <a href="http://docs.wpgeodirectory.com/avada-compatibility-header-php/" target="_blank">See here</a>', GEODIRECTORY_TEXTDOMAIN); ?></h3>
                 </div>
             <?php }?>
 
@@ -1272,7 +1290,15 @@ function geodir_theme_compatibility_setting_page()
 
 
 
-                <?php do_action('gd_compat_other_filters');?>
+                <?php
+                /**
+                 * Allows more filter setting to be added to theme compatibility settings page.
+                 *
+                 * Called after the last setting in "Other filters" section of theme compatibility settings.
+                 *
+                 * @since 1.4.0
+                 */
+                do_action('gd_compat_other_filters');?>
 
                 </tbody>
             </table>
@@ -1345,7 +1371,14 @@ function geodir_custom_post_type_form()
 
                     <div id="gt-form-builder-tab" class="gt-tabs-panel">
 
-                        <?php do_action('geodir_manage_available_fields', $sub_tab); ?>
+                        <?php
+                        /**
+                         * Adds the available fields to the custom fields settings page per post type.
+                         *
+                         * @since 1.0.0
+                         * @param string $sub_tab The current settings tab name.
+                         */
+                        do_action('geodir_manage_available_fields', $sub_tab); ?>
 
                         <div style="clear:both"></div>
                     </div>
@@ -1366,7 +1399,14 @@ function geodir_custom_post_type_form()
 
                     <div id="gt-form-builder-tab" class="gt-tabs-panel">
                         <div class="field_row_main">
-                            <?php do_action('geodir_manage_selected_fields', $sub_tab); ?>
+                            <?php
+                            /**
+                             * Adds the selected fields and setting to the custom fields settings page per post type.
+                             *
+                             * @since 1.0.0
+                             * @param string $sub_tab The current settings tab name.
+                             */
+                            do_action('geodir_manage_selected_fields', $sub_tab); ?>
                         </div>
                         <div style="clear:both"></div>
                     </div>
@@ -1484,7 +1524,14 @@ function geodir_diagnostic_tools_setting_page()
 						<input type="button" value="<?php _e('Run', GEODIRECTORY_TEXTDOMAIN);?>" class="button-primary geodir_diagnosis_button" data-diagnose="load_db_language"/>
 					</td>
 				</tr>
-                <?php do_action('geodir_diagnostic_tool');?>
+                <?php
+                /**
+                 * Allows you to add more setting to the GD>Tools settings page.
+                 *
+                 * Called after the last setting on the GD>Tools page.
+                 * @since 1.0.0
+                 */
+                do_action('geodir_diagnostic_tool');?>
 
                 </tbody>
             </table>

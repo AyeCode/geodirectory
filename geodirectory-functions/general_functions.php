@@ -147,7 +147,7 @@ function geodir_get_addlisting_link($post_type = '')
 
         $add_listing_link = get_page_link(get_option('geodir_add_listing_page'));
 
-        return add_query_arg(array('listing_type' => $post_type), $add_listing_link);
+        return esc_url( add_query_arg(array('listing_type' => $post_type), $add_listing_link) );
     } else
         return get_bloginfo('url');
 }
@@ -244,8 +244,6 @@ function geodir_is_page($gdpage = '')
                 return true;
             break;
         case 'listing':
-            if (is_page() && get_query_var('page_id') == get_option('geodir_listing_page'))
-                return true;
             if (is_tax() && geodir_get_taxonomy_posttype()) {
                 global $current_term, $taxonomy, $term;
 
@@ -296,7 +294,6 @@ function geodir_set_is_geodir_page($wp)
                 $wp->query_vars['page_id'] == get_option('geodir_add_listing_page')
                 || $wp->query_vars['page_id'] == get_option('geodir_preview_page')
                 || $wp->query_vars['page_id'] == get_option('geodir_success_page')
-                || $wp->query_vars['page_id'] == get_option('geodir_listing_page')
                 || $wp->query_vars['page_id'] == get_option('geodir_location_page')
             )
                 $wp->query_vars['gd_is_geodir_page'] = true;
@@ -309,7 +306,6 @@ function geodir_set_is_geodir_page($wp)
                     $page->ID == get_option('geodir_add_listing_page')
                     || $page->ID == get_option('geodir_preview_page')
                     || $page->ID == get_option('geodir_success_page')
-                    || $page->ID == get_option('geodir_listing_page')
                     || $page->ID == get_option('geodir_location_page'))
             )
                 $wp->query_vars['gd_is_geodir_page'] = true;
@@ -1459,7 +1455,7 @@ function geodir_get_widget_listings($query_args = array(), $count_only = false)
     $groupby = apply_filters('geodir_filter_widget_listings_groupby', $groupby, $post_type);
 
     if ($count_only) {
-		$sql = "SELECT COUNT(DISTINCT(" . $wpdb->posts . ".ID)) AS total FROM " . $wpdb->posts . "
+		$sql = "SELECT COUNT(" . $wpdb->posts . ".ID) AS total FROM " . $wpdb->posts . "
 			" . $join . "
 			" . $where;
 		$rows = (int)$wpdb->get_var($sql);
@@ -1805,6 +1801,7 @@ function geodir_popular_post_category_output($args = '', $instance = '')
 
     echo $before_widget;
 
+    /** This filter is documented in geodirectory_widgets.php */
     $title = empty($instance['title']) ? __('Popular Categories', GEODIRECTORY_TEXTDOMAIN) : apply_filters('widget_title', __($instance['title'], GEODIRECTORY_TEXTDOMAIN));
 
     $category_limit = isset($instance['category_limit']) && $instance['category_limit'] > 0 ? (int)$instance['category_limit'] : 15;
@@ -1906,7 +1903,7 @@ function geodir_helper_cat_list_output($terms, $category_limit)
     $geodir_post_category_str = array();
 
 
-    foreach ($terms as $cat) {// print_r($cat);
+    foreach ($terms as $cat) {
         $post_type = str_replace("category", "", $cat->taxonomy);
         $term_icon_url = !empty($term_icons) && isset($term_icons[$cat->term_id]) ? $term_icons[$cat->term_id] : '';
 
@@ -1917,7 +1914,18 @@ function geodir_helper_cat_list_output($terms, $category_limit)
         $class_row = $cat_count > $category_limit ? 'geodir-pcat-hide geodir-hide' : 'geodir-pcat-show';
         $total_post = $cat->count;
 
-        echo '<li class="' . $class_row . '"><a href="' . get_term_link($cat, $cat->taxonomy) . '">';
+        $term_link = get_term_link( $cat, $cat->taxonomy );
+		/**
+		 * Filer the category term link.
+		 *
+		 * @since 1.4.5
+		 * @param string $term_link The term permalink.
+		 * @param int    $cat->term_id The term id.
+		 * @param string $post_type Wordpress post type.
+		 */
+		$term_link = apply_filters( 'geodir_category_term_link', $term_link, $cat->term_id, $post_type );
+
+        echo '<li class="' . $class_row . '"><a href="' . $term_link . '">';
         echo '<img alt="' . $cat->name . ' icon" class="" style="height:20px;vertical-align:middle;" src="' . $term_icon_url . '"/> ';
         echo ucwords($cat->name) . ' (<span class="geodir_term_class geodir_link_span geodir_category_class_' . $post_type . '_' . $cat->term_id . '" >' . $total_post . '</span>) ';
         echo '</a></li>';
@@ -1937,6 +1945,7 @@ function geodir_listing_slider_widget_output($args = '', $instance = '')
 
     echo $before_widget;
 
+    /** This filter is documented in geodirectory_widgets.php */
     $title = empty($instance['title']) ? '' : apply_filters('widget_title', __($instance['title'], GEODIRECTORY_TEXTDOMAIN));
 
     $post_type = empty($instance['post_type']) ? 'gd_place' : apply_filters('widget_post_type', $instance['post_type']);
@@ -1960,6 +1969,8 @@ function geodir_listing_slider_widget_output($args = '', $instance = '')
     $animation = empty($instance['animation']) ? 'slide' : apply_filters('widget_animation', $instance['animation']);
     $list_sort = empty($instance['list_sort']) ? 'latest' : apply_filters('widget_list_sort', $instance['list_sort']);
     $show_featured_only = !empty($instance['show_featured_only']) ? 1 : NULL;
+
+    wp_enqueue_script('geodirectory-jquery-flexslider-js');
     ?>
     <script type="text/javascript">
         jQuery(window).load(function () {
@@ -2094,6 +2105,8 @@ function geodir_loginwidget_output($args = '', $instance = '')
     //print_r($instance);
     // prints the widget
     extract($args, EXTR_SKIP);
+
+    /** This filter is documented in geodirectory_widgets.php */
     $title = empty($instance['title']) ? __('My Dashboard', GEODIRECTORY_TEXTDOMAIN) : apply_filters('widget_title', __($instance['title'], GEODIRECTORY_TEXTDOMAIN));
 
     echo $before_widget;
@@ -2280,6 +2293,7 @@ function geodir_popular_postview_output($args = '', $instance = '')
 
     echo $before_widget;
 
+    /** This filter is documented in geodirectory_widgets.php */
     $title = empty($instance['title']) ? ucwords($instance['category_title']) : apply_filters('widget_title', __($instance['title'], GEODIRECTORY_TEXTDOMAIN));
     $post_type = empty($instance['post_type']) ? 'gd_place' : apply_filters('widget_post_type', $instance['post_type']);
     $category = empty($instance['category']) ? '0' : apply_filters('widget_category', $instance['category']);
@@ -2410,13 +2424,26 @@ function geodir_popular_postview_output($args = '', $instance = '')
     if (!empty($widget_listings) || $with_no_results) {
         ?>
         <div class="geodir_locations geodir_location_listing">
-            <?php do_action('geodir_before_view_all_link_in_widget'); ?>
+
+            <?php
+            /**
+             * Called before the div containing the title and view all link in popular post view widget.
+             *
+             * @since 1.0.0
+             */
+            do_action('geodir_before_view_all_link_in_widget'); ?>
             <div class="geodir_list_heading clearfix">
                 <?php echo $before_title . $title . $after_title; ?>
                 <a href="<?php echo $viewall_url; ?>"
                    class="geodir-viewall"><?php _e('View all', GEODIRECTORY_TEXTDOMAIN); ?></a>
             </div>
-            <?php do_action('geodir_after_view_all_link_in_widget'); ?>
+            <?php
+            /**
+             * Called after the div containing the title and view all link in popular post view widget.
+             *
+             * @since 1.0.0
+             */
+            do_action('geodir_after_view_all_link_in_widget'); ?>
             <?php
             if (strstr($layout, 'gridview')) {
                 $listing_view_exp = explode('_', $layout);

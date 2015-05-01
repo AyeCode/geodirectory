@@ -45,7 +45,7 @@ define('PLACE_DESC_TEXT', __('Listing Description', GEODIRECTORY_TEXTDOMAIN));
 
 define('LISTING_ADDRESS_TEXT', __('Listing Address:', GEODIRECTORY_TEXTDOMAIN));
 define('PLACE_ADDRESS', __('Address:', GEODIRECTORY_TEXTDOMAIN));
-define('ADDRESS_MSG', __('Please enter listing address. eg. : <b>230 Vine Street</b>', GEODIRECTORY_TEXTDOMAIN));
+define('ADDRESS_MSG', __('Please enter listing address. eg. : 230 Vine Street', GEODIRECTORY_TEXTDOMAIN));
 define('PLACE_CITY_TEXT', __('City:', GEODIRECTORY_TEXTDOMAIN));
 define('PLACE_REGION_TEXT', __('Region:', GEODIRECTORY_TEXTDOMAIN));
 define('PLACE_COUNTRY_TEXT', __('Country:', GEODIRECTORY_TEXTDOMAIN));

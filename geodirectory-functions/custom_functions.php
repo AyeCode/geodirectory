@@ -224,12 +224,26 @@ function geodir_send_inquiry($request)
         $to_email = get_option('admin_email');
     }
 
+    /**
+     * Called after the send enquiry var have been set but before the email has been sent.
+     *
+     * @since 1.0.0
+     * @param array $request The submitted form fields as an array.
+     * @param string $type The form type, default: `Enquiry`.
+     */
     do_action('geodir_after_send_enquiry', $request, 'Enquiry');
 
     $client_message = $frnd_comments;
     $client_message .= '<br>' . __('From :', GEODIRECTORY_TEXTDOMAIN) . ' ' . $yourname . '<br>' . __('Phone :', GEODIRECTORY_TEXTDOMAIN) . ' ' . $inq_phone . '<br><br>' . __('Sent from', GEODIRECTORY_TEXTDOMAIN) . ' - <b><a href="' . get_option('siteurl') . '">' . get_option('blogname') . '</a></b>.';
 
     $client_message = apply_filters('geodir_inquiry_email_msg', $client_message);
+
+    /**
+     * Called before the send enquiry email is sent.
+     *
+     * @since 1.0.0
+     * @param array $request The submitted form fields as an array.
+     */
     do_action('geodir_before_send_enquiry_email', $request);
     if ($to_email) {
         // strip slashes message
@@ -238,6 +252,12 @@ function geodir_send_inquiry($request)
         geodir_sendEmail($youremail, $yourname, $to_email, $to_name, '', $client_message, $extra = '', 'send_enquiry', $request['pid']);//To client email
     }
 
+    /**
+     * Called after the send enquiry email is sent.
+     *
+     * @since 1.0.0
+     * @param array $request The submitted form fields as an array.
+     */
     do_action('geodir_after_send_enquiry_email', $request);
     $url = get_permalink($pid);
     if (strstr($url, '?')) {
@@ -287,8 +307,21 @@ function geodir_send_friend($request)
         }
     }
 
+    /**
+     * Called before the send to friend email is sent.
+     *
+     * @since 1.0.0
+     * @param array $request The submitted form fields as an array.
+     */
     do_action('geodir_before_send_to_friend_email', $request);
     geodir_sendEmail($youremail, $yourname, $to_email, $to_name, $frnd_subject, $frnd_comments, $extra = '', 'send_friend', $request['pid']);//To client email
+
+    /**
+     * Called after the send to friend email is sent.
+     *
+     * @since 1.0.0
+     * @param array $request The submitted form fields as an array.
+     */
     do_action('geodir_after_send_to_friend_email', $request);
 
     $url = get_permalink($pid);
@@ -432,8 +465,16 @@ function geodir_get_sort_options($post_type)
  */
 function geodir_display_sort_options()
 {
-
     global $wp_query;
+	
+	/**
+	 * On search pages there should be no sort options, sorting is done by search criteria.
+	 *
+	 * @since 1.4.4
+	 */
+	if ( is_search() ) {
+		return;
+	}
 
     $sort_by = '';
 
@@ -454,7 +495,7 @@ function geodir_display_sort_options()
             if ($sort->field_type == 'random') {
                 $key = $sort->field_type;
                 ($sort_by == $key || ($sort->is_default == '1' && !isset($_REQUEST['sort_by']))) ? $selected = 'selected="selected"' : $selected = '';
-                $sort_field_options .= '<option ' . $selected . ' value="' . add_query_arg('sort_by', $key) . '">' . $label . '</option>';
+                $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg('sort_by', $key) ) . '">' . $label . '</option>';
             }
 
             if ($sort->htmlvar_name == 'comment_count') {
@@ -467,7 +508,7 @@ function geodir_display_sort_options()
                 if ($sort->asc_title)
                     $label = $sort->asc_title;
                 ($sort_by == $key || ($sort->is_default == '1' && !isset($_REQUEST['sort_by']))) ? $selected = 'selected="selected"' : $selected = '';
-                $sort_field_options .= '<option ' . $selected . ' value="' . add_query_arg('sort_by', $key) . '">' . $label . '</option>';
+                $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg('sort_by', $key) ) . '">' . $label . '</option>';
             }
 
             if ($sort->sort_desc) {
@@ -476,7 +517,7 @@ function geodir_display_sort_options()
                 if ($sort->desc_title)
                     $label = $sort->desc_title;
                 ($sort_by == $key || ($sort->is_default == '1' && !isset($_REQUEST['sort_by']))) ? $selected = 'selected="selected"' : $selected = '';
-                $sort_field_options .= '<option ' . $selected . ' value="' . add_query_arg('sort_by', $key) . '">' . $label . '</option>';
+                $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg('sort_by', $key) ) . '">' . $label . '</option>';
             }
 
         }
@@ -491,7 +532,7 @@ function geodir_display_sort_options()
             <select name="sort_by" id="sort_by" onchange="javascript:window.location=this.value;">
 
                 <option
-                    value="<?php echo add_query_arg('sort_by', '');?>" <?php if ($sort_by == '') echo 'selected="selected"';?>><?php _e('Sort By', GEODIRECTORY_TEXTDOMAIN);?></option><?php
+                    value="<?php echo esc_url( add_query_arg('sort_by', '') );?>" <?php if ($sort_by == '') echo 'selected="selected"';?>><?php _e('Sort By', GEODIRECTORY_TEXTDOMAIN);?></option><?php
 
                 echo $sort_field_options;?>
 
@@ -707,13 +748,15 @@ function geodir_related_posts_display($request)
 
 }
 
-add_action('wp_footer', 'geodir_category_count_script', 10);
+
+//add_action('wp_footer', 'geodir_category_count_script', 10);
 /**
  * Adds the category post count javascript code
  *
  * @since 1.0.0
  * @package GeoDirectory
  * @global string $geodir_post_category_str The geodirectory post category.
+ * @depreciated No longer needed.
  */
 function geodir_category_count_script()
 {
@@ -1199,7 +1242,14 @@ function geodir_show_detail_page_tabs()
 
     <div class="geodir-tabs" id="gd-tabs" style="position:relative;">
         <dl class="geodir-tab-head">
-            <?php do_action('geodir_before_tab_list'); ?>
+            <?php
+            /**
+             * Called before the details page tab list headings, inside the `dl` tag.
+             *
+             * @since 1.0.0
+             * @see 'geodir_after_tab_list'
+             */
+            do_action('geodir_before_tab_list'); ?>
             <?php
             $arr_detail_page_tabs = geodir_detail_page_tabs_list();
 
@@ -1220,11 +1270,31 @@ function geodir_show_detail_page_tabs()
                     }?>>
                         <div id="<?php echo $tab_index;?>" class="hash-offset"></div>
                         <?php
+                        /**
+                         * Called before the details tab content is output per tab.
+                         *
+                         * @since 1.0.0
+                         * @param string $tab_index The tab name ID.
+                         */
                         do_action('geodir_before_tab_content', $tab_index);
+
+                        /**
+                         * Called before the details tab content is output per tab.
+                         *
+                         * Uses dynamic hook name: geodir_before_$tab_index_tab_content
+                         *
+                         * @since 1.0.0
+                         * @todo do we need this if we have the hook above? 'geodir_before_tab_content'
+                         */
                         do_action('geodir_before_' . $tab_index . '_tab_content');
                         /// write a code to generate content of each tab
                         switch ($tab_index) {
                             case 'post_profile':
+                                /**
+                                 * Called before the listing description content on the details page tab.
+                                 *
+                                 * @since 1.0.0
+                                 */
                                 do_action('geodir_before_description_on_listing_detail');
                                 if (geodir_is_page('detail')) {
                                     the_content();
@@ -1232,6 +1302,12 @@ function geodir_show_detail_page_tabs()
                                     /** This action is documented in geodirectory_template_actions.php */
                                     echo apply_filters('the_content', stripslashes($post->post_desc));
                                 }
+
+                                /**
+                                 * Called after the listing description content on the details page tab.
+                                 *
+                                 * @since 1.0.0
+                                 */
                                 do_action('geodir_after_description_on_listing_detail');
                                 break;
                             case 'post_info':
@@ -1264,7 +1340,22 @@ function geodir_show_detail_page_tabs()
                             }
                                 break;
                         }
+
+                        /**
+                         * Called after the details tab content is output per tab.
+                         *
+                         * @since 1.0.0
+                         */
                         do_action('geodir_after_tab_content', $tab_index);
+
+                        /**
+                         * Called after the details tab content is output per tab.
+                         *
+                         * Uses dynamic hook name: geodir_after_$tab_index_tab_content
+                         *
+                         * @since 1.0.0
+                         * @todo do we need this if we have the hook above? 'geodir_after_tab_content'
+                         */
                         do_action('geodir_after_' . $tab_index . '_tab_content');
                         ?> </li>
                     <?php
@@ -1272,6 +1363,12 @@ function geodir_show_detail_page_tabs()
                 } // end of if for is_display
             }// end of foreach
 
+            /**
+             * Called after the details page tab list headings, inside the `dl` tag.
+             *
+             * @since 1.0.0
+             * @see 'geodir_before_tab_list'
+             */
             do_action('geodir_after_tab_list');
             ?>
         </dl>
@@ -1282,6 +1379,12 @@ function geodir_show_detail_page_tabs()
                     echo $detail_page_tab['tab_content'];
                 }// end of if
             }// end of foreach
+
+            /**
+             * Called after all the tab content is output in `li` tags, called before the closing `ul` tag.
+             *
+             * @since 1.0.0
+             */
             do_action('geodir_add_tab_content'); ?>
         </ul>
         <!--gd-tabs-content ul end-->

@@ -20,6 +20,7 @@ class geodir_related_listing_postview extends WP_Widget
         // prints the widget
         extract($args, EXTR_SKIP);
 
+        /** This filter is documented in geodirectory_widgets.php */
         $title = empty($instance['title']) ? __('Related Listing', GEODIRECTORY_TEXTDOMAIN) : apply_filters('widget_title', __($instance['title'], GEODIRECTORY_TEXTDOMAIN));
 
         $post_number = empty($instance['post_number']) ? '5' : apply_filters('widget_post_number', $instance['post_number']);

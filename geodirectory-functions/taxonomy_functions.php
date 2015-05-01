@@ -630,9 +630,9 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
         </div>
         <script type="text/javascript">
 
-            function show_subcatlist(main_cat) {
+            function show_subcatlist(main_cat, catObj) {
                 if (main_cat != '') {
-                    var url = '<?php echo geodir_get_ajax_url();?>';
+					var url = '<?php echo geodir_get_ajax_url();?>';
                     var cat_taxonomy = '<?php echo $cat_taxonomy;?>';
                     var cat_exclude = '<?php echo base64_encode($cat_exclude);?>';
                     var cat_limit = jQuery('#' + cat_taxonomy).find('#cat_limit').val();
@@ -670,13 +670,24 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
                 update_listing_cat();
             }
 
-            function update_listing_cat() {
+            function update_listing_cat(el) {
                 var cat_taxonomy = '<?php echo $cat_taxonomy;?>';
                 var cat_ids = '';
                 var main_cat = '';
                 var sub_cat = '';
                 var post_cat_str = '';
                 var cat_limit = jQuery('#' + cat_taxonomy).find('#cat_limit').val();
+				
+				var delEl = jQuery(el).closest('.post_catlist_item').find('input.listing_main_cat');
+				if (typeof el != 'undefined' && jQuery(delEl).val()) {
+					jQuery('.geodir_taxonomy_field').find('select > option[_hc="f"][value="'+jQuery(delEl).val()+'"]').attr('disabled', false);
+				}
+				jQuery('.geodir_taxonomy_field').find('input.listing_main_cat:checked').each(function() {
+					var cV = jQuery(this).val();
+					if (parseInt(cV) > 0) {
+						jQuery('.geodir_taxonomy_field').find('select > option[_hc="f"][value="'+cV+'"]').attr('disabled', true);
+					}
+				});
 
                 jQuery('#' + cat_taxonomy).find('.cat_sublist > div').each(function () {
                     main_cat = jQuery(this).find('.listing_main_cat').val();
@@ -700,7 +711,7 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
                         post_cat_str = post_cat_str + ',n';
                     }
 
-                    if (sub_cat != '') {
+                    if (sub_cat != '' && sub_cat) {
                         cat_ids = cat_ids + ',' + sub_cat;
                         post_cat_str = post_cat_str + ':' + sub_cat;
                     } else {
@@ -710,8 +721,7 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
                 });
 
                 maincat_obj = jQuery('#' + cat_taxonomy).find('.main_cat_list');
-
-
+				
                 if (cat_limit != '' && jQuery('#' + cat_taxonomy).find('.cat_sublist > div.post_catlist_item').length >= cat_limit && cat_limit != 0) {
                     maincat_obj.find('.chosen_select').chosen('destroy');
                     maincat_obj.hide();
@@ -725,8 +735,6 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
                 maincat_obj.find('.chosen_select').trigger("chosen:updated");
                 jQuery('#' + cat_taxonomy).find('#post_category').val(cat_ids);
                 jQuery('#' + cat_taxonomy).find('#post_category_str').val(post_cat_str);
-
-
             }
             jQuery(function () {
                 update_listing_cat();
@@ -771,7 +779,7 @@ function geodir_addpost_categories_html($request_taxonomy, $parrent, $selected =
 
         <div class="post_catlist_item" style="border:1px solid #CCCCCC; margin:5px auto; padding:5px;">
             <img alt="move icon" src="<?php echo geodir_plugin_url() . '/geodirectory-assets/images/move.png';?>"
-                 onclick="jQuery(this).closest('div').remove();update_listing_cat();" align="right"/>
+                 onclick="jQuery(this).closest('div').remove();update_listing_cat(this);" align="right"/>
             <?php /* ?>
 		<img src="<?php echo geodir_plugin_url().'/geodirectory-assets/images/move.png';?>" onclick="jQuery(this).closest('div').remove();show_subcatlist();" align="right" /> 
 		<?php */ ?>
@@ -812,7 +820,9 @@ function geodir_editpost_categories_html($request_taxonomy, $request_postid, $po
         $post_cat_str = $post_categories[$request_taxonomy];
         $post_cat_array = explode("#", $post_cat_str);
         if (is_array($post_cat_array)) {
-            foreach ($post_cat_array as $post_cat_html) {
+            $post_cat_array = array_unique( $post_cat_array );
+
+			foreach ($post_cat_array as $post_cat_html) {
 
                 $post_cat_info = explode(":", $post_cat_html);
                 $post_maincat_str = $post_cat_info[0];
@@ -866,7 +876,7 @@ function geodir_get_catlist($cat_taxonomy, $parrent = 0, $selected = false)
 
         $onchange = '';
         //if($parrent == '0')
-        $onchange = ' onchange="show_subcatlist(this.value)"  ';
+        $onchange = ' onchange="show_subcatlist(this.value, this)"  ';
         //else
         //$onchange = ' onchange="update_listing_cat()"  ';
 
@@ -882,8 +892,12 @@ function geodir_get_catlist($cat_taxonomy, $parrent = 0, $selected = false)
             $option_selected = '';
             if ($selected == $cat_term->term_id)
                 $option_selected = ' selected="selected" ';
+				
+			// Count child terms
+			$child_terms = get_terms( $cat_taxonomy, array( 'parent' => $cat_term->term_id, 'hide_empty' => false, 'exclude' => $exclude_cats, 'number' => 1 ) );
+			$has_child = !empty( $child_terms ) ? 't' : 'f';
 
-            echo '<option  ' . $option_selected . ' alt="' . $cat_term->taxonomy . '" title="' . ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" >' . ucfirst($cat_term->name) . '</option>';
+            echo '<option  ' . $option_selected . ' alt="' . $cat_term->taxonomy . '" title="' . ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" _hc="' . $has_child . '" >' . ucfirst($cat_term->name) . '</option>';
         }
         echo '</select>';
     }
@@ -1431,8 +1445,6 @@ function geodir_get_term_icon($term_id = false, $rebuild = false)
         $terms = $wpdb->get_results("SELECT * FROM $wpdb->term_taxonomy WHERE taxonomy IN ($tax_c)");
         //$terms = get_terms( $taxonomy );
 
-        //print_r($terms );exit;
-
         foreach ($terms as $term) {
             $post_type = str_replace("category", "", $term->taxonomy);
             $a_terms[$post_type][] = $term;
@@ -1442,8 +1454,6 @@ function geodir_get_term_icon($term_id = false, $rebuild = false)
         foreach ($a_terms as $pt => $t2) {
 
             foreach ($t2 as $term) {
-
-                //print_r($term);
                 $term_icon = get_tax_meta($term->term_id, 'ct_cat_icon', false, $pt);
                 if ($term_icon) {
                     $term_icon_url = $term_icon["src"];

@@ -1267,7 +1267,7 @@ function geodir_action_details_micordata()
     <span class="org"><?php the_title();?></span>
     <span class="role"><?php _e('Admin', GEODIRECTORY_TEXTDOMAIN)?></span>
 </span>
-        <meta itemprop="name" content="<?php the_title();?>"/>
+        <meta itemprop="name" content="<?php the_title_attribute();?>"/>
 
         <meta itemprop="url" content="<?php echo $c_url;?>"/>
         <?php if ($post->geodir_contact) {
@@ -1495,7 +1495,9 @@ add_action('geodir_listings_page_description', 'geodir_action_listings_descripti
  */
 function geodir_action_listings_description()
 {
-    global $current_term;
+    global $wp_query;
+    $current_term = $wp_query->get_queried_object();
+
     $gd_post_type = geodir_get_current_posttype();
     if (isset($current_term->term_id) && $current_term->term_id != '') {
 

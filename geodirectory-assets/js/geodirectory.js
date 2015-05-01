@@ -113,53 +113,12 @@
     }), K.disable = K.nativeSupport ? e : i, K.enable = K.nativeSupport ? e : l
 }(this);
 
-gd_infowindow = new google.maps.InfoWindow();
+
 
 jQuery(document).ready(function () {
-    // disable gd modal
-    var disable_gd_modal = typeof geodir_var.geodir_gd_modal != 'undefined' && parseInt(geodir_var.geodir_gd_modal) == 1 ? true : false;
-    if (!disable_gd_modal) {
-        jQuery('#geodir-post-gallery a').lightBox({
-            overlayOpacity: 0.5,
-            imageLoading: geodir_var.geodir_plugin_url + '/geodirectory-assets/images/lightbox-ico-loading.gif',
-            imageBtnNext: geodir_var.geodir_plugin_url + '/geodirectory-assets/images/lightbox-btn-next.gif',
-            imageBtnPrev: geodir_var.geodir_plugin_url + '/geodirectory-assets/images/lightbox-btn-prev.gif',
-            imageBtnClose: geodir_var.geodir_plugin_url + '/geodirectory-assets/images/lightbox-btn-close.gif',
-            imageBlank: geodir_var.geodir_plugin_url + '/geodirectory-assets/images/lightbox-blank.gif'
-        });
-    }
-    jQuery('#geodir_carousel').flexslider({
-        animation: "slide",
-        namespace: "geodir-",
-        selector: ".geodir-slides > li",
-        controlNav: false,
-        directionNav: false,
-        animationLoop: false,
-        slideshow: false,
-        itemWidth: 75,
-        itemMargin: 5,
-        asNavFor: '#geodir_slider',
-        rtl: parseInt(geodir_var.is_rtl) == 1 ? true : false/* fix rtl issue */
-    });
-    jQuery('#geodir_slider').flexslider({
-        animation: "slide",
-        selector: ".geodir-slides > li",
-        namespace: "geodir-",
-        controlNav: true,
-        animationLoop: true,
-        slideshow: true,
-        sync: "#geodir_carousel",
-        start: function (slider) {
-            jQuery('.geodir_flex-loader').hide();
-            jQuery('#geodir_slider').css({
-                'visibility': 'visible'
-            });
-            jQuery('#geodir_carousel').css({
-                'visibility': 'visible'
-            });
-        },
-        rtl: parseInt(geodir_var.is_rtl) == 1 ? true : false/* fix rtl issue */
-    });
+
+    gd_infowindow = new google.maps.InfoWindow();
+
     // Chosen selects
     if (jQuery("select.chosen_select").length > 0) {
         jQuery("select.chosen_select").chosen({
@@ -483,21 +442,29 @@ function geodir_get_post_term(el) {
     });
 }
 
-
 /*
  we recalc the stars because some browsers can't do subpixle percents, we should be able to remove this in a few years.
  */
-jQuery(window).load(function () {
-    jQuery('.geodir-rating').each(function () {
-        var $this = jQuery(this);
-        var parent_width = $this.width();
-        if (!parent_width) {
-            return true;
-        }
-        var star_width = $this.find(".geodir_Star img").width();
-        var star_count = $this.find(".geodir_Star img").length;
-        var width_calc = star_width * star_count;
-        $this.width(width_calc);
-    });
+jQuery(window).load(function() {
+	geodir_resize_rating_stars();
 });
-
+jQuery(window).resize(function() {
+	geodir_resize_rating_stars(true);
+});
+/**
+ * Adjust/resize rating stars width.
+ */
+function geodir_resize_rating_stars(re) {
+	jQuery('.geodir-rating').each(function() {
+		var $this = jQuery(this);
+		var parent_width = $this.width();
+		if (!parent_width) {
+			return true;
+		}
+		var star_width = $this.find(".geodir_Star img").width();
+		var star_count = $this.find(".geodir_Star img").length;
+		var width_calc = star_width * star_count;
+		width_calc = typeof re != 'undefined' && re ? 'auto' : width_calc;
+		$this.width(width_calc);
+	});
+}

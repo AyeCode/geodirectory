@@ -5,7 +5,7 @@
  * @since 1.0.0
  * @package GeoDirectory
  */
- 
+
 /**
  * @global int $mapzoom Zoom level value for the map.
  */
@@ -45,15 +45,16 @@ if (is_admin() && isset($_REQUEST['tab']) && $mapzoom == '') {
  *
  * @param bool Whether to auto fill country, state, city values in fields.
  */
- $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
+$auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
 ?>
 <script type="text/javascript">
     /* <![CDATA[ */
     <?php 
 	/**
-	 * Fires to add javascript for add listing page map.
+	 * Fires at the start of the add javascript on the add lsitings map.
 	 *
 	 * @since 1.0.0
+     * @param string $prefix The prefix for all elements.
 	 */
 	do_action('geodir_add_listing_js_start', $prefix);
 	?>
@@ -168,37 +169,45 @@ if (is_admin() && isset($_REQUEST['tab']) && $mapzoom == '') {
                     if (address_array.length > 1) {//alert(1);
 
 
-                        if (!(typeof(street_number.long_name) == 'undefined' || street_number.long_name == null) && street_number.long_name.toLowerCase() == address_array[0].toLowerCase().trim())
-                        {getAddress = street_number.long_name + ', ' + address_array[1];}
+                        if (!(typeof(street_number.long_name) == 'undefined' || street_number.long_name == null) && street_number.long_name.toLowerCase() == address_array[0].toLowerCase().trim()) {
+                            getAddress = street_number.long_name + ', ' + address_array[1];
+                        }
 
-                        if (getAddress == '' && !(typeof(street_number.long_name) == 'undefined' || street_number.long_name == null) && street_number.long_name.toLowerCase() == address_array[1].toLowerCase().trim())
-                        {getAddress = address_array[0] + ', ' + street_number.long_name;}
-
-
-                        if (getAddress == '' && !(typeof(street_number.short_name) == 'undefined' || street_number.short_name == null) && street_number.short_name.toLowerCase() == address_array[0].toLowerCase().trim())
-                        { getAddress = street_number.short_name + ', ' + address_array[1];}
-
-                        if (getAddress == '' && !(typeof(street_number.short_name) == 'undefined' || street_number.short_name == null) && street_number.short_name.toLowerCase() == address_array[1].toLowerCase().trim())
-                        {getAddress = address_array[0] + ', ' + street_number.short_name;}
+                        if (getAddress == '' && !(typeof(street_number.long_name) == 'undefined' || street_number.long_name == null) && street_number.long_name.toLowerCase() == address_array[1].toLowerCase().trim()) {
+                            getAddress = address_array[0] + ', ' + street_number.long_name;
+                        }
 
 
-                        if (getAddress == '' && !(typeof(premise.long_name) == 'undefined' || premise.long_name == null) && premise.long_name.toLowerCase() == address_array[0].toLowerCase().trim())
-                        {getAddress = premise.long_name + ', ' + address_array[1];}
+                        if (getAddress == '' && !(typeof(street_number.short_name) == 'undefined' || street_number.short_name == null) && street_number.short_name.toLowerCase() == address_array[0].toLowerCase().trim()) {
+                            getAddress = street_number.short_name + ', ' + address_array[1];
+                        }
 
-                        if (getAddress == '' && !(typeof(premise.long_name) == 'undefined' || premise.long_name == null) && premise.long_name.toLowerCase() == address_array[1].toLowerCase().trim())
-                        {getAddress = address_array[0] + ', ' + premise.long_name;}
-
-
-                        if (getAddress == '' && !(typeof(premise.short_name) == 'undefined' || premise.short_name == null) && premise.short_name.toLowerCase() == address_array[0].toLowerCase().trim())
-                        {getAddress = premise.short_name + ', ' + address_array[1];}
-
-                        if (getAddress == '' && !(typeof(premise.short_name) == 'undefined' || premise.short_name == null) && premise.short_name.toLowerCase() == address_array[1].toLowerCase().trim())
-                        {getAddress = address_array[0] + ', ' + premise.short_name;}
+                        if (getAddress == '' && !(typeof(street_number.short_name) == 'undefined' || street_number.short_name == null) && street_number.short_name.toLowerCase() == address_array[1].toLowerCase().trim()) {
+                            getAddress = address_array[0] + ', ' + street_number.short_name;
+                        }
 
 
+                        if (getAddress == '' && !(typeof(premise.long_name) == 'undefined' || premise.long_name == null) && premise.long_name.toLowerCase() == address_array[0].toLowerCase().trim()) {
+                            getAddress = premise.long_name + ', ' + address_array[1];
+                        }
 
-                        if (getAddress == '')
-                        { getAddress = 'none'}
+                        if (getAddress == '' && !(typeof(premise.long_name) == 'undefined' || premise.long_name == null) && premise.long_name.toLowerCase() == address_array[1].toLowerCase().trim()) {
+                            getAddress = address_array[0] + ', ' + premise.long_name;
+                        }
+
+
+                        if (getAddress == '' && !(typeof(premise.short_name) == 'undefined' || premise.short_name == null) && premise.short_name.toLowerCase() == address_array[0].toLowerCase().trim()) {
+                            getAddress = premise.short_name + ', ' + address_array[1];
+                        }
+
+                        if (getAddress == '' && !(typeof(premise.short_name) == 'undefined' || premise.short_name == null) && premise.short_name.toLowerCase() == address_array[1].toLowerCase().trim()) {
+                            getAddress = address_array[0] + ', ' + premise.short_name;
+                        }
+
+
+                        if (getAddress == '') {
+                            getAddress = 'none'
+                        }
 
                     }
                 }
@@ -207,12 +216,11 @@ if (is_admin() && isset($_REQUEST['tab']) && $mapzoom == '') {
 
 
             // if establishment then grab second arr
-            if (getAddress == 'none' && typeof(establishment.long_name) !== 'undefined' && typeof(address_array[1]) !== 'undefined'){
+            if (getAddress == 'none' && typeof(establishment.long_name) !== 'undefined' && typeof(address_array[1]) !== 'undefined') {
                 getAddress = address_array[1];
-            }else{
+            } else {
                 getAddress = address_array[0];
             }
-
 
 
             if (getAddress == '') {
@@ -388,7 +396,6 @@ if (is_admin() && isset($_REQUEST['tab']) && $mapzoom == '') {
 		 * Fires when marker address updated on map.
 		 *
 		 * @since 1.0.0
-		 *
 		 * @param string $prefix Identifier used as a prefix for field name
 		 */
 		do_action('geodir_update_marker_address', $prefix);
@@ -463,8 +470,8 @@ if (is_admin() && isset($_REQUEST['tab']) && $mapzoom == '') {
                     baseMarker.setPosition(results[0].geometry.location);
                     jQuery.goMap.map.setCenter(results[0].geometry.location);
                     updateMarkerPosition(baseMarker.getPosition());
-					//if(set_on_map && is_restrict){
-					//geocodePosition({ 'address': address,'country':   ISO2});
+                    //if(set_on_map && is_restrict){
+                    //geocodePosition({ 'address': address,'country':   ISO2});
                     <?php 
 					/**
 					 * Fires before set geocode position.
@@ -620,7 +627,8 @@ $set_button_class = 'geodir_button';
 if (is_admin())
     $set_button_class = 'button-primary';
 ?>
-<input type="button" id="<?php echo $prefix; ?>set_address_button" class="<?php echo $set_button_class; ?>" value="<?php _e($map_title, GEODIRECTORY_TEXTDOMAIN); ?>" style="float:none;"/>
+<input type="button" id="<?php echo $prefix; ?>set_address_button" class="<?php echo $set_button_class; ?>"
+       value="<?php _e($map_title, GEODIRECTORY_TEXTDOMAIN); ?>" style="float:none;"/>
 <div id="<?php echo $prefix; ?>d_mouseClick"></div>
 <div class="top_banner_section_inn geodir_map_container clearfix" style="margin-top:10px;">
     <div class="TopLeft"><span id="<?php echo $prefix; ?>triggermap" style="margin-top:-11px;margin-left:-12px;"></span>
@@ -629,7 +637,8 @@ if (is_admin())
     <div id="<?php echo $prefix . 'map'; ?>" class="geodir_map" style="height:300px">
         <!-- new map start -->
         <div class="iprelative">
-            <div id="<?php echo $prefix . 'map'; ?>" style="float:right;height:300px;position:relative;" class="form_row clearfix"></div>
+            <div id="<?php echo $prefix . 'map'; ?>" style="float:right;height:300px;position:relative;"
+                 class="form_row clearfix"></div>
             <div id="<?php echo $prefix; ?>loading_div" style="height:300px"></div>
             <div id="<?php echo $prefix; ?>advmap_counter"></div>
             <div id="<?php echo $prefix; ?>advmap_nofound"><?php echo MAP_NO_RESULTS; ?></div>

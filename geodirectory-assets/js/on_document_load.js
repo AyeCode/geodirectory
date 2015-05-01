@@ -1,3 +1,4 @@
+
 function geodir_click_search($this) {
     jQuery($this).parent().find('.geodir_submit_search').click();
 }
@@ -27,7 +28,6 @@ function addToFavourite(post_id, action) {
     });
     return false;
 }
-
 
 jQuery(document).ready(function () {
 
@@ -101,30 +101,6 @@ jQuery(document).ready(function () {
             error = true;
         }
 
-        /*if(listingurl_separator==''){
-         alert(geodir_all_js_msg.location_and_cat_url_separator_msg);
-         jQuery('#geodir_listingurl_separator').focus();
-         error = true; }
-
-         if (!characterReg.test(listingurl_separator) && listingurl_separator!=''){
-
-         alert(geodir_all_js_msg.invalid_char_and_cat_url_separator_msg);
-
-         jQuery('#geodir_listingurl_separator').focus();
-         error = true; }
-
-         if(detailurl_separator==''){
-         alert(geodir_all_js_msg.listing_det_url_separator_msg);
-         jQuery('#geodir_detailurl_separator').focus();
-         error = true; }
-
-         if (!characterReg.test(detailurl_separator) && detailurl_separator!=''){
-
-         alert(geodir_all_js_msg.invalid_char_listing_det_url_separator_msg);
-
-         jQuery('#geodir_detailurl_separator').focus();
-         error = true; }
-         */
 
         if (error == true) {
             return false;
@@ -152,3 +128,4 @@ jQuery(document).ready(function () {
 
     });
 });
+

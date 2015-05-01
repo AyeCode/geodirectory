@@ -1,0 +1,180 @@
+/*---------location page css--------------*/
+
+a:focus {
+    outline: none;
+}
+
+#geodir_wrapper #geodir-location {
+    margin-bottom: 15px;
+}
+
+#geodir_wrapper #geodir-location h1 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+#geodir_wrapper #geodir-location h1 a {
+    text-decoration: none;
+}
+
+#geodir_wrapper #geodir-location h1 a:hover {
+    color: #000;
+}
+
+#geodir_wrapper #geodir-location .comments-title {
+    margin-bottom: 1.42857rem
+}
+
+#geodir_wrapper #geodir-location .location_list_heading {
+    background: none repeat scroll 0 0 #F7F7F7;
+    border-top: 1px #D3D0D0 solid;
+    border-bottom: 1px #D3D0D0 solid;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    padding: 10px 10px 12px 5px;
+}
+
+#geodir_wrapper .gd_location_div {
+    margin-top: 10px;
+}
+
+#geodir_wrapper .location_list_heading {
+    background: none repeat scroll 0 0 #F7F7F7;
+    border-top: 1px #D3D0D0 solid;
+    border-bottom: 1px #D3D0D0 solid;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#geodir_wrapper .geodir_location_listing .location_list_heading h3 {
+    float: left;
+    margin: 0;
+    font-size: 15px;
+}
+
+#geodir_wrapper .geodir_location_listing .location_list_heading a.viewall {
+    float: right;
+    font: bold 11px arial;
+    color: #21759B;
+    padding-top: 5px;
+}
+
+#geodir_wrapper .geodir_location_listing .location_list_heading a.viewall:hover {
+    text-decoration: none;
+}
+
+#geodir_wrapper .geodir_locations {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+#geodir_wrapper .geodir_locations .locatin_list_subheading {
+
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    padding: 10px 0px;
+}
+
+#geodir_wrapper .geodir_locations .locatin_list_subheading h3 {
+    float: left;
+    margin: 0;
+    font-size: 15px;
+}
+
+#geodir_wrapper .geodir_locations > li {
+    float: left;
+    width: 30%;
+    padding: 7px 0;
+    margin-right: 3%;
+    border-bottom: 1px dotted #ccc;
+    list-style: none;
+}
+
+#geodir_wrapper .geodir_locations > li a {
+    text-decoration: none;
+}
+
+.geodir_location_tab_container {
+    /* border:1px solid #E6E6E6; background:none repeat scroll 0 0 #F3F3F3;*/
+    padding: 10px;
+    display: block !important;
+    opacity: 1 !important;
+}
+
+.geodir_location_tabs_head .geodir_location_tabs {
+    float: left;
+}
+
+.geodir_location_tabs_head .geodir_location_tabs a {
+    background: none repeat scroll 0 0 #FFF;
+    border: 1px solid #E6E6E6;
+    margin-bottom: 8px;
+    width: 50px;
+    text-align: center;
+    padding: 5px;
+}
+
+.geodir_location_tabs_head .geodir_location_tabs a:focus {
+    outline: none;
+}
+
+.geodir_location_tabs_head .geodir_location_tabs.gd-tab-active {
+    background: url(../images/downarrow-img.png) no-repeat bottom;
+}
+
+.geodir_location_tab_container .geodir_location_tabs_contant {
+    margin: 2px auto;
+}
+
+.gd-location-switcher .sub-menu a {
+    background-image: none;
+}
+
+#menu-item-gd-location-switcher dl {
+    width: 200px;
+    padding: 0px;
+    margin: 0px;
+}
+
+#menu-item-gd-location-switcher dd {
+    width: 33%;
+    margin: 0;
+    padding: 0;
+}
+
+#menu-item-gd-location-switcher .geodir_location_tab_container dd.geodir_location_tabs a {
+    background: #FFF;
+    color: #444;
+    padding: 5px;
+    margin: 0px 0px 8px 0px;
+    width: auto;
+    font-size: 12px;
+    border: 1px solid #ccc;
+}
+
+#menu-item-gd-location-switcher .geodir_location_sugestion {
+    width: 200px;
+    color: #444;
+}
+
+#menu-item-gd-location-switcher .geodir_location_sugestion a {
+    width: auto;
+    color: #444;
+    padding: 0px 0px 0px 8px;
+    font-size: 12px;
+}
+
+#menu-item-gd-location-switcher .geodir_location_sugestion a:hover, #menu-item-gd-location-switcher dd a:hover {
+    color: #444;
+}
+
+#menu-item-gd-location-switcher .geodir_location_sugestion .geodir-chosen-container {
+    background: #fff;
+}
+
+#menu-item-gd-location-switcher .geodir_location_sugestion .geodir-chosen-container .chosen-drop li {
+    width: 100%;
+}

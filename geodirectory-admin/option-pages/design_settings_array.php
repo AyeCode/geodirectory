@@ -936,6 +936,22 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
         array( 'type' => 'sectionend', 'id' => 'geodir_script_enqueue_settings'),
 
     */
+
+    array('name' => __('SCSS Settings (CSS combine and minify)', GEODIRECTORY_TEXTDOMAIN),
+        'type' => 'sectionstart',
+        'desc' => '',
+        'id' => 'geodir_scss_settings'),
+
+    array(
+        'name' => __('Disable Core SCSS', GEODIRECTORY_TEXTDOMAIN),
+        'desc' => __('Stops the CSS files being minified and output as one.', GEODIRECTORY_TEXTDOMAIN),
+        'id' => 'geodir_scss_core',
+        'type' => 'checkbox',
+        'std' => '0' // Default value to show home top section
+    ),
+
+    array('type' => 'sectionend', 'id' => 'geodir_scss_settings'),
+
     array('name' => __('Script Settings', GEODIRECTORY_TEXTDOMAIN),
         'type' => 'sectionstart',
         'desc' => '',

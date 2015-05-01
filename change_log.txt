@@ -1,6 +1,31 @@
+v1.4.6
+New filter added for term link in popular category widget - ADDED
+Validation added to avoid multiple times selection for same category - FIXED
+Map ajax requests now specifically set to return utf-8 - CHANGED
+Star ratings in sidebar not responsive for window size between 883x738 & 982x738 - FIXED
+
+
+v1.4.5
+Slider JS missing from preview page - FIXED
+http://docs.wpgeodirectory.com/security-release-21-04-2015/ - SECURITY UPDATE
+
+v1.4.4
+In CSV upload file new column post_status added to set listing status - CHANGED
+term description sometimes not showing - FIXED
+Listing title displaying sanitized for title attribute - ADDED
+CSV upload not dealing with line breaks in fields - FIXED
+ADDRESS_MSG can't be translated because it contains HTML tags - FIXED
+CSS files minified and added to one file for frontend - CHANGED
+JS files minified for the frontend - CHANGED
+In Best of widget listings "Best of" text not translatable - FIXED
+Update for Avada 3.8+ compatibility that removes the need to edit and have the header.php in child theme - CHANGED
+On search pages sort options removed as sorting is done by search criteria - CHANGED
+
 v1.4.3
 In the map child categories should be checked/unchecked when parent category is checked/unchecked - FIXED
 Sorting by title not working correctly - FIXED
+Added $post_id param to action 'geodir_update_postrating' - ADDED
+Removed preview button from backend for GD posts - CHANGED
 
 v1.4.2
 Google api establishment term can override street address - FIXED
@@ -21,6 +46,7 @@ Awesome font upgraded with new Awesome font version 4.3.0 - ADDED
 After searching for a city not able to search city again without clearing Near input box - FIXED
 Custom fields texts translation added - FIXED
 [#from_email#] added as a shortcode in notification templates - ADDED
+Changed hook 'template_include' to priority 9 - CHANGED
 
 v1.4.1
 Distances to listings should show miles/km until 0.01 rather than 1 before changing to ft/m - FIXED

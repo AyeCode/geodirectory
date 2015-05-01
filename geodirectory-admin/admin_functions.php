@@ -103,6 +103,7 @@ if (!function_exists('geodir_admin_scripts')) {
         wp_enqueue_script('tax-meta-clss', $plugin_path . '/js/tax-meta-clss.js', array('jquery'), null, true);
 
         $map_lang = "&language=" . geodir_get_map_default_language();
+        /** This filter is documented in geodirectory_template_tags.php */
         $map_extra = apply_filters('geodir_googlemap_script_extra', '');
         wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?sensor=false' . $map_lang . $map_extra, '', NULL);
 
@@ -967,6 +968,14 @@ function geodir_post_information_save($post_id)
 
     global $wpdb, $current_user, $post;
 
+   /* echo '###post';
+    print_r($_POST);
+    echo '###request';
+    print_r($_REQUEST);
+    echo '###';
+    print_r($post);
+    exit;
+   */
     //unsetting the listing session here causes problems, it should be the last thing to be done.
     /*if(isset($_SESSION['listing'])){
 		unset($_SESSION['listing']);
@@ -2934,8 +2943,8 @@ function gd_avada_compat_warning()
     */
 
     $plugin = 'avada-nag';
-    $timestamp = 'avada-nag123';
-    $message = __('Avada theme has no hooks for compatibility, because of this you must add two small changes to the header.php. <a href="http://docs.wpgeodirectory.com/avada-compatibility-header-php/" target="_blank">Instructions</a>', GEODIRECTORY_TEXTDOMAIN);
+    $timestamp = 'avada-nag1234';
+    $message = __('Since Avada 3.8+ they have added hooks for compatibility for GeoDirectory so the header.php modification is no longer required. <a href="http://docs.wpgeodirectory.com/avada-compatibility-header-php/" target="_blank">See here</a>', GEODIRECTORY_TEXTDOMAIN);
     echo '<div id="' . $timestamp . '"  class="error">';
     echo '<span class="gd-remove-noti" onclick="gdRemoveANotification(\'' . $plugin . '\',\'' . $timestamp . '\');" ><i class="fa fa-times"></i></span>';
     echo "<img class='gd-icon-noti' src='" . plugin_dir_url('') . "geodirectory/geodirectory-assets/images/favicon.ico' > ";
@@ -3067,3 +3076,24 @@ function geodir_before_update_options($current_tab, $geodir_settings) {
 		}
 	}
 }
+
+
+/**
+ * Removes the preview buttons from the wp-admin area for GD post types.
+ *
+ * This was removed as the preview page was causing bugs.
+ *
+ * @global string $post_type The current post type.
+ * @since 1.4.3
+ * @package GeoDirectory
+ */
+function geodir_hide_admin_preview_button() {
+    global $post_type;
+    $post_types = geodir_get_posttypes();
+    if(in_array($post_type, $post_types))
+        echo '<style type="text/css">#post-preview, #view-post-btn{display: none;}</style>';
+}
+add_action( 'admin_head-post-new.php', 'geodir_hide_admin_preview_button' );
+add_action( 'admin_head-post.php', 'geodir_hide_admin_preview_button' );
+
+

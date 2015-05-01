@@ -97,7 +97,7 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                             <header class="geodir-entry-header">
                                 <h3 class="geodir-entry-title">
                                     <a href="<?php the_permalink(); ?>"
-                                       title="<?php the_title(); ?>"><?php the_title(); ?></a>
+                                       title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a>
                                 </h3>
                             </header>
                             <!-- .entry-header -->
