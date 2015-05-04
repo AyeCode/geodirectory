@@ -235,7 +235,7 @@ function geodir_get_address_by_lat_lan($lat, $lng)
 }
 
 /// New location functions added on 23-06-2014
-function geodir_get_current_location_terms($location_array_from = 'session')
+function geodir_get_current_location_terms($location_array_from = 'session', $gd_post_type = '')
 {
     global $wp;
     $location_array = array();
@@ -280,6 +280,17 @@ function geodir_get_current_location_terms($location_array_from = 'session')
 			$location_array = geodir_get_current_location_terms('session');
 		}
     }
+	
+	/**
+	 * Filter the location terms.
+	 *
+	 * @since 1.4.6
+	 *
+	 * @param array $location_array Array of location terms. Default empty.
+	 * @param string $location_array_from Source type of location terms. Default session.
+	 * @param string $gd_post_type WP post type.
+	 */
+	$location_array = apply_filters( 'geodir_current_location_terms', $location_array, $location_array_from, $gd_post_type );
 
     return $location_array;
 

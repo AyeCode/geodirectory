@@ -1434,8 +1434,11 @@ function geodir_post_type_archive_title($title)
             $wpseo_edit = true;
         }
         ####### FIX FOR YOAST SEO END ########
+		
+		$gd_post_type = geodir_get_current_posttype();
+        $post_type_info = get_post_type_object($gd_post_type);
 
-        $location_array = geodir_get_current_location_terms('query_vars');
+        $location_array = geodir_get_current_location_terms('query_vars', $gd_post_type);
         if (!empty($location_array)) {
             $location_titles = array();
             $actual_location_name = function_exists('get_actual_location_name') ? true : false;
@@ -1460,9 +1463,6 @@ function geodir_post_type_archive_title($title)
                 $title .= __(' in ', GEODIRECTORY_TEXTDOMAIN) . implode(", ", $location_titles);
             }
         }
-
-        $gd_post_type = geodir_get_current_posttype();
-        $post_type_info = get_post_type_object($gd_post_type);
 
         /*if( get_query_var( $gd_post_type . 'category' ) ) {
 			$gd_taxonomy = $gd_post_type . 'category';

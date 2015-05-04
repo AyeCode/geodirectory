@@ -100,6 +100,18 @@ class geodir_map_listingpage extends WP_Widget
             /** This action is documented in geodirectory_shortcodes.php */
             $scrollwheel = empty($instance['scrollwheel']) ? '0' : apply_filters('widget_scrollwheel', $instance['scrollwheel']);
             $showall = empty($instance['showall']) ? '0' : apply_filters('widget_showall', $instance['showall']);
+			
+			/**
+             * Filter the listing map should to be displayed or not.
+             *
+             * @since 1.4.6
+			 *
+             * @param bool $display true if map should be displayed, false if not.
+             */
+			$show_map = apply_filters( 'geodir_show_map_listing', $display = true );
+			if ( !$show_map ) {
+				return;
+			}
 
             $map_args = array();
             $map_args['map_canvas_name'] = str_replace('-', '_', $args['widget_id']);
@@ -115,7 +127,7 @@ class geodir_map_listingpage extends WP_Widget
             $map_args['enable_post_type_filters'] = false;
             $map_args['enable_location_filters'] = false;
             $map_args['enable_jason_on_load'] = true;
-
+			
             if (is_single()) {
 
                 global $post;

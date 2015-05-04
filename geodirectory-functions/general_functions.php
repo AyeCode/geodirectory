@@ -687,7 +687,7 @@ function geodir_breadcrumb()
         $listing_link .= '/';
 
         $post_type_for_location_link = $listing_link;
-        $location_terms = geodir_get_current_location_terms('query_vars');
+        $location_terms = geodir_get_current_location_terms('query_vars', $gd_post_type);
         $location_link = $post_type_for_location_link;
 
         if (geodir_is_page('detail') || geodir_is_page('listing')) {
@@ -2470,7 +2470,8 @@ function geodir_popular_postview_output($args = '', $instance = '')
             $geodir_is_widget_listing = false;
 
             $GLOBALS['post'] = $current_post;
-            setup_postdata($current_post);
+            if (!empty($current_post))
+				setup_postdata($current_post);
             $map_jason = $current_map_jason;
             $map_canvas_arr = $current_map_canvas_arr;
             ?>
