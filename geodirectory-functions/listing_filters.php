@@ -357,11 +357,14 @@ function geodir_posts_fields($fields)
                 $gd_titlematch_part .= " CASE WHEN ";
                 $count = 0;
                 foreach ($keywords as $keyword) {
-                    $count++;
+                    $keyword = trim($keyword);
+					$count++;
                     if ($count < count($keywords)) {
-                        $gd_titlematch_part .= $wpdb->posts . ".post_title LIKE '%%" . $keyword . "%%' " . $key . " ";
+                       // $gd_titlematch_part .= $wpdb->posts . ".post_title LIKE '%%" . $keyword . "%%' " . $key . " ";
+						$gd_titlematch_part .= "( " . $wpdb->posts . ".post_title REGEXP '[[:<:]]" . $keyword . "[[:>:]]' ) " . $key . " ";
                     } else {
-                        $gd_titlematch_part .= $wpdb->posts . ".post_title LIKE '%%" . $keyword . "%%' ";
+                        //$gd_titlematch_part .= $wpdb->posts . ".post_title LIKE '%%" . $keyword . "%%' ";
+						$gd_titlematch_part .= "( " . $wpdb->posts . ".post_title REGEXP '[[:<:]]" . $keyword . "[[:>:]]' ) ";
                     }
                 }
                 $gd_titlematch_part .= "THEN 1 ELSE 0 END AS " . $part . ",";
@@ -369,7 +372,8 @@ function geodir_posts_fields($fields)
         } else {
             $gd_titlematch_part = "";
         }
-        $fields .= $wpdb->prepare(", CASE WHEN " . $table . ".is_featured='1' THEN 1 ELSE 0 END AS gd_featured, CASE WHEN " . $wpdb->posts . ".post_title=%s THEN 1 ELSE 0 END AS gd_exacttitle," . $gd_titlematch_part . " CASE WHEN " . $wpdb->posts . ".post_title LIKE %s THEN 1 ELSE 0 END AS gd_titlematch, CASE WHEN " . $wpdb->posts . ".post_content LIKE %s THEN 1 ELSE 0 END AS gd_content", array($s, '%' . $s . '%', '%' . $s . '%'));
+        //$fields .= $wpdb->prepare(", CASE WHEN " . $table . ".is_featured='1' THEN 1 ELSE 0 END AS gd_featured, CASE WHEN " . $wpdb->posts . ".post_title=%s THEN 1 ELSE 0 END AS gd_exacttitle," . $gd_titlematch_part . " CASE WHEN " . $wpdb->posts . ".post_title LIKE %s THEN 1 ELSE 0 END AS gd_titlematch, CASE WHEN " . $wpdb->posts . ".post_content LIKE %s THEN 1 ELSE 0 END AS gd_content", array($s, '%' . $s . '%', '%' . $s . '%'));
+		$fields .= $wpdb->prepare(", CASE WHEN " . $table . ".is_featured='1' THEN 1 ELSE 0 END AS gd_featured, CASE WHEN " . $wpdb->posts . ".post_title=%s THEN 1 ELSE 0 END AS gd_exacttitle," . $gd_titlematch_part . " CASE WHEN " . $wpdb->posts . ".post_title REGEXP %s THEN 1 ELSE 0 END AS gd_titlematch, CASE WHEN " . $wpdb->posts . ".post_content REGEXP %s THEN 1 ELSE 0 END AS gd_content", array($s, '[[:<:]]' . $s . '[[:>:]]', '[[:<:]]' . $s . '[[:>:]]'));
     }
     return $fields;
 }
@@ -718,7 +722,8 @@ function searching_filter_where($where)
 
     if (!empty($s_SA)) {
         foreach ($s_SA as $s_term) {
-            $better_search[] = " OR $wpdb->posts.post_title LIKE\"%$s_term%\" ";
+            //$better_search[] = " OR $wpdb->posts.post_title LIKE\"%$s_term%\" ";
+			$better_search[] = " OR $wpdb->posts.post_title REGEXP '[[:<:]]" . $s_term . "[[:>:]]' ";
         }
     }
 
@@ -734,12 +739,13 @@ function searching_filter_where($where)
         $post_types = 'gd_place';
 
     if (trim($s) != '') {
-        $adv_search_arr = explode(" ", $s);
-        if (!empty($adv_search_arr)) {
-            foreach ($adv_search_arr as $adv_search_val) {
-                $adv_search_val = trim($adv_search_val);
-                if ($adv_search_val != '') {
-                    $better_search_terms .= ' OR ' . $wpdb->posts . '.post_title LIKE "%' . $adv_search_val . '%"';
+        $keywords = explode(" ", trim($s));
+        if (!empty($keywords)) {
+            foreach ($keywords as $keyword) {
+                $keyword = trim($keyword);
+                if ($keyword != '') {
+                    //$better_search_terms .= ' OR ' . $wpdb->posts . '.post_title LIKE "%' . $adv_search_val . '%"';
+					$better_search_terms .= ' OR ' . $wpdb->posts . '.post_title REGEXP "[[:<:]]' . $keyword . '[[:>:]]"';
                 }
             }
         }
@@ -755,11 +761,13 @@ function searching_filter_where($where)
     if (count($keywords) > 1) {
         $gd_titlematch_part = " ";
         foreach ($keywords as $keyword) {
-            $gd_titlematch_part .= "OR ($wpdb->posts.post_title LIKE \"%$keyword%\") ";
+            //$gd_titlematch_part .= "OR ($wpdb->posts.post_title LIKE \"%$keyword%\") ";
+			$gd_titlematch_part .= "OR ($wpdb->posts.post_title REGEXP '[[:<:]]" . $keyword . "[[:>:]]') ";
         }
     } else {
         $gd_titlematch_part = "";
     }
+	$gd_titlematch_part = "";
 
     //if($snear!='' && strpos($snear,__('In:',GEODIRECTORY_TEXTDOMAIN)) !== false)
     if ($snear != '') {
@@ -777,16 +785,16 @@ function searching_filter_where($where)
         $rlat2 = is_numeric(max($lat1, $lat2)) ? max($lat1, $lat2) : '';
 
 
-        $where .= " AND ( ( $wpdb->posts.post_title LIKE \"%$s%\" $better_search_terms)
+        $where .= " AND ( ( $wpdb->posts.post_title LIKE \"$s\" $better_search_terms)
 			                    $gd_titlematch_part
-								OR ($wpdb->posts.post_content LIKE \"%$s%\") 
+								OR ($wpdb->posts.post_content REGEXP '[[:<:]]" . $s . "[[:>:]]') 
 								OR ($wpdb->posts.ID IN( 
 										SELECT $wpdb->term_relationships.object_id as post_id 
 										FROM $wpdb->term_taxonomy,  $wpdb->terms, $wpdb->term_relationships 
 										WHERE $wpdb->term_taxonomy.term_id =  $wpdb->terms.term_id
 										AND $wpdb->term_relationships.term_taxonomy_id =  $wpdb->term_taxonomy.term_taxonomy_id
 										AND $wpdb->term_taxonomy.taxonomy in ({$taxonomies})
-										AND ($wpdb->terms.name LIKE\"%$s%\"  OR $wpdb->terms.name IN ($s_A))  
+										AND ($wpdb->terms.name REGEXP '[[:<:]]" . $s . "[[:>:]]' OR $wpdb->terms.name IN ($s_A))  
 										)
 									) 
 							)
@@ -801,16 +809,16 @@ function searching_filter_where($where)
         }
 
     } else {
-        $where .= " AND (	( $wpdb->posts.post_title LIKE \"%$s%\" $better_search_terms)
+        $where .= " AND (	( $wpdb->posts.post_title LIKE \"$s\" $better_search_terms)
                             $gd_titlematch_part
-							OR ( $wpdb->posts.post_content LIKE \"%$s%\") 
+							OR ($wpdb->posts.post_content REGEXP '[[:<:]]" . $s . "[[:>:]]') 
 							OR ( $wpdb->posts.ID IN(	
 									SELECT $wpdb->term_relationships.object_id as post_id                     
 									FROM $wpdb->term_taxonomy,  $wpdb->terms, $wpdb->term_relationships
 								WHERE $wpdb->term_taxonomy.term_id =  $wpdb->terms.term_id
 								AND $wpdb->term_relationships.term_taxonomy_id =  $wpdb->term_taxonomy.term_taxonomy_id
 								AND $wpdb->term_taxonomy.taxonomy in ( {$taxonomies} )
-								AND ($wpdb->terms.name LIKE\"%$s%\" OR $wpdb->terms.name IN ($s_A)) 
+								AND ($wpdb->terms.name REGEXP '[[:<:]]" . $s . "[[:>:]]' OR $wpdb->terms.name IN ($s_A)) 
 								)
 						) 
 					) 
