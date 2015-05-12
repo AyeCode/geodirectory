@@ -176,9 +176,12 @@ function geodir_save_rating($comment = 0)
 					post_date		= %s, 
 					post_city		= %s, 
 					post_region		= %s, 
-					post_country	= %s 
+					post_country	= %s,
+					post_longitude	= %s,
+					post_latitude	= %s,
+					comment_content	= %s 
 					",
-                array($post_id, $post->post_type, $post->post_title, $user_ID, $comment, $rating_ip, $overall_rating, $status, $post_status, date("Y-m-d H:i:s"), $post_details->post_city, $post_details->post_region, $post_details->post_country)
+                array($post_id, $post->post_type, $post->post_title, $user_ID, $comment, $rating_ip, $overall_rating, $status, $post_status, date("Y-m-d H:i:s"), $post_details->post_city, $post_details->post_region, $post_details->post_country,$post_details->post_latitude,$post_details->post_longitude,$comment_info->comment_content)
             );
 
             $wpdb->query($sqlqry);
@@ -246,8 +249,9 @@ function geodir_update_rating_status_change($comment_id, $status)
 
             $sqlqry = $wpdb->prepare("UPDATE " . GEODIR_REVIEW_TABLE . " SET
 						overall_rating = %f,
-						status		= %s 
-						WHERE comment_id = %d ", array($overall_rating, $status, $comment_id));
+						status		= %s,
+						comment_content = %s 
+						WHERE comment_id = %d ", array($overall_rating, $status, $comment_info->comment_content, $comment_id));
 
             $wpdb->query($sqlqry);
 
@@ -298,8 +302,9 @@ function geodir_update_rating($comment_id = 0)
 
                 $sqlqry = $wpdb->prepare("UPDATE " . GEODIR_REVIEW_TABLE . " SET
 						overall_rating = %f,
-						status		= %s 
-						WHERE comment_id = %d ", array($overall_rating, $status, $comment_id));
+						status		= %s,
+						comment_content	= %s 
+						WHERE comment_id = %d ", array($overall_rating, $status, $comment_info->comment_content, $comment_id));
 
                 $wpdb->query($sqlqry);
 
