@@ -518,8 +518,10 @@ function geodir_admin_option_form($tab_name)
             break;
         case 'compatibility_settings' :
             geodir_theme_compatibility_setting_page();
+            break;		
+		case 'import_export' :
+            geodir_import_export_page();
             break;
-
 
     }// end of switch
 }

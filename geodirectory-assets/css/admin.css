@@ -441,6 +441,95 @@ body.edit-tags-php .form-field input, .form-field textarea {
     cursor: pointer;
 }
 
+/* listings/categories import & export */
+.gd-import-export > h3 {
+	margin-top: 0;
+	text-transform: uppercase;
+	color: #555
+}
+.gd-import-export .postbox {
+	border: solid 1px #dedede;
+}
+.gd-import-export h3.hndle {
+	border: solid 1px #dedede;
+	border-top: none;
+}
+.gd-import-export .button-primary, .gd-import-export .button-secondary,
+.gd-import-export .button-primary:active, .gd-import-export .button-secondary:active,
+.gd-import-export .button-primary:focus, .gd-import-export .button-secondary:focus {
+	vertical-align: inherit;
+	margin: 0 10px 0 0;
+}
+.gd-import-export .postbox .inside {
+	margin: 0;
+}
+.gd-import-export .form-table td.fld {
+	width: 140px;
+	color: #555555
+}
+#gd_progressbar {
+	height: 1.5em;
+	position: relative;
+	text-align: center;
+}
+.gd-progress-label {
+    position: absolute;
+    top: 3px;
+    font-weight: bold;
+	text-align:center;
+	font-size: .8em;
+	color: #444;
+	width: 100%
+}
+#gd_timer {
+	display: inline-block
+}
+.gd-import-export .plupload-upload-uic .filelist, .gd-import-export .gd-import-msg, .gd-import-export .gd-import-progress  {
+	margin-top: 25px;
+}
+
+.gd-import-export .filelist div.file:last-child {
+  display: block !important;
+  opacity: 1 !important;
+}
+.gd-import-export .gd-imex-btns {
+	margin-top: 20px;
+}
+
+.gd-import-export #gd-import-msg #message {
+    background-color: rgb(255, 251, 204);
+}
+.gd-import-export .gd-import-msg .message p {
+	margin-top: 3px;
+	margin-bottom: 3px;
+}
+.gd-import-export .fileprogress {
+	margin-top: 3px;
+}
+.gd-import-export .gd-import-progress .gd-import-file {
+    background: #ececec;
+    border: 1px solid #ccc;
+    clear: both;
+    margin-bottom: 4px;
+    padding: 5px;
+}
+.gd-import-export .gd-import-progress .gd-fileprogress {
+    background: #b7c53d;
+    height: 5px;
+    margin-top: 3px;
+    width: 0;
+}
+.gd-import-export .gd-im-choices {
+	margin-bottom: 20px;
+}
+.gd-import-export .gd-im-choices p {
+	margin-top: 0px;
+	margin-bottom: 7px;
+}
+.gd-import-export  .geodir_event_csv_download {
+	display: inline-block;
+}
+
 /***********************---------------MEDIA CSS-------------*****************************/
 
 @media screen and (min-width: 860px) and (max-width: 960px) {
