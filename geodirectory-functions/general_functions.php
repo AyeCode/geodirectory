@@ -224,7 +224,7 @@ function geodir_is_page($gdpage = '')
 
             if (is_page() && get_query_var('page_id') == get_option('geodir_add_listing_page')) {
                 return true;
-            } elseif (is_page() && isset($post->post_content) && has_shortcode($post->post_content, 'add_listing')) {
+            } elseif (is_page() && isset($post->post_content) && has_shortcode($post->post_content, 'gd_add_listing')) {
                 return true;
             }
 
@@ -1776,7 +1776,7 @@ function geodir_googlemap_script_extra_details_page($extra)
 {
     global $post;
     $add_google_places_api = false;
-    if (isset($post->post_content) && has_shortcode($post->post_content, 'add_listing')) {
+    if (isset($post->post_content) && has_shortcode($post->post_content, 'gd_add_listing')) {
         $add_google_places_api = true;
     }
     if (!str_replace('libraries=places', '', $extra) && (geodir_is_page('detail') || $add_google_places_api)) {
