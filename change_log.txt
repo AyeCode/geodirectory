@@ -5,6 +5,9 @@ Map ajax requests now specifically set to return utf-8 - CHANGED
 Star ratings in sidebar not responsive for window size between 883x738 & 982x738 - FIXED
 New filter added for location terms - ADDED
 Searching function updated to find results for only matching whole words - FIXED
+On sorting comment the comment text goes disappeared - FIXED
+Import & Export added for GD listings & categories - ADDED
+CSV Upload updated & moved under Import & Export - CHANGED
 
 
 v1.4.5

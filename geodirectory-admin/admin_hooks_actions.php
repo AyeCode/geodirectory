@@ -1666,3 +1666,10 @@ function geodir_ajax_import_csv()
     echo json_encode($return);
     exit;
 }
+
+// Add the tab in left sidebar menu fro import & export page.
+add_filter( 'geodir_settings_tabs_array', 'geodir_import_export_tab', 94 );
+
+// Handle ajax request for impot/export.
+add_action( 'wp_ajax_geodir_import_export', 'geodir_ajax_import_export' );
+add_action( 'wp_ajax_nopriv_geodir_import_exportn', 'geodir_ajax_import_export' );
