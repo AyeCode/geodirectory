@@ -52,7 +52,7 @@ function geodir_sc_add_listing($atts)
     return $output;
 }
 
-add_shortcode('gd_homepage_map', 'geodir_sc_home_map');
+
 function geodir_sc_home_map($atts)
 {
     ob_start();
@@ -164,6 +164,7 @@ function geodir_sc_home_map($atts)
 
     return $output;
 }
+add_shortcode('gd_homepage_map', 'geodir_sc_home_map');
 
 add_shortcode('gd_listing_map', 'geodir_sc_listing_map');
 function geodir_sc_listing_map($atts)
