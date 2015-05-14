@@ -4292,16 +4292,26 @@ function geodir_ajax_import_export() {
 								if ( isset( $term_data['top_description'] ) ) {
 									update_tax_meta( $term_id, 'ct_cat_top_desc', $term_data['top_description'], $cat_posttype );
 								}
-								
+			
 								$attachment = false;
 								if ( isset( $term_data['image'] ) && $term_data['image'] != '' ) {
-									$attachment = true;
-									update_tax_meta( $term_id, 'ct_cat_default_img', array( 'id' => 'image', 'src' => $uploads['url'] . '/' . $term_data['image'] ), $cat_posttype );
+									$cat_image = geodir_get_default_catimage( $term_id, $cat_posttype );
+									$cat_image = !empty( $cat_image ) && isset( $cat_image['src'] ) ? $cat_image['src'] : '';
+									
+									if ( basename($cat_image) != $term_data['image'] ) {
+										$attachment = true;
+										update_tax_meta( $term_id, 'ct_cat_default_img', array( 'id' => 'image', 'src' => $uploads['url'] . '/' . $term_data['image'] ), $cat_posttype );
+									}
 								}
 								
 								if ( isset( $term_data['icon'] ) && $term_data['icon'] != '' ) {
-									$attachment = true;
-									update_tax_meta( $term_id, 'ct_cat_icon', array( 'id' => 'icon', 'src' => $uploads['url'] . '/' . $term_data['icon'] ), $cat_posttype );
+									$cat_icon = get_tax_meta( $term_id, 'ct_cat_icon', false, $cat_posttype );
+									$cat_icon = !empty( $cat_icon ) && isset( $cat_icon['src'] ) ? $cat_icon['src'] : '';
+										
+									if ( basename($cat_icon) != $term_data['icon'] ) {
+										$attachment = true;
+										update_tax_meta( $term_id, 'ct_cat_icon', array( 'id' => 'icon', 'src' => $uploads['url'] . '/' . $term_data['icon'] ), $cat_posttype );
+									}
 								}
 								
 								if ( $attachment ) {
@@ -4342,6 +4352,7 @@ function geodir_ajax_import_export() {
 							$row = $file[$index];
 							$row = array_map( 'trim', $row );
 							$row = array_map( 'utf8_encode', $row );
+							$row = array_map( 'addslashes_gpc', $row );
 							
 							$post_id = '';
 							$post_title = '';
@@ -4853,6 +4864,15 @@ function geodir_imex_get_posts( $post_type ) {
 		$csv_row[] = 'geodir_website';
 		$csv_row[] = 'geodir_twitter';
 		$csv_row[] = 'geodir_facebook';
+		$csv_row[] = 'geodir_video';
+		$csv_row[] = 'geodir_special_offers';
+		
+		$custom_fields = geodir_imex_get_custom_fields( $post_type );
+		if ( !empty( $custom_fields ) ) {
+			foreach ( $custom_fields as $custom_field ) {
+				$csv_row[] = $custom_field->htmlvar_name;
+			}
+		}
 		
 		$csv_rows[] = $csv_row;
 
@@ -4930,6 +4950,14 @@ function geodir_imex_get_posts( $post_type ) {
 			$csv_row[] = $post_info['geodir_website']; // geodir_website
 			$csv_row[] = $post_info['geodir_twitter']; // geodir_twitter
 			$csv_row[] = $post_info['geodir_facebook']; // geodir_facebook
+			$csv_row[] = $post_info['geodir_video']; // geodir_video
+			$csv_row[] = $post_info['geodir_special_offers']; // geodir_special_offers
+			
+			if ( !empty( $custom_fields ) ) {
+				foreach ( $custom_fields as $custom_field ) {
+					$csv_row[] = isset( $post_info[$custom_field->htmlvar_name] ) ? $post_info[$custom_field->htmlvar_name] : '';
+				}
+			}
 			
 			for ( $c = 0; $c < $images_count; $c++ ) {
 				$csv_row[] = isset( $current_images[$c] ) ? $current_images[$c] : ''; // IMAGE
@@ -5163,4 +5191,13 @@ function geodir_import_export_line_count( $file ) {
 	}
 	
 	return NULL;
+}
+
+function geodir_imex_get_custom_fields( $post_type ) {
+	 global $wpdb;
+	 
+	 $sql = $wpdb->prepare("SELECT htmlvar_name FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE post_type=%s AND is_active='1' AND is_admin!='1' ORDER BY id ASC", array( $post_type ) );
+	 $rows = $wpdb->get_results( $sql );
+	 
+	 return $rows;
 }
