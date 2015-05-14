@@ -1034,7 +1034,7 @@ function geodir_fix_virtual_page($slug, $page_title, $old_id, $option)
     }
 
     $page_data = array(
-        'post_status' => 'virtual',
+        'post_status' => 'publish',
         'post_type' => 'page',
         'post_author' => $current_user->ID,
         'post_name' => $slug,
