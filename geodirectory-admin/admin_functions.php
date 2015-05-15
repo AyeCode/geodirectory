@@ -3496,8 +3496,8 @@ function gd_imex_StartImport(el, type) {
 					gd_skipped = gd_skipped + parseInt(data.skipped);
 					gd_invalid = gd_invalid + parseInt(data.invalid);
 					gd_images = gd_images + parseInt(data.images);
-					if (type=='post' && typeof data.gd_invalid_addr != 'undefined') {
-						gd_invalid_addr = gd_invalid_addr + parseInt(data.gd_invalid_addr);
+					if (type=='post' && typeof data.invalid_addr != 'undefined') {
+						gd_invalid_addr = gd_invalid_addr + parseInt(data.invalid_addr);
 					}
 
 					jQuery('#gd_processed', cont).val(gd_processed);
@@ -3644,16 +3644,16 @@ function gd_imex_showStatusMsg(el, type) {
 		gdMsg += msgParse;
 	}
 	
-	if ( created > 0 ) {
-		var msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) inserted.', GEODIRECTORY_TEXTDOMAIN ), '%s', '%d' ) );?></p>';
-		msgParse = msgParse.replace("%s", created);
+	if ( updated > 0 ) {
+		var msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) updated.', GEODIRECTORY_TEXTDOMAIN ), '%s', '%d' ) );?></p>';
+		msgParse = msgParse.replace("%s", updated);
 		msgParse = msgParse.replace("%d", processed);
 		gdMsg += msgParse;
 	}
 	
-	if ( updated > 0 ) {
-		var msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) updated.', GEODIRECTORY_TEXTDOMAIN ), '%s', '%d' ) );?></p>';
-		msgParse = msgParse.replace("%s", updated);
+	if ( created > 0 ) {
+		var msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) added.', GEODIRECTORY_TEXTDOMAIN ), '%s', '%d' ) );?></p>';
+		msgParse = msgParse.replace("%s", created);
 		msgParse = msgParse.replace("%d", processed);
 		gdMsg += msgParse;
 	}
@@ -3664,16 +3664,16 @@ function gd_imex_showStatusMsg(el, type) {
 		msgParse = msgParse.replace("%d", processed);
 		gdMsg += msgParse;
 	}
-
-	if (invalid > 0) {
-		var msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) could not be inserted due to blank title/invalid post type.', GEODIRECTORY_TEXTDOMAIN ), '%s', '%d' ) );?></p>';
-		msgParse = msgParse.replace("%s", invalid);
+	
+	if (type=='post' && invalid_addr > 0) {
+		var msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) could not be added due to blank/invalid address(city, region, country, latitude, longitude).', GEODIRECTORY_TEXTDOMAIN ), '%s', '%d' ) );?></p>';
+		msgParse = msgParse.replace("%s", invalid_addr);
 		msgParse = msgParse.replace("%d", total);
 		gdMsg += msgParse;
 	}
 	
-	if (type=='post' && invalid_addr > 0) {
-		var msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) could not be inserted due to blank/invalid address.', GEODIRECTORY_TEXTDOMAIN ), '%s', '%d' ) );?></p>';
+	if (invalid > 0) {
+		var msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) could not be added due to blank title/invalid post type.', GEODIRECTORY_TEXTDOMAIN ), '%s', '%d' ) );?></p>';
 		msgParse = msgParse.replace("%s", invalid);
 		msgParse = msgParse.replace("%d", total);
 		gdMsg += msgParse;
@@ -4457,7 +4457,7 @@ function geodir_ajax_import_export() {
 							$location_allowed = function_exists( 'geodir_cpt_no_location' ) && geodir_cpt_no_location( $post_type ) ? false : true;
 							if ( $location_allowed ) {
 								$location_result = geodir_get_default_location();
-								if ( $post_address == '' || $post_city == '' || $post_region == '' || $post_country == '' || $post_zip == '' || $post_latitude == '' || $post_longitude == '' ) {
+								if ( $post_address == '' || $post_city == '' || $post_region == '' || $post_country == '' || $post_latitude == '' || $post_longitude == '' ) {
 									$invalid_addr++;
 									$valid = false;
 								} else if ( !empty( $location_result ) && $location_result->location_id == 0 ) {
@@ -4608,14 +4608,30 @@ function geodir_ajax_import_export() {
 
 								// Post images
 								if ( !empty( $post_images ) ) {
+									$post_images = array_unique($post_images);
+									
+									$old_post_images_arr = array();
+									$saved_post_images_arr = array();
+									
 									$order = 1;
 									
-									// Remove previous attachment
-									$wpdb->query( $wpdb->prepare( "DELETE FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE post_id = %s ", array( $saved_post_id ) ) );
+									$old_post_images = geodir_get_images( $saved_post_id );
+									if (!empty($old_post_images)) {
+										foreach( $old_post_images as $old_post_image ) {
+											if (!empty($old_post_image) && isset($old_post_image->file) && $old_post_image->file != '') {
+												$old_post_images_arr[] = $old_post_image->file;
+											}
+										}
+									}
 									
 									foreach ( $post_images as $post_image ) {
-
 										$image_name = basename( $post_image );
+										$saved_post_images_arr[] = $image_name;
+										
+										if (!empty($old_post_images_arr) && in_array( $image_name, $old_post_images_arr) ) {
+											continue; // Skip if image already exists.
+										}
+										
 										$image_name_parts = explode( '.', $image_name );
 										array_pop( $image_name_parts );
 										$proper_image_name = implode( '.', $image_name_parts );
@@ -4644,11 +4660,27 @@ function geodir_ajax_import_export() {
 																						
 											// Add new attachment
 											$wpdb->query( "INSERT INTO " . GEODIR_ATTACHMENT_TABLE . " SET " . $attachment_set );
-											
-											if ( $order == 1 ) {
-												$wpdb->query( $wpdb->prepare( "UPDATE " . $table . " SET featured_image = %s WHERE post_id =%d", array( $uploads_subdir . '/' . $image_name, $saved_post_id ) ) );
-											}
+																						
 											$order++;
+										}
+									}
+									
+									$saved_post_images_sql = !empty($saved_post_images_arr) ? " AND ( file NOT LIKE '%/" . implode("' AND file NOT LIKE '%/",  $saved_post_images_arr) . "' )" : '';
+									// Remove previous attachment
+									$wpdb->query( "DELETE FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE post_id = " . (int)$saved_post_id . " " . $saved_post_images_sql );
+									
+									if ( !empty( $saved_post_images_arr ) ) {
+										$menu_order = 1;
+										
+										foreach ( $saved_post_images_arr as $img_name ) {
+											$wpdb->query( $wpdb->prepare( "UPDATE " . GEODIR_ATTACHMENT_TABLE . " SET menu_order = %d WHERE post_id =%d AND file LIKE %s", array( $menu_order, $saved_post_id, '%/' . $img_name ) ) );
+											
+											if( $menu_order == 1 ) {
+												if ( $featured_image = $wpdb->get_var( $wpdb->prepare( "SELECT file FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE post_id =%d AND file LIKE %s", array( $saved_post_id, '%/' . $img_name ) ) ) ) {
+													$wpdb->query( $wpdb->prepare( "UPDATE " . $table . " SET featured_image = %s WHERE post_id =%d", array( $featured_image, $saved_post_id ) ) );
+												}
+											}
+											$menu_order++;
 										}
 									}
 									
