@@ -1063,14 +1063,10 @@ function geodir_diagnose_default_pages()
     /* Diagnose Add Listing Page Starts */
     //////////////////////////////////
     $option_value = get_option('geodir_add_listing_page');
-    $page_found = $wpdb->get_var(
-        $wpdb->prepare(
-            "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_status='virtual' LIMIT 1;",
-            array('add-listing')
-        )
-    );
+    $page = get_post($option_value);
+    if(!empty($page)){$page_found = $page->ID;}else{$page_found = '';}
 
-    if (!empty($option_value) && !empty($page_found) && $option_value == $page_found)
+    if(!empty($option_value) && !empty($page_found) && $option_value == $page_found && $page->post_status=='publish')
         $output_str .= "<li>" . __('Add Listing page exists with proper setting.', GEODIRECTORY_TEXTDOMAIN) . "</li>";
     else {
         $is_error_during_diagnose = true;
@@ -1093,14 +1089,10 @@ function geodir_diagnose_default_pages()
     /* Diagnose Listing Preview Page Starts */
     //////////////////////////////////
     $option_value = get_option('geodir_preview_page');
-    $page_found = $wpdb->get_var(
-        $wpdb->prepare(
-            "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_status='virtual' LIMIT 1;",
-            array('listing-preview')
-        )
-    );
+    $page = get_post($option_value);
+    if(!empty($page)){$page_found = $page->ID;}else{$page_found = '';}
 
-    if (!empty($option_value) && !empty($page_found) && $option_value == $page_found)
+    if(!empty($option_value) && !empty($page_found) && $option_value == $page_found && $page->post_status=='publish')
         $output_str .= "<li>" . __('Listing Preview page exists with proper setting.', GEODIRECTORY_TEXTDOMAIN) . "</li>";
     else {
         $is_error_during_diagnose = true;
@@ -1122,14 +1114,10 @@ function geodir_diagnose_default_pages()
     /* Diagnose Listing Success Page Starts */
     //////////////////////////////////
     $option_value = get_option('geodir_success_page');
-    $page_found = $wpdb->get_var(
-        $wpdb->prepare(
-            "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_status='virtual' LIMIT 1;",
-            array('listing-success')
-        )
-    );
+    $page = get_post($option_value);
+    if(!empty($page)){$page_found = $page->ID;}else{$page_found = '';}
 
-    if (!empty($option_value) && !empty($page_found) && $option_value == $page_found)
+    if(!empty($option_value) && !empty($page_found) && $option_value == $page_found && $page->post_status=='publish')
         $output_str .= "<li>" . __('Listing Success page exists with proper setting.', GEODIRECTORY_TEXTDOMAIN) . "</li>";
     else {
         $is_error_during_diagnose = true;
@@ -1151,14 +1139,10 @@ function geodir_diagnose_default_pages()
     /* Diagnose Location Page Starts */
     //////////////////////////////////
     $option_value = get_option('geodir_location_page');
-    $page_found = $wpdb->get_var(
-        $wpdb->prepare(
-            "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_status='virtual' LIMIT 1;",
-            array('location')
-        )
-    );
+    $page = get_post($option_value);
+    if(!empty($page)){$page_found = $page->ID;}else{$page_found = '';}
 
-    if (!empty($option_value) && !empty($page_found) && $option_value == $page_found)
+    if(!empty($option_value) && !empty($page_found) && $option_value == $page_found && $page->post_status=='publish')
         $output_str .= "<li>" . __('Location page exists with proper setting.', GEODIRECTORY_TEXTDOMAIN) . "</li>";
     else {
         $is_error_during_diagnose = true;
@@ -1673,3 +1657,21 @@ add_filter( 'geodir_settings_tabs_array', 'geodir_import_export_tab', 94 );
 // Handle ajax request for impot/export.
 add_action( 'wp_ajax_geodir_import_export', 'geodir_ajax_import_export' );
 add_action( 'wp_ajax_nopriv_geodir_import_exportn', 'geodir_ajax_import_export' );
+
+
+/**
+ * Updates the location page prefix when location page is saved
+ *
+ * @param $post_id int $post_id The post ID of the post being saved.
+ * @param $post object $post The post object of the post being saved.
+ * @package GeoDirectory
+ * @since 1.4.6
+ */
+function geodir_update_location_prefix($post_id,$post){
+    if($post->post_type=='page' && $post->post_name && $post_id==get_option('geodir_location_page')){
+        update_option('geodir_location_prefix',$post->post_name);
+    }
+
+}
+
+add_action('save_post', 'geodir_update_location_prefix',10,2);

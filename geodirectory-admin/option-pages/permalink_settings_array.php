@@ -63,7 +63,7 @@ $geodir_settings['permalink_settings'] = apply_filters('geodir_permalink_setting
 
     array(
         'name' => __('Location url prefix', GEODIRECTORY_TEXTDOMAIN),
-        'desc' => __('Prefix to show in location url', GEODIRECTORY_TEXTDOMAIN),
+        'desc' => __('Depreciated, now uses the location page slug', GEODIRECTORY_TEXTDOMAIN),
         'id' => 'geodir_location_prefix',
         'type' => 'text',
         'css' => 'min-width:300px;',
@@ -90,6 +90,46 @@ $geodir_settings['permalink_settings'] = apply_filters('geodir_permalink_setting
 
 
     array('type' => 'sectionend', 'id' => 'geodir_permalink'),
+
+    array('name' => __('GeoDirectory Pages', GEODIRECTORY_TEXTDOMAIN),
+        'type' => 'sectionstart',
+        'desc' => '',
+        'id' => 'geodir_pages'),
+
+    array(
+        'name' => __('Add listing page', GEODIRECTORY_TEXTDOMAIN),
+        'desc' => __('Select the page to use for adding listings', GEODIRECTORY_TEXTDOMAIN),
+        'id' => 'geodir_add_listing_page',
+        'type' => 'single_select_page',
+        'class' => 'chosen_select'
+    ),
+
+    array(
+        'name' => __('Listing preview page', GEODIRECTORY_TEXTDOMAIN),
+        'desc' => __('Select the page to use for listing preview', GEODIRECTORY_TEXTDOMAIN),
+        'id' => 'geodir_preview_page',
+        'type' => 'single_select_page',
+        'class' => 'chosen_select'
+    ),
+
+    array(
+        'name' => __('Listing success page', GEODIRECTORY_TEXTDOMAIN),
+        'desc' => __('Select the page to use for listing success', GEODIRECTORY_TEXTDOMAIN),
+        'id' => 'geodir_success_page',
+        'type' => 'single_select_page',
+        'class' => 'chosen_select'
+    ),
+
+    array(
+        'name' => __('Location page', GEODIRECTORY_TEXTDOMAIN),
+        'desc' => __('Select the page to use for locations', GEODIRECTORY_TEXTDOMAIN),
+        'id' => 'geodir_location_page',
+        'type' => 'single_select_page',
+        'class' => 'chosen_select'
+    ),
+
+
+    array('type' => 'sectionend', 'id' => 'geodir_pages'),
 
     /* Listing Detail Permalink Settings End */
 
