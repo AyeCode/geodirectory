@@ -304,7 +304,7 @@ function geodir_get_location_link($which_location = 'current')
     if (get_option('permalink_structure') != '') {
 
         $location_prefix = get_option('geodir_location_prefix');
-        $location_link = substr_replace($location_link, $location_prefix, strpos($location_link, 'location'), strlen('location'));
+        //$location_link = substr_replace($location_link, $location_prefix, strpos($location_link, 'location'), strlen('location'));
 
     }
 

@@ -1456,9 +1456,9 @@ function geodir_diagnostic_tools_setting_page()
 
 
                 <tr>
-                    <td><?php _e('Virtual pages check', GEODIRECTORY_TEXTDOMAIN);?></td>
+                    <td><?php _e('GD pages check', GEODIRECTORY_TEXTDOMAIN);?></td>
                     <td>
-                        <small><?php _e('Checks if the virtual pages are installed correctly or not.', GEODIRECTORY_TEXTDOMAIN);?></small>
+                        <small><?php _e('Checks if the GD pages are installed correctly or not.', GEODIRECTORY_TEXTDOMAIN);?></small>
                     </td>
                     <td>
                         <input type="button" value="<?php _e('Run', GEODIRECTORY_TEXTDOMAIN);?>"
