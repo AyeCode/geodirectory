@@ -817,7 +817,7 @@ function geodir_add_meta_keywords()
 
     $meta_desc = '';
     $meta_key = '';
-    if (isset($current_term->ID) && $current_term->ID == get_option('geodir_location_page')) {
+    if (isset($current_term->ID) && $current_term->ID == geodir_location_page_id()) {
         $meta_desc = apply_filters('geodir_seo_meta_location_description', '');
         $meta_desc .= '';
     }

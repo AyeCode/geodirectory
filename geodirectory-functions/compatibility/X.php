@@ -107,7 +107,7 @@ function geodir_x_home_sidebar()
 {
     //if ( geodir_is_geodir_page() ) {
     global $wp;
-    if ($wp->query_vars['page_id'] == get_option('geodir_location_page') || is_home() && !$_GET['geodir_signup']) {
+    if ($wp->query_vars['page_id'] == geodir_location_page_id() || is_home() && !$_GET['geodir_signup']) {
         echo '<div class="x-main full">';
         dynamic_sidebar('geodir_home_top');
         echo '</div>';
@@ -217,7 +217,7 @@ if (!function_exists('x_breadcrumbs')) :
 
             GLOBAL $post;
 
-            if (geodir_is_page('detail') || geodir_is_page('listing') || $wp->query_vars['page_id'] == get_option('geodir_location_page')) {
+            if (geodir_is_page('detail') || geodir_is_page('listing') || $wp->query_vars['page_id'] == geodir_location_page_id()) {
                 geodir_breadcrumb();
             } else {
 

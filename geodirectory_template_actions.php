@@ -1976,8 +1976,10 @@ function geodir_action_add_listing_form()
     if ($current_user->ID != '0') {
         $user_login = true;
     }
+
+
     ?>
-    <form name="propertyform" id="propertyform" action="<?php echo get_page_link(get_option('geodir_preview_page'));?>"
+    <form name="propertyform" id="propertyform" action="<?php echo get_page_link(geodir_preview_page_id());?>"
           method="post" enctype="multipart/form-data">
         <input type="hidden" name="preview" value="<?php echo $listing_type;?>"/>
         <input type="hidden" name="listing_type" value="<?php echo $listing_type;?>"/>

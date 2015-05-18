@@ -1225,11 +1225,6 @@ function geodir_posts_clauses_request($clauses)
     return $clauses;
 }
 
-/* display add listing page for wpml */
-if (!is_admin()) {
-    add_action('admin_init', 'geodir_wpml_check_element_id', 10, 2);
-}
-
 
 /* hook action for post updated */
 add_action('post_updated', 'geodir_action_post_updated', 15, 3);

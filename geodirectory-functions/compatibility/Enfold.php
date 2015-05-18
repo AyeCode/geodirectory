@@ -133,7 +133,7 @@ function enfold_detail_title($page, $class)
 {
     //echo '###'.$page;
     global $wp;
-    if (isset($wp->query_vars['page_id']) && $wp->query_vars['page_id'] == get_option('geodir_location_page') && !isset($_GET['geodir_signup'])) {
+    if (isset($wp->query_vars['page_id']) && $wp->query_vars['page_id'] == geodir_location_page_id() && !isset($_GET['geodir_signup'])) {
         add_action('avia_breadcrumbs_trail', 'enfold_detail_breadcrum', 8, 2);
         echo avia_title();
     } elseif ($page == 'details-page') {
