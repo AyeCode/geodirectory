@@ -507,7 +507,7 @@ function geodir_display_sort_options()
                 $label = $sort->site_title;
                 if ($sort->asc_title)
                     $label = $sort->asc_title;
-                ($sort_by == $key || ($sort->is_default == '1' && !isset($_REQUEST['sort_by']))) ? $selected = 'selected="selected"' : $selected = '';
+                ($sort_by == $key || ($sort->is_default == '1' && $sort->default_order == $key && !isset($_REQUEST['sort_by']))) ? $selected = 'selected="selected"' : $selected = '';
                 $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg('sort_by', $key) ) . '">' . $label . '</option>';
             }
 
@@ -516,7 +516,7 @@ function geodir_display_sort_options()
                 $label = $sort->site_title;
                 if ($sort->desc_title)
                     $label = $sort->desc_title;
-                ($sort_by == $key || ($sort->is_default == '1' && !isset($_REQUEST['sort_by']))) ? $selected = 'selected="selected"' : $selected = '';
+                ($sort_by == $key || ($sort->is_default == '1' && $sort->default_order == $key && !isset($_REQUEST['sort_by']))) ? $selected = 'selected="selected"' : $selected = '';
                 $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg('sort_by', $key) ) . '">' . $label . '</option>';
             }
 
