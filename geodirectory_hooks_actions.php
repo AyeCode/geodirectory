@@ -503,7 +503,7 @@ function geodir_edit_post_link()
                 $post_id = $_REQUEST['pid'];
             }
 
-            $postlink = get_permalink(get_option('geodir_add_listing_page'));
+            $postlink = get_permalink(geodir_add_listing_page_id());
             $editlink = geodir_getlink($postlink, array('pid' => $post_id), false);
             echo ' <p class="edit_link"><i class="fa fa-pencil"></i> <a href="' . $editlink . '">' . __('Edit this Post', GEODIRECTORY_TEXTDOMAIN) . '</a></p>';
         }
@@ -1230,7 +1230,7 @@ function geodir_custom_page_title($title = '', $sep = '')
     if (isset($wp->query_vars['pagename']) && $wp->query_vars['pagename'] != '')
         $page = get_page_by_path($wp->query_vars['pagename']);
     if (!empty($page)) {
-        $listing_page_id = get_option('geodir_add_listing_page');
+        $listing_page_id = geodir_add_listing_page_id();
         if ($listing_page_id != '' && $page->ID == $listing_page_id) {
             if (isset($_REQUEST['listing_type']) && $_REQUEST['listing_type'] != '') {
                 $listing_type = $_REQUEST['listing_type'];

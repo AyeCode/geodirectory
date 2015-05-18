@@ -344,7 +344,7 @@ function geodir_set_location_var_in_session_in_core($wp)
     }
 
 
-    if (isset($wp->query_vars['page_id']) && $wp->query_vars['page_id'] == get_option('geodir_location_page')) {
+    if (isset($wp->query_vars['page_id']) && $wp->query_vars['page_id'] == geodir_location_page_id()) {
         $gd_country = '';
         $gd_region = '';
         $gd_city = '';

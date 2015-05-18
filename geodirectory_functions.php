@@ -7,6 +7,12 @@
  */
 
 /**
+ * Contains helper functions used to make like easier for theme/plugin devs.
+ *
+ * @since 1.0.0
+ */
+include_once('geodirectory-functions/helper_functions.php');
+/**
  * Contains functions used for ajax calls.
  *
  * @since 1.0.0

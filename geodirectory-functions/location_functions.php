@@ -299,11 +299,11 @@ function geodir_get_current_location_terms($location_array_from = 'session', $gd
 function geodir_get_location_link($which_location = 'current')
 {
 
-    $location_link = get_permalink(get_option('geodir_location_page'));
+    $location_link = get_permalink(geodir_location_page_id());
 
     if (get_option('permalink_structure') != '') {
 
-        $location_prefix = get_option('geodir_location_prefix');
+        //$location_prefix = get_option('geodir_location_prefix');
         //$location_link = substr_replace($location_link, $location_prefix, strpos($location_link, 'location'), strlen('location'));
 
     }
