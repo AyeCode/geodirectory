@@ -4464,6 +4464,10 @@ function geodir_ajax_import_export() {
 									if ( ( strtolower( $post_city ) != strtolower( $location_result->city ) ) || ( strtolower( $post_region ) != strtolower( $location_result->region ) ) || (strtolower( $post_country ) != strtolower( $location_result->country ) ) ) {
 										$invalid_addr++;
 										$valid = false;
+									} else {
+										if (!function_exists('geodir_location_plugin_activated')) {
+											$gd_post['post_locations'] = '[' . $location_result->city_slug . '],[' . $location_result->region_slug . '],[' . $location_result->country_slug . ']'; // Set the default location when location manager not activated.
+										}
 									}
 								}
 							}

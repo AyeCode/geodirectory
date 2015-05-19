@@ -108,6 +108,8 @@ function geodir_location_form_submit()
         $old_location = geodir_get_default_location();
 
         $locationid = geodir_add_new_location($location_info);
+		
+		$default_location = geodir_get_location($locationid);
 
         //UPDATE AND DELETE LISTING
         $posttype = geodir_get_posttypes();
@@ -146,8 +148,8 @@ function geodir_location_form_submit()
 
                 $sql = $wpdb->prepare(
                     "UPDATE " . $plugin_prefix . $posttypeobj . "_detail SET post_city=%s, post_region=%s, post_country=%s, post_locations=%s
-						WHERE post_location_id=%d AND ( post_city!=%s OR post_region!=%s OR post_country!=%s)",
-                    array($_REQUEST['city'], $_REQUEST['region'], $_REQUEST['country'], $post_locations, $locationid, $_REQUEST['city'], $_REQUEST['region'], $_REQUEST['country'])
+						WHERE post_location_id=%d AND ( post_city!=%s OR post_region!=%s OR post_country!=%s OR post_locations!=%s OR post_locations IS NULL)",
+                    array($_REQUEST['city'], $_REQUEST['region'], $_REQUEST['country'], $post_locations, $locationid, $_REQUEST['city'], $_REQUEST['region'], $_REQUEST['country'], $post_locations)
                 );
                 $wpdb->query($sql);
             }
