@@ -278,6 +278,7 @@ $dummy_data_settings = apply_filters('geodir_dummy_data_settings', array(
 
 )); //dummy_data_settings End
 
+/* // Moved under Import & Export.
 $csv_upload_settings = apply_filters('geodir_csv_upload_settings', array(
 
     array('name' => __('CSV Upload', GEODIRECTORY_TEXTDOMAIN), 'type' => 'title', 'desc' => '', 'id' => 'csv_upload_settings'),
@@ -292,12 +293,13 @@ $csv_upload_settings = apply_filters('geodir_csv_upload_settings', array(
     ),
     array('type' => 'sectionend', 'id' => 'geodir_csv_upload_settings'),
 
-)); //dummy_data_settings End
+));
+*/
 
 
 //echo 'update option= '.get_option('site_email_name');
 
-$general_settings = array_merge($general_options, $google_analytic_settings, $search_settings, $dummy_data_settings, $csv_upload_settings);
+$general_settings = array_merge($general_options, $google_analytic_settings, $search_settings, $dummy_data_settings);
 
 $geodir_settings['general_settings'] = apply_filters('geodir_general_settings', $general_settings);
 

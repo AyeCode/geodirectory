@@ -10,10 +10,19 @@ function geodir_locate_template($template = '')
             break;
         case 'add-listing':
 
-            if (is_page() && isset($post->post_content) && has_shortcode($post->post_content, 'add_listing')) {
+            $sc_post_type = '';
+			if (is_page() && isset($post->post_content) && has_shortcode($post->post_content, 'gd_add_listing')) {
                 $listing_page_id = $post->ID;
+				
+				$regex_pattern = get_shortcode_regex();
+				preg_match('/'.$regex_pattern.'/s', $post->post_content, $regex_matches);
+				
+				if (!empty($regex_matches) && isset($regex_matches[2]) == 'gd_add_listing' && isset($regex_matches[3])) {
+					$shortcode_atts = shortcode_parse_atts($regex_matches[3]);
+					$sc_post_type = !empty($shortcode_atts) && isset($shortcode_atts['listing_type']) && !empty($shortcode_atts['listing_type']) ? $shortcode_atts['listing_type'] : '';
+				}
             } else {
-                $listing_page_id = get_option('geodir_add_listing_page');
+                $listing_page_id = geodir_add_listing_page_id();
             }
 
             if ($listing_page_id != '' && is_page($listing_page_id) && isset($_REQUEST['listing_type'])
@@ -25,13 +34,17 @@ function geodir_locate_template($template = '')
                 $post_types = geodir_get_posttypes();
                 if (!empty($post_types))
                     $post_type = $post_types[0];
+					
+				if($sc_post_type != '' )
+					$post_type = $sc_post_type;
+				
                 wp_redirect(home_url() . '/' . $pagename . '/?listing_type=' . $post_type);
                 exit();
             }
             return $template = locate_template(array("geodirectory/add-{$post_type}.php", "geodirectory/add-listing.php"));
             break;
         case 'success':
-            $success_page_id = get_option('geodir_success_page');
+            $success_page_id = geodir_success_page_id();
             if ($success_page_id != '' && is_page($success_page_id) && isset($_REQUEST['listing_type'])
                 && in_array($_REQUEST['listing_type'], geodir_get_posttypes())
             )

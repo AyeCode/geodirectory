@@ -108,6 +108,8 @@ function geodir_location_form_submit()
         $old_location = geodir_get_default_location();
 
         $locationid = geodir_add_new_location($location_info);
+		
+		$default_location = geodir_get_location($locationid);
 
         //UPDATE AND DELETE LISTING
         $posttype = geodir_get_posttypes();
@@ -146,8 +148,8 @@ function geodir_location_form_submit()
 
                 $sql = $wpdb->prepare(
                     "UPDATE " . $plugin_prefix . $posttypeobj . "_detail SET post_city=%s, post_region=%s, post_country=%s, post_locations=%s
-						WHERE post_location_id=%d AND ( post_city!=%s OR post_region!=%s OR post_country!=%s)",
-                    array($_REQUEST['city'], $_REQUEST['region'], $_REQUEST['country'], $post_locations, $locationid, $_REQUEST['city'], $_REQUEST['region'], $_REQUEST['country'])
+						WHERE post_location_id=%d AND ( post_city!=%s OR post_region!=%s OR post_country!=%s OR post_locations!=%s OR post_locations IS NULL)",
+                    array($_REQUEST['city'], $_REQUEST['region'], $_REQUEST['country'], $post_locations, $locationid, $_REQUEST['city'], $_REQUEST['region'], $_REQUEST['country'], $post_locations)
                 );
                 $wpdb->query($sql);
             }
@@ -235,7 +237,7 @@ function geodir_get_address_by_lat_lan($lat, $lng)
 }
 
 /// New location functions added on 23-06-2014
-function geodir_get_current_location_terms($location_array_from = 'session')
+function geodir_get_current_location_terms($location_array_from = 'session', $gd_post_type = '')
 {
     global $wp;
     $location_array = array();
@@ -280,6 +282,17 @@ function geodir_get_current_location_terms($location_array_from = 'session')
 			$location_array = geodir_get_current_location_terms('session');
 		}
     }
+	
+	/**
+	 * Filter the location terms.
+	 *
+	 * @since 1.4.6
+	 *
+	 * @param array $location_array Array of location terms. Default empty.
+	 * @param string $location_array_from Source type of location terms. Default session.
+	 * @param string $gd_post_type WP post type.
+	 */
+	$location_array = apply_filters( 'geodir_current_location_terms', $location_array, $location_array_from, $gd_post_type );
 
     return $location_array;
 
@@ -288,12 +301,12 @@ function geodir_get_current_location_terms($location_array_from = 'session')
 function geodir_get_location_link($which_location = 'current')
 {
 
-    $location_link = get_permalink(get_option('geodir_location_page'));
+    $location_link = get_permalink(geodir_location_page_id());
 
     if (get_option('permalink_structure') != '') {
 
-        $location_prefix = get_option('geodir_location_prefix');
-        $location_link = substr_replace($location_link, $location_prefix, strpos($location_link, 'location'), strlen('location'));
+        //$location_prefix = get_option('geodir_location_prefix');
+        //$location_link = substr_replace($location_link, $location_prefix, strpos($location_link, 'location'), strlen('location'));
 
     }
 

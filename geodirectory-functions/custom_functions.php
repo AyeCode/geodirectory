@@ -507,7 +507,7 @@ function geodir_display_sort_options()
                 $label = $sort->site_title;
                 if ($sort->asc_title)
                     $label = $sort->asc_title;
-                ($sort_by == $key || ($sort->is_default == '1' && !isset($_REQUEST['sort_by']))) ? $selected = 'selected="selected"' : $selected = '';
+                ($sort_by == $key || ($sort->is_default == '1' && $sort->default_order == $key && !isset($_REQUEST['sort_by']))) ? $selected = 'selected="selected"' : $selected = '';
                 $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg('sort_by', $key) ) . '">' . $label . '</option>';
             }
 
@@ -516,7 +516,7 @@ function geodir_display_sort_options()
                 $label = $sort->site_title;
                 if ($sort->desc_title)
                     $label = $sort->desc_title;
-                ($sort_by == $key || ($sort->is_default == '1' && !isset($_REQUEST['sort_by']))) ? $selected = 'selected="selected"' : $selected = '';
+                ($sort_by == $key || ($sort->is_default == '1' && $sort->default_order == $key && !isset($_REQUEST['sort_by']))) ? $selected = 'selected="selected"' : $selected = '';
                 $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg('sort_by', $key) ) . '">' . $label . '</option>';
             }
 
@@ -817,7 +817,7 @@ function geodir_add_meta_keywords()
 
     $meta_desc = '';
     $meta_key = '';
-    if (isset($current_term->ID) && $current_term->ID == get_option('geodir_location_page')) {
+    if (isset($current_term->ID) && $current_term->ID == geodir_location_page_id()) {
         $meta_desc = apply_filters('geodir_seo_meta_location_description', '');
         $meta_desc .= '';
     }

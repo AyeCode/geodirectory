@@ -68,6 +68,7 @@ jQuery(document).ready(function () {
 });
 
 jQuery(document).ready(function () {
+    jQuery('#geodir_location_prefix').attr('disabled','disabled');
     jQuery('.button-primary').click(function () {
         var error = false;
         var characterReg = /^\s*[a-zA-Z0-9,\s]+\s*$/;
@@ -89,6 +90,8 @@ jQuery(document).ready(function () {
             error = true;
         }
 
+
+        /* Depreciated 1.4.6
         if (location_prefix == '') {
             alert(geodir_all_js_msg.location_url_prefix_msg);
             jQuery('#geodir_location_prefix').focus();
@@ -100,7 +103,7 @@ jQuery(document).ready(function () {
             jQuery('#geodir_location_prefix').focus();
             error = true;
         }
-
+        */
 
         if (error == true) {
             return false;

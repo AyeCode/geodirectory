@@ -229,13 +229,13 @@ function geodir_ajax_handler()
 
                         if ($last_id) {
                             //$redirect_to = get_permalink( $last_id );
-                            $redirect_to = geodir_getlink(get_permalink(get_option('geodir_success_page')), array('pid' => $last_id));
+                            $redirect_to = geodir_getlink(get_permalink(geodir_success_page_id()), array('pid' => $last_id));
 
                         } elseif (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
-                            $redirect_to = get_permalink(get_option('geodir_add_listing_page'));
+                            $redirect_to = get_permalink(geodir_add_listing_page_id());
                             $redirect_to = geodir_getlink($redirect_to, array('pid' => $post->pid), false);
                         } else
-                            $redirect_to = get_permalink(get_option('geodir_add_listing_page'));
+                            $redirect_to = get_permalink(geodir_add_listing_page_id());
 
                         wp_redirect($redirect_to);
 
@@ -256,7 +256,7 @@ function geodir_ajax_handler()
                         wp_redirect(get_permalink($_REQUEST['pid']));
                     else {
                         geodir_remove_temp_images();
-                        wp_redirect(geodir_getlink(get_permalink(get_option('geodir_add_listing_page')), array('listing_type' => $_REQUEST['listing_type'])));
+                        wp_redirect(geodir_getlink(get_permalink(geodir_add_listing_page_id()), array('listing_type' => $_REQUEST['listing_type'])));
                     }
 
                     break;
@@ -281,12 +281,12 @@ function geodir_ajax_handler()
 
                             if ($last_id) {
                                 //$redirect_to = get_permalink( $last_id );
-                                $redirect_to = geodir_getlink(get_permalink(get_option('geodir_success_page')), array('pid' => $last_id));
+                                $redirect_to = geodir_getlink(get_permalink(geodir_success_page_id()), array('pid' => $last_id));
                             } elseif (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
-                                $redirect_to = get_permalink(get_option('geodir_add_listing_page'));
+                                $redirect_to = get_permalink(geodir_add_listing_page_id());
                                 $redirect_to = geodir_getlink($redirect_to, array('pid' => $post->pid), false);
                             } else
-                                $redirect_to = get_permalink(get_option('geodir_add_listing_page'));
+                                $redirect_to = get_permalink(geodir_add_listing_page_id());
 
                             if (isset($_SESSION['listing'])) unset($_SESSION['listing']);
                             wp_redirect($redirect_to);

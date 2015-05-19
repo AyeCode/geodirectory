@@ -7,6 +7,10 @@ if (get_option(GEODIRECTORY_TEXTDOMAIN . '_db_version') != GEODIRECTORY_VERSION)
     if (GEODIRECTORY_VERSION <= '1.3.6') {
         add_action('plugins_loaded', 'geodir_upgrade_136', 11);
     }
+
+    if (GEODIRECTORY_VERSION <= '1.4.6') {
+        add_action('plugins_loaded', 'geodir_upgrade_146', 11);
+    }
     update_option(GEODIRECTORY_TEXTDOMAIN . '_db_version', GEODIRECTORY_VERSION);
 }
 
@@ -22,6 +26,10 @@ function geodirectory_upgrade_all()
 function geodir_upgrade_136()
 {
     geodir_fix_review_overall_rating();
+}
+
+function geodir_upgrade_146(){
+    gd_convert_virtual_pages();
 }
 
 
@@ -443,9 +451,67 @@ function gd_install_theme_compat()
 }
 
 
+function gd_convert_virtual_pages(){
+    global $wpdb;
+
+    // Update the add listing page settings
+    $add_listing_page = $wpdb->get_var(
+        $wpdb->prepare(
+            "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_status='virtual' LIMIT 1;",
+            array('add-listing')
+        )
+    );
+
+    if($add_listing_page){
+        wp_update_post( array('ID' => $add_listing_page, 'post_status' => 'publish') );
+        update_option( 'geodir_add_listing_page', $add_listing_page);
+    }
+
+    // Update the listing preview page settings
+    $listing_preview_page = $wpdb->get_var(
+        $wpdb->prepare(
+            "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_status='virtual' LIMIT 1;",
+            array('listing-preview')
+        )
+    );
+
+    if($listing_preview_page){
+        wp_update_post( array('ID' => $listing_preview_page, 'post_status' => 'publish') );
+        update_option( 'geodir_preview_page', $listing_preview_page);
+    }
+
+    // Update the listing success page settings
+    $listing_success_page = $wpdb->get_var(
+        $wpdb->prepare(
+            "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_status='virtual' LIMIT 1;",
+            array('listing-success')
+        )
+    );
+
+    if($listing_success_page){
+        wp_update_post( array('ID' => $listing_success_page, 'post_status' => 'publish') );
+        update_option( 'geodir_success_page', $listing_success_page);
+    }
+
+    // Update the listing success page settings
+    $location_page = $wpdb->get_var(
+        $wpdb->prepare(
+            "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_status='virtual' LIMIT 1;",
+            array('location')
+        )
+    );
+
+    if($location_page){
+        $location_slug = get_option('geodir_location_prefix');
+        if(!$location_slug ){$location_slug  = 'location';}
+        wp_update_post( array('ID' => $location_page, 'post_status' => 'publish','post_name' => $location_slug) );
+        update_option( 'geodir_location_page', $location_page);
+    }
+
+}
 
 
-
+//add_action( 'after_setup_theme', 'gd_convert_virtual_pages' );
 
 
 

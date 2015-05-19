@@ -503,7 +503,7 @@ function geodir_edit_post_link()
                 $post_id = $_REQUEST['pid'];
             }
 
-            $postlink = get_permalink(get_option('geodir_add_listing_page'));
+            $postlink = get_permalink(geodir_add_listing_page_id());
             $editlink = geodir_getlink($postlink, array('pid' => $post_id), false);
             echo ' <p class="edit_link"><i class="fa fa-pencil"></i> <a href="' . $editlink . '">' . __('Edit this Post', GEODIRECTORY_TEXTDOMAIN) . '</a></p>';
         }
@@ -1230,7 +1230,7 @@ function geodir_custom_page_title($title = '', $sep = '')
     if (isset($wp->query_vars['pagename']) && $wp->query_vars['pagename'] != '')
         $page = get_page_by_path($wp->query_vars['pagename']);
     if (!empty($page)) {
-        $listing_page_id = get_option('geodir_add_listing_page');
+        $listing_page_id = geodir_add_listing_page_id();
         if ($listing_page_id != '' && $page->ID == $listing_page_id) {
             if (isset($_REQUEST['listing_type']) && $_REQUEST['listing_type'] != '') {
                 $listing_type = $_REQUEST['listing_type'];
@@ -1434,8 +1434,11 @@ function geodir_post_type_archive_title($title)
             $wpseo_edit = true;
         }
         ####### FIX FOR YOAST SEO END ########
+		
+		$gd_post_type = geodir_get_current_posttype();
+        $post_type_info = get_post_type_object($gd_post_type);
 
-        $location_array = geodir_get_current_location_terms('query_vars');
+        $location_array = geodir_get_current_location_terms('query_vars', $gd_post_type);
         if (!empty($location_array)) {
             $location_titles = array();
             $actual_location_name = function_exists('get_actual_location_name') ? true : false;
@@ -1460,9 +1463,6 @@ function geodir_post_type_archive_title($title)
                 $title .= __(' in ', GEODIRECTORY_TEXTDOMAIN) . implode(", ", $location_titles);
             }
         }
-
-        $gd_post_type = geodir_get_current_posttype();
-        $post_type_info = get_post_type_object($gd_post_type);
 
         /*if( get_query_var( $gd_post_type . 'category' ) ) {
 			$gd_taxonomy = $gd_post_type . 'category';
