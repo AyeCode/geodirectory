@@ -4,17 +4,27 @@
  *
  * Inits custom post types and taxonomies
  *
- * @package        GeoDirectory
+ * @package     GeoDirectory
  * @category    Core
- * @author        WPGeoDirectory
+ * @author      WPGeoDirectory
  */
 
 include_once('custom_taxonomy_hooks_actions.php');
 
 /**
- * Add Custom Menu Items
- **/
-
+ * Returns listing nav menu Items.
+ *
+ * When WP Admin ->
+ *      Geodirectory ->
+ *      Design ->
+ *      Navigation ->
+ *      Show add listing navigation in menu and/or Show listings navigation in menu
+ * checked this function returns listing and add listing links.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @return string The Menu HTML.
+ */
 function geodir_add_nav_menu_items()
 {
     $items = '';
@@ -187,6 +197,18 @@ function geodir_add_nav_menu_items()
 }
 
 
+/**
+ * Appends listing menu items on all enabled menu locations.
+ *
+ * This function appends menu items with {@see geodir_add_nav_menu_items()} based on menu location settings.
+ * WP Admin -> Geodirectory -> Design -> Navigation -> Show geodirectory navigation in selected menu locations.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $menu The menu HTML.
+ * @param array $args The menu args.
+ * @return string The menu HTML.
+ */
 function geodir_pagemenu_items($menu, $args)
 {
     $locations = get_nav_menu_locations();
@@ -207,6 +229,18 @@ function geodir_pagemenu_items($menu, $args)
 }
 
 
+/**
+ * Appends listing menu items on given menu location.
+ *
+ * This function appends menu items with {@see geodir_add_nav_menu_items()} when the given menu location enabled on menu location settings.
+ * WP Admin -> Geodirectory -> Design -> Navigation -> Show geodirectory navigation in selected menu locations.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $items The menu HTML.
+ * @param object $args The menu args.
+ * @return string The menu HTML.
+ */
 function geodir_menu_items($items, $args)
 {
 
@@ -225,8 +259,15 @@ function geodir_menu_items($items, $args)
 }
 
 /**
- * Get array of all categories
- **/
+ * Get array of all categories.
+ *
+ * Returns terms from all geodirectory taxonomies. {@see geodir_get_taxonomies()}
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @return array Category array.
+ */
 function geodir_get_category_all_array()
 {
     global $wpdb;
@@ -252,7 +293,13 @@ function geodir_get_category_all_array()
 
 
 /**
- * Get Current Post Type
+ * Get Current Post Type.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wp_query WordPress Query object.
+ * @global string $geodir_post_type The post type.
+ * @return string The post type.
  */
 function geodir_get_current_posttype()
 {
@@ -286,6 +333,14 @@ function geodir_get_current_posttype()
     return $geodir_post_type;
 }
 
+/**
+ * Get list of geodirectory Post Types.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $output The output Type.
+ * @return array|object|string Post Types.
+ */
 function geodir_get_posttypes($output = 'names')
 {
     $post_types = array();
@@ -314,8 +369,13 @@ function geodir_get_posttypes($output = 'names')
 }
 
 /**
- * Get Custom Post Type info
- **/
+ * Get Custom Post Type info.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $post_type The post type.
+ * @return bool|array Post type details.
+ */
 function geodir_get_posttype_info($post_type = '')
 {
     $post_types = array();
@@ -327,10 +387,16 @@ function geodir_get_posttype_info($post_type = '')
         return false;
 }
 
-/**
- * Get all custom taxonomies
- **/
 if (!function_exists('geodir_get_taxonomies')) {
+    /**
+     * Get all custom taxonomies.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param string $post_type The post type.
+     * @param bool $tages_taxonomies Is this a tag taxonomy?. Default: false.
+     * @return array|bool Taxonomies on success. false on failure.
+     */
     function geodir_get_taxonomies($post_type = '', $tages_taxonomies = false)
     {
 
@@ -372,11 +438,18 @@ if (!function_exists('geodir_get_taxonomies')) {
     }
 }
 
-
-/**
- * Get categories drpdown
- **/
 if (!function_exists(' geodir_get_categories_dl')) {
+    /**
+     * Get categories dropdown HTML.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param string $post_type The post type.
+     * @param string $selected The selected value.
+     * @param bool $tages_taxonomies Is this a tag taxonomy?. Default: false.
+     * @param bool $echo Prints the HTML when set to true. Default: true.
+     * @return void|string Dropdown HTML.
+     */
     function  geodir_get_categories_dl($post_type = '', $selected = '', $tages_taxonomies = false, $echo = true)
     {
 
@@ -405,8 +478,13 @@ if (!function_exists(' geodir_get_categories_dl')) {
 
 
 /**
- * Get post type listing slug
- **/
+ * Get post type listing slug.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $object_type The post type.
+ * @return bool|string Slug on success. false on failure.
+ */
 function geodir_get_listing_slug($object_type = '')
 {
 
@@ -436,8 +514,14 @@ function geodir_get_listing_slug($object_type = '')
 
 
 /**
- * Get current taxonomies posttypes
- **/
+ * Get a taxonomy post type.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wp_query WordPress Query object.
+ * @param string $taxonomy The WordPress taxonomy string.
+ * @return bool|string Post type on success. false on failure.
+ */
 function geodir_get_taxonomy_posttype($taxonomy = '')
 {
     global $wp_query;
@@ -466,10 +550,18 @@ function geodir_get_taxonomy_posttype($taxonomy = '')
         return false;
 }
 
-/**
- * Custom taxonomy walker function
- **/
 if (!function_exists('geodir_custom_taxonomy_walker')) {
+    /**
+     * Custom taxonomy walker function.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param string $cat_taxonomy The taxonomy name.
+     * @param int $cat_parent The parent term ID.
+     * @param bool $hide_empty Hide empty taxonomies? Default: false.
+     * @param int $pading CSS padding in pixels.
+     * @return string|void taxonomy HTML.
+     */
     function geodir_custom_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = false, $pading = 0)
     {
         global $cat_display, $post_cat, $exclude_cats;
@@ -541,8 +633,16 @@ if (!function_exists('geodir_custom_taxonomy_walker')) {
     }
 }
 
-/* secound test */
 if (!function_exists('geodir_custom_taxonomy_walker2')) {
+    /**
+     * Custom taxonomy walker function.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @global object $post WordPress Post object.
+     * @param string $cat_taxonomy The taxonomy name.
+     * @param string $cat_limit Number of categories to display.
+     */
     function geodir_custom_taxonomy_walker2($cat_taxonomy, $cat_limit = '')
     {
         $post_category = '';
@@ -761,7 +861,18 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
     }
 }
 
-/* Category Slection Interface in add/edit listing form */
+/**
+ * Category Selection Interface in add/edit listing form.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $request_taxonomy The taxonomy name.
+ * @param int $parrent The parent term ID.
+ * @param bool|string $selected The selected value.
+ * @param bool $main_selected Not yet implemented.
+ * @param bool $default Is this the default category? Default: false.
+ * @param string $exclude Excluded terms list. Serialized base64 encoded string.
+ */
 function geodir_addpost_categories_html($request_taxonomy, $parrent, $selected = false, $main_selected = true, $default = false, $exclude = '')
 {
     global $exclude_cats;
@@ -813,6 +924,15 @@ function geodir_addpost_categories_html($request_taxonomy, $parrent, $selected =
 }
 
 
+/**
+ * Categories HTML for edit post page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $request_taxonomy The taxonomy ID.
+ * @param int $request_postid The post ID.
+ * @param array $post_categories The post catagories.
+ */
 function geodir_editpost_categories_html($request_taxonomy, $request_postid, $post_categories)
 {
 
@@ -865,6 +985,15 @@ function geodir_editpost_categories_html($request_taxonomy, $request_postid, $po
     }
 }
 
+/**
+ * Get terms of a taxonomy as dropdown.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $cat_taxonomy The taxonomy name.
+ * @param int $parrent The parent term ID. Default: 0.
+ * @param bool|string $selected The selected value. Default: false.
+ */
 function geodir_get_catlist($cat_taxonomy, $parrent = 0, $selected = false)
 {
 
@@ -905,9 +1034,16 @@ function geodir_get_catlist($cat_taxonomy, $parrent = 0, $selected = false)
 
 
 /**
+ * Custom post type messages for admin actions.
+ *
  * Replaces "Post" in the update messages for custom post types on the "Edit" post screen.
  * For example "Post updated. View Post." becomes "Place updated. View Place".
- **/
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $post WordPress Post object.
+ * @global int $post_ID WordPress Post ID.
+ */
 function geodir_custom_update_messages($messages)
 {
     global $post, $post_ID;
@@ -936,8 +1072,12 @@ function geodir_custom_update_messages($messages)
 
 
 /**
- * Register default custom Post Types and Taxonomies
- **/
+ * Register default custom Post Types and Taxonomies.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ */
 
 function geodir_register_defaults()
 {
@@ -1079,6 +1219,21 @@ function geodir_register_defaults()
 
 $comment_post_cache = array();
 $gd_permalink_cache = array();
+/**
+ * Returns permalink structure using post link.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global object $wp_query WordPress Query object.
+ * @global string $plugin_prefix WordPress plugin prefix.
+ * @global object $post WordPress Post object.
+ * @param string $post_link The post link.
+ * @param object $post_obj The post object.
+ * @param string $leavename Not yet implemented.
+ * @param bool $sample Is this a sample post?.
+ * @return string The post link.
+ */
 function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $sample)
 {
     //echo $post_link."<br />".$sample ;
@@ -1261,6 +1416,16 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
 }
 
 
+/**
+ * Returns the term link with parameters.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $termlink The term link
+ * @param object $term Not yet implemented.
+ * @param string $taxonomy The taxonomy name.
+ * @return string The term link.
+ */
 function geodir_term_link($termlink, $term, $taxonomy)
 {
     $geodir_taxonomies = geodir_get_taxonomies('', true);
@@ -1311,6 +1476,15 @@ function geodir_term_link($termlink, $term, $taxonomy)
 }
 
 
+/**
+ * Returns the post type link with parameters.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $link The post link.
+ * @param string $post_type The post type.
+ * @return string The modified link.
+ */
 function geodir_posttype_link($link, $post_type)
 {
     global $geodir_add_location_url;
@@ -1340,6 +1514,15 @@ function geodir_posttype_link($link, $post_type)
 
 }
 
+/**
+ * Print or Get post type singular label.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $post_type The post type.
+ * @param bool $echo Prints the label when set to true.
+ * @return void|string Label.
+ */
 function get_post_type_singular_label($post_type, $echo = false)
 {
     $obj_post_type = get_post_type_object($post_type);
@@ -1353,6 +1536,15 @@ function get_post_type_singular_label($post_type, $echo = false)
 
 }
 
+/**
+ * Print or Get post type plural label.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $post_type The post type.
+ * @param bool $echo Prints the label when set to true.
+ * @return void|string Label.
+ */
 function get_post_type_plural_label($post_type, $echo = false)
 {
     $all_postypes = geodir_get_posttypes();
@@ -1368,6 +1560,19 @@ function get_post_type_plural_label($post_type, $echo = false)
 
 }
 
+/**
+ * Checks whether a term exists or not.
+ *
+ * Returns term data on success, bool when failure.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @param int|string $term The term ID or slug.
+ * @param string $taxonomy The taxonomy name.
+ * @param int $parent Parent term ID.
+ * @return bool|object Term data.
+ */
 function geodir_term_exists($term, $taxonomy = '', $parent = 0)
 {
     global $wpdb;
@@ -1417,6 +1622,12 @@ function geodir_term_exists($term, $taxonomy = '', $parent = 0)
     return false;
 }
 
+/**
+ * Reset term icon values.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_get_term_icon_rebuild()
 {
 
@@ -1424,6 +1635,18 @@ function geodir_get_term_icon_rebuild()
 
 }
 
+/**
+ * Gets term icon using term ID.
+ *
+ * If term ID not passed returns all icons.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @param int|bool $term_id The term ID.
+ * @param bool $rebuild Force rebuild the icons when set to true.
+ * @return mixed|string|void Term icon(s).
+ */
 function geodir_get_term_icon($term_id = false, $rebuild = false)
 {
     global $wpdb;
