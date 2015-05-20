@@ -1,3 +1,6 @@
+v1.4.7
+Review counts lost during virtual page conversion (alos fixed by saving any place) - FIXED
+
 v1.4.6
 New filter added for term link in popular category widget - ADDED
 Validation added to avoid multiple times selection for same category - FIXED
