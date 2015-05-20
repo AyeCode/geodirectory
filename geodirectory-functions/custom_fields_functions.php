@@ -1825,12 +1825,12 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
             } else
                 $file_value = '';
 
-            if ($extra_fields['file_multiple'])
+            if (isset($extra_fields['file_multiple']) && $extra_fields['file_multiple'])
                 $file_multiple = true; // allow multiple files upload
             else
                 $file_multiple = false;
 
-            if ($extra_fields['image_limit'])
+            if (isset($extra_fields['image_limit']) && $extra_fields['image_limit'])
                 $file_image_limit = $extra_fields['image_limit'];
             else
                 $file_image_limit = 1;
@@ -1844,6 +1844,9 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                 if (!empty($curImages))
                     $file_totImg = count($curImages);
             }
+			
+			$allowed_file_types = !empty($extra_fields['gd_file_types']) && is_array($extra_fields['gd_file_types']) && !in_array("*", $extra_fields['gd_file_types'] ) ? implode(",", $extra_fields['gd_file_types']) : '';
+			$display_file_types = $allowed_file_types != '' ? '.' . implode(", .", $extra_fields['gd_file_types']) : '';
 
             ?>
             <?php /*?> <h5 class="geodir-form_title"> <?php echo $site_title; ?>
@@ -1865,6 +1868,10 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                            value="<?php echo $file_value; ?>"/>
                     <input type="hidden" name="<?php echo $file_id; ?>image_limit"
                            id="<?php echo $file_id; ?>image_limit" value="<?php echo $file_image_limit; ?>"/>
+					<?php if ($allowed_file_types != '') { ?>
+					<input type="hidden" name="<?php echo $file_id; ?>_allowed_types"
+                           id="<?php echo $file_id; ?>_allowed_types" value="<?php echo $allowed_file_types; ?>" data-exts="<?php echo $display_file_types;?>"/>
+					<?php } ?>
                     <input type="hidden" name="<?php echo $file_id; ?>totImg" id="<?php echo $file_id; ?>totImg"
                            value="<?php if (isset($file_totImg)) {
                                echo $file_totImg;
@@ -1879,7 +1886,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                             <?php /*?><h4><?php _e('Drop files to upload');?></h4><br/><?php */
                             ?>
                             <input id="<?php echo $file_id; ?>plupload-browse-button" type="button"
-                                   value="<?php esc_attr_e('Select Files', GEODIRECTORY_TEXTDOMAIN); ?>"
+                                   value="<?php ($file_image_limit > 1 ? esc_attr_e('Select Files', GEODIRECTORY_TEXTDOMAIN) : esc_attr_e('Select File', GEODIRECTORY_TEXTDOMAIN) ); ?>"
                                    class="geodir_button" style="margin-top:10px;"/>
                             <span class="ajaxnonceplu"
                                   id="ajaxnonceplu<?php echo wp_create_nonce($file_id . 'pluploadan'); ?>"></span>
@@ -1902,7 +1909,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
 
                     </div>
                 </div>
-                <span class="geodir_message_note"><?php _e($admin_desc, GEODIRECTORY_TEXTDOMAIN);?></span>
+                <span class="geodir_message_note"><?php _e($admin_desc, GEODIRECTORY_TEXTDOMAIN);?> <?php echo ( $display_file_types != '' ? __('Allowed file types:', GEODIRECTORY_TEXTDOMAIN) . ' ' . $display_file_types : '' );?></span>
                 <?php if ($is_required) { ?>
                     <span class="geodir_message_error"><?php _e($required_msg, GEODIRECTORY_TEXTDOMAIN); ?></span>
                 <?php } ?>
@@ -2684,7 +2691,10 @@ if (!function_exists('geodir_show_listing_info')) {
                             $files = explode(",", $post->$type['htmlvar_name']);
                             if (!empty($files)):
 
-                                $file_paths = '';
+                               $extra_fields = !empty($type['extra_fields']) ? maybe_unserialize($type['extra_fields']) : NULL;
+							   $allowed_file_types = !empty($extra_fields['gd_file_types']) && is_array($extra_fields['gd_file_types']) && !in_array("*", $extra_fields['gd_file_types'] ) ? $extra_fields['gd_file_types'] : '';
+								
+								$file_paths = '';
                                 foreach ($files as $file) {
                                     if (!empty($file)) {
 
@@ -2696,26 +2706,31 @@ if (!function_exists('geodir_show_listing_info')) {
                                         $img_name_arr = explode('.', $filename);
 
                                         $arr_file_type = wp_check_filetype($filename);
-                                        $uploaded_file_type = $arr_file_type['type'];
+                                        if (empty($arr_file_type['ext']) || empty($arr_file_type['type'])) {
+											continue;
+										}
+										
+										$uploaded_file_type = $arr_file_type['type'];
+										$uploaded_file_ext = $arr_file_type['ext'];
+										
+										if (!empty($allowed_file_types) && !in_array($uploaded_file_ext, $allowed_file_types)) {
+											continue; // Invalid file type.
+										}
 
-                                        $allowed_file_types = array('application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv', 'text/plain');
+                                        //$allowed_file_types = array('application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv', 'text/plain');
+										$image_file_types = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/bmp', 'image/x-icon');
 
-                                        // If the uploaded file is the right format
-                                        if (in_array($uploaded_file_type, $allowed_file_types)) {
-                                            $ext_path = '_' . $html_var . '_';
-
-                                            $filename = explode($ext_path, $filename);
-
-                                            $file_paths .= '<a href="' . $file . '" target="_blank">' . $filename[count($filename) - 1] . '</a>';
-
-                                        } else {
-
+                                        // If the uploaded file is image
+                                        if (in_array($uploaded_file_type, $image_file_types)) {
                                             $file_paths .= '<div class="geodir-custom-post-gallery" class="clearfix">';
                                             $file_paths .= geodir_show_image(array('src' => $file), 'thumbnail', false, false);
                                             //$file_paths .= '<img src="'.$file.'"  />';	
                                             $file_paths .= '</div>';
+                                        } else {
+											$ext_path = '_' . $html_var . '_';
+                                            $filename = explode($ext_path, $filename);
+                                            $file_paths .= '<a href="' . $file . '" target="_blank">' . $filename[count($filename) - 1] . '</a>';
                                         }
-
                                     }
                                 }
 
@@ -2959,12 +2974,14 @@ if (!function_exists('geodir_save_post_file_fields')) {
 	 * Save post file fields
 	 *
 	 * @since 1.0.0
+	 * @since 1.4.7 Added `$extra_fields` parameter.
 	 * @package GeoDirectory
 	 * @param int $post_id
 	 * @param string $field_id
 	 * @param array $post_image
+	 * @param array $extra_fields Array of extra fields.
 	 */
-	function geodir_save_post_file_fields($post_id = 0, $field_id = '', $post_image = array())
+	function geodir_save_post_file_fields($post_id = 0, $field_id = '', $post_image = array(), $extra_fields = array())
     {
 
         global $wpdb, $plugin_prefix, $current_user;
@@ -2976,7 +2993,6 @@ if (!function_exists('geodir_save_post_file_fields')) {
         $postcurr_images = array();
         $postcurr_images = geodir_get_post_meta($post_id, $field_id, true);
         $file_urls = '';
-
 
         if (!empty($post_image)) {
 
@@ -2990,6 +3006,8 @@ if (!function_exists('geodir_save_post_file_fields')) {
             $geodir_uploadpath = $uploads['path'];
             $geodir_uploadurl = $uploads['url'];
             $sub_dir = $uploads['subdir'];
+			
+			$allowed_file_types = !empty($extra_fields['gd_file_types']) && is_array($extra_fields['gd_file_types']) && !in_array("*", $extra_fields['gd_file_types'] ) ? $extra_fields['gd_file_types'] : '';
 
             for ($m = 0; $m < count($post_image); $m++) {
 
@@ -3005,47 +3023,50 @@ if (!function_exists('geodir_save_post_file_fields')) {
                     $img_name_arr = explode('.', $filename);
 
                     $arr_file_type = wp_check_filetype($filename);
-
-                    $uploaded_file_type = $arr_file_type['type'];
+					
+					if (empty($arr_file_type['ext']) || empty($arr_file_type['type'])) {
+						continue;
+					}
+					
+					$uploaded_file_type = $arr_file_type['type'];
+					$uploaded_file_ext = $arr_file_type['ext'];
+					
+					if (!empty($allowed_file_types) && !in_array($uploaded_file_ext, $allowed_file_types)) {
+						continue; // Invalid file type.
+					}
 
                     // Set an array containing a list of acceptable formats
-                    $allowed_file_types = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv', 'text/plain');
+                    //$allowed_file_types = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/octet-stream', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv', 'text/plain');
 
-                    // If the uploaded file is the right format
-                    if (in_array($uploaded_file_type, $allowed_file_types)) {
+					if (!function_exists('wp_handle_upload'))
+						require_once(ABSPATH . 'wp-admin/includes/file.php');
 
-                        if (!function_exists('wp_handle_upload'))
-                            require_once(ABSPATH . 'wp-admin/includes/file.php');
+					if (!is_dir($geodir_uploadpath))
+						mkdir($geodir_uploadpath);
 
-                        if (!is_dir($geodir_uploadpath))
-                            mkdir($geodir_uploadpath);
+					$new_name = $post_id . '_' . $field_id . '_' . $img_name_arr[0] . '.' . $img_name_arr[1];
+					$explode_sub_dir = explode("/", $sub_dir);
+					if ($curr_img_dir == end($explode_sub_dir)) {
+						$img_path = $geodir_uploadpath . '/' . $filename;
+						$img_url = $geodir_uploadurl . '/' . $filename;
+					} else {
+						$img_path = $uploads_dir . '/temp_' . $current_user->data->ID . '/' . $filename;
+						$img_url = $uploads['url'] . '/temp_' . $current_user->data->ID . '/' . $filename;
+					}
 
-                        $new_name = $post_id . '_' . $field_id . '_' . $img_name_arr[0] . '.' . $img_name_arr[1];
+					$uploaded_file = '';
+					if (file_exists($img_path))
+						$uploaded_file = copy($img_path, $geodir_uploadpath . '/' . $new_name);
 
-                        if ($curr_img_dir == end(explode("/", $sub_dir))) {
-                            $img_path = $geodir_uploadpath . '/' . $filename;
-                            $img_url = $geodir_uploadurl . '/' . $filename;
-                        } else {
-                            $img_path = $uploads_dir . '/temp_' . $current_user->data->ID . '/' . $filename;
-                            $img_url = $uploads['url'] . '/temp_' . $current_user->data->ID . '/' . $filename;
-                        }
+					if ($curr_img_dir != $geodir_uploaddir) {
+						if (file_exists($img_path))
+							unlink($img_path);
+					}
 
-                        $uploaded_file = '';
-                        if (file_exists($img_path))
-                            $uploaded_file = copy($img_path, $geodir_uploadpath . '/' . $new_name);
-
-                        if ($curr_img_dir != $geodir_uploaddir) {
-                            if (file_exists($img_path))
-                                unlink($img_path);
-                        }
-
-                        if (!empty($uploaded_file))
-                            $file_urls = $geodir_uploadurl . '/' . $new_name;
-
-                    }
+					if (!empty($uploaded_file))
+						$file_urls = $geodir_uploadurl . '/' . $new_name;
 
                 } else {
-
                     $file_urls = $post_image[$m];
                 }
             }
@@ -3061,7 +3082,6 @@ if (!function_exists('geodir_save_post_file_fields')) {
                 $invalid_files = (object)$invalid_files;
             }
         }
-
 
         geodir_save_post_meta($post_id, $field_id, $file_urls);
 
