@@ -511,7 +511,6 @@ function gd_convert_virtual_pages(){
 }
 
 
-//add_action( 'after_setup_theme', 'gd_convert_virtual_pages' );
 
 
 
