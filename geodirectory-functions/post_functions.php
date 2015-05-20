@@ -228,7 +228,6 @@ if (!function_exists('geodir_save_listing')) {
             $type = $val['type'];
             $extrafields = $val['extra_fields'];
 
-
             if (trim($type) == 'address') {
                 $prefix = $name . '_';
                 $address = $prefix . 'address';
@@ -302,8 +301,9 @@ if (!function_exists('geodir_save_listing')) {
                     $request_files = array();
                     if ($request_info[$name] != '')
                         $request_files = explode(",", $request_info[$name]);
-
-                    geodir_save_post_file_fields($last_post_id, $name, $request_files);
+						
+                    $extrafields = $extrafields != '' ? maybe_unserialize($extrafields) : NULL;
+					geodir_save_post_file_fields($last_post_id, $name, $request_files, $extrafields);
 
                 }
             } elseif (trim($type) == 'datepicker') {

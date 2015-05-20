@@ -687,6 +687,32 @@ $default = isset($field_info->is_admin) ? $field_info->is_admin : '';
                 <?php
                 }
                     break;
+				case 'file': {
+					$allowed_file_types = geodir_allowed_mime_types();
+					
+					$extra_fields = isset($field_info->extra_fields) && $field_info->extra_fields != '' ? maybe_unserialize($field_info->extra_fields) : '';
+					$gd_file_types = !empty($extra_fields) && !empty($extra_fields['gd_file_types']) ? $extra_fields['gd_file_types'] : array('*');
+					?>
+					<tr>
+					  <td><strong><?php _e('Allowed file types:', GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+						<td align="left">
+							<select name="extra[gd_file_types][]" id="gd_file_types" multiple="multiple" style="height:100px;width:90%;">
+								<option value="*" <?php selected(true, in_array('*', $gd_file_types));?>><?php _e('All types', GEODIRECTORY_TEXTDOMAIN) ;?></option>
+								<?php foreach ( $allowed_file_types as $format => $types ) { ?>
+								<optgroup label="<?php echo esc_attr( wp_sprintf(__('%s formats', GEODIRECTORY_TEXTDOMAIN), __($format, GEODIRECTORY_TEXTDOMAIN) ) ) ;?>">
+									<?php foreach ( $types as $ext => $type ) { ?>
+									<option value="<?php echo $ext ;?>" <?php selected(true, in_array($ext, $gd_file_types));?>><?php echo '.' . $ext ;?></option>
+									<?php } ?>
+								</optgroup>
+								<?php } ?>
+							</select>			
+							<br />
+							<span><?php _e('Select file types to allowed for file uploading. (Select multiple file types by holding down "Ctrl" key.)', GEODIRPAYMENT_TEXTDOMAIN);?></span>				
+						</td>
+					</tr>
+					<?php 
+					}
+					break;
 
             endswitch; ?>
             <?php if ($field_type != 'fieldset') {
