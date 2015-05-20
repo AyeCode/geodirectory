@@ -1,4 +1,20 @@
-<?php /* ====== Custom fields form  ======*/
+<?php
+/**
+ * Admin custom field form
+ *
+ * @since 1.0.0
+ *
+ * @package GeoDirectory
+ */
+ 
+/**
+ * Displays the custom field form content.
+ *
+ * @since 1.0.0
+ *
+ * @global string $post_type Post type.
+ */
+
 global $post_type;
 
 if (!isset($field_info->post_type)) {
@@ -273,7 +289,18 @@ $default = isset($field_info->is_admin) ? $field_info->is_admin : '';
             <?php
             $html = ob_get_clean();
 
-            echo $html = apply_filters('geodir_packages_list_on_custom_fields', $html, $field_info);
+			/**
+			 * Filter the price packages list.
+			 *
+			 * Filter the price packages list in custom field form in admin
+             * custom fields settings.
+			 *
+			 * @since 1.0.0
+			 *
+			 * @param string $html The price packages content.
+			 * @param object $field_info Current field object.
+			 */
+			echo $html = apply_filters('geodir_packages_list_on_custom_fields', $html, $field_info);
 
             ?>
 
@@ -766,8 +793,18 @@ $default = isset($field_info->is_admin) ? $field_info->is_admin : '';
                     <tr>
                         <td colspan="2" align="left">
                             <h3><?php
-
-                                echo apply_filters('geodir_advance_custom_fields_heading', __('Posts sort options', GEODIRECTORY_TEXTDOMAIN), $field_type);
+								/**
+								 * Filter the section title.
+								 *
+								 * Filter the section title in custom field form in admin
+								 * custom fields settings.
+								 *
+								 * @since 1.0.0
+								 *
+								 * @param string Title of the section.
+								 * @param string $field_type Current field type.
+								 */
+								echo apply_filters('geodir_advance_custom_fields_heading', __('Posts sort options', GEODIRECTORY_TEXTDOMAIN), $field_type);
 
                                 ?></h3>
                         </td>

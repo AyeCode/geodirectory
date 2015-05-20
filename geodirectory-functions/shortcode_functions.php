@@ -1,9 +1,25 @@
 <?php
+/**
+ * All shortcode related functions
+ *
+ * @since 1.0.0
+ *
+ * @package GeoDirectory
+ */
+ 
 // If this file is called directly, abort.
 if (!defined('WPINC')) {
     die;
 }
 
+/**
+ * Validate and parse the measurement value.
+ *
+ * @since 1.0.0
+ *
+ * @param string $value Input value to validate measurement.
+ * @return string The measurement value in valid format.
+ */
 function gdsc_validate_measurements($value)
 {
     if ((strlen($value) - 1) == strpos(trim($value), '%')) {
@@ -24,6 +40,14 @@ function gdsc_validate_measurements($value)
     return $value;
 }
 
+/**
+ * Validate and parse the google map parameters.
+ *
+ * @since 1.0.0
+ *
+ * @param string $value Input value to validate measurement.
+ * @return string The measurement valud in valid format.
+ */
 function gdsc_validate_map_args($params)
 {
 
@@ -58,14 +82,17 @@ function gdsc_validate_map_args($params)
     return $params;
 }
 
-/** Checks a variable to see if it should be considered a boolean true or false.
+/**
+ * Check the boolean true or false.
+ *
+ * Checks a variable to see if it should be considered a boolean true or false.
  *     Also takes into account some text-based representations of true of false,
  *     such as 'false','N','yes','on','off', etc.
- * @author Samuel Levy <sam+nospam@samuellevy.com>
+ *
+ * @since 1.0.0
  *
  * @param mixed $in The variable to check
- * @param bool $strict If set to false, consider everything that is not false to
- *                     be true.
+ * @param bool $strict If set to false, consider everything that is not false to be true.
  *
  * @return bool The boolean equivalent or null
  */
@@ -119,6 +146,14 @@ function gdsc_to_bool_val($in, $strict = false)
     return $out;
 }
 
+/**
+ * Check the post type valid or not.
+ *
+ * @since 1.0.0
+ *
+ * @param string $incoming_post_type Post type.
+ * @return bool The boolean equivalent or null.
+ */
 function gdsc_is_post_type_valid($incoming_post_type)
 {
     $post_types = geodir_get_posttypes();
@@ -133,9 +168,23 @@ function gdsc_is_post_type_valid($incoming_post_type)
     return $post_type_found;
 }
 
+/**
+ * Adds the filetrs and gets the query.
+ *
+ * @since 1.0.0
+ *
+ * @global WP_Query $wp_query WordPress Query object.
+ * @global string $geodir_post_type Post type.
+ * @global string $table Database table name.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @global string $term Term object.
+ *
+ * @param string $query Database query.
+ * @return string Query.
+ */
 function gdsc_listing_loop_filter($query)
 {
-    global $wp_query, $geodir_post_type, $table, $plugin_prefix, $table, $term;
+    global $wp_query, $geodir_post_type, $table, $plugin_prefix, $term;
 
     $geodir_post_type = geodir_get_current_posttype();
 
@@ -154,7 +203,6 @@ function gdsc_listing_loop_filter($query)
                 }
                 $wp_query->queried_object_id = 1;
                 $wp_query->queried_object = $term_arr;
-                //print_r($wp_query) ;
             }
         }
 
@@ -184,6 +232,15 @@ function gdsc_listing_loop_filter($query)
     return $query;
 }
 
+/**
+ * Get the category id from category name/slug.
+ *
+ * @since 1.0.0
+ *
+ * @param string $post_type Post type.
+ * @param string $category Post category.
+ * @return int Term id.
+ */
 function gdsc_manage_category_choice($post_type, $category)
 {
     if (0 == $category || '' == $category) {
@@ -225,7 +282,13 @@ function gdsc_manage_category_choice($post_type, $category)
 // @todo: Extract this
 // This is wrong, it should be in JS and CSS files.
 if (!(function_exists('geodir_home_map_add_script'))) {
-    function geodir_home_map_add_script()
+	/**
+	 * Adds the script in the page footer for the home page google map.
+	 *
+	 * @since 1.0.0
+     * @return string Print the script in page footer.
+	 */
+	function geodir_home_map_add_script()
     {
         ?>
         <script type="text/javascript">
@@ -303,10 +366,15 @@ if (!(function_exists('geodir_home_map_add_script'))) {
     }
 }
 
+/**
+ * Adds the script in the page footer for the popular category widget.
+ *
+ * @since 1.0.0
+ * @return string Print the script in page footer.
+ */
 function geodir_popular_category_add_scripts()
 {
     ?>
-
     <script type="text/javascript">
         jQuery(function ($) {
             $('.geodir-showcat').click(function () {
@@ -326,6 +394,14 @@ function geodir_popular_category_add_scripts()
 <?php
 }
 
+/**
+ * Get the listing layout name from layout parameter.
+ *
+ * @since 1.0.0
+ *
+ * @param string $layout_choice Listing layout.
+ * @return string Layout name.
+ */
 function gdsc_validate_layout_choice($layout_choice)
 {
     switch (strtolower($layout_choice)) {
@@ -380,6 +456,14 @@ function gdsc_validate_layout_choice($layout_choice)
     return $layout_choice;
 }
 
+/**
+ * Validate & get the correct sorting option.
+ *
+ * @since 1.0.0
+ *
+ * @param string $sort_choice Listing sort option.
+ * @return string Listing sort.
+ */
 function gdsc_validate_sort_choice($sort_choice)
 {
     $sorts = array(
@@ -398,6 +482,14 @@ function gdsc_validate_sort_choice($sort_choice)
     return $sort_choice;
 }
 
+/**
+ * Validate & get the listing layout width.
+ *
+ * @since 1.0.0
+ *
+ * @param string $width_choice Listing width.
+ * @return int|null Listing width or empty value.
+ */
 function gdsc_validate_listing_width($width_choice)
 {
     if (!(empty($width_choice))) {
@@ -418,6 +510,14 @@ function gdsc_validate_listing_width($width_choice)
     return $width_choice;
 }
 
+/**
+ * Validate & get the event list filter.
+ *
+ * @since 1.0.0
+ *
+ * @param string $filter_choice Event filter option.
+ * @return string Event filter option.
+ */
 function gdsc_validate_list_filter_choice($filter_choice)
 {
     $filters = array(
@@ -567,6 +667,8 @@ function geodir_sc_gd_listings_output($args = array()) {
             /**
 			 * Filter the widget listing listview template.
 			 *
+			 * @since 1.0.0
+			 *
 			 * @param string The template file to display listing.
 			 */
 			$template = apply_filters("geodir_template_part-widget-listing-listview", geodir_locate_template('widget-listing-listview'));
@@ -585,6 +687,9 @@ function geodir_sc_gd_listings_output($args = array()) {
 				echo geodir_sc_listings_pagination($total_posts, $post_number, $pageno);
 			}
 
+			/**
+			 * Template for the listing listview.
+			 */
 			include($template);
 			
 			if ($with_pagination && $bottom_pagination) {				
