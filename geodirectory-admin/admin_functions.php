@@ -1,7 +1,16 @@
 <?php
+/**
+ * Admin functions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 
 /**
- * Deactivate geodirectory
+ * Updates option value when GeoDirectory get deactivated.
+ * 
+ * @since 1.0.0
+ * @package GeoDirectory
  */
 function geodir_deactivation()
 {
@@ -14,6 +23,12 @@ function geodir_deactivation()
 }
 
 
+/**
+ * Deletes option value when GeoDirectory get uninstalled.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_uninstall()
 {
 
@@ -21,12 +36,13 @@ function geodir_uninstall()
 
 }
 
-
-/**
- * Enque Admin Styles
- **/
-
 if (!function_exists('geodir_admin_styles')) {
+    /**
+     * Enqueue Admin Styles.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     */
     function geodir_admin_styles()
     {
 
@@ -64,6 +80,12 @@ if (!function_exists('geodir_admin_styles')) {
 }
 
 if (!function_exists('geodir_admin_styles_req')) {
+    /**
+     * Loads stylesheets from CDN.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     */
     function geodir_admin_styles_req()
     {
 
@@ -72,10 +94,13 @@ if (!function_exists('geodir_admin_styles_req')) {
     }
 }
 
-/**
- * Enque Admin Scripts
- **/
 if (!function_exists('geodir_admin_scripts')) {
+    /**
+     * Enqueue Admin Scripts.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     */
     function geodir_admin_scripts()
     {
 
@@ -197,13 +222,17 @@ if (!function_exists('geodir_admin_scripts')) {
     }
 }
 
-
-/**
- * Admin Menus
- *
- * Sets up the admin menus in wordpress.
- */
 if (!function_exists('geodir_admin_menu')) {
+    /**
+     * Admin Menus
+     *
+     * Sets up the admin menus in wordpress.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @global array $menu Menu array.
+     * @global object $geodirectory GeoDirectory plugin object.
+     */
     function geodir_admin_menu()
     {
         global $menu, $geodirectory;
@@ -216,11 +245,15 @@ if (!function_exists('geodir_admin_menu')) {
     }
 }
 
-
-/**
- * Order admin menus
- */
 if (!function_exists('geodir_admin_menu_order')) {
+    /**
+     * Order admin menus.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param array $menu_order Menu order array.
+     * @return array Modified menu order array.
+     */
     function geodir_admin_menu_order($menu_order)
     {
 
@@ -264,6 +297,13 @@ if (!function_exists('geodir_admin_menu_order')) {
 }
 
 if (!function_exists('geodir_admin_custom_menu_order')) {
+    /**
+     * Enables custom menu order.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @return bool
+     */
     function geodir_admin_custom_menu_order()
     {
         if (!current_user_can('manage_options')) return false;
@@ -271,8 +311,12 @@ if (!function_exists('geodir_admin_custom_menu_order')) {
     }
 }
 
-
-// Function to show success or error message on admin option form submittion
+/**
+ * Function to show success or error message on admin option form submission.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_before_admin_panel()
 {
     if (isset($_REQUEST['installed']) && $_REQUEST['installed'] != '') {
@@ -312,6 +356,14 @@ function geodir_before_admin_panel()
     }
 }
 
+/**
+ * Handles data posted from GeoDirectory settings form.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global array $geodir_settings Array of geodirectory settings.
+ * @param string $current_tab The current settings tab name.
+ */
 function geodir_handle_option_form_submit($current_tab)
 {
     global $geodir_settings;
@@ -369,10 +421,16 @@ function geodir_handle_option_form_submit($current_tab)
 }
 
 
-//-----Funtion for install GeoDirectory dummy data------
-
 if (!function_exists('geodir_autoinstall_admin_header') && get_option('geodir_installed')) {
-
+    /**
+     * GeoDirectory dummy data installation.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @global object $wpdb WordPress Database object.
+     * @global string $plugin_prefix Geodirectory plugin table prefix.
+     * @param string $post_type The post type.
+     */
     function geodir_autoinstall_admin_header($post_type = 'gd_place')
     {
 
@@ -504,6 +562,14 @@ if (!function_exists('geodir_autoinstall_admin_header') && get_option('geodir_in
     }
 }
 
+/**
+ * Inserts GeoDirectory dummy posts.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global object $current_user Current user object.
+ */
 function geodir_insert_dummy_posts()
 {
     geodir_default_taxonomies();
@@ -516,7 +582,14 @@ function geodir_insert_dummy_posts()
 
 }
 
-// function for delete GeoDirectory dummy data
+/**
+ * Deletes GeoDirectory dummy data.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ */
 function geodir_delete_dummy_posts()
 {
     global $wpdb, $plugin_prefix;
@@ -537,6 +610,11 @@ function geodir_delete_dummy_posts()
  * Default taxonomies
  *
  * Adds the default terms for taxonomies - placecategory. Modify at your own risk.
+ * 
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global string $dummy_image_path The dummy image path.
  */
 function geodir_default_taxonomies()
 {
@@ -651,6 +729,12 @@ function geodir_default_taxonomies()
  * Update options
  *
  * Updates the options on the geodirectory settings pages. Returns true if saved.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $options The option array.
+ * @param bool $dummy Is this dummy settings? Default: false.
+ * @return bool Returns true if saved.
  */
 function geodir_update_options($options, $dummy = false)
 {
@@ -797,7 +881,14 @@ function geodir_update_options($options, $dummy = false)
 
 }
 
-//create custom fields for place
+/**
+ * create custom fields for place.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $tabs The tabs array.
+ * @return array Modified tabs array.
+ */
 function places_custom_fields_tab($tabs)
 {
 
@@ -833,12 +924,32 @@ function places_custom_fields_tab($tabs)
 }
 
 
+/**
+ * Adds GD Tools settings menu to GeoDirectory settings.
+ *
+ * Can be found here. WP Admin -> Geodirectory -> GD Tools.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $tabs Tab menu array.
+ * @return array Modified tab meny array.
+ */
 function geodir_tools_setting_tab($tabs)
 {
     $tabs['tools_settings'] = array('label' => __('GD Tools', GEODIRECTORY_TEXTDOMAIN));
     return $tabs;
 }
 
+/**
+ * Adds Theme Compatibility menu item to GeoDirectory settings page.
+ *
+ * Can be found here. WP Admin -> Geodirectory -> Theme Compatibility.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $tabs Tab menu array.
+ * @return array Modified tab meny array.
+ */
 function geodir_compatibility_setting_tab($tabs)
 {
     $tabs['compatibility_settings'] = array('label' => __('Theme Compatibility', GEODIRECTORY_TEXTDOMAIN));
@@ -846,6 +957,16 @@ function geodir_compatibility_setting_tab($tabs)
 }
 
 
+/**
+ * Adds Extend Geodirectory menu item to GeoDirectory settings page.
+ *
+ * Can be found here. WP Admin -> Geodirectory -> Extend Geodirectory.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $tabs Tab menu array.
+ * @return array Modified tab meny array.
+ */
 function geodir_extend_geodirectory_setting_tab($tabs)
 {
     $tabs['extend_geodirectory_settings'] = array('label' => __('Extend Geodirectory', GEODIRECTORY_TEXTDOMAIN), 'url' => 'http://wpgeodirectory.com', 'target' => '_blank');
@@ -854,6 +975,14 @@ function geodir_extend_geodirectory_setting_tab($tabs)
 
 
 if (!function_exists('geodir_edit_post_columns')) {
+    /**
+     * Modify admin post listing page columns.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param array $columns The column array.
+     * @return array Altered column array.
+     */
     function geodir_edit_post_columns($columns)
     {
 
@@ -876,6 +1005,16 @@ if (!function_exists('geodir_edit_post_columns')) {
 
 
 if (!function_exists('geodir_manage_post_columns')) {
+    /**
+     * Adds content to our custom post listing page columns.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @global object $wpdb WordPress Database object.
+     * @global object $post WordPress Post object.
+     * @param string $column The column name.
+     * @param int $post_id The post ID.
+     */
     function geodir_manage_post_columns($column, $post_id)
     {
         global $post, $wpdb;
@@ -953,6 +1092,14 @@ if (!function_exists('geodir_manage_post_columns')) {
 
 
 if (!function_exists('geodir_post_sortable_columns')) {
+    /**
+     * Makes admin post listing page columns sortable.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @param array $columns The column array.
+     * @return array Altered column array.
+     */
     function geodir_post_sortable_columns($columns)
     {
 
@@ -962,7 +1109,16 @@ if (!function_exists('geodir_post_sortable_columns')) {
     }
 }
 
-
+/**
+ * Saves listing data from request variable to database.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global object $current_user Current user object.
+ * @global object $post WordPress Post object.
+ * @param int $post_id The post ID.
+ */
 function geodir_post_information_save($post_id)
 {
 
@@ -1015,10 +1171,15 @@ function geodir_post_information_save($post_id)
     endif;
 }
 
-//-----Funtion for insert csv post data------
-
 if (!function_exists('geodir_insert_csv_post_data') && get_option('geodir_installed')) {
-
+    /**
+     * Function to insert csv post data.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @global object $wpdb WordPress Database object.
+     * @global string $plugin_prefix Geodirectory plugin table prefix.
+     */
     function geodir_insert_csv_post_data()
     {
         global $wpdb, $plugin_prefix;
@@ -1613,9 +1774,16 @@ if (!function_exists('geodir_insert_csv_post_data') && get_option('geodir_instal
     <?php }
 }
 
-/*--------Geodirectory Import Data Functions----------------*/
 if (!function_exists('geodir_import_data')) {
-
+    /**
+     * Imports data from csv file.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @global object $wpdb WordPress Database object.
+     * @global string $plugin_prefix Geodirectory plugin table prefix.
+     * @global object $current_user Current User object.
+     */
     function geodir_import_data()
     {
 
@@ -1969,6 +2137,11 @@ if (!function_exists('geodir_import_data')) {
  * Admin fields
  *
  * Loops though the geodirectory options array and outputs each field.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $geodirectory GeoDirectory plugin object.
+ * @param array $options The options array.
  */
 function geodir_admin_fields($options)
 {
@@ -2656,6 +2829,14 @@ function geodir_admin_fields($options)
 <?php
 }
 
+/**
+ * Prints post information meta box content.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $post The post object.
+ * @global int $post_id The post ID.
+ */
 function geodir_post_info_setting()
 {
     global $post, $post_id;
@@ -2687,6 +2868,14 @@ function geodir_post_info_setting()
     echo '</div>';
 }
 
+/**
+ * Prints additional information meta box content.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $post The post object.
+ * @global int $post_id The post ID.
+ */
 function geodir_post_addinfo_setting()
 {
     global $post, $post_id;
@@ -2704,6 +2893,14 @@ function geodir_post_addinfo_setting()
 
 }
 
+/**
+ * Prints Attachments meta box content.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $post The post object.
+ * @global int $post_id The post ID.
+ */
 function geodir_post_attachments()
 {
     global $post, $post_id;
@@ -2791,6 +2988,15 @@ function geodir_post_attachments()
 
 }
 
+/**
+ * Updates custom table when post get updated.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $post_ID The post ID.
+ * @param object $post_after Post object after the update.
+ * @param object $post_before Post object before the update.
+ */
 function geodir_action_post_updated($post_ID, $post_after, $post_before)
 {
     $post_type = get_post_type($post_ID);
@@ -2802,8 +3008,15 @@ function geodir_action_post_updated($post_ID, $post_after, $post_before)
     }
 }
 
-/*
- * Add bcc option
+/**
+ * Add Listing published bcc option.
+ *
+ * WP Admin -> Geodirectory -> Notifications -> Site Bcc Options
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $settings The settings array.
+ * @return array
  */
 function geodir_notification_add_bcc_option($settings)
 {
@@ -2845,6 +3058,13 @@ function geodir_notification_add_bcc_option($settings)
 
 add_action('wp_ajax_get_gd_theme_compat_callback', 'get_gd_theme_compat_callback');
 
+/**
+ * Exports theme compatibility data for given theme.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ */
 function get_gd_theme_compat_callback()
 {
     global $wpdb;
@@ -2864,6 +3084,13 @@ function get_gd_theme_compat_callback()
 
 add_action('wp_ajax_get_gd_theme_compat_import_callback', 'get_gd_theme_compat_import_callback');
 
+/**
+ * Imports theme compatibility data for given theme.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ */
 function get_gd_theme_compat_import_callback()
 {
     global $wpdb;
@@ -2883,6 +3110,13 @@ function get_gd_theme_compat_import_callback()
 }
 
 
+/**
+ * Sets theme compatabilty options.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ */
 function gd_set_theme_compat()
 {
     global $wpdb;
@@ -2923,8 +3157,13 @@ function gd_set_theme_compat()
 }
 
 
-// function to check if Avada needs header.php replaced
 add_action('wp_loaded', 'gd_check_avada_compat');
+/**
+ * Function to check if Avada needs header.php replaced
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function gd_check_avada_compat()
 {
     if (function_exists('avada_load_textdomain') && !get_option('avada_nag')) {
@@ -2933,6 +3172,12 @@ function gd_check_avada_compat()
 }
 
 
+/**
+ * Displays Avada compatibility warning.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function gd_avada_compat_warning()
 {
 
@@ -3011,6 +3256,12 @@ function gd_avada_compat_warning()
 }
 
 
+/**
+ * Removes Avada compatibility warning.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_avada_remove_notification()
 {
     update_option('avada_nag', TRUE);
@@ -3026,9 +3277,10 @@ add_action('wp_ajax_geodir_avada_remove_notification', 'geodir_avada_remove_noti
  * Get the current post type in the wordPress admin
  *
  * @since 1.4.2
+ * @package GeoDirectory
  *
  * @global null|WP_Post $post Post object.
- * @global string Post type.
+ * @global string $typenow Post type.
  * @global object|WP_Screen $current_screen Current screen object
  *
  * @return string Post type ex: gd_place
@@ -3056,6 +3308,7 @@ function geodir_admin_current_post_type() {
  * Fires before updating geodirectory admin settings.
  *
  * @since 1.4.2
+ * @package GeoDirectory
  *
  * @param string $current_tab Current tab in geodirectory settings.
  * @param array  $geodir_settings Array of geodirectory settings.
@@ -3100,8 +3353,9 @@ add_action( 'admin_head-post.php', 'geodir_hide_admin_preview_button' );
  * Add the tab in left sidebar menu fro import & export page.
  *
  * @since 1.4.6
+ * @package GeoDirectory
  *
- * @return Array of tab data.
+ * @return array Array of tab data.
  */
 function geodir_import_export_tab( $tabs ) {
 	$tabs['import_export'] = array( 'label' => __( 'Import & Export', GEODIRECTORY_TEXTDOMAIN ) );
@@ -3112,8 +3366,9 @@ function geodir_import_export_tab( $tabs ) {
  * Display the page to manage import/export categories/listings.
  *
  * @since 1.4.6
+ * @package GeoDirectory
  *
- * @return Html content.
+ * @return string Html content.
  */
 function geodir_import_export_page() {
 	$nonce = wp_create_nonce( 'geodir_import_export_nonce' );
@@ -3269,6 +3524,7 @@ function geodir_import_export_page() {
 						 * Called just after the sample CSV download link.
 						 *
 						 * @since 1.0.0
+                         * @package GeoDirectory
 						 */
 						do_action('geodir_sample_cats_csv_download_link');
 						?>
@@ -3347,6 +3603,7 @@ function geodir_import_export_page() {
 	 *
 	 * Called after the last setting on the GD > Import & Export page.
 	 * @since 1.4.6
+     * @package GeoDirectory
 	 */
 	do_action( 'geodir_import_export' );
 	?>
@@ -3940,12 +4197,13 @@ jQuery(function(){
  * Handle import/export for categories & listings.
  *
  * @since 1.4.6
+ * @package GeoDirectory
  *
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @global object $current_user Worepress current user.
  * @global null|object $wp_filesystem WP_Filesystem object.
- * @return Json data.
+ * @return string Json data.
  */
 function geodir_ajax_import_export() {
 	global $wpdb, $plugin_prefix, $current_user, $wp_filesystem;
@@ -4722,10 +4980,11 @@ function geodir_ajax_import_export() {
  * Create new the post term.
  *
  * @since 1.4.6
+ * @package GeoDirectory
  *
  * @param string $taxonomy Post taxonomy.
  * @param array $term_data Array of term data.
- * @return Term id when success, false when fail.
+ * @return int|bool Term id when success, false when fail.
  */
 function geodir_imex_insert_term( $taxonomy, $term_data ) {
 	if ( empty( $taxonomy ) || empty( $term_data ) ) {
@@ -4760,10 +5019,11 @@ function geodir_imex_insert_term( $taxonomy, $term_data ) {
  * Update the post term.
  *
  * @since 1.4.6
+ * @package GeoDirectory
  *
  * @param string $taxonomy Post taxonomy.
  * @param array $term_data Array of term data.
- * @return Term id when success, false when fail.
+ * @return int|bool Term id when success, false when fail.
  */
 function geodir_imex_update_term( $taxonomy, $term_data ) {
 	if ( empty( $taxonomy ) || empty( $term_data ) ) {
@@ -4805,9 +5065,10 @@ function geodir_imex_update_term( $taxonomy, $term_data ) {
  * Get the posts counts for the current post type.
  *
  * @since 1.4.6
+ * @package GeoDirectory
  *
  * @param string $post_type Post type.
- * @return Posts count.
+ * @return int Posts count.
  */
 function geodir_get_posts_count( $post_type ) {
 	$posts_count = wp_count_posts( $post_type );
@@ -4817,6 +5078,7 @@ function geodir_get_posts_count( $post_type ) {
 	 * Modify returned post counts for the current post type.
 	 *
 	 * @since 1.4.6
+     * @package GeoDirectory
 	 *
 	 * @param int $posts_count Post counts.
 	 * @param string $post_type Post type.
@@ -4830,13 +5092,14 @@ function geodir_get_posts_count( $post_type ) {
  * Filter the posts counts for gd_event post type.
  *
  * @since 1.4.6
+ * @package GeoDirectory
  *
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  *
  * @param int $posts_count Post counts.
  * @param string $post_type Post type.
- * @return Posts count.
+ * @return int Posts count.
  */
 function geodir_imex_count_events( $posts_count, $post_type ) {
 	if ( $post_type == 'gd_event' ) {
@@ -4857,11 +5120,12 @@ function geodir_imex_count_events( $posts_count, $post_type ) {
  * Retrives the posts for the current post type.
  *
  * @since 1.4.6
+ * @package GeoDirectory
  *
  * @global object $wp_filesystem WordPress FileSystem object.
  *
  * @param string $post_type Post type.
- * @return Array of posts data.
+ * @return array Array of posts data.
  */
 function geodir_imex_get_posts( $post_type ) {	
 	global $wp_filesystem;
@@ -5013,12 +5277,13 @@ function geodir_imex_get_posts( $post_type ) {
  * Retrives the posts for the current post type.
  *
  * @since 1.4.6
+ * @package GeoDirectory
  *
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  *
  * @param string $post_type Post type.
- * @return Array of posts data.
+ * @return array Array of posts data.
  */
 function geodir_get_export_posts( $post_type ) {
 	global $wpdb, $plugin_prefix;
@@ -5033,6 +5298,7 @@ function geodir_get_export_posts( $post_type ) {
 	 * Modify returned posts SQL query for the current post type.
 	 *
 	 * @since 1.4.6
+     * @package GeoDirectory
 	 *
 	 * @param int $query The SQL query.
 	 * @param string $post_type Post type.
@@ -5045,6 +5311,7 @@ function geodir_get_export_posts( $post_type ) {
 	 * Modify returned post results for the current post type.
 	 *
 	 * @since 1.4.6
+     * @package GeoDirectory
 	 *
 	 * @param object $counts An object containing all post ids.
 	 * @param string $post_type   Post type.
@@ -5056,13 +5323,14 @@ function geodir_get_export_posts( $post_type ) {
  * Get the posts SQL query for the current post type.
  *
  * @since 1.4.6
+ * @package GeoDirectory
  *
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  *
  * @param string $query The SQL query.
  * @param string $post_type Post type.
- * @return The SQL query.
+ * @return string The SQL query.
  */
 function geodir_imex_get_events_query( $query, $post_type ) {
 	if ( $post_type == 'gd_event' ) {
@@ -5081,9 +5349,10 @@ function geodir_imex_get_events_query( $query, $post_type ) {
  * Retrive terms count for given post type.
  *
  * @since 1.4.6
+ * @package GeoDirectory
  *
  * @param  string $post_type Post type.
- * @return Total terms count.
+ * @return int Total terms count.
  */
 function geodir_get_terms_count( $post_type ) {
 	$args = array( 'hide_empty' => 0 );
@@ -5099,12 +5368,13 @@ function geodir_get_terms_count( $post_type ) {
 }
 
 /**
- * Retrive terms for given post type.
+ * Retrieve terms for given post type.
  *
  * @since 1.4.6
+ * @package GeoDirectory
  *
  * @param  string $post_type The post type.
- * @return Array of terms data.
+ * @return array Array of terms data.
  */
 function geodir_imex_get_terms( $post_type ) {
 	$args = array( 'hide_empty' => 0 );
@@ -5157,9 +5427,10 @@ function geodir_imex_get_terms( $post_type ) {
  * Get the path of cache directory.
  *
  * @since 1.4.6
+ * @package GeoDirectory
  *
  * @param  bool $relative True for relative path & False for absolute path.
- * @return Path to the cache directory.
+ * @return string Path to the cache directory.
  */
 function geodir_path_import_export( $relative = true ) {
 	$upload_dir = wp_upload_dir();
@@ -5171,13 +5442,14 @@ function geodir_path_import_export( $relative = true ) {
  * Save the data in CSV file to export.
  *
  * @since 1.4.6
+ * @package GeoDirectory
  *
  * @global null|object $wp_filesystem WP_Filesystem object.
  *
  * @param  string $file_path Full path to file.
  * @param  array $csv_data Array of csv data.
  * @param  bool $clear If true then it overwrite data otherwise add rows at the end of file.
- * @return true if success otherwise false.
+ * @return bool true if success otherwise false.
  */
 function geodir_save_csv_data( $file_path, $csv_data = array(), $clear = true ) {
 	if ( empty( $csv_data ) ) {
@@ -5209,11 +5481,12 @@ function geodir_save_csv_data( $file_path, $csv_data = array(), $clear = true ) 
  * Count the number of line from file.
  *
  * @since 1.4.6
+ * @package GeoDirectory
  *
  * @global null|object $wp_filesystem WP_Filesystem object.
  *
  * @param  string $file Full path to file.
- * @return No of file rows.
+ * @return int No of file rows.
  */
 function geodir_import_export_line_count( $file ) {
 	global $wp_filesystem;
@@ -5229,6 +5502,15 @@ function geodir_import_export_line_count( $file ) {
 	return NULL;
 }
 
+/**
+ * Returns queried data from custom fields table.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @param string $post_type The post type.
+ * @return object Queried object.
+ */
 function geodir_imex_get_custom_fields( $post_type ) {
 	 global $wpdb;
 	 

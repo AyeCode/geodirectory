@@ -4,15 +4,19 @@
  *
  * Main admin file which loads all settings panels and sets up admin menus.
  *
- * @author        WPGeoDirectory
- * @category    Admin
- * @package    GeoDirectory
+ * @since 1.0.0
+ * @package GeoDirectory
  */
-
-/* Admin init loader */
 
 add_action('admin_init', 'geodir_admin_init');
 if (!function_exists('geodir_admin_init')) {
+    /**
+     * Adds GD setting pages in admin.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @global string $current_tab The current settings tab name.
+     */
     function geodir_admin_init()
     {
 
@@ -35,6 +39,12 @@ if (!function_exists('geodir_admin_init')) {
     }
 }
 
+/**
+ * Redirects to admin page after plugin activation.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_redirect_to_admin_panel_on_installed()
 {
     if (get_option('geodir_installation_redirect', false)) {
@@ -43,6 +53,13 @@ function geodir_redirect_to_admin_panel_on_installed()
     }
 }
 
+/**
+ * Displays setting form for the given tab.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $current_tab The current settings tab name.
+ */
 function geodir_get_admin_option_form($current_tab)
 {
     geodir_admin_option_form($current_tab);// defined in admin template tags.php
@@ -57,7 +74,13 @@ add_action('geodir_before_update_options', 'geodir_before_update_options',10,2);
 
 //add_action('geodir_before_admin_panel', 'geodir_autoinstall_admin_header');
 
-/* Admin scripts loader */
+/**
+ * Admin scripts loader.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global string $pagenow The current screen.
+ */
 function geodir_conditional_admin_script_load()
 {
     global $pagenow;
@@ -97,6 +120,12 @@ add_action('admin_panel_init', 'geodir_admin_list_columns', 2);
 add_action('geodir_insert_dummy_posts_gd_place', 'geodir_insert_dummy_posts', 1);
 add_action('geodir_delete_dummy_posts_gd_place', 'geodir_delete_dummy_posts', 1);
 
+/**
+ * Creates default admin navigation.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function create_default_admin_main_nav()
 {
     add_filter('geodir_settings_tabs_array', 'geodir_default_admin_main_tabs', 1);
@@ -109,6 +138,12 @@ function create_default_admin_main_nav()
 }
 
 
+/**
+ * Adds custom columns on geodirectory post types.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_admin_list_columns()
 {
     if ($post_types = geodir_get_posttypes()) {
@@ -123,6 +158,14 @@ function geodir_admin_list_columns()
     }
 }
 
+/**
+ * Returns an array of main settings tabs.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $tabs Tabs array.
+ * @return array Tabs array.
+ */
 function geodir_default_admin_main_tabs($tabs)
 {
     return $tabs = array(
@@ -136,6 +179,13 @@ function geodir_default_admin_main_tabs($tabs)
 }
 
 add_action('do_meta_boxes', 'geodir_remove_image_box');
+/**
+ * Removes default thumbnail metabox on GD post types.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $post WordPress Post object.
+ */
 function geodir_remove_image_box()
 {
     global $post;
@@ -153,6 +203,13 @@ function geodir_remove_image_box()
 
 
 add_action('add_meta_boxes', 'geodir_meta_box_add');
+/**
+ * Adds meta boxes to the Gd post types.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $post WordPress Post object.
+ */
 function geodir_meta_box_add()
 {
     global $post;
@@ -186,8 +243,15 @@ add_action('save_post', 'geodir_post_information_save');
 //add_filter('geodir_design_settings' , 'geodir_show_hide_location_switcher_nav' ) ;
 
 
-// Geodirectory hide categories post meta.
 add_action('admin_menu', 'geodir_hide_post_taxonomy_meta_boxes');
+/**
+ * Removes taxonomy meta boxes.
+ *
+ * Geodirectory hide categories post meta.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_hide_post_taxonomy_meta_boxes()
 {
 
@@ -209,6 +273,14 @@ function geodir_hide_post_taxonomy_meta_boxes()
 }
 
 add_filter('geodir_add_listing_map_restrict', 'geodir_add_listing_map_restrict');
+/**
+ * Checks whether to restrict the map for specific address only.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param bool $map_restirct The value before filter.
+ * @return bool The value after filter.
+ */
 function geodir_add_listing_map_restrict($map_restirct)
 {
     if (is_admin()) {
@@ -222,6 +294,16 @@ function geodir_add_listing_map_restrict($map_restirct)
 
 add_filter('geodir_notifications_settings', 'geodir_enable_editor_on_notifications', 1);
 
+/**
+ * Converts textarea field to WYSIWYG editor on Notification settings.
+ *
+ * WP Admin -> Geodirectory -> Notifications
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $notification The notification settings array.
+ * @return array Modified notification settings array.
+ */
 function geodir_enable_editor_on_notifications($notification)
 {
 
@@ -240,6 +322,14 @@ function geodir_enable_editor_on_notifications($notification)
 
 add_filter('geodir_design_settings', 'geodir_enable_editor_on_design_settings', 1);
 
+/**
+ * Converts textarea field to WYSIWYG editor on Design settings.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $design_setting The design settings array.
+ * @return array Modified design settings array.
+ */
 function geodir_enable_editor_on_design_settings($design_setting)
 {
 
@@ -260,6 +350,12 @@ function geodir_enable_editor_on_design_settings($design_setting)
 
 add_action('geodir_manage_available_fields', 'geodir_manage_available_fields');
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $sub_tab
+ */
 function geodir_manage_available_fields($sub_tab)
 {
 
@@ -278,6 +374,12 @@ function geodir_manage_available_fields($sub_tab)
 
 add_action('geodir_manage_selected_fields', 'geodir_manage_selected_fields');
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $sub_tab
+ */
 function geodir_manage_selected_fields($sub_tab)
 {
 
@@ -294,6 +396,12 @@ function geodir_manage_selected_fields($sub_tab)
 }
 
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ */
 function geodir_sorting_options_available_fields()
 {
     global $wpdb;
@@ -342,6 +450,12 @@ function geodir_sorting_options_available_fields()
 }
 
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ */
 function geodir_sorting_options_selected_fields()
 {
 
@@ -378,6 +492,11 @@ function geodir_sorting_options_selected_fields()
 }
 
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_custom_available_fields()
 {
 
@@ -425,6 +544,12 @@ function geodir_custom_available_fields()
 }
 
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ */
 function geodir_custom_selected_fields()
 {
 
@@ -457,6 +582,14 @@ function geodir_custom_selected_fields()
 }
 
 add_filter('geodir_custom_fields_panel_head', 'geodir_custom_fields_panel_head', 1, 3);
+/**
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $heading
+ * @param $sub_tab
+ * @param $listing_type
+ * @return string
+ */
 function geodir_custom_fields_panel_head($heading, $sub_tab, $listing_type)
 {
 
@@ -474,6 +607,15 @@ function geodir_custom_fields_panel_head($heading, $sub_tab, $listing_type)
 
 
 add_filter('geodir_cf_panel_available_fields_head', 'geodir_cf_panel_available_fields_head', 1, 3);
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $heading
+ * @param $sub_tab
+ * @param $listing_type
+ * @return string
+ */
 function geodir_cf_panel_available_fields_head($heading, $sub_tab, $listing_type)
 {
 
@@ -491,6 +633,15 @@ function geodir_cf_panel_available_fields_head($heading, $sub_tab, $listing_type
 
 
 add_filter('geodir_cf_panel_available_fields_note', 'geodir_cf_panel_available_fields_note', 1, 3);
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $note
+ * @param $sub_tab
+ * @param $listing_type
+ * @return string
+ */
 function geodir_cf_panel_available_fields_note($note, $sub_tab, $listing_type)
 {
 
@@ -508,6 +659,15 @@ function geodir_cf_panel_available_fields_note($note, $sub_tab, $listing_type)
 
 
 add_filter('geodir_cf_panel_selected_fields_head', 'geodir_cf_panel_selected_fields_head', 1, 3);
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $heading
+ * @param $sub_tab
+ * @param $listing_type
+ * @return string
+ */
 function geodir_cf_panel_selected_fields_head($heading, $sub_tab, $listing_type)
 {
 
@@ -525,6 +685,15 @@ function geodir_cf_panel_selected_fields_head($heading, $sub_tab, $listing_type)
 
 
 add_filter('geodir_cf_panel_selected_fields_note', 'geodir_cf_panel_selected_fields_note', 1, 3);
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $note
+ * @param $sub_tab
+ * @param $listing_type
+ * @return string
+ */
 function geodir_cf_panel_selected_fields_note($note, $sub_tab, $listing_type)
 {
 
@@ -543,6 +712,13 @@ function geodir_cf_panel_selected_fields_note($note, $sub_tab, $listing_type)
 
 add_action('admin_init', 'geodir_remove_unnecessary_fields');
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ */
 function geodir_remove_unnecessary_fields()
 {
     global $wpdb, $plugin_prefix;
@@ -564,6 +740,11 @@ function geodir_remove_unnecessary_fields()
 /* Ajax Handler Start */
 add_action('wp_ajax_geodir_admin_ajax', "geodir_admin_ajax_handler");
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_admin_ajax_handler()
 {
     if (isset($_REQUEST['geodir_admin_ajax_action']) && $_REQUEST['geodir_admin_ajax_action'] != '') {
@@ -588,6 +769,17 @@ function geodir_admin_ajax_handler()
 }
 
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @param $filter_arr
+ * @param $table
+ * @param $tabel_name
+ * @param $fix
+ * @return mixed
+ */
 function geodir_diagnose_multisite_table($filter_arr, $table, $tabel_name, $fix)
 {
     global $wpdb;
@@ -714,6 +906,13 @@ function geodir_diagnose_multisite_table($filter_arr, $table, $tabel_name, $fix)
 }
 
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ */
 function geodir_diagnose_tags_sync()
 {
     global $wpdb, $plugin_prefix;
@@ -766,6 +965,13 @@ function geodir_diagnose_tags_sync()
 
 }
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ */
 function geodir_diagnose_cats_sync()
 {
     global $wpdb, $plugin_prefix;
@@ -840,6 +1046,13 @@ function geodir_diagnose_cats_sync()
 
 }
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ */
 function geodir_diagnose_version_clear()
 {
     global $wpdb, $plugin_prefix;
@@ -901,6 +1114,13 @@ function geodir_diagnose_version_clear()
 }
 
 
+/**
+ *
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ */
 function geodir_diagnose_ratings()
 {
     global $wpdb;
@@ -960,6 +1180,12 @@ function geodir_diagnose_ratings()
 }
 
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ */
 function geodir_diagnose_multisite_conversion()
 {
     global $wpdb;
@@ -1015,6 +1241,18 @@ function geodir_diagnose_multisite_conversion()
     echo "</ul>";
 }
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global object $current_user Current user object.
+ * @param $slug
+ * @param $page_title
+ * @param $old_id
+ * @param $option
+ * @return bool
+ */
 function geodir_fix_virtual_page($slug, $page_title, $old_id, $option)
 {
     global $wpdb, $current_user;
@@ -1052,6 +1290,12 @@ function geodir_fix_virtual_page($slug, $page_title, $old_id, $option)
     }
 }
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ */
 function geodir_diagnose_default_pages()
 {
     global $wpdb;
@@ -1177,6 +1421,12 @@ function geodir_diagnose_default_pages()
 
 }
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ */
 function geodir_diagnose_load_db_language() {
     global $wpdb;
 	
@@ -1204,6 +1454,15 @@ function geodir_diagnose_load_db_language() {
 
 /* sort by expire */
 add_filter('posts_clauses_request', 'geodir_posts_clauses_request');
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @param $clauses
+ * @return mixed
+ */
 function geodir_posts_clauses_request($clauses)
 {
     global $wpdb, $wp_query, $plugin_prefix;
@@ -1239,6 +1498,11 @@ add_filter('geodir_notifications_settings', 'geodir_notification_add_bcc_option'
  * check if there is a compatibility pack when switching theme
  */
 add_action('after_switch_theme', 'gd_theme_switch_compat_check');
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function gd_theme_switch_compat_check()
 {
     gd_set_theme_compat();
@@ -1246,6 +1510,11 @@ function gd_theme_switch_compat_check()
 
 /**
  * read string as csv array
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $current_user Current user object.
+ * @return array
  */
 function geodir_str_getcsv($input, $delimiter = ",", $enclosure = '"', $escape = "\\")
 {
@@ -1273,6 +1542,14 @@ function geodir_str_getcsv($input, $delimiter = ",", $enclosure = '"', $escape =
 }
 
 add_action('wp_ajax_gdImportCsv', 'geodir_ajax_import_csv');
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @global object $current_user Current user object.
+ */
 function geodir_ajax_import_csv()
 {
     error_reporting(0); // hide error to get clean json response

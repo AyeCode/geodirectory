@@ -1,5 +1,17 @@
 <?php
+/**
+ * Geodirectory custom db table related functions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 if (!function_exists('geodir_create_tables')) {
+    /**
+     * Creates custom db tables for storing geodirectory plugin data.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     */
     function geodir_create_tables()
     {
 
@@ -569,6 +581,12 @@ if (!function_exists('geodir_create_tables')) {
 } // END MAIN FUNCTION geodir_tables_install
 
 if (!function_exists('geodir_create_default_fields')) {
+    /**
+     * Inserts default custom fields table data into database.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     */
     function geodir_create_default_fields()
     {
 
