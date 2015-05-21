@@ -1,6 +1,18 @@
 <?php
+/**
+ * Template tag functions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 include_once('geodirectory-functions/map-functions/map_template_tags.php');
 
+/**
+ * Dequeue flexslider javscript.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_core_dequeue_script()
 {
     wp_dequeue_script('flexslider');
@@ -8,6 +20,12 @@ function geodir_core_dequeue_script()
 
 add_action('wp_print_scripts', 'geodir_core_dequeue_script', 100);
 
+/**
+ * Handles loading of all geodirectory javascripts and its dependencies.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_templates_scripts()
 {
     $is_detail_page = false;
@@ -169,6 +187,15 @@ function geodir_templates_scripts()
     wp_enqueue_script('google-geometa');
 }
 
+/**
+ * Loads custom CSS and JS on header.
+ *
+ * WP Admin -> Geodirectory -> Design -> Scripts -> Custom style css code.
+ * WP Admin -> Geodirectory -> Design -> Scripts -> Header script code.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_header_scripts()
 {
     echo '<style>' . stripslashes(get_option('geodir_coustem_css')) . '</style>';
@@ -178,7 +205,15 @@ function geodir_header_scripts()
 }
 
 
-
+/**
+ * Loads custom JS and Google Analytics JS on footer.
+ *
+ * WP Admin -> Geodirectory -> Design -> Scripts -> Footer script code.
+ * WP Admin -> Geodirectory -> General -> Google Analytics -> Google analytics tracking code.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_footer_scripts()
 {
     echo stripslashes(get_option('geodir_ga_tracking_code'));
@@ -186,6 +221,14 @@ function geodir_footer_scripts()
 }
 
 
+/**
+ * Adds async tag to javascript for faster page loading.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $url The javascript file url.
+ * @return string The modified javascript string.
+ */
 function geodir_add_async_forscript($url)
 {
     if (strpos($url, '#asyncload')===false)
@@ -197,6 +240,12 @@ function geodir_add_async_forscript($url)
 }
 add_filter('clean_url', 'geodir_add_async_forscript', 11, 1);
 
+/**
+ * Handles loading of all geodirectory stylesheets and its dependencies.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_templates_styles()
 {
 
@@ -259,11 +308,29 @@ function geodir_templates_styles()
 }
 
 
+/**
+ * Returns geodirectory sidebar.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_get_sidebar()
 {
     get_sidebar('geodirectory');
 }
 
+/**
+ * Returns paginated HTML string based on the given parameters.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $before The HTML to prepend.
+ * @param string $after The HTML to append.
+ * @param string $prelabel The previous link label.
+ * @param string $nxtlabel The next link label.
+ * @param int $pages_to_show Number of pages to display on the pagination. Default: 5.
+ * @param bool $always_show Do you want to show the pagination always? Default: false.
+ */
 function geodir_pagination($before = '', $after = '', $prelabel = '', $nxtlabel = '', $pages_to_show = 5, $always_show = false)
 {
 
@@ -317,6 +384,12 @@ function geodir_pagination($before = '', $after = '', $prelabel = '', $nxtlabel 
     }
 }
 
+/**
+ * Prints listing search related javascript.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_listingsearch_scripts()
 {
     if (get_option('gd_search_dist') != '') {
@@ -382,6 +455,12 @@ function geodir_listingsearch_scripts()
 <?php
 }
 
+/**
+ * Prints location related javascript.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_add_sharelocation_scripts()
 {
 
@@ -545,6 +624,16 @@ function geodir_add_sharelocation_scripts()
 }
 
 
+/**
+ * Displays badges on the listings pages over the thumbnail.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $which The badge type.
+ * @param object $post The post object.
+ * @param string $link The link to the post.
+ * @return string|void The link HTML.
+ */
 function geodir_show_badges_on_image($which, $post, $link)
 {
     switch ($which) {

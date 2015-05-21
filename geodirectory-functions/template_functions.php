@@ -1,4 +1,22 @@
 <?php
+/**
+ * Template functions
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
+
+/**
+ * Locates template based on the template type.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global string $post_type The post type.
+ * @global object $wp The global instance of the WP class.
+ * @global object $post WordPress post object.
+ * @param string $template The template type.
+ * @return bool|string The template path.
+ */
 function geodir_locate_template($template = '')
 {
     global $post_type, $wp, $post;
@@ -112,6 +130,15 @@ function geodir_locate_template($template = '')
 
 }
 
+/**
+ * Loads template based on the current page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wp_query WordPress Query object.
+ * @param string $template The template path.
+ * @return bool|string The template path.
+ */
 function geodir_template_loader($template)
 {
 
@@ -281,6 +308,16 @@ function geodir_template_loader($template)
     return $template;
 }
 
+/**
+ * Locates template part based on the template slug.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $post WordPress post object. Not yet implemented.
+ * @global object $geodirectory Not yet implemented.
+ * @param string $slug The template slug.
+ * @param null $name The template name.
+ */
 function geodir_get_template_part($slug = '', $name = NULL)
 {
     global $geodirectory, $post;
@@ -290,6 +327,7 @@ function geodir_get_template_part($slug = '', $name = NULL)
      * Used dynamic hook name: geodir_get_template_part_{$slug}
      *
      * @since 1.0.0
+     * @package GeoDirectory
      * @param string $slug The template slug.
      * @param string $name The template name.
      */
@@ -313,6 +351,16 @@ function geodir_get_template_part($slug = '', $name = NULL)
 
 }
 
+/**
+ * Appends extra HTML classes to the post class.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $post WordPress post object.
+ * @param string $class The old class string.
+ * @param string|array $all_postypes The GD post types.
+ * @return string The modified post class.
+ */
 function geodir_core_post_view_extra_class($class, $all_postypes = '')
 {
     global $post;

@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 1.4.6\n"
+"Project-Id-Version: GeoDirectory 1.4.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-19 20:20-0000\n"
-"PO-Revision-Date: 2015-05-19 20:20-0000\n"
+"POT-Creation-Date: 2015-05-20 15:56-0000\n"
+"PO-Revision-Date: 2015-05-20 15:56-0000\n"
 "Last-Translator: \n"
 "Language-Team: GeoDirectory <info@wpgeodirectory.com>\n"
 "Language: en_US\n"
@@ -49,7 +49,7 @@ msgstr ""
 
 #: geodirectory_template_actions.php:1367
 #: geodirectory_template_actions.php:2483
-#: geodirectory-functions/taxonomy_functions.php:388
+#: geodirectory-functions/taxonomy_functions.php:461
 #: geodirectory-widgets/geodirectory_listing_slider_widget.php:141
 #: geodirectory-widgets/geodirectory_popular_widget.php:234
 #: geodirectory-widgets/geodirectory_popular_widget.php:252
@@ -104,10 +104,10 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: geodirectory_template_actions.php:1892 geodirectory_hooks_actions.php:1240
-#: geodirectory_hooks_actions.php:1243
-#: geodirectory-functions/taxonomy_functions.php:125
-#: geodirectory-functions/taxonomy_functions.php:170
+#: geodirectory_template_actions.php:1892 geodirectory_hooks_actions.php:1242
+#: geodirectory_hooks_actions.php:1245
+#: geodirectory-functions/taxonomy_functions.php:135
+#: geodirectory-functions/taxonomy_functions.php:180
 #: geodirectory-functions/cat-meta-functions/Tax-meta-class.php:605
 msgid "Add"
 msgstr ""
@@ -2175,36 +2175,36 @@ msgid ""
 "This is a search widget to show advance search for gedodirectory listings."
 msgstr ""
 
-#: geodirectory_template_tags.php:130
+#: geodirectory_template_tags.php:148
 #: geodirectory-admin/admin_functions.php:142
 msgid "Allowed Files"
 msgstr ""
 
-#: geodirectory_template_tags.php:460 geodirectory_template_tags.php:461
+#: geodirectory_template_tags.php:539 geodirectory_template_tags.php:540
 msgid "In:"
 msgstr ""
 
-#: geodirectory_template_tags.php:486
+#: geodirectory_template_tags.php:565
 msgid "Search was not successful for the following reason:"
 msgstr ""
 
-#: geodirectory_template_tags.php:517
+#: geodirectory_template_tags.php:596
 msgid "Unable to find your location"
 msgstr ""
 
-#: geodirectory_template_tags.php:520
+#: geodirectory_template_tags.php:599
 msgid "Permission denied in finding your location"
 msgstr ""
 
-#: geodirectory_template_tags.php:523
+#: geodirectory_template_tags.php:602
 msgid "Your location is currently unknown"
 msgstr ""
 
-#: geodirectory_template_tags.php:526
+#: geodirectory_template_tags.php:605
 msgid "Attempt to find location took too long"
 msgstr ""
 
-#: geodirectory_template_tags.php:529
+#: geodirectory_template_tags.php:608
 msgid "Location detection not supported in browser"
 msgstr ""
 
@@ -2325,11 +2325,11 @@ msgstr ""
 msgid "Reply text"
 msgstr ""
 
-#: geodirectory_hooks_actions.php:779 geodirectory-functions/reviews.php:63
+#: geodirectory_hooks_actions.php:779 geodirectory-functions/reviews.php:61
 msgid "Post Review"
 msgstr ""
 
-#: geodirectory_hooks_actions.php:780 geodirectory-functions/reviews.php:63
+#: geodirectory_hooks_actions.php:780 geodirectory-functions/reviews.php:61
 msgid "Review text"
 msgstr ""
 
@@ -2368,34 +2368,43 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: geodirectory_hooks_actions.php:828
+#: geodirectory_hooks_actions.php:790
+msgid "Allowed files"
+msgstr ""
+
+#: geodirectory_hooks_actions.php:791
+#, php-format
+msgid "File type error. Allowed file types: %s"
+msgstr ""
+
+#: geodirectory_hooks_actions.php:830
 msgid "GeoDirectory"
 msgstr ""
 
-#: geodirectory_hooks_actions.php:999
+#: geodirectory_hooks_actions.php:1001
 #: geodirectory-templates/widget-listing-listview.php:229
 #: geodirectory-templates/listing-listview.php:371
 msgid "No listings found which match your selection."
 msgstr ""
 
-#: geodirectory_hooks_actions.php:1020
+#: geodirectory_hooks_actions.php:1022
 msgid ""
 "Deactivate all GeoDirectory dependent add-ons first before deactivating "
 "GeoDirectory."
 msgstr ""
 
-#: geodirectory_hooks_actions.php:1397 geodirectory_hooks_actions.php:1512
+#: geodirectory_hooks_actions.php:1399 geodirectory_hooks_actions.php:1514
 #: geodirectory-admin/admin_hooks_actions.php:1151
 #: geodirectory-admin/admin_install.php:93
 #: geodirectory-functions/general_functions.php:866
 msgid "Location"
 msgstr ""
 
-#: geodirectory_hooks_actions.php:1463 geodirectory_hooks_actions.php:1493
+#: geodirectory_hooks_actions.php:1465 geodirectory_hooks_actions.php:1495
 msgid " in "
 msgstr ""
 
-#: geodirectory_hooks_actions.php:1998 geodirectory_hooks_actions.php:2033
+#: geodirectory_hooks_actions.php:2000 geodirectory_hooks_actions.php:2035
 #: geodirectory-admin/admin_functions.php:2826
 #: geodirectory-admin/option-pages/general_settings_array.php:62
 #: geodirectory-admin/option-pages/general_settings_array.php:81
@@ -2404,20 +2413,20 @@ msgstr ""
 #: geodirectory-admin/option-pages/notifications_settings_array.php:61
 #: geodirectory-admin/option-pages/notifications_settings_array.php:80
 #: geodirectory-admin/option-pages/notifications_settings_array.php:99
-#: geodirectory-functions/custom_field_html.php:213
-#: geodirectory-functions/custom_field_html.php:290
-#: geodirectory-functions/custom_field_html.php:305
-#: geodirectory-functions/custom_field_html.php:324
-#: geodirectory-functions/custom_field_html.php:356
-#: geodirectory-functions/custom_field_html.php:373
-#: geodirectory-functions/custom_field_html.php:391
-#: geodirectory-functions/custom_fields_functions.php:2407
-#: geodirectory-functions/custom_fields_functions.php:2448
-#: geodirectory-functions/custom_fields_functions.php:3708
+#: geodirectory-functions/custom_field_html.php:229
+#: geodirectory-functions/custom_field_html.php:317
+#: geodirectory-functions/custom_field_html.php:332
+#: geodirectory-functions/custom_field_html.php:351
+#: geodirectory-functions/custom_field_html.php:383
+#: geodirectory-functions/custom_field_html.php:400
+#: geodirectory-functions/custom_field_html.php:418
+#: geodirectory-functions/custom_fields_functions.php:2414
+#: geodirectory-functions/custom_fields_functions.php:2455
+#: geodirectory-functions/custom_fields_functions.php:3728
 msgid "No"
 msgstr ""
 
-#: geodirectory_hooks_actions.php:2000 geodirectory_hooks_actions.php:2031
+#: geodirectory_hooks_actions.php:2002 geodirectory_hooks_actions.php:2033
 #: geodirectory-admin/admin_functions.php:2816
 #: geodirectory-admin/option-pages/general_settings_array.php:53
 #: geodirectory-admin/option-pages/general_settings_array.php:72
@@ -2426,28 +2435,28 @@ msgstr ""
 #: geodirectory-admin/option-pages/notifications_settings_array.php:52
 #: geodirectory-admin/option-pages/notifications_settings_array.php:71
 #: geodirectory-admin/option-pages/notifications_settings_array.php:90
-#: geodirectory-functions/custom_field_html.php:216
-#: geodirectory-functions/custom_field_html.php:286
-#: geodirectory-functions/custom_field_html.php:303
-#: geodirectory-functions/custom_field_html.php:320
-#: geodirectory-functions/custom_field_html.php:352
-#: geodirectory-functions/custom_field_html.php:369
-#: geodirectory-functions/custom_field_html.php:387
-#: geodirectory-functions/custom_fields_functions.php:2409
-#: geodirectory-functions/custom_fields_functions.php:2446
-#: geodirectory-functions/custom_fields_functions.php:3704
+#: geodirectory-functions/custom_field_html.php:232
+#: geodirectory-functions/custom_field_html.php:313
+#: geodirectory-functions/custom_field_html.php:330
+#: geodirectory-functions/custom_field_html.php:347
+#: geodirectory-functions/custom_field_html.php:379
+#: geodirectory-functions/custom_field_html.php:396
+#: geodirectory-functions/custom_field_html.php:414
+#: geodirectory-functions/custom_fields_functions.php:2416
+#: geodirectory-functions/custom_fields_functions.php:2453
+#: geodirectory-functions/custom_fields_functions.php:3724
 msgid "Yes"
 msgstr ""
 
-#: geodirectory_hooks_actions.php:2319
+#: geodirectory_hooks_actions.php:2331
 msgid "Published"
 msgstr ""
 
-#: geodirectory_hooks_actions.php:2321
+#: geodirectory_hooks_actions.php:2333
 msgid "Not published"
 msgstr ""
 
-#: geodirectory_hooks_actions.php:2326
+#: geodirectory_hooks_actions.php:2338
 msgid "Status: "
 msgstr ""
 
@@ -2499,21 +2508,21 @@ msgid "Textarea"
 msgstr ""
 
 #: geodirectory-admin/admin_hooks_actions.php:402
-#: geodirectory-functions/custom_field_html.php:440
-#: geodirectory-functions/custom_field_html.php:574
+#: geodirectory-functions/custom_field_html.php:467
+#: geodirectory-functions/custom_field_html.php:601
 msgid "Checkbox"
 msgstr ""
 
 #: geodirectory-admin/admin_hooks_actions.php:406
-#: geodirectory-functions/custom_field_html.php:443
-#: geodirectory-functions/custom_field_html.php:577
+#: geodirectory-functions/custom_field_html.php:470
+#: geodirectory-functions/custom_field_html.php:604
 msgid "Radio"
 msgstr ""
 
 #: geodirectory-admin/admin_hooks_actions.php:410
-#: geodirectory-functions/custom_field_html.php:102
-#: geodirectory-functions/custom_field_html.php:434
-#: geodirectory-functions/custom_field_html.php:571
+#: geodirectory-functions/custom_field_html.php:118
+#: geodirectory-functions/custom_field_html.php:461
+#: geodirectory-functions/custom_field_html.php:598
 #: geodirectory-functions/custom_fields_functions.php:1546
 msgid "Select"
 msgstr ""
@@ -2789,7 +2798,7 @@ msgstr ""
 #: geodirectory-admin/admin_hooks_actions.php:1075
 #: geodirectory-admin/admin_install.php:90
 #: geodirectory-functions/general_functions.php:2164
-#: geodirectory-functions/taxonomy_functions.php:149
+#: geodirectory-functions/taxonomy_functions.php:159
 msgid "Add Listing"
 msgstr ""
 
@@ -3017,7 +3026,7 @@ msgid "Error: Your settings have not been saved, please try again."
 msgstr ""
 
 #: geodirectory-admin/admin_functions.php:305
-#: geodirectory-functions/template_functions.php:153
+#: geodirectory-functions/template_functions.php:180
 #, php-format
 msgid ""
 "Please %sclick here%s to set a default location, this will make the plugin "
@@ -3711,7 +3720,7 @@ msgid "Tool"
 msgstr ""
 
 #: geodirectory-admin/admin_template_tags.php:1453
-#: geodirectory-functions/custom_field_html.php:638
+#: geodirectory-functions/custom_field_html.php:665
 msgid "Description"
 msgstr ""
 
@@ -5265,653 +5274,673 @@ msgid ""
 "cookies</a> to use WordPress."
 msgstr ""
 
-#: geodirectory-functions/reviews.php:31
+#: geodirectory-functions/reviews.php:29
 #, php-format
 msgid "One review on &ldquo;%2$s&rdquo;"
 msgid_plural "%1$s reviews on &ldquo;%2$s&rdquo;"
 msgstr[0] ""
 msgstr[1] ""
 
-#: geodirectory-functions/reviews.php:44
+#: geodirectory-functions/reviews.php:42
 msgid "Comment navigation"
 msgstr ""
 
-#: geodirectory-functions/reviews.php:47
+#: geodirectory-functions/reviews.php:45
 msgid "&larr; Older Comments"
 msgstr ""
 
-#: geodirectory-functions/reviews.php:49
+#: geodirectory-functions/reviews.php:47
 msgid "Newer Comments &rarr;"
 msgstr ""
 
-#: geodirectory-functions/reviews.php:58
+#: geodirectory-functions/reviews.php:56
 msgid "Comments are closed."
 msgstr ""
 
-#: geodirectory-functions/reviews.php:63
+#: geodirectory-functions/reviews.php:61
 msgid "Leave a Review"
 msgstr ""
 
-#: geodirectory-functions/reviews.php:63
+#: geodirectory-functions/reviews.php:61
 #, php-format
 msgid "You must be <a href=\"%s\">logged in</a> to post a comment."
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:20
-#: geodirectory-functions/custom_fields_functions.php:3587
+#: geodirectory-functions/custom_field_html.php:36
+#: geodirectory-functions/custom_fields_functions.php:3607
 msgid "Double Click to toggle and drag-drop to sort"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:28
+#: geodirectory-functions/custom_field_html.php:44
 msgid "Drag and drop to sort"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:30
-#: geodirectory-functions/custom_fields_functions.php:3594
+#: geodirectory-functions/custom_field_html.php:46
+#: geodirectory-functions/custom_fields_functions.php:3614
 msgid "Click to remove field"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:38
+#: geodirectory-functions/custom_field_html.php:54
 msgid "Fieldset:"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:43
-#: geodirectory-functions/custom_fields_functions.php:3599
+#: geodirectory-functions/custom_field_html.php:59
+#: geodirectory-functions/custom_fields_functions.php:3619
 msgid "Field:"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:74
+#: geodirectory-functions/custom_field_html.php:90
 msgid "Field Data Type ? :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:82
+#: geodirectory-functions/custom_field_html.php:98
 msgid "CHARACTER"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:86
+#: geodirectory-functions/custom_field_html.php:102
 msgid "NUMBER"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:90
+#: geodirectory-functions/custom_field_html.php:106
 msgid "DECIMAL"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:92
+#: geodirectory-functions/custom_field_html.php:108
 msgid "Select Custom Field type"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:98
+#: geodirectory-functions/custom_field_html.php:114
 msgid "Select decimal point :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:109
+#: geodirectory-functions/custom_field_html.php:125
 msgid "Decimal point to display after point"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:116
+#: geodirectory-functions/custom_field_html.php:132
 msgid "Admin title :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:122
+#: geodirectory-functions/custom_field_html.php:138
 msgid ""
 "Personal comment, it would not be displayed anywhere except in custom field "
 "settings"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:126
-#: geodirectory-functions/custom_fields_functions.php:3675
+#: geodirectory-functions/custom_field_html.php:142
+#: geodirectory-functions/custom_fields_functions.php:3695
 msgid "Frontend title :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:132
-#: geodirectory-functions/custom_fields_functions.php:3679
+#: geodirectory-functions/custom_field_html.php:148
+#: geodirectory-functions/custom_fields_functions.php:3699
 msgid "Section title which you wish to display in frontend"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:136
+#: geodirectory-functions/custom_field_html.php:152
 msgid "Frontend description :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:142
+#: geodirectory-functions/custom_field_html.php:158
 msgid "Section description which will appear in frontend"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:149
+#: geodirectory-functions/custom_field_html.php:165
 msgid "HTML variable name :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:157
+#: geodirectory-functions/custom_field_html.php:173
 msgid "HTML variable name must not be blank"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:158
+#: geodirectory-functions/custom_field_html.php:174
 msgid "This should be a unique name"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:160
+#: geodirectory-functions/custom_field_html.php:176
 msgid "HTML variable name not use spaces, special characters"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:165
+#: geodirectory-functions/custom_field_html.php:181
 msgid "Admin label :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:171
+#: geodirectory-functions/custom_field_html.php:187
 msgid "Section Title which will appear in backend"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:185
+#: geodirectory-functions/custom_field_html.php:201
 msgid "Default value :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:191
+#: geodirectory-functions/custom_field_html.php:207
 msgid ""
 "Enter the default value (for \"link\" this will be used as the link text)"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:197
-#: geodirectory-functions/custom_fields_functions.php:3716
+#: geodirectory-functions/custom_field_html.php:213
+#: geodirectory-functions/custom_fields_functions.php:3736
 msgid "Display order :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:203
-#: geodirectory-functions/custom_fields_functions.php:3722
+#: geodirectory-functions/custom_field_html.php:219
+#: geodirectory-functions/custom_fields_functions.php:3742
 msgid "Enter the display order of this field in backend. e.g. 5"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:208
+#: geodirectory-functions/custom_field_html.php:224
 msgid "Show in sidebar :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:219
+#: geodirectory-functions/custom_field_html.php:235
 msgid ""
 "Select yes or no. If no is selected then the field will be displayed as main "
 "form field or additional field"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:226
+#: geodirectory-functions/custom_field_html.php:242
 msgid "Show advanced editor :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:241
+#: geodirectory-functions/custom_field_html.php:257
 msgid "Select if you want to show advanced editor."
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:281
-#: geodirectory-functions/custom_fields_functions.php:3698
+#: geodirectory-functions/custom_field_html.php:308
+#: geodirectory-functions/custom_fields_functions.php:3718
 msgid "Is active :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:293
+#: geodirectory-functions/custom_field_html.php:320
 msgid ""
 "Select yes or no. If no is selected then the field will not be displayed "
 "anywhere"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:299
+#: geodirectory-functions/custom_field_html.php:326
 msgid "For admin use only? :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:307
+#: geodirectory-functions/custom_field_html.php:334
 msgid ""
 "Select yes or no. If yes is selected then only site admin can edit this "
 "field."
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:314
+#: geodirectory-functions/custom_field_html.php:341
 msgid "Is required :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:326
+#: geodirectory-functions/custom_field_html.php:353
 msgid "Select yes to set field as required"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:332
+#: geodirectory-functions/custom_field_html.php:359
 msgid "Required message:"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:339
+#: geodirectory-functions/custom_field_html.php:366
 msgid ""
 "Enter text for error message if field required and have not full fill "
 "requirment."
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:346
+#: geodirectory-functions/custom_field_html.php:373
 msgid "Show on listing page ? :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:358
+#: geodirectory-functions/custom_field_html.php:385
 msgid "Want to show this on listing page ?"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:362
+#: geodirectory-functions/custom_field_html.php:389
 msgid "Show in More Info tab on detail page? :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:376
+#: geodirectory-functions/custom_field_html.php:403
 msgid "Want to show this in More Info tab on detail page?"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:381
+#: geodirectory-functions/custom_field_html.php:408
 msgid "Show as a Tab on detail page? :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:393
+#: geodirectory-functions/custom_field_html.php:420
 msgid ""
 "Want to display this as a tab on detail page? If \"Yes\" then \"Show on "
 "detail page?\" must be Yes."
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:404
+#: geodirectory-functions/custom_field_html.php:431
 msgid "Select taxonomy:"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:420
+#: geodirectory-functions/custom_field_html.php:447
 msgid ""
 "Selected taxonomy name use as field name index. ex:-"
 "( post_category[gd_placecategory] )"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:425
+#: geodirectory-functions/custom_field_html.php:452
 msgid "Category display type :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:431
+#: geodirectory-functions/custom_field_html.php:458
 msgid "Ajax Chained"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:437
+#: geodirectory-functions/custom_field_html.php:464
 msgid "Multiselect"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:447
+#: geodirectory-functions/custom_field_html.php:474
 msgid "Show categories list as select,multiselect,checkbox or radio"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:468
+#: geodirectory-functions/custom_field_html.php:495
 msgid "Display zip/post code :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:474
+#: geodirectory-functions/custom_field_html.php:501
 msgid "Select if you want to show zip/post code field in address section."
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:479
+#: geodirectory-functions/custom_field_html.php:506
 msgid "Zip/Post code label :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:485
+#: geodirectory-functions/custom_field_html.php:512
 msgid "Enter zip/post code field label in address section."
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:490
+#: geodirectory-functions/custom_field_html.php:517
 msgid "Display map :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:496
+#: geodirectory-functions/custom_field_html.php:523
 msgid "Select if you want to `set address on map` field in address section."
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:501
+#: geodirectory-functions/custom_field_html.php:528
 msgid "Map button label :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:507
+#: geodirectory-functions/custom_field_html.php:534
 msgid "Enter text for  `set address on map` button in address section."
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:512
+#: geodirectory-functions/custom_field_html.php:539
 msgid "Use user zoom level:"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:518
+#: geodirectory-functions/custom_field_html.php:545
 msgid "Select if you want to use the user defined map zoom level."
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:523
+#: geodirectory-functions/custom_field_html.php:550
 msgid "Display map view:"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:529
+#: geodirectory-functions/custom_field_html.php:556
 msgid "Select if you want to `set default map` options in address section."
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:535
+#: geodirectory-functions/custom_field_html.php:562
 msgid "Map view label :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:541
+#: geodirectory-functions/custom_field_html.php:568
 msgid "Enter mapview field label in address section."
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:546
+#: geodirectory-functions/custom_field_html.php:573
 msgid "Show latitude and logatude from front-end :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:553
+#: geodirectory-functions/custom_field_html.php:580
 msgid ""
 "Select if you want to show latitude and logatude fields in address section "
 "from front-end."
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:565
+#: geodirectory-functions/custom_field_html.php:592
 msgid "Multiselect display type :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:581
+#: geodirectory-functions/custom_field_html.php:608
 msgid "Show multiselect list as multiselect,checkbox or radio"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:588
+#: geodirectory-functions/custom_field_html.php:615
 msgid "Option Values :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:595
+#: geodirectory-functions/custom_field_html.php:622
 msgid "Option Values should be separated by comma."
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:597
+#: geodirectory-functions/custom_field_html.php:624
 msgid ""
 "If using for a \"tick filter\" place a / and then either a 1 for true or 0 "
 "for false"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:599
+#: geodirectory-functions/custom_field_html.php:626
 msgid "eg: \"No Dogs Allowed/0,Dogs Allowed/1\" (Select only, not multiselect)"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:602
+#: geodirectory-functions/custom_field_html.php:629
 msgid ""
 "- If using OPTGROUP tag to grouping options, use \"{optgroup}OPTGROUP-LABEL|"
 "OPTION-1,OPTION-2{/optgroup}\""
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:604
+#: geodirectory-functions/custom_field_html.php:631
 msgid ""
 "eg: \"{optgroup}Pets Allowed|No Dogs Allowed/0,Dogs Allowed/1{/optgroup},"
 "{optgroup}Sports|Cricket/Cricket,Football/Football,Hockey{/optgroup}\""
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:617
+#: geodirectory-functions/custom_field_html.php:644
 msgid "Date Format :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:633
+#: geodirectory-functions/custom_field_html.php:660
 msgid "Date Formats"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:639
+#: geodirectory-functions/custom_field_html.php:666
 msgid "Format"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:640
+#: geodirectory-functions/custom_field_html.php:667
 msgid "Examples"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:647
+#: geodirectory-functions/custom_field_html.php:674
 msgid "American month, day and year"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:653
+#: geodirectory-functions/custom_field_html.php:680
 msgid "Four digit year, month and day with slashes"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:659
+#: geodirectory-functions/custom_field_html.php:686
 msgid "Year, month and day with dashes"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:665
+#: geodirectory-functions/custom_field_html.php:692
 msgid "Day, textual month and year"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:671
+#: geodirectory-functions/custom_field_html.php:698
 msgid "Textual month, day and year"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:684
+#: geodirectory-functions/custom_field_html.php:711
 msgid "Enter the date format."
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:695
+#: geodirectory-functions/custom_field_html.php:724
+#: geodirectory-functions/custom_fields_functions.php:1912
+msgid "Allowed file types:"
+msgstr ""
+
+#: geodirectory-functions/custom_field_html.php:727
+msgid "All types"
+msgstr ""
+
+#: geodirectory-functions/custom_field_html.php:729
+#, php-format
+msgid "%s formats"
+msgstr ""
+
+#: geodirectory-functions/custom_field_html.php:737
+msgid ""
+"Select file types to allowed for file uploading. (Select multiple file types "
+"by holding down \"Ctrl\" key.)"
+msgstr ""
+
+#: geodirectory-functions/custom_field_html.php:748
 msgid "Custom css"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:699
+#: geodirectory-functions/custom_field_html.php:752
 msgid "Upload icon:"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:706
+#: geodirectory-functions/custom_field_html.php:759
 msgid ""
 "Upload icon using media and enter its url path, or enter <a href=\"http://"
 "fortawesome.github.io/Font-Awesome/icons/\" target=\"_blank\" >font awesome "
 "</a>class eg:\"fa fa-home\""
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:713
+#: geodirectory-functions/custom_field_html.php:766
 msgid "Css class:"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:720
+#: geodirectory-functions/custom_field_html.php:773
 msgid "Enter custom css class for field custom style."
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:744
+#: geodirectory-functions/custom_field_html.php:807
 msgid "Posts sort options"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:752
+#: geodirectory-functions/custom_field_html.php:815
 msgid "Include this field in sort option"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:758
-#: geodirectory-functions/custom_fields_functions.php:3645
-#: geodirectory-functions/custom_fields_functions.php:3667
+#: geodirectory-functions/custom_field_html.php:821
+#: geodirectory-functions/custom_fields_functions.php:3665
+#: geodirectory-functions/custom_fields_functions.php:3687
 msgid "Select if you want to show option in sort."
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:64
+#: geodirectory-functions/taxonomy_functions.php:74
 msgid "Listing"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:791
+#: geodirectory-functions/taxonomy_functions.php:902
 #, php-format
 msgid "Add listing in %s category"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:799
+#: geodirectory-functions/taxonomy_functions.php:910
 #, php-format
 msgid "Set %s as default category"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:807
+#: geodirectory-functions/taxonomy_functions.php:918
 msgid "Add listing in category"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:889
+#: geodirectory-functions/taxonomy_functions.php:1018
 #: geodirectory-functions/custom_fields_functions.php:1784
 #: geodirectory-functions/custom_fields_functions.php:1788
 msgid "Select Category"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:921
+#: geodirectory-functions/taxonomy_functions.php:1057
 #, php-format
 msgid "%s updated. <a href=\"%s\">View %s</a>"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:922
+#: geodirectory-functions/taxonomy_functions.php:1058
 msgid "Custom field updated."
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:923
+#: geodirectory-functions/taxonomy_functions.php:1059
 msgid "Custom field deleted."
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:924
+#: geodirectory-functions/taxonomy_functions.php:1060
 #, php-format
 msgid "%s updated."
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:925
+#: geodirectory-functions/taxonomy_functions.php:1061
 #, php-format
 msgid "%s restored to revision from %s"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:926
+#: geodirectory-functions/taxonomy_functions.php:1062
 #, php-format
 msgid "%s published. <a href=\"%s\">View %s</a>"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:927
+#: geodirectory-functions/taxonomy_functions.php:1063
 #, php-format
 msgid "%s saved."
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:928
+#: geodirectory-functions/taxonomy_functions.php:1064
 #, php-format
 msgid "%s submitted. <a target=\"_blank\" href=\"%s\">Preview %s</a>"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:929
+#: geodirectory-functions/taxonomy_functions.php:1065
 #, php-format
 msgid ""
 "%s scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s"
 "\">Preview %s</a>"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:929
+#: geodirectory-functions/taxonomy_functions.php:1065
 msgid "M j, Y @ G:i"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:930
+#: geodirectory-functions/taxonomy_functions.php:1066
 #, php-format
 msgid "%s draft updated. <a target=\"_blank\" href=\"%s\">Preview %s</a>"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:968
+#: geodirectory-functions/taxonomy_functions.php:1108
 msgid "Place Tags"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:969
+#: geodirectory-functions/taxonomy_functions.php:1109
 msgid "Place Tag"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:970
+#: geodirectory-functions/taxonomy_functions.php:1110
 msgid "Search Place Tags"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:971
+#: geodirectory-functions/taxonomy_functions.php:1111
 msgid "Popular Place Tags"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:972
+#: geodirectory-functions/taxonomy_functions.php:1112
 msgid "All Place Tags"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:973
+#: geodirectory-functions/taxonomy_functions.php:1113
 msgid "Edit Place Tag"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:974
+#: geodirectory-functions/taxonomy_functions.php:1114
 msgid "Update Place Tag"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:975
+#: geodirectory-functions/taxonomy_functions.php:1115
 msgid "Add New Place Tag"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:976
+#: geodirectory-functions/taxonomy_functions.php:1116
 msgid "New Place Tag Name"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:977
+#: geodirectory-functions/taxonomy_functions.php:1117
 msgid "Add or remove Place tags"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:978
+#: geodirectory-functions/taxonomy_functions.php:1118
 msgid "Choose from the most used Place tags"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:979
+#: geodirectory-functions/taxonomy_functions.php:1119
 msgid "Separate Place tags with commas"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:1006
+#: geodirectory-functions/taxonomy_functions.php:1146
 msgid "Place Categories"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:1007
+#: geodirectory-functions/taxonomy_functions.php:1147
 msgid "Place Category"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:1008
+#: geodirectory-functions/taxonomy_functions.php:1148
 msgid "Search Place Categories"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:1009
+#: geodirectory-functions/taxonomy_functions.php:1149
 msgid "Popular Place Categories"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:1010
+#: geodirectory-functions/taxonomy_functions.php:1150
 msgid "All Place Categories"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:1011
+#: geodirectory-functions/taxonomy_functions.php:1151
 msgid "Edit Place Category"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:1012
+#: geodirectory-functions/taxonomy_functions.php:1152
 msgid "Update Place Category"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:1013
+#: geodirectory-functions/taxonomy_functions.php:1153
 msgid "Add New Place Category"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:1014
+#: geodirectory-functions/taxonomy_functions.php:1154
 msgid "New Place Category"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:1015
+#: geodirectory-functions/taxonomy_functions.php:1155
 msgid "Add or remove Place categories"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:1036
+#: geodirectory-functions/taxonomy_functions.php:1176
 msgid "Places"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:1037
+#: geodirectory-functions/taxonomy_functions.php:1177
 msgid "Place"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:1038
+#: geodirectory-functions/taxonomy_functions.php:1178
 msgid "Add New"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:1039
+#: geodirectory-functions/taxonomy_functions.php:1179
 msgid "Add New Place"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:1040
+#: geodirectory-functions/taxonomy_functions.php:1180
 msgid "Edit Place"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:1041
+#: geodirectory-functions/taxonomy_functions.php:1181
 msgid "New Place"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:1042
+#: geodirectory-functions/taxonomy_functions.php:1182
 msgid "View Place"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:1043
+#: geodirectory-functions/taxonomy_functions.php:1183
 msgid "Search Places"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:1044
+#: geodirectory-functions/taxonomy_functions.php:1184
 msgid "No Place Found"
 msgstr ""
 
-#: geodirectory-functions/taxonomy_functions.php:1045
+#: geodirectory-functions/taxonomy_functions.php:1185
 msgid "No Place Found In Trash"
 msgstr ""
 
@@ -6035,34 +6064,34 @@ msgstr ""
 msgid " categories for this package."
 msgstr ""
 
-#: geodirectory-functions/custom_fields_functions.php:3634
+#: geodirectory-functions/custom_fields_functions.php:3654
 msgid "Ascending title"
 msgstr ""
 
-#: geodirectory-functions/custom_fields_functions.php:3642
-#: geodirectory-functions/custom_fields_functions.php:3665
+#: geodirectory-functions/custom_fields_functions.php:3662
+#: geodirectory-functions/custom_fields_functions.php:3685
 msgid "Set as default sort."
 msgstr ""
 
-#: geodirectory-functions/custom_fields_functions.php:3658
+#: geodirectory-functions/custom_fields_functions.php:3678
 msgid "Descending title"
 msgstr ""
 
-#: geodirectory-functions/custom_fields_functions.php:3684
+#: geodirectory-functions/custom_fields_functions.php:3704
 msgid "Default sort option :"
 msgstr ""
 
-#: geodirectory-functions/custom_fields_functions.php:3691
+#: geodirectory-functions/custom_fields_functions.php:3711
 msgid "If field is checked then the field will be use as default sort."
 msgstr ""
 
-#: geodirectory-functions/custom_fields_functions.php:3711
+#: geodirectory-functions/custom_fields_functions.php:3731
 msgid ""
 "Select yes or no. If no is selected then the field will not be displayed "
 "anywhere."
 msgstr ""
 
-#: geodirectory-functions/template_functions.php:164
+#: geodirectory-functions/template_functions.php:191
 msgid ""
 "This listing does not belong to your account, please check the listing id "
 "carefully."

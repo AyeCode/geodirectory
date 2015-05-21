@@ -1,6 +1,6 @@
 <?php
 /**
- * Pluign general functions
+ * Plugin general functions
  *
  * @since 1.0.0
  * @package GeoDirectory
