@@ -34,6 +34,12 @@ jQuery(document).ready(function ($) {
                     quality: 90
                 };
             }
+			var allowed_exts = jQuery('#' + imgId + '_allowed_types').val();
+			if (allowed_exts && allowed_exts != '') {
+				var txt_all_files = (typeof geodir_all_js_msg.geodir_upload_all_files != 'undefined' && geodir_all_js_msg.geodir_upload_all_files != '') ? geodir_all_js_msg.geodir_upload_all_files : 'Allowed files'; 
+				pconfig['filters'] = [{'title':txt_all_files, 'extensions':allowed_exts}];
+			}
+			
             var uploader = new plupload.Uploader(pconfig);
             uploader.bind('Init', function (up) {
                 //alert(1);
@@ -49,6 +55,17 @@ jQuery(document).ready(function ($) {
                         msgErr = 'File size error : You tried to upload a file over %s';
                     }
                     msgErr = msgErr.replace("%s", gd_plupload.upload_img_size);
+
+                    jQuery('#' + imgId + 'upload-error').html(msgErr);
+                } else if (files.code == -601) {
+                    jQuery('#' + imgId + 'upload-error').addClass('upload-error');
+
+                    if (typeof geodir_all_js_msg.geodir_err_file_type != 'undefined' && geodir_all_js_msg.geodir_err_file_type != '') {
+                        msgErr = geodir_all_js_msg.geodir_err_file_type;
+                    } else {
+                        msgErr = 'File type error. Allowed file types: %s';
+                    }
+                    msgErr = msgErr.replace("%s", jQuery("#" + imgId + "_allowed_types").attr('data-exts'));
 
                     jQuery('#' + imgId + 'upload-error').html(msgErr);
                 } else {
@@ -80,6 +97,7 @@ jQuery(document).ready(function ($) {
                         msgErr = msgErr.replace("%s", limitImg);
 
                         jQuery('#' + imgId + 'upload-error').addClass('upload-error');
+
                         jQuery('#' + imgId + 'upload-error').html(msgErr);
                         return false;
                     }
@@ -187,16 +205,22 @@ function plu_show_thumbs(imgId) {
             var dotIndex = images[i].lastIndexOf('.');
             var file_name = images[i].substr(fileNameIndex, dotIndex < fileNameIndex ? loc.length : dotIndex);
 
-            if (file_ext == 'pdf' || file_ext == 'xlsx' || file_ext == 'xls' || file_ext == 'csv' || file_ext == 'docx' || file_ext == 'doc' || file_ext == 'txt') {
+            /*if (file_ext == 'pdf' || file_ext == 'xlsx' || file_ext == 'xls' || file_ext == 'csv' || file_ext == 'docx' || file_ext == 'doc' || file_ext == 'txt') {
                 file_name = file_name.split(imgId + '_');
                 var thumb = $('<div class="thumb geodir_file" id="thumb' + imgId + i + '"><div class="thumbi"><a id="thumbremovelink' + imgId + i + '" href="#">' + txtRemove + '</a></div><a target="_blank" href="' + images[i] + '">' + file_name[file_name.length - 1] + '</a></div>');
             } else {
                 var thumb = $('<div class="thumb" id="thumb' + imgId + i + '"><div class="thumbi"><a id="thumbremovelink' + imgId + i + '" href="#">' + txtRemove + '</a></div><img src="' + images[i] + '" alt=""  /></div>');
+            }*/
+			if (file_ext == 'jpg' || file_ext == 'jpe' || file_ext == 'jpeg' || file_ext == 'png' || file_ext == 'gif' || file_ext == 'bmp' || file_ext == 'ico') {
+                var thumb = $('<div class="thumb" id="thumb' + imgId + i + '"><div class="thumbi"><a id="thumbremovelink' + imgId + i + '" href="#">' + txtRemove + '</a></div><img src="' + images[i] + '" alt=""  /></div>');
+            } else {
+                file_name = file_name.split(imgId + '_');
+                var thumb = $('<div class="thumb geodir_file" id="thumb' + imgId + i + '"><div class="thumbi"><a id="thumbremovelink' + imgId + i + '" href="#">' + txtRemove + '</a></div><a target="_blank" href="' + images[i] + '">' + file_name[file_name.length - 1] + '</a></div>');
             }
 
             thumbsC.append(thumb);
 
-            thumb.find("a").click(function () {
+            thumb.find("a", "thumbi").click(function () {
                 if (jQuery('#' + imgId + 'plupload-upload-ui').hasClass("plupload-upload-uic-multiple")) totalImg--; // remove image from total
                 jQuery('#' + imgId + 'upload-error').html('');
                 jQuery('#' + imgId + 'upload-error').removeClass('upload-error');

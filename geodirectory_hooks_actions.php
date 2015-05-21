@@ -787,6 +787,8 @@ function geodir_localize_all_js_msg()
         'geodir_err_file_upload_limit' => __('You have reached your upload limit of %s files.', GEODIRECTORY_TEXTDOMAIN),
         'geodir_err_pkg_upload_limit' => __('You may only upload %s files with this package, please try again.', GEODIRECTORY_TEXTDOMAIN),
         'geodir_action_remove' => __('Remove', GEODIRECTORY_TEXTDOMAIN),
+		'geodir_upload_allowed_files' => __('Allowed files', GEODIRECTORY_TEXTDOMAIN),
+		'geodir_err_file_type' => __('File type error. Allowed file types: %s', GEODIRECTORY_TEXTDOMAIN),
     );
 
     /**
@@ -2186,7 +2188,10 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                                 $files = explode(",", $post->$type['htmlvar_name']);
 
                                 if (!empty($files)) {
-                                    $file_paths = '';
+                                    $extra_fields = !empty($type['extra_fields']) ? maybe_unserialize($type['extra_fields']) : NULL;
+							   		$allowed_file_types = !empty($extra_fields['gd_file_types']) && is_array($extra_fields['gd_file_types']) && !in_array("*", $extra_fields['gd_file_types'] ) ? $extra_fields['gd_file_types'] : '';
+							   
+									$file_paths = '';
                                     foreach ($files as $file) {
                                         if (!empty($file)) {
                                             $filetype = wp_check_filetype($file);
@@ -2196,22 +2201,29 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                                             $img_name_arr = explode('.', $filename);
 
                                             $arr_file_type = wp_check_filetype($filename);
-                                            $uploaded_file_type = $arr_file_type['type'];
+                                            if (empty($arr_file_type['ext']) || empty($arr_file_type['type'])) {
+												continue;
+											}
+											$uploaded_file_type = $arr_file_type['type'];
+											$uploaded_file_ext = $arr_file_type['ext'];
+											
+											if (!empty($allowed_file_types) && !in_array($uploaded_file_ext, $allowed_file_types)) {
+												continue; // Invalid file type.
+											}
 
-                                            $allowed_file_types = array('application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv', 'text/plain');
+                                            //$allowed_file_types = array('application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv', 'text/plain');
+											$image_file_types = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/bmp', 'image/x-icon');
 
-                                            // If the uploaded file is the right format
-                                            if (in_array($uploaded_file_type, $allowed_file_types)) {
-                                                $ext_path = '_' . $html_var . '_';
-
-                                                $filename = explode($ext_path, $filename);
-
-                                                $file_paths .= '<a href="' . $file . '" target="_blank">' . $filename[count($filename) - 1] . '</a>';
-                                            } else {
+                                            // If the uploaded file is image
+                                            if (in_array($uploaded_file_type, $image_file_types)) {
                                                 $file_paths .= '<div class="geodir-custom-post-gallery" class="clearfix">';
                                                 $file_paths .= geodir_show_image(array('src' => $file), 'thumbnail', false, false);
                                                 //$file_paths .= '<img src="'.$file.'"  />';
                                                 $file_paths .= '</div>';
+                                            } else {
+                                               $ext_path = '_' . $html_var . '_';
+                                               $filename = explode($ext_path, $filename);
+                                               $file_paths .= '<a href="' . $file . '" target="_blank">' . $filename[count($filename) - 1] . '</a>';
                                             }
                                         }
                                     }

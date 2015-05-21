@@ -9,7 +9,7 @@ if (get_option(GEODIRECTORY_TEXTDOMAIN . '_db_version') != GEODIRECTORY_VERSION)
     }
 
     if (GEODIRECTORY_VERSION <= '1.4.6') {
-        add_action('plugins_loaded', 'geodir_upgrade_146', 11);
+        add_action('init', 'geodir_upgrade_146', 11);
     }
     update_option(GEODIRECTORY_TEXTDOMAIN . '_db_version', GEODIRECTORY_VERSION);
 }
