@@ -1,9 +1,20 @@
 <?php
-
+/**
+ * Design tab settings.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global array $geodir_settings Geodirectory settings array.
+ */
 global $geodir_settings;
 
 
-//function for post type settings
+/**
+ * function for post type settings.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_post_type_setting_fun()
 {
     $post_type_arr = array();
@@ -16,7 +27,12 @@ function geodir_post_type_setting_fun()
     return $post_type_arr;
 }
 
-
+/**
+ * function for theme location settings.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_theme_location_setting_fun()
 {
     $post_type_arr = array();

@@ -361,7 +361,7 @@ function geodir_before_admin_panel()
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @global array $geodir_settings Array of geodirectory settings.
+ * @global array $geodir_settings Geodirectory settings array.
  * @param string $current_tab The current settings tab name.
  */
 function geodir_handle_option_form_submit($current_tab)

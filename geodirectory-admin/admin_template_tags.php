@@ -1,10 +1,22 @@
 <?php
 /**
- * Geodirectory Backend Admin Panel
+ * Admin template tag functions.
  *
- * Handles the display of the main geodirectory admin panel.
+ * @since 1.0.0
+ * @package GeoDirectory
  */
+
 if (!function_exists('geodir_admin_panel')) {
+    /**
+     * GeoDirectory Backend Admin Panel.
+     *
+     * Handles the display of the main GeoDirectory admin panel.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @global string $current_tab Current tab in geodirectory settings.
+     * @global object $geodirectory GeoDirectory plugin object.
+     */
     function geodir_admin_panel()
     {
         global $geodirectory;
@@ -271,6 +283,15 @@ if (!function_exists('geodir_admin_panel')) {
 }
 
 
+/**
+ * Displays setting form for the given tab.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global array $geodir_settings Geodirectory settings array.
+ * @global object $wpdb WordPress Database object.
+ * @param string $tab_name Tab name.
+ */
 function geodir_admin_option_form($tab_name)
 {
 
@@ -553,6 +574,13 @@ $wp_filesystem->put_contents(
 */
 
 
+/**
+ * Updates theme compatibility settings.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ */
 function geodir_update_options_compatibility_settings()
 {
 
@@ -675,6 +703,13 @@ function geodir_update_options_compatibility_settings()
 
 }
 
+/**
+ * Displays theme compatibility settings.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ */
 function geodir_theme_compatibility_setting_page()
 {
     global $wpdb;
@@ -1348,6 +1383,12 @@ function geodir_theme_compatibility_setting_page()
 }
 
 
+/**
+ * Displays settings form for the custom post type.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_custom_post_type_form()
 {
     $listing_type = ($_REQUEST['listing_type'] != '') ? $_REQUEST['listing_type'] : 'gd_place';
@@ -1423,6 +1464,12 @@ function geodir_custom_post_type_form()
 <?php
 }
 
+/**
+ * Displays 'GD Diagnostic Tools' page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_diagnostic_tools_setting_page()
 {
     ?>
