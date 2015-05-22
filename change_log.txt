@@ -1,11 +1,9 @@
 v1.4.6.2
 Search not working for empty keyword search - FIXED
-
-
-v1.4.6.1
 Review counts lost during virtual page conversion (alos fixed by saving any place) - FIXED
 Option added to allow/restrict some file types for custom field file upload - ADDED
 Some DocBlocks added for documentation - ADDED
+
 
 v1.4.6
 New filter added for term link in popular category widget - ADDED
