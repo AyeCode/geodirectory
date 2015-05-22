@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * General tab settings.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global array $geodir_settings Geodirectory settings array.
+ */
 global $geodir_settings;
 
 /** General Options **/

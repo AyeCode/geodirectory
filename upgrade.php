@@ -1,4 +1,11 @@
 <?php
+/**
+ * Upgrade related functions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
+
 global $wpdb;
 
 if (get_option(GEODIRECTORY_TEXTDOMAIN . '_db_version') != GEODIRECTORY_VERSION) {
@@ -15,6 +22,11 @@ if (get_option(GEODIRECTORY_TEXTDOMAIN . '_db_version') != GEODIRECTORY_VERSION)
 }
 
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodirectory_upgrade_all()
 {
     geodir_create_tables();
@@ -23,16 +35,33 @@ function geodirectory_upgrade_all()
 }
 
 // 1.3.6 Upgrades
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_upgrade_136()
 {
     geodir_fix_review_overall_rating();
 }
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_upgrade_146(){
     gd_convert_virtual_pages();
 }
 
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ */
 function geodir_update_review_db()
 {
     global $wpdb, $plugin_prefix;
@@ -60,18 +89,37 @@ function geodir_update_review_db()
 
 }
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ */
 function geodir_fix_review_date()
 {
     global $wpdb;
     $wpdb->query("UPDATE " . GEODIR_REVIEW_TABLE . " gdr JOIN $wpdb->comments c ON gdr.comment_id=c.comment_ID SET gdr.post_date = c.comment_date WHERE gdr.post_date='0000-00-00 00:00:00'");
 }
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ */
 function geodir_fix_review_post_status()
 {
     global $wpdb;
     $wpdb->query("UPDATE " . GEODIR_REVIEW_TABLE . " gdr JOIN $wpdb->posts p ON gdr.post_id=p.ID SET gdr.post_status = 1 WHERE gdr.post_status IS NULL AND p.post_status='publish'");
 }
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @return bool
+ */
 function geodir_fix_review_content()
 {
     global $wpdb;
@@ -82,6 +130,13 @@ function geodir_fix_review_content()
     }
 }
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @return bool
+ */
 function geodir_fix_review_location()
 {
     global $wpdb;
@@ -100,6 +155,12 @@ function geodir_fix_review_location()
     return false;
 }
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ */
 function geodir_fix_review_overall_rating()
 {
     global $wpdb;
@@ -128,6 +189,12 @@ function geodir_fix_review_overall_rating()
 ########### THEME COMPATIBILITY ############
 ############################################
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ */
 function gd_install_theme_compat()
 {
     global $wpdb;
@@ -451,6 +518,12 @@ function gd_install_theme_compat()
 }
 
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ */
 function gd_convert_virtual_pages(){
     global $wpdb;
 

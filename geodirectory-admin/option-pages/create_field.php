@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Creates custom fields
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 $data_type = '';
 
 if (isset($_REQUEST['data_type']))

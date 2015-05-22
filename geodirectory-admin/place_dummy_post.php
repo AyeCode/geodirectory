@@ -1,4 +1,10 @@
 <?php
+/**
+ * GD Dummy data.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 
 global $dummy_post_index, $city_bound_lat1, $city_bound_lng1, $city_bound_lat2, $city_bound_lng2;
 $post_info = array();

@@ -1,20 +1,20 @@
 <?php
-
 /**
- * GeoDirectory Install
+ * GeoDirectory Installation related functions.
  *
- * Plugin install script which adds default pages, taxonomies, and database tables
+ * Plugin install script which adds default pages, taxonomies, and database tables.
  *
- * @author        WPGeoDirectory
- * @category    Admin
- * @package    GeoDirectory
+ * @since 1.0.0
+ * @package GeoDirectory
  */
 
 
-/// INSTALLATION RELATED FUNCTIONS ///
 include_once('admin_db_install.php');
 /**
- * Activate geodirectory
+ * Activate GeoDirectory.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  */
 
 function geodir_activation()
@@ -24,6 +24,12 @@ function geodir_activation()
     add_action('wp_loaded', 'geodir_flush_activation');
 }
 
+/**
+ * Remove rewrite rules and then recreate rewrite rules.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_flush_activation()
 {
     // Remove rewrite rules and then recreate rewrite rules.
@@ -32,7 +38,11 @@ function geodir_flush_activation()
 }
 
 /**
- * Install geodirectory
+ * Install GeoDirectory.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global array $geodir_settings GeoDirectory settings array.
  */
 function geodir_install()
 {
@@ -79,9 +89,12 @@ function geodir_install()
 
 
 /**
- * Create pages
+ * Create GD pages.
  *
  * Creates pages that the plugin relies on, storing page id's in variables.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  */
 function geodir_create_pages()
 {
@@ -96,7 +109,18 @@ function geodir_create_pages()
 }
 
 /**
- * Create a page
+ * Create a page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global object $current_user Current user object.
+ * @param string $slug The page slug.
+ * @param string $option The option meta key.
+ * @param string $page_title The page title.
+ * @param string $page_content The page description.
+ * @param int $post_parent Parent page ID.
+ * @param string $status Post status.
  */
 function geodir_create_page($slug, $option, $page_title = '', $page_content = '', $post_parent = 0, $status = 'publish')
 {
@@ -142,6 +166,12 @@ function geodir_create_page($slug, $option, $page_title = '', $page_content = ''
 }
 
 
+/**
+ * Post installation actions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_installation_end()
 {
     //update_option( "geodir_db_version", GEODIRECTORY_VERSION );
@@ -152,9 +182,13 @@ function geodir_installation_end()
 }
 
 /**
- * Default options
+ * Default options.
  *
  * Adds the default options. Modify at your own risk.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global array $geodir_settings Geodirectory settings array.
  */
 function geodir_set_default_options()
 {
@@ -171,9 +205,10 @@ function geodir_set_default_options()
 
 
 /**
+ * Set sidebar widgets.
  *
- * Set sidebar widgets
- *
+ * @since 1.0.0
+ * @package GeoDirectory
  **/
 function geodir_set_default_widgets()
 {
