@@ -1,6 +1,6 @@
 <?php
 /**
- * GeoDirectory Admin
+ * GeoDirectory Admin.
  *
  * Main admin file which loads all settings panels and sets up admin menus.
  *
@@ -204,7 +204,7 @@ function geodir_remove_image_box()
 
 add_action('add_meta_boxes', 'geodir_meta_box_add');
 /**
- * Adds meta boxes to the Gd post types.
+ * Adds meta boxes to the GD post types.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -247,7 +247,7 @@ add_action('admin_menu', 'geodir_hide_post_taxonomy_meta_boxes');
 /**
  * Removes taxonomy meta boxes.
  *
- * Geodirectory hide categories post meta.
+ * GeoDirectory hide categories post meta.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -297,7 +297,7 @@ add_filter('geodir_notifications_settings', 'geodir_enable_editor_on_notificatio
 /**
  * Converts textarea field to WYSIWYG editor on Notification settings.
  *
- * WP Admin -> Geodirectory -> Notifications
+ * WP Admin -> Geodirectory -> Notifications.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -351,10 +351,14 @@ function geodir_enable_editor_on_design_settings($design_setting)
 add_action('geodir_manage_available_fields', 'geodir_manage_available_fields');
 
 /**
+ * Lists available fields for the given sub tab.
+ *
+ * WP Admin -> Geodirectory -> (post type) Settings -> Custom Fields -> Add new Place form field.
+ * WP Admin -> Geodirectory -> (post type) Settings -> Sorting Options -> Available sorting options for Place listing and search results.
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param $sub_tab
+ * @param string $sub_tab The sub tab slug.
  */
 function geodir_manage_available_fields($sub_tab)
 {
@@ -375,10 +379,11 @@ function geodir_manage_available_fields($sub_tab)
 add_action('geodir_manage_selected_fields', 'geodir_manage_selected_fields');
 
 /**
+ * Adds admin html for selected fields of the given sub tab.
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param $sub_tab
+ * @param string $sub_tab The sub tab slug.
  */
 function geodir_manage_selected_fields($sub_tab)
 {
@@ -397,6 +402,7 @@ function geodir_manage_selected_fields($sub_tab)
 
 
 /**
+ * Adds admin html for sorting options available fields.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -451,6 +457,7 @@ function geodir_sorting_options_available_fields()
 
 
 /**
+ * Adds admin html for sorting options selected fields.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -493,6 +500,7 @@ function geodir_sorting_options_selected_fields()
 
 
 /**
+ * Adds admin html for custom fields available fields.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -545,6 +553,7 @@ function geodir_custom_available_fields()
 
 
 /**
+ * Adds admin html for custom fields selected fields.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -583,12 +592,14 @@ function geodir_custom_selected_fields()
 
 add_filter('geodir_custom_fields_panel_head', 'geodir_custom_fields_panel_head', 1, 3);
 /**
+ * Returns heading for given sub tab.
+ *
  * @since 1.0.0
  * @package GeoDirectory
- * @param $heading
- * @param $sub_tab
- * @param $listing_type
- * @return string
+ * @param string $heading The page heading.
+ * @param string $sub_tab The sub tab slug.
+ * @param string $listing_type The post type.
+ * @return string The page heading.
  */
 function geodir_custom_fields_panel_head($heading, $sub_tab, $listing_type)
 {
@@ -608,13 +619,14 @@ function geodir_custom_fields_panel_head($heading, $sub_tab, $listing_type)
 
 add_filter('geodir_cf_panel_available_fields_head', 'geodir_cf_panel_available_fields_head', 1, 3);
 /**
+ * Returns heading for given sub tab available fields box.
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param $heading
- * @param $sub_tab
- * @param $listing_type
- * @return string
+ * @param string $heading The page heading.
+ * @param string $sub_tab The sub tab slug.
+ * @param string $listing_type The post type.
+ * @return string The page heading.
  */
 function geodir_cf_panel_available_fields_head($heading, $sub_tab, $listing_type)
 {
@@ -634,13 +646,14 @@ function geodir_cf_panel_available_fields_head($heading, $sub_tab, $listing_type
 
 add_filter('geodir_cf_panel_available_fields_note', 'geodir_cf_panel_available_fields_note', 1, 3);
 /**
+ * Returns description for given sub tab - available fields box.
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param $note
- * @param $sub_tab
- * @param $listing_type
- * @return string
+ * @param string $note The box description.
+ * @param string $sub_tab The sub tab slug.
+ * @param string $listing_type The post type.
+ * @return string The box description.
  */
 function geodir_cf_panel_available_fields_note($note, $sub_tab, $listing_type)
 {
@@ -660,13 +673,14 @@ function geodir_cf_panel_available_fields_note($note, $sub_tab, $listing_type)
 
 add_filter('geodir_cf_panel_selected_fields_head', 'geodir_cf_panel_selected_fields_head', 1, 3);
 /**
+ * Returns heading for given sub tab selected fields box.
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param $heading
- * @param $sub_tab
- * @param $listing_type
- * @return string
+ * @param string $heading The page heading.
+ * @param string $sub_tab The sub tab slug.
+ * @param string $listing_type The post type.
+ * @return string The page heading.
  */
 function geodir_cf_panel_selected_fields_head($heading, $sub_tab, $listing_type)
 {
@@ -686,13 +700,14 @@ function geodir_cf_panel_selected_fields_head($heading, $sub_tab, $listing_type)
 
 add_filter('geodir_cf_panel_selected_fields_note', 'geodir_cf_panel_selected_fields_note', 1, 3);
 /**
+ * Returns description for given sub tab - selected fields box.
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param $note
- * @param $sub_tab
- * @param $listing_type
- * @return string
+ * @param string $note The box description.
+ * @param string $sub_tab The sub tab slug.
+ * @param string $listing_type The post type.
+ * @return string The box description.
  */
 function geodir_cf_panel_selected_fields_note($note, $sub_tab, $listing_type)
 {
@@ -713,6 +728,7 @@ function geodir_cf_panel_selected_fields_note($note, $sub_tab, $listing_type)
 add_action('admin_init', 'geodir_remove_unnecessary_fields');
 
 /**
+ * Removes unnecessary table columns from the database.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -741,6 +757,7 @@ function geodir_remove_unnecessary_fields()
 add_action('wp_ajax_geodir_admin_ajax', "geodir_admin_ajax_handler");
 
 /**
+ * Handles admin ajax.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -770,15 +787,16 @@ function geodir_admin_ajax_handler()
 
 
 /**
+ * Diagnose multisite related tables.
  *
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
- * @param $filter_arr
- * @param $table
- * @param $tabel_name
- * @param $fix
- * @return mixed
+ * @param array $filter_arr The diagnose messages array.
+ * @param string $table The table name. Ex: geodir_countries.
+ * @param string $tabel_name Human readable table name. Ex: Geodir Countries.
+ * @param bool $fix If error during diagnose do you want to fix it? Default: false.
+ * @return array The diagnose messages array.
  */
 function geodir_diagnose_multisite_table($filter_arr, $table, $tabel_name, $fix)
 {
@@ -907,6 +925,7 @@ function geodir_diagnose_multisite_table($filter_arr, $table, $tabel_name, $fix)
 
 
 /**
+ * Syncs when tags are showing in the backend but missing from the front end.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -966,6 +985,9 @@ function geodir_diagnose_tags_sync()
 }
 
 /**
+ * Syncs when categories are missing from the details table but showing in other places in the backend.
+ *
+ * Only checks posts with missing category info in details table.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -1047,6 +1069,7 @@ function geodir_diagnose_cats_sync()
 }
 
 /**
+ * Clears all GD version numbers so any upgrade functions will run again.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -1115,7 +1138,7 @@ function geodir_diagnose_version_clear()
 
 
 /**
- *
+ * Checks ratings for correct location and content settings.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -1181,6 +1204,7 @@ function geodir_diagnose_ratings()
 
 
 /**
+ * Checks if the GD database tables have been converted to use multisite correctly.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -1242,16 +1266,17 @@ function geodir_diagnose_multisite_conversion()
 }
 
 /**
+ * Fixes if the GD pages are not installed correctly.
  *
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global object $current_user Current user object.
- * @param $slug
- * @param $page_title
- * @param $old_id
- * @param $option
- * @return bool
+ * @param string $slug The page slug.
+ * @param string $page_title The page title.
+ * @param int $old_id Old post ID.
+ * @param string $option Option meta key.
+ * @return bool Returns true when success. false when failure.
  */
 function geodir_fix_virtual_page($slug, $page_title, $old_id, $option)
 {
@@ -1291,6 +1316,7 @@ function geodir_fix_virtual_page($slug, $page_title, $old_id, $option)
 }
 
 /**
+ * Checks if the GD pages are installed correctly or not.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -1422,6 +1448,7 @@ function geodir_diagnose_default_pages()
 }
 
 /**
+ * Loads custom fields in to file for translation.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -1452,16 +1479,17 @@ function geodir_diagnose_load_db_language() {
 
 /* Ajax Handler Ends*/
 
-/* sort by expire */
 add_filter('posts_clauses_request', 'geodir_posts_clauses_request');
 /**
+ * Adds sorting type - sort by expire.
  *
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
+ * @global object $wp_query WordPress Query object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
- * @param $clauses
- * @return mixed
+ * @param array $clauses The clause array.
+ * @return array Altered clause array.
  */
 function geodir_posts_clauses_request($clauses)
 {
@@ -1493,12 +1521,9 @@ add_action('post_updated', 'geodir_action_post_updated', 15, 3);
  */
 add_filter('geodir_notifications_settings', 'geodir_notification_add_bcc_option', 1);
 
-
-/*
- * check if there is a compatibility pack when switching theme
- */
 add_action('after_switch_theme', 'gd_theme_switch_compat_check');
 /**
+ * check if there is a compatibility pack when switching theme.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -1509,12 +1534,12 @@ function gd_theme_switch_compat_check()
 }
 
 /**
- * read string as csv array
+ * Read string as csv array.
  *
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $current_user Current user object.
- * @return array
+ * @return array Returns parsed data as array.
  */
 function geodir_str_getcsv($input, $delimiter = ",", $enclosure = '"', $escape = "\\")
 {
@@ -1543,6 +1568,7 @@ function geodir_str_getcsv($input, $delimiter = ",", $enclosure = '"', $escape =
 
 add_action('wp_ajax_gdImportCsv', 'geodir_ajax_import_csv');
 /**
+ * Imports data from CSV file using ajax.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -1934,10 +1960,10 @@ add_action( 'wp_ajax_nopriv_geodir_import_exportn', 'geodir_ajax_import_export' 
 /**
  * Updates the location page prefix when location page is saved
  *
- * @param $post_id int $post_id The post ID of the post being saved.
- * @param $post object $post The post object of the post being saved.
  * @package GeoDirectory
  * @since 1.4.6
+ * @param $post_id int $post_id The post ID of the post being saved.
+ * @param $post object $post The post object of the post being saved.
  */
 function geodir_update_location_prefix($post_id,$post){
     if($post->post_type=='page' && $post->post_name && $post_id==get_option('geodir_location_page')){

@@ -1,16 +1,18 @@
 <?php
 /**
- * Geodirectory custom db table related functions.
+ * GeoDirectory custom db table related functions.
  *
  * @since 1.0.0
  * @package GeoDirectory
  */
 if (!function_exists('geodir_create_tables')) {
     /**
-     * Creates custom db tables for storing geodirectory plugin data.
+     * Creates custom db tables for storing GeoDirectory plugin data.
      *
      * @since 1.0.0
      * @package GeoDirectory
+     * @global object $wpdb WordPress Database object.
+     * @global string $plugin_prefix GeoDirectory plugin table prefix.
      */
     function geodir_create_tables()
     {
