@@ -1,5 +1,6 @@
 v1.4.7.1
 Send Enquiry & send to friend options removed from listings page - CHANGED
+Add listing form upload image tool should not upload non-image files - FIXED
 
 
 v1.4.6.2
