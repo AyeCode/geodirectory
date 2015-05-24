@@ -30,6 +30,14 @@ if (isset($field_info->admin_title))
     $field_admin_title = $field_info->admin_title;
 
 $default = isset($field_info->is_admin) ? $field_info->is_admin : '';
+
+$display_on_listing = true;
+// Remove Send Enquiry | Send To Friend from listings page
+$htmlvar_name = isset($field_info->htmlvar_name) && $field_info->htmlvar_name != '' ? $field_info->htmlvar_name : '';
+if ($htmlvar_name == 'geodir_email') {
+	$field_info->show_on_listing = 0;
+	$display_on_listing = false;
+}
 ?>
 <li class="text" id="licontainer_<?php echo $result_str; ?>">
     <div class="title title<?php echo $result_str; ?> gt-fieldset"
@@ -369,7 +377,7 @@ $default = isset($field_info->is_admin) ? $field_info->is_admin : '';
                 </td>
             </tr>
 
-            <tr>
+            <tr <?php echo (!$display_on_listing ? 'style="display:none"' : '') ;?>>
                 <td><strong><?php _e('Show on listing page ? :', GEODIRECTORY_TEXTDOMAIN); ?></strong></td>
                 <td align="left">
                     <select name="show_on_listing" id="show_on_listing">

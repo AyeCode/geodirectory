@@ -1,9 +1,13 @@
+v1.4.7.1
+Send Enquiry & send to friend options removed from listings page - CHANGED
+Add listing form upload image tool should not upload non-image files - FIXED
+
+
 v1.4.6.2
 Search not working for empty keyword search - FIXED
 Review counts lost during virtual page conversion (alos fixed by saving any place) - FIXED
 Option added to allow/restrict some file types for custom field file upload - ADDED
 Some DocBlocks added for documentation - ADDED
-
 
 v1.4.6
 New filter added for term link in popular category widget - ADDED
@@ -17,7 +21,6 @@ Import & Export added for GD listings & categories - ADDED
 CSV Upload updated & moved under Import & Export - CHANGED
 GD pages converted from virtual to normal pages - CHANGED
 GD pages section added to GD permalinks page - ADDED
-
 
 v1.4.5
 Slider JS missing from preview page - FIXED

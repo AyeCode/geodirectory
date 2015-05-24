@@ -742,6 +742,15 @@ function geodir_localize_all_js_msg()
     } elseif (!str_replace("https", "http", admin_url('admin-ajax.php')) && !empty($_SERVER['HTTPS'])) {
         $ajax_url = str_replace("http", "https", admin_url('admin-ajax.php'));
     }
+	
+	/**
+	 * Filter the allowed image type extensions for post images.
+	 *
+	 * @since 1.4.7.1
+	 * @param string $allowed_img_types The image type extensions array.
+	 */
+	$allowed_img_types = apply_filters('geodir_allowed_post_image_exts', array('jpg', 'jpeg', 'jpe', 'gif', 'png'));
+	
     $arr_alert_msg = array(
         'geodir_plugin_url' => geodir_plugin_url(),
         'geodir_admin_ajax_url' => $ajax_url,
@@ -787,8 +796,9 @@ function geodir_localize_all_js_msg()
         'geodir_err_file_upload_limit' => __('You have reached your upload limit of %s files.', GEODIRECTORY_TEXTDOMAIN),
         'geodir_err_pkg_upload_limit' => __('You may only upload %s files with this package, please try again.', GEODIRECTORY_TEXTDOMAIN),
         'geodir_action_remove' => __('Remove', GEODIRECTORY_TEXTDOMAIN),
-		'geodir_upload_allowed_files' => __('Allowed files', GEODIRECTORY_TEXTDOMAIN),
+		'geodir_txt_all_files' => __('Allowed files', GEODIRECTORY_TEXTDOMAIN),
 		'geodir_err_file_type' => __('File type error. Allowed file types: %s', GEODIRECTORY_TEXTDOMAIN),
+		'gd_allowed_img_types' => !empty($allowed_img_types) ? implode(',', $allowed_img_types) : '',
     );
 
     /**
