@@ -612,17 +612,41 @@ function geodir_sc_related_listings($atts)
     return $output;
 }
 
-add_shortcode('gd_advanced_search', 'geodir_sc_advanced_search');
-function geodir_sc_advanced_search($atts)
-{
-    ob_start();
-    geodir_get_template_part('listing', 'filter-form');
-    $output = ob_get_contents();
-
+function geodir_sc_advanced_search($atts) {
+    $defaults = array(
+		'title' => '',
+		'before_widget' => '<section id="geodir_advanced_search-1" class="widget geodir-widget geodir_advanced_search_widget">',
+        'after_widget' => '</section>',
+        'before_title' => '<h3 class="widget-title">',
+        'after_title' => '</h3>',
+		'show_adv_search' => 'default'
+	);
+	
+	$params = shortcode_atts($defaults, $atts);
+	
+	$show_adv_search = isset($params['show_adv_search']) && in_array($params['show_adv_search'], array('default', 'always', 'searched')) ? $params['show_adv_search'] : '';
+	
+	if ($show_adv_search != '' ) {
+		$show_adv_class = 'geodir-advance-search-' . $show_adv_search . ' ';
+		if ($show_adv_search == 'searched' && geodir_is_page('search')) {
+			$show_adv_search = 'search';
+		}
+		$show_adv_attrs = 'data-show-adv="' . $show_adv_search . '"';
+		
+		$params['before_widget'] = str_replace('class="', $show_adv_attrs . ' class="' . $show_adv_class, $params['before_widget']);
+	}
+	
+	ob_start();
+	
+	//geodir_get_template_part('listing', 'filter-form');
+	the_widget('geodir_advance_search_widget', $params, $params );
+	
+	$output = ob_get_contents();
     ob_end_clean();
 
     return $output;
 }
+add_shortcode('gd_advanced_search', 'geodir_sc_advanced_search');
 
 /**
  * The best of widget shortcode.

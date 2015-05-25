@@ -716,6 +716,8 @@ function searching_filter_where($where)
     if (is_single() && get_query_var('post_type')) return $where;
 
     if (is_tax()) return $where;
+	
+	$s = trim($s);
 
     $where = '';
 
@@ -739,8 +741,8 @@ function searching_filter_where($where)
     else
         $post_types = 'gd_place';
 
-    if (trim($s) != '') {
-        $keywords = explode(" ", trim($s));
+    if ($s != '') {
+        $keywords = explode(" ", $s);
         if (!empty($keywords)) {
             foreach ($keywords as $keyword) {
                 $keyword = trim($keyword);
@@ -752,27 +754,17 @@ function searching_filter_where($where)
         }
     }
 
-
     /* get taxonomy */
     $taxonomies = geodir_get_taxonomies($post_types, true);
     $taxonomies = implode("','", $taxonomies);
     $taxonomies = "'" . $taxonomies . "'";
 
-    $keywords = explode(" ", $s);
-    if (count($keywords) > 1) {
-        $gd_titlematch_part = " ";
-        foreach ($keywords as $keyword) {
-            //$gd_titlematch_part .= "OR ($wpdb->posts.post_title LIKE \"%$keyword%\") ";
-			if ($keyword = trim($keyword)) {
-				$gd_titlematch_part .= " OR ( $wpdb->posts.post_title LIKE \"$keyword\" OR $wpdb->posts.post_title LIKE \"$keyword %\" OR $wpdb->posts.post_title LIKE \"% $keyword %\" OR $wpdb->posts.post_title LIKE \"% $keyword\" ) ";
-			}
-        }
-    } else {
-        $gd_titlematch_part = "";
-    }
-	$gd_titlematch_part = "";
-
-    //if($snear!='' && strpos($snear,__('In:',GEODIRECTORY_TEXTDOMAIN)) !== false)
+    $content_where = $terms_where = '';
+	if ($s != '') {
+		$content_where = " OR ($wpdb->posts.post_content LIKE \"$s\" OR $wpdb->posts.post_content LIKE \"$s %\" OR $wpdb->posts.post_content LIKE \"% $s %\" OR $wpdb->posts.post_content LIKE \"% $s\") ";
+		$terms_where = " AND ($wpdb->terms.name LIKE \"$s\" OR $wpdb->terms.name LIKE \"$s %\" OR $wpdb->terms.name LIKE \"% $s %\" OR $wpdb->terms.name LIKE \"% $s\"  OR $wpdb->terms.name IN ($s_A)) ";
+	}
+		
     if ($snear != '') {
         if (isset($_SESSION['near_me_range']) && is_numeric($_SESSION['near_me_range']) && !isset($_REQUEST['sdist'])) {
             $dist = $_SESSION['near_me_range'];
@@ -787,17 +779,15 @@ function searching_filter_where($where)
         $rlat1 = is_numeric(min($lat1, $lat2)) ? min($lat1, $lat2) : '';
         $rlat2 = is_numeric(max($lat1, $lat2)) ? max($lat1, $lat2) : '';
 
-
-        $where .= " AND ( ( $wpdb->posts.post_title LIKE \"$s\" $better_search_terms)
-			                    $gd_titlematch_part
-								OR ($wpdb->posts.post_content LIKE \"$s\" OR $wpdb->posts.post_content LIKE \"$s %\" OR $wpdb->posts.post_content LIKE \"% $s %\" OR $wpdb->posts.post_content LIKE \"% $s\") 
+	    $where .= " AND ( ( $wpdb->posts.post_title LIKE \"$s\" $better_search_terms) 
+			                    $content_where 
 								OR ($wpdb->posts.ID IN( 
 										SELECT $wpdb->term_relationships.object_id as post_id 
 										FROM $wpdb->term_taxonomy,  $wpdb->terms, $wpdb->term_relationships 
 										WHERE $wpdb->term_taxonomy.term_id =  $wpdb->terms.term_id
 										AND $wpdb->term_relationships.term_taxonomy_id =  $wpdb->term_taxonomy.term_taxonomy_id
 										AND $wpdb->term_taxonomy.taxonomy in ({$taxonomies})
-										AND ($wpdb->terms.name LIKE \"$s\" OR $wpdb->terms.name LIKE \"$s %\" OR $wpdb->terms.name LIKE \"% $s %\" OR $wpdb->terms.name LIKE \"% $s\"  OR $wpdb->terms.name IN ($s_A))  
+										$terms_where 
 										)
 									) 
 							)
@@ -813,15 +803,14 @@ function searching_filter_where($where)
 
     } else {
         $where .= " AND (	( $wpdb->posts.post_title LIKE \"$s\" $better_search_terms)
-                            $gd_titlematch_part
-							OR ($wpdb->posts.post_content LIKE \"$s\" OR $wpdb->posts.post_content LIKE \"$s %\" OR $wpdb->posts.post_content LIKE \"% $s %\" OR $wpdb->posts.post_content LIKE \"% $s\") 
+                            $content_where  
 							OR ( $wpdb->posts.ID IN(	
 									SELECT $wpdb->term_relationships.object_id as post_id                     
 									FROM $wpdb->term_taxonomy,  $wpdb->terms, $wpdb->term_relationships
 								WHERE $wpdb->term_taxonomy.term_id =  $wpdb->terms.term_id
 								AND $wpdb->term_relationships.term_taxonomy_id =  $wpdb->term_taxonomy.term_taxonomy_id
 								AND $wpdb->term_taxonomy.taxonomy in ( {$taxonomies} )
-								AND ($wpdb->terms.name LIKE \"$s\" OR $wpdb->terms.name LIKE \"$s %\" OR $wpdb->terms.name LIKE \"% $s %\" OR $wpdb->terms.name LIKE \"% $s\" OR $wpdb->terms.name IN ($s_A)) 
+								$terms_where 
 								)
 						) 
 					) 

@@ -2981,7 +2981,7 @@ function geodir_post_attachments()
         </div>
         <span
             id="upload-msg"><?php _e('Please drag &amp; drop the images to rearrange the order', GEODIRECTORY_TEXTDOMAIN);?></span>
-        <span id="upload-error" style="display:none"></span>
+        <span id="<?php echo $id; ?>upload-error" style="display:none"></span>
     </div>
 
 <?php

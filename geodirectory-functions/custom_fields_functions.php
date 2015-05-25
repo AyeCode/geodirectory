@@ -2595,11 +2595,13 @@ if (!function_exists('geodir_show_listing_info')) {
 
 
                     case 'email':
-
-
-                        if ($type['htmlvar_name'] == 'geodir_email' && ((isset($package_info->sendtofriend) && $package_info->sendtofriend) || $post->$type['htmlvar_name'])) {
-
-                            $b_send_inquiry = '';
+					
+						if ($type['htmlvar_name'] == 'geodir_email' && !(geodir_is_page('detail') || geodir_is_page('preview'))) {
+							continue; // Remove Send Enquiry | Send To Friend from listings page
+						}
+                       
+					    if ($type['htmlvar_name'] == 'geodir_email' && ((isset($package_info->sendtofriend) && $package_info->sendtofriend) || $post->$type['htmlvar_name'])) {
+						    $b_send_inquiry = '';
                             $b_sendtofriend = '';
 
                             $html = '';

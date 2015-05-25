@@ -35,8 +35,13 @@ jQuery(document).ready(function ($) {
                 };
             }
 			var allowed_exts = jQuery('#' + imgId + '_allowed_types').val();
+			allowed_exts = allowed_exts && allowed_exts != '' ? allowed_exts : '';
+			if (imgId == 'post_images' && typeof geodir_all_js_msg.gd_allowed_img_types != 'undefined' && geodir_all_js_msg.gd_allowed_img_types != '') {
+				allowed_exts = geodir_all_js_msg.gd_allowed_img_types;
+			}
+
 			if (allowed_exts && allowed_exts != '') {
-				var txt_all_files = (typeof geodir_all_js_msg.geodir_upload_all_files != 'undefined' && geodir_all_js_msg.geodir_upload_all_files != '') ? geodir_all_js_msg.geodir_upload_all_files : 'Allowed files'; 
+				var txt_all_files = (typeof geodir_all_js_msg.geodir_txt_all_files != 'undefined' && geodir_all_js_msg.geodir_txt_all_files != '') ? geodir_all_js_msg.geodir_txt_all_files : 'Allowed files'; 
 				pconfig['filters'] = [{'title':txt_all_files, 'extensions':allowed_exts}];
 			}
 			
@@ -65,7 +70,12 @@ jQuery(document).ready(function ($) {
                     } else {
                         msgErr = 'File type error. Allowed file types: %s';
                     }
-                    msgErr = msgErr.replace("%s", jQuery("#" + imgId + "_allowed_types").attr('data-exts'));
+					if(imgId == 'post_images') {
+						var txtReplace = allowed_exts != '' ? "." + allowed_exts.replace(/,/g, ", .") : '*';
+						msgErr = msgErr.replace("%s", txtReplace);
+					} else {
+						msgErr = msgErr.replace("%s", jQuery("#" + imgId + "_allowed_types").attr('data-exts'));
+					}
 
                     jQuery('#' + imgId + 'upload-error').html(msgErr);
                 } else {
