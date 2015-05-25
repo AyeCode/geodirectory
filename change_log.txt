@@ -1,9 +1,9 @@
-v1.4.7.1
+v1.4.8
 Send Enquiry & send to friend options removed from listings page - CHANGED
 Add listing form upload image tool should not upload non-image files - FIXED
 
 
-v1.4.6.2
+v1.4.7
 Search not working for empty keyword search - FIXED
 Review counts lost during virtual page conversion (alos fixed by saving any place) - FIXED
 Option added to allow/restrict some file types for custom field file upload - ADDED
