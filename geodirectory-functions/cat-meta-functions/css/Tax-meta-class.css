@@ -39,10 +39,7 @@
 }
 
 .wp-editor-wrap {
-
-{
-    width: 500px
-;
+    width: 500px;
 }
 textarea.at-wysiwyg {
     width: 498px !important;

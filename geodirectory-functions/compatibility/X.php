@@ -1,16 +1,21 @@
 <?php
-/*
-Plugin Name: GeoDirectory - X Theme Compatibility
-Plugin URI: http://wpgeodirectory.com
-Description: This plugin lets the GeoDirectory Plugin use the X theme HTML wrappers to fit and work perfectly.
-Version: 1.0.3
-Author: GeoDirectory
-Author URI: http://wpgeodirectory.com
-
-*/
+/**
+ * X theme compatibility functions.
+ *
+ * This file lets the GeoDirectory Plugin use the X theme HTML wrappers to fit and work perfectly.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 
 // call
 add_action('after_setup_theme', 'geodir_x_action_calls', 11);
+/**
+ * Action calls for X theme compatibility.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_x_action_calls()
 {
 
@@ -75,6 +80,12 @@ function geodir_x_action_calls()
 /* FUNCTIONS
 ****************************************************************************************/
 
+/**
+ * Adds top section based on current page type.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function gd_X_compat_add_top_section_back()
 {
 
@@ -96,13 +107,26 @@ function gd_X_compat_add_top_section_back()
 
 // ADD BODY CLASS
 
+/**
+ * Add body class for styling purposes.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $classes Class array.
+ * @return array Modified class array.
+ */
 function geodir_x_body_class($classes)
 {
     $classes[] = 'geodir-x';
     return $classes;
 }
 
-// REPLACE GD HOME TOP SIDEBAR AFTER HEADER
+/**
+ * replace gd home top sidebar after header.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_x_home_sidebar()
 {
     //if ( geodir_is_geodir_page() ) {
@@ -115,19 +139,34 @@ function geodir_x_home_sidebar()
     //}
 }
 
-// ADD OPENING WRAP TO SEARCHBAR
+/**
+ * add opening wrap to searchbar.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_x_search_container_open()
 {
     echo '<div class="x-container-fluid x-container max">';
 }
 
-// ADD CLOSING WRAP TO SEARCHBAR
+/**
+ * add closing wrap to searchbar.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_x_search_container_close()
 {
     echo '</div>';
 }
 
-// WRAPPER OPEN FUNCTIONS
+/**
+ * wrapper open functions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_x_action_wrapper_open()
 {
     global $stack;
@@ -142,7 +181,12 @@ function geodir_x_action_wrapper_open()
     }
 }
 
-// WRAPPER CLOSE FUNCTIONS
+/**
+ * wrapper close functions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_x_action_wrapper_close()
 {
     global $stack;
@@ -153,32 +197,67 @@ function geodir_x_action_wrapper_close()
     }
 }
 
-// WRAPPER CONTENT OPEN FUNCTIONS
+/**
+ * wrapper content open functions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $type Page type.
+ * @param string $id The id of the HTML element.
+ * @param string $class The class of the HTML element.
+ */
 function geodir_x_action_wrapper_content_open($type = '', $id = '', $class = '')
 {
     echo '<div class="x-main left ' . $class . '" role="main">';
 }
 
-// WRAPPER CONTENT CLOSE FUNCTIONS
+/**
+ * wrapper content close functions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_x_action_wrapper_content_close()
 {
     echo '</div>';
 }
 
-// SIDEBAR RIGHT OPEN FUNCTIONS
+/**
+ * sidebar right open functions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $type Page type.
+ * @param string $id The id of the HTML element.
+ * @param string $class The class of the HTML element.
+ * @param string $itemtype HTML itemtype 'http://schema.org/WPSideBar'.
+ */
 function geodir_x_action_sidebar_right_open($type = '', $id = '', $class = '', $itemtype = '')
 {
     echo '<aside class="x-sidebar right" role="complementary" itemscope itemtype="' . $itemtype . '">';
 }
 
-// SIDEBAR RIGHT CLOSE FUNCTIONS
+/**
+ * sidebar right close functions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $type Page type.
+ */
 function geodir_x_action_sidebar_right_close($type = '')
 {
     echo '</aside>';
 }
 
-// MODIFY BREADCRUMB
 add_filter('geodir_breadcrumb', 'geodir_x_breadcrumb');
+/**
+ * modify breadcrumb.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $breadcrumb Breadcrumb HTML.
+ * @return string Modified breadcrumb HTML.
+ */
 function geodir_x_breadcrumb($breadcrumb)
 {
     $breadcrumb = str_replace('<div class="geodir-breadcrumb clearfix"><ul id="breadcrumbs">', '', $breadcrumb);
@@ -189,16 +268,28 @@ function geodir_x_breadcrumb($breadcrumb)
     return $breadcrumb;
 }
 
-// MODIFY BREADCRUMB SEPARATOR
 add_filter('geodir_breadcrumb_separator', 'geodir_x_breadcrumb_separator');
+/**
+ * modify breadcrumb separator.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $separator The breadcrumb separator HTML.
+ * @return string Modified breadcrumb separator HTML.
+ */
 function geodir_x_breadcrumb_separator($separator)
 {
     $separator = str_replace(' > ', ' <span class="delimiter"><i class="x-icon-angle-right"></i></span> ', $separator);
     return $separator;
 }
 
-// BREADCRUMBS
 if (!function_exists('x_breadcrumbs')) :
+    /**
+     * breadcrumbs.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     */
     function x_breadcrumbs()
     {
 
@@ -310,8 +401,15 @@ if (!function_exists('x_breadcrumbs')) :
 endif;
 
 
-// ADD CLASS TO GD MENU ITEMS
 add_filter('geodir_location_switcher_menu_li_class', 'geodir_x_location_switcher_menu_li_class', 10, 1);
+/**
+ * add class to gd menu items.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $class The class of the HTML element.
+ * @return string Modified class.
+ */
 function geodir_x_location_switcher_menu_li_class($class)
 {
     $class .= " menu-item-has-children ";
@@ -319,6 +417,14 @@ function geodir_x_location_switcher_menu_li_class($class)
 }
 
 add_filter('geodir_sub_menu_li_class', 'geodir_x_sub_menu_li_class', 10, 1);
+/**
+ * add class to gd sub menu items.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $class The class of the HTML element.
+ * @return string Modified class.
+ */
 function geodir_x_sub_menu_li_class($class)
 {
     $class .= " menu-item-has-children ";
