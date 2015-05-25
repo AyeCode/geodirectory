@@ -1,9 +1,21 @@
 <?php
-
-// MODIFY BODY CLASSES ON SIGNUP PAGE
+/**
+ * Divi theme compatibility functions.
+ *
+ * This file lets the GeoDirectory Plugin use the Divi theme HTML wrappers to fit and work perfectly.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 add_filter('body_class', 'geodir_divi_signup_body_class', 999);
-
-// REPLACE DIVI BODY CLASS ON SIGNUP PAGE
+/**
+ * replace divi body class on signup page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $classes
+ * @return array|mixed
+ */
 function geodir_divi_signup_body_class($classes)
 {
     if (isset($_GET['geodir_signup']) && $_GET['geodir_signup']) {
@@ -13,8 +25,13 @@ function geodir_divi_signup_body_class($classes)
     return $classes;
 }
 
-// WRAPPER CLOSE FUNCTIONS
 add_action('geodir_wrapper_close', 'geodir_divi_action_wrapper_close', 11);
+/**
+ * wrapper close functions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_divi_action_wrapper_close()
 {
     if (isset($_GET['geodir_signup']) && $_GET['geodir_signup']) {

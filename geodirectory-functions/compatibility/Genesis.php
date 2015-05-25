@@ -1,5 +1,19 @@
 <?php
+/**
+ * Genesis theme compatibility functions.
+ *
+ * This file lets the GeoDirectory Plugin use the Genesis theme HTML wrappers to fit and work perfectly.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 add_action('after_setup_theme', 'gd_compat_php_genesis', 11);
+/**
+ * Action calls for genesis theme compatibility.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function gd_compat_php_genesis()
 {
 // REPLACE GENESIS BREADCRUMBS WITH GD BREADCRUMBS
@@ -30,6 +44,12 @@ function gd_compat_php_genesis()
 add_action('genesis_after_header', 'geodir_replace_breadcrumb', 20);
 
 add_action('genesis_after_header', 'gd_genesis_compat_left_sidebars', 5);
+/**
+ * Left sidebar compatibility actions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function gd_genesis_compat_left_sidebars()
 {
 
@@ -58,6 +78,14 @@ function gd_genesis_compat_left_sidebars()
 
 
 add_filter('body_class', 'geodir_set_body_scs', 100);
+/**
+ * Add body class for styling purposes.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $classes Class array.
+ * @return array Modified class array.
+ */
 function geodir_set_body_scs($classes)
 {
     $remove_class = false;
@@ -123,6 +151,12 @@ function geodir_set_body_scs($classes)
 }
 
 add_action('genesis_after_header', 'gd_genesis_compat_add_top_section_back', 5);
+/**
+ * Adds top section based on current page type.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function gd_genesis_compat_add_top_section_back()
 {
 
@@ -141,7 +175,12 @@ function gd_genesis_compat_add_top_section_back()
 
 }
 
-// REPLACE GENESIS BREADCRUMBS FUNCTION
+/**
+ * replace genesis breadcrumbs function.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_replace_breadcrumb()
 {
     if (is_front_page() && get_option('geodir_set_as_home') && !isset($_GET['geodir_signup'])) {
@@ -154,8 +193,12 @@ function geodir_replace_breadcrumb()
 
 // Force Full Width on signup page
 add_action('genesis_meta', 'geodir_genesis_meta');
-
-// FORCE FULL WIDTH LAYOUT ON SIGNUP PAGE
+/**
+ * force full width layout on signup page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_genesis_meta()
 {
     if (isset($_GET['geodir_signup'])) {
@@ -163,9 +206,13 @@ function geodir_genesis_meta()
     }
 }
 
-
-//add listing page
 add_action('geodir_add_listing_page_title', 'geodir_add_listing_page_title_genesis_before', 8);
+/**
+ * add listing page title before wrapper.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_add_listing_page_title_genesis_before()
 {
 
@@ -174,6 +221,12 @@ function geodir_add_listing_page_title_genesis_before()
 
 
 add_action('geodir_add_listing_form', 'geodir_add_listing_form_genesis_after', 20);
+/**
+ * add listing page title after wrapper.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_add_listing_form_genesis_after()
 {
 
@@ -186,6 +239,12 @@ add_action('geodir_signup_forms', 'geodir_add_listing_form_genesis_after', 20);
 
 
 //add_action( 'genesis_after_header', 'gd_genesis_current_page_title_bar', 25 );
+/**
+ * Current page title bar.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function gd_genesis_current_page_title_bar()
 {
 
@@ -226,6 +285,12 @@ function gd_genesis_current_page_title_bar()
 
 
 add_action('geodir_before_listing', 'gd_genesis_listing_page_title_bar', 10);
+/**
+ * Listing page title bar.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function gd_genesis_listing_page_title_bar()
 {
     geodir_action_listings_title();
@@ -233,9 +298,13 @@ function gd_genesis_listing_page_title_bar()
 }
 
 
-// FIX FOR GEO-1280
-
 add_action('after_setup_theme', 'gd_compat_php_genesis_geo_1280_fix', 11);
+/**
+ * fix for geo-1280.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function gd_compat_php_genesis_geo_1280_fix()
 {
     if (function_exists('geo1280_search_bar')) {
@@ -253,6 +322,12 @@ function gd_compat_php_genesis_geo_1280_fix()
     }
 }
 
+/**
+ * fix for geo-1280 search bar.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geo1280_search_bar_fix()
 {
 

@@ -4,6 +4,7 @@
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
  */
 
 global $wpdb;
@@ -23,6 +24,7 @@ if (get_option(GEODIRECTORY_TEXTDOMAIN . '_db_version') != GEODIRECTORY_VERSION)
 
 
 /**
+ * Handles upgrade for all geodirectory versions.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -34,8 +36,8 @@ function geodirectory_upgrade_all()
     gd_install_theme_compat();
 }
 
-// 1.3.6 Upgrades
 /**
+ * Handles upgrade for geodirectory versions <= 1.3.6.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -46,6 +48,7 @@ function geodir_upgrade_136()
 }
 
 /**
+ * Handles upgrade for geodirectory versions <= 1.4.6.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -56,6 +59,7 @@ function geodir_upgrade_146(){
 
 
 /**
+ * Handles upgrade for review table.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -90,6 +94,7 @@ function geodir_update_review_db()
 }
 
 /**
+ * Fixes review date.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -102,6 +107,7 @@ function geodir_fix_review_date()
 }
 
 /**
+ * Fixes review post status.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -114,6 +120,7 @@ function geodir_fix_review_post_status()
 }
 
 /**
+ * Fixes review content.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -131,6 +138,7 @@ function geodir_fix_review_content()
 }
 
 /**
+ * Fixes review location.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -156,6 +164,7 @@ function geodir_fix_review_location()
 }
 
 /**
+ * Fixes review overall rating.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -190,6 +199,7 @@ function geodir_fix_review_overall_rating()
 ############################################
 
 /**
+ * Inserts theme compatibility settings data for supported themes.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -519,6 +529,7 @@ function gd_install_theme_compat()
 
 
 /**
+ * Converts virtual pages to normal pages.
  *
  * @since 1.0.0
  * @package GeoDirectory
