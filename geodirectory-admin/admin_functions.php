@@ -4194,6 +4194,83 @@ jQuery(function(){
 }
 
 /**
+ * Initiate the WordPress file system and provide fallback if needed.
+ *
+ * @since 1.4.8
+ * @package GeoDirectory
+ * @return bool|string Returns the file system class on success. False on failure.
+ */
+function geodir_init_filesystem()
+{
+
+    if(!function_exists('get_filesystem_method')){
+        require_once(ABSPATH."/wp-admin/includes/file.php");
+    }
+    $access_type = get_filesystem_method();
+    if ($access_type === 'direct') {
+        /* you can safely run request_filesystem_credentials() without any issues and don't need to worry about passing in a URL */
+        $creds = request_filesystem_credentials(site_url() . '/wp-admin/', '', false, false, array());
+
+        /* initialize the API */
+        if (!WP_Filesystem($creds)) {
+            /* any problems and we exit */
+            //return '@@@3';
+            return false;
+        }
+
+        global $wp_filesystem;
+        return $wp_filesystem;
+        /* do our file manipulations below */
+    } elseif (defined('FTP_USER')) {
+        $creds = request_filesystem_credentials(site_url() . '/wp-admin/', '', false, false, array());
+
+        /* initialize the API */
+        if (!WP_Filesystem($creds)) {
+            /* any problems and we exit */
+            //return '@@@33';
+            return false;
+        }
+
+        global $wp_filesystem;
+        //return '@@@1';
+        return $wp_filesystem;
+
+    } else {
+        //return '@@@2';
+        /* don't have direct write access. Prompt user with our notice */
+        add_action('admin_notice', 'geodir_filesystem_notice');
+        return false;
+    }
+
+}
+
+add_action('admin_init', 'geodir_filesystem_notice');
+
+/**
+ * Output error message for file system access.
+ *
+ * Displays an admin message if the WordPress file system can't be automatically accessed. Called via admin_init hook.
+ *
+ * @since 1.4.8
+ * @package GeoDirectory
+ */
+function geodir_filesystem_notice()
+{
+    $access_type = get_filesystem_method();
+    if ($access_type === 'direct') {
+    } elseif (!defined('FTP_USER')) {
+        ?>
+        <div class="error">
+            <p><?php _e('GeoDirectory does not have access to your filesystem, thing like import/export will not work. Please define your details in wp-config.php as explained here', GEODIRECTORY_TEXTDOMAIN); ?>
+                <a target="_blank" href="http://codex.wordpress.org/Editing_wp-config.php#WordPress_Upgrade_Constants">http://codex.wordpress.org/Editing_wp-config.php#WordPress_Upgrade_Constants</a>
+            </p>
+        </div>
+    <?php }
+}
+
+
+
+/**
  * Handle import/export for categories & listings.
  *
  * @since 1.4.6
@@ -4226,11 +4303,18 @@ function geodir_ajax_import_export() {
 
 	$post_type = isset( $_REQUEST['_pt'] ) ? $_REQUEST['_pt'] : NULL;
 	
-	if( empty( $wp_filesystem ) ) {
+	/*if( empty( $wp_filesystem ) ) {
 		require_once( ABSPATH . '/wp-admin/includes/file.php' );
 		WP_Filesystem();
 		global $wp_filesystem;
-	}
+	}*/
+
+    $wp_filesystem = geodir_init_filesystem();
+    if (!$wp_filesystem) {
+        $json['error'] = __( 'Fail, something wrong to create csv file.', GEODIRECTORY_TEXTDOMAIN );
+        wp_send_json( $json );
+        exit;
+    }
 	
 	$csv_file_dir = geodir_path_import_export( false );
 	if ( !$wp_filesystem->is_dir( $csv_file_dir ) ) {
