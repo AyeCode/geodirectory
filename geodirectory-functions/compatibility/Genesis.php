@@ -150,7 +150,7 @@ function geodir_set_body_scs($classes)
 
 }
 
-add_action('genesis_after_header', 'gd_genesis_compat_add_top_section_back', 5);
+add_action('genesis_after_header', 'gd_genesis_compat_add_top_section_back', 11);
 /**
  * Adds top section based on current page type.
  *
