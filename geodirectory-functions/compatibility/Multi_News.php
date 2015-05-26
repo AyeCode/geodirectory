@@ -1,7 +1,19 @@
 <?php
-
-
+/**
+ * Multi news theme compatibility functions.
+ *
+ * This file lets the GeoDirectory Plugin use the Multi News theme HTML wrappers to fit and work perfectly.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 add_action('after_setup_theme', 'multi_news_action_calls', 11);
+/**
+ * Action calls for multi news theme compatibility.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function multi_news_action_calls()
 {
     // REMOVE BREADCRUMB
@@ -36,6 +48,13 @@ function multi_news_action_calls()
     add_action('geodir_wrapper_content_close', 'gd_mn_extra_wrap_end', 3, 1);
 }
 
+/**
+ * Multi News extra content wrap.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $page The page type.
+ */
 function gd_mn_extra_wrap($page)
 {
     if ($page == 'add-listing-page') {
@@ -47,6 +66,13 @@ function gd_mn_extra_wrap($page)
 }
 
 
+/**
+ * Multi News extra content wrap end.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $page The page type.
+ */
 function gd_mn_extra_wrap_end($page)
 {
     if ($page == 'add-listing-page') {
@@ -56,6 +82,12 @@ function gd_mn_extra_wrap_end($page)
 }
 
 
+/**
+ * Multi News replace breadcrumb.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function gd_mn_replace_breadcrums()
 {
 
@@ -78,6 +110,13 @@ function gd_mn_replace_breadcrums()
 }
 
 
+/**
+ * Returns breadcrumb links.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @return string Breadcrumb links.
+ */
 function gd_get_breadcrum_links()
 {
     ob_start();
@@ -91,6 +130,14 @@ function gd_get_breadcrum_links()
 }
 
 
+/**
+ * breadcrumb plus items.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $items Breadcrumb items array.
+ * @return array Modified breadcrumb items array.
+ */
 function gd_breadcrumbs_plus_items($items)
 {   //print_r($items);exit;
     $bits = array();
@@ -120,6 +167,16 @@ function gd_breadcrumbs_plus_items($items)
 }
 
 
+/**
+ * Add breadcrumb plus items.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $items Breadcrumb items array.
+ * @param array $bits Explain this. @todo.
+ * @param string $last Last item.
+ * @return array Modified breadcrumb items array.
+ */
 function gd_breadcrumbs_plus_items_add($items, $bits, $last)
 {
     //$pieces = explode("</div>", $items[0]);

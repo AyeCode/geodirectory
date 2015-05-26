@@ -1,6 +1,19 @@
 <?php
-
+/**
+ * Jupiter theme compatibility functions.
+ *
+ * This file lets the GeoDirectory Plugin use the Jupiter theme HTML wrappers to fit and work perfectly.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 add_action('after_setup_theme', 'jupiter_action_calls', 11);
+/**
+ * Action calls for jupiter theme compatibility.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function jupiter_action_calls()
 {
     // REMOVE BREADCRUMB
@@ -30,6 +43,12 @@ function jupiter_action_calls()
 }
 
 
+/**
+ * Adds breadcrumb based on current page type.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function gd_mk_theme_breadcrumbs()
 {
 
@@ -48,6 +67,12 @@ function gd_mk_theme_breadcrumbs()
     }
 }
 
+/**
+ * Adds page title based on current page type.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function gd_mk_page_title()
 {
     global $wp;
@@ -84,6 +109,12 @@ function gd_mk_page_title()
 }
 
 
+/**
+ * Jupiter breadcrumb compatibility.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function jupiter_geodir_breadcrumb()
 {
     $item = '';
@@ -131,6 +162,14 @@ function jupiter_geodir_breadcrumb()
 
 }
 
+/**
+ * Add page title and subtitle.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $title Page title.
+ * @param string $subtitle Page subtitle.
+ */
 function jupiter_geodir_page_title($title = '', $subtitle = '')
 {
     global $mk_options;

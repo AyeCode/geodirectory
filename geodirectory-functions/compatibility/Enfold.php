@@ -1,6 +1,19 @@
 <?php
-// call
+/**
+ * Enfold theme compatibility functions.
+ *
+ * This file lets the GeoDirectory Plugin use the Enfold theme HTML wrappers to fit and work perfectly.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 add_action('after_setup_theme', 'enfold_action_calls', 11);
+/**
+ * Action calls for enfold theme compatibility.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function enfold_action_calls()
 {
 
@@ -86,6 +99,12 @@ function enfold_action_calls()
 } // Close enfold_action_calls
 
 
+/**
+ * Adds top section based on current page type.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function gd_enfold_compat_add_top_section_back()
 {
 
@@ -108,12 +127,26 @@ function gd_enfold_compat_add_top_section_back()
 /****************************************************************************************/
 
 
+/**
+ * Add body class for styling purposes.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $classes Class array.
+ * @return array Modified class array.
+ */
 function wpgeo_enfold_body_class($classes)
 {
     $classes[] = 'wpgeo-enfold';
     return $classes;
 }
 
+/**
+ * Allow payment urls.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_allow_payment_urls_enfold()
 {
     global $builder;
@@ -121,14 +154,26 @@ function geodir_allow_payment_urls_enfold()
 }
 
 
-// WRAPPER OPEN FUNCTIONS
+/**
+ * wrapper open functions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function enfold_action_wrapper_open()
 {
     echo "<div class='container_wrap container_wrap_first main_color " . avia_layout_class('main', false) . "'>";
     echo "<div class='container template-blog '>";
 }
 
-// PAGE TITLE & BREADCRUMB FUNCTIONS
+/**
+ * page title & breadcrumb functions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $page The page type.
+ * @param string $class The class of the HTML element.
+ */
 function enfold_detail_title($page, $class)
 {
     //echo '###'.$page;
@@ -166,6 +211,15 @@ function enfold_detail_title($page, $class)
 
 }
 
+/**
+ * Enfold breadcrumb compatibility.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $trail Breadcrumb array.
+ * @param array $args Breadcrumb args.
+ * @return array Breadcrumb array.
+ */
 function enfold_detail_breadcrum($trail, $args)
 {
     ob_start(); // Start buffering;
@@ -187,7 +241,15 @@ function enfold_detail_breadcrum($trail, $args)
 }
 
 
-// WRAPPER CONTENT OPEN FUNCTIONS
+/**
+ * wrapper content open functions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $type Page type.
+ * @param string $id The id of the HTML element.
+ * @param string $class The class of the HTML element.
+ */
 function enfold_action_wrapper_content_open($type = '', $id = '', $class = '')
 {
     if (is_home() && isset($_GET['geodir_signup'])) {
@@ -199,7 +261,16 @@ function enfold_action_wrapper_content_open($type = '', $id = '', $class = '')
 }
 
 
-// SIDEBAR RIGHT OPEN FUNCTIONS
+/**
+ * sidebar right open functions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $type Page type.
+ * @param string $id The id of the HTML element.
+ * @param string $class The class of the HTML element.
+ * @param string $itemtype HTML itemtype 'http://schema.org/WPSideBar'.
+ */
 function enfold_action_sidebar_right_open($type = '', $id = '', $class = '', $itemtype = '')
 {
     $sidebar_smartphone = avia_get_option('smartphones_sidebar') == 'smartphones_sidebar' ? 'smartphones_sidebar_active' : "";
@@ -207,7 +278,16 @@ function enfold_action_sidebar_right_open($type = '', $id = '', $class = '', $it
     echo "<div class='inner_sidebar extralight-border'>";
 }
 
-// SIDEBAR LEFT OPEN FUNCTIONS
+/**
+ * Sidebar left open functions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $type Page type.
+ * @param string $id The id of the HTML element.
+ * @param string $class The class of the HTML element.
+ * @param string $itemtype HTML itemtype 'http://schema.org/WPSideBar'.
+ */
 function enfold_action_sidebar_left_open($type = '', $id = '', $class = '', $itemtype = '')
 {
     $sidebar_smartphone = avia_get_option('smartphones_sidebar') == 'smartphones_sidebar' ? 'smartphones_sidebar_active' : "";
@@ -216,7 +296,14 @@ function enfold_action_sidebar_left_open($type = '', $id = '', $class = '', $ite
 }
 
 
-// DISABLE MAPS API FUNCTION
+/**
+ * Disable maps api.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param bool $call Old value.
+ * @return bool New value.
+ */
 function gd_enfold_remove_maps_api($call)
 {
     return false;

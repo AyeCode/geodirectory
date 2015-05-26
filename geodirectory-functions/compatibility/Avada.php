@@ -1,7 +1,21 @@
 <?php
-
-// STRIP THE GD BREADCRUMB WRAPPERS
+/**
+ * Avada theme compatibility functions.
+ *
+ * This file lets the GeoDirectory Plugin use the Avada theme HTML wrappers to fit and work perfectly.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 add_filter('geodir_breadcrumb', 'gd_strip_breadcrumb_wrappers');
+/**
+ * strips the gd breadcrumb wrappers.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $breadcrumb Old breadcrumb HTML.
+ * @return string Modified breadcrumb HTML.
+ */
 function gd_strip_breadcrumb_wrappers($breadcrumb)
 {
     $breadcrumb = str_replace(array("<li>","</li>"), "", $breadcrumb);
@@ -10,17 +24,29 @@ function gd_strip_breadcrumb_wrappers($breadcrumb)
     return $breadcrumb;
 }
 
-// CHANGE THE GD BREADCRUMB SEPARATOR
 add_filter('geodir_breadcrumb_separator', 'gd_change_breadcrumb_separator');
+/**
+ * change the gd breadcrumb separator.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $separator The breadcrumb separator HTML.
+ * @return string Modified breadcrumb separator HTML.
+ */
 function gd_change_breadcrumb_separator($separator)
 {
     $separator = ' / ';
     return $separator;
 }
 
-// NEW TITLE BAR FUNCTIONS FOR GD PAGES
-
 add_action('avada_override_current_page_title_bar','gd_avada_current_page_title_bar_change');
+/**
+ * new title bar functions for gd pages.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $c_pageID Current page ID.
+ */
 function gd_avada_current_page_title_bar_change($c_pageID)
 {
     if (geodir_is_geodir_page()) {
@@ -31,6 +57,12 @@ function gd_avada_current_page_title_bar_change($c_pageID)
 
 }
 
+/**
+ * Avada current page title bar.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function gd_avada_current_page_title_bar()
 {
     ob_start();
@@ -75,6 +107,12 @@ function gd_avada_current_page_title_bar()
     }
 }
 
+/**
+ * Action calls for avada theme compatibility.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function gd_compat_php_avada()
 {
     // change widget wrappers
@@ -109,6 +147,12 @@ function gd_compat_php_avada()
 }
 
 add_action('avada_before_main', 'gd_compat_add_top_section_back', 10);
+/**
+ * Adds top section based on current page type.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function gd_compat_add_top_section_back()
 {
 
@@ -128,8 +172,15 @@ function gd_compat_add_top_section_back()
 }
 
 
-// Add body class for styling purposes
 add_filter('body_class', 'gd_compat_body_class');
+/**
+ * Add body class for styling purposes.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $classes Class array.
+ * @return array Modified class array.
+ */
 function gd_compat_body_class($classes)
 {
     if (geodir_is_geodir_page()) {
@@ -141,17 +192,41 @@ function gd_compat_body_class($classes)
 }
 
 
+/**
+ * Avada before widget compatibility HTML.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $var Not being used.
+ * @return string HTML.
+ */
 function geodir_before_widget_compat($var)
 {
     return '<div id="%1$s" class="geodir-widget %2$s">';
 }
 
+/**
+ * Avada after widget compatibility HTML.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $var Not being used.
+ * @return string HTML.
+ */
 function geodir_after_widget_compat($var)
 {
     return '</div>';
 }
 
 add_filter('geodir_search_form_class', 'geodir_search_form_class_avada');
+/**
+ * Avada search form class.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $class Class string.
+ * @return string Appended class string.
+ */
 function geodir_search_form_class_avada($class)
 {
     $class .= ' search';
