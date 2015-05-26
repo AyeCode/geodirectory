@@ -3,6 +3,7 @@ Send Enquiry & send to friend options removed from listings page - CHANGED
 Add listing form upload image tool should not upload non-image files - FIXED
 Added wp_filesystem checks for systems having problems with import/export - ADDED
 Genesis theme update shows menu below top widget area - FIXED
+Added filter to be able to stop add listing address from changing when moving map pin - ADDED
 
 v1.4.7
 Search not working for empty keyword search - FIXED
