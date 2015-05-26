@@ -11,6 +11,8 @@
  *
  * This is used to run GeoDirectory specific functions via ajax.
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @return string The GeoDirectory ajax URL.
  */
 function geodir_get_ajax_url()
@@ -211,6 +213,8 @@ add_action('wp_footer', 'geodir_add_sharelocation_scripts');
 /**
  * Save and update GeoDirectory navigation settings per theme.
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @param string $newname The theme name.
  * @ignore
  */
@@ -885,6 +889,12 @@ function geodir_store_sidebars()
 }
 
 add_action('after_switch_theme', 'geodir_restore_sidebars');
+/**
+ * Restore sidebars.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_restore_sidebars()
 {
     global $sidebars_widgets;
@@ -918,6 +928,12 @@ function geodir_restore_sidebars()
 }
 
 add_action('geodir_after_listing_post_gridview', 'geodir_after_listing_post_gridview');
+/**
+ * Set gridview columns value.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_after_listing_post_gridview()
 {
     global $gridview_columns;
@@ -938,6 +954,16 @@ function geodir_script_loader_src($url)
 }*/
 
 add_filter('clean_url', 'so_handle_038', 99, 3);
+/**
+ * Clean url.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $url Url.
+ * @param string $original_url Original url.
+ * @param string $_context Context.
+ * @return string Modified url.
+ */
 function so_handle_038($url, $original_url, $_context)
 {
     if (strstr($url, "maps.google.com/maps/api/js") !== false) {
@@ -949,6 +975,13 @@ function so_handle_038($url, $original_url, $_context)
 
 
 add_action('geodir_after_main_form_fields', 'geodir_after_main_form_fields', 1);
+/**
+ * Add html after main form fields.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $post The current post object.
+ */
 function geodir_after_main_form_fields()
 {
 
@@ -987,6 +1020,21 @@ function geodir_after_main_form_fields()
 
 add_filter('geodir_detail_page_tab_is_display', 'geodir_detail_page_tab_is_display', 0, 2);
 
+/**
+ * Check whether custom field should be displayed or not, on the details page tab.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $post The current post object.
+ * @global object $post_images An array of post image objects of current post images if exist.
+ * @global string $video The video embed content.
+ * @global string $special_offers Special offers content.
+ * @global string $related_listing Related listing html.
+ * @global string $geodir_post_detail_fields Detail field html.
+ * @param bool $is_display Old display value.
+ * @param string $tab Tab type.
+ * @return bool New display value. If display returns true.
+ */
 function geodir_detail_page_tab_is_display($is_display, $tab)
 {
 
@@ -1015,13 +1063,19 @@ function geodir_detail_page_tab_is_display($is_display, $tab)
 }
 
 
-/*======================================*/
-/*	Add an action to show a message on core plugin row for deactivation. */
-/*=======================================*/
 global $plugin_file_name;
 add_action('after_plugin_row_' . $plugin_file_name, 'geodir_after_core_plugin_row', 3, 3);
 
 
+/**
+ * Add an action to show a message on core plugin row for deactivation.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $plugin_file Plugin file path.
+ * @param array $plugin_data Plugin data.
+ * @param string $status Plugin status.
+ */
 function geodir_after_core_plugin_row($plugin_file, $plugin_data, $status)
 {
     //echo $plugin_file . " " .  $plugin_data . " " . $status ;
@@ -1035,11 +1089,17 @@ function geodir_after_core_plugin_row($plugin_file, $plugin_data, $status)
 }
 
 
-/* ----------- Geodirectory updated custom field table(add field and change show in sidebar value in db) */
-
 add_action('wp', 'geodir_changes_in_custom_fields_table');
 add_action('wp_admin', 'geodir_changes_in_custom_fields_table');
 
+/**
+ * Geodirectory updated custom field table(add field and change show in sidebar value in db).
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ */
 function geodir_changes_in_custom_fields_table() {
     global $wpdb, $plugin_prefix;
 	
@@ -1124,6 +1184,15 @@ function geodir_changes_in_custom_fields_table() {
 
 
 add_filter('geodir_location_slug_check', 'geodir_location_slug_check');
+/**
+ * Check location slug.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @param string $slug Term slug.
+ * @return string Modified term slug.
+ */
 function geodir_location_slug_check($slug)
 {
 
@@ -1153,6 +1222,17 @@ add_action('edited_term', 'geodir_update_term_slug', '1', 3);
 add_action('create_term', 'geodir_update_term_slug', '1', 3);
 
 
+/**
+ * Update term slug.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @param int $term_id Term ID.
+ * @param int $tt_id term Taxonomy ID.
+ * @param string $taxonomy Taxonomy slug.
+ */
 function geodir_update_term_slug($term_id, $tt_id, $taxonomy)
 {
 
@@ -1166,6 +1246,7 @@ function geodir_update_term_slug($term_id, $tt_id, $taxonomy)
      * Filter if a term slug exists.
      *
      * @since 1.0.0
+     * @package GeoDirectory
      * @param bool $bool Default: false.
      * @param string $slug The term slug.
      * @param int $term_id The term ID.
@@ -1196,6 +1277,17 @@ function geodir_update_term_slug($term_id, $tt_id, $taxonomy)
 
 
 add_filter('geodir_term_slug_is_exists', 'geodir_term_slug_is_exists', 0, 3); //in core plugin
+/**
+ * Check whether a term slug exists or not.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @param bool $slug_exists Default: false.
+ * @param string $slug Term slug.
+ * @param int $term_id Term ID.
+ * @return bool true when exists. false when not exists.
+ */
 function geodir_term_slug_is_exists($slug_exists, $slug, $term_id)
 {
 
@@ -1218,6 +1310,16 @@ function geodir_term_slug_is_exists($slug_exists, $slug, $term_id)
 
 
 add_filter('wp_title', 'geodir_custom_page_title', 100, 2);
+/**
+ * Set custom page title.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @glabal object $wp Wordpress object.
+ * @param string $title Old title.
+ * @param string $sep Title separator.
+ * @return string Modified title.
+ */
 function geodir_custom_page_title($title = '', $sep = '')
 {
     global $wp;
@@ -1227,6 +1329,7 @@ function geodir_custom_page_title($title = '', $sep = '')
          * Filter the pae title separator.
          *
          * @since 1.0.0
+         * @package GeoDirectory
          * @param string $sep The separator, default: `|`.
          */
         $sep = apply_filters('geodir_page_title_separator', '|');
@@ -1262,10 +1365,14 @@ function geodir_custom_page_title($title = '', $sep = '')
 }
 
 
-/* --- set attachments for all geodir posts --- */
-
 //add_action('init', 'geodir_set_post_attachment'); // we need to make a tool somwhere to run this function maybe via ajax or something in batch form, it is crashing servers with lots of listings
 
+/**
+ * set attachments for all geodir posts.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_set_post_attachment()
 {
 
@@ -1303,6 +1410,12 @@ function geodir_set_post_attachment()
 /*   --------- geodir remove url seperator ------- */
 
 add_action('init', 'geodir_remove_url_seperator');
+/**
+ * Remove url separator.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_remove_url_seperator()
 {
 
@@ -1324,6 +1437,14 @@ function geodir_remove_url_seperator()
 
 add_filter('geodir_permalink_settings', 'geodir_remove_url_seperator_form_permalink_settings', 0, 1);
 
+/**
+ * Remove url separator from permalink settings.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $permalink_arr The permalink array.
+ * @return array Modified permalink array.
+ */
 function geodir_remove_url_seperator_form_permalink_settings($permalink_arr)
 {
 
@@ -1341,6 +1462,15 @@ function geodir_remove_url_seperator_form_permalink_settings($permalink_arr)
 if (!is_admin()) {
     add_filter('posts_results', 'geodir_set_status_draft_to_publish_for_own_post');
 }
+/**
+ * Set status from draft to publish.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @glabal object $wp Wordpress object.
+ * @param object $post Post object.
+ * @return object Modified post object.
+ */
 function geodir_set_status_draft_to_publish_for_own_post($post)
 {
     global $wp;
@@ -1354,9 +1484,16 @@ function geodir_set_status_draft_to_publish_for_own_post($post)
 }
 
 
-/* ----- Detail Page Tab Headings Change ---- */
-
 add_filter('geodir_detail_page_tab_list_extend', 'geodir_detail_page_tab_headings_change');
+/**
+ * Detail Page Tab Headings Change.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @param array $tabs_arr Tabs array.
+ * @return array Modified tabs array.
+ */
 function geodir_detail_page_tab_headings_change($tabs_arr)
 {
 
@@ -1391,6 +1528,12 @@ function geodir_detail_page_tab_headings_change($tabs_arr)
 }
 
 add_action('init', 'geodir_remove_template_redirect_actions', 100);
+/**
+ * Remove template redirect options.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_remove_template_redirect_actions()
 {
     if (isset($_REQUEST['geodir_signup'])) {
@@ -1401,8 +1544,17 @@ function geodir_remove_template_redirect_actions()
 
 add_filter('wpseo_title', 'geodir_post_type_archive_title', 11, 1);
 
-/// add loction variables in geodirectory title parameter 
 add_filter('post_type_archive_title', 'geodir_post_type_archive_title', 10, 1);
+/**
+ * add location variables in geodirectory title parameter.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @glabal object $wp Wordpress object.
+ * @param string $title The title parameter.
+ * @return string Modified post title.
+ */
 function geodir_post_type_archive_title($title)
 {
     global $wp_query, $wp, $wpdb;
@@ -1517,6 +1669,16 @@ function geodir_post_type_archive_title($title)
 }
 
 add_filter('single_post_title', 'geodir_single_post_title', 10, 2);
+/**
+ * add location variables in geodirectory title parameter for single post.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @glabal object $wp Wordpress object.
+ * @param string $title The title parameter.
+ * @param object $post Post object.
+ * @return string Modified post title.
+ */
 function geodir_single_post_title($title, $post)
 {
     global $wp;
@@ -1575,6 +1737,16 @@ function geodir_single_post_title($title, $post)
 
 add_action('delete_attachment', 'geodirectory_before_featured_image_delete');
 
+/**
+ * temp function to delete media post.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @param int $attachment_id Attachment ID.
+ * @return bool|void Returns false on failure.
+ */
 function geodirectory_before_featured_image_delete($attachment_id)
 {
 
@@ -1629,6 +1801,14 @@ function geodirectory_before_featured_image_delete($attachment_id)
 
 //add_action('wp', 'geodir_temp_set_post_attachment'); //WTF 
 
+/**
+ * temp function to set post attachment.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ */
 function geodir_temp_set_post_attachment()
 {
 
@@ -1660,7 +1840,7 @@ function geodir_temp_set_post_attachment()
                         if ($file_info['dirname'] != '.' && $file_info['dirname'] != '..')
                             $sub_dir = stripslashes_deep($file_info['dirname']);
 
-                        $uploads = wp_upload_dir(trim($sub_dir, '/')); // Array of key => value pairs	
+                        $uploads = wp_upload_dir(trim($sub_dir, '/')); // Array of key => value pairs
                         $uploads_baseurl = $uploads['baseurl'];
                         $uploads_path = $uploads['basedir'];
 
@@ -1714,6 +1894,12 @@ function geodir_temp_set_post_attachment()
 
 add_action('init', 'geodir_default_rating_star_icon');
 
+/**
+ * Update default rating star icon.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_default_rating_star_icon()
 {
 
@@ -1725,6 +1911,16 @@ function geodir_default_rating_star_icon()
 
 
 /* ------- GET CURRENT USER POST LISTING -------*/
+/**
+ * Get user's post listing count.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global object $current_user Current user object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @return array User listing count for each post type.
+ */
 function geodir_user_post_listing_count()
 {
     global $wpdb, $plugin_prefix, $current_user;
@@ -1751,6 +1947,16 @@ function geodir_user_post_listing_count()
 
 
 /* ------- GET CURRENT USER FAVOURITE LISTING -------*/
+/**
+ * Get user's favorite listing count.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global object $current_user Current user object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @return array User listing count for each post type.
+ */
 function geodir_user_favourite_listing_count()
 {
     global $wpdb, $plugin_prefix, $current_user;
@@ -1779,6 +1985,15 @@ function geodir_user_favourite_listing_count()
 }
 
 add_filter('geodir_detail_page_tab_list_extend', 'geodir_detail_page_custom_field_tab');
+/**
+ * Details page tab custom fields.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $post The current post object.
+ * @param array $tabs_arr Tabs array.
+ * @return array Modified tabs array.
+ */
 function geodir_detail_page_custom_field_tab($tabs_arr)
 {
     global $post;
@@ -2325,6 +2540,14 @@ add_action('post_updated', 'geodir_function_post_updated', 16, 3);
 
 add_action('geodir_after_edit_post_link_on_listing', 'geodir_add_post_status_author_page', 11);
 
+/**
+ * Adds post status on author page when the author is current user.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global object $post The current post object.
+ */
 function geodir_add_post_status_author_page()
 {
     global $wpdb, $post;
@@ -2362,8 +2585,13 @@ function geodir_add_post_status_author_page()
 
 }
 
-// remove rating stars fields if disabled
 add_action('init', 'geodir_init_no_rating', 100);
+/**
+ * remove rating stars fields if disabled.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_init_no_rating()
 {
     if (get_option('geodir_disable_rating')) {
@@ -2383,6 +2611,13 @@ function geodir_init_no_rating()
     }
 }
 
+/**
+ * Modify rating fields when rating disabled.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $post The current post object.
+ */
 function geodir_no_rating_rating_fields()
 {
     global $post;
@@ -2401,6 +2636,15 @@ function geodir_no_rating_rating_fields()
     }
 }
 
+/**
+ * Returns normal comment text when rating disabled.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $content Comment text.
+ * @param string|object $comment Comment object.
+ * @return string Comment HTML.
+ */
 function geodir_no_rating_comment_text($content, $comment = '')
 {
     if (!is_admin()) {
@@ -2410,11 +2654,28 @@ function geodir_no_rating_comment_text($content, $comment = '')
     }
 }
 
+/**
+ * Remove rating HTML when rating disabled.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $content HTML content.
+ * @return null
+ */
 function geodir_no_rating_review_rating_html($content = '')
 {
     return NULL;
 }
 
+/**
+ * Skip overall rating sort option when rating disabled.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $options Sort options array.
+ * @param string $post_type The post type.
+ * @return array Modified sort options array.
+ */
 function geodir_no_rating_get_sort_options($options, $post_type = '')
 {
     $new_options = array();
@@ -2432,8 +2693,15 @@ function geodir_no_rating_get_sort_options($options, $post_type = '')
     return $options;
 }
 
-// skip rating stars validation if rating stars disabled
 add_filter('geodir_all_js_msg', 'geodir_all_js_msg_no_rating', 100);
+/**
+ * skip rating stars validation if rating stars disabled.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $msg Message array.
+ * @return array Modified message array.
+ */
 function geodir_all_js_msg_no_rating($msg = array())
 {
     if (get_option('geodir_disable_rating')) {
@@ -2443,8 +2711,15 @@ function geodir_all_js_msg_no_rating($msg = array())
     return $msg;
 }
 
-// add body class when rating stars if disabled
 add_filter('body_class', 'geodir_body_class_no_rating', 100);
+/**
+ * add body class when rating stars if disabled.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $classes The class array of the HTML element.
+ * @return array Modified class array.
+ */
 function geodir_body_class_no_rating($classes = array())
 {
     if (get_option('geodir_disable_rating')) {
@@ -2455,6 +2730,14 @@ function geodir_body_class_no_rating($classes = array())
 }
 
 add_filter('admin_body_class', 'geodir_admin_body_class_no_rating', 100);
+/**
+ * Adds class to disable rating.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $class The class of the HTML element.
+ * @return string Modified class string.
+ */
 function geodir_admin_body_class_no_rating($class = '')
 {
     if (get_option('geodir_disable_rating')) {
@@ -2464,9 +2747,14 @@ function geodir_admin_body_class_no_rating($class = '')
     return $class;
 }
 
-// hide rating stars if disabled
 add_action('wp_head', 'geodir_wp_head_no_rating');
 add_action('admin_head', 'geodir_wp_head_no_rating');
+/**
+ * hide rating stars if disabled.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_wp_head_no_rating()
 {
     if (get_option('geodir_disable_rating')) {
