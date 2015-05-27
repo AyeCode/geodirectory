@@ -1341,6 +1341,29 @@ function geodir_custom_page_title($title = '', $sep = '')
         $title = $sitename . ' ' . $sep . ' ' . $site_description;
     }
 
+    if (is_search() && isset($_REQUEST['geodir_search'])) {
+        $all_postypes = geodir_get_posttypes();
+        $keyword = esc_sql(strip_tags(get_query_var('s')));
+        $stype = esc_sql(strip_tags($_REQUEST['stype']));
+        $snear = esc_sql(strip_tags($_REQUEST['snear']));
+
+        if ($stype && in_array($stype, $all_postypes)) {
+            $title = $keyword;
+
+            if (!empty($stype)) {
+                $posttype_obj = get_post_type_object($stype);
+                $title = $title . ' ' . $sep . ' ' . ucfirst($posttype_obj->labels->name);
+            }
+
+            if (!empty($snear)) {
+                $title = $title . ' ' . $sep . ' ' . __('Near', GEODIRECTORY_TEXTDOMAIN) . ' ' . $snear;
+            }
+
+            $sitename = get_bloginfo('name');
+            $title = $title . ' ' . $sep . ' ' . __('Search Results', GEODIRECTORY_TEXTDOMAIN) . ' ' . $sep . ' ' . $sitename;
+
+        }
+     }
     //print_r($wp->query_vars) ;
     if (isset($wp->query_vars['pagename']) && $wp->query_vars['pagename'] != '')
         $page = get_page_by_path($wp->query_vars['pagename']);
@@ -2764,3 +2787,38 @@ function geodir_wp_head_no_rating()
 }
 
 add_filter('geodir_load_db_language', 'geodir_load_custom_field_translation');
+
+/**
+ * Meta description for search page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
+function geodir_search_meta_desc($html) {
+    if (is_search() && isset($_REQUEST['geodir_search'])) {
+        $all_postypes = geodir_get_posttypes();
+        $keyword = esc_sql(strip_tags(get_query_var('s')));
+        $stype = esc_sql(strip_tags($_REQUEST['stype']));
+        $snear = esc_sql(strip_tags($_REQUEST['snear']));
+
+        if ($stype && in_array($stype, $all_postypes)) {
+            $desc = __('Search results for', GEODIRECTORY_TEXTDOMAIN);
+
+            if(!empty($keyword)) {
+                $desc = $desc . ' ' . $keyword;
+            }
+
+            if(!empty($stype)) {
+                $posttype_obj = get_post_type_object( $stype );
+                $desc = $desc . ' ' . __('in', GEODIRECTORY_TEXTDOMAIN) . ' ' . $posttype_obj->labels->name;
+            }
+
+            if(!empty($snear)) {
+                $desc = $desc . ' ' . __('near', GEODIRECTORY_TEXTDOMAIN) . ' ' . $snear;
+            }
+            $html = '<meta name="description" content="' . $desc . '" />';
+        }
+    }
+    return $html;
+}
+add_filter('geodir_seo_meta_description', 'geodir_search_meta_desc', 10, 1);

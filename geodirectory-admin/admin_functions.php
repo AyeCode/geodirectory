@@ -1782,7 +1782,7 @@ if (!function_exists('geodir_import_data')) {
      * @package GeoDirectory
      * @global object $wpdb WordPress Database object.
      * @global string $plugin_prefix Geodirectory plugin table prefix.
-     * @global object $current_user Current User object.
+     * @global object $current_user Current user object.
      */
     function geodir_import_data()
     {
@@ -4278,7 +4278,7 @@ function geodir_filesystem_notice()
  *
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
- * @global object $current_user Worepress current user.
+ * @global object $current_user Current user object.
  * @global null|object $wp_filesystem WP_Filesystem object.
  * @return string Json data.
  */

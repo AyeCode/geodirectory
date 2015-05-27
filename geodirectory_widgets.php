@@ -278,6 +278,7 @@ if (!function_exists('register_geodir_widgets')) {
                  * Filter the widget title text.
                  *
                  * @since 1.0.0
+                 * @global object $current_user Current user object.
                  * @param string $title The widget title text.
                  */
                 $title = empty($instance['title']) ? '&nbsp;' : apply_filters('widget_title', $instance['title']);
