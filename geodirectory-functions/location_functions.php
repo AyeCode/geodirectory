@@ -172,7 +172,7 @@ function geodir_get_country_dl($post_country = '', $prefix = '')
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
- * @global string $plugin_prefix WordPress plugin prefix.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
  */
 function geodir_location_form_submit()
 {

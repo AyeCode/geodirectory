@@ -266,6 +266,11 @@ function set_listing_request()
 
 
 /* ====== Place Listing Geodir loop filters ===== */
+/**
+ *
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @param $query
+ */
 function geodir_listing_loop_filter($query)
 {
     global $wp_query, $geodir_post_type, $table, $plugin_prefix, $table, $term;
@@ -321,9 +326,13 @@ function geodir_listing_loop_filter($query)
 }
 
 
-/*
-* Listing fields filter *
-*/
+/**
+ * Listing fields filter.
+ *
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @return string
+ */
 function geodir_posts_fields($fields)
 {
 
@@ -379,9 +388,13 @@ function geodir_posts_fields($fields)
 }
 
 
-/*
-* Listing tables join filter *
-*/
+/**
+ * Listing tables join filter.
+ *
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @return string
+ */
 function geodir_posts_join($join)
 {
     global $wpdb, $geodir_post_type, $table, $table_prefix, $plugin_prefix;
@@ -407,9 +420,13 @@ function geodir_posts_join($join)
 }
 
 
-/*
-* Listing orderby filters *
-*/
+/**
+ * Listing orderby filters.
+ *
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @return string
+ */
 
 function geodir_posts_orderby($orderby)
 {
@@ -696,10 +713,14 @@ function geodir_default_where($where)
 }
 
 
-/*
-* Listing search filter *
-*/
-
+/**
+ * Listing search filter.
+ *
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @param $where
+ * @return string
+ */
 function searching_filter_where($where)
 {
 

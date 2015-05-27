@@ -1354,6 +1354,9 @@ function geodir_wpml_check_element_id()
 }
 
 /**
+ *
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @param $query_args
  * @return string
  */
@@ -1404,7 +1407,8 @@ function geodir_widget_listings_get_order($query_args)
  *
  * @since 1.0.0
  * @since 1.4.2 New paramater $count_only added
- *
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @param  array $query_args
  * @param  int|bool $count_only If true returns listings count only, otherwise returns array
  * @return mixed
@@ -1492,6 +1496,9 @@ function geodir_get_widget_listings($query_args = array(), $count_only = false)
 }
 
 /**
+ *
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @param $fields
  * @return mixed
  */
@@ -1515,6 +1522,9 @@ function geodir_function_widget_listings_fields($fields)
 }
 
 /**
+ *
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @param $join
  * @return string
  */
@@ -1551,6 +1561,9 @@ function geodir_function_widget_listings_join($join)
 }
 
 /**
+ *
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @param $where
  * @return string
  */
@@ -1603,6 +1616,9 @@ function geodir_function_widget_listings_where($where)
 }
 
 /**
+ *
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @param $orderby
  * @return mixed
  */
@@ -1628,6 +1644,9 @@ function geodir_function_widget_listings_orderby($orderby)
 }
 
 /**
+ *
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @param $limit
  * @return int
  */
@@ -1792,6 +1811,9 @@ add_filter('geodir_googlemap_script_extra', 'geodir_googlemap_script_extra_detai
 
 
 /**
+ *
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @param string $args
  * @param string $instance
  */
@@ -2098,6 +2120,8 @@ function geodir_listing_slider_widget_output($args = '', $instance = '')
 
 
 /**
+ *
+ * @global object $current_user Current user object.
  * @param string $args
  * @param string $instance
  */
@@ -2489,6 +2513,9 @@ function geodir_popular_postview_output($args = '', $instance = '')
 /*  Review count functions
 /*-----------------------------------------------------------------------------------*/
 /**
+ *
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @param $term_id
  * @param $taxonomy
  * @param $post_type

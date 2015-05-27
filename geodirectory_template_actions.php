@@ -1918,6 +1918,7 @@ add_action('geodir_add_listing_form', 'geodir_action_add_listing_form', 10);
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $current_user Current user object.
  */
 function geodir_action_add_listing_form()
 {

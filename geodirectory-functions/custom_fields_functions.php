@@ -171,6 +171,8 @@ if (!function_exists('geodir_custom_field_delete')) {
 	 *
 	 * @since 1.0.0
 	 * @package GeoDirectory
+     * @global object $wpdb WordPress Database object.
+     * @global string $plugin_prefix Geodirectory plugin table prefix.
 	 * @param string $field_id The custom field ID.
 	 * @return int|string If field deleted successfully, returns field id. Otherwise returns 0.
 	 */
@@ -235,6 +237,8 @@ if (!function_exists('geodir_custom_field_save')) {
 	 *
 	 * @since 1.0.0
 	 * @package GeoDirectory
+     * @global object $wpdb WordPress Database object.
+     * @global string $plugin_prefix Geodirectory plugin table prefix.
 	 * @param array $request_field The request field array.
 	 * @param bool $default Not yet implemented.
 	 * @return int|string If field is unique returns inserted row id. Otherwise returns error string.
@@ -2978,6 +2982,9 @@ if (!function_exists('geodir_save_post_file_fields')) {
 	 * @since 1.0.0
 	 * @since 1.4.7 Added `$extra_fields` parameter.
 	 * @package GeoDirectory
+     * @global object $wpdb WordPress Database object.
+     * @global string $plugin_prefix Geodirectory plugin table prefix.
+     * @global object $current_user Current user object.
 	 * @param int $post_id
 	 * @param string $field_id
 	 * @param array $post_image
@@ -3126,6 +3133,7 @@ if (!function_exists('geodir_plupload_action')) {
 	 *
 	 * @since 1.0.0
 	 * @package GeoDirectory
+     * @global object $current_user Current user object.
 	 * @param array $upload Array of upload directory data with keys of 'path','url', 'subdir, 'basedir', and 'error'.
 	 * @return mixed Returns upload directory details as an array.
 	 */
@@ -3178,6 +3186,8 @@ if (!function_exists('geodir_plupload_action')) {
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @param int $post_id The post ID.
  * @return mixed Returns video.
  */
@@ -3202,6 +3212,8 @@ function geodir_get_video($post_id)
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @param int $post_id The post ID.
  * @return mixed Returns special offers.
  */
@@ -3398,6 +3410,8 @@ if (!function_exists('geodir_custom_sort_field_save')) {
 	 *
 	 * @since 1.0.0
 	 * @package GeoDirectory
+     * @global object $wpdb WordPress Database object.
+     * @global string $plugin_prefix Geodirectory plugin table prefix.
 	 * @param array $request_field The request field array.
 	 * @param bool $default Not yet implemented.
 	 * @return int Returns the last affected db table row id.
@@ -3524,6 +3538,8 @@ if (!function_exists('geodir_custom_sort_field_delete')) {
 	 * Delete a custom sort field using field id.
 	 * @since 1.0.0
 	 * @package GeoDirectory
+     * @global object $wpdb WordPress Database object.
+     * @global string $plugin_prefix Geodirectory plugin table prefix.
 	 * @param string $field_id The field ID.
 	 * @return int|string Returns field id when successful deletion, else returns 0.
 	 */

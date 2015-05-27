@@ -21,6 +21,7 @@ Tested up to: 4.2
  * The current version number of GeoDirectory.
  *
  * @since 1.0.0
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
  */
 define("GEODIRECTORY_VERSION", "1.4.7");
 

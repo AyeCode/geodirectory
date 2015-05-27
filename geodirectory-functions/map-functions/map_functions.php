@@ -39,7 +39,7 @@ function geodir_init_map_canvas_array()
  * @since 1.0.0
  * @package GeoDirectory
  * @param null|WP_Post $post Post object.
- * @global wpdb $wpdb wpdb Global variable.
+ * @global object $wpdb WordPress Database object.
  * @global array $map_jason Map data in json format.
  * @global bool $add_post_in_marker_array Displays posts in marker array when the value is true.
  * @global array $geodir_cat_icons Category icons array. syntax: array( 'category name' => 'icon url').
