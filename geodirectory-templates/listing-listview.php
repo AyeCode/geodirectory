@@ -281,6 +281,8 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                                 }
                                 geodir_favourite_html($post->post_author, $post->ID);
 
+                                do_action( 'geodir_listing_after_favorite_html', $post->ID );
+
                                 global $wp_query;
 
                                 $show_pin_point = $wp_query->is_main_query();
@@ -300,9 +302,11 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                                        onclick="openMarker('listing_map_canvas' ,'<?php echo $post->ID; ?>')"
                                        onmouseover="animate_marker('listing_map_canvas' ,'<?php echo $post->ID; ?>')"
                                        onmouseout="stop_marker_animation('listing_map_canvas' ,'<?php echo $post->ID; ?>')"><?php _e('Pinpoint', GEODIRECTORY_TEXTDOMAIN); ?></a>
-                                <?php } ?>
+                                <?php }
 
-                                <?php if ($post->post_author == get_current_user_id()) { ?>
+                                do_action( 'geodir_listing_after_favorite_pinpoint', $post->ID );
+
+                                if ($post->post_author == get_current_user_id()) { ?>
                                     <?php
                                     $addplacelink = get_permalink(geodir_add_listing_page_id());
                                     $editlink = geodir_getlink($addplacelink, array('pid' => $post->ID), false);
