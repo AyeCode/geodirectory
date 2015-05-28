@@ -548,6 +548,14 @@ function geodir_posts_orderby($orderby)
 }
 
 
+/**
+ *
+ * @global object $wpdb WordPress Database object.
+ * @param $orderby
+ * @param $sort_by
+ * @param $table
+ * @return string
+ */
 function geodir_posts_order_by_custom_sort($orderby, $sort_by, $table)
 {
 
@@ -599,6 +607,10 @@ function geodir_posts_order_by_custom_sort($orderby, $sort_by, $table)
 * Listing where filters *
 */
 
+/**
+ *
+ * @global object $wpdb WordPress Database object.
+ */
 function geodir_post_where()
 {
 
@@ -651,6 +663,14 @@ function geodir_preview_post_cap($allcaps, $caps, $args)
 /*
 * Listing edit filter *
 */
+
+
+/**
+ *
+ * @global object $wpdb WordPress Database object.
+ * @param $where
+ * @return string
+ */
 function geodir_edit_listing_where($where)
 {
     global $wpdb;
@@ -663,6 +683,12 @@ function geodir_edit_listing_where($where)
 * Listing location filters *
 */
 
+/**
+ *
+ * @global object $wpdb WordPress Database object.
+ * @param $where
+ * @return mixed
+ */
 function geodir_default_where($where)
 {
     global $wp_query, $wpdb;
@@ -846,6 +872,12 @@ function searching_filter_where($where)
 * Listing author filter *
 */
 
+/**
+ *
+ * @global object $wpdb WordPress Database object.
+ * @param $where
+ * @return string
+ */
 function author_filter_where($where)
 {
 

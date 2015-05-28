@@ -15,6 +15,12 @@ function init_listing_map_script()
 }
 
 /* Create listing json for map script */
+
+/**
+ *
+ * @global object $wpdb WordPress Database object.
+ * @param $post
+ */
 function create_list_jsondata($post)
 {
     global $wpdb, $list_map_json, $add_post_in_marker_array;
@@ -72,6 +78,13 @@ class geodir_map_listingpage extends WP_Widget
     }
 
     // prints the widget
+
+    /**
+     *
+     * @global object $post The current post object.
+     * @param array $args
+     * @param array $instance
+     */
     function widget($args, $instance)
     {
 

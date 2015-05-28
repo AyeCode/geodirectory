@@ -137,6 +137,7 @@ add_action('comment_post', 'geodir_save_rating');
  * @package GeoDirectory
  * @param int $comment The comment ID.
  * @global object $wpdb WordPress Database object.
+ * @global object $post The current post object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @global int $user_ID The current user ID.
  */
@@ -552,6 +553,7 @@ function geodir_get_review_count_by_user_id($user_id = 0)
  * @param int $post_id The post ID.
  * @param int $force_query Optional. Do you want force run the query? Default: 0.
  * @global object $wpdb WordPress Database object.
+ * @global object $post The current post object.
  * @return array|bool|int|mixed|null|string
  */
 function geodir_get_post_rating($post_id = 0, $force_query = 0)
@@ -687,6 +689,7 @@ function geodir_get_commentoverall_number($post_id = 0)
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $post The current post object.
  * @param string $comment_template Old comment template.
  * @return string New comment template.
  */
@@ -713,6 +716,7 @@ if (!function_exists('geodir_comment')) {
      *
      * @since 1.0.0
      * @package GeoDirectory
+     * @global object $post The current post object.
      * @param object $comment The comment object.
      * @param array $args The comment args.
      * @param int $depth Depth of comment.
@@ -784,6 +788,7 @@ if (!function_exists('geodir_fix_comment_count')) {
      *
      * @since 1.0.0
      * @package GeoDirectory
+     * @global object $post The current post object.
      * @param int $count The comment count.
      * @param int $post_id The post ID.
      * @todo $post is unreachable since the function return the count before that variable.

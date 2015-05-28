@@ -7,6 +7,7 @@
  * @link http://docs.wpgeodirectory.com/customizing-geodirectory-templates/
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
  */
 ?>
 <div class="geodir_preview_section">

@@ -366,6 +366,11 @@ class geodir_bestof_widget extends WP_Widget
 register_widget('geodir_bestof_widget');
 
 
+/**
+ *
+ * @global object $post The current post object.
+ * @param $query_args
+ */
 function geodir_bestof_places_by_term($query_args)
 {
 

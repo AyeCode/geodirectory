@@ -134,6 +134,8 @@ function geodir_getlink($url, $params = array(), $use_existing_arguments = false
 
 
 /**
+ *
+ * @global object $wpdb WordPress Database object.
  * @param string $post_type
  * @return string|void
  */
@@ -210,10 +212,15 @@ function geodir_get_weeks()
 }
 
 
-
 /**
- * Check that page is
- **/
+ * Check that page is.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $post The current post object.
+ * @param string $gdpage
+ * @return bool
+ */
 function geodir_is_page($gdpage = '')
 {
 
@@ -664,6 +671,7 @@ function geodir_taxonomy_breadcrumb()
 
 /**
  *
+ * @global object $post The current post object.
  */
 function geodir_breadcrumb()
 {
@@ -904,6 +912,7 @@ add_action("admin_init", "geodir_allow_wpadmin"); // check user is admin
 if (!function_exists('geodir_allow_wpadmin')) {
     /**
      *
+     * @global object $wpdb WordPress Database object.
      */
     function geodir_allow_wpadmin()
     {
@@ -1012,6 +1021,8 @@ function geodir_dummy_folder_exists()
 /* Get the author info*/
 /*--------------------------------------------------------------------*/
 /**
+ *
+ * @global object $wpdb WordPress Database object.
  * @param $aid
  * @return mixed
  */
@@ -1028,6 +1039,8 @@ function  geodir_get_author_info($aid)
 
 if (!function_exists('adminEmail')) {
     /**
+     *
+     * @global object $wpdb WordPress Database object.
      * @param        $page_id
      * @param        $user_id
      * @param        $message_type
@@ -1227,6 +1240,8 @@ function gd_lang_object_ids($ids_array, $type)
 
 // function to add class to body when multi post type is active
 /**
+ *
+ * @global object $wpdb WordPress Database object.
  * @param $classes
  * @return array
  */
@@ -1754,6 +1769,8 @@ function geodir_comments_number($number)
 }
 
 /**
+ *
+ * @global object $wpdb WordPress Database object.
  * @return bool
  */
 function is_page_geodir_home()
@@ -1772,6 +1789,8 @@ function is_page_geodir_home()
 
 
 /**
+ *
+ * @global object $post The current post object.
  * @param $url
  * @return string|void
  */
@@ -1790,6 +1809,8 @@ add_filter('wpseo_canonical', 'geodir_wpseo_homepage_canonical', 10);
 add_filter('aioseop_canonical_url', 'geodir_wpseo_homepage_canonical', 10);
 
 /**
+ *
+ * @global object $post The current post object.
  * @param $extra
  * @return string
  */
@@ -1959,6 +1980,8 @@ function geodir_helper_cat_list_output($terms, $category_limit)
 }
 
 /**
+ *
+ * @global object $post The current post object.
  * @param string $args
  * @param string $instance
  */
@@ -2307,6 +2330,8 @@ function geodir_loginwidget_output($args = '', $instance = '')
 
 
 /**
+ *
+ * @global object $post The current post object.
  * @param string $args
  * @param string $instance
  */

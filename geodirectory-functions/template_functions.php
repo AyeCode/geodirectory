@@ -136,6 +136,7 @@ function geodir_locate_template($template = '')
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $wp_query WordPress Query object.
+ * @global object $post The current post object.
  * @global object $current_user Current user object.
  * @param string $template The template path.
  * @return bool|string The template path.
@@ -314,7 +315,7 @@ function geodir_template_loader($template)
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @global object $post WordPress post object. Not yet implemented.
+ * @global object $post The current post object.
  * @global object $geodirectory Not yet implemented.
  * @param string $slug The template slug.
  * @param null $name The template name.
@@ -357,7 +358,7 @@ function geodir_get_template_part($slug = '', $name = NULL)
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @global object $post WordPress post object.
+ * @global object $post The current post object.
  * @param string $class The old class string.
  * @param string|array $all_postypes The GD post types.
  * @return string The modified post class.

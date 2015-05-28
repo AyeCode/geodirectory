@@ -182,6 +182,7 @@ function geodir_flush_rewrite_rules()
  *
  * @since 1.0.0
  *
+ * @global object $wpdb WordPress Database object.
  * @param  array $rules The compiled array of rewrite rules.
  * @return array Rewrite rules.
  */
