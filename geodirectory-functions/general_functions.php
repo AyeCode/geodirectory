@@ -134,6 +134,8 @@ function geodir_getlink($url, $params = array(), $use_existing_arguments = false
 
 
 /**
+ *
+ * @global object $wpdb WordPress Database object.
  * @param string $post_type
  * @return string|void
  */
@@ -904,6 +906,7 @@ add_action("admin_init", "geodir_allow_wpadmin"); // check user is admin
 if (!function_exists('geodir_allow_wpadmin')) {
     /**
      *
+     * @global object $wpdb WordPress Database object.
      */
     function geodir_allow_wpadmin()
     {
@@ -1012,6 +1015,8 @@ function geodir_dummy_folder_exists()
 /* Get the author info*/
 /*--------------------------------------------------------------------*/
 /**
+ *
+ * @global object $wpdb WordPress Database object.
  * @param $aid
  * @return mixed
  */
@@ -1028,6 +1033,8 @@ function  geodir_get_author_info($aid)
 
 if (!function_exists('adminEmail')) {
     /**
+     *
+     * @global object $wpdb WordPress Database object.
      * @param        $page_id
      * @param        $user_id
      * @param        $message_type
@@ -1227,6 +1234,8 @@ function gd_lang_object_ids($ids_array, $type)
 
 // function to add class to body when multi post type is active
 /**
+ *
+ * @global object $wpdb WordPress Database object.
  * @param $classes
  * @return array
  */
@@ -1754,6 +1763,8 @@ function geodir_comments_number($number)
 }
 
 /**
+ *
+ * @global object $wpdb WordPress Database object.
  * @return bool
  */
 function is_page_geodir_home()

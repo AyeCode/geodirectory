@@ -4,9 +4,8 @@
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
  */
-
-
 global $wpdb, $table_prefix;
 
 if (!function_exists('geodir_column_exist')) {
@@ -15,6 +14,7 @@ if (!function_exists('geodir_column_exist')) {
 	 *
 	 * @since 1.0.0
 	 * @package GeoDirectory
+     * @global object $wpdb WordPress Database object.
 	 * @param string $db The table name.
 	 * @param string $column The column name.
 	 * @return bool If column exists returns true. Otherwise false.
@@ -40,6 +40,7 @@ if (!function_exists('geodir_add_column_if_not_exist')) {
 	 *
 	 * @since 1.0.0
 	 * @package GeoDirectory
+     * @global object $wpdb WordPress Database object.
 	 * @param string $db The table name.
 	 * @param string $column The column name.
 	 * @param string $column_attr The column attributes.
@@ -60,6 +61,7 @@ if (!function_exists('geodir_add_column_if_not_exist')) {
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
  * @param int|string $package_id The package ID.
  * @param string $default Optional. When set to "default" it will display only default fields.
  * @param string $post_type Optional. The wordpress post type.
@@ -143,6 +145,7 @@ if (!function_exists('geodir_custom_field_adminhtml')) {
 	 *
 	 * @since 1.0.0
 	 * @package GeoDirectory
+     * @global object $wpdb WordPress Database object.
 	 * @param string $field_type The form field type.
 	 * @param object|int $result_str The custom field results object or row id.
 	 * @param string $field_ins_upd When set to "submit" displays form.
@@ -1028,6 +1031,7 @@ if (!function_exists('geodir_custom_field_save')) {
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
  * @param array $field_ids List of field ids.
  * @return array|bool Returns field ids when success, else returns false.
  */
@@ -1065,6 +1069,7 @@ function godir_set_field_order($field_ids = array())
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
  * @param int|string $package_id The package ID.
  * @param string $default Optional. When set to "default" it will display only default fields.
  * @param string $post_type Optional. The wordpress post type.
@@ -1945,6 +1950,7 @@ if (!function_exists('geodir_get_field_infoby')) {
 	 *
 	 * @since 1.0.0
 	 * @package GeoDirectory
+     * @global object $wpdb WordPress Database object.
 	 * @param string $key The key you want to look for.
 	 * @param string $value The value of the key you want to look for.
 	 * @param string $geodir_post_type The post type.
@@ -1978,6 +1984,7 @@ if (!function_exists('geodir_show_listing_info')) {
 	 *
 	 * @since 1.0.0
 	 * @package GeoDirectory
+     * @global object $wpdb WordPress Database object.
 	 * @param string $fields_location In which page you are going to place this custom fields?. Ex: listing, detail etc.
 	 * @return string Returns listing info html.
 	 */
@@ -3263,6 +3270,7 @@ add_filter('geodir_add_custom_sort_options', 'geodir_add_custom_sort_options', 0
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
  * @param array $fields The sorting fields array
  * @param string $post_type The post type.
  * @return array Returns the fields.
@@ -3304,6 +3312,7 @@ function geodir_add_custom_sort_options($fields, $post_type)
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
  * @param string $post_type The post type.
  * @return bool|mixed|void Returns sort options when post type available. Otherwise returns false.
  */
@@ -3372,6 +3381,7 @@ function geodir_get_custom_sort_options($post_type = '')
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
  * @param array $field_ids List of field ids.
  * @return array|bool Returns field ids. If no field id, returns false.
  */
@@ -3567,6 +3577,7 @@ if (!function_exists('geodir_custom_sort_field_adminhtml')) {
 	 *
 	 * @since 1.0.0
 	 * @package GeoDirectory
+     * @global object $wpdb WordPress Database object.
 	 * @param string $field_type The form field type.
 	 * @param object|int $result_str The custom field results object or row id.
 	 * @param string $field_ins_upd When set to "submit" displays form.
@@ -3787,6 +3798,7 @@ if (!function_exists('check_field_visibility')) {
 	 *
 	 * @since 1.0.0
 	 * @package GeoDirectory
+     * @global object $wpdb WordPress Database object.
 	 * @param int|string $package_id The package ID.
 	 * @param string $field_name The field name.
 	 * @param string $post_type Optional. The wordpress post type.
@@ -3798,7 +3810,6 @@ if (!function_exists('check_field_visibility')) {
         if (!(isset($geodir_addon_list['geodir_payment_manager']) && $geodir_addon_list['geodir_payment_manager'] == 'yes')) {
             return true;
         }
-        global $wpdb;
         if (!$package_id || !$field_name || !$post_type) {
             return true;
         }

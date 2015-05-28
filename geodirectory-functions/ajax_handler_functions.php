@@ -12,6 +12,7 @@
  *
  * @since 1.3.5
  * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
  */
 function geodir_on_wp_loaded()
 {
@@ -38,6 +39,7 @@ function geodir_on_wp_loaded()
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
  */
 function geodir_on_init()
 {
@@ -89,6 +91,7 @@ function geodir_on_init()
  * @see geodir_get_ajax_url()
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
  * @global object $current_user Current user object.
  * @todo check if nonce is required here and if so add one.
  */

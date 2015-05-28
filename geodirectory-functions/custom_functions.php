@@ -183,8 +183,8 @@ function geodir_post_package_info($package_info, $post = '', $post_type = '')
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param array $request The request array that contains details like name, email, phone etc.
  * @global object $wpdb WordPress Database object.
+ * @param array $request The request array that contains details like name, email, phone etc.
  */
 function geodir_send_inquiry($request)
 {
