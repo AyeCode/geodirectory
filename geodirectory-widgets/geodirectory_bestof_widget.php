@@ -369,6 +369,7 @@ register_widget('geodir_bestof_widget');
 /**
  *
  * @global object $post The current post object.
+ * @global string $gridview_columns_widget The girdview style of the listings for widget.
  * @param $query_args
  */
 function geodir_bestof_places_by_term($query_args)

@@ -1653,6 +1653,7 @@ if (!function_exists('geodir_get_infowindow_html')) {
      *
      * @since 1.0.0
      * @package GeoDirectory
+     * @global array $geodir_addon_list List of active GeoDirectory extensions.
      * @param object $postinfo_obj The post details object.
      * @param string $post_preview Is this a post preview?.
      * @return mixed|string|void

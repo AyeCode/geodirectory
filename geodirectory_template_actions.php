@@ -1766,6 +1766,7 @@ function geodir_action_main_content_close()
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global string $gridview_columns The girdview style of the listings.
  */
 function geodir_action_listings_content_inside()
 {
@@ -1921,6 +1922,7 @@ add_action('geodir_add_listing_form', 'geodir_action_add_listing_form', 10);
  * @package GeoDirectory
  * @global object $current_user Current user object.
  * @global object $post The current post object.
+ * @global object $post_images Image objects of current post if available.
  */
 function geodir_action_add_listing_form()
 {
@@ -3054,6 +3056,11 @@ add_action('geodir_home_content_inside', 'geodir_pagination', 20);
 
 add_action('geodir_location_content', 'geodir_action_home_content', 10);
 add_action('geodir_home_content', 'geodir_action_home_content', 10);
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_action_home_content()
 {
     /** This action is documented in geodirectory_template_actions.php */
@@ -3120,6 +3127,7 @@ add_filter('geodir_listing_page_title', 'geodir_filter_listing_page_title', 1, 1
  * @since 1.0.0
  * @package GeoDirectory
  * @param string $list_title The home page title.
+ * @return string
  */
 function geodir_filter_listing_page_title($list_title)
 {

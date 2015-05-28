@@ -10,7 +10,7 @@
  * Starts session if not started.
  *
  * @since 1.0.0
- *
+ * @package GeoDirectory
  * @global bool $geodir_add_location_url If true it will add location name in url.
  */
 function geodir_session_start()
@@ -25,8 +25,9 @@ function geodir_session_start()
  * Set geodir page variable in WP_Query instance.
  *
  * @since 1.0.0
+ * @package GeoDirectory
  *
- * @param WP_Query The WP_Query instance.
+ * @param WP_Query $query The WP_Query instance.
  * @return WP_Query
  */
 function geodir_modified_query($query)
@@ -53,6 +54,7 @@ function geodir_modified_query($query)
  * @global object $wp_query WordPress Query object.
  * @global object $wpdb WordPress Database object.
  * @global string $geodir_post_type The post type.
+ * @global array $geodir_addon_list List of active GeoDirectory extensions.
  * @global string $table Listing table name.
  * @global float $dist Distance value to be filtered.
  * @global string $mylat Current latitude.
@@ -265,13 +267,17 @@ function set_listing_request()
 }
 
 
-/* ====== Place Listing Geodir loop filters ===== */
 /**
+ * GeoDirectory Listing loop filters.
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wp_query WordPress Query object.
+ * @global string $table Listing table name.
  * @todo $wp_query declared twice - fix it.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
- * @param $query
+ * @param object $query Current query object.
+ * @return object Modified query object.
  */
 function geodir_listing_loop_filter($query)
 {
@@ -331,10 +337,14 @@ function geodir_listing_loop_filter($query)
 /**
  * Listing fields filter.
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wp_query WordPress Query object.
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
- * @return string
+ * @global string $table Listing table name.
+ * @param string $fields Fields query string.
+ * @return string Modified fields query string.
  */
 function geodir_posts_fields($fields)
 {
@@ -394,10 +404,13 @@ function geodir_posts_fields($fields)
 /**
  * Listing tables join filter.
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global string $table_prefix WordPress Database Table prefix.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
- * @return string
+ * @global string $table Listing table name.
+ * @return string Modified join query.
  */
 function geodir_posts_join($join)
 {
@@ -427,12 +440,15 @@ function geodir_posts_join($join)
 /**
  * Listing orderby filters.
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global object $wp_query WordPress Query object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
- * @return string
+ * @global string $table Listing table name.
+ * @param string $orderby The orderby query string.
+ * @return string Modified orderby query.
  */
-
 function geodir_posts_orderby($orderby)
 {
     global $wpdb, $wp_query, $geodir_post_type, $table, $plugin_prefix, $snear, $default_sort;
@@ -554,12 +570,15 @@ function geodir_posts_orderby($orderby)
 
 
 /**
+ * Listing orderby custom sort.
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
- * @param $orderby
- * @param $sort_by
- * @param $table
- * @return string
+ * @param string $orderby The orderby query string.
+ * @param string $sort_by Sortby query string.
+ * @param string $table Listing table name.
+ * @return string Modified orderby query.
  */
 function geodir_posts_order_by_custom_sort($orderby, $sort_by, $table)
 {
@@ -608,13 +627,13 @@ function geodir_posts_order_by_custom_sort($orderby, $sort_by, $table)
     return $orderby;
 }
 
-/*
-* Listing where filters *
-*/
-
 /**
+ * Listing where filter.
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
+ * @global string $table Listing table name.
  */
 function geodir_post_where()
 {
@@ -650,9 +669,16 @@ function geodir_post_where()
     }
 }
 
-/*
-* Preivepost cap *
-*/
+/**
+ * Let subscribers edit their own posts.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $allcaps An array of all the role's capabilities.
+ * @param array $caps Actual capabilities for meta capability.
+ * @param array $args Optional parameters passed to has_cap(), typically object ID.
+ * @return array Modified capabilities array.
+ */
 function geodir_preview_post_cap($allcaps, $caps, $args)
 {
     $user_id = get_current_user_id();
@@ -665,16 +691,14 @@ function geodir_preview_post_cap($allcaps, $caps, $args)
 }
 
 
-/*
-* Listing edit filter *
-*/
-
-
 /**
+ * Edit Listing where filter.
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
- * @param $where
- * @return string
+ * @param string $where The where query string.
+ * @return string Modified where query string.
  */
 function geodir_edit_listing_where($where)
 {
@@ -684,17 +708,16 @@ function geodir_edit_listing_where($where)
 }
 
 
-/*
-* Listing location filters *
-*/
-
 /**
+ * Listing location where filter.
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wp_query WordPress Query object.
  * @global object $wpdb WordPress Database object.
  * @global string $table_prefix WordPress Database Table prefix.
- * @param $where
- * @return mixed
+ * @param string $where The where query string.
+ * @return string Modified where query string.
  */
 function geodir_default_where($where)
 {
@@ -747,12 +770,15 @@ function geodir_default_where($where)
 
 
 /**
- * Listing search filter.
+ * Listing search where filter.
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
- * @param $where
- * @return string
+ * @global string $table Listing table name.
+ * @param string $where The where query string.
+ * @return string Modified where query string.
  */
 function searching_filter_where($where)
 {
@@ -875,15 +901,15 @@ function searching_filter_where($where)
 }
 
 
-/*
-* Listing author filter *
-*/
-
 /**
+ * Where filter for author listing.
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
- * @param $where
- * @return string
+ * @global string $table Listing table name.
+ * @param string $where The where query string.
+ * @return string Modified where query string.
  */
 function author_filter_where($where)
 {
@@ -921,13 +947,15 @@ function author_filter_where($where)
     return $where;
 }
 
-// advanced filter for popular post view widget
-
 /**
+ * advanced join filter for popular post view widget.
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wp_query WordPress Query object.
- * @param $join
- * @return string
+ * @global string $table Listing table name.
+ * @param string $join The join query.
+ * @return string Modified join query.
  */
 function geodir_filter_widget_join($join)
 {
@@ -939,10 +967,14 @@ function geodir_filter_widget_join($join)
 }
 
 /**
+ * advanced where filter for popular post view widget.
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wp_query WordPress Query object.
- * @param $where
- * @return string
+ * @global string $table Listing table name.
+ * @param string $where The where query string.
+ * @return string Modified where query string.
  */
 function geodir_filter_widget_where($where)
 {

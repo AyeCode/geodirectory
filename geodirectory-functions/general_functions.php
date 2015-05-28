@@ -356,6 +356,8 @@ function geodir_set_is_geodir_page($wp)
 }
 
 /**
+ *
+ * @global object $wp WordPress object.
  * @return bool
  */
 function geodir_is_geodir_page()
@@ -2335,6 +2337,8 @@ function geodir_loginwidget_output($args = '', $instance = '')
 /**
  *
  * @global object $post The current post object.
+ * @global string $gridview_columns_widget The girdview style of the listings for widget.
+ * @global bool $geodir_is_widget_listing Is this a widget listing?. Default: false.
  * @param string $args
  * @param string $instance
  */

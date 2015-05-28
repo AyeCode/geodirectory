@@ -12,7 +12,7 @@
  * @since 1.0.0
  * @package GeoDirectory
  * @global string $post_type The post type.
- * @global object $wp The global instance of the WP class.
+ * @global object $wp WordPress object.
  * @global object $post WordPress post object.
  * @param string $template The template type.
  * @return bool|string The template path.

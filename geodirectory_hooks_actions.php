@@ -4,6 +4,8 @@
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global array $geodir_addon_list List of active GeoDirectory extensions.
+ * @global string $plugin_file_name Plugin main file name. 'geodirectory/geodirectory.php'.
  */
 
 /**
@@ -594,7 +596,7 @@ function geodir_detail_page_google_analytics()
  *
  * @global WP_Post|null $post The current post, if available.
  * @global bool $preview True if the current page is add listing preview page. False if not.
- * @global object $post_images An array of post image objects of current post images if exist.
+ * @global object $post_images Image objects of current post if available.
  * @since 1.0.0
  * @package GeoDirectory
  */
@@ -933,6 +935,7 @@ add_action('geodir_after_listing_post_gridview', 'geodir_after_listing_post_grid
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global string $gridview_columns The girdview style of the listings.
  */
 function geodir_after_listing_post_gridview()
 {
@@ -1026,7 +1029,7 @@ add_filter('geodir_detail_page_tab_is_display', 'geodir_detail_page_tab_is_displ
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $post The current post object.
- * @global object $post_images An array of post image objects of current post images if exist.
+ * @global object $post_images Image objects of current post if available.
  * @global string $video The video embed content.
  * @global string $special_offers Special offers content.
  * @global string $related_listing Related listing html.
@@ -1318,7 +1321,7 @@ add_filter('wp_title', 'geodir_custom_page_title', 100, 2);
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @glabal object $wp Wordpress object.
+ * @global object $wp WordPress object.
  * @param string $title Old title.
  * @param string $sep Title separator.
  * @return string Modified title.
@@ -1493,7 +1496,7 @@ if (!is_admin()) {
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @glabal object $wp Wordpress object.
+ * @global object $wp WordPress object.
  * @param object $post Post object.
  * @return object Modified post object.
  */
@@ -1578,7 +1581,7 @@ add_filter('post_type_archive_title', 'geodir_post_type_archive_title', 10, 1);
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global object $wp_query WordPress Query object.
- * @glabal object $wp Wordpress object.
+ * @global object $wp WordPress object.
  * @param string $title The title parameter.
  * @return string Modified post title.
  */
@@ -1701,7 +1704,7 @@ add_filter('single_post_title', 'geodir_single_post_title', 10, 2);
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @glabal object $wp Wordpress object.
+ * @global object $wp WordPress object.
  * @param string $title The title parameter.
  * @param object $post Post object.
  * @return string Modified post title.

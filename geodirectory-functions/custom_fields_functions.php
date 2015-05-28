@@ -1072,6 +1072,7 @@ function godir_set_field_order($field_ids = array())
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global object $post The current post object.
+ * @global array $geodir_addon_list List of active GeoDirectory extensions.
  * @param int|string $package_id The package ID.
  * @param string $default Optional. When set to "default" it will display only default fields.
  * @param string $post_type Optional. The wordpress post type.
@@ -3802,6 +3803,7 @@ if (!function_exists('check_field_visibility')) {
 	 * @since 1.0.0
 	 * @package GeoDirectory
      * @global object $wpdb WordPress Database object.
+     * @global array $geodir_addon_list List of active GeoDirectory extensions.
 	 * @param int|string $package_id The package ID.
 	 * @param string $field_name The field name.
 	 * @param string $post_type Optional. The wordpress post type.

@@ -576,6 +576,7 @@ function geodir_advance_customfields_heading($title, $field_type)
  * @param array $request Related posts request array.
  * @global object $wpdb WordPress Database object.
  * @global object $post The current post object.
+ * @global string $gridview_columns The girdview style of the listings.
  * @return string Returns related posts html.
  */
 function geodir_related_posts_display($request)
@@ -798,6 +799,7 @@ function geodir_get_map_default_language()
  * @global object $wpdb WordPress Database object.
  * @global object $post The current post object.
  * @global object $wp_query WordPress Query object.
+ * @global array $geodir_addon_list List of active GeoDirectory extensions.
  */
 function geodir_add_meta_keywords()
 {

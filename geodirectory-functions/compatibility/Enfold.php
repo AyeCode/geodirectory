@@ -171,6 +171,7 @@ function enfold_action_wrapper_open()
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wp WordPress object.
  * @param string $page The page type.
  * @param string $class The class of the HTML element.
  */
