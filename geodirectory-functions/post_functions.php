@@ -1653,6 +1653,7 @@ if (!function_exists('geodir_get_infowindow_html')) {
      *
      * @since 1.0.0
      * @package GeoDirectory
+     * @global array $geodir_addon_list List of active GeoDirectory extensions.
      * @param object $postinfo_obj The post details object.
      * @param string $post_preview Is this a post preview?.
      * @return mixed|string|void
@@ -2423,6 +2424,7 @@ function geodir_allow_post_type_frontend()
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wp_query WordPress Query object.
  * @param int $length Optional. Old length.
  * @return mixed|void Returns length.
  */
@@ -2715,6 +2717,7 @@ function geodir_set_wp_featured_image($post_id)
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
+ * @global string $table_prefix WordPress Database Table prefix.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  */
 function gd_copy_original_translation()

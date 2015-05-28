@@ -313,10 +313,7 @@ function geodir_add_geodir_page_var($public_query_vars)
  * Add the page id to the query variables.
  *
  * @since 1.0.0
- *
- * @global WP_Query $wp_query WordPress Query object.
- *
- * @param array $public_query_vars The array of query variables.
+ * @global object $wp_query WordPress Query object.
  * @return array WordPress Query object.
  */
 function geodir_add_page_id_in_query_var()

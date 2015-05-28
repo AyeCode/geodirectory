@@ -217,6 +217,7 @@ function geodir_get_weeks()
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wp_query WordPress Query object.
  * @global object $post The current post object.
  * @param string $gdpage
  * @return bool
@@ -355,6 +356,8 @@ function geodir_set_is_geodir_page($wp)
 }
 
 /**
+ *
+ * @global object $wp WordPress object.
  * @return bool
  */
 function geodir_is_geodir_page()
@@ -671,6 +674,7 @@ function geodir_taxonomy_breadcrumb()
 
 /**
  *
+ * @global object $wp_query WordPress Query object.
  * @global object $post The current post object.
  */
 function geodir_breadcrumb()
@@ -1424,6 +1428,7 @@ function geodir_widget_listings_get_order($query_args)
  * @since 1.4.2 New paramater $count_only added
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @global string $table_prefix WordPress Database Table prefix.
  * @param  array $query_args
  * @param  int|bool $count_only If true returns listings count only, otherwise returns array
  * @return mixed
@@ -2332,6 +2337,8 @@ function geodir_loginwidget_output($args = '', $instance = '')
 /**
  *
  * @global object $post The current post object.
+ * @global string $gridview_columns_widget The girdview style of the listings for widget.
+ * @global bool $geodir_is_widget_listing Is this a widget listing?. Default: false.
  * @param string $args
  * @param string $instance
  */

@@ -50,6 +50,7 @@ do_action('geodir_wrapper_content_open', 'details-page', 'geodir-wrapper-content
  *
  * @since 1.1.0
  * @global object $post The current post object.
+ * @global object $post_images Image objects of current post if available.
  * @param string $type Page type.
  * @param string $id The id of the HTML element.
  * @param string $class The class of the HTML element.

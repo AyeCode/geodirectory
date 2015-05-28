@@ -72,6 +72,7 @@ function gd_mk_theme_breadcrumbs()
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wp WordPress object.
  */
 function gd_mk_page_title()
 {

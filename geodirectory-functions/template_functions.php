@@ -12,7 +12,7 @@
  * @since 1.0.0
  * @package GeoDirectory
  * @global string $post_type The post type.
- * @global object $wp The global instance of the WP class.
+ * @global object $wp WordPress object.
  * @global object $post WordPress post object.
  * @param string $template The template type.
  * @return bool|string The template path.
@@ -136,6 +136,7 @@ function geodir_locate_template($template = '')
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $wp_query WordPress Query object.
+ * @todo $wp_query declared twice - fix it.
  * @global object $post The current post object.
  * @global object $current_user Current user object.
  * @param string $template The template path.

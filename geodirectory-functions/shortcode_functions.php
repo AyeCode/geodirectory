@@ -173,9 +173,10 @@ function gdsc_is_post_type_valid($incoming_post_type)
  *
  * @since 1.0.0
  *
- * @global WP_Query $wp_query WordPress Query object.
+ * @global object $wp_query WordPress Query object.
+ * @todo $wp_query declared twice - fix it.
  * @global string $geodir_post_type Post type.
- * @global string $table Database table name.
+ * @global string $table Listing table name.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @global string $term Term object.
  *
@@ -539,8 +540,8 @@ function gdsc_validate_list_filter_choice($filter_choice)
  *
  * @since 1.4.2
  *
- * @global string $gridview_columns_widget WordPress database abstraction object.
- * @global bool   $geodir_is_widget_listing Check that current listview is widget listing.
+ * @global string $gridview_columns_widget The girdview style of the listings for widget.
+ * @global bool $geodir_is_widget_listing Is this a widget listing?. Default: false.
  * @global bool   $geodir_event_widget_listview Check that current listview is event.
  * @global object $post The current post object.
  * @global array $map_jason Map data in json format.

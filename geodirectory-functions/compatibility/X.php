@@ -126,6 +126,7 @@ function geodir_x_body_class($classes)
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wp WordPress object.
  */
 function geodir_x_home_sidebar()
 {
