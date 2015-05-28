@@ -9,6 +9,7 @@
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
+ * @global object $post The current post object.
  */
 
 /**

@@ -78,6 +78,13 @@ class geodir_map_listingpage extends WP_Widget
     }
 
     // prints the widget
+
+    /**
+     *
+     * @global object $post The current post object.
+     * @param array $args
+     * @param array $instance
+     */
     function widget($args, $instance)
     {
 

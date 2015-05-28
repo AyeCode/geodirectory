@@ -542,7 +542,7 @@ function gdsc_validate_list_filter_choice($filter_choice)
  * @global string $gridview_columns_widget WordPress database abstraction object.
  * @global bool   $geodir_is_widget_listing Check that current listview is widget listing.
  * @global bool   $geodir_event_widget_listview Check that current listview is event.
- * @global null|WP_Post $post Post object.
+ * @global object $post The current post object.
  * @global array $map_jason Map data in json format.
  * @global array $map_canvas_arr Map canvas array.
  *

@@ -1070,6 +1070,7 @@ function godir_set_field_order($field_ids = array())
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
+ * @global object $post The current post object.
  * @param int|string $package_id The package ID.
  * @param string $default Optional. When set to "default" it will display only default fields.
  * @param string $post_type Optional. The wordpress post type.
@@ -1985,6 +1986,7 @@ if (!function_exists('geodir_show_listing_info')) {
 	 * @since 1.0.0
 	 * @package GeoDirectory
      * @global object $wpdb WordPress Database object.
+     * @global object $post The current post object.
 	 * @param string $fields_location In which page you are going to place this custom fields?. Ex: listing, detail etc.
 	 * @return string Returns listing info html.
 	 */

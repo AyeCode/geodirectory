@@ -212,10 +212,15 @@ function geodir_get_weeks()
 }
 
 
-
 /**
- * Check that page is
- **/
+ * Check that page is.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $post The current post object.
+ * @param string $gdpage
+ * @return bool
+ */
 function geodir_is_page($gdpage = '')
 {
 
@@ -666,6 +671,7 @@ function geodir_taxonomy_breadcrumb()
 
 /**
  *
+ * @global object $post The current post object.
  */
 function geodir_breadcrumb()
 {
@@ -1783,6 +1789,8 @@ function is_page_geodir_home()
 
 
 /**
+ *
+ * @global object $post The current post object.
  * @param $url
  * @return string|void
  */
@@ -1801,6 +1809,8 @@ add_filter('wpseo_canonical', 'geodir_wpseo_homepage_canonical', 10);
 add_filter('aioseop_canonical_url', 'geodir_wpseo_homepage_canonical', 10);
 
 /**
+ *
+ * @global object $post The current post object.
  * @param $extra
  * @return string
  */
@@ -1970,6 +1980,8 @@ function geodir_helper_cat_list_output($terms, $category_limit)
 }
 
 /**
+ *
+ * @global object $post The current post object.
  * @param string $args
  * @param string $instance
  */
@@ -2318,6 +2330,8 @@ function geodir_loginwidget_output($args = '', $instance = '')
 
 
 /**
+ *
+ * @global object $post The current post object.
  * @param string $args
  * @param string $instance
  */

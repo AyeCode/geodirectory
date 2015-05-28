@@ -167,6 +167,13 @@ function geodir_sc_home_map($atts)
 add_shortcode('gd_homepage_map', 'geodir_sc_home_map');
 
 add_shortcode('gd_listing_map', 'geodir_sc_listing_map');
+
+/**
+ *
+ * @global object $post The current post object.
+ * @param $atts
+ * @return string
+ */
 function geodir_sc_listing_map($atts)
 {
     ob_start();
@@ -398,6 +405,14 @@ function geodir_sc_login_box($atts)
 }
 
 add_shortcode('gd_popular_post_category', 'geodir_sc_popular_post_category');
+
+
+/**
+ *
+ * @global object $post The current post object.
+ * @param $atts
+ * @return string
+ */
 function geodir_sc_popular_post_category($atts)
 {
     ob_start();
