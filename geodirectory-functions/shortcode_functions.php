@@ -173,7 +173,8 @@ function gdsc_is_post_type_valid($incoming_post_type)
  *
  * @since 1.0.0
  *
- * @global WP_Query $wp_query WordPress Query object.
+ * @global object $wp_query WordPress Query object.
+ * @todo $wp_query declared twice - fix it.
  * @global string $geodir_post_type Post type.
  * @global string $table Database table name.
  * @global string $plugin_prefix Geodirectory plugin table prefix.

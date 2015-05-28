@@ -50,7 +50,7 @@ function geodir_modified_query($query)
  *
  * @since 1.0.0
  *
- * @global object $wp_query The wordpress query object.
+ * @global object $wp_query WordPress Query object.
  * @global object $wpdb WordPress Database object.
  * @global string $geodir_post_type The post type.
  * @global string $table Listing table name.
@@ -268,6 +268,8 @@ function set_listing_request()
 /* ====== Place Listing Geodir loop filters ===== */
 /**
  *
+ * @global object $wp_query WordPress Query object.
+ * @todo $wp_query declared twice - fix it.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @param $query
  */
@@ -329,6 +331,7 @@ function geodir_listing_loop_filter($query)
 /**
  * Listing fields filter.
  *
+ * @global object $wp_query WordPress Query object.
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @return string
@@ -425,6 +428,7 @@ function geodir_posts_join($join)
  * Listing orderby filters.
  *
  * @global object $wpdb WordPress Database object.
+ * @global object $wp_query WordPress Query object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @return string
  */
@@ -686,6 +690,7 @@ function geodir_edit_listing_where($where)
 
 /**
  *
+ * @global object $wp_query WordPress Query object.
  * @global object $wpdb WordPress Database object.
  * @global string $table_prefix WordPress Database Table prefix.
  * @param $where
@@ -917,6 +922,13 @@ function author_filter_where($where)
 }
 
 // advanced filter for popular post view widget
+
+/**
+ *
+ * @global object $wp_query WordPress Query object.
+ * @param $join
+ * @return string
+ */
 function geodir_filter_widget_join($join)
 {
     global $wp_query, $table;
@@ -926,6 +938,12 @@ function geodir_filter_widget_join($join)
     return $join;
 }
 
+/**
+ *
+ * @global object $wp_query WordPress Query object.
+ * @param $where
+ * @return string
+ */
 function geodir_filter_widget_where($where)
 {
     global $wp_query, $table;

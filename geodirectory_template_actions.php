@@ -1492,7 +1492,7 @@ add_action('geodir_listings_page_description', 'geodir_action_listings_descripti
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @global object $current_term The current term object.
+ * @global object $wp_query WordPress Query object.
  */
 function geodir_action_listings_description()
 {

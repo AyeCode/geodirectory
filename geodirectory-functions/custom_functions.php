@@ -461,7 +461,7 @@ function geodir_get_sort_options($post_type)
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @global object $wp_query The wordpress query object.
+ * @global object $wp_query WordPress Query object.
  */
 function geodir_display_sort_options()
 {
@@ -797,7 +797,7 @@ function geodir_get_map_default_language()
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global object $post The current post object.
- * @global object $wp_query The wordpress query object.
+ * @global object $wp_query WordPress Query object.
  */
 function geodir_add_meta_keywords()
 {

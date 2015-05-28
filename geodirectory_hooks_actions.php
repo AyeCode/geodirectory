@@ -1577,6 +1577,7 @@ add_filter('post_type_archive_title', 'geodir_post_type_archive_title', 10, 1);
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
+ * @global object $wp_query WordPress Query object.
  * @glabal object $wp Wordpress object.
  * @param string $title The title parameter.
  * @return string Modified post title.

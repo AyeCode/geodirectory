@@ -217,6 +217,7 @@ function geodir_get_weeks()
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wp_query WordPress Query object.
  * @global object $post The current post object.
  * @param string $gdpage
  * @return bool
@@ -671,6 +672,7 @@ function geodir_taxonomy_breadcrumb()
 
 /**
  *
+ * @global object $wp_query WordPress Query object.
  * @global object $post The current post object.
  */
 function geodir_breadcrumb()

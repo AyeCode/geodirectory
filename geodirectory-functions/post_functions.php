@@ -2423,6 +2423,7 @@ function geodir_allow_post_type_frontend()
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wp_query WordPress Query object.
  * @param int $length Optional. Old length.
  * @return mixed|void Returns length.
  */
