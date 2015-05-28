@@ -22,8 +22,8 @@ if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'cat') { // R
     exit;
 } else if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'info') { // Retrives marker info window html
     /**
-	 * @global object $wpdb WordPress database abstraction object.
-	 * @global string $plugin_prefix Prefix of tha plugin
+	 * @global object $wpdb WordPress Database object.
+     * @global string $plugin_prefix Geodirectory plugin table prefix.
 	 */
 	global $wpdb, $plugin_prefix;
 
@@ -70,8 +70,8 @@ if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'cat') { // R
  *
  * @since 1.0.0
  *
- * @global object $wpdb WordPress database abstraction object.
- * @global string $plugin_prefix Prefix of the plugin.
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @global array  $geodir_cat_icons Array of the category icon urls.
  * 
  * @return string

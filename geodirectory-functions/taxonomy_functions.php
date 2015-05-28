@@ -1225,8 +1225,8 @@ $gd_permalink_cache = array();
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @global object $wp_query WordPress Query object.
- * @global string $plugin_prefix WordPress plugin prefix.
  * @global object $post WordPress Post object.
  * @param string $post_link The post link.
  * @param object $post_obj The post object.

@@ -137,7 +137,7 @@ add_action('comment_post', 'geodir_save_rating');
  * @package GeoDirectory
  * @param int $comment The comment ID.
  * @global object $wpdb WordPress Database object.
- * @global string $plugin_prefix Geodirectory plugin table prefix
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @global int $user_ID The current user ID.
  */
 function geodir_save_rating($comment = 0)
@@ -373,11 +373,11 @@ function geodir_wrap_comment_text($content, $comment = '')
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @param int $post_id The post ID.
  * @param string $post_type The post type.
  * @param bool $delete Depreciated since ver 1.3.6.
- * @global object $wpdb WordPress Database object.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
  */
 function geodir_update_postrating($post_id = 0, $post_type = '', $delete = false)
 {
@@ -426,10 +426,10 @@ function geodir_update_postrating($post_id = 0, $post_type = '', $delete = false
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @param int $post_id The post ID.
  * @return bool|mixed|null|string
- * @global object $wpdb WordPress Database object.
- * @global string $plugin_prefix Geodirectory plugin table prefix
  */
 function geodir_get_postoverall($post_id = 0)
 {
