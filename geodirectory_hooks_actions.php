@@ -1190,6 +1190,7 @@ add_filter('geodir_location_slug_check', 'geodir_location_slug_check');
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
+ * @global string $table_prefix WordPress Database Table prefix.
  * @param string $slug Term slug.
  * @return string Modified term slug.
  */
@@ -1229,6 +1230,7 @@ add_action('create_term', 'geodir_update_term_slug', '1', 3);
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @global string $table_prefix WordPress Database Table prefix.
  * @param int $term_id Term ID.
  * @param int $tt_id term Taxonomy ID.
  * @param string $taxonomy Taxonomy slug.
@@ -1283,6 +1285,7 @@ add_filter('geodir_term_slug_is_exists', 'geodir_term_slug_is_exists', 0, 3); //
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
+ * @global string $table_prefix WordPress Database Table prefix.
  * @param bool $slug_exists Default: false.
  * @param string $slug Term slug.
  * @param int $term_id Term ID.

@@ -1424,6 +1424,7 @@ function geodir_widget_listings_get_order($query_args)
  * @since 1.4.2 New paramater $count_only added
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @global string $table_prefix WordPress Database Table prefix.
  * @param  array $query_args
  * @param  int|bool $count_only If true returns listings count only, otherwise returns array
  * @return mixed

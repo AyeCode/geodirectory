@@ -2715,6 +2715,7 @@ function geodir_set_wp_featured_image($post_id)
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
+ * @global string $table_prefix WordPress Database Table prefix.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  */
 function gd_copy_original_translation()

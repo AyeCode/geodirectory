@@ -5,6 +5,7 @@
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
+ * @global string $table_prefix WordPress Database Table prefix.
  */
 global $wpdb, $table_prefix;
 

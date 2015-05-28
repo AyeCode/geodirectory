@@ -392,6 +392,7 @@ function geodir_posts_fields($fields)
  * Listing tables join filter.
  *
  * @global object $wpdb WordPress Database object.
+ * @global string $table_prefix WordPress Database Table prefix.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @return string
  */
@@ -686,6 +687,7 @@ function geodir_edit_listing_where($where)
 /**
  *
  * @global object $wpdb WordPress Database object.
+ * @global string $table_prefix WordPress Database Table prefix.
  * @param $where
  * @return mixed
  */
