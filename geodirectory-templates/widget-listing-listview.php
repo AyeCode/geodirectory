@@ -186,6 +186,9 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                                 <?php
                                 }
                                 geodir_favourite_html($post->post_author, $post->ID);
+
+                                do_action( 'geodir_after_favorite_html', $post->ID, 'widget' );
+
                                 if ($post->post_author == get_current_user_id()) {
                                     $addplacelink = get_permalink(geodir_add_listing_page_id());
                                     $editlink = geodir_getlink($addplacelink, array('pid' => $post->ID), false);
