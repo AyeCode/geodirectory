@@ -279,7 +279,7 @@ if (!class_exists('Tax_Meta_Class')) :
          * @since 1.0
          * @access public
          *
-         * @param string $term_id
+         * @param int|string $term_id The term ID.
          */
         /*public function delete_attachments( $term_id ) {
 		
@@ -1132,9 +1132,10 @@ if (!class_exists('Tax_Meta_Class')) :
         /**
          * Save Data from Metabox
          *
-         * @param string $term_id
+         * @param string $term_id The term ID.
          * @since 1.0
          * @access public
+         * @return string
          */
         public function save($term_id)
         {
@@ -1233,7 +1234,7 @@ if (!class_exists('Tax_Meta_Class')) :
         /**
          * Common function for saving fields.
          *
-         * @param string $term_id
+         * @param string $term_id The term ID.
          * @param string $field
          * @param string $old
          * @param string|mixed $new
@@ -1253,7 +1254,7 @@ if (!class_exists('Tax_Meta_Class')) :
         /**
          * function for saving image field.
          *
-         * @param string $term_id
+         * @param string $term_id The term ID.
          * @param string $field
          * @param string $old
          * @param string|mixed $new
@@ -1274,7 +1275,7 @@ if (!class_exists('Tax_Meta_Class')) :
         /*
 	 * Save Wysiwyg Field.
 	 *
-	 * @param string $term_id 
+	 * @param string $term_id The term ID. 
 	 * @param string $field 
 	 * @param string $old 
 	 * @param string $new 
@@ -1289,7 +1290,7 @@ if (!class_exists('Tax_Meta_Class')) :
         /**
          * Save repeater Fields.
          *
-         * @param string $term_id
+         * @param string $term_id The term ID.
          * @param string $field
          * @param string|mixed $old
          * @param string|mixed $new
@@ -1331,7 +1332,7 @@ if (!class_exists('Tax_Meta_Class')) :
         /**
          * Save File Field.
          *
-         * @param string $term_id
+         * @param string $term_id The term ID.
          * @param string $field
          * @param string $old
          * @param string $new
@@ -1375,12 +1376,13 @@ if (!class_exists('Tax_Meta_Class')) :
 
         /**
          * Save repeater File Field.
-         * @param string $term_id
+         * @param string $term_id The term ID.
          * @param string $field
          * @param string $old
          * @param string $new
          * @since 1.0
          * @access public
+         * @return int|void
          */
         public function save_field_file_repeater($term_id, $field, $old, $new)
         {

@@ -1234,7 +1234,7 @@ add_action('create_term', 'geodir_update_term_slug', '1', 3);
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @global string $table_prefix WordPress Database Table prefix.
- * @param int $term_id Term ID.
+ * @param int|string $term_id The term ID.
  * @param int $tt_id term Taxonomy ID.
  * @param string $taxonomy Taxonomy slug.
  */
@@ -1291,7 +1291,7 @@ add_filter('geodir_term_slug_is_exists', 'geodir_term_slug_is_exists', 0, 3); //
  * @global string $table_prefix WordPress Database Table prefix.
  * @param bool $slug_exists Default: false.
  * @param string $slug Term slug.
- * @param int $term_id Term ID.
+ * @param int $term_id The term ID.
  * @return bool true when exists. false when not exists.
  */
 function geodir_term_slug_is_exists($slug_exists, $slug, $term_id)
