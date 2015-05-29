@@ -324,6 +324,8 @@ function geodir_get_sidebar()
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global object $wp_query WordPress Query object.
  * @param string $before The HTML to prepend.
  * @param string $after The HTML to append.
  * @param string $prelabel The previous link label.

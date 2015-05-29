@@ -878,6 +878,7 @@ if (!class_exists('Tax_Meta_Class')) :
         /**
          * Show File Field.
          *
+         * @global object $post The current post object.
          * @param string $field
          * @param string $meta
          * @since 1.0
@@ -1057,6 +1058,8 @@ if (!class_exists('Tax_Meta_Class')) :
         /**
          * Show Posts field.
          * used creating a posts/pages/custom types checkboxlist or a select dropdown
+         *
+         * @global object $post The current post object.
          * @param string $field
          * @param string $meta
          * @since 1.0
@@ -1091,6 +1094,8 @@ if (!class_exists('Tax_Meta_Class')) :
         /**
          * Show Taxonomy field.
          * used creating a category/tags/custom taxonomy checkboxlist or a select dropdown
+         *
+         * @global object $post The current post object.
          * @param string $field
          * @param string $meta
          * @since 1.0

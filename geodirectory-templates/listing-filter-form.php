@@ -7,6 +7,8 @@
  * @link http://docs.wpgeodirectory.com/customizing-geodirectory-templates/
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wp_query WordPress Query object.
+ * @global object $wpdb WordPress Database object.
  */
 global $wp_query, $current_term, $query;
 

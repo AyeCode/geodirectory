@@ -1,4 +1,9 @@
 <?php
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 function geodir_register_sidebar()
 {
     global $geodir_sidebars;
@@ -211,6 +216,11 @@ function geodir_register_sidebar()
 
 
 if (!function_exists('register_geodir_widgets')) {
+    /**
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     */
     function register_geodir_widgets()
     {
         // =============================== Login Widget ======================================
@@ -269,6 +279,11 @@ if (!function_exists('register_geodir_widgets')) {
                 $this->WP_Widget('social_like_widget', __('GD > Social Like', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
             }
 
+            /**
+             * @global object $post The current post object.
+             * @param array $args
+             * @param array $instance
+             */
             function widget($args, $instance)
             {
                 // prints the widget

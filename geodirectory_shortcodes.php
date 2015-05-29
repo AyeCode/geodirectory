@@ -1,4 +1,10 @@
 <?php
+/**
+ * Shortcode functions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 // If this file is called directly, abort.
 if (!defined('WPINC')) {
     die;
@@ -6,6 +12,13 @@ if (!defined('WPINC')) {
 require_once('geodirectory-functions/shortcode_functions.php');
 
 add_shortcode('gd_add_listing', 'geodir_sc_add_listing');
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $atts
+ * @return string
+ */
 function geodir_sc_add_listing($atts)
 {
     ob_start();
@@ -53,6 +66,13 @@ function geodir_sc_add_listing($atts)
 }
 
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $atts
+ * @return string
+ */
 function geodir_sc_home_map($atts)
 {
     ob_start();
@@ -167,6 +187,15 @@ function geodir_sc_home_map($atts)
 add_shortcode('gd_homepage_map', 'geodir_sc_home_map');
 
 add_shortcode('gd_listing_map', 'geodir_sc_listing_map');
+
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $post The current post object.
+ * @param $atts
+ * @return string
+ */
 function geodir_sc_listing_map($atts)
 {
     ob_start();
@@ -258,6 +287,13 @@ function geodir_sc_listing_map($atts)
 }
 
 add_shortcode('gd_listing_slider', 'geodir_sc_listing_slider');
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $atts
+ * @return string
+ */
 function geodir_sc_listing_slider($atts)
 {
     ob_start();
@@ -377,6 +413,13 @@ function geodir_sc_listing_slider($atts)
 }
 
 add_shortcode('gd_login_box', 'geodir_sc_login_box');
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $atts
+ * @return string
+ */
 function geodir_sc_login_box($atts)
 {
     ob_start();
@@ -398,6 +441,16 @@ function geodir_sc_login_box($atts)
 }
 
 add_shortcode('gd_popular_post_category', 'geodir_sc_popular_post_category');
+
+
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $post The current post object.
+ * @param $atts
+ * @return string
+ */
 function geodir_sc_popular_post_category($atts)
 {
     ob_start();
@@ -423,6 +476,13 @@ function geodir_sc_popular_post_category($atts)
 }
 
 add_shortcode('gd_popular_post_view', 'geodir_sc_popular_post_view');
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $atts
+ * @return string
+ */
 function geodir_sc_popular_post_view($atts)
 {
     ob_start();
@@ -519,6 +579,13 @@ function geodir_sc_popular_post_view($atts)
 }
 
 add_shortcode('gd_recent_reviews', 'geodir_sc_recent_reviews');
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $atts
+ * @return string
+ */
 function geodir_sc_recent_reviews($atts)
 {
     ob_start();
@@ -550,6 +617,13 @@ function geodir_sc_recent_reviews($atts)
 }
 
 add_shortcode('gd_related_listings', 'geodir_sc_related_listings');
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $atts
+ * @return string
+ */
 function geodir_sc_related_listings($atts)
 {
     ob_start();
@@ -612,6 +686,13 @@ function geodir_sc_related_listings($atts)
     return $output;
 }
 
+/**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param $atts
+ * @return string
+ */
 function geodir_sc_advanced_search($atts) {
     $defaults = array(
 		'title' => '',

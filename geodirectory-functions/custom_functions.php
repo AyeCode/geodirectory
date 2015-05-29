@@ -99,7 +99,7 @@ add_action('geodir_before_listing', 'geodir_list_view_select', 100);
  * @since 1.0.0
  * @package GeoDirectory
  * @param string|int $charlength The character length.
- * @global object $post The post object.
+ * @global object $post The current post object.
  * @return string The modified excerpt.
  */
 function geodir_max_excerpt($charlength)
@@ -183,8 +183,8 @@ function geodir_post_package_info($package_info, $post = '', $post_type = '')
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param array $request The request array that contains details like name, email, phone etc.
  * @global object $wpdb WordPress Database object.
+ * @param array $request The request array that contains details like name, email, phone etc.
  */
 function geodir_send_inquiry($request)
 {
@@ -461,7 +461,7 @@ function geodir_get_sort_options($post_type)
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @global object $wp_query The wordpress query object.
+ * @global object $wp_query WordPress Query object.
  */
 function geodir_display_sort_options()
 {
@@ -575,7 +575,8 @@ function geodir_advance_customfields_heading($title, $field_type)
  * @package GeoDirectory
  * @param array $request Related posts request array.
  * @global object $wpdb WordPress Database object.
- * @global object $post The post object.
+ * @global object $post The current post object.
+ * @global string $gridview_columns The girdview style of the listings.
  * @return string Returns related posts html.
  */
 function geodir_related_posts_display($request)
@@ -796,8 +797,9 @@ function geodir_get_map_default_language()
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
- * @global object $post The post object.
- * @global object $wp_query The wordpress query object.
+ * @global object $post The current post object.
+ * @global object $wp_query WordPress Query object.
+ * @global array $geodir_addon_list List of active GeoDirectory extensions.
  */
 function geodir_add_meta_keywords()
 {
@@ -1115,7 +1117,7 @@ function geodir_detail_page_tabs_list()
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @global object $post The post object.
+ * @global object $post The current post object.
  * @global array $post_images List of images attached to the post.
  * @global string $video The video embed content.
  * @global string $special_offers Special offers content.
@@ -1733,6 +1735,10 @@ function geodir_twitter_tweet_button()
  * "Facebook like" button code.
  *
  * To display "Facebook like" button, you can call this function.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $post The current post object.
  */
 function geodir_fb_like_button()
 {
@@ -1778,6 +1784,7 @@ function geodir_google_plus_button()
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $post The current post object.
  */
 function geodir_share_this_button_code()
 {

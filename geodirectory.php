@@ -21,7 +21,10 @@ Tested up to: 4.2
  * The current version number of GeoDirectory.
  *
  * @since 1.0.0
+ * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @global array $geodir_addon_list List of active GeoDirectory extensions.
+ * @global string $plugin_file_name Base file name. 'geodirectory/geodirectory.php'.
  */
 define("GEODIRECTORY_VERSION", "1.4.7");
 

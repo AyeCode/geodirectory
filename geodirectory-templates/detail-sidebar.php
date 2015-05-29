@@ -7,9 +7,12 @@
  * @link http://docs.wpgeodirectory.com/customizing-geodirectory-templates/
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $post The current post object.
+ * @global object $post_images Image objects of current post if available.
  */
 
 global $post, $preview, $post_images;
+var_dump($preview);
 $package_info = array();
 
 $package_info = geodir_post_package_info($package_info, $post);

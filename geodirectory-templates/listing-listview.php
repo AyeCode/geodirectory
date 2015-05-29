@@ -8,6 +8,10 @@
  * @link http://docs.wpgeodirectory.com/customizing-geodirectory-templates/
  * @since 1.0.0
  * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global object $post The current post object.
+ * @global object $wp_query WordPress Query object.
+ * @global string $gridview_columns The girdview style of the listings.
  */
 
 /**

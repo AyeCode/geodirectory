@@ -8,6 +8,7 @@
  * @link http://docs.wpgeodirectory.com/customizing-geodirectory-templates/
  * @since 1.0.0
  * @package GeoDirectory
+ * @global string $gridview_columns_widget The girdview style of the listings for widget.
  */
 
 /** This action is documented in geodirectory-templates/listing-listview.php */
