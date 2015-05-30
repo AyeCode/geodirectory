@@ -75,6 +75,7 @@ function geodir_is_plugin_active($plugin)
  * Return a formatted date from a date/time string according to WordPress date format. $date must be in format : 'Y-m-d H:i:s'.
  *
  * @since 1.0.0
+ * @package GeoDirectory
  * @param string $date must be in format: 'Y-m-d H:i:s'
  * @return bool|int|string the formatted date
  */
@@ -89,6 +90,7 @@ function geodir_get_formated_date($date)
  * Return a formatted time from a date/time string according to WordPress time format. $time must be in format : 'Y-m-d H:i:s'.
  *
  * @since 1.0.0
+ * @package GeoDirectory
  * @param string $time must be in format: 'Y-m-d H:i:s'
  * @return bool|int|string the formatted time
  */
@@ -103,6 +105,8 @@ function geodir_get_formated_time($time)
  *
  * Returns a link with new parameters and currently used parameters regardless of ? or & in the $url parameter.
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @param string $url The main url to be used.
  * @param array $params
  * @param bool $use_existing_arguments
@@ -135,6 +139,9 @@ function geodir_getlink($url, $params = array(), $use_existing_arguments = false
 
 /**
  *
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @param string $post_type
  * @return string|void
@@ -181,6 +188,9 @@ function geodir_curPageURL()
 
 
 /**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  * Clean variables
  * This function is used to create posttype, posts, taxonomy and terms slug
  **/
@@ -196,7 +206,10 @@ function geodir_clean($string)
 }
 
 /**
- * Get Week Days
+ * Get Week Days.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  **/
 function geodir_get_weekday()
 {
@@ -204,7 +217,10 @@ function geodir_get_weekday()
 }
 
 /**
- * Get Weeks
+ * Get Weeks.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  **/
 function geodir_get_weeks()
 {
@@ -287,6 +303,9 @@ function geodir_is_page($gdpage = '')
 }
 
 /**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @param $wp
  */
 function geodir_set_is_geodir_page($wp)
@@ -357,6 +376,8 @@ function geodir_set_is_geodir_page($wp)
 
 /**
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wp WordPress object.
  * @return bool
  */
@@ -374,6 +395,9 @@ function geodir_is_geodir_page()
  */
 if (!function_exists('geodir_get_imagesize')) {
     /**
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
      * @param string $size
      * @return array|mixed|void|WP_Error
      */
@@ -420,6 +444,9 @@ function geodir_get_image_size( $image_size ) {
 
 if (!function_exists('createRandomString')) {
     /**
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
      * @return string
      */
     function createRandomString()
@@ -440,6 +467,9 @@ if (!function_exists('createRandomString')) {
 
 if (!function_exists('geodir_getDistanceRadius')) {
     /**
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
      * @param string $uom
      * @return float
      */
@@ -479,6 +509,9 @@ if (!function_exists('geodir_getDistanceRadius')) {
 
 if (!function_exists('geodir_calculateDistanceFromLatLong')) {
     /**
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
      * @param        $point1
      * @param        $point2
      * @param string $uom
@@ -505,6 +538,9 @@ if (!function_exists('geodir_calculateDistanceFromLatLong')) {
 
 if (!function_exists('geodir_sendEmail')) {
     /**
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
      * @param        $fromEmail
      * @param        $fromEmailName
      * @param        $toEmail
@@ -644,6 +680,9 @@ if (!function_exists('geodir_sendEmail')) {
 
 /**
  *
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  */
 function geodir_taxonomy_breadcrumb()
 {
@@ -674,6 +713,9 @@ function geodir_taxonomy_breadcrumb()
 
 /**
  *
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wp_query WordPress Query object.
  * @global object $post The current post object.
  */
@@ -916,6 +958,8 @@ add_action("admin_init", "geodir_allow_wpadmin"); // check user is admin
 if (!function_exists('geodir_allow_wpadmin')) {
     /**
      *
+     * @since 1.0.0
+     * @package GeoDirectory
      * @global object $wpdb WordPress Database object.
      */
     function geodir_allow_wpadmin()
@@ -937,6 +981,9 @@ if (!function_exists('geodir_allow_wpadmin')) {
 
 /* Move Images from a url to upload directory */
 /**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @param $url
  * @return array|WP_Error
  */
@@ -990,6 +1037,9 @@ function fetch_remote_file($url)
 }
 
 /**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @return mixed|void
  */
 function geodir_max_upload_size()
@@ -1009,6 +1059,9 @@ function geodir_max_upload_size()
 /* Check if dummy folder exists or not , if not then fatch from live url */
 /*--------------------------------------------------------------------*/
 /**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @return bool
  */
 function geodir_dummy_folder_exists()
@@ -1026,6 +1079,8 @@ function geodir_dummy_folder_exists()
 /*--------------------------------------------------------------------*/
 /**
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @param $aid
  * @return mixed
@@ -1044,6 +1099,8 @@ function  geodir_get_author_info($aid)
 if (!function_exists('adminEmail')) {
     /**
      *
+     * @since 1.0.0
+     * @package GeoDirectory
      * @global object $wpdb WordPress Database object.
      * @param        $page_id
      * @param        $user_id
@@ -1127,6 +1184,9 @@ if (!function_exists('adminEmail')) {
 ################################# SEND EMAIL FUNCTION START #############################################################
 if (!function_exists('sendEmail')) {
     /**
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
      * @param        $fromEmail
      * @param        $fromEmailName
      * @param        $toEmail
@@ -1221,8 +1281,11 @@ if (!function_exists('sendEmail')) {
 Language translation helper functions
 */
 
-// function to get the translated category id's
 /**
+ * Function to get the translated category id's.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @param $ids_array
  * @param $type
  * @return array
@@ -1242,9 +1305,11 @@ function gd_lang_object_ids($ids_array, $type)
 }
 
 
-// function to add class to body when multi post type is active
 /**
+ * function to add class to body when multi post type is active.
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @param $classes
  * @return array
@@ -1278,6 +1343,9 @@ add_filter('body_class', 'geodir_custom_posts_body_class'); // let's add a class
 
 
 /**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @return mixed|void
  */
 function geodir_map_zoom_level()
@@ -1289,6 +1357,9 @@ function geodir_map_zoom_level()
 
 
 /**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @param $geodir_option_name
  */
 function geodir_option_version_backup($geodir_option_name)
@@ -1301,8 +1372,11 @@ function geodir_option_version_backup($geodir_option_name)
     }
 }
 
-/* display add listing page for wpml */
 /**
+ * display add listing page for wpml.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @param $page_id
  * @return mixed
  */
@@ -1316,6 +1390,9 @@ function get_page_id_geodir_add_listing_page($page_id)
 }
 
 /**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @return bool
  */
 function geodir_wpml_multilingual_status()
@@ -1327,6 +1404,9 @@ function geodir_wpml_multilingual_status()
 }
 
 /**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @param $page_id
  * @param $post_type
  * @return mixed
@@ -1352,6 +1432,9 @@ function geodir_get_wpml_element_id($page_id, $post_type)
 }
 
 /**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @deprecated 1.4.6 No longer needed as we handel translating GD pages as normal now.
  */
 function geodir_wpml_check_element_id()
@@ -1374,6 +1457,8 @@ function geodir_wpml_check_element_id()
 
 /**
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @param $query_args
@@ -1425,6 +1510,7 @@ function geodir_widget_listings_get_order($query_args)
  * Retrive lisitngs/count using requested filter parameters.
  *
  * @since 1.0.0
+ * @package GeoDirectory
  * @since 1.4.2 New paramater $count_only added
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
@@ -1517,6 +1603,8 @@ function geodir_get_widget_listings($query_args = array(), $count_only = false)
 
 /**
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @param $fields
@@ -1543,6 +1631,8 @@ function geodir_function_widget_listings_fields($fields)
 
 /**
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @param $join
@@ -1582,6 +1672,8 @@ function geodir_function_widget_listings_join($join)
 
 /**
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @param $where
@@ -1637,6 +1729,8 @@ function geodir_function_widget_listings_where($where)
 
 /**
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @param $orderby
@@ -1665,6 +1759,8 @@ function geodir_function_widget_listings_orderby($orderby)
 
 /**
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @param $limit
@@ -1688,6 +1784,9 @@ function geodir_function_widget_listings_limit($limit)
 
 // wp media large width
 /**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @param int $default
  * @param string $params
  * @return int|mixed|void
@@ -1708,6 +1807,9 @@ function geodir_media_image_large_width($default = 800, $params = '')
 
 // wp media large height
 /**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @param int $default
  * @param string $params
  * @return int|mixed|void
@@ -1728,6 +1830,9 @@ function geodir_media_image_large_height($default = 800, $params = '')
 }
 
 /**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @param      $type
  * @param      $name
  * @param bool $translate
@@ -1758,6 +1863,9 @@ function geodir_sanitize_location_name($type, $name, $translate = true)
 
 
 /**
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @param $number
  */
 function geodir_comments_number($number)
@@ -1775,6 +1883,8 @@ function geodir_comments_number($number)
 
 /**
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @return bool
  */
@@ -1795,6 +1905,8 @@ function is_page_geodir_home()
 
 /**
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $post The current post object.
  * @param $url
  * @return string|void
@@ -1815,6 +1927,8 @@ add_filter('aioseop_canonical_url', 'geodir_wpseo_homepage_canonical', 10);
 
 /**
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $post The current post object.
  * @param $extra
  * @return string
@@ -1837,9 +1951,13 @@ add_filter('geodir_googlemap_script_extra', 'geodir_googlemap_script_extra_detai
 
 
 /**
+ * Generates popular post category HTML.
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @global string $geodir_post_category_str The geodirectory post category.
  * @param string $args
  * @param string $instance
  */
@@ -1942,7 +2060,12 @@ function geodir_popular_post_category_output($args = '', $instance = '')
 }
 
 /**
- * @param $terms
+ * Generates category list HTML.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global string $geodir_post_category_str The geodirectory post category.
+ * @param array $terms An array of term objects.
  * @param $category_limit
  */
 function geodir_helper_cat_list_output($terms, $category_limit)
@@ -1985,7 +2108,10 @@ function geodir_helper_cat_list_output($terms, $category_limit)
 }
 
 /**
+ * Generates listing slider HTML.
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $post The current post object.
  * @param string $args
  * @param string $instance
@@ -2148,7 +2274,10 @@ function geodir_listing_slider_widget_output($args = '', $instance = '')
 
 
 /**
+ * Generates login box HTML.
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $current_user Current user object.
  * @param string $args
  * @param string $instance
@@ -2335,7 +2464,10 @@ function geodir_loginwidget_output($args = '', $instance = '')
 
 
 /**
+ * Generates popular postview HTML.
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $post The current post object.
  * @global string $gridview_columns_widget The girdview style of the listings for widget.
  * @global bool $geodir_is_widget_listing Is this a widget listing?. Default: false.
@@ -2545,13 +2677,16 @@ function geodir_popular_postview_output($args = '', $instance = '')
 /*  Review count functions
 /*-----------------------------------------------------------------------------------*/
 /**
+ * Count reviews by term ID.
  *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
- * @param $term_id
- * @param $taxonomy
- * @param $post_type
- * @return mixed
+ * @param int $term_id The term ID.
+ * @param int $taxonomy The taxonomy Id.
+ * @param string $post_type The post type.
+ * @return int Reviews count.
  */
 function geodir_count_reviews_by_term_id($term_id, $taxonomy, $post_type)
 {
@@ -2566,8 +2701,12 @@ function geodir_count_reviews_by_term_id($term_id, $taxonomy, $post_type)
 }
 
 /**
- * @param bool $force_update
- * @return array|mixed|void
+ * Count reviews by terms.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param bool $force_update Force update option value?. Default.false.
+ * @return array Term array data.
  */
 function geodir_count_reviews_by_terms($force_update = false)
 {
@@ -2616,6 +2755,10 @@ function geodir_count_reviews_by_terms($force_update = false)
 }
 
 /**
+ * Force update review count.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
  * @return bool
  */
 function geodir_term_review_count_force_update()
@@ -2628,11 +2771,14 @@ function geodir_term_review_count_force_update()
 /*-----------------------------------------------------------------------------------*/
 /*  Term count functions
 /*-----------------------------------------------------------------------------------*/
-//function geodir_count_posts_by_term($data, $term) {
 /**
- * @param $data
- * @param $term
- * @return int
+ * Count posts by term.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $data Count data array.
+ * @param object $term The term object.
+ * @return int Post count.
  */
 function geodir_count_posts_by_term($data, $term)
 {
@@ -2649,8 +2795,12 @@ function geodir_count_posts_by_term($data, $term)
 }
 
 /**
- * @param $terms
- * @return mixed
+ * Sort terms object by post count.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * param array $terms An array of term objects.
+ * @return array Sorted terms array.
  */
 function geodir_sort_terms_by_count($terms)
 {
@@ -2659,8 +2809,12 @@ function geodir_sort_terms_by_count($terms)
 }
 
 /**
- * @param $terms
- * @return mixed
+ * Sort terms object by review count.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $terms An array of term objects.
+ * @return array Sorted terms array.
  */
 function geodir_sort_terms_by_review_count($terms)
 {
@@ -2669,9 +2823,13 @@ function geodir_sort_terms_by_review_count($terms)
 }
 
 /**
- * @param        $terms
- * @param string $sort
- * @return mixed
+ * Sort terms either by post count or review count.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $terms An array of term objects.
+ * @param string $sort The sort type. Can be count (Post Count) or review_count. Default. count.
+ * @return array Sorted terms array.
  */
 function geodir_sort_terms($terms, $sort = 'count')
 {
@@ -2687,8 +2845,12 @@ function geodir_sort_terms($terms, $sort = 'count')
 /*  Utils
 /*-----------------------------------------------------------------------------------*/
 /**
- * @param $a
- * @param $b
+ * Compares post count from array for sorting.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $a The left side array to compare.
+ * @param array $b The right side array to compare.
  * @return bool
  */
 function geodir_sort_by_count($a, $b)
@@ -2697,8 +2859,12 @@ function geodir_sort_by_count($a, $b)
 }
 
 /**
- * @param $a
- * @param $b
+ * Compares post count from object for sorting.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param object $a The left side object to compare.
+ * @param object $b The right side object to compare.
  * @return bool
  */
 function geodir_sort_by_count_obj($a, $b)
@@ -2707,8 +2873,12 @@ function geodir_sort_by_count_obj($a, $b)
 }
 
 /**
- * @param $a
- * @param $b
+ * Compares review count from object for sorting.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param object $a The left side object to compare.
+ * @param object $b The right side object to compare.
  * @return bool
  */
 function geodir_sort_by_review_count_obj($a, $b)
@@ -2720,8 +2890,15 @@ function geodir_sort_by_review_count_obj($a, $b)
  * Load geodirectory plugin textdomain.
  *
  * @since 1.4.2
+ * @package GeoDirectory
  */
 function geodir_load_textdomain() {
+    /**
+     * Filter the plugin locale.
+     *
+     * @since 1.4.2
+     * @package GeoDirectory
+     */
 	$locale = apply_filters('plugin_locale', get_locale(), GEODIRECTORY_TEXTDOMAIN);
 	
 	load_textdomain(GEODIRECTORY_TEXTDOMAIN, WP_LANG_DIR . '/' . GEODIRECTORY_TEXTDOMAIN . '/' . GEODIRECTORY_TEXTDOMAIN . '-' . $locale . '.mo');
@@ -2759,6 +2936,7 @@ function geodir_load_textdomain() {
  * Load language strings in to file to translate via po editor
  *
  * @since 1.4.2
+ * @package GeoDirectory
  *
  * @global null|object $wp_filesystem WP_Filesystem object.
  * 
@@ -2831,6 +3009,7 @@ function geodirectory_load_db_language() {
  * Get the custom fields texts for translation
  *
  * @since 1.4.2
+ * @package GeoDirectory
  *
  * @global object $wpdb WordPress database abstraction object.
  *
@@ -2889,6 +3068,7 @@ function geodir_load_custom_field_translation($translation_texts = array()) {
  * Retrieve list of mime types and file extensions allowed for file upload.
  *
  * @since 1.4.7
+ * @package GeoDirectory
  *
  * @return array Array of mime types.
  */
@@ -2897,6 +3077,7 @@ function geodir_allowed_mime_types() {
 	 * Filter the list of mime types and file extensions allowed for file upload.
 	 *
 	 * @since 1.4.7
+     * @package GeoDirectory
 	 *
 	 * @param array $geodir_allowed_mime_types and file extensions.
 	 */

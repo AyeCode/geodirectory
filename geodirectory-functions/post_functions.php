@@ -1461,7 +1461,7 @@ if (!function_exists('geodir_set_post_terms')) {
      * @global object $wpdb WordPress Database object.
      * @global string $plugin_prefix Geodirectory plugin table prefix.
      * @param int $post_id The post ID.
-     * @param array $terms An array of object terms.
+     * @param array $terms An array of term objects.
      * @param array $tt_ids An array of term taxonomy IDs.
      * @param string $taxonomy Taxonomy slug.
      */

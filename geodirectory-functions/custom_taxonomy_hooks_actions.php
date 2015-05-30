@@ -704,7 +704,7 @@ function geodir_custom_post_status()
  * @param string $termlink Term link URL.
  * @param object $term Term object.
  * @param string $taxonomy Taxonomy slug.
- * $return string The term link
+ * @return string The term link
  */
 function geodir_get_term_link($termlink, $term, $taxonomy)
 {
@@ -718,7 +718,7 @@ function geodir_get_term_link($termlink, $term, $taxonomy)
  *
  * @param string $link The post type archive permalink.
  * @param string $post_type Post type name.
- * @param string The post type archive permalink.
+ * @return string The post type archive permalink.
  */
 function geodir_get_posttype_link($link, $post_type)
 {
@@ -733,7 +733,7 @@ function geodir_get_posttype_link($link, $post_type)
  * @since 1.0.0
  *
  * @param array $exclude_array An array of page IDs to exclude.
- * @param array $An array of page IDs.
+ * @return array $An array of page IDs.
  */
 function exclude_from_wp_list_pages($exclude_array)
 {
