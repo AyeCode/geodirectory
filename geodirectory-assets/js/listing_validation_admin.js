@@ -141,49 +141,42 @@ function validate_field(field) {
     }
 }
 
-jQuery(document).ready(function () {
-
-    /// check validation on blur
-    jQuery('#post').find(".required_field:visible").find("[field_type]:visible, .editor textarea").blur(function () {
-        validate_field(this);
-    });
-
-    jQuery('#post').find(".required_field:visible").find("input[type='checkbox'],input[type='radio']").click(function () {
-        validate_field(this);
-
-    });
-
-
-    /*jQuery('#propertyform').submit(function(ele){*/
-    jQuery(document).delegate("#post", "submit", function (ele) {
-
-        var is_validate = true;
-
-        jQuery(this).find(".required_field:visible").each(function () {
-            jQuery(this).find("[field_type]:visible, .chosen_select, .geodir_location_add_listing_chosen, .editor, .event_recurring_dates, .geodir-custom-file-upload").each(function () {
-
-                if (jQuery(this).is('.chosen_select, .geodir_location_add_listing_chosen')) {
-                    var chosen_ele = jQuery(this);
-                    jQuery('#' + jQuery(this).attr('id') + '_chzn').mouseleave(function () {
-                        validate_field(chosen_ele);
-                    });
-
-                }
-                if (!validate_field(this))
-                    is_validate = validate_field(this);
-            });
-        });
-
-
-        if (is_validate) {
-            return true;
-        } else {
-
-            jQuery(window).scrollTop(jQuery(".geodir_message_error:visible:first").closest('.required_field').offset().top);
-            jQuery('#publishing-action .spinner').hide();
-            jQuery('#publishing-action #publish').removeClass('disabled');
-            return false;
-        }
-
-    });
+jQuery(document).ready(function() {
+	/// check validation on blur
+	jQuery('#post').find(".required_field:visible").find("[field_type]:visible, .editor textarea").blur(function() {
+		validate_field(this);
+	});
+	
+	jQuery('#post').find(".required_field:visible").find("input[type='checkbox'],input[type='radio']").click(function() {
+		validate_field(this);
+	});
+	
+	jQuery(document).delegate("#post", "submit", function(ele) {
+		var is_validate = true;
+		
+		jQuery(this).find(".required_field:visible").each(function() {
+			jQuery(this).find("[field_type]:visible, .chosen_select, .geodir_location_add_listing_chosen, .editor, .event_recurring_dates, .geodir-custom-file-upload").each(function() {
+				if (jQuery(this).is('.chosen_select, .geodir_location_add_listing_chosen')) {
+					var chosen_ele = jQuery(this);
+					jQuery('#' + jQuery(this).attr('id') + '_chzn').mouseleave(function() {
+						validate_field(chosen_ele);
+					});
+				}
+				if (!validate_field(this)) {
+					is_validate = validate_field(this);
+				}
+			});
+		});
+		
+		if (is_validate) {
+			return true;
+		} else {
+			jQuery(window).scrollTop(jQuery(".geodir_message_error:visible:first").closest('.required_field').offset().top);
+			jQuery('#save-action .spinner').removeClass('is-active');
+			jQuery('#save-action #save-post').removeClass('disabled');
+			jQuery('#publishing-action .spinner').removeClass('is-active');
+			jQuery('#publishing-action #publish').removeClass('disabled');
+			return false;
+		}
+	});
 });
