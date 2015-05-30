@@ -667,3 +667,10 @@ div.geodir_map_container.geodir-map-iphone .map_background .triggermap {
 .gd-dragg-ui:hover {
     background-color: #ebebeb !important
 }
+
+.body_fullscreen dl.geodir-tab-head {
+  z-index: 0;
+}
+.body_fullscreen .geodir_more_info i {
+  transform: none;
+}
