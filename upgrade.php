@@ -19,7 +19,12 @@ if (get_option(GEODIRECTORY_TEXTDOMAIN . '_db_version') != GEODIRECTORY_VERSION)
     if (GEODIRECTORY_VERSION <= '1.4.6') {
         add_action('init', 'geodir_upgrade_146', 11);
     }
+
+    if (GEODIRECTORY_VERSION <= '1.4.8') {
+        add_action('init', 'geodir_upgrade_148', 11);
+    }
     update_option(GEODIRECTORY_TEXTDOMAIN . '_db_version', GEODIRECTORY_VERSION);
+
 }
 
 
@@ -56,6 +61,24 @@ function geodir_upgrade_136()
 function geodir_upgrade_146(){
     gd_convert_virtual_pages();
 }
+
+
+
+/**
+ * Handles upgrade for geodirectory versions <= 1.4.8.
+ *
+ * @since 1.4.8
+ * @package GeoDirectory
+ */
+function geodir_upgrade_148(){
+    /*
+     * Blank the users google password if present as we now use oAuth 2.0
+     */
+    update_option('geodir_ga_pass','');
+    update_option('geodir_ga_user','');
+
+}
+
 
 
 /**

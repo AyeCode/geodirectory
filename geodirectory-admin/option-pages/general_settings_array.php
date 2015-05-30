@@ -137,15 +137,7 @@ $google_analytic_settings = apply_filters('geodir_google_analytic_settings', arr
 
     array('name' => __('Google Analytic Settings', GEODIRECTORY_TEXTDOMAIN), 'type' => 'sectionstart', 'id' => 'google_analytic_settings'),
 
-    array(
-        'name' => __('Google analytics "Profile ID(ie: ga:12345678)?', GEODIRECTORY_TEXTDOMAIN) . ' ' .
-            '<a target="_blank" href="http://wpgeodirectory.com/docs/google-analytics/">' . __('help', GEODIRECTORY_TEXTDOMAIN) . '</a>',
-        'desc' => '',
-        'id' => 'geodir_ga_id',
-        'type' => 'text',
-        'css' => 'min-width:300px;',
-        'std' => '' // Default value for the page title - changed in settings
-    ),
+
 
     array(
         'name' => __('Show business owner google analytics stats?', GEODIRECTORY_TEXTDOMAIN),
@@ -167,19 +159,40 @@ $google_analytic_settings = apply_filters('geodir_google_analytic_settings', arr
     ),
 
     array(
-        'name' => __('Google analytics username for api?', GEODIRECTORY_TEXTDOMAIN),
+        'name' => __('Google analytics "Profile ID(ie: ga:12345678)?', GEODIRECTORY_TEXTDOMAIN) . ' ' .
+            '<a target="_blank" href="http://wpgeodirectory.com/docs/google-analytics/">' . __('help', GEODIRECTORY_TEXTDOMAIN) . '</a>',
         'desc' => '',
-        'id' => 'geodir_ga_user',
+        'id' => 'geodir_ga_id',
         'type' => 'text',
         'css' => 'min-width:300px;',
         'std' => '' // Default value for the page title - changed in settings
     ),
 
     array(
-        'name' => __('Google analytics password for api?', GEODIRECTORY_TEXTDOMAIN),
+        'name' => __('Client ID', GEODIRECTORY_TEXTDOMAIN) . ' ' .
+            '<a target="_blank" href="http://wpgeodirectory.com/docs/google-analytics/">' . __('help', GEODIRECTORY_TEXTDOMAIN) . '</a>',
         'desc' => '',
-        'id' => 'geodir_ga_pass',
+        'id' => 'geodir_ga_client_id',
+        'type' => 'text',
+        'css' => 'min-width:300px;',
+        'std' => '' // Default value for the page title - changed in settings
+    ),
+
+    array(
+        'name' => __('Client secret', GEODIRECTORY_TEXTDOMAIN) . ' ' .
+            '<a target="_blank" href="http://wpgeodirectory.com/docs/google-analytics/">' . __('help', GEODIRECTORY_TEXTDOMAIN) . '</a>',
+        'desc' => '',
+        'id' => 'geodir_ga_client_secret',
         'type' => 'password',
+        'css' => 'min-width:300px;',
+        'std' => '' // Default value for the page title - changed in settings
+    ),
+
+    array(
+        'name' => __('Google analytics access', GEODIRECTORY_TEXTDOMAIN),
+        'desc' => '',
+        'id' => 'geodir_ga_token',
+        'type' => 'google_analytics',
         'css' => 'min-width:300px;',
         'std' => '' // Default value for the page title - changed in settings
     ),
