@@ -397,7 +397,7 @@ function parse_marker_jason(data, map_canvas_var) {
         var mapcenter = new google.maps.LatLng(eval(map_canvas_var).latitude, eval(map_canvas_var).longitude);
         list_markers(jsonData, map_canvas_var);
         var center = bounds.getCenter();
-        if (eval(map_canvas_var).autozoom) {
+        if (eval(map_canvas_var).autozoom && parseInt(jsonData[0].totalcount) > 1) {
             jQuery.goMap.map.fitBounds(bounds);
         }
         else {
