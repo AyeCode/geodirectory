@@ -2748,6 +2748,68 @@ function geodir_admin_fields($options)
 
                 break;
 
+            case 'google_analytics' :
+                $selections = (array)get_option($value['id']);
+                if(get_option('geodir_ga_client_id') && get_option('geodir_ga_client_secret') ) {
+                    ?>
+                    <tr valign="top">
+                        <th scope="row" class="titledesc"><?php echo $value['name'] ?></th>
+                        <td class="forminp">
+
+
+                            <?php
+
+                            $oAuthURL = "https://accounts.google.com/o/oauth2/auth?";
+                            $scope = "scope=https://www.googleapis.com/auth/analytics.readonly";
+                            $state = "&state=123";//any string
+                            $redirect_uri = "&redirect_uri=" . admin_url('admin-ajax.php') . "?action=geodir_ga_callback";
+                            $response_type = "&response_type=code";
+                            $client_id = "&client_id=185372810520-eld8a8adfta9m32lv4f45fbf51pvhmqj.apps.googleusercontent.com";
+                            $access_type = "&access_type=offline";
+                            $approval_prompt = "&approval_prompt=force";
+
+                            $auth_url = $oAuthURL . $scope . $state . $redirect_uri . $response_type . $client_id . $access_type . $approval_prompt;
+
+
+                            ?>
+                            <script>
+                                function gd_ga_popup() {
+                                    var win = window.open("<?php echo $auth_url;?>", "Google Analytics", "");
+                                    var pollTimer = window.setInterval(function () {
+                                        if (win.closed !== false) { // !== is required for compatibility with Opera
+                                            window.clearInterval(pollTimer);
+                                            ///someFunctionToCallWhenPopUpCloses();
+                                            alert('closed');
+
+                                            jQuery(".general_settings .submit .button-primary").trigger('click');
+                                        }
+                                    }, 200);
+                                }
+                            </script>
+
+                            <?php
+                            if (get_option('gd_ga_refresh_token')) {
+                                ?>
+                                <span class="button-primary"
+                                      onclick="gd_ga_popup();"><?php _e('Re-authorize', GEODIRECTORY_TEXTDOMAIN); ?></span>
+                                <span
+                                    style="color: green; font-weight: bold;"><?php _e('Authorized', GEODIRECTORY_TEXTDOMAIN); ?></span>
+                            <?php
+                            } else {
+                                ?>
+                                <span class="button-primary"
+                                      onclick="gd_ga_popup();"><?php _e('Authorize', GEODIRECTORY_TEXTDOMAIN);?></span>
+                            <?php
+                            }
+                            ?>
+                        </td>
+                    </tr>
+
+                <?php
+                }
+
+                break;
+
             case 'field_seperator' :
 
                 ?>
