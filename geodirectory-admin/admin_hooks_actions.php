@@ -1973,3 +1973,54 @@ function geodir_update_location_prefix($post_id,$post){
 }
 
 add_action('save_post', 'geodir_update_location_prefix',10,2);
+
+add_action( 'wp_ajax_geodir_gd_callback', 'geodir_ga_callback' );
+
+function geodir_ga_callback(){
+
+if(isset($_REQUEST['code']) && $_REQUEST['code']) {
+    $oAuthURL = "https://www.googleapis.com/oauth2/v3/token?";
+    $code = "code=".$_REQUEST['code'];
+    $grant_type = "&grant_type=authorization_code";
+    $redirect_uri = "&redirect_uri=http://eating.directory/wp-admin/admin-ajax.php?action=geodir_gd_callback";
+    $client_id = "&client_id=185372810520-eld8a8adfta9m32lv4f45fbf51pvhmqj.apps.googleusercontent.com";
+    $client_secret = "&client_secret=xpAYNrvi2tfJ3WgA8KK-1QX2";
+
+    $auth_url = $oAuthURL . $code . $redirect_uri .  $grant_type . $client_id .$client_secret;
+
+    $response = wp_remote_post($auth_url, array('timeout' => 15));
+
+    //print_r($response);
+
+    $error_msg =  __('Something went wrong',GEODIRECTORY_TEXTDOMAIN);
+    if(!empty($response['response']['code']) && $response['response']['code']==200){
+
+        $parts = json_decode($response['body']);
+        //print_r($parts);
+        if(!isset($parts->access_token)){echo $error_msg;exit;}
+        else{
+
+            update_option('gd_ga_access_token', $parts->access_token);
+            update_option('gd_ga_refresh_token', $parts->refresh_token);
+            ?><script>window.close();</script><?php
+        }
+
+
+    }
+    elseif(!empty($response['response']['code']) && $response['response']['code']==400) {
+        $parts = json_decode($response['body']);
+
+        if(isset($parts->error)){
+            echo $parts->error.": ".$parts->error_description;exit;
+        }else{
+            echo $error_msg;exit;
+        }
+
+    }else{
+
+        echo $error_msg;exit;
+
+    }
+}
+    exit;
+}
