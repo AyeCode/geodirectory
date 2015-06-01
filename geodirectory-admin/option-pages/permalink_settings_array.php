@@ -8,7 +8,12 @@
  */
 global $geodir_settings;
 
-
+/**
+ * Filter GD Permalink Settings array.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 $geodir_settings['permalink_settings'] = apply_filters('geodir_permalink_settings', array(
 
     /* Listing Permalink Settings start */

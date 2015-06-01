@@ -16,7 +16,7 @@ global $mapzoom;
  *
  * @since 1.0.0
  *
- * @param bool Whether to ristrict the map for specific address only.
+ * @param bool $var Whether to ristrict the map for specific address only.
  */
 $is_map_restrict = apply_filters('geodir_add_listing_map_restrict', true);
 
@@ -25,7 +25,7 @@ $is_map_restrict = apply_filters('geodir_add_listing_map_restrict', true);
  *
  * @since 1.4.8
  *
- * @param bool Whether to change the country, state, city values in fields.
+ * @param bool $var Whether to change the country, state, city values in fields.
  */
 $auto_change_address_fields_pin_move = apply_filters('geodir_auto_change_address_fields_pin_move', true);
 
@@ -53,7 +53,7 @@ if (is_admin() && isset($_REQUEST['tab']) && $mapzoom == '') {
  *
  * @since 1.0.0
  *
- * @param bool Whether to auto fill country, state, city values in fields.
+ * @param bool $var Whether to auto fill country, state, city values in fields.
  */
 $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
 ?>

@@ -1399,15 +1399,41 @@ function geodir_custom_post_type_form()
     ?>
 
     <div class="gd-content-heading">
+        <?php
+        /**
+         * Filter custom fields panel heading.
+         *
+         * @since 1.0.0
+         * @param string $sub_tab Sub tab name.
+         * @param string $listing_type Post type.
+         */
+        ?>
         <h3><?php echo apply_filters('geodir_custom_fields_panel_head', '', $sub_tab, $listing_type);?></h3>
     </div>
     <div id="container_general" class="clearfix">
         <div class="general-form-builder-frame">
 
             <div class="side-sortables" id="geodir-available-fields">
+                <?php
+                /**
+                 * Filter custom field available fields heading.
+                 *
+                 * @since 1.0.0
+                 * @param string $sub_tab Sub tab name.
+                 * @param string $listing_type Post type.
+                 */
+                ?>
                 <h3 class="hndle"><span><?php echo apply_filters('geodir_cf_panel_available_fields_head', '', $sub_tab, $listing_type);?>
 							</span></h3>
-
+                <?php
+                /**
+                 * Filter custom field available fields note text.
+                 *
+                 * @since 1.0.0
+                 * @param string $sub_tab Sub tab name.
+                 * @param string $listing_type Post type.
+                 */
+                ?>
                 <p><?php echo apply_filters('geodir_cf_panel_available_fields_note', '', $sub_tab, $listing_type);?></p>
 
                 <div class="inside">
@@ -1433,9 +1459,26 @@ function geodir_custom_post_type_form()
 
             <div class="side-sortables" id="geodir-selected-fields">
                 <h3 class="hndle">
+                    <?php
+                    /**
+                     * Filter custom field selected fields heading.
+                     *
+                     * @since 1.0.0
+                     * @param string $sub_tab Sub tab name.
+                     * @param string $listing_type Post type.
+                     */
+                    ?>
                     <span><?php echo apply_filters('geodir_cf_panel_selected_fields_head', '', $sub_tab, $listing_type);?></span>
                 </h3>
-
+                <?php
+                /**
+                 * Filter custom field selected fields note text.
+                 *
+                 * @since 1.0.0
+                 * @param string $sub_tab Sub tab name.
+                 * @param string $listing_type Post type.
+                 */
+                ?>
                 <p><?php echo apply_filters('geodir_cf_panel_selected_fields_note', '', $sub_tab, $listing_type);?></p>
 
                 <div class="inside">

@@ -115,7 +115,7 @@ function geodir_draw_map($map_args = array())
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param object Objects of post types.
+	 * @param object $object Objects of post types.
 	 */
 	$post_types = apply_filters('geodir_map_post_type_list_' . $map_canvas_name, geodir_get_posttypes('object'));
     

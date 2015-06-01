@@ -134,6 +134,16 @@ function geodir_post_custom_fields($package_id = '', $default = 'all', $post_typ
     $geodir_post_custom_fields_cache[$cache_stored] = $return_arr;
 
     if (has_filter('geodir_filter_geodir_post_custom_fields')) {
+        /**
+         * Filter the post custom fields array.
+         *
+         * @since 1.0.0
+         *
+         * @param array $return_arr Post custom fields array.
+         * @param int|string $package_id The package ID.
+         * @param string $post_type Optional. The wordpress post type.
+         * @param string $fields_location Optional. Where exactly are you going to place this custom fields?.
+         */
         $return_arr = apply_filters('geodir_filter_geodir_post_custom_fields', $return_arr, $package_id, $post_type, $fields_location);
     }
 
@@ -1196,8 +1206,23 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
             if (empty($lat)) $lat = isset($location->city_latitude) ? $location->city_latitude : '';
             if (empty($lng)) $lng = isset($location->city_longitude) ? $location->city_longitude : '';
 
-
+            /**
+             * Filter the default latitude.
+             *
+             * @since 1.0.0
+             *
+             * @param float $lat Default latitude.
+             * @param bool $is_admin For admin use only?.
+             */
             $lat = apply_filters('geodir_default_latitude', $lat, $is_admin);
+            /**
+             * Filter the default longitude.
+             *
+             * @since 1.0.0
+             *
+             * @param float $lat Default longitude.
+             * @param bool $is_admin For admin use only?.
+             */
             $lng = apply_filters('geodir_default_longitude', $lng, $is_admin);
 
             ?>
@@ -2069,7 +2094,11 @@ if (!function_exists('geodir_show_listing_info')) {
                             $addition_fields = '';
 
                             if (!empty($extra_fields)) {
-
+                                /**
+                                 * Filter "show city in address" value.
+                                 *
+                                 * @since 1.0.0
+                                 */
                                 $show_city_in_address = apply_filters('geodir_show_city_in_address', false);
                                 if (isset($extra_fields['show_city']) && $extra_fields['show_city'] && $show_city_in_address) {
                                     $field = $type['htmlvar_name'] . '_city';
@@ -2234,7 +2263,15 @@ if (!function_exists('geodir_show_listing_info')) {
 
                             // all search engines that use the nofollow value exclude links that use it from their ranking calculation
                             $rel = strpos($website, get_site_url()) !== false ? '' : 'rel="nofollow"';
-
+                            /**
+                             * Filter custom field website name.
+                             *
+                             * @since 1.0.0
+                             *
+                             * @param string $type['site_title'] Website Title.
+                             * @param string $website Website URL.
+                             * @param int $post->ID Post ID.
+                             */
                             $html = '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $type['htmlvar_name'] . '"><span class="geodir-i-website" style="' . $field_icon . '">' . $field_icon_af . '<a href="' . $website . '" target="_blank" ' . $rel . ' ><strong>' . apply_filters('geodir_custom_field_website_name', stripslashes(__($type['site_title'], GEODIRECTORY_TEXTDOMAIN)), $website, $post->ID) . '</strong></a></span></div>';
 
                         endif;
@@ -2914,6 +2951,15 @@ if (!function_exists('geodir_show_listing_info')) {
                      * @param string $html_var The HTML variable name for the field.
                      */
                     do_action('geodir_before_show_' . $html_var);
+                    /**
+                     * Filter custom field output.
+                     *
+                     * @since 1.0.0
+                     *
+                     * @param string $html_var The HTML variable name for the field.
+                     * @param string $html Custom field unfiltered HTML.
+                     * @param array $variables_array Custom field variables array.
+                     */
                     if ($html) echo apply_filters('geodir_show_' . $html_var, $html, $variables_array);
 
                     /**
@@ -3261,7 +3307,7 @@ if (!function_exists('geodir_max_upload_size')) {
         } else {
             $max_filesize = $max_filesize > 0 ? $max_filesize . 'mb' : '2mb';
         }
-
+        /** Filter documented in geodirectory-functions/general_functions.php **/
         return apply_filters('geodir_default_image_upload_size_limit', $max_filesize);
     }
 }
@@ -3371,7 +3417,13 @@ function geodir_get_custom_sort_options($post_type = '')
             'htmlvar_name' => 'post_title'
         );
 
-
+        /**
+         * Hook to add custom sort options.
+         *
+         * @since 1.0.0
+         * @param array $fields Unmodified sort options array.
+         * @param string $post_type Post type.
+         */
         return $fields = apply_filters('geodir_add_custom_sort_options', $fields, $post_type);
 
     }
