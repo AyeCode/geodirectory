@@ -3513,7 +3513,7 @@ function geodir_import_export_page() {
                         	<input onclick="gd_imex_ContinueImport(this, 'post')" type="button" value="<?php _e( "Continue Import Data", GEODIRECTORY_TEXTDOMAIN );?>" id="gd_continue_data" class="button-primary" style="display:none"/>
                         	<input type="button" value="<?php _e("Terminate Import Data", GEODIRECTORY_TEXTDOMAIN);?>" id="gd_stop_import" class="button-primary" name="gd_stop_import" style="display:none" onclick="gd_imex_TerminateImport(this, 'post')"/>
 							<div id="gd_process_data" style="display:none">
-								<span class="spinner" style="display:inline-block;margin:0 5px 0 5px;float:left"></span><?php _e("Wait, processing import data...", GEODIRECTORY_TEXTDOMAIN);?>
+								<span class="spinner is-active" style="display:inline-block;margin:0 5px 0 5px;float:left"></span><?php _e("Wait, processing import data...", GEODIRECTORY_TEXTDOMAIN);?>
 							</div>
 						</div>
 					</td>
@@ -3622,7 +3622,7 @@ function geodir_import_export_page() {
                         	<input onclick="gd_imex_ContinueImport(this, 'cat')" type="button" value="<?php _e( "Continue Import Data", GEODIRECTORY_TEXTDOMAIN );?>" id="gd_continue_data" class="button-primary" style="display:none"/>
                         	<input type="button" value="<?php _e("Terminate Import Data", GEODIRECTORY_TEXTDOMAIN);?>" id="gd_stop_import" class="button-primary" name="gd_stop_import" style="display:none" onclick="gd_imex_TerminateImport(this, 'cat')"/>
 							<div id="gd_process_data" style="display:none">
-								<span class="spinner" style="display:inline-block;margin:0 5px 0 5px;float:left"></span><?php _e("Wait, processing import data...", GEODIRECTORY_TEXTDOMAIN);?>
+								<span class="spinner is-active" style="display:inline-block;margin:0 5px 0 5px;float:left"></span><?php _e("Wait, processing import data...", GEODIRECTORY_TEXTDOMAIN);?>
 							</div>
 						</div>
 					</td>
@@ -5312,7 +5312,7 @@ function geodir_imex_get_posts( $post_type ) {
 		$csv_row[] = 'geodir_facebook';
 		$csv_row[] = 'geodir_video';
 		$csv_row[] = 'geodir_special_offers';
-		
+				
 		$custom_fields = geodir_imex_get_custom_fields( $post_type );
 		if ( !empty( $custom_fields ) ) {
 			foreach ( $custom_fields as $custom_field ) {
@@ -5320,19 +5320,27 @@ function geodir_imex_get_posts( $post_type ) {
 			}
 		}
 		
+		// Export franchise fields
+		$is_franchise_active = is_plugin_active( 'geodir_franchise/geodir_franchise.php' ) && geodir_franchise_enabled( $post_type ) ? true : false;
+		if ($is_franchise_active) {
+			$csv_row[] = 'gd_is_franchise';
+			$csv_row[] = 'gd_franchise_lock';
+			$csv_row[] = 'franchise';
+		}
+		
 		$csv_rows[] = $csv_row;
 
 		$images_count = 5;
 		foreach ( $posts as $post ) {
 			$post_id = $post['ID'];
-			
+						
 			$taxonomy_category = $post_type . 'category';
 			$taxonomy_tags = $post_type . '_tags';
 			
-			$terms = wp_get_post_terms( $post_id, array( $taxonomy_category, $taxonomy_tags ) );
-			
 			$post_category = '';
 			$post_tags = '';
+			$terms = wp_get_post_terms( $post_id, array( $taxonomy_category, $taxonomy_tags ) );
+			
 			if ( !empty( $terms ) && !is_wp_error( $terms ) ) {
 				$post_category = array();
 				$post_tags = array();
@@ -5351,7 +5359,57 @@ function geodir_imex_get_posts( $post_type ) {
 				$post_tags = !empty( $post_tags ) ? implode( ',', $post_tags ) : '';
 			}
 			
-			$post_info = (array)geodir_get_post_info( $post_id );
+			$gd_post_info = geodir_get_post_info( $post_id );
+			$post_info = (array)$gd_post_info;
+			
+			// Franchise data
+			$franchise_id = NULL;
+			$franchise_info = array();
+			$locked_fields = array();
+			
+			if ($is_franchise_active && isset($post_info['franchise']) && (int)$post_info['franchise'] > 0 && geodir_franchise_check((int)$post_info['franchise'])) {
+				$franchise_id = $post_info['franchise'];
+				$gd_franchise_info = geodir_get_post_info($franchise_id);
+
+				if (geodir_franchise_pkg_is_active($gd_franchise_info)) {
+					$franchise_info = (array)$gd_franchise_info;
+					$locked_fields = geodir_franchise_get_locked_fields($franchise_id, true);
+					
+					if (!empty($locked_fields)) {
+						foreach( $locked_fields as $locked_field) {
+							if (isset($post_info[$locked_field]) && isset($franchise_info[$locked_field])) {
+								$post_info[$locked_field] = $franchise_info[$locked_field];
+							}
+							
+							if (in_array($taxonomy_category, $locked_fields) || in_array('post_tags', $locked_fields)) {
+								$franchise_terms = wp_get_post_terms( $franchise_id, array( $taxonomy_category, $taxonomy_tags ) );
+			
+								if ( !empty( $franchise_terms ) && !is_wp_error( $franchise_terms ) ) {
+									$franchise_post_category = array();
+									$franchise_post_tags = array();
+								
+									foreach ( $franchise_terms as $franchise_term ) {
+										if ( $franchise_term->taxonomy == $taxonomy_category ) {
+											$franchise_post_category[] = $franchise_term->name;
+										}
+										
+										if ( $franchise_term->taxonomy == $taxonomy_tags ) {
+											$franchise_post_tags[] = $franchise_term->name;
+										}
+									}
+									
+									if (in_array($taxonomy_category, $locked_fields)) {
+										$post_category = !empty( $franchise_post_category ) ? implode( ',', $franchise_post_category ) : '';
+									}
+									if (in_array('post_tags', $locked_fields)) {
+										$post_tags = !empty( $franchise_post_tags ) ? implode( ',', $franchise_post_tags ) : '';
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 						
 			$post_images = geodir_get_images( $post_id );
 			$current_images = array();
@@ -5405,6 +5463,24 @@ function geodir_imex_get_posts( $post_type ) {
 				}
 			}
 			
+			// Franchise data
+			if ($is_franchise_active) {
+				$gd_is_franchise = '';
+				$locaked_fields = '';
+				$franchise = '';
+					
+				if (geodir_franchise_pkg_is_active($gd_post_info)) {
+					$gd_is_franchise = (int)get_post_meta( $post_id, 'gd_is_franchise', true );
+					$locaked_fields = $gd_is_franchise ? get_post_meta( $post_id, 'gd_franchise_lock', true ) : '';
+					$locaked_fields = (is_array($locaked_fields) && !empty($locaked_fields) ? implode(",", $locaked_fields) : '');
+					$franchise = !$gd_is_franchise && isset($post_info['franchise']) && (int)$post_info['franchise'] > 0 ? (int)$post_info['franchise'] : 0; // franchise id
+				}
+				
+				$csv_row[] = (int)$gd_is_franchise; // gd_is_franchise
+				$csv_row[] = $locaked_fields; // gd_franchise_lock fields
+				$csv_row[] = (int)$franchise; // franchise id
+			}
+			
 			for ( $c = 0; $c < $images_count; $c++ ) {
 				$csv_row[] = isset( $current_images[$c] ) ? $current_images[$c] : ''; // IMAGE
 			}
@@ -5439,7 +5515,7 @@ function geodir_get_export_posts( $post_type ) {
 		
 	$table = $plugin_prefix . $post_type . '_detail';
 
-	$query = "SELECT {$wpdb->posts}.ID FROM {$wpdb->posts} INNER JOIN {$table} ON {$table}.post_id = {$wpdb->posts}.ID WHERE {$wpdb->posts}.post_type = %s ORDER BY {$table}.post_title ASC";
+	$query = "SELECT {$wpdb->posts}.ID FROM {$wpdb->posts} INNER JOIN {$table} ON {$table}.post_id = {$wpdb->posts}.ID WHERE {$wpdb->posts}.post_type = %s ORDER BY {$wpdb->posts}.ID ASC";
 	/**
 	 * Modify returned posts SQL query for the current post type.
 	 *
@@ -5485,7 +5561,7 @@ function geodir_imex_get_events_query( $query, $post_type ) {
 		$table = $plugin_prefix . $post_type . '_detail';
 		$schedule_table = EVENT_SCHEDULE;
 
-		$query = "SELECT {$wpdb->posts}.ID, {$schedule_table}.event_date, {$schedule_table}.event_enddate AS enddate, {$schedule_table}.event_starttime AS starttime, {$schedule_table}.event_endtime AS endtime FROM {$wpdb->posts} INNER JOIN {$table} ON ({$table}.post_id = {$wpdb->posts}.ID) INNER JOIN {$schedule_table} ON ({$schedule_table}.event_id = {$wpdb->posts}.ID) WHERE {$wpdb->posts}.post_type = %s ORDER BY {$table}.post_title ASC";
+		$query = "SELECT {$wpdb->posts}.ID, {$schedule_table}.event_date, {$schedule_table}.event_enddate AS enddate, {$schedule_table}.event_starttime AS starttime, {$schedule_table}.event_endtime AS endtime FROM {$wpdb->posts} INNER JOIN {$table} ON ({$table}.post_id = {$wpdb->posts}.ID) INNER JOIN {$schedule_table} ON ({$schedule_table}.event_id = {$wpdb->posts}.ID) WHERE {$wpdb->posts}.post_type = %s ORDER BY {$wpdb->posts}.ID ASC";
 	}
 	
 	return $query; 

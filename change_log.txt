@@ -7,6 +7,7 @@ Added filter to be able to stop add listing address from changing when moving ma
 Better seo title and description for search results - CHANGED
 Without filling mandatory fields click on save draft button keeps spinning - FIXED
 Autozoom assigned only for more then map markers - CHANGED
+Import/export integrated with franchise feature - ADDED
 
 v1.4.7
 Search not working for empty keyword search - FIXED
