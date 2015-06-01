@@ -3,6 +3,7 @@
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global array $geodir_sidebars List of geodirectory sidebars.
  */
 function geodir_register_sidebar()
 {
