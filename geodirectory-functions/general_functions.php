@@ -415,10 +415,21 @@ if (!function_exists('geodir_get_imagesize')) {
             'slider-thumb' => array('w' => 100, 'h' => 100)
         );
 
+        /**
+         * Filter the image sizes array.
+         *
+         * @since 1.0.0
+         * @param array $imagesizes Image size array.
+         */
         $imagesizes = apply_filters('geodir_imagesizes', $imagesizes);
 
         if (!empty($size) && array_key_exists($size, $imagesizes)) {
-
+            /**
+             * Filters image size of the passed key.
+             *
+             * @since 1.0.0
+             * @param array $imagesizes[$size] Image size array of the passed key.
+             */
             return apply_filters('geodir_get_imagesize_' . $size, $imagesizes[$size]);
 
         } elseif (!empty($size)) {
@@ -732,12 +743,22 @@ function geodir_breadcrumb()
 {
     global $wp_query, $geodir_add_location_url;
 
+    /**
+     * Filter breadcrumb separator.
+     *
+     * @since 1.0.0
+     */
     $separator = apply_filters('geodir_breadcrumb_separator', ' > ');
 
     if (!is_home()) {
         $breadcrumb = '';
         $url_categoris = '';
         $breadcrumb .= '<div class="geodir-breadcrumb clearfix"><ul id="breadcrumbs">';
+        /**
+         * Filter breadcrumb's first link.
+         *
+         * @since 1.0.0
+         */
         $breadcrumb .= '<li>' . apply_filters('geodir_breadcrumb_first_link', '<a href="' . get_option('home') . '">' . __('Home', GEODIRECTORY_TEXTDOMAIN) . '</a>') . '</li>';
 
         $gd_post_type = geodir_get_current_posttype();
@@ -894,7 +915,13 @@ function geodir_breadcrumb()
             $author_link = get_author_posts_url($user_id);
             $default_author_link = geodir_getlink($author_link, array('geodir_dashbord' => 'true', 'stype' => 'gd_place'), false);
 
-            // author page link
+            /**
+             * Filter author page link.
+             *
+             * @since 1.0.0
+             * @param string $default_author_link Default author link.
+             * @param int $user_id Author ID.
+             */
             $default_author_link = apply_filters('geodir_dashboard_author_link', $default_author_link, $user_id);
 
             $breadcrumb .= '<li>';
@@ -903,7 +930,14 @@ function geodir_breadcrumb()
             if (isset($_REQUEST['list'])) {
                 $author_link = geodir_getlink($author_link, array('geodir_dashbord' => 'true', 'stype' => $_REQUEST['stype']), false);
 
-                // author page link
+                /**
+                 * Filter author page link.
+                 *
+                 * @since 1.0.0
+                 * @param string $author_link Author page link.
+                 * @param int $user_id Author ID.
+                 * @param string $_REQUEST['stype'] Post type.
+                 */
                 $author_link = apply_filters('geodir_dashboard_author_link', $author_link, $user_id, $_REQUEST['stype']);
 
                 $breadcrumb .= $separator . '<a href="' . $author_link . '">' . __(ucfirst($post_type_info->label), GEODIRECTORY_TEXTDOMAIN) . '</a>';
@@ -958,6 +992,13 @@ function geodir_breadcrumb()
         }
         $breadcrumb .= '</ul></div>';
 
+        /**
+         * Filter breadcrumb html output.
+         *
+         * @since 1.0.0
+         * @param string $breadcrumb Breadcrumb HTML.
+         * @param string $separator Breadcrumb separator.
+         */
         echo $breadcrumb = apply_filters('geodir_breadcrumb', $breadcrumb, $separator);
     }
 }
@@ -1065,6 +1106,12 @@ function geodir_max_upload_size()
         $max_filesize = $max_filesize > 0 ? $max_filesize . 'mb' : '2mb';
     }
 
+    /**
+     * Filter default image upload size limit.
+     *
+     * @since 1.0.0
+     * @param string $max_filesize Max file upload size. Ex. 10mb, 512kb.
+     */
     return apply_filters('geodir_default_image_upload_size_limit', $max_filesize);
 }
 
@@ -1360,7 +1407,11 @@ add_filter('body_class', 'geodir_custom_posts_body_class'); // let's add a class
  */
 function geodir_map_zoom_level()
 {
-
+    /**
+     * Filter GD map zoom level.
+     *
+     * @since 1.0.0
+     */
     return apply_filters('geodir_map_zoom_level', array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19));
 
 }
@@ -1522,7 +1573,7 @@ function geodir_widget_listings_get_order($query_args)
 }
 
 /**
- * Retrive lisitngs/count using requested filter parameters.
+ * Retrieve listings/count using requested filter parameters.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -1544,6 +1595,14 @@ function geodir_get_widget_listings($query_args = array(), $count_only = false)
     $table = $plugin_prefix . $post_type . '_detail';
 
     $fields = $wpdb->posts . ".*, " . $table . ".*";
+    /**
+     * Filter widget listing fields string part that is being used for query.
+     *
+     * @since 1.0.0
+     * @param string $fields Fields string.
+     * @param string $table Table name.
+     * @param string $post_type Post type.
+     */
     $fields = apply_filters('geodir_filter_widget_listings_fields', $fields, $table, $post_type);
 
     $join = "INNER JOIN " . $table . " ON (" . $table . ".post_id = " . $wpdb->posts . ".ID)";
@@ -1561,6 +1620,13 @@ function geodir_get_widget_listings($query_args = array(), $count_only = false)
 
     ########### WPML ###########
 
+    /**
+     * Filter widget listing join clause string part that is being used for query.
+     *
+     * @since 1.0.0
+     * @param string $join Join clause string.
+     * @param string $post_type Post type.
+     */
     $join = apply_filters('geodir_filter_widget_listings_join', $join, $post_type);
 
     $post_status = is_super_admin() ? " OR " . $wpdb->posts . ".post_status = 'private'" : '';
@@ -1574,11 +1640,24 @@ function geodir_get_widget_listings($query_args = array(), $count_only = false)
         }
     }
     ########### WPML ###########
-
+    /**
+     * Filter widget listing where clause string part that is being used for query.
+     *
+     * @since 1.0.0
+     * @param string $where Where clause string.
+     * @param string $post_type Post type.
+     */
     $where = apply_filters('geodir_filter_widget_listings_where', $where, $post_type);
     $where = $where != '' ? " WHERE 1=1 " . $where : '';
 
     $groupby = " GROUP BY $wpdb->posts.ID ";
+    /**
+     * Filter widget listing groupby clause string part that is being used for query.
+     *
+     * @since 1.0.0
+     * @param string $groupby Group by clause string.
+     * @param string $post_type Post type.
+     */
     $groupby = apply_filters('geodir_filter_widget_listings_groupby', $groupby, $post_type);
 
     if ($count_only) {
@@ -1588,11 +1667,26 @@ function geodir_get_widget_listings($query_args = array(), $count_only = false)
 		$rows = (int)$wpdb->get_var($sql);
 	} else {
 		$orderby = geodir_widget_listings_get_order($query_args);
+        /**
+         * Filter widget listing orderby clause string part that is being used for query.
+         *
+         * @since 1.0.0
+         * @param string $orderby Order by clause string.
+         * @param string $table Table name.
+         * @param string $post_type Post type.
+         */
 		$orderby = apply_filters('geodir_filter_widget_listings_orderby', $orderby, $table, $post_type);
 		$orderby .= $wpdb->posts . ".post_title ASC";
 		$orderby = $orderby != '' ? " ORDER BY " . $orderby : '';
 			
 		$limit = !empty($query_args['posts_per_page']) ? $query_args['posts_per_page'] : 5;
+        /**
+         * Filter widget listing limit that is being used for query.
+         *
+         * @since 1.0.0
+         * @param int $limit Query results limit.
+         * @param string $post_type Post type.
+         */
 		$limit = apply_filters('geodir_filter_widget_listings_limit', $limit, $post_type);
 		
 		$page = !empty($query_args['pageno']) ? absint($query_args['pageno']) : 1;
@@ -1803,7 +1897,7 @@ function geodir_function_widget_listings_limit($limit)
 }
 
 /**
- * wp media large width.
+ * WP media large width.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -1821,12 +1915,20 @@ function geodir_media_image_large_width($default = 800, $params = '')
         $large_size_w = 800;
     }
 
+    /**
+     * Filter large image width.
+     *
+     * @since 1.0.0
+     * @param int $large_size_w Large image width.
+     * @param int $default Default width.
+     * @param string|array $params Image parameters.
+     */
     $large_size_w = apply_filters('geodir_filter_media_image_large_width', $large_size_w, $default, $params);
     return $large_size_w;
 }
 
 /**
- * wp media large height.
+ * WP media large height.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -1844,6 +1946,14 @@ function geodir_media_image_large_height($default = 800, $params = '')
         $large_size_h = 800;
     }
 
+    /**
+     * Filter large image height.
+     *
+     * @since 1.0.0
+     * @param int $large_size_h Large image height.
+     * @param int $default Default height.
+     * @param string|array $params Image parameters.
+     */
     $large_size_h = apply_filters('geodir_filter_media_image_large_height', $large_size_h, $default, $params);
 
     return $large_size_h;
@@ -2150,26 +2260,82 @@ function geodir_listing_slider_widget_output($args = '', $instance = '')
 
     /** This filter is documented in geodirectory_widgets.php */
     $title = empty($instance['title']) ? '' : apply_filters('widget_title', __($instance['title'], GEODIRECTORY_TEXTDOMAIN));
-
+    /**
+     * Filter the widget post type.
+     *
+     * @since 1.0.0
+     * @param string $instance['post_type'] Post type of listing.
+     */
     $post_type = empty($instance['post_type']) ? 'gd_place' : apply_filters('widget_post_type', $instance['post_type']);
-
+    /**
+     * Filter the widget's term.
+     *
+     * @since 1.0.0
+     * @param string $instance['category'] Filter by term. Can be any valid term.
+     */
     $category = empty($instance['category']) ? '0' : apply_filters('widget_category', $instance['category']);
-
+    /**
+     * Filter the widget listings limit.
+     *
+     * @since 1.0.0
+     * @param string $instance['post_number'] Number of listings to display.
+     */
     $post_number = empty($instance['post_number']) ? '5' : apply_filters('widget_post_number', $instance['post_number']);
-
+    /**
+     * Filter widget's "show title" value.
+     *
+     * @since 1.0.0
+     * @param string|bool $instance['show_title'] Do you want to display title? Can be 1 or 0.
+     */
     $show_title = empty($instance['show_title']) ? '' : apply_filters('widget_show_title', $instance['show_title']);
-
+    /**
+     * Filter widget's "slideshow" value.
+     *
+     * @since 1.0.0
+     * @param int $instance['slideshow'] Setup a slideshow for the slider to animate automatically.
+     */
     $slideshow = empty($instance['slideshow']) ? 0 : apply_filters('widget_slideshow', $instance['slideshow']);
-
+    /**
+     * Filter widget's "animationLoop" value.
+     *
+     * @since 1.0.0
+     * @param int $instance['animationLoop'] Gives the slider a seamless infinite loop.
+     */
     $animationLoop = empty($instance['animationLoop']) ? 0 : apply_filters('widget_animationLoop', $instance['animationLoop']);
-
+    /**
+     * Filter widget's "directionNav" value.
+     *
+     * @since 1.0.0
+     * @param int $instance['directionNav'] Enable previous/next arrow navigation?. Can be 1 or 0.
+     */
     $directionNav = empty($instance['directionNav']) ? 0 : apply_filters('widget_directionNav', $instance['directionNav']);
-
+    /**
+     * Filter widget's "slideshowSpeed" value.
+     *
+     * @since 1.0.0
+     * @param int $instance['slideshowSpeed'] Set the speed of the slideshow cycling, in milliseconds.
+     */
     $slideshowSpeed = empty($instance['slideshowSpeed']) ? 5000 : apply_filters('widget_slideshowSpeed', $instance['slideshowSpeed']);
-
+    /**
+     * Filter widget's "animationSpeed" value.
+     *
+     * @since 1.0.0
+     * @param int $instance['animationSpeed'] Set the speed of animations, in milliseconds.
+     */
     $animationSpeed = empty($instance['animationSpeed']) ? 600 : apply_filters('widget_animationSpeed', $instance['animationSpeed']);
-
+    /**
+     * Filter widget's "animation" value.
+     *
+     * @since 1.0.0
+     * @param string $instance['animation'] Controls the animation type, "fade" or "slide".
+     */
     $animation = empty($instance['animation']) ? 'slide' : apply_filters('widget_animation', $instance['animation']);
+    /**
+     * Filter widget's "list_sort" type.
+     *
+     * @since 1.0.0
+     * @param string $instance['list_sort'] Listing sort by type.
+     */
     $list_sort = empty($instance['list_sort']) ? 'latest' : apply_filters('widget_list_sort', $instance['list_sort']);
     $show_featured_only = !empty($instance['show_featured_only']) ? 1 : NULL;
 
@@ -2353,7 +2519,14 @@ function geodir_loginwidget_output($args = '', $instance = '')
                         if (geodir_get_current_posttype() == $key && geodir_is_page('add-listing'))
                             $selected = 'selected="selected"';
 
-                        // hook for add listing link
+                        /**
+                         * Filter add listing link.
+                         *
+                         * @since 1.0.0
+                         * @param string $add_link Add listing link.
+                         * @param string $key Add listing array key.
+                         * @param int $current_user->ID Current user ID.
+                         */
                         $add_link = apply_filters('geodir_dashboard_link_add_listing', $add_link, $key, $current_user->ID);
 
                         $addlisting_links .= '<option ' . $selected . ' value="' . $add_link . '">' . __(ucfirst($name), GEODIRECTORY_TEXTDOMAIN) . '</option>';
@@ -2392,7 +2565,14 @@ function geodir_loginwidget_output($args = '', $instance = '')
                     if (isset($_REQUEST['list']) && $_REQUEST['list'] == 'favourite' && isset($_REQUEST['stype']) && $_REQUEST['stype'] == $key && isset($_REQUEST['geodir_dashbord'])) {
                         $selected = 'selected="selected"';
                     }
-                    // hook for favorite listing link
+                    /**
+                     * Filter favorite listing link.
+                     *
+                     * @since 1.0.0
+                     * @param string $post_type_link Favorite listing link.
+                     * @param string $key Favorite listing array key.
+                     * @param int $current_user->ID Current user ID.
+                     */
                     $post_type_link = apply_filters('geodir_dashboard_link_favorite_listing', $post_type_link, $key, $current_user->ID);
 
                     $favourite_links .= '<option ' . $selected . ' value="' . $post_type_link . '">' . __(ucfirst($name), GEODIRECTORY_TEXTDOMAIN) . '</option>';
@@ -2430,7 +2610,14 @@ function geodir_loginwidget_output($args = '', $instance = '')
                         $selected = 'selected="selected"';
                     }
 
-                    // hook for my listing link
+                    /**
+                     * Filter my listing link.
+                     *
+                     * @since 1.0.0
+                     * @param string $listing_link My listing link.
+                     * @param string $key My listing array key.
+                     * @param int $current_user->ID Current user ID.
+                     */
                     $listing_link = apply_filters('geodir_dashboard_link_my_listing', $listing_link, $key, $current_user->ID);
 
                     $listing_links .= '<option ' . $selected . ' value="' . $listing_link . '">' . __(ucfirst($name), GEODIRECTORY_TEXTDOMAIN) . '</option>';
@@ -2452,7 +2639,12 @@ function geodir_loginwidget_output($args = '', $instance = '')
         }
 
         $dashboard_link = ob_get_clean();
-
+        /**
+         * Filter dashboard links HTML.
+         *
+         * @since 1.0.0
+         * @param string $dashboard_link Dashboard links HTML.
+         */
         echo apply_filters('geodir_dashboard_links', $dashboard_link);
         echo '</ul>';
     } else {
@@ -2476,9 +2668,23 @@ function geodir_loginwidget_output($args = '', $instance = '')
                                                          value="<?php echo SIGN_IN_BUTTON; ?>" class="b_signin"/>
 
                 <p class="geodir-new-forgot-link">
+                    <?php
+                    /**
+                     * Filter signup page register form link.
+                     *
+                     * @since 1.0.0
+                     */
+                    ?>
                     <a href="<?php echo apply_filters('geodir_signup_reg_form_link', home_url() . '/?geodir_signup=true&amp;page1=sign_up'); ?>"
                        class="goedir-newuser-link"><?php echo NEW_USER_TEXT; ?></a>
 
+                    <?php
+                    /**
+                     * Filter signup page forgot password form link.
+                     *
+                     * @since 1.0.0
+                     */
+                    ?>
                     <a href="<?php echo apply_filters('geodir_signup_forgot_form_link', home_url() . '/?geodir_signup=true&amp;page1=sign_in'); ?>"
                        class="goedir-forgot-link"><?php echo FORGOT_PW_TEXT; ?></a></p></div>
         </form>
@@ -2510,12 +2716,54 @@ function geodir_popular_postview_output($args = '', $instance = '')
 
     /** This filter is documented in geodirectory_widgets.php */
     $title = empty($instance['title']) ? ucwords($instance['category_title']) : apply_filters('widget_title', __($instance['title'], GEODIRECTORY_TEXTDOMAIN));
+    /**
+     * Filter the widget post type.
+     *
+     * @since 1.0.0
+     * @param string $instance['post_type'] Post type of listing.
+     */
     $post_type = empty($instance['post_type']) ? 'gd_place' : apply_filters('widget_post_type', $instance['post_type']);
+    /**
+     * Filter the widget's term.
+     *
+     * @since 1.0.0
+     * @param string $instance['category'] Filter by term. Can be any valid term.
+     */
     $category = empty($instance['category']) ? '0' : apply_filters('widget_category', $instance['category']);
+    /**
+     * Filter the widget listings limit.
+     *
+     * @since 1.0.0
+     * @param string $instance['post_number'] Number of listings to display.
+     */
     $post_number = empty($instance['post_number']) ? '5' : apply_filters('widget_post_number', $instance['post_number']);
+    /**
+     * Filter widget's "layout" type.
+     *
+     * @since 1.0.0
+     * @param string $instance['layout'] Widget layout type.
+     */
     $layout = empty($instance['layout']) ? 'gridview_onehalf' : apply_filters('widget_layout', $instance['layout']);
-    $add_location_filter = empty($instance['add_location_filter']) ? '0' : apply_filters('widget_layout', $instance['add_location_filter']);
+    /**
+     * Filter widget's "add_location_filter" value.
+     *
+     * @since 1.0.0
+     * @param string|bool $instance['add_location_filter'] Do you want to add location filter? Can be 1 or 0.
+     */
+    $add_location_filter = empty($instance['add_location_filter']) ? '0' : apply_filters('widget_add_location_filter', $instance['add_location_filter']);
+    /**
+     * Filter widget's listing width.
+     *
+     * @since 1.0.0
+     * @param string $instance['listing_width'] Listing width.
+     */
     $listing_width = empty($instance['listing_width']) ? '' : apply_filters('widget_listing_width', $instance['listing_width']);
+    /**
+     * Filter widget's "list_sort" type.
+     *
+     * @since 1.0.0
+     * @param string $instance['list_sort'] Listing sort by type.
+     */
     $list_sort = empty($instance['list_sort']) ? 'latest' : apply_filters('widget_list_sort', $instance['list_sort']);
     $use_viewing_post_type = !empty($instance['use_viewing_post_type']) ? true : false;
 
@@ -2535,6 +2783,12 @@ function geodir_popular_postview_output($args = '', $instance = '')
     $title = str_replace("%posttype_singular_label%", $posttype_singular_label, $title);
 
     if (isset($instance['character_count'])) {
+        /**
+         * Filter the widget's excerpt character count.
+         *
+         * @since 1.0.0
+         * @param int $instance['character_count'] Excerpt character count.
+         */
         $character_count = apply_filters('widget_list_character_count', $instance['character_count']);
     } else {
         $character_count = '';
@@ -2668,8 +2922,19 @@ function geodir_popular_postview_output($args = '', $instance = '')
                 $gridview_columns_widget = '';
             }
 
+            /**
+             * Filter the template path.
+             *
+             * @since 1.0.0
+             */
             $template = apply_filters("geodir_template_part-widget-listing-listview", geodir_locate_template('widget-listing-listview'));
             if (!isset($character_count)) {
+                /**
+                 * Filter the widget's excerpt character count.
+                 *
+                 * @since 1.0.0
+                 * @param int $instance['character_count'] Excerpt character count.
+                 */
                 $character_count = $character_count == '' ? 50 : apply_filters('widget_character_count', $character_count);
             }
 
@@ -2735,7 +3000,12 @@ function geodir_count_reviews_by_term_id($term_id, $taxonomy, $post_type)
  */
 function geodir_count_reviews_by_terms($force_update = false)
 {
-
+    /**
+     * Filter review count option data.
+     *
+     * @since 1.0.0
+     * @param bool $force_update Force update option value?. Default.false.
+     */
     $option_data = apply_filters('geodir_count_reviews_by_terms_before', '', $force_update);
     if (!empty($option_data)) {
         return $option_data;

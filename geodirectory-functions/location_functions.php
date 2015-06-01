@@ -276,6 +276,11 @@ function geodir_add_new_location($location_info = array())
         $region_slug = create_location_slug($location_region);
         $city_slug = create_location_slug($location_city);
 
+        /**
+         * Filter add new location data.
+         *
+         * @since 1.0.0
+         */
         $geodir_location = (object)apply_filters('geodir_add_new_location', array('location_id' => 0,
             'country' => $location_country,
             'region' => $location_region,
