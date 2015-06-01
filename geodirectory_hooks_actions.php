@@ -865,6 +865,8 @@ add_action('switch_theme', 'geodir_store_sidebars');
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global array $geodir_sidebars List of geodirectory sidebars.
+ * @global array $sidebars_widgets List of geodirectory sidebar widgets.
  */
 function geodir_store_sidebars()
 {
@@ -896,6 +898,7 @@ add_action('after_switch_theme', 'geodir_restore_sidebars');
  *
  * @since 1.0.0
  * @package GeoDirectory
+ * @global array $sidebars_widgets List of geodirectory sidebar widgets.
  */
 function geodir_restore_sidebars()
 {
