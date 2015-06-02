@@ -3435,10 +3435,26 @@ function geodir_import_export_tab( $tabs ) {
 function geodir_import_export_page() {
 	$nonce = wp_create_nonce( 'geodir_import_export_nonce' );
 	$gd_cats_sample_csv = geodir_plugin_url() . '/geodirectory-assets/gd_sample_categories.csv';
+    /**
+     * Filter sample category data csv file url.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     *
+     * @param string $gd_cats_sample_csv Sample category data csv file url.
+     */
 	$gd_cats_sample_csv = apply_filters( 'geodir_export_cats_sample_csv', $gd_cats_sample_csv );
 	
 	$gd_posts_sample_csv = geodir_plugin_url() . '/geodirectory-assets/place_listing.csv';
-	$gd_posts_sample_csv = apply_filters( 'geodir_export_posts_sample_csv', $gd_posts_sample_csv );
+    /**
+     * Filter sample post data csv file url.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     *
+     * @param string $gd_posts_sample_csv Sample post data csv file url.
+     */
+    $gd_posts_sample_csv = apply_filters( 'geodir_export_posts_sample_csv', $gd_posts_sample_csv );
 	
 	$gd_posttypes = geodir_get_posttypes( 'array' );
 	
@@ -5535,8 +5551,8 @@ function geodir_get_export_posts( $post_type ) {
 	 * @since 1.4.6
      * @package GeoDirectory
 	 *
-	 * @param object $counts An object containing all post ids.
-	 * @param string $post_type   Post type.
+	 * @param object $results An object containing all post ids.
+	 * @param string $post_type Post type.
 	 */
 	return apply_filters( 'geodir_export_posts', $results, $post_type );
 }

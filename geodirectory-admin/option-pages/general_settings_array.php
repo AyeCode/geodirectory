@@ -8,8 +8,12 @@
  */
 global $geodir_settings;
 
-/** General Options **/
-
+/**
+ * Filter GD general settings array.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 $general_options = apply_filters('geodir_general_options', array(
 
     array('name' => __('General', GEODIRECTORY_TEXTDOMAIN), 'type' => 'title', 'desc' => '', 'id' => 'general_options'),
@@ -130,7 +134,12 @@ $general_options = apply_filters('geodir_general_options', array(
 
 ));/* General Options End*/
 
-/** Google Analytic Settings **/
+/**
+ * Filter GD Google Analytic Settings array.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 $google_analytic_settings = apply_filters('geodir_google_analytic_settings', array(
 
     array('name' => __('Google Analytics', GEODIRECTORY_TEXTDOMAIN), 'type' => 'title', 'desc' => '', 'id' => 'google_analytic_settings'),
@@ -212,7 +221,12 @@ $google_analytic_settings = apply_filters('geodir_google_analytic_settings', arr
 
 )); // google_analytic_settings End
 
-
+/**
+ * Filter GD search Settings array.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 $search_settings = apply_filters('geodir_search_settings', array(
 
     array('name' => __('Search', GEODIRECTORY_TEXTDOMAIN), 'type' => 'title', 'desc' => '', 'id' => 'search_settings'),
@@ -281,6 +295,12 @@ $search_settings = apply_filters('geodir_search_settings', array(
 
 )); //search_settings End
 
+/**
+ * Filter GD Dummy data Settings array.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 $dummy_data_settings = apply_filters('geodir_dummy_data_settings', array(
 
     array('name' => __('Dummy Data', GEODIRECTORY_TEXTDOMAIN), 'type' => 'title', 'desc' => '', 'id' => 'dummy_data_settings'),
@@ -320,6 +340,13 @@ $csv_upload_settings = apply_filters('geodir_csv_upload_settings', array(
 
 $general_settings = array_merge($general_options, $google_analytic_settings, $search_settings, $dummy_data_settings);
 
+/**
+ * Filter GD General Settings array.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $general_settings General settings array.
+ */
 $geodir_settings['general_settings'] = apply_filters('geodir_general_settings', $general_settings);
 
 //$_SESSION['geodir_settings']['general_settings'] = $geodir_settings['general_settings'] ;

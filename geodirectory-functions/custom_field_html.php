@@ -809,7 +809,7 @@ if ($htmlvar_name == 'geodir_email') {
 								 *
 								 * @since 1.0.0
 								 *
-								 * @param string Title of the section.
+								 * @param string $title Title of the section.
 								 * @param string $field_type Current field type.
 								 */
 								echo apply_filters('geodir_advance_custom_fields_heading', __('Posts sort options', GEODIRECTORY_TEXTDOMAIN), $field_type);

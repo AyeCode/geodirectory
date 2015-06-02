@@ -47,7 +47,12 @@ function geodir_theme_location_setting_fun()
 
     return $post_type_arr;
 }
-
+/**
+ * Filter GD design settings array.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', array(
 
     /* Home Layout Settings start */
