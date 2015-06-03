@@ -9,6 +9,7 @@ Without filling mandatory fields click on save draft button keeps spinning - FIX
 Autozoom assigned only for more then map markers - CHANGED
 Import/export integrated with franchise feature - ADDED
 Import/export work with parent/child category - ADDED
+Custom field with apostrophe sign not translated properly - FIXED
 
 v1.4.7
 Search not working for empty keyword search - FIXED

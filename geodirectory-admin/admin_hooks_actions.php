@@ -423,7 +423,7 @@ function geodir_sorting_options_available_fields()
 
 
         foreach ($sort_options as $key => $val) {
-
+			$val = stripslashes_deep($val); // strip slashes
 
             $check_html_variable = $wpdb->get_var(
                 $wpdb->prepare(

@@ -2044,7 +2044,9 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
         if (!empty($custom_fields)) {
             $parse_custom_fields = array();
             foreach ($custom_fields as $field) {
-                $type = $field;
+                $field = stripslashes_deep($field); // strip slashes
+				
+				$type = $field;
                 $field_name = $field['htmlvar_name'];
                 if (empty($geodir_post_info) && geodir_is_page('preview') && $field_name != '' && !isset($post->$field_name) && isset($_REQUEST[$field_name])) {
                     $post->$field_name = $_REQUEST[$field_name];
