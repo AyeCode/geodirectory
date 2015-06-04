@@ -4620,6 +4620,7 @@ function geodir_ajax_import_export() {
 							$cat_name = '';
 							$cat_slug = '';
 							$cat_posttype = '';
+							$cat_parent = '';
 							$cat_description = '';
 							$cat_top_description = '';
 							$cat_image = '';
@@ -4635,6 +4636,8 @@ function geodir_ajax_import_export() {
 									$cat_slug = $row[$c];
 								} else if ( $column == 'cat_posttype' ) {
 									$cat_posttype = $row[$c];
+								} else if ( $column == 'cat_parent' ) {
+									$cat_parent = trim($row[$c]);
 								} else if ( $column == 'cat_description' ) {
 									$cat_description = $row[$c];
 								} else if ( $column == 'cat_top_description' ) {
@@ -4651,11 +4654,10 @@ function geodir_ajax_import_export() {
 								$invalid++;
 								continue;
 							}
-							
+														
 							$term_data = array();
 							$term_data['name'] = $cat_name;
 							$term_data['slug'] = $cat_slug;
-							$term_data['parent'] = 0;
 							$term_data['description'] = $cat_description;
 							$term_data['top_description'] = $cat_top_description;
 							$term_data['image'] = $cat_image != '' ? basename( $cat_image ) : '';
@@ -4666,7 +4668,32 @@ function geodir_ajax_import_export() {
 							$taxonomy = $cat_posttype . 'category';
 							
 							$term_data['taxonomy'] = $taxonomy;
-														
+
+							$term_parent_id = 0;
+							if ($cat_parent != "" || (int)$cat_parent > 0) {
+								$term_parent = '';
+								
+								if ( $term_parent = get_term_by( 'name', $cat_parent, $taxonomy ) ) {
+									$term_parent = $term_parent;
+								} else if ( $term_parent = get_term_by( 'slug', $cat_parent, $taxonomy ) ) {
+									$term_parent = $term_parent;
+								} else if ( $term_parent = get_term_by( 'id', $cat_parent, $taxonomy ) ) {
+									$term_parent = $term_parent;
+								} else {
+									$term_parent_data = array();
+									$term_parent_data['name'] = $cat_parent;											
+									$term_parent_data = array_map( 'utf8_encode', $term_parent_data );										
+									$term_parent_data['taxonomy'] = $taxonomy;
+									
+									$term_parent_id = (int)geodir_imex_insert_term( $taxonomy, $term_parent_data );
+								}
+								
+								if ( !empty( $term_parent ) && !is_wp_error( $term_parent ) ) {
+									$term_parent_id = (int)$term_parent->term_id;
+								}
+							}
+							$term_data['parent'] = (int)$term_parent_id;
+						
 							$term_id = NULL;
 							if ( $import_choice == 'update' ) {
 								if ( $cat_id > 0 && $term = (array)term_exists( $cat_id, $taxonomy ) ) {
@@ -4924,7 +4951,8 @@ function geodir_ajax_import_export() {
 										}
 										
 										if ( !empty( $term_category ) && !is_wp_error( $term_category ) ) {
-											$post_category[] = $term_category->slug;
+											//$post_category[] = $term_category->slug;
+											$post_category[] = intval($term_category->term_id);
 										}
 									}
 								}
@@ -4979,21 +5007,7 @@ function geodir_ajax_import_export() {
 								$gd_post['post_status'] = $post_status;
 								$gd_post['submit_time'] = time();
 								$gd_post['submit_ip'] = $_SERVER['REMOTE_ADDR'];
-					
-								// post taxonomies
-								if ( !empty( $save_post['post_category'] ) ) {
-									wp_set_object_terms( $saved_post_id, $save_post['post_category'], $cat_taxonomy );
-									
-									$post_default_category = isset( $save_post['post_default_category'] ) ? $save_post['post_default_category'] : '';
-									$post_category_str = isset( $save_post['post_category_str'] ) ? $save_post['post_category_str'] : '';
-                            		
-									geodir_set_postcat_structure( $saved_post_id, $cat_taxonomy, $post_default_category, $post_category_str );
-								}
-								
-								if ( !empty( $save_post['post_tags'] ) ) {
-									wp_set_object_terms( $saved_post_id, $save_post['post_tags'], $tags_taxonomy );
-								}
-								
+													
 								// post location
 								$post_location_id = 0;
 								if ( $location_allowed && !empty( $location_result ) && $location_result->location_id > 0 ) {
@@ -5027,8 +5041,52 @@ function geodir_ajax_import_export() {
 								
 								$table = $plugin_prefix . $post_type . '_detail';
 								
+								if (isset($gd_post['post_id'])) {
+									unset($gd_post['post_id']);
+								}
+								
+								// Export franchise fields
+								$is_franchise_active = is_plugin_active( 'geodir_franchise/geodir_franchise.php' ) && geodir_franchise_enabled( $post_type ) ? true : false;
+								if ($is_franchise_active) {
+									if ( isset( $gd_post['gd_is_franchise'] ) && (int)$gd_post['gd_is_franchise'] == 1 ) {
+										$gd_franchise_lock = array();
+										
+										if ( isset( $gd_post['gd_franchise_lock'] ) ) {
+											$gd_franchise_lock = str_replace(" ", "", $gd_post['gd_franchise_lock'] );
+											$gd_franchise_lock = trim( $gd_franchise_lock );
+											$gd_franchise_lock = explode( ",", $gd_franchise_lock );
+										}
+										
+										update_post_meta( $saved_post_id, 'gd_is_franchise', 1 );
+										update_post_meta( $saved_post_id, 'gd_franchise_lock', $gd_franchise_lock );
+									} else {
+										if ( isset( $gd_post['franchise'] ) && (int)$gd_post['franchise'] > 0 && geodir_franchise_check( (int)$gd_post['franchise'] ) ) {
+											geodir_save_post_meta( $saved_post_id, 'franchise', (int)$gd_post['franchise'] );
+										}
+									}
+								}
+								
+								if (!empty($save_post['post_category']) && is_array($save_post['post_category'])) {
+									$save_post['post_category'] = array_unique( array_map( 'intval', $save_post['post_category'] ) );
+									$gd_post[$cat_taxonomy] = $save_post['post_category'];
+								}
+								
 								// Save post info
-								geodir_save_post_info( $saved_post_id, $gd_post );			
+								geodir_save_post_info( $saved_post_id, $gd_post );	
+
+								// post taxonomies
+								if ( !empty( $save_post['post_category'] ) ) {
+									wp_set_object_terms( $saved_post_id, $save_post['post_category'], $cat_taxonomy );
+									
+									$post_default_category = isset( $save_post['post_default_category'] ) ? $save_post['post_default_category'] : '';
+									$post_category_str = isset( $save_post['post_category_str'] ) ? $save_post['post_category_str'] : '';
+                            		
+									geodir_set_postcat_structure( $saved_post_id, $cat_taxonomy, $post_default_category, $post_category_str );
+								}
+								
+								if ( !empty( $save_post['post_tags'] ) ) {
+									wp_set_object_terms( $saved_post_id, $save_post['post_tags'], $tags_taxonomy );
+								}		
 
 								// Post images
 								if ( !empty( $post_images ) ) {
@@ -5615,14 +5673,14 @@ function geodir_get_terms_count( $post_type ) {
  * @return array Array of terms data.
  */
 function geodir_imex_get_terms( $post_type ) {
-	$args = array( 'hide_empty' => 0 );
+	$args = array( 'hide_empty' => 0, 'orderby' => 'id' );
 	
 	remove_all_filters( 'get_terms' );
 	
 	$taxonomy = $post_type . 'category';
 	
 	$terms = get_terms( $taxonomy, $args );
-	
+
 	$csv_rows = array();
 	
 	if ( !empty( $terms ) ) {
@@ -5631,6 +5689,7 @@ function geodir_imex_get_terms( $post_type ) {
 		$csv_row[] = 'cat_name';
 		$csv_row[] = 'cat_slug';
 		$csv_row[] = 'cat_posttype';
+		$csv_row[] = 'cat_parent';
 		$csv_row[] = 'cat_description';
 		$csv_row[] = 'cat_top_description';
 		$csv_row[] = 'cat_image';
@@ -5645,11 +5704,18 @@ function geodir_imex_get_terms( $post_type ) {
 			$cat_image = geodir_get_default_catimage( $term->term_id, $post_type );
 			$cat_image = !empty( $cat_image ) && isset( $cat_image['src'] ) ? $cat_image['src'] : ''; 
 			
+			$cat_parent = '';
+			if (isset($term->parent) && (int)$term->parent > 0 && term_exists((int)$term->parent, $taxonomy)) {
+				$parent_term = (array)get_term_by( 'id', (int)$term->parent, $taxonomy );
+				$cat_parent = !empty($parent_term) && isset($parent_term['name']) ? $parent_term['name'] : '';
+			}
+			
 			$csv_row = array();
 			$csv_row[] = $term->term_id;
 			$csv_row[] = $term->name;
 			$csv_row[] = $term->slug;
 			$csv_row[] = $post_type;
+			$csv_row[] = $cat_parent;
 			$csv_row[] = $term->description;
 			$csv_row[] = get_tax_meta( $term->term_id, 'ct_cat_top_desc', false, $post_type );
 			$csv_row[] = $cat_image;
