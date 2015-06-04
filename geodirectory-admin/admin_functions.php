@@ -2764,7 +2764,7 @@ function geodir_admin_fields($options)
                             $state = "&state=123";//any string
                             $redirect_uri = "&redirect_uri=" . admin_url('admin-ajax.php') . "?action=geodir_ga_callback";
                             $response_type = "&response_type=code";
-                            $client_id = "&client_id=185372810520-eld8a8adfta9m32lv4f45fbf51pvhmqj.apps.googleusercontent.com";
+                            $client_id = "&client_id=".get_option('geodir_ga_client_id');
                             $access_type = "&access_type=offline";
                             $approval_prompt = "&approval_prompt=force";
 
@@ -2778,8 +2778,6 @@ function geodir_admin_fields($options)
                                     var pollTimer = window.setInterval(function () {
                                         if (win.closed !== false) { // !== is required for compatibility with Opera
                                             window.clearInterval(pollTimer);
-                                            ///someFunctionToCallWhenPopUpCloses();
-                                            alert('closed');
 
                                             jQuery(".general_settings .submit .button-primary").trigger('click');
                                         }
