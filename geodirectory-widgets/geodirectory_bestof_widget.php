@@ -87,7 +87,7 @@ class geodir_bestof_widget extends WP_Widget
             'is_geodir_loop' => true,
             'post_type' => $post_type,
             'gd_location' => $add_location_filter ? true : false,
-            'order_by' => 'high_rating'
+            'order_by' => 'high_review'
         );
         if ($character_count >= 0) {
             $query_args['excerpt_length'] = $character_count;
