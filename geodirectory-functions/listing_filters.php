@@ -661,7 +661,7 @@ function geodir_post_where()
 
         }
 
-        if (!geodir_is_page('detail'))
+        //if (!geodir_is_page('detail'))
             add_filter('posts_where', 'geodir_default_where', 1);/**/
 
         //add_filter( 'user_has_cap', 'geodir_preview_post_cap', 10, 3 );// let subscribers edit their own posts

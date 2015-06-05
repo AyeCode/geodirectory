@@ -10,6 +10,8 @@ Autozoom assigned only for more then map markers - CHANGED
 Import/export integrated with franchise feature - ADDED
 Import/export work with parent/child category - ADDED
 Custom field with apostrophe sign not translated properly - FIXED
+WPML not translating details page content correctly - FIXED
+Google Analytics for owners stopped working due to API retirement, new improved Analytics added - FIXED
 
 v1.4.7
 Search not working for empty keyword search - FIXED
