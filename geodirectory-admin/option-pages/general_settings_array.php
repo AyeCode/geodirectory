@@ -169,7 +169,7 @@ $google_analytic_settings = apply_filters('geodir_google_analytic_settings', arr
 
     array(
         'name' => __('Google analytics "Profile ID(ie: ga:12345678)?', GEODIRECTORY_TEXTDOMAIN) . ' ' .
-            '<a target="_blank" href="http://wpgeodirectory.com/docs/google-analytics/">' . __('help', GEODIRECTORY_TEXTDOMAIN) . '</a>',
+            '<a target="_blank" href="https://docs.wpgeodirectory.com/gd-core-plugin-google-analytics/">' . __('help', GEODIRECTORY_TEXTDOMAIN) . '</a>',
         'desc' => '',
         'id' => 'geodir_ga_id',
         'type' => 'text',
@@ -179,7 +179,7 @@ $google_analytic_settings = apply_filters('geodir_google_analytic_settings', arr
 
     array(
         'name' => __('Client ID', GEODIRECTORY_TEXTDOMAIN) . ' ' .
-            '<a target="_blank" href="http://wpgeodirectory.com/docs/google-analytics/">' . __('help', GEODIRECTORY_TEXTDOMAIN) . '</a>',
+            '<a target="_blank" href="https://docs.wpgeodirectory.com/gd-core-plugin-google-analytics/">' . __('help', GEODIRECTORY_TEXTDOMAIN) . '</a>',
         'desc' => '',
         'id' => 'geodir_ga_client_id',
         'type' => 'text',
@@ -189,7 +189,7 @@ $google_analytic_settings = apply_filters('geodir_google_analytic_settings', arr
 
     array(
         'name' => __('Client secret', GEODIRECTORY_TEXTDOMAIN) . ' ' .
-            '<a target="_blank" href="http://wpgeodirectory.com/docs/google-analytics/">' . __('help', GEODIRECTORY_TEXTDOMAIN) . '</a>',
+            '<a target="_blank" href="https://docs.wpgeodirectory.com/gd-core-plugin-google-analytics/">' . __('help', GEODIRECTORY_TEXTDOMAIN) . '</a>',
         'desc' => '',
         'id' => 'geodir_ga_client_secret',
         'type' => 'password',

@@ -2002,7 +2002,7 @@ if(isset($_REQUEST['code']) && $_REQUEST['code']) {
 
             update_option('gd_ga_access_token', $parts->access_token);
             update_option('gd_ga_refresh_token', $parts->refresh_token);
-            ?><script>xwindow.close();</script><?php
+            ?><script>window.close();</script><?php
         }
 
 
