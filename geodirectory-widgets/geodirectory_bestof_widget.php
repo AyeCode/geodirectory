@@ -1,20 +1,49 @@
 <?php
+/**
+ * GeoDirectory Best of widget
+ *
+ * @since 1.3.9
+ *
+ * @package GeoDirectory
+ */
 
 /**
- * Geodirectory bestof widget *
- **/
+ * GeoDirectory Best of widget widget class.
+ *
+ * @since 1.3.9
+ */
 class geodir_bestof_widget extends WP_Widget
 {
-    function geodir_bestof_widget()
+    /**
+	 * Register the best of widget with WordPress.
+	 *
+	 * @since 1.3.9
+	 */
+	function geodir_bestof_widget()
     {
         $widget_ops = array('classname' => 'geodir_bestof_widget', 'description' => __('GD > Best of widget', GEODIRECTORY_TEXTDOMAIN));
         $this->WP_Widget('bestof_widget', __('GD > Best of widget', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
     }
 
-    function widget($args, $instance)
+	/**
+	 * Front-end display content for best of widget.
+	 *
+	 * @since 1.3.9
+	 *
+	 * @param array $args     Widget arguments.
+	 * @param array $instance Saved values from database.
+	 */
+	function widget($args, $instance)
     {
         extract($args);
-        $tab_layout = empty($instance['tab_layout']) ? 'bestof-tabs-on-top' : apply_filters('bestof_widget_tab_layout', $instance['tab_layout']);
+		/**
+		 * Filter the best of widget tab layout.
+		 *
+		 * @since 1.3.9
+		 *
+		 * @param string $instance['tab_layout'] Best of widget tab layout name.
+		 */
+		$tab_layout = empty($instance['tab_layout']) ? 'bestof-tabs-on-top' : apply_filters('bestof_widget_tab_layout', $instance['tab_layout']);
         echo '<div class="' . $tab_layout . '" id="bestof-widget-tab-layout">';
         echo $before_widget;
         $loc_terms = geodir_get_current_location_terms();
@@ -23,14 +52,61 @@ class geodir_bestof_widget extends WP_Widget
         } else {
             $cur_location = '';
         }
-        $cur_location = apply_filters('bestof_widget_cur_location', $cur_location);
+		
+		/**
+		 * Filter the current location name.
+		 *
+		 * @since 1.3.9
+		 *
+		 * @param string $cur_location Current location name.
+		 */
+		$cur_location = apply_filters('bestof_widget_cur_location', $cur_location);
 
-        $title = empty($instance['title']) ? wp_sprintf( __( 'Best of %s', GEODIRECTORY_TEXTDOMAIN ), get_bloginfo('name') . $cur_location ) : apply_filters('bestof_widget_title', __($instance['title'], GEODIRECTORY_TEXTDOMAIN));
-        $post_type = empty($instance['post_type']) ? 'gd_place' : apply_filters('bestof_widget_post_type', $instance['post_type']);
-        $post_limit = empty($instance['post_limit']) ? '5' : apply_filters('bestof_widget_post_limit', $instance['post_limit']);
-        $categ_limit = empty($instance['categ_limit']) ? '3' : apply_filters('bestof_widget_categ_limit', $instance['categ_limit']);
+        /**
+		 * Filter the widget title.
+		 *
+		 * @since 1.3.9
+		 *
+		 * @param string $instance['title'] The widget title.
+		 */
+		$title = empty($instance['title']) ? wp_sprintf( __( 'Best of %s', GEODIRECTORY_TEXTDOMAIN ), get_bloginfo('name') . $cur_location ) : apply_filters('bestof_widget_title', __($instance['title'], GEODIRECTORY_TEXTDOMAIN));
+        
+		/**
+		 * Filter the post type.
+		 *
+		 * @since 1.3.9
+		 *
+		 * @param string $instance['post_type'] The post type.
+		 */
+		$post_type = empty($instance['post_type']) ? 'gd_place' : apply_filters('bestof_widget_post_type', $instance['post_type']);
+        
+		/**
+		 * Filter the listing limit.
+		 *
+		 * @since 1.3.9
+		 *
+		 * @param int $instance['post_limit'] No. of posts to display.
+		 */
+		$post_limit = empty($instance['post_limit']) ? '5' : apply_filters('bestof_widget_post_limit', $instance['post_limit']);
+        
+		/**
+		 * Filter the category limit.
+		 *
+		 * @since 1.3.9
+		 *
+		 * @param int $instance['categ_limit'] No. of categories to display.
+		 */
+		$categ_limit = empty($instance['categ_limit']) ? '3' : apply_filters('bestof_widget_categ_limit', $instance['categ_limit']);
         $use_viewing_post_type = !empty($instance['use_viewing_post_type']) ? true : false;
-        $add_location_filter = empty($instance['add_location_filter']) ? '1' : apply_filters('bestof_widget_location_filter', $instance['add_location_filter']);
+        
+		/**
+		 * Filter the use of location filter.
+		 *
+		 * @since 1.3.9
+		 *
+		 * @param int|bool $instance['add_location_filter'] Filter listings using current location.
+		 */
+		$add_location_filter = empty($instance['add_location_filter']) ? '1' : apply_filters('bestof_widget_location_filter', $instance['add_location_filter']);
 
         // set post type to current viewing post type
         if ($use_viewing_post_type) {
@@ -41,7 +117,14 @@ class geodir_bestof_widget extends WP_Widget
         }
 
         if (isset($instance['character_count'])) {
-            $character_count = apply_filters('bestof_widget_list_character_count', $instance['character_count']);
+			/**
+			 * Filter the widget's excerpt character count.
+			 *
+			 * @since 1.3.9
+             *
+			 * @param int $instance['character_count'] Excerpt character count.
+			 */
+			$character_count = apply_filters('bestof_widget_list_character_count', $instance['character_count']);
         } else {
             $character_count = '';
         }
@@ -216,7 +299,17 @@ class geodir_bestof_widget extends WP_Widget
         echo "</div>";
     }
 
-    function update($new_instance, $old_instance)
+	/**
+	 * Sanitize best of widget form values as they are saved.
+	 *
+	 * @since 1.3.9
+	 *
+	 * @param array $new_instance Values just sent to be saved.
+	 * @param array $old_instance Previously saved values from database.
+	 *
+	 * @return array Updated safe values to be saved.
+	 */
+	function update($new_instance, $old_instance)
     {
         $instance = $old_instance;
         $instance['title'] = strip_tags($new_instance['title']);
@@ -233,7 +326,14 @@ class geodir_bestof_widget extends WP_Widget
         return $instance;
     }
 
-    function form($instance)
+	/**
+	 * Back-end best of widget settings form.
+	 *
+	 * @since 1.3.9
+	 *
+	 * @param array $instance Previously saved values from database.
+	 */
+	function form($instance)
     {
         $instance = wp_parse_args((array)$instance,
             array(
@@ -271,7 +371,14 @@ class geodir_bestof_widget extends WP_Widget
                 for="<?php echo $this->get_field_id('post_type'); ?>"><?php _e('Post Type:', GEODIRECTORY_TEXTDOMAIN);?>
 
                 <?php $postypes = geodir_get_posttypes();
-                $postypes = apply_filters('geodir_post_type_list_in_p_widget', $postypes); ?>
+				/**
+				 * Filter the post types to display in widget.
+				 *
+				 * @since 1.3.9
+				 *
+				 * @param array $postypes Post types array.
+				 */
+				$postypes = apply_filters('geodir_post_type_list_in_p_widget', $postypes); ?>
 
                 <select class="widefat" id="<?php echo $this->get_field_id('post_type'); ?>"
                         name="<?php echo $this->get_field_name('post_type'); ?>"
@@ -361,28 +468,35 @@ class geodir_bestof_widget extends WP_Widget
         </p>
     <?php
     }
-}
+} // class geodir_bestof_widget
 
 register_widget('geodir_bestof_widget');
 
-
 /**
+ * Display the best of widget listings using the given query args.
+ *
+ * @since 1.3.9
  *
  * @global object $post The current post object.
+ * @global array  $map_jason Map data in json format.
+ * @global array $map_canvas_arr Map canvas array.
  * @global string $gridview_columns_widget The girdview style of the listings for widget.
- * @param $query_args
+ *
+ * @param array $query_args The query array.
  */
 function geodir_bestof_places_by_term($query_args)
 {
-
     $widget_listings = geodir_get_widget_listings($query_args);
 
     $character_count = isset($query_args['excerpt_length']) ? $query_args['excerpt_length'] : '';
 
     if (!isset($character_count)) {
-        $character_count = $character_count == '' ? 50 : apply_filters('bestof_widget_character_count', $character_count);
+		/** This filter is documented in geodirectory-widgets/geodirectory_bestof_widget.php */
+		$character_count = $character_count == '' ? 50 : apply_filters('bestof_widget_character_count', $character_count);
     }
-    $template = apply_filters("geodir_template_part-widget-listing-listview", geodir_locate_template('widget-listing-listview'));
+	
+	/** This filter is documented in geodirectory-functions/general_functions.php */
+	$template = apply_filters("geodir_template_part-widget-listing-listview", geodir_locate_template('widget-listing-listview'));
 
     global $post, $map_jason, $map_canvas_arr, $gridview_columns_widget;
     $current_post = $post;
@@ -392,7 +506,12 @@ function geodir_bestof_places_by_term($query_args)
     $gridview_columns_widget = null;
     $geodir_is_widget_listing = true;
 
-    include($template);
+	/**
+	 * Includes the template for the listing listview.
+	 *
+	 * @since 1.3.9
+	 */
+	include($template);
 
     $geodir_is_widget_listing = false;
 
@@ -408,6 +527,14 @@ function geodir_bestof_places_by_term($query_args)
 //Ajax functions
 add_action('wp_ajax_geodir_bestof', 'geodir_bestof_callback');
 add_action('wp_ajax_nopriv_geodir_bestof', 'geodir_bestof_callback');
+
+/**
+ * Get the best of widget content using ajax.
+ *
+ * @since 1.3.9
+ *
+ * @return string Html content.
+ */
 function geodir_bestof_callback()
 {
     check_ajax_referer('geodir-bestof-nonce', 'geodir_bestof_nonce');
@@ -448,6 +575,12 @@ function geodir_bestof_callback()
 
 //Javascript
 add_action('wp_footer', 'geodir_bestof_js');
+
+/**
+ * Adds the javascript in the footer for best of widget.
+ *
+ * @since 1.3.9
+ */
 function geodir_bestof_js() {
 	$ajax_nonce = wp_create_nonce("geodir-bestof-nonce");
 ?>
