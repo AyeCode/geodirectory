@@ -755,7 +755,7 @@ add_shortcode('gd_related_listings', 'geodir_sc_related_listings');
  *     @type string $list_sort          Sort by. Default. latest.
  *     @type string $listing_width      Width of the listing in %. Default. Empty.
  *     @type int $post_number           No. of post to display. Default. 5.
- *     @type string $relate_to          Type to use for making relation. Can be tabs or category. Default. category.
+ *     @type string $relate_to          Type to use for making relation. Can be tags or category. Default. category.
  *
  * }
  * @return string Related widget HTML.

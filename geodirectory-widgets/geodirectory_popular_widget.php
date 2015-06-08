@@ -1,28 +1,55 @@
 <?php
+/**
+ * GeoDirectory Popular Post Category Widget & GeoDirectory Popular Post View Widget
+ *
+ * @since 1.0.0
+ *
+ * @package GeoDirectory
+ */
 
 /**
- * Geodirectory popular posts category widget *
- **/
+ * GeoDirectory popular post category widget class.
+ *
+ * @since 1.0.0
+ */
 class geodir_popular_post_category extends WP_Widget
 {
-
-    function geodir_popular_post_category()
+    /**
+	 * Register the popular post category widget.
+	 *
+	 * @since 1.0.0
+	 */
+	function geodir_popular_post_category()
     {
         //Constructor
         $widget_ops = array('classname' => 'geodir_popular_post_category', 'description' => __('GD > Popular Post Category', GEODIRECTORY_TEXTDOMAIN));
         $this->WP_Widget('popular_post_category', __('GD > Popular Post Category', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
-
-
     }
 
-
-    function widget($args, $instance)
+	/**
+	 * Front-end display content for popular post category widget.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $args     Widget arguments.
+	 * @param array $instance Saved values from database.
+	 */
+	function widget($args, $instance)
     {
         geodir_popular_post_category_output($args, $instance);
     }
 
-
-    function update($new_instance, $old_instance)
+	/**
+	 * Sanitize popular post category widget form values as they are saved.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $new_instance Values just sent to be saved.
+	 * @param array $old_instance Previously saved values from database.
+	 *
+	 * @return array Updated safe values to be saved.
+	 */ 
+	function update($new_instance, $old_instance)
     {
         //save the widget
         $instance = $old_instance;
@@ -32,7 +59,14 @@ class geodir_popular_post_category extends WP_Widget
         return $instance;
     }
 
-    function form($instance)
+	/**
+	 * Back-end popular post category widget settings form.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $instance Previously saved values from database.
+	 */
+	function form($instance)
     {
         //widgetform in backend
         $instance = wp_parse_args((array)$instance, array('title' => '', 'category_limit' => 15));
@@ -61,17 +95,24 @@ class geodir_popular_post_category extends WP_Widget
         </p>
     <?php
     }
-}
+} // class geodir_popular_post_category
 
 register_widget('geodir_popular_post_category');
 
 
 /**
- * Geodirectory popular posts widget *
- **/
+ * GeoDirectory popular posts widget class.
+ *
+ * @since 1.0.0
+ */
 class geodir_popular_postview extends WP_Widget
 {
 
+    /**
+	 * Register the popular posts widget.
+	 *
+	 * @since 1.0.0
+	 */
     function geodir_popular_postview()
     {
         //Constructor
@@ -79,12 +120,30 @@ class geodir_popular_postview extends WP_Widget
         $this->WP_Widget('popular_post_view', __('GD > Popular Post View', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
     }
 
-    function widget($args, $instance)
+	/**
+	 * Front-end display content for popular posts widget.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $args     Widget arguments.
+	 * @param array $instance Saved values from database.
+	 */
+	function widget($args, $instance)
     {
         geodir_popular_postview_output($args, $instance);
     }
 
-    function update($new_instance, $old_instance)
+	/**
+	 * Sanitize popular posts widget form values as they are saved.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $new_instance Values just sent to be saved.
+	 * @param array $old_instance Previously saved values from database.
+	 *
+	 * @return array Updated safe values to be saved.
+	 */
+	function update($new_instance, $old_instance)
     {
         //save the widget
         $instance = $old_instance;
@@ -118,7 +177,14 @@ class geodir_popular_postview extends WP_Widget
         return $instance;
     }
 
-    function form($instance)
+	/**
+	 * Back-end popular posts widget settings form.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $instance Previously saved values from database.
+	 */
+	function form($instance)
     {
         //widgetform in backend
         $instance = wp_parse_args((array)$instance,
@@ -188,7 +254,14 @@ class geodir_popular_postview extends WP_Widget
                 for="<?php echo $this->get_field_id('post_type'); ?>"><?php _e('Post Type:', GEODIRECTORY_TEXTDOMAIN);?>
 
                 <?php $postypes = geodir_get_posttypes();
-                $postypes = apply_filters('geodir_post_type_list_in_p_widget', $postypes); ?>
+				/**
+				 * Filter the post types to display in widget.
+				 *
+				 * @since 1.0.0
+				 *
+				 * @param array $postypes Post types array.
+				 */
+				$postypes = apply_filters('geodir_post_type_list_in_p_widget', $postypes); ?>
 
                 <select class="widefat" id="<?php echo $this->get_field_id('post_type'); ?>"
                         name="<?php echo $this->get_field_name('post_type'); ?>"
@@ -439,7 +512,6 @@ class geodir_popular_postview extends WP_Widget
 
     <?php
     }
-}
+} // class geodir_popular_postview
 
 register_widget('geodir_popular_postview');
-

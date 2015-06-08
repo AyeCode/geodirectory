@@ -1,11 +1,24 @@
 <?php
+/**
+ * GeoDirectory Related Listing Widget
+ *
+ * @since 1.0.0
+ *
+ * @package GeoDirectory
+ */
 
 /**
- * Geodirectory popular posts widget *
- **/
+ * GeoDirectory related listing widget class.
+ *
+ * @since 1.0.0
+ */
 class geodir_related_listing_postview extends WP_Widget
 {
-
+    /**
+	 * Register the related listing widget.
+	 *
+	 * @since 1.0.0
+	 */
     function geodir_related_listing_postview()
     {
         //Constructor
@@ -13,7 +26,14 @@ class geodir_related_listing_postview extends WP_Widget
         $this->WP_Widget('post_related_listing', __('GD > Related Listing', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
     }
 
-
+	/**
+	 * Front-end display content for related listing widget.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $args     Widget arguments.
+	 * @param array $instance Saved values from database.
+	 */
     function widget($args, $instance)
     {
 
@@ -23,20 +43,31 @@ class geodir_related_listing_postview extends WP_Widget
         /** This filter is documented in geodirectory_widgets.php */
         $title = empty($instance['title']) ? __('Related Listing', GEODIRECTORY_TEXTDOMAIN) : apply_filters('widget_title', __($instance['title'], GEODIRECTORY_TEXTDOMAIN));
 
-        $post_number = empty($instance['post_number']) ? '5' : apply_filters('widget_post_number', $instance['post_number']);
+        /** This filter is documented in geodirectory-functions/general_functions.php */
+		$post_number = empty($instance['post_number']) ? '5' : apply_filters('widget_post_number', $instance['post_number']);
 
-        $relate_to = empty($instance['relate_to']) ? 'category' : apply_filters('widget_relate_to', $instance['relate_to']);
+        /**
+         * Filter the relation type to get related listing.
+         *
+         * @since 1.0.0
+         * @param string $instance['relate_to'] Can be tags or category.
+         */
+		$relate_to = empty($instance['relate_to']) ? 'category' : apply_filters('widget_relate_to', $instance['relate_to']);
 
-        $layout = empty($instance['layout']) ? 'gridview_onehalf' : apply_filters('widget_layout', $instance['layout']);
+        /** This filter is documented in geodirectory-functions/general_functions.php */
+		$layout = empty($instance['layout']) ? 'gridview_onehalf' : apply_filters('widget_layout', $instance['layout']);
 
-        $add_location_filter = empty($instance['add_location_filter']) ? '0' : apply_filters('widget_layout', $instance['add_location_filter']);
+        /** This filter is documented in geodirectory-functions/general_functions.php */
+		$add_location_filter = empty($instance['add_location_filter']) ? '0' : apply_filters('widget_add_location_filter', $instance['add_location_filter']);
 
-        $listing_width = empty($instance['listing_width']) ? '' : apply_filters('widget_layout', $instance['listing_width']);
+        /** This filter is documented in geodirectory-functions/general_functions.php */
+		$listing_width = empty($instance['listing_width']) ? '' : apply_filters('widget_listing_width', $instance['listing_width']);
 
-        $list_sort = empty($instance['list_sort']) ? 'latest' : apply_filters('widget_list_sort', $instance['list_sort']);
+        /** This filter is documented in geodirectory-functions/general_functions.php */
+		$list_sort = empty($instance['list_sort']) ? 'latest' : apply_filters('widget_list_sort', $instance['list_sort']);
 
-        $character_count = empty($instance['character_count']) ? 20 : apply_filters('widget_list_sort', $instance['character_count']);
-
+        /** This filter is documented in geodirectory-functions/general_functions.php */
+		$character_count = empty($instance['character_count']) ? 20 : apply_filters('widget_list_character_count', $instance['character_count']);
 
         $arr = array(
             'before_title' => $before_title,
@@ -52,17 +83,24 @@ class geodir_related_listing_postview extends WP_Widget
             'is_widget' => '1'
         );
 
-
         if ($widget_display = geodir_related_posts_display($arr)) {
 
             echo $before_widget;
             echo $widget_display;
             echo $after_widget;
         }
-
-
     }
 
+	/**
+	 * Sanitize related listing widget form values as they are saved.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $new_instance Values just sent to be saved.
+	 * @param array $old_instance Previously saved values from database.
+	 *
+	 * @return array Updated safe values to be saved.
+	 */
     function update($new_instance, $old_instance)
     {
         //save the widget
@@ -80,10 +118,16 @@ class geodir_related_listing_postview extends WP_Widget
         else
             $instance['add_location_filter'] = '0';
 
-
         return $instance;
     }
 
+	/**
+	 * Back-end related listing widget settings form.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $instance Previously saved values from database.
+	 */
     function form($instance)
     {
         //widgetform in backend
@@ -118,7 +162,6 @@ class geodir_related_listing_postview extends WP_Widget
         $character_count = $instance['character_count'];
 
         ?>
-
         <p>
             <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', GEODIRECTORY_TEXTDOMAIN);?>
 
@@ -127,7 +170,6 @@ class geodir_related_listing_postview extends WP_Widget
                        value="<?php echo esc_attr($title); ?>"/>
             </label>
         </p>
-
         <p>
             <label
                 for="<?php echo $this->get_field_id('list_sort'); ?>"><?php _e('Sort by:', GEODIRECTORY_TEXTDOMAIN);?>
@@ -158,9 +200,7 @@ class geodir_related_listing_postview extends WP_Widget
                 </select>
             </label>
         </p>
-
         <p>
-
             <label
                 for="<?php echo $this->get_field_id('post_number'); ?>"><?php _e('Number of posts:', GEODIRECTORY_TEXTDOMAIN);?>
 
@@ -169,7 +209,6 @@ class geodir_related_listing_postview extends WP_Widget
                        value="<?php echo esc_attr($post_number); ?>"/>
             </label>
         </p>
-
         <p>
             <label for="<?php echo $this->get_field_id('relate_to'); ?>">
                 <?php _e('Relate to:', GEODIRECTORY_TEXTDOMAIN);?>
@@ -184,9 +223,7 @@ class geodir_related_listing_postview extends WP_Widget
                 </select>
             </label>
         </p>
-
         <p>
-
         <p>
             <label for="<?php echo $this->get_field_id('layout'); ?>">
                 <?php _e('Layout:', GEODIRECTORY_TEXTDOMAIN);?>
@@ -215,7 +252,6 @@ class geodir_related_listing_postview extends WP_Widget
                 </select>
             </label>
         </p>
-
         <p>
             <label
                 for="<?php echo $this->get_field_id('listing_width'); ?>"><?php _e('Listing width:', GEODIRECTORY_TEXTDOMAIN);?>
@@ -225,7 +261,6 @@ class geodir_related_listing_postview extends WP_Widget
                        value="<?php echo esc_attr($listing_width); ?>"/>
             </label>
         </p>
-
         <p>
             <label
                 for="<?php echo $this->get_field_id('character_count'); ?>"><?php _e('Post Content excerpt character count :', GEODIRECTORY_TEXTDOMAIN);?>
@@ -234,7 +269,6 @@ class geodir_related_listing_postview extends WP_Widget
                        value="<?php echo esc_attr($character_count); ?>"/>
             </label>
         </p>
-
         <p>
             <label for="<?php echo $this->get_field_id('add_location_filter'); ?>">
                 <?php _e('Enable Location Filter:', GEODIRECTORY_TEXTDOMAIN);?>
@@ -246,7 +280,6 @@ class geodir_related_listing_postview extends WP_Widget
 
     <?php
     }
-}
+} // class geodir_related_listing_postview
 
 register_widget('geodir_related_listing_postview');
-

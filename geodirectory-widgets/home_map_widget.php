@@ -1,9 +1,26 @@
 <?php
+/**
+ * GeoDirectory GMap - Home page Widget
+ *
+ * This will display Google map on home page with use of Google Map Api V3.
+ *
+ * @since 1.0.0
+ *
+ * @package GeoDirectory
+ */
 
-// =============================== Google Map V3 Home page======================================
+/**
+ * GeoDirectory home page map widget class.
+ *
+ * @since 1.0.0
+ */
 class geodir_homepage_map extends WP_Widget
 {
-
+    /**
+	 * Register the home page map widget.
+	 *
+	 * @since 1.0.0
+	 */
     function geodir_homepage_map()
     {
         //Constructor
@@ -12,6 +29,14 @@ class geodir_homepage_map extends WP_Widget
 
     }
 
+	/**
+	 * Front-end display content for home page map widget.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $args     Widget arguments.
+	 * @param array $instance Saved values from database.
+	 */
     function widget($args, $instance)
     {
         extract($args, EXTR_SKIP);
@@ -31,8 +56,6 @@ class geodir_homepage_map extends WP_Widget
         $scrollwheel = empty($instance['scrollwheel']) ? '0' : apply_filters('widget_scrollwheel', $instance['scrollwheel']);
 
         //$str = createRandomString();
-
-
         $map_args = array();
         $map_args['map_canvas_name'] = str_replace('-', '_', $args['widget_id']); //'home_map_canvas'.$str ;
         $map_args['width'] = $width;
@@ -64,6 +87,16 @@ class geodir_homepage_map extends WP_Widget
 
     }
 
+	/**
+	 * Sanitize home page map widget form values as they are saved.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $new_instance Values just sent to be saved.
+	 * @param array $old_instance Previously saved values from database.
+	 *
+	 * @return array Updated safe values to be saved.
+	 */
     function update($new_instance, $old_instance)
     {
         //save the widget
@@ -79,6 +112,13 @@ class geodir_homepage_map extends WP_Widget
         return $instance;
     }
 
+	/**
+	 * Back-end home page map widget settings form.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $instance Previously saved values from database.
+	 */
     function form($instance)
     {
         //widgetform in backend
@@ -191,6 +231,11 @@ class geodir_homepage_map extends WP_Widget
     <?php
     }
 
+    /**
+	 * Adds the javascript in the footer for home page map widget.
+	 *
+	 * @since 1.0.0
+	 */
     function geodir_home_map_add_script()
     {
         ?>
@@ -267,7 +312,7 @@ class geodir_homepage_map extends WP_Widget
         </script>
     <?php
     }
-}
+} // class geodir_homepage_map
 
 register_widget('geodir_homepage_map');
 ?>
