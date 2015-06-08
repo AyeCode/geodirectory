@@ -1,11 +1,21 @@
 <?php
+/**
+ * GeoDirectory GMap - Listing page Widget
+ *
+ * This will display Google map on listing page with use of Google Map Api V3.
+ *
+ * @since 1.0.0
+ *
+ * @package GeoDirectory
+ */
 
 /**
- * Google Map V3 Listing page *
+ * Enque listing map script.
  *
- **/
-
-/* Enque listing map script*/
+ * @since 1.0.0
+ *
+ * @global array $list_map_json Empty array.
+ */
 function init_listing_map_script()
 {
     global $list_map_json;
@@ -14,12 +24,14 @@ function init_listing_map_script()
 
 }
 
-/* Create listing json for map script */
-
 /**
+ * Create listing json for map script.
+ *
+ * @since 1.0.0
  *
  * @global object $wpdb WordPress Database object.
- * @param $post
+ * @global array $list_map_json Listing map data in json format.
+ * @global bool $add_post_in_marker_array Displays posts in marker array when the value is true.
  */
 function create_list_jsondata($post)
 {
@@ -31,10 +43,15 @@ function create_list_jsondata($post)
 
 }
 
-/* Send json data to script and show listing map */
+/**
+ * Send json data to script and show listing map.
+ *
+ * @since 1.0.0
+ *
+ * @global array $list_map_json Listing map data in json format.
+ */
 function show_listing_widget_map()
 {
-
     global $list_map_json;
 
     if (!empty($list_map_json)) {
@@ -57,11 +74,19 @@ function show_listing_widget_map()
 
 }
 
-
+/**
+ * GeoDirectory listing page map widget class.
+ *
+ * @since 1.0.0
+ */
 class geodir_map_listingpage extends WP_Widget
 {
 
-    //Constructor
+    /**
+	 * Register the listing page map widget.
+	 *
+	 * @since 1.0.0
+	 */
     function geodir_map_listingpage()
     {
 
@@ -77,14 +102,16 @@ class geodir_map_listingpage extends WP_Widget
 
     }
 
-    // prints the widget
-
-    /**
-     *
+	/**
+	 * Front-end display content for listing page map widget.
+	 *
+	 * @since 1.0.0
+	 *
      * @global object $post The current post object.
-     * @param array $args
-     * @param array $instance
-     */
+     *
+	 * @param array $args     Widget arguments.
+	 * @param array $instance Saved values from database.
+	 */
     function widget($args, $instance)
     {
 
@@ -184,6 +211,16 @@ class geodir_map_listingpage extends WP_Widget
         endif;
     }
 
+	/**
+	 * Sanitize listing page map widget form values as they are saved.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $new_instance Values just sent to be saved.
+	 * @param array $old_instance Previously saved values from database.
+	 *
+	 * @return array Updated safe values to be saved.
+	 */
     function update($new_instance, $old_instance)
     {
         //save the widget
@@ -200,7 +237,13 @@ class geodir_map_listingpage extends WP_Widget
         return $instance;
     }
 
-
+	/**
+	 * Back-end listing page map widget settings form.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $instance Previously saved values from database.
+	 */
     function form($instance)
     {
         //widgetform in backend
@@ -319,6 +362,6 @@ class geodir_map_listingpage extends WP_Widget
 
     <?php
     }
-}
+} // class geodir_map_listingpage
 
 register_widget('geodir_map_listingpage');

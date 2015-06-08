@@ -1,24 +1,56 @@
 <?php
+/**
+ * GeoDirectory Listing Slider Widget
+ *
+ * @since 1.0.0
+ *
+ * @package GeoDirectory
+ */
 
-/* ------------ Geodirectory listing slider widget */
-
+/**
+ * GeoDirectory listing slider widget class.
+ *
+ * @since 1.0.0
+ */
 class geodir_listing_slider_widget extends WP_Widget
 {
 
-    function geodir_listing_slider_widget()
+    /**
+	 * Register the listing slider widget.
+	 *
+	 * @since 1.0.0
+	 */
+	function geodir_listing_slider_widget()
     {
         //Constructor
         $widget_ops = array('classname' => 'geodir_listing_slider_view', 'description' => __('GD > Listing Slider', GEODIRECTORY_TEXTDOMAIN));
         $this->WP_Widget('listing_slider_view', __('GD > Listing Slider', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
     }
-
-
+	
+	/**
+	 * Front-end display content for listing slider widget.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $args     Widget arguments.
+	 * @param array $instance Saved values from database.
+	 */
     function widget($args, $instance)
     {
         geodir_listing_slider_widget_output($args, $instance);
     }
 
-    function update($new_instance, $old_instance)
+	/**
+	 * Sanitize listing slider widget form values as they are saved.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $new_instance Values just sent to be saved.
+	 * @param array $old_instance Previously saved values from database.
+	 *
+	 * @return array Updated safe values to be saved.
+	 */
+	function update($new_instance, $old_instance)
     {
         //save the widget
         $instance = $old_instance;
@@ -39,7 +71,14 @@ class geodir_listing_slider_widget extends WP_Widget
         return $instance;
     }
 
-    function form($instance)
+	/**
+	 * Back-end listing slider widget settings form.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $instance Previously saved values from database.
+	 */
+	function form($instance)
     {
 
         //widgetform in backend
@@ -294,8 +333,6 @@ class geodir_listing_slider_widget extends WP_Widget
 
     <?php
     }
-}
+} // class geodir_listing_slider_widget
 
 register_widget('geodir_listing_slider_widget');
-          
-	
