@@ -1098,7 +1098,8 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
     $custom_fields = geodir_post_custom_fields($package_id, $default, $post_type);
 
     foreach ($custom_fields as $key => $val) {
-        $name = $val['name'];
+        $val = stripslashes_deep($val); // strip slashes from labels
+		$name = $val['name'];
         $site_title = $val['site_title'];
         $type = $val['type'];
         $admin_desc = $val['desc'];
@@ -1347,7 +1348,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
 
             <?php if (isset($extra_fields['show_mapzoom']) && $extra_fields['show_mapzoom']) { ?>
                 <input type="hidden" value="<?php if (isset($mapzoom)) {
-                    echo $mapzoom;
+                    echo esc_attr($mapzoom);
                 } ?>" name="<?php echo $prefix . 'mapzoom'; ?>" id="<?php echo $prefix . 'mapzoom'; ?>"/>
             <?php }?>
         <?php } elseif ($type == 'text') {
@@ -1361,7 +1362,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                     <?php if ($is_required) echo '<span>*</span>';?>
                 </label>
                 <input field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>"
-                       value="<?php echo stripslashes($value);?>" type="text" class="geodir_textfield"/>
+                       value="<?php echo esc_attr(stripslashes($value));?>" type="text" class="geodir_textfield"/>
                 <span class="geodir_message_note"><?php _e($admin_desc, GEODIRECTORY_TEXTDOMAIN);?></span>
                 <?php if ($is_required) { ?>
                     <span class="geodir_message_error"><?php _e($required_msg, GEODIRECTORY_TEXTDOMAIN); ?></span>
@@ -1381,7 +1382,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                     <?php if ($is_required) echo '<span>*</span>';?>
                 </label>
                 <input field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>"
-                       value="<?php echo stripslashes($value);?>" type="text" class="geodir_textfield"/>
+                       value="<?php echo esc_attr(stripslashes($value));?>" type="text" class="geodir_textfield"/>
                 <span class="geodir_message_note"><?php _e($admin_desc, GEODIRECTORY_TEXTDOMAIN);?></span>
                 <?php if ($is_required) { ?>
                     <span class="geodir_message_error"><?php _e($required_msg, GEODIRECTORY_TEXTDOMAIN); ?></span>
@@ -1401,7 +1402,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                     <?php if ($is_required) echo '<span>*</span>';?>
                 </label>
                 <input field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>"
-                       value="<?php echo stripslashes($value);?>" type="text" class="geodir_textfield"/>
+                       value="<?php echo esc_attr(stripslashes($value));?>" type="text" class="geodir_textfield"/>
                 <span class="geodir_message_note"><?php _e($admin_desc, GEODIRECTORY_TEXTDOMAIN);?></span>
                 <?php if ($is_required) { ?>
                     <span class="geodir_message_error"><?php _e($required_msg, GEODIRECTORY_TEXTDOMAIN); ?></span>
@@ -1421,7 +1422,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                     <?php if ($is_required) echo '<span>*</span>';?>
                 </label>
                 <input field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>"
-                       value="<?php echo stripslashes($value);?>" type="text" class="geodir_textfield"/>
+                       value="<?php echo esc_attr(stripslashes($value));?>" type="text" class="geodir_textfield"/>
                 <span class="geodir_message_note"><?php _e($admin_desc, GEODIRECTORY_TEXTDOMAIN);?></span>
                 <?php if ($is_required) { ?>
                     <span class="geodir_message_error"><?php _e($required_msg, GEODIRECTORY_TEXTDOMAIN); ?></span>
@@ -1479,7 +1480,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                 <?php if ($value != '1') {
                     $value = '0';
                 }?>
-                <input type="hidden" name="<?php echo $name;?>" id="<?php echo $name;?>" value="<?php echo $value;?>"/>
+                <input type="hidden" name="<?php echo $name;?>" id="<?php echo $name;?>" value="<?php echo esc_attr($value);?>"/>
                 <input  <?php if ($value == '1') {
                     echo 'checked="checked"';
                 }?>  value="1" class="gd-checkbox" field_type="<?php echo $type;?>" type="checkbox"
@@ -1693,7 +1694,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                 </label>
 
                 <input field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>"
-                       value="<?php echo $value;?>" type="text" class="geodir_textfield"/>
+                       value="<?php echo esc_attr($value);?>" type="text" class="geodir_textfield"/>
 
                 <span class="geodir_message_note"><?php _e($admin_desc, GEODIRECTORY_TEXTDOMAIN);?></span>
                 <?php if ($is_required) { ?>
@@ -1725,7 +1726,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                     <?php if ($is_required) echo '<span>*</span>';?>
                 </label>
                 <input readonly="readonly" field_type="<?php echo $type;?>" name="<?php echo $name;?>"
-                       id="<?php echo $name;?>" value="<?php echo $value;?>" type="text" class="geodir_textfield"/>
+                       id="<?php echo $name;?>" value="<?php echo esc_attr($value);?>" type="text" class="geodir_textfield"/>
 
                 <span class="geodir_message_note"><?php _e($admin_desc, GEODIRECTORY_TEXTDOMAIN);?></span>
                 <?php if ($is_required) { ?>
@@ -1808,7 +1809,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                             $required_limit_msg = $required_msg;
                         }
 
-                        echo '<input type="hidden" cat_limit="' . $catadd_limit . '" id="cat_limit" value="' . $required_limit_msg . '" name="cat_limit[' . $name . ']"  />';
+                        echo '<input type="hidden" cat_limit="' . $catadd_limit . '" id="cat_limit" value="' . esc_attr($required_limit_msg) . '" name="cat_limit[' . $name . ']"  />';
 
 
                         if ($cat_display == 'select' || $cat_display == 'multiselect') {
@@ -1902,16 +1903,16 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                         echo $site_title; ?><?php if ($is_required) echo '<span>*</span>';?></label>
                     <input class="geodir-custom-file-upload" field_type="file" type="hidden"
                            name="<?php echo $file_id; ?>" id="<?php echo $file_id; ?>"
-                           value="<?php echo $file_value; ?>"/>
+                           value="<?php echo esc_attr($file_value); ?>"/>
                     <input type="hidden" name="<?php echo $file_id; ?>image_limit"
                            id="<?php echo $file_id; ?>image_limit" value="<?php echo $file_image_limit; ?>"/>
 					<?php if ($allowed_file_types != '') { ?>
 					<input type="hidden" name="<?php echo $file_id; ?>_allowed_types"
-                           id="<?php echo $file_id; ?>_allowed_types" value="<?php echo $allowed_file_types; ?>" data-exts="<?php echo $display_file_types;?>"/>
+                           id="<?php echo $file_id; ?>_allowed_types" value="<?php echo esc_attr($allowed_file_types); ?>" data-exts="<?php echo esc_attr($display_file_types);?>"/>
 					<?php } ?>
                     <input type="hidden" name="<?php echo $file_id; ?>totImg" id="<?php echo $file_id; ?>totImg"
                            value="<?php if (isset($file_totImg)) {
-                               echo $file_totImg;
+                               echo esc_attr($file_totImg);
                            } else {
                                echo '0';
                            } ?>"/>
@@ -2042,6 +2043,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                 $i = 1;
             foreach ($fields_info as $type) {
+				$type = stripslashes_deep($type); // strip slashes
                 $html = '';
                 $html_var = '';
                 $field_icon = '';
@@ -3651,7 +3653,8 @@ if (!function_exists('geodir_custom_sort_field_adminhtml')) {
             $field_info = $cf;
             $result_str = $cf->id;
         }
-
+		
+		$field_info = stripslashes_deep($field_info); // strip slashes
 
         if (!isset($field_info->post_type)) {
             $post_type = $_REQUEST['listing_type'];
@@ -3672,8 +3675,9 @@ if (!function_exists('geodir_custom_sort_field_adminhtml')) {
             $fields = geodir_get_custom_sort_options($post_type);
 
             foreach ($fields as $val) {
-
-                if ($val['field_type'] == $field_type && $val['htmlvar_name'] == $htmlvar_name) {
+				$val = stripslashes_deep($val); // strip slashes
+                
+				if ($val['field_type'] == $field_type && $val['htmlvar_name'] == $htmlvar_name) {
                     $site_title = isset($val['site_title']) ? $val['site_title'] : '';
                 }
 
@@ -3725,7 +3729,7 @@ if (!function_exists('geodir_custom_sort_field_adminhtml')) {
 
                     <?php if ($field_type != 'random') { ?>
 
-                        <input type="hidden" name="site_title" id="site_title" value="<?php echo $site_title; ?>"/>
+                        <input type="hidden" name="site_title" id="site_title" value="<?php echo esc_attr($site_title); ?>"/>
 
                         <tr>
                             <td>Select Ascending</td>
@@ -3736,9 +3740,9 @@ if (!function_exists('geodir_custom_sort_field_adminhtml')) {
                                 } ?>/>
 
                                 <input type="text" name="asc_title" id="asc_title"
-                                       placeholder="<?php _e('Ascending title', GEODIRECTORY_TEXTDOMAIN); ?>"
+                                       placeholder="<?php esc_attr_e('Ascending title', GEODIRECTORY_TEXTDOMAIN); ?>"
                                        value="<?php if (isset($field_info->asc_title)) {
-                                           echo $field_info->asc_title;
+                                           echo esc_attr($field_info->asc_title);
                                        } ?>" style="width:45%;"/>
 
                                 <input type="radio" name="is_default"
@@ -3760,9 +3764,9 @@ if (!function_exists('geodir_custom_sort_field_adminhtml')) {
                                 } ?>/>
 
                                 <input type="text" name="desc_title" id="desc_title"
-                                       placeholder="<?php _e('Descending title', GEODIRECTORY_TEXTDOMAIN); ?>"
+                                       placeholder="<?php esc_attr_e('Descending title', GEODIRECTORY_TEXTDOMAIN); ?>"
                                        value="<?php if (isset($field_info->desc_title)) {
-                                           echo $field_info->desc_title;
+                                           echo esc_attr($field_info->desc_title);
                                        } ?>" style="width:45%;"/>
                                 <input type="radio" name="is_default"
                                        value="<?php echo $htmlvar_name; ?>_desc" <?php if (isset($field_info->default_order) && $field_info->default_order == $htmlvar_name . '_desc') {
@@ -3779,7 +3783,7 @@ if (!function_exists('geodir_custom_sort_field_adminhtml')) {
                         <tr>
                             <td><strong><?php _e('Frontend title :', GEODIRECTORY_TEXTDOMAIN); ?></strong></td>
                             <td align="left">
-                                <input type="text" name="site_title" id="site_title" value="<?php echo $site_title; ?>"
+                                <input type="text" name="site_title" id="site_title" value="<?php echo esc_attr($site_title); ?>"
                                        size="50"/>
                                 <br/><span><?php _e('Section title which you wish to display in frontend', GEODIRECTORY_TEXTDOMAIN); ?></span>
                             </td>
@@ -3821,7 +3825,7 @@ if (!function_exists('geodir_custom_sort_field_adminhtml')) {
                         <td><strong><?php _e('Display order :', GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                         <td align="left"><input type="text" readonly="readonly" name="sort_order" id="sort_order"
                                                 value="<?php if (isset($field_info->sort_order)) {
-                                                    echo $field_info->sort_order;
+                                                    echo esc_attr($field_info->sort_order);
                                                 }?>" size="50"/>
                             <br/>
                             <span><?php _e('Enter the display order of this field in backend. e.g. 5', GEODIRECTORY_TEXTDOMAIN);?></span>
@@ -3831,10 +3835,10 @@ if (!function_exists('geodir_custom_sort_field_adminhtml')) {
                     <tr>
                         <td>&nbsp;</td>
                         <td align="left">
-                            <input type="button" class="button" name="save" id="save" value="Save"
+                            <input type="button" class="button" name="save" id="save" value="<?php esc_attr_e('Save', GEODIRECTORY_TEXTDOMAIN);?>"
                                    onclick="save_sort_field('<?php echo $result_str;?>')"/>
 
-                            <a href="javascript:void(0)"><input type="button" name="delete" value="Delete"
+                            <a href="javascript:void(0)"><input type="button" name="delete" value="<?php esc_attr_e('Delete', GEODIRECTORY_TEXTDOMAIN);?>"
                                                                 onclick="delete_sort_field('<?php echo $result_str;?>', '<?php echo $nonce;?>', this)"
                                                                 class="button_n"/></a>
 

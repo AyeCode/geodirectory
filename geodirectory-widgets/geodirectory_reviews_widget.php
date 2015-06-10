@@ -1,25 +1,64 @@
 <?php
+/**
+ * GeoDirectory Recent Reviews Widget
+ *
+ * @since 1.0.0
+ *
+ * @package GeoDirectory
+ */
 
-// =============================== Recent Comments Widget ======================================
+/**
+ * GeoDirectory recent reviews widget class.
+ *
+ * @since 1.0.0
+ */
 class geodir_recent_reviews_widget extends WP_Widget
 {
-    function geodir_recent_reviews_widget()
+    /**
+	 * Register the recent reviews widget.
+	 *
+	 * @since 1.0.0
+	 */
+	function geodir_recent_reviews_widget()
     {
         //Constructor
         $widget_ops = array('classname' => 'geodir_recent_reviews', 'description' => __('GD > Recent Reviews', GEODIRECTORY_TEXTDOMAIN));
         $this->WP_Widget('geodir_recent_reviews', __('GD > Recent Reviews', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
     }
 
-    function widget($args, $instance)
+	/**
+	 * Front-end display content for recent reviews widget.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $args     Widget arguments.
+	 * @param array $instance Saved values from database.
+	 */
+	function widget($args, $instance)
     {
         // prints the widget
         extract($args, EXTR_SKIP);
 
         /** This filter is documented in geodirectory_widgets.php */
         $title = empty($instance['title']) ? '' : apply_filters('widget_title', __($instance['title'], GEODIRECTORY_TEXTDOMAIN));
-        $count = empty($instance['count']) ? '5' : apply_filters('widget_count', $instance['count']);
+		
+		/**
+		 * Filter the number of reviews to display.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param int $instance['count'] Number of reviews to display.
+		 */
+		$count = empty($instance['count']) ? '5' : apply_filters('widget_count', $instance['count']);
 
-        $g_size = apply_filters('geodir_recent_reviews_g_size', 30);
+		/**
+		 * Filter the height and width of the avatar image in pixels.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param int $g_size Height and width of the avatar image in pixels. Default 30.
+		 */
+		$g_size = apply_filters('geodir_recent_reviews_g_size', 30);
         $comments_li = geodir_get_recent_reviews($g_size, $count, 100, false);
 
         if ($comments_li) {
@@ -36,7 +75,17 @@ class geodir_recent_reviews_widget extends WP_Widget
         }
     }
 
-    function update($new_instance, $old_instance)
+	/**
+	 * Sanitize recent reviews widget form values as they are saved.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $new_instance Values just sent to be saved.
+	 * @param array $old_instance Previously saved values from database.
+	 *
+	 * @return array Updated safe values to be saved.
+	 */
+	function update($new_instance, $old_instance)
     {
         //save the widget
         $instance = $old_instance;
@@ -44,8 +93,15 @@ class geodir_recent_reviews_widget extends WP_Widget
         $instance['count'] = strip_tags($new_instance['count']);
         return $instance;
     }
-
-    function form($instance)
+    
+	/**
+	 * Back-end recent reviews widget settings form.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $instance Previously saved values from database.
+	 */
+	function form($instance)
     {
         //widgetform in backend
         $instance = wp_parse_args((array)$instance, array('title' => '', 't1' => '', 't2' => '', 't3' => '', 'img1' => '', 'count' => ''));
@@ -66,8 +122,6 @@ class geodir_recent_reviews_widget extends WP_Widget
         </p>
     <?php
     }
-}
+} // class geodir_recent_reviews_widget
 
 register_widget('geodir_recent_reviews_widget');
-
-

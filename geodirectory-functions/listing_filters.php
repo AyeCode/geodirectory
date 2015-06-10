@@ -511,16 +511,18 @@ function geodir_posts_orderby($orderby)
             $orderby = "$wpdb->posts.post_date asc, ";
             break;
         case 'low_review':
+        case 'rating_count_asc':
             $orderby = $table . ".rating_count ASC, " . $table . ".overall_rating ASC, ";
             break;
         case 'high_review':
+        case 'rating_count_desc':
 			$orderby = $table . ".rating_count DESC, " . $table . ".overall_rating DESC, ";
             break;
         case 'low_rating':
-            $orderby = "( " . $table . ".overall_rating  ) asc, ";
+            $orderby = "( " . $table . ".overall_rating  ) ASC, " . $table . ".rating_count ASC,  ";
             break;
         case 'high_rating':
-            $orderby = "( " . $table . ".overall_rating ) desc, ";
+            $orderby = " " . $table . ".overall_rating DESC, " . $table . ".rating_count DESC, ";
             break;
         case 'featured':
             $orderby = $table . ".is_featured asc, ";
@@ -602,17 +604,20 @@ function geodir_posts_order_by_custom_sort($orderby, $sort_by, $table)
                 case 'post_date':
                 case 'comment_count':
 
-                    $orderby = "$wpdb->posts." . $sort_by . " " . $order . ", ";
+                    $orderby = "$wpdb->posts." . $sort_by . " " . $order . ", ".$table . ".overall_rating " . $order . ", ";
                     break;
 
                 case 'distance':
                     $orderby = $sort_by . " " . $order . ", ";
                     break;
 
+
                 // sort by rating
                 case 'overall_rating':
-                    $orderby = "( " . $table . "." . $sort_by . " ) " . $order . ", ";
+                    $orderby = " " . $table . "." . $sort_by . "  " . $order . ", " . $table . ".rating_count " . $order . ", ";
+
                     break;
+
 
                 default:
                     $orderby = $table . "." . $sort_by . " " . $order . ", ";
@@ -661,7 +666,7 @@ function geodir_post_where()
 
         }
 
-        if (!geodir_is_page('detail'))
+        //if (!geodir_is_page('detail'))
             add_filter('posts_where', 'geodir_default_where', 1);/**/
 
         //add_filter( 'user_has_cap', 'geodir_preview_post_cap', 10, 3 );// let subscribers edit their own posts

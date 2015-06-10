@@ -27,7 +27,12 @@ if (!function_exists('geodir_create_tables')) {
             if (!empty($wpdb->collate)) $collate .= " COLLATE $wpdb->collate";
         }
 
-        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+		/**
+		 * Include any functions needed for upgrades.
+		 *
+		 * @since 1.0.0
+		 */
+		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
 
 // rename tables if we need to

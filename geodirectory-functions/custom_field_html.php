@@ -22,6 +22,7 @@ if (!isset($field_info->post_type)) {
 } else
     $post_type = $field_info->post_type;
 
+$field_info = stripslashes_deep($field_info); // strip slashes from labels
 
 $nonce = wp_create_nonce('custom_fields_' . $result_str);
 
@@ -76,10 +77,10 @@ if ($htmlvar_name == 'geodir_email') {
          } else {
              echo 'none;';
          } ?>">
-        <input type="hidden" name="_wpnonce" value="<?php echo $nonce; ?>"/>
+        <input type="hidden" name="_wpnonce" value="<?php echo esc_attr($nonce); ?>"/>
         <input type="hidden" name="listing_type" id="listing_type" value="<?php echo $post_type; ?>"/>
         <input type="hidden" name="field_type" id="field_type" value="<?php echo $field_type; ?>"/>
-        <input type="hidden" name="field_id" id="field_id" value="<?php echo $result_str; ?>"/>
+        <input type="hidden" name="field_id" id="field_id" value="<?php echo esc_attr($result_str); ?>"/>
         <input type="hidden" name="data_type" id="data_type" value="<?php if (isset($field_info->data_type)) {
             echo $field_info->data_type;
         } ?>"/>
@@ -89,7 +90,7 @@ if ($htmlvar_name == 'geodir_email') {
             <?php if ($field_type != 'text' || $default) { ?>
 
                 <input type="hidden" name="data_type" id="data_type" value="<?php if (isset($field_info->data_type)) {
-                    echo $field_info->data_type;
+                    echo esc_attr($field_info->data_type);
                 } ?>"/>
 
             <?php } else { ?>
@@ -141,7 +142,7 @@ if ($htmlvar_name == 'geodir_email') {
                 <td align="left">
                     <input type="text" name="admin_title" id="admin_title"
                            value="<?php if (isset($field_info->admin_title)) {
-                               echo $field_info->admin_title;
+                               echo esc_attr($field_info->admin_title);
                            } ?>"/>
                     <br/><span><?php _e('Personal comment, it would not be displayed anywhere except in custom field settings', GEODIRECTORY_TEXTDOMAIN); ?></span>
                 </td>
@@ -151,7 +152,7 @@ if ($htmlvar_name == 'geodir_email') {
                 <td align="left">
                     <input type="text" name="site_title" id="site_title"
                            value="<?php if (isset($field_info->site_title)) {
-                               echo $field_info->site_title;
+                               echo esc_attr($field_info->site_title);
                            } ?>"/>
                     <br/><span><?php _e('Section title which you wish to display in frontend', GEODIRECTORY_TEXTDOMAIN); ?></span>
                 </td>
@@ -161,7 +162,7 @@ if ($htmlvar_name == 'geodir_email') {
                 <td align="left">
                     <input type="text" name="admin_desc" id="admin_desc"
                            value="<?php if (isset($field_info->admin_desc)) {
-                               echo $field_info->admin_desc;
+                               echo esc_attr($field_info->admin_desc);
                            } ?>"/>
                     <br/><span><?php _e('Section description which will appear in frontend', GEODIRECTORY_TEXTDOMAIN); ?></span>
                 </td>
@@ -189,7 +190,7 @@ if ($htmlvar_name == 'geodir_email') {
                 <td><strong><?php _e('Admin label :', GEODIRECTORY_TEXTDOMAIN); ?></strong></td>
                 <td align="left"><input type="text" name="clabels" id="clabels"
                                         value="<?php if (isset($field_info->clabels)) {
-                                            echo $field_info->clabels;
+                                            echo esc_attr($field_info->clabels);
                                         } ?>"/>
                     <br/>
                     <span><?php _e('Section Title which will appear in backend', GEODIRECTORY_TEXTDOMAIN); ?></span>
@@ -209,7 +210,7 @@ if ($htmlvar_name == 'geodir_email') {
                     <td><strong><?php _e('Default value :', GEODIRECTORY_TEXTDOMAIN);?></strong></td>
                     <td align="left"><input type="text" name="default_value" id="default_value"
                                             value="<?php if (isset($field_info->default_value)) {
-                                                echo $field_info->default_value;
+                                                echo esc_attr($field_info->default_value);
                                             }?>"/>
                         <br/>
                         <span><?php _e('Enter the default value (for "link" this will be used as the link text)', GEODIRECTORY_TEXTDOMAIN);?></span>
@@ -221,7 +222,7 @@ if ($htmlvar_name == 'geodir_email') {
                 <td><strong><?php _e('Display order :', GEODIRECTORY_TEXTDOMAIN); ?></strong></td>
                 <td align="left"><input type="text" readonly="readonly" name="sort_order" id="sort_order"
                                         value="<?php if (isset($field_info->sort_order)) {
-                                            echo $field_info->sort_order;
+                                            echo esc_attr($field_info->sort_order);
                                         } ?>"/>
                     <br/>
                     <span><?php _e('Enter the display order of this field in backend. e.g. 5', GEODIRECTORY_TEXTDOMAIN); ?></span>
@@ -288,7 +289,7 @@ if ($htmlvar_name == 'geodir_email') {
                 if (!empty($pricearr)) {
                     foreach ($pricearr as $val) {
                         ?>
-                        <option selected="selected" value="<?php echo $val; ?>" ><?php echo $val; ?></option><?php
+                        <option selected="selected" value="<?php echo esc_attr($val); ?>" ><?php echo $val; ?></option><?php
                     }
                 }
                 ?>
@@ -368,7 +369,7 @@ if ($htmlvar_name == 'geodir_email') {
                 <td align="left">
                     <input type="text" name="required_msg" id="required_msg"
                            value="<?php if (isset($field_info->required_msg)) {
-                               echo $field_info->required_msg;
+                               echo esc_attr($field_info->required_msg);
                            } ?>"/>
                     <span>
                         <?php _e('Enter text for error message if field required and have not full fill requirment.', GEODIRECTORY_TEXTDOMAIN); ?>
@@ -515,7 +516,7 @@ if ($htmlvar_name == 'geodir_email') {
                         <td align="left">
                             <input type="text" name="extra[zip_lable]" id="zip_lable"
                                    value="<?php if (isset($address['zip_lable'])) {
-                                       echo $address['zip_lable'];
+                                       echo esc_attr($address['zip_lable']);
                                    }?>"/>
                             <span><?php _e('Enter zip/post code field label in address section.', GEODIRECTORY_TEXTDOMAIN);?></span>
                         </td>
@@ -537,7 +538,7 @@ if ($htmlvar_name == 'geodir_email') {
                         <td align="left">
                             <input type="text" name="extra[map_lable]" id="map_lable"
                                    value="<?php if (isset($address['map_lable'])) {
-                                       echo $address['map_lable'];
+                                       echo esc_attr($address['map_lable']);
                                    }?>"/>
                             <span><?php _e('Enter text for  `set address on map` button in address section.', GEODIRECTORY_TEXTDOMAIN);?></span>
                         </td>
@@ -571,7 +572,7 @@ if ($htmlvar_name == 'geodir_email') {
                         <td align="left">
                             <input type="text" name="extra[mapview_lable]" id="mapview_lable"
                                    value="<?php if (isset($address['mapview_lable'])) {
-                                       echo $address['mapview_lable'];
+                                       echo esc_attr($address['mapview_lable']);
                                    }?>"/>
                             <span><?php _e('Enter mapview field label in address section.', GEODIRECTORY_TEXTDOMAIN);?></span>
                         </td>
@@ -624,7 +625,7 @@ if ($htmlvar_name == 'geodir_email') {
                         <td align="left">
                             <input type="text" name="option_values" id="option_values"
                                    value="<?php if (isset($field_info->option_values)) {
-                                       echo $field_info->option_values;
+                                       echo esc_attr($field_info->option_values);
                                    }?>"/>
                             <br/>
                             <span><?php _e('Option Values should be separated by comma.', GEODIRECTORY_TEXTDOMAIN);?></span>
@@ -653,7 +654,7 @@ if ($htmlvar_name == 'geodir_email') {
                         <td align="left" style="overflow:inherit;">
                             <input type="text" name="extra[date_format]" id="date_format"
                                    value="<?php if (isset($extra['date_format'])) {
-                                       echo $extra['date_format'];
+                                       echo esc_attr($extra['date_format']);
                                    }?>"/>
 
                             <div style="position:relative; cursor:pointer;">
@@ -736,7 +737,7 @@ if ($htmlvar_name == 'geodir_email') {
 								<?php foreach ( $allowed_file_types as $format => $types ) { ?>
 								<optgroup label="<?php echo esc_attr( wp_sprintf(__('%s formats', GEODIRECTORY_TEXTDOMAIN), __($format, GEODIRECTORY_TEXTDOMAIN) ) ) ;?>">
 									<?php foreach ( $types as $ext => $type ) { ?>
-									<option value="<?php echo $ext ;?>" <?php selected(true, in_array($ext, $gd_file_types));?>><?php echo '.' . $ext ;?></option>
+									<option value="<?php echo esc_attr($ext) ;?>" <?php selected(true, in_array($ext, $gd_file_types));?>><?php echo '.' . $ext ;?></option>
 									<?php } ?>
 								</optgroup>
 								<?php } ?>
@@ -775,7 +776,7 @@ if ($htmlvar_name == 'geodir_email') {
                     <td align="left">
                         <input type="text" name="css_class" id="css_class"
                                value="<?php if (isset($field_info->css_class)) {
-                                   echo $field_info->css_class;
+                                   echo esc_attr($field_info->css_class);
                                }?>"/>
                     <span>
                         <?php _e('Enter custom css class for field custom style.', GEODIRECTORY_TEXTDOMAIN);?>
@@ -859,11 +860,11 @@ if ($htmlvar_name == 'geodir_email') {
                 <td>&nbsp;</td>
                 <td align="left">
 
-                    <input type="button" class="button" name="save" id="save" value="Save"
-                           onclick="save_field('<?php echo $result_str; ?>')"/>
+                    <input type="button" class="button" name="save" id="save" value="<?php echo esc_attr(__('Save',GEODIRECTORY_TEXTDOMAIN));?>"
+                           onclick="save_field('<?php echo esc_attr($result_str); ?>')"/>
                     <?php if (!$default): ?>
-                        <a href="javascript:void(0)"><input type="button" name="delete" value="Delete"
-                                                            onclick="delete_field('<?php echo $result_str; ?>', '<?php echo $nonce; ?>')"
+                        <a href="javascript:void(0)"><input type="button" name="delete" value="<?php echo esc_attr(__('Delete',GEODIRECTORY_TEXTDOMAIN));?>"
+                                                            onclick="delete_field('<?php echo esc_attr($result_str); ?>', '<?php echo $nonce; ?>')"
                                                             class="button_n"/></a>
                     <?php endif; ?>
 

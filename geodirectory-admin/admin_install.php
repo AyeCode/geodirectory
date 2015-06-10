@@ -8,7 +8,11 @@
  * @package GeoDirectory
  */
 
-
+/**
+ * Include custom database table related functions.
+ *
+ * @since 1.0.0
+ */
 include_once('admin_db_install.php');
 /**
  * Activate GeoDirectory.
