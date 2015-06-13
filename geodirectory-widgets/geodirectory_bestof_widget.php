@@ -44,7 +44,7 @@ class geodir_bestof_widget extends WP_Widget
 		 * @param string $instance['tab_layout'] Best of widget tab layout name.
 		 */
 		$tab_layout = empty($instance['tab_layout']) ? 'bestof-tabs-on-top' : apply_filters('bestof_widget_tab_layout', $instance['tab_layout']);
-        echo '<div class="' . $tab_layout . '" id="bestof-widget-tab-layout">';
+        echo '<div class="bestof-widget-tab-layout ' . $tab_layout . '">';
         echo $before_widget;
         $loc_terms = geodir_get_current_location_terms();
         if ($loc_terms) {
@@ -648,10 +648,10 @@ jQuery(document).ready(function() {
 });
 jQuery(document).ready(function() {
 	if (jQuery(window).width() < 660) {
-		if (jQuery('#bestof-widget-tab-layout').hasClass('bestof-tabs-on-left')) {
-			jQuery('#bestof-widget-tab-layout').removeClass('bestof-tabs-on-left').addClass('bestof-tabs-as-dropdown');
-		} else if (jQuery('#bestof-widget-tab-layout').hasClass('bestof-tabs-on-top')) {
-			jQuery('#bestof-widget-tab-layout').removeClass('bestof-tabs-on-top').addClass('bestof-tabs-as-dropdown');
+		if (jQuery('.bestof-widget-tab-layout').hasClass('bestof-tabs-on-left')) {
+			jQuery('.bestof-widget-tab-layout').removeClass('bestof-tabs-on-left').addClass('bestof-tabs-as-dropdown');
+		} else if (jQuery('.bestof-widget-tab-layout').hasClass('bestof-tabs-on-top')) {
+			jQuery('.bestof-widget-tab-layout').removeClass('bestof-tabs-on-top').addClass('bestof-tabs-as-dropdown');
 		}
 	}
 });
