@@ -177,7 +177,7 @@ function jupiter_geodir_page_title($title = '', $subtitle = '')
     global $mk_options;
 
     $post_id = global_get_post_id();
-
+    $shadow_css = '';
     if ($mk_options['page_title_shadow'] == 'true') {
         $shadow_css = 'mk-drop-shadow';
     }

@@ -2025,14 +2025,3 @@ if(isset($_REQUEST['code']) && $_REQUEST['code']) {
     exit;
 }
 
-
-add_action( 'wp_ajax_geodir_ga_query', 'geodir_ga_query' );
-
-function geodir_ga_query()
-{
-
-
-    $response =  wp_remote_get("https://www.googleapis.com/analytics/v3/data/ga?ids=".$id."&start-date=2015-01-01&end-date=2015-05-27&metrics=ga:pageviews,ga:uniquePageviews,ga:bounces,ga:entrances,ga:exits,ga:newVisits,ga:timeOnPage&filters=ga:pagePath==/place/savoy-cafe/&access_token=ya29.gQH1CCa-N--Wmc01_N9gYV431DMkzATkShXbuoHHwLnWSt8fFdFiMhe8UZU8Ren9GS17i0Ykjj9FqA",array('timeout' => 15));
-    print_r($response);
-
-}

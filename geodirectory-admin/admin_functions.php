@@ -4320,6 +4320,7 @@ function geodir_init_filesystem()
 
 }
 
+
 add_action('admin_init', 'geodir_filesystem_notice');
 
 /**
@@ -4328,10 +4329,11 @@ add_action('admin_init', 'geodir_filesystem_notice');
  * Displays an admin message if the WordPress file system can't be automatically accessed. Called via admin_init hook.
  *
  * @since 1.4.8
+ * @since 1.4.9 Added check to not run function when doing ajax calls.
  * @package GeoDirectory
  */
 function geodir_filesystem_notice()
-{
+{   if ( defined( 'DOING_AJAX' ) ){return;}
     $access_type = get_filesystem_method();
     if ($access_type === 'direct') {
     } elseif (!defined('FTP_USER')) {
