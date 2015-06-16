@@ -2649,7 +2649,13 @@ function geodir_loginwidget_output($args = '', $instance = '')
         echo '</ul>';
     } else {
         ?>
-
+        <?php
+        /**
+         * Filter signup form action link.
+         *
+         * @since 1.0.0
+         */
+        ?>
         <form name="loginform" class="loginform1"
               action="<?php echo apply_filters('geodir_signup_reg_submit_link', home_url() . '/index.php?geodir_signup=true'); ?>"
               method="post">
@@ -2923,7 +2929,7 @@ function geodir_popular_postview_output($args = '', $instance = '')
             }
 
             /**
-             * Filter the template path.
+             * Filter the widget listing listview template path.
              *
              * @since 1.0.0
              */
@@ -2945,6 +2951,11 @@ function geodir_popular_postview_output($args = '', $instance = '')
             $current_map_canvas_arr = $map_canvas_arr;
             $geodir_is_widget_listing = true;
 
+            /**
+             * Includes related listing listview template.
+             *
+             * @since 1.0.0
+             */
             include($template);
 
             $geodir_is_widget_listing = false;

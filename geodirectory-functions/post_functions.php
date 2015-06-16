@@ -160,6 +160,12 @@ if (!function_exists('geodir_save_listing')) {
             'post_type' => $request_info['listing_type']
         );
 
+        /**
+         * Called before a listing is saved to the database.
+         *
+         * @since 1.0.0
+         * @param object $post The post object.
+         */
         do_action_ref_array('geodir_before_save_listing', $post);
 
         $send_post_submit_mail = false;

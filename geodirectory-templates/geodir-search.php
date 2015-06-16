@@ -79,7 +79,11 @@ do_action('geodir_wrapper_content_close', 'search-page');
 do_action('geodir_search_sidebar_right');
 
 ###### BOTTOM SECTION WIDGET AREA ######
-// adds the details bottom section widget area, you can add more classes via ''
+/**
+ * Adds the details bottom section widget area, you can add more classes via ''.
+ *
+ * @since 1.1.0
+ */
 do_action('geodir_sidebar_search_bottom_section');
 
 

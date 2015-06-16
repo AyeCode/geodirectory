@@ -10,6 +10,12 @@
 global $wpdb;
 
 if (get_option(GEODIRECTORY_TEXTDOMAIN . '_db_version') != GEODIRECTORY_VERSION) {
+    /**
+     * Include custom database table related functions.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     */
     include_once('geodirectory-admin/admin_db_install.php');
     add_action('plugins_loaded', 'geodirectory_upgrade_all', 10);
     if (GEODIRECTORY_VERSION <= '1.3.6') {

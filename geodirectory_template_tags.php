@@ -5,6 +5,13 @@
  * @since 1.0.0
  * @package GeoDirectory
  */
+
+/**
+ * Contains all map related templates used by the plugin.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 include_once('geodirectory-functions/map-functions/map_template_tags.php');
 
 /**
