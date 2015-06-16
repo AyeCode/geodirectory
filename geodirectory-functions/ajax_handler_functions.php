@@ -62,6 +62,12 @@ function geodir_on_init()
 
 
     if (isset($_REQUEST['ptype']) && $_REQUEST['ptype'] == 'get_markers') {
+        /**
+         * Contains map marker functions.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
         include_once(geodir_plugin_path() . '/geodirectory-functions/map-functions/get_markers.php');
         die;
     }
@@ -117,6 +123,12 @@ function geodir_ajax_handler()
 
     if ((isset($_REQUEST['geodir_ajax']) && $_REQUEST['geodir_ajax'] == 'admin_ajax') || isset($_REQUEST['create_field']) || isset($_REQUEST['sort_create_field'])) {
         if (current_user_can('manage_options')) {
+            /**
+             * Contains admin ajax handling functions.
+             *
+             * @since 1.0.0
+             * @package GeoDirectory
+             */
             include_once(geodir_plugin_path() . '/geodirectory-admin/geodir_admin_ajax.php');
         } else {
             wp_redirect(home_url() . '/?geodir_signup=true');
@@ -192,6 +204,12 @@ function geodir_ajax_handler()
     }*/
 
     if (isset($_REQUEST['geodir_ajax']) && $_REQUEST['geodir_ajax'] == 'map_ajax') {
+        /**
+         * Contains map marker functions.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
         include_once(geodir_plugin_path() . '/geodirectory-functions/map-functions/get_markers.php');
     }
 
@@ -330,7 +348,13 @@ function geodir_ajax_handler()
     }
 
     if (isset($_REQUEST['geodir_ajax']) && $_REQUEST['geodir_ajax'] == 'user_login') {
-
+        /**
+         * Contains registration and login functions.
+         * @todo Fix the file path.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
         include_once(geodir_plugin_path() . '/geodirectory-functions/geodirectory_reg.php');
     }
 

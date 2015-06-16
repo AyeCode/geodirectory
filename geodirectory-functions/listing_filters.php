@@ -563,6 +563,14 @@ function geodir_posts_orderby($orderby)
         }
     }
 
+    /**
+     * Filter order by SQL.
+     *
+     * @since 1.0.0
+     * @param string $orderby The orderby query string.
+     * @param string $sort_by Sortby query string.
+     * @param string $table Listing table name.
+     */
     $orderby = apply_filters('geodir_posts_order_by_sort', $orderby, $sort_by, $table);
 
     $orderby .= $table . ".is_featured asc, $wpdb->posts.post_date desc, $wpdb->posts.post_title ";

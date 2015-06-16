@@ -285,6 +285,11 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                                 }
                                 geodir_favourite_html($post->post_author, $post->ID);
 
+                                /**
+                                 * Called after printing favorite html.
+                                 *
+                                 * @since 1.0.0
+                                 */
                                 do_action( 'geodir_after_favorite_html', $post->ID, 'listing' );
 
                                 global $wp_query;
@@ -308,6 +313,11 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                                        onmouseout="stop_marker_animation('listing_map_canvas' ,'<?php echo $post->ID; ?>')"><?php _e('Pinpoint', GEODIRECTORY_TEXTDOMAIN); ?></a>
                                 <?php }
 
+                                /**
+                                 * Called after printing map pin point.
+                                 *
+                                 * @since 1.0.0
+                                 */
                                 do_action( 'geodir_listing_after_pinpoint', $post->ID );
 
                                 if ($post->post_author == get_current_user_id()) { ?>

@@ -11,6 +11,13 @@
  */
 get_header();
 
+/**
+ * Called before the main content of a template page.
+ * @todo: It looks like this hook is misplaced and duplicated. Remove this if redundant.
+ *
+ * @since 1.1.0
+ * @see 'geodir_after_main_content'
+ */
 do_action('geodir_before_main_content');
 
 ###### WRAPPER OPEN ######
@@ -20,7 +27,12 @@ do_action('geodir_wrapper_open', 'success-page', 'geodir-wrapper', '');
 ###### TOP CONTENT ######
 /** This action is documented in geodirectory-templates/add-listing.php */
 do_action('geodir_top_content', 'success-page');
-// action called before the main content
+/**
+ * Called before the main content of a template page.
+ *
+ * @since 1.1.0
+ * @see 'geodir_after_main_content'
+ */
 do_action('geodir_before_main_content', 'success-page');
 
 ###### MAIN CONTENT WRAPPERS OPEN ######
@@ -38,6 +50,11 @@ do_action('geodir_article_close', 'success-page');
 do_action('geodir_after_main_content');
 
 ###### SIDEBAR ######
+/**
+ * This action adds the sidebar to the detail page template.
+ *
+ * @since 1.1.0
+ */
 do_action('geodir_detail_sidebar');
 
 

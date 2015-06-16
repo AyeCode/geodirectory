@@ -23,7 +23,13 @@ get_header();
             <div id="gd-sidebar-wrapper">
                 <div class="geodir-sidebar-main">
                     <div class="geodir-gd-sidebar">
-                        <?php do_action('geodir_sidebar'); ?>
+                        <?php
+                        /**
+                         * Calls the standard sidebar.
+                         *
+                         * @since 1.0.0
+                         */
+                        do_action('geodir_sidebar'); ?>
                     </div>
                 </div>
             </div>

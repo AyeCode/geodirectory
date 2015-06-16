@@ -780,9 +780,19 @@ function geodir_related_posts_display($request)
 
             }
             $related_posts = true;
+
+            /**
+             * Filters related listing listview template.
+             *
+             * @since 1.0.0
+             */
             $template = apply_filters("geodir_template_part-related-listing-listview", geodir_locate_template('listing-listview'));
 
-
+            /**
+             * Includes related listing listview template.
+             *
+             * @since 1.0.0
+             */
             include($template);
 
             wp_reset_query();
@@ -1158,6 +1168,11 @@ function geodir_detail_page_tabs_array()
         'tab_content' => ''
     );
 
+    /**
+     * Filter the tabs array.
+     *
+     * @since 1.0.0
+     */
     return apply_filters('geodir_detail_page_tab_list_extend', $arr_tabs);
 
 
@@ -1437,6 +1452,11 @@ function geodir_show_detail_page_tabs()
                         do_action('geodir_after_' . $tab_index . '_tab_content');
                         ?> </li>
                     <?php
+                    /**
+                     * Filter the current tab content.
+                     *
+                     * @since 1.0.0
+                     */
                     $arr_detail_page_tabs[$tab_index]['tab_content'] = apply_filters("geodir_modify_" . $detail_page_tab['tab_content'] . "_tab_content", ob_get_clean());
                 } // end of if for is_display
             }// end of foreach

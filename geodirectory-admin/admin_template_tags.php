@@ -298,6 +298,12 @@ function geodir_admin_option_form($tab_name)
     //echo $tab_name.'_array.php' ;
     global $geodir_settings, $is_default, $mapzoom;
     if (file_exists(dirname(__FILE__) . '/option-pages/' . $tab_name . '_array.php')) {
+        /**
+         * Contains settings array for given tab.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
         include_once('option-pages/' . $tab_name . '_array.php');
     }
 
@@ -468,7 +474,11 @@ function geodir_admin_option_form($tab_name)
                                 scope="row"><?php _e('Set Location on Map', GEODIRECTORY_TEXTDOMAIN);?></th>
                             <td class="forminp">
                                 <?php
-
+                                /**
+                                 * Contains add listing page map functions.
+                                 *
+                                 * @since 1.0.0
+                                 */
                                 include(geodir_plugin_path() . "/geodirectory-functions/map-functions/map_on_add_listing_page.php");?>
                             </td>
                         </tr>

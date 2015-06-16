@@ -1313,7 +1313,7 @@ function geodir_action_before_single_post()
      * Called at the very start fo the details page output, before the title section.
      *
      * @since 1.0.0
-     * @param $post The current post object.
+     * @param object $post The current post object.
      * @global WP_Post|null $post The current post, if available.
      */
     do_action('geodir_before_single_post', $post); // extra action	
@@ -1331,7 +1331,7 @@ function geodir_action_after_single_post($post)
      * Called on the details page after the details page tabs section and before the next/prev buttons.
      *
      * @since 1.0.0
-     * @param $post The current post object.
+     * @param object $post The current post object.
      */
     do_action('geodir_after_single_post', $post); // extra action	
 }
@@ -2434,22 +2434,46 @@ function geodir_action_signup_forms()
         ?>
 
         <div class="login_form">
-            <?php include(geodir_plugin_path() . "/geodirectory-templates/login_frm.php"); ?>
+            <?php
+            /**
+             * Contains login form template.
+             *
+             * @since 1.0.0
+             */
+            include(geodir_plugin_path() . "/geodirectory-templates/login_frm.php"); ?>
         </div>
 
     <?php } elseif (isset($_REQUEST['page']) && $_REQUEST['page'] == 'login' && isset($_REQUEST['page1']) && $_REQUEST['page1'] == 'sign_up') { ?>
 
         <div class="registration_form">
-            <?php include(geodir_plugin_path() . "/geodirectory-templates/reg_frm.php"); ?>
+            <?php
+            /**
+             * Contains registration form template.
+             *
+             * @since 1.0.0
+             */
+            include(geodir_plugin_path() . "/geodirectory-templates/reg_frm.php"); ?>
         </div>
 
     <?php } else { ?>
 
         <div class="login_form_l">
-            <?php include(geodir_plugin_path() . "/geodirectory-templates/login_frm.php"); ?>
+            <?php
+            /**
+             * Contains login form template.
+             *
+             * @since 1.0.0
+             */
+            include(geodir_plugin_path() . "/geodirectory-templates/login_frm.php"); ?>
         </div>
         <div class="registration_form_r">
-            <?php include(geodir_plugin_path() . "/geodirectory-templates/reg_frm.php"); ?>
+            <?php
+            /**
+             * Contains registration form template.
+             *
+             * @since 1.0.0
+             */
+            include(geodir_plugin_path() . "/geodirectory-templates/reg_frm.php"); ?>
         </div>
 
     <?php }?>
@@ -3078,7 +3102,7 @@ function geodir_action_home_content()
      */
     do_action('geodir_home_content_inside');
     /**
-     * This is callec after the homepage main content.
+     * This is called after the homepage main content.
      *
      * @since 1.0.0
      */

@@ -9,6 +9,12 @@
  * @author      WPGeoDirectory
  */
 
+/**
+ * Contains custom post types/taxonomies related functions.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
 include_once('custom_taxonomy_hooks_actions.php');
 
 /**
@@ -48,7 +54,18 @@ function geodir_add_nav_menu_items()
                             $menu_class = '';
                             if (geodir_get_current_posttype() == $post_type && geodir_is_page('listing'))
                                 $menu_class = 'current-menu-item';
+                            /**
+                             * Filter the menu li class.
+                             *
+                             * @since 1.0.0
+                             * @param string $menu_class The menu HTML class.
+                             */
                             $li_class = apply_filters('geodir_menu_li_class', 'menu-item ' . $menu_class);
+                            /**
+                             * Filter the menu a class.
+                             *
+                             * @since 1.0.0
+                             */
                             $a_class = apply_filters('geodir_menu_a_class', '');
                             $items .= '<li class="' . $li_class . '">
 									<a href="' . get_post_type_archive_link($post_type) . '" class="' . $a_class . '">
@@ -65,10 +82,37 @@ function geodir_add_nav_menu_items()
         $view_posttype_listing = get_option('geodir_add_posttype_in_listing_nav');
         $is_listing_sub_meny_exists = (!empty($view_posttype_listing)) ? true : false;
         if ($is_listing_sub_meny_exists) {
+            /**
+             * Filter the menu li class.
+             *
+             * @since 1.0.0
+             * @param string $menu_class The menu HTML class.
+             */
             $li_class = apply_filters('geodir_menu_li_class', 'menu-item menu-item-has-children menu-gd-listings ' . $menu_class);
+            /**
+             * Filter the sub menu li class.
+             *
+             * @since 1.0.0
+             * @param string $menu_class The menu HTML class.
+             */
             $sub_li_class = apply_filters('geodir_sub_menu_li_class', 'menu-item ' . $menu_class);
+            /**
+             * Filter the sub menu ul class.
+             *
+             * @since 1.0.0
+             */
             $sub_ul_class = apply_filters('geodir_sub_menu_ul_class', 'sub-menu');
+            /**
+             * Filter the menu a class.
+             *
+             * @since 1.0.0
+             */
             $a_class = apply_filters('geodir_menu_a_class', '');
+            /**
+             * Filter the sub menu a class.
+             *
+             * @since 1.0.0
+             */
             $sub_a_class = apply_filters('geodir_sub_menu_a_class', '');
             $items .= '<li class="' . $li_class . '">
 					<a href="#" class="' . $a_class . '">' . __('Listing', GEODIRECTORY_TEXTDOMAIN) . '</a>
@@ -128,7 +172,18 @@ function geodir_add_nav_menu_items()
                                     $menu_class = '';
                                     if (geodir_get_current_posttype() == $post_type && geodir_is_page('add-listing'))
                                         $menu_class = 'current-menu-item';
+                                    /**
+                                     * Filter the menu li class.
+                                     *
+                                     * @since 1.0.0
+                                     * @param string $menu_class The menu HTML class.
+                                     */
                                     $li_class = apply_filters('geodir_menu_li_class', 'menu-item ' . $menu_class);
+                                    /**
+                                     * Filter the menu a class.
+                                     *
+                                     * @since 1.0.0
+                                     */
                                     $a_class = apply_filters('geodir_menu_a_class', '');
                                     $items .= '<li class="' . $li_class . '">
 											<a href="' . geodir_get_addlisting_link($post_type) . '" class="' . $a_class . '">
@@ -150,10 +205,37 @@ function geodir_add_nav_menu_items()
     if ($is_add_listing_sub_meny_exists) {
 
         if (get_option('geodir_show_addlisting_nav')) {
+            /**
+             * Filter the menu li class.
+             *
+             * @since 1.0.0
+             * @param string $menu_class The menu HTML class.
+             */
             $li_class = apply_filters('geodir_menu_li_class', 'menu-item menu-item-has-children menu-gd-add-listing ' . $menu_class);
+            /**
+             * Filter the sub menu li class.
+             *
+             * @since 1.0.0
+             * @param string $menu_class The menu HTML class.
+             */
             $sub_li_class = apply_filters('geodir_sub_menu_li_class', 'menu-item ' . $menu_class);
+            /**
+             * Filter the sub menu ul class.
+             *
+             * @since 1.0.0
+             */
             $sub_ul_class = apply_filters('geodir_sub_menu_ul_class', 'sub-menu');
+            /**
+             * Filter the menu a class.
+             *
+             * @since 1.0.0
+             */
             $a_class = apply_filters('geodir_menu_a_class', '');
+            /**
+             * Filter the sub menu a class.
+             *
+             * @since 1.0.0
+             */
             $sub_a_class = apply_filters('geodir_sub_menu_a_class', '');
             $items .= '<li  class="' . $li_class . '">
 					<a href="#" class="' . $a_class . '">' . __('Add Listing', GEODIRECTORY_TEXTDOMAIN) . '</a>
@@ -174,6 +256,12 @@ function geodir_add_nav_menu_items()
                                         $menu_class = '';
                                         if (geodir_get_current_posttype() == $post_type && geodir_is_page('add-listing'))
                                             $menu_class = 'current-menu-item';
+                                        /**
+                                         * Filter the menu li class.
+                                         *
+                                         * @since 1.0.0
+                                         * @param string $menu_class The menu HTML class.
+                                         */
                                         $li_class = apply_filters('geodir_menu_li_class', 'menu-item ' . $menu_class);
                                         $items .= '<li class="' . $li_class . '">
 														<a href="' . geodir_get_addlisting_link($post_type) . '" class="' . $sub_a_class . '">
@@ -428,6 +516,12 @@ if (!function_exists('geodir_get_taxonomies')) {
             $gd_taxonomies = array_values($gd_taxonomies);
         }
 
+        /**
+         * Filter the taxonomies.
+         *
+         * @since 1.0.0
+         * @param array $gd_taxonomies The taxonomy array.
+         */
         $taxonomies = apply_filters('geodir_taxonomy', $gd_taxonomies);
 
         if (!empty($taxonomies)) {

@@ -146,6 +146,12 @@ function geodir_template_loader($template)
 {
 
     global $wp_query;
+
+    /**
+     * Filter the custom page list.
+     *
+     * @since 1.0.0
+     */
     $geodir_custom_page_list = apply_filters('geodir_set_custom_pages', array(
         'geodir_signup_page' =>
             apply_filters('geodir_set_custom_signup_page', false),
@@ -174,6 +180,12 @@ function geodir_template_loader($template)
 
         if (!$template) $template = geodir_plugin_path() . '/geodirectory-templates/geodir-signup.php';
 
+        /**
+         * Filter the signup template path.
+         *
+         * @since 1.0.0
+         * @param string $template The template path.
+         */
         return $template = apply_filters('geodir_template_signup', $template);
     }
 
@@ -185,7 +197,12 @@ function geodir_template_loader($template)
             $template = geodir_locate_template('information');
 
             if (!$template) $template = geodir_plugin_path() . '/geodirectory-templates/geodir-information.php';
-
+            /**
+             * Filter the information template path.
+             *
+             * @since 1.0.0
+             * @param string $template The template path.
+             */
             return $template = apply_filters('geodir_template_information', $template);
         }
         // check if pid exists in the record if yes then check if this post belongs to the user who is logged in.
@@ -197,7 +214,12 @@ function geodir_template_loader($template)
                 $template = geodir_locate_template('information');
 
                 if (!$template) $template = geodir_plugin_path() . '/geodirectory-templates/geodir-information.php';
-
+                /**
+                 * Filter the information template path.
+                 *
+                 * @since 1.0.0
+                 * @param string $template The template path.
+                 */
                 return $template = apply_filters('geodir_template_information', $template);
             }
 
@@ -214,7 +236,12 @@ function geodir_template_loader($template)
         $template = geodir_locate_template('add-listing');
 
         if (!$template) $template = geodir_plugin_path() . '/geodirectory-templates/add-listing.php';
-
+        /**
+         * Filter the add listing template path.
+         *
+         * @since 1.0.0
+         * @param string $template The template path.
+         */
         return $template = apply_filters('geodir_template_add_listing', $template);
     }
 
@@ -226,6 +253,12 @@ function geodir_template_loader($template)
         $template = geodir_locate_template('preview');
 
         if (!$template) $template = geodir_plugin_path() . '/geodirectory-templates/listing-detail.php';
+        /**
+         * Filter the preview template path.
+         *
+         * @since 1.0.0
+         * @param string $template The template path.
+         */
         return $template = apply_filters('geodir_template_preview', $template);
 
     }
@@ -236,7 +269,12 @@ function geodir_template_loader($template)
         $template = geodir_locate_template('success');
 
         if (!$template) $template = geodir_plugin_path() . '/geodirectory-templates/listing-success.php';
-
+        /**
+         * Filter the success template path.
+         *
+         * @since 1.0.0
+         * @param string $template The template path.
+         */
         return $template = apply_filters('geodir_template_success', $template);
 
     }
@@ -246,7 +284,12 @@ function geodir_template_loader($template)
         $template = geodir_locate_template('detail');
 
         if (!$template) $template = geodir_plugin_path() . '/geodirectory-templates/listing-detail.php';
-
+        /**
+         * Filter the detail template path.
+         *
+         * @since 1.0.0
+         * @param string $template The template path.
+         */
         return $template = apply_filters('geodir_template_detail', $template);
 
     }
@@ -256,7 +299,12 @@ function geodir_template_loader($template)
         $template = geodir_locate_template('listing');
 
         if (!$template) $template = geodir_plugin_path() . '/geodirectory-templates/geodir-listing.php';
-
+        /**
+         * Filter the listing template path.
+         *
+         * @since 1.0.0
+         * @param string $template The template path.
+         */
         return $template = apply_filters('geodir_template_listing', $template);
 
     }
@@ -266,7 +314,12 @@ function geodir_template_loader($template)
         $template = geodir_locate_template('search');
 
         if (!$template) $template = geodir_plugin_path() . '/geodirectory-templates/geodir-search.php';
-
+        /**
+         * Filter the search template path.
+         *
+         * @since 1.0.0
+         * @param string $template The template path.
+         */
         return $template = apply_filters('geodir_template_search', $template);
 
     }
@@ -276,7 +329,12 @@ function geodir_template_loader($template)
         $template = geodir_locate_template('author');
 
         if (!$template) $template = geodir_plugin_path() . '/geodirectory-templates/geodir-author.php';
-
+        /**
+         * Filter the author template path.
+         *
+         * @since 1.0.0
+         * @param string $template The template path.
+         */
         return $template = apply_filters('geodir_template_author', $template);
 
     }
@@ -292,7 +350,12 @@ function geodir_template_loader($template)
             $template = geodir_locate_template('geodir-home');
 
             if (!$template) $template = geodir_plugin_path() . '/geodirectory-templates/geodir-home.php';
-
+            /**
+             * Filter the home page template path.
+             *
+             * @since 1.0.0
+             * @param string $template The template path.
+             */
             return $template = apply_filters('geodir_template_homepage', $template);
 
         } elseif (geodir_is_page('location')) {
@@ -300,7 +363,12 @@ function geodir_template_loader($template)
             $template = geodir_locate_template('location');
 
             if (!$template) $template = geodir_plugin_path() . '/geodirectory-templates/geodir-location.php';
-
+            /**
+             * Filter the location template path.
+             *
+             * @since 1.0.0
+             * @param string $template The template path.
+             */
             return $template = apply_filters('geodir_template_location', $template);
 
         } else
@@ -345,8 +413,18 @@ function geodir_get_template_part($slug = '', $name = NULL)
     }
 
     if (!locate_template(array("geodirectory/" . $template_name))) :
-
+        /**
+         * Filter the template part with slug and name.
+         *
+         * @since 1.0.0
+         * @param string $template_name The template name.
+         */
         $template = apply_filters("geodir_template_part-{$slug}-{$name}", geodir_plugin_path() . '/geodirectory-templates/' . $template_name);
+        /**
+         * Includes the template part with slug and name.
+         *
+         * @since 1.0.0
+         */
         include($template);
     else:
         locate_template(array("geodirectory/" . $template_name), true, false);

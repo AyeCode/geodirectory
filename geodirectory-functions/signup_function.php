@@ -52,6 +52,13 @@ function geodir_check_ssl()
         }
     }
 
+    /**
+     * Filter the login message.
+     *
+     * @since 1.0.0
+     *
+     * @param string $message Login message.
+     */
     $message = apply_filters('login_message', $message);
     if (!empty($message)) echo $message . "\n";
 
@@ -211,7 +218,22 @@ function geodir_retrieve_password()
     $fromEmail = geodir_get_site_email_id();
     $fromEmailName = get_site_emailName();
     $title = sprintf(__('[%s] Your new password', GEODIRECTORY_TEXTDOMAIN), get_option('blogname'));
+    /**
+     * Filter the password reset email subject part.
+     *
+     * @since 1.0.0
+     *
+     * @param string $title Password reset email subject.
+     */
     $title = apply_filters('password_reset_title', $title);
+    /**
+     * Filter the password reset email message part.
+     *
+     * @since 1.0.0
+     *
+     * @param string $message Password reset email message.
+     * @param string $new_pass The new password string.
+     */
     $message = apply_filters('password_reset_message', $message, $new_pass);
     //geodir_sendEmail($fromEmail,$fromEmailName,$user_email,$user_name,$title,$message,$extra='');///forgot password email
     geodir_sendEmail($fromEmail, $fromEmailName, $user_email, $user_name, $title, $message, $extra = '', 'forgot_password', $post_id = '', $user->ID);///forgot password email
@@ -238,6 +260,13 @@ function geodir_register_new_user($user_login, $user_email)
     $user_login = sanitize_user($user_login);
     $user_login = str_replace(",", "", $user_login);
     $user_email = str_replace(",", "", $user_email);
+    /**
+     * Filter the user registration email.
+     *
+     * @since 1.0.0
+     *
+     * @param string $user_email User registration email.
+     */
     $user_email = apply_filters('user_registration_email', $user_email);
 
 
@@ -279,7 +308,13 @@ function geodir_register_new_user($user_login, $user_email)
      * @since 1.0.0
      */
     do_action('register_post', $user_login, $user_email, $errors);
-
+    /**
+     * Filter the registration error messages.
+     *
+     * @since 1.0.0
+     *
+     * @param object $errors Registration error messages.
+     */
     $errors = apply_filters('registration_errors', $errors);
 
     if ($errors->get_error_code())
@@ -303,6 +338,13 @@ function geodir_register_new_user($user_login, $user_email)
     $user_fname = sanitize_user($_POST['user_fname']);
     $user_fname = str_replace(",", "", $user_fname);
 
+    /**
+     * Filter the submitted user meta.
+     *
+     * @since 1.0.0
+     *
+     * @param int $user_id User ID.
+     */
     $user_address_info = apply_filters('geodir_manage_user_meta', array(
         "user_add1" => '',
         "user_add2" => '',
@@ -411,7 +453,6 @@ function geodir_user_signup()
      *
      * @since 1.0.0
      */
-
     do_action('login_form_' . $action);
 
     $http_post = ('POST' == $_SERVER['REQUEST_METHOD']);
@@ -600,7 +641,14 @@ function geodir_user_signup()
                     $author_link = get_author_posts_url($user_ID);
                     $default_author_link = geodir_getlink($author_link, array('geodir_dashbord' => 'true', 'stype' => 'gd_place'), false);
 
-                    // author page link
+                    /**
+                     * Filter the author link.
+                     *
+                     * @since 1.0.0
+                     *
+                     * @param string $default_author_link Default author link.
+                     * @param int $user_ID The user ID.
+                     */
                     $default_author_link = apply_filters('geodir_dashboard_author_link', $default_author_link, $user_ID);
 
                     $_REQUEST['redirect_to'] = $default_author_link;
@@ -623,6 +671,13 @@ function geodir_user_signup()
 
             $user = wp_signon('', $secure_cookie);
 
+            /**
+             * Filter the login redirect URL.
+             *
+             * @since 1.4.9
+             * @param string $redirect_to The redirect destination URL.
+             * @param WP_User|WP_Error $user WP_User object if login was successful, WP_Error object otherwise.
+             */
             $redirect_to = apply_filters('login_redirect', $redirect_to, isset($_REQUEST['redirect_to']) ? $_REQUEST['redirect_to'] : '', $user);
 
             if (is_wp_error($user)) {

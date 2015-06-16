@@ -991,12 +991,54 @@ if (!function_exists('register_geodir_widgets')) {
         register_widget('geodir_advance_search_widget');
 
 
+        /**
+         * Contains all functions for popular widget.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
         include_once('geodirectory-widgets/geodirectory_popular_widget.php');
+        /**
+         * Contains all functions for listing slider widget.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
         include_once('geodirectory-widgets/geodirectory_listing_slider_widget.php');
+        /**
+         * Contains all functions for home map widget.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
         include_once('geodirectory-widgets/home_map_widget.php');
+        /**
+         * Contains all functions for listing map widget.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
         include_once('geodirectory-widgets/listing_map_widget.php');
+        /**
+         * Contains all functions for reviews widget.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
         include_once('geodirectory-widgets/geodirectory_reviews_widget.php');
+        /**
+         * Contains all functions for related listing widget.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
         include_once('geodirectory-widgets/geodirectory_related_listing_widget.php');
+        /**
+         * Contains all functions for bestof widget.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
         include_once('geodirectory-widgets/geodirectory_bestof_widget.php');
     }
 
