@@ -910,6 +910,17 @@ function searching_filter_where($where)
 				AND $wpdb->posts.post_type in ('$post_types') 
 				AND ($wpdb->posts.post_status = 'publish') ";
     }
+	
+	########### WPML ###########
+    if ( function_exists( 'icl_object_id' ) ) {       
+		$lang_code = ICL_LANGUAGE_CODE;
+		
+		if ($lang_code && $post_types) {
+            $where .= " AND icl_t.language_code = '".$lang_code."' AND icl_t.element_type IN('post_" . $post_types . "') ";
+        }
+    }
+    ########### WPML ###########
+	
     return $where;
 }
 
