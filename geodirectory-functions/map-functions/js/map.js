@@ -173,6 +173,24 @@ function build_map_ajax_search_param(map_canvas_var, reload_cat_list, catObj) {
     var gd_posttype = '';
     var gd_cat_posttype = '';
 	var gd_pt = '';
+    var gd_zl = '';
+    var gd_lat_ne = '';
+    var gd_lon_ne = '';
+    var gd_lat_sw = '';
+    var gd_lon_sw = '';
+
+    //var mapObject = new google.maps.Map(document.getElementById("map"), _mapOptions);
+   // jQuery.goMap.map
+    var map_info = '';
+    if(jQuery.goMap.map) {
+        bounds = jQuery.goMap.map.getBounds();
+        gd_zl = jQuery.goMap.map.getZoom();
+        gd_lat_ne = bounds.getNorthEast().lat();
+        gd_lon_ne = bounds.getNorthEast().lng();
+        gd_lat_sw = bounds.getSouthWest().lat();
+        gd_lon_sw = bounds.getSouthWest().lng();
+        map_info = "&zl="+gd_zl+"&lat_ne="+gd_lat_ne+"&lon_ne="+gd_lon_ne+"&lat_sw="+gd_lat_sw+"&lon_sw="+gd_lon_sw;
+    }
 
     if (jQuery('#' + map_canvas_var + '_posttype').val() != '' && jQuery('#' + map_canvas_var + '_posttype').val() != '0') {
         gd_posttype = jQuery('#' + map_canvas_var + '_posttype').val();
@@ -276,7 +294,7 @@ function build_map_ajax_search_param(map_canvas_var, reload_cat_list, catObj) {
 
 
     var search_query_string = '';
-    search_query_string = '&geodir_ajax=map_ajax&ajax_action=cat&cat_id=' + checked + "&search=" + search_string + hood_string
+    search_query_string = '&geodir_ajax=map_ajax&ajax_action=cat&cat_id=' + checked + "&search=" + search_string + hood_string + map_info;
     if (gd_posttype != '')
         search_query_string = search_query_string + gd_posttype;
 

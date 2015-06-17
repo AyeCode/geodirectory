@@ -5779,13 +5779,13 @@ function geodir_save_csv_data( $file_path, $csv_data = array(), $clear = true ) 
 	if ( function_exists( 'fputcsv' ) ) {
 		$file = fopen( $file_path, $mode );
 		foreach( $csv_data as $csv_row ) {
-			$csv_row = array_map( 'utf8_decode', $csv_row );
+			//$csv_row = array_map( 'utf8_decode', $csv_row );
 			$write_successful = fputcsv( $file, $csv_row, ",", $enclosure = '"' );
 		}
 		fclose( $file );
 	} else {
 		foreach( $csv_data as $csv_row ) {
-			$csv_row = array_map( 'utf8_decode', $csv_row );
+			//$csv_row = array_map( 'utf8_decode', $csv_row );
 			$wp_filesystem->put_contents( $file_path, $csv_row );
 		}
 	}
