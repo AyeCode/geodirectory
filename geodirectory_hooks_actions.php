@@ -2021,7 +2021,83 @@ add_filter('geodir_detail_page_tab_list_extend', 'geodir_detail_page_tab_heading
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
- * @param array $tabs_arr Tabs array.
+ * @param array $tabs_arr {
+ *    Attributes of the Tabs array.
+ *
+ *    @type array $post_profile {
+ *        Attributes of post_profile.
+ *
+ *        @type string $heading_text    Tab Heading. Default "Profile".
+ *        @type bool   $is_active_tab   Is this tab active? Default true.
+ *        @type bool   $is_display      Display this tab? Default true.
+ *        @type string $tab_content     Tab content. Default "".
+ *
+ *    }
+ *    @type array $post_info {
+ *        Attributes of post_info.
+ *
+ *        @type string $heading_text    Tab Heading. Default "More Info".
+ *        @type bool   $is_active_tab   Is this tab active? Default false.
+ *        @type bool   $is_display      Display this tab? Default false.
+ *        @type string $tab_content     Tab content. Default "".
+ *
+ *    }
+ *    @type array $post_images {
+ *        Attributes of post_images.
+ *
+ *        @type string $heading_text    Tab Heading. Default "Photo".
+ *        @type bool   $is_active_tab   Is this tab active? Default false.
+ *        @type bool   $is_display      Display this tab? Default true.
+ *        @type string $tab_content     Tab content. Default "".
+ *
+ *    }
+ *    @type array $post_video {
+ *        Attributes of post_video.
+ *
+ *        @type string $heading_text    Tab Heading. Default "Video".
+ *        @type bool   $is_active_tab   Is this tab active? Default false.
+ *        @type bool   $is_display      Display this tab? Default false.
+ *        @type string $tab_content     Tab content. Default "".
+ *
+ *    }
+ *    @type array $special_offers {
+ *        Attributes of special_offers.
+ *
+ *        @type string $heading_text    Tab Heading. Default "Special Offers".
+ *        @type bool   $is_active_tab   Is this tab active? Default false.
+ *        @type bool   $is_display      Display this tab? Default false.
+ *        @type string $tab_content     Tab content. Default "".
+ *
+ *    }
+ *    @type array $post_map {
+ *        Attributes of post_map.
+ *
+ *        @type string $heading_text    Tab Heading. Default "Map".
+ *        @type bool   $is_active_tab   Is this tab active? Default false.
+ *        @type bool   $is_display      Display this tab? Default true.
+ *        @type string $tab_content     Tab content. Default "".
+ *
+ *    }
+ *    @type array $reviews {
+ *        Attributes of reviews.
+ *
+ *        @type string $heading_text    Tab Heading. Default "Reviews".
+ *        @type bool   $is_active_tab   Is this tab active? Default false.
+ *        @type bool   $is_display      Display this tab? Default true.
+ *        @type string $tab_content     Tab content. Default "review display".
+ *
+ *    }
+ *    @type array $related_listing {
+ *        Attributes of related_listing.
+ *
+ *        @type string $heading_text    Tab Heading. Default "Related Listing".
+ *        @type bool   $is_active_tab   Is this tab active? Default false.
+ *        @type bool   $is_display      Display this tab? Default true.
+ *        @type string $tab_content     Tab content. Default "".
+ *
+ *    }
+ *
+ * }
  * @return array Modified tabs array.
  */
 function geodir_detail_page_tab_headings_change($tabs_arr)

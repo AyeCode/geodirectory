@@ -14,7 +14,18 @@ add_filter('comment_row_actions', 'geodir_comment_meta_row_action', 11, 1);
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param array $a Comment row actions before filter.
+ * @param array $a {
+ *    List of comment row actions.
+ *
+ *    @type string $approve Current comment approve HTML link string.
+ *    @type string $unapprove Current comment unapprove HTML link string.
+ *    @type string $reply Current comment reply HTML link string.
+ *    @type string $quickedit Current comment Quick Edit HTML link string.
+ *    @type string $edit Current comment Edit HTML link string.
+ *    @type string $spam Current comment Spam HTML link string.
+ *    @type string $trash Current comment Trash HTML link string.
+ *
+ * }
  * @global object $comment The comment object.
  * @return mixed Comment row actions.
  */
@@ -718,7 +729,26 @@ if (!function_exists('geodir_comment')) {
      * @package GeoDirectory
      * @global object $post The current post object.
      * @param object $comment The comment object.
-     * @param array $args The comment args.
+     * @param string|array $args {
+     *     Optional. Formatting options.
+     *
+     *     @type object $walker            Instance of a Walker class to list comments. Default null.
+     *     @type int    $max_depth         The maximum comments depth. Default empty.
+     *     @type string $style             The style of list ordering. Default 'ul'. Accepts 'ul', 'ol'.
+     *     @type string $callback          Callback function to use. Default null.
+     *     @type string $end-callback      Callback function to use at the end. Default null.
+     *     @type string $type              Type of comments to list.
+     *                                     Default 'all'. Accepts 'all', 'comment', 'pingback', 'trackback', 'pings'.
+     *     @type int    $page              Page ID to list comments for. Default empty.
+     *     @type int    $per_page          Number of comments to list per page. Default empty.
+     *     @type int    $avatar_size       Height and width dimensions of the avatar size. Default 32.
+     *     @type string $reverse_top_level Ordering of the listed comments. Default null. Accepts 'desc', 'asc'.
+     *     @type bool   $reverse_children  Whether to reverse child comments in the list. Default null.
+     *     @type string $format            How to format the comments list.
+     *                                     Default 'html5' if the theme supports it. Accepts 'html5', 'xhtml'.
+     *     @type bool   $short_ping        Whether to output short pings. Default false.
+     *     @type bool   $echo              Whether to echo the output or return it. Default true.
+     * }
      * @param int $depth Depth of comment.
      */
     function geodir_comment($comment, $args, $depth)
