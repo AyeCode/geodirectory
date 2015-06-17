@@ -414,14 +414,21 @@ function geodir_get_current_location_terms($location_array_from = 'session', $gd
 			$location_array = geodir_get_current_location_terms('session');
 		}
     }
-	
+
 	/**
 	 * Filter the location terms.
 	 *
 	 * @since 1.4.6
      * @package GeoDirectory
 	 *
-	 * @param array $location_array Array of location terms. Default empty.
+     * @param array $location_array {
+     *    Attributes of the location_array.
+     *
+     *    @type string $gd_country The country slug.
+     *    @type string $gd_region The region slug.
+     *    @type string $gd_city The city slug.
+     *
+     * }
 	 * @param string $location_array_from Source type of location terms. Default session.
 	 * @param string $gd_post_type WP post type.
 	 */

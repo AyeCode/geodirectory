@@ -12,7 +12,6 @@
  */
 
 global $post, $preview, $post_images;
-var_dump($preview);
 $package_info = array();
 
 $package_info = geodir_post_package_info($package_info, $post);

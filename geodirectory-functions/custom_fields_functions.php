@@ -3491,7 +3491,25 @@ if (!function_exists('geodir_custom_sort_field_save')) {
 	 * @package GeoDirectory
      * @global object $wpdb WordPress Database object.
      * @global string $plugin_prefix Geodirectory plugin table prefix.
-	 * @param array $request_field The request field array.
+	 * @param array $request_field {
+     *    Attributes of the Request field.
+     *
+     *    @type string $action Ajax action name.
+     *    @type string $manage_field_type Manage field type Default "sorting_options".
+     *    @type string $create_field Do you want to create this field?.
+     *    @type string $field_ins_upd Field created or updated?.
+     *    @type string $_wpnonce Nonce value.
+     *    @type string $listing_type The Post type.
+     *    @type string $field_type Field Type.
+     *    @type string $field_id Field ID.
+     *    @type string $data_type Data Type.
+     *    @type string $htmlvar_name HTML variable name.
+     *    @type string $site_title Section title which you wish to display in frontend.
+     *    @type string $is_default Is this default sorting?.
+     *    @type string $is_active If not active then the field will not be displayed anywhere.
+     *    @type string $sort_order Sort Order.
+     *
+     * }
 	 * @param bool $default Not yet implemented.
 	 * @return int Returns the last affected db table row id.
 	 */
