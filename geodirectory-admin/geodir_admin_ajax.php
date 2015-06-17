@@ -8,7 +8,7 @@
 
 if (isset($_REQUEST['create_field'])) {
 	/**
-	 * Used to create custom fields.
+	 * Includes file to create custom fields.
 	 *
 	 * @since 1.0.0
 	 */

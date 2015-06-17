@@ -688,9 +688,11 @@ function geodir_sc_gd_listings_output($args = array()) {
 				echo geodir_sc_listings_pagination($total_posts, $post_number, $pageno);
 			}
 
-			/**
-			 * Template for the listing listview.
-			 */
+            /**
+             * Includes listing listview template.
+             *
+             * @since 1.0.0
+             */
 			include($template);
 			
 			if ($with_pagination && $bottom_pagination) {				

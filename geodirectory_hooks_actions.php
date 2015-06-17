@@ -248,6 +248,12 @@ require_once('geodirectory-functions/custom_taxonomy_hooks_actions.php');
  */
 function geodir_add_post_filters()
 {
+    /**
+     * Contains all function for filtering listing.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     */
     include_once('geodirectory-functions/listing_filters.php');
 }
 
@@ -2020,7 +2026,6 @@ add_filter('geodir_detail_page_tab_list_extend', 'geodir_detail_page_tab_heading
  */
 function geodir_detail_page_tab_headings_change($tabs_arr)
 {
-
     global $wpdb;
 
     $post_type = geodir_get_current_posttype();

@@ -77,7 +77,7 @@ if (have_posts() && !$preview) {
      *
      * This sets the value of `$post` to the preview values before the main content is called.
      *
-     *@since 1.1.0
+     * @since 1.1.0
      */
     do_action('geodir_action_geodir_set_preview_post'); // set the $post to the preview values
     /** This action is documented in geodirectory-templates/listing-detail.php */
@@ -113,7 +113,8 @@ if (!get_option('geodir_detail_sidebar_left_section')) {
  * Adds the details page bottom section widget area to the details template page.
  *
  * @since 1.1.0
- */do_action('geodir_sidebar_detail_bottom_section', '');
+ */
+do_action('geodir_sidebar_detail_bottom_section', '');
 
 ###### WRAPPER CLOSE ######	
 /** This action is documented in geodirectory-templates/add-listing.php */

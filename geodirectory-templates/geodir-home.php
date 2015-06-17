@@ -67,7 +67,8 @@ do_action('geodir_home_sidebar_right');
  * Adds the home page bottom widget area to the home template page if active.
  *
  * @since 1.1.0
- */do_action('geodir_sidebar_home_bottom_section');
+ */
+do_action('geodir_sidebar_home_bottom_section');
 
 # WRAPPER CLOSE ######	
 /** This action is documented in geodirectory-templates/add-listing.php */

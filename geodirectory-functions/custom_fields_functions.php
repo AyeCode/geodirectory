@@ -174,6 +174,11 @@ if (!function_exists('geodir_custom_field_adminhtml')) {
             $field_info = $cf;
             $result_str = $cf->id;
         }
+        /**
+         * Contains custom field html.
+         *
+         * @since 1.0.0
+         */
         include('custom_field_html.php');
 
     }
@@ -1275,7 +1280,13 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
             <?php if (isset($extra_fields['show_map']) && $extra_fields['show_map']) { ?>
 
                 <div id="geodir_<?php echo $prefix . 'map'; ?>_row" class="geodir_form_row clearfix">
-                    <?php include(geodir_plugin_path() . "/geodirectory-functions/map-functions/map_on_add_listing_page.php");
+                    <?php
+                    /**
+                     * Contains add listing page map functions.
+                     *
+                     * @since 1.0.0
+                     */
+                    include(geodir_plugin_path() . "/geodirectory-functions/map-functions/map_on_add_listing_page.php");
                     if ($lat_lng_blank) {
                         $lat = '';
                         $lng = '';

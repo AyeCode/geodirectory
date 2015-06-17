@@ -368,6 +368,12 @@ function geodir_handle_option_form_submit($current_tab)
 {
     global $geodir_settings;
     if (file_exists(dirname(__FILE__) . '/option-pages/' . $current_tab . '_array.php')) {
+        /**
+         * Contains settings array for current tab.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
         include_once('option-pages/' . $current_tab . '_array.php');
     }
     if (isset($_POST) && $_POST && isset($_REQUEST['page']) && $_REQUEST['page'] == 'geodirectory') :
@@ -403,7 +409,7 @@ function geodir_handle_option_form_submit($current_tab)
          *
          * @since 1.0.0
          * @param string $current_tab The current settings tab name.
-         * @param array $geodir_settings[$current_tab] The array of settings for the current settigns tab.
+         * @param array $geodir_settings[$current_tab] The array of settings for the current settings tab.
          */
         do_action('geodir_update_options_' . $current_tab, $geodir_settings[$current_tab]);
 
@@ -578,6 +584,12 @@ function geodir_insert_dummy_posts()
 
     global $wpdb, $current_user;
 
+    /**
+     * Contains dumy post content.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     */
     include_once('place_dummy_post.php');
 
 }

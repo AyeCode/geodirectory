@@ -76,6 +76,13 @@ function geodir_register_post_types()
                 }
             }
 
+            /**
+             * Filter post type args.
+             *
+             * @since 1.0.0
+             * @param string $args Post type args.
+             * @param string $post_type The post type.
+             */
             $args = apply_filters('geodir_post_type_args', $args, $post_type);
 
             $post_type = register_post_type($post_type, $args);

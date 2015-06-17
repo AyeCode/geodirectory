@@ -118,6 +118,19 @@ function geodir_getGoogleAnalytics($page, $ga_start, $ga_end)
 
     $response =  wp_remote_get($use_url,array('timeout' => 15));
 
+    // Make countries translatable
+    if(isset($_REQUEST['ga_type']) && $_REQUEST['ga_type']=='country'){
+        $c_arr = json_decode($response['body']);
+        if(is_array($c_arr->rows)){
+            $new_rows = array();
+            foreach($c_arr->rows as $wow){
+                $new_rows[] = array(__($wow[0],GEODIRECTORY_TEXTDOMAIN),$wow[1]);
+            }
+            $c_arr->rows = $new_rows;
+        }
+        $response['body'] = json_encode($c_arr);
+    }
+
     echo $response['body'];
     exit;
 
