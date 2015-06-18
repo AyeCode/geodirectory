@@ -69,7 +69,51 @@ if (!function_exists('geodir_save_listing')) {
      * @global object $wpdb WordPress Database object.
      * @global object $post The current post object.
      * @global object $current_user Current user object.
-     * @param array $request_info Array of request info arguments.
+     * @param array $request_info {
+     *    Array of request info arguments.
+     *
+     *    @type string $action                                  Ajax action name.
+     *    @type string $geodir_ajax                             Ajax type.
+     *    @type string $ajax_action                             Ajax action.
+     *    @type string $listing_type                            Listing type.
+     *    @type string $pid                                     Default Post ID.
+     *    @type string $preview                                 Todo Desc needed.
+     *    @type string $add_listing_page_id                     Add listing page ID.
+     *    @type string $post_title                              Listing title.
+     *    @type string $post_desc                               Listing Description.
+     *    @type string $post_tags                               Listing tags.
+     *    @type array  $cat_limit                               Category limit.
+     *    @type array  $post_category                           Category IDs.
+     *    @type array  $post_category_str                       Category string.
+     *    @type string $post_default_category                   Default category ID.
+     *    @type string $post_address                            Listing address.
+     *    @type string $geodir_location_add_listing_country_val Add listing country value.
+     *    @type string $post_country                            Listing country.
+     *    @type string $geodir_location_add_listing_region_val  Add listing region value.
+     *    @type string $post_region                             Listing region.
+     *    @type string $geodir_location_add_listing_city_val    Add listing city value.
+     *    @type string $post_city                               Listing city.
+     *    @type string $post_zip                                Listing zip.
+     *    @type string $post_latitude                           Listing latitude.
+     *    @type string $post_longitude                          Listing longitude.
+     *    @type string $post_mapview                            Listing mapview. Default "ROADMAP".
+     *    @type string $post_mapzoom                            Listing mapzoom Default "9".
+     *    @type string $geodir_timing                           Business timing info.
+     *    @type string $geodir_contact                          Contact number.
+     *    @type string $geodir_email                            Business contact email.
+     *    @type string $geodir_website                          Business website.
+     *    @type string $geodir_twitter                          Twitter link.
+     *    @type string $geodir_facebook                         Facebook link.
+     *    @type string $geodir_video                            Video link.
+     *    @type string $geodir_special_offers                   Speacial offers.
+     *    @type string $post_images                             Post image urls.
+     *    @type string $post_imagesimage_limit                  Post images limit.
+     *    @type string $post_imagestotImg                       Todo Desc needed.
+     *    @type string $geodir_accept_term_condition            Has accepted terms and conditions?.
+     *    @type string $geodir_spamblocker                      Todo Desc needed.
+     *    @type string $geodir_filled_by_spam_bot               Todo Desc needed.
+     *
+     * }
      * @param bool $dummy Optional. Is this a dummy listing? Default false.
      * @return int|string|WP_Error Created post id.
      */
@@ -100,7 +144,7 @@ if (!function_exists('geodir_save_listing')) {
          *
          * @since 1.0.0
          * @package GeoDirectory
-         * @param array $request_info Array of request info arguments.
+         * @param array $request_info See {@see geodir_save_listing()} for accepted args.
          */
         $request_info = apply_filters('geodir_action_get_request_info', $request_info);
 
@@ -517,7 +561,41 @@ if (!function_exists('geodir_save_post_info')) {
      * @global object $wpdb WordPress Database object.
      * @global string $plugin_prefix Geodirectory plugin table prefix.
      * @param int $post_id The post ID.
-     * @param array $postinfo_array Post info that needs to be saved in detail table.
+     * @param array $postinfo_array {
+     *    Post info that needs to be saved in detail table.
+     *
+     *    @type string $post_title              Listing title.
+     *    @type string $post_tags               Listing tags.
+     *    @type string $post_status             Listing post status.
+     *    @type string $post_location_id        Listing location ID.
+     *    @type string $claimed                 Todo Desc needed.
+     *    @type string $businesses              Todo Desc needed.
+     *    @type int    $submit_time             Submitted time in unix timestamp.
+     *    @type string $submit_ip               Submitted IP.
+     *    @type string $expire_date             Listing expiration date.
+     *    @type int    $package_id              Listing package ID.
+     *    @type int    $alive_days              Todo Desc needed.
+     *    @type int    $is_featured             Is this a featured listing?.
+     *    @type string $post_address            Listing address.
+     *    @type string $post_city               Listing city.
+     *    @type string $post_region             Listing region.
+     *    @type string $post_country            Listing country.
+     *    @type string $post_locations          Listing locations.
+     *    @type string $post_zip                Listing zip.
+     *    @type string $post_latitude           Listing latitude.
+     *    @type string $post_longitude          Listing longitude.
+     *    @type string $post_mapview            Listing mapview. Default "ROADMAP".
+     *    @type string $post_mapzoom            Listing mapzoom Default "9".
+     *    @type string $geodir_timing           Business timing info.
+     *    @type string $geodir_contact          Contact number.
+     *    @type string $geodir_email            Business contact email.
+     *    @type string $geodir_website          Business website.
+     *    @type string $geodir_twitter          Twitter link.
+     *    @type string $geodir_facebook         Facebook link.
+     *    @type string $geodir_video            Video link.
+     *    @type string $geodir_special_offers   Speacial offers.
+     *
+     * }
      * @return bool
      */
     function geodir_save_post_info($post_id, $postinfo_array = array())
@@ -535,9 +613,10 @@ if (!function_exists('geodir_save_post_info')) {
          *
          * @since 1.0.0
          * @package GeoDirectory
-         * @param array $postinfo_array Post info that needs to be saved in detail table.
+         * @param array $postinfo_array See {@see geodir_save_post_info()} for accepted args.
          * @param int $post_id The post ID.
          */
+
         $postmeta = apply_filters('geodir_listinginfo_request', $postinfo_array, $post_id);
 
         if (!empty($postmeta) && $post_id) {
@@ -562,7 +641,7 @@ if (!function_exists('geodir_save_post_info')) {
              *
              * @since 1.0.0
              * @package GeoDirectory
-             * @param array $postinfo_array Post info that needs to be saved in detail table.
+             * @param array $postinfo_array See {@see geodir_save_post_info()} for accepted args.
              * @param int $post_id The post ID.
              */
             do_action('geodir_before_save_listinginfo', $postinfo_array, $post_id);
