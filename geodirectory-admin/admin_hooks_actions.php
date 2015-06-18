@@ -235,7 +235,7 @@ function geodir_meta_box_add()
 
 }
 
-add_action('save_post', 'geodir_post_information_save');
+add_action('save_post', 'geodir_post_information_save',10,2);
 
 
 

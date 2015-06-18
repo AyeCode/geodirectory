@@ -307,9 +307,9 @@ if (!function_exists('x_breadcrumbs')) :
             // 8. Get shop title.
             //
 
-            GLOBAL $post;
+            GLOBAL $post,$wp;
 
-            if (geodir_is_page('detail') || geodir_is_page('listing') || $wp->query_vars['page_id'] == geodir_location_page_id()) {
+            if (geodir_is_page('detail') || geodir_is_page('listing') || (isset($wp->query_vars['page_id']) && $wp->query_vars['page_id'] == geodir_location_page_id())) {
                 geodir_breadcrumb();
             } else {
 

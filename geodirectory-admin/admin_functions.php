@@ -1131,10 +1131,14 @@ if (!function_exists('geodir_post_sortable_columns')) {
  * @global object $post WordPress Post object.
  * @param int $post_id The post ID.
  */
-function geodir_post_information_save($post_id)
+function geodir_post_information_save($post_id,$post)
 {
 
-    global $wpdb, $current_user, $post;
+    global $wpdb, $current_user;//, $post;
+
+    if(isset($post->post_type) && ($post->post_type=='nav_menu_item' || $post->post_type=='page' || $post->post_type=='post')){
+        return;
+    }
 
    /* echo '###post';
     print_r($_POST);
