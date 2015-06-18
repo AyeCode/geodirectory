@@ -369,6 +369,16 @@ function geodir_posts_fields($fields)
     global $s;
     if (is_search() && isset($_REQUEST['geodir_search']) && $s && trim($s) != '') {
         $keywords = explode(" ", $s);
+
+        if(is_array($keywords) && $klimit = get_option('geodir_search_word_limit')){
+            foreach($keywords as $kkey=>$kword){
+                if(strlen($kword)<=$klimit){
+                    unset($keywords[$kkey]);
+                }
+            }
+        }
+
+
         if (count($keywords) > 1) {
             $parts = array(
                 'AND' => 'gd_alltitlematch_part',
@@ -548,6 +558,13 @@ function geodir_posts_orderby($orderby)
 
     if (is_search() && isset($_REQUEST['geodir_search']) && $s && trim($s) != '') {
         $keywords = explode(" ", $s);
+        if(is_array($keywords) && $klimit = get_option('geodir_search_word_limit')){
+            foreach($keywords as $kkey=>$kword){
+                if(strlen($kword)<=$klimit){
+                    unset($keywords[$kkey]);
+                }
+            }
+        }
         if ($sort_by == 'nearest' || $sort_by == 'farthest') {
             if (count($keywords) > 1) {
                 $orderby = $orderby . " ( gd_titlematch * 2 + gd_featured * 5 + gd_exacttitle * 10 + gd_alltitlematch_part * 100 + gd_titlematch_part * 50 + gd_content * 1.5) DESC, ";
@@ -836,6 +853,14 @@ function searching_filter_where($where)
 
     if ($s != '') {
         $keywords = explode(" ", $s);
+        if(is_array($keywords) && $klimit = get_option('geodir_search_word_limit')){
+            foreach($keywords as $kkey=>$kword){
+                if(strlen($kword)<=$klimit){
+                    unset($keywords[$kkey]);
+                }
+            }
+        }
+
         if (!empty($keywords)) {
             foreach ($keywords as $keyword) {
                 $keyword = trim($keyword);
