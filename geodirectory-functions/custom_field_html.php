@@ -579,7 +579,7 @@ if ($htmlvar_name == 'geodir_email') {
                     </tr>
                     <tr>
                         <td>
-                            <strong><?php _e('Show latitude and logatude from front-end :', GEODIRECTORY_TEXTDOMAIN);?></strong>
+                            <strong><?php _e('Show latitude and longitude from front-end :', GEODIRECTORY_TEXTDOMAIN);?></strong>
                         </td>
                         <td align="left">
                             <input type="checkbox" name="extra[show_latlng]" id="show_latlng"
