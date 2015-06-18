@@ -62,9 +62,11 @@ if (isset($_GET['redirect_to']) && $_GET['redirect_to'] != '') {
                 }
                 echo esc_attr(stripslashes($user_email)); ?>" size="25"/>
 
-                <div id="reg_passmail">
+                <?php if (!get_option('geodir_allow_cpass')) { ?>
+				<div id="reg_passmail">
                     <?php echo REGISTRATION_MESSAGE; ?>
                 </div>
+				<?php } ?>
                 <span id="user_emailInfo"></span>
             </div>
 
