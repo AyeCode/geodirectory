@@ -222,6 +222,18 @@ function get_markers()
     $content_data = array();
     $post_ids = array();
 
+    /**
+     * Called before marker data is processed into JSON.
+     *
+     * Called before marker data is processed into JSON, this action can be used to change the format or add/remove markers.
+     *
+     * @since 1.4.9
+     * @param object $catinfo The posts object containing all marker data.
+     * @see 'geodir_after_marker_post_process'
+     */
+    do_action('geodir_before_marker_post_process', $catinfo);
+
+    // Sort any posts into a ajax array
     if (!empty($catinfo)) {
         $geodir_cat_icons = geodir_get_term_icon();
         global $geodir_date_format;
@@ -260,6 +272,18 @@ function get_markers()
             $post_ids[] = $catinfo_obj->post_id;
         }
     }
+
+    /**
+     * Called after marker data is processed into JSON.
+     *
+     * Called after marker data is processed into JSON, this action can be used to change the format or add/remove markers.
+     *
+     * @since 1.4.9
+     * @param array $content_data The array containing all markers in JSON format.
+     * @param object $catinfo The posts object containing all marker data.
+     * @see 'geodir_before_marker_post_process'
+     */
+    do_action('geodir_after_marker_post_process', $content_data, $catinfo);
 
     if (!empty($content_data)) {
         $cat_content_info[] = implode(',', $content_data);

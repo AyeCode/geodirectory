@@ -215,7 +215,7 @@ if (!function_exists('geodir_save_listing')) {
         $send_post_submit_mail = false;
 
         // unhook this function so it doesn't loop infinitely
-        remove_action('save_post', 'geodir_post_information_save');
+        remove_action('save_post', 'geodir_post_information_save',10,2);
 
         if (isset($request_info['pid']) && $request_info['pid'] != '') {
             $post['ID'] = $request_info['pid'];
@@ -231,7 +231,7 @@ if (!function_exists('geodir_save_listing')) {
         }
 
         // re-hook this function
-        add_action('save_post', 'geodir_post_information_save');
+        add_action('save_post', 'geodir_post_information_save',10,2);
 
         $post_tags = '';
         if (!isset($request_info['post_tags'])) {
