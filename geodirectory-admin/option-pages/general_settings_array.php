@@ -289,6 +289,21 @@ $search_settings = apply_filters('geodir_search_settings', array(
         'css' => 'min-width:300px;',
         'std' => ''
     ),
+    array(
+        'name' => __('Individual word search limit', GEODIRECTORY_TEXTDOMAIN),
+        'desc' => __('With this option you can limit individual words being searched for, for example searching for `Jo Brown` would return results with words like `Jones`, you can exclude these types of small character words if you wish.', GEODIRECTORY_TEXTDOMAIN),
+        'id' => 'geodir_search_word_limit',
+        'css' => 'min-width:300px;',
+        'std' => 'gridview_onehalf',
+        'type' => 'select',
+        'class' => 'chosen_select',
+        'options' => array_unique(array(
+            '0' => __('Disabled', GEODIRECTORY_TEXTDOMAIN),
+            '1' => __('1 Character words excluded', GEODIRECTORY_TEXTDOMAIN),
+            '2' => __('2 Character words and less excluded', GEODIRECTORY_TEXTDOMAIN),
+            '3' => __('3 Character words and less excluded', GEODIRECTORY_TEXTDOMAIN),
+        ))
+    ),
 
 
     array('type' => 'sectionend', 'id' => 'search_settings'),

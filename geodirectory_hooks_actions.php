@@ -178,7 +178,7 @@ add_action('before_delete_post', 'geodir_delete_listing_info', 10, 1);
 ////////////////////////
 
 add_action('geodir_update_postrating', 'geodir_term_review_count_force_update', 100);
-add_action('transition_post_status', 'geodir_term_review_count_force_update', 100);
+add_action('transition_post_status', 'geodir_term_review_count_force_update', 100,3);
 add_action('created_term', 'geodir_term_review_count_force_update', 100);
 add_action('edited_term', 'geodir_term_review_count_force_update', 100);
 add_action('delete_term', 'geodir_term_review_count_force_update', 100);

@@ -6,6 +6,12 @@ Added check to not run file system check function when doing ajax calls - CHANGE
 Best of widget now supports multiple uses per page - FIXED
 Filter login_redirect added for login after GD signup - ADDED
 Google Analytics Countries now translatable - FIXED
+Google maps home map loads categories on first load instead of via ajax after page load - CHANGED
+Cyrillic characters not exporting correctly in import/export - FIXED
+With WPML search results listings for all languages - FIXED
+In registration send password to email note removed when user allowed choose own password - FIXED
+Menu save triggering rebuilding of category count and review counts - FIXED
+Added option to General>search to limit small individual words form being searched - ADDED
 
 v1.4.8
 Send Enquiry & send to friend options removed from listings page - CHANGED
