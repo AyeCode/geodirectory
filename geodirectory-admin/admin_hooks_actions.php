@@ -1488,7 +1488,18 @@ add_filter('posts_clauses_request', 'geodir_posts_clauses_request');
  * @global object $wpdb WordPress Database object.
  * @global object $wp_query WordPress Query object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
- * @param array $clauses The clause array.
+ * @param array $clauses {
+ *    Attributes of the clause array.
+ *
+ *    @type string $where Where clause.
+ *    @type string $groupby Groupby clause.
+ *    @type string $join Join clause.
+ *    @type string $orderby Orderby clause.
+ *    @type string $distinct Distinct clause.
+ *    @type string $fields Fields clause.
+ *    @type string $limits Limits clause.
+ *
+ * }
  * @return array Altered clause array.
  */
 function geodir_posts_clauses_request($clauses)
