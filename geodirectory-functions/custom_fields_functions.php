@@ -258,7 +258,39 @@ if (!function_exists('geodir_custom_field_save')) {
 	 * @package GeoDirectory
      * @global object $wpdb WordPress Database object.
      * @global string $plugin_prefix Geodirectory plugin table prefix.
-	 * @param array $request_field The request field array.
+	 * @param array $request_field {
+     *    Attributes of the request field array.
+     *
+     *    @type string $action Ajax Action name. Default "geodir_ajax_action".
+     *    @type string $manage_field_type Field type Default "custom_fields".
+     *    @type string $create_field Create field Default "true".
+     *    @type string $field_ins_upd Field ins upd Default "submit".
+     *    @type string $_wpnonce WP nonce value.
+     *    @type string $listing_type Listing type Example "gd_place".
+     *    @type string $field_type Field type Example "radio".
+     *    @type string $field_id Field id Example "12".
+     *    @type string $data_type Data type Example "VARCHAR".
+     *    @type string $is_active Either "1" or "0". If "0" is used then the field will not be displayed anywhere.
+     *    @type array $show_on_pkg Package list to display this field.
+     *    @type string $admin_title Personal comment, it would not be displayed anywhere except in custom field settings.
+     *    @type string $site_title Section title which you wish to display in frontend.
+     *    @type string $admin_desc Section description which will appear in frontend.
+     *    @type string $htmlvar_name Html variable name. This should be a unique name.
+     *    @type string $clabels Section Title which will appear in backend.
+     *    @type string $default_value The default value (for "link" this will be used as the link text).
+     *    @type string $sort_order The display order of this field in backend. e.g. 5.
+     *    @type string $is_default Either "1" or "0". If "0" is used then the field will be displayed as main form field or additional field.
+     *    @type string $for_admin_use Either "1" or "0". If "0" is used then only site admin can edit this field.
+     *    @type string $is_required Use "1" to set field as required.
+     *    @type string $required_msg Enter text for error message if field required and have not full fill requirment.
+     *    @type string $show_on_listing Want to show this on listing page?.
+     *    @type string $show_on_detail Want to show this in More Info tab on detail page?.
+     *    @type string $show_as_tab Want to display this as a tab on detail page? If "1" then "Show on detail page?" must be Yes.
+     *    @type string $option_values Option Values should be separated by comma.
+     *    @type string $field_icon Upload icon using media and enter its url path, or enter font awesome class.
+     *    @type string $css_class Enter custom css class for field custom style.
+     *
+     * }
 	 * @param bool $default Not yet implemented.
 	 * @return int|string If field is unique returns inserted row id. Otherwise returns error string.
 	 */
@@ -1149,7 +1181,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
          * @since 1.0.0
          * @param string $listing_type The post post type.
          * @param int $package_id The price package ID for the post.
-         * @param array $val The settings array for the field.
+         * @param array $val The settings array for the field. {@see geodir_custom_field_save()}.
          * @see 'geodir_after_custom_form_field_$name'
          */
         do_action('geodir_before_custom_form_field_' . $name, $listing_type, $package_id, $val);
@@ -1256,7 +1288,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
              * This is used by the location manage to add further locations info etc.
              *
              * @since 1.0.0
-             * @param array $val The array of setting for the custom field.
+             * @param array $val The array of setting for the custom field. {@see geodir_custom_field_save()}.
              */
             do_action('geodir_address_extra_listing_fields', $val);
 
@@ -1974,7 +2006,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
          * @since 1.0.0
          * @param string $listing_type The post post type.
          * @param int $package_id The price package ID for the post.
-         * @param array $val The settings array for the field.
+         * @param array $val The settings array for the field. {@see geodir_custom_field_save()}.
          * @see 'geodir_before_custom_form_field_$name'
          */
         do_action('geodir_after_custom_form_field_' . $name, $listing_type, $package_id, $val);

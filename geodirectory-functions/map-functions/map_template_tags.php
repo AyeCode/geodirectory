@@ -23,7 +23,46 @@ require_once('map_functions.php');
  *
  * @global array $map_canvas_arr Array of map canvas data.
  *
- * @param  array  $map_args Array of map arguements to use in map options.
+ * @param array $map_args {
+ *    Array of map arguments to use in map options.
+ *
+ *    @type string $width Map width.
+ *    @type string $height Map height.
+ *    @type string $child_collapse Collapse filter div?.
+ *    @type string $sticky Todo: desc needed.
+ *    @type bool $enable_map_resize_button Do you want to enable map resize button?.
+ *    @type bool $enable_cat_filters Do you want to enable category filters?.
+ *    @type bool $enable_text_search Do you want to enable text search?.
+ *    @type bool $enable_post_type_filters Do you want to enable post type filters?.
+ *    @type bool $enable_location_filters Do you want to enable location filters?.
+ *    @type bool $enable_jason_on_load Do you want to enable json on load?.
+ *    @type bool $enable_map_direction Do you want to enable map directions?.
+ *    @type bool $enable_marker_cluster Do you want to enable marker cluster?.
+ *    @type string $ajax_url Map ajax url.
+ *    @type string $map_canvas_name Map canvas name.
+ *    @type string $inputText Text search placeholder.
+ *    @type string $latitude Map default latitude.
+ *    @type string $longitude Map default longitude.
+ *    @type string $zoom Map default zoom.
+ *    @type string $scrollwheel Map default scroll wheel level.
+ *    @type bool $streetViewControl Display street view control?.
+ *    @type string $maptype Map type.
+ *    @type string $showPreview Show preview?.
+ *    @type int $maxZoom Map maximum zoom level.
+ *    @type int $autozoom Map auto zoom level.
+ *    @type string $bubble_size Map bubble size.
+ *    @type string $token Map token.
+ *    @type array $navigationControlOptions {
+ *        Options of navigation control.
+ *
+ *        @type string $position Navigation position.
+ *        @type string $style Navigation style.
+ *
+ *    }
+ *    @type string $map_class_name Map class name.
+ *    @type bool $is_geodir_home_map_widget Is this a home page map? True if the current page is home.
+ *
+ * }
  * @return string|void Html content for google map.
  */
 function geodir_draw_map($map_args = array())
@@ -104,7 +143,7 @@ function geodir_draw_map($map_args = array())
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $geodir_map_options Array of google map options.
+	 * @param array $geodir_map_options {@see geodir_draw_map()} docblock.
 	 */
 	$geodir_map_options = apply_filters('geodir_map_options_' . $map_canvas_name, $geodir_map_options);
 

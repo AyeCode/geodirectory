@@ -1578,7 +1578,7 @@ add_action('after_plugin_row_' . $plugin_file_name, 'geodir_after_core_plugin_ro
  * @package GeoDirectory
  * @param string $plugin_file Plugin file path.
  * @param array $plugin_data Plugin data.
- * @param string $status Plugin status.
+ * @param string $status Status of the plugin. Defaults are 'All', 'Active','Inactive', 'Recently Activated', 'Upgrade', 'Must-Use','Drop-ins', 'Search'.
  */
 function geodir_after_core_plugin_row($plugin_file, $plugin_data, $status)
 {
@@ -1972,12 +1972,11 @@ add_filter('geodir_permalink_settings', 'geodir_remove_url_seperator_form_permal
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param array $permalink_arr The permalink array.
+ * @param array $permalink_arr The permalink settings array ( Geodirectory -> Permalinks ).
  * @return array Modified permalink array.
  */
 function geodir_remove_url_seperator_form_permalink_settings($permalink_arr)
 {
-
     foreach ($permalink_arr as $key => $value) {
 
         if ($value['id'] == 'geodir_listingurl_separator' || $value['id'] == 'geodir_detailurl_separator')
@@ -2597,7 +2596,7 @@ add_filter('geodir_detail_page_tab_list_extend', 'geodir_detail_page_custom_fiel
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $post The current post object.
- * @param array $tabs_arr Tabs array.
+ * @param array $tabs_arr Tabs array {@see geodir_detail_page_tab_headings_change()}.
  * @return array Modified tabs array.
  */
 function geodir_detail_page_custom_field_tab($tabs_arr)

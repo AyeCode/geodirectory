@@ -898,7 +898,41 @@ function geodir_update_options($options, $dummy = false)
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param array $tabs The tabs array.
+ * @param array $tabs {
+ *    Attributes of the tabs array.
+ *
+ *    @type array $general_settings {
+ *        Attributes of general settings.
+ *
+ *        @type string $label Default "General".
+ *
+ *    }
+ *    @type array $design_settings {
+ *        Attributes of design settings.
+ *
+ *        @type string $label Default "Design".
+ *
+ *    }
+ *    @type array $permalink_settings {
+ *        Attributes of permalink settings.
+ *
+ *        @type string $label Default "Permalinks".
+ *
+ *    }
+ *    @type array $notifications_settings {
+ *        Attributes of notifications settings.
+ *
+ *        @type string $label Default "Notifications".
+ *
+ *    }
+ *    @type array $default_location_settings {
+ *        Attributes of default location settings.
+ *
+ *        @type string $label Default "Set Default Location".
+ *
+ *    }
+ *
+ * }
  * @return array Modified tabs array.
  */
 function places_custom_fields_tab($tabs)
@@ -943,7 +977,7 @@ function places_custom_fields_tab($tabs)
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param array $tabs Tab menu array.
+ * @param array $tabs Tab menu array {@see places_custom_fields_tab()}.
  * @return array Modified tab meny array.
  */
 function geodir_tools_setting_tab($tabs)
@@ -959,7 +993,7 @@ function geodir_tools_setting_tab($tabs)
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param array $tabs Tab menu array.
+ * @param array $tabs Tab menu array {@see places_custom_fields_tab()}.
  * @return array Modified tab meny array.
  */
 function geodir_compatibility_setting_tab($tabs)
@@ -976,7 +1010,7 @@ function geodir_compatibility_setting_tab($tabs)
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @param array $tabs Tab menu array.
+ * @param array $tabs Tab menu array {@see places_custom_fields_tab()}.
  * @return array Modified tab meny array.
  */
 function geodir_extend_geodirectory_setting_tab($tabs)
@@ -5219,7 +5253,19 @@ function geodir_ajax_import_export() {
  * @package GeoDirectory
  *
  * @param string $taxonomy Post taxonomy.
- * @param array $term_data Array of term data.
+ * @param array $term_data {
+ *    Attributes of term data.
+ *
+ *    @type string $name Term name.
+ *    @type string $slug Term slug.
+ *    @type string $description Term description.
+ *    @type string $top_description Term top description.
+ *    @type string $image Default Term image.
+ *    @type string $icon Default Term icon.
+ *    @type string $taxonomy Term taxonomy.
+ *    @type int $parent Term parent ID.
+ *
+ * }
  * @return int|bool Term id when success, false when fail.
  */
 function geodir_imex_insert_term( $taxonomy, $term_data ) {
@@ -5258,7 +5304,20 @@ function geodir_imex_insert_term( $taxonomy, $term_data ) {
  * @package GeoDirectory
  *
  * @param string $taxonomy Post taxonomy.
- * @param array $term_data Array of term data.
+ * @param array $term_data {
+ *    Attributes of term data.
+ *
+ *    @type string $term_id Term ID.
+ *    @type string $name Term name.
+ *    @type string $slug Term slug.
+ *    @type string $description Term description.
+ *    @type string $top_description Term top description.
+ *    @type string $image Default Term image.
+ *    @type string $icon Default Term icon.
+ *    @type string $taxonomy Term taxonomy.
+ *    @type int $parent Term parent ID.
+ *
+ * }
  * @return int|bool Term id when success, false when fail.
  */
 function geodir_imex_update_term( $taxonomy, $term_data ) {
