@@ -61,7 +61,16 @@ function geodir_templates_scripts()
      * This is used by addons to add JS translatable variables.
      *
      * @since 1.4.4
-     * @param array $geodir_vars_data The array of variables to output.
+     * @param array $geodir_vars_data {
+     *    geodir var data used by addons to add JS translatable variables.
+     *
+     *    @type string $siteurl Site url.
+     *    @type string $geodir_plugin_url Geodirectory core plugin url.
+     *    @type string $geodir_ajax_url Geodirectory plugin ajax url.
+     *    @type int $geodir_gd_modal Disable GD modal that displays slideshow images in popup?.
+     *    @type int $is_rtl Checks if current locale is RTL.
+     *
+     * }
      */
     $geodir_vars_data = apply_filters('geodir_vars_data',$geodir_vars_data);
 

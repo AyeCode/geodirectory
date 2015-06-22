@@ -203,7 +203,17 @@ function geodir_save_rating($comment = 0)
              *
              * @since 1.0.0
              * @package GeoDirectory
-             * @param array $_REQUEST The $_REQUEST variable.
+             * @param array $_REQUEST {
+             *    Attributes of the $_REQUEST variable.
+             *
+             *    @type string $geodir_overallrating Overall rating.
+             *    @type string $comment Comment text.
+             *    @type string $submit Submit button text.
+             *    @type string $comment_post_ID Comment post ID.
+             *    @type string $comment_parent Comment Parent ID.
+             *    @type string $_wp_unfiltered_html_comment Unfiltered html comment string.
+             *
+             * }
              */
             do_action('geodir_after_save_comment', $_REQUEST, 'Comment Your Post');
 

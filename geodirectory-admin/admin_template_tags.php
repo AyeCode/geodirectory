@@ -694,12 +694,60 @@ function geodir_update_options_compatibility_settings()
     $theme_name = $theme_name . "_custom";
     $theme_arr = get_option('gd_theme_compats');
     update_option('gd_theme_compat', $theme_name);
-
     /**
      * Called before the theme compatibility settings are saved to the DB.
      *
      * @since 1.4.0
-     * @param array $theme_settings The theme compatibility settings as an array.
+     * @param array $theme_settings {
+     *    Attributes of the theme compatibility settings array.
+     *
+     *    @type string $geodir_wrapper_open_id Geodir wrapper open html id.
+     *    @type string $geodir_wrapper_open_class Geodir wrapper open html class.
+     *    @type string $geodir_wrapper_open_replace Geodir wrapper open content replace.
+     *    @type string $geodir_wrapper_close_replace Geodir wrapper close content replace.
+     *    @type string $geodir_wrapper_content_open_id Geodir wrapper content open html id.
+     *    @type string $geodir_wrapper_content_open_class Geodir wrapper content open html class.
+     *    @type string $geodir_wrapper_content_open_replace Geodir wrapper content open content replace.
+     *    @type string $geodir_wrapper_content_close_replace Geodir wrapper content close content replace.
+     *    @type string $geodir_article_open_id Geodir article open html id.
+     *    @type string $geodir_article_open_class Geodir article open html class.
+     *    @type string $geodir_article_open_replace Geodir article open content replace.
+     *    @type string $geodir_article_close_replace Geodir article close content replace.
+     *    @type string $geodir_sidebar_right_open_id Geodir sidebar right open html id.
+     *    @type string $geodir_sidebar_right_open_class Geodir sidebar right open html class.
+     *    @type string $geodir_sidebar_right_open_replace Geodir sidebar right open content replace.
+     *    @type string $geodir_sidebar_right_close_replace Geodir sidebar right close content replace.
+     *    @type string $geodir_sidebar_left_open_id Geodir sidebar left open html id.
+     *    @type string $geodir_sidebar_left_open_class Geodir sidebar left open html class.
+     *    @type string $geodir_sidebar_left_open_replace Geodir sidebar left open content replace.
+     *    @type string $geodir_sidebar_left_close_replace Geodir sidebar left close content replace.
+     *    @type string $geodir_main_content_open_id Geodir main content open html id.
+     *    @type string $geodir_main_content_open_class Geodir main content open html class.
+     *    @type string $geodir_main_content_open_replace Geodir main content open content replace.
+     *    @type string $geodir_main_content_close_replace Geodir main content close content replace.
+     *    @type string $geodir_top_content_add Geodir top content add.
+     *    @type string $geodir_before_main_content_add Geodir before main content add.
+     *    @type string $geodir_full_page_class_filter Geodir full page class filter.
+     *    @type string $geodir_before_widget_filter Geodir before widget filter.
+     *    @type string $geodir_after_widget_filter Geodir after widget filter.
+     *    @type string $geodir_before_title_filter Geodir before title filter.
+     *    @type string $geodir_after_title_filter Geodir after title filter.
+     *    @type string $geodir_menu_li_class_filter Geodir menu li class filter.
+     *    @type string $geodir_sub_menu_ul_class_filter Geodir sub menu ul class filter.
+     *    @type string $geodir_sub_menu_li_class_filter Geodir sub menu li class filter.
+     *    @type string $geodir_menu_a_class_filter Geodir menu a class filter.
+     *    @type string $geodir_sub_menu_a_class_filter Geodir sub menu a class filter.
+     *    @type string $geodir_location_switcher_menu_li_class_filter Geodir location switcher menu li class filter.
+     *    @type string $geodir_location_switcher_menu_a_class_filter Geodir location switcher menu a class filter.
+     *    @type string $geodir_location_switcher_menu_sub_ul_class_filter Geodir location switcher menu sub ul class filter.
+     *    @type string $geodir_location_switcher_menu_sub_li_class_filter Geodir location switcher menu sub li class filter.
+     *    @type string $geodir_theme_compat_css Geodir theme compatibility css.
+     *    @type string $geodir_theme_compat_js Geodir theme compatibility js.
+     *    @type string $gd_theme_compat Gd theme compatibility.
+     *    @type string $geodir_theme_compat_default_options Geodir theme compatibility default options.
+     *    @type bool $geodir_theme_compat_code Geodir theme compatibility code Ex: 'Avada.
+     *
+     * }
      */
     do_action('gd_compat_save_settings', $theme_settings);
 
