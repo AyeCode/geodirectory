@@ -4898,6 +4898,8 @@ function geodir_ajax_import_export() {
 									$post_type = $row[$c];
 								} else if ( $column == 'post_status' ) {
 									$post_status = sanitize_key( $row[$c] );
+								} else if ( $column == 'is_featured' ) {
+									$is_featured = (int)$row[$c];
 								} else if ( $column == 'geodir_video' ) {
 									$geodir_video = $row[$c];
 								} else if ( $column == 'post_address' ) {
@@ -4932,14 +4934,14 @@ function geodir_ajax_import_export() {
 									$post_images[] = $row[$c];
 								} else if ( $column == 'alive_days' && (int)$row[$c] > 0 ) {
 									$expire_date = date_i18n( 'Y-m-d', strtotime( $current_date . '+' . (int)$row[$c] . ' days' ) );
-								} else if ( $column == 'expire_date' && $row[$c] != '' ) {
-									$expire_date = $row[$c];
+								} else if ( $column == 'expire_date' && $row[$c] != '' && strtolower($row[$c]) != 'never' ) {
+									$row[$c] = str_replace('/', '-', $row[$c]);
+									$expire_date = date_i18n( 'Y-m-d', strtotime( $row[$c] ) );
 								}
 								$c++;
 							}
-							
+
 							$gd_post['IMAGE'] = $post_images;
-							$gd_post['expire_date'] = $expire_date;
 							
 							$post_status = !empty( $post_status ) ? sanitize_key( $post_status ) : $default_status;
 							$post_status = !empty( $wp_post_statuses ) && !isset( $wp_post_statuses[$post_status] ) ? $default_status : $post_status;
@@ -5049,7 +5051,9 @@ function geodir_ajax_import_export() {
 								$invalid++;
 							}
 							
-							if ( (int)$saved_post_id > 0 ) {								
+							if ( (int)$saved_post_id > 0 ) {							
+								$gd_post_info = geodir_get_post_info( $saved_post_id );
+								
 								$gd_post['post_id'] = $saved_post_id;
 								$gd_post['ID'] = $saved_post_id;
 								$gd_post['post_tags'] = $post_tags;
@@ -5075,20 +5079,41 @@ function geodir_ajax_import_export() {
 								$gd_post['post_location_id'] = $post_location_id;
 								
 								// post package info
-								$package_id = isset( $gd_post['package_id'] ) && !empty( $gd_post['package_id'] ) ? $gd_post['package_id'] : '';
-								$package_info = (array)geodir_post_package_info( array(), '', $post_type );
-								 
-								if ( !empty( $package_info ) )	 {
-									$package_id = $package_info['pid'];
+								$package_id = isset( $gd_post['package_id'] ) && !empty( $gd_post['package_id'] ) ? (int)$gd_post['package_id'] : 0;
+								if (!$package_id && !empty($gd_post_info) && isset($gd_post_info->package_id) && $gd_post_info->package_id) {
+									$package_id = $gd_post_info->package_id;
+								}
+								
+								$package_info = array();
+								if ($package_id && function_exists('geodir_get_package_info_by_id')) {
+									$package_info = (array)geodir_get_package_info_by_id($package_id);
 									
-									if ( isset( $package_info['alive_days'] ) && (int)$package_info['alive_days'] > 0 ) {
-										$gd_post['expire_date'] = date_i18n( 'Y-m-d', strtotime( $current_date . '+' . (int)$package_info['alive_days'] . ' days' ) );
-									} else {
-										$gd_post['expire_date'] = 'Never';
+									if (!(!empty($package_info) && isset($package_info['post_type']) && $package_info['post_type'] == $post_type)) {
+										$package_info = array();
 									}
 								}
-								$gd_post['package_id'] = $package_id;
 								
+								if (empty($package_info)) {
+									$package_info = (array)geodir_post_package_info( array(), '', $post_type );
+								}
+								 
+								if (!empty($package_info))	 {
+									$package_id = $package_info['pid'];
+									
+									if (isset($gd_post['alive_days']) || isset($gd_post['expire_date'])) {
+										$gd_post['expire_date'] = $expire_date;
+									} else {
+										if ( isset( $package_info['days'] ) && (int)$package_info['days'] > 0 ) {
+											$gd_post['alive_days'] = (int)$package_info['days'];
+											$gd_post['expire_date'] = date_i18n( 'Y-m-d', strtotime( $current_date . '+' . (int)$package_info['days'] . ' days' ) );
+										} else {
+											$gd_post['expire_date'] = 'Never';
+										}
+									}
+									
+									$gd_post['package_id'] = $package_id;
+								}
+
 								$table = $plugin_prefix . $post_type . '_detail';
 								
 								if (isset($gd_post['post_id'])) {
@@ -5223,6 +5248,13 @@ function geodir_ajax_import_export() {
 								
 								/** This action is documented in geodirectory-functions/post-functions.php */
                     			do_action( 'geodir_after_save_listing', $saved_post_id, $gd_post );
+								
+								if (isset($is_featured)) {
+									geodir_save_post_meta($saved_post_id, 'is_featured', $is_featured);
+								}
+								if (isset($gd_post['expire_date'])) {
+									geodir_save_post_meta($saved_post_id, 'expire_date', $gd_post['expire_date']);
+								}
 							}
 						}
 					}
@@ -5430,6 +5462,8 @@ function geodir_imex_get_posts( $post_type ) {
 	$csv_rows = array();
 	
 	if ( !empty( $posts ) ) {
+		$is_payment_plugin = is_plugin_active( 'geodir_payment_manager/geodir_payment_manager.php' );
+		
 		$csv_row = array();
 		$csv_row[] = 'post_id';
 		$csv_row[] = 'post_title';
@@ -5445,6 +5479,11 @@ function geodir_imex_get_posts( $post_type ) {
 			$csv_row[] = 'endtime';
 		}
 		$csv_row[] = 'post_status';
+		$csv_row[] = 'is_featured';
+		if ($is_payment_plugin) {
+			$csv_row[] = 'package_id';
+			$csv_row[] = 'expire_date';
+		}
 		$csv_row[] = 'geodir_video';
 		$csv_row[] = 'post_address';
 		$csv_row[] = 'post_city';
@@ -5589,6 +5628,11 @@ function geodir_imex_get_posts( $post_type ) {
 				$csv_row[] = isset( $post['endtime'] ) && $post['endtime'] != '' && $post['endtime'] != '00:00:00' ? date_i18n( 'H:i', strtotime( $post['endtime'] ) ) : ''; // endtime
 			}
 			$csv_row[] = $post_info['post_status']; // post_status
+			$csv_row[] = (int)$post_info['is_featured'] == 1 ? 1 : ''; // is_featured
+			if ($is_payment_plugin) {
+				$csv_row[] = (int)$post_info['package_id']; // package_id
+				$csv_row[] = $post_info['expire_date'] != '' && strtolower($post_info['expire_date']) != 'never' ? date_i18n('Y-m-d', strtotime($post_info['expire_date'])) : 'Never'; // expire_date
+			}
 			$csv_row[] = $post_info['geodir_video']; // geodir_video
 			$csv_row[] = $post_info['post_address']; // post_address
 			$csv_row[] = $post_info['post_city']; // post_city
