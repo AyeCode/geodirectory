@@ -284,7 +284,7 @@ function gd_genesis_current_page_title_bar()
 }
 
 
-add_action('geodir_before_listing', 'gd_genesis_listing_page_title_bar', 10);
+add_action('geodir_before_listing', 'gd_genesis_listing_page_title_bar', 9);
 /**
  * Listing page title bar.
  *
@@ -294,7 +294,7 @@ add_action('geodir_before_listing', 'gd_genesis_listing_page_title_bar', 10);
 function gd_genesis_listing_page_title_bar()
 {
     geodir_action_listings_title();
-    geodir_action_listings_description();
+    //geodir_action_listings_description();
 }
 
 

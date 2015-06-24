@@ -12,6 +12,7 @@ With WPML search results listings for all languages - FIXED
 In registration send password to email note removed when user allowed choose own password - FIXED
 Menu save triggering rebuilding of category count and review counts - FIXED
 Added option to General>search to limit small individual words form being searched - ADDED
+Genesis cat description appearing twice and title out of align if sort by present - FIXED
 
 v1.4.8
 Send Enquiry & send to friend options removed from listings page - CHANGED

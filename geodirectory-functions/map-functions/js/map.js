@@ -183,6 +183,7 @@ function build_map_ajax_search_param(map_canvas_var, reload_cat_list, catObj) {
    // jQuery.goMap.map
     var map_info = '';
     if(jQuery.goMap.map) {
+        /*
         bounds = jQuery.goMap.map.getBounds();
         gd_zl = jQuery.goMap.map.getZoom();
         gd_lat_ne = bounds.getNorthEast().lat();
@@ -190,6 +191,7 @@ function build_map_ajax_search_param(map_canvas_var, reload_cat_list, catObj) {
         gd_lat_sw = bounds.getSouthWest().lat();
         gd_lon_sw = bounds.getSouthWest().lng();
         map_info = "&zl="+gd_zl+"&lat_ne="+gd_lat_ne+"&lon_ne="+gd_lon_ne+"&lat_sw="+gd_lat_sw+"&lon_sw="+gd_lon_sw;
+    */
     }
 
     if (jQuery('#' + map_canvas_var + '_posttype').val() != '' && jQuery('#' + map_canvas_var + '_posttype').val() != '0') {
