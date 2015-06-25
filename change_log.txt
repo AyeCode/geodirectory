@@ -13,6 +13,7 @@ In registration send password to email note removed when user allowed choose own
 Menu save triggering rebuilding of category count and review counts - FIXED
 Added option to General>search to limit small individual words form being searched - ADDED
 Genesis cat description appearing twice and title out of align if sort by present - FIXED
+Fields is_featured, package_id & expire_date do not working for import/export - FIXED
 
 v1.4.8
 Send Enquiry & send to friend options removed from listings page - CHANGED
