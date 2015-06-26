@@ -1045,8 +1045,8 @@ function geodir_detail_page_google_analytics()
                 }
             }
         </style>
-        <script src="https://ga-dev-tools.appspot.com/public/javascript/Chart.min.js"></script>
-        <script src="https://ga-dev-tools.appspot.com/public/javascript/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
 
 
         <span id="ga_stats">
