@@ -285,9 +285,22 @@ function geodir_draw_map($map_args = array())
                     </div>
 
                     <div id="<?php echo $map_canvas_name; ?>_directionsPanel" style="width:auto;"></div>
+                <?php 
+				}
+				
+				$geodir_default_map_search_pt = get_option('geodir_default_map_search_pt');
+				if (empty($geodir_default_map_search_pt))
+					$geodir_default_map_search_pt = 'gd_place';
 
-                <?php } ?>
-
+				/**
+				 * Filter the post type to retrive data for map
+				 *
+				 * @since 1.0.0
+				 *
+				 * @param string $geodir_default_map_search_pt Post type, eg: gd_place.
+				 */
+				$map_search_pt = apply_filters('geodir_default_map_search_pt', $geodir_default_map_search_pt);
+				?>
                 <div class="map-category-listing-main" style="display:<?php echo $show_entire_cat_panel;?>">
                     <?php
                     $exclude_post_types = get_option('geodir_exclude_post_type_on_map');
@@ -317,20 +330,6 @@ function geodir_draw_map($map_args = array())
                                 <?php } ?>
                                 <input type="hidden" id="<?php echo $map_canvas_name; ?>_cat_enabled" value="1"/>
                                 <div class="toggle">
-                                    <?php
-                                    $geodir_default_map_search_pt = get_option('geodir_default_map_search_pt');
-                                    if (empty($geodir_default_map_search_pt))
-                                        $geodir_default_map_search_pt = 'gd_place';
-
-                                    /**
-                                     * Filter the post type to retrive data for map
-                                     *
-                                     * @since 1.0.0
-                                     *
-                                     * @param string $geodir_default_map_search_pt Post type, eg: gd_place.
-                                     */
-                                    $map_search_pt = apply_filters('geodir_default_map_search_pt', $geodir_default_map_search_pt);
-                                    ?>
                                     <?php echo home_map_taxonomy_walker(array($map_search_pt.'category'),0,true,0,$map_canvas_name,$child_collapse,true); ?>
                                     <script>jQuery( document ).ready(function() {
                                             geodir_show_sub_cat_collapse_button();
