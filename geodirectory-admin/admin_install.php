@@ -69,6 +69,7 @@ function geodir_install()
         geodir_create_pages();
         geodir_set_default_options();
         geodir_set_default_widgets();
+        gd_install_theme_compat();
 
         update_option('geodir_default_data_installed', 1);
 

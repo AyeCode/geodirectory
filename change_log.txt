@@ -16,6 +16,7 @@ Genesis cat description appearing twice and title out of align if sort by presen
 Google removed some JS files from their CDN which broke some Analytics, changed to cloudflare CDN - FIXED
 Added function to ad featured image to details page header so facebook will use it on url share - ADDED
 Fields is_featured, package_id & expire_date do not working for import/export - FIXED
+Default theme compatibility settings not installed on first install only on upgrade - FIXED
 
 v1.4.8
 Send Enquiry & send to friend options removed from listings page - CHANGED
