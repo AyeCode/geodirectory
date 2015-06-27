@@ -103,7 +103,7 @@ function geodir_getGoogleAnalytics($page, $ga_start, $ga_end)
     $ids = "ids=".$id;
     if(!$start_date){$start_date = "&start-date=".$ga_start;}
     if(!$end_date){$end_date = "&end-date=".$ga_end;}
-    $metrics = "&metrics=ga:sessions";
+    $metrics = "&metrics=ga:pageviews";
     $filters = "&filters=ga:pagePath==".$page;
     $access_token = "&access_token=".$at;
 
