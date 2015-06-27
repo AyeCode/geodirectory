@@ -344,9 +344,21 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                                                 ?>
 
                                                 <a href="<?php echo $editlink; ?>" class="geodir-edit"
-                                                   title="<?php _e('Edit Listing', GEODIRECTORY_TEXTDOMAIN); ?>"><?php _e('edit', GEODIRECTORY_TEXTDOMAIN); ?></a>
+                                                   title="<?php _e('Edit Listing', GEODIRECTORY_TEXTDOMAIN); ?>">
+                                                    <?php
+                                                    $geodir_listing_edit_icon = apply_filters('geodir_listing_edit_icon', 'fa fa-edit');
+                                                    echo '<i class="'. $geodir_listing_edit_icon .'"></i>';
+                                                    ?>
+                                                    <?php _e('Edit', GEODIRECTORY_TEXTDOMAIN); ?>
+                                                </a>
                                                 <a href="<?php echo $deletelink; ?>" class="geodir-delete"
-                                                   title="<?php _e('Delete Listing', GEODIRECTORY_TEXTDOMAIN); ?>"><?php _e('delete', GEODIRECTORY_TEXTDOMAIN); ?></a>
+                                                   title="<?php _e('Delete Listing', GEODIRECTORY_TEXTDOMAIN); ?>">
+                                                    <?php
+                                                    $geodir_listing_delete_icon = apply_filters('geodir_listing_delete_icon', 'fa fa-close');
+                                                    echo '<i class="'. $geodir_listing_delete_icon .'"></i>';
+                                                    ?>
+                                                    <?php _e('Delete', GEODIRECTORY_TEXTDOMAIN); ?>
+                                                </a>
                                                 <?php
 
                                                 /**

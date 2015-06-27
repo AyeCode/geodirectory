@@ -2997,3 +2997,26 @@ function geodir_function_post_updated($post_ID, $post_after, $post_before)
         }
     }
 }
+
+add_action('wp_head', 'geodir_fb_like_thumbnail');
+
+
+/**
+ * Adds the featured image to the place details page header so facebook can use it when sharing the link.
+ *
+ * @since 1.4.9
+ * @package GeoDirectory
+ */
+function geodir_fb_like_thumbnail(){
+
+    // return if not a single post
+    if(!is_single()){return;}
+
+    global $post;
+    if(isset($post->featured_image) && $post->featured_image){
+        $upload_dir = wp_upload_dir();
+        $thumb = $upload_dir['baseurl'].$post->featured_image;
+        echo "\n\n<!-- GD Facebook Like Thumbnail -->\n<link rel=\"image_src\" href=\"$thumb\" />\n<!-- End GD Facebook Like Thumbnail -->\n\n";
+
+    }
+}
