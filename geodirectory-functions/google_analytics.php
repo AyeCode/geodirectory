@@ -95,7 +95,7 @@ function geodir_getGoogleAnalytics($page, $ga_start, $ga_end)
     elseif(isset($_REQUEST['ga_type']) && $_REQUEST['ga_type']=='country'){
         if(!$ga_start){$ga_start = "14daysAgo";}
         if(!$ga_end){$ga_end = "yesterday";}
-        $dimensions = "&dimensions=ga:country&sort=-ga:sessions&max-results=5";
+        $dimensions = "&dimensions=ga:country&sort=-ga:pageviews&max-results=5";
     }
 
 
