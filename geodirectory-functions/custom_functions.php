@@ -754,7 +754,7 @@ function geodir_related_posts_display($request)
         if ($relate_to == 'category') {
 
             $category_taxonomy = $post_type . $relate_to;
-            if ($post->$category_taxonomy != '')
+            if (isset($post->$category_taxonomy) && $post->$category_taxonomy != '')
                 $category = explode(',', trim($post->$category_taxonomy, ','));
 
         } elseif ($relate_to == 'tags') {

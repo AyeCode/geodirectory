@@ -1428,13 +1428,15 @@ if (!class_exists('Tax_Meta_Class')) :
             // Default values for meta box
             $this->_meta_box = array_merge(array('context' => 'normal', 'priority' => 'high', 'pages' => array('post')), (array)$this->_meta_box);
 
-            // Default values for fields
-            foreach ($this->_fields as &$field) {
-                $multiple = in_array($field['type'], array('checkbox_list', 'file', 'image'));
-                $std = $multiple ? array() : '';
-                $format = 'date' == $field['type'] ? 'yy-mm-dd' : ('time' == $field['type'] ? 'hh:mm' : '');
-                $field = array_merge(array('multiple' => $multiple, 'std' => $std, 'desc' => '', 'format' => $format, 'validate_func' => ''), $field);
-            } // End foreach
+            if(is_array($this->_fields)) {
+                // Default values for fields
+                foreach ($this->_fields as &$field) {
+                    $multiple = in_array($field['type'], array('checkbox_list', 'file', 'image'));
+                    $std = $multiple ? array() : '';
+                    $format = 'date' == $field['type'] ? 'yy-mm-dd' : ('time' == $field['type'] ? 'hh:mm' : '');
+                    $field = array_merge(array('multiple' => $multiple, 'std' => $std, 'desc' => '', 'format' => $format, 'validate_func' => ''), $field);
+                } // End foreach
+            }
         }
 
         /**
@@ -1446,9 +1448,11 @@ if (!class_exists('Tax_Meta_Class')) :
          */
         public function has_field($type)
         {
-            foreach ($this->_fields as $field) {
-                if ($type == $field['type'])
-                    return true;
+            if(is_array($this->_fields)) {
+                foreach ($this->_fields as $field) {
+                    if ($type == $field['type'])
+                        return true;
+                }
             }
             return false;
         }
