@@ -3067,7 +3067,7 @@ function geodir_count_reviews_by_terms($force_update = false)
  * @package GeoDirectory
  * @return bool
  */
-function geodir_term_review_count_force_update($new_status, $old_status, $post)
+function geodir_term_review_count_force_update($new_status, $old_status='', $post='')
 {
     if(isset($post->post_type) && ($post->post_type=='nav_menu_item' || $post->post_type=='page' || $post->post_type=='post')){
         return;

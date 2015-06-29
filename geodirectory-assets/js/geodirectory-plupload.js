@@ -211,6 +211,7 @@ function plu_show_thumbs(imgId) {
     for (var i = 0; i < images.length; i++) {
         if (images[i] && images[i] != 'null') {
             var file_ext = images[i].substring(images[i].lastIndexOf('.') + 1);
+            file_ext = file_ext.split('?').shift();// in case the image url has params
             var fileNameIndex = images[i].lastIndexOf("/") + 1;
             var dotIndex = images[i].lastIndexOf('.');
             if(dotIndex < fileNameIndex){continue;}
