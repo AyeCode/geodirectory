@@ -66,9 +66,10 @@ function geodir_install()
         geodir_register_defaults(); // geodir_functions/ taxonomy_functions.php
         geodir_create_default_fields();
         //geodir_default_taxonomies();
-        geodir_create_pages();
         geodir_set_default_options();
+        geodir_create_pages();
         geodir_set_default_widgets();
+        gd_install_theme_compat();
 
         update_option('geodir_default_data_installed', 1);
 

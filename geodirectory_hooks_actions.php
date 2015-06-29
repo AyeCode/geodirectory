@@ -1294,6 +1294,7 @@ function geodir_localize_all_js_msg()
         'gd_cmt_err_no_rating' => __("Please select star rating, you can't leave a review without stars.", GEODIRECTORY_TEXTDOMAIN),
         /* on/off dragging for phone devices */
         'geodir_onoff_dragging' => get_option('geodir_map_onoff_dragging') ? true : false,
+        'geodir_is_mobile' => wp_is_mobile() ? true : false,
         'geodir_on_dragging_text' => __('Enable Dragging', GEODIRECTORY_TEXTDOMAIN),
         'geodir_off_dragging_text' => __('Disable Dragging', GEODIRECTORY_TEXTDOMAIN),
         'geodir_err_max_file_size' => __('File size error : You tried to upload a file over %s', GEODIRECTORY_TEXTDOMAIN),

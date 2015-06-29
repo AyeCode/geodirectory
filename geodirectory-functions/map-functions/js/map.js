@@ -65,7 +65,7 @@ function initMap(map_options) {
     var hasControl = jQuery('#' + map_canvas).find('.gd-control-div').hasClass(map_canvas + '-control-div');
 
     /* add option that allows enable/disable map dragging to phone devices */
-    if (GeodirIsiPhone() && typeof geodir_all_js_msg.geodir_onoff_dragging != 'undefined' && geodir_all_js_msg.geodir_onoff_dragging && !hasControl) {
+    if (geodir_all_js_msg.geodir_is_mobile && typeof geodir_all_js_msg.geodir_onoff_dragging != 'undefined' && geodir_all_js_msg.geodir_onoff_dragging && !hasControl) {
         var centerControlDiv = document.createElement('div');
         centerControlDiv.index = 1;
 

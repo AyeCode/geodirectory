@@ -176,6 +176,12 @@ if (is_admin()) {
     require_once(geodir_plugin_path() . '/upgrade.php');
     if (get_option('geodir_installed') != 1) {
         /**
+         * Define language constants, here as they are not loaded yet.
+         *
+         * @since 1.0.0
+         */
+        require_once(geodir_plugin_path() . '/language.php');
+        /**
          * Include the plugin install file that sets up the databases and any options on first run.
          *
          * @since 1.0.0
