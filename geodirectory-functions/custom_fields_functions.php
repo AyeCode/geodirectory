@@ -930,11 +930,20 @@ if (!function_exists('geodir_custom_field_save')) {
                         break;
 
                     case 'checkbox':
+                        $data_type = 'TINYINT';
+
+                        $meta_field_add = $data_type . "( 1 ) NOT NULL ";
+                        if ($default_value != '') {
+                            $meta_field_add .= " DEFAULT '" . $default_value . "'";
+                        }
+
+                        geodir_add_column_if_not_exist($detail_table, $htmlvar_name, $meta_field_add);
+
+
+                        break;
                     case 'multiselect':
 
                         $data_type = 'VARCHAR';
-
-                        $default_value_add = " `" . $htmlvar_name . "` " . $data_type . "( 500 ) NULL  ";
 
                         $meta_field_add = $data_type . "( 500 ) NULL ";
                         if ($default_value != '') {
@@ -943,7 +952,6 @@ if (!function_exists('geodir_custom_field_save')) {
 
                         geodir_add_column_if_not_exist($detail_table, $htmlvar_name, $meta_field_add);
 
-                        //$wpdb->query("ALTER TABLE ".$detail_table." ADD".$default_value_add);
 
                         break;
                     case 'textarea':
