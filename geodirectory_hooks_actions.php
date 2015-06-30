@@ -108,8 +108,7 @@ add_action('wp_loaded', 'geodir_on_wp_loaded', 10);
 
 add_action('wp_head', 'geodir_header_scripts');
 
-add_action('admin_head', 'geodir_header_scripts');
-
+// add_action('admin_head', 'geodir_header_scripts'); // Removed since 1.5.0
 
 add_action('wp_head', 'geodir_init_map_jason'); // Related to MAP
 
