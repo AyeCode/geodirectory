@@ -562,7 +562,7 @@ function geodir_detail_page_google_analytics()
      * @since 1.0.0
      */
     do_action('geodir_before_google_analytics');
-    if (get_option('geodir_ga_stats') && is_user_logged_in() && get_current_user_id()==$post->post_author &&  (isset($package_info->google_analytics) && $package_info->google_analytics == '1')) {
+    if (get_option('geodir_ga_stats') && is_user_logged_in() &&  (isset($package_info->google_analytics) && $package_info->google_analytics == '1') && (get_current_user_id()==$post->post_author || current_user_can( 'manage_options' )) ) {
         $page_url = $_SERVER['REQUEST_URI'];
         //$page_url = "/";
         ?>

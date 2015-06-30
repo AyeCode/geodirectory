@@ -967,7 +967,7 @@ function geodir_breadcrumb()
             $breadcrumb .= stripslashes_deep($page_title);
             $breadcrumb .= '</li>';
         } else if (is_tag()) {
-            $separator . single_tag_title();
+            $breadcrumb .=  "<li> " . $separator . single_tag_title('',false) . '</li>';
         } else if (is_day()) {
             $breadcrumb .= "<li> " . $separator . __(" Archive for", GEODIRECTORY_TEXTDOMAIN) . " ";
             the_time('F jS, Y');
