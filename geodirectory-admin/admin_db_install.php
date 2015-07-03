@@ -448,7 +448,7 @@ if (!function_exists('geodir_create_tables')) {
 						post_title text NULL DEFAULT NULL,
 						post_status varchar(20) NULL DEFAULT NULL,
 						default_category INT NULL DEFAULT NULL,
-						post_tags varchar(254) NULL DEFAULT NULL,
+						post_tags text NULL DEFAULT NULL,
 						post_location_id int(11) NOT NULL,
 						marker_json text NULL DEFAULT NULL,
 						claimed enum( '1', '0' ) NULL DEFAULT '0',
