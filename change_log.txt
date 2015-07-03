@@ -3,6 +3,7 @@ Google analytic countries throws error - FIXED
 Some PHP warnings removed when installing - FIXED
 User level Subscriber not shown Google Analytics stats - FIXED
 GeoDirectory custom script & css should not be printed in backend - FIXED
+Added two hooks to search queries - ADDED
 
 v1.4.9
 Google Analytics extra error messages added to help users debug - ADDED
