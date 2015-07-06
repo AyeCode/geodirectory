@@ -720,7 +720,7 @@ function geodir_user_signup()
                 if (isset($_REQUEST['pagetype']) && $_REQUEST['pagetype'] != '') {
                     wp_redirect($_REQUEST['pagetype'] . '&emsg=1');
                 } else {
-                    wp_redirect(home_url() . '?geodir_signup=true&amp;logemsg=1&amp;redirect_to=' . urlencode($_REQUEST['redirect_to']));
+                    wp_redirect(home_url() . '?geodir_signup=true&logemsg=1&redirect_to=' . urlencode($_REQUEST['redirect_to']));
                 }
                 exit;
             }
