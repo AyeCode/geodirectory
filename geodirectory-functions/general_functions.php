@@ -2541,7 +2541,7 @@ function geodir_loginwidget_output($args = '', $instance = '')
                 <li><select id="geodir_add_listing" class="chosen_select" onchange="window.location.href=this.value"
                             option-autoredirect="1" name="geodir_add_listing" option-ajaxchosen="false"
                             data-placeholder="<?php echo esc_attr(__('Add Listing', GEODIRECTORY_TEXTDOMAIN)); ?>">
-                        <option value=""></option>
+                        <option value="" disabled="disabled" selected="selected" style='display:none;'><?php echo esc_attr(__('Add Listing', GEODIRECTORY_TEXTDOMAIN)); ?></option>
                         <?php echo $addlisting_links; ?>
                     </select></li> <?php
 
@@ -2585,7 +2585,7 @@ function geodir_loginwidget_output($args = '', $instance = '')
                     <select id="geodir_my_favourites" class="chosen_select" onchange="window.location.href=this.value"
                             option-autoredirect="1" name="geodir_my_favourites" option-ajaxchosen="false"
                             data-placeholder="<?php echo esc_attr(__('My Favorites', GEODIRECTORY_TEXTDOMAIN)); ?>">
-                        <option value=""></option>
+                        <option value="" disabled="disabled" selected="selected" style='display:none;'><?php echo esc_attr(__('My Favorites', GEODIRECTORY_TEXTDOMAIN)); ?></option>
                         <?php echo $favourite_links; ?>
                     </select>
                 </li>
@@ -2630,7 +2630,7 @@ function geodir_loginwidget_output($args = '', $instance = '')
                     <select id="geodir_my_listings" class="chosen_select" onchange="window.location.href=this.value"
                             option-autoredirect="1" name="geodir_my_listings" option-ajaxchosen="false"
                             data-placeholder="<?php echo esc_attr(__('My Listings', GEODIRECTORY_TEXTDOMAIN)); ?>">
-                        <option value=""></option>
+                        <option value="" disabled="disabled" selected="selected" style='display:none;'><?php echo esc_attr(__('My Listings', GEODIRECTORY_TEXTDOMAIN)); ?></option>
                         <?php echo $listing_links; ?>
                     </select>
                 </li>
