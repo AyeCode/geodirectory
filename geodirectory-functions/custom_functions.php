@@ -257,7 +257,7 @@ function geodir_send_inquiry($request)
 
     $user_info = get_userdata($author_id);
     $to_email = geodir_get_post_meta($pid, 'geodir_email', true);
-    $to_name = $user_info->first_name;
+    $to_name = geodir_get_client_name($author_id);
 
     if ($to_email == '') {
         $to_email = get_option('admin_email');
@@ -283,7 +283,7 @@ function geodir_send_inquiry($request)
     do_action('geodir_after_send_enquiry', $request, 'Enquiry');
 
     $client_message = $frnd_comments;
-    $client_message .= '<br>' . __('From :', GEODIRECTORY_TEXTDOMAIN) . ' ' . $yourname . '<br>' . __('Phone :', GEODIRECTORY_TEXTDOMAIN) . ' ' . $inq_phone . '<br><br>' . __('Sent from', GEODIRECTORY_TEXTDOMAIN) . ' - <b><a href="' . get_option('siteurl') . '">' . get_option('blogname') . '</a></b>.';
+    $client_message .= '<br>' . __('From :', GEODIRECTORY_TEXTDOMAIN) . ' ' . $yourname . '<br>' . __('Phone :', GEODIRECTORY_TEXTDOMAIN) . ' ' . $inq_phone . '<br><br>' . __('Sent from', GEODIRECTORY_TEXTDOMAIN) . ' - <b><a href="' . trailingslashit(home_url()) . '">' . get_option('blogname') . '</a></b>.';
     /**
      * Filter client message text.
      *

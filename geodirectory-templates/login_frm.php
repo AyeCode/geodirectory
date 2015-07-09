@@ -51,7 +51,7 @@ if (isset($_GET['redirect_to']) && $_GET['redirect_to'] != '') {
         echo '<p class="sucess_msg">' . PW_SEND_CONFIRM_MSG . '</p>';
 
     ?>
-    <form name="cus_loginform" id="cus_loginform" action="<?php echo htmlspecialchars(geodir_curPageURL()); ?>"
+    <form name="cus_loginform" id="cus_loginform" action="<?php echo esc_url(geodir_curPageURL()); ?>"
           method="post">
 
         <div class="form_row clearfix">
@@ -86,7 +86,7 @@ if (isset($_GET['redirect_to']) && $_GET['redirect_to'] != '') {
 
 
         <input class="geodir_button" type="submit" value="<?php echo SIGN_IN_BUTTON; ?>" name="submit"/>
-        <input type="hidden" name="redirect_to" value="<?php echo htmlspecialchars($redirect_to); ?>"/>
+        <input type="hidden" name="redirect_to" value="<?php echo esc_url($redirect_to); ?>"/>
         <input type="hidden" name="testcookie" value="1"/>
         <a href="javascript:void(0);showhide_forgetpw();"><?php echo FORGOT_PW_TEXT; ?></a>
     </form>
