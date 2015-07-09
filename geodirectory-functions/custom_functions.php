@@ -283,7 +283,7 @@ function geodir_send_inquiry($request)
     do_action('geodir_after_send_enquiry', $request, 'Enquiry');
 
     $client_message = $frnd_comments;
-    $client_message .= '<br>' . __('From :', GEODIRECTORY_TEXTDOMAIN) . ' ' . $yourname . '<br>' . __('Phone :', GEODIRECTORY_TEXTDOMAIN) . ' ' . $inq_phone . '<br><br>' . __('Sent from', GEODIRECTORY_TEXTDOMAIN) . ' - <b><a href="' . get_option('siteurl') . '">' . get_option('blogname') . '</a></b>.';
+    $client_message .= '<br>' . __('From :', GEODIRECTORY_TEXTDOMAIN) . ' ' . $yourname . '<br>' . __('Phone :', GEODIRECTORY_TEXTDOMAIN) . ' ' . $inq_phone . '<br><br>' . __('Sent from', GEODIRECTORY_TEXTDOMAIN) . ' - <b><a href="' . trailingslashit(home_url()) . '">' . get_option('blogname') . '</a></b>.';
     /**
      * Filter client message text.
      *

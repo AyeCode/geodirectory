@@ -8,6 +8,7 @@ Post tags has a DB limit of 254, removed this limit - FIXED
 The recent reviews shortcode is missing the title attribute - FIXED
 Login error on GD signup page is not appearing - FIXED
 In forgot password notification user display name is not well formatted - FIXED
+Wrong link passed in send enquiry notification email - FIXED
 
 v1.4.9
 Google Analytics extra error messages added to help users debug - ADDED
