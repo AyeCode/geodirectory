@@ -257,7 +257,7 @@ function geodir_send_inquiry($request)
 
     $user_info = get_userdata($author_id);
     $to_email = geodir_get_post_meta($pid, 'geodir_email', true);
-    $to_name = $user_info->first_name;
+    $to_name = geodir_get_client_name($author_id);
 
     if ($to_email == '') {
         $to_email = get_option('admin_email');

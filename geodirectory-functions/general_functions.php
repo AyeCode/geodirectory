@@ -1216,7 +1216,7 @@ if (!function_exists('adminEmail')) {
         $siteurl_link = '<a href="' . $siteurl . '">' . $fromEmailName . '</a>';
         $user_info = get_userdata($user_id);
         $user_email = $user_info->user_email;
-        $display_name = $user_info->first_name;
+        $display_name = geodir_get_client_name($user_id);
         $user_login = $user_info->user_login;
         $number_of_grace_days = get_option('ptthemes_listing_preexpiry_notice_days');
         if ($number_of_grace_days == '') {
@@ -3449,4 +3449,30 @@ function geodir_allowed_mime_types() {
 			)
 		) 
 	);
+}
+
+/**
+ * Retrieve list of user display name for user id.
+ *
+ * @since 1.5.0
+ * 
+ * @param  string $user_id The WP user id.
+ * @return string User display name.
+ */
+function geodir_get_client_name($user_id) {
+	$client_name = '';
+	
+	$user_data = get_userdata($user_id);
+	
+	if (!empty($user_data)) {
+		if (isset($user_data->display_name) && trim($user_data->display_name) != '') {
+			$client_name = trim($user_data->display_name);
+		} else if (isset($user_data->user_nicename) && trim($user_data->user_nicename) != '') {
+			$client_name = trim($user_data->user_nicename);
+		} else {
+			$client_name = trim($user_data->user_login);
+		}
+	}
+	
+	return $client_name;
 }

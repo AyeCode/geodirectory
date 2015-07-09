@@ -214,7 +214,7 @@ function geodir_retrieve_password()
     //$message .= '<p>You can login to : <a href="'.home_url().'/?ptype=login' . "\">Login</a> or the URL is :  ".home_url()."/?ptype=login</p>";
     //$message .= '<p>Thank You,<br> '.get_option('blogname').'</p>';
     $user_email = $user_data->user_email;
-    $user_name = $user_data->user_nicename;
+    $user_name = geodir_get_client_name($user->ID);
     $fromEmail = geodir_get_site_email_id();
     $fromEmailName = get_site_emailName();
     $title = sprintf(__('[%s] Your new password', GEODIRECTORY_TEXTDOMAIN), get_option('blogname'));
@@ -479,7 +479,7 @@ function geodir_user_signup()
                 $errors = geodir_retrieve_password();
                 $error_message = isset($errors->errors['invalid_email'][0]) ? $errors->errors['invalid_email'][0] : '';
                 if (!is_wp_error($errors)) {
-                    wp_redirect(home_url() . '/?geodir_signup=true&amp;checkemail=confirm');
+                    wp_redirect(home_url() . '/?geodir_signup=true&checkemail=confirm');
                     exit();
                 } else {
                     wp_redirect(home_url() . '/?geodir_signup=true&emsg=fw');
@@ -503,11 +503,11 @@ function geodir_user_signup()
             $errors = reset_password($_GET['key'], $_GET['login']);
 
             if (!is_wp_error($errors)) {
-                wp_redirect(home_url() . '/?geodir_signup=true&amp;action=login&amp;checkemail=newpass');
+                wp_redirect(home_url() . '/?geodir_signup=true&action=login&checkemail=newpass');
                 exit();
             }
 
-            wp_redirect(home_url() . '/?geodir_signup=true&amp;action=lostpassword&amp;page1=sign_in&amp;error=invalidkey');
+            wp_redirect(home_url() . '/?geodir_signup=true&action=lostpassword&page1=sign_in&error=invalidkey');
             exit();
 
             break;
