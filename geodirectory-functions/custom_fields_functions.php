@@ -3003,7 +3003,7 @@ if (!function_exists('geodir_show_listing_info')) {
                      * @since 1.0.0
                      * @param string $html_var The HTML variable name for the field.
                      */
-                    do_action('geodir_before_show_' . $html_var);
+                    do_action("geodir_before_show_{$html_var}");
                     /**
                      * Filter custom field output.
                      *
@@ -3013,7 +3013,7 @@ if (!function_exists('geodir_show_listing_info')) {
                      * @param string $html Custom field unfiltered HTML.
                      * @param array $variables_array Custom field variables array.
                      */
-                    if ($html) echo apply_filters('geodir_show_' . $html_var, $html, $variables_array);
+                    if ($html) echo apply_filters("geodir_show_{$html_var}", $html, $variables_array);
 
                     /**
                      * Called after a custom fields is output on the frontend.
@@ -3021,7 +3021,7 @@ if (!function_exists('geodir_show_listing_info')) {
                      * @since 1.0.0
                      * @param string $html_var The HTML variable name for the field.
                      */
-                    do_action('geodir_after_show_' . $html_var);
+                    do_action("geodir_after_show_{$html_var}");
 
                 endif;
 
