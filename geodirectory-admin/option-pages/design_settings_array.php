@@ -419,6 +419,21 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
         'type' => 'checkbox',
         'std' => '0' // Default value to show home top section
     ),
+	
+	array(
+        'name' => __('Show advanced pagination details', GEODIRECTORY_TEXTDOMAIN),
+        'desc' => __('This will add extra pagination info like "Showing listings x-y of z" aftre/before pagination.', GEODIRECTORY_TEXTDOMAIN),
+        'id' => 'geodir_pagination_advance_info',
+        'css' => 'min-width:300px;',
+        'std' => '',
+        'type' => 'select',
+        'class' => 'chosen_select',
+        'options' => array(
+						'' => __('Never Display', GEODIRECTORY_TEXTDOMAIN),
+						'after' => __('After Pagination', GEODIRECTORY_TEXTDOMAIN),
+						'before' => __('Before Pagination', GEODIRECTORY_TEXTDOMAIN)
+					)
+    ),
 
     array('type' => 'sectionend', 'id' => 'geodir_search_layout'),
 
