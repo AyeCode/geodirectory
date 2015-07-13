@@ -379,7 +379,22 @@ function geodir_pagination($before = '', $after = '', $prelabel = '', $nxtlabel 
         }
 
         if ($max_page > 1 || $always_show) {
-            echo "$before <div class='Navi'>";
+			// Extra pagination info
+			$geodir_pagination_more_info = get_option('geodir_pagination_advance_info');
+			$start_no = ( $paged - 1 ) * $posts_per_page + 1;
+			$end_no = min($paged * $posts_per_page, $numposts);
+			
+			if ($geodir_pagination_more_info != '') {
+				$pagination_info = '<div class="gd-pagination-details">' . wp_sprintf(__('Showing listings %d-%d of %d', GEODIRECTORY_TEXTDOMAIN), $start_no, $end_no, $numposts) . '</div>';
+				
+				if ($geodir_pagination_more_info == 'before') {
+					$before = $before . $pagination_info;
+				} else if ($geodir_pagination_more_info == 'after') {
+					$after = $pagination_info . $after;
+				}
+			}
+			
+			echo "$before <div class='Navi'>";
             if ($paged >= ($pages_to_show - 1)) {
                 echo '<a href="' . str_replace('&paged', '&amp;paged', get_pagenum_link()) . '">&laquo;</a>';
             }
