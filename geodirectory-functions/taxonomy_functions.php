@@ -1289,7 +1289,7 @@ function geodir_register_defaults()
             'menu_icon' => $menu_icon,
             'public' => true,
             'query_var' => true,
-            'rewrite' => array('slug' => $listing_slug . '/%gd_taxonomy%', 'with_front' => false, 'hierarchical' => true),
+            'rewrite' => array('slug' => $listing_slug , 'with_front' => false, 'hierarchical' => true),
             'supports' => array('title', 'editor', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'comments', /*'revisions', 'post-formats'*/),
             'taxonomies' => array('gd_placecategory', 'gd_place_tags'));
 
@@ -1344,6 +1344,37 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
 
     if (in_array($post->post_type, geodir_get_posttypes())) {
 
+
+        $post_types = get_option('geodir_post_types');
+        $slug = $post_types[$post->post_type]['rewrite']['slug'];
+        // Alter the CPT slug is WPML is set to do so
+        if(function_exists('icl_object_id')){
+            //global $sitepress;
+            /*
+             * @todo find the proper way to check if slug translation is turned on (asked on WPML support forum)
+             */
+            //if ( $sitepress->slug_translation_turned_on( $post->post_type ) ) {
+            if (strpos($post_link,"/".$slug."/") === false) {// we can assume that if WPML is present and the original slug is not in the url then we should translate it.
+
+                $slug = apply_filters( 'wpml_translate_single_string',
+                    $slug,
+                    'WordPress',
+                    'URL slug: ' . $slug,
+                    ICL_LANGUAGE_CODE );
+
+            }
+        }
+        $post_link = trailingslashit(
+            preg_replace(  "/" . preg_quote( $slug, "/" ) . "/", $slug ."/%gd_taxonomy%",$post_link, 1 )
+        );
+
+
+
+
+
+
+
+
         if (isset($comment_post_cache[$post->ID])) {
             $post = $comment_post_cache[$post->ID];
         }
@@ -1369,6 +1400,8 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
 
             $comment_post_cache[$post->ID] = $post;
         }
+
+
 
         if (false !== strpos($post_link, '%gd_taxonomy%')) {
 
@@ -1522,6 +1555,7 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
  */
 function geodir_term_link($termlink, $term, $taxonomy)
 {
+    //echo '###'.$termlink;
     $geodir_taxonomies = geodir_get_taxonomies('', true);
 
     if (isset($taxonomy) && !empty($geodir_taxonomies) && in_array($taxonomy, $geodir_taxonomies)) {
@@ -1564,7 +1598,22 @@ function geodir_term_link($termlink, $term, $taxonomy)
 
             }
         }
+
+        // Alter the CPT slug is WPML is set to do so
+        if(function_exists('icl_object_id')){
+            global $sitepress;
+            $post_type = str_replace("category","",$taxonomy);
+            $termlink = $sitepress->post_type_archive_link_filter( $termlink, $post_type);
+        }
+
     }
+    //echo '###2'.$termlink;
+
+
+
+
+
+
 
     return $termlink;
 }

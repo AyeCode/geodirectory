@@ -262,10 +262,12 @@ function geodir_hide_post_taxonomy_meta_boxes()
 
             $gd_taxonomy = geodir_get_taxonomies($geodir_post_type);
 
-            foreach ($gd_taxonomy as $tax) {
+            if(!empty($gd_taxonomy)) {
+                foreach ($gd_taxonomy as $tax) {
 
-                remove_meta_box($tax . 'div', $geodir_post_type, 'normal');
+                    remove_meta_box($tax . 'div', $geodir_post_type, 'normal');
 
+                }
             }
 
         }
