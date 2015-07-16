@@ -265,7 +265,7 @@ function geodir_listing_rewrite_rules($rules)
  * @since 1.0.0
  *
  * @global wpdb $wpdb WordPress database abstraction object.
- *
+ * @deprecated 1.5.0 No longer required.
  * @param string $rules mod_rewrite Rewrite rules formatted for .htaccess.
  * @return array Rewrite rules.
  */
@@ -284,7 +284,7 @@ function geodir_htaccess_contents($rules)
 EOD;
     return $my_content . $rules;
 }
-add_filter('mod_rewrite_rules', 'geodir_htaccess_contents');
+//add_filter('mod_rewrite_rules', 'geodir_htaccess_contents');
 
 /**
  * Add the location variables to the query variables.
