@@ -1460,7 +1460,7 @@ function get_page_id_geodir_add_listing_page($page_id)
  */
 function geodir_wpml_multilingual_status()
 {
-    if (is_plugin_active('sitepress-multilingual-cms/sitepress.php')) {
+    if (function_exists('icl_object_id')) {
         return true;
     }
     return false;

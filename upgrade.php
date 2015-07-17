@@ -29,6 +29,10 @@ if (get_option(GEODIRECTORY_TEXTDOMAIN . '_db_version') != GEODIRECTORY_VERSION)
     if (GEODIRECTORY_VERSION <= '1.4.8') {
         add_action('init', 'geodir_upgrade_148', 11);
     }
+
+    if (GEODIRECTORY_VERSION <= '1.5.0') {
+        add_action('init', 'geodir_upgrade_150', 11);
+    }
     update_option(GEODIRECTORY_TEXTDOMAIN . '_db_version', GEODIRECTORY_VERSION);
 
 }
@@ -66,6 +70,16 @@ function geodir_upgrade_136()
  */
 function geodir_upgrade_146(){
     gd_convert_virtual_pages();
+}
+
+/**
+ * Handles upgrade for geodirectory versions <= 1.5.0.
+ *
+ * @since 1.5.0
+ * @package GeoDirectory
+ */
+function geodir_upgrade_150(){
+    gd_fix_cpt_rewrite_slug();
 }
 
 
@@ -624,7 +638,41 @@ function gd_convert_virtual_pages(){
 }
 
 
+/**
+ * Converts all GD CPT's to the new rewrite slug by removing /%gd_taxonomy% from the slug
+ *
+ * @since 1.5.0
+ * @package GeoDirectory
+ */
+function gd_fix_cpt_rewrite_slug()
+{
 
+    $alt_post_types = array();
+    $post_types = get_option('geodir_post_types');
+
+
+    if (is_array($post_types)){
+
+        foreach ($post_types as $post_type => $args) {
+
+
+            if(isset($args['rewrite']['slug'])){
+                $args['rewrite']['slug'] = str_replace("/%gd_taxonomy%","",$args['rewrite']['slug']);
+            }
+
+                $alt_post_types[$post_type] = $args;
+
+        }
+    }
+
+    if(!empty($alt_post_types)) {
+        update_option('geodir_post_types',$alt_post_types);
+        }
+
+
+    // flush the rewrite rules
+    flush_rewrite_rules();
+}
 
 
 

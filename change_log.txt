@@ -11,6 +11,7 @@ In forgot password notification user display name is not well formatted - FIXED
 Wrong link passed in send enquiry notification email - FIXED
 User Dashboard links not showing titles on mobile - FIXED
 Option added to customize pagination with "Showing results x-y of z" - ADDED
+WPML custom posts slug translation not working with GD (requires CPT and Event addon update also) - FIXED
 
 v1.4.9
 Google Analytics extra error messages added to help users debug - ADDED
