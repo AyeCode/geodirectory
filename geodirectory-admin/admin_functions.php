@@ -4451,6 +4451,15 @@ function geodir_ajax_import_export() {
 			
 	switch ( $task ) {
 		case 'export_posts': {
+			// WPML
+			$is_wpml = geodir_is_wpml();
+			if ($is_wpml) {
+				global $sitepress;
+				$active_lang = ICL_LANGUAGE_CODE;
+				
+				$sitepress->switch_lang('all', true);
+			}
+			// WPML
 			if ( $post_type == 'gd_event' ) {
 				add_filter( 'geodir_imex_count_posts', 'geodir_imex_count_events', 10, 2 );
 				add_filter( 'geodir_imex_export_posts_query', 'geodir_imex_get_events_query', 10, 2 );
@@ -4469,6 +4478,11 @@ function geodir_ajax_import_export() {
 				$percentage = min( $percentage, 100 );
 				
 				$json['percentage'] = $percentage;
+				// WPML
+				if ($is_wpml) {
+					$sitepress->switch_lang($active_lang, true);
+				}
+				// WPML
 				wp_send_json( $json );
 			} else {				
 				if ( $wp_filesystem->exists( $file_path ) ) {
@@ -4507,11 +4521,25 @@ function geodir_ajax_import_export() {
 						$json['error'] = __( 'No records to export.', GEODIRECTORY_TEXTDOMAIN );
 					}
 				}
+				// WPML
+				if ($is_wpml) {
+					$sitepress->switch_lang($active_lang, true);
+				}
+				// WPML
 				wp_send_json( $json );
 			}
 		}
 		break;
 		case 'export_cats': {
+			// WPML
+			$is_wpml = geodir_is_wpml();
+			if ($is_wpml) {
+				global $sitepress;
+				$active_lang = ICL_LANGUAGE_CODE;
+				
+				$sitepress->switch_lang('all', true);
+			}
+			// WPML
 			$file_name = $post_type . 'category_' . date( 'j_n_y' );
 			
 			$terms_count = geodir_get_terms_count( $post_type );
@@ -4525,6 +4553,11 @@ function geodir_ajax_import_export() {
 				$percentage = min( $percentage, 100 );
 				
 				$json['percentage'] = $percentage;
+				// WPML
+				if ($is_wpml) {
+					$sitepress->switch_lang($active_lang, true);
+				}
+				// WPML
 				wp_send_json( $json );
 			} else {				
 				if ( $wp_filesystem->exists( $file_path ) ) {
@@ -4563,6 +4596,11 @@ function geodir_ajax_import_export() {
 						$json['error'] = __( 'No records to export.', GEODIRECTORY_TEXTDOMAIN );
 					}
 				}
+				// WPML
+				if ($is_wpml) {
+					$sitepress->switch_lang($active_lang, true);
+				}
+				// WPML
 				wp_send_json( $json );
 			}
 		}
@@ -4570,6 +4608,14 @@ function geodir_ajax_import_export() {
 		case 'prepare_import':
 		case 'import_cat':
 		case 'import_post': {
+			// WPML
+			$is_wpml = geodir_is_wpml();
+			if ($is_wpml) {
+				global $sitepress;
+				$active_lang = ICL_LANGUAGE_CODE;
+			}
+			// WPML
+			
 			ini_set( 'auto_detect_line_endings', true );
 			
 			$uploads = wp_upload_dir();
@@ -4675,6 +4721,7 @@ function geodir_ajax_import_export() {
 							$cat_top_description = '';
 							$cat_image = '';
 							$cat_icon = '';
+							$cat_language = '';
 							
 							$c = 0;
 							foreach ($columns as $column ) {
@@ -4697,6 +4744,11 @@ function geodir_ajax_import_export() {
 								} else if ( $column == 'cat_icon' ) {
 									$cat_icon = $row[$c];
 								}
+								// WPML
+								if ($is_wpml && $column == 'cat_language') {
+									$cat_language = strtolower(trim($row[$c]));
+								}
+								// WPML
 								$c++;
 							}
 							
@@ -4704,6 +4756,12 @@ function geodir_ajax_import_export() {
 								$invalid++;
 								continue;
 							}
+							
+							// WPML
+							if ($is_wpml && $cat_language != '') {
+								$sitepress->switch_lang($cat_language, true);
+							}
+							// WPML
 														
 							$term_data = array();
 							$term_data['name'] = $cat_name;
@@ -4815,6 +4873,12 @@ function geodir_ajax_import_export() {
 									$images++;
 								}
 							}
+							
+							// WPML
+							if ($is_wpml && $cat_language != '') {
+								$sitepress->switch_lang($active_lang, true);
+							}
+							// WPML
 						}
 					}
 				}
@@ -4877,6 +4941,9 @@ function geodir_ajax_import_export() {
 							$post_images = array();
 							
 							$expire_date = 'Never';
+							
+							$language = '';
+							$original_post_id = '';
 														
 							$c = 0;
 							foreach ($columns as $column ) {
@@ -4938,8 +5005,23 @@ function geodir_ajax_import_export() {
 									$row[$c] = str_replace('/', '-', $row[$c]);
 									$expire_date = date_i18n( 'Y-m-d', strtotime( $row[$c] ) );
 								}
+								// WPML
+								if ($is_wpml) {
+									if ($column == 'language') {
+										$language = strtolower(trim($row[$c]));
+									} else if ($column == 'original_post_id') {
+										$original_post_id = (int)$row[$c];
+									}
+								}
+								// WPML
 								$c++;
 							}
+							
+							// WPML
+							if ($is_wpml && $language != '') {
+								$sitepress->switch_lang($language, true);
+							}
+							// WPML
 
 							$gd_post['IMAGE'] = $post_images;
 							
@@ -5052,6 +5134,17 @@ function geodir_ajax_import_export() {
 							}
 							
 							if ( (int)$saved_post_id > 0 ) {							
+								// WPML
+								if ($is_wpml && $original_post_id > 0 && $language != '') {
+									$wpml_post_type = 'post_' . $post_type;
+									$source_language = geodir_get_language_for_element( $original_post_id, $wpml_post_type );
+									$source_language = $source_language != '' ? $source_language : $sitepress->get_default_language();
+
+									$trid = $sitepress->get_element_trid( $original_post_id, $wpml_post_type );
+									
+									$sitepress->set_element_language_details( $saved_post_id, $wpml_post_type, $trid, $language, $source_language );
+								}
+								// WPML
 								$gd_post_info = geodir_get_post_info( $saved_post_id );
 								
 								$gd_post['post_id'] = $saved_post_id;
@@ -5256,6 +5349,12 @@ function geodir_ajax_import_export() {
 									geodir_save_post_meta($saved_post_id, 'expire_date', $gd_post['expire_date']);
 								}
 							}
+							
+							// WPML
+							if ($is_wpml && $language != '') {
+								$sitepress->switch_lang($active_lang, true);
+							}
+							// WPML
 						}
 					}
 				}
@@ -5316,7 +5415,7 @@ function geodir_imex_insert_term( $taxonomy, $term_data ) {
 		$defaults = array( 'alias_of' => '', 'description' => '', 'parent' => 0, 'slug' => '');
 		$term_args = wp_parse_args( $term_args, $defaults );
 		$term_args = sanitize_term( $term_args, $taxonomy, 'db' );
-		$args['slug'] = wp_unique_term_slug( $term_data['slug'], (object)$term_args );
+		$args['slug'] = wp_unique_term_slug( $args['slug'], (object)$term_args );
 	}
 	
     if( !empty( $term ) ) {
@@ -5500,6 +5599,13 @@ function geodir_imex_get_posts( $post_type ) {
 		$csv_row[] = 'geodir_facebook';
 		$csv_row[] = 'geodir_video';
 		$csv_row[] = 'geodir_special_offers';
+		// WPML
+		$is_wpml = geodir_is_wpml();
+		if ($is_wpml) {
+			$csv_row[] = 'language';
+			$csv_row[] = 'original_post_id';
+		}
+		// WPML
 				
 		$custom_fields = geodir_imex_get_custom_fields( $post_type );
 		if ( !empty( $custom_fields ) ) {
@@ -5649,6 +5755,12 @@ function geodir_imex_get_posts( $post_type ) {
 			$csv_row[] = $post_info['geodir_facebook']; // geodir_facebook
 			$csv_row[] = $post_info['geodir_video']; // geodir_video
 			$csv_row[] = $post_info['geodir_special_offers']; // geodir_special_offers
+			// WPML
+			if ($is_wpml) {
+				$csv_row[] = geodir_get_language_for_element( $post_id, 'post_' . $post_type );
+				$csv_row[] = get_post_meta( $post_id, '_icl_lang_duplicate_of', true );
+			}
+			// WPML
 			
 			if ( !empty( $custom_fields ) ) {
 				foreach ( $custom_fields as $custom_field ) {
@@ -5813,6 +5925,12 @@ function geodir_imex_get_terms( $post_type ) {
 		$csv_row[] = 'cat_top_description';
 		$csv_row[] = 'cat_image';
 		$csv_row[] = 'cat_icon';
+		// WPML
+		$is_wpml = geodir_is_wpml();
+		if ($is_wpml) {
+			$csv_row[] = 'cat_language';
+		}
+		// WPML
 		
 		$csv_rows[] = $csv_row;
 		
@@ -5839,6 +5957,11 @@ function geodir_imex_get_terms( $post_type ) {
 			$csv_row[] = get_tax_meta( $term->term_id, 'ct_cat_top_desc', false, $post_type );
 			$csv_row[] = $cat_image;
 			$csv_row[] = $cat_icon;
+			// WPML
+			if ($is_wpml) {
+				$csv_row[] = geodir_get_language_for_element( $term->term_id, 'tax_' . $taxonomy );
+			}
+			// WPML
 			
 			$csv_rows[] = $csv_row;
 		}
@@ -5941,4 +6064,36 @@ function geodir_imex_get_custom_fields( $post_type ) {
 	 $rows = $wpdb->get_results( $sql );
 	 
 	 return $rows;
+}
+
+/**
+ * Check wpml active or not.
+ *
+ * @since 1.5.0
+ *
+ * @return True if WPML is active else False.
+ */
+function geodir_is_wpml() {
+	if (function_exists('icl_object_id')) {
+		return true;
+	}
+	
+	return false;
+}
+
+/**
+ * Get WPML language code for current term.
+ *
+ * @since 1.5.0
+ *
+ * @global object $sitepress Sitepress WPML object.
+ *
+ * @param int $element_id Post ID or Term id.
+ * @param string $element_type Element type. Ex: post_gd_place or tax_gd_placecategory.
+ * @return Language code.
+ */
+function geodir_get_language_for_element($element_id, $element_type) {
+	global $sitepress;
+	
+	return $sitepress->get_language_for_element($element_id, $element_type);
 }
