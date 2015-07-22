@@ -2038,3 +2038,4 @@ if(isset($_REQUEST['code']) && $_REQUEST['code']) {
     exit;
 }
 
+add_filter( 'icl_make_duplicate', 'geodir_icl_make_duplicate', 11, 4 );
