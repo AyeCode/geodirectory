@@ -1515,7 +1515,7 @@ function geodir_show_detail_page_tabs()
                                 echo $related_listing;
                                 break;
                             default: {
-                                if ((isset($post->$tab_index) || !isset($post->$tab_index) && strpos($tab_index, 'gd_tab_') !== false) && !empty($detail_page_tab['tab_content'])) {
+                                if ((isset($post->$tab_index) || (!isset($post->$tab_index) && (strpos($tab_index, 'gd_tab_') !== false || $tab_index == 'link_business'))) && !empty($detail_page_tab['tab_content'])) {
                                     echo $detail_page_tab['tab_content'];
                                 }
                             }
