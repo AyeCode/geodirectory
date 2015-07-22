@@ -1876,6 +1876,9 @@ function geodir_get_term_icon($term_id = false, $rebuild = false)
         return get_option('geodir_default_marker_icon');
     }
 
+    if (is_ssl()) {
+        $terms_icons = str_replace("http:","https",$terms_icons );
+    }
 
     return $terms_icons;
 }
