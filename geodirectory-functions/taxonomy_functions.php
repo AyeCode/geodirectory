@@ -1310,6 +1310,49 @@ function geodir_register_defaults()
 
 }
 
+$gd_wpml_get_languages = "";
+function gd_wpml_get_lang_from_url($url){
+
+    global $gd_wpml_get_languages;
+    if(isset($_REQUEST['lang']) && $_REQUEST['lang']){return $_REQUEST['lang'];}
+
+
+    //
+    $url = str_replace(array("http://","https://"),"",$url);
+    $site_url = str_replace(array("http://","https://"),"",get_site_url());
+
+    $url = str_replace($site_url,"",$url);
+
+
+    $segments = explode('/', trim($url, '/'));
+
+    //print_r( $segments);
+    if($gd_wpml_get_languages){
+        $langs = $gd_wpml_get_languages;
+    }else{
+        global $sitepress;
+        $gd_wpml_get_languages = $sitepress->get_active_languages();
+    }
+
+    if (isset($segments[0]) && $segments[0] && array_key_exists($segments[0], $gd_wpml_get_languages)) {
+        return $segments[0];
+    }
+
+    return false;
+
+
+}
+
+function gd_wpml_slug_translation_turned_on($post_type) {
+
+    global $sitepress;
+    $settings = $sitepress->get_settings();
+    return isset($settings['posts_slug_translation']['types'][$post_type])
+    && $settings['posts_slug_translation']['types'][$post_type]
+    && isset($settings['posts_slug_translation']['on'])
+    && $settings['posts_slug_translation']['on'];
+}
+
 
 $comment_post_cache = array();
 $gd_permalink_cache = array();
@@ -1347,30 +1390,24 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
 
         $post_types = get_option('geodir_post_types');
         $slug = $post_types[$post->post_type]['rewrite']['slug'];
-        // Alter the CPT slug is WPML is set to do so
+
+        // Alter the CPT slug if WPML is set to do so
         if(function_exists('icl_object_id')){
-            //global $sitepress;
-            /*
-             * @todo find the proper way to check if slug translation is turned on (asked on WPML support forum)
-             */
-            //if ( $sitepress->slug_translation_turned_on( $post->post_type ) ) {
-            if (strpos($post_link,"/".$slug."/") === false) {// we can assume that if WPML is present and the original slug is not in the url then we should translate it.
+            if ( gd_wpml_slug_translation_turned_on( $post->post_type ) && $language_code = gd_wpml_get_lang_from_url($post_link)) {
 
                 $slug = apply_filters( 'wpml_translate_single_string',
                     $slug,
                     'WordPress',
                     'URL slug: ' . $slug,
-                    ICL_LANGUAGE_CODE );
+                    $language_code);
 
             }
         }
+
+
         $post_link = trailingslashit(
             preg_replace(  "/" . preg_quote( $slug, "/" ) . "/", $slug ."/%gd_taxonomy%",$post_link, 1 )
         );
-
-
-
-
 
 
 

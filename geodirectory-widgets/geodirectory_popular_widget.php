@@ -302,7 +302,7 @@ class geodir_popular_postview extends WP_Widget
                 <select multiple="multiple" class="widefat" name="<?php echo $this->get_field_name('category'); ?>[]"
                         onchange="geodir_popular_widget_cat_title(this)">
 
-                    <option <?php if (is_array($category) && in_array('0', $category)) {
+                    <option <?php if (!is_array($category) || (is_array($category) && in_array('0', $category))) {
                         echo 'selected="selected"';
                     } ?> value="0"><?php _e('All', GEODIRECTORY_TEXTDOMAIN); ?></option>
                     <?php foreach ($categories as $category_obj) {
