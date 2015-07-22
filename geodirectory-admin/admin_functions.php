@@ -6097,3 +6097,149 @@ function geodir_get_language_for_element($element_id, $element_type) {
 	
 	return $sitepress->get_language_for_element($element_id, $element_type);
 }
+
+/**
+ * Duplicate post details for WPML translation post.
+ *
+ * @since 1.5.0
+ *
+ * @param int $master_post_id Original Post ID.
+ * @param string $lang Language code for translating post.
+ * @param array $postarr Arraty of post data.
+ * @param int $tr_post_id Translation Post ID.
+ */
+function geodir_icl_make_duplicate($master_post_id, $lang, $postarr, $tr_post_id) {
+	$post_type = get_post_type($master_post_id);
+
+	if (in_array($post_type, geodir_get_posttypes())) {				
+		// Duplicate post details
+		geodir_icl_duplicate_post_details($master_post_id, $tr_post_id, $lang);
+		
+		// Duplicate taxonomies
+		geodir_icl_duplicate_taxonomies($master_post_id, $tr_post_id, $lang);
+		
+		// Duplicate post images
+		geodir_icl_duplicate_post_images($master_post_id, $tr_post_id, $lang);
+	}
+}
+
+/**
+ * Duplicate post general details for WPML translation post.
+ *
+ * @since 1.5.0
+ *
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ *
+ * @param int $master_post_id Original Post ID.
+ * @param int $tr_post_id Translation Post ID.
+ * @param string $lang Language code for translating post.
+ * @return bool True for success, False for fail.
+ */
+function geodir_icl_duplicate_post_details($master_post_id, $tr_post_id, $lang) {
+	global $wpdb, $plugin_prefix;
+	
+	$post_type = get_post_type($master_post_id);
+	$post_table = $plugin_prefix . $post_type . '_detail';
+	
+	$query = $wpdb->prepare("SELECT * FROM " . $post_table . " WHERE post_id = %d", array($master_post_id));
+	$data = (array)$wpdb->get_row($query);
+	
+	if ( !empty( $data ) ) {
+		$data['post_id'] = $tr_post_id;
+		unset($data['default_category'], $data['marker_json'], $data['featured_image'], $data[$post_type . 'category'], $data['overall_rating'], $data['rating_count'], $data['ratings']);
+		
+		$wpdb->update($post_table, $data, array('post_id' => $tr_post_id));		
+		return true;
+	}
+	
+	return false;
+}
+
+/**
+ * Duplicate post taxonomies for WPML translation post.
+ *
+ * @since 1.5.0
+ *
+ * @global object $sitepress Sitepress WPML object.
+ * @global object $wpdb WordPress Database object.
+ *
+ * @param int $master_post_id Original Post ID.
+ * @param int $tr_post_id Translation Post ID.
+ * @param string $lang Language code for translating post.
+ * @return bool True for success, False for fail.
+ */
+function geodir_icl_duplicate_taxonomies($master_post_id, $tr_post_id, $lang) {
+	global $sitepress, $wpdb;
+	$post_type = get_post_type($master_post_id);
+	
+	remove_filter('get_term', array($sitepress,'get_term_adjust_id')); // AVOID filtering to current language
+
+	$taxonomies = get_object_taxonomies($post_type);
+	foreach ($taxonomies as $taxonomy) {
+		$terms = get_the_terms($master_post_id, $taxonomy);
+		$terms_array = array();
+		
+		if ($terms) {
+			foreach ($terms as $term) {
+				$tr_id = apply_filters( 'translate_object_id',$term->term_id, $taxonomy, false, $lang);
+				
+				if (!is_null($tr_id)){
+					// not using get_term - unfiltered get_term
+					$translated_term = $wpdb->get_row($wpdb->prepare("
+						SELECT * FROM {$wpdb->terms} t JOIN {$wpdb->term_taxonomy} x ON x.term_id = t.term_id WHERE t.term_id = %d AND x.taxonomy = %s", $tr_id, $taxonomy));
+
+					$terms_array[] = $translated_term->term_id;
+				}
+			}
+
+			if (!is_taxonomy_hierarchical($taxonomy)){
+				$terms_array = array_unique( array_map( 'intval', $terms_array ) );
+			}
+
+			wp_set_post_terms($tr_post_id, $terms_array, $taxonomy);
+			
+			if ($taxonomy == $post_type . 'category') {
+				geodir_set_postcat_structure($tr_post_id, $post_type . 'category');
+			}
+		}
+	}
+}
+
+/**
+ * Duplicate post images for WPML translation post.
+ *
+ * @since 1.5.0
+ *
+ * @global object $wpdb WordPress Database object.
+ *
+ * @param int $master_post_id Original Post ID.
+ * @param int $tr_post_id Translation Post ID.
+ * @param string $lang Language code for translating post.
+ * @return bool True for success, False for fail.
+ */
+function geodir_icl_duplicate_post_images($master_post_id, $tr_post_id, $lang) {
+	global $wpdb;
+	
+	$query = $wpdb->prepare("DELETE FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE mime_type like %s AND post_id = %d", array('%image%', $tr_post_id));
+	$wpdb->query($query);
+	
+	$query = $wpdb->prepare("SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE mime_type like %s AND post_id = %d ORDER BY menu_order ASC", array('%image%', $master_post_id));
+	$post_images = $wpdb->get_results($query);
+	
+	if ( !empty( $post_images ) ) {
+		foreach ( $post_images as $post_image) {
+			$image_data = (array)$post_image;
+			unset($image_data['ID']);
+			$image_data['post_id'] = $tr_post_id;
+			
+			$wpdb->insert(GEODIR_ATTACHMENT_TABLE, $image_data);
+			
+			geodir_set_wp_featured_image($tr_post_id);
+		}
+		
+		return true;
+	}
+	
+	return false;
+}
