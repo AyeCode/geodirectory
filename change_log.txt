@@ -15,6 +15,7 @@ WPML custom posts slug translation not working with GD (requires CPT and Event a
 WPML popular post view rating on details page all the same as main post - FIXED
 Import Export is now compatible with WPML - FIXED
 Popular post widget set to use "All" if no category selected - CHANGED
+Linked business events are not displayed on detail page for cached post - FIXED
 
 v1.4.9
 Google Analytics extra error messages added to help users debug - ADDED
