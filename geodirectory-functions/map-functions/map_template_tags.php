@@ -145,7 +145,7 @@ function geodir_draw_map($map_args = array())
 	 *
 	 * @param array $geodir_map_options {@see geodir_draw_map()} docblock.
 	 */
-	$geodir_map_options = apply_filters('geodir_map_options_' . $map_canvas_name, $geodir_map_options);
+	$geodir_map_options = apply_filters("geodir_map_options_{$map_canvas_name}", $geodir_map_options);
 
     $map_canvas_arr[$map_canvas_name] = array();
 
@@ -156,7 +156,7 @@ function geodir_draw_map($map_args = array())
 	 *
 	 * @param object $object Objects of post types.
 	 */
-	$post_types = apply_filters('geodir_map_post_type_list_' . $map_canvas_name, geodir_get_posttypes('object'));
+	$post_types = apply_filters("geodir_map_post_type_list_{$map_canvas_name}", geodir_get_posttypes('object'));
     
 	/**
 	 * Filter the post types to exclude to display data on map.
@@ -165,7 +165,7 @@ function geodir_draw_map($map_args = array())
 	 *
 	 * @param array Array of post types to exclude to display data on map.
 	 */
-	$exclude_post_types = apply_filters('geodir_exclude_post_type_on_map_' . $map_canvas_name, get_option('geodir_exclude_post_type_on_map'));
+	$exclude_post_types = apply_filters("geodir_exclude_post_type_on_map_{$map_canvas_name}", get_option('geodir_exclude_post_type_on_map'));
 
     if (count((array)$post_types) != count($exclude_post_types) || ($enable_jason_on_load)):
         // Set default map options

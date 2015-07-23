@@ -17,6 +17,8 @@ Import Export is now compatible with WPML - FIXED
 Popular post widget set to use "All" if no category selected - CHANGED
 Linked business events are not displayed on detail page for cached post - FIXED
 Post images and location details not translated with WPML duplicate option - FIXED
+Single post map icon not https if https is on unless uploaded via https - FIXED
+Category map icon not https if https is on unless uploaded via https - FIXED
 
 v1.4.9
 Google Analytics extra error messages added to help users debug - ADDED
