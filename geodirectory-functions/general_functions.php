@@ -967,7 +967,7 @@ function geodir_breadcrumb()
             $breadcrumb .= stripslashes_deep($page_title);
             $breadcrumb .= '</li>';
         } else if (is_tag()) {
-            $separator . single_tag_title();
+            $breadcrumb .=  "<li> " . $separator . single_tag_title('',false) . '</li>';
         } else if (is_day()) {
             $breadcrumb .= "<li> " . $separator . __(" Archive for", GEODIRECTORY_TEXTDOMAIN) . " ";
             the_time('F jS, Y');
@@ -1216,7 +1216,7 @@ if (!function_exists('adminEmail')) {
         $siteurl_link = '<a href="' . $siteurl . '">' . $fromEmailName . '</a>';
         $user_info = get_userdata($user_id);
         $user_email = $user_info->user_email;
-        $display_name = $user_info->first_name;
+        $display_name = geodir_get_client_name($user_id);
         $user_login = $user_info->user_login;
         $number_of_grace_days = get_option('ptthemes_listing_preexpiry_notice_days');
         if ($number_of_grace_days == '') {
@@ -1460,7 +1460,7 @@ function get_page_id_geodir_add_listing_page($page_id)
  */
 function geodir_wpml_multilingual_status()
 {
-    if (is_plugin_active('sitepress-multilingual-cms/sitepress.php')) {
+    if (function_exists('icl_object_id')) {
         return true;
     }
     return false;
@@ -2541,7 +2541,7 @@ function geodir_loginwidget_output($args = '', $instance = '')
                 <li><select id="geodir_add_listing" class="chosen_select" onchange="window.location.href=this.value"
                             option-autoredirect="1" name="geodir_add_listing" option-ajaxchosen="false"
                             data-placeholder="<?php echo esc_attr(__('Add Listing', GEODIRECTORY_TEXTDOMAIN)); ?>">
-                        <option value=""></option>
+                        <option value="" disabled="disabled" selected="selected" style='display:none;'><?php echo esc_attr(__('Add Listing', GEODIRECTORY_TEXTDOMAIN)); ?></option>
                         <?php echo $addlisting_links; ?>
                     </select></li> <?php
 
@@ -2585,7 +2585,7 @@ function geodir_loginwidget_output($args = '', $instance = '')
                     <select id="geodir_my_favourites" class="chosen_select" onchange="window.location.href=this.value"
                             option-autoredirect="1" name="geodir_my_favourites" option-ajaxchosen="false"
                             data-placeholder="<?php echo esc_attr(__('My Favorites', GEODIRECTORY_TEXTDOMAIN)); ?>">
-                        <option value=""></option>
+                        <option value="" disabled="disabled" selected="selected" style='display:none;'><?php echo esc_attr(__('My Favorites', GEODIRECTORY_TEXTDOMAIN)); ?></option>
                         <?php echo $favourite_links; ?>
                     </select>
                 </li>
@@ -2630,7 +2630,7 @@ function geodir_loginwidget_output($args = '', $instance = '')
                     <select id="geodir_my_listings" class="chosen_select" onchange="window.location.href=this.value"
                             option-autoredirect="1" name="geodir_my_listings" option-ajaxchosen="false"
                             data-placeholder="<?php echo esc_attr(__('My Listings', GEODIRECTORY_TEXTDOMAIN)); ?>">
-                        <option value=""></option>
+                        <option value="" disabled="disabled" selected="selected" style='display:none;'><?php echo esc_attr(__('My Listings', GEODIRECTORY_TEXTDOMAIN)); ?></option>
                         <?php echo $listing_links; ?>
                     </select>
                 </li>
@@ -3449,4 +3449,30 @@ function geodir_allowed_mime_types() {
 			)
 		) 
 	);
+}
+
+/**
+ * Retrieve list of user display name for user id.
+ *
+ * @since 1.5.0
+ * 
+ * @param  string $user_id The WP user id.
+ * @return string User display name.
+ */
+function geodir_get_client_name($user_id) {
+	$client_name = '';
+	
+	$user_data = get_userdata($user_id);
+	
+	if (!empty($user_data)) {
+		if (isset($user_data->display_name) && trim($user_data->display_name) != '') {
+			$client_name = trim($user_data->display_name);
+		} else if (isset($user_data->user_nicename) && trim($user_data->user_nicename) != '') {
+			$client_name = trim($user_data->user_nicename);
+		} else {
+			$client_name = trim($user_data->user_login);
+		}
+	}
+	
+	return $client_name;
 }

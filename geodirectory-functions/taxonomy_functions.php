@@ -1289,7 +1289,7 @@ function geodir_register_defaults()
             'menu_icon' => $menu_icon,
             'public' => true,
             'query_var' => true,
-            'rewrite' => array('slug' => $listing_slug . '/%gd_taxonomy%', 'with_front' => false, 'hierarchical' => true),
+            'rewrite' => array('slug' => $listing_slug , 'with_front' => false, 'hierarchical' => true),
             'supports' => array('title', 'editor', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'comments', /*'revisions', 'post-formats'*/),
             'taxonomies' => array('gd_placecategory', 'gd_place_tags'));
 
@@ -1308,6 +1308,49 @@ function geodir_register_defaults()
 
     //die;
 
+}
+
+$gd_wpml_get_languages = "";
+function gd_wpml_get_lang_from_url($url){
+
+    global $gd_wpml_get_languages;
+    if(isset($_REQUEST['lang']) && $_REQUEST['lang']){return $_REQUEST['lang'];}
+
+
+    //
+    $url = str_replace(array("http://","https://"),"",$url);
+    $site_url = str_replace(array("http://","https://"),"",get_site_url());
+
+    $url = str_replace($site_url,"",$url);
+
+
+    $segments = explode('/', trim($url, '/'));
+
+    //print_r( $segments);
+    if($gd_wpml_get_languages){
+        $langs = $gd_wpml_get_languages;
+    }else{
+        global $sitepress;
+        $gd_wpml_get_languages = $sitepress->get_active_languages();
+    }
+
+    if (isset($segments[0]) && $segments[0] && array_key_exists($segments[0], $gd_wpml_get_languages)) {
+        return $segments[0];
+    }
+
+    return false;
+
+
+}
+
+function gd_wpml_slug_translation_turned_on($post_type) {
+
+    global $sitepress;
+    $settings = $sitepress->get_settings();
+    return isset($settings['posts_slug_translation']['types'][$post_type])
+    && $settings['posts_slug_translation']['types'][$post_type]
+    && isset($settings['posts_slug_translation']['on'])
+    && $settings['posts_slug_translation']['on'];
 }
 
 
@@ -1344,6 +1387,31 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
 
     if (in_array($post->post_type, geodir_get_posttypes())) {
 
+
+        $post_types = get_option('geodir_post_types');
+        $slug = $post_types[$post->post_type]['rewrite']['slug'];
+
+        // Alter the CPT slug if WPML is set to do so
+        if(function_exists('icl_object_id')){
+            if ( gd_wpml_slug_translation_turned_on( $post->post_type ) && $language_code = gd_wpml_get_lang_from_url($post_link)) {
+
+                $slug = apply_filters( 'wpml_translate_single_string',
+                    $slug,
+                    'WordPress',
+                    'URL slug: ' . $slug,
+                    $language_code);
+
+            }
+        }
+
+
+        $post_link = trailingslashit(
+            preg_replace(  "/" . preg_quote( $slug, "/" ) . "/", $slug ."/%gd_taxonomy%",$post_link, 1 )
+        );
+
+
+
+
         if (isset($comment_post_cache[$post->ID])) {
             $post = $comment_post_cache[$post->ID];
         }
@@ -1369,6 +1437,8 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
 
             $comment_post_cache[$post->ID] = $post;
         }
+
+
 
         if (false !== strpos($post_link, '%gd_taxonomy%')) {
 
@@ -1522,6 +1592,7 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
  */
 function geodir_term_link($termlink, $term, $taxonomy)
 {
+    //echo '###'.$termlink;
     $geodir_taxonomies = geodir_get_taxonomies('', true);
 
     if (isset($taxonomy) && !empty($geodir_taxonomies) && in_array($taxonomy, $geodir_taxonomies)) {
@@ -1564,7 +1635,22 @@ function geodir_term_link($termlink, $term, $taxonomy)
 
             }
         }
+
+        // Alter the CPT slug is WPML is set to do so
+        if(function_exists('icl_object_id')){
+            global $sitepress;
+            $post_type = str_replace("category","",$taxonomy);
+            $termlink = $sitepress->post_type_archive_link_filter( $termlink, $post_type);
+        }
+
     }
+    //echo '###2'.$termlink;
+
+
+
+
+
+
 
     return $termlink;
 }
@@ -1790,6 +1876,9 @@ function geodir_get_term_icon($term_id = false, $rebuild = false)
         return get_option('geodir_default_marker_icon');
     }
 
+    if (is_ssl()) {
+        $terms_icons = str_replace("http:","https:",$terms_icons );
+    }
 
     return $terms_icons;
 }

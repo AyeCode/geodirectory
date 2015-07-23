@@ -1,5 +1,24 @@
 v1.5.0
 Google analytic countries throws error - FIXED
+Some PHP warnings removed when installing - FIXED
+User level Subscriber not shown Google Analytics stats - FIXED
+GeoDirectory custom script & css should not be printed in backend - FIXED
+Added two hooks to search queries - ADDED
+Post tags has a DB limit of 254, removed this limit - FIXED
+The recent reviews shortcode is missing the title attribute - FIXED
+Login error on GD signup page is not appearing - FIXED
+In forgot password notification user display name is not well formatted - FIXED
+Wrong link passed in send enquiry notification email - FIXED
+User Dashboard links not showing titles on mobile - FIXED
+Option added to customize pagination with "Showing results x-y of z" - ADDED
+WPML custom posts slug translation not working with GD (requires CPT and Event addon update also) - FIXED
+WPML popular post view rating on details page all the same as main post - FIXED
+Import Export is now compatible with WPML - FIXED
+Popular post widget set to use "All" if no category selected - CHANGED
+Linked business events are not displayed on detail page for cached post - FIXED
+Post images and location details not translated with WPML duplicate option - FIXED
+Single post map icon not https if https is on unless uploaded via https - FIXED
+Category map icon not https if https is on unless uploaded via https - FIXED
 
 v1.4.9
 Google Analytics extra error messages added to help users debug - ADDED

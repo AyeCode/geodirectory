@@ -37,6 +37,7 @@ function geodir_init_map_canvas_array()
  * Creates marker json using given $post object.
  *
  * @since 1.0.0
+ * @since 1.5.0 Converts icon url to HTTPS if HTTPS is active.
  * @package GeoDirectory
  * @param null|WP_Post $post Post object.
  * @global object $wpdb WordPress Database object.
@@ -58,6 +59,10 @@ function create_marker_jason_of_posts($post)
 
         $post_title = $post->post_title;
         $title = str_replace($srcharr, $replarr, $post_title);
+
+        if (is_ssl()) {
+            $icon = str_replace("http:","https:",$icon );
+        }
 
         $map_jason[] = '{"id":"' . $post->ID . '","t": "' . $title . '","lt": "' . $post->post_latitude . '","ln": "' . $post->post_longitude . '","mk_id":"' . $post->ID . '_' . $post->default_category . '","i":"' . $icon . '"}';
     }

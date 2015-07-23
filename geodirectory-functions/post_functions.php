@@ -492,7 +492,8 @@ if (!function_exists('geodir_save_listing')) {
         //die;
 
         if ($send_post_submit_mail) { // if new post send out email
-            geodir_sendEmail('', '', $current_user->user_email, $current_user->display_name, '', '', $request_info, 'post_submit', $last_post_id, $current_user->ID);
+            $to_name = geodir_get_client_name($current_user->ID);
+			geodir_sendEmail('', '', $current_user->user_email, $to_name, '', '', $request_info, 'post_submit', $last_post_id, $current_user->ID);
         }
         /*
          * Unset the session so we don't loop.
@@ -2943,16 +2944,7 @@ function geodir_function_post_updated($post_ID, $post_after, $post_before)
             $post_author_id = !empty($post_after->post_author) ? $post_after->post_author : NULL;
             $post_author_data = get_userdata($post_author_id);
 
-            $to_name = '';
-            if (!empty($post_author_data)) {
-                if (!empty($post_author_data->display_name)) {
-                    $to_name = $post_author_data->display_name;
-                } else if ($post_author_data->user_nicename) {
-                    $to_name = $post_author_data->user_nicename;
-                } else {
-                    $to_name = $post_author_data->user_login;
-                }
-            }
+            $to_name = geodir_get_client_name($post_author_id);
 
             $from_email = geodir_get_site_email_id();
             $from_name = get_site_emailName();

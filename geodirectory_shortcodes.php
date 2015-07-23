@@ -696,20 +696,22 @@ add_shortcode('gd_recent_reviews', 'geodir_sc_recent_reviews');
  * This implements the functionality of the shortcode for displaying recent reviews.
  *
  * @since 1.0.0
+ * @since 1.5.0 New title attribute added.
  * @package GeoDirectory
  * @param array $atts {
  *     Attributes of the shortcode.
  *
+ *     @type string $title The title displayed above recent reviews. Default empty.
  *     @type int $count Number of reviews you want to display. Default. 5.
  *
  * }
  * @return string Recent reviews HTML.
  */
-function geodir_sc_recent_reviews($atts)
-{
+function geodir_sc_recent_reviews($atts) {
     ob_start();
     $defaults = array(
-        'count' => 5,
+		'title' => '',
+		'count' => 5,
     );
 
     $params = shortcode_atts($defaults, $atts);
@@ -718,11 +720,15 @@ function geodir_sc_recent_reviews($atts)
     if (0 == $count) {
         $count = 1;
     }
+	
+	$title = !empty($params['title']) ? __($params['title'], GEODIRECTORY_TEXTDOMAIN) : '';
 
     $comments_li = geodir_get_recent_reviews(30, $count, 100, false);
 
     if ($comments_li) {
-        ?>
+        if ($title != '') { ?>
+		<h3 class="geodir-sc-recent-reviews-title widget-title"><?php echo $title; ?></h3>
+		<?php } ?>
         <div class="geodir_sc_recent_reviews_section">
             <ul class="geodir_sc_recent_reviews"><?php echo $comments_li; ?></ul>
         </div>

@@ -109,7 +109,7 @@ function geodir_max_excerpt($charlength)
         return;
     }
     $out = '';
-    $excerpt = get_the_excerpt();
+    $excerpt = apply_filters('the_excerpt', $post->post_content);
     //return;
     $charlength++;
     $excerpt_more = function_exists('geodirf_excerpt_more') ? geodirf_excerpt_more('') : geodir_excerpt_more('');
@@ -257,7 +257,7 @@ function geodir_send_inquiry($request)
 
     $user_info = get_userdata($author_id);
     $to_email = geodir_get_post_meta($pid, 'geodir_email', true);
-    $to_name = $user_info->first_name;
+    $to_name = geodir_get_client_name($author_id);
 
     if ($to_email == '') {
         $to_email = get_option('admin_email');
@@ -283,7 +283,7 @@ function geodir_send_inquiry($request)
     do_action('geodir_after_send_enquiry', $request, 'Enquiry');
 
     $client_message = $frnd_comments;
-    $client_message .= '<br>' . __('From :', GEODIRECTORY_TEXTDOMAIN) . ' ' . $yourname . '<br>' . __('Phone :', GEODIRECTORY_TEXTDOMAIN) . ' ' . $inq_phone . '<br><br>' . __('Sent from', GEODIRECTORY_TEXTDOMAIN) . ' - <b><a href="' . get_option('siteurl') . '">' . get_option('blogname') . '</a></b>.';
+    $client_message .= '<br>' . __('From :', GEODIRECTORY_TEXTDOMAIN) . ' ' . $yourname . '<br>' . __('Phone :', GEODIRECTORY_TEXTDOMAIN) . ' ' . $inq_phone . '<br><br>' . __('Sent from', GEODIRECTORY_TEXTDOMAIN) . ' - <b><a href="' . trailingslashit(home_url()) . '">' . get_option('blogname') . '</a></b>.';
     /**
      * Filter client message text.
      *
@@ -754,7 +754,7 @@ function geodir_related_posts_display($request)
         if ($relate_to == 'category') {
 
             $category_taxonomy = $post_type . $relate_to;
-            if ($post->$category_taxonomy != '')
+            if (isset($post->$category_taxonomy) && $post->$category_taxonomy != '')
                 $category = explode(',', trim($post->$category_taxonomy, ','));
 
         } elseif ($relate_to == 'tags') {
@@ -1515,7 +1515,7 @@ function geodir_show_detail_page_tabs()
                                 echo $related_listing;
                                 break;
                             default: {
-                                if ((isset($post->$tab_index) || !isset($post->$tab_index) && strpos($tab_index, 'gd_tab_') !== false) && !empty($detail_page_tab['tab_content'])) {
+                                if ((isset($post->$tab_index) || (!isset($post->$tab_index) && (strpos($tab_index, 'gd_tab_') !== false || $tab_index == 'link_business'))) && !empty($detail_page_tab['tab_content'])) {
                                     echo $detail_page_tab['tab_content'];
                                 }
                             }
