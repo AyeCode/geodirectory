@@ -1385,8 +1385,10 @@ if (!function_exists('geodir_get_images')) {
 
         if (!empty($arrImages)) {
             foreach ($arrImages as $attechment) {
+
                 $img_arr = array();
                 $img_arr['id'] = $attechment->ID;
+                $img_arr['user_id'] = $attechment->user_id;
 
                 $file_info = pathinfo($attechment->file);
 
