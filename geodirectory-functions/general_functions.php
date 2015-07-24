@@ -606,6 +606,11 @@ if (!function_exists('geodir_sendEmail')) {
         $sitefromEmail = get_option('site_email');
         $sitefromEmailName = get_site_emailName();
         $productlink = get_permalink($post_id);
+		
+		$user_login = '';
+		if ($user_id > 0 && $user_info = get_userdata($user_id)) {
+			$user_login = $user_info->user_login;
+		}
 
         $posted_date = '';
         $listingLink = '';
@@ -629,12 +634,12 @@ if (!function_exists('geodir_sendEmail')) {
             $fromEmailName = get_option('site_email_name');
         }
 
-        $search_array = array('[#listing_link#]', '[#site_name_url#]', '[#post_id#]', '[#site_name#]', '[#to_name#]', '[#from_name#]', '[#subject#]', '[#comments#]', '[#login_url#]', '[#login_details#]', '[#client_name#]', '[#posted_date#]','[#from_email#]');
-        $replace_array = array($listingLink, $siteurl_link, $post_id, $sitefromEmailName, $toEmailName, $fromEmailName, $to_subject, $to_message, $loginurl_link, $login_details, $toEmailName, $posted_date,$fromEmail);
+        $search_array = array('[#listing_link#]', '[#site_name_url#]', '[#post_id#]', '[#site_name#]', '[#to_name#]', '[#from_name#]', '[#subject#]', '[#comments#]', '[#login_url#]', '[#login_details#]', '[#client_name#]', '[#posted_date#]','[#from_email#]','[#user_login#]','[#username#]');
+        $replace_array = array($listingLink, $siteurl_link, $post_id, $sitefromEmailName, $toEmailName, $fromEmailName, $to_subject, $to_message, $loginurl_link, $login_details, $toEmailName, $posted_date,$fromEmail, $user_login, $user_login);
         $message = str_replace($search_array, $replace_array, $message);
 
-        $search_array = array('[#listing_link#]', '[#site_name_url#]', '[#post_id#]', '[#site_name#]', '[#to_name#]', '[#from_name#]', '[#subject#]', '[#client_name#]', '[#posted_date#]','[#from_email#]');
-        $replace_array = array($listingLink, $siteurl_link, $post_id, $sitefromEmailName, $toEmailName, $fromEmailName, $to_subject, $toEmailName, $posted_date,$fromEmail);
+        $search_array = array('[#listing_link#]', '[#site_name_url#]', '[#post_id#]', '[#site_name#]', '[#to_name#]', '[#from_name#]', '[#subject#]', '[#client_name#]', '[#posted_date#]','[#from_email#]','[#user_login#]','[#username#]');
+        $replace_array = array($listingLink, $siteurl_link, $post_id, $sitefromEmailName, $toEmailName, $fromEmailName, $to_subject, $toEmailName, $posted_date,$fromEmail, $user_login, $user_login);
         $subject = str_replace($search_array, $replace_array, $subject);
 
         $headers = 'MIME-Version: 1.0' . "\r\n";
@@ -662,12 +667,12 @@ if (!function_exists('geodir_sendEmail')) {
             $message = stripslashes(get_option('geodir_post_submited_success_email_content_admin'));
 
 
-            $search_array = array('[#listing_link#]', '[#site_name_url#]', '[#post_id#]', '[#site_name#]', '[#to_name#]', '[#from_name#]', '[#subject#]', '[#comments#]', '[#login_url#]', '[#login_details#]', '[#client_name#]', '[#posted_date#]');
-            $replace_array = array($listingLink, $siteurl_link, $post_id, $sitefromEmailName, $toEmailName, $fromEmailName, $to_subject, $to_message, $loginurl_link, $login_details, $toEmailName, $posted_date);
+            $search_array = array('[#listing_link#]', '[#site_name_url#]', '[#post_id#]', '[#site_name#]', '[#to_name#]', '[#from_name#]', '[#subject#]', '[#comments#]', '[#login_url#]', '[#login_details#]', '[#client_name#]', '[#posted_date#]','[#user_login#]','[#username#]');
+            $replace_array = array($listingLink, $siteurl_link, $post_id, $sitefromEmailName, $toEmailName, $fromEmailName, $to_subject, $to_message, $loginurl_link, $login_details, $toEmailName, $posted_date, $user_login, $user_login);
             $message = str_replace($search_array, $replace_array, $message);
 
-            $search_array = array('[#listing_link#]', '[#site_name_url#]', '[#post_id#]', '[#site_name#]', '[#to_name#]', '[#from_name#]', '[#subject#]', '[#client_name#]', '[#posted_date#]');
-            $replace_array = array($listingLink, $siteurl_link, $post_id, $sitefromEmailName, $toEmailName, $fromEmailName, $to_subject, $toEmailName, $posted_date);
+            $search_array = array('[#listing_link#]', '[#site_name_url#]', '[#post_id#]', '[#site_name#]', '[#to_name#]', '[#from_name#]', '[#subject#]', '[#client_name#]', '[#posted_date#]','[#user_login#]','[#username#]');
+            $replace_array = array($listingLink, $siteurl_link, $post_id, $sitefromEmailName, $toEmailName, $fromEmailName, $to_subject, $toEmailName, $posted_date, $user_login, $user_login);
             $subject = str_replace($search_array, $replace_array, $subject);
 
             $subject .= ' - ADMIN BCC COPY';
