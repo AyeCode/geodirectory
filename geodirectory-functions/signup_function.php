@@ -396,7 +396,7 @@ function geodir_register_new_user($user_login, $user_email)
 
         /////////////customer email//////////////
         //geodir_sendEmail($fromEmail,$fromEmailName,$user_email,$userName,$subject,$client_message,$extra='');///To client email
-        geodir_sendEmail($fromEmail, $fromEmailName, $user_email, $userName, '', $message, $extra = '', 'registration', $post_id = '', '');/// registration email
+        geodir_sendEmail($fromEmail, $fromEmailName, $user_email, $userName, '', $message, '', 'registration', '', $user_id);/// registration email
         //////REGISTRATION EMAIL END////////
     }
 
