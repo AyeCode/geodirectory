@@ -489,11 +489,13 @@ if (!function_exists('geodir_create_tables')) {
 						post_id int(11) NOT NULL,
 						user_id int(11) DEFAULT NULL,
 						title varchar(254) NULL DEFAULT NULL,
+						caption varchar(254) NULL DEFAULT NULL,
 						content text NULL DEFAULT NULL,
 						file varchar(254) NOT NULL, 
 						mime_type varchar(150) NOT NULL,
 						menu_order int(11) NOT NULL DEFAULT '0',
 						is_featured enum( '1', '0' ) NULL DEFAULT '0',
+						is_approved enum( '1', '0' ) NULL DEFAULT '1',
 						metadata text NULL DEFAULT NULL,
 						PRIMARY KEY  (ID)
 						) $collate ";
