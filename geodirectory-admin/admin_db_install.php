@@ -487,6 +487,7 @@ if (!function_exists('geodir_create_tables')) {
         $attechment_table = "CREATE TABLE " . GEODIR_ATTACHMENT_TABLE . " (
 						ID int(11) NOT NULL AUTO_INCREMENT,
 						post_id int(11) NOT NULL,
+						user_id int(11) DEFAULT NULL,
 						title varchar(254) NULL DEFAULT NULL,
 						content text NULL DEFAULT NULL,
 						file varchar(254) NOT NULL, 
