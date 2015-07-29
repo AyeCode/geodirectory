@@ -55,13 +55,10 @@ if (!function_exists('geodir_admin_styles')) {
         wp_register_style('geodir-chosen-style', geodir_plugin_url() . '/geodirectory-assets/css/chosen.css', array(), GEODIRECTORY_VERSION);
         wp_enqueue_style('geodir-chosen-style');
 
-        wp_register_style('geodirectory-jquery-ui-timepicker-css', geodir_plugin_url() . '/geodirectory-assets/ui/jquery.ui.timepicker.css', array(), GEODIRECTORY_VERSION);
+        wp_register_style('geodirectory-jquery-ui-timepicker-css', geodir_plugin_url() . '/geodirectory-assets/css/jquery.ui.timepicker.css', array(), GEODIRECTORY_VERSION);
         wp_enqueue_style('geodirectory-jquery-ui-timepicker-css');
 
-        wp_register_style('geodir-jslider-style', geodir_plugin_url() . '/geodirectory-assets/css/jslider.css', array(), GEODIRECTORY_VERSION);
-        wp_enqueue_style('geodir-jslider-style');
-
-        wp_register_style('geodirectory-jquery-ui-css', geodir_plugin_url() . '/geodirectory-assets/ui/jquery-ui.css', array(), GEODIRECTORY_VERSION);
+        wp_register_style('geodirectory-jquery-ui-css', geodir_plugin_url() . '/geodirectory-assets/css/jquery-ui.css', array(), GEODIRECTORY_VERSION);
         wp_enqueue_style('geodirectory-jquery-ui-css');
 
         wp_register_style('geodirectory-custom-fields-css', geodir_plugin_url() . '/geodirectory-assets/css/custom_field.css', array(), GEODIRECTORY_VERSION);
@@ -110,7 +107,7 @@ if (!function_exists('geodir_admin_scripts')) {
         wp_enqueue_script('jquery-ui-slider'); */
 
 
-        wp_enqueue_script('geodirectory-jquery-ui-timepicker-js', geodir_plugin_url() . '/geodirectory-assets/ui/jquery.ui.timepicker.js', array('jquery-ui-datepicker', 'jquery-ui-slider'), '', true);
+        wp_enqueue_script('geodirectory-jquery-ui-timepicker-js', geodir_plugin_url() . '/geodirectory-assets/js/jquery.ui.timepicker.js', array('jquery-ui-datepicker', 'jquery-ui-slider'), '', true);
 
         wp_register_script('chosen', geodir_plugin_url() . '/geodirectory-assets/js/chosen.jquery.js', array(), GEODIRECTORY_VERSION);
         wp_enqueue_script('chosen');
