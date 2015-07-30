@@ -3516,6 +3516,34 @@ function geodir_import_export_page() {
   <h3><?php _e( 'GD Import & Export CSV', GEODIRECTORY_TEXTDOMAIN ) ;?></h3>
   <span class="description"><?php _e( 'Import & export csv for GD listings & categories.', GEODIRECTORY_TEXTDOMAIN ) ;?></span>
   <div class="gd-content-heading">
+	<div id="gd_ie_reqs" class="metabox-holder">
+      <div class="meta-box-sortables ui-sortable">
+        <div class="postbox">
+          <h3 class="hndle"><span style='vertical-align:top;'><?php echo __( 'PHP Requirements for GD Import & Export CSV', GEODIRECTORY_TEXTDOMAIN );?></span></h3>
+          <div class="inside">
+            <span class="description"><?php echo __( 'Note: In case GD import & export csv not working for larger data then please check and configure following php settings.', GEODIRECTORY_TEXTDOMAIN );?></span>
+			<table class="form-table">
+				<thead>
+				  <tr>
+				  	<th><?php _e( 'PHP Settings', GEODIRECTORY_TEXTDOMAIN );?></th><th><?php _e( 'Current Value', GEODIRECTORY_TEXTDOMAIN );?></th><th><?php _e( 'Recommended Value', GEODIRECTORY_TEXTDOMAIN );?></th>
+				  </tr>
+				</thead>
+				<tbody>
+				  <tr>
+				  	<td>max_input_time</td><td><?php echo @ini_get( 'max_input_time' );?></td><td>3000</td>
+				  </tr>
+				  <tr>
+				  	<td>max_execution_time</td><td><?php echo @ini_get( 'max_execution_time' );?></td><td>3000</td>
+				  </tr>
+				  <tr>
+				  	<td>memory_limit</td><td><?php echo @ini_get( 'memory_limit' );?></td><td>256M</td>
+				  </tr>
+				</tbody>
+		    </table>
+		  </div>
+		</div>
+	  </div>
+	</div>
 	<div id="gd_ie_imposts" class="metabox-holder">
       <div class="meta-box-sortables ui-sortable">
         <div id="gd_ie_im_posts" class="postbox">
