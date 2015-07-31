@@ -464,6 +464,7 @@ function gd_install_theme_compat()
         'geodir_before_main_content_add' => '',
         'geodir_before_widget_filter' => '',
         'geodir_after_widget_filter' => '',
+        'geodir_location_switcher_menu_li_class_filter' => 'menu-item menu-item-gd-location-switcher menu-item-has-children gd-location-switcher',
         'geodir_theme_compat_css' => stripslashes('.full-width-content #geodir-wrapper-content{width:100%}.geodir_full_page .geodir-listing-search{text-align:center}.geodir_full_page .geodir-search{float:none;margin:0}.geodir_full_page .geodir-search select,.geodir_full_page .geodir-search .search_by_post,.geodir_full_page .geodir-search input[type="text"],.geodir_full_page .geodir-search input[type="button"],.geodir_full_page .geodir-search input[type="submit"]{display:inline-block;float:none}.content{float:left}.sidebar-content .content,.sidebar-content #geodir-wrapper-content{float:right}.sidebar .geodir-company_info{background-color:#fff;border:none}.geodir_full_page .geodir-loc-bar{padding:0;margin:0;border:none}.geodir_full_page .geodir-category-list-in{margin-top:0}.geodir_full_page .top_banner_section{margin-bottom:0}.geodir-breadcrumb-bar{margin-bottom:-35px} .search-page .entry-title,.listings-page .entry-title{font-size: 20px;}.site-inner .geodir-breadcrumb-bar{margin-bottom:0px}'),
         'geodir_theme_compat_js' => '',
         'geodir_theme_compat_default_options' => '',

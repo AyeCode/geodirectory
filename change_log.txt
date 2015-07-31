@@ -25,6 +25,7 @@ is_approved and caption columns added in attachments table  - ADDED
 Listing slider widget can now show more than one listing at a time - CHANGED
 Some JS and CSS files removed/reorganised - CHANGED
 Info for PHP settings requirements added on GD Import & Export page - ADDED
+Location manager select not working with genesis child themes on mobile - FIXED
 
 v1.4.9
 Google Analytics extra error messages added to help users debug - ADDED
