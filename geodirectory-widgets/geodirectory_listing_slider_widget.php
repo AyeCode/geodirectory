@@ -58,6 +58,8 @@ class geodir_listing_slider_widget extends WP_Widget
         $instance['post_type'] = strip_tags($new_instance['post_type']);
         $instance['category'] = strip_tags($new_instance['category']);
         $instance['post_number'] = strip_tags($new_instance['post_number']);
+        $instance['max_show'] = strip_tags($new_instance['max_show']);
+        $instance['slide_width'] = strip_tags($new_instance['slide_width']);
         $instance['show_title'] = isset($new_instance['show_title']) ? $new_instance['show_title'] : '';
         $instance['slideshow'] = isset($new_instance['slideshow']) ? $new_instance['slideshow'] : '';
         $instance['animationLoop'] = isset($new_instance['animationLoop']) ? $new_instance['animationLoop'] : '';
@@ -87,6 +89,8 @@ class geodir_listing_slider_widget extends WP_Widget
                 'post_type' => '',
                 'category' => '',
                 'post_number' => '5',
+                'max_show' => '1',
+                'slide_width' => '',
                 'show_title' => '',
                 'slideshow' => '',
                 'animationLoop' => '',
@@ -106,6 +110,10 @@ class geodir_listing_slider_widget extends WP_Widget
         $category = strip_tags($instance['category']);
 
         $post_number = strip_tags($instance['post_number']);
+
+        $max_show = strip_tags($instance['max_show']);
+
+        $slide_width = strip_tags($instance['slide_width']);
 
         $show_title = $instance['show_title'];
 
@@ -203,13 +211,30 @@ class geodir_listing_slider_widget extends WP_Widget
         </p>
         <p>
             <label
-                for="<?php echo $this->get_field_id('post_number'); ?>"><?php _e('Number of posts:', GEODIRECTORY_TEXTDOMAIN);?>
+                for="<?php echo $this->get_field_id('post_number'); ?>"><?php _e('Number of posts(total):', GEODIRECTORY_TEXTDOMAIN);?>
                 <input class="widefat" id="<?php echo $this->get_field_id('post_number'); ?>"
                        name="<?php echo $this->get_field_name('post_number'); ?>" type="text"
                        value="<?php echo esc_attr($post_number); ?>"/>
             </label>
         </p>
 
+        <p>
+            <label
+                for="<?php echo $this->get_field_id('max_show'); ?>"><?php _e('Number of posts(shown at one time, requires a slide width to be set):', GEODIRECTORY_TEXTDOMAIN);?>
+                <input class="widefat" id="<?php echo $this->get_field_id('max_show'); ?>"
+                       name="<?php echo $this->get_field_name('max_show'); ?>" type="text"
+                       value="<?php echo esc_attr($max_show); ?>"/>
+            </label>
+        </p>
+
+        <p>
+            <label
+                for="<?php echo $this->get_field_id('slide_width'); ?>"><?php _e('Slide width(leave blank unless showing more than one slide at a time, ex: 210):', GEODIRECTORY_TEXTDOMAIN);?>
+                <input class="widefat" id="<?php echo $this->get_field_id('slide_width'); ?>"
+                       name="<?php echo $this->get_field_name('slide_width'); ?>" type="text"
+                       value="<?php echo esc_attr($slide_width); ?>"/>
+            </label>
+        </p>
 
         <p>
             <label

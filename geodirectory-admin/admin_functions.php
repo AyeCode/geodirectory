@@ -55,13 +55,10 @@ if (!function_exists('geodir_admin_styles')) {
         wp_register_style('geodir-chosen-style', geodir_plugin_url() . '/geodirectory-assets/css/chosen.css', array(), GEODIRECTORY_VERSION);
         wp_enqueue_style('geodir-chosen-style');
 
-        wp_register_style('geodirectory-jquery-ui-timepicker-css', geodir_plugin_url() . '/geodirectory-assets/ui/jquery.ui.timepicker.css', array(), GEODIRECTORY_VERSION);
+        wp_register_style('geodirectory-jquery-ui-timepicker-css', geodir_plugin_url() . '/geodirectory-assets/css/jquery.ui.timepicker.css', array(), GEODIRECTORY_VERSION);
         wp_enqueue_style('geodirectory-jquery-ui-timepicker-css');
 
-        wp_register_style('geodir-jslider-style', geodir_plugin_url() . '/geodirectory-assets/css/jslider.css', array(), GEODIRECTORY_VERSION);
-        wp_enqueue_style('geodir-jslider-style');
-
-        wp_register_style('geodirectory-jquery-ui-css', geodir_plugin_url() . '/geodirectory-assets/ui/jquery-ui.css', array(), GEODIRECTORY_VERSION);
+        wp_register_style('geodirectory-jquery-ui-css', geodir_plugin_url() . '/geodirectory-assets/css/jquery-ui.css', array(), GEODIRECTORY_VERSION);
         wp_enqueue_style('geodirectory-jquery-ui-css');
 
         wp_register_style('geodirectory-custom-fields-css', geodir_plugin_url() . '/geodirectory-assets/css/custom_field.css', array(), GEODIRECTORY_VERSION);
@@ -110,7 +107,7 @@ if (!function_exists('geodir_admin_scripts')) {
         wp_enqueue_script('jquery-ui-slider'); */
 
 
-        wp_enqueue_script('geodirectory-jquery-ui-timepicker-js', geodir_plugin_url() . '/geodirectory-assets/ui/jquery.ui.timepicker.js', array('jquery-ui-datepicker', 'jquery-ui-slider'), '', true);
+        wp_enqueue_script('geodirectory-jquery-ui-timepicker-js', geodir_plugin_url() . '/geodirectory-assets/js/jquery.ui.timepicker.js', array('jquery-ui-datepicker', 'jquery-ui-slider'), '', true);
 
         wp_register_script('chosen', geodir_plugin_url() . '/geodirectory-assets/js/chosen.jquery.js', array(), GEODIRECTORY_VERSION);
         wp_enqueue_script('chosen');
@@ -3519,6 +3516,34 @@ function geodir_import_export_page() {
   <h3><?php _e( 'GD Import & Export CSV', GEODIRECTORY_TEXTDOMAIN ) ;?></h3>
   <span class="description"><?php _e( 'Import & export csv for GD listings & categories.', GEODIRECTORY_TEXTDOMAIN ) ;?></span>
   <div class="gd-content-heading">
+	<div id="gd_ie_reqs" class="metabox-holder">
+      <div class="meta-box-sortables ui-sortable">
+        <div class="postbox">
+          <h3 class="hndle"><span style='vertical-align:top;'><?php echo __( 'PHP Requirements for GD Import & Export CSV', GEODIRECTORY_TEXTDOMAIN );?></span></h3>
+          <div class="inside">
+            <span class="description"><?php echo __( 'Note: In case GD import & export csv not working for larger data then please check and configure following php settings.', GEODIRECTORY_TEXTDOMAIN );?></span>
+			<table class="form-table">
+				<thead>
+				  <tr>
+				  	<th><?php _e( 'PHP Settings', GEODIRECTORY_TEXTDOMAIN );?></th><th><?php _e( 'Current Value', GEODIRECTORY_TEXTDOMAIN );?></th><th><?php _e( 'Recommended Value', GEODIRECTORY_TEXTDOMAIN );?></th>
+				  </tr>
+				</thead>
+				<tbody>
+				  <tr>
+				  	<td>max_input_time</td><td><?php echo @ini_get( 'max_input_time' );?></td><td>3000</td>
+				  </tr>
+				  <tr>
+				  	<td>max_execution_time</td><td><?php echo @ini_get( 'max_execution_time' );?></td><td>3000</td>
+				  </tr>
+				  <tr>
+				  	<td>memory_limit</td><td><?php echo @ini_get( 'memory_limit' );?></td><td>256M</td>
+				  </tr>
+				</tbody>
+		    </table>
+		  </div>
+		</div>
+	  </div>
+	</div>
 	<div id="gd_ie_imposts" class="metabox-holder">
       <div class="meta-box-sortables ui-sortable">
         <div id="gd_ie_im_posts" class="postbox">
