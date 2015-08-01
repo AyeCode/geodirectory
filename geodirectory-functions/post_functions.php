@@ -1388,7 +1388,7 @@ if (!function_exists('geodir_get_images')) {
 
                 $img_arr = array();
                 $img_arr['id'] = $attechment->ID;
-                $img_arr['user_id'] = $attechment->user_id;
+                $img_arr['user_id'] = isset($attechment->user_id) ? $attechment->user_id : 0;
 
                 $file_info = pathinfo($attechment->file);
 
@@ -1411,9 +1411,9 @@ if (!function_exists('geodir_get_images')) {
 
                 $img_arr['file'] = $file_name; // add the title to the array
                 $img_arr['title'] = $attechment->title; // add the title to the array
-                $img_arr['caption'] = $attechment->caption; // add the caption to the array
+                $img_arr['caption'] = isset($attechment->caption) ? $attechment->caption : ''; // add the caption to the array
                 $img_arr['content'] = $attechment->content; // add the description to the array
-                $img_arr['is_approved'] = $attechment->is_approved; // used for user image moderation. For backward compatibility Default value is 1.
+                $img_arr['is_approved'] = isset($attechment->is_approved) ? $attechment->is_approved : ''; // used for user image moderation. For backward compatibility Default value is 1.
 
                 $return_arr[] = (object)$img_arr;
 

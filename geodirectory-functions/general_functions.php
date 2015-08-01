@@ -2287,6 +2287,20 @@ function geodir_listing_slider_widget_output($args = '', $instance = '')
      */
     $post_number = empty($instance['post_number']) ? '5' : apply_filters('widget_post_number', $instance['post_number']);
     /**
+     * Filter the widget listings limit shown at one time.
+     *
+     * @since 1.5.0
+     * @param string $instance['max_show'] Number of listings to display on screen.
+     */
+    $max_show = empty($instance['max_show']) ? '1' : apply_filters('widget_max_show', $instance['max_show']);
+    /**
+     * Filter the widget slide width.
+     *
+     * @since 1.5.0
+     * @param string $instance['slide_width'] Width of the slides shown.
+     */
+    $slide_width = empty($instance['slide_width']) ? '' : apply_filters('widget_slide_width', $instance['slide_width']);
+    /**
      * Filter widget's "show title" value.
      *
      * @since 1.0.0
@@ -2372,6 +2386,8 @@ function geodir_listing_slider_widget_output($args = '', $instance = '')
                 slideshowSpeed: <?php echo $slideshowSpeed;?>,
                 animationSpeed: <?php echo $animationSpeed;?>,
                 directionNav: <?php echo $directionNav;?>,
+                maxItems: <?php echo $max_show;?>,
+                <?php if($slide_width){ echo "itemWidth: ".$slide_width.",";}?>
                 sync: "#geodir_widget_carousel",
                 start: function (slider) {
                     jQuery('.geodir-listing-flex-loader').hide();

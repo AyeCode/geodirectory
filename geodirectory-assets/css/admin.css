@@ -529,6 +529,15 @@ body.edit-tags-php .form-field input, .form-field textarea {
 .gd-import-export  .geodir_event_csv_download {
 	display: inline-block;
 }
+#gd_ie_reqs span.description {
+	margin: 10px 5px;
+}
+#gd_ie_reqs .form-table th {
+	padding: 5px;
+}
+#gd_ie_reqs .form-table td {
+	padding: 3px 5px;
+}
 
 /***********************---------------MEDIA CSS-------------*****************************/
 
