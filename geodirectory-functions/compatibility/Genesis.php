@@ -315,10 +315,10 @@ function gd_compat_php_genesis_geo_1280_fix()
 
         remove_action('genesis_after_header', 'geodir_replace_breadcrumb', 20);
         remove_action('genesis_before_content_sidebar_wrap', 'geodir_replace_breadcrumb', 20);
-        add_action('genesis_after_header', 'geodir_replace_breadcrumb', 105);
+        add_action('geodir_wrapper_open', 'geodir_replace_breadcrumb', 105);
 
         remove_action('genesis_before_content_sidebar_wrap', 'geo1280_page_title', 10);
-        add_action('genesis_after_header', 'geo1280_page_title', 101);
+        add_action('geodir_wrapper_open', 'geo1280_page_title', 101);
     }
 }
 

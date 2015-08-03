@@ -290,6 +290,42 @@ function gd_install_theme_compat()
         'geodir_theme_compat_code' => ''
     );
 
+//Directory Theme
+    $theme_compat['Directory_Theme'] = array(
+        'geodir_wrapper_open_id' => 'geodir_wrapper',
+        'geodir_wrapper_open_class' => '',
+        'geodir_wrapper_open_replace' => '',
+        'geodir_wrapper_close_replace' => '</div></div><!-- content ends here-->',
+        'geodir_wrapper_content_open_id' => 'geodir_content',
+        'geodir_wrapper_content_open_class' => '',
+        'geodir_wrapper_content_open_replace' => '',
+        'geodir_wrapper_content_close_replace' => '',
+        'geodir_article_open_id' => '',
+        'geodir_article_open_class' => '',
+        'geodir_article_open_replace' => '',
+        'geodir_article_close_replace' => '',
+        'geodir_sidebar_right_open_id' => '',
+        'geodir_sidebar_right_open_class' => '',
+        'geodir_sidebar_right_open_replace' => '<aside id="gd-sidebar-wrapper" class="sidebar [class]" role="complementary" itemscope itemtype="[itemtype]" [width_css]>',
+        'geodir_sidebar_right_close_replace' => '',
+        'geodir_sidebar_left_open_id' => '',
+        'geodir_sidebar_left_open_class' => '',
+        'geodir_sidebar_left_open_replace' => '<aside  id="gd-sidebar-wrapper" class="sidebar [class]" role="complementary" itemscope itemtype="[itemtype]" [width_css]>',
+        'geodir_sidebar_left_close_replace' => '',
+        'geodir_main_content_open_id' => '',
+        'geodir_main_content_open_class' => '',
+        'geodir_main_content_open_replace' => '<!-- removed -->',
+        'geodir_main_content_close_replace' => '<!-- removed -->',
+        'geodir_top_content_add' => '',
+        'geodir_before_main_content_add' => '<div class="clearfix geodir-common">',
+        'geodir_before_widget_filter' => '',
+        'geodir_after_widget_filter' => '',
+        'geodir_theme_compat_css' => '',
+        'geodir_theme_compat_js' => '',
+        'geodir_theme_compat_default_options' => '',
+        'geodir_theme_compat_code' => ''
+    );
+
 //Avada
     $theme_compat['Avada'] = array(
         'geodir_wrapper_open_id' => '',
