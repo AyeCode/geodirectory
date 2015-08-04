@@ -30,6 +30,7 @@ Changes for Genesis child theme fixes - CHANGED
 Import/export we now try to use ini_set to extend the execution times, if ini_set() can't be use we show manual settings notification - CHANGED
 Disqus comments plugin now works with blog posts but is disabled on GD posts - FIXED
 5px margin added to grid view titles - CHANGED
+Error messaged on user registration border changed from green to red to denote errors - CHANGED
 
 v1.4.9
 Google Analytics extra error messages added to help users debug - ADDED
