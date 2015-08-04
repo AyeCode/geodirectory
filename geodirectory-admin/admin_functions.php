@@ -3516,6 +3516,14 @@ function geodir_import_export_page() {
   <h3><?php _e( 'GD Import & Export CSV', GEODIRECTORY_TEXTDOMAIN ) ;?></h3>
   <span class="description"><?php _e( 'Import & export csv for GD listings & categories.', GEODIRECTORY_TEXTDOMAIN ) ;?></span>
   <div class="gd-content-heading">
+
+  <?php
+    ini_set('max_execution_time', 999999);
+    $ini_max_execution_time_check = @ini_get( 'max_execution_time' );
+    ini_restore('max_execution_time');
+
+    if($ini_max_execution_time_check != 999999){ // only show these setting to the user if we can't change the ini setting
+        ?>
 	<div id="gd_ie_reqs" class="metabox-holder">
       <div class="meta-box-sortables ui-sortable">
         <div class="postbox">
@@ -3533,7 +3541,7 @@ function geodir_import_export_page() {
 				  	<td>max_input_time</td><td><?php echo @ini_get( 'max_input_time' );?></td><td>3000</td>
 				  </tr>
 				  <tr>
-				  	<td>max_execution_time</td><td><?php echo @ini_get( 'max_execution_time' );?></td><td>3000</td>
+				  	<td>max_execution_time</td><td><?php  echo @ini_get( 'max_execution_time' );?></td><td>3000</td>
 				  </tr>
 				  <tr>
 				  	<td>memory_limit</td><td><?php echo @ini_get( 'memory_limit' );?></td><td>256M</td>
@@ -3544,6 +3552,7 @@ function geodir_import_export_page() {
 		</div>
 	  </div>
 	</div>
+	<?php }?>
 	<div id="gd_ie_imposts" class="metabox-holder">
       <div class="meta-box-sortables ui-sortable">
         <div id="gd_ie_im_posts" class="postbox">
@@ -4437,7 +4446,11 @@ function geodir_filesystem_notice()
  */
 function geodir_ajax_import_export() {
 	global $wpdb, $plugin_prefix, $current_user, $wp_filesystem;
-	
+
+    // try to set higher limits for import
+    @ini_set('max_input_time', 3000);
+    @ini_set('max_execution_time', 3000);
+    @ini_set('memory_limit', '256M');
 	error_reporting(0);
 	
 	$json = array();

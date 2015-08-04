@@ -927,3 +927,35 @@ function geodir_is_reviews_show($pageview = '')
      */
     return apply_filters('geodir_is_reviews_show', $is_display, $pageview);
 }
+
+
+/*
+ * If Disqus plugin is active, do some fixes to show on blogs but no on GD post types
+ */
+if(function_exists('dsq_can_replace')) {
+    remove_filter('comments_template', 'dsq_comments_template');
+    add_filter('comments_template', 'dsq_comments_template', 100);
+    add_filter('pre_option_disqus_active', 'geodir_option_disqus_active',10,1);
+}
+
+
+
+/**
+ * Disable Disqus plugin on the fly when visiting GeoDirectory post types.
+ *
+ * @since 1.5.0
+ * @package GeoDirectory
+ * @param string $disqus_active Hook called before DB call for option so this is empty.
+ * @return string `1` if active `0` if disabled.
+ */
+function geodir_option_disqus_active($disqus_active){
+    global $post;
+    $all_postypes = geodir_get_posttypes();
+
+    if(isset($post->post_type) && is_array($all_postypes) && in_array($post->post_type,$all_postypes)){
+        $disqus_active = '0';
+    }
+
+    return $disqus_active;
+}
+
