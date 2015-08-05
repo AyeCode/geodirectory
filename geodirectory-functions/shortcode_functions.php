@@ -602,7 +602,7 @@ function geodir_sc_gd_listings_output($args = array()) {
     }
     $with_no_results = !empty($args['without_no_results']) ? false : true;
 
-    if (!empty($category) && $category[0] != '0') {
+    if (!empty($category) && isset($category[0]) && $category[0] != '0') {
         $category_taxonomy = geodir_get_taxonomies($post_type);
 
         ######### WPML #########

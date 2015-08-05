@@ -1202,13 +1202,13 @@ function geodir_post_information_save($post_id,$post)
         if (isset($_REQUEST['action']) && ($_REQUEST['action'] == 'trash' || $_REQUEST['action'] == 'untrash'))
             return;
 
-        if (!wp_verify_nonce($_POST['geodir_post_info_noncename'], plugin_basename(__FILE__)))
+        if (!isset($_POST['geodir_post_info_noncename']) || !wp_verify_nonce($_POST['geodir_post_info_noncename'], plugin_basename(__FILE__)))
             return;
 
         /*if ( !wp_verify_nonce( $_POST['geodir_post_addinfo_noncename'], plugin_basename( __FILE__ ) ) )
         return;*/
 
-        if (!wp_verify_nonce($_POST['geodir_post_attachments_noncename'], plugin_basename(__FILE__)))
+        if (!isset($_POST['geodir_post_attachments_noncename']) || !wp_verify_nonce($_POST['geodir_post_attachments_noncename'], plugin_basename(__FILE__)))
             return;
 
 
