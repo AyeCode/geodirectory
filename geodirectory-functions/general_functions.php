@@ -2428,7 +2428,7 @@ function geodir_listing_slider_widget_output($args = '', $instance = '')
     }// show only upcomming events
 
     $widget_listings = geodir_get_widget_listings($query_args);
-    if (!empty($widget_listings) || $with_no_results) {
+    if (!empty($widget_listings) || (isset($with_no_results) && $with_no_results)) {
         if ($title) {
             echo $before_title . $title . $after_title;
         }
