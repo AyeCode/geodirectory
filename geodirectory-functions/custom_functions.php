@@ -109,8 +109,10 @@ function geodir_max_excerpt($charlength)
         return;
     }
     $out = '';
-    $excerpt = apply_filters('the_excerpt', $post->post_content);
-    //return;
+	
+	$temp_post = $post;
+	$excerpt = get_the_excerpt();
+
     $charlength++;
     $excerpt_more = function_exists('geodirf_excerpt_more') ? geodirf_excerpt_more('') : geodir_excerpt_more('');
     if (mb_strlen($excerpt) > $charlength) {
@@ -156,6 +158,7 @@ function geodir_max_excerpt($charlength)
             $out .= $excerpt;
         }
     }
+	$post = $temp_post;
 
     return $out;
 }
