@@ -1,5 +1,6 @@
 v1.5.1
 Default sort by titles not translatable - FIXED
+Listings permalinks are broken if slug matches part of host or base url - FIXED
 
 v1.5.0
 Google analytic countries throws error - FIXED

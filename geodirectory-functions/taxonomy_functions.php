@@ -1403,14 +1403,21 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
 
             }
         }
-
-
+		
+		// Fix slug problem when slug matches part of host or base url/ Ex: url -> www.abcxyz.com & slug -> xyz.
+		$site_url = trailingslashit(get_home_url());
+		$fix_url = strpos($post_link, $site_url) == 0 ? true : false;
+		if ($fix_url) {
+			$post_link = str_replace($site_url, '', $post_link);
+		}
+		
         $post_link = trailingslashit(
             preg_replace(  "/" . preg_quote( $slug, "/" ) . "/", $slug ."/%gd_taxonomy%",$post_link, 1 )
         );
-
-
-
+		
+		if ($fix_url) {
+			$post_link = $site_url . $post_link;
+		}
 
         if (isset($comment_post_cache[$post->ID])) {
             $post = $comment_post_cache[$post->ID];
