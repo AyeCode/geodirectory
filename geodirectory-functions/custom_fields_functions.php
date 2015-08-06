@@ -3457,28 +3457,28 @@ function geodir_get_custom_sort_options($post_type = '')
             'post_type' => $post_type,
             'data_type' => '',
             'field_type' => 'datetime',
-            'site_title' => 'Add date',
+            'site_title' => __('Add date', GEODIRECTORY_TEXTDOMAIN),
             'htmlvar_name' => 'post_date'
         );
         $fields[] = array(
             'post_type' => $post_type,
             'data_type' => '',
             'field_type' => 'bigint',
-            'site_title' => 'Review',
+            'site_title' => __('Review', GEODIRECTORY_TEXTDOMAIN),
             'htmlvar_name' => 'comment_count'
         );
         $fields[] = array(
             'post_type' => $post_type,
             'data_type' => '',
             'field_type' => 'float',
-            'site_title' => 'Rating',
+            'site_title' => __('Rating', GEODIRECTORY_TEXTDOMAIN),
             'htmlvar_name' => 'overall_rating'
         );
         $fields[] = array(
             'post_type' => $post_type,
             'data_type' => '',
             'field_type' => 'text',
-            'site_title' => 'Title',
+            'site_title' => __('Title', GEODIRECTORY_TEXTDOMAIN),
             'htmlvar_name' => 'post_title'
         );
 

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GeoDirectory 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-04 21:36-0000\n"
-"PO-Revision-Date: 2015-08-04 21:37-0000\n"
+"POT-Creation-Date: 2015-08-05 17:04-0000\n"
+"PO-Revision-Date: 2015-08-05 17:04-0000\n"
 "Last-Translator: \n"
 "Language-Team: GeoDirectory <info@wpgeodirectory.com>\n"
 "Language: en_US\n"
@@ -2166,6 +2166,7 @@ msgid "Featured"
 msgstr ""
 
 #: geodirectory-admin/option-pages/design_settings_array.php:652
+#: geodirectory-functions/custom_fields_functions.php:3467
 #: geodirectory-widgets/geodirectory_listing_slider_widget.php:137
 #: geodirectory-widgets/geodirectory_popular_widget.php:351
 #: geodirectory-widgets/geodirectory_related_listing_widget.php:190
@@ -2174,6 +2175,7 @@ msgid "Review"
 msgstr ""
 
 #: geodirectory-admin/option-pages/design_settings_array.php:653
+#: geodirectory-functions/custom_fields_functions.php:3474
 #: geodirectory-widgets/geodirectory_listing_slider_widget.php:138
 #: geodirectory-widgets/geodirectory_popular_widget.php:355
 #: geodirectory-widgets/geodirectory_related_listing_widget.php:194
@@ -3544,6 +3546,17 @@ msgstr ""
 msgid "Select Category"
 msgstr ""
 
+#: geodirectory-functions/custom_fields_functions.php:3460
+msgid "Add date"
+msgstr ""
+
+#: geodirectory-functions/custom_fields_functions.php:3481
+#: geodirectory-functions/map-functions/get_markers.php:127
+#: geodirectory-functions/map-functions/map_template_tags.php:323
+#: geodirectory_widgets.php:580
+msgid "Title"
+msgstr ""
+
 #: geodirectory-functions/custom_fields_functions.php:3832
 #: geodirectory-functions/custom_fields_functions.php:3855
 msgid "Set as default sort."
@@ -3826,12 +3839,6 @@ msgstr ""
 
 #: geodirectory-functions/map-functions/get_markers.php:33
 msgid "No marker data found"
-msgstr ""
-
-#: geodirectory-functions/map-functions/get_markers.php:127
-#: geodirectory-functions/map-functions/map_template_tags.php:323
-#: geodirectory_widgets.php:580
-msgid "Title"
 msgstr ""
 
 #: geodirectory-functions/map-functions/map_functions.php:226
