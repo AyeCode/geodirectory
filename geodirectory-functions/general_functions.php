@@ -3012,12 +3012,24 @@ function geodir_popular_postview_output($args = '', $instance = '')
  */
 function geodir_count_reviews_by_term_id($term_id, $taxonomy, $post_type)
 {
-
     global $wpdb, $plugin_prefix;
-    $detail_table = $plugin_prefix . $post_type . '_detail';
+    
+	$detail_table = $plugin_prefix . $post_type . '_detail';
 
     $sql = "SELECT COALESCE(SUM(rating_count),0) FROM " . $detail_table . " WHERE post_status = 'publish' AND rating_count > 0 AND FIND_IN_SET(" . $term_id . ", " . $taxonomy . ")";
-    $count = $wpdb->get_var($sql);
+	
+	/**
+	 * Filter count review sql query.
+	 *
+	 * @since 1.5.0
+	 * @param string $sql Database sql query..
+	 * @param int $term_id The term ID.
+	 * @param int $taxonomy The taxonomy Id.
+	 * @param string $post_type The post type.
+	 */
+	$sql = apply_filters('geodir_count_reviews_by_term_sql', $sql, $term_id, $taxonomy, $post_type);
+    
+	$count = $wpdb->get_var($sql);
 
     return $count;
 }
@@ -3032,7 +3044,7 @@ function geodir_count_reviews_by_term_id($term_id, $taxonomy, $post_type)
  */
 function geodir_count_reviews_by_terms($force_update = false)
 {
-    /**
+	/**
      * Filter review count option data.
      *
      * @since 1.0.0
