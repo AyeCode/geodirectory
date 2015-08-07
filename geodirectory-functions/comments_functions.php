@@ -724,7 +724,11 @@ function geodir_comment_template($comment_template)
         return;
     }
     if (in_array($post->post_type, $post_types)) { // assuming there is a post type called business
-        return dirname(__FILE__) . '/reviews.php';
+        $template = locate_template(array("geodirectory/reviews.php")); // Use theme template if available
+        if (!$template) {
+            $template = dirname(__FILE__) . '/reviews.php';
+        }
+        return $template;
     }
 }
 
