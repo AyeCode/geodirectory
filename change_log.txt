@@ -4,6 +4,7 @@ Listings permalinks are broken if slug matches part of host or base url - FIXED
 Popular post view widget is no longer stripping HTML in the excerpt - FIXED
 Add a filter to override comment avatar size from themes - ADDED
 Added some code to override reviews template from theme - ADDED
+Some filters added in best of widget - CHANGED
 
 v1.5.0
 Google analytic countries throws error - FIXED
