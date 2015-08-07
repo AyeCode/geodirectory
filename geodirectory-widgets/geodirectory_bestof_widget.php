@@ -291,7 +291,7 @@ class geodir_bestof_widget extends WP_Widget
 				/**
 				 * Filter the page link to view all lisitngs.
 				 *
-				 * @since 1.5.0
+				 * @since 1.5.1
 				 *
 				 * @param array $view_all_link View all listings page link.
 				 * @param array $post_type The Post type.

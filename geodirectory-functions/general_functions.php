@@ -3021,7 +3021,7 @@ function geodir_count_reviews_by_term_id($term_id, $taxonomy, $post_type)
 	/**
 	 * Filter count review sql query.
 	 *
-	 * @since 1.5.0
+	 * @since 1.5.1
 	 * @param string $sql Database sql query..
 	 * @param int $term_id The term ID.
 	 * @param int $taxonomy The taxonomy Id.
