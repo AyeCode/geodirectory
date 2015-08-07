@@ -709,6 +709,7 @@ function geodir_get_commentoverall_number($post_id = 0)
  * Sets the comment template using filter {@see 'comments_template'}.
  *
  * @since 1.0.0
+ * @since 1.5.1 Reviews template can be overridden from theme.
  * @package GeoDirectory
  * @global object $post The current post object.
  * @param string $comment_template Old comment template.
