@@ -781,7 +781,16 @@ if (!function_exists('geodir_comment')) {
                 <article id="comment-<?php comment_ID(); ?>" class="comment hreview">
                     <header class="comment-meta comment-author vcard">
                         <?php
-                        echo get_avatar($comment, 44);
+                        /**
+                         * Filter to modify comment avatar size
+                         *
+                         * You can use this filter to change comment avatar size.
+                         *
+                         * @since 1.0.0
+                         * @package GeoDirectory
+                         */
+                        $avatar_size = apply_filters('geodir_comment_avatar_size', 44);
+                        echo get_avatar($comment, $avatar_size);
                         printf('<cite><b class="reviewer">%1$s</b> %2$s</cite>',
                             get_comment_author_link(),
                             // If current post author is also comment author, make it known visually.
