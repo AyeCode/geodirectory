@@ -3002,6 +3002,7 @@ function geodir_popular_postview_output($args = '', $instance = '')
  * Count reviews by term ID.
  *
  * @since 1.0.0
+ * @since 1.5.1 Added filter to change SQL.
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.

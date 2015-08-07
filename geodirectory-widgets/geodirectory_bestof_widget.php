@@ -29,6 +29,7 @@ class geodir_bestof_widget extends WP_Widget
 	 * Front-end display content for best of widget.
 	 *
 	 * @since 1.3.9
+     * @since 1.5.1 Added filter to view all link.
 	 *
 	 * @param array $args     Widget arguments.
 	 * @param array $instance Saved values from database.
@@ -568,6 +569,7 @@ add_action('wp_ajax_nopriv_geodir_bestof', 'geodir_bestof_callback');
  * Get the best of widget content using ajax.
  *
  * @since 1.3.9
+ * @since 1.5.1 Added filter to view all link.
  *
  * @return string Html content.
  */
