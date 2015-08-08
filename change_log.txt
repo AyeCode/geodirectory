@@ -5,6 +5,7 @@ Popular post view widget is no longer stripping HTML in the excerpt - FIXED
 Add a filter to override comment avatar size from themes - ADDED
 Added some code to override reviews template from theme - ADDED
 Some filters added in best of widget - CHANGED
+All widgets changed from PHP4 style constructors to PHP5 __construct, for WordPress 4.3 - CHANGED
 
 v1.5.0
 Google analytic countries throws error - FIXED

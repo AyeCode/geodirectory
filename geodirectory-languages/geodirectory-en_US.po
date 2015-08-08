@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GeoDirectory 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-05 17:04-0000\n"
-"PO-Revision-Date: 2015-08-05 17:04-0000\n"
+"POT-Creation-Date: 2015-08-07 10:47-0000\n"
+"PO-Revision-Date: 2015-08-07 10:49-0000\n"
 "Last-Translator: \n"
 "Language-Team: GeoDirectory <info@wpgeodirectory.com>\n"
 "Language: en_US\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e;_n:1,2;_n_noop:1,2;"
-"_nx:1,2\n"
+"_nx:1,2;_x;_ex\n"
 "X-Poedit-Basepath: ../\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -141,7 +141,7 @@ msgstr ""
 #: geodirectory-admin/admin_db_install.php:722
 #: geodirectory-admin/admin_db_install.php:724
 #: geodirectory-admin/admin_db_install.php:730
-#: geodirectory-functions/custom_functions.php:1225
+#: geodirectory-functions/custom_functions.php:1228
 msgid "Video"
 msgstr ""
 
@@ -152,7 +152,7 @@ msgstr ""
 #: geodirectory-admin/admin_db_install.php:735
 #: geodirectory-admin/admin_db_install.php:737
 #: geodirectory-admin/admin_db_install.php:743
-#: geodirectory-functions/custom_functions.php:1232 language.php:61
+#: geodirectory-functions/custom_functions.php:1235 language.php:61
 msgid "Special Offers"
 msgstr ""
 
@@ -273,7 +273,7 @@ msgstr ""
 
 #: geodirectory-admin/admin_functions.php:1033
 #: geodirectory-admin/option-pages/design_settings_array.php:619
-#: geodirectory-functions/custom_functions.php:1883
+#: geodirectory-functions/custom_functions.php:1886
 #: geodirectory-functions/general_functions.php:2150
 #: geodirectory-widgets/geodirectory_related_listing_widget.php:219
 msgid "Categories"
@@ -1184,7 +1184,7 @@ msgid "Post icon"
 msgstr ""
 
 #: geodirectory-admin/admin_hooks_actions.php:1230
-#: geodirectory-functions/custom_functions.php:1246 language.php:153
+#: geodirectory-functions/custom_functions.php:1249 language.php:153
 msgid "Reviews"
 msgstr ""
 
@@ -2400,7 +2400,7 @@ msgid "Footer script code"
 msgstr ""
 
 #: geodirectory-admin/option-pages/design_settings_array.php:1027
-#: geodirectory-functions/custom_functions.php:1239
+#: geodirectory-functions/custom_functions.php:1242
 msgid "Map"
 msgstr ""
 
@@ -3013,35 +3013,35 @@ msgstr ""
 msgid "Overall Rating"
 msgstr ""
 
-#: geodirectory-functions/comments_functions.php:773
+#: geodirectory-functions/comments_functions.php:778
 msgid "Pingback:"
 msgstr ""
 
-#: geodirectory-functions/comments_functions.php:773
+#: geodirectory-functions/comments_functions.php:778
 msgid "(Edit)"
 msgstr ""
 
-#: geodirectory-functions/comments_functions.php:788
+#: geodirectory-functions/comments_functions.php:802
 msgid "Post author"
 msgstr ""
 
-#: geodirectory-functions/comments_functions.php:795
+#: geodirectory-functions/comments_functions.php:809
 #, php-format
 msgid "%1$s at %2$s"
 msgstr ""
 
-#: geodirectory-functions/comments_functions.php:802
+#: geodirectory-functions/comments_functions.php:816
 msgid "Your comment is awaiting moderation."
 msgstr ""
 
-#: geodirectory-functions/comments_functions.php:807
+#: geodirectory-functions/comments_functions.php:821
 #: geodirectory-templates/listing-listview.php:352
 #: geodirectory-templates/widget-listing-listview.php:218
 #: geodirectory_template_actions.php:1890 language.php:171
 msgid "Edit"
 msgstr ""
 
-#: geodirectory-functions/comments_functions.php:812 language.php:170
+#: geodirectory-functions/comments_functions.php:826 language.php:170
 msgid "Reply"
 msgstr ""
 
@@ -3600,76 +3600,76 @@ msgstr ""
 msgid "View: Grid 5"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:140
-#: geodirectory-functions/custom_functions.php:153
+#: geodirectory-functions/custom_functions.php:142
+#: geodirectory-functions/custom_functions.php:155
 msgid "Read more [...]"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:286
+#: geodirectory-functions/custom_functions.php:289
 msgid "From :"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:286
+#: geodirectory-functions/custom_functions.php:289
 msgid "Phone :"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:286
+#: geodirectory-functions/custom_functions.php:289
 msgid "Sent from"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:669
+#: geodirectory-functions/custom_functions.php:672
 msgid "Sort By"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:723
+#: geodirectory-functions/custom_functions.php:726
 msgid "Related Listings"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:1006
-#: geodirectory-functions/custom_functions.php:1087
+#: geodirectory-functions/custom_functions.php:1009
+#: geodirectory-functions/custom_functions.php:1090
 msgid "Posts related to Category:"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:1008
-#: geodirectory-functions/custom_functions.php:1090
+#: geodirectory-functions/custom_functions.php:1011
+#: geodirectory-functions/custom_functions.php:1093
 msgid "Posts related to Tag:"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:1032
+#: geodirectory-functions/custom_functions.php:1035
 msgid "Everywhere"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:1205
+#: geodirectory-functions/custom_functions.php:1208
 msgid "Profile"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:1211
+#: geodirectory-functions/custom_functions.php:1214
 msgid "More Info"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:1218
+#: geodirectory-functions/custom_functions.php:1221
 msgid "Photo"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:1253
+#: geodirectory-functions/custom_functions.php:1256
 #: geodirectory-widgets/geodirectory_related_listing_widget.php:44
 msgid "Related Listing"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:1793
+#: geodirectory-functions/custom_functions.php:1796
 msgid "Read more"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:1853
+#: geodirectory-functions/custom_functions.php:1856
 msgid "reviewed"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:1913
+#: geodirectory-functions/custom_functions.php:1916
 #: geodirectory_widgets.php:365
 msgid "Tweet"
 msgstr ""
 
-#: geodirectory-functions/custom_functions.php:1993
+#: geodirectory-functions/custom_functions.php:1996
 msgid "Share"
 msgstr ""
 
@@ -4039,7 +4039,6 @@ msgstr ""
 #: geodirectory-widgets/geodirectory_listing_slider_widget.php:188
 #: geodirectory-widgets/geodirectory_popular_widget.php:307
 #: geodirectory-widgets/geodirectory_popular_widget.php:325
-#: geodirectory_template_actions.php:1368
 #: geodirectory_template_actions.php:2512
 msgid "All"
 msgstr ""

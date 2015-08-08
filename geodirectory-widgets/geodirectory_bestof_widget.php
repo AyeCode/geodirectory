@@ -18,11 +18,15 @@ class geodir_bestof_widget extends WP_Widget
 	 * Register the best of widget with WordPress.
 	 *
 	 * @since 1.3.9
+     * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
 	 */
-	function geodir_bestof_widget()
-    {
+    function __construct() {
         $widget_ops = array('classname' => 'geodir_bestof_widget', 'description' => __('GD > Best of widget', GEODIRECTORY_TEXTDOMAIN));
-        $this->WP_Widget('bestof_widget', __('GD > Best of widget', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
+        parent::__construct(
+            'bestof_widget', // Base ID
+            __('GD > Best of widget', GEODIRECTORY_TEXTDOMAIN), // Name
+            $widget_ops// Args
+        );
     }
 
 	/**
@@ -30,11 +34,12 @@ class geodir_bestof_widget extends WP_Widget
 	 *
 	 * @since 1.3.9
      * @since 1.5.1 Added filter to view all link.
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $args     Widget arguments.
 	 * @param array $instance Saved values from database.
 	 */
-	function widget($args, $instance)
+	public function widget($args, $instance)
     {
         extract($args);
 		/**
@@ -316,13 +321,14 @@ class geodir_bestof_widget extends WP_Widget
 	 * Sanitize best of widget form values as they are saved.
 	 *
 	 * @since 1.3.9
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $new_instance Values just sent to be saved.
 	 * @param array $old_instance Previously saved values from database.
 	 *
 	 * @return array Updated safe values to be saved.
 	 */
-	function update($new_instance, $old_instance)
+	public function update($new_instance, $old_instance)
     {
         $instance = $old_instance;
         $instance['title'] = strip_tags($new_instance['title']);
@@ -343,10 +349,11 @@ class geodir_bestof_widget extends WP_Widget
 	 * Back-end best of widget settings form.
 	 *
 	 * @since 1.3.9
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $instance Previously saved values from database.
 	 */
-	function form($instance)
+	public function form($instance)
     {
         $instance = wp_parse_args((array)$instance,
             array(

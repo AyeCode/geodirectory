@@ -19,23 +19,27 @@ class geodir_listing_slider_widget extends WP_Widget
 	 * Register the listing slider widget.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
 	 */
-	function geodir_listing_slider_widget()
-    {
-        //Constructor
+    function __construct() {
         $widget_ops = array('classname' => 'geodir_listing_slider_view', 'description' => __('GD > Listing Slider', GEODIRECTORY_TEXTDOMAIN));
-        $this->WP_Widget('listing_slider_view', __('GD > Listing Slider', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
+        parent::__construct(
+            'listing_slider_view', // Base ID
+            __('GD > Listing Slider', GEODIRECTORY_TEXTDOMAIN), // Name
+            $widget_ops// Args
+        );
     }
 	
 	/**
 	 * Front-end display content for listing slider widget.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $args     Widget arguments.
 	 * @param array $instance Saved values from database.
 	 */
-    function widget($args, $instance)
+    public function widget($args, $instance)
     {
         geodir_listing_slider_widget_output($args, $instance);
     }
@@ -44,13 +48,14 @@ class geodir_listing_slider_widget extends WP_Widget
 	 * Sanitize listing slider widget form values as they are saved.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $new_instance Values just sent to be saved.
 	 * @param array $old_instance Previously saved values from database.
 	 *
 	 * @return array Updated safe values to be saved.
 	 */
-	function update($new_instance, $old_instance)
+	public function update($new_instance, $old_instance)
     {
         //save the widget
         $instance = $old_instance;
@@ -77,10 +82,11 @@ class geodir_listing_slider_widget extends WP_Widget
 	 * Back-end listing slider widget settings form.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $instance Previously saved values from database.
 	 */
-	function form($instance)
+	public function form($instance)
     {
 
         //widgetform in backend
