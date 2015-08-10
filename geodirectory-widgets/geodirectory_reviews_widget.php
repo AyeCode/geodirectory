@@ -18,23 +18,27 @@ class geodir_recent_reviews_widget extends WP_Widget
 	 * Register the recent reviews widget.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
 	 */
-	function geodir_recent_reviews_widget()
-    {
-        //Constructor
+    function __construct() {
         $widget_ops = array('classname' => 'geodir_recent_reviews', 'description' => __('GD > Recent Reviews', GEODIRECTORY_TEXTDOMAIN));
-        $this->WP_Widget('geodir_recent_reviews', __('GD > Recent Reviews', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
+        parent::__construct(
+            'geodir_recent_reviews', // Base ID
+            __('GD > Recent Reviews', GEODIRECTORY_TEXTDOMAIN), // Name
+            $widget_ops// Args
+        );
     }
 
 	/**
 	 * Front-end display content for recent reviews widget.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $args     Widget arguments.
 	 * @param array $instance Saved values from database.
 	 */
-	function widget($args, $instance)
+	public function widget($args, $instance)
     {
         // prints the widget
         extract($args, EXTR_SKIP);
@@ -79,13 +83,14 @@ class geodir_recent_reviews_widget extends WP_Widget
 	 * Sanitize recent reviews widget form values as they are saved.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $new_instance Values just sent to be saved.
 	 * @param array $old_instance Previously saved values from database.
 	 *
 	 * @return array Updated safe values to be saved.
 	 */
-	function update($new_instance, $old_instance)
+	public function update($new_instance, $old_instance)
     {
         //save the widget
         $instance = $old_instance;
@@ -98,10 +103,11 @@ class geodir_recent_reviews_widget extends WP_Widget
 	 * Back-end recent reviews widget settings form.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $instance Previously saved values from database.
 	 */
-	function form($instance)
+	public function form($instance)
     {
         //widgetform in backend
         $instance = wp_parse_args((array)$instance, array('title' => '', 't1' => '', 't2' => '', 't3' => '', 'img1' => '', 'count' => ''));

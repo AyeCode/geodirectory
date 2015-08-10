@@ -18,23 +18,27 @@ class geodir_popular_post_category extends WP_Widget
 	 * Register the popular post category widget.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
 	 */
-	function geodir_popular_post_category()
-    {
-        //Constructor
+    function __construct() {
         $widget_ops = array('classname' => 'geodir_popular_post_category', 'description' => __('GD > Popular Post Category', GEODIRECTORY_TEXTDOMAIN));
-        $this->WP_Widget('popular_post_category', __('GD > Popular Post Category', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
+        parent::__construct(
+            'popular_post_category', // Base ID
+            __('GD > Popular Post Category', GEODIRECTORY_TEXTDOMAIN), // Name
+            $widget_ops// Args
+        );
     }
 
 	/**
 	 * Front-end display content for popular post category widget.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $args     Widget arguments.
 	 * @param array $instance Saved values from database.
 	 */
-	function widget($args, $instance)
+	public function widget($args, $instance)
     {
         geodir_popular_post_category_output($args, $instance);
     }
@@ -43,13 +47,14 @@ class geodir_popular_post_category extends WP_Widget
 	 * Sanitize popular post category widget form values as they are saved.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $new_instance Values just sent to be saved.
 	 * @param array $old_instance Previously saved values from database.
 	 *
 	 * @return array Updated safe values to be saved.
 	 */ 
-	function update($new_instance, $old_instance)
+	public function update($new_instance, $old_instance)
     {
         //save the widget
         $instance = $old_instance;
@@ -63,10 +68,11 @@ class geodir_popular_post_category extends WP_Widget
 	 * Back-end popular post category widget settings form.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $instance Previously saved values from database.
 	 */
-	function form($instance)
+	public function form($instance)
     {
         //widgetform in backend
         $instance = wp_parse_args((array)$instance, array('title' => '', 'category_limit' => 15));
@@ -112,23 +118,27 @@ class geodir_popular_postview extends WP_Widget
 	 * Register the popular posts widget.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
 	 */
-    function geodir_popular_postview()
-    {
-        //Constructor
+    function __construct() {
         $widget_ops = array('classname' => 'geodir_popular_post_view', 'description' => __('GD > Popular Post View', GEODIRECTORY_TEXTDOMAIN));
-        $this->WP_Widget('popular_post_view', __('GD > Popular Post View', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
+        parent::__construct(
+            'popular_post_view', // Base ID
+            __('GD > Popular Post View', GEODIRECTORY_TEXTDOMAIN), // Name
+            $widget_ops// Args
+        );
     }
 
 	/**
 	 * Front-end display content for popular posts widget.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $args     Widget arguments.
 	 * @param array $instance Saved values from database.
 	 */
-	function widget($args, $instance)
+	public function widget($args, $instance)
     {
         geodir_popular_postview_output($args, $instance);
     }
@@ -137,13 +147,14 @@ class geodir_popular_postview extends WP_Widget
 	 * Sanitize popular posts widget form values as they are saved.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $new_instance Values just sent to be saved.
 	 * @param array $old_instance Previously saved values from database.
 	 *
 	 * @return array Updated safe values to be saved.
 	 */
-	function update($new_instance, $old_instance)
+	public function update($new_instance, $old_instance)
     {
         //save the widget
         $instance = $old_instance;
@@ -181,10 +192,11 @@ class geodir_popular_postview extends WP_Widget
 	 * Back-end popular posts widget settings form.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $instance Previously saved values from database.
 	 */
-	function form($instance)
+	public function form($instance)
     {
         //widgetform in backend
         $instance = wp_parse_args((array)$instance,

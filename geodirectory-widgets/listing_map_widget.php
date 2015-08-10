@@ -86,33 +86,35 @@ class geodir_map_listingpage extends WP_Widget
 	 * Register the listing page map widget.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
 	 */
-    function geodir_map_listingpage()
-    {
-
+    function __construct() {
         $widget_ops = array('classname' => 'widget geodir-map-listing-page', 'description' => __('Google Map for Listing page. It will show you google map V3 for Listing page.', GEODIRECTORY_TEXTDOMAIN));
-        $this->WP_Widget('geodir_map_v3_listing_map', __('GD > GMap - Listing page', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
-
+        parent::__construct(
+            'geodir_map_v3_listing_map', // Base ID
+            __('GD > GMap - Listing page', GEODIRECTORY_TEXTDOMAIN), // Name
+            $widget_ops// Args
+        );
 
         add_action('wp_head', 'init_listing_map_script'); // Initialize the map object and marker array
 
         add_action('the_post', 'create_list_jsondata'); // Add marker in json array
 
         add_action('wp_footer', 'show_listing_widget_map'); // Show map for listings with markers
-
     }
 
 	/**
 	 * Front-end display content for listing page map widget.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
      * @global object $post The current post object.
      *
 	 * @param array $args     Widget arguments.
 	 * @param array $instance Saved values from database.
 	 */
-    function widget($args, $instance)
+    public function widget($args, $instance)
     {
 
         if (geodir_is_page('listing') || geodir_is_page('author') || geodir_is_page('search')
@@ -215,13 +217,14 @@ class geodir_map_listingpage extends WP_Widget
 	 * Sanitize listing page map widget form values as they are saved.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $new_instance Values just sent to be saved.
 	 * @param array $old_instance Previously saved values from database.
 	 *
 	 * @return array Updated safe values to be saved.
 	 */
-    function update($new_instance, $old_instance)
+    public function update($new_instance, $old_instance)
     {
         //save the widget
         $instance = $old_instance;
@@ -241,10 +244,11 @@ class geodir_map_listingpage extends WP_Widget
 	 * Back-end listing page map widget settings form.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $instance Previously saved values from database.
 	 */
-    function form($instance)
+    public function form($instance)
     {
         //widgetform in backend
         $instance = wp_parse_args((array)$instance, array('width' => '', 'heigh' => '', 'maptype' => '', 'zoom' => '', 'autozoom' => '', 'sticky' => '', 'scrollwheel' => '0', 'showall' => '0'));

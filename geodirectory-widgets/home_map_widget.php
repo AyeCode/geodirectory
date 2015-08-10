@@ -20,24 +20,27 @@ class geodir_homepage_map extends WP_Widget
 	 * Register the home page map widget.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
 	 */
-    function geodir_homepage_map()
-    {
-        //Constructor
+    function __construct() {
         $widget_ops = array('classname' => 'widget Google Map in Home page', 'description' => __('Google Map in Home page. It will show you google map V3 for Home page with category checkbox selection.', GEODIRECTORY_TEXTDOMAIN));
-        $this->WP_Widget('geodir_map_v3_home_map', __('GD > GMap - Home page', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
-
+        parent::__construct(
+            'geodir_map_v3_home_map', // Base ID
+            __('GD > GMap - Home page', GEODIRECTORY_TEXTDOMAIN), // Name
+            $widget_ops// Args
+        );
     }
 
 	/**
 	 * Front-end display content for home page map widget.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $args     Widget arguments.
 	 * @param array $instance Saved values from database.
 	 */
-    function widget($args, $instance)
+    public function widget($args, $instance)
     {
         extract($args, EXTR_SKIP);
         /** This action is documented in geodirectory_shortcodes.php */
@@ -91,13 +94,14 @@ class geodir_homepage_map extends WP_Widget
 	 * Sanitize home page map widget form values as they are saved.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $new_instance Values just sent to be saved.
 	 * @param array $old_instance Previously saved values from database.
 	 *
 	 * @return array Updated safe values to be saved.
 	 */
-    function update($new_instance, $old_instance)
+    public function update($new_instance, $old_instance)
     {
         //save the widget
         $instance = $old_instance;
@@ -116,10 +120,11 @@ class geodir_homepage_map extends WP_Widget
 	 * Back-end home page map widget settings form.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $instance Previously saved values from database.
 	 */
-    function form($instance)
+    public function form($instance)
     {
         //widgetform in backend
 
@@ -235,8 +240,9 @@ class geodir_homepage_map extends WP_Widget
 	 * Adds the javascript in the footer for home page map widget.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 */
-    function geodir_home_map_add_script()
+    public function geodir_home_map_add_script()
     {
         ?>
         <script type="text/javascript">

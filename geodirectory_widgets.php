@@ -244,23 +244,27 @@ if (!function_exists('register_geodir_widgets')) {
              * Register the login widget with WordPress.
              *
              * @since 1.0.0
+             * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
              */
-            function geodir_loginwidget()
-            {
-                //Constructor
+            function __construct() {
                 $widget_ops = array('classname' => 'geodir_loginbox', 'description' => __('Geodirectory Loginbox Widget', GEODIRECTORY_TEXTDOMAIN));
-                $this->WP_Widget('geodir_loginbox', __('GD > Loginbox', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
+                parent::__construct(
+                    'geodir_loginbox', // Base ID
+                    __('GD > Loginbox', GEODIRECTORY_TEXTDOMAIN), // Name
+                    $widget_ops// Args
+                );
             }
 
             /**
              * Front-end display content for login widget.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $args     Widget arguments.
              * @param array $instance Saved values from database.
              */
-            function widget($args, $instance)
+            public function widget($args, $instance)
             {
                 geodir_loginwidget_output($args, $instance);
             }
@@ -269,13 +273,14 @@ if (!function_exists('register_geodir_widgets')) {
              * Sanitize login widget form values as they are saved.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $new_instance Values just sent to be saved.
              * @param array $old_instance Previously saved values from database.
              *
              * @return array Updated safe values to be saved.
              */
-            function update($new_instance, $old_instance)
+            public function update($new_instance, $old_instance)
             {
                 //save the widget
                 $instance = $old_instance;
@@ -288,11 +293,12 @@ if (!function_exists('register_geodir_widgets')) {
              * Back-end login widget settings form.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $instance Previously saved values from database.
              * @return string|void
              */
-            function form($instance)
+            public function form($instance)
             {
                 //widgetform in backend
                 $instance = wp_parse_args((array)$instance, array('title' => '', 't1' => '', 't2' => '', 't3' => '', 'img1' => '', 'desc1' => ''));
@@ -325,22 +331,27 @@ if (!function_exists('register_geodir_widgets')) {
              * Register the social like widget with WordPress.
              *
              * @since 1.0.0
+             * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
              */
-            function geodir_social_like_widget()
-            {
+            function __construct() {
                 $widget_ops = array('classname' => 'geodir_social_like_widget', 'description' => __('GD > Twitter,Facebook and Google+ buttons', GEODIRECTORY_TEXTDOMAIN));
-                $this->WP_Widget('social_like_widget', __('GD > Social Like', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
+                parent::__construct(
+                    'social_like_widget', // Base ID
+                    __('GD > Social Like', GEODIRECTORY_TEXTDOMAIN), // Name
+                    $widget_ops// Args
+                );
             }
 
             /**
              * Front-end display content for social like widget.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $args     Widget arguments.
              * @param array $instance Saved values from database.
              */
-            function widget($args, $instance)
+            public function widget($args, $instance)
             {
                 // prints the widget
                 extract($args, EXTR_SKIP);
@@ -405,13 +416,14 @@ if (!function_exists('register_geodir_widgets')) {
              * Sanitize social like widget form values as they are saved.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $new_instance Values just sent to be saved.
              * @param array $old_instance Previously saved values from database.
              *
              * @return array Updated safe values to be saved.
              */
-            function update($new_instance, $old_instance)
+            public function update($new_instance, $old_instance)
             {
                 //save the widget
                 $instance = $old_instance;
@@ -423,11 +435,12 @@ if (!function_exists('register_geodir_widgets')) {
              * Back-end social like widget settings form.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $instance Previously saved values from database.
              * @return string|void
              */
-            function form($instance)
+            public function form($instance)
             {
                 //widgetform in backend
                 $instance = wp_parse_args((array)$instance, array('title' => ''));
@@ -455,23 +468,27 @@ if (!function_exists('register_geodir_widgets')) {
              * Register the feedburner subscribe widget with WordPress.
              *
              * @since 1.0.0
+             * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
              */
-            function geodirsubscribeWidget()
-            {
-                //Constructor
+            function __construct() {
                 $widget_ops = array('classname' => 'geodir-subscribe', 'description' => __('GD > Google Feedburner Subscribe', GEODIRECTORY_TEXTDOMAIN));
-                $this->WP_Widget('widget_subscribeWidget', __('GD > Subscribe', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
+                parent::__construct(
+                    'widget_subscribeWidget', // Base ID
+                    __('GD > Subscribe', GEODIRECTORY_TEXTDOMAIN), // Name
+                    $widget_ops// Args
+                );
             }
 
             /**
              * Front-end display content for feedburner subscribe widget.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $args     Widget arguments.
              * @param array $instance Saved values from database.
              */
-            function widget($args, $instance)
+            public function widget($args, $instance)
             {
                 // prints the widget
                 extract($args, EXTR_SKIP);
@@ -535,13 +552,14 @@ if (!function_exists('register_geodir_widgets')) {
              * Sanitize feedburner subscribe widget form values as they are saved.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $new_instance Values just sent to be saved.
              * @param array $old_instance Previously saved values from database.
              *
              * @return array Updated safe values to be saved.
              */
-            function update($new_instance, $old_instance)
+            public function update($new_instance, $old_instance)
             {
 
                 //save the widget
@@ -558,11 +576,12 @@ if (!function_exists('register_geodir_widgets')) {
              * Back-end feedburner subscribe widget settings form.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $instance Previously saved values from database.
              * @return string|void
              */
-            function form($instance)
+            public function form($instance)
             {
                 //widgetform in backend
                 $instance = wp_parse_args((array)$instance, array('title' => '', 'id' => '', 'advt1' => '', 'text' => '', 'twitter' => '', 'facebook' => '', 'digg' => '', 'myspace' => ''));
@@ -611,12 +630,15 @@ if (!function_exists('register_geodir_widgets')) {
              * Register the advertise widget with WordPress.
              *
              * @since 1.0.0
+             * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
              */
-            function geodiradvtwidget()
-            {
-                //Constructor
+            function __construct() {
                 $widget_ops = array('classname' => 'GeoDirectory Advertise', 'description' => __('GD > common advertise widget in sidebar, bottom section', GEODIRECTORY_TEXTDOMAIN));
-                $this->WP_Widget('advtwidget', __('GD > Advertise', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
+                parent::__construct(
+                    'advtwidget', // Base ID
+                    __('GD > Advertise', GEODIRECTORY_TEXTDOMAIN), // Name
+                    $widget_ops// Args
+                );
             }
 
 
@@ -624,11 +646,12 @@ if (!function_exists('register_geodir_widgets')) {
              * Front-end display content for advertise widget.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $args     Widget arguments.
              * @param array $instance Saved values from database.
              */
-            function widget($args, $instance)
+            public function widget($args, $instance)
             {
 
                 // prints the widget
@@ -654,13 +677,14 @@ if (!function_exists('register_geodir_widgets')) {
              * Sanitize advertise widget form values as they are saved.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $new_instance Values just sent to be saved.
              * @param array $old_instance Previously saved values from database.
              *
              * @return array Updated safe values to be saved.
              */
-            function update($new_instance, $old_instance)
+            public function update($new_instance, $old_instance)
             {
                 //save the widget
                 $instance = $old_instance;
@@ -672,11 +696,12 @@ if (!function_exists('register_geodir_widgets')) {
              * Back-end advertise widget settings form.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $instance Previously saved values from database.
              * @return string|void
              */
-            function form($instance)
+            public function form($instance)
             {
                 //widgetform in backend
                 $instance = wp_parse_args((array)$instance, array('title' => '', 't1' => '', 't2' => '', 't3' => '', 'img1' => '', 'desc1' => ''));
@@ -707,23 +732,27 @@ if (!function_exists('register_geodir_widgets')) {
              * Register the flickr widget with WordPress.
              *
              * @since 1.0.0
+             * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
              */
-            function GeodirFlickrWidget()
-            {
-                //Constructor
+            function __construct() {
                 $widget_ops = array('classname' => 'Geo Dir Flickr Photos ', 'description' => __('GD > Flickr Photos', GEODIRECTORY_TEXTDOMAIN));
-                $this->WP_Widget('widget_flickrwidget', __('GD > Flickr Photos', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
+                parent::__construct(
+                    'widget_flickrwidget', // Base ID
+                    __('GD > Flickr Photos', GEODIRECTORY_TEXTDOMAIN), // Name
+                    $widget_ops// Args
+                );
             }
 
             /**
              * Front-end display content for flickr widget.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $args     Widget arguments.
              * @param array $instance Saved values from database.
              */
-            function widget($args, $instance)
+            public function widget($args, $instance)
             {
 
                 // prints the widget
@@ -761,13 +790,14 @@ if (!function_exists('register_geodir_widgets')) {
              * Sanitize flickr widget form values as they are saved.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $new_instance Values just sent to be saved.
              * @param array $old_instance Previously saved values from database.
              *
              * @return array Updated safe values to be saved.
              */
-            function update($new_instance, $old_instance)
+            public function update($new_instance, $old_instance)
             {
                 //save the widget
                 $instance = $old_instance;
@@ -780,11 +810,12 @@ if (!function_exists('register_geodir_widgets')) {
              * Back-end flickr widget settings form.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $instance Previously saved values from database.
              * @return string|void
              */
-            function form($instance)
+            public function form($instance)
             {
 
                 //widgetform in backend
@@ -828,12 +859,15 @@ if (!function_exists('register_geodir_widgets')) {
              * Register the Twitter widget with WordPress.
              *
              * @since 1.0.0
+             * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
              */
-            function geodir_twitter()
-            {
-                //Constructor
+            function __construct() {
                 $widget_ops = array('classname' => 'Twitter', 'description' => __('GD > Twitter Feed', GEODIRECTORY_TEXTDOMAIN));
-                $this->WP_Widget('widget_Twidget', __('GD > Twitter', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
+                parent::__construct(
+                    'widget_Twidget', // Base ID
+                    __('GD > Twitter', GEODIRECTORY_TEXTDOMAIN), // Name
+                    $widget_ops// Args
+                );
             }
 
 
@@ -841,11 +875,12 @@ if (!function_exists('register_geodir_widgets')) {
              * Front-end display content for Twitter widget.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $args     Widget arguments.
              * @param array $instance Saved values from database.
              */
-            function widget($args, $instance)
+            public function widget($args, $instance)
             {
 
                 // prints the widget
@@ -870,13 +905,14 @@ if (!function_exists('register_geodir_widgets')) {
              * Sanitize twitter widget form values as they are saved.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $new_instance Values just sent to be saved.
              * @param array $old_instance Previously saved values from database.
              *
              * @return array Updated safe values to be saved.
              */
-            function update($new_instance, $old_instance)
+            public function update($new_instance, $old_instance)
             {
                 //save the widget
                 $instance = $old_instance;
@@ -888,11 +924,12 @@ if (!function_exists('register_geodir_widgets')) {
              * Back-end twitter widget settings form.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $instance Previously saved values from database.
              * @return string|void
              */
-            function form($instance)
+            public function form($instance)
             {
                 //widgetform in backend
                 $instance = wp_parse_args((array)$instance, array('title' => '', 't1' => '', 't2' => '', 't3' => '', 'img1' => '', 'gd_tw_desc1' => ''));
@@ -923,12 +960,15 @@ if (!function_exists('register_geodir_widgets')) {
              * Register the advanced search widget with WordPress.
              *
              * @since 1.0.0
+             * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
              */
-            function geodir_advance_search_widget()
-            {
-                //Constructor
+            function __construct() {
                 $widget_ops = array('classname' => 'geodir_advance_search_widget', 'description' => __('GD > Search', GEODIRECTORY_TEXTDOMAIN));
-                $this->WP_Widget('geodir_advance_search', __('GD > Search', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
+                parent::__construct(
+                    'geodir_advance_search', // Base ID
+                    __('GD > Search', GEODIRECTORY_TEXTDOMAIN), // Name
+                    $widget_ops// Args
+                );
             }
 
 
@@ -936,11 +976,12 @@ if (!function_exists('register_geodir_widgets')) {
              * Front-end display content for advanced search widget.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $args     Widget arguments.
              * @param array $instance Saved values from database.
              */
-            function widget($args, $instance)
+            public function widget($args, $instance)
             {
 
                 // prints the widget
@@ -960,13 +1001,14 @@ if (!function_exists('register_geodir_widgets')) {
              * Sanitize advanced search widget form values as they are saved.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $new_instance Values just sent to be saved.
              * @param array $old_instance Previously saved values from database.
              *
              * @return array Updated safe values to be saved.
              */
-            function update($new_instance, $old_instance)
+            public function update($new_instance, $old_instance)
             {
                 //save the widget
                 //Nothing to save
@@ -977,11 +1019,12 @@ if (!function_exists('register_geodir_widgets')) {
              * Back-end advanced search widget settings form.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $instance Previously saved values from database.
              * @return string|void
              */
-            function form($instance)
+            public function form($instance)
             {
                 //widgetform in backend
                 echo __("This is a search widget to show advance search for gedodirectory listings.", GEODIRECTORY_TEXTDOMAIN);
