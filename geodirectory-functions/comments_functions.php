@@ -784,18 +784,20 @@ if (!function_exists('geodir_comment')) {
                 ?>
             <li <?php comment_class('geodir-comment'); ?> id="li-comment-<?php comment_ID(); ?>">
                 <article id="comment-<?php comment_ID(); ?>" class="comment hreview">
+                    <?php
+                    /**
+                     * Filter to modify comment avatar size
+                     *
+                     * You can use this filter to change comment avatar size.
+                     *
+                     * @since 1.0.0
+                     * @package GeoDirectory
+                     */
+                    $avatar_size = apply_filters('geodir_comment_avatar_size', 44);
+                    echo '<div class="avatar-wrap">'.get_avatar($comment, $avatar_size).'</div>';
+                    ?>
                     <header class="comment-meta comment-author vcard">
                         <?php
-                        /**
-                         * Filter to modify comment avatar size
-                         *
-                         * You can use this filter to change comment avatar size.
-                         *
-                         * @since 1.0.0
-                         * @package GeoDirectory
-                         */
-                        $avatar_size = apply_filters('geodir_comment_avatar_size', 44);
-                        echo get_avatar($comment, $avatar_size);
                         printf('<cite><b class="reviewer">%1$s</b> %2$s</cite>',
                             get_comment_author_link(),
                             // If current post author is also comment author, make it known visually.
@@ -818,13 +820,16 @@ if (!function_exists('geodir_comment')) {
 
                     <section class="comment-content comment">
                         <?php comment_text(); ?>
-                        <?php edit_comment_link(__('Edit', GEODIRECTORY_TEXTDOMAIN), '<p class="edit-link">', '</p>'); ?>
                     </section>
                     <!-- .comment-content -->
 
-                    <div class="reply">
-                        <?php comment_reply_link(array_merge($args, array('reply_text' => __('Reply', GEODIRECTORY_TEXTDOMAIN), 'after' => ' <span>&darr;</span>', 'depth' => $depth, 'max_depth' => $args['max_depth']))); ?>
+                    <div class="comment-links">
+                        <?php edit_comment_link(__('Edit', GEODIRECTORY_TEXTDOMAIN), '<p class="edit-link">', '</p>'); ?>
+                        <div class="reply">
+                            <?php comment_reply_link(array_merge($args, array('reply_text' => __('Reply', GEODIRECTORY_TEXTDOMAIN), 'after' => ' <span>&darr;</span>', 'depth' => $depth, 'max_depth' => $args['max_depth']))); ?>
+                        </div>
                     </div>
+
                     <!-- .reply -->
                 </article>
                 <!-- #comment-## -->
