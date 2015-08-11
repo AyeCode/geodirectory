@@ -26,8 +26,8 @@ if (post_password_required())
     <?php if (have_comments()) : ?>
         <h2 class="comments-title">
             <?php
-            printf(_n('One review on &ldquo;%2$s&rdquo;', '%1$s reviews on &ldquo;%2$s&rdquo;', get_comments_number(), GEODIRECTORY_TEXTDOMAIN),
-                number_format_i18n(get_comments_number()), '<span>' . get_the_title() . '</span>');
+            printf(_n('1 Review <span class="r-title-on">on</span> <span class="r-title">&ldquo;%2$s&rdquo;</span>', '%1$s Reviews <span>on</span> <span class="r-title"> &ldquo;%2$s&rdquo;</span>', get_comments_number(), GEODIRECTORY_TEXTDOMAIN),
+                number_format_i18n(get_comments_number()), get_the_title());
             ?>
         </h2>
 
