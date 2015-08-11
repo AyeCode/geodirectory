@@ -3208,7 +3208,7 @@ function geodir_init_no_rating()
         remove_action('comment_form_before_fields', 'geodir_reviewrating_comment_rating_fields');
         remove_action('add_meta_boxes_comment', 'geodir_comment_add_meta_box');
         remove_action('add_meta_boxes', 'geodir_reviewrating_comment_metabox', 13);
-        remove_filter('comment_text', 'geodir_wrap_comment_text', 10);
+        remove_filter('comment_text', 'geodir_wrap_comment_text', 40);
 
         add_action('comment_form_logged_in_after', 'geodir_no_rating_rating_fields');
         add_action('comment_form_before_fields', 'geodir_no_rating_rating_fields');
