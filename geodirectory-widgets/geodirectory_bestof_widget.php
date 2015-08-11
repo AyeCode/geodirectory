@@ -18,22 +18,28 @@ class geodir_bestof_widget extends WP_Widget
 	 * Register the best of widget with WordPress.
 	 *
 	 * @since 1.3.9
+     * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
 	 */
-	function geodir_bestof_widget()
-    {
+    function __construct() {
         $widget_ops = array('classname' => 'geodir_bestof_widget', 'description' => __('GD > Best of widget', GEODIRECTORY_TEXTDOMAIN));
-        $this->WP_Widget('bestof_widget', __('GD > Best of widget', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
+        parent::__construct(
+            'bestof_widget', // Base ID
+            __('GD > Best of widget', GEODIRECTORY_TEXTDOMAIN), // Name
+            $widget_ops// Args
+        );
     }
 
 	/**
 	 * Front-end display content for best of widget.
 	 *
 	 * @since 1.3.9
+     * @since 1.5.1 Added filter to view all link.
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $args     Widget arguments.
 	 * @param array $instance Saved values from database.
 	 */
-	function widget($args, $instance)
+	public function widget($args, $instance)
     {
         extract($args);
 		/**
@@ -287,7 +293,19 @@ class geodir_bestof_widget extends WP_Widget
             <?php
             echo '<div id="geodir-bestof-places">';
             if ($terms) {
-                echo '<h3 class="bestof-cat-title">' . wp_sprintf( __( 'Best of %s', GEODIRECTORY_TEXTDOMAIN ), $first_term->name ) . '<a href="' . esc_url(add_query_arg(array('sort_by' => 'overall_rating_desc'), get_term_link($first_term, $first_term->taxonomy))) . '">' . __("View all", GEODIRECTORY_TEXTDOMAIN) . '</a></h3>';
+                $view_all_link = add_query_arg(array('sort_by' => 'rating_count_desc'), get_term_link($first_term, $first_term->taxonomy));
+				/**
+				 * Filter the page link to view all lisitngs.
+				 *
+				 * @since 1.5.1
+				 *
+				 * @param array $view_all_link View all listings page link.
+				 * @param array $post_type The Post type.
+				 * @param array $first_term The category term object.
+				 */
+				$view_all_link = apply_filters('geodir_bestof_widget_view_all_link', $view_all_link, $post_type, $first_term);
+				
+				echo '<h3 class="bestof-cat-title">' . wp_sprintf( __( 'Best of %s', GEODIRECTORY_TEXTDOMAIN ), $first_term->name ) . '<a href="' . esc_url($view_all_link) . '">' . __("View all", GEODIRECTORY_TEXTDOMAIN) . '</a></h3>';
             }
             geodir_bestof_places_by_term($query_args);
             echo "</div>";
@@ -303,13 +321,14 @@ class geodir_bestof_widget extends WP_Widget
 	 * Sanitize best of widget form values as they are saved.
 	 *
 	 * @since 1.3.9
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $new_instance Values just sent to be saved.
 	 * @param array $old_instance Previously saved values from database.
 	 *
 	 * @return array Updated safe values to be saved.
 	 */
-	function update($new_instance, $old_instance)
+	public function update($new_instance, $old_instance)
     {
         $instance = $old_instance;
         $instance['title'] = strip_tags($new_instance['title']);
@@ -330,10 +349,11 @@ class geodir_bestof_widget extends WP_Widget
 	 * Back-end best of widget settings form.
 	 *
 	 * @since 1.3.9
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $instance Previously saved values from database.
 	 */
-	function form($instance)
+	public function form($instance)
     {
         $instance = wp_parse_args((array)$instance,
             array(
@@ -556,6 +576,7 @@ add_action('wp_ajax_nopriv_geodir_bestof', 'geodir_bestof_callback');
  * Get the best of widget content using ajax.
  *
  * @since 1.3.9
+ * @since 1.5.1 Added filter to view all link.
  *
  * @return string Html content.
  */
@@ -591,7 +612,11 @@ function geodir_bestof_callback()
     $query_args['tax_query'] = array($tax_query);
     if ($term_id && $taxonomy) {
         $term = get_term_by('id', $term_id, $taxonomy);
-        echo '<h3 class="bestof-cat-title">' . wp_sprintf( __( 'Best of %s', GEODIRECTORY_TEXTDOMAIN ), $term->name ) . '<a href="' . esc_url( add_query_arg(array('sort_by' => 'overall_rating_desc'), get_term_link($term)) ) . '">' . __("View all", GEODIRECTORY_TEXTDOMAIN) . '</a></h3>';
+        $view_all_link = add_query_arg(array('sort_by' => 'rating_count_desc'), get_term_link($term)) ;
+		/** This filter is documented in geodirectory-widgets/geodirectory_bestof_widget.php */
+		$view_all_link = apply_filters('geodir_bestof_widget_view_all_link', $view_all_link, $post_type, $term);
+				
+		echo '<h3 class="bestof-cat-title">' . wp_sprintf( __( 'Best of %s', GEODIRECTORY_TEXTDOMAIN ), $term->name ) . '<a href="' . esc_url( $view_all_link ) . '">' . __("View all", GEODIRECTORY_TEXTDOMAIN) . '</a></h3>';
     }
     geodir_bestof_places_by_term($query_args);
     wp_die();

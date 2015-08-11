@@ -309,7 +309,7 @@ function geodir_pagemenu_items($menu, $args)
     }
     //else if(empty($geodir_theme_location)) // It means 'Show geodirectory navigation in selected menu locations' is not set yet.
 //		$menu = str_replace("</ul></div>",geodir_add_nav_menu_items()."</ul></div>",$menu);
-    else if (is_array($geodir_theme_location) && in_array($args['theme_location'], $geodir_theme_location))
+    else if (is_array($geodir_theme_location) && isset($args['theme_location']) && in_array($args['theme_location'], $geodir_theme_location))
         $menu = str_replace("</ul></div>", geodir_add_nav_menu_items() . "</ul></div>", $menu);
 
     return $menu;
