@@ -307,14 +307,6 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
         'std' => '1' // Default value to show home top section
     ),
 
-    array(
-        'name' => __('Terms and Conditions Content', GEODIRECTORY_TEXTDOMAIN),
-        'desc' => '',
-        'id' => 'geodir_term_condition_content',
-        'type' => 'textarea',
-        'css' => 'width:500px; height: 150px;',
-        'std' => __('Please accept <a href="" target="_blank">terms and conditions</a>', GEODIRECTORY_TEXTDOMAIN)
-    ),
 
     array(
         'name' => __('Show description field as editor', GEODIRECTORY_TEXTDOMAIN),

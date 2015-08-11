@@ -1507,7 +1507,7 @@ function geodir_after_main_form_fields()
                     echo 'checked="checked"';
                 } ?> field_type="checkbox" name="geodir_accept_term_condition" id="geodir_accept_term_condition"
                        class="geodir_textfield" value="1"
-                       style="display:inline-block"/><?php echo __(stripslashes(get_option('geodir_term_condition_content')), GEODIRECTORY_TEXTDOMAIN); ?>
+                       style="display:inline-block"/><a href="<?php $terms_page = get_option('geodir_term_condition_page'); if($terms_page){ echo get_permalink($terms_page);}?>" target="_blank"><?php _e('Please accept our terms and conditions', GEODIRECTORY_TEXTDOMAIN); ?></a>
 				</span>
             </div>
             <span class="geodir_message_error"><?php if (isset($required_msg)) {
