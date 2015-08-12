@@ -11,6 +11,7 @@ Bottom section widget area inside wrapper div - FIXED
 Review text first paragraph not wrapped in `p` tags - FIXED
 Moved out avatar from reviews header - CHANGED
 Changed terms and conditions link from a text input to a page select under GD>Permalinks for WPML compatibility - CHANGED
+Option added in popular post category widget to set default posttype - CHANGED
 
 v1.5.0
 Google analytic countries throws error - FIXED
