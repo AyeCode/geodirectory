@@ -425,6 +425,7 @@ function geodir_get_current_posttype()
  * Get list of geodirectory Post Types.
  *
  * @since 1.0.0
+ * @since 1.5.1 options case added to get post type options array.
  * @package GeoDirectory
  * @param string $output The output Type.
  * @return array|object|string Post Types.
@@ -443,6 +444,17 @@ function geodir_get_posttypes($output = 'names')
             case 'array':
             case 'Array':
                 $post_types = (array)$post_types;
+                break;
+			case 'options':
+                $post_types = (array)$post_types;
+				
+				$options = array();
+				if (!empty($post_types)) {
+					foreach ($post_types as $key => $info) {
+						$options[$key] = __($info['labels']['singular_name'], GEODIRECTORY_TEXTDOMAIN);
+					}
+				}
+				$post_types = $options;
                 break;
             default:
                 $post_types = array_keys($post_types);
