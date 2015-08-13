@@ -4499,7 +4499,7 @@ function geodir_ajax_import_export() {
 			}
 			// WPML
 			if ( $post_type == 'gd_event' ) {
-				add_filter( 'geodir_imex_count_posts', 'geodir_imex_count_events', 10, 2 );
+				//add_filter( 'geodir_imex_count_posts', 'geodir_imex_count_events', 10, 2 );
 				add_filter( 'geodir_imex_export_posts_query', 'geodir_imex_get_events_query', 10, 2 );
 			}
 
@@ -5247,6 +5247,10 @@ function geodir_ajax_import_export() {
 
 								$table = $plugin_prefix . $post_type . '_detail';
 								
+								if ($post_type == 'gd_event') {
+									$gd_post = geodir_imex_process_event_data($gd_post);
+								}
+								
 								if (isset($gd_post['post_id'])) {
 									unset($gd_post['post_id']);
 								}
@@ -5584,6 +5588,7 @@ function geodir_imex_count_events( $posts_count, $post_type ) {
  * Retrives the posts for the current post type.
  *
  * @since 1.4.6
+ * @since 1.5.1 Updated to import & export recurring events.
  * @package GeoDirectory
  *
  * @global object $wp_filesystem WordPress FileSystem object.
@@ -5614,6 +5619,19 @@ function geodir_imex_get_posts( $post_type ) {
 			$csv_row[] = 'event_enddate';
 			$csv_row[] = 'starttime';
 			$csv_row[] = 'endtime';
+			
+			$csv_row[] = 'is_recurring_event';
+			$csv_row[] = 'event_duration_days';
+			$csv_row[] = 'recurring_dates';
+			$csv_row[] = 'is_whole_day_event';
+			$csv_row[] = 'event_starttimes';
+			$csv_row[] = 'event_endtimes';
+			$csv_row[] = 'recurring_type';
+			$csv_row[] = 'recurring_interval';
+			$csv_row[] = 'recurring_week_days';
+			$csv_row[] = 'recurring_week_nos';
+			$csv_row[] = 'max_recurring_count';
+			$csv_row[] = 'recurring_end_date';
 		}
 		$csv_row[] = 'post_status';
 		$csv_row[] = 'is_featured';
@@ -5766,10 +5784,24 @@ function geodir_imex_get_posts( $post_type ) {
 			$csv_row[] = $post_tags; // post_tags
 			$csv_row[] = $post_type; // post_type
 			if ( $post_type == 'gd_event' ) {
-				$csv_row[] = isset( $post['event_date'] ) && $post['event_date'] != '' && $post['event_date'] != '0000-00-00 00:00:00' ? date_i18n( 'd/m/Y', strtotime( $post['event_date'] ) ) : ''; // event_date
-				$csv_row[] = isset( $post['event_date'] ) && $post['event_date'] != '' && $post['event_date'] != '0000-00-00' ? date_i18n( 'd/m/Y', strtotime( $post['event_date'] ) ) : ''; // enddate
-				$csv_row[] = isset( $post['starttime'] ) && $post['starttime'] != '' && $post['starttime'] != '00:00:00' ? date_i18n( 'H:i', strtotime( $post['starttime'] ) ) : ''; // starttime
-				$csv_row[] = isset( $post['endtime'] ) && $post['endtime'] != '' && $post['endtime'] != '00:00:00' ? date_i18n( 'H:i', strtotime( $post['endtime'] ) ) : ''; // endtime
+				$event_data = geodir_imex_get_event_data($post, $gd_post_info);
+				$csv_row[] = $event_data['event_date']; // event_date
+				$csv_row[] = $event_data['event_enddate']; // enddate
+				$csv_row[] = $event_data['starttime']; // starttime
+				$csv_row[] = $event_data['endtime']; // endtime
+				
+				$csv_row[] = $event_data['is_recurring_event']; // is_recurring
+				$csv_row[] = $event_data['event_duration_days']; // duration_x
+				$csv_row[] = $event_data['recurring_dates']; // recurring_dates
+				$csv_row[] = $event_data['is_whole_day_event']; // all_day
+				$csv_row[] = $event_data['event_starttimes']; // starttimes
+				$csv_row[] = $event_data['event_endtimes']; // endtimes
+				$csv_row[] = $event_data['recurring_type']; // repeat_type
+				$csv_row[] = $event_data['recurring_interval']; // repeat_x
+				$csv_row[] = $event_data['recurring_week_days']; // repeat_days
+				$csv_row[] = $event_data['recurring_week_nos']; // repeat_weeks
+				$csv_row[] = $event_data['max_recurring_count']; // max_repeat
+				$csv_row[] = $event_data['recurring_end_date']; // repeat_end
 			}
 			$csv_row[] = $post_info['post_status']; // post_status
 			$csv_row[] = (int)$post_info['is_featured'] == 1 ? 1 : ''; // is_featured
@@ -5858,7 +5890,7 @@ function geodir_get_export_posts( $post_type ) {
 		
 	$table = $plugin_prefix . $post_type . '_detail';
 
-	$query = "SELECT {$wpdb->posts}.ID FROM {$wpdb->posts} INNER JOIN {$table} ON {$table}.post_id = {$wpdb->posts}.ID WHERE {$wpdb->posts}.post_type = %s ORDER BY {$wpdb->posts}.ID ASC";
+	$query = "SELECT {$wpdb->posts}.ID FROM {$wpdb->posts} INNER JOIN {$table} ON {$table}.post_id = {$wpdb->posts}.ID WHERE {$wpdb->posts}.post_type = %s ORDER BY {$wpdb->posts}.ID DESC";
 	/**
 	 * Modify returned posts SQL query for the current post type.
 	 *
@@ -5888,6 +5920,7 @@ function geodir_get_export_posts( $post_type ) {
  * Get the posts SQL query for the current post type.
  *
  * @since 1.4.6
+ * @since 1.5.1 Query updated to get distinct posts. 
  * @package GeoDirectory
  *
  * @global object $wpdb WordPress Database object.
@@ -5904,7 +5937,7 @@ function geodir_imex_get_events_query( $query, $post_type ) {
 		$table = $plugin_prefix . $post_type . '_detail';
 		$schedule_table = EVENT_SCHEDULE;
 
-		$query = "SELECT {$wpdb->posts}.ID, {$schedule_table}.event_date, {$schedule_table}.event_enddate AS enddate, {$schedule_table}.event_starttime AS starttime, {$schedule_table}.event_endtime AS endtime FROM {$wpdb->posts} INNER JOIN {$table} ON ({$table}.post_id = {$wpdb->posts}.ID) INNER JOIN {$schedule_table} ON ({$schedule_table}.event_id = {$wpdb->posts}.ID) WHERE {$wpdb->posts}.post_type = %s ORDER BY {$wpdb->posts}.ID ASC";
+		$query = "SELECT {$wpdb->posts}.ID, {$schedule_table}.event_date, {$schedule_table}.event_enddate AS enddate, {$schedule_table}.event_starttime AS starttime, {$schedule_table}.event_endtime AS endtime FROM {$wpdb->posts} INNER JOIN {$table} ON ({$table}.post_id = {$wpdb->posts}.ID) INNER JOIN {$schedule_table} ON ({$schedule_table}.event_id = {$wpdb->posts}.ID) WHERE {$wpdb->posts}.post_type = %s GROUP BY {$table}.post_id ORDER BY {$wpdb->posts}.ID ASC, {$schedule_table}.schedule_id ASC";
 	}
 	
 	return $query; 
@@ -6280,4 +6313,296 @@ function geodir_icl_duplicate_post_images($master_post_id, $tr_post_id, $lang) {
 	}
 	
 	return false;
+}
+
+/**
+ * Retrives the event data to export.
+ *
+ * @since 1.5.1
+ * @package GeoDirectory
+ *
+ * @param array $post Post array.
+ * @param object $gd_post_info Geodirectory Post object.
+ * @return array Event data array.
+ */
+function geodir_imex_get_event_data($post, $gd_post_info) {
+	$event_date = isset( $post['event_date'] ) && $post['event_date'] != '' && $post['event_date'] != '0000-00-00 00:00:00' ? date_i18n( 'd/m/Y', strtotime( $post['event_date'] ) ) : '';
+	$event_enddate = $event_date;
+	$starttime = isset( $post['starttime'] ) && $post['starttime'] != '' && $post['starttime'] != '00:00:00' ? date_i18n( 'H:i', strtotime( $post['starttime'] ) ) : '';
+	$endtime = isset( $post['endtime'] ) && $post['endtime'] != '' && $post['endtime'] != '00:00:00' ? date_i18n( 'H:i', strtotime( $post['endtime'] ) ) : '';
+	
+	$is_recurring_event = '';
+	$event_duration_days = '';
+	$is_whole_day_event = '';
+	$recurring_dates = '';
+	$event_starttimes = '';
+	$event_endtimes = '';
+	$recurring_type = '';
+	$recurring_interval = '';
+	$recurring_week_days = '';
+	$recurring_week_nos = '';
+	$max_recurring_count = '';
+	$recurring_end_date = '';
+	$recurring_dates = '';
+		
+	$recurring_data = isset($gd_post_info->recurring_dates) ? maybe_unserialize($gd_post_info->recurring_dates) : array();
+	if (!empty($recurring_data)) {
+		$event_date = isset( $recurring_data['event_start'] ) && $recurring_data['event_start'] != '' && $recurring_data['event_start'] != '0000-00-00 00:00:00' ? date_i18n( 'd/m/Y', strtotime( $recurring_data['event_start'] ) ) : $event_date;
+		$event_enddate = isset( $recurring_data['event_end'] ) && $recurring_data['event_end'] != '' && $recurring_data['event_end'] != '0000-00-00 00:00:00' ? date_i18n( 'd/m/Y', strtotime( $recurring_data['event_end'] ) ) : $event_date;
+		$starttime = isset( $recurring_data['starttime'] ) && $recurring_data['starttime'] != '' && $recurring_data['starttime'] != '00:00:00' ? date_i18n( 'H:i', strtotime( $recurring_data['starttime'] ) ) : $starttime;
+		$endtime = isset( $recurring_data['endtime'] ) && $recurring_data['endtime'] != '' && $recurring_data['endtime'] != '00:00:00' ? date_i18n( 'H:i', strtotime( $recurring_data['endtime'] ) ) : $endtime;
+		$is_whole_day_event = !empty($recurring_data['all_day']) ? 1 : '';
+		$different_times = !empty($recurring_data['different_times']) ? true : false;
+	
+		$recurring_pkg = geodir_event_recurring_pkg( $gd_post_info );
+		$is_recurring = isset( $gd_post_info->is_recurring ) && (int)$gd_post_info->is_recurring == 0 ? false : true;
+			
+		if ($recurring_pkg && $is_recurring) {
+			$recurring_dates = $event_date;
+			$event_enddate = '';
+			$is_recurring_event = 1;
+						
+			$recurring_type = !empty($recurring_data['repeat_type']) && in_array($recurring_data['repeat_type'], array('day', 'week', 'month', 'year', 'custom')) ? $recurring_data['repeat_type'] : 'custom';
+			
+			if (!empty($recurring_data['event_recurring_dates'])) {
+				$event_recurring_dates = explode( ',', $recurring_data['event_recurring_dates'] );
+				
+				if (!empty($event_recurring_dates)) {
+					$recurring_dates = array();
+					
+					foreach ($event_recurring_dates as $date) {
+						$recurring_dates[] = date_i18n( 'd/m/Y', strtotime( $date ) );
+					}
+					
+					$recurring_dates = implode(",", $recurring_dates);
+				}
+			}
+			
+			if ($recurring_type == 'custom') {
+				if (!$is_whole_day_event) {
+					$event_starttimes = $starttime;
+					$event_endtimes = $endtime;
+			
+					if (!empty($recurring_data['starttimes'])) {
+						$times = array();
+						
+						foreach ($recurring_data['starttimes'] as $time) {
+							$times[] = $time != '00:00:00' ? date_i18n( 'H:i', strtotime( $time ) ) : '00:00';
+						}
+						
+						$event_starttimes = implode(",", $times);
+					}
+					
+					if (!empty($recurring_data['endtimes'])) {
+						$times = array();
+						
+						foreach ($recurring_data['endtimes'] as $time) {
+							$times[] = $time != '00:00:00' ? date_i18n( 'H:i', strtotime( $time ) ) : '00:00';
+						}
+						
+						$event_endtimes = implode(",", $times);
+					}
+					
+					if (!$different_times) {
+						$event_starttimes = '';
+						$event_endtimes = '';
+					}
+				}
+			} else {
+				$event_duration_days = isset($recurring_data['duration_x']) ? (int)$recurring_data['duration_x'] : 1;
+				$recurring_interval = !empty($recurring_data['repeat_x']) && (int)$recurring_data['repeat_x'] > 0 ? $recurring_data['repeat_x'] : 1;
+				
+				if (($recurring_type == 'week' || $recurring_type == 'month') && !empty($recurring_data['repeat_days'])) {
+					$week_days = array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
+					
+					$days = array();
+					foreach ($recurring_data['repeat_days'] as $day) {
+						if (isset($week_days[$day])) {
+							$days[] = $week_days[$day];
+						}
+					}
+					
+					$recurring_week_days = implode(",", array_unique($days));
+				}
+				
+				$recurring_week_nos = $recurring_type == 'month' && !empty($recurring_data['repeat_weeks']) ? implode(",", $recurring_data['repeat_weeks']) : $recurring_week_nos;
+				if (!empty($recurring_data['repeat_end_type']) && (int)$recurring_data['repeat_end_type'] == 1) {
+					$recurring_end_date = isset($recurring_data['repeat_end']) && $recurring_data['repeat_end'] != '' && $recurring_data['repeat_end'] != '0000-00-00 00:00:00' ? date_i18n( 'd/m/Y', strtotime( $recurring_data['repeat_end'] ) ) : '';
+					$max_recurring_count = empty($recurring_end_date) ? 1 : '';
+				} else {
+					$max_recurring_count = (!empty($recurring_data['max_repeat']) && (int)$recurring_data['max_repeat'] > 0 ? (int)$recurring_data['max_repeat'] : 1);
+				}
+			}
+		}
+	}
+	if ($is_whole_day_event) {
+		$starttime = '';
+		$endtime = '';
+		$event_starttimes = '';
+		$event_endtimes = '';
+	}
+	
+	$data = array();
+	$data['event_date'] = $event_date;
+	$data['event_enddate'] = $event_enddate;
+	$data['starttime'] = $starttime;
+	$data['endtime'] = $endtime;
+	$data['is_recurring_event'] = $is_recurring_event;
+	$data['recurring_dates'] = $recurring_dates;
+	$data['event_duration_days'] = $event_duration_days;
+	$data['is_whole_day_event'] = $is_whole_day_event;
+	$data['event_starttimes'] = $event_starttimes;
+	$data['event_endtimes'] = $event_endtimes;
+	$data['recurring_type'] = $recurring_type;
+	$data['recurring_interval'] = $recurring_interval;
+	$data['recurring_week_days'] = $recurring_week_days;
+	$data['recurring_week_nos'] = $recurring_week_nos;
+	$data['max_recurring_count'] = $max_recurring_count;
+	$data['recurring_end_date'] = $recurring_end_date;
+	
+	return $data;
+}
+
+/**
+ * Convert date format to store in database.
+ *
+ * PHP date() function doesn't work well with d/m/Y format
+ * so this function validate and convert date to store in db.
+ *
+ * @since 1.5.1
+ * @package GeoDirectory
+ *
+ * @param string $date Date in Y-m-d or d/m/Y format.
+ * @return doesn't Date.
+ */
+function geodir_imex_get_date_ymd($date) {
+	if (strpos($date, '/') !== false) {
+		$date = str_replace('/', '-', $date); // PHP doesn't work well with dd/mm/yyyy format.
+	}
+	
+	$date = date_i18n('Y-m-d', strtotime($date));
+	return $date;
+}
+
+/**
+ * Validate the event data.
+ *
+ * @since 1.5.1
+ * @package GeoDirectory
+ *
+ * @param array $gd_post Post array.
+ * @return array Event data array.
+ */
+function geodir_imex_process_event_data($gd_post) {
+	$recurring_pkg = geodir_event_recurring_pkg( (object)$gd_post );
+	
+	$is_recurring = isset( $gd_post['is_recurring_event'] ) && (int)$gd_post['is_recurring_event'] == 0 ? false : true;
+	$event_date = isset($gd_post['event_date']) && $gd_post['event_date'] != '' ? geodir_imex_get_date_ymd($gd_post['event_date']) : '';
+	$event_enddate = isset($gd_post['event_enddate']) && $gd_post['event_enddate'] != '' ? geodir_imex_get_date_ymd($gd_post['event_enddate']) : $event_date;
+	$all_day = isset($gd_post['is_whole_day_event']) && !empty($gd_post['is_whole_day_event']) ? true : false;
+	$starttime = isset($gd_post['starttime']) && !$all_day ? $gd_post['starttime'] : '';
+	$endtime = isset($gd_post['endtime']) && !$all_day ? $gd_post['endtime'] : '';
+	
+	$repeat_type = '';
+	$different_times = '';
+	$starttimes = '';
+	$endtimes = '';
+	$repeat_days = '';
+	$repeat_weeks = '';
+	$event_recurring_dates = '';
+	$repeat_x = '';
+	$duration_x = '';
+	$repeat_end_type = '';
+	$max_repeat = '';
+	$repeat_end = '';
+	
+	if ($recurring_pkg && $is_recurring) {
+		$repeat_type = $gd_post['recurring_type'];
+		
+		if ($repeat_type == 'custom') {
+			$starttimes = !$all_day && !empty($gd_post['event_starttimes']) ? explode(",", $gd_post['event_starttimes']) : array();
+			$endtimes = !$all_day && !empty($gd_post['event_endtimes']) ? explode(",", $gd_post['event_endtimes']) : array();
+			
+			if (!empty($starttimes) || !empty($endtimes)) {
+				$different_times = true;
+			}
+			
+			$recurring_dates = isset($gd_post['recurring_dates']) && $gd_post['recurring_dates'] != '' ? explode(",", $gd_post['recurring_dates']) : array();
+			if (!empty($recurring_dates)) {
+				$event_recurring_dates = array();
+				
+				foreach ($recurring_dates as $recurring_date) {
+					$recurring_date = trim($recurring_date);
+					
+					if ($recurring_date != '') {
+						$event_recurring_dates[] = geodir_imex_get_date_ymd($recurring_date);
+					}
+				}
+				
+				$event_recurring_dates = array_unique($event_recurring_dates);
+				$event_recurring_dates = implode(",", $event_recurring_dates);
+			}
+		} else {
+			$duration_x = !empty( $gd_post['event_duration_days'] ) ? (int)$gd_post['event_duration_days'] : 1;
+			$repeat_x = !empty( $gd_post['recurring_interval'] ) ? (int)$gd_post['recurring_interval'] : 1;
+			$max_repeat = !empty( $gd_post['max_recurring_count'] ) ? (int)$gd_post['max_recurring_count'] : 1;
+			$repeat_end = !empty( $gd_post['recurring_end_date'] ) ? geodir_imex_get_date_ymd($gd_post['recurring_end_date']) : '';
+			
+			$repeat_end_type = $repeat_end != '' ? 1 : 0;
+			$max_repeat = $repeat_end != '' ? '' : $max_repeat;
+			
+			$week_days = array_flip(array('sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'));
+			
+			$a_repeat_days = isset($gd_post['recurring_week_days']) && trim($gd_post['recurring_week_days'])!='' ? explode(',', trim($gd_post['recurring_week_days'])) : array();
+			$repeat_days = array();
+			if (!empty($a_repeat_days)) {
+				foreach ($a_repeat_days as $repeat_day) {
+					$repeat_day = strtolower(trim($repeat_day));
+					
+					if ($repeat_day != '' && isset($week_days[$repeat_day])) {
+						$repeat_days[] = $week_days[$repeat_day];
+					}
+				}
+				
+				$repeat_days = array_unique($repeat_days);
+			}
+			
+			$a_repeat_weeks = isset($gd_post['recurring_week_nos']) && trim($gd_post['recurring_week_nos']) != '' ? explode(",", trim($gd_post['recurring_week_nos'])) : array();
+			$repeat_weeks = array();
+			if (!empty($a_repeat_weeks)) {
+				foreach ($a_repeat_weeks as $repeat_week) {
+					$repeat_weeks[] = (int)$repeat_week;
+				}
+				
+				$repeat_weeks = array_unique($repeat_weeks);
+			}
+		}
+	}
+	
+	if (isset($gd_post['recurring_dates'])) {
+		unset($gd_post['recurring_dates']);
+	}
+	
+	$gd_post['is_recurring'] = $is_recurring;
+	$gd_post['event_date'] = $event_date;
+	$gd_post['event_start'] = $event_date;
+	$gd_post['event_end'] = $event_enddate;
+	$gd_post['all_day'] = $all_day;
+	$gd_post['starttime'] = $starttime;
+	$gd_post['endtime'] = $endtime;
+	
+	$gd_post['repeat_type'] = $repeat_type;
+	$gd_post['different_times'] = $different_times;
+	$gd_post['starttimes'] = $starttimes;
+	$gd_post['endtimes'] = $endtimes;
+	$gd_post['repeat_days'] = $repeat_days;
+	$gd_post['repeat_weeks'] = $repeat_weeks;
+	$gd_post['event_recurring_dates'] = $event_recurring_dates;
+	$gd_post['repeat_x'] = $repeat_x;
+	$gd_post['duration_x'] = $duration_x;
+	$gd_post['repeat_end_type'] = $repeat_end_type;
+	$gd_post['max_repeat'] = $max_repeat;
+	$gd_post['repeat_end'] = $repeat_end;
+
+	return $gd_post;
 }
