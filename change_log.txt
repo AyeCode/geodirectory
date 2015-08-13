@@ -14,6 +14,7 @@ Changed terms and conditions link from a text input to a page select under GD>Pe
 Option added in popular post category widget to set default posttype - CHANGED
 Recurring events no working with GD import & export - FIXED
 Category limit no longer counting child categories - FIXED
+In popular post widget View All link in not correct if location filter disabled - FIXED
 
 v1.5.0
 Google analytic countries throws error - FIXED
