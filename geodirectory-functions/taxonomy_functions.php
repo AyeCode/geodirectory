@@ -842,6 +842,13 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
                     var cat_taxonomy = '<?php echo $cat_taxonomy;?>';
                     var cat_exclude = '<?php echo base64_encode($cat_exclude);?>';
                     var cat_limit = jQuery('#' + cat_taxonomy).find('#cat_limit').val();
+					<?php if ((int)$cat_limit > 0) { ?>
+					var selected = parseInt(jQuery('#' + cat_taxonomy).find('.cat_sublist > div.post_catlist_item').length);
+					if (cat_limit != '' && selected > 0 && selected >= cat_limit && cat_limit != 0) {
+						alert("<?php echo esc_attr(wp_sprintf(__('You have reached category limit of %d categories.', GEODIRECTORY_TEXTDOMAIN), (int)$cat_limit));?>");
+						return false;
+					}
+					<?php } ?>
                     jQuery.post(url, {
                         geodir_ajax: 'category_ajax',
                         cat_tax: cat_taxonomy,
@@ -927,7 +934,6 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
                 });
 
                 maincat_obj = jQuery('#' + cat_taxonomy).find('.main_cat_list');
-				
                 if (cat_limit != '' && jQuery('#' + cat_taxonomy).find('.cat_sublist > div.post_catlist_item').length >= cat_limit && cat_limit != 0) {
                     maincat_obj.find('.chosen_select').chosen('destroy');
                     maincat_obj.hide();

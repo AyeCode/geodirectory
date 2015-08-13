@@ -13,6 +13,7 @@ Moved out avatar from reviews header - CHANGED
 Changed terms and conditions link from a text input to a page select under GD>Permalinks for WPML compatibility - CHANGED
 Option added in popular post category widget to set default posttype - CHANGED
 Recurring events no working with GD import & export - FIXED
+Category limit no longer counting child categories - FIXED
 
 v1.5.0
 Google analytic countries throws error - FIXED
