@@ -18,6 +18,7 @@ In popular post widget View All link in not correct if location filter disabled 
 Disabling address change on marker move now also includes map drag on add listing page - CHANGED
 Countries Caribbean Netherlands and Curaçao added to the country DB - ADDED
 New map infowindow style added to be more consistent on different size maps - CHANGED
+If WPSEO static blog page set GD homepage title wrong - FIXED
 
 v1.5.0
 Google analytic countries throws error - FIXED
