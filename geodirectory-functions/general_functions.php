@@ -2716,6 +2716,7 @@ function geodir_loginwidget_output($args = '', $instance = '')
  * Generates popular postview HTML.
  *
  * @since 1.0.0
+ * @since 1.5.1 View all link fixed for location filter disabled.
  * @package GeoDirectory
  * @global object $post The current post object.
  * @global string $gridview_columns_widget The girdview style of the listings for widget.
@@ -2836,6 +2837,12 @@ function geodir_popular_postview_output($args = '', $instance = '')
     }
 
     $location_url = implode("/", $location_url);
+	
+	$skip_location = false;
+	if (!$add_location_filter && !empty($_SESSION['gd_multi_location'])) {
+		$skip_location = true;
+		unset($_SESSION['gd_multi_location']);
+	}
 
     if (get_option('permalink_structure')) {
         $viewall_url = get_post_type_archive_link($post_type);
@@ -2856,6 +2863,10 @@ function geodir_popular_postview_output($args = '', $instance = '')
 
         $geodir_add_location_url = NULL;
     }
+	if ($skip_location) {
+		$_SESSION['gd_multi_location'] = 1;
+	}
+	
     $query_args = array(
         'posts_per_page' => $post_number,
         'is_geodir_loop' => true,
