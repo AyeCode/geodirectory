@@ -531,7 +531,10 @@ function create_marker(input, map_canvas_var) {
                 success: function (response) {
                     jQuery("#" + map_canvas_var).goMap();
                     gd_infowindow.setContent(response);
+                    //setTimeout(function(){gd_infowindow.open(jQuery.goMap.map, marker);}, 3000);
+                    //setTimeout(function(){geodir_fix_marker_pos(map_canvas_var);}, 6000);
                     gd_infowindow.open(jQuery.goMap.map, marker);
+                    geodir_fix_marker_pos(map_canvas_var);
                 }
             });
 
@@ -544,11 +547,24 @@ function create_marker(input, map_canvas_var) {
             gd_infowindow.close(jQuery.goMap.map, marker);
         });
 
+
         return true;
     } else {
         //no lat & long, return no marker
         return false;
     }
+}
+
+function geodir_fix_marker_pos(map_canvas_var){
+    // Reference to the DIV that wraps the bottom of infowindow
+    var iwOuter = jQuery('#'+map_canvas_var+' .gm-style-iw');
+
+    var iwBackground = iwOuter.parent();
+
+    org_height = iwBackground.height();
+
+    jQuery('#'+map_canvas_var+' .geodir-bubble_desc').attr('style', 'height:'+org_height+'px !important');
+
 }
 
 function openMarker(map_canvas, id) {

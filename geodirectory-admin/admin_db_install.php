@@ -363,7 +363,9 @@ if (!function_exists('geodir_create_tables')) {
 	(270, 'Yugoslavia', 'YI', 'YU', 'YUG', '891', 'YU', 'Belgrade ', 'Europe ', 'Serbian', 'Serbs', 'Yugoslavian Dinar ', 'YUM', 10677290, 'Yugoslavia', 'NULL'),
 	(271, 'Zaire', '--', '--', '-- ', '--', '--', '', '', '', '', '', '', 0, 'Zaire', 'see Democratic Republic of the Congo'),
 	(272, 'Zambia', 'ZA', 'ZM', 'ZWB', '894', 'ZM', 'Lusaka ', 'Africa ', 'Zambian', 'Zambians', 'Kwacha', 'ZMK', 9770199, 'Zambia', ''),
-	(273, 'Zimbabwe', 'ZI', 'ZW', 'ZWE', '716', 'ZW', 'Harare ', 'Africa ', 'Zimbabwean', 'Zimbabweans', 'Zimbabwe Dollar', 'ZWD', 11365366, 'Zimbabwe', '')";
+	(273, 'Zimbabwe', 'ZI', 'ZW', 'ZWE', '716', 'ZW', 'Harare ', 'Africa ', 'Zimbabwean', 'Zimbabweans', 'Zimbabwe Dollar', 'ZWD', 11365366, 'Zimbabwe', ''),
+	(276, 'Curaçao', 'UC', 'CW', 'CUW', '531', 'CW', 'Willemstad ', 'Central America and the Caribbean', 'Curaçaoan', 'Curaçaoans', 'Netherlands Antillean guilder', 'ANG', 152760, 'Curaçao', ''),
+	(277, 'Caribbean Netherlands', '--', 'BQ', 'BES', '535', 'BQ', '--', 'Central America and the Caribbean', '--', '--', 'United States dollar', 'USD', 21133, 'Caribbean Netherlands', '')";
 
             /**
              * Filter the SQL query that inserts the country DB table data.
