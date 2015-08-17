@@ -1507,7 +1507,7 @@ function geodir_after_main_form_fields()
                     echo 'checked="checked"';
                 } ?> field_type="checkbox" name="geodir_accept_term_condition" id="geodir_accept_term_condition"
                        class="geodir_textfield" value="1"
-                       style="display:inline-block"/><?php echo __(stripslashes(get_option('geodir_term_condition_content')), GEODIRECTORY_TEXTDOMAIN); ?>
+                       style="display:inline-block"/><a href="<?php $terms_page = get_option('geodir_term_condition_page'); if($terms_page){ echo get_permalink($terms_page);}?>" target="_blank"><?php _e('Please accept our terms and conditions', GEODIRECTORY_TEXTDOMAIN); ?></a>
 				</span>
             </div>
             <span class="geodir_message_error"><?php if (isset($required_msg)) {
@@ -3208,7 +3208,7 @@ function geodir_init_no_rating()
         remove_action('comment_form_before_fields', 'geodir_reviewrating_comment_rating_fields');
         remove_action('add_meta_boxes_comment', 'geodir_comment_add_meta_box');
         remove_action('add_meta_boxes', 'geodir_reviewrating_comment_metabox', 13);
-        remove_filter('comment_text', 'geodir_wrap_comment_text', 10);
+        remove_filter('comment_text', 'geodir_wrap_comment_text', 40);
 
         add_action('comment_form_logged_in_after', 'geodir_no_rating_rating_fields');
         add_action('comment_form_before_fields', 'geodir_no_rating_rating_fields');

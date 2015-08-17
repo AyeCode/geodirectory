@@ -139,6 +139,14 @@ $geodir_settings['permalink_settings'] = apply_filters('geodir_permalink_setting
         'class' => 'chosen_select'
     ),
 
+    array(
+        'name' => __('Terms and Conditions page', GEODIRECTORY_TEXTDOMAIN),
+        'desc' => __('Select the page to use for Terms and Conditions (if enabled)', GEODIRECTORY_TEXTDOMAIN),
+        'id' => 'geodir_term_condition_page',
+        'type' => 'single_select_page',
+        'class' => 'chosen_select'
+    ),
+
 
     array('type' => 'sectionend', 'id' => 'geodir_pages'),
 

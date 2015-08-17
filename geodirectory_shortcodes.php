@@ -520,6 +520,7 @@ add_shortcode('gd_popular_post_category', 'geodir_sc_popular_post_category');
  * This implements the functionality of the shortcode for displaying popular post category.
  *
  * @since 1.0.0
+ * @since 1.5.1 Added default_post_type parameter.
  * @package GeoDirectory
  * @global string $geodir_post_category_str The geodirectory post category.
  * @param array $atts {
@@ -531,6 +532,7 @@ add_shortcode('gd_popular_post_category', 'geodir_sc_popular_post_category');
  *     @type string $after_title        HTML content to append to the title when displayed. Default. Empty.
  *     @type int $category_limit        Number of categories to display. Default. 15.
  *     @type string $title              Widget title. Default. Empty.
+ *     @type string $default_post_type  Default post type. Default. Empty.
  *
  * }
  * @return string Popular post category HTML.
@@ -546,10 +548,12 @@ function geodir_sc_popular_post_category($atts)
         'before_title' => '',
         'after_title' => '',
         'title' => '',
+		'default_post_type' => '',
     );
 
     $params = shortcode_atts($defaults, $atts, 'popular_post_category');
     $params['category_limit'] = absint($params['category_limit']);
+	$params['default_post_type'] = gdsc_is_post_type_valid($params['default_post_type']) ? $params['default_post_type'] : '';
     geodir_popular_post_category_output($params, $params);
 
     $output = ob_get_contents();

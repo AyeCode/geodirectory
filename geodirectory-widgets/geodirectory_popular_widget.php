@@ -48,6 +48,7 @@ class geodir_popular_post_category extends WP_Widget
 	 *
 	 * @since 1.0.0
      * @since 1.5.1 Declare function public.
+     * @since 1.5.1 Added default_post_type parameter.
 	 *
 	 * @param array $new_instance Values just sent to be saved.
 	 * @param array $old_instance Previously saved values from database.
@@ -61,6 +62,7 @@ class geodir_popular_post_category extends WP_Widget
         $instance['title'] = strip_tags($new_instance['title']);
         $category_limit = (int)$new_instance['category_limit'];
         $instance['category_limit'] = $category_limit > 0 ? $category_limit : 15;
+		$instance['default_post_type'] = isset($new_instance['default_post_type']) ? $new_instance['default_post_type'] : '';
         return $instance;
     }
 
@@ -69,17 +71,21 @@ class geodir_popular_post_category extends WP_Widget
 	 *
 	 * @since 1.0.0
      * @since 1.5.1 Declare function public.
+     * @since 1.5.1 Added option to set default post type.
 	 *
 	 * @param array $instance Previously saved values from database.
 	 */
 	public function form($instance)
     {
         //widgetform in backend
-        $instance = wp_parse_args((array)$instance, array('title' => '', 'category_limit' => 15));
+        $instance = wp_parse_args((array)$instance, array('title' => '', 'category_limit' => 15, 'default_post_type' => ''));
 
         $title = strip_tags($instance['title']);
         $category_limit = (int)$instance['category_limit'];
         $category_limit = $category_limit > 0 ? $category_limit : 15;
+		$default_post_type = isset($instance['default_post_type']) ? $instance['default_post_type'] : '';
+		
+		$post_type_options = geodir_get_posttypes('options');
         ?>
         <p>
             <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', GEODIRECTORY_TEXTDOMAIN); ?>
@@ -88,6 +94,16 @@ class geodir_popular_post_category extends WP_Widget
                        value="<?php echo esc_attr($title); ?>"/>
             </label>
         </p>
+		<p>
+		  <label for="<?php echo $this->get_field_id('post_type'); ?>">
+		  <?php _e('Default post type to use (if not set by page)', GEODIRECTORY_TEXTDOMAIN);?>
+		  <select class="widefat" id="<?php echo $this->get_field_id('default_post_type'); ?>" name="<?php echo $this->get_field_name('default_post_type'); ?>">
+			<?php foreach ($post_type_options as $name => $title) { ?>
+			<option value="<?php echo $name;?>" <?php selected($name, $default_post_type);?>><?php echo $title; ?></option>
+			<?php } ?>
+		  </select>
+		  </label>
+		</p>
         <p>
             <label
                 for="<?php echo $this->get_field_id('category_limit'); ?>"><?php _e('Customize categories count to appear by default:', GEODIRECTORY_TEXTDOMAIN); ?>

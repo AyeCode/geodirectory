@@ -2094,6 +2094,7 @@ add_filter('geodir_googlemap_script_extra', 'geodir_googlemap_script_extra_detai
  * Generates popular post category HTML.
  *
  * @since 1.0.0
+ * @since 1.5.1 Added option to set default post type.
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
@@ -2112,10 +2113,11 @@ function geodir_popular_post_category_output($args = '', $instance = '')
     /** This filter is documented in geodirectory_widgets.php */
     $title = empty($instance['title']) ? __('Popular Categories', GEODIRECTORY_TEXTDOMAIN) : apply_filters('widget_title', __($instance['title'], GEODIRECTORY_TEXTDOMAIN));
 
-    $category_limit = isset($instance['category_limit']) && $instance['category_limit'] > 0 ? (int)$instance['category_limit'] : 15;
-
-
     $gd_post_type = geodir_get_current_posttype();
+	
+	$category_limit = isset($instance['category_limit']) && $instance['category_limit'] > 0 ? (int)$instance['category_limit'] : 15;
+	$default_post_type = !empty($gd_post_type) ? $gd_post_type : (isset($instance['default_post_type']) && gdsc_is_post_type_valid($instance['default_post_type']) ? $instance['default_post_type'] : '');
+
     $taxonomy = array();
     if (!empty($gd_post_type)) {
         $taxonomy[] = $gd_post_type . "category";
@@ -2128,36 +2130,30 @@ function geodir_popular_post_category_output($args = '', $instance = '')
     $b_terms = array();
 
     foreach ($terms as $term) {
-
-
         if ($term->count > 0) {
             $a_terms[$term->taxonomy][] = $term;
         }
-
     }
 
-    if (!empty($a_terms)) {
-        foreach ($a_terms as $b_key => $b_val) {
+    if (!empty($a_terms)) {		
+		foreach ($a_terms as $b_key => $b_val) {
             $b_terms[$b_key] = geodir_sort_terms($b_val, 'count');
         }
-
+		
+		$default_taxonomy = $default_post_type != '' && isset($b_terms[$default_post_type . 'category']) ? $default_post_type . 'category' : '';
 
         $tax_change_output = '';
         if (count($b_terms) > 1) {
             $tax_change_output .= "<select data-limit='$category_limit' class='geodir-cat-list-tax'  onchange='geodir_get_post_term(this);'>";
             foreach ($b_terms as $key => $val) {
                 $ptype = get_post_type_object(str_replace("category", "", $key));
-                $tax_change_output .= "<option value='$key' >" . __($ptype->labels->singular_name, GEODIRECTORY_TEXTDOMAIN) . " " . __('Categories', GEODIRECTORY_TEXTDOMAIN) . "</option>";
+                $tax_change_output .= "<option value='$key' ". selected($key, $default_taxonomy, false) .">" . __($ptype->labels->singular_name, GEODIRECTORY_TEXTDOMAIN) . " " . __('Categories', GEODIRECTORY_TEXTDOMAIN) . "</option>";
             }
             $tax_change_output .= "</select>";
-
-
         }
 
-
         if (!empty($b_terms)) {
-
-            $terms = reset($b_terms);// get the first array
+            $terms = $default_taxonomy != '' && isset($b_terms[$default_taxonomy]) ? $b_terms[$default_taxonomy] : reset($b_terms);// get the first array
             global $cat_count;//make global so we can change via function
             $cat_count = 0;
             ?>
@@ -2186,17 +2182,12 @@ function geodir_popular_post_category_output($args = '', $instance = '')
                 echo "</div>";
                 /* add scripts */
                 add_action('wp_footer', 'geodir_popular_category_add_scripts', 100);
-
-
                 ?>
             </div>
         <?php
-
         }
     }
     echo $after_widget;
-
-
 }
 
 /**
