@@ -562,7 +562,9 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
         });
         google.maps.event.addListener($.goMap.map, 'dragend', function () {
 // updateMarkerStatus('Drag ended');
+            <?php if($auto_change_address_fields_pin_move){?>
             geocodePosition(baseMarker.getPosition());
+            <?php }?>
             centerMarker();
             updateMarkerPosition(baseMarker.getPosition());
         });

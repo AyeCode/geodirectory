@@ -1798,8 +1798,8 @@ if (!function_exists('geodir_get_infowindow_html')) {
 
         if ($lat && $lng) {
             ob_start(); ?>
-            <div class="bubble">
-                <div style="position: relative;margin:5px 0px;">
+            <div class="gd-bubble" style="height: 100px;max-height: 100px;">
+                <div class="gd-bubble-inside">
                     <?php
                     $comment_count = '';
                     $rating_star = '';
@@ -1934,8 +1934,9 @@ if (!function_exists('geodir_get_infowindow_html')) {
 
                             $post_author = isset($postinfo_obj->post_author) ? $postinfo_obj->post_author : get_post_field('post_author', $ID);
                             ?>
+                        <div class="geodir-bubble-meta-fade"></div>
 
-                            <div class="geodir-bubble-meta-bottom">
+                        <div class="geodir-bubble-meta-bottom">
                                 <span class="geodir-bubble-rating"><?php echo $rating_star;?></span>
 
                                 <span
