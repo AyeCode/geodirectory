@@ -2267,6 +2267,15 @@ function geodir_post_type_archive_title($title)
     ####### FIX FOR YOAST SEO START ########	
     if ($wpseo_edit && isset($title_parts[1])) {
         $title = $title . ' ' . $sep . ' ' . $title_parts[1];
+
+
+    }
+
+    if ( defined( 'WPSEO_FILE' ) ) {
+        if(is_home() && is_page_geodir_home()){
+            $sep = isset($sep) ? $sep : '&#8902;';
+            $title = get_option('blogname') . ' ' . $sep . ' ' . get_option('blogdescription');
+        }
     }
     ####### FIX FOR YOAST SEO END ########
 
