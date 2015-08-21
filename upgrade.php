@@ -295,7 +295,7 @@ function gd_install_theme_compat()
     );
 
 //Directory Theme
-    $theme_compat['Directory_Theme'] = array(
+    $theme_compat['Directory_Starter'] = array(
         'geodir_wrapper_open_id' => 'geodir_wrapper',
         'geodir_wrapper_open_class' => '',
         'geodir_wrapper_open_replace' => '',
