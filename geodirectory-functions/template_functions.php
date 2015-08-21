@@ -343,7 +343,7 @@ function geodir_template_loader($template)
 
         global $post, $wp_query;
 
-        if (('page' == get_option('show_on_front') && $post->ID == get_option('page_on_front'))
+        if (('page' == get_option('show_on_front') && isset($post->ID) && $post->ID == get_option('page_on_front'))
             || (is_home() && !$wp_query->is_posts_page || $geodir_custom_page_list['geodir_home_map_page'])
         ) {
 

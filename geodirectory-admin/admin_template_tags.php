@@ -1668,7 +1668,7 @@ function geodir_diagnostic_tools_setting_page()
 				<tr>
 					<td><?php _e('Load custom fields translation', GEODIRECTORY_TEXTDOMAIN);?></td>
 					<td>
-						<small><?php _e('This tool will load strings from database into fie to translate via po editor.Ex: custom fields', GEODIRECTORY_TEXTDOMAIN);?></small>
+						<small><?php _e('This tool will load strings from the database into a file to translate via po editor.Ex: custom fields', GEODIRECTORY_TEXTDOMAIN);?></small>
 					</td>
 					<td>
 						<input type="button" value="<?php _e('Run', GEODIRECTORY_TEXTDOMAIN);?>" class="button-primary geodir_diagnosis_button" data-diagnose="load_db_language"/>
