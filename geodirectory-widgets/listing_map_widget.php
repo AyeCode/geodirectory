@@ -297,7 +297,8 @@ class geodir_map_listingpage extends WP_Widget
                     <option <?php if (isset($maptype) && $maptype == 'HYBRID') {
                         echo 'selected="selected"';
                     } ?> value="HYBRID"><?php _e('Hybrid Map', GEODIRECTORY_TEXTDOMAIN); ?></option>
-
+					<option <?php selected($maptype, 'TERRAIN');?> 
+							value="TERRAIN"><?php _e('Terrain Map', GEODIRECTORY_TEXTDOMAIN); ?></option>
                 </select>
             </label>
         </p>

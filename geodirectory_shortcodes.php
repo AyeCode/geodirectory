@@ -82,13 +82,14 @@ function geodir_sc_add_listing($atts)
  * This implements the functionality of the shortcode for displaying map on home page.
  *
  * @since 1.0.0
+ * @since 1.5.2 Added TERRAIN map type.
  * @package GeoDirectory
  * @param array $atts {
  *     Attributes of the shortcode.
  *
  *     @type string $width           Map width in pixels. Default 960.
  *     @type string $height          Map height in pixels. Default 425.
- *     @type string $maptype         Map type. Default ROADMAP. Can be ROADMAP | SATELLITE | HYBRID.
+ *     @type string $maptype         Map type. Default ROADMAP. Can be ROADMAP | SATELLITE | HYBRID | TERRAIN.
  *     @type string $zoom            The zoom level of the map. Between 1-19. Default 13.
  *     @type string $autozoom        True if the map should autozoom, false if not.
  *     @type string $child_collapse  True if the map should collapse the categories, false if not.
@@ -136,7 +137,8 @@ function geodir_sc_home_map($atts)
          * Filter the widget maptype of the map on home/listings page.
          *
          * @since 1.0.0
-         * @param string $params['maptype'] The map type. Can be ROADMAP | SATELLITE | HYBRID.
+		 * @since 1.5.2 Added TERRAIN map type.
+         * @param string $params['maptype'] The map type. Can be ROADMAP | SATELLITE | HYBRID | TERRAIN.
          */
         'maptype' => apply_filters('widget_maptype', $params['maptype']),
         /**
@@ -219,6 +221,7 @@ add_shortcode('gd_listing_map', 'geodir_sc_listing_map');
  * This implements the functionality of the shortcode for displaying listing map.
  *
  * @since 1.0.0
+ * @since 1.5.2 Added TERRAIN for $maptype attribute.
  * @package GeoDirectory
  * @global object $post The current post object.
  * @param array $atts {
@@ -226,7 +229,7 @@ add_shortcode('gd_listing_map', 'geodir_sc_listing_map');
  *
  *     @type string $width           Map width in pixels. Default 294.
  *     @type string $height          Map height in pixels. Default 370.
- *     @type string $maptype         Map type. Default ROADMAP. Can be ROADMAP | SATELLITE | HYBRID.
+ *     @type string $maptype         Map type. Default ROADMAP. Can be ROADMAP | SATELLITE | HYBRID | TERRAIN.
  *     @type string $zoom            The zoom level of the map. Between 1-19. Default 13.
  *     @type string $autozoom        True if the map should autozoom, false if not.
  *     @type bool   $sticky          True if should be sticky, false if not

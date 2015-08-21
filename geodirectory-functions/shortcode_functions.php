@@ -44,6 +44,7 @@ function gdsc_validate_measurements($value)
  * Validate and parse the google map parameters.
  *
  * @since 1.0.0
+ * @since 1.5.2 Added TERRAIN map type.
  *
  * @param string $value Input value to validate measurement.
  * @return string The measurement valud in valid format.
@@ -54,8 +55,8 @@ function gdsc_validate_map_args($params)
     $params['width'] = gdsc_validate_measurements($params['width']);
     $params['height'] = gdsc_validate_measurements($params['height']);
 
-    // Only accept our 3 maptypes. Otherwise, revert to the default.
-    if (!(in_array(strtoupper($params['maptype']), array('HYBRID', 'SATELLITE', 'ROADMAP')))) {
+    // Only accept our 4 maptypes. Otherwise, revert to the default.
+    if (!(in_array(strtoupper($params['maptype']), array('HYBRID', 'SATELLITE', 'ROADMAP', 'TERRAIN')))) {
         $params['maptype'] = 'ROADMAP';
     } else {
         $params['maptype'] = strtoupper($params['maptype']);
