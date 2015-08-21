@@ -1124,6 +1124,7 @@ function godir_set_field_order($field_ids = array())
  * Displays custom fields html.
  *
  * @since 1.0.0
+ * @since 1.5.2 Added TERRAIN map type.
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global object $post The current post object.
@@ -1392,6 +1393,12 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                                                             id="map_view2" <?php if ($mapview == 'HYBRID') {
                             echo 'checked="checked"';
                         } ?>  value="HYBRID" size="25"/> <?php _e('Hybrid Map', GEODIRECTORY_TEXTDOMAIN); ?></span>
+					<span class="geodir_user_define"><input field_type="<?php echo $type; ?>" type="radio"
+                                                            class="gd-checkbox"
+                                                            name="<?php echo $prefix . 'mapview'; ?>"
+                                                            id="map_view3" <?php if ($mapview == 'TERRAIN') {
+                            echo 'checked="checked"';
+                        } ?>  value="TERRAIN" size="25"/> <?php _e('Terrain Map', GEODIRECTORY_TEXTDOMAIN); ?></span>
 
 
                 </div>
