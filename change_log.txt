@@ -1,5 +1,5 @@
 v1.5.2
-Map view type ROADMAP option added for all the maps - FIXED
+Map view type TERRAIN option added for all the maps - FIXED
 
 v1.5.1
 Default sort by titles not translatable - FIXED
