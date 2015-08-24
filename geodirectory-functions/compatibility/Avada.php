@@ -20,7 +20,7 @@ function gd_strip_breadcrumb_wrappers($breadcrumb)
 {
     $breadcrumb = str_replace(array("<li>","</li>"), "", $breadcrumb);
     $breadcrumb = str_replace('<div class="geodir-breadcrumb clearfix"><ul id="breadcrumbs">', '<ul class="fusion-breadcrumbs"><li>', $breadcrumb);
-    $breadcrumb = str_replace('</li></ul></div>', '</ul>', $breadcrumb);
+    $breadcrumb = str_replace('</ul></div>', '</li></ul>', $breadcrumb);
     return $breadcrumb;
 }
 

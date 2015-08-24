@@ -1413,18 +1413,21 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
         if(function_exists('icl_object_id')){
             if ( gd_wpml_slug_translation_turned_on( $post->post_type ) && $language_code = gd_wpml_get_lang_from_url($post_link)) {
 
+                $org_slug = $slug;
                 $slug = apply_filters( 'wpml_translate_single_string',
                     $slug,
                     'WordPress',
                     'URL slug: ' . $slug,
                     $language_code);
 
+                if(!$slug){$slug = $org_slug;}
+
             }
         }
 
 		// Fix slug problem when slug matches part of host or base url/ Ex: url -> www.abcxyz.com & slug -> xyz.
-		$site_url = trailingslashit(get_home_url());
-		$fix_url = strpos($post_link, $site_url) == 0 ? true : false;
+		$site_url = trailingslashit(get_site_url());
+		$fix_url = strpos($post_link, $site_url) === 0 ? true : false;
 		if ($fix_url) {
 			$post_link = str_replace($site_url, '', $post_link);
 		}

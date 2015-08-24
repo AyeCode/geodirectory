@@ -1579,7 +1579,7 @@ function geodir_show_detail_page_tabs()
         <!--gd-tabs-content ul end-->
     </div>
     <script>
-        if (window.location.hash && jQuery(window.location.hash + 'Tab').length) {
+        if (window.location.hash && window.location.hash.indexOf('&') === -1 && jQuery(window.location.hash + 'Tab').length) {
             hashVal = window.location.hash;
         } else {
             hashVal = jQuery('dl.geodir-tab-head dd.geodir-tab-active').find('a').attr('data-tab');
