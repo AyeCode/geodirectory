@@ -3,6 +3,7 @@ Map view type TERRAIN option added for all the maps - FIXED
 Upgrade function `gd_fix_cpt_rewrite_slug` set to run on every upgrade incase a user misses a version - CHANGED
 Renamed Directory_Theme to Directory_Starter - FIXED
 Avada box style not working for some pages - FIXED
+Share this links to details pages can sometimes cause JS error from jQuery history hash object - FIXED
 
 v1.5.1
 Default sort by titles not translatable - FIXED
