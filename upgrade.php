@@ -33,6 +33,10 @@ if (get_option(GEODIRECTORY_TEXTDOMAIN . '_db_version') != GEODIRECTORY_VERSION)
     if (GEODIRECTORY_VERSION <= '1.5.0') {
         add_action('init', 'geodir_upgrade_150', 11);
     }
+
+
+    add_action('init', 'gd_fix_cpt_rewrite_slug', 11);// this needs to be kept for a few versions
+
     update_option(GEODIRECTORY_TEXTDOMAIN . '_db_version', GEODIRECTORY_VERSION);
 
 }
@@ -291,7 +295,7 @@ function gd_install_theme_compat()
     );
 
 //Directory Theme
-    $theme_compat['Directory_Theme'] = array(
+    $theme_compat['Directory_Starter'] = array(
         'geodir_wrapper_open_id' => 'geodir_wrapper',
         'geodir_wrapper_open_class' => '',
         'geodir_wrapper_open_replace' => '',
