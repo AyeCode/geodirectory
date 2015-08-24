@@ -63,7 +63,15 @@ class geodir_recent_reviews_widget extends WP_Widget
 		 * @param int $g_size Height and width of the avatar image in pixels. Default 30.
 		 */
 		$g_size = apply_filters('geodir_recent_reviews_g_size', 30);
-        $comments_li = geodir_get_recent_reviews($g_size, $count, 100, false);
+        /**
+         * Filter the excerpt length
+         *
+         * @since 1.0.0
+         *
+         * @param int $excerpt_length Excerpt length. Default 100.
+         */
+        $excerpt_length = apply_filters('geodir_recent_reviews_excerpt_length', 100);
+        $comments_li = geodir_get_recent_reviews($g_size, $count, $excerpt_length, false);
 
         if ($comments_li) {
             echo $before_widget;
