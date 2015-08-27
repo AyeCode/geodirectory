@@ -4669,7 +4669,7 @@ function geodir_ajax_import_export() {
 			
 			$json['file'] = $csv_file;
 			$json['error'] = __( 'The uploaded file is not a valid csv file. Please try again.', GEODIRECTORY_TEXTDOMAIN );
-			
+
 			if ( $csv_file && $wp_filesystem->is_file( $target_path ) && $wp_filesystem->exists( $target_path ) ) {
 				$wp_filetype = wp_check_filetype_and_ext( $target_path, $csv_filename );
 				

@@ -2744,8 +2744,11 @@ function geodir_action_search_page_title()
     $gd_post_type = geodir_get_current_posttype();
     $post_type_info = get_post_type_object($gd_post_type);
 
+    $pt_name = '';
+    if(isset($post_type_info->labels->name)){$pt_name=$post_type_info->labels->name;}
+
     if (is_search()) {
-        $list_title = __('Search', GEODIRECTORY_TEXTDOMAIN) . ' ' . __($post_type_info->labels->name, GEODIRECTORY_TEXTDOMAIN) . __(' For :', GEODIRECTORY_TEXTDOMAIN) . " '" . get_search_query() . "'";
+        $list_title = __('Search', GEODIRECTORY_TEXTDOMAIN) . ' ' . __($pt_name, GEODIRECTORY_TEXTDOMAIN) . __(' For :', GEODIRECTORY_TEXTDOMAIN) . " '" . get_search_query() . "'";
 
     }
     /** This action is documented in geodirectory_template_actions.php */
