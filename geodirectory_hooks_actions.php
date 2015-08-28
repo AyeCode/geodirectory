@@ -511,7 +511,7 @@ function geodir_edit_post_link()
             $post_id = $post->ID;
             if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
 
-                $post_id = $_REQUEST['pid'];
+                $post_id = esc_attr($_REQUEST['pid']);
             }
 
             $postlink = get_permalink(geodir_add_listing_page_id());
@@ -1851,8 +1851,8 @@ function geodir_custom_page_title($title = '', $sep = '')
     if (is_search() && isset($_REQUEST['geodir_search'])) {
         $all_postypes = geodir_get_posttypes();
         $keyword = esc_sql(strip_tags(get_query_var('s')));
-        $stype = esc_sql(strip_tags($_REQUEST['stype']));
-        $snear = esc_sql(strip_tags($_REQUEST['snear']));
+        $stype = esc_sql(strip_tags(esc_attr($_REQUEST['stype'])));
+        $snear = esc_sql(strip_tags(esc_attr($_REQUEST['snear'])));
 
         if ($stype && in_array($stype, $all_postypes)) {
             $title = $keyword;
@@ -1878,7 +1878,7 @@ function geodir_custom_page_title($title = '', $sep = '')
         $listing_page_id = geodir_add_listing_page_id();
         if ($listing_page_id != '' && $page->ID == $listing_page_id) {
             if (isset($_REQUEST['listing_type']) && $_REQUEST['listing_type'] != '') {
-                $listing_type = $_REQUEST['listing_type'];
+                $listing_type = esc_attr($_REQUEST['listing_type']);
                 $post_type_info = geodir_get_posttype_info($listing_type);
                 if (!empty($title)) {
                     $title_array = explode($sep, $title);
@@ -3391,8 +3391,8 @@ function geodir_search_meta_desc($html) {
     if (is_search() && isset($_REQUEST['geodir_search'])) {
         $all_postypes = geodir_get_posttypes();
         $keyword = esc_sql(strip_tags(get_query_var('s')));
-        $stype = esc_sql(strip_tags($_REQUEST['stype']));
-        $snear = esc_sql(strip_tags($_REQUEST['snear']));
+        $stype = esc_sql(strip_tags(esc_attr($_REQUEST['stype'])));
+        $snear = esc_sql(strip_tags(esc_attr($_REQUEST['snear'])));
 
         if ($stype && in_array($stype, $all_postypes)) {
             $desc = __('Search results for', GEODIRECTORY_TEXTDOMAIN);

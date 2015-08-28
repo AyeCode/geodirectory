@@ -457,7 +457,7 @@ if (!function_exists('geodir_custom_field_save')) {
 
                                 $is_column = $wpdb->get_var("SHOW COLUMNS FROM " . $detail_table . " where field='" . $old_prefix . "city'");
                                 if ($is_column) {
-                                    $meta_field_add = "ALTER TABLE " . $detail_table . " CHANGE `" . $old_prefix . "city` `" . $prefix . "city` VARCHAR( 30 ) NULL";
+                                    $meta_field_add = "ALTER TABLE " . $detail_table . " CHANGE `" . $old_prefix . "city` `" . $prefix . "city` VARCHAR( 50 ) NULL";
 
                                     if ($default_value != '') {
                                         $meta_field_add .= " DEFAULT '" . $default_value . "'";
@@ -466,8 +466,7 @@ if (!function_exists('geodir_custom_field_save')) {
                                     $wpdb->query($meta_field_add);
                                 } else {
 
-                                    $meta_field_add = "ALTER TABLE " . $detail_table . " ADD `" . $prefix . "city` VARCHAR( 30 ) NULL";
-                                    $meta_field_add = "VARCHAR( 30 ) NULL";
+                                    $meta_field_add = "VARCHAR( 50 ) NULL";
                                     if ($default_value != '') {
                                         $meta_field_add .= " DEFAULT '" . $default_value . "'";
                                     }
@@ -484,7 +483,7 @@ if (!function_exists('geodir_custom_field_save')) {
                                 $is_column = $wpdb->get_var("SHOW COLUMNS FROM " . $detail_table . " where field='" . $old_prefix . "region'");
 
                                 if ($is_column) {
-                                    $meta_field_add = "ALTER TABLE " . $detail_table . " CHANGE `" . $old_prefix . "region` `" . $prefix . "region` VARCHAR( 30 ) NULL";
+                                    $meta_field_add = "ALTER TABLE " . $detail_table . " CHANGE `" . $old_prefix . "region` `" . $prefix . "region` VARCHAR( 50 ) NULL";
 
                                     if ($default_value != '') {
                                         $meta_field_add .= " DEFAULT '" . $default_value . "'";
@@ -492,8 +491,7 @@ if (!function_exists('geodir_custom_field_save')) {
 
                                     $wpdb->query($meta_field_add);
                                 } else {
-                                    $meta_field_add = "ALTER TABLE " . $detail_table . " ADD `" . $prefix . "region` VARCHAR( 30 ) NULL";
-                                    $meta_field_add = "VARCHAR( 30 ) NULL";
+                                    $meta_field_add = "VARCHAR( 50 ) NULL";
                                     if ($default_value != '') {
                                         $meta_field_add .= " DEFAULT '" . $default_value . "'";
                                     }
@@ -508,7 +506,7 @@ if (!function_exists('geodir_custom_field_save')) {
 
                                 if ($is_column) {
 
-                                    $meta_field_add = "ALTER TABLE " . $detail_table . " CHANGE `" . $old_prefix . "country` `" . $prefix . "country` VARCHAR( 30 ) NULL";
+                                    $meta_field_add = "ALTER TABLE " . $detail_table . " CHANGE `" . $old_prefix . "country` `" . $prefix . "country` VARCHAR( 50 ) NULL";
 
                                     if ($default_value != '') {
                                         $meta_field_add .= " DEFAULT '" . $default_value . "'";
@@ -517,9 +515,7 @@ if (!function_exists('geodir_custom_field_save')) {
                                     $wpdb->query($meta_field_add);
                                 } else {
 
-                                    $meta_field_add = "ALTER TABLE " . $detail_table . " ADD `" . $prefix . "country` VARCHAR( 30 ) NULL";
-
-                                    $meta_field_add = "VARCHAR( 30 ) NULL";
+                                    $meta_field_add = "VARCHAR( 50 ) NULL";
                                     if ($default_value != '') {
                                         $meta_field_add .= " DEFAULT '" . $default_value . "'";
                                     }
@@ -535,7 +531,7 @@ if (!function_exists('geodir_custom_field_save')) {
 
                                 if ($is_column) {
 
-                                    $meta_field_add = "ALTER TABLE " . $detail_table . " CHANGE `" . $old_prefix . "zip` `" . $prefix . "zip` VARCHAR( 15 ) NULL";
+                                    $meta_field_add = "ALTER TABLE " . $detail_table . " CHANGE `" . $old_prefix . "zip` `" . $prefix . "zip` VARCHAR( 50 ) NULL";
 
                                     if ($default_value != '') {
                                         $meta_field_add .= " DEFAULT '" . $default_value . "'";
@@ -544,8 +540,7 @@ if (!function_exists('geodir_custom_field_save')) {
                                     $wpdb->query($meta_field_add);
                                 } else {
 
-                                    $meta_field_add = "ALTER TABLE " . $detail_table . " ADD `" . $prefix . "zip` VARCHAR( 15 ) NULL";
-                                    $meta_field_add = "VARCHAR( 15 ) NULL";
+                                    $meta_field_add = "VARCHAR( 50 ) NULL";
                                     if ($default_value != '') {
                                         $meta_field_add .= " DEFAULT '" . $default_value . "'";
                                     }

@@ -89,7 +89,7 @@ function set_listing_request()
         //if(isset($_REQUEST['s']) && $_REQUEST['s'] == '+') $_REQUEST['s'] = '';
 
         if (isset($_REQUEST['sdist'])) {
-            ($_REQUEST['sdist'] != '0' && $_REQUEST['sdist'] != '') ? $dist = $_REQUEST['sdist'] : $dist = 25000;
+            ($_REQUEST['sdist'] != '0' && $_REQUEST['sdist'] != '') ? $dist = esc_attr($_REQUEST['sdist']) : $dist = 25000;
         } elseif (get_option('geodir_search_dist') != '') {
             $dist = get_option('geodir_search_dist');
 
@@ -98,23 +98,23 @@ function set_listing_request()
         } //  Distance
 
         if (isset($_REQUEST['sgeo_lat'])) {
-            $mylat = (float)$_REQUEST['sgeo_lat'];
+            $mylat = (float)esc_attr($_REQUEST['sgeo_lat']);
         } else {
             $mylat = (float)geodir_get_current_city_lat();
         } //  Latatude
 
         if (isset($_REQUEST['sgeo_lon'])) {
-            $mylon = (float)$_REQUEST['sgeo_lon'];
+            $mylon = (float)esc_attr($_REQUEST['sgeo_lon']);
         } else {
             $mylon = (float)geodir_get_current_city_lng();
         } //  Distance
 
         if (isset($_REQUEST['snear'])) {
-            $snear = trim($_REQUEST['snear']);
+            $snear = trim(esc_attr($_REQUEST['snear']));
         }
 
         if (isset($_REQUEST['s'])) {
-            $s = trim($_REQUEST['s']);
+            $s = trim(esc_attr(wp_strip_all_tags($_REQUEST['s'])));
         }
 
         if ($snear == 'NEAR ME') {
@@ -142,127 +142,7 @@ function set_listing_request()
 
     endif;
 
-    /* ===old code start ===
-    if($wp_query->is_main_query() || get_query_var('gd_location')):
 
-    $url_separator = get_option('geodir_listingurl_separator');
-
-    //Set Location
-
-
-    if( geodir_is_page('location') || ( geodir_is_page('search') && isset($_REQUEST['gd_location']) ) ){
-
-        if( geodir_is_page('search') ){
-            $search_location_request =  explode(",",urldecode($_REQUEST['gd_location']));
-            @list($gd_country, $gd_region, $gd_city) = $search_location_request;
-        }else{
-            $gd_country = get_query_var('gd_country');
-            $gd_region = get_query_var('gd_region');
-            $gd_city = get_query_var('gd_city');
-        }
-
-        $_SESSION['gd_country'] = $gd_country;
-        $_SESSION['gd_region'] = $gd_region;
-        $_SESSION['gd_city'] = $gd_city;
-
-
-    }else{
-        $request_term = '';
-        $location_request = array();
-
-        if(isset($wp_query->tax_query->queries) && $wp_query->tax_query->queries){
-            $taxonomies = wp_list_pluck( $wp_query->tax_query->queries, 'taxonomy' );
-            $request_term = isset($wp_query->query[$taxonomies[0]]) ? $wp_query->query[$taxonomies[0]] : '';
-
-        }
-
-        if ( get_option('permalink_structure') != '' ){
-
-            if( strpos($request_term,'/'.$url_separator.'/') ){
-                    $location_request = explode('/'.$url_separator.'/',$request_term);
-                    $location_request = explode("/",$location_request[0]);
-
-            }elseif( isset($taxonomies) && !term_exists( $request_term, $taxonomies[0] ) ){
-                // here i have to check if location plugin installed or not
-                // if the location plugin is not installed then dont set location parameter
-                global $geodir_addon_list;
-                if(!empty($geodir_addon_list) && array_key_exists('geodir_location_manager', $geodir_addon_list) && $geodir_addon_list['geodir_location_manager'] == 'yes') {
-                    $location_request = explode("/",$request_term);
-                }
-            }
-
-
-        }else{
-            if(isset($_REQUEST['gd_country']))
-                $location_request[] = $_REQUEST['gd_country'];
-            if(isset($_REQUEST['gd_region']))
-                $location_request[] = $_REQUEST['gd_region'];
-            if(isset($_REQUEST['gd_city']))
-                $location_request[] = $_REQUEST['gd_city'];
-        }
-
-
-        if(!empty($location_request)){
-            if(get_option('geodir_show_location_url') == 'all'){
-                @list($gd_country, $gd_region, $gd_city) = $location_request;
-            }else{
-                $gd_city = end($location_request);
-            }
-
-            if($gd_city != '' || $gd_country != ''){
-            unset(	$_SESSION['gd_city'],
-                    $_SESSION['gd_region'],
-                    $_SESSION['gd_country'] );
-            }
-        }
-    }
-    unset(	$_SESSION['gd_multi_location'],
-                $_SESSION['gd_city'],
-                $_SESSION['gd_region'],
-                $_SESSION['gd_country'] );
-
-    if(get_option('geodir_show_location_url') == 'all'){
-
-        if(isset($gd_country) && $gd_country != '' ){
-            $wp_query->set('gd_country',$gd_country);
-            $_SESSION['gd_country'] = $gd_country;
-        }elseif( isset($_SESSION['gd_country']) && $_SESSION['gd_country'] != '' ){
-            $wp_query->set('gd_country',$_SESSION['gd_country']);
-        }
-
-        if( isset($gd_region) && $gd_region != '' ){
-            $wp_query->set('gd_region',$gd_region);
-            $_SESSION['gd_region'] = $gd_region;
-        }elseif( isset($_SESSION['gd_region']) && $_SESSION['gd_region'] != '' ){
-            $wp_query->set('gd_region',$_SESSION['gd_region']);
-        }
-    }
-
-    if( isset($gd_city) && $gd_city != '' ){
-        $wp_query->set('gd_city',$gd_city);
-        $_SESSION['gd_city'] = $gd_city;
-    }elseif( isset($_SESSION['gd_city']) && $_SESSION['gd_city'] != '' ){
-            $wp_query->set('gd_city',$_SESSION['gd_city']);
-    }
-
-    if( isset($_REQUEST['neighbourhood']) && $_REQUEST['neighbourhood'] != '' ){
-        $wp_query->set('gd_neighbourhood',$_REQUEST['neighbourhood']);
-    }
-
-
-    if((isset($_SESSION['gd_country']) && $_SESSION['gd_country']!='') || (isset($_SESSION['gd_region']) && $_SESSION['gd_region'] !='') || (isset($_SESSION['gd_city']) && $_SESSION['gd_city'] != ''))
-            $_SESSION['gd_multi_location'] = true ;
-    else{
-
-        if(isset($_SESSION['gd_multi_location']))
-        unset(	$_SESSION['gd_multi_location'],
-                $_SESSION['gd_city'],
-                $_SESSION['gd_region'],
-                $_SESSION['gd_country'] );
-    }
-
-    endif; // End if Set Location
-    /* ===old code end ===*/
 
 }
 
@@ -488,7 +368,7 @@ function geodir_posts_orderby($orderby)
     }
 
     if (isset($_REQUEST['sort_by']) && $_REQUEST['sort_by'] != '' && is_main_query())
-        $sort_by = $_REQUEST['sort_by'];
+        $sort_by = esc_attr($_REQUEST['sort_by']);
 
 
     if ($sort_by == '') {
@@ -733,7 +613,7 @@ function geodir_preview_post_cap($allcaps, $caps, $args)
 function geodir_edit_listing_where($where)
 {
     global $wpdb;
-    $where = " AND $wpdb->posts.ID = " . $_REQUEST['pid'];
+    $where = $wpdb->prepare(" AND $wpdb->posts.ID = %d ", $_REQUEST['pid']);
     return $where;
 }
 
@@ -836,6 +716,7 @@ function searching_filter_where($where)
 
     if (!empty($s_SA)) {
         foreach ($s_SA as $s_term) {
+            //$s_term = esc_attr($s_term);
             //$better_search[] = " OR $wpdb->posts.post_title LIKE\"%$s_term%\" ";
 			$better_search[] = " OR ( $wpdb->posts.post_title LIKE \"$s_term\" OR $wpdb->posts.post_title LIKE \"$s_term%\" OR $wpdb->posts.post_title LIKE \"% $s_term%\" ) ";
         }
@@ -847,7 +728,7 @@ function searching_filter_where($where)
 
     $better_search_terms = '';
     if (isset($_REQUEST['stype']))
-        $post_types = $_REQUEST['stype'];
+        $post_types = esc_attr(wp_strip_all_tags($_REQUEST['stype']));
     else
         $post_types = 'gd_place';
 
@@ -874,8 +755,10 @@ function searching_filter_where($where)
 
     /* get taxonomy */
     $taxonomies = geodir_get_taxonomies($post_types, true);
-    $taxonomies = implode("','", $taxonomies);
-    $taxonomies = "'" . $taxonomies . "'";
+    if($taxonomies) {
+        $taxonomies = implode("','", $taxonomies);
+        $taxonomies = "'" . $taxonomies . "'";
+    }else{$taxonomies='';}
 
     $content_where = $terms_where = '';
 	if ($s != '') {
@@ -911,7 +794,7 @@ function searching_filter_where($where)
         $rlat1 = is_numeric(min($lat1, $lat2)) ? min($lat1, $lat2) : '';
         $rlat2 = is_numeric(max($lat1, $lat2)) ? max($lat1, $lat2) : '';
 
-	    $where .= " AND ( ( $wpdb->posts.post_title LIKE \"$s\" $better_search_terms) 
+	    $where .= " AND ( ( $wpdb->posts.post_title LIKE \"$s\" $better_search_terms)
 			                    $content_where 
 								OR ($wpdb->posts.ID IN( 
 										SELECT $wpdb->term_relationships.object_id as post_id 
@@ -923,8 +806,8 @@ function searching_filter_where($where)
 										)
 									) 
 							)
-						AND $wpdb->posts.post_type in ('{$post_types}') 
-						AND ($wpdb->posts.post_status = 'publish') 
+						AND $wpdb->posts.post_type in ('{$post_types}')
+						AND ($wpdb->posts.post_status = 'publish')
 						AND ( " . $table . ".post_latitude between $rlat1 and $rlat2 )
 						AND ( " . $table . ".post_longitude between $rlon1 and $rlon2 ) ";
 
@@ -984,7 +867,7 @@ function author_filter_where($where)
     //$user_id = get_current_user_id();
     $user_id = $curauth->ID;
     if (isset($_REQUEST['stype'])) {
-        $where = " AND $wpdb->posts.post_type IN ('" . $_REQUEST['stype'] . "') ";
+        $where = $wpdb->prepare(" AND $wpdb->posts.post_type IN (%s) ",$_REQUEST['stype']);
     } else {
         $where = " AND $wpdb->posts.post_type IN ('gd_place') ";
     }
