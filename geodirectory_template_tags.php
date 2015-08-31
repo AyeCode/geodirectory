@@ -85,7 +85,7 @@ function geodir_templates_scripts()
 
 
     wp_register_script('geodirectory-lightbox-jquery', geodir_plugin_url() . '/geodirectory-assets/js/jquery.lightbox-0.5.min.js', array(), GEODIRECTORY_VERSION,true);
-    if($is_detail_page){wp_enqueue_script('geodirectory-lightbox-jquery');}
+    wp_enqueue_script('geodirectory-lightbox-jquery');
 
 
 
