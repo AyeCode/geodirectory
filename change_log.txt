@@ -8,6 +8,8 @@ WPML, other translation links on details pages can be broken when viewing on non
 Filter added to change recent reviews excerpt length - ADDED
 Details table limiting city,region,country names to 30 char, some region names are longer, changed to 50 char - FIXED
 Image file for custom field not enlarging using modal if displayed as tab on detail page - FIXED
+IE map infowindow can appear very small in height - FIXED
+Added filter for adding the location to the url, so it can be filtered from addons - ADDED
 
 v1.5.1
 Default sort by titles not translatable - FIXED

@@ -184,6 +184,15 @@
     background: -webkit-linear-gradient(rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
     background: -moz-linear-gradient(rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
     background: -ms-linear-gradient(rgba(0,0,0,1) 0%,rgba(0,0,0,0) 100%);
+    zoom: 1;
+
+    filter: progid:DXImageTransform.Microsoft.gradient(
+                    gradientType=0, startColor=0, endColorStr='#000'
+    );
+    -ms-filter: progid:DXImageTransform.Microsoft.gradient(
+                    gradientType=0, startColor=0, endColorStr='#000'
+    );
+
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;

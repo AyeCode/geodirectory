@@ -1798,7 +1798,7 @@ if (!function_exists('geodir_get_infowindow_html')) {
 
         if ($lat && $lng) {
             ob_start(); ?>
-            <div class="gd-bubble" style="height: 100px;max-height: 100px;">
+            <div class="gd-bubble" style="">
                 <div class="gd-bubble-inside">
                     <?php
                     $comment_count = '';

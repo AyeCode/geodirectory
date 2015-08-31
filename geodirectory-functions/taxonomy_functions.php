@@ -1470,7 +1470,7 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
 
         if (false !== strpos($post_link, '%gd_taxonomy%')) {
 
-            if (get_option('geodir_add_location_url')) {
+            if ( apply_filters("geodir_add_location_url_to_url",get_option('geodir_add_location_url'),$post->post_type,$post)) {
                 $location_request = '';
 
 
