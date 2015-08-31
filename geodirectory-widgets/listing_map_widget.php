@@ -188,7 +188,6 @@ class geodir_map_listingpage extends WP_Widget
                 $mapview = $maptype;
             }
 
-            if (empty($mapview)) $mapview = 'ROADMAP';
             if (empty($mapzoom)) $mapzoom = $zoom;
 
             // Set default map options
@@ -200,7 +199,7 @@ class geodir_map_listingpage extends WP_Widget
             $map_args['scrollwheel'] = $scrollwheel;
             $map_args['showall'] = $showall;
             $map_args['streetViewControl'] = true;
-            $map_args['maptype'] = $mapview;
+            $map_args['maptype'] = $maptype;
             $map_args['showPreview'] = '0';
             $map_args['maxZoom'] = 21;
             $map_args['autozoom'] = $autozoom;
