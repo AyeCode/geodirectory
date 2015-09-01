@@ -1368,6 +1368,8 @@ function geodir_show_detail_page_tabs()
         $map_args['enable_jason_on_load'] = true;
         $map_args['enable_map_direction'] = true;
         $map_args['map_class_name'] = 'geodir-map-detail-page';
+        $map_args['maptype'] = (!empty($post->post_mapview)) ? $post->post_mapview : 'ROADMAP';
+
 
     } elseif (geodir_is_page('preview')) {
 

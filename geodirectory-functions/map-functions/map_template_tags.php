@@ -68,7 +68,6 @@ require_once('map_functions.php');
 function geodir_draw_map($map_args = array())
 {
     global $map_canvas_arr;
-
     $map_canvas_name = (!empty($map_args) && $map_args['map_canvas_name'] != '') ? $map_args['map_canvas_name'] : 'home_map_canvas';
     $map_class_name = (!empty($map_args) && isset($map_args['map_class_name'])) ? $map_args['map_class_name'] : '';
 
