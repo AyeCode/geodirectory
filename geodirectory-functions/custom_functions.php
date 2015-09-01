@@ -1424,9 +1424,25 @@ function geodir_show_detail_page_tabs()
 
     }
 
+
+    $arr_detail_page_tabs = geodir_detail_page_tabs_list();// get this sooner so we can get the active tab for the user
+
+    $active_tab_name = '';
+    foreach($arr_detail_page_tabs as $tabs){
+        if(isset($tabs['is_active_tab']) && $tabs['is_active_tab'] && isset($tabs['heading_text']) && $tabs['heading_text']){
+            $active_tab_name = __($tabs['heading_text'],GEODIRECTORY_TEXTDOMAIN);
+        }
+    }
     ?>
 
     <div class="geodir-tabs" id="gd-tabs" style="position:relative;">
+
+        <div id="geodir-tab-mobile-menu" >
+            <i class="fa fa-bars"></i>
+            <span class="geodir-mobile-active-tab"><?php echo $active_tab_name;?></span>
+            <i class="fa fa-sort-desc"></i>
+        </div>
+
         <dl class="geodir-tab-head">
             <?php
             /**
@@ -1437,7 +1453,7 @@ function geodir_show_detail_page_tabs()
              */
             do_action('geodir_before_tab_list'); ?>
             <?php
-            $arr_detail_page_tabs = geodir_detail_page_tabs_list();
+
 
             foreach ($arr_detail_page_tabs as $tab_index => $detail_page_tab) {
                 if ($detail_page_tab['is_display']) {
@@ -1445,7 +1461,7 @@ function geodir_show_detail_page_tabs()
                     <dt></dt> <!-- added to comply with validation -->
                     <dd <?php if ($detail_page_tab['is_active_tab']){ ?>class="geodir-tab-active"<?php }?> >
                         <a data-tab="#<?php echo $tab_index;?>"
-                           data-status="enable"><?php echo $detail_page_tab['heading_text'];?></a>
+                           data-status="enable"><?php _e($detail_page_tab['heading_text'],GEODIRECTORY_TEXTDOMAIN);?></a>
                     </dd>
 
                     <?php
