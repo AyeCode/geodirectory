@@ -552,7 +552,7 @@ function gdsc_validate_list_filter_choice($filter_choice)
  * @return string Listings HTML content.
  */
 function geodir_sc_gd_listings_output($args = array()) {
-    $title				 = !empty($args['title']) ? __($args['title'], GEODIRECTORY_TEXTDOMAIN) : '';
+    $title				 = !empty($args['title']) ? __($args['title'], 'geodirectory') : '';
 	$post_type 			 = !empty($args['post_type']) ? $args['post_type'] : 'gd_place';
 	$category 			 = !empty($args['category']) ? $args['category'] : '0';
 	$post_number		 = !empty($args['post_number']) ? $args['post_number'] : 10;
@@ -807,7 +807,7 @@ function geodir_sc_listings_pagination($total_posts, $posts_per_page, $pageno, $
 		$end_no = min($pageno * $posts_per_page, $numposts);
 		
 		if ($geodir_pagination_more_info != '') {
-			$pagination_info = '<div class="gd-pagination-details">' . wp_sprintf(__('Showing listings %d-%d of %d', GEODIRECTORY_TEXTDOMAIN), $start_no, $end_no, $numposts) . '</div>';
+			$pagination_info = '<div class="gd-pagination-details">' . wp_sprintf(__('Showing listings %d-%d of %d', 'geodirectory'), $start_no, $end_no, $numposts) . '</div>';
 			
 			if ($geodir_pagination_more_info == 'before') {
 				$before = $before . $pagination_info;

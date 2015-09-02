@@ -1184,7 +1184,7 @@ function geodir_action_details_taxonomies()
             if (!isset($listing_label)) {
                 $listing_label = '';
             }
-            $taxonomies[$post_type . '_tags'] = wp_sprintf('%s: %l', ucwords($listing_label . ' ' . __('Tags', GEODIRECTORY_TEXTDOMAIN)), $links, (object)$terms);
+            $taxonomies[$post_type . '_tags'] = wp_sprintf('%s: %l', ucwords($listing_label . ' ' . __('Tags', 'geodirectory')), $links, (object)$terms);
         endif;
 
     }
@@ -1224,7 +1224,7 @@ function geodir_action_details_taxonomies()
         if (!isset($listing_label)) {
             $listing_label = '';
         }
-        $taxonomies[$post_taxonomy] = wp_sprintf('%s: %l', ucwords($listing_label . ' ' . __('Category', GEODIRECTORY_TEXTDOMAIN)), $links, (object)$terms);
+        $taxonomies[$post_taxonomy] = wp_sprintf('%s: %l', ucwords($listing_label . ' ' . __('Category', 'geodirectory')), $links, (object)$terms);
 
     }
 
@@ -1265,7 +1265,7 @@ function geodir_action_details_micordata()
         <span class="vcard author" style="display:none;">
 	<span class="fn"><?php echo get_the_author(); ?></span>
     <span class="org"><?php the_title();?></span>
-    <span class="role"><?php _e('Admin', GEODIRECTORY_TEXTDOMAIN)?></span>
+    <span class="role"><?php _e('Admin', 'geodirectory')?></span>
 </span>
         <meta itemprop="name" content="<?php the_title_attribute();?>"/>
 
@@ -1293,9 +1293,9 @@ function geodir_action_details_next_prev()
     ?>
     <div class="geodir-pos_navigation clearfix">
     <div
-        class="geodir-post_left"><?php previous_post_link('%link', '' . __('Previous', GEODIRECTORY_TEXTDOMAIN), false) ?></div>
+        class="geodir-post_left"><?php previous_post_link('%link', '' . __('Previous', 'geodirectory'), false) ?></div>
     <div
-        class="geodir-post_right"><?php next_post_link('%link', __('Next', GEODIRECTORY_TEXTDOMAIN) . '', false) ?></div>
+        class="geodir-post_right"><?php next_post_link('%link', __('Next', 'geodirectory') . '', false) ?></div>
     </div><?php
 }
 
@@ -1365,12 +1365,12 @@ function geodir_action_listings_title()
     $gd_post_type = geodir_get_current_posttype();
     $post_type_info = get_post_type_object($gd_post_type);
 
-    $add_string_in_title = __('All', GEODIRECTORY_TEXTDOMAIN) . ' ';
+    $add_string_in_title = __('All', 'geodirectory') . ' ';
     if (isset($_REQUEST['list']) && $_REQUEST['list'] == 'favourite') {
-        $add_string_in_title = __('My Favorite', GEODIRECTORY_TEXTDOMAIN) . ' ';
+        $add_string_in_title = __('My Favorite', 'geodirectory') . ' ';
     }
 
-    $list_title = $add_string_in_title . __(ucfirst($post_type_info->labels->name), GEODIRECTORY_TEXTDOMAIN);
+    $list_title = $add_string_in_title . __(ucfirst($post_type_info->labels->name), 'geodirectory');
     $single_name = $post_type_info->labels->singular_name;
 
     $taxonomy = geodir_get_taxonomies($gd_post_type, true);
@@ -1397,26 +1397,26 @@ function geodir_action_listings_title()
 
         $current_term = get_term_by('slug', $term, $taxonomy[0]);
         if (!empty($current_term)) {
-            $current_term_name = __(ucfirst($current_term->name), GEODIRECTORY_TEXTDOMAIN);
+            $current_term_name = __(ucfirst($current_term->name), 'geodirectory');
             if ($current_term_name != '' && $location_name != '' && isset($current_term->taxonomy) && $current_term->taxonomy == $gd_post_type . 'category') {
                 $location_last_char = substr($location_name, -1);
-                $location_name_attach = strtolower($location_last_char) == 's' ? __("'", GEODIRECTORY_TEXTDOMAIN) : __("'s", GEODIRECTORY_TEXTDOMAIN);
-                $list_title .= __(' in', GEODIRECTORY_TEXTDOMAIN) . ' ' . $location_name . $location_name_attach . ' ' . $current_term_name;
+                $location_name_attach = strtolower($location_last_char) == 's' ? __("'", 'geodirectory') : __("'s", 'geodirectory');
+                $list_title .= __(' in', 'geodirectory') . ' ' . $location_name . $location_name_attach . ' ' . $current_term_name;
             } else {
-                $list_title .= __(' in', GEODIRECTORY_TEXTDOMAIN) . " '" . $current_term_name . "'";
+                $list_title .= __(' in', 'geodirectory') . " '" . $current_term_name . "'";
             }
         } else {
             if (count($taxonomy) > 1) {
                 $current_term = get_term_by('slug', $term, $taxonomy[1]);
 
                 if (!empty($current_term)) {
-                    $current_term_name = __(ucfirst($current_term->name), GEODIRECTORY_TEXTDOMAIN);
+                    $current_term_name = __(ucfirst($current_term->name), 'geodirectory');
                     if ($current_term_name != '' && $location_name != '' && isset($current_term->taxonomy) && $current_term->taxonomy == $gd_post_type . 'category') {
                         $location_last_char = substr($location_name, -1);
-                        $location_name_attach = strtolower($location_last_char) == 's' ? __("'", GEODIRECTORY_TEXTDOMAIN) : __("'s", GEODIRECTORY_TEXTDOMAIN);
-                        $list_title .= __(' in', GEODIRECTORY_TEXTDOMAIN) . ' ' . $location_name . $location_name_attach . ' ' . $current_term_name;
+                        $location_name_attach = strtolower($location_last_char) == 's' ? __("'", 'geodirectory') : __("'s", 'geodirectory');
+                        $list_title .= __(' in', 'geodirectory') . ' ' . $location_name . $location_name_attach . ' ' . $current_term_name;
                     } else {
-                        $list_title .= __(' in', GEODIRECTORY_TEXTDOMAIN) . " '" . $current_term_name . "'";
+                        $list_title .= __(' in', 'geodirectory') . " '" . $current_term_name . "'";
                     }
                 }
             }
@@ -1441,35 +1441,35 @@ function geodir_action_listings_title()
             } else {
                 $gd_city = preg_replace('/-(\d+)$/', '', $gd_city);
                 $gd_city = preg_replace('/[_-]/', ' ', $gd_city);
-                $gd_city = __(ucwords($gd_city), GEODIRECTORY_TEXTDOMAIN);
+                $gd_city = __(ucwords($gd_city), 'geodirectory');
             }
 
-            $list_title .= __(' in', GEODIRECTORY_TEXTDOMAIN) . " '" . $gd_city . "'";
+            $list_title .= __(' in', 'geodirectory') . " '" . $gd_city . "'";
         } else if ($gd_region != '') {
             if ($gd_region_actual != '') {
                 $gd_region = $gd_region_actual;
             } else {
                 $gd_region = preg_replace('/-(\d+)$/', '', $gd_region);
                 $gd_region = preg_replace('/[_-]/', ' ', $gd_region);
-                $gd_region = __(ucwords($gd_region), GEODIRECTORY_TEXTDOMAIN);
+                $gd_region = __(ucwords($gd_region), 'geodirectory');
             }
 
-            $list_title .= __(' in', GEODIRECTORY_TEXTDOMAIN) . " '" . $gd_region . "'";
+            $list_title .= __(' in', 'geodirectory') . " '" . $gd_region . "'";
         } else if ($gd_country != '') {
             if ($gd_country_actual != '') {
                 $gd_country = $gd_country_actual;
             } else {
                 $gd_country = preg_replace('/-(\d+)$/', '', $gd_country);
                 $gd_country = preg_replace('/[_-]/', ' ', $gd_country);
-                $gd_country = __(ucwords($gd_country), GEODIRECTORY_TEXTDOMAIN);
+                $gd_country = __(ucwords($gd_country), 'geodirectory');
             }
 
-            $list_title .= __(' in', GEODIRECTORY_TEXTDOMAIN) . " '" . $gd_country . "'";
+            $list_title .= __(' in', 'geodirectory') . " '" . $gd_country . "'";
         }
     }
 
     if (is_search()) {
-        $list_title = __('Search', GEODIRECTORY_TEXTDOMAIN) . ' ' . __(ucfirst($post_type_info->labels->name), GEODIRECTORY_TEXTDOMAIN) . __(' For :', GEODIRECTORY_TEXTDOMAIN) . " '" . get_search_query() . "'";
+        $list_title = __('Search', 'geodirectory') . ' ' . __(ucfirst($post_type_info->labels->name), 'geodirectory') . __(' For :', 'geodirectory') . " '" . get_search_query() . "'";
     }
     /** This action is documented in geodirectory_template_actions.php */
     $class = apply_filters('geodir_page_title_class', 'entry-title fn');
@@ -1886,11 +1886,11 @@ function geodir_action_add_listing_page_title()
          * @since 1.0.0
          * @param string $title The page title. This is usually Edit/Add followed by the post type name.
          */
-        echo apply_filters('geodir_add_listing_page_title_text', (ucwords(__('Edit', GEODIRECTORY_TEXTDOMAIN) . ' ' . __($post_type_info['labels']['singular_name'], GEODIRECTORY_TEXTDOMAIN))));
+        echo apply_filters('geodir_add_listing_page_title_text', (ucwords(__('Edit', 'geodirectory') . ' ' . __($post_type_info['labels']['singular_name'], 'geodirectory'))));
     } elseif (isset($listing_type)) {
         $post_type_info = geodir_get_posttype_info($listing_type);
         /** This action is documented in geodirectory_template_actions.php */
-        echo apply_filters('geodir_add_listing_page_title_text', (ucwords(__('Add', GEODIRECTORY_TEXTDOMAIN) . ' ' . __($post_type_info['labels']['singular_name'], GEODIRECTORY_TEXTDOMAIN))));
+        echo apply_filters('geodir_add_listing_page_title_text', (ucwords(__('Add', 'geodirectory') . ' ' . __($post_type_info['labels']['singular_name'], 'geodirectory'))));
     } else {
         /** This action is documented in geodirectory_template_actions.php */
         apply_filters('geodir_add_listing_page_title_text', the_title());
@@ -2021,7 +2021,7 @@ function geodir_action_add_listing_form()
             <label><?php echo PLACE_TITLE_TEXT;?><span>*</span> </label>
             <input type="text" field_type="text" name="post_title" id="post_title" class="geodir_textfield"
                    value="<?php echo esc_attr(stripslashes($title)); ?>"/>
-            <span class="geodir_message_error"><?php _e($required_msg, GEODIRECTORY_TEXTDOMAIN);?></span>
+            <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory');?></span>
         </div>
 
         <?php
@@ -2088,7 +2088,7 @@ function geodir_action_add_listing_form()
             <?php if ($desc_limit_msg != '') { ?>
                 <span class="geodir_message_note"><?php echo $desc_limit_msg; ?></span>
             <?php } ?>
-            <span class="geodir_message_error"><?php echo _e($required_msg, GEODIRECTORY_TEXTDOMAIN);?></span>
+            <span class="geodir_message_error"><?php echo _e($required_msg, 'geodirectory');?></span>
         </div>
         <?php
         /**
@@ -2222,13 +2222,13 @@ function geodir_action_add_listing_form()
 
             <h5 id="geodir_form_title_row" class="geodir-form_title"> <?php echo PRO_PHOTO_TEXT;?>
                 <?php if ($image_limit == 1) {
-                    echo '<br /><small>(' . __('You can upload', GEODIRECTORY_TEXTDOMAIN) . ' ' . $image_limit . ' ' . __('image with this package', GEODIRECTORY_TEXTDOMAIN) . ')</small>';
+                    echo '<br /><small>(' . __('You can upload', 'geodirectory') . ' ' . $image_limit . ' ' . __('image with this package', 'geodirectory') . ')</small>';
                 } ?>
                 <?php if ($image_limit > 1) {
-                    echo '<br /><small>(' . __('You can upload', GEODIRECTORY_TEXTDOMAIN) . ' ' . $image_limit . ' ' . __('images with this package', GEODIRECTORY_TEXTDOMAIN) . ')</small>';
+                    echo '<br /><small>(' . __('You can upload', 'geodirectory') . ' ' . $image_limit . ' ' . __('images with this package', 'geodirectory') . ')</small>';
                 } ?>
                 <?php if ($image_limit == '') {
-                    echo '<br /><small>(' . __('You can upload unlimited images with this package', GEODIRECTORY_TEXTDOMAIN) . ')</small>';
+                    echo '<br /><small>(' . __('You can upload unlimited images with this package', 'geodirectory') . ')</small>';
                 } ?>
             </h5>
 
@@ -2243,9 +2243,9 @@ function geodir_action_add_listing_form()
                 <div
                     class="plupload-upload-uic hide-if-no-js <?php if ($multiple): ?>plupload-upload-uic-multiple<?php endif; ?>"
                     id="<?php echo $id; ?>plupload-upload-ui">
-                    <h4><?php _e('Drop files to upload', GEODIRECTORY_TEXTDOMAIN);?></h4><br/>
+                    <h4><?php _e('Drop files to upload', 'geodirectory');?></h4><br/>
                     <input id="<?php echo $id; ?>plupload-browse-button" type="button"
-                           value="<?php esc_attr_e('Select Files', GEODIRECTORY_TEXTDOMAIN); ?>" class="geodir_button"/>
+                           value="<?php esc_attr_e('Select Files', 'geodirectory'); ?>" class="geodir_button"/>
                     <span class="ajaxnonceplu"
                           id="ajaxnonceplu<?php echo wp_create_nonce($id . 'pluploadan'); ?>"></span>
                     <?php if ($width && $height): ?>
@@ -2260,7 +2260,7 @@ function geodir_action_add_listing_form()
                      id="<?php echo $id; ?>plupload-thumbs" style="border-top:1px solid #ccc; padding-top:10px;">
                 </div>
                 <span
-                    id="upload-msg"><?php _e('Please drag &amp; drop the images to rearrange the order', GEODIRECTORY_TEXTDOMAIN);?></span>
+                    id="upload-msg"><?php _e('Please drag &amp; drop the images to rearrange the order', 'geodirectory');?></span>
                 <span id="<?php echo $id; ?>upload-error" style="display:none"></span>
             </div>
 
@@ -2283,7 +2283,7 @@ function geodir_action_add_listing_form()
         </script>
         <noscript>
             <div>
-                <label><?php _e('Type 64 into this box', GEODIRECTORY_TEXTDOMAIN);?></label>
+                <label><?php _e('Type 64 into this box', 'geodirectory');?></label>
                 <input type="text" id="geodir_spamblocker_top_form" name="geodir_spamblocker" value="" maxlength="10"/>
             </div>
         </noscript>
@@ -2296,7 +2296,7 @@ function geodir_action_add_listing_form()
             <input type="submit" value="<?php echo PRO_PREVIEW_BUTTON;?>"
                    class="geodir_button" <?php echo $submit_button;?>/>
             <span class="geodir_message_note"
-                  style="padding-left:0px;"> <?php _e('Note: You will be able to see a preview in the next page', GEODIRECTORY_TEXTDOMAIN);?></span>
+                  style="padding-left:0px;"> <?php _e('Note: You will be able to see a preview in the next page', 'geodirectory');?></span>
         </div>
 
     </form>
@@ -2508,9 +2508,9 @@ function geodir_action_author_page_title()
     $gd_post_type = geodir_get_current_posttype();
     $post_type_info = get_post_type_object($gd_post_type);
 
-    $add_string_in_title = __('All', GEODIRECTORY_TEXTDOMAIN) . ' ';
+    $add_string_in_title = __('All', 'geodirectory') . ' ';
     if (isset($_REQUEST['list']) && $_REQUEST['list'] == 'favourite') {
-        $add_string_in_title = __('My Favorite', GEODIRECTORY_TEXTDOMAIN) . ' ';
+        $add_string_in_title = __('My Favorite', 'geodirectory') . ' ';
     }
 
     $list_title = $add_string_in_title . $post_type_info->labels->name;
@@ -2521,12 +2521,12 @@ function geodir_action_author_page_title()
     if (!empty($term)) {
         $current_term = get_term_by('slug', $term, $taxonomy[0]);
         if (!empty($current_term))
-            $list_title .= __(' in', GEODIRECTORY_TEXTDOMAIN) . " '" . ucwords($current_term->name) . "'";
+            $list_title .= __(' in', 'geodirectory') . " '" . ucwords($current_term->name) . "'";
     }
 
 
     if (is_search()) {
-        $list_title = __('Search', GEODIRECTORY_TEXTDOMAIN) . ' ' . __($post_type_info->labels->name, GEODIRECTORY_TEXTDOMAIN) . __(' For :', GEODIRECTORY_TEXTDOMAIN) . " '" . get_search_query() . "'";
+        $list_title = __('Search', 'geodirectory') . ' ' . __($post_type_info->labels->name, 'geodirectory') . __(' For :', 'geodirectory') . " '" . get_search_query() . "'";
 
     }
     /** This action is documented in geodirectory_template_actions.php */
@@ -2748,7 +2748,7 @@ function geodir_action_search_page_title()
     if(isset($post_type_info->labels->name)){$pt_name=$post_type_info->labels->name;}
 
     if (is_search()) {
-        $list_title = __('Search', GEODIRECTORY_TEXTDOMAIN) . ' ' . __($pt_name, GEODIRECTORY_TEXTDOMAIN) . __(' For :', GEODIRECTORY_TEXTDOMAIN) . " '" . get_search_query() . "'";
+        $list_title = __('Search', 'geodirectory') . ' ' . __($pt_name, 'geodirectory') . __(' For :', 'geodirectory') . " '" . get_search_query() . "'";
 
     }
     /** This action is documented in geodirectory_template_actions.php */
@@ -3161,7 +3161,7 @@ function geodir_filter_listing_page_title($list_title)
         $gd_post_type = geodir_get_current_posttype();
         $post_type_info = get_post_type_object($gd_post_type);
 
-        $list_title = __('Search', GEODIRECTORY_TEXTDOMAIN) . ' ' . __(ucfirst($post_type_info->labels->name), GEODIRECTORY_TEXTDOMAIN) . __(' :', GEODIRECTORY_TEXTDOMAIN);
+        $list_title = __('Search', 'geodirectory') . ' ' . __(ucfirst($post_type_info->labels->name), 'geodirectory') . __(' :', 'geodirectory');
     }
     return $list_title;
 }

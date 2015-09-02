@@ -192,16 +192,16 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
 
                                         $distance = geodir_calculateDistanceFromLatLong($startPoint, $endPoint, $uom);
                                         if ($uom == 'feet') {
-                                            $uom = __('feet', GEODIRECTORY_TEXTDOMAIN);
+                                            $uom = __('feet', 'geodirectory');
                                         } else {
-                                            $uom = __('meters', GEODIRECTORY_TEXTDOMAIN);
+                                            $uom = __('meters', 'geodirectory');
                                         }
                                         echo round($distance) . ' ' . $uom . '<br />';
                                     } else {
                                         if ($uom == 'miles') {
-                                            $uom = __('miles', GEODIRECTORY_TEXTDOMAIN);
+                                            $uom = __('miles', 'geodirectory');
                                         } else {
-                                            $uom = __('km', GEODIRECTORY_TEXTDOMAIN);
+                                            $uom = __('km', 'geodirectory');
                                         }
                                         echo round($distance, 2) . ' ' . $uom . '<br />';
                                     }
@@ -310,7 +310,7 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                                     <a class="geodir-pinpoint-link" href="javascript:void(0)"
                                        onclick="openMarker('listing_map_canvas' ,'<?php echo $post->ID; ?>')"
                                        onmouseover="animate_marker('listing_map_canvas' ,'<?php echo $post->ID; ?>')"
-                                       onmouseout="stop_marker_animation('listing_map_canvas' ,'<?php echo $post->ID; ?>')"><?php _e('Pinpoint', GEODIRECTORY_TEXTDOMAIN); ?></a>
+                                       onmouseout="stop_marker_animation('listing_map_canvas' ,'<?php echo $post->ID; ?>')"><?php _e('Pinpoint', 'geodirectory'); ?></a>
                                 <?php }
 
                                 /**
@@ -344,20 +344,20 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                                                 ?>
 
                                                 <a href="<?php echo $editlink; ?>" class="geodir-edit"
-                                                   title="<?php _e('Edit Listing', GEODIRECTORY_TEXTDOMAIN); ?>">
+                                                   title="<?php _e('Edit Listing', 'geodirectory'); ?>">
                                                     <?php
                                                     $geodir_listing_edit_icon = apply_filters('geodir_listing_edit_icon', 'fa fa-edit');
                                                     echo '<i class="'. $geodir_listing_edit_icon .'"></i>';
                                                     ?>
-                                                    <?php _e('Edit', GEODIRECTORY_TEXTDOMAIN); ?>
+                                                    <?php _e('Edit', 'geodirectory'); ?>
                                                 </a>
                                                 <a href="<?php echo $deletelink; ?>" class="geodir-delete"
-                                                   title="<?php _e('Delete Listing', GEODIRECTORY_TEXTDOMAIN); ?>">
+                                                   title="<?php _e('Delete Listing', 'geodirectory'); ?>">
                                                     <?php
                                                     $geodir_listing_delete_icon = apply_filters('geodir_listing_delete_icon', 'fa fa-close');
                                                     echo '<i class="'. $geodir_listing_delete_icon .'"></i>';
                                                     ?>
-                                                    <?php _e('Delete', GEODIRECTORY_TEXTDOMAIN); ?>
+                                                    <?php _e('Delete', 'geodirectory'); ?>
                                                 </a>
                                                 <?php
 
@@ -396,9 +396,9 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
         else:
 
             if (isset($_REQUEST['list']) && $_REQUEST['list'] == 'favourite')
-                echo '<li class="no-listing">' . __('No favorite listings found which match your selection.', GEODIRECTORY_TEXTDOMAIN) . '</li>';
+                echo '<li class="no-listing">' . __('No favorite listings found which match your selection.', 'geodirectory') . '</li>';
             else
-                echo '<li class="no-listing">' . __('No listings found which match your selection.', GEODIRECTORY_TEXTDOMAIN) . '</li>';
+                echo '<li class="no-listing">' . __('No listings found which match your selection.', 'geodirectory') . '</li>';
 
         endif;
 

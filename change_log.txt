@@ -15,6 +15,7 @@ Details map and details page map widget mapview not changing from ROADMAP - FIXE
 Details page mobile tabs view improved - CHANGED
 General option added to set if user deleted posts go to trash or are permanently deleted - ADDED
 Date custom field default format of mm/dd/yy added and descriptions of each format added for better understanding - CHANGED
+Changed textdomain from defined constant to a string 'geodirectory' - CHANGED
 
 v1.5.1
 Default sort by titles not translatable - FIXED

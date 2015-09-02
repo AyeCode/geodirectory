@@ -21,10 +21,10 @@ class geodir_popular_post_category extends WP_Widget
      * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
 	 */
     function __construct() {
-        $widget_ops = array('classname' => 'geodir_popular_post_category', 'description' => __('GD > Popular Post Category', GEODIRECTORY_TEXTDOMAIN));
+        $widget_ops = array('classname' => 'geodir_popular_post_category', 'description' => __('GD > Popular Post Category', 'geodirectory'));
         parent::__construct(
             'popular_post_category', // Base ID
-            __('GD > Popular Post Category', GEODIRECTORY_TEXTDOMAIN), // Name
+            __('GD > Popular Post Category', 'geodirectory'), // Name
             $widget_ops// Args
         );
     }
@@ -88,7 +88,7 @@ class geodir_popular_post_category extends WP_Widget
 		$post_type_options = geodir_get_posttypes('options');
         ?>
         <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', GEODIRECTORY_TEXTDOMAIN); ?>
+            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'geodirectory'); ?>
                 <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>"
                        name="<?php echo $this->get_field_name('title'); ?>" type="text"
                        value="<?php echo esc_attr($title); ?>"/>
@@ -96,7 +96,7 @@ class geodir_popular_post_category extends WP_Widget
         </p>
 		<p>
 		  <label for="<?php echo $this->get_field_id('post_type'); ?>">
-		  <?php _e('Default post type to use (if not set by page)', GEODIRECTORY_TEXTDOMAIN);?>
+		  <?php _e('Default post type to use (if not set by page)', 'geodirectory');?>
 		  <select class="widefat" id="<?php echo $this->get_field_id('default_post_type'); ?>" name="<?php echo $this->get_field_name('default_post_type'); ?>">
 			<?php foreach ($post_type_options as $name => $title) { ?>
 			<option value="<?php echo $name;?>" <?php selected($name, $default_post_type);?>><?php echo $title; ?></option>
@@ -106,13 +106,13 @@ class geodir_popular_post_category extends WP_Widget
 		</p>
         <p>
             <label
-                for="<?php echo $this->get_field_id('category_limit'); ?>"><?php _e('Customize categories count to appear by default:', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('category_limit'); ?>"><?php _e('Customize categories count to appear by default:', 'geodirectory'); ?>
                 <input class="widefat" id="<?php echo $this->get_field_id('category_limit'); ?>"
                        name="<?php echo $this->get_field_name('category_limit'); ?>" type="text"
                        value="<?php echo (int)esc_attr($category_limit); ?>"/>
 
                 <p class="description"
-                   style="padding:0"><?php _e('After categories count reaches this limit option More Categories / Less Categoris will be displayed to show/hide categories. Default: 15', GEODIRECTORY_TEXTDOMAIN); ?></p>
+                   style="padding:0"><?php _e('After categories count reaches this limit option More Categories / Less Categoris will be displayed to show/hide categories. Default: 15', 'geodirectory'); ?></p>
             </label>
         </p>
     <?php
@@ -137,10 +137,10 @@ class geodir_popular_postview extends WP_Widget
      * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
 	 */
     function __construct() {
-        $widget_ops = array('classname' => 'geodir_popular_post_view', 'description' => __('GD > Popular Post View', GEODIRECTORY_TEXTDOMAIN));
+        $widget_ops = array('classname' => 'geodir_popular_post_view', 'description' => __('GD > Popular Post View', 'geodirectory'));
         parent::__construct(
             'popular_post_view', // Base ID
-            __('GD > Popular Post View', GEODIRECTORY_TEXTDOMAIN), // Name
+            __('GD > Popular Post View', 'geodirectory'), // Name
             $widget_ops// Args
         );
     }
@@ -266,9 +266,9 @@ class geodir_popular_postview extends WP_Widget
         ?>
 
         <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', GEODIRECTORY_TEXTDOMAIN);?>
+            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'geodirectory');?>
                 <small>(%posttype_singular_label% ,
-                    %posttype_plural_label% <?php _e('can be used', GEODIRECTORY_TEXTDOMAIN);?>)
+                    %posttype_plural_label% <?php _e('can be used', 'geodirectory');?>)
                 </small>
 
                 <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>"
@@ -279,7 +279,7 @@ class geodir_popular_postview extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('post_type'); ?>"><?php _e('Post Type:', GEODIRECTORY_TEXTDOMAIN);?>
+                for="<?php echo $this->get_field_id('post_type'); ?>"><?php _e('Post Type:', 'geodirectory');?>
 
                 <?php $postypes = geodir_get_posttypes();
 				/**
@@ -311,7 +311,7 @@ class geodir_popular_postview extends WP_Widget
 
         <p id="post_type_cats">
             <label
-                for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Post Category:', GEODIRECTORY_TEXTDOMAIN);?>
+                for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Post Category:', 'geodirectory');?>
 
                 <?php
 
@@ -332,7 +332,7 @@ class geodir_popular_postview extends WP_Widget
 
                     <option <?php if (!is_array($category) || (is_array($category) && in_array('0', $category))) {
                         echo 'selected="selected"';
-                    } ?> value="0"><?php _e('All', GEODIRECTORY_TEXTDOMAIN); ?></option>
+                    } ?> value="0"><?php _e('All', 'geodirectory'); ?></option>
                     <?php foreach ($categories as $category_obj) {
                         $selected = '';
                         if (is_array($category) && in_array($category_obj->term_id, $category))
@@ -350,41 +350,41 @@ class geodir_popular_postview extends WP_Widget
 
                 <input type="hidden" name="<?php echo $this->get_field_name('category_title'); ?>"
                        id="<?php echo $this->get_field_id('category_title'); ?>"
-                       value="<?php if ($category_title != '') echo $category_title; else echo __('All', GEODIRECTORY_TEXTDOMAIN);?>"/>
+                       value="<?php if ($category_title != '') echo $category_title; else echo __('All', 'geodirectory');?>"/>
 
             </label>
         </p>
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('list_sort'); ?>"><?php _e('Sort by:', GEODIRECTORY_TEXTDOMAIN);?>
+                for="<?php echo $this->get_field_id('list_sort'); ?>"><?php _e('Sort by:', 'geodirectory');?>
 
                 <select class="widefat" id="<?php echo $this->get_field_id('list_sort'); ?>"
                         name="<?php echo $this->get_field_name('list_sort'); ?>">
 
                     <option <?php if ($list_sort == 'az') {
                         echo 'selected="selected"';
-                    } ?> value="az"><?php _e('A-Z', GEODIRECTORY_TEXTDOMAIN); ?></option>
+                    } ?> value="az"><?php _e('A-Z', 'geodirectory'); ?></option>
 
                     <option <?php if ($list_sort == 'latest') {
                         echo 'selected="selected"';
-                    } ?> value="latest"><?php _e('Latest', GEODIRECTORY_TEXTDOMAIN); ?></option>
+                    } ?> value="latest"><?php _e('Latest', 'geodirectory'); ?></option>
 
                     <option <?php if ($list_sort == 'featured') {
                         echo 'selected="selected"';
-                    } ?> value="featured"><?php _e('Featured', GEODIRECTORY_TEXTDOMAIN); ?></option>
+                    } ?> value="featured"><?php _e('Featured', 'geodirectory'); ?></option>
 
                     <option <?php if ($list_sort == 'high_review') {
                         echo 'selected="selected"';
-                    } ?> value="high_review"><?php _e('Review', GEODIRECTORY_TEXTDOMAIN); ?></option>
+                    } ?> value="high_review"><?php _e('Review', 'geodirectory'); ?></option>
 
                     <option <?php if ($list_sort == 'high_rating') {
                         echo 'selected="selected"';
-                    } ?> value="high_rating"><?php _e('Rating', GEODIRECTORY_TEXTDOMAIN); ?></option>
+                    } ?> value="high_rating"><?php _e('Rating', 'geodirectory'); ?></option>
 
                     <option <?php if ($list_sort == 'random') {
                         echo 'selected="selected"';
-                    } ?> value="random"><?php _e('Random', GEODIRECTORY_TEXTDOMAIN); ?></option>
+                    } ?> value="random"><?php _e('Random', 'geodirectory'); ?></option>
 
                 </select>
             </label>
@@ -393,7 +393,7 @@ class geodir_popular_postview extends WP_Widget
         <p>
 
             <label
-                for="<?php echo $this->get_field_id('post_number'); ?>"><?php _e('Number of posts:', GEODIRECTORY_TEXTDOMAIN);?>
+                for="<?php echo $this->get_field_id('post_number'); ?>"><?php _e('Number of posts:', 'geodirectory');?>
 
                 <input class="widefat" id="<?php echo $this->get_field_id('post_number'); ?>"
                        name="<?php echo $this->get_field_name('post_number'); ?>" type="text"
@@ -403,28 +403,28 @@ class geodir_popular_postview extends WP_Widget
 
         <p>
             <label for="<?php echo $this->get_field_id('layout'); ?>">
-                <?php _e('Layout:', GEODIRECTORY_TEXTDOMAIN);?>
+                <?php _e('Layout:', 'geodirectory');?>
                 <select class="widefat" id="<?php echo $this->get_field_id('layout'); ?>"
                         name="<?php echo $this->get_field_name('layout'); ?>">
                     <option <?php if ($layout == 'gridview_onehalf') {
                         echo 'selected="selected"';
                     } ?>
-                        value="gridview_onehalf"><?php _e('Grid View (Two Columns)', GEODIRECTORY_TEXTDOMAIN); ?></option>
+                        value="gridview_onehalf"><?php _e('Grid View (Two Columns)', 'geodirectory'); ?></option>
                     <option <?php if ($layout == 'gridview_onethird') {
                         echo 'selected="selected"';
                     } ?>
-                        value="gridview_onethird"><?php _e('Grid View (Three Columns)', GEODIRECTORY_TEXTDOMAIN); ?></option>
+                        value="gridview_onethird"><?php _e('Grid View (Three Columns)', 'geodirectory'); ?></option>
                     <option <?php if ($layout == 'gridview_onefourth') {
                         echo 'selected="selected"';
                     } ?>
-                        value="gridview_onefourth"><?php _e('Grid View (Four Columns)', GEODIRECTORY_TEXTDOMAIN); ?></option>
+                        value="gridview_onefourth"><?php _e('Grid View (Four Columns)', 'geodirectory'); ?></option>
                     <option <?php if ($layout == 'gridview_onefifth') {
                         echo 'selected="selected"';
                     } ?>
-                        value="gridview_onefifth"><?php _e('Grid View (Five Columns)', GEODIRECTORY_TEXTDOMAIN); ?></option>
+                        value="gridview_onefifth"><?php _e('Grid View (Five Columns)', 'geodirectory'); ?></option>
                     <option <?php if ($layout == 'list') {
                         echo 'selected="selected"';
-                    } ?> value="list"><?php _e('List view', GEODIRECTORY_TEXTDOMAIN); ?></option>
+                    } ?> value="list"><?php _e('List view', 'geodirectory'); ?></option>
 
                 </select>
             </label>
@@ -432,7 +432,7 @@ class geodir_popular_postview extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('listing_width'); ?>"><?php _e('Listing width:', GEODIRECTORY_TEXTDOMAIN);?>
+                for="<?php echo $this->get_field_id('listing_width'); ?>"><?php _e('Listing width:', 'geodirectory');?>
 
                 <input class="widefat" id="<?php echo $this->get_field_id('listing_width'); ?>"
                        name="<?php echo $this->get_field_name('listing_width'); ?>" type="text"
@@ -442,7 +442,7 @@ class geodir_popular_postview extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('character_count'); ?>"><?php _e('Post Content excerpt character count :', GEODIRECTORY_TEXTDOMAIN);?>
+                for="<?php echo $this->get_field_id('character_count'); ?>"><?php _e('Post Content excerpt character count :', 'geodirectory');?>
                 <input class="widefat" id="<?php echo $this->get_field_id('character_count'); ?>"
                        name="<?php echo $this->get_field_name('character_count'); ?>" type="text"
                        value="<?php echo esc_attr($character_count); ?>"/>
@@ -451,7 +451,7 @@ class geodir_popular_postview extends WP_Widget
 
         <p>
             <label for="<?php echo $this->get_field_id('add_location_filter'); ?>">
-                <?php _e('Enable Location Filter:', GEODIRECTORY_TEXTDOMAIN);?>
+                <?php _e('Enable Location Filter:', 'geodirectory');?>
                 <input type="checkbox" id="<?php echo $this->get_field_id('add_location_filter'); ?>"
                        name="<?php echo $this->get_field_name('add_location_filter'); ?>" <?php if ($add_location_filter) echo 'checked="checked"';?>
                        value="1"/>
@@ -459,7 +459,7 @@ class geodir_popular_postview extends WP_Widget
         </p>
         <p>
             <label for="<?php echo $this->get_field_id('show_featured_only'); ?>">
-                <?php _e('Show only featured listings:', GEODIRECTORY_TEXTDOMAIN);?> <input type="checkbox"
+                <?php _e('Show only featured listings:', 'geodirectory');?> <input type="checkbox"
                                                                                             id="<?php echo $this->get_field_id('show_featured_only'); ?>"
                                                                                             name="<?php echo $this->get_field_name('show_featured_only'); ?>" <?php if ($show_featured_only) echo 'checked="checked"';?>
                                                                                             value="1"/>
@@ -467,7 +467,7 @@ class geodir_popular_postview extends WP_Widget
         </p>
         <p>
             <label for="<?php echo $this->get_field_id('show_special_only'); ?>">
-                <?php _e('Show only listings with special offers:', GEODIRECTORY_TEXTDOMAIN);?> <input type="checkbox"
+                <?php _e('Show only listings with special offers:', 'geodirectory');?> <input type="checkbox"
                                                                                                        id="<?php echo $this->get_field_id('show_special_only'); ?>"
                                                                                                        name="<?php echo $this->get_field_name('show_special_only'); ?>" <?php if ($show_special_only) echo 'checked="checked"';?>
                                                                                                        value="1"/>
@@ -475,7 +475,7 @@ class geodir_popular_postview extends WP_Widget
         </p>
         <p>
             <label for="<?php echo $this->get_field_id('with_pics_only'); ?>">
-                <?php _e('Show only listings with pics:', GEODIRECTORY_TEXTDOMAIN);?> <input type="checkbox"
+                <?php _e('Show only listings with pics:', 'geodirectory');?> <input type="checkbox"
                                                                                              id="<?php echo $this->get_field_id('with_pics_only'); ?>"
                                                                                              name="<?php echo $this->get_field_name('with_pics_only'); ?>" <?php if ($with_pics_only) echo 'checked="checked"';?>
                                                                                              value="1"/>
@@ -483,7 +483,7 @@ class geodir_popular_postview extends WP_Widget
         </p>
         <p>
             <label for="<?php echo $this->get_field_id('with_videos_only'); ?>">
-                <?php _e('Show only listings with videos:', GEODIRECTORY_TEXTDOMAIN);?> <input type="checkbox"
+                <?php _e('Show only listings with videos:', 'geodirectory');?> <input type="checkbox"
                                                                                                id="<?php echo $this->get_field_id('with_videos_only'); ?>"
                                                                                                name="<?php echo $this->get_field_name('with_videos_only'); ?>" <?php if ($with_videos_only) echo 'checked="checked"';?>
                                                                                                value="1"/>
@@ -491,7 +491,7 @@ class geodir_popular_postview extends WP_Widget
         </p>
         <p>
             <label
-                for="<?php echo $this->get_field_id('use_viewing_post_type'); ?>"><?php _e('Use current viewing post type:', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('use_viewing_post_type'); ?>"><?php _e('Use current viewing post type:', 'geodirectory'); ?>
                 <input type="checkbox" id="<?php echo $this->get_field_id('use_viewing_post_type'); ?>"
                        name="<?php echo $this->get_field_name('use_viewing_post_type'); ?>" <?php if ($use_viewing_post_type) {
                     echo 'checked="checked"';

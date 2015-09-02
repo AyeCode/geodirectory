@@ -9,7 +9,7 @@
 
 global $wpdb;
 
-if (get_option(GEODIRECTORY_TEXTDOMAIN . '_db_version') != GEODIRECTORY_VERSION) {
+if (get_option('geodirectory' . '_db_version') != GEODIRECTORY_VERSION) {
     /**
      * Include custom database table related functions.
      *
@@ -41,7 +41,7 @@ if (get_option(GEODIRECTORY_TEXTDOMAIN . '_db_version') != GEODIRECTORY_VERSION)
 
     add_action('init', 'gd_fix_cpt_rewrite_slug', 11);// this needs to be kept for a few versions
 
-    update_option(GEODIRECTORY_TEXTDOMAIN . '_db_version', GEODIRECTORY_VERSION);
+    update_option('geodirectory' . '_db_version', GEODIRECTORY_VERSION);
 
 }
 

@@ -192,7 +192,7 @@ function geodir_template_loader($template)
     if (geodir_is_page('add-listing') || $geodir_custom_page_list['geodir_add_listing_page']) {
         if (!geodir_is_default_location_set()) {
             global $information;
-            $information = sprintf(__('Please %sclick here%s to set a default location, this will make the plugin work properly.', GEODIRECTORY_TEXTDOMAIN), '<a href=\'' . admin_url('admin.php?page=geodirectory&tab=default_location_settings') . '\'>', '</a>');
+            $information = sprintf(__('Please %sclick here%s to set a default location, this will make the plugin work properly.', 'geodirectory'), '<a href=\'' . admin_url('admin.php?page=geodirectory&tab=default_location_settings') . '\'>', '</a>');
 
             $template = geodir_locate_template('information');
 
@@ -208,7 +208,7 @@ function geodir_template_loader($template)
         // check if pid exists in the record if yes then check if this post belongs to the user who is logged in.
         if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
             global $information;
-            $information = __('This listing does not belong to your account, please check the listing id carefully.', GEODIRECTORY_TEXTDOMAIN);
+            $information = __('This listing does not belong to your account, please check the listing id carefully.', 'geodirectory');
             $is_current_user_owner = geodir_listing_belong_to_current_user();
             if (!$is_current_user_owner) {
                 $template = geodir_locate_template('information');

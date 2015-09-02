@@ -106,7 +106,7 @@ function geodir_draw_map($map_args = array())
         'enable_marker_cluster' => $enable_marker_cluster,
         'ajax_url' => geodir_get_ajax_url(),
         'map_canvas_name' => $map_canvas_name,
-        'inputText' => __('Title or Keyword', GEODIRECTORY_TEXTDOMAIN),
+        'inputText' => __('Title or Keyword', 'geodirectory'),
         'latitude' => $map_default_lat,
         'longitude' => $map_default_lng,
         'zoom' => $map_default_zoom,
@@ -235,7 +235,7 @@ function geodir_draw_map($map_args = array())
                            value="<?php echo ENTER_LOCATION_TEXT; ?>"
                            onblur="if (this.value == '') {this.value = '<?php echo ENTER_LOCATION_TEXT; ?>';}"
                            onfocus="if (this.value == '<?php echo ENTER_LOCATION_TEXT; ?>') {this.value = '';}"/>
-                    <input type="button" value="<?php _e('Get Directions', GEODIRECTORY_TEXTDOMAIN); ?>"
+                    <input type="button" value="<?php _e('Get Directions', 'geodirectory'); ?>"
                            class="<?php echo $map_canvas_name; ?>_getdirection" id="directions"
                            onclick="calcRoute('<?php echo $map_canvas_name; ?>')"/>
 
@@ -269,17 +269,17 @@ function geodir_draw_map($map_args = array())
 
                     <div id='directions-options' class="hidden">
                         <select id="travel-mode" onchange="calcRoute('<?php echo $map_canvas_name; ?>')">
-                            <option value="driving"><?php _e('Driving', GEODIRECTORY_TEXTDOMAIN); ?></option>
-                            <option value="walking"><?php _e('Walking', GEODIRECTORY_TEXTDOMAIN); ?></option>
-                            <option value="bicycling"><?php _e('Bicycling', GEODIRECTORY_TEXTDOMAIN); ?></option>
-                            <option value="transit"><?php _e('Public Transport', GEODIRECTORY_TEXTDOMAIN); ?></option>
+                            <option value="driving"><?php _e('Driving', 'geodirectory'); ?></option>
+                            <option value="walking"><?php _e('Walking', 'geodirectory'); ?></option>
+                            <option value="bicycling"><?php _e('Bicycling', 'geodirectory'); ?></option>
+                            <option value="transit"><?php _e('Public Transport', 'geodirectory'); ?></option>
                         </select>
 
                         <select id="travel-units" onchange="calcRoute('<?php echo $map_canvas_name; ?>')">
-                            <option value="miles"><?php _e('Miles', GEODIRECTORY_TEXTDOMAIN); ?></option>
+                            <option value="miles"><?php _e('Miles', 'geodirectory'); ?></option>
                             <option <?php if (get_option('geodir_search_dist_1') == 'km') {
                                 echo 'selected="selected"';
-                            } ?> value="kilometers"><?php _e('Kilometers', GEODIRECTORY_TEXTDOMAIN); ?></option>
+                            } ?> value="kilometers"><?php _e('Kilometers', 'geodirectory'); ?></option>
                         </select>
                     </div>
 
@@ -319,7 +319,7 @@ function geodir_draw_map($map_args = array())
                                 type="text"
                                 class="inputbox <?php echo($geodir_map_options['enable_text_search'] ? '' : 'geodir-hide'); ?>"
                                 id="<?php echo $map_canvas_name; ?>_search_string" name="search"
-                                placeholder="<?php _e('Title', GEODIRECTORY_TEXTDOMAIN); ?>"/>
+                                placeholder="<?php _e('Title', 'geodirectory'); ?>"/>
                             <?php if ($geodir_map_options['enable_cat_filters']) { ?>
                                 <?php if ($geodir_map_options['child_collapse']) { $child_collapse = "1"; ?>
                                     <input type="hidden" id="<?php echo $map_canvas_name; ?>_child_collapse" value="1"/>
@@ -418,7 +418,7 @@ function geodir_draw_map($map_args = array())
                                     foreach ($post_types as $post_type => $args) {
                                         if (!in_array($post_type, $exclude_post_types)) {
                                             $class = $map_search_pt == $post_type ? 'class="gd-map-search-pt"' : '';
-											echo '<li id="' . $post_type . '" ' . $class . '><a href="javascript:void(0);" onclick="jQuery(\'#' . $map_canvas_name . '_posttype\').val(\'' . $post_type . '\');build_map_ajax_search_param(\'' . $map_canvas_name . '\', true)">' . __(ucfirst($args->labels->name), GEODIRECTORY_TEXTDOMAIN) . '</a></li>';
+											echo '<li id="' . $post_type . '" ' . $class . '><a href="javascript:void(0);" onclick="jQuery(\'#' . $map_canvas_name . '_posttype\').val(\'' . $post_type . '\');build_map_ajax_search_param(\'' . $map_canvas_name . '\', true)">' . __(ucfirst($args->labels->name), 'geodirectory') . '</a></li>';
                                         }
                                     }
                                     ?>

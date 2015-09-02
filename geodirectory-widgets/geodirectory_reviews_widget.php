@@ -21,10 +21,10 @@ class geodir_recent_reviews_widget extends WP_Widget
      * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
 	 */
     function __construct() {
-        $widget_ops = array('classname' => 'geodir_recent_reviews', 'description' => __('GD > Recent Reviews', GEODIRECTORY_TEXTDOMAIN));
+        $widget_ops = array('classname' => 'geodir_recent_reviews', 'description' => __('GD > Recent Reviews', 'geodirectory'));
         parent::__construct(
             'geodir_recent_reviews', // Base ID
-            __('GD > Recent Reviews', GEODIRECTORY_TEXTDOMAIN), // Name
+            __('GD > Recent Reviews', 'geodirectory'), // Name
             $widget_ops// Args
         );
     }
@@ -44,7 +44,7 @@ class geodir_recent_reviews_widget extends WP_Widget
         extract($args, EXTR_SKIP);
 
         /** This filter is documented in geodirectory_widgets.php */
-        $title = empty($instance['title']) ? '' : apply_filters('widget_title', __($instance['title'], GEODIRECTORY_TEXTDOMAIN));
+        $title = empty($instance['title']) ? '' : apply_filters('widget_title', __($instance['title'], 'geodirectory'));
 		
 		/**
 		 * Filter the number of reviews to display.

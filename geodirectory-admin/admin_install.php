@@ -105,10 +105,10 @@ function geodir_create_pages()
 {
 
     //geodir_create_page( esc_sql( _x('home-map', 'page_slug', 'geodirectory') ), 'geodir_home_map_page', __('Home Map', 'geodirectory'), '',0,'publish' );
-    geodir_create_page(esc_sql(_x('add-listing', 'page_slug', GEODIRECTORY_TEXTDOMAIN)), 'geodir_add_listing_page', __('Add Listing', GEODIRECTORY_TEXTDOMAIN), '');
-    geodir_create_page(esc_sql(_x('listing-preview', 'page_slug', 'geodirectory')), 'geodir_preview_page', __('Listing Preview', GEODIRECTORY_TEXTDOMAIN), '');
-    geodir_create_page(esc_sql(_x('listing-success', 'page_slug', GEODIRECTORY_TEXTDOMAIN)), 'geodir_success_page', __('Listing Success', GEODIRECTORY_TEXTDOMAIN), '');
-    geodir_create_page(esc_sql(_x('location', 'page_slug', GEODIRECTORY_TEXTDOMAIN)), 'geodir_location_page', __('Location', GEODIRECTORY_TEXTDOMAIN), '');
+    geodir_create_page(esc_sql(_x('add-listing', 'page_slug', 'geodirectory')), 'geodir_add_listing_page', __('Add Listing', 'geodirectory'), '');
+    geodir_create_page(esc_sql(_x('listing-preview', 'page_slug', 'geodirectory')), 'geodir_preview_page', __('Listing Preview', 'geodirectory'), '');
+    geodir_create_page(esc_sql(_x('listing-success', 'page_slug', 'geodirectory')), 'geodir_success_page', __('Listing Success', 'geodirectory'), '');
+    geodir_create_page(esc_sql(_x('location', 'page_slug', 'geodirectory')), 'geodir_location_page', __('Location', 'geodirectory'), '');
 
 
 }
@@ -252,29 +252,29 @@ function geodir_set_default_widgets()
     /*===========================*/
 
     $widget_option_list['geodir_home_top'] =
-        array('popular_post_category' => array("title" => __('Popular Categories', GEODIRECTORY_TEXTDOMAIN)),
+        array('popular_post_category' => array("title" => __('Popular Categories', 'geodirectory')),
             'geodir_map_v3_home_map' => array("autozoom" => 1, "width" => '940', "heigh" => '425'),
             'geodir_advance_search' => array());
 
     $widget_option_list['geodir_home_content'] =
-        array('popular_post_view' => array("title" => __('Popular Places', GEODIRECTORY_TEXTDOMAIN), "layout" => 'list', "add_location_filter" => '1'));
+        array('popular_post_view' => array("title" => __('Popular Places', 'geodirectory'), "layout" => 'list', "add_location_filter" => '1'));
 
     $widget_option_list['geodir_home_right'] =
-        array('geodir_loginbox' => array("title" => __('My Dashboard', GEODIRECTORY_TEXTDOMAIN)),
-            'popular_post_view' => array("title" => __('Latest Places', GEODIRECTORY_TEXTDOMAIN), "add_location_filter" => '1'));
+        array('geodir_loginbox' => array("title" => __('My Dashboard', 'geodirectory')),
+            'popular_post_view' => array("title" => __('Latest Places', 'geodirectory'), "add_location_filter" => '1'));
 
     /*===========================*/
     /*  Widgets ON LISTING PAGE     */
     /*===========================*/
 
     $widget_option_list['geodir_listing_top'] =
-        array('popular_post_category' => array("title" => __('Popular Categories', GEODIRECTORY_TEXTDOMAIN)),
+        array('popular_post_category' => array("title" => __('Popular Categories', 'geodirectory')),
             'geodir_advance_search' => array());
 
     $widget_option_list['geodir_listing_right_sidebar'] =
-        array('geodir_loginbox' => array("title" => __('My Dashboard', GEODIRECTORY_TEXTDOMAIN)),
+        array('geodir_loginbox' => array("title" => __('My Dashboard', 'geodirectory')),
             'geodir_map_v3_listing_map' => array("autozoom" => 1, "sticky" => 1),
-            'popular_post_view' => array("title" => __('Latest Places', GEODIRECTORY_TEXTDOMAIN), "add_location_filter" => '1'));
+            'popular_post_view' => array("title" => __('Latest Places', 'geodirectory'), "add_location_filter" => '1'));
 
 
     /*===========================*/
@@ -282,22 +282,22 @@ function geodir_set_default_widgets()
     /*===========================*/
 
     $widget_option_list['geodir_search_top'] =
-        array('popular_post_category' => array("title" => __('Popular Categories', GEODIRECTORY_TEXTDOMAIN)),
+        array('popular_post_category' => array("title" => __('Popular Categories', 'geodirectory')),
             'geodir_advance_search' => array());
 
     $widget_option_list['geodir_search_right_sidebar'] =
-        array('geodir_loginbox' => array("title" => __('My Dashboard', GEODIRECTORY_TEXTDOMAIN)),
+        array('geodir_loginbox' => array("title" => __('My Dashboard', 'geodirectory')),
             'geodir_map_v3_listing_map' => array("autozoom" => 1, "sticky" => 1),
-            'popular_post_view' => array("title" => __('Latest Places', GEODIRECTORY_TEXTDOMAIN), "add_location_filter" => '1'));
+            'popular_post_view' => array("title" => __('Latest Places', 'geodirectory'), "add_location_filter" => '1'));
 
     /*===========================*/
     /*  Widgets ON DETAIL/SINGLE PAGE     */
     /*===========================*/
 
     $widget_option_list['geodir_detail_sidebar'] =
-        array('geodir_loginbox' => array("title" => __('My Dashboard', GEODIRECTORY_TEXTDOMAIN)),
+        array('geodir_loginbox' => array("title" => __('My Dashboard', 'geodirectory')),
             'geodir_map_v3_listing_map' => array("autozoom" => 1, "sticky" => 1),
-            'popular_post_view' => array("title" => __('Latest Places', GEODIRECTORY_TEXTDOMAIN), "add_location_filter" => '1'));
+            'popular_post_view' => array("title" => __('Latest Places', 'geodirectory'), "add_location_filter" => '1'));
 
 
     /*===========================*/
@@ -306,7 +306,7 @@ function geodir_set_default_widgets()
 
 
     $widget_option_list['geodir_author_right_sidebar'] =
-        array('geodir_loginbox' => array("title" => __('My Dashboard', GEODIRECTORY_TEXTDOMAIN)));
+        array('geodir_loginbox' => array("title" => __('My Dashboard', 'geodirectory')));
 
 
     $sidebars_widgets = get_option('sidebars_widgets');
