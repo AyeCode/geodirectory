@@ -1876,22 +1876,26 @@ function geodir_get_term_icon($term_id = false, $rebuild = false)
         $terms = $wpdb->get_results("SELECT * FROM $wpdb->term_taxonomy WHERE taxonomy IN ($tax_c)");
         //$terms = get_terms( $taxonomy );
 
-        foreach ($terms as $term) {
-            $post_type = str_replace("category", "", $term->taxonomy);
-            $a_terms[$post_type][] = $term;
+        if($terms) {
+            foreach ($terms as $term) {
+                $post_type = str_replace("category", "", $term->taxonomy);
+                $a_terms[$post_type][] = $term;
 
+            }
         }
 
-        foreach ($a_terms as $pt => $t2) {
+        if($a_terms) {
+            foreach ($a_terms as $pt => $t2) {
 
-            foreach ($t2 as $term) {
-                $term_icon = get_tax_meta($term->term_id, 'ct_cat_icon', false, $pt);
-                if ($term_icon) {
-                    $term_icon_url = $term_icon["src"];
-                } else {
-                    $term_icon_url = $default_icon_url;
+                foreach ($t2 as $term) {
+                    $term_icon = get_tax_meta($term->term_id, 'ct_cat_icon', false, $pt);
+                    if ($term_icon) {
+                        $term_icon_url = $term_icon["src"];
+                    } else {
+                        $term_icon_url = $default_icon_url;
+                    }
+                    $terms_icons[$term->term_id] = $term_icon_url;
                 }
-                $terms_icons[$term->term_id] = $term_icon_url;
             }
         }
 
