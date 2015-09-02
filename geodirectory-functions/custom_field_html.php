@@ -655,7 +655,7 @@ if ($htmlvar_name == 'geodir_email') {
                             <input type="text" name="extra[date_format]" id="date_format"
                                    value="<?php if (isset($extra['date_format'])) {
                                        echo esc_attr($extra['date_format']);
-                                   }?>"/>
+                                   }else{echo "mm/dd/yy";}?>"/>
 
                             <div style="position:relative; cursor:pointer;">
                         <span onclick="jQuery('#show_dateformat').toggle();">
@@ -666,48 +666,64 @@ if ($htmlvar_name == 'geodir_email') {
                                      style=" background:#CCCCCC; height:auto;position:absolute; z-index:100; display:none;">
 
                                     <table class="doctable table">
-                                        <caption><strong><?php _e('Date Formats', GEODIRECTORY_TEXTDOMAIN); ?></strong>
+                                        <caption><strong><?php _e('Date Formats: dd/mm/yy', GEODIRECTORY_TEXTDOMAIN); ?></strong>
                                         </caption>
 
                                         <thead>
+
                                         <tr>
-                                            <th><?php _e('Description', GEODIRECTORY_TEXTDOMAIN); ?></th>
                                             <th><?php _e('Format', GEODIRECTORY_TEXTDOMAIN); ?></th>
-                                            <th><?php _e('Examples', GEODIRECTORY_TEXTDOMAIN); ?></th>
+                                            <th><?php _e('Description', GEODIRECTORY_TEXTDOMAIN); ?></th>
                                         </tr>
                                         </thead>
 
                                         <tbody class="tbody">
 
                                         <tr>
-                                            <td><?php _e('American month, day and year', GEODIRECTORY_TEXTDOMAIN); ?></td>
-                                            <td><em>mm</em> "/" <em>dd</em> "/" <em>y</em></td>
-                                            <td>"12/22/78", "1/17/2006", "1/17/6"</td>
+                                            <td>d</td>
+                                            <td><?php _e('day of month (no leading zero)', GEODIRECTORY_TEXTDOMAIN); ?></td>
                                         </tr>
 
                                         <tr>
-                                            <td><?php _e('Four digit year, month and day with slashes', GEODIRECTORY_TEXTDOMAIN); ?></td>
-                                            <td><em>yy</em> "/" <em>mm</em> "/" <em>dd</em></td>
-                                            <td>"2008/6/30", "1978/12/22"</td>
+                                            <td>dd</td>
+                                            <td><?php _e('day of month (two digit)', GEODIRECTORY_TEXTDOMAIN); ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td>D</td>
+                                            <td><?php _e('day name short', GEODIRECTORY_TEXTDOMAIN); ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td>DD</td>
+                                            <td><?php _e('day name long', GEODIRECTORY_TEXTDOMAIN); ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td>m</td>
+                                            <td><?php _e('month of year (no leading zero)', GEODIRECTORY_TEXTDOMAIN); ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td>mm</td>
+                                            <td><?php _e('month of year (two digit)', GEODIRECTORY_TEXTDOMAIN); ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td>M</td>
+                                            <td><?php _e('month name short', GEODIRECTORY_TEXTDOMAIN); ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td>MM</td>
+                                            <td><?php _e('month name long', GEODIRECTORY_TEXTDOMAIN); ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td>y</td>
+                                            <td><?php _e('year (two digit)', GEODIRECTORY_TEXTDOMAIN); ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td>yy</td>
+                                            <td><?php _e('year (four digit)', GEODIRECTORY_TEXTDOMAIN); ?></td>
                                         </tr>
 
-                                        <tr>
-                                            <td><?php _e('Year, month and day with dashes', GEODIRECTORY_TEXTDOMAIN); ?></td>
-                                            <td><em>y</em> "-" <em>mm</em> "-" <em>dd</em></td>
-                                            <td>"2008-6-30", "78-12-22", "8-6-21"</td>
-                                        </tr>
 
-                                        <tr>
-                                            <td><?php _e('Day, textual month and year', GEODIRECTORY_TEXTDOMAIN); ?></td>
-                                            <td><em>d</em> ([-])* <em>M</em> ([-])* <em>y</em></td>
-                                            <td>"30-June 2008", "22DEC78"</td>
-                                        </tr>
 
-                                        <tr>
-                                            <td><?php _e('Textual month, day and year', GEODIRECTORY_TEXTDOMAIN); ?></td>
-                                            <td><em>M</em> ([-])* <em>dd</em> [,]* <em>yy</em></td>
-                                            <td>"July 1st, 2008", "April 17, 1790", "May.9,78"</td>
-                                        </tr>
+
 
                                         </tbody>
 

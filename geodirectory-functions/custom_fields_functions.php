@@ -2424,8 +2424,8 @@ if (!function_exists('geodir_show_listing_info')) {
                                 $date_format = $date_format['date_format'];
                             }
 
-                            $search = array('dd', 'mm', 'yy');
-                            $replace = array('d', 'm', 'Y');
+                            $search = array('dd','d','DD','mm','m','MM','yy'); //jQuery UI datepicker format
+                            $replace = array('d','j','l','m','n','F','Y');//PHP date format
 
                             $date_format = str_replace($search, $replace, $date_format);
 
