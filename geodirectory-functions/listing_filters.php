@@ -879,6 +879,8 @@ function author_filter_where($where)
     } else
         $where .= " AND $wpdb->posts.post_author = $user_id ";
 
+    $where .= " AND $wpdb->posts.post_status IN ('publish','draft','pending') ";
+
     ########### WPML ###########
 
     if (function_exists('icl_object_id')) {

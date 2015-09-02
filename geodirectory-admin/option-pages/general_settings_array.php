@@ -103,6 +103,13 @@ $general_options = apply_filters('geodir_general_options', array(
         'std' => '0'
     ),
     array(
+        'name' => __('User deleted posts go to trash', GEODIRECTORY_TEXTDOMAIN),
+        'desc' => __('If checked a user deleted post will go to trash, otherwise it will be permanently deleted', GEODIRECTORY_TEXTDOMAIN),
+        'id' => 'geodir_disable_perm_delete',
+        'type' => 'checkbox',
+        'std' => '1'
+    ),
+    array(
         'name' => __('Maxi upload file size(in mb)', GEODIRECTORY_TEXTDOMAIN),
         'desc' => __('(Maximum upload file size in MB, 1 MB = 1024 KB. Must be greater then 0(ZERO), for ex: 2 )', GEODIRECTORY_TEXTDOMAIN),
         'id' => 'geodir_upload_max_filesize',
