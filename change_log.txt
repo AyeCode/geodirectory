@@ -12,6 +12,7 @@ IE map infowindow can appear very small in height - FIXED
 Added filter for adding the location to the url, so it can be filtered from addons - ADDED
 Popup custom field image file in lightbox modal not working on home page and listing pages - FIXED
 Details map and details page map widget mapview not changing from ROADMAP - FIXED
+Details page mobile tabs view improved - CHANGED
 
 v1.5.1
 Default sort by titles not translatable - FIXED

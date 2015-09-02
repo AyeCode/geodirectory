@@ -151,6 +151,18 @@ ul#breadcrumbs {
 }
 
 /* tabs */
+#geodir-tab-mobile-menu{display: none;}
+#geodir-tab-mobile-menu {
+  font-size: 30px;
+  border: 1px #ccc solid;
+  padding: 15px;
+}
+
+#geodir-tab-mobile-menu i.fa-sort-desc{
+  float: right;
+  margin-top: -5px;
+}
+
 dl.geodir-tab-head {
     margin: 0px;
     height: auto;
