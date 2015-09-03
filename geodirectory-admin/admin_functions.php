@@ -86,7 +86,7 @@ if (!function_exists('geodir_admin_styles_req')) {
     function geodir_admin_styles_req()
     {
 
-        wp_register_style('geodirectory-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css', array(), GEODIRECTORY_VERSION);
+        wp_register_style('geodirectory-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css', array(), GEODIRECTORY_VERSION);
         wp_enqueue_style('geodirectory-font-awesome');
     }
 }
@@ -3296,7 +3296,7 @@ function gd_avada_compat_warning()
 
     $plugin = 'avada-nag';
     $timestamp = 'avada-nag1234';
-    $message = __('Since Avada 3.8+ they have added hooks for compatibility for GeoDirectory so the header.php modification is no longer required. <a href="http://docs.wpgeodirectory.com/avada-compatibility-header-php/" target="_blank">See here</a>', 'geodirectory');
+    $message = __('Welcome to GeoDirectory, please have a look <a href="https://docs.wpgeodirectory.com/category/getting-started/" target="_blank">here</a> to get started. :)', 'geodirectory');
     echo '<div id="' . $timestamp . '"  class="error">';
     echo '<span class="gd-remove-noti" onclick="gdRemoveANotification(\'' . $plugin . '\',\'' . $timestamp . '\');" ><i class="fa fa-times"></i></span>';
     echo "<img class='gd-icon-noti' src='" . plugin_dir_url('') . "geodirectory/geodirectory-assets/images/favicon.ico' > ";
@@ -6605,4 +6605,61 @@ function geodir_imex_process_event_data($gd_post) {
 	$gd_post['repeat_end'] = $repeat_end;
 
 	return $gd_post;
+}
+
+/**
+ * Create a page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global object $current_user Current user object.
+ * @param string $slug The page slug.
+ * @param string $option The option meta key.
+ * @param string $page_title The page title.
+ * @param string $page_content The page description.
+ * @param int $post_parent Parent page ID.
+ * @param string $status Post status.
+ */
+function geodir_create_page($slug, $option, $page_title = '', $page_content = '', $post_parent = 0, $status = 'publish')
+{
+    global $wpdb, $current_user;
+
+    $option_value = get_option($option);
+
+    if ($option_value > 0) :
+        if (get_post($option_value)) :
+            // Page exists
+            return;
+        endif;
+    endif;
+
+
+    $page_found = $wpdb->get_var(
+        $wpdb->prepare(
+            "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s LIMIT 1;",
+            array($slug)
+        )
+    );
+
+    if ($page_found) :
+        // Page exists
+        if (!$option_value) update_option($option, $page_found);
+        return;
+    endif;
+
+    $page_data = array(
+        'post_status' => $status,
+        'post_type' => 'page',
+        'post_author' => $current_user->ID,
+        'post_name' => $slug,
+        'post_title' => $page_title,
+        'post_content' => $page_content,
+        'post_parent' => $post_parent,
+        'comment_status' => 'closed'
+    );
+    $page_id = wp_insert_post($page_data);
+
+    add_option($option, $page_id);
+
 }

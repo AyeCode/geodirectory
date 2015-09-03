@@ -113,62 +113,7 @@ function geodir_create_pages()
 
 }
 
-/**
- * Create a page.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
- * @global object $current_user Current user object.
- * @param string $slug The page slug.
- * @param string $option The option meta key.
- * @param string $page_title The page title.
- * @param string $page_content The page description.
- * @param int $post_parent Parent page ID.
- * @param string $status Post status.
- */
-function geodir_create_page($slug, $option, $page_title = '', $page_content = '', $post_parent = 0, $status = 'publish')
-{
-    global $wpdb, $current_user;
 
-    $option_value = get_option($option);
-
-    if ($option_value > 0) :
-        if (get_post($option_value)) :
-            // Page exists
-            return;
-        endif;
-    endif;
-
-
-    $page_found = $wpdb->get_var(
-        $wpdb->prepare(
-            "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s LIMIT 1;",
-            array($slug)
-        )
-    );
-
-    if ($page_found) :
-        // Page exists
-        if (!$option_value) update_option($option, $page_found);
-        return;
-    endif;
-
-    $page_data = array(
-        'post_status' => $status,
-        'post_type' => 'page',
-        'post_author' => $current_user->ID,
-        'post_name' => $slug,
-        'post_title' => $page_title,
-        'post_content' => $page_content,
-        'post_parent' => $post_parent,
-        'comment_status' => 'closed'
-    );
-    $page_id = wp_insert_post($page_data);
-
-    add_option($option, $page_id);
-
-}
 
 
 /**

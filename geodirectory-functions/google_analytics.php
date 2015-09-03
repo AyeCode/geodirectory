@@ -68,7 +68,6 @@ function geodir_getGoogleAnalytics($page, $ga_start, $ga_end)
     // if you don't specify an id here, then you'll get the "Badly formatted request to the Google Analytics API..." error message
     $id = trim(get_option('geodir_ga_id'));
 
-
     $at = geodir_ga_get_token();
 
     $start_date = '';

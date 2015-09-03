@@ -539,6 +539,8 @@ body.edit-tags-php .form-field input, .form-field textarea {
 	padding: 3px 5px;
 }
 
+div.update-nag{width: 95%;}
+
 /***********************---------------MEDIA CSS-------------*****************************/
 
 @media screen and (min-width: 860px) and (max-width: 960px) {
