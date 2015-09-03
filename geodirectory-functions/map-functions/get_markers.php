@@ -30,7 +30,7 @@ if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'cat') { // R
     if ($_REQUEST['m_id'] != '') {
         $pid = $_REQUEST['m_id'];
     } else {
-        echo __('No marker data found', GEODIRECTORY_TEXTDOMAIN);
+        echo __('No marker data found', 'geodirectory');
         exit;
     }
 
@@ -124,7 +124,7 @@ function get_markers()
     $main_query_array = $map_cat_ids_array;
   
 
-    if (isset($_REQUEST['search']) && !empty($_REQUEST['search']) && $_REQUEST['search'] != __('Title', GEODIRECTORY_TEXTDOMAIN)) {
+    if (isset($_REQUEST['search']) && !empty($_REQUEST['search']) && $_REQUEST['search'] != __('Title', 'geodirectory')) {
 
         $search .= " AND p.post_title like %s";
         $main_query_array[] = "%" . $_REQUEST['search'] . "%";

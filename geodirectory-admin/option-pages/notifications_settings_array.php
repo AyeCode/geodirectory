@@ -17,14 +17,14 @@ global $geodir_settings;
 $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications_settings', array(
 
 
-    array('name' => __('Options', GEODIRECTORY_TEXTDOMAIN), 'type' => 'title', 'desc' => '', 'id' => 'notification_options'),
+    array('name' => __('Options', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'notification_options'),
 
 
-    array('name' => __('Notification Options', GEODIRECTORY_TEXTDOMAIN), 'type' => 'sectionstart', 'id' => 'notification_options'),
+    array('name' => __('Notification Options', 'geodirectory'), 'type' => 'sectionstart', 'id' => 'notification_options'),
 
     array(
-        'name' => __('List of usable shortcodes', GEODIRECTORY_TEXTDOMAIN),
-        'desc' => __('[#client_name#],[#listing_link#],[#posted_date#],[#number_of_days#],[#number_of_grace_days#],[#login_url#],[#username#],[#user_email#],[#site_name_url#],[#renew_link#],[#post_id#],[#site_name#],[#from_email#](in most cases this will be the admin email, except for popup forms)', GEODIRECTORY_TEXTDOMAIN),
+        'name' => __('List of usable shortcodes', 'geodirectory'),
+        'desc' => __('[#client_name#],[#listing_link#],[#posted_date#],[#number_of_days#],[#number_of_grace_days#],[#login_url#],[#username#],[#user_email#],[#site_name_url#],[#renew_link#],[#post_id#],[#site_name#],[#from_email#](in most cases this will be the admin email, except for popup forms)', 'geodirectory'),
         'id' => 'geodir_list_of_usable_shordcodes',
         'type' => 'html_content',
         'css' => 'min-width:300px;',
@@ -32,8 +32,8 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
     ),
 
     array(
-        'name' => __('Use advanced editor? (slow loading)', GEODIRECTORY_TEXTDOMAIN),
-        'desc' => __('Yes', GEODIRECTORY_TEXTDOMAIN),
+        'name' => __('Use advanced editor? (slow loading)', 'geodirectory'),
+        'desc' => __('Yes', 'geodirectory'),
         'id' => 'geodir_tiny_editor',
         'std' => 'yes',
         'type' => 'radio',
@@ -41,8 +41,8 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
         'radiogroup' => 'start'
     ),
     array(
-        'name' => __('Use advanced editor?(slow loading)', GEODIRECTORY_TEXTDOMAIN),
-        'desc' => __('No', GEODIRECTORY_TEXTDOMAIN),
+        'name' => __('Use advanced editor?(slow loading)', 'geodirectory'),
+        'desc' => __('No', 'geodirectory'),
         'id' => 'geodir_tiny_editor',
         'std' => 'yes',
         'type' => 'radio',
@@ -54,13 +54,13 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
     array('type' => 'sectionend', 'id' => 'notification_options'),
 
 
-    array('name' => __('Site Bcc Options', GEODIRECTORY_TEXTDOMAIN), 'type' => 'title', 'desc' => '', 'id' => 'site_bcc_options'),
+    array('name' => __('Site Bcc Options', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'site_bcc_options'),
 
-    array('name' => __('Site Bcc Options', GEODIRECTORY_TEXTDOMAIN), 'type' => 'sectionstart', 'id' => 'site_bcc_options'),
+    array('name' => __('Site Bcc Options', 'geodirectory'), 'type' => 'sectionstart', 'id' => 'site_bcc_options'),
 
     array(
-        'name' => __('New user registration', GEODIRECTORY_TEXTDOMAIN),
-        'desc' => __('Yes', GEODIRECTORY_TEXTDOMAIN),
+        'name' => __('New user registration', 'geodirectory'),
+        'desc' => __('Yes', 'geodirectory'),
         'id' => 'geodir_bcc_new_user',
         'std' => 'yes',
         'type' => 'radio',
@@ -68,8 +68,8 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
         'radiogroup' => 'start'
     ),
     array(
-        'name' => __('New user registration', GEODIRECTORY_TEXTDOMAIN),
-        'desc' => __('No', GEODIRECTORY_TEXTDOMAIN),
+        'name' => __('New user registration', 'geodirectory'),
+        'desc' => __('No', 'geodirectory'),
         'id' => 'geodir_bcc_new_user',
         'std' => 'yes',
         'type' => 'radio',
@@ -78,8 +78,8 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
     ),
 
     array(
-        'name' => __('Send to friend', GEODIRECTORY_TEXTDOMAIN),
-        'desc' => __('Yes', GEODIRECTORY_TEXTDOMAIN),
+        'name' => __('Send to friend', 'geodirectory'),
+        'desc' => __('Yes', 'geodirectory'),
         'id' => 'geodir_bcc_friend',
         'std' => 'yes',
         'type' => 'radio',
@@ -87,8 +87,8 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
         'radiogroup' => 'start'
     ),
     array(
-        'name' => __('Send to friend', GEODIRECTORY_TEXTDOMAIN),
-        'desc' => __('No', GEODIRECTORY_TEXTDOMAIN),
+        'name' => __('Send to friend', 'geodirectory'),
+        'desc' => __('No', 'geodirectory'),
         'id' => 'geodir_bcc_friend',
         'std' => 'yes',
         'type' => 'radio',
@@ -97,8 +97,8 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
     ),
 
     array(
-        'name' => __('Send enquiry', GEODIRECTORY_TEXTDOMAIN),
-        'desc' => __('Yes', GEODIRECTORY_TEXTDOMAIN),
+        'name' => __('Send enquiry', 'geodirectory'),
+        'desc' => __('Yes', 'geodirectory'),
         'id' => 'geodir_bcc_enquiry',
         'std' => 'yes',
         'type' => 'radio',
@@ -106,8 +106,8 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
         'radiogroup' => 'start'
     ),
     array(
-        'name' => __('Send enquiry', GEODIRECTORY_TEXTDOMAIN),
-        'desc' => __('No', GEODIRECTORY_TEXTDOMAIN),
+        'name' => __('Send enquiry', 'geodirectory'),
+        'desc' => __('No', 'geodirectory'),
         'id' => 'geodir_bcc_enquiry',
         'std' => 'yes',
         'type' => 'radio',
@@ -119,12 +119,12 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
     array('type' => 'sectionend', 'id' => 'site_bcc_options'),
 
 
-    array('name' => __('Admin Emails', GEODIRECTORY_TEXTDOMAIN), 'type' => 'title', 'desc' => '', 'id' => 'admin_emails'),
+    array('name' => __('Admin Emails', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_emails'),
 
-    array('name' => __('Admin Emails', GEODIRECTORY_TEXTDOMAIN), 'type' => 'sectionstart', 'id' => 'admin_emails'),
+    array('name' => __('Admin Emails', 'geodirectory'), 'type' => 'sectionstart', 'id' => 'admin_emails'),
 
     array(
-        'name' => __('Post submit success to admin email', GEODIRECTORY_TEXTDOMAIN),
+        'name' => __('Post submit success to admin email', 'geodirectory'),
         'desc' => '',
         'id' => 'geodir_post_submited_success_email_subject_admin',
         'type' => 'text',
@@ -144,12 +144,12 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
     array('type' => 'sectionend', 'id' => 'admin_emails'),
 
 
-    array('name' => __('Client Emails', GEODIRECTORY_TEXTDOMAIN), 'type' => 'title', 'desc' => '', 'id' => 'client_emails'),
+    array('name' => __('Client Emails', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'client_emails'),
 
-    array('name' => __('Client Emails', GEODIRECTORY_TEXTDOMAIN), 'type' => 'sectionstart', 'id' => 'client_emails'),
+    array('name' => __('Client Emails', 'geodirectory'), 'type' => 'sectionstart', 'id' => 'client_emails'),
 
     array(
-        'name' => __('Post submit success to client email', GEODIRECTORY_TEXTDOMAIN),
+        'name' => __('Post submit success to client email', 'geodirectory'),
         'desc' => '',
         'id' => 'geodir_post_submited_success_email_subject',
         'type' => 'text',
@@ -167,7 +167,7 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
 
 
     array(
-        'name' => __('User forgot password email', GEODIRECTORY_TEXTDOMAIN),
+        'name' => __('User forgot password email', 'geodirectory'),
         'desc' => '',
         'id' => 'geodir_forgot_password_subject',
         'type' => 'text',
@@ -184,7 +184,7 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
     ),
 
     array(
-        'name' => __('Registration success email', GEODIRECTORY_TEXTDOMAIN),
+        'name' => __('Registration success email', 'geodirectory'),
         'desc' => '',
         'id' => 'geodir_registration_success_email_subject',
         'type' => 'text',
@@ -200,12 +200,12 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
         'std' => "<p>Dear [#client_name#],</p><p>You can log in  with the following information:</p><p>[#login_details#]</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>"
     ),
     array(
-        'name' => __('Listing published email', GEODIRECTORY_TEXTDOMAIN),
+        'name' => __('Listing published email', 'geodirectory'),
         'desc' => '',
         'id' => 'geodir_post_published_email_subject',
         'type' => 'text',
         'css' => 'min-width:300px;',
-        'std' => __('Listing Published Successfully', GEODIRECTORY_TEXTDOMAIN) // Default value for the page title - changed in settings
+        'std' => __('Listing Published Successfully', 'geodirectory') // Default value for the page title - changed in settings
     ),
     array(
         'name' => '',
@@ -213,17 +213,17 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
         'id' => 'geodir_post_published_email_content',
         'css' => 'width:500px; height: 150px;',
         'type' => 'textarea',
-        'std' => __("<p>Dear [#client_name#],</p><p>Your listing [#listing_link#] has been published. This email is just for your information.</p><p>[#listing_link#]</p><br><p>Thank you for your contribution.</p><p>[#site_name#]</p>", GEODIRECTORY_TEXTDOMAIN)
+        'std' => __("<p>Dear [#client_name#],</p><p>Your listing [#listing_link#] has been published. This email is just for your information.</p><p>[#listing_link#]</p><br><p>Thank you for your contribution.</p><p>[#site_name#]</p>", 'geodirectory')
     ),
 
     array('type' => 'sectionend', 'id' => 'client_emails'),
 
-    array('name' => __('Other Emails', GEODIRECTORY_TEXTDOMAIN), 'type' => 'title', 'desc' => '', 'id' => 'other_emails'),
+    array('name' => __('Other Emails', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'other_emails'),
 
-    array('name' => __('Other Emails', GEODIRECTORY_TEXTDOMAIN), 'type' => 'sectionstart', 'id' => 'other_emails'),
+    array('name' => __('Other Emails', 'geodirectory'), 'type' => 'sectionstart', 'id' => 'other_emails'),
 
     array(
-        'name' => __('Send to friend', GEODIRECTORY_TEXTDOMAIN),
+        'name' => __('Send to friend', 'geodirectory'),
         'desc' => '',
         'id' => 'geodir_email_friend_subject',
         'type' => 'text',
@@ -240,12 +240,12 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
     ),
 
     array(
-        'name' => __('Email enquiry', GEODIRECTORY_TEXTDOMAIN),
+        'name' => __('Email enquiry', 'geodirectory'),
         'desc' => '',
         'id' => 'geodir_email_enquiry_subject',
         'type' => 'text',
         'css' => 'min-width:300px;',
-        'std' => __('Website Enquiry', GEODIRECTORY_TEXTDOMAIN)
+        'std' => __('Website Enquiry', 'geodirectory')
     ),
     array(
         'name' => '',
@@ -259,12 +259,12 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
     array('type' => 'sectionend', 'id' => 'other_emails'),
 
 
-    array('name' => __('Messages', GEODIRECTORY_TEXTDOMAIN), 'type' => 'title', 'desc' => '', 'id' => 'messages'),
+    array('name' => __('Messages', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'messages'),
 
-    array('name' => __('Messages', GEODIRECTORY_TEXTDOMAIN), 'type' => 'sectionstart', 'id' => 'messages'),
+    array('name' => __('Messages', 'geodirectory'), 'type' => 'sectionstart', 'id' => 'messages'),
 
     array(
-        'name' => __('Post submitted success', GEODIRECTORY_TEXTDOMAIN),
+        'name' => __('Post submitted success', 'geodirectory'),
         'desc' => '',
         'id' => 'geodir_post_added_success_msg_content',
         'css' => 'width:500px; height: 150px;',

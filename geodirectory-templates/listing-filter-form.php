@@ -46,15 +46,15 @@ echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
 
                 $default_search_for_text = SEARCH_FOR_TEXT;
                 if (get_option('geodir_search_field_default_text'))
-                    $default_search_for_text = __(get_option('geodir_search_field_default_text'), GEODIRECTORY_TEXTDOMAIN);
+                    $default_search_for_text = __(get_option('geodir_search_field_default_text'), 'geodirectory');
 
                 $default_near_text = NEAR_TEXT;
                 if (get_option('geodir_near_field_default_text'))
-                    $default_near_text = __(get_option('geodir_near_field_default_text'), GEODIRECTORY_TEXTDOMAIN);
+                    $default_near_text = __(get_option('geodir_near_field_default_text'), 'geodirectory');
 
-                $default_search_button_label = __('Search', GEODIRECTORY_TEXTDOMAIN);
+                $default_search_button_label = __('Search', 'geodirectory');
                 if (get_option('geodir_search_button_label'))
-                    $default_search_button_label = __(get_option('geodir_search_button_label'), GEODIRECTORY_TEXTDOMAIN);
+                    $default_search_button_label = __(get_option('geodir_search_button_label'), 'geodirectory');
 
                 $post_types = geodir_get_posttypes('object');
 
@@ -77,7 +77,7 @@ echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
                                 }
                             } elseif ($curr_post_type == $post_type) {
                                 echo 'selected="selected"';
-                            }?>><?php _e(ucfirst($info->labels->name), GEODIRECTORY_TEXTDOMAIN);?></option>
+                            }?>><?php _e(ucfirst($info->labels->name), 'geodirectory');?></option>
 
                         <?php endforeach; ?>
                     </select>

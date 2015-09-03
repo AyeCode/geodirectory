@@ -223,7 +223,7 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = 
         return $out;
     } else {
         if ($cat_parent == 0)
-            return _e('No category', GEODIRECTORY_TEXTDOMAIN);
+            return _e('No category', 'geodirectory');
     }
     return;
 }

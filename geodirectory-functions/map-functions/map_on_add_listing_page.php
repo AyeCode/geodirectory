@@ -332,7 +332,7 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
 			?>
             <?php if($is_map_restrict){?>
             if (getCity.toLowerCase() != '<?php echo mb_strtolower(esc_attr($city));?>') {
-                alert('<?php printf(__('Please choose any address of the (%s) city only.',GEODIRECTORY_TEXTDOMAIN), $city);?>');
+                alert('<?php printf(__('Please choose any address of the (%s) city only.','geodirectory'), $city);?>');
                 jQuery("#<?php echo $prefix.'map';?>").goMap();
                 jQuery.goMap.map.setCenter(new google.maps.LatLng('<?php echo $default_lat; ?>', '<?php echo $default_lng; ?>'));
                 baseMarker.setPosition(new google.maps.LatLng('<?php echo $default_lat; ?>', '<?php echo $default_lng; ?>'));
@@ -342,7 +342,7 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
             <?php } ?>
             updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry);
         } else {
-            updateMarkerAddress('<?php echo addslashes(__('Cannot determine address at this location.',GEODIRECTORY_TEXTDOMAIN));?>');
+            updateMarkerAddress('<?php echo addslashes(__('Cannot determine address at this location.','geodirectory'));?>');
         }
 
 
@@ -493,7 +493,7 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
                     geocodePosition(baseMarker.getPosition(), {'address': address, 'country': ISO2});
 //}
                 } else {
-                    alert("<?php _e('Geocode was not successful for the following reason:',GEODIRECTORY_TEXTDOMAIN);?> " + status);
+                    alert("<?php _e('Geocode was not successful for the following reason:','geodirectory');?> " + status);
                 }
             });
     }
@@ -593,7 +593,7 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
                         new google.maps.LatLng(bound_lat_lng[2], bound_lat_lng[3])
                     );
                 } else {
-                    alert("<?php _e('Geocode was not successful for the following reason:',GEODIRECTORY_TEXTDOMAIN);?> " + status);
+                    alert("<?php _e('Geocode was not successful for the following reason:','geodirectory');?> " + status);
                 }
             });
         <?php }?>
@@ -642,7 +642,7 @@ if (is_admin())
     $set_button_class = 'button-primary';
 ?>
 <input type="button" id="<?php echo $prefix; ?>set_address_button" class="<?php echo $set_button_class; ?>"
-       value="<?php _e($map_title, GEODIRECTORY_TEXTDOMAIN); ?>" style="float:none;"/>
+       value="<?php _e($map_title, 'geodirectory'); ?>" style="float:none;"/>
 <div id="<?php echo $prefix; ?>d_mouseClick"></div>
 <div class="top_banner_section_inn geodir_map_container clearfix" style="margin-top:10px;">
     <div class="TopLeft"><span id="<?php echo $prefix; ?>triggermap" style="margin-top:-11px;margin-left:-12px;"></span>

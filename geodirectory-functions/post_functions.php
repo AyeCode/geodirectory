@@ -2962,11 +2962,11 @@ function geodir_function_post_updated($post_ID, $post_after, $post_before)
             $message_type = 'listing_published';
 
             if (get_option('geodir_post_published_email_subject') == '') {
-                update_option('geodir_post_published_email_subject', __('Listing Published Successfully', GEODIRECTORY_TEXTDOMAIN));
+                update_option('geodir_post_published_email_subject', __('Listing Published Successfully', 'geodirectory'));
             }
 
             if (get_option('geodir_post_published_email_content') == '') {
-                update_option('geodir_post_published_email_content', __("<p>Dear [#client_name#],</p><p>Your listing [#listing_link#] has been published. This email is just for your information.</p><p>[#listing_link#]</p><br><p>Thank you for your contribution.</p><p>[#site_name#]</p>", GEODIRECTORY_TEXTDOMAIN));
+                update_option('geodir_post_published_email_content', __("<p>Dear [#client_name#],</p><p>Your listing [#listing_link#] has been published. This email is just for your information.</p><p>[#listing_link#]</p><br><p>Thank you for your contribution.</p><p>[#site_name#]</p>", 'geodirectory'));
             }
 
             /**

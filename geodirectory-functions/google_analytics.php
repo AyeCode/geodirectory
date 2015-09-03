@@ -124,7 +124,7 @@ function geodir_getGoogleAnalytics($page, $ga_start, $ga_end)
         if(is_array($c_arr->rows)){
             $new_rows = array();
             foreach($c_arr->rows as $wow){
-                $new_rows[] = array(__($wow[0],GEODIRECTORY_TEXTDOMAIN),$wow[1]);
+                $new_rows[] = array(__($wow[0],'geodirectory'),$wow[1]);
             }
             $c_arr->rows = $new_rows;
         }
@@ -149,7 +149,7 @@ function geodir_ga_get_token(){
 
         $refresh_at = get_option('gd_ga_refresh_token');
         if(!$refresh_at){
-            echo json_encode(array('error'=>__('Not authorized, please click authorized in GD > Google analytic settings.', GEODIRECTORY_TEXTDOMAIN)));exit;
+            echo json_encode(array('error'=>__('Not authorized, please click authorized in GD > Google analytic settings.', 'geodirectory')));exit;
         }
 
         $rat_url = "https://www.googleapis.com/oauth2/v3/token?";
@@ -169,7 +169,7 @@ function geodir_ga_get_token(){
             return $parts->access_token;
 
         }else{
-            echo json_encode(array('error'=>__('Login failed', GEODIRECTORY_TEXTDOMAIN)));exit;
+            echo json_encode(array('error'=>__('Login failed', 'geodirectory')));exit;
         }
 
 

@@ -142,13 +142,13 @@ function geodir_retrieve_password()
 
     $errors = new WP_Error();
     if (empty($_POST['user_login']) && empty($_POST['user_email']))
-        $errors->add('empty_username', __('<strong>ERROR</strong>: Enter a username or e-mail address.', GEODIRECTORY_TEXTDOMAIN));
+        $errors->add('empty_username', __('<strong>ERROR</strong>: Enter a username or e-mail address.', 'geodirectory'));
 
     if (strpos($_POST['user_login'], '@')) {
         //$user_data = get_user_by_email(trim($_POST['user_login']));
         $user_data = get_user_by('email', trim($_POST['user_login']));
         if (empty($user_data))
-            $errors->add('invalid_email', __('<strong>ERROR</strong>: There is no user registered with that email address.', GEODIRECTORY_TEXTDOMAIN));
+            $errors->add('invalid_email', __('<strong>ERROR</strong>: There is no user registered with that email address.', 'geodirectory'));
     } else {
         $login = trim($_POST['user_login']);
         $user_data = get_user_by('email', $login);
@@ -165,7 +165,7 @@ function geodir_retrieve_password()
         return $errors;
 
     if (!$user_data) {
-        $errors->add('invalidcombo', __('<strong>ERROR</strong>: Invalid username or e-mail.', GEODIRECTORY_TEXTDOMAIN));
+        $errors->add('invalidcombo', __('<strong>ERROR</strong>: Invalid username or e-mail.', 'geodirectory'));
         return $errors;
     }
 
@@ -193,7 +193,7 @@ function geodir_retrieve_password()
     );
 
     if (empty($user))
-        return new WP_Error('invalid_key', __('Invalid key', GEODIRECTORY_TEXTDOMAIN));
+        return new WP_Error('invalid_key', __('Invalid key', 'geodirectory'));
 
     $new_pass = wp_generate_password(12, false);
 
@@ -208,16 +208,16 @@ function geodir_retrieve_password()
 
     wp_set_password($new_pass, $user->ID);
     update_user_meta($user->ID, 'default_password_nag', true); //Set up the Password change nag.
-    $message = '<p><b>' . __('Your login Information :', GEODIRECTORY_TEXTDOMAIN) . '</b></p>';
-    $message .= '<p>' . sprintf(__('Username: %s', GEODIRECTORY_TEXTDOMAIN), $user->user_login) . "</p>";
-    $message .= '<p>' . sprintf(__('Password: %s', GEODIRECTORY_TEXTDOMAIN), $new_pass) . "</p>";
+    $message = '<p><b>' . __('Your login Information :', 'geodirectory') . '</b></p>';
+    $message .= '<p>' . sprintf(__('Username: %s', 'geodirectory'), $user->user_login) . "</p>";
+    $message .= '<p>' . sprintf(__('Password: %s', 'geodirectory'), $new_pass) . "</p>";
     //$message .= '<p>You can login to : <a href="'.home_url().'/?ptype=login' . "\">Login</a> or the URL is :  ".home_url()."/?ptype=login</p>";
     //$message .= '<p>Thank You,<br> '.get_option('blogname').'</p>';
     $user_email = $user_data->user_email;
     $user_name = geodir_get_client_name($user->ID);
     $fromEmail = geodir_get_site_email_id();
     $fromEmailName = get_site_emailName();
-    $title = sprintf(__('[%s] Your new password', GEODIRECTORY_TEXTDOMAIN), get_option('blogname'));
+    $title = sprintf(__('[%s] Your new password', 'geodirectory'), get_option('blogname'));
     /**
      * Filter the password reset email subject part.
      *
@@ -275,29 +275,29 @@ function geodir_register_new_user($user_login, $user_email)
         $user_pass2 = $_REQUEST['user_pass2'];
         // Check the password
         if ($user_pass != $user_pass2) {
-            $errors->add('pass_match', __('ERROR: Passwords do not match.', GEODIRECTORY_TEXTDOMAIN));
+            $errors->add('pass_match', __('ERROR: Passwords do not match.', 'geodirectory'));
         } elseif (strlen($user_pass) < 7) {
-            $errors->add('pass_match', __('ERROR: Password must be 7 characters or more.', GEODIRECTORY_TEXTDOMAIN));
+            $errors->add('pass_match', __('ERROR: Password must be 7 characters or more.', 'geodirectory'));
         }
     }
 
     // Check the username
     if ($user_login == '')
-        $errors->add('empty_username', __('ERROR: Please enter a username.', GEODIRECTORY_TEXTDOMAIN));
+        $errors->add('empty_username', __('ERROR: Please enter a username.', 'geodirectory'));
     elseif (!validate_username($user_login)) {
-        $errors->add('invalid_username', __('<strong>ERROR</strong>: This username is invalid.  Please enter a valid username.', GEODIRECTORY_TEXTDOMAIN));
+        $errors->add('invalid_username', __('<strong>ERROR</strong>: This username is invalid.  Please enter a valid username.', 'geodirectory'));
         $user_login = '';
     } elseif (username_exists($user_login))
-        $errors->add('username_exists', __('<strong>ERROR</strong>: This username is already registered, please choose another one.', GEODIRECTORY_TEXTDOMAIN));
+        $errors->add('username_exists', __('<strong>ERROR</strong>: This username is already registered, please choose another one.', 'geodirectory'));
 
     // Check the e-mail address
     if ($user_email == '') {
-        $errors->add('empty_email', __('<strong>ERROR</strong>: Please type your e-mail address.', GEODIRECTORY_TEXTDOMAIN));
+        $errors->add('empty_email', __('<strong>ERROR</strong>: Please type your e-mail address.', 'geodirectory'));
     } elseif (!is_email($user_email)) {
-        $errors->add('invalid_email', __('<strong>ERROR</strong>: The email address isn&#8217;t correct.', GEODIRECTORY_TEXTDOMAIN));
+        $errors->add('invalid_email', __('<strong>ERROR</strong>: The email address isn&#8217;t correct.', 'geodirectory'));
         $user_email = '';
     } elseif (email_exists($user_email))
-        $errors->add('email_exists', __('<strong>ERROR</strong>: This email is already registered, please choose another one.', GEODIRECTORY_TEXTDOMAIN));
+        $errors->add('email_exists', __('<strong>ERROR</strong>: This email is already registered, please choose another one.', 'geodirectory'));
 
     /**
      * Called when registering a new user.
@@ -373,7 +373,7 @@ function geodir_register_new_user($user_login, $user_email)
     $wpdb->query($updateUsersql);
 
     if (!$user_id) {
-        $errors->add('registerfail', sprintf(__('<strong>ERROR</strong>: Couldn&#8217;t register you... please contact the <a href="mailto:%s">webmaster</a> !', GEODIRECTORY_TEXTDOMAIN), get_option('admin_email')));
+        $errors->add('registerfail', sprintf(__('<strong>ERROR</strong>: Couldn&#8217;t register you... please contact the <a href="mailto:%s">webmaster</a> !', 'geodirectory'), get_option('admin_email')));
         return $errors;
     }
     global $upload_folder_path;
@@ -390,9 +390,9 @@ function geodir_register_new_user($user_login, $user_email)
         ///////REGISTRATION EMAIL START//////
         $fromEmail = geodir_get_site_email_id();
         $fromEmailName = get_site_emailName();
-        $message = __('<p><b>' . __('Your login Information :', GEODIRECTORY_TEXTDOMAIN) . '</b></p>
-<p>' . __('Username:', GEODIRECTORY_TEXTDOMAIN) . ' ' . $user_login . '</p>
-<p>' . __('Password:', GEODIRECTORY_TEXTDOMAIN) . ' ' . $user_pass . '</p>');
+        $message = __('<p><b>' . __('Your login Information :', 'geodirectory') . '</b></p>
+<p>' . __('Username:', 'geodirectory') . ' ' . $user_login . '</p>
+<p>' . __('Password:', 'geodirectory') . ' ' . $user_pass . '</p>');
 
         /////////////customer email//////////////
         //geodir_sendEmail($fromEmail,$fromEmailName,$user_email,$userName,$subject,$client_message,$extra='');///To client email
@@ -401,7 +401,7 @@ function geodir_register_new_user($user_login, $user_email)
     }
 
     if (get_option('ptthemes_auto_login')) {
-        $errors->add('auto_login', __('<strong>SUCCESS</strong>: Thank you for registering, please check your email for your login details.', GEODIRECTORY_TEXTDOMAIN));
+        $errors->add('auto_login', __('<strong>SUCCESS</strong>: Thank you for registering, please check your email for your login details.', 'geodirectory'));
         return $errors;
     }
 
@@ -486,7 +486,7 @@ function geodir_user_signup()
                     exit();
                 }
             }
-            if (isset($_GET['error']) && 'invalidkey' == $_GET['error']) $errors->add('invalidkey', __('Sorry, that key does not appear to be valid.', GEODIRECTORY_TEXTDOMAIN));
+            if (isset($_GET['error']) && 'invalidkey' == $_GET['error']) $errors->add('invalidkey', __('Sorry, that key does not appear to be valid.', 'geodirectory'));
         /**
          * Called in the geodir_user_signup() function during the lostpassword case.
          *
@@ -701,7 +701,7 @@ function geodir_user_signup()
                 $errors = new WP_Error();
             // If cookies are disabled we can't log in even with a valid user+pass
             if (isset($_POST['testcookie']) && empty($_COOKIE[TEST_COOKIE]))
-                $errors->add('test_cookie', __("<strong>ERROR</strong>: Cookies are blocked or not supported by your browser. You must <a href='http://www.google.com/cookies.html'>enable cookies</a> to use WordPress.", GEODIRECTORY_TEXTDOMAIN));
+                $errors->add('test_cookie', __("<strong>ERROR</strong>: Cookies are blocked or not supported by your browser. You must <a href='http://www.google.com/cookies.html'>enable cookies</a> to use WordPress.", 'geodirectory'));
 
             // Some parts of this script use the main login form to display a message
             if (isset($_GET['loggedout']) && TRUE == $_GET['loggedout']) {

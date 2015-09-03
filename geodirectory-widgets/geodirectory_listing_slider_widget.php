@@ -22,10 +22,10 @@ class geodir_listing_slider_widget extends WP_Widget
      * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
 	 */
     function __construct() {
-        $widget_ops = array('classname' => 'geodir_listing_slider_view', 'description' => __('GD > Listing Slider', GEODIRECTORY_TEXTDOMAIN));
+        $widget_ops = array('classname' => 'geodir_listing_slider_view', 'description' => __('GD > Listing Slider', 'geodirectory'));
         parent::__construct(
             'listing_slider_view', // Base ID
-            __('GD > Listing Slider', GEODIRECTORY_TEXTDOMAIN), // Name
+            __('GD > Listing Slider', 'geodirectory'), // Name
             $widget_ops// Args
         );
     }
@@ -138,15 +138,15 @@ class geodir_listing_slider_widget extends WP_Widget
         $show_featured_only = isset($instance['show_featured_only']) && $instance['show_featured_only'] ? true : false;
 
         $sort_fields = array();
-        $sort_fields[] = array('field' => 'latest', 'label' => __('Latest', GEODIRECTORY_TEXTDOMAIN));
-        $sort_fields[] = array('field' => 'featured', 'label' => __('Featured', GEODIRECTORY_TEXTDOMAIN));
-        $sort_fields[] = array('field' => 'high_review', 'label' => __('Review', GEODIRECTORY_TEXTDOMAIN));
-        $sort_fields[] = array('field' => 'high_rating', 'label' => __('Rating', GEODIRECTORY_TEXTDOMAIN));
-        $sort_fields[] = array('field' => 'random', 'label' => __('Random', GEODIRECTORY_TEXTDOMAIN));
+        $sort_fields[] = array('field' => 'latest', 'label' => __('Latest', 'geodirectory'));
+        $sort_fields[] = array('field' => 'featured', 'label' => __('Featured', 'geodirectory'));
+        $sort_fields[] = array('field' => 'high_review', 'label' => __('Review', 'geodirectory'));
+        $sort_fields[] = array('field' => 'high_rating', 'label' => __('Rating', 'geodirectory'));
+        $sort_fields[] = array('field' => 'random', 'label' => __('Random', 'geodirectory'));
         ?>
 
         <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', GEODIRECTORY_TEXTDOMAIN);?>
+            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'geodirectory');?>
 
                 <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>"
                        name="<?php echo $this->get_field_name('title'); ?>" type="text"
@@ -156,7 +156,7 @@ class geodir_listing_slider_widget extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('post_type'); ?>"><?php _e('Post Type:', GEODIRECTORY_TEXTDOMAIN);?>
+                for="<?php echo $this->get_field_id('post_type'); ?>"><?php _e('Post Type:', 'geodirectory');?>
 
                 <?php $postypes = geodir_get_posttypes(); ?>
 
@@ -180,7 +180,7 @@ class geodir_listing_slider_widget extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Post Category:', GEODIRECTORY_TEXTDOMAIN);?>
+                for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Post Category:', 'geodirectory');?>
 
                 <?php
                 $category_taxonomy = geodir_get_taxonomies('gd_place');
@@ -191,7 +191,7 @@ class geodir_listing_slider_widget extends WP_Widget
                         name="<?php echo $this->get_field_name('category'); ?>">
                     <option <?php if ($category == '0') {
                         echo 'selected="selected"';
-                    } ?> value="0"><?php _e('All', GEODIRECTORY_TEXTDOMAIN); ?></option>
+                    } ?> value="0"><?php _e('All', 'geodirectory'); ?></option>
                     <?php foreach ($categories as $category_obj) { ?>
 
                         <option <?php if ($category == $category_obj->term_id) {
@@ -206,7 +206,7 @@ class geodir_listing_slider_widget extends WP_Widget
         </p>
         <p>
             <label
-                for="<?php echo $this->get_field_id('list_sort'); ?>"><?php _e('Sort by:', GEODIRECTORY_TEXTDOMAIN); ?></label>
+                for="<?php echo $this->get_field_id('list_sort'); ?>"><?php _e('Sort by:', 'geodirectory'); ?></label>
             <select class="widefat" id="<?php echo $this->get_field_id('list_sort'); ?>"
                     name="<?php echo $this->get_field_name('list_sort'); ?>">
                 <?php foreach ($sort_fields as $sort_field) { ?>
@@ -217,7 +217,7 @@ class geodir_listing_slider_widget extends WP_Widget
         </p>
         <p>
             <label
-                for="<?php echo $this->get_field_id('post_number'); ?>"><?php _e('Number of posts(total):', GEODIRECTORY_TEXTDOMAIN);?>
+                for="<?php echo $this->get_field_id('post_number'); ?>"><?php _e('Number of posts(total):', 'geodirectory');?>
                 <input class="widefat" id="<?php echo $this->get_field_id('post_number'); ?>"
                        name="<?php echo $this->get_field_name('post_number'); ?>" type="text"
                        value="<?php echo esc_attr($post_number); ?>"/>
@@ -226,7 +226,7 @@ class geodir_listing_slider_widget extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('max_show'); ?>"><?php _e('Number of posts(shown at one time, requires a slide width to be set):', GEODIRECTORY_TEXTDOMAIN);?>
+                for="<?php echo $this->get_field_id('max_show'); ?>"><?php _e('Number of posts(shown at one time, requires a slide width to be set):', 'geodirectory');?>
                 <input class="widefat" id="<?php echo $this->get_field_id('max_show'); ?>"
                        name="<?php echo $this->get_field_name('max_show'); ?>" type="text"
                        value="<?php echo esc_attr($max_show); ?>"/>
@@ -235,7 +235,7 @@ class geodir_listing_slider_widget extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('slide_width'); ?>"><?php _e('Slide width(leave blank unless showing more than one slide at a time, ex: 210):', GEODIRECTORY_TEXTDOMAIN);?>
+                for="<?php echo $this->get_field_id('slide_width'); ?>"><?php _e('Slide width(leave blank unless showing more than one slide at a time, ex: 210):', 'geodirectory');?>
                 <input class="widefat" id="<?php echo $this->get_field_id('slide_width'); ?>"
                        name="<?php echo $this->get_field_name('slide_width'); ?>" type="text"
                        value="<?php echo esc_attr($slide_width); ?>"/>
@@ -244,7 +244,7 @@ class geodir_listing_slider_widget extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('animation'); ?>"><?php _e('Animation:', GEODIRECTORY_TEXTDOMAIN);?>
+                for="<?php echo $this->get_field_id('animation'); ?>"><?php _e('Animation:', 'geodirectory');?>
 
                 <select class="widefat" id="<?php echo $this->get_field_id('animation'); ?>"
                         name="<?php echo $this->get_field_name('animation'); ?>">
@@ -262,7 +262,7 @@ class geodir_listing_slider_widget extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('slideshowSpeed'); ?>"><?php _e('Slide Show Speed: (milliseconds)', GEODIRECTORY_TEXTDOMAIN);?>
+                for="<?php echo $this->get_field_id('slideshowSpeed'); ?>"><?php _e('Slide Show Speed: (milliseconds)', 'geodirectory');?>
 
                 <input class="widefat" id="<?php echo $this->get_field_id('slideshowSpeed'); ?>"
                        name="<?php echo $this->get_field_name('slideshowSpeed'); ?>" type="text"
@@ -272,7 +272,7 @@ class geodir_listing_slider_widget extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('animationSpeed'); ?>"><?php _e('Animation Speed: (milliseconds)', GEODIRECTORY_TEXTDOMAIN);?>
+                for="<?php echo $this->get_field_id('animationSpeed'); ?>"><?php _e('Animation Speed: (milliseconds)', 'geodirectory');?>
 
                 <input class="widefat" id="<?php echo $this->get_field_id('animationSpeed'); ?>"
                        name="<?php echo $this->get_field_name('animationSpeed'); ?>" type="text"
@@ -282,7 +282,7 @@ class geodir_listing_slider_widget extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('slideshow'); ?>"><?php _e('SlideShow:', GEODIRECTORY_TEXTDOMAIN);?>
+                for="<?php echo $this->get_field_id('slideshow'); ?>"><?php _e('SlideShow:', 'geodirectory');?>
 
                 <input type="checkbox" <?php if ($slideshow) {
                     echo 'checked="checked"';
@@ -294,7 +294,7 @@ class geodir_listing_slider_widget extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('animationLoop'); ?>"><?php _e('AnimationLoop:', GEODIRECTORY_TEXTDOMAIN);?>
+                for="<?php echo $this->get_field_id('animationLoop'); ?>"><?php _e('AnimationLoop:', 'geodirectory');?>
 
                 <input type="checkbox" <?php if ($animationLoop) {
                     echo 'checked="checked"';
@@ -306,7 +306,7 @@ class geodir_listing_slider_widget extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('directionNav'); ?>"><?php _e('DirectionNav:', GEODIRECTORY_TEXTDOMAIN);?>
+                for="<?php echo $this->get_field_id('directionNav'); ?>"><?php _e('DirectionNav:', 'geodirectory');?>
 
                 <input type="checkbox" <?php if ($directionNav) {
                     echo 'checked="checked"';
@@ -319,7 +319,7 @@ class geodir_listing_slider_widget extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('show_title'); ?>"><?php _e('Show Title:', GEODIRECTORY_TEXTDOMAIN);?>
+                for="<?php echo $this->get_field_id('show_title'); ?>"><?php _e('Show Title:', 'geodirectory');?>
 
                 <input type="checkbox" <?php if ($show_title) {
                     echo 'checked="checked"';
@@ -330,7 +330,7 @@ class geodir_listing_slider_widget extends WP_Widget
         </p>
         <p>
             <label
-                for="<?php echo $this->get_field_id('show_featured_only'); ?>"><?php _e('Show only featured listings:', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('show_featured_only'); ?>"><?php _e('Show only featured listings:', 'geodirectory'); ?>
                 <input type="checkbox" id="<?php echo $this->get_field_id('show_featured_only'); ?>"
                        name="<?php echo $this->get_field_name('show_featured_only'); ?>" <?php if ($show_featured_only) echo 'checked="checked"'; ?>
                        value="1"/>

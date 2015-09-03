@@ -53,7 +53,7 @@ add_action('add_meta_boxes_comment', 'geodir_comment_add_meta_box');
  */
 function geodir_comment_add_meta_box($comment)
 {
-    add_meta_box('gd-comment-rating', __('Comment Rating', GEODIRECTORY_TEXTDOMAIN), 'geodir_comment_rating_meta', 'comment', 'normal', 'high');
+    add_meta_box('gd-comment-rating', __('Comment Rating', 'geodirectory'), 'geodir_comment_rating_meta', 'comment', 'normal', 'high');
 }
 
 /**
@@ -383,7 +383,7 @@ function geodir_wrap_comment_text($content, $comment = '')
     if (!empty($comment))
         $rating = geodir_get_commentoverall($comment->comment_ID);
     if ($rating != 0 && !is_admin()) {
-        return '<div>' . __('Overall Rating', GEODIRECTORY_TEXTDOMAIN) . ': <div class="rating">' . $rating . '</div>' . geodir_get_rating_stars($rating, $comment->comment_ID) . '</div><div class="description">' . $content . '</div>';
+        return '<div>' . __('Overall Rating', 'geodirectory') . ': <div class="rating">' . $rating . '</div>' . geodir_get_rating_stars($rating, $comment->comment_ID) . '</div><div class="description">' . $content . '</div>';
     } else
         return $content;
 
@@ -775,7 +775,7 @@ if (!function_exists('geodir_comment')) {
                 // Display trackbacks differently than normal comments.
                 ?>
                 <li <?php comment_class('geodir-comment'); ?> id="comment-<?php comment_ID(); ?>">
-                <p><?php _e('Pingback:', GEODIRECTORY_TEXTDOMAIN); ?> <?php comment_author_link(); ?> <?php edit_comment_link(__('(Edit)', GEODIRECTORY_TEXTDOMAIN), '<span class="edit-link">', '</span>'); ?></p>
+                <p><?php _e('Pingback:', 'geodirectory'); ?> <?php comment_author_link(); ?> <?php edit_comment_link(__('(Edit)', 'geodirectory'), '<span class="edit-link">', '</span>'); ?></p>
                 <?php
                 break;
             default :
@@ -799,21 +799,21 @@ if (!function_exists('geodir_comment')) {
                         printf('<cite><b class="reviewer">%1$s</b> %2$s</cite>',
                             get_comment_author_link(),
                             // If current post author is also comment author, make it known visually.
-                            ($comment->user_id === $post->post_author) ? '<span>' . __('Post author', GEODIRECTORY_TEXTDOMAIN) . '</span>' : ''
+                            ($comment->user_id === $post->post_author) ? '<span>' . __('Post author', 'geodirectory') . '</span>' : ''
                         );
                         echo "<span class='item'><small><span class='fn'>$post->post_title</span></small></span>";
                         printf('<a href="%1$s"><time datetime="%2$s" class="dtreviewed">%3$s<span class="value-title" title="%2$s"></span></time></a>',
                             esc_url(get_comment_link($comment->comment_ID)),
                             get_comment_time('c'),
                             /* translators: 1: date, 2: time */
-                            sprintf(__('%1$s at %2$s', GEODIRECTORY_TEXTDOMAIN), get_comment_date(), get_comment_time())
+                            sprintf(__('%1$s at %2$s', 'geodirectory'), get_comment_date(), get_comment_time())
                         );
                         ?>
                     </header>
                     <!-- .comment-meta -->
 
                     <?php if ('0' == $comment->comment_approved) : ?>
-                        <p class="comment-awaiting-moderation"><?php _e('Your comment is awaiting moderation.', GEODIRECTORY_TEXTDOMAIN); ?></p>
+                        <p class="comment-awaiting-moderation"><?php _e('Your comment is awaiting moderation.', 'geodirectory'); ?></p>
                     <?php endif; ?>
 
                     <section class="comment-content comment">
@@ -822,9 +822,9 @@ if (!function_exists('geodir_comment')) {
                     <!-- .comment-content -->
 
                     <div class="comment-links">
-                        <?php edit_comment_link(__('Edit', GEODIRECTORY_TEXTDOMAIN), '<p class="edit-link">', '</p>'); ?>
+                        <?php edit_comment_link(__('Edit', 'geodirectory'), '<p class="edit-link">', '</p>'); ?>
                         <div class="reply">
-                            <?php comment_reply_link(array_merge($args, array('reply_text' => __('Reply', GEODIRECTORY_TEXTDOMAIN), 'after' => ' <span>&darr;</span>', 'depth' => $depth, 'max_depth' => $args['max_depth']))); ?>
+                            <?php comment_reply_link(array_merge($args, array('reply_text' => __('Reply', 'geodirectory'), 'after' => ' <span>&darr;</span>', 'depth' => $depth, 'max_depth' => $args['max_depth']))); ?>
                         </div>
                     </div>
 
