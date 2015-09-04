@@ -1432,6 +1432,17 @@ function geodir_diagnose_default_pages()
     /* Diagnose Location Page Ends */
     ////////////////////////////////
 
+    $page_chk_arr = array('output_str'=>$output_str,'is_error_during_diagnose'=>$is_error_during_diagnose );
+    /**
+     * This action is called at the end of the GD Tools page check function.
+     *
+     * @since 1.5.2
+     */
+    $page_chk_arr = apply_filters('geodir_diagnose_default_pages',$page_chk_arr);
+
+    $output_str = $page_chk_arr['output_str'];
+    $is_error_during_diagnose = $page_chk_arr['is_error_during_diagnose'];
+
     if ($is_error_during_diagnose) {
         if ($fix) {
             flush_rewrite_rules();

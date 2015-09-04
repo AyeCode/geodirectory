@@ -555,6 +555,10 @@ function geodir_detail_page_google_analytics()
     $package_info = array();
     $package_info = geodir_post_package_info($package_info, $post);
 
+    $id = trim(get_option('geodir_ga_id'));
+
+    if(!$id){return;}//if no Google Analytics ID then bail.
+
     ob_start(); // Start buffering;
     /**
      * This is called before the edit post link html in the function geodir_detail_page_google_analytics()

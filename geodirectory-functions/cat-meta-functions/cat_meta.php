@@ -114,8 +114,9 @@ function manage_category_custom_fields($deprecated, $column_name, $term_id)
 
             $file_info = pathinfo($term_icon_url['src']);
 
-            if ($file_info['dirname'] != '.' && $file_info['dirname'] != '..')
+            if (isset($file_info['dirname'] ) && $file_info['dirname'] != '.' && $file_info['dirname'] != '..')
                 $sub_dir = $file_info['dirname'];
+            else{$sub_dir = '';}
 
             $uploads = wp_upload_dir(trim($sub_dir, '/')); // Array of key => value pairs
             $uploads_baseurl = $uploads['baseurl'];
