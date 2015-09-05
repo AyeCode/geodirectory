@@ -2144,7 +2144,7 @@ add_action('init', 'geodir_remove_template_redirect_actions', 100);
  */
 function geodir_remove_template_redirect_actions()
 {
-    if (isset($_REQUEST['geodir_signup'])) {
+    if (geodir_is_page('login')){
         remove_all_actions('template_redirect');
         remove_action('init', 'avia_modify_front', 10);
     }

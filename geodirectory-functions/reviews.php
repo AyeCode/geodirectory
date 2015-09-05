@@ -58,6 +58,6 @@ if (post_password_required())
 
     <?php endif; // have_comments() ?>
 
-    <?php comment_form(array('title_reply' => __('Leave a Review', 'geodirectory'), 'label_submit' => __('Post Review', 'geodirectory'), 'comment_field' => '<p class="comment-form-comment"><label for="comment">' . __('Review text', 'geodirectory') . '</label><textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p>', 'must_log_in' => '<p class="must-log-in">' . sprintf(__('You must be <a href="%s">logged in</a> to post a comment.', 'geodirectory'), home_url() . "/?geodir_signup=true&amp;page1=sign_in") . '</p>')); ?>
+    <?php comment_form(array('title_reply' => __('Leave a Review', 'geodirectory'), 'label_submit' => __('Post Review', 'geodirectory'), 'comment_field' => '<p class="comment-form-comment"><label for="comment">' . __('Review text', 'geodirectory') . '</label><textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p>', 'must_log_in' => '<p class="must-log-in">' . sprintf(__('You must be <a href="%s">logged in</a> to post a comment.', 'geodirectory'), geodir_login_url()) . '</p>')); ?>
 
 </div><!-- #comments .comments-area -->

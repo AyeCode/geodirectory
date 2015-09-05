@@ -110,6 +110,10 @@ function geodir_create_pages()
     geodir_create_page(esc_sql(_x('listing-success', 'page_slug', 'geodirectory')), 'geodir_success_page', __('Listing Success', 'geodirectory'), '');
     geodir_create_page(esc_sql(_x('location', 'page_slug', 'geodirectory')), 'geodir_location_page', __('Location', 'geodirectory'), '');
 
+    //New since 1.5.3
+    geodir_create_page(esc_sql(_x('gd-info', 'page_slug', 'geodirectory')), 'geodir_info_page', __('Info', 'geodirectory'), '');
+    geodir_create_page(esc_sql(_x('d-glogin', 'page_slug', 'geodirectory')), 'geodir_login_page', __('Login', 'geodirectory'), '');
+
 
 }
 

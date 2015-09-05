@@ -296,6 +296,14 @@ function geodir_is_page($gdpage = '')
             if (is_search() && isset($_REQUEST['geodir_search']))
                 return true;
             break;
+        case 'info':
+            if (is_page() && get_query_var('page_id') == geodir_info_page_id())
+                return true;
+            break;
+        case 'login':
+            if (is_page() && get_query_var('page_id') == geodir_login_page_id())
+                return true;
+            break;
         default:
             return false;
             break;
@@ -623,7 +631,7 @@ if (!function_exists('geodir_sendEmail')) {
         }
         $siteurl = home_url();
         $siteurl_link = '<a href="' . $siteurl . '">' . $siteurl . '</a>';
-        $loginurl = home_url() . '/?geodir_signup=true';
+        $loginurl = geodir_login_url();
         $loginurl_link = '<a href="' . $loginurl . '">login</a>';
 
         if ($fromEmail == '') {
@@ -1384,7 +1392,7 @@ function geodir_custom_posts_body_class($classes)
     }
 
     // fix body class for signup page
-    if (isset($_REQUEST['geodir_signup'])) {
+    if (geodir_is_page('login')) {
         $new_classes = array();
         $new_classes[] = 'signup page-geodir-signup';
         if (!empty($classes)) {
@@ -2501,7 +2509,7 @@ function geodir_loginwidget_output($args = '', $instance = '')
     if (is_user_logged_in()) {
         global $current_user;
 
-        $login_url = geodir_getlink(home_url(), array('geodir_signup' => 'true'), false);
+        $login_url = geodir_login_url();
         $add_listurl = get_permalink(geodir_add_listing_page_id());
         $add_listurl = geodir_getlink($add_listurl, array('listing_type' => 'gd_place'));
         $author_link = get_author_posts_url($current_user->data->ID);
@@ -2669,7 +2677,7 @@ function geodir_loginwidget_output($args = '', $instance = '')
          */
         ?>
         <form name="loginform" class="loginform1"
-              action="<?php echo apply_filters('geodir_signup_reg_submit_link', home_url() . '/index.php?geodir_signup=true'); ?>"
+              action="<?php echo geodir_login_url(); ?>"
               method="post">
             <div class="geodir_form_row"><input placeholder="<?php _e('Email', 'geodirectory'); ?>" name="log"
                                                 type="text" class="textfield user_login1"/> <span
@@ -2693,7 +2701,7 @@ function geodir_loginwidget_output($args = '', $instance = '')
                      * @since 1.0.0
                      */
                     ?>
-                    <a href="<?php echo apply_filters('geodir_signup_reg_form_link', home_url() . '/?geodir_signup=true&amp;page1=sign_up'); ?>"
+                    <a href="<?php echo geodir_login_url(); ?>"
                        class="goedir-newuser-link"><?php echo NEW_USER_TEXT; ?></a>
 
                     <?php
@@ -2703,7 +2711,7 @@ function geodir_loginwidget_output($args = '', $instance = '')
                      * @since 1.0.0
                      */
                     ?>
-                    <a href="<?php echo apply_filters('geodir_signup_forgot_form_link', home_url() . '/?geodir_signup=true&amp;page1=sign_in'); ?>"
+                    <a href="<?php echo geodir_login_url(); ?>"
                        class="goedir-forgot-link"><?php echo FORGOT_PW_TEXT; ?></a></p></div>
         </form>
     <?php }

@@ -25,7 +25,7 @@
     $siteurl = home_url();
     $siteurl_link = '<a href="' . $siteurl . '">' . $siteurl . '</a>';
 
-    $loginurl = home_url() . '/?geodir_signup=true';
+    $loginurl = geodir_login_url();
     $loginurl_link = '<a href="' . $loginurl . '">login</a>';
 
     $post_author = $post_info->post_author;

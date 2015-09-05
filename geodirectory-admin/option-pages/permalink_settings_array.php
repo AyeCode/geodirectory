@@ -147,6 +147,22 @@ $geodir_settings['permalink_settings'] = apply_filters('geodir_permalink_setting
         'class' => 'chosen_select'
     ),
 
+    array(
+        'name' => __('Info page', 'geodirectory'),
+        'desc' => __('Select the page to use for Gd general Info', 'geodirectory'),
+        'id' => 'geodir_info_page',
+        'type' => 'single_select_page',
+        'class' => 'chosen_select'
+    ),
+
+    array(
+        'name' => __('Login page', 'geodirectory'),
+        'desc' => __('Select the page to use for Login / Register', 'geodirectory'),
+        'id' => 'geodir_login_page',
+        'type' => 'single_select_page',
+        'class' => 'chosen_select'
+    ),
+
 
     array('type' => 'sectionend', 'id' => 'geodir_pages'),
 

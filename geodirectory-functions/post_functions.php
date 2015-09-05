@@ -2409,7 +2409,7 @@ if (!function_exists('geodir_favourite_html')) {
         } else {
 
             if (!isset($current_user->data->ID) || $current_user->data->ID == '') {
-                $script_text = 'javascript:window.location.href=\'' . home_url('/?geodir_signup=true&amp;page1=sign_up') . '\'';
+                $script_text = 'javascript:window.location.href=\'' . geodir_login_url() . '\'';
             } else
                 $script_text = 'javascript:addToFavourite(' . $post_id . ',\'add\')';
 
