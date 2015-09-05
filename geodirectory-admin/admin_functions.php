@@ -747,7 +747,8 @@ function geodir_default_taxonomies()
  */
 function geodir_update_options($options, $dummy = false)
 {
-    //print_r($_POST);exit;
+   // print_r($_POST);    print_r($options);    exit;
+
     if ((!isset($_POST) || !$_POST) && !$dummy) return false;
 
     foreach ($options as $value) {
