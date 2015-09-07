@@ -33,9 +33,21 @@ function geodir_on_wp_loaded()
 
     }
 
-    if (geodir_is_page('login')) {
+}
+
+/**
+ * Geodirectory Post or Get request handler on wp_loaded.
+ *
+ * @since 1.3.5
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ */
+function geodir_on_wp()
+{
+    if(geodir_is_page('login')) {
         geodir_user_signup();
     }
+
 }
 
 /**

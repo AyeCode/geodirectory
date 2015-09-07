@@ -418,7 +418,6 @@ function geodir_register_new_user($user_login, $user_email)
 function geodir_user_signup()
 {
     global $errors;
-
     $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'login';
 
     $errors = new WP_Error();
