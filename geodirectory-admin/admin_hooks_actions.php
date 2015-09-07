@@ -1408,6 +1408,56 @@ function geodir_diagnose_default_pages()
     ////////////////////////////////
 
     //////////////////////////////////
+    /* Diagnose Info Page Starts */
+    //////////////////////////////////
+    $option_value = get_option('geodir_info_page');
+    $page = get_post($option_value);
+    if(!empty($page)){$page_found = $page->ID;}else{$page_found = '';}
+
+    if(!empty($option_value) && !empty($page_found) && $option_value == $page_found && $page->post_status=='publish')
+        $output_str .= "<li>" . __('Info page exists with proper setting.', 'geodirectory') . "</li>";
+    else {
+        $is_error_during_diagnose = true;
+        $output_str .= "<li><strong>" . __('Info page is missing.', 'geodirectory') . "</strong></li>";
+        if ($fix) {
+            if (geodir_fix_virtual_page('gd-info', __('Info', 'geodirectory'), $page_found, 'geodir_info_page')) {
+                $output_str .= "<li><strong>" . __('-->FIXED: Info page fixed', 'geodirectory') . "</strong></li>";
+            } else {
+                $output_str .= "<li><strong>" . __('-->FAILED: Info page fix failed', 'geodirectory') . "</strong></li>";
+            }
+        }
+    }
+
+    ////////////////////////////////
+    /* Diagnose Info Page Ends */
+    ////////////////////////////////
+
+    //////////////////////////////////
+    /* Diagnose Login Page Starts */
+    //////////////////////////////////
+    $option_value = get_option('geodir_login_page');
+    $page = get_post($option_value);
+    if(!empty($page)){$page_found = $page->ID;}else{$page_found = '';}
+
+    if(!empty($option_value) && !empty($page_found) && $option_value == $page_found && $page->post_status=='publish')
+        $output_str .= "<li>" . __('Login page exists with proper setting.', 'geodirectory') . "</li>";
+    else {
+        $is_error_during_diagnose = true;
+        $output_str .= "<li><strong>" . __('Login page is missing.', 'geodirectory') . "</strong></li>";
+        if ($fix) {
+            if (geodir_fix_virtual_page('gd-login', __('Login', 'geodirectory'), $page_found, 'geodir_login_page')) {
+                $output_str .= "<li><strong>" . __('-->FIXED: Login page fixed', 'geodirectory') . "</strong></li>";
+            } else {
+                $output_str .= "<li><strong>" . __('-->FAILED: Login page fix failed', 'geodirectory') . "</strong></li>";
+            }
+        }
+    }
+
+    ////////////////////////////////
+    /* Diagnose Info Page Ends */
+    ////////////////////////////////
+
+    //////////////////////////////////
     /* Diagnose Location Page Starts */
     //////////////////////////////////
     $option_value = get_option('geodir_location_page');

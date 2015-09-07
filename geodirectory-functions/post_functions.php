@@ -904,7 +904,7 @@ if (!function_exists('geodir_save_post_images')) {
                 $file_path = '';
                 /* --------- start ------- */
 
-                $split_img_path = explode($uploads['baseurl'], $post_image[$m]);
+                $split_img_path = explode(str_replace(array('http://','https://'),'',$uploads['baseurl']), str_replace(array('http://','https://'),'',$post_image[$m]));
 
                 $split_img_file_path = isset($split_img_path[1]) ? $split_img_path[1] : '';
 
@@ -961,7 +961,7 @@ if (!function_exists('geodir_save_post_images')) {
                         }
 
                         $external_img = false;
-                        if (strpos($curr_img_url, $uploads['baseurl']) !== false) {
+                        if (strpos(str_replace(array('http://','https://'),'',$curr_img_url), str_replace(array('http://','https://'),'',$uploads['baseurl'])) !== false) {
                         } else {
                             $external_img = true;
                         }
@@ -1005,7 +1005,7 @@ if (!function_exists('geodir_save_post_images')) {
                                 $file_path = $sub_dir . '/' . $new_name;
                             }
 
-                            $postcurr_images[] = $uploads['baseurl'] . $file_path;
+                            $postcurr_images[] = str_replace(array('http://','https://'),'',$uploads['baseurl'] . $file_path);
 
                             if ($menu_order == 1) {
 
@@ -1043,7 +1043,7 @@ if (!function_exists('geodir_save_post_images')) {
                 } else {
                     $valid_file_ids[] = $find_image;
 
-                    $postcurr_images[] = $post_image[$m];
+                    $postcurr_images[] = str_replace(array('http://','https://'),'',$post_image[$m]);
 
                     $wpdb->query(
                         $wpdb->prepare(
@@ -1077,7 +1077,7 @@ if (!function_exists('geodir_save_post_images')) {
 
                 foreach ($post_images as $img) {
 
-                    if (!in_array($img->src, $postcurr_images)) {
+                    if (!in_array(str_replace(array('http://','https://'),'',$img->src), $postcurr_images)) {
 
                         $invalid_files[] = (object)array('src' => $img->src);
 
@@ -1096,9 +1096,8 @@ if (!function_exists('geodir_save_post_images')) {
 
         if (!empty($invalid_files))
             geodir_remove_attachments($invalid_files);
-
-
     }
+
 }
 
 /**
@@ -2409,7 +2408,7 @@ if (!function_exists('geodir_favourite_html')) {
         } else {
 
             if (!isset($current_user->data->ID) || $current_user->data->ID == '') {
-                $script_text = 'javascript:window.location.href=\'' . home_url('/?geodir_signup=true&amp;page1=sign_up') . '\'';
+                $script_text = 'javascript:window.location.href=\'' . geodir_login_url() . '\'';
             } else
                 $script_text = 'javascript:addToFavourite(' . $post_id . ',\'add\')';
 

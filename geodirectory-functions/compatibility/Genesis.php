@@ -183,7 +183,7 @@ function gd_genesis_compat_add_top_section_back()
  */
 function geodir_replace_breadcrumb()
 {
-    if (is_front_page() && get_option('geodir_set_as_home') && !isset($_GET['geodir_signup'])) {
+    if (is_front_page() && get_option('geodir_set_as_home') && !geodir_is_page('login')) {
     } else {
         echo '<div class="geodir-breadcrumb-bar"><div class="wrap">';
         geodir_breadcrumb();
@@ -201,7 +201,7 @@ add_action('genesis_meta', 'geodir_genesis_meta');
  */
 function geodir_genesis_meta()
 {
-    if (isset($_GET['geodir_signup'])) {
+    if (geodir_is_page('login')) {
         add_filter('genesis_pre_get_option_site_layout', '__genesis_return_full_width_content');
     }
 }

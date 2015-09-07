@@ -174,7 +174,7 @@ function geodir_template_loader($template)
     ));
 
 
-    if (isset($_REQUEST['geodir_signup']) || $geodir_custom_page_list['geodir_signup_page']) {
+    if (geodir_is_page('login') || $geodir_custom_page_list['geodir_signup_page']) {
 
         $template = geodir_locate_template('signup');
 
@@ -229,7 +229,7 @@ function geodir_template_loader($template)
         //geodir_is_login(true);
         global $current_user;
         if (!$current_user->ID) {
-            wp_redirect(home_url() . '?geodir_signup=true&redirect_add_listing=' . urlencode(geodir_curPageURL()), 302);
+            wp_redirect(geodir_login_url(array('redirect_add_listing'=>urlencode(geodir_curPageURL()))), 302);
             exit;
         }
 

@@ -22,7 +22,7 @@ function geodir_is_login($redirect = false)
         if ($redirect) {
             ?>
             <script type="text/javascript">
-                window.location.href = '<?php echo home_url().'?geodir_signup=true';?>';
+                window.location.href = '<?php echo geodir_login_url();?>';
             </script>
         <?php
         } else
@@ -479,10 +479,10 @@ function geodir_user_signup()
                 $errors = geodir_retrieve_password();
                 $error_message = isset($errors->errors['invalid_email'][0]) ? $errors->errors['invalid_email'][0] : '';
                 if (!is_wp_error($errors)) {
-                    wp_redirect(home_url() . '/?geodir_signup=true&checkemail=confirm');
+                    wp_redirect(geodir_login_url(array('checkemail'=>'confirm')));
                     exit();
                 } else {
-                    wp_redirect(home_url() . '/?geodir_signup=true&emsg=fw');
+                    wp_redirect(geodir_login_url(array('emsg'=>'fw')));
                     exit();
                 }
             }
@@ -503,11 +503,11 @@ function geodir_user_signup()
             $errors = reset_password($_GET['key'], $_GET['login']);
 
             if (!is_wp_error($errors)) {
-                wp_redirect(home_url() . '/?geodir_signup=true&action=login&checkemail=newpass');
+                wp_redirect(geodir_login_url(array('checkemail'=>'newpass')));
                 exit();
             }
 
-            wp_redirect(home_url() . '/?geodir_signup=true&action=lostpassword&page1=sign_in&error=invalidkey');
+            wp_redirect(geodir_login_url(array('error'=>'invalidkey','action'=>'lostpassword')));
             exit();
 
             break;
@@ -515,7 +515,7 @@ function geodir_user_signup()
         case 'register' :
             ############################### fix by Stiofan -  HebTech.co.uk ### SECURITY FIX ##############################
             if (!get_option('users_can_register')) {
-                wp_redirect(home_url() . '?geodir_signup=true&emsg=regnewusr');
+                wp_redirect(geodir_login_url(array('emsg'=>'regnewusr')));
                 exit();
             }
             ############################### fix by Stiofan -  HebTech.co.uk ### SECURITY FIX ##############################
@@ -720,7 +720,7 @@ function geodir_user_signup()
                 if (isset($_REQUEST['pagetype']) && $_REQUEST['pagetype'] != '') {
                     wp_redirect($_REQUEST['pagetype'] . '&emsg=1');
                 } else {
-                    wp_redirect(home_url() . '?geodir_signup=true&logemsg=1&redirect_to=' . urlencode($_REQUEST['redirect_to']));
+                    wp_redirect(geodir_login_url(array('logemsg'=>'1','redirect_to'=>urlencode($_REQUEST['redirect_to']))));
                 }
                 exit;
             }

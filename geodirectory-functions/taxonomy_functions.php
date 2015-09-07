@@ -637,9 +637,11 @@ function geodir_get_taxonomy_posttype($taxonomy = '')
 
     if (!empty($taxonomy)) {
         $taxonomies[] = $taxonomy;
-    } elseif ($wp_query->tax_query->queries) {
-        $taxonomies = wp_list_pluck($wp_query->tax_query->queries, 'taxonomy');
-
+    } elseif (isset($wp_query->tax_query->queries)) {
+        $tax_arr = $wp_query->tax_query->queries;
+        //if tax query has 'relation' set then it will break wp_list_pluck so we remove it
+        if(isset( $tax_arr['relation'])){unset( $tax_arr['relation']);}
+        $taxonomies = wp_list_pluck($tax_arr, 'taxonomy');
     }
 
     if (!empty($taxonomies)) {
