@@ -4749,7 +4749,7 @@ function geodir_ajax_import_export() {
 						if (isset($file[$index])) {
 							$row = $file[$index];
 							$row = array_map( 'trim', $row );
-							$row = array_map( 'utf8_encode', $row );
+							//$row = array_map( 'utf8_encode', $row );
 							
 							$cat_id = '';
 							$cat_name = '';
@@ -4810,7 +4810,7 @@ function geodir_ajax_import_export() {
 							$term_data['image'] = $cat_image != '' ? basename( $cat_image ) : '';
 							$term_data['icon'] = $cat_icon != '' ? basename( $cat_icon ) : '';
 							
-							$term_data = array_map( 'utf8_encode', $term_data );
+							//$term_data = array_map( 'utf8_encode', $term_data );
 							
 							$taxonomy = $cat_posttype . 'category';
 							
@@ -4829,7 +4829,7 @@ function geodir_ajax_import_export() {
 								} else {
 									$term_parent_data = array();
 									$term_parent_data['name'] = $cat_parent;											
-									$term_parent_data = array_map( 'utf8_encode', $term_parent_data );										
+									//$term_parent_data = array_map( 'utf8_encode', $term_parent_data );										
 									$term_parent_data['taxonomy'] = $taxonomy;
 									
 									$term_parent_id = (int)geodir_imex_insert_term( $taxonomy, $term_parent_data );
@@ -4951,7 +4951,7 @@ function geodir_ajax_import_export() {
 						if (isset($file[$index])) {
 							$row = $file[$index];
 							$row = array_map( 'trim', $row );
-							$row = array_map( 'utf8_encode', $row );
+							//$row = array_map( 'utf8_encode', $row );
 							$row = array_map( 'addslashes_gpc', $row );
 							
 							$post_id = '';
@@ -5114,7 +5114,7 @@ function geodir_ajax_import_export() {
 										} else {
 											$term_data = array();
 											$term_data['name'] = $category_name;											
-											$term_data = array_map( 'utf8_encode', $term_data );										
+											//$term_data = array_map( 'utf8_encode', $term_data );										
 											$term_data['taxonomy'] = $cat_taxonomy;
 											
 											$term_id = geodir_imex_insert_term( $cat_taxonomy, $term_data );
