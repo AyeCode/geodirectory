@@ -101,6 +101,8 @@ add_filter('parse_query', 'geodir_modified_query');
 //add_action( 'wp_loaded','geodir_flush_rewrite_rules' );
 add_action('wp_loaded', 'geodir_on_wp_loaded', 10);
 
+add_action('wp', 'geodir_on_wp', 10);
+
 
 /////////////////////////////
 /* ON WP HEADE ACTIONS */
