@@ -161,4 +161,3 @@ function geodir_info_url($args=array()){
 
     return $info_url;
 }
-

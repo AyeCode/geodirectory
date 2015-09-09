@@ -1861,6 +1861,57 @@ if (!function_exists('geodir_get_infowindow_html')) {
                         }
                         ?>
                         <div class="geodir-bubble-meta-side">
+                            <?php
+                            if (isset($postinfo_obj->recurring_dates)) {
+                                $recuring_data = unserialize($postinfo_obj->recurring_dates);
+                                $output = '';
+                                $output .= '<div class="geodir_event_schedule">';
+
+                                $event_recurring_dates = explode(',', $recuring_data['event_recurring_dates']);
+
+                                $starttimes = isset($recuring_data['starttime']) ? $recuring_data['starttime'] : '';
+                                $endtimes = isset($recuring_data['endtime']) ? $recuring_data['endtime'] : '';
+                                $e = 0;
+                                foreach ($event_recurring_dates as $key => $date) {
+
+                                    if (strtotime($date) < strtotime(date("Y-m-d"))) {
+                                        continue;
+                                    } // if the event is old don't show it on the map
+                                    $e++;
+                                    if ($e == 2) {
+                                        break;
+                                    }// only show 3 event dates
+                                   // $output .= '<p>';
+                                    //$geodir_num_dates++;
+                                    if (isset($recuring_data['different_times']) && $recuring_data['different_times'] == '1') {
+                                        $starttimes = isset($recuring_data['starttimes'][$key]) ? $recuring_data['starttimes'][$key] : '';
+                                        $endtimes = isset($recuring_data['endtimes'][$key]) ? $recuring_data['endtimes'][$key] : '';
+                                    }
+
+                                    $sdate = strtotime($date . ' ' . $starttimes);
+                                    $edate = strtotime($date . ' ' . $endtimes);
+
+                                    if ($starttimes > $endtimes) {
+                                        $edate = strtotime($date . ' ' . $endtimes . " +1 day");
+                                    }
+
+
+                                    global $geodir_date_time_format;
+
+                                    $output .= '<i class="fa fa-caret-right"></i>' . date($geodir_date_time_format, $sdate);
+                                    //$output .=  __(' To', GEODIREVENTS_TEXTDOMAIN).' ';
+                                    $output .= '<br />';
+                                    $output .= '<i class="fa fa-caret-left"></i>' . date($geodir_date_time_format, $edate);//.'<br />';
+                                   // $output .= '</p>';
+                                }
+
+                                $output .= '</div>';
+
+                                echo $output;
+                            }
+                            ?>
+
+
                             <span class="geodir_address"><i class="fa fa-home"></i> <?php echo $address; ?></span>
                             <?php if ($contact) { ?><span class="geodir_contact"><i
                                 class="fa fa-phone"></i> <?php echo $contact; ?></span><?php } ?>
@@ -1880,54 +1931,6 @@ if (!function_exists('geodir_get_infowindow_html')) {
                             ?>
                         </div>
                         <?php
-                        if (isset($postinfo_obj->recurring_dates)) {
-                            $recuring_data = unserialize($postinfo_obj->recurring_dates);
-                            $output = '';
-                            $output .= '<div class="geodir_event_schedule">';
-
-                            $event_recurring_dates = explode(',', $recuring_data['event_recurring_dates']);
-
-                            $starttimes = isset($recuring_data['starttime']) ? $recuring_data['starttime'] : '';
-                            $endtimes = isset($recuring_data['endtime']) ? $recuring_data['endtime'] : '';
-                            $e = 0;
-                            foreach ($event_recurring_dates as $key => $date) {
-
-                                if (strtotime($date) < strtotime(date("Y-m-d"))) {
-                                    continue;
-                                } // if the event is old don't show it on the map
-                                $e++;
-                                if ($e == 2) {
-                                    break;
-                                }// only show 3 event dates
-                                $output .= '<p>';
-                                //$geodir_num_dates++;
-                                if (isset($recuring_data['different_times']) && $recuring_data['different_times'] == '1') {
-                                    $starttimes = isset($recuring_data['starttimes'][$key]) ? $recuring_data['starttimes'][$key] : '';
-                                    $endtimes = isset($recuring_data['endtimes'][$key]) ? $recuring_data['endtimes'][$key] : '';
-                                }
-
-                                $sdate = strtotime($date . ' ' . $starttimes);
-                                $edate = strtotime($date . ' ' . $endtimes);
-
-                                if ($starttimes > $endtimes) {
-                                    $edate = strtotime($date . ' ' . $endtimes . " +1 day");
-                                }
-
-
-                                global $geodir_date_time_format;
-
-                                $output .= '<i class="fa fa-caret-right"></i>' . date($geodir_date_time_format, $sdate);
-                                //$output .=  __(' To', GEODIREVENTS_TEXTDOMAIN).' ';
-                                $output .= '<br />';
-                                $output .= '<i class="fa fa-caret-left"></i>' . date($geodir_date_time_format, $edate);//.'<br />';
-                                $output .= '</p>';
-                            }
-
-                            $output .= '</div>';
-
-                            echo $output;
-                        }
-
 
                         if ($ID) {
 

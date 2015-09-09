@@ -62,9 +62,7 @@ function geodir_register_post_types()
     if (is_array($post_types)):
 
         foreach ($post_types as $post_type => $args):
-            if ($post_type == 'gd_place' && get_option('geodir_disable_place_tax')) {
-                continue;
-            }
+
             if (!empty($args['rewrite']['slug'])) {
                 $args['rewrite']['slug'] = _x($args['rewrite']['slug'], 'URL slug', 'geodirectory');
             }

@@ -3,6 +3,7 @@ If tax query has 'relation' set then it will throw WARNING in wp_list_pluck - FI
 listing-preview page template removed as details page template now used - CHANGED
 In some cases with https when saving a listing it can change image url - FIXED
 Cyrillic letters does not supported in GD Import - FIXED
+Event map infowindow not showing dates properly - FIXED
 
 v1.5.2
 Map view type TERRAIN option added for all the maps - FIXED
