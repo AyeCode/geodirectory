@@ -117,24 +117,7 @@ $general_options = apply_filters('geodir_general_options', array(
         'css' => 'min-width:300px;',
         'std' => '2'
     ),
-    /*array(
-        'name' => __( 'Disable standard place taxonomie?', 'geodirectory' ),
-        'desc' 		=> __( 'Yes', 'geodirectory' ),
-        'id' 		=> 'geodir_disable_place_tax',
-        'std' 		=> '0',
-        'type' 		=> 'radio',
-        'value'		=> '1',
-        'radiogroup' => 'start'
-    ),
-    array(
-        'name' => __( 'Disable standard place taxonomie?', 'geodirectory' ),
-        'desc' 		=> __( 'No', 'geodirectory' ),
-        'id' 		=> 'geodir_disable_place_tax',
-        'std' 		=> '1',
-        'type' 		=> 'radio',
-        'value'		=> '0',
-        'radiogroup' => 'end'
-    ),*/
+
 
 
     array('type' => 'sectionend', 'id' => 'general_options'),

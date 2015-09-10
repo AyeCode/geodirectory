@@ -941,9 +941,7 @@ function places_custom_fields_tab($tabs)
     if (!empty($geodir_post_types)) {
 
         foreach ($geodir_post_types as $geodir_post_type => $geodir_posttype_info):
-            if ($geodir_post_type == 'gd_place' && get_option('geodir_disable_place_tax')) {
-                continue;
-            }
+
             $listing_slug = $geodir_posttype_info['labels']['singular_name'];
 
             $tabs[$geodir_post_type . '_fields_settings'] = array(
