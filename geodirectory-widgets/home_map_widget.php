@@ -23,10 +23,10 @@ class geodir_homepage_map extends WP_Widget
      * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
 	 */
     function __construct() {
-        $widget_ops = array('classname' => 'widget Google Map in Home page', 'description' => __('Google Map in Home page. It will show you google map V3 for Home page with category checkbox selection.', GEODIRECTORY_TEXTDOMAIN));
+        $widget_ops = array('classname' => 'widget Google Map in Home page', 'description' => __('Google Map in Home page. It will show you google map V3 for Home page with category checkbox selection.', 'geodirectory'));
         parent::__construct(
             'geodir_map_v3_home_map', // Base ID
-            __('GD > GMap - Home page', GEODIRECTORY_TEXTDOMAIN), // Name
+            __('GD > GMap - Home page', 'geodirectory'), // Name
             $widget_ops// Args
         );
     }
@@ -140,7 +140,7 @@ class geodir_homepage_map extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('width'); ?>"><?php _e('Map Width <small>(Default is : 960px) you can use px or % here</small>', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('width'); ?>"><?php _e('Map Width <small>(Default is : 960px) you can use px or % here</small>', 'geodirectory'); ?>
                 :
                 <input class="widefat" id="<?php echo $this->get_field_id('width'); ?>"
                        name="<?php echo $this->get_field_name('width'); ?>" type="text"
@@ -149,7 +149,7 @@ class geodir_homepage_map extends WP_Widget
         </p>
         <p>
             <label
-                for="<?php echo $this->get_field_id('heigh'); ?>"><?php _e('Map Height <small>(Default is : 425px) you can use px or vh here</small>', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('heigh'); ?>"><?php _e('Map Height <small>(Default is : 425px) you can use px or vh here</small>', 'geodirectory'); ?>
                 :
                 <input class="widefat" id="<?php echo $this->get_field_id('heigh'); ?>"
                        name="<?php echo $this->get_field_name('heigh'); ?>" type="text"
@@ -159,22 +159,22 @@ class geodir_homepage_map extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('maptype'); ?>"><?php _e(' Select Map View', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('maptype'); ?>"><?php _e(' Select Map View', 'geodirectory'); ?>
                 :
                 <select class="widefat" id="<?php echo $this->get_field_id('maptype'); ?>"
                         name="<?php echo $this->get_field_name('maptype'); ?>">
 
                     <option <?php if (isset($maptype) && $maptype == 'ROADMAP') {
                         echo 'selected="selected"';
-                    } ?> value="ROADMAP"><?php _e('Road Map', GEODIRECTORY_TEXTDOMAIN); ?></option>
+                    } ?> value="ROADMAP"><?php _e('Road Map', 'geodirectory'); ?></option>
                     <option <?php if (isset($maptype) && $maptype == 'SATELLITE') {
                         echo 'selected="selected"';
-                    } ?> value="SATELLITE"><?php _e('Satellite Map', GEODIRECTORY_TEXTDOMAIN); ?></option>
+                    } ?> value="SATELLITE"><?php _e('Satellite Map', 'geodirectory'); ?></option>
                     <option <?php if (isset($maptype) && $maptype == 'HYBRID') {
                         echo 'selected="selected"';
-                    } ?> value="HYBRID"><?php _e('Hybrid Map', GEODIRECTORY_TEXTDOMAIN); ?></option>
+                    } ?> value="HYBRID"><?php _e('Hybrid Map', 'geodirectory'); ?></option>
 					<option <?php selected($maptype, 'TERRAIN');?> 
-							value="TERRAIN"><?php _e('Terrain Map', GEODIRECTORY_TEXTDOMAIN); ?></option>
+							value="TERRAIN"><?php _e('Terrain Map', 'geodirectory'); ?></option>
                 </select>
             </label>
         </p>
@@ -185,7 +185,7 @@ class geodir_homepage_map extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('zoom'); ?>"><?php _e('Map Zoom level', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('zoom'); ?>"><?php _e('Map Zoom level', 'geodirectory'); ?>
                 :
                 <select class="widefat" id="<?php echo $this->get_field_id('zoom'); ?>"
                         name="<?php echo $this->get_field_name('zoom'); ?>"> <?php
@@ -206,7 +206,7 @@ class geodir_homepage_map extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('autozoom'); ?>"><?php _e('Map Auto Zoom ?', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('autozoom'); ?>"><?php _e('Map Auto Zoom ?', 'geodirectory'); ?>
                 :
                 <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('autozoom'); ?>"
                        name="<?php echo $this->get_field_name('autozoom'); ?>"<?php if ($autozoom) {
@@ -216,7 +216,7 @@ class geodir_homepage_map extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('child_collapse'); ?>"><?php _e('Collapse child/sub categories ?', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('child_collapse'); ?>"><?php _e('Collapse child/sub categories ?', 'geodirectory'); ?>
                 :
                 <input id="<?php echo $this->get_field_id('child_collapse'); ?>"
                        name="<?php echo $this->get_field_name('child_collapse'); ?>" type="checkbox" value="1"
@@ -226,7 +226,7 @@ class geodir_homepage_map extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('scrollwheel'); ?>"><?php _e('Enable mouse scroll zoom ?', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('scrollwheel'); ?>"><?php _e('Enable mouse scroll zoom ?', 'geodirectory'); ?>
                 :
                 <input id="<?php echo $this->get_field_id('scrollwheel'); ?>"
                        name="<?php echo $this->get_field_name('scrollwheel'); ?>" type="checkbox" value="1"

@@ -33,9 +33,21 @@ function geodir_on_wp_loaded()
 
     }
 
-    if (isset($_REQUEST['geodir_signup'])) {
+}
+
+/**
+ * Geodirectory Post or Get request handler on wp_loaded.
+ *
+ * @since 1.3.5
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ */
+function geodir_on_wp()
+{
+    if(geodir_is_page('login')) {
         geodir_user_signup();
     }
+
 }
 
 /**
@@ -133,7 +145,7 @@ function geodir_ajax_handler()
              */
             include_once(geodir_plugin_path() . '/geodirectory-admin/geodir_admin_ajax.php');
         } else {
-            wp_redirect(home_url() . '/?geodir_signup=true');
+            wp_redirect(geodir_login_url());
             exit();
         }
     }
@@ -179,7 +191,7 @@ function geodir_ajax_handler()
                     break;
             endswitch;
         } else {
-            wp_redirect(home_url() . '/?geodir_signup=true');
+            wp_redirect(geodir_login_url());
             exit();
         }
     }
@@ -188,7 +200,7 @@ function geodir_ajax_handler()
         if (current_user_can('manage_options')) {
             geodir_import_data();
         } else {
-            wp_redirect(home_url() . '/?geodir_signup=true');
+            wp_redirect(geodir_login_url());
             exit();
         }
     }
@@ -227,7 +239,7 @@ function geodir_ajax_handler()
                     break;
             endswitch;
         } else {
-            wp_redirect(home_url() . '/?geodir_signup=true');
+            wp_redirect(geodir_login_url());
             exit();
         }
     }
@@ -329,8 +341,13 @@ function geodir_ajax_handler()
 
                         global $current_user;
                         get_currentuserinfo();
-                        $post_type = get_post_type($_REQUEST['pid']);
-                        $lastid = wp_delete_post($_REQUEST['pid']);
+
+                        if(get_option('geodir_disable_perm_delete')){
+                            $lastid = wp_trash_post($_REQUEST['pid']);
+                        }else{
+                            $lastid = wp_delete_post($_REQUEST['pid']);
+                        }
+
                         if ($lastid && !is_wp_error($lastid))
                             wp_redirect($_SERVER['HTTP_REFERER']);
 
@@ -343,7 +360,7 @@ function geodir_ajax_handler()
 
         } else {
             if (isset($_SESSION['listing'])) unset($_SESSION['listing']);
-            wp_redirect(home_url() . '/?geodir_signup=true');
+            wp_redirect(geodir_login_url());
             exit();
         }
 

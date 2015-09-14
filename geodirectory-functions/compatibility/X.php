@@ -132,7 +132,7 @@ function geodir_x_home_sidebar()
 {
     //if ( geodir_is_geodir_page() ) {
     global $wp;
-    if ($wp->query_vars['page_id'] == geodir_location_page_id() || is_home() && !$_GET['geodir_signup']) {
+    if ($wp->query_vars['page_id'] == geodir_location_page_id() || is_home() && !geodir_is_page('login')) {
         echo '<div class="x-main full">';
         dynamic_sidebar('geodir_home_top');
         echo '</div>';

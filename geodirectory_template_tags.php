@@ -85,7 +85,7 @@ function geodir_templates_scripts()
 
 
     wp_register_script('geodirectory-lightbox-jquery', geodir_plugin_url() . '/geodirectory-assets/js/jquery.lightbox-0.5.min.js', array(), GEODIRECTORY_VERSION,true);
-    if($is_detail_page){wp_enqueue_script('geodirectory-lightbox-jquery');}
+    wp_enqueue_script('geodirectory-lightbox-jquery');
 
 
 
@@ -161,7 +161,7 @@ function geodir_templates_scripts()
             'url' => $ajax_url,
             'flash_swf_url' => includes_url('js/plupload/plupload.flash.swf'),
             'silverlight_xap_url' => includes_url('js/plupload/plupload.silverlight.xap'),
-            'filters' => array(array('title' => __('Allowed Files', GEODIRECTORY_TEXTDOMAIN), 'extensions' => '*')),
+            'filters' => array(array('title' => __('Allowed Files', 'geodirectory'), 'extensions' => '*')),
             'multipart' => true,
             'urlstream_upload' => true,
             'multi_selection' => false, // will be added per uploader
@@ -313,7 +313,7 @@ function geodir_templates_styles()
     wp_enqueue_style('geodirectory-frontend-rtl-style');
     }
 
-    wp_register_style('geodirectory-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css', array(), GEODIRECTORY_VERSION);
+    wp_register_style('geodirectory-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css', array(), GEODIRECTORY_VERSION);
     wp_enqueue_style('geodirectory-font-awesome');
 
 
@@ -381,7 +381,7 @@ function geodir_pagination($before = '', $after = '', $prelabel = '', $nxtlabel 
 			$end_no = min($paged * $posts_per_page, $numposts);
 			
 			if ($geodir_pagination_more_info != '') {
-				$pagination_info = '<div class="gd-pagination-details">' . wp_sprintf(__('Showing listings %d-%d of %d', GEODIRECTORY_TEXTDOMAIN), $start_no, $end_no, $numposts) . '</div>';
+				$pagination_info = '<div class="gd-pagination-details">' . wp_sprintf(__('Showing listings %d-%d of %d', 'geodirectory'), $start_no, $end_no, $numposts) . '</div>';
 				
 				if ($geodir_pagination_more_info == 'before') {
 					$before = $before . $pagination_info;
@@ -495,11 +495,11 @@ function geodir_add_sharelocation_scripts()
 
     $default_search_for_text = SEARCH_FOR_TEXT;
     if (get_option('geodir_search_field_default_text'))
-        $default_search_for_text = __(get_option('geodir_search_field_default_text'), GEODIRECTORY_TEXTDOMAIN);
+        $default_search_for_text = __(get_option('geodir_search_field_default_text'), 'geodirectory');
 
     $default_near_text = NEAR_TEXT;
     if (get_option('geodir_near_field_default_text'))
-        $default_near_text = __(get_option('geodir_near_field_default_text'), GEODIRECTORY_TEXTDOMAIN);
+        $default_near_text = __(get_option('geodir_near_field_default_text'), 'geodirectory');
 
     ?>
 
@@ -565,8 +565,8 @@ function geodir_add_sharelocation_scripts()
         function geocodeAddress($form) {
             Sgeocoder = new google.maps.Geocoder(); // Call the geocode function
 
-            if (jQuery('.snear', $form).val() == '' || ( jQuery('.sgeo_lat').val() != '' && jQuery('.sgeo_lon').val() != ''  ) || jQuery('.snear', $form).val().match("^<?php _e('In:',GEODIRECTORY_TEXTDOMAIN);?>")) {
-                if (jQuery('.snear', $form).val().match("^<?php _e('In:',GEODIRECTORY_TEXTDOMAIN);?>")) {
+            if (jQuery('.snear', $form).val() == '' || ( jQuery('.sgeo_lat').val() != '' && jQuery('.sgeo_lon').val() != ''  ) || jQuery('.snear', $form).val().match("^<?php _e('In:','geodirectory');?>")) {
+                if (jQuery('.snear', $form).val().match("^<?php _e('In:','geodirectory');?>")) {
                     jQuery(".snear", $form).val('');
                 }
                 jQuery($form).submit();
@@ -591,7 +591,7 @@ function geodir_add_sharelocation_scripts()
                             if (status == google.maps.GeocoderStatus.OK) {
                                 updateSearchPosition(results[0].geometry.location, $form);
                             } else {
-                                alert("<?php _e('Search was not successful for the following reason:',GEODIRECTORY_TEXTDOMAIN);?>" + status);
+                                alert("<?php _e('Search was not successful for the following reason:','geodirectory');?>" + status);
                             }
                         });
                 }
@@ -622,19 +622,19 @@ function geodir_add_sharelocation_scripts()
             var msg;
             switch (err.code) {
                 case err.UNKNOWN_ERROR:
-                    msg = "<?php _e('Unable to find your location',GEODIRECTORY_TEXTDOMAIN);?>";
+                    msg = "<?php _e('Unable to find your location','geodirectory');?>";
                     break;
                 case err.PERMISSION_DENINED:
-                    msg = "<?php _e('Permission denied in finding your location',GEODIRECTORY_TEXTDOMAIN);?>";
+                    msg = "<?php _e('Permission denied in finding your location','geodirectory');?>";
                     break;
                 case err.POSITION_UNAVAILABLE:
-                    msg = "<?php _e('Your location is currently unknown',GEODIRECTORY_TEXTDOMAIN);?>";
+                    msg = "<?php _e('Your location is currently unknown','geodirectory');?>";
                     break;
                 case err.BREAK:
-                    msg = "<?php _e('Attempt to find location took too long',GEODIRECTORY_TEXTDOMAIN);?>";
+                    msg = "<?php _e('Attempt to find location took too long','geodirectory');?>";
                     break;
                 default:
-                    msg = "<?php _e('Location detection not supported in browser',GEODIRECTORY_TEXTDOMAIN);?>";
+                    msg = "<?php _e('Location detection not supported in browser','geodirectory');?>";
             }
             jQuery('#info').html(msg);
         }

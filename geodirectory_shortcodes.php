@@ -36,7 +36,7 @@ function geodir_sc_add_listing($atts)
     $defaults = array(
         'pid' => '',
         'listing_type' => 'gd_place',
-        'login_msg' => __('You must login to post.', GEODIRECTORY_TEXTDOMAIN),
+        'login_msg' => __('You must login to post.', 'geodirectory'),
         'show_login' => false,
     );
     $params = shortcode_atts($defaults, $atts);
@@ -728,7 +728,7 @@ function geodir_sc_recent_reviews($atts) {
         $count = 1;
     }
 	
-	$title = !empty($params['title']) ? __($params['title'], GEODIRECTORY_TEXTDOMAIN) : '';
+	$title = !empty($params['title']) ? __($params['title'], 'geodirectory') : '';
 
     $comments_li = geodir_get_recent_reviews(30, $count, 100, false);
 

@@ -25,7 +25,7 @@ function geodir_register_taxonomies()
             // Allow taxonomie names to be translated
             if (!empty($args['args']['labels'])) {
                 foreach ($args['args']['labels'] as $key => $tax_label) {
-                    $args['args']['labels'][$key] = __($tax_label, GEODIRECTORY_TEXTDOMAIN);
+                    $args['args']['labels'][$key] = __($tax_label, 'geodirectory');
                 }
             }
 
@@ -42,7 +42,7 @@ function geodir_register_taxonomies()
 /**
  * Get available custom posttypes and taxonomies and register them.
  */
-_x('places', 'URL slug', GEODIRECTORY_TEXTDOMAIN);
+_x('places', 'URL slug', 'geodirectory');
 
 /**
  * Register the post types.
@@ -62,17 +62,15 @@ function geodir_register_post_types()
     if (is_array($post_types)):
 
         foreach ($post_types as $post_type => $args):
-            if ($post_type == 'gd_place' && get_option('geodir_disable_place_tax')) {
-                continue;
-            }
+
             if (!empty($args['rewrite']['slug'])) {
-                $args['rewrite']['slug'] = _x($args['rewrite']['slug'], 'URL slug', GEODIRECTORY_TEXTDOMAIN);
+                $args['rewrite']['slug'] = _x($args['rewrite']['slug'], 'URL slug', 'geodirectory');
             }
             $args = stripslashes_deep($args);
 
             if (!empty($args['labels'])) {
                 foreach ($args['labels'] as $key => $val) {
-                    $args['labels'][$key] = __($val, GEODIRECTORY_TEXTDOMAIN);// allow translation
+                    $args['labels'][$key] = __($val, 'geodirectory');// allow translation
                 }
             }
 
@@ -685,12 +683,12 @@ function geodir_custom_post_status()
 {
     // Vertual Page Status
     register_post_status('virtual', array(
-        'label' => _x('Virtual', 'page', GEODIRECTORY_TEXTDOMAIN),
+        'label' => _x('Virtual', 'page', 'geodirectory'),
         'public' => true,
         'exclude_from_search' => true,
         'show_in_admin_all_list' => true,
         'show_in_admin_status_list' => true,
-        'label_count' => _n_noop('Virtual <span class="count">(%s)</span>', 'Virtual <span class="count">(%s)</span>', GEODIRECTORY_TEXTDOMAIN),
+        'label_count' => _n_noop('Virtual <span class="count">(%s)</span>', 'Virtual <span class="count">(%s)</span>', 'geodirectory'),
     ));
 
     /**

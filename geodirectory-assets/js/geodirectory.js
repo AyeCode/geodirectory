@@ -117,6 +117,11 @@
 
 jQuery(document).ready(function () {
 
+    //toggle detail page tabs mobile menu
+    jQuery('#geodir-tab-mobile-menu').click(function(){
+        jQuery('#gd-tabs .geodir-tab-head').toggle();
+    });
+
     gd_infowindow = new google.maps.InfoWindow();
 
     // Chosen selects
@@ -173,7 +178,13 @@ jQuery(window).load(function () {
     jQuery('.geodir-tabs-content').show(); // set the tabs to show once js loaded to avoid double scroll bar in chrome
     tabNoRun = false;
     function activateTab(tab) {
-        //alert(tab);//return;
+
+        // change name for mobile tabs menu
+        tabName = urlHash = tab.find('a').html();
+        if(tabName && jQuery('.geodir-mobile-active-tab').length){
+            jQuery('.geodir-mobile-active-tab').html(tabName);
+        }
+
         if (tabNoRun) {
             tabNoRun = false;
             return;
@@ -482,3 +493,4 @@ function geodir_resize_rating_stars(re) {
 		$this.width(width_calc);
 	});
 }
+

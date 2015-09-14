@@ -63,22 +63,22 @@ function geodir_list_view_select()
             } else {
                 $sel = '';
             }?>
-            <option value=""><?php _e('View:', GEODIRECTORY_TEXTDOMAIN);?></option>
+            <option value=""><?php _e('View:', 'geodirectory');?></option>
             <option value="1" <?php if ($sel == '1') {
                 echo 'selected="selected"';
-            }?> ><?php _e('View: List', GEODIRECTORY_TEXTDOMAIN);?></option>
+            }?> ><?php _e('View: List', 'geodirectory');?></option>
             <option value="2" <?php if ($sel == '2') {
                 echo 'selected="selected"';
-            }?>><?php _e('View: Grid 2', GEODIRECTORY_TEXTDOMAIN);?></option>
+            }?>><?php _e('View: Grid 2', 'geodirectory');?></option>
             <option value="3" <?php if ($sel == '3') {
                 echo 'selected="selected"';
-            }?>><?php _e('View: Grid 3', GEODIRECTORY_TEXTDOMAIN);?></option>
+            }?>><?php _e('View: Grid 3', 'geodirectory');?></option>
             <option value="4" <?php if ($sel == '4') {
                 echo 'selected="selected"';
-            }?>><?php _e('View: Grid 4', GEODIRECTORY_TEXTDOMAIN);?></option>
+            }?>><?php _e('View: Grid 4', 'geodirectory');?></option>
             <option value="5" <?php if ($sel == '5') {
                 echo 'selected="selected"';
-            }?>><?php _e('View: Grid 5', GEODIRECTORY_TEXTDOMAIN);?></option>
+            }?>><?php _e('View: Grid 5', 'geodirectory');?></option>
 
         </select>
     </div>
@@ -139,7 +139,7 @@ function geodir_max_excerpt($charlength)
          *
          * @since 1.0.0
          */
-        $out .= apply_filters('geodir_max_excerpt_end', __('Read more [...]', GEODIRECTORY_TEXTDOMAIN));
+        $out .= apply_filters('geodir_max_excerpt_end', __('Read more [...]', 'geodirectory'));
         $out .= '</a>';
 
     } else {
@@ -152,7 +152,7 @@ function geodir_max_excerpt($charlength)
              *
              * @since 1.0.0
              */
-            $out .= apply_filters('geodir_max_excerpt_end', __('Read more [...]', GEODIRECTORY_TEXTDOMAIN));
+            $out .= apply_filters('geodir_max_excerpt_end', __('Read more [...]', 'geodirectory'));
             $out .= '</a>';
         } else {
             $out .= $excerpt;
@@ -286,7 +286,7 @@ function geodir_send_inquiry($request)
     do_action('geodir_after_send_enquiry', $request, 'Enquiry');
 
     $client_message = $frnd_comments;
-    $client_message .= '<br>' . __('From :', GEODIRECTORY_TEXTDOMAIN) . ' ' . $yourname . '<br>' . __('Phone :', GEODIRECTORY_TEXTDOMAIN) . ' ' . $inq_phone . '<br><br>' . __('Sent from', GEODIRECTORY_TEXTDOMAIN) . ' - <b><a href="' . trailingslashit(home_url()) . '">' . get_option('blogname') . '</a></b>.';
+    $client_message .= '<br>' . __('From :', 'geodirectory') . ' ' . $yourname . '<br>' . __('Phone :', 'geodirectory') . ' ' . $inq_phone . '<br><br>' . __('Sent from', 'geodirectory') . ' - <b><a href="' . trailingslashit(home_url()) . '">' . get_option('blogname') . '</a></b>.';
     /**
      * Filter client message text.
      *
@@ -627,12 +627,12 @@ function geodir_display_sort_options()
         foreach ($sort_options as $sort) {
 			$sort = stripslashes_deep($sort); // strip slashes
 
-            $label = __($sort->site_title, GEODIRECTORY_TEXTDOMAIN);
+            $label = __($sort->site_title, 'geodirectory');
 
             if ($sort->field_type == 'random') {
                 $key = $sort->field_type;
                 ($sort_by == $key || ($sort->is_default == '1' && !isset($_REQUEST['sort_by']))) ? $selected = 'selected="selected"' : $selected = '';
-                $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg('sort_by', $key) ) . '">' . __($label, GEODIRECTORY_TEXTDOMAIN) . '</option>';
+                $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg('sort_by', $key) ) . '">' . __($label, 'geodirectory') . '</option>';
             }
 
             if ($sort->htmlvar_name == 'comment_count') {
@@ -645,7 +645,7 @@ function geodir_display_sort_options()
                 if ($sort->asc_title)
                     $label = $sort->asc_title;
                 ($sort_by == $key || ($sort->is_default == '1' && $sort->default_order == $key && !isset($_REQUEST['sort_by']))) ? $selected = 'selected="selected"' : $selected = '';
-                $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg('sort_by', $key) ) . '">' . __($label, GEODIRECTORY_TEXTDOMAIN) . '</option>';
+                $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg('sort_by', $key) ) . '">' . __($label, 'geodirectory') . '</option>';
             }
 
             if ($sort->sort_desc) {
@@ -654,7 +654,7 @@ function geodir_display_sort_options()
                 if ($sort->desc_title)
                     $label = $sort->desc_title;
                 ($sort_by == $key || ($sort->is_default == '1' && $sort->default_order == $key && !isset($_REQUEST['sort_by']))) ? $selected = 'selected="selected"' : $selected = '';
-                $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg('sort_by', $key) ) . '">' . __($label, GEODIRECTORY_TEXTDOMAIN) . '</option>';
+                $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg('sort_by', $key) ) . '">' . __($label, 'geodirectory') . '</option>';
             }
 
         }
@@ -669,7 +669,7 @@ function geodir_display_sort_options()
             <select name="sort_by" id="sort_by" onchange="javascript:window.location=this.value;">
 
                 <option
-                    value="<?php echo esc_url( add_query_arg('sort_by', '') );?>" <?php if ($sort_by == '') echo 'selected="selected"';?>><?php _e('Sort By', GEODIRECTORY_TEXTDOMAIN);?></option><?php
+                    value="<?php echo esc_url( add_query_arg('sort_by', '') );?>" <?php if ($sort_by == '') echo 'selected="selected"';?>><?php _e('Sort By', 'geodirectory');?></option><?php
 
                 echo $sort_field_options;?>
 
@@ -723,7 +723,7 @@ function geodir_related_posts_display($request)
         $before_title = (isset($request['before_title']) && !empty($request['before_title'])) ? $request['before_title'] : '';
         $after_title = (isset($request['after_title']) && !empty($request['after_title'])) ? $request['after_title'] : '';
 
-        $title = (isset($request['title']) && !empty($request['title'])) ? $request['title'] : __('Related Listings', GEODIRECTORY_TEXTDOMAIN);
+        $title = (isset($request['title']) && !empty($request['title'])) ? $request['title'] : __('Related Listings', 'geodirectory');
         $post_number = (isset($request['post_number']) && !empty($request['post_number'])) ? $request['post_number'] : '5';
         $relate_to = (isset($request['relate_to']) && !empty($request['relate_to'])) ? $request['relate_to'] : 'category';
         $layout = (isset($request['layout']) && !empty($request['layout'])) ? $request['layout'] : 'gridview_onehalf';
@@ -1006,9 +1006,9 @@ function geodir_add_meta_keywords()
         }
     } elseif ((is_category() || is_tag()) && isset($current_term->taxonomy) && in_array($current_term->taxonomy, $geodir_taxonomies)) {
         if (is_category()) {
-            $meta_desc .= __("Posts related to Category:", GEODIRECTORY_TEXTDOMAIN) . " " . ucfirst(single_cat_title("", FALSE));
+            $meta_desc .= __("Posts related to Category:", 'geodirectory') . " " . ucfirst(single_cat_title("", FALSE));
         } elseif (is_tag()) {
-            $meta_desc .= __("Posts related to Tag:", GEODIRECTORY_TEXTDOMAIN) . " " . ucfirst(single_tag_title("", FALSE));
+            $meta_desc .= __("Posts related to Tag:", 'geodirectory') . " " . ucfirst(single_tag_title("", FALSE));
         }
     } elseif (isset($current_term->taxonomy) && in_array($current_term->taxonomy, $geodir_taxonomies)) {
         $meta_desc .= isset($current_term->description) ? $current_term->description : '';
@@ -1032,7 +1032,7 @@ function geodir_add_meta_keywords()
     $gd_city = $geodir_location_manager && isset($godir_location_terms['gd_city']) ? $godir_location_terms['gd_city'] : NULL;
     $gd_region = $geodir_location_manager && isset($godir_location_terms['gd_region']) ? $godir_location_terms['gd_region'] : NULL;
     $gd_country = $geodir_location_manager && isset($godir_location_terms['gd_country']) ? $godir_location_terms['gd_country'] : NULL;
-    $replace_location = __('Everywhere', GEODIRECTORY_TEXTDOMAIN);
+    $replace_location = __('Everywhere', 'geodirectory');
     $location_id = NULL;
     if ($geodir_location_manager) {
         $sql = $wpdb->prepare("SELECT location_id FROM " . POST_LOCATION_TABLE . " WHERE city_slug=%s ORDER BY location_id ASC LIMIT 1", array($gd_city));
@@ -1044,7 +1044,7 @@ function geodir_add_meta_keywords()
             $replace_location = geodir_get_current_location(array('what' => 'region', 'echo' => false));
         } elseif ($location_type == 'country') {
             $replace_location = geodir_get_current_location(array('what' => 'country', 'echo' => false));
-            $replace_location = __($replace_location, GEODIRECTORY_TEXTDOMAIN);
+            $replace_location = __($replace_location, 'geodirectory');
         }
         $country = get_query_var('gd_country');
         $region = get_query_var('gd_region');
@@ -1087,10 +1087,10 @@ function geodir_add_meta_keywords()
                             $category_desc = isset($option['gd_cat_loc_desc']) && trim($option['gd_cat_loc_desc']) != '' ? trim($option['gd_cat_loc_desc']) : $category_desc;
                         }
                     }
-                    $geodir_meta_desc = __("Posts related to Category:", GEODIRECTORY_TEXTDOMAIN) . " " . ucfirst(single_cat_title("", FALSE)) . '. ' . $category_desc;
+                    $geodir_meta_desc = __("Posts related to Category:", 'geodirectory') . " " . ucfirst(single_cat_title("", FALSE)) . '. ' . $category_desc;
                 }
             } else if ($geodir_is_tag) {
-                $geodir_meta_desc = __("Posts related to Tag:", GEODIRECTORY_TEXTDOMAIN) . " " . ucfirst(single_tag_title("", FALSE)) . '. ' . $geodir_meta_desc;
+                $geodir_meta_desc = __("Posts related to Tag:", 'geodirectory') . " " . ucfirst(single_tag_title("", FALSE)) . '. ' . $geodir_meta_desc;
             }
         }
     }
@@ -1205,55 +1205,55 @@ function geodir_detail_page_tabs_array()
      * @since 1.0.0
      */
     $arr_tabs['post_profile'] = array(
-        'heading_text' => __('Profile', GEODIRECTORY_TEXTDOMAIN),
+        'heading_text' => __('Profile', 'geodirectory'),
         'is_active_tab' => true,
         'is_display' => apply_filters('geodir_detail_page_tab_is_display', true, 'post_profile'),
         'tab_content' => ''
     );
     $arr_tabs['post_info'] = array(
-        'heading_text' => __('More Info', GEODIRECTORY_TEXTDOMAIN),
+        'heading_text' => __('More Info', 'geodirectory'),
         'is_active_tab' => false,
         'is_display' => apply_filters('geodir_detail_page_tab_is_display', true, 'post_info'),
         'tab_content' => ''
     );
 
     $arr_tabs['post_images'] = array(
-        'heading_text' => __('Photo', GEODIRECTORY_TEXTDOMAIN),
+        'heading_text' => __('Photo', 'geodirectory'),
         'is_active_tab' => false,
         'is_display' => apply_filters('geodir_detail_page_tab_is_display', true, 'post_images'),
         'tab_content' => ''
     );
 
     $arr_tabs['post_video'] = array(
-        'heading_text' => __('Video', GEODIRECTORY_TEXTDOMAIN),
+        'heading_text' => __('Video', 'geodirectory'),
         'is_active_tab' => false,
         'is_display' => apply_filters('geodir_detail_page_tab_is_display', true, 'post_video'),
         'tab_content' => ''
     );
 
     $arr_tabs['special_offers'] = array(
-        'heading_text' => __('Special Offers', GEODIRECTORY_TEXTDOMAIN),
+        'heading_text' => __('Special Offers', 'geodirectory'),
         'is_active_tab' => false,
         'is_display' => apply_filters('geodir_detail_page_tab_is_display', true, 'special_offers'),
         'tab_content' => ''
     );
 
     $arr_tabs['post_map'] = array(
-        'heading_text' => __('Map', GEODIRECTORY_TEXTDOMAIN),
+        'heading_text' => __('Map', 'geodirectory'),
         'is_active_tab' => false,
         'is_display' => apply_filters('geodir_detail_page_tab_is_display', true, 'post_map'),
         'tab_content' => ''
     );
 
     $arr_tabs['reviews'] = array(
-        'heading_text' => __('Reviews', GEODIRECTORY_TEXTDOMAIN),
+        'heading_text' => __('Reviews', 'geodirectory'),
         'is_active_tab' => false,
         'is_display' => apply_filters('geodir_detail_page_tab_is_display', true, 'reviews'),
         'tab_content' => 'review display'
     );
 
     $arr_tabs['related_listing'] = array(
-        'heading_text' => __('Related Listing', GEODIRECTORY_TEXTDOMAIN),
+        'heading_text' => __('Related Listing', 'geodirectory'),
         'is_active_tab' => false,
         'is_display' => apply_filters('geodir_detail_page_tab_is_display', true, 'related_listing'),
         'tab_content' => ''
@@ -1368,6 +1368,8 @@ function geodir_show_detail_page_tabs()
         $map_args['enable_jason_on_load'] = true;
         $map_args['enable_map_direction'] = true;
         $map_args['map_class_name'] = 'geodir-map-detail-page';
+        $map_args['maptype'] = (!empty($post->post_mapview)) ? $post->post_mapview : 'ROADMAP';
+
 
     } elseif (geodir_is_page('preview')) {
 
@@ -1422,9 +1424,25 @@ function geodir_show_detail_page_tabs()
 
     }
 
+
+    $arr_detail_page_tabs = geodir_detail_page_tabs_list();// get this sooner so we can get the active tab for the user
+
+    $active_tab_name = '';
+    foreach($arr_detail_page_tabs as $tabs){
+        if(isset($tabs['is_active_tab']) && $tabs['is_active_tab'] && isset($tabs['heading_text']) && $tabs['heading_text']){
+            $active_tab_name = __($tabs['heading_text'],'geodirectory');
+        }
+    }
     ?>
 
     <div class="geodir-tabs" id="gd-tabs" style="position:relative;">
+
+        <div id="geodir-tab-mobile-menu" >
+            <i class="fa fa-bars"></i>
+            <span class="geodir-mobile-active-tab"><?php echo $active_tab_name;?></span>
+            <i class="fa fa-sort-desc"></i>
+        </div>
+
         <dl class="geodir-tab-head">
             <?php
             /**
@@ -1435,7 +1453,7 @@ function geodir_show_detail_page_tabs()
              */
             do_action('geodir_before_tab_list'); ?>
             <?php
-            $arr_detail_page_tabs = geodir_detail_page_tabs_list();
+
 
             foreach ($arr_detail_page_tabs as $tab_index => $detail_page_tab) {
                 if ($detail_page_tab['is_display']) {
@@ -1443,7 +1461,7 @@ function geodir_show_detail_page_tabs()
                     <dt></dt> <!-- added to comply with validation -->
                     <dd <?php if ($detail_page_tab['is_active_tab']){ ?>class="geodir-tab-active"<?php }?> >
                         <a data-tab="#<?php echo $tab_index;?>"
-                           data-status="enable"><?php echo $detail_page_tab['heading_text'];?></a>
+                           data-status="enable"><?php _e($detail_page_tab['heading_text'],'geodirectory');?></a>
                     </dd>
 
                     <?php
@@ -1793,7 +1811,7 @@ function geodir_get_recent_reviews($g_size = 60, $no_comments = 10, $comment_len
         $post_title = get_the_title($comment_post_ID);
         $permalink = get_permalink($comment_post_ID);
         $comment_permalink = $permalink . "#comment-" . $comment->comment_ID;
-        $read_more = '<a class="comment_excerpt" href="' . $comment_permalink . '">' . __('Read more', GEODIRECTORY_TEXTDOMAIN) . '</a>';
+        $read_more = '<a class="comment_excerpt" href="' . $comment_permalink . '">' . __('Read more', 'geodirectory') . '</a>';
 
         $comment_content_length = strlen($comment_content);
         if ($comment_content_length > $comment_lenth) {
@@ -1853,7 +1871,7 @@ function geodir_get_recent_reviews($g_size = 60, $no_comments = 10, $comment_len
             $comments_echo .= '<span class="geodir_reviewer_content">';
             //if($comment->user_id){$comments_echo .= '<a href="'.get_author_posts_url( $comment->user_id ).'">';}
             $comments_echo .= '<span class="geodir_reviewer_author">' . $comment->comment_author . '</span> ';
-            $comments_echo .= '<span class="geodir_reviewer_reviewed">' . __('reviewed', GEODIRECTORY_TEXTDOMAIN) . '</span> ';
+            $comments_echo .= '<span class="geodir_reviewer_reviewed">' . __('reviewed', 'geodirectory') . '</span> ';
             //if($comment->user_id){'</a> ';}
             $comments_echo .= '<a href="' . $permalink . '" class="geodir_reviewer_title">' . $post_title . '</a>';
             $comments_echo .= geodir_get_rating_stars($comment->overall_rating, $comment_post_ID);
@@ -1883,7 +1901,7 @@ function geodir_home_map_cats_key_value_array()
     $return = array();
     if (!empty($post_types)) {
         foreach ($post_types as $key => $post_type) {
-            $post_type_name = __($post_type->labels->singular_name, GEODIRECTORY_TEXTDOMAIN) . ' ' . __('Categories', GEODIRECTORY_TEXTDOMAIN);
+            $post_type_name = __($post_type->labels->singular_name, 'geodirectory') . ' ' . __('Categories', 'geodirectory');
             $taxonomies = geodir_get_taxonomies($key);
             $cat_taxonomy = !empty($taxonomies[0]) ? $taxonomies[0] : NULL;
             $cat_terms = $cat_taxonomy ? get_terms($cat_taxonomy) : NULL;
@@ -1913,7 +1931,7 @@ function geodir_twitter_tweet_button()
 {
     ?>
     <a href="http://twitter.com/share"
-       class="twitter-share-button"><?php _e('Tweet', GEODIRECTORY_TEXTDOMAIN); ?></a>
+       class="twitter-share-button"><?php _e('Tweet', 'geodirectory'); ?></a>
     <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
 <?php
 }
@@ -1993,7 +2011,7 @@ function geodir_share_this_button_code()
                 "url": "<?php echo geodir_curPageURL();?>",
                 "title": "<?php echo $post->post_title;?>",
                 "type": "chicklet",
-                "text": "<?php _e( 'Share', GEODIRECTORY_TEXTDOMAIN );?>"
+                "text": "<?php _e( 'Share', 'geodirectory' );?>"
             });</script>
 
     </div>

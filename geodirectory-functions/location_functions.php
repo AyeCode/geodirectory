@@ -151,7 +151,7 @@ function geodir_get_country_dl($post_country = '', $prefix = '')
     if ($post_country == '')
         $selected = 'selected="selected"';
 
-    $out_put = '<option ' . $selected . ' value="">' . __('Select Country', GEODIRECTORY_TEXTDOMAIN) . '</option>';
+    $out_put = '<option ' . $selected . ' value="">' . __('Select Country', 'geodirectory') . '</option>';
     foreach ($countries as $country) {
         $ccode = $ISO2[$country];
 
@@ -159,7 +159,7 @@ function geodir_get_country_dl($post_country = '', $prefix = '')
         if ($post_country == $country)
             $selected = ' selected="selected" ';
 
-        $out_put .= '<option ' . $selected . ' value="' . $country . '" data-country_code="' . $ccode . '">' . __($country, GEODIRECTORY_TEXTDOMAIN) . '</option>';
+        $out_put .= '<option ' . $selected . ' value="' . $country . '" data-country_code="' . $ccode . '">' . __($country, 'geodirectory') . '</option>';
     }
 
     echo $out_put;
@@ -272,7 +272,7 @@ function geodir_add_new_location($location_info = array())
         $location_lat = ($location_info['geo_lat'] != '') ? $location_info['geo_lat'] : '';
         $location_lng = ($location_info['geo_lng'] != '') ? $location_info['geo_lng'] : '';
         $is_default = isset($location_info['is_default']) ? $location_info['is_default'] : '';
-        $country_slug = create_location_slug(__($location_country, GEODIRECTORY_TEXTDOMAIN));
+        $country_slug = create_location_slug(__($location_country, 'geodirectory'));
         $region_slug = create_location_slug($location_region);
         $city_slug = create_location_slug($location_city);
 

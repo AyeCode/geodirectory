@@ -9,7 +9,7 @@
 
 global $wpdb;
 
-if (get_option(GEODIRECTORY_TEXTDOMAIN . '_db_version') != GEODIRECTORY_VERSION) {
+if (get_option('geodirectory' . '_db_version') != GEODIRECTORY_VERSION) {
     /**
      * Include custom database table related functions.
      *
@@ -34,10 +34,18 @@ if (get_option(GEODIRECTORY_TEXTDOMAIN . '_db_version') != GEODIRECTORY_VERSION)
         add_action('init', 'geodir_upgrade_150', 11);
     }
 
+    if (GEODIRECTORY_VERSION <= '1.5.2') {
+        add_action('init', 'geodir_upgrade_152', 11);
+    }
+
+    if (GEODIRECTORY_VERSION <= '1.5.3') {
+        add_action('init', 'geodir_upgrade_153', 11);
+    }
+
 
     add_action('init', 'gd_fix_cpt_rewrite_slug', 11);// this needs to be kept for a few versions
 
-    update_option(GEODIRECTORY_TEXTDOMAIN . '_db_version', GEODIRECTORY_VERSION);
+    update_option('geodirectory' . '_db_version', GEODIRECTORY_VERSION);
 
 }
 
@@ -104,6 +112,27 @@ function geodir_upgrade_148(){
 }
 
 
+/**
+ * Handles upgrade for geodirectory versions <= 1.5.3.
+ *
+ * @since 1.5.3
+ * @package GeoDirectory
+ */
+function geodir_upgrade_153(){
+    geodir_create_page(esc_sql(_x('gd-info', 'page_slug', 'geodirectory')), 'geodir_info_page', __('Info', 'geodirectory'), '');
+    geodir_create_page(esc_sql(_x('gd-login', 'page_slug', 'geodirectory')), 'geodir_login_page', __('Login', 'geodirectory'), '');
+}
+
+/**
+ * Handles upgrade for geodirectory versions <= 1.5.2.
+ *
+ * @since 1.5.2
+ * @package GeoDirectory
+ */
+function geodir_upgrade_152(){
+    gd_fix_address_detail_table_limit();
+}
+
 
 /**
  * Handles upgrade for review table.
@@ -116,22 +145,6 @@ function geodir_upgrade_148(){
 function geodir_update_review_db()
 {
     global $wpdb, $plugin_prefix;
-// Add columns to review table
-    geodir_add_column_if_not_exist(GEODIR_REVIEW_TABLE, 'post_status', 'INT(11) DEFAULT NULL');
-    geodir_add_column_if_not_exist(GEODIR_REVIEW_TABLE, 'post_date', 'DATETIME NOT NULL');
-    geodir_add_column_if_not_exist(GEODIR_REVIEW_TABLE, 'post_city', 'varchar(30) NULL DEFAULT NULL');
-    geodir_add_column_if_not_exist(GEODIR_REVIEW_TABLE, 'post_region', 'varchar(30) NULL DEFAULT NULL');
-    geodir_add_column_if_not_exist(GEODIR_REVIEW_TABLE, 'post_country', 'varchar(30) NULL DEFAULT NULL');
-    geodir_add_column_if_not_exist(GEODIR_REVIEW_TABLE, 'post_latitude', 'varchar(20) NULL DEFAULT NULL');
-    geodir_add_column_if_not_exist(GEODIR_REVIEW_TABLE, 'post_longitude', 'varchar(20) NULL DEFAULT NULL');
-    geodir_add_column_if_not_exist(GEODIR_REVIEW_TABLE, 'comment_content', 'TEXT NULL DEFAULT NULL');
-
-    // this should not be needed anymore becasue of geodir_fix_review_location()
-    /*$reviews = $wpdb->get_results("SELECT * FROM ".GEODIR_REVIEW_TABLE." WHERE post_city='' OR post_city IS NULL OR post_latitude='' OR post_latitude IS NULL");
-    foreach($reviews as $review){
-    $location = $wpdb->get_row("SELECT * FROM ".$plugin_prefix.$review->post_type."_detail WHERE post_id=".$review->post_id);
-    $wpdb->query($wpdb->prepare("UPDATE ".GEODIR_REVIEW_TABLE." gdr SET gdr.post_city=%s, gdr.post_region=%s , gdr.post_country=%s , gdr.post_latitude=%s, gdr.post_longitude=%s WHERE gdr.id=%d",$location->post_city,$location->post_region,$location->post_country,$review->id,$location->post_latitude,$location->post_longitude));
-    }*/
 
     geodir_fix_review_date();
     geodir_fix_review_post_status();
@@ -716,6 +729,29 @@ function gd_fix_cpt_rewrite_slug()
 }
 
 
+/**
+ * Fixes the address field limit of 30 to 50 in details table.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ */
+function gd_fix_address_detail_table_limit()
+{
+    global $wpdb;
+
+    $all_postypes = geodir_get_posttypes();
+
+    if (!empty($all_postypes)) {
+        foreach ($all_postypes as $key) {
+            // update each GD CTP
+
+            @$wpdb->query("ALTER TABLE " . $wpdb->prefix . "geodir_" . $key . "_detail MODIFY post_city VARCHAR( 50 ) NULL,MODIFY post_region VARCHAR( 50 ) NULL,MODIFY post_country VARCHAR( 50 ) NULL");
 
 
+
+        }
+
+    }
+}
 

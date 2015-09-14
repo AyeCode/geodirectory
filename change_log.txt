@@ -1,3 +1,10 @@
+v1.5.3
+If tax query has 'relation' set then it will throw WARNING in wp_list_pluck - FIXED
+listing-preview page template removed as details page template now used - CHANGED
+In some cases with https when saving a listing it can change image url - FIXED
+Cyrillic letters does not supported in GD Import - FIXED
+Event map infowindow not showing dates properly - FIXED
+
 v1.5.2
 Map view type TERRAIN option added for all the maps - FIXED
 Upgrade function `gd_fix_cpt_rewrite_slug` set to run on every upgrade incase a user misses a version - CHANGED
@@ -6,6 +13,17 @@ Avada box style not working for some pages - FIXED
 Share this links to details pages can sometimes cause JS error from jQuery history hash object - FIXED
 WPML, other translation links on details pages can be broken when viewing on non default language - FIXED
 Filter added to change recent reviews excerpt length - ADDED
+Details table limiting city,region,country names to 30 char, some region names are longer, changed to 50 char - FIXED
+Image file for custom field not enlarging using modal if displayed as tab on detail page - FIXED
+IE map infowindow can appear very small in height - FIXED
+Added filter for adding the location to the url, so it can be filtered from addons - ADDED
+Popup custom field image file in lightbox modal not working on home page and listing pages - FIXED
+Details map and details page map widget mapview not changing from ROADMAP - FIXED
+Details page mobile tabs view improved - CHANGED
+General option added to set if user deleted posts go to trash or are permanently deleted - ADDED
+Date custom field default format of mm/dd/yy added and descriptions of each format added for better understanding - CHANGED
+Changed textdomain from defined constant to a string 'geodirectory' - CHANGED
+Awesome font upgraded with new Awesome font version 4.4.0 - CHANGED
 
 v1.5.1
 Default sort by titles not translatable - FIXED

@@ -179,7 +179,7 @@ function enfold_detail_title($page, $class)
 {
     //echo '###'.$page;
     global $wp;
-    if (isset($wp->query_vars['page_id']) && $wp->query_vars['page_id'] == geodir_location_page_id() && !isset($_GET['geodir_signup'])) {
+    if (isset($wp->query_vars['page_id']) && $wp->query_vars['page_id'] == geodir_location_page_id() && !geodir_is_page('login')) {
         add_action('avia_breadcrumbs_trail', 'enfold_detail_breadcrum', 8, 2);
         echo avia_title();
     } elseif ($page == 'details-page') {
@@ -253,7 +253,7 @@ function enfold_detail_breadcrum($trail, $args)
  */
 function enfold_action_wrapper_content_open($type = '', $id = '', $class = '')
 {
-    if (is_home() && isset($_GET['geodir_signup'])) {
+    if (geodir_is_page('login')) {
         echo "<main class='template-page content twelve alpha units " . $class . "' " . avia_markup_helper(array('context' => 'content', 'post_type' => 'page', 'echo' => false)) . ">";
     } else {
         echo "<main class='template-page content " . avia_layout_class('content', false) . " units " . $class . "' " . avia_markup_helper(array('context' => 'content', 'post_type' => 'page', 'echo' => false)) . ">";
