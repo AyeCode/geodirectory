@@ -424,7 +424,7 @@ if (!function_exists('geodir_create_tables')) {
 							  show_on_detail enum( '0', '1' ) NOT NULL DEFAULT '1',
 							  show_as_tab enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  for_admin_use enum( '0', '1' ) NOT NULL DEFAULT '0',
-							  packages varchar(255) NOT NULL DEFAULT ',0,',
+							  packages text NULL DEFAULT NULL,
 							  cat_sort text NULL DEFAULT NULL,
 							  cat_filter text NULL DEFAULT NULL,
 							  extra_fields text NULL DEFAULT NULL,

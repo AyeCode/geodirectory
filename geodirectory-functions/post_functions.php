@@ -1850,13 +1850,16 @@ if (!function_exists('geodir_get_infowindow_html')) {
                                     } ?>"><img alt="bubble image" style="max-height:50px;"
                                                src="<?php echo $post_images[0]; ?>"/></a></div>
                             <?php
+                            }else{
+                                echo '<div class="geodir-bubble_image"></div>';
                             }
                         } else {
                             if ($image = geodir_show_featured_image($ID, 'widget-thumb', true, false, $postinfo_obj->featured_image)) {
                                 ?>
-                                <div class="geodir-bubble_image"><a
-                                        href="<?php echo $plink; ?>"><?php echo $image; ?></a></div>
+                                <div class="geodir-bubble_image"><a href="<?php echo $plink; ?>"><?php echo $image; ?></a></div>
                             <?php
+                            }else{
+                                echo '<div class="geodir-bubble_image"></div>';
                             }
                         }
                         ?>
