@@ -4,6 +4,7 @@ listing-preview page template removed as details page template now used - CHANGE
 In some cases with https when saving a listing it can change image url - FIXED
 Cyrillic letters does not supported in GD Import - FIXED
 Event map infowindow not showing dates properly - FIXED
+Conflicts due to same id for password field in login and register form - FIXED
 
 v1.5.2
 Map view type TERRAIN option added for all the maps - FIXED
