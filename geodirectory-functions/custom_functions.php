@@ -1869,10 +1869,10 @@ function geodir_get_recent_reviews($g_size = 60, $no_comments = 10, $comment_len
             $comments_echo .= "</span>\n";
 
             $comments_echo .= '<span class="geodir_reviewer_content">';
-            //if($comment->user_id){$comments_echo .= '<a href="'.get_author_posts_url( $comment->user_id ).'">';}
+            if($comment->user_id){$comments_echo .= '<a href="'.get_author_posts_url( $comment->user_id ).'">';}
             $comments_echo .= '<span class="geodir_reviewer_author">' . $comment->comment_author . '</span> ';
+            if($comment->user_id){$comments_echo .= '</a>';}
             $comments_echo .= '<span class="geodir_reviewer_reviewed">' . __('reviewed', 'geodirectory') . '</span> ';
-            //if($comment->user_id){'</a> ';}
             $comments_echo .= '<a href="' . $permalink . '" class="geodir_reviewer_title">' . $post_title . '</a>';
             $comments_echo .= geodir_get_rating_stars($comment->overall_rating, $comment_post_ID);
             $comments_echo .= '<p class="geodir_reviewer_text">' . $comment_excerpt . '';

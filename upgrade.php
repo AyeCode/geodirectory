@@ -343,6 +343,9 @@ function gd_install_theme_compat()
         'geodir_theme_compat_code' => ''
     );
 
+//Jobby
+    $theme_compat['Jobby'] = $theme_compat['Directory_Starter'];
+
 //Avada
     $theme_compat['Avada'] = array(
         'geodir_wrapper_open_id' => '',
