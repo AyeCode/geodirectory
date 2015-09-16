@@ -5,6 +5,9 @@ In some cases with https when saving a listing it can change image url - FIXED
 Cyrillic letters does not supported in GD Import - FIXED
 Event map infowindow not showing dates properly - FIXED
 Conflicts due to same id for password field in login and register form - FIXED
+Jobby compatibility pack - ADDED
+Avatar links to the member page are inconsistent - FIXED
+Map popups with no image can be malformed on some themes - FIXED
 
 v1.5.2
 Map view type TERRAIN option added for all the maps - FIXED
