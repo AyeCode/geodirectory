@@ -132,18 +132,24 @@ function get_markers()
     }
 
 
+
+
     /**
-     * @todo below code is for testing and should be removed in the future by stiofan
+     * Filter the marker query search SQL, values are replaces with %s or %d.
+     *
+     * @since 1.5.3
+     *
+     * @param string $search The SQL query for search/where.
      */
-    /*
-    if(isset($_REQUEST['zl']) && $_REQUEST['zl']) {
-        $search .= " AND pd.post_latitude > %s AND pd.post_latitude < %s AND pd.post_longitude > %s AND pd.post_longitude < %s ";
-        $main_query_array[] = min($_REQUEST['lat_sw'],$_REQUEST['lat_ne']);
-        $main_query_array[] = max($_REQUEST['lat_sw'],$_REQUEST['lat_ne']);
-        $main_query_array[] = max($_REQUEST['lon_sw'],$_REQUEST['lon_ne']);
-        $main_query_array[] = min($_REQUEST['lon_sw'],$_REQUEST['lon_ne']);
-    }
-    */
+    $search = apply_filters('geodir_marker_search',$search);
+    /**
+     * Filter the marker query search SQL values %s and %d, this is an array of values.
+     *
+     * @since 1.5.3
+     *
+     * @param array $main_query_array The SQL query values for search/where.
+     */
+    $main_query_array = apply_filters('geodir_marker_main_query_array',$main_query_array);
 
     $gd_posttype = '';
     if (isset($_REQUEST['gd_posttype']) && $_REQUEST['gd_posttype'] != '') {
@@ -221,6 +227,17 @@ function get_markers()
     $cat_content_info = array();
     $content_data = array();
     $post_ids = array();
+
+    /**
+     * Called before marker data is processed into JSON.
+     *
+     * Called before marker data is processed into JSON, this action can be used to change the format or add/remove markers.
+     *
+     * @since 1.5.3
+     * @param object $catinfo The posts object containing all marker data.
+     * @see 'geodir_after_marker_post_process'
+     */
+    $catinfo = apply_filters('geodir_before_marker_post_process', $catinfo);
 
     /**
      * Called before marker data is processed into JSON.

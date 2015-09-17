@@ -740,6 +740,9 @@
                 if (marker.title)
                     options.title = marker.title;
 
+                if (marker.label)
+                    options.label = marker.label;
+
                 if (marker.draggable)
                     options.draggable = marker.draggable;
 

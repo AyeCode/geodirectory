@@ -1727,16 +1727,18 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
 
             $date_format = str_replace($search, $replace, $extra_fields['date_format']);
 
+            if($value=='0000-00-00'){$value='';}//if date not set, then mark it empty
             if($value && !isset($_REQUEST['backandedit'])) {
                 $time = strtotime($value);
                 $value = date($date_format, $time);
             }
+
             ?>
             <script type="text/javascript">
 
                 jQuery(function () {
 
-                    jQuery("#<?php echo $name;?>").datepicker({changeMonth: true, changeYear: true,});
+                    jQuery("#<?php echo $name;?>").datepicker({changeMonth: true, changeYear: true});
 
                     jQuery("#<?php echo $name;?>").datepicker("option", "dateFormat", '<?php echo $extra_fields['date_format'];?>');
 
