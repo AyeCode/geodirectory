@@ -8,6 +8,7 @@ Conflicts due to same id for password field in login and register form - FIXED
 Jobby compatibility pack - ADDED
 Avatar links to the member page are inconsistent - FIXED
 Map popups with no image can be malformed on some themes - FIXED
+WPML listings not exports original post id for some listings - FIXED
 
 v1.5.2
 Map view type TERRAIN option added for all the maps - FIXED
