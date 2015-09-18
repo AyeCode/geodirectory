@@ -5588,6 +5588,7 @@ function geodir_imex_count_events( $posts_count, $post_type ) {
  *
  * @since 1.4.6
  * @since 1.5.1 Updated to import & export recurring events.
+ * @since 1.5.3 Fixed to get wpml original post id.
  * @package GeoDirectory
  *
  * @global object $wp_filesystem WordPress FileSystem object.
@@ -5827,7 +5828,7 @@ function geodir_imex_get_posts( $post_type ) {
 			// WPML
 			if ($is_wpml) {
 				$csv_row[] = geodir_get_language_for_element( $post_id, 'post_' . $post_type );
-				$csv_row[] = get_post_meta( $post_id, '_icl_lang_duplicate_of', true );
+				$csv_row[] = geodir_imex_original_post_id( $post_id, 'post_' . $post_type );
 			}
 			// WPML
 			
@@ -5889,7 +5890,7 @@ function geodir_get_export_posts( $post_type ) {
 		
 	$table = $plugin_prefix . $post_type . '_detail';
 
-	$query = "SELECT {$wpdb->posts}.ID FROM {$wpdb->posts} INNER JOIN {$table} ON {$table}.post_id = {$wpdb->posts}.ID WHERE {$wpdb->posts}.post_type = %s ORDER BY {$wpdb->posts}.ID DESC";
+	$query = "SELECT {$wpdb->posts}.ID FROM {$wpdb->posts} INNER JOIN {$table} ON {$table}.post_id = {$wpdb->posts}.ID WHERE {$wpdb->posts}.post_type = %s ORDER BY {$wpdb->posts}.ID ASC";
 	/**
 	 * Modify returned posts SQL query for the current post type.
 	 *
@@ -6662,3 +6663,24 @@ function geodir_create_page($slug, $option, $page_title = '', $page_content = ''
     add_option($option, $page_id);
 
 }
+
+/**
+ * Get WPML original translation element id.
+ *
+ * @since 1.5.3
+ *
+ * @global object $sitepress Sitepress WPML object.
+ *
+ * @param int $element_id Post ID or Term id.
+ * @param string $element_type Element type. Ex: post_gd_place or tax_gd_placecategory.
+ * @return Original element id.
+ */
+function geodir_imex_original_post_id($element_id, $element_type) {
+	global $sitepress;
+	
+	$original_element_id = $sitepress->get_original_element_id($element_id, $element_type);
+	$element_id = $element_id != $original_element_id ? $original_element_id : '';
+	
+	return $element_id;
+}
+?>

@@ -1346,7 +1346,8 @@ function geodir_show_detail_page_tabs()
         $thumb_image = '';
         if (!empty($post_images)) {
             foreach ($post_images as $image) {
-                $thumb_image .= '<a href="' . $image->src . '">';
+                $caption = (!empty($image->caption)) ? $image->caption : '';
+                $thumb_image .= '<a href="' . $image->src . '" title="'.$caption.'">';
                 $thumb_image .= geodir_show_image($image, 'thumbnail', true, false);
                 $thumb_image .= '</a>';
             }

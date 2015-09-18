@@ -7,6 +7,12 @@ Event map infowindow not showing dates properly - FIXED
 Conflicts due to same id for password field in login and register form - FIXED
 Jobby compatibility pack - ADDED
 Avatar links to the member page are inconsistent - FIXED
+Map popups with no image can be malformed on some themes - FIXED
+WPML listings not exports original post id for some listings - FIXED
+Datepicker custom field can show wrong date on edit if left blank on save - FIXED
+Google maps zoom and street view buttons hidden with new Google layout - FIXED
+New GD page gd-info added for displaying info messages - ADDED
+New GD page gd-login added for login/register - ADDED
 
 v1.5.2
 Map view type TERRAIN option added for all the maps - FIXED
