@@ -488,13 +488,15 @@ function create_marker(input, map_canvas_var) {
             input.i = geodir_all_js_msg.geodir_default_marker_icon;
         }
 
+        cs = input.cs;
         var marker = jQuery.goMap.createMarker({
             id: marker_id,
             title: title,
             position: coord,
             visible: true,
             clickable: true,
-            icon: input.i
+            icon: input.i,
+            label: cs
         });
 
 
