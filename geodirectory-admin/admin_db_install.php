@@ -542,29 +542,29 @@ if (!function_exists('geodir_create_tables')) {
         dbDelta($custom_sort_fields_table);
 
 
-        if ($wpdb->get_var("SHOW TABLES LIKE '" . GEODIR_REVIEW_TABLE . "'") != GEODIR_REVIEW_TABLE) {
-            $review_table = "CREATE TABLE IF NOT EXISTS " . GEODIR_REVIEW_TABLE . "(
-			`id` INT(11) NOT NULL AUTO_INCREMENT,
-			`post_id` INT(11) DEFAULT NULL,
-			`post_title` VARCHAR( 255 ) NULL DEFAULT NULL,
-			`post_type` VARCHAR( 255 ) NULL DEFAULT NULL,
-			`user_id` INT(11) DEFAULT NULL,
-			`comment_id` INT(11) DEFAULT NULL,
-			`rating_ip` VARCHAR( 50 ) NULL DEFAULT NULL,
-			`ratings` TEXT NULL DEFAULT NULL,
-			`overall_rating` float(11) DEFAULT NULL,
-			`comment_images` TEXT NULL DEFAULT NULL,
-			`wasthis_review` INT NOT NULL,
-			`status` VARCHAR( 100 ) NOT NULL,
-			`post_status` INT(11) DEFAULT NULL,
-			`post_date` DATETIME NOT NULL,
-			`post_city` varchar(50) NULL DEFAULT NULL,
-			`post_region` varchar(50) NULL DEFAULT NULL,
-			`post_country` varchar(50) NULL DEFAULT NULL,
-			`post_latitude` varchar(20) NULL DEFAULT NULL,
-			`post_longitude` varchar(20) NULL DEFAULT NULL,
-			`comment_content` TEXT NULL DEFAULT NULL,
-			PRIMARY KEY (id)) $collate  ";
+            $review_table = "CREATE TABLE " . GEODIR_REVIEW_TABLE . " (
+			id int(11) NOT NULL AUTO_INCREMENT,
+			post_id int(11) DEFAULT NULL,
+			post_title varchar( 255 ) NULL DEFAULT NULL,
+			post_type varchar( 255 ) NULL DEFAULT NULL,
+			user_id int(11) DEFAULT NULL,
+			comment_id int(11) DEFAULT NULL,
+			rating_ip varchar( 50 ) NULL DEFAULT NULL,
+			ratings text NULL DEFAULT NULL,
+			overall_rating float(11) DEFAULT NULL,
+			comment_images text NULL DEFAULT NULL,
+			wasthis_review int(11) NOT NULL,
+			status varchar( 100 ) NOT NULL,
+			post_status int(11) DEFAULT NULL,
+			post_date datetime NOT NULL,
+			post_city varchar(50) NULL DEFAULT NULL,
+			post_region varchar(50) NULL DEFAULT NULL,
+			post_country varchar(50) NULL DEFAULT NULL,
+			post_latitude varchar(20) NULL DEFAULT NULL,
+			post_longitude varchar(20) NULL DEFAULT NULL,
+			comment_content text NULL DEFAULT NULL,
+			PRIMARY KEY  (id)
+			) $collate  ";
 
             /**
              * Filter the SQL query that creates the review DB table structure.
@@ -573,11 +573,8 @@ if (!function_exists('geodir_create_tables')) {
              * @param string $sql The SQL insert query string.
              */
             $review_table = apply_filters('geodir_before_review_table_create', $review_table);
-            $wpdb->query($review_table);
-        }
+            dbDelta($review_table);
 
-        if (isset($review_table))
-            $wpdb->show_errors($review_table);
 
 
         // Alter terms table
