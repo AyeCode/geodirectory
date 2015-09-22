@@ -1,5 +1,6 @@
 /**
  * CHANGED BY STIOFAN FOR RESPONSIVE ON MOBILE - 20/01/2015
+ * CHANGED BY KIRAN FOR RESIZE POPUP IMAGE - 22/09/2015
  * jQuery lightBox plugin
  * This jQuery plugin was inspired and based on Lightbox 2 by Lokesh Dhakar (http://www.huddletogether.com/projects/lightbox2/)
  * and adapted to me for use like a plugin from jQuery.
@@ -41,8 +42,8 @@
             }).fadeIn();
             var a = v();
             e("#jquery-lightbox").css({
-                top: a[1] + i[3] / 10,
-                left: a[0]
+                top: e(window).scrollTop() + 50,
+                left: e(window).scrollLeft()
             }).show(), e("#jquery-overlay,#jquery-lightbox").click(function() {
                 u()
             }), e("#lightbox-loading-link,#lightbox-secNav-btnClose").click(function() {
@@ -55,8 +56,8 @@
                 });
                 var i = v();
                 e("#jquery-lightbox").css({
-                    top: i[1] + t[3] / 10,
-                    left: i[0]
+                    top: e(window).scrollTop() + 50,
+					left: e(window).scrollLeft()
                 })
             })
         }
@@ -65,7 +66,55 @@
             e("#lightbox-loading").show(), t.fixedNavigation ? e("#lightbox-image,#lightbox-container-image-data-box,#lightbox-image-details-currentNumber").hide() : e("#lightbox-image,#lightbox-nav,#lightbox-nav-btnPrev,#lightbox-nav-btnNext,#lightbox-container-image-data-box,#lightbox-image-details-currentNumber").hide();
             var i = new Image;
             i.onload = function() {
-                e("#lightbox-image").attr("src", t.imageArray[t.activeImage][0]), r(i.width, i.height), i.onload = function() {}
+				// resize popup image
+				var imageHeight;
+				var imageWidth;
+				var maxWidth;
+				var maxHeight;
+				var $container = e('#lightbox-container-image');
+				
+				var $image = e('#lightbox-image', $container);
+				$image.attr('src', t.imageArray[t.activeImage][0]);
+				$image.width(i.width);
+				$image.height(i.height);
+				
+				var containerTopPadding = parseInt($container.css('padding-top'), 10);
+				var containerRightPadding = parseInt($container.css('padding-right'), 10);
+				var containerBottomPadding = parseInt($container.css('padding-bottom'), 10);
+				var containerLeftPadding = parseInt($container.css('padding-left'), 10);
+				var heightBtn = parseInt(e("#lightbox-container-image-data-box", '#jquery-lightbox').height(), 10);
+				
+				var windowWidth = e(window).width();
+				var windowHeight = e(window).height();
+				var maxImageWidth = windowWidth - containerLeftPadding - containerRightPadding - 20;
+				var maxImageHeight = windowHeight - containerTopPadding - containerBottomPadding - 120;
+				
+				if (maxWidth && maxWidth < maxImageWidth) {
+					maxImageWidth = maxWidth;
+				}
+				
+				if (maxHeight && maxHeight < maxImageWidth) {
+					maxImageHeight = maxHeight;
+				}
+				
+				if ((i.width > maxImageWidth) || (i.height > maxImageHeight)) {
+					if ((i.width / maxImageWidth) > (i.height / maxImageHeight)) {
+						imageWidth = maxImageWidth;
+						imageHeight = parseInt(i.height / (i.width / imageWidth), 10);
+						$image.width(imageWidth);
+						$image.height(imageHeight);
+					} else {
+						imageHeight = maxImageHeight;
+						imageWidth = parseInt(i.width / (i.height / imageHeight), 10);
+						$image.width(imageWidth);
+						$image.height(imageHeight);
+					}
+				}
+				i.width = $image.width();
+				i.height = $image.height();
+				// resize popup image
+				
+				e("#lightbox-image").attr("src", t.imageArray[t.activeImage][0]), r(i.width, i.height), i.onload = function() {}
             }, i.src = t.imageArray[t.activeImage][0]
         }
 
