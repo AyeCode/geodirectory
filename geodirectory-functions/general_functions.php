@@ -2701,7 +2701,7 @@ function geodir_loginwidget_output($args = '', $instance = '')
                      * @since 1.0.0
                      */
                     ?>
-                    <a href="<?php echo geodir_login_url(); ?>"
+                    <a href="<?php echo geodir_login_url(array('signup' => true)); ?>"
                        class="goedir-newuser-link"><?php echo NEW_USER_TEXT; ?></a>
 
                     <?php
@@ -2711,7 +2711,7 @@ function geodir_loginwidget_output($args = '', $instance = '')
                      * @since 1.0.0
                      */
                     ?>
-                    <a href="<?php echo geodir_login_url(); ?>"
+                    <a href="<?php echo geodir_login_url(array('forgot' => true)); ?>"
                        class="goedir-forgot-link"><?php echo FORGOT_PW_TEXT; ?></a></p></div>
         </form>
     <?php }
