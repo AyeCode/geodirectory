@@ -1737,6 +1737,7 @@ add_action('create_term', 'geodir_update_term_slug', '1', 3);
  * Update term slug.
  *
  * @since 1.0.0
+ * @since 1.5.3 Modified to update tag in detail table when tag updated.
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
@@ -1784,7 +1785,27 @@ function geodir_update_term_slug($term_id, $tt_id, $taxonomy)
         $wpdb->query($wpdb->prepare("UPDATE " . $table_prefix . "terms SET slug=%s WHERE term_id=%d", array($slug, $term_id)));
 
     }
-
+	
+	// Update tag in detail table.
+	$taxonomy_obj = get_taxonomy($taxonomy);
+	$post_type = !empty($taxonomy_obj) ? $taxonomy_obj->object_type[0] : NULL;
+	
+	$post_types = geodir_get_posttypes();
+	if ($post_type && in_array($post_type, $post_types) && $post_type . '_tags' == $taxonomy) {		
+		$posts_obj = $wpdb->get_results($wpdb->prepare("SELECT object_id FROM " . $wpdb->term_relationships . " WHERE term_taxonomy_id = %d", array($tt_id)));
+		
+		if (!empty($posts_obj)) {
+			foreach ($posts_obj as $post_obj) {
+				$post_id = $post_obj->object_id;
+				
+				$raw_tags = wp_get_object_terms($post_id, $post_type . '_tags', array('fields' => 'names'));
+				$post_tags = !empty($raw_tags) ? implode(',', $raw_tags) : '';
+				
+				$listing_table = $plugin_prefix . $post_type . '_detail';
+				$wpdb->query($wpdb->prepare("UPDATE " . $listing_table . " SET post_tags=%s WHERE post_id =%d", array($post_tags, $post_id)));
+			}
+		}
+	}
 }
 
 
