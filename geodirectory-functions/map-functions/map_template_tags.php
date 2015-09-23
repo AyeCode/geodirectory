@@ -394,10 +394,11 @@ function geodir_draw_map($map_args = array())
                     <input type="hidden" id="<?php echo $map_canvas_name;?>_location_enabled" value="0"/>
                 <?php }?>
 
-                <input type="hidden" id="<?php echo $map_canvas_name;?>_posttype" name="gd_posttype"
-                       value="<?php echo $map_search_pt;?>"/>
+                <input type="hidden" id="<?php echo $map_canvas_name;?>_posttype" name="gd_posttype" value="<?php echo $map_search_pt;?>"/>
 
                 <input type="hidden" name="limitstart" value=""/>
+
+
 
                 <?php if ($geodir_map_options['enable_post_type_filters']) {
                     $post_types = geodir_get_posttypes('object');
@@ -491,6 +492,16 @@ function geodir_draw_map($map_args = array())
             </script>
         <?php
         }
+
+        /**
+         * Action that runs after all the map code has been output;
+         *
+         * @since 1.5.3
+         *
+         * @param array $geodir_map_options Array of map settings.
+         * @param string $map_canvas_name The canvas name and ID for the map.
+         */
+        do_action('geodir_map_after_render',$geodir_map_options,$map_canvas_name);
 
 
     endif; // Exclude posttypes if end

@@ -13,8 +13,10 @@ Datepicker custom field can show wrong date on edit if left blank on save - FIXE
 Google maps zoom and street view buttons hidden with new Google layout - FIXED
 New GD page gd-info added for displaying info messages - ADDED
 New GD page gd-login added for login/register - ADDED
+Some large imports can stop at 98/99% but are actually finished - FIXED
 Image popup modal on detail page doesn't resize according to screen size - FIXED
 Editing CPT tag not updating tag for associated CPT listing - FIXED
+Changes made for marker cluster addon to allow server side clustering - ADDED
 
 v1.5.2
 Map view type TERRAIN option added for all the maps - FIXED
