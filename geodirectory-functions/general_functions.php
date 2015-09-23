@@ -3113,6 +3113,8 @@ function geodir_count_reviews_by_terms($force_update = false)
  */
 function geodir_term_review_count_force_update($new_status, $old_status='', $post='')
 {
+    if(isset($_REQUEST['action']) && $_REQUEST['action']=='geodir_import_export'){return;}//do not run if importing listings
+
     if(isset($post->post_type) && ($post->post_type=='nav_menu_item' || $post->post_type=='page' || $post->post_type=='post')){
         return;
     }

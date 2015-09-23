@@ -223,7 +223,7 @@ function get_markers()
     //echo $catsql;
    // print_r($_REQUEST);
     $catinfo = $wpdb->get_results($catsql);
-;
+
     $cat_content_info = array();
     $content_data = array();
     $post_ids = array();
@@ -248,7 +248,7 @@ function get_markers()
      * @param object $catinfo The posts object containing all marker data.
      * @see 'geodir_after_marker_post_process'
      */
-    do_action('geodir_before_marker_post_process', $catinfo);
+    do_action('geodir_before_marker_post_process_action', $catinfo);
 
     // Sort any posts into a ajax array
     if (!empty($catinfo)) {
