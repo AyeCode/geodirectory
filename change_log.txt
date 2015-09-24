@@ -17,6 +17,7 @@ Some large imports can stop at 98/99% but are actually finished - FIXED
 Image popup modal on detail page doesn't resize according to screen size - FIXED
 Editing CPT tag not updating tag for associated CPT listing - FIXED
 Changes made for marker cluster addon to allow server side clustering - ADDED
+New login page now compatible with buddypress registration form for redirect option - CHANGED
 
 v1.5.2
 Map view type TERRAIN option added for all the maps - FIXED
