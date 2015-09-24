@@ -3936,7 +3936,8 @@ function gd_imex_StartImport(el, type) {
 						jQuery('#gd_prepared', cont).val('');
 						
 						gd_imex_showStatusMsg(el, type);
-						
+						gd_imex_FinishImport(el, type);
+
 						jQuery('#gd_stop_import', cont).hide();
 					}
 					if (parseInt(gd_processed) < parseInt(total)) {
@@ -4348,6 +4349,26 @@ jQuery(function(){
 		return true;
 	}
 });
+
+function gd_imex_FinishImport(el,type){
+
+    if(type=='post'){
+        jQuery.ajax({
+            url: ajaxurl,
+            type: "POST",
+            data: 'action=geodir_import_export&task=import_finish&_pt=' + type + '&_nonce=<?php echo $nonce; ?>',
+            dataType : 'json',
+            cache: false,
+            success: function (data) {
+            alert(data);
+            }
+        });
+    }
+
+
+
+}
+
 </script>
 <?php
 }
@@ -4931,10 +4952,6 @@ function geodir_ajax_import_export() {
 				wp_send_json( $json );
 			} else if ( $task == 'import_post' ) {
 
-                //global $wp_filter;
-
-                //print_r($wp_filter['geodir_after_save_listing']);
-
                 //run some stuff to make the import quicker
                 wp_defer_term_counting( true );
                 wp_defer_comment_counting( true );
@@ -4945,10 +4962,6 @@ function geodir_ajax_import_export() {
                 //remove_all_actions('publish_future_post');
 
 
-
-                $time_start = time();
-
-                //echo '/* ###6:'.($time_start - time()). "*/ \n";
 				if (!empty($file)) {
 					$wp_post_statuses = get_post_statuses(); // All of the WordPress supported post statuses.
 					$default_status = 'publish';
@@ -5116,7 +5129,7 @@ function geodir_ajax_import_export() {
 
 							$cat_taxonomy = $post_type . 'category';
 							$tags_taxonomy = $post_type . '_tags';
-                            //echo '/* ###7:'.($time_start - time()). "*/ \n";
+
 							$post_category = array();
 							if ( !empty( $post_category_arr ) ) {
 								foreach ( $post_category_arr as $value ) {
@@ -5148,7 +5161,7 @@ function geodir_ajax_import_export() {
 									}
 								}
 							}
-							
+
 							$save_post = array();
 							$save_post['post_title'] = $post_title;
 							$save_post['post_content'] = $post_content;
@@ -5157,7 +5170,7 @@ function geodir_ajax_import_export() {
 							$save_post['post_status'] = $post_status;
 							$save_post['post_category'] = $post_category;
 							$save_post['post_tags'] = $post_tags;
-                            //echo '/* ###8:'.($time_start - time()). "*/ \n";
+
 							$saved_post_id = NULL;
 							if ( $import_choice == 'update' ) {
 								if ( $post_id > 0 && get_post( $post_id ) ) {
@@ -5189,7 +5202,7 @@ function geodir_ajax_import_export() {
 							} else {
 								$invalid++;
 							}
-                            //echo '/* ###9:'.($time_start - time()). "*/ \n";
+
 							if ( (int)$saved_post_id > 0 ) {
 								// WPML
 								if ($is_wpml && $original_post_id > 0 && $language != '') {
@@ -5273,7 +5286,7 @@ function geodir_ajax_import_export() {
 								if (isset($gd_post['post_id'])) {
 									unset($gd_post['post_id']);
 								}
-								
+
 								// Export franchise fields
 								$is_franchise_active = is_plugin_active( 'geodir_franchise/geodir_franchise.php' ) && geodir_franchise_enabled( $post_type ) ? true : false;
 								if ($is_franchise_active) {
@@ -5301,9 +5314,7 @@ function geodir_ajax_import_export() {
 								}
 								
 								// Save post info
-                                //echo '/* ###10:'.($time_start - time()). "*/ \n";
 								geodir_save_post_info( $saved_post_id, $gd_post );
-                                //echo '/* ###11:'.($time_start - time()). "*/ \n";
 								// post taxonomies
 								if ( !empty( $save_post['post_category'] ) ) {
 									wp_set_object_terms( $saved_post_id, $save_post['post_category'], $cat_taxonomy );
@@ -5317,7 +5328,7 @@ function geodir_ajax_import_export() {
 								if ( !empty( $save_post['post_tags'] ) ) {
 									wp_set_object_terms( $saved_post_id, $save_post['post_tags'], $tags_taxonomy );
 								}
-                                //echo '/* ###11.1:'.($time_start - time()). "*/ \n";
+
 								// Post images
 								if ( !empty( $post_images ) ) {
 									$post_images = array_unique($post_images);
@@ -5400,7 +5411,6 @@ function geodir_ajax_import_export() {
 										$images++;
 									}
 								}
-                                //echo '/* ###12:'.($time_start - time()). "*/ \n";
 
 								/** This action is documented in geodirectory-functions/post-functions.php */
                     			do_action( 'geodir_after_save_listing', $saved_post_id, $gd_post );
@@ -5411,7 +5421,6 @@ function geodir_ajax_import_export() {
 								if (isset($gd_post['expire_date'])) {
 									geodir_save_post_meta($saved_post_id, 'expire_date', $gd_post['expire_date']);
 								}
-                                //echo '/* ###13:'.($time_start - time()). "*/ \n";
 							}
 							
 							// WPML
@@ -5443,6 +5452,19 @@ function geodir_ajax_import_export() {
 			}
 		}
 		break;
+        case 'import_finish':{
+            /**
+             * Run an action when an import finishes.
+             *
+             * This action can be used to fire functions after an import ends.
+             *
+             * @since 1.5.3
+             * @package GeoDirectory
+             */
+            do_action('geodir_import_finished');
+        }
+        break;
+
 	}
 	echo '0';
 	wp_die();
@@ -6525,7 +6547,7 @@ function geodir_imex_get_date_ymd($date) {
  */
 function geodir_imex_process_event_data($gd_post) {
 	$recurring_pkg = geodir_event_recurring_pkg( (object)$gd_post );
-	
+
 	$is_recurring = isset( $gd_post['is_recurring_event'] ) && (int)$gd_post['is_recurring_event'] == 0 ? false : true;
 	$event_date = isset($gd_post['event_date']) && $gd_post['event_date'] != '' ? geodir_imex_get_date_ymd($gd_post['event_date']) : '';
 	$event_enddate = isset($gd_post['event_enddate']) && $gd_post['event_enddate'] != '' ? geodir_imex_get_date_ymd($gd_post['event_enddate']) : $event_date;
@@ -6612,7 +6634,7 @@ function geodir_imex_process_event_data($gd_post) {
 	if (isset($gd_post['recurring_dates'])) {
 		unset($gd_post['recurring_dates']);
 	}
-	
+
 	$gd_post['is_recurring'] = $is_recurring;
 	$gd_post['event_date'] = $event_date;
 	$gd_post['event_start'] = $event_date;
