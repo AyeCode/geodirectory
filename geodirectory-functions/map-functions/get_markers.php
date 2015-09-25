@@ -204,11 +204,11 @@ function get_markers()
     $catsql = $wpdb->prepare("$select $field_default_cat FROM "
         . $wpdb->posts . " as p,"
         . $join . " WHERE p.ID = pd.post_id
-				AND p.post_status = 'publish' " . $search . $gd_posttype, $main_query_array);
+				AND p.post_status = 'publish' " . $search . $gd_posttype , $main_query_array);
 
 
 
-
+    //if(isset($_SESSION['testing2']) && $_SESSION['testing2']){return $_SESSION['testing2'];}
     
 	/**
 	 * Filter the SQL query to retrive markers data
@@ -223,7 +223,7 @@ function get_markers()
     //echo $catsql;
    // print_r($_REQUEST);
     $catinfo = $wpdb->get_results($catsql);
-;
+
     $cat_content_info = array();
     $content_data = array();
     $post_ids = array();
@@ -248,7 +248,7 @@ function get_markers()
      * @param object $catinfo The posts object containing all marker data.
      * @see 'geodir_after_marker_post_process'
      */
-    do_action('geodir_before_marker_post_process', $catinfo);
+    do_action('geodir_before_marker_post_process_action', $catinfo);
 
     // Sort any posts into a ajax array
     if (!empty($catinfo)) {
@@ -309,8 +309,10 @@ function get_markers()
 
     $totalcount = count(array_unique($post_ids));
 
-    if (!empty($cat_content_info))
+    if (!empty($cat_content_info)) {
+       // $_SESSION['testing2'] = '[{"totalcount":"' . $totalcount . '",' . substr(implode(',', $cat_content_info), 1) . ']';
         return '[{"totalcount":"' . $totalcount . '",' . substr(implode(',', $cat_content_info), 1) . ']';
+    }
     else
         return '[{"totalcount":"0"}]';
 }

@@ -886,6 +886,33 @@
             this.geoMarkers = [];
         },
 
+        clearMarkersDelay: function () {
+
+            var old_markers =this.markers;
+            setTimeout(function(){
+            for (var i = 0, l = old_markers.length; i < l; i++) {
+                var markerId = old_markers[i];
+                var marker = $(this.mapId).data(markerId);
+                var info = $(this.mapId).data(markerId + 'info');
+
+                marker.setVisible(false);
+                marker.setMap(null);
+                $(this.mapId).removeData(markerId);
+
+                if (info) {
+                    info.close();
+                    info.show = false;
+                    $(this.mapId).removeData(markerId + 'info');
+                }
+            }
+            this.singleMarker = false;
+            this.lockGeocode = false;
+            this.markers = [];
+            this.tmpMarkers = [];
+            this.geoMarkers = [];
+            }, 3000);
+        },
+
         isVisible: function (latlng) {
             return this.map.getBounds().contains(latlng);
         }

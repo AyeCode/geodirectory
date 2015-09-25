@@ -136,7 +136,18 @@ function geodir_login_url($args=array()){
         $login_url = add_query_arg($args,$login_url );
     }
 
-    return $login_url;
+    /**
+     * Filter the GeoDirectory login page url.
+     *
+     * This filter can be used to change the GeoDirectory page url.
+     *
+     * @since 1.5.3
+     * @package GeoDirectory
+     * @param string $login_url The url of the login page.
+     * @param array $args The array of query args used.
+     * @param int $gd_page_id The page id of the GD login page.
+     */
+    return apply_filters('geodir_login_url',$login_url,$args,$gd_page_id);
 }
 
 function geodir_info_url($args=array()){

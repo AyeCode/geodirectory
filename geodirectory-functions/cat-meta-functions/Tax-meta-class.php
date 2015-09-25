@@ -115,12 +115,12 @@ if (!class_exists('Tax_Meta_Class')) :
                 if ($meta_box['use_with_theme'] === true) {
                     $this->SelfPath = get_stylesheet_directory_uri() . '/library/cat-meta';
                 } elseif ($meta_box['use_with_theme'] === false) {
-                    $this->SelfPath = plugins_url('cat-meta', plugin_basename(dirname(__FILE__)));
+                    $this->SelfPath = plugins_url('cat-meta-functions', plugin_basename(dirname(__FILE__)));
                 } else {
                     $this->SelfPath = $meta_box['use_with_theme'];
                 }
             else {
-                $this->SelfPath = plugins_url('cat-meta', plugin_basename(dirname(__FILE__)));
+                $this->SelfPath = plugins_url('cat-meta-functions', plugin_basename(dirname(__FILE__)));
             }
 
 

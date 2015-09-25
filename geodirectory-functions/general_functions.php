@@ -2701,7 +2701,7 @@ function geodir_loginwidget_output($args = '', $instance = '')
                      * @since 1.0.0
                      */
                     ?>
-                    <a href="<?php echo geodir_login_url(); ?>"
+                    <a href="<?php echo geodir_login_url(array('signup' => true)); ?>"
                        class="goedir-newuser-link"><?php echo NEW_USER_TEXT; ?></a>
 
                     <?php
@@ -2711,7 +2711,7 @@ function geodir_loginwidget_output($args = '', $instance = '')
                      * @since 1.0.0
                      */
                     ?>
-                    <a href="<?php echo geodir_login_url(); ?>"
+                    <a href="<?php echo geodir_login_url(array('forgot' => true)); ?>"
                        class="goedir-forgot-link"><?php echo FORGOT_PW_TEXT; ?></a></p></div>
         </form>
     <?php }
@@ -3113,6 +3113,8 @@ function geodir_count_reviews_by_terms($force_update = false)
  */
 function geodir_term_review_count_force_update($new_status, $old_status='', $post='')
 {
+    if(isset($_REQUEST['action']) && $_REQUEST['action']=='geodir_import_export'){return;}//do not run if importing listings
+
     if(isset($post->post_type) && ($post->post_type=='nav_menu_item' || $post->post_type=='page' || $post->post_type=='post')){
         return;
     }
