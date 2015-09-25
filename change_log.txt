@@ -19,6 +19,7 @@ Editing CPT tag not updating tag for associated CPT listing - FIXED
 Changes made for marker cluster addon to allow server side clustering - ADDED
 New login page now compatible with buddypress registration form for redirect option - CHANGED
 GD import speed improved -  CHANGED
+Added some filters in listview template for jobby theme compatibility - ADDED
 
 v1.5.2
 Map view type TERRAIN option added for all the maps - FIXED

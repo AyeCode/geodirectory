@@ -223,13 +223,23 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                             <div class="geodir-entry-content">
 
                                 <?php
-                                if (isset($character_count) && ($character_count || $character_count == '0')) {
-                                    $content_out = geodir_max_excerpt($character_count);
-                                } else {
-                                    $content_out = get_the_excerpt();
-                                }
-                                if (!empty($content_out)) {
-                                    echo "<p>" . $content_out . "</p>";
+                                /**
+                                 * Filter to hide the listing excerpt
+                                 *
+                                 * @since 1.5.3
+                                 * @param bool $display Display the excerpt or not. Default true.
+                                 * @param object $post The post object.
+                                 */
+                                $show_listing_excerpt = apply_filters('geodir_show_listing_post_excerpt', true, 'listview', $post);
+                                if ($show_listing_excerpt) {
+                                    if ( isset( $character_count ) && ( $character_count || $character_count == '0' ) ) {
+                                        $content_out = geodir_max_excerpt( $character_count );
+                                    } else {
+                                        $content_out = get_the_excerpt();
+                                    }
+                                    if ( ! empty( $content_out ) ) {
+                                        echo "<p>" . $content_out . "</p>";
+                                    }
                                 }
                                 ?></div>
 
@@ -244,10 +254,12 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                             do_action('geodir_after_listing_post_excerpt', $post); ?>
                         </div>
                         <!-- gd-content ends here-->
+                        <?php do_action( 'geodir_after_listing_content', $post, 'listing' ); ?>
                         <footer class="geodir-entry-meta">
                             <div class="geodir-addinfo clearfix">
 
                                 <?php
+                                do_action( 'geodir_before_review_html', $post->ID, 'listing' );
 
                                 $review_show = geodir_is_reviews_show('listview');
 
