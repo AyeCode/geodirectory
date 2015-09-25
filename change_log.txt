@@ -21,6 +21,7 @@ New login page now compatible with buddypress registration form for redirect opt
 GD import speed improved -  CHANGED
 Hit enter to search delayed by 100ms so other functions have a chance to change settings - CHANGED
 Unused css image classes removed - REMOVED
+Email custom field now used mailto: for the address and filter added to change the name output - CHANGED
 
 v1.5.2
 Map view type TERRAIN option added for all the maps - FIXED
