@@ -20,6 +20,7 @@ Changes made for marker cluster addon to allow server side clustering - ADDED
 New login page now compatible with buddypress registration form for redirect option - CHANGED
 GD import speed improved -  CHANGED
 Hit enter to search delayed by 100ms so other functions have a chance to change settings - CHANGED
+Unused css image classes removed - REMOVED
 
 v1.5.2
 Map view type TERRAIN option added for all the maps - FIXED
