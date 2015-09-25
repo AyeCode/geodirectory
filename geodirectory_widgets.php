@@ -1083,6 +1083,13 @@ if (!function_exists('register_geodir_widgets')) {
          * @package GeoDirectory
          */
         include_once('geodirectory-widgets/geodirectory_bestof_widget.php');
+		/**
+         * Contains all functions for cpt categories widget.
+         *
+         * @since 1.5.3
+         * @package GeoDirectory
+         */
+        include_once('geodirectory-widgets/geodirectory_cpt_categories_widget.php');
     }
 
 }

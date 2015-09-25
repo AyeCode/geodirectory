@@ -1593,3 +1593,47 @@ div#jquery-lightbox {
 .page.hentry .geodir-sc-gd-listings .geodir_category_list_view > li {
 	margin-left: 0;
 }
+/* cpt categories widget */
+.gd-cptcat-row {
+	min-width: 240px;
+	float: left;
+	margin-right: 1.5em;
+}
+.gd-cptcat-ul {
+	margin-top: .5em;
+}
+.gd-cptcat-row > .gd-cptcat-ul {
+	padding-left: 1em;
+}
+.gd-cptcat-row .gd-cptcat-title {
+  background-position: right bottom 3px;
+  background-repeat: no-repeat;
+  background-size: auto 85%;
+  border-bottom: 1px solid #f01d4f;
+  padding-bottom: 5px;
+  text-align: left;
+}
+.gd-cptcat-row .gd-cptcat-li {
+	margin: .25em;
+}
+.gd-cptcat-li h3 {
+	margin: 0;
+}
+.gd-cptcat-li a img  {
+	height: 1.1em;
+	vertical-align: middle;
+}
+.gd-cptcat-title > img  {
+	height: 1.1em;
+	vertical-align: middle;
+}
+.gd-cptcat-li .gd-cptcat-count, .gd-cptcat-title > .gd-cptcat-count {
+	color: #f01d4f;
+	font-weight: normal;
+	font-size: 13px;
+	vertical-align: middle;
+	display: inline-block;
+}
+.gd-cptcat-title > .gd-cptcat-count  {
+	font-size: .5em;
+}
