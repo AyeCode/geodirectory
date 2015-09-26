@@ -114,7 +114,9 @@ class geodir_cpt_categories_widget extends WP_Widget {
 		
 		echo $args['before_widget'];
 		if ( $params['title'] ) {
+            echo '<div class="geodir_list_heading clearfix">';
 			echo $args['before_title'] . $params['title'] . $args['after_title'];
+            echo '</div>';
 		}
 		echo '<div class="gd-cptcats-widget">';		
 		echo $output;
@@ -304,7 +306,7 @@ function geodir_cpt_categories_output($params) {
 					$term_icon_url = !empty($term_icons) && isset($term_icons[$term_info->term_id]) ? $term_icons[$term_info->term_id] : '';
 					$term_icon_url = $term_icon_url != '' ? '<img alt="' . esc_attr($term_info->name) . ' icon" src="' . $term_icon_url . '" /> ' : '';
 					
-					$count = $show_count ? ' <span class="gd-cptcat-count">(' . $term_info->count . ')' : '';
+					$count = $show_count ? ' <span class="gd-cptcat-count">(' . $term_info->count . ')</span>' : '';
 					$cpt_row .= '<h2 class="gd-cptcat-title">' . $term_icon_url . $term_info->name . $count . '</h2>';
 				} else {
 					$cpt_row .= '<h2 class="gd-cptcat-title"' . $cpt_image .'>' . __($cpt_info['labels']['name'], 'geodirectory') . '</h2>';
@@ -319,7 +321,7 @@ function geodir_cpt_categories_output($params) {
 					$term_link = apply_filters( 'geodir_category_term_link', $term_link, $category->term_id, $cpt );
 		
 					$cpt_row .= '<li class="gd-cptcat-li">';
-					$count = $show_count ? ' <span class="gd-cptcat-count">(' . $category->count . ')' : '';
+					$count = $show_count ? ' <span class="gd-cptcat-count">(' . $category->count . ')</span>' : '';
 					$cpt_row .= '<h3 class="gd-cptcat-cat"><a href="' . esc_url($term_link) . '" title="' . esc_attr($category->name) . '">'  .$term_icon_url . $category->name . $count . '</a></h3>';
 					if ($all_childs || $max_count > 0) {
 						$cpt_row .= geodir_cpt_categories_child_cats($category->term_id, $cpt, $hide_empty, $show_count, $max_count, $term_icons);
@@ -354,11 +356,11 @@ function geodir_cpt_categories_child_cats($parent_id, $cpt, $hide_empty, $show_c
 	
 	$child_cats = get_terms($cat_taxonomy, array('orderby' => 'count', 'order' => 'DESC', 'hide_empty' => $hide_empty, 'parent' => $parent_id, 'number' => $max_count));
 	if ($hide_empty) {
-		$categories = geodir_filter_empty_terms($categories);
+        $child_cats = geodir_filter_empty_terms($child_cats);
 	}
 	$child_cats = geodir_sort_terms($child_cats, 'count');
 	if (empty($child_cats)) {
-		return $content;
+		return '';
 	}
 	
 	$depth++;

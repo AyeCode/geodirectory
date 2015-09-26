@@ -4360,7 +4360,7 @@ function gd_imex_FinishImport(el,type){
             dataType : 'json',
             cache: false,
             success: function (data) {
-            alert(data);
+            //import done
             }
         });
     }

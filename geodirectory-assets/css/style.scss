@@ -324,7 +324,7 @@ ul.geodir-tabs-content li h3 {
     height: 20px;
     top: -40px;
     background-image: url(../images/stars.png);
-    background-position: initial initial;
+    background-position: initial;
     background-repeat: repeat no-repeat;
     font-size: 0;
 }
@@ -932,6 +932,10 @@ section.widget {
 }
 
 /* GD > Popular post view */
+.geodir_full_page .geodir_list_heading{
+  margin-left: 0px;
+  margin-right: 0px;
+}
 .geodir_list_heading {
     text-align: justify;
 }
@@ -1222,7 +1226,7 @@ ul li .geodir_featured_img {
 .geodir-rating {
     max-width: 114px;
     overflow: hidden;
-    line-height: 1px;
+    line-height: 0px;
 }
 
 .gd_rating_show {
@@ -1257,10 +1261,10 @@ ul li .geodir_featured_img {
     height: 100%;
     top: 0px;
     background-image: none;
-    background-position: initial initial;
+    background-position: initial;
     background-repeat: repeat no-repeat;
     background-size: contain;
-    display: inline-block;
+    display: block;
     width: 100%;
 }
 
@@ -1594,10 +1598,13 @@ div#jquery-lightbox {
 	margin-left: 0;
 }
 /* cpt categories widget */
+#geodir_content .geodir_cpt_categories_widget{
+  padding: 0;
+}
 .gd-cptcat-row {
 	min-width: 240px;
-	float: left;
 	margin-right: 1.5em;
+    display: inline-table;
 }
 .gd-cptcat-ul {
 	margin-top: .5em;

@@ -222,6 +222,7 @@ function build_map_ajax_search_param(map_canvas_var, reload_cat_list, catObj,hid
     //var mapObject = new google.maps.Map(document.getElementById("map"), _mapOptions);
    // jQuery.goMap.map
     var map_info = '';
+
     if(jQuery.goMap.map && eval(map_canvas_var).enable_marker_cluster_server) {// map loaded so we know the bounds
 
         bounds = jQuery.goMap.map.getBounds();
@@ -232,10 +233,10 @@ function build_map_ajax_search_param(map_canvas_var, reload_cat_list, catObj,hid
         gd_lon_sw = bounds.getSouthWest().lng();
         map_info = "&zl="+gd_zl+"&lat_ne="+gd_lat_ne+"&lon_ne="+gd_lon_ne+"&lat_sw="+gd_lat_sw+"&lon_sw="+gd_lon_sw;
 
-    }else if(eval(map_canvas_var).enable_marker_cluster_server && eval(map_canvas_var).autozoom!='on'){// map not loaded and auto zoom not set
+    }else if(eval(map_canvas_var).enable_marker_cluster_server && !eval(map_canvas_var).autozoom){// map not loaded and auto zoom not set
         gd_zl = eval(map_canvas_var).zoom;
         map_info = "&zl="+gd_zl;
-    }else if(eval(map_canvas_var).enable_marker_cluster_server && eval(map_canvas_var).autozoom=='on'){// map not loaded and auto zoom set
+    }else if(eval(map_canvas_var).enable_marker_cluster_server && eval(map_canvas_var).autozoom){// map not loaded and auto zoom set
         gd_zl = eval(map_canvas_var).zoom;
         gd_map_h = jQuery('#' + map_canvas_var).height();
         gd_map_w = jQuery('#' + map_canvas_var).width();
