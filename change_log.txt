@@ -19,7 +19,13 @@ Editing CPT tag not updating tag for associated CPT listing - FIXED
 Changes made for marker cluster addon to allow server side clustering - ADDED
 New login page now compatible with buddypress registration form for redirect option - CHANGED
 GD import speed improved -  CHANGED
-Added some filters in listview template for jobby theme compatibility - ADDED
+Hit enter to search delayed by 100ms so other functions have a chance to change settings - CHANGED
+Unused css image classes removed - REMOVED
+Email custom field now used mailto: for the address and filter added to change the name output - CHANGED
+Preview page missing address closing div which can break the footer in some themes - FIXED
+New widget "CPT Categories" added to list categories - ADDED
+Visiting a place while session is set ot another location can show wrong breadcrumbs - FIXED
+Added some filters in listview template and widget listview for jobby theme compatibility - ADDED
 
 v1.5.2
 Map view type TERRAIN option added for all the maps - FIXED

@@ -2261,7 +2261,7 @@ if (!function_exists('geodir_show_listing_info')) {
                             $html .= '</span>';
                             //print_r($_POST);
                             if ($preview) {
-                                $html .= stripslashes($post->$html_var) . $addition_fields . '</p>';
+                                $html .= stripslashes($post->$html_var) . $addition_fields . '</p></div>';
                             } else {
                                 if ($post->post_address) {
                                     $html .= '<span itemprop="streetAddress">' . $post->post_address . '</span><br>';
@@ -2798,7 +2798,23 @@ if (!function_exists('geodir_show_listing_info')) {
 
                                 $html = '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $type['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-email" style="' . $field_icon . '">' . $field_icon_af;
                                 $html .= (trim($type['site_title'])) ? __($type['site_title'], 'geodirectory') . ': ' : '';
-                                $html .= '</span>' . stripslashes($post->$type['htmlvar_name']) . '</div>';
+                                $html .= '</span><span class="geodir-email-address-output">';
+                                $email = stripslashes($post->$type['htmlvar_name']) ;
+                                if($e_split = explode('@',$email)){
+                                    /**
+                                     * Filter email custom field name output.
+                                     *
+                                     * @since 1.5.3
+                                     *
+                                     * @param string $email The email string being output.
+                                     * @param array $type Custom field variables array.
+                                     */
+                                    $email_name = apply_filters('geodir_email_field_name_output',$email,$type);
+                                    $html .=  "<script>document.write('<a href=\"mailto:'+'$e_split[0]' + '@' + '$e_split[1]'+'\">$email_name</a>')</script>";
+                                }else{
+                                    $html .=  $email;
+                                }
+                                $html .= '</span></div>';
                             }
 
                         }
