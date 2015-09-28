@@ -259,7 +259,7 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                             <div class="geodir-addinfo clearfix">
 
                                 <?php
-                                do_action( 'geodir_before_review_html', $post->ID, 'listing' );
+                                do_action( 'geodir_before_review_html', $post, 'listing' );
 
                                 $review_show = geodir_is_reviews_show('listview');
 
