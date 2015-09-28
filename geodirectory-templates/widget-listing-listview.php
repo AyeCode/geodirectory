@@ -175,10 +175,25 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                             do_action('geodir_after_listing_post_excerpt', $post); ?>
                         </div>
                         <!-- gd-content ends here-->
-                        <?php do_action( 'geodir_after_listing_content', $post, 'widget' ); ?>
+                        <?php
+                        /**
+                         * Called after printing listing content.
+                         *
+                         * @since 1.5.3
+                         * @param object $post The post object.
+                         * @param string $view The view type, default 'widget'.
+                         */
+                        do_action( 'geodir_after_listing_content', $post, 'widget' ); ?>
                         <footer class="geodir-entry-meta">
                             <div class="geodir-addinfo clearfix">
                                 <?php
+                                /**
+                                 * Called before printing review stars html.
+                                 *
+                                 * @since 1.5.3
+                                 * @param object $post The post object.
+                                 * @param string $view The view type, default 'widget'.
+                                 */
                                 do_action( 'geodir_before_review_html', $post, 'widget' );
                                 $review_show = geodir_is_reviews_show('listview');
                                 if ($review_show) {
