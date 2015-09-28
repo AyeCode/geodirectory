@@ -781,16 +781,30 @@ function geodir_breadcrumb()
 
         $listing_link = get_post_type_archive_link($gd_post_type);
 
+
         add_filter('post_type_archive_link', 'geodir_get_posttype_link', 10, 2);
         $listing_link = rtrim($listing_link, '/');
         $listing_link .= '/';
 
         $post_type_for_location_link = $listing_link;
         $location_terms = geodir_get_current_location_terms('query_vars', $gd_post_type);
+
+        global $wp;
         $location_link = $post_type_for_location_link;
 
         if (geodir_is_page('detail') || geodir_is_page('listing')) {
+
+
             global $post;
+            if(geodir_is_page('detail') && isset($post->country_slug)){
+                $location_terms = array(
+                    'gd_country' => $post->country_slug,
+                    'gd_region' => $post->region_slug,
+                    'gd_city' => $post->city_slug
+                );
+            }
+
+
             $is_location_last = '';
             $is_taxonomy_last = '';
             $breadcrumb .= '<li>';

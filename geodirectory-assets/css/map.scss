@@ -327,8 +327,8 @@
 #post_mapTab .triggermap,
 .geodir-content-right .triggermap,
 .geodir-content-left .triggermap {
-    margin-top: -15px;
-    margin-left: -6px;
+    /*margin-top: -15px;
+    margin-left: -6px;*/
 }
 
 .triggermap:hover {
@@ -637,8 +637,8 @@
 */
 
 .geodir-map-small .map_background .triggermap {
-    left: 10.5px !important;
-    top: 87px !important;
+  /*left: 10.5px !important;
+  top: 87px !important;*/
     margin: auto !important;
     font-size: 17px
 }
@@ -653,8 +653,8 @@
 }
 
 .geodir-map-small .map_background span.triggermap_fullscreen {
-    left: 10.5px !important;
-    top: 90px !important;
+  /*left: 10.5px !important;
+  top: 90px !important;*/
     margin: auto !important;
     font-size: 17px
 }
@@ -670,8 +670,8 @@
 }
 
 div.geodir_map_container.geodir-map-iphone .map_background .triggermap {
-    left: 9px !important;
-    top: 45px !important;
+  /*left: 9px !important;
+  top: 45px !important;*/
     margin: auto !important
 }
 

@@ -2261,7 +2261,7 @@ if (!function_exists('geodir_show_listing_info')) {
                             $html .= '</span>';
                             //print_r($_POST);
                             if ($preview) {
-                                $html .= stripslashes($post->$html_var) . $addition_fields . '</p>';
+                                $html .= stripslashes($post->$html_var) . $addition_fields . '</p></div>';
                             } else {
                                 if ($post->post_address) {
                                     $html .= '<span itemprop="streetAddress">' . $post->post_address . '</span><br>';

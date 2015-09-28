@@ -1088,8 +1088,9 @@ if (!function_exists('register_geodir_widgets')) {
          *
          * @since 1.5.3
          * @package GeoDirectory
+         * @todo Not ready for the big time yet, needs work
          */
-        include_once('geodirectory-widgets/geodirectory_cpt_categories_widget.php');
+        //include_once('geodirectory-widgets/geodirectory_cpt_categories_widget.php');
     }
 
 }

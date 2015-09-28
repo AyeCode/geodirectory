@@ -196,7 +196,17 @@ function geodir_sc_home_map($atts)
 	
 	// Add marker cluster
 	if (isset($params['marker_cluster']) && gdsc_to_bool_val($params['marker_cluster']) && defined('GDCLUSTER_VERSION')) {
-		$map_args['enable_marker_cluster'] = true;
+        $map_args['enable_marker_cluster'] = true;
+        if(get_option('geodir_marker_cluster_type')) {
+            if ($map_args['autozoom']) {
+                $map_args['enable_marker_cluster_no_reposition'] = false;
+            } else {
+                $map_args['enable_marker_cluster_no_reposition'] = true;
+            }
+
+            $map_args['enable_marker_cluster_server'] = true ;
+
+        }
 	} else {
 		$map_args['enable_marker_cluster'] = false;
 	}

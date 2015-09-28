@@ -897,7 +897,7 @@ function geodir_action_details_sidebar()
          * @since 1.0.0
          */
         do_action('geodir_detail_sidebar_inside');
-        ?></div><?php
+        ?></div><!-- end geodir-content-left --><?php
         /**
          * Called after the details page left sidebar.
          *
@@ -924,7 +924,7 @@ function geodir_action_details_sidebar()
         <div class="geodir-content-right geodir-sidebar-wrap"><?php
         /** This action is documented in geodirectory_template_actions.php */
         do_action('geodir_detail_sidebar_inside');
-        ?></div><?php
+        ?></div><!-- end geodir-content-right --><?php
         /**
          * Called after the details page right sidebar.
          *
@@ -1634,7 +1634,7 @@ function geodir_listing_left_section()
     if (get_option('geodir_show_listing_left_section')) { ?>
         <div class="geodir-content-left geodir-sidebar-wrap">
             <?php dynamic_sidebar('geodir_listing_left_sidebar'); ?>
-        </div>
+        </div><!-- end geodir-content-left -->
     <?php }
 }
 
@@ -1678,7 +1678,7 @@ function geodir_listing_right_section()
     if (get_option('geodir_show_listing_right_section')) { ?>
         <div class="geodir-content-right geodir-sidebar-wrap">
             <?php dynamic_sidebar('geodir_listing_right_sidebar'); ?>
-        </div>
+        </div><!-- end geodir-content-right -->
     <?php }
 }
 
@@ -2581,7 +2581,7 @@ function geodir_author_left_section()
     if (get_option('geodir_show_author_left_section')) { ?>
         <div class="geodir-content-left geodir-sidebar-wrap">
             <?php dynamic_sidebar('geodir_author_left_sidebar'); ?>
-        </div>
+        </div><!-- end geodir-content-left -->
     <?php }
 }
 
@@ -2627,7 +2627,7 @@ function geodir_author_right_section()
     if (get_option('geodir_show_author_right_section')) { ?>
         <div class="geodir-content-right geodir-sidebar-wrap">
             <?php dynamic_sidebar('geodir_author_right_sidebar'); ?>
-        </div>
+        </div><!-- end geodir-content-right -->
     <?php }
 }
 
@@ -2796,7 +2796,7 @@ function geodir_search_left_section()
     if (get_option('geodir_show_search_left_section')) { ?>
         <div class="geodir-content-left geodir-sidebar-wrap">
             <?php dynamic_sidebar('geodir_search_left_sidebar'); ?>
-        </div>
+        </div><!-- end geodir-content-left -->
     <?php }
 }
 
@@ -2841,7 +2841,7 @@ function geodir_search_right_section()
     if (get_option('geodir_show_search_right_section')) { ?>
         <div class="geodir-content-right geodir-sidebar-wrap">
             <?php dynamic_sidebar('geodir_search_right_sidebar'); ?>
-        </div>
+        </div><!-- end geodir-content-right -->
     <?php }
 }
 
@@ -2987,7 +2987,7 @@ function geodir_home_left_section()
     if (get_option('geodir_show_home_left_section')) { ?>
         <div class="geodir-content-left geodir-sidebar-wrap">
             <?php dynamic_sidebar('geodir_home_left'); ?>
-        </div>
+        </div><!-- end geodir-content-left -->
     <?php }
 }
 
@@ -3034,7 +3034,7 @@ function geodir_home_right_section()
     if (get_option('geodir_show_home_right_section')) { ?>
         <div class="geodir-content-right geodir-sidebar-wrap">
             <?php dynamic_sidebar('geodir_home_right'); ?>
-        </div>
+        </div><!-- end geodir-content-right -->
     <?php }
 }
 
