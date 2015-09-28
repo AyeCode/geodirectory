@@ -2141,10 +2141,12 @@ if (!function_exists('geodir_show_listing_info')) {
 
                     case 'fieldset':
 
+                        $fieldset_class = 'fieldset-'.sanitize_title_with_dashes($type['site_title']);
+
                         if ($field_set_start == 1) {
-                            echo '</div><div class="geodir-company_info field-group ' . $type['htmlvar_name'] . '"><h2>' . __($type['site_title'], 'geodirectory') . '</h2>';
+                            echo '</div><div class="geodir-company_info field-group ' . $type['htmlvar_name'] . '"><h2 class="'.$fieldset_class.'">' . __($type['site_title'], 'geodirectory') . '</h2>';
                         } else {
-                            echo '<h2>' . __($type['site_title'], 'geodirectory') . '</h2>';
+                            echo '<h2 class="'.$fieldset_class.'">' . __($type['site_title'], 'geodirectory') . '</h2>';
                             $field_set_start = 1;
                         }
 
@@ -2906,6 +2908,7 @@ if (!function_exists('geodir_show_listing_info')) {
                         break;
 
                     case 'textarea':
+                        $html_var = $type['htmlvar_name'];
 
                         if (!empty($post->$type['htmlvar_name'])) {
 
