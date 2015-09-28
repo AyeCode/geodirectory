@@ -532,7 +532,7 @@ function geodir_bestof_places_by_term($query_args)
 	/** This filter is documented in geodirectory-functions/general_functions.php */
 	$template = apply_filters("geodir_template_part-widget-listing-listview", geodir_locate_template('widget-listing-listview'));
 
-    global $post, $map_jason, $map_canvas_arr, $gridview_columns_widget;
+    global $post, $map_jason, $map_canvas_arr, $gridview_columns_widget, $geodir_is_widget_listing;
     $current_post = $post;
     $current_map_jason = $map_jason;
     $current_map_canvas_arr = $map_canvas_arr;
