@@ -598,8 +598,8 @@ function create_marker(input, map_canvas_var) {
                     gd_infowindow.open(jQuery.goMap.map, marker);
                     geodir_fix_marker_pos(map_canvas_var);
 
-                    // give the map half a second to reposition before allowing it to reload
-                    setTimeout(function(){ is_zooming = false; }, 500);
+                    // give the map 1 second to reposition before allowing it to reload
+                    setTimeout(function(){ is_zooming = false; }, 1000);
 
                 }
             });
