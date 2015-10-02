@@ -256,7 +256,7 @@
             }
         };
         e.prototype.winnow_results = function () {
-            var e, t, n, r, i, s, o, u, a, f, l, c, h;
+            var e, t, n, r, i, s, o, u, a, f, l, c, h, tt;
             this.no_results_clear();
             i = 0;
             o = this.get_search_text();
@@ -290,7 +290,13 @@
                         if (t.search_match) {
                             if (o.length) {
                                 u = t.search_text.search(f);
-                                a = t.search_text.substr(0, u + o.length) + "</em>" + t.search_text.substr(u + o.length);
+                                // fix for related accents search.
+								if (u != 0) {
+									var tt = gd_replace_accents(t.search_text);
+									u = tt.search(f);
+								}
+								//
+								a = t.search_text.substr(0, u + o.length) + "</em>" + t.search_text.substr(u + o.length);
                                 t.search_text = a.substr(0, u) + "<em>" + a.substr(u)
                             }
                             if (s != null) {
@@ -312,7 +318,7 @@
             }
         };
         e.prototype.search_string_match = function (e, t) {
-            var n, r, i, s;
+            var n, r, i, s, et;
             if (t.test(e)) {
                 return true
             } else if (this.enable_split_word_search && (e.indexOf(" ") >= 0 || e.indexOf("[") === 0)) {
@@ -325,7 +331,26 @@
                         }
                     }
                 }
-            }
+				
+				// fix for related accents search.
+				et = gd_replace_accents(e);
+				r = et.replace(/\[|\]/g, "").split(" ");
+				if (r.length) {
+					for (i = 0, s = r.length; i < s; i++) {
+						n = r[i];
+						if (t.test(n)) {
+							return true;
+						}
+					}
+				}
+				//
+            } else { // fix for related accents search.
+				et = gd_replace_accents(e);
+				if (t.test(et)) {
+					return true;
+				}
+			}
+			//
         };
         e.prototype.choices_count = function () {
             var e, t, n, r;
