@@ -2299,7 +2299,11 @@ function geodir_post_type_archive_title($title)
     }
 
     if ( defined( 'WPSEO_FILE' ) ) {
-        if(is_home() && is_page_geodir_home()){
+        // Force rewrite YOAST SEO home page title.
+		$wpseo_titles = get_option('wpseo_titles');
+		$forcerewritetitle = !empty($wpseo_titles) && isset($wpseo_titles['forcerewritetitle']) && !empty($wpseo_titles['forcerewritetitle']) ? true : false;
+		
+		if(is_home() && is_page_geodir_home() && !$forcerewritetitle){
             $sep = isset($sep) ? $sep : '&#8902;';
             $title = get_option('blogname') . ' ' . $sep . ' ' . get_option('blogdescription');
         }
