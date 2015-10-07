@@ -44,7 +44,7 @@ class geodir_homepage_map extends WP_Widget
     {
         extract($args, EXTR_SKIP);
         /** This action is documented in geodirectory_shortcodes.php */
-        $width = empty($instance['width']) ? '960' : apply_filters('widget_width', $instance['width']);
+        $width = empty($instance['width']) ? '100%' : apply_filters('widget_width', $instance['width']);
         /** This action is documented in geodirectory_shortcodes.php */
         $height = empty($instance['heigh']) ? '425' : apply_filters('widget_heigh', $instance['heigh']);
         /** This action is documented in geodirectory_shortcodes.php */
@@ -140,7 +140,7 @@ class geodir_homepage_map extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('width'); ?>"><?php _e('Map Width <small>(Default is : 960px) you can use px or % here</small>', 'geodirectory'); ?>
+                for="<?php echo $this->get_field_id('width'); ?>"><?php _e('Map Width <small>(Default is : 100%) you can use px or % here</small>', 'geodirectory'); ?>
                 :
                 <input class="widefat" id="<?php echo $this->get_field_id('width'); ?>"
                        name="<?php echo $this->get_field_name('width'); ?>" type="text"
