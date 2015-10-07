@@ -3,7 +3,10 @@ Event after map marker opened extended to prevent FireFox reclosing marker with 
 Map popup image margins and padding set to 0 !important for compatibility - CHANGED
 Bootstrap styles can alter the popular categories count number position - FIXED
 Location switcher ajax search not working with accents chars - FIXED
-bestof widget Option added to display reviews in excerpt - ADDED
+Best of widget Option added to display reviews in excerpt - ADDED
+Image gallery lightbox popup image stretches problem with some themes - FIXED
+Changed creation of url custom field from varchar 255 to text for longer urls - CHANGED
+Yoast SEO is unable to overwrite the home page meta title - FIXED
 
 v1.5.3
 If tax query has 'relation' set then it will throw WARNING in wp_list_pluck - FIXED

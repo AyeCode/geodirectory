@@ -951,6 +951,7 @@ if (!function_exists('geodir_custom_field_save')) {
                         break;
                     case 'textarea':
                     case 'html':
+                    case 'url':
 
                         $data_type = 'TEXT';
 
