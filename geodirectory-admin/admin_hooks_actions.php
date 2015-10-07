@@ -845,7 +845,7 @@ function geodir_diagnose_multisite_table($filter_arr, $table, $tabel_name, $fix)
                 $wpdb->query("RENAME TABLE " . $table . "_ms_bak TO " . $table . "_ms_bak2");// rename ms_bak table to ms_bak2
 
                 if ($wpdb->query("SHOW TABLES LIKE '" . $table . "_ms_bak'") == 0) {
-                    $filter_arr['output_str'] .= "<li>" . sprintf(__('-->FIXED: table %s_ms_bak renamed and backedup', 'geodirectory'), $table) . "</li>";
+                    $filter_arr['output_str'] .= "<li>" . sprintf(__('-->FIXED: table %s_ms_bak renamed and backed up', 'geodirectory'), $table) . "</li>";
                 } else {
                     $filter_arr['output_str'] .= "<li>" . __('-->PROBLEM: Failed to rename tables, please contact support.', 'geodirectory') . "</li>";
                 }

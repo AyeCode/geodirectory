@@ -1649,6 +1649,15 @@ div#jquery-lightbox {
 .gd-cptcat-title > .gd-cptcat-count  {
 	font-size: .5em;
 }
+.gd-cptcat-row.gd-cpt-flat{
+  width: 100%;
+  margin-right: 0px;
+}
+.gd-cptcat-ul.gd-cptcat-parent.gd-cpt-flat {
+  float: left;
+  width: 20%;
+}
+
 #lightbox-container-image #lightbox-image {
   max-width: none
 }
