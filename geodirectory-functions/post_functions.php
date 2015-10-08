@@ -2550,7 +2550,12 @@ function geodir_excerpt_length($length)
 function geodir_excerpt_more($more)
 {
     global $post;
-    return ' <a href="' . get_permalink($post->ID) . '">' . READ_MORE_TXT . '</a>';
+    $all_postypes = geodir_get_posttypes();
+    if (is_array($all_postypes) && in_array($post->post_type, $all_postypes)) {
+        return ' <a href="' . get_permalink($post->ID) . '">' . READ_MORE_TXT . '</a>';
+    }
+
+    return $more;
 }
 
 
