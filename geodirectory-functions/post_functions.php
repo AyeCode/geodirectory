@@ -2542,6 +2542,7 @@ function geodir_excerpt_length($length)
  * Changing excerpt more.
  *
  * @since 1.0.0
+ * @since 1.5.4 Now only applied to GD post types.
  * @package GeoDirectory
  * @global object $post The current post object.
  * @param string $more Optional. Old string.
