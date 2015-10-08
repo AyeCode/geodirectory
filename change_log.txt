@@ -7,6 +7,9 @@ Best of widget Option added to display reviews in excerpt - ADDED
 Image gallery lightbox popup image stretches problem with some themes - FIXED
 Changed creation of url custom field from varchar 255 to text for longer urls - CHANGED
 Yoast SEO is unable to overwrite the home page meta title - FIXED
+Map tick box HTML changed for compatibility - CHANGED
+New widget added: CPT Categories - ADDED
+Default home page map width changed to 100% from 960px - CHANGED
 
 v1.5.3
 If tax query has 'relation' set then it will throw WARNING in wp_list_pluck - FIXED
