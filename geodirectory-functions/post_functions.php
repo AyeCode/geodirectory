@@ -2542,6 +2542,7 @@ function geodir_excerpt_length($length)
  * Changing excerpt more.
  *
  * @since 1.0.0
+ * @since 1.5.4 Now only applied to GD post types.
  * @package GeoDirectory
  * @global object $post The current post object.
  * @param string $more Optional. Old string.
@@ -2550,7 +2551,12 @@ function geodir_excerpt_length($length)
 function geodir_excerpt_more($more)
 {
     global $post;
-    return ' <a href="' . get_permalink($post->ID) . '">' . READ_MORE_TXT . '</a>';
+    $all_postypes = geodir_get_posttypes();
+    if (is_array($all_postypes) && in_array($post->post_type, $all_postypes)) {
+        return ' <a href="' . get_permalink($post->ID) . '">' . READ_MORE_TXT . '</a>';
+    }
+
+    return $more;
 }
 
 
