@@ -13,6 +13,8 @@ Default home page map width changed to 100% from 960px - CHANGED
 With multi ratings the comment sorting is reversed then selected under settings -> discussion - FIXED
 Excerpt more filter now only applied to GD post types - CHANGED
 New action "geodir_infowindow_meta_before" added in map marker info window - ADDED
+Default category can be set by "default_category" in csv import - CHANGED
+Search unable to find listings for a particular keyword in the content - FIXED
 
 v1.5.3
 If tax query has 'relation' set then it will throw WARNING in wp_list_pluck - FIXED
