@@ -360,7 +360,7 @@ function geodir_pagination($before = '', $after = '', $prelabel = '', $nxtlabel 
 
     $half_pages_to_show = round($pages_to_show / 2);
 
-    if (get_option('geodir_set_as_home') && is_home()) // dont apply default  pagination for geodirectory home page.
+    if (geodir_is_page('home') || (get_option('geodir_set_as_home') && is_home())) // dont apply default  pagination for geodirectory home page.
         return;
 
     if (!is_single()) {

@@ -108,6 +108,14 @@ $geodir_settings['permalink_settings'] = apply_filters('geodir_permalink_setting
         'id' => 'geodir_pages'),
 
     array(
+        'name' => __('GD Home page', 'geodirectory'),
+        'desc' => __('Select the page to use for the GD homepage (you must also set this page in Settings>Reading>Front page for it to work)', 'geodirectory'),
+        'id' => 'geodir_home_page',
+        'type' => 'single_select_page',
+        'class' => 'chosen_select'
+    ),
+
+    array(
         'name' => __('Add listing page', 'geodirectory'),
         'desc' => __('Select the page to use for adding listings', 'geodirectory'),
         'id' => 'geodir_add_listing_page',

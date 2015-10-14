@@ -283,8 +283,11 @@ function geodir_is_page($gdpage = '')
                 return true;
 
             break;
+        case 'home':
+            if (is_page() && get_query_var('page_id') == geodir_home_page_id())
+                return true;
+            break;
         case 'location':
-
             if (is_page() && get_query_var('page_id') == geodir_location_page_id())
                 return true;
             break;
@@ -2054,7 +2057,7 @@ function is_page_geodir_home()
     $cur_url = str_replace(array("https://", "http://", "www."), array('', '', ''), geodir_curPageURL());
     $home_url = home_url('', 'http');
     $home_url = str_replace("www.", "", $home_url);
-    if ((strpos($home_url, $cur_url) !== false || strpos($home_url . '/', $cur_url) !== false) && get_option('geodir_set_as_home')) {
+    if ((strpos($home_url, $cur_url) !== false || strpos($home_url . '/', $cur_url) !== false) && (get_option('geodir_set_as_home')|| geodir_is_page('home'))) {
         return true;
     } else {
         return false;

@@ -339,12 +339,12 @@ function geodir_template_loader($template)
 
     }
 
-    if (get_option('geodir_set_as_home') || geodir_is_page('location') || $geodir_custom_page_list['geodir_home_map_page']) {
+    if (get_option('geodir_set_as_home') || geodir_is_page('home') || geodir_is_page('location')) {
 
         global $post, $wp_query;
 
-        if (('page' == get_option('show_on_front') && isset($post->ID) && $post->ID == get_option('page_on_front'))
-            || (is_home() && !$wp_query->is_posts_page || $geodir_custom_page_list['geodir_home_map_page'])
+        if (geodir_is_page('home') || ('page' == get_option('show_on_front') && isset($post->ID) && $post->ID == get_option('page_on_front'))
+            || (is_home() && !$wp_query->is_posts_page)
         ) {
 
             $template = geodir_locate_template('geodir-home');
