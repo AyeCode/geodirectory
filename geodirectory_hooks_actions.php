@@ -3447,3 +3447,7 @@ function geodir_search_meta_desc($html) {
     return $html;
 }
 add_filter('geodir_seo_meta_description', 'geodir_search_meta_desc', 10, 1);
+// If WordPress SEO active.
+add_filter('wpseo_title', 'geodir_replace_location_vars', 10, 1);
+add_filter('wpseo_metakeywords', 'geodir_replace_location_vars', 10, 1);
+add_filter('wpseo_metadesc', 'geodir_replace_location_vars', 10, 1);

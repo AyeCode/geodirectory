@@ -17,6 +17,7 @@ Default category can be set by "default_category" in csv import - CHANGED
 Search unable to find listings for a particular keyword in the content - FIXED
 New GD Home page created and setting depreciated for overriding normal home page - CHANGED
 Email address with .coop TLD not validated - FIXED
+Yoast meta title, description & keywords now also works with %location% tag - ADDED
 
 v1.5.3
 If tax query has 'relation' set then it will throw WARNING in wp_list_pluck - FIXED
