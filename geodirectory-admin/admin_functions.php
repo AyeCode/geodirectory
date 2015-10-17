@@ -4456,6 +4456,7 @@ function geodir_filesystem_notice()
  * Handle import/export for categories & listings.
  *
  * @since 1.4.6
+ * @since 1.5.4 Modified to add default category via csv import.
  * @package GeoDirectory
  *
  * @global object $wpdb WordPress Database object.
@@ -4990,6 +4991,7 @@ function geodir_ajax_import_export() {
 							$post_author = '';
 							$post_content = '';
 							$post_category_arr = array();
+							$default_category = '';
 							$post_tags = array();
 							$post_type = '';
 							$post_status = '';
@@ -5029,6 +5031,8 @@ function geodir_ajax_import_export() {
 									$post_content = $row[$c];
 								} else if ( $column == 'post_category' && $row[$c] != '' ) {
 									$post_category_arr = explode( ',', $row[$c] );
+								} else if ( $column == 'default_category' ) {
+									$default_category = wp_kses_normalize_entities($row[$c]);
 								} else if ( $column == 'post_tags' && $row[$c] != '' ) {
 									$post_tags = explode( ',', $row[$c] );
 								} else if ( $column == 'post_type' ) {
@@ -5129,8 +5133,13 @@ function geodir_ajax_import_export() {
 
 							$cat_taxonomy = $post_type . 'category';
 							$tags_taxonomy = $post_type . '_tags';
+							
+							if ($default_category != '' && !in_array($default_category, $post_category_arr)) {
+								$post_category_arr = array_merge(array($default_category), $post_category_arr);
+							}
 
 							$post_category = array();
+							$default_category_id = NULL;
 							if ( !empty( $post_category_arr ) ) {
 								foreach ( $post_category_arr as $value ) {
 									$category_name = wp_kses_normalize_entities( trim( $value ) );
@@ -5157,6 +5166,10 @@ function geodir_ajax_import_export() {
 										if ( !empty( $term_category ) && !is_wp_error( $term_category ) ) {
 											//$post_category[] = $term_category->slug;
 											$post_category[] = intval($term_category->term_id);
+											
+											if ($category_name == $default_category) {
+												$default_category_id = intval($term_category->term_id);
+											}
 										}
 									}
 								}
@@ -5310,6 +5323,10 @@ function geodir_ajax_import_export() {
 								
 								if (!empty($save_post['post_category']) && is_array($save_post['post_category'])) {
 									$save_post['post_category'] = array_unique( array_map( 'intval', $save_post['post_category'] ) );
+									if ($default_category_id) {
+										$save_post['post_default_category'] = $default_category_id;
+										$gd_post['default_category'] = $default_category_id;
+									}
 									$gd_post[$cat_taxonomy] = $save_post['post_category'];
 								}
 								
@@ -5320,7 +5337,18 @@ function geodir_ajax_import_export() {
 									wp_set_object_terms( $saved_post_id, $save_post['post_category'], $cat_taxonomy );
 									
 									$post_default_category = isset( $save_post['post_default_category'] ) ? $save_post['post_default_category'] : '';
-									$post_category_str = isset( $save_post['post_category_str'] ) ? $save_post['post_category_str'] : '';
+									if ($default_category_id) {
+										$post_default_category = $default_category_id;
+									}
+									$post_cat_ids = geodir_get_post_meta($saved_post_id, $cat_taxonomy);
+									$save_post['post_category'] = !empty($post_cat_ids) ? explode(",", trim($post_cat_ids, ",")) : $save_post['post_category'];
+									$post_category_str = !empty($save_post['post_category']) ? implode(",y:#", $save_post['post_category']) . ',y:' : '';
+									
+									if ($post_category_str != '' && $post_default_category) {
+										$post_category_str = str_replace($post_default_category . ',y:', $post_default_category . ',y,d:', $post_category_str);
+									}
+									
+									$post_category_str = $post_category_str != '' ? array($cat_taxonomy => $post_category_str) : '';
                             		
 									geodir_set_postcat_structure( $saved_post_id, $cat_taxonomy, $post_default_category, $post_category_str );
 								}
@@ -5664,6 +5692,7 @@ function geodir_imex_get_posts( $post_type ) {
 		$csv_row[] = 'post_author';
 		$csv_row[] = 'post_content';
 		$csv_row[] = 'post_category';
+		$csv_row[] = 'default_category';
 		$csv_row[] = 'post_tags';
 		$csv_row[] = 'post_type';
 		if ( $post_type == 'gd_event' ) {
@@ -5735,11 +5764,16 @@ function geodir_imex_get_posts( $post_type ) {
 		$images_count = 5;
 		foreach ( $posts as $post ) {
 			$post_id = $post['ID'];
+			
+			$gd_post_info = geodir_get_post_info( $post_id );
+			$post_info = (array)$gd_post_info;
 						
 			$taxonomy_category = $post_type . 'category';
 			$taxonomy_tags = $post_type . '_tags';
 			
 			$post_category = '';
+			$default_category_id = $gd_post_info->default_category;
+			$default_category = '';
 			$post_tags = '';
 			$terms = wp_get_post_terms( $post_id, array( $taxonomy_category, $taxonomy_tags ) );
 			
@@ -5750,6 +5784,10 @@ function geodir_imex_get_posts( $post_type ) {
 				foreach ( $terms as $term ) {
 					if ( $term->taxonomy == $taxonomy_category ) {
 						$post_category[] = $term->name;
+						
+						if ($default_category_id == $term->term_id) {
+							$default_category = $term->name; // Default category.
+						}
 					}
 					
 					if ( $term->taxonomy == $taxonomy_tags ) {
@@ -5757,12 +5795,12 @@ function geodir_imex_get_posts( $post_type ) {
 					}
 				}
 				
+				if (empty($default_category) && !empty($post_category)) {
+					$default_category = $post_category[0]; // Set first one as default category.
+				}
 				$post_category = !empty( $post_category ) ? implode( ',', $post_category ) : '';
 				$post_tags = !empty( $post_tags ) ? implode( ',', $post_tags ) : '';
 			}
-			
-			$gd_post_info = geodir_get_post_info( $post_id );
-			$post_info = (array)$gd_post_info;
 			
 			// Franchise data
 			$franchise_id = NULL;
@@ -5833,6 +5871,7 @@ function geodir_imex_get_posts( $post_type ) {
 			$csv_row[] = $post_info['post_author']; // post_author
 			$csv_row[] = $post_info['post_content']; // post_content
 			$csv_row[] = $post_category; // post_category
+			$csv_row[] = $default_category; // default_category
 			$csv_row[] = $post_tags; // post_tags
 			$csv_row[] = $post_type; // post_type
 			if ( $post_type == 'gd_event' ) {

@@ -683,6 +683,7 @@ function geodir_default_where($where)
  * Listing search where filter.
  *
  * @since 1.0.0
+ * @since 1.5.4 Modified to fix unable to find listings for a particular keyword in the content.
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
@@ -767,9 +768,9 @@ function searching_filter_where($where)
          *
          * @since 1.5.0
          * @package GeoDirectory
-         * @param string $content_where The query values, default: `" OR ($wpdb->posts.post_content LIKE \"$s\" OR $wpdb->posts.post_content LIKE \"$s%\" OR $wpdb->posts.post_content LIKE \"% $s%\") "`.
+         * @param string $content_where The query values, default: `" OR ($wpdb->posts.post_content LIKE \"$s\" OR $wpdb->posts.post_content LIKE \"$s%\" OR $wpdb->posts.post_content LIKE \"% $s%\" OR $wpdb->posts.post_content LIKE \"%>$s%\" OR $wpdb->posts.post_content LIKE \"%\n$s%\") ") "`.
          */
-		$content_where = apply_filters("geodir_search_content_where"," OR ($wpdb->posts.post_content LIKE \"$s\" OR $wpdb->posts.post_content LIKE \"$s%\" OR $wpdb->posts.post_content LIKE \"% $s%\") ");
+		$content_where = apply_filters("geodir_search_content_where"," OR ($wpdb->posts.post_content LIKE \"$s\" OR $wpdb->posts.post_content LIKE \"$s%\" OR $wpdb->posts.post_content LIKE \"% $s%\" OR $wpdb->posts.post_content LIKE \"%>$s%\" OR $wpdb->posts.post_content LIKE \"%\n$s%\") ");
         /**
          * Filter the search query term values.
          *

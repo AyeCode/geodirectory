@@ -950,6 +950,7 @@ function geodir_get_map_default_language()
  * Adds meta keywords and description for SEO.
  *
  * @since 1.0.0
+ * @since 1.5.4 Modified to replace %location% from meta when Yoast SEO plugin active.
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global object $post The current post object.
@@ -965,6 +966,19 @@ function geodir_add_meta_keywords()
     if (!$is_geodir_page) {
         return;
     }// if non GD page, bail
+	
+	$use_gd_meta = true;
+	if (class_exists('WPSEO_Frontend') || class_exists('All_in_One_SEO_Pack')) {
+		$use_gd_meta = false;
+		
+		if (geodir_is_page('search')) {
+			$use_gd_meta = true;
+		}
+	}
+	
+	if (!$use_gd_meta) {
+		return;
+	}// bail if Yoast Wordpress SEO or All_in_One_SEO_Pack active.
 
     $current_term = $wp_query->get_queried_object();
 
@@ -2017,4 +2031,49 @@ function geodir_share_this_button_code()
 
     </div>
 <?php
+}
+
+/**
+ * Replace the %location% string with real location.
+ *
+ * @since 1.5.4
+ * @package GeoDirectory
+ *
+ * @param string $string The string form which %location% replaced.
+ * @param string $default The default text to replace %location% if location not found.
+ * @return string The %location% replaced string.
+ */
+function geodir_replace_location_vars($string, $default = '') {
+	if ($string != '') {
+		$default = $default != '' ? $default : __('Everywhere', 'geodirectory');
+		
+		$location = '';
+		if (is_plugin_active('geodir_location_manager/geodir_location_manager.php')) {			
+			if ($city = get_query_var('gd_city')) {
+				$location = get_actual_location_name('city', $city);
+			} else if ($region = get_query_var('gd_region')) {
+				$location = get_actual_location_name('region', $region);
+			} else if ($country = get_query_var('gd_country')) {
+				$location = get_actual_location_name('country', $country, true);
+			}
+			
+			if ($location == '') {
+				$location_type = geodir_what_is_current_location();
+				
+				if ($location_type == 'city') {
+					$location = geodir_get_current_location(array('what' => 'city', 'echo' => false));
+				} else if ($location_type == 'region') {
+					$location = geodir_get_current_location(array('what' => 'region', 'echo' => false));
+				} else if ($location_type == 'country') {
+					$location = geodir_get_current_location(array('what' => 'country', 'echo' => false));
+					$location = __($location, 'geodirectory');
+				}
+			}
+		}
+		
+		$replace = $location != '' ? $location : $default;
+		$string = str_replace('%location%', $replace, $string);
+	}
+	
+	return $string;
 }

@@ -845,7 +845,7 @@ function geodir_diagnose_multisite_table($filter_arr, $table, $tabel_name, $fix)
                 $wpdb->query("RENAME TABLE " . $table . "_ms_bak TO " . $table . "_ms_bak2");// rename ms_bak table to ms_bak2
 
                 if ($wpdb->query("SHOW TABLES LIKE '" . $table . "_ms_bak'") == 0) {
-                    $filter_arr['output_str'] .= "<li>" . sprintf(__('-->FIXED: table %s_ms_bak renamed and backedup', 'geodirectory'), $table) . "</li>";
+                    $filter_arr['output_str'] .= "<li>" . sprintf(__('-->FIXED: table %s_ms_bak renamed and backed up', 'geodirectory'), $table) . "</li>";
                 } else {
                     $filter_arr['output_str'] .= "<li>" . __('-->PROBLEM: Failed to rename tables, please contact support.', 'geodirectory') . "</li>";
                 }
@@ -1330,6 +1330,31 @@ function geodir_diagnose_default_pages()
     $is_error_during_diagnose = false;
     $output_str = '';
     $fix = isset($_POST['fix']) ? true : false;
+
+    //////////////////////////////////
+    /* Diagnose GD Home Page Starts */
+    //////////////////////////////////
+    $option_value = get_option('geodir_home_page');
+    $page = get_post($option_value);
+    if(!empty($page)){$page_found = $page->ID;}else{$page_found = '';}
+
+    if(!empty($option_value) && !empty($page_found) && $option_value == $page_found && $page->post_status=='publish')
+        $output_str .= "<li>" . __('GD Home page exists with proper setting.', 'geodirectory') . "</li>";
+    else {
+        $is_error_during_diagnose = true;
+        $output_str .= "<li><strong>" . __('GD Home page is missing.', 'geodirectory') . "</strong></li>";
+        if ($fix) {
+            if (geodir_fix_virtual_page('gd-home', __('GD Home page', 'geodirectory'), $page_found, 'geodir_home_page')) {
+                $output_str .= "<li><strong>" . __('-->FIXED: GD Home page fixed', 'geodirectory') . "</strong></li>";
+            } else {
+                $output_str .= "<li><strong>" . __('-->FAILED: GD Home page fix failed', 'geodirectory') . "</strong></li>";
+            }
+        }
+    }
+
+    ////////////////////////////////
+    /* Diagnose GD Home Page Ends */
+    ////////////////////////////////
 
     //////////////////////////////////
     /* Diagnose Add Listing Page Starts */

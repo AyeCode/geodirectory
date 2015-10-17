@@ -1741,6 +1741,7 @@ if (!function_exists('geodir_get_infowindow_html')) {
      * Set post Map Marker info html.
      *
      * @since 1.0.0
+	 * @since 1.5.4 Modified to add new action "geodir_infowindow_meta_before".
      * @package GeoDirectory
      * @global array $geodir_addon_list List of active GeoDirectory extensions.
      * @param object $postinfo_obj The post details object.
@@ -1865,56 +1866,18 @@ if (!function_exists('geodir_get_infowindow_html')) {
                         ?>
                         <div class="geodir-bubble-meta-side">
                             <?php
-                            if (isset($postinfo_obj->recurring_dates)) {
-                                $recuring_data = unserialize($postinfo_obj->recurring_dates);
-                                $output = '';
-                                $output .= '<div class="geodir_event_schedule">';
-
-                                $event_recurring_dates = explode(',', $recuring_data['event_recurring_dates']);
-
-                                $starttimes = isset($recuring_data['starttime']) ? $recuring_data['starttime'] : '';
-                                $endtimes = isset($recuring_data['endtime']) ? $recuring_data['endtime'] : '';
-                                $e = 0;
-                                foreach ($event_recurring_dates as $key => $date) {
-
-                                    if (strtotime($date) < strtotime(date("Y-m-d"))) {
-                                        continue;
-                                    } // if the event is old don't show it on the map
-                                    $e++;
-                                    if ($e == 2) {
-                                        break;
-                                    }// only show 3 event dates
-                                   // $output .= '<p>';
-                                    //$geodir_num_dates++;
-                                    if (isset($recuring_data['different_times']) && $recuring_data['different_times'] == '1') {
-                                        $starttimes = isset($recuring_data['starttimes'][$key]) ? $recuring_data['starttimes'][$key] : '';
-                                        $endtimes = isset($recuring_data['endtimes'][$key]) ? $recuring_data['endtimes'][$key] : '';
-                                    }
-
-                                    $sdate = strtotime($date . ' ' . $starttimes);
-                                    $edate = strtotime($date . ' ' . $endtimes);
-
-                                    if ($starttimes > $endtimes) {
-                                        $edate = strtotime($date . ' ' . $endtimes . " +1 day");
-                                    }
-
-
-                                    global $geodir_date_time_format;
-
-                                    $output .= '<i class="fa fa-caret-right"></i>' . date($geodir_date_time_format, $sdate);
-                                    //$output .=  __(' To', GEODIREVENTS_TEXTDOMAIN).' ';
-                                    $output .= '<br />';
-                                    $output .= '<i class="fa fa-caret-left"></i>' . date($geodir_date_time_format, $edate);//.'<br />';
-                                   // $output .= '</p>';
-                                }
-
-                                $output .= '</div>';
-
-                                echo $output;
-                            }
+                            /**
+                             * Fires before the meta info in the map info window.
+                             *
+                             * This can be used to add more info to the map info window before the normal meta info.
+                             *
+                             * @since 1.5.4
+							 * @param int $ID The post id.
+                             * @param object $postinfo_obj The posts info as an object.
+                             * @param bool|string $post_preview True if currently in post preview page. Empty string if not.                           *
+                             */
+                            do_action('geodir_infowindow_meta_before', $ID, $postinfo_obj, $post_preview);
                             ?>
-
-
                             <span class="geodir_address"><i class="fa fa-home"></i> <?php echo $address; ?></span>
                             <?php if ($contact) { ?><span class="geodir_contact"><i
                                 class="fa fa-phone"></i> <?php echo $contact; ?></span><?php } ?>
@@ -2542,6 +2505,7 @@ function geodir_excerpt_length($length)
  * Changing excerpt more.
  *
  * @since 1.0.0
+ * @since 1.5.4 Now only applied to GD post types.
  * @package GeoDirectory
  * @global object $post The current post object.
  * @param string $more Optional. Old string.
@@ -2550,7 +2514,12 @@ function geodir_excerpt_length($length)
 function geodir_excerpt_more($more)
 {
     global $post;
-    return ' <a href="' . get_permalink($post->ID) . '">' . READ_MORE_TXT . '</a>';
+    $all_postypes = geodir_get_posttypes();
+    if (is_array($all_postypes) && in_array($post->post_type, $all_postypes)) {
+        return ' <a href="' . get_permalink($post->ID) . '">' . READ_MORE_TXT . '</a>';
+    }
+
+    return $more;
 }
 
 
