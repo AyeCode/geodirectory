@@ -19,6 +19,7 @@ New GD Home page created and setting depreciated for overriding normal home page
 Email address with .coop TLD not validated - FIXED
 Yoast meta title, description & keywords now also works with %location% tag - ADDED
 GeoProperty theme compatibility pack - ADDED
+Related listing widget does not reset the $post value properly - FIXED
 
 v1.5.3
 If tax query has 'relation' set then it will throw WARNING in wp_list_pluck - FIXED

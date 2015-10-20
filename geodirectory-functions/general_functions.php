@@ -766,7 +766,7 @@ function geodir_breadcrumb()
      */
     $separator = apply_filters('geodir_breadcrumb_separator', ' > ');
 
-    if (!is_home()) {
+    if (!geodir_is_page('home')) {
         $breadcrumb = '';
         $url_categoris = '';
         $breadcrumb .= '<div class="geodir-breadcrumb clearfix"><ul id="breadcrumbs">';
@@ -775,7 +775,7 @@ function geodir_breadcrumb()
          *
          * @since 1.0.0
          */
-        $breadcrumb .= '<li>' . apply_filters('geodir_breadcrumb_first_link', '<a href="' . get_option('home') . '">' . __('Home', 'geodirectory') . '</a>') . '</li>';
+        $breadcrumb .= '<li>' . apply_filters('geodir_breadcrumb_first_link', '<a href="' . home_url() . '">' . __('Home', 'geodirectory') . '</a>') . '</li>';
 
         $gd_post_type = geodir_get_current_posttype();
         $post_type_info = get_post_type_object($gd_post_type);
@@ -3538,4 +3538,54 @@ function geodir_get_client_name($user_id) {
 	}
 	
 	return $client_name;
+}
+
+
+//add_filter( 'home_url', 'geodir_geo_home_link',10,2 );
+function geodir_geo_home_link( $url, $path){
+
+    // If direct home path then we edit it.
+    if(!$path || $path=='/'){
+
+        global $geodir_add_location_url;
+        $include_location = false;
+
+        if ($geodir_add_location_url != NULL && $geodir_add_location_url != '') {
+            if ($geodir_add_location_url && get_option('geodir_add_location_url')) {
+                $include_location = true;
+            }
+
+        } elseif (get_option('geodir_add_location_url') && isset($_SESSION['gd_multi_location']) && $_SESSION['gd_multi_location'] == 1)
+            $include_location = true;
+
+
+        if ($include_location) {
+
+            $request_term = geodir_get_current_location_terms('query_vars');
+
+            if (!empty($request_term)) {
+
+
+                if (get_option('permalink_structure') != '') {
+
+                    $location_slug = get_post_field( 'post_name', geodir_location_page_id() );
+
+
+                    $request_term = implode("/", $request_term);
+                    $new_listing_slug = '/' . $location_slug . '/' . $request_term . '/';
+
+                    $url = trim($url,'/').$new_listing_slug;
+
+                } else {
+                    $url = geodir_getlink($url, $request_term);
+                }
+
+            }
+        }
+
+    }
+
+
+    return $url;
+
 }
