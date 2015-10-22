@@ -1483,7 +1483,7 @@ function geodir_show_detail_page_tabs()
                     ob_start() // start tab content buffering
                     ?>
                     <li id="<?php echo $tab_index;?>Tab" <?php if ($tab_index == 'post_profile') {
-                        echo 'itemprop="description"';
+                        //echo 'itemprop="description"';
                     }?>>
                         <div id="<?php echo $tab_index;?>" class="hash-offset"></div>
                         <?php

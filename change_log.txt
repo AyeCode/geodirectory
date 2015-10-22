@@ -21,6 +21,8 @@ Yoast meta title, description & keywords now also works with %location% tag - AD
 GeoProperty theme compatibility pack - ADDED
 Related listing widget does not reset the $post value properly - FIXED
 Email subjects and messages can now be translated in .po file if original messages is used - CHANGED
+Structured data now uses JSON-LD and can be filtered to add more info - ADDED
+Schema type option added to categories for structured data - ADDED
 
 v1.5.3
 If tax query has 'relation' set then it will throw WARNING in wp_list_pluck - FIXED
