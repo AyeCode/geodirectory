@@ -512,6 +512,7 @@ add_action('geodir_article_open', 'geodir_action_article_open', 10, 4);
  * @param string $class Optional. The element class.
  * @param string $itemtype Optional. The element itemtype.
  * @since 1.0.0
+ * @since 1.5.4 Removed itemscope itemtype="[itemtype]" as now added
  * @package GeoDirectory
  */
 function geodir_action_article_open($type = '', $id = '', $class = '', $itemtype = '')
@@ -521,7 +522,7 @@ function geodir_action_article_open($type = '', $id = '', $class = '', $itemtype
     if (!empty($tc['geodir_article_open_replace'])) {
         $text = $tc['geodir_article_open_replace'];
     } else {
-        $text = '<article  id="[id]" class="[class]" itemscope itemtype="[itemtype]">';
+        $text = '<article  id="[id]" class="[class]" >';
     }
 
     if (!empty($tc['geodir_article_open_id'])) {
@@ -971,6 +972,7 @@ add_action('geodir_details_slider', 'geodir_action_details_slider', 10, 1);
  * Output the details page slider HTML.
  *
  * @since 1.0.0
+ * @since 1.5.4 itemprop="image" removed as added via JSON-LD.
  * @package GeoDirectory
  * @global bool $preview True of on a preview page. False if not.
  * @global object $post The current post object.
@@ -1069,7 +1071,7 @@ function geodir_action_details_slider()
                 }
                 $caption = '';//(!empty($image->caption)) ? '<p class="flex-caption">'.$image->caption.'</p>' : '';
                 $main_slides .= '<li><img src="' . geodir_plugin_url() . "/geodirectory-assets/images/spacer.gif" . '" alt="' . $image->title . '" title="' . $image->title . '" style="max-height:' . $spacer_height . 'px;margin:0 auto;" />';
-                $main_slides .= '<img src="' . $image->src . '" alt="' . $image->title . '" title="' . $image->title . '" style="max-height:400px;margin:0 auto;" itemprop="image"/>'.$caption.'</li>';
+                $main_slides .= '<img src="' . $image->src . '" alt="' . $image->title . '" title="' . $image->title . '" style="max-height:400px;margin:0 auto;" />'.$caption.'</li>';
                 $nav_slides .= '<li><img src="' . $image->src . '" alt="' . $image->title . '" title="' . $image->title . '" style="max-height:48px;margin:0 auto;" /></li>';
                 $slides++;
             }
@@ -1240,7 +1242,7 @@ function geodir_action_details_taxonomies()
     </p><?php
 }
 
-add_action('geodir_details_micordata', 'geodir_action_details_micordata', 10);
+add_action('wp_head', 'geodir_action_details_micordata', 10);
 
 /**
  * Output the posts microdata in the source code.
@@ -1250,30 +1252,125 @@ add_action('geodir_details_micordata', 'geodir_action_details_micordata', 10);
  * @global bool $preview True of on a preview page. False if not.
  * @global object $post The current post object.
  * @since 1.0.0
+ * @since 1.5.4 Changed to JSON-LD and added filters.
  * @package GeoDirectory
  */
 function geodir_action_details_micordata()
 {
-    global $post, $preview;
-    if (!$preview) {
-        $c_url = geodir_curPageURL();
-        $c_url = strtok($c_url, "#");
-        $c_url = strtok($c_url, "?");
-        ?>
-        <span style="display:none;" class="url"><?php echo $c_url;?></span>
-        <span class="updated" style="display:none;"><?php the_modified_date('c');?></span>
-        <span class="vcard author" style="display:none;">
-	<span class="fn"><?php echo get_the_author(); ?></span>
-    <span class="org"><?php the_title();?></span>
-    <span class="role"><?php _e('Admin', 'geodirectory')?></span>
-</span>
-        <meta itemprop="name" content="<?php the_title_attribute();?>"/>
 
-        <meta itemprop="url" content="<?php echo $c_url;?>"/>
-        <?php if ($post->geodir_contact) {
-            echo '<meta itemprop="telephone" content="' . $post->geodir_contact . '" />';
-        }
+    global $post, $preview;
+    if ($preview || !geodir_is_page('detail')) {
+        return;
     }
+
+    // url
+    $c_url = geodir_curPageURL();
+
+    // post reviews
+    $post_reviews = get_comments(array('post_id' => $post->ID, 'status' => 'approve'));
+    if (empty($post_reviews)) {
+        $reviews = '';
+    } else {
+        foreach ($post_reviews as $review) {
+            $reviews[] = array(
+                "@type" => "Review",
+                "author" => $review->comment_author,
+                "datePublished" => $review->comment_date,
+                "description" => $review->comment_content,
+                "reviewRating" => array(
+                    "@type" => "Rating",
+                    "bestRating" => "5",// @todo this will need to be filtered for review manager if user changes the score.
+                    "ratingValue" => geodir_get_commentoverall($review->comment_ID),
+                    "worstRating" => "1"
+                )
+            );
+        }
+
+    }
+
+    // post images
+    $post_images = geodir_get_images($post->ID, 'thumbnail', get_option('geodir_listing_no_img'));
+    if (empty($post_images)) {
+        $images = '';
+    } else {
+        $i_arr = array();
+        foreach ($post_images as $img) {
+            $i_arr[] = $img->src;
+        }
+
+        if (count($i_arr) == 1) {
+            $images = $i_arr[0];
+        } else {
+            $images = $i_arr;
+        }
+
+    }
+    //print_r($post);
+    // external links
+    $external_links =  array();
+    $external_links[] = $post->geodir_website;
+    $external_links[] = $post->geodir_twitter;
+    $external_links[] = $post->geodir_facebook;
+    $external_links = array_filter($external_links);
+
+    // reviews
+    $comment_count = geodir_get_review_count_total($post->ID);
+    $post_avgratings = geodir_get_post_rating($post->ID);
+
+    // schema type
+    if(isset($post->default_category) && $post->default_category){
+        $schema_type = get_tax_meta($post->default_category, 'ct_cat_schema', false, $post->post_type);
+        if(!$schema_type && $post->post_type=='gd_event'){$schema_type = 'Event';}
+        elseif(!$schema_type){$schema_type = 'LocalBusiness';}
+    }
+
+    $schema = array();
+    $schema['@context'] = "http://schema.org";
+    $schema['@type'] = $schema_type;
+    $schema['name'] = $post->post_name;
+    $schema['description'] = $post->post_content;
+    $schema['telephone'] = $post->geodir_contact;
+    $schema['url'] = $c_url;
+    $schema['sameAs'] = $external_links;;
+    $schema['image'] = $images;
+    $schema['address'] = array(
+        "@type" => "PostalAddress",
+        "streetAddress" => $post->post_address,
+        "addressLocality" => $post->post_city,
+        "addressRegion" => $post->post_region,
+        "addressCountry" => $post->post_country,
+        "postalCode" => $post->post_zip
+    );
+
+    if($post->post_latitude && $post->post_longitude) {
+        $schema['geo'] = array(
+            "@type" => "GeoCoordinates",
+            "latitude" => $post->post_latitude,
+            "longitude" => $post->post_longitude
+        );
+    }
+
+    if($post_avgratings) {
+        $schema['aggregateRating'] = array(
+            "@type" => "AggregateRating",
+            "ratingValue" => $post_avgratings,
+            "bestRating" => "5", // @todo this will need to be filtered for review manager if user changes the score.
+            "worstRating" => "1",
+            "ratingCount" => $comment_count
+        );
+    }
+    $schema['review'] = $reviews;
+
+    /**
+     * Allow the schema JSON-LD info to be filtered.
+     *
+     * @since 1.5.4
+     * @param array $schema The array of schema data to be filtered.
+     */
+    $schema = apply_filters('geodir_details_schema', $schema);
+
+    echo '<script type="application/ld+json">' . json_encode($schema) . '</script>';
+
 }
 
 add_action('geodir_details_tabs', 'geodir_show_detail_page_tabs', 10);
@@ -1340,7 +1437,6 @@ add_action('geodir_details_main_content', 'geodir_action_before_single_post', 10
 add_action('geodir_details_main_content', 'geodir_action_page_title', 20);
 add_action('geodir_details_main_content', 'geodir_action_details_slider', 30);
 add_action('geodir_details_main_content', 'geodir_action_details_taxonomies', 40);
-add_action('geodir_details_main_content', 'geodir_action_details_micordata', 50);
 add_action('geodir_details_main_content', 'geodir_show_detail_page_tabs', 60);
 add_action('geodir_details_main_content', 'geodir_action_after_single_post', 70);
 add_action('geodir_details_main_content', 'geodir_action_details_next_prev', 80);

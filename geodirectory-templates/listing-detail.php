@@ -49,6 +49,7 @@ do_action('geodir_wrapper_content_open', 'details-page', 'geodir-wrapper-content
  * Adds the opening HTML wrapper for the article on the details page.
  *
  * @since 1.1.0
+ * @since 1.5.4 Removed http://schema.org/LocalBusiness parameter as its now added via JSON-LD
  * @global object $post The current post object.
  * @global object $post_images Image objects of current post if available.
  * @param string $type Page type.
@@ -57,7 +58,7 @@ do_action('geodir_wrapper_content_open', 'details-page', 'geodir-wrapper-content
  * @param string $itemtype The itemtype value of the HTML element.
  * @see 'geodir_article_close'
  */
-do_action('geodir_article_open', 'details-page', 'post-' . get_the_ID(), get_post_class(), 'http://schema.org/LocalBusiness');
+do_action('geodir_article_open', 'details-page', 'post-' . get_the_ID(), get_post_class(), '');
 
 ###### MAIN CONTENT ######
 // this call the main page content
