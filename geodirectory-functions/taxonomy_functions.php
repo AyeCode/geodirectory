@@ -1527,13 +1527,24 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
 
 
                 if (!empty($post_location)) {
-                    if (get_option('geodir_show_location_url') == 'all') {
-                        $location_request .= $post_location->country_slug . '/';
-                        $location_request .= $post_location->region_slug . '/';
-                        $location_request .= $post_location->city_slug . '/';
-                    } else {
-                        $location_request .= $post_location->city_slug . '/';
-                    }
+                    $country_slug = isset($post_location->country_slug) ? $post_location->country_slug : '';
+					$region_slug = isset($post_location->region_slug) ? $post_location->region_slug : '';
+					$city_slug = isset($post_location->city_slug) ? $post_location->city_slug : '';
+					
+					$geodir_show_location_url = get_option('geodir_show_location_url');
+					
+					$location_slug = array();
+					if ($geodir_show_location_url == 'all') {
+						$location_slug[] = $country_slug;
+						$location_slug[] = $region_slug;
+					} else if ($geodir_show_location_url == 'country_city') {
+						$location_slug[] = $country_slug;
+					} else if ($geodir_show_location_url == 'region_city') {
+						$location_slug[] = $region_slug;
+					}
+					$location_slug[] = $city_slug;
+					
+					$location_request .= implode('/', $location_slug) . '/';
                 }
             }
 

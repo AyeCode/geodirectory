@@ -808,6 +808,24 @@ function geodir_breadcrumb()
             }
 
 
+            $geodir_show_location_url = get_option('geodir_show_location_url');
+			if ($geodir_show_location_url == 'country_city') {
+				if (isset($location_terms['gd_region'])) {
+					unset($location_terms['gd_region']);
+				}
+			} else if ($geodir_show_location_url == 'region_city') {
+				if (isset($location_terms['gd_country'])) {
+					unset($location_terms['gd_country']);
+				}
+			} else if ($geodir_show_location_url == 'city') {
+				if (isset($location_terms['gd_country'])) {
+					unset($location_terms['gd_country']);
+				}
+				if (isset($location_terms['gd_region'])) {
+					unset($location_terms['gd_region']);
+				}
+			}
+
             $is_location_last = '';
             $is_taxonomy_last = '';
             $breadcrumb .= '<li>';
@@ -2843,26 +2861,35 @@ function geodir_popular_postview_output($args = '', $instance = '')
     }
 
     $location_url = array();
-    $city = get_query_var('gd_city');
-    if (!empty($city)) {
-        if (get_option('geodir_show_location_url') == 'all') {
-            $country = get_query_var('gd_country');
-            $region = get_query_var('gd_region');
+	$city = get_query_var('gd_city');
+	if (!empty($city)) {
+		$country = get_query_var('gd_country');
+		$region = get_query_var('gd_region');
+		
+		$geodir_show_location_url = get_option('geodir_show_location_url');
+		
+		if ($geodir_show_location_url == 'all') {
+			if ($country != '') {
+				$location_url[] = $country;
+			}
+			
+			if ($region != '') {
+				$location_url[] = $region;
+			}
+		} else if ($geodir_show_location_url == 'country_city') {
+			if ($country != '') {
+				$location_url[] = $country;
+			}
+		} else if ($geodir_show_location_url == 'region_city') {
+			if ($region != '') {
+				$location_url[] = $region;
+			}
+		}
+		
+		$location_url[] = $city;
+	}
 
-            if (!empty($country)) {
-                $location_url[] = $country;
-            }
-
-            if (!empty($region)) {
-                $location_url[] = $region;
-            }
-        }
-
-        $location_url[] = $city;
-    }
-
-    $location_url = implode("/", $location_url);
-	
+	$location_url = implode('/', $location_url);
 	$skip_location = false;
 	if (!$add_location_filter && !empty($_SESSION['gd_multi_location'])) {
 		$skip_location = true;

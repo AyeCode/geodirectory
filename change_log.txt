@@ -26,6 +26,7 @@ Schema type option added to categories for structured data - ADDED
 Categories tax meta "cat_schema" is manageable using import/export - ADDED
 HTML5 validation added to email, number, tel and url custom fields - ADDED
 HTML5 pattern validation option added to text custom fields - ADDED
+Options added for location specific urls like /country/city/ & /region/city/ - ADDED
 
 v1.5.3
 If tax query has 'relation' set then it will throw WARNING in wp_list_pluck - FIXED
