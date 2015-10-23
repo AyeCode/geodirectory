@@ -24,6 +24,8 @@ Email subjects and messages can now be translated in .po file if original messag
 Structured data now uses JSON-LD and can be filtered to add more info - ADDED
 Schema type option added to categories for structured data - ADDED
 Categories tax meta "cat_schema" is manageable using import/export - ADDED
+HTML5 validation added to email, number, tel and url custom fields - ADDED
+HTML5 pattern validation option added to text custom fields - ADDED
 
 v1.5.3
 If tax query has 'relation' set then it will throw WARNING in wp_list_pluck - FIXED

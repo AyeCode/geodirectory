@@ -377,6 +377,8 @@ if (!function_exists('geodir_custom_field_save')) {
             $show_as_tab = isset($request_field['show_as_tab']) ? $request_field['show_as_tab'] : '';
             $decimal_point = isset($request_field['decimal_point']) ? trim($request_field['decimal_point']) : ''; // decimal point for DECIMAL data type
             $decimal_point = $decimal_point > 0 ? ($decimal_point > 10 ? 10 : $decimal_point) : '';
+            $validation_pattern = isset($request_field['validation_pattern']) ? $request_field['validation_pattern'] : '';
+            $validation_msg = isset($request_field['validation_msg']) ? $request_field['validation_msg'] : '';
             $for_admin_use = isset($request_field['for_admin_use']) ? $request_field['for_admin_use'] : '';
 
             if ($field_type != 'address' && $field_type != 'taxonomy' && $field_type != 'fieldset') {
@@ -765,10 +767,12 @@ if (!function_exists('geodir_custom_field_save')) {
 					data_type = %s,
 					extra_fields = %s,
 					decimal_point = %s,
-					for_admin_use = %s  
+					validation_pattern = %s,
+					validation_msg = %s,
+					for_admin_use = %s
 					where id = %d",
 
-                        array($post_type, $admin_title, $site_title, $field_type, $htmlvar_name, $admin_desc, $clabels, $default_value, $sort_order, $is_active, $is_default, $is_required, $required_msg, $css_class, $field_icon, $field_icon, $show_on_listing, $show_on_detail, $show_as_tab, $option_values, $price_pkg, $cat_sort, $cat_filter, $data_type, $extra_field_query, $decimal_point, $for_admin_use, $cf)
+                        array($post_type, $admin_title, $site_title, $field_type, $htmlvar_name, $admin_desc, $clabels, $default_value, $sort_order, $is_active, $is_default, $is_required, $required_msg, $css_class, $field_icon, $field_icon, $show_on_listing, $show_on_detail, $show_as_tab, $option_values, $price_pkg, $cat_sort, $cat_filter, $data_type, $extra_field_query, $decimal_point,$validation_pattern,$validation_msg, $for_admin_use, $cf)
                     )
 
                 );
@@ -1054,9 +1058,11 @@ if (!function_exists('geodir_custom_field_save')) {
 					data_type = %s,
 					extra_fields = %s,
 					decimal_point = %s,
+					validation_pattern = %s,
+					validation_msg = %s,
 					for_admin_use = %s ",
 
-                        array($post_type, $admin_title, $site_title, $field_type, $htmlvar_name, $admin_desc, $clabels, $default_value, $sort_order, $is_active, $is_default, $is_admin, $is_required, $required_msg, $css_class, $field_icon, $show_on_listing, $show_on_detail, $show_as_tab, $option_values, $price_pkg, $cat_sort, $cat_filter, $data_type, $extra_field_query, $decimal_point, $for_admin_use)
+                        array($post_type, $admin_title, $site_title, $field_type, $htmlvar_name, $admin_desc, $clabels, $default_value, $sort_order, $is_active, $is_default, $is_admin, $is_required, $required_msg, $css_class, $field_icon, $show_on_listing, $show_on_detail, $show_as_tab, $option_values, $price_pkg, $cat_sort, $cat_filter, $data_type, $extra_field_query, $decimal_point,$validation_pattern,$validation_msg, $for_admin_use)
 
                     )
 
@@ -1407,9 +1413,19 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
             <?php }?>
         <?php } elseif ($type == 'text') {
 
-            //number and float validation
-           // if(isset($val['data_type']) && $val['data_type']=='INT'){$type = 'number';}
-            //elseif(isset($val['data_type']) && $val['data_type']=='FLOAT'){$type = 'float';}
+            //number and float validation $validation_pattern
+            if(isset($val['data_type']) && $val['data_type']=='INT'){$type = 'number';}
+            elseif(isset($val['data_type']) && $val['data_type']=='FLOAT'){$type = 'float';}
+            //print_r($val);
+            //validation
+            if(isset($val['validation_pattern']) && $val['validation_pattern']){
+                $validation = 'pattern="'.$val['validation_pattern'].'"';
+            }else{$validation='';}
+
+            // validation message
+            if(isset($val['validation_msg']) && $val['validation_msg']){
+                $validation_msg = 'title="'.$val['validation_msg'].'"';
+            }else{$validation_msg='';}
             ?>
 
             <div id="<?php echo $name;?>_row"
@@ -1420,7 +1436,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                     <?php if ($is_required) echo '<span>*</span>';?>
                 </label>
                 <input field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>"
-                       value="<?php echo esc_attr(stripslashes($value));?>" type="text" class="geodir_textfield"/>
+                       value="<?php echo esc_attr(stripslashes($value));?>" type="<?php echo $type;?>" class="geodir_textfield" <?php echo $validation;echo $validation_msg;?> />
                 <span class="geodir_message_note"><?php _e($admin_desc, 'geodirectory');?></span>
                 <?php if ($is_required) { ?>
                     <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
@@ -1440,7 +1456,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                     <?php if ($is_required) echo '<span>*</span>';?>
                 </label>
                 <input field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>"
-                       value="<?php echo esc_attr(stripslashes($value));?>" type="text" class="geodir_textfield"/>
+                       value="<?php echo esc_attr(stripslashes($value));?>" type="email" class="geodir_textfield"/>
                 <span class="geodir_message_note"><?php _e($admin_desc, 'geodirectory');?></span>
                 <?php if ($is_required) { ?>
                     <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
@@ -1460,7 +1476,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                     <?php if ($is_required) echo '<span>*</span>';?>
                 </label>
                 <input field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>"
-                       value="<?php echo esc_attr(stripslashes($value));?>" type="text" class="geodir_textfield"/>
+                       value="<?php echo esc_attr(stripslashes($value));?>" type="tel" class="geodir_textfield"/>
                 <span class="geodir_message_note"><?php _e($admin_desc, 'geodirectory');?></span>
                 <?php if ($is_required) { ?>
                     <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
@@ -1480,7 +1496,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                     <?php if ($is_required) echo '<span>*</span>';?>
                 </label>
                 <input field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>"
-                       value="<?php echo esc_attr(stripslashes($value));?>" type="text" class="geodir_textfield"/>
+                       value="<?php echo esc_attr(stripslashes($value));?>" type="url" class="geodir_textfield"/>
                 <span class="geodir_message_note"><?php _e($admin_desc, 'geodirectory');?></span>
                 <?php if ($is_required) { ?>
                     <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>

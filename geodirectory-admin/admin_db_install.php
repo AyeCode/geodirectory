@@ -431,6 +431,8 @@ if (!function_exists('geodir_create_tables')) {
 							  field_icon varchar(255) NULL DEFAULT NULL,
 							  css_class varchar(255) NULL DEFAULT NULL,
 							  decimal_point varchar( 10 ) NOT NULL,
+							  validation_pattern varchar( 255 ) NOT NULL,
+							  validation_msg text NULL DEFAULT NULL,
 							  PRIMARY KEY  (id)
 							  ) $collate";
 
