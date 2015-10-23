@@ -779,35 +779,36 @@ function geodir_related_posts_display($request)
 
         /* --- return false in invalid request --- */
 
-        $location_url = '';
+       $location_url = '';
         if ($add_location_filter != '0') {
             $location_url = array();
-            if (get_query_var('gd_city')) {
-
-                if (get_option('geodir_show_location_url') == 'all') {
-                    if ($country = get_query_var('gd_country'))
-                        $location_url[] = $country;
-
-                    if ($region = get_query_var('gd_region'))
-                        $location_url[] = $region;
-                }
-
-                if ($city = get_query_var('gd_city'))
-                    $location_url[] = $city;
-
+			$geodir_show_location_url = get_option('geodir_show_location_url');
+			
+			$gd_city = get_query_var('gd_city');
+			
+			if ($gd_city) {
+				$gd_country = get_query_var('gd_country');
+				$gd_region = get_query_var('gd_region');
             } else {
-
                 $location = geodir_get_default_location();
-
-                if (get_option('geodir_show_location_url') == 'all') {
-                    $location_url[] = isset($location->country_slug) ? $location->country_slug : '';
-                    $location_url[] = isset($location->region_slug) ? $location->region_slug : '';
-                }
-                $location_url[] = isset($location->city_slug) ? $location->city_slug : '';
+				
+				$gd_country = isset($location->country_slug) ? $location->country_slug : '';
+				$gd_region = isset($location->region_slug) ? $location->region_slug : '';
+				$gd_city = isset($location->city_slug) ? $location->city_slug : '';
             }
+			
+			if ($geodir_show_location_url == 'all') {
+				$location_url[] = $gd_country;
+				$location_url[] = $gd_region;
+			} else if ($geodir_show_location_url == 'country_city') {
+				$location_url[] = $gd_country;
+			} else if ($geodir_show_location_url == 'region_city') {
+				$location_url[] = $gd_region;
+			}
+			
+			$location_url[] = $gd_city;
 
-            $location_url = implode("/", $location_url);
-
+            $location_url = implode('/', $location_url);
         }
 
 
