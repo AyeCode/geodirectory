@@ -675,9 +675,28 @@ if (!function_exists('geodir_custom_field_save')) {
 
                     case 'checkbox':
                     case 'multiselect':
+                    case 'select':
                     case 'taxonomy':
 
-                        $meta_field_add = "ALTER TABLE " . $detail_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "`VARCHAR( 500 ) NULL";
+                    $op_size = '500';
+
+                    // only make the field as big as it needs to be.
+                    if(isset($option_values) && $option_values && $field_type=='select'){
+                        $option_values_arr = explode(',',$option_values);
+                        if(is_array($option_values_arr)){
+                            $op_max = 0;
+                            foreach($option_values_arr as $op_val){
+                                if(strlen($op_val) && strlen($op_val)>$op_max){$op_max = strlen($op_val);}
+                            }
+                            if($op_max){$op_size =$op_max; }
+                        }
+                    }elseif(isset($option_values) && $option_values && $field_type=='multiselect'){
+                        if(strlen($option_values)){
+                            $op_size =  strlen($option_values);
+                        }
+                    }
+
+                        $meta_field_add = "ALTER TABLE " . $detail_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "`VARCHAR( $op_size ) NULL";
 
                         if ($default_value != '') {
                             $meta_field_add .= " DEFAULT '" . $default_value . "'";
@@ -941,16 +960,35 @@ if (!function_exists('geodir_custom_field_save')) {
 
                         break;
                     case 'multiselect':
+                    case 'select':
 
                         $data_type = 'VARCHAR';
 
-                        $meta_field_add = $data_type . "( 500 ) NULL ";
+
+                        $op_size = '500';
+
+                        // only make the field as big as it needs to be.
+                        if(isset($option_values) && $option_values && $field_type=='select'){
+                            $option_values_arr = explode(',',$option_values);
+                            if(is_array($option_values_arr)){
+                                $op_max = 0;
+                                foreach($option_values_arr as $op_val){
+                                    if(strlen($op_val) && strlen($op_val)>$op_max){$op_max = strlen($op_val);}
+                                }
+                                if($op_max){$op_size =$op_max; }
+                            }
+                        }elseif(isset($option_values) && $option_values && $field_type=='multiselect'){
+                            if(strlen($option_values)){
+                                $op_size =  strlen($option_values);
+                            }
+                        }
+
+                        $meta_field_add = $data_type . "( $op_size ) NULL ";
                         if ($default_value != '') {
                             $meta_field_add .= " DEFAULT '" . $default_value . "'";
                         }
 
                         geodir_add_column_if_not_exist($detail_table, $htmlvar_name, $meta_field_add);
-
 
                         break;
                     case 'textarea':
