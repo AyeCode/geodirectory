@@ -42,6 +42,10 @@ if (get_option('geodirectory' . '_db_version') != GEODIRECTORY_VERSION) {
         add_action('init', 'geodir_upgrade_153', 11);
     }
 
+    if (GEODIRECTORY_VERSION <= '1.5.4') {
+        add_action('init', 'geodir_upgrade_154', 11);
+    }
+
 
     add_action('init', 'gd_fix_cpt_rewrite_slug', 11);// this needs to be kept for a few versions
 
@@ -121,6 +125,16 @@ function geodir_upgrade_148(){
 function geodir_upgrade_153(){
     geodir_create_page(esc_sql(_x('gd-info', 'page_slug', 'geodirectory')), 'geodir_info_page', __('Info', 'geodirectory'), '');
     geodir_create_page(esc_sql(_x('gd-login', 'page_slug', 'geodirectory')), 'geodir_login_page', __('Login', 'geodirectory'), '');
+}
+
+/**
+ * Handles upgrade for geodirectory versions <= 1.5.3.
+ *
+ * @since 1.5.3
+ * @package GeoDirectory
+ */
+function geodir_upgrade_154(){
+    geodir_create_page(esc_sql(_x('gd-home', 'page_slug', 'geodirectory')), 'geodir_home_page', __('GD Home page', 'geodirectory'), '');
 }
 
 /**
