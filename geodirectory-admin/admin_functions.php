@@ -6224,18 +6224,19 @@ function geodir_import_export_line_count( $file ) {
  * Returns queried data from custom fields table.
  *
  * @since 1.0.0
+ * @since 1.5.4 Modified to fix empty columns in export csv file.
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @param string $post_type The post type.
  * @return object Queried object.
  */
 function geodir_imex_get_custom_fields( $post_type ) {
-	 global $wpdb;
+	global $wpdb;
 	 
-	 $sql = $wpdb->prepare("SELECT htmlvar_name FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE post_type=%s AND is_active='1' AND is_admin!='1' ORDER BY id ASC", array( $post_type ) );
-	 $rows = $wpdb->get_results( $sql );
+	$sql = $wpdb->prepare("SELECT htmlvar_name FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE post_type=%s AND is_active='1' AND is_admin!='1' AND field_type != 'fieldset' AND htmlvar_name != '' ORDER BY id ASC", array( $post_type ) );
+	$rows = $wpdb->get_results( $sql );
 	 
-	 return $rows;
+	return $rows;
 }
 
 /**
