@@ -27,6 +27,7 @@ Categories tax meta "cat_schema" is manageable using import/export - ADDED
 HTML5 validation added to email, number, tel and url custom fields - ADDED
 HTML5 pattern validation option added to text custom fields - ADDED
 Options added for location specific urls like /country/city/ & /region/city/ - ADDED
+Select and multiselect custom fields now exactly set their own max length in the DB so to not use as many bytes - CHANGED
 
 v1.5.3
 If tax query has 'relation' set then it will throw WARNING in wp_list_pluck - FIXED
