@@ -366,6 +366,14 @@ function geodir_admin_option_form($tab_name)
             </p>
             </div>	
 		<?php break;
+        case 'title_meta_settings' :
+            geodir_admin_fields($geodir_settings['title_meta_settings']); ?>
+            <p class="submit">
+            <input name="save" class="button-primary" type="submit" value="<?php _e('Save changes', 'geodirectory'); ?>" />
+            <input type="hidden" name="subtab" id="last_tab" />
+            </p>
+            </div>
+		<?php break;
         case 'notifications_settings' :
             geodir_admin_fields($geodir_settings['notifications_settings']); ?>
 			

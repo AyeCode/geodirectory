@@ -365,7 +365,7 @@ function geodir_set_location_var_in_session_in_core($wp)
 	
 	// The location url format (all or country_city or region_city or city).
 	$geodir_show_location_url = get_option('geodir_show_location_url');
-	
+
     if (isset($wp->query_vars['page_id']) && $wp->query_vars['page_id'] == geodir_location_page_id()) {
         $gd_country = '';
         $gd_region = '';

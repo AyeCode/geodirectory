@@ -172,6 +172,7 @@ function geodir_default_admin_main_tabs($tabs)
         'general_settings' => array('label' => __('General', 'geodirectory')),
         'design_settings' => array('label' => __('Design', 'geodirectory')),
         'permalink_settings' => array('label' => __('Permalinks', 'geodirectory')),
+        'title_meta_settings' => array('label' => __('Titles & Metas', 'geodirectory')),
         'notifications_settings' => array('label' => __('Notifications', 'geodirectory')),
         'default_location_settings' => array('label' => __('Set Default Location', 'geodirectory')),
 
