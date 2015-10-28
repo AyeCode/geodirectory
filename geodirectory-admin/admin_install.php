@@ -176,6 +176,13 @@ function geodir_set_default_options()
      * @package GeoDirectory
      */
     include_once("option-pages/permalink_settings_array.php");
+    /**
+     * Contains settings array for title / meta tab.
+     *
+     * @since 1.5.4
+     * @package GeoDirectory
+     */
+    include_once("option-pages/titlemeta_settings_array.php");
     foreach ($geodir_settings as $value) {
         geodir_update_options($value, true);
     }

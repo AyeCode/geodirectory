@@ -960,14 +960,13 @@ function geodir_get_map_default_language()
  */
 function geodir_add_meta_keywords()
 {
-    global $post, $wp_query, $wpdb, $geodir_addon_list;
+    global $wp, $post, $wp_query, $wpdb, $geodir_addon_list;
 
     $is_geodir_page = geodir_is_geodir_page();
-
     if (!$is_geodir_page) {
         return;
     }// if non GD page, bail
-	
+
 	$use_gd_meta = true;
 	if (class_exists('WPSEO_Frontend') || class_exists('All_in_One_SEO_Pack')) {
 		$use_gd_meta = false;
@@ -1110,6 +1109,33 @@ function geodir_add_meta_keywords()
         }
     }
 
+
+    $gd_page = '';
+    if(geodir_is_page('home')){
+        $gd_page = 'home';
+        $meta_desc = (get_option('geodir_meta_desc_homepage')) ? get_option('geodir_meta_desc_homepage') : $meta_desc;
+    }
+    elseif(geodir_is_page('detail')){
+        $gd_page = 'detail';
+        $meta_desc = (get_option('geodir_meta_desc_detail')) ? get_option('geodir_meta_desc_detail') : $meta_desc;
+    }
+    elseif(geodir_is_page('pt')){
+        $gd_page = 'pt';
+        $meta_desc = (get_option('geodir_meta_desc_pt')) ? get_option('geodir_meta_desc_pt') : $meta_desc;
+    }
+    elseif(geodir_is_page('listing')){
+        $gd_page = 'listing';
+        $meta_desc = (get_option('geodir_meta_desc_listing')) ? get_option('geodir_meta_desc_listing') : $meta_desc;
+    }
+    elseif(geodir_is_page('location')){
+        $gd_page = 'location';
+        $meta_desc = (get_option('geodir_meta_desc_location')) ? get_option('geodir_meta_desc_location') : $meta_desc;
+        $meta_desc = apply_filters('geodir_seo_meta_location_description', $meta_desc);
+
+    }
+
+
+    /*
     $geodir_meta_desc = $geodir_meta_desc != '' ? $geodir_meta_desc : $meta_desc;
     if ($geodir_meta_desc != '') {
         $geodir_meta_desc = strip_tags($geodir_meta_desc);
@@ -1119,9 +1145,20 @@ function geodir_add_meta_keywords()
 
         $meta_desc = $geodir_meta_desc != '' ? $geodir_meta_desc : $meta_desc;
     }
+    */
+
 
     if ($meta_desc) {
         $meta_desc = stripslashes_deep($meta_desc);
+        /**
+         * Filter page description to replace variables.
+         *
+         * @since 1.5.4
+         * @param string $title The page description including variables.
+         * @param string $gd_page The GeoDirectory page type if any.
+         */
+        $meta_desc = apply_filters('geodir_seo_meta_description', $meta_desc,$gd_page,'');
+
         /**
          * Filter SEO meta description.
          *

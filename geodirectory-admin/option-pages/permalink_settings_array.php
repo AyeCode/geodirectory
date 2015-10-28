@@ -43,6 +43,7 @@ $geodir_settings['permalink_settings'] = apply_filters('geodir_permalink_setting
         'std' => 'all',
         'radiogroup' => ''
     ),
+
 	array(
         'name' => __('Add country and city slug in listing urls', 'geodirectory'),
         'desc' => __('Add country and city slug in listing urls (/country/city/)', 'geodirectory'),
@@ -70,7 +71,7 @@ $geodir_settings['permalink_settings'] = apply_filters('geodir_permalink_setting
         'value' => 'city',
         'radiogroup' => 'end'
     ),
-	 array(
+	/* array(
         'name' => __('Home page should go to', 'geodirectory'),
         'desc' => __('Site root (ex: mysite.com/)', 'geodirectory'),
         'id' => 'geodir_home_go_to',
@@ -87,7 +88,7 @@ $geodir_settings['permalink_settings'] = apply_filters('geodir_permalink_setting
         'std' => 'root',
         'value' => 'location',
         'radiogroup' => 'end'
-    ),
+    ),*/
 
 
     array(
