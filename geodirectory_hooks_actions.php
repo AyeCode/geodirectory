@@ -1860,7 +1860,7 @@ function geodir_custom_page_title($title = '', $sep = '')
 
     if ($sep == '') {
         /**
-         * Filter the pae title separator.
+         * Filter the page title separator.
          *
          * @since 1.0.0
          * @package GeoDirectory
@@ -1917,7 +1917,38 @@ function geodir_custom_page_title($title = '', $sep = '')
             }
         }
     }
-    return $title;
+
+    $gd_page = '';
+    if(geodir_is_page('home')){
+        $gd_page = 'home';
+        $title = (get_option('geodir_meta_title_homepage')) ? get_option('geodir_meta_title_homepage') : $title;
+    }
+    elseif(geodir_is_page('detail')){
+        $gd_page = 'detail';
+        $title = (get_option('geodir_meta_title_detail')) ? get_option('geodir_meta_title_detail') : $title;
+    }
+    elseif(geodir_is_page('pt')){
+        $gd_page = 'pt';
+        $title = (get_option('geodir_meta_title_pt')) ? get_option('geodir_meta_title_pt') : $title;
+    }
+    elseif(geodir_is_page('listing')){
+        $gd_page = 'listing';
+        $title = (get_option('geodir_meta_title_listing')) ? get_option('geodir_meta_title_listing') : $title;
+    }
+    elseif(geodir_is_page('location')){
+        $gd_page = 'location';
+        $title = (get_option('geodir_meta_title_location')) ? get_option('geodir_meta_title_location') : $title;
+    }
+
+    /**
+     * Filter page title to replace variables.
+     *
+     * @since 1.5.4
+     * @param string $title The page title including variables.
+     * @param string $gd_page The GeoDirectory page type if any.
+     * @param string $sep The title separator symbol.
+     */
+    return apply_filters('geodir_seo_meta_title', $title, $gd_page, $sep);
 
 }
 

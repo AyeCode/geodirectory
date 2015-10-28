@@ -4777,6 +4777,7 @@ function geodir_ajax_import_export() {
 							$cat_posttype = '';
 							$cat_parent = '';
 							$cat_description = '';
+							$cat_schema = '';
 							$cat_top_description = '';
 							$cat_image = '';
 							$cat_icon = '';
@@ -4794,6 +4795,8 @@ function geodir_ajax_import_export() {
 									$cat_posttype = $row[$c];
 								} else if ( $column == 'cat_parent' ) {
 									$cat_parent = trim($row[$c]);
+								} else if ( $column == 'cat_schema' && $row[$c] != '' ) {
+									$cat_schema = $row[$c];
 								} else if ( $column == 'cat_description' ) {
 									$cat_description = $row[$c];
 								} else if ( $column == 'cat_top_description' ) {
@@ -4826,6 +4829,7 @@ function geodir_ajax_import_export() {
 							$term_data['name'] = $cat_name;
 							$term_data['slug'] = $cat_slug;
 							$term_data['description'] = $cat_description;
+							$term_data['cat_schema'] = $cat_schema;
 							$term_data['top_description'] = $cat_top_description;
 							$term_data['image'] = $cat_image != '' ? basename( $cat_image ) : '';
 							$term_data['icon'] = $cat_icon != '' ? basename( $cat_icon ) : '';
@@ -4905,6 +4909,10 @@ function geodir_ajax_import_export() {
 							if ( $term_id ) {
 								if ( isset( $term_data['top_description'] ) ) {
 									update_tax_meta( $term_id, 'ct_cat_top_desc', $term_data['top_description'], $cat_posttype );
+								}
+								
+								if ( isset( $term_data['cat_schema'] ) ) {
+									update_tax_meta( $term_id, 'ct_cat_schema', $term_data['cat_schema'], $cat_posttype );
 								}
 			
 								$attachment = false;
@@ -5191,11 +5199,11 @@ function geodir_ajax_import_export() {
 									
 									if ( wp_update_post( $save_post ) ) {
 										$saved_post_id = $post_id;
-										$updated++;	
+										$updated++;
 									}
 								} else {
 									if ( $saved_post_id = wp_insert_post( $save_post ) ) {
-										$created++;	
+										$created++;
 									}
 								}
 								
@@ -6083,6 +6091,7 @@ function geodir_imex_get_terms( $post_type ) {
 		$csv_row[] = 'cat_slug';
 		$csv_row[] = 'cat_posttype';
 		$csv_row[] = 'cat_parent';
+		$csv_row[] = 'cat_schema';
 		$csv_row[] = 'cat_description';
 		$csv_row[] = 'cat_top_description';
 		$csv_row[] = 'cat_image';
@@ -6115,6 +6124,7 @@ function geodir_imex_get_terms( $post_type ) {
 			$csv_row[] = $term->slug;
 			$csv_row[] = $post_type;
 			$csv_row[] = $cat_parent;
+			$csv_row[] = get_tax_meta( $term->term_id, 'ct_cat_schema', false, $post_type );
 			$csv_row[] = $term->description;
 			$csv_row[] = get_tax_meta( $term->term_id, 'ct_cat_top_desc', false, $post_type );
 			$csv_row[] = $cat_image;
@@ -6214,18 +6224,19 @@ function geodir_import_export_line_count( $file ) {
  * Returns queried data from custom fields table.
  *
  * @since 1.0.0
+ * @since 1.5.4 Modified to fix empty columns in export csv file.
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @param string $post_type The post type.
  * @return object Queried object.
  */
 function geodir_imex_get_custom_fields( $post_type ) {
-	 global $wpdb;
+	global $wpdb;
 	 
-	 $sql = $wpdb->prepare("SELECT htmlvar_name FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE post_type=%s AND is_active='1' AND is_admin!='1' ORDER BY id ASC", array( $post_type ) );
-	 $rows = $wpdb->get_results( $sql );
+	$sql = $wpdb->prepare("SELECT htmlvar_name FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE post_type=%s AND is_active='1' AND is_admin!='1' AND field_type != 'fieldset' AND htmlvar_name != '' ORDER BY id ASC", array( $post_type ) );
+	$rows = $wpdb->get_results( $sql );
 	 
-	 return $rows;
+	return $rows;
 }
 
 /**

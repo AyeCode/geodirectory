@@ -246,7 +246,7 @@ function geodir_get_weeks()
 function geodir_is_page($gdpage = '')
 {
 
-    global $wp_query, $post;
+    global $wp_query, $post,$wp;
     //if(!is_admin()):
 
     switch ($gdpage):
@@ -273,6 +273,11 @@ function geodir_is_page($gdpage = '')
             if (is_single() && in_array(get_query_var('post_type'), geodir_get_posttypes()))
                 return true;
             break;
+        case 'pt':
+            if (is_post_type_archive() && in_array(get_query_var('post_type'), geodir_get_posttypes()) && !is_tax())
+                return true;
+
+            break;
         case 'listing':
             if (is_tax() && geodir_get_taxonomy_posttype()) {
                 global $current_term, $taxonomy, $term;
@@ -284,8 +289,10 @@ function geodir_is_page($gdpage = '')
 
             break;
         case 'home':
-            if (is_page() && get_query_var('page_id') == geodir_home_page_id())
+
+            if (is_page() && get_query_var('page_id') == geodir_home_page_id() || is_page_geodir_home())
                 return true;
+
             break;
         case 'location':
             if (is_page() && get_query_var('page_id') == geodir_location_page_id())
@@ -341,6 +348,9 @@ function geodir_set_is_geodir_page($wp)
                 || $wp->query_vars['page_id'] == geodir_preview_page_id()
                 || $wp->query_vars['page_id'] == geodir_success_page_id()
                 || $wp->query_vars['page_id'] == geodir_location_page_id()
+                || $wp->query_vars['page_id'] == geodir_home_page_id()
+                || $wp->query_vars['page_id'] == geodir_info_page_id()
+                || $wp->query_vars['page_id'] == geodir_login_page_id()
             )
                 $wp->query_vars['gd_is_geodir_page'] = true;
         }
@@ -352,10 +362,15 @@ function geodir_set_is_geodir_page($wp)
                     $page->ID == geodir_add_listing_page_id()
                     || $page->ID == geodir_preview_page_id()
                     || $page->ID == geodir_success_page_id()
-                    || $page->ID == geodir_location_page_id())
+                    || $page->ID == geodir_location_page_id()
+                    || $wp->query_vars['page_id'] == geodir_home_page_id()
+                    || $wp->query_vars['page_id'] == geodir_info_page_id()
+                    || $wp->query_vars['page_id'] == geodir_login_page_id()
+                )
             )
                 $wp->query_vars['gd_is_geodir_page'] = true;
         }
+
 
         if (!isset($wp->query_vars['gd_is_geodir_page']) && isset($wp->query_vars['post_type']) && $wp->query_vars['post_type'] != '') {
             $requested_post_type = $wp->query_vars['post_type'];
@@ -382,6 +397,15 @@ function geodir_set_is_geodir_page($wp)
 
         if (!isset($wp->query_vars['gd_is_geodir_page']) && isset($_REQUEST['geodir_search']))
             $wp->query_vars['gd_is_geodir_page'] = true;
+
+
+//check if homepage
+        if(!isset($wp->query_vars['gd_is_geodir_page'])
+            && !isset($wp->query_vars['page_id'])
+            && !isset($wp->query_vars['pagename'])
+            && is_page_geodir_home()){
+            $wp->query_vars['gd_is_geodir_page'] = true;
+        }
         //echo $wp->query_vars['gd_is_geodir_page'] ;
         /*echo "<pre>" ;
 		print_r($wp) ;
@@ -592,25 +616,25 @@ if (!function_exists('geodir_sendEmail')) {
         $to_message = stripslashes_deep($to_message);
 
         if ($message_type == 'send_friend') {
-            $subject = stripslashes(get_option('geodir_email_friend_subject'));
-            $message = stripslashes(get_option('geodir_email_friend_content'));
+            $subject = stripslashes(__(get_option('geodir_email_friend_subject'),'geodirectory'));
+            $message = stripslashes(__(get_option('geodir_email_friend_content'),'geodirectory'));
         } elseif ($message_type == 'send_enquiry') {
-            $subject = stripslashes(get_option('geodir_email_enquiry_subject'));
-            $message = stripslashes(get_option('geodir_email_enquiry_content'));
+            $subject = stripslashes(__(get_option('geodir_email_enquiry_subject'),'geodirectory'));
+            $message = stripslashes(__(get_option('geodir_email_enquiry_content'),'geodirectory'));
         } elseif ($message_type == 'forgot_password') {
-            $subject = stripslashes(get_option('geodir_forgot_password_subject'));
-            $message = stripslashes(get_option('geodir_forgot_password_content'));
+            $subject = stripslashes(__(get_option('geodir_forgot_password_subject'),'geodirectory'));
+            $message = stripslashes(__(get_option('geodir_forgot_password_content'),'geodirectory'));
             $login_details = $to_message;
         } elseif ($message_type == 'registration') {
-            $subject = stripslashes(get_option('geodir_registration_success_email_subject'));
-            $message = stripslashes(get_option('geodir_registration_success_email_content'));
+            $subject = stripslashes(__(get_option('geodir_registration_success_email_subject'),'geodirectory'));
+            $message = stripslashes(__(get_option('geodir_registration_success_email_content'),'geodirectory'));
             $login_details = $to_message;
         } elseif ($message_type == 'post_submit') {
-            $subject = stripslashes(get_option('geodir_post_submited_success_email_subject'));
-            $message = stripslashes(get_option('geodir_post_submited_success_email_content'));
+            $subject = stripslashes(__(get_option('geodir_post_submited_success_email_subject'),'geodirectory'));
+            $message = stripslashes(__(get_option('geodir_post_submited_success_email_content'),'geodirectory'));
         } elseif ($message_type == 'listing_published') {
-            $subject = stripslashes_deep(get_option('geodir_post_published_email_subject'));
-            $message = stripslashes_deep(get_option('geodir_post_published_email_content'));
+            $subject = stripslashes_deep(__(get_option('geodir_post_published_email_subject'),'geodirectory'));
+            $message = stripslashes_deep(__(get_option('geodir_post_published_email_content'),'geodirectory'));
         }
 
         $to_message = nl2br($to_message);
@@ -674,8 +698,8 @@ if (!function_exists('geodir_sendEmail')) {
 
         if ($message_type == 'post_submit') {
 
-            $subject = stripslashes(get_option('geodir_post_submited_success_email_subject_admin'));
-            $message = stripslashes(get_option('geodir_post_submited_success_email_content_admin'));
+            $subject = stripslashes(__(get_option('geodir_post_submited_success_email_subject_admin'),'geodirectory'));
+            $message = stripslashes(__(get_option('geodir_post_submited_success_email_content_admin'),'geodirectory'));
 
 
             $search_array = array('[#listing_link#]', '[#site_name_url#]', '[#post_id#]', '[#site_name#]', '[#to_name#]', '[#from_name#]', '[#subject#]', '[#comments#]', '[#login_url#]', '[#login_details#]', '[#client_name#]', '[#posted_date#]','[#user_login#]','[#username#]');
@@ -766,7 +790,7 @@ function geodir_breadcrumb()
      */
     $separator = apply_filters('geodir_breadcrumb_separator', ' > ');
 
-    if (!is_home()) {
+    if (!geodir_is_page('home')) {
         $breadcrumb = '';
         $url_categoris = '';
         $breadcrumb .= '<div class="geodir-breadcrumb clearfix"><ul id="breadcrumbs">';
@@ -775,7 +799,7 @@ function geodir_breadcrumb()
          *
          * @since 1.0.0
          */
-        $breadcrumb .= '<li>' . apply_filters('geodir_breadcrumb_first_link', '<a href="' . get_option('home') . '">' . __('Home', 'geodirectory') . '</a>') . '</li>';
+        $breadcrumb .= '<li>' . apply_filters('geodir_breadcrumb_first_link', '<a href="' . home_url() . '">' . __('Home', 'geodirectory') . '</a>') . '</li>';
 
         $gd_post_type = geodir_get_current_posttype();
         $post_type_info = get_post_type_object($gd_post_type);
@@ -807,6 +831,24 @@ function geodir_breadcrumb()
                 );
             }
 
+
+            $geodir_show_location_url = get_option('geodir_show_location_url');
+			if ($geodir_show_location_url == 'country_city') {
+				if (isset($location_terms['gd_region'])) {
+					unset($location_terms['gd_region']);
+				}
+			} else if ($geodir_show_location_url == 'region_city') {
+				if (isset($location_terms['gd_country'])) {
+					unset($location_terms['gd_country']);
+				}
+			} else if ($geodir_show_location_url == 'city') {
+				if (isset($location_terms['gd_country'])) {
+					unset($location_terms['gd_country']);
+				}
+				if (isset($location_terms['gd_region'])) {
+					unset($location_terms['gd_region']);
+				}
+			}
 
             $is_location_last = '';
             $is_taxonomy_last = '';
@@ -1200,35 +1242,35 @@ if (!function_exists('adminEmail')) {
     {
         global $wpdb;
         if ($message_type == 'expiration') {
-            $subject = stripslashes(get_option('renew_email_subject'));
-            $client_message = stripslashes(get_option('renew_email_content'));
+            $subject = stripslashes(__(get_option('renew_email_subject'),'geodirectory'));
+            $client_message = stripslashes(__(get_option('renew_email_content'),'geodirectory'));
         } elseif ($message_type == 'post_submited') {
-            $subject = get_option('post_submited_success_email_subject_admin');
-            $client_message = get_option('post_submited_success_email_content_admin');
+            $subject = __(get_option('post_submited_success_email_subject_admin'),'geodirectory');
+            $client_message = __(get_option('post_submited_success_email_content_admin'),'geodirectory');
         } elseif ($message_type == 'renew') {
-            $subject = get_option('post_renew_success_email_subject_admin');
-            $client_message = get_option('post_renew_success_email_content_admin');
+            $subject = __(get_option('post_renew_success_email_subject_admin'),'geodirectory');
+            $client_message = __(get_option('post_renew_success_email_content_admin'),'geodirectory');
         } elseif ($message_type == 'upgrade') {
-            $subject = get_option('post_upgrade_success_email_subject_admin');
-            $client_message = get_option('post_upgrade_success_email_content_admin');
+            $subject = __(get_option('post_upgrade_success_email_subject_admin'),'geodirectory');
+            $client_message = __(get_option('post_upgrade_success_email_content_admin'),'geodirectory');
         } elseif ($message_type == 'claim_approved') {
-            $subject = get_option('claim_approved_email_subject');
-            $client_message = get_option('claim_approved_email_content');
+            $subject = __(get_option('claim_approved_email_subject'),'geodirectory');
+            $client_message = __(get_option('claim_approved_email_content'),'geodirectory');
         } elseif ($message_type == 'claim_rejected') {
-            $subject = get_option('claim_rejected_email_subject');
-            $client_message = get_option('claim_rejected_email_content');
+            $subject = __(get_option('claim_rejected_email_subject'),'geodirectory');
+            $client_message = __(get_option('claim_rejected_email_content'),'geodirectory');
         } elseif ($message_type == 'claim_requested') {
-            $subject = get_option('claim_email_subject_admin');
-            $client_message = get_option('claim_email_content_admin');
+            $subject = __(get_option('claim_email_subject_admin'),'geodirectory');
+            $client_message = __(get_option('claim_email_content_admin'),'geodirectory');
         } elseif ($message_type == 'auto_claim') {
-            $subject = get_option('auto_claim_email_subject');
-            $client_message = get_option('auto_claim_email_content');
+            $subject = __(get_option('auto_claim_email_subject'),'geodirectory');
+            $client_message = __(get_option('auto_claim_email_content'),'geodirectory');
         } elseif ($message_type == 'payment_success') {
-            $subject = get_option('post_payment_success_admin_email_subject');
-            $client_message = get_option('post_payment_success_admin_email_content');
+            $subject = __(get_option('post_payment_success_admin_email_subject'),'geodirectory');
+            $client_message = __(get_option('post_payment_success_admin_email_content'),'geodirectory');
         } elseif ($message_type == 'payment_fail') {
-            $subject = get_option('post_payment_fail_admin_email_subject');
-            $client_message = get_option('post_payment_fail_admin_email_content');
+            $subject = __(get_option('post_payment_fail_admin_email_subject'),'geodirectory');
+            $client_message = __(get_option('post_payment_fail_admin_email_content'),'geodirectory');
         }
         $transaction_details = $custom_1;
         $fromEmail = get_option('site_email');
@@ -1291,18 +1333,18 @@ if (!function_exists('sendEmail')) {
     {
         $login_details = '';
         if ($message_type == 'send_friend') {
-            $subject = stripslashes(get_option('email_friend_subject'));
-            $message = stripslashes(get_option('email_friend_content'));
+            $subject = stripslashes(__(get_option('email_friend_subject'),'geodirectory'));
+            $message = stripslashes(__(get_option('email_friend_content'),'geodirectory'));
         } elseif ($message_type == 'send_enquiry') {
-            $subject = get_option('email_enquiry_subject');
-            $message = get_option('email_enquiry_content');
+            $subject = __(get_option('email_enquiry_subject'),'geodirectory');
+            $message = __(get_option('email_enquiry_content'),'geodirectory');
         } elseif ($message_type == 'forgot_password') {
-            $subject = get_option('forgot_password_subject');
-            $message = get_option('forgot_password_content');
+            $subject = __(get_option('forgot_password_subject'),'geodirectory');
+            $message = __(get_option('forgot_password_content'),'geodirectory');
             $login_details = $to_message;
         } elseif ($message_type == 'registration') {
-            $subject = get_option('registration_success_email_subject');
-            $message = get_option('registration_success_email_content');
+            $subject = __(get_option('registration_success_email_subject'),'geodirectory');
+            $message = __(get_option('registration_success_email_content'),'geodirectory');
             $login_details = $to_message;
         }
         $to_message = nl2br($to_message);
@@ -2057,7 +2099,7 @@ function is_page_geodir_home()
     $cur_url = str_replace(array("https://", "http://", "www."), array('', '', ''), geodir_curPageURL());
     $home_url = home_url('', 'http');
     $home_url = str_replace("www.", "", $home_url);
-    if ((strpos($home_url, $cur_url) !== false || strpos($home_url . '/', $cur_url) !== false) && (get_option('geodir_set_as_home')|| geodir_is_page('home'))) {
+    if ((strpos($home_url, $cur_url) !== false || strpos($home_url . '/', $cur_url) !== false) && (get_option('geodir_set_as_home'))) {
         return true;
     } else {
         return false;
@@ -2843,26 +2885,35 @@ function geodir_popular_postview_output($args = '', $instance = '')
     }
 
     $location_url = array();
-    $city = get_query_var('gd_city');
-    if (!empty($city)) {
-        if (get_option('geodir_show_location_url') == 'all') {
-            $country = get_query_var('gd_country');
-            $region = get_query_var('gd_region');
+	$city = get_query_var('gd_city');
+	if (!empty($city)) {
+		$country = get_query_var('gd_country');
+		$region = get_query_var('gd_region');
+		
+		$geodir_show_location_url = get_option('geodir_show_location_url');
+		
+		if ($geodir_show_location_url == 'all') {
+			if ($country != '') {
+				$location_url[] = $country;
+			}
+			
+			if ($region != '') {
+				$location_url[] = $region;
+			}
+		} else if ($geodir_show_location_url == 'country_city') {
+			if ($country != '') {
+				$location_url[] = $country;
+			}
+		} else if ($geodir_show_location_url == 'region_city') {
+			if ($region != '') {
+				$location_url[] = $region;
+			}
+		}
+		
+		$location_url[] = $city;
+	}
 
-            if (!empty($country)) {
-                $location_url[] = $country;
-            }
-
-            if (!empty($region)) {
-                $location_url[] = $region;
-            }
-        }
-
-        $location_url[] = $city;
-    }
-
-    $location_url = implode("/", $location_url);
-	
+	$location_url = implode('/', $location_url);
 	$skip_location = false;
 	if (!$add_location_filter && !empty($_SESSION['gd_multi_location'])) {
 		$skip_location = true;
@@ -3538,4 +3589,238 @@ function geodir_get_client_name($user_id) {
 	}
 	
 	return $client_name;
+}
+
+
+//add_filter( 'home_url', 'geodir_geo_home_link',10,2 );
+function geodir_geo_home_link( $url, $path){
+
+    // If direct home path then we edit it.
+    if(!$path || $path=='/'){
+
+        global $geodir_add_location_url;
+        $include_location = false;
+
+        if ($geodir_add_location_url != NULL && $geodir_add_location_url != '') {
+            if ($geodir_add_location_url && get_option('geodir_add_location_url')) {
+                $include_location = true;
+            }
+
+        } elseif (get_option('geodir_add_location_url') && isset($_SESSION['gd_multi_location']) && $_SESSION['gd_multi_location'] == 1)
+            $include_location = true;
+
+
+        if ($include_location) {
+
+            $request_term = geodir_get_current_location_terms('query_vars');
+
+            if (!empty($request_term)) {
+
+
+                if (get_option('permalink_structure') != '') {
+
+                    $location_slug = get_post_field( 'post_name', geodir_location_page_id() );
+
+
+                    $request_term = implode("/", $request_term);
+                    $new_listing_slug = '/' . $location_slug . '/' . $request_term . '/';
+
+                    $url = trim($url,'/').$new_listing_slug;
+
+                } else {
+                    $url = geodir_getlink($url, $request_term);
+                }
+
+            }
+        }
+
+    }
+
+
+    return $url;
+
+}
+
+add_filter('geodir_seo_meta_title','geodir_filter_title_variables',10,3);
+add_filter('geodir_seo_meta_description','geodir_filter_title_variables',10,3);
+function geodir_filter_title_variables($title, $gd_page, $sep=''){
+
+    if(!$gd_page){return $title;}// if no a GD page then bail.
+    global $post;
+    //print_r($post);
+    /*
+    %%date%%	                Replaced with the date of the post/page
+    %%title%%	                Replaced with the title of the post/page
+    %%sitename%%	            The site's name
+    %%sitedesc%%	            The site's tagline / description
+    %%excerpt%%	                Replaced with the post/page excerpt (or auto-generated if it does not exist)
+    %%tag%%	                    Replaced with the current tag/tags
+    %%category%%	            Replaced with the post categories (comma separated)
+    %%category_description%%	Replaced with the category description
+    %%tag_description%%	        Replaced with the tag description
+    %%term_description%%	    Replaced with the term description
+    %%term_title%%	            Replaced with the term name
+    %%searchphrase%%	        Replaced with the current search phrase
+    %%sep%%	                    The separator defined in your theme's wp_title() tag.
+
+    ADVANCED
+    %%pt_single%%	            Replaced with the post type single label
+    %%pt_plural%%	            Replaced with the post type plural label
+    %%modified%%	            Replaced with the post/page modified time
+    %%id%%	                    Replaced with the post/page ID
+    %%name%%	                Replaced with the post/page author's 'nicename'
+    %%userid%%	                Replaced with the post/page author's userid
+    %%page%%	                Replaced with the current page number (i.e. page 2 of 4)
+    %%pagetotal%%	            Replaced with the current page total
+    %%pagenumber%%	            Replaced with the current page number
+     */
+
+    if ($sep == '') {
+        /**
+         * Filter the page title separator.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         * @param string $sep The separator, default: `|`.
+         */
+        $sep = apply_filters('geodir_page_title_separator', '|');
+    }
+
+
+    if(strpos($title,'%%title%%') !== false){
+        $title = str_replace("%%title%%",$post->post_title,$title);
+    }
+
+    if(strpos($title,'%%sitename%%') !== false){
+        $title = str_replace("%%sitename%%",get_bloginfo('name'),$title);
+    }
+
+    if(strpos($title,'%%sitedesc%%') !== false){
+        $title = str_replace("%%sitedesc%%",get_bloginfo('description'),$title);
+    }
+
+    if(strpos($title,'%%excerpt%%') !== false){
+        $title = str_replace("%%excerpt%%",strip_tags(get_the_excerpt()),$title);
+    }
+
+    if(strpos($title,'%%pt_single%%') !== false){
+        $single_name = '';
+        if($post->post_type){
+            $geodir_post_types = get_option('geodir_post_types');
+            if(isset($geodir_post_types[$post->post_type]['labels']['singular_name'])){
+                $single_name = __($geodir_post_types[$post->post_type]['labels']['singular_name'],'geodirectory');
+            }
+
+
+        }
+        $title = str_replace("%%pt_single%%",$single_name,$title);
+    }
+
+    if(strpos($title,'%%pt_plural%%') !== false){
+        $plural_name = '';
+        if($post->post_type){
+            $geodir_post_types = get_option('geodir_post_types');
+            if(isset($geodir_post_types[$post->post_type]['labels']['name'])){
+                $plural_name = __($geodir_post_types[$post->post_type]['labels']['name'],'geodirectory');
+            }
+
+
+        }
+        $title = str_replace("%%pt_plural%%",$plural_name,$title);
+    }
+
+
+
+    if(strpos($title,'%%category%%') !== false){
+        $cat_name = '';
+
+        if($gd_page=='detail') {
+            if ($post->default_category) {
+                $cat = get_term($post->default_category, $post->post_type . 'category');
+                $cat_name = (isset($cat->name)) ? $cat->name : '';
+            }
+        }elseif($gd_page=='listing'){
+            $queried_object = get_queried_object();
+            if(isset($queried_object->name)){
+                $cat_name = $queried_object->name;
+            }
+        }
+        $title = str_replace("%%category%%",$cat_name,$title);
+    }
+
+
+
+    if(strpos($title,'%%id%%') !== false){
+        $ID = (isset($post->ID)) ? $post->ID : '';
+        $title = str_replace("%%id%%",$ID,$title);
+    }
+
+    /*
+        if(strpos($title,'') !== false){
+            $title = str_replace("",,$title);
+        }
+
+        if(strpos($title,'') !== false){
+            $title = str_replace("",,$title);
+        }
+    */
+
+    if(strpos($title,'%%sep%%') !== false){
+        $title = str_replace("%%sep%%",$sep,$title);
+    }
+
+
+
+    // location variables
+    $gd_post_type = geodir_get_current_posttype();
+    $location_array = geodir_get_current_location_terms('query_vars', $gd_post_type);
+    if($gd_page=='location' && get_query_var( 'gd_country_full' )){
+        if(get_query_var( 'gd_country_full' )){$location_array['gd_country'] = get_query_var( 'gd_country_full' );}
+        if(get_query_var( 'gd_region_full' )){$location_array['gd_region'] = get_query_var( 'gd_region_full' );}
+        if(get_query_var( 'gd_city_full' )){$location_array['gd_city'] = get_query_var( 'gd_city_full' );}
+    }
+    if (!empty($location_array)) {
+        $location_titles = array();
+        $actual_location_name = function_exists('get_actual_location_name') ? true : false;
+        $location_array = array_reverse($location_array);
+
+        foreach ($location_array as $location_type => $location) {
+            $gd_location_link_text = preg_replace('/-(\d+)$/', '', $location);
+            $gd_location_link_text = preg_replace('/[_-]/', ' ', $gd_location_link_text);
+
+            $location_name = ucwords($gd_location_link_text);
+            $location_name = __($location_name, 'geodirectory');
+
+            if ($actual_location_name) {
+                $location_type = strpos($location_type, 'gd_') === 0 ? substr($location_type, 3) : $location_type;
+                $location_name = get_actual_location_name($location_type, $location, true);
+            }
+
+            $location_titles[] = $location_name;
+        }
+        if (!empty($location_titles)) {
+            $location_titles = array_unique($location_titles);
+        }
+    }
+
+
+    if(strpos($title,'%%location%%') !== false){
+        $location = '';
+        if($location_titles) {
+            $location = implode(", ", $location_titles);
+        }
+        $title = str_replace("%%location%%",$location,$title);
+    }
+
+    if(strpos($title,'%%in_location%%') !== false){
+        $location = '';
+        if($location_titles) {
+            $location = __('in ', 'geodirectory') . implode(", ", $location_titles);
+        }
+        $title = str_replace("%%in_location%%",$location,$title);
+    }
+
+
+
+    return $title;
 }
