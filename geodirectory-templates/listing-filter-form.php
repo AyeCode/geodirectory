@@ -39,7 +39,7 @@ echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
         do_action('geodir_before_search_form') ?>
 
         <div class="clearfix geodir-loc-bar-in">
-
+			<i class="fa fa-refresh fa-spin fa-lg gd-form-refresh" style="display:none"></i>
             <div class="geodir-search">
 
                 <?php
