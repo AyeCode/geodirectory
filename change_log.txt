@@ -29,6 +29,7 @@ HTML5 pattern validation option added to text custom fields - ADDED
 Options added for location specific urls like /country/city/ & /region/city/ - ADDED
 Select and multiselect custom fields now exactly set their own max length in the DB so to not use as many bytes - CHANGED
 Custom field type fieldset should not import/export in csv file - FIXED
+In listing search form spinner icon customized with font-awesome spinner - CHANGED
 
 v1.5.3
 If tax query has 'relation' set then it will throw WARNING in wp_list_pluck - FIXED

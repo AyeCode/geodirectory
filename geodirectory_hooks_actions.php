@@ -1878,8 +1878,8 @@ function geodir_custom_page_title($title = '', $sep = '')
     if (is_search() && isset($_REQUEST['geodir_search'])) {
         $all_postypes = geodir_get_posttypes();
         $keyword = esc_sql(strip_tags(get_query_var('s')));
-        $stype = esc_sql(strip_tags(esc_attr($_REQUEST['stype'])));
-        $snear = esc_sql(strip_tags(esc_attr($_REQUEST['snear'])));
+        $stype = isset($_REQUEST['stype']) ? esc_sql(strip_tags(esc_attr($_REQUEST['stype']))) : '';
+        $snear = isset($_REQUEST['snear']) ? esc_sql(strip_tags(esc_attr($_REQUEST['snear']))) : '';
 
         if ($stype && in_array($stype, $all_postypes)) {
             $title = $keyword;

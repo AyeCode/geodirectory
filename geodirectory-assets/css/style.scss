@@ -1661,3 +1661,20 @@ div#jquery-lightbox {
 #lightbox-container-image #lightbox-image {
   max-width: none
 }
+.geodir-loc-bar .geodir-loc-bar-in {
+	position: relative;
+}
+form.geodir-adv-form-wait .geodir-loc-bar-in .geodir-search {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)";
+	filter: alpha(opacity=75);
+	opacity: 0.75;
+}
+.form.geodir-adv-form-wait .gd-form-refresh {
+	display: inline-block !important;
+	position: absolute;
+	left: 49%;
+	left: calc(50% - .37rem);
+	top: 5px;
+	top: calc(50% - .37rem);
+	z-index: 1;
+}
