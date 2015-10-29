@@ -1199,7 +1199,7 @@ function geodir_add_meta_keywords()
     if ($geodir_meta_keys != '') {
         $geodir_meta_keys = strip_tags($geodir_meta_keys);
         $geodir_meta_keys = esc_html($geodir_meta_keys);
-        $geodir_meta_keys = mb_strtolower($geodir_meta_keys);
+        $geodir_meta_keys = geodir_strtolower($geodir_meta_keys);
         $geodir_meta_keys = wp_html_excerpt($geodir_meta_keys, 1000, '');
         $geodir_meta_keys = str_replace('%location%', $replace_location, $geodir_meta_keys);
 
