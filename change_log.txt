@@ -31,6 +31,7 @@ Select and multiselect custom fields now exactly set their own max length in the
 Custom field type fieldset should not import/export in csv file - FIXED
 In listing search form spinner icon customized with font-awesome spinner - CHANGED
 On home page map categories menu not able to click on down arrow of scroll bar - FIXED
+case conversion functions added to support unicode languages - ADDED
 
 v1.5.3
 If tax query has 'relation' set then it will throw WARNING in wp_list_pluck - FIXED

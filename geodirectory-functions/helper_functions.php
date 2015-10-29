@@ -167,6 +167,13 @@ function geodir_login_url($args=array()){
     return apply_filters('geodir_login_url',$login_url,$args,$gd_page_id);
 }
 
+/**
+ * Returns info page url
+ *
+ * @package Geodirectory
+ * @since 1.5.4
+ * @return string Info page url.
+ */
 function geodir_info_url($args=array()){
     $gd_page_id = get_option('geodir_info_page');
 
@@ -188,4 +195,58 @@ function geodir_info_url($args=array()){
     }
 
     return $info_url;
+}
+
+/**
+ * Converts string to title case.
+ *
+ * This function converts string to title case. Ex: hello world -> Hello World.
+ * When mbstring php extension available this function supports all unicode characters.
+ *
+ * @package Geodirectory
+ * @since 1.5.4
+ * @return string Returns converted string.
+ */
+function geodir_ucwords($string) {
+    if (function_exists('mb_convert_case')) {
+        return mb_convert_case($string, MB_CASE_TITLE, 'UTF-8');
+    } else {
+        return ucwords($string);
+    }
+}
+
+/**
+ * Converts string to lower case.
+ *
+ * This function converts string to lower case. Ex: HelLO WorLd -> hello world.
+ * When mbstring php extension available this function supports all unicode characters.
+ *
+ * @package Geodirectory
+ * @since 1.5.4
+ * @return string Returns converted string.
+ */
+function geodir_strtolower($string) {
+    if (function_exists('mb_convert_case')) {
+        return mb_convert_case($string, MB_CASE_LOWER, 'UTF-8');
+    } else {
+        return strtolower($string);
+    }
+}
+
+/**
+ * Converts string to upper case.
+ *
+ * This function converts string to upper case. Ex: HelLO WorLd -> HELLO WORLD.
+ * When mbstring php extension available this function supports all unicode characters.
+ *
+ * @package Geodirectory
+ * @since 1.5.4
+ * @return string Returns converted string.
+ */
+function geodir_strtoupper($string) {
+    if (function_exists('mb_convert_case')) {
+        return mb_convert_case($string, MB_CASE_UPPER, 'UTF-8');
+    } else {
+        return strtoupper($string);
+    }
 }
