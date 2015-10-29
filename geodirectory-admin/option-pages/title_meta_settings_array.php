@@ -21,7 +21,7 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
 
 
     array('name' => __('Available Variables', 'geodirectory'),
-        'desc' => __('%%title%%, %%sitename%%, %%sitedesc%%, %%excerpt%%, %%pt_single%%, %%pt_plural%%, %%category%%, %%id%%, %%sep%%, %%location%%, %%in_location%%, %%search_term%%, %%search_near%%, %%name%%', 'geodirectory'),
+        'desc' => __('%%title%%, %%sitename%%, %%sitedesc%%, %%excerpt%%, %%pt_single%%, %%pt_plural%%, %%category%%, %%id%%, %%sep%%, %%location%%, %%in_location%%, %%in_location_single%%, %%location_single%%, %%search_term%%, %%search_near%%, %%name%%', 'geodirectory'),
         'type' => 'sectionstart',
         'id' => 'geodir_meta_vars'),
 
@@ -102,6 +102,15 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'std' => '%%pt_plural%% %%in_location%%'
     ),
 
+    array(
+        'name' => __('Post type page title', 'geodirectory'),
+        'desc' => __('Enter the title for the post type pages.', 'geodirectory'),
+        'id' => 'geodir_page_title_pt',
+        'type' => 'text',
+        'css' => 'width:100%;',
+        'std' => 'All %%pt_plural%% %%in_location_single%%'
+    ),
+
     array('type' => 'sectionend', 'id' => 'geodir_pt_meta'),
 
     // Cat listing page meta
@@ -126,6 +135,24 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'type' => 'textarea',
         'css' => 'width:100%;',
         'std' => 'Posts related to Category: %%category%% %%in_location%%'
+    ),
+
+    array(
+        'name' => __('Category listing page title', 'geodirectory'),
+        'desc' => __('Enter the title for the category listing pages.', 'geodirectory'),
+        'id' => 'geodir_page_title_cat-listing',
+        'type' => 'text',
+        'css' => 'width:100%;',
+        'std' => 'All %%category%% %%in_location_single%%'
+    ),
+
+    array(
+        'name' => __('Tag listing page title', 'geodirectory'),
+        'desc' => __('Enter the title for the tag listing pages.', 'geodirectory'),
+        'id' => 'geodir_page_title_tag-listing',
+        'type' => 'text',
+        'css' => 'width:100%;',
+        'std' => 'Tag: %%tag%% %%in_location_single%%'
     ),
 
     array('type' => 'sectionend', 'id' => 'geodir_location_meta'),
@@ -203,7 +230,25 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_desc_add-listing',
         'type' => 'textarea',
         'css' => 'width:100%;',
-        'std' => 'Add your %%pt_single%% to our site.'
+        'std' => 'Add %%pt_single%%'
+    ),
+
+    array(
+        'name' => __('Add listing page title', 'geodirectory'),
+        'desc' => __('Enter the title for the add listing page.', 'geodirectory'),
+        'id' => 'geodir_page_title_add-listing',
+        'type' => 'text',
+        'css' => 'width:100%;',
+        'std' => 'Add %%pt_single%%'
+    ),
+
+    array(
+        'name' => __('Edit listing page title', 'geodirectory'),
+        'desc' => __('Enter the title for the edit listing page.', 'geodirectory'),
+        'id' => 'geodir_page_title_edit-listing',
+        'type' => 'text',
+        'css' => 'width:100%;',
+        'std' => 'Edit %%pt_single%%'
     ),
 
     array('type' => 'sectionend', 'id' => 'geodir_location_meta'),
@@ -230,6 +275,24 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'type' => 'textarea',
         'css' => 'width:100%;',
         'std' => ''
+    ),
+
+    array(
+        'name' => __('Author page title', 'geodirectory'),
+        'desc' => __('Enter the title for the author page.', 'geodirectory'),
+        'id' => 'geodir_page_title_author',
+        'type' => 'text',
+        'css' => 'width:100%;',
+        'std' => '%%pt_plural%% by: %%name%%'
+    ),
+
+    array(
+        'name' => __('Author favorite page title', 'geodirectory'),
+        'desc' => __('Enter the title for the author favorite page.', 'geodirectory'),
+        'id' => 'geodir_page_title_favorite',
+        'type' => 'text',
+        'css' => 'width:100%;',
+        'std' => '%%name%%: Favorite %%pt_plural%%'
     ),
 
     array('type' => 'sectionend', 'id' => 'geodir_location_meta'),

@@ -1572,6 +1572,43 @@ function geodir_action_listings_title()
     /** This action is documented in geodirectory_template_actions.php */
     $class_header = apply_filters('geodir_page_title_header_class', 'entry-header');
 
+
+    $title = $list_title;
+    if(geodir_is_page('pt')){
+        $gd_page = 'pt';
+        $title  = (get_option('geodir_page_title_pt')) ? get_option('geodir_page_title_pt') : $title;
+    }
+    elseif(geodir_is_page('listing')){
+        $gd_page = 'listing';
+        global $wp_query;
+        $current_term = $wp_query->get_queried_object();
+        if (strpos($current_term->taxonomy,'_tags') !== false) {
+            $title = (get_option('geodir_page_title_tag-listing')) ? get_option('geodir_page_title_tag-listing') : $title;
+        }else{
+            $title = (get_option('geodir_page_title_cat-listing')) ? get_option('geodir_page_title_cat-listing') : $title;
+        }
+
+    }
+    elseif(geodir_is_page('author')){
+        $gd_page = 'author';
+        if(isset($_REQUEST['list']) && $_REQUEST['list']=='favourite'){
+            $title = (get_option('geodir_page_title_favorite')) ? get_option('geodir_page_title_favorite') : $title;
+        }else{
+            $title = (get_option('geodir_page_title_author')) ? get_option('geodir_page_title_author') : $title;
+        }
+
+    }
+
+
+    /**
+     * Filter page title to replace variables.
+     *
+     * @since 1.5.4
+     * @param string $title The page title including variables.
+     * @param string $gd_page The GeoDirectory page type if any.
+     */
+    $title =  apply_filters('geodir_seo_page_title', $title, $gd_page);
+
     echo '<header class="' . $class_header . '"><h1 class="' . $class . '">' .
         /**
          * Filter the listing page title.
@@ -1579,7 +1616,7 @@ function geodir_action_listings_title()
          * @since 1.0.0
          * @param string $list_title The title for the category page.
          */
-        apply_filters('geodir_listing_page_title', wptexturize($list_title)) . '</h1></header>';
+        apply_filters('geodir_listing_page_title', $title) . 'vvv</h1></header>';
 }
 
 add_action('geodir_listings_page_description', 'geodir_action_listings_description', 10);
@@ -1972,25 +2009,31 @@ function geodir_action_add_listing_page_title()
     $class = apply_filters('geodir_page_title_class', 'entry-title fn');
     /** This action is documented in geodirectory_template_actions.php */
     $class_header = apply_filters('geodir_page_title_header_class', 'entry-header');
-    echo '<header class="' . $class_header . '"><h1 class="' . $class . '">';
 
-    if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
-        $post_type_info = geodir_get_posttype_info(get_post_type($_REQUEST['pid']));
-        /**
-         * Filter the add listing page title.
-         *
-         * @since 1.0.0
-         * @param string $title The page title. This is usually Edit/Add followed by the post type name.
-         */
-        echo apply_filters('geodir_add_listing_page_title_text', (geodir_ucwords(__('Edit', 'geodirectory') . ' ' . __($post_type_info['labels']['singular_name'], 'geodirectory'))));
-    } elseif (isset($listing_type)) {
-        $post_type_info = geodir_get_posttype_info($listing_type);
-        /** This action is documented in geodirectory_template_actions.php */
-        echo apply_filters('geodir_add_listing_page_title_text', (geodir_ucwords(__('Add', 'geodirectory') . ' ' . __($post_type_info['labels']['singular_name'], 'geodirectory'))));
-    } else {
-        /** This action is documented in geodirectory_template_actions.php */
-        apply_filters('geodir_add_listing_page_title_text', the_title());
+    $title = apply_filters('geodir_add_listing_page_title_text', get_the_title());
+
+    if(geodir_is_page('add-listing')){
+        $gd_page = 'add-listing';
+        if(isset($_REQUEST['pid']) && $_REQUEST['pid'] != ''){
+            $title = (get_option('geodir_page_title_edit-listing')) ? get_option('geodir_page_title_edit-listing') : $title;
+        }elseif(isset($listing_type)){
+            $title = (get_option('geodir_page_title_add-listing')) ? get_option('geodir_page_title_add-listing') : $title;
+        }
+
     }
+
+
+    /**
+     * Filter page title to replace variables.
+     *
+     * @since 1.5.4
+     * @param string $title The page title including variables.
+     * @param string $gd_page The GeoDirectory page type if any.
+     */
+    $title =  apply_filters('geodir_seo_page_title', $title, $gd_page);
+
+    echo '<header class="' . $class_header . '"><h1 class="' . $class . '">';
+    echo $title;
     echo '</h1></header>';
 }
 
@@ -2629,6 +2672,28 @@ function geodir_action_author_page_title()
     $class = apply_filters('geodir_page_title_class', 'entry-title fn');
     /** This action is documented in geodirectory_template_actions.php */
     $class_header = apply_filters('geodir_page_title_header_class', 'entry-header');
+
+    $title = $list_title;
+    if(geodir_is_page('author')){
+        $gd_page = 'author';
+        if(isset($_REQUEST['list']) && $_REQUEST['list']=='favourite'){
+            $title = (get_option('geodir_page_title_favorite')) ? get_option('geodir_page_title_favorite') : $title;
+        }else{
+            $title = (get_option('geodir_page_title_author')) ? get_option('geodir_page_title_author') : $title;
+        }
+
+    }
+
+
+    /**
+     * Filter page title to replace variables.
+     *
+     * @since 1.5.4
+     * @param string $title The page title including variables.
+     * @param string $gd_page The GeoDirectory page type if any.
+     */
+    $title =  apply_filters('geodir_seo_page_title', $title, $gd_page);
+
     echo '<header class="' . $class_header . '"><h1 class="' . $class . '">' .
         /**
          * Filter the author page title text.
@@ -2636,7 +2701,7 @@ function geodir_action_author_page_title()
          * @since 1.0.0
          * @param string $list_title The title for the page.
          */
-        apply_filters('geodir_author_page_title_text', wptexturize($list_title)) . '</h1></header>';
+        apply_filters('geodir_author_page_title_text', $title) . '</h1></header>';
 }
 
 

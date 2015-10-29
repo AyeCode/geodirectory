@@ -1920,7 +1920,7 @@ function geodir_custom_page_title($title = '', $sep = '')
 
 
     /**
-     * Filter page title to replace variables.
+     * Filter page meta title to replace variables.
      *
      * @since 1.5.4
      * @param string $title The page title including variables.
