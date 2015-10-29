@@ -1133,6 +1133,26 @@ function geodir_add_meta_keywords()
         $meta_desc = apply_filters('geodir_seo_meta_location_description', $meta_desc);
 
     }
+    elseif(geodir_is_page('search')){
+        $gd_page = 'search';
+        $meta_desc = (get_option('geodir_meta_desc_search')) ? get_option('geodir_meta_desc_search') : $meta_desc;
+    }
+    elseif(geodir_is_page('add-listing')){
+        $gd_page = 'add-listing';
+        $meta_desc = (get_option('geodir_meta_desc_add-listing')) ? get_option('geodir_meta_desc_add-listing') : $meta_desc;
+    }
+    elseif(geodir_is_page('author')){
+        $gd_page = 'author';
+        $meta_desc = (get_option('geodir_meta_desc_author')) ? get_option('geodir_meta_desc_author') : $meta_desc;
+    }
+    elseif(geodir_is_page('login')){
+        $gd_page = 'login';
+        $meta_desc = (get_option('geodir_meta_desc_login')) ? get_option('geodir_meta_desc_login') : $meta_desc;
+    }
+    elseif(geodir_is_page('listing-success')){
+        $gd_page = 'listing-success';
+        $meta_desc = (get_option('geodir_meta_desc_listing-success')) ? get_option('geodir_meta_desc_listing-success') : $meta_desc;
+    }
 
 
     /*
@@ -1157,7 +1177,7 @@ function geodir_add_meta_keywords()
          * @param string $title The page description including variables.
          * @param string $gd_page The GeoDirectory page type if any.
          */
-        $meta_desc = apply_filters('geodir_seo_meta_description', $meta_desc,$gd_page,'');
+        $meta_desc = apply_filters('geodir_seo_meta_description_pre', $meta_desc,$gd_page,'');
 
         /**
          * Filter SEO meta description.

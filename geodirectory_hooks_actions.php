@@ -1843,6 +1843,12 @@ function geodir_term_slug_is_exists($slug_exists, $slug, $term_id)
 }
 
 
+function dq_override_post_title($title){
+    print_r($title);
+
+    return $title;
+}
+add_filter('pre_get_document_title', 'geodir_custom_page_title', 100);
 add_filter('wp_title', 'geodir_custom_page_title', 100, 2);
 /**
  * Set custom page title.
@@ -1869,54 +1875,6 @@ function geodir_custom_page_title($title = '', $sep = '')
         $sep = apply_filters('geodir_page_title_separator', '|');
     }
 
-    if ($title == '') {
-        $sitename = get_bloginfo('name');
-        $site_description = get_bloginfo('description');
-        $title = $sitename . ' ' . $sep . ' ' . $site_description;
-    }
-
-    if (is_search() && isset($_REQUEST['geodir_search'])) {
-        $all_postypes = geodir_get_posttypes();
-        $keyword = esc_sql(strip_tags(get_query_var('s')));
-        $stype = isset($_REQUEST['stype']) ? esc_sql(strip_tags(esc_attr($_REQUEST['stype']))) : '';
-        $snear = isset($_REQUEST['snear']) ? esc_sql(strip_tags(esc_attr($_REQUEST['snear']))) : '';
-
-        if ($stype && in_array($stype, $all_postypes)) {
-            $title = $keyword;
-
-            if (!empty($stype)) {
-                $posttype_obj = get_post_type_object($stype);
-                $title = $title . ' ' . $sep . ' ' . ucfirst($posttype_obj->labels->name);
-            }
-
-            if (!empty($snear)) {
-                $title = $title . ' ' . $sep . ' ' . __('Near', 'geodirectory') . ' ' . $snear;
-            }
-
-            $sitename = get_bloginfo('name');
-            $title = $title . ' ' . $sep . ' ' . __('Search Results', 'geodirectory') . ' ' . $sep . ' ' . $sitename;
-
-        }
-     }
-    //print_r($wp->query_vars) ;
-    if (isset($wp->query_vars['pagename']) && $wp->query_vars['pagename'] != '')
-        $page = get_page_by_path($wp->query_vars['pagename']);
-    if (!empty($page)) {
-        $listing_page_id = geodir_add_listing_page_id();
-        if ($listing_page_id != '' && $page->ID == $listing_page_id) {
-            if (isset($_REQUEST['listing_type']) && $_REQUEST['listing_type'] != '') {
-                $listing_type = esc_attr($_REQUEST['listing_type']);
-                $post_type_info = geodir_get_posttype_info($listing_type);
-                if (!empty($title)) {
-                    $title_array = explode($sep, $title);
-                    $title_array[0] = geodir_ucwords(__('Add', 'geodirectory') . ' ' . __($post_type_info['labels']['singular_name'], 'geodirectory')) . ' ';
-                    $title = implode($sep, $title_array);
-                } else
-                    $title = geodir_ucwords(__('Add', 'geodirectory') . ' ' . __($post_type_info['labels']['singular_name'], 'geodirectory'));
-                //$title .= " " . $gd_country . $gd_region . $gd_city  . "$sep ";
-            }
-        }
-    }
 
     $gd_page = '';
     if(geodir_is_page('home')){
@@ -1939,6 +1897,27 @@ function geodir_custom_page_title($title = '', $sep = '')
         $gd_page = 'location';
         $title = (get_option('geodir_meta_title_location')) ? get_option('geodir_meta_title_location') : $title;
     }
+    elseif(geodir_is_page('search')){
+        $gd_page = 'search';
+        $title = (get_option('geodir_meta_title_search')) ? get_option('geodir_meta_title_search') : $title;
+    }
+    elseif(geodir_is_page('add-listing')){
+        $gd_page = 'add-listing';
+        $title = (get_option('geodir_meta_title_add-listing')) ? get_option('geodir_meta_title_add-listing') : $title;
+    }
+    elseif(geodir_is_page('author')){
+        $gd_page = 'author';
+        $title = (get_option('geodir_meta_title_author')) ? get_option('geodir_meta_title_author') : $title;
+    }
+    elseif(geodir_is_page('login')){
+        $gd_page = 'login';
+        $title = (get_option('geodir_meta_title_login')) ? get_option('geodir_meta_title_login') : $title;
+    }
+    elseif(geodir_is_page('listing-success')){
+        $gd_page = 'listing-success';
+        $title = (get_option('geodir_meta_title_listing-success')) ? get_option('geodir_meta_title_listing-success') : $title;
+    }
+
 
     /**
      * Filter page title to replace variables.

@@ -3642,10 +3642,10 @@ function geodir_geo_home_link( $url, $path){
 }
 
 add_filter('geodir_seo_meta_title','geodir_filter_title_variables',10,3);
-add_filter('geodir_seo_meta_description','geodir_filter_title_variables',10,3);
+add_filter('geodir_seo_meta_description_pre','geodir_filter_title_variables',10,3);
 function geodir_filter_title_variables($title, $gd_page, $sep=''){
 
-    if(!$gd_page){return $title;}// if no a GD page then bail.
+    if(!$gd_page || !$title){return $title;}// if no a GD page then bail.
     global $post;
     //print_r($post);
     /*
@@ -3705,7 +3705,21 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
 
     if(strpos($title,'%%pt_single%%') !== false){
         $single_name = '';
-        if($post->post_type){
+        if($gd_page=='search'){
+            $geodir_post_types = get_option('geodir_post_types');
+            $spt = esc_attr($_REQUEST['stype']);
+            if(isset($geodir_post_types[$spt]['labels']['singular_name'])){
+                $single_name = __($geodir_post_types[$spt]['labels']['singular_name'],'geodirectory');
+            }
+        }elseif($gd_page=='add-listing'){
+            $geodir_post_types = get_option('geodir_post_types');
+            $spt = esc_attr($_REQUEST['listing_type']);
+            if(!$spt){$spt='gd_place';}
+            if(isset($geodir_post_types[$spt]['labels']['singular_name'])){
+                $single_name = __($geodir_post_types[$spt]['labels']['singular_name'],'geodirectory');
+            }
+        }
+        elseif($post->post_type){
             $geodir_post_types = get_option('geodir_post_types');
             if(isset($geodir_post_types[$post->post_type]['labels']['singular_name'])){
                 $single_name = __($geodir_post_types[$post->post_type]['labels']['singular_name'],'geodirectory');
@@ -3718,12 +3732,25 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
 
     if(strpos($title,'%%pt_plural%%') !== false){
         $plural_name = '';
-        if($post->post_type){
+        if($gd_page=='search'){
+            $geodir_post_types = get_option('geodir_post_types');
+            $spt = esc_attr($_REQUEST['stype']);
+            if(isset($geodir_post_types[$spt]['labels']['name'])){
+                $plural_name = __($geodir_post_types[$spt]['labels']['name'],'geodirectory');
+            }
+        }elseif($gd_page=='add-listing'){
+            $geodir_post_types = get_option('geodir_post_types');
+            $spt = esc_attr($_REQUEST['listing_type']);
+            if(!$spt){$spt='gd_place';}
+            if(isset($geodir_post_types[$spt]['labels']['name'])){
+                $plural_name = __($geodir_post_types[$spt]['labels']['name'],'geodirectory');
+            }
+        }
+        elseif($post->post_type){
             $geodir_post_types = get_option('geodir_post_types');
             if(isset($geodir_post_types[$post->post_type]['labels']['name'])){
                 $plural_name = __($geodir_post_types[$post->post_type]['labels']['name'],'geodirectory');
             }
-
 
         }
         $title = str_replace("%%pt_plural%%",$plural_name,$title);
@@ -3774,13 +3801,14 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
     // location variables
     $gd_post_type = geodir_get_current_posttype();
     $location_array = geodir_get_current_location_terms('query_vars', $gd_post_type);
+    $location_titles = array();
     if($gd_page=='location' && get_query_var( 'gd_country_full' )){
         if(get_query_var( 'gd_country_full' )){$location_array['gd_country'] = get_query_var( 'gd_country_full' );}
         if(get_query_var( 'gd_region_full' )){$location_array['gd_region'] = get_query_var( 'gd_region_full' );}
         if(get_query_var( 'gd_city_full' )){$location_array['gd_city'] = get_query_var( 'gd_city_full' );}
     }
     if (!empty($location_array)) {
-        $location_titles = array();
+
         $actual_location_name = function_exists('get_actual_location_name') ? true : false;
         $location_array = array_reverse($location_array);
 
@@ -3820,7 +3848,31 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
         $title = str_replace("%%in_location%%",$location,$title);
     }
 
+    if(strpos($title,'%%search_term%%') !== false){
+        $search_term = '';
+        if(isset($_REQUEST['s'])){
+            $search_term = esc_attr($_REQUEST['s']);
+        }
+        $title = str_replace("%%search_term%%",$search_term,$title);
+    }
 
+    if(strpos($title,'%%search_near%%') !== false){
+        $search_term = '';
+        if(isset($_REQUEST['snear'])){
+            $search_term = esc_attr($_REQUEST['snear']);
+        }
+        $title = str_replace("%%search_near%%",$search_term,$title);
+    }
+
+    if(strpos($title,'%%name%%') !== false){
+        $author_name = '';
+        if($author_name = get_the_author()){}
+        $title = str_replace("%%name%%",$author_name,$title);
+    }
+
+    $title = wptexturize( $title );
+    $title = convert_chars( $title );
+    $title = esc_html( $title );
 
     return $title;
 }
