@@ -435,7 +435,7 @@ function geodir_user_signup()
         if (isset($_SERVER['PATH_INFO']) && ($_SERVER['PATH_INFO'] != $_SERVER['PHP_SELF']))
             $_SERVER['PHP_SELF'] = str_replace($_SERVER['PATH_INFO'], '', $_SERVER['PHP_SELF']);
 
-        $schema = (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on') ? 'https://' : 'http://';
+        $schema = (isset($_SERVER['HTTPS']) && geodir_strtolower($_SERVER['HTTPS']) == 'on') ? 'https://' : 'http://';
         if (dirname($schema . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']) != home_url())
             update_option('siteurl', dirname($schema . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']));
     }

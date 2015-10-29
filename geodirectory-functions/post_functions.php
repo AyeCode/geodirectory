@@ -2651,7 +2651,7 @@ function geodir_listing_belong_to_current_user($listing_id = '', $exclude_admin 
     global $current_user;
     if ($exclude_admin) {
         foreach ($current_user->caps as $key => $caps) {
-            if (strtolower($key) == 'administrator') {
+            if (geodir_strtolower($key) == 'administrator') {
                 return true;
                 break;
             }
@@ -2733,7 +2733,7 @@ function geodir_set_wp_featured_image($post_id)
 
         $new_attachment_name = basename($post_first_image[0]->file);
 
-        if (strtolower($new_attachment_name) != strtolower($old_attachment_name)) {
+        if (geodir_strtolower($new_attachment_name) != geodir_strtolower($old_attachment_name)) {
 
             if (has_post_thumbnail($post_id) && $post_thumbnail_id != '' && (!isset($_REQUEST['action']) || $_REQUEST['action'] != 'delete')) {
 

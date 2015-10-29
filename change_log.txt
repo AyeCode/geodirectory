@@ -32,6 +32,7 @@ Custom field type fieldset should not import/export in csv file - FIXED
 In listing search form spinner icon customized with font-awesome spinner - CHANGED
 On home page map categories menu not able to click on down arrow of scroll bar - FIXED
 case conversion functions added to support unicode languages - ADDED
+case conversion functions replaced with custom function to support unicode languages - CHANGED
 
 v1.5.3
 If tax query has 'relation' set then it will throw WARNING in wp_list_pluck - FIXED

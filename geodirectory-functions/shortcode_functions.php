@@ -56,10 +56,10 @@ function gdsc_validate_map_args($params)
     $params['height'] = gdsc_validate_measurements($params['height']);
 
     // Only accept our 4 maptypes. Otherwise, revert to the default.
-    if (!(in_array(strtoupper($params['maptype']), array('HYBRID', 'SATELLITE', 'ROADMAP', 'TERRAIN')))) {
+    if (!(in_array(geodir_strtoupper($params['maptype']), array('HYBRID', 'SATELLITE', 'ROADMAP', 'TERRAIN')))) {
         $params['maptype'] = 'ROADMAP';
     } else {
-        $params['maptype'] = strtoupper($params['maptype']);
+        $params['maptype'] = geodir_strtoupper($params['maptype']);
     }
 
     // Zoom accepts a value between 1 and 19
@@ -158,10 +158,10 @@ function gdsc_to_bool_val($in, $strict = false)
 function gdsc_is_post_type_valid($incoming_post_type)
 {
     $post_types = geodir_get_posttypes();
-    $post_types = array_map('strtolower', $post_types);
+    $post_types = array_map('geodir_strtolower', $post_types);
     $post_type_found = false;
     foreach ($post_types as $type) {
-        if (strtolower($incoming_post_type) == strtolower($type)) {
+        if (geodir_strtolower($incoming_post_type) == geodir_strtolower($type)) {
             $post_type_found = true;
         }
     }
@@ -201,7 +201,7 @@ function gdsc_listing_loop_filter($query)
                 $terms_arr = get_terms($taxonomies[0], $args);
                 foreach ($terms_arr as $location_term) {
                     $term_arr = $location_term;
-                    $term_arr->name = ucwords(str_replace('-', ' ', $request_term));
+                    $term_arr->name = geodir_ucwords(str_replace('-', ' ', $request_term));
                 }
                 $wp_query->queried_object_id = 1;
                 $wp_query->queried_object = $term_arr;
@@ -406,7 +406,7 @@ function geodir_popular_category_add_scripts()
  */
 function gdsc_validate_layout_choice($layout_choice)
 {
-    switch (strtolower($layout_choice)) {
+    switch (geodir_strtolower($layout_choice)) {
         case 'list';
         case 'one';
         case 'one_column';

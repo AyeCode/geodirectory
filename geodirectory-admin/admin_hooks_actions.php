@@ -221,7 +221,7 @@ function geodir_meta_box_add()
     if (isset($post->post_type) && in_array($post->post_type, $geodir_posttypes)):
 
         $geodir_posttype = $post->post_type;
-        $post_typename = ucwords($geodir_post_types[$geodir_posttype]['labels']['singular_name']);
+        $post_typename = geodir_ucwords($geodir_post_types[$geodir_posttype]['labels']['singular_name']);
 
         // Filter-Payment-Manager
 
@@ -1702,7 +1702,7 @@ function geodir_ajax_import_csv()
     if (is_file($target_path) && file_exists($target_path) && $uploadedFile) {
         $wp_filetype = wp_check_filetype_and_ext($target_path, $filename);
 
-        if (!empty($wp_filetype) && isset($wp_filetype['ext']) && strtolower($wp_filetype['ext']) == 'csv') {
+        if (!empty($wp_filetype) && isset($wp_filetype['ext']) && geodir_strtolower($wp_filetype['ext']) == 'csv') {
             $return['error'] = NULL;
 
             $return['rows'] = 0;
@@ -1896,7 +1896,7 @@ function geodir_ajax_import_csv()
                         $blank_address++;
                         continue;
                     } else if ($location_result->location_id == 0) {
-                        if ((strtolower($gd_post_info['post_city']) != strtolower($location_result->city)) || (strtolower($gd_post_info['post_region']) != strtolower($location_result->region)) || (strtolower($gd_post_info['post_country']) != strtolower($location_result->country))) {
+                        if ((geodir_strtolower($gd_post_info['post_city']) != geodir_strtolower($location_result->city)) || (geodir_strtolower($gd_post_info['post_region']) != geodir_strtolower($location_result->region)) || (geodir_strtolower($gd_post_info['post_country']) != geodir_strtolower($location_result->country))) {
                             $address_invalid++;
                             continue;
                         }

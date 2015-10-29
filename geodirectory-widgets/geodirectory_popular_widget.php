@@ -176,7 +176,7 @@ class geodir_popular_postview extends WP_Widget
         $instance = $old_instance;
 
         if ($new_instance['title'] == '') {
-            $title = ucwords(strip_tags($new_instance['category_title']));
+            $title = geodir_ucwords(strip_tags($new_instance['category_title']));
             //$instance['title'] = $title;
         }
         $instance['title'] = strip_tags($new_instance['title']);

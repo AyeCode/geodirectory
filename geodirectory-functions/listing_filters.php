@@ -181,7 +181,7 @@ function geodir_listing_loop_filter($query)
                 $terms_arr = get_terms($taxonomies[0], $args);
                 foreach ($terms_arr as $location_term) {
                     $term_arr = $location_term;
-                    $term_arr->name = ucwords(str_replace('-', ' ', $request_term));
+                    $term_arr->name = geodir_ucwords(str_replace('-', ' ', $request_term));
                 }
                 $wp_query->queried_object_id = 1;
                 $wp_query->queried_object = $term_arr;

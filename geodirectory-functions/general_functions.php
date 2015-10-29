@@ -529,7 +529,7 @@ if (!function_exists('geodir_getDistanceRadius')) {
     function geodir_getDistanceRadius($uom = 'km')
     {
 //	Use Haversine formula to calculate the great circle distance between two points identified by longitude and latitude
-        switch (strtolower($uom)):
+        switch (geodir_strtolower($uom)):
             case 'km'    :
                 $earthMeanRadius = 6371.009; // km
                 break;
@@ -960,7 +960,7 @@ function geodir_breadcrumb()
                         if (!empty($term_info) && isset($term_info['name']) && $term_info['name'] != '') {
                             $term_link_text = urldecode($term_info['name']);
                         } else {
-                            $term_link_text = ucwords(urldecode($term_link_text));
+                            $term_link_text = geodir_ucwords(urldecode($term_link_text));
                         }
 
                         if ($term_index == count($term_array) && $is_taxonomy_last)
@@ -2057,7 +2057,7 @@ function geodir_sanitize_location_name($type, $name, $translate = true)
     } else {
         $return = preg_replace('/-(\d+)$/', '', $return);
         $return = preg_replace('/[_-]/', ' ', $return);
-        $return = ucwords($return);
+        $return = geodir_ucwords($return);
         $return = $translate ? __($return, 'geodirectory') : $return;
     }
 
@@ -2298,7 +2298,7 @@ function geodir_helper_cat_list_output($terms, $category_limit)
 
         echo '<li class="' . $class_row . '"><a href="' . $term_link . '">';
         echo '<img alt="' . $cat->name . ' icon" class="" style="height:20px;vertical-align:middle;" src="' . $term_icon_url . '"/> ';
-        echo ucwords($cat->name) . ' (<span class="geodir_term_class geodir_link_span geodir_category_class_' . $post_type . '_' . $cat->term_id . '" >' . $total_post . '</span>) ';
+        echo geodir_ucwords($cat->name) . ' (<span class="geodir_term_class geodir_link_span geodir_category_class_' . $post_type . '_' . $cat->term_id . '" >' . $total_post . '</span>) ';
         echo '</a></li>';
     }
 
@@ -2801,7 +2801,7 @@ function geodir_popular_postview_output($args = '', $instance = '')
     echo $before_widget;
 
     /** This filter is documented in geodirectory_widgets.php */
-    $title = empty($instance['title']) ? ucwords($instance['category_title']) : apply_filters('widget_title', __($instance['title'], 'geodirectory'));
+    $title = empty($instance['title']) ? geodir_ucwords($instance['category_title']) : apply_filters('widget_title', __($instance['title'], 'geodirectory'));
     /**
      * Filter the widget post type.
      *
@@ -3788,7 +3788,7 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
             $gd_location_link_text = preg_replace('/-(\d+)$/', '', $location);
             $gd_location_link_text = preg_replace('/[_-]/', ' ', $gd_location_link_text);
 
-            $location_name = ucwords($gd_location_link_text);
+            $location_name = geodir_ucwords($gd_location_link_text);
             $location_name = __($location_name, 'geodirectory');
 
             if ($actual_location_name) {

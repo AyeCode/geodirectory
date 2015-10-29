@@ -1013,7 +1013,7 @@ function geodir_addpost_categories_html($request_taxonomy, $parrent, $selected =
                    onchange="if(jQuery(this).is(':checked')){jQuery(this).closest('div').find('.post_default_category').prop('checked',false).show();}else{jQuery(this).closest('div').find('.post_default_category').prop('checked',false).hide();};update_listing_cat()"
                    checked="checked" disabled="disabled"/>
        <span> 
-        <?php printf(__('Add listing in %s category', 'geodirectory'), ucwords($main_cat->name));?>
+        <?php printf(__('Add listing in %s category', 'geodirectory'), geodir_ucwords($main_cat->name));?>
         </span>
             <br/>
 
@@ -1021,7 +1021,7 @@ function geodir_addpost_categories_html($request_taxonomy, $parrent, $selected =
                 <input type="radio" name="post_default_category" value="<?php echo $main_cat->term_id;?>"
                        onchange="update_listing_cat()" <?php if ($default) echo ' checked="checked" ';?>   />
         <span> 
-        <?php printf(__('Set %s as default category', 'geodirectory'), ucwords($main_cat->name));?>
+        <?php printf(__('Set %s as default category', 'geodirectory'), geodir_ucwords($main_cat->name));?>
         </span>
             </div>
 
