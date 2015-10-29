@@ -338,14 +338,27 @@ jQuery(document).ready(function () {
 
     jQuery(".trigger").click(function () {
         jQuery(this).toggleClass("active").next().slideToggle("slow");
-        if (jQuery(".trigger").hasClass("triggeroff")) {
-            jQuery(".trigger").removeClass('triggeroff');
+		var aD = jQuery(this).toggleClass("active").next().hasClass('map_category') ? true : false;
+		if (jQuery(".trigger").hasClass("triggeroff")) {
+			jQuery(".trigger").removeClass('triggeroff');
             jQuery(".trigger").addClass('triggeron');
+			if (aD) {
+				gd_compress_animate(this, 0);
+			}
         } else {
-            jQuery(".trigger").removeClass('triggeron');
+			jQuery(".trigger").removeClass('triggeron');
             jQuery(".trigger").addClass('triggeroff');
+			
+			if (aD) {
+				gd_compress_animate(this, parseFloat(jQuery(this).toggleClass("active").next().outerWidth()));
+			}
         }
     });
+	jQuery(".trigger").each(function() {
+		if (jQuery(this).hasClass('triggeroff') && jQuery(this).next().hasClass('map_category')) {
+			gd_compress_animate(this, parseFloat(jQuery(this).next().outerWidth()));
+		}
+	});
 
     jQuery(".trigger_sticky").click(function () {
         var effect = 'slide';
@@ -368,6 +381,10 @@ jQuery(document).ready(function () {
             setCookie('geodir_stickystatus', 'sshow', 1);
         }
     });
+	
+	function gd_compress_animate(e, r) {
+		jQuery(e).animate({"margin-right":r + "px"}, "fast");
+	}
 	
 	var gd_modal = "undefined" != typeof geodir_var.geodir_gd_modal && 1 == parseInt(geodir_var.geodir_gd_modal) ? false : true;
 	if (gd_modal) {
