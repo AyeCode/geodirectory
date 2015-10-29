@@ -39,7 +39,6 @@ echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
         do_action('geodir_before_search_form') ?>
 
         <div class="clearfix geodir-loc-bar-in">
-			<i class="fa fa-refresh fa-spin fa-lg gd-form-refresh" style="display:none"></i>
             <div class="geodir-search">
 
                 <?php
@@ -143,7 +142,7 @@ echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
                  * @since 1.0.0
                  */
                 do_action('geodir_before_search_button'); ?>
-                <input type="button" value="<?php echo $default_search_button_label; ?>" class="geodir_submit_search">
+				<button type="button" class="geodir_submit_search"><i class="fa fa-refresh fa-spin gd-form-refresh" style="display:none"></i><i class="fa fa-search"></i><font class="gd-srchbtn-txt"><?php echo $default_search_button_label;?></font></button>
                 <?php
                 /**
                  * Called on the GD search form just after the search button.
