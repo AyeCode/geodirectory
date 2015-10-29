@@ -1245,10 +1245,10 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
 
             $prefix = $name . '_';
 
-            ($site_title != '') ? $address_title = $site_title : $address_title = ucwords($prefix . ' address');
-            ($extra_fields['zip_lable'] != '') ? $zip_title = $extra_fields['zip_lable'] : $zip_title = ucwords($prefix . ' zip/post code ');
-            ($extra_fields['map_lable'] != '') ? $map_title = $extra_fields['map_lable'] : $map_title = ucwords('set address on map');
-            ($extra_fields['mapview_lable'] != '') ? $mapview_title = $extra_fields['mapview_lable'] : $mapview_title = ucwords($prefix . ' mapview');
+            ($site_title != '') ? $address_title = $site_title : $address_title = geodir_ucwords($prefix . ' address');
+            ($extra_fields['zip_lable'] != '') ? $zip_title = $extra_fields['zip_lable'] : $zip_title = geodir_ucwords($prefix . ' zip/post code ');
+            ($extra_fields['map_lable'] != '') ? $map_title = $extra_fields['map_lable'] : $map_title = geodir_ucwords('set address on map');
+            ($extra_fields['mapview_lable'] != '') ? $mapview_title = $extra_fields['mapview_lable'] : $mapview_title = geodir_ucwords($prefix . ' mapview');
 
             $address = '';
             $zip = '';
@@ -3870,7 +3870,7 @@ if (!function_exists('geodir_custom_sort_field_adminhtml')) {
                      class="handlediv close"></div>
 
                 <b style="cursor:pointer;"
-                   onclick="show_hide('field_frm<?php echo $result_str;?>')"><?php echo ucwords(__('Field:', 'geodirectory') . ' (' . $site_title . ')');?></b>
+                   onclick="show_hide('field_frm<?php echo $result_str;?>')"><?php echo geodir_ucwords(__('Field:', 'geodirectory') . ' (' . $site_title . ')');?></b>
 
             </div>
 

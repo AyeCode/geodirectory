@@ -54,7 +54,7 @@ class geodir_bestof_widget extends WP_Widget
         echo $before_widget;
         $loc_terms = geodir_get_current_location_terms();
         if ($loc_terms) {
-            $cur_location = ' : ' . ucwords(str_replace('-', ' ', end($loc_terms)));
+            $cur_location = ' : ' . geodir_ucwords(str_replace('-', ' ', end($loc_terms)));
         } else {
             $cur_location = '';
         }
@@ -228,7 +228,7 @@ class geodir_bestof_widget extends WP_Widget
                 }
                 if ($is_dropdown) {
                     $selected = ($cat_count == 1) ? 'selected="selected"' : '';
-                    $nav_html .= '<option ' . $selected . ' value="' . $cat->term_id . '">' . ucwords($cat->name) . '</option>';
+                    $nav_html .= '<option ' . $selected . ' value="' . $cat->term_id . '">' . geodir_ucwords($cat->name) . '</option>';
                 } else {
                     if ($cat_count == 1) {
                         $nav_html .= '<dd class="geodir-tab-active">';
@@ -239,7 +239,7 @@ class geodir_bestof_widget extends WP_Widget
                     $nav_html .= '<a data-termid="' . $cat->term_id . '" href="' . get_term_link($cat, $cat->taxonomy) . '">';
                     $nav_html .= '<img alt="' . $cat->name . ' icon" class="bestof-cat-icon" src="' . $term_icon_url . '"/>';
                     $nav_html .= '<span>';
-                    $nav_html .= ucwords($cat->name);
+                    $nav_html .= geodir_ucwords($cat->name);
                     $nav_html .= '<small>';
                     if (isset($cat->review_count)) {
                         $num_reviews = $cat->review_count;

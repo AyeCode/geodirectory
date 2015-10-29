@@ -1909,10 +1909,10 @@ function geodir_custom_page_title($title = '', $sep = '')
                 $post_type_info = geodir_get_posttype_info($listing_type);
                 if (!empty($title)) {
                     $title_array = explode($sep, $title);
-                    $title_array[0] = ucwords(__('Add', 'geodirectory') . ' ' . __($post_type_info['labels']['singular_name'], 'geodirectory')) . ' ';
+                    $title_array[0] = geodir_ucwords(__('Add', 'geodirectory') . ' ' . __($post_type_info['labels']['singular_name'], 'geodirectory')) . ' ';
                     $title = implode($sep, $title_array);
                 } else
-                    $title = ucwords(__('Add', 'geodirectory') . ' ' . __($post_type_info['labels']['singular_name'], 'geodirectory'));
+                    $title = geodir_ucwords(__('Add', 'geodirectory') . ' ' . __($post_type_info['labels']['singular_name'], 'geodirectory'));
                 //$title .= " " . $gd_country . $gd_region . $gd_city  . "$sep ";
             }
         }
@@ -2275,7 +2275,7 @@ function geodir_post_type_archive_title($title)
                 $gd_location_link_text = preg_replace('/-(\d+)$/', '', $location);
                 $gd_location_link_text = preg_replace('/[_-]/', ' ', $gd_location_link_text);
 
-                $location_name = ucwords($gd_location_link_text);
+                $location_name = geodir_ucwords($gd_location_link_text);
                 $location_name = __($location_name, 'geodirectory');
 
                 if ($actual_location_name) {
@@ -2310,8 +2310,8 @@ function geodir_post_type_archive_title($title)
                     $term_link_text = preg_replace('/[_-]/', ' ', $term_link_text);
                 }
 
-                //$title .= ' ' . ucwords( $term_link_text );
-                $taxonomy_titles[] = ucwords($term_link_text);
+                //$title .= ' ' . geodir_ucwords( $term_link_text );
+                $taxonomy_titles[] = geodir_ucwords($term_link_text);
             }
         }
 
@@ -2371,7 +2371,7 @@ function geodir_single_post_title($title, $post)
                 $gd_location_link_text = preg_replace('/-(\d+)$/', '', $location);
                 $gd_location_link_text = preg_replace('/[_-]/', ' ', $gd_location_link_text);
 
-                $gd_location_link_text = ucwords($gd_location_link_text);
+                $gd_location_link_text = geodir_ucwords($gd_location_link_text);
                 $gd_location_link_text = __($gd_location_link_text, 'geodirectory');
 
                 if ($actual_location_name) {
@@ -2400,7 +2400,7 @@ function geodir_single_post_title($title, $post)
                         $term_link_text = preg_replace('/[_-]/', ' ', $term_link_text);
                     }
 
-                    $title .= ' ' . ucwords($term_link_text);
+                    $title .= ' ' . geodir_ucwords($term_link_text);
                 }
             }
         }

@@ -60,12 +60,12 @@ if ($htmlvar_name == 'geodir_email') {
             ?>
 
             <b style="cursor:pointer;"
-               onclick="show_hide('field_frm<?php echo $result_str;?>')"><?php echo ucwords(__('Fieldset:', 'geodirectory') . ' ' . $field_admin_title);?></b>
+               onclick="show_hide('field_frm<?php echo $result_str;?>')"><?php echo geodir_ucwords(__('Fieldset:', 'geodirectory') . ' ' . $field_admin_title);?></b>
         <?php
         } else {
             ?>
             <b style="cursor:pointer;"
-               onclick="show_hide('field_frm<?php echo $result_str;?>')"><?php echo ucwords(__('Field:', 'geodirectory') . ' ' . $field_admin_title . ' (' . $field_type . ')');?></b>
+               onclick="show_hide('field_frm<?php echo $result_str;?>')"><?php echo geodir_ucwords(__('Field:', 'geodirectory') . ' ' . $field_admin_title . ' (' . $field_type . ')');?></b>
         <?php
         }
         ?>

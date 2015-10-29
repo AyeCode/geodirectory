@@ -90,7 +90,7 @@ function create_location_slug($location_string)
 
     sanitize_title
     $lvalue = utf8_decode($location_string);
-    $lvalue = strtolower (strtr($lvalue, $spec_arr));
+    $lvalue = geodir_strtolower (strtr($lvalue, $spec_arr));
     $slug = str_replace(" ", "_", $lvalue);*/
 
     /**

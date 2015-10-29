@@ -1186,7 +1186,7 @@ function geodir_action_details_taxonomies()
             if (!isset($listing_label)) {
                 $listing_label = '';
             }
-            $taxonomies[$post_type . '_tags'] = wp_sprintf('%s: %l', ucwords($listing_label . ' ' . __('Tags', 'geodirectory')), $links, (object)$terms);
+            $taxonomies[$post_type . '_tags'] = wp_sprintf('%s: %l', geodir_ucwords($listing_label . ' ' . __('Tags', 'geodirectory')), $links, (object)$terms);
         endif;
 
     }
@@ -1226,7 +1226,7 @@ function geodir_action_details_taxonomies()
         if (!isset($listing_label)) {
             $listing_label = '';
         }
-        $taxonomies[$post_taxonomy] = wp_sprintf('%s: %l', ucwords($listing_label . ' ' . __('Category', 'geodirectory')), $links, (object)$terms);
+        $taxonomies[$post_taxonomy] = wp_sprintf('%s: %l', geodir_ucwords($listing_label . ' ' . __('Category', 'geodirectory')), $links, (object)$terms);
 
     }
 
@@ -1496,7 +1496,7 @@ function geodir_action_listings_title()
             $current_term_name = __(ucfirst($current_term->name), 'geodirectory');
             if ($current_term_name != '' && $location_name != '' && isset($current_term->taxonomy) && $current_term->taxonomy == $gd_post_type . 'category') {
                 $location_last_char = substr($location_name, -1);
-                $location_name_attach = strtolower($location_last_char) == 's' ? __("'", 'geodirectory') : __("'s", 'geodirectory');
+                $location_name_attach = geodir_strtolower($location_last_char) == 's' ? __("'", 'geodirectory') : __("'s", 'geodirectory');
                 $list_title .= __(' in', 'geodirectory') . ' ' . $location_name . $location_name_attach . ' ' . $current_term_name;
             } else {
                 $list_title .= __(' in', 'geodirectory') . " '" . $current_term_name . "'";
@@ -1509,7 +1509,7 @@ function geodir_action_listings_title()
                     $current_term_name = __(ucfirst($current_term->name), 'geodirectory');
                     if ($current_term_name != '' && $location_name != '' && isset($current_term->taxonomy) && $current_term->taxonomy == $gd_post_type . 'category') {
                         $location_last_char = substr($location_name, -1);
-                        $location_name_attach = strtolower($location_last_char) == 's' ? __("'", 'geodirectory') : __("'s", 'geodirectory');
+                        $location_name_attach = geodir_strtolower($location_last_char) == 's' ? __("'", 'geodirectory') : __("'s", 'geodirectory');
                         $list_title .= __(' in', 'geodirectory') . ' ' . $location_name . $location_name_attach . ' ' . $current_term_name;
                     } else {
                         $list_title .= __(' in', 'geodirectory') . " '" . $current_term_name . "'";
@@ -1537,7 +1537,7 @@ function geodir_action_listings_title()
             } else {
                 $gd_city = preg_replace('/-(\d+)$/', '', $gd_city);
                 $gd_city = preg_replace('/[_-]/', ' ', $gd_city);
-                $gd_city = __(ucwords($gd_city), 'geodirectory');
+                $gd_city = __(geodir_ucwords($gd_city), 'geodirectory');
             }
 
             $list_title .= __(' in', 'geodirectory') . " '" . $gd_city . "'";
@@ -1547,7 +1547,7 @@ function geodir_action_listings_title()
             } else {
                 $gd_region = preg_replace('/-(\d+)$/', '', $gd_region);
                 $gd_region = preg_replace('/[_-]/', ' ', $gd_region);
-                $gd_region = __(ucwords($gd_region), 'geodirectory');
+                $gd_region = __(geodir_ucwords($gd_region), 'geodirectory');
             }
 
             $list_title .= __(' in', 'geodirectory') . " '" . $gd_region . "'";
@@ -1557,7 +1557,7 @@ function geodir_action_listings_title()
             } else {
                 $gd_country = preg_replace('/-(\d+)$/', '', $gd_country);
                 $gd_country = preg_replace('/[_-]/', ' ', $gd_country);
-                $gd_country = __(ucwords($gd_country), 'geodirectory');
+                $gd_country = __(geodir_ucwords($gd_country), 'geodirectory');
             }
 
             $list_title .= __(' in', 'geodirectory') . " '" . $gd_country . "'";
@@ -1982,11 +1982,11 @@ function geodir_action_add_listing_page_title()
          * @since 1.0.0
          * @param string $title The page title. This is usually Edit/Add followed by the post type name.
          */
-        echo apply_filters('geodir_add_listing_page_title_text', (ucwords(__('Edit', 'geodirectory') . ' ' . __($post_type_info['labels']['singular_name'], 'geodirectory'))));
+        echo apply_filters('geodir_add_listing_page_title_text', (geodir_ucwords(__('Edit', 'geodirectory') . ' ' . __($post_type_info['labels']['singular_name'], 'geodirectory'))));
     } elseif (isset($listing_type)) {
         $post_type_info = geodir_get_posttype_info($listing_type);
         /** This action is documented in geodirectory_template_actions.php */
-        echo apply_filters('geodir_add_listing_page_title_text', (ucwords(__('Add', 'geodirectory') . ' ' . __($post_type_info['labels']['singular_name'], 'geodirectory'))));
+        echo apply_filters('geodir_add_listing_page_title_text', (geodir_ucwords(__('Add', 'geodirectory') . ' ' . __($post_type_info['labels']['singular_name'], 'geodirectory'))));
     } else {
         /** This action is documented in geodirectory_template_actions.php */
         apply_filters('geodir_add_listing_page_title_text', the_title());
@@ -2617,7 +2617,7 @@ function geodir_action_author_page_title()
     if (!empty($term)) {
         $current_term = get_term_by('slug', $term, $taxonomy[0]);
         if (!empty($current_term))
-            $list_title .= __(' in', 'geodirectory') . " '" . ucwords($current_term->name) . "'";
+            $list_title .= __(' in', 'geodirectory') . " '" . geodir_ucwords($current_term->name) . "'";
     }
 
 
