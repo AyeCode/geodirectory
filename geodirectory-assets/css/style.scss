@@ -855,7 +855,8 @@ span.geodir_term_class {
 }
 
 .geodir-search input[type="button"],
-.geodir-search input[type="submit"] {
+.geodir-search input[type="submit"],
+.geodir-search button[type="button"] {
     display: block;
     float: left;
     margin: 5px;
@@ -1660,4 +1661,14 @@ div#jquery-lightbox {
 
 #lightbox-container-image #lightbox-image {
   max-width: none
+}
+
+.geodir-adv-form-wait .geodir_submit_search .gd-srchbtn-txt,
+.geodir_submit_search .fa-search {
+	display: none;
+}
+
+.geodir-adv-form-wait .geodir-search .gd-form-refresh,
+.geodir-adv-form-wait .geodir-advance-search .gd-form-refresh {
+	display: inline-block !important;
 }
