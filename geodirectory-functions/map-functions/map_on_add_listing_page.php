@@ -331,7 +331,7 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
 			do_action('geodir_add_listing_geocode_js_vars');
 			?>
             <?php if($is_map_restrict){?>
-            if (getCity.toLowerCase() != '<?php echo mb_strtolower(esc_attr($city));?>') {
+            if (getCity.toLowerCase() != '<?php echo geodir_strtolower(esc_attr($city));?>') {
                 alert('<?php printf(__('Please choose any address of the (%s) city only.','geodirectory'), $city);?>');
                 jQuery("#<?php echo $prefix.'map';?>").goMap();
                 jQuery.goMap.map.setCenter(new google.maps.LatLng('<?php echo $default_lat; ?>', '<?php echo $default_lng; ?>'));
