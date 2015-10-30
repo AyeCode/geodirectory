@@ -185,9 +185,10 @@ function geodir_add_nav_menu_items()
                                      * @since 1.0.0
                                      */
                                     $a_class = apply_filters('geodir_menu_a_class', '');
+                                    $cpt_name = __($args->labels->singular_name, 'geodirectory');
                                     $items .= '<li class="' . $li_class . '">
 											<a href="' . geodir_get_addlisting_link($post_type) . '" class="' . $a_class . '">
-												' . __('Add', 'geodirectory') . ' ' . __($args->labels->singular_name, 'geodirectory') . '
+												' . sprintf( __('Add %s', 'geodirectory'), $cpt_name ) . '
 											</a>
 										</li>';
                                 }
@@ -263,9 +264,10 @@ function geodir_add_nav_menu_items()
                                          * @param string $menu_class The menu HTML class.
                                          */
                                         $li_class = apply_filters('geodir_menu_li_class', 'menu-item ' . $menu_class);
+                                        $cpt_name = __($args->labels->singular_name, 'geodirectory');
                                         $items .= '<li class="' . $li_class . '">
 														<a href="' . geodir_get_addlisting_link($post_type) . '" class="' . $sub_a_class . '">
-															' . __('Add', 'geodirectory') . ' ' . __($args->labels->singular_name, 'geodirectory') . '
+															' . sprintf( __('Add %s', 'geodirectory'), $cpt_name ) . '
 														</a>
 													</li>';
                                     }

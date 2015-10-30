@@ -1974,7 +1974,8 @@ function geodir_home_map_cats_key_value_array()
     $return = array();
     if (!empty($post_types)) {
         foreach ($post_types as $key => $post_type) {
-            $post_type_name = __($post_type->labels->singular_name, 'geodirectory') . ' ' . __('Categories', 'geodirectory');
+            $cpt_name = __($post_type->labels->singular_name, 'geodirectory');
+            $post_type_name =   sprintf(__('%s Categories', 'geodirectory'),$cpt_name);
             $taxonomies = geodir_get_taxonomies($key);
             $cat_taxonomy = !empty($taxonomies[0]) ? $taxonomies[0] : NULL;
             $cat_terms = $cat_taxonomy ? get_terms($cat_taxonomy) : NULL;

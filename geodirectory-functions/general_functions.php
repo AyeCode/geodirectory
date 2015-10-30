@@ -2214,7 +2214,8 @@ function geodir_popular_post_category_output($args = '', $instance = '')
             $tax_change_output .= "<select data-limit='$category_limit' class='geodir-cat-list-tax'  onchange='geodir_get_post_term(this);'>";
             foreach ($b_terms as $key => $val) {
                 $ptype = get_post_type_object(str_replace("category", "", $key));
-                $tax_change_output .= "<option value='$key' ". selected($key, $default_taxonomy, false) .">" . __($ptype->labels->singular_name, 'geodirectory') . " " . __('Categories', 'geodirectory') . "</option>";
+                $cpt_name = __($ptype->labels->singular_name, 'geodirectory');
+                $tax_change_output .= "<option value='$key' ". selected($key, $default_taxonomy, false) .">" . sprintf(__('%s Categories', 'geodirectory'),$cpt_name) . "</option>";
             }
             $tax_change_output .= "</select>";
         }

@@ -37,6 +37,7 @@ Titles & Metas section added for changing GD page meta titles and descriptions -
 Some page titles now editable in the Titles & Metas section - ADDED
 Page titles compatible with WP 4.4 - ADDED
 %%location%%, %%in_location%%, %%location_single%% and %%in_location_single%% now compatible with Yoast (WPSEO) - ADDED
+Double words like `Place Categories` now easier to translate as one - CHANGED
 
 v1.5.3
 If tax query has 'relation' set then it will throw WARNING in wp_list_pluck - FIXED
