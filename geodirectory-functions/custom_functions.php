@@ -1177,7 +1177,7 @@ function geodir_add_meta_keywords()
          * @param string $title The page description including variables.
          * @param string $gd_page The GeoDirectory page type if any.
          */
-        $meta_desc = apply_filters('geodir_seo_meta_description_pre', $meta_desc,$gd_page,'');
+        $meta_desc = apply_filters('geodir_seo_meta_description_pre', __($meta_desc, 'geodirectory'),$gd_page,'');
 
         /**
          * Filter SEO meta description.
@@ -2089,49 +2089,4 @@ function geodir_share_this_button_code()
 
     </div>
 <?php
-}
-
-/**
- * Replace the %location% string with real location.
- *
- * @since 1.5.4
- * @package GeoDirectory
- *
- * @param string $string The string form which %location% replaced.
- * @param string $default The default text to replace %location% if location not found.
- * @return string The %location% replaced string.
- */
-function geodir_replace_location_vars($string, $default = '') {
-	if ($string != '') {
-		$default = $default != '' ? $default : __('Everywhere', 'geodirectory');
-		
-		$location = '';
-		if (is_plugin_active('geodir_location_manager/geodir_location_manager.php')) {			
-			if ($city = get_query_var('gd_city')) {
-				$location = get_actual_location_name('city', $city);
-			} else if ($region = get_query_var('gd_region')) {
-				$location = get_actual_location_name('region', $region);
-			} else if ($country = get_query_var('gd_country')) {
-				$location = get_actual_location_name('country', $country, true);
-			}
-			
-			if ($location == '') {
-				$location_type = geodir_what_is_current_location();
-				
-				if ($location_type == 'city') {
-					$location = geodir_get_current_location(array('what' => 'city', 'echo' => false));
-				} else if ($location_type == 'region') {
-					$location = geodir_get_current_location(array('what' => 'region', 'echo' => false));
-				} else if ($location_type == 'country') {
-					$location = geodir_get_current_location(array('what' => 'country', 'echo' => false));
-					$location = __($location, 'geodirectory');
-				}
-			}
-		}
-		
-		$replace = $location != '' ? $location : $default;
-		$string = str_replace('%location%', $replace, $string);
-	}
-	
-	return $string;
 }

@@ -35,6 +35,8 @@ case conversion functions added to support unicode languages - ADDED
 case conversion functions replaced with custom function to support unicode languages - CHANGED
 Titles & Metas section added for changing GD page meta titles and descriptions - ADDED
 Some page titles now editable in the Titles & Metas section - ADDED
+Page titles compatible with WP 4.4 - ADDED
+%%location%%, %%in_location%%, %%location_single%% and %%in_location_single%% now compatible with Yoast (WPSEO) - ADDED
 
 v1.5.3
 If tax query has 'relation' set then it will throw WARNING in wp_list_pluck - FIXED

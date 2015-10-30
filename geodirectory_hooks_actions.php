@@ -1843,11 +1843,7 @@ function geodir_term_slug_is_exists($slug_exists, $slug, $term_id)
 }
 
 
-function dq_override_post_title($title){
-    print_r($title);
 
-    return $title;
-}
 add_filter('pre_get_document_title', 'geodir_custom_page_title', 100);
 add_filter('wp_title', 'geodir_custom_page_title', 100, 2);
 /**
@@ -1863,6 +1859,9 @@ add_filter('wp_title', 'geodir_custom_page_title', 100, 2);
 function geodir_custom_page_title($title = '', $sep = '')
 {
     global $wp;
+    if (class_exists('WPSEO_Frontend') || class_exists('All_in_One_SEO_Pack')) {
+        return $title;
+    }
 
     if ($sep == '') {
         /**
@@ -1927,7 +1926,7 @@ function geodir_custom_page_title($title = '', $sep = '')
      * @param string $gd_page The GeoDirectory page type if any.
      * @param string $sep The title separator symbol.
      */
-    return apply_filters('geodir_seo_meta_title', $title, $gd_page, $sep);
+    return apply_filters('geodir_seo_meta_title', __($title, 'geodirectory'), $gd_page, $sep);
 
 }
 
@@ -2183,209 +2182,6 @@ function geodir_remove_template_redirect_actions()
     }
 }
 
-add_filter('wpseo_title', 'geodir_post_type_archive_title', 11, 1);
-
-add_filter('post_type_archive_title', 'geodir_post_type_archive_title', 10, 1);
-/**
- * add location variables in geodirectory title parameter.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
- * @global object $wp_query WordPress Query object.
- * @global object $wp WordPress object.
- * @param string $title The title parameter.
- * @return string Modified post title.
- */
-function geodir_post_type_archive_title($title)
-{
-    global $wp_query, $wp, $wpdb;
-    $title = str_replace("Location", __('Location', 'geodirectory'), $title);
-    $wpseo_edit = false;
-    $current_term = $wp_query->get_queried_object();
-
-    if (!isset($current_term->ID)) {
-        if (empty($current_term) || !is_object($current_term)) {
-            $current_term = new stdClass();
-        }
-        $current_term->ID = '';
-    }
-
-    if (geodir_is_geodir_page() && (is_tax() || $current_term->ID == get_option('geodir_location_page') || (is_archive() && !$current_term->ID && !(is_tax() || $current_term->ID == get_option('geodir_location_page'))))) {
-        $title = $title != '' ? __($title, 'geodirectory') : '';
-        ####### FIX FOR YOAST SEO START ########
-        $separator_options = array(
-            'sc-dash' => '-',
-            'sc-ndash' => '&ndash;',
-            'sc-mdash' => '&mdash;',
-            'sc-middot' => '&middot;',
-            'sc-bull' => '&bull;',
-            'sc-star' => '*',
-            'sc-smstar' => '&#8902;',
-            'sc-pipe' => '|',
-            'sc-tilde' => '~',
-            'sc-laquo' => '&laquo;',
-            'sc-raquo' => '&raquo;',
-            'sc-lt' => '&lt;',
-            'sc-gt' => '&gt;',
-        );
-
-
-        $wpseo = get_option('wpseo_titles');
-
-        if (is_array($wpseo) && is_plugin_active('wordpress-seo/wp-seo.php')) {
-            $sep = $separator_options[$wpseo['separator']];
-            $title_parts = explode(' ' . $sep . ' ', $title, 2);
-            $title = $title_parts[0];
-            $wpseo_edit = true;
-        }
-        ####### FIX FOR YOAST SEO END ########
-		
-		$gd_post_type = geodir_get_current_posttype();
-        $post_type_info = get_post_type_object($gd_post_type);
-
-        $location_array = geodir_get_current_location_terms('query_vars', $gd_post_type);
-        if (!empty($location_array)) {
-            $location_titles = array();
-            $actual_location_name = function_exists('get_actual_location_name') ? true : false;
-            $location_array = array_reverse($location_array);
-
-            foreach ($location_array as $location_type => $location) {
-                $gd_location_link_text = preg_replace('/-(\d+)$/', '', $location);
-                $gd_location_link_text = preg_replace('/[_-]/', ' ', $gd_location_link_text);
-
-                $location_name = geodir_ucwords($gd_location_link_text);
-                $location_name = __($location_name, 'geodirectory');
-
-                if ($actual_location_name) {
-                    $location_type = strpos($location_type, 'gd_') === 0 ? substr($location_type, 3) : $location_type;
-                    $location_name = get_actual_location_name($location_type, $location, true);
-                }
-
-                $location_titles[] = $location_name;
-            }
-            if (!empty($location_titles)) {
-                $location_titles = array_unique($location_titles);
-                $title .= __(' in ', 'geodirectory') . implode(", ", $location_titles);
-            }
-        }
-
-        /*if( get_query_var( $gd_post_type . 'category' ) ) {
-			$gd_taxonomy = $gd_post_type . 'category';
-			$taxonomy_title = __( ' with category ', 'geodirectory' );
-		}
-		else if( get_query_var( $gd_post_type . '_tags' ) ) {
-			$gd_taxonomy = $gd_post_type . '_tags';
-			$taxonomy_title = __( ' with tag ', 'geodirectory' );
-		}*/
-
-        if (!empty($gd_taxonomy)) {
-            $taxonomy_titles = array();
-            $term_array = explode("/", trim($wp->query_vars[$gd_taxonomy], "/"));
-
-            if (!empty($term_array)) {
-                foreach ($term_array as $term) {
-                    $term_link_text = preg_replace('/-(\d+)$/', '', $term);
-                    $term_link_text = preg_replace('/[_-]/', ' ', $term_link_text);
-                }
-
-                //$title .= ' ' . geodir_ucwords( $term_link_text );
-                $taxonomy_titles[] = geodir_ucwords($term_link_text);
-            }
-        }
-
-        if (!empty($taxonomy_titles)) {
-            $taxonomy_titles = array_unique($taxonomy_titles);
-            $title .= (!empty($location_titles) ? $taxonomy_title : __(' in ', 'geodirectory'));
-            $title .= implode(", ", $taxonomy_titles);
-        }
-    }
-
-    ####### FIX FOR YOAST SEO START ########	
-    if ($wpseo_edit && isset($title_parts[1])) {
-        $title = $title . ' ' . $sep . ' ' . $title_parts[1];
-
-
-    }
-
-    if ( defined( 'WPSEO_FILE' ) ) {
-        // Force rewrite YOAST SEO home page title.
-		$wpseo_titles = get_option('wpseo_titles');
-		$forcerewritetitle = !empty($wpseo_titles) && isset($wpseo_titles['forcerewritetitle']) && !empty($wpseo_titles['forcerewritetitle']) ? true : false;
-		
-		if(is_home() && is_page_geodir_home() && !$forcerewritetitle){
-            $sep = isset($sep) ? $sep : '&#8902;';
-            $title = get_option('blogname') . ' ' . $sep . ' ' . get_option('blogdescription');
-        }
-    }
-    ####### FIX FOR YOAST SEO END ########
-
-    return $title;
-}
-
-add_filter('single_post_title', 'geodir_single_post_title', 10, 2);
-/**
- * add location variables in geodirectory title parameter for single post.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @global object $wp WordPress object.
- * @param string $title The title parameter.
- * @param object $post Post object.
- * @return string Modified post title.
- */
-function geodir_single_post_title($title, $post)
-{
-    global $wp;
-    if ($post->post_title == 'Location' && geodir_is_geodir_page()) {
-        $title = defined('GD_LOCATION') ? GD_LOCATION : __('Location', 'geodirectory');
-
-        $location_array = geodir_get_current_location_terms('query_vars');
-
-        if (!empty($location_array)) {
-            $location_array = array_reverse($location_array);
-            $actual_location_name = function_exists('get_actual_location_name') ? true : false;
-
-            foreach ($location_array as $location_type => $location) {
-                $gd_location_link_text = preg_replace('/-(\d+)$/', '', $location);
-                $gd_location_link_text = preg_replace('/[_-]/', ' ', $gd_location_link_text);
-
-                $gd_location_link_text = geodir_ucwords($gd_location_link_text);
-                $gd_location_link_text = __($gd_location_link_text, 'geodirectory');
-
-                if ($actual_location_name) {
-                    $location_type = strpos($location_type, 'gd_') === 0 ? substr($location_type, 3) : $location_type;
-                    $gd_location_link_text = get_actual_location_name($location_type, $location, true);
-                }
-
-                $title .= ' ' . $gd_location_link_text;
-            }
-
-            $gd_post_type = geodir_get_current_posttype();
-            $post_type_info = get_post_type_object($gd_post_type);
-
-            if (get_query_var($gd_post_type . 'category')) {
-                $gd_taxonomy = $gd_post_type . 'category';
-            } else if (get_query_var($gd_post_type . '_tags')) {
-                $gd_taxonomy = $gd_post_type . '_tags';
-            }
-
-            if (!empty($gd_taxonomy)) {
-                $term_array = explode("/", trim($wp->query_vars[$gd_taxonomy], "/"));
-
-                if (!empty($term_array)) {
-                    foreach ($term_array as $term) {
-                        $term_link_text = preg_replace('/-(\d+)$/', '', $term);
-                        $term_link_text = preg_replace('/[_-]/', ' ', $term_link_text);
-                    }
-
-                    $title .= ' ' . geodir_ucwords($term_link_text);
-                }
-            }
-        }
-    }
-    return $title;
-}
 
 
 /* ---------- temp function to delete media post */
@@ -3457,7 +3253,3 @@ function geodir_search_meta_desc($html) {
     return $html;
 }
 add_filter('geodir_seo_meta_description', 'geodir_search_meta_desc', 10, 1);
-// If WordPress SEO active.
-add_filter('wpseo_title', 'geodir_replace_location_vars', 10, 1);
-add_filter('wpseo_metakeywords', 'geodir_replace_location_vars', 10, 1);
-add_filter('wpseo_metadesc', 'geodir_replace_location_vars', 10, 1);

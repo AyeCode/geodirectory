@@ -1607,7 +1607,7 @@ function geodir_action_listings_title()
      * @param string $title The page title including variables.
      * @param string $gd_page The GeoDirectory page type if any.
      */
-    $title =  apply_filters('geodir_seo_page_title', $title, $gd_page);
+    $title =  apply_filters('geodir_seo_page_title', __($title, 'geodirectory'), $gd_page);
 
     echo '<header class="' . $class_header . '"><h1 class="' . $class . '">' .
         /**
@@ -1616,7 +1616,7 @@ function geodir_action_listings_title()
          * @since 1.0.0
          * @param string $list_title The title for the category page.
          */
-        apply_filters('geodir_listing_page_title', $title) . 'vvv</h1></header>';
+        apply_filters('geodir_listing_page_title', $title) . '</h1></header>';
 }
 
 add_action('geodir_listings_page_description', 'geodir_action_listings_description', 10);
@@ -2030,7 +2030,7 @@ function geodir_action_add_listing_page_title()
      * @param string $title The page title including variables.
      * @param string $gd_page The GeoDirectory page type if any.
      */
-    $title =  apply_filters('geodir_seo_page_title', $title, $gd_page);
+    $title =  apply_filters('geodir_seo_page_title', __($title, 'geodirectory'), $gd_page);
 
     echo '<header class="' . $class_header . '"><h1 class="' . $class . '">';
     echo $title;
@@ -2692,7 +2692,7 @@ function geodir_action_author_page_title()
      * @param string $title The page title including variables.
      * @param string $gd_page The GeoDirectory page type if any.
      */
-    $title =  apply_filters('geodir_seo_page_title', $title, $gd_page);
+    $title =  apply_filters('geodir_seo_page_title', __($title, 'geodirectory'), $gd_page);
 
     echo '<header class="' . $class_header . '"><h1 class="' . $class . '">' .
         /**

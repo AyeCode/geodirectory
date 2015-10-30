@@ -8,6 +8,11 @@
  */
 global $geodir_settings;
 
+$gd_wpseo_use = '';
+if (class_exists('WPSEO_Frontend') || class_exists('All_in_One_SEO_Pack')) {
+    $gd_wpseo_use = "<b style='color:red;'>".__('Please use the WPSEO settings instead.','geodirectory')."</b><br />";
+}
+
 /**
  * Filter GD Permalink Settings array.
  *
@@ -20,7 +25,9 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
     array('name' => __('Title / Meta', 'geodirectory'), 'type' => 'no_tabs', 'desc' => 'Settings to set page title and meta', 'id' => 'geodir_title_meta_settings '),
 
 
-    array('name' => __('Available Variables', 'geodirectory'),
+
+
+    array('name' => $gd_wpseo_use.__('Available Variables', 'geodirectory'),
         'desc' => __('%%title%%, %%sitename%%, %%sitedesc%%, %%excerpt%%, %%pt_single%%, %%pt_plural%%, %%category%%, %%id%%, %%sep%%, %%location%%, %%in_location%%, %%in_location_single%%, %%location_single%%, %%search_term%%, %%search_near%%, %%name%%', 'geodirectory'),
         'type' => 'sectionstart',
         'id' => 'geodir_meta_vars'),
@@ -38,7 +45,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_title_homepage',
         'type' => 'text',
         'css' => 'width:100%;',
-        'std' => ''
+        'std' => '',
+        'placeholder' => ''
     ),
 
     array(
@@ -64,7 +72,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_title_detail',
         'type' => 'text',
         'css' => 'width:100%;',
-        'std' => '%%title%% %%sep%% %%sitename%%'
+        'std' => __('%%title%% %%sep%% %%sitename%%', 'geodirectory'),
+        'placeholder' => '%%title%% %%sep%% %%sitename%%'
     ),
 
     array(
@@ -73,7 +82,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_desc_detail',
         'type' => 'textarea',
         'css' => 'width:100%;',
-        'std' => '%%excerpt%%'
+        'std' => __('%%excerpt%%', 'geodirectory'),
+        'placeholder' => '%%excerpt%%'
     ),
 
     array('type' => 'sectionend', 'id' => 'geodir_details_meta'),
@@ -90,7 +100,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_title_pt',
         'type' => 'text',
         'css' => 'width:100%;',
-        'std' => '%%pt_plural%% %%in_location%% %%sep%% %%sitename%%'
+        'std' => __('%%pt_plural%% %%in_location%% %%sep%% %%sitename%%', 'geodirectory'),
+        'placeholder' => '%%pt_plural%% %%in_location%% %%sep%% %%sitename%%'
     ),
 
     array(
@@ -99,7 +110,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_desc_pt',
         'type' => 'textarea',
         'css' => 'width:100%;',
-        'std' => '%%pt_plural%% %%in_location%%'
+        'std' => __('%%pt_plural%% %%in_location%%', 'geodirectory'),
+        'placeholder' => '%%pt_plural%% %%in_location%%'
     ),
 
     array(
@@ -108,7 +120,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_page_title_pt',
         'type' => 'text',
         'css' => 'width:100%;',
-        'std' => 'All %%pt_plural%% %%in_location_single%%'
+        'std' => __('All %%pt_plural%% %%in_location_single%%', 'geodirectory'),
+        'placeholder' => 'All %%pt_plural%% %%in_location_single%%'
     ),
 
     array('type' => 'sectionend', 'id' => 'geodir_pt_meta'),
@@ -125,7 +138,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_title_listing',
         'type' => 'text',
         'css' => 'width:100%;',
-        'std' => '%%category%% %%in_location%% %%sep%% %%sitename%%'
+        'std' => __('%%category%% %%in_location%% %%sep%% %%sitename%%', 'geodirectory'),
+        'placeholder' => '%%category%% %%in_location%% %%sep%% %%sitename%%'
     ),
 
     array(
@@ -134,7 +148,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_desc_listing',
         'type' => 'textarea',
         'css' => 'width:100%;',
-        'std' => 'Posts related to Category: %%category%% %%in_location%%'
+        'std' => __('Posts related to Category: %%category%% %%in_location%%', 'geodirectory'),
+        'placeholder' => 'Posts related to Category: %%category%% %%in_location%%'
     ),
 
     array(
@@ -143,7 +158,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_page_title_cat-listing',
         'type' => 'text',
         'css' => 'width:100%;',
-        'std' => 'All %%category%% %%in_location_single%%'
+        'std' => __('All %%category%% %%in_location_single%%', 'geodirectory'),
+        'placeholder' => 'All %%category%% %%in_location_single%%'
     ),
 
     array(
@@ -152,7 +168,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_page_title_tag-listing',
         'type' => 'text',
         'css' => 'width:100%;',
-        'std' => 'Tag: %%tag%% %%in_location_single%%'
+        'std' => __('Tag: %%tag%% %%in_location_single%%', 'geodirectory'),
+        'placeholder' => 'Tag: %%tag%% %%in_location_single%%'
     ),
 
     array('type' => 'sectionend', 'id' => 'geodir_location_meta'),
@@ -169,7 +186,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_title_location',
         'type' => 'text',
         'css' => 'width:100%;',
-        'std' => '%%title%% %%location%% %%sep%% %%sitename%%'
+        'std' => __('%%title%% %%location%% %%sep%% %%sitename%%', 'geodirectory'),
+        'placeholder' => '%%title%% %%location%% %%sep%% %%sitename%%'
     ),
 
     array(
@@ -178,7 +196,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_desc_location',
         'type' => 'textarea',
         'css' => 'width:100%;',
-        'std' => '%%location%%'
+        'std' => __('%%location%%', 'geodirectory'),
+        'placeholder' => '%%location%%'
     ),
 
     array('type' => 'sectionend', 'id' => 'geodir_location_meta'),
@@ -195,7 +214,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_title_search',
         'type' => 'text',
         'css' => 'width:100%;',
-        'std' => '%%pt_plural%% search results for %%search_term%%, Near %%search_near%% %%sep%% %%sitename%%'
+        'std' => __('%%pt_plural%% search results for %%search_term%%, Near %%search_near%% %%sep%% %%sitename%%', 'geodirectory'),
+        'placeholder' => '%%pt_plural%% search results for %%search_term%%, Near %%search_near%% %%sep%% %%sitename%%'
     ),
 
     array(
@@ -204,7 +224,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_desc_search',
         'type' => 'textarea',
         'css' => 'width:100%;',
-        'std' => '%%pt_plural%% search results for %%search_term%%, Near %%search_near%%'
+        'std' => __('%%pt_plural%% search results for %%search_term%%, Near %%search_near%%', 'geodirectory'),
+        'placeholder' => '%%pt_plural%% search results for %%search_term%%, Near %%search_near%%'
     ),
 
     array('type' => 'sectionend', 'id' => 'geodir_location_meta'),
@@ -221,7 +242,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_title_add-listing',
         'type' => 'text',
         'css' => 'width:100%;',
-        'std' => 'Add %%pt_single%% %%sep%% %%sitename%%'
+        'std' => __('Add %%pt_single%% %%sep%% %%sitename%%', 'geodirectory'),
+        'placeholder' => 'Add %%pt_single%% %%sep%% %%sitename%%'
     ),
 
     array(
@@ -230,7 +252,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_desc_add-listing',
         'type' => 'textarea',
         'css' => 'width:100%;',
-        'std' => 'Add %%pt_single%%'
+        'std' => __('Add %%pt_single%%', 'geodirectory'),
+        'placeholder' => 'Add %%pt_single%%'
     ),
 
     array(
@@ -239,7 +262,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_page_title_add-listing',
         'type' => 'text',
         'css' => 'width:100%;',
-        'std' => 'Add %%pt_single%%'
+        'std' => __('Add %%pt_single%%', 'geodirectory'),
+        'placeholder' => 'Add %%pt_single%%'
     ),
 
     array(
@@ -248,7 +272,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_page_title_edit-listing',
         'type' => 'text',
         'css' => 'width:100%;',
-        'std' => 'Edit %%pt_single%%'
+        'std' => __('Edit %%pt_single%%', 'geodirectory'),
+        'placeholder' => 'Edit %%pt_single%%'
     ),
 
     array('type' => 'sectionend', 'id' => 'geodir_location_meta'),
@@ -265,7 +290,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_title_author',
         'type' => 'text',
         'css' => 'width:100%;',
-        'std' => 'Author: %%name%% %%sep%% %%sitename%%'
+        'std' => __('Author: %%name%% %%sep%% %%sitename%%', 'geodirectory'),
+        'placeholder' => 'Author: %%name%% %%sep%% %%sitename%%'
     ),
 
     array(
@@ -283,7 +309,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_page_title_author',
         'type' => 'text',
         'css' => 'width:100%;',
-        'std' => '%%pt_plural%% by: %%name%%'
+        'std' => __('%%pt_plural%% by: %%name%%', 'geodirectory'),
+        'placeholder' => '%%pt_plural%% by: %%name%%'
     ),
 
     array(
@@ -292,7 +319,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_page_title_favorite',
         'type' => 'text',
         'css' => 'width:100%;',
-        'std' => '%%name%%: Favorite %%pt_plural%%'
+        'std' => __('%%name%%: Favorite %%pt_plural%%', 'geodirectory'),
+        'placeholder' => '%%name%%: Favorite %%pt_plural%%'
     ),
 
     array('type' => 'sectionend', 'id' => 'geodir_location_meta'),
@@ -309,7 +337,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_title_login',
         'type' => 'text',
         'css' => 'width:100%;',
-        'std' => '%%title%% %%sep%% %%sitename%%'
+        'std' => __('%%title%% %%sep%% %%sitename%%', 'geodirectory'),
+        'placeholder' => '%%title%% %%sep%% %%sitename%%'
     ),
 
     array(
@@ -335,7 +364,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_title_listing-success',
         'type' => 'text',
         'css' => 'width:100%;',
-        'std' => '%%title%% %%sep%% %%sitename%%'
+        'std' => __('%%title%% %%sep%% %%sitename%%', 'geodirectory'),
+        'placeholder' => '%%title%% %%sep%% %%sitename%%'
     ),
 
     array(
@@ -352,10 +382,6 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
 
 
 
-    /* Listing Detail Permalink Settings End */
-
-
 )); // End Design settings
 
 
-//$_SESSION['geodir_settings']['permalink_settings'] = $geodir_settings['permalink_settings'] ;
