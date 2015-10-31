@@ -38,6 +38,7 @@ Some page titles now editable in the Titles & Metas section - ADDED
 Page titles compatible with WP 4.4 - ADDED
 %%location%%, %%in_location%%, %%location_single%% and %%in_location_single%% now compatible with Yoast (WPSEO) - ADDED
 Double words like `Place Categories` now easier to translate as one - CHANGED
+Error message added when creation/edit of custom field fails - ADDED
 
 v1.5.3
 If tax query has 'relation' set then it will throw WARNING in wp_list_pluck - FIXED
