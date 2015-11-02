@@ -8,6 +8,11 @@
  */
 global $geodir_settings;
 
+$gd_wpseo_use = '';
+if (class_exists('WPSEO_Frontend') || class_exists('All_in_One_SEO_Pack')) {
+    $gd_wpseo_use = "<b style='color:red;'>".__('Please use the WPSEO settings instead.','geodirectory')."</b><br />";
+}
+
 /**
  * Filter GD Permalink Settings array.
  *
@@ -20,8 +25,10 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
     array('name' => __('Title / Meta', 'geodirectory'), 'type' => 'no_tabs', 'desc' => 'Settings to set page title and meta', 'id' => 'geodir_title_meta_settings '),
 
 
-    array('name' => __('Available Variables', 'geodirectory'),
-        'desc' => __('%%title%%, %%sitename%%, %%sitedesc%%, %%excerpt%%, %%pt_single%%, %%pt_plural%%, %%category%%, %%id%%, %%sep%%, %%location%%, %%in_location%%', 'geodirectory'),
+
+
+    array('name' => $gd_wpseo_use.__('Available Variables', 'geodirectory'),
+        'desc' => __('%%title%%, %%sitename%%, %%sitedesc%%, %%excerpt%%, %%pt_single%%, %%pt_plural%%, %%category%%, %%id%%, %%sep%%, %%location%%, %%in_location%%, %%in_location_single%%, %%location_single%%, %%search_term%%, %%search_near%%, %%name%%', 'geodirectory'),
         'type' => 'sectionstart',
         'id' => 'geodir_meta_vars'),
 
@@ -38,7 +45,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_title_homepage',
         'type' => 'text',
         'css' => 'width:100%;',
-        'std' => ''
+        'std' => '',
+        'placeholder' => ''
     ),
 
     array(
@@ -64,7 +72,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_title_detail',
         'type' => 'text',
         'css' => 'width:100%;',
-        'std' => '%%title%% %%sep%% %%sitename%%'
+        'std' => __('%%title%% %%sep%% %%sitename%%', 'geodirectory'),
+        'placeholder' => '%%title%% %%sep%% %%sitename%%'
     ),
 
     array(
@@ -73,7 +82,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_desc_detail',
         'type' => 'textarea',
         'css' => 'width:100%;',
-        'std' => '%%excerpt%%'
+        'std' => __('%%excerpt%%', 'geodirectory'),
+        'placeholder' => '%%excerpt%%'
     ),
 
     array('type' => 'sectionend', 'id' => 'geodir_details_meta'),
@@ -90,7 +100,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_title_pt',
         'type' => 'text',
         'css' => 'width:100%;',
-        'std' => '%%pt_plural%% %%in_location%% %%sep%% %%sitename%%'
+        'std' => __('%%pt_plural%% %%in_location%% %%sep%% %%sitename%%', 'geodirectory'),
+        'placeholder' => '%%pt_plural%% %%in_location%% %%sep%% %%sitename%%'
     ),
 
     array(
@@ -99,7 +110,18 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_desc_pt',
         'type' => 'textarea',
         'css' => 'width:100%;',
-        'std' => '%%pt_plural%% %%in_location%%'
+        'std' => __('%%pt_plural%% %%in_location%%', 'geodirectory'),
+        'placeholder' => '%%pt_plural%% %%in_location%%'
+    ),
+
+    array(
+        'name' => __('Post type page title', 'geodirectory'),
+        'desc' => __('Enter the title for the post type pages.', 'geodirectory'),
+        'id' => 'geodir_page_title_pt',
+        'type' => 'text',
+        'css' => 'width:100%;',
+        'std' => __('All %%pt_plural%% %%in_location_single%%', 'geodirectory'),
+        'placeholder' => 'All %%pt_plural%% %%in_location_single%%'
     ),
 
     array('type' => 'sectionend', 'id' => 'geodir_pt_meta'),
@@ -116,7 +138,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_title_listing',
         'type' => 'text',
         'css' => 'width:100%;',
-        'std' => '%%category%% %%in_location%% %%sep%% %%sitename%%'
+        'std' => __('%%category%% %%in_location%% %%sep%% %%sitename%%', 'geodirectory'),
+        'placeholder' => '%%category%% %%in_location%% %%sep%% %%sitename%%'
     ),
 
     array(
@@ -125,12 +148,33 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_desc_listing',
         'type' => 'textarea',
         'css' => 'width:100%;',
-        'std' => 'Posts related to Category: %%category%% %%in_location%%'
+        'std' => __('Posts related to Category: %%category%% %%in_location%%', 'geodirectory'),
+        'placeholder' => 'Posts related to Category: %%category%% %%in_location%%'
+    ),
+
+    array(
+        'name' => __('Category listing page title', 'geodirectory'),
+        'desc' => __('Enter the title for the category listing pages.', 'geodirectory'),
+        'id' => 'geodir_page_title_cat-listing',
+        'type' => 'text',
+        'css' => 'width:100%;',
+        'std' => __('All %%category%% %%in_location_single%%', 'geodirectory'),
+        'placeholder' => 'All %%category%% %%in_location_single%%'
+    ),
+
+    array(
+        'name' => __('Tag listing page title', 'geodirectory'),
+        'desc' => __('Enter the title for the tag listing pages.', 'geodirectory'),
+        'id' => 'geodir_page_title_tag-listing',
+        'type' => 'text',
+        'css' => 'width:100%;',
+        'std' => __('Tag: %%tag%% %%in_location_single%%', 'geodirectory'),
+        'placeholder' => 'Tag: %%tag%% %%in_location_single%%'
     ),
 
     array('type' => 'sectionend', 'id' => 'geodir_location_meta'),
 
-    // Cat listing page meta
+    // location page meta
     array('name' => __('Location Page Meta Settings', 'geodirectory'),
         'type' => 'sectionstart',
         'desc' => '',
@@ -142,7 +186,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_title_location',
         'type' => 'text',
         'css' => 'width:100%;',
-        'std' => '%%title%% %%location%% %%sep%% %%sitename%%'
+        'std' => __('%%title%% %%location%% %%sep%% %%sitename%%', 'geodirectory'),
+        'placeholder' => '%%title%% %%location%% %%sep%% %%sitename%%'
     ),
 
     array(
@@ -151,18 +196,192 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_desc_location',
         'type' => 'textarea',
         'css' => 'width:100%;',
-        'std' => '%%location%%'
+        'std' => __('%%location%%', 'geodirectory'),
+        'placeholder' => '%%location%%'
     ),
 
     array('type' => 'sectionend', 'id' => 'geodir_location_meta'),
 
+    // Search page meta
+    array('name' => __('Search Page Meta Settings', 'geodirectory'),
+        'type' => 'sectionstart',
+        'desc' => '',
+        'id' => 'geodir_pt_meta'),
+
+    array(
+        'name' => __('Search page meta title', 'geodirectory'),
+        'desc' => __('Enter the meta title for the search page.', 'geodirectory'),
+        'id' => 'geodir_meta_title_search',
+        'type' => 'text',
+        'css' => 'width:100%;',
+        'std' => __('%%pt_plural%% search results for %%search_term%%, Near %%search_near%% %%sep%% %%sitename%%', 'geodirectory'),
+        'placeholder' => '%%pt_plural%% search results for %%search_term%%, Near %%search_near%% %%sep%% %%sitename%%'
+    ),
+
+    array(
+        'name' => __('Search page meta description', 'geodirectory'),
+        'desc' => __('Enter the meta description for the search page.', 'geodirectory'),
+        'id' => 'geodir_meta_desc_search',
+        'type' => 'textarea',
+        'css' => 'width:100%;',
+        'std' => __('%%pt_plural%% search results for %%search_term%%, Near %%search_near%%', 'geodirectory'),
+        'placeholder' => '%%pt_plural%% search results for %%search_term%%, Near %%search_near%%'
+    ),
+
+    array('type' => 'sectionend', 'id' => 'geodir_location_meta'),
+
+    //Add listing page meta
+    array('name' => __('Add Listing Page Meta Settings', 'geodirectory'),
+        'type' => 'sectionstart',
+        'desc' => '',
+        'id' => 'geodir_pt_meta'),
+
+    array(
+        'name' => __('Add listing page meta title', 'geodirectory'),
+        'desc' => __('Enter the meta title for the add listing page.', 'geodirectory'),
+        'id' => 'geodir_meta_title_add-listing',
+        'type' => 'text',
+        'css' => 'width:100%;',
+        'std' => __('Add %%pt_single%% %%sep%% %%sitename%%', 'geodirectory'),
+        'placeholder' => 'Add %%pt_single%% %%sep%% %%sitename%%'
+    ),
+
+    array(
+        'name' => __('Add listing page meta description', 'geodirectory'),
+        'desc' => __('Enter the meta description for the add listing page.', 'geodirectory'),
+        'id' => 'geodir_meta_desc_add-listing',
+        'type' => 'textarea',
+        'css' => 'width:100%;',
+        'std' => __('Add %%pt_single%%', 'geodirectory'),
+        'placeholder' => 'Add %%pt_single%%'
+    ),
+
+    array(
+        'name' => __('Add listing page title', 'geodirectory'),
+        'desc' => __('Enter the title for the add listing page.', 'geodirectory'),
+        'id' => 'geodir_page_title_add-listing',
+        'type' => 'text',
+        'css' => 'width:100%;',
+        'std' => __('Add %%pt_single%%', 'geodirectory'),
+        'placeholder' => 'Add %%pt_single%%'
+    ),
+
+    array(
+        'name' => __('Edit listing page title', 'geodirectory'),
+        'desc' => __('Enter the title for the edit listing page.', 'geodirectory'),
+        'id' => 'geodir_page_title_edit-listing',
+        'type' => 'text',
+        'css' => 'width:100%;',
+        'std' => __('Edit %%pt_single%%', 'geodirectory'),
+        'placeholder' => 'Edit %%pt_single%%'
+    ),
+
+    array('type' => 'sectionend', 'id' => 'geodir_location_meta'),
+
+    //Author page meta
+    array('name' => __('Author Page Meta Settings', 'geodirectory'),
+        'type' => 'sectionstart',
+        'desc' => '',
+        'id' => 'geodir_pt_meta'),
+
+    array(
+        'name' => __('Author page meta title', 'geodirectory'),
+        'desc' => __('Enter the meta title for the author page.', 'geodirectory'),
+        'id' => 'geodir_meta_title_author',
+        'type' => 'text',
+        'css' => 'width:100%;',
+        'std' => __('Author: %%name%% %%sep%% %%sitename%%', 'geodirectory'),
+        'placeholder' => 'Author: %%name%% %%sep%% %%sitename%%'
+    ),
+
+    array(
+        'name' => __('Author page meta description', 'geodirectory'),
+        'desc' => __('Enter the meta description for the author page.', 'geodirectory'),
+        'id' => 'geodir_meta_desc_author',
+        'type' => 'textarea',
+        'css' => 'width:100%;',
+        'std' => ''
+    ),
+
+    array(
+        'name' => __('Author page title', 'geodirectory'),
+        'desc' => __('Enter the title for the author page.', 'geodirectory'),
+        'id' => 'geodir_page_title_author',
+        'type' => 'text',
+        'css' => 'width:100%;',
+        'std' => __('%%pt_plural%% by: %%name%%', 'geodirectory'),
+        'placeholder' => '%%pt_plural%% by: %%name%%'
+    ),
+
+    array(
+        'name' => __('Author favorite page title', 'geodirectory'),
+        'desc' => __('Enter the title for the author favorite page.', 'geodirectory'),
+        'id' => 'geodir_page_title_favorite',
+        'type' => 'text',
+        'css' => 'width:100%;',
+        'std' => __('%%name%%: Favorite %%pt_plural%%', 'geodirectory'),
+        'placeholder' => '%%name%%: Favorite %%pt_plural%%'
+    ),
+
+    array('type' => 'sectionend', 'id' => 'geodir_location_meta'),
+
+    //Login page meta
+    array('name' => __('Login Page Meta Settings', 'geodirectory'),
+        'type' => 'sectionstart',
+        'desc' => '',
+        'id' => 'geodir_login_meta'),
+
+    array(
+        'name' => __('Login page meta title', 'geodirectory'),
+        'desc' => __('Enter the meta title for the login page.', 'geodirectory'),
+        'id' => 'geodir_meta_title_login',
+        'type' => 'text',
+        'css' => 'width:100%;',
+        'std' => __('%%title%% %%sep%% %%sitename%%', 'geodirectory'),
+        'placeholder' => '%%title%% %%sep%% %%sitename%%'
+    ),
+
+    array(
+        'name' => __('Login page meta description', 'geodirectory'),
+        'desc' => __('Enter the meta description for the login page.', 'geodirectory'),
+        'id' => 'geodir_meta_desc_login',
+        'type' => 'textarea',
+        'css' => 'width:100%;',
+        'std' => ''
+    ),
+
+    array('type' => 'sectionend', 'id' => 'geodir_login_meta'),
+
+    //Listing success page meta
+    array('name' => __('Listing Success Page Meta Settings', 'geodirectory'),
+        'type' => 'sectionstart',
+        'desc' => '',
+        'id' => 'geodir_login_meta'),
+
+    array(
+        'name' => __('Listing success page meta title', 'geodirectory'),
+        'desc' => __('Enter the meta title for the listing success page.', 'geodirectory'),
+        'id' => 'geodir_meta_title_listing-success',
+        'type' => 'text',
+        'css' => 'width:100%;',
+        'std' => __('%%title%% %%sep%% %%sitename%%', 'geodirectory'),
+        'placeholder' => '%%title%% %%sep%% %%sitename%%'
+    ),
+
+    array(
+        'name' => __('Listing success page meta description', 'geodirectory'),
+        'desc' => __('Enter the meta description for the listing success page.', 'geodirectory'),
+        'id' => 'geodir_meta_desc_listing-success',
+        'type' => 'textarea',
+        'css' => 'width:100%;',
+        'std' => ''
+    ),
+
+    array('type' => 'sectionend', 'id' => 'geodir_login_meta'),
 
 
-
-    /* Listing Detail Permalink Settings End */
 
 
 )); // End Design settings
 
 
-//$_SESSION['geodir_settings']['permalink_settings'] = $geodir_settings['permalink_settings'] ;

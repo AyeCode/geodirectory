@@ -101,7 +101,7 @@ function geodir_register_post_types()
 function geodir_post_type_args_modify($args, $post_type)
 {
     $geodir_location_prefix = isset($_REQUEST['geodir_location_prefix']) ? trim($_REQUEST['geodir_location_prefix']) : get_option('geodir_location_prefix');
-	if (isset($_REQUEST['geodir_listing_prefix']) && $_REQUEST['geodir_listing_prefix'] != '' && strtolower($_REQUEST['geodir_listing_prefix']) != strtolower($geodir_location_prefix)) {
+	if (isset($_REQUEST['geodir_listing_prefix']) && $_REQUEST['geodir_listing_prefix'] != '' && geodir_strtolower($_REQUEST['geodir_listing_prefix']) != geodir_strtolower($geodir_location_prefix)) {
 
         $listing_slug = htmlentities(trim($_REQUEST['geodir_listing_prefix']));
 
@@ -329,7 +329,7 @@ function geodir_add_page_id_in_query_var()
 
     if (!get_query_var('page_id')) {
         // fix for WP tags conflict with enfold theme
-        $theme_name = strtolower(wp_get_theme());
+        $theme_name = geodir_strtolower(wp_get_theme());
         if (!geodir_is_geodir_page() && strpos($theme_name, 'enfold') !== false) {
             return $wp_query;
         }
@@ -548,9 +548,9 @@ function geodir_set_location_var_in_session_in_core($wp)
                         $gd_country = urldecode($geodir_terms[0]);
                     }
 
-                    if (strtolower($default_location->country_slug) == strtolower($gd_country) &&
-                        strtolower($default_location->region_slug) == strtolower($gd_region) &&
-                        strtolower($default_location->city_slug) == strtolower($gd_city)
+                    if (geodir_strtolower($default_location->country_slug) == geodir_strtolower($gd_country) &&
+                        geodir_strtolower($default_location->region_slug) == geodir_strtolower($gd_region) &&
+                        geodir_strtolower($default_location->city_slug) == geodir_strtolower($gd_city)
                     )
                         $is_geodir_location_found = true;
 
@@ -558,8 +558,8 @@ function geodir_set_location_var_in_session_in_core($wp)
 
                     if (!$is_geodir_location_found) {
                         $gd_city = '';
-                        if (strtolower($default_location->country_slug) == strtolower($gd_country) &&
-                            strtolower($default_location->region_slug) == strtolower($gd_region)
+                        if (geodir_strtolower($default_location->country_slug) == geodir_strtolower($gd_country) &&
+                            geodir_strtolower($default_location->region_slug) == geodir_strtolower($gd_region)
                         )
                             $is_geodir_location_found = true;
 
@@ -569,7 +569,7 @@ function geodir_set_location_var_in_session_in_core($wp)
                     if (!$is_geodir_location_found) {
                         $gd_city = '';
                         $gd_region = '';
-                        if (strtolower($default_location->country_slug) == strtolower($gd_country))
+                        if (geodir_strtolower($default_location->country_slug) == geodir_strtolower($gd_country))
                             $is_geodir_location_found = true;
                     }
                 } else if ($geodir_show_location_url == 'country_city') {
@@ -580,14 +580,14 @@ function geodir_set_location_var_in_session_in_core($wp)
                         $gd_country = urldecode($geodir_terms[0]);
                     }
 
-                    if (strtolower($default_location->country_slug) == strtolower($gd_country) && strtolower($default_location->city_slug) == strtolower($gd_city))
+                    if (geodir_strtolower($default_location->country_slug) == geodir_strtolower($gd_country) && geodir_strtolower($default_location->city_slug) == geodir_strtolower($gd_city))
                         $is_geodir_location_found = true;
 
                     // if location has not been found for country and city  then search for country only
                     if (!$is_geodir_location_found) {
                         $gd_city = '';
                         
-						if (strtolower($default_location->country_slug) == strtolower($gd_country))
+						if (geodir_strtolower($default_location->country_slug) == geodir_strtolower($gd_country))
                             $is_geodir_location_found = true;
                     }
                 }  else if ($geodir_show_location_url == 'region_city') {
@@ -598,20 +598,20 @@ function geodir_set_location_var_in_session_in_core($wp)
                         $gd_region = urldecode($geodir_terms[0]);
                     }
 
-                    if (strtolower($default_location->region_slug) == strtolower($gd_region) && strtolower($default_location->city_slug) == strtolower($gd_city))
+                    if (geodir_strtolower($default_location->region_slug) == geodir_strtolower($gd_region) && geodir_strtolower($default_location->city_slug) == geodir_strtolower($gd_city))
                         $is_geodir_location_found = true;
 
                     // if location has not been found for region and city  then search for region only
                     if (!$is_geodir_location_found) {
                         $gd_city = '';
                         
-						if (strtolower($default_location->region_slug) == strtolower($gd_region))
+						if (geodir_strtolower($default_location->region_slug) == geodir_strtolower($gd_region))
                             $is_geodir_location_found = true;
                     }
                 } else {
                     $gd_city = $geodir_terms[0];
 
-                    if (strtolower($default_location->city_slug) == strtolower($gd_city)) {
+                    if (geodir_strtolower($default_location->city_slug) == geodir_strtolower($gd_city)) {
                         $is_geodir_location_found = true;
                         $gd_region = $default_location->region_slug;
                         $gd_country = $default_location->country_slug;

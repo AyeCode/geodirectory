@@ -49,11 +49,12 @@ if (!function_exists('geodir_add_column_if_not_exist')) {
 	function geodir_add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 255 ) NOT NULL")
     {
         global $wpdb;
-
+        $result = 0;// no rows affected
         if (!geodir_column_exist($db, $column)) {
             if (!empty($db) && !empty($column))
-                $wpdb->query("ALTER TABLE `$db` ADD `$column`  $column_attr");
+                $result = $wpdb->query("ALTER TABLE `$db` ADD `$column`  $column_attr");
         }
+        return $result;
     }
 }
 
@@ -702,7 +703,10 @@ if (!function_exists('geodir_custom_field_save')) {
                             $meta_field_add .= " DEFAULT '" . $default_value . "'";
                         }
 
-                        $wpdb->query($meta_field_add);
+                    $alter_result = $wpdb->query($meta_field_add);
+                    if($alter_result===false){
+                        return __('Column change failed, you may have too many columns.','geodirectory');
+                    }
 
                         if (isset($request_field['cat_display_type']))
                             $extra_fields = $request_field['cat_display_type'];
@@ -716,7 +720,10 @@ if (!function_exists('geodir_custom_field_save')) {
                     case 'textarea':
                     case 'html':
 
-                        $wpdb->query("ALTER TABLE " . $detail_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "` TEXT NULL");
+                    $alter_result = $wpdb->query("ALTER TABLE " . $detail_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "` TEXT NULL");
+                    if($alter_result===false){
+                        return __('Column change failed, you may have too many columns.','geodirectory');
+                    }
                         if (isset($request_field['advanced_editor']))
                             $extra_fields = $request_field['advanced_editor'];
 
@@ -744,7 +751,10 @@ if (!function_exists('geodir_custom_field_save')) {
                             }
                         }
 
-                        $wpdb->query($default_value_add);
+                        $alter_result = $wpdb->query($default_value_add);
+                        if($alter_result===false){
+                            return __('Column change failed, you may have too many columns.','geodirectory');
+                        }
                         break;
                 endswitch;
 
@@ -955,12 +965,16 @@ if (!function_exists('geodir_custom_field_save')) {
                             $meta_field_add .= " DEFAULT '" . $default_value . "'";
                         }
 
-                        geodir_add_column_if_not_exist($detail_table, $htmlvar_name, $meta_field_add);
+                        $add_result = geodir_add_column_if_not_exist($detail_table, $htmlvar_name, $meta_field_add);
+                        if($add_result===false){
+                            return __('Column creation failed, you may have too many columns.','geodirectory');
+                        }
 
 
                         break;
                     case 'multiselect':
                     case 'select':
+
 
                         $data_type = 'VARCHAR';
 
@@ -988,7 +1002,10 @@ if (!function_exists('geodir_custom_field_save')) {
                             $meta_field_add .= " DEFAULT '" . $default_value . "'";
                         }
 
-                        geodir_add_column_if_not_exist($detail_table, $htmlvar_name, $meta_field_add);
+                        $add_result = geodir_add_column_if_not_exist($detail_table, $htmlvar_name, $meta_field_add);
+                        if($add_result===false){
+                            return __('Column creation failed, you may have too many columns.','geodirectory');
+                        }
 
                         break;
                     case 'textarea':
@@ -1003,7 +1020,10 @@ if (!function_exists('geodir_custom_field_save')) {
                         /*if($default_value != '')
 					{ $meta_field_add .= " DEFAULT '".$default_value."'"; }*/
 
-                        geodir_add_column_if_not_exist($detail_table, $htmlvar_name, $meta_field_add);
+                    $add_result = geodir_add_column_if_not_exist($detail_table, $htmlvar_name, $meta_field_add);
+                    if($add_result===false){
+                        return __('Column creation failed, you may have too many columns.','geodirectory');
+                    }
 
                         break;
 
@@ -1015,7 +1035,10 @@ if (!function_exists('geodir_custom_field_save')) {
 
                         $meta_field_add = $data_type . " NULL ";
 
-                        geodir_add_column_if_not_exist($detail_table, $htmlvar_name, $meta_field_add);
+                        $add_result = geodir_add_column_if_not_exist($detail_table, $htmlvar_name, $meta_field_add);
+                        if($add_result===false){
+                            return __('Column creation failed, you may have too many columns.','geodirectory');
+                        }
 
                         break;
 
@@ -1027,7 +1050,10 @@ if (!function_exists('geodir_custom_field_save')) {
 
                         $meta_field_add = $data_type . " NULL ";
 
-                        geodir_add_column_if_not_exist($detail_table, $htmlvar_name, $meta_field_add);
+                        $add_result = geodir_add_column_if_not_exist($detail_table, $htmlvar_name, $meta_field_add);
+                        if($add_result===false){
+                            return __('Column creation failed, you may have too many columns.','geodirectory');
+                        }
 
                         break;
 
@@ -1054,7 +1080,10 @@ if (!function_exists('geodir_custom_field_save')) {
                             }
                         }
 
-                        geodir_add_column_if_not_exist($detail_table, $htmlvar_name, $meta_field_add);
+                        $add_result = geodir_add_column_if_not_exist($detail_table, $htmlvar_name, $meta_field_add);
+                        if($add_result===false){
+                            return __('Column creation failed, you may have too many columns.','geodirectory');
+                        }
                         break;
                 endswitch;
 
@@ -1138,6 +1167,7 @@ function godir_set_field_order($field_ids = array())
 
     $count = 0;
     if (!empty($field_ids)):
+        $post_meta_info = false;
         foreach ($field_ids as $id) {
 
             $cf = trim($id, '_');
@@ -1153,7 +1183,7 @@ function godir_set_field_order($field_ids = array())
             $count++;
         }
 
-        return $field_ids;
+        return $post_meta_info;
     else:
         return false;
     endif;
@@ -1245,10 +1275,10 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
 
             $prefix = $name . '_';
 
-            ($site_title != '') ? $address_title = $site_title : $address_title = ucwords($prefix . ' address');
-            ($extra_fields['zip_lable'] != '') ? $zip_title = $extra_fields['zip_lable'] : $zip_title = ucwords($prefix . ' zip/post code ');
-            ($extra_fields['map_lable'] != '') ? $map_title = $extra_fields['map_lable'] : $map_title = ucwords('set address on map');
-            ($extra_fields['mapview_lable'] != '') ? $mapview_title = $extra_fields['mapview_lable'] : $mapview_title = ucwords($prefix . ' mapview');
+            ($site_title != '') ? $address_title = $site_title : $address_title = geodir_ucwords($prefix . ' address');
+            ($extra_fields['zip_lable'] != '') ? $zip_title = $extra_fields['zip_lable'] : $zip_title = geodir_ucwords($prefix . ' zip/post code ');
+            ($extra_fields['map_lable'] != '') ? $map_title = $extra_fields['map_lable'] : $map_title = geodir_ucwords('set address on map');
+            ($extra_fields['mapview_lable'] != '') ? $mapview_title = $extra_fields['mapview_lable'] : $mapview_title = geodir_ucwords($prefix . ' mapview');
 
             $address = '';
             $zip = '';
@@ -3870,7 +3900,7 @@ if (!function_exists('geodir_custom_sort_field_adminhtml')) {
                      class="handlediv close"></div>
 
                 <b style="cursor:pointer;"
-                   onclick="show_hide('field_frm<?php echo $result_str;?>')"><?php echo ucwords(__('Field:', 'geodirectory') . ' (' . $site_title . ')');?></b>
+                   onclick="show_hide('field_frm<?php echo $result_str;?>')"><?php echo geodir_ucwords(__('Field:', 'geodirectory') . ' (' . $site_title . ')');?></b>
 
             </div>
 

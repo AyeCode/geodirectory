@@ -812,7 +812,7 @@ function geodir_sc_related_listings($atts)
     }
 
     // Validate relate_to - only category or tags
-    $params['relate_to'] = strtolower($params['relate_to']);
+    $params['relate_to'] = geodir_strtolower($params['relate_to']);
     if ('category' != $params['relate_to'] && 'tags' != $params['relate_to']) {
         $params['relate_to'] = 'category';
     }

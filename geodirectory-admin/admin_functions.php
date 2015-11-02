@@ -2003,9 +2003,9 @@ if (!function_exists('geodir_import_data')) {
 
                             } elseif ($location_result->location_id == 0) {
 
-                                if ((strtolower($gd_post_info['post_city']) != strtolower($location_result->city)) ||
-                                    (strtolower($gd_post_info['post_region']) != strtolower($location_result->region)) ||
-                                    (strtolower($gd_post_info['post_country']) != strtolower($location_result->country))
+                                if ((geodir_strtolower($gd_post_info['post_city']) != geodir_strtolower($location_result->city)) ||
+                                    (geodir_strtolower($gd_post_info['post_region']) != geodir_strtolower($location_result->region)) ||
+                                    (geodir_strtolower($gd_post_info['post_country']) != geodir_strtolower($location_result->country))
                                 ) {
 
                                     $address_invalid++;
@@ -2295,6 +2295,7 @@ function geodir_admin_fields($options)
                 <td class="forminp"><input name="<?php echo esc_attr($value['id']); ?>"
                                            id="<?php echo esc_attr($value['id']); ?>"
                                            type="<?php echo esc_attr($value['type']); ?>"
+                                           <?php if(isset($value['placeholder'])){?>placeholder="<?php echo esc_attr($value['placeholder']); ?>"<?php }?>
                                            style=" <?php echo esc_attr($value['css']); ?>"
                                            value="<?php if (get_option($value['id']) !== false && get_option($value['id']) !== null) {
                                                echo esc_attr(stripslashes(get_option($value['id'])));
@@ -2311,6 +2312,7 @@ function geodir_admin_fields($options)
                 <td class="forminp"><input name="<?php echo esc_attr($value['id']); ?>"
                                            id="<?php echo esc_attr($value['id']); ?>"
                                            type="<?php echo esc_attr($value['type']); ?>"
+                                           <?php if(isset($value['placeholder'])){?>placeholder="<?php echo esc_attr($value['placeholder']); ?>"<?php }?>
                                            style="<?php echo esc_attr($value['css']); ?>"
                                            value="<?php if (get_option($value['id']) !== false && get_option($value['id']) !== null) {
                                                echo esc_attr(stripslashes(get_option($value['id'])));
@@ -2696,6 +2698,7 @@ function geodir_admin_fields($options)
                     <textarea
                         <?php if (isset($value['args'])) echo $value['args'] . ' '; ?>name="<?php echo esc_attr($value['id']); ?>"
                         id="<?php echo esc_attr($value['id']); ?>"
+                        <?php if(isset($value['placeholder'])){?>placeholder="<?php echo esc_attr($value['placeholder']); ?>"<?php }?>
                         style="<?php echo esc_attr($value['css']); ?>"><?php if (get_option($value['id'])) echo esc_textarea(stripslashes(get_option($value['id']))); else echo esc_textarea($value['std']); ?></textarea><span
                         class="description"><?php echo $value['desc'] ?></span>
 
@@ -3428,7 +3431,7 @@ function geodir_before_update_options($current_tab, $geodir_settings) {
 		$location_prefix = isset($_POST['geodir_location_prefix']) ? trim($_POST['geodir_location_prefix']) : '';
 		
 		// Don't allow same slug url for listing and location
-		if (strtolower($listing_prefix) == strtolower($location_prefix)) {
+		if (geodir_strtolower($listing_prefix) == geodir_strtolower($location_prefix)) {
 			$redirect_url = admin_url('admin.php?page=geodirectory&tab=' . $current_tab . '&active_tab=' . $active_tab . '&msg=fail&gderr=21');
         	wp_redirect($redirect_url);
 			exit;
@@ -4694,7 +4697,7 @@ function geodir_ajax_import_export() {
 			if ( $csv_file && $wp_filesystem->is_file( $target_path ) && $wp_filesystem->exists( $target_path ) ) {
 				$wp_filetype = wp_check_filetype_and_ext( $target_path, $csv_filename );
 				
-				if (!empty($wp_filetype) && isset($wp_filetype['ext']) && strtolower($wp_filetype['ext']) == 'csv') {
+				if (!empty($wp_filetype) && isset($wp_filetype['ext']) && geodir_strtolower($wp_filetype['ext']) == 'csv') {
 					$json['error'] = NULL;
 					$json['rows'] = 0;
 					
@@ -4808,7 +4811,7 @@ function geodir_ajax_import_export() {
 								}
 								// WPML
 								if ($is_wpml && $column == 'cat_language') {
-									$cat_language = strtolower(trim($row[$c]));
+									$cat_language = geodir_strtolower(trim($row[$c]));
 								}
 								// WPML
 								$c++;
@@ -5083,14 +5086,14 @@ function geodir_ajax_import_export() {
 									$post_images[] = $row[$c];
 								} else if ( $column == 'alive_days' && (int)$row[$c] > 0 ) {
 									$expire_date = date_i18n( 'Y-m-d', strtotime( $current_date . '+' . (int)$row[$c] . ' days' ) );
-								} else if ( $column == 'expire_date' && $row[$c] != '' && strtolower($row[$c]) != 'never' ) {
+								} else if ( $column == 'expire_date' && $row[$c] != '' && geodir_strtolower($row[$c]) != 'never' ) {
 									$row[$c] = str_replace('/', '-', $row[$c]);
 									$expire_date = date_i18n( 'Y-m-d', strtotime( $row[$c] ) );
 								}
 								// WPML
 								if ($is_wpml) {
 									if ($column == 'language') {
-										$language = strtolower(trim($row[$c]));
+										$language = geodir_strtolower(trim($row[$c]));
 									} else if ($column == 'original_post_id') {
 										$original_post_id = (int)$row[$c];
 									}
@@ -5124,7 +5127,7 @@ function geodir_ajax_import_export() {
 									$invalid_addr++;
 									$valid = false;
 								} else if ( !empty( $location_result ) && $location_result->location_id == 0 ) {
-									if ( ( strtolower( $post_city ) != strtolower( $location_result->city ) ) || ( strtolower( $post_region ) != strtolower( $location_result->region ) ) || (strtolower( $post_country ) != strtolower( $location_result->country ) ) ) {
+									if ( ( geodir_strtolower( $post_city ) != geodir_strtolower( $location_result->city ) ) || ( geodir_strtolower( $post_region ) != geodir_strtolower( $location_result->region ) ) || (geodir_strtolower( $post_country ) != geodir_strtolower( $location_result->country ) ) ) {
 										$invalid_addr++;
 										$valid = false;
 									} else {
@@ -5906,7 +5909,7 @@ function geodir_imex_get_posts( $post_type ) {
 			$csv_row[] = (int)$post_info['is_featured'] == 1 ? 1 : ''; // is_featured
 			if ($is_payment_plugin) {
 				$csv_row[] = (int)$post_info['package_id']; // package_id
-				$csv_row[] = $post_info['expire_date'] != '' && strtolower($post_info['expire_date']) != 'never' ? date_i18n('Y-m-d', strtotime($post_info['expire_date'])) : 'Never'; // expire_date
+				$csv_row[] = $post_info['expire_date'] != '' && geodir_strtolower($post_info['expire_date']) != 'never' ? date_i18n('Y-m-d', strtotime($post_info['expire_date'])) : 'Never'; // expire_date
 			}
 			$csv_row[] = $post_info['geodir_video']; // geodir_video
 			$csv_row[] = $post_info['post_address']; // post_address
@@ -6659,7 +6662,7 @@ function geodir_imex_process_event_data($gd_post) {
 			$repeat_days = array();
 			if (!empty($a_repeat_days)) {
 				foreach ($a_repeat_days as $repeat_day) {
-					$repeat_day = strtolower(trim($repeat_day));
+					$repeat_day = geodir_strtolower(trim($repeat_day));
 					
 					if ($repeat_day != '' && isset($week_days[$repeat_day])) {
 						$repeat_days[] = $week_days[$repeat_day];

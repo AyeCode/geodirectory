@@ -185,9 +185,10 @@ function geodir_add_nav_menu_items()
                                      * @since 1.0.0
                                      */
                                     $a_class = apply_filters('geodir_menu_a_class', '');
+                                    $cpt_name = __($args->labels->singular_name, 'geodirectory');
                                     $items .= '<li class="' . $li_class . '">
 											<a href="' . geodir_get_addlisting_link($post_type) . '" class="' . $a_class . '">
-												' . __('Add', 'geodirectory') . ' ' . __($args->labels->singular_name, 'geodirectory') . '
+												' . sprintf( __('Add %s', 'geodirectory'), $cpt_name ) . '
 											</a>
 										</li>';
                                 }
@@ -263,9 +264,10 @@ function geodir_add_nav_menu_items()
                                          * @param string $menu_class The menu HTML class.
                                          */
                                         $li_class = apply_filters('geodir_menu_li_class', 'menu-item ' . $menu_class);
+                                        $cpt_name = __($args->labels->singular_name, 'geodirectory');
                                         $items .= '<li class="' . $li_class . '">
 														<a href="' . geodir_get_addlisting_link($post_type) . '" class="' . $sub_a_class . '">
-															' . __('Add', 'geodirectory') . ' ' . __($args->labels->singular_name, 'geodirectory') . '
+															' . sprintf( __('Add %s', 'geodirectory'), $cpt_name ) . '
 														</a>
 													</li>';
                                     }
@@ -1013,7 +1015,7 @@ function geodir_addpost_categories_html($request_taxonomy, $parrent, $selected =
                    onchange="if(jQuery(this).is(':checked')){jQuery(this).closest('div').find('.post_default_category').prop('checked',false).show();}else{jQuery(this).closest('div').find('.post_default_category').prop('checked',false).hide();};update_listing_cat()"
                    checked="checked" disabled="disabled"/>
        <span> 
-        <?php printf(__('Add listing in %s category', 'geodirectory'), ucwords($main_cat->name));?>
+        <?php printf(__('Add listing in %s category', 'geodirectory'), geodir_ucwords($main_cat->name));?>
         </span>
             <br/>
 
@@ -1021,7 +1023,7 @@ function geodir_addpost_categories_html($request_taxonomy, $parrent, $selected =
                 <input type="radio" name="post_default_category" value="<?php echo $main_cat->term_id;?>"
                        onchange="update_listing_cat()" <?php if ($default) echo ' checked="checked" ';?>   />
         <span> 
-        <?php printf(__('Set %s as default category', 'geodirectory'), ucwords($main_cat->name));?>
+        <?php printf(__('Set %s as default category', 'geodirectory'), geodir_ucwords($main_cat->name));?>
         </span>
             </div>
 
