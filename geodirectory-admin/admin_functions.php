@@ -2295,6 +2295,7 @@ function geodir_admin_fields($options)
                 <td class="forminp"><input name="<?php echo esc_attr($value['id']); ?>"
                                            id="<?php echo esc_attr($value['id']); ?>"
                                            type="<?php echo esc_attr($value['type']); ?>"
+                                           <?php if(isset($value['placeholder'])){?>placeholder="<?php echo esc_attr($value['placeholder']); ?>"<?php }?>
                                            style=" <?php echo esc_attr($value['css']); ?>"
                                            value="<?php if (get_option($value['id']) !== false && get_option($value['id']) !== null) {
                                                echo esc_attr(stripslashes(get_option($value['id'])));
@@ -2311,6 +2312,7 @@ function geodir_admin_fields($options)
                 <td class="forminp"><input name="<?php echo esc_attr($value['id']); ?>"
                                            id="<?php echo esc_attr($value['id']); ?>"
                                            type="<?php echo esc_attr($value['type']); ?>"
+                                           <?php if(isset($value['placeholder'])){?>placeholder="<?php echo esc_attr($value['placeholder']); ?>"<?php }?>
                                            style="<?php echo esc_attr($value['css']); ?>"
                                            value="<?php if (get_option($value['id']) !== false && get_option($value['id']) !== null) {
                                                echo esc_attr(stripslashes(get_option($value['id'])));
@@ -2696,6 +2698,7 @@ function geodir_admin_fields($options)
                     <textarea
                         <?php if (isset($value['args'])) echo $value['args'] . ' '; ?>name="<?php echo esc_attr($value['id']); ?>"
                         id="<?php echo esc_attr($value['id']); ?>"
+                        <?php if(isset($value['placeholder'])){?>placeholder="<?php echo esc_attr($value['placeholder']); ?>"<?php }?>
                         style="<?php echo esc_attr($value['css']); ?>"><?php if (get_option($value['id'])) echo esc_textarea(stripslashes(get_option($value['id']))); else echo esc_textarea($value['std']); ?></textarea><span
                         class="description"><?php echo $value['desc'] ?></span>
 

@@ -363,9 +363,9 @@ function geodir_set_is_geodir_page($wp)
                     || $page->ID == geodir_preview_page_id()
                     || $page->ID == geodir_success_page_id()
                     || $page->ID == geodir_location_page_id()
-                    || $wp->query_vars['page_id'] == geodir_home_page_id()
-                    || $wp->query_vars['page_id'] == geodir_info_page_id()
-                    || $wp->query_vars['page_id'] == geodir_login_page_id()
+                    || (isset($wp->query_vars['page_id']) && $wp->query_vars['page_id'] == geodir_home_page_id())
+                    || (isset($wp->query_vars['page_id']) && $wp->query_vars['page_id'] == geodir_info_page_id())
+                    || (isset($wp->query_vars['page_id']) && $wp->query_vars['page_id'] == geodir_login_page_id())
                 )
             )
                 $wp->query_vars['gd_is_geodir_page'] = true;
@@ -2214,7 +2214,8 @@ function geodir_popular_post_category_output($args = '', $instance = '')
             $tax_change_output .= "<select data-limit='$category_limit' class='geodir-cat-list-tax'  onchange='geodir_get_post_term(this);'>";
             foreach ($b_terms as $key => $val) {
                 $ptype = get_post_type_object(str_replace("category", "", $key));
-                $tax_change_output .= "<option value='$key' ". selected($key, $default_taxonomy, false) .">" . __($ptype->labels->singular_name, 'geodirectory') . " " . __('Categories', 'geodirectory') . "</option>";
+                $cpt_name = __($ptype->labels->singular_name, 'geodirectory');
+                $tax_change_output .= "<option value='$key' ". selected($key, $default_taxonomy, false) .">" . sprintf(__('%s Categories', 'geodirectory'),$cpt_name) . "</option>";
             }
             $tax_change_output .= "</select>";
         }
@@ -3641,11 +3642,128 @@ function geodir_geo_home_link( $url, $path){
 
 }
 
+
+add_filter('wpseo_replacements','geodir_wpseo_replacements',10,1);
+/*
+ * Add location variables to wpseo replacements.
+ *
+ * @since 1.5.4
+ */
+function geodir_wpseo_replacements($vars){
+
+    global $wp;
+    $title = '';
+    // location variables
+    $gd_post_type = geodir_get_current_posttype();
+    $location_array = geodir_get_current_location_terms('query_vars', $gd_post_type);
+    $location_titles = array();
+    if(get_query_var( 'gd_country_full' )){
+        if(get_query_var( 'gd_country_full' )){$location_array['gd_country'] = get_query_var( 'gd_country_full' );}
+        if(get_query_var( 'gd_region_full' )){$location_array['gd_region'] = get_query_var( 'gd_region_full' );}
+        if(get_query_var( 'gd_city_full' )){$location_array['gd_city'] = get_query_var( 'gd_city_full' );}
+    }
+    $location_single = '';
+    $gd_country = (isset($wp->query_vars['gd_country']) && $wp->query_vars['gd_country'] != '') ? $wp->query_vars['gd_country'] : '';
+    $gd_region = (isset($wp->query_vars['gd_region']) && $wp->query_vars['gd_region'] != '') ? $wp->query_vars['gd_region'] : '';
+    $gd_city = (isset($wp->query_vars['gd_city']) && $wp->query_vars['gd_city'] != '') ? $wp->query_vars['gd_city'] : '';
+
+    $gd_country_actual = $gd_region_actual = $gd_city_actual = '';
+
+    if (function_exists('get_actual_location_name')) {
+        $gd_country_actual = $gd_country != '' ? get_actual_location_name('country', $gd_country, true) : $gd_country;
+        $gd_region_actual = $gd_region != '' ? get_actual_location_name('region', $gd_region) : $gd_region;
+        $gd_city_actual = $gd_city != '' ? get_actual_location_name('city', $gd_city) : $gd_city;
+    }
+
+    if ($gd_city != '') {
+        if ($gd_city_actual != '') {
+            $gd_city = $gd_city_actual;
+        } else {
+            $gd_city = preg_replace('/-(\d+)$/', '', $gd_city);
+            $gd_city = preg_replace('/[_-]/', ' ', $gd_city);
+            $gd_city = __(geodir_ucwords($gd_city), 'geodirectory');
+        }
+        $location_single = $gd_city;
+
+    } else if ($gd_region != '') {
+        if ($gd_region_actual != '') {
+            $gd_region = $gd_region_actual;
+        } else {
+            $gd_region = preg_replace('/-(\d+)$/', '', $gd_region);
+            $gd_region = preg_replace('/[_-]/', ' ', $gd_region);
+            $gd_region = __(geodir_ucwords($gd_region), 'geodirectory');
+        }
+
+        $location_single = $gd_region;
+    } else if ($gd_country != '') {
+        if ($gd_country_actual != '') {
+            $gd_country = $gd_country_actual;
+        } else {
+            $gd_country = preg_replace('/-(\d+)$/', '', $gd_country);
+            $gd_country = preg_replace('/[_-]/', ' ', $gd_country);
+            $gd_country = __(geodir_ucwords($gd_country), 'geodirectory');
+        }
+
+        $location_single = $gd_country;
+    }
+
+    if (!empty($location_array)) {
+
+        $actual_location_name = function_exists('get_actual_location_name') ? true : false;
+        $location_array = array_reverse($location_array);
+
+        foreach ($location_array as $location_type => $location) {
+            $gd_location_link_text = preg_replace('/-(\d+)$/', '', $location);
+            $gd_location_link_text = preg_replace('/[_-]/', ' ', $gd_location_link_text);
+
+            $location_name = geodir_ucwords($gd_location_link_text);
+            $location_name = __($location_name, 'geodirectory');
+
+            if ($actual_location_name) {
+                $location_type = strpos($location_type, 'gd_') === 0 ? substr($location_type, 3) : $location_type;
+                $location_name = get_actual_location_name($location_type, $location, true);
+            }
+
+            $location_titles[] = $location_name;
+        }
+        if (!empty($location_titles)) {
+            $location_titles = array_unique($location_titles);
+        }
+    }
+
+
+
+        if($location_titles) {
+            $vars['%%location%%'] = implode(", ", $location_titles);
+        }
+
+
+        if($location_titles) {
+            $vars['%%in_location%%'] = __('in ', 'geodirectory') . implode(", ", $location_titles);
+        }
+
+
+
+        if($location_single) {
+            $vars['%%in_location_single%%'] = __('in', 'geodirectory') . ' ' .$location_single;
+        }
+
+
+    if($location_single) {
+        $vars['%%location_single%%'] = str_replace("%%location_single%%",$location_single,$title);
+    }
+
+
+    return $vars;
+}
+
+
 add_filter('geodir_seo_meta_title','geodir_filter_title_variables',10,3);
-add_filter('geodir_seo_meta_description','geodir_filter_title_variables',10,3);
+add_filter('geodir_seo_page_title','geodir_filter_title_variables',10,2);
+add_filter('geodir_seo_meta_description_pre','geodir_filter_title_variables',10,3);
 function geodir_filter_title_variables($title, $gd_page, $sep=''){
 
-    if(!$gd_page){return $title;}// if no a GD page then bail.
+    if(!$gd_page || !$title){return $title;}// if no a GD page then bail.
     global $post;
     //print_r($post);
     /*
@@ -3705,7 +3823,21 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
 
     if(strpos($title,'%%pt_single%%') !== false){
         $single_name = '';
-        if($post->post_type){
+        if($gd_page=='search' || $gd_page=='author'){
+            $geodir_post_types = get_option('geodir_post_types');
+            $spt = esc_attr($_REQUEST['stype']);
+            if(isset($geodir_post_types[$spt]['labels']['singular_name'])){
+                $single_name = __($geodir_post_types[$spt]['labels']['singular_name'],'geodirectory');
+            }
+        }elseif($gd_page=='add-listing'){
+            $geodir_post_types = get_option('geodir_post_types');
+            $spt = esc_attr($_REQUEST['listing_type']);
+            if(!$spt){$spt='gd_place';}
+            if(isset($geodir_post_types[$spt]['labels']['singular_name'])){
+                $single_name = __($geodir_post_types[$spt]['labels']['singular_name'],'geodirectory');
+            }
+        }
+        elseif($post->post_type){
             $geodir_post_types = get_option('geodir_post_types');
             if(isset($geodir_post_types[$post->post_type]['labels']['singular_name'])){
                 $single_name = __($geodir_post_types[$post->post_type]['labels']['singular_name'],'geodirectory');
@@ -3718,12 +3850,25 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
 
     if(strpos($title,'%%pt_plural%%') !== false){
         $plural_name = '';
-        if($post->post_type){
+        if($gd_page=='search' || $gd_page=='author'){
+            $geodir_post_types = get_option('geodir_post_types');
+            $spt = esc_attr($_REQUEST['stype']);
+            if(isset($geodir_post_types[$spt]['labels']['name'])){
+                $plural_name = __($geodir_post_types[$spt]['labels']['name'],'geodirectory');
+            }
+        }elseif($gd_page=='add-listing'){
+            $geodir_post_types = get_option('geodir_post_types');
+            $spt = esc_attr($_REQUEST['listing_type']);
+            if(!$spt){$spt='gd_place';}
+            if(isset($geodir_post_types[$spt]['labels']['name'])){
+                $plural_name = __($geodir_post_types[$spt]['labels']['name'],'geodirectory');
+            }
+        }
+        elseif($post->post_type){
             $geodir_post_types = get_option('geodir_post_types');
             if(isset($geodir_post_types[$post->post_type]['labels']['name'])){
                 $plural_name = __($geodir_post_types[$post->post_type]['labels']['name'],'geodirectory');
             }
-
 
         }
         $title = str_replace("%%pt_plural%%",$plural_name,$title);
@@ -3748,6 +3893,23 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
         $title = str_replace("%%category%%",$cat_name,$title);
     }
 
+    if(strpos($title,'%%tag%%') !== false){
+        $cat_name = '';
+
+        if($gd_page=='detail') {
+            if ($post->default_category) {
+                $cat = get_term($post->default_category, $post->post_type . 'category');
+                $cat_name = (isset($cat->name)) ? $cat->name : '';
+            }
+        }elseif($gd_page=='listing'){
+            $queried_object = get_queried_object();
+            if(isset($queried_object->name)){
+                $cat_name = $queried_object->name;
+            }
+        }
+        $title = str_replace("%%tag%%",$cat_name,$title);
+    }
+
 
 
     if(strpos($title,'%%id%%') !== false){
@@ -3770,17 +3932,63 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
     }
 
 
-
+    global $wp;
     // location variables
     $gd_post_type = geodir_get_current_posttype();
     $location_array = geodir_get_current_location_terms('query_vars', $gd_post_type);
+    $location_titles = array();
     if($gd_page=='location' && get_query_var( 'gd_country_full' )){
         if(get_query_var( 'gd_country_full' )){$location_array['gd_country'] = get_query_var( 'gd_country_full' );}
         if(get_query_var( 'gd_region_full' )){$location_array['gd_region'] = get_query_var( 'gd_region_full' );}
         if(get_query_var( 'gd_city_full' )){$location_array['gd_city'] = get_query_var( 'gd_city_full' );}
     }
+    $location_single = '';
+    $gd_country = (isset($wp->query_vars['gd_country']) && $wp->query_vars['gd_country'] != '') ? $wp->query_vars['gd_country'] : '';
+    $gd_region = (isset($wp->query_vars['gd_region']) && $wp->query_vars['gd_region'] != '') ? $wp->query_vars['gd_region'] : '';
+    $gd_city = (isset($wp->query_vars['gd_city']) && $wp->query_vars['gd_city'] != '') ? $wp->query_vars['gd_city'] : '';
+
+    $gd_country_actual = $gd_region_actual = $gd_city_actual = '';
+
+    if (function_exists('get_actual_location_name')) {
+        $gd_country_actual = $gd_country != '' ? get_actual_location_name('country', $gd_country, true) : $gd_country;
+        $gd_region_actual = $gd_region != '' ? get_actual_location_name('region', $gd_region) : $gd_region;
+        $gd_city_actual = $gd_city != '' ? get_actual_location_name('city', $gd_city) : $gd_city;
+    }
+
+    if ($gd_city != '') {
+        if ($gd_city_actual != '') {
+            $gd_city = $gd_city_actual;
+        } else {
+            $gd_city = preg_replace('/-(\d+)$/', '', $gd_city);
+            $gd_city = preg_replace('/[_-]/', ' ', $gd_city);
+            $gd_city = __(geodir_ucwords($gd_city), 'geodirectory');
+        }
+        $location_single = $gd_city;
+
+    } else if ($gd_region != '') {
+        if ($gd_region_actual != '') {
+            $gd_region = $gd_region_actual;
+        } else {
+            $gd_region = preg_replace('/-(\d+)$/', '', $gd_region);
+            $gd_region = preg_replace('/[_-]/', ' ', $gd_region);
+            $gd_region = __(geodir_ucwords($gd_region), 'geodirectory');
+        }
+
+        $location_single = $gd_region;
+    } else if ($gd_country != '') {
+        if ($gd_country_actual != '') {
+            $gd_country = $gd_country_actual;
+        } else {
+            $gd_country = preg_replace('/-(\d+)$/', '', $gd_country);
+            $gd_country = preg_replace('/[_-]/', ' ', $gd_country);
+            $gd_country = __(geodir_ucwords($gd_country), 'geodirectory');
+        }
+
+        $location_single = $gd_country;
+    }
+
     if (!empty($location_array)) {
-        $location_titles = array();
+
         $actual_location_name = function_exists('get_actual_location_name') ? true : false;
         $location_array = array_reverse($location_array);
 
@@ -3820,7 +4028,49 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
         $title = str_replace("%%in_location%%",$location,$title);
     }
 
+    if(strpos($title,'%%in_location_single%%') !== false){
+        if($location_single) {
+            $location_single = __('in', 'geodirectory') . ' ' .$location_single;
+        }
+        $title = str_replace("%%in_location_single%%",$location_single,$title);
+    }
 
+    if(strpos($title,'%%location_single%%') !== false){
+        $title = str_replace("%%location_single%%",$location_single,$title);
+    }
+
+
+    if(strpos($title,'%%search_term%%') !== false){
+        $search_term = '';
+        if(isset($_REQUEST['s'])){
+            $search_term = esc_attr($_REQUEST['s']);
+        }
+        $title = str_replace("%%search_term%%",$search_term,$title);
+    }
+
+    if(strpos($title,'%%search_near%%') !== false){
+        $search_term = '';
+        if(isset($_REQUEST['snear'])){
+            $search_term = esc_attr($_REQUEST['snear']);
+        }
+        $title = str_replace("%%search_near%%",$search_term,$title);
+    }
+
+    if(strpos($title,'%%name%%') !== false){
+        $author_name = '';
+        if($author_name = get_the_author()){}
+        else{
+            $queried_object = get_queried_object();
+            if(isset($queried_object->data->user_nicename)){
+                $author_name = $queried_object->data->user_nicename;
+            }
+        }
+        $title = str_replace("%%name%%",$author_name,$title);
+    }
+
+    $title = wptexturize( $title );
+    $title = convert_chars( $title );
+    $title = esc_html( $title );
 
     return $title;
 }
