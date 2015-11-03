@@ -186,6 +186,7 @@ function geodir_flush_rewrite_rules()
  * Get the full set of generated rewrite rules.
  *
  * @since 1.0.0
+ * @since 1.5.4 Modified to add country/city & region/city rules.
  *
  * @global object $wpdb WordPress Database object.
  * @param  array $rules The compiled array of rewrite rules.
@@ -228,10 +229,36 @@ function geodir_listing_rewrite_rules($rules)
     if (!isset($location_prefix))
         $location_prefix = 'location';
 
-
-    $newrules[$location_prefix . '/([^/]+)/([^/]+)/([^/]+)/?$'] = 'index.php?page_id=' . $location_page . '&gd_country=$matches[1]&gd_region=$matches[2]&gd_city=$matches[3]';
-    $newrules[$location_prefix . '/([^/]+)/([^/]+)/?$'] = 'index.php?page_id=' . $location_page . '&gd_country=$matches[1]&gd_region=$matches[2]';
-    $newrules[$location_prefix . '/([^/]+)/?$'] = 'index.php?page_id=' . $location_page . '&gd_country=$matches[1]';
+	$location_manager = function_exists('geodir_location_plugin_activated') ? true : false; // Check location manager installed & active.
+	if ($location_manager) {
+		$hide_country_part = get_option('geodir_location_hide_country_part');
+		$hide_region_part = get_option('geodir_location_hide_region_part');
+	}
+	
+	if ($location_manager && ($hide_country_part || $hide_region_part)) {
+		$matches2 = '';
+		$matches1 = '';
+		
+		if (!$hide_country_part && $hide_region_part) { // country/city
+			$matches1 = 'gd_country';
+			$matches2 = 'gd_city';
+		} else if ($hide_country_part && !$hide_region_part) { // region/city
+			$matches1 = 'gd_region';
+			$matches2 = 'gd_city';
+		} else { // city
+			$matches1 = 'gd_city';
+		}
+		
+		if ($matches2) {
+			$newrules[$location_prefix . '/([^/]+)/([^/]+)/?$'] = 'index.php?page_id=' . $location_page . '&' . $matches1 . '=$matches[1]&' . $matches2 . '=$matches[2]';
+		}
+		
+		$newrules[$location_prefix . '/([^/]+)/?$'] = 'index.php?page_id=' . $location_page . '&' . $matches1 . '=$matches[1]';
+	} else { // country/region/city
+		$newrules[$location_prefix . '/([^/]+)/([^/]+)/([^/]+)/?$'] = 'index.php?page_id=' . $location_page . '&gd_country=$matches[1]&gd_region=$matches[2]&gd_city=$matches[3]';
+		$newrules[$location_prefix . '/([^/]+)/([^/]+)/?$'] = 'index.php?page_id=' . $location_page . '&gd_country=$matches[1]&gd_region=$matches[2]';
+		$newrules[$location_prefix . '/([^/]+)/?$'] = 'index.php?page_id=' . $location_page . '&gd_country=$matches[1]';
+	}
 
     if ($location_page && function_exists('icl_object_id')) {
 
@@ -241,10 +268,30 @@ function geodir_listing_rewrite_rules($rules)
             if($alt_page_id){
                 $location_prefix = $wpdb->get_var($wpdb->prepare("SELECT post_name FROM $wpdb->posts WHERE post_type='page' AND ID=%d", $alt_page_id));
 
-                $newrules[$location_prefix . '/([^/]+)/([^/]+)/([^/]+)/?$'] = 'index.php?page_id=' . $alt_page_id . '&gd_country=$matches[1]&gd_region=$matches[2]&gd_city=$matches[3]';
-                $newrules[$location_prefix . '/([^/]+)/([^/]+)/?$'] = 'index.php?page_id=' . $alt_page_id . '&gd_country=$matches[1]&gd_region=$matches[2]';
-                $newrules[$location_prefix . '/([^/]+)/?$'] = 'index.php?page_id=' . $alt_page_id . '&gd_country=$matches[1]';
-
+				if ($location_manager && ($hide_country_part || $hide_region_part)) {
+					$matches2 = '';
+					$matches1 = '';
+					
+					if (!$hide_country_part && $hide_region_part) { // country/city
+						$matches1 = 'gd_country';
+						$matches2 = 'gd_city';
+					} else if ($hide_country_part && !$hide_region_part) { // region/city
+						$matches1 = 'gd_region';
+						$matches2 = 'gd_city';
+					} else { // city
+						$matches1 = 'gd_city';
+					}
+					
+					if ($matches2) {
+						$newrules[$location_prefix . '/([^/]+)/([^/]+)/?$'] = 'index.php?page_id=' . $alt_page_id . '&' . $matches1 . '=$matches[1]&' . $matches2 . '=$matches[2]';
+					}
+					
+					$newrules[$location_prefix . '/([^/]+)/?$'] = 'index.php?page_id=' . $alt_page_id . '&' . $matches1 . '=$matches[1]';
+				} else { // country/region/city
+					$newrules[$location_prefix . '/([^/]+)/([^/]+)/([^/]+)/?$'] = 'index.php?page_id=' . $alt_page_id . '&gd_country=$matches[1]&gd_region=$matches[2]&gd_city=$matches[3]';
+					$newrules[$location_prefix . '/([^/]+)/([^/]+)/?$'] = 'index.php?page_id=' . $alt_page_id . '&gd_country=$matches[1]&gd_region=$matches[2]';
+					$newrules[$location_prefix . '/([^/]+)/?$'] = 'index.php?page_id=' . $alt_page_id . '&gd_country=$matches[1]';
+				}
             }
         }
 

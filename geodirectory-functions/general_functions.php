@@ -833,22 +833,50 @@ function geodir_breadcrumb()
 
 
             $geodir_show_location_url = get_option('geodir_show_location_url');
-			if ($geodir_show_location_url == 'country_city') {
-				if (isset($location_terms['gd_region'])) {
-					unset($location_terms['gd_region']);
+			
+			$hide_url_part = array();
+			if (defined('POST_LOCATION_TABLE')) {
+				$hide_country_part = get_option('geodir_location_hide_country_part');
+				$hide_region_part = get_option('geodir_location_hide_region_part');
+				
+				$geodir_location_part = 'all';
+				if ($hide_region_part && $hide_country_part) {
+					$geodir_location_part = 'city';
+					$hide_url_part = array('gd_country', 'gd_region');
+				} else if ($hide_region_part && !$hide_country_part) {
+					$geodir_location_part = 'country_city';
+					$hide_url_part = array('gd_region');
+				} else if (!$hide_region_part && $hide_country_part) {
+					$geodir_location_part = 'region_city';
+					$hide_url_part = array('gd_country');
 				}
-			} else if ($geodir_show_location_url == 'region_city') {
-				if (isset($location_terms['gd_country'])) {
-					unset($location_terms['gd_country']);
-				}
-			} else if ($geodir_show_location_url == 'city') {
-				if (isset($location_terms['gd_country'])) {
-					unset($location_terms['gd_country']);
-				}
-				if (isset($location_terms['gd_region'])) {
-					unset($location_terms['gd_region']);
-				}
+				
+				// $geodir_show_location_url = $geodir_location_part;
 			}
+			
+			$hide_text_part = array();
+			//if (!defined('POST_LOCATION_TABLE')) {
+				if ($geodir_show_location_url == 'country_city') {
+					$hide_text_part = array('gd_region');
+					if (isset($location_terms['gd_region']) && !defined('POST_LOCATION_TABLE')) {
+						unset($location_terms['gd_region']);
+					}
+				} else if ($geodir_show_location_url == 'region_city') {
+					$hide_text_part = array('gd_country');
+					if (isset($location_terms['gd_country']) && !defined('POST_LOCATION_TABLE')) {
+						unset($location_terms['gd_country']);
+					}
+				} else if ($geodir_show_location_url == 'city') {
+					$hide_text_part = array('gd_country', 'gd_region');
+					
+					if (isset($location_terms['gd_country']) && !defined('POST_LOCATION_TABLE')) {
+						unset($location_terms['gd_country']);
+					}
+					if (isset($location_terms['gd_region']) && !defined('POST_LOCATION_TABLE')) {
+						unset($location_terms['gd_region']);
+					}
+				}
+			//}
 
             $is_location_last = '';
             $is_taxonomy_last = '';
@@ -923,6 +951,10 @@ function geodir_breadcrumb()
                             } else if ($key == 'gd_city' && $location_term_actual_city != '') {
                                 $gd_location_link_text = $location_term_actual_city;
                             }
+							
+							if (geodir_is_page('detail') && !empty($hide_text_part) && in_array($key, $hide_text_part)) {
+								continue;
+							}
 
                             $breadcrumb .= $separator . '<a href="' . $location_link . '">' . $gd_location_link_text . '</a>';
                         }
