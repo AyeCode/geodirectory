@@ -6788,4 +6788,16 @@ function geodir_imex_original_post_id($element_id, $element_type) {
 	
 	return $element_id;
 }
+
+/*
+ * Show admin notice if core is out of date for the current addons.
+ *
+ * @since 1.5.4
+ * @package GeoDirectory
+ */
+function geodir_admin_upgrade_noticex() {
+    $class = "error";
+    $message = __("Please update core GeoDirectory or some addons may not function correctly.","geodirectory");
+    echo"<div class=\"$class\"> <p>$message</p></div>";
+}
 ?>
