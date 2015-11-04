@@ -1658,6 +1658,8 @@ function geodir_term_link($termlink, $term, $taxonomy)
 
             $request_term = geodir_get_current_location_terms('query_vars');
 
+            //unset($request_term['gd_country']);
+
             if (!empty($request_term)) {
 
                 $url_separator = '';//get_option('geodir_listingurl_separator');
@@ -1716,6 +1718,9 @@ function geodir_posttype_link($link, $post_type)
 
         if (get_option('geodir_add_location_url') && isset($_SESSION['gd_multi_location']) && $_SESSION['gd_multi_location'] == 1) {
             $location_terms = geodir_get_current_location_terms('query_vars');
+
+            //unset($location_terms['gd_country']);
+            //print_r($location_terms);
             if (!empty($location_terms)) {
 
                 if (get_option('permalink_structure') != '') {
