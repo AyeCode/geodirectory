@@ -808,7 +808,6 @@ function geodir_breadcrumb()
 
         $listing_link = get_post_type_archive_link($gd_post_type);
 
-
         add_filter('post_type_archive_link', 'geodir_get_posttype_link', 10, 2);
         $listing_link = rtrim($listing_link, '/');
         $listing_link .= '/';
@@ -820,8 +819,6 @@ function geodir_breadcrumb()
         $location_link = $post_type_for_location_link;
 
         if (geodir_is_page('detail') || geodir_is_page('listing')) {
-
-
             global $post;
             if(geodir_is_page('detail') && isset($post->country_slug)){
                 $location_terms = array(
@@ -831,52 +828,46 @@ function geodir_breadcrumb()
                 );
             }
 
-
             $geodir_show_location_url = get_option('geodir_show_location_url');
+			$location_manager = defined('POST_LOCATION_TABLE') ? true : false;
 			
 			$hide_url_part = array();
-			if (defined('POST_LOCATION_TABLE')) {
+			if ($location_manager) {
 				$hide_country_part = get_option('geodir_location_hide_country_part');
 				$hide_region_part = get_option('geodir_location_hide_region_part');
 				
-				$geodir_location_part = 'all';
 				if ($hide_region_part && $hide_country_part) {
-					$geodir_location_part = 'city';
 					$hide_url_part = array('gd_country', 'gd_region');
 				} else if ($hide_region_part && !$hide_country_part) {
-					$geodir_location_part = 'country_city';
 					$hide_url_part = array('gd_region');
 				} else if (!$hide_region_part && $hide_country_part) {
-					$geodir_location_part = 'region_city';
 					$hide_url_part = array('gd_country');
 				}
-				
-				// $geodir_show_location_url = $geodir_location_part;
 			}
 			
 			$hide_text_part = array();
-			//if (!defined('POST_LOCATION_TABLE')) {
-				if ($geodir_show_location_url == 'country_city') {
-					$hide_text_part = array('gd_region');
-					if (isset($location_terms['gd_region']) && !defined('POST_LOCATION_TABLE')) {
-						unset($location_terms['gd_region']);
-					}
-				} else if ($geodir_show_location_url == 'region_city') {
-					$hide_text_part = array('gd_country');
-					if (isset($location_terms['gd_country']) && !defined('POST_LOCATION_TABLE')) {
-						unset($location_terms['gd_country']);
-					}
-				} else if ($geodir_show_location_url == 'city') {
-					$hide_text_part = array('gd_country', 'gd_region');
-					
-					if (isset($location_terms['gd_country']) && !defined('POST_LOCATION_TABLE')) {
-						unset($location_terms['gd_country']);
-					}
-					if (isset($location_terms['gd_region']) && !defined('POST_LOCATION_TABLE')) {
-						unset($location_terms['gd_region']);
-					}
+			if ($geodir_show_location_url == 'country_city') {
+				$hide_text_part = array('gd_region');
+				
+				if (isset($location_terms['gd_region']) && !$location_manager) {
+					unset($location_terms['gd_region']);
 				}
-			//}
+			} else if ($geodir_show_location_url == 'region_city') {
+				$hide_text_part = array('gd_country');
+				
+				if (isset($location_terms['gd_country']) && !$location_manager) {
+					unset($location_terms['gd_country']);
+				}
+			} else if ($geodir_show_location_url == 'city') {
+				$hide_text_part = array('gd_country', 'gd_region');
+				
+				if (isset($location_terms['gd_country']) && !$location_manager) {
+					unset($location_terms['gd_country']);
+				}
+				if (isset($location_terms['gd_region']) && !$location_manager) {
+					unset($location_terms['gd_region']);
+				}
+			}
 
             $is_location_last = '';
             $is_taxonomy_last = '';
@@ -902,7 +893,11 @@ function geodir_breadcrumb()
 
                 foreach ($location_terms as $key => $location_term) {
                     if ($location_term != '') {
-                        $gd_location_link_text = preg_replace('/-(\d+)$/', '', $location_term);
+                        if (!empty($hide_url_part) && in_array($key, $hide_url_part)) { // Hide location part from url & breadcrumb.
+							continue;
+						}
+							
+						$gd_location_link_text = preg_replace('/-(\d+)$/', '', $location_term);
                         $gd_location_link_text = preg_replace('/[_-]/', ' ', $gd_location_link_text);
                         $gd_location_link_text = ucfirst($gd_location_link_text);
 
@@ -952,9 +947,11 @@ function geodir_breadcrumb()
                                 $gd_location_link_text = $location_term_actual_city;
                             }
 							
+							/*
 							if (geodir_is_page('detail') && !empty($hide_text_part) && in_array($key, $hide_text_part)) {
 								continue;
 							}
+							*/
 
                             $breadcrumb .= $separator . '<a href="' . $location_link . '">' . $gd_location_link_text . '</a>';
                         }
@@ -965,7 +962,6 @@ function geodir_breadcrumb()
             if (!empty($gd_taxonomy)) {
                 $term_index = 1;
 
-
                 //if(get_option('geodir_add_categories_url'))
                 {
                     if (get_query_var($gd_post_type . '_tags')) {
@@ -974,10 +970,13 @@ function geodir_breadcrumb()
                         $cat_link = $listing_link;
 
                     foreach ($location_terms as $key => $location_term) {
-                        if ($location_term != '') {
+                        if ($location_manager && in_array($key, $hide_url_part)) {
+							continue;
+						}
+						
+						if ($location_term != '') {
                             if (get_option('permalink_structure') != '') {
                                 $cat_link .= $location_term . '/';
-
                             }
                         }
                     }
