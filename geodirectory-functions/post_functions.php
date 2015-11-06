@@ -65,6 +65,7 @@ if (!function_exists('geodir_save_listing')) {
      * Saves listing in the database using given information.
      *
      * @since 1.0.0
+	 * @since 1.5.4 New parameter $wp_error added.
      * @package GeoDirectory
      * @global object $wpdb WordPress Database object.
      * @global object $post The current post object.
@@ -115,9 +116,10 @@ if (!function_exists('geodir_save_listing')) {
      *
      * }
      * @param bool $dummy Optional. Is this a dummy listing? Default false.
-     * @return int|string|WP_Error Created post id.
+     * @param bool $wp_error Optional. Allow return of WP_Error on failure. Default false.
+     * @return int|string|WP_Error Created post id or WP_Error on failure.
      */
-    function geodir_save_listing($request_info = array(), $dummy = false)
+    function geodir_save_listing($request_info = array(), $dummy = false, $wp_error = false)
     {
         global $wpdb, $current_user;
 
@@ -129,7 +131,7 @@ if (!function_exists('geodir_save_listing')) {
             $request_info = array_merge($_REQUEST, $request_session);
         } else if (!isset($_SESSION['listing']) && !$dummy) {
             global $post;
-            $request_info['pid'] = $post->ID;
+            $request_info['pid'] = !empty($post->ID) ? $post->ID : (!empty($request_info['post_id']) ? $request_info['post_id'] : NULL);
             $request_info['post_title'] = $request_info['post_title'];
             $request_info['listing_type'] = $post->post_type;
             $request_info['post_desc'] = $request_info['content'];
@@ -220,15 +222,23 @@ if (!function_exists('geodir_save_listing')) {
         if (isset($request_info['pid']) && $request_info['pid'] != '') {
             $post['ID'] = $request_info['pid'];
 
-            $last_post_id = wp_update_post($post);
+            $last_post_id = wp_update_post($post, $wp_error);
         } else {
-            $last_post_id = wp_insert_post($post);
+            $last_post_id = wp_insert_post($post, $wp_error);
 
             if (!$dummy && $last_post_id) {
                 $send_post_submit_mail = true; // we move post_submit email from here so the rest of the variables are added to the db first(was breaking permalink in email)
                 //geodir_sendEmail('','',$current_user->user_email,$current_user->display_name,'','',$request_info,'post_submit',$last_post_id,$current_user->ID);
             }
         }
+		
+		if ($wp_error && is_wp_error($last_post_id)) {
+			return $last_post_id; // Return WP_Error on save failure.
+		}
+		
+		if (!$last_post_id) {
+			return false; // Save failure.
+		}
 
         // re-hook this function
         add_action('save_post', 'geodir_post_information_save',10,2);
