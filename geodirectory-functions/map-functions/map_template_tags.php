@@ -169,7 +169,7 @@ function geodir_draw_map($map_args = array())
     if (count((array)$post_types) != count($exclude_post_types) || ($enable_jason_on_load)):
         // Set default map options
 
-        wp_enqueue_script('geodir-map-widget', geodir_plugin_url() . '/geodirectory-functions/map-functions/js/map.js');
+        wp_enqueue_script('geodir-map-widget', geodir_plugin_url() . '/geodirectory-functions/map-functions/js/map.min.js');
 
         wp_localize_script('geodir-map-widget', $map_canvas_name, $geodir_map_options);
 

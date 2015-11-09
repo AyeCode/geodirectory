@@ -395,6 +395,7 @@ function geodir_add_page_id_in_query_var()
  */
 function geodir_set_location_var_in_session_in_core($wp)
 {
+
 	//$wp->geodir_query_vars = $wp->query_vars ;
 	// this code will determine when a user wants to switch location 
 	
@@ -409,6 +410,7 @@ function geodir_set_location_var_in_session_in_core($wp)
         }
 
     }
+
 	
 	// The location url format (all or country_city or region_city or city).
 	$geodir_show_location_url = get_option('geodir_show_location_url');

@@ -1011,7 +1011,7 @@ function geodir_compatibility_setting_tab($tabs)
  */
 function geodir_extend_geodirectory_setting_tab($tabs)
 {
-    $tabs['extend_geodirectory_settings'] = array('label' => __('Extend Geodirectory', 'geodirectory'), 'url' => 'http://wpgeodirectory.com', 'target' => '_blank');
+    $tabs['extend_geodirectory_settings'] = array('label' => __('Extend Geodirectory', 'geodirectory'). ' <i class="fa fa-plug"></i>', 'url' => 'http://wpgeodirectory.com', 'target' => '_blank');
     return $tabs;
 }
 
@@ -2676,7 +2676,7 @@ function geodir_admin_fields($options)
                                id="<?php echo esc_attr($value['id'] . $value['value']); ?>" type="radio"
                                value="<?php echo $value['value'] ?>" <?php if (get_option($value['id']) == $value['value']) {
                             echo 'checked="checked"';
-                        } ?> />
+                        }elseif(get_option($value['id'])=='' && $value['std']==$value['value']){echo 'checked="checked"';} ?> />
                         <?php echo $value['desc']; ?></label><br>
                 </fieldset>
                 <?php
@@ -6795,7 +6795,7 @@ function geodir_imex_original_post_id($element_id, $element_type) {
  * @since 1.5.4
  * @package GeoDirectory
  */
-function geodir_admin_upgrade_noticex() {
+function geodir_admin_upgrade_notice() {
     $class = "error";
     $message = __("Please update core GeoDirectory or some addons may not function correctly.","geodirectory");
     echo"<div class=\"$class\"> <p>$message</p></div>";
