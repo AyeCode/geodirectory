@@ -1500,6 +1500,8 @@ if (!function_exists('geodir_show_image')) {
             if (!is_object($request))
                 $request = (object)$request;
 
+            if(isset($request->src) && !isset($request->path)){$request->path = $request->src;}
+
             @list($width, $height) = getimagesize($request->path);
             $image->src = $request->src;
             $image->width = $width;

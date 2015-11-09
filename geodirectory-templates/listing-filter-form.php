@@ -25,7 +25,7 @@ $curr_post_type = geodir_get_current_posttype();
  * @param string $class The class for the search form, default: 'geodir-listing-search'.
  */
 echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
-      name="geodir-listing-search" action="<?php echo home_url(); ?>" method="get">
+      name="geodir-listing-search" action="<?php echo get_site_url(); ?>" method="get">
     <input type="hidden" name="geodir_search" value="1"/>
 
     <div class="geodir-loc-bar">

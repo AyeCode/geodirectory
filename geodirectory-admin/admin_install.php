@@ -182,7 +182,7 @@ function geodir_set_default_options()
      * @since 1.5.4
      * @package GeoDirectory
      */
-    include_once("option-pages/titlemeta_settings_array.php");
+    include_once("option-pages/title_meta_settings_array.php");
     foreach ($geodir_settings as $value) {
         geodir_update_options($value, true);
     }
@@ -210,7 +210,7 @@ function geodir_set_default_widgets()
 
     $widget_option_list['geodir_home_top'] =
         array('popular_post_category' => array("title" => __('Popular Categories', 'geodirectory')),
-            'geodir_map_v3_home_map' => array("autozoom" => 1, "width" => '940', "heigh" => '425'),
+            'geodir_map_v3_home_map' => array("autozoom" => 1, "width" => '100%', "heigh" => '425'),
             'geodir_advance_search' => array());
 
     $widget_option_list['geodir_home_content'] =

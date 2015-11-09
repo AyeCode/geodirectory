@@ -329,6 +329,7 @@ function geodir_is_page($gdpage = '')
  * Sets a key and value in $wp object if the current page is a geodir page.
  *
  * @since 1.0.0
+ * @since 1.5.4 Added check for new style GD homepage.
  * @package GeoDirectory
  * @param object $wp WordPress object.
  */
@@ -340,6 +341,11 @@ function geodir_set_is_geodir_page($wp)
         if (empty($wp->query_vars) || !array_diff(array_keys($wp->query_vars), array('preview', 'page', 'paged', 'cpage'))) {
             if (get_option('geodir_set_as_home'))
                 $wp->query_vars['gd_is_geodir_page'] = true;
+            if(geodir_is_page('home')){
+                $wp->query_vars['gd_is_geodir_page'] = true;
+            }
+
+
         }
 
         if (!isset($wp->query_vars['gd_is_geodir_page']) && isset($wp->query_vars['page_id'])) {
@@ -2130,7 +2136,9 @@ function is_page_geodir_home()
     $cur_url = str_replace(array("https://", "http://", "www."), array('', '', ''), geodir_curPageURL());
     $home_url = home_url('', 'http');
     $home_url = str_replace("www.", "", $home_url);
-    if ((strpos($home_url, $cur_url) !== false || strpos($home_url . '/', $cur_url) !== false) && (get_option('geodir_set_as_home'))) {
+    if ( (strpos($home_url, $cur_url) !== false || strpos($home_url . '/', $cur_url) !== false) && ('page' == get_option('show_on_front') && get_option('page_on_front') && get_option('page_on_front')==get_option('geodir_home_page')) ) {
+        return true;
+    }elseif(is_home() && 'page' == get_option('show_on_front') && get_option('page_on_front') && get_option('page_on_front')==get_option('geodir_home_page')){
         return true;
     } else {
         return false;
@@ -3624,54 +3632,7 @@ function geodir_get_client_name($user_id) {
 }
 
 
-//add_filter( 'home_url', 'geodir_geo_home_link',10,2 );
-function geodir_geo_home_link( $url, $path){
 
-    // If direct home path then we edit it.
-    if(!$path || $path=='/'){
-
-        global $geodir_add_location_url;
-        $include_location = false;
-
-        if ($geodir_add_location_url != NULL && $geodir_add_location_url != '') {
-            if ($geodir_add_location_url && get_option('geodir_add_location_url')) {
-                $include_location = true;
-            }
-
-        } elseif (get_option('geodir_add_location_url') && isset($_SESSION['gd_multi_location']) && $_SESSION['gd_multi_location'] == 1)
-            $include_location = true;
-
-
-        if ($include_location) {
-
-            $request_term = geodir_get_current_location_terms('query_vars');
-
-            if (!empty($request_term)) {
-
-
-                if (get_option('permalink_structure') != '') {
-
-                    $location_slug = get_post_field( 'post_name', geodir_location_page_id() );
-
-
-                    $request_term = implode("/", $request_term);
-                    $new_listing_slug = '/' . $location_slug . '/' . $request_term . '/';
-
-                    $url = trim($url,'/').$new_listing_slug;
-
-                } else {
-                    $url = geodir_getlink($url, $request_term);
-                }
-
-            }
-        }
-
-    }
-
-
-    return $url;
-
-}
 
 
 add_filter('wpseo_replacements','geodir_wpseo_replacements',10,1);
@@ -3862,7 +3823,10 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
             }
         }elseif($gd_page=='add-listing'){
             $geodir_post_types = get_option('geodir_post_types');
-            $spt = esc_attr($_REQUEST['listing_type']);
+            $spt = isset($_REQUEST['listing_type']) ? esc_attr($_REQUEST['listing_type']) : '';
+            if(!$spt && isset($_REQUEST['pid'])){
+                $spt = get_post_type( $_REQUEST['pid'] );
+            }
             if(!$spt){$spt='gd_place';}
             if(isset($geodir_post_types[$spt]['labels']['singular_name'])){
                 $single_name = __($geodir_post_types[$spt]['labels']['singular_name'],'geodirectory');
