@@ -1319,7 +1319,7 @@ if (!function_exists('adminEmail')) {
         $post_info = get_post($page_id);
         $post_date = date('dS F,Y', strtotime($post_info->post_date));
         $listingLink = '<a href="' . $productlink . '"><b>' . $post_info->post_title . '</b></a>';
-        $loginurl = trailingslashit(home_url()) . '?ptype=login';
+        $loginurl = geodir_login_url();
         $loginurl_link = '<a href="' . $loginurl . '">login</a>';
         $siteurl = home_url();
         $siteurl_link = '<a href="' . $siteurl . '">' . $fromEmailName . '</a>';
@@ -1392,7 +1392,7 @@ if (!function_exists('sendEmail')) {
         $listingLink = '<a href="' . $productlink . '"><b>' . $post_info->post_title . '</b></a>';
         $siteurl = home_url();
         $siteurl_link = '<a href="' . $siteurl . '">' . $siteurl . '</a>';
-        $loginurl = trailingslashit(home_url()) . '?ptype=login';
+        $loginurl = geodir_login_url();
         $loginurl_link = '<a href="' . $loginurl . '">login</a>';
         if ($fromEmail == '') {
             $fromEmail = get_option('site_email');
