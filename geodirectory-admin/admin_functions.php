@@ -4392,7 +4392,7 @@ function geodir_init_filesystem()
     $access_type = get_filesystem_method();
     if ($access_type === 'direct') {
         /* you can safely run request_filesystem_credentials() without any issues and don't need to worry about passing in a URL */
-        $creds = request_filesystem_credentials(site_url() . '/wp-admin/', '', false, false, array());
+        $creds = request_filesystem_credentials(trailingslashit(site_url()) . 'wp-admin/', '', false, false, array());
 
         /* initialize the API */
         if (!WP_Filesystem($creds)) {
@@ -4405,7 +4405,7 @@ function geodir_init_filesystem()
         return $wp_filesystem;
         /* do our file manipulations below */
     } elseif (defined('FTP_USER')) {
-        $creds = request_filesystem_credentials(site_url() . '/wp-admin/', '', false, false, array());
+        $creds = request_filesystem_credentials(trailingslashit(site_url()) . 'wp-admin/', '', false, false, array());
 
         /* initialize the API */
         if (!WP_Filesystem($creds)) {

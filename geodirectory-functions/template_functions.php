@@ -56,7 +56,7 @@ function geodir_locate_template($template = '')
 				if($sc_post_type != '' )
 					$post_type = $sc_post_type;
 				
-                wp_redirect(get_site_url() . '/' . $pagename . '/?listing_type=' . $post_type);
+                wp_redirect(trailingslashit(get_site_url()) . $pagename . '/?listing_type=' . $post_type);
                 exit();
             }
             return $template = locate_template(array("geodirectory/add-{$post_type}.php", "geodirectory/add-listing.php"));
