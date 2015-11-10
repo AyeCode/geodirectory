@@ -63,7 +63,7 @@ echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
                         <?php foreach ($post_types as $post_type => $info):
                             global $wpdb;
                             $has_posts = '';
-                            $has_posts = $wpdb->get_row($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE post_type = %s LIMIT 1", $post_type));
+                            $has_posts = $wpdb->get_row($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE post_type = %s AND post_status='publish' LIMIT 1", $post_type));
                             if (!$has_posts) {
                                 continue;
                             }
