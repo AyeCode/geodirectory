@@ -25,7 +25,7 @@ $curr_post_type = geodir_get_current_posttype();
  * @param string $class The class for the search form, default: 'geodir-listing-search'.
  */
 echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
-      name="geodir-listing-search" action="<?php echo home_url(); ?>" method="get">
+      name="geodir-listing-search" action="<?php echo get_site_url(); ?>" method="get">
     <input type="hidden" name="geodir_search" value="1"/>
 
     <div class="geodir-loc-bar">
@@ -63,7 +63,7 @@ echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
                         <?php foreach ($post_types as $post_type => $info):
                             global $wpdb;
                             $has_posts = '';
-                            $has_posts = $wpdb->get_row($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE post_type = %s LIMIT 1", $post_type));
+                            $has_posts = $wpdb->get_row($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE post_type = %s AND post_status='publish' LIMIT 1", $post_type));
                             if (!$has_posts) {
                                 continue;
                             }

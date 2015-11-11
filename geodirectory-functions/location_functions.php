@@ -374,7 +374,7 @@ function geodir_get_current_location_terms($location_array_from = 'session', $gd
     global $wp;
     $location_array = array();
     if ($location_array_from == 'session') {
-        if (isset($_SESSION['gd_country']) && $_SESSION['gd_country'] == 'me') {
+        if ((isset($_SESSION['gd_country']) && $_SESSION['gd_country'] == 'me') || (isset($_SESSION['gd_region']) && $_SESSION['gd_region'] == 'me') || (isset($_SESSION['gd_city']) && $_SESSION['gd_city'] == 'me')) {
             return $location_array;
         }
 
@@ -390,7 +390,7 @@ function geodir_get_current_location_terms($location_array_from = 'session', $gd
         if ($city != '')
             $location_array['gd_city'] = urldecode($city);
     } else {
-        if (isset($wp->query_vars['gd_country']) && $wp->query_vars['gd_country'] == 'me') {
+        if ((isset($wp->query_vars['gd_country']) && $wp->query_vars['gd_country'] == 'me') || (isset($wp->query_vars['gd_region']) && $wp->query_vars['gd_region'] == 'me') || (isset($wp->query_vars['gd_city']) && $wp->query_vars['gd_city'] == 'me')) {
             return $location_array;
         }
 

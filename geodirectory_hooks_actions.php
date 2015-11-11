@@ -3230,7 +3230,7 @@ function geodir_search_meta_desc($html) {
         $all_postypes = geodir_get_posttypes();
         $keyword = esc_sql(strip_tags(get_query_var('s')));
         $stype = esc_sql(strip_tags(esc_attr($_REQUEST['stype'])));
-        $snear = esc_sql(strip_tags(esc_attr($_REQUEST['snear'])));
+        $snear = (isset($_REQUEST['snear'])) ? esc_sql(strip_tags(esc_attr($_REQUEST['snear']))) : '';
 
         if ($stype && in_array($stype, $all_postypes)) {
             $desc = __('Search results for', 'geodirectory');

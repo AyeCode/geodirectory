@@ -71,24 +71,7 @@ $geodir_settings['permalink_settings'] = apply_filters('geodir_permalink_setting
         'value' => 'city',
         'radiogroup' => 'end'
     ),
-	/* array(
-        'name' => __('Home page should go to', 'geodirectory'),
-        'desc' => __('Site root (ex: mysite.com/)', 'geodirectory'),
-        'id' => 'geodir_home_go_to',
-        'type' => 'radio',
-        'value' => 'root',
-        'std' => 'root',
-        'radiogroup' => 'start'
-    ),
-	array(
-        'name' => __('Current location page', 'geodirectory'),
-        'desc' => __('Current location page (ex: mysite.com/location/glasgow/)', 'geodirectory'),
-        'id' => 'geodir_home_go_to',
-        'type' => 'radio',
-        'std' => 'root',
-        'value' => 'location',
-        'radiogroup' => 'end'
-    ),*/
+
 
 
     array(

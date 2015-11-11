@@ -1656,9 +1656,42 @@ function geodir_term_link($termlink, $term, $taxonomy)
 
         if ($include_location) {
 
-            $request_term = geodir_get_current_location_terms('query_vars');
 
-            if (!empty($request_term)) {
+            global $post;
+            if(geodir_is_page('detail') && isset($post->country_slug)){
+                $location_terms = array(
+                    'gd_country' => $post->country_slug,
+                    'gd_region' => $post->region_slug,
+                    'gd_city' => $post->city_slug
+                );
+            }else{
+                $location_terms = geodir_get_current_location_terms('query_vars');
+            }
+
+
+            $geodir_show_location_url = get_option('geodir_show_location_url');
+            $location_manager = defined('POST_LOCATION_TABLE') ? true : false;
+
+
+            if ($location_manager) {
+                $hide_country_part = get_option('geodir_location_hide_country_part');
+                $hide_region_part = get_option('geodir_location_hide_region_part');
+
+                if ($hide_region_part && $hide_country_part) {
+                    unset($location_terms['gd_country']);
+                    unset($location_terms['gd_region']);
+                } else if ($hide_region_part && !$hide_country_part) {
+                    unset($location_terms['gd_region']);
+                } else if (!$hide_region_part && $hide_country_part) {
+                    unset($location_terms['gd_country']);
+                }
+            }
+
+
+
+            //unset($request_term['gd_country']);
+
+            if (!empty($location_terms)) {
 
                 $url_separator = '';//get_option('geodir_listingurl_separator');
 
@@ -1666,7 +1699,7 @@ function geodir_term_link($termlink, $term, $taxonomy)
 
                     $old_listing_slug = '/' . $listing_slug . '/';
 
-                    $request_term = implode("/", $request_term);
+                    $request_term = implode("/", $location_terms);
                     //$new_listing_slug = '/'.$listing_slug.'/'.rtrim($request_term,'/').'/'.$url_separator.'/';
                     $new_listing_slug = '/' . $listing_slug . '/' . $request_term . '/';
 
@@ -1716,6 +1749,9 @@ function geodir_posttype_link($link, $post_type)
 
         if (get_option('geodir_add_location_url') && isset($_SESSION['gd_multi_location']) && $_SESSION['gd_multi_location'] == 1) {
             $location_terms = geodir_get_current_location_terms('query_vars');
+
+            //unset($location_terms['gd_country']);
+            //print_r($location_terms);
             if (!empty($location_terms)) {
 
                 if (get_option('permalink_structure') != '') {

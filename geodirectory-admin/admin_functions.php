@@ -1011,7 +1011,7 @@ function geodir_compatibility_setting_tab($tabs)
  */
 function geodir_extend_geodirectory_setting_tab($tabs)
 {
-    $tabs['extend_geodirectory_settings'] = array('label' => __('Extend Geodirectory', 'geodirectory'), 'url' => 'http://wpgeodirectory.com', 'target' => '_blank');
+    $tabs['extend_geodirectory_settings'] = array('label' => __('Extend Geodirectory', 'geodirectory'). ' <i class="fa fa-plug"></i>', 'url' => 'http://wpgeodirectory.com', 'target' => '_blank');
     return $tabs;
 }
 
@@ -2676,7 +2676,7 @@ function geodir_admin_fields($options)
                                id="<?php echo esc_attr($value['id'] . $value['value']); ?>" type="radio"
                                value="<?php echo $value['value'] ?>" <?php if (get_option($value['id']) == $value['value']) {
                             echo 'checked="checked"';
-                        } ?> />
+                        }elseif(get_option($value['id'])=='' && $value['std']==$value['value']){echo 'checked="checked"';} ?> />
                         <?php echo $value['desc']; ?></label><br>
                 </fieldset>
                 <?php
@@ -4392,7 +4392,7 @@ function geodir_init_filesystem()
     $access_type = get_filesystem_method();
     if ($access_type === 'direct') {
         /* you can safely run request_filesystem_credentials() without any issues and don't need to worry about passing in a URL */
-        $creds = request_filesystem_credentials(site_url() . '/wp-admin/', '', false, false, array());
+        $creds = request_filesystem_credentials(trailingslashit(site_url()) . 'wp-admin/', '', false, false, array());
 
         /* initialize the API */
         if (!WP_Filesystem($creds)) {
@@ -4405,7 +4405,7 @@ function geodir_init_filesystem()
         return $wp_filesystem;
         /* do our file manipulations below */
     } elseif (defined('FTP_USER')) {
-        $creds = request_filesystem_credentials(site_url() . '/wp-admin/', '', false, false, array());
+        $creds = request_filesystem_credentials(trailingslashit(site_url()) . 'wp-admin/', '', false, false, array());
 
         /* initialize the API */
         if (!WP_Filesystem($creds)) {
@@ -6787,5 +6787,17 @@ function geodir_imex_original_post_id($element_id, $element_type) {
 	$element_id = $element_id != $original_element_id ? $original_element_id : '';
 	
 	return $element_id;
+}
+
+/*
+ * Show admin notice if core is out of date for the current addons.
+ *
+ * @since 1.5.4
+ * @package GeoDirectory
+ */
+function geodir_admin_upgrade_notice() {
+    $class = "error";
+    $message = __("Please update core GeoDirectory or some addons may not function correctly.","geodirectory");
+    echo"<div class=\"$class\"> <p>$message</p></div>";
 }
 ?>

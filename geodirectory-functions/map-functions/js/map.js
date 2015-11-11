@@ -218,10 +218,14 @@ function build_map_ajax_search_param(map_canvas_var, reload_cat_list, catObj,hid
     var gd_lon_ne = '';
     var gd_lat_sw = '';
     var gd_lon_sw = '';
+    var my_lat = '';
+    var my_lon = '';
 
     //var mapObject = new google.maps.Map(document.getElementById("map"), _mapOptions);
    // jQuery.goMap.map
     var map_info = '';
+
+
 
     if(jQuery.goMap.map && eval(map_canvas_var).enable_marker_cluster_server) {// map loaded so we know the bounds
 
@@ -231,6 +235,8 @@ function build_map_ajax_search_param(map_canvas_var, reload_cat_list, catObj,hid
         gd_lon_ne = bounds.getNorthEast().lng();
         gd_lat_sw = bounds.getSouthWest().lat();
         gd_lon_sw = bounds.getSouthWest().lng();
+
+
         map_info = "&zl="+gd_zl+"&lat_ne="+gd_lat_ne+"&lon_ne="+gd_lon_ne+"&lat_sw="+gd_lat_sw+"&lon_sw="+gd_lon_sw;
 
     }else if(eval(map_canvas_var).enable_marker_cluster_server && !eval(map_canvas_var).autozoom){// map not loaded and auto zoom not set
@@ -241,6 +247,13 @@ function build_map_ajax_search_param(map_canvas_var, reload_cat_list, catObj,hid
         gd_map_h = jQuery('#' + map_canvas_var).height();
         gd_map_w = jQuery('#' + map_canvas_var).width();
         map_info = "&zl="+gd_zl+"&gd_map_h="+gd_map_h+"&gd_map_w="+gd_map_w;
+    }
+
+    //check for near me page
+    if( typeof my_location !== 'undefined' && my_location && lat && lon){
+        my_lat = lat;
+        my_lon = lon;
+        map_info = map_info+"&my_lat="+my_lat+"&my_lon="+my_lon;
     }
 
     if (jQuery('#' + map_canvas_var + '_posttype').val() != '' && jQuery('#' + map_canvas_var + '_posttype').val() != '0') {
