@@ -1713,10 +1713,38 @@ function geodir_term_link($termlink, $term, $taxonomy)
         }
 
         // Alter the CPT slug is WPML is set to do so
+        /* we can replace this with the below function
         if(function_exists('icl_object_id')){
             global $sitepress;
             $post_type = str_replace("category","",$taxonomy);
             $termlink = $sitepress->post_type_archive_link_filter( $termlink, $post_type);
+        }*/
+
+
+
+        // Alter the CPT slug if WPML is set to do so
+        if(function_exists('icl_object_id')){
+            $post_types = get_option('geodir_post_types');
+            $post_type = str_replace("category","",$taxonomy);
+            $slug = $post_types[$post_type]['rewrite']['slug'];
+            if ( gd_wpml_slug_translation_turned_on( $post_type ) && $language_code = gd_wpml_get_lang_from_url($termlink)) {
+
+                $org_slug = $slug;
+                $slug = apply_filters( 'wpml_translate_single_string',
+                    $slug,
+                    'WordPress',
+                    'URL slug: ' . $slug,
+                    $language_code);
+
+
+                if(!$slug){$slug = $org_slug;}
+
+                $termlink = trailingslashit(
+
+                    preg_replace(  "/" . preg_quote( $org_slug, "/" ) . "/", $slug  ,$termlink, 1 )
+                );
+
+            }
         }
 
     }

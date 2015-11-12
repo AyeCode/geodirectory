@@ -3648,6 +3648,15 @@ function geodir_wpseo_replacements($vars){
     // location variables
     $gd_post_type = geodir_get_current_posttype();
     $location_array = geodir_get_current_location_terms('query_vars', $gd_post_type);
+    /**
+     * Filter the title variables location variables array
+     *
+     * @since 1.5.5
+     * @package GeoDirectory
+     * @param array $location_array The array of location variables.
+     * @param array $vars The page title variables.
+     */
+    $location_array = apply_filters('geodir_filter_title_variables_location_arr_seo',$location_array, $vars);
     $location_titles = array();
     if(get_query_var( 'gd_country_full' )){
         if(get_query_var( 'gd_country_full' )){$location_array['gd_country'] = get_query_var( 'gd_country_full' );}
@@ -3724,7 +3733,6 @@ function geodir_wpseo_replacements($vars){
     }
 
 
-
         if($location_titles) {
             $vars['%%location%%'] = implode(", ", $location_titles);
         }
@@ -3742,7 +3750,7 @@ function geodir_wpseo_replacements($vars){
 
 
     if($location_single) {
-        $vars['%%location_single%%'] = str_replace("%%location_single%%",$location_single,$title);
+        $vars['%%location_single%%'] = $location_single;
     }
 
 
@@ -3754,6 +3762,7 @@ add_filter('geodir_seo_meta_title','geodir_filter_title_variables',10,3);
 add_filter('geodir_seo_page_title','geodir_filter_title_variables',10,2);
 add_filter('geodir_seo_meta_description_pre','geodir_filter_title_variables',10,3);
 function geodir_filter_title_variables($title, $gd_page, $sep=''){
+
 
     if(!$gd_page || !$title){return $title;}// if no a GD page then bail.
     global $post;
@@ -3931,6 +3940,17 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
     // location variables
     $gd_post_type = geodir_get_current_posttype();
     $location_array = geodir_get_current_location_terms('query_vars', $gd_post_type);
+    /**
+     * Filter the title variables location variables array
+     *
+     * @since 1.5.5
+     * @package GeoDirectory
+     * @param array $location_array The array of location variables.
+     * @param string $title The title with variables..
+     * @param string $gd_page The page being filtered.
+     * @param string $sep The separator, default: `|`.
+     */
+    $location_array = apply_filters('geodir_filter_title_variables_location_arr',$location_array,$title, $gd_page, $sep);
     $location_titles = array();
     if($gd_page=='location' && get_query_var( 'gd_country_full' )){
         if(get_query_var( 'gd_country_full' )){$location_array['gd_country'] = get_query_var( 'gd_country_full' );}
