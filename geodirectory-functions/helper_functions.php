@@ -205,11 +205,13 @@ function geodir_info_url($args=array()){
  *
  * @package Geodirectory
  * @since 1.5.4
+ * @param string $string String to convert.
+ * @param string $charset Character set to use for conversion.
  * @return string Returns converted string.
  */
-function geodir_ucwords($string) {
+function geodir_ucwords($string, $charset='UTF-8') {
     if (function_exists('mb_convert_case')) {
-        return mb_convert_case($string, MB_CASE_TITLE, 'UTF-8');
+        return mb_convert_case($string, MB_CASE_TITLE, $charset);
     } else {
         return ucwords($string);
     }
@@ -223,11 +225,13 @@ function geodir_ucwords($string) {
  *
  * @package Geodirectory
  * @since 1.5.4
+ * @param string $string String to convert.
+ * @param string $charset Character set to use for conversion.
  * @return string Returns converted string.
  */
-function geodir_strtolower($string) {
+function geodir_strtolower($string, $charset='UTF-8') {
     if (function_exists('mb_convert_case')) {
-        return mb_convert_case($string, MB_CASE_LOWER, 'UTF-8');
+        return mb_convert_case($string, MB_CASE_LOWER, $charset);
     } else {
         return strtolower($string);
     }
@@ -241,11 +245,13 @@ function geodir_strtolower($string) {
  *
  * @package Geodirectory
  * @since 1.5.4
+ * @param string $string String to convert.
+ * @param string $charset Character set to use for conversion.
  * @return string Returns converted string.
  */
-function geodir_strtoupper($string) {
+function geodir_strtoupper($string, $charset='UTF-8') {
     if (function_exists('mb_convert_case')) {
-        return mb_convert_case($string, MB_CASE_UPPER, 'UTF-8');
+        return mb_convert_case($string, MB_CASE_UPPER, $charset);
     } else {
         return strtoupper($string);
     }

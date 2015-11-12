@@ -1,3 +1,6 @@
+v1.5.5
+Added charset parameter to case conversion functions - ADDED
+
 v1.5.4
 Event after map marker opened extended to prevent FireFox reclosing marker with server side clustering addon - FIXED
 Map popup image margins and padding set to 0 !important for compatibility - CHANGED
