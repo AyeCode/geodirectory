@@ -140,13 +140,17 @@ function geodir_login_url($args=array()){
         $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
     }
 
+    remove_filter( 'home_url', 'geodir_location_geo_home_link',100000);
+    $home_url = get_home_url();
+    add_filter( 'home_url', 'geodir_location_geo_home_link',100000,2 );
+
     if($gd_page_id){
         $post = get_post($gd_page_id);
         $slug = $post->post_name;
         //$login_url = get_permalink($gd_page_id );// get_permalink can only be user after theme-Setup hook, any earlier and it errors
-        $login_url = trailingslashit(get_site_url())."$slug/";
+        $login_url = trailingslashit($home_url)."$slug/";
     }else{
-        $login_url = trailingslashit(get_site_url())."?geodir_signup=true";
+        $login_url = trailingslashit($home_url)."?geodir_signup=true";
     }
 
     if($args){
@@ -181,13 +185,17 @@ function geodir_info_url($args=array()){
         $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
     }
 
+    remove_filter( 'home_url', 'geodir_location_geo_home_link',100000);
+    $home_url = get_home_url();
+    add_filter( 'home_url', 'geodir_location_geo_home_link',100000,2 );
+
     if($gd_page_id){
         $post = get_post($gd_page_id);
         $slug = $post->post_name;
         //$login_url = get_permalink($gd_page_id );// get_permalink can only be user after theme-Setup hook, any earlier and it errors
-        $info_url = trailingslashit(get_site_url())."$slug/";
+        $info_url = trailingslashit($home_url)."$slug/";
     }else{
-        $info_url = trailingslashit(get_site_url());
+        $info_url = trailingslashit($home_url);
     }
 
     if($args){
