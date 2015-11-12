@@ -1727,7 +1727,12 @@ function geodir_term_link($termlink, $term, $taxonomy)
             $post_types = get_option('geodir_post_types');
             $post_type = str_replace("category","",$taxonomy);
             $slug = $post_types[$post_type]['rewrite']['slug'];
-            if ( gd_wpml_slug_translation_turned_on( $post_type ) && $language_code = gd_wpml_get_lang_from_url($termlink)) {
+            if ( gd_wpml_slug_translation_turned_on( $post_type )) {
+
+                global $sitepress;
+                $default_lang = $sitepress->get_default_language();
+                $language_code = gd_wpml_get_lang_from_url($termlink);
+                if(!$language_code ){$language_code  = $default_lang;}
 
                 $org_slug = $slug;
                 $slug = apply_filters( 'wpml_translate_single_string',
