@@ -6,6 +6,7 @@ GD category page CPT slug does not change when switching language with WPML - FI
 Search form url not keeping the language in the url with WPML - FIXED
 Homepage page_id query var not set and can cause problems with Yoast SEO - FIXED
 All CPT text are translatable using db translation - FIXED
+New actions added to customize listing not found message - CHANGED
 
 v1.5.4
 Event after map marker opened extended to prevent FireFox reclosing marker with server side clustering addon - FIXED

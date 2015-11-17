@@ -270,12 +270,10 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
             /** This action is documented in geodirectory-templates/listing-listview.php */
             do_action('geodir_after_listing_post_listview');
         } else {
-
-            if (isset($_REQUEST['list']) && $_REQUEST['list'] == 'favourite') {
-                echo '<li class="no-listing">' . __('No favorite listings found which match your selection.', 'geodirectory') . '</li>';
-            } else {
-                echo '<li class="no-listing">' . __('No listings found which match your selection.', 'geodirectory') . '</li>';
-            }
+			$favorite = isset($_REQUEST['list']) && $_REQUEST['list'] == 'favourite' ? true : false;
+            
+			/** This action is documented in geodirectory-templates/listing-listview.php */
+            do_action('geodir_message_not_found_on_listing', 'widget-listing-listview', $favorite);
         }
         ?>
     </ul>  <!-- geodir_category_list_view ends here-->

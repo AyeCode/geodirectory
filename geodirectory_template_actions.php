@@ -3326,3 +3326,5 @@ function geodir_filter_listing_page_title($list_title)
     }
     return $list_title;
 }
+
+add_action('geodir_message_not_found_on_listing', 'geodir_display_message_not_found_on_listing');

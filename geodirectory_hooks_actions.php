@@ -1565,8 +1565,14 @@ function geodir_detail_page_tab_is_display($is_display, $tab)
     if ($tab == 'reviews')
         $is_display = (geodir_is_page('detail')) ? true : false;
 
-    if ($tab == 'related_listing')
-        $is_display = ((strpos($related_listing, __('No listings found which match your selection.', 'geodirectory')) !== false || $related_listing == '' || !geodir_is_page('detail'))) ? false : true;
+    if ($tab == 'related_listing') {
+       $message = __('No listings found which match your selection.', 'geodirectory');
+	   
+	   /** This action is documented in geodirectory-functions/template_functions.php */
+	   $message = apply_filters('geodir_message_listing_not_found', $message, 'listing-listview', false);
+	   
+	   $is_display = ((strpos($related_listing, $message) !== false || $related_listing == '' || !geodir_is_page('detail'))) ? false : true;
+	}
 
 
     return $is_display;
