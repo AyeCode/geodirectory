@@ -1309,6 +1309,8 @@ function geodir_localize_all_js_msg()
 		'geodir_txt_all_files' => __('Allowed files', 'geodirectory'),
 		'geodir_err_file_type' => __('File type error. Allowed file types: %s', 'geodirectory'),
 		'gd_allowed_img_types' => !empty($allowed_img_types) ? implode(',', $allowed_img_types) : '',
+		'geodir_txt_form_wait' => __('Wait...', 'geodirectory'),
+		'geodir_txt_form_searching' => __('Searching...', 'geodirectory'),
     );
 
     /**
