@@ -8,6 +8,7 @@ Homepage page_id query var not set and can cause problems with Yoast SEO - FIXED
 All CPT text are translatable using db translation - FIXED
 New actions added to customize listing not found message - CHANGED
 Advance search submit button fixed - FIXED
+Pagination not working when location selected - FIXED
 
 v1.5.4
 Event after map marker opened extended to prevent FireFox reclosing marker with server side clustering addon - FIXED

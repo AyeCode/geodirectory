@@ -335,6 +335,7 @@ function geodir_get_sidebar()
  * Returns paginated HTML string based on the given parameters.
  *
  * @since 1.0.0
+ * @since 1.5.5 Fixed pagination links when location selected.
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global object $wp_query WordPress Query object.
@@ -364,7 +365,9 @@ function geodir_pagination($before = '', $after = '', $prelabel = '', $nxtlabel 
         return;
 
     if (!is_single()) {
-
+		if (function_exists('geodir_location_geo_home_link')) {
+			remove_filter('home_url', 'geodir_location_geo_home_link', 100000);
+		}
         $numposts = $wp_query->found_posts;
 
 
@@ -410,6 +413,10 @@ function geodir_pagination($before = '', $after = '', $prelabel = '', $nxtlabel 
             }
             echo "</div> $after";
         }
+		
+		if (function_exists('geodir_location_geo_home_link')) {
+			add_filter('home_url', 'geodir_location_geo_home_link', 100000, 2);
+		}
     }
 }
 
