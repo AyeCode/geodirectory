@@ -3253,3 +3253,4 @@ function geodir_search_meta_desc($html) {
     return $html;
 }
 add_filter('geodir_seo_meta_description', 'geodir_search_meta_desc', 10, 1);
+add_filter('geodir_load_db_language', 'geodir_load_cpt_text_translation');
