@@ -3868,7 +3868,7 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
                 $plural_name = __($geodir_post_types[$spt]['labels']['name'],'geodirectory');
             }
         }
-        elseif($post->post_type){
+        elseif(isset($post->post_type) && $post->post_type){
             $geodir_post_types = get_option('geodir_post_types');
             if(isset($geodir_post_types[$post->post_type]['labels']['name'])){
                 $plural_name = __($geodir_post_types[$post->post_type]['labels']['name'],'geodirectory');
