@@ -1111,4 +1111,84 @@ function geodir_sc_gd_listings($atts, $content = '') {
 }
 add_shortcode('gd_listings', 'geodir_sc_gd_listings');
 
+/**
+ * The CPT categories widget shortcode.
+ *
+ * This implements the functionality of the CPT categories widget shortcode for displaying
+ * all geodirectory categories.
+ *
+ * @since 1.5.5
+ *
+ * @param array $atts {
+ *     Attributes of the shortcode.
+ *
+ *     @type string $title         The title of the widget displayed.
+ *     @type string $post_type     Post type of listing. Default empty.
+ *     @type bool   $hide_empty    Hide empty categories? Default empty.
+ *     @type bool   $show_count    Show category count? Default empty.
+ *     @type bool   $hide_icon     Hide category icon? Default empty.
+ *     @type bool   $cpt_left      Show CPT on same line? Default empty.
+ *     @type string $sort_by       Categories sort by. 'az' or 'count'. Default 'count'.
+ *     @type string|int $max_count Max no of sub-categories count. Default 'all'.
+ *     @type string|int $max_level Max level of sub-categories depth. Default 1.
+ *     @type string $before_widget HTML content to prepend to each widget's HTML output.
+ *                                 Default is an opening list item element.
+ *     @type string $after_widget  HTML content to append to each widget's HTML output.
+ *                                 Default is a closing list item element.
+ *     @type string $before_title  HTML content to prepend to the widget title when displayed.
+ *                                 Default is an opening h3 element.
+ *     @type string $after_title   HTML content to append to the widget title when displayed.
+ *                                 Default is a closing h3 element.
+ * }
+ * @param string $content The enclosed content. Optional.
+ * @return string HTML content to display CPT categories.
+ */
+function geodir_sc_cpt_categories_widget($atts, $content = '') {
+	$defaults = array(
+		'title' => '',
+		'post_type' => '', // NULL for all
+		'hide_empty' => '',
+		'show_count' => '',
+		'hide_icon' => '',
+		'cpt_left' => '',
+		'sort_by' => 'count',
+		'max_count' => 'all',
+		'max_level' => '1',
+		'before_widget' => '<section id="geodir_cpt_categories_widget-1" class="widget geodir-widget geodir_cpt_categories_widget geodir_sc_cpt_categories_widget">',
+        'after_widget' => '</section>',
+        'before_title' => '<h3 class="widget-title">',
+        'after_title' => '</h3>',
+	);
+	$params = shortcode_atts($defaults, $atts);
+
+    /**
+     * Validate our incoming params
+     */
+	// Make sure we have an array
+    $params['post_type'] = !is_array($params['post_type']) && trim($params['post_type']) != '' ? explode(',', trim($params['post_type'])) : array();
+	 
+	// Validate the checkboxes used on the widget
+    $params['hide_empty'] 	= gdsc_to_bool_val($params['hide_empty']);
+    $params['show_count'] 	= gdsc_to_bool_val($params['show_count']);
+    $params['hide_icon'] 	= gdsc_to_bool_val($params['hide_icon']);
+    $params['cpt_left'] 	= gdsc_to_bool_val($params['cpt_left']);
+	
+	if ($params['max_count'] != 'all') {
+		$params['max_count'] = absint($params['max_count']);
+	}
+	
+	if ($params['max_level'] != 'all') {
+		$params['max_level'] = absint($params['max_level']);
+	}
+	
+	$params['sort_by'] = $params['sort_by'] == 'az' ? 'az' : 'count';
+
+	ob_start();
+	the_widget('geodir_cpt_categories_widget', $params, $params);
+    $output = ob_get_contents();
+    ob_end_clean();
+
+    return $output;
+}
+add_shortcode('gd_cpt_categories', 'geodir_sc_cpt_categories_widget');
 ?>
