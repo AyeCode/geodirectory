@@ -140,9 +140,13 @@ function geodir_login_url($args=array()){
         $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
     }
 
-    remove_filter( 'home_url', 'geodir_location_geo_home_link',100000);
+    if (function_exists('geodir_location_geo_home_link')) {
+        remove_filter('home_url', 'geodir_location_geo_home_link', 100000);
+    }
     $home_url = get_home_url();
-    add_filter( 'home_url', 'geodir_location_geo_home_link',100000,2 );
+    if (function_exists('geodir_location_geo_home_link')) {
+        add_filter('home_url', 'geodir_location_geo_home_link', 100000, 2);
+    }
 
     if($gd_page_id){
         $post = get_post($gd_page_id);
@@ -185,9 +189,13 @@ function geodir_info_url($args=array()){
         $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
     }
 
-    remove_filter( 'home_url', 'geodir_location_geo_home_link',100000);
+    if (function_exists('geodir_location_geo_home_link')) {
+        remove_filter('home_url', 'geodir_location_geo_home_link', 100000);
+    }
     $home_url = get_home_url();
-    add_filter( 'home_url', 'geodir_location_geo_home_link',100000,2 );
+    if (function_exists('geodir_location_geo_home_link')) {
+        add_filter('home_url', 'geodir_location_geo_home_link', 100000, 2);
+    }
 
     if($gd_page_id){
         $post = get_post($gd_page_id);
