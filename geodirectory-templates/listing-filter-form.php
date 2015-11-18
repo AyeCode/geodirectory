@@ -13,7 +13,9 @@
 global $wp_query, $current_term, $query;
 
 $curr_post_type = geodir_get_current_posttype();
-
+remove_filter( 'home_url', 'geodir_location_geo_home_link',100000);
+$search_url = trailingslashit(get_home_url());
+add_filter( 'home_url', 'geodir_location_geo_home_link',100000,2 );
 ?>
 
 
@@ -25,7 +27,7 @@ $curr_post_type = geodir_get_current_posttype();
  * @param string $class The class for the search form, default: 'geodir-listing-search'.
  */
 echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
-      name="geodir-listing-search" action="<?php echo get_site_url(); ?>" method="get">
+      name="geodir-listing-search" action="<?php echo $search_url ?>" method="get">
     <input type="hidden" name="geodir_search" value="1"/>
 
     <div class="geodir-loc-bar">
@@ -142,7 +144,7 @@ echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
                  * @since 1.0.0
                  */
                 do_action('geodir_before_search_button'); ?>
-				<button type="button" class="geodir_submit_search"><i class="fa fa-refresh fa-spin gd-form-refresh" style="display:none"></i><i class="fa fa-search"></i><font class="gd-srchbtn-txt"><?php echo $default_search_button_label;?></font></button>
+				<input type="button" value="<?php esc_attr_e($default_search_button_label); ?>" class="geodir_submit_search" />
                 <?php
                 /**
                  * Called on the GD search form just after the search button.

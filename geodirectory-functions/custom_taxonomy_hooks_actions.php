@@ -402,14 +402,14 @@ function geodir_set_location_var_in_session_in_core($wp)
 	// Query Vars will have page_id parameter
 	// check if query var has page_id and that page id is location page
     geodir_set_is_geodir_page($wp);
-    if (!get_option('geodir_set_as_home')) {
-
-        if (empty($wp->query_vars) || !array_diff(array_keys($wp->query_vars), array('preview', 'page', 'paged', 'cpage'))) {
-            if ('page' == get_option('show_on_front'))
+// if is GD homepage set the page ID
+        if (geodir_is_page('home')) {
                 $wp->query_vars['page_id'] = get_option('page_on_front');
         }
 
-    }
+
+
+
 
 	
 	// The location url format (all or country_city or region_city or city).

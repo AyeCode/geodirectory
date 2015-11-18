@@ -462,3 +462,48 @@ function geodir_core_post_view_extra_class($class, $all_postypes = '')
 
     return $class;
 }
+
+/**
+ * Display message when no listing result found.
+ *
+ * @since 1.5.5
+ * @package GeoDirectory
+ *
+ * @param string $template_listview Optional. Listing listview template. Ex: listing-listview, widget-listing-listview,
+                 gdevents_widget_listview, link-business-listview. Default: 'listing-listview'.
+ * @param bool $favorite Listing Optional. Are favorite listings results? Default: false.
+ */
+function geodir_display_message_not_found_on_listing($template_listview = 'listing-listview', $favorite = false) {
+    if ($favorite) {
+		$message = __('No favorite listings found which match your selection.', 'geodirectory');
+	} else {
+		$message = __('No listings found which match your selection.', 'geodirectory');
+	}
+	
+	/**
+	 * Filter the no listing found message.
+	 *
+	 * @since 1.5.5
+	 * @param string $template_listview Listing listview template.
+	 * @param bool $favorite Are favorite listings results?
+	 */
+	$message = apply_filters('geodir_message_listing_not_found', $message, $template_listview, $favorite);
+	
+	echo '<li class="no-listing">' . $message . '</li>';
+}
+
+/**
+ * Strips </li><li> tags from Breadcrumb HTML to wrap breadcrumb html.
+ *
+ * Using </li><li> breaks the links to a new line when window size is small(ex: in mobile device).
+ *
+ * @since 1.5.5
+ * @param string $breadcrumb Breadcrumb HTML.
+ * @param string $separator Breadcrumb separator.
+ * @return string Breadcrumb HTML.
+ */
+function geodir_strip_breadcrumb_li_wrappers($breadcrumb, $separator) {
+	$breadcrumb = str_replace(array('</li><li>', '</li> <li>'), '', $breadcrumb);
+	
+	return $breadcrumb;
+}

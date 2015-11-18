@@ -3648,6 +3648,15 @@ function geodir_wpseo_replacements($vars){
     // location variables
     $gd_post_type = geodir_get_current_posttype();
     $location_array = geodir_get_current_location_terms('query_vars', $gd_post_type);
+    /**
+     * Filter the title variables location variables array
+     *
+     * @since 1.5.5
+     * @package GeoDirectory
+     * @param array $location_array The array of location variables.
+     * @param array $vars The page title variables.
+     */
+    $location_array = apply_filters('geodir_filter_title_variables_location_arr_seo',$location_array, $vars);
     $location_titles = array();
     if(get_query_var( 'gd_country_full' )){
         if(get_query_var( 'gd_country_full' )){$location_array['gd_country'] = get_query_var( 'gd_country_full' );}
@@ -3724,7 +3733,6 @@ function geodir_wpseo_replacements($vars){
     }
 
 
-
         if($location_titles) {
             $vars['%%location%%'] = implode(", ", $location_titles);
         }
@@ -3742,7 +3750,7 @@ function geodir_wpseo_replacements($vars){
 
 
     if($location_single) {
-        $vars['%%location_single%%'] = str_replace("%%location_single%%",$location_single,$title);
+        $vars['%%location_single%%'] = $location_single;
     }
 
 
@@ -3754,6 +3762,7 @@ add_filter('geodir_seo_meta_title','geodir_filter_title_variables',10,3);
 add_filter('geodir_seo_page_title','geodir_filter_title_variables',10,2);
 add_filter('geodir_seo_meta_description_pre','geodir_filter_title_variables',10,3);
 function geodir_filter_title_variables($title, $gd_page, $sep=''){
+
 
     if(!$gd_page || !$title){return $title;}// if no a GD page then bail.
     global $post;
@@ -3859,7 +3868,7 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
                 $plural_name = __($geodir_post_types[$spt]['labels']['name'],'geodirectory');
             }
         }
-        elseif($post->post_type){
+        elseif(isset($post->post_type) && $post->post_type){
             $geodir_post_types = get_option('geodir_post_types');
             if(isset($geodir_post_types[$post->post_type]['labels']['name'])){
                 $plural_name = __($geodir_post_types[$post->post_type]['labels']['name'],'geodirectory');
@@ -3931,6 +3940,17 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
     // location variables
     $gd_post_type = geodir_get_current_posttype();
     $location_array = geodir_get_current_location_terms('query_vars', $gd_post_type);
+    /**
+     * Filter the title variables location variables array
+     *
+     * @since 1.5.5
+     * @package GeoDirectory
+     * @param array $location_array The array of location variables.
+     * @param string $title The title with variables..
+     * @param string $gd_page The page being filtered.
+     * @param string $sep The separator, default: `|`.
+     */
+    $location_array = apply_filters('geodir_filter_title_variables_location_arr',$location_array,$title, $gd_page, $sep);
     $location_titles = array();
     if($gd_page=='location' && get_query_var( 'gd_country_full' )){
         if(get_query_var( 'gd_country_full' )){$location_array['gd_country'] = get_query_var( 'gd_country_full' );}
@@ -4068,4 +4088,75 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
     $title = esc_html( $title );
 
     return $title;
+}
+
+/**
+ * Get the cpt texts for translation.
+ *
+ * @since 1.5.5
+ * @package GeoDirectory
+ *
+ * @param  array $translation_texts Array of text strings.
+ * @return array Translation texts.
+ */
+function geodir_load_cpt_text_translation($translation_texts = array()) {	
+	$gd_post_types = geodir_get_posttypes('array');
+	
+	if (!empty($gd_post_types)) {
+		foreach ($gd_post_types as $post_type => $cpt_info) {
+			$labels = isset($cpt_info['labels']) ? $cpt_info['labels'] : '';
+			$description = isset($cpt_info['description']) ? $cpt_info['description'] : '';
+			$seo = isset($cpt_info['seo']) ? $cpt_info['seo'] : '';
+						
+			if (!empty($labels)) {
+				if ($labels['name'] != '' && !in_array($labels['name'], $translation_texts))
+					$translation_texts[] = $labels['name'];
+				if ($labels['singular_name'] != '' && !in_array($labels['singular_name'], $translation_texts))
+					$translation_texts[] = $labels['singular_name'];
+				if ($labels['add_new'] != '' && !in_array($labels['add_new'], $translation_texts))
+					$translation_texts[] = $labels['add_new'];
+				if ($labels['add_new_item'] != '' && !in_array($labels['add_new_item'], $translation_texts))
+					$translation_texts[] = $labels['add_new_item'];
+				if ($labels['edit_item'] != '' && !in_array($labels['edit_item'], $translation_texts))
+					$translation_texts[] = $labels['edit_item'];
+				if ($labels['new_item'] != '' && !in_array($labels['new_item'], $translation_texts))
+					$translation_texts[] = $labels['new_item'];
+				if ($labels['view_item'] != '' && !in_array($labels['view_item'], $translation_texts))
+					$translation_texts[] = $labels['view_item'];
+				if ($labels['search_items'] != '' && !in_array($labels['search_items'], $translation_texts))
+					$translation_texts[] = $labels['search_items'];
+				if ($labels['not_found'] != '' && !in_array($labels['not_found'], $translation_texts))
+					$translation_texts[] = $labels['not_found'];
+				if ($labels['not_found_in_trash'] != '' && !in_array($labels['not_found_in_trash'], $translation_texts))
+					$translation_texts[] = $labels['not_found_in_trash'];
+				if (isset($labels['label_post_profile']) && $labels['label_post_profile'] != '' && !in_array($labels['label_post_profile'], $translation_texts))
+					$translation_texts[] = $labels['label_post_profile'];
+				if (isset($labels['label_post_info']) && $labels['label_post_info'] != '' && !in_array($labels['label_post_info'], $translation_texts))
+					$translation_texts[] = $labels['label_post_info'];
+				if (isset($labels['label_post_images']) && $labels['label_post_images'] != '' && !in_array($labels['label_post_images'], $translation_texts))
+					$translation_texts[] = $labels['label_post_images'];
+				if (isset($labels['label_post_map']) && $labels['label_post_map'] != '' && !in_array($labels['label_post_map'], $translation_texts))
+					$translation_texts[] = $labels['label_post_map'];
+				if (isset($labels['label_reviews']) && $labels['label_reviews'] != '' && !in_array($labels['label_reviews'], $translation_texts))
+					$translation_texts[] = $labels['label_reviews'];
+				if (isset($labels['label_related_listing']) && $labels['label_related_listing'] != '' && !in_array($labels['label_related_listing'], $translation_texts))
+					$translation_texts[] = $labels['label_related_listing'];
+			}
+			
+			if ($description != '' && !in_array($description, $translation_texts)) {
+				$translation_texts[] = normalize_whitespace($description);
+			}
+			
+			if (!empty($seo)) {
+				if (isset($seo['meta_keyword']) && $seo['meta_keyword'] != '' && !in_array($seo['meta_keyword'], $translation_texts))
+					$translation_texts[] = normalize_whitespace($seo['meta_keyword']);
+				
+				if (isset($seo['meta_description']) && $seo['meta_description'] != '' && !in_array($seo['meta_description'], $translation_texts))
+					$translation_texts[] = normalize_whitespace($seo['meta_description']);
+			}
+		}
+	}
+	$translation_texts = !empty($translation_texts) ? array_unique($translation_texts) : $translation_texts;
+	
+	return $translation_texts;
 }

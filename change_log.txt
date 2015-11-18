@@ -1,5 +1,17 @@
 v1.5.5
 Added charset parameter to case conversion functions - ADDED
+Avada compat CSS updated to adjust search button position - FIXED
+Filter `geodir_filter_title_variables_location_arr` added to filter the location variables for titles/meta - ADDED
+GD category page CPT slug does not change when switching language with WPML - FIXED
+Search form url not keeping the language in the url with WPML - FIXED
+Homepage page_id query var not set and can cause problems with Yoast SEO - FIXED
+Some changes for PHP7 - CHANGED
+All CPT text are translatable using db translation - FIXED
+New actions added to customize listing not found message - CHANGED
+Advance search submit button fixed - FIXED
+Pagination not working when location selected - FIXED
+Shortcode added for CPT categories widget - ADDED
+Breadcrumb HTML does not wrap correctly for a small screens or in a mobile - FIXED
 
 v1.5.4
 Event after map marker opened extended to prevent FireFox reclosing marker with server side clustering addon - FIXED

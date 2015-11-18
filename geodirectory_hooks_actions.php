@@ -1309,6 +1309,8 @@ function geodir_localize_all_js_msg()
 		'geodir_txt_all_files' => __('Allowed files', 'geodirectory'),
 		'geodir_err_file_type' => __('File type error. Allowed file types: %s', 'geodirectory'),
 		'gd_allowed_img_types' => !empty($allowed_img_types) ? implode(',', $allowed_img_types) : '',
+		'geodir_txt_form_wait' => __('Wait...', 'geodirectory'),
+		'geodir_txt_form_searching' => __('Searching...', 'geodirectory'),
     );
 
     /**
@@ -1565,8 +1567,14 @@ function geodir_detail_page_tab_is_display($is_display, $tab)
     if ($tab == 'reviews')
         $is_display = (geodir_is_page('detail')) ? true : false;
 
-    if ($tab == 'related_listing')
-        $is_display = ((strpos($related_listing, __('No listings found which match your selection.', 'geodirectory')) !== false || $related_listing == '' || !geodir_is_page('detail'))) ? false : true;
+    if ($tab == 'related_listing') {
+       $message = __('No listings found which match your selection.', 'geodirectory');
+	   
+	   /** This action is documented in geodirectory-functions/template_functions.php */
+	   $message = apply_filters('geodir_message_listing_not_found', $message, 'listing-listview', false);
+	   
+	   $is_display = ((strpos($related_listing, $message) !== false || $related_listing == '' || !geodir_is_page('detail'))) ? false : true;
+	}
 
 
     return $is_display;
@@ -3253,3 +3261,4 @@ function geodir_search_meta_desc($html) {
     return $html;
 }
 add_filter('geodir_seo_meta_description', 'geodir_search_meta_desc', 10, 1);
+add_filter('geodir_load_db_language', 'geodir_load_cpt_text_translation');

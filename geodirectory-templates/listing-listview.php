@@ -422,12 +422,16 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
             do_action('geodir_after_listing_post_listview');
 
         else:
-
-            if (isset($_REQUEST['list']) && $_REQUEST['list'] == 'favourite')
-                echo '<li class="no-listing">' . __('No favorite listings found which match your selection.', 'geodirectory') . '</li>';
-            else
-                echo '<li class="no-listing">' . __('No listings found which match your selection.', 'geodirectory') . '</li>';
-
+			$favorite = isset($_REQUEST['list']) && $_REQUEST['list'] == 'favourite' ? true : false;
+            
+			/**
+             * Called inside the `ul` of the listings template, when no listing found.
+             *
+             * @since 1.5.5
+			 * @param string 'listing-listview' Listing listview template.
+			 * @param bool $favorite Are favorite listings results?
+             */
+            do_action('geodir_message_not_found_on_listing', 'listing-listview', $favorite);
         endif;
 
         ?>
