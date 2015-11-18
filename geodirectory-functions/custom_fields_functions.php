@@ -1564,7 +1564,10 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                     <?php if ($is_required) echo '<span>*</span>';?>
                 </label>
                 <input field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>"
-                       value="<?php echo esc_attr(stripslashes($value));?>" type="url" class="geodir_textfield"/>
+                       value="<?php echo esc_attr(stripslashes($value));?>" type="url" class="geodir_textfield"
+                       oninvalid="setCustomValidity('<?php _e('Please enter a valid URL including http://', 'geodirectory'); ?>')"
+                       onchange="try{setCustomValidity('')}catch(e){}"
+                    />
                 <span class="geodir_message_note"><?php _e($admin_desc, 'geodirectory');?></span>
                 <?php if ($is_required) { ?>
                     <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
