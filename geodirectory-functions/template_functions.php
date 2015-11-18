@@ -491,3 +491,19 @@ function geodir_display_message_not_found_on_listing($template_listview = 'listi
 	
 	echo '<li class="no-listing">' . $message . '</li>';
 }
+
+/**
+ * Strips </li><li> tags from Breadcrumb HTML to wrap breadcrumb html.
+ *
+ * Using </li><li> breaks the links to a new line when window size is small(ex: in mobile device).
+ *
+ * @since 1.5.5
+ * @param string $breadcrumb Breadcrumb HTML.
+ * @param string $separator Breadcrumb separator.
+ * @return string Breadcrumb HTML.
+ */
+function geodir_strip_breadcrumb_li_wrappers($breadcrumb, $separator) {
+	$breadcrumb = str_replace(array('</li><li>', '</li> <li>'), '', $breadcrumb);
+	
+	return $breadcrumb;
+}
