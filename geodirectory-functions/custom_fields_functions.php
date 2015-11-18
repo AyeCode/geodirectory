@@ -2212,8 +2212,8 @@ if (!function_exists('geodir_show_listing_info')) {
                     $variables_array['post_id'] = $post->ID;
                     $variables_array['label'] = __($type['site_title'], 'geodirectory');
                     $variables_array['value'] = '';
-                    if (isset($post->$type['htmlvar_name']))
-                        $variables_array['value'] = $post->$type['htmlvar_name'];
+                    if (isset($post->{$type['htmlvar_name']}))
+                        $variables_array['value'] = $post->{$type['htmlvar_name']};
                 endif;
 
                 //if($type['field_icon'])
@@ -2383,7 +2383,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                         $html_var = $type['htmlvar_name'];
 
-                        if ($post->$type['htmlvar_name']):
+                        if ($post->{$type['htmlvar_name']}):
 
                             if (strpos($field_icon, 'http') !== false) {
                                 $field_icon_af = '';
@@ -2402,10 +2402,10 @@ if (!function_exists('geodir_show_listing_info')) {
                                 $field_icon = '';
                             }
 
-                            if (!strstr($post->$type['htmlvar_name'], 'http'))
-                                $website = 'http://' . $post->$type['htmlvar_name'];
+                            if (!strstr($post->{$type['htmlvar_name']}, 'http'))
+                                $website = 'http://' . $post->{$type['htmlvar_name']};
                             else
-                                $website = $post->$type['htmlvar_name'];
+                                $website = $post->{$type['htmlvar_name']};
 
 
                             $geodir_odd_even = '';
@@ -2440,7 +2440,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                         $html_var = $type['htmlvar_name'];
 
-                        if ($post->$type['htmlvar_name']):
+                        if ($post->{$type['htmlvar_name']}):
 
                             if (strpos($field_icon, 'http') !== false) {
                                 $field_icon_af = '';
@@ -2463,7 +2463,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                             $html = '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $type['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-contact" style="' . $field_icon . '">' . $field_icon_af .
                                 $html .= (trim($type['site_title'])) ? __($type['site_title'], 'geodirectory') . ': ' : '&nbsp;';
-                            $html .= '</span><a href="tel:' . stripslashes($post->$type['htmlvar_name']) . '">' . stripslashes($post->$type['htmlvar_name']) . '</a></div>';
+                            $html .= '</span><a href="tel:' . stripslashes($post->{$type['htmlvar_name']}) . '">' . stripslashes($post->{$type['htmlvar_name']}) . '</a></div>';
 
                         endif;
 
@@ -2473,12 +2473,12 @@ if (!function_exists('geodir_show_listing_info')) {
 
                         $html_var = $type['htmlvar_name'];
 
-                        if ($post->$type['htmlvar_name']):
+                        if ($post->{$type['htmlvar_name']}):
 
                             $value = '';
-                            if ($post->$type['htmlvar_name'] != '')
-                                //$value = date('h:i',strtotime($post->$type['htmlvar_name']));
-                                $value = date(get_option('time_format'), strtotime($post->$type['htmlvar_name']));
+                            if ($post->{$type['htmlvar_name']} != '')
+                                //$value = date('h:i',strtotime($post->{$type['htmlvar_name']}));
+                                $value = date(get_option('time_format'), strtotime($post->{$type['htmlvar_name']}));
 
                             if (strpos($field_icon, 'http') !== false) {
                                 $field_icon_af = '';
@@ -2509,7 +2509,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                     case 'datepicker':
 
-                        if ($post->$type['htmlvar_name']):
+                        if ($post->{$type['htmlvar_name']}):
 
                             $date_format = geodir_default_date_format();
                             if ($type['extra_fields'] != '') {
@@ -2522,10 +2522,10 @@ if (!function_exists('geodir_show_listing_info')) {
 
                             $date_format = str_replace($search, $replace, $date_format);
 
-                            $post_htmlvar_value = $date_format == 'd/m/Y' ? str_replace('/', '-', $post->$type['htmlvar_name']) : $post->$type['htmlvar_name']; // PHP doesn't work well with dd/mm/yyyy format
+                            $post_htmlvar_value = $date_format == 'd/m/Y' ? str_replace('/', '-', $post->{$type['htmlvar_name']}) : $post->{$type['htmlvar_name']}; // PHP doesn't work well with dd/mm/yyyy format
 
                             $value = '';
-                            if ($post->$type['htmlvar_name'] != '' && $post->$type['htmlvar_name']!="0000-00-00") {
+                            if ($post->{$type['htmlvar_name']} != '' && $post->{$type['htmlvar_name']}!="0000-00-00") {
                                 $value = date($date_format, strtotime($post_htmlvar_value));
                             }else{
                                 continue;
@@ -2562,7 +2562,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                         $html_var = $type['htmlvar_name'];
 
-                        if (isset($post->$type['htmlvar_name']) && $post->$type['htmlvar_name'] != '' && $type['htmlvar_name'] == 'geodir_timing'):
+                        if (isset($post->{$type['htmlvar_name']}) && $post->{$type['htmlvar_name']} != '' && $type['htmlvar_name'] == 'geodir_timing'):
 
                             if (strpos($field_icon, 'http') !== false) {
                                 $field_icon_af = '';
@@ -2585,9 +2585,9 @@ if (!function_exists('geodir_show_listing_info')) {
 
                             $html = '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $type['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-time" style="' . $field_icon . '">' . $field_icon_af;
                             $html .= (trim($type['site_title'])) ? __($type['site_title'], 'geodirectory') . ': ' : '&nbsp;';
-                            $html .= '</span>' . stripslashes($post->$type['htmlvar_name']) . '</div>';
+                            $html .= '</span>' . stripslashes($post->{$type['htmlvar_name']}) . '</div>';
 
-                        elseif (isset($post->$type['htmlvar_name']) && $post->$type['htmlvar_name']):
+                        elseif (isset($post->{$type['htmlvar_name']}) && $post->{$type['htmlvar_name']}):
 
                             if (strpos($field_icon, 'http') !== false) {
                                 $field_icon_af = '';
@@ -2610,7 +2610,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                             $html = '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $type['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-text" style="' . $field_icon . '">' . $field_icon_af;
                             $html .= (trim($type['site_title'])) ? __($type['site_title'], 'geodirectory') . ': ' : '';
-                            $html .= '</span>' . stripslashes($post->$type['htmlvar_name']) . '</div>';
+                            $html .= '</span>' . stripslashes($post->{$type['htmlvar_name']}) . '</div>';
 
                         endif;
 
@@ -2619,12 +2619,12 @@ if (!function_exists('geodir_show_listing_info')) {
                     case 'radio':
 
                         $html_var = $type['htmlvar_name'];
-                        $html_val = $post->$type['htmlvar_name'];
-                        if ($post->$type['htmlvar_name'] != ''):
+                        $html_val = $post->{$type['htmlvar_name']};
+                        if ($post->{$type['htmlvar_name']} != ''):
 
-                            if ($post->$type['htmlvar_name'] == 'f' || $post->$type['htmlvar_name'] == '0'):
+                            if ($post->{$type['htmlvar_name']} == 'f' || $post->{$type['htmlvar_name']} == '0'):
                                 $html_val = __('No', 'geodirectory');
-                            elseif ($post->$type['htmlvar_name'] == 't' || $post->$type['htmlvar_name'] == '1'):
+                            elseif ($post->{$type['htmlvar_name']} == 't' || $post->{$type['htmlvar_name']} == '1'):
                                 $html_val = __('Yes', 'geodirectory');
                             endif;
 
@@ -2661,7 +2661,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                         if ((int)$post->$html_var == 1):
 
-                            if ($post->$type['htmlvar_name'] == '1'):
+                            if ($post->{$type['htmlvar_name']} == '1'):
                                 $html_val = __('Yes', 'geodirectory');
                             else:
                                 $html_val = __('No', 'geodirectory');
@@ -2697,7 +2697,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                         $html_var = $type['htmlvar_name'];
 
-                        if ($post->$type['htmlvar_name']):
+                        if ($post->{$type['htmlvar_name']}):
 
                             if (strpos($field_icon, 'http') !== false) {
                                 $field_icon_af = '';
@@ -2720,7 +2720,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                             $html = '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $type['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-select" style="' . $field_icon . '">' . $field_icon_af;
                             $html .= (trim($type['site_title'])) ? __($type['site_title'], 'geodirectory') . ': ' : '';
-                            $html .= '</span>' . stripslashes($post->$type['htmlvar_name']) . '</div>';
+                            $html .= '</span>' . stripslashes($post->{$type['htmlvar_name']}) . '</div>';
                         endif;
 
                         break;
@@ -2730,10 +2730,10 @@ if (!function_exists('geodir_show_listing_info')) {
 
                         $html_var = $type['htmlvar_name'];
 
-                        if (!empty($post->$type['htmlvar_name'])):
+                        if (!empty($post->{$type['htmlvar_name']})):
 
-                            if (is_array($post->$type['htmlvar_name'])) {
-                                $post->$type['htmlvar_name'] = implode(', ', $post->$type['htmlvar_name']);
+                            if (is_array($post->{$type['htmlvar_name']})) {
+                                $post->{$type['htmlvar_name']} = implode(', ', $post->{$type['htmlvar_name']});
                             }
 
                             if (strpos($field_icon, 'http') !== false) {
@@ -2746,7 +2746,7 @@ if (!function_exists('geodir_show_listing_info')) {
                             }
 
 
-                            $option_values = explode(',', $post->$type['htmlvar_name']);
+                            $option_values = explode(',', $post->{$type['htmlvar_name']});
 
                             if ($type['option_values']) {
 
@@ -2760,7 +2760,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                                         $val = explode('/', $data);
 
-                                        if (isset($val[1]) && in_array($val[1], explode(',', $post->$type['htmlvar_name'])))
+                                        if (isset($val[1]) && in_array($val[1], explode(',', $post->{$type['htmlvar_name']})))
                                             $option_values[] = $val[0];
 
                                     }
@@ -2796,7 +2796,7 @@ if (!function_exists('geodir_show_listing_info')) {
                                 $html .= '</ul>';
 
                             } else {
-                                $html .= stripslashes(trim($post->$type['htmlvar_name'], ','));
+                                $html .= stripslashes(trim($post->{$type['htmlvar_name']}, ','));
                             }
 
                             $html .= '</div>';
@@ -2812,7 +2812,7 @@ if (!function_exists('geodir_show_listing_info')) {
 							continue; // Remove Send Enquiry | Send To Friend from listings page
 						}
                        
-					    if ($type['htmlvar_name'] == 'geodir_email' && ((isset($package_info->sendtofriend) && $package_info->sendtofriend) || $post->$type['htmlvar_name'])) {
+					    if ($type['htmlvar_name'] == 'geodir_email' && ((isset($package_info->sendtofriend) && $package_info->sendtofriend) || $post->{$type['htmlvar_name']})) {
 						    $b_send_inquiry = '';
                             $b_sendtofriend = '';
 
@@ -2844,7 +2844,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                             $html .= '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $type['htmlvar_name'] . '"><span class="geodir-i-email" style="' . $field_icon . '">' . $field_icon_af;
                             $seperator = '';
-                            if ($post->$type['htmlvar_name']) {
+                            if ($post->{$type['htmlvar_name']}) {
                                 $html .= '<a href="javascript:void(0);" class="' . $b_send_inquiry . '" >' . SEND_INQUIRY . '</a>';
                                 $seperator = ' | ';
                             }
@@ -2867,7 +2867,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                         } else {
 
-                            if ($post->$type['htmlvar_name']) {
+                            if ($post->{$type['htmlvar_name']}) {
                                 if (strpos($field_icon, 'http') !== false) {
                                     $field_icon_af = '';
                                 } elseif ($field_icon == '') {
@@ -2890,7 +2890,7 @@ if (!function_exists('geodir_show_listing_info')) {
                                 $html = '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $type['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-email" style="' . $field_icon . '">' . $field_icon_af;
                                 $html .= (trim($type['site_title'])) ? __($type['site_title'], 'geodirectory') . ': ' : '';
                                 $html .= '</span><span class="geodir-email-address-output">';
-                                $email = stripslashes($post->$type['htmlvar_name']) ;
+                                $email = stripslashes($post->{$type['htmlvar_name']}) ;
                                 if($e_split = explode('@',$email)){
                                     /**
                                      * Filter email custom field name output.
@@ -2916,9 +2916,9 @@ if (!function_exists('geodir_show_listing_info')) {
                     case 'file':
                         $html_var = $type['htmlvar_name'];
 
-                        if (!empty($post->$type['htmlvar_name'])):
+                        if (!empty($post->{$type['htmlvar_name']})):
 
-                            $files = explode(",", $post->$type['htmlvar_name']);
+                            $files = explode(",", $post->{$type['htmlvar_name']});
                             if (!empty($files)):
 
                                $extra_fields = !empty($type['extra_fields']) ? maybe_unserialize($type['extra_fields']) : NULL;
@@ -2999,7 +2999,7 @@ if (!function_exists('geodir_show_listing_info')) {
                     case 'textarea':
                         $html_var = $type['htmlvar_name'];
 
-                        if (!empty($post->$type['htmlvar_name'])) {
+                        if (!empty($post->{$type['htmlvar_name']})) {
 
                             if (strpos($field_icon, 'http') !== false) {
                                 $field_icon_af = '';
@@ -3022,13 +3022,13 @@ if (!function_exists('geodir_show_listing_info')) {
 
                             $html = '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $type['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-text" style="' . $field_icon . '">' . $field_icon_af;
                             $html .= (trim($type['site_title'])) ? __($type['site_title'], 'geodirectory') . ': ' : '';
-                            $html .= '</span>' . wpautop(stripslashes($post->$type['htmlvar_name'])) . '</div>';
+                            $html .= '</span>' . wpautop(stripslashes($post->{$type['htmlvar_name']})) . '</div>';
 
                         }
                         break;
 
                     case 'html':
-                        if (!empty($post->$type['htmlvar_name'])) {
+                        if (!empty($post->{$type['htmlvar_name']})) {
 
                             if (strpos($field_icon, 'http') !== false) {
                                 $field_icon_af = '';
@@ -3051,7 +3051,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                             $html = '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $type['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-text" style="' . $field_icon . '">' . $field_icon_af;
                             $html .= (trim($type['site_title'])) ? __($type['site_title'], 'geodirectory') . ': ' : '';
-                            $html .= '</span>' . wpautop(stripslashes($post->$type['htmlvar_name'])) . '</div>';
+                            $html .= '</span>' . wpautop(stripslashes($post->{$type['htmlvar_name']})) . '</div>';
 
                         }
                         break;
