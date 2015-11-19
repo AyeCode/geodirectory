@@ -13,9 +13,13 @@
 global $wp_query, $current_term, $query;
 
 $curr_post_type = geodir_get_current_posttype();
-remove_filter( 'home_url', 'geodir_location_geo_home_link',100000);
+if (function_exists('geodir_location_geo_home_link')) {
+    remove_filter('home_url', 'geodir_location_geo_home_link', 100000);
+}
 $search_url = trailingslashit(get_home_url());
-add_filter( 'home_url', 'geodir_location_geo_home_link',100000,2 );
+if (function_exists('geodir_location_geo_home_link')) {
+    add_filter('home_url', 'geodir_location_geo_home_link', 100000, 2);
+}
 ?>
 
 

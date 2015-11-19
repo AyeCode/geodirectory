@@ -5,6 +5,7 @@ Filter `geodir_filter_title_variables_location_arr` added to filter the location
 GD category page CPT slug does not change when switching language with WPML - FIXED
 Search form url not keeping the language in the url with WPML - FIXED
 Homepage page_id query var not set and can cause problems with Yoast SEO - FIXED
+Some changes for PHP7 - CHANGED
 All CPT text are translatable using db translation - FIXED
 New actions added to customize listing not found message - CHANGED
 Advance search submit button fixed - FIXED
