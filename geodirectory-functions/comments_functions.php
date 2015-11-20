@@ -99,8 +99,9 @@ function geodir_comment_rating_fields()
     $post_types = geodir_get_posttypes();
 
     if (in_array($post->post_type, $post_types)) {
+        $gd_rating_html = apply_filters('gd_rating_form_html', '<div class="gd_rating" data-average="0" data-id="5"></div>');
+        echo $gd_rating_html;
         ?>
-        <div class="gd_rating" data-average="0" data-id="5"></div>
         <input type="hidden" id="geodir_overallrating" name="geodir_overallrating" value="0"/><?php
     }
 }
@@ -912,7 +913,7 @@ function geodir_get_rating_stars($rating, $post_id, $small = false)
 			$r_html = '<div class="geodir-rating" style="' . $attach_style . '"><div class="gd_rating_show" data-average="' . $rating . '" data-id="' . $post_id . '"><div class="geodir_RatingAverage" style="width: ' . $a_rating . '%;"></div><div class="geodir_Star">' . $rating_img . $rating_img . $rating_img . $rating_img . $rating_img . '</div></div></div>';
 		}
     }
-    return $r_html;
+    return apply_filters('geodir_get_rating_stars_html', $r_html, $rating);
 }
 
 /**
