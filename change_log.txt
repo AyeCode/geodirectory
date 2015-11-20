@@ -14,6 +14,7 @@ Shortcode added for CPT categories widget - ADDED
 Breadcrumb HTML does not wrap correctly for a small screens or in a mobile - FIXED
 Added geodir_review_form_args, gd_rating_form_html, geodir_get_rating_stars_html filters - ADDED
 Post type archive link not working when "add city slug in listing urls" for location - FIXED
+Tested with WP 4.4 - NOTICE
 
 v1.5.4
 Event after map marker opened extended to prevent FireFox reclosing marker with server side clustering addon - FIXED
