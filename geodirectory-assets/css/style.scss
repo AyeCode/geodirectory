@@ -1656,6 +1656,21 @@ div#jquery-lightbox {
 .gd-cptcat-ul.gd-cptcat-parent.gd-cpt-flat {
   float: left;
   width: 20%;
+  min-width: 170px;
+}
+
+.gd-cptcat-ul.gd-cptcat-parent.gd-cpt-flat li a
+{
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  min-width: 170px;
+  display: block;
+}
+
+.gd-cptcat-ul.gd-cptcat-parent.gd-cpt-flat li ul li a
+{
+  min-width: 155px;
 }
 
 #lightbox-container-image #lightbox-image {
