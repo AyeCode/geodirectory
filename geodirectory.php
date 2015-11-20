@@ -14,7 +14,7 @@ Version: 1.5.4
 Author: GeoDirectory
 Author URI: http://wpgeodirectory.com
 Requires at least: 3.1
-Tested up to: 4.3
+Tested up to: 4.4
 */
 
 /**

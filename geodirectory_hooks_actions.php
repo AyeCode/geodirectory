@@ -3227,38 +3227,4 @@ function geodir_wp_head_no_rating()
 
 add_filter('geodir_load_db_language', 'geodir_load_custom_field_translation');
 
-/**
- * Meta description for search page.
- *
- * @since 1.0.0
- * @package GeoDirectory
- */
-function geodir_search_meta_desc($html) {
-    if (is_search() && isset($_REQUEST['geodir_search'])) {
-        $all_postypes = geodir_get_posttypes();
-        $keyword = esc_sql(strip_tags(get_query_var('s')));
-        $stype = esc_sql(strip_tags(esc_attr($_REQUEST['stype'])));
-        $snear = (isset($_REQUEST['snear'])) ? esc_sql(strip_tags(esc_attr($_REQUEST['snear']))) : '';
-
-        if ($stype && in_array($stype, $all_postypes)) {
-            $desc = __('Search results for', 'geodirectory');
-
-            if(!empty($keyword)) {
-                $desc = $desc . ' ' . $keyword;
-            }
-
-            if(!empty($stype)) {
-                $posttype_obj = get_post_type_object( $stype );
-                $desc = $desc . ' ' . __('in', 'geodirectory') . ' ' . $posttype_obj->labels->name;
-            }
-
-            if(!empty($snear)) {
-                $desc = $desc . ' ' . __('near', 'geodirectory') . ' ' . $snear;
-            }
-            $html = '<meta name="description" content="' . $desc . '" />';
-        }
-    }
-    return $html;
-}
-add_filter('geodir_seo_meta_description', 'geodir_search_meta_desc', 10, 1);
 add_filter('geodir_load_db_language', 'geodir_load_cpt_text_translation');
