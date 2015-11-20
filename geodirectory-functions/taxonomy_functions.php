@@ -1633,9 +1633,7 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
  * @param string $taxonomy The taxonomy name.
  * @return string The term link.
  */
-function geodir_term_link($termlink, $term, $taxonomy)
-{
-    //echo '###'.$termlink;
+function geodir_term_link($termlink, $term, $taxonomy) {
     $geodir_taxonomies = geodir_get_taxonomies('', true);
 
     if (isset($taxonomy) && !empty($geodir_taxonomies) && in_array($taxonomy, $geodir_taxonomies)) {
@@ -1644,71 +1642,43 @@ function geodir_term_link($termlink, $term, $taxonomy)
         $request_term = array();
 
         $listing_slug = geodir_get_listing_slug($taxonomy);
-        //echo $listing_slug ;
 
         if ($geodir_add_location_url != NULL && $geodir_add_location_url != '') {
             if ($geodir_add_location_url && get_option('geodir_add_location_url')) {
                 $include_location = true;
             }
-
         } elseif (get_option('geodir_add_location_url') && isset($_SESSION['gd_multi_location']) && $_SESSION['gd_multi_location'] == 1)
             $include_location = true;
 
         if ($include_location) {
-
-
             global $post;
-            if(geodir_is_page('detail') && isset($post->country_slug)){
+            
+			if(geodir_is_page('detail') && isset($post->country_slug)){
                 $location_terms = array(
                     'gd_country' => $post->country_slug,
                     'gd_region' => $post->region_slug,
                     'gd_city' => $post->city_slug
                 );
-            }else{
+            } else {
                 $location_terms = geodir_get_current_location_terms('query_vars');
             }
 
-
             $geodir_show_location_url = get_option('geodir_show_location_url');
-            $location_manager = defined('POST_LOCATION_TABLE') ? true : false;
-
-
-            if ($location_manager) {
-                $hide_country_part = get_option('geodir_location_hide_country_part');
-                $hide_region_part = get_option('geodir_location_hide_region_part');
-
-                if ($hide_region_part && $hide_country_part) {
-                    unset($location_terms['gd_country']);
-                    unset($location_terms['gd_region']);
-                } else if ($hide_region_part && !$hide_country_part) {
-                    unset($location_terms['gd_region']);
-                } else if (!$hide_region_part && $hide_country_part) {
-                    unset($location_terms['gd_country']);
-                }
-            }
-
-
-
-            //unset($request_term['gd_country']);
+            $location_terms = geodir_remove_location_terms($location_terms);
 
             if (!empty($location_terms)) {
 
                 $url_separator = '';//get_option('geodir_listingurl_separator');
 
                 if (get_option('permalink_structure') != '') {
-
                     $old_listing_slug = '/' . $listing_slug . '/';
-
                     $request_term = implode("/", $location_terms);
-                    //$new_listing_slug = '/'.$listing_slug.'/'.rtrim($request_term,'/').'/'.$url_separator.'/';
                     $new_listing_slug = '/' . $listing_slug . '/' . $request_term . '/';
 
                     $termlink = substr_replace($termlink, $new_listing_slug, strpos($termlink, $old_listing_slug), strlen($old_listing_slug));
-
                 } else {
                     $termlink = geodir_getlink($termlink, $request_term);
                 }
-
             }
         }
 
@@ -1719,8 +1689,6 @@ function geodir_term_link($termlink, $term, $taxonomy)
             $post_type = str_replace("category","",$taxonomy);
             $termlink = $sitepress->post_type_archive_link_filter( $termlink, $post_type);
         }*/
-
-
 
         // Alter the CPT slug if WPML is set to do so
         if(function_exists('icl_object_id')){
@@ -1753,57 +1721,57 @@ function geodir_term_link($termlink, $term, $taxonomy)
         }
 
     }
-    //echo '###2'.$termlink;
-
-
-
-
-
-
-
+	
     return $termlink;
 }
-
 
 /**
  * Returns the post type link with parameters.
  *
  * @since 1.0.0
+ * @since 1.5.5 Fixed post type archive link for selected location.
  * @package GeoDirectory
+ *
+ * @global bool $geodir_add_location_url If true it will add location name in url.
+ * @global object $post WordPress Post object.
+ *
  * @param string $link The post link.
  * @param string $post_type The post type.
  * @return string The modified link.
  */
-function geodir_posttype_link($link, $post_type)
-{
-    global $geodir_add_location_url;
-    $location_terms = array();
-    if (in_array($post_type, geodir_get_posttypes())) {
-
-        if (get_option('geodir_add_location_url') && isset($_SESSION['gd_multi_location']) && $_SESSION['gd_multi_location'] == 1) {
-            $location_terms = geodir_get_current_location_terms('query_vars');
-
-            //unset($location_terms['gd_country']);
-            //print_r($location_terms);
-            if (!empty($location_terms)) {
-
-                if (get_option('permalink_structure') != '') {
-
-                    $location_terms = implode("/", $location_terms);
-                    $location_terms = rtrim($location_terms, '/');
-                    return $link . urldecode($location_terms) . '/';
-                } else {
-                    return geodir_getlink($link, $location_terms);
-                }
-
+function geodir_posttype_link($link, $post_type) {
+	global $geodir_add_location_url, $post;
+	
+	$location_terms = array();
+	
+	if (in_array($post_type, geodir_get_posttypes())) {
+		if (get_option('geodir_add_location_url') && isset($_SESSION['gd_multi_location']) && $_SESSION['gd_multi_location'] == 1) {
+			if(geodir_is_page('detail') && !empty($post) && isset($post->country_slug)) {
+                $location_terms = array(
+                    'gd_country' => $post->country_slug,
+                    'gd_region' => $post->region_slug,
+                    'gd_city' => $post->city_slug
+                );
+            } else {
+                $location_terms = geodir_get_current_location_terms('query_vars');
             }
-
-        }
-
-    }
-
-    return $link;
-
+			
+			$location_terms = geodir_remove_location_terms($location_terms);
+			
+			if (!empty($location_terms)) {
+				if (get_option('permalink_structure') != '') {
+					$location_terms = implode("/", $location_terms);
+					$location_terms = rtrim($location_terms, '/');
+					
+					$link .= urldecode($location_terms) . '/';
+				} else {
+					$link = geodir_getlink($link, $location_terms);
+				}
+			}
+		}
+	}
+	
+	return $link;
 }
 
 /**
