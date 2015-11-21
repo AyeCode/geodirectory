@@ -231,7 +231,7 @@ if (!function_exists('geodir_save_listing')) {
                 //geodir_sendEmail('','',$current_user->user_email,$current_user->display_name,'','',$request_info,'post_submit',$last_post_id,$current_user->ID);
             }
         }
-		
+
 		if ($wp_error && is_wp_error($last_post_id)) {
 			return $last_post_id; // Return WP_Error on save failure.
 		}
@@ -371,7 +371,7 @@ if (!function_exists('geodir_save_listing')) {
                 }
             } elseif (trim($type) == 'datepicker') {
                 $datetime = '';
-                if ($request_info[$name] != '') {
+                if (isset($request_info[$name]) && $request_info[$name] != '') {
                     $date_format = geodir_default_date_format();
                     if (isset($val['extra_fields']) && $val['extra_fields'] != '') {
                         $extra_fields = unserialize($val['extra_fields']);
@@ -464,8 +464,10 @@ if (!function_exists('geodir_save_listing')) {
                 $tmpimgArr = trim($request_info['post_images'], ",");
                 $tmpimgArr = explode(",", $tmpimgArr);
                 geodir_save_post_images($last_post_id, $tmpimgArr, $dummy);
-            } else
+            } else{
                 geodir_save_post_images($last_post_id, $request_info['post_images'], $dummy);
+            }
+
 
         } elseif (!isset($request_info['post_images']) || $request_info['post_images'] == '') {
 
@@ -489,6 +491,7 @@ if (!function_exists('geodir_save_listing')) {
 
         geodir_remove_temp_images();
         geodir_set_wp_featured_image($last_post_id);
+
         /**
          * Called after a listing is saved to the database and before any email have been sent.
          *
@@ -874,6 +877,7 @@ if (!function_exists('geodir_save_post_images')) {
     function geodir_save_post_images($post_id = 0, $post_image = array(), $dummy = false)
     {
 
+
         global $wpdb, $plugin_prefix, $current_user;
 
         $post_type = get_post_type($post_id);
@@ -980,9 +984,11 @@ if (!function_exists('geodir_save_post_images')) {
                             $uploaded_file = array();
                             $uploaded = (array)fetch_remote_file($curr_img_url);
 
-                            if (empty($uploaded['error'])) {
+                            if (isset($uploaded['error']) && empty($uploaded['error'])) {
                                 $new_name = basename($uploaded['file']);
                                 $uploaded_file = $uploaded;
+                            }else{
+                                print_r($uploaded);exit;
                             }
                             $external_img = false;
                         } else {

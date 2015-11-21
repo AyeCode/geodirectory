@@ -4160,3 +4160,36 @@ function geodir_load_cpt_text_translation($translation_texts = array()) {
 	
 	return $translation_texts;
 }
+
+/**
+ * Remove the location terms to hide term from location url.
+ *
+ * @since 1.5.5
+ * @package GeoDirectory
+ *
+ * @param  array $location_terms Array of location terms.
+ * @return array Location terms.
+ */
+function geodir_remove_location_terms($location_terms = array()) {	
+	$location_manager = defined('POST_LOCATION_TABLE') ? true : false;
+	
+	if (!empty($location_terms) && $location_manager) {
+		$hide_country_part = get_option('geodir_location_hide_country_part');
+		$hide_region_part = get_option('geodir_location_hide_region_part');
+
+		if ($hide_region_part && $hide_country_part) {
+			if (isset($location_terms['gd_country']))
+				unset($location_terms['gd_country']);
+			if (isset($location_terms['gd_region']))
+				unset($location_terms['gd_region']);
+		} else if ($hide_region_part && !$hide_country_part) {
+			if (isset($location_terms['gd_region']))
+				unset($location_terms['gd_region']);
+		} else if (!$hide_region_part && $hide_country_part) {
+			if (isset($location_terms['gd_country']))
+				unset($location_terms['gd_country']);
+		}
+	}
+	
+	return $location_terms;
+}

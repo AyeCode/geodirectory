@@ -2660,7 +2660,6 @@ if (!function_exists('geodir_show_listing_info')) {
                     case 'checkbox':
 
                         $html_var = $type['htmlvar_name'];
-                        $html_val = $type['htmlvar_name'];
 
                         if ((int)$post->$html_var == 1):
 

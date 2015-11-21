@@ -147,7 +147,17 @@ echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
                  *
                  * @since 1.0.0
                  */
-                do_action('geodir_before_search_button'); ?>
+                do_action('geodir_before_search_button');
+
+                /**
+                 * Filter the default search button text value for the search form.
+                 *
+                 * This text can be changed via an option in settings, this is a last resort.
+                 *
+                 * @since 1.5.5
+                 * @param string $default_search_button_label The current search button text.
+                 */
+                $default_search_button_label = apply_filters('geodir_search_default_search_button_text', $default_search_button_label);?>
 				<input type="button" value="<?php esc_attr_e($default_search_button_label); ?>" class="geodir_submit_search" />
                 <?php
                 /**
