@@ -10,7 +10,7 @@
 Plugin Name: GeoDirectory
 Plugin URI: http://wpgeodirectory.com/
 Description: GeoDirectory plugin for wordpress.
-Version: 1.5.4
+Version: 1.5.5
 Author: GeoDirectory
 Author URI: http://wpgeodirectory.com
 Requires at least: 3.1
@@ -26,7 +26,7 @@ Tested up to: 4.4
  * @global array $geodir_addon_list List of active GeoDirectory extensions.
  * @global string $plugin_file_name Base file name. 'geodirectory/geodirectory.php'.
  */
-define("GEODIRECTORY_VERSION", "1.5.4");
+define("GEODIRECTORY_VERSION", "1.5.5");
 
 if (!session_id()) session_start();
 
@@ -102,6 +102,7 @@ if ($_SERVER['REQUEST_URI'] == '' || $_SERVER['REQUEST_URI'] == '/') {
      * This tries to disable cache on homepage as it can be very dynamic.
      */
     define('DONOTCACHEPAGE', TRUE);
+    $_SERVER['DONOTCACHEPAGE']= TRUE;
 }
 
 

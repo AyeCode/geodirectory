@@ -489,10 +489,12 @@ if (!function_exists('geodir_autoinstall_admin_header') && get_option('geodir_in
                 var latlng = new google.maps.LatLng(lat, lng);
                 geocoder.geocode({'address': CITY_ADDRESS},
                     function (results, status) {
+
                         if (status == google.maps.GeocoderStatus.OK) {
                             // Bounds for North America
                             //	 alert((results[0].geometry.bounds==null))
                             if (results[0].geometry.bounds == null) {
+
                                 bound_lat_lng1 = String(results[0].geometry.viewport.getSouthWest());
                                 bound_lat_lng1 = bound_lat_lng1.replace(/[()]/g, "");
 
@@ -508,6 +510,8 @@ if (!function_exists('geodir_autoinstall_admin_header') && get_option('geodir_in
 
                                 bound_lat_lng = bound_lat_lng.split(',');
                             }
+
+                            bound_lat_lng = bound_lat_lng.map(function(x){return x.replace(" ", '');});// remove spaces from lat/lon
 
                             strictBounds = new google.maps.LatLngBounds(
                                 new google.maps.LatLng(bound_lat_lng[0], bound_lat_lng[1]),
