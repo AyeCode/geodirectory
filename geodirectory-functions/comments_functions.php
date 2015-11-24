@@ -384,7 +384,7 @@ function geodir_wrap_comment_text($content, $comment = '')
     if (!empty($comment))
         $rating = geodir_get_commentoverall($comment->comment_ID);
     if ($rating != 0 && !is_admin()) {
-        return '<div>' . __('Overall Rating', 'geodirectory') . ': <div class="rating">' . $rating . '</div>' . geodir_get_rating_stars($rating, $comment->comment_ID) . '</div><div class="description">' . $content . '</div>';
+        return '<div><div class="gd-rating-text">' . __('Overall Rating', 'geodirectory') . ': <div class="rating">' . $rating . '</div></div>' . geodir_get_rating_stars($rating, $comment->comment_ID) . '</div><div class="description">' . $content . '</div>';
     } else
         return $content;
 
