@@ -15,6 +15,7 @@ Breadcrumb HTML does not wrap correctly for a small screens or in a mobile - FIX
 Added geodir_review_form_args, gd_rating_form_html, geodir_get_rating_stars_html filters - ADDED
 Post type archive link not working when "add city slug in listing urls" for location - FIXED
 Tested with WP 4.4 - NOTICE
+Blog archive page shows home page content even selected as a posts page - FIXED
 
 v1.5.4
 Event after map marker opened extended to prevent FireFox reclosing marker with server side clustering addon - FIXED
