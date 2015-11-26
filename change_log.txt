@@ -1,3 +1,6 @@
+v1.5.6
+In add listing form sub-categories are no longer showing in hierarchy for checkbox display type - FIXED
+
 v1.5.5
 Added charset parameter to case conversion functions - ADDED
 Avada compat CSS updated to adjust search button position - FIXED
