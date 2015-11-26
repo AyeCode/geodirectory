@@ -71,7 +71,7 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                     <article class="geodir-category-listing <?php if ($post_view_article_class) {
                         echo $post_view_article_class;
                     } ?>">
-                        <div class="geodir-post-img">
+                        <div class="geodir-post-img <?php echo apply_filters('geodir_listing_listview_thumb_extra_class', '', 'widget'); ?>">
                             <?php if ($fimage = geodir_show_featured_image($post->ID, 'list-thumb', true, false, $post->featured_image)) { ?>
                                 <a href="<?php the_permalink(); ?>"><?php echo $fimage; ?></a>
                                 <?php
@@ -91,7 +91,7 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                             }
                             ?>
                         </div>
-                        <div class="geodir-content">
+                        <div class="geodir-content <?php echo apply_filters('geodir_listing_listview_content_extra_class', '', 'widget'); ?>">
                             <?php
                             /** This action is documented in geodirectory-templates/listing-listview.php */
                             do_action('geodir_before_listing_post_title', 'listview', $post); ?>
@@ -184,8 +184,8 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                          * @param string $view The view type, default 'widget'.
                          */
                         do_action( 'geodir_after_listing_content', $post, 'widget' ); ?>
-                        <footer class="geodir-entry-meta">
-                            <div class="geodir-addinfo clearfix">
+                        <footer class="geodir-entry-meta <?php echo apply_filters('geodir_listing_listview_meta_extra_class', '', 'widget'); ?>">
+                            <div class="geodir-addinfo clearfix <?php echo apply_filters('geodir_listing_listview_addinfo_extra_class', '', 'widget'); ?>">
                                 <?php
                                 /**
                                  * Called before printing review stars html.
