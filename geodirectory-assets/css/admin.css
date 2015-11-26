@@ -654,3 +654,7 @@ div.update-nag{width: 95%;}
     }
 
 }
+
+.gd-cats-display-checkbox .gd-sub-cats-list {
+	padding-left: 1.2em;
+}
