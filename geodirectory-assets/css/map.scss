@@ -140,6 +140,12 @@
     overflow-y: auto;
     margin-top: -6px;
   height: calc(50% - 11px);
+  box-sizing: border-box;
+}
+
+.geodir-bubble_desc div,
+.geodir-bubble_desc h4{
+  box-sizing: border-box;
 }
 
 .geodir-bubble-meta-side::-webkit-scrollbar
