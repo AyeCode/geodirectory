@@ -1,3 +1,7 @@
+v1.5.6
+In add listing form sub-categories are no longer showing in hierarchy for checkbox display type - FIXED
+Tick parent category should not tick sub-categories but untick parent category should untick sub-categories - CHANGED
+
 v1.5.5
 Added charset parameter to case conversion functions - ADDED
 Avada compat CSS updated to adjust search button position - FIXED
@@ -15,6 +19,7 @@ Breadcrumb HTML does not wrap correctly for a small screens or in a mobile - FIX
 Added geodir_review_form_args, gd_rating_form_html, geodir_get_rating_stars_html filters - ADDED
 Post type archive link not working when "add city slug in listing urls" for location - FIXED
 Tested with WP 4.4 - NOTICE
+Blog archive page shows home page content even selected as a posts page - FIXED
 
 v1.5.4
 Event after map marker opened extended to prevent FireFox reclosing marker with server side clustering addon - FIXED

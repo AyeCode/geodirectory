@@ -290,7 +290,7 @@ function geodir_is_page($gdpage = '')
             break;
         case 'home':
 
-            if (is_page() && get_query_var('page_id') == geodir_home_page_id() || is_page_geodir_home())
+            if ((is_page() && get_query_var('page_id') == geodir_home_page_id()) || is_page_geodir_home())
                 return true;
 
             break;
@@ -2138,7 +2138,7 @@ function is_page_geodir_home()
     $home_url = str_replace("www.", "", $home_url);
     if ( (strpos($home_url, $cur_url) !== false || strpos($home_url . '/', $cur_url) !== false) && ('page' == get_option('show_on_front') && get_option('page_on_front') && get_option('page_on_front')==get_option('geodir_home_page')) ) {
         return true;
-    }elseif(is_home() && 'page' == get_option('show_on_front') && get_option('page_on_front') && get_option('page_on_front')==get_option('geodir_home_page')){
+    }elseif(get_query_var('page_id') == get_option('page_on_front') && 'page' == get_option('show_on_front') && get_option('page_on_front') && get_option('page_on_front')==get_option('geodir_home_page')){
         return true;
     } else {
         return false;
