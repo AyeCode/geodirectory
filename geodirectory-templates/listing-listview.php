@@ -97,7 +97,7 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                     <article class="geodir-category-listing <?php if ($post_view_article_class) {
                         echo $post_view_article_class;
                     } ?>">
-                        <div class="geodir-post-img">
+                        <div class="geodir-post-img <?php echo apply_filters('geodir_listing_listview_thumb_extra_class', '', 'listing'); ?>">
                             <?php if ($fimage = geodir_show_featured_image($post->ID, 'list-thumb', true, false, $post->featured_image)) { ?>
 
                                 <a href="<?php the_permalink(); ?>">
@@ -141,7 +141,7 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
 
                         </div>
 
-                        <div class="geodir-content">
+                        <div class="geodir-content <?php echo apply_filters('geodir_listing_listview_content_extra_class', '', 'listing'); ?>">
 
                             <?php
                             /**
@@ -264,8 +264,8 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                          * @param string $view The view type, default 'listing'.
                          */
                         do_action( 'geodir_after_listing_content', $post, 'listing' ); ?>
-                        <footer class="geodir-entry-meta">
-                            <div class="geodir-addinfo clearfix">
+                        <footer class="geodir-entry-meta <?php echo apply_filters('geodir_listing_listview_meta_extra_class', '', 'listing'); ?>">
+                            <div class="geodir-addinfo clearfix <?php echo apply_filters('geodir_listing_listview_addinfo_extra_class', '', 'listing'); ?>">
 
                                 <?php
                                 /**
@@ -334,7 +334,9 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                                     <span class="geodir-pinpoint"
                                           style=" background:url('<?php if (isset($marker_icon)) {
                                               echo $marker_icon;
-                                          } ?>') no-repeat scroll left top transparent; background-size:auto 100%; -webkit-background-size:auto 100%; -moz-background-size:auto 100%; height:9px; width:14px; "></span>
+                                          } ?>') no-repeat scroll left top transparent; background-size:auto 100%; -webkit-background-size:auto 100%; -moz-background-size:auto 100%; height:9px; width:14px; ">
+                                        <?php echo apply_filters('geodir_listing_listview_pinpoint_inner_content', '', 'listing'); ?>
+                                    </span>
                                     <a class="geodir-pinpoint-link" href="javascript:void(0)"
                                        onclick="openMarker('listing_map_canvas' ,'<?php echo $post->ID; ?>')"
                                        onmouseover="animate_marker('listing_map_canvas' ,'<?php echo $post->ID; ?>')"
