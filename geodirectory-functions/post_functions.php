@@ -2381,6 +2381,16 @@ if (!function_exists('geodir_favourite_html')) {
          */
         $favourite_icon = apply_filters('geodir_favourite_icon', 'fa fa-heart');
 
+        /**
+         * Filter to modify "fa fa-heart" icon for "remove from favorites" link
+         *
+         * You can use this filter to change "fa fa-heart" icon to something else.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         */
+        $unfavourite_icon = apply_filters('geodir_unfavourite_icon', 'fa fa-heart');
+
         $user_meta_data = '';
         if (isset($current_user->data->ID))
             $user_meta_data = get_user_meta($current_user->data->ID, 'gd_user_favourite_post', true);
@@ -2389,7 +2399,7 @@ if (!function_exists('geodir_favourite_html')) {
             ?><span class="geodir-addtofav favorite_property_<?php echo $post_id;?>"  ><a
                 class="geodir-removetofav-icon" href="javascript:void(0);"
                 onclick="javascript:addToFavourite(<?php echo $post_id;?>,'remove');"
-                title="<?php echo $remove_favourite_text;?>"><i class="<?php echo $favourite_icon; ?>"></i> <?php echo $unfavourite_text;?>
+                title="<?php echo $remove_favourite_text;?>"><i class="<?php echo $unfavourite_icon; ?>"></i> <?php echo $unfavourite_text;?>
             </a>   </span><?php
 
         } else {
