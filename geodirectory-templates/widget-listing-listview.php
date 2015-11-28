@@ -36,7 +36,7 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
     }
 }
 ?>
-    <ul class="geodir_category_list_view clearfix">
+    <ul class="geodir_category_list_view clearfix <?php echo apply_filters('geodir_listing_listview_ul_extra_class', '', 'widget'); ?>">
         <?php
         if (!empty($widget_listings)) {
 
