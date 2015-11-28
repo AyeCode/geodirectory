@@ -336,7 +336,7 @@ function geodir_is_page($gdpage = '')
 function geodir_set_is_geodir_page($wp)
 {
     if (!is_admin()) {
-        //$wp->query_vars['gd_is_geodir_page'] = false;	
+        //$wp->query_vars['gd_is_geodir_page'] = false;
         //print_r()
         if (empty($wp->query_vars) || !array_diff(array_keys($wp->query_vars), array('preview', 'page', 'paged', 'cpage'))) {
             if (get_option('geodir_set_as_home'))
@@ -2134,7 +2134,13 @@ function is_page_geodir_home()
 {
     global $wpdb;
     $cur_url = str_replace(array("https://", "http://", "www."), array('', '', ''), geodir_curPageURL());
+    if (function_exists('geodir_location_geo_home_link')) {
+        remove_filter('home_url', 'geodir_location_geo_home_link', 100000);
+    }
     $home_url = home_url('', 'http');
+    if (function_exists('geodir_location_geo_home_link')) {
+        add_filter('home_url', 'geodir_location_geo_home_link', 100000, 2);
+    }
     $home_url = str_replace("www.", "", $home_url);
     if ( (strpos($home_url, $cur_url) !== false || strpos($home_url . '/', $cur_url) !== false) && ('page' == get_option('show_on_front') && get_option('page_on_front') && get_option('page_on_front')==get_option('geodir_home_page')) ) {
         return true;
