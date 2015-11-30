@@ -689,6 +689,12 @@ div.geodir_map_container.geodir-map-iphone .map_background .triggermap {
     background-color: #ebebeb !important
 }
 
+
+.body_fullscreen .geodir_map_container,
+.body_fullscreen .geodir_popular_post_view,
+.body_fullscreen .geodir_more_info,
+.body_fullscreen .geodir_loginbox,
+.body_fullscreen .geodir-custom-post-gallery,
 .body_fullscreen dl.geodir-tab-head,
 .body_fullscreen .geodir_Star,
 .body_fullscreen .geodir-direction-nav a,
@@ -696,4 +702,7 @@ div.geodir_map_container.geodir-map-iphone .map_background .triggermap {
 .body_fullscreen .geodir-company_info i,
 .body_fullscreen .b_signin {
   display: none;
+}
+.body_fullscreen .geodir_map_container.geodir_map_container_fullscreen{
+  display: block;
 }

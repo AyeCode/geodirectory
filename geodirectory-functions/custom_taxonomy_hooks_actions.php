@@ -197,6 +197,7 @@ function geodir_listing_rewrite_rules($rules)
     $newrules = array();
     $taxonomies = array();
     $taxonomies = get_option('geodir_taxonomies');
+    //print_r($taxonomies );exit;
     $detail_url_seprator = get_option('geodir_detailurl_separator');
     //create rules for post listing
     if (is_array($taxonomies)):
@@ -207,8 +208,12 @@ function geodir_listing_rewrite_rules($rules)
 
             if (strpos($taxonomy, 'tags')) {
                 $newrules[$listing_slug . '/(.+?)/page/?([0-9]{1,})/?$'] = 'index.php?' . $taxonomy . '=$matches[1]&paged=$matches[2]';
+
                 $newrules[$listing_slug . '/(.+?)/?$'] = 'index.php?' . $taxonomy . '=$matches[1]';
 
+            }else{
+                // use this loop to add paging for details page comments paging
+                $newrules[str_replace("/tags","",$listing_slug) . '/(.+?)/comment-page-([0-9]{1,})/?$'] = 'index.php?' . $taxonomy . '=$matches[1]&cpage=$matches[2]';
             }
 
             /*	$newrules[$listing_slug.'/'.$detail_url_seprator.'/([^/]+)/?$'] = 'index.php?'.$post_type.'=$matches[1]';
@@ -218,6 +223,9 @@ function geodir_listing_rewrite_rules($rules)
 
         endforeach;
     endif;
+
+
+
 
     //create rules for location listing
     $location_page = get_option('geodir_location_page');

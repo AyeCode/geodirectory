@@ -677,6 +677,7 @@ function geodir_action_geodir_set_preview_post()
 
     $post = (object)$_REQUEST;
 
+
     if (isset($post->video)) {
         $post->video = stripslashes($post->video);
     }
