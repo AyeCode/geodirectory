@@ -4476,9 +4476,24 @@ function geodir_ajax_import_export() {
 	global $wpdb, $plugin_prefix, $current_user, $wp_filesystem;
 
     // try to set higher limits for import
-    @ini_set('max_input_time', 3000);
-    @ini_set('max_execution_time', 3000);
-    @ini_set('memory_limit', '256M');
+    $max_input_time = ini_get('max_input_time');
+    $max_execution_time = ini_get('max_execution_time');
+    $memory_limit= ini_get('memory_limit');
+
+    if(!$max_input_time || $max_input_time<3000){
+        @ini_set('max_input_time', 3000);
+    }
+
+    if(!$max_execution_time || $max_execution_time<3000){
+        @ini_set('max_execution_time', 3000);
+    }
+
+    if($memory_limit && str_replace('M','',$memory_limit)){
+        if(str_replace('M','',$memory_limit)<256){
+            @ini_set('memory_limit', '256M');
+        }
+    }
+
 	error_reporting(0);
 
 	$json = array();
@@ -4537,7 +4552,7 @@ function geodir_ajax_import_export() {
 			$file_url = geodir_path_import_export() . '/' . $file_name . '.csv';
 			$file_path = $csv_file_dir . '/' . $file_name . '.csv';
 			$file_path_temp = $csv_file_dir . '/' . $post_type . '_' . $nonce . '.csv';
-			
+
 			if ( isset( $_REQUEST['_st'] ) ) {
 				$line_count = (int)geodir_import_export_line_count( $file_path_temp );
 				$percentage = count( $posts_count ) > 0 && $line_count > 0 ? ceil( $line_count / $posts_count ) * 100 : 0;
@@ -4560,12 +4575,12 @@ function geodir_ajax_import_export() {
 				} else {
 					$args = array( 'hide_empty' => 0 );
 					$posts = geodir_imex_get_posts( $post_type );
-					
+
 					if ( !empty( $posts ) ) {
 						$total_posts = count( $posts );
 						$per_page = 100;
 						$total_pages = ceil( $total_posts / $per_page );
-						
+
 						for ( $i = 0; $i <= $total_pages; $i++ ) {
 							$save_posts = array_slice( $posts , ( $i * $per_page ), $per_page );
 							
@@ -5693,9 +5708,9 @@ function geodir_imex_count_events( $posts_count, $post_type ) {
  */
 function geodir_imex_get_posts( $post_type ) {	
 	global $wp_filesystem;
-	
+
 	$posts = geodir_get_export_posts( $post_type );
-	
+
 	$csv_rows = array();
 	
 	if ( !empty( $posts ) ) {
@@ -5758,14 +5773,14 @@ function geodir_imex_get_posts( $post_type ) {
 			$csv_row[] = 'original_post_id';
 		}
 		// WPML
-				
+
 		$custom_fields = geodir_imex_get_custom_fields( $post_type );
 		if ( !empty( $custom_fields ) ) {
 			foreach ( $custom_fields as $custom_field ) {
 				$csv_row[] = $custom_field->htmlvar_name;
 			}
 		}
-		
+
 		// Export franchise fields
 		$is_franchise_active = is_plugin_active( 'geodir_franchise/geodir_franchise.php' ) && geodir_franchise_enabled( $post_type ) ? true : false;
 		if ($is_franchise_active) {
@@ -5777,7 +5792,8 @@ function geodir_imex_get_posts( $post_type ) {
 		$csv_rows[] = $csv_row;
 
 		$images_count = 5;
-		foreach ( $posts as $post ) {
+        $xx=0;
+		foreach ( $posts as $post ) {$xx++;
 			$post_id = $post['ID'];
 			
 			$gd_post_info = geodir_get_post_info( $post_id );
@@ -5816,7 +5832,7 @@ function geodir_imex_get_posts( $post_type ) {
 				$post_category = !empty( $post_category ) ? implode( ',', $post_category ) : '';
 				$post_tags = !empty( $post_tags ) ? implode( ',', $post_tags ) : '';
 			}
-			
+
 			// Franchise data
 			$franchise_id = NULL;
 			$franchise_info = array();
@@ -5967,8 +5983,9 @@ function geodir_imex_get_posts( $post_type ) {
 			}
 			
 			$csv_rows[] = $csv_row;
+
 		}
-		
+
 		for ( $c = 0; $c < $images_count; $c++ ) {
 			$csv_rows[0][] = 'IMAGE';
 		}

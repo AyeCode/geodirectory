@@ -2939,6 +2939,20 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                         }
                             break;
                     }
+
+
+                    /**
+                     * Filter custom field output in tab.
+                     *
+                     * @since 1.5.6
+                     *
+                     * @param string $html_var The HTML variable name for the field.
+                     * @param string $html Custom field unfiltered HTML.
+                     * @param array $variables_array Custom field variables array.
+                     */
+                    $html = apply_filters("geodir_tab_show_{$html_var}", $html, $variables_array);
+
+
                     if ($field_set_start == 1) {
                         $add_html = false;
                         if ($type['type'] == 'fieldset' && $fieldset_count > 1) {
