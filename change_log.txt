@@ -6,6 +6,7 @@ Details page map can have overlaping sidebar map elements - FIXED
 Schema description HTML tags now removed - CHANGED
 New widget added to display content like features - ADDED
 URL Schema can have validation error - FIXED
+Multiselect fields with {optgroup} sometimes not creating a list - FIXED
 
 v1.5.5
 Added charset parameter to case conversion functions - ADDED

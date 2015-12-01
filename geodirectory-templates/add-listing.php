@@ -137,4 +137,4 @@ do_action('geodir_add_listing_sidebar');
 do_action('geodir_wrapper_close', 'add-listing-page');
 
 // call footer
-get_footer();     
+get_footer();
