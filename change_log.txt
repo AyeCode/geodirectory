@@ -3,6 +3,7 @@ In add listing form sub-categories are no longer showing in hierarchy for checkb
 Tick parent category should not tick sub-categories but untick parent category should untick sub-categories - CHANGED
 Filter added to modify unfavorite icon - ADDED
 Details page map can have overlaping sidebar map elements - FIXED
+New widget added to display content like features - ADDED
 
 v1.5.5
 Added charset parameter to case conversion functions - ADDED
