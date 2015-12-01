@@ -677,6 +677,7 @@ function geodir_action_geodir_set_preview_post()
 
     $post = (object)$_REQUEST;
 
+
     if (isset($post->video)) {
         $post->video = stripslashes($post->video);
     }
@@ -1936,7 +1937,8 @@ function geodir_action_listings_content()
      * @see 'geodir_main_content_close' Where the oposing closing tag is added.
      */
     do_action('geodir_main_content_open', 'listings-page', 'geodir-main-content', 'listings-page');
-    echo '<div class="clearfix">';
+    $extra_class = apply_filters('geodir_before_listing_wrapper_extra_class', '', 'listings-page');
+    echo '<div class="clearfix '.$extra_class.'">';
     /**
      * Called before the listings page content, inside the outer wrapper. Used on listings pages and search and author pages.
      *

@@ -126,9 +126,10 @@ function initMap(map_options) {
     var maxMap = document.getElementById(map_canvas + '_triggermap');
     if (!jQuery(maxMap).hasClass('gd-triggered-map')) { // skip multiple click listener after reload map via ajax
         jQuery(maxMap).addClass('gd-triggered-map');
-        google.maps.event.addDomListener(maxMap, 'click', showAlert);
+        google.maps.event.addDomListener(maxMap, 'click', gdMaxMap);
     }
-    function showAlert() {
+    function gdMaxMap() {
+
 
         jQuery('#' + map_canvas).toggleClass('map-fullscreen');
         jQuery('.' + map_canvas + '_map_category').toggleClass('map_category_fullscreen');

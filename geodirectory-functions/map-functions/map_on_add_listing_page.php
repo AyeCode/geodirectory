@@ -497,7 +497,7 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
                 }
             });
     }
-    function showAlert() {
+    function gdMaxMap() {
         jQuery("#<?php echo $prefix.'map';?>").goMap();
 
         jQuery('#<?php echo $prefix.'map';?>').toggleClass('map-fullscreen');
@@ -573,7 +573,7 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
         });
 
         var maxMap = document.getElementById('<?php echo $prefix;?>triggermap');
-        google.maps.event.addDomListener(maxMap, 'click', showAlert);
+        google.maps.event.addDomListener(maxMap, 'click', gdMaxMap);
 
         <?php
         if($is_map_restrict)
