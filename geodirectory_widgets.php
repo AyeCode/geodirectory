@@ -1090,6 +1090,13 @@ if (!function_exists('register_geodir_widgets')) {
          * @package GeoDirectory
          */
         include_once('geodirectory-widgets/geodirectory_cpt_categories_widget.php');
+        /**
+         * Contains all functions for features widget.
+         *
+         * @since 1.5.6
+         * @package GeoDirectory
+         */
+        include_once('geodirectory-widgets/geodirectory_features_widget.php');
     }
 
 }

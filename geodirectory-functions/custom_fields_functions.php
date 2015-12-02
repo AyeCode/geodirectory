@@ -2750,7 +2750,29 @@ if (!function_exists('geodir_show_listing_info')) {
 
                             $option_values = explode(',', $post->{$type['htmlvar_name']});
 
+
+                           // print_r($option_values);
+                            //print_r($type);
+
                             if ($type['option_values']) {
+
+                                if (strstr($type['option_values'], "|")) {
+
+                                    $field_values = explode(',', $type['option_values']);
+                                    $san_options = array();
+                                    foreach ($field_values as $data) {
+                                        if (strstr($data, "|")) {
+                                            $temp_data = explode('|', $data);
+                                            if(isset($temp_data[1]))$data = $temp_data[1];
+                                        }
+
+                                        $data = str_replace(array("{optgroup}","{/optgroup}"),'',$data);
+                                        $san_options[] =trim( $data);
+
+                                    }
+                                    $type['option_values'] = implode(',',$san_options);
+
+                                }
 
                                 if (strstr($type['option_values'], "/")) {
 
@@ -2770,7 +2792,7 @@ if (!function_exists('geodir_show_listing_info')) {
                                 }
 
                             }
-
+                            //print_r($option_values);
                             $geodir_odd_even = '';
                             if ($fields_location == 'detail') {
 

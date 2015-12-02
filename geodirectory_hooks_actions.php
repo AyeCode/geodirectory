@@ -2779,6 +2779,27 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                             $option_values = explode(',', $post->$type['htmlvar_name']);
 
                             if ($type['option_values']) {
+
+
+                                if (strstr($type['option_values'], "|")) {
+
+                                    $field_values = explode(',', $type['option_values']);
+                                    $san_options = array();
+                                    foreach ($field_values as $data) {
+                                        if (strstr($data, "|")) {
+                                            $temp_data = explode('|', $data);
+                                            if(isset($temp_data[1]))$data = $temp_data[1];
+                                        }
+
+                                        $data = str_replace(array("{optgroup}","{/optgroup}"),'',$data);
+                                        $san_options[] = trim($data);
+
+                                    }
+                                    $type['option_values'] = implode(',',$san_options);
+
+                                }
+
+
                                 if (strstr($type['option_values'], "/")) {
                                     $option_values = array();
                                     $field_values = explode(',', $type['option_values']);
