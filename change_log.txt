@@ -8,6 +8,7 @@ New widget added to display content like features - ADDED
 URL Schema can have validation error - FIXED
 Multiselect fields with {optgroup} sometimes not creating a list - FIXED
 Option added to export max number listings per csv file to fix out of memory issue - FIXED
+Body classes added to GD pages for each page - ADDED
 The recent reviews widget ignores 1 star reviews - FIXED
 
 v1.5.5

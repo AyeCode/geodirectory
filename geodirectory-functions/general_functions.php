@@ -237,6 +237,7 @@ function geodir_get_weeks()
  * Check that page is.
  *
  * @since 1.0.0
+ * @since 1.5.6 Added to check GD invoices and GD checkout pages.
  * @package GeoDirectory
  * @global object $wp_query WordPress Query object.
  * @global object $post The current post object.
@@ -314,6 +315,14 @@ function geodir_is_page($gdpage = '')
             if (is_page() && get_query_var('page_id') == geodir_login_page_id())
                 return true;
             break;
+        case 'checkout':
+            if (is_page() && function_exists('geodir_payment_checkout_page_id') && get_query_var('page_id') == geodir_payment_checkout_page_id())
+                return true;
+            break;
+        case 'invoices':
+            if (is_page() && function_exists('geodir_payment_invoices_page_id') && get_query_var('page_id') == geodir_payment_invoices_page_id())
+                return true;
+            break;
         default:
             return false;
             break;
@@ -330,6 +339,7 @@ function geodir_is_page($gdpage = '')
  *
  * @since 1.0.0
  * @since 1.5.4 Added check for new style GD homepage.
+ * @since 1.5.6 Added check for GD invoices and GD checkout page.
  * @package GeoDirectory
  * @param object $wp WordPress object.
  */
@@ -357,6 +367,8 @@ function geodir_set_is_geodir_page($wp)
                 || $wp->query_vars['page_id'] == geodir_home_page_id()
                 || $wp->query_vars['page_id'] == geodir_info_page_id()
                 || $wp->query_vars['page_id'] == geodir_login_page_id()
+                || (function_exists('geodir_payment_checkout_page_id') && $wp->query_vars['page_id'] == geodir_payment_checkout_page_id())
+                || (function_exists('geodir_payment_invoices_page_id') && $wp->query_vars['page_id'] == geodir_payment_invoices_page_id())
             )
                 $wp->query_vars['gd_is_geodir_page'] = true;
         }
@@ -372,6 +384,8 @@ function geodir_set_is_geodir_page($wp)
                     || (isset($wp->query_vars['page_id']) && $wp->query_vars['page_id'] == geodir_home_page_id())
                     || (isset($wp->query_vars['page_id']) && $wp->query_vars['page_id'] == geodir_info_page_id())
                     || (isset($wp->query_vars['page_id']) && $wp->query_vars['page_id'] == geodir_login_page_id())
+                    || (isset($wp->query_vars['page_id']) && function_exists('geodir_payment_checkout_page_id') && $wp->query_vars['page_id'] == geodir_payment_checkout_page_id())
+                    || (isset($wp->query_vars['page_id']) && function_exists('geodir_payment_invoices_page_id') && $wp->query_vars['page_id'] == geodir_payment_invoices_page_id())
                 )
             )
                 $wp->query_vars['gd_is_geodir_page'] = true;
@@ -647,11 +661,11 @@ if (!function_exists('geodir_sendEmail')) {
         $sitefromEmail = get_option('site_email');
         $sitefromEmailName = get_site_emailName();
         $productlink = get_permalink($post_id);
-		
-		$user_login = '';
-		if ($user_id > 0 && $user_info = get_userdata($user_id)) {
-			$user_login = $user_info->user_login;
-		}
+
+        $user_login = '';
+        if ($user_id > 0 && $user_info = get_userdata($user_id)) {
+            $user_login = $user_info->user_login;
+        }
 
         $posted_date = '';
         $listingLink = '';
@@ -835,45 +849,45 @@ function geodir_breadcrumb()
             }
 
             $geodir_show_location_url = get_option('geodir_show_location_url');
-			$location_manager = defined('POST_LOCATION_TABLE') ? true : false;
-			
-			$hide_url_part = array();
-			if ($location_manager) {
-				$hide_country_part = get_option('geodir_location_hide_country_part');
-				$hide_region_part = get_option('geodir_location_hide_region_part');
-				
-				if ($hide_region_part && $hide_country_part) {
-					$hide_url_part = array('gd_country', 'gd_region');
-				} else if ($hide_region_part && !$hide_country_part) {
-					$hide_url_part = array('gd_region');
-				} else if (!$hide_region_part && $hide_country_part) {
-					$hide_url_part = array('gd_country');
-				}
-			}
-			
-			$hide_text_part = array();
-			if ($geodir_show_location_url == 'country_city') {
-				$hide_text_part = array('gd_region');
-				
-				if (isset($location_terms['gd_region']) && !$location_manager) {
-					unset($location_terms['gd_region']);
-				}
-			} else if ($geodir_show_location_url == 'region_city') {
-				$hide_text_part = array('gd_country');
-				
-				if (isset($location_terms['gd_country']) && !$location_manager) {
-					unset($location_terms['gd_country']);
-				}
-			} else if ($geodir_show_location_url == 'city') {
-				$hide_text_part = array('gd_country', 'gd_region');
-				
-				if (isset($location_terms['gd_country']) && !$location_manager) {
-					unset($location_terms['gd_country']);
-				}
-				if (isset($location_terms['gd_region']) && !$location_manager) {
-					unset($location_terms['gd_region']);
-				}
-			}
+            $location_manager = defined('POST_LOCATION_TABLE') ? true : false;
+
+            $hide_url_part = array();
+            if ($location_manager) {
+                $hide_country_part = get_option('geodir_location_hide_country_part');
+                $hide_region_part = get_option('geodir_location_hide_region_part');
+
+                if ($hide_region_part && $hide_country_part) {
+                    $hide_url_part = array('gd_country', 'gd_region');
+                } else if ($hide_region_part && !$hide_country_part) {
+                    $hide_url_part = array('gd_region');
+                } else if (!$hide_region_part && $hide_country_part) {
+                    $hide_url_part = array('gd_country');
+                }
+            }
+
+            $hide_text_part = array();
+            if ($geodir_show_location_url == 'country_city') {
+                $hide_text_part = array('gd_region');
+
+                if (isset($location_terms['gd_region']) && !$location_manager) {
+                    unset($location_terms['gd_region']);
+                }
+            } else if ($geodir_show_location_url == 'region_city') {
+                $hide_text_part = array('gd_country');
+
+                if (isset($location_terms['gd_country']) && !$location_manager) {
+                    unset($location_terms['gd_country']);
+                }
+            } else if ($geodir_show_location_url == 'city') {
+                $hide_text_part = array('gd_country', 'gd_region');
+
+                if (isset($location_terms['gd_country']) && !$location_manager) {
+                    unset($location_terms['gd_country']);
+                }
+                if (isset($location_terms['gd_region']) && !$location_manager) {
+                    unset($location_terms['gd_region']);
+                }
+            }
 
             $is_location_last = '';
             $is_taxonomy_last = '';
@@ -900,10 +914,10 @@ function geodir_breadcrumb()
                 foreach ($location_terms as $key => $location_term) {
                     if ($location_term != '') {
                         if (!empty($hide_url_part) && in_array($key, $hide_url_part)) { // Hide location part from url & breadcrumb.
-							continue;
-						}
-							
-						$gd_location_link_text = preg_replace('/-(\d+)$/', '', $location_term);
+                            continue;
+                        }
+
+                        $gd_location_link_text = preg_replace('/-(\d+)$/', '', $location_term);
                         $gd_location_link_text = preg_replace('/[_-]/', ' ', $gd_location_link_text);
                         $gd_location_link_text = ucfirst($gd_location_link_text);
 
@@ -952,12 +966,12 @@ function geodir_breadcrumb()
                             } else if ($key == 'gd_city' && $location_term_actual_city != '') {
                                 $gd_location_link_text = $location_term_actual_city;
                             }
-							
-							/*
-							if (geodir_is_page('detail') && !empty($hide_text_part) && in_array($key, $hide_text_part)) {
-								continue;
-							}
-							*/
+
+                            /*
+                            if (geodir_is_page('detail') && !empty($hide_text_part) && in_array($key, $hide_text_part)) {
+                                continue;
+                            }
+                            */
 
                             $breadcrumb .= $separator . '<a href="' . $location_link . '">' . $gd_location_link_text . '</a>';
                         }
@@ -977,10 +991,10 @@ function geodir_breadcrumb()
 
                     foreach ($location_terms as $key => $location_term) {
                         if ($location_manager && in_array($key, $hide_url_part)) {
-							continue;
-						}
-						
-						if ($location_term != '') {
+                            continue;
+                        }
+
+                        if ($location_term != '') {
                             if (get_option('permalink_structure') != '') {
                                 $cat_link .= $location_term . '/';
                             }
@@ -1474,14 +1488,14 @@ function gd_lang_object_ids($ids_array, $type)
  * function to add class to body when multi post type is active.
  *
  * @since 1.0.0
+ * @since 1.5.6 Add geodir-page class to body for all gd pages.
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @param array $classes Body CSS classes.
  * @return array Modified Body CSS classes.
  */
-function geodir_custom_posts_body_class($classes)
-{
-    global $wpdb;
+function geodir_custom_posts_body_class($classes) {
+    global $wpdb, $wp;
     $post_types = geodir_get_posttypes('object');
     if (!empty($post_types) && count((array)$post_types) > 1) {
         $classes[] = 'geodir_custom_posts';
@@ -1499,6 +1513,10 @@ function geodir_custom_posts_body_class($classes)
             }
         }
         $classes = $new_classes;
+    }
+
+    if (geodir_is_geodir_page()) {
+        $classes[] = 'geodir-page';
     }
 
     return $classes;
@@ -1665,7 +1683,7 @@ function geodir_widget_listings_get_order($query_args)
             $orderby = $wpdb->posts . ".post_title ASC, ";
             break;
         case 'high_review':
-			$orderby = $table . ".rating_count DESC, " . $table . ".overall_rating DESC, ";
+            $orderby = $table . ".rating_count DESC, " . $table . ".overall_rating DESC, ";
             break;
         case 'high_rating':
             $orderby = "( " . $table . ".overall_rating  ) DESC, ";
@@ -1770,12 +1788,12 @@ function geodir_get_widget_listings($query_args = array(), $count_only = false)
     $groupby = apply_filters('geodir_filter_widget_listings_groupby', $groupby, $post_type);
 
     if ($count_only) {
-		$sql = "SELECT COUNT(" . $wpdb->posts . ".ID) AS total FROM " . $wpdb->posts . "
+        $sql = "SELECT COUNT(" . $wpdb->posts . ".ID) AS total FROM " . $wpdb->posts . "
 			" . $join . "
 			" . $where;
-		$rows = (int)$wpdb->get_var($sql);
-	} else {
-		$orderby = geodir_widget_listings_get_order($query_args);
+        $rows = (int)$wpdb->get_var($sql);
+    } else {
+        $orderby = geodir_widget_listings_get_order($query_args);
         /**
          * Filter widget listing orderby clause string part that is being used for query.
          *
@@ -1784,11 +1802,11 @@ function geodir_get_widget_listings($query_args = array(), $count_only = false)
          * @param string $table Table name.
          * @param string $post_type Post type.
          */
-		$orderby = apply_filters('geodir_filter_widget_listings_orderby', $orderby, $table, $post_type);
-		$orderby .= $wpdb->posts . ".post_title ASC";
-		$orderby = $orderby != '' ? " ORDER BY " . $orderby : '';
-			
-		$limit = !empty($query_args['posts_per_page']) ? $query_args['posts_per_page'] : 5;
+        $orderby = apply_filters('geodir_filter_widget_listings_orderby', $orderby, $table, $post_type);
+        $orderby .= $wpdb->posts . ".post_title ASC";
+        $orderby = $orderby != '' ? " ORDER BY " . $orderby : '';
+
+        $limit = !empty($query_args['posts_per_page']) ? $query_args['posts_per_page'] : 5;
         /**
          * Filter widget listing limit that is being used for query.
          *
@@ -1796,22 +1814,22 @@ function geodir_get_widget_listings($query_args = array(), $count_only = false)
          * @param int $limit Query results limit.
          * @param string $post_type Post type.
          */
-		$limit = apply_filters('geodir_filter_widget_listings_limit', $limit, $post_type);
-		
-		$page = !empty($query_args['pageno']) ? absint($query_args['pageno']) : 1;
-		if ( !$page )
-			$page = 1;
-		
-		$limit = (int)$limit > 0 ? " LIMIT " . absint( ( $page - 1 ) * (int)$limit ) . ", " . (int)$limit : "";
-		
-		$sql = "SELECT SQL_CALC_FOUND_ROWS " . $fields . " FROM " . $wpdb->posts . "
+        $limit = apply_filters('geodir_filter_widget_listings_limit', $limit, $post_type);
+
+        $page = !empty($query_args['pageno']) ? absint($query_args['pageno']) : 1;
+        if ( !$page )
+            $page = 1;
+
+        $limit = (int)$limit > 0 ? " LIMIT " . absint( ( $page - 1 ) * (int)$limit ) . ", " . (int)$limit : "";
+
+        $sql = "SELECT SQL_CALC_FOUND_ROWS " . $fields . " FROM " . $wpdb->posts . "
 			" . $join . "
 			" . $where . "
 			" . $groupby . "
 			" . $orderby . "
-			" . $limit;	
-		$rows = $wpdb->get_results($sql);
-	}
+			" . $limit;
+        $rows = $wpdb->get_results($sql);
+    }
 
     unset($GLOBALS['gd_query_args_widgets']);
     unset($gd_query_args_widgets);
@@ -2226,9 +2244,9 @@ function geodir_popular_post_category_output($args = '', $instance = '')
     $title = empty($instance['title']) ? __('Popular Categories', 'geodirectory') : apply_filters('widget_title', __($instance['title'], 'geodirectory'));
 
     $gd_post_type = geodir_get_current_posttype();
-	
-	$category_limit = isset($instance['category_limit']) && $instance['category_limit'] > 0 ? (int)$instance['category_limit'] : 15;
-	$default_post_type = !empty($gd_post_type) ? $gd_post_type : (isset($instance['default_post_type']) && gdsc_is_post_type_valid($instance['default_post_type']) ? $instance['default_post_type'] : '');
+
+    $category_limit = isset($instance['category_limit']) && $instance['category_limit'] > 0 ? (int)$instance['category_limit'] : 15;
+    $default_post_type = !empty($gd_post_type) ? $gd_post_type : (isset($instance['default_post_type']) && gdsc_is_post_type_valid($instance['default_post_type']) ? $instance['default_post_type'] : '');
 
     $taxonomy = array();
     if (!empty($gd_post_type)) {
@@ -2247,12 +2265,12 @@ function geodir_popular_post_category_output($args = '', $instance = '')
         }
     }
 
-    if (!empty($a_terms)) {		
-		foreach ($a_terms as $b_key => $b_val) {
+    if (!empty($a_terms)) {
+        foreach ($a_terms as $b_key => $b_val) {
             $b_terms[$b_key] = geodir_sort_terms($b_val, 'count');
         }
-		
-		$default_taxonomy = $default_post_type != '' && isset($b_terms[$default_post_type . 'category']) ? $default_post_type . 'category' : '';
+
+        $default_taxonomy = $default_post_type != '' && isset($b_terms[$default_post_type . 'category']) ? $default_post_type . 'category' : '';
 
         $tax_change_output = '';
         if (count($b_terms) > 1) {
@@ -2332,15 +2350,15 @@ function geodir_helper_cat_list_output($terms, $category_limit)
         $total_post = $cat->count;
 
         $term_link = get_term_link( $cat, $cat->taxonomy );
-		/**
-		 * Filer the category term link.
-		 *
-		 * @since 1.4.5
-		 * @param string $term_link The term permalink.
-		 * @param int    $cat->term_id The term id.
-		 * @param string $post_type Wordpress post type.
-		 */
-		$term_link = apply_filters( 'geodir_category_term_link', $term_link, $cat->term_id, $post_type );
+        /**
+         * Filer the category term link.
+         *
+         * @since 1.4.5
+         * @param string $term_link The term permalink.
+         * @param int    $cat->term_id The term id.
+         * @param string $post_type Wordpress post type.
+         */
+        $term_link = apply_filters( 'geodir_category_term_link', $term_link, $cat->term_id, $post_type );
 
         echo '<li class="' . $class_row . '"><a href="' . $term_link . '">';
         echo '<img alt="' . $cat->name . ' icon" class="" style="height:20px;vertical-align:middle;" src="' . $term_icon_url . '"/> ';
@@ -2931,40 +2949,40 @@ function geodir_popular_postview_output($args = '', $instance = '')
     }
 
     $location_url = array();
-	$city = get_query_var('gd_city');
-	if (!empty($city)) {
-		$country = get_query_var('gd_country');
-		$region = get_query_var('gd_region');
-		
-		$geodir_show_location_url = get_option('geodir_show_location_url');
-		
-		if ($geodir_show_location_url == 'all') {
-			if ($country != '') {
-				$location_url[] = $country;
-			}
-			
-			if ($region != '') {
-				$location_url[] = $region;
-			}
-		} else if ($geodir_show_location_url == 'country_city') {
-			if ($country != '') {
-				$location_url[] = $country;
-			}
-		} else if ($geodir_show_location_url == 'region_city') {
-			if ($region != '') {
-				$location_url[] = $region;
-			}
-		}
-		
-		$location_url[] = $city;
-	}
+    $city = get_query_var('gd_city');
+    if (!empty($city)) {
+        $country = get_query_var('gd_country');
+        $region = get_query_var('gd_region');
 
-	$location_url = implode('/', $location_url);
-	$skip_location = false;
-	if (!$add_location_filter && !empty($_SESSION['gd_multi_location'])) {
-		$skip_location = true;
-		unset($_SESSION['gd_multi_location']);
-	}
+        $geodir_show_location_url = get_option('geodir_show_location_url');
+
+        if ($geodir_show_location_url == 'all') {
+            if ($country != '') {
+                $location_url[] = $country;
+            }
+
+            if ($region != '') {
+                $location_url[] = $region;
+            }
+        } else if ($geodir_show_location_url == 'country_city') {
+            if ($country != '') {
+                $location_url[] = $country;
+            }
+        } else if ($geodir_show_location_url == 'region_city') {
+            if ($region != '') {
+                $location_url[] = $region;
+            }
+        }
+
+        $location_url[] = $city;
+    }
+
+    $location_url = implode('/', $location_url);
+    $skip_location = false;
+    if (!$add_location_filter && !empty($_SESSION['gd_multi_location'])) {
+        $skip_location = true;
+        unset($_SESSION['gd_multi_location']);
+    }
 
     if (get_option('permalink_structure')) {
         $viewall_url = get_post_type_archive_link($post_type);
@@ -2985,10 +3003,10 @@ function geodir_popular_postview_output($args = '', $instance = '')
 
         $geodir_add_location_url = NULL;
     }
-	if ($skip_location) {
-		$_SESSION['gd_multi_location'] = 1;
-	}
-	
+    if ($skip_location) {
+        $_SESSION['gd_multi_location'] = 1;
+    }
+
     $query_args = array(
         'posts_per_page' => $post_number,
         'is_geodir_loop' => true,
@@ -3107,7 +3125,7 @@ function geodir_popular_postview_output($args = '', $instance = '')
 
             $GLOBALS['post'] = $current_post;
             if (!empty($current_post))
-				setup_postdata($current_post);
+                setup_postdata($current_post);
             $map_jason = $current_map_jason;
             $map_canvas_arr = $current_map_canvas_arr;
             ?>
@@ -3138,23 +3156,23 @@ function geodir_popular_postview_output($args = '', $instance = '')
 function geodir_count_reviews_by_term_id($term_id, $taxonomy, $post_type)
 {
     global $wpdb, $plugin_prefix;
-    
-	$detail_table = $plugin_prefix . $post_type . '_detail';
+
+    $detail_table = $plugin_prefix . $post_type . '_detail';
 
     $sql = "SELECT COALESCE(SUM(rating_count),0) FROM " . $detail_table . " WHERE post_status = 'publish' AND rating_count > 0 AND FIND_IN_SET(" . $term_id . ", " . $taxonomy . ")";
-	
-	/**
-	 * Filter count review sql query.
-	 *
-	 * @since 1.5.1
-	 * @param string $sql Database sql query..
-	 * @param int $term_id The term ID.
-	 * @param int $taxonomy The taxonomy Id.
-	 * @param string $post_type The post type.
-	 */
-	$sql = apply_filters('geodir_count_reviews_by_term_sql', $sql, $term_id, $taxonomy, $post_type);
-    
-	$count = $wpdb->get_var($sql);
+
+    /**
+     * Filter count review sql query.
+     *
+     * @since 1.5.1
+     * @param string $sql Database sql query..
+     * @param int $term_id The term ID.
+     * @param int $taxonomy The taxonomy Id.
+     * @param string $post_type The post type.
+     */
+    $sql = apply_filters('geodir_count_reviews_by_term_sql', $sql, $term_id, $taxonomy, $post_type);
+
+    $count = $wpdb->get_var($sql);
 
     return $count;
 }
@@ -3169,7 +3187,7 @@ function geodir_count_reviews_by_term_id($term_id, $taxonomy, $post_type)
  */
 function geodir_count_reviews_by_terms($force_update = false)
 {
-	/**
+    /**
      * Filter review count option data.
      *
      * @since 1.0.0
@@ -3370,37 +3388,37 @@ function geodir_load_textdomain() {
      * @since 1.4.2
      * @package GeoDirectory
      */
-	$locale = apply_filters('plugin_locale', get_locale(), 'geodirectory');
-	
-	load_textdomain('geodirectory', WP_LANG_DIR . '/' . 'geodirectory' . '/' . 'geodirectory' . '-' . $locale . '.mo');
-	load_plugin_textdomain('geodirectory', false, dirname(plugin_basename(__FILE__)) . '/geodirectory-languages');
-	
-	/**
-	 * Define language constants.
-	 *
-	 * @since 1.0.0
-	 */
-	require_once(geodir_plugin_path() . '/language.php');
-	
-	$language_file = geodir_plugin_path() . '/db-language.php';
-	
-	// Load language string file if not created yet
-	if (!file_exists($language_file)) {
-		geodirectory_load_db_language();
-	}
-	
-	if (file_exists($language_file)) {
-		/**
-		 * Language strings from database.
-		 *
-		 * @since 1.4.2
-		 */
-		try {
-			require_once($language_file);
-		} catch(Exception $e) {
-			error_log('Language Error: ' . $e->getMessage());
-		}
-	}
+    $locale = apply_filters('plugin_locale', get_locale(), 'geodirectory');
+
+    load_textdomain('geodirectory', WP_LANG_DIR . '/' . 'geodirectory' . '/' . 'geodirectory' . '-' . $locale . '.mo');
+    load_plugin_textdomain('geodirectory', false, dirname(plugin_basename(__FILE__)) . '/geodirectory-languages');
+
+    /**
+     * Define language constants.
+     *
+     * @since 1.0.0
+     */
+    require_once(geodir_plugin_path() . '/language.php');
+
+    $language_file = geodir_plugin_path() . '/db-language.php';
+
+    // Load language string file if not created yet
+    if (!file_exists($language_file)) {
+        geodirectory_load_db_language();
+    }
+
+    if (file_exists($language_file)) {
+        /**
+         * Language strings from database.
+         *
+         * @since 1.4.2
+         */
+        try {
+            require_once($language_file);
+        } catch(Exception $e) {
+            error_log('Language Error: ' . $e->getMessage());
+        }
+    }
 }
 
 /**
@@ -3410,70 +3428,70 @@ function geodir_load_textdomain() {
  * @package GeoDirectory
  *
  * @global null|object $wp_filesystem WP_Filesystem object.
- * 
+ *
  * @return bool True if file created otherwise false
  */
 function geodirectory_load_db_language() {
-	global $wp_filesystem;
-	if( empty( $wp_filesystem ) ) {
-		require_once( ABSPATH .'/wp-admin/includes/file.php' );
-		WP_Filesystem();
-		global $wp_filesystem;
-	}
-	
-	$language_file = geodir_plugin_path() . '/db-language.php';
-	
-	if(is_file($language_file) && !is_writable($language_file))
-		return false; // Not possible to create.
-	
-	if(!is_file($language_file) && !is_writable(dirname($language_file)))
-		return false; // Not possible to create.
-		
-	$contents_strings = array();
-	
-	/**
-	 * Filter the language string from database to translate via po editor
-	 *
-	 * @since 1.4.2
-	 *
-	 * @param array $contents_strings Array of strings.
-	 */
-	$contents_strings = apply_filters('geodir_load_db_language', $contents_strings);
-	
-	$contents_strings = array_unique($contents_strings);
-	
-	$contents_head = array();
-	$contents_head[] = "<?php";
-	$contents_head[] = "/**";
-	$contents_head[] = " * Translate language string stored in database. Ex: Custom Fields";
-	$contents_head[] = " *";
-	$contents_head[] = " * @since 1.4.2";
-	$contents_head[] = " * @package GeoDirectory";
-	$contents_head[] = " */";
-	$contents_head[] = "";
-	$contents_head[] = "// Language keys";
-	
-	$contents_foot = array();
-	$contents_foot[] = "";
-	$contents_foot[] = "?>";
-	
-	$contents = implode(PHP_EOL, $contents_head);
-	
-	if (!empty($contents_strings)) {
-		foreach ( $contents_strings as $string ) {
-			if (is_scalar($string) && $string != '') {
-				$string = str_replace("'", "\'", $string);
-				$contents .= PHP_EOL . "__('" . $string . "', 'geodirectory');";
-			}
-		}
-	}
-	
-	$contents .= implode(PHP_EOL, $contents_foot);
-		
-	if($wp_filesystem->put_contents( $language_file, $contents, FS_CHMOD_FILE))
-		return false; // Failure; could not write file.
-	
-	return true;
+    global $wp_filesystem;
+    if( empty( $wp_filesystem ) ) {
+        require_once( ABSPATH .'/wp-admin/includes/file.php' );
+        WP_Filesystem();
+        global $wp_filesystem;
+    }
+
+    $language_file = geodir_plugin_path() . '/db-language.php';
+
+    if(is_file($language_file) && !is_writable($language_file))
+        return false; // Not possible to create.
+
+    if(!is_file($language_file) && !is_writable(dirname($language_file)))
+        return false; // Not possible to create.
+
+    $contents_strings = array();
+
+    /**
+     * Filter the language string from database to translate via po editor
+     *
+     * @since 1.4.2
+     *
+     * @param array $contents_strings Array of strings.
+     */
+    $contents_strings = apply_filters('geodir_load_db_language', $contents_strings);
+
+    $contents_strings = array_unique($contents_strings);
+
+    $contents_head = array();
+    $contents_head[] = "<?php";
+    $contents_head[] = "/**";
+    $contents_head[] = " * Translate language string stored in database. Ex: Custom Fields";
+    $contents_head[] = " *";
+    $contents_head[] = " * @since 1.4.2";
+    $contents_head[] = " * @package GeoDirectory";
+    $contents_head[] = " */";
+    $contents_head[] = "";
+    $contents_head[] = "// Language keys";
+
+    $contents_foot = array();
+    $contents_foot[] = "";
+    $contents_foot[] = "?>";
+
+    $contents = implode(PHP_EOL, $contents_head);
+
+    if (!empty($contents_strings)) {
+        foreach ( $contents_strings as $string ) {
+            if (is_scalar($string) && $string != '') {
+                $string = str_replace("'", "\'", $string);
+                $contents .= PHP_EOL . "__('" . $string . "', 'geodirectory');";
+            }
+        }
+    }
+
+    $contents .= implode(PHP_EOL, $contents_foot);
+
+    if($wp_filesystem->put_contents( $language_file, $contents, FS_CHMOD_FILE))
+        return false; // Failure; could not write file.
+
+    return true;
 }
 
 /**
@@ -3488,51 +3506,51 @@ function geodirectory_load_db_language() {
  * @return array Translation texts.
  */
 function geodir_load_custom_field_translation($translation_texts = array()) {
-	global $wpdb;
-	
-	// Custom fields table
-	$sql = "SELECT admin_title, admin_desc, site_title, clabels, required_msg FROM " . GEODIR_CUSTOM_FIELDS_TABLE;
-	$rows = $wpdb->get_results($sql);
-	
-	if (!empty($rows)) {
-		foreach($rows as $row) {
-			if (!empty($row->admin_title))
-				$translation_texts[] = stripslashes_deep($row->admin_title);
-				
-			if (!empty($row->admin_desc))
-				$translation_texts[] = stripslashes_deep($row->admin_desc);
-				
-			if (!empty($row->site_title))
-				$translation_texts[] = stripslashes_deep($row->site_title);
-				
-			if (!empty($row->clabels))
-				$translation_texts[] = stripslashes_deep($row->clabels);
-				
-			if (!empty($row->required_msg))
-				$translation_texts[] = stripslashes_deep($row->required_msg);
-		}
-	}
-	
-	// Custom sorting fields table
-	$sql = "SELECT site_title, asc_title, desc_title FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE;
-	$rows = $wpdb->get_results($sql);
-	
-	if (!empty($rows)) {
-		foreach($rows as $row) {
-			if (!empty($row->site_title))
-				$translation_texts[] = stripslashes_deep($row->site_title);
-				
-			if (!empty($row->asc_title))
-				$translation_texts[] = stripslashes_deep($row->asc_title);
-				
-			if (!empty($row->desc_title))
-				$translation_texts[] = stripslashes_deep($row->desc_title);
-		}
-	}
-	
-	$translation_texts = !empty($translation_texts) ? array_unique($translation_texts) : $translation_texts;
-	
-	return $translation_texts;
+    global $wpdb;
+
+    // Custom fields table
+    $sql = "SELECT admin_title, admin_desc, site_title, clabels, required_msg FROM " . GEODIR_CUSTOM_FIELDS_TABLE;
+    $rows = $wpdb->get_results($sql);
+
+    if (!empty($rows)) {
+        foreach($rows as $row) {
+            if (!empty($row->admin_title))
+                $translation_texts[] = stripslashes_deep($row->admin_title);
+
+            if (!empty($row->admin_desc))
+                $translation_texts[] = stripslashes_deep($row->admin_desc);
+
+            if (!empty($row->site_title))
+                $translation_texts[] = stripslashes_deep($row->site_title);
+
+            if (!empty($row->clabels))
+                $translation_texts[] = stripslashes_deep($row->clabels);
+
+            if (!empty($row->required_msg))
+                $translation_texts[] = stripslashes_deep($row->required_msg);
+        }
+    }
+
+    // Custom sorting fields table
+    $sql = "SELECT site_title, asc_title, desc_title FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE;
+    $rows = $wpdb->get_results($sql);
+
+    if (!empty($rows)) {
+        foreach($rows as $row) {
+            if (!empty($row->site_title))
+                $translation_texts[] = stripslashes_deep($row->site_title);
+
+            if (!empty($row->asc_title))
+                $translation_texts[] = stripslashes_deep($row->asc_title);
+
+            if (!empty($row->desc_title))
+                $translation_texts[] = stripslashes_deep($row->desc_title);
+        }
+    }
+
+    $translation_texts = !empty($translation_texts) ? array_unique($translation_texts) : $translation_texts;
+
+    return $translation_texts;
 }
 
 /**
@@ -3544,97 +3562,97 @@ function geodir_load_custom_field_translation($translation_texts = array()) {
  * @return array Array of mime types.
  */
 function geodir_allowed_mime_types() {
-	/**
-	 * Filter the list of mime types and file extensions allowed for file upload.
-	 *
-	 * @since 1.4.7
+    /**
+     * Filter the list of mime types and file extensions allowed for file upload.
+     *
+     * @since 1.4.7
      * @package GeoDirectory
-	 *
-	 * @param array $geodir_allowed_mime_types and file extensions.
-	 */
-	return apply_filters( 'geodir_allowed_mime_types', array(
-			'Image' => array( // Image formats.
-				'jpg' => 'image/jpeg',
-				'jpe' => 'image/jpeg',
-				'jpeg' => 'image/jpeg',
-				'gif' => 'image/gif',
-				'png' => 'image/png',
-				'bmp' => 'image/bmp',
-				'ico' => 'image/x-icon',
-			),
-			'Video' => array( // Video formats.
-				'asf' => 'video/x-ms-asf',
-				'avi' => 'video/avi',
-				'flv' => 'video/x-flv',
-				'mkv' => 'video/x-matroska',
-				'mp4' => 'video/mp4',
-				'mpeg' => 'video/mpeg',
-				'mpg' => 'video/mpeg',
-				'wmv' => 'video/x-ms-wmv',
-				'3gp' => 'video/3gpp',
-			),
-			'Audio' => array( // Audio formats.
-				'ogg' => 'audio/ogg',
-				'mp3' => 'audio/mpeg',
-				'wav' => 'audio/wav',
-				'wma' => 'audio/x-ms-wma',
-			),
-			'Text' => array( // Text formats.
-				'css' => 'text/css',
-				'csv' => 'text/csv',
-				'htm' => 'text/html',
-				'html' => 'text/html',
-				'txt' => 'text/plain',
-				'rtx' => 'text/richtext',
-				'vtt' => 'text/vtt',
-			),
-			'Application' => array( // Application formats.
-				'doc' => 'application/msword',
-				'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-				'exe' => 'application/x-msdownload',
-				'js' => 'application/javascript',
-				'odt' => 'application/vnd.oasis.opendocument.text',
-				'pdf' => 'application/pdf',
-				'pot' => 'application/vnd.ms-powerpoint',
-				'ppt' => 'application/vnd.ms-powerpoint',
-				'pptx' => 'application/vnd.ms-powerpoint',
-				'psd' => 'application/octet-stream',
-				'rar' => 'application/rar',
-				'rtf' => 'application/rtf',
-				'swf' => 'application/x-shockwave-flash',
-				'tar' => 'application/x-tar',
-				'xls' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-				'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-				'zip' => 'application/zip',
-			)
-		) 
-	);
+     *
+     * @param array $geodir_allowed_mime_types and file extensions.
+     */
+    return apply_filters( 'geodir_allowed_mime_types', array(
+            'Image' => array( // Image formats.
+                'jpg' => 'image/jpeg',
+                'jpe' => 'image/jpeg',
+                'jpeg' => 'image/jpeg',
+                'gif' => 'image/gif',
+                'png' => 'image/png',
+                'bmp' => 'image/bmp',
+                'ico' => 'image/x-icon',
+            ),
+            'Video' => array( // Video formats.
+                'asf' => 'video/x-ms-asf',
+                'avi' => 'video/avi',
+                'flv' => 'video/x-flv',
+                'mkv' => 'video/x-matroska',
+                'mp4' => 'video/mp4',
+                'mpeg' => 'video/mpeg',
+                'mpg' => 'video/mpeg',
+                'wmv' => 'video/x-ms-wmv',
+                '3gp' => 'video/3gpp',
+            ),
+            'Audio' => array( // Audio formats.
+                'ogg' => 'audio/ogg',
+                'mp3' => 'audio/mpeg',
+                'wav' => 'audio/wav',
+                'wma' => 'audio/x-ms-wma',
+            ),
+            'Text' => array( // Text formats.
+                'css' => 'text/css',
+                'csv' => 'text/csv',
+                'htm' => 'text/html',
+                'html' => 'text/html',
+                'txt' => 'text/plain',
+                'rtx' => 'text/richtext',
+                'vtt' => 'text/vtt',
+            ),
+            'Application' => array( // Application formats.
+                'doc' => 'application/msword',
+                'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'exe' => 'application/x-msdownload',
+                'js' => 'application/javascript',
+                'odt' => 'application/vnd.oasis.opendocument.text',
+                'pdf' => 'application/pdf',
+                'pot' => 'application/vnd.ms-powerpoint',
+                'ppt' => 'application/vnd.ms-powerpoint',
+                'pptx' => 'application/vnd.ms-powerpoint',
+                'psd' => 'application/octet-stream',
+                'rar' => 'application/rar',
+                'rtf' => 'application/rtf',
+                'swf' => 'application/x-shockwave-flash',
+                'tar' => 'application/x-tar',
+                'xls' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'zip' => 'application/zip',
+            )
+        )
+    );
 }
 
 /**
  * Retrieve list of user display name for user id.
  *
  * @since 1.5.0
- * 
+ *
  * @param  string $user_id The WP user id.
  * @return string User display name.
  */
 function geodir_get_client_name($user_id) {
-	$client_name = '';
-	
-	$user_data = get_userdata($user_id);
-	
-	if (!empty($user_data)) {
-		if (isset($user_data->display_name) && trim($user_data->display_name) != '') {
-			$client_name = trim($user_data->display_name);
-		} else if (isset($user_data->user_nicename) && trim($user_data->user_nicename) != '') {
-			$client_name = trim($user_data->user_nicename);
-		} else {
-			$client_name = trim($user_data->user_login);
-		}
-	}
-	
-	return $client_name;
+    $client_name = '';
+
+    $user_data = get_userdata($user_id);
+
+    if (!empty($user_data)) {
+        if (isset($user_data->display_name) && trim($user_data->display_name) != '') {
+            $client_name = trim($user_data->display_name);
+        } else if (isset($user_data->user_nicename) && trim($user_data->user_nicename) != '') {
+            $client_name = trim($user_data->user_nicename);
+        } else {
+            $client_name = trim($user_data->user_login);
+        }
+    }
+
+    return $client_name;
 }
 
 
@@ -3739,20 +3757,20 @@ function geodir_wpseo_replacements($vars){
     }
 
 
-        if($location_titles) {
-            $vars['%%location%%'] = implode(", ", $location_titles);
-        }
+    if($location_titles) {
+        $vars['%%location%%'] = implode(", ", $location_titles);
+    }
 
 
-        if($location_titles) {
-            $vars['%%in_location%%'] = __('in ', 'geodirectory') . implode(", ", $location_titles);
-        }
+    if($location_titles) {
+        $vars['%%in_location%%'] = __('in ', 'geodirectory') . implode(", ", $location_titles);
+    }
 
 
 
-        if($location_single) {
-            $vars['%%in_location_single%%'] = __('in', 'geodirectory') . ' ' .$location_single;
-        }
+    if($location_single) {
+        $vars['%%in_location_single%%'] = __('in', 'geodirectory') . ' ' .$location_single;
+    }
 
 
     if($location_single) {
@@ -4105,66 +4123,66 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
  * @param  array $translation_texts Array of text strings.
  * @return array Translation texts.
  */
-function geodir_load_cpt_text_translation($translation_texts = array()) {	
-	$gd_post_types = geodir_get_posttypes('array');
-	
-	if (!empty($gd_post_types)) {
-		foreach ($gd_post_types as $post_type => $cpt_info) {
-			$labels = isset($cpt_info['labels']) ? $cpt_info['labels'] : '';
-			$description = isset($cpt_info['description']) ? $cpt_info['description'] : '';
-			$seo = isset($cpt_info['seo']) ? $cpt_info['seo'] : '';
-						
-			if (!empty($labels)) {
-				if ($labels['name'] != '' && !in_array($labels['name'], $translation_texts))
-					$translation_texts[] = $labels['name'];
-				if ($labels['singular_name'] != '' && !in_array($labels['singular_name'], $translation_texts))
-					$translation_texts[] = $labels['singular_name'];
-				if ($labels['add_new'] != '' && !in_array($labels['add_new'], $translation_texts))
-					$translation_texts[] = $labels['add_new'];
-				if ($labels['add_new_item'] != '' && !in_array($labels['add_new_item'], $translation_texts))
-					$translation_texts[] = $labels['add_new_item'];
-				if ($labels['edit_item'] != '' && !in_array($labels['edit_item'], $translation_texts))
-					$translation_texts[] = $labels['edit_item'];
-				if ($labels['new_item'] != '' && !in_array($labels['new_item'], $translation_texts))
-					$translation_texts[] = $labels['new_item'];
-				if ($labels['view_item'] != '' && !in_array($labels['view_item'], $translation_texts))
-					$translation_texts[] = $labels['view_item'];
-				if ($labels['search_items'] != '' && !in_array($labels['search_items'], $translation_texts))
-					$translation_texts[] = $labels['search_items'];
-				if ($labels['not_found'] != '' && !in_array($labels['not_found'], $translation_texts))
-					$translation_texts[] = $labels['not_found'];
-				if ($labels['not_found_in_trash'] != '' && !in_array($labels['not_found_in_trash'], $translation_texts))
-					$translation_texts[] = $labels['not_found_in_trash'];
-				if (isset($labels['label_post_profile']) && $labels['label_post_profile'] != '' && !in_array($labels['label_post_profile'], $translation_texts))
-					$translation_texts[] = $labels['label_post_profile'];
-				if (isset($labels['label_post_info']) && $labels['label_post_info'] != '' && !in_array($labels['label_post_info'], $translation_texts))
-					$translation_texts[] = $labels['label_post_info'];
-				if (isset($labels['label_post_images']) && $labels['label_post_images'] != '' && !in_array($labels['label_post_images'], $translation_texts))
-					$translation_texts[] = $labels['label_post_images'];
-				if (isset($labels['label_post_map']) && $labels['label_post_map'] != '' && !in_array($labels['label_post_map'], $translation_texts))
-					$translation_texts[] = $labels['label_post_map'];
-				if (isset($labels['label_reviews']) && $labels['label_reviews'] != '' && !in_array($labels['label_reviews'], $translation_texts))
-					$translation_texts[] = $labels['label_reviews'];
-				if (isset($labels['label_related_listing']) && $labels['label_related_listing'] != '' && !in_array($labels['label_related_listing'], $translation_texts))
-					$translation_texts[] = $labels['label_related_listing'];
-			}
-			
-			if ($description != '' && !in_array($description, $translation_texts)) {
-				$translation_texts[] = normalize_whitespace($description);
-			}
-			
-			if (!empty($seo)) {
-				if (isset($seo['meta_keyword']) && $seo['meta_keyword'] != '' && !in_array($seo['meta_keyword'], $translation_texts))
-					$translation_texts[] = normalize_whitespace($seo['meta_keyword']);
-				
-				if (isset($seo['meta_description']) && $seo['meta_description'] != '' && !in_array($seo['meta_description'], $translation_texts))
-					$translation_texts[] = normalize_whitespace($seo['meta_description']);
-			}
-		}
-	}
-	$translation_texts = !empty($translation_texts) ? array_unique($translation_texts) : $translation_texts;
-	
-	return $translation_texts;
+function geodir_load_cpt_text_translation($translation_texts = array()) {
+    $gd_post_types = geodir_get_posttypes('array');
+
+    if (!empty($gd_post_types)) {
+        foreach ($gd_post_types as $post_type => $cpt_info) {
+            $labels = isset($cpt_info['labels']) ? $cpt_info['labels'] : '';
+            $description = isset($cpt_info['description']) ? $cpt_info['description'] : '';
+            $seo = isset($cpt_info['seo']) ? $cpt_info['seo'] : '';
+
+            if (!empty($labels)) {
+                if ($labels['name'] != '' && !in_array($labels['name'], $translation_texts))
+                    $translation_texts[] = $labels['name'];
+                if ($labels['singular_name'] != '' && !in_array($labels['singular_name'], $translation_texts))
+                    $translation_texts[] = $labels['singular_name'];
+                if ($labels['add_new'] != '' && !in_array($labels['add_new'], $translation_texts))
+                    $translation_texts[] = $labels['add_new'];
+                if ($labels['add_new_item'] != '' && !in_array($labels['add_new_item'], $translation_texts))
+                    $translation_texts[] = $labels['add_new_item'];
+                if ($labels['edit_item'] != '' && !in_array($labels['edit_item'], $translation_texts))
+                    $translation_texts[] = $labels['edit_item'];
+                if ($labels['new_item'] != '' && !in_array($labels['new_item'], $translation_texts))
+                    $translation_texts[] = $labels['new_item'];
+                if ($labels['view_item'] != '' && !in_array($labels['view_item'], $translation_texts))
+                    $translation_texts[] = $labels['view_item'];
+                if ($labels['search_items'] != '' && !in_array($labels['search_items'], $translation_texts))
+                    $translation_texts[] = $labels['search_items'];
+                if ($labels['not_found'] != '' && !in_array($labels['not_found'], $translation_texts))
+                    $translation_texts[] = $labels['not_found'];
+                if ($labels['not_found_in_trash'] != '' && !in_array($labels['not_found_in_trash'], $translation_texts))
+                    $translation_texts[] = $labels['not_found_in_trash'];
+                if (isset($labels['label_post_profile']) && $labels['label_post_profile'] != '' && !in_array($labels['label_post_profile'], $translation_texts))
+                    $translation_texts[] = $labels['label_post_profile'];
+                if (isset($labels['label_post_info']) && $labels['label_post_info'] != '' && !in_array($labels['label_post_info'], $translation_texts))
+                    $translation_texts[] = $labels['label_post_info'];
+                if (isset($labels['label_post_images']) && $labels['label_post_images'] != '' && !in_array($labels['label_post_images'], $translation_texts))
+                    $translation_texts[] = $labels['label_post_images'];
+                if (isset($labels['label_post_map']) && $labels['label_post_map'] != '' && !in_array($labels['label_post_map'], $translation_texts))
+                    $translation_texts[] = $labels['label_post_map'];
+                if (isset($labels['label_reviews']) && $labels['label_reviews'] != '' && !in_array($labels['label_reviews'], $translation_texts))
+                    $translation_texts[] = $labels['label_reviews'];
+                if (isset($labels['label_related_listing']) && $labels['label_related_listing'] != '' && !in_array($labels['label_related_listing'], $translation_texts))
+                    $translation_texts[] = $labels['label_related_listing'];
+            }
+
+            if ($description != '' && !in_array($description, $translation_texts)) {
+                $translation_texts[] = normalize_whitespace($description);
+            }
+
+            if (!empty($seo)) {
+                if (isset($seo['meta_keyword']) && $seo['meta_keyword'] != '' && !in_array($seo['meta_keyword'], $translation_texts))
+                    $translation_texts[] = normalize_whitespace($seo['meta_keyword']);
+
+                if (isset($seo['meta_description']) && $seo['meta_description'] != '' && !in_array($seo['meta_description'], $translation_texts))
+                    $translation_texts[] = normalize_whitespace($seo['meta_description']);
+            }
+        }
+    }
+    $translation_texts = !empty($translation_texts) ? array_unique($translation_texts) : $translation_texts;
+
+    return $translation_texts;
 }
 
 /**
@@ -4176,26 +4194,26 @@ function geodir_load_cpt_text_translation($translation_texts = array()) {
  * @param  array $location_terms Array of location terms.
  * @return array Location terms.
  */
-function geodir_remove_location_terms($location_terms = array()) {	
-	$location_manager = defined('POST_LOCATION_TABLE') ? true : false;
-	
-	if (!empty($location_terms) && $location_manager) {
-		$hide_country_part = get_option('geodir_location_hide_country_part');
-		$hide_region_part = get_option('geodir_location_hide_region_part');
+function geodir_remove_location_terms($location_terms = array()) {
+    $location_manager = defined('POST_LOCATION_TABLE') ? true : false;
 
-		if ($hide_region_part && $hide_country_part) {
-			if (isset($location_terms['gd_country']))
-				unset($location_terms['gd_country']);
-			if (isset($location_terms['gd_region']))
-				unset($location_terms['gd_region']);
-		} else if ($hide_region_part && !$hide_country_part) {
-			if (isset($location_terms['gd_region']))
-				unset($location_terms['gd_region']);
-		} else if (!$hide_region_part && $hide_country_part) {
-			if (isset($location_terms['gd_country']))
-				unset($location_terms['gd_country']);
-		}
-	}
-	
-	return $location_terms;
+    if (!empty($location_terms) && $location_manager) {
+        $hide_country_part = get_option('geodir_location_hide_country_part');
+        $hide_region_part = get_option('geodir_location_hide_region_part');
+
+        if ($hide_region_part && $hide_country_part) {
+            if (isset($location_terms['gd_country']))
+                unset($location_terms['gd_country']);
+            if (isset($location_terms['gd_region']))
+                unset($location_terms['gd_region']);
+        } else if ($hide_region_part && !$hide_country_part) {
+            if (isset($location_terms['gd_region']))
+                unset($location_terms['gd_region']);
+        } else if (!$hide_region_part && $hide_country_part) {
+            if (isset($location_terms['gd_country']))
+                unset($location_terms['gd_country']);
+        }
+    }
+
+    return $location_terms;
 }
