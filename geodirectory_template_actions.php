@@ -1176,16 +1176,22 @@ function geodir_action_details_taxonomies()
 
                     // fix tag link on detail page
                     if ($priority_location) {
-                        $links[] = "<a href=''>$post_term</a>";
-                    } else {
+
+                        $tag_link = "<a href=''>$post_term</a>";
                         /**
                          * Filter the tag name on the details page.
                          *
                          * @since 1.5.6
+                         * @param string $tag_link The tag link html.
                          * @param object $term The tag term object.
                          */
-                        $term = apply_filters('geodir_details_taxonomies_tag_name',$term);
-                        $links[] = "<a href='" . esc_attr(get_term_link($term->term_id, $term->taxonomy)) . "'>$term->name</a>";
+                        $tag_link = apply_filters('geodir_details_taxonomies_tag_link',$tag_link,$term);
+                        $links[] = $tag_link;
+                    } else {
+                        $tag_link = "<a href='" . esc_attr(get_term_link($term->term_id, $term->taxonomy)) . "'>$term->name</a>";
+                        /** This action is documented in geodirectory-template_actions.php */
+                        $tag_link = apply_filters('geodir_details_taxonomies_tag_link',$tag_link,$term);
+                        $links[] = $tag_link;
                     }
                     $terms[] = $term;
                 }
@@ -1218,14 +1224,16 @@ function geodir_action_details_taxonomies()
                     $term = get_term_by('id', $post_term, $post_taxonomy);
 
                     if (is_object($term)) {
+                        $term_link = "<a href='" . esc_attr(get_term_link($term, $post_taxonomy)) . "'>$term->name</a>";
                         /**
                          * Filter the category name on the details page.
                          *
                          * @since 1.5.6
+                         * @param string $term_link The link html to the category.
                          * @param object $term The category term object.
                          */
-                        $term = apply_filters('geodir_details_taxonomies_term_name',$term);
-                        $links[] = "<a href='" . esc_attr(get_term_link($term, $post_taxonomy)) . "'>$term->name</a>";
+                        $term_link = apply_filters('geodir_details_taxonomies_cat_link',$term_link,$term);
+                        $links[] = $term_link;
                         $terms[] = $term;
                     }
                 endif;
