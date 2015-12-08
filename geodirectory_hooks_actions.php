@@ -1600,7 +1600,7 @@ function geodir_after_core_plugin_row($plugin_file, $plugin_data, $status)
     if (is_plugin_active($plugin_file)) {
         $wp_list_table = _get_list_table('WP_Plugins_List_Table');
 
-        echo '<tr class="plugin-update-tr"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange"><div class="geodir-plugin-row-warning">';
+        echo '<tr class="plugin-update-tr active update"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange"><div class="geodir-plugin-row-warning">';
         _e('Deactivate all GeoDirectory dependent add-ons first before deactivating GeoDirectory.', 'geodirectory');
         echo '</div></td></tr>';
     }
