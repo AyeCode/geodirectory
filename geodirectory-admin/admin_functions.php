@@ -6910,4 +6910,60 @@ function geodir_admin_upgrade_notice() {
     $message = __("Please update core GeoDirectory or some addons may not function correctly.","geodirectory");
     echo"<div class=\"$class\"> <p>$message</p></div>";
 }
+
+
+
+
+/**
+ * Displays an update message for plugin list screens.
+ * Shows only the version updates from the current until the newest version
+ *
+ * @param (array) $plugin_data
+ * @param (object) $r
+ * @return (string) $output
+ */
+function geodire_admin_upgrade_notice( $plugin_data, $r )
+{
+    // readme contents
+    $args = array(
+        'timeout'     => 15,
+        'redirection' => 5
+    );
+    $url = "http://plugins.svn.wordpress.org/geodirectory/trunk/readme.txt";
+    $data       = wp_remote_get( $url, $args );
+
+    if (!is_wp_error($data) && $data['response']['code'] == 200) {
+
+        geodir_in_plugin_update_message($data['body']);
+    }
+}
+
+
+/*
+* @param string $body http response body
+*/
+function geodir_in_plugin_update_message($content) {
+    // Output Upgrade Notice
+    $matches        = null;
+    $regexp         = '~==\s*Upgrade Notice\s*==\s*=\s*(.*)\s*=(.*)(=\s*' . preg_quote( GEODIRECTORY_VERSION ) . '\s*=|$)~Uis';
+    $upgrade_notice = '';
+    if ( preg_match( $regexp, $content, $matches ) ) {
+        if(empty($matches)){return;}
+        //print_r($matches );
+        $version = trim( $matches[1] );
+        if($version && $version>GEODIRECTORY_VERSION){
+
+
+        $notices = (array) preg_split('~[\r\n]+~', trim( $matches[2] ) );
+        if ( version_compare( WC_VERSION, $version, '<' ) ) {
+            $upgrade_notice .= '<div class="geodir_plugin_upgrade_notice">';
+            foreach ( $notices as $index => $line ) {
+                $upgrade_notice .= wp_kses_post( preg_replace( '~\[([^\]]*)\]\(([^\)]*)\)~', '<a href="${2}">${1}</a>', $line ) );
+            }
+            $upgrade_notice .= '</div> ';
+        }
+        }
+    }
+    echo $upgrade_notice;
+}
 ?>
