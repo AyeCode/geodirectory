@@ -341,7 +341,7 @@ function geodir_random_float($min = 0, $max = 1)
  */
 function geodir_get_address_by_lat_lan($lat, $lng)
 {
-    $url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' . trim($lat) . ',' . trim($lng) . '&sensor=true';
+    $url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' . trim($lat) . ',' . trim($lng) ;
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);

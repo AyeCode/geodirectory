@@ -259,7 +259,7 @@ function get_markers()
             $icon = !empty($geodir_cat_icons) && isset($geodir_cat_icons[$catinfo_obj->default_category]) ? $geodir_cat_icons[$catinfo_obj->default_category] : '';
 
             $e_dates = '';
-            if ($post_type == 'gd_event') {
+            if ($post_type == 'gd_event' && isset($catinfo_obj->recurring_dates)) {
                 $event_arr = maybe_unserialize($catinfo_obj->recurring_dates);
                 $e_arr = explode(",", $event_arr['event_recurring_dates']);
 
