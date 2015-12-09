@@ -256,6 +256,7 @@ if (!function_exists('geodir_custom_field_save')) {
 	 * Save or Update custom fields into the database.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.6 Fix for saving multiselect custom field "Display Type" on first attempt.
 	 * @package GeoDirectory
      * @global object $wpdb WordPress Database object.
      * @global string $plugin_prefix Geodirectory plugin table prefix.
@@ -974,27 +975,34 @@ if (!function_exists('geodir_custom_field_save')) {
                         break;
                     case 'multiselect':
                     case 'select':
-
-
                         $data_type = 'VARCHAR';
-
-
                         $op_size = '500';
 
                         // only make the field as big as it needs to be.
-                        if(isset($option_values) && $option_values && $field_type=='select'){
-                            $option_values_arr = explode(',',$option_values);
-                            if(is_array($option_values_arr)){
+                        if (isset($option_values) && $option_values && $field_type == 'select') {
+                            $option_values_arr = explode(',', $option_values);
+                            
+							if (is_array($option_values_arr)) {
                                 $op_max = 0;
-                                foreach($option_values_arr as $op_val){
-                                    if(strlen($op_val) && strlen($op_val)>$op_max){$op_max = strlen($op_val);}
+                                
+								foreach ($option_values_arr as $op_val) {
+                                    if (strlen($op_val) && strlen($op_val) > $op_max) {
+										$op_max = strlen($op_val);
+									}
                                 }
-                                if($op_max){$op_size =$op_max; }
+                                
+								if ($op_max) {
+									$op_size = $op_max;
+								}
                             }
-                        }elseif(isset($option_values) && $option_values && $field_type=='multiselect'){
-                            if(strlen($option_values)){
+                        } elseif (isset($option_values) && $option_values && $field_type == 'multiselect') {
+                            if (strlen($option_values)) {
                                 $op_size =  strlen($option_values);
                             }
+							
+							if (isset($request_field['multi_display_type'])) {
+								$extra_fields = $request_field['multi_display_type'];
+							}
                         }
 
                         $meta_field_add = $data_type . "( $op_size ) NULL ";
@@ -1003,10 +1011,9 @@ if (!function_exists('geodir_custom_field_save')) {
                         }
 
                         $add_result = geodir_add_column_if_not_exist($detail_table, $htmlvar_name, $meta_field_add);
-                        if($add_result===false){
-                            return __('Column creation failed, you may have too many columns.','geodirectory');
+                        if ($add_result === false) {
+                            return __('Column creation failed, you may have too many columns.', 'geodirectory');
                         }
-
                         break;
                     case 'textarea':
                     case 'html':
