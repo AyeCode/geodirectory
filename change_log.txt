@@ -13,6 +13,7 @@ The recent reviews widget ignores 1 star reviews - FIXED
 Added ability to show upgrade warning messages for major changes - ADDED
 Multiselect custom field "Display Type" option doesn't save on first attempt - FIXED
 Apostrophe in location name breaks the maps - FIXED
+JS warning Google maps sensor no longer required - FIXED
 
 v1.5.5
 Added charset parameter to case conversion functions - ADDED

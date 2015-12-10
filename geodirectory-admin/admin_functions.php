@@ -127,7 +127,7 @@ if (!function_exists('geodir_admin_scripts')) {
         $map_lang = "&language=" . geodir_get_map_default_language();
         /** This filter is documented in geodirectory_template_tags.php */
         $map_extra = apply_filters('geodir_googlemap_script_extra', '');
-        wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?sensor=false' . $map_lang . $map_extra, '', NULL);
+        wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?' . $map_lang . $map_extra, '', NULL);
 
         wp_register_script('geodirectory-goMap-script', geodir_plugin_url() . '/geodirectory-assets/js/goMap.js', array(), GEODIRECTORY_VERSION);
         wp_enqueue_script('geodirectory-goMap-script');
