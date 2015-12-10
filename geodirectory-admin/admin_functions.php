@@ -127,7 +127,7 @@ if (!function_exists('geodir_admin_scripts')) {
         $map_lang = "&language=" . geodir_get_map_default_language();
         /** This filter is documented in geodirectory_template_tags.php */
         $map_extra = apply_filters('geodir_googlemap_script_extra', '');
-        wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?sensor=false' . $map_lang . $map_extra, '', NULL);
+        wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?' . $map_lang . $map_extra, '', NULL);
 
         wp_register_script('geodirectory-goMap-script', geodir_plugin_url() . '/geodirectory-assets/js/goMap.js', array(), GEODIRECTORY_VERSION);
         wp_enqueue_script('geodirectory-goMap-script');
@@ -1493,7 +1493,6 @@ if (!function_exists('geodir_insert_csv_post_data') && get_option('geodir_instal
                 }
             }
             function gdTerminateImport() {
-                console.log('gdTerminateImport()');
                 jQuery('#gd_terminateaction').val('terminate');
                 jQuery('#gd_import_data').hide();
                 jQuery('#gd_stop_import').hide();
@@ -3479,6 +3478,7 @@ function geodir_import_export_tab( $tabs ) {
  * Display the page to manage import/export categories/listings.
  *
  * @since 1.4.6
+ * @since 1.5.6 Option added to export max number listings per csv file.
  * @package GeoDirectory
  *
  * @return string Html content.
@@ -3514,6 +3514,33 @@ function geodir_import_export_page() {
 		$gd_posttypes_option .= '<option value="' . $gd_posttype . '">' . __( $row['labels']['name'], 'geodirectory' ) . '</option>';
 	}
 	wp_enqueue_script( 'jquery-ui-progressbar' );
+	
+	$gd_chunksize_options = array();
+	$gd_chunksize_options[100] = 100;
+	$gd_chunksize_options[200] = 200;
+	$gd_chunksize_options[500] = 500;
+	$gd_chunksize_options[1000] = 1000;
+	$gd_chunksize_options[2000] = 2000;
+	$gd_chunksize_options[5000] = 5000;
+	$gd_chunksize_options[10000] = 10000;
+	$gd_chunksize_options[20000] = 20000;
+	$gd_chunksize_options[50000] = 50000;
+	$gd_chunksize_options[100000] = 100000;
+	 
+	 /**
+     * Filter max entries per export csv file.
+     *
+     * @since 1.5.6
+     * @package GeoDirectory
+     *
+     * @param string $gd_chunksize_options Entries options.
+     */
+    $gd_chunksize_options = apply_filters( 'geodir_export_csv_chunksize_options', $gd_chunksize_options );
+	
+	$gd_chunksize_option = '';
+	foreach ($gd_chunksize_options as $value => $title) {
+		$gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 5000) . '>' . $title . '</option>';
+	}
 	
 	$uploads = wp_upload_dir();
 ?>
@@ -3644,7 +3671,11 @@ function geodir_import_export_page() {
 					</select></td>
 				</tr>
 				<tr>
-				  <td class="fld" style="vertical-align: top"><label>
+					<td class="fld" style="vertical-align:top"><label for="gd_chunk_size"><?php _e( 'Max entries per csv file:', 'geodirectory' );?></label></td>
+					<td><select name="gd_chunk_size" id="gd_chunk_size" style="min-width:140px"><?php echo $gd_chunksize_option;?></select><span class="description"><?php _e( 'Please select the maximum number of entries per csv file (defaults to 5000, you might want to lower this to prevent memory issues on some installs)', 'geodirectory' );?></span></td>
+				  </tr>
+				<tr>
+				  <td class="fld" style="vertical-align:top"><label>
 					<?php _e( 'Progress:', 'geodirectory' );?>
 					</label></td>
 				  <td><div id='gd_progressbar_box'>
@@ -3658,9 +3689,10 @@ function geodir_import_export_page() {
 					  
 					<p id="gd_timer" class="gd_timer">00:00:00</p></td>
 				</tr>
-				<tr>
-				  <td colspan="2"><input type="submit" value="<?php echo esc_attr( __( 'Export CSV', 'geodirectory' ) );?>" class="button-primary" name="gd_ie_exposts_submit" id="gd_ie_exposts_submit">
+				<tr class="gd-ie-actions">
+				  <td><input type="submit" value="<?php echo esc_attr( __( 'Export CSV', 'geodirectory' ) );?>" class="button-primary" name="gd_ie_exposts_submit" id="gd_ie_exposts_submit">
 				  </td>
+				  <td id="gd_ie_ex_files" class="gd-ie-files"></td>
 				</tr>
 			  </tbody>
 			</table>
@@ -3748,14 +3780,19 @@ function geodir_import_export_page() {
 					<td class="fld"><label for="gd_post_type"><?php _e( 'Post Type:', 'geodirectory' );?></label></td>
 					<td><select name="gd_post_type" id="gd_post_type" style="min-width:140px"><?php echo $gd_posttypes_option;?></select></td>
 				  </tr>
-				  <tr>
-					<td class="fld" style="vertical-align: top"><label><?php _e( 'Progress:', 'geodirectory' );?></label></td>
-					<td><div id='gd_progressbar_box'><div id="gd_progressbar" class="gd_progressbar"><div class="gd-progress-label"></div></div></div><p style="display:inline-block"><?php _e( 'Elapsed Time:', 'geodirectory' );?></p>&nbsp;&nbsp;<p id="gd_timer" class="gd_timer">00:00:00</p></td>
+				   <tr>
+					<td class="fld" style="vertical-align:top"><label for="gd_chunk_size"><?php _e( 'Max entries per csv file:', 'geodirectory' );?></label></td>
+					<td><select name="gd_chunk_size" id="gd_chunk_size" style="min-width:140px"><?php echo $gd_chunksize_option;?></select><span class="description"><?php _e( 'Please select the maximum number of entries per csv file (defaults to 5000, you might want to lower this to prevent memory issues on some installs)', 'geodirectory' );?></span></td>
 				  </tr>
 				  <tr>
-					<td colspan="2">
+					<td class="fld" style="vertical-align:top"><label><?php _e( 'Progress:', 'geodirectory' );?></label></td>
+					<td><div id='gd_progressbar_box'><div id="gd_progressbar" class="gd_progressbar"><div class="gd-progress-label"></div></div></div><p style="display:inline-block"><?php _e( 'Elapsed Time:', 'geodirectory' );?></p>&nbsp;&nbsp;<p id="gd_timer" class="gd_timer">00:00:00</p></td>
+				  </tr>
+				  <tr class="gd-ie-actions">
+					<td>
 						<input type="submit" value="<?php echo esc_attr( __( 'Export CSV', 'geodirectory' ) );?>" class="button-primary" name="gd_ie_excats_submit" id="gd_ie_excats_submit">
 					</td>
+					<td id="gd_ie_ex_files" class="gd-ie-files"></td>
 				  </tr>
 				</tbody>
 			</table>
@@ -4176,6 +4213,7 @@ jQuery(function(){
 		
 		var el = jQuery(this).closest('.postbox');
 		var post_type = jQuery(el).find('#gd_post_type').val();
+		var chunk_size = parseInt(jQuery('#gd_chunk_size', el).val());
 		if ( !post_type ) {
 			jQuery(el).find('#gd_post_type').focus();
 			return false;
@@ -4188,7 +4226,7 @@ jQuery(function(){
 			jQuery(el).find(".gd_timer").gdposts_timer();
 		}, 1000);
 		
-		gd_process_export_posts(el, post_type);
+		gd_process_export_posts(el, post_type, chunk_size);
 	});
 	
 	jQuery.fn.gdposts_timer = function() {
@@ -4204,6 +4242,7 @@ jQuery(function(){
 		
 		var el = jQuery(this).closest('.postbox');
 		var post_type = jQuery(el).find('#gd_post_type').val();
+		var chunk_size = parseInt(jQuery('#gd_chunk_size', el).val());
 		if ( !post_type ) {
 			jQuery(el).find('#gd_post_type').focus();
 			return false;
@@ -4216,7 +4255,7 @@ jQuery(function(){
 			jQuery(el).find(".gd_timer").gdcats_timer();
 		}, 1000);
 		
-		gd_process_export_cats(el, post_type);
+		gd_process_export_cats(el, post_type, chunk_size);
 	});
 	
 	jQuery.fn.gdcats_timer = function() {
@@ -4237,18 +4276,19 @@ jQuery(function(){
 		return time;
 	}
 		
-	function gd_process_export_posts(el, post_type) {
+	function gd_process_export_posts(el, post_type, chunk_size) {
 		gd_progressbar(el, 0, "<?php echo esc_attr( __( 'Exporting...', 'geodirectory' ) );?>");
 		jQuery(el).find('#gd_timer').text('00:00:00');
 
 		jQuery.ajax({
 			url: ajaxurl,
 			type: "POST",
-			data: 'action=geodir_import_export&task=export_posts&_pt=' + post_type + '&_nonce=<?php echo $nonce;?>',
+			data: 'action=geodir_import_export&task=export_posts&_pt=' + post_type + '&_n=' + chunk_size + '&_nonce=<?php echo $nonce;?>',
 			dataType : 'json',
 			cache: false,
 			beforeSend: function (jqXHR, settings) {
 				jQuery(el).find('#gd_timer').text('00:00:01');
+				jQuery('#gd_ie_ex_files', el).html('');
 				
 				window.clearInterval(stat_posts);
 				stat_posts = window.setInterval( function() {
@@ -4268,8 +4308,13 @@ jQuery(function(){
 						if (typeof data.total != 'undefined' && parseInt(data.total) > 0) {
 							gd_progressbar(el, 100, "<?php echo esc_attr( __( 'Complete!', 'geodirectory' ) );?>");
 						}
-						if (typeof data.csv_file != 'undefined' && data.csv_file != '' ) {
-							window.location.href = data.csv_file;
+						if (typeof data.csv_files != 'undefined' && jQuery(data.csv_files).length ) {
+							var obj_files = data.csv_files;
+							var files = '';
+							for (var i in data.csv_files) {
+								files += '<p>'+ obj_files[i].i +' <a class="gd-ie-file" href="' + obj_files[i].u + '" target="_blank">' + obj_files[i].u + '</a> (' + obj_files[i].s + ')</p>';
+							}
+							jQuery('#gd_ie_ex_files', el).html(files);
 							return true;
 						}
 					}
@@ -4283,18 +4328,19 @@ jQuery(function(){
 		});
 	}
 	
-	function gd_process_export_cats(el, post_type) {
+	function gd_process_export_cats(el, post_type, chunk_size) {
 		gd_progressbar(el, 0, "<?php echo esc_attr( __( 'Exporting...', 'geodirectory' ) );?>");
 		jQuery(el).find('#gd_timer').text('00:00:00');
 
 		jQuery.ajax({
 			url: ajaxurl,
 			type: "POST",
-			data: 'action=geodir_import_export&task=export_cats&_pt=' + post_type + '&_nonce=<?php echo $nonce;?>',
+			data: 'action=geodir_import_export&task=export_cats&_pt=' + post_type + '&_n=' + chunk_size + '&_nonce=<?php echo $nonce;?>',
 			dataType : 'json',
 			cache: false,
 			beforeSend: function (jqXHR, settings) {
 				jQuery(el).find('#gd_timer').text('00:00:01');
+				jQuery('#gd_ie_ex_files', el).html('');
 				
 				window.clearInterval(stat_cats);
 				
@@ -4310,8 +4356,13 @@ jQuery(function(){
 						if (typeof data.total != 'undefined' && parseInt(data.total) > 0) {
 							gd_progressbar(el, 100, "<?php echo esc_attr( __( 'Complete!', 'geodirectory' ) );?>");
 						}
-						if (typeof data.csv_file != 'undefined' && data.csv_file != '' ) {
-							window.location.href = data.csv_file;
+						if (typeof data.csv_files != 'undefined' && jQuery(data.csv_files).length ) {
+							var obj_files = data.csv_files;
+							var files = '';
+							for (var i in data.csv_files) {
+								files += '<p>'+ obj_files[i].i +' <a class="gd-ie-file" href="' + obj_files[i].u + '" target="_blank">' + obj_files[i].u + '</a> (' + obj_files[i].s + ')</p>';
+							}
+							jQuery('#gd_ie_ex_files', el).html(files);
 							return true;
 						}
 					}
@@ -4511,6 +4562,8 @@ function geodir_ajax_import_export() {
 	}
 
 	$post_type = isset( $_REQUEST['_pt'] ) ? $_REQUEST['_pt'] : NULL;
+	$chunk_per_page = isset( $_REQUEST['_n'] ) ? absint($_REQUEST['_n']) : NULL;
+	$chunk_per_page = $chunk_per_page < 50 || $chunk_per_page > 10000 ? 1000 : $chunk_per_page;
 	
 	/*if( empty( $wp_filesystem ) ) {
 		require_once( ABSPATH . '/wp-admin/includes/file.php' );
@@ -4545,13 +4598,14 @@ function geodir_ajax_import_export() {
 				//add_filter( 'geodir_imex_count_posts', 'geodir_imex_count_events', 10, 2 );
 				add_filter( 'geodir_imex_export_posts_query', 'geodir_imex_get_events_query', 10, 2 );
 			}
-
-			$file_name = $post_type . '_' . date( 'j_n_y' );
-			
+			$file_name = $post_type . '_' . date( 'dmyHi' );
 			$posts_count = geodir_get_posts_count( $post_type );
-			$file_url = geodir_path_import_export() . '/' . $file_name . '.csv';
+			$file_url_base = geodir_path_import_export() . '/';
+			$file_url = $file_url_base . $file_name . '.csv';
 			$file_path = $csv_file_dir . '/' . $file_name . '.csv';
 			$file_path_temp = $csv_file_dir . '/' . $post_type . '_' . $nonce . '.csv';
+			
+			$chunk_file_paths = array();
 
 			if ( isset( $_REQUEST['_st'] ) ) {
 				$line_count = (int)geodir_import_export_line_count( $file_path_temp );
@@ -4565,11 +4619,8 @@ function geodir_ajax_import_export() {
 				}
 				// WPML
 				wp_send_json( $json );
+				exit;
 			} else {				
-				if ( $wp_filesystem->exists( $file_path ) ) {
-					$wp_filesystem->delete( $file_path );
-				}
-				
 				if ( !$posts_count > 0 ) {
 					$json['error'] = __( 'No records to export.', 'geodirectory' );
 				} else {
@@ -4578,23 +4629,41 @@ function geodir_ajax_import_export() {
 
 					if ( !empty( $posts ) ) {
 						$total_posts = count( $posts );
-						$per_page = 100;
-						$total_pages = ceil( $total_posts / $per_page );
-
-						for ( $i = 0; $i <= $total_pages; $i++ ) {
-							$save_posts = array_slice( $posts , ( $i * $per_page ), $per_page );
+						if ($chunk_per_page > $total_posts) {
+							$chunk_per_page = $total_posts;
+						}
+						$chunk_total_pages = ceil( $total_posts / $chunk_per_page );
+						
+						for ( $j = 0; $j <= $chunk_total_pages; $j++ ) {
+							$chunk_save_posts = array_slice( $posts , ( $j * $chunk_per_page ), $chunk_per_page );
 							
-							$clear = $i == 0 ? true : false;
-							geodir_save_csv_data( $file_path_temp, $save_posts, $clear );
+							$per_page = 200;
+							if ($per_page > $chunk_per_page) {
+								$per_page = $chunk_per_page;
+							}
+							$total_pages = ceil( $chunk_per_page / $per_page );
+							
+							for ( $i = 0; $i <= $total_pages; $i++ ) {
+								$save_posts = array_slice( $chunk_save_posts , ( $i * $per_page ), $per_page );
+								
+								$clear = $i == 0 ? true : false;
+								geodir_save_csv_data( $file_path_temp, $save_posts, $clear );
+							}
+								
+							if ( $wp_filesystem->exists( $file_path_temp ) ) {
+								$chunk_page_no = $chunk_total_pages > 1 ? '-' . ( $j + 1 ) : '';
+								$chunk_file_name = $file_name . $chunk_page_no . '.csv';
+								$file_path = $csv_file_dir . '/' . $chunk_file_name;
+								$wp_filesystem->move( $file_path_temp, $file_path, true );
+								
+								$file_url = $file_url_base . $chunk_file_name;
+								$chunk_file_paths[] = array('i' => ($j + 1 ) . '.', 'u' => $file_url, 's' => size_format(filesize($file_path), 2));
+							}
 						}
-						
-						if ( $wp_filesystem->exists( $file_path_temp ) ) {
-							$wp_filesystem->move( $file_path_temp, $file_path, true );
-						}
-						
-						if ( $wp_filesystem->exists( $file_path ) ) {
+												
+						if ( !empty($chunk_file_paths) ) {
 							$json['total'] = $posts_count;
-							$json['csv_file'] = $file_url;
+							$json['csv_files'] = $chunk_file_paths;
 						} else {
 							$json['error'] = __( 'Fail, something wrong to create csv file.', 'geodirectory' );
 						}
@@ -4608,6 +4677,7 @@ function geodir_ajax_import_export() {
 				}
 				// WPML
 				wp_send_json( $json );
+				exit;
 			}
 		}
 		break;
@@ -4621,12 +4691,15 @@ function geodir_ajax_import_export() {
 				$sitepress->switch_lang('all', true);
 			}
 			// WPML
-			$file_name = $post_type . 'category_' . date( 'j_n_y' );
+			$file_name = $post_type . 'category_' . date( 'dmyHi' );
 			
 			$terms_count = geodir_get_terms_count( $post_type );
-			$file_url = geodir_path_import_export() . '/' . $file_name . '.csv';
+			$file_url_base = geodir_path_import_export() . '/';
+			$file_url = $file_url_base . $file_name . '.csv';
 			$file_path = $csv_file_dir . '/' . $file_name . '.csv';
 			$file_path_temp = $csv_file_dir . '/' . $post_type . 'category_' . $nonce . '.csv';
+			
+			$chunk_file_paths = array();
 			
 			if ( isset( $_REQUEST['_st'] ) ) {
 				$line_count = (int)geodir_import_export_line_count( $file_path_temp );
@@ -4640,11 +4713,8 @@ function geodir_ajax_import_export() {
 				}
 				// WPML
 				wp_send_json( $json );
+				exit;
 			} else {				
-				if ( $wp_filesystem->exists( $file_path ) ) {
-					$wp_filesystem->delete( $file_path );
-				}
-				
 				if ( !$terms_count > 0 ) {
 					$json['error'] = __( 'No records to export.', 'geodirectory' );
 				} else {
@@ -4653,23 +4723,41 @@ function geodir_ajax_import_export() {
 					
 					if ( !empty( $terms ) ) {
 						$total_terms = count( $terms );
-						$per_page = 50;
-						$total_pages = ceil( $total_terms / $per_page );
+						if ($chunk_per_page > $total_terms) {
+							$chunk_per_page = $total_terms;
+						}
+						$chunk_total_pages = ceil( $total_terms / $chunk_per_page );
 						
-						for ( $i = 0; $i <= $total_pages; $i++ ) {
-							$save_terms = array_slice( $terms , ( $i * $per_page ), $per_page );
+						for ( $j = 0; $j <= $chunk_total_pages; $j++ ) {
+							$chunk_save_terms = array_slice( $terms , ( $j * $chunk_per_page ), $chunk_per_page );
 							
-							$clear = $i == 0 ? true : false;
-							geodir_save_csv_data( $file_path_temp, $save_terms, $clear );
+							$per_page = 200;
+							if ($per_page > $chunk_per_page) {
+								$per_page = $chunk_per_page;
+							}
+							$total_pages = ceil( $chunk_per_page / $per_page );
+							
+							for ( $i = 0; $i <= $total_pages; $i++ ) {
+								$save_terms = array_slice( $chunk_save_terms , ( $i * $per_page ), $per_page );
+								
+								$clear = $i == 0 ? true : false;
+								geodir_save_csv_data( $file_path_temp, $save_terms, $clear );
+							}
+							
+							if ( $wp_filesystem->exists( $file_path_temp ) ) {
+								$chunk_page_no = $chunk_total_pages > 1 ? '-' . ( $j + 1 ) : '';
+								$chunk_file_name = $file_name . $chunk_page_no . '.csv';
+								$file_path = $csv_file_dir . '/' . $chunk_file_name;
+								$wp_filesystem->move( $file_path_temp, $file_path, true );
+								
+								$file_url = $file_url_base . $chunk_file_name;
+								$chunk_file_paths[] = array('i' => ($j + 1 ) . '.', 'u' => $file_url, 's' => size_format(filesize($file_path), 2));
+							}
 						}
 						
-						if ( $wp_filesystem->exists( $file_path_temp ) ) {
-							$wp_filesystem->move( $file_path_temp, $file_path, true );
-						}
-						
-						if ( $wp_filesystem->exists( $file_path ) ) {
+						if ( !empty($chunk_file_paths) ) {
 							$json['total'] = $terms_count;
-							$json['csv_file'] = $file_url;
+							$json['csv_files'] = $chunk_file_paths;
 						} else {
 							$json['error'] = __( 'Fail, something wrong to create csv file.', 'geodirectory' );
 						}
@@ -4683,6 +4771,7 @@ function geodir_ajax_import_export() {
 				}
 				// WPML
 				wp_send_json( $json );
+				exit;
 			}
 		}
 		break;
@@ -6820,5 +6909,61 @@ function geodir_admin_upgrade_notice() {
     $class = "error";
     $message = __("Please update core GeoDirectory or some addons may not function correctly.","geodirectory");
     echo"<div class=\"$class\"> <p>$message</p></div>";
+}
+
+
+
+
+/**
+ * Displays an update message for plugin list screens.
+ * Shows only the version updates from the current until the newest version
+ *
+ * @param (array) $plugin_data
+ * @param (object) $r
+ * @return (string) $output
+ */
+function geodire_admin_upgrade_notice( $plugin_data, $r )
+{
+    // readme contents
+    $args = array(
+        'timeout'     => 15,
+        'redirection' => 5
+    );
+    $url = "http://plugins.svn.wordpress.org/geodirectory/trunk/readme.txt";
+    $data       = wp_remote_get( $url, $args );
+
+    if (!is_wp_error($data) && $data['response']['code'] == 200) {
+
+        geodir_in_plugin_update_message($data['body']);
+    }
+}
+
+
+/*
+* @param string $body http response body
+*/
+function geodir_in_plugin_update_message($content) {
+    // Output Upgrade Notice
+    $matches        = null;
+    $regexp         = '~==\s*Upgrade Notice\s*==\s*=\s*(.*)\s*=(.*)(=\s*' . preg_quote( GEODIRECTORY_VERSION ) . '\s*=|$)~Uis';
+    $upgrade_notice = '';
+    if ( preg_match( $regexp, $content, $matches ) ) {
+        if(empty($matches)){return;}
+        //print_r($matches );
+        $version = trim( $matches[1] );
+        if($version && $version>GEODIRECTORY_VERSION){
+
+
+        $notices = (array) preg_split('~[\r\n]+~', trim( $matches[2] ) );
+        if ( version_compare( WC_VERSION, $version, '<' ) ) {
+            $upgrade_notice .= '<div class="geodir_plugin_upgrade_notice">';
+            foreach ( $notices as $index => $line ) {
+                $upgrade_notice .= wp_kses_post( preg_replace( '~\[([^\]]*)\]\(([^\)]*)\)~', '<a href="${2}">${1}</a>', $line ) );
+            }
+            $upgrade_notice .= '</div> ';
+        }
+        }
+    }
+    echo $upgrade_notice;
 }
 ?>

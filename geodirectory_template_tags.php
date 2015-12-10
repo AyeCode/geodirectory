@@ -105,7 +105,7 @@ function geodir_templates_scripts()
      * @param string $var The string to filter, default is empty string.
      */
     $map_extra = apply_filters('geodir_googlemap_script_extra', '');
-    wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?sensor=false' . $map_lang . $map_extra, '', NULL);
+    wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?' . $map_lang . $map_extra, '', NULL);
     /*	{
             wp_register_script( 'geodirectory-googlemap-script', "//maps.google.com/maps/api/js?sensor=false&language=en" );
             wp_enqueue_script( 'geodirectory-googlemap-script' );

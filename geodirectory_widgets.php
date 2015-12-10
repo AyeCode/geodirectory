@@ -1095,6 +1095,7 @@ if (!function_exists('register_geodir_widgets')) {
          *
          * @since 1.5.6
          * @package GeoDirectory
+         * @todo make the image field recurring
          */
         include_once('geodirectory-widgets/geodirectory_features_widget.php');
     }

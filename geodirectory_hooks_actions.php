@@ -1600,7 +1600,7 @@ function geodir_after_core_plugin_row($plugin_file, $plugin_data, $status)
     if (is_plugin_active($plugin_file)) {
         $wp_list_table = _get_list_table('WP_Plugins_List_Table');
 
-        echo '<tr class="plugin-update-tr"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange"><div class="geodir-plugin-row-warning">';
+        echo '<tr class="plugin-update-tr active update"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange"><div class="geodir-plugin-row-warning">';
         _e('Deactivate all GeoDirectory dependent add-ons first before deactivating GeoDirectory.', 'geodirectory');
         echo '</div></td></tr>';
     }
@@ -2779,6 +2779,27 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                             $option_values = explode(',', $post->$type['htmlvar_name']);
 
                             if ($type['option_values']) {
+
+
+                                if (strstr($type['option_values'], "|")) {
+
+                                    $field_values = explode(',', $type['option_values']);
+                                    $san_options = array();
+                                    foreach ($field_values as $data) {
+                                        if (strstr($data, "|")) {
+                                            $temp_data = explode('|', $data);
+                                            if(isset($temp_data[1]))$data = $temp_data[1];
+                                        }
+
+                                        $data = str_replace(array("{optgroup}","{/optgroup}"),'',$data);
+                                        $san_options[] = trim($data);
+
+                                    }
+                                    $type['option_values'] = implode(',',$san_options);
+
+                                }
+
+
                                 if (strstr($type['option_values'], "/")) {
                                     $option_values = array();
                                     $field_values = explode(',', $type['option_values']);

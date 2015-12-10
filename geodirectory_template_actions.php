@@ -1176,9 +1176,22 @@ function geodir_action_details_taxonomies()
 
                     // fix tag link on detail page
                     if ($priority_location) {
-                        $links[] = "<a href=''>$post_term</a>";
+
+                        $tag_link = "<a href=''>$post_term</a>";
+                        /**
+                         * Filter the tag name on the details page.
+                         *
+                         * @since 1.5.6
+                         * @param string $tag_link The tag link html.
+                         * @param object $term The tag term object.
+                         */
+                        $tag_link = apply_filters('geodir_details_taxonomies_tag_link',$tag_link,$term);
+                        $links[] = $tag_link;
                     } else {
-                        $links[] = "<a href='" . esc_attr(get_term_link($term->term_id, $term->taxonomy)) . "'>$term->name</a>";
+                        $tag_link = "<a href='" . esc_attr(get_term_link($term->term_id, $term->taxonomy)) . "'>$term->name</a>";
+                        /** This action is documented in geodirectory-template_actions.php */
+                        $tag_link = apply_filters('geodir_details_taxonomies_tag_link',$tag_link,$term);
+                        $links[] = $tag_link;
                     }
                     $terms[] = $term;
                 }
@@ -1209,8 +1222,18 @@ function geodir_action_details_taxonomies()
 
                 if ($post_term != ''):
                     $term = get_term_by('id', $post_term, $post_taxonomy);
+
                     if (is_object($term)) {
-                        $links[] = "<a href='" . esc_attr(get_term_link($term, $post_taxonomy)) . "'>$term->name</a>";
+                        $term_link = "<a href='" . esc_attr(get_term_link($term, $post_taxonomy)) . "'>$term->name</a>";
+                        /**
+                         * Filter the category name on the details page.
+                         *
+                         * @since 1.5.6
+                         * @param string $term_link The link html to the category.
+                         * @param object $term The category term object.
+                         */
+                        $term_link = apply_filters('geodir_details_taxonomies_cat_link',$term_link,$term);
+                        $links[] = $term_link;
                         $terms[] = $term;
                     }
                 endif;
@@ -1314,6 +1337,10 @@ function geodir_action_details_micordata()
     $external_links[] = $post->geodir_facebook;
     $external_links = array_filter($external_links);
 
+    if(!empty($external_links)){
+        $external_links = array_values($external_links);
+    }
+
     // reviews
     $comment_count = geodir_get_review_count_total($post->ID);
     $post_avgratings = geodir_get_post_rating($post->ID);
@@ -1329,10 +1356,10 @@ function geodir_action_details_micordata()
     $schema['@context'] = "http://schema.org";
     $schema['@type'] = $schema_type;
     $schema['name'] = $post->post_name;
-    $schema['description'] = $post->post_content;
+    $schema['description'] = wp_strip_all_tags( $post->post_content, true );
     $schema['telephone'] = $post->geodir_contact;
     $schema['url'] = $c_url;
-    $schema['sameAs'] = $external_links;;
+    $schema['sameAs'] = $external_links;
     $schema['image'] = $images;
     $schema['address'] = array(
         "@type" => "PostalAddress",
@@ -1369,6 +1396,7 @@ function geodir_action_details_micordata()
      * @param array $schema The array of schema data to be filtered.
      */
     $schema = apply_filters('geodir_details_schema', $schema);
+
 
     echo '<script type="application/ld+json">' . json_encode($schema) . '</script>';
 

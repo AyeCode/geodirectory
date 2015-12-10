@@ -3,6 +3,7 @@
  * Displays the map in add listing map
  *
  * @since 1.0.0
+ * @since 1.5.6 Fixed breaking maps when there is an apostrophe in location name.
  * @package GeoDirectory
  */
 
@@ -110,7 +111,7 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
             var getCountry = '';
             getCountryISO = '';
 
-            console.log(responses);
+            //console.log(responses);
             street_number = '';
             premise = ''; // In Russian ;
             establishment = '';
@@ -175,7 +176,7 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
                 if (responses[0].formatted_address != '') {
 
                     address_array = responses[0].formatted_address.split(",", 2);
-                    console.log(address_array);
+                    //console.log(address_array);
                     if (address_array.length > 1) {//alert(1);
 
 
@@ -331,8 +332,8 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
 			do_action('geodir_add_listing_geocode_js_vars');
 			?>
             <?php if($is_map_restrict){?>
-            if (getCity.toLowerCase() != '<?php echo geodir_strtolower(esc_attr($city));?>') {
-                alert('<?php printf(__('Please choose any address of the (%s) city only.','geodirectory'), $city);?>');
+            if (getCity.toLowerCase() != '<?php echo geodir_strtolower(addslashes_gpc($city));?>') {
+                alert('<?php echo addslashes_gpc(wp_sprintf(__('Please choose any address of the (%s) city only.','geodirectory'), $city));?>');
                 jQuery("#<?php echo $prefix.'map';?>").goMap();
                 jQuery.goMap.map.setCenter(new google.maps.LatLng('<?php echo $default_lat; ?>', '<?php echo $default_lng; ?>'));
                 baseMarker.setPosition(new google.maps.LatLng('<?php echo $default_lat; ?>', '<?php echo $default_lng; ?>'));
@@ -342,7 +343,7 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
             <?php } ?>
             updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry);
         } else {
-            updateMarkerAddress('<?php echo addslashes(__('Cannot determine address at this location.','geodirectory'));?>');
+            updateMarkerAddress('<?php echo addslashes_gpc(__('Cannot determine address at this location.','geodirectory'));?>');
         }
 
 
@@ -366,7 +367,7 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
         jQuery('#<?php echo $prefix.'longitude';?>').val(markerlatLng.lng());
     }
     function updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry) {
-        var set_map_val_in_fields = '<?php echo $auto_change_map_fields;?>';
+        var set_map_val_in_fields = '<?php echo addslashes_gpc($auto_change_map_fields);?>';
         <?php ob_start();?>
         var old_country = jQuery("#<?php echo $prefix.'country';?>").val();
         var old_region = jQuery("#<?php echo $prefix.'region';?>").val();
@@ -427,13 +428,13 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
             zip = '';
         }
         if (typeof city == "undefined") {
-            city = '<?php echo $city;?>';
+            city = '<?php echo addslashes_gpc($city);?>';
         }
         if (typeof region == "undefined") {
-            region = '<?php echo $region;?>';
+            region = '<?php echo addslashes_gpc($region);?>';
         }
         if (typeof country == "undefined") {
-            country = '<?php echo $country;?>';
+            country = '<?php echo addslashes_gpc($country);?>';
         }
         var is_restrict = '<?php echo $is_map_restrict; ?>';
         <?php ob_start();
@@ -473,7 +474,7 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
         ?>
         geocoder.geocode({'address': address, 'country': ISO2},
             function (results, status) {
-                console.log(results);
+                //console.log(results);
                 console.log(status);
                 jQuery("#<?php echo $prefix.'map';?>").goMap();
                 if (status == google.maps.GeocoderStatus.OK) {
@@ -493,7 +494,7 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
                     geocodePosition(baseMarker.getPosition(), {'address': address, 'country': ISO2});
 //}
                 } else {
-                    alert("<?php _e('Geocode was not successful for the following reason:','geodirectory');?> " + status);
+                    alert('<?php echo addslashes_gpc(__('Geocode was not successful for the following reason:','geodirectory'));?> ' + status);
                 }
             });
     }
@@ -579,7 +580,7 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
         if($is_map_restrict)
         {
         ?>
-        var CITY_ADDRESS = '<?php echo $city.','.$region.','.$country;?>';
+        var CITY_ADDRESS = '<?php echo addslashes_gpc($city).','.addslashes_gpc($region).','.addslashes_gpc($country);?>';
         geocoder.geocode({'address': CITY_ADDRESS},
             function (results, status) {
                 $("#<?php echo $prefix.'map';?>").goMap();
