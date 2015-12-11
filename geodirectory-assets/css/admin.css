@@ -475,11 +475,16 @@ body.edit-tags-php .form-field input, .form-field textarea {
 .gd-progress-label {
     position: absolute;
     top: 3px;
-    font-weight: bold;
+    font-weight: normal;
 	text-align:center;
 	font-size: .8em;
 	color: #444;
 	width: 100%
+}
+.gd-progress-label .fa {
+	margin-left: 7px;
+	font-size: 14px;
+	margin-right: 5px;
 }
 #gd_timer {
 	display: inline-block
