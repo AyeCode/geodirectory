@@ -1264,7 +1264,16 @@ if (!function_exists('geodir_get_featured_image')) {
             $file_name = $file_info['basename'];
 
             $uploads_url = $uploads_baseurl . $sub_dir;
-            $img_arr['src'] = $uploads_url . '/' . $file_name;
+            /*
+             * Allows the filter of image src for such things as CDN change.
+             *
+             * @since 1.5.7
+             * @param string $url The full image url.
+             * @param string $file_name The image file name and directory path.
+             * @param string $uploads_url The server upload directory url.
+             * @param string $uploads_baseurl The uploads dir base url.
+             */
+            $img_arr['src'] = apply_filters('geodir_get_featured_image_src',$uploads_url . '/' . $file_name,$file_name,$uploads_url,$uploads_baseurl);
             $img_arr['path'] = $uploads_path . '/' . $file_name;
             @list($width, $height) = getimagesize($img_arr['path']);
             $img_arr['width'] = $width;
@@ -1418,7 +1427,16 @@ if (!function_exists('geodir_get_images')) {
                 $file_name = $file_info['basename'];
 
                 $uploads_url = $uploads_baseurl . $sub_dir;
-                $img_arr['src'] = $uploads_url . '/' . $file_name;
+                /*
+                * Allows the filter of image src for such things as CDN change.
+                *
+                * @since 1.5.7
+                * @param string $url The full image url.
+                * @param string $file_name The image file name and directory path.
+                * @param string $uploads_url The server upload directory url.
+                * @param string $uploads_baseurl The uploads dir base url.
+                */
+                $img_arr['src'] = apply_filters('geodir_get_images_src',$uploads_url . '/' . $file_name,$file_name,$uploads_url,$uploads_baseurl);
                 $img_arr['path'] = $uploads_path . '/' . $file_name;
                 @list($width, $height) = getimagesize($img_arr['path']);
                 $img_arr['width'] = $width;

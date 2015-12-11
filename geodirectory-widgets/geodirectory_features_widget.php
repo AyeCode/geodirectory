@@ -1,5 +1,5 @@
 <?php
-register_widget("Geodir_Features_Widget");
+
 class Geodir_Features_Widget extends WP_Widget {
 
     /**
@@ -582,7 +582,7 @@ class Geodir_Features_Widget extends WP_Widget {
     }
 
 }
-
+register_widget("Geodir_Features_Widget");
 function gd_features_parse_image($image, $icon_color) {
     if (substr( $image, 0, 4 ) === "http") {
         $image = '<img src="'.$image.'" />';
