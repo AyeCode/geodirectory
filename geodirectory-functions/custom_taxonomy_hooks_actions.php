@@ -405,7 +405,22 @@ function geodir_set_location_var_in_session_in_core($wp)
 {
 
 	//$wp->geodir_query_vars = $wp->query_vars ;
-	// this code will determine when a user wants to switch location 
+	// this code will determine when a user wants to switch location
+
+    // Fix for WPML removing page_id query var:
+    if (isset($wp->query_vars['page']) && !isset($wp->query_vars['page_id']) && isset($wp->query_vars['pagename']) && !is_home()) {
+        global $wpdb;
+
+        $page_for_posts = get_option('page_for_posts');
+        $real_page_id = $wpdb->get_var($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE post_type='page' AND post_name=%s",$wp->query_vars['pagename']));
+
+        if (function_exists('icl_object_id')) {
+            $real_page_id = icl_object_id($real_page_id, 'page', true, ICL_LANGUAGE_CODE);
+        }
+        if ($real_page_id && $real_page_id!=$page_for_posts) {
+            $wp->query_vars['page_id'] = $real_page_id;
+        }
+    }
 	
 	// Query Vars will have page_id parameter
 	// check if query var has page_id and that page id is location page

@@ -3777,8 +3777,15 @@ function geodir_wpseo_replacements($vars){
         $vars['%%location_single%%'] = $location_single;
     }
 
-
-    return $vars;
+    /**
+     * Filter the title variables after standard ones have been filtered for wpseo.
+     *
+     * @since 1.5.7
+     * @package GeoDirectory
+     * @param string $vars The title with variables.
+     * @param array $location_array The array of location variables.
+     */
+    return apply_filters('geodir_wpseo_replacements_vars',$vars,$location_array);
 }
 
 
@@ -4111,7 +4118,18 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
     $title = convert_chars( $title );
     $title = esc_html( $title );
 
-    return $title;
+    /**
+     * Filter the title variables after standard ones have been filtered.
+     *
+     * @since 1.5.7
+     * @package GeoDirectory
+     * @param string $title The title with variables.
+     * @param array $location_array The array of location variables.
+     * @param string $gd_page The page being filtered.
+     * @param string $sep The separator, default: `|`.
+     */
+
+    return apply_filters('geodir_filter_title_variables_vars',$title,$location_array, $gd_page, $sep);
 }
 
 /**

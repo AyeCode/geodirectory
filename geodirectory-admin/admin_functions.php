@@ -4947,7 +4947,7 @@ function geodir_ajax_import_export() {
 								}
 							}
 							$term_data['parent'] = (int)$term_parent_id;
-						
+
 							$term_id = NULL;
 							if ( $import_choice == 'update' ) {
 								if ( $cat_id > 0 && $term = (array)term_exists( $cat_id, $taxonomy ) ) {

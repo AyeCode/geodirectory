@@ -262,6 +262,8 @@ function get_markers()
             if ($post_type == 'gd_event' && isset($catinfo_obj->recurring_dates)) {
                 $event_arr = maybe_unserialize($catinfo_obj->recurring_dates);
                 $e_arr = explode(",", $event_arr['event_recurring_dates']);
+                $end_date = '';
+                if(isset($event_arr['event_end'])){$end_date = $event_arr['event_end'];}
 
                 $e = 0;
                 foreach ($e_arr as $e_date) {
@@ -273,6 +275,13 @@ function get_markers()
 						if ($e == 3) {
                             break;
                         }
+                    }
+                }
+
+                // if no recurring check end date is not in future
+                if ($e_dates == '' && $end_date) {
+                    if (strtotime($end_date) >= strtotime(date("Y-m-d"))) {
+                        $e_dates .= date($geodir_date_format, strtotime($event_arr['event_start'])) .' -> ' . date($geodir_date_format, strtotime($end_date));
                     }
                 }
 
