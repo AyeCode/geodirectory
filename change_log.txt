@@ -1,6 +1,9 @@
 v1.5.7
 GD Export should split requests to skip out of memory problem - FIXED
 Added filters to change img urls for uses like CDN - ADDED
+Added filters to be able to add your own vars to titles and meta - ADDED
+Some plugins/themes can unset the page_id which breaks some features - FIXED
+Events with long running times sometimes not showing on the map - FIXED
 
 v1.5.6
 In add listing form sub-categories are no longer showing in hierarchy for checkbox display type - FIXED

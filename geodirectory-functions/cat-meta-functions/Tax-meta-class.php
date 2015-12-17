@@ -943,6 +943,10 @@ if (!class_exists('Tax_Meta_Class')) :
 
                 $file_info = pathinfo($meta['src']);
 
+                //print_r($meta);
+                //print_r($uploads);
+                //print_r($file_info);
+
                 if ($file_info['dirname'] != '.' && $file_info['dirname'] != '..')
                     $sub_dir = $file_info['dirname'];
 

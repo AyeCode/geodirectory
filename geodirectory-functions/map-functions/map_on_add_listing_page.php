@@ -111,7 +111,7 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
             var getCountry = '';
             getCountryISO = '';
 
-            //console.log(responses);
+            //console.log(responses); // enable to show location response in console
             street_number = '';
             premise = ''; // In Russian ;
             establishment = '';
