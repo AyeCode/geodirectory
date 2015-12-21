@@ -1237,6 +1237,10 @@ if (!function_exists('geodir_get_featured_image')) {
             $post_type = get_post_type($post_id);
         }
 
+        if (!in_array($post_type, geodir_get_posttypes())) {
+            return false;// if not a GD CPT return;
+        }
+
         $table = $plugin_prefix . $post_type . '_detail';
 
         if (!$file) {
