@@ -129,7 +129,7 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
         'id' => 'geodir_post_submited_success_email_subject_admin',
         'type' => 'text',
         'css' => 'min-width:300px;',
-        'std' => 'Post Submitted Successfully' // Default value for the page title - changed in settings
+        'std' => __('Post Submitted Successfully','geodirectory') // Default value for the page title - changed in settings
     ),
     array(
         'name' => '',
@@ -154,7 +154,7 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
         'id' => 'geodir_post_submited_success_email_subject',
         'type' => 'text',
         'css' => 'min-width:300px;',
-        'std' => 'Post Submitted Successfully' // Default value for the page title - changed in settings
+        'std' => __('Post Submitted Successfully','geodirectory') // Default value for the page title - changed in settings
     ),
     array(
         'name' => '',
@@ -172,7 +172,7 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
         'id' => 'geodir_forgot_password_subject',
         'type' => 'text',
         'css' => 'min-width:300px;',
-        'std' => '[#site_name#] - Your new password' // Default value for the page title - changed in settings
+        'std' => __('[#site_name#] - Your new password', 'geodirectory') // Default value for the page title - changed in settings
     ),
     array(
         'name' => '',
@@ -189,7 +189,7 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
         'id' => 'geodir_registration_success_email_subject',
         'type' => 'text',
         'css' => 'min-width:300px;',
-        'std' => 'Your Log In Details' // Default value for the page title - changed in settings
+        'std' => __('Your Log In Details', 'geodirectory') // Default value for the page title - changed in settings
     ),
     array(
         'name' => '',
@@ -228,7 +228,7 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
         'id' => 'geodir_email_friend_subject',
         'type' => 'text',
         'css' => 'min-width:300px;',
-        'std' => '[#from_name#] thought you might be interested in..'
+        'std' => __('[#from_name#] thought you might be interested in..', 'geodirectory')
     ),
     array(
         'name' => '',

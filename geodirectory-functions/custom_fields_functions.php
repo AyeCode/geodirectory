@@ -3432,17 +3432,25 @@ if (!function_exists('geodir_plupload_action')) {
 
         // change file orinetation if needed
         $fixed_file = geodir_exif($_FILES[$imgid . 'async-upload']);
+        //print_r(wp_upload_dir());
+        //print_r($fixed_file);
+        //echo '###'.$fixed_file;
 
         // handle file upload
         $status = wp_handle_upload($fixed_file, array('test_form' => true, 'action' => 'plupload_action'));
         // remove handle custom file uploaddir
         remove_filter('upload_dir', 'geodir_upload_dir');
 
+
+        if(!isset($status['url']) && isset($status['error'])){
+            print_r($status);
+        }
+
         // send the uploaded file url in response
         if (isset($status['url'])) {
             echo $status['url'];
         } else {
-            echo '';
+            echo 'x';
         }
         exit;
     }
