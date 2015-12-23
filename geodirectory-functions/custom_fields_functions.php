@@ -1837,7 +1837,14 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
 
                 jQuery(function () {
 
-                    jQuery("#<?php echo $name;?>").datepicker({changeMonth: true, changeYear: true});
+                    jQuery("#<?php echo $name;?>").datepicker({changeMonth: true, changeYear: true <?php
+                    /**
+                     * Used to add extra option to datepicker per custom field.
+                     *
+                     * @since 1.5.7
+                     * @param string $name The custom field name.
+                     */
+                    echo apply_filters("gd_datepicker_extra_{$name}",'');?>});
 
                     jQuery("#<?php echo $name;?>").datepicker("option", "dateFormat", '<?php echo $extra_fields['date_format'];?>');
 
