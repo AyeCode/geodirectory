@@ -44,7 +44,12 @@ if (is_admin()) {
     /*$my_meta->addCheckbox($prefix.'pointless',array('name'=> __('<b>Exclude</b> Rating sort option','geodirectory'),'style'=>'hidden'));*/// hidden setting to trick WPML
 
     $my_meta->addSelect($prefix . 'cat_schema',
-        array(
+    /*
+     * Allows you to add/filter the cat schema types.
+     *
+     * @since 1.5.7
+     */
+        apply_filters('geodir_cat_schemas',array(
             '' => __('Default (LocalBusiness)', 'geodirectory'),
             'AccountingService' => 'AccountingService',
             'Attorney' => 'Attorney',
@@ -129,12 +134,13 @@ if (is_admin()) {
             'Taxi' => 'Taxi',
             'TennisComplex' => 'TennisComplex',
             'TireShop' => 'TireShop',
+            'TouristAttraction' => 'TouristAttraction',
             'ToyStore' => 'ToyStore',
             'TravelAgency' => 'TravelAgency',
             'VeterinaryCare' => 'VeterinaryCare',
             'WholesaleStore' => 'WholesaleStore',
             'Winery' => 'Winery'
-        ),
+        )),
         array('name' => __('Schema Type', 'geodirectory'), 'desc' => __('Select the Schema to use for this category', 'geodirectory') . "", 'std' => array('selectkey2')));
 
     /*$my_meta->addSelect($prefix.'cat_sort',array(''=>__('Default' , 'geodirectory'),

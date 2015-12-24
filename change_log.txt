@@ -6,6 +6,9 @@ Some plugins/themes can unset the page_id which breaks some features - FIXED
 Events with long running times sometimes not showing on the map - FIXED
 Some notification subjects not translatable - FIXED
 Datepicker custom filed now has filter to add extra params - ADDED
+Visual Composer can throw error for widget view all links - FIXED
+Added TouristAttraction schema type for categories - ADDED
+Added filter to be able to add/remove schema types - ADDED
 
 v1.5.6
 In add listing form sub-categories are no longer showing in hierarchy for checkbox display type - FIXED

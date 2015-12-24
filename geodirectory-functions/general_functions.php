@@ -3007,6 +3007,8 @@ function geodir_popular_postview_output($args = '', $instance = '')
         $_SESSION['gd_multi_location'] = 1;
     }
 
+    if(is_wp_error( $viewall_url  )){$viewall_url = '';}
+
     $query_args = array(
         'posts_per_page' => $post_number,
         'is_geodir_loop' => true,

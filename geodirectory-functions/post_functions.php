@@ -65,7 +65,7 @@ if (!function_exists('geodir_save_listing')) {
      * Saves listing in the database using given information.
      *
      * @since 1.0.0
-	 * @since 1.5.4 New parameter $wp_error added.
+     * @since 1.5.4 New parameter $wp_error added.
      * @package GeoDirectory
      * @global object $wpdb WordPress Database object.
      * @global object $post The current post object.
@@ -150,7 +150,7 @@ if (!function_exists('geodir_save_listing')) {
          */
         $request_info = apply_filters('geodir_action_get_request_info', $request_info);
 
-        // Check if we need to save post location as new location 
+        // Check if we need to save post location as new location
         $location_result = geodir_get_default_location();
 
         if ($location_result->location_id > 0) {
@@ -232,13 +232,13 @@ if (!function_exists('geodir_save_listing')) {
             }
         }
 
-		if ($wp_error && is_wp_error($last_post_id)) {
-			return $last_post_id; // Return WP_Error on save failure.
-		}
-		
-		if (!$last_post_id) {
-			return false; // Save failure.
-		}
+        if ($wp_error && is_wp_error($last_post_id)) {
+            return $last_post_id; // Return WP_Error on save failure.
+        }
+
+        if (!$last_post_id) {
+            return false; // Save failure.
+        }
 
         // re-hook this function
         add_action('save_post', 'geodir_post_information_save',10,2);
@@ -364,9 +364,9 @@ if (!function_exists('geodir_save_listing')) {
                     $request_files = array();
                     if ($request_info[$name] != '')
                         $request_files = explode(",", $request_info[$name]);
-						
+
                     $extrafields = $extrafields != '' ? maybe_unserialize($extrafields) : NULL;
-					geodir_save_post_file_fields($last_post_id, $name, $request_files, $extrafields);
+                    geodir_save_post_file_fields($last_post_id, $name, $request_files, $extrafields);
 
                 }
             } elseif (trim($type) == 'datepicker') {
@@ -473,7 +473,7 @@ if (!function_exists('geodir_save_listing')) {
 
             /* Delete Attachments
 			$postcurr_images = geodir_get_images($last_post_id);
-			
+
 			$wpdb->query(
 				$wpdb->prepare(
 					"DELETE FROM ".GEODIR_ATTACHMENT_TABLE." WHERE `post_id` = %d",
@@ -481,10 +481,10 @@ if (!function_exists('geodir_save_listing')) {
 				)
 			);
 			geodir_remove_attachments($postcurr_images);
-			
+
 			$gd_post_featured_img = array();
 			$gd_post_featured_img['featured_image'] = '';
-			geodir_save_post_info($last_post_id, $gd_post_featured_img); 
+			geodir_save_post_info($last_post_id, $gd_post_featured_img);
 			*/
 
         }
@@ -506,7 +506,7 @@ if (!function_exists('geodir_save_listing')) {
 
         if ($send_post_submit_mail) { // if new post send out email
             $to_name = geodir_get_client_name($current_user->ID);
-			geodir_sendEmail('', '', $current_user->user_email, $to_name, '', '', $request_info, 'post_submit', $last_post_id, $current_user->ID);
+            geodir_sendEmail('', '', $current_user->user_email, $to_name, '', '', $request_info, 'post_submit', $last_post_id, $current_user->ID);
         }
         /*
          * Unset the session so we don't loop.
@@ -556,7 +556,7 @@ function geodir_get_post_info($post_id = '')
      * @package GeoDirectory
      */
     $query = apply_filters('geodir_post_info_query', "SELECT p.*,pd.* FROM " . $wpdb->posts . " p," . $table . " pd
-			  WHERE p.ID = pd.post_id 
+			  WHERE p.ID = pd.post_id
 			  AND post_id = " . $post_id);
 
     $post_detail = $wpdb->get_row($query);
@@ -1132,7 +1132,7 @@ function geodir_remove_temp_images()
     $uploads_dir = $uploads['path'];
 
     /*	if(is_dir($uploads_dir.'/temp_'.$current_user->data->ID)){
-					
+
 			$dirPath = $uploads_dir.'/temp_'.$current_user->data->ID;
 			if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
 				$dirPath .= '/';
@@ -1206,7 +1206,7 @@ if (!function_exists('geodir_remove_attachments')) {
                     unlink($uploads_dir . '/' . $filename);
             }
 
-        } // endif 
+        } // endif
         // Unlink all past images of post end
     }
 }
@@ -1260,7 +1260,7 @@ if (!function_exists('geodir_get_featured_image')) {
             if ($file_info['dirname'] != '.' && $file_info['dirname'] != '..')
                 $sub_dir = stripslashes_deep($file_info['dirname']);
 
-            $uploads = wp_upload_dir(trim($sub_dir, '/')); // Array of key => value pairs	
+            $uploads = wp_upload_dir(trim($sub_dir, '/')); // Array of key => value pairs
             $uploads_baseurl = $uploads['baseurl'];
             $uploads_path = $uploads['path'];
 
@@ -1310,7 +1310,7 @@ if (!function_exists('geodir_get_featured_image')) {
 
             if (!empty($default_img)) {
 
-                $uploads = wp_upload_dir(); // Array of key => value pairs	
+                $uploads = wp_upload_dir(); // Array of key => value pairs
                 $uploads_baseurl = $uploads['baseurl'];
                 $uploads_path = $uploads['path'];
 
@@ -1423,7 +1423,7 @@ if (!function_exists('geodir_get_images')) {
                 if ($file_info['dirname'] != '.' && $file_info['dirname'] != '..')
                     $sub_dir = stripslashes_deep($file_info['dirname']);
 
-                $uploads = wp_upload_dir(trim($sub_dir, '/')); // Array of key => value pairs	
+                $uploads = wp_upload_dir(trim($sub_dir, '/')); // Array of key => value pairs
                 $uploads_baseurl = $uploads['baseurl'];
                 $uploads_path = $uploads['path'];
 
@@ -1471,7 +1471,7 @@ if (!function_exists('geodir_get_images')) {
 
             if (!empty($default_img)) {
 
-                $uploads = wp_upload_dir(); // Array of key => value pairs	
+                $uploads = wp_upload_dir(); // Array of key => value pairs
                 $uploads_baseurl = $uploads['baseurl'];
                 $uploads_path = $uploads['path'];
 
@@ -1560,11 +1560,11 @@ if (!function_exists('geodir_show_image')) {
                 endif;
 
                 /*$html = '<div style="text-align: center;max-height:'.$max_size->h.'px;line-height:'.$max_size->h.'px;">';
-			
+
 			$html .= '<img src="' . $image->src . '" style="vertical-align:middle;max-height:'. $max_size->h .'px;margin:-2px auto 0;';
-			
+
 			$html .= 'max-width:'.$width_per.'%';
-			
+
 			$html .= '" /></div>'; */
 
             }
@@ -1679,17 +1679,17 @@ if (!function_exists('geodir_set_post_terms')) {
 
                         if ($wpdb->get_var($wpdb->prepare("SELECT post_id from " . GEODIR_ICON_TABLE . " WHERE post_id = %d AND cat_id = %d", array($post_id, $cat_id)))) {
 
-                            $json_query = $wpdb->prepare("UPDATE " . GEODIR_ICON_TABLE . " SET 
-										post_title = %s, 
-										json = %s 
+                            $json_query = $wpdb->prepare("UPDATE " . GEODIR_ICON_TABLE . " SET
+										post_title = %s,
+										json = %s
 										WHERE post_id = %d AND cat_id = %d ",
                                 array($post_title, $json, $post_id, $cat_id));
 
                         } else {
 
-                            $json_query = $wpdb->prepare("INSERT INTO " . GEODIR_ICON_TABLE . " SET 
-										post_id = %d, 
-										post_title = %s, 
+                            $json_query = $wpdb->prepare("INSERT INTO " . GEODIR_ICON_TABLE . " SET
+										post_id = %d,
+										post_title = %s,
 										cat_id = %d,
 										json = %s",
                                 array($post_id, $post_title, $cat_id, $json));
@@ -1714,8 +1714,8 @@ if (!function_exists('geodir_set_post_terms')) {
 
                         $wpdb->query(
                             $wpdb->prepare(
-                                "UPDATE " . $table . " SET 
-								" . $taxonomy . " = %s, 
+                                "UPDATE " . $table . " SET
+								" . $taxonomy . " = %s,
 								marker_json = %s
 								where post_id = %d",
                                 array($categories, $post_marker_json, $post_id)
@@ -1736,7 +1736,7 @@ if (!function_exists('geodir_set_post_terms')) {
 
                                     $wpdb->query(
                                         $wpdb->prepare(
-                                            "UPDATE " . $table . " SET 
+                                            "UPDATE " . $table . " SET
 											default_category = %s
 											where post_id = %d",
                                             array($categories[0], $post_id)
@@ -1761,8 +1761,8 @@ if (!function_exists('geodir_set_post_terms')) {
 
                         $wpdb->query(
                             $wpdb->prepare(
-                                "INSERT INTO " . $table . " SET 
-								post_id = %d, 
+                                "INSERT INTO " . $table . " SET
+								post_id = %d,
 								" . $taxonomy . " = %s,
 								marker_json = %s ",
 
@@ -1781,7 +1781,7 @@ if (!function_exists('geodir_get_infowindow_html')) {
      * Set post Map Marker info html.
      *
      * @since 1.0.0
-	 * @since 1.5.4 Modified to add new action "geodir_infowindow_meta_before".
+     * @since 1.5.4 Modified to add new action "geodir_infowindow_meta_before".
      * @package GeoDirectory
      * @global array $geodir_addon_list List of active GeoDirectory extensions.
      * @param object $postinfo_obj The post details object.
@@ -1912,7 +1912,7 @@ if (!function_exists('geodir_get_infowindow_html')) {
                              * This can be used to add more info to the map info window before the normal meta info.
                              *
                              * @since 1.5.4
-							 * @param int $ID The post id.
+                             * @param int $ID The post id.
                              * @param object $postinfo_obj The posts info as an object.
                              * @param bool|string $post_preview True if currently in post preview page. Empty string if not.                           *
                              */
@@ -1942,9 +1942,9 @@ if (!function_exists('geodir_get_infowindow_html')) {
 
                             $post_author = isset($postinfo_obj->post_author) ? $postinfo_obj->post_author : get_post_field('post_author', $ID);
                             ?>
-                        <div class="geodir-bubble-meta-fade"></div>
+                            <div class="geodir-bubble-meta-fade"></div>
 
-                        <div class="geodir-bubble-meta-bottom">
+                            <div class="geodir-bubble-meta-bottom">
                                 <span class="geodir-bubble-rating"><?php echo $rating_star;?></span>
 
                                 <span
@@ -2487,8 +2487,8 @@ function geodir_get_cat_postcount($term = array())
              */
             $where = apply_filters('geodir_cat_post_count_where', $where, $term);
 
-            $count_query = "SELECT count(post_id) FROM 
-							" . $table . " as pd " . $join . " 
+            $count_query = "SELECT count(post_id) FROM
+							" . $table . " as pd " . $join . "
 							WHERE pd.post_status='publish' AND FIND_IN_SET('" . $term->term_id . "'," . $term->taxonomy . ") " . $where;
 
             $cat_post_count = $wpdb->get_var($count_query);
