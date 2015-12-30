@@ -615,6 +615,7 @@ if (!function_exists('geodir_sendEmail')) {
      * The main function that send transactional emails using the args provided.
      *
      * @since 1.0.0
+     * @since 1.5.7 Added db translations for notifications subject and content.
      * @package GeoDirectory
      * @param string $fromEmail Sender email address.
      * @param string $fromEmailName Sender name.
@@ -627,8 +628,7 @@ if (!function_exists('geodir_sendEmail')) {
      * @param string $post_id The post ID.
      * @param string $user_id The user ID.
      */
-    function geodir_sendEmail($fromEmail, $fromEmailName, $toEmail, $toEmailName, $to_subject, $to_message, $extra = '', $message_type, $post_id = '', $user_id = '')
-    {
+    function geodir_sendEmail($fromEmail, $fromEmailName, $toEmail, $toEmailName, $to_subject, $to_message, $extra = '', $message_type, $post_id = '', $user_id = '') {
         $login_details = '';
 
         // strip slashes from subject & message text
@@ -636,26 +636,34 @@ if (!function_exists('geodir_sendEmail')) {
         $to_message = stripslashes_deep($to_message);
 
         if ($message_type == 'send_friend') {
-            $subject = stripslashes(__(get_option('geodir_email_friend_subject'),'geodirectory'));
-            $message = stripslashes(__(get_option('geodir_email_friend_content'),'geodirectory'));
+            $subject = get_option('geodir_email_friend_subject');
+            $message = get_option('geodir_email_friend_content');
         } elseif ($message_type == 'send_enquiry') {
-            $subject = stripslashes(__(get_option('geodir_email_enquiry_subject'),'geodirectory'));
-            $message = stripslashes(__(get_option('geodir_email_enquiry_content'),'geodirectory'));
+            $subject = get_option('geodir_email_enquiry_subject');
+            $message = get_option('geodir_email_enquiry_content');
         } elseif ($message_type == 'forgot_password') {
-            $subject = stripslashes(__(get_option('geodir_forgot_password_subject'),'geodirectory'));
-            $message = stripslashes(__(get_option('geodir_forgot_password_content'),'geodirectory'));
+            $subject = get_option('geodir_forgot_password_subject');
+            $message = get_option('geodir_forgot_password_content');
             $login_details = $to_message;
         } elseif ($message_type == 'registration') {
-            $subject = stripslashes(__(get_option('geodir_registration_success_email_subject'),'geodirectory'));
-            $message = stripslashes(__(get_option('geodir_registration_success_email_content'),'geodirectory'));
+            $subject = get_option('geodir_registration_success_email_subject');
+            $message = get_option('geodir_registration_success_email_content');
             $login_details = $to_message;
         } elseif ($message_type == 'post_submit') {
-            $subject = stripslashes(__(get_option('geodir_post_submited_success_email_subject'),'geodirectory'));
-            $message = stripslashes(__(get_option('geodir_post_submited_success_email_content'),'geodirectory'));
+            $subject = get_option('geodir_post_submited_success_email_subject');
+            $message = get_option('geodir_post_submited_success_email_content');
         } elseif ($message_type == 'listing_published') {
-            $subject = stripslashes_deep(__(get_option('geodir_post_published_email_subject'),'geodirectory'));
-            $message = stripslashes_deep(__(get_option('geodir_post_published_email_content'),'geodirectory'));
+            $subject = get_option('geodir_post_published_email_subject');
+            $message = get_option('geodir_post_published_email_content');
         }
+		
+		if (!empty($subject)) {
+			$subject = __(stripslashes_deep($subject),'geodirectory');
+		}
+		
+		if (!empty($message)) {
+			$message = __(stripslashes_deep($message),'geodirectory');
+		}
 
         $to_message = nl2br($to_message);
         $sitefromEmail = get_option('site_email');
@@ -717,10 +725,8 @@ if (!function_exists('geodir_sendEmail')) {
 
 
         if ($message_type == 'post_submit') {
-
-            $subject = stripslashes(__(get_option('geodir_post_submited_success_email_subject_admin'),'geodirectory'));
-            $message = stripslashes(__(get_option('geodir_post_submited_success_email_content_admin'),'geodirectory'));
-
+            $subject = __(stripslashes_deep(get_option('geodir_post_submited_success_email_subject_admin')), 'geodirectory');
+            $message = __(stripslashes_deep(get_option('geodir_post_submited_success_email_content_admin')), 'geodirectory');
 
             $search_array = array('[#listing_link#]', '[#site_name_url#]', '[#post_id#]', '[#site_name#]', '[#to_name#]', '[#from_name#]', '[#subject#]', '[#comments#]', '[#login_url#]', '[#login_details#]', '[#client_name#]', '[#posted_date#]','[#user_login#]','[#username#]');
             $replace_array = array($listingLink, $siteurl_link, $post_id, $sitefromEmailName, $toEmailName, $fromEmailName, $to_subject, $to_message, $loginurl_link, $login_details, $toEmailName, $posted_date, $user_login, $user_login);

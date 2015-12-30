@@ -3263,3 +3263,47 @@ function geodir_wp_head_no_rating()
 add_filter('geodir_load_db_language', 'geodir_load_custom_field_translation');
 
 add_filter('geodir_load_db_language', 'geodir_load_cpt_text_translation');
+
+/**
+ * Get the geodirectory notification subject & content texts for translation.
+ *
+ * @since 1.5.7
+ * @package GeoDirectory
+ *
+ * @param  array $translation_texts Array of text strings.
+ * @return array Translation texts.
+ */
+function geodir_load_gd_options_text_translation($translation_texts = array()) {
+	$translation_texts = !empty( $translation_texts ) && is_array( $translation_texts ) ? $translation_texts : array();
+	
+	$gd_options = array('geodir_post_submited_success_email_subject_admin', 'geodir_post_submited_success_email_content_admin', 'geodir_post_submited_success_email_subject', 'geodir_post_submited_success_email_content', 'geodir_forgot_password_subject', 'geodir_forgot_password_content', 'geodir_registration_success_email_subject', 'geodir_registration_success_email_content', 'geodir_post_published_email_subject', 'geodir_post_published_email_content', 'geodir_email_friend_subject', 'geodir_email_friend_content', 'geodir_email_enquiry_subject', 'geodir_email_enquiry_content', 'geodir_post_added_success_msg_content');
+	
+	/**
+	 * Filters the geodirectory option names that requires to add for translation.
+	 *
+	 * @since 1.5.7
+	 * @package GeoDirectory
+	 *
+	 * @param  array $gd_options Array of option names.
+	 */
+	$gd_options = apply_filters('geodir_gd_options_for_translation', $gd_options);
+	$gd_options = array_unique($gd_options);
+	
+	if (!empty($gd_options)) {
+		foreach ($gd_options as $gd_option) {
+			if ($gd_option != '' && $option_value = get_option($gd_option)) {
+				$option_value = is_string($option_value) ? stripslashes_deep($option_value) : '';
+				
+				if ($option_value != '' && !in_array($option_value, $translation_texts)) {
+					$translation_texts[] = stripslashes_deep($option_value);
+				}
+			}
+		}
+	}
+	
+	$translation_texts = !empty($translation_texts) ? array_unique($translation_texts) : $translation_texts;
+
+    return $translation_texts;
+}
+
+add_filter('geodir_load_db_language', 'geodir_load_gd_options_text_translation');
