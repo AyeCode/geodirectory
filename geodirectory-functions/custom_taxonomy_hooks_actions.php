@@ -187,49 +187,36 @@ function geodir_flush_rewrite_rules()
  *
  * @since 1.0.0
  * @since 1.5.4 Modified to add country/city & region/city rules.
+ * @since 1.5.7 Modified to manage neighbourhood permalinks.
  *
  * @global object $wpdb WordPress Database object.
  * @param  array $rules The compiled array of rewrite rules.
  * @return array Rewrite rules.
  */
-function geodir_listing_rewrite_rules($rules)
-{
+function geodir_listing_rewrite_rules($rules) {
     $newrules = array();
-    $taxonomies = array();
     $taxonomies = get_option('geodir_taxonomies');
-    //print_r($taxonomies );exit;
     $detail_url_seprator = get_option('geodir_detailurl_separator');
-    //create rules for post listing
+    
+	// create rules for post listing
     if (is_array($taxonomies)):
         foreach ($taxonomies as $taxonomy => $args):
-
             $post_type = $args['object_type'];
             $listing_slug = $args['listing_slug'];
 
             if (strpos($taxonomy, 'tags')) {
                 $newrules[$listing_slug . '/(.+?)/page/?([0-9]{1,})/?$'] = 'index.php?' . $taxonomy . '=$matches[1]&paged=$matches[2]';
-
                 $newrules[$listing_slug . '/(.+?)/?$'] = 'index.php?' . $taxonomy . '=$matches[1]';
-
-            }else{
+            } else {
                 // use this loop to add paging for details page comments paging
                 $newrules[str_replace("/tags","",$listing_slug) . '/(.+?)/comment-page-([0-9]{1,})/?$'] = 'index.php?' . $taxonomy . '=$matches[1]&cpage=$matches[2]';
             }
-
-            /*	$newrules[$listing_slug.'/'.$detail_url_seprator.'/([^/]+)/?$'] = 'index.php?'.$post_type.'=$matches[1]';
-                $newrules[$listing_slug.'/(.+?)/'.$detail_url_seprator.'/([^/]+)/?$'] = 'index.php?'.$taxonomy.'=$matches[1]&'.$post_type.'=$matches[2]';
-                */
-
-
         endforeach;
     endif;
 
-
-
-
-    //create rules for location listing
+    // create rules for location listing
     $location_page = get_option('geodir_location_page');
-    //$location_prefix = get_option('geodir_location_prefix');
+	
     if($location_page) {
         global $wpdb;
         $location_prefix = $wpdb->get_var($wpdb->prepare("SELECT post_name FROM $wpdb->posts WHERE post_type='page' AND ID=%d", $location_page));
@@ -242,6 +229,7 @@ function geodir_listing_rewrite_rules($rules)
 		$hide_country_part = get_option('geodir_location_hide_country_part');
 		$hide_region_part = get_option('geodir_location_hide_region_part');
 	}
+	$neighbourhood_active = $location_manager && get_option('location_neighbourhoods') ? true : false;
 	
 	if ($location_manager && ($hide_country_part || $hide_region_part)) {
 		$matches2 = '';
@@ -258,18 +246,27 @@ function geodir_listing_rewrite_rules($rules)
 		}
 		
 		if ($matches2) {
+			if ($neighbourhood_active) {
+				$newrules[$location_prefix . '/([^/]+)/([^/]+)/([^/]+)/?$'] = 'index.php?page_id=' . $location_page . '&' . $matches1 . '=$matches[1]&' . $matches2 . '=$matches[2]&gd_neighbourhood=$matches[3]';
+			}
 			$newrules[$location_prefix . '/([^/]+)/([^/]+)/?$'] = 'index.php?page_id=' . $location_page . '&' . $matches1 . '=$matches[1]&' . $matches2 . '=$matches[2]';
+		} else {
+			if ($neighbourhood_active) {
+				$newrules[$location_prefix . '/([^/]+)/([^/]+)/?$'] = 'index.php?page_id=' . $location_page . '&' . $matches1 . '=$matches[1]&gd_neighbourhood=$matches[2]';
+			}
 		}
 		
 		$newrules[$location_prefix . '/([^/]+)/?$'] = 'index.php?page_id=' . $location_page . '&' . $matches1 . '=$matches[1]';
 	} else { // country/region/city
+		if ($neighbourhood_active) {
+			$newrules[$location_prefix . '/([^/]+)/([^/]+)/([^/]+)/([^/]+)/?$'] = 'index.php?page_id=' . $location_page . '&gd_country=$matches[1]&gd_region=$matches[2]&gd_city=$matches[3]&gd_neighbourhood=$matches[4]';
+		}
 		$newrules[$location_prefix . '/([^/]+)/([^/]+)/([^/]+)/?$'] = 'index.php?page_id=' . $location_page . '&gd_country=$matches[1]&gd_region=$matches[2]&gd_city=$matches[3]';
 		$newrules[$location_prefix . '/([^/]+)/([^/]+)/?$'] = 'index.php?page_id=' . $location_page . '&gd_country=$matches[1]&gd_region=$matches[2]';
 		$newrules[$location_prefix . '/([^/]+)/?$'] = 'index.php?page_id=' . $location_page . '&gd_country=$matches[1]';
 	}
 
     if ($location_page && function_exists('icl_object_id')) {
-
         foreach(icl_get_languages('skip_missing=N') as $lang){
             $alt_page_id = '';
             $alt_page_id = icl_object_id($location_page, 'page', false,$lang['language_code']);
@@ -291,22 +288,30 @@ function geodir_listing_rewrite_rules($rules)
 					}
 					
 					if ($matches2) {
+						if ($neighbourhood_active) {
+							$newrules[$location_prefix . '/([^/]+)/([^/]+)/([^/]+)/?$'] = 'index.php?page_id=' . $alt_page_id . '&' . $matches1 . '=$matches[1]&' . $matches2 . '=$matches[2]&gd_neighbourhood=$matches[3]';
+						}
 						$newrules[$location_prefix . '/([^/]+)/([^/]+)/?$'] = 'index.php?page_id=' . $alt_page_id . '&' . $matches1 . '=$matches[1]&' . $matches2 . '=$matches[2]';
+					} else {
+						if ($neighbourhood_active) {
+							$newrules[$location_prefix . '/([^/]+)/([^/]+)/?$'] = 'index.php?page_id=' . $alt_page_id . '&' . $matches1 . '=$matches[1]&gd_neighbourhood=$matches[2]';
+						}
 					}
 					
 					$newrules[$location_prefix . '/([^/]+)/?$'] = 'index.php?page_id=' . $alt_page_id . '&' . $matches1 . '=$matches[1]';
 				} else { // country/region/city
+					if ($neighbourhood_active) {
+						$newrules[$location_prefix . '/([^/]+)/([^/]+)/([^/]+)/([^/]+)/?$'] = 'index.php?page_id=' . $alt_page_id . '&gd_country=$matches[1]&gd_region=$matches[2]&gd_city=$matches[3]&gd_neighbourhood=$matches[4]';
+					}
 					$newrules[$location_prefix . '/([^/]+)/([^/]+)/([^/]+)/?$'] = 'index.php?page_id=' . $alt_page_id . '&gd_country=$matches[1]&gd_region=$matches[2]&gd_city=$matches[3]';
 					$newrules[$location_prefix . '/([^/]+)/([^/]+)/?$'] = 'index.php?page_id=' . $alt_page_id . '&gd_country=$matches[1]&gd_region=$matches[2]';
 					$newrules[$location_prefix . '/([^/]+)/?$'] = 'index.php?page_id=' . $alt_page_id . '&gd_country=$matches[1]';
 				}
             }
         }
-
     }
 
     $newrules[$location_prefix . '/?$'] = 'index.php?page_id=' . $location_page;
-
 
     $rules = array_merge($newrules, $rules);
     return $rules;

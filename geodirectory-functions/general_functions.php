@@ -801,6 +801,7 @@ function geodir_taxonomy_breadcrumb()
  * Main function that generates breadcrumb for all pages.
  *
  * @since 1.0.0
+ * @since 1.5.7 Changes for the neighbourhood system improvement.
  * @package GeoDirectory
  * @global object $wp_query WordPress Query object.
  * @global object $post The current post object.
@@ -846,16 +847,22 @@ function geodir_breadcrumb()
 
         if (geodir_is_page('detail') || geodir_is_page('listing')) {
             global $post;
-            if(geodir_is_page('detail') && isset($post->country_slug)){
+            $location_manager = defined('POST_LOCATION_TABLE') ? true : false;
+			$neighbourhood_active = $location_manager && get_option('location_neighbourhoods') ? true : false;
+				
+			if(geodir_is_page('detail') && isset($post->country_slug)){
                 $location_terms = array(
                     'gd_country' => $post->country_slug,
                     'gd_region' => $post->region_slug,
                     'gd_city' => $post->city_slug
                 );
+				
+				if ($neighbourhood_active && !empty($location_terms['gd_city']) && !empty($_SESSION['gd_neighbourhood'])) {
+					$location_terms['gd_neighbourhood'] = $_SESSION['gd_neighbourhood'];
+				}
             }
 
             $geodir_show_location_url = get_option('geodir_show_location_url');
-            $location_manager = defined('POST_LOCATION_TABLE') ? true : false;
 
             $hide_url_part = array();
             if ($location_manager) {
@@ -956,8 +963,10 @@ function geodir_breadcrumb()
                             $breadcrumb .= $location_term_actual_country != '' ? $separator . $location_term_actual_country : $separator . $gd_location_link_text;
                         } else if ($is_location_last && $key == 'gd_region' && !(isset($location_terms['gd_city']) && $location_terms['gd_city'] != '')) {
                             $breadcrumb .= $location_term_actual_region != '' ? $separator . $location_term_actual_region : $separator . $gd_location_link_text;
-                        } else if ($is_location_last && $key == 'gd_city') {
+                        } else if ($is_location_last && $key == 'gd_city' && empty($location_terms['gd_neighbourhood'])) {
                             $breadcrumb .= $location_term_actual_city != '' ? $separator . $location_term_actual_city : $separator . $gd_location_link_text;
+                        } else if ($is_location_last && $key == 'gd_neighbourhood') {
+                            $breadcrumb .= $separator . $gd_location_link_text;
                         } else {
                             if (get_option('permalink_structure') != '') {
                                 $location_link .= $location_term . '/';
