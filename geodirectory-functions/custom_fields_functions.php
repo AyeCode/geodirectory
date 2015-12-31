@@ -1220,7 +1220,9 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
 
     $custom_fields = geodir_post_custom_fields($package_id, $default, $post_type);
 
-    foreach ($custom_fields as $key => $val) {
+    $fieldset_id = '';
+	$fieldset_field_class = 'gd-fieldset-details';
+	foreach ($custom_fields as $key => $val) {
         $val = stripslashes_deep($val); // strip slashes from labels
 		$name = $val['name'];
         $site_title = $val['site_title'];
@@ -1273,8 +1275,9 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
         do_action('geodir_before_custom_form_field_' . $name, $listing_type, $package_id, $val);
 
         if ($type == 'fieldset') {
-
-            ?><h5><?php echo $site_title;?>
+            $fieldset_id = (int)$val['id'];
+			$fieldset_field_class = 'gd-fieldset-' . $fieldset_id;
+			?><h5 id="geodir_fieldset_<?php echo $fieldset_id;?>" class="geodir-fieldset-row" gd-fieldset="<?php echo $fieldset_id;?>"><?php echo $site_title;?>
             <?php if ($admin_desc != '') echo '<small>( ' . $admin_desc . ' )</small>';?>
             </h5><?php
 
@@ -1352,7 +1355,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
             ?>
 
             <div id="geodir_<?php echo $prefix . 'address';?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix">
+                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
                 <label>
                     <?php _e($address_title, 'geodirectory'); ?>
                     <?php if ($is_required) echo '<span>*</span>';?>
@@ -1381,7 +1384,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
             if (isset($extra_fields['show_zip']) && $extra_fields['show_zip']) { ?>
 
                 <div id="geodir_<?php echo $prefix . 'zip'; ?>_row"
-                     class="<?php /*if($is_required) echo 'required_field';*/ ?> geodir_form_row clearfix">
+                     class="<?php /*if($is_required) echo 'required_field';*/ ?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
                     <label>
                         <?php _e($zip_title, 'geodirectory'); ?>
                         <?php /*if($is_required) echo '<span>*</span>';*/ ?>
@@ -1397,7 +1400,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
 
             <?php if (isset($extra_fields['show_map']) && $extra_fields['show_map']) { ?>
 
-                <div id="geodir_<?php echo $prefix . 'map'; ?>_row" class="geodir_form_row clearfix">
+                <div id="geodir_<?php echo $prefix . 'map'; ?>_row" class="geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
                     <?php
                     /**
                      * Contains add listing page map functions.
@@ -1416,7 +1419,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                 /* show lat lng */
                 $style_latlng = ((isset($extra_fields['show_latlng']) && $extra_fields['show_latlng']) || is_admin()) ? '' : 'style="display:none"'; ?>
                 <div id="geodir_<?php echo $prefix . 'latitude'; ?>_row"
-                     class="<?php if ($is_required) echo 'required_field'; ?> geodir_form_row clearfix" <?php echo $style_latlng; ?>>
+                     class="<?php if ($is_required) echo 'required_field'; ?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>" <?php echo $style_latlng; ?>>
                     <label>
                         <?php echo PLACE_ADDRESS_LAT; ?>
                         <?php if ($is_required) echo '<span>*</span>'; ?>
@@ -1431,7 +1434,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                 </div>
 
                 <div id="geodir_<?php echo $prefix . 'longitude'; ?>_row"
-                     class="<?php if ($is_required) echo 'required_field'; ?> geodir_form_row clearfix" <?php echo $style_latlng; ?>>
+                     class="<?php if ($is_required) echo 'required_field'; ?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>" <?php echo $style_latlng; ?>>
                     <label>
                         <?php echo PLACE_ADDRESS_LNG; ?>
                         <?php if ($is_required) echo '<span>*</span>'; ?>
@@ -1447,7 +1450,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
             <?php } ?>
 
             <?php if (isset($extra_fields['show_mapview']) && $extra_fields['show_mapview']) { ?>
-                <div id="geodir_<?php echo $prefix . 'mapview'; ?>_row" class="geodir_form_row clearfix ">
+                <div id="geodir_<?php echo $prefix . 'mapview'; ?>_row" class="geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
                     <label><?php _e($mapview_title, 'geodirectory'); ?></label>
 
 
@@ -1504,7 +1507,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
             ?>
 
             <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix">
+                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
                 <label>
                     <?php $site_title = __($site_title, 'geodirectory');
                     echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
@@ -1524,7 +1527,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
             }?>
 
             <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix">
+                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
                 <label>
                     <?php $site_title = __($site_title, 'geodirectory');
                     echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
@@ -1544,7 +1547,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
             } ?>
 
             <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix">
+                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
                 <label>
                     <?php $site_title = __($site_title, 'geodirectory');
                     echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
@@ -1564,7 +1567,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
             }?>
 
             <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix">
+                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
                 <label>
                     <?php $site_title = __($site_title, 'geodirectory');
                     echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
@@ -1583,7 +1586,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
 
         <?php } elseif ($type == 'radio') { ?>
             <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix">
+                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
                 <label>
                     <?php $site_title = __($site_title, 'geodirectory');
                     echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
@@ -1623,7 +1626,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
         <?php } elseif ($type == 'checkbox') { ?>
 
             <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix">
+                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
                 <label>
                     <?php $site_title = __($site_title, 'geodirectory');
                     echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
@@ -1647,7 +1650,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
             ?>
 
             <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix">
+                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
                 <label>
                     <?php $site_title = __($site_title, 'geodirectory');
                     echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
@@ -1679,7 +1682,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
 
         <?php } elseif ($type == 'select') { ?>
             <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row geodir_custom_fields clearfix">
+                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row geodir_custom_fields clearfix <?php echo $fieldset_field_class;?>">
                 <label>
                     <?php $site_title = __($site_title, 'geodirectory');
                     echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
@@ -1722,7 +1725,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
             }
             ?>
             <div id="<?php echo $name; ?>_row"
-                 class="<?php if ($is_required) echo 'required_field'; ?> geodir_form_row clearfix">
+                 class="<?php if ($is_required) echo 'required_field'; ?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
                 <label>
                     <?php $site_title = __($site_title, 'geodirectory');
                     echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
@@ -1796,7 +1799,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
             ?>
 
             <div id="<?php echo $name; ?>_row"
-                 class="<?php if ($is_required) echo 'required_field'; ?> geodir_form_row clearfix">
+                 class="<?php if ($is_required) echo 'required_field'; ?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
                 <label>
                     <?php $site_title = __($site_title, 'geodirectory');
                     echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
@@ -1856,7 +1859,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
 
             </script>
             <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix">
+                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
                 <label>
 
                     <?php $site_title = __($site_title, 'geodirectory');
@@ -1889,7 +1892,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                 });
             </script>
             <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix">
+                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
                 <label>
 
                     <?php $site_title = __($site_title, 'geodirectory');
@@ -1910,7 +1913,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                 $value = '';
             } ?>
             <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix">
+                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
                 <label>
                     <?php $site_title = __($site_title, 'geodirectory');
                     echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
@@ -2066,7 +2069,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
             ?>
 
             <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix">
+                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
 
                 <div id="<?php echo $file_id; ?>dropbox" align="center" style="">
                     <label

@@ -2174,7 +2174,7 @@ function geodir_action_add_listing_form()
          */
         do_action('geodir_before_detail_fields');?>
 
-        <h5><?php echo LISTING_DETAILS_TEXT;?></h5>
+        <h5 id="geodir_fieldset_details" class="geodir-fieldset-row" gd-fieldset="details"><?php echo LISTING_DETAILS_TEXT;?></h5>
 
         <?php
         /**
@@ -2186,7 +2186,7 @@ function geodir_action_add_listing_form()
          */
         do_action('geodir_before_main_form_fields');?>
 
-        <div id="geodir_post_title_row" class="required_field geodir_form_row clearfix">
+        <div id="geodir_post_title_row" class="required_field geodir_form_row clearfix gd-fieldset-details">
             <label><?php echo PLACE_TITLE_TEXT;?><span>*</span> </label>
             <input type="text" field_type="text" name="post_title" id="post_title" class="geodir_textfield"
                    value="<?php echo esc_attr(stripslashes($title)); ?>"/>
@@ -2234,7 +2234,7 @@ function geodir_action_add_listing_form()
         do_action('geodir_before_description_field'); ?>
         <div id="geodir_post_desc_row" class="<?php if ($desc_limit != '0') {
             echo 'required_field';
-        }?> geodir_form_row clearfix">
+        }?> geodir_form_row clearfix gd-fieldset-details">
             <label><?php echo PLACE_DESC_TEXT;?><span><?php if ($desc_limit != '0') {
                         echo '*';
                     }?></span> </label>
@@ -2304,7 +2304,7 @@ function geodir_action_add_listing_form()
          */
         do_action('geodir_before_listing_tags_field');
         ?>
-        <div id="geodir_post_tags_row" class="geodir_form_row clearfix">
+        <div id="geodir_post_tags_row" class="geodir_form_row clearfix gd-fieldset-details">
             <label><?php echo TAGKW_TEXT; ?></label>
             <input name="post_tags" id="post_tags" value="<?php echo $kw_tags; ?>" type="text" class="geodir_textfield"
                    maxlength="<?php echo $kw_tags_count;?>"/>
