@@ -110,7 +110,9 @@ function geodir_sc_home_map($atts)
         'autozoom' => '',
         'child_collapse' => '0',
         'scrollwheel' => '0',
-		'marker_cluster' => false
+		'marker_cluster' => false,
+        'latitude' => '',
+        'longitude' => ''
     );
 
     $params = shortcode_atts($defaults, $atts);
@@ -119,6 +121,9 @@ function geodir_sc_home_map($atts)
 
     $map_args = array(
         'map_canvas_name' => 'gd_home_map',
+        'latitude' => $params['latitude'],
+        'longitude' => $params['longitude'],
+
         /**
          * Filter the widget width of the map on home/listings page.
          *
@@ -193,7 +198,7 @@ function geodir_sc_home_map($atts)
         'map_class_name' => 'geodir-map-home-page',
         'is_geodir_home_map_widget' => true,
     );
-	
+
 	// Add marker cluster
 	if (isset($params['marker_cluster']) && gdsc_to_bool_val($params['marker_cluster']) && defined('GDCLUSTER_VERSION')) {
         $map_args['enable_marker_cluster'] = true;
@@ -210,6 +215,12 @@ function geodir_sc_home_map($atts)
 	} else {
 		$map_args['enable_marker_cluster'] = false;
 	}
+
+    // if lat and long set in shortcode, hack it so the map is not repositioned
+    if(!empty($params['latitude']) && !empty($params['longitude']) ){
+        $map_args['enable_marker_cluster_no_reposition'] = true;
+    }
+
 
     geodir_draw_map($map_args);
 
