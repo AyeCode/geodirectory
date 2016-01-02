@@ -1627,6 +1627,7 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
  * Returns the term link with parameters.
  *
  * @since 1.0.0
+ * @since 1.5.7 Changes for the neighbourhood system improvement.
  * @package GeoDirectory
  * @param string $termlink The term link
  * @param object $term Not yet implemented.
@@ -1652,6 +1653,9 @@ function geodir_term_link($termlink, $term, $taxonomy) {
 
         if ($include_location) {
             global $post;
+			
+			$location_manager = defined('POST_LOCATION_TABLE') ? true : false;
+			$neighbourhood_active = $location_manager && get_option('location_neighbourhoods') ? true : false;
             
 			if(geodir_is_page('detail') && isset($post->country_slug)){
                 $location_terms = array(
@@ -1659,6 +1663,10 @@ function geodir_term_link($termlink, $term, $taxonomy) {
                     'gd_region' => $post->region_slug,
                     'gd_city' => $post->city_slug
                 );
+				
+				if ($neighbourhood_active && !empty($location_terms['gd_city']) && !empty($_SESSION['gd_neighbourhood'])) {
+					$location_terms['gd_neighbourhood'] = $_SESSION['gd_neighbourhood'];
+				}
             } else {
                 $location_terms = geodir_get_current_location_terms('query_vars');
             }
