@@ -1341,7 +1341,7 @@ function gd_wpml_get_lang_from_url($url){
 
     //
     $url = str_replace(array("http://","https://"),"",$url);
-    $site_url = str_replace(array("http://","https://"),"",get_site_url());
+    $site_url = str_replace(array("http://","https://"),"",get_bloginfo('url'));
 
     $url = str_replace($site_url,"",$url);
 
@@ -1430,7 +1430,8 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
         }
 
 		// Fix slug problem when slug matches part of host or base url/ Ex: url -> www.abcxyz.com & slug -> xyz.
-		$site_url = trailingslashit(get_site_url());
+        $site_url = trailingslashit(get_bloginfo('url'));
+
 		$fix_url = strpos($post_link, $site_url) === 0 ? true : false;
 		if ($fix_url) {
 			$post_link = str_replace($site_url, '', $post_link);
