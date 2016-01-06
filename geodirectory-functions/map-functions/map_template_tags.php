@@ -304,11 +304,13 @@ function geodir_draw_map($map_args = array())
                     <?php
                     $exclude_post_types = get_option('geodir_exclude_post_type_on_map');
                     $geodir_available_pt_on_map = count(geodir_get_posttypes('array')) - count($exclude_post_types);
+					$map_cat_class = '';
+					if ($geodir_map_options['enable_post_type_filters']) {
+						$map_cat_class = $geodir_available_pt_on_map > 1 ? ' map-cat-ptypes' : ' map-cat-floor';
+					}
                     ?>
                     <div
-                        class="map-category-listing <?php if ($geodir_map_options['enable_post_type_filters'] && $geodir_available_pt_on_map < 2) {
-                            echo "map-cat-floor";
-                        }?>">
+                        class="map-category-listing<?php echo $map_cat_class;?>">
                         <div class="trigger triggeroff"><i class="fa fa-compress"></i><i class="fa fa-expand"></i></div>
                         <div id="<?php echo $map_canvas_name;?>_cat"
                              class="<?php echo $map_canvas_name;?>_map_category  map_category"
@@ -383,9 +385,6 @@ function geodir_draw_map($map_args = array())
                     $post_types = geodir_get_posttypes('object');
                     if (count((array)($post_types)) > 1) {
                         ?>
-                        <style>.map_category, .trigger {
-                                margin-bottom: 30px;
-                            }</style>
                         <div class="map-places-listing" id="<?php echo $map_canvas_name;?>_posttype_menu"
                              style="max-width:<?php echo $map_width;?>!important;">
 

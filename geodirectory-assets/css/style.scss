@@ -1692,7 +1692,7 @@ div#jquery-lightbox {
 	padding-left: 1.2em !important;
 }
 
-//Features widget
+/* Features widget */
 .widget_gd_features {
     .gd-features {
         list-style-type: none;
@@ -1731,4 +1731,9 @@ div#jquery-lightbox {
             }
         }
     }
+}
+
+.map-cat-ptypes .map_category,
+.map-cat-ptypes .trigger {
+	margin-bottom: 30px;
 }

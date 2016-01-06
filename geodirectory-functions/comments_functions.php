@@ -136,7 +136,7 @@ add_filter('cancel_comment_reply_link', 'geodir_cancle_replaylink');
 function geodir_cancle_replaylink($link)
 {
 
-    $link = '<span id="gd_cancle_replaylink">' . $link . '</span>';
+    $link = '<span class="gd-cancel-replaylink">' . $link . '</span>';
 
     return $link;
 }

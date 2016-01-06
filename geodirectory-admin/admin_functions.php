@@ -3070,8 +3070,7 @@ function geodir_post_attachments()
 
     ?>
 
-    <div class="gtd-form_row clearfix" id="<?php echo $id; ?>dropbox" style="border:1px solid #999999; padding:5px;"
-         align="center">
+    <div class="gtd-form_row clearfix" id="<?php echo $id; ?>dropbox" style="border:1px solid #999999;padding:5px;text-align:center;">
         <input type="hidden" name="<?php echo $id; ?>" id="<?php echo $id; ?>" value="<?php echo $svalue; ?>"/>
 
         <div

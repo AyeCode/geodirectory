@@ -2071,7 +2071,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
             <div id="<?php echo $name;?>_row"
                  class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
 
-                <div id="<?php echo $file_id; ?>dropbox" align="center" style="">
+                <div id="<?php echo $file_id; ?>dropbox" style="text-align:center;">
                     <label
                         style="text-align:left; padding-top:10px;"><?php $site_title = __($site_title, 'geodirectory');
                         echo $site_title; ?><?php if ($is_required) echo '<span>*</span>';?></label>
@@ -2483,7 +2483,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                             $html = '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $type['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-contact" style="' . $field_icon . '">' . $field_icon_af .
                                 $html .= (trim($type['site_title'])) ? __($type['site_title'], 'geodirectory') . ': ' : '&nbsp;';
-                            $html .= '</span><a href="tel:' . stripslashes($post->{$type['htmlvar_name']}) . '">' . stripslashes($post->{$type['htmlvar_name']}) . '</a></div>';
+                            $html .= '</span><a href="tel:' . preg_replace('/[^0-9+]/', '', $post->{$type['htmlvar_name']}) . '">' . stripslashes($post->{$type['htmlvar_name']}) . '</a></div>';
 
                         endif;
 

@@ -13,6 +13,7 @@ Notifications email messages sent by GD should be translatable - FIXED
 Changes for the neighbourhood system improvement - CHANGED
 id & style class added to custom field type fieldset - ADDED
 Home map shortcode now supports latitude longitude args - ADDED
+Made few changes for W3C validation - CHANGED
 
 v1.5.6
 In add listing form sub-categories are no longer showing in hierarchy for checkbox display type - FIXED
