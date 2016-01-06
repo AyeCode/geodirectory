@@ -411,7 +411,7 @@ jQuery(document).ready(function () {
         jQuery('#respond .form-submit input#submit').val(geodir_all_js_msg.gd_cmt_btn_post_reply);
         jQuery('#respond .comment-form-comment label').html(geodir_all_js_msg.gd_cmt_btn_reply_text);
     });
-    jQuery('#gd_cancle_replaylink a').bind('click', function () {
+    jQuery('.gd-cancel-replaylink a').bind('click', function () {
         jQuery('#commentform #err_no_rating').remove();
         jQuery('#commentform .gd_rating').show();
         jQuery('#respond .form-submit input#submit').val(geodir_all_js_msg.gd_cmt_btn_post_review);

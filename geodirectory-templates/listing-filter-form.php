@@ -75,7 +75,7 @@ echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
                             }
                             ?>
 
-                            <option opt_label="<?php echo get_post_type_archive_link($post_type);?>"
+                            <option data-label="<?php echo get_post_type_archive_link($post_type);?>"
                                     value="<?php echo $post_type;?>" <?php if (isset($_REQUEST['stype'])) {
                                 if ($post_type == $_REQUEST['stype']) {
                                     echo 'selected="selected"';

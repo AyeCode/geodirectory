@@ -2401,8 +2401,8 @@ function geodir_action_add_listing_form()
                 } ?>
             </h5>
 
-            <div class="geodir_form_row clearfix" id="<?php echo $id; ?>dropbox" align="center"
-                 style="border:1px solid #ccc; min-height:100px; height:auto; padding:10px;">
+            <div class="geodir_form_row clearfix" id="<?php echo $id; ?>dropbox"
+                 style="border:1px solid #ccc;min-height:100px;height:auto;padding:10px;text-align:center;">
                 <input type="hidden" name="<?php echo $id; ?>" id="<?php echo $id; ?>" value="<?php echo $svalue; ?>"/>
                 <input type="hidden" name="<?php echo $id; ?>image_limit" id="<?php echo $id; ?>image_limit"
                        value="<?php echo $image_limit; ?>"/>
@@ -2461,7 +2461,7 @@ function geodir_action_add_listing_form()
 
         <!-- end captcha code -->
 
-        <div id="geodir-add-listing-submit" class="geodir_form_row clear_both" align="center" style="padding:2px;">
+        <div id="geodir-add-listing-submit" class="geodir_form_row clear_both" style="padding:2px;text-align:center;">
             <input type="submit" value="<?php echo PRO_PREVIEW_BUTTON;?>"
                    class="geodir_button" <?php echo $submit_button;?>/>
             <span class="geodir_message_note"
