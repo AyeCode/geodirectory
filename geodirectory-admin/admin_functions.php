@@ -86,7 +86,7 @@ if (!function_exists('geodir_admin_styles_req')) {
     function geodir_admin_styles_req()
     {
 
-        wp_register_style('geodirectory-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css', array(), GEODIRECTORY_VERSION);
+        wp_register_style('geodirectory-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css', array(), GEODIRECTORY_VERSION);
         wp_enqueue_style('geodirectory-font-awesome');
     }
 }
