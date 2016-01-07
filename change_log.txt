@@ -14,6 +14,7 @@ Changes for the neighbourhood system improvement - CHANGED
 id & style class added to custom field type fieldset - ADDED
 Home map shortcode now supports latitude longitude args - ADDED
 Made few changes for W3C validation - CHANGED
+Font awesome updated to 4.5.0 - CHANGED
 
 v1.5.6
 In add listing form sub-categories are no longer showing in hierarchy for checkbox display type - FIXED
