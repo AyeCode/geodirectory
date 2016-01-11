@@ -69,6 +69,7 @@ if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'cat') { // R
  * Retrive markers data to use in map
  *
  * @since 1.0.0
+ * @since 1.5.7 Fixed non recurring events markers.
  *
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
@@ -76,11 +77,8 @@ if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'cat') { // R
  * 
  * @return string
  */
-function get_markers()
-{
-
+function get_markers() {
     global $wpdb, $plugin_prefix, $geodir_cat_icons;
-
 
     $search = '';
     $main_query_array;
@@ -96,17 +94,15 @@ function get_markers()
 
     $field_default_cat = '';
     if (isset($_REQUEST['cat_id']) && $_REQUEST['cat_id'] != '') {
-
         $map_cat_arr = trim($_REQUEST['cat_id'], ',');
 
         if (!empty($map_cat_arr)) {
-
-            $field_default_cat .= "when (default_category IN (" . $map_cat_arr . ")) then default_category ";
+            $field_default_cat .= "WHEN (default_category IN (" . $map_cat_arr . ")) THEN default_category ";
 
             $map_cat_ids_array = explode(',', $map_cat_arr);
             $cat_find_array = array();
             foreach ($map_cat_ids_array as $cat_id) {
-                $field_default_cat .= "when ( find_in_set($cat_id, `" . $post_type . "category`) > 0) then $cat_id ";
+                $field_default_cat .= "WHEN (FIND_IN_SET($cat_id, `" . $post_type . "category`) > 0) THEN $cat_id ";
                 $cat_find_array[] = " FIND_IN_SET(%d, pd." . $post_type . "category)";
                 $main_query_array[] = $cat_id;
             }
@@ -120,19 +116,12 @@ function get_markers()
     if (!empty($cat_find_array))
         $search .= "AND (" . implode(' OR ', $cat_find_array) . ")";
 
-
     $main_query_array = $map_cat_ids_array;
   
-
     if (isset($_REQUEST['search']) && !empty($_REQUEST['search']) && $_REQUEST['search'] != __('Title', 'geodirectory')) {
-
-        $search .= " AND p.post_title like %s";
+        $search .= " AND p.post_title LIKE %s";
         $main_query_array[] = "%" . $_REQUEST['search'] . "%";
-
     }
-
-
-
 
     /**
      * Filter the marker query search SQL, values are replaces with %s or %d.
@@ -141,7 +130,7 @@ function get_markers()
      *
      * @param string $search The SQL query for search/where.
      */
-    $search = apply_filters('geodir_marker_search',$search);
+    $search = apply_filters('geodir_marker_search', $search);
     /**
      * Filter the marker query search SQL values %s and %d, this is an array of values.
      *
@@ -149,7 +138,7 @@ function get_markers()
      *
      * @param array $main_query_array The SQL query values for search/where.
      */
-    $main_query_array = apply_filters('geodir_marker_main_query_array',$main_query_array);
+    $main_query_array = apply_filters('geodir_marker_main_query_array', $main_query_array);
 
     $gd_posttype = '';
     if (isset($_REQUEST['gd_posttype']) && $_REQUEST['gd_posttype'] != '') {
@@ -160,11 +149,7 @@ function get_markers()
     } else
         $table = $plugin_prefix . 'gd_place_detail';
 
-
-
-
-
-    $join = $table . " as pd ";
+    $join = ", " . $table . " AS pd ";
 
     /**
 	 * Filter the SQL JOIN clause for the markers data
@@ -186,12 +171,12 @@ function get_markers()
     $search = str_replace(array("'%", "%'"), array("'%%", "%%'"), $search);
     $cat_type = $post_type . 'category';
     if ($post_type == 'gd_event') {
-        $event_select = ",pd.recurring_dates";
+        $event_select = ", pd.recurring_dates, pd.is_recurring";
     } else {
         $event_select = "";
     }
 
-    $sql_select = 'SELECT pd.default_category,pd.' . $cat_type . ',pd.post_title,pd.post_id,pd.post_latitude,pd.post_longitude ' . $event_select;
+    $sql_select = 'SELECT pd.default_category, pd.' . $cat_type . ', pd.post_title, pd.post_id, pd.post_latitude, pd.post_longitude' . $event_select;
     /**
 	 * Filter the SQL SELECT clause to retrive fields data
 	 *
@@ -200,15 +185,18 @@ function get_markers()
 	 * @param string $sql_select Row of SQL SELECT clause.
 	 */
 	$select = apply_filters('geodir_home_map_listing_select', $sql_select);
+	
+	$groupby = " GROUP BY pd.post_id";
+	/**
+	 * Filter the SQL GROUP BY clause to retrive map markers data.
+	 *
+	 * @since 1.5.7
+	 *
+	 * @param string $groupby Row of SQL GROUP BY clause.
+	 */
+	$groupby = apply_filters('geodir_home_map_listing_groupby', $groupby);
 
-    $catsql = $wpdb->prepare("$select $field_default_cat FROM "
-        . $wpdb->posts . " as p,"
-        . $join . " WHERE p.ID = pd.post_id
-				AND p.post_status = 'publish' " . $search . $gd_posttype , $main_query_array);
-
-
-
-    //if(isset($_SESSION['testing2']) && $_SESSION['testing2']){return $_SESSION['testing2'];}
+    $catsql = $wpdb->prepare("$select $field_default_cat FROM " . $wpdb->posts . " as p" . $join . " WHERE p.ID = pd.post_id AND p.post_status = 'publish' " . $search . $gd_posttype . $groupby , $main_query_array);
     
 	/**
 	 * Filter the SQL query to retrive markers data
@@ -219,11 +207,9 @@ function get_markers()
 	 * @param string $search Row of searched fields to use in WHERE clause.
 	 */
 	$catsql = apply_filters('geodir_home_map_listing_query', $catsql, $search);
-
-    //echo $catsql;
-   // print_r($_REQUEST);
+	
     $catinfo = $wpdb->get_results($catsql);
-
+	
     $cat_content_info = array();
     $content_data = array();
     $post_ids = array();
@@ -255,44 +241,50 @@ function get_markers()
         $geodir_cat_icons = geodir_get_term_icon();
         global $geodir_date_format;
 
-        foreach ($catinfo as $catinfo_obj) {
-            $icon = !empty($geodir_cat_icons) && isset($geodir_cat_icons[$catinfo_obj->default_category]) ? $geodir_cat_icons[$catinfo_obj->default_category] : '';
+        $today = strtotime(date_i18n('Y-m-d'));
+		
+		foreach ($catinfo as $catinfo_obj) {
+            $post_title = $catinfo_obj->post_title;
+            
+			if ($post_type == 'gd_event' && !empty($catinfo_obj->recurring_dates)) {
+				$event_dates = '';
+				$recurring_data = isset($catinfo_obj->recurring_dates) ? maybe_unserialize($catinfo_obj->recurring_dates) : array();
+				
+				$post_info = geodir_get_post_info($catinfo_obj->post_id);
+				if (!empty($catinfo_obj->is_recurring) && !empty($recurring_data) && !empty($recurring_data['is_recurring']) && geodir_event_recurring_pkg($post_info)) {
+					$recurring_dates = explode(',', $recurring_data['event_recurring_dates']);
+					
+					if (!empty($recurring_dates)) {					
+						$e = 0;
+						foreach ($recurring_dates as $date) {
+							if (strtotime($date) >= $today) {
+								$event_dates .= ' :: ' . date_i18n($geodir_date_format, strtotime($date));
+								
+								$e++;
+								if ($e == 3) { // only show 3 event dates
+									break;
+								}
+							}
+						}
+					}
+				} else {
+					$start_date = !empty($recurring_data['event_start']) && $recurring_data['event_start'] != '0000-00-00 00:00:00' ? $recurring_data['event_start'] : '';
+					$end_date = !empty($recurring_data['event_end']) && $recurring_data['event_end'] != '0000-00-00 00:00:00' ? $recurring_data['event_end'] : $start_date;
+				
+					if ($end_date != '' && strtotime($end_date) >= $today) {
+						$event_dates .= ' :: ' . date_i18n($geodir_date_format, strtotime($start_date)) .' -> ' . date_i18n($geodir_date_format, strtotime($end_date));
+					}
+				}
 
-            $e_dates = '';
-            if ($post_type == 'gd_event' && isset($catinfo_obj->recurring_dates)) {
-                $event_arr = maybe_unserialize($catinfo_obj->recurring_dates);
-                $e_arr = explode(",", $event_arr['event_recurring_dates']);
-                $end_date = '';
-                if(isset($event_arr['event_end'])){$end_date = $event_arr['event_end'];}
-
-                $e = 0;
-                foreach ($e_arr as $e_date) {
-                    if (strtotime($e_date) >= strtotime(date("Y-m-d"))) {
-                        $e++;
-                        $e_dates .= ' :: ' . date($geodir_date_format, strtotime($e_date));
-                        
-						// only show 3 event dates
-						if ($e == 3) {
-                            break;
-                        }
-                    }
-                }
-
-                // if no recurring check end date is not in future
-                if ($e_dates == '' && $end_date) {
-                    if (strtotime($end_date) >= strtotime(date("Y-m-d"))) {
-                        $e_dates .= date($geodir_date_format, strtotime($event_arr['event_start'])) .' -> ' . date($geodir_date_format, strtotime($end_date));
-                    }
-                }
-
-                // if the event is old don't show it on the map
-				if ($e_dates == '') {
-                    continue;
-                }
+				if (empty($event_dates)) {
+					continue;
+				}
+				
+				$post_title .= $event_dates;
             }
 
-            $mark_extra = (isset($catinfo_obj->marker_extra)) ? $catinfo_obj->marker_extra : '';
-            $post_title = $catinfo_obj->post_title . $e_dates;
+            $icon = !empty($geodir_cat_icons) && isset($geodir_cat_icons[$catinfo_obj->default_category]) ? $geodir_cat_icons[$catinfo_obj->default_category] : '';
+			$mark_extra = (isset($catinfo_obj->marker_extra)) ? $catinfo_obj->marker_extra : '';
             $title = str_replace($srcharr, $replarr, $post_title);
 
             $content_data[] = '{"id":"' . $catinfo_obj->post_id . '","t": "' . $title . '","lt": "' . $catinfo_obj->post_latitude . '","ln": "' . $catinfo_obj->post_longitude . '","mk_id":"' . $catinfo_obj->post_id . '_' . $catinfo_obj->default_category . '","i":"' . $icon . '"'.$mark_extra.'}';
@@ -319,9 +311,9 @@ function get_markers()
     $totalcount = count(array_unique($post_ids));
 
     if (!empty($cat_content_info)) {
-       // $_SESSION['testing2'] = '[{"totalcount":"' . $totalcount . '",' . substr(implode(',', $cat_content_info), 1) . ']';
-        return '[{"totalcount":"' . $totalcount . '",' . substr(implode(',', $cat_content_info), 1) . ']';
+		return '[{"totalcount":"' . $totalcount . '",' . substr(implode(',', $cat_content_info), 1) . ']';
     }
-    else
-        return '[{"totalcount":"0"}]';
+    else {
+		return '[{"totalcount":"0"}]';
+	}
 }
