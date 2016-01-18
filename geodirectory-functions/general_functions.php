@@ -3515,6 +3515,7 @@ function geodirectory_load_db_language() {
  * Get the custom fields texts for translation
  *
  * @since 1.4.2
+ * @since 1.5.7 Option values are translatable via db translation.
  * @package GeoDirectory
  *
  * @global object $wpdb WordPress database abstraction object.
@@ -3526,14 +3527,14 @@ function geodir_load_custom_field_translation($translation_texts = array()) {
     global $wpdb;
 
     // Custom fields table
-    $sql = "SELECT admin_title, admin_desc, site_title, clabels, required_msg FROM " . GEODIR_CUSTOM_FIELDS_TABLE;
+    $sql = "SELECT admin_title, admin_desc, site_title, clabels, required_msg, default_value, option_values FROM " . GEODIR_CUSTOM_FIELDS_TABLE;
     $rows = $wpdb->get_results($sql);
 
     if (!empty($rows)) {
         foreach($rows as $row) {
             if (!empty($row->admin_title))
                 $translation_texts[] = stripslashes_deep($row->admin_title);
-
+			
             if (!empty($row->admin_desc))
                 $translation_texts[] = stripslashes_deep($row->admin_desc);
 
@@ -3545,9 +3546,24 @@ function geodir_load_custom_field_translation($translation_texts = array()) {
 
             if (!empty($row->required_msg))
                 $translation_texts[] = stripslashes_deep($row->required_msg);
+			
+			if (!empty($row->default_value))
+                $translation_texts[] = stripslashes_deep($row->default_value);
+			
+			if (!empty($row->option_values)) {
+				$option_values = geodir_string_values_to_options(stripslashes_deep($row->option_values));
+				
+				if (!empty($option_values)) {
+					foreach ($option_values as $option_value) {
+						if (!empty($option_value['label'])) {
+							$translation_texts[] = $option_value['label'];
+						}
+					}
+				}
+			}
         }
     }
-
+	
     // Custom sorting fields table
     $sql = "SELECT site_title, asc_title, desc_title FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE;
     $rows = $wpdb->get_results($sql);
@@ -3564,6 +3580,25 @@ function geodir_load_custom_field_translation($translation_texts = array()) {
                 $translation_texts[] = stripslashes_deep($row->desc_title);
         }
     }
+	
+	// Advance search filter fields table
+	if (defined('GEODIR_ADVANCE_SEARCH_TABLE')) {
+		$sql = "SELECT field_site_name, front_search_title, field_desc FROM " . GEODIR_ADVANCE_SEARCH_TABLE;
+		$rows = $wpdb->get_results($sql);
+
+		if (!empty($rows)) {
+			foreach($rows as $row) {
+				if (!empty($row->field_site_name))
+					$translation_texts[] = stripslashes_deep($row->field_site_name);
+
+				if (!empty($row->front_search_title))
+					$translation_texts[] = stripslashes_deep($row->front_search_title);
+
+				if (!empty($row->field_desc))
+					$translation_texts[] = stripslashes_deep($row->field_desc);
+			}
+		}
+	}
 
     $translation_texts = !empty($translation_texts) ? array_unique($translation_texts) : $translation_texts;
 

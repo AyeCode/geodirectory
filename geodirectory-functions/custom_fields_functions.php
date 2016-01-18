@@ -1592,29 +1592,18 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                     echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
                     <?php if ($is_required) echo '<span>*</span>';?>
                 </label>
-
-                <?php if ($option_values) {
-                    $option_values_arr = explode(',', $option_values);
-
-                    for ($i = 0; $i < count($option_values_arr); $i++) {
-                        if (strstr($option_values_arr[$i], "/")) {
-                            $radio_attr = explode("/", $option_values_arr[$i]);
-                            $radio_lable = ucfirst($radio_attr[0]);
-                            $radio_value = $radio_attr[1];
-                        } else {
-                            $radio_lable = ucfirst($option_values_arr[$i]);
-                            $radio_value = $option_values_arr[$i];
-                        }
-
-                        ?>
-
-                        <input name="<?php echo $name;?>" id="<?php echo $name;?>" <?php if ($radio_value == $value) {
-                            echo 'checked="checked"';
-                        }?>  value="<?php echo $radio_value; ?>" class="gd-checkbox" field_type="<?php echo $type;?>"
-                               type="radio"  /><?php _e($radio_lable); ?>
-
-                    <?php
-                    }
+				<?php if ($option_values) {
+                    $option_values = geodir_string_values_to_options($option_values, true);
+					
+					if (!empty($option_values)) {
+						foreach ($option_values as $option_value) {
+							if (empty($option_value['optgroup'])) {
+							?>
+							<input name="<?php echo $name;?>" id="<?php echo $name;?>" <?php checked($value, $option_value['value']);?> value="<?php echo esc_attr($option_value['value']); ?>" class="gd-checkbox" field_type="<?php echo $type;?>" type="radio" /><?php echo $option_value['label']; ?>
+							<?php
+							}
+						}
+					}
                 }
                 ?>
                 <span class="geodir_message_note"><?php _e($admin_desc, 'geodirectory');?></span>
@@ -1689,7 +1678,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                     <?php if ($is_required) echo '<span>*</span>';?>
                 </label>
                 <?php
-                $option_values_arr = geodir_string_values_to_options($option_values);
+                $option_values_arr = geodir_string_values_to_options($option_values, true);
                 $select_options = '';
                 if (!empty($option_values_arr)) {
                     foreach ($option_values_arr as $option_row) {
@@ -1743,7 +1732,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                             echo '<ul class="gd_multi_choice">';
                         }
 
-                        $option_values_arr = geodir_string_values_to_options($option_values);
+                        $option_values_arr = geodir_string_values_to_options($option_values, true);
                         $select_options = '';
                         if (!empty($option_values_arr)) {
                             foreach ($option_values_arr as $option_row) {
@@ -2186,6 +2175,7 @@ if (!function_exists('geodir_show_listing_info')) {
 	 * Show listing info depending on field location.
 	 *
 	 * @since 1.0.0
+	 * @since 1.5.7 Custom fields option values added to db translation.
 	 * @package GeoDirectory
      * @global object $wpdb WordPress Database object.
      * @global object $post The current post object.
@@ -2639,14 +2629,26 @@ if (!function_exists('geodir_show_listing_info')) {
                     case 'radio':
 
                         $html_var = $type['htmlvar_name'];
-                        $html_val = $post->{$type['htmlvar_name']};
+                        $html_val = __($post->{$type['htmlvar_name']}, 'geodirectory');
                         if ($post->{$type['htmlvar_name']} != ''):
 
-                            if ($post->{$type['htmlvar_name']} == 'f' || $post->{$type['htmlvar_name']} == '0'):
-                                $html_val = __('No', 'geodirectory');
-                            elseif ($post->{$type['htmlvar_name']} == 't' || $post->{$type['htmlvar_name']} == '1'):
-                                $html_val = __('Yes', 'geodirectory');
-                            endif;
+                            if ($post->{$type['htmlvar_name']} == 'f' || $post->{$type['htmlvar_name']} == '0') {
+								$html_val = __('No', 'geodirectory');
+							} else if ($post->{$type['htmlvar_name']} == 't' || $post->{$type['htmlvar_name']} == '1') {
+								$html_val = __('Yes', 'geodirectory');
+							} else {								
+								if (!empty($type['option_values'])) {
+									$cf_option_values = geodir_string_values_to_options(stripslashes_deep($type['option_values']), true);
+									
+									if (!empty($cf_option_values)) {
+										foreach ($cf_option_values as $cf_option_value) {
+											if (isset($cf_option_value['value']) && $cf_option_value['value'] == $post->{$type['htmlvar_name']}) {
+												$html_val = $cf_option_value['label'];
+											}
+										}
+									}
+								}
+							}
 
                             if (strpos($field_icon, 'http') !== false) {
                                 $field_icon_af = '';
@@ -2717,7 +2719,20 @@ if (!function_exists('geodir_show_listing_info')) {
                         $html_var = $type['htmlvar_name'];
 
                         if ($post->{$type['htmlvar_name']}):
-
+							$field_value = __($post->$type['htmlvar_name'], 'geodirectory');
+							
+							if (!empty($type['option_values'])) {
+								$cf_option_values = geodir_string_values_to_options(stripslashes_deep($type['option_values']), true);
+								
+								if (!empty($cf_option_values)) {
+									foreach ($cf_option_values as $cf_option_value) {
+										if (isset($cf_option_value['value']) && $cf_option_value['value'] == $post->$type['htmlvar_name']) {
+											$field_value = $cf_option_value['label'];
+										}
+									}
+								}
+							}
+							
                             if (strpos($field_icon, 'http') !== false) {
                                 $field_icon_af = '';
                             } elseif ($field_icon == '') {
@@ -2739,7 +2754,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                             $html = '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $type['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-select" style="' . $field_icon . '">' . $field_icon_af;
                             $html .= (trim($type['site_title'])) ? __($type['site_title'], 'geodirectory') . ': ' : '';
-                            $html .= '</span>' . stripslashes($post->{$type['htmlvar_name']}) . '</div>';
+                            $html .= '</span>' . $field_value . '</div>';
                         endif;
 
                         break;
@@ -2763,53 +2778,22 @@ if (!function_exists('geodir_show_listing_info')) {
                                 $field_icon_af = $field_icon;
                                 $field_icon = '';
                             }
+							
+							$field_values = explode(',', trim($post->$type['htmlvar_name'], ","));
 
-
-                            $option_values = explode(',', $post->{$type['htmlvar_name']});
-
-
-                           // print_r($option_values);
-                            //print_r($type);
-
-                            if ($type['option_values']) {
-
-                                if (strstr($type['option_values'], "|")) {
-
-                                    $field_values = explode(',', $type['option_values']);
-                                    $san_options = array();
-                                    foreach ($field_values as $data) {
-                                        if (strstr($data, "|")) {
-                                            $temp_data = explode('|', $data);
-                                            if(isset($temp_data[1]))$data = $temp_data[1];
-                                        }
-
-                                        $data = str_replace(array("{optgroup}","{/optgroup}"),'',$data);
-                                        $san_options[] =trim( $data);
-
-                                    }
-                                    $type['option_values'] = implode(',',$san_options);
-
-                                }
-
-                                if (strstr($type['option_values'], "/")) {
-
-                                    $option_values = array();
-
-                                    $field_values = explode(',', $type['option_values']);
-
-                                    foreach ($field_values as $data) {
-
-                                        $val = explode('/', $data);
-
-                                        if (isset($val[1]) && in_array($val[1], explode(',', $post->{$type['htmlvar_name']})))
-                                            $option_values[] = $val[0];
-
-                                    }
-
-                                }
-
+                            $option_values = array();
+							if (!empty($type['option_values'])) {
+								$cf_option_values = geodir_string_values_to_options(stripslashes_deep($type['option_values']), true);
+								
+								if (!empty($cf_option_values)) {
+									foreach ($cf_option_values as $cf_option_value) {
+										if (isset($cf_option_value['value']) && in_array($cf_option_value['value'], $field_values)) {
+											$option_values[] = $cf_option_value['label'];
+										}
+									}
+								}
                             }
-                            //print_r($option_values);
+							
                             $geodir_odd_even = '';
                             if ($fields_location == 'detail') {
 
@@ -2825,28 +2809,20 @@ if (!function_exists('geodir_show_listing_info')) {
                             $html .= '</span>';
 
                             if (count($option_values) > 1) {
-
                                 $html .= '<ul>';
-
-                                foreach ($option_values as $val) {
-
-                                    $html .= '<li>' . stripslashes($val) . '</li>';
-
+                                
+								foreach ($option_values as $val) {
+                                    $html .= '<li>' . $val . '</li>';
                                 }
-
-                                $html .= '</ul>';
-
+                                
+								$html .= '</ul>';
                             } else {
-                                $html .= stripslashes(trim($post->{$type['htmlvar_name']}, ','));
+                                $html .= $post->$type['htmlvar_name'];
                             }
 
                             $html .= '</div>';
-
                         endif;
-
                         break;
-
-
                     case 'email':
 					
 						if ($type['htmlvar_name'] == 'geodir_email' && !(geodir_is_page('detail') || geodir_is_page('preview'))) {
@@ -4131,11 +4107,13 @@ if (!function_exists('check_field_visibility')) {
  * Parse label & values from string.
  *
  * @since 1.0.0
+ * @since 1.5.7 New parameter $translated added.
  * @package GeoDirectory
  * @param string $input The string input.
+ * @param bool $translated True if label needs to be translated.
  * @return array Returns option array.
  */
-function geodir_string_to_options($input = '')
+function geodir_string_to_options($input = '', $translated = false)
 {
     $return = array();
     if ($input != '') {
@@ -4154,10 +4132,16 @@ function geodir_string_to_options($input = '')
             if (strpos($input_str, "/") !== false) {
                 $input_str = explode("/", $input_str, 2);
                 $label = trim($input_str[0]);
-                $label = ucfirst($label);
+                if ($translated && $label != '') {
+					$label = __($label, 'geodirectory');
+				}
+				$label = ucfirst($label);
                 $value = trim($input_str[1]);
             } else {
-                $label = ucfirst($input_str);
+                if ($translated && $input_str != '') {
+					$input_str = __($input_str, 'geodirectory');
+				}
+				$label = ucfirst($input_str);
                 $value = $input_str;
             }
 
@@ -4174,11 +4158,13 @@ function geodir_string_to_options($input = '')
  * Parse option values string to array.
  *
  * @since 1.0.0
+ * @since 1.5.7 New parameter $translated added.
  * @package GeoDirectory
  * @param string $option_values The option values.
+ * @param bool $translated True if label needs to be translated.
  * @return array Returns option array.
  */
-function geodir_string_values_to_options($option_values = '')
+function geodir_string_values_to_options($option_values = '', $translated = false)
 {
     $options = array();
     if ($option_values == '') {
@@ -4201,11 +4187,14 @@ function geodir_string_values_to_options($option_values = '')
                     if (strpos($optgroup_str, "|") !== false) {
                         $optgroup_str_arr = explode("|", $optgroup_str, 2);
                         $optgroup_label = trim($optgroup_str_arr[0]);
+						if ($translated && $optgroup_label != '') {
+							$optgroup_label = __($optgroup_label, 'geodirectory');
+						}
                         $optgroup_label = ucfirst($optgroup_label);
                         $optgroup_str = $optgroup_str_arr[1];
                     }
 
-                    $optgroup3 = geodir_string_to_options($optgroup_str);
+                    $optgroup3 = geodir_string_to_options($optgroup_str, $translated);
 
                     if ($count > 1 && $optgroup_label != '' && !empty($optgroup3)) {
                         $optgroup_start = array(array('label' => $optgroup_label, 'value' => NULL, 'optgroup' => 'start'));
@@ -4215,12 +4204,12 @@ function geodir_string_values_to_options($option_values = '')
                     $options = array_merge($options, $optgroup3);
                 }
             } else {
-                $optgroup1 = geodir_string_to_options($optgroup);
+                $optgroup1 = geodir_string_to_options($optgroup, $translated);
                 $options = array_merge($options, $optgroup1);
             }
         }
     } else {
-        $options = geodir_string_to_options($option_values);
+        $options = geodir_string_to_options($option_values, $translated);
     }
 
     return $options;
