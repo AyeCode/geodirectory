@@ -17,6 +17,7 @@ Made few changes for W3C validation - CHANGED
 Font awesome updated to 4.5.0 - CHANGED
 New filter added to use group by clause in map marker query - ADDED
 Custom field option values should be translatable - FIXED
+Permalink pages settings saving on a different wpml language breaks pages settings - FIXED
 
 v1.5.6
 In add listing form sub-categories are no longer showing in hierarchy for checkbox display type - FIXED

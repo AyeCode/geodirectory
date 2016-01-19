@@ -2190,6 +2190,7 @@ if (!function_exists('geodir_import_data')) {
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $geodirectory GeoDirectory plugin object.
+ * @global object $sitepress Sitepress WPML object.
  * @param array $options The options array.
  */
 function geodir_admin_fields($options)
@@ -2732,7 +2733,23 @@ function geodir_admin_fields($options)
                 break;
 
             case 'single_select_page' :
-                $page_setting = (int)get_option($value['id']);
+                // WPML
+				$switch_lang = false;
+				$disabled = '';
+				if (geodir_is_wpml() && isset($_REQUEST['tab']) && $_REQUEST['tab'] == 'permalink_settings') {
+					global $sitepress;
+					
+					$default_lang = $sitepress->get_default_language();
+					$current_lang = $sitepress->get_current_language();
+					
+					if ($current_lang != 'all' && $current_lang != $default_lang) {
+						$disabled = "disabled='disabled'";
+						$switch_lang = $current_lang;
+						$sitepress->switch_lang('all', true);
+					}
+				}
+				//
+				$page_setting = (int)get_option($value['id']);
 
                 $args = array('name' => $value['id'],
                     'id' => $value['id'],
@@ -2749,10 +2766,13 @@ function geodir_admin_fields($options)
                 <tr valign="top" class="single_select_page">
                 <th scope="row" class="titledesc"><?php echo $value['name'] ?></th>
                 <td class="forminp">
-                    <?php echo str_replace(' id=', " data-placeholder='" . __('Select a page...', 'geodirectory') . "' style='" . $value['css'] . "' class='" . $value['class'] . "' id=", wp_dropdown_pages($args)); ?>
+                    <?php echo str_replace(' id=', " data-placeholder='" . __('Select a page...', 'geodirectory') . "' style='" . $value['css'] . "' class='" . $value['class'] . "' " . $disabled . " id=", wp_dropdown_pages($args)); ?>
                     <span class="description"><?php echo $value['desc'] ?></span>
                 </td>
                 </tr><?php
+				if ($switch_lang) {
+					$sitepress->switch_lang($switch_lang, true);
+				}
                 break;
             case 'single_select_country' :
                 $countries = $geodirectory->countries->countries;
@@ -3421,6 +3441,8 @@ function geodir_admin_current_post_type() {
  * @since 1.4.2
  * @package GeoDirectory
  *
+ * @global object $sitepress Sitepress WPML object.
+ *
  * @param string $current_tab Current tab in geodirectory settings.
  * @param array  $geodir_settings Array of geodirectory settings.
  */
@@ -3437,6 +3459,19 @@ function geodir_before_update_options($current_tab, $geodir_settings) {
 			$redirect_url = admin_url('admin.php?page=geodirectory&tab=' . $current_tab . '&active_tab=' . $active_tab . '&msg=fail&gderr=21');
         	wp_redirect($redirect_url);
 			exit;
+		}
+		
+		// Don't allow to update page settings on different language.
+		if (geodir_is_wpml()) {
+			global $sitepress;
+			$current_language = $sitepress->get_current_language();
+			$default_language = $sitepress->get_default_language();
+			
+			if ($current_language != 'all' && $current_language != $default_language) {
+				$redirect_url = admin_url('admin.php?page=geodirectory&tab=' . $current_tab . '&active_tab=' . $active_tab);
+				wp_redirect($redirect_url);
+				exit;
+			}
 		}
 	}
 }
@@ -6961,5 +6996,26 @@ function geodir_in_plugin_update_message($content) {
         }
     }
     echo $upgrade_notice;
+}
+
+/**
+ * Display notice on geodirectory permalink settings page to don't pages settings on a different language when wpml is active.
+ *
+ * @package GeoDirectory
+ * @since 1.5.7
+ *
+ * @global object $sitepress Sitepress WPML object.
+ */
+function geodir_wpml_permalink_setting_notice() {
+	if (geodir_is_wpml()) {
+		global $sitepress;
+		$current_language = $sitepress->get_current_language();
+		$default_language = $sitepress->get_default_language();
+		if ($current_language != 'all' && $current_language != $default_language) {
+	?>
+	<div class="updated error notice-success" id="message"><p style="color:red"><strong><?php _e('Saving GeoDirectory pages settings on a different language breaks pages settings. Try to save after switching to default language.', 'geodirectory');?></strong></p></div>
+	<?php
+		}
+	}
 }
 ?>
