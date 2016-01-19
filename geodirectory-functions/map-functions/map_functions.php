@@ -64,7 +64,16 @@ function create_marker_jason_of_posts($post)
             $icon = str_replace("http:","https:",$icon );
         }
 
-        $map_jason[] = '{"id":"' . $post->ID . '","t": "' . $title . '","lt": "' . $post->post_latitude . '","ln": "' . $post->post_longitude . '","mk_id":"' . $post->ID . '_' . $post->default_category . '","i":"' . $icon . '"}';
+        $post_json = '{"id":"' . $post->ID . '","t": "' . $title . '","lt": "' . $post->post_latitude . '","ln": "' . $post->post_longitude . '","mk_id":"' . $post->ID . '_' . $post->default_category . '","i":"' . $icon . '"}';
+
+        /**
+         * Filter the json data when creating output for post json marker..
+         *
+         * @since 1.5.7
+         * @param string $post_json JSON representation of the post marker info.
+         * @param object $post The post object.
+         */
+        $map_jason[] = apply_filters('geodir_create_marker_jason_of_posts',$post_json, $post);
     }
 }
 
