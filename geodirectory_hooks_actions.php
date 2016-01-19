@@ -2448,6 +2448,7 @@ add_filter('geodir_detail_page_tab_list_extend', 'geodir_detail_page_custom_fiel
  * Details page tab custom fields.
  *
  * @since 1.0.0
+ * @since 1.5.7 Custom fields option values added to db translation.
  * @package GeoDirectory
  * @global object $post The current post object.
  * @param array $tabs_arr Tabs array {@see geodir_detail_page_tab_headings_change()}.
@@ -2681,12 +2682,27 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                         }
                             break;
                         case 'radio': {
-                            if ($post->$type['htmlvar_name'] != '') {
-                                if ($post->$type['htmlvar_name'] == 'f' || $post->$type['htmlvar_name'] == '0') {
+
+							if ($post->$type['htmlvar_name'] != '') {
+								if ($post->$type['htmlvar_name'] == 'f' || $post->$type['htmlvar_name'] == '0') {
                                     $html_val = __('No', 'geodirectory');
                                 } else if ($post->$type['htmlvar_name'] == 't' || $post->$type['htmlvar_name'] == '1') {
                                     $html_val = __('Yes', 'geodirectory');
-                                }
+                                } else {
+									$html_val = __($post->$type['htmlvar_name'], 'geodirectory');
+									
+									if (!empty($type['option_values'])) {
+										$cf_option_values = geodir_string_values_to_options(stripslashes_deep($type['option_values']), true);
+										
+										if (!empty($cf_option_values)) {
+											foreach ($cf_option_values as $cf_option_value) {
+												if (isset($cf_option_value['value']) && $cf_option_value['value'] == $post->$type['htmlvar_name']) {
+													$html_val = $cf_option_value['label'];
+												}
+											}
+										}
+									}
+								}
 
                                 if (strpos($field_icon, 'http') !== false) {
                                     $field_icon_af = '';
@@ -2751,6 +2767,20 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                                 $field_icon_af = $field_icon;
                                 $field_icon = '';
                             }
+							
+							$field_value = __($post->$type['htmlvar_name'], 'geodirectory');
+							
+							if (!empty($type['option_values'])) {
+								$cf_option_values = geodir_string_values_to_options(stripslashes_deep($type['option_values']), true);
+								
+								if (!empty($cf_option_values)) {
+									foreach ($cf_option_values as $cf_option_value) {
+										if (isset($cf_option_value['value']) && $cf_option_value['value'] == $post->$type['htmlvar_name']) {
+											$field_value = $cf_option_value['label'];
+										}
+									}
+								}
+							}
 
                             $geodir_odd_even = $field_set_start == 1 && $i % 2 == 0 ? 'geodir_more_info_even' : 'geodir_more_info_odd';
 
@@ -2758,7 +2788,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                             if ($field_set_start == 1 && $site_title != '') {
                                 $html .= ' ' . __($site_title, 'geodirectory') . ': ';
                             }
-                            $html .= ' </span>' . stripslashes($post->$type['htmlvar_name']) . '</div>';
+                            $html .= ' </span>' . $field_value . '</div>';
                         }
                             break;
                         case 'multiselect': {
@@ -2775,40 +2805,19 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                                 $field_icon = '';
                             }
 
+                            $field_values = explode(',', trim($post->$type['htmlvar_name'], ","));
 
-                            $option_values = explode(',', $post->$type['htmlvar_name']);
-
-                            if ($type['option_values']) {
-
-
-                                if (strstr($type['option_values'], "|")) {
-
-                                    $field_values = explode(',', $type['option_values']);
-                                    $san_options = array();
-                                    foreach ($field_values as $data) {
-                                        if (strstr($data, "|")) {
-                                            $temp_data = explode('|', $data);
-                                            if(isset($temp_data[1]))$data = $temp_data[1];
-                                        }
-
-                                        $data = str_replace(array("{optgroup}","{/optgroup}"),'',$data);
-                                        $san_options[] = trim($data);
-
-                                    }
-                                    $type['option_values'] = implode(',',$san_options);
-
-                                }
-
-
-                                if (strstr($type['option_values'], "/")) {
-                                    $option_values = array();
-                                    $field_values = explode(',', $type['option_values']);
-                                    foreach ($field_values as $data) {
-                                        $val = explode('/', $data);
-                                        if (isset($val[1]) && in_array($val[1], explode(',', $post->$type['htmlvar_name'])))
-                                            $option_values[] = $val[0];
-                                    }
-                                }
+                            $option_values = array();
+							if (!empty($type['option_values'])) {
+								$cf_option_values = geodir_string_values_to_options(stripslashes_deep($type['option_values']), true);
+								
+								if (!empty($cf_option_values)) {
+									foreach ($cf_option_values as $cf_option_value) {
+										if (isset($cf_option_value['value']) && in_array($cf_option_value['value'], $field_values)) {
+											$option_values[] = $cf_option_value['label'];
+										}
+									}
+								}
                             }
 
                             $geodir_odd_even = $field_set_start == 1 && $i % 2 == 0 ? 'geodir_more_info_even' : 'geodir_more_info_odd';
@@ -2822,11 +2831,11 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                             if (count($option_values) > 1) {
                                 $html .= '<ul>';
                                 foreach ($option_values as $val) {
-                                    $html .= '<li>' . stripslashes($val) . '</li>';
+                                    $html .= '<li>' . $val . '</li>';
                                 }
                                 $html .= '</ul>';
                             } else {
-                                $html .= stripslashes(trim($post->$type['htmlvar_name'], ','));
+                                $html .= $post->$type['htmlvar_name'];
                             }
                             $html .= '</div>';
                         }

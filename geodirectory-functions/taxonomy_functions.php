@@ -1703,6 +1703,7 @@ function geodir_term_link($termlink, $term, $taxonomy) {
         if(function_exists('icl_object_id')){
             $post_types = get_option('geodir_post_types');
             $post_type = str_replace("category","",$taxonomy);
+			$post_type = str_replace("_tags","",$post_type);
             $slug = $post_types[$post_type]['rewrite']['slug'];
             if ( gd_wpml_slug_translation_turned_on( $post_type )) {
 
