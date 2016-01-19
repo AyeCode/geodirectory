@@ -38,7 +38,14 @@ function create_list_jsondata($post)
     global $wpdb, $list_map_json, $add_post_in_marker_array;
 
     if ((is_main_query() || $add_post_in_marker_array) && isset($post->marker_json) && $post->marker_json != '') {
-        $list_map_json[] = $post->marker_json;
+        /**
+         * Filter the json data for search listing map.
+         *
+         * @since 1.5.7
+         * @param string $post->marker_json JSON representation of the post marker info.
+         * @param object $post The post object.
+         */
+        $list_map_json[] = apply_filters('geodir_create_list_jsondata',$post->marker_json,$post);
     }
 
 }
