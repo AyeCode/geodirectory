@@ -667,8 +667,8 @@ function geodir_user_signup()
 
             if (!$secure_cookie && is_ssl() && force_ssl_login() && !force_ssl_admin() && (0 !== strpos($redirect_to, 'https')) && (0 === strpos($redirect_to, 'http')))
                 $secure_cookie = false;
-
             $user = wp_signon('', $secure_cookie);
+
 
             /**
              * Filter the login redirect URL.
@@ -685,6 +685,11 @@ function geodir_user_signup()
                 }
             }
             if (!is_wp_error($user)) {
+
+                // Some servers are not logging the user in properly after wp_signon, se we set the user here.
+                //wp_set_current_user($user->ID);
+                //echo '###';exit;
+
                 if ($redirect_to) {
                     wp_redirect($redirect_to);
                 } else {
