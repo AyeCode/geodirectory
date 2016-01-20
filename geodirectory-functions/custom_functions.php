@@ -863,13 +863,11 @@ function geodir_related_posts_display($request)
             query_posts($query_args);
 
             if (strstr($layout, 'gridview')) {
-
                 $listing_view_exp = explode('_', $layout);
-
                 $gridview_columns = $layout;
-
                 $layout = $listing_view_exp[0];
-
+            } else if ($layout == 'list') {
+                $gridview_columns = '';
             }
             $related_posts = true;
 
