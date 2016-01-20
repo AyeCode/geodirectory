@@ -2449,6 +2449,7 @@ add_filter('geodir_detail_page_tab_list_extend', 'geodir_detail_page_custom_fiel
  *
  * @since 1.0.0
  * @since 1.5.7 Custom fields option values added to db translation.
+                Changes to display url fields title.
  * @package GeoDirectory
  * @global object $post The current post object.
  * @param array $tabs_arr Tabs array {@see geodir_detail_page_tab_headings_change()}.
@@ -2560,11 +2561,12 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                                 $field_icon_af = $field_icon;
                                 $field_icon = '';
                             }
+							
+							$a_url = geodir_parse_custom_field_url($post->$type['htmlvar_name']);
 
-                            if (!strstr($post->$type['htmlvar_name'], 'http'))
-                                $website = 'http://' . $post->$type['htmlvar_name'];
-                            else
-                                $website = $post->$type['htmlvar_name'];
+							$website = !empty($a_url['url']) ? $a_url['url'] : '';
+							$title = !empty($a_url['label']) ? $a_url['label'] : $type['site_title'];
+							$title = $title != '' ? __(stripslashes($title), 'geodirectory') : '';
 
                             $geodir_odd_even = $field_set_start == 1 && $i % 2 == 0 ? 'geodir_more_info_even' : 'geodir_more_info_odd';
 
@@ -2576,11 +2578,11 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                                  * Filer the custom field website name.
                                  *
                                  * @since 1.0.0
-                                 * @param string $type['site_title'] The field name default: "Website".
+                                 * @param string $title The field name default: "Website".
                                  * @param string $website The website address.
                                  * @param int $post->ID The post ID.
                                  */
-                                apply_filters('geodir_custom_field_website_name', stripslashes(__($type['site_title'], 'geodirectory')), $website, $post->ID) . '</strong></a></span></div>';
+                                apply_filters('geodir_custom_field_website_name', $title, $website, $post->ID) . '</strong></a></span></div>';
                         }
                             break;
                         case 'phone': {

@@ -2176,6 +2176,7 @@ if (!function_exists('geodir_show_listing_info')) {
 	 *
 	 * @since 1.0.0
 	 * @since 1.5.7 Custom fields option values added to db translation.
+	                Changes to display url fields title.
 	 * @package GeoDirectory
      * @global object $wpdb WordPress Database object.
      * @global object $post The current post object.
@@ -2411,12 +2412,12 @@ if (!function_exists('geodir_show_listing_info')) {
                                 $field_icon_af = $field_icon;
                                 $field_icon = '';
                             }
-
-                            if (!strstr($post->{$type['htmlvar_name']}, 'http'))
-                                $website = 'http://' . $post->{$type['htmlvar_name']};
-                            else
-                                $website = $post->{$type['htmlvar_name']};
-
+							
+							$a_url = geodir_parse_custom_field_url($post->{$type['htmlvar_name']});
+							
+							$website = !empty($a_url['url']) ? $a_url['url'] : '';
+							$title = !empty($a_url['label']) ? $a_url['label'] : $type['site_title'];
+							$title = $title != '' ? __(stripslashes($title), 'geodirectory') : '';
 
                             $geodir_odd_even = '';
                             if ($fields_location == 'detail') {
@@ -2436,11 +2437,11 @@ if (!function_exists('geodir_show_listing_info')) {
                              *
                              * @since 1.0.0
                              *
-                             * @param string $type['site_title'] Website Title.
+                             * @param string $title Website Title.
                              * @param string $website Website URL.
                              * @param int $post->ID Post ID.
                              */
-                            $html = '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $type['htmlvar_name'] . '"><span class="geodir-i-website" style="' . $field_icon . '">' . $field_icon_af . '<a href="' . $website . '" target="_blank" ' . $rel . ' ><strong>' . apply_filters('geodir_custom_field_website_name', stripslashes(__($type['site_title'], 'geodirectory')), $website, $post->ID) . '</strong></a></span></div>';
+                            $html = '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $type['htmlvar_name'] . '"><span class="geodir-i-website" style="' . $field_icon . '">' . $field_icon_af . '<a href="' . $website . '" target="_blank" ' . $rel . ' ><strong>' . apply_filters('geodir_custom_field_website_name', $title, $website, $post->ID) . '</strong></a></span></div>';
 
                         endif;
 
