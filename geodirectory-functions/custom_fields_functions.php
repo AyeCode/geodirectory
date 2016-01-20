@@ -2176,7 +2176,7 @@ if (!function_exists('geodir_show_listing_info')) {
 	 *
 	 * @since 1.0.0
 	 * @since 1.5.7 Custom fields option values added to db translation.
-	                Changes to display url fields title.
+     *              Changes to display url fields title.
 	 * @package GeoDirectory
      * @global object $wpdb WordPress Database object.
      * @global object $post The current post object.

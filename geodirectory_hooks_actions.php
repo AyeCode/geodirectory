@@ -2449,7 +2449,7 @@ add_filter('geodir_detail_page_tab_list_extend', 'geodir_detail_page_custom_fiel
  *
  * @since 1.0.0
  * @since 1.5.7 Custom fields option values added to db translation.
-                Changes to display url fields title.
+ *              Changes to display url fields title.
  * @package GeoDirectory
  * @global object $post The current post object.
  * @param array $tabs_arr Tabs array {@see geodir_detail_page_tab_headings_change()}.
