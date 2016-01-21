@@ -1103,6 +1103,7 @@ add_action('geodir_details_taxonomies', 'geodir_action_details_taxonomies', 10);
  * @global bool $preview True of on a preview page. False if not.
  * @global object $post The current post object.
  * @since 1.0.0
+ * @since 1.5.7 Modified to add parent categories if only sub category selected.
  * @package GeoDirectory
  */
 function geodir_action_details_taxonomies()
@@ -1213,6 +1214,10 @@ function geodir_action_details_taxonomies()
             $post_term = explode(",", trim($post->$post_taxonomy, ","));
         } else {
             $post_term = $post->$post_taxonomy;
+			
+			if ($preview && !$is_backend_preview) {
+				$post_term = geodir_add_parent_terms($post_term, $post_taxonomy);
+			}
         }
 
         $post_term = array_unique($post_term);

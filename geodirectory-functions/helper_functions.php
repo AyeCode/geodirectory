@@ -323,3 +323,89 @@ function geodir_parse_custom_field_url($url, $formatted = true) {
 
 	return $return;
 }
+
+/**
+ * Set parent categories to fix categoires tree structure.
+ *
+ * @since 1.5.7
+ * @package GeoDirectory
+ *
+ * @param array $request_info Listing request info.
+ * @return array Modified listing request info.
+ */
+function geodir_attach_parent_categories($request_info) {
+	if (!empty($request_info['post_category']) && is_array($request_info['post_category'])) {
+		foreach ($request_info['post_category'] as $taxomony => $term_ids) {			
+			$attach_term_ids = array();
+			
+			if (!empty($term_ids) && is_array($term_ids) && taxonomy_exists($taxomony) && strpos($taxomony, 'category') !== false) {
+				$attach_term_ids = geodir_add_parent_terms($term_ids, $taxomony);
+				
+				if (!empty($attach_term_ids)) {
+					if (!isset($request_info['post_default_category'])) {
+						$request_info['post_default_category'] = $attach_term_ids[0];
+					}
+					$request_info['post_category'][$taxomony] = $attach_term_ids;
+				}
+			}
+		}
+	}
+	
+	return $request_info;
+}
+
+/**
+ * Add the parent terms in current terms.
+ *
+ * @since 1.5.7
+ * @package GeoDirectory
+ *
+ * @param int|array $term_ids Term id or Terms array.
+ * @param string $taxomony Category taxonomy of post type.
+ * @return array Modified term ids.
+ */
+function geodir_add_parent_terms($term_ids, $taxomony) {	
+	if (is_int($term_ids)) {
+		$term_ids = array($term_ids);
+	}
+	
+	$parent_terms = array();
+	
+	foreach ($term_ids as $term_id) {
+		$parent_terms[] = $term_id;
+		$term_parents = geodir_get_category_parents($term_id, $taxomony, $parent_terms);
+		
+		if (!empty($term_parents)) {
+			$parent_terms = array_merge($parent_terms, $term_parents);
+		}
+	}
+
+	return $parent_terms;
+}
+
+/**
+ * Get the parent categories of current id.
+ *
+ * @since 1.5.7
+ * @package GeoDirectory
+ *
+ * @param int $id Category id.
+ * @param string $taxomony Category taxonomy of post type.
+ * @param array $visited Array of category ids already included.
+ * @param array $parents Array of category ids.
+ * @return array Category ids.
+ */
+function geodir_get_category_parents($id, $taxomony, $visited = array(), $parents = array()) {
+	$parent = get_term($id, $taxomony);
+	if (is_wp_error($parent)) {
+		return $parents;
+	}
+
+	if ($parent->parent && ($parent->parent != $parent->term_id) && !in_array($parent->parent, $visited)) {
+		$visited[] = $parent->parent;
+		$parents[] = $parent->parent;
+		$parents = geodir_get_category_parents($parent->parent, $taxomony, $visited, $parents);
+	}
+
+	return $parents;
+}
