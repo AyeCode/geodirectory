@@ -513,3 +513,37 @@ function geodir_strip_breadcrumb_li_wrappers($breadcrumb, $separator) {
 	
 	return $breadcrumb;
 }
+
+/**
+ * Get listing listview class for current column length.
+ *
+ * @since 1.5.7
+ * @param int $columns Column length(ex: 1,2,3,4,5). Default empty.
+ * @return string Listing listview class.
+ */
+function geodir_convert_listing_view_class($columns = '') {
+	$class = '';
+	
+	switch ((int)$columns) {
+		case 1:
+			$class = '';
+		break;
+		case 2:
+			$class = 'gridview_onehalf';
+		break;
+		case 3:
+			$class = 'gridview_onethird';
+		break;
+		case 4:
+			$class = 'gridview_onefourth';
+		break;
+		case 5:
+			$class = 'gridview_onefifth';
+		break;
+		default:
+			$class = '';
+		break;
+	}
+	
+	return $class;
+}

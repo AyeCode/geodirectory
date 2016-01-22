@@ -705,122 +705,105 @@ function setCookie(cname, cvalue, exdays) {
     document.cookie = cname + "=" + cvalue + "; " + expires + ";Path=/";
 }
 
-
 function map_sticky(map_options) {
-    var optionsname = map_options;
-    map_options = eval(map_options);
-
-    if (map_options.sticky && jQuery(window).width() > 1250) {
-
-        jQuery.fn.scrollBottom = function () {
-            return this.scrollTop() + this.height();
-        };
-
-        //var content = jQuery("#geodir_wrapper").closest('div').scrollBottom();
-        //var content = jQuery("#geodir-main-content").closest('div').scrollBottom();
-        var content = jQuery(".geodir-sidebar-wrap").scrollBottom();
-
-        var stickymap = jQuery("#sticky_map_" + optionsname + "").scrollBottom();
-        var catcher = jQuery('#catcher_' + optionsname + '');
-        var sticky = jQuery('#sticky_map_' + optionsname + '');
-        var map_parent = sticky.parent();
-        var sticky_show_hide_trigger = sticky.closest('.stick_trigger_container').find('.trigger_sticky');
-        var mapheight = jQuery("#sticky_map_" + optionsname + "").height();
-        //alert(mapheight)
-        jQuery(window).scroll(function () {
-
-            jQuery("#" + optionsname + "").goMap();
-
-            // get the bounds of the map
-            bounds = new google.maps.LatLngBounds();
-
-            var wheight = jQuery(window).height();
-
-
-            //alert(catcher.offset().top);
-            //sticky.css({'min-width':'300px'});
-            //alert(content);
-            //alert(stickymap);
-            //if(content > stickymap ) {alert(1);}
-            //if(jQuery(window).scrollTop() >= catcher.offset().top ) {alert(2);}
-
-            if (jQuery(window).scrollTop() >= catcher.offset().top) {
-                if (!sticky.hasClass('stickymap')) {
-                    sticky.addClass('stickymap');
-                    sticky.hide();
-
-                    sticky.appendTo('body');
-
-                    sticky.css({'position': 'fixed', 'right': '0', 'border': '1px solid red'});
-                    //sticky.css({'top':'25%','width':'25%'});
-                    sticky.css({'top': '25%'});
-                    catcher.css({'height': mapheight});
-                    var cstatus = getCookie('geodir_stickystatus');
-                    if (cstatus != 'shide') {
-                        sticky.show('slow');
-
-                        sticky_show_hide_trigger.removeClass('triggeron_sticky');
-                        sticky_show_hide_trigger.addClass('triggeroff_sticky');
-                    } else {
-                        sticky_show_hide_trigger.removeClass('triggeroff_sticky');
-                        sticky_show_hide_trigger.addClass('triggeron_sticky');
-                    }
-
-
-                }
-
-                sticky_show_hide_trigger.css({
-                    'top': '25%',
-                    'width': '1%',
-                    'padding-right': '3px',
-                    'padding-left': '0px'
-                });
-                sticky_show_hide_trigger.css({'position': 'fixed', 'right': '0'});
-
-                sticky_show_hide_trigger.show();
-
-            }
-
-            if (jQuery(window).scrollTop() < catcher.offset().top) {
-                if (sticky.hasClass('stickymap')) {
-                    sticky.appendTo(map_parent);
-                    sticky.hide();
-                    sticky.removeClass('stickymap');
-                    sticky.css({'position': 'relative', 'border': 'none'});
-                    sticky.css({'top': '0', 'width': 'auto'});
-                    sticky.fadeIn('slow');
-                    catcher.css({'height': '0'});
-                    sticky_show_hide_trigger.removeClass('triggeroff_sticky');
-                    sticky_show_hide_trigger.addClass('triggeron_sticky');
-                }
-
-
-                sticky_show_hide_trigger.hide();
-            }
-
-
-        });
-
-        jQuery(window).resize(function () {
-            jQuery(window).scroll();
-        });
-
-    } // sticky if end
-
-    // bind a click event on listing_map_show_hide_all_markers 'Click here to see all other markers.'
-    // first check if this div exists or not.
-    /*if (jQuery('#listing_map_show_hide_all_markers') != null )
-     {
-     jQuery('#listing_map_show_hide_all_markers a').hide();
-     jQuery('#listing_map_show_hide_all_markers a').click(function() {
-     show_all_markers();
-     jQuery(this).hide();
-     });
-     // alert('Found with Not Null');
-     }*/
-
+	var optionsname = map_options;
+	map_options = eval(map_options);
+	
+	if (map_options.sticky && jQuery(window).width() > 1250) {
+		jQuery.fn.scrollBottom = function() {
+			return this.scrollTop() + this.height();
+		};
+		
+		var content = jQuery(".geodir-sidebar-wrap").scrollBottom();
+		var stickymap = jQuery("#sticky_map_" + optionsname + "").scrollBottom();
+		var catcher = jQuery('#catcher_' + optionsname + '');
+		var sticky = jQuery('#sticky_map_' + optionsname + '');
+		var map_parent = sticky.parent();
+		var sticky_show_hide_trigger = sticky.closest('.stick_trigger_container').find('.trigger_sticky');
+		var mapheight = jQuery("#sticky_map_" + optionsname + "").height();
+		
+		var widthpx = sticky.width();
+		var widthmap = map_options.width;
+		if (widthmap.indexOf('%') != -1) {
+			jQuery('.main_map_wrapper', sticky).width('100%');
+			jQuery('.geodir_marker_cluster', sticky).width('100%');
+		}
+		
+		jQuery(window).scroll(function() {
+			jQuery("#" + optionsname + "").goMap();
+			// get the bounds of the map
+			bounds = new google.maps.LatLngBounds();
+			var wheight = jQuery(window).height();
+			
+			if (jQuery(window).scrollTop() >= catcher.offset().top) {
+				if (!sticky.hasClass('stickymap')) {
+					sticky.addClass('stickymap');
+					sticky.hide();
+					sticky.appendTo('body');
+					sticky.css({
+						'position': 'fixed',
+						'right': '0',
+						'border': '1px solid red'
+					});
+					sticky.css({
+						'top': '25%',
+						'width': (widthpx + 2)
+					});
+					catcher.css({
+						'height': mapheight
+					});
+					
+					var cstatus = getCookie('geodir_stickystatus');
+					
+					if (cstatus != 'shide') {
+						sticky.show('slow');
+						sticky_show_hide_trigger.removeClass('triggeron_sticky');
+						sticky_show_hide_trigger.addClass('triggeroff_sticky');
+					} else {
+						sticky_show_hide_trigger.removeClass('triggeroff_sticky');
+						sticky_show_hide_trigger.addClass('triggeron_sticky');
+					}
+				}
+				sticky_show_hide_trigger.css({
+					'top': '25%',
+					'width': '1%',
+					'padding-right': '3px',
+					'padding-left': '0px'
+				});
+				sticky_show_hide_trigger.css({
+					'position': 'fixed',
+					'right': '0'
+				});
+				sticky_show_hide_trigger.show();
+			}
+			if (jQuery(window).scrollTop() < catcher.offset().top) {
+				if (sticky.hasClass('stickymap')) {
+					sticky.appendTo(map_parent);
+					sticky.hide();
+					sticky.removeClass('stickymap');
+					sticky.css({
+						'position': 'relative',
+						'border': 'none'
+					});
+					sticky.css({
+						'top': '0',
+						'width': widthmap
+					});
+					sticky.fadeIn('slow');
+					catcher.css({
+						'height': '0'
+					});
+					sticky_show_hide_trigger.removeClass('triggeroff_sticky');
+					sticky_show_hide_trigger.addClass('triggeron_sticky');
+				}
+				sticky_show_hide_trigger.hide();
+			}
+		});
+		jQuery(window).resize(function() {
+			jQuery(window).scroll();
+		});
+	} // sticky if end
 }
-
 
 var rendererOptions = {draggable: true};
 var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);

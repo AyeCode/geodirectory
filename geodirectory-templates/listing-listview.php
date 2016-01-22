@@ -35,21 +35,7 @@ global $gridview_columns;
  */
 $grid_view_class = apply_filters('geodir_grid_view_widget_columns', $gridview_columns);
 if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' && !isset($before_widget) && !isset($related_posts)) {
-    if ($_SESSION['gd_listing_view'] == '1') {
-        $grid_view_class = '';
-    }
-    if ($_SESSION['gd_listing_view'] == '2') {
-        $grid_view_class = 'gridview_onehalf';
-    }
-    if ($_SESSION['gd_listing_view'] == '3') {
-        $grid_view_class = 'gridview_onethird';
-    }
-    if ($_SESSION['gd_listing_view'] == '4') {
-        $grid_view_class = 'gridview_onefourth';
-    }
-    if ($_SESSION['gd_listing_view'] == '5') {
-        $grid_view_class = 'gridview_onefifth';
-    }
+	$grid_view_class = geodir_convert_listing_view_class($_SESSION['gd_listing_view']);
 }
 ?>
 
@@ -68,7 +54,7 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
             do_action('geodir_before_listing_post_listview');
 
             while (have_posts()) : the_post();
-                global $post, $wpdb, $listing_width, $preview;
+                global $post, $wpdb, $preview;
 
                 /**
                  * Add a class to the `li` element of the listings list template.
@@ -93,7 +79,7 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                     echo ' geodir-listview ';
                 } ?> <?php if ($post_view_class) {
                     echo $post_view_class;
-                } ?>" <?php if ($listing_width) echo "style='width:{$listing_width}%;'"; // Width for widget listing ?> >
+                } ?>" <?php if (isset($listing_width) && $listing_width) echo "style='width:{$listing_width}%;'"; // Width for widget listing ?> >
                     <article class="geodir-category-listing <?php if ($post_view_article_class) {
                         echo $post_view_article_class;
                     } ?>">

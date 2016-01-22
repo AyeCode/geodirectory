@@ -19,21 +19,7 @@ global $gridview_columns_widget;
 /** This action is documented in geodirectory-templates/listing-listview.php */
 $grid_view_class = apply_filters('geodir_grid_view_widget_columns', $gridview_columns_widget);
 if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' && !isset($before_widget)) {
-    if ($_SESSION['gd_listing_view'] == '1') {
-        $grid_view_class = '';
-    }
-    if ($_SESSION['gd_listing_view'] == '2') {
-        $grid_view_class = 'gridview_onehalf';
-    }
-    if ($_SESSION['gd_listing_view'] == '3') {
-        $grid_view_class = 'gridview_onethird ';
-    }
-    if ($_SESSION['gd_listing_view'] == '4') {
-        $grid_view_class = 'gridview_onefourth';
-    }
-    if ($_SESSION['gd_listing_view'] == '5') {
-        $grid_view_class = 'gridview_onefifth';
-    }
+    $grid_view_class = geodir_convert_listing_view_class($_SESSION['gd_listing_view']);
 }
 ?>
     <ul class="geodir_category_list_view clearfix <?php echo apply_filters('geodir_listing_listview_ul_extra_class', '', 'widget'); ?>">
