@@ -87,7 +87,7 @@
      * @param object $post_info Post object.
      * @param object $user_info User object.
      */
-    do_action('geodir_before_success_page_msg_wrapper', $message,$post_info, $user_info);
+    do_action('geodir_after_success_page_msg_wrapper', $message,$post_info, $user_info);
 
     ?>
 
