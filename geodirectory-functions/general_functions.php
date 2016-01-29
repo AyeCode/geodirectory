@@ -2376,12 +2376,9 @@ function geodir_helper_cat_list_output($terms, $category_limit)
         $term_link = apply_filters( 'geodir_category_term_link', $term_link, $cat->term_id, $post_type );
 
         echo '<li class="' . $class_row . '"><a href="' . $term_link . '">';
-        echo '<img alt="' . $cat->name . ' icon" class="" style="height:20px;vertical-align:middle;" src="' . $term_icon_url . '"/> ';
-        echo geodir_ucwords($cat->name) . ' (<span class="geodir_term_class geodir_link_span geodir_category_class_' . $post_type . '_' . $cat->term_id . '" >' . $total_post . '</span>) ';
+        echo '<img alt="' . esc_attr($cat->name) . ' icon" style="height:20px;vertical-align:middle;" src="' . $term_icon_url . '"/> <span class="cat-link">'; echo geodir_ucwords($cat->name) . '</span> <span class="geodir_term_class geodir_link_span geodir_category_class_' . $post_type . '_' . $cat->term_id . '">(' . $total_post . ')</span> ';
         echo '</a></li>';
     }
-
-
 }
 
 /**
