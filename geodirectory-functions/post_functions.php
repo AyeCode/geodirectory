@@ -1525,10 +1525,22 @@ if (!function_exists('geodir_show_image')) {
         $html = '';
         if (!empty($request)) {
 
-            if (!is_object($request))
+            if (!is_object($request)){
                 $request = (object)$request;
+            }
+
 
             if(isset($request->src) && !isset($request->path)){$request->path = $request->src;}
+
+            /*
+             * getimagesize() works faster from path than url so we try and get path if we can.
+             */
+            $upload_dir = wp_upload_dir();
+            $img_no_http = str_replace(array("http://","https://"),"",$request->path);
+            $upload_no_http = str_replace(array("http://","https://"),"",$upload_dir['baseurl']);
+            if (strpos($img_no_http ,$upload_no_http ) !== false) {
+                $request->path = str_replace( $img_no_http,$upload_dir['basedir'],$request->path);
+            }
 
             @list($width, $height) = getimagesize($request->path);
             $image->src = $request->src;
@@ -1549,23 +1561,12 @@ if (!function_exists('geodir_show_image')) {
                         $width_per = 100;
                 }
 
-                //$html = '<div class="geodir_thumbnail" style="background-image:url(\''.$image->src.'\');"></div>';
-
-                //$html = '<div class="geodir_thumbnail"><img style="max-height:'. $max_size->h .'px;" alt="place image" src="' . $image->src . '"  /></div>';
-                //print_r($_REQUEST);
-                if (is_admin() && !isset($_REQUEST['geodir_ajax'])):
+                if (is_admin() && !isset($_REQUEST['geodir_ajax'])){
                     $html = '<div class="geodir_thumbnail"><img style="max-height:' . $max_size->h . 'px;" alt="place image" src="' . $image->src . '"  /></div>';
-                else :
+                }
+                else{
                     $html = '<div class="geodir_thumbnail" style="background-image:url(\'' . $image->src . '\');"></div>';
-                endif;
-
-                /*$html = '<div style="text-align: center;max-height:'.$max_size->h.'px;line-height:'.$max_size->h.'px;">';
-
-			$html .= '<img src="' . $image->src . '" style="vertical-align:middle;max-height:'. $max_size->h .'px;margin:-2px auto 0;';
-
-			$html .= 'max-width:'.$width_per.'%';
-
-			$html .= '" /></div>'; */
+                }
 
             }
 

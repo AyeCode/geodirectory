@@ -22,6 +22,8 @@ Added filter to be able to search listing results map json - ADDED
 Able to enter title for url fields with "|" separator like "http://wpgeodirectory.com|GeoDirectory" - CHANGED
 Listing width option does not working in related listing widget - FIXED
 For category field type "select" it should add parent category also when a sub-category is selected - FIXED
+Slight change to tax meta class for compatibility with some themes - CHANGED
+Added hooks to add listing success page message - ADDED
 
 v1.5.6
 In add listing form sub-categories are no longer showing in hierarchy for checkbox display type - FIXED

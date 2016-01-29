@@ -1351,10 +1351,10 @@ function geodir_action_details_micordata()
     $post_avgratings = geodir_get_post_rating($post->ID);
 
     // schema type
+    $schema_type = 'LocalBusiness';
     if(isset($post->default_category) && $post->default_category){
         $schema_type = get_tax_meta($post->default_category, 'ct_cat_schema', false, $post->post_type);
         if(!$schema_type && $post->post_type=='gd_event'){$schema_type = 'Event';}
-        elseif(!$schema_type){$schema_type = 'LocalBusiness';}
     }
 
     $schema = array();
