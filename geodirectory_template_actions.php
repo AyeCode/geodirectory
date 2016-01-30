@@ -1282,12 +1282,15 @@ add_action('wp_head', 'geodir_action_details_micordata', 10);
  * @global object $post The current post object.
  * @since 1.0.0
  * @since 1.5.4 Changed to JSON-LD and added filters.
+ * @since 1.5.7 Added $post param.
+ * @param object $post Optional. The post object or blank.
  * @package GeoDirectory
  */
-function geodir_action_details_micordata()
+function geodir_action_details_micordata($post='')
 {
 
-    global $post, $preview;
+    global $preview;
+    if(empty($post)){global $post;}
     if ($preview || !geodir_is_page('detail')) {
         return;
     }
@@ -1398,9 +1401,11 @@ function geodir_action_details_micordata()
      * Allow the schema JSON-LD info to be filtered.
      *
      * @since 1.5.4
+     * @since 1.5.7 Added $post variable.
      * @param array $schema The array of schema data to be filtered.
+     * @param object $post The post object.
      */
-    $schema = apply_filters('geodir_details_schema', $schema);
+    $schema = apply_filters('geodir_details_schema', $schema,$post);
 
 
     echo '<script type="application/ld+json">' . json_encode($schema) . '</script>';
