@@ -2021,7 +2021,8 @@ if (!class_exists('Tax_Meta_Class')) :
             }
 
             $t_id = (is_object($term_id)) ? $term_id->term_id : $term_id;
-            $m = get_option('tax_meta_' . $post_type . '_' . $t_id);
+            if($post_type){$post_type = $post_type.'_';}
+            $m = get_option('tax_meta_' . $post_type  . $t_id);
             if (isset($m[$key])) {
                 return $m[$key];
             } else {
@@ -2039,10 +2040,11 @@ if (!class_exists('Tax_Meta_Class')) :
             }
 
             $m = get_option('tax_meta_' . $post_type . '_' . $term_id);
+            if($post_type){$post_type = $post_type.'_';}
             if (isset($m[$key])) {
                 unset($m[$key]);
             }
-            update_option('tax_meta_' . $post_type . '_' . $term_id, $m);
+            update_option('tax_meta_' . $post_type  . $term_id, $m);
         }
 
         //update meta
@@ -2055,8 +2057,9 @@ if (!class_exists('Tax_Meta_Class')) :
             }
 
             $m = get_option('tax_meta_' . $post_type . '_' . $term_id);
+            if($post_type){$post_type = $post_type.'_';}
             $m[$key] = $value;
-            update_option('tax_meta_' . $post_type . '_' . $term_id, $m);
+            update_option('tax_meta_' . $post_type  . $term_id, $m);
 
             /**
              * Called after the tax meta is updated.
@@ -2092,7 +2095,8 @@ if (!function_exists('get_tax_meta')) {
         }
 
         $t_id = (is_object($term_id)) ? $term_id->term_id : $term_id;
-        $m = get_option('tax_meta_' . $post_type . '_' . $t_id);
+        if($post_type){$post_type = $post_type.'_';}
+        $m = get_option('tax_meta_' . $post_type  . $t_id);
         if (isset($m[$key])) {
             return $m[$key];
         } else {
@@ -2110,10 +2114,11 @@ if (!function_exists('delete_tax_meta')) {
         $post_type = $taxObject->object_type[0];
 
         $m = get_option('tax_meta_' . $post_type . '_' . $term_id);
+        if($post_type){$post_type = $post_type.'_';}
         if (isset($m[$key])) {
             unset($m[$key]);
         }
-        update_option('tax_meta_' . $post_type . '_' . $term_id, $m);
+        update_option('tax_meta_' . $post_type  . $term_id, $m);
     }
 }
 
@@ -2128,8 +2133,9 @@ if (!function_exists('update_tax_meta')) {
         }
 
         $m = get_option('tax_meta_' . $post_type . '_' . $term_id);
+        if($post_type){$post_type = $post_type.'_';}
         $m[$key] = $value;
-        update_option('tax_meta_' . $post_type . '_' . $term_id, $m);
+        update_option('tax_meta_' . $post_type . $term_id, $m);
 
         /** This action is documented in geodirectory-functions/cat-meta-functions/Tax-meta-class.php */
         do_action('gd_tax_meta_updated', false, true, $term_id, $post_type);

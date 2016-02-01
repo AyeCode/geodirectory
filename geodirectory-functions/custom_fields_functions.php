@@ -2196,6 +2196,7 @@ if (!function_exists('geodir_show_listing_info')) {
         //return;
         $post_package_id = $package_info->pid;
         $p_type = (geodir_get_current_posttype()) ? geodir_get_current_posttype() : $post->post_type;
+
         ob_start();
         $fields_info = geodir_post_custom_fields($post_package_id, 'default', $p_type, $fields_location);
 
@@ -2932,6 +2933,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
 
                     case 'file':
+
                         $html_var = $type['htmlvar_name'];
 
                         if (!empty($post->{$type['htmlvar_name']})):
@@ -2946,7 +2948,7 @@ if (!function_exists('geodir_show_listing_info')) {
                                 foreach ($files as $file) {
                                     if (!empty($file)) {
 
-                                        $filetype = wp_check_filetype($file);
+                                       // $filetype = wp_check_filetype($file);
 
                                         $image_name_arr = explode('/', $file);
                                         $curr_img_dir = $image_name_arr[count($image_name_arr) - 2];
