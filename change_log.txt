@@ -25,6 +25,7 @@ For category field type "select" it should add parent category also when a sub-c
 Slight change to tax meta class for compatibility with some themes - CHANGED
 Added hooks to add listing success page message - ADDED
 Schema filter/function added $post param - CHANGED
+GD login doesn't allows login by email if site is using SSL - FIXED
 
 v1.5.6
 In add listing form sub-categories are no longer showing in hierarchy for checkbox display type - FIXED
