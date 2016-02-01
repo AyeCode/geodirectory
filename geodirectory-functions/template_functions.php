@@ -547,3 +547,27 @@ function geodir_convert_listing_view_class($columns = '') {
 	
 	return $class;
 }
+
+/**
+ * Filter to hide the listing excerpt.
+ *
+ * @since 1.5.7
+ * @param bool $display Display the excerpt or not.
+ * @param string $view The view type, Ex: 'listview'.
+ * @param object $post The post object.
+ * @return bool Modified value for display the excerpt.
+ */
+function geodir_show_listing_post_excerpt($display, $view, $post) {
+	if ($view == 'listview') {
+		if (geodir_is_page('author')) {
+			$word_limit = get_option('geodir_author_desc_word_limit');
+		} else {
+			$word_limit = get_option('geodir_desc_word_limit');
+		}
+		
+		if ($word_limit !== '' && ($word_limit == 0 || $word_limit == '0')) {
+			$display = false;
+		}
+	}
+	return $display;
+}

@@ -412,6 +412,7 @@ function geodir_register_new_user($user_login, $user_email)
  * Handles user Authentication actions Ex. login, register, logout etc.
  *
  * @since 1.0.0
+ * @since 1.5.7 It allows login by email also if site is using SSL.
  * @package GeoDirectory
  * @global object $errors WordPress Error object.
  */
@@ -554,7 +555,7 @@ function geodir_user_signup()
 
                     $secure_cookie = '';
                     // If the user wants ssl but the session is not ssl, force a secure cookie.
-                    if (!empty($_POST['log']) && !force_ssl_admin()) {
+                    if (!empty($_POST['log'])) {
                         $user_name = sanitize_user($_POST['log']);
                         if ($user = get_user_by('email', $user_name)) {
                             if (get_user_option('use_ssl', $user->ID)) {
@@ -612,7 +613,7 @@ function geodir_user_signup()
         default:
             $secure_cookie = '';
 
-            if (!empty($_POST['log']) && !force_ssl_admin()) {
+            if (!empty($_POST['log'])) {
                 $user_name = sanitize_user($_POST['log']);
                 if ($user = get_user_by('login', $user_name)) {
 
