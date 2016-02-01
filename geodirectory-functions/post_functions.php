@@ -2533,14 +2533,20 @@ function geodir_allow_post_type_frontend()
  * Changing excerpt length.
  *
  * @since 1.0.0
+ * @since 1.5.7 Hide description when description word limit is 0.
  * @package GeoDirectory
  * @global object $wp_query WordPress Query object.
+ * @global bool $geodir_is_widget_listing Is this a widget listing?
  * @param int $length Optional. Old length.
  * @return mixed|void Returns length.
  */
 function geodir_excerpt_length($length)
 {
-    global $wp_query;
+    global $wp_query, $geodir_is_widget_listing;
+	if ($geodir_is_widget_listing) {
+		return $length;
+	}
+	
     if (isset($wp_query->query_vars['is_geodir_loop']) && $wp_query->query_vars['is_geodir_loop'] && get_option('geodir_desc_word_limit'))
         $length = get_option('geodir_desc_word_limit');
     elseif (get_query_var('excerpt_length'))
