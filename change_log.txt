@@ -27,6 +27,7 @@ Added hooks to add listing success page message - ADDED
 Schema filter/function added $post param - CHANGED
 GD login doesn't allows login by email if site is using SSL - FIXED
 Description word limit to zero in GD -> Design -> Listings doesn't hide listing description - FIXED
+Url custom field uses default value for link text if present - CHANGED
 
 v1.5.6
 In add listing form sub-categories are no longer showing in hierarchy for checkbox display type - FIXED

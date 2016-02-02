@@ -2415,10 +2415,13 @@ if (!function_exists('geodir_show_listing_info')) {
                             }
 							
 							$a_url = geodir_parse_custom_field_url($post->{$type['htmlvar_name']});
-							
+
+
 							$website = !empty($a_url['url']) ? $a_url['url'] : '';
 							$title = !empty($a_url['label']) ? $a_url['label'] : $type['site_title'];
+                            if(!empty($type['default_value'])){$title = $type['default_value'];}
 							$title = $title != '' ? __(stripslashes($title), 'geodirectory') : '';
+
 
                             $geodir_odd_even = '';
                             if ($fields_location == 'detail') {
