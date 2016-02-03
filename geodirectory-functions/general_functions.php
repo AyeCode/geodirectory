@@ -238,6 +238,7 @@ function geodir_get_weeks()
  *
  * @since 1.0.0
  * @since 1.5.6 Added to check GD invoices and GD checkout pages.
+ * @since 1.5.7 Updated to validate buddypress dashboard listings page as a author page.
  * @package GeoDirectory
  * @global object $wp_query WordPress Query object.
  * @global object $post The current post object.
@@ -302,6 +303,12 @@ function geodir_is_page($gdpage = '')
         case 'author':
             if (is_author() && isset($_REQUEST['geodir_dashbord']))
                 return true;
+			
+			if (function_exists('bp_loggedin_user_id') && function_exists('bp_displayed_user_id') && $my_id = (int)bp_loggedin_user_id()) {
+				if (((bool)bp_is_current_component('listings') || (bool)bp_is_current_component('favorites')) && $my_id > 0 && $my_id == (int)bp_displayed_user_id()) {
+					return true;
+				}
+			}
             break;
         case 'search':
             if (is_search() && isset($_REQUEST['geodir_search']))
