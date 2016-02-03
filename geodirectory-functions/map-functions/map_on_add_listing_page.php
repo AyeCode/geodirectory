@@ -101,7 +101,7 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
     }
 
     function geocodeResponse(responses) {
-
+        //console.log(responses);
 
         if (responses && responses.length > 0) {
             var getAddress = '';
