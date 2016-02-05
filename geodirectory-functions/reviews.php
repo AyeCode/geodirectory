@@ -44,12 +44,12 @@ if (post_password_required())
 
         <?php if (get_comment_pages_count() > 1 && get_option('page_comments')) : // are there comments to navigate through ?>
             <nav id="comment-nav-below" class="navigation" role="navigation">
-                <h1 class="assistive-text section-heading"><?php _e('Comment navigation', 'geodirectory'); ?></h1>
+                <h1 class="assistive-text section-heading"><?php _e('Review navigation', 'geodirectory'); ?></h1>
 
                 <div
-                    class="nav-previous"><?php previous_comments_link(__('&larr; Older Comments', 'geodirectory')); ?></div>
+                    class="nav-previous"><?php previous_comments_link(__('&larr; Older Reviews', 'geodirectory')); ?></div>
                 <div
-                    class="nav-next"><?php next_comments_link(__('Newer Comments &rarr;', 'geodirectory')); ?></div>
+                    class="nav-next"><?php next_comments_link(__('Newer Reviews &rarr;', 'geodirectory')); ?></div>
             </nav>
         <?php endif; // check for comment navigation ?>
 
@@ -58,12 +58,11 @@ if (post_password_required())
          * But we only want the note on posts and pages that had comments in the first place.
          */
         if (!comments_open() && get_comments_number()) : ?>
-            <p class="nocomments"><?php _e('Comments are closed.', 'geodirectory'); ?></p>
+            <p class="nocomments"><?php _e('Reviews are closed.', 'geodirectory'); ?></p>
         <?php endif; ?>
 
     <?php endif; // have_comments() ?>
 
-    <?php do_action('geodir_after_review_list'); ?>
     <?php do_action('geodir_before_review_form'); ?>
 
     <?php
