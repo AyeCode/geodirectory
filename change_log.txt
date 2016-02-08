@@ -28,6 +28,7 @@ Schema filter/function added $post param - CHANGED
 GD login doesn't allows login by email if site is using SSL - FIXED
 Description word limit to zero in GD -> Design -> Listings doesn't hide listing description - FIXED
 Url custom field uses default value for link text if present - CHANGED
+Default image should not displayed on listing detail preview page - FIXED
 
 v1.5.6
 In add listing form sub-categories are no longer showing in hierarchy for checkbox display type - FIXED
