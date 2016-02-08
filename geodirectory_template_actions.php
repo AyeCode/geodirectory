@@ -974,6 +974,7 @@ add_action('geodir_details_slider', 'geodir_action_details_slider', 10, 1);
  *
  * @since 1.0.0
  * @since 1.5.4 itemprop="image" removed as added via JSON-LD.
+ * @since 1.5.7 Hide default image on listing detail preview page.
  * @package GeoDirectory
  * @global bool $preview True of on a preview page. False if not.
  * @global object $post The current post object.
@@ -999,7 +1000,8 @@ function geodir_action_details_slider()
     }
 
     if ($preview) {
-        if (isset($post->post_images) && !empty($post->post_images)) {
+        $post_images = array();
+		if (isset($post->post_images) && !empty($post->post_images)) {
             $post->post_images = trim($post->post_images, ",");
             $post_images = explode(",", $post->post_images);
         }
@@ -1007,25 +1009,6 @@ function geodir_action_details_slider()
         $main_slides = '';
         $nav_slides = '';
         $slides = 0;
-
-        if (empty($post_images)) {
-            $default_img = '';
-            $default_cat = '';
-
-            if (isset($post->post_default_category)) {
-                $default_cat = $post->post_default_category;
-            }
-
-            if ($default_catimg = geodir_get_default_catimage($default_cat, $post->listing_type)) {
-                $default_img = $default_catimg['src'];
-            } else if ($no_images = get_option('geodir_listing_no_img')) {
-                $default_img = $no_images;
-            }
-
-            if (!empty($default_img)) {
-                $post_images[] = $default_img;
-            }
-        }
 
         if (!empty($post_images)) {
             foreach ($post_images as $image) {
@@ -1056,12 +1039,8 @@ function geodir_action_details_slider()
     } else {
         $main_slides = '';
         $nav_slides = '';
-        $post_images = geodir_get_images($post->ID, 'thumbnail', get_option('geodir_listing_no_img'));
+        $post_images = geodir_get_images($post->ID, 'thumbnail', false); // Hide default image on listing preview/detail page.
         $slides = 0;
-
-        if (empty($post_images) && get_option('geodir_listing_no_img')) {
-            $post_images = (object)array((object)array('src' => get_option('geodir_listing_no_img')));
-        }
 
         if (!empty($post_images)) {
             foreach ($post_images as $image) {
