@@ -101,7 +101,7 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
     }
 
     function geocodeResponse(responses) {
-        //console.log(responses);
+        console.log(responses);
 
         if (responses && responses.length > 0) {
             var getAddress = '';
@@ -257,6 +257,7 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
                 rr = country.short_name;
             }
 
+
 //$country_arr = ["US", "CA", "IN","DE","NL"];
 // fix for regions in GB
             $country_arr = ["GB"];
@@ -297,11 +298,11 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
                     getCity = administrative_area_level_3.long_name;
                 }
             } else {
-                if (postal_town.long_name) {
-                    getCity = postal_town.long_name;
-                }
-                else if (locality.long_name) {
+
+                if (locality.long_name) {
                     getCity = locality.long_name;
+                }else if (postal_town.long_name) {
+                    getCity = postal_town.long_name;
                 }
                 else if (sublocality_level_1.long_name) {
                     getCity = sublocality_level_1.long_name;
@@ -311,7 +312,8 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
                 }
             }
 
-
+            //console.log("pt:"+postal_town.long_name);
+            //console.log("lo:"+locality.long_name);
             /*if(administrative_area_level_1.long_name){getState = administrative_area_level_1.long_name;}
              else if(administrative_area_level_2.long_name){getState = administrative_area_level_2.long_name;}*/
 
@@ -331,7 +333,7 @@ $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
 			 */
 			do_action('geodir_add_listing_geocode_js_vars');
 			?>
-            <?php if($is_map_restrict){?>
+            <?php if($is_map_restrict){ ?>
             if (getCity.toLowerCase() != '<?php echo geodir_strtolower(addslashes_gpc($city));?>') {
                 alert('<?php echo addslashes_gpc(wp_sprintf(__('Please choose any address of the (%s) city only.','geodirectory'), $city));?>');
                 jQuery("#<?php echo $prefix.'map';?>").goMap();

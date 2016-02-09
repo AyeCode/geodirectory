@@ -2015,13 +2015,16 @@ if (!class_exists('Tax_Meta_Class')) :
         public function get_tax_meta($term_id, $key, $multi = false, $post_type = '')
         {
 
-            if (empty($gd_post_type) && isset($_REQUEST['taxonomy'])) {
+            if (empty($post_type) && isset($_REQUEST['taxonomy'])) {
                 $taxObject = get_taxonomy($_REQUEST['taxonomy']);
                 $post_type = $taxObject->object_type[0];
             }
 
-            $t_id = (is_object($term_id)) ? $term_id->term_id : $term_id;
+            if($post_type=='post'){$post_type='';}
             if($post_type){$post_type = $post_type.'_';}
+
+            $t_id = (is_object($term_id)) ? $term_id->term_id : $term_id;
+
             $m = get_option('tax_meta_' . $post_type  . $t_id);
             if (isset($m[$key])) {
                 return $m[$key];
@@ -2034,13 +2037,16 @@ if (!class_exists('Tax_Meta_Class')) :
         public function delete_tax_meta($term_id, $key, $post_type = '')
         {
 
-            if (empty($gd_post_type) && isset($_REQUEST['taxonomy'])) {
+            if (empty($post_type) && isset($_REQUEST['taxonomy'])) {
                 $taxObject = get_taxonomy($_REQUEST['taxonomy']);
                 $post_type = $taxObject->object_type[0];
             }
 
-            $m = get_option('tax_meta_' . $post_type . '_' . $term_id);
+            if($post_type=='post'){$post_type='';}
             if($post_type){$post_type = $post_type.'_';}
+
+            $m = get_option('tax_meta_' . $post_type  . $term_id);
+
             if (isset($m[$key])) {
                 unset($m[$key]);
             }
@@ -2051,13 +2057,16 @@ if (!class_exists('Tax_Meta_Class')) :
         public function update_tax_meta($term_id, $key, $value, $post_type = '')
         {
 
-            if (empty($gd_post_type) && isset($_REQUEST['taxonomy'])) {
+            if (empty($post_type) && isset($_REQUEST['taxonomy'])) {
                 $taxObject = get_taxonomy($_REQUEST['taxonomy']);
                 $post_type = $taxObject->object_type[0];
             }
 
-            $m = get_option('tax_meta_' . $post_type . '_' . $term_id);
+            if($post_type=='post'){$post_type='';}
             if($post_type){$post_type = $post_type.'_';}
+
+            $m = get_option('tax_meta_' . $post_type  . $term_id);
+
             $m[$key] = $value;
             update_option('tax_meta_' . $post_type  . $term_id, $m);
 
@@ -2089,13 +2098,16 @@ if (!function_exists('get_tax_meta')) {
     function get_tax_meta($term_id, $key, $multi = false, $post_type = '')
     {
 
-        if (empty($gd_post_type) && isset($_REQUEST['taxonomy'])) {
+        if (empty($post_type) && isset($_REQUEST['taxonomy'])) {
             $taxObject = get_taxonomy($_REQUEST['taxonomy']);
             $post_type = $taxObject->object_type[0];
         }
 
-        $t_id = (is_object($term_id)) ? $term_id->term_id : $term_id;
+        if($post_type=='post'){$post_type='';}
         if($post_type){$post_type = $post_type.'_';}
+
+        $t_id = (is_object($term_id)) ? $term_id->term_id : $term_id;
+
         $m = get_option('tax_meta_' . $post_type  . $t_id);
         if (isset($m[$key])) {
             return $m[$key];
@@ -2113,8 +2125,11 @@ if (!function_exists('delete_tax_meta')) {
         $taxObject = get_taxonomy($_REQUEST['taxonomy']);
         $post_type = $taxObject->object_type[0];
 
-        $m = get_option('tax_meta_' . $post_type . '_' . $term_id);
+        if($post_type=='post'){$post_type='';}
         if($post_type){$post_type = $post_type.'_';}
+
+        $m = get_option('tax_meta_' . $post_type . $term_id);
+
         if (isset($m[$key])) {
             unset($m[$key]);
         }
@@ -2127,13 +2142,16 @@ if (!function_exists('update_tax_meta')) {
     function update_tax_meta($term_id, $key, $value, $post_type = '')
     {
 
-        if (empty($gd_post_type) && isset($_REQUEST['taxonomy'])) {
+        if (empty($post_type) && isset($_REQUEST['taxonomy'])) {
             $taxObject = get_taxonomy($_REQUEST['taxonomy']);
             $post_type = $taxObject->object_type[0];
         }
 
-        $m = get_option('tax_meta_' . $post_type . '_' . $term_id);
+        if($post_type=='post'){$post_type='';}
         if($post_type){$post_type = $post_type.'_';}
+
+        $m = get_option('tax_meta_' . $post_type  . $term_id);
+
         $m[$key] = $value;
         update_option('tax_meta_' . $post_type . $term_id, $m);
 
