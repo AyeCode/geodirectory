@@ -4612,14 +4612,21 @@ function geodir_ajax_import_export() {
 	
     $wp_filesystem = geodir_init_filesystem();
     if (!$wp_filesystem) {
-        $json['error'] = __( 'Fail, something wrong to create csv file.', 'geodirectory' );
+        $json['error'] = __( 'Filesystem ERROR: Could not access filesystem.', 'geodirectory' );
         wp_send_json( $json );
-        exit;
     }
+	
+	if (!empty($wp_filesystem) && isset($wp_filesystem->errors) && is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code()) {
+		$json['error'] = __( 'Filesystem ERROR: ' . $wp_filesystem->errors->get_error_message(), 'geodirectory' );
+        wp_send_json( $json );
+	}
 	
 	$csv_file_dir = geodir_path_import_export( false );
 	if ( !$wp_filesystem->is_dir( $csv_file_dir ) ) {
-		$wp_filesystem->mkdir( $csv_file_dir, FS_CHMOD_DIR );
+		if ( !$wp_filesystem->mkdir( $csv_file_dir, FS_CHMOD_DIR ) ) {
+			$json['error'] = __( 'ERROR: Could not create cache directory. This is usually due to inconsistent file permissions.', 'geodirectory' );
+			wp_send_json( $json );
+		}
 	}
 
 	switch ( $task ) {
@@ -4699,7 +4706,7 @@ function geodir_ajax_import_export() {
 						$json['total'] = $posts_count;
 						$json['files'] = $chunk_file_paths;
 					} else {
-						$json['error'] = __( 'Fail, something wrong to create csv file.', 'geodirectory' );
+						$json['error'] = __( 'ERROR: Could not create csv file. This is usually due to inconsistent file permissions.', 'geodirectory' );
 					}
 				}
 				// WPML
@@ -4708,7 +4715,6 @@ function geodir_ajax_import_export() {
 				}
 				// WPML
 				wp_send_json( $json );
-				exit;
 			}
 		}
 		break;
@@ -4744,7 +4750,6 @@ function geodir_ajax_import_export() {
 				}
 				// WPML
 				wp_send_json( $json );
-				exit;
 			} else {				
 				if ( !$terms_count > 0 ) {
 					$json['error'] = __( 'No records to export.', 'geodirectory' );
@@ -4785,7 +4790,7 @@ function geodir_ajax_import_export() {
 						$json['total'] = $terms_count;
 						$json['files'] = $chunk_file_paths;
 					} else {
-						$json['error'] = __( 'Fail, something wrong to create csv file.', 'geodirectory' );
+						$json['error'] = __( 'ERROR: Could not create csv file. This is usually due to inconsistent file permissions.', 'geodirectory' );
 					}
 				}
 				// WPML
@@ -4794,7 +4799,6 @@ function geodir_ajax_import_export() {
 				}
 				// WPML
 				wp_send_json( $json );
-				exit;
 			}
 		}
 		break;
@@ -4814,7 +4818,6 @@ function geodir_ajax_import_export() {
 				
 				$json['percentage'] = $percentage;
 				wp_send_json( $json );
-				exit;
 			} else {
 				$chunk_file_paths = array();
 				
@@ -4856,7 +4859,6 @@ function geodir_ajax_import_export() {
 					}
 				}
 				wp_send_json( $json );
-				exit;
 			}
 		}
 		break;
@@ -5695,7 +5697,6 @@ function geodir_ajax_import_export() {
 					if (empty($columns) || (!empty($columns) && $columns[0] == '')) {
 						$json['error'] = __('File you are uploading is not valid. Columns does not matching.', 'geodirectory');
 						wp_send_json( $json );
-						exit;
 					}
 					
 					for ($i = 1; $i <= $limit; $i++) {
@@ -5777,7 +5778,6 @@ function geodir_ajax_import_export() {
 				$json['images'] = $images;
 				
 				wp_send_json( $json );
-				exit;
 			}
 		}
 		break;
