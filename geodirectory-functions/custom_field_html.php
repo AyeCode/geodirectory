@@ -204,7 +204,7 @@ $field_data_type = isset($field_info->data_type) ? $field_info->data_type : '';
 			<tr>
 				<td><strong><?php _e('Default value :', 'geodirectory');?></strong></td>
 				<td align="left">
-				<?php if ($field_type == 'checkbox' && $field_data_type == 'TINYINT') { ?>
+				<?php if ($field_type == 'checkbox') { ?>
 				<select name="default_value" id="default_value">
 					<option value=""><?php _e('Unchecked', 'geodirectory'); ?></option>
 					<option value="1" <?php selected(true, (int)$default_value === 1);?>><?php _e('Checked', 'geodirectory'); ?></option>
