@@ -30,6 +30,7 @@ Description word limit to zero in GD -> Design -> Listings doesn't hide listing 
 Url custom field uses default value for link text if present - CHANGED
 Default image should not displayed on listing detail preview page - FIXED
 Changes to implement location import/export for multilocations - CHANGED
+Not able to create new custom field with type checkbox if default value entered - FIXED
 
 v1.5.6
 In add listing form sub-categories are no longer showing in hierarchy for checkbox display type - FIXED

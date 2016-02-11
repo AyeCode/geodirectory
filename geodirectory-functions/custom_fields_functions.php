@@ -962,16 +962,14 @@ if (!function_exists('geodir_custom_field_save')) {
                         $data_type = 'TINYINT';
 
                         $meta_field_add = $data_type . "( 1 ) NOT NULL ";
-                        if ($default_value != '') {
-                            $meta_field_add .= " DEFAULT '" . $default_value . "'";
+                        if ((int)$default_value === 1) {
+                            $meta_field_add .= " DEFAULT '1'";
                         }
 
                         $add_result = geodir_add_column_if_not_exist($detail_table, $htmlvar_name, $meta_field_add);
-                        if($add_result===false){
-                            return __('Column creation failed, you may have too many columns.','geodirectory');
+                        if ($add_result === false) {
+                            return __('Column creation failed, you may have too many columns or the default value does not match with field data type.', 'geodirectory');
                         }
-
-
                         break;
                     case 'multiselect':
                     case 'select':
@@ -1012,7 +1010,7 @@ if (!function_exists('geodir_custom_field_save')) {
 
                         $add_result = geodir_add_column_if_not_exist($detail_table, $htmlvar_name, $meta_field_add);
                         if ($add_result === false) {
-                            return __('Column creation failed, you may have too many columns.', 'geodirectory');
+                            return __('Column creation failed, you may have too many columns or the default value does not match with field data type.', 'geodirectory');
                         }
                         break;
                     case 'textarea':
@@ -1028,8 +1026,8 @@ if (!function_exists('geodir_custom_field_save')) {
 					{ $meta_field_add .= " DEFAULT '".$default_value."'"; }*/
 
                     $add_result = geodir_add_column_if_not_exist($detail_table, $htmlvar_name, $meta_field_add);
-                    if($add_result===false){
-                        return __('Column creation failed, you may have too many columns.','geodirectory');
+                    if ($add_result === false) {
+                        return __('Column creation failed, you may have too many columns or the default value does not match with field data type.', 'geodirectory');
                     }
 
                         break;
@@ -1043,8 +1041,8 @@ if (!function_exists('geodir_custom_field_save')) {
                         $meta_field_add = $data_type . " NULL ";
 
                         $add_result = geodir_add_column_if_not_exist($detail_table, $htmlvar_name, $meta_field_add);
-                        if($add_result===false){
-                            return __('Column creation failed, you may have too many columns.','geodirectory');
+                        if ($add_result === false) {
+                            return __('Column creation failed, you may have too many columns or the default value must have in valid date format.', 'geodirectory');
                         }
 
                         break;
@@ -1058,12 +1056,11 @@ if (!function_exists('geodir_custom_field_save')) {
                         $meta_field_add = $data_type . " NULL ";
 
                         $add_result = geodir_add_column_if_not_exist($detail_table, $htmlvar_name, $meta_field_add);
-                        if($add_result===false){
-                            return __('Column creation failed, you may have too many columns.','geodirectory');
+                        if ($add_result === false) {
+                            return __('Column creation failed, you may have too many columns or the default value must have in valid time format.', 'geodirectory');
                         }
 
                         break;
-
 
                     default:
 
@@ -1088,8 +1085,8 @@ if (!function_exists('geodir_custom_field_save')) {
                         }
 
                         $add_result = geodir_add_column_if_not_exist($detail_table, $htmlvar_name, $meta_field_add);
-                        if($add_result===false){
-                            return __('Column creation failed, you may have too many columns.','geodirectory');
+                        if ($add_result === false) {
+                            return __('Column creation failed, you may have too many columns or the default value does not match with field data type.', 'geodirectory');
                         }
                         break;
                 endswitch;

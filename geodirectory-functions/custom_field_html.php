@@ -39,6 +39,7 @@ if ($htmlvar_name == 'geodir_email') {
 	$field_info->show_on_listing = 0;
 	$display_on_listing = false;
 }
+$field_data_type = isset($field_info->data_type) ? $field_info->data_type : '';
 ?>
 <li class="text" id="licontainer_<?php echo $result_str; ?>">
     <div class="title title<?php echo $result_str; ?> gt-fieldset"
@@ -196,28 +197,28 @@ if ($htmlvar_name == 'geodir_email') {
                     <span><?php _e('Section Title which will appear in backend', 'geodirectory'); ?></span>
                 </td>
             </tr>
-
-            <?php if ($field_type != 'textarea'
-                && $field_type != 'html'
-                && $field_type != 'file'
-                && $field_type != 'fieldset'
-                && $field_type != 'taxonomy'
-                && $field_type != 'address'
-            ) {
-
-                ?>
-                <tr>
-                    <td><strong><?php _e('Default value :', 'geodirectory');?></strong></td>
-                    <td align="left"><input type="text" name="default_value" id="default_value"
-                                            value="<?php if (isset($field_info->default_value)) {
-                                                echo esc_attr($field_info->default_value);
-                                            }?>"/>
-                        <br/>
-                        <span><?php _e('Enter the default value (for "link" this will be used as the link text)', 'geodirectory');?></span>
-                    </td>
-                </tr>
-            <?php
-            } ?>
+            <?php 
+			if ($field_type != 'textarea' && $field_type != 'html' && $field_type != 'file' && $field_type != 'fieldset' && $field_type != 'taxonomy' && $field_type != 'address') {
+				$default_value = isset($field_info->default_value) ? $field_info->default_value : '';
+			?>
+			<tr>
+				<td><strong><?php _e('Default value :', 'geodirectory');?></strong></td>
+				<td align="left">
+				<?php if ($field_type == 'checkbox' && $field_data_type == 'TINYINT') { ?>
+				<select name="default_value" id="default_value">
+					<option value=""><?php _e('Unchecked', 'geodirectory'); ?></option>
+					<option value="1" <?php selected(true, (int)$default_value === 1);?>><?php _e('Checked', 'geodirectory'); ?></option>
+				</select>
+				<?php } else if ($field_type == 'email') { ?>
+				<input type="email" name="default_value" placeholder="<?php _e('info@mysite.com', 'geodirectory') ;?>" id="default_value" value="<?php echo esc_attr($default_value);?>" /><br/>
+				<span><?php _e('Enter the default value. Ex: info@mysite.com', 'geodirectory');?></span>
+				<?php } else { ?>
+				<input type="text" name="default_value" id="default_value" value="<?php echo esc_attr($default_value);?>" /><br/>
+				<span><?php _e('Enter the default value (for "link" this will be used as the link text)', 'geodirectory');?></span>
+				<?php } ?>
+				</td>
+			</tr>
+            <?php } ?>
             <tr>
                 <td><strong><?php _e('Display order :', 'geodirectory'); ?></strong></td>
                 <td align="left"><input type="text" readonly="readonly" name="sort_order" id="sort_order"

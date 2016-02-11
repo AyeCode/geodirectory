@@ -342,7 +342,7 @@
     text-shadow: 0 1px 0 #FFFFFF;
 }
 
-#geodir-selected-fields input[type="text"], #geodir-selected-fields select {
+#geodir-selected-fields input[type="text"], #geodir-selected-fields input[type="email"], #geodir-selected-fields select {
     width: 100%;
 }
 
