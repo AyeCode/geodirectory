@@ -365,29 +365,31 @@ function geodir_get_address_by_lat_lan($lat, $lng)
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $wp WordPress object.
+ * @global object $gd_session GeoDirectory Session object.
+ *
  * @param string $location_array_from Place to look for location array. Default: 'session'.
  * @param string $gd_post_type The post type.
  * @return array The location term array.
  */
 function geodir_get_current_location_terms($location_array_from = 'session', $gd_post_type = '')
 {
-    global $wp;
+    global $wp, $gd_session;
     $location_array = array();
     if ($location_array_from == 'session') {
-        if ((isset($_SESSION['gd_country']) && $_SESSION['gd_country'] == 'me') || (isset($_SESSION['gd_region']) && $_SESSION['gd_region'] == 'me') || (isset($_SESSION['gd_city']) && $_SESSION['gd_city'] == 'me')) {
+        if ($gd_session->get('gd_country') == 'me' || $gd_session->get('gd_region') == 'me' || $gd_session->get('gd_city') == 'me') {
             return $location_array;
         }
 
-        $country = (isset($_SESSION['gd_country']) && $_SESSION['gd_country'] != '') ? $_SESSION['gd_country'] : '';
-        if ($country != '')
+        $country = $gd_session->get('gd_country');
+        if ($country != '' && $country)
             $location_array['gd_country'] = urldecode($country);
 
-        $region = (isset($_SESSION['gd_region']) && $_SESSION['gd_region'] != '') ? $_SESSION['gd_region'] : '';
-        if ($region != '')
+        $region = $gd_session->get('gd_region');
+        if ($region != '' && $region)
             $location_array['gd_region'] = urldecode($region);
 
-        $city = (isset($_SESSION['gd_city']) && $_SESSION['gd_city'] != '') ? $_SESSION['gd_city'] : '';
-        if ($city != '')
+        $city = $gd_session->get('gd_city');
+        if ($city != '' && $city)
             $location_array['gd_city'] = urldecode($city);
     } else {
         if ((isset($wp->query_vars['gd_country']) && $wp->query_vars['gd_country'] == 'me') || (isset($wp->query_vars['gd_region']) && $wp->query_vars['gd_region'] == 'me') || (isset($wp->query_vars['gd_city']) && $wp->query_vars['gd_city'] == 'me')) {

@@ -1112,6 +1112,3 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
     /* Map Settings End */
 
 )); // End Design settings
-
-
-//$_SESSION['geodir_settings']['design_settings'] = $geodir_settings['design_settings'] ;

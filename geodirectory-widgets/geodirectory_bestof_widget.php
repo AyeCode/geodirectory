@@ -539,12 +539,14 @@ register_widget('geodir_bestof_widget');
  * @global array  $map_jason Map data in json format.
  * @global array $map_canvas_arr Map canvas array.
  * @global string $gridview_columns_widget The girdview style of the listings for widget.
+ * @global object $gd_session GeoDirectory Session object.
  *
  * @param array $query_args The query array.
  */
-function geodir_bestof_places_by_term($query_args)
-{
-    /**
+function geodir_bestof_places_by_term($query_args) {
+    global $gd_session;
+	
+	/**
      * This action called before querying widget listings.
      *
      * @since 1.0.0
@@ -577,10 +579,10 @@ function geodir_bestof_places_by_term($query_args)
     $current_grid_view = $gridview_columns_widget;
     $gridview_columns_widget = null;
     
-	$gd_listing_view_set = isset($_SESSION['gd_listing_view']) ? true : false;
-	$gd_listing_view_old = $gd_listing_view_set ? $_SESSION['gd_listing_view'] : '';
+	$gd_listing_view_set = $gd_session->get('gd_listing_view') ? true : false;
+	$gd_listing_view_old = $gd_listing_view_set ? $gd_session->get('gd_listing_view') : '';
 	
-    $_SESSION['gd_listing_view'] = '1';
+    $gd_session->set('gd_listing_view', '1');
     $geodir_is_widget_listing = true;
 
 	/**
@@ -597,9 +599,9 @@ function geodir_bestof_places_by_term($query_args)
     	setup_postdata($current_post);
 	}
 	if ($gd_listing_view_set) { // Set back previous value
-		$_SESSION['gd_listing_view'] = $gd_listing_view_old;
+		$gd_session->set('gd_listing_view', $gd_listing_view_old);
 	} else {
-		unset($_SESSION['gd_listing_view']);
+		$gd_session->un_set('gd_listing_view');
 	}
     $map_jason = $current_map_jason;
     $map_canvas_arr = $current_map_canvas_arr;

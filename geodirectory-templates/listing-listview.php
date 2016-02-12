@@ -12,6 +12,7 @@
  * @global object $post The current post object.
  * @global object $wp_query WordPress Query object.
  * @global string $gridview_columns The girdview style of the listings.
+ * @global object $gd_session GeoDirectory Session object.
  */
 
 /**
@@ -23,7 +24,7 @@
  */
 do_action('geodir_before_listing_listview');
 
-global $gridview_columns;
+global $gridview_columns, $gd_session;
 
 /**
  * Filter the default grid view class.
@@ -34,8 +35,8 @@ global $gridview_columns;
  * @param string $gridview_columns The grid view class, can be '', 'gridview_onehalf', 'gridview_onethird', 'gridview_onefourth' or 'gridview_onefifth'.
  */
 $grid_view_class = apply_filters('geodir_grid_view_widget_columns', $gridview_columns);
-if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' && !isset($before_widget) && !isset($related_posts)) {
-	$grid_view_class = geodir_convert_listing_view_class($_SESSION['gd_listing_view']);
+if ($gd_session->get('gd_listing_view') && !isset($before_widget) && !isset($related_posts)) {
+	$grid_view_class = geodir_convert_listing_view_class($gd_session->get('gd_listing_view'));
 }
 ?>
 

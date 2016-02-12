@@ -1165,42 +1165,21 @@ if (!function_exists('geodir_post_sortable_columns')) {
  * @global object $post WordPress Post object.
  * @param int $post_id The post ID.
  */
-function geodir_post_information_save($post_id,$post)
-{
+function geodir_post_information_save($post_id, $post) {
+    global $wpdb, $current_user;
 
-    global $wpdb, $current_user;//, $post;
-
-    if(isset($post->post_type) && ($post->post_type=='nav_menu_item' || $post->post_type=='page' || $post->post_type=='post')){
+    if (isset($post->post_type) && ($post->post_type=='nav_menu_item' || $post->post_type=='page' || $post->post_type=='post')) {
         return;
     }
-
-   /* echo '###post';
-    print_r($_POST);
-    echo '###request';
-    print_r($_REQUEST);
-    echo '###';
-    print_r($post);
-    exit;
-   */
-    //unsetting the listing session here causes problems, it should be the last thing to be done.
-    /*if(isset($_SESSION['listing'])){
-		unset($_SESSION['listing']);
-	}*/
 
     $geodir_posttypes = geodir_get_posttypes();
 
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
         return;
 
-    if (!wp_is_post_revision($post_id) &&
-        isset($post->post_type) && in_array($post->post_type, $geodir_posttypes)
-    ):
-
+    if (!wp_is_post_revision($post_id) && isset($post->post_type) && in_array($post->post_type, $geodir_posttypes)) {
         if (isset($_REQUEST['_status']))
             geodir_change_post_status($post_id, $_REQUEST['_status']);
-
-        /*if ( !wp_verify_nonce( $_POST['geodir_post_setting_noncename'], plugin_basename( __FILE__ ) ) )
-        return;*/
 
         if (isset($_REQUEST['action']) && ($_REQUEST['action'] == 'trash' || $_REQUEST['action'] == 'untrash'))
             return;
@@ -1208,17 +1187,11 @@ function geodir_post_information_save($post_id,$post)
         if (!isset($_POST['geodir_post_info_noncename']) || !wp_verify_nonce($_POST['geodir_post_info_noncename'], plugin_basename(__FILE__)))
             return;
 
-        /*if ( !wp_verify_nonce( $_POST['geodir_post_addinfo_noncename'], plugin_basename( __FILE__ ) ) )
-        return;*/
-
         if (!isset($_POST['geodir_post_attachments_noncename']) || !wp_verify_nonce($_POST['geodir_post_attachments_noncename'], plugin_basename(__FILE__)))
             return;
 
-
         geodir_save_listing($_REQUEST);
-
-
-    endif;
+    }
 }
 
 if (!function_exists('geodir_insert_csv_post_data') && get_option('geodir_installed')) {

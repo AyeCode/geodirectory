@@ -223,24 +223,23 @@ function geodir_listing_loop_filter($query)
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @global string $table Listing table name.
+ * @global object $gd_session GeoDirectory Session object.
+ *
  * @param string $fields Fields query string.
  * @return string Modified fields query string.
  */
-function geodir_posts_fields($fields)
-{
+function geodir_posts_fields($fields) {
+    global $wp_query, $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $mylat, $mylon, $snear, $gd_session;
 
-    global $wp_query, $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $mylat, $mylon, $snear;
-
-    //Filter-Location-Manager to add location table.
-
-    //$fields .= ", ".$table.".*".", ".POST_LOCATION_TABLE.".* ";//===old code
+    // Filter-Location-Manager to add location table.
     $fields .= ", " . $table . ".* ";
-    if ($snear != '' || isset($_SESSION['all_near_me'])) {
+    
+	if ($snear != '' || $gd_session->get('all_near_me')) {
         $DistanceRadius = geodir_getDistanceRadius(get_option('geodir_search_dist_1'));
-        if (isset($_SESSION['all_near_me'])) {
-            $mylat = $_SESSION['user_lat'];
-            $mylon = $_SESSION['user_lon'];
-
+        
+		if ($gd_session->get('all_near_me')) {
+            $mylat = $gd_session->get('user_lat');
+            $mylon = $gd_session->get('user_lon');
         }
 
         $fields .= " , (" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(" . $table . ".post_latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(" . $table . ".post_latitude) * pi()/180) *POWER(SIN(($mylon - " . $table . ".post_longitude) * pi()/180 / 2), 2) )))as distance ";
@@ -688,25 +687,26 @@ function geodir_default_where($where)
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @global string $table Listing table name.
+ * @global object $gd_session GeoDirectory Session object.
+ *
  * @param string $where The where query string.
  * @return string Modified where query string.
  */
-function searching_filter_where($where)
-{
-
-    global $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $mylat, $mylon, $s, $snear, $s, $s_A, $s_SA;
-
-
-    global $search_term;
+function searching_filter_where($where) {
+    global $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $mylat, $mylon, $s, $snear, $s, $s_A, $s_SA, $search_term, $gd_session;
+	
     $search_term = 'OR';
     $search_term = 'AND';
     $geodir_custom_search = '';
-
     $category_search_range = '';
 
-    if (is_single() && get_query_var('post_type')) return $where;
+    if (is_single() && get_query_var('post_type')) {
+		return $where;
+	}
 
-    if (is_tax()) return $where;
+    if (is_tax()) {
+		return $where;
+	}
 	
 	$s = trim($s);
 
@@ -782,8 +782,8 @@ function searching_filter_where($where)
 	}
 		
     if ($snear != '') {
-        if (isset($_SESSION['near_me_range']) && is_numeric($_SESSION['near_me_range']) && !isset($_REQUEST['sdist'])) {
-            $dist = $_SESSION['near_me_range'];
+        if (is_numeric($gd_session->get('near_me_range')) && !isset($_REQUEST['sdist'])) {
+            $dist = $gd_session->get('near_me_range');
         }
         $lon1 = $mylon - $dist / abs(cos(deg2rad($mylat)) * 69);
         $lon2 = $mylon + $dist / abs(cos(deg2rad($mylat)) * 69);

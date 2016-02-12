@@ -1203,14 +1203,14 @@ function godir_set_field_order($field_ids = array())
  * @global object $wpdb WordPress Database object.
  * @global object $post The current post object.
  * @global array $geodir_addon_list List of active GeoDirectory extensions.
+ * @global object $gd_session GeoDirectory Session object.
+ *
  * @param int|string $package_id The package ID.
  * @param string $default Optional. When set to "default" it will display only default fields.
  * @param string $post_type Optional. The wordpress post type.
  */
-function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $post_type = 'gd_place')
-{
-
-    global $is_default, $mapzoom;
+function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $post_type = 'gd_place') {
+    global $is_default, $mapzoom, $gd_session;
 
     $show_editors = array();
     $listing_type = $post_type;
@@ -1240,15 +1240,14 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
         }
 
         if (is_admin()) {
-
             global $post;
 
             if (isset($_REQUEST['post']))
                 $_REQUEST['pid'] = $_REQUEST['post'];
         }
 
-        if (isset($_REQUEST['backandedit']) && $_REQUEST['backandedit'] && isset($_SESSION['listing'])) {
-            $post = unserialize($_SESSION['listing']);
+        if (isset($_REQUEST['backandedit']) && $_REQUEST['backandedit'] && $gd_ses_listing = $gd_session->get('listing')) {
+            $post = $gd_ses_listing;
             $value = isset($post[$name]) ? $post[$name] : '';
         } elseif (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
             $value = geodir_get_post_meta($_REQUEST['pid'], $name, true);
@@ -1294,18 +1293,15 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
             $lat = '';
             $lng = '';
 
-            if (isset($_REQUEST['backandedit']) && $_REQUEST['backandedit'] && isset($_SESSION['listing'])) {
-
-                $post = unserialize($_SESSION['listing']);
+            if (isset($_REQUEST['backandedit']) && $_REQUEST['backandedit'] && $gd_ses_listing = $gd_session->get('listing')) {
+                $post = $gd_ses_listing;
                 $address = $post[$prefix . 'address'];
                 $zip = isset($post[$prefix . 'zip']) ? $post[$prefix . 'zip'] : '';
                 $lat = isset($post[$prefix . 'latitude']) ? $post[$prefix . 'latitude'] : '';
                 $lng = isset($post[$prefix . 'longitude']) ? $post[$prefix . 'longitude'] : '';
                 $mapview = isset($post[$prefix . 'mapview']) ? $post[$prefix . 'mapview'] : '';
                 $mapzoom = isset($post[$prefix . 'mapzoom']) ? $post[$prefix . 'mapzoom'] : '';
-
-            } elseif (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '' && $post_info = geodir_get_post_info($_REQUEST['pid'])) {
-
+            } else if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '' && $post_info = geodir_get_post_info($_REQUEST['pid'])) {
                 $post_info = (array)$post_info;
 
                 $address = $post_info[$prefix . 'address'];
@@ -1314,7 +1310,6 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                 $lng = isset($post_info[$prefix . 'longitude']) ? $post_info[$prefix . 'longitude'] : '';
                 $mapview = isset($post_info[$prefix . 'mapview']) ? $post_info[$prefix . 'mapview'] : '';
                 $mapzoom = isset($post_info[$prefix . 'mapzoom']) ? $post_info[$prefix . 'mapzoom'] : '';
-
             }
 
             $location = geodir_get_default_location();

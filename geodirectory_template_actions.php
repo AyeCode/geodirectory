@@ -634,12 +634,13 @@ add_action('geodir_detail_before_main_content', 'geodir_breadcrumb', 20);
  *
  * @global object $post The current post object.
  * @global bool $preview True if the current page is a preview page. False if not.
+ * @global object $gd_session GeoDirectory Session object.
  * @since 1.0.0
  * @package GeoDirectory
  */
 function geodir_action_geodir_set_preview_post()
 {
-    global $post, $preview;
+    global $post, $preview, $gd_session;
     $is_backend_preview = (is_single() && !empty($_REQUEST['post_type']) && !empty($_REQUEST['preview']) && !empty($_REQUEST['p'])) && is_super_admin() ? true : false; // skip if preview from backend
     if (!$preview || $is_backend_preview) {
         return;
@@ -742,7 +743,7 @@ function geodir_action_geodir_set_preview_post()
 
     $post->marker_json = $json;
 
-    $_SESSION['listing'] = serialize($_REQUEST);
+    $gd_session->set('listing', $_REQUEST);
 
     // we need to define a few things to trick the setup_postdata
     if (!isset($post->ID)) {
@@ -2080,10 +2081,11 @@ add_action('geodir_add_listing_form', 'geodir_action_add_listing_form', 10);
  * @global object $current_user Current user object.
  * @global object $post The current post object.
  * @global object $post_images Image objects of current post if available.
+ * @global object $gd_session GeoDirectory Session object.
  */
 function geodir_action_add_listing_form()
 {
-    global $cat_display, $post_cat, $current_user;
+    global $cat_display, $post_cat, $current_user, $gd_session;
     $page_id = get_the_ID();
     $post = '';
     $title = '';
@@ -2099,7 +2101,7 @@ function geodir_action_add_listing_form()
 
     if (isset($_REQUEST['backandedit'])) {
         global $post;
-        $post = (object)unserialize($_SESSION['listing']);
+        $post = (object)$gd_session->get('listing');
         $listing_type = $post->listing_type;
         $title = $post->post_title;
         $desc = $post->post_desc;
@@ -2330,7 +2332,7 @@ function geodir_action_add_listing_form()
         $thumb_img_arr = array();
         $totImg = 0;
         if (isset($_REQUEST['backandedit']) && empty($_REQUEST['pid'])) {
-            $post = (object)unserialize($_SESSION['listing']);
+            $post = (object)$gd_session->get('listing');
             if (isset($post->post_images))
                 $curImages = trim($post->post_images, ",");
 

@@ -547,6 +547,7 @@ function gdsc_validate_list_filter_choice($filter_choice)
  * @global object $post The current post object.
  * @global array $map_jason Map data in json format.
  * @global array $map_canvas_arr Map canvas array.
+ * @global object $gd_session GeoDirectory Session object.
  *
  * @param array $args Array of arguements to filter listings.
  * @return string Listings HTML content.
@@ -675,15 +676,13 @@ function geodir_sc_gd_listings_output($args = array()) {
 			 */
 			$template = apply_filters("geodir_template_part-widget-listing-listview", geodir_locate_template('widget-listing-listview'));
             			
-            global $post, $map_jason, $map_canvas_arr;
+            global $post, $map_jason, $map_canvas_arr, $gd_session;
 
             $current_post = $post;
             $current_map_jason = $map_jason;
             $current_map_canvas_arr = $map_canvas_arr;
             $geodir_is_widget_listing = true;
-			if (isset($_SESSION['gd_listing_view'])) {
-				unset($_SESSION['gd_listing_view']);
-			}
+			$gd_session->un_set('gd_listing_view');
 
             if ($with_pagination && $top_pagination) {				
 				echo geodir_sc_listings_pagination($total_posts, $post_number, $pageno);

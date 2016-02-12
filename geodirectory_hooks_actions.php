@@ -194,7 +194,8 @@ add_action('gd_tax_meta_updated', 'geodir_get_term_icon_rebuild', 5000);
 
 add_action('wp_footer', 'geodir_footer_scripts'); /* Footer Scripts loader */
 
-add_action('wp_print_scripts', 'send_marker_jason_to_js',200); // Show map for listings with markers
+add_action('wp_footer', 'send_marker_jason_to_js'); // Show map for listings with markers
+//add_action('wp_print_scripts', 'send_marker_jason_to_js', 200); // Show map for listings with markers
 
 
 add_action('admin_footer', 'geodir_localize_all_js_msg');
@@ -1493,15 +1494,16 @@ add_action('geodir_after_main_form_fields', 'geodir_after_main_form_fields', 1);
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $post The current post object.
+ * @global object $gd_session GeoDirectory Session object.
  */
-function geodir_after_main_form_fields()
-{
-
+function geodir_after_main_form_fields() {
+	global $gd_session;
+	
     if (get_option('geodir_accept_term_condition')) {
         global $post;
         $term_condition = '';
         if (isset($_REQUEST['backandedit'])) {
-            $post = (object)unserialize($_SESSION['listing']);
+            $post = (object)$gd_session->get('listing');
             $term_condition = isset($post->geodir_accept_term_condition) ? $post->geodir_accept_term_condition : '';
         }
 

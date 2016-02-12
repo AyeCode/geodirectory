@@ -24,8 +24,9 @@ if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'cat') { // R
     /**
 	 * @global object $wpdb WordPress Database object.
      * @global string $plugin_prefix Geodirectory plugin table prefix.
+	 * @global object $gd_session GeoDirectory Session object.
 	 */
-	global $wpdb, $plugin_prefix;
+	global $wpdb, $plugin_prefix, $gd_session;
 
     if ($_REQUEST['m_id'] != '') {
         $pid = $_REQUEST['m_id'];
@@ -34,14 +35,10 @@ if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'cat') { // R
         exit;
     }
 
-    if (isset($_REQUEST['post_preview']) && $_REQUEST['post_preview'] != '' && isset($_SESSION['listing'])) {
-
-        $post = (object)unserialize($_SESSION['listing']);
+    if (isset($_REQUEST['post_preview']) && $_REQUEST['post_preview'] != '' && $gd_ses_listing = $gd_session->get('listing')) {
+        $post = (object)$gd_ses_listing;
         echo geodir_get_infowindow_html($post, $_REQUEST['post_preview']);
-
     } else {
-
-
         $geodir_post_type = get_post_type($pid);
 
         $table = $plugin_prefix . $geodir_post_type . '_detail';
