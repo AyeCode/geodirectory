@@ -32,8 +32,6 @@ add_action('init', 'geodir_add_post_filters');
 
 //add_action('init', 'geodir_init_defaults');
 
-add_action('init', 'geodir_session_start');
-
 add_action('init', 'geodir_allow_post_type_frontend');
 
 add_action('init', 'geodir_register_taxonomies', 1);

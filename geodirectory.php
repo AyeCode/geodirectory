@@ -28,8 +28,6 @@ Tested up to: 4.4
  */
 define("GEODIRECTORY_VERSION", "1.5.6");
 
-if (!session_id()) session_start();
-
 /*
  * CHECK FOR OLD COMPATIBILITY PACKS AND DISABLE IF THEY ARE ACTIVE
  */
