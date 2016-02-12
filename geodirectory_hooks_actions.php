@@ -195,7 +195,6 @@ add_action('gd_tax_meta_updated', 'geodir_get_term_icon_rebuild', 5000);
 add_action('wp_footer', 'geodir_footer_scripts'); /* Footer Scripts loader */
 
 add_action('wp_footer', 'send_marker_jason_to_js'); // Show map for listings with markers
-//add_action('wp_print_scripts', 'send_marker_jason_to_js', 200); // Show map for listings with markers
 
 
 add_action('admin_footer', 'geodir_localize_all_js_msg');
