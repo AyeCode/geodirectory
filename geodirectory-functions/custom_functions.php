@@ -13,83 +13,65 @@
  *
  * @since 1.0.0
  * @package GeoDirectory
+ *
+ * @global object $gd_session GeoDirectory Session object.
  */
-function geodir_list_view_select()
-{
-    ?>
+function geodir_list_view_select() {
+    global $gd_session;
+	?>
     <script type="text/javascript">
-        function geodir_list_view_select(list) {
-            //alert(listval);
-            val = list.value;
-            if (!val) {
-                return;
-            }
+	function geodir_list_view_select(list) {
+		//alert(listval);
+		val = list.value;
+		if (!val) {
+			return;
+		}
 
-//var listSel = jQuery(list).closest('.geodir_category_list_view');
-            var listSel = jQuery(list).parent().parent().next('.geodir_category_list_view');
-            if (val != 1) {
-                jQuery(listSel).children('li').addClass('geodir-gridview');
-                jQuery(listSel).children('li').removeClass('geodir-listview');
-            } else {
-                jQuery(listSel).children('li').addClass('geodir-listview');
-            }
+		var listSel = jQuery(list).parent().parent().next('.geodir_category_list_view');
+		if (val != 1) {
+			jQuery(listSel).children('li').addClass('geodir-gridview');
+			jQuery(listSel).children('li').removeClass('geodir-listview');
+		} else {
+			jQuery(listSel).children('li').addClass('geodir-listview');
+		}
 
-            if (val == 1) {
-                jQuery(listSel).children('li').removeClass('geodir-gridview gridview_onehalf gridview_onethird gridview_onefourth gridview_onefifth');
-            }
-            else if (val == 2) {
-                jQuery(listSel).children('li').switchClass('gridview_onethird gridview_onefourth gridview_onefifth', 'gridview_onehalf', 600);
-            }
-            else if (val == 3) {
-                jQuery(listSel).children('li').switchClass('gridview_onehalf gridview_onefourth gridview_onefifth', 'gridview_onethird', 600);
-            }
-            else if (val == 4) {
-                jQuery(listSel).children('li').switchClass('gridview_onehalf gridview_onethird gridview_onefifth', 'gridview_onefourth', 600);
-            }
-            else if (val == 5) {
-                jQuery(listSel).children('li').switchClass('gridview_onehalf gridview_onethird gridview_onefourth', 'gridview_onefifth', 600);
-            }
+		if (val == 1) {
+			jQuery(listSel).children('li').removeClass('geodir-gridview gridview_onehalf gridview_onethird gridview_onefourth gridview_onefifth');
+		}
+		else if (val == 2) {
+			jQuery(listSel).children('li').switchClass('gridview_onethird gridview_onefourth gridview_onefifth', 'gridview_onehalf', 600);
+		}
+		else if (val == 3) {
+			jQuery(listSel).children('li').switchClass('gridview_onehalf gridview_onefourth gridview_onefifth', 'gridview_onethird', 600);
+		}
+		else if (val == 4) {
+			jQuery(listSel).children('li').switchClass('gridview_onehalf gridview_onethird gridview_onefifth', 'gridview_onefourth', 600);
+		}
+		else if (val == 5) {
+			jQuery(listSel).children('li').switchClass('gridview_onehalf gridview_onethird gridview_onefourth', 'gridview_onefifth', 600);
+		}
 
-            jQuery.post("<?php echo geodir_get_ajax_url();?>&gd_listing_view=" + val, function (data) {
-                //alert(data );
-            });
-
-        }
+		jQuery.post("<?php echo geodir_get_ajax_url();?>&gd_listing_view=" + val, function (data) {
+			//alert(data );
+		});
+	}
     </script>
     <div class="geodir-list-view-select">
         <select name="gd_list_view" id="gd_list_view" onchange="geodir_list_view_select(this);">
-            <?php if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '') {
-                $sel = $_SESSION['gd_listing_view'];
-            } else {
-                $sel = '';
-            }?>
+            <?php $listing_view = (int)$gd_session->get('gd_listing_view'); ?>
             <option value=""><?php _e('View:', 'geodirectory');?></option>
-            <option value="1" <?php if ($sel == '1') {
-                echo 'selected="selected"';
-            }?> ><?php _e('View: List', 'geodirectory');?></option>
-            <option value="2" <?php if ($sel == '2') {
-                echo 'selected="selected"';
-            }?>><?php _e('View: Grid 2', 'geodirectory');?></option>
-            <option value="3" <?php if ($sel == '3') {
-                echo 'selected="selected"';
-            }?>><?php _e('View: Grid 3', 'geodirectory');?></option>
-            <option value="4" <?php if ($sel == '4') {
-                echo 'selected="selected"';
-            }?>><?php _e('View: Grid 4', 'geodirectory');?></option>
-            <option value="5" <?php if ($sel == '5') {
-                echo 'selected="selected"';
-            }?>><?php _e('View: Grid 5', 'geodirectory');?></option>
-
+            <option value="1" <?php selected(1, $listing_view);?>><?php _e('View: List', 'geodirectory');?></option>
+            <option value="2" <?php selected(2, $listing_view);?>><?php _e('View: Grid 2', 'geodirectory');?></option>
+            <option value="3" <?php selected(3, $listing_view);?>><?php _e('View: Grid 3', 'geodirectory');?></option>
+            <option value="4" <?php selected(4, $listing_view);?>><?php _e('View: Grid 4', 'geodirectory');?></option>
+            <option value="5" <?php selected(5, $listing_view);?>><?php _e('View: Grid 5', 'geodirectory');?></option>
         </select>
     </div>
 <?php
-
 }
-
 
 //add_action('geodir_before_listing_post_listview', 'geodir_list_view_select');
 add_action('geodir_before_listing', 'geodir_list_view_select', 100);
-
 
 /**
  * Limit the listing excerpt.
@@ -714,11 +696,10 @@ function geodir_advance_customfields_heading($title, $field_type)
  * @global object $wpdb WordPress Database object.
  * @global object $post The current post object.
  * @global string $gridview_columns The girdview style of the listings.
+ * @global object $gd_session GeoDirectory Session object.
  * @return string Returns related posts html.
  */
-function geodir_related_posts_display($request)
-{
-
+function geodir_related_posts_display($request) {
     if (!empty($request)) {
         $before_title = (isset($request['before_title']) && !empty($request['before_title'])) ? $request['before_title'] : '';
         $after_title = (isset($request['after_title']) && !empty($request['after_title'])) ? $request['after_title'] : '';
@@ -732,7 +713,7 @@ function geodir_related_posts_display($request)
         $list_sort = (isset($request['list_sort']) && !empty($request['list_sort'])) ? $request['list_sort'] : 'latest';
         $character_count = (isset($request['character_count']) && !empty($request['character_count'])) ? $request['character_count'] : '';
 
-        global $wpdb, $post;
+        global $wpdb, $post, $gd_session;
         $origi_post = $post;
         $post_type = '';
         $post_id = '';
@@ -741,7 +722,7 @@ function geodir_related_posts_display($request)
         $category = array();
 
         if (isset($_REQUEST['backandedit'])) {
-            $post = (object)unserialize($_SESSION['listing']);
+            $post = (object)$gd_session->get('listing');
             $post_type = $post->listing_type;
             if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '')
                 $post_id = $_REQUEST['pid'];
@@ -1777,79 +1758,44 @@ function geodir_exif($file)
  *
  * @since 1.0.0
  * @package GeoDirectory
+ *
+ * @global object $wpdb WordPress Database object.
+ * @global object $gd_session GeoDirectory Session object.
+ *
  * @param int $g_size Optional. Avatar size in pixels. Default 60.
  * @param int $no_comments Optional. Number of reviews you want to display. Default: 10.
  * @param int $comment_lenth Optional. Maximum number of characters you want to display. After that read more link will appear.
  * @param bool $show_pass_post Optional. Not yet implemented.
- * @global object $wpdb WordPress Database object.
  * @return string Returns the recent reviews html.
  */
-function geodir_get_recent_reviews($g_size = 60, $no_comments = 10, $comment_lenth = 60, $show_pass_post = false)
-{
-    global $wpdb, $tablecomments, $tableposts, $rating_table_name;
+function geodir_get_recent_reviews($g_size = 60, $no_comments = 10, $comment_lenth = 60, $show_pass_post = false) {
+    global $wpdb, $tablecomments, $tableposts, $rating_table_name, $gd_session;
     $tablecomments = $wpdb->comments;
     $tableposts = $wpdb->posts;
 
     $comments_echo = '';
-    //print_r($_SESSION);
-
     $city_filter = '';
     $region_filter = '';
     $country_filter = '';
 
-    if (isset($_SESSION['gd_multi_location'])) {
-
-        if (isset($_SESSION['gd_country']) && $_SESSION['gd_country']) {
-            $country_filter = $wpdb->prepare(" AND r.post_country=%s ", str_replace("-", " ", $_SESSION['gd_country']));
+    if ($gd_session->get('gd_multi_location')) {
+        if ($gd_ses_country = $gd_session->get('gd_country')) {
+            $country_filter = $wpdb->prepare(" AND r.post_country=%s ", str_replace("-", " ", $gd_ses_country));
         }
 
-        if (isset($_SESSION['gd_region']) && $_SESSION['gd_region']) {
-            $region_filter = $wpdb->prepare(" AND r.post_region=%s ", str_replace("-", " ", $_SESSION['gd_region']));
+        if ($gd_ses_region = $gd_session->get('gd_region')) {
+            $region_filter = $wpdb->prepare(" AND r.post_region=%s ", str_replace("-", " ", $gd_ses_region));
         }
 
-        if (isset($_SESSION['gd_city']) && $_SESSION['gd_city']) {
-            $city_filter = $wpdb->prepare(" AND r.post_city=%s ", str_replace("-", " ", $_SESSION['gd_city']));
+        if ($gd_ses_city = $gd_session->get('gd_city')) {
+            $city_filter = $wpdb->prepare(" AND r.post_city=%s ", str_replace("-", " ", $gd_ses_city));
         }
-
-
     }
-
-    /*if(isset($_SESSION['all_near_me'])){
-
-        $mylat = $_SESSION['user_lat'];
-        $mylon = $_SESSION['user_lon'];
-
-        if(isset($_SESSION['near_me_range']) && is_numeric($_SESSION['near_me_range'])){$dist =$_SESSION['near_me_range']; }
-        elseif(get_option('geodir_near_me_dist')!=''){$dist = get_option('geodir_near_me_dist');}
-        else{ $dist = '200';  }
-
-        $lon1 = $mylon- $dist/abs(cos(deg2rad($mylat))*69);
-        $lon2 = $mylon+$dist/abs(cos(deg2rad($mylat))*69);
-        $lat1 = $mylat-($dist/69);
-        $lat2 = $mylat+($dist/69);
-
-        $rlon1 = is_numeric(min($lon1,$lon2)) ? min($lon1,$lon2) : '';
-        $rlon2 = is_numeric(max($lon1,$lon2)) ? max($lon1,$lon2) : '';
-        $rlat1 = is_numeric(min($lat1,$lat2)) ? min($lat1,$lat2) : '';
-        $rlat2 = is_numeric(max($lat1,$lat2)) ? max($lat1,$lat2) : '';
-
-        $country_filter ='';
-        $region_filter = '';
-        $city_filter = " AND post_latitude between $rlat1 and $rlat2
-        AND post_longitude between $rlon1 and $rlon2 ";
-
-        $join =
-
-    }*/
-
+	
     $review_table = GEODIR_REVIEW_TABLE;
     $request = "SELECT r.id as ID, r.post_type, r.comment_id as comment_ID, r.post_date as comment_date,r.overall_rating, r.user_id, r.post_id FROM $review_table as r WHERE r.post_status = 1 AND r.status =1 AND r.overall_rating>=1 $country_filter $region_filter $city_filter ORDER BY r.post_date DESC, r.id DESC LIMIT $no_comments";
 
-    //$request = "SELECT r.*,c.* FROM $review_table r JOIN $wpdb->comments c ON r.comment_ID=c.comment_ID WHERE r.post_status = 1 AND r.status =1 $country_filter $region_filter $city_filter ORDER BY r.post_date DESC, r.id DESC LIMIT $no_comments";
-    //echo $request;
-
     $comments = $wpdb->get_results($request);
-
 
     foreach ($comments as $comment) {
         // Set the extra comment info needed.
@@ -1858,7 +1804,6 @@ function geodir_get_recent_reviews($g_size = 60, $no_comments = 10, $comment_len
         $comment->comment_content = $comment_extra->comment_content;
         $comment->comment_author = $comment_extra->comment_author;
         $comment->comment_author_email = $comment_extra->comment_author_email;
-
 
         $comment_id = '';
         $comment_id = $comment->comment_ID;

@@ -70,6 +70,7 @@ if (!function_exists('geodir_save_listing')) {
      * @global object $wpdb WordPress Database object.
      * @global object $post The current post object.
      * @global object $current_user Current user object.
+	 * @global object $gd_session GeoDirectory Session object.
      * @param array $request_info {
      *    Array of request info arguments.
      *
@@ -121,15 +122,15 @@ if (!function_exists('geodir_save_listing')) {
      */
     function geodir_save_listing($request_info = array(), $dummy = false, $wp_error = false)
     {
-        global $wpdb, $current_user;
+        global $wpdb, $current_user, $gd_session;
 
         $last_post_id = '';
 
-        if (isset($_SESSION['listing']) && !$dummy) {
+        if ($gd_session->get('listing') && !$dummy) {
             $request_info = array();
-            $request_session = unserialize($_SESSION['listing']);
+            $request_session = $gd_session->get('listing');
             $request_info = array_merge($_REQUEST, $request_session);
-        } else if (!isset($_SESSION['listing']) && !$dummy) {
+        } else if (!$gd_session->get('listing') && !$dummy) {
             global $post;
             $request_info['pid'] = !empty($post->ID) ? $post->ID : (!empty($request_info['post_id']) ? $request_info['post_id'] : NULL);
             $request_info['post_title'] = $request_info['post_title'];
@@ -511,7 +512,7 @@ if (!function_exists('geodir_save_listing')) {
         /*
          * Unset the session so we don't loop.
          */
-        if (isset($_SESSION['listing'])) unset($_SESSION['listing']);
+        $gd_session->un_set('listing');
         return $last_post_id;
 
     }
@@ -1785,17 +1786,18 @@ if (!function_exists('geodir_get_infowindow_html')) {
      * @since 1.5.4 Modified to add new action "geodir_infowindow_meta_before".
      * @package GeoDirectory
      * @global array $geodir_addon_list List of active GeoDirectory extensions.
+     * @global object $gd_session GeoDirectory Session object.
      * @param object $postinfo_obj The post details object.
      * @param string $post_preview Is this a post preview?.
      * @return mixed|string|void
      */
     function geodir_get_infowindow_html($postinfo_obj, $post_preview = '')
     {
-        global $preview;
+        global $preview, $gd_session;
         $srcharr = array("'", "/", "-", '"', '\\');
         $replarr = array("&prime;", "&frasl;", "&ndash;", "&ldquo;", '');
 
-        if (isset($_SESSION['listing']) && isset($post_preview) && $post_preview != '') {
+        if ($gd_session->get('listing') && isset($post_preview) && $post_preview != '') {
             $ID = '';
             $plink = '';
 
@@ -1877,7 +1879,7 @@ if (!function_exists('geodir_get_infowindow_html')) {
                             } ?>"><?php echo $title; ?></a>
                         </h4>
                         <?php
-                        if (isset($_SESSION['listing']) && isset($post_preview) && $post_preview != '') {
+                        if ($gd_session->get('listing') && isset($post_preview) && $post_preview != '') {
                             $post_images = array();
                             if (!empty($postinfo_obj->post_images)) {
                                 $post_images = explode(",", $postinfo_obj->post_images);

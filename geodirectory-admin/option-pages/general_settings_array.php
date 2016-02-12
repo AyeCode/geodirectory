@@ -353,5 +353,3 @@ $general_settings = array_merge($general_options, $google_analytic_settings, $se
  * @param array $general_settings General settings array.
  */
 $geodir_settings['general_settings'] = apply_filters('geodir_general_settings', $general_settings);
-
-//$_SESSION['geodir_settings']['general_settings'] = $geodir_settings['general_settings'] ;

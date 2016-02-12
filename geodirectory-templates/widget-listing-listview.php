@@ -9,17 +9,18 @@
  * @since 1.0.0
  * @package GeoDirectory
  * @global string $gridview_columns_widget The girdview style of the listings for widget.
+ * @global object $gd_session GeoDirectory Session object.
  */
 
 /** This action is documented in geodirectory-templates/listing-listview.php */
 do_action('geodir_before_listing_listview');
 
-global $gridview_columns_widget;
+global $gridview_columns_widget, $gd_session;
 
 /** This action is documented in geodirectory-templates/listing-listview.php */
 $grid_view_class = apply_filters('geodir_grid_view_widget_columns', $gridview_columns_widget);
-if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' && !isset($before_widget)) {
-    $grid_view_class = geodir_convert_listing_view_class($_SESSION['gd_listing_view']);
+if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
+    $grid_view_class = geodir_convert_listing_view_class($gd_session->get('gd_listing_view'));
 }
 ?>
     <ul class="geodir_category_list_view clearfix <?php echo apply_filters('geodir_listing_listview_ul_extra_class', '', 'widget'); ?>">

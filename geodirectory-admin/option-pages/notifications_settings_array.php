@@ -276,5 +276,3 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
     array('type' => 'sectionend', 'id' => 'messages'),
 
 )); // End Manage NOtifications settings
-
-//$_SESSION['geodir_settings']['notifications_settings'] = $geodir_settings['notifications_settings'];

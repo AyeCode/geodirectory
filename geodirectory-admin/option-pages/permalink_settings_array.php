@@ -197,6 +197,3 @@ $geodir_settings['permalink_settings'] = apply_filters('geodir_permalink_setting
 
 
 )); // End Design settings
-
-
-//$_SESSION['geodir_settings']['permalink_settings'] = $geodir_settings['permalink_settings'] ;

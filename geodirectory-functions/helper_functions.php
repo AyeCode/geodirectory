@@ -409,3 +409,35 @@ function geodir_get_category_parents($id, $taxomony, $visited = array(), $parent
 
 	return $parents;
 }
+
+if (!function_exists('geodir_get_ip')) {
+/**
+ * Get the visitor's IP address.
+ *
+ * @since 1.5.7
+ * @package GeoDirectory
+ *
+ * @return string The IP address.
+ */
+function geodir_get_ip() {
+	if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+		//check ip from share internet
+		$ip = $_SERVER['HTTP_CLIENT_IP'];
+	} elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+		//to check ip is pass from proxy
+		$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+	} else {
+		$ip = $_SERVER['REMOTE_ADDR'];
+	}
+	
+	/**
+	 * Filter the the visitor's IP address.
+	 *
+	 * @since 1.5.7
+	 * @package GeoDirectory
+	 *
+	 * @param string $ip The IP address.
+	 */
+	return apply_filters('geodir_get_ip', $ip);
+}
+}

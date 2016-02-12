@@ -404,14 +404,13 @@ function geodir_add_page_id_in_query_var()
  *
  * @since 1.0.0
  *
+ * @global object $gd_session GeoDirectory Session object.
+ *
  * @param object $wp The WordPress object.
  */
-function geodir_set_location_var_in_session_in_core($wp)
-{
-
-	//$wp->geodir_query_vars = $wp->query_vars ;
-	// this code will determine when a user wants to switch location
-
+function geodir_set_location_var_in_session_in_core($wp) {
+	global $gd_session;
+	
     // Fix for WPML removing page_id query var:
     if (isset($wp->query_vars['page']) && !isset($wp->query_vars['page_id']) && isset($wp->query_vars['pagename']) && !is_home()) {
         global $wpdb;
@@ -430,16 +429,11 @@ function geodir_set_location_var_in_session_in_core($wp)
 	// Query Vars will have page_id parameter
 	// check if query var has page_id and that page id is location page
     geodir_set_is_geodir_page($wp);
-// if is GD homepage set the page ID
-        if (geodir_is_page('home')) {
-                $wp->query_vars['page_id'] = get_option('page_on_front');
-        }
+	// if is GD homepage set the page ID
+	if (geodir_is_page('home')) {
+		$wp->query_vars['page_id'] = get_option('page_on_front');
+	}
 
-
-
-
-
-	
 	// The location url format (all or country_city or region_city or city).
 	$geodir_show_location_url = get_option('geodir_show_location_url');
 
@@ -462,15 +456,15 @@ function geodir_set_location_var_in_session_in_core($wp)
             if (get_option('geodir_add_location_url')) {
                 if ($geodir_show_location_url != 'all') {
                     if ($gd_region == '') {
-                        if (isset($_SESSION['gd_region']))
-                            $gd_region = $_SESSION['gd_region'];
+                        if ($gd_ses_region = $gd_session->get('gd_region'))
+                            $gd_region = $gd_ses_region;
                         else
                             $gd_region = $default_location->region_slug;
                     }
 
                     if ($gd_city == '') {
-                        if (isset($_SESSION['gd_city']))
-                            $gd_city = $_SESSION['gd_city'];
+                        if ($gd_ses_city = $gd_session->get('gd_city'))
+                            $gd_city = $gd_ses_city;
                         else
                             $gd_city = $default_location->city_slug;
 
@@ -495,19 +489,19 @@ function geodir_set_location_var_in_session_in_core($wp)
 
             $location_array = function_exists('geodir_get_location_array') ? geodir_get_location_array($args) : array();
             if (!empty($location_array)) {
-                $_SESSION['gd_multi_location'] = 1;
-                $_SESSION['gd_country'] = $gd_country;
-                $_SESSION['gd_region'] = $gd_region;
-                $_SESSION['gd_city'] = $gd_city;
+                $gd_session->set('gd_multi_location', 1);
+                $gd_session->set('gd_country', $gd_country);
+                $gd_session->set('gd_region', $gd_region);
+                $gd_session->set('gd_city', $gd_city);
                 
 				$wp->query_vars['gd_country'] = $gd_country;
                 $wp->query_vars['gd_region'] = $gd_region;
                 $wp->query_vars['gd_city'] = $gd_city;
             } else {
-                unset($_SESSION['gd_multi_location'], $_SESSION['gd_city'], $_SESSION['gd_region'], $_SESSION['gd_country']);
+                $gd_session->un_set(array('gd_multi_location', 'gd_city', 'gd_region', 'gd_country'));
             }
         } else {
-            unset($_SESSION['gd_multi_location'], $_SESSION['gd_city'], $_SESSION['gd_region'], $_SESSION['gd_country']);
+            $gd_session->un_set(array('gd_multi_location', 'gd_city', 'gd_region', 'gd_country'));
         }
 
     } else if (isset($wp->query_vars['post_type']) && $wp->query_vars['post_type'] != '') {
@@ -696,10 +690,10 @@ function geodir_set_location_var_in_session_in_core($wp)
                 }
                 // if locaton still not found then clear location related session variables
                 if ($is_geodir_location_found && $geodir_set_location_session) {
-                    $_SESSION['gd_multi_location'] = 1;
-                    $_SESSION['gd_country'] = $gd_country;
-                    $_SESSION['gd_region'] = $gd_region;
-                    $_SESSION['gd_city'] = $gd_city;
+                    $gd_session->set('gd_multi_location', 1);
+                    $gd_session->set('gd_country', $gd_country);
+                    $gd_session->set('gd_region', $gd_region);
+                    $gd_session->set('gd_city', $gd_city);
                 }
 
                 if ($geodir_show_location_url == 'all') {
@@ -755,13 +749,13 @@ function geodir_set_location_var_in_session_in_core($wp)
 	
 	// Unset location session if gd page and location not set.
 	if (isset($wp->query_vars['gd_is_geodir_page']) && !isset($wp->query_vars['gd_country'])) {
-		unset($_SESSION['gd_multi_location'], $_SESSION['gd_city'], $_SESSION['gd_region'], $_SESSION['gd_country']);
+		$gd_session->un_set(array('gd_multi_location', 'gd_city', 'gd_region', 'gd_country'));
 	}
 
-    if (isset($_SESSION['gd_multi_location']) && $_SESSION['gd_multi_location'] == 1) {
-        $wp->query_vars['gd_country'] = $_SESSION['gd_country'];
-        $wp->query_vars['gd_region'] = $_SESSION['gd_region'];
-        $wp->query_vars['gd_city'] = $_SESSION['gd_city'];
+    if ($gd_session->get('gd_multi_location') == 1) {
+        $wp->query_vars['gd_country'] = $gd_session->get('gd_country');
+        $wp->query_vars['gd_region'] = $gd_session->get('gd_region');
+        $wp->query_vars['gd_city'] = $gd_session->get('gd_city');
     }
 
     // now check if there is location parts in the url or not

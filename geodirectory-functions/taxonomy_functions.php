@@ -750,6 +750,7 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
      * @since 1.0.0
      * @package GeoDirectory
      * @global object $post WordPress Post object.
+     * @global object $gd_session GeoDirectory Session object.
      * @param string $cat_taxonomy The taxonomy name.
      * @param string $cat_limit Number of categories to display.
      */
@@ -757,14 +758,14 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
     {
         $post_category = '';
         $post_category_str = '';
-        global $exclude_cats;
+        global $exclude_cats, $gd_session;
 
         $cat_exclude = '';
         if (is_array($exclude_cats) && !empty($exclude_cats))
             $cat_exclude = serialize($exclude_cats);
 
         if (isset($_REQUEST['backandedit'])) {
-            $post = (object)unserialize($_SESSION['listing']);
+            $post = (object)$gd_session->get('listing');
 
             if (!is_array($post->post_category[$cat_taxonomy]))
                 $post_category = $post->post_category[$cat_taxonomy];
@@ -1639,7 +1640,7 @@ function geodir_term_link($termlink, $term, $taxonomy) {
     $geodir_taxonomies = geodir_get_taxonomies('', true);
 
     if (isset($taxonomy) && !empty($geodir_taxonomies) && in_array($taxonomy, $geodir_taxonomies)) {
-        global $geodir_add_location_url;
+        global $geodir_add_location_url, $gd_session;
         $include_location = false;
         $request_term = array();
 
@@ -1649,7 +1650,7 @@ function geodir_term_link($termlink, $term, $taxonomy) {
             if ($geodir_add_location_url && get_option('geodir_add_location_url')) {
                 $include_location = true;
             }
-        } elseif (get_option('geodir_add_location_url') && isset($_SESSION['gd_multi_location']) && $_SESSION['gd_multi_location'] == 1)
+        } elseif (get_option('geodir_add_location_url') && $gd_session->get('gd_multi_location') == 1)
             $include_location = true;
 
         if ($include_location) {
@@ -1665,8 +1666,8 @@ function geodir_term_link($termlink, $term, $taxonomy) {
                     'gd_city' => $post->city_slug
                 );
 				
-				if ($neighbourhood_active && !empty($location_terms['gd_city']) && !empty($_SESSION['gd_neighbourhood'])) {
-					$location_terms['gd_neighbourhood'] = $_SESSION['gd_neighbourhood'];
+				if ($neighbourhood_active && !empty($location_terms['gd_city']) && $gd_ses_neighbourhood = $gd_session->get('gd_neighbourhood')) {
+					$location_terms['gd_neighbourhood'] = $gd_ses_neighbourhood;
 				}
             } else {
                 $location_terms = geodir_get_current_location_terms('query_vars');
@@ -1744,18 +1745,19 @@ function geodir_term_link($termlink, $term, $taxonomy) {
  *
  * @global bool $geodir_add_location_url If true it will add location name in url.
  * @global object $post WordPress Post object.
+ * @global object $gd_session GeoDirectory Session object.
  *
  * @param string $link The post link.
  * @param string $post_type The post type.
  * @return string The modified link.
  */
 function geodir_posttype_link($link, $post_type) {
-	global $geodir_add_location_url, $post;
+	global $geodir_add_location_url, $post, $gd_session;
 	
 	$location_terms = array();
 	
 	if (in_array($post_type, geodir_get_posttypes())) {
-		if (get_option('geodir_add_location_url') && isset($_SESSION['gd_multi_location']) && $_SESSION['gd_multi_location'] == 1) {
+		if (get_option('geodir_add_location_url') && $gd_session->get('gd_multi_location') == 1) {
 			if(geodir_is_page('detail') && !empty($post) && isset($post->country_slug)) {
                 $location_terms = array(
                     'gd_country' => $post->country_slug,

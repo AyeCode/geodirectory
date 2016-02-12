@@ -812,6 +812,7 @@ function geodir_taxonomy_breadcrumb()
  * @package GeoDirectory
  * @global object $wp_query WordPress Query object.
  * @global object $post The current post object.
+ * @global object $gd_session GeoDirectory Session object.
  */
 function geodir_breadcrumb()
 {
@@ -849,7 +850,7 @@ function geodir_breadcrumb()
         $post_type_for_location_link = $listing_link;
         $location_terms = geodir_get_current_location_terms('query_vars', $gd_post_type);
 
-        global $wp;
+        global $wp, $gd_session;
         $location_link = $post_type_for_location_link;
 
         if (geodir_is_page('detail') || geodir_is_page('listing')) {
@@ -864,8 +865,8 @@ function geodir_breadcrumb()
                     'gd_city' => $post->city_slug
                 );
 				
-				if ($neighbourhood_active && !empty($location_terms['gd_city']) && !empty($_SESSION['gd_neighbourhood'])) {
-					$location_terms['gd_neighbourhood'] = $_SESSION['gd_neighbourhood'];
+				if ($neighbourhood_active && !empty($location_terms['gd_city']) && $gd_ses_neighbourhood = $gd_session->get('gd_neighbourhood')) {
+					$location_terms['gd_neighbourhood'] = $gd_ses_neighbourhood;
 				}
             }
 
@@ -2871,13 +2872,14 @@ function geodir_loginwidget_output($args = '', $instance = '')
  * @global object $post The current post object.
  * @global string $gridview_columns_widget The girdview style of the listings for widget.
  * @global bool $geodir_is_widget_listing Is this a widget listing?. Default: false.
+ * @global object $gd_session GeoDirectory Session object.
+ *
  * @param array|string $args Display arguments including before_title, after_title, before_widget, and after_widget.
  * @param array|string $instance The settings for the particular instance of the widget.
  */
-function geodir_popular_postview_output($args = '', $instance = '')
-{
-    //print_r($args);
-    //print_r($instance);
+function geodir_popular_postview_output($args = '', $instance = '') {
+    global $gd_session;
+	
     // prints the widget
     extract($args, EXTR_SKIP);
 
@@ -2998,9 +3000,9 @@ function geodir_popular_postview_output($args = '', $instance = '')
 
     $location_url = implode('/', $location_url);
     $skip_location = false;
-    if (!$add_location_filter && !empty($_SESSION['gd_multi_location'])) {
+    if (!$add_location_filter && $gd_session->get('gd_multi_location')) {
         $skip_location = true;
-        unset($_SESSION['gd_multi_location']);
+        $gd_session->un_set('gd_multi_location');
     }
 
     if (get_option('permalink_structure')) {
@@ -3023,7 +3025,7 @@ function geodir_popular_postview_output($args = '', $instance = '')
         $geodir_add_location_url = NULL;
     }
     if ($skip_location) {
-        $_SESSION['gd_multi_location'] = 1;
+        $gd_session->set('gd_multi_location', 1);
     }
 
     if(is_wp_error( $viewall_url  )){$viewall_url = '';}
