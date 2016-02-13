@@ -2145,15 +2145,15 @@ function geodir_action_add_listing_form()
     ?>
     <form name="propertyform" id="propertyform" action="<?php echo get_page_link(geodir_preview_page_id());?>"
           method="post" enctype="multipart/form-data">
-        <input type="hidden" name="preview" value="<?php echo $listing_type;?>"/>
-        <input type="hidden" name="listing_type" value="<?php echo $listing_type;?>"/>
+        <input type="hidden" name="preview" value="<?php echo sanitize_text_field($listing_type);?>"/>
+        <input type="hidden" name="listing_type" value="<?php echo sanitize_text_field($listing_type);?>"/>
         <?php if ($page_id) { ?><input type="hidden" name="add_listing_page_id"
                                        value="<?php echo $page_id; ?>" /><?php }?>
         <?php if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') { ?>
-            <input type="hidden" name="pid" value="<?php echo $_REQUEST['pid']; ?>"/>
+            <input type="hidden" name="pid" value="<?php echo sanitize_text_field($_REQUEST['pid']); ?>"/>
         <?php } ?>
         <?php if (isset($_REQUEST['backandedit'])) { ?>
-            <input type="hidden" name="backandedit" value="<?php echo $_REQUEST['backandedit']; ?>"/>
+            <input type="hidden" name="backandedit" value="<?php echo sanitize_text_field($_REQUEST['backandedit']); ?>"/>
         <?php } ?>
         <?php
         /**
