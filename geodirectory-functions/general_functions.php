@@ -772,7 +772,7 @@ if (!function_exists('geodir_sendEmail')) {
             $admin_bcc = true;
         }
 
-        if($admin_bcc==true){
+        if($admin_bcc===true){
             $sent = wp_mail($to, $subject, $message, $headers);
 
             if( ! $sent ) {
@@ -1526,7 +1526,7 @@ if (!function_exists('sendEmail')) {
             $admin_bcc = true;
         }
 
-        if($admin_bcc == true){
+        if($admin_bcc === true){
             $sent = wp_mail($to, $subject, $message, $headers);
             if( ! $sent ) {
                 if ( is_array( $to ) ) {
@@ -3882,12 +3882,12 @@ function geodir_wpseo_replacements($vars){
     }
 
 
-    if($location_titles) {
+    if(!empty($location_titles)) {
         $vars['%%location%%'] = implode(", ", $location_titles);
     }
 
 
-    if($location_titles) {
+    if(!empty($location_titles)) {
         $vars['%%in_location%%'] = __('in ', 'geodirectory') . implode(", ", $location_titles);
     }
 

@@ -20,7 +20,7 @@ class geodir_related_listing_postview extends WP_Widget
 	 * @since 1.0.0
      * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
 	 */
-    function __construct() {
+    public function __construct() {
         $widget_ops = array('classname' => 'geodir_related_listing_post_view', 'description' => __('GD > Related Listing', 'geodirectory'));
         parent::__construct(
             'post_related_listing', // Base ID

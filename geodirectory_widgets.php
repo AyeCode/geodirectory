@@ -246,7 +246,7 @@ if (!function_exists('register_geodir_widgets')) {
              * @since 1.0.0
              * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
              */
-            function __construct() {
+            public function __construct() {
                 $widget_ops = array('classname' => 'geodir_loginbox', 'description' => __('Geodirectory Loginbox Widget', 'geodirectory'));
                 parent::__construct(
                     'geodir_loginbox', // Base ID
@@ -333,7 +333,7 @@ if (!function_exists('register_geodir_widgets')) {
              * @since 1.0.0
              * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
              */
-            function __construct() {
+            public function __construct() {
                 $widget_ops = array('classname' => 'geodir_social_like_widget', 'description' => __('GD > Twitter,Facebook and Google+ buttons', 'geodirectory'));
                 parent::__construct(
                     'social_like_widget', // Base ID
@@ -470,7 +470,7 @@ if (!function_exists('register_geodir_widgets')) {
              * @since 1.0.0
              * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
              */
-            function __construct() {
+            public function __construct() {
                 $widget_ops = array('classname' => 'geodir-subscribe', 'description' => __('GD > Google Feedburner Subscribe', 'geodirectory'));
                 parent::__construct(
                     'widget_subscribeWidget', // Base ID
@@ -632,7 +632,7 @@ if (!function_exists('register_geodir_widgets')) {
              * @since 1.0.0
              * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
              */
-            function __construct() {
+            public function __construct() {
                 $widget_ops = array('classname' => 'GeoDirectory Advertise', 'description' => __('GD > common advertise widget in sidebar, bottom section', 'geodirectory'));
                 parent::__construct(
                     'advtwidget', // Base ID
@@ -734,7 +734,7 @@ if (!function_exists('register_geodir_widgets')) {
              * @since 1.0.0
              * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
              */
-            function __construct() {
+            public function __construct() {
                 $widget_ops = array('classname' => 'Geo Dir Flickr Photos ', 'description' => __('GD > Flickr Photos', 'geodirectory'));
                 parent::__construct(
                     'widget_flickrwidget', // Base ID
@@ -861,7 +861,7 @@ if (!function_exists('register_geodir_widgets')) {
              * @since 1.0.0
              * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
              */
-            function __construct() {
+            public function __construct() {
                 $widget_ops = array('classname' => 'Twitter', 'description' => __('GD > Twitter Feed', 'geodirectory'));
                 parent::__construct(
                     'widget_Twidget', // Base ID
@@ -962,7 +962,7 @@ if (!function_exists('register_geodir_widgets')) {
              * @since 1.0.0
              * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
              */
-            function __construct() {
+            public function __construct() {
                 $widget_ops = array('classname' => 'geodir_advance_search_widget', 'description' => __('GD > Search', 'geodirectory'));
                 parent::__construct(
                     'geodir_advance_search', // Base ID
