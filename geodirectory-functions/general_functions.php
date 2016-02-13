@@ -738,7 +738,7 @@ if (!function_exists('geodir_sendEmail')) {
         $adminEmail = get_bloginfo('admin_email');
         $to = $adminEmail;
 
-
+        $admin_bcc = false;
         if ($message_type == 'post_submit') {
             $subject = __(stripslashes_deep(get_option('geodir_post_submited_success_email_subject_admin')), 'geodirectory');
             $message = __(stripslashes_deep(get_option('geodir_post_submited_success_email_content_admin')), 'geodirectory');
@@ -752,81 +752,29 @@ if (!function_exists('geodir_sendEmail')) {
             $subject = str_replace($search_array, $replace_array, $subject);
 
             $subject .= ' - ADMIN BCC COPY';
-
-            $sent = wp_mail($to, $subject, $message, $headers);
-
-            if( ! $sent ) {
-                if ( is_array( $to ) ) {
-                    $to = implode( ',', $to );
-                }
-                $log_message = sprintf(
-                    __( "Email from GeoDirectory failed to send.\nMessage type: %s\nSend time: %s\nTo: %s\nSubject: %s\n\n", 'geodirectory' ),
-                    $message_type,
-                    date_i18n( 'F j Y H:i:s', current_time( 'timestamp' ) ),
-                    $to,
-                    $subject
-                );
-                geodir_error_log( $log_message );
-            }
+            $admin_bcc = true;
 
         }
-
-        if ($message_type == 'registration' && get_option('geodir_bcc_new_user')) {
+        elseif ($message_type == 'registration' && get_option('geodir_bcc_new_user')) {
             $subject .= ' - ADMIN BCC COPY';
-            $sent = wp_mail($to, $subject, $message, $headers);
-            if( ! $sent ) {
-                if ( is_array( $to ) ) {
-                    $to = implode( ',', $to );
-                }
-                $log_message = sprintf(
-                    __( "Email from GeoDirectory failed to send.\nMessage type: %s\nSend time: %s\nTo: %s\nSubject: %s\n\n", 'geodirectory' ),
-                    $message_type,
-                    date_i18n( 'F j Y H:i:s', current_time( 'timestamp' ) ),
-                    $to,
-                    $subject
-                );
-                geodir_error_log( $log_message );
-            }
+            $admin_bcc = true;
+        }
+        elseif ($message_type == 'send_friend' && get_option('geodir_bcc_friend')) {
+            $subject .= ' - ADMIN BCC COPY';
+            $admin_bcc = true;
+        }
+        elseif ($message_type == 'send_enquiry' && get_option('geodir_bcc_enquiry')) {
+            $subject .= ' - ADMIN BCC COPY';
+            $admin_bcc = true;
+        }
+        elseif ($message_type == 'listing_published' && get_option('geodir_bcc_listing_published')) {
+            $subject .= ' - ADMIN BCC COPY';
+            $admin_bcc = true;
         }
 
-        if ($message_type == 'send_friend' && get_option('geodir_bcc_friend')) {
-            $subject .= ' - ADMIN BCC COPY';
+        if($admin_bcc==true){
             $sent = wp_mail($to, $subject, $message, $headers);
-            if( ! $sent ) {
-                if ( is_array( $to ) ) {
-                    $to = implode( ',', $to );
-                }
-                $log_message = sprintf(
-                    __( "Email from GeoDirectory failed to send.\nMessage type: %s\nSend time: %s\nTo: %s\nSubject: %s\n\n", 'geodirectory' ),
-                    $message_type,
-                    date_i18n( 'F j Y H:i:s', current_time( 'timestamp' ) ),
-                    $to,
-                    $subject
-                );
-                geodir_error_log( $log_message );
-            }
-        }
 
-        if ($message_type == 'send_enquiry' && get_option('geodir_bcc_enquiry')) {
-            $subject .= ' - ADMIN BCC COPY';
-            $sent = wp_mail($to, $subject, $message, $headers);
-            if( ! $sent ) {
-                if ( is_array( $to ) ) {
-                    $to = implode( ',', $to );
-                }
-                $log_message = sprintf(
-                    __( "Email from GeoDirectory failed to send.\nMessage type: %s\nSend time: %s\nTo: %s\nSubject: %s\n\n", 'geodirectory' ),
-                    $message_type,
-                    date_i18n( 'F j Y H:i:s', current_time( 'timestamp' ) ),
-                    $to,
-                    $subject
-                );
-                geodir_error_log( $log_message );
-            }
-        }
-        if ($message_type == 'listing_published' && get_option('geodir_bcc_listing_published')) {
-            $subject .= ' - ADMIN BCC COPY';
-            $sent = wp_mail($to, $subject, $message, $headers);
             if( ! $sent ) {
                 if ( is_array( $to ) ) {
                     $to = implode( ',', $to );
@@ -1282,28 +1230,27 @@ function fetch_remote_file($url)
     // fetch the remote url and write it to the placeholder file
     $headers = wp_get_http($url, $upload['file']);
 
+    $log_message = '';
+    $filesize = filesize($upload['file']);
     // request failed
     if (!$headers) {
-        @unlink($upload['file']);
-        return new WP_Error('import_file_error', __('Remote server did not respond', 'geodirectory'));
+        $log_message = __('Remote server did not respond', 'geodirectory');
     }
-
     // make sure the fetch was successful
-    if ($headers['response'] != '200') {
-        @unlink($upload['file']);
-        return new WP_Error('import_file_error', sprintf(__('Remote server returned error response %1$d %2$s', 'geodirectory'), esc_html($headers['response']), get_status_header_desc($headers['response'])));
+    elseif ($headers['response'] != '200') {
+        $log_message = sprintf(__('Remote server returned error response %1$d %2$s', 'geodirectory'), esc_html($headers['response']), get_status_header_desc($headers['response']));
+    }
+    elseif (isset($headers['content-length']) && $filesize != $headers['content-length']) {
+        $log_message =  __('Remote file is incorrect size', 'geodirectory');
+    }
+    elseif (0 == $filesize) {
+        $log_message = __('Zero size file downloaded', 'geodirectory');
     }
 
-    $filesize = filesize($upload['file']);
-
-    if (isset($headers['content-length']) && $filesize != $headers['content-length']) {
-        @unlink($upload['file']);
-        return new WP_Error('import_file_error', __('Remote file is incorrect size', 'geodirectory'));
-    }
-
-    if (0 == $filesize) {
-        @unlink($upload['file']);
-        return new WP_Error('import_file_error', __('Zero size file downloaded', 'geodirectory'));
+    if($log_message){
+        $del = unlink($upload['file']);
+        if(!$del){geodir_error_log(__('GeoDirectory: fetch_remote_file() failed to delete temp file.', 'geodirectory'));}
+        return new WP_Error('import_file_error',$log_message );
     }
 
 
@@ -1455,9 +1402,24 @@ if (!function_exists('adminEmail')) {
         $subject = str_replace($search_array, $replace_array, $subject);
         $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-//$headers .= 'To: <'.$fromEmail.'>' . "\r\n";
         $headers .= 'From: ' . $fromEmailName . ' <' . $fromEmail . '>' . "\r\n";
-        @wp_mail($fromEmail, $subject, $client_message, $headers);///To client email
+
+        $to = $fromEmail;
+        $message = $client_message;
+        $sent = wp_mail($to, $subject, $message, $headers);
+        if( ! $sent ) {
+            if ( is_array( $to ) ) {
+                $to = implode( ',', $to );
+            }
+            $log_message = sprintf(
+                __( "Email from GeoDirectory failed to send.\nMessage type: %s\nSend time: %s\nTo: %s\nSubject: %s\n\n", 'geodirectory' ),
+                $message_type,
+                date_i18n( 'F j Y H:i:s', current_time( 'timestamp' ) ),
+                $to,
+                $subject
+            );
+            geodir_error_log( $log_message );
+        }
     }
 }
 
@@ -1522,35 +1484,65 @@ if (!function_exists('sendEmail')) {
         $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
         $headers .= "Reply-To: " . $fromEmail . "\r\n";
-//$headers .= 'To: '.$toEmailName.' <'.$toEmail.'>' . "\r\n";
         $headers .= 'From: ' . $sitefromEmailName . ' <' . $sitefromEmail . '>' . "\r\n";
-        @wp_mail($toEmail, $subject, $message, $headers);
 
-///////// ADMIN BCC EMIALS
+        $to = $toEmail;
+
+        $sent = wp_mail($to, $subject, $message, $headers);
+        if( ! $sent ) {
+            if ( is_array( $to ) ) {
+                $to = implode( ',', $to );
+            }
+            $log_message = sprintf(
+                __( "Email from GeoDirectory failed to send.\nMessage type: %s\nSend time: %s\nTo: %s\nSubject: %s\n\n", 'geodirectory' ),
+                $message_type,
+                date_i18n( 'F j Y H:i:s', current_time( 'timestamp' ) ),
+                $to,
+                $subject
+            );
+            geodir_error_log( $log_message );
+        }
+
+        ///////// ADMIN BCC EMIALS
+        $admin_bcc = false;
         if ($message_type == 'registration') {
             $message_raw = explode(__("Password:", 'geodirectory'), $message);
             $message_raw2 = explode("</p>", $message_raw[1], 2);
             $message = $message_raw[0] . __('Password:', 'geodirectory') . ' **********</p>' . $message_raw2[1];
         }
         $adminEmail = get_bloginfo('admin_email');
+        $to = $adminEmail;
 
-        $headers = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-        $headers .= "Reply-To: " . $fromEmail . "\r\n";
-//$headers .= 'To: <'.$adminEmail.'>' . "\r\n";
-        $headers .= 'From: ' . $sitefromEmailName . ' <' . $sitefromEmail . '>' . "\r\n";
         if ($message_type == 'registration' && get_option('bcc_new_user')) {
             $subject .= ' - ADMIN BCC COPY';
-            @wp_mail($adminEmail, $subject, $message, $headers);
+            $admin_bcc = true;
         }
-        if ($message_type == 'send_friend' && get_option('bcc_friend')) {
+        elseif ($message_type == 'send_friend' && get_option('bcc_friend')) {
             $subject .= ' - ADMIN BCC COPY';
-            @wp_mail($adminEmail, $subject, $message, $headers);
+            $admin_bcc = true;
         }
-        if ($message_type == 'send_enquiry' && get_option('bcc_enquiry')) {
+        elseif ($message_type == 'send_enquiry' && get_option('bcc_enquiry')) {
             $subject .= ' - ADMIN BCC COPY';
-            @wp_mail($adminEmail, $subject, $message, $headers);
+            $admin_bcc = true;
         }
+
+        if($admin_bcc == true){
+            $sent = wp_mail($to, $subject, $message, $headers);
+            if( ! $sent ) {
+                if ( is_array( $to ) ) {
+                    $to = implode( ',', $to );
+                }
+                $log_message = sprintf(
+                    __( "Email from GeoDirectory failed to send.\nMessage type: %s\nSend time: %s\nTo: %s\nSubject: %s\n\n", 'geodirectory' ),
+                    $message_type,
+                    date_i18n( 'F j Y H:i:s', current_time( 'timestamp' ) ),
+                    $to,
+                    $subject
+                );
+                geodir_error_log( $log_message );
+            }
+        }
+
     }
 }
 
