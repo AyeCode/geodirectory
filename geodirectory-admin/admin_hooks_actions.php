@@ -479,7 +479,7 @@ function geodir_sorting_options_selected_fields()
 
         $fields = $wpdb->get_results(
             $wpdb->prepare(
-                "select * from " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " where post_type = %s order by sort_order asc",
+                "select * from " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " where post_type = %s AND field_type != 'address' order by sort_order asc",
                 array($listing_type)
             )
         );

@@ -3535,7 +3535,7 @@ function geodir_add_custom_sort_options($fields, $post_type)
 
             $custom_fields = $wpdb->get_results(
                 $wpdb->prepare(
-                    "select post_type,data_type,field_type,site_title,htmlvar_name from " . GEODIR_CUSTOM_FIELDS_TABLE . " where post_type = %s and is_active='1' and cat_sort='1' order by sort_order asc",
+                    "select post_type,data_type,field_type,site_title,htmlvar_name from " . GEODIR_CUSTOM_FIELDS_TABLE . " where post_type = %s and is_active='1' and cat_sort='1' AND field_type != 'address' order by sort_order asc",
                     array($post_type)
                 ), 'ARRAY_A'
             );
