@@ -866,7 +866,7 @@ $field_data_type = isset($field_info->data_type) ? $field_info->data_type : '';
                         </td>
                     </tr>
 
-                    <?php if (!in_array($field_type, array('multiselect', 'textarea', 'taxonomy'))) { ?>
+                    <?php if (!in_array($field_type, array('multiselect', 'textarea', 'taxonomy')) && $field_type != 'address') { ?>
                     <tr>
                         <td><?php _e('Include this field in sort option', 'geodirectory'); ?></td>
                         <td>:

@@ -548,19 +548,16 @@ function geodir_get_posts_default_sort($post_type)
  * @global object $wpdb WordPress Database object.
  * @return bool|mixed|void Returns sort results, when the post type is valid. Otherwise returns false.
  */
-function geodir_get_sort_options($post_type)
-{
+function geodir_get_sort_options($post_type) {
     global $wpdb;
 
     if ($post_type != '') {
-
         $all_postypes = geodir_get_posttypes();
 
         if (!in_array($post_type, $all_postypes))
             return false;
 
-
-        $sort_field_info = $wpdb->get_results($wpdb->prepare("select * from " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " where	post_type= %s and is_active=%d and (sort_asc=1 ||	sort_desc=1 || field_type='random') order by sort_order asc", array($post_type, 1)));
+        $sort_field_info = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE post_type=%s AND is_active=%d AND (sort_asc=1 || sort_desc=1 || field_type='random') AND field_type != 'address' ORDER BY sort_order ASC", array($post_type, 1)));
         /**
          * Filter post sort options.
          *
