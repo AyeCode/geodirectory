@@ -190,25 +190,28 @@ if (!function_exists('geodir_custom_field_delete')) {
 	 * Delete custom field using field id.
 	 *
 	 * @since 1.0.0
+	 * @since 1.5.7 Delete field from sorting fields table when custom field deleted.
 	 * @package GeoDirectory
      * @global object $wpdb WordPress Database object.
      * @global string $plugin_prefix Geodirectory plugin table prefix.
 	 * @param string $field_id The custom field ID.
 	 * @return int|string If field deleted successfully, returns field id. Otherwise returns 0.
 	 */
-	function geodir_custom_field_delete($field_id = '')
-    {
-
+	function geodir_custom_field_delete($field_id = '') {
         global $wpdb, $plugin_prefix;
-        if ($field_id != '') {
+        
+		if ($field_id != '') {
             $cf = trim($field_id, '_');
 
             if ($field = $wpdb->get_row($wpdb->prepare("select htmlvar_name,post_type,field_type from " . GEODIR_CUSTOM_FIELDS_TABLE . " where id= %d", array($cf)))) {
-
-
                 $wpdb->query($wpdb->prepare("delete from " . GEODIR_CUSTOM_FIELDS_TABLE . " where id= %d ", array($cf)));
 
                 $post_type = $field->post_type;
+				$htmlvar_name = $field->htmlvar_name;
+				
+				if ($post_type != '' && $htmlvar_name != '') {
+					$wpdb->query($wpdb->prepare("DELETE FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE htmlvar_name=%s AND post_type=%s LIMIT 1", array($htmlvar_name, $post_type)));
+				}
 
                 /**
                  * Called after a custom field is deleted.
@@ -221,7 +224,6 @@ if (!function_exists('geodir_custom_field_delete')) {
                 do_action('geodir_after_custom_field_deleted', $cf, $field->htmlvar_name, $post_type);
 
                 if ($field->field_type == 'address') {
-
                     $wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_address`");
                     $wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_city`");
                     $wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_region`");
@@ -231,23 +233,17 @@ if (!function_exists('geodir_custom_field_delete')) {
                     $wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_longitude`");
                     $wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_mapview`");
                     $wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_mapzoom`");
-
                 } else {
-
                     if ($field->field_type != 'fieldset') {
-
                         $wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "`");
-
                     }
                 }
 
                 return $field_id;
-
             } else
                 return 0;
         } else
             return 0;
-
     }
 }
 
