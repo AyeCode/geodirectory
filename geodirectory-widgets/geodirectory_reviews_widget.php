@@ -20,7 +20,7 @@ class geodir_recent_reviews_widget extends WP_Widget
 	 * @since 1.0.0
      * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
 	 */
-    function __construct() {
+    public function __construct() {
         $widget_ops = array('classname' => 'geodir_recent_reviews', 'description' => __('GD > Recent Reviews', 'geodirectory'));
         parent::__construct(
             'geodir_recent_reviews', // Base ID

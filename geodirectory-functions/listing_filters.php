@@ -12,6 +12,7 @@
  * @since 1.0.0
  * @package GeoDirectory
  * @global bool $geodir_add_location_url If true it will add location name in url.
+ * @deprecated 1.5.7 $_SESSION no longer used.
  */
 function geodir_session_start()
 {

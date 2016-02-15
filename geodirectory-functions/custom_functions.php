@@ -1727,6 +1727,7 @@ function geodir_exif($file)
             //if no Imagick, fallback to GD
             //GD needs negative degrees
             $rotateImage = -$rotateImage;
+            $file['file'] = sanitize_file_name($file['file']);
 
             switch ($file['type']) {
                 case 'image/jpeg':

@@ -20,7 +20,7 @@ class geodir_bestof_widget extends WP_Widget
 	 * @since 1.3.9
      * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
 	 */
-    function __construct() {
+    public function __construct() {
         $widget_ops = array('classname' => 'geodir_bestof_widget', 'description' => __('GD > Best of widget', 'geodirectory'));
         parent::__construct(
             'bestof_widget', // Base ID

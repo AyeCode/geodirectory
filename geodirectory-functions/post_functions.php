@@ -26,7 +26,16 @@ function geodir_set_postcat_structure($post_id, $taxonomy, $default_cat = '', $c
 
     if (!isset($default_cat) || empty($default_cat)) {
         $default_cat = isset($post_cat_array[0]) ? $post_cat_array[0] : '';
+    }else{
+        if(!is_int($default_cat)){
+            $category = get_term_by('name', $default_cat, $taxonomy);
+            if(isset($category->term_id)){
+                $default_cat =  $category->term_id;
+            }
+        }
+
     }
+
 
     geodir_save_post_meta($post_id, 'default_category', $default_cat);
 

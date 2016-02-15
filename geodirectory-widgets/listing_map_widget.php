@@ -95,7 +95,7 @@ class geodir_map_listingpage extends WP_Widget
 	 * @since 1.0.0
      * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
 	 */
-    function __construct() {
+    public function __construct() {
         $widget_ops = array('classname' => 'widget geodir-map-listing-page', 'description' => __('Google Map for Listing page. It will show you google map V3 for Listing page.', 'geodirectory'));
         parent::__construct(
             'geodir_map_v3_listing_map', // Base ID

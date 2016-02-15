@@ -28,8 +28,6 @@ Tested up to: 4.4
  */
 define("GEODIRECTORY_VERSION", "1.5.6");
 
-if (!session_id()) session_start();
-
 /*
  * CHECK FOR OLD COMPATIBILITY PACKS AND DISABLE IF THEY ARE ACTIVE
  */
@@ -113,6 +111,31 @@ if (!defined('GEODIRECTORY_TEXTDOMAIN')) define('GEODIRECTORY_TEXTDOMAIN', 'geod
 
 // Load geodirectory plugin textdomain.
 add_action( 'plugins_loaded', 'geodir_load_textdomain' );
+
+/*
+ * A function to log GD errors no matter the type given.
+ *
+ * This function will log GD errors if the WP_DEBUG constant is true, it can be filtered.
+ *
+ * @since 1.5.7
+ * @param mixed $log The thing that should be logged.
+ * @package GeoDirectory
+ */
+function geodir_error_log($log){
+    /*
+     * A filter to override the WP_DEBUG setting for function geodir_error_log().
+     *
+     * @since 1.5.7
+     */
+    $should_log = apply_filters( 'geodir_log_errors', WP_DEBUG);
+    if ( true === $should_log ) {
+        if ( is_array( $log ) || is_object( $log ) ) {
+            error_log( print_r( $log, true ) );
+        } else {
+            error_log( $log );
+        }
+    }
+}
 
 /**
  * Include all plugin functions.

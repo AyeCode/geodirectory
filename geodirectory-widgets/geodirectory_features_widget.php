@@ -5,7 +5,7 @@ class Geodir_Features_Widget extends WP_Widget {
     /**
      * Class constructor.
      */
-    function __construct() {
+    public function __construct() {
         $widget_ops = array(
             'description' => __( 'Displays "GD Features" widget', 'geodirectory' ),
             'classname' => 'widget_gd_features',

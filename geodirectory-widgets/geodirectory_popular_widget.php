@@ -20,7 +20,7 @@ class geodir_popular_post_category extends WP_Widget
 	 * @since 1.0.0
      * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
 	 */
-    function __construct() {
+    public function __construct() {
         $widget_ops = array('classname' => 'geodir_popular_post_category', 'description' => __('GD > Popular Post Category', 'geodirectory'));
         parent::__construct(
             'popular_post_category', // Base ID
@@ -136,7 +136,7 @@ class geodir_popular_postview extends WP_Widget
 	 * @since 1.0.0
      * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
 	 */
-    function __construct() {
+    public function __construct() {
         $widget_ops = array('classname' => 'geodir_popular_post_view', 'description' => __('GD > Popular Post View', 'geodirectory'));
         parent::__construct(
             'popular_post_view', // Base ID

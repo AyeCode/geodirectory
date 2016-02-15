@@ -32,8 +32,6 @@ add_action('init', 'geodir_add_post_filters');
 
 //add_action('init', 'geodir_init_defaults');
 
-add_action('init', 'geodir_session_start');
-
 add_action('init', 'geodir_allow_post_type_frontend');
 
 add_action('init', 'geodir_register_taxonomies', 1);
@@ -195,7 +193,6 @@ add_action('gd_tax_meta_updated', 'geodir_get_term_icon_rebuild', 5000);
 add_action('wp_footer', 'geodir_footer_scripts'); /* Footer Scripts loader */
 
 add_action('wp_footer', 'send_marker_jason_to_js'); // Show map for listings with markers
-//add_action('wp_print_scripts', 'send_marker_jason_to_js', 200); // Show map for listings with markers
 
 
 add_action('admin_footer', 'geodir_localize_all_js_msg');

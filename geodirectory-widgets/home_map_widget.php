@@ -22,7 +22,7 @@ class geodir_homepage_map extends WP_Widget
 	 * @since 1.0.0
      * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
 	 */
-    function __construct() {
+    public function __construct() {
         $widget_ops = array('classname' => 'widget Google Map in Home page', 'description' => __('Google Map in Home page. It will show you google map V3 for Home page with category checkbox selection.', 'geodirectory'));
         parent::__construct(
             'geodir_map_v3_home_map', // Base ID
@@ -58,7 +58,6 @@ class geodir_homepage_map extends WP_Widget
         /** This action is documented in geodirectory_shortcodes.php */
         $scrollwheel = empty($instance['scrollwheel']) ? '0' : apply_filters('widget_scrollwheel', $instance['scrollwheel']);
 
-        //$str = createRandomString();
         $map_args = array();
         $map_args['map_canvas_name'] = str_replace('-', '_', $args['widget_id']); //'home_map_canvas'.$str ;
         $map_args['width'] = $width;

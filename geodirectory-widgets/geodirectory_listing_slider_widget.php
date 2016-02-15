@@ -21,7 +21,7 @@ class geodir_listing_slider_widget extends WP_Widget
 	 * @since 1.0.0
      * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
 	 */
-    function __construct() {
+    public function __construct() {
         $widget_ops = array('classname' => 'geodir_listing_slider_view', 'description' => __('GD > Listing Slider', 'geodirectory'));
         parent::__construct(
             'listing_slider_view', // Base ID
