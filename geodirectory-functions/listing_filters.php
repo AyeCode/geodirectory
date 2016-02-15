@@ -525,7 +525,9 @@ function geodir_posts_order_by_custom_sort($orderby, $sort_by, $table)
 
 
                 default:
-                    $orderby = $table . "." . $sort_by . " " . $order . ", ";
+                    if (geodir_column_exist($table, $sort_by)) {
+						$orderby = $table . "." . $sort_by . " " . $order . ", ";
+					}
                     break;
 
             endswitch;
