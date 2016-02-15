@@ -2172,22 +2172,21 @@ if (!function_exists('geodir_show_listing_info')) {
 	 * @package GeoDirectory
      * @global object $wpdb WordPress Database object.
      * @global object $post The current post object.
+     * @global bool $send_to_friend True if send to friend link already rendered. Otherwise false.
+     *
 	 * @param string $fields_location In which page you are going to place this custom fields?. Ex: listing, detail etc.
 	 * @return string Returns listing info html.
 	 */
-	function geodir_show_listing_info($fields_location = '')
-    {
-
-        global $post, $preview, $wpdb;
-
+	function geodir_show_listing_info($fields_location = '') {
+        global $post, $preview, $wpdb, $send_to_friend;
 
         $payment_info = array();
         $package_info = array();
 
         $package_info = geodir_post_package_info($package_info, $post);
-        //return;
         $post_package_id = $package_info->pid;
         $p_type = (geodir_get_current_posttype()) ? geodir_get_current_posttype() : $post->post_type;
+		$send_to_friend = false;
 
         ob_start();
         $fields_info = geodir_post_custom_fields($post_package_id, 'default', $p_type, $fields_location);
@@ -2821,13 +2820,13 @@ if (!function_exists('geodir_show_listing_info')) {
                         endif;
                         break;
                     case 'email':
-					
 						if ($type['htmlvar_name'] == 'geodir_email' && !(geodir_is_page('detail') || geodir_is_page('preview'))) {
 							continue; // Remove Send Enquiry | Send To Friend from listings page
 						}
                        
 					    if ($type['htmlvar_name'] == 'geodir_email' && ((isset($package_info->sendtofriend) && $package_info->sendtofriend) || $post->{$type['htmlvar_name']})) {
-						    $b_send_inquiry = '';
+						    $send_to_friend = true;
+							$b_send_inquiry = '';
                             $b_sendtofriend = '';
 
                             $html = '';
@@ -2863,8 +2862,9 @@ if (!function_exists('geodir_show_listing_info')) {
                                 $seperator = ' | ';
                             }
 
-                            if (isset($package_info->sendtofriend) && $package_info->sendtofriend)
+                            if (isset($package_info->sendtofriend) && $package_info->sendtofriend) {
                                 $html .= $seperator . '<a href="javascript:void(0);" class="' . $b_sendtofriend . '">' . SEND_TO_FRIEND . '</a>';
+							}
 
                             $html .= '</span></div>';
 
