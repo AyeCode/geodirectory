@@ -408,12 +408,16 @@ jQuery(document).ready(function () {
     jQuery('.gd_comment_replaylink a').bind('click', function () {
         jQuery('#commentform #err_no_rating').remove();
         jQuery('#commentform .gd_rating').hide();
+		jQuery('#commentform .br-wrapper.br-theme-fontawesome-stars').hide();
+		jQuery('#commentform #geodir_overallrating').val('0');
         jQuery('#respond .form-submit input#submit').val(geodir_all_js_msg.gd_cmt_btn_post_reply);
         jQuery('#respond .comment-form-comment label').html(geodir_all_js_msg.gd_cmt_btn_reply_text);
     });
     jQuery('.gd-cancel-replaylink a').bind('click', function () {
         jQuery('#commentform #err_no_rating').remove();
         jQuery('#commentform .gd_rating').show();
+		jQuery('#commentform .br-wrapper.br-theme-fontawesome-stars').show();
+		jQuery('#commentform #geodir_overallrating').val('0');
         jQuery('#respond .form-submit input#submit').val(geodir_all_js_msg.gd_cmt_btn_post_review);
         jQuery('#respond .comment-form-comment label').html(geodir_all_js_msg.gd_cmt_btn_review_text);
     });

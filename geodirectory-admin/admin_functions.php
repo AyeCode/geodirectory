@@ -132,8 +132,14 @@ if (!function_exists('geodir_admin_scripts')) {
         wp_register_script('geodirectory-goMap-script', geodir_plugin_url() . '/geodirectory-assets/js/goMap.js', array(), GEODIRECTORY_VERSION);
         wp_enqueue_script('geodirectory-goMap-script');
 
-        wp_register_script('geodir-jRating-js', geodir_plugin_url() . '/geodirectory-assets/js/jRating.jquery.js', array(), GEODIRECTORY_VERSION);
-        wp_enqueue_script('geodir-jRating-js');
+		// font awesome rating script
+		if (get_option('geodir_reviewrating_enable_font_awesome')) {
+			wp_register_script('geodir-barrating-js', geodir_plugin_url() . '/geodirectory-assets/js/jquery.barrating.min.js', array(), GEODIRECTORY_VERSION);
+			wp_enqueue_script('geodir-barrating-js');
+		} else { // default rating script
+			wp_register_script('geodir-jRating-js', geodir_plugin_url() . '/geodirectory-assets/js/jRating.jquery.js', array(), GEODIRECTORY_VERSION);
+			wp_enqueue_script('geodir-jRating-js');
+		}
 
         wp_register_script('geodir-on-document-load', geodir_plugin_url() . '/geodirectory-assets/js/on_document_load.js', array(), GEODIRECTORY_VERSION);
         wp_enqueue_script('geodir-on-document-load');

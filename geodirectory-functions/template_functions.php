@@ -571,3 +571,80 @@ function geodir_show_listing_post_excerpt($display, $view, $post) {
 	}
 	return $display;
 }
+
+/**
+ * Replace the font awesome rating icons in comment form.
+ *
+ * @since 1.5.7
+ * @package GeoDirectory
+ *
+ * @param string $html Rating icons html.
+ * @param array $star_texts Rating icons labels.
+ * @param int|null $default Default rating value to get selected.
+ * @return string Rating icons html content.
+ */
+function geodir_font_awesome_rating_form_html($html, $star_texts = array(), $default = '') {
+	if (get_option('geodir_reviewrating_enable_font_awesome') == '1') {
+		$html = '<select class="gd-fa-rating">';
+		$html .= '<option value=""></option>';
+		if (!empty($star_texts) && is_array($star_texts)) {
+			foreach ($star_texts as $i => $text) {
+				$html .= '<option ' . selected((int)($i + 1), (int)$default, false) . ' value="' . (int)($i + 1) . '">' . $text . '</option>';
+			}
+		} else {
+			$html .= '<option value="1">1</option>';
+			$html .= '<option value="2">2</option>';
+			$html .= '<option value="3">3</option>';
+			$html .= '<option value="4">4</option>';
+			$html .= '<option value="5">5</option>';
+		}
+		$html .= '</select>';
+	}
+
+	return $html;
+}
+
+/**
+ * Display the font awesome rating icons in place of default rating images.
+ *
+ * @since 1.5.7
+ * @package GeoDirectory
+ *
+ * @param string $html Rating icons html.
+ * @param float $rating Current rating value.
+ * @param int $star_count Total rating stars. Default 5.
+ * @return string Rating icons html content.
+ */
+function geodir_font_awesome_rating_stars_html($html, $rating, $star_count = 5) {
+	if (get_option('geodir_reviewrating_enable_font_awesome') == '1') {
+		$rating = min($rating, $star_count);
+		$full_stars = floor( $rating );
+		$half_stars = ceil( $rating - $full_stars );
+		$empty_stars = $star_count - $full_stars - $half_stars;
+		
+		$html = '<div class="gd-star-rating gd-fa-star-rating">';
+		$html .= str_repeat( '<i class="fa fa-star gd-full-star"></i>', $full_stars );
+		$html .= str_repeat( '<i class="fa fa-star-o fa-star-half-full gd-half-star"></i>', $half_stars );
+		$html .= str_repeat( '<i class="fa fa-star-o gd-empty-star"></i>', $empty_stars);
+		$html .= '</div>';
+	}
+
+	return $html;
+}
+
+/**
+ * Adds the style for the font awesome rating icons.
+ *
+ * @since 1.5.7
+ * @package GeoDirectory
+ */
+function geodir_font_awesome_rating_css() {
+	// Font awesome rating style
+	if (get_option('geodir_reviewrating_enable_font_awesome') == '1') {
+		$full_color = get_option('geodir_reviewrating_fa_full_rating_color', '#757575');
+		if ($full_color != '#757575') {
+			echo '<style type="text/css">.br-theme-fontawesome-stars .br-widget a.br-active:after,.br-theme-fontawesome-stars .br-widget a.br-selected:after,
+			.gd-star-rating i.fa {color:' . stripslashes($full_color) . '!important;</style>';
+		}
+	}
+}
