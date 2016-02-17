@@ -67,16 +67,29 @@ function geodir_comment_add_meta_box($comment)
  */
 function geodir_comment_rating_meta($comment)
 {
-    if ($rating = geodir_get_commentoverall($comment->comment_ID)) {
+    $post_type = get_post_type($comment->comment_post_ID);
+	if (in_array($post_type, (array)geodir_get_posttypes()) && (int)$comment->comment_parent == 0) {
+		$rating = geodir_get_commentoverall($comment->comment_ID);
+		
+		if ((int)get_option('geodir_reviewrating_enable_font_awesome') == 1) {
+			$star_texts = array();
+			$star_texts[] = __('Terrible', 'geodirectory');
+			$star_texts[] = __('Poor', 'geodirectory');
+			$star_texts[] = __('Average', 'geodirectory');
+			$star_texts[] = __('Very Good', 'geodirectory');
+			$star_texts[] = __('Excellent', 'geodirectory');
+			
+			echo geodir_font_awesome_rating_form_html('', $star_texts, $rating);
+		} else {			
+			if ($rating) {
+				echo '<div class="gd_rating" data-average="' . $rating . '" data-id="5">';
 
-        echo '<div class="gd_rating" data-average="' . $rating . '" data-id="5"></div>
-    		<input type="hidden" id="geodir_overallrating" name="geodir_overallrating" value="' . $rating . '"  />';
-
-
-    } else {
-        echo '<div class="gd_rating" data-average="0" data-id="5"></div>
-    		<input type="hidden" id="geodir_overallrating" name="geodir_overallrating" value="0"  />';
-    }
+			} else {
+				echo '<div class="gd_rating" data-average="0" data-id="5"></div>';
+			}
+		}
+		echo '<input type="hidden" id="geodir_overallrating" name="geodir_overallrating" value="' . $rating . '"  />';
+	}
 }
 
 
@@ -99,7 +112,14 @@ function geodir_comment_rating_fields()
     $post_types = geodir_get_posttypes();
 
     if (in_array($post->post_type, $post_types)) {
-        $gd_rating_html = apply_filters('gd_rating_form_html', '<div class="gd_rating" data-average="0" data-id="5"></div>');
+        $star_texts = array();
+		$star_texts[] = __('Terrible', 'geodirectory');
+		$star_texts[] = __('Poor', 'geodirectory');
+		$star_texts[] = __('Average', 'geodirectory');
+		$star_texts[] = __('Very Good', 'geodirectory');
+		$star_texts[] = __('Excellent', 'geodirectory');
+		
+		$gd_rating_html = apply_filters('gd_rating_form_html', '<div class="gd_rating" data-average="0" data-id="5"></div>', $star_texts);
         echo $gd_rating_html;
         ?>
         <input type="hidden" id="geodir_overallrating" name="geodir_overallrating" value="0"/><?php
@@ -149,31 +169,31 @@ add_action('comment_post', 'geodir_save_rating');
  * @package GeoDirectory
  * @param int $comment The comment ID.
  * @global object $wpdb WordPress Database object.
- * @global object $post The current post object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @global int $user_ID The current user ID.
  */
 function geodir_save_rating($comment = 0)
 {
-    global $wpdb, $user_ID, $post, $plugin_prefix;
+    global $wpdb, $user_ID, $plugin_prefix;
 
     $comment_info = get_comment($comment);
 
     $post_id = $comment_info->comment_post_ID;
     $status = $comment_info->comment_approved;
     $rating_ip = getenv("REMOTE_ADDR");
-
-    $post_details = $wpdb->get_row("SELECT * FROM " . $plugin_prefix . $post->post_type . "_detail WHERE post_id =" . $post->ID);
+	
+    $post = geodir_get_post_info($post_id);
 
     if ($post->post_status == 'publish') {
         $post_status = '1';
     } else {
         $post_status = '0';
     }
+	
     if (isset($_REQUEST['geodir_overallrating'])) {
-
         $overall_rating = $_REQUEST['geodir_overallrating'];
-        if (isset($comment_info->comment_parent) && (int)$comment_info->comment_parent == 0) {
+        
+		if (isset($comment_info->comment_parent) && (int)$comment_info->comment_parent == 0) {
             $overall_rating = $overall_rating > 0 ? $overall_rating : '0';
 
             $sqlqry = $wpdb->prepare("INSERT INTO " . GEODIR_REVIEW_TABLE . " SET
@@ -194,7 +214,7 @@ function geodir_save_rating($comment = 0)
 					post_latitude	= %s,
 					comment_content	= %s 
 					",
-                array($post_id, $post->post_type, $post->post_title, $user_ID, $comment, $rating_ip, $overall_rating, $status, $post_status, date("Y-m-d H:i:s"), $post_details->post_city, $post_details->post_region, $post_details->post_country,$post_details->post_latitude,$post_details->post_longitude,$comment_info->comment_content)
+                array($post_id, $post->post_type, $post->post_title, $user_ID, $comment, $rating_ip, $overall_rating, $status, $post_status, date_i18n('Y-m-d H:i:s', current_time('timestamp')), $post->post_city, $post->post_region, $post->post_country, $post->post_latitude, $post->post_longitude, $comment_info->comment_content)
             );
 
             $wpdb->query($sqlqry);
@@ -223,7 +243,6 @@ function geodir_save_rating($comment = 0)
             }
         }
     }
-
 }
 
 
@@ -913,7 +932,7 @@ function geodir_get_rating_stars($rating, $post_id, $small = false)
 			$r_html = '<div class="geodir-rating" style="' . $attach_style . '"><div class="gd_rating_show" data-average="' . $rating . '" data-id="' . $post_id . '"><div class="geodir_RatingAverage" style="width: ' . $a_rating . '%;"></div><div class="geodir_Star">' . $rating_img . $rating_img . $rating_img . $rating_img . $rating_img . '</div></div></div>';
 		}
     }
-    return apply_filters('geodir_get_rating_stars_html', $r_html, $rating);
+    return apply_filters('geodir_get_rating_stars_html', $r_html, $rating, 5);
 }
 
 /**

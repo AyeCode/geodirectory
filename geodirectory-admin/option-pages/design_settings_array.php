@@ -577,6 +577,20 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
         'std' => '0',
         'value' => geodir_plugin_url() . '/geodirectory-assets/images/stars.png'// Default value to show home top section
     ),
+	array(
+		'name' => __('Enable Font Awesome', 'geodirectory'),
+		'desc' => __('When enabled all rating images will be using font awesome rating icons as images.', 'geodirectory' ),
+		'id' => 'geodir_reviewrating_enable_font_awesome',
+		'type' => 'checkbox',
+		'std' => '0'
+	),
+	array(
+		'name' => __('Rating Icon Color', 'geodirectory'),
+		'desc' => __('Enter hexadecimal color for font awesome rating icons. Default: #757575', 'geodirectory'),
+		'id' => 'geodir_reviewrating_fa_full_rating_color',
+		'type' => 'color',
+		'std' => '#757575'
+	),
 
     array('type' => 'sectionend', 'id' => 'geodir_detail_page_tab_settings'),
 

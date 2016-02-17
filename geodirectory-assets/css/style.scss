@@ -1790,3 +1790,69 @@ div#jquery-lightbox {
 	color: #fff;
 	line-height: 20px;
 }
+.br-theme-fontawesome-stars .br-widget {
+    height: 28px;
+    white-space: nowrap;
+    line-height: 35px
+}
+
+.br-theme-fontawesome-stars .br-widget a {
+    font: normal normal normal 18px/1 FontAwesome;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    text-decoration: none;
+    margin-right: 2px
+}
+.br-theme-fontawesome-stars .br-widget a,
+.br-theme-fontawesome-stars .br-widget a:hover,
+.br-theme-fontawesome-stars .br-widget a:active {
+    outline: 0;
+}
+.br-theme-fontawesome-stars .br-widget a:after {
+    content: '\f005';
+    color: #dddddd
+}
+
+.br-theme-fontawesome-stars .br-widget a.br-active:after {
+    color: #757575
+}
+
+.br-theme-fontawesome-stars .br-widget a.br-selected:after {
+    color: #757575
+}
+
+.br-theme-fontawesome-stars .br-widget .br-current-rating {
+    display: inline-block;
+	margin-left: 10px;
+}
+.gd-rate-category .br-theme-fontawesome-stars {
+	margin-top: 3px;
+}
+
+@media print {
+    .br-theme-fontawesome-stars .br-widget a:after {
+        content: '\f006';
+        color: black
+    }
+
+    .br-theme-fontawesome-stars .br-widget a.br-active:after, .br-theme-fontawesome-stars .br-widget a.br-selected:after {
+        content: '\f005';
+        color: black
+    }
+}
+.gd-star-rating {
+    max-width: 115px;
+    font-size: 20px;
+    margin-right: 5px;
+}
+.gd-star-rating i.fa {
+    color: #757575;
+}
+
+#comments .gdreview_section .comment_overall {
+    margin: 7px 0 6px 0;
+}
+.gd-star-rating.gd-fa-star-rating i.fa {
+	font-size: 20px;
+    margin-right: 2px;
+}

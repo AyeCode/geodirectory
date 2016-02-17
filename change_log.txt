@@ -34,6 +34,7 @@ Not able to create new custom field with type checkbox if default value entered 
 GeoDirectory Session class added to manage sessions - ADDED
 Deleting custom field not deletes the field from sorting fields table - FIXED
 Address field sort option removed - CHANGED
+Font Awesome support added for rating images - ADDED
 
 v1.5.6
 In add listing form sub-categories are no longer showing in hierarchy for checkbox display type - FIXED

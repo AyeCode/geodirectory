@@ -33,41 +33,56 @@ function addToFavourite(post_id, action) {
 }
 
 jQuery(document).ready(function () {
+    if (geodir_all_js_msg.fa_rating) { // font awesome rating
+		jQuery('.gd-fa-rating').barrating({
+			theme: 'fontawesome-stars',
+			onSelect: function(value, text, event) {
+				if (geodir_all_js_msg.reviewrating) {
+					if (jQuery(this.$elem).closest('form').attr('id') == 'post') {
+						jQuery(this.$elem).closest('.br-theme-fontawesome-stars').parent().find('[name^=geodir_rating]').val(value);
+					} else {
+						jQuery(this.$elem).parent().parent().find('.geodir_reviewratings_current_rating').val(value);
+					}
+				} else {
+					jQuery("#geodir_overallrating").val(value);
+				}
+			}
+		});
+	} else { // default rating
+		jQuery('.gd_rating').jRating({
+			/** String vars **/
+			//bigStarsPath : geodir_all_js_msg.geodir_plugin_url+'/geodirectory-assets/images/stars.png',
+			bigStarsPath: geodir_all_js_msg.geodir_default_rating_star_icon,
+			smallStarsPath: geodir_all_js_msg.geodir_plugin_url + '/geodirectory-assets/images/small.png',
+			phpPath: geodir_all_js_msg.geodir_plugin_url + '/jRating.php',
+			type: 'big', // can be set to 'small' or 'big'
 
-    jQuery('.gd_rating').jRating({
-        /** String vars **/
-        //bigStarsPath : geodir_all_js_msg.geodir_plugin_url+'/geodirectory-assets/images/stars.png',
-        bigStarsPath: geodir_all_js_msg.geodir_default_rating_star_icon,
-        smallStarsPath: geodir_all_js_msg.geodir_plugin_url + '/geodirectory-assets/images/small.png',
-        phpPath: geodir_all_js_msg.geodir_plugin_url + '/jRating.php',
-        type: 'big', // can be set to 'small' or 'big'
+			/** Boolean vars **/
+			step: true, // if true,  mouseover binded star by star,
+			isDisabled: false,
+			showRateInfo: true,
+			canRateAgain: true,
 
-        /** Boolean vars **/
-        step: true, // if true,  mouseover binded star by star,
-        isDisabled: false,
-        showRateInfo: true,
-        canRateAgain: true,
+			/** Integer vars **/
+			length: 5, // number of star to display
+			decimalLength: 0, // number of decimals.. Max 3, but you can complete the function 'getNote'
+			rateMax: 5, // maximal rate - integer from 0 to 9999 (or more)
+			rateInfosX: -45, // relative position in X axis of the info box when mouseover
+			rateInfosY: 5, // relative position in Y axis of the info box when mouseover
+			nbRates: 100,
 
-        /** Integer vars **/
-        length: 5, // number of star to display
-        decimalLength: 0, // number of decimals.. Max 3, but you can complete the function 'getNote'
-        rateMax: 5, // maximal rate - integer from 0 to 9999 (or more)
-        rateInfosX: -45, // relative position in X axis of the info box when mouseover
-        rateInfosY: 5, // relative position in Y axis of the info box when mouseover
-        nbRates: 100,
-
-        /** Functions **/
-        onSuccess: function (element, rate) {
-            jQuery('#geodir_overallrating').val(rate);
-        },
-        onTouchstart: function (element, rate) {
-            jQuery('#geodir_overallrating').val(rate);
-        },
-        onError: function () {
-            alert(geodir_all_js_msg.rating_error_msg);
-        }
-    });
-
+			/** Functions **/
+			onSuccess: function (element, rate) {
+				jQuery('#geodir_overallrating').val(rate);
+			},
+			onTouchstart: function (element, rate) {
+				jQuery('#geodir_overallrating').val(rate);
+			},
+			onError: function () {
+				alert(geodir_all_js_msg.rating_error_msg);
+			}
+		});
+	}
 });
 
 jQuery(document).ready(function () {
@@ -134,4 +149,3 @@ jQuery(document).ready(function () {
 
     });
 });
-
