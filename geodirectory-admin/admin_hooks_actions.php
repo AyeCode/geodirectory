@@ -403,7 +403,6 @@ function geodir_manage_selected_fields($sub_tab)
     }
 }
 
-
 /**
  * Adds admin html for sorting options available fields.
  *
@@ -414,50 +413,38 @@ function geodir_manage_selected_fields($sub_tab)
 function geodir_sorting_options_available_fields()
 {
     global $wpdb;
-    $listing_type = ($_REQUEST['listing_type'] != '') ? $_REQUEST['listing_type'] : 'gd_place';
+    $listing_type = ($_REQUEST['listing_type'] != '') ? sanitize_text_field($_REQUEST['listing_type']) : 'gd_place';
     ?>
     <input type="hidden" name="listing_type" id="new_post_type" value="<?php echo $listing_type;?>"/>
-    <input type="hidden" name="manage_field_type" class="manage_field_type" value="<?php echo $_REQUEST['subtab']; ?>"/>
+    <input type="hidden" name="manage_field_type" class="manage_field_type" value="<?php echo sanitize_text_field($_REQUEST['subtab']); ?>"/>
     <ul>
-
-        <?php
-
+    <?php
         $sort_options = geodir_get_custom_sort_options($listing_type);
-
-
+        
         foreach ($sort_options as $key => $val) {
-			$val = stripslashes_deep($val); // strip slashes
+            $val = stripslashes_deep($val); // strip slashes
 
             $check_html_variable = $wpdb->get_var(
                 $wpdb->prepare(
-                    "select htmlvar_name from " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " where htmlvar_name = %s and post_type = %s and field_type=%s ",
+                    "SELECT htmlvar_name FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE htmlvar_name = %s AND post_type = %s AND field_type=%s",
                     array($val['htmlvar_name'], $listing_type, $val['field_type'])
                 )
             );
-
-            $display = '';
-            if ($check_html_variable)
-                $display = ' style="display:none;"';
-
-
+            
+            $display = $check_html_variable ? ' style="display:none;"' : '';
             ?>
             <li <?php echo $display;?>>
             <a id="gt-<?php echo $val['field_type'];?>-_-<?php echo $val['htmlvar_name'];?>"
                title="<?php echo $val['site_title'];?>"
                class="gt-draggable-form-items gt-<?php echo $val['field_type'];?> geodir-sort-<?php echo $val['htmlvar_name'];?>"
                href="javascript:void(0);"><b></b><?php _e($val['site_title'], 'geodirectory');?></a>
-            </li><?php
-
+            </li>
+            <?php
         }
-
-        ?>
-
+    ?>
     </ul>
-
-<?php
-
+    <?php
 }
-
 
 /**
  * Adds admin html for sorting options selected fields.
@@ -468,21 +455,14 @@ function geodir_sorting_options_available_fields()
  */
 function geodir_sorting_options_selected_fields()
 {
-
-    $listing_type = ($_REQUEST['listing_type'] != '') ? $_REQUEST['listing_type'] : 'gd_place';
+    $listing_type = ($_REQUEST['listing_type'] != '') ? sanitize_text_field($_REQUEST['listing_type']) : 'gd_place';
     ?>
-
-    <input type="hidden" name="manage_field_type" class="manage_field_type" value="<?php echo $_REQUEST['subtab']; ?>"/>
-
-    <ul class="core"><?php global $wpdb;
-
-
-        $fields = $wpdb->get_results(
-            $wpdb->prepare(
-                "select * from " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " where post_type = %s AND field_type != 'address' order by sort_order asc",
-                array($listing_type)
-            )
-        );
+    <input type="hidden" name="manage_field_type" class="manage_field_type" value="<?php echo sanitize_text_field($_REQUEST['subtab']); ?>"/>
+    <ul class="core">
+    <?php 
+        global $wpdb;
+        
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE post_type = %s AND field_type != 'address' ORDER BY sort_order ASC", array($listing_type)));
 
         if (!empty($fields)) {
             foreach ($fields as $field) {
@@ -496,11 +476,10 @@ function geodir_sorting_options_selected_fields()
                 geodir_custom_sort_field_adminhtml($field_type, $result_str, $field_ins_upd, $default);
             }
         }
-        ?></ul>
-<?php
-
+    ?>
+    </ul>
+    <?php
 }
-
 
 /**
  * Adds admin html for custom fields available fields.
@@ -510,14 +489,12 @@ function geodir_sorting_options_selected_fields()
  */
 function geodir_custom_available_fields()
 {
-
-    $listing_type = ($_REQUEST['listing_type'] != '') ? $_REQUEST['listing_type'] : 'gd_place';
+    $listing_type = ($_REQUEST['listing_type'] != '') ? sanitize_text_field($_REQUEST['listing_type']) : 'gd_place';
     ?>
     <input type="hidden" name="listing_type" id="new_post_type" value="<?php echo $listing_type;?>"/>
-    <input type="hidden" name="manage_field_type" class="manage_field_type" value="<?php echo $_REQUEST['subtab']; ?>"/>
+    <input type="hidden" name="manage_field_type" class="manage_field_type" value="<?php echo sanitize_text_field($_REQUEST['subtab']); ?>"/>
     <ul class="full">
-        <li><a id="gt-fieldset" class="gt-draggable-form-items gt-fieldset"
-               href="javascript:void(0);"><?php _e('Fieldset', 'geodirectory');?></a></li>
+        <li><a id="gt-fieldset" class="gt-draggable-form-items gt-fieldset" href="javascript:void(0);"><?php _e('Fieldset', 'geodirectory');?></a></li>
     </ul>
     <ul>
         <li><a id="gt-text" class="gt-draggable-form-items gt-text"
@@ -564,19 +541,13 @@ function geodir_custom_available_fields()
  */
 function geodir_custom_selected_fields()
 {
-
-    $listing_type = ($_REQUEST['listing_type'] != '') ? $_REQUEST['listing_type'] : 'gd_place';
+    $listing_type = ($_REQUEST['listing_type'] != '') ? sanitize_text_field($_REQUEST['listing_type']) : 'gd_place';
     ?>
-    <input type="hidden" name="manage_field_type" class="manage_field_type" value="<?php echo $_REQUEST['subtab']; ?>"/>
-    <ul class="core"><?php global $wpdb;
-
-
-        $fields = $wpdb->get_results(
-            $wpdb->prepare(
-                "select * from " . GEODIR_CUSTOM_FIELDS_TABLE . " where post_type = %s order by sort_order asc",
-                array($listing_type)
-            )
-        );
+    <input type="hidden" name="manage_field_type" class="manage_field_type" value="<?php echo sanitize_text_field($_REQUEST['subtab']); ?>"/>
+    <ul class="core">
+    <?php 
+        global $wpdb;
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE post_type = %s ORDER BY sort_order ASC", array($listing_type)));
 
         if (!empty($fields)) {
             foreach ($fields as $field) {
@@ -772,14 +743,14 @@ function geodir_admin_ajax_handler()
         switch ($geodir_admin_ajax_action) {
             case 'diagnosis' :
                 if (isset($_REQUEST['diagnose_this']) && $_REQUEST['diagnose_this'] != '')
-                    $diagnose_this = $_REQUEST['diagnose_this'];
+                    $diagnose_this = sanitize_text_field($_REQUEST['diagnose_this']);
                 call_user_func('geodir_diagnose_' . $diagnose_this);
                 exit();
                 break;
 
             case 'diagnosis-fix' :
                 if (isset($_REQUEST['diagnose_this']) && $_REQUEST['diagnose_this'] != '')
-                    $diagnose_this = $_REQUEST['diagnose_this'];
+                    $diagnose_this = sanitize_text_field($_REQUEST['diagnose_this']);
                 call_user_func('geodir_diagnose_' . $diagnose_this);
                 exit();
                 break;

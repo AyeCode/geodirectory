@@ -224,15 +224,14 @@ function geodir_ajax_handler() {
         include_once(geodir_plugin_path() . '/geodirectory-functions/map-functions/get_markers.php');
     }
 
-
     if (isset($_REQUEST['geodir_ajax']) && $_REQUEST['geodir_ajax'] == 'favorite') {
         if (is_user_logged_in()) {
             switch ($_REQUEST['ajax_action']):
                 case "add" :
-                    geodir_add_to_favorite($_REQUEST['pid']);
+                    geodir_add_to_favorite((int)$_REQUEST['pid']);
                     break;
                 case "remove" :
-                    geodir_remove_from_favorite($_REQUEST['pid']);
+                    geodir_remove_from_favorite((int)$_REQUEST['pid']);
                     break;
             endswitch;
         } else {
@@ -245,7 +244,7 @@ function geodir_ajax_handler() {
 
         $is_current_user_owner = true;
         if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
-            $is_current_user_owner = geodir_listing_belong_to_current_user($_REQUEST['pid']);
+            $is_current_user_owner = geodir_listing_belong_to_current_user((int)$_REQUEST['pid']);
         }
 
         $request = $gd_session->get('listing');

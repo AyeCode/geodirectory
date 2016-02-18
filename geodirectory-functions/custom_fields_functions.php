@@ -1268,13 +1268,12 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
 
         if ($type == 'fieldset') {
             $fieldset_id = (int)$val['id'];
-			$fieldset_field_class = 'gd-fieldset-' . $fieldset_id;
-			?><h5 id="geodir_fieldset_<?php echo $fieldset_id;?>" class="geodir-fieldset-row" gd-fieldset="<?php echo $fieldset_id;?>"><?php echo $site_title;?>
-            <?php if ($admin_desc != '') echo '<small>( ' . $admin_desc . ' )</small>';?>
-            </h5><?php
-
-        } elseif ($type == 'address') {
-
+            $fieldset_field_class = 'gd-fieldset-' . $fieldset_id;
+            ?>
+            <h5 id="geodir_fieldset_<?php echo $fieldset_id;?>" class="geodir-fieldset-row" gd-fieldset="<?php echo $fieldset_id;?>"><?php echo $site_title;?>
+            <?php if ($admin_desc != '') echo '<small>( ' . $admin_desc . ' )</small>';?></h5>
+            <?php
+        } else if ($type == 'address') {
             $prefix = $name . '_';
 
             ($site_title != '') ? $address_title = $site_title : $address_title = geodir_ucwords($prefix . ' address');
@@ -3393,15 +3392,14 @@ if (!function_exists('geodir_plupload_action')) {
         return $upload;
     }
 
-	/**
-	 * Handles place file and image upload.
-	 *
-	 * @since 1.0.0
-	 * @package GeoDirectory
-	 */
-	function geodir_plupload_action()
+    /**
+     * Handles place file and image upload.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     */
+    function geodir_plupload_action()
     {
-
         // check ajax noonce
         $imgid = $_POST["imgid"];
 
@@ -3412,15 +3410,11 @@ if (!function_exists('geodir_plupload_action')) {
 
         // change file orinetation if needed
         $fixed_file = geodir_exif($_FILES[$imgid . 'async-upload']);
-        //print_r(wp_upload_dir());
-        //print_r($fixed_file);
-        //echo '###'.$fixed_file;
 
         // handle file upload
         $status = wp_handle_upload($fixed_file, array('test_form' => true, 'action' => 'plupload_action'));
         // remove handle custom file uploaddir
         remove_filter('upload_dir', 'geodir_upload_dir');
-
 
         if(!isset($status['url']) && isset($status['error'])){
             print_r($status);
@@ -3860,21 +3854,19 @@ if (!function_exists('geodir_custom_sort_field_adminhtml')) {
         global $wpdb;
         $cf = $result_str;
         if (!is_object($cf)) {
-
-            $field_info = $wpdb->get_row($wpdb->prepare("select * from " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " where id= %d", array($cf)));
-
+            $field_info = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE id = %d", array($cf)));
         } else {
             $field_info = $cf;
             $result_str = $cf->id;
         }
-		
-		$field_info = stripslashes_deep($field_info); // strip slashes
+        
+        $field_info = stripslashes_deep($field_info); // strip slashes
 
         if (!isset($field_info->post_type)) {
-            $post_type = $_REQUEST['listing_type'];
-        } else
+            $post_type = sanitize_text_field($_REQUEST['listing_type']);
+        } else {
             $post_type = $field_info->post_type;
-
+        }
 
         $field_types = explode('-_-', $field_type);
         $field_type = $field_types[0];
@@ -3885,25 +3877,22 @@ if (!function_exists('geodir_custom_sort_field_adminhtml')) {
             $site_title = isset($field_info->site_title) ? $field_info->site_title : '';
 
         if ($site_title == '') {
-
             $fields = geodir_get_custom_sort_options($post_type);
 
             foreach ($fields as $val) {
-				$val = stripslashes_deep($val); // strip slashes
+                $val = stripslashes_deep($val); // strip slashes
                 
-				if ($val['field_type'] == $field_type && $val['htmlvar_name'] == $htmlvar_name) {
+                if ($val['field_type'] == $field_type && $val['htmlvar_name'] == $htmlvar_name) {
                     $site_title = isset($val['site_title']) ? $val['site_title'] : '';
                 }
-
             }
-
         }
 
         if ($htmlvar_name == '')
             $htmlvar_name = isset($field_info->htmlvar_name) ? $field_info->htmlvar_name : '';
 
         $nonce = wp_create_nonce('custom_fields_' . $result_str);
-
+        
         ?>
         <li class="text" id="licontainer_<?php echo $result_str;?>">
             <div class="title title<?php echo $result_str;?> gt-fieldset"

@@ -358,6 +358,7 @@ function geodir_draw_map($map_args = array())
                     $country = $country != 'me' ? $country : '';
 					$region = $region != 'me' ? $region : '';
 					$city = $country != 'me' ? $city : '';
+                    $gd_neighbourhood = isset($_REQUEST['gd_neighbourhood']) ? sanitize_text_field($_REQUEST['gd_neighbourhood']) : '';
                     ?>
                     <input type="hidden" id="<?php echo $map_canvas_name;?>_location_enabled" value="1"/>
                     <input type="hidden" id="<?php echo $map_canvas_name;?>_country" name="gd_country"
@@ -367,9 +368,7 @@ function geodir_draw_map($map_args = array())
                     <input type="hidden" id="<?php echo $map_canvas_name;?>_city" name="gd_city"
                            value="<?php echo $city;?>"/>
                     <input type="hidden" id="<?php echo $map_canvas_name;?>_neighbourhood" name="gd_neighbourhood"
-                           value="<?php if (isset($_REQUEST['gd_neighbourhood'])) {
-                               echo $_REQUEST['gd_neighbourhood'];
-                           }?>"/>
+                           value="<?php echo $gd_neighbourhood;?>"/>
                 <?php } else { //end of location filter
                     ?>
                     <input type="hidden" id="<?php echo $map_canvas_name;?>_location_enabled" value="0"/>

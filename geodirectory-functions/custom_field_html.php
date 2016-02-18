@@ -18,7 +18,7 @@
 global $post_type;
 
 if (!isset($field_info->post_type)) {
-    $post_type = $_REQUEST['listing_type'];
+    $post_type = sanitize_text_field($_REQUEST['listing_type']);
 } else
     $post_type = $field_info->post_type;
 

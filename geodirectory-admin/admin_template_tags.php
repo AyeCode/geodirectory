@@ -78,7 +78,7 @@ if (!function_exists('geodir_admin_panel')) {
                                 $tab_link = geodir_getlink($tab_link, $args['request']);
 
                             if (isset($args['target']) && $args['target'] != '') {
-                                $tab_target = " target='" . $args['target'] . "' ";
+                                $tab_target = " target='" . sanitize_text_field($args['target']) . "' ";
                             } else
                                 $tab_target = '';
 
@@ -93,7 +93,7 @@ if (!function_exists('geodir_admin_panel')) {
                              * @see 'geodir_after_settings_tabs'
                              */
                             do_action('geodir_before_settings_tabs', $name);
-                            echo '<li ' . $tab_active . ' ><a href="' . $tab_link . '"  ' . $tab_target . ' >' . $label . '</a></li>';
+                            echo '<li ' . $tab_active . ' ><a href="' . esc_url($tab_link) . '"  ' . $tab_target . ' >' . sanitize_text_field($label) . '</a></li>';
                             /**
                              * Called after the individual settings tabs are output.
                              *
@@ -117,7 +117,6 @@ if (!function_exists('geodir_admin_panel')) {
                 </div>
                 <!--gd-left-nav ends here-->
 
-
                 <div class="gd-content-wrapper">
                     <div class="gd-tabs-main">
 
@@ -127,45 +126,37 @@ if (!function_exists('geodir_admin_panel')) {
                             $subtabs = $tabs[$current_tab]['subtabs'];
                         $form_action = '';
 
-                        if (!empty($subtabs)):?>
-
+                        if (!empty($subtabs)):
+                        ?>
                             <dl class="gd-tab-head">
                                 <?php
                                 foreach ($subtabs as $sub) {
-
                                     $subtab_active = '';
                                     if (isset($_REQUEST['subtab']) && $sub['subtab'] == $_REQUEST['subtab']) {
                                         $subtab_active = 'class="gd-tab-active"';
                                         $form_action = isset($sub['form_action']) ? $sub['form_action'] : '';
                                     }
 
-
                                     $sub_tabs_link = admin_url() . 'admin.php?page=geodirectory&tab=' . $current_tab . '&subtab=' . $sub['subtab'];
                                     if (isset($sub['request']) && is_array($sub['request']) && !empty($sub['request'])) {
-
                                         $sub_tabs_link = geodir_getlink($sub_tabs_link, $sub['request']);
-
                                     }
-
-
-                                    echo '<dd ' . $subtab_active . ' id="claim_listing"><a href="' . $sub_tabs_link . '" >' . $sub['label'] . '</a></dd>';
-
+                                    echo '<dd ' . $subtab_active . ' id="claim_listing"><a href="' . esc_url($sub_tabs_link) . '" >' . sanitize_text_field($sub['label']) . '</a></dd>';
                                 }
                                 ?>
                             </dl>
 
                         <?php endif; ?>
-
                         <div class="gd-tab-content <?php if (empty($subtabs)) {
                             echo "inner_contet_tabs";
                         } ?>">
                             <form method="post" id="mainform"
                                   class="geodir_optionform <?php echo $current_tab . ' '; ?><?php if (isset($sub['subtab'])) {
-                                      echo $sub['subtab'];
+                                      echo sanitize_text_field($sub['subtab']);
                                   } ?>" action="<?php echo $form_action; ?>" enctype="multipart/form-data">
                                 <input type="hidden" class="active_tab" name="active_tab"
                                        value="<?php if (isset($_REQUEST['active_tab'])) {
-                                           echo $_REQUEST['active_tab'];
+                                           echo sanitize_text_field($_REQUEST['active_tab']);
                                        } ?>"/>
                                 <?php wp_nonce_field('geodir-settings', '_wpnonce', true, true); ?>
                                 <?php wp_nonce_field('geodir-settings-' . $current_tab, '_wpnonce-' . $current_tab, true, true); ?>
@@ -186,7 +177,6 @@ if (!function_exists('geodir_admin_panel')) {
         </div>
         <script type="text/javascript">
             jQuery(window).load(function () {
-
                 // Subsubsub tabs
                 jQuery('ul.subsubsub li a:eq(0)').addClass('current');
                 jQuery('.subsubsub_section .section:gt(0)').hide();
@@ -199,9 +189,7 @@ if (!function_exists('geodir_admin_panel')) {
                      jQuery('#last_tab').val( jQuery(this).attr('href') );
                      return false;*/
                 });
-
-                <?php if (isset($_GET['subtab']) && $_GET['subtab']) echo 'jQuery("ul.subsubsub li a[href=#'.$_GET['subtab'].']").click();'; ?>
-
+                <?php if (isset($_GET['subtab']) && $_GET['subtab']) echo 'jQuery("ul.subsubsub li a[href=#' . sanitize_text_field($_GET['subtab']) . ']").click();'; ?>
                 // Countries
                 jQuery('select#geodirectory_allowed_countries').change(function () {
                     if (jQuery(this).val() == "specific") {

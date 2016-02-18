@@ -1679,7 +1679,7 @@ function geodir_show_detail_page_tabs()
 function geodir_exif($file)
 {
     //This line reads the EXIF data and passes it into an array
-    $file['file'] = $file['tmp_name'];
+    $file['file'] = sanitize_text_field($file['tmp_name']);
     if ($file['type'] == "image/jpg" || $file['type'] == "image/jpeg" || $file['type'] == "image/pjpeg") {
     } else {
         return $file;

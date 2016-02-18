@@ -3555,15 +3555,15 @@ function geodirectory_load_db_language() {
     $contents_head[] = "/**";
     $contents_head[] = " * Translate language string stored in database. Ex: Custom Fields";
     $contents_head[] = " *";
-    $contents_head[] = " * @since 1.4.2";
     $contents_head[] = " * @package GeoDirectory";
+    $contents_head[] = " * @since 1.4.2";
     $contents_head[] = " */";
     $contents_head[] = "";
     $contents_head[] = "// Language keys";
 
     $contents_foot = array();
     $contents_foot[] = "";
-    $contents_foot[] = "?>";
+    $contents_foot[] = "";
 
     $contents = implode(PHP_EOL, $contents_head);
 
@@ -4018,7 +4018,7 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
             }
         }elseif($gd_page=='add-listing'){
             $geodir_post_types = get_option('geodir_post_types');
-            $spt = esc_attr($_REQUEST['listing_type']);
+            $spt = sanitize_text_field($_REQUEST['listing_type']);
             if(!$spt){$spt='gd_place';}
             if(isset($geodir_post_types[$spt]['labels']['name'])){
                 $plural_name = __($geodir_post_types[$spt]['labels']['name'],'geodirectory');

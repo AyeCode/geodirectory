@@ -765,13 +765,11 @@ function gd_fix_address_detail_table_limit()
     if (!empty($all_postypes)) {
         foreach ($all_postypes as $key) {
             // update each GD CTP
-
-            @$wpdb->query("ALTER TABLE " . $wpdb->prefix . "geodir_" . $key . "_detail MODIFY post_city VARCHAR( 50 ) NULL,MODIFY post_region VARCHAR( 50 ) NULL,MODIFY post_country VARCHAR( 50 ) NULL");
-
-
-
+            try {
+                $wpdb->query("ALTER TABLE " . $wpdb->prefix . "geodir_" . $key . "_detail MODIFY post_city VARCHAR( 50 ) NULL,MODIFY post_region VARCHAR( 50 ) NULL,MODIFY post_country VARCHAR( 50 ) NULL");
+            } catch(Exception $e) {
+                error_log( 'Error: ' . $e->getMessage() );
+            }
         }
-
     }
 }
-

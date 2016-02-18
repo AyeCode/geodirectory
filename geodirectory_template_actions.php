@@ -646,7 +646,7 @@ function geodir_action_geodir_set_preview_post()
         return;
     }// bail if not previewing
 
-    $listing_type = isset($_REQUEST['listing_type']) ? $_REQUEST['listing_type'] : '';
+    $listing_type = isset($_REQUEST['listing_type']) ? sanitize_text_field($_REQUEST['listing_type']) : '';
 
     $fields_info = geodir_get_custom_fields_type($listing_type);
 
@@ -1002,7 +1002,7 @@ function geodir_action_details_slider()
 
     if ($preview) {
         $post_images = array();
-		if (isset($post->post_images) && !empty($post->post_images)) {
+        if (isset($post->post_images) && !empty($post->post_images)) {
             $post->post_images = trim($post->post_images, ",");
             $post_images = explode(",", $post->post_images);
         }
@@ -1014,7 +1014,9 @@ function geodir_action_details_slider()
         if (!empty($post_images)) {
             foreach ($post_images as $image) {
                 if (!empty($image)) {
-                    @list($width, $height) = getimagesize(trim($image));
+                    $sizes = getimagesize(trim($image));
+                    $width = !empty($sizes) && isset($sizes[0]) ? $sizes[0] : 0;
+                    $height = !empty($sizes) && isset($sizes[1]) ? $sizes[1] : 0;
 
                     if ($image && $width && $height) {
                         $image = (object)array('src' => $image, 'width' => $width, 'height' => $height);
@@ -1138,9 +1140,9 @@ function geodir_action_details_taxonomies()
                 if ($insert_term = term_exists($post_term, $post_type . '_tags')) {
                     $term = get_term_by('name', $post_term, $post_type . '_tags');
                 } else {
-                    $post_country = isset($_REQUEST['post_country']) && $_REQUEST['post_country'] != '' ? $_REQUEST['post_country'] : NULL;
-                    $post_region = isset($_REQUEST['post_region']) && $_REQUEST['post_region'] != '' ? $_REQUEST['post_region'] : NULL;
-                    $post_city = isset($_REQUEST['post_city']) && $_REQUEST['post_city'] != '' ? $_REQUEST['post_city'] : NULL;
+                    $post_country = isset($_REQUEST['post_country']) && $_REQUEST['post_country'] != '' ? sanitize_text_field($_REQUEST['post_country']) : NULL;
+                    $post_region = isset($_REQUEST['post_region']) && $_REQUEST['post_region'] != '' ? sanitize_text_field($_REQUEST['post_region']) : NULL;
+                    $post_city = isset($_REQUEST['post_city']) && $_REQUEST['post_city'] != '' ? sanitize_text_field($_REQUEST['post_city']) : NULL;
                     $match_country = $post_country && sanitize_title($post_term) == sanitize_title($post_country) ? true : false;
                     $match_region = $post_region && sanitize_title($post_term) == sanitize_title($post_region) ? true : false;
                     $match_city = $post_city && sanitize_title($post_term) == sanitize_title($post_city) ? true : false;
@@ -2024,7 +2026,7 @@ add_action('geodir_add_listing_page_title', 'geodir_action_add_listing_page_titl
 function geodir_action_add_listing_page_title()
 {
     if (isset($_REQUEST['listing_type']) && $_REQUEST['listing_type'] != '')
-        $listing_type = $_REQUEST['listing_type'];
+        $listing_type = sanitize_text_field($_REQUEST['listing_type']);
     /** This action is documented in geodirectory_template_actions.php */
     $class = apply_filters('geodir_page_title_class', 'entry-title fn');
     /** This action is documented in geodirectory_template_actions.php */
@@ -2134,7 +2136,7 @@ function geodir_action_add_listing_form()
         $kw_tags = $post->post_tags;
         $kw_tags = implode(",", wp_get_object_terms($post->ID, $listing_type . '_tags', array('fields' => 'names')));
     } else {
-        $listing_type = $_REQUEST['listing_type'];
+        $listing_type = sanitize_text_field($_REQUEST['listing_type']);
     }
 
     if ($current_user->ID != '0') {
@@ -2345,12 +2347,12 @@ function geodir_action_add_listing_form()
             $listing_type = $post->listing_type;
 
         } elseif (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
-            $post = geodir_get_post_info($_REQUEST['pid']);
+            $post = geodir_get_post_info((int)$_REQUEST['pid']);
             $listing_type = $post->post_type;
             $thumb_img_arr = geodir_get_images($_REQUEST['pid']);
 
         } else {
-            $listing_type = $_REQUEST['listing_type'];
+            $listing_type = sanitize_text_field($_REQUEST['listing_type']);
         }
 
 
