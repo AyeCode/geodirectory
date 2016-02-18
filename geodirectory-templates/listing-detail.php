@@ -109,7 +109,7 @@ if (!get_option('geodir_detail_sidebar_left_section')) {
 }
 
 
-###### WRAPPER CLOSE ######	
+###### WRAPPER CLOSE ######
 /** This action is documented in geodirectory-templates/add-listing.php */
 do_action('geodir_wrapper_close', 'details-page');
 
@@ -122,4 +122,4 @@ do_action('geodir_wrapper_close', 'details-page');
 do_action('geodir_sidebar_detail_bottom_section', '');
 
 
-get_footer();      
+get_footer();

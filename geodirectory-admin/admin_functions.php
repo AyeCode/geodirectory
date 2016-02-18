@@ -88,6 +88,10 @@ if (!function_exists('geodir_admin_styles_req')) {
 
         wp_register_style('geodirectory-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css', array(), GEODIRECTORY_VERSION);
         wp_enqueue_style('geodirectory-font-awesome');
+
+        wp_register_script('geodirectory-admin', geodir_plugin_url() . '/geodirectory-assets/js/admin-req.min.js', array('jquery'), GEODIRECTORY_VERSION);
+        wp_enqueue_script('geodirectory-admin');
+
     }
 }
 
@@ -102,10 +106,6 @@ if (!function_exists('geodir_admin_scripts')) {
     {
 
         wp_enqueue_script('jquery');
-        /*wp_enqueue_script( 'jquery-ui-core' );
-        wp_enqueue_script( 'jquery-ui-datepicker' );
-        wp_enqueue_script('jquery-ui-slider'); */
-
 
         wp_enqueue_script('geodirectory-jquery-ui-timepicker-js', geodir_plugin_url() . '/geodirectory-assets/js/jquery.ui.timepicker.js', array('jquery-ui-datepicker', 'jquery-ui-slider'), '', true);
 

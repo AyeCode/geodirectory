@@ -303,10 +303,10 @@ if (!function_exists('geodir_custom_field_save')) {
 
         $result_str = isset($request_field['field_id']) ? trim($request_field['field_id']) : '';
 
-        //geodir_add_column_if_not_exist(GEODIR_CUSTOM_FIELDS_TABLE, 'cat_sort', 'text NOT NULL');
-        //geodir_add_column_if_not_exist(GEODIR_CUSTOM_FIELDS_TABLE, 'cat_filter', 'text NOT NULL');
-        // add column to store decimal point
-        //geodir_add_column_if_not_exist( GEODIR_CUSTOM_FIELDS_TABLE, 'decimal_point', 'VARCHAR( 10 ) NOT NULL');
+        // some servers fail if a POST value is VARCHAR so we change it.
+        if(isset($request_field['data_type']) && $request_field['data_type']=='XVARCHAR'){
+            $request_field['data_type'] = 'VARCHAR';
+        }
 
         $cf = trim($result_str, '_');
 
@@ -346,9 +346,7 @@ if (!function_exists('geodir_custom_field_save')) {
                 $old_html_variable = $post_val->htmlvar_name;
 
             }
-            /*else{
-		$post_val->sort_order = $wpdb->get_var("select max(sort_order)+1 from  ".GEODIR_CUSTOM_FIELDS_TABLE);
-		}*/
+
 
 
             if ($post_type == '') $post_type = 'gd_place';

@@ -35,6 +35,7 @@ GeoDirectory Session class added to manage sessions - ADDED
 Deleting custom field not deletes the field from sorting fields table - FIXED
 Address field sort option removed - CHANGED
 Font Awesome support added for rating images - ADDED
+Some servers fail if a POST value is VARCHAR so we change it to XVARCHAR for post - CHANGED
 
 v1.5.6
 In add listing form sub-categories are no longer showing in hierarchy for checkbox display type - FIXED
@@ -52,6 +53,7 @@ Added ability to show upgrade warning messages for major changes - ADDED
 Multiselect custom field "Display Type" option doesn't save on first attempt - FIXED
 Apostrophe in location name breaks the maps - FIXED
 JS warning Google maps sensor no longer required - FIXED
+Features widget now has repeater fields for ability to add lots of items - CHANGED
 
 v1.5.5
 Added charset parameter to case conversion functions - ADDED
