@@ -48,7 +48,7 @@ function geodir_locate_template($template = '')
             if ($listing_page_id != '' && (is_page($listing_page_id) || ($is_wpml && !empty($wp->query_vars['page_id']))) && isset($_REQUEST['listing_type'])
                 && in_array($_REQUEST['listing_type'], geodir_get_posttypes())
             )
-                $post_type = $_REQUEST['listing_type'];
+                $post_type = sanitize_text_field($_REQUEST['listing_type']);
             if (empty($post_type) && !isset($_REQUEST['pid'])) {
                 $pagename = $wp->query_vars['pagename'];
                 $post_types = geodir_get_posttypes();
@@ -72,7 +72,7 @@ function geodir_locate_template($template = '')
             if ($success_page_id != '' && is_page($success_page_id) && isset($_REQUEST['listing_type'])
                 && in_array($_REQUEST['listing_type'], geodir_get_posttypes())
             )
-                $post_type = $_REQUEST['listing_type'];
+                $post_type = sanitize_text_field($_REQUEST['listing_type']);
             return $template = locate_template(array("geodirectory/{$post_type}-success.php", "geodirectory/listing-success.php"));
             break;
         case 'detail':

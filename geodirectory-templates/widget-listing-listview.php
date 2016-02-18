@@ -26,7 +26,6 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
     <ul class="geodir_category_list_view clearfix <?php echo apply_filters('geodir_listing_listview_ul_extra_class', '', 'widget'); ?>">
         <?php
         if (!empty($widget_listings)) {
-
             /** This action is documented in geodirectory-templates/listing-listview.php */
             do_action('geodir_before_listing_post_listview');
             $all_postypes = geodir_get_posttypes();
@@ -217,13 +216,12 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
                                     $deletelink = geodir_getlink($ajaxlink, array('geodir_ajax' => 'add_listing', 'ajax_action' => 'delete', 'pid' => $post->ID), false);
                                     ?>
                                     <span class="geodir-authorlink clearfix">
-				<?php
+                                <?php
                 if (isset($_REQUEST['geodir_dashbord']) && $_REQUEST['geodir_dashbord']) {
-
                     /** This action is documented in geodirectory-templates/listing-listview.php */
                     do_action('geodir_before_edit_post_link_on_listing');
                     ?>
-                    <a href="<?php echo $editlink; ?>" class="geodir-edit"
+                    <a href="<?php echo esc_url($editlink); ?>" class="geodir-edit"
                        title="<?php _e('Edit Listing', 'geodirectory'); ?>">
                         <?php
                         $geodir_listing_edit_icon = apply_filters('geodir_listing_edit_icon', 'fa fa-edit');
@@ -231,7 +229,7 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
                         ?>
                         <?php _e('Edit', 'geodirectory'); ?>
                     </a>
-                    <a href="<?php echo $deletelink; ?>" class="geodir-delete"
+                    <a href="<?php echo esc_url($deletelink); ?>" class="geodir-delete"
                        title="<?php _e('Delete Listing', 'geodirectory'); ?>">
                         <?php
                         $geodir_listing_delete_icon = apply_filters('geodir_listing_delete_icon', 'fa fa-close');

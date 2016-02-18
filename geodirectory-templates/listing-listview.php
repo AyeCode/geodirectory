@@ -360,7 +360,7 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget) && !isset($rel
                                                 do_action('geodir_before_edit_post_link_on_listing');
                                                 ?>
 
-                                                <a href="<?php echo $editlink; ?>" class="geodir-edit"
+                                                <a href="<?php echo esc_url($editlink); ?>" class="geodir-edit"
                                                    title="<?php _e('Edit Listing', 'geodirectory'); ?>">
                                                     <?php
                                                     $geodir_listing_edit_icon = apply_filters('geodir_listing_edit_icon', 'fa fa-edit');
@@ -368,7 +368,7 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget) && !isset($rel
                                                     ?>
                                                     <?php _e('Edit', 'geodirectory'); ?>
                                                 </a>
-                                                <a href="<?php echo $deletelink; ?>" class="geodir-delete"
+                                                <a href="<?php echo esc_url($deletelink); ?>" class="geodir-delete"
                                                    title="<?php _e('Delete Listing', 'geodirectory'); ?>">
                                                     <?php
                                                     $geodir_listing_delete_icon = apply_filters('geodir_listing_delete_icon', 'fa fa-close');

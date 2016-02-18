@@ -511,7 +511,7 @@ function geodir_edit_post_link()
             $post_id = $post->ID;
             if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
 
-                $post_id = esc_attr($_REQUEST['pid']);
+                $post_id = (int)$_REQUEST['pid'];
             }
 
             $postlink = get_permalink(geodir_add_listing_page_id());
@@ -557,7 +557,9 @@ function geodir_detail_page_google_analytics()
 
     $id = trim(get_option('geodir_ga_id'));
 
-    if(!$id){return;}//if no Google Analytics ID then bail.
+    if (!$id) {
+        return; //if no Google Analytics ID then bail.
+    }
 
     ob_start(); // Start buffering;
     /**
@@ -566,11 +568,10 @@ function geodir_detail_page_google_analytics()
      * @since 1.0.0
      */
     do_action('geodir_before_google_analytics');
+    
     if (get_option('geodir_ga_stats') && is_user_logged_in() &&  (isset($package_info->google_analytics) && $package_info->google_analytics == '1') && (get_current_user_id()==$post->post_author || current_user_can( 'manage_options' )) ) {
-        $page_url = $_SERVER['REQUEST_URI'];
-        //$page_url = "/";
+        $page_url = urlencode($_SERVER['REQUEST_URI']);
         ?>
-
         <script type="text/javascript">
             ga_data1 = false;
             ga_data2 = false;
@@ -579,10 +580,9 @@ function geodir_detail_page_google_analytics()
             ga_data5 = false;
             ga_data6 = false;
             ga_au = 0;
-            jQuery(document).ready(function () {
-
+            jQuery(document).ready(function() {
                 gdga_weekVSweek();
-
+                
                 // Set some global Chart.js defaults.
                 Chart.defaults.global.animationSteps = 60;
                 Chart.defaults.global.animationEasing = 'easeInOutQuart';
@@ -592,8 +592,7 @@ function geodir_detail_page_google_analytics()
                 gdga_realtime();
             });
 
-            function gdga_weekVSweek(){
-
+            function gdga_weekVSweek() {
                 jQuery.ajax({url: "<?php echo get_bloginfo('url').'/?ptype=ga&ga_page='.$page_url; ?>&ga_type=thisweek", success: function(result){
                     ga_data1 = jQuery.parseJSON(result);
                     if(ga_data1.error){jQuery('#ga_stats').html(result);return;}
@@ -604,12 +603,9 @@ function geodir_detail_page_google_analytics()
                     ga_data2 = jQuery.parseJSON(result);
                     gd_renderWeekOverWeekChart();
                 }});
-
-
             }
 
-            function gdga_yearVSyear(){
-
+            function gdga_yearVSyear() {
                 jQuery.ajax({url: "<?php echo get_bloginfo('url').'/?ptype=ga&ga_page='.$page_url; ?>&ga_type=thisyear", success: function(result){
                     ga_data3 = jQuery.parseJSON(result);
                     if(ga_data3.error){jQuery('#ga_stats').html(result);return;}
@@ -621,63 +617,55 @@ function geodir_detail_page_google_analytics()
                     ga_data4 = jQuery.parseJSON(result);
                     gd_renderYearOverYearChart()
                 }});
-
-
             }
 
-            function gdga_country(){
-
+            function gdga_country() {
                 jQuery.ajax({url: "<?php echo get_bloginfo('url').'/?ptype=ga&ga_page='.$page_url; ?>&ga_type=country", success: function(result){
                     ga_data5 = jQuery.parseJSON(result);
                     if(ga_data5.error){jQuery('#ga_stats').html(result);return;}
                     gd_renderTopCountriesChart();
                 }});
-
             }
 
-            function gdga_realtime(){
-
+            function gdga_realtime() {
                 jQuery.ajax({url: "<?php echo get_bloginfo('url').'/?ptype=ga&ga_page='.$page_url; ?>&ga_type=realtime", success: function(result){
                     ga_data6 = jQuery.parseJSON(result);
                     if(ga_data6.error){jQuery('#ga_stats').html(result);return;}
                     gd_renderRealTime();
                 }});
-
             }
 
-            function gd_renderRealTime(){
+            function gd_renderRealTime() {
                 ga_au_old = ga_au;
 
                 ga_au = ga_data6.totalsForAllResults["rt:activeUsers"];
+                if (ga_au>ga_au_old) {
+                    jQuery('.gd-ActiveUsers').addClass( "is-increasing");
+                }
 
-                    if(ga_au>ga_au_old){
-                        jQuery('.gd-ActiveUsers').addClass( "is-increasing");
-                    }
-
-                    if(ga_au<ga_au_old){
-                        jQuery('.gd-ActiveUsers').addClass( "is-decreasing");
-                    }
-                    jQuery('.gd-ActiveUsers-value').html(ga_au);
+                if (ga_au<ga_au_old) {
+                    jQuery('.gd-ActiveUsers').addClass( "is-decreasing");
+                }
+                
+                jQuery('.gd-ActiveUsers-value').html(ga_au);
 
                 // check for new users every 5 seconds
-                setTimeout(function (){
-                    jQuery('.gd-ActiveUsers').removeClass( "is-increasing is-decreasing" );
+                setTimeout(function() {
+                    jQuery('.gd-ActiveUsers').removeClass("is-increasing is-decreasing");
                     gdga_realtime();
                 }, 5000);
             }
-
 
             /**
              * Draw the a chart.js doughnut chart with data from the specified view that
              * compares sessions from mobile, desktop, and tablet over the past two
              * weeks.
              */
-            function gd_renderTopCountriesChart(){
-
-                if(ga_data5){
+            function gd_renderTopCountriesChart() {
+                if (ga_data5) {
                     response = ga_data5;
                     ga_data5 = false;
-                }else{
+                } else {
                     return;
                 }
 
@@ -685,29 +673,27 @@ function geodir_detail_page_google_analytics()
                 jQuery('#gdga-legend-container').show();
                 jQuery('#gdga-loader-icon').hide();
                 jQuery('#gdga-select-analytic').show();
+                
+                var data = [];
+                var colors = ['#4D5360','#949FB1','#D4CCC5','#E2EAE9','#F7464A'];
 
+                if (response.rows) {
+                    response.rows.forEach(function (row, i) {
+                        data.push({
+                            label: row[0],
+                            value: +row[1],
+                            color: colors[i]
+                        });
+                    });
 
-                        var data = [];
-                        var colors = ['#4D5360','#949FB1','#D4CCC5','#E2EAE9','#F7464A'];
-
-                        if(response.rows){
-                            response.rows.forEach(function (row, i) {
-                                data.push({
-                                    label: row[0],
-                                    value: +row[1],
-                                    color: colors[i]
-                                });
-                            });
-
-                            new Chart(makeCanvas('gdga-chart-container')).Doughnut(data);
-                            generateLegend('gdga-legend-container', data);
-                        }else{
-                            gdga_noResults();
-                        }
-
+                    new Chart(makeCanvas('gdga-chart-container')).Doughnut(data);
+                    generateLegend('gdga-legend-container', data);
+                } else {
+                    gdga_noResults();
+                }
             }
 
-            function gdga_noResults(){
+            function gdga_noResults() {
                 jQuery('#gdga-chart-container').html('<?php _e('No results available','geodirectory');?>');
                 jQuery('#gdga-legend-container').html('');
             }
@@ -717,15 +703,13 @@ function geodir_detail_page_google_analytics()
              * overlays session data for the current year over session data for the
              * previous year, grouped by month.
              */
-            function gd_renderYearOverYearChart(){
-
-                if(ga_data3 && ga_data4){
+            function gd_renderYearOverYearChart() {
+                if (ga_data3 && ga_data4) {
                     thisYear = ga_data3;
                     lastYear = ga_data4;
                     ga_data3 = false;
                     ga_data4 = false;
-
-                }else{
+                } else {
                     return;
                 }
 
@@ -737,14 +721,10 @@ function geodir_detail_page_google_analytics()
                 // Adjust `now` to experiment with different days, for testing only...
                 var now = moment(); // .subtract(3, 'day');
 
-
-
                 Promise.all([thisYear, lastYear]).then(function(results) {
                     var data1 = results[0].rows.map(function(row) { return +row[2]; });
                     var data2 = results[1].rows.map(function(row) { return +row[2]; });
                     //var labelsN = results[0].rows.map(function(row) { return +row[1]; });
-
-
 
                     var labels = ['<?php _e('Jan', 'geodirectory');?>',
                         '<?php _e('Feb', 'geodirectory');?>',
@@ -759,14 +739,12 @@ function geodir_detail_page_google_analytics()
                         '<?php _e('Nov', 'geodirectory');?>',
                         '<?php _e('Dec', 'geodirectory');?>'];
 
-
                     // Ensure the data arrays are at least as long as the labels array.
                     // Chart.js bar charts don't (yet) accept sparse datasets.
                     for (var i = 0, len = labels.length; i < len; i++) {
                         if (data1[i] === undefined) data1[i] = null;
                         if (data2[i] === undefined) data2[i] = null;
                     }
-
 
                     var data = {
                         labels : labels,
@@ -788,10 +766,9 @@ function geodir_detail_page_google_analytics()
 
                     new Chart(makeCanvas('gdga-chart-container')).Bar(data);
                     generateLegend('gdga-legend-container', data.datasets);
+                }).catch(function(err) {
+                    console.error(err.stack);
                 })
-                    .catch(function(err) {
-                        console.error(err.stack);
-                    })
             }
 
             /**
@@ -800,7 +777,6 @@ function geodir_detail_page_google_analytics()
              * previous week.
              */
             function gd_renderWeekOverWeekChart() {
-
                 if(ga_data1 && ga_data2){
                     thisWeek = ga_data1;
                     lastWeek = ga_data2;
@@ -810,18 +786,15 @@ function geodir_detail_page_google_analytics()
                     return;
                 }
 
-            jQuery('#gdga-chart-container').show();
-            jQuery('#gdga-legend-container').show();
-            jQuery('#gdga-loader-icon').hide();
+                jQuery('#gdga-chart-container').show();
+                jQuery('#gdga-legend-container').show();
+                jQuery('#gdga-loader-icon').hide();
                 jQuery('#gdga-select-analytic').show();
-
-
 
                 // Adjust `now` to experiment with different days, for testing only...
                 var now = moment();
 
                 Promise.all([thisWeek, lastWeek]).then(function(results) {
-
                     var data1 = results[0].rows.map(function(row) { return +row[2]; });
                     var data2 = results[1].rows.map(function(row) { return +row[2]; });
                     var labels = results[1].rows.map(function(row) { return +row[0]; });
@@ -846,8 +819,6 @@ function geodir_detail_page_google_analytics()
                         "<?php _e(date('D', strtotime("+6 day")),'geodirectory'); ?>",
                         "<?php _e(date('D', strtotime("+7 day")),'geodirectory'); ?>"
                     ];
-
-
 
                     var data = {
                         labels : labels,
@@ -910,31 +881,21 @@ function geodir_detail_page_google_analytics()
                 }).join('');
             }
 
-
-
-            function gdga_select_option(){
-
-
+            function gdga_select_option() {
                 jQuery('#gdga-select-analytic').hide();
                 jQuery('#gdga-loader-icon').show();
 
                 gaType = jQuery('#gdga-select-analytic').val();
 
-                if(gaType=='weeks'){
+                if (gaType=='weeks') {
                     gdga_weekVSweek();
-
-                }else if(gaType=='years'){
+                } else if (gaType=='years') {
                     gdga_yearVSyear();
-
-                }else if(gaType=='country'){
+                } else if(gaType=='country') {
                     gdga_country();
                 }
-
             }
-
-
         </script>
-
         <style>
             #ga_stats #gd-active-users-container {
                 float: right;
@@ -2392,9 +2353,7 @@ function geodir_user_post_listing_count()
     $user_listing = array();
     if (is_array($all_posts) && !empty($all_posts)) {
         foreach ($all_posts as $ptype) {
-            $total_posts = $wpdb->get_var("SELECT count( ID )
-											FROM " . $wpdb->prefix . "posts
-											WHERE post_author=" . $user_id . " AND post_type='" . $ptype . "' AND ( post_status = 'publish' OR post_status = 'draft' OR post_status = 'private' )");
+            $total_posts = $wpdb->get_var("SELECT count( ID ) FROM " . $wpdb->prefix . "posts WHERE post_author=" . $user_id . " AND post_type='" . $ptype . "' AND ( post_status = 'publish' OR post_status = 'draft' OR post_status = 'private' )");
 
             if ($total_posts > 0) {
                 $user_listing[$ptype] = $total_posts;
@@ -2431,9 +2390,7 @@ function geodir_user_favourite_listing_count()
         $user_favorites = "'" . implode("','", $user_favorites) . "'";
 
         foreach ($all_posts as $ptype) {
-            $total_posts = $wpdb->get_var("SELECT count( ID )
-											FROM " . $wpdb->prefix . "posts
-											WHERE  post_type='" . $ptype . "' AND post_status = 'publish' AND ID IN (" . $user_favorites . ")");
+            $total_posts = $wpdb->get_var("SELECT count( ID ) FROM " . $wpdb->prefix . "posts WHERE  post_type='" . $ptype . "' AND post_status = 'publish' AND ID IN (" . $user_favorites . ")");
 
             if ($total_posts > 0) {
                 $user_listing[$ptype] = $total_posts;
@@ -2474,8 +2431,8 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
             $parse_custom_fields = array();
             foreach ($custom_fields as $field) {
                 $field = stripslashes_deep($field); // strip slashes
-				
-				$type = $field;
+                
+                $type = $field;
                 $field_name = $field['htmlvar_name'];
                 if (empty($geodir_post_info) && geodir_is_page('preview') && $field_name != '' && !isset($post->$field_name) && isset($_REQUEST[$field_name])) {
                     $post->$field_name = $_REQUEST[$field_name];
@@ -2562,12 +2519,12 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                                 $field_icon_af = $field_icon;
                                 $field_icon = '';
                             }
-							
-							$a_url = geodir_parse_custom_field_url($post->$type['htmlvar_name']);
+                            
+                            $a_url = geodir_parse_custom_field_url($post->$type['htmlvar_name']);
 
-							$website = !empty($a_url['url']) ? $a_url['url'] : '';
-							$title = !empty($a_url['label']) ? $a_url['label'] : $type['site_title'];
-							$title = $title != '' ? __(stripslashes($title), 'geodirectory') : '';
+                            $website = !empty($a_url['url']) ? $a_url['url'] : '';
+                            $title = !empty($a_url['label']) ? $a_url['label'] : $type['site_title'];
+                            $title = $title != '' ? __(stripslashes($title), 'geodirectory') : '';
 
                             $geodir_odd_even = $field_set_start == 1 && $i % 2 == 0 ? 'geodir_more_info_even' : 'geodir_more_info_odd';
 
@@ -2686,26 +2643,26 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                             break;
                         case 'radio': {
 
-							if ($post->$type['htmlvar_name'] != '') {
-								if ($post->$type['htmlvar_name'] == 'f' || $post->$type['htmlvar_name'] == '0') {
+                            if ($post->$type['htmlvar_name'] != '') {
+                                if ($post->$type['htmlvar_name'] == 'f' || $post->$type['htmlvar_name'] == '0') {
                                     $html_val = __('No', 'geodirectory');
                                 } else if ($post->$type['htmlvar_name'] == 't' || $post->$type['htmlvar_name'] == '1') {
                                     $html_val = __('Yes', 'geodirectory');
                                 } else {
-									$html_val = __($post->$type['htmlvar_name'], 'geodirectory');
-									
-									if (!empty($type['option_values'])) {
-										$cf_option_values = geodir_string_values_to_options(stripslashes_deep($type['option_values']), true);
-										
-										if (!empty($cf_option_values)) {
-											foreach ($cf_option_values as $cf_option_value) {
-												if (isset($cf_option_value['value']) && $cf_option_value['value'] == $post->$type['htmlvar_name']) {
-													$html_val = $cf_option_value['label'];
-												}
-											}
-										}
-									}
-								}
+                                    $html_val = __($post->$type['htmlvar_name'], 'geodirectory');
+                                    
+                                    if (!empty($type['option_values'])) {
+                                        $cf_option_values = geodir_string_values_to_options(stripslashes_deep($type['option_values']), true);
+                                        
+                                        if (!empty($cf_option_values)) {
+                                            foreach ($cf_option_values as $cf_option_value) {
+                                                if (isset($cf_option_value['value']) && $cf_option_value['value'] == $post->$type['htmlvar_name']) {
+                                                    $html_val = $cf_option_value['label'];
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
 
                                 if (strpos($field_icon, 'http') !== false) {
                                     $field_icon_af = '';
@@ -2770,20 +2727,20 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                                 $field_icon_af = $field_icon;
                                 $field_icon = '';
                             }
-							
-							$field_value = __($post->$type['htmlvar_name'], 'geodirectory');
-							
-							if (!empty($type['option_values'])) {
-								$cf_option_values = geodir_string_values_to_options(stripslashes_deep($type['option_values']), true);
-								
-								if (!empty($cf_option_values)) {
-									foreach ($cf_option_values as $cf_option_value) {
-										if (isset($cf_option_value['value']) && $cf_option_value['value'] == $post->$type['htmlvar_name']) {
-											$field_value = $cf_option_value['label'];
-										}
-									}
-								}
-							}
+                            
+                            $field_value = __($post->$type['htmlvar_name'], 'geodirectory');
+                            
+                            if (!empty($type['option_values'])) {
+                                $cf_option_values = geodir_string_values_to_options(stripslashes_deep($type['option_values']), true);
+                                
+                                if (!empty($cf_option_values)) {
+                                    foreach ($cf_option_values as $cf_option_value) {
+                                        if (isset($cf_option_value['value']) && $cf_option_value['value'] == $post->$type['htmlvar_name']) {
+                                            $field_value = $cf_option_value['label'];
+                                        }
+                                    }
+                                }
+                            }
 
                             $geodir_odd_even = $field_set_start == 1 && $i % 2 == 0 ? 'geodir_more_info_even' : 'geodir_more_info_odd';
 
@@ -2811,16 +2768,16 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                             $field_values = explode(',', trim($post->$type['htmlvar_name'], ","));
 
                             $option_values = array();
-							if (!empty($type['option_values'])) {
-								$cf_option_values = geodir_string_values_to_options(stripslashes_deep($type['option_values']), true);
-								
-								if (!empty($cf_option_values)) {
-									foreach ($cf_option_values as $cf_option_value) {
-										if (isset($cf_option_value['value']) && in_array($cf_option_value['value'], $field_values)) {
-											$option_values[] = $cf_option_value['label'];
-										}
-									}
-								}
+                            if (!empty($type['option_values'])) {
+                                $cf_option_values = geodir_string_values_to_options(stripslashes_deep($type['option_values']), true);
+                                
+                                if (!empty($cf_option_values)) {
+                                    foreach ($cf_option_values as $cf_option_value) {
+                                        if (isset($cf_option_value['value']) && in_array($cf_option_value['value'], $field_values)) {
+                                            $option_values[] = $cf_option_value['label'];
+                                        }
+                                    }
+                                }
                             }
 
                             $geodir_odd_even = $field_set_start == 1 && $i % 2 == 0 ? 'geodir_more_info_even' : 'geodir_more_info_odd';
@@ -2899,7 +2856,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                             }
                             $html .= ' </span>' . wpautop(stripslashes($post->$type['htmlvar_name'])) . '</div>';
                         }
-                            break;
+                        break;
                         case 'file': {
                             $html_var = $type['htmlvar_name'];
 
@@ -2908,9 +2865,9 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
 
                                 if (!empty($files)) {
                                     $extra_fields = !empty($type['extra_fields']) ? maybe_unserialize($type['extra_fields']) : NULL;
-							   		$allowed_file_types = !empty($extra_fields['gd_file_types']) && is_array($extra_fields['gd_file_types']) && !in_array("*", $extra_fields['gd_file_types'] ) ? $extra_fields['gd_file_types'] : '';
-							   
-									$file_paths = '';
+                                    $allowed_file_types = !empty($extra_fields['gd_file_types']) && is_array($extra_fields['gd_file_types']) && !in_array("*", $extra_fields['gd_file_types'] ) ? $extra_fields['gd_file_types'] : '';
+                               
+                                    $file_paths = '';
                                     foreach ($files as $file) {
                                         if (!empty($file)) {
                                             $filetype = wp_check_filetype($file);
@@ -2921,29 +2878,29 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
 
                                             $arr_file_type = wp_check_filetype($filename);
                                             if (empty($arr_file_type['ext']) || empty($arr_file_type['type'])) {
-												continue;
-											}
-											$uploaded_file_type = $arr_file_type['type'];
-											$uploaded_file_ext = $arr_file_type['ext'];
-											
-											if (!empty($allowed_file_types) && !in_array($uploaded_file_ext, $allowed_file_types)) {
-												continue; // Invalid file type.
-											}
+                                                continue;
+                                            }
+                                            $uploaded_file_type = $arr_file_type['type'];
+                                            $uploaded_file_ext = $arr_file_type['ext'];
+                                            
+                                            if (!empty($allowed_file_types) && !in_array($uploaded_file_ext, $allowed_file_types)) {
+                                                continue; // Invalid file type.
+                                            }
 
                                             //$allowed_file_types = array('application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv', 'text/plain');
-											$image_file_types = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/bmp', 'image/x-icon');
+                                            $image_file_types = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/bmp', 'image/x-icon');
 
                                             // If the uploaded file is image
                                             if (in_array($uploaded_file_type, $image_file_types)) {
                                                 $file_paths .= '<div class="geodir-custom-post-gallery" class="clearfix">';
-												$file_paths .= '<a href="'.$file.'">';
-												$file_paths .= geodir_show_image(array('src' => $file), 'thumbnail', false, false);
-												$file_paths .= '</a>';
-												$file_paths .= '</div>';
+                                                $file_paths .= '<a href="'.$file.'">';
+                                                $file_paths .= geodir_show_image(array('src' => $file), 'thumbnail', false, false);
+                                                $file_paths .= '</a>';
+                                                $file_paths .= '</div>';
                                             } else {
-                                               $ext_path = '_' . $html_var . '_';
-                                               $filename = explode($ext_path, $filename);
-                                               $file_paths .= '<a href="' . $file . '" target="_blank">' . $filename[count($filename) - 1] . '</a>';
+                                                $ext_path = '_' . $html_var . '_';
+                                                $filename = explode($ext_path, $filename);
+                                                $file_paths .= '<a href="' . $file . '" target="_blank">' . $filename[count($filename) - 1] . '</a>';
                                             }
                                         }
                                     }
@@ -3286,34 +3243,34 @@ add_filter('geodir_load_db_language', 'geodir_load_cpt_text_translation');
  * @return array Translation texts.
  */
 function geodir_load_gd_options_text_translation($translation_texts = array()) {
-	$translation_texts = !empty( $translation_texts ) && is_array( $translation_texts ) ? $translation_texts : array();
-	
-	$gd_options = array('geodir_post_submited_success_email_subject_admin', 'geodir_post_submited_success_email_content_admin', 'geodir_post_submited_success_email_subject', 'geodir_post_submited_success_email_content', 'geodir_forgot_password_subject', 'geodir_forgot_password_content', 'geodir_registration_success_email_subject', 'geodir_registration_success_email_content', 'geodir_post_published_email_subject', 'geodir_post_published_email_content', 'geodir_email_friend_subject', 'geodir_email_friend_content', 'geodir_email_enquiry_subject', 'geodir_email_enquiry_content', 'geodir_post_added_success_msg_content');
-	
-	/**
-	 * Filters the geodirectory option names that requires to add for translation.
-	 *
-	 * @since 1.5.7
-	 * @package GeoDirectory
-	 *
-	 * @param  array $gd_options Array of option names.
-	 */
-	$gd_options = apply_filters('geodir_gd_options_for_translation', $gd_options);
-	$gd_options = array_unique($gd_options);
-	
-	if (!empty($gd_options)) {
-		foreach ($gd_options as $gd_option) {
-			if ($gd_option != '' && $option_value = get_option($gd_option)) {
-				$option_value = is_string($option_value) ? stripslashes_deep($option_value) : '';
-				
-				if ($option_value != '' && !in_array($option_value, $translation_texts)) {
-					$translation_texts[] = stripslashes_deep($option_value);
-				}
-			}
-		}
-	}
-	
-	$translation_texts = !empty($translation_texts) ? array_unique($translation_texts) : $translation_texts;
+    $translation_texts = !empty( $translation_texts ) && is_array( $translation_texts ) ? $translation_texts : array();
+
+    $gd_options = array('geodir_post_submited_success_email_subject_admin', 'geodir_post_submited_success_email_content_admin', 'geodir_post_submited_success_email_subject', 'geodir_post_submited_success_email_content', 'geodir_forgot_password_subject', 'geodir_forgot_password_content', 'geodir_registration_success_email_subject', 'geodir_registration_success_email_content', 'geodir_post_published_email_subject', 'geodir_post_published_email_content', 'geodir_email_friend_subject', 'geodir_email_friend_content', 'geodir_email_enquiry_subject', 'geodir_email_enquiry_content', 'geodir_post_added_success_msg_content');
+
+    /**
+     * Filters the geodirectory option names that requires to add for translation.
+     *
+     * @since 1.5.7
+     * @package GeoDirectory
+     *
+     * @param  array $gd_options Array of option names.
+     */
+    $gd_options = apply_filters('geodir_gd_options_for_translation', $gd_options);
+    $gd_options = array_unique($gd_options);
+
+    if (!empty($gd_options)) {
+        foreach ($gd_options as $gd_option) {
+            if ($gd_option != '' && $option_value = get_option($gd_option)) {
+                $option_value = is_string($option_value) ? stripslashes_deep($option_value) : '';
+                
+                if ($option_value != '' && !in_array($option_value, $translation_texts)) {
+                    $translation_texts[] = stripslashes_deep($option_value);
+                }
+            }
+        }
+    }
+
+    $translation_texts = !empty($translation_texts) ? array_unique($translation_texts) : $translation_texts;
 
     return $translation_texts;
 }

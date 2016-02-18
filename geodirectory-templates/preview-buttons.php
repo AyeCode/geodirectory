@@ -106,21 +106,19 @@ ob_start()// start publish listing form buffering
                 $publish_listing_form_button = apply_filters('geodir_publish_listing_form_button', $publish_listing_form_button);
                 echo $publish_listing_form_button;
 
-
                 $post_id = '';
                 if (isset($post->pid)) {
                     $post_id = $post->pid;
-                } elseif (isset($_REQUEST['pid'])) {
-                    $post_id = $_REQUEST['pid'];
+                } else if (isset($_REQUEST['pid'])) {
+                    $post_id = (int)$_REQUEST['pid'];
                 }
-
 
                 $postlink = get_permalink(geodir_add_listing_page_id());
                 $postlink = geodir_getlink($postlink, array('pid' => $post_id, 'backandedit' => '1', 'listing_type' => $post_type), false);
 
                 ob_start(); // start go back and edit / cancel buffering
                 ?>
-                <a href="<?php echo $postlink; ?>" class="geodir_goback"><?php echo PRO_BACK_AND_EDIT_TEXT; ?></a>
+                <a href="<?php echo esc_url($postlink); ?>" class="geodir_goback"><?php echo PRO_BACK_AND_EDIT_TEXT; ?></a>
                 <input type="button" name="Cancel" value="<?php echo(PRO_CANCEL_BUTTON); ?>"
                        class="geodir_button geodir_cancle_button"
                        onclick="window.location.href='<?php echo geodir_get_ajax_url() . '&geodir_ajax=add_listing&ajax_action=cancel&pid=' . $post_id . '&listing_type=' . $post_type; ?>'"/>

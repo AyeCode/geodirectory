@@ -393,21 +393,19 @@ function geodir_get_category_all_array()
  */
 function geodir_get_current_posttype()
 {
-
     global $wp_query, $geodir_post_type;
 
     $geodir_post_type = get_query_var('post_type');
 
     if (geodir_is_page('add-listing') || geodir_is_page('preview')) {
         if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '')
-            $geodir_post_type = get_post_type($_REQUEST['pid']);
+            $geodir_post_type = get_post_type((int)$_REQUEST['pid']);
         elseif (isset($_REQUEST['listing_type']))
-            $geodir_post_type = $_REQUEST['listing_type'];
-
+            $geodir_post_type = sanitize_text_field($_REQUEST['listing_type']);
     }
 
     if ((geodir_is_page('search') || geodir_is_page('author')) && isset($_REQUEST['stype']))
-        $geodir_post_type = $_REQUEST['stype'];
+        $geodir_post_type = sanitize_text_field($_REQUEST['stype']);
 
     if (is_tax())
         $geodir_post_type = geodir_get_taxonomy_posttype();
@@ -1120,24 +1118,19 @@ function geodir_editpost_categories_html($request_taxonomy, $request_postid, $po
  */
 function geodir_get_catlist($cat_taxonomy, $parrent = 0, $selected = false)
 {
-
     global $exclude_cats;
 
     $cat_terms = get_terms($cat_taxonomy, array('parent' => $parrent, 'hide_empty' => false, 'exclude' => $exclude_cats));
 
     if (!empty($cat_terms)) {
-
         $onchange = '';
-        //if($parrent == '0')
-        $onchange = ' onchange="show_subcatlist(this.value, this)"  ';
-        //else
-        //$onchange = ' onchange="update_listing_cat()"  ';
+        $onchange = ' onchange="show_subcatlist(this.value, this)" ';
 
         $option_selected = '';
         if (!$selected)
             $option_slected = ' selected="selected" ';
 
-        echo '<select field_type="select" id="' . $cat_taxonomy . '" class="chosen_select" ' . $onchange . ' option-ajaxChosen="false" >';
+        echo '<select field_type="select" id="' . sanitize_text_field($cat_taxonomy) . '" class="chosen_select" ' . $onchange . ' option-ajaxChosen="false" >';
 
         echo '<option value="" ' . $option_selected . ' >' . __('Select Category', 'geodirectory') . '</option>';
 
@@ -1145,17 +1138,16 @@ function geodir_get_catlist($cat_taxonomy, $parrent = 0, $selected = false)
             $option_selected = '';
             if ($selected == $cat_term->term_id)
                 $option_selected = ' selected="selected" ';
-				
-			// Count child terms
-			$child_terms = get_terms( $cat_taxonomy, array( 'parent' => $cat_term->term_id, 'hide_empty' => false, 'exclude' => $exclude_cats, 'number' => 1 ) );
-			$has_child = !empty( $child_terms ) ? 't' : 'f';
+
+            // Count child terms
+            $child_terms = get_terms( $cat_taxonomy, array( 'parent' => $cat_term->term_id, 'hide_empty' => false, 'exclude' => $exclude_cats, 'number' => 1 ) );
+            $has_child = !empty( $child_terms ) ? 't' : 'f';
 
             echo '<option  ' . $option_selected . ' alt="' . $cat_term->taxonomy . '" title="' . ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" _hc="' . $has_child . '" >' . ucfirst($cat_term->name) . '</option>';
         }
         echo '</select>';
     }
 }
-
 
 /**
  * Custom post type messages for admin actions.

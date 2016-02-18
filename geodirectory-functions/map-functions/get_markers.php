@@ -7,9 +7,10 @@
  */
  
 if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'homemap_catlist') {
-    $post_taxonomy = geodir_get_taxonomies($_REQUEST['post_type']);
-    $map_canvas_name = $_REQUEST['map_canvas'];
-    $child_collapse = $_REQUEST['child_collapse'];
+    $gd_post_type = sanitize_text_field($_REQUEST['post_type']);
+    $post_taxonomy = geodir_get_taxonomies($gd_post_type);
+    $map_canvas_name = sanitize_text_field($_REQUEST['map_canvas']);
+    $child_collapse = (int)$_REQUEST['child_collapse'];
     echo home_map_taxonomy_walker($post_taxonomy, 0, true, 0, $map_canvas_name, $child_collapse, true);
     die;
 }
@@ -22,14 +23,14 @@ if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'cat') { // R
     exit;
 } else if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'info') { // Retrives marker info window html
     /**
-	 * @global object $wpdb WordPress Database object.
+     * @global object $wpdb WordPress Database object.
      * @global string $plugin_prefix Geodirectory plugin table prefix.
-	 * @global object $gd_session GeoDirectory Session object.
-	 */
-	global $wpdb, $plugin_prefix, $gd_session;
+     * @global object $gd_session GeoDirectory Session object.
+     */
+    global $wpdb, $plugin_prefix, $gd_session;
 
     if ($_REQUEST['m_id'] != '') {
-        $pid = $_REQUEST['m_id'];
+        $pid = (int)$_REQUEST['m_id'];
     } else {
         echo __('No marker data found', 'geodirectory');
         exit;
@@ -57,7 +58,6 @@ if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'cat') { // R
                 echo geodir_get_infowindow_html($postinfo_obj);
             }
         }
-
     }
     exit;
 }
@@ -239,49 +239,49 @@ function get_markers() {
         global $geodir_date_format;
 
         $today = strtotime(date_i18n('Y-m-d'));
-		
-		foreach ($catinfo as $catinfo_obj) {
+        
+        foreach ($catinfo as $catinfo_obj) {
             $post_title = $catinfo_obj->post_title;
             
-			if ($post_type == 'gd_event' && !empty($catinfo_obj->recurring_dates)) {
-				$event_dates = '';
-				$recurring_data = isset($catinfo_obj->recurring_dates) ? maybe_unserialize($catinfo_obj->recurring_dates) : array();
-				
-				$post_info = geodir_get_post_info($catinfo_obj->post_id);
-				if (!empty($catinfo_obj->is_recurring) && !empty($recurring_data) && !empty($recurring_data['is_recurring']) && geodir_event_recurring_pkg($post_info)) {
-					$recurring_dates = explode(',', $recurring_data['event_recurring_dates']);
-					
-					if (!empty($recurring_dates)) {					
-						$e = 0;
-						foreach ($recurring_dates as $date) {
-							if (strtotime($date) >= $today) {
-								$event_dates .= ' :: ' . date_i18n($geodir_date_format, strtotime($date));
-								
-								$e++;
-								if ($e == 3) { // only show 3 event dates
-									break;
-								}
-							}
-						}
-					}
-				} else {
-					$start_date = !empty($recurring_data['event_start']) && $recurring_data['event_start'] != '0000-00-00 00:00:00' ? $recurring_data['event_start'] : '';
-					$end_date = !empty($recurring_data['event_end']) && $recurring_data['event_end'] != '0000-00-00 00:00:00' ? $recurring_data['event_end'] : $start_date;
-				
-					if ($end_date != '' && strtotime($end_date) >= $today) {
-						$event_dates .= ' :: ' . date_i18n($geodir_date_format, strtotime($start_date)) .' -> ' . date_i18n($geodir_date_format, strtotime($end_date));
-					}
-				}
+            if ($post_type == 'gd_event' && !empty($catinfo_obj->recurring_dates)) {
+                $event_dates = '';
+                $recurring_data = isset($catinfo_obj->recurring_dates) ? maybe_unserialize($catinfo_obj->recurring_dates) : array();
+                
+                $post_info = geodir_get_post_info($catinfo_obj->post_id);
+                if (!empty($catinfo_obj->is_recurring) && !empty($recurring_data) && !empty($recurring_data['is_recurring']) && geodir_event_recurring_pkg($post_info)) {
+                    $recurring_dates = explode(',', $recurring_data['event_recurring_dates']);
+                    
+                    if (!empty($recurring_dates)) {					
+                        $e = 0;
+                        foreach ($recurring_dates as $date) {
+                            if (strtotime($date) >= $today) {
+                                $event_dates .= ' :: ' . date_i18n($geodir_date_format, strtotime($date));
+                                
+                                $e++;
+                                if ($e == 3) { // only show 3 event dates
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    $start_date = !empty($recurring_data['event_start']) && $recurring_data['event_start'] != '0000-00-00 00:00:00' ? $recurring_data['event_start'] : '';
+                    $end_date = !empty($recurring_data['event_end']) && $recurring_data['event_end'] != '0000-00-00 00:00:00' ? $recurring_data['event_end'] : $start_date;
+                
+                    if ($end_date != '' && strtotime($end_date) >= $today) {
+                        $event_dates .= ' :: ' . date_i18n($geodir_date_format, strtotime($start_date)) .' -> ' . date_i18n($geodir_date_format, strtotime($end_date));
+                    }
+                }
 
-				if (empty($event_dates)) {
-					continue;
-				}
-				
-				$post_title .= $event_dates;
+                if (empty($event_dates)) {
+                    continue;
+                }
+                
+                $post_title .= $event_dates;
             }
 
             $icon = !empty($geodir_cat_icons) && isset($geodir_cat_icons[$catinfo_obj->default_category]) ? $geodir_cat_icons[$catinfo_obj->default_category] : '';
-			$mark_extra = (isset($catinfo_obj->marker_extra)) ? $catinfo_obj->marker_extra : '';
+            $mark_extra = (isset($catinfo_obj->marker_extra)) ? $catinfo_obj->marker_extra : '';
             $title = str_replace($srcharr, $replarr, $post_title);
 
             $content_data[] = '{"id":"' . $catinfo_obj->post_id . '","t": "' . $title . '","lt": "' . $catinfo_obj->post_latitude . '","ln": "' . $catinfo_obj->post_longitude . '","mk_id":"' . $catinfo_obj->post_id . '_' . $catinfo_obj->default_category . '","i":"' . $icon . '"'.$mark_extra.'}';
@@ -308,9 +308,9 @@ function get_markers() {
     $totalcount = count(array_unique($post_ids));
 
     if (!empty($cat_content_info)) {
-		return '[{"totalcount":"' . $totalcount . '",' . substr(implode(',', $cat_content_info), 1) . ']';
+        return '[{"totalcount":"' . $totalcount . '",' . substr(implode(',', $cat_content_info), 1) . ']';
     }
     else {
-		return '[{"totalcount":"0"}]';
-	}
+        return '[{"totalcount":"0"}]';
+    }
 }

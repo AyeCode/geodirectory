@@ -1255,90 +1255,62 @@ if (!function_exists('geodir_insert_csv_post_data') && get_option('geodir_instal
         <?php
 
         if (isset($_REQUEST['active_tab']) && $_REQUEST['active_tab'] == 'csv_upload_settings') {
-
             if (isset($_REQUEST['msg']) && $_REQUEST['msg'] == 'success') {
-                $rowcount = $_REQUEST['rowcount'];
-                $uploads = wp_upload_dir(); ?>
-
-                <div class="updated fade below-h2" id="message"
-                     style="background-color: rgb(255, 251, 204); margin-left:0px; margin-top:0px; margin-bottom:10px;">
-
-                    <?php
-
+                $rowcount = (int)$_REQUEST['rowcount'];
+                $uploads = wp_upload_dir();
+                ?>
+                <div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204); margin-left:0px; margin-top:0px; margin-bottom:10px;">
+                <?php
                     if ($_REQUEST['invalidcount'] == 0 && $_REQUEST['blank_address'] == 0 && $_REQUEST['invalid_post_type'] == 0 && $_REQUEST['invalid_title'] == 0) {
-
                         echo '<p>' . CSV_INSERT_DATA . '</p>';
-
                     }
-
                     echo '<p>';
                     printf(CSV_TOTAL_RECORD, $rowcount);
                     echo '</p>';
 
                     if (isset($_REQUEST['invalidcount']) && $_REQUEST['invalidcount'] > 0) {
-
                         echo '<p>';
-                        printf(CSV_INVALID_DEFUALT_ADDRESS, $_REQUEST['invalidcount'], $_REQUEST['total_records']);
+                        printf(CSV_INVALID_DEFUALT_ADDRESS, (int)$_REQUEST['invalidcount'], (int)$_REQUEST['total_records']);
                         echo '</p>';
                     }
 
                     if (isset($_REQUEST['blank_address']) && $_REQUEST['blank_address'] > 0) {
-
                         echo '<p>';
-                        printf(CSV_INVALID_TOTAL_RECORD, $_REQUEST['blank_address'], $_REQUEST['total_records']);
+                        printf(CSV_INVALID_TOTAL_RECORD, (int)$_REQUEST['blank_address'], (int)$_REQUEST['total_records']);
                         echo '</p>';
-
                     }
 
                     if (isset($_REQUEST['invalid_post_type']) && $_REQUEST['invalid_post_type'] > 0) {
-
                         echo '<p>';
-                        printf(CSV_INVALID_POST_TYPE, $_REQUEST['invalid_post_type'], $_REQUEST['total_records']);
+                        printf(CSV_INVALID_POST_TYPE, (int)$_REQUEST['invalid_post_type'], (int)$_REQUEST['total_records']);
                         echo '</p>';
-
                     }
 
                     if (isset($_REQUEST['invalid_title']) && $_REQUEST['invalid_title'] > 0) {
-
                         echo '<p>';
-                        printf(CSV_BLANK_POST_TITLE, $_REQUEST['invalid_title'], $_REQUEST['total_records']);
+                        printf(CSV_BLANK_POST_TITLE, (int)$_REQUEST['invalid_title'], (int)$_REQUEST['total_records']);
                         echo '</p>';
-
                     }
 
                     if (isset($_REQUEST['upload_files']) && $_REQUEST['upload_files'] > 0) {
-
                         echo '<p>';
                         printf(CSV_TRANSFER_IMG_FOLDER, $uploads['subdir']);
                         echo '</p>';
-
                     }
-
-
                     ?>
-
                 </div>
-
-            <?php }?>
-
+            <?php } ?>
             <?php if (isset($_REQUEST['emsg']) && $_REQUEST['emsg'] == 'wrong') { ?>
-
                 <div class="updated fade below-h2" id="message"
                      style="background-color: rgb(255, 251, 204); margin-left:0px; margin-top:0px; margin-bottom:10px;  color:#FF0000;">
                     <p><?php echo CSV_INVAILD_FILE; ?></p>
-
                 </div>
-
             <?php }?>
-
             <?php if (isset($_REQUEST['emsg']) == 'csvonly') { ?>
-
                 <div class="updated fade below-h2" id="message"
                      style="background-color: rgb(255, 251, 204); margin-left:0px; margin-top:0px; margin-bottom:10px; color:#FF0000;">
                     <p><?php echo CSV_UPLOAD_ONLY; ?></p>
-
                 </div>
-
             <?php }
         } ?>
         <?php /* ?>
@@ -1348,11 +1320,11 @@ if (!function_exists('geodir_insert_csv_post_data') && get_option('geodir_instal
                 <th class="titledesc" scope="row"><?php echo SELECT_CSV_FILE;?></th>
                 <td class="forminp">
 
-					<?php
+                    <?php
                     $id = "import_image";
                     $multiple = false; // allow multiple files upload
                     ?>
-                 	<div class="gtd-formfeild">
+                    <div class="gtd-formfeild">
                         <div class="gtd-form_row clearfix" id="<?php echo $id; ?>dropbox">
 
                         <div class="plupload-upload-uic hide-if-no-js" id="<?php echo $id; ?>plupload-upload-ui">
@@ -2916,27 +2888,14 @@ function geodir_admin_fields($options)
                 jQuery("select.chosen_select").trigger("chosen:updated"); //refresh closen
             });
 
-
-            <?php
-            if(isset($_REQUEST['active_tab']) && $_REQUEST['active_tab'] != '')
-            {
-
-                ?>
+            <?php if (isset($_REQUEST['active_tab']) && $_REQUEST['active_tab'] != '') { ?>
             jQuery('.geodir_option_tabs').removeClass('gd-tab-active');
-            jQuery('#<?php echo $_REQUEST['active_tab'];?>').addClass('gd-tab-active');
-
+            jQuery('#<?php echo sanitize_text_field($_REQUEST['active_tab']);?>').addClass('gd-tab-active');
             jQuery('.gd-content-heading').hide();
-            jQuery('#sub_<?php echo $_REQUEST['active_tab'];?>').show();
-
-
-            <?php
-        }
-        ?>
-
+            jQuery('#sub_<?php echo sanitize_text_field($_REQUEST['active_tab']);?>').show();
+            <?php } ?>
         });
-
     </script>
-
 <?php
 }
 
@@ -3208,7 +3167,7 @@ function get_gd_theme_compat_import_callback()
     if (isset($_POST['theme']) && !empty($_POST['theme'])) {
         $json = json_decode(stripslashes($_POST['theme']), true);
         if (!empty($json) && is_array($json)) {
-            $key = key($json);
+            $key = sanitize_text_field(key($json));
             $themes[$key] = $json[$key];
             update_option('gd_theme_compats', $themes);
             echo $key;
@@ -4547,7 +4506,9 @@ function geodir_filesystem_notice()
  * @return string Json data.
  */
 function geodir_ajax_import_export() {
-	global $wpdb, $plugin_prefix, $current_user, $wp_filesystem;
+    global $wpdb, $plugin_prefix, $current_user, $wp_filesystem;
+    
+    error_reporting(0);
 
     // try to set higher limits for import
     $max_input_time = ini_get('max_input_time');
@@ -4555,591 +4516,589 @@ function geodir_ajax_import_export() {
     $memory_limit= ini_get('memory_limit');
 
     if(!$max_input_time || $max_input_time<3000){
-        @ini_set('max_input_time', 3000);
+        ini_set('max_input_time', 3000);
     }
 
     if(!$max_execution_time || $max_execution_time<3000){
-        @ini_set('max_execution_time', 3000);
+        ini_set('max_execution_time', 3000);
     }
 
     if($memory_limit && str_replace('M','',$memory_limit)){
         if(str_replace('M','',$memory_limit)<256){
-            @ini_set('memory_limit', '256M');
+            ini_set('memory_limit', '256M');
         }
     }
 
-	error_reporting(0);
+    $json = array();
 
-	$json = array();
-	
-	if ( !current_user_can( 'manage_options' ) ) {
-		wp_send_json( $json );
-	}
-	
-	$task = isset( $_REQUEST['task'] ) ? $_REQUEST['task'] : NULL;
-	$nonce = isset( $_REQUEST['_nonce'] ) ? $_REQUEST['_nonce'] : NULL;
-	$stat = isset( $_REQUEST['_st'] ) ? $_REQUEST['_st'] : false;
-	
-	if ( !wp_verify_nonce( $nonce, 'geodir_import_export_nonce' ) ) {
-		wp_send_json( $json );
-	}
+    if ( !current_user_can( 'manage_options' ) ) {
+        wp_send_json( $json );
+    }
 
-	$post_type = isset( $_REQUEST['_pt'] ) ? $_REQUEST['_pt'] : NULL;
-	$chunk_per_page = isset( $_REQUEST['_n'] ) ? absint($_REQUEST['_n']) : NULL;
-	$chunk_per_page = $chunk_per_page < 50 || $chunk_per_page > 100000 ? 5000 : $chunk_per_page;
-	$chunk_page_no = isset( $_REQUEST['_p'] ) ? absint($_REQUEST['_p']) : 1;
-	
+    $task = isset( $_REQUEST['task'] ) ? $_REQUEST['task'] : NULL;
+    $nonce = isset( $_REQUEST['_nonce'] ) ? $_REQUEST['_nonce'] : NULL;
+    $stat = isset( $_REQUEST['_st'] ) ? $_REQUEST['_st'] : false;
+
+    if ( !wp_verify_nonce( $nonce, 'geodir_import_export_nonce' ) ) {
+        wp_send_json( $json );
+    }
+
+    $post_type = isset( $_REQUEST['_pt'] ) ? $_REQUEST['_pt'] : NULL;
+    $chunk_per_page = isset( $_REQUEST['_n'] ) ? absint($_REQUEST['_n']) : NULL;
+    $chunk_per_page = $chunk_per_page < 50 || $chunk_per_page > 100000 ? 5000 : $chunk_per_page;
+    $chunk_page_no = isset( $_REQUEST['_p'] ) ? absint($_REQUEST['_p']) : 1;
+
     $wp_filesystem = geodir_init_filesystem();
     if (!$wp_filesystem) {
         $json['error'] = __( 'Filesystem ERROR: Could not access filesystem.', 'geodirectory' );
         wp_send_json( $json );
     }
-	
-	if (!empty($wp_filesystem) && isset($wp_filesystem->errors) && is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code()) {
-		$json['error'] = __( 'Filesystem ERROR: ' . $wp_filesystem->errors->get_error_message(), 'geodirectory' );
+
+    if (!empty($wp_filesystem) && isset($wp_filesystem->errors) && is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code()) {
+        $json['error'] = __( 'Filesystem ERROR: ' . $wp_filesystem->errors->get_error_message(), 'geodirectory' );
         wp_send_json( $json );
-	}
-	
-	$csv_file_dir = geodir_path_import_export( false );
-	if ( !$wp_filesystem->is_dir( $csv_file_dir ) ) {
-		if ( !$wp_filesystem->mkdir( $csv_file_dir, FS_CHMOD_DIR ) ) {
-			$json['error'] = __( 'ERROR: Could not create cache directory. This is usually due to inconsistent file permissions.', 'geodirectory' );
-			wp_send_json( $json );
-		}
-	}
+    }
 
-	switch ( $task ) {
-		case 'export_posts': {
-			// WPML
-			$is_wpml = geodir_is_wpml();
-			if ($is_wpml) {
-				global $sitepress;
-				$active_lang = ICL_LANGUAGE_CODE;
-				
-				$sitepress->switch_lang('all', true);
-			}
-			// WPML
-			if ( $post_type == 'gd_event' ) {
-				//add_filter( 'geodir_imex_count_posts', 'geodir_imex_count_events', 10, 2 );
-				add_filter( 'geodir_imex_export_posts_query', 'geodir_imex_get_events_query', 10, 2 );
-			}
-			$file_name = $post_type . '_' . date( 'dmyHi' );
-			$posts_count = geodir_get_posts_count( $post_type );
-			$file_url_base = geodir_path_import_export() . '/';
-			$file_url = $file_url_base . $file_name . '.csv';
-			$file_path = $csv_file_dir . '/' . $file_name . '.csv';
-			$file_path_temp = $csv_file_dir . '/' . $post_type . '_' . $nonce . '.csv';
-			
-			$chunk_file_paths = array();
+    $csv_file_dir = geodir_path_import_export( false );
+    if ( !$wp_filesystem->is_dir( $csv_file_dir ) ) {
+        if ( !$wp_filesystem->mkdir( $csv_file_dir, FS_CHMOD_DIR ) ) {
+            $json['error'] = __( 'ERROR: Could not create cache directory. This is usually due to inconsistent file permissions.', 'geodirectory' );
+            wp_send_json( $json );
+        }
+    }
 
-			if ( isset( $_REQUEST['_st'] ) ) {
-				$line_count = (int)geodir_import_export_line_count( $file_path_temp );
-				$percentage = count( $posts_count ) > 0 && $line_count > 0 ? ceil( $line_count / $posts_count ) * 100 : 0;
-				$percentage = min( $percentage, 100 );
-				
-				$json['percentage'] = $percentage;
-				// WPML
-				if ($is_wpml) {
-					$sitepress->switch_lang($active_lang, true);
-				}
-				// WPML
-				wp_send_json( $json );
-				exit;
-			} else {				
-				if ( !$posts_count > 0 ) {
-					$json['error'] = __( 'No records to export.', 'geodirectory' );
-				} else {
-					$total_posts = $posts_count;
-					if ($chunk_per_page > $total_posts) {
-						$chunk_per_page = $total_posts;
-					}
-					$chunk_total_pages = ceil( $total_posts / $chunk_per_page );
-					
-					$j = $chunk_page_no;
-					$chunk_save_posts = geodir_imex_get_posts( $post_type, $chunk_per_page, $j );
-					
-					$per_page = 500;
-					if ($per_page > $chunk_per_page) {
-						$per_page = $chunk_per_page;
-					}
-					$total_pages = ceil( $chunk_per_page / $per_page );
-					
-					for ( $i = 0; $i <= $total_pages; $i++ ) {
-						$save_posts = array_slice( $chunk_save_posts , ( $i * $per_page ), $per_page );
-						
-						$clear = $i == 0 ? true : false;
-						geodir_save_csv_data( $file_path_temp, $save_posts, $clear );
-					}
-						
-					if ( $wp_filesystem->exists( $file_path_temp ) ) {
-						$chunk_page_no = $chunk_total_pages > 1 ? '-' . $j : '';
-						$chunk_file_name = $file_name . $chunk_page_no . '.csv';
-						$file_path = $csv_file_dir . '/' . $chunk_file_name;
-						$wp_filesystem->move( $file_path_temp, $file_path, true );
-						
-						$file_url = $file_url_base . $chunk_file_name;
-						$chunk_file_paths[] = array('i' => $j . '.', 'u' => $file_url, 's' => size_format(filesize($file_path), 2));
-					}
-					
-					if ( !empty($chunk_file_paths) ) {
-						$json['total'] = $posts_count;
-						$json['files'] = $chunk_file_paths;
-					} else {
-						$json['error'] = __( 'ERROR: Could not create csv file. This is usually due to inconsistent file permissions.', 'geodirectory' );
-					}
-				}
-				// WPML
-				if ($is_wpml) {
-					$sitepress->switch_lang($active_lang, true);
-				}
-				// WPML
-				wp_send_json( $json );
-			}
-		}
-		break;
-		case 'export_cats': {
-			// WPML
-			$is_wpml = geodir_is_wpml();
-			if ($is_wpml) {
-				global $sitepress;
-				$active_lang = ICL_LANGUAGE_CODE;
-				
-				$sitepress->switch_lang('all', true);
-			}
-			// WPML
-			$file_name = $post_type . 'category_' . date( 'dmyHi' );
-			
-			$terms_count = geodir_get_terms_count( $post_type );
-			$file_url_base = geodir_path_import_export() . '/';
-			$file_url = $file_url_base . $file_name . '.csv';
-			$file_path = $csv_file_dir . '/' . $file_name . '.csv';
-			$file_path_temp = $csv_file_dir . '/' . $post_type . 'category_' . $nonce . '.csv';
-			
-			$chunk_file_paths = array();
-			
-			if ( isset( $_REQUEST['_st'] ) ) {
-				$line_count = (int)geodir_import_export_line_count( $file_path_temp );
-				$percentage = count( $terms_count ) > 0 && $line_count > 0 ? ceil( $line_count / $terms_count ) * 100 : 0;
-				$percentage = min( $percentage, 100 );
-				
-				$json['percentage'] = $percentage;
-				// WPML
-				if ($is_wpml) {
-					$sitepress->switch_lang($active_lang, true);
-				}
-				// WPML
-				wp_send_json( $json );
-			} else {				
-				if ( !$terms_count > 0 ) {
-					$json['error'] = __( 'No records to export.', 'geodirectory' );
-				} else {
-					$total_terms = $terms_count;
-					if ($chunk_per_page > $terms_count) {
-						$chunk_per_page = $terms_count;
-					}
-					$chunk_total_pages = ceil( $total_terms / $chunk_per_page );
-					
-					$j = $chunk_page_no;					
-					$chunk_save_terms = geodir_imex_get_terms( $post_type, $chunk_per_page, $j );
-					
-					$per_page = 500;
-					if ($per_page > $chunk_per_page) {
-						$per_page = $chunk_per_page;
-					}
-					$total_pages = ceil( $chunk_per_page / $per_page );
-					
-					for ( $i = 0; $i <= $total_pages; $i++ ) {
-						$save_terms = array_slice( $chunk_save_terms , ( $i * $per_page ), $per_page );
-						
-						$clear = $i == 0 ? true : false;
-						geodir_save_csv_data( $file_path_temp, $save_terms, $clear );
-					}
-					
-					if ( $wp_filesystem->exists( $file_path_temp ) ) {
-						$chunk_page_no = $chunk_total_pages > 1 ? '-' . $j : '';
-						$chunk_file_name = $file_name . $chunk_page_no . '.csv';
-						$file_path = $csv_file_dir . '/' . $chunk_file_name;
-						$wp_filesystem->move( $file_path_temp, $file_path, true );
-						
-						$file_url = $file_url_base . $chunk_file_name;
-						$chunk_file_paths[] = array('i' => $j . '.', 'u' => $file_url, 's' => size_format(filesize($file_path), 2));
-					}
-					
-					if ( !empty($chunk_file_paths) ) {
-						$json['total'] = $terms_count;
-						$json['files'] = $chunk_file_paths;
-					} else {
-						$json['error'] = __( 'ERROR: Could not create csv file. This is usually due to inconsistent file permissions.', 'geodirectory' );
-					}
-				}
-				// WPML
-				if ($is_wpml) {
-					$sitepress->switch_lang($active_lang, true);
-				}
-				// WPML
-				wp_send_json( $json );
-			}
-		}
-		break;
-		case 'export_locations': {
-			$file_url_base = geodir_path_import_export() . '/';
-			$file_name = 'gd_locations_' . date( 'dmyHi' );			
-			$file_url = $file_url_base . $file_name . '.csv';
-			$file_path = $csv_file_dir . '/' . $file_name . '.csv';
-			$file_path_temp = $csv_file_dir . '/gd_locations_' . $nonce . '.csv';
-			
-			$items_count = (int)geodir_location_imex_count_locations();
-			
-			if ( isset( $_REQUEST['_st'] ) ) {
-				$line_count = (int)geodir_import_export_line_count( $file_path_temp );
-				$percentage = count( $items_count ) > 0 && $line_count > 0 ? ceil( $line_count / $items_count ) * 100 : 0;
-				$percentage = min( $percentage, 100 );
-				
-				$json['percentage'] = $percentage;
-				wp_send_json( $json );
-			} else {
-				$chunk_file_paths = array();
-				
-				if ( !$items_count > 0 ) {
-					$json['error'] = __( 'No records to export.', 'geodirectory' );
-				} else {
-					$chunk_per_page = min( $chunk_per_page, $items_count );
-					$chunk_total_pages = ceil( $items_count / $chunk_per_page );
-					
-					$j = $chunk_page_no;					
-					$chunk_save_items = geodir_location_imex_locations_data( $chunk_per_page, $j );
-					
-					$per_page = 500;
-					$per_page = min( $per_page, $chunk_per_page );
-					$total_pages = ceil( $chunk_per_page / $per_page );
-					
-					for ( $i = 0; $i <= $total_pages; $i++ ) {
-						$save_items = array_slice( $chunk_save_items , ( $i * $per_page ), $per_page );
-						
-						$clear = $i == 0 ? true : false;
-						geodir_save_csv_data( $file_path_temp, $save_items, $clear );
-					}
-					
-					if ( $wp_filesystem->exists( $file_path_temp ) ) {
-						$chunk_page_no = $chunk_total_pages > 1 ? '-' . $j : '';
-						$chunk_file_name = $file_name . $chunk_page_no . '.csv';
-						$file_path = $csv_file_dir . '/' . $chunk_file_name;
-						$wp_filesystem->move( $file_path_temp, $file_path, true );
-						
-						$file_url = $file_url_base . $chunk_file_name;
-						$chunk_file_paths[] = array('i' => $j . '.', 'u' => $file_url, 's' => size_format(filesize($file_path), 2));
-					}
-					
-					if ( !empty($chunk_file_paths) ) {
-						$json['total'] = $items_count;
-						$json['files'] = $chunk_file_paths;
-					} else {
-						$json['error'] = __( 'Fail, something wrong to create csv file.', 'geodirectory' );
-					}
-				}
-				wp_send_json( $json );
-			}
-		}
-		break;
-		case 'prepare_import':
-		case 'import_cat':
-		case 'import_post':
-		case 'import_loc': {
-			// WPML
-			$is_wpml = geodir_is_wpml();
-			if ($is_wpml) {
-				global $sitepress;
-				$active_lang = ICL_LANGUAGE_CODE;
-			}
-			// WPML
-			
-			ini_set( 'auto_detect_line_endings', true );
-			
-			$uploads = wp_upload_dir();
-			$uploads_dir = $uploads['path'];
-			$uploads_subdir = $uploads['subdir'];
-			
-			$csv_file = isset( $_POST['_file'] ) ? $_POST['_file'] : NULL;
-			$import_choice = isset( $_REQUEST['_ch'] ) ? $_REQUEST['_ch'] : 'skip';
-			
-			$csv_file_arr = explode( '/', $csv_file );
-			$csv_filename = end( $csv_file_arr );
-			$target_path = $uploads_dir . '/temp_' . $current_user->data->ID . '/' . $csv_filename;
-			
-			$json['file'] = $csv_file;
-			$json['error'] = __( 'The uploaded file is not a valid csv file. Please try again.', 'geodirectory' );
+    switch ( $task ) {
+        case 'export_posts': {
+            // WPML
+            $is_wpml = geodir_is_wpml();
+            if ($is_wpml) {
+                global $sitepress;
+                $active_lang = ICL_LANGUAGE_CODE;
+                
+                $sitepress->switch_lang('all', true);
+            }
+            // WPML
+            if ( $post_type == 'gd_event' ) {
+                //add_filter( 'geodir_imex_count_posts', 'geodir_imex_count_events', 10, 2 );
+                add_filter( 'geodir_imex_export_posts_query', 'geodir_imex_get_events_query', 10, 2 );
+            }
+            $file_name = $post_type . '_' . date( 'dmyHi' );
+            $posts_count = geodir_get_posts_count( $post_type );
+            $file_url_base = geodir_path_import_export() . '/';
+            $file_url = $file_url_base . $file_name . '.csv';
+            $file_path = $csv_file_dir . '/' . $file_name . '.csv';
+            $file_path_temp = $csv_file_dir . '/' . $post_type . '_' . $nonce . '.csv';
+            
+            $chunk_file_paths = array();
 
-			if ( $csv_file && $wp_filesystem->is_file( $target_path ) && $wp_filesystem->exists( $target_path ) ) {
-				$wp_filetype = wp_check_filetype_and_ext( $target_path, $csv_filename );
-				
-				if (!empty($wp_filetype) && isset($wp_filetype['ext']) && geodir_strtolower($wp_filetype['ext']) == 'csv') {
-					$json['error'] = NULL;
-					$json['rows'] = 0;
-					
-					if ( ( $handle = fopen($target_path, "r" ) ) !== FALSE ) {
-						while ( ( $data = fgetcsv( $handle, 100000, "," ) ) !== FALSE ) {
-							if ( !empty( $data ) ) {
-								$file[] = $data;
-							}
-						}
-						fclose($handle);
-					}
-	
-					$json['rows'] = (!empty($file) && count($file) > 1) ? count($file) - 1 : 0;
-					
-					if (!$json['rows'] > 0) {
-						$json['error'] = __('No data found in csv file.', 'geodirectory');
-					}
-				} else {
-					wp_send_json( $json );
-				}
-			} else {
-				wp_send_json( $json );
-			}
-			
-			if ( $task == 'prepare_import' || !empty( $json['error'] ) ) {
-				wp_send_json( $json );
-			}
-			
-			$total = $json['rows'];
-			$limit = isset($_POST['limit']) ? (int)$_POST['limit'] : 1;
-			$processed = isset($_POST['processed']) ? (int)$_POST['processed'] : 0;
-			
-			$count = $limit;
-			$requested_limit = $limit;
-			
-			if ($count < $total) {
-				$count = $processed + $count;
-				if ($count > $total) {
-					$count = $total;
-				}
-			} else {
-				$count = $total;
-			}
-			
-			$created = 0;
-			$updated = 0;
-			$skipped = 0;
-			$invalid = 0;
-			$invalid_addr = 0;
-			$images = 0;
-			
-			$invalid_title = 0;
-			$customKeyarray = array();
-			$gd_post_info = array();
-			$post_location = array();
-			$countpost = 0;
-			
-			$post_types = geodir_get_posttypes();
-	
-			if ( $task == 'import_cat' ) {				
-				if (!empty($file)) {
-					$columns = isset($file[0]) ? $file[0] : NULL;
-					
-					if (empty($columns) || (!empty($columns) && $columns[0] == '')) {
-						$json['error'] = CSV_INVAILD_FILE;
-						wp_send_json( $json );
-						exit;
-					}
-					
-					for ($i = 1; $i <= $limit; $i++) {
-						$index = $processed + $i;
-						
-						if (isset($file[$index])) {
-							$row = $file[$index];
-							$row = array_map( 'trim', $row );
-							//$row = array_map( 'utf8_encode', $row );
-							
-							$cat_id = '';
-							$cat_name = '';
-							$cat_slug = '';
-							$cat_posttype = '';
-							$cat_parent = '';
-							$cat_description = '';
-							$cat_schema = '';
-							$cat_top_description = '';
-							$cat_image = '';
-							$cat_icon = '';
-							$cat_language = '';
-							
-							$c = 0;
-							foreach ($columns as $column ) {
-								if ( $column == 'cat_id' ) {
-									$cat_id = (int)$row[$c];
-								} else if ( $column == 'cat_name' ) {
-									$cat_name = $row[$c];
-								} else if ( $column == 'cat_slug' ) {
-									$cat_slug = $row[$c];
-								} else if ( $column == 'cat_posttype' ) {
-									$cat_posttype = $row[$c];
-								} else if ( $column == 'cat_parent' ) {
-									$cat_parent = trim($row[$c]);
-								} else if ( $column == 'cat_schema' && $row[$c] != '' ) {
-									$cat_schema = $row[$c];
-								} else if ( $column == 'cat_description' ) {
-									$cat_description = $row[$c];
-								} else if ( $column == 'cat_top_description' ) {
-									$cat_top_description = $row[$c];
-								} else if ( $column == 'cat_image' ) {
-									$cat_image = $row[$c];
-								} else if ( $column == 'cat_icon' ) {
-									$cat_icon = $row[$c];
-								}
-								// WPML
-								if ($is_wpml && $column == 'cat_language') {
-									$cat_language = geodir_strtolower(trim($row[$c]));
-								}
-								// WPML
-								$c++;
-							}
-							
-							if ( $cat_name == '' || !in_array( $cat_posttype, $post_types ) ) {
-								$invalid++;
-								continue;
-							}
-							
-							// WPML
-							if ($is_wpml && $cat_language != '') {
-								$sitepress->switch_lang($cat_language, true);
-							}
-							// WPML
-														
-							$term_data = array();
-							$term_data['name'] = $cat_name;
-							$term_data['slug'] = $cat_slug;
-							$term_data['description'] = $cat_description;
-							$term_data['cat_schema'] = $cat_schema;
-							$term_data['top_description'] = $cat_top_description;
-							$term_data['image'] = $cat_image != '' ? basename( $cat_image ) : '';
-							$term_data['icon'] = $cat_icon != '' ? basename( $cat_icon ) : '';
-							
-							//$term_data = array_map( 'utf8_encode', $term_data );
-							
-							$taxonomy = $cat_posttype . 'category';
-							
-							$term_data['taxonomy'] = $taxonomy;
+            if ( isset( $_REQUEST['_st'] ) ) {
+                $line_count = (int)geodir_import_export_line_count( $file_path_temp );
+                $percentage = count( $posts_count ) > 0 && $line_count > 0 ? ceil( $line_count / $posts_count ) * 100 : 0;
+                $percentage = min( $percentage, 100 );
+                
+                $json['percentage'] = $percentage;
+                // WPML
+                if ($is_wpml) {
+                    $sitepress->switch_lang($active_lang, true);
+                }
+                // WPML
+                wp_send_json( $json );
+                exit;
+            } else {				
+                if ( !$posts_count > 0 ) {
+                    $json['error'] = __( 'No records to export.', 'geodirectory' );
+                } else {
+                    $total_posts = $posts_count;
+                    if ($chunk_per_page > $total_posts) {
+                        $chunk_per_page = $total_posts;
+                    }
+                    $chunk_total_pages = ceil( $total_posts / $chunk_per_page );
+                    
+                    $j = $chunk_page_no;
+                    $chunk_save_posts = geodir_imex_get_posts( $post_type, $chunk_per_page, $j );
+                    
+                    $per_page = 500;
+                    if ($per_page > $chunk_per_page) {
+                        $per_page = $chunk_per_page;
+                    }
+                    $total_pages = ceil( $chunk_per_page / $per_page );
+                    
+                    for ( $i = 0; $i <= $total_pages; $i++ ) {
+                        $save_posts = array_slice( $chunk_save_posts , ( $i * $per_page ), $per_page );
+                        
+                        $clear = $i == 0 ? true : false;
+                        geodir_save_csv_data( $file_path_temp, $save_posts, $clear );
+                    }
+                        
+                    if ( $wp_filesystem->exists( $file_path_temp ) ) {
+                        $chunk_page_no = $chunk_total_pages > 1 ? '-' . $j : '';
+                        $chunk_file_name = $file_name . $chunk_page_no . '.csv';
+                        $file_path = $csv_file_dir . '/' . $chunk_file_name;
+                        $wp_filesystem->move( $file_path_temp, $file_path, true );
+                        
+                        $file_url = $file_url_base . $chunk_file_name;
+                        $chunk_file_paths[] = array('i' => $j . '.', 'u' => $file_url, 's' => size_format(filesize($file_path), 2));
+                    }
+                    
+                    if ( !empty($chunk_file_paths) ) {
+                        $json['total'] = $posts_count;
+                        $json['files'] = $chunk_file_paths;
+                    } else {
+                        $json['error'] = __( 'ERROR: Could not create csv file. This is usually due to inconsistent file permissions.', 'geodirectory' );
+                    }
+                }
+                // WPML
+                if ($is_wpml) {
+                    $sitepress->switch_lang($active_lang, true);
+                }
+                // WPML
+                wp_send_json( $json );
+            }
+        }
+        break;
+        case 'export_cats': {
+            // WPML
+            $is_wpml = geodir_is_wpml();
+            if ($is_wpml) {
+                global $sitepress;
+                $active_lang = ICL_LANGUAGE_CODE;
+                
+                $sitepress->switch_lang('all', true);
+            }
+            // WPML
+            $file_name = $post_type . 'category_' . date( 'dmyHi' );
+            
+            $terms_count = geodir_get_terms_count( $post_type );
+            $file_url_base = geodir_path_import_export() . '/';
+            $file_url = $file_url_base . $file_name . '.csv';
+            $file_path = $csv_file_dir . '/' . $file_name . '.csv';
+            $file_path_temp = $csv_file_dir . '/' . $post_type . 'category_' . $nonce . '.csv';
+            
+            $chunk_file_paths = array();
+            
+            if ( isset( $_REQUEST['_st'] ) ) {
+                $line_count = (int)geodir_import_export_line_count( $file_path_temp );
+                $percentage = count( $terms_count ) > 0 && $line_count > 0 ? ceil( $line_count / $terms_count ) * 100 : 0;
+                $percentage = min( $percentage, 100 );
+                
+                $json['percentage'] = $percentage;
+                // WPML
+                if ($is_wpml) {
+                    $sitepress->switch_lang($active_lang, true);
+                }
+                // WPML
+                wp_send_json( $json );
+            } else {				
+                if ( !$terms_count > 0 ) {
+                    $json['error'] = __( 'No records to export.', 'geodirectory' );
+                } else {
+                    $total_terms = $terms_count;
+                    if ($chunk_per_page > $terms_count) {
+                        $chunk_per_page = $terms_count;
+                    }
+                    $chunk_total_pages = ceil( $total_terms / $chunk_per_page );
+                    
+                    $j = $chunk_page_no;					
+                    $chunk_save_terms = geodir_imex_get_terms( $post_type, $chunk_per_page, $j );
+                    
+                    $per_page = 500;
+                    if ($per_page > $chunk_per_page) {
+                        $per_page = $chunk_per_page;
+                    }
+                    $total_pages = ceil( $chunk_per_page / $per_page );
+                    
+                    for ( $i = 0; $i <= $total_pages; $i++ ) {
+                        $save_terms = array_slice( $chunk_save_terms , ( $i * $per_page ), $per_page );
+                        
+                        $clear = $i == 0 ? true : false;
+                        geodir_save_csv_data( $file_path_temp, $save_terms, $clear );
+                    }
+                    
+                    if ( $wp_filesystem->exists( $file_path_temp ) ) {
+                        $chunk_page_no = $chunk_total_pages > 1 ? '-' . $j : '';
+                        $chunk_file_name = $file_name . $chunk_page_no . '.csv';
+                        $file_path = $csv_file_dir . '/' . $chunk_file_name;
+                        $wp_filesystem->move( $file_path_temp, $file_path, true );
+                        
+                        $file_url = $file_url_base . $chunk_file_name;
+                        $chunk_file_paths[] = array('i' => $j . '.', 'u' => $file_url, 's' => size_format(filesize($file_path), 2));
+                    }
+                    
+                    if ( !empty($chunk_file_paths) ) {
+                        $json['total'] = $terms_count;
+                        $json['files'] = $chunk_file_paths;
+                    } else {
+                        $json['error'] = __( 'ERROR: Could not create csv file. This is usually due to inconsistent file permissions.', 'geodirectory' );
+                    }
+                }
+                // WPML
+                if ($is_wpml) {
+                    $sitepress->switch_lang($active_lang, true);
+                }
+                // WPML
+                wp_send_json( $json );
+            }
+        }
+        break;
+        case 'export_locations': {
+            $file_url_base = geodir_path_import_export() . '/';
+            $file_name = 'gd_locations_' . date( 'dmyHi' );			
+            $file_url = $file_url_base . $file_name . '.csv';
+            $file_path = $csv_file_dir . '/' . $file_name . '.csv';
+            $file_path_temp = $csv_file_dir . '/gd_locations_' . $nonce . '.csv';
+            
+            $items_count = (int)geodir_location_imex_count_locations();
+            
+            if ( isset( $_REQUEST['_st'] ) ) {
+                $line_count = (int)geodir_import_export_line_count( $file_path_temp );
+                $percentage = count( $items_count ) > 0 && $line_count > 0 ? ceil( $line_count / $items_count ) * 100 : 0;
+                $percentage = min( $percentage, 100 );
+                
+                $json['percentage'] = $percentage;
+                wp_send_json( $json );
+            } else {
+                $chunk_file_paths = array();
+                
+                if ( !$items_count > 0 ) {
+                    $json['error'] = __( 'No records to export.', 'geodirectory' );
+                } else {
+                    $chunk_per_page = min( $chunk_per_page, $items_count );
+                    $chunk_total_pages = ceil( $items_count / $chunk_per_page );
+                    
+                    $j = $chunk_page_no;					
+                    $chunk_save_items = geodir_location_imex_locations_data( $chunk_per_page, $j );
+                    
+                    $per_page = 500;
+                    $per_page = min( $per_page, $chunk_per_page );
+                    $total_pages = ceil( $chunk_per_page / $per_page );
+                    
+                    for ( $i = 0; $i <= $total_pages; $i++ ) {
+                        $save_items = array_slice( $chunk_save_items , ( $i * $per_page ), $per_page );
+                        
+                        $clear = $i == 0 ? true : false;
+                        geodir_save_csv_data( $file_path_temp, $save_items, $clear );
+                    }
+                    
+                    if ( $wp_filesystem->exists( $file_path_temp ) ) {
+                        $chunk_page_no = $chunk_total_pages > 1 ? '-' . $j : '';
+                        $chunk_file_name = $file_name . $chunk_page_no . '.csv';
+                        $file_path = $csv_file_dir . '/' . $chunk_file_name;
+                        $wp_filesystem->move( $file_path_temp, $file_path, true );
+                        
+                        $file_url = $file_url_base . $chunk_file_name;
+                        $chunk_file_paths[] = array('i' => $j . '.', 'u' => $file_url, 's' => size_format(filesize($file_path), 2));
+                    }
+                    
+                    if ( !empty($chunk_file_paths) ) {
+                        $json['total'] = $items_count;
+                        $json['files'] = $chunk_file_paths;
+                    } else {
+                        $json['error'] = __( 'Fail, something wrong to create csv file.', 'geodirectory' );
+                    }
+                }
+                wp_send_json( $json );
+            }
+        }
+        break;
+        case 'prepare_import':
+        case 'import_cat':
+        case 'import_post':
+        case 'import_loc': {
+            // WPML
+            $is_wpml = geodir_is_wpml();
+            if ($is_wpml) {
+                global $sitepress;
+                $active_lang = ICL_LANGUAGE_CODE;
+            }
+            // WPML
+            
+            ini_set( 'auto_detect_line_endings', true );
+            
+            $uploads = wp_upload_dir();
+            $uploads_dir = $uploads['path'];
+            $uploads_subdir = $uploads['subdir'];
+            
+            $csv_file = isset( $_POST['_file'] ) ? $_POST['_file'] : NULL;
+            $import_choice = isset( $_REQUEST['_ch'] ) ? $_REQUEST['_ch'] : 'skip';
+            
+            $csv_file_arr = explode( '/', $csv_file );
+            $csv_filename = end( $csv_file_arr );
+            $target_path = $uploads_dir . '/temp_' . $current_user->data->ID . '/' . $csv_filename;
+            
+            $json['file'] = $csv_file;
+            $json['error'] = __( 'The uploaded file is not a valid csv file. Please try again.', 'geodirectory' );
 
-							$term_parent_id = 0;
-							if ($cat_parent != "" || (int)$cat_parent > 0) {
-								$term_parent = '';
-								
-								if ( $term_parent = get_term_by( 'name', $cat_parent, $taxonomy ) ) {
-									$term_parent = $term_parent;
-								} else if ( $term_parent = get_term_by( 'slug', $cat_parent, $taxonomy ) ) {
-									$term_parent = $term_parent;
-								} else if ( $term_parent = get_term_by( 'id', $cat_parent, $taxonomy ) ) {
-									$term_parent = $term_parent;
-								} else {
-									$term_parent_data = array();
-									$term_parent_data['name'] = $cat_parent;											
-									//$term_parent_data = array_map( 'utf8_encode', $term_parent_data );										
-									$term_parent_data['taxonomy'] = $taxonomy;
-									
-									$term_parent_id = (int)geodir_imex_insert_term( $taxonomy, $term_parent_data );
-								}
-								
-								if ( !empty( $term_parent ) && !is_wp_error( $term_parent ) ) {
-									$term_parent_id = (int)$term_parent->term_id;
-								}
-							}
-							$term_data['parent'] = (int)$term_parent_id;
+            if ( $csv_file && $wp_filesystem->is_file( $target_path ) && $wp_filesystem->exists( $target_path ) ) {
+                $wp_filetype = wp_check_filetype_and_ext( $target_path, $csv_filename );
+                
+                if (!empty($wp_filetype) && isset($wp_filetype['ext']) && geodir_strtolower($wp_filetype['ext']) == 'csv') {
+                    $json['error'] = NULL;
+                    $json['rows'] = 0;
+                    
+                    if ( ( $handle = fopen($target_path, "r" ) ) !== FALSE ) {
+                        while ( ( $data = fgetcsv( $handle, 100000, "," ) ) !== FALSE ) {
+                            if ( !empty( $data ) ) {
+                                $file[] = $data;
+                            }
+                        }
+                        fclose($handle);
+                    }
 
-							$term_id = NULL;
-							if ( $import_choice == 'update' ) {
-								if ( $cat_id > 0 && $term = (array)term_exists( $cat_id, $taxonomy ) ) {
-									$term_data['term_id'] = $term['term_id'];
-									
-									if ( $term_id = geodir_imex_update_term( $taxonomy, $term_data ) ) {
-										$updated++;
-									} else {
-										$invalid++;
-									}
-								} else if ( $term_data['slug'] != '' && $term = (array)term_exists( $term_data['slug'], $taxonomy ) ) {
-									$term_data['term_id'] = $term['term_id'];
-									
-									if ( $term_id = geodir_imex_update_term( $taxonomy, $term_data ) ) {
-										$updated++;
-									} else {
-										$invalid++;
-									}
-								} else {
-									if ( $term_id = geodir_imex_insert_term( $taxonomy, $term_data ) ) {
-										$created++;
-									} else {
-										$invalid++;
-									}
-								}
-							} else if ( $import_choice == 'skip' ) {
-								if ( $cat_id > 0 && $term = (array)term_exists( $cat_id, $taxonomy ) ) {
-									$skipped++;
-								} else if ( $term_data['slug'] != '' && $term = (array)term_exists( $term_data['slug'], $taxonomy ) ) {
-									$skipped++;
-								} else {
-									if ( $term_id = geodir_imex_insert_term( $taxonomy, $term_data ) ) {										
-										$created++;
-									} else {
-										$invalid++;
-									}
-								}
-							} else {
-								$invalid++;
-							}
-							
-							if ( $term_id ) {
-								if ( isset( $term_data['top_description'] ) ) {
-									update_tax_meta( $term_id, 'ct_cat_top_desc', $term_data['top_description'], $cat_posttype );
-								}
-								
-								if ( isset( $term_data['cat_schema'] ) ) {
-									update_tax_meta( $term_id, 'ct_cat_schema', $term_data['cat_schema'], $cat_posttype );
-								}
-			
-								$attachment = false;
-								if ( isset( $term_data['image'] ) && $term_data['image'] != '' ) {
-									$cat_image = geodir_get_default_catimage( $term_id, $cat_posttype );
-									$cat_image = !empty( $cat_image ) && isset( $cat_image['src'] ) ? $cat_image['src'] : '';
-									
-									if ( basename($cat_image) != $term_data['image'] ) {
-										$attachment = true;
-										update_tax_meta( $term_id, 'ct_cat_default_img', array( 'id' => 'image', 'src' => $uploads['url'] . '/' . $term_data['image'] ), $cat_posttype );
-									}
-								}
-								
-								if ( isset( $term_data['icon'] ) && $term_data['icon'] != '' ) {
-									$cat_icon = get_tax_meta( $term_id, 'ct_cat_icon', false, $cat_posttype );
-									$cat_icon = !empty( $cat_icon ) && isset( $cat_icon['src'] ) ? $cat_icon['src'] : '';
-										
-									if ( basename($cat_icon) != $term_data['icon'] ) {
-										$attachment = true;
-										update_tax_meta( $term_id, 'ct_cat_icon', array( 'id' => 'icon', 'src' => $uploads['url'] . '/' . $term_data['icon'] ), $cat_posttype );
-									}
-								}
-								
-								if ( $attachment ) {
-									$images++;
-								}
-							}
-							
-							// WPML
-							if ($is_wpml && $cat_language != '') {
-								$sitepress->switch_lang($active_lang, true);
-							}
-							// WPML
-						}
-					}
-				}
-				
-				$json = array();
-				$json['processed'] = $limit;
-				$json['created'] = $created;
-				$json['updated'] = $updated;
-				$json['skipped'] = $skipped;
-				$json['invalid'] = $invalid;
-				$json['images'] = $images;
-				
-				wp_send_json( $json );
-				exit;
-			} else if ( $task == 'import_post' ) {
+                    $json['rows'] = (!empty($file) && count($file) > 1) ? count($file) - 1 : 0;
+                    
+                    if (!$json['rows'] > 0) {
+                        $json['error'] = __('No data found in csv file.', 'geodirectory');
+                    }
+                } else {
+                    wp_send_json( $json );
+                }
+            } else {
+                wp_send_json( $json );
+            }
+            
+            if ( $task == 'prepare_import' || !empty( $json['error'] ) ) {
+                wp_send_json( $json );
+            }
+            
+            $total = $json['rows'];
+            $limit = isset($_POST['limit']) ? (int)$_POST['limit'] : 1;
+            $processed = isset($_POST['processed']) ? (int)$_POST['processed'] : 0;
+            
+            $count = $limit;
+            $requested_limit = $limit;
+            
+            if ($count < $total) {
+                $count = $processed + $count;
+                if ($count > $total) {
+                    $count = $total;
+                }
+            } else {
+                $count = $total;
+            }
+            
+            $created = 0;
+            $updated = 0;
+            $skipped = 0;
+            $invalid = 0;
+            $invalid_addr = 0;
+            $images = 0;
+            
+            $invalid_title = 0;
+            $customKeyarray = array();
+            $gd_post_info = array();
+            $post_location = array();
+            $countpost = 0;
+            
+            $post_types = geodir_get_posttypes();
+
+            if ( $task == 'import_cat' ) {				
+                if (!empty($file)) {
+                    $columns = isset($file[0]) ? $file[0] : NULL;
+                    
+                    if (empty($columns) || (!empty($columns) && $columns[0] == '')) {
+                        $json['error'] = CSV_INVAILD_FILE;
+                        wp_send_json( $json );
+                        exit;
+                    }
+                    
+                    for ($i = 1; $i <= $limit; $i++) {
+                        $index = $processed + $i;
+                        
+                        if (isset($file[$index])) {
+                            $row = $file[$index];
+                            $row = array_map( 'trim', $row );
+                            //$row = array_map( 'utf8_encode', $row );
+                            
+                            $cat_id = '';
+                            $cat_name = '';
+                            $cat_slug = '';
+                            $cat_posttype = '';
+                            $cat_parent = '';
+                            $cat_description = '';
+                            $cat_schema = '';
+                            $cat_top_description = '';
+                            $cat_image = '';
+                            $cat_icon = '';
+                            $cat_language = '';
+                            
+                            $c = 0;
+                            foreach ($columns as $column ) {
+                                if ( $column == 'cat_id' ) {
+                                    $cat_id = (int)$row[$c];
+                                } else if ( $column == 'cat_name' ) {
+                                    $cat_name = $row[$c];
+                                } else if ( $column == 'cat_slug' ) {
+                                    $cat_slug = $row[$c];
+                                } else if ( $column == 'cat_posttype' ) {
+                                    $cat_posttype = $row[$c];
+                                } else if ( $column == 'cat_parent' ) {
+                                    $cat_parent = trim($row[$c]);
+                                } else if ( $column == 'cat_schema' && $row[$c] != '' ) {
+                                    $cat_schema = $row[$c];
+                                } else if ( $column == 'cat_description' ) {
+                                    $cat_description = $row[$c];
+                                } else if ( $column == 'cat_top_description' ) {
+                                    $cat_top_description = $row[$c];
+                                } else if ( $column == 'cat_image' ) {
+                                    $cat_image = $row[$c];
+                                } else if ( $column == 'cat_icon' ) {
+                                    $cat_icon = $row[$c];
+                                }
+                                // WPML
+                                if ($is_wpml && $column == 'cat_language') {
+                                    $cat_language = geodir_strtolower(trim($row[$c]));
+                                }
+                                // WPML
+                                $c++;
+                            }
+                            
+                            if ( $cat_name == '' || !in_array( $cat_posttype, $post_types ) ) {
+                                $invalid++;
+                                continue;
+                            }
+                            
+                            // WPML
+                            if ($is_wpml && $cat_language != '') {
+                                $sitepress->switch_lang($cat_language, true);
+                            }
+                            // WPML
+                                                        
+                            $term_data = array();
+                            $term_data['name'] = $cat_name;
+                            $term_data['slug'] = $cat_slug;
+                            $term_data['description'] = $cat_description;
+                            $term_data['cat_schema'] = $cat_schema;
+                            $term_data['top_description'] = $cat_top_description;
+                            $term_data['image'] = $cat_image != '' ? basename( $cat_image ) : '';
+                            $term_data['icon'] = $cat_icon != '' ? basename( $cat_icon ) : '';
+                            
+                            //$term_data = array_map( 'utf8_encode', $term_data );
+                            
+                            $taxonomy = $cat_posttype . 'category';
+                            
+                            $term_data['taxonomy'] = $taxonomy;
+
+                            $term_parent_id = 0;
+                            if ($cat_parent != "" || (int)$cat_parent > 0) {
+                                $term_parent = '';
+                                
+                                if ( $term_parent = get_term_by( 'name', $cat_parent, $taxonomy ) ) {
+                                    $term_parent = $term_parent;
+                                } else if ( $term_parent = get_term_by( 'slug', $cat_parent, $taxonomy ) ) {
+                                    $term_parent = $term_parent;
+                                } else if ( $term_parent = get_term_by( 'id', $cat_parent, $taxonomy ) ) {
+                                    $term_parent = $term_parent;
+                                } else {
+                                    $term_parent_data = array();
+                                    $term_parent_data['name'] = $cat_parent;											
+                                    //$term_parent_data = array_map( 'utf8_encode', $term_parent_data );										
+                                    $term_parent_data['taxonomy'] = $taxonomy;
+                                    
+                                    $term_parent_id = (int)geodir_imex_insert_term( $taxonomy, $term_parent_data );
+                                }
+                                
+                                if ( !empty( $term_parent ) && !is_wp_error( $term_parent ) ) {
+                                    $term_parent_id = (int)$term_parent->term_id;
+                                }
+                            }
+                            $term_data['parent'] = (int)$term_parent_id;
+
+                            $term_id = NULL;
+                            if ( $import_choice == 'update' ) {
+                                if ( $cat_id > 0 && $term = (array)term_exists( $cat_id, $taxonomy ) ) {
+                                    $term_data['term_id'] = $term['term_id'];
+                                    
+                                    if ( $term_id = geodir_imex_update_term( $taxonomy, $term_data ) ) {
+                                        $updated++;
+                                    } else {
+                                        $invalid++;
+                                    }
+                                } else if ( $term_data['slug'] != '' && $term = (array)term_exists( $term_data['slug'], $taxonomy ) ) {
+                                    $term_data['term_id'] = $term['term_id'];
+                                    
+                                    if ( $term_id = geodir_imex_update_term( $taxonomy, $term_data ) ) {
+                                        $updated++;
+                                    } else {
+                                        $invalid++;
+                                    }
+                                } else {
+                                    if ( $term_id = geodir_imex_insert_term( $taxonomy, $term_data ) ) {
+                                        $created++;
+                                    } else {
+                                        $invalid++;
+                                    }
+                                }
+                            } else if ( $import_choice == 'skip' ) {
+                                if ( $cat_id > 0 && $term = (array)term_exists( $cat_id, $taxonomy ) ) {
+                                    $skipped++;
+                                } else if ( $term_data['slug'] != '' && $term = (array)term_exists( $term_data['slug'], $taxonomy ) ) {
+                                    $skipped++;
+                                } else {
+                                    if ( $term_id = geodir_imex_insert_term( $taxonomy, $term_data ) ) {										
+                                        $created++;
+                                    } else {
+                                        $invalid++;
+                                    }
+                                }
+                            } else {
+                                $invalid++;
+                            }
+                            
+                            if ( $term_id ) {
+                                if ( isset( $term_data['top_description'] ) ) {
+                                    update_tax_meta( $term_id, 'ct_cat_top_desc', $term_data['top_description'], $cat_posttype );
+                                }
+                                
+                                if ( isset( $term_data['cat_schema'] ) ) {
+                                    update_tax_meta( $term_id, 'ct_cat_schema', $term_data['cat_schema'], $cat_posttype );
+                                }
+            
+                                $attachment = false;
+                                if ( isset( $term_data['image'] ) && $term_data['image'] != '' ) {
+                                    $cat_image = geodir_get_default_catimage( $term_id, $cat_posttype );
+                                    $cat_image = !empty( $cat_image ) && isset( $cat_image['src'] ) ? $cat_image['src'] : '';
+                                    
+                                    if ( basename($cat_image) != $term_data['image'] ) {
+                                        $attachment = true;
+                                        update_tax_meta( $term_id, 'ct_cat_default_img', array( 'id' => 'image', 'src' => $uploads['url'] . '/' . $term_data['image'] ), $cat_posttype );
+                                    }
+                                }
+                                
+                                if ( isset( $term_data['icon'] ) && $term_data['icon'] != '' ) {
+                                    $cat_icon = get_tax_meta( $term_id, 'ct_cat_icon', false, $cat_posttype );
+                                    $cat_icon = !empty( $cat_icon ) && isset( $cat_icon['src'] ) ? $cat_icon['src'] : '';
+                                        
+                                    if ( basename($cat_icon) != $term_data['icon'] ) {
+                                        $attachment = true;
+                                        update_tax_meta( $term_id, 'ct_cat_icon', array( 'id' => 'icon', 'src' => $uploads['url'] . '/' . $term_data['icon'] ), $cat_posttype );
+                                    }
+                                }
+                                
+                                if ( $attachment ) {
+                                    $images++;
+                                }
+                            }
+                            
+                            // WPML
+                            if ($is_wpml && $cat_language != '') {
+                                $sitepress->switch_lang($active_lang, true);
+                            }
+                            // WPML
+                        }
+                    }
+                }
+                
+                $json = array();
+                $json['processed'] = $limit;
+                $json['created'] = $created;
+                $json['updated'] = $updated;
+                $json['skipped'] = $skipped;
+                $json['invalid'] = $invalid;
+                $json['images'] = $images;
+                
+                wp_send_json( $json );
+                exit;
+            } else if ( $task == 'import_post' ) {
 
                 //run some stuff to make the import quicker
                 wp_defer_term_counting( true );
@@ -5151,503 +5110,503 @@ function geodir_ajax_import_export() {
                 //remove_all_actions('publish_future_post');
 
 
-				if (!empty($file)) {
-					$wp_post_statuses = get_post_statuses(); // All of the WordPress supported post statuses.
-					$default_status = 'publish';
-					$current_date = date_i18n( 'Y-m-d', time() );
-					
-					$columns = isset($file[0]) ? $file[0] : NULL;
-					
-					if (empty($columns) || (!empty($columns) && $columns[0] == '')) {
-						$json['error'] = CSV_INVAILD_FILE;
-						wp_send_json( $json );
-						exit;
-					}
+                if (!empty($file)) {
+                    $wp_post_statuses = get_post_statuses(); // All of the WordPress supported post statuses.
+                    $default_status = 'publish';
+                    $current_date = date_i18n( 'Y-m-d', time() );
+                    
+                    $columns = isset($file[0]) ? $file[0] : NULL;
+                    
+                    if (empty($columns) || (!empty($columns) && $columns[0] == '')) {
+                        $json['error'] = CSV_INVAILD_FILE;
+                        wp_send_json( $json );
+                        exit;
+                    }
 
                     $processed_actual=0;
-					for ($i = 1; $i <= $limit; $i++) {
-						$index = $processed + $i;
-						$gd_post = array();
-						
-						if (isset($file[$index])) {$processed_actual++;
-							$row = $file[$index];
-							$row = array_map( 'trim', $row );
-							//$row = array_map( 'utf8_encode', $row );
-							$row = array_map( 'addslashes_gpc', $row );
-							
-							$post_id = '';
-							$post_title = '';
-							$post_author = '';
-							$post_content = '';
-							$post_category_arr = array();
-							$default_category = '';
-							$post_tags = array();
-							$post_type = '';
-							$post_status = '';
-							$geodir_video = '';
-							$post_address = '';
-							$post_city = '';
-							$post_region = '';
-							$post_country = '';
-							$post_zip = '';
-							$post_latitude = '';
-							$post_longitude = '';
-							$geodir_timing = '';
-							$geodir_contact = '';
-							$geodir_email = '';
-							$geodir_website = '';
-							$geodir_twitter = '';
-							$geodir_facebook = '';
-							$geodir_twitter = '';
-							$post_images = array();
-							
-							$expire_date = 'Never';
-							
-							$language = '';
-							$original_post_id = '';
-														
-							$c = 0;
-							foreach ($columns as $column ) {
-								$gd_post[$column] = $row[$c];
-								
-								if ( $column == 'post_id' ) {
-									$post_id = $row[$c];
-								} else if ( $column == 'post_title' ) {
-									$post_title = $row[$c];
-								} else if ( $column == 'post_author' ) {
-									$post_author = $row[$c];
-								} else if ( $column == 'post_content' ) {
-									$post_content = $row[$c];
-								} else if ( $column == 'post_category' && $row[$c] != '' ) {
-									$post_category_arr = explode( ',', $row[$c] );
-								} else if ( $column == 'default_category' ) {
-									$default_category = wp_kses_normalize_entities($row[$c]);
-								} else if ( $column == 'post_tags' && $row[$c] != '' ) {
-									$post_tags = explode( ',', $row[$c] );
-								} else if ( $column == 'post_type' ) {
-									$post_type = $row[$c];
-								} else if ( $column == 'post_status' ) {
-									$post_status = sanitize_key( $row[$c] );
-								} else if ( $column == 'is_featured' ) {
-									$is_featured = (int)$row[$c];
-								} else if ( $column == 'geodir_video' ) {
-									$geodir_video = $row[$c];
-								} else if ( $column == 'post_address' ) {
-									$post_address = $row[$c];
-								} else if ( $column == 'post_city' ) {
-									$post_city = $row[$c];
-								} else if ( $column == 'post_region' ) {
-									$post_region = $row[$c];
-								} else if ( $column == 'post_country' ) {
-									$post_country = $row[$c];
-								} else if ( $column == 'post_zip' ) {
-									$post_zip = $row[$c];
-								} else if ( $column == 'post_latitude' ) {
-									$post_latitude = $row[$c];
-								} else if ( $column == 'post_longitude' ) {
-									$post_longitude = $row[$c];
-								} else if ( $column == 'geodir_timing' ) {
-									$geodir_timing = $row[$c];
-								} else if ( $column == 'geodir_contact' ) {
-									$geodir_contact = $row[$c];
-								} else if ( $column == 'geodir_email' ) {
-									$geodir_email = $row[$c];
-								} else if ( $column == 'geodir_website' ) {
-									$geodir_website = $row[$c];
-								} else if ( $column == 'geodir_twitter' ) {
-									$geodir_twitter = $row[$c];
-								} else if ( $column == 'geodir_facebook' ) {
-									$geodir_facebook = $row[$c];
-								} else if ( $column == 'geodir_twitter' ) {
-									$geodir_twitter = $row[$c];
-								} else if ( $column == 'IMAGE' && !empty( $row[$c] ) && $row[$c] != '' ) {
-									$post_images[] = $row[$c];
-								} else if ( $column == 'alive_days' && (int)$row[$c] > 0 ) {
-									$expire_date = date_i18n( 'Y-m-d', strtotime( $current_date . '+' . (int)$row[$c] . ' days' ) );
-								} else if ( $column == 'expire_date' && $row[$c] != '' && geodir_strtolower($row[$c]) != 'never' ) {
-									$row[$c] = str_replace('/', '-', $row[$c]);
-									$expire_date = date_i18n( 'Y-m-d', strtotime( $row[$c] ) );
-								}
-								// WPML
-								if ($is_wpml) {
-									if ($column == 'language') {
-										$language = geodir_strtolower(trim($row[$c]));
-									} else if ($column == 'original_post_id') {
-										$original_post_id = (int)$row[$c];
-									}
-								}
-								// WPML
-								$c++;
-							}
-							
-							// WPML
-							if ($is_wpml && $language != '') {
-								$sitepress->switch_lang($language, true);
-							}
-							// WPML
+                    for ($i = 1; $i <= $limit; $i++) {
+                        $index = $processed + $i;
+                        $gd_post = array();
+                        
+                        if (isset($file[$index])) {$processed_actual++;
+                            $row = $file[$index];
+                            $row = array_map( 'trim', $row );
+                            //$row = array_map( 'utf8_encode', $row );
+                            $row = array_map( 'addslashes_gpc', $row );
+                            
+                            $post_id = '';
+                            $post_title = '';
+                            $post_author = '';
+                            $post_content = '';
+                            $post_category_arr = array();
+                            $default_category = '';
+                            $post_tags = array();
+                            $post_type = '';
+                            $post_status = '';
+                            $geodir_video = '';
+                            $post_address = '';
+                            $post_city = '';
+                            $post_region = '';
+                            $post_country = '';
+                            $post_zip = '';
+                            $post_latitude = '';
+                            $post_longitude = '';
+                            $geodir_timing = '';
+                            $geodir_contact = '';
+                            $geodir_email = '';
+                            $geodir_website = '';
+                            $geodir_twitter = '';
+                            $geodir_facebook = '';
+                            $geodir_twitter = '';
+                            $post_images = array();
+                            
+                            $expire_date = 'Never';
+                            
+                            $language = '';
+                            $original_post_id = '';
+                                                        
+                            $c = 0;
+                            foreach ($columns as $column ) {
+                                $gd_post[$column] = $row[$c];
+                                
+                                if ( $column == 'post_id' ) {
+                                    $post_id = $row[$c];
+                                } else if ( $column == 'post_title' ) {
+                                    $post_title = $row[$c];
+                                } else if ( $column == 'post_author' ) {
+                                    $post_author = $row[$c];
+                                } else if ( $column == 'post_content' ) {
+                                    $post_content = $row[$c];
+                                } else if ( $column == 'post_category' && $row[$c] != '' ) {
+                                    $post_category_arr = explode( ',', $row[$c] );
+                                } else if ( $column == 'default_category' ) {
+                                    $default_category = wp_kses_normalize_entities($row[$c]);
+                                } else if ( $column == 'post_tags' && $row[$c] != '' ) {
+                                    $post_tags = explode( ',', $row[$c] );
+                                } else if ( $column == 'post_type' ) {
+                                    $post_type = $row[$c];
+                                } else if ( $column == 'post_status' ) {
+                                    $post_status = sanitize_key( $row[$c] );
+                                } else if ( $column == 'is_featured' ) {
+                                    $is_featured = (int)$row[$c];
+                                } else if ( $column == 'geodir_video' ) {
+                                    $geodir_video = $row[$c];
+                                } else if ( $column == 'post_address' ) {
+                                    $post_address = $row[$c];
+                                } else if ( $column == 'post_city' ) {
+                                    $post_city = $row[$c];
+                                } else if ( $column == 'post_region' ) {
+                                    $post_region = $row[$c];
+                                } else if ( $column == 'post_country' ) {
+                                    $post_country = $row[$c];
+                                } else if ( $column == 'post_zip' ) {
+                                    $post_zip = $row[$c];
+                                } else if ( $column == 'post_latitude' ) {
+                                    $post_latitude = $row[$c];
+                                } else if ( $column == 'post_longitude' ) {
+                                    $post_longitude = $row[$c];
+                                } else if ( $column == 'geodir_timing' ) {
+                                    $geodir_timing = $row[$c];
+                                } else if ( $column == 'geodir_contact' ) {
+                                    $geodir_contact = $row[$c];
+                                } else if ( $column == 'geodir_email' ) {
+                                    $geodir_email = $row[$c];
+                                } else if ( $column == 'geodir_website' ) {
+                                    $geodir_website = $row[$c];
+                                } else if ( $column == 'geodir_twitter' ) {
+                                    $geodir_twitter = $row[$c];
+                                } else if ( $column == 'geodir_facebook' ) {
+                                    $geodir_facebook = $row[$c];
+                                } else if ( $column == 'geodir_twitter' ) {
+                                    $geodir_twitter = $row[$c];
+                                } else if ( $column == 'IMAGE' && !empty( $row[$c] ) && $row[$c] != '' ) {
+                                    $post_images[] = $row[$c];
+                                } else if ( $column == 'alive_days' && (int)$row[$c] > 0 ) {
+                                    $expire_date = date_i18n( 'Y-m-d', strtotime( $current_date . '+' . (int)$row[$c] . ' days' ) );
+                                } else if ( $column == 'expire_date' && $row[$c] != '' && geodir_strtolower($row[$c]) != 'never' ) {
+                                    $row[$c] = str_replace('/', '-', $row[$c]);
+                                    $expire_date = date_i18n( 'Y-m-d', strtotime( $row[$c] ) );
+                                }
+                                // WPML
+                                if ($is_wpml) {
+                                    if ($column == 'language') {
+                                        $language = geodir_strtolower(trim($row[$c]));
+                                    } else if ($column == 'original_post_id') {
+                                        $original_post_id = (int)$row[$c];
+                                    }
+                                }
+                                // WPML
+                                $c++;
+                            }
+                            
+                            // WPML
+                            if ($is_wpml && $language != '') {
+                                $sitepress->switch_lang($language, true);
+                            }
+                            // WPML
 
-							$gd_post['IMAGE'] = $post_images;
-							
-							$post_status = !empty( $post_status ) ? sanitize_key( $post_status ) : $default_status;
-							$post_status = !empty( $wp_post_statuses ) && !isset( $wp_post_statuses[$post_status] ) ? $default_status : $post_status;
-																												
-							$valid = true;
-							
-							if ( $post_title == '' || !in_array( $post_type, $post_types ) ) {
-								$invalid++;
-								$valid = false;
-							}
-							
-							$location_allowed = function_exists( 'geodir_cpt_no_location' ) && geodir_cpt_no_location( $post_type ) ? false : true;
-							if ( $location_allowed ) {
-								$location_result = geodir_get_default_location();
-								if ( $post_address == '' || $post_city == '' || $post_region == '' || $post_country == '' || $post_latitude == '' || $post_longitude == '' ) {
-									$invalid_addr++;
-									$valid = false;
-								} else if ( !empty( $location_result ) && $location_result->location_id == 0 ) {
-									if ( ( geodir_strtolower( $post_city ) != geodir_strtolower( $location_result->city ) ) || ( geodir_strtolower( $post_region ) != geodir_strtolower( $location_result->region ) ) || (geodir_strtolower( $post_country ) != geodir_strtolower( $location_result->country ) ) ) {
-										$invalid_addr++;
-										$valid = false;
-									} else {
-										if (!function_exists('geodir_location_plugin_activated')) {
-											$gd_post['post_locations'] = '[' . $location_result->city_slug . '],[' . $location_result->region_slug . '],[' . $location_result->country_slug . ']'; // Set the default location when location manager not activated.
-										}
-									}
-								}
-							}
-							
-							if ( !$valid ) {
-								continue;
-							}
+                            $gd_post['IMAGE'] = $post_images;
+                            
+                            $post_status = !empty( $post_status ) ? sanitize_key( $post_status ) : $default_status;
+                            $post_status = !empty( $wp_post_statuses ) && !isset( $wp_post_statuses[$post_status] ) ? $default_status : $post_status;
+                                                                                                                
+                            $valid = true;
+                            
+                            if ( $post_title == '' || !in_array( $post_type, $post_types ) ) {
+                                $invalid++;
+                                $valid = false;
+                            }
+                            
+                            $location_allowed = function_exists( 'geodir_cpt_no_location' ) && geodir_cpt_no_location( $post_type ) ? false : true;
+                            if ( $location_allowed ) {
+                                $location_result = geodir_get_default_location();
+                                if ( $post_address == '' || $post_city == '' || $post_region == '' || $post_country == '' || $post_latitude == '' || $post_longitude == '' ) {
+                                    $invalid_addr++;
+                                    $valid = false;
+                                } else if ( !empty( $location_result ) && $location_result->location_id == 0 ) {
+                                    if ( ( geodir_strtolower( $post_city ) != geodir_strtolower( $location_result->city ) ) || ( geodir_strtolower( $post_region ) != geodir_strtolower( $location_result->region ) ) || (geodir_strtolower( $post_country ) != geodir_strtolower( $location_result->country ) ) ) {
+                                        $invalid_addr++;
+                                        $valid = false;
+                                    } else {
+                                        if (!function_exists('geodir_location_plugin_activated')) {
+                                            $gd_post['post_locations'] = '[' . $location_result->city_slug . '],[' . $location_result->region_slug . '],[' . $location_result->country_slug . ']'; // Set the default location when location manager not activated.
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            if ( !$valid ) {
+                                continue;
+                            }
 
-							$cat_taxonomy = $post_type . 'category';
-							$tags_taxonomy = $post_type . '_tags';
-							
-							if ($default_category != '' && !in_array($default_category, $post_category_arr)) {
-								$post_category_arr = array_merge(array($default_category), $post_category_arr);
-							}
+                            $cat_taxonomy = $post_type . 'category';
+                            $tags_taxonomy = $post_type . '_tags';
+                            
+                            if ($default_category != '' && !in_array($default_category, $post_category_arr)) {
+                                $post_category_arr = array_merge(array($default_category), $post_category_arr);
+                            }
 
-							$post_category = array();
-							$default_category_id = NULL;
-							if ( !empty( $post_category_arr ) ) {
-								foreach ( $post_category_arr as $value ) {
-									$category_name = wp_kses_normalize_entities( trim( $value ) );
-									
-									if ( $category_name != '' ) {
-										$term_category = array();
-										
-										if ( $term = get_term_by( 'name', $category_name, $cat_taxonomy ) ) {
-											$term_category = $term;
-										} else if ( $term = get_term_by( 'slug', $category_name, $cat_taxonomy ) ) {
-											$term_category = $term;
-										} else {
-											$term_data = array();
-											$term_data['name'] = $category_name;											
-											//$term_data = array_map( 'utf8_encode', $term_data );										
-											$term_data['taxonomy'] = $cat_taxonomy;
-											
-											$term_id = geodir_imex_insert_term( $cat_taxonomy, $term_data );
-											if ( $term_id ) {
-												$term_category = get_term( $term_id, $cat_taxonomy );
-											}
-										}
-										
-										if ( !empty( $term_category ) && !is_wp_error( $term_category ) ) {
-											//$post_category[] = $term_category->slug;
-											$post_category[] = intval($term_category->term_id);
-											
-											if ($category_name == $default_category) {
-												$default_category_id = intval($term_category->term_id);
-											}
-										}
-									}
-								}
-							}
+                            $post_category = array();
+                            $default_category_id = NULL;
+                            if ( !empty( $post_category_arr ) ) {
+                                foreach ( $post_category_arr as $value ) {
+                                    $category_name = wp_kses_normalize_entities( trim( $value ) );
+                                    
+                                    if ( $category_name != '' ) {
+                                        $term_category = array();
+                                        
+                                        if ( $term = get_term_by( 'name', $category_name, $cat_taxonomy ) ) {
+                                            $term_category = $term;
+                                        } else if ( $term = get_term_by( 'slug', $category_name, $cat_taxonomy ) ) {
+                                            $term_category = $term;
+                                        } else {
+                                            $term_data = array();
+                                            $term_data['name'] = $category_name;											
+                                            //$term_data = array_map( 'utf8_encode', $term_data );										
+                                            $term_data['taxonomy'] = $cat_taxonomy;
+                                            
+                                            $term_id = geodir_imex_insert_term( $cat_taxonomy, $term_data );
+                                            if ( $term_id ) {
+                                                $term_category = get_term( $term_id, $cat_taxonomy );
+                                            }
+                                        }
+                                        
+                                        if ( !empty( $term_category ) && !is_wp_error( $term_category ) ) {
+                                            //$post_category[] = $term_category->slug;
+                                            $post_category[] = intval($term_category->term_id);
+                                            
+                                            if ($category_name == $default_category) {
+                                                $default_category_id = intval($term_category->term_id);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
-							$save_post = array();
-							$save_post['post_title'] = $post_title;
-							$save_post['post_content'] = $post_content;
-							$save_post['post_type'] = $post_type;
-							$save_post['post_author'] = $post_author;
-							$save_post['post_status'] = $post_status;
-							$save_post['post_category'] = $post_category;
-							$save_post['post_tags'] = $post_tags;
+                            $save_post = array();
+                            $save_post['post_title'] = $post_title;
+                            $save_post['post_content'] = $post_content;
+                            $save_post['post_type'] = $post_type;
+                            $save_post['post_author'] = $post_author;
+                            $save_post['post_status'] = $post_status;
+                            $save_post['post_category'] = $post_category;
+                            $save_post['post_tags'] = $post_tags;
 
-							$saved_post_id = NULL;
-							if ( $import_choice == 'update' ) {
-								if ( $post_id > 0 && get_post( $post_id ) ) {
-									$save_post['ID'] = $post_id;
-									
-									if ( wp_update_post( $save_post ) ) {
-										$saved_post_id = $post_id;
-										$updated++;
-									}
-								} else {
-									if ( $saved_post_id = wp_insert_post( $save_post ) ) {
-										$created++;
-									}
-								}
-								
-								if ( !$saved_post_id > 0 ) {
-									$invalid++;
-								}
-							} else if ( $import_choice == 'skip' ) {
-								if ( $post_id > 0 && get_post( $post_id ) ) {
-									$skipped++;	
-								} else {
-									if ( $saved_post_id = wp_insert_post( $save_post ) ) {
-										$created++;	
-									} else {
-										$invalid++;
-									}
-								}
-							} else {
-								$invalid++;
-							}
+                            $saved_post_id = NULL;
+                            if ( $import_choice == 'update' ) {
+                                if ( $post_id > 0 && get_post( $post_id ) ) {
+                                    $save_post['ID'] = $post_id;
+                                    
+                                    if ( wp_update_post( $save_post ) ) {
+                                        $saved_post_id = $post_id;
+                                        $updated++;
+                                    }
+                                } else {
+                                    if ( $saved_post_id = wp_insert_post( $save_post ) ) {
+                                        $created++;
+                                    }
+                                }
+                                
+                                if ( !$saved_post_id > 0 ) {
+                                    $invalid++;
+                                }
+                            } else if ( $import_choice == 'skip' ) {
+                                if ( $post_id > 0 && get_post( $post_id ) ) {
+                                    $skipped++;	
+                                } else {
+                                    if ( $saved_post_id = wp_insert_post( $save_post ) ) {
+                                        $created++;	
+                                    } else {
+                                        $invalid++;
+                                    }
+                                }
+                            } else {
+                                $invalid++;
+                            }
 
-							if ( (int)$saved_post_id > 0 ) {
-								// WPML
-								if ($is_wpml && $original_post_id > 0 && $language != '') {
-									$wpml_post_type = 'post_' . $post_type;
-									$source_language = geodir_get_language_for_element( $original_post_id, $wpml_post_type );
-									$source_language = $source_language != '' ? $source_language : $sitepress->get_default_language();
+                            if ( (int)$saved_post_id > 0 ) {
+                                // WPML
+                                if ($is_wpml && $original_post_id > 0 && $language != '') {
+                                    $wpml_post_type = 'post_' . $post_type;
+                                    $source_language = geodir_get_language_for_element( $original_post_id, $wpml_post_type );
+                                    $source_language = $source_language != '' ? $source_language : $sitepress->get_default_language();
 
-									$trid = $sitepress->get_element_trid( $original_post_id, $wpml_post_type );
-									
-									$sitepress->set_element_language_details( $saved_post_id, $wpml_post_type, $trid, $language, $source_language );
-								}
-								// WPML
-								$gd_post_info = geodir_get_post_info( $saved_post_id );
-								
-								$gd_post['post_id'] = $saved_post_id;
-								$gd_post['ID'] = $saved_post_id;
-								$gd_post['post_tags'] = $post_tags;
-								$gd_post['post_title'] = $post_title;
-								$gd_post['post_status'] = $post_status;
-								$gd_post['submit_time'] = time();
-								$gd_post['submit_ip'] = $_SERVER['REMOTE_ADDR'];
-													
-								// post location
-								$post_location_id = 0;
-								if ( $location_allowed && !empty( $location_result ) && $location_result->location_id > 0 ) {
-									$post_location_info = array(
-																'city' => $post_city,
-																'region' => $post_region,
-																'country' => $post_country,
-																'geo_lat' => $post_latitude,
-																'geo_lng' => $post_longitude
-															);
-									if ( $location_id = (int)geodir_add_new_location( $post_location_info ) ) {
-										$post_location_id = $location_id;
-									}
-								}
-								$gd_post['post_location_id'] = $post_location_id;
-								
-								// post package info
-								$package_id = isset( $gd_post['package_id'] ) && !empty( $gd_post['package_id'] ) ? (int)$gd_post['package_id'] : 0;
-								if (!$package_id && !empty($gd_post_info) && isset($gd_post_info->package_id) && $gd_post_info->package_id) {
-									$package_id = $gd_post_info->package_id;
-								}
-								
-								$package_info = array();
-								if ($package_id && function_exists('geodir_get_package_info_by_id')) {
-									$package_info = (array)geodir_get_package_info_by_id($package_id);
-									
-									if (!(!empty($package_info) && isset($package_info['post_type']) && $package_info['post_type'] == $post_type)) {
-										$package_info = array();
-									}
-								}
-								
-								if (empty($package_info)) {
-									$package_info = (array)geodir_post_package_info( array(), '', $post_type );
-								}
-								 
-								if (!empty($package_info))	 {
-									$package_id = $package_info['pid'];
-									
-									if (isset($gd_post['alive_days']) || isset($gd_post['expire_date'])) {
-										$gd_post['expire_date'] = $expire_date;
-									} else {
-										if ( isset( $package_info['days'] ) && (int)$package_info['days'] > 0 ) {
-											$gd_post['alive_days'] = (int)$package_info['days'];
-											$gd_post['expire_date'] = date_i18n( 'Y-m-d', strtotime( $current_date . '+' . (int)$package_info['days'] . ' days' ) );
-										} else {
-											$gd_post['expire_date'] = 'Never';
-										}
-									}
-									
-									$gd_post['package_id'] = $package_id;
-								}
+                                    $trid = $sitepress->get_element_trid( $original_post_id, $wpml_post_type );
+                                    
+                                    $sitepress->set_element_language_details( $saved_post_id, $wpml_post_type, $trid, $language, $source_language );
+                                }
+                                // WPML
+                                $gd_post_info = geodir_get_post_info( $saved_post_id );
+                                
+                                $gd_post['post_id'] = $saved_post_id;
+                                $gd_post['ID'] = $saved_post_id;
+                                $gd_post['post_tags'] = $post_tags;
+                                $gd_post['post_title'] = $post_title;
+                                $gd_post['post_status'] = $post_status;
+                                $gd_post['submit_time'] = time();
+                                $gd_post['submit_ip'] = $_SERVER['REMOTE_ADDR'];
+                                                    
+                                // post location
+                                $post_location_id = 0;
+                                if ( $location_allowed && !empty( $location_result ) && $location_result->location_id > 0 ) {
+                                    $post_location_info = array(
+                                                                'city' => $post_city,
+                                                                'region' => $post_region,
+                                                                'country' => $post_country,
+                                                                'geo_lat' => $post_latitude,
+                                                                'geo_lng' => $post_longitude
+                                                            );
+                                    if ( $location_id = (int)geodir_add_new_location( $post_location_info ) ) {
+                                        $post_location_id = $location_id;
+                                    }
+                                }
+                                $gd_post['post_location_id'] = $post_location_id;
+                                
+                                // post package info
+                                $package_id = isset( $gd_post['package_id'] ) && !empty( $gd_post['package_id'] ) ? (int)$gd_post['package_id'] : 0;
+                                if (!$package_id && !empty($gd_post_info) && isset($gd_post_info->package_id) && $gd_post_info->package_id) {
+                                    $package_id = $gd_post_info->package_id;
+                                }
+                                
+                                $package_info = array();
+                                if ($package_id && function_exists('geodir_get_package_info_by_id')) {
+                                    $package_info = (array)geodir_get_package_info_by_id($package_id);
+                                    
+                                    if (!(!empty($package_info) && isset($package_info['post_type']) && $package_info['post_type'] == $post_type)) {
+                                        $package_info = array();
+                                    }
+                                }
+                                
+                                if (empty($package_info)) {
+                                    $package_info = (array)geodir_post_package_info( array(), '', $post_type );
+                                }
+                                 
+                                if (!empty($package_info))	 {
+                                    $package_id = $package_info['pid'];
+                                    
+                                    if (isset($gd_post['alive_days']) || isset($gd_post['expire_date'])) {
+                                        $gd_post['expire_date'] = $expire_date;
+                                    } else {
+                                        if ( isset( $package_info['days'] ) && (int)$package_info['days'] > 0 ) {
+                                            $gd_post['alive_days'] = (int)$package_info['days'];
+                                            $gd_post['expire_date'] = date_i18n( 'Y-m-d', strtotime( $current_date . '+' . (int)$package_info['days'] . ' days' ) );
+                                        } else {
+                                            $gd_post['expire_date'] = 'Never';
+                                        }
+                                    }
+                                    
+                                    $gd_post['package_id'] = $package_id;
+                                }
 
-								$table = $plugin_prefix . $post_type . '_detail';
-								
-								if ($post_type == 'gd_event') {
-									$gd_post = geodir_imex_process_event_data($gd_post);
-								}
-								
-								if (isset($gd_post['post_id'])) {
-									unset($gd_post['post_id']);
-								}
+                                $table = $plugin_prefix . $post_type . '_detail';
+                                
+                                if ($post_type == 'gd_event') {
+                                    $gd_post = geodir_imex_process_event_data($gd_post);
+                                }
+                                
+                                if (isset($gd_post['post_id'])) {
+                                    unset($gd_post['post_id']);
+                                }
 
-								// Export franchise fields
-								$is_franchise_active = is_plugin_active( 'geodir_franchise/geodir_franchise.php' ) && geodir_franchise_enabled( $post_type ) ? true : false;
-								if ($is_franchise_active) {
-									if ( isset( $gd_post['gd_is_franchise'] ) && (int)$gd_post['gd_is_franchise'] == 1 ) {
-										$gd_franchise_lock = array();
-										
-										if ( isset( $gd_post['gd_franchise_lock'] ) ) {
-											$gd_franchise_lock = str_replace(" ", "", $gd_post['gd_franchise_lock'] );
-											$gd_franchise_lock = trim( $gd_franchise_lock );
-											$gd_franchise_lock = explode( ",", $gd_franchise_lock );
-										}
-										
-										update_post_meta( $saved_post_id, 'gd_is_franchise', 1 );
-										update_post_meta( $saved_post_id, 'gd_franchise_lock', $gd_franchise_lock );
-									} else {
-										if ( isset( $gd_post['franchise'] ) && (int)$gd_post['franchise'] > 0 && geodir_franchise_check( (int)$gd_post['franchise'] ) ) {
-											geodir_save_post_meta( $saved_post_id, 'franchise', (int)$gd_post['franchise'] );
-										}
-									}
-								}
-								
-								if (!empty($save_post['post_category']) && is_array($save_post['post_category'])) {
-									$save_post['post_category'] = array_unique( array_map( 'intval', $save_post['post_category'] ) );
-									if ($default_category_id) {
-										$save_post['post_default_category'] = $default_category_id;
-										$gd_post['default_category'] = $default_category_id;
-									}
-									$gd_post[$cat_taxonomy] = $save_post['post_category'];
-								}
-								
-								// Save post info
-								geodir_save_post_info( $saved_post_id, $gd_post );
-								// post taxonomies
-								if ( !empty( $save_post['post_category'] ) ) {
-									wp_set_object_terms( $saved_post_id, $save_post['post_category'], $cat_taxonomy );
-									
-									$post_default_category = isset( $save_post['post_default_category'] ) ? $save_post['post_default_category'] : '';
-									if ($default_category_id) {
-										$post_default_category = $default_category_id;
-									}
-									$post_cat_ids = geodir_get_post_meta($saved_post_id, $cat_taxonomy);
-									$save_post['post_category'] = !empty($post_cat_ids) ? explode(",", trim($post_cat_ids, ",")) : $save_post['post_category'];
-									$post_category_str = !empty($save_post['post_category']) ? implode(",y:#", $save_post['post_category']) . ',y:' : '';
-									
-									if ($post_category_str != '' && $post_default_category) {
-										$post_category_str = str_replace($post_default_category . ',y:', $post_default_category . ',y,d:', $post_category_str);
-									}
-									
-									$post_category_str = $post_category_str != '' ? array($cat_taxonomy => $post_category_str) : '';
-                            		
-									geodir_set_postcat_structure( $saved_post_id, $cat_taxonomy, $post_default_category, $post_category_str );
-								}
+                                // Export franchise fields
+                                $is_franchise_active = is_plugin_active( 'geodir_franchise/geodir_franchise.php' ) && geodir_franchise_enabled( $post_type ) ? true : false;
+                                if ($is_franchise_active) {
+                                    if ( isset( $gd_post['gd_is_franchise'] ) && (int)$gd_post['gd_is_franchise'] == 1 ) {
+                                        $gd_franchise_lock = array();
+                                        
+                                        if ( isset( $gd_post['gd_franchise_lock'] ) ) {
+                                            $gd_franchise_lock = str_replace(" ", "", $gd_post['gd_franchise_lock'] );
+                                            $gd_franchise_lock = trim( $gd_franchise_lock );
+                                            $gd_franchise_lock = explode( ",", $gd_franchise_lock );
+                                        }
+                                        
+                                        update_post_meta( $saved_post_id, 'gd_is_franchise', 1 );
+                                        update_post_meta( $saved_post_id, 'gd_franchise_lock', $gd_franchise_lock );
+                                    } else {
+                                        if ( isset( $gd_post['franchise'] ) && (int)$gd_post['franchise'] > 0 && geodir_franchise_check( (int)$gd_post['franchise'] ) ) {
+                                            geodir_save_post_meta( $saved_post_id, 'franchise', (int)$gd_post['franchise'] );
+                                        }
+                                    }
+                                }
+                                
+                                if (!empty($save_post['post_category']) && is_array($save_post['post_category'])) {
+                                    $save_post['post_category'] = array_unique( array_map( 'intval', $save_post['post_category'] ) );
+                                    if ($default_category_id) {
+                                        $save_post['post_default_category'] = $default_category_id;
+                                        $gd_post['default_category'] = $default_category_id;
+                                    }
+                                    $gd_post[$cat_taxonomy] = $save_post['post_category'];
+                                }
+                                
+                                // Save post info
+                                geodir_save_post_info( $saved_post_id, $gd_post );
+                                // post taxonomies
+                                if ( !empty( $save_post['post_category'] ) ) {
+                                    wp_set_object_terms( $saved_post_id, $save_post['post_category'], $cat_taxonomy );
+                                    
+                                    $post_default_category = isset( $save_post['post_default_category'] ) ? $save_post['post_default_category'] : '';
+                                    if ($default_category_id) {
+                                        $post_default_category = $default_category_id;
+                                    }
+                                    $post_cat_ids = geodir_get_post_meta($saved_post_id, $cat_taxonomy);
+                                    $save_post['post_category'] = !empty($post_cat_ids) ? explode(",", trim($post_cat_ids, ",")) : $save_post['post_category'];
+                                    $post_category_str = !empty($save_post['post_category']) ? implode(",y:#", $save_post['post_category']) . ',y:' : '';
+                                    
+                                    if ($post_category_str != '' && $post_default_category) {
+                                        $post_category_str = str_replace($post_default_category . ',y:', $post_default_category . ',y,d:', $post_category_str);
+                                    }
+                                    
+                                    $post_category_str = $post_category_str != '' ? array($cat_taxonomy => $post_category_str) : '';
+                                    
+                                    geodir_set_postcat_structure( $saved_post_id, $cat_taxonomy, $post_default_category, $post_category_str );
+                                }
 
-								if ( !empty( $save_post['post_tags'] ) ) {
-									wp_set_object_terms( $saved_post_id, $save_post['post_tags'], $tags_taxonomy );
-								}
+                                if ( !empty( $save_post['post_tags'] ) ) {
+                                    wp_set_object_terms( $saved_post_id, $save_post['post_tags'], $tags_taxonomy );
+                                }
 
-								// Post images
-								if ( !empty( $post_images ) ) {
-									$post_images = array_unique($post_images);
-									
-									$old_post_images_arr = array();
-									$saved_post_images_arr = array();
-									
-									$order = 1;
-									
-									$old_post_images = geodir_get_images( $saved_post_id );
-									if (!empty($old_post_images)) {
-										foreach( $old_post_images as $old_post_image ) {
-											if (!empty($old_post_image) && isset($old_post_image->file) && $old_post_image->file != '') {
-												$old_post_images_arr[] = $old_post_image->file;
-											}
-										}
-									}
-									
-									foreach ( $post_images as $post_image ) {
-										$image_name = basename( $post_image );
-										$saved_post_images_arr[] = $image_name;
-										
-										if (!empty($old_post_images_arr) && in_array( $image_name, $old_post_images_arr) ) {
-											continue; // Skip if image already exists.
-										}
-										
-										$image_name_parts = explode( '.', $image_name );
-										array_pop( $image_name_parts );
-										$proper_image_name = implode( '.', $image_name_parts );
-										
-										$arr_file_type = wp_check_filetype( $image_name );
-										
-										if ( !empty( $arr_file_type ) ) {
-											$uploaded_file_type = $arr_file_type['type'];
-											
-											$attachment = array();
-											$attachment['post_id'] = $saved_post_id;
-											$attachment['title'] = $proper_image_name;
-											$attachment['content'] = '';
-											$attachment['file'] = $uploads_subdir . '/' . $image_name;
-											$attachment['mime_type'] = $uploaded_file_type;
-											$attachment['menu_order'] = $order;
-											$attachment['is_featured'] = 0;
+                                // Post images
+                                if ( !empty( $post_images ) ) {
+                                    $post_images = array_unique($post_images);
+                                    
+                                    $old_post_images_arr = array();
+                                    $saved_post_images_arr = array();
+                                    
+                                    $order = 1;
+                                    
+                                    $old_post_images = geodir_get_images( $saved_post_id );
+                                    if (!empty($old_post_images)) {
+                                        foreach( $old_post_images as $old_post_image ) {
+                                            if (!empty($old_post_image) && isset($old_post_image->file) && $old_post_image->file != '') {
+                                                $old_post_images_arr[] = $old_post_image->file;
+                                            }
+                                        }
+                                    }
+                                    
+                                    foreach ( $post_images as $post_image ) {
+                                        $image_name = basename( $post_image );
+                                        $saved_post_images_arr[] = $image_name;
+                                        
+                                        if (!empty($old_post_images_arr) && in_array( $image_name, $old_post_images_arr) ) {
+                                            continue; // Skip if image already exists.
+                                        }
+                                        
+                                        $image_name_parts = explode( '.', $image_name );
+                                        array_pop( $image_name_parts );
+                                        $proper_image_name = implode( '.', $image_name_parts );
+                                        
+                                        $arr_file_type = wp_check_filetype( $image_name );
+                                        
+                                        if ( !empty( $arr_file_type ) ) {
+                                            $uploaded_file_type = $arr_file_type['type'];
+                                            
+                                            $attachment = array();
+                                            $attachment['post_id'] = $saved_post_id;
+                                            $attachment['title'] = $proper_image_name;
+                                            $attachment['content'] = '';
+                                            $attachment['file'] = $uploads_subdir . '/' . $image_name;
+                                            $attachment['mime_type'] = $uploaded_file_type;
+                                            $attachment['menu_order'] = $order;
+                                            $attachment['is_featured'] = 0;
 
-											$attachment_set = '';
-											foreach ( $attachment as $key => $val ) {
-												if ( $val != '' ) {
-													$attachment_set .= $key . " = '" . $val . "', ";
-												}
-											}
-											$attachment_set = trim( $attachment_set, ", " );
-																						
-											// Add new attachment
-											$wpdb->query( "INSERT INTO " . GEODIR_ATTACHMENT_TABLE . " SET " . $attachment_set );
-																						
-											$order++;
-										}
-									}
+                                            $attachment_set = '';
+                                            foreach ( $attachment as $key => $val ) {
+                                                if ( $val != '' ) {
+                                                    $attachment_set .= $key . " = '" . $val . "', ";
+                                                }
+                                            }
+                                            $attachment_set = trim( $attachment_set, ", " );
+                                                                                        
+                                            // Add new attachment
+                                            $wpdb->query( "INSERT INTO " . GEODIR_ATTACHMENT_TABLE . " SET " . $attachment_set );
+                                                                                        
+                                            $order++;
+                                        }
+                                    }
 
-									$saved_post_images_sql = !empty($saved_post_images_arr) ? " AND ( file NOT LIKE '%/" . implode("' AND file NOT LIKE '%/",  $saved_post_images_arr) . "' )" : '';
-									// Remove previous attachment
-									$wpdb->query( "DELETE FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE post_id = " . (int)$saved_post_id . " " . $saved_post_images_sql );
-									
-									if ( !empty( $saved_post_images_arr ) ) {
-										$menu_order = 1;
-										
-										foreach ( $saved_post_images_arr as $img_name ) {
-											$wpdb->query( $wpdb->prepare( "UPDATE " . GEODIR_ATTACHMENT_TABLE . " SET menu_order = %d WHERE post_id =%d AND file LIKE %s", array( $menu_order, $saved_post_id, '%/' . $img_name ) ) );
-											
-											if( $menu_order == 1 ) {
-												if ( $featured_image = $wpdb->get_var( $wpdb->prepare( "SELECT file FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE post_id =%d AND file LIKE %s", array( $saved_post_id, '%/' . $img_name ) ) ) ) {
-													$wpdb->query( $wpdb->prepare( "UPDATE " . $table . " SET featured_image = %s WHERE post_id =%d", array( $featured_image, $saved_post_id ) ) );
-												}
-											}
-											$menu_order++;
-										}
-									}
-									
-									if ( $order > 1 ) {
-										$images++;
-									}
-								}
+                                    $saved_post_images_sql = !empty($saved_post_images_arr) ? " AND ( file NOT LIKE '%/" . implode("' AND file NOT LIKE '%/",  $saved_post_images_arr) . "' )" : '';
+                                    // Remove previous attachment
+                                    $wpdb->query( "DELETE FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE post_id = " . (int)$saved_post_id . " " . $saved_post_images_sql );
+                                    
+                                    if ( !empty( $saved_post_images_arr ) ) {
+                                        $menu_order = 1;
+                                        
+                                        foreach ( $saved_post_images_arr as $img_name ) {
+                                            $wpdb->query( $wpdb->prepare( "UPDATE " . GEODIR_ATTACHMENT_TABLE . " SET menu_order = %d WHERE post_id =%d AND file LIKE %s", array( $menu_order, $saved_post_id, '%/' . $img_name ) ) );
+                                            
+                                            if( $menu_order == 1 ) {
+                                                if ( $featured_image = $wpdb->get_var( $wpdb->prepare( "SELECT file FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE post_id =%d AND file LIKE %s", array( $saved_post_id, '%/' . $img_name ) ) ) ) {
+                                                    $wpdb->query( $wpdb->prepare( "UPDATE " . $table . " SET featured_image = %s WHERE post_id =%d", array( $featured_image, $saved_post_id ) ) );
+                                                }
+                                            }
+                                            $menu_order++;
+                                        }
+                                    }
+                                    
+                                    if ( $order > 1 ) {
+                                        $images++;
+                                    }
+                                }
 
-								/** This action is documented in geodirectory-functions/post-functions.php */
-                    			do_action( 'geodir_after_save_listing', $saved_post_id, $gd_post );
-								
-								if (isset($is_featured)) {
-									geodir_save_post_meta($saved_post_id, 'is_featured', $is_featured);
-								}
-								if (isset($gd_post['expire_date'])) {
-									geodir_save_post_meta($saved_post_id, 'expire_date', $gd_post['expire_date']);
-								}
-							}
-							
-							// WPML
-							if ($is_wpml && $language != '') {
-								$sitepress->switch_lang($active_lang, true);
-							}
-							// WPML
-						}
-					}
-				}
+                                /** This action is documented in geodirectory-functions/post-functions.php */
+                                do_action( 'geodir_after_save_listing', $saved_post_id, $gd_post );
+                                
+                                if (isset($is_featured)) {
+                                    geodir_save_post_meta($saved_post_id, 'is_featured', $is_featured);
+                                }
+                                if (isset($gd_post['expire_date'])) {
+                                    geodir_save_post_meta($saved_post_id, 'expire_date', $gd_post['expire_date']);
+                                }
+                            }
+                            
+                            // WPML
+                            if ($is_wpml && $language != '') {
+                                $sitepress->switch_lang($active_lang, true);
+                            }
+                            // WPML
+                        }
+                    }
+                }
 
                 //undo some stuff to make the import quicker
                 wp_defer_term_counting( false );
@@ -5655,111 +5614,111 @@ function geodir_ajax_import_export() {
                 $wpdb->query( 'COMMIT;' );
                 $wpdb->query( 'SET autocommit = 1;' );
 
-				$json = array();
-				$json['processed'] = $processed_actual;
-				$json['created'] = $created;
-				$json['updated'] = $updated;
-				$json['skipped'] = $skipped;
-				$json['invalid'] = $invalid;
-				$json['invalid_addr'] = $invalid_addr;
-				$json['images'] = $images;
-				
-				wp_send_json( $json );
-				exit;
-			} else if ( $task == 'import_loc' ) {
-				global $gd_post_types;
-				$gd_post_types = $post_types;
-				
-				if (!empty($file)) {
-					$columns = isset($file[0]) ? $file[0] : NULL;
-					
-					if (empty($columns) || (!empty($columns) && $columns[0] == '')) {
-						$json['error'] = __('File you are uploading is not valid. Columns does not matching.', 'geodirectory');
-						wp_send_json( $json );
-					}
-					
-					for ($i = 1; $i <= $limit; $i++) {
-						$index = $processed + $i;
-						
-						if (isset($file[$index])) {
-							$row = $file[$index];
-							$row = array_map( 'trim', $row );
-							$data = array();
-							
-							foreach ($columns as $c => $column ) {
-								if (in_array($column, array('location_id', 'latitude', 'longitude', 'city', 'city_slug', 'region', 'country', 'city_meta', 'city_desc', 'region_meta', 'region_desc', 'country_meta', 'country_desc'))) {
-									$data[$column] = $row[$c];
-								}
-							}
+                $json = array();
+                $json['processed'] = $processed_actual;
+                $json['created'] = $created;
+                $json['updated'] = $updated;
+                $json['skipped'] = $skipped;
+                $json['invalid'] = $invalid;
+                $json['invalid_addr'] = $invalid_addr;
+                $json['images'] = $images;
+                
+                wp_send_json( $json );
+                exit;
+            } else if ( $task == 'import_loc' ) {
+                global $gd_post_types;
+                $gd_post_types = $post_types;
+                
+                if (!empty($file)) {
+                    $columns = isset($file[0]) ? $file[0] : NULL;
+                    
+                    if (empty($columns) || (!empty($columns) && $columns[0] == '')) {
+                        $json['error'] = __('File you are uploading is not valid. Columns does not matching.', 'geodirectory');
+                        wp_send_json( $json );
+                    }
+                    
+                    for ($i = 1; $i <= $limit; $i++) {
+                        $index = $processed + $i;
+                        
+                        if (isset($file[$index])) {
+                            $row = $file[$index];
+                            $row = array_map( 'trim', $row );
+                            $data = array();
+                            
+                            foreach ($columns as $c => $column ) {
+                                if (in_array($column, array('location_id', 'latitude', 'longitude', 'city', 'city_slug', 'region', 'country', 'city_meta', 'city_desc', 'region_meta', 'region_desc', 'country_meta', 'country_desc'))) {
+                                    $data[$column] = $row[$c];
+                                }
+                            }
 
-							if ( empty($data['city']) || empty($data['region']) || empty($data['country']) || empty($data['latitude']) || empty($data['longitude']) ) {
-								$invalid++;
-								continue;
-							}
-							
-							$data['location_id'] = isset($data['location_id']) ? absint($data['location_id']) : 0;
-							
-							if ( $import_choice == 'update' ) {
-								if ( (int)$data['location_id'] > 0 && $location = geodir_get_location_by_id( '', (int)$data['location_id'] ) ) {
-									if ( $location_id = geodir_location_update_city( $data, true, $location ) ) {
-										$updated++;
-									} else {
-										$invalid++;
-									}
-								} else if ( !empty( $data['city_slug'] ) && $location = geodir_get_location_by_slug( 'city', array( 'city_slug' => $data['city_slug'] ) ) ) {
-									$data['location_id'] = (int)$location->location_id;
-									
-									if ( $location = geodir_get_location_by_slug( 'city', array( 'city_slug' => $data['city_slug'], 'country' => $data['country'], 'region' => $data['region'] ) ) ) {
-										$data['location_id'] = (int)$location->location_id;
-									} else if ( $location = geodir_get_location_by_slug( 'city', array( 'city_slug' => $data['city_slug'], 'region' => $data['region'] ) ) ) {
-										$data['location_id'] = (int)$location->location_id;
-									} else if ( $location = geodir_get_location_by_slug( 'city', array( 'city_slug' => $data['city_slug'], 'country' => $data['country'] ) ) ) {
-										$data['location_id'] = (int)$location->location_id;
-									}
-									
-									if ( $location_id = geodir_location_update_city( $data, true, $location ) ) {
-										$updated++;
-									} else {
-										$invalid++;
-									}
-								} else {
-									if ( $location_id = geodir_location_insert_city( $data, true ) ) {
-										$created++;
-									} else {
-										$invalid++;
-									}
-								}
-							} elseif ( $import_choice == 'skip' ) {
-								if ( (int)$data['location_id'] > 0 && $location = geodir_get_location_by_id( '', (int)$data['location_id'] ) ) {
-									$skipped++;
-								} else if ( !empty( $data['city_slug'] ) && $location = geodir_get_location_by_slug( 'city', array( 'city_slug' => $data['city_slug'] ) ) ) {
-									$skipped++;
-								} else {
-									if ( $location_id = geodir_location_insert_city( $data, true ) ) {										
-										$created++;
-									} else {
-										$invalid++;
-									}
-								}
-							} else {
-								$invalid++;
-							}
-						}
-					}
-				}
-				
-				$json = array();
-				$json['processed'] = $limit;
-				$json['created'] = $created;
-				$json['updated'] = $updated;
-				$json['skipped'] = $skipped;
-				$json['invalid'] = $invalid;
-				$json['images'] = $images;
-				
-				wp_send_json( $json );
-			}
-		}
-		break;
+                            if ( empty($data['city']) || empty($data['region']) || empty($data['country']) || empty($data['latitude']) || empty($data['longitude']) ) {
+                                $invalid++;
+                                continue;
+                            }
+                            
+                            $data['location_id'] = isset($data['location_id']) ? absint($data['location_id']) : 0;
+                            
+                            if ( $import_choice == 'update' ) {
+                                if ( (int)$data['location_id'] > 0 && $location = geodir_get_location_by_id( '', (int)$data['location_id'] ) ) {
+                                    if ( $location_id = geodir_location_update_city( $data, true, $location ) ) {
+                                        $updated++;
+                                    } else {
+                                        $invalid++;
+                                    }
+                                } else if ( !empty( $data['city_slug'] ) && $location = geodir_get_location_by_slug( 'city', array( 'city_slug' => $data['city_slug'] ) ) ) {
+                                    $data['location_id'] = (int)$location->location_id;
+                                    
+                                    if ( $location = geodir_get_location_by_slug( 'city', array( 'city_slug' => $data['city_slug'], 'country' => $data['country'], 'region' => $data['region'] ) ) ) {
+                                        $data['location_id'] = (int)$location->location_id;
+                                    } else if ( $location = geodir_get_location_by_slug( 'city', array( 'city_slug' => $data['city_slug'], 'region' => $data['region'] ) ) ) {
+                                        $data['location_id'] = (int)$location->location_id;
+                                    } else if ( $location = geodir_get_location_by_slug( 'city', array( 'city_slug' => $data['city_slug'], 'country' => $data['country'] ) ) ) {
+                                        $data['location_id'] = (int)$location->location_id;
+                                    }
+                                    
+                                    if ( $location_id = geodir_location_update_city( $data, true, $location ) ) {
+                                        $updated++;
+                                    } else {
+                                        $invalid++;
+                                    }
+                                } else {
+                                    if ( $location_id = geodir_location_insert_city( $data, true ) ) {
+                                        $created++;
+                                    } else {
+                                        $invalid++;
+                                    }
+                                }
+                            } elseif ( $import_choice == 'skip' ) {
+                                if ( (int)$data['location_id'] > 0 && $location = geodir_get_location_by_id( '', (int)$data['location_id'] ) ) {
+                                    $skipped++;
+                                } else if ( !empty( $data['city_slug'] ) && $location = geodir_get_location_by_slug( 'city', array( 'city_slug' => $data['city_slug'] ) ) ) {
+                                    $skipped++;
+                                } else {
+                                    if ( $location_id = geodir_location_insert_city( $data, true ) ) {										
+                                        $created++;
+                                    } else {
+                                        $invalid++;
+                                    }
+                                }
+                            } else {
+                                $invalid++;
+                            }
+                        }
+                    }
+                }
+                
+                $json = array();
+                $json['processed'] = $limit;
+                $json['created'] = $created;
+                $json['updated'] = $updated;
+                $json['skipped'] = $skipped;
+                $json['invalid'] = $invalid;
+                $json['images'] = $images;
+                
+                wp_send_json( $json );
+            }
+        }
+        break;
         case 'import_finish':{
             /**
              * Run an action when an import finishes.
@@ -5773,9 +5732,9 @@ function geodir_ajax_import_export() {
         }
         break;
 
-	}
-	echo '0';
-	wp_die();
+    }
+    echo '0';
+    wp_die();
 }
 
 /**

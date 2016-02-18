@@ -1238,7 +1238,6 @@ if (!function_exists('geodir_get_featured_image')) {
      */
     function geodir_get_featured_image($post_id = '', $size = '', $no_image = false, $file = false)
     {
-
         global $wpdb, $plugin_prefix, $post;
 
         if (isset($post->ID) && isset($post->post_type) && $post->ID == $post_id) {
@@ -1262,7 +1261,6 @@ if (!function_exists('geodir_get_featured_image')) {
         }
 
         if ($file != NULL && $file != '' && (($uploads = wp_upload_dir()) && false === $uploads['error'])) {
-
             $img_arr = array();
 
             $file_info = pathinfo($file);
@@ -1273,7 +1271,6 @@ if (!function_exists('geodir_get_featured_image')) {
             $uploads = wp_upload_dir(trim($sub_dir, '/')); // Array of key => value pairs
             $uploads_baseurl = $uploads['baseurl'];
             $uploads_path = $uploads['path'];
-
 
             $file_name = $file_info['basename'];
 
@@ -1289,20 +1286,17 @@ if (!function_exists('geodir_get_featured_image')) {
              */
             $img_arr['src'] = apply_filters('geodir_get_featured_image_src',$uploads_url . '/' . $file_name,$file_name,$uploads_url,$uploads_baseurl);
             $img_arr['path'] = $uploads_path . '/' . $file_name;
-            @list($width, $height) = getimagesize($img_arr['path']);
+            $imagesize = getimagesize($img_arr['path']);
+            $width = !empty($imagesize) && isset($imagesize[0]) ? $imagesize[0] : 0;
+            $height = !empty($imagesize) && isset($imagesize[1]) ? $imagesize[1] : 0;
             $img_arr['width'] = $width;
             $img_arr['height'] = $height;
             $img_arr['title'] = '';
-
-
         } elseif ($post_images = geodir_get_images($post_id, $size, $no_image, 1)) {
-
             foreach ($post_images as $image) {
                 return $image;
             }
-
-        } elseif ($no_image) {
-
+        } else if ($no_image) {
             $img_arr = array();
 
             $default_img = '';
@@ -1319,7 +1313,6 @@ if (!function_exists('geodir_get_featured_image')) {
             }
 
             if (!empty($default_img)) {
-
                 $uploads = wp_upload_dir(); // Array of key => value pairs
                 $uploads_baseurl = $uploads['baseurl'];
                 $uploads_path = $uploads['path'];
@@ -1333,21 +1326,20 @@ if (!function_exists('geodir_get_featured_image')) {
                 $img_arr['src'] = $default_img;
                 $img_arr['path'] = $uploads_path . '/' . $file_name;
 
-                @list($width, $height) = getimagesize($img_arr['path']);
+                $imagesize = getimagesize($img_arr['path']);
+                $width = !empty($imagesize) && isset($imagesize[0]) ? $imagesize[0] : 0;
+                $height = !empty($imagesize) && isset($imagesize[1]) ? $imagesize[1] : 0;
                 $img_arr['width'] = $width;
                 $img_arr['height'] = $height;
 
                 $img_arr['title'] = ''; // add the title to the array
-
             }
-
         }
 
         if (!empty($img_arr))
             return (object)$img_arr;//return (object)array( 'src' => $file_url, 'path' => $file_path );
         else
             return false;
-
     }
 }
 
@@ -1366,9 +1358,7 @@ if (!function_exists('geodir_show_featured_image')) {
      */
     function geodir_show_featured_image($post_id = '', $size = 'thumbnail', $no_image = false, $echo = true, $fimage = false)
     {
-
         $image = geodir_get_featured_image($post_id, $size, $no_image, $fimage);
-
 
         $html = geodir_show_image($image, $size, $no_image, false);
 
@@ -1378,7 +1368,6 @@ if (!function_exists('geodir_show_featured_image')) {
             return $html;
         } else
             return false;
-
     }
 }
 
@@ -1398,7 +1387,6 @@ if (!function_exists('geodir_get_images')) {
      */
     function geodir_get_images($post_id = 0, $img_size = '', $no_images = false, $add_featured = true, $limit = '')
     {
-
         global $wpdb;
         if ($limit) {
             $limit_q = " LIMIT $limit ";
@@ -1420,7 +1408,6 @@ if (!function_exists('geodir_get_images')) {
         $counter = 0;
         $return_arr = array();
 
-
         if (!empty($arrImages)) {
             foreach ($arrImages as $attechment) {
 
@@ -1437,7 +1424,6 @@ if (!function_exists('geodir_get_images')) {
                 $uploads_baseurl = $uploads['baseurl'];
                 $uploads_path = $uploads['path'];
 
-
                 $file_name = $file_info['basename'];
 
                 $uploads_url = $uploads_baseurl . $sub_dir;
@@ -1452,7 +1438,9 @@ if (!function_exists('geodir_get_images')) {
                 */
                 $img_arr['src'] = apply_filters('geodir_get_images_src',$uploads_url . '/' . $file_name,$file_name,$uploads_url,$uploads_baseurl);
                 $img_arr['path'] = $uploads_path . '/' . $file_name;
-                @list($width, $height) = getimagesize($img_arr['path']);
+                $imagesize = getimagesize($img_arr['path']);
+                $width = !empty($imagesize) && isset($imagesize[0]) ? $imagesize[0] : 0;
+                $height = !empty($imagesize) && isset($imagesize[1]) ? $imagesize[1] : 0;
                 $img_arr['width'] = $width;
                 $img_arr['height'] = $height;
 
@@ -1464,9 +1452,7 @@ if (!function_exists('geodir_get_images')) {
 
                 $return_arr[] = (object)$img_arr;
 
-
                 $counter++;
-
             }
             return (object)$return_arr;
         } else if ($no_images) {
@@ -1480,7 +1466,6 @@ if (!function_exists('geodir_get_images')) {
             }
 
             if (!empty($default_img)) {
-
                 $uploads = wp_upload_dir(); // Array of key => value pairs
                 $uploads_baseurl = $uploads['baseurl'];
                 $uploads_path = $uploads['path'];
@@ -1494,7 +1479,9 @@ if (!function_exists('geodir_get_images')) {
                 $img_arr['src'] = $default_img;
                 $img_arr['path'] = $uploads_path . '/' . $file_name;
 
-                @list($width, $height) = getimagesize($img_arr['path']);
+                $imagesize = getimagesize($img_arr['path']);
+                $width = !empty($imagesize) && isset($imagesize[0]) ? $imagesize[0] : 0;
+                $height = !empty($imagesize) && isset($imagesize[1]) ? $imagesize[1] : 0;
                 $img_arr['width'] = $width;
                 $img_arr['height'] = $height;
 
@@ -1505,15 +1492,11 @@ if (!function_exists('geodir_get_images')) {
                 $return_arr[] = (object)$img_arr;
 
                 return $return_arr;
-
             } else
                 return false;
-
         }
-
     }
 }
-
 
 if (!function_exists('geodir_show_image')) {
     /**
@@ -1529,18 +1512,17 @@ if (!function_exists('geodir_show_image')) {
      */
     function geodir_show_image($request = array(), $size = 'thumbnail', $no_image = false, $echo = true)
     {
-
         $image = new stdClass();
 
         $html = '';
         if (!empty($request)) {
-
             if (!is_object($request)){
                 $request = (object)$request;
             }
 
-
-            if(isset($request->src) && !isset($request->path)){$request->path = $request->src;}
+            if (isset($request->src) && !isset($request->path)) {
+                $request->path = $request->src;
+            }
 
             /*
              * getimagesize() works faster from path than url so we try and get path if we can.
@@ -1552,7 +1534,9 @@ if (!function_exists('geodir_show_image')) {
                 $request->path = str_replace( $img_no_http,$upload_dir['basedir'],$request->path);
             }
 
-            @list($width, $height) = getimagesize($request->path);
+            $imagesize = getimagesize($request->path);
+            $width = !empty($imagesize) && isset($imagesize[0]) ? $imagesize[0] : 0;
+            $height = !empty($imagesize) && isset($imagesize[1]) ? $imagesize[1] : 0;
             $image->src = $request->src;
             $image->width = $width;
             $image->height = $height;
@@ -2280,7 +2264,6 @@ if (!function_exists('geodir_remove_from_favorite')) {
      */
     function geodir_remove_from_favorite($post_id)
     {
-
         global $current_user;
 
         /**

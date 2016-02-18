@@ -109,16 +109,3 @@ include_once('geodirectory-functions/google_analytics.php');
  * @since 1.3.7
  */
 include_once('geodirectory_shortcodes.php');
-
-if (!function_exists('is_plugin_active')) {
-    //include_once(ABSPATH . 'wp-admin/includes/plugin.php');
-}
-/**
- * Contains functions used for Rest API.
- *
- * @since 1.5.4
- */
-if (is_plugin_active('rest-api/plugin.php')) {
-    //include_once('api.php');
-}
-

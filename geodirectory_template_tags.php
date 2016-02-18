@@ -445,7 +445,7 @@ function geodir_listingsearch_scripts()
         jQuery(function ($) {
             $("#distance_slider").slider({
                 range: true,
-                values: [0, <?php echo ($_REQUEST['sdist']!='') ? $_REQUEST['sdist'] : "0"; ?>],
+                values: [0, <?php echo ($_REQUEST['sdist']!='') ? sanitize_text_field($_REQUEST['sdist']) : "0"; ?>],
                 min: 0,
                 max: <?php echo $dist; ?>,
                 step: <?php echo $dist_dif; ?>,
