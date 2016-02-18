@@ -1678,75 +1678,117 @@ function geodir_show_detail_page_tabs()
  */
 function geodir_exif($file)
 {
-    //This line reads the EXIF data and passes it into an array
-    $file['file'] = sanitize_text_field($file['tmp_name']);
-    if ($file['type'] == "image/jpg" || $file['type'] == "image/jpeg" || $file['type'] == "image/pjpeg") {
-    } else {
+    if (empty($file) || !is_array($file)) {
         return $file;
     }
-    if (!function_exists('read_exif_data')) {
+    
+    $file_path = !empty($file['tmp_name']) ? sanitize_text_field($file['tmp_name']) : '';
+    if (!($file_path && file_exists($file_path))) {
         return $file;
     }
-    $exif = read_exif_data($file['file']);
-
-    //We're only interested in the orientation
-    $exif_orient = isset($exif['Orientation']) ? $exif['Orientation'] : 0;
-    $rotateImage = 0;
-
-    //We convert the exif rotation to degrees for further use
-    if (6 == $exif_orient) {
-        $rotateImage = 90;
-        $imageOrientation = 1;
-    } elseif (3 == $exif_orient) {
-        $rotateImage = 180;
-        $imageOrientation = 1;
-    } elseif (8 == $exif_orient) {
-        $rotateImage = 270;
-        $imageOrientation = 1;
+    $file['file'] = $file_path;
+    
+    if (!file_is_valid_image($file_path)) {
+        return $file; // Bail if file is not an image.
     }
-
-    //if the image is rotated
-    if ($rotateImage) {
-
-        //WordPress 3.5+ have started using Imagick, if it is available since there is a noticeable difference in quality
-        //Why spoil beautiful images by rotating them with GD, if the user has Imagick
-
-        if (class_exists('Imagick')) {
-            $imagick = new Imagick();
-            $imagick->readImage($file['file']);
-            $imagick->rotateImage(new ImagickPixel(), $rotateImage);
-            $imagick->setImageOrientation($imageOrientation);
-            $imagick->writeImage($file['file']);
-            $imagick->clear();
-            $imagick->destroy();
-        } else {
-
-            //if no Imagick, fallback to GD
-            //GD needs negative degrees
-            $rotateImage = -$rotateImage;
-            $file['file'] = sanitize_file_name($file['file']);
-
-            switch ($file['type']) {
-                case 'image/jpeg':
-                    $source = imagecreatefromjpeg($file['file']);
-                    $rotate = imagerotate($source, $rotateImage, 0);
-                    imagejpeg($rotate, $file['file']);
-                    break;
-                case 'image/png':
-                    $source = imagecreatefrompng($file['file']);
-                    $rotate = imagerotate($source, $rotateImage, 0);
-                    imagepng($rotate, $file['file']);
-                    break;
-                case 'image/gif':
-                    $source = imagecreatefromgif($file['file']);
-                    $rotate = imagerotate($source, $rotateImage, 0);
-                    imagegif($rotate, $file['file']);
-                    break;
-                default:
-                    break;
-            }
+    
+    if (!function_exists('wp_get_image_editor') || !function_exists('exif_read_data')) {
+        return $file;
+    }
+   
+    $exif = exif_read_data($file_path);
+    
+    $rotate = false;
+    $flip = false;
+    $modify = false;
+    if (!empty($exif) && isset($exif['Orientation'])) {
+        switch ((int)$exif['Orientation']) {
+            case 1:
+                // do nothing
+                break;
+            case 2:
+                $flip = array(false, true);
+                $modify = true;
+                break;
+            case 3:
+                $orientation = -180;
+                $rotate = true;
+                $modify = true;
+                break;
+            case 4:
+                $flip = array(true, false);
+                $modify = true;
+                break;
+            case 5:
+                $orientation = -90;
+                $rotate = true;
+                $flip = array(false, true);
+                $modify = true;
+                break;
+            case 6:
+                $orientation = -90;
+                $rotate = true;
+                $modify = true;
+                break;
+            case 7:
+                $orientation = -270;
+                $rotate = true;
+                $flip = array(false, true);
+                $modify = true;
+                break;
+            case 8:
+            case 9:
+                $orientation = -270;
+                $rotate = true;
+                $modify = true;
+                break;
+            default:
+                $orientation = 0;
+                $rotate = true;
+                $modify = true;
+                break;
         }
     }
+    
+    $mime_type = $file['type'];
+    $quality = null;
+    /**
+     * Filter the image quality.
+     *
+     * @since 1.5.7
+     * @param int|null $quality Image Compression quality between 1-100% scale. Default null.
+     * @param string $quality Image mime type.
+     */
+    $quality = apply_filters('geodir_image_upload_set_quality', $quality, $mime_type);
+    if ($quality !== null) {
+        $modify = true;
+    }
+
+    if (!$modify) {
+        return $file; // no change
+    }
+
+    $image = wp_get_image_editor($file_path);
+    if (!is_wp_error($image)) {
+        if ($rotate) {
+            $image->rotate($orientation);
+        }
+        
+        if (!empty($flip)) {
+            $image->flip($flip[0], $flip[1]);
+        }
+        
+        if ($quality !== null) {
+            $image->set_quality((int)$quality);
+        }
+        
+       $result = $image->save($file_path);
+       if (!is_wp_error($result)) {
+           $file['file'] = $result['path'];
+           $file['tmp_name'] = $result['path'];
+       }
+    }
+    
     // The image orientation is fixed, pass it back for further processing
     return $file;
 }

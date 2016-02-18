@@ -13,14 +13,19 @@ $field_id = isset($_REQUEST['field_id']) ? sanitize_text_field($_REQUEST['field_
 
 $field_id = $field_id != '' ? trim($field_id, '_') : $field_id;
 
+$field_ids = array();
+if (!empty($_REQUEST['licontainer']) && is_array($_REQUEST['licontainer'])) {
+    foreach ($_REQUEST['licontainer'] as $lic_id) {
+        $field_ids[] = sanitize_text_field($lic_id);
+    }
+}
+
 /* ------- check nonce field ------- */
 if (isset($_REQUEST['update']) && $_REQUEST['update'] == "update" && isset($_REQUEST['create_field']) && isset($_REQUEST['manage_field_type']) && $_REQUEST['manage_field_type'] == 'custom_fields') {
-    $field_ids = !empty($_REQUEST['licontainer']) ? array_map('sanitize_text_field', $_REQUEST['licontainer']) : array();
     echo godir_set_field_order($field_ids);
 }
 
 if (isset($_REQUEST['update']) && $_REQUEST['update'] == "update" && isset($_REQUEST['create_field']) && isset($_REQUEST['manage_field_type']) && $_REQUEST['manage_field_type'] == 'sorting_options') {
-    $field_ids = !empty($_REQUEST['licontainer']) ? array_map('sanitize_text_field', $_REQUEST['licontainer']) : array();
     echo godir_set_sort_field_order($field_ids);
 }
 

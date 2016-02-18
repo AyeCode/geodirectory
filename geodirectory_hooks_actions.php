@@ -502,21 +502,18 @@ function geodir_edit_post_link()
      */
     do_action('geodir_before_edit_post_link');
     if (!$preview) {
-        //if(is_user_logged_in() && $post->post_author == get_current_user_id())
-
         $is_current_user_owner = geodir_listing_belong_to_current_user();
+        
         if ($is_current_user_owner) {
-
-
             $post_id = $post->ID;
+            
             if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
-
                 $post_id = (int)$_REQUEST['pid'];
             }
 
             $postlink = get_permalink(geodir_add_listing_page_id());
             $editlink = geodir_getlink($postlink, array('pid' => $post_id), false);
-            echo ' <p class="edit_link"><i class="fa fa-pencil"></i> <a href="' . $editlink . '">' . __('Edit this Post', 'geodirectory') . '</a></p>';
+            echo ' <p class="edit_link"><i class="fa fa-pencil"></i> <a href="' . esc_url($editlink) . '">' . __('Edit this Post', 'geodirectory') . '</a></p>';
         }
     }// end of if, if its a preview or not
     /**
@@ -536,8 +533,6 @@ function geodir_edit_post_link()
          */
         echo $content_html = apply_filters('geodir_edit_post_link_html', $content_html);
     }
-
-
 }
 
 /**
