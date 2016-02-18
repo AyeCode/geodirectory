@@ -54,6 +54,7 @@ Multiselect custom field "Display Type" option doesn't save on first attempt - F
 Apostrophe in location name breaks the maps - FIXED
 JS warning Google maps sensor no longer required - FIXED
 Features widget now has repeater fields for ability to add lots of items - CHANGED
+Star rating hidden when map is full screen - FIXED
 
 v1.5.5
 Added charset parameter to case conversion functions - ADDED
