@@ -1701,6 +1701,7 @@ function geodir_exif($file)
     $rotate = false;
     $flip = false;
     $modify = false;
+    $orientation = 0;
     if (!empty($exif) && isset($exif['Orientation'])) {
         switch ((int)$exif['Orientation']) {
             case 1:

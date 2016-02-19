@@ -1286,9 +1286,13 @@ if (!function_exists('geodir_get_featured_image')) {
              */
             $img_arr['src'] = apply_filters('geodir_get_featured_image_src',$uploads_url . '/' . $file_name,$file_name,$uploads_url,$uploads_baseurl);
             $img_arr['path'] = $uploads_path . '/' . $file_name;
-            $imagesize = getimagesize($img_arr['path']);
-            $width = !empty($imagesize) && isset($imagesize[0]) ? $imagesize[0] : 0;
-            $height = !empty($imagesize) && isset($imagesize[1]) ? $imagesize[1] : 0;
+            $width = 0;
+            $height = 0;
+            if (is_file($img_arr['path']) && file_exists($img_arr['path'])) {
+                $imagesize = getimagesize($img_arr['path']);
+                $width = !empty($imagesize) && isset($imagesize[0]) ? $imagesize[0] : '';
+                $height = !empty($imagesize) && isset($imagesize[1]) ? $imagesize[1] : '';
+            }
             $img_arr['width'] = $width;
             $img_arr['height'] = $height;
             $img_arr['title'] = '';
@@ -1326,9 +1330,13 @@ if (!function_exists('geodir_get_featured_image')) {
                 $img_arr['src'] = $default_img;
                 $img_arr['path'] = $uploads_path . '/' . $file_name;
 
-                $imagesize = getimagesize($img_arr['path']);
-                $width = !empty($imagesize) && isset($imagesize[0]) ? $imagesize[0] : 0;
-                $height = !empty($imagesize) && isset($imagesize[1]) ? $imagesize[1] : 0;
+                $width = 0;
+                $height = 0;
+                if (is_file($img_arr['path']) && file_exists($img_arr['path'])) {
+                    $imagesize = getimagesize($img_arr['path']);
+                    $width = !empty($imagesize) && isset($imagesize[0]) ? $imagesize[0] : '';
+                    $height = !empty($imagesize) && isset($imagesize[1]) ? $imagesize[1] : '';
+                }
                 $img_arr['width'] = $width;
                 $img_arr['height'] = $height;
 
@@ -1438,9 +1446,13 @@ if (!function_exists('geodir_get_images')) {
                 */
                 $img_arr['src'] = apply_filters('geodir_get_images_src',$uploads_url . '/' . $file_name,$file_name,$uploads_url,$uploads_baseurl);
                 $img_arr['path'] = $uploads_path . '/' . $file_name;
-                $imagesize = getimagesize($img_arr['path']);
-                $width = !empty($imagesize) && isset($imagesize[0]) ? $imagesize[0] : 0;
-                $height = !empty($imagesize) && isset($imagesize[1]) ? $imagesize[1] : 0;
+                $width = 0;
+                $height = 0;
+                if (is_file($img_arr['path']) && file_exists($img_arr['path'])) {
+                    $imagesize = getimagesize($img_arr['path']);
+                    $width = !empty($imagesize) && isset($imagesize[0]) ? $imagesize[0] : '';
+                    $height = !empty($imagesize) && isset($imagesize[1]) ? $imagesize[1] : '';
+                }
                 $img_arr['width'] = $width;
                 $img_arr['height'] = $height;
 
@@ -1467,27 +1479,31 @@ if (!function_exists('geodir_get_images')) {
 
             if (!empty($default_img)) {
                 $uploads = wp_upload_dir(); // Array of key => value pairs
-                $uploads_baseurl = $uploads['baseurl'];
-                $uploads_path = $uploads['path'];
-
-                $img_arr = array();
+                
+                $image_path = $default_img;
+                if (!path_is_absolute($image_path)) {
+                    $image_path = str_replace($uploads['baseurl'], $uploads['basedir'], $image_path);
+                }
 
                 $file_info = pathinfo($default_img);
-
                 $file_name = $file_info['basename'];
 
+                $width = '';
+                $height = '';
+                if (is_file($image_path) && file_exists($image_path)) {
+                    $imagesize = getimagesize($image_path);
+                    $width = !empty($imagesize) && isset($imagesize[0]) ? $imagesize[0] : '';
+                    $height = !empty($imagesize) && isset($imagesize[1]) ? $imagesize[1] : '';
+                }
+                
+                $img_arr = array();
                 $img_arr['src'] = $default_img;
-                $img_arr['path'] = $uploads_path . '/' . $file_name;
-
-                $imagesize = getimagesize($img_arr['path']);
-                $width = !empty($imagesize) && isset($imagesize[0]) ? $imagesize[0] : 0;
-                $height = !empty($imagesize) && isset($imagesize[1]) ? $imagesize[1] : 0;
+                $img_arr['path'] = $image_path;
                 $img_arr['width'] = $width;
                 $img_arr['height'] = $height;
-
                 $img_arr['file'] = $file_name; // add the title to the array
-                $img_arr['title'] = $file_name; // add the title to the array
-                $img_arr['content'] = $file_name; // add the description to the array
+                $img_arr['title'] = $file_info['filename']; // add the title to the array
+                $img_arr['content'] = $file_info['filename']; // add the description to the array
 
                 $return_arr[] = (object)$img_arr;
 
@@ -1528,15 +1544,20 @@ if (!function_exists('geodir_show_image')) {
              * getimagesize() works faster from path than url so we try and get path if we can.
              */
             $upload_dir = wp_upload_dir();
-            $img_no_http = str_replace(array("http://","https://"),"",$request->path);
-            $upload_no_http = str_replace(array("http://","https://"),"",$upload_dir['baseurl']);
-            if (strpos($img_no_http ,$upload_no_http ) !== false) {
-                $request->path = str_replace( $img_no_http,$upload_dir['basedir'],$request->path);
+            $img_no_http = str_replace(array("http://", "https://"), "", $request->path);
+            $upload_no_http = str_replace(array("http://", "https://"), "", $upload_dir['baseurl']);
+            if (strpos($img_no_http, $upload_no_http) !== false) {
+                $request->path = str_replace( $img_no_http,$upload_dir['basedir'], $request->path);
+            }
+            
+            $width = 0;
+            $height = 0;
+            if (is_file($request->path) && file_exists($request->path)) {
+                $imagesize = getimagesize($request->path);
+                $width = !empty($imagesize) && isset($imagesize[0]) ? $imagesize[0] : '';
+                $height = !empty($imagesize) && isset($imagesize[1]) ? $imagesize[1] : '';
             }
 
-            $imagesize = getimagesize($request->path);
-            $width = !empty($imagesize) && isset($imagesize[0]) ? $imagesize[0] : 0;
-            $height = !empty($imagesize) && isset($imagesize[1]) ? $imagesize[1] : 0;
             $image->src = $request->src;
             $image->width = $width;
             $image->height = $height;
@@ -1544,12 +1565,10 @@ if (!function_exists('geodir_show_image')) {
             $max_size = (object)geodir_get_imagesize($size);
 
             if (!is_wp_error($max_size)) {
-
-
                 if ($image->width) {
                     if ($image->height >= $image->width) {
                         $width_per = round(((($image->width * ($max_size->h / $image->height)) / $max_size->w) * 100), 2);
-                    } elseif ($image->width < ($max_size->h)) {
+                    } else if ($image->width < ($max_size->h)) {
                         $width_per = round((($image->width / $max_size->w) * 100), 2);
                     } else
                         $width_per = 100;
@@ -1557,13 +1576,10 @@ if (!function_exists('geodir_show_image')) {
 
                 if (is_admin() && !isset($_REQUEST['geodir_ajax'])){
                     $html = '<div class="geodir_thumbnail"><img style="max-height:' . $max_size->h . 'px;" alt="place image" src="' . $image->src . '"  /></div>';
-                }
-                else{
+                } else {
                     $html = '<div class="geodir_thumbnail" style="background-image:url(\'' . $image->src . '\');"></div>';
                 }
-
             }
-
         }
 
         if (!empty($html) && $echo) {
@@ -1572,7 +1588,6 @@ if (!function_exists('geodir_show_image')) {
             return $html;
         } else
             return false;
-
     }
 }
 
