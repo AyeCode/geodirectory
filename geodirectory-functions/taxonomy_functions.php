@@ -135,7 +135,7 @@ function geodir_add_nav_menu_items()
 
                                 $items .= '<li class="' . $sub_li_class . '">
 														<a href="' . get_post_type_archive_link($post_type) . '" class="' . $sub_a_class . '">
-															' . __(ucfirst($args->labels->name)) . '
+															' . __(ucfirst($args->labels->name),'geodirectory') . '
 														</a>
 													</li>';
                             }

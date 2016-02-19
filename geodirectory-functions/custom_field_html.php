@@ -103,7 +103,7 @@ $field_data_type = isset($field_info->data_type) ? $field_info->data_type : '';
                         <select name="data_type" id="data_type"
                                 onchange="javascript:gd_data_type_changed(this, '<?php echo $result_str; ?>');">
                             <option
-                                value="VARCHAR" <?php if (isset($field_info->data_type) && $field_info->data_type == 'VARCHAR') {
+                                value="XVARCHAR" <?php if (isset($field_info->data_type) && $field_info->data_type == 'VARCHAR') {
                                 echo 'selected="selected"';
                             } ?>><?php _e('CHARACTER', 'geodirectory'); ?></option>
                             <option
