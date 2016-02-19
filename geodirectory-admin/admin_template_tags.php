@@ -93,7 +93,7 @@ if (!function_exists('geodir_admin_panel')) {
                              * @see 'geodir_after_settings_tabs'
                              */
                             do_action('geodir_before_settings_tabs', $name);
-                            echo '<li ' . $tab_active . ' ><a href="' . esc_url($tab_link) . '"  ' . $tab_target . ' >' . sanitize_text_field($label) . '</a></li>';
+                            echo '<li ' . $tab_active . ' ><a href="' . esc_url($tab_link) . '"  ' . $tab_target . ' >' . $label . '</a></li>';
                             /**
                              * Called after the individual settings tabs are output.
                              *
