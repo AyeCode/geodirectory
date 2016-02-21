@@ -983,6 +983,17 @@ if (!function_exists('register_geodir_widgets')) {
              */
             public function widget($args, $instance)
             {
+                print_r($args);
+                print_r($instance);
+
+                /**
+                 * Filter the search widget arguments.
+                 *
+                 * @since 1.5.7
+                 * @param array $args The widget arguments.
+                 * @param array $instance The widget instance.
+                 */
+                $args = apply_filters('widget_geodir_advance_search_args',$args,$instance);
 
                 // prints the widget
                 extract($args, EXTR_SKIP);
