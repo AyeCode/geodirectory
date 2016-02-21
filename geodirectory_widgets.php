@@ -983,9 +983,6 @@ if (!function_exists('register_geodir_widgets')) {
              */
             public function widget($args, $instance)
             {
-                print_r($args);
-                print_r($instance);
-
                 /**
                  * Filter the search widget arguments.
                  *
