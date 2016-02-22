@@ -1506,9 +1506,17 @@ add_filter('geodir_detail_page_tab_is_display', 'geodir_detail_page_tab_is_displ
  */
 function geodir_detail_page_tab_is_display($is_display, $tab)
 {
-
     global $post, $post_images, $video, $special_offers, $related_listing, $geodir_post_detail_fields;
 
+    if ($tab == 'post_profile') {
+        /** This action is documented in geodirectory_template_actions.php */
+        $desc_limit = apply_filters('geodir_description_field_desc_limit', '');
+        
+        if (!($desc_limit === '' || (int)$desc_limit > 0)) {
+            $is_display = false;
+        }
+    }
+    
     if ($tab == 'post_info')
         $is_display = (!empty($geodir_post_detail_fields)) ? true : false;
 
@@ -1526,13 +1534,12 @@ function geodir_detail_page_tab_is_display($is_display, $tab)
 
     if ($tab == 'related_listing') {
        $message = __('No listings found which match your selection.', 'geodirectory');
-	   
-	   /** This action is documented in geodirectory-functions/template_functions.php */
-	   $message = apply_filters('geodir_message_listing_not_found', $message, 'listing-listview', false);
-	   
-	   $is_display = ((strpos($related_listing, $message) !== false || $related_listing == '' || !geodir_is_page('detail'))) ? false : true;
-	}
-
+       
+       /** This action is documented in geodirectory-functions/template_functions.php */
+       $message = apply_filters('geodir_message_listing_not_found', $message, 'listing-listview', false);
+       
+       $is_display = ((strpos($related_listing, $message) !== false || $related_listing == '' || !geodir_is_page('detail'))) ? false : true;
+    }
 
     return $is_display;
 }
