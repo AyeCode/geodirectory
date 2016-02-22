@@ -1327,8 +1327,6 @@ function geodir_detail_page_tabs_array()
  */
 function geodir_detail_page_tabs_list()
 {
-
-
     $tabs_excluded = get_option('geodir_detail_page_tabs_excluded');
     $tabs_array = geodir_detail_page_tabs_array();
     if (!empty($tabs_excluded)) {
@@ -1338,7 +1336,6 @@ function geodir_detail_page_tabs_list()
         }
     }
     return $tabs_array;
-
 }
 
 
@@ -1356,7 +1353,6 @@ function geodir_detail_page_tabs_list()
  */
 function geodir_show_detail_page_tabs()
 {
-
     global $post, $post_images, $video, $special_offers, $related_listing, $geodir_post_detail_fields;
 
     $post_id = !empty($post) && isset($post->ID) ? (int)$post->ID : 0;
@@ -1371,7 +1367,6 @@ function geodir_show_detail_page_tabs()
     $geodir_post_detail_fields = geodir_show_listing_info('detail');
 
     if (geodir_is_page('detail')) {
-
         $video = geodir_get_video($post->ID);
         $special_offers = geodir_get_special_offers($post->ID);
         $related_listing_array = array();
@@ -1418,10 +1413,7 @@ function geodir_show_detail_page_tabs()
         $map_args['enable_map_direction'] = true;
         $map_args['map_class_name'] = 'geodir-map-detail-page';
         $map_args['maptype'] = (!empty($post->post_mapview)) ? $post->post_mapview : 'ROADMAP';
-
-
-    } elseif (geodir_is_page('preview')) {
-
+    } else if (geodir_is_page('preview')) {
         $video = isset($post->geodir_video) ? $post->geodir_video : '';
         $special_offers = isset($post->geodir_special_offers) ? $post->geodir_special_offers : '';
 
@@ -1470,28 +1462,42 @@ function geodir_show_detail_page_tabs()
         $map_args['enable_jason_on_load'] = true;
         $map_args['enable_map_direction'] = true;
         $map_args['map_class_name'] = 'geodir-map-preview-page';
-
     }
-
 
     $arr_detail_page_tabs = geodir_detail_page_tabs_list();// get this sooner so we can get the active tab for the user
 
+    $active_tab = '';
     $active_tab_name = '';
-    foreach($arr_detail_page_tabs as $tabs){
-        if(isset($tabs['is_active_tab']) && $tabs['is_active_tab'] && isset($tabs['heading_text']) && $tabs['heading_text']){
-            $active_tab_name = __($tabs['heading_text'],'geodirectory');
+    $default_tab = '';
+    $default_tab_name = '';
+    foreach($arr_detail_page_tabs as $tab_index => $tabs){
+        if (isset($tabs['is_active_tab']) && $tabs['is_active_tab'] && !empty($tabs['is_display']) && isset($tabs['heading_text']) && $tabs['heading_text']) {
+            $active_tab = $tab_index;
+            $active_tab_name = __($tabs['heading_text'], 'geodirectory');
+        }
+        
+        if ($default_tab === '' && !empty($tabs['is_display']) && !empty($tabs['heading_text'])) {
+            $default_tab = $tab_index;
+            $default_tab_name = __($tabs['heading_text'], 'geodirectory');
         }
     }
+    
+    if ($active_tab === '' && $default_tab !== '') { // Make first tab acs a active tab if not any tab is active.
+        if (isset($arr_detail_page_tabs[$active_tab]) && isset($arr_detail_page_tabs[$active_tab]['is_active_tab'])) {
+            $arr_detail_page_tabs[$active_tab]['is_active_tab'] = false;
+        }
+        
+        $arr_detail_page_tabs[$default_tab]['is_active_tab'] = true;
+        $active_tab = $default_tab;
+        $active_tab_name = $default_tab_name;
+    }
     ?>
-
     <div class="geodir-tabs" id="gd-tabs" style="position:relative;">
-
         <div id="geodir-tab-mobile-menu" >
             <i class="fa fa-bars"></i>
             <span class="geodir-mobile-active-tab"><?php echo $active_tab_name;?></span>
             <i class="fa fa-sort-desc"></i>
         </div>
-
         <dl class="geodir-tab-head">
             <?php
             /**
@@ -1502,23 +1508,16 @@ function geodir_show_detail_page_tabs()
              */
             do_action('geodir_before_tab_list'); ?>
             <?php
-
-
             foreach ($arr_detail_page_tabs as $tab_index => $detail_page_tab) {
                 if ($detail_page_tab['is_display']) {
                     ?>
                     <dt></dt> <!-- added to comply with validation -->
-                    <dd <?php if ($detail_page_tab['is_active_tab']){ ?>class="geodir-tab-active"<?php }?> >
-                        <a data-tab="#<?php echo $tab_index;?>"
-                           data-status="enable"><?php _e($detail_page_tab['heading_text'],'geodirectory');?></a>
+                    <dd <?php if ($detail_page_tab['is_active_tab']){ ?>class="geodir-tab-active"<?php }?> ><a data-tab="#<?php echo $tab_index;?>" data-status="enable"><?php _e($detail_page_tab['heading_text'],'geodirectory');?></a>
                     </dd>
-
                     <?php
                     ob_start() // start tab content buffering
                     ?>
-                    <li id="<?php echo $tab_index;?>Tab" <?php if ($tab_index == 'post_profile') {
-                        //echo 'itemprop="description"';
-                    }?>>
+                    <li id="<?php echo $tab_index;?>Tab">
                         <div id="<?php echo $tab_index;?>" class="hash-offset"></div>
                         <?php
                         /**

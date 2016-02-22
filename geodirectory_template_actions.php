@@ -2096,7 +2096,7 @@ function geodir_action_add_listing_form()
     $required_msg = '';
     $submit_button = '';
 
-    if (isset($_REQUEST['ajax_action'])) $ajax_action = $_REQUEST['ajax_action']; else $ajax_action = 'add';
+    $ajax_action = isset($_REQUEST['ajax_action']) ? $_REQUEST['ajax_action'] : 'add';
 
     $thumb_img_arr = array();
     $curImages = '';
@@ -2107,19 +2107,12 @@ function geodir_action_add_listing_form()
         $listing_type = $post->listing_type;
         $title = $post->post_title;
         $desc = $post->post_desc;
-        /*if(is_array($post->post_category) && !empty($post->post_category))
-			$post_cat = $post->post_category;
-		else*/
         $post_cat = $post->post_category;
 
         $kw_tags = $post->post_tags;
         $curImages = isset($post->post_images) ? $post->post_images : '';
     } elseif (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
-
         global $post, $post_images;
-
-        /*query_posts(array('p'=>$_REQUEST['pid']));
-		if ( have_posts() ) while ( have_posts() ) the_post(); global $post,$post_images;*/
 
         $post = geodir_get_post_info($_REQUEST['pid']);
         $thumb_img_arr = geodir_get_images($post->ID);
@@ -2132,7 +2125,6 @@ function geodir_action_add_listing_form()
         $listing_type = $post->post_type;
         $title = $post->post_title;
         $desc = $post->post_content;
-        //$post_cat = $post->categories;
         $kw_tags = $post->post_tags;
         $kw_tags = implode(",", wp_get_object_terms($post->ID, $listing_type . '_tags', array('fields' => 'names')));
     } else {
@@ -2142,22 +2134,18 @@ function geodir_action_add_listing_form()
     if ($current_user->ID != '0') {
         $user_login = true;
     }
-
-
     ?>
-    <form name="propertyform" id="propertyform" action="<?php echo get_page_link(geodir_preview_page_id());?>"
-          method="post" enctype="multipart/form-data">
+    <form name="propertyform" id="propertyform" action="<?php echo get_page_link(geodir_preview_page_id());?>" method="post" enctype="multipart/form-data">
         <input type="hidden" name="preview" value="<?php echo sanitize_text_field($listing_type);?>"/>
         <input type="hidden" name="listing_type" value="<?php echo sanitize_text_field($listing_type);?>"/>
-        <?php if ($page_id) { ?><input type="hidden" name="add_listing_page_id"
-                                       value="<?php echo $page_id; ?>" /><?php }?>
-        <?php if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') { ?>
-            <input type="hidden" name="pid" value="<?php echo sanitize_text_field($_REQUEST['pid']); ?>"/>
-        <?php } ?>
-        <?php if (isset($_REQUEST['backandedit'])) { ?>
-            <input type="hidden" name="backandedit" value="<?php echo sanitize_text_field($_REQUEST['backandedit']); ?>"/>
-        <?php } ?>
+        <?php if ($page_id) { ?>
+        <input type="hidden" name="add_listing_page_id" value="<?php echo $page_id;?>"/>
+        <?php } if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') { ?>
+            <input type="hidden" name="pid" value="<?php echo sanitize_text_field($_REQUEST['pid']);?>"/>
+        <?php } if (isset($_REQUEST['backandedit'])) { ?>
+            <input type="hidden" name="backandedit" value="<?php echo sanitize_text_field($_REQUEST['backandedit']);?>"/>
         <?php
+        } 
         /**
          * Called at the very top of the add listing page form for frontend.
          *
@@ -2165,10 +2153,9 @@ function geodir_action_add_listing_form()
          *
          * @since 1.0.0
          */
-        do_action('geodir_before_detail_fields');?>
-
+        do_action('geodir_before_detail_fields');
+        ?>
         <h5 id="geodir_fieldset_details" class="geodir-fieldset-row" gd-fieldset="details"><?php echo LISTING_DETAILS_TEXT;?></h5>
-
         <?php
         /**
          * Called at the top of the add listing page form for frontend.
@@ -2177,15 +2164,14 @@ function geodir_action_add_listing_form()
          *
          * @since 1.0.0
          */
-        do_action('geodir_before_main_form_fields');?>
-
+        do_action('geodir_before_main_form_fields');
+        ?>
         <div id="geodir_post_title_row" class="required_field geodir_form_row clearfix gd-fieldset-details">
             <label><?php echo PLACE_TITLE_TEXT;?><span>*</span> </label>
             <input type="text" field_type="text" name="post_title" id="post_title" class="geodir_textfield"
                    value="<?php echo esc_attr(stripslashes($title)); ?>"/>
             <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory');?></span>
         </div>
-
         <?php
         $show_editor = get_option('geodir_tiny_editor_on_add_listing');
 
@@ -2217,49 +2203,49 @@ function geodir_action_add_listing_form()
          * @param int $desc_limit The character limit numer if any.
          */
         $desc_limit_msg = apply_filters('geodir_description_field_desc_limit_msg', $desc_limit_msg, $desc_limit);
+        
+        $desc_class = '';
+        if ($desc_limit === '' || (int)$desc_limit > 0) {
+            /**
+             * Called on the add listing page form for frontend just before the description field.
+             *
+             * @since 1.0.0
+             */
+            do_action('geodir_before_description_field');
+            
+            $desc_class = ' required_field';
+        } else {
+            $desc_class = ' hidden';
+        }
         ?>
-        <?php
-        /**
-         * Called on the add listing page form for frontend just before the description field.
-         *
-         * @since 1.0.0
-         */
-        do_action('geodir_before_description_field'); ?>
-        <div id="geodir_post_desc_row" class="<?php if ($desc_limit != '0') {
-            echo 'required_field';
-        }?> geodir_form_row clearfix gd-fieldset-details">
-            <label><?php echo PLACE_DESC_TEXT;?><span><?php if ($desc_limit != '0') {
-                        echo '*';
-                    }?></span> </label>
+        <div id="geodir_post_desc_row" class="geodir_form_row clearfix gd-fieldset-details<?php echo $desc_class;?>">
+            <label><?php echo PLACE_DESC_TEXT;?><span><?php if ($desc_limit != '0') { echo '*'; } ?></span> </label>
             <?php
             if (!empty($show_editor) && in_array($listing_type, $show_editor)) {
-
-                $editor_settings = array('media_buttons' => false, 'textarea_rows' => 10);?>
-
+                $editor_settings = array('media_buttons' => false, 'textarea_rows' => 10);
+            ?>
                 <div class="editor" field_id="post_desc" field_type="editor">
                     <?php wp_editor($desc, "post_desc", $editor_settings); ?>
                 </div>
             <?php if ($desc_limit != '') { ?>
-                <script
-                    type="text/javascript">jQuery('textarea#post_desc').attr('maxlength', "<?php echo $desc_limit;?>");</script>
-            <?php } ?>
-            <?php } else { ?>
-                <textarea field_type="textarea" name="post_desc" id="post_desc" class="geodir_textarea"
-                          maxlength="<?php echo $desc_limit; ?>"><?php echo $desc; ?></textarea>
-            <?php } ?>
-            <?php if ($desc_limit_msg != '') { ?>
+                <script type="text/javascript">jQuery('textarea#post_desc').attr('maxlength', "<?php echo $desc_limit;?>");</script>
+            <?php } } else { ?>
+                <textarea field_type="textarea" name="post_desc" id="post_desc" class="geodir_textarea" maxlength="<?php echo $desc_limit; ?>"><?php echo $desc; ?></textarea>
+            <?php } if ($desc_limit_msg != '') { ?>
                 <span class="geodir_message_note"><?php echo $desc_limit_msg; ?></span>
             <?php } ?>
             <span class="geodir_message_error"><?php echo _e($required_msg, 'geodirectory');?></span>
         </div>
         <?php
-        /**
-         * Called on the add listing page form for frontend just after the description field.
-         *
-         * @since 1.0.0
-         */
-        do_action('geodir_after_description_field'); ?>
-        <?php
+        if ($desc_limit === '' || (int)$desc_limit > 0) {
+            /**
+             * Called on the add listing page form for frontend just after the description field.
+             *
+             * @since 1.0.0
+             */
+            do_action('geodir_after_description_field');
+        }
+        
         $kw_tags = esc_attr(stripslashes($kw_tags));
         $kw_tags_count = TAGKW_TEXT_COUNT;
         $kw_tags_msg = TAGKW_MSG;
@@ -2288,40 +2274,40 @@ function geodir_action_add_listing_form()
          * @param int $kw_tags_count The character count limit if any.
          */
         $kw_tags_msg = apply_filters('geodir_listing_tags_field_tags_msg', $kw_tags_msg, $kw_tags_count);
+        
+        $tags_class = '';
+        if ($kw_tags_count === '' || (int)$kw_tags_count > 0) {
+            /**
+             * Called on the add listing page form for frontend just before the tags field.
+             *
+             * @since 1.0.0
+             */
+            do_action('geodir_before_listing_tags_field');
+        } else {
+            $tags_class = ' hidden';
+        }
         ?>
-        <?php
-        /**
-         * Called on the add listing page form for frontend just before the tags field.
-         *
-         * @since 1.0.0
-         */
-        do_action('geodir_before_listing_tags_field');
-        ?>
-        <div id="geodir_post_tags_row" class="geodir_form_row clearfix gd-fieldset-details">
+        <div id="geodir_post_tags_row" class="geodir_form_row clearfix gd-fieldset-details<?php echo $tags_class;?>">
             <label><?php echo TAGKW_TEXT; ?></label>
             <input name="post_tags" id="post_tags" value="<?php echo $kw_tags; ?>" type="text" class="geodir_textfield"
                    maxlength="<?php echo $kw_tags_count;?>"/>
             <span class="geodir_message_note"><?php echo $kw_tags_msg;?></span>
         </div>
         <?php
-        /**
-         * Called on the add listing page form for frontend just after the tags field.
-         *
-         * @since 1.0.0
-         */
-        do_action('geodir_after_listing_tags_field'); ?>
-
-        <?php
-
-
+        if ($kw_tags_count === '' || (int)$kw_tags_count > 0) {
+            /**
+             * Called on the add listing page form for frontend just after the tags field.
+             *
+             * @since 1.0.0
+             */
+            do_action('geodir_after_listing_tags_field');
+        }
+        
         $package_info = array();
-
         $package_info = geodir_post_package_info($package_info, $post);
-
-        geodir_get_custom_fields_html($package_info->pid, 'all', $listing_type);?>
-
-
-        <?php
+        
+        geodir_get_custom_fields_html($package_info->pid, 'all', $listing_type);
+        
         // adjust values here
         $id = "post_images"; // this will be the name of form field. Image url(s) will be submitted in $_POST using this key. So if $id == �img1� then $_POST[�img1�] will have all the image urls
 
