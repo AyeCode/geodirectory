@@ -1482,7 +1482,7 @@ function geodir_show_detail_page_tabs()
         }
     }
     
-    if ($default_tab !== '' && $default_tab != $active_tab) { // Make first tab acs a active tab if not any tab is active.
+    if ($active_tab === '' && $default_tab !== '') { // Make first tab acs a active tab if not any tab is active.
         if (isset($arr_detail_page_tabs[$active_tab]) && isset($arr_detail_page_tabs[$active_tab]['is_active_tab'])) {
             $arr_detail_page_tabs[$active_tab]['is_active_tab'] = false;
         }
