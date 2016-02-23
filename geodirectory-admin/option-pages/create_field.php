@@ -26,7 +26,12 @@ if (isset($_REQUEST['update']) && $_REQUEST['update'] == "update" && isset($_REQ
 }
 
 if (isset($_REQUEST['update']) && $_REQUEST['update'] == "update" && isset($_REQUEST['create_field']) && isset($_REQUEST['manage_field_type']) && $_REQUEST['manage_field_type'] == 'sorting_options') {
-    echo godir_set_sort_field_order($field_ids);
+    $response = godir_set_sort_field_order($field_ids);
+    if (is_array($response)) {
+        wp_send_json($response);
+    } else {
+        echo $response;
+    }
 }
 
 /* ---- Show field form in admin ---- */
