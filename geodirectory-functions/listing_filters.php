@@ -861,32 +861,36 @@ function searching_filter_where($where) {
  * @param string $where The where query string.
  * @return string Modified where query string.
  */
-function author_filter_where($where)
-{
-
+function author_filter_where($where) {
     global $wpdb, $geodir_post_type, $table, $curr;
 
     $curauth = (get_query_var('author_name')) ? get_user_by('slug', get_query_var('author_name')) : get_userdata(get_query_var('author'));
-
-    //$user_id = get_current_user_id();
-    $user_id = $curauth->ID;
+    $user_id = !empty($curauth->ID) ? (int)$curauth->ID : 0;
+    
     if (isset($_REQUEST['stype'])) {
         $where = $wpdb->prepare(" AND $wpdb->posts.post_type IN (%s) ",$_REQUEST['stype']);
     } else {
         $where = " AND $wpdb->posts.post_type IN ('gd_place') ";
     }
 
-    if (isset($_REQUEST['list']) && $_REQUEST['list'] == 'favourite') {
-        if ($user_fav_posts = get_user_meta($user_id, 'gd_user_favourite_post', true))
-            $user_fav_posts = implode("','", $user_fav_posts);
-        $where .= " AND $wpdb->posts.ID IN ('$user_fav_posts')  ";
-    } else
-        $where .= " AND $wpdb->posts.post_author = $user_id ";
+    if ($user_id > 0) {
+        if (isset($_REQUEST['list']) && $_REQUEST['list'] == 'favourite') {
+            $user_fav_posts = get_user_meta($user_id, 'gd_user_favourite_post', true);
+            $user_fav_posts = !empty($user_fav_posts) && is_array($user_fav_posts) ? implode("','", $user_fav_posts) : '-1';
+            $where .= " AND $wpdb->posts.ID IN ('$user_fav_posts')";
+        } else
+            $where .= " AND $wpdb->posts.post_author = $user_id";
 
-    $where .= " AND $wpdb->posts.post_status IN ('publish','draft','pending') ";
+        if ($user_id == (int)get_current_user_id()) {
+            $where .= " AND $wpdb->posts.post_status IN ('publish','draft','pending') ";
+        } else {
+            $where .= " AND $wpdb->posts.post_status = 'publish' ";
+        }
+    } else {
+        $where .= " AND $wpdb->posts.post_author = '-1' AND $wpdb->posts.post_status = 'publish' ";
+    }
 
     ########### WPML ###########
-
     if (function_exists('icl_object_id')) {
         $lang_code = ICL_LANGUAGE_CODE;
         if ($lang_code) {
@@ -895,7 +899,7 @@ function author_filter_where($where)
 
     }
     ########### WPML ###########
-
+    
     return $where;
 }
 
