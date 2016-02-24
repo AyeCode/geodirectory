@@ -1691,11 +1691,19 @@ function geodir_exif($file)
         return $file; // Bail if file is not an image.
     }
     
-    if (!function_exists('wp_get_image_editor') || !function_exists('exif_read_data')) {
+    if (!function_exists('wp_get_image_editor')) {
         return $file;
     }
    
-    $exif = exif_read_data($file_path);
+    $mime_type = $file['type'];
+    $exif = array();
+    if ($mime_type == 'image/jpeg' && function_exists('exif_read_data')) {
+        try {
+            $exif = exif_read_data($file_path);
+        } catch(Exception $e) {
+            $exif = array();
+        }
+    }
     
     $rotate = false;
     $flip = false;
@@ -1750,7 +1758,6 @@ function geodir_exif($file)
         }
     }
     
-    $mime_type = $file['type'];
     $quality = null;
     /**
      * Filter the image quality.
