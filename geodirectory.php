@@ -10,7 +10,7 @@
 Plugin Name: GeoDirectory
 Plugin URI: http://wpgeodirectory.com/
 Description: GeoDirectory plugin for wordpress.
-Version: 1.5.6
+Version: 1.5.7
 Author: GeoDirectory
 Author URI: http://wpgeodirectory.com
 Requires at least: 3.1
@@ -21,12 +21,8 @@ Tested up to: 4.4
  * The current version number of GeoDirectory.
  *
  * @since 1.0.0
- * @global object $wpdb WordPress Database object.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
- * @global array $geodir_addon_list List of active GeoDirectory extensions.
- * @global string $plugin_file_name Base file name. 'geodirectory/geodirectory.php'.
  */
-define("GEODIRECTORY_VERSION", "1.5.6");
+define("GEODIRECTORY_VERSION", "1.5.7");
 
 /*
  * CHECK FOR OLD COMPATIBILITY PACKS AND DISABLE IF THEY ARE ACTIVE
@@ -59,8 +55,14 @@ if (is_admin()) {
 
 }
 
-/*
+/**
  * Declare some global variables for later use.
+ *
+ * @since 1.0.0
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @global array $geodir_addon_list List of active GeoDirectory extensions.
+ * @global string $plugin_file_name Base file name. 'geodirectory/geodirectory.php'.
  */
 global $wpdb, $plugin_prefix, $geodir_addon_list, $plugin_file_name;
 $plugin_prefix = $wpdb->prefix . 'geodir_';
@@ -222,14 +224,14 @@ if (is_admin()) {
      * @since 1.5.6
      */
     global $pagenow;
-   // if ( 'plugins.php' === $pagenow )
+   if ( 'plugins.php' === $pagenow )
     {
         // Better update message
         $file   = basename( __FILE__ );
         $folder = basename( dirname( __FILE__ ) );
         $hook = "in_plugin_update_message-{$folder}/{$file}";
-        //echo $hook;
-        add_action( 'in_plugin_update_message-geodirectory/geodirectory.php', 'geodire_admin_upgrade_notice', 20, 2 );
+        echo $hook;
+        add_action( $hook, 'geodire_admin_upgrade_notice', 20, 2 );
     }
 
 }

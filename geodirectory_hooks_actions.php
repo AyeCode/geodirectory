@@ -1545,32 +1545,6 @@ function geodir_detail_page_tab_is_display($is_display, $tab)
 }
 
 
-global $plugin_file_name;
-add_action('after_plugin_row_' . $plugin_file_name, 'geodir_after_core_plugin_row', 3, 3);
-
-
-/**
- * Add an action to show a message on core plugin row for deactivation.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @param string $plugin_file Plugin file path.
- * @param array $plugin_data Plugin data.
- * @param string $status Status of the plugin. Defaults are 'All', 'Active','Inactive', 'Recently Activated', 'Upgrade', 'Must-Use','Drop-ins', 'Search'.
- */
-function geodir_after_core_plugin_row($plugin_file, $plugin_data, $status)
-{
-    //echo $plugin_file . " " .  $plugin_data . " " . $status ;
-    if (is_plugin_active($plugin_file)) {
-        $wp_list_table = _get_list_table('WP_Plugins_List_Table');
-
-        echo '<tr class="plugin-update-tr active update"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange"><div class="geodir-plugin-row-warning">';
-        _e('Deactivate all GeoDirectory dependent add-ons first before deactivating GeoDirectory.', 'geodirectory');
-        echo '</div></td></tr>';
-    }
-}
-
-
 add_action('wp', 'geodir_changes_in_custom_fields_table');
 add_action('wp_admin', 'geodir_changes_in_custom_fields_table');
 

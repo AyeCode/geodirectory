@@ -410,12 +410,15 @@ function geodir_set_is_geodir_page($wp)
 
         if (!isset($wp->query_vars['gd_is_geodir_page'])) {
             $geodir_taxonomis = geodir_get_taxonomies('', true);
-            foreach ($geodir_taxonomis as $taxonomy) {
-                if (array_key_exists($taxonomy, $wp->query_vars)) {
-                    $wp->query_vars['gd_is_geodir_page'] = true;
-                    break;
+            if(!empty($geodir_taxonomis)){
+                foreach ($geodir_taxonomis as $taxonomy) {
+                    if (array_key_exists($taxonomy, $wp->query_vars)) {
+                        $wp->query_vars['gd_is_geodir_page'] = true;
+                        break;
+                    }
                 }
             }
+
         }
 
         if (!isset($wp->query_vars['gd_is_geodir_page']) && isset($wp->query_vars['author_name']) && isset($_REQUEST['geodir_dashbord']))
@@ -1228,7 +1231,7 @@ function fetch_remote_file($url)
         return new WP_Error('upload_dir_error', $upload['error']);
 
     // fetch the remote url and write it to the placeholder file
-    $headers = wp_get_http($url, $upload['file']);
+    $headers = wp_remote_get($url, array('stream' => true,'filename' => $upload['file']));
 
     $log_message = '';
     $filesize = filesize($upload['file']);
@@ -1237,10 +1240,10 @@ function fetch_remote_file($url)
         $log_message = __('Remote server did not respond', 'geodirectory');
     }
     // make sure the fetch was successful
-    elseif ($headers['response'] != '200') {
+    elseif ($headers['response']['code'] != '200') {
         $log_message = sprintf(__('Remote server returned error response %1$d %2$s', 'geodirectory'), esc_html($headers['response']), get_status_header_desc($headers['response']));
     }
-    elseif (isset($headers['content-length']) && $filesize != $headers['content-length']) {
+    elseif (isset($headers['headers']['content-length']) && $filesize != $headers['headers']['content-length']) {
         $log_message =  __('Remote file is incorrect size', 'geodirectory');
     }
     elseif (0 == $filesize) {

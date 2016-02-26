@@ -204,7 +204,7 @@ function get_markers() {
 	 * @param string $search Row of searched fields to use in WHERE clause.
 	 */
 	$catsql = apply_filters('geodir_home_map_listing_query', $catsql, $search);
-	
+
     $catinfo = $wpdb->get_results($catsql);
 	
     $cat_content_info = array();
