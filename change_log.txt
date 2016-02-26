@@ -1,3 +1,6 @@
+v1.5.8
+Local .mo file path points to wrong location - FIXED
+
 v1.5.7
 GD Export should split requests to skip out of memory problem - FIXED
 Added filters to change img urls for uses like CDN - ADDED

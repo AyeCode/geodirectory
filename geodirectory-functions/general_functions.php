@@ -3484,7 +3484,7 @@ function geodir_load_textdomain() {
     $locale = apply_filters('plugin_locale', get_locale(), 'geodirectory');
 
     load_textdomain('geodirectory', WP_LANG_DIR . '/' . 'geodirectory' . '/' . 'geodirectory' . '-' . $locale . '.mo');
-    load_plugin_textdomain('geodirectory', false, dirname(plugin_basename(__FILE__)) . '/geodirectory-languages');
+    load_plugin_textdomain('geodirectory', false, plugin_basename(dirname(dirname(__FILE__))) . '/geodirectory-languages');
 
     /**
      * Define language constants.
