@@ -10,7 +10,7 @@
 Plugin Name: GeoDirectory
 Plugin URI: http://wpgeodirectory.com/
 Description: GeoDirectory plugin for wordpress.
-Version: 1.5.7
+Version: 1.5.8
 Author: GeoDirectory
 Author URI: http://wpgeodirectory.com
 Requires at least: 3.1
@@ -22,7 +22,7 @@ Tested up to: 4.4
  *
  * @since 1.0.0
  */
-define("GEODIRECTORY_VERSION", "1.5.7");
+define("GEODIRECTORY_VERSION", "1.5.8");
 
 /*
  * CHECK FOR OLD COMPATIBILITY PACKS AND DISABLE IF THEY ARE ACTIVE
@@ -230,7 +230,6 @@ if (is_admin()) {
         $file   = basename( __FILE__ );
         $folder = basename( dirname( __FILE__ ) );
         $hook = "in_plugin_update_message-{$folder}/{$file}";
-        echo $hook;
         add_action( $hook, 'geodire_admin_upgrade_notice', 20, 2 );
     }
 
