@@ -2603,6 +2603,7 @@ function geodir_listing_slider_widget_output($args = '', $instance = '')
                 animationSpeed: <?php echo $animationSpeed;?>,
                 directionNav: <?php echo $directionNav;?>,
                 maxItems: <?php echo $max_show;?>,
+                move: 1,
                 <?php if($slide_width){ echo "itemWidth: ".$slide_width.",";}?>
                 sync: "#geodir_widget_carousel",
                 start: function (slider) {
