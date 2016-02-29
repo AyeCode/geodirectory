@@ -1005,6 +1005,9 @@ add_shortcode('gd_bestof_widget', 'geodir_sc_bestof_widget');
  * This implements the functionality of the shortcode for displaying geodirectory listings.
  *
  * @since 1.4.2
+ * @since 1.5.9 New parameter "post_author" added.
+ *
+ * @global object $post The current post object.
  *
  * @param array $atts {
  *     Attributes of the shortcode.
@@ -1017,6 +1020,8 @@ add_shortcode('gd_bestof_widget', 'geodir_sc_bestof_widget');
  *     @type string $event_type    Event type filter. Should today, upcoming, past, all. Default empty.
                                    For post type gd_event only. 
  *     @type int    $post_number   No. of post to display. Default 10.
+ *     @type int|string $post_author       Fitler the posts by author. Either author ID or 'current'(it uses 
+                                           the author ID of the current post. Default empty.
  *     @type string $layout        Layout to display listing. Should be gridview_onehalf, gridview_onethird
                                    gridview_onefourth, gridview_onefifth, list. Default 'gridview_onehalf'.
  *     @type string $listing_width Listing width. Optional
@@ -1036,33 +1041,36 @@ add_shortcode('gd_bestof_widget', 'geodir_sc_bestof_widget');
  * @return string HTML content to display geodirectory listings.
  */
 function geodir_sc_gd_listings($atts, $content = '') {
-	$defaults = array(
-		'title'					=> '',
-		'post_type' 			=> 'gd_place',
-		'category'				=> 0,
-		'list_sort'				=> 'latest',
-		'event_type'			=> '',
-		'post_number'			=> 10,
-		'layout'				=> 'gridview_onehalf',
-		'listing_width'			=> '',
-		'character_count'		=> 20,
-		'add_location_filter' 	=> 1,
-		'show_featured_only'	=> '',
-		'show_special_only' 	=> '',
-		'with_pics_only' 		=> '',
-		'with_videos_only' 		=> '',
-		'with_pagination' 		=> '1',
-		'top_pagination' 		=> '0',
-		'bottom_pagination' 	=> '1',
-	);
-	$params = shortcode_atts($defaults, $atts);
+    global $post;
+    
+    $defaults = array(
+        'title'                 => '',
+        'post_type'             => 'gd_place',
+        'category'              => 0,
+        'list_sort'             => 'latest',
+        'event_type'            => '',
+        'post_number'           => 10,
+        'post_author'           => '',
+        'layout'                => 'gridview_onehalf',
+        'listing_width'         => '',
+        'character_count'       => 20,
+        'add_location_filter'   => 1,
+        'show_featured_only'    => '',
+        'show_special_only'     => '',
+        'with_pics_only'        => '',
+        'with_videos_only'      => '',
+        'with_pagination'       => '1',
+        'top_pagination'        => '0',
+        'bottom_pagination'     => '1',
+    );
+    $params = shortcode_atts($defaults, $atts);
 
-	$params['title'] 		= wp_strip_all_tags($params['title']);
-    $params['post_type'] 	= gdsc_is_post_type_valid($params['post_type']) ? $params['post_type'] : 'gd_place';
-	
-	// Validate the selected category/ies - Grab the current list based on post_type
-    $category_taxonomy 		= geodir_get_taxonomies($params['post_type']);
-    $categories 			= get_terms($category_taxonomy, array('orderby' => 'count', 'order' => 'DESC', 'fields' => 'ids'));
+    $params['title']        = wp_strip_all_tags($params['title']);
+    $params['post_type']    = gdsc_is_post_type_valid($params['post_type']) ? $params['post_type'] : 'gd_place';
+
+    // Validate the selected category/ies - Grab the current list based on post_type
+    $category_taxonomy      = geodir_get_taxonomies($params['post_type']);
+    $categories             = get_terms($category_taxonomy, array('orderby' => 'count', 'order' => 'DESC', 'fields' => 'ids'));
 
     // Make sure we have an array
     if (!(is_array($params['category']))) {
@@ -1071,52 +1079,65 @@ function geodir_sc_gd_listings($atts, $content = '') {
 
     // Array_intersect returns only the items in $params['category'] that are also in our category list
     // Otherwise it becomes empty and later on that will mean "All"
-    $params['category'] 	= array_intersect($params['category'], $categories);
-	
-	// Post_number needs to be a positive integer
-    $params['post_number'] 	= absint($params['post_number']);
-    $params['post_number']	= $params['post_number'] > 0 ? $params['post_number'] : 10;
-	
-	// Validate character_count
+    $params['category']     = array_intersect($params['category'], $categories);
+
+    // Post_number needs to be a positive integer
+    $params['post_number']  = absint($params['post_number']);
+    $params['post_number']  = $params['post_number'] > 0 ? $params['post_number'] : 10;
+    
+    // Post_number needs to be a positive integer
+    if (!empty($atts['post_author'])) {
+        if ($atts['post_author'] == 'current' && !empty($post) && isset($post->post_author) && $post->post_type != 'page') {
+            $params['post_author'] = $post->post_author;
+        } else if ($atts['post_author'] != 'current' && absint($atts['post_author']) > 0) {
+            $params['post_author'] = absint($atts['post_author']);
+        } else {
+            unset($params['post_author']);
+        }
+    } else {
+        unset($params['post_author']);
+    }
+
+    // Validate character_count
     //todo: is this necessary?
-    $params['character_count'] 	= $params['character_count'];
-	
-	// Validate our layout choice
+    $params['character_count']  = $params['character_count'];
+
+    // Validate our layout choice
     // Outside of the norm, I added some more simple terms to match the existing
     // So now I just run the switch to set it properly.
-    $params['layout'] 			= gdsc_validate_layout_choice($params['layout']);
+    $params['layout']           = gdsc_validate_layout_choice($params['layout']);
 
     // Validate our sorting choice
-    $params['list_sort'] 		= gdsc_validate_sort_choice($params['list_sort']);
-	
-	// Validate Listing width, used in the template widget-listing-listview.php
+    $params['list_sort']        = gdsc_validate_sort_choice($params['list_sort']);
+
+    // Validate Listing width, used in the template widget-listing-listview.php
     // The context is in width=$listing_width% - So we need a positive number between 0 & 100
-    $params['listing_width'] 	= gdsc_validate_listing_width($params['listing_width']);
+    $params['listing_width']    = gdsc_validate_listing_width($params['listing_width']);
 
     // Validate the checkboxes used on the widget
-    $params['add_location_filter'] 	= gdsc_to_bool_val($params['add_location_filter']);
-    $params['show_featured_only'] 	= gdsc_to_bool_val($params['show_featured_only']);
-    $params['show_special_only'] 	= gdsc_to_bool_val($params['show_special_only']);
-    $params['with_pics_only'] 		= gdsc_to_bool_val($params['with_pics_only']);
-    $params['with_videos_only'] 	= gdsc_to_bool_val($params['with_videos_only']);
-	$params['with_pagination'] 		= gdsc_to_bool_val($params['with_pagination']);
-	$params['top_pagination'] 		= gdsc_to_bool_val($params['top_pagination']);
-	$params['bottom_pagination'] 	= gdsc_to_bool_val($params['bottom_pagination']);
-	
+    $params['add_location_filter']  = gdsc_to_bool_val($params['add_location_filter']);
+    $params['show_featured_only']   = gdsc_to_bool_val($params['show_featured_only']);
+    $params['show_special_only']    = gdsc_to_bool_val($params['show_special_only']);
+    $params['with_pics_only']       = gdsc_to_bool_val($params['with_pics_only']);
+    $params['with_videos_only']     = gdsc_to_bool_val($params['with_videos_only']);
+    $params['with_pagination']      = gdsc_to_bool_val($params['with_pagination']);
+    $params['top_pagination']       = gdsc_to_bool_val($params['top_pagination']);
+    $params['bottom_pagination']    = gdsc_to_bool_val($params['bottom_pagination']);
+
     /**
      * End of validation
      */
-	if (isset($atts['geodir_ajax'])) {
-		$params['geodir_ajax'] = $atts['geodir_ajax'];
-		unset($atts['geodir_ajax']);
-	}
-	if (isset($atts['pageno'])) {
-		$params['pageno'] = $atts['pageno'];
-		unset($atts['pageno']);
-	}
-	$params['shortcode_atts'] 		= $atts;
+    if (isset($atts['geodir_ajax'])) {
+        $params['geodir_ajax'] = $atts['geodir_ajax'];
+        unset($atts['geodir_ajax']);
+    }
+    if (isset($atts['pageno'])) {
+        $params['pageno'] = $atts['pageno'];
+        unset($atts['pageno']);
+    }
+    $params['shortcode_atts']       = $atts;
 
-	$output = geodir_sc_gd_listings_output($params);
+    $output = geodir_sc_gd_listings_output($params);
 
     return $output;
 }
