@@ -2027,6 +2027,10 @@ function geodir_function_widget_listings_where($where)
             $where = geodir_default_location_where($where, $table);
         }
 
+        if (!empty($query_args['post_author'])) {
+            $where .= " AND " . $wpdb->posts . ".post_author = " . (int)$query_args['post_author'];
+        }
+        
         if (!empty($query_args['show_featured_only'])) {
             $where .= " AND " . $table . ".is_featured = '1'";
         }

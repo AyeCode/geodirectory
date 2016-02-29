@@ -585,6 +585,10 @@ function geodir_sc_gd_listings_output($args = array()) {
     if ($character_count >= 0) {
         $query_args['excerpt_length'] = $character_count;
     }
+    
+    if (!empty($args['post_author'])) {
+        $query_args['post_author'] = $args['post_author'];
+    }
 
     if (!empty($args['show_featured_only'])) {
         $query_args['show_featured_only'] = 1;

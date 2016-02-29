@@ -1,3 +1,6 @@
+v1.5.9
+New parameter "post_author" added in [gd_listings] shortcode to filter listings by author - ADDED
+
 v1.5.8
 Local .mo file path points to wrong location - FIXED
 Debugging notice printing on plugins.php page - FIXED
