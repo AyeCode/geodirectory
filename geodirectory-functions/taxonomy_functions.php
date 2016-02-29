@@ -994,7 +994,7 @@ function geodir_addpost_categories_html($request_taxonomy, $parrent, $selected =
 
     if ($exclude != '') {
         $exclude_cats = maybe_unserialize(base64_decode($exclude));
-        print_r($exclude_cats);
+
         if(is_array( $exclude_cats)){
             $exclude_cats = array_map( 'intval', $exclude_cats );
         }else{
