@@ -896,7 +896,7 @@ function geodir_update_options($options, $dummy = false)
         endif;
     }
     if ($dummy)
-        unset($_POST);
+        $_POST = array();
     return true;
 
 }
