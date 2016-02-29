@@ -529,17 +529,20 @@ function geodir_set_location_var_in_session_in_core($wp) {
         $geodir_term = '';
         $geodir_set_location_session = true;
         $geodir_taxonomis = geodir_get_taxonomies('', true);
-		
-	    foreach ($geodir_taxonomis as $taxonomy) {
-            if (array_key_exists($taxonomy, $wp->query_vars)) {
-                $is_geodir_taxonomy = true;
-                $geodir_taxonomy = $taxonomy;
-                $geodir_post_type = str_replace('category', '', $taxonomy);
-                $geodir_post_type = str_replace('_tags', '', $geodir_post_type);
-                $geodir_term = $wp->query_vars[$geodir_taxonomy];
-                break;
+
+        if(!empty($geodir_taxonomis)){
+            foreach ($geodir_taxonomis as $taxonomy) {
+                if (array_key_exists($taxonomy, $wp->query_vars)) {
+                    $is_geodir_taxonomy = true;
+                    $geodir_taxonomy = $taxonomy;
+                    $geodir_post_type = str_replace('category', '', $taxonomy);
+                    $geodir_post_type = str_replace('_tags', '', $geodir_post_type);
+                    $geodir_term = $wp->query_vars[$geodir_taxonomy];
+                    break;
+                }
             }
         }
+
         // now get an array of all terms seperated by '/'
         $geodir_terms = explode('/', $geodir_term);
         $geodir_last_term = end($geodir_terms);

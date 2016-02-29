@@ -1,3 +1,7 @@
+v1.5.8
+Local .mo file path points to wrong location - FIXED
+Debugging notice printing on plugins.php page - FIXED
+
 v1.5.7
 GD Export should split requests to skip out of memory problem - FIXED
 Added filters to change img urls for uses like CDN - ADDED
@@ -37,6 +41,7 @@ Address field sort option removed - CHANGED
 Font Awesome support added for rating images - ADDED
 Some servers fail if a POST value is VARCHAR so we change it to XVARCHAR for post - CHANGED
 Hide tags and description fields if char limit set to ZERO for fields - CHANGED
+WordPress function wp_get_http is deprecated, removed and replaced - CHANGED
 
 v1.5.6
 In add listing form sub-categories are no longer showing in hierarchy for checkbox display type - FIXED
