@@ -270,7 +270,7 @@ function build_map_ajax_search_param(map_canvas_var, reload_cat_list, catObj,hid
 		jQuery(elList).find('li').removeClass('gd-map-search-pt');
 		jQuery(elList).find('li#'+ gd_pt).addClass('gd-map-search-pt');
 	}
-	
+
 	// Check/uncheck child categories
 	if (typeof catObj == 'object') {
 		if (jQuery(catObj).is(':checked')) {
@@ -423,14 +423,14 @@ function map_ajax_search(map_canvas_var, search_query_string, marker_jason,hide_
     else{jQuery('#' + map_canvas_var + '_loading_div').show();}
 
     if (marker_jason != '') {
-        parse_marker_jason(marker_jason, map_canvas_var)
+        parse_marker_jason(marker_jason, map_canvas_var);
         //document.getElementById( map_canvas+'_loading_div').style.display="none";
-        jQuery('#' + map_canvas + '_loading_div').hide();
+        jQuery('#' + map_canvas_var + '_loading_div').hide();
         return;
     }
 
     var query_url = eval(map_canvas_var).ajax_url + search_query_string;
-    if(gd_current_query==query_url){}//dont run again
+    if(gd_current_query==query_url){jQuery('#' + map_canvas_var + '_loading_div').hide();}//dont run again
     else {
         gd_current_query = query_url;
         jQuery.ajax({
