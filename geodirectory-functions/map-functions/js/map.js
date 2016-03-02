@@ -536,7 +536,11 @@ function geodir_htmlEscape(str) {
         .replace(/&frasl;/g, '/')
         .replace(/&ndash;/g, '-')
         .replace(/&ldquo;/g, '"')
-        .replace(/&gt;/g, '>');
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&apos;/g, "'")
+        .replace(/&amp;quot;/g, '"')
+        .replace(/&amp;apos;/g, "'");
 }
 gd_single_marker_lat = '';
 gd_single_marker_lon = '';
@@ -606,20 +610,17 @@ function create_marker(input, map_canvas_var) {
                 },
                 success: function (response) {
                     jQuery("#" + map_canvas_var).goMap();
+                    response = geodir_htmlEscape(response);
                     gd_infowindow.setContent(response);
-                    //setTimeout(function(){gd_infowindow.open(jQuery.goMap.map, marker);}, 3000);
-                    //setTimeout(function(){geodir_fix_marker_pos(map_canvas_var);}, 6000);
                     gd_infowindow.open(jQuery.goMap.map, marker);
                     geodir_fix_marker_pos(map_canvas_var);
 
                     // give the map 1 second to reposition before allowing it to reload
-                    setTimeout(function(){ is_zooming = false; }, 1000);
-
+                    setTimeout(function(){is_zooming = false;}, 1000);
                 }
             });
 
             return;
-
         });
 
         // Adding a visible_changed event to the marker

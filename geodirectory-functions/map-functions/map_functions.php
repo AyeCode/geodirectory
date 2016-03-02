@@ -98,10 +98,13 @@ function send_marker_jason_to_js()
                 unset($cat_content_info);
                 $cat_content_info[] = implode(',', $map_canvas_arr[$canvas]);
                 $totalcount = count(array_unique($map_jason));
-                if (!empty($cat_content_info))
-                    $canvas_jason = '[{"totalcount":"' . $totalcount . '",' . substr(implode(',', $cat_content_info), 1) . ']';
-                else
+                if (!empty($cat_content_info)) {
+                    $json_content = substr(implode(',', $cat_content_info), 1);
+                    $json_content = htmlentities($json_content, ENT_QUOTES); // Quotes in csv title import break maps - FIXED by kiran on 2nd March, 2016
+                    $canvas_jason = '[{"totalcount":"' . $totalcount . '",' . $json_content . ']';
+                } else {
                     $canvas_jason = '[{"totalcount":"0"}]';
+                }
 
                 $map_canvas_jason_args = array($canvas . '_jason' => $canvas_jason);
 

@@ -69,10 +69,13 @@ function show_listing_widget_map()
     $totalcount = count(array_unique($list_map_json));
 
 
-    if (!empty($cat_content_info))
-        $list_json = '[{"totalcount":"' . $totalcount . '",' . substr(implode(',', $cat_content_info), 1) . ']';
-    else
+    if (!empty($cat_content_info)) {
+        $json_content = substr(implode(',', $cat_content_info), 1);
+        $json_content = htmlentities($json_content, ENT_QUOTES); // Quotes in csv title import break maps - FIXED by kiran on 2nd March, 2016
+        $list_json = '[{"totalcount":"' . $totalcount . '",' . $json_content . ']';
+    } else {
         $list_json = '[{"totalcount":"0"}]';
+    }
 
     $listing_map_args = array('list_json' => $list_json);
 
