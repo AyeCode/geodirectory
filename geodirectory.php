@@ -13,6 +13,8 @@ Description: GeoDirectory plugin for wordpress.
 Version: 1.5.8
 Author: GeoDirectory
 Author URI: http://wpgeodirectory.com
+Text Domain: geodirectory
+Domain Path: /geodirectory-languages
 Requires at least: 3.1
 Tested up to: 4.4
 */
@@ -78,6 +80,10 @@ $geodir_post_custom_fields_cache = array();
  */
 if (!defined('WP_POST_REVISIONS')) define('WP_POST_REVISIONS', 0);
 
+/**
+ * Define constants
+ */
+if(!defined('GEODIRECTORY_PLUGIN_DIR')) define('GEODIRECTORY_PLUGIN_DIR', plugin_dir_path( __FILE__ ));
 
 /*
  * Declare database table names. All since version 1.0.0

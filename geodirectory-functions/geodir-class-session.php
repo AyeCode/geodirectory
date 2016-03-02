@@ -60,12 +60,12 @@ class Geodir_Session {
 			}
 
 			if ( !class_exists( 'Recursive_ArrayAccess' ) ) {
-				require_once GEODIRECTORY_PLUGIN_DIR . 'wp-session/class-recursive-arrayaccess.php';
+				require_once GEODIRECTORY_PLUGIN_DIR . 'geodirectory-functions/wp-session/class-recursive-arrayaccess.php';
 			}
 
 			if ( !class_exists( 'WP_Session' ) ) {
-				require_once GEODIRECTORY_PLUGIN_DIR . 'wp-session/class-wp-session.php';
-				require_once GEODIRECTORY_PLUGIN_DIR . 'wp-session/wp-session.php';
+				require_once GEODIRECTORY_PLUGIN_DIR . 'geodirectory-functions/wp-session/class-wp-session.php';
+				require_once GEODIRECTORY_PLUGIN_DIR . 'geodirectory-functions/wp-session/wp-session.php';
 			}
 
 			add_filter( 'wp_session_expiration_variant', array( $this, 'set_expiration_variant_time' ), 99999 );
