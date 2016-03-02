@@ -5172,7 +5172,7 @@ function geodir_ajax_import_export() {
                                 if ( $column == 'post_id' ) {
                                     $post_id = $row[$c];
                                 } else if ( $column == 'post_title' ) {
-                                    $post_title = $row[$c];
+                                    $post_title = sanitize_text_field($row[$c]);
                                 } else if ( $column == 'post_author' ) {
                                     $post_author = $row[$c];
                                 } else if ( $column == 'post_content' ) {
