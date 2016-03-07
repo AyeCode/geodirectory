@@ -1382,6 +1382,8 @@ $gd_permalink_cache = array();
  * Returns permalink structure using post link.
  *
  * @since 1.0.0
+ * @since 1.5.9 Fix the broken links when domain name contain CPT and home page 
+ *              is set to current location.
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
@@ -1429,21 +1431,29 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
             }
         }
 
-		// Fix slug problem when slug matches part of host or base url/ Ex: url -> www.abcxyz.com & slug -> xyz.
+        if (function_exists('geodir_location_geo_home_link')) {
+            remove_filter('home_url', 'geodir_location_geo_home_link', 100000);
+        }
+        
+        // Fix slug problem when slug matches part of host or base url/ Ex: url -> www.abcxyz.com & slug -> xyz.
         $site_url = trailingslashit(get_bloginfo('url'));
+        
+        if (function_exists('geodir_location_geo_home_link')) {
+            add_filter('home_url', 'geodir_location_geo_home_link', 100000, 2);
+        }
 
-		$fix_url = strpos($post_link, $site_url) === 0 ? true : false;
-		if ($fix_url) {
-			$post_link = str_replace($site_url, '', $post_link);
-		}
-		
+        $fix_url = strpos($post_link, $site_url) === 0 ? true : false;
+        if ($fix_url) {
+            $post_link = str_replace($site_url, '', $post_link);
+        }
+        
         $post_link = trailingslashit(
             preg_replace(  "/" . preg_quote( $slug, "/" ) . "/", $slug ."/%gd_taxonomy%",$post_link, 1 )
         );
 
-		if ($fix_url) {
-			$post_link = $site_url . $post_link;
-		}
+        if ($fix_url) {
+            $post_link = $site_url . $post_link;
+        }
 
         if (isset($comment_post_cache[$post->ID])) {
             $post = $comment_post_cache[$post->ID];
