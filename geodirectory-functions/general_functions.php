@@ -272,11 +272,15 @@ function geodir_is_page($gdpage = '')
                 return true;
             break;
         case 'detail':
-            if (is_single() && in_array(get_query_var('post_type'), geodir_get_posttypes()))
+            $post_type = get_query_var('post_type');
+            if(is_array($post_type)){$post_type = reset($post_type);}
+            if (is_single() && in_array($post_type, geodir_get_posttypes()))
                 return true;
             break;
         case 'pt':
-            if (is_post_type_archive() && in_array(get_query_var('post_type'), geodir_get_posttypes()) && !is_tax())
+            $post_type = get_query_var('post_type');
+            if(is_array($post_type)){$post_type = reset($post_type);}
+            if (is_post_type_archive() && in_array($post_type , geodir_get_posttypes()) && !is_tax())
                 return true;
 
             break;
@@ -286,7 +290,9 @@ function geodir_is_page($gdpage = '')
 
                 return true;
             }
-            if (is_post_type_archive() && in_array(get_query_var('post_type'), geodir_get_posttypes()))
+            $post_type = get_query_var('post_type');
+            if(is_array($post_type)){$post_type = reset($post_type);}
+            if (is_post_type_archive() && in_array($post_type, geodir_get_posttypes()))
                 return true;
 
             break;
