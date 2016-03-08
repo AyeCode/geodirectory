@@ -110,16 +110,13 @@ $general_options = apply_filters('geodir_general_options', array(
         'std' => '1'
     ),
     array(
-        'name' => __('Maxi upload file size(in mb)', 'geodirectory'),
-        'desc' => __('(Maximum upload file size in MB, 1 MB = 1024 KB. Must be greater then 0(ZERO), for ex: 2 )', 'geodirectory'),
+        'name' => __('Max upload file size(in mb)', 'geodirectory'),
+        'desc' => __('(Maximum upload file size in MB, 1 MB = 1024 KB. Must be greater then 0(ZERO), for ex: 2. This setting will overwrite the max upload file size limit in image/file upload & import listings for entire GeoDirectory core + GeoDirectory plugins.)', 'geodirectory'),
         'id' => 'geodir_upload_max_filesize',
         'type' => 'text',
         'css' => 'min-width:300px;',
         'std' => '2'
     ),
-
-
-
     array('type' => 'sectionend', 'id' => 'general_options'),
 
 ));/* General Options End*/
