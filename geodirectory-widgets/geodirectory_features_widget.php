@@ -144,7 +144,7 @@ class Geodir_Features_Widget extends WP_Widget
             $i = 1;
             while ($i < 100) {
 
-                if ((isset($instance['title' . $i]) || isset($instance['image' . $i]) || isset($instance['desc' . $i])) && ($instance['title' . $i] || $instance['image' . $i] || $instance['desc' . $i])) {
+                if ( $i==1 || (isset($instance['title' . $i]) || isset($instance['image' . $i]) || isset($instance['desc' . $i])) && ($instance['title' . $i] || $instance['image' . $i] || $instance['desc' . $i])) {
                     ?>
                     <div class="gdrep<?php echo $i;?>">
                         <p class="features-title">

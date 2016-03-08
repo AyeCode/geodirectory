@@ -732,5 +732,3 @@ function geodir_user_signup()
             break;
     endswitch; // end action switch
 }
-
-?>
