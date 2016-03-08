@@ -7,6 +7,7 @@ Fontawesome star rating colour CSS missing a closing bracket - FIXED
 If map shows multiple CPT, clicking current selected CPT shows loading div constantly - FIXED
 Quotes in csv title import break maps - FIXED
 If domain name contain CPT and home page is set to current location then it breaks the links on listing pages - FIXED
+geodir_is_page() fails if post_type query var is an array - FIXED
 
 v1.5.8
 Local .mo file path points to wrong location - FIXED
