@@ -193,15 +193,6 @@ function geodir_ajax_handler() {
         }
     }
 
-    if (isset($_REQUEST['geodir_import_data']) && $_REQUEST['geodir_import_data'] != '') {
-        if (current_user_can('manage_options')) {
-            geodir_import_data();
-        } else {
-            wp_redirect(geodir_login_url());
-            exit();
-        }
-    }
-
     if (isset($_REQUEST['popuptype']) && $_REQUEST['popuptype'] != '' && isset($_REQUEST['post_id']) && $_REQUEST['post_id'] != '') {
 
         if ($_REQUEST['popuptype'] == 'b_send_inquiry' || $_REQUEST['popuptype'] == 'b_sendtofriend')
@@ -380,12 +371,6 @@ function geodir_ajax_handler() {
         exit();
 
     }
-
-
+    
     die;
-
-
 }
-
-
-

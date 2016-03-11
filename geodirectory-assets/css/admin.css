@@ -448,7 +448,14 @@ body.edit-tags-php .form-field input, .form-field textarea {
 	color: #555
 }
 .gd-import-export .postbox {
-	border: solid 1px #dedede;
+	border: solid 1px #cfcfcf;
+    margin-bottom: 5px;
+}
+.gd-import-export .meta-box-sortables .gd-hndle-pbox {
+    border: solid 1px #aaaaaa;
+}
+.gd-import-export .meta-box-sortables .gd-hndle-pbox.closed {
+    border: solid 1px #cfcfcf;
 }
 .gd-import-export h3.hndle {
 	border: solid 1px #dedede;
