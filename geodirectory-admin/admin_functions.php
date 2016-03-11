@@ -1388,6 +1388,8 @@ function geodir_admin_fields($options)
                 </tr><?php
                 break;
             case 'select':
+                $option_value = get_option($value['id']);
+                $option_value = !empty($option_value) ? stripslashes_deep($option_value) : $option_value;
                 ?>
                 <tr valign="top">
                 <th scope="row" class="titledesc"><?php echo $value['name'] ?></th>
@@ -1399,15 +1401,13 @@ function geodir_admin_fields($options)
                         <?php
                         foreach ($value['options'] as $key => $val) {
                             $geodir_select_value = '';
-                            if (get_option($value['id']) != '') {
-                                if (get_option($value['id']) != '' && get_option($value['id']) == $key)
+                            if ($option_value != '') {
+                                if ($option_value != '' && $option_value == $key)
                                     $geodir_select_value = ' selected="selected" ';
                             } else {
                                 if ($value['std'] == $key)
                                     $geodir_select_value = ' selected="selected" ';
                             }
-
-
                             ?>
                             <option
                                 value="<?php echo esc_attr($key); ?>" <?php echo $geodir_select_value; ?> ><?php echo ucfirst($val) ?></option>
@@ -1420,6 +1420,11 @@ function geodir_admin_fields($options)
                 break;
 
             case 'multiselect':
+                $option_values = get_option($value['id']);
+                if ($option_values === '' && !empty($value['std']) && is_array($value['std'])) {
+                   $option_values = $value['std'];
+                }
+                $option_values = !empty($option_values) ? stripslashes_deep($option_values) : $option_values;
                 ?>
                 <tr valign="top">
                 <th scope="row" class="titledesc"><?php echo $value['name']; ?></th>
@@ -1438,9 +1443,7 @@ function geodir_admin_fields($options)
                             } else {
                                 ?>
                                 <option
-                                    value="<?php echo esc_attr($key); ?>" <?php if (is_array(get_option($value['id']))) {
-                                    if (in_array($key, get_option($value['id']))) { ?> selected="selected" <?php }
-                                } ?>><?php echo ucfirst($val) ?></option>
+                                    value="<?php echo esc_attr($key); ?>" <?php selected(true, (is_array($option_values) && in_array($key, $option_values)));?>><?php echo ucfirst($val) ?></option>
                             <?php
                             }
                         }
