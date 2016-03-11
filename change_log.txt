@@ -11,6 +11,7 @@ geodir_is_page() fails if post_type query var is an array - FIXED
 Features widget add item button does not do anything for new widgets - FIXED
 Added option to bounce marker pin on listing hover on listing page - ADDED
 Multinews theme compatibility changes for new version - FIXED
+Add listing neighbourhood via GD import/export listings - CHANGED
 
 v1.5.8
 Local .mo file path points to wrong location - FIXED
