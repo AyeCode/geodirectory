@@ -7132,4 +7132,131 @@ function geodir_wpml_permalink_setting_notice() {
 		}
 	}
 }
-?>
+
+
+/*
+ * Look at doing menu items this way, must be customiser ready
+ * @todo research below
+ */
+// GeoDirectory Menu Items
+/*
+
+function geodir_register_menu_metabox() {
+    $custom_param = array( 0 => 'This param will be passed to my_render_menu_metabox' );
+
+    add_meta_box( 'geodir-menu-metabox', 'GeoDirectory Items', 'geodir_render_menu_metabox', 'nav-menus', 'side', 'default', $custom_param );
+}
+add_action( 'admin_head-nav-menus.php', 'geodir_register_menu_metabox' );
+if(is_admin()){
+
+    //add_action( 'customize_register', 'geodir_register_menu_metabox' );
+}
+*/
+/**
+ * Displays a menu metabox
+ *
+ * @param string $object Not used.
+ * @param array $args Parameters and arguments. If you passed custom params to add_meta_box(),
+ * they will be in $args['args']
+ */
+/*
+function geodir_render_menu_metabox( $object, $args ) {
+    global $nav_menu_selected_id;
+
+    // Create an array of objects that imitate Post objects
+    $my_items = array(
+        (object) array(
+            'ID' => 0,
+            'db_id' => 0,
+            'menu_item_parent' => 0,
+            'object_id' => 1,
+            'post_parent' => 0,
+            'type' => 'custom',
+            'object' => 'my-object-slug',
+            'type_label' => 'My Cool Plugin',
+            'title' => 'Custom Link 1',
+            'url' => home_url( '/jobs/' ),
+            'target' => '',
+            'attr_title' => '',
+            'description' => '123',
+            'classes' => array(),
+            'xfn' => '',
+        ),
+        (object) array(
+            'ID' => 2,
+            'db_id' => 0,
+            'menu_item_parent' => 0,
+            'object_id' => 1,
+            'post_parent' => 0,
+            'type' => 'custom',
+            'object' => 'my-object-slug',
+            'type_label' => 'My Cool Plugin',
+            'title' => 'Custom Link 2',
+            'url' => home_url( '/custom-link-2/' ),
+            'target' => '',
+            'attr_title' => '',
+            'description' => '123',
+            'classes' => array(),
+            'xfn' => '',
+        ),
+        (object) array(
+            'ID' => 3,
+            'db_id' => 0,
+            'menu_item_parent' => 0,
+            'object_id' => 1,
+            'post_parent' => 0,
+            'type' => 'custom',
+            'object' => 'my-object-slug',
+            'type_label' => 'My Cool Plugin',
+            'title' => 'Custom Link 3',
+            'url' => home_url( '/custom-link-3/' ),
+            'target' => '',
+            'attr_title' => '',
+            'description' => '123',
+            'classes' => array(),
+            'xfn' => '',
+        ),
+    );
+    $db_fields = false;
+    // If your links will be hieararchical, adjust the $db_fields array bellow
+    if ( false ) {
+        $db_fields = array( 'parent' => 'parent', 'id' => 'post_parent' );
+    }
+    $walker = new Walker_Nav_Menu_Checklist( $db_fields );
+
+    $removed_args = array(
+        'action',
+        'customlink-tab',
+        'edit-menu-item',
+        'menu-item',
+        'page-tab',
+        '_wpnonce',
+    ); ?>
+    <div id="my-plugin-div">
+    <div id="tabs-panel-my-plugin-all" class="tabs-panel tabs-panel-active">
+        <ul id="my-plugin-checklist-pop" class="categorychecklist form-no-clear" >
+            <?php echo walk_nav_menu_tree( array_map( 'wp_setup_nav_menu_item', $my_items ), 0, (object) array( 'walker' => $walker ) ); ?>
+        </ul>
+
+        <p class="button-controls">
+			<span class="list-controls">
+				<a href="<?php
+                echo esc_url(add_query_arg(
+                    array(
+                        'my-plugin-all' => 'all',
+                        'selectall' => 1,
+                    ),
+                    remove_query_arg( $removed_args )
+                ));
+                ?>#my-menu-test-metabox" class="select-all"><?php _e( 'Select All' ); ?></a>
+			</span>
+
+			<span class="add-to-menu">
+				<input type="submit"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> class="button-secondary submit-add-to-menu right" value="<?php esc_attr_e( 'Add to Menu' ); ?>" name="add-my-plugin-menu-item" id="submit-my-plugin-div" />
+				<span class="spinner"></span>
+			</span>
+        </p>
+    </div>
+<?php
+}
+*/

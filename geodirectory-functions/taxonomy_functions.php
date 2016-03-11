@@ -145,8 +145,14 @@ function geodir_add_nav_menu_items()
                 $geodir_add_location_url = NULL;
             }
 
-            $items .= '	</ul>
-				</li>';
+            $items .= '	</ul> ';
+            /**
+             * Filter called after the sub menu closing ul tag for dynamic added menu items.
+             *
+             * @since 1.5.9
+             */
+            $items .= apply_filters('geodir_menu_after_sub_ul','');
+            $items .= '</li>';
         }
     }
 
@@ -278,8 +284,10 @@ function geodir_add_nav_menu_items()
                 }
             }
 
-            $items .= '	</ul>
-				</li>';
+            $items .= '	</ul> ';
+            $items .= apply_filters('geodir_menu_after_sub_ul','');
+            $items .= '</li>';
+
         }
     }
     // apply filter to add more navigations // -Filter-Location-Manager

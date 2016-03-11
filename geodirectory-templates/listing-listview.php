@@ -80,7 +80,18 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget) && !isset($rel
                     echo ' geodir-listview ';
                 } ?> <?php if ($post_view_class) {
                     echo $post_view_class;
-                } ?>" <?php if (isset($listing_width) && $listing_width) echo "style='width:{$listing_width}%;'"; // Width for widget listing ?> >
+                } ?>" <?php if (isset($listing_width) && $listing_width) echo "style='width:{$listing_width}%;'"; // Width for widget listing
+
+                echo " data-post-id='$post->ID' ";
+                /**
+                 * Called inside the `<li>` tag for listing outputs.
+                 *
+                 * @since 1.5.9
+                 * @param object $post The post object.
+                 * @param string $string If called on the listing or widget template.
+                 */
+                do_action('geodir_listview_inside_li', $post, 'listing');
+                ?> >
                     <article class="geodir-category-listing <?php if ($post_view_article_class) {
                         echo $post_view_article_class;
                     } ?>">
@@ -298,7 +309,7 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget) && !isset($rel
                                         <?php geodir_comments_number($post->rating_count); ?></a>
                                 <?php
                                 }
-                                geodir_favourite_html($post->post_author, $post->ID);
+
 
                                 /**
                                  * Called after printing favorite html.
@@ -307,35 +318,16 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget) && !isset($rel
                                  */
                                 do_action( 'geodir_after_favorite_html', $post->ID, 'listing' );
 
-                                global $wp_query;
-
-                                $show_pin_point = $wp_query->is_main_query();
-                                if (!empty($show_pin_point) && is_active_widget(false, "", "geodir_map_v3_listing_map")) {
-
-                                    /*if($json_info = json_decode($post->marker_json))
-                                        $marker_icon = $json_info->icon;*/
-
-                                    $term_icon_url = get_tax_meta($post->default_category, 'ct_cat_icon', false, $post->post_type);
-                                    $marker_icon = isset($term_icon_url['src']) ? $term_icon_url['src'] : get_option('geodir_default_marker_icon');
-                                    ?>
-                                    <span class="geodir-pinpoint"
-                                          style=" background:url('<?php if (isset($marker_icon)) {
-                                              echo $marker_icon;
-                                          } ?>') no-repeat scroll left top transparent; background-size:auto 100%; -webkit-background-size:auto 100%; -moz-background-size:auto 100%; height:9px; width:14px; ">
-                                        <?php echo apply_filters('geodir_listing_listview_pinpoint_inner_content', '', 'listing'); ?>
-                                    </span>
-                                    <a class="geodir-pinpoint-link" href="javascript:void(0)"
-                                       onclick="openMarker('listing_map_canvas' ,'<?php echo $post->ID; ?>')"
-                                       onmouseover="animate_marker('listing_map_canvas' ,'<?php echo $post->ID; ?>')"
-                                       onmouseout="stop_marker_animation('listing_map_canvas' ,'<?php echo $post->ID; ?>')"><?php _e('Pinpoint', 'geodirectory'); ?></a>
-                                <?php }
 
                                 /**
                                  * Called after printing map pin point.
                                  *
                                  * @since 1.0.0
+                                 * @since 1.5.9 Added $post as second param.
+                                 * @param int $post->ID The post id.
+                                 * @param object $post The post object.
                                  */
-                                do_action( 'geodir_listing_after_pinpoint', $post->ID );
+                                do_action( 'geodir_listing_after_pinpoint', $post->ID ,$post);
 
                                 if ($post->post_author == get_current_user_id()) { ?>
                                     <?php

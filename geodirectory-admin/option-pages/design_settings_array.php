@@ -265,6 +265,14 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
         'std' => '50' // Default value to show home top section
     ),
 
+    array(
+        'name' => __('Hover listing map animaton', 'geodirectory'),
+        'desc' => __('Bounce map pin if listing hovered', 'geodirectory'),
+        'id' => 'geodir_listing_hover_bounce_map_pin',
+        'type' => 'checkbox',
+        'std' => '1' // Default value to show home top section
+    ),
+
     array('type' => 'sectionend', 'id' => 'geodir_listing_layout'),
 
 

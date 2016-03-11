@@ -53,7 +53,12 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
                     echo $post_view_class;
                 } ?>" <?php if (isset($listing_width) && $listing_width) {
                     echo "style='width:{$listing_width}%;'";
-                } ?>>
+                }
+
+                echo " data-post-id='$post->ID' ";
+                /** This action is documented in geodirectory-templates/listing-listview.php */
+                do_action('geodir_listview_inside_li', $post, 'widget');
+                ?>>
                     <article class="geodir-category-listing <?php if ($post_view_article_class) {
                         echo $post_view_article_class;
                     } ?>">
@@ -198,7 +203,7 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
                                     </a>
                                 <?php
                                 }
-                                geodir_favourite_html($post->post_author, $post->ID);
+
 
                                 /**
                                  * Called after printing favorite html.

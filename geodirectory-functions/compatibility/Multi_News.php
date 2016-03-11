@@ -197,5 +197,10 @@ function gd_breadcrumbs_plus_items_add($items, $bits, $last)
 
 }
 
+add_filter('geodir_menu_after_sub_ul','gd_multinews_mobile_menu_caret',10,1);
+add_filter('geodir_location_switcher_menu_after_sub_ul','gd_multinews_mobile_menu_caret',10,1);
+function gd_multinews_mobile_menu_caret($html){
+    $html .= '<i class="responsive-caret"></i>';
+    return $html;
 
-?>
+}
