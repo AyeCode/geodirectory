@@ -78,7 +78,7 @@ if (!function_exists('geodir_admin_panel')) {
                                 $tab_link = geodir_getlink($tab_link, $args['request']);
 
                             if (isset($args['target']) && $args['target'] != '') {
-                                $tab_target = " target='" . $args['target'] . "' ";
+                                $tab_target = " target='" . sanitize_text_field($args['target']) . "' ";
                             } else
                                 $tab_target = '';
 
@@ -93,7 +93,7 @@ if (!function_exists('geodir_admin_panel')) {
                              * @see 'geodir_after_settings_tabs'
                              */
                             do_action('geodir_before_settings_tabs', $name);
-                            echo '<li ' . $tab_active . ' ><a href="' . $tab_link . '"  ' . $tab_target . ' >' . $label . '</a></li>';
+                            echo '<li ' . $tab_active . ' ><a href="' . esc_url($tab_link) . '"  ' . $tab_target . ' >' . $label . '</a></li>';
                             /**
                              * Called after the individual settings tabs are output.
                              *
@@ -117,7 +117,6 @@ if (!function_exists('geodir_admin_panel')) {
                 </div>
                 <!--gd-left-nav ends here-->
 
-
                 <div class="gd-content-wrapper">
                     <div class="gd-tabs-main">
 
@@ -127,45 +126,37 @@ if (!function_exists('geodir_admin_panel')) {
                             $subtabs = $tabs[$current_tab]['subtabs'];
                         $form_action = '';
 
-                        if (!empty($subtabs)):?>
-
+                        if (!empty($subtabs)):
+                        ?>
                             <dl class="gd-tab-head">
                                 <?php
                                 foreach ($subtabs as $sub) {
-
                                     $subtab_active = '';
                                     if (isset($_REQUEST['subtab']) && $sub['subtab'] == $_REQUEST['subtab']) {
                                         $subtab_active = 'class="gd-tab-active"';
                                         $form_action = isset($sub['form_action']) ? $sub['form_action'] : '';
                                     }
 
-
                                     $sub_tabs_link = admin_url() . 'admin.php?page=geodirectory&tab=' . $current_tab . '&subtab=' . $sub['subtab'];
                                     if (isset($sub['request']) && is_array($sub['request']) && !empty($sub['request'])) {
-
                                         $sub_tabs_link = geodir_getlink($sub_tabs_link, $sub['request']);
-
                                     }
-
-
-                                    echo '<dd ' . $subtab_active . ' id="claim_listing"><a href="' . $sub_tabs_link . '" >' . $sub['label'] . '</a></dd>';
-
+                                    echo '<dd ' . $subtab_active . ' id="claim_listing"><a href="' . esc_url($sub_tabs_link) . '" >' . sanitize_text_field($sub['label']) . '</a></dd>';
                                 }
                                 ?>
                             </dl>
 
                         <?php endif; ?>
-
                         <div class="gd-tab-content <?php if (empty($subtabs)) {
                             echo "inner_contet_tabs";
                         } ?>">
                             <form method="post" id="mainform"
                                   class="geodir_optionform <?php echo $current_tab . ' '; ?><?php if (isset($sub['subtab'])) {
-                                      echo $sub['subtab'];
+                                      echo sanitize_text_field($sub['subtab']);
                                   } ?>" action="<?php echo $form_action; ?>" enctype="multipart/form-data">
                                 <input type="hidden" class="active_tab" name="active_tab"
                                        value="<?php if (isset($_REQUEST['active_tab'])) {
-                                           echo $_REQUEST['active_tab'];
+                                           echo sanitize_text_field($_REQUEST['active_tab']);
                                        } ?>"/>
                                 <?php wp_nonce_field('geodir-settings', '_wpnonce', true, true); ?>
                                 <?php wp_nonce_field('geodir-settings-' . $current_tab, '_wpnonce-' . $current_tab, true, true); ?>
@@ -186,7 +177,6 @@ if (!function_exists('geodir_admin_panel')) {
         </div>
         <script type="text/javascript">
             jQuery(window).load(function () {
-
                 // Subsubsub tabs
                 jQuery('ul.subsubsub li a:eq(0)').addClass('current');
                 jQuery('.subsubsub_section .section:gt(0)').hide();
@@ -199,9 +189,7 @@ if (!function_exists('geodir_admin_panel')) {
                      jQuery('#last_tab').val( jQuery(this).attr('href') );
                      return false;*/
                 });
-
-                <?php if (isset($_GET['subtab']) && $_GET['subtab']) echo 'jQuery("ul.subsubsub li a[href=#'.$_GET['subtab'].']").click();'; ?>
-
+                <?php if (isset($_GET['subtab']) && $_GET['subtab']) echo 'jQuery("ul.subsubsub li a[href=#' . sanitize_text_field($_GET['subtab']) . ']").click();'; ?>
                 // Countries
                 jQuery('select#geodirectory_allowed_countries').change(function () {
                     if (jQuery(this).val() == "specific") {
@@ -234,7 +222,7 @@ if (!function_exists('geodir_admin_panel')) {
                     jQuery('.geodirectory-nav-tab-wrapper a').click(function () {
                         if (changed) {
                             window.onbeforeunload = function () {
-                                return '<?php echo __( 'The changes you made will be lost if you navigate away from this page.', GEODIRECTORY_TEXTDOMAIN); ?>';
+                                return '<?php echo __( 'The changes you made will be lost if you navigate away from this page.', 'geodirectory'); ?>';
                             }
                         } else {
                             window.onbeforeunload = '';
@@ -339,7 +327,7 @@ function geodir_admin_option_form($tab_name)
             ?>
 
             <p class="submit">
-            <input <?php echo $hide_save_button;?> name="save" class="button-primary" type="submit" value="<?php _e('Save changes', GEODIRECTORY_TEXTDOMAIN); ?>" />
+            <input <?php echo $hide_save_button;?> name="save" class="button-primary" type="submit" value="<?php _e('Save changes', 'geodirectory'); ?>" />
             <input type="hidden" name="subtab" id="last_tab" />
             </p>
             
@@ -353,7 +341,7 @@ function geodir_admin_option_form($tab_name)
 
             ?>
 			<p class="submit">
-			<input name="save" class="button-primary" type="submit" value="<?php _e('Save changes', GEODIRECTORY_TEXTDOMAIN); ?>" />
+			<input name="save" class="button-primary" type="submit" value="<?php _e('Save changes', 'geodirectory'); ?>" />
 			<input type="hidden" name="subtab" id="last_tab" />
 			</p>
 			</div>
@@ -361,17 +349,25 @@ function geodir_admin_option_form($tab_name)
         case 'permalink_settings' :
             geodir_admin_fields($geodir_settings['permalink_settings']); ?>
             <p class="submit">
-            <input name="save" class="button-primary" type="submit" value="<?php _e('Save changes', GEODIRECTORY_TEXTDOMAIN); ?>" />
+            <input name="save" class="button-primary" type="submit" value="<?php _e('Save changes', 'geodirectory'); ?>" />
             <input type="hidden" name="subtab" id="last_tab" />
             </p>
             </div>	
+		<?php break;
+        case 'title_meta_settings' :
+            geodir_admin_fields($geodir_settings['title_meta_settings']); ?>
+            <p class="submit">
+            <input name="save" class="button-primary" type="submit" value="<?php _e('Save changes', 'geodirectory'); ?>" />
+            <input type="hidden" name="subtab" id="last_tab" />
+            </p>
+            </div>
 		<?php break;
         case 'notifications_settings' :
             geodir_admin_fields($geodir_settings['notifications_settings']); ?>
 			
 			<p class="submit">
 				
-			<input name="save" class="button-primary" type="submit" value="<?php _e('Save changes', GEODIRECTORY_TEXTDOMAIN); ?>" />
+			<input name="save" class="button-primary" type="submit" value="<?php _e('Save changes', 'geodirectory'); ?>" />
 			<input type="hidden" name="subtab" id="last_tab" />
 			</p>
 			</div>
@@ -396,11 +392,11 @@ function geodir_admin_option_form($tab_name)
                     $country = isset($location_result->country) ? $location_result->country : '';
 
 
-                    $map_title = __("Set Address On Map", GEODIRECTORY_TEXTDOMAIN);
+                    $map_title = __("Set Address On Map", 'geodirectory');
 
                     ?>
 
-                    <h3><?php _e('Set Default Location', GEODIRECTORY_TEXTDOMAIN);?></h3>
+                    <h3><?php _e('Set Default Location', 'geodirectory');?></h3>
 
                     <input type="hidden" name="add_location" value="location">
 
@@ -413,7 +409,7 @@ function geodir_admin_option_form($tab_name)
                     <table class="form-table default_location_form">
                         <tbody>
                         <tr valign="top" class="single_select_page">
-                            <th class="titledesc" scope="row"><?php _e('City', GEODIRECTORY_TEXTDOMAIN);?></th>
+                            <th class="titledesc" scope="row"><?php _e('City', 'geodirectory');?></th>
                             <td class="forminp">
                                 <div class="gtd-formfeild required">
                                     <input class="require" type="text" size="80" style="width:440px"
@@ -423,13 +419,13 @@ function geodir_admin_option_form($tab_name)
                                            } ?>"/>
 
                                     <div
-                                        class="gd-location_message_error"> <?php _e('This field is required.', GEODIRECTORY_TEXTDOMAIN); ?></div>
+                                        class="gd-location_message_error"> <?php _e('This field is required.', 'geodirectory'); ?></div>
                                 </div>
                                 <span class="description"></span>
                             </td>
                         </tr>
                         <tr valign="top" class="single_select_page">
-                            <th class="titledesc" scope="row"><?php _e('Region', GEODIRECTORY_TEXTDOMAIN);?></th>
+                            <th class="titledesc" scope="row"><?php _e('Region', 'geodirectory');?></th>
                             <td class="forminp">
                                 <div class="gtd-formfeild required">
                                     <input class="require" type="text" size="80" style="width:440px"
@@ -439,13 +435,13 @@ function geodir_admin_option_form($tab_name)
                                            } ?>"/>
 
                                     <div
-                                        class="gd-location_message_error"> <?php _e('This field is required.', GEODIRECTORY_TEXTDOMAIN); ?></div>
+                                        class="gd-location_message_error"> <?php _e('This field is required.', 'geodirectory'); ?></div>
                                 </div>
                                 <span class="description"></span>
                             </td>
                         </tr>
                         <tr valign="top" class="single_select_page">
-                            <th class="titledesc" scope="row"><?php _e('Country', GEODIRECTORY_TEXTDOMAIN);?></th>
+                            <th class="titledesc" scope="row"><?php _e('Country', 'geodirectory');?></th>
                             <td class="forminp">
                                 <div class="gtd-formfeild required" style="padding-top:10px;">
                                     <?php
@@ -454,14 +450,14 @@ function geodir_admin_option_form($tab_name)
                                     ?>
                                     <select id="<?php echo $prefix ?>country" class="chosen_select"
                                             data-location_type="country" name="<?php echo $prefix ?>country"
-                                            data-placeholder="<?php _e('Choose a country.', GEODIRECTORY_TEXTDOMAIN);?>"
+                                            data-placeholder="<?php _e('Choose a country.', 'geodirectory');?>"
                                             data-addsearchtermonnorecord="1" data-ajaxchosen="0" data-autoredirect="0"
                                             data-showeverywhere="0">
                                         <?php geodir_get_country_dl($country, $prefix); ?>
                                     </select>
 
                                     <div
-                                        class="gd-location_message_error"><?php _e('This field is required.', GEODIRECTORY_TEXTDOMAIN); ?></div>
+                                        class="gd-location_message_error"><?php _e('This field is required.', 'geodirectory'); ?></div>
 
                                 </div>
 
@@ -471,7 +467,7 @@ function geodir_admin_option_form($tab_name)
                         </tr>
                         <tr valign="top" class="single_select_page">
                             <th class="titledesc"
-                                scope="row"><?php _e('Set Location on Map', GEODIRECTORY_TEXTDOMAIN);?></th>
+                                scope="row"><?php _e('Set Location on Map', 'geodirectory');?></th>
                             <td class="forminp">
                                 <?php
                                 /**
@@ -483,7 +479,7 @@ function geodir_admin_option_form($tab_name)
                             </td>
                         </tr>
                         <tr valign="top" class="single_select_page">
-                            <th class="titledesc" scope="row"><?php _e('City Latitude', GEODIRECTORY_TEXTDOMAIN);?></th>
+                            <th class="titledesc" scope="row"><?php _e('City Latitude', 'geodirectory');?></th>
                             <td class="forminp">
                                 <div class="gtd-formfeild required" style="padding-top:10px;">
                                     <input type="text" class="require" size="80" style="width:440px"
@@ -493,14 +489,14 @@ function geodir_admin_option_form($tab_name)
                                            } ?>"/>
 
                                     <div
-                                        class="gd-location_message_error"><?php _e('This field is required.', GEODIRECTORY_TEXTDOMAIN); ?></div>
+                                        class="gd-location_message_error"><?php _e('This field is required.', 'geodirectory'); ?></div>
                                 </div>
                                 <span class="description"></span>
                             </td>
                         </tr>
                         <tr valign="top" class="single_select_page">
                             <th class="titledesc"
-                                scope="row"><?php _e('City Longitude', GEODIRECTORY_TEXTDOMAIN);?></th>
+                                scope="row"><?php _e('City Longitude', 'geodirectory');?></th>
                             <td class="forminp">
                                 <div class="gtd-formfeild required" style="padding-top:10px;">
                                     <input type="text" class="require" size="80" style="width:440px"
@@ -510,7 +506,7 @@ function geodir_admin_option_form($tab_name)
                                            } ?>"/>
 
                                     <div
-                                        class="gd-location_message_error"><?php _e('This field is required.', GEODIRECTORY_TEXTDOMAIN); ?></div>
+                                        class="gd-location_message_error"><?php _e('This field is required.', 'geodirectory'); ?></div>
                                 </div>
                                 <span class="description"></span>
                             </td>
@@ -518,12 +514,12 @@ function geodir_admin_option_form($tab_name)
                         <?php if (isset($location_result->location_id) && $location_result->location_id >= 0) { ?>
                             <tr valign="top" class="single_select_page">
                                 <th class="titledesc"
-                                    scope="row"><?php _e('Action For Listing', GEODIRECTORY_TEXTDOMAIN); ?></th>
+                                    scope="row"><?php _e('Action For Listing', 'geodirectory'); ?></th>
                                 <td class="forminp">
                                     <div class="gtd-formfeild" style="padding-top:10px;">
                                         <input style="display:none;" type="radio" name="listing_action"
                                                checked="checked" value="delete"/>
-                                        <label><?php _e('Post will be updated if both city and map marker position has been changed.', GEODIRECTORY_TEXTDOMAIN); ?></label>
+                                        <label><?php _e('Post will be updated if both city and map marker position has been changed.', 'geodirectory'); ?></label>
                                     </div>
                                 </td>
                             </tr>
@@ -780,7 +776,7 @@ function geodir_theme_compatibility_setting_page()
         <div class="gd-content-heading">
 
 
-            <h3><?php _e('Theme Compatability Settings', GEODIRECTORY_TEXTDOMAIN);?></h3>
+            <h3><?php _e('Theme Compatability Settings', 'geodirectory');?></h3>
             <style>
                 .gd-theme-compat-table {
                     width: 100%;
@@ -807,15 +803,15 @@ function geodir_theme_compatibility_setting_page()
 
             <?php if (str_replace("_custom", "", get_option('gd_theme_compat')) == 'Avada') { ?>
                 <div id="gd-compat-warnings">
-                    <h3><?php _e('Since Avada 3.8+ they have added hooks for compatibility for GeoDirectory so the header.php modification is no longer required. <a href="http://docs.wpgeodirectory.com/avada-compatibility-header-php/" target="_blank">See here</a>', GEODIRECTORY_TEXTDOMAIN); ?></h3>
+                    <h3><?php _e('Since Avada 3.8+ they have added hooks for compatibility for GeoDirectory so the header.php modification is no longer required. <a href="http://docs.wpgeodirectory.com/avada-compatibility-header-php/" target="_blank">See here</a>', 'geodirectory'); ?></h3>
                 </div>
             <?php }?>
 
-            <h4><?php _e('Select Theme Compatibility Pack', GEODIRECTORY_TEXTDOMAIN);?></h4>
+            <h4><?php _e('Select Theme Compatibility Pack', 'geodirectory');?></h4>
 
             <select name="gd_theme_compat" id="gd_theme_compat">
-                <option value=""><?php _e('Select Theme', GEODIRECTORY_TEXTDOMAIN);?></option>
-                <option value="custom"><?php _e('Custom', GEODIRECTORY_TEXTDOMAIN);?></option>
+                <option value=""><?php _e('Select Theme', 'geodirectory');?></option>
+                <option value="custom"><?php _e('Custom', 'geodirectory');?></option>
                 <?php
                 $theme_arr = get_option('gd_theme_compats');
                 $theme_active = get_option('gd_theme_compat');
@@ -834,20 +830,20 @@ function geodir_theme_compatibility_setting_page()
                 ?>
             </select>
             <button onclick="gd_comp_export();" type="button"
-                    class="button-primary"><?php _e('Export', GEODIRECTORY_TEXTDOMAIN);?></button>
+                    class="button-primary"><?php _e('Export', 'geodirectory');?></button>
             <button onclick="gd_comp_import();" type="button"
-                    class="button-primary"><?php _e('Import', GEODIRECTORY_TEXTDOMAIN);?></button>
+                    class="button-primary"><?php _e('Import', 'geodirectory');?></button>
 
             <div class="gd-comp-import-export">
                 <textarea id="gd-import-export-theme-comp"
-                          placeholder="<?php _e('Paste the JSON code here and then click import again', GEODIRECTORY_TEXTDOMAIN);?>"></textarea>
+                          placeholder="<?php _e('Paste the JSON code here and then click import again', 'geodirectory');?>"></textarea>
             </div>
             <script>
 
                 function gd_comp_export() {
                     theme = jQuery('#gd_theme_compat').val();
                     if (theme == '' || theme == 'custom') {
-                        alert("<?php _e('Please select a theme to export',GEODIRECTORY_TEXTDOMAIN);?>");
+                        alert("<?php _e('Please select a theme to export','geodirectory');?>");
                         return false;
                     }
                     jQuery('.gd-comp-import-export').show();
@@ -881,9 +877,9 @@ function geodir_theme_compatibility_setting_page()
 
                     jQuery.post(ajaxurl, data, function (response) {
                         if (response == '0') {
-                            alert("<?php _e('Something went wrong',GEODIRECTORY_TEXTDOMAIN);?>");
+                            alert("<?php _e('Something went wrong','geodirectory');?>");
                         } else {
-                            alert("<?php _e('Theme Compatibility Imported',GEODIRECTORY_TEXTDOMAIN);?>");
+                            alert("<?php _e('Theme Compatibility Imported','geodirectory');?>");
                             jQuery('#gd-import-export-theme-comp').val('');
                             jQuery('.gd-comp-import-export').hide();
                             jQuery('#gd_theme_compat').append(new Option(response, response));
@@ -924,14 +920,14 @@ function geodir_theme_compatibility_setting_page()
 
             </script>
 
-            <h4><?php _e('Main Wrapper Actions', GEODIRECTORY_TEXTDOMAIN);?></h4>
+            <h4><?php _e('Main Wrapper Actions', 'geodirectory');?></h4>
 
             <table class="form-table gd-theme-compat-table">
                 <tbody>
                 <tr>
-                    <td><strong><?php _e('Hook', GEODIRECTORY_TEXTDOMAIN);?></strong></td>
-                    <td><strong><?php _e('ID', GEODIRECTORY_TEXTDOMAIN);?></strong></td>
-                    <td><strong><?php _e('Class', GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                    <td><strong><?php _e('Hook', 'geodirectory');?></strong></td>
+                    <td><strong><?php _e('ID', 'geodirectory');?></strong></td>
+                    <td><strong><?php _e('Class', 'geodirectory');?></strong></td>
                 </tr>
 
 
@@ -949,7 +945,7 @@ function geodir_theme_compatibility_setting_page()
 
                 <tr class="gd-theme-comp-out">
                     <td colspan="3">
-                        <span><?php _e('Output:', GEODIRECTORY_TEXTDOMAIN);?></span>
+                        <span><?php _e('Output:', 'geodirectory');?></span>
                         <textarea name="geodir_wrapper_open_replace"
                                   placeholder='<div id="[id]" class="[class]">'><?php if (isset($tc['geodir_wrapper_open_replace'])) {
                                 echo $tc['geodir_wrapper_open_replace'];
@@ -963,14 +959,14 @@ function geodir_theme_compatibility_setting_page()
                         <small>geodir_wrapper_close</small>
                     </td>
                     <td><input disabled="disabled" type="text" name="geodir_wrapper_open_id"
-                               placeholder="<?php _e('Not used', GEODIRECTORY_TEXTDOMAIN);?>"/></td>
+                               placeholder="<?php _e('Not used', 'geodirectory');?>"/></td>
                     <td><input disabled="disabled" type="text" name="geodir_wrapper_open_class"
-                               placeholder="<?php _e('Not used', GEODIRECTORY_TEXTDOMAIN);?>"/></td>
+                               placeholder="<?php _e('Not used', 'geodirectory');?>"/></td>
                 </tr>
 
                 <tr class="gd-theme-comp-out">
                     <td colspan="3">
-                        <span><?php _e('Output:', GEODIRECTORY_TEXTDOMAIN);?></span>
+                        <span><?php _e('Output:', 'geodirectory');?></span>
                         <textarea name="geodir_wrapper_close_replace"
                                   placeholder='</div><!-- wrapper ends here-->'><?php if (isset($tc['geodir_wrapper_close_replace'])) {
                                 echo $tc['geodir_wrapper_close_replace'];
@@ -994,7 +990,7 @@ function geodir_theme_compatibility_setting_page()
 
                 <tr class="gd-theme-comp-out">
                     <td colspan="3">
-                        <span><?php _e('Output:', GEODIRECTORY_TEXTDOMAIN);?></span>
+                        <span><?php _e('Output:', 'geodirectory');?></span>
                         <textarea name="geodir_wrapper_content_open_replace"
                                   placeholder='<div id="[id]" class="[class]" role="main" [width_css]>'><?php if (isset($tc['geodir_wrapper_content_open_replace'])) {
                                 echo $tc['geodir_wrapper_content_open_replace'];
@@ -1008,14 +1004,14 @@ function geodir_theme_compatibility_setting_page()
                         <small>geodir_wrapper_content_close</small>
                     </td>
                     <td><input disabled="disabled" type="text" name="geodir_wrapper_content_close_id"
-                               placeholder="<?php _e('Not used', GEODIRECTORY_TEXTDOMAIN);?>"/></td>
+                               placeholder="<?php _e('Not used', 'geodirectory');?>"/></td>
                     <td><input disabled="disabled" type="text" name="geodir_wrapper_content_close_class"
-                               placeholder="<?php _e('Not used', GEODIRECTORY_TEXTDOMAIN);?>"/></td>
+                               placeholder="<?php _e('Not used', 'geodirectory');?>"/></td>
                 </tr>
 
                 <tr class="gd-theme-comp-out">
                     <td colspan="3">
-                        <span><?php _e('Output:', GEODIRECTORY_TEXTDOMAIN);?></span>
+                        <span><?php _e('Output:', 'geodirectory');?></span>
                         <textarea name="geodir_wrapper_content_close_replace"
                                   placeholder='</div><!-- content ends here-->'><?php if (isset($tc['geodir_wrapper_content_close_replace'])) {
                                 echo $tc['geodir_wrapper_content_close_replace'];
@@ -1037,7 +1033,7 @@ function geodir_theme_compatibility_setting_page()
 
                 <tr class="gd-theme-comp-out">
                     <td colspan="3">
-                        <span><?php _e('Output:', GEODIRECTORY_TEXTDOMAIN);?></span>
+                        <span><?php _e('Output:', 'geodirectory');?></span>
                         <textarea name="geodir_article_open_replace"
                                   placeholder='<article  id="[id]" class="[class]" itemscope itemtype="[itemtype]">'><?php if (isset($tc['geodir_article_open_replace'])) {
                                 echo $tc['geodir_article_open_replace'];
@@ -1050,14 +1046,14 @@ function geodir_theme_compatibility_setting_page()
                         <small>geodir_article_close</small>
                     </td>
                     <td><input disabled="disabled" type="text" name="geodir_article_close_id"
-                               placeholder="<?php _e('Not used', GEODIRECTORY_TEXTDOMAIN);?>"/></td>
+                               placeholder="<?php _e('Not used', 'geodirectory');?>"/></td>
                     <td><input disabled="disabled" type="text" name="geodir_article_close_class"
-                               placeholder="<?php _e('Not used', GEODIRECTORY_TEXTDOMAIN);?>"/></td>
+                               placeholder="<?php _e('Not used', 'geodirectory');?>"/></td>
                 </tr>
 
                 <tr class="gd-theme-comp-out">
                     <td colspan="3">
-                        <span><?php _e('Output:', GEODIRECTORY_TEXTDOMAIN);?></span>
+                        <span><?php _e('Output:', 'geodirectory');?></span>
                         <textarea name="geodir_article_close_replace"
                                   placeholder='</article><!-- article ends here-->'><?php if (isset($tc['geodir_article_close_replace'])) {
                                 echo $tc['geodir_article_close_replace'];
@@ -1080,7 +1076,7 @@ function geodir_theme_compatibility_setting_page()
 
                 <tr class="gd-theme-comp-out">
                     <td colspan="3">
-                        <span><?php _e('Output:', GEODIRECTORY_TEXTDOMAIN);?></span>
+                        <span><?php _e('Output:', 'geodirectory');?></span>
                         <textarea name="geodir_sidebar_right_open_replace"
                                   placeholder='<aside  id="[id]" class="[class]" role="complementary" itemscope itemtype="[itemtype]" [width_css]>'><?php if (isset($tc['geodir_sidebar_right_open_replace'])) {
                                 echo $tc['geodir_sidebar_right_open_replace'];
@@ -1093,14 +1089,14 @@ function geodir_theme_compatibility_setting_page()
                         <small>geodir_sidebar_right_close</small>
                     </td>
                     <td><input disabled="disabled" type="text" name="geodir_sidebar_right_close_id"
-                               placeholder="<?php _e('Not used', GEODIRECTORY_TEXTDOMAIN);?>"/></td>
+                               placeholder="<?php _e('Not used', 'geodirectory');?>"/></td>
                     <td><input disabled="disabled" type="text" name="geodir_sidebar_right_close_class"
-                               placeholder="<?php _e('Not used', GEODIRECTORY_TEXTDOMAIN);?>"/></td>
+                               placeholder="<?php _e('Not used', 'geodirectory');?>"/></td>
                 </tr>
 
                 <tr class="gd-theme-comp-out">
                     <td colspan="3">
-                        <span><?php _e('Output:', GEODIRECTORY_TEXTDOMAIN);?></span>
+                        <span><?php _e('Output:', 'geodirectory');?></span>
                         <textarea name="geodir_sidebar_right_close_replace"
                                   placeholder='</aside><!-- sidebar ends here-->'><?php if (isset($tc['geodir_sidebar_right_close_replace'])) {
                                 echo $tc['geodir_sidebar_right_close_replace'];
@@ -1124,7 +1120,7 @@ function geodir_theme_compatibility_setting_page()
 
                 <tr class="gd-theme-comp-out">
                     <td colspan="3">
-                        <span><?php _e('Output:', GEODIRECTORY_TEXTDOMAIN);?></span>
+                        <span><?php _e('Output:', 'geodirectory');?></span>
                         <textarea name="geodir_sidebar_left_open_replace"
                                   placeholder='<aside  id="[id]" class="[class]" role="complementary" itemscope itemtype="[itemtype]" [width_css]>'><?php if (isset($tc['geodir_sidebar_left_open_replace'])) {
                                 echo $tc['geodir_sidebar_left_open_replace'];
@@ -1137,14 +1133,14 @@ function geodir_theme_compatibility_setting_page()
                         <small>geodir_sidebar_left_close</small>
                     </td>
                     <td><input disabled="disabled" type="text" name="geodir_sidebar_left_close_id"
-                               placeholder="<?php _e('Not used', GEODIRECTORY_TEXTDOMAIN);?>"/></td>
+                               placeholder="<?php _e('Not used', 'geodirectory');?>"/></td>
                     <td><input disabled="disabled" type="text" name="geodir_sidebar_left_close_class"
-                               placeholder="<?php _e('Not used', GEODIRECTORY_TEXTDOMAIN);?>"/></td>
+                               placeholder="<?php _e('Not used', 'geodirectory');?>"/></td>
                 </tr>
 
                 <tr class="gd-theme-comp-out">
                     <td colspan="3">
-                        <span><?php _e('Output:', GEODIRECTORY_TEXTDOMAIN);?></span>
+                        <span><?php _e('Output:', 'geodirectory');?></span>
                         <textarea name="geodir_sidebar_left_close_replace"
                                   placeholder='</aside><!-- sidebar ends here-->'><?php if (isset($tc['geodir_sidebar_left_close_replace'])) {
                                 echo $tc['geodir_sidebar_left_close_replace'];
@@ -1166,7 +1162,7 @@ function geodir_theme_compatibility_setting_page()
 
                 <tr class="gd-theme-comp-out">
                     <td colspan="3">
-                        <span><?php _e('Output:', GEODIRECTORY_TEXTDOMAIN);?></span>
+                        <span><?php _e('Output:', 'geodirectory');?></span>
                         <textarea name="geodir_main_content_open_replace"
                                   placeholder='<main  id="[id]" class="[class]"  role="main">'><?php if (isset($tc['geodir_main_content_open_replace'])) {
                                 echo $tc['geodir_main_content_open_replace'];
@@ -1179,14 +1175,14 @@ function geodir_theme_compatibility_setting_page()
                         <small>geodir_main_content_close</small>
                     </td>
                     <td><input disabled="disabled" type="text" name="geodir_main_content_close_id"
-                               placeholder="<?php _e('Not used', GEODIRECTORY_TEXTDOMAIN);?>"/></td>
+                               placeholder="<?php _e('Not used', 'geodirectory');?>"/></td>
                     <td><input disabled="disabled" type="text" name="geodir_main_content_close_class"
-                               placeholder="<?php _e('Not used', GEODIRECTORY_TEXTDOMAIN);?>"/></td>
+                               placeholder="<?php _e('Not used', 'geodirectory');?>"/></td>
                 </tr>
 
                 <tr class="gd-theme-comp-out">
                     <td colspan="3">
-                        <span><?php _e('Output:', GEODIRECTORY_TEXTDOMAIN);?></span>
+                        <span><?php _e('Output:', 'geodirectory');?></span>
                         <textarea name="geodir_main_content_close_replace"
                                   placeholder='</main><!-- main ends here-->'><?php if (isset($tc['geodir_main_content_close_replace'])) {
                                 echo $tc['geodir_main_content_close_replace'];
@@ -1198,13 +1194,13 @@ function geodir_theme_compatibility_setting_page()
                 </tbody>
             </table>
 
-            <h4><?php _e('Other Actions', GEODIRECTORY_TEXTDOMAIN);?></h4>
+            <h4><?php _e('Other Actions', 'geodirectory');?></h4>
 
             <table class="form-table gd-theme-compat-table">
                 <tbody>
                 <tr>
-                    <td><strong><?php _e('Hook', GEODIRECTORY_TEXTDOMAIN);?></strong></td>
-                    <td><strong><?php _e('Content', GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                    <td><strong><?php _e('Hook', 'geodirectory');?></strong></td>
+                    <td><strong><?php _e('Content', 'geodirectory');?></strong></td>
                 </tr>
 
 
@@ -1233,13 +1229,13 @@ function geodir_theme_compatibility_setting_page()
             </table>
 
 
-            <h4><?php _e('Other Filters', GEODIRECTORY_TEXTDOMAIN);?></h4>
+            <h4><?php _e('Other Filters', 'geodirectory');?></h4>
 
             <table class="form-table gd-theme-compat-table">
                 <tbody>
                 <tr>
-                    <td><strong><?php _e('Filter', GEODIRECTORY_TEXTDOMAIN);?></strong></td>
-                    <td><strong><?php _e('Content', GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                    <td><strong><?php _e('Filter', 'geodirectory');?></strong></td>
+                    <td><strong><?php _e('Content', 'geodirectory');?></strong></td>
                 </tr>
 
                 <tr>
@@ -1399,7 +1395,7 @@ function geodir_theme_compatibility_setting_page()
             </table>
 
 
-            <h4><?php _e('Required CSS', GEODIRECTORY_TEXTDOMAIN);?></h4>
+            <h4><?php _e('Required CSS', 'geodirectory');?></h4>
 
             <table class="form-table gd-theme-compat-table">
                 <tbody>
@@ -1414,7 +1410,7 @@ function geodir_theme_compatibility_setting_page()
                 </tbody>
             </table>
 
-            <h4><?php _e('Required JS', GEODIRECTORY_TEXTDOMAIN);?></h4>
+            <h4><?php _e('Required JS', 'geodirectory');?></h4>
 
             <table class="form-table gd-theme-compat-table">
                 <tbody>
@@ -1432,7 +1428,7 @@ function geodir_theme_compatibility_setting_page()
 
             <p class="submit">
                 <input name="save" class="button-primary" type="submit"
-                       value="<?php _e('Save changes', GEODIRECTORY_TEXTDOMAIN);?>">
+                       value="<?php _e('Save changes', 'geodirectory');?>">
             </p>
 
         </div>
@@ -1578,7 +1574,7 @@ function geodir_diagnostic_tools_setting_page()
         <div class="gd-content-heading">
 
 
-            <h3><?php _e('GD Diagnostic Tools', GEODIRECTORY_TEXTDOMAIN);?></h3>
+            <h3><?php _e('GD Diagnostic Tools', 'geodirectory');?></h3>
             <style>
                 .gd-tools-table {
                     width: 100%;
@@ -1597,81 +1593,81 @@ function geodir_diagnostic_tools_setting_page()
             <table class="form-table gd-tools-table">
                 <tbody>
                 <tr>
-                    <td><strong><?php _e('Tool', GEODIRECTORY_TEXTDOMAIN);?></strong></td>
-                    <td><strong><?php _e('Description', GEODIRECTORY_TEXTDOMAIN);?></strong></td>
-                    <td><strong><?php _e('Action', GEODIRECTORY_TEXTDOMAIN);?></strong></td>
+                    <td><strong><?php _e('Tool', 'geodirectory');?></strong></td>
+                    <td><strong><?php _e('Description', 'geodirectory');?></strong></td>
+                    <td><strong><?php _e('Action', 'geodirectory');?></strong></td>
                 </tr>
 
 
                 <tr>
-                    <td><?php _e('GD pages check', GEODIRECTORY_TEXTDOMAIN);?></td>
+                    <td><?php _e('GD pages check', 'geodirectory');?></td>
                     <td>
-                        <small><?php _e('Checks if the GD pages are installed correctly or not.', GEODIRECTORY_TEXTDOMAIN);?></small>
+                        <small><?php _e('Checks if the GD pages are installed correctly or not.', 'geodirectory');?></small>
                     </td>
                     <td>
-                        <input type="button" value="<?php _e('Run', GEODIRECTORY_TEXTDOMAIN);?>"
+                        <input type="button" value="<?php _e('Run', 'geodirectory');?>"
                                class="button-primary geodir_diagnosis_button" data-diagnose="default_pages"/>
                     </td>
                 </tr>
 
 
                 <tr>
-                    <td><?php _e('Multisite DB conversion check', GEODIRECTORY_TEXTDOMAIN);?></td>
+                    <td><?php _e('Multisite DB conversion check', 'geodirectory');?></td>
                     <td>
-                        <small><?php _e('Checks if the GD database tables have been converted to use multisite correctly.', GEODIRECTORY_TEXTDOMAIN);?></small>
+                        <small><?php _e('Checks if the GD database tables have been converted to use multisite correctly.', 'geodirectory');?></small>
                     </td>
-                    <td><input type="button" value="<?php _e('Run', GEODIRECTORY_TEXTDOMAIN);?>"
+                    <td><input type="button" value="<?php _e('Run', 'geodirectory');?>"
                                class="button-primary geodir_diagnosis_button" data-diagnose="multisite_conversion"/>
                     </td>
                 </tr>
 
                 <tr>
-                    <td><?php _e('Ratings check', GEODIRECTORY_TEXTDOMAIN);?></td>
+                    <td><?php _e('Ratings check', 'geodirectory');?></td>
                     <td>
-                        <small><?php _e('Checks ratings for correct location and content settings', GEODIRECTORY_TEXTDOMAIN);?></small>
+                        <small><?php _e('Checks ratings for correct location and content settings', 'geodirectory');?></small>
                     </td>
-                    <td><input type="button" value="<?php _e('Run', GEODIRECTORY_TEXTDOMAIN);?>"
+                    <td><input type="button" value="<?php _e('Run', 'geodirectory');?>"
                                class="button-primary geodir_diagnosis_button" data-diagnose="ratings"/>
                     </td>
                 </tr>
 
                 <tr>
-                    <td><?php _e('Sync GD tags', GEODIRECTORY_TEXTDOMAIN);?></td>
+                    <td><?php _e('Sync GD tags', 'geodirectory');?></td>
                     <td>
-                        <small><?php _e('This tool can be used when tags are showing in the backend but missing from the front end.', GEODIRECTORY_TEXTDOMAIN);?></small>
+                        <small><?php _e('This tool can be used when tags are showing in the backend but missing from the front end.', 'geodirectory');?></small>
                     </td>
-                    <td><input type="button" value="<?php _e('Run', GEODIRECTORY_TEXTDOMAIN);?>"
+                    <td><input type="button" value="<?php _e('Run', 'geodirectory');?>"
                                class="button-primary geodir_diagnosis_button" data-diagnose="tags_sync"/>
                     </td>
                 </tr>
 
                 <tr>
-                    <td><?php _e('Sync GD Categories', GEODIRECTORY_TEXTDOMAIN);?></td>
+                    <td><?php _e('Sync GD Categories', 'geodirectory');?></td>
                     <td>
-                        <small><?php _e('This tool can be used when categories are missing from the details table but showing in other places in the backend (only checks posts with missing category info in details table)', GEODIRECTORY_TEXTDOMAIN);?></small>
+                        <small><?php _e('This tool can be used when categories are missing from the details table but showing in other places in the backend (only checks posts with missing category info in details table)', 'geodirectory');?></small>
                     </td>
-                    <td><input type="button" value="<?php _e('Run', GEODIRECTORY_TEXTDOMAIN);?>"
+                    <td><input type="button" value="<?php _e('Run', 'geodirectory');?>"
                                class="button-primary geodir_diagnosis_button" data-diagnose="cats_sync"/>
                     </td>
                 </tr>
 
 
                 <tr>
-                    <td><?php _e('Clear all GD version numbers', GEODIRECTORY_TEXTDOMAIN);?></td>
+                    <td><?php _e('Clear all GD version numbers', 'geodirectory');?></td>
                     <td>
-                        <small><?php _e('This tool will clear all GD version numbers so any upgrade functions will run again.', GEODIRECTORY_TEXTDOMAIN);?></small>
+                        <small><?php _e('This tool will clear all GD version numbers so any upgrade functions will run again.', 'geodirectory');?></small>
                     </td>
-                    <td><input type="button" value="<?php _e('Run', GEODIRECTORY_TEXTDOMAIN);?>"
+                    <td><input type="button" value="<?php _e('Run', 'geodirectory');?>"
                                class="button-primary geodir_diagnosis_button" data-diagnose="version_clear"/>
                     </td>
                 </tr>
 				<tr>
-					<td><?php _e('Load custom fields translation', GEODIRECTORY_TEXTDOMAIN);?></td>
+					<td><?php _e('Load custom fields translation', 'geodirectory');?></td>
 					<td>
-						<small><?php _e('This tool will load strings from database into fie to translate via po editor.Ex: custom fields', GEODIRECTORY_TEXTDOMAIN);?></small>
+						<small><?php _e('This tool will load strings from the database into a file to translate via po editor.Ex: custom fields', 'geodirectory');?></small>
 					</td>
 					<td>
-						<input type="button" value="<?php _e('Run', GEODIRECTORY_TEXTDOMAIN);?>" class="button-primary geodir_diagnosis_button" data-diagnose="load_db_language"/>
+						<input type="button" value="<?php _e('Run', 'geodirectory');?>" class="button-primary geodir_diagnosis_button" data-diagnose="load_db_language"/>
 					</td>
 				</tr>
                 <?php

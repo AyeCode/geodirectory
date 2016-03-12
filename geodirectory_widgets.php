@@ -56,31 +56,31 @@ function geodir_register_sidebar()
         $after_title = apply_filters('geodir_after_title', '</h3>');
 
         if (get_option('geodir_show_home_top_section')) {
-            register_sidebars(1, array('id' => 'geodir_home_top', 'name' => __('GD Home Top Section', GEODIRECTORY_TEXTDOMAIN), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
+            register_sidebars(1, array('id' => 'geodir_home_top', 'name' => __('GD Home Top Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_home_top';
         }
 
         if (get_option('geodir_show_home_contant_section')) {
-            register_sidebars(1, array('id' => 'geodir_home_content', 'name' => __('GD Home Content Section', GEODIRECTORY_TEXTDOMAIN), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
+            register_sidebars(1, array('id' => 'geodir_home_content', 'name' => __('GD Home Content Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_home_content';
         }
 
         if (get_option('geodir_show_home_right_section')) {
-            register_sidebars(1, array('id' => 'geodir_home_right', 'name' => __('GD Home Right Section', GEODIRECTORY_TEXTDOMAIN), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
+            register_sidebars(1, array('id' => 'geodir_home_right', 'name' => __('GD Home Right Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_home_right';
         }
 
         if (get_option('geodir_show_home_left_section')) {
-            register_sidebars(1, array('id' => 'geodir_home_left', 'name' => __('GD Home Left Section', GEODIRECTORY_TEXTDOMAIN), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
+            register_sidebars(1, array('id' => 'geodir_home_left', 'name' => __('GD Home Left Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_home_left';
         }
 
         if (get_option('geodir_show_home_bottom_section')) {
-            register_sidebars(1, array('id' => 'geodir_home_bottom', 'name' => __('GD Home Bottom Section', GEODIRECTORY_TEXTDOMAIN), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
+            register_sidebars(1, array('id' => 'geodir_home_bottom', 'name' => __('GD Home Bottom Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_home_bottom';
         }
@@ -94,25 +94,25 @@ function geodir_register_sidebar()
         /*===========================*/
 
         if (get_option('geodir_show_listing_top_section')) {
-            register_sidebars(1, array('id' => 'geodir_listing_top', 'name' => __('GD Listing Top Section', GEODIRECTORY_TEXTDOMAIN), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
+            register_sidebars(1, array('id' => 'geodir_listing_top', 'name' => __('GD Listing Top Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_listing_top';
         }
 
         if (get_option('geodir_show_listing_left_section')) {
-            register_sidebars(1, array('id' => 'geodir_listing_left_sidebar', 'name' => __('GD Listing Left Sidebar', GEODIRECTORY_TEXTDOMAIN), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
+            register_sidebars(1, array('id' => 'geodir_listing_left_sidebar', 'name' => __('GD Listing Left Sidebar', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_listing_left_sidebar';
         }
 
         if (get_option('geodir_show_listing_right_section')) {
-            register_sidebars(1, array('id' => 'geodir_listing_right_sidebar', 'name' => __('GD Listing Right Sidebar', GEODIRECTORY_TEXTDOMAIN), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
+            register_sidebars(1, array('id' => 'geodir_listing_right_sidebar', 'name' => __('GD Listing Right Sidebar', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_listing_right_sidebar';
         }
 
         if (get_option('geodir_show_listing_bottom_section')) {
-            register_sidebars(1, array('id' => 'geodir_listing_bottom', 'name' => __('GD Listing Bottom Section', GEODIRECTORY_TEXTDOMAIN), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
+            register_sidebars(1, array('id' => 'geodir_listing_bottom', 'name' => __('GD Listing Bottom Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_listing_bottom';
         }
@@ -126,25 +126,25 @@ function geodir_register_sidebar()
         /*===========================*/
 
         if (get_option('geodir_show_search_top_section')) {
-            register_sidebars(1, array('id' => 'geodir_search_top', 'name' => __('GD Search Top Section', GEODIRECTORY_TEXTDOMAIN), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
+            register_sidebars(1, array('id' => 'geodir_search_top', 'name' => __('GD Search Top Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_search_top';
         }
 
         if (get_option('geodir_show_search_left_section')) {
-            register_sidebars(1, array('id' => 'geodir_search_left_sidebar', 'name' => __('GD Search Left Sidebar', GEODIRECTORY_TEXTDOMAIN), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
+            register_sidebars(1, array('id' => 'geodir_search_left_sidebar', 'name' => __('GD Search Left Sidebar', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_search_left_sidebar';
         }
 
         if (get_option('geodir_show_search_right_section')) {
-            register_sidebars(1, array('id' => 'geodir_search_right_sidebar', 'name' => __('GD Search Right Sidebar', GEODIRECTORY_TEXTDOMAIN), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
+            register_sidebars(1, array('id' => 'geodir_search_right_sidebar', 'name' => __('GD Search Right Sidebar', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_search_right_sidebar';
         }
 
         if (get_option('geodir_show_search_bottom_section')) {
-            register_sidebars(1, array('id' => 'geodir_search_bottom', 'name' => __('GD Search Bottom Section', GEODIRECTORY_TEXTDOMAIN), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
+            register_sidebars(1, array('id' => 'geodir_search_bottom', 'name' => __('GD Search Bottom Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_search_bottom';
         }
@@ -157,17 +157,17 @@ function geodir_register_sidebar()
         /* Detail/Single page sidebars start*/
         /*==================================*/
         if (get_option('geodir_show_detail_top_section')) {
-            register_sidebars(1, array('id' => 'geodir_detail_top', 'name' => __('GD Detail Top Section', GEODIRECTORY_TEXTDOMAIN), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
+            register_sidebars(1, array('id' => 'geodir_detail_top', 'name' => __('GD Detail Top Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_detail_top';
         }
 
-        register_sidebars(1, array('id' => 'geodir_detail_sidebar', 'name' => __('GD Detail Sidebar', GEODIRECTORY_TEXTDOMAIN), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
+        register_sidebars(1, array('id' => 'geodir_detail_sidebar', 'name' => __('GD Detail Sidebar', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
         $geodir_sidebars[] = 'geodir_detail_sidebar';
 
         if (get_option('geodir_show_detail_bottom_section')) {
-            register_sidebars(1, array('id' => 'geodir_detail_bottom', 'name' => __('GD Detail Bottom Section', GEODIRECTORY_TEXTDOMAIN), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
+            register_sidebars(1, array('id' => 'geodir_detail_bottom', 'name' => __('GD Detail Bottom Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_detail_bottom';
         }
@@ -181,25 +181,25 @@ function geodir_register_sidebar()
         /*==================================*/
 
         if (get_option('geodir_show_author_top_section')) {
-            register_sidebars(1, array('id' => 'geodir_author_top', 'name' => __('GD Author Top Section', GEODIRECTORY_TEXTDOMAIN), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
+            register_sidebars(1, array('id' => 'geodir_author_top', 'name' => __('GD Author Top Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_author_top';
         }
 
         if (get_option('geodir_show_author_left_section')) {
-            register_sidebars(1, array('id' => 'geodir_author_left_sidebar', 'name' => __('GD Author Left Sidebar', GEODIRECTORY_TEXTDOMAIN), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
+            register_sidebars(1, array('id' => 'geodir_author_left_sidebar', 'name' => __('GD Author Left Sidebar', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_author_left_sidebar';
         }
 
         if (get_option('geodir_show_author_right_section')) {
-            register_sidebars(1, array('id' => 'geodir_author_right_sidebar', 'name' => __('GD Author Right Sidebar', GEODIRECTORY_TEXTDOMAIN), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
+            register_sidebars(1, array('id' => 'geodir_author_right_sidebar', 'name' => __('GD Author Right Sidebar', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_author_right_sidebar';
         }
 
         if (get_option('geodir_show_author_bottom_section')) {
-            register_sidebars(1, array('id' => 'geodir_author_bottom', 'name' => __('GD Author Bottom Section', GEODIRECTORY_TEXTDOMAIN), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
+            register_sidebars(1, array('id' => 'geodir_author_bottom', 'name' => __('GD Author Bottom Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_author_bottom';
         }
@@ -212,7 +212,7 @@ function geodir_register_sidebar()
         /* Add listing page sidebars start       */
         /*==================================*/
 
-        register_sidebars(1, array('id' => 'geodir_add_listing_sidebar', 'name' => __('GD Add Listing Right Sidebar', GEODIRECTORY_TEXTDOMAIN), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
+        register_sidebars(1, array('id' => 'geodir_add_listing_sidebar', 'name' => __('GD Add Listing Right Sidebar', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
         $geodir_sidebars[] = 'geodir_add_listing_sidebar';
 
@@ -244,23 +244,27 @@ if (!function_exists('register_geodir_widgets')) {
              * Register the login widget with WordPress.
              *
              * @since 1.0.0
+             * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
              */
-            function geodir_loginwidget()
-            {
-                //Constructor
-                $widget_ops = array('classname' => 'geodir_loginbox', 'description' => __('Geodirectory Loginbox Widget', GEODIRECTORY_TEXTDOMAIN));
-                $this->WP_Widget('geodir_loginbox', __('GD > Loginbox', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
+            public function __construct() {
+                $widget_ops = array('classname' => 'geodir_loginbox', 'description' => __('Geodirectory Loginbox Widget', 'geodirectory'));
+                parent::__construct(
+                    'geodir_loginbox', // Base ID
+                    __('GD > Loginbox', 'geodirectory'), // Name
+                    $widget_ops// Args
+                );
             }
 
             /**
              * Front-end display content for login widget.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $args     Widget arguments.
              * @param array $instance Saved values from database.
              */
-            function widget($args, $instance)
+            public function widget($args, $instance)
             {
                 geodir_loginwidget_output($args, $instance);
             }
@@ -269,13 +273,14 @@ if (!function_exists('register_geodir_widgets')) {
              * Sanitize login widget form values as they are saved.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $new_instance Values just sent to be saved.
              * @param array $old_instance Previously saved values from database.
              *
              * @return array Updated safe values to be saved.
              */
-            function update($new_instance, $old_instance)
+            public function update($new_instance, $old_instance)
             {
                 //save the widget
                 $instance = $old_instance;
@@ -288,11 +293,12 @@ if (!function_exists('register_geodir_widgets')) {
              * Back-end login widget settings form.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $instance Previously saved values from database.
              * @return string|void
              */
-            function form($instance)
+            public function form($instance)
             {
                 //widgetform in backend
                 $instance = wp_parse_args((array)$instance, array('title' => '', 't1' => '', 't2' => '', 't3' => '', 'img1' => '', 'desc1' => ''));
@@ -300,7 +306,7 @@ if (!function_exists('register_geodir_widgets')) {
 
                 ?>
                 <p><label
-                        for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget Title', GEODIRECTORY_TEXTDOMAIN); ?>
+                        for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget Title', 'geodirectory'); ?>
                         : <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>"
                                  name="<?php echo $this->get_field_name('title'); ?>" type="text"
                                  value="<?php echo esc_attr($title); ?>"/></label></p>
@@ -325,22 +331,27 @@ if (!function_exists('register_geodir_widgets')) {
              * Register the social like widget with WordPress.
              *
              * @since 1.0.0
+             * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
              */
-            function geodir_social_like_widget()
-            {
-                $widget_ops = array('classname' => 'geodir_social_like_widget', 'description' => __('GD > Twitter,Facebook and Google+ buttons', GEODIRECTORY_TEXTDOMAIN));
-                $this->WP_Widget('social_like_widget', __('GD > Social Like', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
+            public function __construct() {
+                $widget_ops = array('classname' => 'geodir_social_like_widget', 'description' => __('GD > Twitter,Facebook and Google+ buttons', 'geodirectory'));
+                parent::__construct(
+                    'social_like_widget', // Base ID
+                    __('GD > Social Like', 'geodirectory'), // Name
+                    $widget_ops// Args
+                );
             }
 
             /**
              * Front-end display content for social like widget.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $args     Widget arguments.
              * @param array $instance Saved values from database.
              */
-            function widget($args, $instance)
+            public function widget($args, $instance)
             {
                 // prints the widget
                 extract($args, EXTR_SKIP);
@@ -362,7 +373,7 @@ if (!function_exists('register_geodir_widgets')) {
                 ?>
 
                 <a href="http://twitter.com/share"
-                   class="twitter-share-button"><?php _e('Tweet', GEODIRECTORY_TEXTDOMAIN);?></a>
+                   class="twitter-share-button"><?php _e('Tweet', 'geodirectory');?></a>
 
                 <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
 
@@ -405,13 +416,14 @@ if (!function_exists('register_geodir_widgets')) {
              * Sanitize social like widget form values as they are saved.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $new_instance Values just sent to be saved.
              * @param array $old_instance Previously saved values from database.
              *
              * @return array Updated safe values to be saved.
              */
-            function update($new_instance, $old_instance)
+            public function update($new_instance, $old_instance)
             {
                 //save the widget
                 $instance = $old_instance;
@@ -423,11 +435,12 @@ if (!function_exists('register_geodir_widgets')) {
              * Back-end social like widget settings form.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $instance Previously saved values from database.
              * @return string|void
              */
-            function form($instance)
+            public function form($instance)
             {
                 //widgetform in backend
                 $instance = wp_parse_args((array)$instance, array('title' => ''));
@@ -455,23 +468,27 @@ if (!function_exists('register_geodir_widgets')) {
              * Register the feedburner subscribe widget with WordPress.
              *
              * @since 1.0.0
+             * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
              */
-            function geodirsubscribeWidget()
-            {
-                //Constructor
-                $widget_ops = array('classname' => 'geodir-subscribe', 'description' => __('GD > Google Feedburner Subscribe', GEODIRECTORY_TEXTDOMAIN));
-                $this->WP_Widget('widget_subscribeWidget', __('GD > Subscribe', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
+            public function __construct() {
+                $widget_ops = array('classname' => 'geodir-subscribe', 'description' => __('GD > Google Feedburner Subscribe', 'geodirectory'));
+                parent::__construct(
+                    'widget_subscribeWidget', // Base ID
+                    __('GD > Subscribe', 'geodirectory'), // Name
+                    $widget_ops// Args
+                );
             }
 
             /**
              * Front-end display content for feedburner subscribe widget.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $args     Widget arguments.
              * @param array $instance Saved values from database.
              */
-            function widget($args, $instance)
+            public function widget($args, $instance)
             {
                 // prints the widget
                 extract($args, EXTR_SKIP);
@@ -485,7 +502,7 @@ if (!function_exists('register_geodir_widgets')) {
                 $id = empty($instance['id']) ? '' : apply_filters('widget_id', $instance['id']);
 
                 /** This filter is documented in geodirectory_widgets.php */
-                $title = empty($instance['title']) ? '' : apply_filters('widget_title', __($instance['title'], GEODIRECTORY_TEXTDOMAIN));
+                $title = empty($instance['title']) ? '' : apply_filters('widget_title', __($instance['title'], 'geodirectory'));
 
                 /**
                  * Filter the widget text.
@@ -515,9 +532,9 @@ if (!function_exists('register_geodir_widgets')) {
                       onsubmit="window.open('http://feedburner.google.com/fb/a/mailverify?uri=<?php echo $id; ?>', 'popupwindow', 'scrollbars=yes,width=550,height=520');return true">
 
                     <input type="text" class="field"
-                           onfocus="if (this.value == '<?php _e('Your Email Address', GEODIRECTORY_TEXTDOMAIN)?>') {this.value = '';}"
-                           onblur="if (this.value == '') {this.value = '<?php _e('Your Email Address', GEODIRECTORY_TEXTDOMAIN)?>';}"
-                           name="email" value="<?php _e('Your Email Address', GEODIRECTORY_TEXTDOMAIN)?>"/>
+                           onfocus="if (this.value == '<?php _e('Your Email Address', 'geodirectory')?>') {this.value = '';}"
+                           onblur="if (this.value == '') {this.value = '<?php _e('Your Email Address', 'geodirectory')?>';}"
+                           name="email" value="<?php _e('Your Email Address', 'geodirectory')?>"/>
 
                     <input type="hidden" value="<?php echo $id; ?>" name="uri"/><input type="hidden" name="loc"
                                                                                        value="en_US"/>
@@ -535,13 +552,14 @@ if (!function_exists('register_geodir_widgets')) {
              * Sanitize feedburner subscribe widget form values as they are saved.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $new_instance Values just sent to be saved.
              * @param array $old_instance Previously saved values from database.
              *
              * @return array Updated safe values to be saved.
              */
-            function update($new_instance, $old_instance)
+            public function update($new_instance, $old_instance)
             {
 
                 //save the widget
@@ -558,11 +576,12 @@ if (!function_exists('register_geodir_widgets')) {
              * Back-end feedburner subscribe widget settings form.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $instance Previously saved values from database.
              * @return string|void
              */
-            function form($instance)
+            public function form($instance)
             {
                 //widgetform in backend
                 $instance = wp_parse_args((array)$instance, array('title' => '', 'id' => '', 'advt1' => '', 'text' => '', 'twitter' => '', 'facebook' => '', 'digg' => '', 'myspace' => ''));
@@ -577,19 +596,19 @@ if (!function_exists('register_geodir_widgets')) {
 
                 ?>
                 <p><label
-                        for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', GEODIRECTORY_TEXTDOMAIN);?>:
+                        for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'geodirectory');?>:
                         <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>"
                                name="<?php echo $this->get_field_name('title'); ?>" type="text"
                                value="<?php echo esc_attr($title); ?>"/></label></p>
 
                 <p><label
-                        for="<?php echo $this->get_field_id('id'); ?>"><?php _e('Feedburner ID (ex :- geotheme)', GEODIRECTORY_TEXTDOMAIN);?>
+                        for="<?php echo $this->get_field_id('id'); ?>"><?php _e('Feedburner ID (ex :- geotheme)', 'geodirectory');?>
                         : <input class="widefat" id="<?php echo $this->get_field_id('id'); ?>"
                                  name="<?php echo $this->get_field_name('id'); ?>" type="text"
                                  value="<?php echo esc_attr($id); ?>"/></label></p>
 
                 <p><label
-                        for="<?php echo $this->get_field_id('text'); ?>"><?php _e('Short Description', GEODIRECTORY_TEXTDOMAIN);?>
+                        for="<?php echo $this->get_field_id('text'); ?>"><?php _e('Short Description', 'geodirectory');?>
                         <textarea class="widefat" rows="6" cols="20" id="<?php echo $this->get_field_id('text'); ?>"
                                   name="<?php echo $this->get_field_name('text'); ?>"><?php echo esc_attr($text); ?></textarea></label>
                 </p>
@@ -611,12 +630,15 @@ if (!function_exists('register_geodir_widgets')) {
              * Register the advertise widget with WordPress.
              *
              * @since 1.0.0
+             * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
              */
-            function geodiradvtwidget()
-            {
-                //Constructor
-                $widget_ops = array('classname' => 'GeoDirectory Advertise', 'description' => __('GD > common advertise widget in sidebar, bottom section', GEODIRECTORY_TEXTDOMAIN));
-                $this->WP_Widget('advtwidget', __('GD > Advertise', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
+            public function __construct() {
+                $widget_ops = array('classname' => 'GeoDirectory Advertise', 'description' => __('GD > common advertise widget in sidebar, bottom section', 'geodirectory'));
+                parent::__construct(
+                    'advtwidget', // Base ID
+                    __('GD > Advertise', 'geodirectory'), // Name
+                    $widget_ops// Args
+                );
             }
 
 
@@ -624,11 +646,12 @@ if (!function_exists('register_geodir_widgets')) {
              * Front-end display content for advertise widget.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $args     Widget arguments.
              * @param array $instance Saved values from database.
              */
-            function widget($args, $instance)
+            public function widget($args, $instance)
             {
 
                 // prints the widget
@@ -654,13 +677,14 @@ if (!function_exists('register_geodir_widgets')) {
              * Sanitize advertise widget form values as they are saved.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $new_instance Values just sent to be saved.
              * @param array $old_instance Previously saved values from database.
              *
              * @return array Updated safe values to be saved.
              */
-            function update($new_instance, $old_instance)
+            public function update($new_instance, $old_instance)
             {
                 //save the widget
                 $instance = $old_instance;
@@ -672,11 +696,12 @@ if (!function_exists('register_geodir_widgets')) {
              * Back-end advertise widget settings form.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $instance Previously saved values from database.
              * @return string|void
              */
-            function form($instance)
+            public function form($instance)
             {
                 //widgetform in backend
                 $instance = wp_parse_args((array)$instance, array('title' => '', 't1' => '', 't2' => '', 't3' => '', 'img1' => '', 'desc1' => ''));
@@ -684,7 +709,7 @@ if (!function_exists('register_geodir_widgets')) {
                 $desc1 = ($instance['desc1']);
                 ?>
                 <p><label
-                        for="<?php echo $this->get_field_id('desc1'); ?>"><?php _e('Your Advt code (ex.google adsense, etc.)', GEODIRECTORY_TEXTDOMAIN);?>
+                        for="<?php echo $this->get_field_id('desc1'); ?>"><?php _e('Your Advt code (ex.google adsense, etc.)', 'geodirectory');?>
                         <textarea class="widefat" rows="6" cols="20" id="<?php echo $this->get_field_id('desc1'); ?>"
                                   name="<?php echo $this->get_field_name('desc1'); ?>"><?php echo esc_attr($desc1); ?></textarea></label>
                 </p>
@@ -707,23 +732,27 @@ if (!function_exists('register_geodir_widgets')) {
              * Register the flickr widget with WordPress.
              *
              * @since 1.0.0
+             * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
              */
-            function GeodirFlickrWidget()
-            {
-                //Constructor
-                $widget_ops = array('classname' => 'Geo Dir Flickr Photos ', 'description' => __('GD > Flickr Photos', GEODIRECTORY_TEXTDOMAIN));
-                $this->WP_Widget('widget_flickrwidget', __('GD > Flickr Photos', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
+            public function __construct() {
+                $widget_ops = array('classname' => 'Geo Dir Flickr Photos ', 'description' => __('GD > Flickr Photos', 'geodirectory'));
+                parent::__construct(
+                    'widget_flickrwidget', // Base ID
+                    __('GD > Flickr Photos', 'geodirectory'), // Name
+                    $widget_ops// Args
+                );
             }
 
             /**
              * Front-end display content for flickr widget.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $args     Widget arguments.
              * @param array $instance Saved values from database.
              */
-            function widget($args, $instance)
+            public function widget($args, $instance)
             {
 
                 // prints the widget
@@ -743,7 +772,7 @@ if (!function_exists('register_geodir_widgets')) {
                  * @param string $number The image count.
                  */
                 $number = empty($instance['number']) ? '&nbsp;' : apply_filters('widget_number', $instance['number']);
-                echo $before_title . __('Photo Gallery', GEODIRECTORY_TEXTDOMAIN) . $after_title;
+                echo $before_title . __('Photo Gallery', 'geodirectory') . $after_title;
                 ?>
 
                 <div class="geodir-flickr clearfix">
@@ -761,13 +790,14 @@ if (!function_exists('register_geodir_widgets')) {
              * Sanitize flickr widget form values as they are saved.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $new_instance Values just sent to be saved.
              * @param array $old_instance Previously saved values from database.
              *
              * @return array Updated safe values to be saved.
              */
-            function update($new_instance, $old_instance)
+            public function update($new_instance, $old_instance)
             {
                 //save the widget
                 $instance = $old_instance;
@@ -780,11 +810,12 @@ if (!function_exists('register_geodir_widgets')) {
              * Back-end flickr widget settings form.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $instance Previously saved values from database.
              * @return string|void
              */
-            function form($instance)
+            public function form($instance)
             {
 
                 //widgetform in backend
@@ -795,7 +826,7 @@ if (!function_exists('register_geodir_widgets')) {
 
                 <p>
                     <label
-                        for="<?php echo $this->get_field_id('id'); ?>"><?php _e('Flickr ID', GEODIRECTORY_TEXTDOMAIN);?>
+                        for="<?php echo $this->get_field_id('id'); ?>"><?php _e('Flickr ID', 'geodirectory');?>
                         (<a href="http://www.idgettr.com">idGettr</a>):
                         <input class="widefat" id="<?php echo $this->get_field_id('id'); ?>"
                                name="<?php echo $this->get_field_name('id'); ?>" type="text"
@@ -805,7 +836,7 @@ if (!function_exists('register_geodir_widgets')) {
 
                 <p>
                     <label
-                        for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of photos:', GEODIRECTORY_TEXTDOMAIN);?>
+                        for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of photos:', 'geodirectory');?>
                         <input class="widefat" id="<?php echo $this->get_field_id('number'); ?>"
                                name="<?php echo $this->get_field_name('number'); ?>" type="text"
                                value="<?php echo esc_attr($number); ?>"/>
@@ -828,12 +859,15 @@ if (!function_exists('register_geodir_widgets')) {
              * Register the Twitter widget with WordPress.
              *
              * @since 1.0.0
+             * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
              */
-            function geodir_twitter()
-            {
-                //Constructor
-                $widget_ops = array('classname' => 'Twitter', 'description' => __('GD > Twitter Feed', GEODIRECTORY_TEXTDOMAIN));
-                $this->WP_Widget('widget_Twidget', __('GD > Twitter', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
+            public function __construct() {
+                $widget_ops = array('classname' => 'Twitter', 'description' => __('GD > Twitter Feed', 'geodirectory'));
+                parent::__construct(
+                    'widget_Twidget', // Base ID
+                    __('GD > Twitter', 'geodirectory'), // Name
+                    $widget_ops// Args
+                );
             }
 
 
@@ -841,11 +875,12 @@ if (!function_exists('register_geodir_widgets')) {
              * Front-end display content for Twitter widget.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $args     Widget arguments.
              * @param array $instance Saved values from database.
              */
-            function widget($args, $instance)
+            public function widget($args, $instance)
             {
 
                 // prints the widget
@@ -870,13 +905,14 @@ if (!function_exists('register_geodir_widgets')) {
              * Sanitize twitter widget form values as they are saved.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $new_instance Values just sent to be saved.
              * @param array $old_instance Previously saved values from database.
              *
              * @return array Updated safe values to be saved.
              */
-            function update($new_instance, $old_instance)
+            public function update($new_instance, $old_instance)
             {
                 //save the widget
                 $instance = $old_instance;
@@ -888,11 +924,12 @@ if (!function_exists('register_geodir_widgets')) {
              * Back-end twitter widget settings form.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $instance Previously saved values from database.
              * @return string|void
              */
-            function form($instance)
+            public function form($instance)
             {
                 //widgetform in backend
                 $instance = wp_parse_args((array)$instance, array('title' => '', 't1' => '', 't2' => '', 't3' => '', 'img1' => '', 'gd_tw_desc1' => ''));
@@ -900,7 +937,7 @@ if (!function_exists('register_geodir_widgets')) {
                 $desc1 = ($instance['gd_tw_desc1']);
                 ?>
                 <p><label
-                        for="<?php echo $this->get_field_id('gd_tw_desc1'); ?>"><?php _e('Your twitter code', GEODIRECTORY_TEXTDOMAIN);?>
+                        for="<?php echo $this->get_field_id('gd_tw_desc1'); ?>"><?php _e('Your twitter code', 'geodirectory');?>
                         <textarea class="widefat" rows="6" cols="20"
                                   id="<?php echo $this->get_field_id('gd_tw_desc1'); ?>"
                                   name="<?php echo $this->get_field_name('gd_tw_desc1'); ?>"><?php echo esc_attr($desc1); ?></textarea></label>
@@ -923,12 +960,15 @@ if (!function_exists('register_geodir_widgets')) {
              * Register the advanced search widget with WordPress.
              *
              * @since 1.0.0
+             * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
              */
-            function geodir_advance_search_widget()
-            {
-                //Constructor
-                $widget_ops = array('classname' => 'geodir_advance_search_widget', 'description' => __('GD > Search', GEODIRECTORY_TEXTDOMAIN));
-                $this->WP_Widget('geodir_advance_search', __('GD > Search', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
+            public function __construct() {
+                $widget_ops = array('classname' => 'geodir_advance_search_widget', 'description' => __('GD > Search', 'geodirectory'));
+                parent::__construct(
+                    'geodir_advance_search', // Base ID
+                    __('GD > Search', 'geodirectory'), // Name
+                    $widget_ops// Args
+                );
             }
 
 
@@ -936,12 +976,21 @@ if (!function_exists('register_geodir_widgets')) {
              * Front-end display content for advanced search widget.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $args     Widget arguments.
              * @param array $instance Saved values from database.
              */
-            function widget($args, $instance)
+            public function widget($args, $instance)
             {
+                /**
+                 * Filter the search widget arguments.
+                 *
+                 * @since 1.5.7
+                 * @param array $args The widget arguments.
+                 * @param array $instance The widget instance.
+                 */
+                $args = apply_filters('widget_geodir_advance_search_args',$args,$instance);
 
                 // prints the widget
                 extract($args, EXTR_SKIP);
@@ -949,7 +998,7 @@ if (!function_exists('register_geodir_widgets')) {
                 echo $before_widget;
 
                 /** This filter is documented in geodirectory_widgets.php */
-                $title = empty($instance['title']) ? __('Search', GEODIRECTORY_TEXTDOMAIN) : apply_filters('widget_title', __($instance['title'], GEODIRECTORY_TEXTDOMAIN));
+                $title = empty($instance['title']) ? __('Search', 'geodirectory') : apply_filters('widget_title', __($instance['title'], 'geodirectory'));
 
                 geodir_get_template_part('listing', 'filter-form');
 
@@ -960,13 +1009,14 @@ if (!function_exists('register_geodir_widgets')) {
              * Sanitize advanced search widget form values as they are saved.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $new_instance Values just sent to be saved.
              * @param array $old_instance Previously saved values from database.
              *
              * @return array Updated safe values to be saved.
              */
-            function update($new_instance, $old_instance)
+            public function update($new_instance, $old_instance)
             {
                 //save the widget
                 //Nothing to save
@@ -977,14 +1027,15 @@ if (!function_exists('register_geodir_widgets')) {
              * Back-end advanced search widget settings form.
              *
              * @since 1.0.0
+             * @since 1.5.1 Declare function public.
              *
              * @param array $instance Previously saved values from database.
              * @return string|void
              */
-            function form($instance)
+            public function form($instance)
             {
                 //widgetform in backend
-                echo __("This is a search widget to show advance search for gedodirectory listings.", GEODIRECTORY_TEXTDOMAIN);
+                echo __("This is a search widget to show advance search for gedodirectory listings.", 'geodirectory');
             }
         }
 
@@ -1040,6 +1091,21 @@ if (!function_exists('register_geodir_widgets')) {
          * @package GeoDirectory
          */
         include_once('geodirectory-widgets/geodirectory_bestof_widget.php');
+		/**
+         * Contains all functions for cpt categories widget.
+         *
+         * @since 1.5.4
+         * @package GeoDirectory
+         */
+        include_once('geodirectory-widgets/geodirectory_cpt_categories_widget.php');
+        /**
+         * Contains all functions for features widget.
+         *
+         * @since 1.5.6
+         * @package GeoDirectory
+         * @todo make the image field recurring
+         */
+        include_once('geodirectory-widgets/geodirectory_features_widget.php');
     }
 
 }

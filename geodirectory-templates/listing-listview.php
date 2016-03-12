@@ -12,6 +12,7 @@
  * @global object $post The current post object.
  * @global object $wp_query WordPress Query object.
  * @global string $gridview_columns The girdview style of the listings.
+ * @global object $gd_session GeoDirectory Session object.
  */
 
 /**
@@ -23,7 +24,7 @@
  */
 do_action('geodir_before_listing_listview');
 
-global $gridview_columns;
+global $gridview_columns, $gd_session;
 
 /**
  * Filter the default grid view class.
@@ -34,26 +35,12 @@ global $gridview_columns;
  * @param string $gridview_columns The grid view class, can be '', 'gridview_onehalf', 'gridview_onethird', 'gridview_onefourth' or 'gridview_onefifth'.
  */
 $grid_view_class = apply_filters('geodir_grid_view_widget_columns', $gridview_columns);
-if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' && !isset($before_widget) && !isset($related_posts)) {
-    if ($_SESSION['gd_listing_view'] == '1') {
-        $grid_view_class = '';
-    }
-    if ($_SESSION['gd_listing_view'] == '2') {
-        $grid_view_class = 'gridview_onehalf';
-    }
-    if ($_SESSION['gd_listing_view'] == '3') {
-        $grid_view_class = 'gridview_onethird';
-    }
-    if ($_SESSION['gd_listing_view'] == '4') {
-        $grid_view_class = 'gridview_onefourth';
-    }
-    if ($_SESSION['gd_listing_view'] == '5') {
-        $grid_view_class = 'gridview_onefifth';
-    }
+if ($gd_session->get('gd_listing_view') && !isset($before_widget) && !isset($related_posts)) {
+	$grid_view_class = geodir_convert_listing_view_class($gd_session->get('gd_listing_view'));
 }
 ?>
 
-    <ul class="geodir_category_list_view clearfix">
+    <ul class="geodir_category_list_view clearfix <?php echo apply_filters('geodir_listing_listview_ul_extra_class', '', 'listing'); ?>">
 
         <?php if (have_posts()) :
 
@@ -68,7 +55,7 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
             do_action('geodir_before_listing_post_listview');
 
             while (have_posts()) : the_post();
-                global $post, $wpdb, $listing_width, $preview;
+                global $post, $wpdb, $preview;
 
                 /**
                  * Add a class to the `li` element of the listings list template.
@@ -93,11 +80,22 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                     echo ' geodir-listview ';
                 } ?> <?php if ($post_view_class) {
                     echo $post_view_class;
-                } ?>" <?php if ($listing_width) echo "style='width:{$listing_width}%;'"; // Width for widget listing ?> >
+                } ?>" <?php if (isset($listing_width) && $listing_width) echo "style='width:{$listing_width}%;'"; // Width for widget listing
+
+                echo " data-post-id='$post->ID' ";
+                /**
+                 * Called inside the `<li>` tag for listing outputs.
+                 *
+                 * @since 1.5.9
+                 * @param object $post The post object.
+                 * @param string $string If called on the listing or widget template.
+                 */
+                do_action('geodir_listview_inside_li', $post, 'listing');
+                ?> >
                     <article class="geodir-category-listing <?php if ($post_view_article_class) {
                         echo $post_view_article_class;
                     } ?>">
-                        <div class="geodir-post-img">
+                        <div class="geodir-post-img <?php echo apply_filters('geodir_listing_listview_thumb_extra_class', '', 'listing'); ?>">
                             <?php if ($fimage = geodir_show_featured_image($post->ID, 'list-thumb', true, false, $post->featured_image)) { ?>
 
                                 <a href="<?php the_permalink(); ?>">
@@ -141,7 +139,7 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
 
                         </div>
 
-                        <div class="geodir-content">
+                        <div class="geodir-content <?php echo apply_filters('geodir_listing_listview_content_extra_class', '', 'listing'); ?>">
 
                             <?php
                             /**
@@ -192,16 +190,16 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
 
                                         $distance = geodir_calculateDistanceFromLatLong($startPoint, $endPoint, $uom);
                                         if ($uom == 'feet') {
-                                            $uom = __('feet', GEODIRECTORY_TEXTDOMAIN);
+                                            $uom = __('feet', 'geodirectory');
                                         } else {
-                                            $uom = __('meters', GEODIRECTORY_TEXTDOMAIN);
+                                            $uom = __('meters', 'geodirectory');
                                         }
                                         echo round($distance) . ' ' . $uom . '<br />';
                                     } else {
                                         if ($uom == 'miles') {
-                                            $uom = __('miles', GEODIRECTORY_TEXTDOMAIN);
+                                            $uom = __('miles', 'geodirectory');
                                         } else {
-                                            $uom = __('km', GEODIRECTORY_TEXTDOMAIN);
+                                            $uom = __('km', 'geodirectory');
                                         }
                                         echo round($distance, 2) . ' ' . $uom . '<br />';
                                     }
@@ -223,13 +221,24 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                             <div class="geodir-entry-content">
 
                                 <?php
-                                if (isset($character_count) && ($character_count || $character_count == '0')) {
-                                    $content_out = geodir_max_excerpt($character_count);
-                                } else {
-                                    $content_out = get_the_excerpt();
-                                }
-                                if (!empty($content_out)) {
-                                    echo "<p>" . $content_out . "</p>";
+                                /**
+                                 * Filter to hide the listing excerpt
+                                 *
+                                 * @since 1.5.3
+                                 * @param bool $display Display the excerpt or not. Default true.
+                                 * @param string $view The view type, default 'listview'.
+                                 * @param object $post The post object.
+                                 */
+                                $show_listing_excerpt = apply_filters('geodir_show_listing_post_excerpt', true, 'listview', $post);
+                                if ($show_listing_excerpt) {
+                                    if ( isset( $character_count ) && ( $character_count || $character_count == '0' ) ) {
+                                        $content_out = geodir_max_excerpt( $character_count );
+                                    } else {
+                                        $content_out = get_the_excerpt();
+                                    }
+                                    if ( ! empty( $content_out ) ) {
+                                        echo "<p>" . $content_out . "</p>";
+                                    }
                                 }
                                 ?></div>
 
@@ -244,10 +253,27 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                             do_action('geodir_after_listing_post_excerpt', $post); ?>
                         </div>
                         <!-- gd-content ends here-->
-                        <footer class="geodir-entry-meta">
-                            <div class="geodir-addinfo clearfix">
+                        <?php
+                        /**
+                         * Called after printing listing content.
+                         *
+                         * @since 1.5.3
+                         * @param object $post The post object.
+                         * @param string $view The view type, default 'listing'.
+                         */
+                        do_action( 'geodir_after_listing_content', $post, 'listing' ); ?>
+                        <footer class="geodir-entry-meta <?php echo apply_filters('geodir_listing_listview_meta_extra_class', '', 'listing'); ?>">
+                            <div class="geodir-addinfo clearfix <?php echo apply_filters('geodir_listing_listview_addinfo_extra_class', '', 'listing'); ?>">
 
                                 <?php
+                                /**
+                                 * Called before printing review stars html.
+                                 *
+                                 * @since 1.5.3
+                                 * @param object $post The post object.
+                                 * @param string $view The view type, default 'listing'.
+                                 */
+                                do_action( 'geodir_before_review_html', $post, 'listing' );
 
                                 $review_show = geodir_is_reviews_show('listview');
 
@@ -283,7 +309,7 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                                         <?php geodir_comments_number($post->rating_count); ?></a>
                                 <?php
                                 }
-                                geodir_favourite_html($post->post_author, $post->ID);
+
 
                                 /**
                                  * Called after printing favorite html.
@@ -292,33 +318,16 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                                  */
                                 do_action( 'geodir_after_favorite_html', $post->ID, 'listing' );
 
-                                global $wp_query;
-
-                                $show_pin_point = $wp_query->is_main_query();
-                                if (!empty($show_pin_point) && is_active_widget(false, "", "geodir_map_v3_listing_map")) {
-
-                                    /*if($json_info = json_decode($post->marker_json))
-                                        $marker_icon = $json_info->icon;*/
-
-                                    $term_icon_url = get_tax_meta($post->default_category, 'ct_cat_icon', false, $post->post_type);
-                                    $marker_icon = isset($term_icon_url['src']) ? $term_icon_url['src'] : get_option('geodir_default_marker_icon');
-                                    ?>
-                                    <span class="geodir-pinpoint"
-                                          style=" background:url('<?php if (isset($marker_icon)) {
-                                              echo $marker_icon;
-                                          } ?>') no-repeat scroll left top transparent; background-size:auto 100%; -webkit-background-size:auto 100%; -moz-background-size:auto 100%; height:9px; width:14px; "></span>
-                                    <a class="geodir-pinpoint-link" href="javascript:void(0)"
-                                       onclick="openMarker('listing_map_canvas' ,'<?php echo $post->ID; ?>')"
-                                       onmouseover="animate_marker('listing_map_canvas' ,'<?php echo $post->ID; ?>')"
-                                       onmouseout="stop_marker_animation('listing_map_canvas' ,'<?php echo $post->ID; ?>')"><?php _e('Pinpoint', GEODIRECTORY_TEXTDOMAIN); ?></a>
-                                <?php }
 
                                 /**
                                  * Called after printing map pin point.
                                  *
                                  * @since 1.0.0
+                                 * @since 1.5.9 Added $post as second param.
+                                 * @param int $post->ID The post id.
+                                 * @param object $post The post object.
                                  */
-                                do_action( 'geodir_listing_after_pinpoint', $post->ID );
+                                do_action( 'geodir_listing_after_pinpoint', $post->ID ,$post);
 
                                 if ($post->post_author == get_current_user_id()) { ?>
                                     <?php
@@ -343,21 +352,21 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
                                                 do_action('geodir_before_edit_post_link_on_listing');
                                                 ?>
 
-                                                <a href="<?php echo $editlink; ?>" class="geodir-edit"
-                                                   title="<?php _e('Edit Listing', GEODIRECTORY_TEXTDOMAIN); ?>">
+                                                <a href="<?php echo esc_url($editlink); ?>" class="geodir-edit"
+                                                   title="<?php _e('Edit Listing', 'geodirectory'); ?>">
                                                     <?php
                                                     $geodir_listing_edit_icon = apply_filters('geodir_listing_edit_icon', 'fa fa-edit');
                                                     echo '<i class="'. $geodir_listing_edit_icon .'"></i>';
                                                     ?>
-                                                    <?php _e('Edit', GEODIRECTORY_TEXTDOMAIN); ?>
+                                                    <?php _e('Edit', 'geodirectory'); ?>
                                                 </a>
-                                                <a href="<?php echo $deletelink; ?>" class="geodir-delete"
-                                                   title="<?php _e('Delete Listing', GEODIRECTORY_TEXTDOMAIN); ?>">
+                                                <a href="<?php echo esc_url($deletelink); ?>" class="geodir-delete"
+                                                   title="<?php _e('Delete Listing', 'geodirectory'); ?>">
                                                     <?php
                                                     $geodir_listing_delete_icon = apply_filters('geodir_listing_delete_icon', 'fa fa-close');
                                                     echo '<i class="'. $geodir_listing_delete_icon .'"></i>';
                                                     ?>
-                                                    <?php _e('Delete', GEODIRECTORY_TEXTDOMAIN); ?>
+                                                    <?php _e('Delete', 'geodirectory'); ?>
                                                 </a>
                                                 <?php
 
@@ -394,12 +403,16 @@ if (isset($_SESSION['gd_listing_view']) && $_SESSION['gd_listing_view'] != '' &&
             do_action('geodir_after_listing_post_listview');
 
         else:
-
-            if (isset($_REQUEST['list']) && $_REQUEST['list'] == 'favourite')
-                echo '<li class="no-listing">' . __('No favorite listings found which match your selection.', GEODIRECTORY_TEXTDOMAIN) . '</li>';
-            else
-                echo '<li class="no-listing">' . __('No listings found which match your selection.', GEODIRECTORY_TEXTDOMAIN) . '</li>';
-
+			$favorite = isset($_REQUEST['list']) && $_REQUEST['list'] == 'favourite' ? true : false;
+            
+			/**
+             * Called inside the `ul` of the listings template, when no listing found.
+             *
+             * @since 1.5.5
+			 * @param string 'listing-listview' Listing listview template.
+			 * @param bool $favorite Are favorite listings results?
+             */
+            do_action('geodir_message_not_found_on_listing', 'listing-listview', $favorite);
         endif;
 
         ?>

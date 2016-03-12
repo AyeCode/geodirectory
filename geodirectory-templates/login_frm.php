@@ -20,6 +20,13 @@ if (isset($_GET['redirect_to']) && $_GET['redirect_to'] != '') {
 
 }
 
+/*
+if(wp_get_referer()){
+    $redirect_to = wp_get_referer();
+}else{
+    $redirect_to = '';
+}
+*/
 ?>
 
 <div class="login_content">

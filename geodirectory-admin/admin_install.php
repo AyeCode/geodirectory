@@ -105,70 +105,20 @@ function geodir_create_pages()
 {
 
     //geodir_create_page( esc_sql( _x('home-map', 'page_slug', 'geodirectory') ), 'geodir_home_map_page', __('Home Map', 'geodirectory'), '',0,'publish' );
-    geodir_create_page(esc_sql(_x('add-listing', 'page_slug', GEODIRECTORY_TEXTDOMAIN)), 'geodir_add_listing_page', __('Add Listing', GEODIRECTORY_TEXTDOMAIN), '');
-    geodir_create_page(esc_sql(_x('listing-preview', 'page_slug', 'geodirectory')), 'geodir_preview_page', __('Listing Preview', GEODIRECTORY_TEXTDOMAIN), '');
-    geodir_create_page(esc_sql(_x('listing-success', 'page_slug', GEODIRECTORY_TEXTDOMAIN)), 'geodir_success_page', __('Listing Success', GEODIRECTORY_TEXTDOMAIN), '');
-    geodir_create_page(esc_sql(_x('location', 'page_slug', GEODIRECTORY_TEXTDOMAIN)), 'geodir_location_page', __('Location', GEODIRECTORY_TEXTDOMAIN), '');
+    geodir_create_page(esc_sql(_x('gd-home', 'page_slug', 'geodirectory')), 'geodir_home_page', __('GD Home page', 'geodirectory'), '');
+    geodir_create_page(esc_sql(_x('add-listing', 'page_slug', 'geodirectory')), 'geodir_add_listing_page', __('Add Listing', 'geodirectory'), '');
+    geodir_create_page(esc_sql(_x('listing-preview', 'page_slug', 'geodirectory')), 'geodir_preview_page', __('Listing Preview', 'geodirectory'), '');
+    geodir_create_page(esc_sql(_x('listing-success', 'page_slug', 'geodirectory')), 'geodir_success_page', __('Listing Success', 'geodirectory'), '');
+    geodir_create_page(esc_sql(_x('location', 'page_slug', 'geodirectory')), 'geodir_location_page', __('Location', 'geodirectory'), '');
+
+    //New since 1.5.3
+    geodir_create_page(esc_sql(_x('gd-info', 'page_slug', 'geodirectory')), 'geodir_info_page', __('Info', 'geodirectory'), '');
+    geodir_create_page(esc_sql(_x('gd-login', 'page_slug', 'geodirectory')), 'geodir_login_page', __('Login', 'geodirectory'), '');
 
 
 }
 
-/**
- * Create a page.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
- * @global object $current_user Current user object.
- * @param string $slug The page slug.
- * @param string $option The option meta key.
- * @param string $page_title The page title.
- * @param string $page_content The page description.
- * @param int $post_parent Parent page ID.
- * @param string $status Post status.
- */
-function geodir_create_page($slug, $option, $page_title = '', $page_content = '', $post_parent = 0, $status = 'publish')
-{
-    global $wpdb, $current_user;
 
-    $option_value = get_option($option);
-
-    if ($option_value > 0) :
-        if (get_post($option_value)) :
-            // Page exists
-            return;
-        endif;
-    endif;
-
-
-    $page_found = $wpdb->get_var(
-        $wpdb->prepare(
-            "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s LIMIT 1;",
-            array($slug)
-        )
-    );
-
-    if ($page_found) :
-        // Page exists
-        if (!$option_value) update_option($option, $page_found);
-        return;
-    endif;
-
-    $page_data = array(
-        'post_status' => $status,
-        'post_type' => 'page',
-        'post_author' => $current_user->ID,
-        'post_name' => $slug,
-        'post_title' => $page_title,
-        'post_content' => $page_content,
-        'post_parent' => $post_parent,
-        'comment_status' => 'closed'
-    );
-    $page_id = wp_insert_post($page_data);
-
-    add_option($option, $page_id);
-
-}
 
 
 /**
@@ -226,6 +176,13 @@ function geodir_set_default_options()
      * @package GeoDirectory
      */
     include_once("option-pages/permalink_settings_array.php");
+    /**
+     * Contains settings array for title / meta tab.
+     *
+     * @since 1.5.4
+     * @package GeoDirectory
+     */
+    include_once("option-pages/title_meta_settings_array.php");
     foreach ($geodir_settings as $value) {
         geodir_update_options($value, true);
     }
@@ -252,29 +209,29 @@ function geodir_set_default_widgets()
     /*===========================*/
 
     $widget_option_list['geodir_home_top'] =
-        array('popular_post_category' => array("title" => __('Popular Categories', GEODIRECTORY_TEXTDOMAIN)),
-            'geodir_map_v3_home_map' => array("autozoom" => 1, "width" => '940', "heigh" => '425'),
+        array('popular_post_category' => array("title" => __('Popular Categories', 'geodirectory')),
+            'geodir_map_v3_home_map' => array("autozoom" => 1, "width" => '100%', "heigh" => '425'),
             'geodir_advance_search' => array());
 
     $widget_option_list['geodir_home_content'] =
-        array('popular_post_view' => array("title" => __('Popular Places', GEODIRECTORY_TEXTDOMAIN), "layout" => 'list', "add_location_filter" => '1'));
+        array('popular_post_view' => array("title" => __('Popular Places', 'geodirectory'), "layout" => 'list', "add_location_filter" => '1'));
 
     $widget_option_list['geodir_home_right'] =
-        array('geodir_loginbox' => array("title" => __('My Dashboard', GEODIRECTORY_TEXTDOMAIN)),
-            'popular_post_view' => array("title" => __('Latest Places', GEODIRECTORY_TEXTDOMAIN), "add_location_filter" => '1'));
+        array('geodir_loginbox' => array("title" => __('My Dashboard', 'geodirectory')),
+            'popular_post_view' => array("title" => __('Latest Places', 'geodirectory'), "add_location_filter" => '1'));
 
     /*===========================*/
     /*  Widgets ON LISTING PAGE     */
     /*===========================*/
 
     $widget_option_list['geodir_listing_top'] =
-        array('popular_post_category' => array("title" => __('Popular Categories', GEODIRECTORY_TEXTDOMAIN)),
+        array('popular_post_category' => array("title" => __('Popular Categories', 'geodirectory')),
             'geodir_advance_search' => array());
 
     $widget_option_list['geodir_listing_right_sidebar'] =
-        array('geodir_loginbox' => array("title" => __('My Dashboard', GEODIRECTORY_TEXTDOMAIN)),
+        array('geodir_loginbox' => array("title" => __('My Dashboard', 'geodirectory')),
             'geodir_map_v3_listing_map' => array("autozoom" => 1, "sticky" => 1),
-            'popular_post_view' => array("title" => __('Latest Places', GEODIRECTORY_TEXTDOMAIN), "add_location_filter" => '1'));
+            'popular_post_view' => array("title" => __('Latest Places', 'geodirectory'), "add_location_filter" => '1'));
 
 
     /*===========================*/
@@ -282,22 +239,22 @@ function geodir_set_default_widgets()
     /*===========================*/
 
     $widget_option_list['geodir_search_top'] =
-        array('popular_post_category' => array("title" => __('Popular Categories', GEODIRECTORY_TEXTDOMAIN)),
+        array('popular_post_category' => array("title" => __('Popular Categories', 'geodirectory')),
             'geodir_advance_search' => array());
 
     $widget_option_list['geodir_search_right_sidebar'] =
-        array('geodir_loginbox' => array("title" => __('My Dashboard', GEODIRECTORY_TEXTDOMAIN)),
+        array('geodir_loginbox' => array("title" => __('My Dashboard', 'geodirectory')),
             'geodir_map_v3_listing_map' => array("autozoom" => 1, "sticky" => 1),
-            'popular_post_view' => array("title" => __('Latest Places', GEODIRECTORY_TEXTDOMAIN), "add_location_filter" => '1'));
+            'popular_post_view' => array("title" => __('Latest Places', 'geodirectory'), "add_location_filter" => '1'));
 
     /*===========================*/
     /*  Widgets ON DETAIL/SINGLE PAGE     */
     /*===========================*/
 
     $widget_option_list['geodir_detail_sidebar'] =
-        array('geodir_loginbox' => array("title" => __('My Dashboard', GEODIRECTORY_TEXTDOMAIN)),
+        array('geodir_loginbox' => array("title" => __('My Dashboard', 'geodirectory')),
             'geodir_map_v3_listing_map' => array("autozoom" => 1, "sticky" => 1),
-            'popular_post_view' => array("title" => __('Latest Places', GEODIRECTORY_TEXTDOMAIN), "add_location_filter" => '1'));
+            'popular_post_view' => array("title" => __('Latest Places', 'geodirectory'), "add_location_filter" => '1'));
 
 
     /*===========================*/
@@ -306,7 +263,7 @@ function geodir_set_default_widgets()
 
 
     $widget_option_list['geodir_author_right_sidebar'] =
-        array('geodir_loginbox' => array("title" => __('My Dashboard', GEODIRECTORY_TEXTDOMAIN)));
+        array('geodir_loginbox' => array("title" => __('My Dashboard', 'geodirectory')));
 
 
     $sidebars_widgets = get_option('sidebars_widgets');

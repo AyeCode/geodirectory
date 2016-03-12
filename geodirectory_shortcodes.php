@@ -36,7 +36,7 @@ function geodir_sc_add_listing($atts)
     $defaults = array(
         'pid' => '',
         'listing_type' => 'gd_place',
-        'login_msg' => __('You must login to post.', GEODIRECTORY_TEXTDOMAIN),
+        'login_msg' => __('You must login to post.', 'geodirectory'),
         'show_login' => false,
     );
     $params = shortcode_atts($defaults, $atts);
@@ -82,13 +82,14 @@ function geodir_sc_add_listing($atts)
  * This implements the functionality of the shortcode for displaying map on home page.
  *
  * @since 1.0.0
+ * @since 1.5.2 Added TERRAIN map type.
  * @package GeoDirectory
  * @param array $atts {
  *     Attributes of the shortcode.
  *
  *     @type string $width           Map width in pixels. Default 960.
  *     @type string $height          Map height in pixels. Default 425.
- *     @type string $maptype         Map type. Default ROADMAP. Can be ROADMAP | SATELLITE | HYBRID.
+ *     @type string $maptype         Map type. Default ROADMAP. Can be ROADMAP | SATELLITE | HYBRID | TERRAIN.
  *     @type string $zoom            The zoom level of the map. Between 1-19. Default 13.
  *     @type string $autozoom        True if the map should autozoom, false if not.
  *     @type string $child_collapse  True if the map should collapse the categories, false if not.
@@ -109,7 +110,9 @@ function geodir_sc_home_map($atts)
         'autozoom' => '',
         'child_collapse' => '0',
         'scrollwheel' => '0',
-		'marker_cluster' => false
+		'marker_cluster' => false,
+        'latitude' => '',
+        'longitude' => ''
     );
 
     $params = shortcode_atts($defaults, $atts);
@@ -118,6 +121,9 @@ function geodir_sc_home_map($atts)
 
     $map_args = array(
         'map_canvas_name' => 'gd_home_map',
+        'latitude' => $params['latitude'],
+        'longitude' => $params['longitude'],
+
         /**
          * Filter the widget width of the map on home/listings page.
          *
@@ -136,7 +142,8 @@ function geodir_sc_home_map($atts)
          * Filter the widget maptype of the map on home/listings page.
          *
          * @since 1.0.0
-         * @param string $params['maptype'] The map type. Can be ROADMAP | SATELLITE | HYBRID.
+		 * @since 1.5.2 Added TERRAIN map type.
+         * @param string $params['maptype'] The map type. Can be ROADMAP | SATELLITE | HYBRID | TERRAIN.
          */
         'maptype' => apply_filters('widget_maptype', $params['maptype']),
         /**
@@ -191,13 +198,29 @@ function geodir_sc_home_map($atts)
         'map_class_name' => 'geodir-map-home-page',
         'is_geodir_home_map_widget' => true,
     );
-	
+
 	// Add marker cluster
 	if (isset($params['marker_cluster']) && gdsc_to_bool_val($params['marker_cluster']) && defined('GDCLUSTER_VERSION')) {
-		$map_args['enable_marker_cluster'] = true;
+        $map_args['enable_marker_cluster'] = true;
+        if(get_option('geodir_marker_cluster_type')) {
+            if ($map_args['autozoom']) {
+                $map_args['enable_marker_cluster_no_reposition'] = false;
+            } else {
+                $map_args['enable_marker_cluster_no_reposition'] = true;
+            }
+
+            $map_args['enable_marker_cluster_server'] = true ;
+
+        }
 	} else {
 		$map_args['enable_marker_cluster'] = false;
 	}
+
+    // if lat and long set in shortcode, hack it so the map is not repositioned
+    if(!empty($params['latitude']) && !empty($params['longitude']) ){
+        $map_args['enable_marker_cluster_no_reposition'] = true;
+    }
+
 
     geodir_draw_map($map_args);
 
@@ -219,6 +242,7 @@ add_shortcode('gd_listing_map', 'geodir_sc_listing_map');
  * This implements the functionality of the shortcode for displaying listing map.
  *
  * @since 1.0.0
+ * @since 1.5.2 Added TERRAIN for $maptype attribute.
  * @package GeoDirectory
  * @global object $post The current post object.
  * @param array $atts {
@@ -226,7 +250,7 @@ add_shortcode('gd_listing_map', 'geodir_sc_listing_map');
  *
  *     @type string $width           Map width in pixels. Default 294.
  *     @type string $height          Map height in pixels. Default 370.
- *     @type string $maptype         Map type. Default ROADMAP. Can be ROADMAP | SATELLITE | HYBRID.
+ *     @type string $maptype         Map type. Default ROADMAP. Can be ROADMAP | SATELLITE | HYBRID | TERRAIN.
  *     @type string $zoom            The zoom level of the map. Between 1-19. Default 13.
  *     @type string $autozoom        True if the map should autozoom, false if not.
  *     @type bool   $sticky          True if should be sticky, false if not
@@ -520,6 +544,7 @@ add_shortcode('gd_popular_post_category', 'geodir_sc_popular_post_category');
  * This implements the functionality of the shortcode for displaying popular post category.
  *
  * @since 1.0.0
+ * @since 1.5.1 Added default_post_type parameter.
  * @package GeoDirectory
  * @global string $geodir_post_category_str The geodirectory post category.
  * @param array $atts {
@@ -531,6 +556,7 @@ add_shortcode('gd_popular_post_category', 'geodir_sc_popular_post_category');
  *     @type string $after_title        HTML content to append to the title when displayed. Default. Empty.
  *     @type int $category_limit        Number of categories to display. Default. 15.
  *     @type string $title              Widget title. Default. Empty.
+ *     @type string $default_post_type  Default post type. Default. Empty.
  *
  * }
  * @return string Popular post category HTML.
@@ -546,10 +572,12 @@ function geodir_sc_popular_post_category($atts)
         'before_title' => '',
         'after_title' => '',
         'title' => '',
+		'default_post_type' => '',
     );
 
     $params = shortcode_atts($defaults, $atts, 'popular_post_category');
     $params['category_limit'] = absint($params['category_limit']);
+	$params['default_post_type'] = gdsc_is_post_type_valid($params['default_post_type']) ? $params['default_post_type'] : '';
     geodir_popular_post_category_output($params, $params);
 
     $output = ob_get_contents();
@@ -721,7 +749,7 @@ function geodir_sc_recent_reviews($atts) {
         $count = 1;
     }
 	
-	$title = !empty($params['title']) ? __($params['title'], GEODIRECTORY_TEXTDOMAIN) : '';
+	$title = !empty($params['title']) ? __($params['title'], 'geodirectory') : '';
 
     $comments_li = geodir_get_recent_reviews(30, $count, 100, false);
 
@@ -795,7 +823,7 @@ function geodir_sc_related_listings($atts)
     }
 
     // Validate relate_to - only category or tags
-    $params['relate_to'] = strtolower($params['relate_to']);
+    $params['relate_to'] = geodir_strtolower($params['relate_to']);
     if ('category' != $params['relate_to'] && 'tags' != $params['relate_to']) {
         $params['relate_to'] = 'category';
     }
@@ -977,6 +1005,9 @@ add_shortcode('gd_bestof_widget', 'geodir_sc_bestof_widget');
  * This implements the functionality of the shortcode for displaying geodirectory listings.
  *
  * @since 1.4.2
+ * @since 1.5.9 New parameter "post_author" added.
+ *
+ * @global object $post The current post object.
  *
  * @param array $atts {
  *     Attributes of the shortcode.
@@ -989,6 +1020,8 @@ add_shortcode('gd_bestof_widget', 'geodir_sc_bestof_widget');
  *     @type string $event_type    Event type filter. Should today, upcoming, past, all. Default empty.
                                    For post type gd_event only. 
  *     @type int    $post_number   No. of post to display. Default 10.
+ *     @type int|string $post_author       Fitler the posts by author. Either author ID or 'current'(it uses 
+                                           the author ID of the current post. Default empty.
  *     @type string $layout        Layout to display listing. Should be gridview_onehalf, gridview_onethird
                                    gridview_onefourth, gridview_onefifth, list. Default 'gridview_onehalf'.
  *     @type string $listing_width Listing width. Optional
@@ -1008,33 +1041,36 @@ add_shortcode('gd_bestof_widget', 'geodir_sc_bestof_widget');
  * @return string HTML content to display geodirectory listings.
  */
 function geodir_sc_gd_listings($atts, $content = '') {
-	$defaults = array(
-		'title'					=> '',
-		'post_type' 			=> 'gd_place',
-		'category'				=> 0,
-		'list_sort'				=> 'latest',
-		'event_type'			=> '',
-		'post_number'			=> 10,
-		'layout'				=> 'gridview_onehalf',
-		'listing_width'			=> '',
-		'character_count'		=> 20,
-		'add_location_filter' 	=> 1,
-		'show_featured_only'	=> '',
-		'show_special_only' 	=> '',
-		'with_pics_only' 		=> '',
-		'with_videos_only' 		=> '',
-		'with_pagination' 		=> '1',
-		'top_pagination' 		=> '0',
-		'bottom_pagination' 	=> '1',
-	);
-	$params = shortcode_atts($defaults, $atts);
+    global $post;
+    
+    $defaults = array(
+        'title'                 => '',
+        'post_type'             => 'gd_place',
+        'category'              => 0,
+        'list_sort'             => 'latest',
+        'event_type'            => '',
+        'post_number'           => 10,
+        'post_author'           => '',
+        'layout'                => 'gridview_onehalf',
+        'listing_width'         => '',
+        'character_count'       => 20,
+        'add_location_filter'   => 1,
+        'show_featured_only'    => '',
+        'show_special_only'     => '',
+        'with_pics_only'        => '',
+        'with_videos_only'      => '',
+        'with_pagination'       => '1',
+        'top_pagination'        => '0',
+        'bottom_pagination'     => '1',
+    );
+    $params = shortcode_atts($defaults, $atts);
 
-	$params['title'] 		= wp_strip_all_tags($params['title']);
-    $params['post_type'] 	= gdsc_is_post_type_valid($params['post_type']) ? $params['post_type'] : 'gd_place';
-	
-	// Validate the selected category/ies - Grab the current list based on post_type
-    $category_taxonomy 		= geodir_get_taxonomies($params['post_type']);
-    $categories 			= get_terms($category_taxonomy, array('orderby' => 'count', 'order' => 'DESC', 'fields' => 'ids'));
+    $params['title']        = wp_strip_all_tags($params['title']);
+    $params['post_type']    = gdsc_is_post_type_valid($params['post_type']) ? $params['post_type'] : 'gd_place';
+
+    // Validate the selected category/ies - Grab the current list based on post_type
+    $category_taxonomy      = geodir_get_taxonomies($params['post_type']);
+    $categories             = get_terms($category_taxonomy, array('orderby' => 'count', 'order' => 'DESC', 'fields' => 'ids'));
 
     // Make sure we have an array
     if (!(is_array($params['category']))) {
@@ -1043,55 +1079,148 @@ function geodir_sc_gd_listings($atts, $content = '') {
 
     // Array_intersect returns only the items in $params['category'] that are also in our category list
     // Otherwise it becomes empty and later on that will mean "All"
-    $params['category'] 	= array_intersect($params['category'], $categories);
-	
-	// Post_number needs to be a positive integer
-    $params['post_number'] 	= absint($params['post_number']);
-    $params['post_number']	= $params['post_number'] > 0 ? $params['post_number'] : 10;
-	
-	// Validate character_count
+    $params['category']     = array_intersect($params['category'], $categories);
+
+    // Post_number needs to be a positive integer
+    $params['post_number']  = absint($params['post_number']);
+    $params['post_number']  = $params['post_number'] > 0 ? $params['post_number'] : 10;
+    
+    // Post_number needs to be a positive integer
+    if (!empty($atts['post_author'])) {
+        if ($atts['post_author'] == 'current' && !empty($post) && isset($post->post_author) && $post->post_type != 'page') {
+            $params['post_author'] = $post->post_author;
+        } else if ($atts['post_author'] != 'current' && absint($atts['post_author']) > 0) {
+            $params['post_author'] = absint($atts['post_author']);
+        } else {
+            unset($params['post_author']);
+        }
+    } else {
+        unset($params['post_author']);
+    }
+
+    // Validate character_count
     //todo: is this necessary?
-    $params['character_count'] 	= $params['character_count'];
-	
-	// Validate our layout choice
+    $params['character_count']  = $params['character_count'];
+
+    // Validate our layout choice
     // Outside of the norm, I added some more simple terms to match the existing
     // So now I just run the switch to set it properly.
-    $params['layout'] 			= gdsc_validate_layout_choice($params['layout']);
+    $params['layout']           = gdsc_validate_layout_choice($params['layout']);
 
     // Validate our sorting choice
-    $params['list_sort'] 		= gdsc_validate_sort_choice($params['list_sort']);
-	
-	// Validate Listing width, used in the template widget-listing-listview.php
+    $params['list_sort']        = gdsc_validate_sort_choice($params['list_sort']);
+
+    // Validate Listing width, used in the template widget-listing-listview.php
     // The context is in width=$listing_width% - So we need a positive number between 0 & 100
-    $params['listing_width'] 	= gdsc_validate_listing_width($params['listing_width']);
+    $params['listing_width']    = gdsc_validate_listing_width($params['listing_width']);
 
     // Validate the checkboxes used on the widget
-    $params['add_location_filter'] 	= gdsc_to_bool_val($params['add_location_filter']);
-    $params['show_featured_only'] 	= gdsc_to_bool_val($params['show_featured_only']);
-    $params['show_special_only'] 	= gdsc_to_bool_val($params['show_special_only']);
-    $params['with_pics_only'] 		= gdsc_to_bool_val($params['with_pics_only']);
-    $params['with_videos_only'] 	= gdsc_to_bool_val($params['with_videos_only']);
-	$params['with_pagination'] 		= gdsc_to_bool_val($params['with_pagination']);
-	$params['top_pagination'] 		= gdsc_to_bool_val($params['top_pagination']);
-	$params['bottom_pagination'] 	= gdsc_to_bool_val($params['bottom_pagination']);
-	
+    $params['add_location_filter']  = gdsc_to_bool_val($params['add_location_filter']);
+    $params['show_featured_only']   = gdsc_to_bool_val($params['show_featured_only']);
+    $params['show_special_only']    = gdsc_to_bool_val($params['show_special_only']);
+    $params['with_pics_only']       = gdsc_to_bool_val($params['with_pics_only']);
+    $params['with_videos_only']     = gdsc_to_bool_val($params['with_videos_only']);
+    $params['with_pagination']      = gdsc_to_bool_val($params['with_pagination']);
+    $params['top_pagination']       = gdsc_to_bool_val($params['top_pagination']);
+    $params['bottom_pagination']    = gdsc_to_bool_val($params['bottom_pagination']);
+
     /**
      * End of validation
      */
-	if (isset($atts['geodir_ajax'])) {
-		$params['geodir_ajax'] = $atts['geodir_ajax'];
-		unset($atts['geodir_ajax']);
-	}
-	if (isset($atts['pageno'])) {
-		$params['pageno'] = $atts['pageno'];
-		unset($atts['pageno']);
-	}
-	$params['shortcode_atts'] 		= $atts;
+    if (isset($atts['geodir_ajax'])) {
+        $params['geodir_ajax'] = $atts['geodir_ajax'];
+        unset($atts['geodir_ajax']);
+    }
+    if (isset($atts['pageno'])) {
+        $params['pageno'] = $atts['pageno'];
+        unset($atts['pageno']);
+    }
+    $params['shortcode_atts']       = $atts;
 
-	$output = geodir_sc_gd_listings_output($params);
+    $output = geodir_sc_gd_listings_output($params);
 
     return $output;
 }
 add_shortcode('gd_listings', 'geodir_sc_gd_listings');
 
+/**
+ * The CPT categories widget shortcode.
+ *
+ * This implements the functionality of the CPT categories widget shortcode for displaying
+ * all geodirectory categories.
+ *
+ * @since 1.5.5
+ *
+ * @param array $atts {
+ *     Attributes of the shortcode.
+ *
+ *     @type string $title         The title of the widget displayed.
+ *     @type string $post_type     Post type of listing. Default empty.
+ *     @type bool   $hide_empty    Hide empty categories? Default empty.
+ *     @type bool   $show_count    Show category count? Default empty.
+ *     @type bool   $hide_icon     Hide category icon? Default empty.
+ *     @type bool   $cpt_left      Show CPT on same line? Default empty.
+ *     @type string $sort_by       Categories sort by. 'az' or 'count'. Default 'count'.
+ *     @type string|int $max_count Max no of sub-categories count. Default 'all'.
+ *     @type string|int $max_level Max level of sub-categories depth. Default 1.
+ *     @type string $before_widget HTML content to prepend to each widget's HTML output.
+ *                                 Default is an opening list item element.
+ *     @type string $after_widget  HTML content to append to each widget's HTML output.
+ *                                 Default is a closing list item element.
+ *     @type string $before_title  HTML content to prepend to the widget title when displayed.
+ *                                 Default is an opening h3 element.
+ *     @type string $after_title   HTML content to append to the widget title when displayed.
+ *                                 Default is a closing h3 element.
+ * }
+ * @param string $content The enclosed content. Optional.
+ * @return string HTML content to display CPT categories.
+ */
+function geodir_sc_cpt_categories_widget($atts, $content = '') {
+	$defaults = array(
+		'title' => '',
+		'post_type' => '', // NULL for all
+		'hide_empty' => '',
+		'show_count' => '',
+		'hide_icon' => '',
+		'cpt_left' => '',
+		'sort_by' => 'count',
+		'max_count' => 'all',
+		'max_level' => '1',
+		'before_widget' => '<section id="geodir_cpt_categories_widget-1" class="widget geodir-widget geodir_cpt_categories_widget geodir_sc_cpt_categories_widget">',
+        'after_widget' => '</section>',
+        'before_title' => '<h3 class="widget-title">',
+        'after_title' => '</h3>',
+	);
+	$params = shortcode_atts($defaults, $atts);
+
+    /**
+     * Validate our incoming params
+     */
+	// Make sure we have an array
+    $params['post_type'] = !is_array($params['post_type']) && trim($params['post_type']) != '' ? explode(',', trim($params['post_type'])) : array();
+	 
+	// Validate the checkboxes used on the widget
+    $params['hide_empty'] 	= gdsc_to_bool_val($params['hide_empty']);
+    $params['show_count'] 	= gdsc_to_bool_val($params['show_count']);
+    $params['hide_icon'] 	= gdsc_to_bool_val($params['hide_icon']);
+    $params['cpt_left'] 	= gdsc_to_bool_val($params['cpt_left']);
+	
+	if ($params['max_count'] != 'all') {
+		$params['max_count'] = absint($params['max_count']);
+	}
+	
+	if ($params['max_level'] != 'all') {
+		$params['max_level'] = absint($params['max_level']);
+	}
+	
+	$params['sort_by'] = $params['sort_by'] == 'az' ? 'az' : 'count';
+
+	ob_start();
+	the_widget('geodir_cpt_categories_widget', $params, $params);
+    $output = ob_get_contents();
+    ob_end_clean();
+
+    return $output;
+}
+add_shortcode('gd_cpt_categories', 'geodir_sc_cpt_categories_widget');
 ?>

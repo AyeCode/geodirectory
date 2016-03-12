@@ -44,6 +44,7 @@ function gdsc_validate_measurements($value)
  * Validate and parse the google map parameters.
  *
  * @since 1.0.0
+ * @since 1.5.2 Added TERRAIN map type.
  *
  * @param string $value Input value to validate measurement.
  * @return string The measurement valud in valid format.
@@ -54,11 +55,11 @@ function gdsc_validate_map_args($params)
     $params['width'] = gdsc_validate_measurements($params['width']);
     $params['height'] = gdsc_validate_measurements($params['height']);
 
-    // Only accept our 3 maptypes. Otherwise, revert to the default.
-    if (!(in_array(strtoupper($params['maptype']), array('HYBRID', 'SATELLITE', 'ROADMAP')))) {
+    // Only accept our 4 maptypes. Otherwise, revert to the default.
+    if (!(in_array(geodir_strtoupper($params['maptype']), array('HYBRID', 'SATELLITE', 'ROADMAP', 'TERRAIN')))) {
         $params['maptype'] = 'ROADMAP';
     } else {
-        $params['maptype'] = strtoupper($params['maptype']);
+        $params['maptype'] = geodir_strtoupper($params['maptype']);
     }
 
     // Zoom accepts a value between 1 and 19
@@ -157,10 +158,10 @@ function gdsc_to_bool_val($in, $strict = false)
 function gdsc_is_post_type_valid($incoming_post_type)
 {
     $post_types = geodir_get_posttypes();
-    $post_types = array_map('strtolower', $post_types);
+    $post_types = array_map('geodir_strtolower', $post_types);
     $post_type_found = false;
     foreach ($post_types as $type) {
-        if (strtolower($incoming_post_type) == strtolower($type)) {
+        if (geodir_strtolower($incoming_post_type) == geodir_strtolower($type)) {
             $post_type_found = true;
         }
     }
@@ -200,7 +201,7 @@ function gdsc_listing_loop_filter($query)
                 $terms_arr = get_terms($taxonomies[0], $args);
                 foreach ($terms_arr as $location_term) {
                     $term_arr = $location_term;
-                    $term_arr->name = ucwords(str_replace('-', ' ', $request_term));
+                    $term_arr->name = geodir_ucwords(str_replace('-', ' ', $request_term));
                 }
                 $wp_query->queried_object_id = 1;
                 $wp_query->queried_object = $term_arr;
@@ -405,7 +406,7 @@ function geodir_popular_category_add_scripts()
  */
 function gdsc_validate_layout_choice($layout_choice)
 {
-    switch (strtolower($layout_choice)) {
+    switch (geodir_strtolower($layout_choice)) {
         case 'list';
         case 'one';
         case 'one_column';
@@ -546,12 +547,13 @@ function gdsc_validate_list_filter_choice($filter_choice)
  * @global object $post The current post object.
  * @global array $map_jason Map data in json format.
  * @global array $map_canvas_arr Map canvas array.
+ * @global object $gd_session GeoDirectory Session object.
  *
  * @param array $args Array of arguements to filter listings.
  * @return string Listings HTML content.
  */
 function geodir_sc_gd_listings_output($args = array()) {
-    $title				 = !empty($args['title']) ? __($args['title'], GEODIRECTORY_TEXTDOMAIN) : '';
+    $title				 = !empty($args['title']) ? __($args['title'], 'geodirectory') : '';
 	$post_type 			 = !empty($args['post_type']) ? $args['post_type'] : 'gd_place';
 	$category 			 = !empty($args['category']) ? $args['category'] : '0';
 	$post_number		 = !empty($args['post_number']) ? $args['post_number'] : 10;
@@ -582,6 +584,10 @@ function geodir_sc_gd_listings_output($args = array()) {
 
     if ($character_count >= 0) {
         $query_args['excerpt_length'] = $character_count;
+    }
+    
+    if (!empty($args['post_author'])) {
+        $query_args['post_author'] = $args['post_author'];
     }
 
     if (!empty($args['show_featured_only'])) {
@@ -674,15 +680,13 @@ function geodir_sc_gd_listings_output($args = array()) {
 			 */
 			$template = apply_filters("geodir_template_part-widget-listing-listview", geodir_locate_template('widget-listing-listview'));
             			
-            global $post, $map_jason, $map_canvas_arr;
+            global $post, $map_jason, $map_canvas_arr, $gd_session;
 
             $current_post = $post;
             $current_map_jason = $map_jason;
             $current_map_canvas_arr = $map_canvas_arr;
             $geodir_is_widget_listing = true;
-			if (isset($_SESSION['gd_listing_view'])) {
-				unset($_SESSION['gd_listing_view']);
-			}
+			$gd_session->un_set('gd_listing_view');
 
             if ($with_pagination && $top_pagination) {				
 				echo geodir_sc_listings_pagination($total_posts, $post_number, $pageno);
@@ -806,7 +810,7 @@ function geodir_sc_listings_pagination($total_posts, $posts_per_page, $pageno, $
 		$end_no = min($pageno * $posts_per_page, $numposts);
 		
 		if ($geodir_pagination_more_info != '') {
-			$pagination_info = '<div class="gd-pagination-details">' . wp_sprintf(__('Showing listings %d-%d of %d', GEODIRECTORY_TEXTDOMAIN), $start_no, $end_no, $numposts) . '</div>';
+			$pagination_info = '<div class="gd-pagination-details">' . wp_sprintf(__('Showing listings %d-%d of %d', 'geodirectory'), $start_no, $end_no, $numposts) . '</div>';
 			
 			if ($geodir_pagination_more_info == 'before') {
 				$before = $before . $pagination_info;

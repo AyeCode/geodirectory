@@ -85,7 +85,7 @@ function geodir_templates_scripts()
 
 
     wp_register_script('geodirectory-lightbox-jquery', geodir_plugin_url() . '/geodirectory-assets/js/jquery.lightbox-0.5.min.js', array(), GEODIRECTORY_VERSION,true);
-    if($is_detail_page){wp_enqueue_script('geodirectory-lightbox-jquery');}
+    wp_enqueue_script('geodirectory-lightbox-jquery');
 
 
 
@@ -105,7 +105,7 @@ function geodir_templates_scripts()
      * @param string $var The string to filter, default is empty string.
      */
     $map_extra = apply_filters('geodir_googlemap_script_extra', '');
-    wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?sensor=false' . $map_lang . $map_extra, '', NULL);
+    wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?' . $map_lang . $map_extra, '', NULL);
     /*	{
             wp_register_script( 'geodirectory-googlemap-script', "//maps.google.com/maps/api/js?sensor=false&language=en" );
             wp_enqueue_script( 'geodirectory-googlemap-script' );
@@ -161,7 +161,7 @@ function geodir_templates_scripts()
             'url' => $ajax_url,
             'flash_swf_url' => includes_url('js/plupload/plupload.flash.swf'),
             'silverlight_xap_url' => includes_url('js/plupload/plupload.silverlight.xap'),
-            'filters' => array(array('title' => __('Allowed Files', GEODIRECTORY_TEXTDOMAIN), 'extensions' => '*')),
+            'filters' => array(array('title' => __('Allowed Files', 'geodirectory'), 'extensions' => '*')),
             'multipart' => true,
             'urlstream_upload' => true,
             'multi_selection' => false, // will be added per uploader
@@ -179,27 +179,27 @@ function geodir_templates_scripts()
 
         wp_localize_script('geodirectory-plupload-script', 'gd_plupload', $gd_plupload_init);
 
-
         wp_enqueue_script('geodirectory-listing-validation-script', geodir_plugin_url() . '/geodirectory-assets/js/listing_validation.min.js#asyncload');
-
-
     } // End if for add place page
 
+    wp_register_script('geodirectory-post-custom-js', geodir_plugin_url() . '/geodirectory-assets/js/post.custom.min.js#asyncload', array(), GEODIRECTORY_VERSION, true);
+    if ($is_detail_page) {
+		wp_enqueue_script('geodirectory-post-custom-js');
+	}
 
-    wp_register_script('geodirectory-post-custom-js', geodir_plugin_url() . '/geodirectory-assets/js/post.custom.min.js#asyncload', array(), GEODIRECTORY_VERSION,true);
-    if($is_detail_page){wp_enqueue_script('geodirectory-post-custom-js');}
+    // font awesome rating script
+	if (get_option('geodir_reviewrating_enable_font_awesome')) {
+		wp_register_script('geodir-barrating-js', geodir_plugin_url() . '/geodirectory-assets/js/jquery.barrating.min.js', array(), GEODIRECTORY_VERSION, true);
+		wp_enqueue_script('geodir-barrating-js');
+	} else { // default rating script
+		wp_register_script('geodir-jRating-js', geodir_plugin_url() . '/geodirectory-assets/js/jRating.jquery.min.js', array(), GEODIRECTORY_VERSION, true);
+		wp_enqueue_script('geodir-jRating-js');
+	}
 
-
-
-
-
-    wp_register_script('geodir-jRating-js', geodir_plugin_url() . '/geodirectory-assets/js/jRating.jquery.min.js', array(), GEODIRECTORY_VERSION,true);
-    wp_enqueue_script('geodir-jRating-js');
-
-    wp_register_script('geodir-on-document-load', geodir_plugin_url() . '/geodirectory-assets/js/on_document_load.js#asyncload', array(), GEODIRECTORY_VERSION,true);
+    wp_register_script('geodir-on-document-load', geodir_plugin_url() . '/geodirectory-assets/js/on_document_load.js#asyncload', array(), GEODIRECTORY_VERSION, true);
     wp_enqueue_script('geodir-on-document-load');
 
-    wp_register_script('google-geometa', geodir_plugin_url() . '/geodirectory-assets/js/geometa.min.js#asyncload', array(), GEODIRECTORY_VERSION,true);
+    wp_register_script('google-geometa', geodir_plugin_url() . '/geodirectory-assets/js/geometa.min.js#asyncload', array(), GEODIRECTORY_VERSION, true);
     wp_enqueue_script('google-geometa');
 }
 
@@ -215,9 +215,7 @@ function geodir_templates_scripts()
 function geodir_header_scripts()
 {
     echo '<style>' . stripslashes(get_option('geodir_coustem_css')) . '</style>';
-
     echo stripslashes(get_option('geodir_header_scripts'));
-
 }
 
 
@@ -231,8 +229,8 @@ function geodir_header_scripts()
  * @package GeoDirectory
  */
 function geodir_footer_scripts()
-{
-    echo stripslashes(get_option('geodir_ga_tracking_code'));
+{	
+	echo stripslashes(get_option('geodir_ga_tracking_code'));
     echo stripslashes(get_option('geodir_footer_scripts'));
 }
 
@@ -313,7 +311,7 @@ function geodir_templates_styles()
     wp_enqueue_style('geodirectory-frontend-rtl-style');
     }
 
-    wp_register_style('geodirectory-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css', array(), GEODIRECTORY_VERSION);
+    wp_register_style('geodirectory-font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css', array(), GEODIRECTORY_VERSION);
     wp_enqueue_style('geodirectory-font-awesome');
 
 
@@ -335,6 +333,7 @@ function geodir_get_sidebar()
  * Returns paginated HTML string based on the given parameters.
  *
  * @since 1.0.0
+ * @since 1.5.5 Fixed pagination links when location selected.
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global object $wp_query WordPress Query object.
@@ -360,11 +359,13 @@ function geodir_pagination($before = '', $after = '', $prelabel = '', $nxtlabel 
 
     $half_pages_to_show = round($pages_to_show / 2);
 
-    if (get_option('geodir_set_as_home') && is_home()) // dont apply default  pagination for geodirectory home page.
+    if (geodir_is_page('home') || (get_option('geodir_set_as_home') && is_home())) // dont apply default  pagination for geodirectory home page.
         return;
 
     if (!is_single()) {
-
+		if (function_exists('geodir_location_geo_home_link')) {
+			remove_filter('home_url', 'geodir_location_geo_home_link', 100000);
+		}
         $numposts = $wp_query->found_posts;
 
 
@@ -381,7 +382,7 @@ function geodir_pagination($before = '', $after = '', $prelabel = '', $nxtlabel 
 			$end_no = min($paged * $posts_per_page, $numposts);
 			
 			if ($geodir_pagination_more_info != '') {
-				$pagination_info = '<div class="gd-pagination-details">' . wp_sprintf(__('Showing listings %d-%d of %d', GEODIRECTORY_TEXTDOMAIN), $start_no, $end_no, $numposts) . '</div>';
+				$pagination_info = '<div class="gd-pagination-details">' . wp_sprintf(__('Showing listings %d-%d of %d', 'geodirectory'), $start_no, $end_no, $numposts) . '</div>';
 				
 				if ($geodir_pagination_more_info == 'before') {
 					$before = $before . $pagination_info;
@@ -410,6 +411,10 @@ function geodir_pagination($before = '', $after = '', $prelabel = '', $nxtlabel 
             }
             echo "</div> $after";
         }
+		
+		if (function_exists('geodir_location_geo_home_link')) {
+			add_filter('home_url', 'geodir_location_geo_home_link', 100000, 2);
+		}
     }
 }
 
@@ -440,7 +445,7 @@ function geodir_listingsearch_scripts()
         jQuery(function ($) {
             $("#distance_slider").slider({
                 range: true,
-                values: [0, <?php echo ($_REQUEST['sdist']!='') ? $_REQUEST['sdist'] : "0"; ?>],
+                values: [0, <?php echo ($_REQUEST['sdist']!='') ? sanitize_text_field($_REQUEST['sdist']) : "0"; ?>],
                 min: 0,
                 max: <?php echo $dist; ?>,
                 step: <?php echo $dist_dif; ?>,
@@ -495,11 +500,11 @@ function geodir_add_sharelocation_scripts()
 
     $default_search_for_text = SEARCH_FOR_TEXT;
     if (get_option('geodir_search_field_default_text'))
-        $default_search_for_text = __(get_option('geodir_search_field_default_text'), GEODIRECTORY_TEXTDOMAIN);
+        $default_search_for_text = __(get_option('geodir_search_field_default_text'), 'geodirectory');
 
     $default_near_text = NEAR_TEXT;
     if (get_option('geodir_near_field_default_text'))
-        $default_near_text = __(get_option('geodir_near_field_default_text'), GEODIRECTORY_TEXTDOMAIN);
+        $default_near_text = __(get_option('geodir_near_field_default_text'), 'geodirectory');
 
     ?>
 
@@ -565,8 +570,8 @@ function geodir_add_sharelocation_scripts()
         function geocodeAddress($form) {
             Sgeocoder = new google.maps.Geocoder(); // Call the geocode function
 
-            if (jQuery('.snear', $form).val() == '' || ( jQuery('.sgeo_lat').val() != '' && jQuery('.sgeo_lon').val() != ''  ) || jQuery('.snear', $form).val().match("^<?php _e('In:',GEODIRECTORY_TEXTDOMAIN);?>")) {
-                if (jQuery('.snear', $form).val().match("^<?php _e('In:',GEODIRECTORY_TEXTDOMAIN);?>")) {
+            if (jQuery('.snear', $form).val() == '' || ( jQuery('.sgeo_lat').val() != '' && jQuery('.sgeo_lon').val() != ''  ) || jQuery('.snear', $form).val().match("^<?php _e('In:','geodirectory');?>")) {
+                if (jQuery('.snear', $form).val().match("^<?php _e('In:','geodirectory');?>")) {
                     jQuery(".snear", $form).val('');
                 }
                 jQuery($form).submit();
@@ -591,7 +596,7 @@ function geodir_add_sharelocation_scripts()
                             if (status == google.maps.GeocoderStatus.OK) {
                                 updateSearchPosition(results[0].geometry.location, $form);
                             } else {
-                                alert("<?php _e('Search was not successful for the following reason:',GEODIRECTORY_TEXTDOMAIN);?>" + status);
+                                alert("<?php _e('Search was not successful for the following reason:','geodirectory');?>" + status);
                             }
                         });
                 }
@@ -622,19 +627,19 @@ function geodir_add_sharelocation_scripts()
             var msg;
             switch (err.code) {
                 case err.UNKNOWN_ERROR:
-                    msg = "<?php _e('Unable to find your location',GEODIRECTORY_TEXTDOMAIN);?>";
+                    msg = "<?php _e('Unable to find your location','geodirectory');?>";
                     break;
                 case err.PERMISSION_DENINED:
-                    msg = "<?php _e('Permission denied in finding your location',GEODIRECTORY_TEXTDOMAIN);?>";
+                    msg = "<?php _e('Permission denied in finding your location','geodirectory');?>";
                     break;
                 case err.POSITION_UNAVAILABLE:
-                    msg = "<?php _e('Your location is currently unknown',GEODIRECTORY_TEXTDOMAIN);?>";
+                    msg = "<?php _e('Your location is currently unknown','geodirectory');?>";
                     break;
                 case err.BREAK:
-                    msg = "<?php _e('Attempt to find location took too long',GEODIRECTORY_TEXTDOMAIN);?>";
+                    msg = "<?php _e('Attempt to find location took too long','geodirectory');?>";
                     break;
                 default:
-                    msg = "<?php _e('Location detection not supported in browser',GEODIRECTORY_TEXTDOMAIN);?>";
+                    msg = "<?php _e('Location detection not supported in browser','geodirectory');?>";
             }
             jQuery('#info').html(msg);
         }

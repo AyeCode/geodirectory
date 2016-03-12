@@ -53,7 +53,7 @@ add_action('add_meta_boxes_comment', 'geodir_comment_add_meta_box');
  */
 function geodir_comment_add_meta_box($comment)
 {
-    add_meta_box('gd-comment-rating', __('Comment Rating', GEODIRECTORY_TEXTDOMAIN), 'geodir_comment_rating_meta', 'comment', 'normal', 'high');
+    add_meta_box('gd-comment-rating', __('Comment Rating', 'geodirectory'), 'geodir_comment_rating_meta', 'comment', 'normal', 'high');
 }
 
 /**
@@ -67,16 +67,29 @@ function geodir_comment_add_meta_box($comment)
  */
 function geodir_comment_rating_meta($comment)
 {
-    if ($rating = geodir_get_commentoverall($comment->comment_ID)) {
+    $post_type = get_post_type($comment->comment_post_ID);
+	if (in_array($post_type, (array)geodir_get_posttypes()) && (int)$comment->comment_parent == 0) {
+		$rating = geodir_get_commentoverall($comment->comment_ID);
+		
+		if ((int)get_option('geodir_reviewrating_enable_font_awesome') == 1) {
+			$star_texts = array();
+			$star_texts[] = __('Terrible', 'geodirectory');
+			$star_texts[] = __('Poor', 'geodirectory');
+			$star_texts[] = __('Average', 'geodirectory');
+			$star_texts[] = __('Very Good', 'geodirectory');
+			$star_texts[] = __('Excellent', 'geodirectory');
+			
+			echo geodir_font_awesome_rating_form_html('', $star_texts, $rating);
+		} else {			
+			if ($rating) {
+				echo '<div class="gd_rating" data-average="' . $rating . '" data-id="5">';
 
-        echo '<div class="gd_rating" data-average="' . $rating . '" data-id="5"></div>
-    		<input type="hidden" id="geodir_overallrating" name="geodir_overallrating" value="' . $rating . '"  />';
-
-
-    } else {
-        echo '<div class="gd_rating" data-average="0" data-id="5"></div>
-    		<input type="hidden" id="geodir_overallrating" name="geodir_overallrating" value="0"  />';
-    }
+			} else {
+				echo '<div class="gd_rating" data-average="0" data-id="5"></div>';
+			}
+		}
+		echo '<input type="hidden" id="geodir_overallrating" name="geodir_overallrating" value="' . $rating . '"  />';
+	}
 }
 
 
@@ -99,8 +112,16 @@ function geodir_comment_rating_fields()
     $post_types = geodir_get_posttypes();
 
     if (in_array($post->post_type, $post_types)) {
+        $star_texts = array();
+		$star_texts[] = __('Terrible', 'geodirectory');
+		$star_texts[] = __('Poor', 'geodirectory');
+		$star_texts[] = __('Average', 'geodirectory');
+		$star_texts[] = __('Very Good', 'geodirectory');
+		$star_texts[] = __('Excellent', 'geodirectory');
+		
+		$gd_rating_html = apply_filters('gd_rating_form_html', '<div class="gd_rating" data-average="0" data-id="5"></div>', $star_texts);
+        echo $gd_rating_html;
         ?>
-        <div class="gd_rating" data-average="0" data-id="5"></div>
         <input type="hidden" id="geodir_overallrating" name="geodir_overallrating" value="0"/><?php
     }
 }
@@ -135,7 +156,7 @@ add_filter('cancel_comment_reply_link', 'geodir_cancle_replaylink');
 function geodir_cancle_replaylink($link)
 {
 
-    $link = '<span id="gd_cancle_replaylink">' . $link . '</span>';
+    $link = '<span class="gd-cancel-replaylink">' . $link . '</span>';
 
     return $link;
 }
@@ -148,31 +169,31 @@ add_action('comment_post', 'geodir_save_rating');
  * @package GeoDirectory
  * @param int $comment The comment ID.
  * @global object $wpdb WordPress Database object.
- * @global object $post The current post object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @global int $user_ID The current user ID.
  */
 function geodir_save_rating($comment = 0)
 {
-    global $wpdb, $user_ID, $post, $plugin_prefix;
+    global $wpdb, $user_ID, $plugin_prefix;
 
     $comment_info = get_comment($comment);
 
     $post_id = $comment_info->comment_post_ID;
     $status = $comment_info->comment_approved;
     $rating_ip = getenv("REMOTE_ADDR");
-
-    $post_details = $wpdb->get_row("SELECT * FROM " . $plugin_prefix . $post->post_type . "_detail WHERE post_id =" . $post->ID);
+	
+    $post = geodir_get_post_info($post_id);
 
     if ($post->post_status == 'publish') {
         $post_status = '1';
     } else {
         $post_status = '0';
     }
+	
     if (isset($_REQUEST['geodir_overallrating'])) {
-
         $overall_rating = $_REQUEST['geodir_overallrating'];
-        if (isset($comment_info->comment_parent) && (int)$comment_info->comment_parent == 0) {
+        
+		if (isset($comment_info->comment_parent) && (int)$comment_info->comment_parent == 0) {
             $overall_rating = $overall_rating > 0 ? $overall_rating : '0';
 
             $sqlqry = $wpdb->prepare("INSERT INTO " . GEODIR_REVIEW_TABLE . " SET
@@ -193,7 +214,7 @@ function geodir_save_rating($comment = 0)
 					post_latitude	= %s,
 					comment_content	= %s 
 					",
-                array($post_id, $post->post_type, $post->post_title, $user_ID, $comment, $rating_ip, $overall_rating, $status, $post_status, date("Y-m-d H:i:s"), $post_details->post_city, $post_details->post_region, $post_details->post_country,$post_details->post_latitude,$post_details->post_longitude,$comment_info->comment_content)
+                array($post_id, $post->post_type, $post->post_title, $user_ID, $comment, $rating_ip, $overall_rating, $status, $post_status, date_i18n('Y-m-d H:i:s', current_time('timestamp')), $post->post_city, $post->post_region, $post->post_country, $post->post_latitude, $post->post_longitude, $comment_info->comment_content)
             );
 
             $wpdb->query($sqlqry);
@@ -222,7 +243,6 @@ function geodir_save_rating($comment = 0)
             }
         }
     }
-
 }
 
 
@@ -367,7 +387,7 @@ function geodir_comment_delete_comment($comment_id)
 
 }
 
-add_filter('comment_text', 'geodir_wrap_comment_text', 10, 2);
+add_filter('comment_text', 'geodir_wrap_comment_text', 40, 2);
 /**
  * Add rating information in comment text.
  *
@@ -383,7 +403,7 @@ function geodir_wrap_comment_text($content, $comment = '')
     if (!empty($comment))
         $rating = geodir_get_commentoverall($comment->comment_ID);
     if ($rating != 0 && !is_admin()) {
-        return '<div>' . __('Overall Rating', GEODIRECTORY_TEXTDOMAIN) . ': <div class="rating">' . $rating . '</div>' . geodir_get_rating_stars($rating, $comment->comment_ID) . '</div><div class="description">' . $content . '</div>';
+        return '<div><div class="gd-rating-text">' . __('Overall Rating', 'geodirectory') . ': <div class="rating">' . $rating . '</div></div>' . geodir_get_rating_stars($rating, $comment->comment_ID) . '</div><div class="description">' . $content . '</div>';
     } else
         return $content;
 
@@ -709,6 +729,7 @@ function geodir_get_commentoverall_number($post_id = 0)
  * Sets the comment template using filter {@see 'comments_template'}.
  *
  * @since 1.0.0
+ * @since 1.5.1 Reviews template can be overridden from theme.
  * @package GeoDirectory
  * @global object $post The current post object.
  * @param string $comment_template Old comment template.
@@ -724,7 +745,11 @@ function geodir_comment_template($comment_template)
         return;
     }
     if (in_array($post->post_type, $post_types)) { // assuming there is a post type called business
-        return dirname(__FILE__) . '/reviews.php';
+        $template = locate_template(array("geodirectory/reviews.php")); // Use theme template if available
+        if (!$template) {
+            $template = dirname(__FILE__) . '/reviews.php';
+        }
+        return $template;
     }
 }
 
@@ -770,7 +795,7 @@ if (!function_exists('geodir_comment')) {
                 // Display trackbacks differently than normal comments.
                 ?>
                 <li <?php comment_class('geodir-comment'); ?> id="comment-<?php comment_ID(); ?>">
-                <p><?php _e('Pingback:', GEODIRECTORY_TEXTDOMAIN); ?> <?php comment_author_link(); ?> <?php edit_comment_link(__('(Edit)', GEODIRECTORY_TEXTDOMAIN), '<span class="edit-link">', '</span>'); ?></p>
+                <p><?php _e('Pingback:', 'geodirectory'); ?> <?php comment_author_link(); ?> <?php edit_comment_link(__('(Edit)', 'geodirectory'), '<span class="edit-link">', '</span>'); ?></p>
                 <?php
                 break;
             default :
@@ -781,36 +806,48 @@ if (!function_exists('geodir_comment')) {
                 <article id="comment-<?php comment_ID(); ?>" class="comment hreview">
                     <header class="comment-meta comment-author vcard">
                         <?php
-                        echo get_avatar($comment, 44);
+                        /**
+                         * Filter to modify comment avatar size
+                         *
+                         * You can use this filter to change comment avatar size.
+                         *
+                         * @since 1.0.0
+                         * @package GeoDirectory
+                         */
+                        $avatar_size = apply_filters('geodir_comment_avatar_size', 44);
+                        echo get_avatar($comment, $avatar_size);
                         printf('<cite><b class="reviewer">%1$s</b> %2$s</cite>',
                             get_comment_author_link(),
                             // If current post author is also comment author, make it known visually.
-                            ($comment->user_id === $post->post_author) ? '<span>' . __('Post author', GEODIRECTORY_TEXTDOMAIN) . '</span>' : ''
+                            ($comment->user_id === $post->post_author) ? '<span>' . __('Post author', 'geodirectory') . '</span>' : ''
                         );
                         echo "<span class='item'><small><span class='fn'>$post->post_title</span></small></span>";
                         printf('<a href="%1$s"><time datetime="%2$s" class="dtreviewed">%3$s<span class="value-title" title="%2$s"></span></time></a>',
                             esc_url(get_comment_link($comment->comment_ID)),
                             get_comment_time('c'),
                             /* translators: 1: date, 2: time */
-                            sprintf(__('%1$s at %2$s', GEODIRECTORY_TEXTDOMAIN), get_comment_date(), get_comment_time())
+                            sprintf(__('%1$s at %2$s', 'geodirectory'), get_comment_date(), get_comment_time())
                         );
                         ?>
                     </header>
                     <!-- .comment-meta -->
 
                     <?php if ('0' == $comment->comment_approved) : ?>
-                        <p class="comment-awaiting-moderation"><?php _e('Your comment is awaiting moderation.', GEODIRECTORY_TEXTDOMAIN); ?></p>
+                        <p class="comment-awaiting-moderation"><?php _e('Your comment is awaiting moderation.', 'geodirectory'); ?></p>
                     <?php endif; ?>
 
                     <section class="comment-content comment">
                         <?php comment_text(); ?>
-                        <?php edit_comment_link(__('Edit', GEODIRECTORY_TEXTDOMAIN), '<p class="edit-link">', '</p>'); ?>
                     </section>
                     <!-- .comment-content -->
 
-                    <div class="reply">
-                        <?php comment_reply_link(array_merge($args, array('reply_text' => __('Reply', GEODIRECTORY_TEXTDOMAIN), 'after' => ' <span>&darr;</span>', 'depth' => $depth, 'max_depth' => $args['max_depth']))); ?>
+                    <div class="comment-links">
+                        <?php edit_comment_link(__('Edit', 'geodirectory'), '<p class="edit-link">', '</p>'); ?>
+                        <div class="reply">
+                            <?php comment_reply_link(array_merge($args, array('reply_text' => __('Reply', 'geodirectory'), 'after' => ' <span>&darr;</span>', 'depth' => $depth, 'max_depth' => $args['max_depth']))); ?>
+                        </div>
                     </div>
+
                     <!-- .reply -->
                 </article>
                 <!-- #comment-## -->
@@ -895,7 +932,7 @@ function geodir_get_rating_stars($rating, $post_id, $small = false)
 			$r_html = '<div class="geodir-rating" style="' . $attach_style . '"><div class="gd_rating_show" data-average="' . $rating . '" data-id="' . $post_id . '"><div class="geodir_RatingAverage" style="width: ' . $a_rating . '%;"></div><div class="geodir_Star">' . $rating_img . $rating_img . $rating_img . $rating_img . $rating_img . '</div></div></div>';
 		}
     }
-    return $r_html;
+    return apply_filters('geodir_get_rating_stars_html', $r_html, $rating, 5);
 }
 
 /**

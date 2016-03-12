@@ -10,25 +10,21 @@
 Plugin Name: GeoDirectory
 Plugin URI: http://wpgeodirectory.com/
 Description: GeoDirectory plugin for wordpress.
-Version: 1.5.0
+Version: 1.5.8
 Author: GeoDirectory
 Author URI: http://wpgeodirectory.com
+Text Domain: geodirectory
+Domain Path: /geodirectory-languages
 Requires at least: 3.1
-Tested up to: 4.2
+Tested up to: 4.4
 */
 
 /**
  * The current version number of GeoDirectory.
  *
  * @since 1.0.0
- * @global object $wpdb WordPress Database object.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
- * @global array $geodir_addon_list List of active GeoDirectory extensions.
- * @global string $plugin_file_name Base file name. 'geodirectory/geodirectory.php'.
  */
-define("GEODIRECTORY_VERSION", "1.5.0");
-
-if (!session_id()) session_start();
+define("GEODIRECTORY_VERSION", "1.5.8");
 
 /*
  * CHECK FOR OLD COMPATIBILITY PACKS AND DISABLE IF THEY ARE ACTIVE
@@ -61,8 +57,14 @@ if (is_admin()) {
 
 }
 
-/*
+/**
  * Declare some global variables for later use.
+ *
+ * @since 1.0.0
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @global array $geodir_addon_list List of active GeoDirectory extensions.
+ * @global string $plugin_file_name Base file name. 'geodirectory/geodirectory.php'.
  */
 global $wpdb, $plugin_prefix, $geodir_addon_list, $plugin_file_name;
 $plugin_prefix = $wpdb->prefix . 'geodir_';
@@ -78,6 +80,10 @@ $geodir_post_custom_fields_cache = array();
  */
 if (!defined('WP_POST_REVISIONS')) define('WP_POST_REVISIONS', 0);
 
+/**
+ * Define constants
+ */
+if(!defined('GEODIRECTORY_PLUGIN_DIR')) define('GEODIRECTORY_PLUGIN_DIR', plugin_dir_path( __FILE__ ));
 
 /*
  * Declare database table names. All since version 1.0.0
@@ -102,6 +108,7 @@ if ($_SERVER['REQUEST_URI'] == '' || $_SERVER['REQUEST_URI'] == '/') {
      * This tries to disable cache on homepage as it can be very dynamic.
      */
     define('DONOTCACHEPAGE', TRUE);
+    $_SERVER['DONOTCACHEPAGE']= TRUE;
 }
 
 
@@ -112,6 +119,31 @@ if (!defined('GEODIRECTORY_TEXTDOMAIN')) define('GEODIRECTORY_TEXTDOMAIN', 'geod
 
 // Load geodirectory plugin textdomain.
 add_action( 'plugins_loaded', 'geodir_load_textdomain' );
+
+/*
+ * A function to log GD errors no matter the type given.
+ *
+ * This function will log GD errors if the WP_DEBUG constant is true, it can be filtered.
+ *
+ * @since 1.5.7
+ * @param mixed $log The thing that should be logged.
+ * @package GeoDirectory
+ */
+function geodir_error_log($log){
+    /*
+     * A filter to override the WP_DEBUG setting for function geodir_error_log().
+     *
+     * @since 1.5.7
+     */
+    $should_log = apply_filters( 'geodir_log_errors', WP_DEBUG);
+    if ( true === $should_log ) {
+        if ( is_array( $log ) || is_object( $log ) ) {
+            error_log( print_r( $log, true ) );
+        } else {
+            error_log( $log );
+        }
+    }
+}
 
 /**
  * Include all plugin functions.
@@ -191,5 +223,20 @@ if (is_admin()) {
     }
     register_deactivation_hook(__FILE__, 'geodir_deactivation');
     register_uninstall_hook(__FILE__, 'geodir_uninstall');
+
+    /*
+     * Show a upgrade warning message if applicable.
+     *
+     * @since 1.5.6
+     */
+    global $pagenow;
+   if ( 'plugins.php' === $pagenow )
+    {
+        // Better update message
+        $file   = basename( __FILE__ );
+        $folder = basename( dirname( __FILE__ ) );
+        $hook = "in_plugin_update_message-{$folder}/{$file}";
+        add_action( $hook, 'geodire_admin_upgrade_notice', 20, 2 );
+    }
 
 }

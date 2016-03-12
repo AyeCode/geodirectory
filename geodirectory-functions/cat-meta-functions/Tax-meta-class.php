@@ -115,12 +115,12 @@ if (!class_exists('Tax_Meta_Class')) :
                 if ($meta_box['use_with_theme'] === true) {
                     $this->SelfPath = get_stylesheet_directory_uri() . '/library/cat-meta';
                 } elseif ($meta_box['use_with_theme'] === false) {
-                    $this->SelfPath = plugins_url('cat-meta', plugin_basename(dirname(__FILE__)));
+                    $this->SelfPath = plugins_url('cat-meta-functions', plugin_basename(dirname(__FILE__)));
                 } else {
                     $this->SelfPath = $meta_box['use_with_theme'];
                 }
             else {
-                $this->SelfPath = plugins_url('cat-meta', plugin_basename(dirname(__FILE__)));
+                $this->SelfPath = plugins_url('cat-meta-functions', plugin_basename(dirname(__FILE__)));
             }
 
 
@@ -262,7 +262,7 @@ if (!class_exists('Tax_Meta_Class')) :
                 $li = "<li id='item_{$attachment_id}'>";
                 $li .= "<img src='{$attachment['url']}' alt='image_{$attachment_id}' />";
                 //$li 	.= "<a title='" . __( 'Delete this image' ) . "' class='at-delete-file' href='#' rel='{$nonce}|{$term_id}|{$id}|{$attachment_id}'>" . __( 'Delete' ) . "</a>";
-                $li .= "<a title='" . __('Remove this image', GEODIRECTORY_TEXTDOMAIN) . "' class='at-delete-file' href='#' rel='{$nonce}|{$term_id}|{$id}|{$attachment_id}'><img src='" . $this->SelfPath . "/images/delete-16.png' alt='" . __('Remove', GEODIRECTORY_TEXTDOMAIN) . "' /></a>";
+                $li .= "<a title='" . __('Remove this image', 'geodirectory') . "' class='at-delete-file' href='#' rel='{$nonce}|{$term_id}|{$id}|{$attachment_id}'><img src='" . $this->SelfPath . "/images/delete-16.png' alt='" . __('Remove', 'geodirectory') . "' /></a>";
                 $li .= "<input type='hidden' name='{$id}[]' value='{$attachment_id}' />";
                 $li .= "</li>";
                 $html .= $li;
@@ -361,7 +361,7 @@ if (!class_exists('Tax_Meta_Class')) :
                 echo json_encode(array('status' => 'success'));
                 die();
             } else {
-                echo json_encode(array('message' => __('Cannot delete file. Something\'s wrong.', GEODIRECTORY_TEXTDOMAIN)));
+                echo json_encode(array('message' => __('Cannot delete file. Something\'s wrong.', 'geodirectory')));
                 die();
             }
         }
@@ -589,7 +589,7 @@ if (!class_exists('Tax_Meta_Class')) :
                     } else {
                         echo 'http://i.imgur.com/g8Duj.png';
                     }
-                    echo '" alt="' . __('Remove', GEODIRECTORY_TEXTDOMAIN) . '" title="' . __('Remove', GEODIRECTORY_TEXTDOMAIN) . '" id="remove-' . $field['id'] . '"></div>';
+                    echo '" alt="' . __('Remove', 'geodirectory') . '" title="' . __('Remove', 'geodirectory') . '" id="remove-' . $field['id'] . '"></div>';
                     $c = $c + 1;
 
                 }
@@ -602,7 +602,7 @@ if (!class_exists('Tax_Meta_Class')) :
             } else {
                 echo 'http://i.imgur.com/w5Tuc.png';
             }
-            echo '" alt="' . __('Add', GEODIRECTORY_TEXTDOMAIN) . '" title="' . __('Add', GEODIRECTORY_TEXTDOMAIN) . '" id="add-' . $field['id'] . '"><br/></div>';
+            echo '" alt="' . __('Add', 'geodirectory') . '" title="' . __('Add', 'geodirectory') . '" id="add-' . $field['id'] . '"><br/></div>';
 
             //create all fields once more for js function and catch with object buffer
             ob_start();
@@ -632,7 +632,7 @@ if (!class_exists('Tax_Meta_Class')) :
             } else {
                 echo 'http://i.imgur.com/g8Duj.png';
             }
-            echo '" alt="' . __('Remove', GEODIRECTORY_TEXTDOMAIN) . '" title="' . __('Remove', GEODIRECTORY_TEXTDOMAIN) . '" id="remove-' . $field['id'] . '"></div>';
+            echo '" alt="' . __('Remove', 'geodirectory') . '" title="' . __('Remove', 'geodirectory') . '" id="remove-' . $field['id'] . '"></div>';
             $counter = 'countadd_' . $field['id'];
             $js_code = ob_get_clean();
             $js_code = str_replace("'", "\"", $js_code);
@@ -897,11 +897,11 @@ if (!class_exists('Tax_Meta_Class')) :
 
             if (!empty($meta)) {
                 $nonce = wp_create_nonce('at_ajax_delete');
-                echo '<div style="margin-bottom: 10px"><strong>' . __('Uploaded files', GEODIRECTORY_TEXTDOMAIN) . '</strong></div>';
+                echo '<div style="margin-bottom: 10px"><strong>' . __('Uploaded files', 'geodirectory') . '</strong></div>';
                 echo '<ol class="at-upload">';
                 foreach ($meta as $att) {
                     // if (wp_attachment_is_image($att)) continue; // what's image uploader for?
-                    echo "<li>" . wp_get_attachment_link($att, '', false, false, ' ') . " (<a class='at-delete-file' href='#' rel='{$nonce}|{$post->ID}|{$field['id']}|{$att}'>" . __('Remove', GEODIRECTORY_TEXTDOMAIN) . "</a>)</li>";
+                    echo "<li>" . wp_get_attachment_link($att, '', false, false, ' ') . " (<a class='at-delete-file' href='#' rel='{$nonce}|{$post->ID}|{$field['id']}|{$att}'>" . __('Remove', 'geodirectory') . "</a>)</li>";
                 }
                 echo '</ol>';
             }
@@ -909,13 +909,13 @@ if (!class_exists('Tax_Meta_Class')) :
             // show form upload
 
             echo "<div class='at-file-upload-label'>";
-            echo "<strong>" . __('Upload new files', GEODIRECTORY_TEXTDOMAIN) . "</strong>";
+            echo "<strong>" . __('Upload new files', 'geodirectory') . "</strong>";
             echo "</div>";
             echo "<div class='new-files'>";
             echo "<div class='file-input'>";
             echo "<input type='file' name='{$field['id']}[]' />";
             echo "</div><!-- End .file-input -->";
-            echo "<a class='at-add-file button' href='#'>" . __('Add more files', GEODIRECTORY_TEXTDOMAIN) . "</a>";
+            echo "<a class='at-add-file button' href='#'>" . __('Add more files', 'geodirectory') . "</a>";
             echo "</div><!-- End .new-files -->";
             echo "</td>";
             $this->show_field_end($field, $meta);
@@ -943,6 +943,10 @@ if (!class_exists('Tax_Meta_Class')) :
 
                 $file_info = pathinfo($meta['src']);
 
+                //print_r($meta);
+                //print_r($uploads);
+                //print_r($file_info);
+
                 if ($file_info['dirname'] != '.' && $file_info['dirname'] != '..')
                     $sub_dir = $file_info['dirname'];
 
@@ -962,12 +966,12 @@ if (!class_exists('Tax_Meta_Class')) :
                 $html .= "<span class='mupload_img_holder'><img src='" . $meta['src'] . "' style='max-height: 150px;max-width: 150px;' /></span>";
                 $html .= "<input type='hidden' name='" . $field['id'] . "[id]' id='" . $field['id'] . "[id]' value='" . $meta['id'] . "' />";
                 $html .= "<input type='hidden' class='" . $field['id'] . "[src]' name='" . $field['id'] . "[src]' id='" . $field['id'] . "[src]' value='" . $meta['src'] . "' />";
-                $html .= "<input class='at-delete_image_button' type='button' rel='" . $field['id'] . "' value='" . __('Remove Image', GEODIRECTORY_TEXTDOMAIN) . "' />";
+                $html .= "<input class='at-delete_image_button' type='button' rel='" . $field['id'] . "' value='" . __('Remove Image', 'geodirectory') . "' />";
             } else {
                 $html .= "<span class='mupload_img_holder'></span>";
                 $html .= "<input type='hidden' name='" . $field['id'] . "[id]' id='" . $field['id'] . "[id]' value='' />";
                 $html .= "<input class='" . $field['id'] . "[src]' style='position:absolute;left:-500px;width:50px;' type='text' name='" . $field['id'] . "[src]' id='" . $field['id'] . "[src]' value='' />";
-                $html .= "<input class='at-upload_image_button' type='button' rel='" . $field['id'] . "' value='" . __('Upload Image', GEODIRECTORY_TEXTDOMAIN) . "' />";
+                $html .= "<input class='at-upload_image_button' type='button' rel='" . $field['id'] . "' value='" . __('Upload Image', 'geodirectory') . "' />";
             }
             echo $html;
             $this->show_field_end($field, $meta);
@@ -991,7 +995,7 @@ if (!class_exists('Tax_Meta_Class')) :
 
             echo "<input class='at-color' type='text' name='{$field['id']}' id='{$field['id']}' value='{$meta}' size='8' />";
             //	echo "<a href='#' class='at-color-select button' rel='{$field['id']}'>" . __( 'Select a color' ) . "</a>";
-            echo "<input type='button' class='at-color-select button' rel='{$field['id']}' value='" . __('Select a color', GEODIRECTORY_TEXTDOMAIN) . "'/>";
+            echo "<input type='button' class='at-color-select button' rel='{$field['id']}' value='" . __('Select a color', 'geodirectory') . "'/>";
             echo "<div style='display:none' class='at-color-picker' rel='{$field['id']}'></div>";
             $this->show_field_end($field, $meta);
 
@@ -1550,7 +1554,7 @@ if (!class_exists('Tax_Meta_Class')) :
          */
         public function addText($id, $args, $repeater = false)
         {
-            $new_field = array('type' => 'text', 'id' => $id, 'std' => '', 'desc' => '', 'style' => '', 'name' => __('Text Field', GEODIRECTORY_TEXTDOMAIN));
+            $new_field = array('type' => 'text', 'id' => $id, 'std' => '', 'desc' => '', 'style' => '', 'name' => __('Text Field', 'geodirectory'));
             $new_field = array_merge($new_field, $args);
             if (false === $repeater) {
                 $this->_fields[] = $new_field;
@@ -1575,7 +1579,7 @@ if (!class_exists('Tax_Meta_Class')) :
          */
         public function addHidden($id, $args, $repeater = false)
         {
-            $new_field = array('type' => 'hidden', 'id' => $id, 'std' => '', 'desc' => '', 'style' => '', 'name' => __('Text Field', GEODIRECTORY_TEXTDOMAIN));
+            $new_field = array('type' => 'hidden', 'id' => $id, 'std' => '', 'desc' => '', 'style' => '', 'name' => __('Text Field', 'geodirectory'));
             $new_field = array_merge($new_field, $args);
             if (false === $repeater) {
                 $this->_fields[] = $new_field;
@@ -1619,7 +1623,7 @@ if (!class_exists('Tax_Meta_Class')) :
          */
         public function addCheckbox($id, $args, $repeater = false)
         {
-            $new_field = array('type' => 'checkbox', 'id' => $id, 'std' => '', 'desc' => '', 'style' => '', 'name' => __('Checkbox Field', GEODIRECTORY_TEXTDOMAIN));
+            $new_field = array('type' => 'checkbox', 'id' => $id, 'std' => '', 'desc' => '', 'style' => '', 'name' => __('Checkbox Field', 'geodirectory'));
             $new_field = array_merge($new_field, $args);
             if (false === $repeater) {
                 $this->_fields[] = $new_field;
@@ -1647,7 +1651,7 @@ if (!class_exists('Tax_Meta_Class')) :
          */
         public function addCheckboxList($id, $options, $args, $repeater = false)
         {
-            $new_field = array('type' => 'checkbox_list', 'id' => $id, 'std' => '', 'desc' => '', 'style' => '', 'name' => __('Checkbox List Field', GEODIRECTORY_TEXTDOMAIN));
+            $new_field = array('type' => 'checkbox_list', 'id' => $id, 'std' => '', 'desc' => '', 'style' => '', 'name' => __('Checkbox List Field', 'geodirectory'));
             $new_field = array_merge($new_field, $args);
             if (false === $repeater) {
                 $this->_fields[] = $new_field;
@@ -1672,7 +1676,7 @@ if (!class_exists('Tax_Meta_Class')) :
          */
         public function addTextarea($id, $args, $repeater = false)
         {
-            $new_field = array('type' => 'textarea', 'id' => $id, 'std' => '', 'desc' => '', 'style' => '', 'name' => __('Textarea Field', GEODIRECTORY_TEXTDOMAIN));
+            $new_field = array('type' => 'textarea', 'id' => $id, 'std' => '', 'desc' => '', 'style' => '', 'name' => __('Textarea Field', 'geodirectory'));
             $new_field = array_merge($new_field, $args);
             if (false === $repeater) {
                 $this->_fields[] = $new_field;
@@ -1698,7 +1702,7 @@ if (!class_exists('Tax_Meta_Class')) :
          */
         public function addSelect($id, $options, $args, $repeater = false)
         {
-            $new_field = array('type' => 'select', 'id' => $id, 'std' => array(), 'desc' => '', 'style' => '', 'name' => __('Select Field', GEODIRECTORY_TEXTDOMAIN), 'multiple' => false, 'options' => $options);
+            $new_field = array('type' => 'select', 'id' => $id, 'std' => array(), 'desc' => '', 'style' => '', 'name' => __('Select Field', 'geodirectory'), 'multiple' => false, 'options' => $options);
             $new_field = array_merge($new_field, $args);
             if (false === $repeater) {
                 $this->_fields[] = $new_field;
@@ -1724,7 +1728,7 @@ if (!class_exists('Tax_Meta_Class')) :
          */
         public function addRadio($id, $options, $args, $repeater = false)
         {
-            $new_field = array('type' => 'radio', 'id' => $id, 'std' => array(), 'desc' => '', 'style' => '', 'name' => __('Radio Field', GEODIRECTORY_TEXTDOMAIN), 'options' => $options);
+            $new_field = array('type' => 'radio', 'id' => $id, 'std' => array(), 'desc' => '', 'style' => '', 'name' => __('Radio Field', 'geodirectory'), 'options' => $options);
             $new_field = array_merge($new_field, $args);
             if (false === $repeater) {
                 $this->_fields[] = $new_field;
@@ -1749,7 +1753,7 @@ if (!class_exists('Tax_Meta_Class')) :
          */
         public function addDate($id, $args, $repeater = false)
         {
-            $new_field = array('type' => 'date', 'id' => $id, 'std' => '', 'desc' => '', 'format' => 'yy-mm-dd', 'name' => __('Date Field', GEODIRECTORY_TEXTDOMAIN));
+            $new_field = array('type' => 'date', 'id' => $id, 'std' => '', 'desc' => '', 'format' => 'yy-mm-dd', 'name' => __('Date Field', 'geodirectory'));
             $new_field = array_merge($new_field, $args);
             if (false === $repeater) {
                 $this->_fields[] = $new_field;
@@ -1774,7 +1778,7 @@ if (!class_exists('Tax_Meta_Class')) :
          */
         public function addTime($id, $args, $repeater = false)
         {
-            $new_field = array('type' => 'time', 'id' => $id, 'std' => '', 'desc' => '', 'format' => 'hh:mm', 'name' => __('Time Field', GEODIRECTORY_TEXTDOMAIN));
+            $new_field = array('type' => 'time', 'id' => $id, 'std' => '', 'desc' => '', 'format' => 'hh:mm', 'name' => __('Time Field', 'geodirectory'));
             $new_field = array_merge($new_field, $args);
             if (false === $repeater) {
                 $this->_fields[] = $new_field;
@@ -1798,7 +1802,7 @@ if (!class_exists('Tax_Meta_Class')) :
          */
         public function addColor($id, $args, $repeater = false)
         {
-            $new_field = array('type' => 'color', 'id' => $id, 'std' => '', 'desc' => '', 'name' => __('ColorPicker Field', GEODIRECTORY_TEXTDOMAIN));
+            $new_field = array('type' => 'color', 'id' => $id, 'std' => '', 'desc' => '', 'name' => __('ColorPicker Field', 'geodirectory'));
             $new_field = array_merge($new_field, $args);
             if (false === $repeater) {
                 $this->_fields[] = $new_field;
@@ -1821,7 +1825,7 @@ if (!class_exists('Tax_Meta_Class')) :
          */
         public function addImage($id, $args, $repeater = false)
         {
-            $new_field = array('type' => 'image', 'id' => $id, 'desc' => '', 'style' => '', 'name' => __('Image Field', GEODIRECTORY_TEXTDOMAIN));
+            $new_field = array('type' => 'image', 'id' => $id, 'desc' => '', 'style' => '', 'name' => __('Image Field', 'geodirectory'));
             $new_field = array_merge($new_field, $args);
 
             if (false === $repeater) {
@@ -1845,7 +1849,7 @@ if (!class_exists('Tax_Meta_Class')) :
          */
         public function addFile($id, $args, $repeater = false)
         {
-            $new_field = array('type' => 'file', 'id' => $id, 'desc' => '', 'style' => '', 'name' => __('File Field', GEODIRECTORY_TEXTDOMAIN));
+            $new_field = array('type' => 'file', 'id' => $id, 'desc' => '', 'style' => '', 'name' => __('File Field', 'geodirectory'));
             $new_field = array_merge($new_field, $args);
             if (false === $repeater) {
                 $this->_fields[] = $new_field;
@@ -1870,7 +1874,7 @@ if (!class_exists('Tax_Meta_Class')) :
          */
         public function addWysiwyg($id, $args, $repeater = false)
         {
-            $new_field = array('type' => 'wysiwyg', 'id' => $id, 'std' => '', 'desc' => '', 'style' => 'width: 300px; height: 400px', 'name' => __('WYSIWYG Editor Field', GEODIRECTORY_TEXTDOMAIN));
+            $new_field = array('type' => 'wysiwyg', 'id' => $id, 'std' => '', 'desc' => '', 'style' => 'width: 300px; height: 400px', 'name' => __('WYSIWYG Editor Field', 'geodirectory'));
             $new_field = array_merge($new_field, $args);
             if (false === $repeater) {
                 $this->_fields[] = $new_field;
@@ -1903,7 +1907,7 @@ if (!class_exists('Tax_Meta_Class')) :
             $type = 'select';
             $temp = array($tax, $type, $q);
             $options = array_merge($temp, $options);
-            $new_field = array('type' => 'taxonomy', 'id' => $id, 'desc' => '', 'name' => __('Taxonomy Field', GEODIRECTORY_TEXTDOMAIN), 'options' => $options);
+            $new_field = array('type' => 'taxonomy', 'id' => $id, 'desc' => '', 'name' => __('Taxonomy Field', 'geodirectory'), 'options' => $options);
             $new_field = array_merge($new_field, $args);
             if (false === $repeater) {
                 $this->_fields[] = $new_field;
@@ -1934,7 +1938,7 @@ if (!class_exists('Tax_Meta_Class')) :
             $q = array('posts_per_page' => -1);
             $temp = array('post_type' => 'post', 'type' => 'select', 'args' => $q);
             $options = array_merge($temp, $options);
-            $new_field = array('type' => 'posts', 'id' => $id, 'desc' => '', 'name' => __('Posts Field', GEODIRECTORY_TEXTDOMAIN), 'options' => $options);
+            $new_field = array('type' => 'posts', 'id' => $id, 'desc' => '', 'name' => __('Posts Field', 'geodirectory'), 'options' => $options);
             $new_field = array_merge($new_field, $args);
             if (false === $repeater) {
                 $this->_fields[] = $new_field;
@@ -1959,7 +1963,7 @@ if (!class_exists('Tax_Meta_Class')) :
          */
         public function addRepeaterBlock($id, $args)
         {
-            $new_field = array('type' => 'repeater', 'id' => $id, 'name' => __('Reapeater Field', GEODIRECTORY_TEXTDOMAIN), 'fields' => array(), 'inline' => false);
+            $new_field = array('type' => 'repeater', 'id' => $id, 'name' => __('Reapeater Field', 'geodirectory'), 'fields' => array(), 'inline' => false);
             $new_field = array_merge($new_field, $args);
             $this->_fields[] = $new_field;
         }
@@ -2011,13 +2015,17 @@ if (!class_exists('Tax_Meta_Class')) :
         public function get_tax_meta($term_id, $key, $multi = false, $post_type = '')
         {
 
-            if (empty($gd_post_type) && isset($_REQUEST['taxonomy'])) {
+            if (empty($post_type) && isset($_REQUEST['taxonomy'])) {
                 $taxObject = get_taxonomy($_REQUEST['taxonomy']);
                 $post_type = $taxObject->object_type[0];
             }
 
+            if($post_type=='post'){$post_type='';}
+            if($post_type){$post_type = $post_type.'_';}
+
             $t_id = (is_object($term_id)) ? $term_id->term_id : $term_id;
-            $m = get_option('tax_meta_' . $post_type . '_' . $t_id);
+
+            $m = get_option('tax_meta_' . $post_type  . $t_id);
             if (isset($m[$key])) {
                 return $m[$key];
             } else {
@@ -2029,30 +2037,38 @@ if (!class_exists('Tax_Meta_Class')) :
         public function delete_tax_meta($term_id, $key, $post_type = '')
         {
 
-            if (empty($gd_post_type) && isset($_REQUEST['taxonomy'])) {
+            if (empty($post_type) && isset($_REQUEST['taxonomy'])) {
                 $taxObject = get_taxonomy($_REQUEST['taxonomy']);
                 $post_type = $taxObject->object_type[0];
             }
 
-            $m = get_option('tax_meta_' . $post_type . '_' . $term_id);
+            if($post_type=='post'){$post_type='';}
+            if($post_type){$post_type = $post_type.'_';}
+
+            $m = get_option('tax_meta_' . $post_type  . $term_id);
+
             if (isset($m[$key])) {
                 unset($m[$key]);
             }
-            update_option('tax_meta_' . $post_type . '_' . $term_id, $m);
+            update_option('tax_meta_' . $post_type  . $term_id, $m);
         }
 
         //update meta
         public function update_tax_meta($term_id, $key, $value, $post_type = '')
         {
 
-            if (empty($gd_post_type) && isset($_REQUEST['taxonomy'])) {
+            if (empty($post_type) && isset($_REQUEST['taxonomy'])) {
                 $taxObject = get_taxonomy($_REQUEST['taxonomy']);
                 $post_type = $taxObject->object_type[0];
             }
 
-            $m = get_option('tax_meta_' . $post_type . '_' . $term_id);
+            if($post_type=='post'){$post_type='';}
+            if($post_type){$post_type = $post_type.'_';}
+
+            $m = get_option('tax_meta_' . $post_type  . $term_id);
+
             $m[$key] = $value;
-            update_option('tax_meta_' . $post_type . '_' . $term_id, $m);
+            update_option('tax_meta_' . $post_type  . $term_id, $m);
 
             /**
              * Called after the tax meta is updated.
@@ -2082,13 +2098,17 @@ if (!function_exists('get_tax_meta')) {
     function get_tax_meta($term_id, $key, $multi = false, $post_type = '')
     {
 
-        if (empty($gd_post_type) && isset($_REQUEST['taxonomy'])) {
+        if (empty($post_type) && isset($_REQUEST['taxonomy'])) {
             $taxObject = get_taxonomy($_REQUEST['taxonomy']);
             $post_type = $taxObject->object_type[0];
         }
 
+        if($post_type=='post'){$post_type='';}
+        if($post_type){$post_type = $post_type.'_';}
+
         $t_id = (is_object($term_id)) ? $term_id->term_id : $term_id;
-        $m = get_option('tax_meta_' . $post_type . '_' . $t_id);
+
+        $m = get_option('tax_meta_' . $post_type  . $t_id);
         if (isset($m[$key])) {
             return $m[$key];
         } else {
@@ -2105,11 +2125,15 @@ if (!function_exists('delete_tax_meta')) {
         $taxObject = get_taxonomy($_REQUEST['taxonomy']);
         $post_type = $taxObject->object_type[0];
 
-        $m = get_option('tax_meta_' . $post_type . '_' . $term_id);
+        if($post_type=='post'){$post_type='';}
+        if($post_type){$post_type = $post_type.'_';}
+
+        $m = get_option('tax_meta_' . $post_type . $term_id);
+
         if (isset($m[$key])) {
             unset($m[$key]);
         }
-        update_option('tax_meta_' . $post_type . '_' . $term_id, $m);
+        update_option('tax_meta_' . $post_type  . $term_id, $m);
     }
 }
 
@@ -2118,14 +2142,18 @@ if (!function_exists('update_tax_meta')) {
     function update_tax_meta($term_id, $key, $value, $post_type = '')
     {
 
-        if (empty($gd_post_type) && isset($_REQUEST['taxonomy'])) {
+        if (empty($post_type) && isset($_REQUEST['taxonomy'])) {
             $taxObject = get_taxonomy($_REQUEST['taxonomy']);
             $post_type = $taxObject->object_type[0];
         }
 
-        $m = get_option('tax_meta_' . $post_type . '_' . $term_id);
+        if($post_type=='post'){$post_type='';}
+        if($post_type){$post_type = $post_type.'_';}
+
+        $m = get_option('tax_meta_' . $post_type  . $term_id);
+
         $m[$key] = $value;
-        update_option('tax_meta_' . $post_type . '_' . $term_id, $m);
+        update_option('tax_meta_' . $post_type . $term_id, $m);
 
         /** This action is documented in geodirectory-functions/cat-meta-functions/Tax-meta-class.php */
         do_action('gd_tax_meta_updated', false, true, $term_id, $post_type);

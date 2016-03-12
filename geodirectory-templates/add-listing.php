@@ -8,9 +8,11 @@
  * @since 1.0.0
  * @package GeoDirectory
  */
+ 
+global $gd_session;
 
 if (!isset($_REQUEST['backandedit'])) {
-    unset($_SESSION['listing']);
+    $gd_session->un_set('listing');
 }
 // call header
 get_header();
@@ -137,4 +139,4 @@ do_action('geodir_add_listing_sidebar');
 do_action('geodir_wrapper_close', 'add-listing-page');
 
 // call footer
-get_footer();     
+get_footer();

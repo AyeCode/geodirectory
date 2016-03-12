@@ -59,12 +59,19 @@
                 position: 'TOP_RIGHT', // TOP, TOP_LEFT, TOP_RIGHT, BOTTOM, BOTTOM_LEFT, BOTTOM_RIGHT, LEFT, RIGHT
                 style: 'DEFAULT'// DEFAULT, DROPDOWN_MENU, HORIZONTAL_BAR
             },
+            zoomControl: true,
+            zoomControlOptions: {
+                position: 'LEFT_CENTER'
+            },
             scaleControl: false, // Show or hide scale
             scrollwheel: true, // Mouse scroll whell
             directions: false,
             directionsResult: null,
             disableDoubleClickZoom: false,
-            streetViewControl: false,
+            streetViewControl: true,
+            streetViewControlOptions: {
+                position: 'LEFT_CENTER'
+            },
             markers: [],
             overlays: [],
             polyline: {
@@ -142,6 +149,9 @@
                 disableDoubleClickZoom: opts.disableDoubleClickZoom,
                 mapTypeControl: opts.mapTypeControl,
                 streetViewControl: opts.streetViewControl,
+                streetViewControlOptions: {
+                    position: google.maps.ControlPosition[opts.streetViewControlOptions.position.toUpperCase()]
+                },
                 mapTypeControlOptions: {
                     position: google.maps.ControlPosition[opts.mapTypeControlOptions.position.toUpperCase()],
                     style: google.maps.MapTypeControlStyle[opts.mapTypeControlOptions.style.toUpperCase()]
@@ -151,6 +161,10 @@
                 navigationControlOptions: {
                     position: google.maps.ControlPosition[opts.navigationControlOptions.position.toUpperCase()],
                     style: google.maps.NavigationControlStyle[opts.navigationControlOptions.style.toUpperCase()]
+                },
+                zoomControl: true,
+                zoomControlOptions: {
+                    position: google.maps.ControlPosition[opts.zoomControlOptions.position.toUpperCase()]
                 },
                 scaleControl: opts.scaleControl,
                 scrollwheel: opts.scrollwheel,
@@ -740,6 +754,9 @@
                 if (marker.title)
                     options.title = marker.title;
 
+                if (marker.label)
+                    options.label = marker.label;
+
                 if (marker.draggable)
                     options.draggable = marker.draggable;
 
@@ -867,6 +884,33 @@
             this.markers = [];
             this.tmpMarkers = [];
             this.geoMarkers = [];
+        },
+
+        clearMarkersDelay: function () {
+
+            var old_markers =this.markers;
+            setTimeout(function(){
+            for (var i = 0, l = old_markers.length; i < l; i++) {
+                var markerId = old_markers[i];
+                var marker = $(this.mapId).data(markerId);
+                var info = $(this.mapId).data(markerId + 'info');
+
+                marker.setVisible(false);
+                marker.setMap(null);
+                $(this.mapId).removeData(markerId);
+
+                if (info) {
+                    info.close();
+                    info.show = false;
+                    $(this.mapId).removeData(markerId + 'info');
+                }
+            }
+            this.singleMarker = false;
+            this.lockGeocode = false;
+            this.markers = [];
+            this.tmpMarkers = [];
+            this.geoMarkers = [];
+            }, 3000);
         },
 
         isVisible: function (latlng) {

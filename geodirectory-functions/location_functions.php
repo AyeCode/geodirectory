@@ -78,21 +78,6 @@ function geodir_is_default_location_set()
 function create_location_slug($location_string)
 {
 
-    /*$spec_arr = array(
-        '�'=>'S', '�'=>'s', '�'=>'Dj','�'=>'Z', '�'=>'z', '�'=>'A', '�'=>'A', '�'=>'A', '�'=>'A', '�'=>'A',
-        '�'=>'A', '�'=>'A', '�'=>'C', '�'=>'E', '�'=>'E', '�'=>'E', '�'=>'E', '�'=>'I', '�'=>'I', '�'=>'I',
-        '�'=>'I', '�'=>'N', '�'=>'O', '�'=>'O', '�'=>'O', '�'=>'O', '�'=>'O', '�'=>'O', '�'=>'U', '�'=>'U',
-        '�'=>'U', '�'=>'U', '�'=>'Y', '�'=>'B', '�'=>'Ss','�'=>'a', '�'=>'a', '�'=>'a', '�'=>'a', '�'=>'a',
-        '�'=>'a', '�'=>'a', '�'=>'c', '�'=>'e', '�'=>'e', '�'=>'e', '�'=>'e', '�'=>'i', '�'=>'i', '�'=>'i',
-        '�'=>'i', '�'=>'o', '�'=>'n', '�'=>'o', '�'=>'o', '�'=>'o', '�'=>'o', '�'=>'o', '�'=>'o', '�'=>'u',
-        '�'=>'u', '�'=>'u', '�'=>'y', '�'=>'y', '�'=>'b', '�'=>'y', '�'=>'f'
-    );
-
-    sanitize_title
-    $lvalue = utf8_decode($location_string);
-    $lvalue = strtolower (strtr($lvalue, $spec_arr));
-    $slug = str_replace(" ", "_", $lvalue);*/
-
     /**
      * Filter the location slug.
      *
@@ -151,7 +136,7 @@ function geodir_get_country_dl($post_country = '', $prefix = '')
     if ($post_country == '')
         $selected = 'selected="selected"';
 
-    $out_put = '<option ' . $selected . ' value="">' . __('Select Country', GEODIRECTORY_TEXTDOMAIN) . '</option>';
+    $out_put = '<option ' . $selected . ' value="">' . __('Select Country', 'geodirectory') . '</option>';
     foreach ($countries as $country) {
         $ccode = $ISO2[$country];
 
@@ -159,7 +144,7 @@ function geodir_get_country_dl($post_country = '', $prefix = '')
         if ($post_country == $country)
             $selected = ' selected="selected" ';
 
-        $out_put .= '<option ' . $selected . ' value="' . $country . '" data-country_code="' . $ccode . '">' . __($country, GEODIRECTORY_TEXTDOMAIN) . '</option>';
+        $out_put .= '<option ' . $selected . ' value="' . $country . '" data-country_code="' . $ccode . '">' . __($country, 'geodirectory') . '</option>';
     }
 
     echo $out_put;
@@ -272,7 +257,7 @@ function geodir_add_new_location($location_info = array())
         $location_lat = ($location_info['geo_lat'] != '') ? $location_info['geo_lat'] : '';
         $location_lng = ($location_info['geo_lng'] != '') ? $location_info['geo_lng'] : '';
         $is_default = isset($location_info['is_default']) ? $location_info['is_default'] : '';
-        $country_slug = create_location_slug(__($location_country, GEODIRECTORY_TEXTDOMAIN));
+        $country_slug = create_location_slug(__($location_country, 'geodirectory'));
         $region_slug = create_location_slug($location_region);
         $city_slug = create_location_slug($location_city);
 
@@ -341,7 +326,7 @@ function geodir_random_float($min = 0, $max = 1)
  */
 function geodir_get_address_by_lat_lan($lat, $lng)
 {
-    $url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' . trim($lat) . ',' . trim($lng) . '&sensor=true';
+    $url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' . trim($lat) . ',' . trim($lng) ;
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -365,32 +350,34 @@ function geodir_get_address_by_lat_lan($lat, $lng)
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $wp WordPress object.
+ * @global object $gd_session GeoDirectory Session object.
+ *
  * @param string $location_array_from Place to look for location array. Default: 'session'.
  * @param string $gd_post_type The post type.
  * @return array The location term array.
  */
 function geodir_get_current_location_terms($location_array_from = 'session', $gd_post_type = '')
 {
-    global $wp;
+    global $wp, $gd_session;
     $location_array = array();
     if ($location_array_from == 'session') {
-        if (isset($_SESSION['gd_country']) && $_SESSION['gd_country'] == 'me') {
+        if ($gd_session->get('gd_country') == 'me' || $gd_session->get('gd_region') == 'me' || $gd_session->get('gd_city') == 'me') {
             return $location_array;
         }
 
-        $country = (isset($_SESSION['gd_country']) && $_SESSION['gd_country'] != '') ? $_SESSION['gd_country'] : '';
-        if ($country != '')
+        $country = $gd_session->get('gd_country');
+        if ($country != '' && $country)
             $location_array['gd_country'] = urldecode($country);
 
-        $region = (isset($_SESSION['gd_region']) && $_SESSION['gd_region'] != '') ? $_SESSION['gd_region'] : '';
-        if ($region != '')
+        $region = $gd_session->get('gd_region');
+        if ($region != '' && $region)
             $location_array['gd_region'] = urldecode($region);
 
-        $city = (isset($_SESSION['gd_city']) && $_SESSION['gd_city'] != '') ? $_SESSION['gd_city'] : '';
-        if ($city != '')
+        $city = $gd_session->get('gd_city');
+        if ($city != '' && $city)
             $location_array['gd_city'] = urldecode($city);
     } else {
-        if (isset($wp->query_vars['gd_country']) && $wp->query_vars['gd_country'] == 'me') {
+        if ((isset($wp->query_vars['gd_country']) && $wp->query_vars['gd_country'] == 'me') || (isset($wp->query_vars['gd_region']) && $wp->query_vars['gd_region'] == 'me') || (isset($wp->query_vars['gd_city']) && $wp->query_vars['gd_city'] == 'me')) {
             return $location_array;
         }
 

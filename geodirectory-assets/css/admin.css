@@ -448,7 +448,14 @@ body.edit-tags-php .form-field input, .form-field textarea {
 	color: #555
 }
 .gd-import-export .postbox {
-	border: solid 1px #dedede;
+	border: solid 1px #cfcfcf;
+    margin-bottom: 5px;
+}
+.gd-import-export .meta-box-sortables .gd-hndle-pbox {
+    border: solid 1px #aaaaaa;
+}
+.gd-import-export .meta-box-sortables .gd-hndle-pbox.closed {
+    border: solid 1px #cfcfcf;
 }
 .gd-import-export h3.hndle {
 	border: solid 1px #dedede;
@@ -475,11 +482,16 @@ body.edit-tags-php .form-field input, .form-field textarea {
 .gd-progress-label {
     position: absolute;
     top: 3px;
-    font-weight: bold;
+    font-weight: normal;
 	text-align:center;
 	font-size: .8em;
 	color: #444;
 	width: 100%
+}
+.gd-progress-label .fa {
+	margin-left: 7px;
+	font-size: 14px;
+	margin-right: 5px;
 }
 #gd_timer {
 	display: inline-block
@@ -538,6 +550,8 @@ body.edit-tags-php .form-field input, .form-field textarea {
 #gd_ie_reqs .form-table td {
 	padding: 3px 5px;
 }
+
+div.update-nag{width: 95%;}
 
 /***********************---------------MEDIA CSS-------------*****************************/
 
@@ -651,4 +665,8 @@ body.edit-tags-php .form-field input, .form-field textarea {
         width: auto;
     }
 
+}
+
+.gd-cats-display-checkbox .gd-sub-cats-list {
+	padding-left: 1.2em;
 }

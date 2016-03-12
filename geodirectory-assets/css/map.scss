@@ -74,13 +74,29 @@
 
 /* gmap bubble styles */
 
-.bubble {
-    width: auto;
-    height: auto;
-    position: relative;
+
+.gm-style .gm-style-iw{
+  left: 0px !important;
+  top: 0px !important;
+  width: 250px !important;
 }
 
-.bubble h4 {
+.gm-style .gm-style-iw > div, .gm-style .gm-style-iw > div > div{
+  overflow: visible !important;
+}
+
+.gm-style .gm-style-iw + div{
+    right: 3px !important;
+    top: 2px !important;
+}
+
+.gd-bubble {
+    max-width: 250px;
+    width: 190px;
+    overflow: visible;
+}
+
+.gd-bubble h4 {
     margin-top: 3px;
 }
 
@@ -88,7 +104,10 @@
     box-sizing: border-box;
     display: inline-block;
     position: relative;
-    width: 48%;
+    width: 100%;
+  height: calc(50% - 11px);
+  margin: 0px !important;
+  padding: 0px !important;
 }
 
 .geodir-bubble_image:after {
@@ -110,13 +129,39 @@
     left: 0;
     right: 0;
     margin: 0%;
-    width: 98%;
+    width: 100%;
 }
 
 .geodir-bubble-meta-side {
     display: inline-block;
-    width: 48%;
     vertical-align: top;
+    width: 100%;
+    padding: 0 5px;
+    overflow-y: auto;
+    margin-top: -6px;
+  height: calc(50% - 11px);
+  box-sizing: border-box;
+}
+
+.geodir-bubble_desc div,
+.geodir-bubble_desc h4{
+  box-sizing: border-box;
+}
+
+.geodir-bubble-meta-side::-webkit-scrollbar
+{
+  width: 5px;  /* for vertical scrollbars */
+  height: 5px; /* for horizontal scrollbars */
+}
+
+.geodir-bubble-meta-side::-webkit-scrollbar-track
+{
+  background: rgba(128, 128, 128, 0.1);
+}
+
+.geodir-bubble-meta-side::-webkit-scrollbar-thumb
+{
+  background: rgba(128, 128, 128, 0.5);
 }
 
 .geodir-bubble-meta-side span {
@@ -129,41 +174,38 @@
 }
 
 .geodir-bubble_desc {
-    width: auto;
+    width: 241px !important;
+  overflow-y: hidden;
 }
 
 .geodir-bubble_desc h4 {
     clear: inherit;
-    padding-bottom: 5px;
+    background-color: red;
+    position: absolute;
+    z-index: 10;
+    width: 242px;
+    padding-left: 5px;
+    padding-bottom: 16px;
+    margin-top: 0px;
+    padding-top: 7px;
+    background: linear-gradient(rgba(0,0,0,1) 100%,rgba(0,0,0,0.2) 100%);
+    background: -webkit-linear-gradient(rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+    background: -moz-linear-gradient(rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+    background: -ms-linear-gradient(rgba(0,0,0,1) 0%,rgba(0,0,0,0) 100%);
+    zoom: 1;
+
+    filter: progid:DXImageTransform.Microsoft.gradient(
+                    gradientType=0, startColor=0, endColorStr='#000'
+    );
+    -ms-filter: progid:DXImageTransform.Microsoft.gradient(
+                    gradientType=0, startColor=0, endColorStr='#000'
+    );
+
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
-.paddress {
-    background: url(../images/i_locationnew.png) no-repeat left 3px;
-    padding: 0px 5px 5px 25px;
-    font: normal 13px arial;
-    color: #000;
-    line-height: 18px;
-    display: block;
-    margin: 5px 0px;
-}
-
-.ptiming {
-    background: url(../images/i_clocknew.png) no-repeat left 3px;
-    padding: 0px 5px 5px 25px;
-    font: normal 13px arial;
-    color: #000;
-    line-height: 18px;
-    display: block;
-}
-
-.pcontact {
-    background: url(../images/i_phonenew.png) no-repeat left 3px;
-    padding: 0px 5px 5px 25px;
-    font: normal 13px arial;
-    color: #000;
-    line-height: 18px;
-    display: block;
-}
 
 .geodir-bubble_desc span.rating {
     display: block;
@@ -214,13 +256,13 @@
     width: 59px;
     height: 10px;
     top: -20px;
-    background-image: url(../images/small.png);
-    background-position: initial initial;
+    background-position: initial;
     background-repeat: repeat no-repeat;
 }
 
 .geodir-bubble-meta-bottom .geodir-bubble-reviews {
     margin-right: 10px;
+
 }
 
 .geodir-bubble-meta-bottom .geodir-bubble-reviews,
@@ -235,19 +277,35 @@
     height: 20px;
 }
 
-.geodir-bubble-meta-bottom span {
+.geodir-bubble-meta-bottom > span {
     display: inline-block;
 }
 
 .geodir-bubble-meta-bottom {
     font-size: 18px;
     padding-top: 5px;
-    border-top: 1px solid #ccc;
-    width: 100%;
+    width: 94%;
     min-width: 100%;
     margin-top: -2px;
     min-width: 180px;
+  height: 22px;
+  bottom: 9px;
+  position: absolute;
+  padding: 0 5px;
 }
+
+.geodir-bubble-meta-fade{
+  position: absolute;
+  height: 15%;
+  width: 94%;
+  bottom: 22px;
+  left: 1px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 60%);
+  background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 60%);
+  background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 60%);
+  background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 60%);
+}
+
 
 .geodir-bubble-meta-bottom a {
     text-decoration: none;
@@ -277,8 +335,8 @@
 #post_mapTab .triggermap,
 .geodir-content-right .triggermap,
 .geodir-content-left .triggermap {
-    margin-top: -15px;
-    margin-left: -6px;
+    /*margin-top: -15px;
+    margin-left: -6px;*/
 }
 
 .triggermap:hover {
@@ -587,8 +645,8 @@
 */
 
 .geodir-map-small .map_background .triggermap {
-    left: 10.5px !important;
-    top: 87px !important;
+  /*left: 10.5px !important;
+  top: 87px !important;*/
     margin: auto !important;
     font-size: 17px
 }
@@ -603,8 +661,8 @@
 }
 
 .geodir-map-small .map_background span.triggermap_fullscreen {
-    left: 10.5px !important;
-    top: 90px !important;
+  /*left: 10.5px !important;
+  top: 90px !important;*/
     margin: auto !important;
     font-size: 17px
 }
@@ -620,59 +678,30 @@
 }
 
 div.geodir_map_container.geodir-map-iphone .map_background .triggermap {
-    left: 9px !important;
-    top: 45px !important;
+  /*left: 9px !important;
+  top: 45px !important;*/
     margin: auto !important
 }
 
-/* fix info windows are too inconsistent in sizes and shapes */
-@media screen and (max-width: 240px) {
-    .geodir-map-home-page .bubble, .geodir-map-small .bubble {
-        width: 100px;
-    }
 
-    .geodir-map-home-page .geodir-bubble_image, .geodir-map-home-page .geodir-bubble-meta-side, .geodir-map-small .geodir-bubble_image, .geodir-map-small .geodir-bubble-meta-side {
-        width: 48px;
-    }
-}
-
-@media screen and (min-width: 241px) and (max-width: 767px) {
-    .geodir-map-home-page .bubble, .geodir-map-small .bubble {
-        width: 160px;
-    }
-
-    .geodir-map-home-page .geodir-bubble_image, .geodir-map-home-page .geodir-bubble-meta-side, .geodir-map-small .geodir-bubble_image, .geodir-map-small .geodir-bubble-meta-side {
-        width: 76px;
-    }
-}
-
-@media screen and (min-width: 768px) {
-    .geodir-map-home-page .bubble {
-        width: 340px;
-    }
-
-    .geodir-map-home-page .geodir-bubble_image, .geodir-map-home-page .geodir-bubble-meta-side {
-        width: 163px;
-    }
-
-    .geodir-map-small .bubble {
-        width: 240px;
-    }
-
-    .geodir-map-small .geodir-bubble_image, .geodir-map-small .geodir-bubble-meta-side {
-        width: 115px;
-    }
-}
 
 .gd-dragg-ui:hover {
     background-color: #ebebeb !important
 }
 
+
+.body_fullscreen .geodir_map_container,
+.body_fullscreen .geodir_popular_post_view,
+.body_fullscreen .geodir_more_info,
+.body_fullscreen .geodir_loginbox,
+.body_fullscreen .geodir-custom-post-gallery,
 .body_fullscreen dl.geodir-tab-head,
-.body_fullscreen .geodir_Star,
 .body_fullscreen .geodir-direction-nav a,
 .body_fullscreen .geodir_more_info i,
 .body_fullscreen .geodir-company_info i,
 .body_fullscreen .b_signin {
   display: none;
+}
+.body_fullscreen .geodir_map_container.geodir_map_container_fullscreen{
+  display: block;
 }

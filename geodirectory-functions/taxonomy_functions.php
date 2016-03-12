@@ -115,7 +115,7 @@ function geodir_add_nav_menu_items()
              */
             $sub_a_class = apply_filters('geodir_sub_menu_a_class', '');
             $items .= '<li class="' . $li_class . '">
-					<a href="#" class="' . $a_class . '">' . __('Listing', GEODIRECTORY_TEXTDOMAIN) . '</a>
+					<a href="#" class="' . $a_class . '">' . __('Listing', 'geodirectory') . '</a>
 					<ul class="' . $sub_ul_class . '">';
             $post_types = geodir_get_posttypes('object');
 
@@ -135,7 +135,7 @@ function geodir_add_nav_menu_items()
 
                                 $items .= '<li class="' . $sub_li_class . '">
 														<a href="' . get_post_type_archive_link($post_type) . '" class="' . $sub_a_class . '">
-															' . __(ucfirst($args->labels->name)) . '
+															' . __(ucfirst($args->labels->name),'geodirectory') . '
 														</a>
 													</li>';
                             }
@@ -145,8 +145,14 @@ function geodir_add_nav_menu_items()
                 $geodir_add_location_url = NULL;
             }
 
-            $items .= '	</ul>
-				</li>';
+            $items .= '	</ul> ';
+            /**
+             * Filter called after the sub menu closing ul tag for dynamic added menu items.
+             *
+             * @since 1.5.9
+             */
+            $items .= apply_filters('geodir_menu_after_sub_ul','');
+            $items .= '</li>';
         }
     }
 
@@ -185,9 +191,10 @@ function geodir_add_nav_menu_items()
                                      * @since 1.0.0
                                      */
                                     $a_class = apply_filters('geodir_menu_a_class', '');
+                                    $cpt_name = __($args->labels->singular_name, 'geodirectory');
                                     $items .= '<li class="' . $li_class . '">
 											<a href="' . geodir_get_addlisting_link($post_type) . '" class="' . $a_class . '">
-												' . __('Add', GEODIRECTORY_TEXTDOMAIN) . ' ' . __($args->labels->singular_name, GEODIRECTORY_TEXTDOMAIN) . '
+												' . sprintf( __('Add %s', 'geodirectory'), $cpt_name ) . '
 											</a>
 										</li>';
                                 }
@@ -238,7 +245,7 @@ function geodir_add_nav_menu_items()
              */
             $sub_a_class = apply_filters('geodir_sub_menu_a_class', '');
             $items .= '<li  class="' . $li_class . '">
-					<a href="#" class="' . $a_class . '">' . __('Add Listing', GEODIRECTORY_TEXTDOMAIN) . '</a>
+					<a href="#" class="' . $a_class . '">' . __('Add Listing', 'geodirectory') . '</a>
 					<ul class="' . $sub_ul_class . '">';
 
             $post_types = geodir_get_posttypes('object');
@@ -263,9 +270,10 @@ function geodir_add_nav_menu_items()
                                          * @param string $menu_class The menu HTML class.
                                          */
                                         $li_class = apply_filters('geodir_menu_li_class', 'menu-item ' . $menu_class);
+                                        $cpt_name = __($args->labels->singular_name, 'geodirectory');
                                         $items .= '<li class="' . $li_class . '">
 														<a href="' . geodir_get_addlisting_link($post_type) . '" class="' . $sub_a_class . '">
-															' . __('Add', GEODIRECTORY_TEXTDOMAIN) . ' ' . __($args->labels->singular_name, GEODIRECTORY_TEXTDOMAIN) . '
+															' . sprintf( __('Add %s', 'geodirectory'), $cpt_name ) . '
 														</a>
 													</li>';
                                     }
@@ -276,8 +284,10 @@ function geodir_add_nav_menu_items()
                 }
             }
 
-            $items .= '	</ul>
-				</li>';
+            $items .= '	</ul> ';
+            $items .= apply_filters('geodir_menu_after_sub_ul','');
+            $items .= '</li>';
+
         }
     }
     // apply filter to add more navigations // -Filter-Location-Manager
@@ -309,7 +319,7 @@ function geodir_pagemenu_items($menu, $args)
     }
     //else if(empty($geodir_theme_location)) // It means 'Show geodirectory navigation in selected menu locations' is not set yet.
 //		$menu = str_replace("</ul></div>",geodir_add_nav_menu_items()."</ul></div>",$menu);
-    else if (is_array($geodir_theme_location) && in_array($args['theme_location'], $geodir_theme_location))
+    else if (is_array($geodir_theme_location) && isset($args['theme_location']) && in_array($args['theme_location'], $geodir_theme_location))
         $menu = str_replace("</ul></div>", geodir_add_nav_menu_items() . "</ul></div>", $menu);
 
     return $menu;
@@ -391,21 +401,19 @@ function geodir_get_category_all_array()
  */
 function geodir_get_current_posttype()
 {
-
     global $wp_query, $geodir_post_type;
 
     $geodir_post_type = get_query_var('post_type');
 
     if (geodir_is_page('add-listing') || geodir_is_page('preview')) {
         if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '')
-            $geodir_post_type = get_post_type($_REQUEST['pid']);
+            $geodir_post_type = get_post_type((int)$_REQUEST['pid']);
         elseif (isset($_REQUEST['listing_type']))
-            $geodir_post_type = $_REQUEST['listing_type'];
-
+            $geodir_post_type = sanitize_text_field($_REQUEST['listing_type']);
     }
 
     if ((geodir_is_page('search') || geodir_is_page('author')) && isset($_REQUEST['stype']))
-        $geodir_post_type = $_REQUEST['stype'];
+        $geodir_post_type = sanitize_text_field($_REQUEST['stype']);
 
     if (is_tax())
         $geodir_post_type = geodir_get_taxonomy_posttype();
@@ -425,6 +433,7 @@ function geodir_get_current_posttype()
  * Get list of geodirectory Post Types.
  *
  * @since 1.0.0
+ * @since 1.5.1 options case added to get post type options array.
  * @package GeoDirectory
  * @param string $output The output Type.
  * @return array|object|string Post Types.
@@ -443,6 +452,17 @@ function geodir_get_posttypes($output = 'names')
             case 'array':
             case 'Array':
                 $post_types = (array)$post_types;
+                break;
+			case 'options':
+                $post_types = (array)$post_types;
+				
+				$options = array();
+				if (!empty($post_types)) {
+					foreach ($post_types as $key => $info) {
+						$options[$key] = __($info['labels']['singular_name'], 'geodirectory');
+					}
+				}
+				$post_types = $options;
                 break;
             default:
                 $post_types = array_keys($post_types);
@@ -552,7 +572,7 @@ if (!function_exists(' geodir_get_categories_dl')) {
 
         $categories = get_terms($taxonomies);
 
-        $html .= '<option value="0">' . __('All', GEODIRECTORY_TEXTDOMAIN) . '</option>';
+        $html .= '<option value="0">' . __('All', 'geodirectory') . '</option>';
 
         foreach ($categories as $category_obj) {
             $select_opt = '';
@@ -625,9 +645,11 @@ function geodir_get_taxonomy_posttype($taxonomy = '')
 
     if (!empty($taxonomy)) {
         $taxonomies[] = $taxonomy;
-    } elseif ($wp_query->tax_query->queries) {
-        $taxonomies = wp_list_pluck($wp_query->tax_query->queries, 'taxonomy');
-
+    } elseif (isset($wp_query->tax_query->queries)) {
+        $tax_arr = $wp_query->tax_query->queries;
+        //if tax query has 'relation' set then it will break wp_list_pluck so we remove it
+        if(isset( $tax_arr['relation'])){unset( $tax_arr['relation']);}
+        $taxonomies = wp_list_pluck($tax_arr, 'taxonomy');
     }
 
     if (!empty($taxonomies)) {
@@ -734,6 +756,7 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
      * @since 1.0.0
      * @package GeoDirectory
      * @global object $post WordPress Post object.
+     * @global object $gd_session GeoDirectory Session object.
      * @param string $cat_taxonomy The taxonomy name.
      * @param string $cat_limit Number of categories to display.
      */
@@ -741,14 +764,14 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
     {
         $post_category = '';
         $post_category_str = '';
-        global $exclude_cats;
+        global $exclude_cats, $gd_session;
 
         $cat_exclude = '';
         if (is_array($exclude_cats) && !empty($exclude_cats))
             $cat_exclude = serialize($exclude_cats);
 
         if (isset($_REQUEST['backandedit'])) {
-            $post = (object)unserialize($_SESSION['listing']);
+            $post = (object)$gd_session->get('listing');
 
             if (!is_array($post->post_category[$cat_taxonomy]))
                 $post_category = $post->post_category[$cat_taxonomy];
@@ -830,6 +853,13 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
                     var cat_taxonomy = '<?php echo $cat_taxonomy;?>';
                     var cat_exclude = '<?php echo base64_encode($cat_exclude);?>';
                     var cat_limit = jQuery('#' + cat_taxonomy).find('#cat_limit').val();
+					<?php if ((int)$cat_limit > 0) { ?>
+					var selected = parseInt(jQuery('#' + cat_taxonomy).find('.cat_sublist > div.post_catlist_item').length);
+					if (cat_limit != '' && selected > 0 && selected >= cat_limit && cat_limit != 0) {
+						alert("<?php echo esc_attr(wp_sprintf(__('You have reached category limit of %d categories.', 'geodirectory'), (int)$cat_limit));?>");
+						return false;
+					}
+					<?php } ?>
                     jQuery.post(url, {
                         geodir_ajax: 'category_ajax',
                         cat_tax: cat_taxonomy,
@@ -915,7 +945,6 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
                 });
 
                 maincat_obj = jQuery('#' + cat_taxonomy).find('.main_cat_list');
-				
                 if (cat_limit != '' && jQuery('#' + cat_taxonomy).find('.cat_sublist > div.post_catlist_item').length >= cat_limit && cat_limit != 0) {
                     maincat_obj.find('.chosen_select').chosen('destroy');
                     maincat_obj.hide();
@@ -972,7 +1001,14 @@ function geodir_addpost_categories_html($request_taxonomy, $parrent, $selected =
     global $exclude_cats;
 
     if ($exclude != '') {
-        $exclude_cats = unserialize(base64_decode($exclude));
+        $exclude_cats = maybe_unserialize(base64_decode($exclude));
+
+        if(is_array( $exclude_cats)){
+            $exclude_cats = array_map( 'intval', $exclude_cats );
+        }else{
+            $exclude_cats = intval($exclude_cats);
+        }
+
     }
 
     if ((is_array($exclude_cats) && !empty($exclude_cats) && !in_array($parrent, $exclude_cats)) ||
@@ -993,7 +1029,7 @@ function geodir_addpost_categories_html($request_taxonomy, $parrent, $selected =
                    onchange="if(jQuery(this).is(':checked')){jQuery(this).closest('div').find('.post_default_category').prop('checked',false).show();}else{jQuery(this).closest('div').find('.post_default_category').prop('checked',false).hide();};update_listing_cat()"
                    checked="checked" disabled="disabled"/>
        <span> 
-        <?php printf(__('Add listing in %s category', GEODIRECTORY_TEXTDOMAIN), ucwords($main_cat->name));?>
+        <?php printf(__('Add listing in %s category', 'geodirectory'), geodir_ucwords($main_cat->name));?>
         </span>
             <br/>
 
@@ -1001,7 +1037,7 @@ function geodir_addpost_categories_html($request_taxonomy, $parrent, $selected =
                 <input type="radio" name="post_default_category" value="<?php echo $main_cat->term_id;?>"
                        onchange="update_listing_cat()" <?php if ($default) echo ' checked="checked" ';?>   />
         <span> 
-        <?php printf(__('Set %s as default category', GEODIRECTORY_TEXTDOMAIN), ucwords($main_cat->name));?>
+        <?php printf(__('Set %s as default category', 'geodirectory'), geodir_ucwords($main_cat->name));?>
         </span>
             </div>
 
@@ -1009,7 +1045,7 @@ function geodir_addpost_categories_html($request_taxonomy, $parrent, $selected =
             <?php
             $cat_terms = get_terms($request_taxonomy, array('parent' => $main_cat->term_id, 'hide_empty' => false, 'exclude' => $exclude_cats));
             if (!empty($cat_terms)) { ?>
-                <span> <?php printf(__('Add listing in category', GEODIRECTORY_TEXTDOMAIN)); ?></span>
+                <span> <?php printf(__('Add listing in category', 'geodirectory')); ?></span>
                 <?php geodir_get_catlist($request_taxonomy, $parrent, $selected) ?>
             <?php } ?>
         </div>
@@ -1090,42 +1126,36 @@ function geodir_editpost_categories_html($request_taxonomy, $request_postid, $po
  */
 function geodir_get_catlist($cat_taxonomy, $parrent = 0, $selected = false)
 {
-
     global $exclude_cats;
 
     $cat_terms = get_terms($cat_taxonomy, array('parent' => $parrent, 'hide_empty' => false, 'exclude' => $exclude_cats));
 
     if (!empty($cat_terms)) {
-
         $onchange = '';
-        //if($parrent == '0')
-        $onchange = ' onchange="show_subcatlist(this.value, this)"  ';
-        //else
-        //$onchange = ' onchange="update_listing_cat()"  ';
+        $onchange = ' onchange="show_subcatlist(this.value, this)" ';
 
         $option_selected = '';
         if (!$selected)
             $option_slected = ' selected="selected" ';
 
-        echo '<select field_type="select" id="' . $cat_taxonomy . '" class="chosen_select" ' . $onchange . ' option-ajaxChosen="false" >';
+        echo '<select field_type="select" id="' . sanitize_text_field($cat_taxonomy) . '" class="chosen_select" ' . $onchange . ' option-ajaxChosen="false" >';
 
-        echo '<option value="" ' . $option_selected . ' >' . __('Select Category', GEODIRECTORY_TEXTDOMAIN) . '</option>';
+        echo '<option value="" ' . $option_selected . ' >' . __('Select Category', 'geodirectory') . '</option>';
 
         foreach ($cat_terms as $cat_term) {
             $option_selected = '';
             if ($selected == $cat_term->term_id)
                 $option_selected = ' selected="selected" ';
-				
-			// Count child terms
-			$child_terms = get_terms( $cat_taxonomy, array( 'parent' => $cat_term->term_id, 'hide_empty' => false, 'exclude' => $exclude_cats, 'number' => 1 ) );
-			$has_child = !empty( $child_terms ) ? 't' : 'f';
+
+            // Count child terms
+            $child_terms = get_terms( $cat_taxonomy, array( 'parent' => $cat_term->term_id, 'hide_empty' => false, 'exclude' => $exclude_cats, 'number' => 1 ) );
+            $has_child = !empty( $child_terms ) ? 't' : 'f';
 
             echo '<option  ' . $option_selected . ' alt="' . $cat_term->taxonomy . '" title="' . ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" _hc="' . $has_child . '" >' . ucfirst($cat_term->name) . '</option>';
         }
         echo '</select>';
     }
 }
-
 
 /**
  * Custom post type messages for admin actions.
@@ -1148,16 +1178,16 @@ function geodir_custom_update_messages($messages)
 
         $messages[$post_type] = array(
             0 => '', // Unused. Messages start at index 1.
-            1 => sprintf(__('%s updated. <a href="%s">View %s</a>', GEODIRECTORY_TEXTDOMAIN), $post_object->labels->singular_name, esc_url(get_permalink($post_ID)), $post_object->labels->singular_name),
-            2 => __('Custom field updated.', GEODIRECTORY_TEXTDOMAIN),
-            3 => __('Custom field deleted.', GEODIRECTORY_TEXTDOMAIN),
-            4 => sprintf(__('%s updated.', GEODIRECTORY_TEXTDOMAIN), $post_object->labels->singular_name),
-            5 => isset($_GET['revision']) ? sprintf(__('%s restored to revision from %s', GEODIRECTORY_TEXTDOMAIN), $post_object->labels->singular_name, wp_post_revision_title((int)$_GET['revision'], false)) : false,
-            6 => sprintf(__('%s published. <a href="%s">View %s</a>', GEODIRECTORY_TEXTDOMAIN), $post_object->labels->singular_name, esc_url(get_permalink($post_ID)), $post_object->labels->singular_name),
-            7 => sprintf(__('%s saved.', GEODIRECTORY_TEXTDOMAIN), $post_object->labels->singular_name),
-            8 => sprintf(__('%s submitted. <a target="_blank" href="%s">Preview %s</a>', GEODIRECTORY_TEXTDOMAIN), $post_object->labels->singular_name, esc_url(add_query_arg('preview', 'true', get_permalink($post_ID))), $post_object->labels->singular_name),
-            9 => sprintf(__('%s scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview %s</a>', GEODIRECTORY_TEXTDOMAIN), $post_object->labels->singular_name, date_i18n(__('M j, Y @ G:i', GEODIRECTORY_TEXTDOMAIN), strtotime($post->post_date)), esc_url(get_permalink($post_ID)), $post_object->labels->singular_name),
-            10 => sprintf(__('%s draft updated. <a target="_blank" href="%s">Preview %s</a>', GEODIRECTORY_TEXTDOMAIN), $post_object->labels->singular_name, esc_url(add_query_arg('preview', 'true', get_permalink($post_ID))), $post_object->labels->singular_name),
+            1 => sprintf(__('%s updated. <a href="%s">View %s</a>', 'geodirectory'), $post_object->labels->singular_name, esc_url(get_permalink($post_ID)), $post_object->labels->singular_name),
+            2 => __('Custom field updated.', 'geodirectory'),
+            3 => __('Custom field deleted.', 'geodirectory'),
+            4 => sprintf(__('%s updated.', 'geodirectory'), $post_object->labels->singular_name),
+            5 => isset($_GET['revision']) ? sprintf(__('%s restored to revision from %s', 'geodirectory'), $post_object->labels->singular_name, wp_post_revision_title((int)$_GET['revision'], false)) : false,
+            6 => sprintf(__('%s published. <a href="%s">View %s</a>', 'geodirectory'), $post_object->labels->singular_name, esc_url(get_permalink($post_ID)), $post_object->labels->singular_name),
+            7 => sprintf(__('%s saved.', 'geodirectory'), $post_object->labels->singular_name),
+            8 => sprintf(__('%s submitted. <a target="_blank" href="%s">Preview %s</a>', 'geodirectory'), $post_object->labels->singular_name, esc_url(add_query_arg('preview', 'true', get_permalink($post_ID))), $post_object->labels->singular_name),
+            9 => sprintf(__('%s scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview %s</a>', 'geodirectory'), $post_object->labels->singular_name, date_i18n(__('M j, Y @ G:i', 'geodirectory'), strtotime($post->post_date)), esc_url(get_permalink($post_ID)), $post_object->labels->singular_name),
+            10 => sprintf(__('%s draft updated. <a target="_blank" href="%s">Preview %s</a>', 'geodirectory'), $post_object->labels->singular_name, esc_url(add_query_arg('preview', 'true', get_permalink($post_ID))), $post_object->labels->singular_name),
         );
     }
 
@@ -1199,18 +1229,18 @@ function geodir_register_defaults()
             'query_var' => true,
 
             'labels' => array(
-                'name' => __('Place Tags', GEODIRECTORY_TEXTDOMAIN),
-                'singular_name' => __('Place Tag', GEODIRECTORY_TEXTDOMAIN),
-                'search_items' => __('Search Place Tags', GEODIRECTORY_TEXTDOMAIN),
-                'popular_items' => __('Popular Place Tags', GEODIRECTORY_TEXTDOMAIN),
-                'all_items' => __('All Place Tags', GEODIRECTORY_TEXTDOMAIN),
-                'edit_item' => __('Edit Place Tag', GEODIRECTORY_TEXTDOMAIN),
-                'update_item' => __('Update Place Tag', GEODIRECTORY_TEXTDOMAIN),
-                'add_new_item' => __('Add New Place Tag', GEODIRECTORY_TEXTDOMAIN),
-                'new_item_name' => __('New Place Tag Name', GEODIRECTORY_TEXTDOMAIN),
-                'add_or_remove_items' => __('Add or remove Place tags', GEODIRECTORY_TEXTDOMAIN),
-                'choose_from_most_used' => __('Choose from the most used Place tags', GEODIRECTORY_TEXTDOMAIN),
-                'separate_items_with_commas' => __('Separate Place tags with commas', GEODIRECTORY_TEXTDOMAIN),
+                'name' => __('Place Tags', 'geodirectory'),
+                'singular_name' => __('Place Tag', 'geodirectory'),
+                'search_items' => __('Search Place Tags', 'geodirectory'),
+                'popular_items' => __('Popular Place Tags', 'geodirectory'),
+                'all_items' => __('All Place Tags', 'geodirectory'),
+                'edit_item' => __('Edit Place Tag', 'geodirectory'),
+                'update_item' => __('Update Place Tag', 'geodirectory'),
+                'add_new_item' => __('Add New Place Tag', 'geodirectory'),
+                'new_item_name' => __('New Place Tag Name', 'geodirectory'),
+                'add_or_remove_items' => __('Add or remove Place tags', 'geodirectory'),
+                'choose_from_most_used' => __('Choose from the most used Place tags', 'geodirectory'),
+                'separate_items_with_commas' => __('Separate Place tags with commas', 'geodirectory'),
             ),
         );
 
@@ -1237,16 +1267,16 @@ function geodir_register_defaults()
             'rewrite' => array('slug' => $listing_slug, 'with_front' => false, 'hierarchical' => true),
             'query_var' => true,
             'labels' => array(
-                'name' => __('Place Categories', GEODIRECTORY_TEXTDOMAIN),
-                'singular_name' => __('Place Category', GEODIRECTORY_TEXTDOMAIN),
-                'search_items' => __('Search Place Categories', GEODIRECTORY_TEXTDOMAIN),
-                'popular_items' => __('Popular Place Categories', GEODIRECTORY_TEXTDOMAIN),
-                'all_items' => __('All Place Categories', GEODIRECTORY_TEXTDOMAIN),
-                'edit_item' => __('Edit Place Category', GEODIRECTORY_TEXTDOMAIN),
-                'update_item' => __('Update Place Category', GEODIRECTORY_TEXTDOMAIN),
-                'add_new_item' => __('Add New Place Category', GEODIRECTORY_TEXTDOMAIN),
-                'new_item_name' => __('New Place Category', GEODIRECTORY_TEXTDOMAIN),
-                'add_or_remove_items' => __('Add or remove Place categories', GEODIRECTORY_TEXTDOMAIN),
+                'name' => __('Place Categories', 'geodirectory'),
+                'singular_name' => __('Place Category', 'geodirectory'),
+                'search_items' => __('Search Place Categories', 'geodirectory'),
+                'popular_items' => __('Popular Place Categories', 'geodirectory'),
+                'all_items' => __('All Place Categories', 'geodirectory'),
+                'edit_item' => __('Edit Place Category', 'geodirectory'),
+                'update_item' => __('Update Place Category', 'geodirectory'),
+                'add_new_item' => __('Add New Place Category', 'geodirectory'),
+                'new_item_name' => __('New Place Category', 'geodirectory'),
+                'add_or_remove_items' => __('Add or remove Place categories', 'geodirectory'),
             ),
         );
 
@@ -1267,16 +1297,16 @@ function geodir_register_defaults()
     {
 
         $labels = array(
-            'name' => __('Places', GEODIRECTORY_TEXTDOMAIN),
-            'singular_name' => __('Place', GEODIRECTORY_TEXTDOMAIN),
-            'add_new' => __('Add New', GEODIRECTORY_TEXTDOMAIN),
-            'add_new_item' => __('Add New Place', GEODIRECTORY_TEXTDOMAIN),
-            'edit_item' => __('Edit Place', GEODIRECTORY_TEXTDOMAIN),
-            'new_item' => __('New Place', GEODIRECTORY_TEXTDOMAIN),
-            'view_item' => __('View Place', GEODIRECTORY_TEXTDOMAIN),
-            'search_items' => __('Search Places', GEODIRECTORY_TEXTDOMAIN),
-            'not_found' => __('No Place Found', GEODIRECTORY_TEXTDOMAIN),
-            'not_found_in_trash' => __('No Place Found In Trash', GEODIRECTORY_TEXTDOMAIN));
+            'name' => __('Places', 'geodirectory'),
+            'singular_name' => __('Place', 'geodirectory'),
+            'add_new' => __('Add New', 'geodirectory'),
+            'add_new_item' => __('Add New Place', 'geodirectory'),
+            'edit_item' => __('Edit Place', 'geodirectory'),
+            'new_item' => __('New Place', 'geodirectory'),
+            'view_item' => __('View Place', 'geodirectory'),
+            'search_items' => __('Search Places', 'geodirectory'),
+            'not_found' => __('No Place Found', 'geodirectory'),
+            'not_found_in_trash' => __('No Place Found In Trash', 'geodirectory'));
 
         $place_default = array(
             'labels' => $labels,
@@ -1319,7 +1349,7 @@ function gd_wpml_get_lang_from_url($url){
 
     //
     $url = str_replace(array("http://","https://"),"",$url);
-    $site_url = str_replace(array("http://","https://"),"",get_site_url());
+    $site_url = str_replace(array("http://","https://"),"",get_bloginfo('url'));
 
     $url = str_replace($site_url,"",$url);
 
@@ -1360,6 +1390,8 @@ $gd_permalink_cache = array();
  * Returns permalink structure using post link.
  *
  * @since 1.0.0
+ * @since 1.5.9 Fix the broken links when domain name contain CPT and home page 
+ *              is set to current location.
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
@@ -1395,22 +1427,41 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
         if(function_exists('icl_object_id')){
             if ( gd_wpml_slug_translation_turned_on( $post->post_type ) && $language_code = gd_wpml_get_lang_from_url($post_link)) {
 
+                $org_slug = $slug;
                 $slug = apply_filters( 'wpml_translate_single_string',
                     $slug,
                     'WordPress',
                     'URL slug: ' . $slug,
                     $language_code);
 
+                if(!$slug){$slug = $org_slug;}
+
             }
         }
 
+        if (function_exists('geodir_location_geo_home_link')) {
+            remove_filter('home_url', 'geodir_location_geo_home_link', 100000);
+        }
+        
+        // Fix slug problem when slug matches part of host or base url/ Ex: url -> www.abcxyz.com & slug -> xyz.
+        $site_url = trailingslashit(get_bloginfo('url'));
+        
+        if (function_exists('geodir_location_geo_home_link')) {
+            add_filter('home_url', 'geodir_location_geo_home_link', 100000, 2);
+        }
 
+        $fix_url = strpos($post_link, $site_url) === 0 ? true : false;
+        if ($fix_url) {
+            $post_link = str_replace($site_url, '', $post_link);
+        }
+        
         $post_link = trailingslashit(
             preg_replace(  "/" . preg_quote( $slug, "/" ) . "/", $slug ."/%gd_taxonomy%",$post_link, 1 )
         );
 
-
-
+        if ($fix_url) {
+            $post_link = $site_url . $post_link;
+        }
 
         if (isset($comment_post_cache[$post->ID])) {
             $post = $comment_post_cache[$post->ID];
@@ -1442,7 +1493,7 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
 
         if (false !== strpos($post_link, '%gd_taxonomy%')) {
 
-            if (get_option('geodir_add_location_url')) {
+            if ( apply_filters("geodir_add_location_url_to_url",get_option('geodir_add_location_url'),$post->post_type,$post)) {
                 $location_request = '';
 
 
@@ -1497,13 +1548,24 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
 
 
                 if (!empty($post_location)) {
-                    if (get_option('geodir_show_location_url') == 'all') {
-                        $location_request .= $post_location->country_slug . '/';
-                        $location_request .= $post_location->region_slug . '/';
-                        $location_request .= $post_location->city_slug . '/';
-                    } else {
-                        $location_request .= $post_location->city_slug . '/';
-                    }
+                    $country_slug = isset($post_location->country_slug) ? $post_location->country_slug : '';
+					$region_slug = isset($post_location->region_slug) ? $post_location->region_slug : '';
+					$city_slug = isset($post_location->city_slug) ? $post_location->city_slug : '';
+					
+					$geodir_show_location_url = get_option('geodir_show_location_url');
+					
+					$location_slug = array();
+					if ($geodir_show_location_url == 'all') {
+						$location_slug[] = $country_slug;
+						$location_slug[] = $region_slug;
+					} else if ($geodir_show_location_url == 'country_city') {
+						$location_slug[] = $country_slug;
+					} else if ($geodir_show_location_url == 'region_city') {
+						$location_slug[] = $region_slug;
+					}
+					$location_slug[] = $city_slug;
+					
+					$location_request .= implode('/', $location_slug) . '/';
                 }
             }
 
@@ -1584,114 +1646,161 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
  * Returns the term link with parameters.
  *
  * @since 1.0.0
+ * @since 1.5.7 Changes for the neighbourhood system improvement.
  * @package GeoDirectory
  * @param string $termlink The term link
  * @param object $term Not yet implemented.
  * @param string $taxonomy The taxonomy name.
  * @return string The term link.
  */
-function geodir_term_link($termlink, $term, $taxonomy)
-{
-    //echo '###'.$termlink;
+function geodir_term_link($termlink, $term, $taxonomy) {
     $geodir_taxonomies = geodir_get_taxonomies('', true);
 
     if (isset($taxonomy) && !empty($geodir_taxonomies) && in_array($taxonomy, $geodir_taxonomies)) {
-        global $geodir_add_location_url;
+        global $geodir_add_location_url, $gd_session;
         $include_location = false;
         $request_term = array();
 
         $listing_slug = geodir_get_listing_slug($taxonomy);
-        //echo $listing_slug ;
 
         if ($geodir_add_location_url != NULL && $geodir_add_location_url != '') {
             if ($geodir_add_location_url && get_option('geodir_add_location_url')) {
                 $include_location = true;
             }
-
-        } elseif (get_option('geodir_add_location_url') && isset($_SESSION['gd_multi_location']) && $_SESSION['gd_multi_location'] == 1)
+        } elseif (get_option('geodir_add_location_url') && $gd_session->get('gd_multi_location') == 1)
             $include_location = true;
 
         if ($include_location) {
+            global $post;
+			
+			$location_manager = defined('POST_LOCATION_TABLE') ? true : false;
+			$neighbourhood_active = $location_manager && get_option('location_neighbourhoods') ? true : false;
+            
+			if(geodir_is_page('detail') && isset($post->country_slug)){
+                $location_terms = array(
+                    'gd_country' => $post->country_slug,
+                    'gd_region' => $post->region_slug,
+                    'gd_city' => $post->city_slug
+                );
+				
+				if ($neighbourhood_active && !empty($location_terms['gd_city']) && $gd_ses_neighbourhood = $gd_session->get('gd_neighbourhood')) {
+					$location_terms['gd_neighbourhood'] = $gd_ses_neighbourhood;
+				}
+            } else {
+                $location_terms = geodir_get_current_location_terms('query_vars');
+            }
 
-            $request_term = geodir_get_current_location_terms('query_vars');
+            $geodir_show_location_url = get_option('geodir_show_location_url');
+            $location_terms = geodir_remove_location_terms($location_terms);
 
-            if (!empty($request_term)) {
+            if (!empty($location_terms)) {
 
                 $url_separator = '';//get_option('geodir_listingurl_separator');
 
                 if (get_option('permalink_structure') != '') {
-
                     $old_listing_slug = '/' . $listing_slug . '/';
-
-                    $request_term = implode("/", $request_term);
-                    //$new_listing_slug = '/'.$listing_slug.'/'.rtrim($request_term,'/').'/'.$url_separator.'/';
+                    $request_term = implode("/", $location_terms);
                     $new_listing_slug = '/' . $listing_slug . '/' . $request_term . '/';
 
                     $termlink = substr_replace($termlink, $new_listing_slug, strpos($termlink, $old_listing_slug), strlen($old_listing_slug));
-
                 } else {
                     $termlink = geodir_getlink($termlink, $request_term);
                 }
-
             }
         }
 
         // Alter the CPT slug is WPML is set to do so
+        /* we can replace this with the below function
         if(function_exists('icl_object_id')){
             global $sitepress;
             $post_type = str_replace("category","",$taxonomy);
             $termlink = $sitepress->post_type_archive_link_filter( $termlink, $post_type);
+        }*/
+
+        // Alter the CPT slug if WPML is set to do so
+        if(function_exists('icl_object_id')){
+            $post_types = get_option('geodir_post_types');
+            $post_type = str_replace("category","",$taxonomy);
+			$post_type = str_replace("_tags","",$post_type);
+            $slug = $post_types[$post_type]['rewrite']['slug'];
+            if ( gd_wpml_slug_translation_turned_on( $post_type )) {
+
+                global $sitepress;
+                $default_lang = $sitepress->get_default_language();
+                $language_code = gd_wpml_get_lang_from_url($termlink);
+                if(!$language_code ){$language_code  = $default_lang;}
+
+                $org_slug = $slug;
+                $slug = apply_filters( 'wpml_translate_single_string',
+                    $slug,
+                    'WordPress',
+                    'URL slug: ' . $slug,
+                    $language_code);
+
+
+                if(!$slug){$slug = $org_slug;}
+
+                $termlink = trailingslashit(
+
+                    preg_replace(  "/" . preg_quote( $org_slug, "/" ) . "/", $slug  ,$termlink, 1 )
+                );
+
+            }
         }
 
     }
-    //echo '###2'.$termlink;
-
-
-
-
-
-
-
+	
     return $termlink;
 }
-
 
 /**
  * Returns the post type link with parameters.
  *
  * @since 1.0.0
+ * @since 1.5.5 Fixed post type archive link for selected location.
  * @package GeoDirectory
+ *
+ * @global bool $geodir_add_location_url If true it will add location name in url.
+ * @global object $post WordPress Post object.
+ * @global object $gd_session GeoDirectory Session object.
+ *
  * @param string $link The post link.
  * @param string $post_type The post type.
  * @return string The modified link.
  */
-function geodir_posttype_link($link, $post_type)
-{
-    global $geodir_add_location_url;
-    $location_terms = array();
-    if (in_array($post_type, geodir_get_posttypes())) {
-
-        if (get_option('geodir_add_location_url') && isset($_SESSION['gd_multi_location']) && $_SESSION['gd_multi_location'] == 1) {
-            $location_terms = geodir_get_current_location_terms('query_vars');
-            if (!empty($location_terms)) {
-
-                if (get_option('permalink_structure') != '') {
-
-                    $location_terms = implode("/", $location_terms);
-                    $location_terms = rtrim($location_terms, '/');
-                    return $link . urldecode($location_terms) . '/';
-                } else {
-                    return geodir_getlink($link, $location_terms);
-                }
-
+function geodir_posttype_link($link, $post_type) {
+	global $geodir_add_location_url, $post, $gd_session;
+	
+	$location_terms = array();
+	
+	if (in_array($post_type, geodir_get_posttypes())) {
+		if (get_option('geodir_add_location_url') && $gd_session->get('gd_multi_location') == 1) {
+			if(geodir_is_page('detail') && !empty($post) && isset($post->country_slug)) {
+                $location_terms = array(
+                    'gd_country' => $post->country_slug,
+                    'gd_region' => $post->region_slug,
+                    'gd_city' => $post->city_slug
+                );
+            } else {
+                $location_terms = geodir_get_current_location_terms('query_vars');
             }
-
-        }
-
-    }
-
-    return $link;
-
+			
+			$location_terms = geodir_remove_location_terms($location_terms);
+			
+			if (!empty($location_terms)) {
+				if (get_option('permalink_structure') != '') {
+					$location_terms = implode("/", $location_terms);
+					$location_terms = rtrim($location_terms, '/');
+					
+					$link .= urldecode($location_terms) . '/';
+				} else {
+					$link = geodir_getlink($link, $location_terms);
+				}
+			}
+		}
+	}
+	
+	return $link;
 }
 
 /**
@@ -1848,22 +1957,26 @@ function geodir_get_term_icon($term_id = false, $rebuild = false)
         $terms = $wpdb->get_results("SELECT * FROM $wpdb->term_taxonomy WHERE taxonomy IN ($tax_c)");
         //$terms = get_terms( $taxonomy );
 
-        foreach ($terms as $term) {
-            $post_type = str_replace("category", "", $term->taxonomy);
-            $a_terms[$post_type][] = $term;
+        if($terms) {
+            foreach ($terms as $term) {
+                $post_type = str_replace("category", "", $term->taxonomy);
+                $a_terms[$post_type][] = $term;
 
+            }
         }
 
-        foreach ($a_terms as $pt => $t2) {
+        if($a_terms) {
+            foreach ($a_terms as $pt => $t2) {
 
-            foreach ($t2 as $term) {
-                $term_icon = get_tax_meta($term->term_id, 'ct_cat_icon', false, $pt);
-                if ($term_icon) {
-                    $term_icon_url = $term_icon["src"];
-                } else {
-                    $term_icon_url = $default_icon_url;
+                foreach ($t2 as $term) {
+                    $term_icon = get_tax_meta($term->term_id, 'ct_cat_icon', false, $pt);
+                    if ($term_icon) {
+                        $term_icon_url = $term_icon["src"];
+                    } else {
+                        $term_icon_url = $default_icon_url;
+                    }
+                    $terms_icons[$term->term_id] = $term_icon_url;
                 }
-                $terms_icons[$term->term_id] = $term_icon_url;
             }
         }
 

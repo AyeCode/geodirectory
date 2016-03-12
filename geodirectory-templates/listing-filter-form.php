@@ -13,7 +13,13 @@
 global $wp_query, $current_term, $query;
 
 $curr_post_type = geodir_get_current_posttype();
-
+if (function_exists('geodir_location_geo_home_link')) {
+    remove_filter('home_url', 'geodir_location_geo_home_link', 100000);
+}
+$search_url = trailingslashit(get_home_url());
+if (function_exists('geodir_location_geo_home_link')) {
+    add_filter('home_url', 'geodir_location_geo_home_link', 100000, 2);
+}
 ?>
 
 
@@ -25,7 +31,7 @@ $curr_post_type = geodir_get_current_posttype();
  * @param string $class The class for the search form, default: 'geodir-listing-search'.
  */
 echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
-      name="geodir-listing-search" action="<?php echo home_url(); ?>" method="get">
+      name="geodir-listing-search" action="<?php echo $search_url ?>" method="get">
     <input type="hidden" name="geodir_search" value="1"/>
 
     <div class="geodir-loc-bar">
@@ -39,22 +45,21 @@ echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
         do_action('geodir_before_search_form') ?>
 
         <div class="clearfix geodir-loc-bar-in">
-
             <div class="geodir-search">
 
                 <?php
 
                 $default_search_for_text = SEARCH_FOR_TEXT;
                 if (get_option('geodir_search_field_default_text'))
-                    $default_search_for_text = __(get_option('geodir_search_field_default_text'), GEODIRECTORY_TEXTDOMAIN);
+                    $default_search_for_text = __(get_option('geodir_search_field_default_text'), 'geodirectory');
 
                 $default_near_text = NEAR_TEXT;
                 if (get_option('geodir_near_field_default_text'))
-                    $default_near_text = __(get_option('geodir_near_field_default_text'), GEODIRECTORY_TEXTDOMAIN);
+                    $default_near_text = __(get_option('geodir_near_field_default_text'), 'geodirectory');
 
-                $default_search_button_label = __('Search', GEODIRECTORY_TEXTDOMAIN);
+                $default_search_button_label = __('Search', 'geodirectory');
                 if (get_option('geodir_search_button_label'))
-                    $default_search_button_label = __(get_option('geodir_search_button_label'), GEODIRECTORY_TEXTDOMAIN);
+                    $default_search_button_label = __(get_option('geodir_search_button_label'), 'geodirectory');
 
                 $post_types = geodir_get_posttypes('object');
 
@@ -64,20 +69,20 @@ echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
                         <?php foreach ($post_types as $post_type => $info):
                             global $wpdb;
                             $has_posts = '';
-                            $has_posts = $wpdb->get_row($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE post_type = %s LIMIT 1", $post_type));
+                            $has_posts = $wpdb->get_row($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE post_type = %s AND post_status='publish' LIMIT 1", $post_type));
                             if (!$has_posts) {
                                 continue;
                             }
                             ?>
 
-                            <option opt_label="<?php echo get_post_type_archive_link($post_type);?>"
+                            <option data-label="<?php echo get_post_type_archive_link($post_type);?>"
                                     value="<?php echo $post_type;?>" <?php if (isset($_REQUEST['stype'])) {
                                 if ($post_type == $_REQUEST['stype']) {
                                     echo 'selected="selected"';
                                 }
                             } elseif ($curr_post_type == $post_type) {
                                 echo 'selected="selected"';
-                            }?>><?php _e(ucfirst($info->labels->name), GEODIRECTORY_TEXTDOMAIN);?></option>
+                            }?>><?php _e(ucfirst($info->labels->name), 'geodirectory');?></option>
 
                         <?php endforeach; ?>
                     </select>
@@ -87,7 +92,7 @@ echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
 
                 <input class="search_text" name="s"
                        value="<?php if (isset($_REQUEST['s']) && trim($_REQUEST['s']) != '') {
-                           echo $_REQUEST['s'];
+                           echo esc_attr($_REQUEST['s']);
                        } else {
                            echo $default_search_for_text;
                        } ?>" type="text"
@@ -98,7 +103,7 @@ echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
 
                 <?php
                 if (isset($_REQUEST['snear']) && $_REQUEST['snear'] != '') {
-                    $near = stripslashes($_REQUEST['snear']);
+                    $near = esc_attr(stripslashes($_REQUEST['snear']));
                 } else {
                     $near = $default_near_text;
                 }
@@ -142,8 +147,18 @@ echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
                  *
                  * @since 1.0.0
                  */
-                do_action('geodir_before_search_button'); ?>
-                <input type="button" value="<?php echo $default_search_button_label; ?>" class="geodir_submit_search">
+                do_action('geodir_before_search_button');
+
+                /**
+                 * Filter the default search button text value for the search form.
+                 *
+                 * This text can be changed via an option in settings, this is a last resort.
+                 *
+                 * @since 1.5.5
+                 * @param string $default_search_button_label The current search button text.
+                 */
+                $default_search_button_label = apply_filters('geodir_search_default_search_button_text', $default_search_button_label);?>
+				<input type="button" value="<?php esc_attr_e($default_search_button_label); ?>" class="geodir_submit_search" />
                 <?php
                 /**
                  * Called on the GD search form just after the search button.

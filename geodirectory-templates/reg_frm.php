@@ -85,8 +85,8 @@ if (isset($_GET['redirect_to']) && $_GET['redirect_to'] != '') {
                 <div class="row_spacer_registration clearfix">
                     <div class="form_row clearfix">
                         <input placeholder='<?php echo PASSWORD_TEXT; ?>' type="password" name="user_pass"
-                               id="user_pass" class="textfield input-text" value="" size="25"/>
-                        <span id="user_fnameInfo"></span>
+                               id="user_pass1" class="textfield input-text" value="" size="25"/>
+                        <span id="user_passInfo1"></span>
                     </div>
                 </div>
 
@@ -94,7 +94,7 @@ if (isset($_GET['redirect_to']) && $_GET['redirect_to'] != '') {
                     <div class="form_row clearfix">
                         <input placeholder='<?php echo CONFIRM_PASSWORD_TEXT; ?>' type="password" name="user_pass2"
                                id="user_pass2" class="textfield input-text" value="" size="25"/>
-                        <span id="user_fnameInfo"></span>
+                        <span id="user_passInfo2"></span>
                     </div>
                 </div>
 

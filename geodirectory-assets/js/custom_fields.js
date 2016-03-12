@@ -1,5 +1,6 @@
 jQuery(document).ready(function () {
     jQuery("#gt-form-builder-tab ul li a").click(function () {
+        if(!jQuery(this).attr('id')){return;}
         var type = jQuery(this).attr('id').replace('gt-', '');
         var post_type = jQuery(this).closest('#gt-form-builder-tab').find('#new_post_type').val();
         var id = 'new' + jQuery(".field_row_main ul.core li:last").index();

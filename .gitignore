@@ -1,1 +1,4 @@
 .idea/
+
+# Vendor
+vendor/

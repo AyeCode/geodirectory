@@ -48,7 +48,7 @@ if ($_REQUEST['popuptype'] == 'b_sendtofriend') { ?>
             do_action('geodir_before_stf_form_field', 'to_name');?>
             <div class="row clearfix">
                 <div class="geodir_popup_heading">
-                    <label><?php _e('Friend Name', GEODIRECTORY_TEXTDOMAIN);?> : <span>*</span></label></div>
+                    <label><?php _e('Friend Name', 'geodirectory');?> : <span>*</span></label></div>
                 <div class="geodir_popup_field">
                     <input class="is_required" field_type="text" name="to_name" id="to_name" type="text" value=""/>
                     <span class="message_error2" id="to_nameInfo"></span></div>
@@ -66,7 +66,7 @@ if ($_REQUEST['popuptype'] == 'b_sendtofriend') { ?>
             do_action('geodir_before_stf_form_field', 'to_email');?>
             <div class="row  clearfix">
                 <div class="geodir_popup_heading">
-                    <label> <?php _e('Email', GEODIRECTORY_TEXTDOMAIN);?> : <span>*</span></label></div>
+                    <label> <?php _e('Email', 'geodirectory');?> : <span>*</span></label></div>
                 <div class="geodir_popup_field">
                     <input class="is_required" field_type="email" name="to_email" id="to_email" type="text" value=""/>
                     <span class="message_error2" id="to_emailInfo"></span></div>
@@ -79,7 +79,7 @@ if ($_REQUEST['popuptype'] == 'b_sendtofriend') { ?>
             do_action('geodir_before_stf_form_field', 'yourname');?>
             <div class="row  clearfix">
                 <div class="geodir_popup_heading">
-                    <label><?php _e('Your Name', GEODIRECTORY_TEXTDOMAIN);?> : <span>*</span></label></div>
+                    <label><?php _e('Your Name', 'geodirectory');?> : <span>*</span></label></div>
                 <div class="geodir_popup_field">
                     <input class="is_required" field_type="text" name="yourname" id="yourname" type="text" value=""/>
                     <span class="message_error2" id="yournameInfo"></span></div>
@@ -92,7 +92,7 @@ if ($_REQUEST['popuptype'] == 'b_sendtofriend') { ?>
             do_action('geodir_before_stf_form_field', 'youremail');?>
             <div class="row  clearfix">
                 <div class="geodir_popup_heading">
-                    <label> <?php _e('Email', GEODIRECTORY_TEXTDOMAIN);?> : <span>*</span></label></div>
+                    <label> <?php _e('Email', 'geodirectory');?> : <span>*</span></label></div>
                 <div class="geodir_popup_field">
                     <input class="is_required" field_type="email" name="youremail" id="youremail" type="text" value=""/>
                     <span class="message_error2" id="youremailInfo"></span></div>
@@ -105,10 +105,10 @@ if ($_REQUEST['popuptype'] == 'b_sendtofriend') { ?>
             do_action('geodir_before_stf_form_field', 'frnd_subject');?>
             <div class="row  clearfix">
                 <div class="geodir_popup_heading">
-                    <label><?php _e('Subject', GEODIRECTORY_TEXTDOMAIN);?> : <span>*</span></label></div>
+                    <label><?php _e('Subject', 'geodirectory');?> : <span>*</span></label></div>
                 <div class="geodir_popup_field">
                     <input class="is_required" field_type="text" name="frnd_subject"
-                           value="<?php echo __('About', GEODIRECTORY_TEXTDOMAIN) . ' ' . $post_info->post_title;?>"
+                           value="<?php echo __('About', 'geodirectory') . ' ' . $post_info->post_title;?>"
                            id="frnd_subject" type="text" value=""/>
                     <span class="message_error2" id="frnd_subjectInfo"></span></div>
             </div>
@@ -120,7 +120,7 @@ if ($_REQUEST['popuptype'] == 'b_sendtofriend') { ?>
             do_action('geodir_before_stf_form_field', 'frnd_comments');?>
             <div class="row  clearfix">
                 <div class="geodir_popup_heading">
-                    <label><?php _e('Comments', GEODIRECTORY_TEXTDOMAIN);?> : <span>*</span></label></div>
+                    <label><?php _e('Comments', 'geodirectory');?> : <span>*</span></label></div>
                 <div class="geodir_popup_field">
                     <textarea class="is_required" field_type="textarea" name="frnd_comments" id="frnd_comments" cols=""
                               rows=""><?php echo SEND_TO_FRIEND_SAMPLE_CONTENT;?></textarea>
@@ -132,7 +132,7 @@ if ($_REQUEST['popuptype'] == 'b_sendtofriend') { ?>
             <?php if (function_exists('geodir_get_captch')) {
                 geodir_get_captch('-1');
             }?>
-            <input name="Send" type="submit" value="<?php _e('Send', GEODIRECTORY_TEXTDOMAIN)?> " class="button "/>
+            <input name="Send" type="submit" value="<?php _e('Send', 'geodirectory')?> " class="button "/>
         </form>
     </div> <?php
 
@@ -163,7 +163,7 @@ if ($_REQUEST['popuptype'] == 'b_sendtofriend') { ?>
              */
             do_action('geodir_before_inquiry_form_field', 'inq_name');?>
             <div class="row  clearfix">
-                <div class="geodir_popup_heading"><label><?php _e('Your Name', GEODIRECTORY_TEXTDOMAIN);?> :
+                <div class="geodir_popup_heading"><label><?php _e('Your Name', 'geodirectory');?> :
                         <span>*</span></label></div>
                 <div class="geodir_popup_field">
                     <input class="is_required" field_type="text" name="inq_name" type="text" value=""/>
@@ -182,7 +182,7 @@ if ($_REQUEST['popuptype'] == 'b_sendtofriend') { ?>
             do_action('geodir_before_inquiry_form_field', 'inq_email');?>
             <div class="row  clearfix">
                 <div class="geodir_popup_heading">
-                    <label><?php _e('Email', GEODIRECTORY_TEXTDOMAIN);?> : <span>*</span></label></div>
+                    <label><?php _e('Email', 'geodirectory');?> : <span>*</span></label></div>
                 <div class="geodir_popup_field">
                     <input class="is_required" field_type="email" name="inq_email" type="text" value=""/>
                     <span class="message_error2" id="span_agt_mail_email"></span>
@@ -196,7 +196,7 @@ if ($_REQUEST['popuptype'] == 'b_sendtofriend') { ?>
             do_action('geodir_before_inquiry_form_field', 'inq_phone');?>
             <div class="row  clearfix">
                 <div class="geodir_popup_heading">
-                    <label><?php _e('Contact Info', GEODIRECTORY_TEXTDOMAIN);?> :</label></div>
+                    <label><?php _e('Contact Info', 'geodirectory');?> :</label></div>
                 <div class="geodir_popup_field">
                     <input name="inq_phone" id="agt_mail_phone" type="text" value=""/>
                 </div>
@@ -209,7 +209,7 @@ if ($_REQUEST['popuptype'] == 'b_sendtofriend') { ?>
             do_action('geodir_before_inquiry_form_field', 'inq_msg');?>
             <div class="row  clearfix">
                 <div class="geodir_popup_heading">
-                    <label><?php _e('Comments', GEODIRECTORY_TEXTDOMAIN);?> : <span>*</span></label></div>
+                    <label><?php _e('Comments', 'geodirectory');?> : <span>*</span></label></div>
                 <div class="geodir_popup_field">
                     <textarea class="is_required" field_type="textarea" name="inq_msg" cols=""
                               rows=""><?php echo SEND_INQUIRY_SAMPLE_CONTENT;?></textarea>
@@ -218,7 +218,7 @@ if ($_REQUEST['popuptype'] == 'b_sendtofriend') { ?>
             <?php
             /** This action is documented in geodirectory-templates/popup-forms.php */
             do_action('geodir_after_inquiry_form_field', 'inq_msg');?>
-            <input name="Send" type="submit" value="<?php _e('Send', GEODIRECTORY_TEXTDOMAIN);?>"
+            <input name="Send" type="submit" value="<?php _e('Send', 'geodirectory');?>"
                    class="button clearfix"/>
         </form>
     </div> <?php

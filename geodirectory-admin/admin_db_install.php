@@ -363,7 +363,10 @@ if (!function_exists('geodir_create_tables')) {
 	(270, 'Yugoslavia', 'YI', 'YU', 'YUG', '891', 'YU', 'Belgrade ', 'Europe ', 'Serbian', 'Serbs', 'Yugoslavian Dinar ', 'YUM', 10677290, 'Yugoslavia', 'NULL'),
 	(271, 'Zaire', '--', '--', '-- ', '--', '--', '', '', '', '', '', '', 0, 'Zaire', 'see Democratic Republic of the Congo'),
 	(272, 'Zambia', 'ZA', 'ZM', 'ZWB', '894', 'ZM', 'Lusaka ', 'Africa ', 'Zambian', 'Zambians', 'Kwacha', 'ZMK', 9770199, 'Zambia', ''),
-	(273, 'Zimbabwe', 'ZI', 'ZW', 'ZWE', '716', 'ZW', 'Harare ', 'Africa ', 'Zimbabwean', 'Zimbabweans', 'Zimbabwe Dollar', 'ZWD', 11365366, 'Zimbabwe', '')";
+	(273, 'Zimbabwe', 'ZI', 'ZW', 'ZWE', '716', 'ZW', 'Harare ', 'Africa ', 'Zimbabwean', 'Zimbabweans', 'Zimbabwe Dollar', 'ZWD', 11365366, 'Zimbabwe', ''),
+	(276, 'Curaçao', 'UC', 'CW', 'CUW', '531', 'CW', 'Willemstad ', 'Central America and the Caribbean', 'Curaçaoan', 'Curaçaoans', 'Netherlands Antillean guilder', 'ANG', 152760, 'Curaçao', ''),
+	(277, 'Caribbean Netherlands', '--', 'BQ', 'BES', '535', 'BQ', '--', 'Central America and the Caribbean', '--', '--', 'United States dollar', 'USD', 21133, 'Caribbean Netherlands', ''),
+	(278, 'Kosovo', 'XK', 'XK', '--', '--', 'XK', 'Pristina', 'Europe', '--', '--', 'Euro', 'EUR', 1859203, 'Caribbean Netherlands', 'Kosovo')";
 
             /**
              * Filter the SQL query that inserts the country DB table data.
@@ -422,13 +425,15 @@ if (!function_exists('geodir_create_tables')) {
 							  show_on_detail enum( '0', '1' ) NOT NULL DEFAULT '1',
 							  show_as_tab enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  for_admin_use enum( '0', '1' ) NOT NULL DEFAULT '0',
-							  packages varchar(255) NOT NULL DEFAULT ',0,',
+							  packages text NULL DEFAULT NULL,
 							  cat_sort text NULL DEFAULT NULL,
 							  cat_filter text NULL DEFAULT NULL,
 							  extra_fields text NULL DEFAULT NULL,
 							  field_icon varchar(255) NULL DEFAULT NULL,
 							  css_class varchar(255) NULL DEFAULT NULL,
 							  decimal_point varchar( 10 ) NOT NULL,
+							  validation_pattern varchar( 255 ) NOT NULL,
+							  validation_msg text NULL DEFAULT NULL,
 							  PRIMARY KEY  (id)
 							  ) $collate";
 
@@ -540,29 +545,29 @@ if (!function_exists('geodir_create_tables')) {
         dbDelta($custom_sort_fields_table);
 
 
-        if ($wpdb->get_var("SHOW TABLES LIKE '" . GEODIR_REVIEW_TABLE . "'") != GEODIR_REVIEW_TABLE) {
-            $review_table = "CREATE TABLE IF NOT EXISTS " . GEODIR_REVIEW_TABLE . "(
-			`id` INT(11) NOT NULL AUTO_INCREMENT,
-			`post_id` INT(11) DEFAULT NULL,
-			`post_title` VARCHAR( 255 ) NULL DEFAULT NULL,
-			`post_type` VARCHAR( 255 ) NULL DEFAULT NULL,
-			`user_id` INT(11) DEFAULT NULL,
-			`comment_id` INT(11) DEFAULT NULL,
-			`rating_ip` VARCHAR( 50 ) NULL DEFAULT NULL,
-			`ratings` TEXT NULL DEFAULT NULL,
-			`overall_rating` float(11) DEFAULT NULL,
-			`comment_images` TEXT NULL DEFAULT NULL,
-			`wasthis_review` INT NOT NULL,
-			`status` VARCHAR( 100 ) NOT NULL,
-			`post_status` INT(11) DEFAULT NULL,
-			`post_date` DATETIME NOT NULL,
-			`post_city` varchar(30) NULL DEFAULT NULL,
-			`post_region` varchar(30) NULL DEFAULT NULL,
-			`post_country` varchar(30) NULL DEFAULT NULL,
-			`post_latitude` varchar(20) NULL DEFAULT NULL,
-			`post_longitude` varchar(20) NULL DEFAULT NULL,
-			`comment_content` TEXT NULL DEFAULT NULL,
-			PRIMARY KEY (id)) $collate  ";
+            $review_table = "CREATE TABLE " . GEODIR_REVIEW_TABLE . " (
+			id int(11) NOT NULL AUTO_INCREMENT,
+			post_id int(11) DEFAULT NULL,
+			post_title varchar( 255 ) NULL DEFAULT NULL,
+			post_type varchar( 255 ) NULL DEFAULT NULL,
+			user_id int(11) DEFAULT NULL,
+			comment_id int(11) DEFAULT NULL,
+			rating_ip varchar( 50 ) NULL DEFAULT NULL,
+			ratings text NULL DEFAULT NULL,
+			overall_rating float(11) DEFAULT NULL,
+			comment_images text NULL DEFAULT NULL,
+			wasthis_review int(11) NOT NULL,
+			status varchar( 100 ) NOT NULL,
+			post_status int(11) DEFAULT NULL,
+			post_date datetime NOT NULL,
+			post_city varchar(50) NULL DEFAULT NULL,
+			post_region varchar(50) NULL DEFAULT NULL,
+			post_country varchar(50) NULL DEFAULT NULL,
+			post_latitude varchar(20) NULL DEFAULT NULL,
+			post_longitude varchar(20) NULL DEFAULT NULL,
+			comment_content text NULL DEFAULT NULL,
+			PRIMARY KEY  (id)
+			) $collate  ";
 
             /**
              * Filter the SQL query that creates the review DB table structure.
@@ -571,11 +576,8 @@ if (!function_exists('geodir_create_tables')) {
              * @param string $sql The SQL insert query string.
              */
             $review_table = apply_filters('geodir_before_review_table_create', $review_table);
-            $wpdb->query($review_table);
-        }
+            dbDelta($review_table);
 
-        if (isset($review_table))
-            $wpdb->show_errors($review_table);
 
 
         // Alter terms table
@@ -605,142 +607,142 @@ if (!function_exists('geodir_create_default_fields')) {
         $fields[] = array('listing_type' => 'gd_place',
             'data_type' => 'VARCHAR',
             'field_type' => 'taxonomy',
-            'admin_title' => __('Category', GEODIRECTORY_TEXTDOMAIN),
-            'admin_desc' => __('SELECT listing category FROM here. SELECT at least one CATEGORY', GEODIRECTORY_TEXTDOMAIN),
-            'site_title' => __('Category', GEODIRECTORY_TEXTDOMAIN),
+            'admin_title' => __('Category', 'geodirectory'),
+            'admin_desc' => __('SELECT listing category FROM here. SELECT at least one CATEGORY', 'geodirectory'),
+            'site_title' => __('Category', 'geodirectory'),
             'htmlvar_name' => 'gd_placecategory',
             'default_value' => '',
             'is_default' => '1',
             'is_admin' => '1',
             'is_required' => '1',
-            'clabels' => __('Category', GEODIRECTORY_TEXTDOMAIN));
+            'clabels' => __('Category', 'geodirectory'));
 
         $fields[] = array('listing_type' => 'gd_place',
             'data_type' => 'VARCHAR',
             'field_type' => 'address',
-            'admin_title' => __('Address', GEODIRECTORY_TEXTDOMAIN),
+            'admin_title' => __('Address', 'geodirectory'),
             'admin_desc' => ADDRESS_MSG,
-            'site_title' => __('Address', GEODIRECTORY_TEXTDOMAIN),
+            'site_title' => __('Address', 'geodirectory'),
             'htmlvar_name' => 'post',
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
             'is_admin' => '1',
             'is_required' => '1',
-            'required_msg' => __('Address fields are required', GEODIRECTORY_TEXTDOMAIN),
-            'clabels' => __('Address', GEODIRECTORY_TEXTDOMAIN),
-            'extra' => array('show_city' => 1, 'city_lable' => __('City', GEODIRECTORY_TEXTDOMAIN),
-                'show_region' => 1, 'region_lable' => __('Region', GEODIRECTORY_TEXTDOMAIN),
-                'show_country' => 1, 'country_lable' => __('Country', GEODIRECTORY_TEXTDOMAIN),
-                'show_zip' => 1, 'zip_lable' => __('Zip/Post Code', GEODIRECTORY_TEXTDOMAIN),
-                'show_map' => 1, 'map_lable' => __('Set Address On Map', GEODIRECTORY_TEXTDOMAIN),
-                'show_mapview' => 1, 'mapview_lable' => __('Select Map View', GEODIRECTORY_TEXTDOMAIN),
+            'required_msg' => __('Address fields are required', 'geodirectory'),
+            'clabels' => __('Address', 'geodirectory'),
+            'extra' => array('show_city' => 1, 'city_lable' => __('City', 'geodirectory'),
+                'show_region' => 1, 'region_lable' => __('Region', 'geodirectory'),
+                'show_country' => 1, 'country_lable' => __('Country', 'geodirectory'),
+                'show_zip' => 1, 'zip_lable' => __('Zip/Post Code', 'geodirectory'),
+                'show_map' => 1, 'map_lable' => __('Set Address On Map', 'geodirectory'),
+                'show_mapview' => 1, 'mapview_lable' => __('Select Map View', 'geodirectory'),
                 'show_mapzoom' => 1, 'mapzoom_lable' => 'hidden',
                 'show_latlng' => 1));
 
         $fields[] = array('listing_type' => 'gd_place',
             'data_type' => 'VARCHAR',
             'field_type' => 'text',
-            'admin_title' => __('Time', GEODIRECTORY_TEXTDOMAIN),
-            'admin_desc' => __('Enter Business or Listing Timing Information.<br/>eg. : 10.00 am to 6 pm every day', GEODIRECTORY_TEXTDOMAIN),
-            'site_title' => __('Time', GEODIRECTORY_TEXTDOMAIN),
+            'admin_title' => __('Time', 'geodirectory'),
+            'admin_desc' => __('Enter Business or Listing Timing Information.<br/>eg. : 10.00 am to 6 pm every day', 'geodirectory'),
+            'site_title' => __('Time', 'geodirectory'),
             'htmlvar_name' => 'timing',
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
             'is_admin' => '1',
-            'clabels' => __('Time', GEODIRECTORY_TEXTDOMAIN));
+            'clabels' => __('Time', 'geodirectory'));
 
         $fields[] = array('listing_type' => 'gd_place',
             'data_type' => 'VARCHAR',
             'field_type' => 'phone',
-            'admin_title' => __('Phone', GEODIRECTORY_TEXTDOMAIN),
-            'admin_desc' => __('You can enter phone number,cell phone number etc.', GEODIRECTORY_TEXTDOMAIN),
-            'site_title' => __('Phone', GEODIRECTORY_TEXTDOMAIN),
+            'admin_title' => __('Phone', 'geodirectory'),
+            'admin_desc' => __('You can enter phone number,cell phone number etc.', 'geodirectory'),
+            'site_title' => __('Phone', 'geodirectory'),
             'htmlvar_name' => 'contact',
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
             'is_admin' => '1',
-            'clabels' => __('Phone', GEODIRECTORY_TEXTDOMAIN));
+            'clabels' => __('Phone', 'geodirectory'));
 
         $fields[] = array('listing_type' => 'gd_place',
             'data_type' => 'VARCHAR',
             'field_type' => 'email',
-            'admin_title' => __('Email', GEODIRECTORY_TEXTDOMAIN),
-            'admin_desc' => __('You can enter your business or listing email.', GEODIRECTORY_TEXTDOMAIN),
-            'site_title' => __('Email', GEODIRECTORY_TEXTDOMAIN),
+            'admin_title' => __('Email', 'geodirectory'),
+            'admin_desc' => __('You can enter your business or listing email.', 'geodirectory'),
+            'site_title' => __('Email', 'geodirectory'),
             'htmlvar_name' => 'email',
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
             'is_admin' => '1',
-            'clabels' => __('Email', GEODIRECTORY_TEXTDOMAIN));
+            'clabels' => __('Email', 'geodirectory'));
 
         $fields[] = array('listing_type' => 'gd_place',
             'data_type' => 'VARCHAR',
             'field_type' => 'url',
-            'admin_title' => __('Website', GEODIRECTORY_TEXTDOMAIN),
-            'admin_desc' => __('You can enter your business or listing website.', GEODIRECTORY_TEXTDOMAIN),
-            'site_title' => __('Website', GEODIRECTORY_TEXTDOMAIN),
+            'admin_title' => __('Website', 'geodirectory'),
+            'admin_desc' => __('You can enter your business or listing website.', 'geodirectory'),
+            'site_title' => __('Website', 'geodirectory'),
             'htmlvar_name' => 'website',
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
             'is_admin' => '1',
-            'clabels' => __('Website', GEODIRECTORY_TEXTDOMAIN));
+            'clabels' => __('Website', 'geodirectory'));
 
         $fields[] = array('listing_type' => 'gd_place',
             'data_type' => 'VARCHAR',
             'field_type' => 'url',
-            'admin_title' => __('Twitter', GEODIRECTORY_TEXTDOMAIN),
-            'admin_desc' => __('You can enter your business or listing twitter url.', GEODIRECTORY_TEXTDOMAIN),
-            'site_title' => __('Twitter', GEODIRECTORY_TEXTDOMAIN),
+            'admin_title' => __('Twitter', 'geodirectory'),
+            'admin_desc' => __('You can enter your business or listing twitter url.', 'geodirectory'),
+            'site_title' => __('Twitter', 'geodirectory'),
             'htmlvar_name' => 'twitter',
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
             'is_admin' => '1',
-            'clabels' => __('Twitter', GEODIRECTORY_TEXTDOMAIN));
+            'clabels' => __('Twitter', 'geodirectory'));
 
         $fields[] = array('listing_type' => 'gd_place',
             'data_type' => 'VARCHAR',
             'field_type' => 'url',
-            'admin_title' => __('Facebook', GEODIRECTORY_TEXTDOMAIN),
-            'admin_desc' => __('You can enter your business or listing facebook url.', GEODIRECTORY_TEXTDOMAIN),
-            'site_title' => __('Facebook', GEODIRECTORY_TEXTDOMAIN),
+            'admin_title' => __('Facebook', 'geodirectory'),
+            'admin_desc' => __('You can enter your business or listing facebook url.', 'geodirectory'),
+            'site_title' => __('Facebook', 'geodirectory'),
             'htmlvar_name' => 'facebook',
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
             'is_admin' => '1',
-            'clabels' => __('Facebook', GEODIRECTORY_TEXTDOMAIN));
+            'clabels' => __('Facebook', 'geodirectory'));
 
         $fields[] = array('listing_type' => 'gd_place',
             'data_type' => 'TEXT',
             'field_type' => 'textarea',
-            'admin_title' => __('Video', GEODIRECTORY_TEXTDOMAIN),
-            'admin_desc' => __('Add video code here, YouTube etc.', GEODIRECTORY_TEXTDOMAIN),
-            'site_title' => __('Video', GEODIRECTORY_TEXTDOMAIN),
+            'admin_title' => __('Video', 'geodirectory'),
+            'admin_desc' => __('Add video code here, YouTube etc.', 'geodirectory'),
+            'site_title' => __('Video', 'geodirectory'),
             'htmlvar_name' => 'video',
             'default_value' => '',
             'option_values' => '',
             'is_default' => '0',
             'is_admin' => '1',
-            'clabels' => __('Video', GEODIRECTORY_TEXTDOMAIN));
+            'clabels' => __('Video', 'geodirectory'));
 
         $fields[] = array('listing_type' => 'gd_place',
             'data_type' => 'TEXT',
             'field_type' => 'textarea',
-            'admin_title' => __('Special Offers', GEODIRECTORY_TEXTDOMAIN),
-            'admin_desc' => __('Note: List out any special offers (optional)', GEODIRECTORY_TEXTDOMAIN),
-            'site_title' => __('Special Offers', GEODIRECTORY_TEXTDOMAIN),
+            'admin_title' => __('Special Offers', 'geodirectory'),
+            'admin_desc' => __('Note: List out any special offers (optional)', 'geodirectory'),
+            'site_title' => __('Special Offers', 'geodirectory'),
             'htmlvar_name' => 'special_offers',
             'default_value' => '',
             'option_values' => '',
             'is_default' => '0',
             'is_admin' => '1',
-            'clabels' => __('Special Offers', GEODIRECTORY_TEXTDOMAIN));
+            'clabels' => __('Special Offers', 'geodirectory'));
 
         /**
          * Filter the array of default custom fields DB table data.

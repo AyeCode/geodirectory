@@ -20,28 +20,31 @@ class geodir_homepage_map extends WP_Widget
 	 * Register the home page map widget.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
 	 */
-    function geodir_homepage_map()
-    {
-        //Constructor
-        $widget_ops = array('classname' => 'widget Google Map in Home page', 'description' => __('Google Map in Home page. It will show you google map V3 for Home page with category checkbox selection.', GEODIRECTORY_TEXTDOMAIN));
-        $this->WP_Widget('geodir_map_v3_home_map', __('GD > GMap - Home page', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
-
+    public function __construct() {
+        $widget_ops = array('classname' => 'widget Google Map in Home page', 'description' => __('Google Map in Home page. It will show you google map V3 for Home page with category checkbox selection.', 'geodirectory'));
+        parent::__construct(
+            'geodir_map_v3_home_map', // Base ID
+            __('GD > GMap - Home page', 'geodirectory'), // Name
+            $widget_ops// Args
+        );
     }
 
 	/**
 	 * Front-end display content for home page map widget.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $args     Widget arguments.
 	 * @param array $instance Saved values from database.
 	 */
-    function widget($args, $instance)
+    public function widget($args, $instance)
     {
         extract($args, EXTR_SKIP);
         /** This action is documented in geodirectory_shortcodes.php */
-        $width = empty($instance['width']) ? '960' : apply_filters('widget_width', $instance['width']);
+        $width = empty($instance['width']) ? '100%' : apply_filters('widget_width', $instance['width']);
         /** This action is documented in geodirectory_shortcodes.php */
         $height = empty($instance['heigh']) ? '425' : apply_filters('widget_heigh', $instance['heigh']);
         /** This action is documented in geodirectory_shortcodes.php */
@@ -55,7 +58,6 @@ class geodir_homepage_map extends WP_Widget
         /** This action is documented in geodirectory_shortcodes.php */
         $scrollwheel = empty($instance['scrollwheel']) ? '0' : apply_filters('widget_scrollwheel', $instance['scrollwheel']);
 
-        //$str = createRandomString();
         $map_args = array();
         $map_args['map_canvas_name'] = str_replace('-', '_', $args['widget_id']); //'home_map_canvas'.$str ;
         $map_args['width'] = $width;
@@ -91,13 +93,14 @@ class geodir_homepage_map extends WP_Widget
 	 * Sanitize home page map widget form values as they are saved.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $new_instance Values just sent to be saved.
 	 * @param array $old_instance Previously saved values from database.
 	 *
 	 * @return array Updated safe values to be saved.
 	 */
-    function update($new_instance, $old_instance)
+    public function update($new_instance, $old_instance)
     {
         //save the widget
         $instance = $old_instance;
@@ -116,10 +119,11 @@ class geodir_homepage_map extends WP_Widget
 	 * Back-end home page map widget settings form.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $instance Previously saved values from database.
 	 */
-    function form($instance)
+    public function form($instance)
     {
         //widgetform in backend
 
@@ -135,7 +139,7 @@ class geodir_homepage_map extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('width'); ?>"><?php _e('Map Width <small>(Default is : 960px) you can use px or % here</small>', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('width'); ?>"><?php _e('Map Width <small>(Default is : 100%) you can use px or % here</small>', 'geodirectory'); ?>
                 :
                 <input class="widefat" id="<?php echo $this->get_field_id('width'); ?>"
                        name="<?php echo $this->get_field_name('width'); ?>" type="text"
@@ -144,7 +148,7 @@ class geodir_homepage_map extends WP_Widget
         </p>
         <p>
             <label
-                for="<?php echo $this->get_field_id('heigh'); ?>"><?php _e('Map Height <small>(Default is : 425px) you can use px or vh here</small>', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('heigh'); ?>"><?php _e('Map Height <small>(Default is : 425px) you can use px or vh here</small>', 'geodirectory'); ?>
                 :
                 <input class="widefat" id="<?php echo $this->get_field_id('heigh'); ?>"
                        name="<?php echo $this->get_field_name('heigh'); ?>" type="text"
@@ -154,21 +158,22 @@ class geodir_homepage_map extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('maptype'); ?>"><?php _e(' Select Map View', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('maptype'); ?>"><?php _e(' Select Map View', 'geodirectory'); ?>
                 :
                 <select class="widefat" id="<?php echo $this->get_field_id('maptype'); ?>"
                         name="<?php echo $this->get_field_name('maptype'); ?>">
 
                     <option <?php if (isset($maptype) && $maptype == 'ROADMAP') {
                         echo 'selected="selected"';
-                    } ?> value="ROADMAP"><?php _e('Road Map', GEODIRECTORY_TEXTDOMAIN); ?></option>
+                    } ?> value="ROADMAP"><?php _e('Road Map', 'geodirectory'); ?></option>
                     <option <?php if (isset($maptype) && $maptype == 'SATELLITE') {
                         echo 'selected="selected"';
-                    } ?> value="SATELLITE"><?php _e('Satellite Map', GEODIRECTORY_TEXTDOMAIN); ?></option>
+                    } ?> value="SATELLITE"><?php _e('Satellite Map', 'geodirectory'); ?></option>
                     <option <?php if (isset($maptype) && $maptype == 'HYBRID') {
                         echo 'selected="selected"';
-                    } ?> value="HYBRID"><?php _e('Hybrid Map', GEODIRECTORY_TEXTDOMAIN); ?></option>
-
+                    } ?> value="HYBRID"><?php _e('Hybrid Map', 'geodirectory'); ?></option>
+					<option <?php selected($maptype, 'TERRAIN');?> 
+							value="TERRAIN"><?php _e('Terrain Map', 'geodirectory'); ?></option>
                 </select>
             </label>
         </p>
@@ -179,7 +184,7 @@ class geodir_homepage_map extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('zoom'); ?>"><?php _e('Map Zoom level', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('zoom'); ?>"><?php _e('Map Zoom level', 'geodirectory'); ?>
                 :
                 <select class="widefat" id="<?php echo $this->get_field_id('zoom'); ?>"
                         name="<?php echo $this->get_field_name('zoom'); ?>"> <?php
@@ -200,7 +205,7 @@ class geodir_homepage_map extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('autozoom'); ?>"><?php _e('Map Auto Zoom ?', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('autozoom'); ?>"><?php _e('Map Auto Zoom ?', 'geodirectory'); ?>
                 :
                 <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('autozoom'); ?>"
                        name="<?php echo $this->get_field_name('autozoom'); ?>"<?php if ($autozoom) {
@@ -210,7 +215,7 @@ class geodir_homepage_map extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('child_collapse'); ?>"><?php _e('Collapse child/sub categories ?', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('child_collapse'); ?>"><?php _e('Collapse child/sub categories ?', 'geodirectory'); ?>
                 :
                 <input id="<?php echo $this->get_field_id('child_collapse'); ?>"
                        name="<?php echo $this->get_field_name('child_collapse'); ?>" type="checkbox" value="1"
@@ -220,7 +225,7 @@ class geodir_homepage_map extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('scrollwheel'); ?>"><?php _e('Enable mouse scroll zoom ?', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('scrollwheel'); ?>"><?php _e('Enable mouse scroll zoom ?', 'geodirectory'); ?>
                 :
                 <input id="<?php echo $this->get_field_id('scrollwheel'); ?>"
                        name="<?php echo $this->get_field_name('scrollwheel'); ?>" type="checkbox" value="1"
@@ -235,8 +240,9 @@ class geodir_homepage_map extends WP_Widget
 	 * Adds the javascript in the footer for home page map widget.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 */
-    function geodir_home_map_add_script()
+    public function geodir_home_map_add_script()
     {
         ?>
         <script type="text/javascript">

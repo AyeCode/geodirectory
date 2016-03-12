@@ -5,6 +5,13 @@
  * @since 1.0.0
  * @package GeoDirectory
  */
+ 
+/**
+ * Contains class & functions for geodirectory session usage.
+ *
+ * @since 1.5.7
+ */
+include_once('geodirectory-functions/geodir-class-session.php');
 
 /**
  * Contains helper functions used to make like easier for theme/plugin devs.
@@ -102,4 +109,3 @@ include_once('geodirectory-functions/google_analytics.php');
  * @since 1.3.7
  */
 include_once('geodirectory_shortcodes.php');
-

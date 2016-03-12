@@ -38,7 +38,14 @@ function create_list_jsondata($post)
     global $wpdb, $list_map_json, $add_post_in_marker_array;
 
     if ((is_main_query() || $add_post_in_marker_array) && isset($post->marker_json) && $post->marker_json != '') {
-        $list_map_json[] = $post->marker_json;
+        /**
+         * Filter the json data for search listing map.
+         *
+         * @since 1.5.7
+         * @param string $post->marker_json JSON representation of the post marker info.
+         * @param object $post The post object.
+         */
+        $list_map_json[] = apply_filters('geodir_create_list_jsondata',$post->marker_json,$post);
     }
 
 }
@@ -62,10 +69,13 @@ function show_listing_widget_map()
     $totalcount = count(array_unique($list_map_json));
 
 
-    if (!empty($cat_content_info))
-        $list_json = '[{"totalcount":"' . $totalcount . '",' . substr(implode(',', $cat_content_info), 1) . ']';
-    else
+    if (!empty($cat_content_info)) {
+        $json_content = substr(implode(',', $cat_content_info), 1);
+        $json_content = htmlentities($json_content, ENT_QUOTES); // Quotes in csv title import break maps - FIXED by kiran on 2nd March, 2016
+        $list_json = '[{"totalcount":"' . $totalcount . '",' . $json_content . ']';
+    } else {
         $list_json = '[{"totalcount":"0"}]';
+    }
 
     $listing_map_args = array('list_json' => $list_json);
 
@@ -86,33 +96,35 @@ class geodir_map_listingpage extends WP_Widget
 	 * Register the listing page map widget.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
 	 */
-    function geodir_map_listingpage()
-    {
-
-        $widget_ops = array('classname' => 'widget geodir-map-listing-page', 'description' => __('Google Map for Listing page. It will show you google map V3 for Listing page.', GEODIRECTORY_TEXTDOMAIN));
-        $this->WP_Widget('geodir_map_v3_listing_map', __('GD > GMap - Listing page', GEODIRECTORY_TEXTDOMAIN), $widget_ops);
-
+    public function __construct() {
+        $widget_ops = array('classname' => 'widget geodir-map-listing-page', 'description' => __('Google Map for Listing page. It will show you google map V3 for Listing page.', 'geodirectory'));
+        parent::__construct(
+            'geodir_map_v3_listing_map', // Base ID
+            __('GD > GMap - Listing page', 'geodirectory'), // Name
+            $widget_ops// Args
+        );
 
         add_action('wp_head', 'init_listing_map_script'); // Initialize the map object and marker array
 
         add_action('the_post', 'create_list_jsondata'); // Add marker in json array
 
         add_action('wp_footer', 'show_listing_widget_map'); // Show map for listings with markers
-
     }
 
 	/**
 	 * Front-end display content for listing page map widget.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
      * @global object $post The current post object.
      *
 	 * @param array $args     Widget arguments.
 	 * @param array $instance Saved values from database.
 	 */
-    function widget($args, $instance)
+    public function widget($args, $instance)
     {
 
         if (geodir_is_page('listing') || geodir_is_page('author') || geodir_is_page('search')
@@ -186,7 +198,6 @@ class geodir_map_listingpage extends WP_Widget
                 $mapview = $maptype;
             }
 
-            if (empty($mapview)) $mapview = 'ROADMAP';
             if (empty($mapzoom)) $mapzoom = $zoom;
 
             // Set default map options
@@ -198,7 +209,7 @@ class geodir_map_listingpage extends WP_Widget
             $map_args['scrollwheel'] = $scrollwheel;
             $map_args['showall'] = $showall;
             $map_args['streetViewControl'] = true;
-            $map_args['maptype'] = $mapview;
+            $map_args['maptype'] = $maptype;
             $map_args['showPreview'] = '0';
             $map_args['maxZoom'] = 21;
             $map_args['autozoom'] = $autozoom;
@@ -215,13 +226,14 @@ class geodir_map_listingpage extends WP_Widget
 	 * Sanitize listing page map widget form values as they are saved.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $new_instance Values just sent to be saved.
 	 * @param array $old_instance Previously saved values from database.
 	 *
 	 * @return array Updated safe values to be saved.
 	 */
-    function update($new_instance, $old_instance)
+    public function update($new_instance, $old_instance)
     {
         //save the widget
         $instance = $old_instance;
@@ -241,10 +253,11 @@ class geodir_map_listingpage extends WP_Widget
 	 * Back-end listing page map widget settings form.
 	 *
 	 * @since 1.0.0
+     * @since 1.5.1 Declare function public.
 	 *
 	 * @param array $instance Previously saved values from database.
 	 */
-    function form($instance)
+    public function form($instance)
     {
         //widgetform in backend
         $instance = wp_parse_args((array)$instance, array('width' => '', 'heigh' => '', 'maptype' => '', 'zoom' => '', 'autozoom' => '', 'sticky' => '', 'scrollwheel' => '0', 'showall' => '0'));
@@ -259,7 +272,7 @@ class geodir_map_listingpage extends WP_Widget
         ?>
         <p>
             <label
-                for="<?php echo $this->get_field_id('width'); ?>"><?php _e('Map Width <small>(Default is : 294) you can use px or % here</small>', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('width'); ?>"><?php _e('Map Width <small>(Default is : 294) you can use px or % here</small>', 'geodirectory'); ?>
                 :
                 <input class="widefat" id="<?php echo $this->get_field_id('width'); ?>"
                        name="<?php echo $this->get_field_name('width'); ?>" type="text"
@@ -269,7 +282,7 @@ class geodir_map_listingpage extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('heigh'); ?>"><?php _e('Map Height <small>(Default is : 370) you can use px or vh here</small>', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('heigh'); ?>"><?php _e('Map Height <small>(Default is : 370) you can use px or vh here</small>', 'geodirectory'); ?>
                 :
                 <input class="widefat" id="<?php echo $this->get_field_id('heigh'); ?>"
                        name="<?php echo $this->get_field_name('heigh'); ?>" type="text"
@@ -279,21 +292,22 @@ class geodir_map_listingpage extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('maptype'); ?>"><?php _e(' Select Map View', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('maptype'); ?>"><?php _e(' Select Map View', 'geodirectory'); ?>
                 :
                 <select class="widefat" id="<?php echo $this->get_field_id('maptype'); ?>"
                         name="<?php echo $this->get_field_name('maptype'); ?>">
 
                     <option <?php if (isset($maptype) && $maptype == 'ROADMAP') {
                         echo 'selected="selected"';
-                    } ?> value="ROADMAP"><?php _e('Road Map', GEODIRECTORY_TEXTDOMAIN); ?></option>
+                    } ?> value="ROADMAP"><?php _e('Road Map', 'geodirectory'); ?></option>
                     <option <?php if (isset($maptype) && $maptype == 'SATELLITE') {
                         echo 'selected="selected"';
-                    } ?> value="SATELLITE"><?php _e('Satellite Map', GEODIRECTORY_TEXTDOMAIN); ?></option>
+                    } ?> value="SATELLITE"><?php _e('Satellite Map', 'geodirectory'); ?></option>
                     <option <?php if (isset($maptype) && $maptype == 'HYBRID') {
                         echo 'selected="selected"';
-                    } ?> value="HYBRID"><?php _e('Hybrid Map', GEODIRECTORY_TEXTDOMAIN); ?></option>
-
+                    } ?> value="HYBRID"><?php _e('Hybrid Map', 'geodirectory'); ?></option>
+					<option <?php selected($maptype, 'TERRAIN');?> 
+							value="TERRAIN"><?php _e('Terrain Map', 'geodirectory'); ?></option>
                 </select>
             </label>
         </p>
@@ -304,7 +318,7 @@ class geodir_map_listingpage extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('zoom'); ?>"><?php _e('Map Zoom level', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('zoom'); ?>"><?php _e('Map Zoom level', 'geodirectory'); ?>
                 :
 
                 <select class="widefat" id="<?php echo $this->get_field_id('zoom'); ?>"
@@ -326,7 +340,7 @@ class geodir_map_listingpage extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('autozoom'); ?>"><?php _e('Map Auto Zoom ?', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('autozoom'); ?>"><?php _e('Map Auto Zoom ?', 'geodirectory'); ?>
                 :
                 <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('autozoom'); ?>"
                        name="<?php echo $this->get_field_name('autozoom'); ?>"<?php if ($autozoom) {
@@ -336,7 +350,7 @@ class geodir_map_listingpage extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('sticky'); ?>"><?php _e('Map Sticky(should stick to the right of screen) ?', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('sticky'); ?>"><?php _e('Map Sticky(should stick to the right of screen) ?', 'geodirectory'); ?>
                 :
                 <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('sticky'); ?>"
                        name="<?php echo $this->get_field_name('sticky'); ?>"<?php if ($sticky) {
@@ -346,7 +360,7 @@ class geodir_map_listingpage extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('scrollwheel'); ?>"><?php _e('Enable mouse scroll zoom ?', GEODIRECTORY_TEXTDOMAIN); ?>
+                for="<?php echo $this->get_field_id('scrollwheel'); ?>"><?php _e('Enable mouse scroll zoom ?', 'geodirectory'); ?>
                 :
                 <input id="<?php echo $this->get_field_id('scrollwheel'); ?>"
                        name="<?php echo $this->get_field_name('scrollwheel'); ?>" type="checkbox" value="1"
@@ -355,7 +369,7 @@ class geodir_map_listingpage extends WP_Widget
         </p>
 
         <!-- <p>
-      <label for="<?php echo $this->get_field_id('showall'); ?>"><?php _e('Show all listings on map? (not just page list)', GEODIRECTORY_TEXTDOMAIN); ?>:
+      <label for="<?php echo $this->get_field_id('showall'); ?>"><?php _e('Show all listings on map? (not just page list)', 'geodirectory'); ?>:
       <input id="<?php echo $this->get_field_id('showall'); ?>" name="<?php echo $this->get_field_name('showall'); ?>" type="checkbox"  value="1"  <?php if ($showall) { ?>checked="checked" <?php } ?> />
       </label>
     </p> -->

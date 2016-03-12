@@ -33,9 +33,21 @@ function geodir_on_wp_loaded()
 
     }
 
-    if (isset($_REQUEST['geodir_signup'])) {
+}
+
+/**
+ * Geodirectory Post or Get request handler on wp_loaded.
+ *
+ * @since 1.3.5
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ */
+function geodir_on_wp()
+{
+    if(geodir_is_page('login')) {
         geodir_user_signup();
     }
+
 }
 
 /**
@@ -101,26 +113,23 @@ function geodir_on_init()
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global object $current_user Current user object.
+ * @global object $gd_session GeoDirectory Session object.
+ *
  * @todo check if nonce is required here and if so add one.
  */
-function geodir_ajax_handler()
-{
-    global $wpdb;
+function geodir_ajax_handler() {
+    global $wpdb, $gd_session;
 
     if (isset($_REQUEST['gd_listing_view']) && $_REQUEST['gd_listing_view'] != '') {
-        $_SESSION['gd_listing_view'] = $_REQUEST['gd_listing_view'];
+		$gd_session->set('gd_listing_view', $_REQUEST['gd_listing_view']);
         echo '1';
     }
 
-
     if (isset($_REQUEST['geodir_ajax']) && $_REQUEST['geodir_ajax'] == 'category_ajax') {
-
         if (isset($_REQUEST['main_catid']) && isset($_REQUEST['cat_tax']) && isset($_REQUEST['exclude']))
             geodir_addpost_categories_html($_REQUEST['cat_tax'], $_REQUEST['main_catid'], '', '', '', $_REQUEST['exclude']);
-
-        elseif (isset($_REQUEST['catpid']) && isset($_REQUEST['cat_tax']))
+        else if (isset($_REQUEST['catpid']) && isset($_REQUEST['cat_tax']))
             geodir_editpost_categories_html($_REQUEST['cat_tax'], $_REQUEST['catpid']);
-
     }
 
     if ((isset($_REQUEST['geodir_ajax']) && $_REQUEST['geodir_ajax'] == 'admin_ajax') || isset($_REQUEST['create_field']) || isset($_REQUEST['sort_create_field'])) {
@@ -133,7 +142,7 @@ function geodir_ajax_handler()
              */
             include_once(geodir_plugin_path() . '/geodirectory-admin/geodir_admin_ajax.php');
         } else {
-            wp_redirect(home_url() . '/?geodir_signup=true');
+            wp_redirect(geodir_login_url());
             exit();
         }
     }
@@ -179,16 +188,7 @@ function geodir_ajax_handler()
                     break;
             endswitch;
         } else {
-            wp_redirect(home_url() . '/?geodir_signup=true');
-            exit();
-        }
-    }
-
-    if (isset($_REQUEST['geodir_import_data']) && $_REQUEST['geodir_import_data'] != '') {
-        if (current_user_can('manage_options')) {
-            geodir_import_data();
-        } else {
-            wp_redirect(home_url() . '/?geodir_signup=true');
+            wp_redirect(geodir_login_url());
             exit();
         }
     }
@@ -215,19 +215,18 @@ function geodir_ajax_handler()
         include_once(geodir_plugin_path() . '/geodirectory-functions/map-functions/get_markers.php');
     }
 
-
     if (isset($_REQUEST['geodir_ajax']) && $_REQUEST['geodir_ajax'] == 'favorite') {
         if (is_user_logged_in()) {
             switch ($_REQUEST['ajax_action']):
                 case "add" :
-                    geodir_add_to_favorite($_REQUEST['pid']);
+                    geodir_add_to_favorite((int)$_REQUEST['pid']);
                     break;
                 case "remove" :
-                    geodir_remove_from_favorite($_REQUEST['pid']);
+                    geodir_remove_from_favorite((int)$_REQUEST['pid']);
                     break;
             endswitch;
         } else {
-            wp_redirect(home_url() . '/?geodir_signup=true');
+            wp_redirect(geodir_login_url());
             exit();
         }
     }
@@ -236,10 +235,10 @@ function geodir_ajax_handler()
 
         $is_current_user_owner = true;
         if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
-            $is_current_user_owner = geodir_listing_belong_to_current_user($_REQUEST['pid']);
+            $is_current_user_owner = geodir_listing_belong_to_current_user((int)$_REQUEST['pid']);
         }
 
-        $request = isset($_SESSION['listing']) ? unserialize($_SESSION['listing']) : '';
+        $request = $gd_session->get('listing');
 
         if (is_user_logged_in() && $is_current_user_owner) {
 
@@ -248,7 +247,6 @@ function geodir_ajax_handler()
                 case "update":
 
                     if (isset($request['geodir_spamblocker']) && $request['geodir_spamblocker'] == '64' && isset($request['geodir_filled_by_spam_bot']) && $request['geodir_filled_by_spam_bot'] == '') {
-
                         $last_id = geodir_save_listing();
 
                         if ($last_id) {
@@ -262,19 +260,15 @@ function geodir_ajax_handler()
                             $redirect_to = get_permalink(geodir_add_listing_page_id());
 
                         wp_redirect($redirect_to);
-
                     } else {
-
-                        if (isset($_SESSION['listing']))
-                            unset($_SESSION['listing']);
+                        $gd_session->un_set('listing');
                         wp_redirect(home_url());
-
                     }
 
                     break;
                 case "cancel" :
 
-                    unset($_SESSION['listing']);
+                    $gd_session->un_set('listing');
 
                     if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '' && get_permalink($_REQUEST['pid']))
                         wp_redirect(get_permalink($_REQUEST['pid']));
@@ -290,17 +284,14 @@ function geodir_ajax_handler()
                     if (isset($request['geodir_spamblocker']) && $request['geodir_spamblocker'] == '64' && isset($request['geodir_filled_by_spam_bot']) && $request['geodir_filled_by_spam_bot'] == '') {
 
                         if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
-
                             $new_post = array();
                             $new_post['ID'] = $_REQUEST['pid'];
-                            //$new_post['post_status'] = 'publish';
 
                             $lastid = wp_update_post($new_post);
 
-                            if (isset($_SESSION['listing'])) unset($_SESSION['listing']);
+                            $gd_session->un_set('listing');
                             wp_redirect(get_permalink($lastid));
                         } else {
-
                             $last_id = geodir_save_listing();
 
                             if ($last_id) {
@@ -312,25 +303,26 @@ function geodir_ajax_handler()
                             } else
                                 $redirect_to = get_permalink(geodir_add_listing_page_id());
 
-                            if (isset($_SESSION['listing'])) unset($_SESSION['listing']);
+                            $gd_session->un_set('listing');
                             wp_redirect($redirect_to);
                         }
-
                     } else {
-
-                        if (isset($_SESSION['listing'])) unset($_SESSION['listing']);
+                        $gd_session->un_set('listing');
                         wp_redirect(home_url());
-
                     }
 
                     break;
                 case "delete" :
                     if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
-
                         global $current_user;
                         get_currentuserinfo();
-                        $post_type = get_post_type($_REQUEST['pid']);
-                        $lastid = wp_delete_post($_REQUEST['pid']);
+
+                        if (get_option('geodir_disable_perm_delete')) {
+                            $lastid = wp_trash_post($_REQUEST['pid']);
+                        } else {
+                            $lastid = wp_delete_post($_REQUEST['pid']);
+                        }
+
                         if ($lastid && !is_wp_error($lastid))
                             wp_redirect($_SERVER['HTTP_REFERER']);
 
@@ -339,14 +331,12 @@ function geodir_ajax_handler()
                     break;
             endswitch;
 
-            if (isset($_SESSION['listing'])) unset($_SESSION['listing']);
-
+            $gd_session->un_set('listing');
         } else {
-            if (isset($_SESSION['listing'])) unset($_SESSION['listing']);
-            wp_redirect(home_url() . '/?geodir_signup=true');
+            $gd_session->un_set('listing');
+            wp_redirect(geodir_login_url());
             exit();
         }
-
     }
 
     if (isset($_REQUEST['geodir_ajax']) && $_REQUEST['geodir_ajax'] == 'user_login') {
@@ -381,12 +371,6 @@ function geodir_ajax_handler()
         exit();
 
     }
-
-
+    
     die;
-
-
 }
-
-
-

@@ -64,7 +64,16 @@ function create_marker_jason_of_posts($post)
             $icon = str_replace("http:","https:",$icon );
         }
 
-        $map_jason[] = '{"id":"' . $post->ID . '","t": "' . $title . '","lt": "' . $post->post_latitude . '","ln": "' . $post->post_longitude . '","mk_id":"' . $post->ID . '_' . $post->default_category . '","i":"' . $icon . '"}';
+        $post_json = '{"id":"' . $post->ID . '","t": "' . $title . '","lt": "' . $post->post_latitude . '","ln": "' . $post->post_longitude . '","mk_id":"' . $post->ID . '_' . $post->default_category . '","i":"' . $icon . '"}';
+
+        /**
+         * Filter the json data when creating output for post json marker..
+         *
+         * @since 1.5.7
+         * @param string $post_json JSON representation of the post marker info.
+         * @param object $post The post object.
+         */
+        $map_jason[] = apply_filters('geodir_create_marker_jason_of_posts',$post_json, $post);
     }
 }
 
@@ -89,10 +98,13 @@ function send_marker_jason_to_js()
                 unset($cat_content_info);
                 $cat_content_info[] = implode(',', $map_canvas_arr[$canvas]);
                 $totalcount = count(array_unique($map_jason));
-                if (!empty($cat_content_info))
-                    $canvas_jason = '[{"totalcount":"' . $totalcount . '",' . substr(implode(',', $cat_content_info), 1) . ']';
-                else
+                if (!empty($cat_content_info)) {
+                    $json_content = substr(implode(',', $cat_content_info), 1);
+                    $json_content = htmlentities($json_content, ENT_QUOTES); // Quotes in csv title import break maps - FIXED by kiran on 2nd March, 2016
+                    $canvas_jason = '[{"totalcount":"' . $totalcount . '",' . $json_content . ']';
+                } else {
                     $canvas_jason = '[{"totalcount":"0"}]';
+                }
 
                 $map_canvas_jason_args = array($canvas . '_jason' => $canvas_jason);
 
@@ -203,11 +215,12 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = 
                     }
                 }
 
-                $term_check = '<input type="checkbox" ' . $checked . ' class="group_selector ' . $main_list_class . '"';
-                $term_check .= ' name="' . $map_canvas_name . '_cat[]" group="catgroup' . $cat_term->term_id . '"';
-                $term_check .= ' alt="' . $cat_term->taxonomy . '" title="' . esc_attr(ucfirst($cat_term->name)) . '" value="' . $cat_term->term_id . '" onclick="javascript:build_map_ajax_search_param(\'' . $map_canvas_name . '\',false, this)">';
-                $term_check .= '<img height="15" width="15" alt="" src="' . $icon . '" title="' . ucfirst($cat_term->name) . '"/>';
-                $out .= '<li>' . $term_check . '<label>' . ucfirst($cat_term->name) . '</label><i class="fa fa-long-arrow-down"></i>';
+                $term_check = '<input type="checkbox" ' . $checked . ' id="' .$map_canvas_name.'_tick_cat_'. $cat_term->term_id . '" class="group_selector ' . $main_list_class . '"';
+                $term_check .= ' name="' . $map_canvas_name . '_cat[]" ';
+                $term_check .= '  title="' . esc_attr(ucfirst($cat_term->name)) . '" value="' . $cat_term->term_id . '" onclick="javascript:build_map_ajax_search_param(\'' . $map_canvas_name . '\',false, this)">';
+                $term_img = '<img height="15" width="15" alt="' . $cat_term->taxonomy . '" src="' . $icon . '" title="' . ucfirst($cat_term->name) . '"/>';
+                $out .= '<li>' . $term_check . '<label for="' . $map_canvas_name.'_tick_cat_'. $cat_term->term_id . '">' . $term_img . ucfirst($cat_term->name) . '</label><i class="fa fa-long-arrow-down"></i>';
+
             endif;
 
 
@@ -223,7 +236,7 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = 
         return $out;
     } else {
         if ($cat_parent == 0)
-            return _e('No category', GEODIRECTORY_TEXTDOMAIN);
+            return _e('No category', 'geodirectory');
     }
     return;
 }

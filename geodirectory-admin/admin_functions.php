@@ -86,8 +86,12 @@ if (!function_exists('geodir_admin_styles_req')) {
     function geodir_admin_styles_req()
     {
 
-        wp_register_style('geodirectory-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css', array(), GEODIRECTORY_VERSION);
+        wp_register_style('geodirectory-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css', array(), GEODIRECTORY_VERSION);
         wp_enqueue_style('geodirectory-font-awesome');
+
+        wp_register_script('geodirectory-admin', geodir_plugin_url() . '/geodirectory-assets/js/admin-req.min.js', array('jquery'), GEODIRECTORY_VERSION);
+        wp_enqueue_script('geodirectory-admin');
+
     }
 }
 
@@ -102,10 +106,6 @@ if (!function_exists('geodir_admin_scripts')) {
     {
 
         wp_enqueue_script('jquery');
-        /*wp_enqueue_script( 'jquery-ui-core' );
-        wp_enqueue_script( 'jquery-ui-datepicker' );
-        wp_enqueue_script('jquery-ui-slider'); */
-
 
         wp_enqueue_script('geodirectory-jquery-ui-timepicker-js', geodir_plugin_url() . '/geodirectory-assets/js/jquery.ui.timepicker.js', array('jquery-ui-datepicker', 'jquery-ui-slider'), '', true);
 
@@ -127,13 +127,19 @@ if (!function_exists('geodir_admin_scripts')) {
         $map_lang = "&language=" . geodir_get_map_default_language();
         /** This filter is documented in geodirectory_template_tags.php */
         $map_extra = apply_filters('geodir_googlemap_script_extra', '');
-        wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?sensor=false' . $map_lang . $map_extra, '', NULL);
+        wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?' . $map_lang . $map_extra, '', NULL);
 
         wp_register_script('geodirectory-goMap-script', geodir_plugin_url() . '/geodirectory-assets/js/goMap.js', array(), GEODIRECTORY_VERSION);
         wp_enqueue_script('geodirectory-goMap-script');
 
-        wp_register_script('geodir-jRating-js', geodir_plugin_url() . '/geodirectory-assets/js/jRating.jquery.js', array(), GEODIRECTORY_VERSION);
-        wp_enqueue_script('geodir-jRating-js');
+		// font awesome rating script
+		if (get_option('geodir_reviewrating_enable_font_awesome')) {
+			wp_register_script('geodir-barrating-js', geodir_plugin_url() . '/geodirectory-assets/js/jquery.barrating.min.js', array(), GEODIRECTORY_VERSION);
+			wp_enqueue_script('geodir-barrating-js');
+		} else { // default rating script
+			wp_register_script('geodir-jRating-js', geodir_plugin_url() . '/geodirectory-assets/js/jRating.jquery.js', array(), GEODIRECTORY_VERSION);
+			wp_enqueue_script('geodir-jRating-js');
+		}
 
         wp_register_script('geodir-on-document-load', geodir_plugin_url() . '/geodirectory-assets/js/on_document_load.js', array(), GEODIRECTORY_VERSION);
         wp_enqueue_script('geodir-on-document-load');
@@ -161,7 +167,7 @@ if (!function_exists('geodir_admin_scripts')) {
             'url' => admin_url('admin-ajax.php'),
             'flash_swf_url' => includes_url('js/plupload/plupload.flash.swf'),
             'silverlight_xap_url' => includes_url('js/plupload/plupload.silverlight.xap'),
-            'filters' => array(array('title' => __('Allowed Files', GEODIRECTORY_TEXTDOMAIN), 'extensions' => '*')),
+            'filters' => array(array('title' => __('Allowed Files', 'geodirectory'), 'extensions' => '*')),
             'multipart' => true,
             'urlstream_upload' => true,
             'multi_selection' => false, // will be added per uploader
@@ -236,7 +242,7 @@ if (!function_exists('geodir_admin_menu')) {
 
         if (current_user_can('manage_options')) $menu[] = array('', 'read', 'separator-geodirectory', '', 'wp-menu-separator geodirectory');
 
-        add_menu_page(__('Geodirectory', GEODIRECTORY_TEXTDOMAIN), __('Geodirectory', GEODIRECTORY_TEXTDOMAIN), 'manage_options', 'geodirectory', 'geodir_admin_panel', geodir_plugin_url() . '/geodirectory-assets/images/favicon.ico', '55.1984');
+        add_menu_page(__('Geodirectory', 'geodirectory'), __('Geodirectory', 'geodirectory'), 'manage_options', 'geodirectory', 'geodir_admin_panel', geodir_plugin_url() . '/geodirectory-assets/images/favicon.ico', '55.1984');
 
 
     }
@@ -318,8 +324,8 @@ function geodir_before_admin_panel()
 {
     if (isset($_REQUEST['installed']) && $_REQUEST['installed'] != '') {
         echo '<div id="message" class="updated fade">
-                        <p style="float:right;">' . __('Like Geodirectory?', GEODIRECTORY_TEXTDOMAIN) . ' <a href="http://wordpress.org/extend/plugins/Geodirectory/" target="_blank">' . __('Support us by leaving a rating!', GEODIRECTORY_TEXTDOMAIN) . '</a></p>
-                        <p><strong>' . __('Geodirectory has been installed and setup. Enjoy :)', GEODIRECTORY_TEXTDOMAIN) . '</strong></p>
+                        <p style="float:right;">' . __('Like Geodirectory?', 'geodirectory') . ' <a href="http://wordpress.org/extend/plugins/Geodirectory/" target="_blank">' . __('Support us by leaving a rating!', 'geodirectory') . '</a></p>
+                        <p><strong>' . __('Geodirectory has been installed and setup. Enjoy :)', 'geodirectory') . '</strong></p>
                 </div>';
 
     }
@@ -327,7 +333,7 @@ function geodir_before_admin_panel()
     if (isset($_REQUEST['msg']) && $_REQUEST['msg'] != '') {
         switch ($_REQUEST['msg']) {
             case 'success':
-                echo '<div id="message" class="updated fade"><p><strong>' . __('Your settings have been saved.', GEODIRECTORY_TEXTDOMAIN) . '</strong></p></div>';
+                echo '<div id="message" class="updated fade"><p><strong>' . __('Your settings have been saved.', 'geodirectory') . '</strong></p></div>';
                 flush_rewrite_rules(false);
 
                 break;
@@ -335,20 +341,20 @@ function geodir_before_admin_panel()
 				$gderr = isset($_REQUEST['gderr']) ? $_REQUEST['gderr'] : '';
 				
 				if ($gderr == 21)
-			    	echo '<div id="message" class="error fade"><p><strong>' . __('Error: You can not add same permalinks for both Listing and Location, please try again.', GEODIRECTORY_TEXTDOMAIN) . '</strong></p></div>';
+			    	echo '<div id="message" class="error fade"><p><strong>' . __('Error: You can not add same permalinks for both Listing and Location, please try again.', 'geodirectory') . '</strong></p></div>';
 				else
-					echo '<div id="message" class="error fade"><p><strong>' . __('Error: Your settings have not been saved, please try again.', GEODIRECTORY_TEXTDOMAIN) . '</strong></p></div>';
+					echo '<div id="message" class="error fade"><p><strong>' . __('Error: Your settings have not been saved, please try again.', 'geodirectory') . '</strong></p></div>';
                 break;
         }
     }
 
     if (!geodir_is_default_location_set()) {
-        echo '<div class="updated fade"><p><strong>' . sprintf(__('Please %sclick here%s to set a default location, this will make the plugin work properly.', GEODIRECTORY_TEXTDOMAIN), '<a href=\'' . admin_url('admin.php?page=geodirectory&tab=default_location_settings') . '\'>', '</a>') . '</strong></p></div>';
+        echo '<div class="updated fade"><p><strong>' . sprintf(__('Please %sclick here%s to set a default location, this will make the plugin work properly.', 'geodirectory'), '<a href=\'' . admin_url('admin.php?page=geodirectory&tab=default_location_settings') . '\'>', '</a>') . '</strong></p></div>';
 
     }
 
     if (!function_exists('curl_init')) {
-        echo '<div class="error"><p><strong>' . __('CURL is not installed on this server, this can cause problems, please ask your server admin to install it.', GEODIRECTORY_TEXTDOMAIN) . '</strong></p></div>';
+        echo '<div class="error"><p><strong>' . __('CURL is not installed on this server, this can cause problems, please ask your server admin to install it.', 'geodirectory') . '</strong></p></div>';
 
     }
 }
@@ -374,8 +380,8 @@ function geodir_handle_option_form_submit($current_tab)
         include_once('option-pages/' . $current_tab . '_array.php');
     }
     if (isset($_POST) && $_POST && isset($_REQUEST['page']) && $_REQUEST['page'] == 'geodirectory') :
-        if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'geodir-settings')) die(__('Action failed. Please refresh the page and retry.', GEODIRECTORY_TEXTDOMAIN));
-        if (!wp_verify_nonce($_REQUEST['_wpnonce-' . $current_tab], 'geodir-settings-' . $current_tab)) die(__('Action failed. Please refresh the page and retry.', GEODIRECTORY_TEXTDOMAIN));
+        if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'geodir-settings')) die(__('Action failed. Please refresh the page and retry.', 'geodirectory'));
+        if (!wp_verify_nonce($_REQUEST['_wpnonce-' . $current_tab], 'geodir-settings-' . $current_tab)) die(__('Action failed. Please refresh the page and retry.', 'geodirectory'));
 		
 		/**
 		 * Fires before updating geodirectory admin settings.
@@ -440,7 +446,7 @@ if (!function_exists('geodir_autoinstall_admin_header') && get_option('geodir_in
         global $wpdb, $plugin_prefix;
 
         if (!geodir_is_default_location_set()) {
-            echo '<div class="updated fade"><p><strong>' . sprintf(__('Please %sclick here%s to set a default location, this will help to set location of all dummy data.', GEODIRECTORY_TEXTDOMAIN), '<a href=\'' . admin_url('admin.php?page=geodirectory&tab=default_location_settings') . '\'>', '</a>') . '</strong></p></div>';
+            echo '<div class="updated fade"><p><strong>' . sprintf(__('Please %sclick here%s to set a default location, this will help to set location of all dummy data.', 'geodirectory'), '<a href=\'' . admin_url('admin.php?page=geodirectory&tab=default_location_settings') . '\'>', '</a>') . '</strong></p></div>';
         } else {
 
             $geodir_url = admin_url() . 'admin.php?page=geodirectory&tab=general_settings&active_tab=';
@@ -489,10 +495,12 @@ if (!function_exists('geodir_autoinstall_admin_header') && get_option('geodir_in
                 var latlng = new google.maps.LatLng(lat, lng);
                 geocoder.geocode({'address': CITY_ADDRESS},
                     function (results, status) {
+
                         if (status == google.maps.GeocoderStatus.OK) {
                             // Bounds for North America
                             //	 alert((results[0].geometry.bounds==null))
                             if (results[0].geometry.bounds == null) {
+
                                 bound_lat_lng1 = String(results[0].geometry.viewport.getSouthWest());
                                 bound_lat_lng1 = bound_lat_lng1.replace(/[()]/g, "");
 
@@ -509,13 +517,15 @@ if (!function_exists('geodir_autoinstall_admin_header') && get_option('geodir_in
                                 bound_lat_lng = bound_lat_lng.split(',');
                             }
 
+                            bound_lat_lng = bound_lat_lng.map(function(x){return x.replace(" ", '');});// remove spaces from lat/lon
+
                             strictBounds = new google.maps.LatLngBounds(
                                 new google.maps.LatLng(bound_lat_lng[0], bound_lat_lng[1]),
                                 new google.maps.LatLng(bound_lat_lng[2], bound_lat_lng[3])
                             );
 
                         } else {
-                            alert("<?php _e('Geocode was not successful for the following reason:',GEODIRECTORY_TEXTDOMAIN);?> " + status);
+                            alert("<?php _e('Geocode was not successful for the following reason:','geodirectory');?> " + status);
                         }
                     });
 
@@ -528,7 +538,7 @@ if (!function_exists('geodir_autoinstall_admin_header') && get_option('geodir_in
                     var total_dummy_post_count = jQuery('#sub_' + active_tab).find('.selected_sample_data').val();
 
                     if (id == 'geodir_dummy_delete') {
-                        if (confirm('<?php _e('Are you sure you want to delete dummy data?' , GEODIRECTORY_TEXTDOMAIN); ?>')) {
+                        if (confirm('<?php _e('Are you sure you want to delete dummy data?' , 'geodirectory'); ?>')) {
                             jQuery('#sub_' + active_tab).find('.geodir_auto_install').hide();
                             jQuery('#sub_' + active_tab).find('.geodir_show_progress').show();
                             jQuery.post('<?php echo geodir_get_ajax_url(); ?>&geodir_autofill=' + id + '&posttype=' + posttype + '&_wpnonce=' + nonce,
@@ -547,7 +557,7 @@ if (!function_exists('geodir_autoinstall_admin_header') && get_option('geodir_in
                         jQuery.post('<?php echo geodir_get_ajax_url(); ?>&geodir_autofill=' + id + '&posttype=' + posttype + '&insert_dummy_post_index=' + dummy_post_index + '&city_bound_lat1=' + bound_lat_lng[0] + '&city_bound_lng1=' + bound_lat_lng[1] + '&city_bound_lat2=' + bound_lat_lng[2] + '&city_bound_lng2=' + bound_lat_lng[3] + '&_wpnonce=' + nonce,
                             function (data) {
 
-                                jQuery(obj).closest('form').find('.dummy_post_inserted').html('<?php _e('Dummy post(s) inserted:',GEODIRECTORY_TEXTDOMAIN);?> ' + dummy_post_index + ' <?php _e('of' ,GEODIRECTORY_TEXTDOMAIN); ?> ' + total_dummy_post_count + '');
+                                jQuery(obj).closest('form').find('.dummy_post_inserted').html('<?php _e('Dummy post(s) inserted:','geodirectory');?> ' + dummy_post_index + ' <?php _e('of' ,'geodirectory'); ?> ' + total_dummy_post_count + '');
                                 dummy_post_index++;
                                 if (dummy_post_index <= total_dummy_post_count)
                                     geodir_autoinstall(obj, id, nonce, posttype);
@@ -625,9 +635,7 @@ function geodir_delete_dummy_posts()
  * @global object $wpdb WordPress Database object.
  * @global string $dummy_image_path The dummy image path.
  */
-function geodir_default_taxonomies()
-{
-
+function geodir_default_taxonomies() {
     global $wpdb, $dummy_image_path;
 
     $category_array = array('Attractions', 'Hotels', 'Restaurants', 'Food Nightlife', 'Festival', 'Videos', 'Feature');
@@ -637,7 +645,7 @@ function geodir_default_taxonomies()
     $last_term = get_term($last_catid, 'gd_placecategory');
 
     $uploads = wp_upload_dir(); // Array of key => value pairs
-    //print_r($uploads) ;
+
     for ($i = 0; $i < count($category_array); $i++) {
         $parent_catid = 0;
         if (is_array($category_array[$i])) {
@@ -745,9 +753,7 @@ function geodir_default_taxonomies()
  * @param bool $dummy Is this dummy settings? Default: false.
  * @return bool Returns true if saved.
  */
-function geodir_update_options($options, $dummy = false)
-{
-    //print_r($_POST);exit;
+function geodir_update_options($options, $dummy = false) {
     if ((!isset($_POST) || !$_POST) && !$dummy) return false;
 
     foreach ($options as $value) {
@@ -885,7 +891,7 @@ function geodir_update_options($options, $dummy = false)
         endif;
     }
     if ($dummy)
-        unset($_POST);
+        $_POST = array();
     return true;
 
 }
@@ -940,19 +946,17 @@ function places_custom_fields_tab($tabs)
     if (!empty($geodir_post_types)) {
 
         foreach ($geodir_post_types as $geodir_post_type => $geodir_posttype_info):
-            if ($geodir_post_type == 'gd_place' && get_option('geodir_disable_place_tax')) {
-                continue;
-            }
+
             $listing_slug = $geodir_posttype_info['labels']['singular_name'];
 
             $tabs[$geodir_post_type . '_fields_settings'] = array(
-                'label' => __(ucfirst($listing_slug) . ' Settings', GEODIRECTORY_TEXTDOMAIN),
+                'label' => __(ucfirst($listing_slug) . ' Settings', 'geodirectory'),
                 'subtabs' => array(
                     array('subtab' => 'custom_fields',
-                        'label' => __('Custom Fields', GEODIRECTORY_TEXTDOMAIN),
+                        'label' => __('Custom Fields', 'geodirectory'),
                         'request' => array('listing_type' => $geodir_post_type)),
                     array('subtab' => 'sorting_options',
-                        'label' => __('Sorting Options', GEODIRECTORY_TEXTDOMAIN),
+                        'label' => __('Sorting Options', 'geodirectory'),
                         'request' => array('listing_type' => $geodir_post_type)),
                 ),
                 'tab_index' => 9,
@@ -979,7 +983,7 @@ function places_custom_fields_tab($tabs)
  */
 function geodir_tools_setting_tab($tabs)
 {
-    $tabs['tools_settings'] = array('label' => __('GD Tools', GEODIRECTORY_TEXTDOMAIN));
+    $tabs['tools_settings'] = array('label' => __('GD Tools', 'geodirectory'));
     return $tabs;
 }
 
@@ -995,7 +999,7 @@ function geodir_tools_setting_tab($tabs)
  */
 function geodir_compatibility_setting_tab($tabs)
 {
-    $tabs['compatibility_settings'] = array('label' => __('Theme Compatibility', GEODIRECTORY_TEXTDOMAIN));
+    $tabs['compatibility_settings'] = array('label' => __('Theme Compatibility', 'geodirectory'));
     return $tabs;
 }
 
@@ -1012,7 +1016,7 @@ function geodir_compatibility_setting_tab($tabs)
  */
 function geodir_extend_geodirectory_setting_tab($tabs)
 {
-    $tabs['extend_geodirectory_settings'] = array('label' => __('Extend Geodirectory', GEODIRECTORY_TEXTDOMAIN), 'url' => 'http://wpgeodirectory.com', 'target' => '_blank');
+    $tabs['extend_geodirectory_settings'] = array('label' => __('Extend Geodirectory', 'geodirectory'). ' <i class="fa fa-plug"></i>', 'url' => 'http://wpgeodirectory.com', 'target' => '_blank');
     return $tabs;
 }
 
@@ -1029,8 +1033,8 @@ if (!function_exists('geodir_edit_post_columns')) {
     function geodir_edit_post_columns($columns)
     {
 
-        $new_columns = array('location' => __('Location (ID)', GEODIRECTORY_TEXTDOMAIN),
-            'categorys' => __('Categories', GEODIRECTORY_TEXTDOMAIN));
+        $new_columns = array('location' => __('Location (ID)', 'geodirectory'),
+            'categorys' => __('Categories', 'geodirectory'));
 
         if (($offset = array_search('author', array_keys($columns))) === false) // if the key doesn't exist
         {
@@ -1040,7 +1044,7 @@ if (!function_exists('geodir_edit_post_columns')) {
 
         $columns = array_merge(array_slice($columns, 0, $offset), $new_columns, array_slice($columns, $offset));
 
-        $columns = array_merge($columns, array('expire' => __('Expires', GEODIRECTORY_TEXTDOMAIN)));
+        $columns = array_merge($columns, array('expire' => __('Expires', 'geodirectory')));
 
         return $columns;
     }
@@ -1069,11 +1073,11 @@ if (!function_exists('geodir_manage_post_columns')) {
                 $location = geodir_get_location($location_id);
                 /* If no city is found, output a default message. */
                 if (empty($location)) {
-                    _e('Unknown', GEODIRECTORY_TEXTDOMAIN);
+                    _e('Unknown', 'geodirectory');
                 } else {
                     /* If there is a city id, append 'city name' to the text string. */
                     $add_location_id = $location_id > 0 ? ' (' . $location_id . ')' : '';
-                    echo(__($location->country, GEODIRECTORY_TEXTDOMAIN) . '-' . $location->region . '-' . $location->city . $add_location_id);
+                    echo(__($location->country, 'geodirectory') . '-' . $location->region . '-' . $location->city . $add_location_id);
                 }
                 break;
 
@@ -1082,12 +1086,12 @@ if (!function_exists('geodir_manage_post_columns')) {
                 $expire_date = geodir_get_post_meta($post->ID, 'expire_date', true);
                 $d1 = $expire_date; // get expire_date
                 $d2 = date('Y-m-d'); // get current date
-                $state = __('days left', GEODIRECTORY_TEXTDOMAIN);
+                $state = __('days left', 'geodirectory');
                 $date_diff_text = '';
                 $expire_class = 'expire_left';
                 if ($expire_date != 'Never') {
                     if (strtotime($d1) < strtotime($d2)) {
-                        $state = __('days overdue', GEODIRECTORY_TEXTDOMAIN);
+                        $state = __('days overdue', 'geodirectory');
                         $expire_class = 'expire_over';
                     }
                     $date_diff = round(abs(strtotime($d1) - strtotime($d2)) / 86400); // get the differance in days
@@ -1095,7 +1099,7 @@ if (!function_exists('geodir_manage_post_columns')) {
                 }
                 /* If no expire_date is found, output a default message. */
                 if (empty($expire_date))
-                    echo __('Unknown', GEODIRECTORY_TEXTDOMAIN);
+                    echo __('Unknown', 'geodirectory');
                 /* If there is a expire_date, append 'days left' to the text string. */
                 else
                     echo $expire_date . $date_diff_text;
@@ -1125,7 +1129,7 @@ if (!function_exists('geodir_manage_post_columns')) {
                     echo(join(', ', $out));
                 } /* If no terms were found, output a default message. */
                 else {
-                    _e('No Categories', GEODIRECTORY_TEXTDOMAIN);
+                    _e('No Categories', 'geodirectory');
                 }
                 break;
 
@@ -1162,42 +1166,21 @@ if (!function_exists('geodir_post_sortable_columns')) {
  * @global object $post WordPress Post object.
  * @param int $post_id The post ID.
  */
-function geodir_post_information_save($post_id,$post)
-{
+function geodir_post_information_save($post_id, $post) {
+    global $wpdb, $current_user;
 
-    global $wpdb, $current_user;//, $post;
-
-    if(isset($post->post_type) && ($post->post_type=='nav_menu_item' || $post->post_type=='page' || $post->post_type=='post')){
+    if (isset($post->post_type) && ($post->post_type=='nav_menu_item' || $post->post_type=='page' || $post->post_type=='post')) {
         return;
     }
-
-   /* echo '###post';
-    print_r($_POST);
-    echo '###request';
-    print_r($_REQUEST);
-    echo '###';
-    print_r($post);
-    exit;
-   */
-    //unsetting the listing session here causes problems, it should be the last thing to be done.
-    /*if(isset($_SESSION['listing'])){
-		unset($_SESSION['listing']);
-	}*/
 
     $geodir_posttypes = geodir_get_posttypes();
 
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
         return;
 
-    if (!wp_is_post_revision($post_id) &&
-        isset($post->post_type) && in_array($post->post_type, $geodir_posttypes)
-    ):
-
+    if (!wp_is_post_revision($post_id) && isset($post->post_type) && in_array($post->post_type, $geodir_posttypes)) {
         if (isset($_REQUEST['_status']))
             geodir_change_post_status($post_id, $_REQUEST['_status']);
-
-        /*if ( !wp_verify_nonce( $_POST['geodir_post_setting_noncename'], plugin_basename( __FILE__ ) ) )
-        return;*/
 
         if (isset($_REQUEST['action']) && ($_REQUEST['action'] == 'trash' || $_REQUEST['action'] == 'untrash'))
             return;
@@ -1205,978 +1188,10 @@ function geodir_post_information_save($post_id,$post)
         if (!isset($_POST['geodir_post_info_noncename']) || !wp_verify_nonce($_POST['geodir_post_info_noncename'], plugin_basename(__FILE__)))
             return;
 
-        /*if ( !wp_verify_nonce( $_POST['geodir_post_addinfo_noncename'], plugin_basename( __FILE__ ) ) )
-        return;*/
-
         if (!isset($_POST['geodir_post_attachments_noncename']) || !wp_verify_nonce($_POST['geodir_post_attachments_noncename'], plugin_basename(__FILE__)))
             return;
 
-
         geodir_save_listing($_REQUEST);
-
-
-    endif;
-}
-
-if (!function_exists('geodir_insert_csv_post_data') && get_option('geodir_installed')) {
-    /**
-     * Function to insert csv post data.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @global object $wpdb WordPress Database object.
-     * @global string $plugin_prefix Geodirectory plugin table prefix.
-     */
-    function geodir_insert_csv_post_data()
-    {
-        global $wpdb, $plugin_prefix;
-
-        $svalue = '';
-        ?>
-        <script type="text/javascript">
-            jQuery(document).ready(function () {
-                jQuery("#import_data").click(function () {
-                    var geodir_import_data = jQuery('.geodir_import_data').val();
-                    var csv_filename = jQuery('.csv_filename').val();
-                    if (csv_filename != '') {
-                        jQuery.post('<?php echo geodir_get_ajax_url(); ?>&geodir_import_data=' + geodir_import_data + '&filename=' + csv_filename, function (data) {
-                            //alert(data);
-                            window.location.href = data;
-                        });
-                    } else {
-                        alert('<?php echo PLZ_SELECT_CSV_FILE; ?>');
-                    }
-                });
-
-                jQuery(".uploadcsv_button").click(function () {
-                    setInterval(function () {
-                        var checkvalue = jQuery('.csv_filename').val();
-                        if (checkvalue != '') {
-                            jQuery('.csv_button_div').show();
-                        }
-                    }, 1000);
-                });
-
-
-            });
-            jQuery(document).ready(function () {
-                jQuery(".gd_uploadcsv_button").click(function () {
-                    setInterval(function () {
-                        var checkvalue = jQuery('.gd_csv_filename').val();
-                        if (checkvalue != '') {
-                            jQuery('.gd_csv_button_div').show();
-                        }
-                    }, 1000);
-                });
-            });
-        </script>
-        <?php
-
-        if (isset($_REQUEST['active_tab']) && $_REQUEST['active_tab'] == 'csv_upload_settings') {
-
-            if (isset($_REQUEST['msg']) && $_REQUEST['msg'] == 'success') {
-                $rowcount = $_REQUEST['rowcount'];
-                $uploads = wp_upload_dir(); ?>
-
-                <div class="updated fade below-h2" id="message"
-                     style="background-color: rgb(255, 251, 204); margin-left:0px; margin-top:0px; margin-bottom:10px;">
-
-                    <?php
-
-                    if ($_REQUEST['invalidcount'] == 0 && $_REQUEST['blank_address'] == 0 && $_REQUEST['invalid_post_type'] == 0 && $_REQUEST['invalid_title'] == 0) {
-
-                        echo '<p>' . CSV_INSERT_DATA . '</p>';
-
-                    }
-
-                    echo '<p>';
-                    printf(CSV_TOTAL_RECORD, $rowcount);
-                    echo '</p>';
-
-                    if (isset($_REQUEST['invalidcount']) && $_REQUEST['invalidcount'] > 0) {
-
-                        echo '<p>';
-                        printf(CSV_INVALID_DEFUALT_ADDRESS, $_REQUEST['invalidcount'], $_REQUEST['total_records']);
-                        echo '</p>';
-                    }
-
-                    if (isset($_REQUEST['blank_address']) && $_REQUEST['blank_address'] > 0) {
-
-                        echo '<p>';
-                        printf(CSV_INVALID_TOTAL_RECORD, $_REQUEST['blank_address'], $_REQUEST['total_records']);
-                        echo '</p>';
-
-                    }
-
-                    if (isset($_REQUEST['invalid_post_type']) && $_REQUEST['invalid_post_type'] > 0) {
-
-                        echo '<p>';
-                        printf(CSV_INVALID_POST_TYPE, $_REQUEST['invalid_post_type'], $_REQUEST['total_records']);
-                        echo '</p>';
-
-                    }
-
-                    if (isset($_REQUEST['invalid_title']) && $_REQUEST['invalid_title'] > 0) {
-
-                        echo '<p>';
-                        printf(CSV_BLANK_POST_TITLE, $_REQUEST['invalid_title'], $_REQUEST['total_records']);
-                        echo '</p>';
-
-                    }
-
-                    if (isset($_REQUEST['upload_files']) && $_REQUEST['upload_files'] > 0) {
-
-                        echo '<p>';
-                        printf(CSV_TRANSFER_IMG_FOLDER, $uploads['subdir']);
-                        echo '</p>';
-
-                    }
-
-
-                    ?>
-
-                </div>
-
-            <?php }?>
-
-            <?php if (isset($_REQUEST['emsg']) && $_REQUEST['emsg'] == 'wrong') { ?>
-
-                <div class="updated fade below-h2" id="message"
-                     style="background-color: rgb(255, 251, 204); margin-left:0px; margin-top:0px; margin-bottom:10px;  color:#FF0000;">
-                    <p><?php echo CSV_INVAILD_FILE; ?></p>
-
-                </div>
-
-            <?php }?>
-
-            <?php if (isset($_REQUEST['emsg']) == 'csvonly') { ?>
-
-                <div class="updated fade below-h2" id="message"
-                     style="background-color: rgb(255, 251, 204); margin-left:0px; margin-top:0px; margin-bottom:10px; color:#FF0000;">
-                    <p><?php echo CSV_UPLOAD_ONLY; ?></p>
-
-                </div>
-
-            <?php }
-        } ?>
-        <?php /* ?>
-    <table class="form-table">
-        <tbody>
-            <tr valign="top" class="single_select_page">
-                <th class="titledesc" scope="row"><?php echo SELECT_CSV_FILE;?></th>
-                <td class="forminp">
-
-					<?php
-                    $id = "import_image";
-                    $multiple = false; // allow multiple files upload
-                    ?>
-                 	<div class="gtd-formfeild">
-                        <div class="gtd-form_row clearfix" id="<?php echo $id; ?>dropbox">
-
-                        <div class="plupload-upload-uic hide-if-no-js" id="<?php echo $id; ?>plupload-upload-ui">
-                        <input type="text" readonly="readonly" name="<?php echo $id; ?>" class="csv_filename" id="<?php echo $id; ?>" value="<?php echo $svalue; ?>" /><input id="<?php echo $id; ?>plupload-browse-button" type="button" value="<?php echo SELECT_UPLOAD_CSV; ?>" class="uploadcsv_button" /><br />
-                       <a href="<?php echo geodir_plugin_url() . '/geodirectory-assets/place_listing.csv'?>" ><?php _e("Download sample csv", GEODIRECTORY_TEXTDOMAIN)?></a>
-                       <?php do_action('geodir_sample_csv_download_link'); ?>
-
-                        <span class="ajaxnonceplu" id="ajaxnonceplu<?php echo wp_create_nonce($id . 'pluploadan'); ?>"></span><br /><br />
-    						<div class="filelist"></div>
-
-                        </div>
-                   </div>
-                	</div>
-                    <span id="upload-error" style="display:none"></span>
-                	<span class="description"></span><br />
-                    <div class="csv_button_div" style="display:none;">
-                    <input type="hidden" class="geodir_import_data" name="geodir_import_data" value="save" />					        			<input type="button" value="<?php echo CSV_IMPORT_DATA; ?>" id="import_data" class="button-primary" name="save">				</div>
-
-                </td>
-            </tr>
-
-        </tbody>
-    </table>
-	<?php */ ?>
-        <?php
-        $id = "gd_import_csv";
-        $multiple = false; // allow multiple files upload
-        $uploads = wp_upload_dir();
-        ?>
-        <style>
-            .gd-csv-form-table .filelist div.file:last-child {
-                display: block !important;
-                opacity: 1 !important
-            }
-
-            .gd-import-progress {
-                margin-top: 10px
-            }
-
-            .gd-import-file {
-                background: #ececec;
-                border: 1px solid #ccc;
-                clear: both;
-                margin-bottom: 4px;
-                padding: 5px;
-            }
-
-            .gd-fileprogress {
-                background: #b7c53d;
-                height: 5px;
-                width: 0;
-                margin-top: 3px
-            }
-
-            .gd-csv-form-table .fileprogress {
-                margin-top: 3px
-            }
-
-            #gd-import-msg {
-                padding-top: 12px
-            }
-
-            #gd-import-msg #message {
-                background-color: rgb(255, 251, 204);
-            }
-        </style>
-        <script type="text/javascript">
-            var timout;
-            function gdPrepareImport() {
-                jQuery('#gd-import-msg').hide();
-                var gd_prepared = jQuery('#gd_prepared').val();
-                var uploadedFile = jQuery('#gd_import_csv').val();
-                if (gd_prepared == uploadedFile) {
-                    gdContinueImport();
-                    jQuery('#gd_import_data').attr('disabled', 'disabled');
-                } else {
-                    var gddata = new Array();
-                    gddata = {
-                        'uploadedFile': uploadedFile,
-                    }
-                    jQuery.ajax({
-                        type: 'POST',
-                        url: ajaxurl,
-                        dataType: 'json',
-                        data: {
-                            'action': 'gdImportCsv',
-                            'gddata': gddata,
-                            'task': 'prepare'
-                        },
-                        success: function (data) {
-                            if (typeof data == 'object') {
-                                if (data.error) {
-                                    jQuery('#gd-import-msg').find('#message').removeClass('updated').addClass('error').html('<p>' + data.error + '</p>');
-                                    jQuery('#gd-import-msg').show();
-                                } else {
-                                    jQuery('#gd_tmpcount').val('0');
-                                    jQuery('#gd_tot_records').val(data.rows);
-                                    jQuery('#gd_checktotal').val(data.rows);
-                                    jQuery('#gd_prepared').val(uploadedFile);
-
-                                    jQuery('#gd_rowcount').val('0');
-                                    jQuery('#gd_invalidcount').val('0');
-                                    jQuery('#gd_blank_address').val('0');
-                                    jQuery('#gd_upload_files').val('0');
-                                    jQuery('#gd_invalid_post_type').val('0');
-                                    jQuery('#gd_invalid_title').val('0');
-                                    jQuery('#gd_total_records').val('0');
-
-                                    gdStartImport();
-                                }
-                            }
-                        },
-                        error: function (errorThrown) {
-                            console.log(errorThrown);
-                        }
-                    });
-                }
-            }
-            function gdTerminateImport() {
-                console.log('gdTerminateImport()');
-                jQuery('#gd_terminateaction').val('terminate');
-                jQuery('#gd_import_data').hide();
-                jQuery('#gd_stop_import').hide();
-                jQuery('#gd_process_data').hide();
-                jQuery('#gd_continue_data').show();
-            }
-            function gdContinueImport() {
-                var tmpCnt = jQuery('#gd_tmpcount').val();
-                var tot_no_of_records = jQuery('#gd_tot_records').val();
-                if (parseInt(tmpCnt) > parseInt(tot_no_of_records)) {
-                    jQuery('#gd_stop_import').hide();
-                } else {
-                    jQuery('#gd_stop_import').show();
-                }
-                jQuery('#gd_import_data').show();
-                jQuery('#gd_import_data').attr('disabled', 'disabled');
-                jQuery('#gd_process_data').css({
-                    'display': 'inline-block'
-                });
-                jQuery('#gd_continue_data').hide();
-                jQuery('#gd_terminateaction').val('continue');
-                clearTimeout(timout);
-                timout = setTimeout(function () {
-                    gdStartImport();
-                }, 0);
-            }
-            function gdStartImport(siteurl) {
-                var importlimit = 1;
-                var get_requested_count = importlimit;
-                var tot_no_of_records = jQuery('#gd_checktotal').val();
-                var uploadedFile = jQuery('#gd_import_csv').val();
-                var tmpCnt = jQuery('#gd_tmpcount').val();
-                var no_of_tot_records = jQuery('#gd_tot_records').val();
-
-                if (!uploadedFile) {
-                    jQuery('#gd_import_data').removeAttr('disabled');
-                    jQuery('#gd_import_data').show();
-                    jQuery('#gd_stop_import').hide();
-                    jQuery('#gd_process_data').hide();
-                    jQuery('#gd-import-progress').hide();
-                    jQuery('.gd-fileprogress').width(0);
-                    jQuery('#gd-import-done').text('0');
-                    jQuery('#gd-import-total').text('0');
-                    jQuery('#gd-import-perc').text('0%');
-
-                    jQuery('.gd-csv-form-table .filelist .file').remove();
-                    jQuery('#gd-import-msg').find('#message').removeClass('updated').addClass('error').html("<p><?php echo esc_attr( PLZ_SELECT_CSV_FILE );?></p>");
-                    jQuery('#gd-import-msg').show();
-
-                    return false;
-                }
-
-                jQuery('#gd-import-total').text(tot_no_of_records);
-                jQuery('#gd_stop_import').show();
-                jQuery('#gd_process_data').css({
-                    'display': 'inline-block'
-                });
-                jQuery('#gd-import-progress').show();
-                if ((parseInt(no_of_tot_records) / 100) > 0) {
-                    importlimit = parseInt(parseInt(no_of_tot_records) / 100);
-                }
-                if (importlimit == 1) {
-                    if (parseInt(no_of_tot_records) > 50) {
-                        importlimit = 5;
-                    } else if (parseInt(no_of_tot_records) > 10 && parseInt(no_of_tot_records) < 51) {
-                        importlimit = 2;
-                    }
-                }
-                if (importlimit > 10) {
-                    importlimit = 10;
-                }
-                if (importlimit < 1) {
-                    importlimit = 1;
-                }
-
-                get_requested_count = importlimit;
-
-                var tempCount = parseInt(tmpCnt);
-                var totalCount = parseInt(tot_no_of_records);
-                if (tempCount >= totalCount) {
-                    jQuery('#gd_import_data').removeAttr('disabled');
-                    jQuery('#gd_import_data').show();
-                    jQuery('#gd_stop_import').hide();
-                    jQuery('#gd_process_data').hide();
-                    gd_showStatusMsg();
-                    jQuery('#gd_import_csv').val('');
-                    jQuery('#gd_prepared').val('');
-
-                    return false;
-                }
-                jQuery('#gd-import-msg').hide();
-                var gddata = new Array();
-                gddata = {
-                    'importlimit': importlimit,
-                    'totRecords': tot_no_of_records,
-                    'uploadedFile': uploadedFile,
-                    'tmpcount': tmpCnt,
-                }
-                var tmpLoc = jQuery('#tmpLoc').val();
-
-                var gd_rowcount = parseInt(jQuery('#gd_rowcount').val());
-                var gd_invalidcount = parseInt(jQuery('#gd_invalidcount').val());
-                var gd_blank_address = parseInt(jQuery('#gd_blank_address').val());
-                var gd_upload_files = parseInt(jQuery('#gd_upload_files').val());
-                var gd_invalid_post_type = parseInt(jQuery('#gd_invalid_post_type').val());
-                var gd_invalid_title = parseInt(jQuery('#gd_invalid_title').val());
-                var gd_total_records = parseInt(jQuery('#gd_total_records').val());
-
-                jQuery.ajax({
-                    type: 'POST',
-                    url: ajaxurl,
-                    dataType: 'json',
-                    data: {
-                        'action': 'gdImportCsv',
-                        'gddata': gddata,
-                        'siteurl': siteurl,
-                    },
-                    success: function (data) {
-                        if (typeof data == 'object') {
-                            if (data.error) {
-                                jQuery('#gd_import_data').removeAttr('disabled');
-                                jQuery('#gd_import_data').show();
-                                jQuery('#gd_stop_import').hide();
-                                jQuery('#gd_process_data').hide();
-                                jQuery('#gd-import-msg').find('#message').removeClass('updated').addClass('error').html('<p>' + data.error + '</p>');
-                                jQuery('#gd-import-msg').show();
-                            } else {
-                                gd_rowcount = gd_rowcount + parseInt(data.rowcount);
-                                gd_invalidcount = gd_invalidcount + parseInt(data.invalidcount);
-                                gd_blank_address = gd_blank_address + parseInt(data.blank_address);
-                                gd_upload_files = gd_upload_files + parseInt(data.upload_files);
-                                gd_invalid_post_type = gd_invalid_post_type + parseInt(data.invalid_post_type);
-                                gd_invalid_title = gd_invalid_title + parseInt(data.invalid_title);
-                                gd_total_records = gd_total_records + parseInt(data.total_records);
-
-                                jQuery('#gd_rowcount').val(gd_rowcount);
-                                jQuery('#gd_invalidcount').val(gd_invalidcount);
-                                jQuery('#gd_blank_address').val(gd_blank_address);
-                                jQuery('#gd_upload_files').val(gd_upload_files);
-                                jQuery('#gd_invalid_post_type').val(gd_invalid_post_type);
-                                jQuery('#gd_invalid_title').val(gd_invalid_title);
-                                jQuery('#gd_total_records').val(gd_total_records);
-
-                                if (parseInt(tmpCnt) == parseInt(tot_no_of_records)) {
-                                    jQuery('#gd-import-done').text(tot_no_of_records);
-                                    jQuery('#gd-import-perc').text('100%');
-                                    jQuery('.gd-fileprogress').css({
-                                        'width': '100%'
-                                    });
-                                    jQuery('#gd_import_csv').val('');
-                                    jQuery('#gd_prepared').val('');
-                                    gd_showStatusMsg();
-                                    jQuery('#gd_stop_import').hide();
-                                }
-                                if (parseInt(tmpCnt) < parseInt(tot_no_of_records)) {
-                                    var terminate_action = jQuery('#gd_terminateaction').val();
-                                    if (terminate_action == 'continue') {
-                                        //console.log('Limit: ' + importlimit + ', Total: ' + tot_no_of_records);
-                                        var nTmpCnt = parseInt(tmpCnt) + parseInt(importlimit);
-                                        nTmpCnt = nTmpCnt > tot_no_of_records ? tot_no_of_records : nTmpCnt;
-
-                                        jQuery('#gd_tmpcount').val(nTmpCnt);
-
-                                        jQuery('#gd-import-done').text(nTmpCnt);
-                                        if (parseInt(tot_no_of_records) > 0) {
-                                            var percentage = ((parseInt(nTmpCnt) / parseInt(tot_no_of_records)) * 100);
-                                            percentage = percentage > 100 ? 100 : percentage;
-                                            jQuery('#gd-import-perc').text(parseInt(percentage) + '%');
-                                            jQuery('.gd-fileprogress').css({
-                                                'width': percentage + '%'
-                                            });
-                                        }
-
-                                        clearTimeout(timout);
-                                        timout = setTimeout(function () {
-                                            gdStartImport();
-                                        }, 0);
-                                    } else {
-                                        jQuery('#gd_import_data').hide();
-                                        jQuery('#gd_stop_import').hide();
-                                        jQuery('#gd_process_data').hide();
-                                        jQuery('#gd_continue_data').show();
-                                        return false;
-                                    }
-                                } else {
-                                    jQuery('#gd_import_data').removeAttr('disabled');
-                                    jQuery('#gd_import_data').show();
-                                    jQuery('#gd_stop_import').hide();
-                                    jQuery('#gd_process_data').hide();
-                                    return false;
-                                }
-                            }
-                        }
-                    },
-                    error: function (errorThrown) {
-                        jQuery('#gd_import_data').removeAttr('disabled');
-                        jQuery('#gd_import_data').show();
-                        jQuery('#gd_stop_import').hide();
-                        jQuery('#gd_process_data').hide();
-                        console.log(errorThrown);
-                    }
-                });
-            }
-            function gd_showStatusMsg() {
-                var gd_rowcount = parseInt(jQuery('#gd_rowcount').val());
-                var gd_invalidcount = parseInt(jQuery('#gd_invalidcount').val());
-                var gd_blank_address = parseInt(jQuery('#gd_blank_address').val());
-                var gd_upload_files = parseInt(jQuery('#gd_upload_files').val());
-                var gd_invalid_post_type = parseInt(jQuery('#gd_invalid_post_type').val());
-                var gd_invalid_title = parseInt(jQuery('#gd_invalid_title').val());
-                var gd_total_records = parseInt(jQuery('#gd_total_records').val());
-
-                var gdMsg = '<p></p>';
-                if (gd_invalidcount == 0 && gd_blank_address == 0 && gd_invalid_post_type == 0 && gd_invalid_title == 0) {
-                    gdMsg += "<p><?php echo esc_attr( CSV_INSERT_DATA );?></p>";
-                }
-
-                var msgParse = '<p><?php echo addslashes( CSV_TOTAL_RECORD );?></p>';
-                gdMsg += msgParse.replace("%s", gd_rowcount);
-
-                if (gd_invalidcount > 0) {
-                    msgParse = msgParse = '<p><?php echo sprintf( CSV_INVALID_DEFUALT_ADDRESS, '%s', '%d' );?></p>';
-                    msgParse = msgParse.replace("%s", gd_invalidcount);
-                    msgParse = msgParse.replace("%d", gd_total_records);
-                    gdMsg += msgParse;
-                }
-                if (gd_blank_address > 0) {
-                    msgParse = '<p><?php echo addslashes( sprintf( CSV_INVALID_TOTAL_RECORD, '%s', '%d' ) );?></p>';
-                    msgParse = msgParse.replace("%s", gd_blank_address);
-                    msgParse = msgParse.replace("%d", gd_total_records);
-                    gdMsg += msgParse;
-                }
-                if (gd_invalid_post_type > 0) {
-                    msgParse = '<p><?php echo addslashes( sprintf( CSV_INVALID_POST_TYPE, '%s', '%d' ) );?></p>';
-                    msgParse = msgParse.replace("%s", gd_invalid_post_type);
-                    msgParse = msgParse.replace("%d", gd_total_records);
-                    gdMsg += msgParse;
-                }
-                if (gd_invalid_title > 0) {
-                    msgParse = '<p><?php echo addslashes( sprintf( CSV_BLANK_POST_TITLE, '%s', '%d' ) );?></p>';
-                    msgParse = msgParse.replace("%s", gd_invalid_title);
-                    msgParse = msgParse.replace("%d", gd_total_records);
-                    gdMsg += msgParse;
-                }
-                if (gd_upload_files > 0) {
-                    gdMsg += '<p><?php echo addslashes( sprintf( CSV_TRANSFER_IMG_FOLDER, $uploads['subdir'] ) );?></p>';
-                }
-                gdMsg += '<p></p>';
-                jQuery('#gd-import-msg').find('#message').removeClass('error').addClass('updated').html(gdMsg);
-                jQuery('#gd-import-msg').show();
-            }
-        </script>
-        <table class="form-table gd-csv-form-table">
-            <tbody>
-            <tr valign="top" class="single_select_page">
-                <th class="titledesc" scope="row"><?php echo SELECT_CSV_FILE;?></th>
-                <td class="forminp">
-                    <div class="gtd-formfeild">
-                        <div class="gtd-form_row clearfix" id="<?php echo $id; ?>dropbox">
-                            <div class="plupload-upload-uic hide-if-no-js" id="<?php echo $id; ?>plupload-upload-ui">
-                                <input type="text" readonly="readonly" name="<?php echo $id; ?>" class="gd_csv_filename"
-                                       id="<?php echo $id; ?>" value="<?php echo $svalue; ?>"/>
-                                <input id="<?php echo $id; ?>plupload-browse-button" type="button"
-                                       value="<?php echo SELECT_UPLOAD_CSV; ?>" class="gd_uploadcsv_button"/>
-                                <br/>
-                                <a href="<?php echo geodir_plugin_url() . '/geodirectory-assets/place_listing.csv'?>"><?php _e("Download sample csv", GEODIRECTORY_TEXTDOMAIN)?></a>
-                                <?php
-                                /**
-                                 * Called just after the sample CSV download link.
-                                 *
-                                 * @since 1.0.0
-                                 */
-                                do_action('geodir_sample_csv_download_link'); ?>
-                                <span class="ajaxnonceplu"
-                                      id="ajaxnonceplu<?php echo wp_create_nonce($id . 'pluploadan'); ?>"></span><br/>
-                                <br/>
-
-                                <div class="filelist"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <span id="<?php echo $id; ?>upload-error" style="display:none"></span> <span
-                        class="description"></span><br/>
-
-                    <div class="gd_csv_button_div" style="display:none;">
-                        <input type="hidden" class="geodir_import_file" name="geodir_import_file" value="save"/>
-                        <input onclick="gdPrepareImport()" type="button" value="<?php echo CSV_IMPORT_DATA; ?>"
-                               id="gd_import_data" class="button-primary" name="save">
-                        <input onclick="gdContinueImport()" type="button" value="Continue Import Data"
-                               id="gd_continue_data" class="button-primary" style="display:none"/>
-                        <input type="button" value="<?php _e("Terminate Import Data", GEODIRECTORY_TEXTDOMAIN);?>"
-                               id="gd_stop_import" class="button-primary" name="gd_stop_import" style="display:none"
-                               onclick="gdTerminateImport()"/>
-
-                        <div id="gd_process_data" style="display:none"><span class="spinner"
-                                                                             style="display:inline-block;margin:0 5px 0 5px;float:left"></span><?php _e("Wait, processing import data...", GEODIRECTORY_TEXTDOMAIN);?>
-                        </div>
-                    </div>
-                    <div id="gd_importer" style="display:none">
-                        <input type="hidden" id="gd_tmpcount" value="0"/>
-                        <input type="hidden" id="gd_tot_records" value="100"/>
-                        <input type="hidden" id="gd_checktotal" value="100"/>
-                        <input type="hidden" id="gd_terminateaction" value="continue"/>
-                        <input type="hidden" id="gd_prepared" value="continue"/>
-                        <input type="hidden" id="gd_rowcount" value="0"/>
-                        <input type="hidden" id="gd_invalidcount" value="0"/>
-                        <input type="hidden" id="gd_blank_address" value="0"/>
-                        <input type="hidden" id="gd_upload_files" value="0"/>
-                        <input type="hidden" id="gd_invalid_post_type" value="0"/>
-                        <input type="hidden" id="gd_invalid_title" value="0"/>
-                        <input type="hidden" id="gd_total_records" value="0"/>
-                    </div>
-                    <div class="gd-import-progress" id="gd-import-progress" style="display:none">
-                        <div class="gd-import-file"><b><?php _e("Import Data Status :", GEODIRECTORY_TEXTDOMAIN);?> </b><font
-                                id="gd-import-done">0</font> / <font id="gd-import-total">0</font>&nbsp;( <font
-                                id="gd-import-perc">0%</font> )
-                            <div class="gd-fileprogress"></div>
-                        </div>
-                    </div>
-                    <div class="gd-import-msg" id="gd-import-msg" style="display:none">
-                        <div id="message" class="message fade"></div>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-    <?php }
-}
-
-if (!function_exists('geodir_import_data')) {
-    /**
-     * Imports data from csv file.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @global object $wpdb WordPress Database object.
-     * @global string $plugin_prefix Geodirectory plugin table prefix.
-     * @global object $current_user Current user object.
-     */
-    function geodir_import_data()
-    {
-
-        global $wpdb, $plugin_prefix, $current_user;
-
-        if (isset($_REQUEST['geodir_import_data']) && !empty($_REQUEST['geodir_import_data'])) {
-            $uploads = wp_upload_dir();
-            $uploads_dir = $uploads['path'];
-
-            $curr_img_url = $_REQUEST['filename'];
-
-            $image_name_arr = explode('/', $curr_img_url);
-
-            $filename = end($image_name_arr);
-
-            $target_path = $uploads_dir . '/temp_' . $current_user->data->ID . '/' . $filename;
-
-            $destination_path = $uploads_dir . '/temp_' . $current_user->data->ID;
-
-            $csv_target_path = $target_path;
-
-            ini_set('auto_detect_line_endings', true);
-
-            $fd = fopen($target_path, "rt");
-
-            $total_records = 0;
-            $rowcount = 0;
-            $address_invalid = 0;
-            $blank_address = 0;
-            $upload_files = 0;
-            $invalid_post_type = 0;
-            $invalid_title = 0;
-
-            $customKeyarray = array();
-
-            $gd_post_info = array();
-
-            $post_location = array();
-            $countpost = 0;
-
-            $uploaded_file_type = pathinfo($filename, PATHINFO_EXTENSION);
-
-            $extensionarr = array('csv', 'CSV');
-
-            if (in_array($uploaded_file_type, $extensionarr)) {
-
-                while (!feof($fd)) {
-                    $buffer = fgetcsv($fd, 40960);
-
-                    if ($rowcount == 0) {
-                        for ($k = 0; $k < count($buffer); $k++) {
-                            $customKeyarray[$k] = $buffer[$k];
-                        }
-
-                        if ($customKeyarray[0] == '') {
-                            echo $geodir_url = admin_url() . 'admin.php?page=geodirectory&tab=general_settings&active_tab=csv_upload_settings&emsg=wrong';
-                            exit;
-                        }
-                    } elseif (!empty($buffer)) {
-
-                        $total_records++;
-
-                        $post_title = addslashes($buffer[0]);
-                        $current_post_author = $buffer[1];
-                        $post_desc = addslashes($buffer[2]);
-                        $post_cat = array();
-                        $catids_arr = array();
-                        $post_cat = trim($buffer[3]); // comma seperated category name
-
-                        if ($post_cat) {
-                            $post_cat_arr = explode(',', $post_cat);
-
-                            for ($c = 0; $c < count($post_cat_arr); $c++) {
-                                $catid = wp_kses_normalize_entities(trim($post_cat_arr[$c]));
-                                if (!empty($buffer[5])) {
-                                    if (in_array($buffer[5], geodir_get_posttypes())) {
-                                        $p_taxonomy = geodir_get_taxonomies(addslashes($buffer[5]));
-                                        if (get_term_by('name', $catid, $p_taxonomy[0])) {
-                                            $cat = get_term_by('name', $catid, $p_taxonomy[0]);
-                                            $catids_arr[] = $cat->slug;
-                                        } elseif (get_term_by('slug', $catid, $p_taxonomy[0])) {
-                                            $cat = get_term_by('slug', $catid, $p_taxonomy[0]);
-                                            $catids_arr[] = $cat->slug;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        if (!$catids_arr) {
-                            $catids_arr[] = 1;
-                        }
-
-                        $post_tags = trim($buffer[4]); // comma seperated tags
-
-                        $tag_arr = '';
-                        if ($post_tags) {
-
-                            $tag_arr = explode(',', $post_tags);
-                        }
-
-                        $table = $plugin_prefix . $buffer[5] . '_detail'; // check table in database
-
-                        $error = '';
-                        if ($wpdb->get_var("SHOW TABLES LIKE '" . $table . "'") != $table) {
-
-                            $invalid_post_type++;
-                            continue;
-
-                        }
-
-                        if ($post_title != '') {
-
-                            $menu_order = 0;
-
-                            $image_folder_name = 'uplaod/';
-
-                            $image_names = array();
-
-                            for ($c = 5; $c < count($customKeyarray); $c++) {
-                                $gd_post_info[$customKeyarray[$c]] = addslashes($buffer[$c]);
-
-                                if ($customKeyarray[$c] == 'IMAGE') {
-                                    $buffer[$c] = trim($buffer[$c]);
-                                    if (!empty($buffer[$c])) {
-                                        $image_names[] = $buffer[$c];
-                                    }
-
-                                }
-
-                                if ($customKeyarray[$c] == 'alive_days') {
-                                    if ($buffer[$c] != '0' && $buffer[$c] != '') {
-                                        $submitdata = date('Y-m-d');
-                                        $gd_post_info['expire_date'] = date('Y-m-d', strtotime($submitdata . "+" . addslashes($buffer[$c]) . " days"));
-                                    } else {
-                                        $gd_post_info['expire_date'] = 'Never';
-                                    }
-                                }
-
-
-                                if ($customKeyarray[$c] == 'post_city') {
-                                    $post_city = addslashes($buffer[$c]);
-                                }
-
-                                if ($customKeyarray[$c] == 'post_region') {
-                                    $post_region = addslashes($buffer[$c]);
-                                }
-
-                                if ($customKeyarray[$c] == 'post_country') {
-                                    $post_country = addslashes($buffer[$c]);
-                                }
-
-                                if ($customKeyarray[$c] == 'post_latitude') {
-                                    $post_latitude = addslashes($buffer[$c]);
-                                }
-
-                                if ($customKeyarray[$c] == 'post_longitude') {
-                                    $post_longitude = addslashes($buffer[$c]);
-                                }
-
-                            }
-
-                            /* ================ before array create ============== */
-
-                            $location_result = geodir_get_default_location();
-
-                            if ((!isset($gd_post_info['post_city']) || $gd_post_info['post_city'] == '') || (!isset($gd_post_info['post_region']) || $gd_post_info['post_region'] == '') || (!isset($gd_post_info['post_country']) || $gd_post_info['post_country'] == '') || (!isset($gd_post_info['post_address']) || $gd_post_info['post_address'] == '') || (!isset($gd_post_info['post_latitude']) || $gd_post_info['post_latitude'] == '') || (!isset($gd_post_info['post_longitude']) || $gd_post_info['post_longitude'] == '')) {
-
-                                $blank_address++;
-                                continue;
-
-                            } elseif ($location_result->location_id == 0) {
-
-                                if ((strtolower($gd_post_info['post_city']) != strtolower($location_result->city)) ||
-                                    (strtolower($gd_post_info['post_region']) != strtolower($location_result->region)) ||
-                                    (strtolower($gd_post_info['post_country']) != strtolower($location_result->country))
-                                ) {
-
-                                    $address_invalid++;
-                                    continue;
-
-                                }
-
-                            }
-
-
-                            $my_post['post_title'] = $post_title;
-                            $my_post['post_content'] = $post_desc;
-                            $my_post['post_type'] = addslashes($buffer[5]);
-                            $my_post['post_author'] = $current_post_author;
-                            $my_post['post_status'] = 'publish';
-                            $my_post['post_category'] = $catids_arr;
-                            $my_post['post_tags'] = $tag_arr;
-
-
-                            $gd_post_info['post_tags'] = $tag_arr;
-                            $gd_post_info['post_title'] = $post_title;
-                            $gd_post_info['post_status'] = 'publish';
-                            $gd_post_info['submit_time'] = time();
-                            $gd_post_info['submit_ip'] = $_SERVER['REMOTE_ADDR'];
-
-
-                            $last_postid = wp_insert_post($my_post);
-                            $countpost++;
-
-
-                            // Check if we need to save post location as new location
-
-                            if ($location_result->location_id > 0) {
-                                if (isset($post_city) && isset($post_region)) {
-
-                                    $request_info['post_location'] = array('city' => $post_city,
-                                        'region' => $post_region,
-                                        'country' => $post_country,
-                                        'geo_lat' => $post_latitude,
-                                        'geo_lng' => $post_longitude);
-
-                                    $post_location_info = $request_info['post_location'];
-                                    if ($location_id = geodir_add_new_location($post_location_info))
-                                        $post_location_id = $location_id;
-
-                                } else {
-                                    $post_location_id = 0;
-                                }
-                            } else {
-                                $post_location_id = 0;
-                            }
-
-                            /* ------- get default package info ----- */
-                            $payment_info = array();
-                            $package_info = array();
-
-                            $package_info = (array)geodir_post_package_info($package_info, '', $buffer[5]);
-                            $package_id = '';
-                            if (isset($gd_post_info['package_id']) && $gd_post_info['package_id'] != '') {
-                                $package_id = $gd_post_info['package_id'];
-                            }
-
-                            if (!empty($package_info)) {
-                                $payment_info['package_id'] = $package_info['pid'];
-                                if (isset($package_info['alive_days']) && $package_info['alive_days'] != 0) {
-                                    $payment_info['expire_date'] = date('Y-m-d', strtotime("+" . $package_info['alive_days'] . " days"));
-                                } else {
-                                    $payment_info['expire_date'] = 'Never';
-                                }
-
-                                $gd_post_info = array_merge($gd_post_info, $payment_info);
-                            }
-
-
-                            $gd_post_info['post_location_id'] = $post_location_id;
-
-                            $post_type = get_post_type($last_postid);
-
-                            $table = $plugin_prefix . $post_type . '_detail';
-
-                            geodir_save_post_info($last_postid, $gd_post_info);
-
-                            if (!empty($image_names)) {
-                                $upload_files++;
-                                $menu_order = 1;
-                                foreach ($image_names as $image_name) {
-
-                                    $img_name_arr = explode('.', $image_name);
-
-                                    $uploads = wp_upload_dir();
-                                    $sub_dir = $uploads['subdir'];
-
-                                    $arr_file_type = wp_check_filetype($image_name);
-                                    $uploaded_file_type = $arr_file_type['type'];
-
-                                    $attachment = array();
-                                    $attachment['post_id'] = $last_postid;
-                                    $attachment['title'] = $img_name_arr[0];
-                                    $attachment['content'] = '';
-                                    $attachment['file'] = $sub_dir . '/' . $image_name;
-                                    $attachment['mime_type'] = $uploaded_file_type;
-                                    $attachment['menu_order'] = $menu_order;
-                                    $attachment['is_featured'] = 0;
-
-                                    $attachment_set = '';
-
-                                    foreach ($attachment as $key => $val) {
-                                        if ($val != '')
-                                            $attachment_set .= $key . " = '" . $val . "', ";
-                                    }
-
-                                    $attachment_set = trim($attachment_set, ", ");
-
-                                    $wpdb->query("INSERT INTO " . GEODIR_ATTACHMENT_TABLE . " SET " . $attachment_set);
-
-                                    if ($menu_order == 1) {
-
-                                        $post_type = get_post_type($last_postid);
-
-                                        $wpdb->query($wpdb->prepare("UPDATE " . $table . " SET featured_image = %s where post_id =%d", array($sub_dir . '/' . $image_name, $last_postid)));
-
-                                    }
-
-                                    $menu_order++;
-                                }
-                            }
-
-                            $gd_post_info['package_id'] = $package_id;
-
-                            /** This action is documented in geodirectory-functions/post-functions.php */
-                            do_action('geodir_after_save_listing', $last_postid, $gd_post_info);
-
-                            if (!empty($buffer[5])) {
-                                if (in_array($buffer[5], geodir_get_posttypes())) {
-
-                                    $taxonomies = geodir_get_posttype_info(addslashes($buffer[5]));
-                                    wp_set_object_terms($last_postid, $my_post['post_tags'], $taxonomy = $taxonomies['taxonomies'][1]);
-                                    wp_set_object_terms($last_postid, $my_post['post_category'], $taxonomy = $taxonomies['taxonomies'][0]);
-
-
-                                    $post_default_category = isset($my_post['post_default_category']) ? $my_post['post_default_category'] : '';
-
-                                    $post_category_str = isset($my_post['post_category_str']) ? $my_post['post_category_str'] : '';
-                                    geodir_set_postcat_structure($last_postid, $taxonomy, $post_default_category, $post_category_str);
-
-                                }
-
-                            }
-
-                        } else {
-                            $invalid_title++;
-                        }
-                    }
-                    $rowcount++;
-                }
-                fclose($fd);
-                //unlink($csv_target_path);
-                //rmdir($destination_path);
-                if (!empty($filename))
-                    geodir_remove_temp_images();
-
-
-                echo $geodir_url = admin_url() . 'admin.php?page=geodirectory&tab=general_settings&active_tab=csv_upload_settings&msg=success&rowcount=' . $countpost . '&invalidcount=' . $address_invalid . '&blank_address=' . $blank_address . '&upload_files=' . $upload_files . '&invalid_post_type=' . $invalid_post_type . '&invalid_title=' . $invalid_title . '&total_records=' . $total_records;
-                exit;
-            } else {
-                echo $geodir_url = admin_url() . 'admin.php?page=geodirectory&tab=general_settings&active_tab=csv_upload_settings&emsg=csvonly';
-                exit;
-            }
-        }
-
     }
 }
 
@@ -2188,6 +1203,7 @@ if (!function_exists('geodir_import_data')) {
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $geodirectory GeoDirectory plugin object.
+ * @global object $sitepress Sitepress WPML object.
  * @param array $options The options array.
  */
 function geodir_admin_fields($options)
@@ -2207,9 +1223,6 @@ function geodir_admin_fields($options)
             case 'dummy_installer':
                 $post_type = isset($value['post_type']) ? $value['post_type'] : 'gd_place';
                 geodir_autoinstall_admin_header($post_type);
-                break;
-            case 'csv_installer':
-                geodir_insert_csv_post_data();
                 break;
             case 'title':
 
@@ -2296,6 +1309,7 @@ function geodir_admin_fields($options)
                 <td class="forminp"><input name="<?php echo esc_attr($value['id']); ?>"
                                            id="<?php echo esc_attr($value['id']); ?>"
                                            type="<?php echo esc_attr($value['type']); ?>"
+                                           <?php if(isset($value['placeholder'])){?>placeholder="<?php echo esc_attr($value['placeholder']); ?>"<?php }?>
                                            style=" <?php echo esc_attr($value['css']); ?>"
                                            value="<?php if (get_option($value['id']) !== false && get_option($value['id']) !== null) {
                                                echo esc_attr(stripslashes(get_option($value['id'])));
@@ -2312,6 +1326,7 @@ function geodir_admin_fields($options)
                 <td class="forminp"><input name="<?php echo esc_attr($value['id']); ?>"
                                            id="<?php echo esc_attr($value['id']); ?>"
                                            type="<?php echo esc_attr($value['type']); ?>"
+                                           <?php if(isset($value['placeholder'])){?>placeholder="<?php echo esc_attr($value['placeholder']); ?>"<?php }?>
                                            style="<?php echo esc_attr($value['css']); ?>"
                                            value="<?php if (get_option($value['id']) !== false && get_option($value['id']) !== null) {
                                                echo esc_attr(stripslashes(get_option($value['id'])));
@@ -2354,17 +1369,17 @@ function geodir_admin_fields($options)
                 <th scope="row" class="titledesc"><?php echo $value['name'] ?></th>
                 <td class="forminp">
 
-                    <?php _e('Width', GEODIRECTORY_TEXTDOMAIN); ?> <input
+                    <?php _e('Width', 'geodirectory'); ?> <input
                         name="<?php echo esc_attr($value['id']); ?>_width"
                         id="<?php echo esc_attr($value['id']); ?>_width" type="text" size="3"
                         value="<?php if ($size = get_option($value['id'] . '_width')) echo stripslashes($size); else echo $value['std']; ?>"/>
 
-                    <?php _e('Height', GEODIRECTORY_TEXTDOMAIN); ?> <input
+                    <?php _e('Height', 'geodirectory'); ?> <input
                         name="<?php echo esc_attr($value['id']); ?>_height"
                         id="<?php echo esc_attr($value['id']); ?>_height" type="text" size="3"
                         value="<?php if ($size = get_option($value['id'] . '_height')) echo stripslashes($size); else echo $value['std']; ?>"/>
 
-                    <label><?php _e('Hard Crop', GEODIRECTORY_TEXTDOMAIN); ?> <input
+                    <label><?php _e('Hard Crop', 'geodirectory'); ?> <input
                             name="<?php echo esc_attr($value['id']); ?>_crop"
                             id="<?php echo esc_attr($value['id']); ?>_crop"
                             type="checkbox" <?php if (get_option($value['id'] . '_crop') != '') checked(get_option($value['id'] . '_crop'), 1); else checked(1); ?> /></label>
@@ -2373,6 +1388,8 @@ function geodir_admin_fields($options)
                 </tr><?php
                 break;
             case 'select':
+                $option_value = get_option($value['id']);
+                $option_value = !empty($option_value) ? stripslashes_deep($option_value) : $option_value;
                 ?>
                 <tr valign="top">
                 <th scope="row" class="titledesc"><?php echo $value['name'] ?></th>
@@ -2384,15 +1401,13 @@ function geodir_admin_fields($options)
                         <?php
                         foreach ($value['options'] as $key => $val) {
                             $geodir_select_value = '';
-                            if (get_option($value['id']) != '') {
-                                if (get_option($value['id']) != '' && get_option($value['id']) == $key)
+                            if ($option_value != '') {
+                                if ($option_value != '' && $option_value == $key)
                                     $geodir_select_value = ' selected="selected" ';
                             } else {
                                 if ($value['std'] == $key)
                                     $geodir_select_value = ' selected="selected" ';
                             }
-
-
                             ?>
                             <option
                                 value="<?php echo esc_attr($key); ?>" <?php echo $geodir_select_value; ?> ><?php echo ucfirst($val) ?></option>
@@ -2405,6 +1420,11 @@ function geodir_admin_fields($options)
                 break;
 
             case 'multiselect':
+                $option_values = get_option($value['id']);
+                if ($option_values === '' && !empty($value['std']) && is_array($value['std'])) {
+                   $option_values = $value['std'];
+                }
+                $option_values = !empty($option_values) ? stripslashes_deep($option_values) : $option_values;
                 ?>
                 <tr valign="top">
                 <th scope="row" class="titledesc"><?php echo $value['name']; ?></th>
@@ -2423,9 +1443,7 @@ function geodir_admin_fields($options)
                             } else {
                                 ?>
                                 <option
-                                    value="<?php echo esc_attr($key); ?>" <?php if (is_array(get_option($value['id']))) {
-                                    if (in_array($key, get_option($value['id']))) { ?> selected="selected" <?php }
-                                } ?>><?php echo ucfirst($val) ?></option>
+                                    value="<?php echo esc_attr($key); ?>" <?php selected(true, (is_array($option_values) && in_array($key, $option_values)));?>><?php echo ucfirst($val) ?></option>
                             <?php
                             }
                         }
@@ -2448,8 +1466,8 @@ function geodir_admin_fields($options)
                         <span class="description"> <?php $uploads = wp_upload_dir(); ?> <a
                                 href="<?php echo get_option($value['id']); ?>"
                                 target="_blank"><?php echo get_option($value['id']); ?></a> <i
-                                title="<?php _e('remove file (set to empty)', GEODIRECTORY_TEXTDOMAIN); ?>"
-                                onclick="jQuery('#<?php echo esc_attr($value['id']); ?>_remove').val('1'); jQuery( this ).parent().text('<?php _e('save to remove file', GEODIRECTORY_TEXTDOMAIN); ?>');"
+                                title="<?php _e('remove file (set to empty)', 'geodirectory'); ?>"
+                                onclick="jQuery('#<?php echo esc_attr($value['id']); ?>_remove').val('1'); jQuery( this ).parent().text('<?php _e('save to remove file', 'geodirectory'); ?>');"
                                 class="fa fa-times gd-remove-file"></i></span>
 
                     <?php } ?>
@@ -2460,66 +1478,66 @@ function geodir_admin_fields($options)
                 ?>
 
                 <tr valign="top">
-                    <th class="titledesc" width="40%"><?php _e('Default map language', GEODIRECTORY_TEXTDOMAIN);?></th>
+                    <th class="titledesc" width="40%"><?php _e('Default map language', 'geodirectory');?></th>
                     <td width="60%">
                         <select name="geodir_default_map_language" style="width:60%">
                             <?php
                             $arr_map_langages = array(
-                                'ar' => __('ARABIC', GEODIRECTORY_TEXTDOMAIN),
-                                'eu' => __('BASQUE', GEODIRECTORY_TEXTDOMAIN),
-                                'bg' => __('BULGARIAN', GEODIRECTORY_TEXTDOMAIN),
-                                'bn' => __('BENGALI', GEODIRECTORY_TEXTDOMAIN),
-                                'ca' => __('CATALAN', GEODIRECTORY_TEXTDOMAIN),
-                                'cs' => __('CZECH', GEODIRECTORY_TEXTDOMAIN),
-                                'da' => __('DANISH', GEODIRECTORY_TEXTDOMAIN),
-                                'de' => __('GERMAN', GEODIRECTORY_TEXTDOMAIN),
-                                'el' => __('GREEK', GEODIRECTORY_TEXTDOMAIN),
-                                'en' => __('ENGLISH', GEODIRECTORY_TEXTDOMAIN),
-                                'en-AU' => __('ENGLISH (AUSTRALIAN)', GEODIRECTORY_TEXTDOMAIN),
-                                'en-GB' => __('ENGLISH (GREAT BRITAIN)', GEODIRECTORY_TEXTDOMAIN),
-                                'es' => __('SPANISH', GEODIRECTORY_TEXTDOMAIN),
-                                'eu' => __('BASQUE', GEODIRECTORY_TEXTDOMAIN),
-                                'fa' => __('FARSI', GEODIRECTORY_TEXTDOMAIN),
-                                'fi' => __('FINNISH', GEODIRECTORY_TEXTDOMAIN),
-                                'fil' => __('FILIPINO', GEODIRECTORY_TEXTDOMAIN),
-                                'fr' => __('FRENCH', GEODIRECTORY_TEXTDOMAIN),
-                                'gl' => __('GALICIAN', GEODIRECTORY_TEXTDOMAIN),
-                                'gu' => __('GUJARATI', GEODIRECTORY_TEXTDOMAIN),
-                                'hi' => __('HINDI', GEODIRECTORY_TEXTDOMAIN),
-                                'hr' => __('CROATIAN', GEODIRECTORY_TEXTDOMAIN),
-                                'hu' => __('HUNGARIAN', GEODIRECTORY_TEXTDOMAIN),
-                                'id' => __('INDONESIAN', GEODIRECTORY_TEXTDOMAIN),
-                                'it' => __('ITALIAN', GEODIRECTORY_TEXTDOMAIN),
-                                'iw' => __('HEBREW', GEODIRECTORY_TEXTDOMAIN),
-                                'ja' => __('JAPANESE', GEODIRECTORY_TEXTDOMAIN),
-                                'kn' => __('KANNADA', GEODIRECTORY_TEXTDOMAIN),
-                                'ko' => __('KOREAN', GEODIRECTORY_TEXTDOMAIN),
-                                'lt' => __('LITHUANIAN', GEODIRECTORY_TEXTDOMAIN),
-                                'lv' => __('LATVIAN', GEODIRECTORY_TEXTDOMAIN),
-                                'ml' => __('MALAYALAM', GEODIRECTORY_TEXTDOMAIN),
-                                'mr' => __('MARATHI', GEODIRECTORY_TEXTDOMAIN),
-                                'nl' => __('DUTCH', GEODIRECTORY_TEXTDOMAIN),
-                                'no' => __('NORWEGIAN', GEODIRECTORY_TEXTDOMAIN),
-                                'pl' => __('POLISH', GEODIRECTORY_TEXTDOMAIN),
-                                'pt' => __('PORTUGUESE', GEODIRECTORY_TEXTDOMAIN),
-                                'pt-BR' => __('PORTUGUESE (BRAZIL)', GEODIRECTORY_TEXTDOMAIN),
-                                'pt-PT' => __('PORTUGUESE (PORTUGAL)', GEODIRECTORY_TEXTDOMAIN),
-                                'ro' => __('ROMANIAN', GEODIRECTORY_TEXTDOMAIN),
-                                'ru' => __('RUSSIAN', GEODIRECTORY_TEXTDOMAIN),
-                                'ru' => __('RUSSIAN', GEODIRECTORY_TEXTDOMAIN),
-                                'sk' => __('SLOVAK', GEODIRECTORY_TEXTDOMAIN),
-                                'sl' => __('SLOVENIAN', GEODIRECTORY_TEXTDOMAIN),
-                                'sr' => __('SERBIAN', GEODIRECTORY_TEXTDOMAIN),
-                                'sv' => __('	SWEDISH', GEODIRECTORY_TEXTDOMAIN),
-                                'tl' => __('TAGALOG', GEODIRECTORY_TEXTDOMAIN),
-                                'ta' => __('TAMIL', GEODIRECTORY_TEXTDOMAIN),
-                                'te' => __('TELUGU', GEODIRECTORY_TEXTDOMAIN),
-                                'th' => __('THAI', GEODIRECTORY_TEXTDOMAIN),
-                                'tr' => __('TURKISH', GEODIRECTORY_TEXTDOMAIN),
-                                'uk' => __('UKRAINIAN', GEODIRECTORY_TEXTDOMAIN),
-                                'vi' => __('VIETNAMESE', GEODIRECTORY_TEXTDOMAIN),
-                                'zh-CN' => __('CHINESE (SIMPLIFIED)', GEODIRECTORY_TEXTDOMAIN),
-                                'zh-TW' => __('CHINESE (TRADITIONAL)', GEODIRECTORY_TEXTDOMAIN),
+                                'ar' => __('ARABIC', 'geodirectory'),
+                                'eu' => __('BASQUE', 'geodirectory'),
+                                'bg' => __('BULGARIAN', 'geodirectory'),
+                                'bn' => __('BENGALI', 'geodirectory'),
+                                'ca' => __('CATALAN', 'geodirectory'),
+                                'cs' => __('CZECH', 'geodirectory'),
+                                'da' => __('DANISH', 'geodirectory'),
+                                'de' => __('GERMAN', 'geodirectory'),
+                                'el' => __('GREEK', 'geodirectory'),
+                                'en' => __('ENGLISH', 'geodirectory'),
+                                'en-AU' => __('ENGLISH (AUSTRALIAN)', 'geodirectory'),
+                                'en-GB' => __('ENGLISH (GREAT BRITAIN)', 'geodirectory'),
+                                'es' => __('SPANISH', 'geodirectory'),
+                                'eu' => __('BASQUE', 'geodirectory'),
+                                'fa' => __('FARSI', 'geodirectory'),
+                                'fi' => __('FINNISH', 'geodirectory'),
+                                'fil' => __('FILIPINO', 'geodirectory'),
+                                'fr' => __('FRENCH', 'geodirectory'),
+                                'gl' => __('GALICIAN', 'geodirectory'),
+                                'gu' => __('GUJARATI', 'geodirectory'),
+                                'hi' => __('HINDI', 'geodirectory'),
+                                'hr' => __('CROATIAN', 'geodirectory'),
+                                'hu' => __('HUNGARIAN', 'geodirectory'),
+                                'id' => __('INDONESIAN', 'geodirectory'),
+                                'it' => __('ITALIAN', 'geodirectory'),
+                                'iw' => __('HEBREW', 'geodirectory'),
+                                'ja' => __('JAPANESE', 'geodirectory'),
+                                'kn' => __('KANNADA', 'geodirectory'),
+                                'ko' => __('KOREAN', 'geodirectory'),
+                                'lt' => __('LITHUANIAN', 'geodirectory'),
+                                'lv' => __('LATVIAN', 'geodirectory'),
+                                'ml' => __('MALAYALAM', 'geodirectory'),
+                                'mr' => __('MARATHI', 'geodirectory'),
+                                'nl' => __('DUTCH', 'geodirectory'),
+                                'no' => __('NORWEGIAN', 'geodirectory'),
+                                'pl' => __('POLISH', 'geodirectory'),
+                                'pt' => __('PORTUGUESE', 'geodirectory'),
+                                'pt-BR' => __('PORTUGUESE (BRAZIL)', 'geodirectory'),
+                                'pt-PT' => __('PORTUGUESE (PORTUGAL)', 'geodirectory'),
+                                'ro' => __('ROMANIAN', 'geodirectory'),
+                                'ru' => __('RUSSIAN', 'geodirectory'),
+                                'ru' => __('RUSSIAN', 'geodirectory'),
+                                'sk' => __('SLOVAK', 'geodirectory'),
+                                'sl' => __('SLOVENIAN', 'geodirectory'),
+                                'sr' => __('SERBIAN', 'geodirectory'),
+                                'sv' => __('	SWEDISH', 'geodirectory'),
+                                'tl' => __('TAGALOG', 'geodirectory'),
+                                'ta' => __('TAMIL', 'geodirectory'),
+                                'te' => __('TELUGU', 'geodirectory'),
+                                'th' => __('THAI', 'geodirectory'),
+                                'tr' => __('TURKISH', 'geodirectory'),
+                                'uk' => __('UKRAINIAN', 'geodirectory'),
+                                'vi' => __('VIETNAMESE', 'geodirectory'),
+                                'zh-CN' => __('CHINESE (SIMPLIFIED)', 'geodirectory'),
+                                'zh-TW' => __('CHINESE (TRADITIONAL)', 'geodirectory'),
                             );
                             $geodir_default_map_language = get_option('geodir_default_map_language');
                             if (empty($geodir_default_map_language))
@@ -2542,7 +1560,7 @@ function geodir_admin_fields($options)
 
                 <tr valign="top">
                     <th class="titledesc"
-                        width="40%"><?php _e('Default post type search on map', GEODIRECTORY_TEXTDOMAIN);?></th>
+                        width="40%"><?php _e('Default post type search on map', 'geodirectory');?></th>
                     <td width="60%">
                         <select name="geodir_default_map_search_pt" style="width:60%">
                             <?php
@@ -2622,7 +1640,7 @@ function geodir_admin_fields($options)
                                 <?php $count++; endforeach; ?>
                             </thead>
                         </table>
-                        <p><?php _e('Note: Tick respective post type or categories which you want to hide from home page map widget.', GEODIRECTORY_TEXTDOMAIN)?></p>
+                        <p><?php _e('Note: Tick respective post type or categories which you want to hide from home page map widget.', 'geodirectory')?></p>
                     </td>
                 </tr>
                 <?php
@@ -2675,7 +1693,7 @@ function geodir_admin_fields($options)
                                id="<?php echo esc_attr($value['id'] . $value['value']); ?>" type="radio"
                                value="<?php echo $value['value'] ?>" <?php if (get_option($value['id']) == $value['value']) {
                             echo 'checked="checked"';
-                        } ?> />
+                        }elseif(get_option($value['id'])=='' && $value['std']==$value['value']){echo 'checked="checked"';} ?> />
                         <?php echo $value['desc']; ?></label><br>
                 </fieldset>
                 <?php
@@ -2697,6 +1715,7 @@ function geodir_admin_fields($options)
                     <textarea
                         <?php if (isset($value['args'])) echo $value['args'] . ' '; ?>name="<?php echo esc_attr($value['id']); ?>"
                         id="<?php echo esc_attr($value['id']); ?>"
+                        <?php if(isset($value['placeholder'])){?>placeholder="<?php echo esc_attr($value['placeholder']); ?>"<?php }?>
                         style="<?php echo esc_attr($value['css']); ?>"><?php if (get_option($value['id'])) echo esc_textarea(stripslashes(get_option($value['id']))); else echo esc_textarea($value['std']); ?></textarea><span
                         class="description"><?php echo $value['desc'] ?></span>
 
@@ -2727,7 +1746,23 @@ function geodir_admin_fields($options)
                 break;
 
             case 'single_select_page' :
-                $page_setting = (int)get_option($value['id']);
+                // WPML
+				$switch_lang = false;
+				$disabled = '';
+				if (geodir_is_wpml() && isset($_REQUEST['tab']) && $_REQUEST['tab'] == 'permalink_settings') {
+					global $sitepress;
+					
+					$default_lang = $sitepress->get_default_language();
+					$current_lang = $sitepress->get_current_language();
+					
+					if ($current_lang != 'all' && $current_lang != $default_lang) {
+						$disabled = "disabled='disabled'";
+						$switch_lang = $current_lang;
+						$sitepress->switch_lang('all', true);
+					}
+				}
+				//
+				$page_setting = (int)get_option($value['id']);
 
                 $args = array('name' => $value['id'],
                     'id' => $value['id'],
@@ -2744,10 +1779,13 @@ function geodir_admin_fields($options)
                 <tr valign="top" class="single_select_page">
                 <th scope="row" class="titledesc"><?php echo $value['name'] ?></th>
                 <td class="forminp">
-                    <?php echo str_replace(' id=', " data-placeholder='" . __('Select a page...', 'geodirectory') . "' style='" . $value['css'] . "' class='" . $value['class'] . "' id=", wp_dropdown_pages($args)); ?>
+                    <?php echo str_replace(' id=', " data-placeholder='" . __('Select a page...', 'geodirectory') . "' style='" . $value['css'] . "' class='" . $value['class'] . "' " . $disabled . " id=", wp_dropdown_pages($args)); ?>
                     <span class="description"><?php echo $value['desc'] ?></span>
                 </td>
                 </tr><?php
+				if ($switch_lang) {
+					$sitepress->switch_lang($switch_lang, true);
+				}
                 break;
             case 'single_select_country' :
                 $countries = $geodirectory->countries->countries;
@@ -2764,7 +1802,7 @@ function geodir_admin_fields($options)
                 <th scope="rpw" class="titledesc"><?php echo $value['name'] ?></th>
                 <td class="forminp"><select name="<?php echo esc_attr($value['id']); ?>"
                                             style="<?php echo esc_attr($value['css']); ?>"
-                                            data-placeholder="<?php _e('Choose a country&hellip;', GEODIRECTORY_TEXTDOMAIN); ?>"
+                                            data-placeholder="<?php _e('Choose a country&hellip;', 'geodirectory'); ?>"
                                             title="Country" class="chosen_select">
                         <?php echo $geodirectory->countries->country_dropdown_options($country, $state); ?>
                     </select> <span class="description"><?php echo $value['desc'] ?></span>
@@ -2780,7 +1818,7 @@ function geodir_admin_fields($options)
                 <th scope="row" class="titledesc"><?php echo $value['name'] ?></th>
                 <td class="forminp">
                     <select multiple="multiple" name="<?php echo esc_attr($value['id']); ?>[]" style="width:450px;"
-                            data-placeholder="<?php _e('Choose countries&hellip;', GEODIRECTORY_TEXTDOMAIN); ?>"
+                            data-placeholder="<?php _e('Choose countries&hellip;', 'geodirectory'); ?>"
                             title="Country" class="chosen_select">
                         <?php
                         if ($countries) foreach ($countries as $key => $val) :
@@ -2836,14 +1874,14 @@ function geodir_admin_fields($options)
                             if (get_option('gd_ga_refresh_token')) {
                                 ?>
                                 <span class="button-primary"
-                                      onclick="gd_ga_popup();"><?php _e('Re-authorize', GEODIRECTORY_TEXTDOMAIN); ?></span>
+                                      onclick="gd_ga_popup();"><?php _e('Re-authorize', 'geodirectory'); ?></span>
                                 <span
-                                    style="color: green; font-weight: bold;"><?php _e('Authorized', GEODIRECTORY_TEXTDOMAIN); ?></span>
+                                    style="color: green; font-weight: bold;"><?php _e('Authorized', 'geodirectory'); ?></span>
                             <?php
                             } else {
                                 ?>
                                 <span class="button-primary"
-                                      onclick="gd_ga_popup();"><?php _e('Authorize', GEODIRECTORY_TEXTDOMAIN);?></span>
+                                      onclick="gd_ga_popup();"><?php _e('Authorize', 'geodirectory');?></span>
                             <?php
                             }
                             ?>
@@ -2912,27 +1950,14 @@ function geodir_admin_fields($options)
                 jQuery("select.chosen_select").trigger("chosen:updated"); //refresh closen
             });
 
-
-            <?php
-            if(isset($_REQUEST['active_tab']) && $_REQUEST['active_tab'] != '')
-            {
-
-                ?>
+            <?php if (isset($_REQUEST['active_tab']) && $_REQUEST['active_tab'] != '') { ?>
             jQuery('.geodir_option_tabs').removeClass('gd-tab-active');
-            jQuery('#<?php echo $_REQUEST['active_tab'];?>').addClass('gd-tab-active');
-
+            jQuery('#<?php echo sanitize_text_field($_REQUEST['active_tab']);?>').addClass('gd-tab-active');
             jQuery('.gd-content-heading').hide();
-            jQuery('#sub_<?php echo $_REQUEST['active_tab'];?>').show();
-
-
-            <?php
-        }
-        ?>
-
+            jQuery('#sub_<?php echo sanitize_text_field($_REQUEST['active_tab']);?>').show();
+            <?php } ?>
         });
-
     </script>
-
 <?php
 }
 
@@ -3015,7 +2040,7 @@ function geodir_post_attachments()
     wp_nonce_field(plugin_basename(__FILE__), 'geodir_post_attachments_noncename');
 
     if (geodir_get_featured_image($post_id, 'thumbnail')) {
-        echo '<h4>' . __('Featured Image', GEODIRECTORY_TEXTDOMAIN) . '</h4>';
+        echo '<h4>' . __('Featured Image', 'geodirectory') . '</h4>';
         geodir_show_featured_image($post_id, 'thumbnail');
     }
 
@@ -3026,13 +2051,13 @@ function geodir_post_attachments()
 
     <h5 class="form_title">
         <?php if ($image_limit != 0 && $image_limit == 1) {
-            echo '<br /><small>(' . __('You can upload', GEODIRECTORY_TEXTDOMAIN) . ' ' . $image_limit . ' ' . __('image with this package', GEODIRECTORY_TEXTDOMAIN) . ')</small>';
+            echo '<br /><small>(' . __('You can upload', 'geodirectory') . ' ' . $image_limit . ' ' . __('image with this package', 'geodirectory') . ')</small>';
         } ?>
         <?php if ($image_limit != 0 && $image_limit > 1) {
-            echo '<br /><small>(' . __('You can upload', GEODIRECTORY_TEXTDOMAIN) . ' ' . $image_limit . ' ' . __('images with this package', GEODIRECTORY_TEXTDOMAIN) . ')</small>';
+            echo '<br /><small>(' . __('You can upload', 'geodirectory') . ' ' . $image_limit . ' ' . __('images with this package', 'geodirectory') . ')</small>';
         } ?>
         <?php if ($image_limit == 0) {
-            echo '<br /><small>(' . __('You can upload unlimited images with this package', GEODIRECTORY_TEXTDOMAIN) . ')</small>';
+            echo '<br /><small>(' . __('You can upload unlimited images with this package', 'geodirectory') . ')</small>';
         } ?>
     </h5>
 
@@ -3065,16 +2090,15 @@ function geodir_post_attachments()
 
     ?>
 
-    <div class="gtd-form_row clearfix" id="<?php echo $id; ?>dropbox" style="border:1px solid #999999; padding:5px;"
-         align="center">
+    <div class="gtd-form_row clearfix" id="<?php echo $id; ?>dropbox" style="border:1px solid #999999;padding:5px;text-align:center;">
         <input type="hidden" name="<?php echo $id; ?>" id="<?php echo $id; ?>" value="<?php echo $svalue; ?>"/>
 
         <div
             class="plupload-upload-uic hide-if-no-js <?php if ($multiple): ?>plupload-upload-uic-multiple<?php endif; ?>"
             id="<?php echo $id; ?>plupload-upload-ui">
-            <h4><?php _e('Drop files to upload', GEODIRECTORY_TEXTDOMAIN);?></h4>
+            <h4><?php _e('Drop files to upload', 'geodirectory');?></h4>
             <input id="<?php echo $id; ?>plupload-browse-button" type="button"
-                   value="<?php _e('Select Files', GEODIRECTORY_TEXTDOMAIN); ?>" class="button"/>
+                   value="<?php _e('Select Files', 'geodirectory'); ?>" class="button"/>
             <span class="ajaxnonceplu" id="ajaxnonceplu<?php echo wp_create_nonce($id . 'pluploadan'); ?>"></span>
             <?php if ($width && $height): ?>
                 <span class="plupload-resize"></span>
@@ -3087,7 +2111,7 @@ function geodir_post_attachments()
              id="<?php echo $id; ?>plupload-thumbs" style="border-top:1px solid #ccc; padding-top:10px;">
         </div>
         <span
-            id="upload-msg"><?php _e('Please drag &amp; drop the images to rearrange the order', GEODIRECTORY_TEXTDOMAIN);?></span>
+            id="upload-msg"><?php _e('Please drag &amp; drop the images to rearrange the order', 'geodirectory');?></span>
         <span id="<?php echo $id; ?>upload-error" style="display:none"></span>
     </div>
 
@@ -3132,8 +2156,8 @@ function geodir_notification_add_bcc_option($settings)
         foreach ($settings as $setting) {
             if (isset($setting['id']) && $setting['id'] == 'site_bcc_options' && isset($setting['type']) && $setting['type'] == 'sectionend') {
                 $geodir_bcc_listing_published_yes = array(
-                    'name' => __('Listing published', GEODIRECTORY_TEXTDOMAIN),
-                    'desc' => __('Yes', GEODIRECTORY_TEXTDOMAIN),
+                    'name' => __('Listing published', 'geodirectory'),
+                    'desc' => __('Yes', 'geodirectory'),
                     'id' => 'geodir_bcc_listing_published',
                     'std' => 'yes',
                     'type' => 'radio',
@@ -3142,8 +2166,8 @@ function geodir_notification_add_bcc_option($settings)
                 );
 
                 $geodir_bcc_listing_published_no = array(
-                    'name' => __('Listing published', GEODIRECTORY_TEXTDOMAIN),
-                    'desc' => __('No', GEODIRECTORY_TEXTDOMAIN),
+                    'name' => __('Listing published', 'geodirectory'),
+                    'desc' => __('No', 'geodirectory'),
                     'id' => 'geodir_bcc_listing_published',
                     'std' => 'yes',
                     'type' => 'radio',
@@ -3205,7 +2229,7 @@ function get_gd_theme_compat_import_callback()
     if (isset($_POST['theme']) && !empty($_POST['theme'])) {
         $json = json_decode(stripslashes($_POST['theme']), true);
         if (!empty($json) && is_array($json)) {
-            $key = key($json);
+            $key = sanitize_text_field(key($json));
             $themes[$key] = $json[$key];
             update_option('gd_theme_compats', $themes);
             echo $key;
@@ -3296,7 +2320,7 @@ function gd_avada_compat_warning()
 
     $plugin = 'avada-nag';
     $timestamp = 'avada-nag1234';
-    $message = __('Since Avada 3.8+ they have added hooks for compatibility for GeoDirectory so the header.php modification is no longer required. <a href="http://docs.wpgeodirectory.com/avada-compatibility-header-php/" target="_blank">See here</a>', GEODIRECTORY_TEXTDOMAIN);
+    $message = __('Welcome to GeoDirectory, please have a look <a href="https://docs.wpgeodirectory.com/category/getting-started/" target="_blank">here</a> to get started. :)', 'geodirectory');
     echo '<div id="' . $timestamp . '"  class="error">';
     echo '<span class="gd-remove-noti" onclick="gdRemoveANotification(\'' . $plugin . '\',\'' . $timestamp . '\');" ><i class="fa fa-times"></i></span>';
     echo "<img class='gd-icon-noti' src='" . plugin_dir_url('') . "geodirectory/geodirectory-assets/images/favicon.ico' > ";
@@ -3417,6 +2441,8 @@ function geodir_admin_current_post_type() {
  * @since 1.4.2
  * @package GeoDirectory
  *
+ * @global object $sitepress Sitepress WPML object.
+ *
  * @param string $current_tab Current tab in geodirectory settings.
  * @param array  $geodir_settings Array of geodirectory settings.
  */
@@ -3429,10 +2455,23 @@ function geodir_before_update_options($current_tab, $geodir_settings) {
 		$location_prefix = isset($_POST['geodir_location_prefix']) ? trim($_POST['geodir_location_prefix']) : '';
 		
 		// Don't allow same slug url for listing and location
-		if (strtolower($listing_prefix) == strtolower($location_prefix)) {
+		if (geodir_strtolower($listing_prefix) == geodir_strtolower($location_prefix)) {
 			$redirect_url = admin_url('admin.php?page=geodirectory&tab=' . $current_tab . '&active_tab=' . $active_tab . '&msg=fail&gderr=21');
         	wp_redirect($redirect_url);
 			exit;
+		}
+		
+		// Don't allow to update page settings on different language.
+		if (geodir_is_wpml()) {
+			global $sitepress;
+			$current_language = $sitepress->get_current_language();
+			$default_language = $sitepress->get_default_language();
+			
+			if ($current_language != 'all' && $current_language != $default_language) {
+				$redirect_url = admin_url('admin.php?page=geodirectory&tab=' . $current_tab . '&active_tab=' . $active_tab);
+				wp_redirect($redirect_url);
+				exit;
+			}
 		}
 	}
 }
@@ -3465,7 +2504,7 @@ add_action( 'admin_head-post.php', 'geodir_hide_admin_preview_button' );
  * @return array Array of tab data.
  */
 function geodir_import_export_tab( $tabs ) {
-	$tabs['import_export'] = array( 'label' => __( 'Import & Export', GEODIRECTORY_TEXTDOMAIN ) );
+	$tabs['import_export'] = array( 'label' => __( 'Import & Export', 'geodirectory' ) );
     return $tabs;
 }
 
@@ -3473,6 +2512,7 @@ function geodir_import_export_tab( $tabs ) {
  * Display the page to manage import/export categories/listings.
  *
  * @since 1.4.6
+ * @since 1.5.6 Option added to export max number listings per csv file.
  * @package GeoDirectory
  *
  * @return string Html content.
@@ -3505,16 +2545,43 @@ function geodir_import_export_page() {
 	
 	$gd_posttypes_option = '';
 	foreach ( $gd_posttypes as $gd_posttype => $row ) {
-		$gd_posttypes_option .= '<option value="' . $gd_posttype . '">' . __( $row['labels']['name'], GEODIRECTORY_TEXTDOMAIN ) . '</option>';
+		$gd_posttypes_option .= '<option value="' . $gd_posttype . '" data-cats="' . (int)geodir_get_terms_count( $gd_posttype ) . '" data-posts="' . (int)geodir_get_posts_count( $gd_posttype ) . '">' . __( $row['labels']['name'], 'geodirectory' ) . '</option>';
 	}
 	wp_enqueue_script( 'jquery-ui-progressbar' );
+	
+	$gd_chunksize_options = array();
+	$gd_chunksize_options[100] = 100;
+	$gd_chunksize_options[200] = 200;
+	$gd_chunksize_options[500] = 500;
+	$gd_chunksize_options[1000] = 1000;
+	$gd_chunksize_options[2000] = 2000;
+	$gd_chunksize_options[5000] = 5000;
+	$gd_chunksize_options[10000] = 10000;
+	$gd_chunksize_options[20000] = 20000;
+	$gd_chunksize_options[50000] = 50000;
+	$gd_chunksize_options[100000] = 100000;
+	 
+	 /**
+     * Filter max entries per export csv file.
+     *
+     * @since 1.5.6
+     * @package GeoDirectory
+     *
+     * @param string $gd_chunksize_options Entries options.
+     */
+    $gd_chunksize_options = apply_filters( 'geodir_export_csv_chunksize_options', $gd_chunksize_options );
+	
+	$gd_chunksize_option = '';
+	foreach ($gd_chunksize_options as $value => $title) {
+		$gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 5000, false) . '>' . $title . '</option>';
+	}
 	
 	$uploads = wp_upload_dir();
 ?>
 </form>
 <div class="inner_content_tab_main gd-import-export">
-  <h3><?php _e( 'GD Import & Export CSV', GEODIRECTORY_TEXTDOMAIN ) ;?></h3>
-  <span class="description"><?php _e( 'Import & export csv for GD listings & categories.', GEODIRECTORY_TEXTDOMAIN ) ;?></span>
+  <h3><?php _e( 'GD Import & Export CSV', 'geodirectory' ) ;?></h3>
+  <span class="description"><?php _e( 'Import & export csv for GD listings & categories.', 'geodirectory' ) ;?></span>
   <div class="gd-content-heading">
 
   <?php
@@ -3527,13 +2594,13 @@ function geodir_import_export_page() {
 	<div id="gd_ie_reqs" class="metabox-holder">
       <div class="meta-box-sortables ui-sortable">
         <div class="postbox">
-          <h3 class="hndle"><span style='vertical-align:top;'><?php echo __( 'PHP Requirements for GD Import & Export CSV', GEODIRECTORY_TEXTDOMAIN );?></span></h3>
+          <h3 class="hndle"><span style='vertical-align:top;'><?php echo __( 'PHP Requirements for GD Import & Export CSV', 'geodirectory' );?></span></h3>
           <div class="inside">
-            <span class="description"><?php echo __( 'Note: In case GD import & export csv not working for larger data then please check and configure following php settings.', GEODIRECTORY_TEXTDOMAIN );?></span>
+            <span class="description"><?php echo __( 'Note: In case GD import & export csv not working for larger data then please check and configure following php settings.', 'geodirectory' );?></span>
 			<table class="form-table">
 				<thead>
 				  <tr>
-				  	<th><?php _e( 'PHP Settings', GEODIRECTORY_TEXTDOMAIN );?></th><th><?php _e( 'Current Value', GEODIRECTORY_TEXTDOMAIN );?></th><th><?php _e( 'Recommended Value', GEODIRECTORY_TEXTDOMAIN );?></th>
+				  	<th><?php _e( 'PHP Settings', 'geodirectory' );?></th><th><?php _e( 'Current Value', 'geodirectory' );?></th><th><?php _e( 'Recommended Value', 'geodirectory' );?></th>
 				  </tr>
 				</thead>
 				<tbody>
@@ -3555,20 +2622,21 @@ function geodir_import_export_page() {
 	<?php }?>
 	<div id="gd_ie_imposts" class="metabox-holder">
       <div class="meta-box-sortables ui-sortable">
-        <div id="gd_ie_im_posts" class="postbox">
-          <h3 class="hndle"><span style='vertical-align:top;'><?php echo __( 'GD Listings: Import CSV', GEODIRECTORY_TEXTDOMAIN );?></span></h3>
+        <div id="gd_ie_im_posts" class="postbox gd-hndle-pbox">
+          <button class="handlediv button-link" type="button"><span class="screen-reader-text"><?php _e( 'Toggle panel - GD Listings: Import CSV', 'geodirectory' );?></span><span aria-hidden="true" class="toggle-indicator"></span></button>
+          <h3 class="hndle gd-hndle-click"><span style='vertical-align:top;'><?php echo __( 'GD Listings: Import CSV', 'geodirectory' );?></span></h3>
           <div class="inside">
             <table class="form-table">
 				<tbody>
 				  <tr>
 					<td class="gd-imex-box">
 						<div class="gd-im-choices">
-						<p><input type="radio" value="update" name="gd_im_choicepost" id="gd_im_pchoice_u" /><label for="gd_im_pchoice_u"><?php _e( 'Update listing if post with post_id already exists.', GEODIRECTORY_TEXTDOMAIN );?></label></p>
-						<p><input type="radio" checked="checked" value="skip" name="gd_im_choicepost" id="gd_im_pchoice_s" /><label for="gd_im_pchoice_s"><?php _e( 'Ignore listing if post with post_id already exists.', GEODIRECTORY_TEXTDOMAIN );?></label></p>
+						<p><input type="radio" value="update" name="gd_im_choicepost" id="gd_im_pchoice_u" /><label for="gd_im_pchoice_u"><?php _e( 'Update listing if post with post_id already exists.', 'geodirectory' );?></label></p>
+						<p><input type="radio" checked="checked" value="skip" name="gd_im_choicepost" id="gd_im_pchoice_s" /><label for="gd_im_pchoice_s"><?php _e( 'Ignore listing if post with post_id already exists.', 'geodirectory' );?></label></p>
 						</div>
 						<div class="plupload-upload-uic hide-if-no-js" id="gd_im_postplupload-upload-ui">
 							<input type="text" readonly="readonly" name="gd_im_post_file" class="gd-imex-file gd_im_post_file" id="gd_im_post" onclick="jQuery('#gd_im_postplupload-browse-button').trigger('click');" />
-							<input id="gd_im_postplupload-browse-button" type="button" value="<?php echo SELECT_UPLOAD_CSV; ?>" class="gd-imex-pupload button-primary" /><input type="button" value="<?php echo esc_attr( __( 'Download Sample CSV', GEODIRECTORY_TEXTDOMAIN ) );?>" class="button-secondary" name="gd_ie_imposts_sample" id="gd_ie_imposts_sample">
+							<input id="gd_im_postplupload-browse-button" type="button" value="<?php echo SELECT_UPLOAD_CSV; ?>" class="gd-imex-pupload button-primary" /><input type="button" value="<?php echo esc_attr( __( 'Download Sample CSV', 'geodirectory' ) );?>" class="button-secondary" name="gd_ie_imposts_sample" id="gd_ie_imposts_sample">
 						<input type="hidden" id="gd_ie_imposts_csv" value="<?php echo $gd_posts_sample_csv;?>" />
 							<?php
 							/**
@@ -3596,7 +2664,7 @@ function geodir_import_export_page() {
 							<input type="hidden" id="gd_terminateaction" value="continue"/>
 						</div>
 						<div class="gd-import-progress" id="gd-import-progress" style="display:none">
-							<div class="gd-import-file"><b><?php _e("Import Data Status :", GEODIRECTORY_TEXTDOMAIN);?> </b><font
+							<div class="gd-import-file"><b><?php _e("Import Data Status :", 'geodirectory');?> </b><font
 									id="gd-import-done">0</font> / <font id="gd-import-total">0</font>&nbsp;( <font
 									id="gd-import-perc">0%</font> )
 								<div class="gd-fileprogress"></div>
@@ -3608,10 +2676,10 @@ function geodir_import_export_page() {
                     	<div class="gd-imex-btns" style="display:none;">
                         	<input type="hidden" class="geodir_import_file" name="geodir_import_file" value="save"/>
                         	<input onclick="gd_imex_PrepareImport(this, 'post')" type="button" value="<?php echo CSV_IMPORT_DATA; ?>" id="gd_import_data" class="button-primary" />
-                        	<input onclick="gd_imex_ContinueImport(this, 'post')" type="button" value="<?php _e( "Continue Import Data", GEODIRECTORY_TEXTDOMAIN );?>" id="gd_continue_data" class="button-primary" style="display:none"/>
-                        	<input type="button" value="<?php _e("Terminate Import Data", GEODIRECTORY_TEXTDOMAIN);?>" id="gd_stop_import" class="button-primary" name="gd_stop_import" style="display:none" onclick="gd_imex_TerminateImport(this, 'post')"/>
+                        	<input onclick="gd_imex_ContinueImport(this, 'post')" type="button" value="<?php _e( "Continue Import Data", 'geodirectory' );?>" id="gd_continue_data" class="button-primary" style="display:none"/>
+                        	<input type="button" value="<?php _e("Terminate Import Data", 'geodirectory');?>" id="gd_stop_import" class="button-primary" name="gd_stop_import" style="display:none" onclick="gd_imex_TerminateImport(this, 'post')"/>
 							<div id="gd_process_data" style="display:none">
-								<span class="spinner is-active" style="display:inline-block;margin:0 5px 0 5px;float:left"></span><?php _e("Wait, processing import data...", GEODIRECTORY_TEXTDOMAIN);?>
+								<span class="spinner is-active" style="display:inline-block;margin:0 5px 0 5px;float:left"></span><?php _e("Wait, processing import data...", 'geodirectory');?>
 							</div>
 						</div>
 					</td>
@@ -3624,22 +2692,27 @@ function geodir_import_export_page() {
     </div>
 	<div id="gd_ie_excategs" class="metabox-holder">
 	  <div class="meta-box-sortables ui-sortable">
-		<div id="gd_ie_ex_posts" class="postbox">
-		  <h3 class="hndle"><span style='vertical-align:top;'><?php echo __( 'GD Listings: Export CSV', GEODIRECTORY_TEXTDOMAIN );?></span></h3>
+		<div id="gd_ie_ex_posts" class="postbox gd-hndle-pbox">
+		  <button class="handlediv button-link" type="button"><span class="screen-reader-text"><?php _e( 'Toggle panel - Listings: Export CSV', 'geodirectory' );?></span><span aria-hidden="true" class="toggle-indicator"></span></button>
+          <h3 class="hndle gd-hndle-click"><span style='vertical-align:top;'><?php echo __( 'GD Listings: Export CSV', 'geodirectory' );?></span></h3>
 		  <div class="inside">
 			<table class="form-table">
 			  <tbody>
 				<tr>
 				  <td class="fld"><label for="gd_post_type">
-					<?php _e( 'Post Type:', GEODIRECTORY_TEXTDOMAIN );?>
+					<?php _e( 'Post Type:', 'geodirectory' );?>
 					</label></td>
 				  <td><select name="gd_post_type" id="gd_post_type" style="min-width:140px">
 					  <?php echo $gd_posttypes_option;?>
 					</select></td>
 				</tr>
 				<tr>
-				  <td class="fld" style="vertical-align: top"><label>
-					<?php _e( 'Progress:', GEODIRECTORY_TEXTDOMAIN );?>
+					<td class="fld" style="vertical-align:top"><label for="gd_chunk_size"><?php _e( 'Max entries per csv file:', 'geodirectory' );?></label></td>
+					<td><select name="gd_chunk_size" id="gd_chunk_size" style="min-width:140px"><?php echo $gd_chunksize_option;?></select><span class="description"><?php _e( 'Please select the maximum number of entries per csv file (defaults to 5000, you might want to lower this to prevent memory issues on some installs)', 'geodirectory' );?></span></td>
+				  </tr>
+				<tr>
+				  <td class="fld" style="vertical-align:top"><label>
+					<?php _e( 'Progress:', 'geodirectory' );?>
 					</label></td>
 				  <td><div id='gd_progressbar_box'>
 					  <div id="gd_progressbar" class="gd_progressbar">
@@ -3647,14 +2720,15 @@ function geodir_import_export_page() {
 					  </div>
 					</div>
 					<p style="display:inline-block">
-					  <?php _e( 'Elapsed Time:', GEODIRECTORY_TEXTDOMAIN );?>
+					  <?php _e( 'Elapsed Time:', 'geodirectory' );?>
 					</p>
 					  
 					<p id="gd_timer" class="gd_timer">00:00:00</p></td>
 				</tr>
-				<tr>
-				  <td colspan="2"><input type="submit" value="<?php echo esc_attr( __( 'Export CSV', GEODIRECTORY_TEXTDOMAIN ) );?>" class="button-primary" name="gd_ie_exposts_submit" id="gd_ie_exposts_submit">
+				<tr class="gd-ie-actions">
+				  <td style="vertical-align:top"><input type="submit" value="<?php echo esc_attr( __( 'Export CSV', 'geodirectory' ) );?>" class="button-primary" name="gd_ie_exposts_submit" id="gd_ie_exposts_submit">
 				  </td>
+				  <td id="gd_ie_ex_files" class="gd-ie-files"></td>
 				</tr>
 			  </tbody>
 			</table>
@@ -3664,20 +2738,21 @@ function geodir_import_export_page() {
 	</div>
 	<div id="gd_ie_imcategs" class="metabox-holder">
       <div class="meta-box-sortables ui-sortable">
-        <div id="gd_ie_imcats" class="postbox">
-          <h3 class="hndle"><span style='vertical-align:top;'><?php echo __( 'GD Categories: Import CSV', GEODIRECTORY_TEXTDOMAIN );?></span></h3>
+        <div id="gd_ie_imcats" class="postbox gd-hndle-pbox">
+          <button class="handlediv button-link" type="button"><span class="screen-reader-text"><?php _e( 'Toggle panel - GD Categories: Import CSV', 'geodirectory' );?></span><span aria-hidden="true" class="toggle-indicator"></span></button>
+          <h3 class="hndle gd-hndle-click"><span style='vertical-align:top;'><?php echo __( 'GD Categories: Import CSV', 'geodirectory' );?></span></h3>
           <div class="inside">
             <table class="form-table">
 				<tbody>
 				  <tr>
 					<td class="gd-imex-box">
 						<div class="gd-im-choices">
-						<p><input type="radio" value="update" name="gd_im_choicecat" id="gd_im_cchoice_u" /><label for="gd_im_cchoice_u"><?php _e( 'Update item if item with cat_id/cat_slug already exists.', GEODIRECTORY_TEXTDOMAIN );?></label></p>
-						<p><input type="radio" checked="checked" value="skip" name="gd_im_choicecat" id="gd_im_cchoice_s" /><label for="gd_im_cchoice_s"><?php _e( 'Ignore item if item with cat_id/cat_slug already exists.', GEODIRECTORY_TEXTDOMAIN );?></label></p>
+						<p><input type="radio" value="update" name="gd_im_choicecat" id="gd_im_cchoice_u" /><label for="gd_im_cchoice_u"><?php _e( 'Update item if item with cat_id/cat_slug already exists.', 'geodirectory' );?></label></p>
+						<p><input type="radio" checked="checked" value="skip" name="gd_im_choicecat" id="gd_im_cchoice_s" /><label for="gd_im_cchoice_s"><?php _e( 'Ignore item if item with cat_id/cat_slug already exists.', 'geodirectory' );?></label></p>
 						</div>
 						<div class="plupload-upload-uic hide-if-no-js" id="gd_im_catplupload-upload-ui">
 							<input type="text" readonly="readonly" name="gd_im_cat_file" class="gd-imex-file gd_im_cat_file" id="gd_im_cat" onclick="jQuery('#gd_im_catplupload-browse-button').trigger('click');" />
-							<input id="gd_im_catplupload-browse-button" type="button" value="<?php echo SELECT_UPLOAD_CSV; ?>" class="gd-imex-cupload button-primary" /><input type="button" value="<?php echo esc_attr( __( 'Download Sample CSV', GEODIRECTORY_TEXTDOMAIN ) );?>" class="button-secondary" name="gd_ie_imcats_sample" id="gd_ie_imcats_sample">
+							<input id="gd_im_catplupload-browse-button" type="button" value="<?php echo SELECT_UPLOAD_CSV; ?>" class="gd-imex-cupload button-primary" /><input type="button" value="<?php echo esc_attr( __( 'Download Sample CSV', 'geodirectory' ) );?>" class="button-secondary" name="gd_ie_imcats_sample" id="gd_ie_imcats_sample">
 						<input type="hidden" id="gd_ie_imcats_csv" value="<?php echo $gd_cats_sample_csv;?>" />
 						<?php
 						/**
@@ -3705,7 +2780,7 @@ function geodir_import_export_page() {
 							<input type="hidden" id="gd_terminateaction" value="continue"/>
 						</div>
 						<div class="gd-import-progress" id="gd-import-progress" style="display:none">
-							<div class="gd-import-file"><b><?php _e("Import Data Status :", GEODIRECTORY_TEXTDOMAIN);?> </b><font
+							<div class="gd-import-file"><b><?php _e("Import Data Status :", 'geodirectory');?> </b><font
 									id="gd-import-done">0</font> / <font id="gd-import-total">0</font>&nbsp;( <font
 									id="gd-import-perc">0%</font> )
 								<div class="gd-fileprogress"></div>
@@ -3717,10 +2792,10 @@ function geodir_import_export_page() {
                     	<div class="gd-imex-btns" style="display:none;">
                         	<input type="hidden" class="geodir_import_file" name="geodir_import_file" value="save"/>
                         	<input onclick="gd_imex_PrepareImport(this, 'cat')" type="button" value="<?php echo CSV_IMPORT_DATA; ?>" id="gd_import_data" class="button-primary" />
-                        	<input onclick="gd_imex_ContinueImport(this, 'cat')" type="button" value="<?php _e( "Continue Import Data", GEODIRECTORY_TEXTDOMAIN );?>" id="gd_continue_data" class="button-primary" style="display:none"/>
-                        	<input type="button" value="<?php _e("Terminate Import Data", GEODIRECTORY_TEXTDOMAIN);?>" id="gd_stop_import" class="button-primary" name="gd_stop_import" style="display:none" onclick="gd_imex_TerminateImport(this, 'cat')"/>
+                        	<input onclick="gd_imex_ContinueImport(this, 'cat')" type="button" value="<?php _e( "Continue Import Data", 'geodirectory' );?>" id="gd_continue_data" class="button-primary" style="display:none"/>
+                        	<input type="button" value="<?php _e("Terminate Import Data", 'geodirectory');?>" id="gd_stop_import" class="button-primary" name="gd_stop_import" style="display:none" onclick="gd_imex_TerminateImport(this, 'cat')"/>
 							<div id="gd_process_data" style="display:none">
-								<span class="spinner is-active" style="display:inline-block;margin:0 5px 0 5px;float:left"></span><?php _e("Wait, processing import data...", GEODIRECTORY_TEXTDOMAIN);?>
+								<span class="spinner is-active" style="display:inline-block;margin:0 5px 0 5px;float:left"></span><?php _e("Wait, processing import data...", 'geodirectory');?>
 							</div>
 						</div>
 					</td>
@@ -3733,23 +2808,29 @@ function geodir_import_export_page() {
     </div>
 	<div id="gd_ie_excategs" class="metabox-holder">
       <div class="meta-box-sortables ui-sortable">
-        <div id="gd_ie_ex_cats" class="postbox">
-          <h3 class="hndle"><span style='vertical-align:top;'><?php echo __( 'GD Categories: Export CSV', GEODIRECTORY_TEXTDOMAIN );?></span></h3>
+        <div id="gd_ie_ex_cats" class="postbox gd-hndle-pbox">
+          <button class="handlediv button-link" type="button"><span class="screen-reader-text"><?php _e( 'Toggle panel - GD Categories: Export CSV', 'geodirectory' );?></span><span aria-hidden="true" class="toggle-indicator"></span></button>
+          <h3 class="hndle gd-hndle-click"><span style='vertical-align:top;'><?php echo __( 'GD Categories: Export CSV', 'geodirectory' );?></span></h3>
           <div class="inside">
             <table class="form-table">
 				<tbody>
 				  <tr>
-					<td class="fld"><label for="gd_post_type"><?php _e( 'Post Type:', GEODIRECTORY_TEXTDOMAIN );?></label></td>
+					<td class="fld"><label for="gd_post_type"><?php _e( 'Post Type:', 'geodirectory' );?></label></td>
 					<td><select name="gd_post_type" id="gd_post_type" style="min-width:140px"><?php echo $gd_posttypes_option;?></select></td>
 				  </tr>
-				  <tr>
-					<td class="fld" style="vertical-align: top"><label><?php _e( 'Progress:', GEODIRECTORY_TEXTDOMAIN );?></label></td>
-					<td><div id='gd_progressbar_box'><div id="gd_progressbar" class="gd_progressbar"><div class="gd-progress-label"></div></div></div><p style="display:inline-block"><?php _e( 'Elapsed Time:', GEODIRECTORY_TEXTDOMAIN );?></p>&nbsp;&nbsp;<p id="gd_timer" class="gd_timer">00:00:00</p></td>
+				   <tr>
+					<td class="fld" style="vertical-align:top"><label for="gd_chunk_size"><?php _e( 'Max entries per csv file:', 'geodirectory' );?></label></td>
+					<td><select name="gd_chunk_size" id="gd_chunk_size" style="min-width:140px"><?php echo $gd_chunksize_option;?></select><span class="description"><?php _e( 'Please select the maximum number of entries per csv file (defaults to 5000, you might want to lower this to prevent memory issues on some installs)', 'geodirectory' );?></span></td>
 				  </tr>
 				  <tr>
-					<td colspan="2">
-						<input type="submit" value="<?php echo esc_attr( __( 'Export CSV', GEODIRECTORY_TEXTDOMAIN ) );?>" class="button-primary" name="gd_ie_excats_submit" id="gd_ie_excats_submit">
+					<td class="fld" style="vertical-align:top"><label><?php _e( 'Progress:', 'geodirectory' );?></label></td>
+					<td><div id='gd_progressbar_box'><div id="gd_progressbar" class="gd_progressbar"><div class="gd-progress-label"></div></div></div><p style="display:inline-block"><?php _e( 'Elapsed Time:', 'geodirectory' );?></p>&nbsp;&nbsp;<p id="gd_timer" class="gd_timer">00:00:00</p></td>
+				  </tr>
+				  <tr class="gd-ie-actions">
+					<td style="vertical-align:top">
+						<input type="submit" value="<?php echo esc_attr( __( 'Export CSV', 'geodirectory' ) );?>" class="button-primary" name="gd_ie_excats_submit" id="gd_ie_excats_submit">
 					</td>
+					<td id="gd_ie_ex_files" class="gd-ie-files"></td>
 				  </tr>
 				</tbody>
 			</table>
@@ -3764,591 +2845,660 @@ function geodir_import_export_page() {
 	 * Called after the last setting on the GD > Import & Export page.
 	 * @since 1.4.6
      * @package GeoDirectory
+	 *
+	 * @param array $gd_posttypes GD post types.
+     * @param array $gd_chunksize_options File chunk size options.
+     * @param string $nonce Wordpress security token for GD import & export.
 	 */
-	do_action( 'geodir_import_export' );
+	do_action( 'geodir_import_export', $gd_posttypes, $gd_chunksize_options, $nonce );
 	?>
   </div>
 </div>
 <script type="text/javascript">
-var timoutC, timoutP;
+var timoutC, timoutP, timoutL, timoutH;
 
 function gd_imex_PrepareImport(el, type) {
-	var cont = jQuery(el).closest('.gd-imex-box');
-	var gd_prepared = jQuery('#gd_prepared', cont).val();
-	var uploadedFile = jQuery('#gd_im_' + type, cont).val();
-	jQuery('gd-import-msg', cont).hide();
-	if(gd_prepared == uploadedFile) {
-		gd_imex_ContinueImport(el, type);
-		jQuery('#gd_import_data', cont).attr('disabled', 'disabled');
-	} else {
-		jQuery.ajax({
-			url: ajaxurl,
-			type: "POST",
-			data: 'action=geodir_import_export&task=prepare_import&_pt=' + type + '&_file=' + uploadedFile + '&_nonce=<?php echo $nonce;?>',
-			dataType: 'json',
-			cache: false,
-			success: function(data) {
-				if(typeof data == 'object') {
-					if(data.error) {
-						jQuery('#gd-import-msg', cont).find('#message').removeClass('updated').addClass('error').html('<p>' + data.error + '</p>');
-						jQuery('#gd-import-msg', cont).show();
-					} else if(!data.error && typeof data.rows != 'undefined') {
-						jQuery('#gd_total', cont).val(data.rows);
-						jQuery('#gd_prepared', cont).val(uploadedFile);
-						jQuery('#gd_processed', cont).val('0');
-						jQuery('#gd_created', cont).val('0');
-						jQuery('#gd_updated', cont).val('0');
-						jQuery('#gd_skipped', cont).val('0');
-						jQuery('#gd_invalid', cont).val('0');
-						jQuery('#gd_images', cont).val('0');
-						if(type == 'post') {
-							jQuery('#gd_invalid_addr', cont).val('0');
-						}
-						gd_imex_StartImport(el, type);
-					}
-				}
-			},
-			error: function(errorThrown) {
-				console.log(errorThrown);
-			}
-		});
-	}
+    var cont = jQuery(el).closest('.gd-imex-box');
+    var gd_prepared = jQuery('#gd_prepared', cont).val();
+    var uploadedFile = jQuery('#gd_im_' + type, cont).val();
+    jQuery('gd-import-msg', cont).hide();
+    if(gd_prepared == uploadedFile) {
+        gd_imex_ContinueImport(el, type);
+        jQuery('#gd_import_data', cont).attr('disabled', 'disabled');
+    } else {
+        jQuery.ajax({
+            url: ajaxurl,
+            type: "POST",
+            data: 'action=geodir_import_export&task=prepare_import&_pt=' + type + '&_file=' + uploadedFile + '&_nonce=<?php echo $nonce;?>',
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+                if(typeof data == 'object') {
+                    if(data.error) {
+                        jQuery('#gd-import-msg', cont).find('#message').removeClass('updated').addClass('error').html('<p>' + data.error + '</p>');
+                        jQuery('#gd-import-msg', cont).show();
+                    } else if(!data.error && typeof data.rows != 'undefined') {
+                        jQuery('#gd_total', cont).val(data.rows);
+                        jQuery('#gd_prepared', cont).val(uploadedFile);
+                        jQuery('#gd_processed', cont).val('0');
+                        jQuery('#gd_created', cont).val('0');
+                        jQuery('#gd_updated', cont).val('0');
+                        jQuery('#gd_skipped', cont).val('0');
+                        jQuery('#gd_invalid', cont).val('0');
+                        jQuery('#gd_images', cont).val('0');
+                        if(type == 'post') {
+                            jQuery('#gd_invalid_addr', cont).val('0');
+                        }
+                        gd_imex_StartImport(el, type);
+                    }
+                }
+            },
+            error: function(errorThrown) {
+                console.log(errorThrown);
+            }
+        });
+    }
 }
 
-function gd_imex_StartImport(el, type) {	
-	var cont = jQuery(el).closest('.gd-imex-box');
-	
-	var limit = 1;
-	var total = parseInt(jQuery('#gd_total', cont).val());
-	var total_processed = parseInt(jQuery('#gd_processed', cont).val());
-	var uploadedFile = jQuery('#gd_im_' + type, cont).val();
-	var choice = jQuery('input[name="gd_im_choice'+ type +'"]:checked', cont).val();
+function gd_imex_StartImport(el, type) {
+    var cont = jQuery(el).closest('.gd-imex-box');
 
-	if (!uploadedFile) {
-		jQuery('#gd_import_data', cont).removeAttr('disabled').show();
-		jQuery('#gd_stop_import', cont).hide();
-		jQuery('#gd_process_data', cont).hide();
-		jQuery('#gd-import-progress', cont).hide();
-		jQuery('.gd-fileprogress', cont).width(0);
-		jQuery('#gd-import-done', cont).text('0');
-		jQuery('#gd-import-total', cont).text('0');
-		jQuery('#gd-import-perc', cont).text('0%');
+    var limit = 1;
+    var total = parseInt(jQuery('#gd_total', cont).val());
+    var total_processed = parseInt(jQuery('#gd_processed', cont).val());
+    var uploadedFile = jQuery('#gd_im_' + type, cont).val();
+    var choice = jQuery('input[name="gd_im_choice'+ type +'"]:checked', cont).val();
 
-		jQuery(cont).find('.filelist .file').remove();
-		
-		jQuery('#gd-import-msg', cont).find('#message').removeClass('updated').addClass('error').html("<p><?php echo esc_attr( PLZ_SELECT_CSV_FILE );?></p>");
-		jQuery('#gd-import-msg', cont).show();
-		
-		return false;
-	}
+    if (!uploadedFile) {
+        jQuery('#gd_import_data', cont).removeAttr('disabled').show();
+        jQuery('#gd_stop_import', cont).hide();
+        jQuery('#gd_process_data', cont).hide();
+        jQuery('#gd-import-progress', cont).hide();
+        jQuery('.gd-fileprogress', cont).width(0);
+        jQuery('#gd-import-done', cont).text('0');
+        jQuery('#gd-import-total', cont).text('0');
+        jQuery('#gd-import-perc', cont).text('0%');
 
-	jQuery('#gd-import-total', cont).text(total);
-	jQuery('#gd_stop_import', cont).show();
-	jQuery('#gd_process_data', cont).css({
-		'display': 'inline-block'
-	});
-	jQuery('#gd-import-progress', cont).show();
-	if ((parseInt(total) / 100) > 0) {
-		limit = parseInt(parseInt(total) / 100);
-	}
-	if (limit == 1) {
-		if (parseInt(total) > 50) {
-			limit = 5;
-		} else if (parseInt(total) > 10 && parseInt(total) < 51) {
-			limit = 2;
-		}
-	}
-	if (limit > 10) {
-		limit = 10;
-	}
-	if (limit < 1) {
-		limit = 1;
-	}
+        jQuery(cont).find('.filelist .file').remove();
+        
+        jQuery('#gd-import-msg', cont).find('#message').removeClass('updated').addClass('error').html("<p><?php echo esc_attr( PLZ_SELECT_CSV_FILE );?></p>");
+        jQuery('#gd-import-msg', cont).show();
+        
+        return false;
+    }
 
-	if ( parseInt(limit) > parseInt(total) )
-		limit = parseInt(total);
-	if (total_processed >= total) {
-		jQuery('#gd_import_data', cont).removeAttr('disabled').show();
-		jQuery('#gd_stop_import', cont).hide();
-		jQuery('#gd_process_data', cont).hide();
-		
-		gd_imex_showStatusMsg(el, type);
-		
-		jQuery('#gd_im_' + type, cont).val('');
-		jQuery('#gd_prepared', cont).val('');
+    jQuery('#gd-import-total', cont).text(total);
+    jQuery('#gd_stop_import', cont).show();
+    jQuery('#gd_process_data', cont).css({
+        'display': 'inline-block'
+    });
+    jQuery('#gd-import-progress', cont).show();
+    if ((parseInt(total) / 100) > 0) {
+        limit = parseInt(parseInt(total) / 100);
+    }
+    if (limit == 1) {
+        if (parseInt(total) > 50) {
+            limit = 5;
+        } else if (parseInt(total) > 10 && parseInt(total) < 51) {
+            limit = 2;
+        }
+    }
+    if (limit > 10) {
+        limit = 10;
+    }
+    if (limit < 1) {
+        limit = 1;
+    }
 
-		return false;
-	}
-	jQuery('#gd-import-msg', cont).hide();
-		
-	var gd_processed = parseInt(jQuery('#gd_processed', cont).val());
-	var gd_created = parseInt(jQuery('#gd_created', cont).val());
-	var gd_updated = parseInt(jQuery('#gd_updated', cont).val());
-	var gd_skipped = parseInt(jQuery('#gd_skipped', cont).val());
-	var gd_invalid = parseInt(jQuery('#gd_invalid', cont).val());
-	var gd_images = parseInt(jQuery('#gd_images', cont).val());
-	if (type=='post') {
-		var gd_invalid_addr = parseInt(jQuery('#gd_invalid_addr', cont).val());
-	}
-	
-	var gddata = '&limit=' + limit + '&processed=' + gd_processed;
-	jQuery.ajax({
-		url: ajaxurl,
-		type: "POST",
-		data: 'action=geodir_import_export&task=import_' + type + '&_pt=' + type + '&_file=' + uploadedFile + gddata + '&_ch=' + choice + '&_nonce=<?php echo $nonce;?>',
-		dataType : 'json',
-		cache: false,
-		success: function (data) {
-			if (typeof data == 'object') {
-				if (data.error) {
-					jQuery('#gd_import_data', cont).removeAttr('disabled').show();
-					jQuery('#gd_stop_import', cont).hide();
-					jQuery('#gd_process_data', cont).hide();
-					jQuery('#gd-import-msg', cont).find('#message').removeClass('updated').addClass('error').html('<p>' + data.error + '</p>');
-					jQuery('#gd-import-msg', cont).show();
-				} else {
-					gd_processed = gd_processed + parseInt(data.processed);
-					gd_created = gd_created + parseInt(data.created);
-					gd_updated = gd_updated + parseInt(data.updated);
-					gd_skipped = gd_skipped + parseInt(data.skipped);
-					gd_invalid = gd_invalid + parseInt(data.invalid);
-					gd_images = gd_images + parseInt(data.images);
-					if (type=='post' && typeof data.invalid_addr != 'undefined') {
-						gd_invalid_addr = gd_invalid_addr + parseInt(data.invalid_addr);
-					}
+    if ( parseInt(limit) > parseInt(total) )
+        limit = parseInt(total);
+    if (total_processed >= total) {
+        jQuery('#gd_import_data', cont).removeAttr('disabled').show();
+        jQuery('#gd_stop_import', cont).hide();
+        jQuery('#gd_process_data', cont).hide();
+        
+        gd_imex_showStatusMsg(el, type);
+        
+        jQuery('#gd_im_' + type, cont).val('');
+        jQuery('#gd_prepared', cont).val('');
 
-					jQuery('#gd_processed', cont).val(gd_processed);
-					jQuery('#gd_created', cont).val(gd_created);
-					jQuery('#gd_updated', cont).val(gd_updated);
-					jQuery('#gd_skipped', cont).val(gd_skipped);
-					jQuery('#gd_invalid', cont).val(gd_invalid);
-					jQuery('#gd_images', cont).val(gd_images);
-					if (type=='post') {
-						jQuery('#gd_invalid_addr', cont).val(gd_invalid_addr);
-					}
+        return false;
+    }
+    jQuery('#gd-import-msg', cont).hide();
+        
+    var gd_processed = parseInt(jQuery('#gd_processed', cont).val());
+    var gd_created = parseInt(jQuery('#gd_created', cont).val());
+    var gd_updated = parseInt(jQuery('#gd_updated', cont).val());
+    var gd_skipped = parseInt(jQuery('#gd_skipped', cont).val());
+    var gd_invalid = parseInt(jQuery('#gd_invalid', cont).val());
+    var gd_images = parseInt(jQuery('#gd_images', cont).val());
+    if (type=='post') {
+        var gd_invalid_addr = parseInt(jQuery('#gd_invalid_addr', cont).val());
+    }
 
-					if (parseInt(gd_processed) == parseInt(total)) {
-						jQuery('#gd-import-done', cont).text(total);
-						jQuery('#gd-import-perc', cont).text('100%');
-						jQuery('.gd-fileprogress', cont).css({
-							'width': '100%'
-						});
-						jQuery('#gd_im_' + type, cont).val('');
-						jQuery('#gd_prepared', cont).val('');
-						
-						gd_imex_showStatusMsg(el, type);
-						
-						jQuery('#gd_stop_import', cont).hide();
-					}
-					if (parseInt(gd_processed) < parseInt(total)) {
-						var terminate_action = jQuery('#gd_terminateaction', cont).val();
-						if (terminate_action == 'continue') {
-							var nTmpCnt = parseInt(total_processed) + parseInt(limit);
-							nTmpCnt = nTmpCnt > total ? total : nTmpCnt;
+    var gddata = '&limit=' + limit + '&processed=' + gd_processed;
+    jQuery.ajax({
+        url: ajaxurl,
+        type: "POST",
+        data: 'action=geodir_import_export&task=import_' + type + '&_pt=' + type + '&_file=' + uploadedFile + gddata + '&_ch=' + choice + '&_nonce=<?php echo $nonce;?>',
+        dataType : 'json',
+        cache: false,
+        success: function (data) {
+            if (typeof data == 'object') {
+                if (data.error) {
+                    jQuery('#gd_import_data', cont).removeAttr('disabled').show();
+                    jQuery('#gd_stop_import', cont).hide();
+                    jQuery('#gd_process_data', cont).hide();
+                    jQuery('#gd-import-msg', cont).find('#message').removeClass('updated').addClass('error').html('<p>' + data.error + '</p>');
+                    jQuery('#gd-import-msg', cont).show();
+                } else {
+                    gd_processed = gd_processed + parseInt(data.processed);
+                    gd_processed = Math.min(gd_processed, total);
+                    gd_created = gd_created + parseInt(data.created);
+                    gd_updated = gd_updated + parseInt(data.updated);
+                    gd_skipped = gd_skipped + parseInt(data.skipped);
+                    gd_invalid = gd_invalid + parseInt(data.invalid);
+                    gd_images = gd_images + parseInt(data.images);
+                    if (type=='post' && typeof data.invalid_addr != 'undefined') {
+                        gd_invalid_addr = gd_invalid_addr + parseInt(data.invalid_addr);
+                    }
 
-							jQuery('#gd_processed', cont).val(nTmpCnt);
+                    jQuery('#gd_processed', cont).val(gd_processed);
+                    jQuery('#gd_created', cont).val(gd_created);
+                    jQuery('#gd_updated', cont).val(gd_updated);
+                    jQuery('#gd_skipped', cont).val(gd_skipped);
+                    jQuery('#gd_invalid', cont).val(gd_invalid);
+                    jQuery('#gd_images', cont).val(gd_images);
+                    if (type=='post') {
+                        jQuery('#gd_invalid_addr', cont).val(gd_invalid_addr);
+                    }
 
-							jQuery('#gd-import-done', cont).text(nTmpCnt);
-							if (parseInt(total) > 0) {
-								var percentage = ((parseInt(nTmpCnt) / parseInt(total)) * 100);
-								percentage = percentage > 100 ? 100 : percentage;
-								jQuery('#gd-import-perc', cont).text(parseInt(percentage) + '%');
-								jQuery('.gd-fileprogress', cont).css({
-									'width': percentage + '%'
-								});
-							}
-							
-							if (type=='cat') {
-								clearTimeout(timoutC);
-								timoutC = setTimeout(function () {
-									gd_imex_StartImport(el, type);
-								}, 0);
-							}
-							if (type=='post') {
-								clearTimeout(timoutP);
-								timoutP = setTimeout(function () {
-									gd_imex_StartImport(el, type);
-								}, 0);
-							}
-						} else {
-							jQuery('#gd_import_data', cont).hide();
-							jQuery('#gd_stop_import', cont).hide();
-							jQuery('#gd_process_data', cont).hide();
-							jQuery('#gd_continue_data', cont).show();
-							return false;
-						}
-					} else {
-						jQuery('#gd_import_data', cont).removeAttr('disabled').show();
-						jQuery('#gd_stop_import', cont).hide();
-						jQuery('#gd_process_data', cont).hide();
-						return false;
-					}
-				}
-			} else {
-				jQuery('#gd_import_data', cont).removeAttr('disabled').show();
-				jQuery('#gd_stop_import', cont).hide();
-				jQuery('#gd_process_data', cont).hide();
-			}
-		},
-		error: function (errorThrown) {
-			jQuery('#gd_import_data', cont).removeAttr('disabled').show();
-			jQuery('#gd_stop_import', cont).hide();
-			jQuery('#gd_process_data', cont).hide();
-			console.log(errorThrown);
-		}
-	});
+                    if (parseInt(gd_processed) == parseInt(total)) {
+                        jQuery('#gd-import-done', cont).text(total);
+                        jQuery('#gd-import-perc', cont).text('100%');
+                        jQuery('.gd-fileprogress', cont).css({
+                            'width': '100%'
+                        });
+                        jQuery('#gd_im_' + type, cont).val('');
+                        jQuery('#gd_prepared', cont).val('');
+                        
+                        gd_imex_showStatusMsg(el, type);
+                        gd_imex_FinishImport(el, type);
+
+                        jQuery('#gd_stop_import', cont).hide();
+                    }
+                    if (parseInt(gd_processed) < parseInt(total)) {
+                        var terminate_action = jQuery('#gd_terminateaction', cont).val();
+                        if (terminate_action == 'continue') {
+                            var nTmpCnt = parseInt(total_processed) + parseInt(limit);
+                            nTmpCnt = nTmpCnt > total ? total : nTmpCnt;
+
+                            jQuery('#gd_processed', cont).val(nTmpCnt);
+
+                            jQuery('#gd-import-done', cont).text(nTmpCnt);
+                            if (parseInt(total) > 0) {
+                                var percentage = ((parseInt(nTmpCnt) / parseInt(total)) * 100);
+                                percentage = percentage > 100 ? 100 : percentage;
+                                jQuery('#gd-import-perc', cont).text(parseInt(percentage) + '%');
+                                jQuery('.gd-fileprogress', cont).css({
+                                    'width': percentage + '%'
+                                });
+                            }
+                            
+                            if (type=='cat') {
+                                clearTimeout(timoutC);
+                                timoutC = setTimeout(function () {
+                                    gd_imex_StartImport(el, type);
+                                }, 0);
+                            }
+                            if (type=='post') {
+                                clearTimeout(timoutP);
+                                timoutP = setTimeout(function () {
+                                    gd_imex_StartImport(el, type);
+                                }, 0);
+                            }
+                            if (type=='loc') {
+                                clearTimeout(timoutL);
+                                timoutL = setTimeout(function () {
+                                    gd_imex_StartImport(el, type);
+                                }, 0);
+                            }
+                            if (type=='hood') {
+                                clearTimeout(timoutH);
+                                timoutH = setTimeout(function () {
+                                    gd_imex_StartImport(el, type);
+                                }, 0);
+                            }
+                        } else {
+                            jQuery('#gd_import_data', cont).hide();
+                            jQuery('#gd_stop_import', cont).hide();
+                            jQuery('#gd_process_data', cont).hide();
+                            jQuery('#gd_continue_data', cont).show();
+                            return false;
+                        }
+                    } else {
+                        jQuery('#gd_import_data', cont).removeAttr('disabled').show();
+                        jQuery('#gd_stop_import', cont).hide();
+                        jQuery('#gd_process_data', cont).hide();
+                        return false;
+                    }
+                }
+            } else {
+                jQuery('#gd_import_data', cont).removeAttr('disabled').show();
+                jQuery('#gd_stop_import', cont).hide();
+                jQuery('#gd_process_data', cont).hide();
+            }
+        },
+        error: function (errorThrown) {
+            jQuery('#gd_import_data', cont).removeAttr('disabled').show();
+            jQuery('#gd_stop_import', cont).hide();
+            jQuery('#gd_process_data', cont).hide();
+            console.log(errorThrown);
+        }
+    });
 }
 
-function gd_imex_TerminateImport(el, type) {	
-	var cont = jQuery(el).closest('.gd-imex-box');
-	jQuery('#gd_terminateaction', cont).val('terminate');
-	jQuery('#gd_import_data', cont).hide();
-	jQuery('#gd_stop_import', cont).hide();
-	jQuery('#gd_process_data', cont).hide();
-	jQuery('#gd_continue_data', cont).show();
+function gd_imex_TerminateImport(el, type) {
+    var cont = jQuery(el).closest('.gd-imex-box');
+    jQuery('#gd_terminateaction', cont).val('terminate');
+    jQuery('#gd_import_data', cont).hide();
+    jQuery('#gd_stop_import', cont).hide();
+    jQuery('#gd_process_data', cont).hide();
+    jQuery('#gd_continue_data', cont).show();
 }
 
 function gd_imex_ContinueImport(el, type) {	
-	var cont = jQuery(el).closest('.gd-imex-box');
-	var processed = jQuery('#gd_processed', cont).val();
-	var total = jQuery('#gd_total', cont).val();
-	if (parseInt(processed) > parseInt(total)) {
-		jQuery('#gd_stop_import', cont).hide();
-	} else {
-		jQuery('#gd_stop_import', cont).show();
-	}
-	jQuery('#gd_import_data', cont).show();
-	jQuery('#gd_import_data', cont).attr('disabled', 'disabled');
-	jQuery('#gd_process_data', cont).css({
-		'display': 'inline-block'
-	});
-	jQuery('#gd_continue_data', cont).hide();
-	jQuery('#gd_terminateaction', cont).val('continue');
-	
-	if (type=='cat') {
-		clearTimeout(timoutC);
-		timoutC = setTimeout(function () {
-			gd_imex_StartImport(el, type);
-		}, 0);
-	}
-	
-	if (type=='post') {
-		clearTimeout(timoutP);
-		timoutP = setTimeout(function () {
-			gd_imex_StartImport(el, type);
-		}, 0);
-	}
+    var cont = jQuery(el).closest('.gd-imex-box');
+    var processed = jQuery('#gd_processed', cont).val();
+    var total = jQuery('#gd_total', cont).val();
+    if (parseInt(processed) > parseInt(total)) {
+        jQuery('#gd_stop_import', cont).hide();
+    } else {
+        jQuery('#gd_stop_import', cont).show();
+    }
+    jQuery('#gd_import_data', cont).show();
+    jQuery('#gd_import_data', cont).attr('disabled', 'disabled');
+    jQuery('#gd_process_data', cont).css({
+        'display': 'inline-block'
+    });
+    jQuery('#gd_continue_data', cont).hide();
+    jQuery('#gd_terminateaction', cont).val('continue');
+
+    if (type=='cat') {
+        clearTimeout(timoutC);
+        timoutC = setTimeout(function () {
+            gd_imex_StartImport(el, type);
+        }, 0);
+    }
+
+    if (type=='post') {
+        clearTimeout(timoutP);
+        timoutP = setTimeout(function () {
+            gd_imex_StartImport(el, type);
+        }, 0);
+    }
+
+    if (type=='loc') {
+        clearTimeout(timoutL);
+        timoutL = setTimeout(function () {
+            gd_imex_StartImport(el, type);
+        }, 0);
+    }
+    
+    if (type=='hood') {
+        clearTimeout(timoutH);
+        timoutH = setTimeout(function () {
+            gd_imex_StartImport(el, type);
+        }, 0);
+    }
 }
 
 function gd_imex_showStatusMsg(el, type) {
-	var cont = jQuery(el).closest('.gd-imex-box');
-	
-	var total = parseInt(jQuery('#gd_total', cont).val());
-	var processed = parseInt(jQuery('#gd_processed', cont).val());
-	var created = parseInt(jQuery('#gd_created', cont).val());
-	var updated = parseInt(jQuery('#gd_updated', cont).val());
-	var skipped = parseInt(jQuery('#gd_skipped', cont).val());
-	var invalid = parseInt(jQuery('#gd_invalid', cont).val());
-	var images = parseInt(jQuery('#gd_images', cont).val());
-	if (type=='post') {
-		var invalid_addr = parseInt(jQuery('#gd_invalid_addr', cont).val());
-	}
-	
-	var gdMsg = '<p></p>';
-	if ( processed > 0 ) {
-		var msgParse = '<p><?php echo addslashes( sprintf( __( 'Total %s item(s) found.', GEODIRECTORY_TEXTDOMAIN ), '%s' ) );?></p>';
-		msgParse = msgParse.replace("%s", processed);
-		gdMsg += msgParse;
-	}
-	
-	if ( updated > 0 ) {
-		var msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) updated.', GEODIRECTORY_TEXTDOMAIN ), '%s', '%d' ) );?></p>';
-		msgParse = msgParse.replace("%s", updated);
-		msgParse = msgParse.replace("%d", processed);
-		gdMsg += msgParse;
-	}
-	
-	if ( created > 0 ) {
-		var msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) added.', GEODIRECTORY_TEXTDOMAIN ), '%s', '%d' ) );?></p>';
-		msgParse = msgParse.replace("%s", created);
-		msgParse = msgParse.replace("%d", processed);
-		gdMsg += msgParse;
-	}
-	
-	if ( skipped > 0 ) {
-		var msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) ignored due to already exists.', GEODIRECTORY_TEXTDOMAIN ), '%s', '%d' ) );?></p>';
-		msgParse = msgParse.replace("%s", skipped);
-		msgParse = msgParse.replace("%d", processed);
-		gdMsg += msgParse;
-	}
-	
-	if (type=='post' && invalid_addr > 0) {
-		var msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) could not be added due to blank/invalid address(city, region, country, latitude, longitude).', GEODIRECTORY_TEXTDOMAIN ), '%s', '%d' ) );?></p>';
-		msgParse = msgParse.replace("%s", invalid_addr);
-		msgParse = msgParse.replace("%d", total);
-		gdMsg += msgParse;
-	}
-	
-	if (invalid > 0) {
-		var msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) could not be added due to blank title/invalid post type.', GEODIRECTORY_TEXTDOMAIN ), '%s', '%d' ) );?></p>';
-		msgParse = msgParse.replace("%s", invalid);
-		msgParse = msgParse.replace("%d", total);
-		gdMsg += msgParse;
-	}
-	
-	if (images > 0) {
-		gdMsg += '<p><?php echo addslashes( sprintf( CSV_TRANSFER_IMG_FOLDER, $uploads['subdir'] ) );?></p>';
-	}
-	gdMsg += '<p></p>';
-	jQuery('#gd-import-msg', cont).find('#message').removeClass('error').addClass('updated').html(gdMsg);
-	jQuery('#gd-import-msg', cont).show();
-	return;
+    var cont = jQuery(el).closest('.gd-imex-box');
+
+    var total = parseInt(jQuery('#gd_total', cont).val());
+    var processed = parseInt(jQuery('#gd_processed', cont).val());
+    var created = parseInt(jQuery('#gd_created', cont).val());
+    var updated = parseInt(jQuery('#gd_updated', cont).val());
+    var skipped = parseInt(jQuery('#gd_skipped', cont).val());
+    var invalid = parseInt(jQuery('#gd_invalid', cont).val());
+    var images = parseInt(jQuery('#gd_images', cont).val());
+    if (type=='post') {
+        var invalid_addr = parseInt(jQuery('#gd_invalid_addr', cont).val());
+    }
+
+    var gdMsg = '<p></p>';
+    if ( processed > 0 ) {
+        var msgParse = '<p><?php echo addslashes( sprintf( __( 'Total %s item(s) found.', 'geodirectory' ), '%s' ) );?></p>';
+        msgParse = msgParse.replace("%s", processed);
+        gdMsg += msgParse;
+    }
+
+    if ( updated > 0 ) {
+        var msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) updated.', 'geodirectory' ), '%s', '%d' ) );?></p>';
+        msgParse = msgParse.replace("%s", updated);
+        msgParse = msgParse.replace("%d", processed);
+        gdMsg += msgParse;
+    }
+
+    if ( created > 0 ) {
+        var msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) added.', 'geodirectory' ), '%s', '%d' ) );?></p>';
+        msgParse = msgParse.replace("%s", created);
+        msgParse = msgParse.replace("%d", processed);
+        gdMsg += msgParse;
+    }
+
+    if ( skipped > 0 ) {
+        var msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) ignored due to already exists.', 'geodirectory' ), '%s', '%d' ) );?></p>';
+        msgParse = msgParse.replace("%s", skipped);
+        msgParse = msgParse.replace("%d", processed);
+        gdMsg += msgParse;
+    }
+
+    if ((type=='post' && invalid_addr > 0) || (type=='loc' && invalid > 0)) {
+        if (type=='loc') {
+            invalid_addr = invalid;
+        }
+        var msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) could not be added due to blank/invalid address(city, region, country, latitude, longitude).', 'geodirectory' ), '%s', '%d' ) );?></p>';
+        msgParse = msgParse.replace("%s", invalid_addr);
+        msgParse = msgParse.replace("%d", total);
+        gdMsg += msgParse;
+    }
+
+    if (invalid > 0 && type!='loc') {
+        var msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) could not be added due to blank title/invalid post type.', 'geodirectory' ), '%s', '%d' ) );?></p>';
+        
+        if (type=='hood') {
+            msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) could not be added due to invalid neighbourhood data(name, latitude, longitude) or invalid location data(either location_id or city/region/country is empty)', 'geodirectory' ), '%s', '%d' ) );?></p>';
+        }
+        msgParse = msgParse.replace("%s", invalid);
+        msgParse = msgParse.replace("%d", total);
+        gdMsg += msgParse;
+    }
+
+    if (images > 0) {
+        gdMsg += '<p><?php echo addslashes( sprintf( CSV_TRANSFER_IMG_FOLDER, $uploads['subdir'] ) );?></p>';
+    }
+    gdMsg += '<p></p>';
+    jQuery('#gd-import-msg', cont).find('#message').removeClass('error').addClass('updated').html(gdMsg);
+    jQuery('#gd-import-msg', cont).show();
+    return;
 }
 
 function gd_progressbar(el, value, label) {
-	var value = parseFloat(value);
-	if ( value <= 100 ) {
-		jQuery(el).find('#gd_progressbar').progressbar("value",value);
-		if (typeof label != 'undefined') {
-			jQuery(el).find('#gd_progressbar .gd-progress-label').text(label);
-		}
-	}
+    var value = parseFloat(value);
+    if ( value <= 100 ) {
+        jQuery(el).find('#gd_progressbar').progressbar("value",value);
+        if (typeof label != 'undefined') {
+            jQuery(el).find('#gd_progressbar .gd-progress-label').html(label);
+        }
+    }
 }
-			
+
 jQuery(function(){
-	var intIp;
-	var intIc;
-	
-	jQuery(".gd-imex-pupload").click(function () {
-		var $this = this;
-		var $cont = jQuery($this).closest('.gd-imex-box');
-		clearInterval(intIp);
-		intIp = setInterval(function () {
-			if (jQuery($cont).find('.gd-imex-file').val()) {
-				jQuery($cont).find('.gd-imex-btns').show();
-			}
-		}, 1000);
-	});
-	
-	jQuery(".gd-imex-cupload").click(function () {
-		var $this = this;
-		var $cont = jQuery($this).closest('.gd-imex-box');
-		clearInterval(intIc);
-		intIc = setInterval(function () {
-			if (jQuery($cont).find('.gd-imex-file').val()) {
-				jQuery($cont).find('.gd-imex-btns').show();
-			}
-		}, 1000);
-	});
-				
-	jQuery('#gd_ie_imposts_sample').click(function(){
-		if (jQuery('#gd_ie_imposts_csv').val() != '') {
-			window.location.href = jQuery('#gd_ie_imposts_csv').val();
-			return false;
-		}
-	});
-	
-	jQuery('#gd_ie_imcats_sample').click(function(){
-		if (jQuery('#gd_ie_imcats_csv').val() != '') {
-			window.location.href = jQuery('#gd_ie_imcats_csv').val();
-			return false;
-		}
-	});
-	
-	jQuery('.gd-import-export .geodir_event_csv_download a').addClass('button-secondary');
-	
-	jQuery( '.gd_progressbar' ).each(function(){
-		jQuery(this).progressbar({value:0});
-	});
-	
-	var timer_posts;
-	var pseconds;
-	var stat_posts;
-	jQuery('#gd_ie_exposts_submit').click(function(){
-		pseconds = 1;
-		
-		var el = jQuery(this).closest('.postbox');
-		var post_type = jQuery(el).find('#gd_post_type').val();
-		if ( !post_type ) {
-			jQuery(el).find('#gd_post_type').focus();
-			return false;
-		}
-		window.clearInterval(timer_posts);
-		
-		jQuery(this).prop('disabled', true);
-		
-		timer_posts = window.setInterval( function() {
-			jQuery(el).find(".gd_timer").gdposts_timer();
-		}, 1000);
-		
-		gd_process_export_posts(el, post_type);
-	});
-	
-	jQuery.fn.gdposts_timer = function() {
-		pseconds++;		
-		jQuery(this).text( pseconds.toString().toHMS() );
-	}
-	
-	var timer_cats;
-	var cseconds;
-	var stat_cats;
-	jQuery('#gd_ie_excats_submit').click(function(){
-		cseconds = 1;
-		
-		var el = jQuery(this).closest('.postbox');
-		var post_type = jQuery(el).find('#gd_post_type').val();
-		if ( !post_type ) {
-			jQuery(el).find('#gd_post_type').focus();
-			return false;
-		}
-		window.clearInterval(timer_cats);
-		
-		jQuery(this).prop('disabled', true);
-		
-		timer_cats = window.setInterval( function() {
-			jQuery(el).find(".gd_timer").gdcats_timer();
-		}, 1000);
-		
-		gd_process_export_cats(el, post_type);
-	});
-	
-	jQuery.fn.gdcats_timer = function() {
-		cseconds++;		
-		jQuery(this).text( cseconds.toString().toHMS() );
-	}
-	
-	String.prototype.toHMS = function () {
-		var sec_num = parseInt(this, 10); // don't forget the second param
-		var hours   = Math.floor(sec_num / 3600);
-		var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-		var seconds = sec_num - (hours * 3600) - (minutes * 60);
+    jQuery('.postbox.gd-hndle-pbox').addClass('closed');
+    jQuery('.gd-import-export .postbox .gd-hndle-click, .gd-import-export .postbox .button-link').click(function(e){
+        var $this = this;
+        var $postbox = jQuery($this).closest('.postbox');
+        
+        $postbox.toggleClass('closed');
+    });
 
-		if (hours   < 10) {hours   = "0"+hours;}
-		if (minutes < 10) {minutes = "0"+minutes;}
-		if (seconds < 10) {seconds = "0"+seconds;}
-		var time    = hours+':'+minutes+':'+seconds;
-		return time;
-	}
-		
-	function gd_process_export_posts(el, post_type) {
-		gd_progressbar(el, 0, "<?php echo esc_attr( __( 'Exporting...', GEODIRECTORY_TEXTDOMAIN ) );?>");
-		jQuery(el).find('#gd_timer').text('00:00:00');
+    var intIp;
+    var intIc;
 
-		jQuery.ajax({
-			url: ajaxurl,
-			type: "POST",
-			data: 'action=geodir_import_export&task=export_posts&_pt=' + post_type + '&_nonce=<?php echo $nonce;?>',
-			dataType : 'json',
-			cache: false,
-			beforeSend: function (jqXHR, settings) {
-				jQuery(el).find('#gd_timer').text('00:00:01');
-				
-				window.clearInterval(stat_posts);
-				stat_posts = window.setInterval( function() {
-					gd_process_stats( el, 'export_posts', post_type );
-				}, 2500);
-			},
-			success: function( data ) {
-				window.clearInterval(stat_posts);
-				window.clearInterval(timer_posts);
-				
-				jQuery(el).find('input[type="submit"]').prop('disabled', false);
-				
-				if (typeof data == 'object') {
-					if (typeof data.error != 'undefined' && data.error) {
-						gd_progressbar(el, 0, data.error);
-					} else {
-						if (typeof data.total != 'undefined' && parseInt(data.total) > 0) {
-							gd_progressbar(el, 100, "<?php echo esc_attr( __( 'Complete!', GEODIRECTORY_TEXTDOMAIN ) );?>");
-						}
-						if (typeof data.csv_file != 'undefined' && data.csv_file != '' ) {
-							window.location.href = data.csv_file;
-							return true;
-						}
-					}
-				}
-			},
-			error: function( data ) {
-				window.clearInterval(stat_posts);
-				window.clearInterval(timer_posts);
-				return;
-			}
-		});
-	}
-	
-	function gd_process_export_cats(el, post_type) {
-		gd_progressbar(el, 0, "<?php echo esc_attr( __( 'Exporting...', GEODIRECTORY_TEXTDOMAIN ) );?>");
-		jQuery(el).find('#gd_timer').text('00:00:00');
+    jQuery(".gd-imex-pupload").click(function () {
+        var $this = this;
+        var $cont = jQuery($this).closest('.gd-imex-box');
+        clearInterval(intIp);
+        intIp = setInterval(function () {
+            if (jQuery($cont).find('.gd-imex-file').val()) {
+                jQuery($cont).find('.gd-imex-btns').show();
+            }
+        }, 1000);
+    });
 
-		jQuery.ajax({
-			url: ajaxurl,
-			type: "POST",
-			data: 'action=geodir_import_export&task=export_cats&_pt=' + post_type + '&_nonce=<?php echo $nonce;?>',
-			dataType : 'json',
-			cache: false,
-			beforeSend: function (jqXHR, settings) {
-				jQuery(el).find('#gd_timer').text('00:00:01');
-				
-				window.clearInterval(stat_cats);
-				
-				stat_cats = window.setInterval( function() {
-					gd_process_stats( el, 'export_cats', post_type );
-				}, 2500);
-			},
-			success: function( data ) {
-				if (typeof data == 'object') {
-					if (typeof data.error != 'undefined' && data.error) {
-						gd_progressbar(el, 0, data.error);
-					} else {
-						if (typeof data.total != 'undefined' && parseInt(data.total) > 0) {
-							gd_progressbar(el, 100, "<?php echo esc_attr( __( 'Complete!', GEODIRECTORY_TEXTDOMAIN ) );?>");
-						}
-						if (typeof data.csv_file != 'undefined' && data.csv_file != '' ) {
-							window.location.href = data.csv_file;
-							return true;
-						}
-					}
-				}
-			},
-			error: function( data ) {
-			},
-			complete: function( jqXHR, textStatus  ) {
-				window.clearInterval(stat_cats);
-				window.clearInterval(timer_cats);
-				
-				jQuery(el).find('input[type="submit"]').prop('disabled', false);
-			}
-		});
-	}
-	
-	function gd_process_stats(el, task, post_type) {
-		jQuery.ajax({
-			url: ajaxurl,
-			type: "POST",
-			data: 'action=geodir_import_export&task='+ task +'&_pt=' + post_type + '&_st=true&_nonce=<?php echo $nonce;?>',
-			dataType : 'json',
-			cache: false,
-			timeout: 2490,
-			success: function(data) {
-				if (typeof data == 'object' && parseFloat(data.percentage) > 0) {
-					gd_progressbar(el, parseFloat(data.percentage));
-				}
-				return true;
-			},
-			error: function( data ) {
-				if (data.statusText != 'timeout' && data.status != 200) {
-					if (task == 'export_posts') {
-						window.clearInterval(stat_posts);
-					} else if (task == 'export_cats') {
-						window.clearInterval(stat_cats);
-					}
-				}
-				return false;
-			}
-		});
-		return true;
-	}
+    jQuery(".gd-imex-cupload").click(function () {
+        var $this = this;
+        var $cont = jQuery($this).closest('.gd-imex-box');
+        clearInterval(intIc);
+        intIc = setInterval(function () {
+            if (jQuery($cont).find('.gd-imex-file').val()) {
+                jQuery($cont).find('.gd-imex-btns').show();
+            }
+        }, 1000);
+    });
+                
+    jQuery('#gd_ie_imposts_sample').click(function(){
+        if (jQuery('#gd_ie_imposts_csv').val() != '') {
+            window.location.href = jQuery('#gd_ie_imposts_csv').val();
+            return false;
+        }
+    });
+
+    jQuery('#gd_ie_imcats_sample').click(function(){
+        if (jQuery('#gd_ie_imcats_csv').val() != '') {
+            window.location.href = jQuery('#gd_ie_imcats_csv').val();
+            return false;
+        }
+    });
+
+    jQuery('.gd-import-export .geodir_event_csv_download a').addClass('button-secondary');
+
+    jQuery( '.gd_progressbar' ).each(function(){
+        jQuery(this).progressbar({value:0});
+    });
+
+    var timer_posts;
+    var pseconds;
+    jQuery('#gd_ie_exposts_submit').click(function(){
+        pseconds = 1;
+        
+        var el = jQuery(this).closest('.postbox');
+        var post_type = jQuery(el).find('#gd_post_type').val();
+        if ( !post_type ) {
+            jQuery(el).find('#gd_post_type').focus();
+            return false;
+        }
+        window.clearInterval(timer_posts);
+        
+        jQuery(this).prop('disabled', true);
+        
+        timer_posts = window.setInterval( function() {
+            jQuery(el).find(".gd_timer").gdposts_timer();
+        }, 1000);
+        
+        var chunk_size = parseInt(jQuery('#gd_chunk_size', el).val());
+        var total_posts = parseInt(jQuery('option:selected', jQuery(el).find('#gd_post_type')).attr('data-posts'));
+        chunk_size = chunk_size < 50 || chunk_size > 100000 ? 5000 : chunk_size;
+        if (chunk_size > total_posts) {
+            chunk_size = total_posts;
+        }
+        var pages = Math.ceil( total_posts / chunk_size );
+        
+        gd_process_export_posts(el, post_type, total_posts, chunk_size, pages, 1);
+    });
+
+    jQuery.fn.gdposts_timer = function() {
+        pseconds++;
+        jQuery(this).text( pseconds.toString().toHMS() );
+    }
+
+    var timer_cats;
+    var cseconds;
+    jQuery('#gd_ie_excats_submit').click(function(){
+        cseconds = 1;
+        
+        var el = jQuery(this).closest('.postbox');
+        var post_type = jQuery(el).find('#gd_post_type').val();
+        if ( !post_type ) {
+            jQuery(el).find('#gd_post_type').focus();
+            return false;
+        }
+        window.clearInterval(timer_cats);
+        
+        jQuery(this).prop('disabled', true);
+        
+        timer_cats = window.setInterval( function() {
+            jQuery(el).find(".gd_timer").gdcats_timer();
+        }, 1000);
+        
+        var chunk_size = parseInt(jQuery('#gd_chunk_size', el).val());
+        var total_cats = parseInt(jQuery('option:selected', jQuery(el).find('#gd_post_type')).attr('data-cats'));
+        chunk_size = chunk_size < 50 || chunk_size > 100000 ? 5000 : chunk_size;
+        if (chunk_size > total_cats) {
+            chunk_size = total_cats;
+        }
+        var pages = Math.ceil( total_cats / chunk_size );
+        
+        gd_process_export_cats(el, post_type, total_cats, chunk_size, pages, 1);
+    });
+
+    jQuery.fn.gdcats_timer = function() {
+        cseconds++;
+        jQuery(this).text( cseconds.toString().toHMS() );
+    }
+
+    String.prototype.toHMS = function () {
+        var sec_num = parseInt(this, 10); // don't forget the second param
+        var hours   = Math.floor(sec_num / 3600);
+        var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+        var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+        if (hours   < 10) {hours   = "0"+hours;}
+        if (minutes < 10) {minutes = "0"+minutes;}
+        if (seconds < 10) {seconds = "0"+seconds;}
+        var time    = hours+':'+minutes+':'+seconds;
+        return time;
+    }
+        
+    function gd_process_export_posts(el, post_type, total_posts, chunk_size, pages, page) {
+        if (page < 2) {
+            gd_progressbar(el, 0, '0% (0 / ' + total_posts + ') <i class="fa fa-refresh fa-spin"></i><?php echo esc_attr( __( 'Exporting...', 'geodirectory' ) );?>');
+            jQuery(el).find('#gd_timer').text('00:00:01');
+            jQuery('#gd_ie_ex_files', el).html('');
+        }
+
+        jQuery.ajax({
+            url: ajaxurl,
+            type: "POST",
+            data: 'action=geodir_import_export&task=export_posts&_pt=' + post_type + '&_n=' + chunk_size + '&_nonce=<?php echo $nonce;?>&_p=' + page,
+            dataType : 'json',
+            cache: false,
+            beforeSend: function (jqXHR, settings) {},
+            success: function( data ) {
+                jQuery(el).find('input[type="submit"]').prop('disabled', false);
+                
+                if (typeof data == 'object') {
+                    if (typeof data.error != 'undefined' && data.error) {
+                        gd_progressbar(el, 0, '<i class="fa fa-warning"></i>' + data.error);
+                        window.clearInterval(timer_posts);
+                    } else {
+                        if (pages < page || pages == page) {
+                            window.clearInterval(timer_posts);
+                            gd_progressbar(el, 100, '100% (' + total_posts + ' / ' + total_posts + ') <i class="fa fa-check"></i><?php echo esc_attr( __( 'Complete!', 'geodirectory' ) );?>');
+                        } else {
+                            var percentage = Math.round(((page * chunk_size) / total_posts) * 100);
+                            percentage = percentage > 100 ? 100 : percentage;
+                            gd_progressbar(el, percentage, '' + percentage + '% (' + ( page * chunk_size ) + ' / ' + total_posts + ') <i class="fa fa-refresh fa-spin"></i><?php echo esc_attr( __( 'Exporting...', 'geodirectory' ) );?>');
+                        }
+                        if (typeof data.files != 'undefined' && jQuery(data.files).length ) {
+                            var obj_files = data.files;
+                            var files = '';
+                            for (var i in data.files) {
+                                files += '<p>'+ obj_files[i].i +' <a class="gd-ie-file" href="' + obj_files[i].u + '" target="_blank">' + obj_files[i].u + '</a> (' + obj_files[i].s + ')</p>';
+                            }
+                            jQuery('#gd_ie_ex_files', el).append(files);
+                            if (pages > page) {
+                                return gd_process_export_posts(el, post_type, total_posts, chunk_size, pages, (page + 1));
+                            }
+                            return true;
+                        }
+                    }
+                }
+            },
+            error: function( data ) {
+                jQuery(el).find('input[type="submit"]').prop('disabled', false);
+                window.clearInterval(timer_posts);
+                return;
+            },
+            complete: function( jqXHR, textStatus  ) {
+                return;
+            }
+        });
+    }
+
+    function gd_process_export_cats(el, post_type, total_cats, chunk_size, pages, page) {
+        if (page < 2) {
+            gd_progressbar(el, 0, '0% (0 / ' + total_cats + ') <i class="fa fa-refresh fa-spin"></i><?php echo esc_attr( __( 'Exporting...', 'geodirectory' ) );?>');
+            jQuery(el).find('#gd_timer').text('00:00:01');
+            jQuery('#gd_ie_ex_files', el).html('');
+        }
+
+        jQuery.ajax({
+            url: ajaxurl,
+            type: "POST",
+            data: 'action=geodir_import_export&task=export_cats&_pt=' + post_type + '&_n=' + chunk_size + '&_nonce=<?php echo $nonce;?>&_p=' + page,
+            dataType : 'json',
+            cache: false,
+            beforeSend: function (jqXHR, settings) {},
+            success: function( data ) {
+                jQuery(el).find('input[type="submit"]').prop('disabled', false);
+                
+                if (typeof data == 'object') {
+                    if (typeof data.error != 'undefined' && data.error) {
+                        gd_progressbar(el, 0, '<i class="fa fa-warning"></i>' + data.error);
+                        window.clearInterval(timer_cats);
+                    } else {
+                        if (pages < page || pages == page) {
+                            window.clearInterval(timer_cats);
+                            gd_progressbar(el, 100, '100% (' + total_cats + ' / ' + total_cats + ') <i class="fa fa-check"></i><?php echo esc_attr( __( 'Complete!', 'geodirectory' ) );?>');
+                        } else {
+                            var percentage = Math.round(((page * chunk_size) / total_cats) * 100);
+                            percentage = percentage > 100 ? 100 : percentage;
+                            gd_progressbar(el, percentage, '' + percentage + '% (' + ( page * chunk_size ) + ' / ' + total_cats + ') <i class="fa fa-refresh fa-spin"></i><?php esc_attr_e( 'Exporting...', 'geodirectory' );?>');
+                        }
+                        if (typeof data.files != 'undefined' && jQuery(data.files).length ) {
+                            var obj_files = data.files;
+                            var files = '';
+                            for (var i in data.files) {
+                                files += '<p>'+ obj_files[i].i +' <a class="gd-ie-file" href="' + obj_files[i].u + '" target="_blank">' + obj_files[i].u + '</a> (' + obj_files[i].s + ')</p>';
+                            }
+                            jQuery('#gd_ie_ex_files', el).append(files);
+                            if (pages > page) {
+                                return gd_process_export_cats(el, post_type, total_cats, chunk_size, pages, (page + 1));
+                            }
+                            return true;
+                        }
+                    }
+                }
+            },
+            error: function( data ) {
+                jQuery(el).find('input[type="submit"]').prop('disabled', false);
+                window.clearInterval(timer_cats);
+                return;
+            },
+            complete: function( jqXHR, textStatus  ) {
+                return;
+            }
+        });
+    }
 });
+
+function gd_imex_FinishImport(el, type) {
+    if (type=='post') {
+        jQuery.ajax({
+            url: ajaxurl,
+            type: "POST",
+            data: 'action=geodir_import_export&task=import_finish&_pt=' + type + '&_nonce=<?php echo $nonce; ?>',
+            dataType : 'json',
+            cache: false,
+            success: function (data) {
+                //import done
+            }
+        });
+    }
+}
 </script>
 <?php
 }
@@ -4369,7 +3519,7 @@ function geodir_init_filesystem()
     $access_type = get_filesystem_method();
     if ($access_type === 'direct') {
         /* you can safely run request_filesystem_credentials() without any issues and don't need to worry about passing in a URL */
-        $creds = request_filesystem_credentials(site_url() . '/wp-admin/', '', false, false, array());
+        $creds = request_filesystem_credentials(trailingslashit(site_url()) . 'wp-admin/', '', false, false, array());
 
         /* initialize the API */
         if (!WP_Filesystem($creds)) {
@@ -4382,7 +3532,7 @@ function geodir_init_filesystem()
         return $wp_filesystem;
         /* do our file manipulations below */
     } elseif (defined('FTP_USER')) {
-        $creds = request_filesystem_credentials(site_url() . '/wp-admin/', '', false, false, array());
+        $creds = request_filesystem_credentials(trailingslashit(site_url()) . 'wp-admin/', '', false, false, array());
 
         /* initialize the API */
         if (!WP_Filesystem($creds)) {
@@ -4423,7 +3573,7 @@ function geodir_filesystem_notice()
     } elseif (!defined('FTP_USER')) {
         ?>
         <div class="error">
-            <p><?php _e('GeoDirectory does not have access to your filesystem, thing like import/export will not work. Please define your details in wp-config.php as explained here', GEODIRECTORY_TEXTDOMAIN); ?>
+            <p><?php _e('GeoDirectory does not have access to your filesystem, thing like import/export will not work. Please define your details in wp-config.php as explained here', 'geodirectory'); ?>
                 <a target="_blank" href="http://codex.wordpress.org/Editing_wp-config.php#WordPress_Upgrade_Constants">http://codex.wordpress.org/Editing_wp-config.php#WordPress_Upgrade_Constants</a>
             </p>
         </div>
@@ -4436,6 +3586,8 @@ function geodir_filesystem_notice()
  * Handle import/export for categories & listings.
  *
  * @since 1.4.6
+ * @since 1.5.4 Modified to add default category via csv import.
+ * @since 1.5.7 Modified to fix 504 Gateway Time-out for very large data.
  * @package GeoDirectory
  *
  * @global object $wpdb WordPress Database object.
@@ -4445,974 +3597,1448 @@ function geodir_filesystem_notice()
  * @return string Json data.
  */
 function geodir_ajax_import_export() {
-	global $wpdb, $plugin_prefix, $current_user, $wp_filesystem;
+    global $wpdb, $plugin_prefix, $current_user, $wp_filesystem;
+    
+    error_reporting(0);
 
     // try to set higher limits for import
-    @ini_set('max_input_time', 3000);
-    @ini_set('max_execution_time', 3000);
-    @ini_set('memory_limit', '256M');
-	error_reporting(0);
-	
-	$json = array();
-	
-	if ( !current_user_can( 'manage_options' ) ) {
-		wp_send_json( $json );
-	}
-	
-	$task = isset( $_REQUEST['task'] ) ? $_REQUEST['task'] : NULL;
-	$nonce = isset( $_REQUEST['_nonce'] ) ? $_REQUEST['_nonce'] : NULL;
-	$stat = isset( $_REQUEST['_st'] ) ? $_REQUEST['_st'] : false;
-	
-	if ( !wp_verify_nonce( $nonce, 'geodir_import_export_nonce' ) ) {
-		wp_send_json( $json );
-	}
+    $max_input_time = ini_get('max_input_time');
+    $max_execution_time = ini_get('max_execution_time');
+    $memory_limit= ini_get('memory_limit');
 
-	$post_type = isset( $_REQUEST['_pt'] ) ? $_REQUEST['_pt'] : NULL;
-	
-	/*if( empty( $wp_filesystem ) ) {
-		require_once( ABSPATH . '/wp-admin/includes/file.php' );
-		WP_Filesystem();
-		global $wp_filesystem;
-	}*/
+    if(!$max_input_time || $max_input_time<3000){
+        ini_set('max_input_time', 3000);
+    }
+
+    if(!$max_execution_time || $max_execution_time<3000){
+        ini_set('max_execution_time', 3000);
+    }
+
+    if($memory_limit && str_replace('M','',$memory_limit)){
+        if(str_replace('M','',$memory_limit)<256){
+            ini_set('memory_limit', '256M');
+        }
+    }
+
+    $json = array();
+
+    if ( !current_user_can( 'manage_options' ) ) {
+        wp_send_json( $json );
+    }
+
+    $task = isset( $_REQUEST['task'] ) ? $_REQUEST['task'] : NULL;
+    $nonce = isset( $_REQUEST['_nonce'] ) ? $_REQUEST['_nonce'] : NULL;
+    $stat = isset( $_REQUEST['_st'] ) ? $_REQUEST['_st'] : false;
+
+    if ( !wp_verify_nonce( $nonce, 'geodir_import_export_nonce' ) ) {
+        wp_send_json( $json );
+    }
+
+    $post_type = isset( $_REQUEST['_pt'] ) ? $_REQUEST['_pt'] : NULL;
+    $chunk_per_page = isset( $_REQUEST['_n'] ) ? absint($_REQUEST['_n']) : NULL;
+    $chunk_per_page = $chunk_per_page < 50 || $chunk_per_page > 100000 ? 5000 : $chunk_per_page;
+    $chunk_page_no = isset( $_REQUEST['_p'] ) ? absint($_REQUEST['_p']) : 1;
 
     $wp_filesystem = geodir_init_filesystem();
     if (!$wp_filesystem) {
-        $json['error'] = __( 'Fail, something wrong to create csv file.', GEODIRECTORY_TEXTDOMAIN );
+        $json['error'] = __( 'Filesystem ERROR: Could not access filesystem.', 'geodirectory' );
         wp_send_json( $json );
-        exit;
     }
-	
-	$csv_file_dir = geodir_path_import_export( false );
-	if ( !$wp_filesystem->is_dir( $csv_file_dir ) ) {
-		$wp_filesystem->mkdir( $csv_file_dir, FS_CHMOD_DIR );
-	}
-			
-	switch ( $task ) {
-		case 'export_posts': {
-			// WPML
-			$is_wpml = geodir_is_wpml();
-			if ($is_wpml) {
-				global $sitepress;
-				$active_lang = ICL_LANGUAGE_CODE;
-				
-				$sitepress->switch_lang('all', true);
-			}
-			// WPML
-			if ( $post_type == 'gd_event' ) {
-				add_filter( 'geodir_imex_count_posts', 'geodir_imex_count_events', 10, 2 );
-				add_filter( 'geodir_imex_export_posts_query', 'geodir_imex_get_events_query', 10, 2 );
-			}
 
-			$file_name = $post_type . '_' . date( 'j_n_y' );
-			
-			$posts_count = geodir_get_posts_count( $post_type );
-			$file_url = geodir_path_import_export() . '/' . $file_name . '.csv';
-			$file_path = $csv_file_dir . '/' . $file_name . '.csv';
-			$file_path_temp = $csv_file_dir . '/' . $post_type . '_' . $nonce . '.csv';
-			
-			if ( isset( $_REQUEST['_st'] ) ) {
-				$line_count = (int)geodir_import_export_line_count( $file_path_temp );
-				$percentage = count( $posts_count ) > 0 && $line_count > 0 ? ceil( $line_count / $posts_count ) * 100 : 0;
-				$percentage = min( $percentage, 100 );
-				
-				$json['percentage'] = $percentage;
-				// WPML
-				if ($is_wpml) {
-					$sitepress->switch_lang($active_lang, true);
-				}
-				// WPML
-				wp_send_json( $json );
-			} else {				
-				if ( $wp_filesystem->exists( $file_path ) ) {
-					$wp_filesystem->delete( $file_path );
-				}
-				
-				if ( !$posts_count > 0 ) {
-					$json['error'] = __( 'No records to export.', GEODIRECTORY_TEXTDOMAIN );
-				} else {
-					$args = array( 'hide_empty' => 0 );
-					$posts = geodir_imex_get_posts( $post_type );
-					
-					if ( !empty( $posts ) ) {
-						$total_posts = count( $posts );
-						$per_page = 100;
-						$total_pages = ceil( $total_posts / $per_page );
-						
-						for ( $i = 0; $i <= $total_pages; $i++ ) {
-							$save_posts = array_slice( $posts , ( $i * $per_page ), $per_page );
-							
-							$clear = $i == 0 ? true : false;
-							geodir_save_csv_data( $file_path_temp, $save_posts, $clear );
-						}
-						
-						if ( $wp_filesystem->exists( $file_path_temp ) ) {
-							$wp_filesystem->move( $file_path_temp, $file_path, true );
-						}
-						
-						if ( $wp_filesystem->exists( $file_path ) ) {
-							$json['total'] = $posts_count;
-							$json['csv_file'] = $file_url;
-						} else {
-							$json['error'] = __( 'Fail, something wrong to create csv file.', GEODIRECTORY_TEXTDOMAIN );
-						}
-					} else {
-						$json['error'] = __( 'No records to export.', GEODIRECTORY_TEXTDOMAIN );
-					}
-				}
-				// WPML
-				if ($is_wpml) {
-					$sitepress->switch_lang($active_lang, true);
-				}
-				// WPML
-				wp_send_json( $json );
-			}
-		}
-		break;
-		case 'export_cats': {
-			// WPML
-			$is_wpml = geodir_is_wpml();
-			if ($is_wpml) {
-				global $sitepress;
-				$active_lang = ICL_LANGUAGE_CODE;
-				
-				$sitepress->switch_lang('all', true);
-			}
-			// WPML
-			$file_name = $post_type . 'category_' . date( 'j_n_y' );
-			
-			$terms_count = geodir_get_terms_count( $post_type );
-			$file_url = geodir_path_import_export() . '/' . $file_name . '.csv';
-			$file_path = $csv_file_dir . '/' . $file_name . '.csv';
-			$file_path_temp = $csv_file_dir . '/' . $post_type . 'category_' . $nonce . '.csv';
-			
-			if ( isset( $_REQUEST['_st'] ) ) {
-				$line_count = (int)geodir_import_export_line_count( $file_path_temp );
-				$percentage = count( $terms_count ) > 0 && $line_count > 0 ? ceil( $line_count / $terms_count ) * 100 : 0;
-				$percentage = min( $percentage, 100 );
-				
-				$json['percentage'] = $percentage;
-				// WPML
-				if ($is_wpml) {
-					$sitepress->switch_lang($active_lang, true);
-				}
-				// WPML
-				wp_send_json( $json );
-			} else {				
-				if ( $wp_filesystem->exists( $file_path ) ) {
-					$wp_filesystem->delete( $file_path );
-				}
-				
-				if ( !$terms_count > 0 ) {
-					$json['error'] = __( 'No records to export.', GEODIRECTORY_TEXTDOMAIN );
-				} else {
-					$args = array( 'hide_empty' => 0 );
-					$terms = geodir_imex_get_terms( $post_type );
-					
-					if ( !empty( $terms ) ) {
-						$total_terms = count( $terms );
-						$per_page = 50;
-						$total_pages = ceil( $total_terms / $per_page );
-						
-						for ( $i = 0; $i <= $total_pages; $i++ ) {
-							$save_terms = array_slice( $terms , ( $i * $per_page ), $per_page );
-							
-							$clear = $i == 0 ? true : false;
-							geodir_save_csv_data( $file_path_temp, $save_terms, $clear );
-						}
-						
-						if ( $wp_filesystem->exists( $file_path_temp ) ) {
-							$wp_filesystem->move( $file_path_temp, $file_path, true );
-						}
-						
-						if ( $wp_filesystem->exists( $file_path ) ) {
-							$json['total'] = $terms_count;
-							$json['csv_file'] = $file_url;
-						} else {
-							$json['error'] = __( 'Fail, something wrong to create csv file.', GEODIRECTORY_TEXTDOMAIN );
-						}
-					} else {
-						$json['error'] = __( 'No records to export.', GEODIRECTORY_TEXTDOMAIN );
-					}
-				}
-				// WPML
-				if ($is_wpml) {
-					$sitepress->switch_lang($active_lang, true);
-				}
-				// WPML
-				wp_send_json( $json );
-			}
-		}
-		break;
-		case 'prepare_import':
-		case 'import_cat':
-		case 'import_post': {
-			// WPML
-			$is_wpml = geodir_is_wpml();
-			if ($is_wpml) {
-				global $sitepress;
-				$active_lang = ICL_LANGUAGE_CODE;
-			}
-			// WPML
-			
-			ini_set( 'auto_detect_line_endings', true );
-			
-			$uploads = wp_upload_dir();
-			$uploads_dir = $uploads['path'];
-			$uploads_subdir = $uploads['subdir'];
-			
-			$csv_file = isset( $_POST['_file'] ) ? $_POST['_file'] : NULL;
-			$import_choice = isset( $_REQUEST['_ch'] ) ? $_REQUEST['_ch'] : 'skip';
-			
-			$csv_file_arr = explode( '/', $csv_file );
-			$csv_filename = end( $csv_file_arr );
-			$target_path = $uploads_dir . '/temp_' . $current_user->data->ID . '/' . $csv_filename;
-			
-			$json['file'] = $csv_file;
-			$json['error'] = __( 'The uploaded file is not a valid csv file. Please try again.', GEODIRECTORY_TEXTDOMAIN );
-			
-			if ( $csv_file && $wp_filesystem->is_file( $target_path ) && $wp_filesystem->exists( $target_path ) ) {
-				$wp_filetype = wp_check_filetype_and_ext( $target_path, $csv_filename );
-				
-				if (!empty($wp_filetype) && isset($wp_filetype['ext']) && strtolower($wp_filetype['ext']) == 'csv') {
-					$json['error'] = NULL;
-					$json['rows'] = 0;
-					
-					if ( ( $handle = fopen($target_path, "r" ) ) !== FALSE ) {
-						while ( ( $data = fgetcsv( $handle, 100000, "," ) ) !== FALSE ) {
-							if ( !empty( $data ) ) {
-								$file[] = $data;
-							}
-						}
-						fclose($handle);
-					}
-	
-					$json['rows'] = (!empty($file) && count($file) > 1) ? count($file) - 1 : 0;
-					
-					if (!$json['rows'] > 0) {
-						$json['error'] = __('No data found in csv file.', GEODIRECTORY_TEXTDOMAIN);
-					}
-				} else {
-					wp_send_json( $json );
-				}
-			} else {
-				wp_send_json( $json );
-			}
-			
-			if ( $task == 'prepare_import' || !empty( $json['error'] ) ) {
-				wp_send_json( $json );
-			}
-			
-			$total = $json['rows'];
-			$limit = isset($_POST['limit']) ? (int)$_POST['limit'] : 1;
-			$processed = isset($_POST['processed']) ? (int)$_POST['processed'] : 0;
-			
-			$count = $limit;
-			$requested_limit = $limit;
-			
-			if ($count < $total) {
-				$count = $processed + $count;
-				if ($count > $total) {
-					$count = $total;
-				}
-			} else {
-				$count = $total;
-			}
-			
-			$created = 0;
-			$updated = 0;
-			$skipped = 0;
-			$invalid = 0;
-			$invalid_addr = 0;
-			$images = 0;
-			
-			$invalid_title = 0;
-			$customKeyarray = array();
-			$gd_post_info = array();
-			$post_location = array();
-			$countpost = 0;
-			
-			$post_types = geodir_get_posttypes();
-	
-			if ( $task == 'import_cat' ) {				
-				if (!empty($file)) {
-					$columns = isset($file[0]) ? $file[0] : NULL;
-					
-					if (empty($columns) || (!empty($columns) && $columns[0] == '')) {
-						$json['error'] = CSV_INVAILD_FILE;
-						wp_send_json( $json );
-					}
-					
-					for ($i = 1; $i <= $limit; $i++) {
-						$index = $processed + $i;
-						
-						if (isset($file[$index])) {
-							$row = $file[$index];
-							$row = array_map( 'trim', $row );
-							$row = array_map( 'utf8_encode', $row );
-							
-							$cat_id = '';
-							$cat_name = '';
-							$cat_slug = '';
-							$cat_posttype = '';
-							$cat_parent = '';
-							$cat_description = '';
-							$cat_top_description = '';
-							$cat_image = '';
-							$cat_icon = '';
-							$cat_language = '';
-							
-							$c = 0;
-							foreach ($columns as $column ) {
-								if ( $column == 'cat_id' ) {
-									$cat_id = (int)$row[$c];
-								} else if ( $column == 'cat_name' ) {
-									$cat_name = $row[$c];
-								} else if ( $column == 'cat_slug' ) {
-									$cat_slug = $row[$c];
-								} else if ( $column == 'cat_posttype' ) {
-									$cat_posttype = $row[$c];
-								} else if ( $column == 'cat_parent' ) {
-									$cat_parent = trim($row[$c]);
-								} else if ( $column == 'cat_description' ) {
-									$cat_description = $row[$c];
-								} else if ( $column == 'cat_top_description' ) {
-									$cat_top_description = $row[$c];
-								} else if ( $column == 'cat_image' ) {
-									$cat_image = $row[$c];
-								} else if ( $column == 'cat_icon' ) {
-									$cat_icon = $row[$c];
-								}
-								// WPML
-								if ($is_wpml && $column == 'cat_language') {
-									$cat_language = strtolower(trim($row[$c]));
-								}
-								// WPML
-								$c++;
-							}
-							
-							if ( $cat_name == '' || !in_array( $cat_posttype, $post_types ) ) {
-								$invalid++;
-								continue;
-							}
-							
-							// WPML
-							if ($is_wpml && $cat_language != '') {
-								$sitepress->switch_lang($cat_language, true);
-							}
-							// WPML
-														
-							$term_data = array();
-							$term_data['name'] = $cat_name;
-							$term_data['slug'] = $cat_slug;
-							$term_data['description'] = $cat_description;
-							$term_data['top_description'] = $cat_top_description;
-							$term_data['image'] = $cat_image != '' ? basename( $cat_image ) : '';
-							$term_data['icon'] = $cat_icon != '' ? basename( $cat_icon ) : '';
-							
-							$term_data = array_map( 'utf8_encode', $term_data );
-							
-							$taxonomy = $cat_posttype . 'category';
-							
-							$term_data['taxonomy'] = $taxonomy;
+    if (!empty($wp_filesystem) && isset($wp_filesystem->errors) && is_wp_error($wp_filesystem->errors) && $wp_filesystem->errors->get_error_code()) {
+        $json['error'] = __( 'Filesystem ERROR: ' . $wp_filesystem->errors->get_error_message(), 'geodirectory' );
+        wp_send_json( $json );
+    }
 
-							$term_parent_id = 0;
-							if ($cat_parent != "" || (int)$cat_parent > 0) {
-								$term_parent = '';
-								
-								if ( $term_parent = get_term_by( 'name', $cat_parent, $taxonomy ) ) {
-									$term_parent = $term_parent;
-								} else if ( $term_parent = get_term_by( 'slug', $cat_parent, $taxonomy ) ) {
-									$term_parent = $term_parent;
-								} else if ( $term_parent = get_term_by( 'id', $cat_parent, $taxonomy ) ) {
-									$term_parent = $term_parent;
-								} else {
-									$term_parent_data = array();
-									$term_parent_data['name'] = $cat_parent;											
-									$term_parent_data = array_map( 'utf8_encode', $term_parent_data );										
-									$term_parent_data['taxonomy'] = $taxonomy;
-									
-									$term_parent_id = (int)geodir_imex_insert_term( $taxonomy, $term_parent_data );
-								}
-								
-								if ( !empty( $term_parent ) && !is_wp_error( $term_parent ) ) {
-									$term_parent_id = (int)$term_parent->term_id;
-								}
-							}
-							$term_data['parent'] = (int)$term_parent_id;
-						
-							$term_id = NULL;
-							if ( $import_choice == 'update' ) {
-								if ( $cat_id > 0 && $term = (array)term_exists( $cat_id, $taxonomy ) ) {
-									$term_data['term_id'] = $term['term_id'];
-									
-									if ( $term_id = geodir_imex_update_term( $taxonomy, $term_data ) ) {
-										$updated++;
-									} else {
-										$invalid++;
-									}
-								} else if ( $term_data['slug'] != '' && $term = (array)term_exists( $term_data['slug'], $taxonomy ) ) {
-									$term_data['term_id'] = $term['term_id'];
-									
-									if ( $term_id = geodir_imex_update_term( $taxonomy, $term_data ) ) {
-										$updated++;
-									} else {
-										$invalid++;
-									}
-								} else {
-									if ( $term_id = geodir_imex_insert_term( $taxonomy, $term_data ) ) {
-										$created++;
-									} else {
-										$invalid++;
-									}
-								}
-							} else if ( $import_choice == 'skip' ) {
-								if ( $cat_id > 0 && $term = (array)term_exists( $cat_id, $taxonomy ) ) {
-									$skipped++;
-								} else if ( $term_data['slug'] != '' && $term = (array)term_exists( $term_data['slug'], $taxonomy ) ) {
-									$skipped++;
-								} else {
-									if ( $term_id = geodir_imex_insert_term( $taxonomy, $term_data ) ) {										
-										$created++;
-									} else {
-										$invalid++;
-									}
-								}
-							} else {
-								$invalid++;
-							}
-							
-							if ( $term_id ) {
-								if ( isset( $term_data['top_description'] ) ) {
-									update_tax_meta( $term_id, 'ct_cat_top_desc', $term_data['top_description'], $cat_posttype );
-								}
-			
-								$attachment = false;
-								if ( isset( $term_data['image'] ) && $term_data['image'] != '' ) {
-									$cat_image = geodir_get_default_catimage( $term_id, $cat_posttype );
-									$cat_image = !empty( $cat_image ) && isset( $cat_image['src'] ) ? $cat_image['src'] : '';
-									
-									if ( basename($cat_image) != $term_data['image'] ) {
-										$attachment = true;
-										update_tax_meta( $term_id, 'ct_cat_default_img', array( 'id' => 'image', 'src' => $uploads['url'] . '/' . $term_data['image'] ), $cat_posttype );
-									}
-								}
-								
-								if ( isset( $term_data['icon'] ) && $term_data['icon'] != '' ) {
-									$cat_icon = get_tax_meta( $term_id, 'ct_cat_icon', false, $cat_posttype );
-									$cat_icon = !empty( $cat_icon ) && isset( $cat_icon['src'] ) ? $cat_icon['src'] : '';
-										
-									if ( basename($cat_icon) != $term_data['icon'] ) {
-										$attachment = true;
-										update_tax_meta( $term_id, 'ct_cat_icon', array( 'id' => 'icon', 'src' => $uploads['url'] . '/' . $term_data['icon'] ), $cat_posttype );
-									}
-								}
-								
-								if ( $attachment ) {
-									$images++;
-								}
-							}
-							
-							// WPML
-							if ($is_wpml && $cat_language != '') {
-								$sitepress->switch_lang($active_lang, true);
-							}
-							// WPML
-						}
-					}
-				}
-				
-				$json = array();
-				$json['processed'] = $limit;
-				$json['created'] = $created;
-				$json['updated'] = $updated;
-				$json['skipped'] = $skipped;
-				$json['invalid'] = $invalid;
-				$json['images'] = $images;
-				
-				wp_send_json( $json );
-			} else if ( $task == 'import_post' ) {				
-				if (!empty($file)) {
-					$wp_post_statuses = get_post_statuses(); // All of the WordPress supported post statuses.
-					$default_status = 'publish';
-					$current_date = date_i18n( 'Y-m-d', time() );
-					
-					$columns = isset($file[0]) ? $file[0] : NULL;
-					
-					if (empty($columns) || (!empty($columns) && $columns[0] == '')) {
-						$json['error'] = CSV_INVAILD_FILE;
-						wp_send_json( $json );
-					}
-					
-					for ($i = 1; $i <= $limit; $i++) {
-						$index = $processed + $i;
-						$gd_post = array();
-						
-						if (isset($file[$index])) {
-							$row = $file[$index];
-							$row = array_map( 'trim', $row );
-							$row = array_map( 'utf8_encode', $row );
-							$row = array_map( 'addslashes_gpc', $row );
-							
-							$post_id = '';
-							$post_title = '';
-							$post_author = '';
-							$post_content = '';
-							$post_category_arr = array();
-							$post_tags = array();
-							$post_type = '';
-							$post_status = '';
-							$geodir_video = '';
-							$post_address = '';
-							$post_city = '';
-							$post_region = '';
-							$post_country = '';
-							$post_zip = '';
-							$post_latitude = '';
-							$post_longitude = '';
-							$geodir_timing = '';
-							$geodir_contact = '';
-							$geodir_email = '';
-							$geodir_website = '';
-							$geodir_twitter = '';
-							$geodir_facebook = '';
-							$geodir_twitter = '';
-							$post_images = array();
-							
-							$expire_date = 'Never';
-							
-							$language = '';
-							$original_post_id = '';
-														
-							$c = 0;
-							foreach ($columns as $column ) {
-								$gd_post[$column] = $row[$c];
-								
-								if ( $column == 'post_id' ) {
-									$post_id = $row[$c];
-								} else if ( $column == 'post_title' ) {
-									$post_title = $row[$c];
-								} else if ( $column == 'post_author' ) {
-									$post_author = $row[$c];
-								} else if ( $column == 'post_content' ) {
-									$post_content = $row[$c];
-								} else if ( $column == 'post_category' && $row[$c] != '' ) {
-									$post_category_arr = explode( ',', $row[$c] );
-								} else if ( $column == 'post_tags' && $row[$c] != '' ) {
-									$post_tags = explode( ',', $row[$c] );
-								} else if ( $column == 'post_type' ) {
-									$post_type = $row[$c];
-								} else if ( $column == 'post_status' ) {
-									$post_status = sanitize_key( $row[$c] );
-								} else if ( $column == 'is_featured' ) {
-									$is_featured = (int)$row[$c];
-								} else if ( $column == 'geodir_video' ) {
-									$geodir_video = $row[$c];
-								} else if ( $column == 'post_address' ) {
-									$post_address = $row[$c];
-								} else if ( $column == 'post_city' ) {
-									$post_city = $row[$c];
-								} else if ( $column == 'post_region' ) {
-									$post_region = $row[$c];
-								} else if ( $column == 'post_country' ) {
-									$post_country = $row[$c];
-								} else if ( $column == 'post_zip' ) {
-									$post_zip = $row[$c];
-								} else if ( $column == 'post_latitude' ) {
-									$post_latitude = $row[$c];
-								} else if ( $column == 'post_longitude' ) {
-									$post_longitude = $row[$c];
-								} else if ( $column == 'geodir_timing' ) {
-									$geodir_timing = $row[$c];
-								} else if ( $column == 'geodir_contact' ) {
-									$geodir_contact = $row[$c];
-								} else if ( $column == 'geodir_email' ) {
-									$geodir_email = $row[$c];
-								} else if ( $column == 'geodir_website' ) {
-									$geodir_website = $row[$c];
-								} else if ( $column == 'geodir_twitter' ) {
-									$geodir_twitter = $row[$c];
-								} else if ( $column == 'geodir_facebook' ) {
-									$geodir_facebook = $row[$c];
-								} else if ( $column == 'geodir_twitter' ) {
-									$geodir_twitter = $row[$c];
-								} else if ( $column == 'IMAGE' && !empty( $row[$c] ) && $row[$c] != '' ) {
-									$post_images[] = $row[$c];
-								} else if ( $column == 'alive_days' && (int)$row[$c] > 0 ) {
-									$expire_date = date_i18n( 'Y-m-d', strtotime( $current_date . '+' . (int)$row[$c] . ' days' ) );
-								} else if ( $column == 'expire_date' && $row[$c] != '' && strtolower($row[$c]) != 'never' ) {
-									$row[$c] = str_replace('/', '-', $row[$c]);
-									$expire_date = date_i18n( 'Y-m-d', strtotime( $row[$c] ) );
-								}
-								// WPML
-								if ($is_wpml) {
-									if ($column == 'language') {
-										$language = strtolower(trim($row[$c]));
-									} else if ($column == 'original_post_id') {
-										$original_post_id = (int)$row[$c];
-									}
-								}
-								// WPML
-								$c++;
-							}
-							
-							// WPML
-							if ($is_wpml && $language != '') {
-								$sitepress->switch_lang($language, true);
-							}
-							// WPML
+    $csv_file_dir = geodir_path_import_export( false );
+    if ( !$wp_filesystem->is_dir( $csv_file_dir ) ) {
+        if ( !$wp_filesystem->mkdir( $csv_file_dir, FS_CHMOD_DIR ) ) {
+            $json['error'] = __( 'ERROR: Could not create cache directory. This is usually due to inconsistent file permissions.', 'geodirectory' );
+            wp_send_json( $json );
+        }
+    }
+    
+    $location_manager = function_exists('geodir_location_plugin_activated') ? true : false; // Check location manager installed & active.
+    $neighbourhood_active = $location_manager && get_option('location_neighbourhoods') ? true : false;
 
-							$gd_post['IMAGE'] = $post_images;
-							
-							$post_status = !empty( $post_status ) ? sanitize_key( $post_status ) : $default_status;
-							$post_status = !empty( $wp_post_statuses ) && !isset( $wp_post_statuses[$post_status] ) ? $default_status : $post_status;
-																												
-							$valid = true;
-							
-							if ( $post_title == '' || !in_array( $post_type, $post_types ) ) {
-								$invalid++;
-								$valid = false;
-							}
-							
-							$location_allowed = function_exists( 'geodir_cpt_no_location' ) && geodir_cpt_no_location( $post_type ) ? false : true;
-							if ( $location_allowed ) {
-								$location_result = geodir_get_default_location();
-								if ( $post_address == '' || $post_city == '' || $post_region == '' || $post_country == '' || $post_latitude == '' || $post_longitude == '' ) {
-									$invalid_addr++;
-									$valid = false;
-								} else if ( !empty( $location_result ) && $location_result->location_id == 0 ) {
-									if ( ( strtolower( $post_city ) != strtolower( $location_result->city ) ) || ( strtolower( $post_region ) != strtolower( $location_result->region ) ) || (strtolower( $post_country ) != strtolower( $location_result->country ) ) ) {
-										$invalid_addr++;
-										$valid = false;
-									} else {
-										if (!function_exists('geodir_location_plugin_activated')) {
-											$gd_post['post_locations'] = '[' . $location_result->city_slug . '],[' . $location_result->region_slug . '],[' . $location_result->country_slug . ']'; // Set the default location when location manager not activated.
-										}
-									}
-								}
-							}
-							
-							if ( !$valid ) {
-								continue;
-							}
-														
-							$cat_taxonomy = $post_type . 'category';
-							$tags_taxonomy = $post_type . '_tags';
-							
-							$post_category = array();
-							if ( !empty( $post_category_arr ) ) {
-								foreach ( $post_category_arr as $value ) {
-									$category_name = wp_kses_normalize_entities( trim( $value ) );
-									
-									if ( $category_name != '' ) {
-										$term_category = array();
-										
-										if ( $term = get_term_by( 'name', $category_name, $cat_taxonomy ) ) {
-											$term_category = $term;
-										} else if ( $term = get_term_by( 'slug', $category_name, $cat_taxonomy ) ) {
-											$term_category = $term;
-										} else {
-											$term_data = array();
-											$term_data['name'] = $category_name;											
-											$term_data = array_map( 'utf8_encode', $term_data );										
-											$term_data['taxonomy'] = $cat_taxonomy;
-											
-											$term_id = geodir_imex_insert_term( $cat_taxonomy, $term_data );
-											if ( $term_id ) {
-												$term_category = get_term( $term_id, $cat_taxonomy );
-											}
-										}
-										
-										if ( !empty( $term_category ) && !is_wp_error( $term_category ) ) {
-											//$post_category[] = $term_category->slug;
-											$post_category[] = intval($term_category->term_id);
-										}
-									}
-								}
-							}
-							
-							$save_post = array();
-							$save_post['post_title'] = $post_title;
-							$save_post['post_content'] = $post_content;
-							$save_post['post_type'] = $post_type;
-							$save_post['post_author'] = $post_author;
-							$save_post['post_status'] = $post_status;
-							$save_post['post_category'] = $post_category;
-							$save_post['post_tags'] = $post_tags;
-														
-							$saved_post_id = NULL;
-							if ( $import_choice == 'update' ) {
-								if ( $post_id > 0 && get_post( $post_id ) ) {
-									$save_post['ID'] = $post_id;
-									
-									if ( wp_update_post( $save_post ) ) {
-										$saved_post_id = $post_id;
-										$updated++;	
-									}
-								} else {
-									if ( $saved_post_id = wp_insert_post( $save_post ) ) {
-										$created++;	
-									}
-								}
-								
-								if ( !$saved_post_id > 0 ) {
-									$invalid++;
-								}
-							} else if ( $import_choice == 'skip' ) {
-								if ( $post_id > 0 && get_post( $post_id ) ) {
-									$skipped++;	
-								} else {
-									if ( $saved_post_id = wp_insert_post( $save_post ) ) {
-										$created++;	
-									} else {
-										$invalid++;
-									}
-								}
-							} else {
-								$invalid++;
-							}
-							
-							if ( (int)$saved_post_id > 0 ) {							
-								// WPML
-								if ($is_wpml && $original_post_id > 0 && $language != '') {
-									$wpml_post_type = 'post_' . $post_type;
-									$source_language = geodir_get_language_for_element( $original_post_id, $wpml_post_type );
-									$source_language = $source_language != '' ? $source_language : $sitepress->get_default_language();
+    switch ( $task ) {
+        case 'export_posts': {
+            // WPML
+            $is_wpml = geodir_is_wpml();
+            if ($is_wpml) {
+                global $sitepress;
+                $active_lang = ICL_LANGUAGE_CODE;
+                
+                $sitepress->switch_lang('all', true);
+            }
+            // WPML
+            if ( $post_type == 'gd_event' ) {
+                //add_filter( 'geodir_imex_count_posts', 'geodir_imex_count_events', 10, 2 );
+                add_filter( 'geodir_imex_export_posts_query', 'geodir_imex_get_events_query', 10, 2 );
+            }
+            $file_name = $post_type . '_' . date( 'dmyHi' );
+            $posts_count = geodir_get_posts_count( $post_type );
+            $file_url_base = geodir_path_import_export() . '/';
+            $file_url = $file_url_base . $file_name . '.csv';
+            $file_path = $csv_file_dir . '/' . $file_name . '.csv';
+            $file_path_temp = $csv_file_dir . '/' . $post_type . '_' . $nonce . '.csv';
+            
+            $chunk_file_paths = array();
 
-									$trid = $sitepress->get_element_trid( $original_post_id, $wpml_post_type );
-									
-									$sitepress->set_element_language_details( $saved_post_id, $wpml_post_type, $trid, $language, $source_language );
-								}
-								// WPML
-								$gd_post_info = geodir_get_post_info( $saved_post_id );
-								
-								$gd_post['post_id'] = $saved_post_id;
-								$gd_post['ID'] = $saved_post_id;
-								$gd_post['post_tags'] = $post_tags;
-								$gd_post['post_title'] = $post_title;
-								$gd_post['post_status'] = $post_status;
-								$gd_post['submit_time'] = time();
-								$gd_post['submit_ip'] = $_SERVER['REMOTE_ADDR'];
-													
-								// post location
-								$post_location_id = 0;
-								if ( $location_allowed && !empty( $location_result ) && $location_result->location_id > 0 ) {
-									$post_location_info = array(
-																'city' => $post_city,
-																'region' => $post_region,
-																'country' => $post_country,
-																'geo_lat' => $post_latitude,
-																'geo_lng' => $post_longitude
-															);
-									if ( $location_id = (int)geodir_add_new_location( $post_location_info ) ) {
-										$post_location_id = $location_id;
-									}
-								}
-								$gd_post['post_location_id'] = $post_location_id;
-								
-								// post package info
-								$package_id = isset( $gd_post['package_id'] ) && !empty( $gd_post['package_id'] ) ? (int)$gd_post['package_id'] : 0;
-								if (!$package_id && !empty($gd_post_info) && isset($gd_post_info->package_id) && $gd_post_info->package_id) {
-									$package_id = $gd_post_info->package_id;
-								}
-								
-								$package_info = array();
-								if ($package_id && function_exists('geodir_get_package_info_by_id')) {
-									$package_info = (array)geodir_get_package_info_by_id($package_id);
-									
-									if (!(!empty($package_info) && isset($package_info['post_type']) && $package_info['post_type'] == $post_type)) {
-										$package_info = array();
-									}
-								}
-								
-								if (empty($package_info)) {
-									$package_info = (array)geodir_post_package_info( array(), '', $post_type );
-								}
-								 
-								if (!empty($package_info))	 {
-									$package_id = $package_info['pid'];
-									
-									if (isset($gd_post['alive_days']) || isset($gd_post['expire_date'])) {
-										$gd_post['expire_date'] = $expire_date;
-									} else {
-										if ( isset( $package_info['days'] ) && (int)$package_info['days'] > 0 ) {
-											$gd_post['alive_days'] = (int)$package_info['days'];
-											$gd_post['expire_date'] = date_i18n( 'Y-m-d', strtotime( $current_date . '+' . (int)$package_info['days'] . ' days' ) );
-										} else {
-											$gd_post['expire_date'] = 'Never';
-										}
-									}
-									
-									$gd_post['package_id'] = $package_id;
-								}
+            if ( isset( $_REQUEST['_st'] ) ) {
+                $line_count = (int)geodir_import_export_line_count( $file_path_temp );
+                $percentage = count( $posts_count ) > 0 && $line_count > 0 ? ceil( $line_count / $posts_count ) * 100 : 0;
+                $percentage = min( $percentage, 100 );
+                
+                $json['percentage'] = $percentage;
+                // WPML
+                if ($is_wpml) {
+                    $sitepress->switch_lang($active_lang, true);
+                }
+                // WPML
+                wp_send_json( $json );
+                exit;
+            } else {
+                if ( !$posts_count > 0 ) {
+                    $json['error'] = __( 'No records to export.', 'geodirectory' );
+                } else {
+                    $total_posts = $posts_count;
+                    if ($chunk_per_page > $total_posts) {
+                        $chunk_per_page = $total_posts;
+                    }
+                    $chunk_total_pages = ceil( $total_posts / $chunk_per_page );
+                    
+                    $j = $chunk_page_no;
+                    $chunk_save_posts = geodir_imex_get_posts( $post_type, $chunk_per_page, $j );
+                    
+                    $per_page = 500;
+                    if ($per_page > $chunk_per_page) {
+                        $per_page = $chunk_per_page;
+                    }
+                    $total_pages = ceil( $chunk_per_page / $per_page );
+                    
+                    for ( $i = 0; $i <= $total_pages; $i++ ) {
+                        $save_posts = array_slice( $chunk_save_posts , ( $i * $per_page ), $per_page );
+                        
+                        $clear = $i == 0 ? true : false;
+                        geodir_save_csv_data( $file_path_temp, $save_posts, $clear );
+                    }
+                        
+                    if ( $wp_filesystem->exists( $file_path_temp ) ) {
+                        $chunk_page_no = $chunk_total_pages > 1 ? '-' . $j : '';
+                        $chunk_file_name = $file_name . $chunk_page_no . '.csv';
+                        $file_path = $csv_file_dir . '/' . $chunk_file_name;
+                        $wp_filesystem->move( $file_path_temp, $file_path, true );
+                        
+                        $file_url = $file_url_base . $chunk_file_name;
+                        $chunk_file_paths[] = array('i' => $j . '.', 'u' => $file_url, 's' => size_format(filesize($file_path), 2));
+                    }
+                    
+                    if ( !empty($chunk_file_paths) ) {
+                        $json['total'] = $posts_count;
+                        $json['files'] = $chunk_file_paths;
+                    } else {
+                        if ($j > 1) {
+                            $json['total'] = $items_count;
+                            $json['files'] = array();
+                        } else {
+                            $json['error'] = __( 'ERROR: Could not create csv file. This is usually due to inconsistent file permissions.', 'geodirectory' );
+                        }
+                    }
+                }
+                // WPML
+                if ($is_wpml) {
+                    $sitepress->switch_lang($active_lang, true);
+                }
+                // WPML
+                wp_send_json( $json );
+            }
+        }
+        break;
+        case 'export_cats': {
+            // WPML
+            $is_wpml = geodir_is_wpml();
+            if ($is_wpml) {
+                global $sitepress;
+                $active_lang = ICL_LANGUAGE_CODE;
+                
+                $sitepress->switch_lang('all', true);
+            }
+            // WPML
+            $file_name = $post_type . 'category_' . date( 'dmyHi' );
+            
+            $terms_count = geodir_get_terms_count( $post_type );
+            $file_url_base = geodir_path_import_export() . '/';
+            $file_url = $file_url_base . $file_name . '.csv';
+            $file_path = $csv_file_dir . '/' . $file_name . '.csv';
+            $file_path_temp = $csv_file_dir . '/' . $post_type . 'category_' . $nonce . '.csv';
+            
+            $chunk_file_paths = array();
+            
+            if ( isset( $_REQUEST['_st'] ) ) {
+                $line_count = (int)geodir_import_export_line_count( $file_path_temp );
+                $percentage = count( $terms_count ) > 0 && $line_count > 0 ? ceil( $line_count / $terms_count ) * 100 : 0;
+                $percentage = min( $percentage, 100 );
+                
+                $json['percentage'] = $percentage;
+                // WPML
+                if ($is_wpml) {
+                    $sitepress->switch_lang($active_lang, true);
+                }
+                // WPML
+                wp_send_json( $json );
+            } else {
+                if ( !$terms_count > 0 ) {
+                    $json['error'] = __( 'No records to export.', 'geodirectory' );
+                } else {
+                    $total_terms = $terms_count;
+                    if ($chunk_per_page > $terms_count) {
+                        $chunk_per_page = $terms_count;
+                    }
+                    $chunk_total_pages = ceil( $total_terms / $chunk_per_page );
+                    
+                    $j = $chunk_page_no;
+                    $chunk_save_terms = geodir_imex_get_terms( $post_type, $chunk_per_page, $j );
+                    
+                    $per_page = 500;
+                    if ($per_page > $chunk_per_page) {
+                        $per_page = $chunk_per_page;
+                    }
+                    $total_pages = ceil( $chunk_per_page / $per_page );
+                    
+                    for ( $i = 0; $i <= $total_pages; $i++ ) {
+                        $save_terms = array_slice( $chunk_save_terms , ( $i * $per_page ), $per_page );
+                        
+                        $clear = $i == 0 ? true : false;
+                        geodir_save_csv_data( $file_path_temp, $save_terms, $clear );
+                    }
+                    
+                    if ( $wp_filesystem->exists( $file_path_temp ) ) {
+                        $chunk_page_no = $chunk_total_pages > 1 ? '-' . $j : '';
+                        $chunk_file_name = $file_name . $chunk_page_no . '.csv';
+                        $file_path = $csv_file_dir . '/' . $chunk_file_name;
+                        $wp_filesystem->move( $file_path_temp, $file_path, true );
+                        
+                        $file_url = $file_url_base . $chunk_file_name;
+                        $chunk_file_paths[] = array('i' => $j . '.', 'u' => $file_url, 's' => size_format(filesize($file_path), 2));
+                    }
+                    
+                    if ( !empty($chunk_file_paths) ) {
+                        $json['total'] = $terms_count;
+                        $json['files'] = $chunk_file_paths;
+                    } else {
+                        $json['error'] = __( 'ERROR: Could not create csv file. This is usually due to inconsistent file permissions.', 'geodirectory' );
+                    }
+                }
+                // WPML
+                if ($is_wpml) {
+                    $sitepress->switch_lang($active_lang, true);
+                }
+                // WPML
+                wp_send_json( $json );
+            }
+        }
+        break;
+        case 'export_locations': {
+            $file_url_base = geodir_path_import_export() . '/';
+            $file_name = 'gd_locations_' . date( 'dmyHi' );
+            $file_url = $file_url_base . $file_name . '.csv';
+            $file_path = $csv_file_dir . '/' . $file_name . '.csv';
+            $file_path_temp = $csv_file_dir . '/gd_locations_' . $nonce . '.csv';
+            
+            $items_count = (int)geodir_location_imex_count_locations();
+            
+            if ( isset( $_REQUEST['_st'] ) ) {
+                $line_count = (int)geodir_import_export_line_count( $file_path_temp );
+                $percentage = count( $items_count ) > 0 && $line_count > 0 ? ceil( $line_count / $items_count ) * 100 : 0;
+                $percentage = min( $percentage, 100 );
+                
+                $json['percentage'] = $percentage;
+                wp_send_json( $json );
+            } else {
+                $chunk_file_paths = array();
+                
+                if ( !$items_count > 0 ) {
+                    $json['error'] = __( 'No records to export.', 'geodirectory' );
+                } else {
+                    $chunk_per_page = min( $chunk_per_page, $items_count );
+                    $chunk_total_pages = ceil( $items_count / $chunk_per_page );
+                    
+                    $j = $chunk_page_no;
+                    $chunk_save_items = geodir_location_imex_locations_data( $chunk_per_page, $j );
+                    
+                    $per_page = 500;
+                    $per_page = min( $per_page, $chunk_per_page );
+                    $total_pages = ceil( $chunk_per_page / $per_page );
+                    
+                    for ( $i = 0; $i <= $total_pages; $i++ ) {
+                        $save_items = array_slice( $chunk_save_items , ( $i * $per_page ), $per_page );
+                        
+                        $clear = $i == 0 ? true : false;
+                        geodir_save_csv_data( $file_path_temp, $save_items, $clear );
+                    }
+                    
+                    if ( $wp_filesystem->exists( $file_path_temp ) ) {
+                        $chunk_page_no = $chunk_total_pages > 1 ? '-' . $j : '';
+                        $chunk_file_name = $file_name . $chunk_page_no . '.csv';
+                        $file_path = $csv_file_dir . '/' . $chunk_file_name;
+                        $wp_filesystem->move( $file_path_temp, $file_path, true );
+                        
+                        $file_url = $file_url_base . $chunk_file_name;
+                        $chunk_file_paths[] = array('i' => $j . '.', 'u' => $file_url, 's' => size_format(filesize($file_path), 2));
+                    }
+                    
+                    if ( !empty($chunk_file_paths) ) {
+                        $json['total'] = $items_count;
+                        $json['files'] = $chunk_file_paths;
+                    } else {
+                        $json['error'] = __( 'Fail, something wrong to create csv file.', 'geodirectory' );
+                    }
+                }
+                wp_send_json( $json );
+            }
+        }
+        break;
+        case 'export_hoods': {
+            $file_url_base = geodir_path_import_export() . '/';
+            $file_name = 'gd_neighbourhoods_' . date( 'dmyHi' );
+            $file_url = $file_url_base . $file_name . '.csv';
+            $file_path = $csv_file_dir . '/' . $file_name . '.csv';
+            $file_path_temp = $csv_file_dir . '/gd_neighbourhoods_' . $nonce . '.csv';
+            
+            $items_count = (int)geodir_location_imex_count_neighbourhoods();
+            
+            if ( isset( $_REQUEST['_st'] ) ) {
+                $line_count = (int)geodir_import_export_line_count( $file_path_temp );
+                $percentage = count( $items_count ) > 0 && $line_count > 0 ? ceil( $line_count / $items_count ) * 100 : 0;
+                $percentage = min( $percentage, 100 );
+                
+                $json['percentage'] = $percentage;
+                wp_send_json( $json );
+            } else {
+                $chunk_file_paths = array();
+                
+                if ( !$items_count > 0 ) {
+                    $json['error'] = __( 'No records to export.', 'geodirectory' );
+                } else {
+                    $chunk_per_page = min( $chunk_per_page, $items_count );
+                    $chunk_total_pages = ceil( $items_count / $chunk_per_page );
+                    
+                    $j = $chunk_page_no;
+                    $chunk_save_items = geodir_location_imex_neighbourhoods_data( $chunk_per_page, $j );
+                    
+                    $per_page = 500;
+                    $per_page = min( $per_page, $chunk_per_page );
+                    $total_pages = ceil( $chunk_per_page / $per_page );
+                    
+                    for ( $i = 0; $i <= $total_pages; $i++ ) {
+                        $save_items = array_slice( $chunk_save_items , ( $i * $per_page ), $per_page );
+                        
+                        $clear = $i == 0 ? true : false;
+                        geodir_save_csv_data( $file_path_temp, $save_items, $clear );
+                    }
+                    
+                    if ( $wp_filesystem->exists( $file_path_temp ) ) {
+                        $chunk_page_no = $chunk_total_pages > 1 ? '-' . $j : '';
+                        $chunk_file_name = $file_name . $chunk_page_no . '.csv';
+                        $file_path = $csv_file_dir . '/' . $chunk_file_name;
+                        $wp_filesystem->move( $file_path_temp, $file_path, true );
+                        
+                        $file_url = $file_url_base . $chunk_file_name;
+                        $chunk_file_paths[] = array('i' => $j . '.', 'u' => $file_url, 's' => size_format(filesize($file_path), 2));
+                    }
+                    
+                    if ( !empty($chunk_file_paths) ) {
+                        $json['total'] = $items_count;
+                        $json['files'] = $chunk_file_paths;
+                    } else {
+                        $json['error'] = __( 'Fail, something wrong to create csv file.', 'geodirectory' );
+                    }
+                }
+                wp_send_json( $json );
+            }
+        }
+        break;
+        case 'prepare_import':
+        case 'import_cat':
+        case 'import_post':
+        case 'import_loc':
+        case 'import_hood': {
+            // WPML
+            $is_wpml = geodir_is_wpml();
+            if ($is_wpml) {
+                global $sitepress;
+                $active_lang = ICL_LANGUAGE_CODE;
+            }
+            // WPML
+            
+            ini_set( 'auto_detect_line_endings', true );
+            
+            $uploads = wp_upload_dir();
+            $uploads_dir = $uploads['path'];
+            $uploads_subdir = $uploads['subdir'];
+            
+            $csv_file = isset( $_POST['_file'] ) ? $_POST['_file'] : NULL;
+            $import_choice = isset( $_REQUEST['_ch'] ) ? $_REQUEST['_ch'] : 'skip';
+            
+            $csv_file_arr = explode( '/', $csv_file );
+            $csv_filename = end( $csv_file_arr );
+            $target_path = $uploads_dir . '/temp_' . $current_user->data->ID . '/' . $csv_filename;
+            
+            $json['file'] = $csv_file;
+            $json['error'] = __( 'The uploaded file is not a valid csv file. Please try again.', 'geodirectory' );
 
-								$table = $plugin_prefix . $post_type . '_detail';
-								
-								if (isset($gd_post['post_id'])) {
-									unset($gd_post['post_id']);
-								}
-								
-								// Export franchise fields
-								$is_franchise_active = is_plugin_active( 'geodir_franchise/geodir_franchise.php' ) && geodir_franchise_enabled( $post_type ) ? true : false;
-								if ($is_franchise_active) {
-									if ( isset( $gd_post['gd_is_franchise'] ) && (int)$gd_post['gd_is_franchise'] == 1 ) {
-										$gd_franchise_lock = array();
-										
-										if ( isset( $gd_post['gd_franchise_lock'] ) ) {
-											$gd_franchise_lock = str_replace(" ", "", $gd_post['gd_franchise_lock'] );
-											$gd_franchise_lock = trim( $gd_franchise_lock );
-											$gd_franchise_lock = explode( ",", $gd_franchise_lock );
-										}
-										
-										update_post_meta( $saved_post_id, 'gd_is_franchise', 1 );
-										update_post_meta( $saved_post_id, 'gd_franchise_lock', $gd_franchise_lock );
-									} else {
-										if ( isset( $gd_post['franchise'] ) && (int)$gd_post['franchise'] > 0 && geodir_franchise_check( (int)$gd_post['franchise'] ) ) {
-											geodir_save_post_meta( $saved_post_id, 'franchise', (int)$gd_post['franchise'] );
-										}
-									}
-								}
-								
-								if (!empty($save_post['post_category']) && is_array($save_post['post_category'])) {
-									$save_post['post_category'] = array_unique( array_map( 'intval', $save_post['post_category'] ) );
-									$gd_post[$cat_taxonomy] = $save_post['post_category'];
-								}
-								
-								// Save post info
-								geodir_save_post_info( $saved_post_id, $gd_post );	
+            if ( $csv_file && $wp_filesystem->is_file( $target_path ) && $wp_filesystem->exists( $target_path ) ) {
+                $wp_filetype = wp_check_filetype_and_ext( $target_path, $csv_filename );
+                
+                if (!empty($wp_filetype) && isset($wp_filetype['ext']) && geodir_strtolower($wp_filetype['ext']) == 'csv') {
+                    $json['error'] = NULL;
+                    $json['rows'] = 0;
+                    
+                    if ( ( $handle = fopen($target_path, "r" ) ) !== FALSE ) {
+                        while ( ( $data = fgetcsv( $handle, 100000, "," ) ) !== FALSE ) {
+                            if ( !empty( $data ) ) {
+                                $file[] = $data;
+                            }
+                        }
+                        fclose($handle);
+                    }
 
-								// post taxonomies
-								if ( !empty( $save_post['post_category'] ) ) {
-									wp_set_object_terms( $saved_post_id, $save_post['post_category'], $cat_taxonomy );
-									
-									$post_default_category = isset( $save_post['post_default_category'] ) ? $save_post['post_default_category'] : '';
-									$post_category_str = isset( $save_post['post_category_str'] ) ? $save_post['post_category_str'] : '';
-                            		
-									geodir_set_postcat_structure( $saved_post_id, $cat_taxonomy, $post_default_category, $post_category_str );
-								}
-								
-								if ( !empty( $save_post['post_tags'] ) ) {
-									wp_set_object_terms( $saved_post_id, $save_post['post_tags'], $tags_taxonomy );
-								}		
+                    $json['rows'] = (!empty($file) && count($file) > 1) ? count($file) - 1 : 0;
+                    
+                    if (!$json['rows'] > 0) {
+                        $json['error'] = __('No data found in csv file.', 'geodirectory');
+                    }
+                } else {
+                    wp_send_json( $json );
+                }
+            } else {
+                wp_send_json( $json );
+            }
+            
+            if ( $task == 'prepare_import' || !empty( $json['error'] ) ) {
+                wp_send_json( $json );
+            }
+            
+            $total = $json['rows'];
+            $limit = isset($_POST['limit']) ? (int)$_POST['limit'] : 1;
+            $processed = isset($_POST['processed']) ? (int)$_POST['processed'] : 0;
+            
+            $count = $limit;
+            $requested_limit = $limit;
+            
+            if ($count < $total) {
+                $count = $processed + $count;
+                if ($count > $total) {
+                    $count = $total;
+                }
+            } else {
+                $count = $total;
+            }
+            
+            $created = 0;
+            $updated = 0;
+            $skipped = 0;
+            $invalid = 0;
+            $invalid_addr = 0;
+            $images = 0;
+            
+            $invalid_title = 0;
+            $customKeyarray = array();
+            $gd_post_info = array();
+            $post_location = array();
+            $countpost = 0;
+            
+            $post_types = geodir_get_posttypes();
 
-								// Post images
-								if ( !empty( $post_images ) ) {
-									$post_images = array_unique($post_images);
-									
-									$old_post_images_arr = array();
-									$saved_post_images_arr = array();
-									
-									$order = 1;
-									
-									$old_post_images = geodir_get_images( $saved_post_id );
-									if (!empty($old_post_images)) {
-										foreach( $old_post_images as $old_post_image ) {
-											if (!empty($old_post_image) && isset($old_post_image->file) && $old_post_image->file != '') {
-												$old_post_images_arr[] = $old_post_image->file;
-											}
-										}
-									}
-									
-									foreach ( $post_images as $post_image ) {
-										$image_name = basename( $post_image );
-										$saved_post_images_arr[] = $image_name;
-										
-										if (!empty($old_post_images_arr) && in_array( $image_name, $old_post_images_arr) ) {
-											continue; // Skip if image already exists.
-										}
-										
-										$image_name_parts = explode( '.', $image_name );
-										array_pop( $image_name_parts );
-										$proper_image_name = implode( '.', $image_name_parts );
-										
-										$arr_file_type = wp_check_filetype( $image_name );
-										
-										if ( !empty( $arr_file_type ) ) {
-											$uploaded_file_type = $arr_file_type['type'];
-											
-											$attachment = array();
-											$attachment['post_id'] = $saved_post_id;
-											$attachment['title'] = $proper_image_name;
-											$attachment['content'] = '';
-											$attachment['file'] = $uploads_subdir . '/' . $image_name;
-											$attachment['mime_type'] = $uploaded_file_type;
-											$attachment['menu_order'] = $order;
-											$attachment['is_featured'] = 0;
+            if ( $task == 'import_cat' ) {				
+                if (!empty($file)) {
+                    $columns = isset($file[0]) ? $file[0] : NULL;
+                    
+                    if (empty($columns) || (!empty($columns) && $columns[0] == '')) {
+                        $json['error'] = CSV_INVAILD_FILE;
+                        wp_send_json( $json );
+                        exit;
+                    }
+                    
+                    for ($i = 1; $i <= $limit; $i++) {
+                        $index = $processed + $i;
+                        
+                        if (isset($file[$index])) {
+                            $row = $file[$index];
+                            $row = array_map( 'trim', $row );
+                            //$row = array_map( 'utf8_encode', $row );
+                            
+                            $cat_id = '';
+                            $cat_name = '';
+                            $cat_slug = '';
+                            $cat_posttype = '';
+                            $cat_parent = '';
+                            $cat_description = '';
+                            $cat_schema = '';
+                            $cat_top_description = '';
+                            $cat_image = '';
+                            $cat_icon = '';
+                            $cat_language = '';
+                            
+                            $c = 0;
+                            foreach ($columns as $column ) {
+                                if ( $column == 'cat_id' ) {
+                                    $cat_id = (int)$row[$c];
+                                } else if ( $column == 'cat_name' ) {
+                                    $cat_name = $row[$c];
+                                } else if ( $column == 'cat_slug' ) {
+                                    $cat_slug = $row[$c];
+                                } else if ( $column == 'cat_posttype' ) {
+                                    $cat_posttype = $row[$c];
+                                } else if ( $column == 'cat_parent' ) {
+                                    $cat_parent = trim($row[$c]);
+                                } else if ( $column == 'cat_schema' && $row[$c] != '' ) {
+                                    $cat_schema = $row[$c];
+                                } else if ( $column == 'cat_description' ) {
+                                    $cat_description = $row[$c];
+                                } else if ( $column == 'cat_top_description' ) {
+                                    $cat_top_description = $row[$c];
+                                } else if ( $column == 'cat_image' ) {
+                                    $cat_image = $row[$c];
+                                } else if ( $column == 'cat_icon' ) {
+                                    $cat_icon = $row[$c];
+                                }
+                                // WPML
+                                if ($is_wpml && $column == 'cat_language') {
+                                    $cat_language = geodir_strtolower(trim($row[$c]));
+                                }
+                                // WPML
+                                $c++;
+                            }
+                            
+                            if ( $cat_name == '' || !in_array( $cat_posttype, $post_types ) ) {
+                                $invalid++;
+                                continue;
+                            }
+                            
+                            // WPML
+                            if ($is_wpml && $cat_language != '') {
+                                $sitepress->switch_lang($cat_language, true);
+                            }
+                            // WPML
+                                                        
+                            $term_data = array();
+                            $term_data['name'] = $cat_name;
+                            $term_data['slug'] = $cat_slug;
+                            $term_data['description'] = $cat_description;
+                            $term_data['cat_schema'] = $cat_schema;
+                            $term_data['top_description'] = $cat_top_description;
+                            $term_data['image'] = $cat_image != '' ? basename( $cat_image ) : '';
+                            $term_data['icon'] = $cat_icon != '' ? basename( $cat_icon ) : '';
+                            
+                            //$term_data = array_map( 'utf8_encode', $term_data );
+                            
+                            $taxonomy = $cat_posttype . 'category';
+                            
+                            $term_data['taxonomy'] = $taxonomy;
 
-											$attachment_set = '';
-											foreach ( $attachment as $key => $val ) {
-												if ( $val != '' ) {
-													$attachment_set .= $key . " = '" . $val . "', ";
-												}
-											}
-											$attachment_set = trim( $attachment_set, ", " );
-																						
-											// Add new attachment
-											$wpdb->query( "INSERT INTO " . GEODIR_ATTACHMENT_TABLE . " SET " . $attachment_set );
-																						
-											$order++;
-										}
-									}
-									
-									$saved_post_images_sql = !empty($saved_post_images_arr) ? " AND ( file NOT LIKE '%/" . implode("' AND file NOT LIKE '%/",  $saved_post_images_arr) . "' )" : '';
-									// Remove previous attachment
-									$wpdb->query( "DELETE FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE post_id = " . (int)$saved_post_id . " " . $saved_post_images_sql );
-									
-									if ( !empty( $saved_post_images_arr ) ) {
-										$menu_order = 1;
-										
-										foreach ( $saved_post_images_arr as $img_name ) {
-											$wpdb->query( $wpdb->prepare( "UPDATE " . GEODIR_ATTACHMENT_TABLE . " SET menu_order = %d WHERE post_id =%d AND file LIKE %s", array( $menu_order, $saved_post_id, '%/' . $img_name ) ) );
-											
-											if( $menu_order == 1 ) {
-												if ( $featured_image = $wpdb->get_var( $wpdb->prepare( "SELECT file FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE post_id =%d AND file LIKE %s", array( $saved_post_id, '%/' . $img_name ) ) ) ) {
-													$wpdb->query( $wpdb->prepare( "UPDATE " . $table . " SET featured_image = %s WHERE post_id =%d", array( $featured_image, $saved_post_id ) ) );
-												}
-											}
-											$menu_order++;
-										}
-									}
-									
-									if ( $order > 1 ) {
-										$images++;
-									}
-								}
-								
-								/** This action is documented in geodirectory-functions/post-functions.php */
-                    			do_action( 'geodir_after_save_listing', $saved_post_id, $gd_post );
-								
-								if (isset($is_featured)) {
-									geodir_save_post_meta($saved_post_id, 'is_featured', $is_featured);
-								}
-								if (isset($gd_post['expire_date'])) {
-									geodir_save_post_meta($saved_post_id, 'expire_date', $gd_post['expire_date']);
-								}
-							}
-							
-							// WPML
-							if ($is_wpml && $language != '') {
-								$sitepress->switch_lang($active_lang, true);
-							}
-							// WPML
-						}
-					}
-				}
-				
-				$json = array();
-				$json['processed'] = $limit;
-				$json['created'] = $created;
-				$json['updated'] = $updated;
-				$json['skipped'] = $skipped;
-				$json['invalid'] = $invalid;
-				$json['invalid_addr'] = $invalid_addr;
-				$json['images'] = $images;
-				
-				wp_send_json( $json );
-			}
-		}
-		break;
-	}
-	echo '0';
-	wp_die();
+                            $term_parent_id = 0;
+                            if ($cat_parent != "" || (int)$cat_parent > 0) {
+                                $term_parent = '';
+                                
+                                if ( $term_parent = get_term_by( 'name', $cat_parent, $taxonomy ) ) {
+                                    $term_parent = $term_parent;
+                                } else if ( $term_parent = get_term_by( 'slug', $cat_parent, $taxonomy ) ) {
+                                    $term_parent = $term_parent;
+                                } else if ( $term_parent = get_term_by( 'id', $cat_parent, $taxonomy ) ) {
+                                    $term_parent = $term_parent;
+                                } else {
+                                    $term_parent_data = array();
+                                    $term_parent_data['name'] = $cat_parent;											
+                                    //$term_parent_data = array_map( 'utf8_encode', $term_parent_data );										
+                                    $term_parent_data['taxonomy'] = $taxonomy;
+                                    
+                                    $term_parent_id = (int)geodir_imex_insert_term( $taxonomy, $term_parent_data );
+                                }
+                                
+                                if ( !empty( $term_parent ) && !is_wp_error( $term_parent ) ) {
+                                    $term_parent_id = (int)$term_parent->term_id;
+                                }
+                            }
+                            $term_data['parent'] = (int)$term_parent_id;
+
+                            $term_id = NULL;
+                            if ( $import_choice == 'update' ) {
+                                if ( $cat_id > 0 && $term = (array)term_exists( $cat_id, $taxonomy ) ) {
+                                    $term_data['term_id'] = $term['term_id'];
+                                    
+                                    if ( $term_id = geodir_imex_update_term( $taxonomy, $term_data ) ) {
+                                        $updated++;
+                                    } else {
+                                        $invalid++;
+                                    }
+                                } else if ( $term_data['slug'] != '' && $term = (array)term_exists( $term_data['slug'], $taxonomy ) ) {
+                                    $term_data['term_id'] = $term['term_id'];
+                                    
+                                    if ( $term_id = geodir_imex_update_term( $taxonomy, $term_data ) ) {
+                                        $updated++;
+                                    } else {
+                                        $invalid++;
+                                    }
+                                } else {
+                                    if ( $term_id = geodir_imex_insert_term( $taxonomy, $term_data ) ) {
+                                        $created++;
+                                    } else {
+                                        $invalid++;
+                                    }
+                                }
+                            } else if ( $import_choice == 'skip' ) {
+                                if ( $cat_id > 0 && $term = (array)term_exists( $cat_id, $taxonomy ) ) {
+                                    $skipped++;
+                                } else if ( $term_data['slug'] != '' && $term = (array)term_exists( $term_data['slug'], $taxonomy ) ) {
+                                    $skipped++;
+                                } else {
+                                    if ( $term_id = geodir_imex_insert_term( $taxonomy, $term_data ) ) {										
+                                        $created++;
+                                    } else {
+                                        $invalid++;
+                                    }
+                                }
+                            } else {
+                                $invalid++;
+                            }
+                            
+                            if ( $term_id ) {
+                                if ( isset( $term_data['top_description'] ) ) {
+                                    update_tax_meta( $term_id, 'ct_cat_top_desc', $term_data['top_description'], $cat_posttype );
+                                }
+                                
+                                if ( isset( $term_data['cat_schema'] ) ) {
+                                    update_tax_meta( $term_id, 'ct_cat_schema', $term_data['cat_schema'], $cat_posttype );
+                                }
+            
+                                $attachment = false;
+                                if ( isset( $term_data['image'] ) && $term_data['image'] != '' ) {
+                                    $cat_image = geodir_get_default_catimage( $term_id, $cat_posttype );
+                                    $cat_image = !empty( $cat_image ) && isset( $cat_image['src'] ) ? $cat_image['src'] : '';
+                                    
+                                    if ( basename($cat_image) != $term_data['image'] ) {
+                                        $attachment = true;
+                                        update_tax_meta( $term_id, 'ct_cat_default_img', array( 'id' => 'image', 'src' => $uploads['url'] . '/' . $term_data['image'] ), $cat_posttype );
+                                    }
+                                }
+                                
+                                if ( isset( $term_data['icon'] ) && $term_data['icon'] != '' ) {
+                                    $cat_icon = get_tax_meta( $term_id, 'ct_cat_icon', false, $cat_posttype );
+                                    $cat_icon = !empty( $cat_icon ) && isset( $cat_icon['src'] ) ? $cat_icon['src'] : '';
+                                        
+                                    if ( basename($cat_icon) != $term_data['icon'] ) {
+                                        $attachment = true;
+                                        update_tax_meta( $term_id, 'ct_cat_icon', array( 'id' => 'icon', 'src' => $uploads['url'] . '/' . $term_data['icon'] ), $cat_posttype );
+                                    }
+                                }
+                                
+                                if ( $attachment ) {
+                                    $images++;
+                                }
+                            }
+                            
+                            // WPML
+                            if ($is_wpml && $cat_language != '') {
+                                $sitepress->switch_lang($active_lang, true);
+                            }
+                            // WPML
+                        }
+                    }
+                }
+                
+                $json = array();
+                $json['processed'] = $limit;
+                $json['created'] = $created;
+                $json['updated'] = $updated;
+                $json['skipped'] = $skipped;
+                $json['invalid'] = $invalid;
+                $json['images'] = $images;
+                
+                wp_send_json( $json );
+                exit;
+            } else if ( $task == 'import_post' ) {
+
+                //run some stuff to make the import quicker
+                wp_defer_term_counting( true );
+                wp_defer_comment_counting( true );
+                $wpdb->query( 'SET autocommit = 0;' );
+
+                //remove_all_actions('publish_post');
+                //remove_all_actions('transition_post_status');
+                //remove_all_actions('publish_future_post');
+
+                if (!empty($file)) {
+                    $wp_post_statuses = get_post_statuses(); // All of the WordPress supported post statuses.
+                    $default_status = 'publish';
+                    $current_date = date_i18n( 'Y-m-d', time() );
+                    
+                    $columns = isset($file[0]) ? $file[0] : NULL;
+                    
+                    if (empty($columns) || (!empty($columns) && $columns[0] == '')) {
+                        $json['error'] = CSV_INVAILD_FILE;
+                        wp_send_json( $json );
+                        exit;
+                    }
+
+                    $processed_actual=0;
+                    for ($i = 1; $i <= $limit; $i++) {
+                        $index = $processed + $i;
+                        $gd_post = array();
+                        
+                        if (isset($file[$index])) {$processed_actual++;
+                            $row = $file[$index];
+                            $row = array_map( 'trim', $row );
+                            //$row = array_map( 'utf8_encode', $row );
+                            $row = array_map( 'addslashes_gpc', $row );
+                            
+                            $post_id = '';
+                            $post_title = '';
+                            $post_author = '';
+                            $post_content = '';
+                            $post_category_arr = array();
+                            $default_category = '';
+                            $post_tags = array();
+                            $post_type = '';
+                            $post_status = '';
+                            $geodir_video = '';
+                            $post_address = '';
+                            $post_city = '';
+                            $post_region = '';
+                            $post_country = '';
+                            $post_zip = '';
+                            $post_latitude = '';
+                            $post_longitude = '';
+                            $post_neighbourhood = '';
+                            $neighbourhood_latitude = '';
+                            $neighbourhood_longitude = '';
+                            $geodir_timing = '';
+                            $geodir_contact = '';
+                            $geodir_email = '';
+                            $geodir_website = '';
+                            $geodir_twitter = '';
+                            $geodir_facebook = '';
+                            $geodir_twitter = '';
+                            $post_images = array();
+                            
+                            $expire_date = 'Never';
+                            
+                            $language = '';
+                            $original_post_id = '';
+                                                        
+                            $c = 0;
+                            foreach ($columns as $column ) {
+                                $gd_post[$column] = $row[$c];
+                                
+                                if ( $column == 'post_id' ) {
+                                    $post_id = $row[$c];
+                                } else if ( $column == 'post_title' ) {
+                                    $post_title = sanitize_text_field($row[$c]);
+                                } else if ( $column == 'post_author' ) {
+                                    $post_author = $row[$c];
+                                } else if ( $column == 'post_content' ) {
+                                    $post_content = $row[$c];
+                                } else if ( $column == 'post_category' && $row[$c] != '' ) {
+                                    $post_category_arr = explode( ',', $row[$c] );
+                                } else if ( $column == 'default_category' ) {
+                                    $default_category = wp_kses_normalize_entities($row[$c]);
+                                } else if ( $column == 'post_tags' && $row[$c] != '' ) {
+                                    $post_tags = explode( ',', $row[$c] );
+                                } else if ( $column == 'post_type' ) {
+                                    $post_type = $row[$c];
+                                } else if ( $column == 'post_status' ) {
+                                    $post_status = sanitize_key( $row[$c] );
+                                } else if ( $column == 'is_featured' ) {
+                                    $is_featured = (int)$row[$c];
+                                } else if ( $column == 'geodir_video' ) {
+                                    $geodir_video = $row[$c];
+                                } else if ( $column == 'post_address' ) {
+                                    $post_address = $row[$c];
+                                } else if ( $column == 'post_city' ) {
+                                    $post_city = $row[$c];
+                                } else if ( $column == 'post_region' ) {
+                                    $post_region = $row[$c];
+                                } else if ( $column == 'post_country' ) {
+                                    $post_country = $row[$c];
+                                } else if ( $column == 'post_zip' ) {
+                                    $post_zip = $row[$c];
+                                } else if ( $column == 'post_latitude' ) {
+                                    $post_latitude = $row[$c];
+                                } else if ( $column == 'post_longitude' ) {
+                                    $post_longitude = $row[$c];
+                                } else if ( $column == 'post_neighbourhood' ) {
+                                    $post_neighbourhood = $row[$c];
+                                    unset($gd_post[$column]);
+                                } else if ( $column == 'neighbourhood_latitude' ) {
+                                    $neighbourhood_latitude = $row[$c];
+                                } else if ( $column == 'neighbourhood_longitude' ) {
+                                    $neighbourhood_longitude = $row[$c];
+                                } else if ( $column == 'geodir_timing' ) {
+                                    $geodir_timing = $row[$c];
+                                } else if ( $column == 'geodir_contact' ) {
+                                    $geodir_contact = $row[$c];
+                                } else if ( $column == 'geodir_email' ) {
+                                    $geodir_email = $row[$c];
+                                } else if ( $column == 'geodir_website' ) {
+                                    $geodir_website = $row[$c];
+                                } else if ( $column == 'geodir_twitter' ) {
+                                    $geodir_twitter = $row[$c];
+                                } else if ( $column == 'geodir_facebook' ) {
+                                    $geodir_facebook = $row[$c];
+                                } else if ( $column == 'geodir_twitter' ) {
+                                    $geodir_twitter = $row[$c];
+                                } else if ( $column == 'IMAGE' && !empty( $row[$c] ) && $row[$c] != '' ) {
+                                    $post_images[] = $row[$c];
+                                } else if ( $column == 'alive_days' && (int)$row[$c] > 0 ) {
+                                    $expire_date = date_i18n( 'Y-m-d', strtotime( $current_date . '+' . (int)$row[$c] . ' days' ) );
+                                } else if ( $column == 'expire_date' && $row[$c] != '' && geodir_strtolower($row[$c]) != 'never' ) {
+                                    $row[$c] = str_replace('/', '-', $row[$c]);
+                                    $expire_date = date_i18n( 'Y-m-d', strtotime( $row[$c] ) );
+                                }
+                                // WPML
+                                if ($is_wpml) {
+                                    if ($column == 'language') {
+                                        $language = geodir_strtolower(trim($row[$c]));
+                                    } else if ($column == 'original_post_id') {
+                                        $original_post_id = (int)$row[$c];
+                                    }
+                                }
+                                // WPML
+                                $c++;
+                            }
+                            
+                            // WPML
+                            if ($is_wpml && $language != '') {
+                                $sitepress->switch_lang($language, true);
+                            }
+                            // WPML
+
+                            $gd_post['IMAGE'] = $post_images;
+                            
+                            $post_status = !empty( $post_status ) ? sanitize_key( $post_status ) : $default_status;
+                            $post_status = !empty( $wp_post_statuses ) && !isset( $wp_post_statuses[$post_status] ) ? $default_status : $post_status;
+                                                                                                                
+                            $valid = true;
+                            
+                            if ( $post_title == '' || !in_array( $post_type, $post_types ) ) {
+                                $invalid++;
+                                $valid = false;
+                            }
+                            
+                            $location_allowed = function_exists( 'geodir_cpt_no_location' ) && geodir_cpt_no_location( $post_type ) ? false : true;
+                            if ( $location_allowed ) {
+                                $location_result = geodir_get_default_location();
+                                if ( $post_address == '' || $post_city == '' || $post_region == '' || $post_country == '' || $post_latitude == '' || $post_longitude == '' ) {
+                                    $invalid_addr++;
+                                    $valid = false;
+                                } else if ( !empty( $location_result ) && $location_result->location_id == 0 ) {
+                                    if ( ( geodir_strtolower( $post_city ) != geodir_strtolower( $location_result->city ) ) || ( geodir_strtolower( $post_region ) != geodir_strtolower( $location_result->region ) ) || (geodir_strtolower( $post_country ) != geodir_strtolower( $location_result->country ) ) ) {
+                                        $invalid_addr++;
+                                        $valid = false;
+                                    } else {
+                                        if (!$location_manager) {
+                                            $gd_post['post_locations'] = '[' . $location_result->city_slug . '],[' . $location_result->region_slug . '],[' . $location_result->country_slug . ']'; // Set the default location when location manager not activated.
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            if ( !$valid ) {
+                                continue;
+                            }
+
+                            $cat_taxonomy = $post_type . 'category';
+                            $tags_taxonomy = $post_type . '_tags';
+                            
+                            if ($default_category != '' && !in_array($default_category, $post_category_arr)) {
+                                $post_category_arr = array_merge(array($default_category), $post_category_arr);
+                            }
+
+                            $post_category = array();
+                            $default_category_id = NULL;
+                            if ( !empty( $post_category_arr ) ) {
+                                foreach ( $post_category_arr as $value ) {
+                                    $category_name = wp_kses_normalize_entities( trim( $value ) );
+                                    
+                                    if ( $category_name != '' ) {
+                                        $term_category = array();
+                                        
+                                        if ( $term = get_term_by( 'name', $category_name, $cat_taxonomy ) ) {
+                                            $term_category = $term;
+                                        } else if ( $term = get_term_by( 'slug', $category_name, $cat_taxonomy ) ) {
+                                            $term_category = $term;
+                                        } else {
+                                            $term_data = array();
+                                            $term_data['name'] = $category_name;
+                                            $term_data['taxonomy'] = $cat_taxonomy;
+                                            
+                                            $term_id = geodir_imex_insert_term( $cat_taxonomy, $term_data );
+                                            if ( $term_id ) {
+                                                $term_category = get_term( $term_id, $cat_taxonomy );
+                                            }
+                                        }
+                                        
+                                        if ( !empty( $term_category ) && !is_wp_error( $term_category ) ) {
+                                            $post_category[] = intval($term_category->term_id);
+                                            
+                                            if ($category_name == $default_category) {
+                                                $default_category_id = intval($term_category->term_id);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            $save_post = array();
+                            $save_post['post_title'] = $post_title;
+                            $save_post['post_content'] = $post_content;
+                            $save_post['post_type'] = $post_type;
+                            $save_post['post_author'] = $post_author;
+                            $save_post['post_status'] = $post_status;
+                            $save_post['post_category'] = $post_category;
+                            $save_post['post_tags'] = $post_tags;
+
+                            $saved_post_id = NULL;
+                            if ( $import_choice == 'update' ) {
+                                if ( $post_id > 0 && get_post( $post_id ) ) {
+                                    $save_post['ID'] = $post_id;
+                                    
+                                    if ( wp_update_post( $save_post ) ) {
+                                        $saved_post_id = $post_id;
+                                        $updated++;
+                                    }
+                                } else {
+                                    if ( $saved_post_id = wp_insert_post( $save_post ) ) {
+                                        $created++;
+                                    }
+                                }
+                                
+                                if ( !$saved_post_id > 0 ) {
+                                    $invalid++;
+                                }
+                            } else if ( $import_choice == 'skip' ) {
+                                if ( $post_id > 0 && get_post( $post_id ) ) {
+                                    $skipped++;	
+                                } else {
+                                    if ( $saved_post_id = wp_insert_post( $save_post ) ) {
+                                        $created++;	
+                                    } else {
+                                        $invalid++;
+                                    }
+                                }
+                            } else {
+                                $invalid++;
+                            }
+
+                            if ( (int)$saved_post_id > 0 ) {
+                                // WPML
+                                if ($is_wpml && $original_post_id > 0 && $language != '') {
+                                    $wpml_post_type = 'post_' . $post_type;
+                                    $source_language = geodir_get_language_for_element( $original_post_id, $wpml_post_type );
+                                    $source_language = $source_language != '' ? $source_language : $sitepress->get_default_language();
+
+                                    $trid = $sitepress->get_element_trid( $original_post_id, $wpml_post_type );
+                                    
+                                    $sitepress->set_element_language_details( $saved_post_id, $wpml_post_type, $trid, $language, $source_language );
+                                }
+                                // WPML
+                                $gd_post_info = geodir_get_post_info( $saved_post_id );
+                                
+                                $gd_post['post_id'] = $saved_post_id;
+                                $gd_post['ID'] = $saved_post_id;
+                                $gd_post['post_tags'] = $post_tags;
+                                $gd_post['post_title'] = $post_title;
+                                $gd_post['post_status'] = $post_status;
+                                $gd_post['submit_time'] = time();
+                                $gd_post['submit_ip'] = $_SERVER['REMOTE_ADDR'];
+                                                    
+                                // post location
+                                $post_location_id = 0;
+                                if ( $location_allowed && !empty( $location_result ) && $location_result->location_id > 0 ) {
+                                    $gd_post['post_neighbourhood'] = '';
+                                    
+                                    $post_location_info = array(
+                                                                'city' => $post_city,
+                                                                'region' => $post_region,
+                                                                'country' => $post_country,
+                                                                'geo_lat' => $post_latitude,
+                                                                'geo_lng' => $post_longitude
+                                                            );
+                                    if ( $location_id = (int)geodir_add_new_location( $post_location_info ) ) {
+                                        $post_location_id = $location_id;
+                                    }
+                                    
+                                    if ($post_location_id > 0 && $neighbourhood_active && !empty($post_neighbourhood)) {
+                                        $neighbourhood_info = geodir_location_neighbourhood_by_name_loc_id($post_neighbourhood, $post_location_id);
+
+                                        $hood_data = array();
+                                        $hood_data['hood_location_id'] = $post_location_id;
+                                        $hood_data['hood_name'] = $post_neighbourhood;
+                                        
+                                        if (!empty($neighbourhood_info)) {
+                                            $hood_data['hood_id'] = $neighbourhood_info->hood_id;
+                                            $hood_data['hood_slug'] = $neighbourhood_info->hood_slug;
+                                            
+                                            if (empty($neighbourhood_latitude) || empty($neighbourhood_longitude)) {
+                                                $neighbourhood_latitude = $neighbourhood_info->hood_latitude;
+                                                $neighbourhood_longitude = $neighbourhood_info->hood_longitude;
+                                            }
+                                        }
+                                        
+                                        if (empty($neighbourhood_latitude) || empty($neighbourhood_longitude)) {
+                                            $neighbourhood_latitude = $neighbourhood_info->hood_latitude;
+                                            $neighbourhood_longitude = $neighbourhood_info->hood_longitude;
+                                        }
+                                        
+                                        $hood_data['hood_latitude'] = $post_latitude;
+                                        $hood_data['hood_longitude'] = $post_longitude;
+
+                                        $neighbourhood_info = geodir_location_insert_update_neighbourhood($hood_data);
+                                        if (!empty($neighbourhood_info) && isset($neighbourhood_info->hood_slug)) {
+                                            $gd_post['post_neighbourhood'] = $neighbourhood_info->hood_slug;
+                                        }
+                                    }
+                                }
+                                $gd_post['post_location_id'] = $post_location_id;
+                                
+                                // post package info
+                                $package_id = isset( $gd_post['package_id'] ) && !empty( $gd_post['package_id'] ) ? (int)$gd_post['package_id'] : 0;
+                                if (!$package_id && !empty($gd_post_info) && isset($gd_post_info->package_id) && $gd_post_info->package_id) {
+                                    $package_id = $gd_post_info->package_id;
+                                }
+                                
+                                $package_info = array();
+                                if ($package_id && function_exists('geodir_get_package_info_by_id')) {
+                                    $package_info = (array)geodir_get_package_info_by_id($package_id);
+                                    
+                                    if (!(!empty($package_info) && isset($package_info['post_type']) && $package_info['post_type'] == $post_type)) {
+                                        $package_info = array();
+                                    }
+                                }
+                                
+                                if (empty($package_info)) {
+                                    $package_info = (array)geodir_post_package_info( array(), '', $post_type );
+                                }
+                                 
+                                if (!empty($package_info))	 {
+                                    $package_id = $package_info['pid'];
+                                    
+                                    if (isset($gd_post['alive_days']) || isset($gd_post['expire_date'])) {
+                                        $gd_post['expire_date'] = $expire_date;
+                                    } else {
+                                        if ( isset( $package_info['days'] ) && (int)$package_info['days'] > 0 ) {
+                                            $gd_post['alive_days'] = (int)$package_info['days'];
+                                            $gd_post['expire_date'] = date_i18n( 'Y-m-d', strtotime( $current_date . '+' . (int)$package_info['days'] . ' days' ) );
+                                        } else {
+                                            $gd_post['expire_date'] = 'Never';
+                                        }
+                                    }
+                                    
+                                    $gd_post['package_id'] = $package_id;
+                                }
+
+                                $table = $plugin_prefix . $post_type . '_detail';
+                                
+                                if ($post_type == 'gd_event') {
+                                    $gd_post = geodir_imex_process_event_data($gd_post);
+                                }
+                                
+                                if (isset($gd_post['post_id'])) {
+                                    unset($gd_post['post_id']);
+                                }
+
+                                // Export franchise fields
+                                $is_franchise_active = is_plugin_active( 'geodir_franchise/geodir_franchise.php' ) && geodir_franchise_enabled( $post_type ) ? true : false;
+                                if ($is_franchise_active) {
+                                    if ( isset( $gd_post['gd_is_franchise'] ) && (int)$gd_post['gd_is_franchise'] == 1 ) {
+                                        $gd_franchise_lock = array();
+                                        
+                                        if ( isset( $gd_post['gd_franchise_lock'] ) ) {
+                                            $gd_franchise_lock = str_replace(" ", "", $gd_post['gd_franchise_lock'] );
+                                            $gd_franchise_lock = trim( $gd_franchise_lock );
+                                            $gd_franchise_lock = explode( ",", $gd_franchise_lock );
+                                        }
+                                        
+                                        update_post_meta( $saved_post_id, 'gd_is_franchise', 1 );
+                                        update_post_meta( $saved_post_id, 'gd_franchise_lock', $gd_franchise_lock );
+                                    } else {
+                                        if ( isset( $gd_post['franchise'] ) && (int)$gd_post['franchise'] > 0 && geodir_franchise_check( (int)$gd_post['franchise'] ) ) {
+                                            geodir_save_post_meta( $saved_post_id, 'franchise', (int)$gd_post['franchise'] );
+                                        }
+                                    }
+                                }
+                                
+                                if (!empty($save_post['post_category']) && is_array($save_post['post_category'])) {
+                                    $save_post['post_category'] = array_unique( array_map( 'intval', $save_post['post_category'] ) );
+                                    if ($default_category_id) {
+                                        $save_post['post_default_category'] = $default_category_id;
+                                        $gd_post['default_category'] = $default_category_id;
+                                    }
+                                    $gd_post[$cat_taxonomy] = $save_post['post_category'];
+                                }
+                                
+                                // Save post info
+                                geodir_save_post_info( $saved_post_id, $gd_post );
+                                // post taxonomies
+                                if ( !empty( $save_post['post_category'] ) ) {
+                                    wp_set_object_terms( $saved_post_id, $save_post['post_category'], $cat_taxonomy );
+                                    
+                                    $post_default_category = isset( $save_post['post_default_category'] ) ? $save_post['post_default_category'] : '';
+                                    if ($default_category_id) {
+                                        $post_default_category = $default_category_id;
+                                    }
+                                    $post_cat_ids = geodir_get_post_meta($saved_post_id, $cat_taxonomy);
+                                    $save_post['post_category'] = !empty($post_cat_ids) ? explode(",", trim($post_cat_ids, ",")) : $save_post['post_category'];
+                                    $post_category_str = !empty($save_post['post_category']) ? implode(",y:#", $save_post['post_category']) . ',y:' : '';
+                                    
+                                    if ($post_category_str != '' && $post_default_category) {
+                                        $post_category_str = str_replace($post_default_category . ',y:', $post_default_category . ',y,d:', $post_category_str);
+                                    }
+                                    
+                                    $post_category_str = $post_category_str != '' ? array($cat_taxonomy => $post_category_str) : '';
+                                    
+                                    geodir_set_postcat_structure( $saved_post_id, $cat_taxonomy, $post_default_category, $post_category_str );
+                                }
+
+                                if ( !empty( $save_post['post_tags'] ) ) {
+                                    wp_set_object_terms( $saved_post_id, $save_post['post_tags'], $tags_taxonomy );
+                                }
+
+                                // Post images
+                                if ( !empty( $post_images ) ) {
+                                    $post_images = array_unique($post_images);
+                                    
+                                    $old_post_images_arr = array();
+                                    $saved_post_images_arr = array();
+                                    
+                                    $order = 1;
+                                    
+                                    $old_post_images = geodir_get_images( $saved_post_id );
+                                    if (!empty($old_post_images)) {
+                                        foreach( $old_post_images as $old_post_image ) {
+                                            if (!empty($old_post_image) && isset($old_post_image->file) && $old_post_image->file != '') {
+                                                $old_post_images_arr[] = $old_post_image->file;
+                                            }
+                                        }
+                                    }
+                                    
+                                    foreach ( $post_images as $post_image ) {
+                                        $image_name = basename( $post_image );
+                                        $saved_post_images_arr[] = $image_name;
+                                        
+                                        if (!empty($old_post_images_arr) && in_array( $image_name, $old_post_images_arr) ) {
+                                            continue; // Skip if image already exists.
+                                        }
+                                        
+                                        $image_name_parts = explode( '.', $image_name );
+                                        array_pop( $image_name_parts );
+                                        $proper_image_name = implode( '.', $image_name_parts );
+                                        
+                                        $arr_file_type = wp_check_filetype( $image_name );
+                                        
+                                        if ( !empty( $arr_file_type ) ) {
+                                            $uploaded_file_type = $arr_file_type['type'];
+                                            
+                                            $attachment = array();
+                                            $attachment['post_id'] = $saved_post_id;
+                                            $attachment['title'] = $proper_image_name;
+                                            $attachment['content'] = '';
+                                            $attachment['file'] = $uploads_subdir . '/' . $image_name;
+                                            $attachment['mime_type'] = $uploaded_file_type;
+                                            $attachment['menu_order'] = $order;
+                                            $attachment['is_featured'] = 0;
+
+                                            $attachment_set = '';
+                                            foreach ( $attachment as $key => $val ) {
+                                                if ( $val != '' ) {
+                                                    $attachment_set .= $key . " = '" . $val . "', ";
+                                                }
+                                            }
+                                            $attachment_set = trim( $attachment_set, ", " );
+                                                                                        
+                                            // Add new attachment
+                                            $wpdb->query( "INSERT INTO " . GEODIR_ATTACHMENT_TABLE . " SET " . $attachment_set );
+                                                                                        
+                                            $order++;
+                                        }
+                                    }
+
+                                    $saved_post_images_sql = !empty($saved_post_images_arr) ? " AND ( file NOT LIKE '%/" . implode("' AND file NOT LIKE '%/",  $saved_post_images_arr) . "' )" : '';
+                                    // Remove previous attachment
+                                    $wpdb->query( "DELETE FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE post_id = " . (int)$saved_post_id . " " . $saved_post_images_sql );
+                                    
+                                    if ( !empty( $saved_post_images_arr ) ) {
+                                        $menu_order = 1;
+                                        
+                                        foreach ( $saved_post_images_arr as $img_name ) {
+                                            $wpdb->query( $wpdb->prepare( "UPDATE " . GEODIR_ATTACHMENT_TABLE . " SET menu_order = %d WHERE post_id =%d AND file LIKE %s", array( $menu_order, $saved_post_id, '%/' . $img_name ) ) );
+                                            
+                                            if( $menu_order == 1 ) {
+                                                if ( $featured_image = $wpdb->get_var( $wpdb->prepare( "SELECT file FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE post_id =%d AND file LIKE %s", array( $saved_post_id, '%/' . $img_name ) ) ) ) {
+                                                    $wpdb->query( $wpdb->prepare( "UPDATE " . $table . " SET featured_image = %s WHERE post_id =%d", array( $featured_image, $saved_post_id ) ) );
+                                                }
+                                            }
+                                            $menu_order++;
+                                        }
+                                    }
+                                    
+                                    if ( $order > 1 ) {
+                                        $images++;
+                                    }
+                                }
+
+                                /** This action is documented in geodirectory-functions/post-functions.php */
+                                do_action( 'geodir_after_save_listing', $saved_post_id, $gd_post );
+                                
+                                if (isset($is_featured)) {
+                                    geodir_save_post_meta($saved_post_id, 'is_featured', $is_featured);
+                                }
+                                if (isset($gd_post['expire_date'])) {
+                                    geodir_save_post_meta($saved_post_id, 'expire_date', $gd_post['expire_date']);
+                                }
+                            }
+                            
+                            // WPML
+                            if ($is_wpml && $language != '') {
+                                $sitepress->switch_lang($active_lang, true);
+                            }
+                            // WPML
+                        }
+                    }
+                }
+
+                //undo some stuff to make the import quicker
+                wp_defer_term_counting( false );
+                wp_defer_comment_counting( false );
+                $wpdb->query( 'COMMIT;' );
+                $wpdb->query( 'SET autocommit = 1;' );
+
+                $json = array();
+                $json['processed'] = $processed_actual;
+                $json['created'] = $created;
+                $json['updated'] = $updated;
+                $json['skipped'] = $skipped;
+                $json['invalid'] = $invalid;
+                $json['invalid_addr'] = $invalid_addr;
+                $json['images'] = $images;
+                
+                wp_send_json( $json );
+                exit;
+            } else if ( $task == 'import_loc' ) {
+                global $gd_post_types;
+                $gd_post_types = $post_types;
+                
+                if (!empty($file)) {
+                    $columns = isset($file[0]) ? $file[0] : NULL;
+                    
+                    if (empty($columns) || (!empty($columns) && $columns[0] == '')) {
+                        $json['error'] = __('File you are uploading is not valid. Columns does not matching.', 'geodirectory');
+                        wp_send_json( $json );
+                    }
+                    
+                    for ($i = 1; $i <= $limit; $i++) {
+                        $index = $processed + $i;
+                        
+                        if (isset($file[$index])) {
+                            $row = $file[$index];
+                            $row = array_map( 'trim', $row );
+                            $data = array();
+                            
+                            foreach ($columns as $c => $column ) {
+                                if (in_array($column, array('location_id', 'latitude', 'longitude', 'city', 'city_slug', 'region', 'country', 'city_meta', 'city_desc', 'region_meta', 'region_desc', 'country_meta', 'country_desc'))) {
+                                    $data[$column] = $row[$c];
+                                }
+                            }
+
+                            if ( empty($data['city']) || empty($data['region']) || empty($data['country']) || empty($data['latitude']) || empty($data['longitude']) ) {
+                                $invalid++;
+                                continue;
+                            }
+                            
+                            $data['location_id'] = isset($data['location_id']) ? absint($data['location_id']) : 0;
+                            
+                            if ( $import_choice == 'update' ) {
+                                if ( (int)$data['location_id'] > 0 && $location = geodir_get_location_by_id( '', (int)$data['location_id'] ) ) {
+                                    if ( $location_id = geodir_location_update_city( $data, true, $location ) ) {
+                                        $updated++;
+                                    } else {
+                                        $invalid++;
+                                    }
+                                } else if ( !empty( $data['city_slug'] ) && $location = geodir_get_location_by_slug( 'city', array( 'city_slug' => $data['city_slug'] ) ) ) {
+                                    $data['location_id'] = (int)$location->location_id;
+                                    
+                                    if ( $location = geodir_get_location_by_slug( 'city', array( 'city_slug' => $data['city_slug'], 'country' => $data['country'], 'region' => $data['region'] ) ) ) {
+                                        $data['location_id'] = (int)$location->location_id;
+                                    } else if ( $location = geodir_get_location_by_slug( 'city', array( 'city_slug' => $data['city_slug'], 'region' => $data['region'] ) ) ) {
+                                        $data['location_id'] = (int)$location->location_id;
+                                    } else if ( $location = geodir_get_location_by_slug( 'city', array( 'city_slug' => $data['city_slug'], 'country' => $data['country'] ) ) ) {
+                                        $data['location_id'] = (int)$location->location_id;
+                                    }
+                                    
+                                    if ( $location_id = geodir_location_update_city( $data, true, $location ) ) {
+                                        $updated++;
+                                    } else {
+                                        $invalid++;
+                                    }
+                                } else {
+                                    if ( $location_id = geodir_location_insert_city( $data, true ) ) {
+                                        $created++;
+                                    } else {
+                                        $invalid++;
+                                    }
+                                }
+                            } elseif ( $import_choice == 'skip' ) {
+                                if ( (int)$data['location_id'] > 0 && $location = geodir_get_location_by_id( '', (int)$data['location_id'] ) ) {
+                                    $skipped++;
+                                } else if ( !empty( $data['city_slug'] ) && $location = geodir_get_location_by_slug( 'city', array( 'city_slug' => $data['city_slug'] ) ) ) {
+                                    $skipped++;
+                                } else {
+                                    if ( $location_id = geodir_location_insert_city( $data, true ) ) {
+                                        $created++;
+                                    } else {
+                                        $invalid++;
+                                    }
+                                }
+                            } else {
+                                $invalid++;
+                            }
+                        }
+                    }
+                }
+                
+                $json = array();
+                $json['processed'] = $limit;
+                $json['created'] = $created;
+                $json['updated'] = $updated;
+                $json['skipped'] = $skipped;
+                $json['invalid'] = $invalid;
+                $json['images'] = $images;
+                
+                wp_send_json( $json );
+            } else if ( $task == 'import_hood' ) {               
+                if (!empty($file)) {
+                    $columns = isset($file[0]) ? $file[0] : NULL;
+                    
+                    if (empty($columns) || (!empty($columns) && $columns[0] == '')) {
+                        $json['error'] = __('File you are uploading is not valid. Columns does not matching.', 'geodirectory');
+                        wp_send_json( $json );
+                    }
+                    
+                    for ($i = 1; $i <= $limit; $i++) {
+                        $index = $processed + $i;
+                        
+                        if (isset($file[$index])) {
+                            $row = $file[$index];
+                            $row = array_map( 'trim', $row );
+                            $data = array();
+                            
+                            foreach ($columns as $c => $column) {
+                                if (in_array($column, array('neighbourhood_id', 'neighbourhood_name', 'neighbourhood_slug', 'latitude', 'longitude', 'location_id', 'city', 'region', 'country'))) {
+                                    $data[$column] = sanitize_text_field($row[$c]);
+                                }
+                            }
+
+                            if (empty($data['neighbourhood_name']) || empty($data['latitude']) || empty($data['longitude'])) {
+                                $invalid++;
+                                continue;
+                            }
+                            
+                            $location_info = array();
+                            if (!empty($data['location_id']) && (int)$data['location_id'] > 0) {
+                                $location_info = geodir_get_location_by_id('', (int)$data['location_id']);
+                            } else if (!empty($data['city']) && !empty($data['region']) && !empty($data['country'])) {
+                                $location_info = geodir_get_location_by_slug('city', array('fields' => 'location_id', 'city' => $data['city'], 'country' => $data['country'], 'region' => $data['region']));
+                            }
+
+                            if (empty($location_info)) {
+                                $invalid++;
+                                continue;
+                            }
+                            
+                            $location_id = $location_info->location_id;
+
+                            $data['neighbourhood_id'] = isset($data['neighbourhood_id']) ? absint($data['neighbourhood_id']) : 0;
+                            
+                            $hood_data = array();
+                            $hood_data['hood_name'] = $data['neighbourhood_name'];
+                            $hood_data['hood_slug'] = $data['neighbourhood_slug'];
+                            $hood_data['hood_latitude'] = $data['longitude'];
+                            $hood_data['hood_longitude'] = $data['longitude'];
+                            $hood_data['hood_location_id'] = $location_id;
+                                    
+                            if ( $import_choice == 'update' ) {
+                                if ((int)$data['neighbourhood_id'] > 0 && ($neighbourhood = geodir_location_get_neighbourhood_by_id((int)$data['neighbourhood_id']))) {
+                                    $hood_data['hood_id'] = (int)$data['neighbourhood_id'];
+                                    
+                                    if ($neighbourhood = geodir_location_insert_update_neighbourhood($hood_data)) {
+                                        $updated++;
+                                    } else {
+                                        $invalid++;
+                                    }
+                                } else if (!empty($data['neighbourhood_slug']) && ($neighbourhood = geodir_location_get_neighbourhood_by_id($data['neighbourhood_slug'], true))) {
+                                    $hood_data['hood_id'] = (int)$neighbourhood->hood_id;
+                                    
+                                    if ($neighbourhood = geodir_location_insert_update_neighbourhood($hood_data)) {
+                                        $updated++;
+                                    } else {
+                                        $invalid++;
+                                    }
+                                } else {
+                                    if ($neighbourhood = geodir_location_insert_update_neighbourhood($hood_data)) {
+                                        $created++;
+                                    } else {
+                                        $invalid++;
+                                    }
+                                }
+                            } elseif ( $import_choice == 'skip' ) {
+                                if ((int)$data['neighbourhood_id'] > 0 && ($neighbourhood = geodir_location_get_neighbourhood_by_id((int)$data['neighbourhood_id']))) {
+                                    $skipped++;
+                                } else if (!empty($data['neighbourhood_slug']) && ($neighbourhood = geodir_location_get_neighbourhood_by_id($data['neighbourhood_slug'], true))) {
+                                    $skipped++;
+                                } else {
+                                    
+                                    if ($neighbourhood = geodir_location_insert_update_neighbourhood($hood_data)) {
+                                        $created++;
+                                    } else {
+                                        $invalid++;
+                                    }
+                                }
+                            } else {
+                                $invalid++;
+                            }
+                        }
+                    }
+                }
+                
+                $json = array();
+                $json['processed'] = $limit;
+                $json['created'] = $created;
+                $json['updated'] = $updated;
+                $json['skipped'] = $skipped;
+                $json['invalid'] = $invalid;
+                $json['images'] = $images;
+                
+                wp_send_json( $json );
+            }
+        }
+        break;
+        case 'import_finish':{
+            /**
+             * Run an action when an import finishes.
+             *
+             * This action can be used to fire functions after an import ends.
+             *
+             * @since 1.5.3
+             * @package GeoDirectory
+             */
+            do_action('geodir_import_finished');
+        }
+        break;
+
+    }
+    echo '0';
+    wp_die();
 }
 
 /**
@@ -5584,22 +5210,30 @@ function geodir_imex_count_events( $posts_count, $post_type ) {
  * Retrives the posts for the current post type.
  *
  * @since 1.4.6
+ * @since 1.5.1 Updated to import & export recurring events.
+ * @since 1.5.3 Fixed to get wpml original post id.
+ * @since 1.5.7 $per_page & $page_no parameters added.
  * @package GeoDirectory
  *
  * @global object $wp_filesystem WordPress FileSystem object.
  *
  * @param string $post_type Post type.
+ * @param int $per_page Per page limit. Default 0.
+ * @param int $page_no Page number. Default 0.
  * @return array Array of posts data.
  */
-function geodir_imex_get_posts( $post_type ) {	
+function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {	
 	global $wp_filesystem;
-	
-	$posts = geodir_get_export_posts( $post_type );
-	
+
+	$posts = geodir_get_export_posts( $post_type, $per_page, $page_no );
+
 	$csv_rows = array();
 	
 	if ( !empty( $posts ) ) {
 		$is_payment_plugin = is_plugin_active( 'geodir_payment_manager/geodir_payment_manager.php' );
+        $location_manager = function_exists('geodir_location_plugin_activated') ? true : false; // Check location manager installed & active.
+        $location_allowed = function_exists( 'geodir_cpt_no_location' ) && geodir_cpt_no_location( $post_type ) ? false : true;
+        $neighbourhood_active = $location_manager && $location_allowed && get_option('location_neighbourhoods') ? true : false;
 		
 		$csv_row = array();
 		$csv_row[] = 'post_id';
@@ -5607,6 +5241,7 @@ function geodir_imex_get_posts( $post_type ) {
 		$csv_row[] = 'post_author';
 		$csv_row[] = 'post_content';
 		$csv_row[] = 'post_category';
+		$csv_row[] = 'default_category';
 		$csv_row[] = 'post_tags';
 		$csv_row[] = 'post_type';
 		if ( $post_type == 'gd_event' ) {
@@ -5614,6 +5249,19 @@ function geodir_imex_get_posts( $post_type ) {
 			$csv_row[] = 'event_enddate';
 			$csv_row[] = 'starttime';
 			$csv_row[] = 'endtime';
+			
+			$csv_row[] = 'is_recurring_event';
+			$csv_row[] = 'event_duration_days';
+			$csv_row[] = 'recurring_dates';
+			$csv_row[] = 'is_whole_day_event';
+			$csv_row[] = 'event_starttimes';
+			$csv_row[] = 'event_endtimes';
+			$csv_row[] = 'recurring_type';
+			$csv_row[] = 'recurring_interval';
+			$csv_row[] = 'recurring_week_days';
+			$csv_row[] = 'recurring_week_nos';
+			$csv_row[] = 'max_recurring_count';
+			$csv_row[] = 'recurring_end_date';
 		}
 		$csv_row[] = 'post_status';
 		$csv_row[] = 'is_featured';
@@ -5629,6 +5277,11 @@ function geodir_imex_get_posts( $post_type ) {
 		$csv_row[] = 'post_zip';
 		$csv_row[] = 'post_latitude';
 		$csv_row[] = 'post_longitude';
+        if ($neighbourhood_active) {
+            $csv_row[] = 'post_neighbourhood';
+            $csv_row[] = 'neighbourhood_latitude';
+            $csv_row[] = 'neighbourhood_longitude';
+        }
 		$csv_row[] = 'geodir_timing';
 		$csv_row[] = 'geodir_contact';
 		$csv_row[] = 'geodir_email';
@@ -5644,14 +5297,14 @@ function geodir_imex_get_posts( $post_type ) {
 			$csv_row[] = 'original_post_id';
 		}
 		// WPML
-				
+
 		$custom_fields = geodir_imex_get_custom_fields( $post_type );
 		if ( !empty( $custom_fields ) ) {
 			foreach ( $custom_fields as $custom_field ) {
 				$csv_row[] = $custom_field->htmlvar_name;
 			}
 		}
-		
+
 		// Export franchise fields
 		$is_franchise_active = is_plugin_active( 'geodir_franchise/geodir_franchise.php' ) && geodir_franchise_enabled( $post_type ) ? true : false;
 		if ($is_franchise_active) {
@@ -5663,13 +5316,19 @@ function geodir_imex_get_posts( $post_type ) {
 		$csv_rows[] = $csv_row;
 
 		$images_count = 5;
-		foreach ( $posts as $post ) {
+        $xx=0;
+		foreach ( $posts as $post ) {$xx++;
 			$post_id = $post['ID'];
+			
+			$gd_post_info = geodir_get_post_info( $post_id );
+			$post_info = (array)$gd_post_info;
 						
 			$taxonomy_category = $post_type . 'category';
 			$taxonomy_tags = $post_type . '_tags';
 			
 			$post_category = '';
+			$default_category_id = $gd_post_info->default_category;
+			$default_category = '';
 			$post_tags = '';
 			$terms = wp_get_post_terms( $post_id, array( $taxonomy_category, $taxonomy_tags ) );
 			
@@ -5680,6 +5339,10 @@ function geodir_imex_get_posts( $post_type ) {
 				foreach ( $terms as $term ) {
 					if ( $term->taxonomy == $taxonomy_category ) {
 						$post_category[] = $term->name;
+						
+						if ($default_category_id == $term->term_id) {
+							$default_category = $term->name; // Default category.
+						}
 					}
 					
 					if ( $term->taxonomy == $taxonomy_tags ) {
@@ -5687,13 +5350,13 @@ function geodir_imex_get_posts( $post_type ) {
 					}
 				}
 				
+				if (empty($default_category) && !empty($post_category)) {
+					$default_category = $post_category[0]; // Set first one as default category.
+				}
 				$post_category = !empty( $post_category ) ? implode( ',', $post_category ) : '';
 				$post_tags = !empty( $post_tags ) ? implode( ',', $post_tags ) : '';
 			}
-			
-			$gd_post_info = geodir_get_post_info( $post_id );
-			$post_info = (array)$gd_post_info;
-			
+
 			// Franchise data
 			$franchise_id = NULL;
 			$franchise_info = array();
@@ -5763,19 +5426,34 @@ function geodir_imex_get_posts( $post_type ) {
 			$csv_row[] = $post_info['post_author']; // post_author
 			$csv_row[] = $post_info['post_content']; // post_content
 			$csv_row[] = $post_category; // post_category
+			$csv_row[] = $default_category; // default_category
 			$csv_row[] = $post_tags; // post_tags
 			$csv_row[] = $post_type; // post_type
 			if ( $post_type == 'gd_event' ) {
-				$csv_row[] = isset( $post['event_date'] ) && $post['event_date'] != '' && $post['event_date'] != '0000-00-00 00:00:00' ? date_i18n( 'd/m/Y', strtotime( $post['event_date'] ) ) : ''; // event_date
-				$csv_row[] = isset( $post['event_date'] ) && $post['event_date'] != '' && $post['event_date'] != '0000-00-00' ? date_i18n( 'd/m/Y', strtotime( $post['event_date'] ) ) : ''; // enddate
-				$csv_row[] = isset( $post['starttime'] ) && $post['starttime'] != '' && $post['starttime'] != '00:00:00' ? date_i18n( 'H:i', strtotime( $post['starttime'] ) ) : ''; // starttime
-				$csv_row[] = isset( $post['endtime'] ) && $post['endtime'] != '' && $post['endtime'] != '00:00:00' ? date_i18n( 'H:i', strtotime( $post['endtime'] ) ) : ''; // endtime
+				$event_data = geodir_imex_get_event_data($post, $gd_post_info);
+				$csv_row[] = $event_data['event_date']; // event_date
+				$csv_row[] = $event_data['event_enddate']; // enddate
+				$csv_row[] = $event_data['starttime']; // starttime
+				$csv_row[] = $event_data['endtime']; // endtime
+				
+				$csv_row[] = $event_data['is_recurring_event']; // is_recurring
+				$csv_row[] = $event_data['event_duration_days']; // duration_x
+				$csv_row[] = $event_data['recurring_dates']; // recurring_dates
+				$csv_row[] = $event_data['is_whole_day_event']; // all_day
+				$csv_row[] = $event_data['event_starttimes']; // starttimes
+				$csv_row[] = $event_data['event_endtimes']; // endtimes
+				$csv_row[] = $event_data['recurring_type']; // repeat_type
+				$csv_row[] = $event_data['recurring_interval']; // repeat_x
+				$csv_row[] = $event_data['recurring_week_days']; // repeat_days
+				$csv_row[] = $event_data['recurring_week_nos']; // repeat_weeks
+				$csv_row[] = $event_data['max_recurring_count']; // max_repeat
+				$csv_row[] = $event_data['recurring_end_date']; // repeat_end
 			}
 			$csv_row[] = $post_info['post_status']; // post_status
 			$csv_row[] = (int)$post_info['is_featured'] == 1 ? 1 : ''; // is_featured
 			if ($is_payment_plugin) {
 				$csv_row[] = (int)$post_info['package_id']; // package_id
-				$csv_row[] = $post_info['expire_date'] != '' && strtolower($post_info['expire_date']) != 'never' ? date_i18n('Y-m-d', strtotime($post_info['expire_date'])) : 'Never'; // expire_date
+				$csv_row[] = $post_info['expire_date'] != '' && geodir_strtolower($post_info['expire_date']) != 'never' ? date_i18n('Y-m-d', strtotime($post_info['expire_date'])) : 'Never'; // expire_date
 			}
 			$csv_row[] = $post_info['geodir_video']; // geodir_video
 			$csv_row[] = $post_info['post_address']; // post_address
@@ -5785,6 +5463,21 @@ function geodir_imex_get_posts( $post_type ) {
 			$csv_row[] = $post_info['post_zip']; // post_zip
 			$csv_row[] = $post_info['post_latitude']; // post_latitude
 			$csv_row[] = $post_info['post_longitude']; // post_longitude
+            if ($neighbourhood_active) {
+                $post_neighbourhood = '';
+                $neighbourhood_latitude = '';
+                $neighbourhood_longitude = '';
+                if (!empty($post_info['post_neighbourhood']) && ($hood_info = geodir_location_get_neighbourhood_by_id($post_info['post_neighbourhood'], true, $post_info['post_location_id']))) {
+                    if (!empty($hood_info)) {
+                        $post_neighbourhood = $hood_info->hood_name;
+                        $neighbourhood_latitude = $hood_info->hood_latitude;
+                        $neighbourhood_longitude = $hood_info->hood_longitude;
+                    }
+                }
+                $csv_row[] = $post_neighbourhood; // post_neighbourhood
+                $csv_row[] = $neighbourhood_latitude; // neighbourhood_latitude
+                $csv_row[] = $neighbourhood_longitude; // neighbourhood_longitude
+            }
 			$csv_row[] = $post_info['geodir_timing']; // geodir_timing
 			$csv_row[] = $post_info['geodir_contact']; // geodir_contact
 			$csv_row[] = $post_info['geodir_email']; // geodir_email
@@ -5796,7 +5489,7 @@ function geodir_imex_get_posts( $post_type ) {
 			// WPML
 			if ($is_wpml) {
 				$csv_row[] = geodir_get_language_for_element( $post_id, 'post_' . $post_type );
-				$csv_row[] = get_post_meta( $post_id, '_icl_lang_duplicate_of', true );
+				$csv_row[] = geodir_imex_original_post_id( $post_id, 'post_' . $post_type );
 			}
 			// WPML
 			
@@ -5829,8 +5522,9 @@ function geodir_imex_get_posts( $post_type ) {
 			}
 			
 			$csv_rows[] = $csv_row;
+
 		}
-		
+
 		for ( $c = 0; $c < $images_count; $c++ ) {
 			$csv_rows[0][] = 'IMAGE';
 		}
@@ -5842,23 +5536,37 @@ function geodir_imex_get_posts( $post_type ) {
  * Retrives the posts for the current post type.
  *
  * @since 1.4.6
+ * @since 1.5.7 $per_page & $page_no parameters added.
  * @package GeoDirectory
  *
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  *
  * @param string $post_type Post type.
+ * @param int $per_page Per page limit. Default 0.
+ * @param int $page_no Page number. Default 0.
  * @return array Array of posts data.
  */
-function geodir_get_export_posts( $post_type ) {
+function geodir_get_export_posts( $post_type, $per_page = 0, $page_no = 0 ) {
 	global $wpdb, $plugin_prefix;
 
 	if ( ! post_type_exists( $post_type ) )
 		return new stdClass;
 		
 	$table = $plugin_prefix . $post_type . '_detail';
+	
+	$limit = '';
+	if ( $per_page > 0 && $page_no > 0 ) {
+		$offset = ( $page_no - 1 ) * $per_page;
+		
+		if ( $offset > 0 ) {
+			$limit = " LIMIT " . $offset . "," . $per_page;
+		} else {
+			$limit = " LIMIT " . $per_page;
+		}
+	}
 
-	$query = "SELECT {$wpdb->posts}.ID FROM {$wpdb->posts} INNER JOIN {$table} ON {$table}.post_id = {$wpdb->posts}.ID WHERE {$wpdb->posts}.post_type = %s ORDER BY {$wpdb->posts}.ID ASC";
+	$query = "SELECT {$wpdb->posts}.ID FROM {$wpdb->posts} INNER JOIN {$table} ON {$table}.post_id = {$wpdb->posts}.ID WHERE {$wpdb->posts}.post_type = %s ORDER BY {$wpdb->posts}.ID ASC" . $limit;
 	/**
 	 * Modify returned posts SQL query for the current post type.
 	 *
@@ -5888,6 +5596,7 @@ function geodir_get_export_posts( $post_type ) {
  * Get the posts SQL query for the current post type.
  *
  * @since 1.4.6
+ * @since 1.5.1 Query updated to get distinct posts. 
  * @package GeoDirectory
  *
  * @global object $wpdb WordPress Database object.
@@ -5904,7 +5613,7 @@ function geodir_imex_get_events_query( $query, $post_type ) {
 		$table = $plugin_prefix . $post_type . '_detail';
 		$schedule_table = EVENT_SCHEDULE;
 
-		$query = "SELECT {$wpdb->posts}.ID, {$schedule_table}.event_date, {$schedule_table}.event_enddate AS enddate, {$schedule_table}.event_starttime AS starttime, {$schedule_table}.event_endtime AS endtime FROM {$wpdb->posts} INNER JOIN {$table} ON ({$table}.post_id = {$wpdb->posts}.ID) INNER JOIN {$schedule_table} ON ({$schedule_table}.event_id = {$wpdb->posts}.ID) WHERE {$wpdb->posts}.post_type = %s ORDER BY {$wpdb->posts}.ID ASC";
+		$query = "SELECT {$wpdb->posts}.ID, {$schedule_table}.event_date, {$schedule_table}.event_enddate AS enddate, {$schedule_table}.event_starttime AS starttime, {$schedule_table}.event_endtime AS endtime FROM {$wpdb->posts} INNER JOIN {$table} ON ({$table}.post_id = {$wpdb->posts}.ID) INNER JOIN {$schedule_table} ON ({$schedule_table}.event_id = {$wpdb->posts}.ID) WHERE {$wpdb->posts}.post_type = %s GROUP BY {$table}.post_id ORDER BY {$wpdb->posts}.ID ASC, {$schedule_table}.schedule_id ASC";
 	}
 	
 	return $query; 
@@ -5936,17 +5645,25 @@ function geodir_get_terms_count( $post_type ) {
  * Retrieve terms for given post type.
  *
  * @since 1.4.6
+ * @since 1.5.7 $per_page & $page_no parameters added.
  * @package GeoDirectory
  *
  * @param  string $post_type The post type.
+ * @param int $per_page Per page limit. Default 0.
+ * @param int $page_no Page number. Default 0.
  * @return array Array of terms data.
  */
-function geodir_imex_get_terms( $post_type ) {
+function geodir_imex_get_terms( $post_type, $per_page = 0, $page_no = 0 ) {
 	$args = array( 'hide_empty' => 0, 'orderby' => 'id' );
 	
 	remove_all_filters( 'get_terms' );
 	
 	$taxonomy = $post_type . 'category';
+	
+	if ( $per_page > 0 && $page_no > 0 ) {
+		$args['offset'] = ( $page_no - 1 ) * $per_page;
+		$args['number'] = $per_page;
+	}
 	
 	$terms = get_terms( $taxonomy, $args );
 
@@ -5959,6 +5676,7 @@ function geodir_imex_get_terms( $post_type ) {
 		$csv_row[] = 'cat_slug';
 		$csv_row[] = 'cat_posttype';
 		$csv_row[] = 'cat_parent';
+		$csv_row[] = 'cat_schema';
 		$csv_row[] = 'cat_description';
 		$csv_row[] = 'cat_top_description';
 		$csv_row[] = 'cat_image';
@@ -5991,6 +5709,7 @@ function geodir_imex_get_terms( $post_type ) {
 			$csv_row[] = $term->slug;
 			$csv_row[] = $post_type;
 			$csv_row[] = $cat_parent;
+			$csv_row[] = get_tax_meta( $term->term_id, 'ct_cat_schema', false, $post_type );
 			$csv_row[] = $term->description;
 			$csv_row[] = get_tax_meta( $term->term_id, 'ct_cat_top_desc', false, $post_type );
 			$csv_row[] = $cat_image;
@@ -6090,18 +5809,19 @@ function geodir_import_export_line_count( $file ) {
  * Returns queried data from custom fields table.
  *
  * @since 1.0.0
+ * @since 1.5.4 Modified to fix empty columns in export csv file.
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @param string $post_type The post type.
  * @return object Queried object.
  */
 function geodir_imex_get_custom_fields( $post_type ) {
-	 global $wpdb;
+	global $wpdb;
 	 
-	 $sql = $wpdb->prepare("SELECT htmlvar_name FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE post_type=%s AND is_active='1' AND is_admin!='1' ORDER BY id ASC", array( $post_type ) );
-	 $rows = $wpdb->get_results( $sql );
+	$sql = $wpdb->prepare("SELECT htmlvar_name FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE post_type=%s AND is_active='1' AND is_admin!='1' AND field_type != 'fieldset' AND htmlvar_name != '' ORDER BY id ASC", array( $post_type ) );
+	$rows = $wpdb->get_results( $sql );
 	 
-	 return $rows;
+	return $rows;
 }
 
 /**
@@ -6281,3 +6001,583 @@ function geodir_icl_duplicate_post_images($master_post_id, $tr_post_id, $lang) {
 	
 	return false;
 }
+
+/**
+ * Retrives the event data to export.
+ *
+ * @since 1.5.1
+ * @package GeoDirectory
+ *
+ * @param array $post Post array.
+ * @param object $gd_post_info Geodirectory Post object.
+ * @return array Event data array.
+ */
+function geodir_imex_get_event_data($post, $gd_post_info) {
+	$event_date = isset( $post['event_date'] ) && $post['event_date'] != '' && $post['event_date'] != '0000-00-00 00:00:00' ? date_i18n( 'd/m/Y', strtotime( $post['event_date'] ) ) : '';
+	$event_enddate = $event_date;
+	$starttime = isset( $post['starttime'] ) && $post['starttime'] != '' && $post['starttime'] != '00:00:00' ? date_i18n( 'H:i', strtotime( $post['starttime'] ) ) : '';
+	$endtime = isset( $post['endtime'] ) && $post['endtime'] != '' && $post['endtime'] != '00:00:00' ? date_i18n( 'H:i', strtotime( $post['endtime'] ) ) : '';
+	
+	$is_recurring_event = '';
+	$event_duration_days = '';
+	$is_whole_day_event = '';
+	$recurring_dates = '';
+	$event_starttimes = '';
+	$event_endtimes = '';
+	$recurring_type = '';
+	$recurring_interval = '';
+	$recurring_week_days = '';
+	$recurring_week_nos = '';
+	$max_recurring_count = '';
+	$recurring_end_date = '';
+	$recurring_dates = '';
+		
+	$recurring_data = isset($gd_post_info->recurring_dates) ? maybe_unserialize($gd_post_info->recurring_dates) : array();
+	if (!empty($recurring_data)) {
+		$event_date = isset( $recurring_data['event_start'] ) && $recurring_data['event_start'] != '' && $recurring_data['event_start'] != '0000-00-00 00:00:00' ? date_i18n( 'd/m/Y', strtotime( $recurring_data['event_start'] ) ) : $event_date;
+		$event_enddate = isset( $recurring_data['event_end'] ) && $recurring_data['event_end'] != '' && $recurring_data['event_end'] != '0000-00-00 00:00:00' ? date_i18n( 'd/m/Y', strtotime( $recurring_data['event_end'] ) ) : $event_date;
+		$starttime = isset( $recurring_data['starttime'] ) && $recurring_data['starttime'] != '' && $recurring_data['starttime'] != '00:00:00' ? date_i18n( 'H:i', strtotime( $recurring_data['starttime'] ) ) : $starttime;
+		$endtime = isset( $recurring_data['endtime'] ) && $recurring_data['endtime'] != '' && $recurring_data['endtime'] != '00:00:00' ? date_i18n( 'H:i', strtotime( $recurring_data['endtime'] ) ) : $endtime;
+		$is_whole_day_event = !empty($recurring_data['all_day']) ? 1 : '';
+		$different_times = !empty($recurring_data['different_times']) ? true : false;
+	
+		$recurring_pkg = geodir_event_recurring_pkg( $gd_post_info );
+		$is_recurring = isset( $gd_post_info->is_recurring ) && (int)$gd_post_info->is_recurring == 0 ? false : true;
+			
+		if ($recurring_pkg && $is_recurring) {
+			$recurring_dates = $event_date;
+			$event_enddate = '';
+			$is_recurring_event = 1;
+						
+			$recurring_type = !empty($recurring_data['repeat_type']) && in_array($recurring_data['repeat_type'], array('day', 'week', 'month', 'year', 'custom')) ? $recurring_data['repeat_type'] : 'custom';
+			
+			if (!empty($recurring_data['event_recurring_dates'])) {
+				$event_recurring_dates = explode( ',', $recurring_data['event_recurring_dates'] );
+				
+				if (!empty($event_recurring_dates)) {
+					$recurring_dates = array();
+					
+					foreach ($event_recurring_dates as $date) {
+						$recurring_dates[] = date_i18n( 'd/m/Y', strtotime( $date ) );
+					}
+					
+					$recurring_dates = implode(",", $recurring_dates);
+				}
+			}
+			
+			if ($recurring_type == 'custom') {
+				if (!$is_whole_day_event) {
+					$event_starttimes = $starttime;
+					$event_endtimes = $endtime;
+			
+					if (!empty($recurring_data['starttimes'])) {
+						$times = array();
+						
+						foreach ($recurring_data['starttimes'] as $time) {
+							$times[] = $time != '00:00:00' ? date_i18n( 'H:i', strtotime( $time ) ) : '00:00';
+						}
+						
+						$event_starttimes = implode(",", $times);
+					}
+					
+					if (!empty($recurring_data['endtimes'])) {
+						$times = array();
+						
+						foreach ($recurring_data['endtimes'] as $time) {
+							$times[] = $time != '00:00:00' ? date_i18n( 'H:i', strtotime( $time ) ) : '00:00';
+						}
+						
+						$event_endtimes = implode(",", $times);
+					}
+					
+					if (!$different_times) {
+						$event_starttimes = '';
+						$event_endtimes = '';
+					}
+				}
+			} else {
+				$event_duration_days = isset($recurring_data['duration_x']) ? (int)$recurring_data['duration_x'] : 1;
+				$recurring_interval = !empty($recurring_data['repeat_x']) && (int)$recurring_data['repeat_x'] > 0 ? $recurring_data['repeat_x'] : 1;
+				
+				if (($recurring_type == 'week' || $recurring_type == 'month') && !empty($recurring_data['repeat_days'])) {
+					$week_days = array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
+					
+					$days = array();
+					foreach ($recurring_data['repeat_days'] as $day) {
+						if (isset($week_days[$day])) {
+							$days[] = $week_days[$day];
+						}
+					}
+					
+					$recurring_week_days = implode(",", array_unique($days));
+				}
+				
+				$recurring_week_nos = $recurring_type == 'month' && !empty($recurring_data['repeat_weeks']) ? implode(",", $recurring_data['repeat_weeks']) : $recurring_week_nos;
+				if (!empty($recurring_data['repeat_end_type']) && (int)$recurring_data['repeat_end_type'] == 1) {
+					$recurring_end_date = isset($recurring_data['repeat_end']) && $recurring_data['repeat_end'] != '' && $recurring_data['repeat_end'] != '0000-00-00 00:00:00' ? date_i18n( 'd/m/Y', strtotime( $recurring_data['repeat_end'] ) ) : '';
+					$max_recurring_count = empty($recurring_end_date) ? 1 : '';
+				} else {
+					$max_recurring_count = (!empty($recurring_data['max_repeat']) && (int)$recurring_data['max_repeat'] > 0 ? (int)$recurring_data['max_repeat'] : 1);
+				}
+			}
+		}
+	}
+	if ($is_whole_day_event) {
+		$starttime = '';
+		$endtime = '';
+		$event_starttimes = '';
+		$event_endtimes = '';
+	}
+	
+	$data = array();
+	$data['event_date'] = $event_date;
+	$data['event_enddate'] = $event_enddate;
+	$data['starttime'] = $starttime;
+	$data['endtime'] = $endtime;
+	$data['is_recurring_event'] = $is_recurring_event;
+	$data['recurring_dates'] = $recurring_dates;
+	$data['event_duration_days'] = $event_duration_days;
+	$data['is_whole_day_event'] = $is_whole_day_event;
+	$data['event_starttimes'] = $event_starttimes;
+	$data['event_endtimes'] = $event_endtimes;
+	$data['recurring_type'] = $recurring_type;
+	$data['recurring_interval'] = $recurring_interval;
+	$data['recurring_week_days'] = $recurring_week_days;
+	$data['recurring_week_nos'] = $recurring_week_nos;
+	$data['max_recurring_count'] = $max_recurring_count;
+	$data['recurring_end_date'] = $recurring_end_date;
+	
+	return $data;
+}
+
+/**
+ * Convert date format to store in database.
+ *
+ * PHP date() function doesn't work well with d/m/Y format
+ * so this function validate and convert date to store in db.
+ *
+ * @since 1.5.1
+ * @package GeoDirectory
+ *
+ * @param string $date Date in Y-m-d or d/m/Y format.
+ * @return doesn't Date.
+ */
+function geodir_imex_get_date_ymd($date) {
+	if (strpos($date, '/') !== false) {
+		$date = str_replace('/', '-', $date); // PHP doesn't work well with dd/mm/yyyy format.
+	}
+	
+	$date = date_i18n('Y-m-d', strtotime($date));
+	return $date;
+}
+
+/**
+ * Validate the event data.
+ *
+ * @since 1.5.1
+ * @package GeoDirectory
+ *
+ * @param array $gd_post Post array.
+ * @return array Event data array.
+ */
+function geodir_imex_process_event_data($gd_post) {
+	$recurring_pkg = geodir_event_recurring_pkg( (object)$gd_post );
+
+	$is_recurring = isset( $gd_post['is_recurring_event'] ) && (int)$gd_post['is_recurring_event'] == 0 ? false : true;
+	$event_date = isset($gd_post['event_date']) && $gd_post['event_date'] != '' ? geodir_imex_get_date_ymd($gd_post['event_date']) : '';
+	$event_enddate = isset($gd_post['event_enddate']) && $gd_post['event_enddate'] != '' ? geodir_imex_get_date_ymd($gd_post['event_enddate']) : $event_date;
+	$all_day = isset($gd_post['is_whole_day_event']) && !empty($gd_post['is_whole_day_event']) ? true : false;
+	$starttime = isset($gd_post['starttime']) && !$all_day ? $gd_post['starttime'] : '';
+	$endtime = isset($gd_post['endtime']) && !$all_day ? $gd_post['endtime'] : '';
+	
+	$repeat_type = '';
+	$different_times = '';
+	$starttimes = '';
+	$endtimes = '';
+	$repeat_days = '';
+	$repeat_weeks = '';
+	$event_recurring_dates = '';
+	$repeat_x = '';
+	$duration_x = '';
+	$repeat_end_type = '';
+	$max_repeat = '';
+	$repeat_end = '';
+	
+	if ($recurring_pkg && $is_recurring) {
+		$repeat_type = $gd_post['recurring_type'];
+		
+		if ($repeat_type == 'custom') {
+			$starttimes = !$all_day && !empty($gd_post['event_starttimes']) ? explode(",", $gd_post['event_starttimes']) : array();
+			$endtimes = !$all_day && !empty($gd_post['event_endtimes']) ? explode(",", $gd_post['event_endtimes']) : array();
+			
+			if (!empty($starttimes) || !empty($endtimes)) {
+				$different_times = true;
+			}
+			
+			$recurring_dates = isset($gd_post['recurring_dates']) && $gd_post['recurring_dates'] != '' ? explode(",", $gd_post['recurring_dates']) : array();
+			if (!empty($recurring_dates)) {
+				$event_recurring_dates = array();
+				
+				foreach ($recurring_dates as $recurring_date) {
+					$recurring_date = trim($recurring_date);
+					
+					if ($recurring_date != '') {
+						$event_recurring_dates[] = geodir_imex_get_date_ymd($recurring_date);
+					}
+				}
+				
+				$event_recurring_dates = array_unique($event_recurring_dates);
+				$event_recurring_dates = implode(",", $event_recurring_dates);
+			}
+		} else {
+			$duration_x = !empty( $gd_post['event_duration_days'] ) ? (int)$gd_post['event_duration_days'] : 1;
+			$repeat_x = !empty( $gd_post['recurring_interval'] ) ? (int)$gd_post['recurring_interval'] : 1;
+			$max_repeat = !empty( $gd_post['max_recurring_count'] ) ? (int)$gd_post['max_recurring_count'] : 1;
+			$repeat_end = !empty( $gd_post['recurring_end_date'] ) ? geodir_imex_get_date_ymd($gd_post['recurring_end_date']) : '';
+			
+			$repeat_end_type = $repeat_end != '' ? 1 : 0;
+			$max_repeat = $repeat_end != '' ? '' : $max_repeat;
+			
+			$week_days = array_flip(array('sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'));
+			
+			$a_repeat_days = isset($gd_post['recurring_week_days']) && trim($gd_post['recurring_week_days'])!='' ? explode(',', trim($gd_post['recurring_week_days'])) : array();
+			$repeat_days = array();
+			if (!empty($a_repeat_days)) {
+				foreach ($a_repeat_days as $repeat_day) {
+					$repeat_day = geodir_strtolower(trim($repeat_day));
+					
+					if ($repeat_day != '' && isset($week_days[$repeat_day])) {
+						$repeat_days[] = $week_days[$repeat_day];
+					}
+				}
+				
+				$repeat_days = array_unique($repeat_days);
+			}
+			
+			$a_repeat_weeks = isset($gd_post['recurring_week_nos']) && trim($gd_post['recurring_week_nos']) != '' ? explode(",", trim($gd_post['recurring_week_nos'])) : array();
+			$repeat_weeks = array();
+			if (!empty($a_repeat_weeks)) {
+				foreach ($a_repeat_weeks as $repeat_week) {
+					$repeat_weeks[] = (int)$repeat_week;
+				}
+				
+				$repeat_weeks = array_unique($repeat_weeks);
+			}
+		}
+	}
+	
+	if (isset($gd_post['recurring_dates'])) {
+		unset($gd_post['recurring_dates']);
+	}
+
+	$gd_post['is_recurring'] = $is_recurring;
+	$gd_post['event_date'] = $event_date;
+	$gd_post['event_start'] = $event_date;
+	$gd_post['event_end'] = $event_enddate;
+	$gd_post['all_day'] = $all_day;
+	$gd_post['starttime'] = $starttime;
+	$gd_post['endtime'] = $endtime;
+	
+	$gd_post['repeat_type'] = $repeat_type;
+	$gd_post['different_times'] = $different_times;
+	$gd_post['starttimes'] = $starttimes;
+	$gd_post['endtimes'] = $endtimes;
+	$gd_post['repeat_days'] = $repeat_days;
+	$gd_post['repeat_weeks'] = $repeat_weeks;
+	$gd_post['event_recurring_dates'] = $event_recurring_dates;
+	$gd_post['repeat_x'] = $repeat_x;
+	$gd_post['duration_x'] = $duration_x;
+	$gd_post['repeat_end_type'] = $repeat_end_type;
+	$gd_post['max_repeat'] = $max_repeat;
+	$gd_post['repeat_end'] = $repeat_end;
+
+	return $gd_post;
+}
+
+/**
+ * Create a page.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global object $current_user Current user object.
+ * @param string $slug The page slug.
+ * @param string $option The option meta key.
+ * @param string $page_title The page title.
+ * @param string $page_content The page description.
+ * @param int $post_parent Parent page ID.
+ * @param string $status Post status.
+ */
+function geodir_create_page($slug, $option, $page_title = '', $page_content = '', $post_parent = 0, $status = 'publish') {
+    global $wpdb, $current_user;
+
+    $option_value = get_option($option);
+
+    if ($option_value > 0) :
+        if (get_post($option_value)) :
+            // Page exists
+            return;
+        endif;
+    endif;
+
+    $page_found = $wpdb->get_var(
+        $wpdb->prepare(
+            "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s LIMIT 1;",
+            array($slug)
+        )
+    );
+
+    if ($page_found) :
+        // Page exists
+        if (!$option_value) update_option($option, $page_found);
+        return;
+    endif;
+
+    $page_data = array(
+        'post_status' => $status,
+        'post_type' => 'page',
+        'post_author' => $current_user->ID,
+        'post_name' => $slug,
+        'post_title' => $page_title,
+        'post_content' => $page_content,
+        'post_parent' => $post_parent,
+        'comment_status' => 'closed'
+    );
+    $page_id = wp_insert_post($page_data);
+
+    add_option($option, $page_id);
+
+}
+
+/**
+ * Get WPML original translation element id.
+ *
+ * @since 1.5.3
+ *
+ * @global object $sitepress Sitepress WPML object.
+ *
+ * @param int $element_id Post ID or Term id.
+ * @param string $element_type Element type. Ex: post_gd_place or tax_gd_placecategory.
+ * @return Original element id.
+ */
+function geodir_imex_original_post_id($element_id, $element_type) {
+	global $sitepress;
+	
+	$original_element_id = $sitepress->get_original_element_id($element_id, $element_type);
+	$element_id = $element_id != $original_element_id ? $original_element_id : '';
+	
+	return $element_id;
+}
+
+/*
+ * Show admin notice if core is out of date for the current addons.
+ *
+ * @since 1.5.4
+ * @package GeoDirectory
+ */
+function geodir_admin_upgrade_notice() {
+    $class = "error";
+    $message = __("Please update core GeoDirectory or some addons may not function correctly.","geodirectory");
+    echo"<div class=\"$class\"> <p>$message</p></div>";
+}
+
+/**
+ * Displays an update message for plugin list screens.
+ * Shows only the version updates from the current until the newest version
+ *
+ * @param (array) $plugin_data
+ * @param (object) $r
+ * @return (string) $output
+ */
+function geodire_admin_upgrade_notice( $plugin_data, $r )
+{
+    // readme contents
+    $args = array(
+        'timeout'     => 15,
+        'redirection' => 5
+    );
+    $url = "http://plugins.svn.wordpress.org/geodirectory/trunk/readme.txt";
+    $data       = wp_remote_get( $url, $args );
+
+    if (!is_wp_error($data) && $data['response']['code'] == 200) {
+
+        geodir_in_plugin_update_message($data['body']);
+    }
+}
+
+
+/*
+* @param string $body http response body
+*/
+function geodir_in_plugin_update_message($content) {
+    // Output Upgrade Notice
+    $matches        = null;
+    $regexp         = '~==\s*Upgrade Notice\s*==\s*=\s*(.*)\s*=(.*)(=\s*' . preg_quote( GEODIRECTORY_VERSION ) . '\s*=|$)~Uis';
+    $upgrade_notice = '';
+    if ( preg_match( $regexp, $content, $matches ) ) {
+        if(empty($matches)){return;}
+
+        $version = trim( $matches[1] );
+        if($version && $version>GEODIRECTORY_VERSION){
+
+
+        $notices = (array) preg_split('~[\r\n]+~', trim( $matches[2] ) );
+        if ( version_compare( GEODIRECTORY_VERSION, $version, '<' ) ) {
+            $upgrade_notice .= '<div class="geodir_plugin_upgrade_notice">';
+            foreach ( $notices as $index => $line ) {
+                $upgrade_notice .= wp_kses_post( preg_replace( '~\[([^\]]*)\]\(([^\)]*)\)~', '<a href="${2}">${1}</a>', $line ) );
+            }
+            $upgrade_notice .= '</div> ';
+        }
+        }
+    }
+    echo $upgrade_notice;
+}
+
+/**
+ * Display notice on geodirectory permalink settings page to don't pages settings on a different language when wpml is active.
+ *
+ * @package GeoDirectory
+ * @since 1.5.7
+ *
+ * @global object $sitepress Sitepress WPML object.
+ */
+function geodir_wpml_permalink_setting_notice() {
+	if (geodir_is_wpml()) {
+		global $sitepress;
+		$current_language = $sitepress->get_current_language();
+		$default_language = $sitepress->get_default_language();
+		if ($current_language != 'all' && $current_language != $default_language) {
+	?>
+	<div class="updated error notice-success" id="message"><p style="color:red"><strong><?php _e('Saving GeoDirectory pages settings on a different language breaks pages settings. Try to save after switching to default language.', 'geodirectory');?></strong></p></div>
+	<?php
+		}
+	}
+}
+
+/*
+ * Look at doing menu items this way, must be customiser ready
+ * @todo research below
+ */
+// GeoDirectory Menu Items
+/*
+
+function geodir_register_menu_metabox() {
+    $custom_param = array( 0 => 'This param will be passed to my_render_menu_metabox' );
+
+    add_meta_box( 'geodir-menu-metabox', 'GeoDirectory Items', 'geodir_render_menu_metabox', 'nav-menus', 'side', 'default', $custom_param );
+}
+add_action( 'admin_head-nav-menus.php', 'geodir_register_menu_metabox' );
+if(is_admin()){
+
+    //add_action( 'customize_register', 'geodir_register_menu_metabox' );
+}
+*/
+/**
+ * Displays a menu metabox
+ *
+ * @param string $object Not used.
+ * @param array $args Parameters and arguments. If you passed custom params to add_meta_box(),
+ * they will be in $args['args']
+ */
+/*
+function geodir_render_menu_metabox( $object, $args ) {
+    global $nav_menu_selected_id;
+
+    // Create an array of objects that imitate Post objects
+    $my_items = array(
+        (object) array(
+            'ID' => 0,
+            'db_id' => 0,
+            'menu_item_parent' => 0,
+            'object_id' => 1,
+            'post_parent' => 0,
+            'type' => 'custom',
+            'object' => 'my-object-slug',
+            'type_label' => 'My Cool Plugin',
+            'title' => 'Custom Link 1',
+            'url' => home_url( '/jobs/' ),
+            'target' => '',
+            'attr_title' => '',
+            'description' => '123',
+            'classes' => array(),
+            'xfn' => '',
+        ),
+        (object) array(
+            'ID' => 2,
+            'db_id' => 0,
+            'menu_item_parent' => 0,
+            'object_id' => 1,
+            'post_parent' => 0,
+            'type' => 'custom',
+            'object' => 'my-object-slug',
+            'type_label' => 'My Cool Plugin',
+            'title' => 'Custom Link 2',
+            'url' => home_url( '/custom-link-2/' ),
+            'target' => '',
+            'attr_title' => '',
+            'description' => '123',
+            'classes' => array(),
+            'xfn' => '',
+        ),
+        (object) array(
+            'ID' => 3,
+            'db_id' => 0,
+            'menu_item_parent' => 0,
+            'object_id' => 1,
+            'post_parent' => 0,
+            'type' => 'custom',
+            'object' => 'my-object-slug',
+            'type_label' => 'My Cool Plugin',
+            'title' => 'Custom Link 3',
+            'url' => home_url( '/custom-link-3/' ),
+            'target' => '',
+            'attr_title' => '',
+            'description' => '123',
+            'classes' => array(),
+            'xfn' => '',
+        ),
+    );
+    $db_fields = false;
+    // If your links will be hieararchical, adjust the $db_fields array bellow
+    if ( false ) {
+        $db_fields = array( 'parent' => 'parent', 'id' => 'post_parent' );
+    }
+    $walker = new Walker_Nav_Menu_Checklist( $db_fields );
+
+    $removed_args = array(
+        'action',
+        'customlink-tab',
+        'edit-menu-item',
+        'menu-item',
+        'page-tab',
+        '_wpnonce',
+    ); ?>
+    <div id="my-plugin-div">
+    <div id="tabs-panel-my-plugin-all" class="tabs-panel tabs-panel-active">
+        <ul id="my-plugin-checklist-pop" class="categorychecklist form-no-clear" >
+            <?php echo walk_nav_menu_tree( array_map( 'wp_setup_nav_menu_item', $my_items ), 0, (object) array( 'walker' => $walker ) ); ?>
+        </ul>
+
+        <p class="button-controls">
+			<span class="list-controls">
+				<a href="<?php
+                echo esc_url(add_query_arg(
+                    array(
+                        'my-plugin-all' => 'all',
+                        'selectall' => 1,
+                    ),
+                    remove_query_arg( $removed_args )
+                ));
+                ?>#my-menu-test-metabox" class="select-all"><?php _e( 'Select All' ); ?></a>
+			</span>
+
+			<span class="add-to-menu">
+				<input type="submit"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> class="button-secondary submit-add-to-menu right" value="<?php esc_attr_e( 'Add to Menu' ); ?>" name="add-my-plugin-menu-item" id="submit-my-plugin-div" />
+				<span class="spinner"></span>
+			</span>
+        </p>
+    </div>
+<?php
+}
+*/

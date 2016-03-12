@@ -42,11 +42,13 @@ function geodir_locate_template($template = '')
             } else {
                 $listing_page_id = geodir_add_listing_page_id();
             }
+			
+			$is_wpml = function_exists('icl_object_id') ? true : false;
 
-            if ($listing_page_id != '' && is_page($listing_page_id) && isset($_REQUEST['listing_type'])
+            if ($listing_page_id != '' && (is_page($listing_page_id) || ($is_wpml && !empty($wp->query_vars['page_id']))) && isset($_REQUEST['listing_type'])
                 && in_array($_REQUEST['listing_type'], geodir_get_posttypes())
             )
-                $post_type = $_REQUEST['listing_type'];
+                $post_type = sanitize_text_field($_REQUEST['listing_type']);
             if (empty($post_type) && !isset($_REQUEST['pid'])) {
                 $pagename = $wp->query_vars['pagename'];
                 $post_types = geodir_get_posttypes();
@@ -56,7 +58,11 @@ function geodir_locate_template($template = '')
 				if($sc_post_type != '' )
 					$post_type = $sc_post_type;
 				
-                wp_redirect(home_url() . '/' . $pagename . '/?listing_type=' . $post_type);
+                if ($is_wpml && !empty($wp->query_vars['page_id'])) {
+					wp_redirect(geodir_getlink(get_permalink($wp->query_vars['page_id']), array('listing_type' => $post_type)));
+				} else {
+					wp_redirect(trailingslashit(get_site_url()) . $pagename . '/?listing_type=' . $post_type);
+				}
                 exit();
             }
             return $template = locate_template(array("geodirectory/add-{$post_type}.php", "geodirectory/add-listing.php"));
@@ -66,7 +72,7 @@ function geodir_locate_template($template = '')
             if ($success_page_id != '' && is_page($success_page_id) && isset($_REQUEST['listing_type'])
                 && in_array($_REQUEST['listing_type'], geodir_get_posttypes())
             )
-                $post_type = $_REQUEST['listing_type'];
+                $post_type = sanitize_text_field($_REQUEST['listing_type']);
             return $template = locate_template(array("geodirectory/{$post_type}-success.php", "geodirectory/listing-success.php"));
             break;
         case 'detail':
@@ -174,7 +180,7 @@ function geodir_template_loader($template)
     ));
 
 
-    if (isset($_REQUEST['geodir_signup']) || $geodir_custom_page_list['geodir_signup_page']) {
+    if (geodir_is_page('login') || $geodir_custom_page_list['geodir_signup_page']) {
 
         $template = geodir_locate_template('signup');
 
@@ -192,7 +198,7 @@ function geodir_template_loader($template)
     if (geodir_is_page('add-listing') || $geodir_custom_page_list['geodir_add_listing_page']) {
         if (!geodir_is_default_location_set()) {
             global $information;
-            $information = sprintf(__('Please %sclick here%s to set a default location, this will make the plugin work properly.', GEODIRECTORY_TEXTDOMAIN), '<a href=\'' . admin_url('admin.php?page=geodirectory&tab=default_location_settings') . '\'>', '</a>');
+            $information = sprintf(__('Please %sclick here%s to set a default location, this will make the plugin work properly.', 'geodirectory'), '<a href=\'' . admin_url('admin.php?page=geodirectory&tab=default_location_settings') . '\'>', '</a>');
 
             $template = geodir_locate_template('information');
 
@@ -208,7 +214,7 @@ function geodir_template_loader($template)
         // check if pid exists in the record if yes then check if this post belongs to the user who is logged in.
         if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
             global $information;
-            $information = __('This listing does not belong to your account, please check the listing id carefully.', GEODIRECTORY_TEXTDOMAIN);
+            $information = __('This listing does not belong to your account, please check the listing id carefully.', 'geodirectory');
             $is_current_user_owner = geodir_listing_belong_to_current_user();
             if (!$is_current_user_owner) {
                 $template = geodir_locate_template('information');
@@ -229,7 +235,7 @@ function geodir_template_loader($template)
         //geodir_is_login(true);
         global $current_user;
         if (!$current_user->ID) {
-            wp_redirect(home_url() . '?geodir_signup=true&redirect_add_listing=' . urlencode(geodir_curPageURL()), 302);
+            wp_redirect(geodir_login_url(array('redirect_add_listing'=>urlencode(geodir_curPageURL()))), 302);
             exit;
         }
 
@@ -339,12 +345,12 @@ function geodir_template_loader($template)
 
     }
 
-    if (get_option('geodir_set_as_home') || geodir_is_page('location') || $geodir_custom_page_list['geodir_home_map_page']) {
+    if (get_option('geodir_set_as_home') || geodir_is_page('home') || geodir_is_page('location')) {
 
         global $post, $wp_query;
 
-        if (('page' == get_option('show_on_front') && $post->ID == get_option('page_on_front'))
-            || (is_home() && !$wp_query->is_posts_page || $geodir_custom_page_list['geodir_home_map_page'])
+        if (geodir_is_page('home') || ('page' == get_option('show_on_front') && isset($post->ID) && $post->ID == get_option('page_on_front'))
+            || (is_home() && !$wp_query->is_posts_page)
         ) {
 
             $template = geodir_locate_template('geodir-home');
@@ -461,4 +467,184 @@ function geodir_core_post_view_extra_class($class, $all_postypes = '')
     }
 
     return $class;
+}
+
+/**
+ * Display message when no listing result found.
+ *
+ * @since 1.5.5
+ * @package GeoDirectory
+ *
+ * @param string $template_listview Optional. Listing listview template. Ex: listing-listview, widget-listing-listview,
+                 gdevents_widget_listview, link-business-listview. Default: 'listing-listview'.
+ * @param bool $favorite Listing Optional. Are favorite listings results? Default: false.
+ */
+function geodir_display_message_not_found_on_listing($template_listview = 'listing-listview', $favorite = false) {
+    if ($favorite) {
+		$message = __('No favorite listings found which match your selection.', 'geodirectory');
+	} else {
+		$message = __('No listings found which match your selection.', 'geodirectory');
+	}
+	
+	/**
+	 * Filter the no listing found message.
+	 *
+	 * @since 1.5.5
+	 * @param string $template_listview Listing listview template.
+	 * @param bool $favorite Are favorite listings results?
+	 */
+	$message = apply_filters('geodir_message_listing_not_found', $message, $template_listview, $favorite);
+	
+	echo '<li class="no-listing">' . $message . '</li>';
+}
+
+/**
+ * Strips </li><li> tags from Breadcrumb HTML to wrap breadcrumb html.
+ *
+ * Using </li><li> breaks the links to a new line when window size is small(ex: in mobile device).
+ *
+ * @since 1.5.5
+ * @param string $breadcrumb Breadcrumb HTML.
+ * @param string $separator Breadcrumb separator.
+ * @return string Breadcrumb HTML.
+ */
+function geodir_strip_breadcrumb_li_wrappers($breadcrumb, $separator) {
+	$breadcrumb = str_replace(array('</li><li>', '</li> <li>'), '', $breadcrumb);
+	
+	return $breadcrumb;
+}
+
+/**
+ * Get listing listview class for current column length.
+ *
+ * @since 1.5.7
+ * @param int $columns Column length(ex: 1,2,3,4,5). Default empty.
+ * @return string Listing listview class.
+ */
+function geodir_convert_listing_view_class($columns = '') {
+	$class = '';
+	
+	switch ((int)$columns) {
+		case 1:
+			$class = '';
+		break;
+		case 2:
+			$class = 'gridview_onehalf';
+		break;
+		case 3:
+			$class = 'gridview_onethird';
+		break;
+		case 4:
+			$class = 'gridview_onefourth';
+		break;
+		case 5:
+			$class = 'gridview_onefifth';
+		break;
+		default:
+			$class = '';
+		break;
+	}
+	
+	return $class;
+}
+
+/**
+ * Filter to hide the listing excerpt.
+ *
+ * @since 1.5.7
+ * @param bool $display Display the excerpt or not.
+ * @param string $view The view type, Ex: 'listview'.
+ * @param object $post The post object.
+ * @return bool Modified value for display the excerpt.
+ */
+function geodir_show_listing_post_excerpt($display, $view, $post) {
+	if ($view == 'listview') {
+		if (geodir_is_page('author')) {
+			$word_limit = get_option('geodir_author_desc_word_limit');
+		} else {
+			$word_limit = get_option('geodir_desc_word_limit');
+		}
+		
+		if ($word_limit !== '' && ($word_limit == 0 || $word_limit == '0')) {
+			$display = false;
+		}
+	}
+	return $display;
+}
+
+/**
+ * Replace the font awesome rating icons in comment form.
+ *
+ * @since 1.5.7
+ * @package GeoDirectory
+ *
+ * @param string $html Rating icons html.
+ * @param array $star_texts Rating icons labels.
+ * @param int|null $default Default rating value to get selected.
+ * @return string Rating icons html content.
+ */
+function geodir_font_awesome_rating_form_html($html, $star_texts = array(), $default = '') {
+	if (get_option('geodir_reviewrating_enable_font_awesome') == '1') {
+		$html = '<select class="gd-fa-rating">';
+		$html .= '<option value=""></option>';
+		if (!empty($star_texts) && is_array($star_texts)) {
+			foreach ($star_texts as $i => $text) {
+				$html .= '<option ' . selected((int)($i + 1), (int)$default, false) . ' value="' . (int)($i + 1) . '">' . $text . '</option>';
+			}
+		} else {
+			$html .= '<option value="1">1</option>';
+			$html .= '<option value="2">2</option>';
+			$html .= '<option value="3">3</option>';
+			$html .= '<option value="4">4</option>';
+			$html .= '<option value="5">5</option>';
+		}
+		$html .= '</select>';
+	}
+
+	return $html;
+}
+
+/**
+ * Display the font awesome rating icons in place of default rating images.
+ *
+ * @since 1.5.7
+ * @package GeoDirectory
+ *
+ * @param string $html Rating icons html.
+ * @param float $rating Current rating value.
+ * @param int $star_count Total rating stars. Default 5.
+ * @return string Rating icons html content.
+ */
+function geodir_font_awesome_rating_stars_html($html, $rating, $star_count = 5) {
+	if (get_option('geodir_reviewrating_enable_font_awesome') == '1') {
+		$rating = min($rating, $star_count);
+		$full_stars = floor( $rating );
+		$half_stars = ceil( $rating - $full_stars );
+		$empty_stars = $star_count - $full_stars - $half_stars;
+		
+		$html = '<div class="gd-star-rating gd-fa-star-rating">';
+		$html .= str_repeat( '<i class="fa fa-star gd-full-star"></i>', $full_stars );
+		$html .= str_repeat( '<i class="fa fa-star-o fa-star-half-full gd-half-star"></i>', $half_stars );
+		$html .= str_repeat( '<i class="fa fa-star-o gd-empty-star"></i>', $empty_stars);
+		$html .= '</div>';
+	}
+
+	return $html;
+}
+
+/**
+ * Adds the style for the font awesome rating icons.
+ *
+ * @since 1.5.7
+ * @package GeoDirectory
+ */
+function geodir_font_awesome_rating_css() {
+	// Font awesome rating style
+	if (get_option('geodir_reviewrating_enable_font_awesome') == '1') {
+		$full_color = get_option('geodir_reviewrating_fa_full_rating_color', '#757575');
+		if ($full_color != '#757575') {
+			echo '<style type="text/css">.br-theme-fontawesome-stars .br-widget a.br-active:after,.br-theme-fontawesome-stars .br-widget a.br-selected:after,
+			.gd-star-rating i.fa {color:' . stripslashes($full_color) . '!important;}</style>';
+		}
+	}
 }
