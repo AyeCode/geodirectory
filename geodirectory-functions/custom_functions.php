@@ -332,7 +332,7 @@ function geodir_send_inquiry($request)
      */
     $url = apply_filters('geodir_send_enquiry_after_submit_redirect', $url);
     wp_redirect($url);
-    exit;
+    gd_die();
 
 }
 
@@ -439,7 +439,7 @@ function geodir_send_friend($request)
      */
     $url = apply_filters('geodir_send_to_friend_after_submit_redirect', $url);
     wp_redirect($url);
-    exit;
+    gd_die();
 }
 
 /**

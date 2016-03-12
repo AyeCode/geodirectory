@@ -480,10 +480,10 @@ function geodir_user_signup()
                 $error_message = isset($errors->errors['invalid_email'][0]) ? $errors->errors['invalid_email'][0] : '';
                 if (!is_wp_error($errors)) {
                     wp_redirect(geodir_login_url(array('checkemail'=>'confirm')));
-                    exit();
+                    gd_die();
                 } else {
                     wp_redirect(geodir_login_url(array('emsg'=>'fw')));
-                    exit();
+                    gd_die();
                 }
             }
             if (isset($_GET['error']) && 'invalidkey' == $_GET['error']) $errors->add('invalidkey', __('Sorry, that key does not appear to be valid.', 'geodirectory'));
@@ -696,7 +696,7 @@ function geodir_user_signup()
                 } else {
                     wp_redirect(home_url());
                 }
-                exit();
+                gd_die();
             }
 
             $errors = $user;
@@ -727,7 +727,7 @@ function geodir_user_signup()
                 } else {
                     wp_redirect(geodir_login_url(array('logemsg'=>'1','redirect_to'=>urlencode($_REQUEST['redirect_to']))));
                 }
-                exit;
+                gd_die();
             }
             break;
     endswitch; // end action switch

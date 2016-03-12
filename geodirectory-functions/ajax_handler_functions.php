@@ -371,6 +371,6 @@ function geodir_ajax_handler() {
         exit();
 
     }
-    
-    die;
+
+    gd_die();
 }

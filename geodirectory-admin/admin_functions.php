@@ -665,6 +665,9 @@ function geodir_default_taxonomies() {
                         $dummy_image_url = geodir_plugin_url() . "/geodirectory-admin/dummy/cat_icon";
                     else
                         $dummy_image_url = 'http://www.wpgeodirectory.com/dummy/cat_icon';
+
+                    $dummy_image_url = apply_filters('place_dummy_cat_image_url', $dummy_image_url);
+
                     $catname = str_replace(' ', '_', $catname);
                     $uploaded = (array)fetch_remote_file("$dummy_image_url/" . $catname . ".png");
 
@@ -706,6 +709,9 @@ function geodir_default_taxonomies() {
                     $dummy_image_url = geodir_plugin_url() . "/geodirectory-admin/dummy/cat_icon";
                 else
                     $dummy_image_url = 'http://www.wpgeodirectory.com/dummy/cat_icon';
+
+                $dummy_image_url = apply_filters('place_dummy_cat_image_url', $dummy_image_url);
+
                 $catname = str_replace(' ', '_', $catname);
                 $uploaded = (array)fetch_remote_file("$dummy_image_url/" . $catname . ".png");
 
