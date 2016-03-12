@@ -16,6 +16,8 @@ if (geodir_dummy_folder_exists())
 else
     $dummy_image_url = 'http://www.wpgeodirectory.com/dummy';
 
+$dummy_image_url = apply_filters('place_dummy_image_url', $dummy_image_url);
+
 switch ($dummy_post_index) {
 
     case(1):

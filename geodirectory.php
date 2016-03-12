@@ -180,7 +180,7 @@ include_once('geodirectory_template_actions.php');
 /*
  * Admin init + activation hooks
  */
-if (is_admin()) {
+if (is_admin() || geodir_is_testing_mode()) {
 
     /**
      * Include functions used in admin area only.
@@ -239,4 +239,19 @@ if (is_admin()) {
         add_action( $hook, 'geodire_admin_upgrade_notice', 20, 2 );
     }
 
+}
+
+
+/**
+ * Check whether testing mode enabled or not
+ *
+ * @package Geodirectory
+ * @since 1.5.7
+ */
+function geodir_is_testing_mode() {
+    if ( defined( 'GD_TESTING_MODE' ) && GD_TESTING_MODE ) {
+        return true;
+    } else {
+        return false;
+    }
 }

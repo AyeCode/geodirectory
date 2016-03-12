@@ -401,7 +401,7 @@ function geodir_get_category_parents($id, $taxomony, $visited = array(), $parent
 		return $parents;
 	}
 
-	if ($parent->parent && ($parent->parent != $parent->term_id) && !in_array($parent->parent, $visited)) {
+	if (isset($parent->parent) && $parent->parent && ($parent->parent != $parent->term_id) && !in_array($parent->parent, $visited)) {
 		$visited[] = $parent->parent;
 		$parents[] = $parent->parent;
 		$parents = geodir_get_category_parents($parent->parent, $taxomony, $visited, $parents);
@@ -440,4 +440,35 @@ function geodir_get_ip() {
 	 */
 	return apply_filters('geodir_get_ip', $ip);
 }
+}
+
+/**
+ * Register die handler for gd_die()
+ *
+ * @since 1.5.9
+ * @package GeoDirectory
+ */
+function _gd_die_handler() {
+    if ( defined( 'GD_TESTING_MODE' ) ) {
+        return '_gd_die_handler';
+    } else {
+        die();
+    }
+}
+
+/**
+ * Wrapper function for wp_die(). This function adds filters for wp_die() which
+ * kills execution of the script using wp_die(). This allows us to then to work
+ * with functions using gd_die() in the unit tests.
+ *
+ * @since 1.5.9
+ * @package GeoDirectory
+ * @param string $message Optional. Error message.
+ * @param string $title   Optional. Error title.
+ * @param int $status     Optional. Status code.
+ */
+function gd_die( $message = '', $title = '', $status = 400 ) {
+    add_filter( 'wp_die_ajax_handler', '_gd_die_handler', 10, 3 );
+    add_filter( 'wp_die_handler', '_gd_die_handler', 10, 3 );
+    wp_die( $message, $title, array( 'response' => $status ));
 }
