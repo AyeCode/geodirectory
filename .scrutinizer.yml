@@ -1,0 +1,55 @@
+# .scrutinizer.yml
+build:
+    environment:
+        php: '5.6.16'
+        mysql: true
+        selenium: false
+        postgresql: false
+        redis: false
+        hosts:
+            www.test.ci: '127.0.0.1'
+        apache2:
+            modules: ['rewrite']
+            sites:
+                symfony_app:
+                    web_root: '/home/scrutinizer/web/'
+                    host: 'www.test.ci'
+        variables:
+            WP_VERSION: '4.4.2'
+            WP_MULTISITE: '0'
+            WEB_BASE_DIR: '/home/scrutinizer/web/'
+            WP_CORE_DIR: '/home/scrutinizer/web/wordpress'
+            PLUGIN_BASE_DIR: '/home/scrutinizer/web/wordpress/wp-content/plugins/'
+            GD_PLUGIN_DIR: '/home/scrutinizer/web/wordpress/wp-content/plugins/geodirectory/'
+
+    dependencies:
+        before:
+            - mysql -uroot -e 'CREATE DATABASE wordpress_test'
+            - wget -nv -O /home/scrutinizer/build/tests/lib/wordpress-tests-lib/wp-tests-config.php https://raw.githubusercontent.com/mistergiri/scrutinizer-wordpress-tests/master/wp-tests-config.php
+            - mkdir -p $WEB_BASE_DIR
+            - mkdir -p $WP_CORE_DIR
+            - cd $WP_CORE_DIR
+            - mkdir -p ~/Downloads
+            - cd ~/Downloads
+            -
+                  command: 'wget -nv -O ~/Downloads/wordpress.tar.gz https://github.com/WordPress/WordPress/tarball/$WP_VERSION > /dev/null 2>&1 && mkdir -p wordpress && tar --strip-components=1 -zxmf wordpress.tar.gz -C wordpress'
+#                  not_if: 'test -e ~/Downloads/wordpress/'
+            - cp -a ~/Downloads/wordpress/. $WP_CORE_DIR
+            - cd ~/Downloads
+            -
+                  command: 'wget -nv -O ~/Downloads/geodirectory.tar.gz https://github.com/$GITHUB_REPO_USER/geodirectory/tarball/master > /dev/null 2>&1 && mkdir -p ~/Downloads/geodirectory && tar --strip-components=1 -zxmf ~/Downloads/geodirectory.tar.gz -C ~/Downloads/geodirectory'
+#                  not_if: 'test -e ~/Downloads/geodirectory/'
+            - mkdir -p $GD_PLUGIN_DIR
+            - cp -r /home/scrutinizer/build/* $GD_PLUGIN_DIR
+            - cd $GD_PLUGIN_DIR
+            - composer install --no-interaction
+
+    cache:
+          directories:
+#              - ~/Downloads/
+              - ~/.wp-cli/
+    tests:
+         override:
+              -
+                    command: 'cd $GD_PLUGIN_DIR && vendor/bin/phpunit --debug'
+                    idle_timeout: 1800
