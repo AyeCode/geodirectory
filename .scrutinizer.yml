@@ -51,5 +51,5 @@ build:
     tests:
          override:
               -
-                    command: 'cd $GD_PLUGIN_DIR && vendor/bin/phpunit --debug'
+                    command: 'cd $GD_PLUGIN_DIR && vendor/bin/phpunit --coverage-clover /home/scrutinizer/build/logs/scrutinizer-clover.xml'
                     idle_timeout: 1800
