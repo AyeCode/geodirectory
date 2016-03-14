@@ -33,12 +33,7 @@ build:
             - cd ~/Downloads
             -
                   command: 'wget -nv -O ~/Downloads/wordpress.tar.gz https://github.com/WordPress/WordPress/tarball/$WP_VERSION > /dev/null 2>&1 && mkdir -p wordpress && tar --strip-components=1 -zxmf wordpress.tar.gz -C wordpress'
-#                  not_if: 'test -e ~/Downloads/wordpress/'
             - cp -a ~/Downloads/wordpress/. $WP_CORE_DIR
-            - cd ~/Downloads
-            -
-                  command: 'wget -nv -O ~/Downloads/geodirectory.tar.gz https://github.com/$GITHUB_REPO_USER/geodirectory/tarball/master > /dev/null 2>&1 && mkdir -p ~/Downloads/geodirectory && tar --strip-components=1 -zxmf ~/Downloads/geodirectory.tar.gz -C ~/Downloads/geodirectory'
-#                  not_if: 'test -e ~/Downloads/geodirectory/'
             - mkdir -p $GD_PLUGIN_DIR
             - cp -r /home/scrutinizer/build/* $GD_PLUGIN_DIR
             - cd $GD_PLUGIN_DIR
@@ -46,7 +41,7 @@ build:
 
     cache:
           directories:
-#              - ~/Downloads/
+              - ~/Downloads/
               - ~/.wp-cli/
     tests:
          override:
