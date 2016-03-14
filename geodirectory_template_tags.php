@@ -76,24 +76,16 @@ function geodir_templates_scripts()
 
     wp_localize_script('geodirectory-script', 'geodir_var', $geodir_vars_data);
 
-
-
-
     wp_register_script('geodirectory-jquery-flexslider-js', geodir_plugin_url() . '/geodirectory-assets/js/jquery.flexslider.min.js', array(), GEODIRECTORY_VERSION,true);
     if($is_detail_page){wp_enqueue_script('geodirectory-jquery-flexslider-js');}
-
-
 
     wp_register_script('geodirectory-lightbox-jquery', geodir_plugin_url() . '/geodirectory-assets/js/jquery.lightbox-0.5.min.js', array(), GEODIRECTORY_VERSION,true);
     wp_enqueue_script('geodirectory-lightbox-jquery');
 
-
-
     wp_register_script('geodirectory-jquery-simplemodal', geodir_plugin_url() . '/geodirectory-assets/js/jquery.simplemodal.min.js', array(), GEODIRECTORY_VERSION,true);
-    if($is_detail_page){wp_enqueue_script('geodirectory-jquery-simplemodal');}
-
-
-    //if( get_option('geodir_enqueue_google_api_script')==1)
+    if ($is_detail_page) {
+        wp_enqueue_script('geodirectory-jquery-simplemodal');
+    }
 
     $map_lang = "&language=" . geodir_get_map_default_language();
     /**
@@ -106,11 +98,7 @@ function geodir_templates_scripts()
      */
     $map_extra = apply_filters('geodir_googlemap_script_extra', '');
     wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?' . $map_lang . $map_extra, '', NULL);
-    /*	{
-            wp_register_script( 'geodirectory-googlemap-script', "//maps.google.com/maps/api/js?sensor=false&language=en" );
-            wp_enqueue_script( 'geodirectory-googlemap-script' );
-           }
-        */
+    
     wp_register_script('geodirectory-goMap-script', geodir_plugin_url() . '/geodirectory-assets/js/goMap.min.js', array(), GEODIRECTORY_VERSION,true);
     wp_enqueue_script('geodirectory-goMap-script');
 
@@ -123,19 +111,13 @@ function geodir_templates_scripts()
 
     wp_enqueue_script('geodirectory-jquery-ui-timepicker-js', geodir_plugin_url() . '/geodirectory-assets/js/jquery.ui.timepicker.min.js#asyncload', array('jquery-ui-datepicker', 'jquery-ui-slider', 'jquery-effects-core', 'jquery-effects-slide'), '', true);
 
-
     if (is_page() && geodir_is_page('add-listing')) {
-
-
-
-
         // SCRIPT FOR UPLOAD
         wp_enqueue_script('plupload-all');
         wp_enqueue_script('jquery-ui-sortable');
 
         wp_register_script('geodirectory-plupload-script', geodir_plugin_url() . '/geodirectory-assets/js/geodirectory-plupload.min.js#asyncload', array(), GEODIRECTORY_VERSION,true);
         wp_enqueue_script('geodirectory-plupload-script');
-
         // SCRIPT FOR UPLOAD END
 
         // check_ajax_referer function is used to make sure no files are uplaoded remotly but it will fail if used between https and non https so we do the check below of the urls
@@ -147,6 +129,8 @@ function geodir_templates_scripts()
             $ajax_url = str_replace("https", "http", admin_url('admin-ajax.php'));
         } elseif (!str_replace("https", "http", admin_url('admin-ajax.php')) && !empty($_SERVER['HTTPS'])) {
             $ajax_url = str_replace("http", "https", admin_url('admin-ajax.php'));
+        } else {
+            $ajax_url = admin_url('admin-ajax.php');
         }
 
         // place js config array for plupload
@@ -344,9 +328,7 @@ function geodir_get_sidebar()
  * @param int $pages_to_show Number of pages to display on the pagination. Default: 5.
  * @param bool $always_show Do you want to show the pagination always? Default: false.
  */
-function geodir_pagination($before = '', $after = '', $prelabel = '', $nxtlabel = '', $pages_to_show = 5, $always_show = false)
-{
-
+function geodir_pagination($before = '', $after = '', $prelabel = '', $nxtlabel = '', $pages_to_show = 5, $always_show = false) {
     global $wp_query, $posts_per_page, $wpdb, $paged, $blog_id;
 
     if (empty($prelabel)) {
@@ -363,35 +345,82 @@ function geodir_pagination($before = '', $after = '', $prelabel = '', $nxtlabel 
         return;
 
     if (!is_single()) {
-		if (function_exists('geodir_location_geo_home_link')) {
-			remove_filter('home_url', 'geodir_location_geo_home_link', 100000);
-		}
+        if (function_exists('geodir_location_geo_home_link')) {
+            remove_filter('home_url', 'geodir_location_geo_home_link', 100000);
+        }
         $numposts = $wp_query->found_posts;
-
 
         $max_page = ceil($numposts / $posts_per_page);
 
         if (empty($paged)) {
             $paged = 1;
         }
+        
+        $post_type = geodir_get_current_posttype();
+        $listing_type_name = get_post_type_plural_label($post_type);
+        if (geodir_is_page('listing') || geodir_is_page('search')) {            
+            $term = array();
+            
+            if (is_tax()) {
+                $term_id = get_queried_object_id();
+                $taxonomy = get_query_var('taxonomy');
 
-        if ($max_page > 1 || $always_show) {
-			// Extra pagination info
-			$geodir_pagination_more_info = get_option('geodir_pagination_advance_info');
-			$start_no = ( $paged - 1 ) * $posts_per_page + 1;
-			$end_no = min($paged * $posts_per_page, $numposts);
-			
-			if ($geodir_pagination_more_info != '') {
-				$pagination_info = '<div class="gd-pagination-details">' . wp_sprintf(__('Showing listings %d-%d of %d', 'geodirectory'), $start_no, $end_no, $numposts) . '</div>';
-				
-				if ($geodir_pagination_more_info == 'before') {
-					$before = $before . $pagination_info;
-				} else if ($geodir_pagination_more_info == 'after') {
-					$after = $pagination_info . $after;
-				}
-			}
-			
-			echo "$before <div class='Navi'>";
+                if ($term_id && $post_type && get_query_var('taxonomy') == $post_type . 'category' ) {
+                    $term = get_term($term_id, $post_type . 'category');
+                }
+            }
+            
+            if (geodir_is_page('search') && !empty($_REQUEST['s' . $post_type . 'category'])) {
+                $taxonomy_search = $_REQUEST['s' . $post_type . 'category'];
+                
+                if (!is_array($taxonomy_search)) {
+                    $term = get_term((int)$taxonomy_search, $post_type . 'category');
+                } else if(is_array($taxonomy_search) && count($taxonomy_search) == 1) { // single category search
+                    $term = get_term((int)$taxonomy_search[0], $post_type . 'category');
+                }
+            }
+            
+            if (!empty($term) && !is_wp_error($term)) {
+                $listing_type_name = $term->name;
+            }
+        }
+
+        if ($max_page > 1 || $always_show) {            
+            // Extra pagination info
+            $geodir_pagination_more_info = get_option('geodir_pagination_advance_info');
+            $start_no = ( $paged - 1 ) * $posts_per_page + 1;
+            $end_no = min($paged * $posts_per_page, $numposts);
+
+            if ($geodir_pagination_more_info != '') {
+                if ($listing_type_name) {
+                    $listing_type_name = __($listing_type_name, 'geodirectory');
+                    $pegination_desc = wp_sprintf(__('Showing %s %d-%d of %d', 'geodirectory'), $listing_type_name, $start_no, $end_no, $numposts);
+                } else {
+                    $pegination_desc = wp_sprintf(__('Showing listings %d-%d of %d', 'geodirectory'), $start_no, $end_no, $numposts);
+                }
+                $pagination_info = '<div class="gd-pagination-details">' . $pegination_desc . '</div>';
+                /**
+                 * Adds an extra pagination info above/under pagination.
+                 *
+                 * @since 1.5.9
+                 *
+                 * @param string $pagination_info Extra pagination info content.
+                 * @param string $listing_type_name Listing results type.
+                 * @param string $start_no First result number.
+                 * @param string $end_no Last result number.
+                 * @param string $numposts Total number of listings.
+                 * @param string $post_type The post type.
+                 */
+                $pagination_info = apply_filters('geodir_pagination_advance_info', $pagination_info, $listing_type_name, $start_no, $end_no, $numposts, $post_type);
+                
+                if ($geodir_pagination_more_info == 'before') {
+                    $before = $before . $pagination_info;
+                } else if ($geodir_pagination_more_info == 'after') {
+                    $after = $pagination_info . $after;
+                }
+            }
+            
+            echo "$before <div class='Navi'>";
             if ($paged >= ($pages_to_show - 1)) {
                 echo '<a href="' . str_replace('&paged', '&amp;paged', get_pagenum_link()) . '">&laquo;</a>';
             }
@@ -411,10 +440,10 @@ function geodir_pagination($before = '', $after = '', $prelabel = '', $nxtlabel 
             }
             echo "</div> $after";
         }
-		
-		if (function_exists('geodir_location_geo_home_link')) {
-			add_filter('home_url', 'geodir_location_geo_home_link', 100000, 2);
-		}
+        
+        if (function_exists('geodir_location_geo_home_link')) {
+            add_filter('home_url', 'geodir_location_geo_home_link', 100000, 2);
+        }
     }
 }
 
@@ -670,6 +699,7 @@ function geodir_add_sharelocation_scripts()
  */
 function geodir_show_badges_on_image($which, $post, $link)
 {
+    $return = '';
     switch ($which) {
         case 'featured':
             /**
@@ -679,7 +709,7 @@ function geodir_show_badges_on_image($which, $post, $link)
              * @param object $post The post object.
              * @param string $link The link to the post.
              */
-            return apply_filters('geodir_featured_badge_on_image', '<a href="' . $link . '"><span class="geodir_featured_img">&nbsp;</span></a>',$post,$link);
+            $return = apply_filters('geodir_featured_badge_on_image', '<a href="' . $link . '"><span class="geodir_featured_img">&nbsp;</span></a>',$post,$link);
             break;
         case 'new' :
             /**
@@ -689,10 +719,10 @@ function geodir_show_badges_on_image($which, $post, $link)
              * @param object $post The post object.
              * @param string $link The link to the post.
              */
-            return apply_filters('geodir_new_badge_on_image', '<a href="' . $link . '"><span class="geodir_new_listing">&nbsp;</span></a>',$post,$link);
+            $return = apply_filters('geodir_new_badge_on_image', '<a href="' . $link . '"><span class="geodir_new_listing">&nbsp;</span></a>',$post,$link);
             break;
 
     }
+    
+    return $return;
 }
-
-?>
