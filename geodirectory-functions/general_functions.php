@@ -675,6 +675,9 @@ if (!function_exists('geodir_sendEmail')) {
         } elseif ($message_type == 'listing_published') {
             $subject = get_option('geodir_post_published_email_subject');
             $message = get_option('geodir_post_published_email_content');
+        } elseif ($message_type == 'listing_edited') {
+            $subject = get_option('geodir_post_edited_email_subject_admin');
+            $message = get_option('geodir_post_edited_email_content_admin');
         }
 		
 		if (!empty($subject)) {
@@ -708,6 +711,10 @@ if (!function_exists('geodir_sendEmail')) {
         $siteurl_link = '<a href="' . $siteurl . '">' . $siteurl . '</a>';
         $loginurl = geodir_login_url();
         $loginurl_link = '<a href="' . $loginurl . '">login</a>';
+        
+        $post_author_id = !empty($post_info) ? $post_info->post_author : 0;
+        $post_author_name = geodir_get_client_name($post_author_id);
+        $current_date = date_i18n('Y-m-d H:i:s', current_time('timestamp'));
 
         if ($fromEmail == '') {
             $fromEmail = get_option('site_email');
@@ -717,12 +724,12 @@ if (!function_exists('geodir_sendEmail')) {
             $fromEmailName = get_option('site_email_name');
         }
 
-        $search_array = array('[#listing_link#]', '[#site_name_url#]', '[#post_id#]', '[#site_name#]', '[#to_name#]', '[#from_name#]', '[#subject#]', '[#comments#]', '[#login_url#]', '[#login_details#]', '[#client_name#]', '[#posted_date#]','[#from_email#]','[#user_login#]','[#username#]');
-        $replace_array = array($listingLink, $siteurl_link, $post_id, $sitefromEmailName, $toEmailName, $fromEmailName, $to_subject, $to_message, $loginurl_link, $login_details, $toEmailName, $posted_date,$fromEmail, $user_login, $user_login);
+        $search_array = array('[#listing_link#]', '[#site_name_url#]', '[#post_id#]', '[#site_name#]', '[#to_name#]', '[#from_name#]', '[#subject#]', '[#comments#]', '[#login_url#]', '[#login_details#]', '[#client_name#]', '[#posted_date#]','[#from_email#]','[#user_login#]','[#username#]','[#post_author_id#]','[#post_author_name#]','[#current_date#]');
+        $replace_array = array($listingLink, $siteurl_link, $post_id, $sitefromEmailName, $toEmailName, $fromEmailName, $to_subject, $to_message, $loginurl_link, $login_details, $toEmailName, $posted_date,$fromEmail, $user_login, $user_login, $post_author_id, $post_author_name, $current_date);
         $message = str_replace($search_array, $replace_array, $message);
 
-        $search_array = array('[#listing_link#]', '[#site_name_url#]', '[#post_id#]', '[#site_name#]', '[#to_name#]', '[#from_name#]', '[#subject#]', '[#client_name#]', '[#posted_date#]','[#from_email#]','[#user_login#]','[#username#]');
-        $replace_array = array($listingLink, $siteurl_link, $post_id, $sitefromEmailName, $toEmailName, $fromEmailName, $to_subject, $toEmailName, $posted_date,$fromEmail, $user_login, $user_login);
+        $search_array = array('[#listing_link#]', '[#site_name_url#]', '[#post_id#]', '[#site_name#]', '[#to_name#]', '[#from_name#]', '[#subject#]', '[#client_name#]', '[#posted_date#]','[#from_email#]','[#user_login#]','[#username#]','[#post_author_id#]','[#post_author_name#]','[#current_date#]');
+        $replace_array = array($listingLink, $siteurl_link, $post_id, $sitefromEmailName, $toEmailName, $fromEmailName, $to_subject, $toEmailName, $posted_date,$fromEmail, $user_login, $user_login, $post_author_id, $post_author_name, $current_date);
         $subject = str_replace($search_array, $replace_array, $subject);
 
         $headers = 'MIME-Version: 1.0' . "\r\n";
@@ -4377,4 +4384,43 @@ function geodir_remove_location_terms($location_terms = array()) {
     }
 
     return $location_terms;
+}
+
+/**
+ * Send notification when a listing has been edited by it's author.
+ *
+ * @since 1.5.9
+ * @package GeoDirectory
+ *
+ * @param int $post_ID Post ID.
+ * @param WP_Post $post Post object.
+ * @param bool $update Whether this is an existing listing being updated or not.
+ */
+function geodir_on_wp_insert_post($post_ID, $post, $update) {
+    if (!$update) {
+        return;
+    }
+    
+    $is_admin = is_admin() && ( !defined('DOING_AJAX' ) || ( defined('DOING_AJAX') && !DOING_AJAX ) )  ? true : false;
+    $inline_save = isset($_POST['action']) && $_POST['action'] == 'inline-save' ? true : false;
+
+    if (empty($post->post_type) || $is_admin || $inline_save || (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)) {
+        return;
+    }
+
+    $user_id = (int)get_current_user_id();
+        
+    if ($user_id > 0 && get_option('geodir_notify_post_edited') && !wp_is_post_revision($post_ID) && in_array($post->post_type, geodir_get_posttypes())) {
+        $author_id = !empty($post->post_author) ? $post->post_author : 0;
+        
+        if ($user_id == $author_id) {
+            $from_email = get_option('site_email');
+            $from_name = get_site_emailName();
+            $to_email = get_option('admin_email');
+            $to_name = get_option('name');
+            $message_type = 'listing_edited';
+            
+            geodir_sendEmail($from_email, $from_name, $to_email, $to_name, '', '', '', $message_type, $post_ID);
+        }
+    }
 }

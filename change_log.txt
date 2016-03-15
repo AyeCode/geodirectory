@@ -14,6 +14,7 @@ Multinews theme compatibility changes for new version - FIXED
 Add listing neighbourhood via GD import/export listings - CHANGED
 If apostrophe in option value then it disappears from the selected option values - FIXED
 Display cpt/category name in the advanced pagination info - CHANGED
+Send notification to Admin when listing edited by Author - ADDED
 
 v1.5.8
 Local .mo file path points to wrong location - FIXED

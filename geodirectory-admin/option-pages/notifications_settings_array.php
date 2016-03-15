@@ -131,13 +131,47 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
         'css' => 'min-width:300px;',
         'std' => __('Post Submitted Successfully','geodirectory') // Default value for the page title - changed in settings
     ),
-    array(
+     array(
         'name' => '',
         'desc' => '',
         'id' => 'geodir_post_submited_success_email_content_admin',
         'css' => 'width:500px; height: 150px;',
         'type' => 'textarea',
         'std' => __('<p>Dear Admin,</p><p>A new  listing has been published [#listing_link#]. This email is just for your information.</p><br><p>[#site_name#]</p>','geodirectory')
+    ),
+    array(
+        'name' => __('Notify Admin when listing edited by Author', 'geodirectory'),
+        'desc' => __('Yes', 'geodirectory'),
+        'id' => 'geodir_notify_post_edited',
+        'std' => 'yes',
+        'type' => 'radio',
+        'value' => '1',
+        'radiogroup' => 'start'
+    ),
+    array(
+        'name' => __('Notify Admin when listing edited by Author', 'geodirectory'),
+        'desc' => __('No', 'geodirectory'),
+        'id' => 'geodir_notify_post_edited',
+        'std' => 'no',
+        'type' => 'radio',
+        'value' => '0',
+        'radiogroup' => 'end'
+    ),
+    array(
+        'name' => __('Listing edited by Author', 'geodirectory'),
+        'desc' => '',
+        'id' => 'geodir_post_edited_email_subject_admin',
+        'type' => 'text',
+        'css' => 'min-width:300px;',
+        'std' => __('[[#site_name#]] Listing edited by Author', 'geodirectory')
+    ),
+    array(
+        'name' => '',
+        'desc' => '',
+        'id' => 'geodir_post_edited_email_content_admin',
+        'css' => 'width:500px; height: 150px;',
+        'type' => 'textarea',
+        'std' => __('<p>Dear Admin,</p><p>A listing [#listing_link#] has been edited by it\'s author [#post_author_name#].</p><br><p><b>Listing Details:</b></p><p>Listing ID: [#post_id#]</p><p>Listing URL: [#listing_link#]</p><p>Date: [#current_date#]</p><br><p>This email is just for your information.</p><p>[#site_name#]</p>', 'geodirectory')
     ),
 
 
