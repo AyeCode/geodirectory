@@ -15,6 +15,7 @@ Add listing neighbourhood via GD import/export listings - CHANGED
 If apostrophe in option value then it disappears from the selected option values - FIXED
 Display cpt/category name in the advanced pagination info - CHANGED
 Send notification to Admin when listing edited by Author - ADDED
+Added new filter for search terms `geodir_search_better_search_terms` - ADDED
 
 v1.5.8
 Local .mo file path points to wrong location - FIXED
