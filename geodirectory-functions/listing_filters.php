@@ -696,7 +696,7 @@ function geodir_default_where($where)
  * @return string Modified where query string.
  */
 function searching_filter_where($where) {
-    global $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $mylat, $mylon, $s, $snear, $s, $s_A, $s_SA, $search_term, $gd_session;
+    global $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $mylat, $mylon, $s, $snear, $s_A, $s_SA, $search_term, $gd_session;
 	
     $search_term = 'OR';
     $search_term = 'AND';
@@ -714,22 +714,6 @@ function searching_filter_where($where) {
 	$s = trim($s);
 
     $where = '';
-
-    $better_search_terms = '';
-    $better_search = array();
-
-    if (!empty($s_SA)) {
-        foreach ($s_SA as $s_term) {
-            //$s_term = esc_attr($s_term);
-            //$better_search[] = " OR $wpdb->posts.post_title LIKE\"%$s_term%\" ";
-			$better_search[] = " OR ( $wpdb->posts.post_title LIKE \"$s_term\" OR $wpdb->posts.post_title LIKE \"$s_term%\" OR $wpdb->posts.post_title LIKE \"% $s_term%\" ) ";
-        }
-    }
-
-    if (is_array($better_search)) {
-        $better_search_terms = implode(' ', $better_search);
-    }
-
     $better_search_terms = '';
     if (isset($_REQUEST['stype']))
         $post_types = esc_attr(wp_strip_all_tags($_REQUEST['stype']));
@@ -750,8 +734,16 @@ function searching_filter_where($where) {
             foreach ($keywords as $keyword) {
                 $keyword = trim($keyword);
                 if ($keyword != '') {
-                    //$better_search_terms .= ' OR ' . $wpdb->posts . '.post_title LIKE "%' . $adv_search_val . '%"';
-					$better_search_terms .= ' OR ( ' . $wpdb->posts . '.post_title LIKE "' . $keyword . '" OR ' . $wpdb->posts . '.post_title LIKE "' . $keyword . '%" OR ' . $wpdb->posts . '.post_title LIKE "% ' . $keyword . '%" )';
+                    /**
+                     * Filter the search query keywords SQL.
+                     *
+                     * @since 1.5.9
+                     * @package GeoDirectory
+                     * @param string $better_search_terms The query values, default: `' OR ( ' . $wpdb->posts . '.post_title LIKE "' . $keyword . '" OR ' . $wpdb->posts . '.post_title LIKE "' . $keyword . '%" OR ' . $wpdb->posts . '.post_title LIKE "% ' . $keyword . '%" )'`.
+                     * @param array $keywords The array of keywords for the query.
+                     * @param string $keyword The single keyword being searched.
+                     */
+					$better_search_terms .= apply_filters("geodir_search_better_search_terms",' OR ( ' . $wpdb->posts . '.post_title LIKE "' . $keyword . '" OR ' . $wpdb->posts . '.post_title LIKE "' . $keyword . '%" OR ' . $wpdb->posts . '.post_title LIKE "% ' . $keyword . '%" )',$keywords,$keyword);
                 }
             }
         }

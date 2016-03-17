@@ -2,22 +2,23 @@
 /**
  * This is the main GeoDirectory plugin file, here we declare and call the important stuff
  *
+ * @package     GeoDirectory
+ * @copyright   2016 AyeCode Ltd
+ * @license     GPL-2.0+
  * @since 1.0.0
- * @package GeoDirectory
+ *
+ * @wordpress-plugin
+ * Plugin Name: GeoDirectory
+ * Plugin URI: http://wpgeodirectory.com/
+ * Description: GeoDirectory plugin for wordpress.
+ * Version: 1.5.8
+ * Author: GeoDirectory
+ * Author URI: http://wpgeodirectory.com
+ * Text Domain: geodirectory
+ * Domain Path: /geodirectory-languages
+ * Requires at least: 3.1
+ * Tested up to: 4.4
  */
-
-/* 
-Plugin Name: GeoDirectory
-Plugin URI: http://wpgeodirectory.com/
-Description: GeoDirectory plugin for wordpress.
-Version: 1.5.8
-Author: GeoDirectory
-Author URI: http://wpgeodirectory.com
-Text Domain: geodirectory
-Domain Path: /geodirectory-languages
-Requires at least: 3.1
-Tested up to: 4.4
-*/
 
 /**
  * The current version number of GeoDirectory.

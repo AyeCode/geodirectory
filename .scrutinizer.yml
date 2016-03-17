@@ -34,17 +34,20 @@ build:
             -
                   command: 'wget -nv -O ~/Downloads/wordpress.tar.gz https://github.com/WordPress/WordPress/tarball/$WP_VERSION > /dev/null 2>&1 && mkdir -p wordpress && tar --strip-components=1 -zxmf wordpress.tar.gz -C wordpress'
             - cp -a ~/Downloads/wordpress/. $WP_CORE_DIR
-            - mkdir -p $GD_PLUGIN_DIR
-            - cp -r /home/scrutinizer/build/* $GD_PLUGIN_DIR
-            - cd $GD_PLUGIN_DIR
-            - composer install --no-interaction
+#            - mkdir -p $GD_PLUGIN_DIR
+#            - cp -r /home/scrutinizer/build/* $GD_PLUGIN_DIR
+#            - cd $GD_PLUGIN_DIR
+#            - composer install --no-interaction
 
     cache:
           directories:
               - ~/Downloads/
-              - ~/.wp-cli/
+#              - ~/.wp-cli/
     tests:
          override:
               -
-                    command: 'cd $GD_PLUGIN_DIR && vendor/bin/phpunit --coverage-clover /home/scrutinizer/build/logs/scrutinizer-clover.xml'
+                    command: 'phpunit --coverage-clover=coverage.xml'
                     idle_timeout: 1800
+                    coverage:
+                        file: 'coverage.xml'
+                        format: 'php-clover'
