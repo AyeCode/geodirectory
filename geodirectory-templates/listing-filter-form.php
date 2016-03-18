@@ -92,7 +92,7 @@ echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
 
                 <input class="search_text" name="s"
                        value="<?php if (isset($_REQUEST['s']) && trim($_REQUEST['s']) != '') {
-                           echo esc_attr($_REQUEST['s']);
+                           echo esc_attr(stripslashes_deep($_REQUEST['s']));
                        } else {
                            echo $default_search_for_text;
                        } ?>" type="text"
@@ -103,7 +103,7 @@ echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
 
                 <?php
                 if (isset($_REQUEST['snear']) && $_REQUEST['snear'] != '') {
-                    $near = esc_attr(stripslashes($_REQUEST['snear']));
+                    $near = esc_attr(stripslashes_deep($_REQUEST['snear']));
                 } else {
                     $near = $default_near_text;
                 }
