@@ -20,6 +20,12 @@ include_once('geodirectory-functions/geodir-class-session.php');
  */
 include_once('geodirectory-functions/helper_functions.php');
 /**
+ * Contains functions used for user info.
+ *
+ * @since 1.5.9
+ */
+include_once('geodirectory-functions/user_functions.php');
+/**
  * Contains functions used for ajax calls.
  *
  * @since 1.0.0

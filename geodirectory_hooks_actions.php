@@ -2341,41 +2341,7 @@ function geodir_user_post_listing_count()
 }
 
 
-/* ------- GET CURRENT USER FAVOURITE LISTING -------*/
-/**
- * Get user's favorite listing count.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
- * @global object $current_user Current user object.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
- * @return array User listing count for each post type.
- */
-function geodir_user_favourite_listing_count()
-{
-    global $wpdb, $plugin_prefix, $current_user;
 
-    $user_id = $current_user->ID;
-    $all_postypes = geodir_get_posttypes();
-    $user_favorites = get_user_meta($user_id, 'gd_user_favourite_post', true);
-    $all_posts = get_option('geodir_favorite_link_user_dashboard');
-
-    $user_listing = array();
-    if (is_array($all_posts) && !empty($all_posts) && is_array($user_favorites) && !empty($user_favorites)) {
-        $user_favorites = "'" . implode("','", $user_favorites) . "'";
-
-        foreach ($all_posts as $ptype) {
-            $total_posts = $wpdb->get_var("SELECT count( ID ) FROM " . $wpdb->prefix . "posts WHERE  post_type='" . $ptype . "' AND post_status = 'publish' AND ID IN (" . $user_favorites . ")");
-
-            if ($total_posts > 0) {
-                $user_listing[$ptype] = $total_posts;
-            }
-        }
-    }
-
-    return $user_listing;
-}
 
 add_filter('geodir_detail_page_tab_list_extend', 'geodir_detail_page_custom_field_tab');
 /**
