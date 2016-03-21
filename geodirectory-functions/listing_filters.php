@@ -270,6 +270,7 @@ function geodir_posts_fields($fields) {
                 $count = 0;
                 foreach ($keywords as $keyword) {
                     $keyword = trim($keyword);
+                    $keyword  = wp_specialchars_decode($keyword ,ENT_QUOTES);
 					$count++;
                     if ($count < count($keywords)) {
                        // $gd_titlematch_part .= $wpdb->posts . ".post_title LIKE '%%" . $keyword . "%%' " . $key . " ";
@@ -284,9 +285,11 @@ function geodir_posts_fields($fields) {
         } else {
             $gd_titlematch_part = "";
         }
-        //$fields .= $wpdb->prepare(", CASE WHEN " . $table . ".is_featured='1' THEN 1 ELSE 0 END AS gd_featured, CASE WHEN " . $wpdb->posts . ".post_title=%s THEN 1 ELSE 0 END AS gd_exacttitle," . $gd_titlematch_part . " CASE WHEN " . $wpdb->posts . ".post_title LIKE %s THEN 1 ELSE 0 END AS gd_titlematch, CASE WHEN " . $wpdb->posts . ".post_content LIKE %s THEN 1 ELSE 0 END AS gd_content", array($s, '%' . $s . '%', '%' . $s . '%'));
+        $s = stripslashes_deep( $s );
+        $s = wp_specialchars_decode($s,ENT_QUOTES);
 		$fields .= $wpdb->prepare(", CASE WHEN " . $table . ".is_featured='1' THEN 1 ELSE 0 END AS gd_featured, CASE WHEN " . $wpdb->posts . ".post_title LIKE %s THEN 1 ELSE 0 END AS gd_exacttitle," . $gd_titlematch_part . " CASE WHEN ( " . $wpdb->posts . ".post_title LIKE %s OR " . $wpdb->posts . ".post_title LIKE %s OR " . $wpdb->posts . ".post_title LIKE %s ) THEN 1 ELSE 0 END AS gd_titlematch, CASE WHEN ( " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s ) THEN 1 ELSE 0 END AS gd_content", array($s, $s, $s . '%', '% ' . $s . '%', $s, $s . ' %', '% ' . $s . ' %', '% ' . $s));
     }
+
     return $fields;
 }
 
@@ -712,6 +715,8 @@ function searching_filter_where($where) {
 	}
 	
 	$s = trim($s);
+    $s  = wp_specialchars_decode($s ,ENT_QUOTES);
+    $s_A = wp_specialchars_decode($s_A ,ENT_QUOTES);
 
     $where = '';
     $better_search_terms = '';
@@ -733,6 +738,7 @@ function searching_filter_where($where) {
         if (!empty($keywords)) {
             foreach ($keywords as $keyword) {
                 $keyword = trim($keyword);
+                $keyword  = wp_specialchars_decode($keyword ,ENT_QUOTES);
                 if ($keyword != '') {
                     /**
                      * Filter the search query keywords SQL.
@@ -777,6 +783,8 @@ function searching_filter_where($where) {
 	}
 		
     if ($snear != '') {
+
+
         if (is_numeric($gd_session->get('near_me_range')) && !isset($_REQUEST['sdist'])) {
             $dist = $gd_session->get('near_me_range');
         }
@@ -789,6 +797,8 @@ function searching_filter_where($where) {
         $rlon2 = is_numeric(max($lon1, $lon2)) ? max($lon1, $lon2) : '';
         $rlat1 = is_numeric(min($lat1, $lat2)) ? min($lat1, $lat2) : '';
         $rlat2 = is_numeric(max($lat1, $lat2)) ? max($lat1, $lat2) : '';
+
+
 
 	    $where .= " AND ( ( $wpdb->posts.post_title LIKE \"$s\" $better_search_terms)
 			                    $content_where 

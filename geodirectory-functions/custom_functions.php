@@ -2085,11 +2085,7 @@ function geodir_share_this_button_code()
 
 function geodir_listing_bounce_map_pin_on_hover(){
 
-    if(get_option('geodir_listing_hover_bounce_map_pin')) {
-        global $wp_query;
-
-        $show_pin_point = $wp_query->is_main_query();
-        if (!empty($show_pin_point) && is_active_widget(false, "", "geodir_map_v3_listing_map")) {
+    if(get_option('geodir_listing_hover_bounce_map_pin',true)) {
             ?>
             <script>
                 jQuery(function ($) {
@@ -2106,7 +2102,7 @@ function geodir_listing_bounce_map_pin_on_hover(){
             </script>
 
         <?php
-        }
+
     }
 }
 add_action('geodir_after_listing_listview','geodir_listing_bounce_map_pin_on_hover',10);
