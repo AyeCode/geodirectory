@@ -1107,7 +1107,7 @@ function geodir_action_details_taxonomies()
     }
 //{	
     $post_type_info = get_post_type_object($post_type);
-    $listing_label = $post_type_info->labels->singular_name;
+    $listing_label = __($post_type_info->labels->singular_name, 'geodirectory');
 
     if (!empty($post->post_tags)) {
 
@@ -1183,7 +1183,7 @@ function geodir_action_details_taxonomies()
             if (!isset($listing_label)) {
                 $listing_label = '';
             }
-            $taxonomies[$post_type . '_tags'] = wp_sprintf('%s: %l', geodir_ucwords($listing_label . ' ' . __('Tags', 'geodirectory')), $links, (object)$terms);
+            $taxonomies[$post_type . '_tags'] = wp_sprintf(__('%s Tags: %l', 'geodirectory'), geodir_ucwords($listing_label), $links, (object)$terms);
         endif;
 
     }
@@ -1237,10 +1237,20 @@ function geodir_action_details_taxonomies()
         if (!isset($listing_label)) {
             $listing_label = '';
         }
-        $taxonomies[$post_taxonomy] = wp_sprintf('%s: %l', geodir_ucwords($listing_label . ' ' . __('Category', 'geodirectory')), $links, (object)$terms);
+        $taxonomies[$post_taxonomy] = wp_sprintf(__('%s Category: %l', 'geodirectory'), geodir_ucwords($listing_label), $links, (object)$terms);
 
     }
 
+    /**
+     * Filter the taxonomies array before output.
+     *
+     * @since 1.5.9
+     * @param array $taxonomies The array of cats and tags.
+     * @param string $post_type The post type being output.
+     * @param string $listing_label The post type label.
+     * @param string $listing_label The post type label with ucwords function.
+     */
+    $taxonomies = apply_filters('geodir_details_taxonomies_output',$taxonomies,$post_type,$listing_label,geodir_ucwords($listing_label));
 
     if (isset($taxonomies[$post_taxonomy])) {
         echo '<span class="geodir-category">' . $taxonomies[$post_taxonomy] . '</span>';

@@ -17,6 +17,7 @@ Display cpt/category name in the advanced pagination info - CHANGED
 Send notification to Admin when listing edited by Author - ADDED
 Added new filter for search terms `geodir_search_better_search_terms` - ADDED
 Search with single quotes does not return results - FIXED
+Tag and Cat labels on details page easier to translate - CHANGED
 
 v1.5.8
 Local .mo file path points to wrong location - FIXED
