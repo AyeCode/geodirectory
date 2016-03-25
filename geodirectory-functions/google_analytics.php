@@ -72,6 +72,7 @@ function geodir_getGoogleAnalytics($page, $ga_start, $ga_end)
 
     $start_date = '';
     $end_date = '';
+    $dimensions = "&filters=ga:pagePath==" . $page;
     if(isset($_REQUEST['ga_type']) && $_REQUEST['ga_type']=='thisweek'){
         if(!$ga_start){$ga_start = date('Y-m-d', strtotime("-6 day"));}
         if(!$ga_end){$ga_end = date('Y-m-d');}
@@ -96,7 +97,6 @@ function geodir_getGoogleAnalytics($page, $ga_start, $ga_end)
         if(!$ga_end){$ga_end = "yesterday";}
         $dimensions = "&dimensions=ga:country&sort=-ga:pageviews&max-results=5";
     }
-
 
     $APIURL = "https://www.googleapis.com/analytics/v3/data/ga?";
     $ids = "ids=".$id;
