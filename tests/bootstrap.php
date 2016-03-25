@@ -21,32 +21,6 @@ if ( ! $_tests_dir ) {
 }
 
 require_once $_tests_dir . '/includes/functions.php';
-
-
-function _manually_load_plugin() {
-	require dirname( __FILE__ ) . '/../geodirectory.php';
-}
-
-function place_dummy_image_url($url) {
-	$gd_dummy_base_url = getenv( 'GD_DUMMY_BASE_URL' );
-	if ($gd_dummy_base_url) {
-		return $gd_dummy_base_url;
-	} else {
-		return $url;
-	}
-}
-
-function place_dummy_cat_image_url($url) {
-	$gd_dummy_base_url = getenv( 'GD_DUMMY_BASE_URL' );
-	if ($gd_dummy_base_url) {
-		return $gd_dummy_base_url."/cat_icon";
-	} else {
-		return $url;
-	}
-}
-
-
-
 require $_tests_dir . '/includes/bootstrap.php';
 
 if ( $is_selenium_test ) {
@@ -160,4 +134,27 @@ function generateRandomString($length = 10) {
 		$randomString .= $characters[rand(0, $charactersLength - 1)];
 	}
 	return $randomString;
+}
+
+
+function _manually_load_plugin() {
+	require dirname( __FILE__ ) . '/../geodirectory.php';
+}
+
+function place_dummy_image_url($url) {
+	$gd_dummy_base_url = getenv( 'GD_DUMMY_BASE_URL' );
+	if ($gd_dummy_base_url) {
+		return $gd_dummy_base_url;
+	} else {
+		return $url;
+	}
+}
+
+function place_dummy_cat_image_url($url) {
+	$gd_dummy_base_url = getenv( 'GD_DUMMY_BASE_URL' );
+	if ($gd_dummy_base_url) {
+		return $gd_dummy_base_url."/cat_icon";
+	} else {
+		return $url;
+	}
 }
