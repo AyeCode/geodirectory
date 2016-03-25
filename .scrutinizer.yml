@@ -141,9 +141,9 @@ build:
             - cp -r ~/Downloads/gdf_test_child/ $SEL_THEME_BASE_DIR
             - cd $GD_PLUGIN_DIR
             - composer install --no-interaction
-            -
-                    command: 'vendor/bin/phpcs --ignore=tests/*,vendor/* --standard=phpcsdocblocks.xml'
-                    idle_timeout: 1800
+           # -
+            #        command: 'vendor/bin/phpcs --ignore=tests/*,vendor/* --standard=phpcsdocblocks.xml'
+             #       idle_timeout: 1800
             -
                     command: 'vendor/bin/phpunit'
                     idle_timeout: 1800
