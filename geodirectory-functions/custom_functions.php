@@ -735,8 +735,8 @@ function geodir_related_posts_display($request) {
         if ($relate_to == 'category') {
 
             $category_taxonomy = $post_type . $relate_to;
-            if (isset($post->$category_taxonomy) && $post->$category_taxonomy != '')
-                $category = explode(',', trim($post->$category_taxonomy, ','));
+            if (isset($post->{$category_taxonomy}) && $post->{$category_taxonomy} != '')
+                $category = explode(',', trim($post->{$category_taxonomy}, ','));
 
         } elseif ($relate_to == 'tags') {
 
@@ -1584,7 +1584,7 @@ function geodir_show_detail_page_tabs()
                                 echo $related_listing;
                                 break;
                             default: {
-                                if ((isset($post->$tab_index) || (!isset($post->$tab_index) && (strpos($tab_index, 'gd_tab_') !== false || $tab_index == 'link_business'))) && !empty($detail_page_tab['tab_content'])) {
+                                if ((isset($post->{$tab_index}) || (!isset($post->{$tab_index}) && (strpos($tab_index, 'gd_tab_') !== false || $tab_index == 'link_business'))) && !empty($detail_page_tab['tab_content'])) {
                                     echo $detail_page_tab['tab_content'];
                                 }
                             }

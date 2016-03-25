@@ -1100,7 +1100,7 @@ function geodir_action_details_taxonomies()
     if ($preview && !$is_backend_preview) {
         $post_type = $post->listing_type;
         $post_taxonomy = $post_type . 'category';
-        $post->$post_taxonomy = $post->post_category[$post_taxonomy];
+        $post->{$post_taxonomy} = $post->post_category[$post_taxonomy];
     } else {
         $post_type = $post->post_type;
         $post_taxonomy = $post_type . 'category';
@@ -1188,14 +1188,14 @@ function geodir_action_details_taxonomies()
 
     }
 
-    if (!empty($post->$post_taxonomy)) {
+    if (!empty($post->{$post_taxonomy})) {
         $links = array();
         $terms = array();
         $termsOrdered = array();
-        if (!is_array($post->$post_taxonomy)) {
-            $post_term = explode(",", trim($post->$post_taxonomy, ","));
+        if (!is_array($post->{$post_taxonomy})) {
+            $post_term = explode(",", trim($post->{$post_taxonomy}, ","));
         } else {
-            $post_term = $post->$post_taxonomy;
+            $post_term = $post->{$post_taxonomy};
 			
 			if ($preview && !$is_backend_preview) {
 				$post_term = geodir_add_parent_terms($post_term, $post_taxonomy);

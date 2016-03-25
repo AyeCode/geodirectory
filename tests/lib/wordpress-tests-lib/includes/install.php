@@ -45,7 +45,7 @@ foreach ( $wpdb->tables( 'ms_global' ) as $table => $prefixed_table ) {
 
 	// We need to create references to ms global tables.
 	if ( $multisite )
-		$wpdb->$table = $prefixed_table;
+		$wpdb->{$table} = $prefixed_table;
 }
 
 // Prefill a permalink structure so that WP doesn't try to determine one itself.

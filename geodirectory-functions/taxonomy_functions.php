@@ -784,8 +784,8 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
             global $post;
 
             $post_category = geodir_get_post_meta($post->ID, $cat_taxonomy, true);
-            if (empty($post_category) && isset($post->$cat_taxonomy)) {
-                $post_category = $post->$cat_taxonomy;
+            if (empty($post_category) && isset($post->{$cat_taxonomy})) {
+                $post_category = $post->{$cat_taxonomy};
             }
 
             $post_categories = get_post_meta($post->ID, 'post_categories', true);
@@ -1581,8 +1581,8 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
                 } else {
                     $post_terms = '';
 
-                    if (isset($post->$taxonomies)) {
-                        $post_terms = explode(",", trim($post->$taxonomies, ","));
+                    if (isset($post->{$taxonomies})) {
+                        $post_terms = explode(",", trim($post->{$taxonomies}, ","));
                         $post_terms = $post_terms[0];
                     }
 
