@@ -37,27 +37,6 @@ $general_options = apply_filters('geodir_general_options', array(
         'css' => 'min-width:300px;',
         'std' => get_bloginfo('admin_email') // Default value for the page title - changed in settings
     ),
-
-
-    /*array(
-        'name' => __( 'Display Category', 'geodirectory' ),
-        'desc' 		=> __( 'Allow users to select category at add listing page', 'geodirectory' ),
-        'tip' 		=> '',
-        'id' 		=> 'geodir_category_dislay',
-        'css' 		=> 'min-width:300px;',
-        'std' 		=> 'checkbox',
-        'type' 		=> 'select',
-        'class'		=> 'chosen_select',
-        'options' => array_unique(apply_filters('geodir_category_display', array(
-            'select' => __( 'Category drop down', 'geodirectory' ),
-            'checkbox' => __( 'Category checkboxs', 'geodirectory' ),
-            'radio' => __( 'Category radio', 'geodirectory' ),
-            ))
-        )
-    ),
-
-
-    */
     array(
         'name' => __('Allow user to see wp-admin area', 'geodirectory'),
         'desc' => __('Yes', 'geodirectory'),
@@ -202,7 +181,20 @@ $google_analytic_settings = apply_filters('geodir_google_analytic_settings', arr
         'css' => 'min-width:300px;',
         'std' => '' // Default value for the page title - changed in settings
     ),
-
+    array(
+        'name' => __('Hide refresh button', 'geodirectory'),
+        'desc' => __('Hide refresh button to check & refresh new users', 'geodirectory'),
+        'id' => 'geodir_ga_no_refresh',
+        'type' => 'checkbox',
+        'std' => '0'
+    ),
+    array(
+        'name' => __('Time interval for check new users', 'geodirectory'),
+        'desc' => __('Time interval in seconds to check for new users. The new users results will be auto refreshed after this time interval. Leave blank or use 0(zero) to disable auto refresh. Default: 5', 'geodirectory'),
+        'id' => 'geodir_ga_refresh_time',
+        'type' => 'text',
+        'std' => '5'
+    ),
 
     array('type' => 'sectionend', 'id' => 'google_analytic_settings'),
 
