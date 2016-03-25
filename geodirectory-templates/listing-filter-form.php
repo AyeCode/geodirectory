@@ -92,18 +92,18 @@ echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
 
                 <input class="search_text" name="s"
                        value="<?php if (isset($_REQUEST['s']) && trim($_REQUEST['s']) != '') {
-                           echo esc_attr($_REQUEST['s']);
+                           echo esc_attr(stripslashes_deep($_REQUEST['s']));
                        } else {
                            echo $default_search_for_text;
                        } ?>" type="text"
-                       onblur="if (this.value == '') {this.value = '<?php echo $default_search_for_text; ?>';}"
+                       onblur="if (this.value.trim() == '') {this.value = '<?php echo $default_search_for_text; ?>';}"
                        onfocus="if (this.value == '<?php echo $default_search_for_text; ?>') {this.value = '';}"
                        onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);">
 
 
                 <?php
                 if (isset($_REQUEST['snear']) && $_REQUEST['snear'] != '') {
-                    $near = esc_attr(stripslashes($_REQUEST['snear']));
+                    $near = esc_attr(stripslashes_deep($_REQUEST['snear']));
                 } else {
                     $near = $default_near_text;
                 }
@@ -137,7 +137,7 @@ echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
                 ?>
 
                 <input name="snear" class="snear <?php echo $near_class; ?>" type="text" value="<?php echo $near; ?>"
-                       onblur="if (this.value == '') {this.value = ('<?php echo $near; ?>' != '' ? '<?php echo $near; ?>' : '<?php echo $default_near_text; ?>');}"
+                       onblur="if (this.value.trim() == '') {this.value = ('<?php echo $near; ?>' != '' ? '<?php echo $near; ?>' : '<?php echo $default_near_text; ?>');}"
                        onfocus="if (this.value == '<?php echo $default_near_text; ?>' || this.value =='<?php echo $near; ?>') {this.value = '';}"
                        onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);"/>
 

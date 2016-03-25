@@ -2813,6 +2813,7 @@ if (!function_exists('geodir_show_listing_info')) {
                         endif;
                         break;
                     case 'email':
+                        $html_var = $type['htmlvar_name'];
 						if ($type['htmlvar_name'] == 'geodir_email' && !(geodir_is_page('detail') || geodir_is_page('preview'))) {
 							continue; // Remove Send Enquiry | Send To Friend from listings page
 						}

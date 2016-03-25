@@ -564,10 +564,28 @@ function geodir_detail_page_google_analytics()
      */
     do_action('geodir_before_google_analytics');
     
+    $refresh_time = get_option('geodir_ga_refresh_time', 5);
+    /**
+     * Filter the time interval to check & refresh new users results.
+     *
+     * @since 1.5.9
+     *
+     * @param int $refresh_time Time interval to check & refresh new users results.
+     */
+    $refresh_time = apply_filters('geodir_google_analytics_refresh_time', $refresh_time);
+    $refresh_time = absint($refresh_time * 1000);
+    
+    $hide_refresh = get_option('geodir_ga_auto_refresh');
+    
+    $auto_refresh = $hide_refresh && $refresh_time && $refresh_time > 0 ? 1 : 0;
     if (get_option('geodir_ga_stats') && is_user_logged_in() &&  (isset($package_info->google_analytics) && $package_info->google_analytics == '1') && (get_current_user_id()==$post->post_author || current_user_can( 'manage_options' )) ) {
         $page_url = urlencode($_SERVER['REQUEST_URI']);
         ?>
         <script type="text/javascript">
+            var gd_gaTimeOut;
+            var gd_gaTime = parseInt('<?php echo $refresh_time;?>');
+            var gd_gaHideRefresh = <?php echo (int)$hide_refresh;?>;
+            var gd_gaAutoRefresh = <?php echo $auto_refresh;?>;
             ga_data1 = false;
             ga_data2 = false;
             ga_data3 = false;
@@ -575,16 +593,27 @@ function geodir_detail_page_google_analytics()
             ga_data5 = false;
             ga_data6 = false;
             ga_au = 0;
-            jQuery(document).ready(function() {
-                gdga_weekVSweek();
-                
+            jQuery(document).ready(function() {              
                 // Set some global Chart.js defaults.
                 Chart.defaults.global.animationSteps = 60;
                 Chart.defaults.global.animationEasing = 'easeInOutQuart';
                 Chart.defaults.global.responsive = true;
                 Chart.defaults.global.maintainAspectRatio = false;
+                
+                jQuery('.gdga-show-analytics').click(function(e){
+                    jQuery(this).hide();
+                    jQuery('.gdga-analytics-box').show();
+                    gdga_weekVSweek();
+                    gdga_realtime(true);
+                });
 
-                gdga_realtime();
+                if (gd_gaAutoRefresh !== 1) {
+                    jQuery('.fa#gdga-loader-icon').click(function(e){
+                        gdga_refresh();
+                        clearTimeout(gd_gaTimeOut);
+                        gdga_realtime();
+                    });
+                }
             });
 
             function gdga_weekVSweek() {
@@ -622,15 +651,21 @@ function geodir_detail_page_google_analytics()
                 }});
             }
 
-            function gdga_realtime() {
-                jQuery.ajax({url: "<?php echo get_bloginfo('url').'/?ptype=ga&ga_page='.$page_url; ?>&ga_type=realtime", success: function(result){
+            function gdga_realtime(dom_ready) {
+                jQuery.ajax({url: "<?php echo get_bloginfo('url').'/?ptype=ga&ga_page='.$page_url; ?>&ga_type=realtime", success: function(result) {
                     ga_data6 = jQuery.parseJSON(result);
-                    if(ga_data6.error){jQuery('#ga_stats').html(result);return;}
-                    gd_renderRealTime();
+                    if (ga_data6.error) {
+                        jQuery('#ga_stats').html(result);
+                        return;
+                    }
+                    gd_renderRealTime(dom_ready);
                 }});
             }
 
-            function gd_renderRealTime() {
+            function gd_renderRealTime(dom_ready) {
+                if (typeof dom_ready === 'undefined') {
+                    gdga_refresh(true);
+                }
                 ga_au_old = ga_au;
 
                 ga_au = ga_data6.totalsForAllResults["rt:activeUsers"];
@@ -644,11 +679,13 @@ function geodir_detail_page_google_analytics()
                 
                 jQuery('.gd-ActiveUsers-value').html(ga_au);
 
-                // check for new users every 5 seconds
-                setTimeout(function() {
-                    jQuery('.gd-ActiveUsers').removeClass("is-increasing is-decreasing");
-                    gdga_realtime();
-                }, 5000);
+                if (gd_gaTime > 0 && gd_gaAutoRefresh === 1) {
+                    // check for new users every 5 seconds
+                    gd_gaTimeOut = setTimeout(function() {
+                        jQuery('.gd-ActiveUsers').removeClass("is-increasing is-decreasing");
+                        gdga_realtime();
+                    }, gd_gaTime);
+                }
             }
 
             /**
@@ -666,7 +703,7 @@ function geodir_detail_page_google_analytics()
 
                 jQuery('#gdga-chart-container').show();
                 jQuery('#gdga-legend-container').show();
-                jQuery('#gdga-loader-icon').hide();
+                gdga_refresh(true);
                 jQuery('#gdga-select-analytic').show();
                 
                 var data = [];
@@ -710,7 +747,7 @@ function geodir_detail_page_google_analytics()
 
                 jQuery('#gdga-chart-container').show();
                 jQuery('#gdga-legend-container').show();
-                jQuery('#gdga-loader-icon').hide();
+                gdga_refresh(true);
                 jQuery('#gdga-select-analytic').show();
 
                 // Adjust `now` to experiment with different days, for testing only...
@@ -783,7 +820,7 @@ function geodir_detail_page_google_analytics()
 
                 jQuery('#gdga-chart-container').show();
                 jQuery('#gdga-legend-container').show();
-                jQuery('#gdga-loader-icon').hide();
+                gdga_refresh(true);
                 jQuery('#gdga-select-analytic').show();
 
                 // Adjust `now` to experiment with different days, for testing only...
@@ -878,7 +915,7 @@ function geodir_detail_page_google_analytics()
 
             function gdga_select_option() {
                 jQuery('#gdga-select-analytic').hide();
-                jQuery('#gdga-loader-icon').show();
+                gdga_refresh();
 
                 gaType = jQuery('#gdga-select-analytic').val();
 
@@ -890,8 +927,29 @@ function geodir_detail_page_google_analytics()
                     gdga_country();
                 }
             }
+            
+            function gdga_refresh(stop) {
+                if (typeof stop !== 'undefined' && stop) {
+                    if (gd_gaAutoRefresh === 1 || gd_gaHideRefresh == 1) {
+                        jQuery('#gdga-loader-icon').hide();
+                    } else {
+                        jQuery('#gdga-loader-icon').removeClass('fa-spin');
+                    }
+                } else {
+                    if (gd_gaAutoRefresh === 1 || gd_gaHideRefresh == 1) {
+                        jQuery('#gdga-loader-icon').show();
+                    } else {
+                        if (!jQuery('#gdga-loader-icon').hasClass('fa-spin')) {
+                            jQuery('#gdga-loader-icon').addClass('fa-spin');
+                        }
+                    }
+                }
+            }
         </script>
         <style>
+            .geodir-details-sidebar-google-analytics {
+                min-height: 60px;
+            }
             #ga_stats #gd-active-users-container {
                 float: right;
                 margin: 0 0 10px;
@@ -1003,26 +1061,29 @@ function geodir_detail_page_google_analytics()
                     color: red
                 }
             }
+            .fa#gdga-loader-icon {
+                margin: 0 10px 0 -10px;
+                color: #333333;
+                cursor: pointer;
+                -webkit-animation-duration:1.5s;
+                animation-duration:1.5s;
+            }
         </style>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
-
-
-        <span id="ga_stats">
+        <button type="button" class="gdga-show-analytics"><?php _e('Show Google Analytics', 'geodirectory');?></button>
+        <span id="ga_stats" class="gdga-analytics-box" style="display:none">
             <div id="ga-analytics-title"><?php _e("Analytics", 'geodirectory');?></div>
-
             <div id="gd-active-users-container">
-                <div class="gd-ActiveUsers"><?php _e("Active Users:", 'geodirectory');?>
+                <div class="gd-ActiveUsers"><i id="gdga-loader-icon" class="fa fa-refresh fa-spin" title="<?php esc_attr_e("Refresh", 'geodirectory');?>"></i><?php _e("Active Users:", 'geodirectory');?>
                     <b class="gd-ActiveUsers-value">0</b>
                 </div>
             </div>
-
             <select id="gdga-select-analytic" onchange="gdga_select_option();" style="display: none;">
                 <option value="weeks"><?php _e("Last Week vs This Week", 'geodirectory');?></option>
                 <option value="years"><?php _e("This Year vs Last Year", 'geodirectory');?></option>
                 <option value="country"><?php _e("Top Countries", 'geodirectory');?></option>
             </select>
-            <img alt="loader icon" id="gdga-loader-icon" src="<?php echo geodir_plugin_url() . '/geodirectory-assets/images/ajax-loader.gif'; ?>" />
             <div class="Chartjs-figure" id="gdga-chart-container"></div>
             <ol class="Chartjs-legend" id="gdga-legend-container"></ol>
         </span>
@@ -1566,22 +1627,7 @@ function geodir_changes_in_custom_fields_table() {
         delete_option('geodir_listing_page');
 	}
 
-    // updated custom field table(add field to show custom field as a tab)
-    /*if (!$wpdb->get_var("SHOW COLUMNS FROM ".GEODIR_CUSTOM_FIELDS_TABLE." WHERE field = 'show_as_tab'")) {
-		$wpdb->query("ALTER TABLE `".GEODIR_CUSTOM_FIELDS_TABLE."` ADD `show_as_tab` ENUM( '0', '1' ) NOT NULL DEFAULT '0' AFTER `show_on_detail`");
-	}
-	
-	if (!$wpdb->get_var("SHOW COLUMNS FROM ".GEODIR_CUSTOM_FIELDS_TABLE." WHERE field = 'for_admin_use'")) {
-		$wpdb->query("ALTER TABLE `".GEODIR_CUSTOM_FIELDS_TABLE."` ADD `for_admin_use` ENUM( '0', '1' ) NOT NULL DEFAULT '0'");
-	}*/
-
     if (!get_option('geodir_changes_in_custom_fields_table')) {
-
-        $post_types = geodir_get_posttypes();
-
-        /*if(!$wpdb->get_var("SHOW COLUMNS FROM ".GEODIR_CUSTOM_FIELDS_TABLE." WHERE field = 'is_admin'"))
-					$wpdb->query("ALTER TABLE `".GEODIR_CUSTOM_FIELDS_TABLE."` ADD `is_admin` ENUM( '0', '1' ) NOT NULL DEFAULT '0' AFTER `is_default`");*/
-
         $wpdb->query(
             $wpdb->prepare(
                 "UPDATE " . GEODIR_CUSTOM_FIELDS_TABLE . " SET is_default=%s, is_admin=%s WHERE is_default=%s",
@@ -1990,7 +2036,6 @@ function geodir_set_status_draft_to_publish_for_own_post($post)
     if (!empty($post) && $post[0]->post_author == $user_id) {
         $post[0]->post_status = 'publish';
     }
-    //print_r($post) ;
     return $post;
 }
 
@@ -2238,7 +2283,6 @@ function geodir_temp_set_post_attachment()
                             $sub_dir = stripslashes_deep($file_info['dirname']);
 
                         $uploads = wp_upload_dir(trim($sub_dir, '/')); // Array of key => value pairs
-                        $uploads_baseurl = $uploads['baseurl'];
                         $uploads_path = $uploads['basedir'];
 
                         $file_name = $file_info['basename'];
@@ -2318,9 +2362,12 @@ function geodir_default_rating_star_icon()
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @return array User listing count for each post type.
  */
-function geodir_user_post_listing_count()
+function geodir_user_post_listing_count($user_id=null)
 {
     global $wpdb, $plugin_prefix, $current_user;
+    if(!$user_id){
+        $user_id = $current_user->ID;
+    }
 
     $user_id = $current_user->ID;
     $all_postypes = geodir_get_posttypes();
@@ -2341,41 +2388,7 @@ function geodir_user_post_listing_count()
 }
 
 
-/* ------- GET CURRENT USER FAVOURITE LISTING -------*/
-/**
- * Get user's favorite listing count.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
- * @global object $current_user Current user object.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
- * @return array User listing count for each post type.
- */
-function geodir_user_favourite_listing_count()
-{
-    global $wpdb, $plugin_prefix, $current_user;
 
-    $user_id = $current_user->ID;
-    $all_postypes = geodir_get_posttypes();
-    $user_favorites = get_user_meta($user_id, 'gd_user_favourite_post', true);
-    $all_posts = get_option('geodir_favorite_link_user_dashboard');
-
-    $user_listing = array();
-    if (is_array($all_posts) && !empty($all_posts) && is_array($user_favorites) && !empty($user_favorites)) {
-        $user_favorites = "'" . implode("','", $user_favorites) . "'";
-
-        foreach ($all_posts as $ptype) {
-            $total_posts = $wpdb->get_var("SELECT count( ID ) FROM " . $wpdb->prefix . "posts WHERE  post_type='" . $ptype . "' AND post_status = 'publish' AND ID IN (" . $user_favorites . ")");
-
-            if ($total_posts > 0) {
-                $user_listing[$ptype] = $total_posts;
-            }
-        }
-    }
-
-    return $user_listing;
-}
 
 add_filter('geodir_detail_page_tab_list_extend', 'geodir_detail_page_custom_field_tab');
 /**
@@ -2541,8 +2554,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                         case 'time': {
                             $value = '';
                             if ($post->$type['htmlvar_name'] != '')
-                                //$value = date('h:i',strtotime($post->$type['htmlvar_name']));
-                                $value = date(get_option('time_format'), strtotime($post->$type['htmlvar_name']));
+                                $value = date_i18n(get_option('time_format'), strtotime($post->$type['htmlvar_name']));
 
                             if (strpos($field_icon, 'http') !== false) {
                                 $field_icon_af = '';
@@ -2846,11 +2858,8 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                                     $file_paths = '';
                                     foreach ($files as $file) {
                                         if (!empty($file)) {
-                                            $filetype = wp_check_filetype($file);
                                             $image_name_arr = explode('/', $file);
-                                            $curr_img_dir = $image_name_arr[count($image_name_arr) - 2];
                                             $filename = end($image_name_arr);
-                                            $img_name_arr = explode('.', $filename);
 
                                             $arr_file_type = wp_check_filetype($filename);
                                             if (empty($arr_file_type['ext']) || empty($arr_file_type['type'])) {
@@ -2863,7 +2872,6 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                                                 continue; // Invalid file type.
                                             }
 
-                                            //$allowed_file_types = array('application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv', 'text/plain');
                                             $image_file_types = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/bmp', 'image/x-icon');
 
                                             // If the uploaded file is image
@@ -2918,7 +2926,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                      */
                     $html = apply_filters("geodir_tab_show_{$html_var}", $html, $variables_array);
 
-
+                    $fieldset_html = '';
                     if ($field_set_start == 1) {
                         $add_html = false;
                         if ($type['type'] == 'fieldset' && $fieldset_count > 1) {
@@ -3221,7 +3229,7 @@ add_filter('geodir_load_db_language', 'geodir_load_cpt_text_translation');
 function geodir_load_gd_options_text_translation($translation_texts = array()) {
     $translation_texts = !empty( $translation_texts ) && is_array( $translation_texts ) ? $translation_texts : array();
 
-    $gd_options = array('geodir_post_submited_success_email_subject_admin', 'geodir_post_submited_success_email_content_admin', 'geodir_post_submited_success_email_subject', 'geodir_post_submited_success_email_content', 'geodir_forgot_password_subject', 'geodir_forgot_password_content', 'geodir_registration_success_email_subject', 'geodir_registration_success_email_content', 'geodir_post_published_email_subject', 'geodir_post_published_email_content', 'geodir_email_friend_subject', 'geodir_email_friend_content', 'geodir_email_enquiry_subject', 'geodir_email_enquiry_content', 'geodir_post_added_success_msg_content');
+    $gd_options = array('geodir_post_submited_success_email_subject_admin', 'geodir_post_submited_success_email_content_admin', 'geodir_post_submited_success_email_subject', 'geodir_post_submited_success_email_content', 'geodir_forgot_password_subject', 'geodir_forgot_password_content', 'geodir_registration_success_email_subject', 'geodir_registration_success_email_content', 'geodir_post_published_email_subject', 'geodir_post_published_email_content', 'geodir_email_friend_subject', 'geodir_email_friend_content', 'geodir_email_enquiry_subject', 'geodir_email_enquiry_content', 'geodir_post_added_success_msg_content', 'geodir_post_edited_email_subject_admin', 'geodir_post_edited_email_content_admin');
 
     /**
      * Filters the geodirectory option names that requires to add for translation.
@@ -3258,3 +3266,4 @@ add_filter('gd_rating_form_html', 'geodir_font_awesome_rating_form_html', 10, 2)
 add_filter('geodir_get_rating_stars_html', 'geodir_font_awesome_rating_stars_html', 10, 3);
 add_action('wp_head', 'geodir_font_awesome_rating_css');
 add_action('admin_head', 'geodir_font_awesome_rating_css');
+add_action('wp_insert_post', 'geodir_on_wp_insert_post', 10, 3);
