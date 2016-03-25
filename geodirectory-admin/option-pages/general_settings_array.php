@@ -182,15 +182,15 @@ $google_analytic_settings = apply_filters('geodir_google_analytic_settings', arr
         'std' => '' // Default value for the page title - changed in settings
     ),
     array(
-        'name' => __('Hide refresh button', 'geodirectory'),
-        'desc' => __('Hide refresh button to check & refresh new users', 'geodirectory'),
-        'id' => 'geodir_ga_no_refresh',
+        'name' => __('Auto refresh active users?', 'geodirectory'),
+        'desc' => __('If ticked it uses the auto refresh time below, if not it never refreshes unless the refresh button is clicked.', 'geodirectory'),
+        'id' => 'geodir_ga_auto_refresh',
         'type' => 'checkbox',
         'std' => '0'
     ),
     array(
-        'name' => __('Time interval for check new users', 'geodirectory'),
-        'desc' => __('Time interval in seconds to check for new users. The new users results will be auto refreshed after this time interval. Leave blank or use 0(zero) to disable auto refresh. Default: 5', 'geodirectory'),
+        'name' => __('Time interval for auto refresh active users', 'geodirectory'),
+        'desc' => __('Time interval in seconds to auto refresh active users. The active users will be auto refreshed after this time interval. Leave blank or use 0(zero) to disable auto refresh. Default: 5', 'geodirectory'),
         'id' => 'geodir_ga_refresh_time',
         'type' => 'text',
         'std' => '5'

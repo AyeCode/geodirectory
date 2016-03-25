@@ -575,15 +575,17 @@ function geodir_detail_page_google_analytics()
     $refresh_time = apply_filters('geodir_google_analytics_refresh_time', $refresh_time);
     $refresh_time = absint($refresh_time * 1000);
     
-    $hide_refresh = get_option('geodir_ga_no_refresh');
+    $hide_refresh = get_option('geodir_ga_auto_refresh');
     
+    $auto_refresh = $hide_refresh && $refresh_time && $refresh_time > 0 ? 1 : 0;
     if (get_option('geodir_ga_stats') && is_user_logged_in() &&  (isset($package_info->google_analytics) && $package_info->google_analytics == '1') && (get_current_user_id()==$post->post_author || current_user_can( 'manage_options' )) ) {
         $page_url = urlencode($_SERVER['REQUEST_URI']);
         ?>
         <script type="text/javascript">
             var gd_gaTimeOut;
             var gd_gaTime = parseInt('<?php echo $refresh_time;?>');
-            var gd_gaNoRefresh = <?php echo (int)$hide_refresh;?>;
+            var gd_gaHideRefresh = <?php echo (int)$hide_refresh;?>;
+            var gd_gaAutoRefresh = <?php echo $auto_refresh;?>;
             ga_data1 = false;
             ga_data2 = false;
             ga_data3 = false;
@@ -591,22 +593,27 @@ function geodir_detail_page_google_analytics()
             ga_data5 = false;
             ga_data6 = false;
             ga_au = 0;
-            jQuery(document).ready(function() {
-                gdga_weekVSweek();
-                
+            jQuery(document).ready(function() {              
                 // Set some global Chart.js defaults.
                 Chart.defaults.global.animationSteps = 60;
                 Chart.defaults.global.animationEasing = 'easeInOutQuart';
                 Chart.defaults.global.responsive = true;
                 Chart.defaults.global.maintainAspectRatio = false;
-
-                gdga_realtime(true);
                 
-                jQuery('.fa#gdga-loader-icon').click(function(e){
-                    gdga_refresh();
-                    clearTimeout(gd_gaTimeOut);
-                    gdga_realtime();
+                jQuery('.gdga-show-analytics').click(function(e){
+                    jQuery(this).hide();
+                    jQuery('.gdga-analytics-box').show();
+                    gdga_weekVSweek();
+                    gdga_realtime(true);
                 });
+
+                if (gd_gaAutoRefresh !== 1) {
+                    jQuery('.fa#gdga-loader-icon').click(function(e){
+                        gdga_refresh();
+                        clearTimeout(gd_gaTimeOut);
+                        gdga_realtime();
+                    });
+                }
             });
 
             function gdga_weekVSweek() {
@@ -672,16 +679,12 @@ function geodir_detail_page_google_analytics()
                 
                 jQuery('.gd-ActiveUsers-value').html(ga_au);
 
-                if (gd_gaTime > 0) {
+                if (gd_gaTime > 0 && gd_gaAutoRefresh === 1) {
                     // check for new users every 5 seconds
                     gd_gaTimeOut = setTimeout(function() {
                         jQuery('.gd-ActiveUsers').removeClass("is-increasing is-decreasing");
                         gdga_realtime();
                     }, gd_gaTime);
-                } else {
-                    jQuery('.gd-ActiveUsers').removeClass("is-increasing is-decreasing");
-                    clearTimeout(gd_gaTimeOut);
-                    gdga_realtime();
                 }
             }
 
@@ -927,13 +930,13 @@ function geodir_detail_page_google_analytics()
             
             function gdga_refresh(stop) {
                 if (typeof stop !== 'undefined' && stop) {
-                    if (gd_gaNoRefresh === 1) {
+                    if (gd_gaAutoRefresh === 1 || gd_gaHideRefresh == 1) {
                         jQuery('#gdga-loader-icon').hide();
                     } else {
                         jQuery('#gdga-loader-icon').removeClass('fa-spin');
                     }
                 } else {
-                    if (gd_gaNoRefresh === 1) {
+                    if (gd_gaAutoRefresh === 1 || gd_gaHideRefresh == 1) {
                         jQuery('#gdga-loader-icon').show();
                     } else {
                         if (!jQuery('#gdga-loader-icon').hasClass('fa-spin')) {
@@ -944,6 +947,9 @@ function geodir_detail_page_google_analytics()
             }
         </script>
         <style>
+            .geodir-details-sidebar-google-analytics {
+                min-height: 60px;
+            }
             #ga_stats #gd-active-users-container {
                 float: right;
                 margin: 0 0 10px;
@@ -1056,7 +1062,7 @@ function geodir_detail_page_google_analytics()
                 }
             }
             .fa#gdga-loader-icon {
-                margin: 0 0 0 3px;
+                margin: 0 10px 0 -10px;
                 color: #333333;
                 cursor: pointer;
                 -webkit-animation-duration:1.5s;
@@ -1065,10 +1071,11 @@ function geodir_detail_page_google_analytics()
         </style>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
-        <span id="ga_stats">
-            <div id="ga-analytics-title"><?php _e("Analytics", 'geodirectory');?></div>&nbsp;<i id="gdga-loader-icon" class="fa fa-refresh fa-spin" title="<?php esc_attr_e("Refresh", 'geodirectory');?>"></i>
+        <button type="button" class="gdga-show-analytics"><?php _e('Show Google Analytics', 'geodirectory');?></button>
+        <span id="ga_stats" class="gdga-analytics-box" style="display:none">
+            <div id="ga-analytics-title"><?php _e("Analytics", 'geodirectory');?></div>
             <div id="gd-active-users-container">
-                <div class="gd-ActiveUsers"><?php _e("Active Users:", 'geodirectory');?>
+                <div class="gd-ActiveUsers"><i id="gdga-loader-icon" class="fa fa-refresh fa-spin" title="<?php esc_attr_e("Refresh", 'geodirectory');?>"></i><?php _e("Active Users:", 'geodirectory');?>
                     <b class="gd-ActiveUsers-value">0</b>
                 </div>
             </div>
