@@ -2114,7 +2114,7 @@ function geodir_output_favourite_html_listings( $post_id){
 }
 
 
-do_action( 'geodir_listing_after_pinpoint', 'geodir_output_pinpoint_html_listings',1,2 );
+add_action( 'geodir_listing_after_pinpoint', 'geodir_output_pinpoint_html_listings',1,2 );
 
 function geodir_output_pinpoint_html_listings( $post_id, $post){
     global $wp_query;

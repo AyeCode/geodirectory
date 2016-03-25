@@ -2346,7 +2346,7 @@ if (!function_exists('geodir_show_listing_info')) {
                             $html .= '<span class="geodir-i-location" style="' . $field_icon . '">' . $field_icon_af;
                             $html .= (trim($type['site_title'])) ? __($type['site_title'], 'geodirectory') . ': ' : '&nbsp;';
                             $html .= '</span>';
-                            //print_r($_POST);
+
                             if ($preview) {
                                 $html .= stripslashes($post->{$html_var}) . $addition_fields . '</p></div>';
                             } else {
@@ -2618,6 +2618,7 @@ if (!function_exists('geodir_show_listing_info')) {
                     case 'radio':
 
                         $html_var = $type['htmlvar_name'];
+                        if(!isset($post->{$type['htmlvar_name']})){continue;}
                         $html_val = __($post->{$type['htmlvar_name']}, 'geodirectory');
                         if ($post->{$type['htmlvar_name']} != ''):
 
@@ -2706,7 +2707,7 @@ if (!function_exists('geodir_show_listing_info')) {
                     case 'select':
 
                         $html_var = $type['htmlvar_name'];
-
+                        if(!isset($post->{$type['htmlvar_name']})){continue;}
                         if ($post->{$type['htmlvar_name']}):
 							$field_value = __($post->{$type['htmlvar_name']}, 'geodirectory');
 							
