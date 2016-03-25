@@ -117,7 +117,7 @@ function geodir_user_show_favourites($user_id='',$output_type='select'){
 function geodir_user_show_listings($user_id='',$output_type='select'){
 
     $show_listing_link_user_dashboard = get_option('geodir_listing_link_user_dashboard');
-    $user_listing = geodir_user_post_listing_count();
+    $user_listing = geodir_user_post_listing_count($user_id);
 
     if (!empty($show_listing_link_user_dashboard) && !empty($user_listing)) {
         $listing_links = '';

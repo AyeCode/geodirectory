@@ -2362,11 +2362,15 @@ function geodir_default_rating_star_icon()
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @return array User listing count for each post type.
  */
-function geodir_user_post_listing_count()
+function geodir_user_post_listing_count($user_id=null)
 {
     global $wpdb, $plugin_prefix, $current_user;
+    if(!$user_id){
+        $user_id = $current_user->ID;
+    }
 
     $user_id = $current_user->ID;
+    $all_postypes = geodir_get_posttypes();
     $all_posts = get_option('geodir_listing_link_user_dashboard');
 
     $user_listing = array();
