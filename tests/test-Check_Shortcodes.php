@@ -14,12 +14,6 @@ class CheckShortcodes extends WP_UnitTestCase
         $this->assertContains( 'geodir-map-home-page', $output );
     }
 
-    public function testCptCategoriesShortcode()
-    {
-        $output = do_shortcode('[gd_cpt_categories show_count=1]');
-        $this->assertContains( 'gd-cptcats-widget', $output );
-    }
-
     public function testListingMapShortcode()
     {
         $output = do_shortcode('[gd_listing_map width=100% height=300 scrollwheel=false sticky=true]');
@@ -116,13 +110,7 @@ class CheckShortcodes extends WP_UnitTestCase
         $this->assertTrue(is_int($post_id));
 
     }
-
-    public function texstAdvSearchShortcode()
-    {
-        $output = do_shortcode('[gd_advanced_search]');
-        $this->assertContains( 'geodir-map-home-page', $output );
-    }
-
+    
     public function texstListingsShortcode()
     {
         $output = do_shortcode('[gd_listings post_type="gd_place" category="1,3" post_number="10" list_sort="high_review"]');
