@@ -306,7 +306,7 @@ if (!function_exists('geodir_save_listing')) {
                 $address = $prefix . 'address';
 
                 if (isset($request_info[$address]) && $request_info[$address] != '') {
-                    $gd_post_info[$address] = $request_info[$address];
+                    $gd_post_info[$address] = wp_slash($request_info[$address]);
                 }
 
                 if ($extrafields != '') {

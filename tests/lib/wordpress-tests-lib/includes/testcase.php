@@ -366,7 +366,7 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 
 	function assertEqualFields( $object, $fields ) {
 		foreach( $fields as $field_name => $field_value ) {
-			if ( $object->$field_name != $field_value ) {
+			if ( $object->{$field_name} != $field_value ) {
 				$this->fail();
 			}
 		}
@@ -565,7 +565,7 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 		$not_false = $not_true = array(); // properties that were not set to expected values
 
 		foreach ( $all as $query_thing ) {
-			$result = is_callable( $query_thing ) ? call_user_func( $query_thing ) : $wp_query->$query_thing;
+			$result = is_callable( $query_thing ) ? call_user_func( $query_thing ) : $wp_query->{$query_thing};
 
 			if ( in_array( $query_thing, $true ) ) {
 				if ( ! $result ) {
