@@ -5,7 +5,7 @@
  * @package     GeoDirectory
  * @copyright   2016 AyeCode Ltd
  * @license     GPL-2.0+
- * @since 1.0.0
+ * @since       1.0.0
  *
  * @wordpress-plugin
  * Plugin Name: GeoDirectory
