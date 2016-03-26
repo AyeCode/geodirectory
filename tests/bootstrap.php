@@ -27,38 +27,12 @@ if ( $is_selenium_test ) {
 	require dirname( __FILE__ ) . '/selenium/base.php';
 }
 
-function _manually_load_plugin() {
+if ( ! $is_selenium_test ) {
 	require dirname( __FILE__ ) . '/../geodirectory.php';
-}
-if ( ! $is_selenium_test ) {
-	tests_add_filter('muplugins_loaded', '_manually_load_plugin');
-}
-
-function place_dummy_image_url($url) {
-	$gd_dummy_base_url = getenv( 'GD_DUMMY_BASE_URL' );
-	if ($gd_dummy_base_url) {
-		return $gd_dummy_base_url;
-	} else {
-		return $url;
-	}
-}
-if ( ! $is_selenium_test ) {
 	tests_add_filter('place_dummy_image_url', 'place_dummy_image_url');
-}
-
-function place_dummy_cat_image_url($url) {
-	$gd_dummy_base_url = getenv( 'GD_DUMMY_BASE_URL' );
-	if ($gd_dummy_base_url) {
-		return $gd_dummy_base_url."/cat_icon";
-	} else {
-		return $url;
-	}
-}
-if ( ! $is_selenium_test ) {
 	tests_add_filter('place_dummy_cat_image_url', 'place_dummy_cat_image_url');
-}
 
-if ( ! $is_selenium_test ) {
+
 	global $current_user;
 	$current_user = new WP_User(1);
 	$current_user->set_role('administrator');
@@ -160,4 +134,22 @@ function generateRandomString($length = 10) {
 		$randomString .= $characters[rand(0, $charactersLength - 1)];
 	}
 	return $randomString;
+}
+
+function place_dummy_image_url($url) {
+	$gd_dummy_base_url = getenv( 'GD_DUMMY_BASE_URL' );
+	if ($gd_dummy_base_url) {
+		return $gd_dummy_base_url;
+	} else {
+		return $url;
+	}
+}
+
+function place_dummy_cat_image_url($url) {
+	$gd_dummy_base_url = getenv( 'GD_DUMMY_BASE_URL' );
+	if ($gd_dummy_base_url) {
+		return $gd_dummy_base_url."/cat_icon";
+	} else {
+		return $url;
+	}
 }
