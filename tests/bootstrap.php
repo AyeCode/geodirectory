@@ -28,7 +28,7 @@ if ( $is_selenium_test ) {
 }
 
 if ( ! $is_selenium_test ) {
-	tests_add_filter('muplugins_loaded', '_manually_load_plugin');
+	require dirname( __FILE__ ) . '/../geodirectory.php';
 	tests_add_filter('place_dummy_image_url', 'place_dummy_image_url');
 	tests_add_filter('place_dummy_cat_image_url', 'place_dummy_cat_image_url');
 
@@ -134,11 +134,6 @@ function generateRandomString($length = 10) {
 		$randomString .= $characters[rand(0, $charactersLength - 1)];
 	}
 	return $randomString;
-}
-
-
-function _manually_load_plugin() {
-	require dirname( __FILE__ ) . '/../geodirectory.php';
 }
 
 function place_dummy_image_url($url) {
