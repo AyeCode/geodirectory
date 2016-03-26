@@ -15,6 +15,7 @@ build:
                     web_root: '/home/scrutinizer/web/'
                     host: 'www.test.ci'
         variables:
+            IS_SELENIUM_TEST: 'true'
             WP_VERSION: '4.4.2'
             WP_MULTISITE: '0'
             WEB_BASE_DIR: '/home/scrutinizer/web/'
