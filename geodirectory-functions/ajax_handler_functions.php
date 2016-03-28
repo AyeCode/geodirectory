@@ -359,7 +359,7 @@ function geodir_ajax_handler() {
 			$filter_terms = array();
 			
 			foreach ($terms_o as $term) {	
-				if ($term->count > 0) {
+				if (isset($term->count) && $term->count > 0) {
 					$filter_terms[] = $term;
 				}
 			}

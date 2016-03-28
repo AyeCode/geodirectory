@@ -10,13 +10,13 @@
 	<testsuites>
 		<testsuite>
 			<directory prefix="test-" suffix=".php">./tests/</directory>
-			<!--<directory prefix="stest-" suffix=".php">./tests/selenium/</directory>-->
-		</testsuite>
-	</testsuites>
+            <!--<directory prefix="stest-" suffix=".php">./tests/selenium/</directory>-->
+        </testsuite>
+    </testsuites>
 
-	<filter>
-		<whitelist processUncoveredFilesFromWhitelist="true">
-			<!--<directory suffix=".php">./geodirectory-admin</directory>-->
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <!--<directory suffix=".php">./geodirectory-admin</directory>-->
 			<!--<directory suffix=".php">./geodirectory-functions</directory>-->
 			<!--<directory suffix=".php">./geodirectory-templates</directory>-->
 			<!--<directory suffix=".php">./geodirectory-widgets</directory>-->

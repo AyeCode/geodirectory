@@ -2256,16 +2256,16 @@ if (!function_exists('geodir_show_listing_info')) {
                                 $show_city_in_address = apply_filters('geodir_show_city_in_address', false);
                                 if (isset($extra_fields['show_city']) && $extra_fields['show_city'] && $show_city_in_address) {
                                     $field = $type['htmlvar_name'] . '_city';
-                                    if ($post->$field) {
-                                        $addition_fields .= ', ' . $post->$field;
+                                    if ($post->{$field}) {
+                                        $addition_fields .= ', ' . $post->{$field};
                                     }
                                 }
 
 
                                 if (isset($extra_fields['show_zip']) && $extra_fields['show_zip']) {
                                     $field = $type['htmlvar_name'] . '_zip';
-                                    if ($post->$field) {
-                                        $addition_fields .= ', ' . $post->$field;
+                                    if ($post->{$field}) {
+                                        $addition_fields .= ', ' . $post->{$field};
                                     }
                                 }
 
@@ -2321,7 +2321,7 @@ if (!function_exists('geodir_show_listing_info')) {
 						
 						}*/
 
-                        if ($post->$html_var):
+                        if ($post->{$html_var}):
 
                             if (strpos($field_icon, 'http') !== false) {
                                 $field_icon_af = '';
@@ -2346,9 +2346,9 @@ if (!function_exists('geodir_show_listing_info')) {
                             $html .= '<span class="geodir-i-location" style="' . $field_icon . '">' . $field_icon_af;
                             $html .= (trim($type['site_title'])) ? __($type['site_title'], 'geodirectory') . ': ' : '&nbsp;';
                             $html .= '</span>';
-                            //print_r($_POST);
+
                             if ($preview) {
-                                $html .= stripslashes($post->$html_var) . $addition_fields . '</p></div>';
+                                $html .= stripslashes($post->{$html_var}) . $addition_fields . '</p></div>';
                             } else {
                                 if ($post->post_address) {
                                     $html .= '<span itemprop="streetAddress">' . $post->post_address . '</span><br>';
@@ -2371,7 +2371,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                         endif;
 
-                        $variables_array['value'] = $post->$html_var;
+                        $variables_array['value'] = $post->{$html_var};
 
                         break;
 
@@ -2618,6 +2618,7 @@ if (!function_exists('geodir_show_listing_info')) {
                     case 'radio':
 
                         $html_var = $type['htmlvar_name'];
+                        if(!isset($post->{$type['htmlvar_name']})){continue;}
                         $html_val = __($post->{$type['htmlvar_name']}, 'geodirectory');
                         if ($post->{$type['htmlvar_name']} != ''):
 
@@ -2669,7 +2670,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                         $html_var = $type['htmlvar_name'];
 
-                        if ((int)$post->$html_var == 1):
+                        if ((int)$post->{$html_var} == 1):
 
                             if ($post->{$type['htmlvar_name']} == '1'):
                                 $html_val = __('Yes', 'geodirectory');
@@ -2706,16 +2707,16 @@ if (!function_exists('geodir_show_listing_info')) {
                     case 'select':
 
                         $html_var = $type['htmlvar_name'];
-
+                        if(!isset($post->{$type['htmlvar_name']})){continue;}
                         if ($post->{$type['htmlvar_name']}):
-							$field_value = __($post->$type['htmlvar_name'], 'geodirectory');
+							$field_value = __($post->{$type['htmlvar_name']}, 'geodirectory');
 							
 							if (!empty($type['option_values'])) {
 								$cf_option_values = geodir_string_values_to_options(stripslashes_deep($type['option_values']), true);
 								
 								if (!empty($cf_option_values)) {
 									foreach ($cf_option_values as $cf_option_value) {
-										if (isset($cf_option_value['value']) && $cf_option_value['value'] == $post->$type['htmlvar_name']) {
+										if (isset($cf_option_value['value']) && $cf_option_value['value'] == $post->{$type['htmlvar_name']}) {
 											$field_value = $cf_option_value['label'];
 										}
 									}
@@ -2768,7 +2769,7 @@ if (!function_exists('geodir_show_listing_info')) {
                                 $field_icon = '';
                             }
 							
-							$field_values = explode(',', trim($post->$type['htmlvar_name'], ","));
+							$field_values = explode(',', trim($post->{$type['htmlvar_name']}, ","));
 
                             $option_values = array();
 							if (!empty($type['option_values'])) {
@@ -2806,13 +2807,14 @@ if (!function_exists('geodir_show_listing_info')) {
                                 
 								$html .= '</ul>';
                             } else {
-                                $html .= $post->$type['htmlvar_name'];
+                                $html .= $post->{$type['htmlvar_name']};
                             }
 
                             $html .= '</div>';
                         endif;
                         break;
                     case 'email':
+                        $html_var = $type['htmlvar_name'];
 						if ($type['htmlvar_name'] == 'geodir_email' && !(geodir_is_page('detail') || geodir_is_page('preview'))) {
 							continue; // Remove Send Enquiry | Send To Friend from listings page
 						}
@@ -3065,9 +3067,9 @@ if (!function_exists('geodir_show_listing_info')) {
                         break;
                     case 'taxonomy': {
                         $html_var = $type['htmlvar_name'];
-                        if ($html_var == $post->post_type . 'category' && !empty($post->$html_var)) {
+                        if ($html_var == $post->post_type . 'category' && !empty($post->{$html_var})) {
                             $post_taxonomy = $post->post_type . 'category';
-                            $field_value = $post->$html_var;
+                            $field_value = $post->{$html_var};
                             $links = array();
                             $terms = array();
                             $termsOrdered = array();

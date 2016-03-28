@@ -2362,11 +2362,15 @@ function geodir_default_rating_star_icon()
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @return array User listing count for each post type.
  */
-function geodir_user_post_listing_count()
+function geodir_user_post_listing_count($user_id=null)
 {
     global $wpdb, $plugin_prefix, $current_user;
+    if(!$user_id){
+        $user_id = $current_user->ID;
+    }
 
     $user_id = $current_user->ID;
+    $all_postypes = geodir_get_posttypes();
     $all_posts = get_option('geodir_listing_link_user_dashboard');
 
     $user_listing = array();
@@ -2419,12 +2423,12 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                 
                 $type = $field;
                 $field_name = $field['htmlvar_name'];
-                if (empty($geodir_post_info) && geodir_is_page('preview') && $field_name != '' && !isset($post->$field_name) && isset($_REQUEST[$field_name])) {
-                    $post->$field_name = $_REQUEST[$field_name];
+                if (empty($geodir_post_info) && geodir_is_page('preview') && $field_name != '' && !isset($post->{$field_name}) && isset($_REQUEST[$field_name])) {
+                    $post->{$field_name} = $_REQUEST[$field_name];
                 }
 
-                if (isset($field['show_as_tab']) && $field['show_as_tab'] == 1 && ((isset($post->$field_name) && $post->$field_name != '') || $field['type'] == 'fieldset') && in_array($field['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file'))) {
-                    if ($type['type'] == 'datepicker' && ($post->$type['htmlvar_name'] == '' || $post->$type['htmlvar_name'] == '0000-00-00')) {
+                if (isset($field['show_as_tab']) && $field['show_as_tab'] == 1 && ((isset($post->{$field_name}) && $post->{$field_name} != '') || $field['type'] == 'fieldset') && in_array($field['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file'))) {
+                    if ($type['type'] == 'datepicker' && ($post->{$type['htmlvar_name']} == '' || $post->{$type['htmlvar_name']} == '0000-00-00')) {
                         continue;
                     }
 
@@ -2447,11 +2451,11 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
             foreach ($custom_fields as $field) {
                 $count_field++;
                 $field_name = $field['htmlvar_name'];
-                if (empty($geodir_post_info) && geodir_is_page('preview') && $field_name != '' && !isset($post->$field_name) && isset($_REQUEST[$field_name])) {
-                    $post->$field_name = $_REQUEST[$field_name];
+                if (empty($geodir_post_info) && geodir_is_page('preview') && $field_name != '' && !isset($post->{$field_name}) && isset($_REQUEST[$field_name])) {
+                    $post->{$field_name} = $_REQUEST[$field_name];
                 }
 
-                if (isset($field['show_as_tab']) && $field['show_as_tab'] == 1 && ((isset($post->$field_name) && $post->$field_name != '') || $field['type'] == 'fieldset') && in_array($field['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file'))) {
+                if (isset($field['show_as_tab']) && $field['show_as_tab'] == 1 && ((isset($post->{$field_name}) && $post->{$field_name} != '') || $field['type'] == 'fieldset') && in_array($field['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file'))) {
                     $label = $field['site_title'] != '' ? $field['site_title'] : $field['admin_title'];
                     $site_title = trim($field['site_title']);
                     $type = $field;
@@ -2460,7 +2464,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                     $field_icon = '';
                     $variables_array = array();
 
-                    if ($type['type'] == 'datepicker' && ($post->$type['htmlvar_name'] == '' || $post->$type['htmlvar_name'] == '0000-00-00')) {
+                    if ($type['type'] == 'datepicker' && ($post->{$type['htmlvar_name']} == '' || $post->{$type['htmlvar_name']} == '0000-00-00')) {
                         continue;
                     }
 
@@ -2469,7 +2473,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                         $variables_array['post_id'] = $post->ID;
                         $variables_array['label'] = __($type['site_title'], 'geodirectory');
                         $variables_array['value'] = '';
-                        $variables_array['value'] = $post->$type['htmlvar_name'];
+                        $variables_array['value'] = $post->{$type['htmlvar_name']};
                     }
 
                     if (strpos($type['field_icon'], 'http') !== false) {
@@ -2505,7 +2509,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                                 $field_icon = '';
                             }
                             
-                            $a_url = geodir_parse_custom_field_url($post->$type['htmlvar_name']);
+                            $a_url = geodir_parse_custom_field_url($post->{$type['htmlvar_name']});
 
                             $website = !empty($a_url['url']) ? $a_url['url'] : '';
                             $title = !empty($a_url['label']) ? $a_url['label'] : $type['site_title'];
@@ -2544,13 +2548,13 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                             if ($field_set_start == 1 && $site_title != '') {
                                 $html .= ' ' . __($site_title, 'geodirectory') . ': ';
                             }
-                            $html .= ' </span>' . stripslashes($post->$type['htmlvar_name']) . '</div>';
+                            $html .= ' </span>' . stripslashes($post->{$type['htmlvar_name']}) . '</div>';
                         }
                             break;
                         case 'time': {
                             $value = '';
-                            if ($post->$type['htmlvar_name'] != '')
-                                $value = date_i18n(get_option('time_format'), strtotime($post->$type['htmlvar_name']));
+                            if ($post->{$type['htmlvar_name']} != '')
+                                $value = date_i18n(get_option('time_format'), strtotime($post->{$type['htmlvar_name']}));
 
                             if (strpos($field_icon, 'http') !== false) {
                                 $field_icon_af = '';
@@ -2582,10 +2586,10 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
 
                             $date_format = str_replace($search, $replace, $date_format);
 
-                            $post_htmlvar_value = $date_format == 'd/m/Y' ? str_replace('/', '-', $post->$type['htmlvar_name']) : $post->$type['htmlvar_name']; // PHP doesn't work well with dd/mm/yyyy format
+                            $post_htmlvar_value = $date_format == 'd/m/Y' ? str_replace('/', '-', $post->{$type['htmlvar_name']}) : $post->{$type['htmlvar_name']}; // PHP doesn't work well with dd/mm/yyyy format
 
                             $value = '';
-                            if ($post->$type['htmlvar_name'] != '')
+                            if ($post->{$type['htmlvar_name']} != '')
                                 $value = date($date_format, strtotime($post_htmlvar_value));
 
                             if (strpos($field_icon, 'http') !== false) {
@@ -2622,25 +2626,25 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                             if ($field_set_start == 1 && $site_title != '') {
                                 $html .= ' ' . __($site_title, 'geodirectory') . ': ';
                             }
-                            $html .= ' </span>' . stripslashes($post->$type['htmlvar_name']) . '</div>';
+                            $html .= ' </span>' . stripslashes($post->{$type['htmlvar_name']}) . '</div>';
                         }
                             break;
                         case 'radio': {
 
-                            if ($post->$type['htmlvar_name'] != '') {
-                                if ($post->$type['htmlvar_name'] == 'f' || $post->$type['htmlvar_name'] == '0') {
+                            if ($post->{$type['htmlvar_name']} != '') {
+                                if ($post->{$type['htmlvar_name']} == 'f' || $post->{$type['htmlvar_name']} == '0') {
                                     $html_val = __('No', 'geodirectory');
-                                } else if ($post->$type['htmlvar_name'] == 't' || $post->$type['htmlvar_name'] == '1') {
+                                } else if ($post->{$type['htmlvar_name']} == 't' || $post->{$type['htmlvar_name']} == '1') {
                                     $html_val = __('Yes', 'geodirectory');
                                 } else {
-                                    $html_val = __($post->$type['htmlvar_name'], 'geodirectory');
+                                    $html_val = __($post->{$type['htmlvar_name']}, 'geodirectory');
                                     
                                     if (!empty($type['option_values'])) {
                                         $cf_option_values = geodir_string_values_to_options(stripslashes_deep($type['option_values']), true);
                                         
                                         if (!empty($cf_option_values)) {
                                             foreach ($cf_option_values as $cf_option_value) {
-                                                if (isset($cf_option_value['value']) && $cf_option_value['value'] == $post->$type['htmlvar_name']) {
+                                                if (isset($cf_option_value['value']) && $cf_option_value['value'] == $post->{$type['htmlvar_name']}) {
                                                     $html_val = $cf_option_value['label'];
                                                 }
                                             }
@@ -2673,9 +2677,9 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                             $html_var = $type['htmlvar_name'];
                             $html_val = $type['htmlvar_name'];
 
-                            if ((int)$post->$html_var == 1) {
+                            if ((int)$post->{$html_var} == 1) {
 
-                                if ($post->$type['htmlvar_name'] == '1') {
+                                if ($post->{$type['htmlvar_name']} == '1') {
                                     $html_val = __('Yes', 'geodirectory');
                                 } else {
                                     $html_val = __('No', 'geodirectory');
@@ -2712,14 +2716,14 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                                 $field_icon = '';
                             }
                             
-                            $field_value = __($post->$type['htmlvar_name'], 'geodirectory');
+                            $field_value = __($post->{$type['htmlvar_name']}, 'geodirectory');
                             
                             if (!empty($type['option_values'])) {
                                 $cf_option_values = geodir_string_values_to_options(stripslashes_deep($type['option_values']), true);
                                 
                                 if (!empty($cf_option_values)) {
                                     foreach ($cf_option_values as $cf_option_value) {
-                                        if (isset($cf_option_value['value']) && $cf_option_value['value'] == $post->$type['htmlvar_name']) {
+                                        if (isset($cf_option_value['value']) && $cf_option_value['value'] == $post->{$type['htmlvar_name']}) {
                                             $field_value = $cf_option_value['label'];
                                         }
                                     }
@@ -2736,8 +2740,8 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                         }
                             break;
                         case 'multiselect': {
-                            if (is_array($post->$type['htmlvar_name'])) {
-                                $post->$type['htmlvar_name'] = implode(', ', $post->$type['htmlvar_name']);
+                            if (is_array($post->{$type['htmlvar_name']})) {
+                                $post->{$type['htmlvar_name']} = implode(', ', $post->{$type['htmlvar_name']});
                             }
 
                             if (strpos($field_icon, 'http') !== false) {
@@ -2749,7 +2753,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                                 $field_icon = '';
                             }
 
-                            $field_values = explode(',', trim($post->$type['htmlvar_name'], ","));
+                            $field_values = explode(',', trim($post->{$type['htmlvar_name']}, ","));
 
                             $option_values = array();
                             if (!empty($type['option_values'])) {
@@ -2779,7 +2783,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                                 }
                                 $html .= '</ul>';
                             } else {
-                                $html .= $post->$type['htmlvar_name'];
+                                $html .= $post->{$type['htmlvar_name']};
                             }
                             $html .= '</div>';
                         }
@@ -2800,7 +2804,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                             if ($field_set_start == 1 && $site_title != '') {
                                 $html .= ' ' . __($site_title, 'geodirectory') . ': ';
                             }
-                            $html .= ' </span>' . stripslashes($post->$type['htmlvar_name']) . '</div>';
+                            $html .= ' </span>' . stripslashes($post->{$type['htmlvar_name']}) . '</div>';
                         }
                             break;
                         case 'textarea': {
@@ -2819,7 +2823,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                             if ($field_set_start == 1 && $site_title != '') {
                                 $html .= ' ' . __($site_title, 'geodirectory') . ': ';
                             }
-                            $html .= '</span>' . wpautop(stripslashes($post->$type['htmlvar_name'])) . '</div>';
+                            $html .= '</span>' . wpautop(stripslashes($post->{$type['htmlvar_name']})) . '</div>';
                         }
                             break;
                         case 'html': {
@@ -2838,14 +2842,14 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                             if ($field_set_start == 1 && $site_title != '') {
                                 $html .= ' ' . __($site_title, 'geodirectory') . ': ';
                             }
-                            $html .= ' </span>' . wpautop(stripslashes($post->$type['htmlvar_name'])) . '</div>';
+                            $html .= ' </span>' . wpautop(stripslashes($post->{$type['htmlvar_name']})) . '</div>';
                         }
                         break;
                         case 'file': {
                             $html_var = $type['htmlvar_name'];
 
-                            if (!empty($post->$type['htmlvar_name'])) {
-                                $files = explode(",", $post->$type['htmlvar_name']);
+                            if (!empty($post->{$type['htmlvar_name']})) {
+                                $files = explode(",", $post->{$type['htmlvar_name']});
 
                                 if (!empty($files)) {
                                     $extra_fields = !empty($type['extra_fields']) ? maybe_unserialize($type['extra_fields']) : NULL;

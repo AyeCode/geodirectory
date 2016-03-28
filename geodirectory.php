@@ -5,13 +5,13 @@
  * @package     GeoDirectory
  * @copyright   2016 AyeCode Ltd
  * @license     GPL-2.0+
- * @since 1.0.0
+ * @since       1.0.0
  *
  * @wordpress-plugin
  * Plugin Name: GeoDirectory
  * Plugin URI: http://wpgeodirectory.com/
  * Description: GeoDirectory plugin for wordpress.
- * Version: 1.5.8
+ * Version: 1.5.9
  * Author: GeoDirectory
  * Author URI: http://wpgeodirectory.com
  * Text Domain: geodirectory
@@ -25,7 +25,7 @@
  *
  * @since 1.0.0
  */
-define("GEODIRECTORY_VERSION", "1.5.8");
+define("GEODIRECTORY_VERSION", "1.5.9");
 
 /*
  * CHECK FOR OLD COMPATIBILITY PACKS AND DISABLE IF THEY ARE ACTIVE
