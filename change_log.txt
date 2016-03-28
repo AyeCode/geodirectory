@@ -1,3 +1,6 @@
+v1.6.0
+GD export should not export deleted listings - CHANGED
+
 v1.5.9
 New parameter "post_author" added in [gd_listings] shortcode to filter listings by author - ADDED
 The slider thumbnails are not working as expected when many listings are displayed - FIXED
