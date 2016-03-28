@@ -189,13 +189,8 @@ if (!function_exists('geodir_admin_scripts')) {
         $totImg = '';
         $image_limit = '';
         if (!empty($thumb_img_arr)) {
-            foreach ($thumb_img_arr as $img) {
-                $curImages = $img->src . ",";
-            }
-
             $totImg = count($thumb_img_arr);
         }
-
 
         $gd_plupload_init = array('base_plupload_config' => $base_plupload_config,
             'totalImg' => $totImg,
@@ -268,11 +263,6 @@ if (!function_exists('geodir_admin_menu_order')) {
 
         // Get index of posttype menu
         $post_types = geodir_get_posttypes();
-        if (!empty($post_types)) {
-            foreach ($post_types as $post_type) {
-                $geodir_posts = array_search("edit.php?post_type={$post_type}", $menu_order);
-            }
-        }
 
         // Loop through menu order and do some rearranging
         foreach ($menu_order as $index => $item) :
@@ -640,9 +630,7 @@ function geodir_default_taxonomies() {
 
     $category_array = array('Attractions', 'Hotels', 'Restaurants', 'Food Nightlife', 'Festival', 'Videos', 'Feature');
 
-    $last_catid = isset($last_catid) ? $last_catid : '';
-
-    $last_term = get_term($last_catid, 'gd_placecategory');
+    $last_catid = '';
 
     $uploads = wp_upload_dir(); // Array of key => value pairs
 
@@ -794,7 +782,6 @@ function geodir_update_options($options, $dummy = false) {
         elseif (isset($value['type']) && $value['type'] == 'map') :
             $post_types = array();
             $categories = array();
-            $i = 0;
 
             if (!empty($_POST['home_map_post_types'])) :
                 foreach ($_POST['home_map_post_types'] as $post_type) :
@@ -1469,7 +1456,7 @@ function geodir_admin_fields($options)
                     <?php if (get_option($value['id'])) { ?>
                         <input type="hidden" name="<?php echo esc_attr($value['id']); ?>_remove"
                                id="<?php echo esc_attr($value['id']); ?>_remove" value="0">
-                        <span class="description"> <?php $uploads = wp_upload_dir(); ?> <a
+                        <span class="description"> <a
                                 href="<?php echo get_option($value['id']); ?>"
                                 target="_blank"><?php echo get_option($value['id']); ?></a> <i
                                 title="<?php _e('remove file (set to empty)', 'geodirectory'); ?>"
@@ -1734,8 +1721,6 @@ function geodir_admin_fields($options)
                 <tr valign="top">
                 <th scope="row" class="titledesc"><?php echo $value['name'] ?></th>
                 <td class="forminp"><?php
-
-                    $content = '';
                     if (get_option($value['id']))
                         $content = stripslashes(get_option($value['id']));
                     else
@@ -1794,7 +1779,6 @@ function geodir_admin_fields($options)
 				}
                 break;
             case 'single_select_country' :
-                $countries = $geodirectory->countries->countries;
                 $country_setting = (string)get_option($value['id']);
                 if (strstr($country_setting, ':')) :
                     $country = current(explode(':', $country_setting));
@@ -3679,7 +3663,6 @@ function geodir_ajax_import_export() {
             }
             // WPML
             if ( $post_type == 'gd_event' ) {
-                //add_filter( 'geodir_imex_count_posts', 'geodir_imex_count_events', 10, 2 );
                 add_filter( 'geodir_imex_export_posts_query', 'geodir_imex_get_events_query', 10, 2 );
             }
             $file_name = $post_type . '_' . date( 'dmyHi' );
@@ -3745,7 +3728,7 @@ function geodir_ajax_import_export() {
                         $json['files'] = $chunk_file_paths;
                     } else {
                         if ($j > 1) {
-                            $json['total'] = $items_count;
+                            $json['total'] = $posts_count;
                             $json['files'] = array();
                         } else {
                             $json['error'] = __( 'ERROR: Could not create csv file. This is usually due to inconsistent file permissions.', 'geodirectory' );
@@ -3993,6 +3976,7 @@ function geodir_ajax_import_export() {
             
             $json['file'] = $csv_file;
             $json['error'] = __( 'The uploaded file is not a valid csv file. Please try again.', 'geodirectory' );
+            $file = array();
 
             if ( $csv_file && $wp_filesystem->is_file( $target_path ) && $wp_filesystem->exists( $target_path ) ) {
                 $wp_filetype = wp_check_filetype_and_ext( $target_path, $csv_filename );
@@ -4031,7 +4015,6 @@ function geodir_ajax_import_export() {
             $processed = isset($_POST['processed']) ? (int)$_POST['processed'] : 0;
             
             $count = $limit;
-            $requested_limit = $limit;
             
             if ($count < $total) {
                 $count = $processed + $count;
@@ -4049,15 +4032,12 @@ function geodir_ajax_import_export() {
             $invalid_addr = 0;
             $images = 0;
             
-            $invalid_title = 0;
-            $customKeyarray = array();
             $gd_post_info = array();
-            $post_location = array();
             $countpost = 0;
             
             $post_types = geodir_get_posttypes();
 
-            if ( $task == 'import_cat' ) {				
+            if ( $task == 'import_cat' ) {
                 if (!empty($file)) {
                     $columns = isset($file[0]) ? $file[0] : NULL;
                     
@@ -4149,15 +4129,15 @@ function geodir_ajax_import_export() {
                                 $term_parent = '';
                                 
                                 if ( $term_parent = get_term_by( 'name', $cat_parent, $taxonomy ) ) {
-                                    $term_parent = $term_parent;
+                                    //
                                 } else if ( $term_parent = get_term_by( 'slug', $cat_parent, $taxonomy ) ) {
-                                    $term_parent = $term_parent;
+                                    //
                                 } else if ( $term_parent = get_term_by( 'id', $cat_parent, $taxonomy ) ) {
-                                    $term_parent = $term_parent;
+                                    //
                                 } else {
                                     $term_parent_data = array();
-                                    $term_parent_data['name'] = $cat_parent;											
-                                    //$term_parent_data = array_map( 'utf8_encode', $term_parent_data );										
+                                    $term_parent_data['name'] = $cat_parent;
+                                    //$term_parent_data = array_map( 'utf8_encode', $term_parent_data );
                                     $term_parent_data['taxonomy'] = $taxonomy;
                                     
                                     $term_parent_id = (int)geodir_imex_insert_term( $taxonomy, $term_parent_data );
@@ -5091,7 +5071,7 @@ function geodir_imex_insert_term( $taxonomy, $term_data ) {
     if( !empty( $term ) ) {
 		$result = wp_insert_term( $term, $taxonomy, $args );
         if( !is_wp_error( $result ) ) {
-            return $term_id = isset( $result['term_id'] ) ? $result['term_id'] : 0;
+            return isset( $result['term_id'] ) ? $result['term_id'] : 0;
         }
     }
 	
@@ -5126,7 +5106,6 @@ function geodir_imex_update_term( $taxonomy, $term_data ) {
 		return false;
 	}
 	
-	$term = isset( $term_data['name'] ) && !empty( $term_data['name'] ) ? $term_data['name'] : '';
 	$term_id = isset( $term_data['term_id'] ) && !empty( $term_data['term_id'] ) ? $term_data['term_id'] : 0;
 	
 	$args = array();
@@ -5140,7 +5119,7 @@ function geodir_imex_update_term( $taxonomy, $term_data ) {
 		$result = wp_update_term( $term_data['term_id'], $taxonomy, $term_data );
 		
 		if( !is_wp_error( $result ) ) {
-            return $term_id = isset( $result['term_id'] ) ? $result['term_id'] : 0;
+            return isset( $result['term_id'] ) ? $result['term_id'] : 0;
         }
 	} else if ( $term_data['slug'] != '' && $term_info = (array)term_exists( $term_data['slug'], $taxonomy ) ) {
 		$term_data['term_id'] = $term_info['term_id'];
@@ -5148,7 +5127,7 @@ function geodir_imex_update_term( $taxonomy, $term_data ) {
 		$result = wp_update_term( $term_data['term_id'], $taxonomy, $term_data );
 		
 		if( !is_wp_error( $result ) ) {
-            return $term_id = isset( $result['term_id'] ) ? $result['term_id'] : 0;
+            return isset( $result['term_id'] ) ? $result['term_id'] : 0;
         }
 	} else {
 		return geodir_imex_insert_term( $taxonomy, $term_data );
@@ -5163,53 +5142,44 @@ function geodir_imex_update_term( $taxonomy, $term_data ) {
  * @since 1.4.6
  * @package GeoDirectory
  *
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ *
  * @param string $post_type Post type.
  * @return int Posts count.
  */
 function geodir_get_posts_count( $post_type ) {
-	$posts_count = wp_count_posts( $post_type );
-	$posts_count = array_sum( (array)$posts_count );
-	
-	/**
-	 * Modify returned post counts for the current post type.
-	 *
-	 * @since 1.4.6
+    global $wpdb, $plugin_prefix;
+
+    if ( !post_type_exists( $post_type ) ) {
+        return 0;
+    }
+        
+    $table = $plugin_prefix . $post_type . '_detail';
+
+    // Skip listing with statuses trash, auto-draft etc...
+    $skip_statuses = geodir_imex_export_skip_statuses();
+    $where_statuses = '';
+    if ( !empty( $skip_statuses ) && is_array( $skip_statuses ) ) {
+        $where_statuses = "AND `" . $wpdb->posts . "`.`post_status` NOT IN('" . implode( "','", $skip_statuses ) . "')";
+    }
+
+    $query = $wpdb->prepare( "SELECT COUNT({$wpdb->posts}.ID) FROM {$wpdb->posts} INNER JOIN {$table} ON {$table}.post_id = {$wpdb->posts}.ID WHERE {$wpdb->posts}.post_type = %s " . $where_statuses, $post_type );
+
+    $posts_count = (int)$wpdb->get_var( $query );
+    
+    /**
+     * Modify returned post counts for the current post type.
+     *
+     * @since 1.4.6
      * @package GeoDirectory
-	 *
-	 * @param int $posts_count Post counts.
-	 * @param string $post_type Post type.
-	 */
-	$posts_count = apply_filters( 'geodir_imex_count_posts', $posts_count, $post_type );	 
-	
-	return $posts_count;
-}
+     *
+     * @param int $posts_count Post counts.
+     * @param string $post_type Post type.
+     */
+    $posts_count = apply_filters( 'geodir_imex_count_posts', $posts_count, $post_type );
 
-/**
- * Filter the posts counts for gd_event post type.
- *
- * @since 1.4.6
- * @package GeoDirectory
- *
- * @global object $wpdb WordPress Database object.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
- *
- * @param int $posts_count Post counts.
- * @param string $post_type Post type.
- * @return int Posts count.
- */
-function geodir_imex_count_events( $posts_count, $post_type ) {
-	if ( $post_type == 'gd_event' ) {
-		global $wpdb, $plugin_prefix;
-		
-		$table = $plugin_prefix . $post_type . '_detail';
-		$schedule_table = EVENT_SCHEDULE;
-
-		$query = "SELECT COUNT({$wpdb->posts}.ID) AS total FROM {$wpdb->posts} INNER JOIN {$table} ON ({$table}.post_id = {$wpdb->posts}.ID) INNER JOIN {$schedule_table} ON ({$schedule_table}.event_id = {$wpdb->posts}.ID) WHERE {$wpdb->posts}.post_type = %s";
-		
-		$posts_count = (int)$wpdb->get_var( $wpdb->prepare( $query, $post_type ) );
-	}
-	
-	return $posts_count;
+    return $posts_count;
 }
 
 /**
@@ -5364,10 +5334,6 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
 			}
 
 			// Franchise data
-			$franchise_id = NULL;
-			$franchise_info = array();
-			$locked_fields = array();
-			
 			if ($is_franchise_active && isset($post_info['franchise']) && (int)$post_info['franchise'] > 0 && geodir_franchise_check((int)$post_info['franchise'])) {
 				$franchise_id = $post_info['franchise'];
 				$gd_franchise_info = geodir_get_post_info($franchise_id);
@@ -5554,48 +5520,55 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
  * @return array Array of posts data.
  */
 function geodir_get_export_posts( $post_type, $per_page = 0, $page_no = 0 ) {
-	global $wpdb, $plugin_prefix;
+    global $wpdb, $plugin_prefix;
 
-	if ( ! post_type_exists( $post_type ) )
-		return new stdClass;
-		
-	$table = $plugin_prefix . $post_type . '_detail';
-	
-	$limit = '';
-	if ( $per_page > 0 && $page_no > 0 ) {
-		$offset = ( $page_no - 1 ) * $per_page;
-		
-		if ( $offset > 0 ) {
-			$limit = " LIMIT " . $offset . "," . $per_page;
-		} else {
-			$limit = " LIMIT " . $per_page;
-		}
-	}
+    if ( ! post_type_exists( $post_type ) )
+        return new stdClass;
+        
+    $table = $plugin_prefix . $post_type . '_detail';
 
-	$query = "SELECT {$wpdb->posts}.ID FROM {$wpdb->posts} INNER JOIN {$table} ON {$table}.post_id = {$wpdb->posts}.ID WHERE {$wpdb->posts}.post_type = %s ORDER BY {$wpdb->posts}.ID ASC" . $limit;
-	/**
-	 * Modify returned posts SQL query for the current post type.
-	 *
-	 * @since 1.4.6
+    $limit = '';
+    if ( $per_page > 0 && $page_no > 0 ) {
+        $offset = ( $page_no - 1 ) * $per_page;
+        
+        if ( $offset > 0 ) {
+            $limit = " LIMIT " . $offset . "," . $per_page;
+        } else {
+            $limit = " LIMIT " . $per_page;
+        }
+    }
+
+    // Skip listing with statuses trash, auto-draft etc...
+    $skip_statuses = geodir_imex_export_skip_statuses();
+    $where_statuses = '';
+    if ( !empty( $skip_statuses ) && is_array( $skip_statuses ) ) {
+        $where_statuses = "AND `" . $wpdb->posts . "`.`post_status` NOT IN('" . implode( "','", $skip_statuses ) . "')";
+    }
+
+    $query = "SELECT {$wpdb->posts}.ID FROM {$wpdb->posts} INNER JOIN {$table} ON {$table}.post_id = {$wpdb->posts}.ID WHERE {$wpdb->posts}.post_type = %s " . $where_statuses . " ORDER BY {$wpdb->posts}.ID ASC" . $limit;
+    /**
+     * Modify returned posts SQL query for the current post type.
+     *
+     * @since 1.4.6
      * @package GeoDirectory
-	 *
-	 * @param int $query The SQL query.
-	 * @param string $post_type Post type.
-	 */
-	$query = apply_filters( 'geodir_imex_export_posts_query', $query, $post_type );
+     *
+     * @param int $query The SQL query.
+     * @param string $post_type Post type.
+     */
+    $query = apply_filters( 'geodir_imex_export_posts_query', $query, $post_type );
 
-	$results = (array)$wpdb->get_results( $wpdb->prepare( $query, $post_type ), ARRAY_A );
+    $results = (array)$wpdb->get_results( $wpdb->prepare( $query, $post_type ), ARRAY_A );
 
-	/**
-	 * Modify returned post results for the current post type.
-	 *
-	 * @since 1.4.6
+    /**
+     * Modify returned post results for the current post type.
+     *
+     * @since 1.4.6
      * @package GeoDirectory
-	 *
-	 * @param object $results An object containing all post ids.
-	 * @param string $post_type Post type.
-	 */
-	return apply_filters( 'geodir_export_posts', $results, $post_type );
+     *
+     * @param object $results An object containing all post ids.
+     * @param string $post_type Post type.
+     */
+    return apply_filters( 'geodir_export_posts', $results, $post_type );
 }
 
 /**
@@ -5613,16 +5586,23 @@ function geodir_get_export_posts( $post_type, $per_page = 0, $page_no = 0 ) {
  * @return string The SQL query.
  */
 function geodir_imex_get_events_query( $query, $post_type ) {
-	if ( $post_type == 'gd_event' ) {
-		global $wpdb, $plugin_prefix;
-		
-		$table = $plugin_prefix . $post_type . '_detail';
-		$schedule_table = EVENT_SCHEDULE;
+    if ( $post_type == 'gd_event' ) {
+        global $wpdb, $plugin_prefix;
+        
+        $table = $plugin_prefix . $post_type . '_detail';
+        $schedule_table = EVENT_SCHEDULE;
+        
+        // Skip listing with statuses trash, auto-draft etc...
+        $skip_statuses = geodir_imex_export_skip_statuses();
+        $where_statuses = '';
+        if ( !empty( $skip_statuses ) && is_array( $skip_statuses ) ) {
+            $where_statuses = "AND `" . $wpdb->posts . "`.`post_status` NOT IN('" . implode( "','", $skip_statuses ) . "')";
+        }
 
-		$query = "SELECT {$wpdb->posts}.ID, {$schedule_table}.event_date, {$schedule_table}.event_enddate AS enddate, {$schedule_table}.event_starttime AS starttime, {$schedule_table}.event_endtime AS endtime FROM {$wpdb->posts} INNER JOIN {$table} ON ({$table}.post_id = {$wpdb->posts}.ID) INNER JOIN {$schedule_table} ON ({$schedule_table}.event_id = {$wpdb->posts}.ID) WHERE {$wpdb->posts}.post_type = %s GROUP BY {$table}.post_id ORDER BY {$wpdb->posts}.ID ASC, {$schedule_table}.schedule_id ASC";
-	}
-	
-	return $query; 
+        $query = "SELECT {$wpdb->posts}.ID, {$schedule_table}.event_date, {$schedule_table}.event_enddate AS enddate, {$schedule_table}.event_starttime AS starttime, {$schedule_table}.event_endtime AS endtime FROM {$wpdb->posts} INNER JOIN {$table} ON ({$table}.post_id = {$wpdb->posts}.ID) INNER JOIN {$schedule_table} ON ({$schedule_table}.event_id = {$wpdb->posts}.ID) WHERE {$wpdb->posts}.post_type = %s " . $where_statuses . " GROUP BY {$table}.post_id ORDER BY {$wpdb->posts}.ID ASC, {$schedule_table}.schedule_id ASC";
+    }
+
+    return $query;
 }
 
 /**
@@ -6036,7 +6016,6 @@ function geodir_imex_get_event_data($post, $gd_post_info) {
 	$recurring_week_nos = '';
 	$max_recurring_count = '';
 	$recurring_end_date = '';
-	$recurring_dates = '';
 		
 	$recurring_data = isset($gd_post_info->recurring_dates) ? maybe_unserialize($gd_post_info->recurring_dates) : array();
 	if (!empty($recurring_data)) {
@@ -6166,7 +6145,7 @@ function geodir_imex_get_event_data($post, $gd_post_info) {
  * @package GeoDirectory
  *
  * @param string $date Date in Y-m-d or d/m/Y format.
- * @return doesn't Date.
+ * @return string Date in Y-m-d format.
  */
 function geodir_imex_get_date_ymd($date) {
 	if (strpos($date, '/') !== false) {
@@ -6413,7 +6392,7 @@ function geodire_admin_upgrade_notice( $plugin_data, $r )
 
 
 /*
-* @param string $body http response body
+* @param string $content http response body
 */
 function geodir_in_plugin_update_message($content) {
     // Output Upgrade Notice
@@ -6459,6 +6438,30 @@ function geodir_wpml_permalink_setting_notice() {
 	<?php
 		}
 	}
+}
+
+/**
+ * Get the statuses to skip during GD export listings.
+ *
+ * @package GeoDirectory
+ * @since 1.6.0
+ *
+ * @param array Listing statuses to be skipped.
+ */
+function geodir_imex_export_skip_statuses() {
+    $statuses = array( 'trash', 'auto-draft' );
+    
+    /**
+     * Filter the statuses to skip during GD export listings.
+     *
+     * @since 1.6.0
+     * @package GeoDirectory
+     *
+     * @param array $statuses Listing statuses to be skipped.
+     */
+    $statuses = apply_filters( 'geodir_imex_export_skip_statuses', $statuses );
+     
+    return $statuses;
 }
 
 /*

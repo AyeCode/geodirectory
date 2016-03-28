@@ -1849,7 +1849,6 @@ function geodir_get_widget_listings($query_args = array(), $count_only = false)
     if (function_exists('icl_object_id')) {
         global $sitepress;
         $lang_code = ICL_LANGUAGE_CODE;
-        $default_lang_code = $sitepress->get_default_language();
         if ($lang_code) {
             $join .= " JOIN " . $table_prefix . "icl_translations icl_t ON icl_t.element_id = " . $table_prefix . "posts.ID";
         }
@@ -1965,14 +1964,7 @@ function geodir_function_widget_listings_fields($fields)
     if (empty($query_args) || empty($query_args['is_geodir_loop'])) {
         return $fields;
     }
-    $post_type = empty($query_args['post_type']) ? 'gd_place' : $query_args['post_type'];
-    $table = $plugin_prefix . $post_type . '_detail';
-
-    /*
-	if ( $post_type == 'gd_event' && defined( 'EVENT_SCHEDULE' ) ) {
-		$fields .= $fields != '' ? ", " . EVENT_SCHEDULE . ".*" : EVENT_SCHEDULE . ".*";
-	}
-	*/
+    
     return $fields;
 }
 
@@ -1992,7 +1984,7 @@ function geodir_function_widget_listings_join($join)
 
     $query_args = $gd_query_args_widgets;
     if (empty($query_args) || empty($query_args['is_geodir_loop'])) {
-        return $where;
+        return $join;
     }
 
     $post_type = empty($query_args['post_type']) ? 'gd_place' : $query_args['post_type'];
@@ -2001,12 +1993,6 @@ function geodir_function_widget_listings_join($join)
     if (!empty($query_args['with_pics_only'])) {
         $join .= " LEFT JOIN " . GEODIR_ATTACHMENT_TABLE . " ON ( " . GEODIR_ATTACHMENT_TABLE . ".post_id=" . $table . ".post_id AND " . GEODIR_ATTACHMENT_TABLE . ".mime_type LIKE '%image%' )";
     }
-
-    /*
-	if ( $post_type == 'gd_event' && defined( 'EVENT_SCHEDULE' ) ) {
-		$join .= " INNER JOIN " . EVENT_SCHEDULE ." ON (" . EVENT_SCHEDULE .".event_id = " . $wpdb->posts . ".ID)";
-	}
-	*/
 
     if (!empty($query_args['tax_query'])) {
         $tax_queries = get_tax_sql($query_args['tax_query'], $wpdb->posts, 'ID');
@@ -2098,15 +2084,6 @@ function geodir_function_widget_listings_orderby($orderby)
     if (empty($query_args) || empty($query_args['is_geodir_loop'])) {
         return $orderby;
     }
-
-    $post_type = empty($query_args['post_type']) ? 'gd_place' : $query_args['post_type'];
-    $table = $plugin_prefix . $post_type . '_detail';
-
-    /*
-	if ( $post_type == 'gd_event' && defined( 'EVENT_SCHEDULE' ) ) {
-		$orderby .= EVENT_SCHEDULE . ".event_date ASC, " . EVENT_SCHEDULE . ".event_starttime ASC , " . $table . ".is_featured ASC, ";
-	}
-	*/
 
     return $orderby;
 }
@@ -2744,9 +2721,6 @@ function geodir_loginwidget_output($args = '', $instance = '')
     if (is_user_logged_in()) {
         global $current_user;
 
-        $login_url = geodir_login_url();
-        $add_listurl = get_permalink(geodir_add_listing_page_id());
-        $add_listurl = geodir_getlink($add_listurl, array('listing_type' => 'gd_place'));
         $author_link = get_author_posts_url($current_user->data->ID);
         $author_link = geodir_getlink($author_link, array('geodir_dashbord' => 'true'), false);
 
@@ -4102,16 +4076,6 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
         $title = str_replace("%%id%%",$ID,$title);
     }
 
-    /*
-        if(strpos($title,'') !== false){
-            $title = str_replace("",,$title);
-        }
-
-        if(strpos($title,'') !== false){
-            $title = str_replace("",,$title);
-        }
-    */
-
     if(strpos($title,'%%sep%%') !== false){
         $title = str_replace("%%sep%%",$sep,$title);
     }
@@ -4253,15 +4217,15 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
     }
 
     if(strpos($title,'%%name%%') !== false){
-        $author_name = '';
-        if($author_name = get_the_author()){}
-        else{
+        $author_name = get_the_author();
+        if (!$author_name || $author_name === '') {
             $queried_object = get_queried_object();
-            if(isset($queried_object->data->user_nicename)){
+            
+            if (isset($queried_object->data->user_nicename)) {
                 $author_name = $queried_object->data->user_nicename;
             }
         }
-        $title = str_replace("%%name%%",$author_name,$title);
+        $title = str_replace("%%name%%", $author_name, $title);
     }
 
     $title = wptexturize( $title );
@@ -4401,10 +4365,15 @@ function geodir_on_wp_insert_post($post_ID, $post, $update) {
         return;
     }
     
+    $action = isset($_REQUEST['action']) ? sanitize_text_field($_REQUEST['action']) : '';
     $is_admin = is_admin() && ( !defined('DOING_AJAX' ) || ( defined('DOING_AJAX') && !DOING_AJAX ) )  ? true : false;
-    $inline_save = isset($_POST['action']) && $_POST['action'] == 'inline-save' ? true : false;
+    $inline_save = $action == 'inline-save' ? true : false;
 
     if (empty($post->post_type) || $is_admin || $inline_save || (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)) {
+        return;
+    }
+    
+    if ($action != '' && in_array($action, array('geodir_import_export'))) {
         return;
     }
 
@@ -4413,12 +4382,22 @@ function geodir_on_wp_insert_post($post_ID, $post, $update) {
     if ($user_id > 0 && get_option('geodir_notify_post_edited') && !wp_is_post_revision($post_ID) && in_array($post->post_type, geodir_get_posttypes())) {
         $author_id = !empty($post->post_author) ? $post->post_author : 0;
         
-        if ($user_id == $author_id) {
+        if ($user_id == $author_id && !is_super_admin()) {
             $from_email = get_option('site_email');
             $from_name = get_site_emailName();
             $to_email = get_option('admin_email');
             $to_name = get_option('name');
             $message_type = 'listing_edited';
+            
+            $notify_edited = true;
+            /**
+             * Send notification when listing edited by author?
+             *
+             * @since 1.6.0
+             * @param bool $notify_edited Notify on listing edited by author?
+             * @param object $post The current post object.
+             */
+            $notify_edited = apply_filters('geodir_notify_on_listing_edited', $notify_edited, $post);
             
             geodir_sendEmail($from_email, $from_name, $to_email, $to_name, '', '', '', $message_type, $post_ID);
         }
