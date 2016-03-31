@@ -110,7 +110,7 @@ class CheckShortcodes extends WP_UnitTestCase
         $this->assertTrue(is_int($post_id));
 
     }
-    
+
     public function texstListingsShortcode()
     {
         $output = do_shortcode('[gd_listings post_type="gd_place" category="1,3" post_number="10" list_sort="high_review"]');
