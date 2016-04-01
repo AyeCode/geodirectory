@@ -315,7 +315,6 @@ function geodir_ajax_handler() {
                 case "delete" :
                     if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
                         global $current_user;
-                        get_currentuserinfo();
 
                         if (get_option('geodir_disable_perm_delete')) {
                             $lastid = wp_trash_post($_REQUEST['pid']);
