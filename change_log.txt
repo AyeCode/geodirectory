@@ -2,6 +2,7 @@ v1.6.0
 GD export should not export deleted listings - CHANGED
 Edited by author message should not fire when using GD import - CHANGED
 get_currentuserinfo() Depreciated and removed/changed - FIXED
+Option added to show custom text when no listings found in gd_listings shortcode - CHANGED
 
 v1.5.9
 New parameter "post_author" added in [gd_listings] shortcode to filter listings by author - ADDED
