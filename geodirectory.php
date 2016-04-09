@@ -146,6 +146,22 @@ function geodir_error_log($log){
     }
 }
 
+if (!function_exists('geodir_is_testing_mode')) {
+    /**
+     * Check whether testing mode enabled or not
+     *
+     * @package Geodirectory
+     * @since 1.5.7
+     */
+    function geodir_is_testing_mode() {
+        if ( defined( 'GD_TESTING_MODE' ) && GD_TESTING_MODE ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
 /**
  * Include all plugin functions.
  *
@@ -240,19 +256,4 @@ if (is_admin() || geodir_is_testing_mode()) {
         add_action( $hook, 'geodire_admin_upgrade_notice', 20, 2 );
     }
 
-}
-
-
-/**
- * Check whether testing mode enabled or not
- *
- * @package Geodirectory
- * @since 1.5.7
- */
-function geodir_is_testing_mode() {
-    if ( defined( 'GD_TESTING_MODE' ) && GD_TESTING_MODE ) {
-        return true;
-    } else {
-        return false;
-    }
 }

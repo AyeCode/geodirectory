@@ -3,7 +3,7 @@ $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
 $_SERVER['SERVER_NAME'] = '';
 $PHP_SELF = $GLOBALS['PHP_SELF'] = $_SERVER['PHP_SELF'] = '/index.php';
 
-define( 'GD_USE_PHP_SESSIONS', false );
+define( 'GEODIR_USE_PHP_SESSIONS', false );
 define( 'GD_TESTING_MODE', true );
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );

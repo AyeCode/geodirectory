@@ -31,5 +31,8 @@
 			<!--<file>language.php</file>-->
 			<!--<file>upgrade.php</file>-->
 		</whitelist>
+		<whitelist addUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">./tests/</directory>
+		</whitelist>
 	</filter>
 </phpunit>

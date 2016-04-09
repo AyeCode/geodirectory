@@ -133,11 +133,13 @@ final class WP_Session extends Recursive_ArrayAccess implements Iterator, Counta
 	 * Set the session cookie
 	 */
 	protected function set_cookie() {
-		try {
-            setcookie( WP_SESSION_COOKIE, $this->session_id . '||' . $this->expires . '||' . $this->exp_variant , $this->expires, COOKIEPATH, COOKIE_DOMAIN );
-        } catch(Exception $e) {
-            error_log( 'Set Cookie Error: ' . $e->getMessage() );
-        }
+		if (! defined( 'GD_TESTING_MODE' )) {
+			try {
+				setcookie( WP_SESSION_COOKIE, $this->session_id . '||' . $this->expires . '||' . $this->exp_variant , $this->expires, COOKIEPATH, COOKIE_DOMAIN );
+			} catch(Exception $e) {
+				error_log( 'Set Cookie Error: ' . $e->getMessage() );
+			}
+		}
 	}
 
 	/**
