@@ -28,7 +28,7 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
 
 
     array('name' => $gd_wpseo_use.__('Available Variables', 'geodirectory'),
-        'desc' => __('%%title%%, %%sitename%%, %%sitedesc%%, %%excerpt%%, %%pt_single%%, %%pt_plural%%, %%category%%, %%id%%, %%sep%%, %%location%%, %%in_location%%, %%in_location_single%%, %%location_single%%, %%search_term%%, %%search_near%%, %%name%%', 'geodirectory'),
+        'desc' => __('%%title%%, %%sitename%%, %%sitedesc%%, %%excerpt%%, %%pt_single%%, %%pt_plural%%, %%category%%, %%id%%, %%sep%%, %%location%%, %%in_location%%, %%in_location_single%%, %%location_single%%, %%search_term%%, %%search_near%%, %%name%%, %%page%%, %%pagenumber%%, %%pagetotal%%', 'geodirectory'),
         'type' => 'sectionstart',
         'id' => 'geodir_meta_vars'),
 
