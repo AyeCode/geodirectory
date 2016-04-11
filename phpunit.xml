@@ -15,24 +15,12 @@
     </testsuites>
 
     <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <!--<directory suffix=".php">./geodirectory-admin</directory>-->
-			<!--<directory suffix=".php">./geodirectory-functions</directory>-->
-			<!--<directory suffix=".php">./geodirectory-templates</directory>-->
-			<!--<directory suffix=".php">./geodirectory-widgets</directory>-->
-			<!--<file>geodirectory.php</file>-->
-			<!--<file>db-language.php</file>-->
-			<!--<file>geodirectory_functions.php</file>-->
-			<!--<file>geodirectory_hooks_actions.php</file>-->
-			<!--<file>geodirectory_shortcodes.php</file>-->
-			<!--<file>geodirectory_template_actions.php</file>-->
-			<!--<file>geodirectory_template_tags.php</file>-->
-			<!--<file>geodirectory_widgets.php</file>-->
-			<!--<file>language.php</file>-->
-			<!--<file>upgrade.php</file>-->
-		</whitelist>
-		<whitelist addUncoveredFilesFromWhitelist="true">
-			<directory suffix=".php">./tests/</directory>
+		<whitelist>
+			<directory suffix=".php">./</directory>
+			<exclude>
+				<directory suffix=".php">./tests</directory>
+				<directory suffix=".php">./vendor</directory>
+			</exclude>
 		</whitelist>
 	</filter>
 </phpunit>
