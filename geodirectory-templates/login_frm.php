@@ -128,4 +128,5 @@ if(wp_get_referer()){
             document.getElementById('lostpassword_form').style.display = 'none';
         }
     }
+    <?php if (!empty($_REQUEST['forgot'])) { echo 'showhide_forgetpw();'; } ?>
 </script>
