@@ -398,8 +398,17 @@ table.fixed {
     display: none;
 }
 
-body.edit-tags-php .form-field input, .form-field textarea {
+body.edit-tags-php .form-field input,
+body.edit-tags-php .form-field textarea,
+body.term-php .form-field input,
+body.term-php .form-field textarea {
     width: auto !important;
+}
+#wp-ct_cat_top_desc-editor-container #ct_cat_top_desc,
+#wp-gd_cat_loc-editor-container #gd_cat_loc {
+    width: 100% !important;
+    border: none;
+    height: 200px;
 }
 
 .mceIframeContainer iframe {

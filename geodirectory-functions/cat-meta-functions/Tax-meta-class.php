@@ -1470,7 +1470,7 @@ if (!class_exists('Tax_Meta_Class')) :
         public function is_edit_page()
         {
             global $pagenow;
-            return ($pagenow == 'edit-tags.php');
+            return ($pagenow == 'edit-tags.php' || $pagenow == 'term.php');
         }
 
         /**

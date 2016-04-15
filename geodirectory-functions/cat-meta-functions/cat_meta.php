@@ -167,7 +167,7 @@ if (is_admin()) {
 
         }*/
 
-    //Finish Meta Box Decleration
+    //Finish Meta Box Declaration
     $my_meta->Finish();
 }
 
@@ -187,11 +187,7 @@ if (!empty($gd_taxonomies)) {
 
 function addCat_column($columns)
 {
-    // only edit the columns on the current taxonomy
-    /*if ( !isset($_GET['taxonomy']) && !in_array($_GET['taxonomy'],geodir_get_taxonomies()) )
-    return $columns;
-    */
-    if ($posts = $columns['description']) {
+    if (isset($columns['description']) && $posts = $columns['description']) {
         unset($columns['description']);
     }
 
