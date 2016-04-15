@@ -725,9 +725,9 @@ if (!class_exists('Tax_Meta_Class')) :
                     echo "<p class='desc-field'>{$field['desc']}</p>";
                 }
                 if ($this->_form_type == 'edit') {
-                    echo '<td>';
+                    echo '</td>';
                 } else {
-                    echo '<td></div>';
+                    echo '</td></div>';
                 }
             }
         }

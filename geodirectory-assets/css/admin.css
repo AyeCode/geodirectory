@@ -408,6 +408,7 @@ body.term-php .form-field textarea {
 #wp-gd_cat_loc-editor-container #gd_cat_loc {
     width: 100% !important;
     border: none;
+    min-height: 200px !important;
     height: 200px;
 }
 
