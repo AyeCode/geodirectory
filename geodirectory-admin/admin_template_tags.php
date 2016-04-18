@@ -189,7 +189,7 @@ if (!function_exists('geodir_admin_panel')) {
                      jQuery('#last_tab').val( jQuery(this).attr('href') );
                      return false;*/
                 });
-                <?php if (isset($_GET['subtab']) && $_GET['subtab']) echo 'jQuery("ul.subsubsub li a[href=#' . sanitize_text_field($_GET['subtab']) . ']").click();'; ?>
+                <?php if (isset($_GET['subtab']) && $_GET['subtab']) echo 'jQuery(\'ul.subsubsub li a[href="#' . sanitize_text_field($_GET['subtab']) . '"]\').click();'; ?>
                 // Countries
                 jQuery('select#geodirectory_allowed_countries').change(function () {
                     if (jQuery(this).val() == "specific") {

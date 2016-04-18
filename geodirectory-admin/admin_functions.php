@@ -4966,7 +4966,7 @@ function geodir_ajax_import_export() {
                             $hood_data = array();
                             $hood_data['hood_name'] = $data['neighbourhood_name'];
                             $hood_data['hood_slug'] = $data['neighbourhood_slug'];
-                            $hood_data['hood_latitude'] = $data['longitude'];
+                            $hood_data['hood_latitude'] = $data['latitude'];
                             $hood_data['hood_longitude'] = $data['longitude'];
                             $hood_data['hood_location_id'] = $location_id;
                                     
