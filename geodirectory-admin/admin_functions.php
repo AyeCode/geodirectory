@@ -4066,6 +4066,7 @@ function geodir_ajax_import_export() {
                             $cat_image = '';
                             $cat_icon = '';
                             $cat_language = '';
+                            $cat_id_original = '';
                             
                             $c = 0;
                             foreach ($columns as $column ) {
@@ -4091,8 +4092,12 @@ function geodir_ajax_import_export() {
                                     $cat_icon = $row[$c];
                                 }
                                 // WPML
-                                if ($is_wpml && $column == 'cat_language') {
-                                    $cat_language = geodir_strtolower(trim($row[$c]));
+                                if ( $is_wpml ) {
+                                    if ( $column == 'cat_language' ) {
+                                        $cat_language = geodir_strtolower( trim( $row[$c] ) );
+                                    } else if ( $column == 'cat_id_original' ) {
+                                        $cat_id_original = (int)$row[$c];
+                                    }
                                 }
                                 // WPML
                                 $c++;
@@ -4180,7 +4185,7 @@ function geodir_ajax_import_export() {
                                 } else if ( $term_data['slug'] != '' && $term = (array)term_exists( $term_data['slug'], $taxonomy ) ) {
                                     $skipped++;
                                 } else {
-                                    if ( $term_id = geodir_imex_insert_term( $taxonomy, $term_data ) ) {										
+                                    if ( $term_id = geodir_imex_insert_term( $taxonomy, $term_data ) ) {
                                         $created++;
                                     } else {
                                         $invalid++;
@@ -4191,6 +4196,18 @@ function geodir_ajax_import_export() {
                             }
                             
                             if ( $term_id ) {
+                                // WPML
+                                if ($is_wpml && $cat_id_original > 0 && $cat_language != '') {
+                                    $wpml_element_type = 'tax_' . $taxonomy;
+                                    $source_language = geodir_get_language_for_element( $cat_id_original, $wpml_element_type );
+                                    $source_language = $source_language != '' ? $source_language : $sitepress->get_default_language();
+
+                                    $trid = $sitepress->get_element_trid( $cat_id_original, $wpml_element_type );
+                                    
+                                    $sitepress->set_element_language_details( $term_id, $wpml_element_type, $trid, $cat_language, $source_language );
+                                }
+                                // WPML
+                                
                                 if ( isset( $term_data['top_description'] ) ) {
                                     update_tax_meta( $term_id, 'ct_cat_top_desc', $term_data['top_description'], $cat_posttype );
                                 }
@@ -4949,7 +4966,7 @@ function geodir_ajax_import_export() {
                             $hood_data = array();
                             $hood_data['hood_name'] = $data['neighbourhood_name'];
                             $hood_data['hood_slug'] = $data['neighbourhood_slug'];
-                            $hood_data['hood_latitude'] = $data['longitude'];
+                            $hood_data['hood_latitude'] = $data['latitude'];
                             $hood_data['hood_longitude'] = $data['longitude'];
                             $hood_data['hood_location_id'] = $location_id;
                                     
@@ -5614,17 +5631,46 @@ function geodir_imex_get_events_query( $query, $post_type ) {
  * @param  string $post_type Post type.
  * @return int Total terms count.
  */
+/**
+ * Retrive terms count for given post type.
+ *
+ * @since 1.4.6
+ * @package GeoDirectory
+ *
+ * @param  string $post_type Post type.
+ * @return int Total terms count.
+ */
 function geodir_get_terms_count( $post_type ) {
-	$args = array( 'hide_empty' => 0 );
-	
-	remove_all_filters( 'get_terms' );
-	
-	$taxonomy = $post_type . 'category';
+    $args = array( 'hide_empty' => 0 );
 
-	$count_terms = wp_count_terms( $taxonomy, $args );
-	$count_terms = !is_wp_error( $count_terms ) ? $count_terms : 0;
-	 
-	return $count_terms;
+    remove_all_filters( 'get_terms' );
+
+    $taxonomy = $post_type . 'category';
+
+    // WPML
+    $is_wpml = geodir_is_wpml();
+    $active_lang = 'all';
+    if ( $is_wpml ) {
+        global $sitepress;
+        $active_lang = $sitepress->get_current_language();
+        
+        if ( $active_lang != 'all' ) {
+            $sitepress->switch_lang( 'all', true );
+        }
+    }
+    // WPML
+            
+    $count_terms = wp_count_terms( $taxonomy, $args );
+
+    // WPML
+    if ( $is_wpml && $active_lang !== 'all' ) {
+        global $sitepress;
+        $sitepress->switch_lang( $active_lang, true );
+    }
+    // WPML
+    $count_terms = !is_wp_error( $count_terms ) ? $count_terms : 0;
+     
+    return $count_terms;
 }
 
 /**
@@ -5663,20 +5709,21 @@ function geodir_imex_get_terms( $post_type, $per_page = 0, $page_no = 0 ) {
 		$csv_row[] = 'cat_posttype';
 		$csv_row[] = 'cat_parent';
 		$csv_row[] = 'cat_schema';
+        // WPML
+		$is_wpml = geodir_is_wpml();
+		if ($is_wpml) {
+			$csv_row[] = 'cat_language';
+            $csv_row[] = 'cat_id_original';
+		}
+		// WPML
 		$csv_row[] = 'cat_description';
 		$csv_row[] = 'cat_top_description';
 		$csv_row[] = 'cat_image';
 		$csv_row[] = 'cat_icon';
-		// WPML
-		$is_wpml = geodir_is_wpml();
-		if ($is_wpml) {
-			$csv_row[] = 'cat_language';
-		}
-		// WPML
 		
 		$csv_rows[] = $csv_row;
 		
-		foreach ( $terms as $term ) {			
+		foreach ( $terms as $term ) {
 			$cat_icon = get_tax_meta( $term->term_id, 'ct_cat_icon', false, $post_type );
 			$cat_icon = !empty( $cat_icon ) && isset( $cat_icon['src'] ) ? $cat_icon['src'] : '';
 			
@@ -5696,15 +5743,16 @@ function geodir_imex_get_terms( $post_type, $per_page = 0, $page_no = 0 ) {
 			$csv_row[] = $post_type;
 			$csv_row[] = $cat_parent;
 			$csv_row[] = get_tax_meta( $term->term_id, 'ct_cat_schema', false, $post_type );
+            // WPML
+			if ($is_wpml) {
+				$csv_row[] = geodir_get_language_for_element( $term->term_id, 'tax_' . $taxonomy );
+                $csv_row[] = geodir_imex_original_post_id( $term->term_id, 'tax_' . $taxonomy );
+			}
+			// WPML
 			$csv_row[] = $term->description;
 			$csv_row[] = get_tax_meta( $term->term_id, 'ct_cat_top_desc', false, $post_type );
 			$csv_row[] = $cat_image;
 			$csv_row[] = $cat_icon;
-			// WPML
-			if ($is_wpml) {
-				$csv_row[] = geodir_get_language_for_element( $term->term_id, 'tax_' . $taxonomy );
-			}
-			// WPML
 			
 			$csv_rows[] = $csv_row;
 		}

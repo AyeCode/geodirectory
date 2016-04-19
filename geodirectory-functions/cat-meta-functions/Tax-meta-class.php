@@ -725,9 +725,9 @@ if (!class_exists('Tax_Meta_Class')) :
                     echo "<p class='desc-field'>{$field['desc']}</p>";
                 }
                 if ($this->_form_type == 'edit') {
-                    echo '<td>';
+                    echo '</td>';
                 } else {
-                    echo '<td></div>';
+                    echo '</td></div>';
                 }
             }
         }
@@ -1470,7 +1470,7 @@ if (!class_exists('Tax_Meta_Class')) :
         public function is_edit_page()
         {
             global $pagenow;
-            return ($pagenow == 'edit-tags.php');
+            return ($pagenow == 'edit-tags.php' || $pagenow == 'term.php');
         }
 
         /**
