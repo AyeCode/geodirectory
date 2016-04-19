@@ -49,6 +49,7 @@
 ############################################
 ########### SELENIUM TEST CODE #############
 ############################################
+# in phpunit.xml comment out line 12 and uncoment line 13
 build:
     environment:
         php: '5.6.16'
