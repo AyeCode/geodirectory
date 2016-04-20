@@ -50,7 +50,7 @@ There are various ways you can contribute:
 
 1. Raise an [Issue](https://github.com/GeoDirectory/geodirectory/issues) on GitHub
 2. Send us a Pull Request with your bug fixes and/or new features
-3. Translate Easy Digital Downloads into [different languages](https://www.wpgeodirectory.com/translate/projects/geodirectory)
+3. Translate GeoDirectory into [different languages](https://www.wpgeodirectory.com/translate/projects/geodirectory)
 
 ## Features ##
 
