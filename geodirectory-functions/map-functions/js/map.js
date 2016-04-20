@@ -675,15 +675,19 @@ function openMarker(map_canvas, id) {
 
 function animate_marker(map_canvas, id) {
     jQuery("#" + map_canvas).goMap();
-    //alert(jQuery.goMap.mapId.data(id))
-    jQuery.goMap.mapId.data(id).setAnimation(google.maps.Animation.BOUNCE);
+    try {
+        jQuery.goMap.mapId.data(id).setAnimation(google.maps.Animation.BOUNCE);
+    } catch (e) {
+    }
 }
 
 function stop_marker_animation(map_canvas, id) {
     jQuery("#" + map_canvas).goMap();
-
-    if (jQuery.goMap.mapId.data(id).getAnimation() != null) {
-        jQuery.goMap.mapId.data(id).setAnimation(null);
+    try {
+        if (jQuery.goMap.mapId.data(id).getAnimation() != null) {
+            jQuery.goMap.mapId.data(id).setAnimation(null);
+        }
+    } catch (e) {
     }
 }
 
