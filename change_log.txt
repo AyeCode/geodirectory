@@ -1,6 +1,13 @@
 v1.6.0
 GD export should not export deleted listings - CHANGED
 Edited by author message should not fire when using GD import - CHANGED
+get_currentuserinfo() Depreciated and removed/changed - FIXED
+Option added to show custom text when no listings found in gd_listings shortcode - CHANGED
+Page number variables added for titles & metas description - CHANGED
+Forgot Password link not working - FIXED
+The category icon and default image uploader no longer working with WP 4.5 - FIXED
+Now able to set source category id for WPML translated categories in GD Import/Export - CHANGED
+GD Import/Export imports wrong latitudes values - FIXED
 
 v1.5.9
 New parameter "post_author" added in [gd_listings] shortcode to filter listings by author - ADDED

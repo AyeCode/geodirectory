@@ -563,6 +563,16 @@ function geodir_sc_gd_listings_output($args = array()) {
 	$layout 			 = !empty($args['layout']) ? $args['layout'] : 'gridview_onehalf';
 	$with_pagination 	 = !empty($args['with_pagination']) ? true : false;
 	$event_type 	 	 = !empty($args['event_type']) ? $args['event_type'] : '';
+    $shortcode_content   = !empty($args['shortcode_content']) ? trim($args['shortcode_content']) : '';
+    /**
+     * Filter the content text displayed when no listings found.
+     *
+     * @since 1.6.0
+     *
+     * @param string $shortcode_content The shortcode content text.
+     * @param array $args Array of arguements to filter listings.
+     */
+    $shortcode_content = apply_filters('geodir_sc_gd_listings_not_found_content', $shortcode_content, $args);
 		
 	$top_pagination 	 = $with_pagination && !empty($args['top_pagination']) ? true : false;
 	$bottom_pagination 	 = $with_pagination && !empty($args['bottom_pagination']) ? true : false;
@@ -663,56 +673,60 @@ function geodir_sc_gd_listings_output($args = array()) {
             </div>
 			<?php } ?>
             <?php
-            if (strstr($layout, 'gridview')) {
-                $listing_view_exp = explode('_', $layout);
-                $gridview_columns_widget = $layout;
-                $layout = $listing_view_exp[0];
+            if (!(empty($widget_listings) && !empty($shortcode_content))) {
+                if (strstr($layout, 'gridview')) {
+                    $listing_view_exp = explode('_', $layout);
+                    $gridview_columns_widget = $layout;
+                    $layout = $listing_view_exp[0];
+                } else {
+                    $gridview_columns_widget = '';
+                }
+
+                /**
+                 * Filter the widget listing listview template.
+                 *
+                 * @since 1.0.0
+                 *
+                 * @param string The template file to display listing.
+                 */
+                $template = apply_filters("geodir_template_part-widget-listing-listview", geodir_locate_template('widget-listing-listview'));
+                            
+                global $post, $map_jason, $map_canvas_arr, $gd_session;
+
+                $current_post = $post;
+                $current_map_jason = $map_jason;
+                $current_map_canvas_arr = $map_canvas_arr;
+                $geodir_is_widget_listing = true;
+                $gd_session->un_set('gd_listing_view');
+
+                if ($with_pagination && $top_pagination) {				
+                    echo geodir_sc_listings_pagination($total_posts, $post_number, $pageno);
+                }
+
+                /**
+                 * Includes listing listview template.
+                 *
+                 * @since 1.0.0
+                 */
+                include($template);
+                
+                if ($with_pagination && $bottom_pagination) {				
+                    echo geodir_sc_listings_pagination($total_posts, $post_number, $pageno);
+                }
+
+                $geodir_is_widget_listing = false;
+
+                $GLOBALS['post'] = $current_post;
+                if (!empty($current_post)) {
+                    setup_postdata($current_post);
+                }
+                $map_jason = $current_map_jason;
+                $map_canvas_arr = $current_map_canvas_arr;
+                global $gridview_columns_widget;
+                $gridview_columns_widget = $current_gridview_columns_widget;
             } else {
-                $gridview_columns_widget = '';
+                echo $shortcode_content;
             }
-
-            /**
-			 * Filter the widget listing listview template.
-			 *
-			 * @since 1.0.0
-			 *
-			 * @param string The template file to display listing.
-			 */
-			$template = apply_filters("geodir_template_part-widget-listing-listview", geodir_locate_template('widget-listing-listview'));
-            			
-            global $post, $map_jason, $map_canvas_arr, $gd_session;
-
-            $current_post = $post;
-            $current_map_jason = $map_jason;
-            $current_map_canvas_arr = $map_canvas_arr;
-            $geodir_is_widget_listing = true;
-			$gd_session->un_set('gd_listing_view');
-
-            if ($with_pagination && $top_pagination) {				
-				echo geodir_sc_listings_pagination($total_posts, $post_number, $pageno);
-			}
-
-            /**
-             * Includes listing listview template.
-             *
-             * @since 1.0.0
-             */
-			include($template);
-			
-			if ($with_pagination && $bottom_pagination) {				
-				echo geodir_sc_listings_pagination($total_posts, $post_number, $pageno);
-			}
-
-            $geodir_is_widget_listing = false;
-
-            $GLOBALS['post'] = $current_post;
-			if (!empty($current_post)) {
-            	setup_postdata($current_post);
-			}
-            $map_jason = $current_map_jason;
-            $map_canvas_arr = $current_map_canvas_arr;
-			global $gridview_columns_widget;
-			$gridview_columns_widget = $current_gridview_columns_widget;
 			?>
 			<p class="geodir-sclisting-loading" style="display:none;"><i class="fa fa-cog fa-spin"></i></p>
 			<?php

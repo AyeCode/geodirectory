@@ -24,7 +24,7 @@ if (!function_exists('geodir_admin_init')) {
             global $current_tab;
             geodir_redirect_to_admin_panel_on_installed();
             $current_tab = (isset($_GET['tab']) && $_GET['tab'] != '') ? $_GET['tab'] : 'general_settings';
-            if (!(isset($_REQUEST['action']))) // this will avoide Ajax requests
+            if (!(isset($_REQUEST['action']))) // this will avoid Ajax requests
                 geodir_handle_option_form_submit($current_tab); // located in admin function.php
             /**
              * Called on the WordPress 'admin_init' hook this hookis used to call everything for the GD settings pages in the admin area.
@@ -78,6 +78,7 @@ add_action('geodir_before_update_options', 'geodir_before_update_options',10,2);
  * Admin scripts loader.
  *
  * @since 1.0.0
+ * @since 1.6.0 Changes to work category icon and default image uploader for WP 4.5.
  * @package GeoDirectory
  * @global string $pagenow The current screen.
  */
@@ -89,7 +90,7 @@ function geodir_conditional_admin_script_load()
 	$post_type = geodir_admin_current_post_type();
 	$geodir_post_types = geodir_get_posttypes();
     
-	if ((isset($_REQUEST['page']) && $_REQUEST['page'] == 'geodirectory') || (($pagenow == 'post.php' || $pagenow == 'post-new.php' || $pagenow == 'edit.php') && $post_type && in_array($post_type, $geodir_post_types)) || ($pagenow == 'edit-tags.php' || $pagenow == 'edit-comments.php' || $pagenow == 'comment.php')) {
+	if ((isset($_REQUEST['page']) && $_REQUEST['page'] == 'geodirectory') || (($pagenow == 'post.php' || $pagenow == 'post-new.php' || $pagenow == 'edit.php') && $post_type && in_array($post_type, $geodir_post_types)) || ($pagenow == 'edit-tags.php' || $pagenow == 'term.php' || $pagenow == 'edit-comments.php' || $pagenow == 'comment.php')) {
         add_action('admin_enqueue_scripts', 'geodir_admin_scripts');
         add_action('admin_enqueue_scripts', 'geodir_admin_styles');
     }
@@ -229,7 +230,7 @@ function geodir_meta_box_add()
 
         add_meta_box('geodir_post_info', $post_typename . ' ' . __('Information', 'geodirectory'), 'geodir_post_info_setting', $geodir_posttype, 'normal', 'high');
 
-        // no need of this box as all fields moved to main informain box
+        // no need of this box as all fields moved to main information box
         //add_meta_box( 'geodir_post_addinfo', $post_typename. ' ' .__('Additional Information' , 'geodirectory'), 'geodir_post_addinfo_setting', $geodir_posttype,'normal', 'high' );
 
     endif;
@@ -665,7 +666,7 @@ function geodir_cf_panel_selected_fields_head($heading, $sub_tab, $listing_type)
             break;
 
         case 'sorting_options':
-            $heading = sprintf(__('List of fields those will appear in %s listing and search resutls sorting option dropdown box.', 'geodirectory'), get_post_type_singular_label($listing_type));
+            $heading = sprintf(__('List of fields those will appear in %s listing and search results sorting option dropdown box.', 'geodirectory'), get_post_type_singular_label($listing_type));
             break;
     }
     return $heading;
@@ -777,7 +778,7 @@ function geodir_diagnose_multisite_table($filter_arr, $table, $tabel_name, $fix)
     global $wpdb;
     //$filter_arr['output_str'] .='###'.$table.'###';
     if ($wpdb->query("SHOW TABLES LIKE '" . $table . "_ms_bak2'") > 0 && $wpdb->query("SHOW TABLES LIKE '" . $table . "_ms_bak'") > 0) {
-        $filter_arr['output_str'] .= "<li>" . __('ERROR: You didnt follow instructions! Now you will need to contact support to manually fix things.', 'geodirectory') . "</li>";
+        $filter_arr['output_str'] .= "<li>" . __('ERROR: You did not follow instructions! Now you will need to contact support to manually fix things.', 'geodirectory') . "</li>";
         $filter_arr['is_error_during_diagnose'] = true;
 
     } elseif ($wpdb->query("SHOW TABLES LIKE '" . $table . "_ms_bak'") > 0 && $wpdb->query("SHOW TABLES LIKE '" . $wpdb->prefix . "$table'") > 0) {
@@ -864,7 +865,7 @@ function geodir_diagnose_multisite_table($filter_arr, $table, $tabel_name, $fix)
         $filter_arr['is_error_during_diagnose'] = true;
 
         if ($fix) {
-            // if orignal table exists but new does not, rename
+            // if original table exists but new does not, rename
             if ($wpdb->query("RENAME TABLE $table TO " . $wpdb->prefix . "$table") || $wpdb->query("SHOW TABLES LIKE '$table'") == 0) {
                 $filter_arr['output_str'] .= "<li>" . sprintf(__('-->FIXED: Table %s renamed to %s', 'geodirectory'), $table, $wpdb->prefix . $table) . "</li>";
             } else {
@@ -878,7 +879,7 @@ function geodir_diagnose_multisite_table($filter_arr, $table, $tabel_name, $fix)
         $filter_arr['is_error_during_diagnose'] = true;
 
         if ($fix) {
-            // if orignal table does not exist try deleting db_vers of all addons so the initial db_install scripts run;
+            // if original table does not exist try deleting db_vers of all addons so the initial db_install scripts run;
             delete_option('geodirlocation_db_version');
             delete_option('geodirevents_db_version');
             delete_option('geodir_reviewrating_db_version');
@@ -920,7 +921,7 @@ function geodir_diagnose_tags_sync()
 
     if (!empty($all_postypes)) {
         foreach ($all_postypes as $key) {
-            // update each GD CTP
+            // update each GD CPT
             $posts = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . "geodir_" . $key . "_detail d");
 
             if (!empty($posts)) {
@@ -1209,7 +1210,7 @@ function geodir_diagnose_multisite_conversion()
     /**
      * Filter the array of tables.
      *
-     * Filter the array of tables to check during the GD>Tools multisite DB conversion tool check, this allows adons to add their DB tables to the checks.
+     * Filter the array of tables to check during the GD>Tools multisite DB conversion tool check, this allows addons to add their DB tables to the checks.
      *
      * @since 1.0.0
      * @param array $table_arr The array of tables to check, array('geodir_countries' => __('Countries', 'geodirectory'),...
@@ -2023,7 +2024,7 @@ function geodir_ajax_import_csv()
 // Add the tab in left sidebar menu fro import & export page.
 add_filter( 'geodir_settings_tabs_array', 'geodir_import_export_tab', 94 );
 
-// Handle ajax request for impot/export.
+// Handle ajax request for import/export.
 add_action( 'wp_ajax_geodir_import_export', 'geodir_ajax_import_export' );
 add_action( 'wp_ajax_nopriv_geodir_import_exportn', 'geodir_ajax_import_export' );
 

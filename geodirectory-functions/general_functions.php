@@ -4227,6 +4227,19 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
         }
         $title = str_replace("%%name%%", $author_name, $title);
     }
+    
+    if (strpos($title, '%%page%%') !== false) {
+        $page = geodir_title_meta_page($sep);
+        $title = str_replace("%%page%%", $page, $title);
+    }
+    if (strpos($title, '%%pagenumber%%') !== false) {
+        $pagenumber = geodir_title_meta_pagenumber();
+        $title = str_replace("%%pagenumber%%", $pagenumber, $title);
+    }
+    if (strpos($title, '%%pagetotal%%') !== false) {
+        $pagetotal = geodir_title_meta_pagetotal();
+        $title = str_replace("%%pagetotal%%", $pagetotal, $title);
+    }
 
     $title = wptexturize( $title );
     $title = convert_chars( $title );
@@ -4402,4 +4415,119 @@ function geodir_on_wp_insert_post($post_ID, $post, $update) {
             geodir_sendEmail($from_email, $from_name, $to_email, $to_name, '', '', '', $message_type, $post_ID);
         }
     }
+}
+
+/**
+ * Retrieve the current page start & end numbering with context (i.e. 'page 2 of 4') for use as replacement string.
+ *
+ * @since 1.6.0
+ * @package GeoDirectory
+ *
+ * @param string $sep The separator tag.
+ *
+ * @return string|null The current page start & end numbering.
+ */
+function geodir_title_meta_page($sep) {
+    $replacement = null;
+
+    $max = geodir_title_meta_pagenumbering('max');
+    $nr  = geodir_title_meta_pagenumbering('nr');
+
+    if ($max > 1 && $nr > 1) {
+        $replacement = sprintf($sep . ' ' . __('Page %1$d of %2$d', 'geodirectory'), $nr, $max);
+    }
+
+    return $replacement;
+}
+
+/**
+ * Retrieve the current page number for use as replacement string.
+ *
+ * @since 1.6.0
+ * @package GeoDirectory
+ *
+ * @return string|null The current page number.
+ */
+function geodir_title_meta_pagenumber() {
+    $replacement = null;
+
+    $nr = geodir_title_meta_pagenumbering('nr');
+    if (isset($nr) && $nr > 0) {
+        $replacement = (string)$nr;
+    }
+
+    return $replacement;
+}
+
+/**
+ * Retrieve the current page total for use as replacement string.
+ *
+ * @since 1.6.0
+ * @package GeoDirectory
+ *
+ * @return string|null The current page total.
+ */
+function geodir_title_meta_pagetotal() {
+    $replacement = null;
+
+    $max = geodir_title_meta_pagenumbering('max');
+    if (isset($max) && $max > 0) {
+        $replacement = (string)$max;
+    }
+
+    return $replacement;
+}
+
+/**
+ * Determine the page numbering of the current post/page/cpt.
+ *
+ * @param string $request 'nr'|'max' - whether to return the page number or the max number of pages.
+ *
+ * @since 1.6.0
+ * @package GeoDirectory
+ *
+ * @global object $wp_query WordPress Query object.
+ * @global object $post The current post object.
+ *
+ * @return int|null The current page numbering.
+ */
+function geodir_title_meta_pagenumbering($request = 'nr') {
+    global $wp_query, $post;
+    $max_num_pages = null;
+    $page_number   = null;
+
+    $max_num_pages = 1;
+
+    if (!is_singular()) {
+        $page_number = get_query_var('paged');
+        if ($page_number === 0 || $page_number === '') {
+            $page_number = 1;
+        }
+
+        if (isset($wp_query->max_num_pages) && ($wp_query->max_num_pages != '' && $wp_query->max_num_pages != 0)) {
+            $max_num_pages = $wp_query->max_num_pages;
+        }
+    } else {
+        $page_number = get_query_var('page');
+        if ($page_number === 0 || $page_number === '') {
+            $page_number = 1;
+        }
+
+        if (isset($post->post_content)) {
+            $max_num_pages = (substr_count($post->post_content, '<!--nextpage-->' ) + 1);
+        }
+    }
+
+    $return = null;
+
+    switch ($request) {
+        case 'nr':
+            $return = $page_number;
+            break;
+        case 'max':
+            $return = $max_num_pages;
+            break;
+    }
+
+    return $return;
 }

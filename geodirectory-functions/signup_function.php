@@ -482,7 +482,7 @@ function geodir_user_signup()
                     wp_redirect(geodir_login_url(array('checkemail'=>'confirm')));
                     gd_die();
                 } else {
-                    wp_redirect(geodir_login_url(array('emsg'=>'fw')));
+                    wp_redirect(geodir_login_url(array('forgot' => 1, 'emsg'=>'fw')));
                     gd_die();
                 }
             }

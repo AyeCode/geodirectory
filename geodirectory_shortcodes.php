@@ -1062,6 +1062,7 @@ function geodir_sc_gd_listings($atts, $content = '') {
         'with_pagination'       => '1',
         'top_pagination'        => '0',
         'bottom_pagination'     => '1',
+        'without_no_results'     => 0,
     );
     $params = shortcode_atts($defaults, $atts);
 
@@ -1135,6 +1136,13 @@ function geodir_sc_gd_listings($atts, $content = '') {
         $params['pageno'] = $atts['pageno'];
         unset($atts['pageno']);
     }
+
+    if ( !empty($atts['shortcode_content']) ) {
+        $content = $atts['shortcode_content'];
+    }
+    $params['shortcode_content'] = trim($content);
+    $atts['shortcode_content'] = trim($content);
+    
     $params['shortcode_atts']       = $atts;
 
     $output = geodir_sc_gd_listings_output($params);
