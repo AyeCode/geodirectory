@@ -114,6 +114,9 @@ class GeoDirectoryTests extends WP_UnitTestCase
 
     public function testGDWisgetListView() {
         global $gridview_columns_widget, $geodir_is_widget_listing;
+
+        $_REQUEST['sgeo_lat'] = '40.7127837';
+        $_REQUEST['sgeo_lon'] = '-74.00594130000002';
         $query_args = array(
             'posts_per_page' => 1,
             'is_geodir_loop' => true,
@@ -143,6 +146,18 @@ class GeoDirectoryTests extends WP_UnitTestCase
         $map_jason = $current_map_jason;
         $map_canvas_arr = $current_map_canvas_arr;
 
+    }
+
+    public function testRegTemplate() {
+//        var_dump(geodir_login_page_id());
+        wp_set_current_user(0);
+        $template = geodir_plugin_path() . '/geodirectory-templates/geodir-signup.php';
+
+        ob_start();
+        include($template);
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Sign In', $output);
     }
 
     public function tearDown()
