@@ -1,60 +1,8 @@
-#build:
-#    environment:
-#        php: '5.6.16'
-#        mysql: true
-#        selenium: false
-#        postgresql: false
-#        redis: false
-#        hosts:
-#            www.test.ci: '127.0.0.1'
-#        apache2:
-#            modules: ['rewrite']
-#            sites:
-#                symfony_app:
-#                    web_root: '/home/scrutinizer/web/'
-#                    host: 'www.test.ci'
-#        variables:
-#            WP_VERSION: '4.5'
-#            WP_MULTISITE: '0'
-#            WEB_BASE_DIR: '/home/scrutinizer/web/'
-#            WP_CORE_DIR: '/home/scrutinizer/web/wordpress'
-#            PLUGIN_BASE_DIR: '/home/scrutinizer/web/wordpress/wp-content/plugins/'
-#            GD_PLUGIN_DIR: '/home/scrutinizer/web/wordpress/wp-content/plugins/geodirectory/'
-#
-#    dependencies:
-#        before:
-#            - mysql -uroot -e 'CREATE DATABASE wordpress_test'
-#            - wget -nv -O /home/scrutinizer/build/tests/lib/wordpress-tests-lib/wp-tests-config.php https://raw.githubusercontent.com/mistergiri/scrutinizer-wordpress-tests/master/wp-tests-config.php
-#            - mkdir -p $WEB_BASE_DIR
-#            - mkdir -p $WP_CORE_DIR
-#            - cd $WP_CORE_DIR
-#            - mkdir -p ~/Downloads
-#            - cd ~/Downloads
-#            -
-#                  command: 'wget -nv -O ~/Downloads/wordpress.tar.gz https://github.com/WordPress/WordPress/tarball/$WP_VERSION > /dev/null 2>&1 && mkdir -p wordpress && tar --strip-components=1 -zxmf wordpress.tar.gz -C wordpress'
-#            - cp -a ~/Downloads/wordpress/. $WP_CORE_DIR
-#
-#    cache:
-#          directories:
-#              - ~/Downloads/
-#    tests:
-#         override:
-#              -
-#                    command: 'phpunit --coverage-clover=coverage.xml'
-#                    idle_timeout: 1800
-#                    coverage:
-#                        file: 'coverage.xml'
-#                        format: 'php-clover'
-
-############################################
-########### SELENIUM TEST CODE #############
-############################################
-# in phpunit.xml comment out line 12 and uncoment line 13
 build:
     environment:
         php: '5.6.16'
         mysql: true
-        selenium: true
+        selenium: false
         postgresql: false
         redis: false
         hosts:
@@ -66,144 +14,196 @@ build:
                     web_root: '/home/scrutinizer/web/'
                     host: 'www.test.ci'
         variables:
-            IS_SELENIUM_TEST: 'true'
             WP_VERSION: '4.5'
             WP_MULTISITE: '0'
             WEB_BASE_DIR: '/home/scrutinizer/web/'
             WP_CORE_DIR: '/home/scrutinizer/web/wordpress'
-            WP_SELENIUM_CORE_DIR: '/home/scrutinizer/web/selpress'
             PLUGIN_BASE_DIR: '/home/scrutinizer/web/wordpress/wp-content/plugins/'
             GD_PLUGIN_DIR: '/home/scrutinizer/web/wordpress/wp-content/plugins/geodirectory/'
-            SEL_PLUGIN_BASE_DIR: '/home/scrutinizer/web/selpress/wp-content/plugins/'
-            SEL_THEME_BASE_DIR: '/home/scrutinizer/web/selpress/wp-content/themes/'
 
     dependencies:
         before:
             - mysql -uroot -e 'CREATE DATABASE wordpress_test'
-            - mysql -uroot -e 'CREATE DATABASE selpress'
             - wget -nv -O /home/scrutinizer/build/tests/lib/wordpress-tests-lib/wp-tests-config.php https://raw.githubusercontent.com/mistergiri/scrutinizer-wordpress-tests/master/wp-tests-config.php
             - mkdir -p $WEB_BASE_DIR
             - mkdir -p $WP_CORE_DIR
-            - mkdir -p $WP_SELENIUM_CORE_DIR
             - cd $WP_CORE_DIR
             - mkdir -p ~/Downloads
             - cd ~/Downloads
             -
                   command: 'wget -nv -O ~/Downloads/wordpress.tar.gz https://github.com/WordPress/WordPress/tarball/$WP_VERSION > /dev/null 2>&1 && mkdir -p wordpress && tar --strip-components=1 -zxmf wordpress.tar.gz -C wordpress'
-                  not_if: 'test -e ~/Downloads/wordpress/'
             - cp -a ~/Downloads/wordpress/. $WP_CORE_DIR
-            - cp -a ~/Downloads/wordpress/. $WP_SELENIUM_CORE_DIR
-            - cd $WP_SELENIUM_CORE_DIR
-            -
-                  command: 'wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && chmod +x wp-cli.phar && mkdir ~/.wp-cli && mv wp-cli.phar ~/.wp-cli/wp'
-                  not_if: 'test -e ~/.wp-cli/'
-            - cd $WP_SELENIUM_CORE_DIR
-            - ~/.wp-cli/wp core config --dbname="selpress" --dbuser="root" --dbpass=""
-            - ~/.wp-cli/wp core install --url="http://www.test.ci/selpress/"  --title="GeoDirectory" --admin_user="admin" --admin_password="admin" --admin_email="giridharanbtech@gmail.com"
-            - cd ~/Downloads
-            -
-                  command: 'wget -nv -O ~/Downloads/geodirectory.tar.gz https://github.com/$GITHUB_REPO_USER/geodirectory/tarball/master > /dev/null 2>&1 && mkdir -p ~/Downloads/geodirectory && tar --strip-components=1 -zxmf ~/Downloads/geodirectory.tar.gz -C ~/Downloads/geodirectory'
-                  not_if: 'test -e ~/Downloads/geodirectory/'
-            -
-                  command: 'wget -nv -O ~/Downloads/geodir_advance_search_filters.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_advance_search_filters/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_advance_search_filters && tar --strip-components=1 -zxmf ~/Downloads/geodir_advance_search_filters.tar.gz -C ~/Downloads/geodir_advance_search_filters'
-                  not_if: 'test -e ~/Downloads/geodir_advance_search_filters/'
-            -
-                  command: 'wget -nv -O ~/Downloads/geodir_affiliate.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_affiliate/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_affiliate && tar --strip-components=1 -zxmf ~/Downloads/geodir_affiliate.tar.gz -C ~/Downloads/geodir_affiliate'
-                  not_if: 'test -e ~/Downloads/geodir_affiliate/'
-            -
-                  command: 'wget -nv -O ~/Downloads/geodir_ajax_duplicate_alert.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_ajax_duplicate_alert/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_ajax_duplicate_alert && tar --strip-components=1 -zxmf ~/Downloads/geodir_ajax_duplicate_alert.tar.gz -C ~/Downloads/geodir_ajax_duplicate_alert'
-                  not_if: 'test -e ~/Downloads/geodir_ajax_duplicate_alert/'
-            -
-                  command: 'wget -nv -O ~/Downloads/geodir_buddypress.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_buddypress/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_buddypress && tar --strip-components=1 -zxmf ~/Downloads/geodir_buddypress.tar.gz -C ~/Downloads/geodir_buddypress'
-                  not_if: 'test -e ~/Downloads/geodir_buddypress/'
-            -
-                  command: 'wget -nv -O ~/Downloads/geodir_claim_listing.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_claim_listing/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_claim_listing && tar --strip-components=1 -zxmf ~/Downloads/geodir_claim_listing.tar.gz -C ~/Downloads/geodir_claim_listing'
-                  not_if: 'test -e ~/Downloads/geodir_claim_listing/'
-            -
-                  command: 'wget -nv -O ~/Downloads/geodir_custom_posts.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_custom_posts/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_custom_posts && tar --strip-components=1 -zxmf ~/Downloads/geodir_custom_posts.tar.gz -C ~/Downloads/geodir_custom_posts'
-                  not_if: 'test -e ~/Downloads/geodir_custom_posts/'
-            -
-                  command: 'wget -nv -O ~/Downloads/geodir_event_manager.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_event_manager/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_event_manager && tar --strip-components=1 -zxmf ~/Downloads/geodir_event_manager.tar.gz -C ~/Downloads/geodir_event_manager'
-                  not_if: 'test -e ~/Downloads/geodir_event_manager/'
-            -
-                  command: 'wget -nv -O ~/Downloads/geodir_gd_booster.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_gd_booster/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_gd_booster && tar --strip-components=1 -zxmf ~/Downloads/geodir_gd_booster.tar.gz -C ~/Downloads/geodir_gd_booster'
-                  not_if: 'test -e ~/Downloads/geodir_gd_booster/'
-            -
-                  command: 'wget -nv -O ~/Downloads/geodir_location_manager.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_location_manager/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_location_manager && tar --strip-components=1 -zxmf ~/Downloads/geodir_location_manager.tar.gz -C ~/Downloads/geodir_location_manager'
-                  not_if: 'test -e ~/Downloads/geodir_location_manager/'
-            -
-                  command: 'wget -nv -O ~/Downloads/geodir_marker_cluster.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_marker_cluster/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_marker_cluster && tar --strip-components=1 -zxmf ~/Downloads/geodir_marker_cluster.tar.gz -C ~/Downloads/geodir_marker_cluster'
-                  not_if: 'test -e ~/Downloads/geodir_marker_cluster/'
-            -
-                  command: 'wget -nv -O ~/Downloads/geodir_payment_manager.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_payment_manager/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_payment_manager && tar --strip-components=1 -zxmf ~/Downloads/geodir_payment_manager.tar.gz -C ~/Downloads/geodir_payment_manager'
-                  not_if: 'test -e ~/Downloads/geodir_payment_manager/'
-            -
-                  command: 'wget -nv -O ~/Downloads/geodir_recaptcha.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_recaptcha/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_recaptcha && tar --strip-components=1 -zxmf ~/Downloads/geodir_recaptcha.tar.gz -C ~/Downloads/geodir_recaptcha'
-                  not_if: 'test -e ~/Downloads/geodir_recaptcha/'
-            -
-                  command: 'wget -nv -O ~/Downloads/geodir_review_rating_manager.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_review_rating_manager/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_review_rating_manager && tar --strip-components=1 -zxmf ~/Downloads/geodir_review_rating_manager.tar.gz -C ~/Downloads/geodir_review_rating_manager'
-                  not_if: 'test -e ~/Downloads/geodir_review_rating_manager/'
-            -
-                  command: 'wget -nv -O ~/Downloads/geodir_social_importer.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_social_importer/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_social_importer && tar --strip-components=1 -zxmf ~/Downloads/geodir_social_importer.tar.gz -C ~/Downloads/geodir_social_importer'
-                  not_if: 'test -e ~/Downloads/geodir_social_importer/'
-            -
-                  command: 'wget -nv -O ~/Downloads/geodir_stripe_payment_manager.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_stripe_payment_manager/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_stripe_payment_manager && tar --strip-components=1 -zxmf ~/Downloads/geodir_stripe_payment_manager.tar.gz -C ~/Downloads/geodir_stripe_payment_manager'
-                  not_if: 'test -e ~/Downloads/geodir_stripe_payment_manager/'
-            -
-                  command: 'wget -nv -O ~/Downloads/BP-Default-Data.tar.gz https://github.com/slaFFik/BP-Default-Data/tarball/master > /dev/null 2>&1 && mkdir -p ~/Downloads/BP-Default-Data && tar --strip-components=1 -zxmf ~/Downloads/BP-Default-Data.tar.gz -C ~/Downloads/BP-Default-Data'
-                  not_if: 'test -e ~/Downloads/BP-Default-Data/'
-            -
-                  command: 'wget -nv -O ~/Downloads/BuddyPress.tar.gz https://github.com/buddypress/BuddyPress/tarball/master > /dev/null 2>&1 && mkdir -p ~/Downloads/BuddyPress && tar --strip-components=1 -zxmf ~/Downloads/BuddyPress.tar.gz -C ~/Downloads/BuddyPress'
-                  not_if: 'test -e ~/Downloads/BuddyPress/'
-            -
-                  command: 'wget -nv -O ~/Downloads/buddypress-compliments.tar.gz https://github.com/$GITHUB_REPO_USER/buddypress-compliments/tarball/master > /dev/null 2>&1 && mkdir -p ~/Downloads/buddypress-compliments && tar --strip-components=1 -zxmf ~/Downloads/buddypress-compliments.tar.gz -C ~/Downloads/buddypress-compliments'
-                  not_if: 'test -e ~/Downloads/buddypress-compliments/'
-            -
-                  command: 'wget -nv -O ~/Downloads/wordpress-database-reset.tar.gz https://github.com/chrisberthe/wordpress-database-reset/tarball/master > /dev/null 2>&1 && mkdir -p ~/Downloads/wordpress-database-reset && tar --strip-components=1 -zxmf ~/Downloads/wordpress-database-reset.tar.gz -C ~/Downloads/wordpress-database-reset'
-                  not_if: 'test -e ~/Downloads/wordpress-database-reset/'
-            -
-                  command: 'wget -nv -O ~/Downloads/geodirectory_framework.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodirectory_framework/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/GeoDirectory_framework && tar --strip-components=1 -zxmf ~/Downloads/geodirectory_framework.tar.gz -C ~/Downloads/GeoDirectory_framework'
-                  not_if: 'test -e ~/Downloads/GeoDirectory_framework/'
-            -
-                  command: 'wget -nv -O ~/Downloads/gdf_test_child.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/gdf_test_child/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/gdf_test_child && tar --strip-components=1 -zxmf ~/Downloads/gdf_test_child.tar.gz -C ~/Downloads/gdf_test_child'
-                  not_if: 'test -e ~/Downloads/gdf_test_child/'
-            - cp -r ~/Downloads/geodirectory/ $SEL_PLUGIN_BASE_DIR
-            - mkdir -p $GD_PLUGIN_DIR
-            - mv -v /home/scrutinizer/build/* $GD_PLUGIN_DIR
-            - cp -r ~/Downloads/geodir_advance_search_filters/ $SEL_PLUGIN_BASE_DIR
-            - cp -r ~/Downloads/geodir_affiliate/ $SEL_PLUGIN_BASE_DIR
-            - cp -r ~/Downloads/geodir_ajax_duplicate_alert/ $SEL_PLUGIN_BASE_DIR
-            - cp -r ~/Downloads/geodir_buddypress/ $SEL_PLUGIN_BASE_DIR
-            - cp -r ~/Downloads/geodir_claim_listing/ $SEL_PLUGIN_BASE_DIR
-            - cp -r ~/Downloads/geodir_custom_posts/ $SEL_PLUGIN_BASE_DIR
-            - cp -r ~/Downloads/geodir_event_manager/ $SEL_PLUGIN_BASE_DIR
-            - cp -r ~/Downloads/geodir_gd_booster/ $SEL_PLUGIN_BASE_DIR
-            - cp -r ~/Downloads/geodir_location_manager/ $SEL_PLUGIN_BASE_DIR
-            - cp -r ~/Downloads/geodir_marker_cluster/ $SEL_PLUGIN_BASE_DIR
-            - cp -r ~/Downloads/geodir_payment_manager/ $SEL_PLUGIN_BASE_DIR
-            - cp -r ~/Downloads/geodir_recaptcha/ $SEL_PLUGIN_BASE_DIR
-            - cp -r ~/Downloads/geodir_review_rating_manager/ $SEL_PLUGIN_BASE_DIR
-            - cp -r ~/Downloads/geodir_social_importer/ $SEL_PLUGIN_BASE_DIR
-            - cp -r ~/Downloads/geodir_stripe_payment_manager/ $SEL_PLUGIN_BASE_DIR
-            - cp -r ~/Downloads/BP-Default-Data/ $SEL_PLUGIN_BASE_DIR
-            - cp -r ~/Downloads/BuddyPress/ $SEL_PLUGIN_BASE_DIR
-            - cp -r ~/Downloads/buddypress-compliments/ $SEL_PLUGIN_BASE_DIR
-            - cp -r ~/Downloads/wordpress-database-reset/ $SEL_PLUGIN_BASE_DIR
-            - cp -r ~/Downloads/GeoDirectory_framework/ $SEL_THEME_BASE_DIR
-            - cp -r ~/Downloads/gdf_test_child/ $SEL_THEME_BASE_DIR
-            - cd $GD_PLUGIN_DIR
-            - composer install --no-interaction
-            -
-                    command: 'vendor/bin/phpunit'
-                    idle_timeout: 1800
 
-    project_setup:
-          before:
-              -
-                  command: java -jar selenium-server.jar
-                  background: true
     cache:
           directories:
               - ~/Downloads/
-              - ~/.wp-cli/
-              - /home/scrutinizer/web/wordpress/wp-content/plugins/geodirectory/vendor/
+    tests:
+         override:
+              -
+                    command: 'phpunit --coverage-clover=coverage.xml'
+                    idle_timeout: 1800
+                    coverage:
+                        file: 'coverage.xml'
+                        format: 'php-clover'
+
+############################################
+########### SELENIUM TEST CODE #############
+############################################
+# in phpunit.xml comment out line 12 and uncoment line 13
+#build:
+#    environment:
+#        php: '5.6.16'
+#        mysql: true
+#        selenium: true
+#        postgresql: false
+#        redis: false
+#        hosts:
+#            www.test.ci: '127.0.0.1'
+#        apache2:
+#            modules: ['rewrite']
+#            sites:
+#                symfony_app:
+#                    web_root: '/home/scrutinizer/web/'
+#                    host: 'www.test.ci'
+#        variables:
+#            IS_SELENIUM_TEST: 'true'
+#            WP_VERSION: '4.5'
+#            WP_MULTISITE: '0'
+#            WEB_BASE_DIR: '/home/scrutinizer/web/'
+#            WP_CORE_DIR: '/home/scrutinizer/web/wordpress'
+#            WP_SELENIUM_CORE_DIR: '/home/scrutinizer/web/selpress'
+#            PLUGIN_BASE_DIR: '/home/scrutinizer/web/wordpress/wp-content/plugins/'
+#            GD_PLUGIN_DIR: '/home/scrutinizer/web/wordpress/wp-content/plugins/geodirectory/'
+#            SEL_PLUGIN_BASE_DIR: '/home/scrutinizer/web/selpress/wp-content/plugins/'
+#            SEL_THEME_BASE_DIR: '/home/scrutinizer/web/selpress/wp-content/themes/'
+#
+#    dependencies:
+#        before:
+#            - mysql -uroot -e 'CREATE DATABASE wordpress_test'
+#            - mysql -uroot -e 'CREATE DATABASE selpress'
+#            - wget -nv -O /home/scrutinizer/build/tests/lib/wordpress-tests-lib/wp-tests-config.php https://raw.githubusercontent.com/mistergiri/scrutinizer-wordpress-tests/master/wp-tests-config.php
+#            - mkdir -p $WEB_BASE_DIR
+#            - mkdir -p $WP_CORE_DIR
+#            - mkdir -p $WP_SELENIUM_CORE_DIR
+#            - cd $WP_CORE_DIR
+#            - mkdir -p ~/Downloads
+#            - cd ~/Downloads
+#            -
+#                  command: 'wget -nv -O ~/Downloads/wordpress.tar.gz https://github.com/WordPress/WordPress/tarball/$WP_VERSION > /dev/null 2>&1 && mkdir -p wordpress && tar --strip-components=1 -zxmf wordpress.tar.gz -C wordpress'
+#                  not_if: 'test -e ~/Downloads/wordpress/'
+#            - cp -a ~/Downloads/wordpress/. $WP_CORE_DIR
+#            - cp -a ~/Downloads/wordpress/. $WP_SELENIUM_CORE_DIR
+#            - cd $WP_SELENIUM_CORE_DIR
+#            -
+#                  command: 'wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && chmod +x wp-cli.phar && mkdir ~/.wp-cli && mv wp-cli.phar ~/.wp-cli/wp'
+#                  not_if: 'test -e ~/.wp-cli/'
+#            - cd $WP_SELENIUM_CORE_DIR
+#            - ~/.wp-cli/wp core config --dbname="selpress" --dbuser="root" --dbpass=""
+#            - ~/.wp-cli/wp core install --url="http://www.test.ci/selpress/"  --title="GeoDirectory" --admin_user="admin" --admin_password="admin" --admin_email="giridharanbtech@gmail.com"
+#            - cd ~/Downloads
+#            -
+#                  command: 'wget -nv -O ~/Downloads/geodirectory.tar.gz https://github.com/$GITHUB_REPO_USER/geodirectory/tarball/master > /dev/null 2>&1 && mkdir -p ~/Downloads/geodirectory && tar --strip-components=1 -zxmf ~/Downloads/geodirectory.tar.gz -C ~/Downloads/geodirectory'
+#                  not_if: 'test -e ~/Downloads/geodirectory/'
+#            -
+#                  command: 'wget -nv -O ~/Downloads/geodir_advance_search_filters.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_advance_search_filters/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_advance_search_filters && tar --strip-components=1 -zxmf ~/Downloads/geodir_advance_search_filters.tar.gz -C ~/Downloads/geodir_advance_search_filters'
+#                  not_if: 'test -e ~/Downloads/geodir_advance_search_filters/'
+#            -
+#                  command: 'wget -nv -O ~/Downloads/geodir_affiliate.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_affiliate/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_affiliate && tar --strip-components=1 -zxmf ~/Downloads/geodir_affiliate.tar.gz -C ~/Downloads/geodir_affiliate'
+#                  not_if: 'test -e ~/Downloads/geodir_affiliate/'
+#            -
+#                  command: 'wget -nv -O ~/Downloads/geodir_ajax_duplicate_alert.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_ajax_duplicate_alert/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_ajax_duplicate_alert && tar --strip-components=1 -zxmf ~/Downloads/geodir_ajax_duplicate_alert.tar.gz -C ~/Downloads/geodir_ajax_duplicate_alert'
+#                  not_if: 'test -e ~/Downloads/geodir_ajax_duplicate_alert/'
+#            -
+#                  command: 'wget -nv -O ~/Downloads/geodir_buddypress.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_buddypress/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_buddypress && tar --strip-components=1 -zxmf ~/Downloads/geodir_buddypress.tar.gz -C ~/Downloads/geodir_buddypress'
+#                  not_if: 'test -e ~/Downloads/geodir_buddypress/'
+#            -
+#                  command: 'wget -nv -O ~/Downloads/geodir_claim_listing.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_claim_listing/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_claim_listing && tar --strip-components=1 -zxmf ~/Downloads/geodir_claim_listing.tar.gz -C ~/Downloads/geodir_claim_listing'
+#                  not_if: 'test -e ~/Downloads/geodir_claim_listing/'
+#            -
+#                  command: 'wget -nv -O ~/Downloads/geodir_custom_posts.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_custom_posts/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_custom_posts && tar --strip-components=1 -zxmf ~/Downloads/geodir_custom_posts.tar.gz -C ~/Downloads/geodir_custom_posts'
+#                  not_if: 'test -e ~/Downloads/geodir_custom_posts/'
+#            -
+#                  command: 'wget -nv -O ~/Downloads/geodir_event_manager.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_event_manager/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_event_manager && tar --strip-components=1 -zxmf ~/Downloads/geodir_event_manager.tar.gz -C ~/Downloads/geodir_event_manager'
+#                  not_if: 'test -e ~/Downloads/geodir_event_manager/'
+#            -
+#                  command: 'wget -nv -O ~/Downloads/geodir_gd_booster.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_gd_booster/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_gd_booster && tar --strip-components=1 -zxmf ~/Downloads/geodir_gd_booster.tar.gz -C ~/Downloads/geodir_gd_booster'
+#                  not_if: 'test -e ~/Downloads/geodir_gd_booster/'
+#            -
+#                  command: 'wget -nv -O ~/Downloads/geodir_location_manager.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_location_manager/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_location_manager && tar --strip-components=1 -zxmf ~/Downloads/geodir_location_manager.tar.gz -C ~/Downloads/geodir_location_manager'
+#                  not_if: 'test -e ~/Downloads/geodir_location_manager/'
+#            -
+#                  command: 'wget -nv -O ~/Downloads/geodir_marker_cluster.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_marker_cluster/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_marker_cluster && tar --strip-components=1 -zxmf ~/Downloads/geodir_marker_cluster.tar.gz -C ~/Downloads/geodir_marker_cluster'
+#                  not_if: 'test -e ~/Downloads/geodir_marker_cluster/'
+#            -
+#                  command: 'wget -nv -O ~/Downloads/geodir_payment_manager.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_payment_manager/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_payment_manager && tar --strip-components=1 -zxmf ~/Downloads/geodir_payment_manager.tar.gz -C ~/Downloads/geodir_payment_manager'
+#                  not_if: 'test -e ~/Downloads/geodir_payment_manager/'
+#            -
+#                  command: 'wget -nv -O ~/Downloads/geodir_recaptcha.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_recaptcha/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_recaptcha && tar --strip-components=1 -zxmf ~/Downloads/geodir_recaptcha.tar.gz -C ~/Downloads/geodir_recaptcha'
+#                  not_if: 'test -e ~/Downloads/geodir_recaptcha/'
+#            -
+#                  command: 'wget -nv -O ~/Downloads/geodir_review_rating_manager.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_review_rating_manager/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_review_rating_manager && tar --strip-components=1 -zxmf ~/Downloads/geodir_review_rating_manager.tar.gz -C ~/Downloads/geodir_review_rating_manager'
+#                  not_if: 'test -e ~/Downloads/geodir_review_rating_manager/'
+#            -
+#                  command: 'wget -nv -O ~/Downloads/geodir_social_importer.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_social_importer/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_social_importer && tar --strip-components=1 -zxmf ~/Downloads/geodir_social_importer.tar.gz -C ~/Downloads/geodir_social_importer'
+#                  not_if: 'test -e ~/Downloads/geodir_social_importer/'
+#            -
+#                  command: 'wget -nv -O ~/Downloads/geodir_stripe_payment_manager.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodir_stripe_payment_manager/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/geodir_stripe_payment_manager && tar --strip-components=1 -zxmf ~/Downloads/geodir_stripe_payment_manager.tar.gz -C ~/Downloads/geodir_stripe_payment_manager'
+#                  not_if: 'test -e ~/Downloads/geodir_stripe_payment_manager/'
+#            -
+#                  command: 'wget -nv -O ~/Downloads/BP-Default-Data.tar.gz https://github.com/slaFFik/BP-Default-Data/tarball/master > /dev/null 2>&1 && mkdir -p ~/Downloads/BP-Default-Data && tar --strip-components=1 -zxmf ~/Downloads/BP-Default-Data.tar.gz -C ~/Downloads/BP-Default-Data'
+#                  not_if: 'test -e ~/Downloads/BP-Default-Data/'
+#            -
+#                  command: 'wget -nv -O ~/Downloads/BuddyPress.tar.gz https://github.com/buddypress/BuddyPress/tarball/master > /dev/null 2>&1 && mkdir -p ~/Downloads/BuddyPress && tar --strip-components=1 -zxmf ~/Downloads/BuddyPress.tar.gz -C ~/Downloads/BuddyPress'
+#                  not_if: 'test -e ~/Downloads/BuddyPress/'
+#            -
+#                  command: 'wget -nv -O ~/Downloads/buddypress-compliments.tar.gz https://github.com/$GITHUB_REPO_USER/buddypress-compliments/tarball/master > /dev/null 2>&1 && mkdir -p ~/Downloads/buddypress-compliments && tar --strip-components=1 -zxmf ~/Downloads/buddypress-compliments.tar.gz -C ~/Downloads/buddypress-compliments'
+#                  not_if: 'test -e ~/Downloads/buddypress-compliments/'
+#            -
+#                  command: 'wget -nv -O ~/Downloads/wordpress-database-reset.tar.gz https://github.com/chrisberthe/wordpress-database-reset/tarball/master > /dev/null 2>&1 && mkdir -p ~/Downloads/wordpress-database-reset && tar --strip-components=1 -zxmf ~/Downloads/wordpress-database-reset.tar.gz -C ~/Downloads/wordpress-database-reset'
+#                  not_if: 'test -e ~/Downloads/wordpress-database-reset/'
+#            -
+#                  command: 'wget -nv -O ~/Downloads/geodirectory_framework.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/geodirectory_framework/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/GeoDirectory_framework && tar --strip-components=1 -zxmf ~/Downloads/geodirectory_framework.tar.gz -C ~/Downloads/GeoDirectory_framework'
+#                  not_if: 'test -e ~/Downloads/GeoDirectory_framework/'
+#            -
+#                  command: 'wget -nv -O ~/Downloads/gdf_test_child.tar.gz https://$BITBUCKET_LOGIN_USER:$BITBUCKET_LOGIN_PASS@bitbucket.org/$BITBUCKET_REPO_USER/gdf_test_child/get/master.tar.gz > /dev/null 2>&1 && mkdir -p ~/Downloads/gdf_test_child && tar --strip-components=1 -zxmf ~/Downloads/gdf_test_child.tar.gz -C ~/Downloads/gdf_test_child'
+#                  not_if: 'test -e ~/Downloads/gdf_test_child/'
+#            - cp -r ~/Downloads/geodirectory/ $SEL_PLUGIN_BASE_DIR
+#            - mkdir -p $GD_PLUGIN_DIR
+#            - mv -v /home/scrutinizer/build/* $GD_PLUGIN_DIR
+#            - cp -r ~/Downloads/geodir_advance_search_filters/ $SEL_PLUGIN_BASE_DIR
+#            - cp -r ~/Downloads/geodir_affiliate/ $SEL_PLUGIN_BASE_DIR
+#            - cp -r ~/Downloads/geodir_ajax_duplicate_alert/ $SEL_PLUGIN_BASE_DIR
+#            - cp -r ~/Downloads/geodir_buddypress/ $SEL_PLUGIN_BASE_DIR
+#            - cp -r ~/Downloads/geodir_claim_listing/ $SEL_PLUGIN_BASE_DIR
+#            - cp -r ~/Downloads/geodir_custom_posts/ $SEL_PLUGIN_BASE_DIR
+#            - cp -r ~/Downloads/geodir_event_manager/ $SEL_PLUGIN_BASE_DIR
+#            - cp -r ~/Downloads/geodir_gd_booster/ $SEL_PLUGIN_BASE_DIR
+#            - cp -r ~/Downloads/geodir_location_manager/ $SEL_PLUGIN_BASE_DIR
+#            - cp -r ~/Downloads/geodir_marker_cluster/ $SEL_PLUGIN_BASE_DIR
+#            - cp -r ~/Downloads/geodir_payment_manager/ $SEL_PLUGIN_BASE_DIR
+#            - cp -r ~/Downloads/geodir_recaptcha/ $SEL_PLUGIN_BASE_DIR
+#            - cp -r ~/Downloads/geodir_review_rating_manager/ $SEL_PLUGIN_BASE_DIR
+#            - cp -r ~/Downloads/geodir_social_importer/ $SEL_PLUGIN_BASE_DIR
+#            - cp -r ~/Downloads/geodir_stripe_payment_manager/ $SEL_PLUGIN_BASE_DIR
+#            - cp -r ~/Downloads/BP-Default-Data/ $SEL_PLUGIN_BASE_DIR
+#            - cp -r ~/Downloads/BuddyPress/ $SEL_PLUGIN_BASE_DIR
+#            - cp -r ~/Downloads/buddypress-compliments/ $SEL_PLUGIN_BASE_DIR
+#            - cp -r ~/Downloads/wordpress-database-reset/ $SEL_PLUGIN_BASE_DIR
+#            - cp -r ~/Downloads/GeoDirectory_framework/ $SEL_THEME_BASE_DIR
+#            - cp -r ~/Downloads/gdf_test_child/ $SEL_THEME_BASE_DIR
+#            - cd $GD_PLUGIN_DIR
+#            - composer install --no-interaction
+#            -
+#                    command: 'vendor/bin/phpunit'
+#                    idle_timeout: 1800
+#
+#    project_setup:
+#          before:
+#              -
+#                  command: java -jar selenium-server.jar
+#                  background: true
+#    cache:
+#          directories:
+#              - ~/Downloads/
+#              - ~/.wp-cli/
+#              - /home/scrutinizer/web/wordpress/wp-content/plugins/geodirectory/vendor/
