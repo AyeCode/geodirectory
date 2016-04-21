@@ -160,6 +160,74 @@ class GeoDirectoryTests extends WP_UnitTestCase
         $this->assertContains('Sign In', $output);
     }
 
+    public function testTemplates() {
+        $homepage = get_page_by_title( 'GD Home page' );
+        if ( $homepage )
+        {
+            update_option( 'page_on_front', $homepage->ID );
+            update_option( 'show_on_front', 'page' );
+        }
+
+        ob_start();
+        $this->go_to( home_url('/') );
+        $this->load_template();
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('body class="home', $output);
+    }
+
+    private function load_template() {
+        do_action( 'template_redirect' );
+        $template = false;
+        if	 ( is_404()			&& $template = get_404_template()			) :
+        elseif ( is_search()		 && $template = get_search_template()		 ) :
+        elseif ( is_front_page()	 && $template = get_front_page_template()	 ) :
+        elseif ( is_home()		   && $template = get_home_template()		   ) :
+        elseif ( is_post_type_archive() && $template = get_post_type_archive_template() ) :
+        elseif ( is_tax()			&& $template = get_taxonomy_template()	   ) :
+        elseif ( is_attachment()	 && $template = get_attachment_template()	 ) :
+            remove_filter('the_content', 'prepend_attachment');
+        elseif ( is_single()		 && $template = get_single_template()		 ) :
+        elseif ( is_page()		   && $template = get_page_template()		   ) :
+        elseif ( is_category()	   && $template = get_category_template()	   ) :
+        elseif ( is_tag()			&& $template = get_tag_template()			) :
+        elseif ( is_author()		 && $template = get_author_template()		 ) :
+        elseif ( is_date()		   && $template = get_date_template()		   ) :
+        elseif ( is_archive()		&& $template = get_archive_template()		) :
+        elseif ( is_comments_popup() && $template = get_comments_popup_template() ) :
+        elseif ( is_paged()		  && $template = get_paged_template()		  ) :
+        else :
+            $template = get_index_template();
+        endif;
+        /**
+         * Filter the path of the current template before including it.
+         *
+         * @since 3.0.0
+         *
+         * @param string $template The path of the template to include.
+         */
+        if ( $template = apply_filters( 'template_include', $template ) ) {
+            $template_contents = file_get_contents( $template );
+            $included_header = $included_footer = false;
+            if ( false !== stripos( $template_contents, 'get_header();' ) ) {
+                do_action( 'get_header', null );
+                locate_template( 'header.php', true, false );
+                $included_header = true;
+            }
+            include( $template );
+            if ( false !== stripos( $template_contents, 'get_footer();' ) ) {
+                do_action( 'get_footer', null );
+                locate_template( 'footer.php', true, false );
+                $included_footer = true;
+            }
+            if ( $included_header && $included_footer ) {
+                global $wp_scripts;
+                $wp_scripts->done = array();
+            }
+        }
+        return;
+    }
+
     public function tearDown()
     {
         parent::tearDown();
