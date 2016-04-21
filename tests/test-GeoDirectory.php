@@ -7,8 +7,69 @@ class GeoDirectoryTests extends WP_UnitTestCase
         wp_set_current_user(1);
     }
 
-    public function testSettingsPage() {
-        geodir_set_default_options();
+    public function testAdminSettingForms() {
+        $_REQUEST['listing_type'] = 'gd_place';
+        ob_start();
+        geodir_admin_option_form('general_settings');
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('General Options', $output);
+
+        ob_start();
+        geodir_admin_option_form('design_settings');
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Home Top Section Settings', $output);
+
+        ob_start();
+        geodir_admin_option_form('permalink_settings');
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Listing Detail Permalink Settings', $output);
+
+        ob_start();
+        geodir_admin_option_form('title_meta_settings');
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Homepage Meta Settings', $output);
+
+        ob_start();
+        geodir_admin_option_form('notifications_settings');
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Notification Options', $output);
+
+        ob_start();
+        geodir_admin_option_form('default_location_settings');
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Set Default Location', $output);
+
+        ob_start();
+        geodir_admin_option_form('tools_settings');
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('GD Diagnostic Tools', $output);
+
+        ob_start();
+        geodir_admin_option_form('compatibility_settings');
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Theme Compatability Settings', $output);
+
+        ob_start();
+        geodir_admin_option_form('import_export');
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('GD Import & Export CSV', $output);
+
+        $_REQUEST['subtab'] = 'custom_fields';
+        ob_start();
+        geodir_admin_option_form('gd_place_fields_settings');
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('general-form-builder-frame', $output);
+
     }
 
     public function testPopPostWidget() {
