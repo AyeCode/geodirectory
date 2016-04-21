@@ -4,6 +4,7 @@ class AddCustomFields extends WP_UnitTestCase
     public function setUp()
     {
         parent::setUp();
+        wp_set_current_user(1);
     }
 
     public function testAddCustomFields()
@@ -146,6 +147,160 @@ class AddCustomFields extends WP_UnitTestCase
         }
 
     }
+
+    public function testTextCusField() {
+        $_REQUEST = array (
+            'action' =>  'geodir_ajax_action',
+            'create_field' =>  'true',
+            'field_ins_upd' =>  'submit',
+            '_wpnonce' =>  wp_create_nonce('custom_fields_text_field_99'),
+            'listing_type' =>  'gd_place',
+            'field_type' =>  'text',
+            'field_id' =>  'text_field_99',
+            'data_type' =>  'XVARCHAR',
+            'is_active' =>  '1',
+            'site_title' => "Text Field",
+            'admin_title' => "Text Field",
+            'admin_desc' => "Text Field",
+            'site_field_title' =>  'Category',
+            'field_data_type' =>  'VARCHAR',
+            'search_condition' =>  'SINGLE',
+            'htmlvar_name' =>  'text_field_99',
+            'for_admin_use' => '0',
+            'is_required' => '0',
+            'required_msg'=> '',
+            'validation_pattern' => '',
+            'validation_msg' => '',
+            'decimal_point' => '',
+            'clabels' => 'Text Field',
+            'is_default' => '1',
+            'field_title' =>  'Text Field',
+            'expand_custom_value' =>  '',
+            'search_operator' =>  'AND',
+            'front_search_title' =>  'Category',
+            'field_desc' =>  'Cat',
+            'geodir_ajax' => 'admin_ajax',
+            'manage_field_type' => 'custom_fields',
+            'default_value' =>  '' ,
+            'sort_order' =>  '11' ,
+            'show_on_listing' =>  '1' ,
+            'show_on_detail' =>  '1' ,
+            'show_as_tab' =>  '0' ,
+            'field_icon' =>  '' ,
+            'css_class' =>  '' ,
+        );
+        add_filter('wp_redirect', '__return_false');
+        ob_start();
+        geodir_ajax_handler();
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Double Click to toggle', $output);
+        remove_filter('wp_redirect', '__return_false');
+
+    }
+
+    public function texstDateCusField() {
+        $_REQUEST = array (
+            'action' =>  'geodir_ajax_action',
+            'create_field' =>  'true',
+            'field_ins_upd' =>  'submit',
+            '_wpnonce' =>  wp_create_nonce('custom_fields_date_field'),
+            'listing_type' =>  'gd_place',
+            'field_type' =>  'datepicker',
+            'field_id' =>  'date_field',
+            'data_type' =>  '',
+            'is_active' =>  '1',
+            'site_title' => "Text Field",
+            'admin_title' => "Text Field",
+            'admin_desc' => "Text Field",
+            'site_field_title' =>  'Category',
+            'field_data_type' =>  'VARCHAR',
+            'search_condition' =>  'SINGLE',
+            'htmlvar_name' =>  'date_field',
+            'for_admin_use' => '0',
+            'is_required' => '0',
+            'required_msg'=> '',
+            'validation_pattern' => '',
+            'validation_msg' => '',
+            'decimal_point' => '',
+            'clabels' => 'Text Field',
+            'is_default' => '0',
+            'field_title' =>  'Text Field',
+            'expand_custom_value' =>  '',
+            'search_operator' =>  'AND',
+            'front_search_title' =>  'Category',
+            'field_desc' =>  'Cat',
+            'geodir_ajax' => 'admin_ajax',
+            'manage_field_type' => 'custom_fields',
+            'default_value' =>  '' ,
+            'sort_order' =>  '12' ,
+            'show_on_listing' =>  '1' ,
+            'show_on_detail' =>  '1' ,
+            'show_as_tab' =>  '0' ,
+            'field_icon' =>  '' ,
+            'css_class' =>  '' ,
+            'extra' => array(
+                'date_format' => 'mm/dd/yy'
+            )
+        );
+        add_filter('wp_redirect', '__return_false');
+        ob_start();
+        geodir_ajax_handler();
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Double Click to toggle', $output);
+        remove_filter('wp_redirect', '__return_false');
+
+    }
+
+    public function texstTextAreaCusField() {
+        $_REQUEST = array (
+            'action' =>  'geodir_ajax_action',
+            'create_field' =>  'true',
+            'field_ins_upd' =>  'submit',
+            '_wpnonce' =>  wp_create_nonce('custom_fields_textarea_field'),
+            'listing_type' =>  'gd_place',
+            'field_type' =>  'textarea',
+            'field_id' =>  'textarea_field',
+            'data_type' =>  '',
+            'is_active' =>  '1',
+            'site_title' => "Text Field",
+            'admin_title' => "Text Field",
+            'admin_desc' => "Text Field",
+            'htmlvar_name' =>  'textarea_field',
+            'for_admin_use' => '0',
+            'is_required' => '0',
+            'required_msg'=> '',
+            'validation_pattern' => '',
+            'validation_msg' => '',
+            'decimal_point' => '',
+            'clabels' => 'Text Field',
+            'is_default' => '1',
+            'field_title' =>  'Text Field',
+            'expand_custom_value' =>  '',
+            'search_operator' =>  'AND',
+            'front_search_title' =>  'Category',
+            'field_desc' =>  'Cat',
+            'geodir_ajax' => 'admin_ajax',
+            'manage_field_type' => 'custom_fields',
+            'default_value' =>  '' ,
+            'sort_order' =>  '12' ,
+            'show_on_listing' =>  '1' ,
+            'show_on_detail' =>  '1' ,
+            'show_as_tab' =>  '0' ,
+            'field_icon' =>  '' ,
+            'css_class' =>  '' ,
+        );
+        add_filter('wp_redirect', '__return_false');
+        ob_start();
+        geodir_ajax_handler();
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Double Click to toggle', $output);
+        remove_filter('wp_redirect', '__return_false');
+
+    }
+
     public function tearDown()
     {
         parent::tearDown();

@@ -29,6 +29,7 @@
 			<directory suffix=".php">./geodirectory-templates/</directory>
 			<directory suffix=".php">./geodirectory-widgets/</directory>
 			<exclude>
+				<file>geodirectory-functions/map-functions/get_markers.php</file>
 				<directory suffix=".php">./tests/</directory>
 			</exclude>
 		</whitelist>

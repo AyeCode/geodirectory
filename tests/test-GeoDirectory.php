@@ -7,6 +7,10 @@ class GeoDirectoryTests extends WP_UnitTestCase
         wp_set_current_user(1);
     }
 
+    public function testSettingsPage() {
+        geodir_set_default_options();
+    }
+
     public function testPopPostWidget() {
         $args = array(
             'before_widget' => '<ul>',
@@ -79,7 +83,6 @@ class GeoDirectoryTests extends WP_UnitTestCase
         $map_canvas_arr = $current_map_canvas_arr;
 
     }
-
 
     public function tearDown()
     {

@@ -21,8 +21,8 @@ class TestDummyData extends WP_UnitTestCase
         $city_bound_lng2 = -73.7002721;
 
 
-        $dummy_post_index = 10;
-        test_create_dummy_posts(10);
+        $dummy_post_index = 30;
+        test_create_dummy_posts(30);
 
         $query_args = array(
             'post_status' => 'publish',

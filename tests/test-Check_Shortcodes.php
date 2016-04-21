@@ -32,7 +32,7 @@ class CheckShortcodes extends WP_UnitTestCase
         $this->assertContains( 'geodir-loginbox-list', $output );
     }
 
-    public function texstPopPostCatShortcode()
+    public function testPopPostCatShortcode()
     {
         global $geodir_post_type;
         $geodir_post_type = 'gd_place';
