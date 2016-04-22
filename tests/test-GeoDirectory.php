@@ -232,6 +232,14 @@ class GeoDirectoryTests extends WP_UnitTestCase
         ob_end_clean();
         $this->assertContains('bestof-widget-tab-layout', $output);
 
+        ob_start();
+        $this->the_widget_form( 'geodir_bestof_widget' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Number of categories', $output);
+
+
+
     }
 
     public function testCptCatsWidget() {
@@ -243,6 +251,12 @@ class GeoDirectoryTests extends WP_UnitTestCase
         $output = ob_get_contents();
         ob_end_clean();
         $this->assertContains('geodir_cpt_categories_widget', $output);
+
+        ob_start();
+        $this->the_widget_form( 'geodir_cpt_categories_widget' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Select CPT', $output);
 
     }
 
@@ -256,6 +270,12 @@ class GeoDirectoryTests extends WP_UnitTestCase
         ob_end_clean();
         $this->assertContains('widget_gd_features', $output);
 
+        ob_start();
+        $this->the_widget_form( 'Geodir_Features_Widget' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Font Awesome Icon Color', $output);
+
     }
 
     public function testSliderWidget() {
@@ -267,6 +287,12 @@ class GeoDirectoryTests extends WP_UnitTestCase
         $output = ob_get_contents();
         ob_end_clean();
         $this->assertContains('geodir_listing_slider_view', $output);
+
+        ob_start();
+        $this->the_widget_form( 'geodir_listing_slider_widget' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Slide Show Speed', $output);
 
     }
 
@@ -281,12 +307,24 @@ class GeoDirectoryTests extends WP_UnitTestCase
         $this->assertContains('geodir_popular_post_category', $output);
 
         ob_start();
+        $this->the_widget_form( 'geodir_popular_post_category' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Default post type to use', $output);
+
+        ob_start();
         $instance = array();
         $instance['category_title'] = '';
         the_widget( 'geodir_popular_postview', $instance );
         $output = ob_get_contents();
         ob_end_clean();
         $this->assertContains('geodir_popular_post_view', $output);
+
+        ob_start();
+        $this->the_widget_form( 'geodir_popular_postview' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Post Category', $output);
 
     }
 
@@ -315,6 +353,12 @@ class GeoDirectoryTests extends WP_UnitTestCase
             $output = ob_get_contents();
             ob_end_clean();
             $this->assertContains('Related Listing', $output);
+
+            ob_start();
+            $this->the_widget_form( 'geodir_related_listing_postview' );
+            $output = ob_get_contents();
+            ob_end_clean();
+            $this->assertContains('Relate to', $output);
         endwhile;
 
         $this->assertTrue(is_int($post_id));
@@ -377,6 +421,12 @@ class GeoDirectoryTests extends WP_UnitTestCase
         $output = ob_get_contents();
         ob_end_clean();
         $this->assertContains('geodir_recent_reviews', $output);
+
+        ob_start();
+        $this->the_widget_form( 'geodir_recent_reviews_widget' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Number of Reviews', $output);
     }
 
     public function testHomeMapWidget() {
@@ -392,6 +442,12 @@ class GeoDirectoryTests extends WP_UnitTestCase
         ob_end_clean();
         $this->assertContains('geodir-map-home-page', $output);
 
+        ob_start();
+        $this->the_widget_form( 'geodir_homepage_map' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Map Zoom level', $output);
+
     }
 
     public function texstListingMapWidget() {
@@ -403,6 +459,12 @@ class GeoDirectoryTests extends WP_UnitTestCase
         $output = ob_get_contents();
         ob_end_clean();
         $this->assertContains('bestof-widget-tab-layout', $output);
+
+        ob_start();
+        $this->the_widget_form( 'geodir_map_listingpage' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Select Map View', $output);
 
     }
 
@@ -463,6 +525,18 @@ class GeoDirectoryTests extends WP_UnitTestCase
         $wp_rewrite->flush_rules();
         update_option( 'permalink_structure', $struc );
         flush_rewrite_rules( true );
+    }
+
+    function the_widget_form( $widget, $instance = array() ) {
+        global $wp_widget_factory;
+
+        $widget_obj = $wp_widget_factory->widgets[$widget];
+        if ( ! ( $widget_obj instanceof WP_Widget ) ) {
+            return;
+        }
+
+        $widget_obj->_set(-1);
+        $widget_obj->form($instance);
     }
 
     public function tearDown()
