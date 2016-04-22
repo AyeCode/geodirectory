@@ -160,7 +160,9 @@ class GeoDirectoryTests extends WP_UnitTestCase
         $this->assertContains('Sign In', $output);
     }
 
-    public function testTemplates() {
+    public function texstTemplates() {
+        $this->setPermalinkStructure();
+
         $homepage = get_page_by_title( 'GD Home page' );
         if ( $homepage )
         {
@@ -174,6 +176,234 @@ class GeoDirectoryTests extends WP_UnitTestCase
         $output = ob_get_contents();
         ob_end_clean();
         $this->assertContains('body class="home', $output);
+
+
+        ob_start();
+        $this->go_to( home_url('/?post_type=gd_place') );
+        $this->load_template();
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('All Places', $output);
+    }
+
+    public function testNavMenus() {
+        $menuname = 'Primary Menu';
+        $menulocation = 'primary';
+        // Does the menu exist already?
+        $menu_exists = wp_get_nav_menu_object( $menuname );
+
+        // If it doesn't exist, let's create it.
+        if( !$menu_exists){
+            $menu_id = wp_create_nav_menu($menuname);
+
+            // Set up default BuddyPress links and add them to the menu.
+            wp_update_nav_menu_item($menu_id, 0, array(
+                'menu-item-title' =>  __('Home'),
+                'menu-item-classes' => 'home',
+                'menu-item-url' => home_url( '/' ),
+                'menu-item-status' => 'publish'));
+
+            if( !has_nav_menu( $menulocation ) ){
+                $locations = get_theme_mod('nav_menu_locations');
+                $locations[$menulocation] = $menu_id;
+                set_theme_mod( 'nav_menu_locations', $locations );
+            }
+
+            update_option('geodir_theme_location_nav', array('primary'));
+
+            $menu = wp_nav_menu(array(
+                'theme_location' => 'primary',
+                'echo' => false,
+            ));
+
+            $this->assertContains('Add Listing', $menu);
+
+
+        }
+    }
+
+    public function testBestOfWidget() {
+        $template = geodir_plugin_path() . '/geodirectory-widgets/geodirectory_bestof_widget.php';
+        include_once($template);
+
+        ob_start();
+        the_widget( 'geodir_bestof_widget' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('bestof-widget-tab-layout', $output);
+
+    }
+
+    public function testCptCatsWidget() {
+        $template = geodir_plugin_path() . '/geodirectory-widgets/geodirectory_cpt_categories_widget.php';
+        include_once($template);
+
+        ob_start();
+        the_widget( 'geodir_cpt_categories_widget' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('geodir_cpt_categories_widget', $output);
+
+    }
+
+    public function testFeaturesWidget() {
+        $template = geodir_plugin_path() . '/geodirectory-widgets/geodirectory_features_widget.php';
+        include_once($template);
+
+        ob_start();
+        the_widget( 'Geodir_Features_Widget' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('widget_gd_features', $output);
+
+    }
+
+    public function testSliderWidget() {
+        $template = geodir_plugin_path() . '/geodirectory-widgets/geodirectory_listing_slider_widget.php';
+        include_once($template);
+
+        ob_start();
+        the_widget( 'geodir_listing_slider_widget' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('geodir_listing_slider_view', $output);
+
+    }
+
+    public function testPopularWidget() {
+        $template = geodir_plugin_path() . '/geodirectory-widgets/geodirectory_popular_widget.php';
+        include_once($template);
+
+        ob_start();
+        the_widget( 'geodir_popular_post_category' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('geodir_popular_post_category', $output);
+
+        ob_start();
+        $instance = array();
+        $instance['category_title'] = '';
+        the_widget( 'geodir_popular_postview', $instance );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('geodir_popular_post_view', $output);
+
+    }
+
+    public function testRelatedWidget() {
+        $query_args = array(
+            'post_status' => 'publish',
+            'post_type' => 'gd_place',
+            'posts_per_page' => 1,
+        );
+
+        $all_posts = new WP_Query( $query_args );
+        $post_id = null;
+        while ( $all_posts->have_posts() ) : $all_posts->the_post();
+            global $post;
+            $post_id = get_the_ID();
+            $post = geodir_get_post_info($post->ID);
+
+//            $term_list = wp_get_post_terms($post->ID, 'gd_placecategory');
+//            $post->gd_placecategory = (string) $term_list[0]->term_id;
+
+            $template = geodir_plugin_path() . '/geodirectory-widgets/geodirectory_related_listing_widget.php';
+            include_once($template);
+
+            ob_start();
+            the_widget( 'geodir_related_listing_postview' );
+            $output = ob_get_contents();
+            ob_end_clean();
+            $this->assertContains('Related Listing', $output);
+        endwhile;
+
+        $this->assertTrue(is_int($post_id));
+
+
+    }
+
+    public function testReviewsWidget() {
+
+        $time = current_time('mysql');
+
+        $args = array(
+            'listing_type' => 'gd_place',
+            'post_title' => 'Test Listing Title',
+            'post_desc' => 'Test Desc',
+            'post_tags' => 'test1,test2',
+            'post_address' => 'New York City Hall',
+            'post_zip' => '10007',
+            'post_latitude' => '40.7127837',
+            'post_longitude' => '-74.00594130000002',
+            'post_mapview' => 'ROADMAP',
+            'post_mapzoom' => '10',
+            'geodir_timing' => '10.00 am to 6 pm every day',
+            'geodir_contact' => '1234567890',
+            'geodir_email' => 'test@test.com',
+            'geodir_website' => 'http://test.com',
+            'geodir_twitter' => 'http://twitter.com/test',
+            'geodir_facebook' => 'http://facebook.com/test',
+            'geodir_special_offers' => 'Test offer'
+        );
+        $post_id = geodir_save_listing($args, true);
+
+        $data = array(
+            'comment_post_ID' => $post_id,
+            'comment_author' => 'admin',
+            'comment_author_email' => 'admin@admin.com',
+            'comment_author_url' => 'http://wpgeodirectory.com',
+            'comment_content' => 'content here',
+            'comment_type' => '',
+            'comment_parent' => 0,
+            'user_id' => 1,
+            'comment_author_IP' => '127.0.0.1',
+            'comment_agent' => 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.10) Gecko/2009042316 Firefox/3.0.10 (.NET CLR 3.5.30729)',
+            'comment_date' => $time,
+            'comment_approved' => 1,
+        );
+
+        $comment_id = wp_insert_comment($data);
+
+        $_REQUEST['geodir_overallrating'] = 5.0;
+        geodir_save_rating($comment_id);
+
+        $this->assertTrue(is_int($comment_id));
+
+        $template = geodir_plugin_path() . '/geodirectory-widgets/geodirectory_reviews_widget.php';
+        include_once($template);
+
+        ob_start();
+        the_widget( 'geodir_recent_reviews_widget' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('geodir_recent_reviews', $output);
+    }
+
+    public function testHomeMapWidget() {
+        $template = geodir_plugin_path() . '/geodirectory-widgets/home_map_widget.php';
+        include_once($template);
+
+        ob_start();
+        $instance = array();
+        $args = array();
+        $args["widget_id"] = "geodir_map_v3_home_map-2";
+        the_widget( 'geodir_homepage_map', $instance, $args );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('geodir-map-home-page', $output);
+
+    }
+
+    public function texstListingMapWidget() {
+        $template = geodir_plugin_path() . '/geodirectory-widgets/listing_map_widget.php';
+        include_once($template);
+
+        ob_start();
+        the_widget( 'geodir_map_listingpage' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('bestof-widget-tab-layout', $output);
+
     }
 
     private function load_template() {
@@ -194,7 +424,6 @@ class GeoDirectoryTests extends WP_UnitTestCase
         elseif ( is_author()		 && $template = get_author_template()		 ) :
         elseif ( is_date()		   && $template = get_date_template()		   ) :
         elseif ( is_archive()		&& $template = get_archive_template()		) :
-        elseif ( is_comments_popup() && $template = get_comments_popup_template() ) :
         elseif ( is_paged()		  && $template = get_paged_template()		  ) :
         else :
             $template = get_index_template();
@@ -226,6 +455,14 @@ class GeoDirectoryTests extends WP_UnitTestCase
             }
         }
         return;
+    }
+
+    public static function setPermalinkStructure( $struc = '/%postname%/' ) {
+        global $wp_rewrite;
+        $wp_rewrite->set_permalink_structure( $struc );
+        $wp_rewrite->flush_rules();
+        update_option( 'permalink_structure', $struc );
+        flush_rewrite_rules( true );
     }
 
     public function tearDown()

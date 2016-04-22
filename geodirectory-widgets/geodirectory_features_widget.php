@@ -27,7 +27,7 @@ class Geodir_Features_Widget extends WP_Widget
         extract($args);
 
         $title = empty($instance['title']) ? '' : apply_filters('gd_features_widget_title', __($instance['title'], 'geodirectory'));
-        $icon_color = $instance['icon_color'];
+        $icon_color = empty($instance['icon_color']) ? '#757575' : apply_filters('gd_features_widget_icon_color', __($instance['icon_color'], 'geodirectory'));
 
         echo $before_widget;
         ?>
