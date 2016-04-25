@@ -3686,7 +3686,7 @@ function geodir_ajax_import_export() {
                 }
                 // WPML
                 wp_send_json( $json );
-                exit;
+                gd_die();
             } else {
                 if ( !$posts_count > 0 ) {
                     $json['error'] = __( 'No records to export.', 'geodirectory' );
@@ -5041,7 +5041,7 @@ function geodir_ajax_import_export() {
 
     }
     echo '0';
-    wp_die();
+    gd_die();
 }
 
 /**

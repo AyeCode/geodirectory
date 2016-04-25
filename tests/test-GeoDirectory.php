@@ -7,6 +7,30 @@ class GeoDirectoryTests extends WP_UnitTestCase
         wp_set_current_user(1);
     }
 
+    public function testBreadcrumbs() {
+        $query_args = array(
+            'post_status' => 'publish',
+            'post_type' => 'gd_place',
+            'posts_per_page' => 1,
+        );
+
+        $all_posts = new WP_Query( $query_args );
+        $post_id = null;
+        while ( $all_posts->have_posts() ) : $all_posts->the_post();
+            $post_id = get_the_ID();
+        endwhile;
+
+        $this->assertTrue(is_int($post_id));
+
+        $this->go_to( get_permalink($post_id) );
+
+        ob_start();
+        geodir_breadcrumb();
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Places', $output);
+    }
+
     public function testAdminSettingForms() {
         $_REQUEST['listing_type'] = 'gd_place';
         ob_start();
@@ -227,6 +251,9 @@ class GeoDirectoryTests extends WP_UnitTestCase
         include_once($template);
 
         ob_start();
+        $instance = array();
+        $instance['use_viewing_post_type'] = '1';
+        $instance['excerpt_type'] = 'show-reviews';
         the_widget( 'geodir_bestof_widget' );
         $output = ob_get_contents();
         ob_end_clean();
@@ -238,7 +265,25 @@ class GeoDirectoryTests extends WP_UnitTestCase
         ob_end_clean();
         $this->assertContains('Number of categories', $output);
 
+        $new_instance = array(
+            'title' => '',
+            'post_type' => '',
+            'post_limit' => '5',
+            'categ_limit' => '3',
+            'character_count' => '20',
+            'add_location_filter' => '1',
+            'tab_layout' => 'bestof-tabs-on-top',
+            'excerpt_type' => 'show-desc',
+            'use_viewing_post_type' => '1'
+        );
+        $output = $this->the_widget_form_update( 'geodir_bestof_widget', $new_instance );
+        $this->assertContains('20', $output['character_count']);
 
+        ob_start();
+        geodir_bestof_js();
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('bestof-widget-tab-layout', $output);
 
     }
 
@@ -258,23 +303,55 @@ class GeoDirectoryTests extends WP_UnitTestCase
         ob_end_clean();
         $this->assertContains('Select CPT', $output);
 
+        $new_instance = array(
+            'title' => '',
+            'post_type' => array(), // NULL for all
+            'hide_empty' => '',
+            'show_count' => '',
+            'hide_icon' => '',
+            'cpt_left' => '',
+            'sort_by' => 'count',
+            'max_count' => 'all',
+            'max_level' => '1'
+        );
+        $output = $this->the_widget_form_update( 'geodir_cpt_categories_widget', $new_instance );
+        $this->assertContains('count', $output['sort_by']);
+
     }
 
     public function testFeaturesWidget() {
         $template = geodir_plugin_path() . '/geodirectory-widgets/geodirectory_features_widget.php';
         include_once($template);
 
+        $instance = array(
+            'title' => 'Features',
+            'icon_color' => '',
+            'title1' => 'Hello World',
+            'image1' => 'fa-recycle',
+            'desc1' => 'cool',
+        );
+
         ob_start();
-        the_widget( 'Geodir_Features_Widget' );
+        the_widget( 'Geodir_Features_Widget', $instance);
         $output = ob_get_contents();
         ob_end_clean();
         $this->assertContains('widget_gd_features', $output);
 
         ob_start();
-        $this->the_widget_form( 'Geodir_Features_Widget' );
+        $this->the_widget_form( 'Geodir_Features_Widget', $instance );
         $output = ob_get_contents();
         ob_end_clean();
         $this->assertContains('Font Awesome Icon Color', $output);
+
+        $new_instance = array(
+            'title' => 'Features',
+            'icon_color' => '',
+            'title1' => 'Hello World',
+            'image1' => 'fa-recycle',
+            'desc1' => 'cool',
+        );
+        $output = $this->the_widget_form_update( 'Geodir_Features_Widget', $new_instance );
+        $this->assertContains('Features', $output['title']);
 
     }
 
@@ -294,6 +371,26 @@ class GeoDirectoryTests extends WP_UnitTestCase
         ob_end_clean();
         $this->assertContains('Slide Show Speed', $output);
 
+        $new_instance = array(
+            'title' => '',
+            'post_type' => '',
+            'category' => '',
+            'post_number' => '5',
+            'max_show' => '1',
+            'slide_width' => '',
+            'show_title' => '',
+            'slideshow' => '',
+            'animationLoop' => '',
+            'directionNav' => '',
+            'slideshowSpeed' => 5000,
+            'animationSpeed' => 600,
+            'animation' => '',
+            'list_sort' => 'latest',
+            'show_featured_only' => '',
+        );
+        $output = $this->the_widget_form_update( 'geodir_listing_slider_widget', $new_instance );
+        $this->assertContains('latest', $output['list_sort']);
+
     }
 
     public function testPopularWidget() {
@@ -312,6 +409,14 @@ class GeoDirectoryTests extends WP_UnitTestCase
         ob_end_clean();
         $this->assertContains('Default post type to use', $output);
 
+        $new_instance = array(
+            'title' => '',
+            'category_limit' => 15,
+            'default_post_type' => ''
+        );
+        $output = $this->the_widget_form_update( 'geodir_popular_post_category', $new_instance );
+        $this->assertEquals(15, $output['category_limit']);
+
         ob_start();
         $instance = array();
         $instance['category_title'] = '';
@@ -325,6 +430,27 @@ class GeoDirectoryTests extends WP_UnitTestCase
         $output = ob_get_contents();
         ob_end_clean();
         $this->assertContains('Post Category', $output);
+
+        $new_instance = array(
+            'title' => '',
+            'post_type' => '',
+            'category' => array(),
+            'category_title' => '',
+            'list_sort' => '',
+            'list_order' => '',
+            'post_number' => '5',
+            'layout' => 'gridview_onehalf',
+            'listing_width' => '',
+            'add_location_filter' => '1',
+            'character_count' => '20',
+            'show_featured_only' => '',
+            'show_special_only' => '',
+            'with_pics_only' => '',
+            'with_videos_only' => '',
+            'use_viewing_post_type' => ''
+        );
+        $output = $this->the_widget_form_update( 'geodir_popular_postview', $new_instance );
+        $this->assertContains('gridview_onehalf', $output['layout']);
 
     }
 
@@ -359,6 +485,20 @@ class GeoDirectoryTests extends WP_UnitTestCase
             $output = ob_get_contents();
             ob_end_clean();
             $this->assertContains('Relate to', $output);
+
+            $new_instance = array(
+                'title' => '',
+                'list_sort' => '',
+                'list_order' => '',
+                'post_number' => '5',
+                'relate_to' => '',
+                'layout' => 'gridview_onehalf',
+                'listing_width' => '',
+                'add_location_filter' => '1',
+                'character_count' => '20'
+            );
+            $output = $this->the_widget_form_update( 'geodir_related_listing_postview', $new_instance );
+            $this->assertContains('gridview_onehalf', $output['layout']);
         endwhile;
 
         $this->assertTrue(is_int($post_id));
@@ -427,6 +567,17 @@ class GeoDirectoryTests extends WP_UnitTestCase
         $output = ob_get_contents();
         ob_end_clean();
         $this->assertContains('Number of Reviews', $output);
+
+        $new_instance = array(
+            'title' => '',
+            't1' => '',
+            't2' => '',
+            't3' => '',
+            'img1' => '',
+            'count' => ''
+        );
+        $output = $this->the_widget_form_update( 'geodir_recent_reviews_widget', $new_instance );
+        $this->assertTrue(empty($output['count']));
     }
 
     public function testHomeMapWidget() {
@@ -448,23 +599,82 @@ class GeoDirectoryTests extends WP_UnitTestCase
         ob_end_clean();
         $this->assertContains('Map Zoom level', $output);
 
+        $new_instance = array(
+            'width' => '',
+            'heigh' => '',
+            'maptype' => '',
+            'zoom' => '',
+            'autozoom' => '',
+            'child_collapse' => '0',
+            'scrollwheel' => '0'
+        );
+        $output = $this->the_widget_form_update( 'geodir_homepage_map', $new_instance );
+        $this->assertContains('0', $output['scrollwheel']);
+
     }
 
-    public function texstListingMapWidget() {
+    public function testListingMapWidget() {
+
         $template = geodir_plugin_path() . '/geodirectory-widgets/listing_map_widget.php';
         include_once($template);
 
+        //listing page
+        $this->go_to( home_url('/?post_type=gd_place') );
+
         ob_start();
-        the_widget( 'geodir_map_listingpage' );
+        $instance = array();
+        $args = array();
+        $args["widget_id"] = "geodir_map_v3_listing_map-2";
+        the_widget( 'geodir_map_listingpage', $instance, $args );
         $output = ob_get_contents();
         ob_end_clean();
-        $this->assertContains('bestof-widget-tab-layout', $output);
+        $this->assertContains('geodir-map-listing-page', $output);
+
+        // detail page
+        $query_args = array(
+            'post_status' => 'publish',
+            'post_type' => 'gd_place',
+            'posts_per_page' => 1,
+        );
+
+        $all_posts = new WP_Query( $query_args );
+        $post_id = null;
+        while ( $all_posts->have_posts() ) : $all_posts->the_post();
+            $post_id = get_the_ID();
+        endwhile;
+
+        $this->assertTrue(is_int($post_id));
+
+        $this->go_to( get_permalink($post_id) );
+
+        ob_start();
+        $instance = array();
+        $args = array();
+        $args["widget_id"] = "geodir_map_v3_listing_map-2";
+        the_widget( 'geodir_map_listingpage', $instance, $args );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('geodir-map-listing-page', $output);
 
         ob_start();
         $this->the_widget_form( 'geodir_map_listingpage' );
         $output = ob_get_contents();
         ob_end_clean();
         $this->assertContains('Select Map View', $output);
+
+        $new_instance = array(
+            'width' => '',
+            'heigh' => '',
+            'maptype' => '',
+            'zoom' => '',
+            'autozoom' => '',
+            'sticky' => '',
+            'scrollwheel' => '0',
+            'showall' => '0'
+        );
+        $output = $this->the_widget_form_update( 'geodir_map_listingpage', $new_instance );
+        $this->assertContains('0', $output['scrollwheel']);
+
 
     }
 
@@ -538,6 +748,19 @@ class GeoDirectoryTests extends WP_UnitTestCase
         $widget_obj->_set(-1);
         $widget_obj->form($instance);
     }
+
+    function the_widget_form_update( $widget, $new_instance = array(), $old_instance = array() ) {
+        global $wp_widget_factory;
+
+        $widget_obj = $wp_widget_factory->widgets[$widget];
+        if ( ! ( $widget_obj instanceof WP_Widget ) ) {
+            return;
+        }
+
+        $widget_obj->_set(-1);
+        return $widget_obj->update($new_instance, $old_instance);
+    }
+
 
     public function tearDown()
     {
