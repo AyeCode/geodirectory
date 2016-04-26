@@ -1020,7 +1020,7 @@ if (!function_exists('register_geodir_widgets')) {
             {
                 //save the widget
                 //Nothing to save
-                return isset($instance) ? $instance : '';
+                return isset($instance) ? $instance : array();
             }
 
             /**

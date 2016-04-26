@@ -1,4 +1,5 @@
 v1.6.1
+GD Search widget bug with Display Widgets plugin - FIXED
 Log the WP error in debug.log with csv row number when fail to import listing - ADDED
 
 v1.6.0
