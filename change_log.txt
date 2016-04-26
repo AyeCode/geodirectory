@@ -1,3 +1,6 @@
+v1.6.1
+Log the WP error in debug.log with csv row number when fail to import listing - ADDED
+
 v1.6.0
 GD export should not export deleted listings - CHANGED
 Edited by author message should not fire when using GD import - CHANGED
