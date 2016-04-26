@@ -88,7 +88,7 @@ class CheckShortcodes extends WP_UnitTestCase
         $this->assertContains( 'geodir_sc_recent_reviews', $output );
     }
 
-    public function texstRelatedListingsShortcode()
+    public function testRelatedListingsShortcode()
     {
         $query_args = array(
             'post_status' => 'publish',
@@ -111,7 +111,7 @@ class CheckShortcodes extends WP_UnitTestCase
 
     }
 
-    public function texstListingsShortcode()
+    public function testListingsShortcode()
     {
         $output = do_shortcode('[gd_listings post_type="gd_place" category="1,3" post_number="10" list_sort="high_review"]');
         $this->assertContains( 'geodir-sc-gd-listings', $output );
@@ -119,6 +119,9 @@ class CheckShortcodes extends WP_UnitTestCase
 
     public function texstBestOfWidgetShortcode()
     {
+        $template = geodir_plugin_path() . '/geodirectory-widgets/geodirectory_bestof_widget.php';
+        include_once($template);
+
         $output = do_shortcode('[gd_bestof_widget title="widget title" post_type=gd_hotel post_limit=5 categ_limit=6 character_count=50 use_viewing_post_type=true add_location_filter=true tab_layout=bestof-tabs-as-dropdown]');
         $this->assertContains( 'geodir_bestof_widget', $output );
     }

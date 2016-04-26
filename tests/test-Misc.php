@@ -72,6 +72,27 @@ class MiscTests extends WP_UnitTestCase
         $this->assertContains('Title / Meta', $output[0]['name']);
     }
 
+    public function testDiagnose() {
+        ob_start();
+        geodir_diagnose_default_pages();
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains( 'GD Home page exists with proper setting', $output );
+        $this->assertContains( 'Add Listing page exists with proper setting', $output );
+        $this->assertContains( 'Listing Preview page exists with proper setting', $output );
+        $this->assertContains( 'Listing Success page exists with proper setting', $output );
+        $this->assertContains( 'Info page exists with proper setting', $output );
+        $this->assertContains( 'Login page exists with proper setting', $output );
+        $this->assertContains( 'Location page exists with proper setting', $output );
+
+        ob_start();
+        geodir_diagnose_load_db_language();
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains( 'ul', $output );
+
+    }
+
     public function tearDown()
     {
         parent::tearDown();

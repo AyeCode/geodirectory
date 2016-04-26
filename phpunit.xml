@@ -31,6 +31,9 @@
 			<exclude>
 				<file>geodirectory-functions/map-functions/get_markers.php</file>
 				<directory suffix=".php">./tests/</directory>
+				<directory suffix=".php">./geodirectory-functions/cat-meta-functions/</directory>
+				<directory suffix=".php">./geodirectory-functions/wp-session/</directory>
+				<directory suffix="array.php">./geodirectory-admin/option-pages/</directory>
 			</exclude>
 		</whitelist>
 	</filter>

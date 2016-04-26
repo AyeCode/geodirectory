@@ -80,6 +80,19 @@ class Register extends WP_UnitTestCase
         $this->assertInternalType("int", $data[0]);
     }
 
+    public function testResetPassword()
+    {
+        global $errors;
+        $_REQUEST['action'] = 'login';
+        $_POST['log'] = 'admin';
+        add_filter('wp_redirect', '__return_false');
+        geodir_user_signup();
+        remove_filter('wp_redirect', '__return_false');
+        $errors = (array) $errors;
+        $this->assertArrayHasKey( 'empty_password', $errors["errors"] );
+        $this->assertContains( 'The password field is empty', $errors["errors"]["empty_password"][0] );
+    }
+
     public function tearDown()
     {
         parent::tearDown();
