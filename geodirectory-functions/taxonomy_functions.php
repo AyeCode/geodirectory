@@ -1319,7 +1319,7 @@ function geodir_register_defaults()
             'menu_icon' => $menu_icon,
             'public' => true,
             'query_var' => true,
-            'rewrite' => array('slug' => $listing_slug , 'with_front' => false, 'hierarchical' => true),
+            'rewrite' => array('slug' => $listing_slug , 'with_front' => false, 'hierarchical' => true, 'feeds' => true),
             'supports' => array('title', 'editor', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'comments', /*'revisions', 'post-formats'*/),
             'taxonomies' => array('gd_placecategory', 'gd_place_tags'));
 

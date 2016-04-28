@@ -1158,7 +1158,7 @@ function geodir_remove_temp_images()
 			rmdir($dirPath);
 	}	*/
 
-    $dirname = $uploads_dir . '/temp_' . $current_user->data->ID;
+    $dirname = $uploads_dir . '/temp_' . $current_user->ID;
     geodir_delete_directory($dirname);
 }
 

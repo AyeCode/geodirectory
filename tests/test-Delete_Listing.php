@@ -5,8 +5,6 @@ class DeleteListing extends WP_UnitTestCase
     {
         parent::setUp();
         wp_set_current_user(1);
-        deactivate_plugins('buddypress/bp-loader.php');
-        remove_filter( 'muplugins_loaded', '_tests_load_bp_registration_options' );
     }
 
     public function testDeleteListing()

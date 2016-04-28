@@ -5,6 +5,8 @@ class GeoDirectoryTests extends WP_UnitTestCase
     {
         parent::setUp();
         wp_set_current_user(1);
+
+        geodir_register_sidebar();
     }
 
     public function testBreadcrumbs() {
@@ -184,7 +186,12 @@ class GeoDirectoryTests extends WP_UnitTestCase
         $this->assertContains('Sign In', $output);
     }
 
-    public function texstTemplates() {
+    public function testTemplates() {
+
+        global $current_user;
+
+        $user_id = $current_user->ID;
+
         $this->setPermalinkStructure();
 
         $homepage = get_page_by_title( 'GD Home page' );
@@ -208,6 +215,46 @@ class GeoDirectoryTests extends WP_UnitTestCase
         $output = ob_get_contents();
         ob_end_clean();
         $this->assertContains('All Places', $output);
+
+        ob_start();
+        $this->go_to( home_url('/?geodir_search=1&stype=gd_place&s=test&snear=&sgeo_lat=&sgeo_lon=') );
+        $this->load_template();
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Search Results for', $output);
+
+        $query_args = array(
+            'post_status' => 'publish',
+            'post_type' => 'gd_place',
+            'posts_per_page' => 1,
+        );
+
+        $all_posts = new WP_Query( $query_args );
+        $post_id = null;
+        while ( $all_posts->have_posts() ) : $all_posts->the_post();
+            $post_id = get_the_ID();
+        endwhile;
+
+        $this->assertTrue(is_int($post_id));
+
+        global $preview;
+        $preview = false;
+        ob_start();
+        $this->go_to( get_permalink($post_id) );
+        $this->load_template();
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('post_profileTab', $output);
+
+        ob_start();
+        $_REQUEST['stype'] = 'gd_place';
+        $_REQUEST['geodir_dashbord'] = true;
+        $this->go_to( get_author_posts_url($user_id) );
+        $this->load_template();
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('gd_list_view', $output);
+
     }
 
     public function testNavMenus() {
@@ -610,6 +657,178 @@ class GeoDirectoryTests extends WP_UnitTestCase
         );
         $output = $this->the_widget_form_update( 'geodir_homepage_map', $new_instance );
         $this->assertContains('0', $output['scrollwheel']);
+
+    }
+
+    public function testLoginWidget() {
+
+        register_geodir_widgets();
+
+        ob_start();
+        the_widget( 'geodir_loginwidget' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('geodir_loginbox', $output);
+
+        ob_start();
+        $this->the_widget_form( 'geodir_loginwidget' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Widget Title', $output);
+
+        $new_instance = array(
+            'title' => 'Login',
+            't1' => '',
+            't2' => '',
+            't3' => '',
+            'img1' => '',
+            'desc1' => ''
+        );
+        $output = $this->the_widget_form_update( 'geodir_loginwidget', $new_instance );
+        $this->assertContains('Login', $output['title']);
+
+    }
+
+    public function testSocialWidget() {
+
+        ob_start();
+        the_widget( 'geodir_social_like_widget' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('twitter.com', $output);
+
+        ob_start();
+        $this->the_widget_form( 'geodir_social_like_widget' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('No settings for this widget', $output);
+
+        $new_instance = array(
+            'title' => 'Social',
+        );
+        $output = $this->the_widget_form_update( 'geodir_social_like_widget', $new_instance );
+        $this->assertContains('Social', $output['title']);
+
+    }
+
+    public function testSubscribeWidget() {
+
+        ob_start();
+        the_widget( 'geodirsubscribeWidget' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('geodir-subscribe-form', $output);
+
+        ob_start();
+        $this->the_widget_form( 'geodirsubscribeWidget' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Feedburner ID', $output);
+
+        $new_instance = array(
+            'title' => 'Subscribe',
+            'id' => '',
+            'advt1' => '',
+            'text' => '',
+            'twitter' => '',
+            'facebook' => '',
+            'digg' => '',
+            'myspace' => ''
+        );
+        $output = $this->the_widget_form_update( 'geodirsubscribeWidget', $new_instance );
+        $this->assertContains('Subscribe', $output['title']);
+
+    }
+
+    public function testAdvWidget() {
+
+        ob_start();
+        $instance = array();
+        $instance['desc1'] = 'hello';
+        the_widget( 'geodiradvtwidget', $instance );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('hello', $output);
+
+        ob_start();
+        $this->the_widget_form( 'geodiradvtwidget' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Your Advt code', $output);
+
+        $new_instance = array(
+            'desc1' => 'Advertise'
+        );
+        $output = $this->the_widget_form_update( 'geodiradvtwidget', $new_instance );
+        $this->assertContains('Advertise', $output['desc1']);
+
+    }
+
+    public function testFlickrWidget() {
+
+        ob_start();
+        the_widget( 'GeodirFlickrWidget' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('geodir-flickr', $output);
+
+        ob_start();
+        $this->the_widget_form( 'GeodirFlickrWidget' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Flickr ID', $output);
+
+        $new_instance = array(
+            'id' => '',
+            'number' => '34'
+        );
+        $output = $this->the_widget_form_update( 'GeodirFlickrWidget', $new_instance );
+        $this->assertContains('34', $output['number']);
+
+    }
+
+    public function testTwitterWidget() {
+
+        ob_start();
+        $instance = array();
+        $instance['gd_tw_desc1'] = 'hello';
+        the_widget( 'geodir_twitter', $instance );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('hello', $output);
+
+        ob_start();
+        $this->the_widget_form( 'geodir_twitter' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('Your twitter code', $output);
+
+        $new_instance = array(
+            'gd_tw_desc1' => 'hello'
+        );
+        $output = $this->the_widget_form_update( 'geodir_twitter', $new_instance );
+        $this->assertContains('hello', $output['gd_tw_desc1']);
+
+    }
+
+    public function testAdvSearchWidget() {
+
+        ob_start();
+        the_widget( 'geodir_advance_search_widget' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('geodir-loc-bar', $output);
+
+        ob_start();
+        $this->the_widget_form( 'geodir_advance_search_widget' );
+        $output = ob_get_contents();
+        ob_end_clean();
+        $this->assertContains('This is a search widget', $output);
+
+//        $new_instance = array(
+//        );
+//        $output = $this->the_widget_form_update( 'geodir_advance_search_widget', $new_instance );
+//        $this->assertContains('Subscribe', $output['title']);
 
     }
 
