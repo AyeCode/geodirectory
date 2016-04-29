@@ -420,7 +420,7 @@ function geodir_handle_option_form_submit($current_tab)
 }
 
 
-if (!function_exists('geodir_autoinstall_admin_header') && get_option('geodir_installed')) {
+if (!function_exists('geodir_autoinstall_admin_header') && (get_option('geodir_installed') || defined( 'GD_TESTING_MODE' ))) {
     /**
      * GeoDirectory dummy data installation.
      *
@@ -3686,7 +3686,7 @@ function geodir_ajax_import_export() {
                 }
                 // WPML
                 wp_send_json( $json );
-                exit;
+                gd_die();
             } else {
                 if ( !$posts_count > 0 ) {
                     $json['error'] = __( 'No records to export.', 'geodirectory' );
@@ -5096,7 +5096,7 @@ function geodir_ajax_import_export() {
 
     }
     echo '0';
-    wp_die();
+    gd_die();
 }
 
 /**

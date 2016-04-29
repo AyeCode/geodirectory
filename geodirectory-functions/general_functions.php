@@ -617,10 +617,10 @@ if (!function_exists('geodir_calculateDistanceFromLatLong')) {
 
         $earthMeanRadius = geodir_getDistanceRadius($uom);
 
-        $deltaLatitude = deg2rad($point2['latitude'] - $point1['latitude']);
-        $deltaLongitude = deg2rad($point2['longitude'] - $point1['longitude']);
+        $deltaLatitude = deg2rad((float) $point2['latitude'] - (float) $point1['latitude']);
+        $deltaLongitude = deg2rad((float) $point2['longitude'] - (float) $point1['longitude']);
         $a = sin($deltaLatitude / 2) * sin($deltaLatitude / 2) +
-            cos(deg2rad($point1['latitude'])) * cos(deg2rad($point2['latitude'])) *
+            cos(deg2rad((float) $point1['latitude'])) * cos(deg2rad((float) $point2['latitude'])) *
             sin($deltaLongitude / 2) * sin($deltaLongitude / 2);
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
         $distance = $earthMeanRadius * $c;

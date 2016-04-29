@@ -3,7 +3,7 @@ $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
 $_SERVER['SERVER_NAME'] = '';
 $PHP_SELF = $GLOBALS['PHP_SELF'] = $_SERVER['PHP_SELF'] = '/index.php';
 
-define( 'GD_USE_PHP_SESSIONS', false );
+define( 'GEODIR_USE_PHP_SESSIONS', false );
 define( 'GD_TESTING_MODE', true );
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
@@ -85,33 +85,7 @@ function print_mail($data) {
 }
 
 function test_create_dummy_posts($max = 10) {
-//	$i = 1;
-//	while($i <= 10) {
-//		$_REQUEST['insert_dummy_post_index'] = $i;
-//		$_REQUEST['city_bound_lat1'] = 40.4960439;
-//		$_REQUEST['city_bound_lng1'] = -74.2557349;
-//		$_REQUEST['city_bound_lat2'] = 40.91525559999999;
-//		$_REQUEST['city_bound_lng2'] = -73.7002721;
-//
-//		$_REQUEST['geodir_autofill'] = 'geodir_dummy_insert';
-//		$_REQUEST['posttype'] = 'gd_place';
-//		$_REQUEST['_wpnonce'] = wp_create_nonce('geodir_dummy_posts_insert_noncename');;
-//		geodir_ajax_handler();
-//
-////	geodir_insert_dummy_posts();
-//		$i++;
-//	}
-//
-//	unset($_REQUEST['insert_dummy_post_index']);
-//	unset($_REQUEST['city_bound_lat1']);
-//	unset($_REQUEST['city_bound_lng1']);
-//	unset($_REQUEST['city_bound_lat2']);
-//	unset($_REQUEST['city_bound_lng2']);
-//	unset($_REQUEST['geodir_autofill']);
-//	unset($_REQUEST['posttype']);
-//	unset($_REQUEST['_wpnonce']);
-
-	$i = 2;
+	$i = 1;
 	while($i <= $max) {
 		global $dummy_post_index, $city_bound_lat1, $city_bound_lng1, $city_bound_lat2, $city_bound_lng2;
 

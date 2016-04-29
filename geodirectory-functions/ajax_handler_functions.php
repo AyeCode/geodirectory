@@ -143,7 +143,7 @@ function geodir_ajax_handler() {
             include_once(geodir_plugin_path() . '/geodirectory-admin/geodir_admin_ajax.php');
         } else {
             wp_redirect(geodir_login_url());
-            exit();
+            gd_die();
         }
     }
 

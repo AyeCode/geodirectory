@@ -11,6 +11,8 @@ class Favourites extends WP_UnitTestCase
     {
         global $current_user;
 
+        $user_id = $current_user->ID;
+
         $query_args = array(
             'post_status' => 'publish',
             'post_type' => 'gd_place',
@@ -30,7 +32,6 @@ class Favourites extends WP_UnitTestCase
         $output = ob_get_clean();
         $this->assertContains( 'Remove from Favorites', $output );
 
-        $user_id = $current_user->ID;
 
         $user_fav_posts = get_user_meta($user_id, 'gd_user_favourite_post', true);
 
@@ -43,6 +44,8 @@ class Favourites extends WP_UnitTestCase
     {
         global $current_user;
 
+        $user_id = $current_user->ID;
+
         $query_args = array(
             'post_status' => 'publish',
             'post_type' => 'gd_place',
@@ -62,7 +65,6 @@ class Favourites extends WP_UnitTestCase
         $output = ob_get_clean();
         $this->assertContains( 'Remove from Favorites', $output );
 
-        $user_id = $current_user->ID;
 
         $user_fav_posts = get_user_meta($user_id, 'gd_user_favourite_post', true);
 
