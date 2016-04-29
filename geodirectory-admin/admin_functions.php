@@ -582,7 +582,7 @@ function geodir_insert_dummy_posts()
     global $wpdb, $current_user;
 
     /**
-     * Contains dumy post content.
+     * Contains dummy post content.
      *
      * @since 1.0.0
      * @package GeoDirectory
@@ -972,7 +972,7 @@ function places_custom_fields_tab($tabs)
  * @since 1.0.0
  * @package GeoDirectory
  * @param array $tabs Tab menu array {@see places_custom_fields_tab()}.
- * @return array Modified tab meny array.
+ * @return array Modified tab menu array.
  */
 function geodir_tools_setting_tab($tabs)
 {
@@ -988,7 +988,7 @@ function geodir_tools_setting_tab($tabs)
  * @since 1.0.0
  * @package GeoDirectory
  * @param array $tabs Tab menu array {@see places_custom_fields_tab()}.
- * @return array Modified tab meny array.
+ * @return array Modified tab menu array.
  */
 function geodir_compatibility_setting_tab($tabs)
 {
@@ -1005,7 +1005,7 @@ function geodir_compatibility_setting_tab($tabs)
  * @since 1.0.0
  * @package GeoDirectory
  * @param array $tabs Tab menu array {@see places_custom_fields_tab()}.
- * @return array Modified tab meny array.
+ * @return array Modified tab menu array.
  */
 function geodir_extend_geodirectory_setting_tab($tabs)
 {
@@ -1087,7 +1087,7 @@ if (!function_exists('geodir_manage_post_columns')) {
                         $state = __('days overdue', 'geodirectory');
                         $expire_class = 'expire_over';
                     }
-                    $date_diff = round(abs(strtotime($d1) - strtotime($d2)) / 86400); // get the differance in days
+                    $date_diff = round(abs(strtotime($d1) - strtotime($d2)) / 86400); // get the difference in days
                     $date_diff_text = '<br /><span class="' . $expire_class . '">(' . $date_diff . ' ' . $state . ')</span>';
                 }
                 /* If no expire_date is found, output a default message. */
@@ -1937,7 +1937,7 @@ function geodir_admin_fields($options)
                 jQuery('.gd-content-heading').hide();
                 jQuery('#sub_' + tab_id).show();
                 jQuery('.active_tab').val(tab_id);
-                jQuery("select.chosen_select").trigger("chosen:updated"); //refresh closen
+                jQuery("select.chosen_select").trigger("chosen:updated"); //refresh chosen
             });
 
             <?php if (isset($_REQUEST['active_tab']) && $_REQUEST['active_tab'] != '') { ?>
@@ -2232,7 +2232,7 @@ function get_gd_theme_compat_import_callback()
 
 
 /**
- * Sets theme compatabilty options.
+ * Sets theme compatibility options.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -2255,7 +2255,7 @@ function gd_set_theme_compat()
 
     if ($current_compat == $theme_name && strpos("_custom", get_option('gd_theme_compat')) !== false) {
         return;
-    }// if already running corect compat then bail
+    }// if already running correct compat then bail
 
     if (isset($theme_compats[$theme_name])) {// if there is a compat avail then set it
         update_option('gd_theme_compat', $theme_name);
@@ -2395,7 +2395,7 @@ function geodir_avada_remove_notification()
 add_action('wp_ajax_geodir_avada_remove_notification', 'geodir_avada_remove_notification');
 
 /**
- * Get the current post type in the wordPress admin
+ * Get the current post type in the WordPress admin
  *
  * @since 1.4.2
  * @package GeoDirectory
@@ -3196,7 +3196,7 @@ function gd_imex_showStatusMsg(el, type) {
     }
 
     if (invalid > 0 && type!='loc') {
-        var msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) could not be added due to blank title/invalid post type.', 'geodirectory' ), '%s', '%d' ) );?></p>';
+        var msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) could not be added due to blank title/invalid post type/invalid characters used in data.', 'geodirectory' ), '%s', '%d' ) );?></p>';
         
         if (type=='hood') {
             msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) could not be added due to invalid neighbourhood data(name, latitude, longitude) or invalid location data(either location_id or city/region/country is empty)', 'geodirectory' ), '%s', '%d' ) );?></p>';
@@ -4047,6 +4047,8 @@ function geodir_ajax_import_export() {
                         exit;
                     }
                     
+                    $gd_error_log = __('GD IMPORT CATEGORIES [ROW %d]:', 'geodirectory');
+                    
                     for ($i = 1; $i <= $limit; $i++) {
                         $index = $processed + $i;
                         
@@ -4104,6 +4106,8 @@ function geodir_ajax_import_export() {
                             }
                             
                             if ( $cat_name == '' || !in_array( $cat_posttype, $post_types ) ) {
+                                geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . __( 'Could not be added due to blank title/invalid post type', 'geodirectory' ) );
+                                
                                 $invalid++;
                                 continue;
                             }
@@ -4163,6 +4167,7 @@ function geodir_ajax_import_export() {
                                         $updated++;
                                     } else {
                                         $invalid++;
+                                        geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . __( 'Could not be updated due to invalid data (check & remove if any invalid characters used in data)', 'geodirectory' ) );
                                     }
                                 } else if ( $term_data['slug'] != '' && $term = (array)term_exists( $term_data['slug'], $taxonomy ) ) {
                                     $term_data['term_id'] = $term['term_id'];
@@ -4171,12 +4176,14 @@ function geodir_ajax_import_export() {
                                         $updated++;
                                     } else {
                                         $invalid++;
+                                        geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . __( 'Could not be updated due to invalid data (check & remove if any invalid characters used in data)', 'geodirectory' ) );
                                     }
                                 } else {
                                     if ( $term_id = geodir_imex_insert_term( $taxonomy, $term_data ) ) {
                                         $created++;
                                     } else {
                                         $invalid++;
+                                        geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . __( 'Could not be added due to invalid data (check & remove if any invalid characters used in data)', 'geodirectory' ) );
                                     }
                                 }
                             } else if ( $import_choice == 'skip' ) {
@@ -4189,10 +4196,12 @@ function geodir_ajax_import_export() {
                                         $created++;
                                     } else {
                                         $invalid++;
+                                        geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . __( 'Could not be updated due to invalid data (check & remove if any invalid characters used in data)', 'geodirectory' ) );
                                     }
                                 }
                             } else {
                                 $invalid++;
+                                geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . __( 'Could not be added due to invalid data (check & remove if any invalid characters used in data)', 'geodirectory' ) );
                             }
                             
                             if ( $term_id ) {
@@ -4262,7 +4271,6 @@ function geodir_ajax_import_export() {
                 wp_send_json( $json );
                 exit;
             } else if ( $task == 'import_post' ) {
-
                 //run some stuff to make the import quicker
                 wp_defer_term_counting( true );
                 wp_defer_comment_counting( true );
@@ -4285,12 +4293,15 @@ function geodir_ajax_import_export() {
                         exit;
                     }
 
-                    $processed_actual=0;
+                    $gd_error_log = __('GD IMPORT LISTINGS [ROW %d]:', 'geodirectory');
+                    $wp_chars_error = __( '(check & remove if any invalid characters used in data)', 'geodirectory' );
+                    $processed_actual = 0;
                     for ($i = 1; $i <= $limit; $i++) {
                         $index = $processed + $i;
                         $gd_post = array();
                         
-                        if (isset($file[$index])) {$processed_actual++;
+                        if (isset($file[$index])) {
+                            $processed_actual++;
                             $row = $file[$index];
                             $row = array_map( 'trim', $row );
                             //$row = array_map( 'utf8_encode', $row );
@@ -4347,7 +4358,7 @@ function geodir_ajax_import_export() {
                                 } else if ( $column == 'default_category' ) {
                                     $default_category = wp_kses_normalize_entities($row[$c]);
                                 } else if ( $column == 'post_tags' && $row[$c] != '' ) {
-                                    $post_tags = explode( ',', $row[$c] );
+                                    $post_tags = explode( ',', sanitize_text_field($row[$c]) );
                                 } else if ( $column == 'post_type' ) {
                                     $post_type = $row[$c];
                                 } else if ( $column == 'post_status' ) {
@@ -4357,40 +4368,40 @@ function geodir_ajax_import_export() {
                                 } else if ( $column == 'geodir_video' ) {
                                     $geodir_video = $row[$c];
                                 } else if ( $column == 'post_address' ) {
-                                    $post_address = $row[$c];
+                                    $post_address = sanitize_text_field($row[$c]);
                                 } else if ( $column == 'post_city' ) {
-                                    $post_city = $row[$c];
+                                    $post_city = sanitize_text_field($row[$c]);
                                 } else if ( $column == 'post_region' ) {
-                                    $post_region = $row[$c];
+                                    $post_region = sanitize_text_field($row[$c]);
                                 } else if ( $column == 'post_country' ) {
-                                    $post_country = $row[$c];
+                                    $post_country = sanitize_text_field($row[$c]);
                                 } else if ( $column == 'post_zip' ) {
-                                    $post_zip = $row[$c];
+                                    $post_zip = sanitize_text_field($row[$c]);
                                 } else if ( $column == 'post_latitude' ) {
-                                    $post_latitude = $row[$c];
+                                    $post_latitude = sanitize_text_field($row[$c]);
                                 } else if ( $column == 'post_longitude' ) {
-                                    $post_longitude = $row[$c];
+                                    $post_longitude = sanitize_text_field($row[$c]);
                                 } else if ( $column == 'post_neighbourhood' ) {
-                                    $post_neighbourhood = $row[$c];
+                                    $post_neighbourhood = sanitize_text_field($row[$c]);
                                     unset($gd_post[$column]);
                                 } else if ( $column == 'neighbourhood_latitude' ) {
-                                    $neighbourhood_latitude = $row[$c];
+                                    $neighbourhood_latitude = sanitize_text_field($row[$c]);
                                 } else if ( $column == 'neighbourhood_longitude' ) {
-                                    $neighbourhood_longitude = $row[$c];
+                                    $neighbourhood_longitude = sanitize_text_field($row[$c]);
                                 } else if ( $column == 'geodir_timing' ) {
-                                    $geodir_timing = $row[$c];
+                                    $geodir_timing = sanitize_text_field($row[$c]);
                                 } else if ( $column == 'geodir_contact' ) {
-                                    $geodir_contact = $row[$c];
+                                    $geodir_contact = sanitize_text_field($row[$c]);
                                 } else if ( $column == 'geodir_email' ) {
-                                    $geodir_email = $row[$c];
+                                    $geodir_email = sanitize_email($row[$c]);
                                 } else if ( $column == 'geodir_website' ) {
-                                    $geodir_website = $row[$c];
+                                    $geodir_website = sanitize_text_field($row[$c]);
                                 } else if ( $column == 'geodir_twitter' ) {
-                                    $geodir_twitter = $row[$c];
+                                    $geodir_twitter = sanitize_text_field($row[$c]);
                                 } else if ( $column == 'geodir_facebook' ) {
-                                    $geodir_facebook = $row[$c];
+                                    $geodir_facebook = sanitize_text_field($row[$c]);
                                 } else if ( $column == 'geodir_twitter' ) {
-                                    $geodir_twitter = $row[$c];
+                                    $geodir_twitter = sanitize_text_field($row[$c]);
                                 } else if ( $column == 'IMAGE' && !empty( $row[$c] ) && $row[$c] != '' ) {
                                     $post_images[] = $row[$c];
                                 } else if ( $column == 'alive_days' && (int)$row[$c] > 0 ) {
@@ -4427,6 +4438,7 @@ function geodir_ajax_import_export() {
                             if ( $post_title == '' || !in_array( $post_type, $post_types ) ) {
                                 $invalid++;
                                 $valid = false;
+                                geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . __( 'Could not be added due to blank title/invalid post type', 'geodirectory' ) );
                             }
                             
                             $location_allowed = function_exists( 'geodir_cpt_no_location' ) && geodir_cpt_no_location( $post_type ) ? false : true;
@@ -4435,10 +4447,12 @@ function geodir_ajax_import_export() {
                                 if ( $post_address == '' || $post_city == '' || $post_region == '' || $post_country == '' || $post_latitude == '' || $post_longitude == '' ) {
                                     $invalid_addr++;
                                     $valid = false;
+                                    geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . __( 'Could not be added due to blank/invalid address(city, region, country, latitude, longitude).', 'geodirectory' ) );
                                 } else if ( !empty( $location_result ) && $location_result->location_id == 0 ) {
                                     if ( ( geodir_strtolower( $post_city ) != geodir_strtolower( $location_result->city ) ) || ( geodir_strtolower( $post_region ) != geodir_strtolower( $location_result->region ) ) || (geodir_strtolower( $post_country ) != geodir_strtolower( $location_result->country ) ) ) {
                                         $invalid_addr++;
                                         $valid = false;
+                                        geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . __( 'Could not be added due to blank/invalid address(city, region, country, latitude, longitude).', 'geodirectory' ) );
                                     } else {
                                         if (!$location_manager) {
                                             $gd_post['post_locations'] = '[' . $location_result->city_slug . '],[' . $location_result->region_slug . '],[' . $location_result->country_slug . ']'; // Set the default location when location manager not activated.
@@ -4504,34 +4518,58 @@ function geodir_ajax_import_export() {
 
                             $saved_post_id = NULL;
                             if ( $import_choice == 'update' ) {
+                                $gd_wp_error = __( 'Unable to add listing, please check the listing data.', 'geodirectory' );
+                                
                                 if ( $post_id > 0 && get_post( $post_id ) ) {
                                     $save_post['ID'] = $post_id;
                                     
-                                    if ( wp_update_post( $save_post ) ) {
-                                        $saved_post_id = $post_id;
-                                        $updated++;
+                                    if ( $saved_post_id = wp_update_post( $save_post, true ) ) {
+                                        if ( is_wp_error( $saved_post_id ) ) {
+                                            $gd_wp_error = $saved_post_id->get_error_message() . ' ' . $wp_chars_error;
+                                            $saved_post_id = 0;
+                                        } else {
+                                            $saved_post_id = $post_id;
+                                            $updated++;
+                                        }
                                     }
                                 } else {
-                                    if ( $saved_post_id = wp_insert_post( $save_post ) ) {
-                                        $created++;
+                                    if ( $saved_post_id = wp_insert_post( $save_post, true ) ) {
+                                        if ( is_wp_error( $saved_post_id ) ) {
+                                            $gd_wp_error = $saved_post_id->get_error_message() . ' ' . $wp_chars_error;
+                                            $saved_post_id = 0;
+                                        } else {
+                                            $created++;
+                                        }
                                     }
                                 }
                                 
                                 if ( !$saved_post_id > 0 ) {
                                     $invalid++;
+                                    geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . $gd_wp_error );
                                 }
                             } else if ( $import_choice == 'skip' ) {
                                 if ( $post_id > 0 && get_post( $post_id ) ) {
                                     $skipped++;	
                                 } else {
-                                    if ( $saved_post_id = wp_insert_post( $save_post ) ) {
-                                        $created++;	
+                                    if ( $saved_post_id = wp_insert_post( $save_post, true ) ) {
+                                        if ( is_wp_error( $saved_post_id ) ) {
+                                            $invalid++;
+                                            
+                                            geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . $saved_post_id->get_error_message() . ' ' . $wp_chars_error );
+                                            $saved_post_id = 0;
+                                        } else {
+                                            $created++;
+                                        }
                                     } else {
                                         $invalid++;
+                                        
+                                        geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . $wp_chars_error );
                                     }
                                 }
                             } else {
                                 $invalid++;
+                                
+                                geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . $wp_chars_error );
                             }
 
                             if ( (int)$saved_post_id > 0 ) {
@@ -4840,6 +4878,8 @@ function geodir_ajax_import_export() {
                         wp_send_json( $json );
                     }
                     
+                    $gd_error_log = __('GD IMPORT LOCATIONS [ROW %d]:', 'geodirectory');
+                    $gd_error_location = __( 'Could not be saved due to blank/invalid address(city, region, country, latitude, longitude)', 'geodirectory' );
                     for ($i = 1; $i <= $limit; $i++) {
                         $index = $processed + $i;
                         
@@ -4856,6 +4896,7 @@ function geodir_ajax_import_export() {
 
                             if ( empty($data['city']) || empty($data['region']) || empty($data['country']) || empty($data['latitude']) || empty($data['longitude']) ) {
                                 $invalid++;
+                                geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . $gd_error_location );
                                 continue;
                             }
                             
@@ -4867,6 +4908,7 @@ function geodir_ajax_import_export() {
                                         $updated++;
                                     } else {
                                         $invalid++;
+                                        geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . $gd_error_location );
                                     }
                                 } else if ( !empty( $data['city_slug'] ) && $location = geodir_get_location_by_slug( 'city', array( 'city_slug' => $data['city_slug'] ) ) ) {
                                     $data['location_id'] = (int)$location->location_id;
@@ -4883,12 +4925,14 @@ function geodir_ajax_import_export() {
                                         $updated++;
                                     } else {
                                         $invalid++;
+                                        geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . $gd_error_location );
                                     }
                                 } else {
                                     if ( $location_id = geodir_location_insert_city( $data, true ) ) {
                                         $created++;
                                     } else {
                                         $invalid++;
+                                        geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . $gd_error_location );
                                     }
                                 }
                             } elseif ( $import_choice == 'skip' ) {
@@ -4901,10 +4945,12 @@ function geodir_ajax_import_export() {
                                         $created++;
                                     } else {
                                         $invalid++;
+                                        geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . $gd_error_location );
                                     }
                                 }
                             } else {
                                 $invalid++;
+                                geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . $gd_error_location );
                             }
                         }
                     }
@@ -4928,6 +4974,8 @@ function geodir_ajax_import_export() {
                         wp_send_json( $json );
                     }
                     
+                    $gd_error_log = __('GD IMPORT NEIGHBOURHOODS [ROW %d]:', 'geodirectory');
+                    $gd_error_hood = __( 'Could not be saved due to invalid neighbourhood data(name, latitude, longitude) or invalid location data(either location_id or city/region/country is empty)', 'geodirectory' );
                     for ($i = 1; $i <= $limit; $i++) {
                         $index = $processed + $i;
                         
@@ -4944,6 +4992,7 @@ function geodir_ajax_import_export() {
 
                             if (empty($data['neighbourhood_name']) || empty($data['latitude']) || empty($data['longitude'])) {
                                 $invalid++;
+                                geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . $gd_error_hood );
                                 continue;
                             }
                             
@@ -4956,6 +5005,7 @@ function geodir_ajax_import_export() {
 
                             if (empty($location_info)) {
                                 $invalid++;
+                                geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . $gd_error_hood );
                                 continue;
                             }
                             
@@ -4978,6 +5028,7 @@ function geodir_ajax_import_export() {
                                         $updated++;
                                     } else {
                                         $invalid++;
+                                        geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . $gd_error_hood );
                                     }
                                 } else if (!empty($data['neighbourhood_slug']) && ($neighbourhood = geodir_location_get_neighbourhood_by_id($data['neighbourhood_slug'], true))) {
                                     $hood_data['hood_id'] = (int)$neighbourhood->hood_id;
@@ -4986,12 +5037,14 @@ function geodir_ajax_import_export() {
                                         $updated++;
                                     } else {
                                         $invalid++;
+                                        geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . $gd_error_hood );
                                     }
                                 } else {
                                     if ($neighbourhood = geodir_location_insert_update_neighbourhood($hood_data)) {
                                         $created++;
                                     } else {
                                         $invalid++;
+                                        geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . $gd_error_hood );
                                     }
                                 }
                             } elseif ( $import_choice == 'skip' ) {
@@ -5005,10 +5058,12 @@ function geodir_ajax_import_export() {
                                         $created++;
                                     } else {
                                         $invalid++;
+                                        geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . $gd_error_hood );
                                     }
                                 }
                             } else {
                                 $invalid++;
+                                geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . $gd_error_hood );
                             }
                         }
                     }
@@ -5200,7 +5255,7 @@ function geodir_get_posts_count( $post_type ) {
 }
 
 /**
- * Retrives the posts for the current post type.
+ * Retrieves the posts for the current post type.
  *
  * @since 1.4.6
  * @since 1.5.1 Updated to import & export recurring events.
@@ -5522,7 +5577,7 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
 }
 
 /**
- * Retrives the posts for the current post type.
+ * Retrieves the posts for the current post type.
  *
  * @since 1.4.6
  * @since 1.5.7 $per_page & $page_no parameters added.
@@ -5623,7 +5678,7 @@ function geodir_imex_get_events_query( $query, $post_type ) {
 }
 
 /**
- * Retrive terms count for given post type.
+ * Retrieve terms count for given post type.
  *
  * @since 1.4.6
  * @package GeoDirectory
@@ -5632,7 +5687,7 @@ function geodir_imex_get_events_query( $query, $post_type ) {
  * @return int Total terms count.
  */
 /**
- * Retrive terms count for given post type.
+ * Retrieve terms count for given post type.
  *
  * @since 1.4.6
  * @package GeoDirectory
@@ -5897,7 +5952,7 @@ function geodir_get_language_for_element($element_id, $element_type) {
  *
  * @param int $master_post_id Original Post ID.
  * @param string $lang Language code for translating post.
- * @param array $postarr Arraty of post data.
+ * @param array $postarr Array of post data.
  * @param int $tr_post_id Translation Post ID.
  */
 function geodir_icl_make_duplicate($master_post_id, $lang, $postarr, $tr_post_id) {
@@ -6037,7 +6092,7 @@ function geodir_icl_duplicate_post_images($master_post_id, $tr_post_id, $lang) {
 }
 
 /**
- * Retrives the event data to export.
+ * Retrieves the event data to export.
  *
  * @since 1.5.1
  * @package GeoDirectory
@@ -6596,7 +6651,7 @@ function geodir_render_menu_metabox( $object, $args ) {
         ),
     );
     $db_fields = false;
-    // If your links will be hieararchical, adjust the $db_fields array bellow
+    // If your links will be hierarchical, adjust the $db_fields array bellow
     if ( false ) {
         $db_fields = array( 'parent' => 'parent', 'id' => 'post_parent' );
     }
