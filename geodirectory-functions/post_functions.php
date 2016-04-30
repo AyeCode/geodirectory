@@ -1614,7 +1614,7 @@ if (!function_exists('geodir_set_post_terms')) {
 
         if (in_array($post_type, geodir_get_posttypes()) && !wp_is_post_revision($post_id)) {
 
-            if (strstr($taxonomy, 'tag')) {
+            if ($taxonomy == $post_type . '_tags') {
                 if (isset($_POST['action']) && $_POST['action'] == 'inline-save') {
                     geodir_save_post_meta($post_id, 'post_tags', $terms);
                 }
