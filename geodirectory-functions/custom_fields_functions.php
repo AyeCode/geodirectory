@@ -2713,11 +2713,11 @@ if (!function_exists('geodir_show_listing_info')) {
 							
 							if (!empty($type['option_values'])) {
 								$cf_option_values = geodir_string_values_to_options(stripslashes_deep($type['option_values']), true);
-								
+
 								if (!empty($cf_option_values)) {
 									foreach ($cf_option_values as $cf_option_value) {
 										if (isset($cf_option_value['value']) && $cf_option_value['value'] == $post->{$type['htmlvar_name']}) {
-											$field_value = $cf_option_value['label'];
+											//$field_value = $cf_option_value['label']; // no longer needed here.
 										}
 									}
 								}

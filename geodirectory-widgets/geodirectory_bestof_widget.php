@@ -671,7 +671,7 @@ function geodir_bestof_callback()
     if ($excerpt_type == 'show-reviews') {
         remove_filter('get_the_excerpt', 'best_of_show_review_in_excerpt');
     }
-    wp_die();
+    gd_die();
 }
 
 //Javascript

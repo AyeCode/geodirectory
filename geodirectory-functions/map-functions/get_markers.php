@@ -16,11 +16,13 @@ if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'homemap_catl
 }
 
 // Send the content-type header with correct encoding
-header("Content-type: text/javascript; charset=utf-8");
+if (!defined('GD_TESTING_MODE')) {
+    header("Content-type: text/javascript; charset=utf-8");
+}
 
 if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'cat') { // Retrives markers data for categories
     echo get_markers();
-    exit;
+    gd_die();
 } else if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'info') { // Retrives marker info window html
     /**
      * @global object $wpdb WordPress Database object.

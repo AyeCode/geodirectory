@@ -4,7 +4,6 @@ class LoginUser extends WP_UnitTestCase
     public function setUp()
     {
         parent::setUp();
-        deactivate_plugins('buddypress/bp-loader.php');
     }
 
     public function testLoginEmptyPassword()

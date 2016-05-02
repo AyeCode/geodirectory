@@ -13,7 +13,7 @@ if (isset($_REQUEST['create_field'])) {
 	 * @since 1.0.0
 	 */
 	include_once(geodir_plugin_path() . '/geodirectory-admin/option-pages/create_field.php');
-    die;
+    gd_die();
 }
 
 

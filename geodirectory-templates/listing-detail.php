@@ -9,7 +9,6 @@
  * @package GeoDirectory
  */
 
-header("X-XSS-Protection: 0"); // IE requirement
 // call header
 get_header();
 
@@ -62,6 +61,7 @@ do_action('geodir_article_open', 'details-page', 'post-' . get_the_ID(), get_pos
 
 ###### MAIN CONTENT ######
 // this call the main page content
+global $preview;
 if (have_posts() && !$preview) {
     the_post();
     global $post, $post_images;

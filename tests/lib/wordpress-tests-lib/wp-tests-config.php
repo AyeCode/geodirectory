@@ -34,5 +34,8 @@ define( 'WP_TESTS_TITLE', 'Test Blog' );
 
 define( 'WP_PHP_BINARY', 'php' );
 
+define( 'FS_CHMOD_DIR', ( 0755 & ~ umask() ) );
+define( 'FS_CHMOD_FILE', ( 0644 & ~ umask() ) );
+
 define( 'WPLANG', '' );
 $table_prefix  = 'wptests_';

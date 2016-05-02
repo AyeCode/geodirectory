@@ -1521,6 +1521,7 @@ function geodir_diagnose_load_db_language() {
 	$is_error_during_diagnose = geodirectory_load_db_language();
 
     $output_str = '';
+    $fix_button_txt = '';
 
     if ($is_error_during_diagnose) {
         $output_str .= "<li>" . __('Fail to load custom fields in to file for translation, please check file permission:', 'geodirectory') . ' ' . geodir_plugin_path() . '/db-language.php' . "</li>";
