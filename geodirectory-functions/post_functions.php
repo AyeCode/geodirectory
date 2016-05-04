@@ -858,15 +858,15 @@ if (!function_exists('geodir_get_post_meta')) {
         $table = $plugin_prefix . $post_type . '_detail';
 
         if ($wpdb->get_var("SHOW COLUMNS FROM " . $table . " WHERE field = '" . $meta_key . "'") != '') {
-
-            if ($meta_value = $wpdb->get_var($wpdb->prepare("SELECT " . $meta_key . " from " . $table . " where post_id = %d", array($post_id)))) {
-                $meta_value = maybe_serialize($meta_value);
-                return $meta_value;
+            $meta_value = $wpdb->get_var($wpdb->prepare("SELECT " . $meta_key . " from " . $table . " where post_id = %d", array($post_id)));
+            
+            if ($meta_value && $meta_value !== '') {
+                return maybe_serialize($meta_value);
             } else
-                return false;
-
-        } else
+                return $meta_value;
+        } else {
             return false;
+        }
     }
 }
 
