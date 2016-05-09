@@ -2470,6 +2470,7 @@ function geodir_popular_post_category_output($args = '', $instance = '')
     if (!empty($gd_post_type)) {
         $taxonomy[] = $gd_post_type . "category";
     } else {
+        $default_post_type = geodir_get_posttypes()[0];
         $taxonomy = geodir_get_taxonomies($gd_post_type);
     }
 
