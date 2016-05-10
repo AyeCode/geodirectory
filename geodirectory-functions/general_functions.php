@@ -3411,12 +3411,15 @@ function geodir_count_reviews_by_term_id($term_id, $taxonomy, $post_type)
  * Count reviews by terms.
  *
  * @since 1.0.0
+ * @since 1.6.1 Fixed add listing page load time.
  * @package GeoDirectory
+ *
+ * @global object $gd_session GeoDirectory Session object.
+ *
  * @param bool $force_update Force update option value?. Default.false.
  * @return array Term array data.
  */
-function geodir_count_reviews_by_terms($force_update = false)
-{
+function geodir_count_reviews_by_terms($force_update = false, $post_ID = 0) {
     /**
      * Filter review count option data.
      *
@@ -3431,29 +3434,65 @@ function geodir_count_reviews_by_terms($force_update = false)
     $option_data = get_option('geodir_global_review_count');
 
     if (!$option_data OR $force_update) {
-        $post_types = geodir_get_posttypes();
-        $term_array = array();
-        foreach ($post_types as $post_type) {
+        if ((int)$post_ID > 0) { // Update reviews count for specific post categories only.
+            global $gd_session;
+                        
+            $term_array = (array)$option_data;
+            $post_type = get_post_type($post_ID);
+            $taxonomy = $post_type . 'category';
+            $terms = wp_get_object_terms($post_ID, $taxonomy, array('fields' => 'ids'));
 
-            $taxonomy = geodir_get_taxonomies($post_type);
-            $taxonomy = $taxonomy[0];
+            if (!empty($terms) && !is_wp_error($terms)) {
+                foreach ($terms as $term_id) {
+                    $count = geodir_count_reviews_by_term_id($term_id, $taxonomy, $post_type);
+                    $children = get_term_children($term_id, $taxonomy);
+                    $term_array[$term_id] = $count;
+                }
+            }
+            
+            $session_listing = $gd_session->get('listing');
+            
+            $terms = array();
+            if (isset($_POST['post_category'][$taxonomy])) {
+                $terms = (array)$_POST['post_category'][$taxonomy];
+            } else if (!empty($session_listing) && isset($session_listing['post_category'][$taxonomy])) {
+                $terms = (array)$session_listing['post_category'][$taxonomy];
+            }
+            
+            if (!empty($terms)) {
+                foreach ($terms as $term_id) {
+                    if ($term_id > 0) {
+                        $count = geodir_count_reviews_by_term_id($term_id, $taxonomy, $post_type);
+                        $children = get_term_children($term_id, $taxonomy);
+                        $term_array[$term_id] = $count;
+                    }
+                }
+            }
+        } else { // Update reviews count for all post categories.
+            $term_array = array();
+            $post_types = geodir_get_posttypes();
+            foreach ($post_types as $post_type) {
 
-            $args = array(
-                'hide_empty' => false
-            );
+                $taxonomy = geodir_get_taxonomies($post_type);
+                $taxonomy = $taxonomy[0];
 
-            $terms = get_terms($taxonomy, $args);
+                $args = array(
+                    'hide_empty' => false
+                );
 
-            foreach ($terms as $term) {
-                $count = geodir_count_reviews_by_term_id($term->term_id, $taxonomy, $post_type);
-                $children = get_term_children($term->term_id, $taxonomy);
-                /*if ( is_array( $children ) ) {
-					foreach ( $children as $child_id ) {
-						$child_count = geodir_count_reviews_by_term_id($child_id, $taxonomy, $post_type);
-						$count = $count + $child_count;
-					}
-				}*/
-                $term_array[$term->term_id] = $count;
+                $terms = get_terms($taxonomy, $args);
+
+                foreach ($terms as $term) {
+                    $count = geodir_count_reviews_by_term_id($term->term_id, $taxonomy, $post_type);
+                    $children = get_term_children($term->term_id, $taxonomy);
+                    /*if ( is_array( $children ) ) {
+                        foreach ( $children as $child_id ) {
+                            $child_count = geodir_count_reviews_by_term_id($child_id, $taxonomy, $post_type);
+                            $count = $count + $child_count;
+                        }
+                    }*/
+                    $term_array[$term->term_id] = $count;
+                }
             }
         }
 
@@ -3470,22 +3509,40 @@ function geodir_count_reviews_by_terms($force_update = false)
  * Force update review count.
  *
  * @since 1.0.0
+ * @since 1.6.1 Fixed add listing page load time.
  * @package GeoDirectory
  * @return bool
  */
-function geodir_term_review_count_force_update($new_status, $old_status='', $post='')
-{
-    if(isset($_REQUEST['action']) && $_REQUEST['action']=='geodir_import_export'){return;}//do not run if importing listings
-
-    if(isset($post->post_type) && ($post->post_type=='nav_menu_item' || $post->post_type=='page' || $post->post_type=='post')){
+function geodir_term_review_count_force_update($new_status, $old_status = '', $post = '') {
+    if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'geodir_import_export') {
+        return; // do not run if importing listings
+    }
+    
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
         return;
     }
-    if($new_status!=$old_status) {
-        geodir_count_reviews_by_terms(true);
+
+    $post_ID = 0;
+    if (!empty($post)) {
+        if (isset($post->post_type) && strpos($post->post_type, 'gd_') !== 0) {
+            return;
+        }
+        
+        if ($new_status == 'auto-draft' && $old_status == 'new') {
+            return;
+        }
+        
+        if (!empty($post->ID)) {
+            $post_ID = $post->ID;
+        }
     }
+
+    if ($new_status != $old_status) {
+        geodir_count_reviews_by_terms(true, $post_ID);
+    }
+
     return true;
 }
-
 
 /*-----------------------------------------------------------------------------------*/
 /*  Term count functions
