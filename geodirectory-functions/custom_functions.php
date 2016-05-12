@@ -1435,7 +1435,12 @@ function geodir_show_detail_page_tabs()
         }
 
         global $map_jason;
-        $map_jason[] = $post->marker_json;
+        $marker_json = $post->marker_json != '' ? json_decode($post->marker_json, true) : array();
+        $icon_size = (!empty($marker_json) && !empty($marker_json['icon'])) ? $marker_json['icon'] : '';             
+        $icon_size = geodir_get_marker_size($marker_json['icon']);
+        $marker_json['w'] = $icon_size['w'];
+        $marker_json['h'] = $icon_size['h'];
+        $map_jason[] = json_encode($marker_json);
 
         $address_latitude = isset($post->post_latitude) ? $post->post_latitude : '';
         $address_longitude = isset($post->post_longitude) ? $post->post_longitude : '';
@@ -1683,12 +1688,9 @@ function geodir_show_detail_page_tabs()
 
         });
     </script>
-    <?php }?>
-
-<?php
-
+    <?php
+    }
 }
-
 
 /**
  * Fixes image orientation.
@@ -2032,8 +2034,7 @@ function geodir_twitter_tweet_button()
  * @package GeoDirectory
  * @global object $post The current post object.
  */
-function geodir_fb_like_button()
-{
+function geodir_fb_like_button() {
     global $post;
     ?>
     <iframe <?php if (isset($_SERVER['HTTP_USER_AGENT']) && (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)) {
@@ -2041,7 +2042,7 @@ function geodir_fb_like_button()
     } ?> class="facebook"
          src="//www.facebook.com/plugins/like.php?href=<?php echo urlencode(get_permalink($post->ID)); ?>&amp;layout=button_count&amp;show_faces=false&amp;width=100&amp;action=like&amp;colorscheme=light"
          style="border:none; overflow:hidden; width:100px; height:20px"></iframe>
-<?php
+    <?php
 }
 
 /**
@@ -2052,8 +2053,7 @@ function geodir_fb_like_button()
  * @since 1.0.0
  * @package GeoDirectory
  */
-function geodir_google_plus_button()
-{
+function geodir_google_plus_button() {
     ?>
     <div id="plusone-div" class="g-plusone" data-size="medium"></div>
     <script type="text/javascript">
@@ -2066,7 +2066,7 @@ function geodir_google_plus_button()
             s.parentNode.insertBefore(po, s);
         })();
     </script>
-<?php
+    <?php
 }
 
 /**
@@ -2078,8 +2078,7 @@ function geodir_google_plus_button()
  * @package GeoDirectory
  * @global object $post The current post object.
  */
-function geodir_share_this_button_code()
-{
+function geodir_share_this_button_code() {
     global $post;
     ?>
     <div class="addthis_toolbox addthis_default_style">
@@ -2099,67 +2098,49 @@ function geodir_share_this_button_code()
                 "title": "<?php echo $post->post_title;?>",
                 "type": "chicklet",
                 "text": "<?php _e( 'Share', 'geodirectory' );?>"
-            });</script>
-
+            });
+        </script>
     </div>
-<?php
+    <?php
 }
 
-
-function geodir_listing_bounce_map_pin_on_hover(){
-
+function geodir_listing_bounce_map_pin_on_hover() {
     if(get_option('geodir_listing_hover_bounce_map_pin',true)) {
-            ?>
-            <script>
-                jQuery(function ($) {
-                    if (typeof(animate_marker) == 'function') {
-                        var groupTab = $("ul.geodir_category_list_view").children("li");
-                        groupTab.hover(function () {
-                            animate_marker('listing_map_canvas', String($(this).data("post-id")));
-                        }, function () {
-                            stop_marker_animation('listing_map_canvas', String($(this).data("post-id")));
-
-                        });
-                    }
-                });
-            </script>
-
+        ?>
+        <script>
+            jQuery(function ($) {
+                if (typeof(animate_marker) == 'function') {
+                    var groupTab = $("ul.geodir_category_list_view").children("li");
+                    groupTab.hover(function () {
+                        animate_marker('listing_map_canvas', String($(this).data("post-id")));
+                    }, function () {
+                        stop_marker_animation('listing_map_canvas', String($(this).data("post-id")));
+                    });
+                }
+            });
+        </script>
         <?php
-
     }
 }
 add_action('geodir_after_listing_listview','geodir_listing_bounce_map_pin_on_hover',10);
 
 add_action('geodir_after_favorite_html','geodir_output_favourite_html_listings',1,1);
-
 function geodir_output_favourite_html_listings( $post_id){
     geodir_favourite_html('', $post_id);
 }
 
-
-add_action( 'geodir_listing_after_pinpoint', 'geodir_output_pinpoint_html_listings',1,2 );
-
+add_action( 'geodir_listing_after_pinpoint', 'geodir_output_pinpoint_html_listings', 1, 2);
 function geodir_output_pinpoint_html_listings( $post_id, $post){
     global $wp_query;
 
     $show_pin_point = $wp_query->is_main_query();
+    
     if (!empty($show_pin_point) && is_active_widget(false, "", "geodir_map_v3_listing_map")) {
-
-        /*if($json_info = json_decode($post->marker_json))
-            $marker_icon = $json_info->icon;*/
-
         $term_icon_url = get_tax_meta($post->default_category, 'ct_cat_icon', false, $post->post_type);
         $marker_icon = isset($term_icon_url['src']) ? $term_icon_url['src'] : get_option('geodir_default_marker_icon');
         ?>
-        <span class="geodir-pinpoint"
-              style=" background:url('<?php if (isset($marker_icon)) {
-                  echo $marker_icon;
-              } ?>') no-repeat scroll left top transparent; background-size:auto 100%; -webkit-background-size:auto 100%; -moz-background-size:auto 100%; height:9px; width:14px; ">
-                                        <?php echo apply_filters('geodir_listing_listview_pinpoint_inner_content', '', 'listing'); ?>
-                                    </span>
-        <a class="geodir-pinpoint-link" href="javascript:void(0)"
-           onclick="openMarker('listing_map_canvas' ,'<?php echo $post->ID; ?>')"
-           onmouseover="animate_marker('listing_map_canvas' ,'<?php echo $post->ID; ?>')"
-           onmouseout="stop_marker_animation('listing_map_canvas' ,'<?php echo $post->ID; ?>')"><?php _e('Pinpoint', 'geodirectory'); ?></a>
-    <?php }
+        <span class="geodir-pinpoint" style="background:url('<?php echo $marker_icon; ?>') no-repeat scroll left top transparent;background-size:auto 100%; -webkit-background-size:auto 100%;-moz-background-size:auto 100%;height:9px;width:14px;"><?php echo apply_filters('geodir_listing_listview_pinpoint_inner_content', '', 'listing'); ?></span>
+        <a class="geodir-pinpoint-link" href="javascript:void(0)" onclick="openMarker('listing_map_canvas' ,'<?php echo $post->ID; ?>')" onmouseover="animate_marker('listing_map_canvas' ,'<?php echo $post->ID; ?>')" onmouseout="stop_marker_animation('listing_map_canvas' ,'<?php echo $post->ID; ?>')"><?php _e('Pinpoint', 'geodirectory'); ?></a>
+        <?php
+    }
 }

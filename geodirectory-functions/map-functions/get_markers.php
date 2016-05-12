@@ -16,13 +16,11 @@ if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'homemap_catl
 }
 
 // Send the content-type header with correct encoding
-if (!defined('GD_TESTING_MODE')) {
-    header("Content-type: text/javascript; charset=utf-8");
-}
+header("Content-type: text/javascript; charset=utf-8");
 
 if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'cat') { // Retrives markers data for categories
     echo get_markers();
-    gd_die();
+    exit;
 } else if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'info') { // Retrives marker info window html
     /**
      * @global object $wpdb WordPress Database object.
@@ -69,15 +67,17 @@ if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'cat') { // R
  *
  * @since 1.0.0
  * @since 1.5.7 Fixed non recurring events markers.
+ * @since 1.6.1 Marker icons size added.
  *
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @global array  $geodir_cat_icons Array of the category icon urls.
+ * @global array  $gd_marker_sizes Array of the marker icons sizes.
  * 
  * @return string
  */
 function get_markers() {
-    global $wpdb, $plugin_prefix, $geodir_cat_icons;
+    global $wpdb, $plugin_prefix, $geodir_cat_icons, $gd_marker_sizes;
 
     $search = '';
     $main_query_array;
@@ -285,8 +285,21 @@ function get_markers() {
             $icon = !empty($geodir_cat_icons) && isset($geodir_cat_icons[$catinfo_obj->default_category]) ? $geodir_cat_icons[$catinfo_obj->default_category] : '';
             $mark_extra = (isset($catinfo_obj->marker_extra)) ? $catinfo_obj->marker_extra : '';
             $title = str_replace($srcharr, $replarr, $post_title);
+            
+            if ($icon != '') {
+                $gd_marker_sizes = empty($gd_marker_sizes) ? array() : $gd_marker_sizes;
+                
+                if (isset($gd_marker_sizes[$icon])) {
+                    $icon_size = $gd_marker_sizes[$icon];
+                } else {
+                    $icon_size = geodir_get_marker_size($icon);
+                    $gd_marker_sizes[$icon] = $icon_size;
+                }               
+            } else {
+                $icon_size = array('w' => 36, 'h' => 45);
+            }
 
-            $content_data[] = '{"id":"' . $catinfo_obj->post_id . '","t": "' . $title . '","lt": "' . $catinfo_obj->post_latitude . '","ln": "' . $catinfo_obj->post_longitude . '","mk_id":"' . $catinfo_obj->post_id . '_' . $catinfo_obj->default_category . '","i":"' . $icon . '"'.$mark_extra.'}';
+            $content_data[] = '{"id":"' . $catinfo_obj->post_id . '","t": "' . $title . '","lt": "' . $catinfo_obj->post_latitude . '","ln": "' . $catinfo_obj->post_longitude . '","mk_id":"' . $catinfo_obj->post_id . '_' . $catinfo_obj->default_category . '","i":"' . $icon . '","w":"' . $icon_size['w'] . '","h":"' . $icon_size['h'] . '"'.$mark_extra.'}';
             $post_ids[] = $catinfo_obj->post_id;
         }
     }

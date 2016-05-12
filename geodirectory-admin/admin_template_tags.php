@@ -465,7 +465,7 @@ function geodir_admin_option_form($tab_name)
                                 <span class="description"></span>
                             </td>
                         </tr>
-                        <tr valign="top" class="single_select_page">
+                        <tr valign="top" class="single_select_page gd-add-location-map">
                             <th class="titledesc"
                                 scope="row"><?php _e('Set Location on Map', 'geodirectory');?></th>
                             <td class="forminp">
@@ -671,7 +671,7 @@ function geodir_update_options_compatibility_settings()
     $theme_settings['geodir_theme_compat_default_options'] = '';
 
 
-//suported theme code
+//supported theme code
     $theme_settings['geodir_theme_compat_code'] = false;
 
     $theme = wp_get_theme();
@@ -776,7 +776,7 @@ function geodir_theme_compatibility_setting_page()
         <div class="gd-content-heading">
 
 
-            <h3><?php _e('Theme Compatability Settings', 'geodirectory');?></h3>
+            <h3><?php _e('Theme Compatibility Settings', 'geodirectory');?></h3>
             <style>
                 .gd-theme-compat-table {
                     width: 100%;
@@ -1686,5 +1686,3 @@ function geodir_diagnostic_tools_setting_page()
     </div>
 <?php
 }
-
-?>

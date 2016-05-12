@@ -210,6 +210,8 @@ function geodir_draw_map($map_args = array())
                                 <!--<div id="home_map_counter"></div>        -->
                                 <div id="<?php echo $map_canvas_name;?>_map_nofound"
                                      class="advmap_nofound"><?php echo MAP_NO_RESULTS; ?></div>
+                                <div id="<?php echo $map_canvas_name;?>_map_notloaded"
+                                     class="advmap_notloaded"><?php _e('<h3>Google Map Not Loaded</h3><p>Sorry, unable to load Google Maps API.', 'geodirectory'); ?></div>
                             </div>
                             <!-- new map end -->
                         </div>
@@ -247,16 +249,21 @@ function geodir_draw_map($map_args = array())
                         <?php }?>
 
                         function gd_initialize_ac() {
-                            // Create the autocomplete object, restricting the search
-                            // to geographical location types.
-                            autocomplete = new google.maps.places.Autocomplete(
-                                /** @type {HTMLInputElement} */(document.getElementById('<?php echo $map_canvas_name;?>_fromAddress')),
-                                {types: ['geocode']});
-                            // When the user selects an address from the dropdown,
-                            // populate the address fields in the form.
-                            google.maps.event.addListener(autocomplete, 'place_changed', function () {
-                                gd_fillInAddress_ac();
-                            });
+                            if (typeof google!=='undefined' && typeof google.maps!=='undefined') {
+                                // Create the autocomplete object, restricting the search
+                                // to geographical location types.
+                                autocomplete = new google.maps.places.Autocomplete(
+                                    /** @type {HTMLInputElement} */(document.getElementById('<?php echo $map_canvas_name;?>_fromAddress')),
+                                    {types: ['geocode']});
+                                // When the user selects an address from the dropdown,
+                                // populate the address fields in the form.
+                                google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                                    gd_fillInAddress_ac();
+                                });
+                            } else {
+                                jQuery('#<?php echo $map_canvas_name; ?>_fromAddress').hide();
+                                jQuery('.<?php echo $map_canvas_name; ?>_getdirection').hide();
+                            }
                         }
 
                         function gd_fillInAddress_ac() {
