@@ -4729,3 +4729,25 @@ function geodir_title_meta_pagenumbering($request = 'nr') {
 
     return $return;
 }
+
+/**
+ * Filter the terms with count empty.
+ *
+ * @since 1.5.4
+ *
+ * @param array $terms Terms array.
+ * @return array Terms.
+ */
+function geodir_filter_empty_terms($terms) {
+    if (empty($terms)) {
+        return $terms;
+    }
+
+    $return = array();
+    foreach ($terms as $term) {
+        if (isset($term->count) && $term->count > 0) {
+            $return[] = $term;
+        }
+    }
+    return $return;
+}

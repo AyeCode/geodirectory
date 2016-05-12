@@ -61,7 +61,7 @@ echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
                 if (get_option('geodir_search_button_label'))
                     $default_search_button_label = __(get_option('geodir_search_button_label'), 'geodirectory');
 
-                $post_types = geodir_get_posttypes('object');
+                $post_types = apply_filters('geodir_search_form_post_types', geodir_get_posttypes('object'));
 
                 if (!empty($post_types) && count((array)$post_types) > 1):
                     ?>
