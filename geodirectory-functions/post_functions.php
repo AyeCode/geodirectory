@@ -858,15 +858,15 @@ if (!function_exists('geodir_get_post_meta')) {
         $table = $plugin_prefix . $post_type . '_detail';
 
         if ($wpdb->get_var("SHOW COLUMNS FROM " . $table . " WHERE field = '" . $meta_key . "'") != '') {
-
-            if ($meta_value = $wpdb->get_var($wpdb->prepare("SELECT " . $meta_key . " from " . $table . " where post_id = %d", array($post_id)))) {
-                $meta_value = maybe_serialize($meta_value);
-                return $meta_value;
+            $meta_value = $wpdb->get_var($wpdb->prepare("SELECT " . $meta_key . " from " . $table . " where post_id = %d", array($post_id)));
+            
+            if ($meta_value && $meta_value !== '') {
+                return maybe_serialize($meta_value);
             } else
-                return false;
-
-        } else
+                return $meta_value;
+        } else {
             return false;
+        }
     }
 }
 
@@ -1614,7 +1614,7 @@ if (!function_exists('geodir_set_post_terms')) {
 
         if (in_array($post_type, geodir_get_posttypes()) && !wp_is_post_revision($post_id)) {
 
-            if (strstr($taxonomy, 'tag')) {
+            if ($taxonomy == $post_type . '_tags') {
                 if (isset($_POST['action']) && $_POST['action'] == 'inline-save') {
                     geodir_save_post_meta($post_id, 'post_tags', $terms);
                 }
