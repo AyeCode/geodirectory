@@ -1491,7 +1491,7 @@ function geodir_show_detail_page_tabs()
         $active_tab = $default_tab;
         $active_tab_name = $default_tab_name;
     }
-    $tab_list = (get_option('geodir_disable_tabs',true)) ? true : false;
+    $tab_list = (get_option('geodir_disable_tabs',false)) ? true : false;
     ?>
     <div class="geodir-tabs" id="gd-tabs" style="position:relative;">
         <?php if(!$tab_list){ ?>
