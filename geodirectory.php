@@ -104,15 +104,6 @@ if (!defined('GEODIR_REVIEW_TABLE')) define('GEODIR_REVIEW_TABLE', $plugin_prefi
 if (!defined('GEODIR_CUSTOM_SORT_FIELDS_TABLE')) define('GEODIR_CUSTOM_SORT_FIELDS_TABLE', $plugin_prefix . 'custom_sort_fields');
 
 
-if ($_SERVER['REQUEST_URI'] == '' || $_SERVER['REQUEST_URI'] == '/') {
-    /**
-     * This tries to disable cache on homepage as it can be very dynamic.
-     */
-    define('DONOTCACHEPAGE', TRUE);
-    $_SERVER['DONOTCACHEPAGE']= TRUE;
-}
-
-
 /*
  * Localisation items.
  */
