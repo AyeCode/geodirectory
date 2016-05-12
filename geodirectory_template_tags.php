@@ -561,6 +561,7 @@ function geodir_add_sharelocation_scripts()
         var Sgeocoder = (typeof google!=='undefined' && typeof google.maps!=='undefined') ? new google.maps.Geocoder() : {};
 
 		function geodir_setup_submit_search() {
+            jQuery('.geodir_submit_search').unbind('click');// unbind any other click events
 			jQuery('.geodir_submit_search').click(function() {
 				var s = ' ';
 				var $form = jQuery(this).closest('form');

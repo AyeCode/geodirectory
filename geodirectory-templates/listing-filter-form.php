@@ -96,8 +96,8 @@ echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
                        } else {
                            echo $default_search_for_text;
                        } ?>" type="text"
-                       onblur="if (this.value.trim() == '') {this.value = '<?php echo $default_search_for_text; ?>';}"
-                       onfocus="if (this.value == '<?php echo $default_search_for_text; ?>') {this.value = '';}"
+                       onblur="if (this.value.trim() == '') {this.value = '<?php echo esc_sql($default_search_for_text); ?>';}"
+                       onfocus="if (this.value == '<?php echo esc_sql($default_search_for_text); ?>') {this.value = '';}"
                        onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);">
 
 
@@ -137,8 +137,8 @@ echo apply_filters('geodir_search_form_class', 'geodir-listing-search'); ?>"
                 ?>
 
                 <input name="snear" class="snear <?php echo $near_class; ?>" type="text" value="<?php echo $near; ?>"
-                       onblur="if (this.value.trim() == '') {this.value = ('<?php echo $near; ?>' != '' ? '<?php echo $near; ?>' : '<?php echo $default_near_text; ?>');}"
-                       onfocus="if (this.value == '<?php echo $default_near_text; ?>' || this.value =='<?php echo $near; ?>') {this.value = '';}"
+                       onblur="if (this.value.trim() == '') {this.value = ('<?php echo esc_sql($near); ?>' != '' ? '<?php echo esc_sql($near); ?>' : '<?php echo $default_near_text; ?>');}"
+                       onfocus="if (this.value == '<?php echo $default_near_text; ?>' || this.value =='<?php echo esc_sql($near); ?>') {this.value = '';}"
                        onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);"/>
 
                 <?php
