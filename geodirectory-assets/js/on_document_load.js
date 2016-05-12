@@ -227,6 +227,72 @@ function gd_replace_accents (s) {
     return s;
 }
 
+jQuery(function($) {    
+    try {
+    if (window.gdMaps == 'osm') {
+        $('input[name="post_address"]').autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: (location.protocol === 'https:' ? 'https:' : 'http:') + '//nominatim.openstreetmap.org/search',
+                    dataType: "json",
+                    data: {
+                        q: request.term,
+                        format: 'json',
+                        addressdetails: 1,
+                        limit: 5
+                    },
+                    success: function(data, textStatus, jqXHR) {
+                        jQuery('input[name="post_address"]').removeClass('ui-autocomplete-loading');
+                        response(data);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(errorThrown);
+                    },
+                    complete: function(jqXHR, textStatus) {
+                        jQuery('input[name="post_address"]').removeClass('ui-autocomplete-loading');
+                    }
+                });
+            },
+            autoFocus: true,
+            minLength: 1,
+            appendTo: jQuery('input[name="post_address"]').closest('.geodir_form_row'),
+            open: function(event, ui) {
+                jQuery('input[name="post_address"]').removeClass('ui-autocomplete-loading');
+            },
+            select: function(event, ui) {
+                item = gd_osm_parse_item(ui.item);
+                event.preventDefault();
+                $('input[name="post_address"]').val(item.display_address);
+                geocodeResponseOSM(item, true);
+            },
+            close: function(event, ui) {
+                jQuery('input[name="post_address"]').removeClass('ui-autocomplete-loading');
+            }
+        }).autocomplete("instance")._renderItem = function(ul, item) {
+            if (!ul.hasClass('gd-osm-results')) {
+                ul.addClass('gd-osm-results');
+            }
+            
+            var label = item.display_name;
+            
+            /*
+            item = gd_osm_parse_item(item);
+            if (item.display_address) {
+                label = gd_highlight(label, item.display_address, '<span class="gdOQ">', '</span>');
+            }
+            */
+            
+            if (label && this.term) {
+                label = gd_highlight(label, this.term);
+            }
+            
+            return $("<li>").width($('input[name="post_address"]').outerWidth()).append('<i class="fa fa-map-marker"></i><span>' + label + '</span>').appendTo(ul);
+        };
+    }
+    } catch (e) {
+    }
+});
+
 jQuery(function(){
     if (window.gdMaps === 'google') {
         console.log('Google Maps API Loaded :)');
