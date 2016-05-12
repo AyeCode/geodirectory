@@ -36,6 +36,7 @@ add_action('wp_print_scripts', 'geodir_core_dequeue_script', 100);
 function geodir_templates_scripts()
 {
     $is_detail_page = false;
+    $geodir_map_name = geodir_map_name();
 
     if((is_single() && geodir_is_geodir_page()) || (is_page() && geodir_is_page('preview') )) {
         $is_detail_page = true;
@@ -45,7 +46,6 @@ function geodir_templates_scripts()
 
     wp_register_script('geodirectory-script', geodir_plugin_url() . '/geodirectory-assets/js/geodirectory.min.js#asyncload', array(), GEODIRECTORY_VERSION);
     wp_enqueue_script('geodirectory-script');
-
 
     $geodir_vars_data = array(
         'siteurl' => get_option('siteurl'),
@@ -87,17 +87,32 @@ function geodir_templates_scripts()
         wp_enqueue_script('geodirectory-jquery-simplemodal');
     }
 
-    $map_lang = "&language=" . geodir_get_map_default_language();
-    /**
-     * Filter the variables that are added to the end of the google maps script call.
-     *
-     * This i used to change things like google maps language etc.
-     *
-     * @since 1.0.0
-     * @param string $var The string to filter, default is empty string.
-     */
-    $map_extra = apply_filters('geodir_googlemap_script_extra', '');
-    wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?' . $map_lang . $map_extra, '', NULL);
+    if (in_array($geodir_map_name, array('auto', 'google'))) {
+        $map_lang = "&language=" . geodir_get_map_default_language();
+        /**
+         * Filter the variables that are added to the end of the google maps script call.
+         *
+         * This i used to change things like google maps language etc.
+         *
+         * @since 1.0.0
+         * @param string $var The string to filter, default is empty string.
+         */
+        $map_extra = apply_filters('geodir_googlemap_script_extra', '');
+        wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?' . $map_lang . $map_extra, '', NULL);
+    }
+    
+    if ($geodir_map_name == 'osm') {
+        // Leaflet OpenStreetMap
+        wp_register_style('geodirectory-leaflet-style', geodir_plugin_url() . '/geodirectory-assets/leaflet/leaflet.css', array(), GEODIRECTORY_VERSION);
+        wp_enqueue_style('geodirectory-leaflet-style');
+            
+        wp_register_script('geodirectory-leaflet-script', geodir_plugin_url() . '/geodirectory-assets/leaflet/leaflet.min.js', array(), GEODIRECTORY_VERSION);
+        wp_enqueue_script('geodirectory-leaflet-script');
+        
+        wp_register_script('geodirectory-leaflet-geo-script', geodir_plugin_url() . '/geodirectory-assets/leaflet/osm.geocode.js', array(), GEODIRECTORY_VERSION);
+        wp_enqueue_script('geodirectory-leaflet-geo-script');
+    }
+    wp_enqueue_script( 'jquery-ui-autocomplete' );
     
     wp_register_script('geodirectory-goMap-script', geodir_plugin_url() . '/geodirectory-assets/js/goMap.min.js', array(), GEODIRECTORY_VERSION,true);
     wp_enqueue_script('geodirectory-goMap-script');
@@ -541,10 +556,9 @@ function geodir_add_sharelocation_scripts()
     <script type="text/javascript">
         var default_location = '<?php if($search_location = geodir_get_default_location())  echo $search_location->city ;?>';
         var latlng;
-        var Sgeocoder;
         var address;
         var dist = 0;
-        var Sgeocoder = new google.maps.Geocoder();
+        var Sgeocoder = (typeof google!=='undefined' && typeof google.maps!=='undefined') ? new google.maps.Geocoder() : {};
 
 		function geodir_setup_submit_search() {
 			jQuery('.geodir_submit_search').click(function() {
@@ -576,14 +590,13 @@ function geodir_add_sharelocation_scripts()
 		}
 
         jQuery(document).ready(function() {
-			/*
-			jQuery('#sort_by').change(function() {
-				jQuery('.geodir_submit_search:first').click();
-			});
-			*/
-			
-			geodir_setup_submit_search();
-		});
+            /*
+            jQuery('#sort_by').change(function() {
+                jQuery('.geodir_submit_search:first').click();
+            });
+            */
+            geodir_setup_submit_search();
+        });
         
 		function geodir_setsearch($form) {
 			if ((dist > 0 || (jQuery('select[name="sort_by"]', $form).val() == 'nearest' || jQuery('select[name="sort_by"]', $form).val() == 'farthest')) && (jQuery(".snear", $form).val() == '' || jQuery(".snear", $form).val() == '<?php echo $default_near_text;?>')) jQuery(".snear", $form).val(default_location);
@@ -597,7 +610,8 @@ function geodir_add_sharelocation_scripts()
         }
 
         function geocodeAddress($form) {
-            Sgeocoder = new google.maps.Geocoder(); // Call the geocode function
+            // Call the geocode function
+            Sgeocoder = (typeof google!=='undefined' && typeof google.maps!=='undefined') ? new google.maps.Geocoder() : {};
 
             if (jQuery('.snear', $form).val() == '' || ( jQuery('.sgeo_lat').val() != '' && jQuery('.sgeo_lon').val() != ''  ) || jQuery('.snear', $form).val().match("^<?php _e('In:','geodirectory');?>")) {
                 if (jQuery('.snear', $form).val().match("^<?php _e('In:','geodirectory');?>")) {
@@ -605,29 +619,31 @@ function geodir_add_sharelocation_scripts()
                 }
                 jQuery($form).submit();
             } else {
-
-                var address = jQuery(".snear", $form).val();
-
-                if (jQuery('.snear', $form).val() == '<?php echo $default_near_text;?>') {
-                    initialise2();
+                if (jQuery.isEmptyObject(Sgeocoder)) {
+                    jQuery($form).submit();
                 } else {
+                    var address = jQuery(".snear", $form).val();
 
-                    Sgeocoder.geocode({'address': address<?php
-                    if($near_add = get_option('geodir_search_near_addition')){echo '+", '.$near_add.'"';}
-                    if($near_add2 =
-                    /**
-                     * Adds any extra info to the near search box query when trying to geolocate it via google api.
-                     *
-                     * @since 1.0.0
-                     */
-                    apply_filters('geodir_search_near_addition','')){echo $near_add2;}//gt_advanced_near_search();?>},
-                        function (results, status) {
-                            if (status == google.maps.GeocoderStatus.OK) {
-                                updateSearchPosition(results[0].geometry.location, $form);
-                            } else {
-                                alert("<?php _e('Search was not successful for the following reason:','geodirectory');?>" + status);
-                            }
-                        });
+                    if (jQuery('.snear', $form).val() == '<?php echo $default_near_text;?>') {
+                        initialise2();
+                    } else {
+                        Sgeocoder.geocode({'address': address<?php
+                        if($near_add = get_option('geodir_search_near_addition')){echo '+", '.$near_add.'"';}
+                        if($near_add2 =
+                        /**
+                         * Adds any extra info to the near search box query when trying to geolocate it via google api.
+                         *
+                         * @since 1.0.0
+                         */
+                        apply_filters('geodir_search_near_addition','')){echo $near_add2;}//gt_advanced_near_search();?>},
+                            function (results, status) {
+                                if (status == google.maps.GeocoderStatus.OK) {
+                                    updateSearchPosition(results[0].geometry.location, $form);
+                                } else {
+                                    alert("<?php _e('Search was not successful for the following reason:','geodirectory');?>" + status);
+                                }
+                            });
+                    }
                 }
             }
         }

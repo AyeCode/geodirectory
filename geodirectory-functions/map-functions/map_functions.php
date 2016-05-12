@@ -38,16 +38,19 @@ function geodir_init_map_canvas_array()
  *
  * @since 1.0.0
  * @since 1.5.0 Converts icon url to HTTPS if HTTPS is active.
+ * @since 1.6.1 Marker icons size added.
+ *
  * @package GeoDirectory
  * @param null|WP_Post $post Post object.
  * @global object $wpdb WordPress Database object.
  * @global array $map_jason Map data in json format.
  * @global bool $add_post_in_marker_array Displays posts in marker array when the value is true.
  * @global array $geodir_cat_icons Category icons array. syntax: array( 'category name' => 'icon url').
+ * @global array  $gd_marker_sizes Array of the marker icons sizes.
  */
 function create_marker_jason_of_posts($post)
 {
-    global $wpdb, $map_jason, $add_post_in_marker_array, $geodir_cat_icons;
+    global $wpdb, $map_jason, $add_post_in_marker_array, $geodir_cat_icons, $gd_marker_sizes;
 
     if (!empty($post) && isset($post->ID) && $post->ID > 0 && (is_main_query() || $add_post_in_marker_array) && $post->marker_json != '') {
         $srcharr = array("'", "/", "-", '"', '\\');
@@ -63,8 +66,21 @@ function create_marker_jason_of_posts($post)
         if (is_ssl()) {
             $icon = str_replace("http:","https:",$icon );
         }
+        
+        if ($icon != '') {
+            $gd_marker_sizes = empty($gd_marker_sizes) ? array() : $gd_marker_sizes;
+            
+            if (isset($gd_marker_sizes[$icon])) {
+                $icon_size = $gd_marker_sizes[$icon];
+            } else {
+                $icon_size = geodir_get_marker_size($icon);
+                $gd_marker_sizes[$icon] = $icon_size;
+            }               
+        } else {
+            $icon_size = array('w' => 36, 'h' => 45);
+        }
 
-        $post_json = '{"id":"' . $post->ID . '","t": "' . $title . '","lt": "' . $post->post_latitude . '","ln": "' . $post->post_longitude . '","mk_id":"' . $post->ID . '_' . $post->default_category . '","i":"' . $icon . '"}';
+        $post_json = '{"id":"' . $post->ID . '","t": "' . $title . '","lt": "' . $post->post_latitude . '","ln": "' . $post->post_longitude . '","mk_id":"' . $post->ID . '_' . $post->default_category . '","i":"' . $icon . '","w":"' . $icon_size['w'] . '","h":"' . $icon_size['h'] . '"}';
 
         /**
          * Filter the json data when creating output for post json marker..
@@ -177,7 +193,7 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = 
     }
 
     $cat_terms = get_terms($cat_taxonomy, array('parent' => $cat_parent, 'exclude' => $exclude_cat_str, 'hide_empty ' => $hide_empty));
-
+    
     if ($hide_empty) {
         $cat_terms = geodir_filter_empty_terms($cat_terms);
     }
@@ -228,7 +244,7 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = 
             endif;
 
 
-            // get sub category by recurson
+            // get sub category by recursion
             $out .= home_map_taxonomy_walker($cat_taxonomy, $cat_term->term_id, $hide_empty, $pading, $map_canvas_name, $child_collapse, $is_home_map);
 
             $out .= '</li>';
@@ -245,5 +261,124 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = 
     return;
 }
 
+/**
+ * Get the map JS API provider name.
+ *
+ * @since 1.6.1
+ * @package GeoDirectory
+ *
+ * @return string The map API provider name.
+ */
+function geodir_map_name() {
+    $geodir_map_name = get_option('geodir_load_map', 'google');
+    
+    if (!in_array($geodir_map_name, array('none', 'auto', 'google', 'osm'))) {
+        $geodir_map_name = 'auto';
+    }
 
+    /**
+     * Filter the map JS API provider name.
+     *
+     * @since 1.6.1
+     * @param string $geodir_map_name The map API provider name.
+     */
+    return apply_filters('geodir_map_name', $geodir_map_name);
+}
+
+/**
+ * Get the marker icon size.
+ * This will return width and height of icon in array (ex: w => 36, h => 45).
+ *
+ * @since 1.6.1
+ * @package GeoDirectory
+ *
+ * @global $gd_marker_sizes Array of the marker icons sizes.
+ *
+ * @param string $icon Marker icon url.
+ * @return array The icon size.
+ */
+function geodir_get_marker_size($icon, $default_size = array('w' => 36, 'h' => 45)) {
+    global $gd_marker_sizes;
+    
+    if (empty($gd_marker_sizes)) {
+        $gd_marker_sizes = array();
+    }
+      
+    if (!empty($gd_marker_sizes[$icon])) {
+        return $gd_marker_sizes[$icon];
+    }
+    
+    if (empty($icon)) {
+        $gd_marker_sizes[$icon] = $default_size;
+        
+        return $default_size;
+    }
+    
+    $icon_url = $icon;
+    
+    $uploads = wp_upload_dir(); // Array of key => value pairs
+      
+    if (!path_is_absolute($icon)) {
+        $icon = str_replace($uploads['baseurl'], $uploads['basedir'], $icon);
+    }
+    
+    if (!path_is_absolute($icon) && strpos($icon, WP_CONTENT_URL) !== false) {
+        $icon = str_replace(WP_CONTENT_URL, WP_CONTENT_DIR, $icon);
+    }
+    
+    $sizes = array();
+    if (is_file($icon) && file_exists($icon)) {
+        $size = getimagesize(trim($icon));
+        
+        if (!empty($size[0]) && !empty($size[1])) {
+            $sizes = array('w' => $size[0], 'h' => $size[1]);
+        }
+    }
+    
+    $sizes = !empty($sizes) ? $sizes : $default_size;
+    
+    $gd_marker_sizes[$icon_url] = $sizes;
+    
+    return $sizes;
+}
+
+add_action('wp_head', 'geodir_map_load_style', 10);
+add_action('admin_head', 'geodir_map_load_style', 10);
+/**
+ * Adds the marker cluster style for OpenStreetMap when Google JS Library not loaded.
+ *
+ * @since 1.6.1
+ * @package GeoDirectory
+ */
+function geodir_map_load_style() {    
+    if (in_array(geodir_map_name(), array('auto', 'google')) && wp_script_is( 'geodirectory-googlemap-script', 'done')) {
 ?>
+<script type="text/javascript">
+if (!(window.google && typeof google.maps !== 'undefined')) {
+    document.write('<' + 'link id="geodirectory-leaflet-style-css" media="all" type="text/css" href="<?php echo geodir_plugin_url();?>/geodirectory-assets/leaflet/leaflet.css?ver=<?php echo GEODIRECTORY_VERSION;?>" rel="stylesheet"' + '>');
+}
+</script>
+<?php
+    }
+}
+
+add_action('wp_footer', 'geodir_map_load_script', 10);
+add_action('admin_footer', 'geodir_map_load_script', 10);
+/**
+ * Adds the marker cluster script for OpenStreetMap when Google JS Library not loaded.
+ *
+ * @since 1.6.1
+ * @package GeoDirectory
+ */
+function geodir_map_load_script() {
+    if (in_array(geodir_map_name(), array('auto', 'google')) && wp_script_is( 'geodirectory-googlemap-script', 'done')) {
+?>
+<script type="text/javascript">
+if (!(window.google && typeof google.maps !== 'undefined')) {
+    document.write('<' + 'script id="geodirectory-leaflet-script" src="<?php echo geodir_plugin_url();?>/geodirectory-assets/leaflet/leaflet.min.js?ver=<?php echo GEODIRECTORY_VERSION;?>" type="text/javascript"><' + '/script>');
+    document.write('<' + 'script id="geodirectory-leaflet-geo-script" src="<?php echo geodir_plugin_url();?>/geodirectory-assets/leaflet/osm.geocode.js?ver=<?php echo GEODIRECTORY_VERSION;?>" type="text/javascript"><' + '/script>');
+}
+</script>
+<?php
+    }
+}

@@ -9,6 +9,7 @@ Added filter hook to listing slider widget - ADDED
 If CPT order is changed from default the homepage categories dont change - FIXED
 Hide the empty categories on the map - CHANGED
 Large number of categories slow down the add listing page - FIXED
+OpenStreetMap integration added for maps - ADDED
 
 v1.6.0
 GD export should not export deleted listings - CHANGED

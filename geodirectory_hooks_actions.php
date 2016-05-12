@@ -1275,6 +1275,11 @@ function geodir_localize_all_js_msg()
 	 */
 	$allowed_img_types = apply_filters('geodir_allowed_post_image_exts', array('jpg', 'jpeg', 'jpe', 'gif', 'png'));
 	
+    $default_marker_icon = get_option('geodir_default_marker_icon');
+    $default_marker_size = geodir_get_marker_size($default_marker_icon, array('w' => 20, 'h' => 34));
+    $default_marker_width = $default_marker_size['w'];
+    $default_marker_height = $default_marker_size['h'];
+    
     $arr_alert_msg = array(
         'geodir_plugin_url' => geodir_plugin_url(),
         'geodir_admin_ajax_url' => $ajax_url,
@@ -1303,7 +1308,9 @@ function geodir_localize_all_js_msg()
         'loading_listing_error_favorite' => __('Error loading listing.', 'geodirectory'),
         'geodir_field_id_required' => __('This field is required.', 'geodirectory'),
         'geodir_valid_email_address_msg' => __('Please enter valid email address.', 'geodirectory'),
-        'geodir_default_marker_icon' => get_option('geodir_default_marker_icon'),
+        'geodir_default_marker_icon' => $default_marker_icon,
+        'geodir_default_marker_w' => $default_marker_width,
+        'geodir_default_marker_h' => $default_marker_height,
         'geodir_latitude_error_msg' => GEODIR_LATITUDE_ERROR_MSG,
         'geodir_longgitude_error_msg' => GEODIR_LOGNGITUDE_ERROR_MSG,
         'geodir_default_rating_star_icon' => get_option('geodir_default_rating_star_icon'),
@@ -1328,6 +1335,7 @@ function geodir_localize_all_js_msg()
 		'geodir_txt_form_searching' => __('Searching...', 'geodirectory'),
 		'fa_rating' => (int)get_option('geodir_reviewrating_enable_font_awesome') == 1 ? 1 : '',
 		'reviewrating' => defined('GEODIRREVIEWRATING_VERSION') ? 1 : '',
+        'geodir_map_name' => geodir_map_name(),
     );
 
     /**
@@ -3175,6 +3183,8 @@ function geodir_body_class_no_rating($classes = array())
     if (get_option('geodir_disable_rating')) {
         $classes[] = 'gd-no-rating';
     }
+    
+    $classes[] = 'gd-map-' . geodir_map_name();
 
     return $classes;
 }
@@ -3193,6 +3203,8 @@ function geodir_admin_body_class_no_rating($class = '')
     if (get_option('geodir_disable_rating')) {
         $class .= ' gd-no-rating';
     }
+    
+    $class .= ' gd-map-' . geodir_map_name();
 
     return $class;
 }

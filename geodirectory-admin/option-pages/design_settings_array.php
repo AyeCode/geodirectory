@@ -266,7 +266,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
     ),
 
     array(
-        'name' => __('Hover listing map animaton', 'geodirectory'),
+        'name' => __('Hover listing map animation', 'geodirectory'),
         'desc' => __('Bounce map pin if listing hovered', 'geodirectory'),
         'id' => 'geodir_listing_hover_bounce_map_pin',
         'type' => 'checkbox',
@@ -422,7 +422,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 	
 	array(
         'name' => __('Show advanced pagination details', 'geodirectory'),
-        'desc' => __('This will add extra pagination info like "Showing listings x-y of z" aftre/before pagination.', 'geodirectory'),
+        'desc' => __('This will add extra pagination info like "Showing listings x-y of z" after/before pagination.', 'geodirectory'),
         'id' => 'geodir_pagination_advance_info',
         'css' => 'min-width:300px;',
         'std' => '',
@@ -569,7 +569,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
         'class' => 'chosen_select',
         'options' => array_unique(geodir_detail_page_tabs_key_value_array())
     ),
-
+    
     array(
         'name' => __('Show as list', 'geodirectory'),
         'desc' => __('Show as list instead of tabs', 'geodirectory'),
@@ -577,7 +577,6 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
         'type' => 'checkbox',
         'std' => '0'
     ),
-
 
     array('type' => 'sectionend', 'id' => 'geodir_detail_page_tab_settings'),
     /* ---------- DETAIL PAGE TAB SETTING END*/
@@ -1120,6 +1119,22 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
         'id' => 'geodir_map_onoff_dragging',
         'type' => 'checkbox',
         'std' => '0' // Default value to show home top section
+    ),
+    array(
+        'name' => __('Select Maps API', 'geodirectory'),
+        'desc' => __('- Google Maps API will force to load Google JS library only.<br>- OpenStreetMap API will force to load OpenStreetMap JS library only.<br>- Load Automatic will load Google JS library first, but if Google maps JS library not loaded it then loads the OpenStreetMap JS library to load the maps (recommended for regions where Google maps banned).<br>- Disable Maps will disable and hides maps for entire site.', 'geodirectory'),
+        'tip' => '',
+        'id' => 'geodir_load_map',
+        'css' => 'min-width:300px;',
+        'std' => 'auto',
+        'type' => 'select',
+        'placeholder_text' => __('Select Map', 'geodirectory'),
+        'options' => array(
+                        'auto' => __('Load Automatic', 'geodirectory'),
+                        'google' => __('Load Google Maps API', 'geodirectory'),
+                        'osm' => __('Load OpenStreetMap API', 'geodirectory'),
+                        'none' => __('Disbale Maps', 'geodirectory')
+                    )
     ),
 
     array('type' => 'sectionend', 'id' => 'geodir_map_default_settings'),
