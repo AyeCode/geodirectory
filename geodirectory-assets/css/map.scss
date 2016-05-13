@@ -724,7 +724,8 @@ div.geodir_map_container.geodir-map-iphone .map_background .triggermap {
 .gd-no-gmaps #geodir_post_map_row .geodir_message_note {
     display: none !important;
 }
-.advmap_notloaded {
+.advmap_notloaded,
+.gd-map-osm .advmap_notloaded {
     background: #ffffff none repeat scroll 0 0;
     border: 1px solid #dddddd;
     color: #aa0000;
@@ -736,16 +737,27 @@ div.geodir_map_container.geodir-map-iphone .map_background .triggermap {
     left: 20%;
     max-width: 360px;
 }
-.advmap_notloaded p {
+.advmap_notloaded p,
+.gd-map-osm .advmap_notloaded p {
     margin: 0 !important;
 }
-.advmap_notloaded h3 {
+.advmap_notloaded h3,
+.gd-map-osm .advmap_notloaded h3 {
     margin: 0 !important;
     padding: 0 !important;
 }
-.geodir-map-listing-page .advmap_notloaded {
+.geodir-map-listing-page .advmap_notloaded,
+.gd-map-osm .geodir-map-listing-page .advmap_notloaded {
     width: 96%;
     left: 2%;
+}
+.gd-map-osm .advmap_nofound {
+    height: inherit;
+    z-index: 9999;
+    bottom: inherit;
+}
+.gd-osm-gmaps .geodir_map_container .map_background span.triggermap {
+    top: 0!important;
 }
 .geodir_map_container .leaflet-popup-content {
     margin: 0;
