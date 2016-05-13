@@ -63,7 +63,7 @@ function geodir_locate_template($template = '')
 				} else {
 					wp_redirect(trailingslashit(get_site_url()) . $pagename . '/?listing_type=' . $post_type);
 				}
-                exit();
+                gd_die();
             }
             return $template = locate_template(array("geodirectory/add-{$post_type}.php", "geodirectory/add-listing.php"));
             break;
