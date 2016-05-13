@@ -1,114 +1,104 @@
-
 function geodir_click_search($this) {
     //we delay this so other functions have a change to change setting before search
-    setTimeout(function(){
-    jQuery($this).parent().find('.geodir_submit_search').click();
+    setTimeout(function() {
+        jQuery($this).parent().find('.geodir_submit_search').click();
     }, 100);
 }
 
 function addToFavourite(post_id, action) {
-
     var fav_url;
-
+    
     if (action == 'add') {
         fav_url = geodir_all_js_msg.geodir_admin_ajax_url + '?action=geodir_ajax_action&geodir_ajax=favorite&ajax_action=add&pid=' + post_id;
-    }
-    else {
+    } else {
         fav_url = geodir_all_js_msg.geodir_admin_ajax_url + '?action=geodir_ajax_action&geodir_ajax=favorite&ajax_action=remove&pid=' + post_id;
     }
-
+    
     jQuery.ajax({
         url: fav_url,
         type: 'GET',
         dataType: 'html',
         timeout: 20000,
-        error: function () {
+        error: function() {
             alert(geodir_all_js_msg.loading_listing_error_favorite);
         },
-        success: function (html) {
+        success: function(html) {
             jQuery('.favorite_property_' + post_id).html(html);
         }
     });
     return false;
 }
 
-jQuery(document).ready(function () {
+jQuery(document).ready(function($) {
     if (geodir_all_js_msg.fa_rating) { // font awesome rating
-		jQuery('.gd-fa-rating').barrating({
-			theme: 'fontawesome-stars',
-			onSelect: function(value, text, event) {
-				if (geodir_all_js_msg.reviewrating) {
-					if (jQuery(this.$elem).closest('form').attr('id') == 'post') {
-						jQuery(this.$elem).closest('.br-theme-fontawesome-stars').parent().find('[name^=geodir_rating]').val(value);
-					} else {
-						jQuery(this.$elem).parent().parent().find('.geodir_reviewratings_current_rating').val(value);
-					}
-				} else {
-					jQuery("#geodir_overallrating").val(value);
-				}
-			}
-		});
-	} else { // default rating
-		jQuery('.gd_rating').jRating({
-			/** String vars **/
-			//bigStarsPath : geodir_all_js_msg.geodir_plugin_url+'/geodirectory-assets/images/stars.png',
-			bigStarsPath: geodir_all_js_msg.geodir_default_rating_star_icon,
-			smallStarsPath: geodir_all_js_msg.geodir_plugin_url + '/geodirectory-assets/images/small.png',
-			phpPath: geodir_all_js_msg.geodir_plugin_url + '/jRating.php',
-			type: 'big', // can be set to 'small' or 'big'
+        jQuery('.gd-fa-rating').barrating({
+            theme: 'fontawesome-stars',
+            onSelect: function(value, text, event) {
+                if (geodir_all_js_msg.reviewrating) {
+                    if (jQuery(this.$elem).closest('form').attr('id') == 'post') {
+                        jQuery(this.$elem).closest('.br-theme-fontawesome-stars').parent().find('[name^=geodir_rating]').val(value);
+                    } else {
+                        jQuery(this.$elem).parent().parent().find('.geodir_reviewratings_current_rating').val(value);
+                    }
+                } else {
+                    jQuery("#geodir_overallrating").val(value);
+                }
+            }
+        });
+    } else { // default rating
+        jQuery('.gd_rating').jRating({
+            /** String vars **/
+            //bigStarsPath : geodir_all_js_msg.geodir_plugin_url+'/geodirectory-assets/images/stars.png',
+            bigStarsPath: geodir_all_js_msg.geodir_default_rating_star_icon,
+            smallStarsPath: geodir_all_js_msg.geodir_plugin_url + '/geodirectory-assets/images/small.png',
+            phpPath: geodir_all_js_msg.geodir_plugin_url + '/jRating.php',
+            type: 'big', // can be set to 'small' or 'big'
+            /** Boolean vars **/
+            step: true, // if true,  mouseover binded star by star,
+            isDisabled: false,
+            showRateInfo: true,
+            canRateAgain: true,
+            /** Integer vars **/
+            length: 5, // number of star to display
+            decimalLength: 0, // number of decimals.. Max 3, but you can complete the function 'getNote'
+            rateMax: 5, // maximal rate - integer from 0 to 9999 (or more)
+            rateInfosX: -45, // relative position in X axis of the info box when mouseover
+            rateInfosY: 5, // relative position in Y axis of the info box when mouseover
+            nbRates: 100,
+            /** Functions **/
+            onSuccess: function(element, rate) {
+                jQuery('#geodir_overallrating').val(rate);
+            },
+            onTouchstart: function(element, rate) {
+                jQuery('#geodir_overallrating').val(rate);
+            },
+            onError: function() {
+                alert(geodir_all_js_msg.rating_error_msg);
+            }
+        });
+    }
 
-			/** Boolean vars **/
-			step: true, // if true,  mouseover binded star by star,
-			isDisabled: false,
-			showRateInfo: true,
-			canRateAgain: true,
-
-			/** Integer vars **/
-			length: 5, // number of star to display
-			decimalLength: 0, // number of decimals.. Max 3, but you can complete the function 'getNote'
-			rateMax: 5, // maximal rate - integer from 0 to 9999 (or more)
-			rateInfosX: -45, // relative position in X axis of the info box when mouseover
-			rateInfosY: 5, // relative position in Y axis of the info box when mouseover
-			nbRates: 100,
-
-			/** Functions **/
-			onSuccess: function (element, rate) {
-				jQuery('#geodir_overallrating').val(rate);
-			},
-			onTouchstart: function (element, rate) {
-				jQuery('#geodir_overallrating').val(rate);
-			},
-			onError: function () {
-				alert(geodir_all_js_msg.rating_error_msg);
-			}
-		});
-	}
-});
-
-jQuery(document).ready(function () {
-    jQuery('#geodir_location_prefix').attr('disabled','disabled');
-    jQuery('.button-primary').click(function () {
+    jQuery('#geodir_location_prefix').attr('disabled', 'disabled');
+    jQuery('.button-primary').click(function() {
         var error = false;
         var characterReg = /^\s*[a-zA-Z0-9,\s]+\s*$/;
         var listing_prefix = jQuery('#geodir_listing_prefix').val();
         var location_prefix = jQuery('#geodir_location_prefix').val();
         var listingurl_separator = jQuery('#geodir_listingurl_separator').val();
         var detailurl_separator = jQuery('#geodir_detailurl_separator').val();
-
+        
         if (listing_prefix == '') {
-
             alert(geodir_all_js_msg.listing_url_prefix_msg);
             jQuery('#geodir_listing_prefix').focus();
             error = true;
         }
-
+        
         if (/^[a-z0-90\_9_-]*$/.test(listing_prefix) == false && listing_prefix != '') {
             jQuery('#geodir_listing_prefix').focus();
             alert(geodir_all_js_msg.invalid_listing_prefix_msg);
             error = true;
         }
-
-
+        
         /* Depreciated 1.4.6
         if (location_prefix == '') {
             alert(geodir_all_js_msg.location_url_prefix_msg);
@@ -122,7 +112,7 @@ jQuery(document).ready(function () {
             error = true;
         }
         */
-
+        
         if (error == true) {
             return false;
         } else {
@@ -130,23 +120,18 @@ jQuery(document).ready(function () {
         }
     });
 
-});
-
-jQuery(document).ready(function () {
-    jQuery('.map_post_type').click(function () {
-
+    jQuery('.map_post_type').click(function() {
         var divshow = jQuery(this).val();
-
+        
         if (jQuery(this).is(':checked')) {
-            jQuery('#' + divshow + ' input').each(function () {
+            jQuery('#' + divshow + ' input').each(function() {
                 jQuery(this).attr('checked', 'checked');
             });
         } else {
-            jQuery('#' + divshow + ' input').each(function () {
+            jQuery('#' + divshow + ' input').each(function() {
                 jQuery(this).removeAttr('checked');
             });
         }
-
     });
 });
 
@@ -241,3 +226,89 @@ function gd_replace_accents (s) {
     }
     return s;
 }
+
+jQuery(function($) {    
+    try {
+    if (window.gdMaps == 'osm') {
+        $('input[name="post_address"]').autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: (location.protocol === 'https:' ? 'https:' : 'http:') + '//nominatim.openstreetmap.org/search',
+                    dataType: "json",
+                    data: {
+                        q: request.term,
+                        format: 'json',
+                        addressdetails: 1,
+                        limit: 5
+                    },
+                    success: function(data, textStatus, jqXHR) {
+                        jQuery('input[name="post_address"]').removeClass('ui-autocomplete-loading');
+                        response(data);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(errorThrown);
+                    },
+                    complete: function(jqXHR, textStatus) {
+                        jQuery('input[name="post_address"]').removeClass('ui-autocomplete-loading');
+                    }
+                });
+            },
+            autoFocus: true,
+            minLength: 1,
+            appendTo: jQuery('input[name="post_address"]').closest('.geodir_form_row'),
+            open: function(event, ui) {
+                jQuery('input[name="post_address"]').removeClass('ui-autocomplete-loading');
+            },
+            select: function(event, ui) {
+                item = gd_osm_parse_item(ui.item);
+                event.preventDefault();
+                $('input[name="post_address"]').val(item.display_address);
+                geocodeResponseOSM(item, true);
+            },
+            close: function(event, ui) {
+                jQuery('input[name="post_address"]').removeClass('ui-autocomplete-loading');
+            }
+        }).autocomplete("instance")._renderItem = function(ul, item) {
+            if (!ul.hasClass('gd-osm-results')) {
+                ul.addClass('gd-osm-results');
+            }
+            
+            var label = item.display_name;
+            
+            /*
+            item = gd_osm_parse_item(item);
+            if (item.display_address) {
+                label = gd_highlight(label, item.display_address, '<span class="gdOQ">', '</span>');
+            }
+            */
+            
+            if (label && this.term) {
+                label = gd_highlight(label, this.term);
+            }
+            
+            return $("<li>").width($('input[name="post_address"]').outerWidth()).append('<i class="fa fa-map-marker"></i><span>' + label + '</span>').appendTo(ul);
+        };
+    }
+    } catch (e) {
+    }
+});
+
+jQuery(function(){
+    if (window.gdMaps === 'google') {
+        console.log('Google Maps API Loaded :)');
+        jQuery('body').addClass('gd-google-maps');
+    } else if (window.gdMaps === 'osm') {
+        console.log('Leaflet | OpenStreetMap API Loaded :)');
+        jQuery('body').addClass('gd-osm-gmaps');
+    } else {
+        console.log('Maps API Not Loaded :(');
+        jQuery('body').addClass('gd-no-gmaps');
+    }
+});
+var gdMaps = null;
+if (typeof google!=='undefined' && typeof google.maps!=='undefined') {
+    gdMaps = 'google';
+} else if (typeof L!=='undefined' && typeof L.version!=='undefined') {
+    gdMaps = 'osm';
+}
+window.gdMaps = window.gdMaps || gdMaps;

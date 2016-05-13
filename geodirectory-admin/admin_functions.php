@@ -104,7 +104,8 @@ if (!function_exists('geodir_admin_scripts')) {
      */
     function geodir_admin_scripts()
     {
-
+        $geodir_map_name = geodir_map_name();
+        
         wp_enqueue_script('jquery');
 
         wp_enqueue_script('geodirectory-jquery-ui-timepicker-js', geodir_plugin_url() . '/geodirectory-assets/js/jquery.ui.timepicker.js', array('jquery-ui-datepicker', 'jquery-ui-slider'), '', true);
@@ -124,10 +125,28 @@ if (!function_exists('geodir_admin_scripts')) {
 
         wp_enqueue_script('tax-meta-clss', $plugin_path . '/js/tax-meta-clss.js', array('jquery'), null, true);
 
-        $map_lang = "&language=" . geodir_get_map_default_language();
-        /** This filter is documented in geodirectory_template_tags.php */
-        $map_extra = apply_filters('geodir_googlemap_script_extra', '');
-        wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?' . $map_lang . $map_extra, '', NULL);
+        if (in_array($geodir_map_name, array('auto', 'google'))) {
+            $map_lang = "&language=" . geodir_get_map_default_language();
+            /** This filter is documented in geodirectory_template_tags.php */
+            $map_extra = apply_filters('geodir_googlemap_script_extra', '');
+            wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?' . $map_lang . $map_extra, '', NULL);
+        }
+        
+        if ($geodir_map_name == 'osm') {
+            // Leaflet OpenStreetMap
+            wp_register_style('geodirectory-leaflet-style', geodir_plugin_url() . '/geodirectory-assets/leaflet/leaflet.css', array(), GEODIRECTORY_VERSION);
+            wp_enqueue_style('geodirectory-leaflet-style');
+                
+            wp_register_script('geodirectory-leaflet-script', geodir_plugin_url() . '/geodirectory-assets/leaflet/leaflet.min.js', array(), GEODIRECTORY_VERSION);
+            wp_enqueue_script('geodirectory-leaflet-script');
+            
+            wp_register_script('geodirectory-leaflet-geo-script', geodir_plugin_url() . '/geodirectory-assets/leaflet/osm.geocode.js', array('geodirectory-leaflet-script'), GEODIRECTORY_VERSION);
+            wp_enqueue_script('geodirectory-leaflet-geo-script');
+        }
+        wp_enqueue_script( 'jquery-ui-autocomplete' );
+        
+        wp_register_script('geodirectory-goMap-script', geodir_plugin_url() . '/geodirectory-assets/js/goMap.min.js', array(), GEODIRECTORY_VERSION,true);
+        wp_enqueue_script('geodirectory-goMap-script');
 
         wp_register_script('geodirectory-goMap-script', geodir_plugin_url() . '/geodirectory-assets/js/goMap.js', array(), GEODIRECTORY_VERSION);
         wp_enqueue_script('geodirectory-goMap-script');
@@ -420,7 +439,7 @@ function geodir_handle_option_form_submit($current_tab)
 }
 
 
-if (!function_exists('geodir_autoinstall_admin_header') && (get_option('geodir_installed') || defined( 'GD_TESTING_MODE' ))) {
+if (!function_exists('geodir_autoinstall_admin_header') && get_option('geodir_installed')) {
     /**
      * GeoDirectory dummy data installation.
      *
@@ -468,57 +487,61 @@ if (!function_exists('geodir_autoinstall_admin_header') && (get_option('geodir_i
             ?>
             <script>
                 <?php
-
-                    $default_location = geodir_get_default_location();
+                  $default_location = geodir_get_default_location();
                   $city =  isset($default_location->city) ? $default_location->city : '';
                   $region =isset($default_location->region) ? $default_location->region : '';
                   $country =isset($default_location->country) ? $default_location->country : '';
                   $city_latitude =isset($default_location->city_latitude) ? $default_location->city_latitude : '';
                   $city_longitude =isset($default_location->city_longitude) ? $default_location->city_longitude : '';
-
                 ?>
-                var geocoder = new google.maps.Geocoder();
+                var geocoder = window.gdMaps == 'google' ? new google.maps.Geocoder() : null;
                 var CITY_ADDRESS = '<?php echo $city.','.$region.','.$country;?>';
                 var bound_lat_lng;
+                var latlng = ['<?php echo $city_latitude; ?>', <?php echo $city_longitude; ?>];
                 var lat = <?php echo $city_latitude; ?>;
                 var lng = <?php echo $city_longitude; ?>;
-                var latlng = new google.maps.LatLng(lat, lng);
-                geocoder.geocode({'address': CITY_ADDRESS},
-                    function (results, status) {
+                if (window.gdMaps == 'google') {
+                    latlng = new google.maps.LatLng(lat, lng);
+                } else if (window.gdMaps == 'osm') {
+                    latlng = L.latLng(lat, lng);
+                }
+                if (window.gdMaps == 'google') {
+                    geocoder.geocode({'address': CITY_ADDRESS},
+                        function (results, status) {
 
-                        if (status == google.maps.GeocoderStatus.OK) {
-                            // Bounds for North America
-                            //	 alert((results[0].geometry.bounds==null))
-                            if (results[0].geometry.bounds == null) {
+                            if (status == google.maps.GeocoderStatus.OK) {
+                                // Bounds for North America
+                                //	 alert((results[0].geometry.bounds==null))
+                                if (results[0].geometry.bounds == null) {
 
-                                bound_lat_lng1 = String(results[0].geometry.viewport.getSouthWest());
-                                bound_lat_lng1 = bound_lat_lng1.replace(/[()]/g, "");
+                                    bound_lat_lng1 = String(results[0].geometry.viewport.getSouthWest());
+                                    bound_lat_lng1 = bound_lat_lng1.replace(/[()]/g, "");
 
-                                bound_lat_lng2 = String(results[0].geometry.viewport.getNorthEast());
-                                bound_lat_lng2 = bound_lat_lng2.replace(/[()]/g, "");
-                                bound_lat_lng2 = bound_lat_lng1 + "," + bound_lat_lng2;
-                                bound_lat_lng = bound_lat_lng2.split(',');
+                                    bound_lat_lng2 = String(results[0].geometry.viewport.getNorthEast());
+                                    bound_lat_lng2 = bound_lat_lng2.replace(/[()]/g, "");
+                                    bound_lat_lng2 = bound_lat_lng1 + "," + bound_lat_lng2;
+                                    bound_lat_lng = bound_lat_lng2.split(',');
+                                }
+                                else {
+                                    bound_lat_lng = String(results[0].geometry.bounds);
+
+                                    bound_lat_lng = bound_lat_lng.replace(/[()]/g, "");
+
+                                    bound_lat_lng = bound_lat_lng.split(',');
+                                }
+
+                                bound_lat_lng = bound_lat_lng.map(function(x){return x.replace(" ", '');});// remove spaces from lat/lon
+
+                                strictBounds = new google.maps.LatLngBounds(
+                                    new google.maps.LatLng(bound_lat_lng[0], bound_lat_lng[1]),
+                                    new google.maps.LatLng(bound_lat_lng[2], bound_lat_lng[3])
+                                );
+
+                            } else {
+                                alert("<?php _e('Geocode was not successful for the following reason:','geodirectory');?> " + status);
                             }
-                            else {
-                                bound_lat_lng = String(results[0].geometry.bounds);
-
-                                bound_lat_lng = bound_lat_lng.replace(/[()]/g, "");
-
-                                bound_lat_lng = bound_lat_lng.split(',');
-                            }
-
-                            bound_lat_lng = bound_lat_lng.map(function(x){return x.replace(" ", '');});// remove spaces from lat/lon
-
-                            strictBounds = new google.maps.LatLngBounds(
-                                new google.maps.LatLng(bound_lat_lng[0], bound_lat_lng[1]),
-                                new google.maps.LatLng(bound_lat_lng[2], bound_lat_lng[3])
-                            );
-
-                        } else {
-                            alert("<?php _e('Geocode was not successful for the following reason:','geodirectory');?> " + status);
-                        }
-                    });
-
+                        });
+                }
 
                 var dummy_post_index = 1;
                 function geodir_autoinstall(obj, id, nonce, posttype) {
@@ -2410,8 +2433,9 @@ function geodir_admin_current_post_type() {
 	global $post, $typenow, $current_screen;
 	
 	$post_type = NULL;
-	
-	if ($post && isset($post->post_type))
+    if (isset($_REQUEST['post']) && get_post_type($_REQUEST['post']))
+		$post_type = get_post_type($_REQUEST['post']);
+    elseif ($post && isset($post->post_type))
 		$post_type = $post->post_type;
 	elseif ($typenow)
 		$post_type = $typenow;
@@ -2419,8 +2443,7 @@ function geodir_admin_current_post_type() {
 		$post_type = $current_screen->post_type;
 	elseif (isset($_REQUEST['post_type']))
 		$post_type = sanitize_key($_REQUEST['post_type']);
-	elseif (isset($_REQUEST['post']) && get_post_type($_REQUEST['post']))
-		$post_type = get_post_type($_REQUEST['post']);
+
 
 	return $post_type;
 }
@@ -4400,8 +4423,6 @@ function geodir_ajax_import_export() {
                                     $geodir_twitter = sanitize_text_field($row[$c]);
                                 } else if ( $column == 'geodir_facebook' ) {
                                     $geodir_facebook = sanitize_text_field($row[$c]);
-                                } else if ( $column == 'geodir_twitter' ) {
-                                    $geodir_twitter = sanitize_text_field($row[$c]);
                                 } else if ( $column == 'IMAGE' && !empty( $row[$c] ) && $row[$c] != '' ) {
                                     $post_images[] = $row[$c];
                                 } else if ( $column == 'alive_days' && (int)$row[$c] > 0 ) {

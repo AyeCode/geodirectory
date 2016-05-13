@@ -3424,19 +3424,20 @@ function geodir_count_reviews_by_terms($force_update = false, $post_ID = 0) {
      * Filter review count option data.
      *
      * @since 1.0.0
+     * @since 1.6.1 Added $post_ID param.
      * @param bool $force_update Force update option value?. Default.false.
+     * @param int $post_ID The post id to update if any.
      */
-    $option_data = apply_filters('geodir_count_reviews_by_terms_before', '', $force_update);
+    $option_data = apply_filters('geodir_count_reviews_by_terms_before', '', $force_update,$post_ID);
     if (!empty($option_data)) {
         return $option_data;
     }
 
     $option_data = get_option('geodir_global_review_count');
 
-    if (!$option_data OR $force_update) {
+    if (!$option_data || $force_update) {
         if ((int)$post_ID > 0) { // Update reviews count for specific post categories only.
             global $gd_session;
-                        
             $term_array = (array)$option_data;
             $post_type = get_post_type($post_ID);
             $taxonomy = $post_type . 'category';
@@ -3542,6 +3543,10 @@ function geodir_term_review_count_force_update($new_status, $old_status = '', $p
     }
 
     return true;
+}
+
+function geodir_term_review_count_force_update_single_post($post_id){
+    geodir_count_reviews_by_terms(true, $post_id); 
 }
 
 /*-----------------------------------------------------------------------------------*/

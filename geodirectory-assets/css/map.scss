@@ -705,3 +705,139 @@ div.geodir_map_container.geodir-map-iphone .map_background .triggermap {
 .body_fullscreen .geodir_map_container.geodir_map_container_fullscreen{
   display: block;
 }
+
+/* OpenStreetMap */
+.gd-no-gmaps .geodir_map_container, .gd-no-gmaps .main_map_wrapper, .gd-no-gmaps  .geodir_marker_cluster {
+    max-width: 100% !important;
+}
+.gd-map-none .stick_trigger_container,
+.gd-map-none .geodir_map_container,
+.gd-map-none #gd-tabs [data-tab="#post_map"],
+.gd-map-none #geodir_post_map_row,
+.gd-map-none #geodir_post_mapview_row,
+.gd-map-none #geodir_post_latitude_row,
+.gd-map-none #geodir_post_longitude_row,
+.gd-map-none .gd-add-location-map,
+.gd-no-gmaps .geodir-pinpoint,
+.gd-no-gmaps .geodir-pinpoint-link,
+.gd-no-gmaps #post_set_address_button,
+.gd-no-gmaps #geodir_post_map_row .geodir_message_note {
+    display: none !important;
+}
+.advmap_notloaded {
+    background: #ffffff none repeat scroll 0 0;
+    border: 1px solid #dddddd;
+    color: #aa0000;
+    display: none;
+    padding: 8px;
+    top: calc(50% - 50px);
+    position: absolute;
+    width: 60%;
+    left: 20%;
+    max-width: 360px;
+}
+.advmap_notloaded p {
+    margin: 0 !important;
+}
+.advmap_notloaded h3 {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+.geodir-map-listing-page .advmap_notloaded {
+    width: 96%;
+    left: 2%;
+}
+.geodir_map_container .leaflet-popup-content {
+    margin: 0;
+}
+.geodir_map_container  .leaflet-popup-content .gd-bubble {
+    width: auto;
+}
+.geodir_map_container  .leaflet-popup-content .geodir-bubble-meta-fade {
+}
+.geodir_map_container  .leaflet-popup-content-wrapper {
+    border-radius: 0;
+}
+.geodir_map_container  .leaflet-popup-content-wrapper .geodir-bubble-meta-bottom {
+    width: 96%;
+    left: 2%;
+    bottom: 30px;
+}
+.geodir_map_container  .leaflet-popup-content-wrapper .geodir-bubble-meta-side {
+    margin-top: -1px;
+}
+.geodir_map_container  .leaflet-popup-content-wrapper {
+    padding: 0;
+}
+.geodir_map_container  .leaflet-container a.leaflet-popup-close-button {
+    z-index: 99;
+}
+.geodir_map_container  .leaflet-popup-content-wrapper #map_loading {
+    width: 100%;
+    height: 100%;
+    min-height: 120px;
+    min-width: 241px;
+    background-position: center;
+}
+.gd-osm-gmaps .map-places-listing,
+.gd-osm-gmaps .map-category-listing,
+.gd-osm-gmaps .loading_div,
+.gd-osm-gmaps .gd-triggered-map {
+    z-index: 9999
+}
+.gd-osm-gmaps .leaflet-top .leaflet-control {
+    margin-top: 30px
+}
+#post_address.ui-autocomplete-loading {
+    background-image:url(../images/classic-loader.gif);
+    background-repeat: no-repeat;
+    background-position: center right 9px;
+}
+.gd-osm-results {
+    background-color: #fff;
+    border-radius: 2px;
+    border: none !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    box-sizing: border-box;
+    overflow: hidden;
+    position: absolute !important;
+    z-index: 1000;
+    width: auto !important;
+}
+.gd-osm-results .ui-menu-item {
+    border: none !important;
+    border-top: 1px solid #e6e6e6 !important;
+    color: #777!important;
+    cursor: default;
+    font-size: 12px;
+    line-height: 30px;
+    overflow: hidden;
+    padding: 0 4px !important;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: none !important;
+    margin: 0 !important;
+    font-family: Arial,sans-serif!important;
+}
+.gd-osm-results .ui-menu-item span {
+    color: #777;
+    font-size: 11px;
+}
+.gd-osm-results .ui-menu-item > span .gdOQ,
+.gd-osm-results .ui-menu-item > span .gdOH {
+    color: #333!important;
+    font-size: 12px;
+}
+.gd-osm-results .ui-menu-item:hover {
+    background-color: #fafafa !important;
+}
+.gd-osm-results .ui-menu-item .fa {
+    margin-right: 5px;
+}
+.gd-osm-results .ui-menu-item:hover .fa {
+    color: #3887be!important;
+}
+.gd-osm-results .ui-menu-item  .gdOH {
+    font-weight: 700;
+}

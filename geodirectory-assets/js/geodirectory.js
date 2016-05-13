@@ -113,17 +113,14 @@
     }), K.disable = K.nativeSupport ? e : i, K.enable = K.nativeSupport ? e : l
 }(this);
 
-
-
-jQuery(document).ready(function () {
-
+jQuery(document).ready(function($) {
     //toggle detail page tabs mobile menu
-    jQuery('#geodir-tab-mobile-menu').click(function(){
+    jQuery('#geodir-tab-mobile-menu').click(function() {
         jQuery('#gd-tabs .geodir-tab-head').toggle();
     });
-
-    gd_infowindow = new google.maps.InfoWindow();
-
+    
+    gd_infowindow = (typeof google !== 'undefined' && typeof google.maps !== 'undefined') ? new google.maps.InfoWindow() : null;
+    
     // Chosen selects
     if (jQuery("select.chosen_select").length > 0) {
         jQuery("select.chosen_select").chosen({
@@ -133,191 +130,163 @@ jQuery(document).ready(function () {
             allow_single_deselect: 'true'
         });
     }
-
-    jQuery('.gd-cats-display-checkbox input[type="checkbox"]').click(function () {
+    
+    jQuery('.gd-cats-display-checkbox input[type="checkbox"]').click(function() {
         var isChecked = jQuery(this).is(':checked');
         if (!isChecked) {
-			var chkVal = jQuery(this).val();
-			jQuery(this).closest('.gd-parent-cats-list').find('.gd-cat-row-' + chkVal + ' input[type="checkbox"]').prop("checked", isChecked);
-		}
+            var chkVal = jQuery(this).val();
+            jQuery(this).closest('.gd-parent-cats-list').find('.gd-cat-row-' + chkVal + ' input[type="checkbox"]').prop("checked", isChecked);
+        }
     });
 
-});
-
-jQuery(document).ready(function () {
-
-
-    jQuery('.geodir-delete').click(function () {
+    jQuery('.geodir-delete').click(function() {
         if (confirm(geodir_all_js_msg.my_place_listing_del)) {
             return true;
         } else
             return false;
     });
-
-    //jQuery('#gd-content').height(jQuery('#gd-content').parent('div').height());
-
-
-    jQuery('.gd-category-dd').hover(function () {
+    
+    jQuery('.gd-category-dd').hover(function() {
         jQuery('.gd-category-dd ul').show();
     });
-
-    jQuery('.gd-category-dd ul li a').click(function (ele) {
-
+    
+    jQuery('.gd-category-dd ul li a').click(function(ele) {
         jQuery('.gd-category-dd').find('input').val(jQuery(this).attr('data-slug'));
         jQuery('.gd-category-dd > a').html(jQuery(this).attr('data-name'));
         jQuery('.gd-category-dd ul').hide();
     });
-
-
 });
 
 
-jQuery(window).load(function () {
-
+jQuery(window).load(function() {
     /*-----------------------------------------------------------------------------------*/
-    /*	Tabs
-     /*-----------------------------------------------------------------------------------*/
+    /* Tabs
+    /*-----------------------------------------------------------------------------------*/
     jQuery('.geodir-tabs-content').show(); // set the tabs to show once js loaded to avoid double scroll bar in chrome
     tabNoRun = false;
-    function activateTab(tab) {
 
+    function activateTab(tab) {
         if ( !jQuery( ".geodir-tab-head" ).length ) {
             return;
         }
         // change name for mobile tabs menu
         tabName = urlHash = tab.find('a').html();
-        if(tabName && jQuery('.geodir-mobile-active-tab').length){
+        
+        if (tabName && jQuery('.geodir-mobile-active-tab').length) {
             jQuery('.geodir-mobile-active-tab').html(tabName);
         }
-
+        
         if (tabNoRun) {
             tabNoRun = false;
             return;
         }
-        var activeTab = tab.closest('dl').find('dd.geodir-tab-active'),
-            contentLocation = tab.find('a').attr("data-tab") + 'Tab';
-
+        var activeTab = tab.closest('dl').find('dd.geodir-tab-active'), contentLocation = tab.find('a').attr("data-tab") + 'Tab';
         urlHash = tab.find('a').attr("data-tab");
-        if (jQuery(tab).hasClass("geodir-tab-active")) {
-        } else {
-
+        
+        if (jQuery(tab).hasClass("geodir-tab-active")) {} else {
             if (typeof urlHash === 'undefined') {
                 if (window.location.hash.substring(0, 8) == '#comment') {
                     tab = jQuery('*[data-tab="#reviews"]').parent();
                     tabNoRun = true;
                 }
-
-
             } else {
-
                 if (history.pushState) {
                     //history.pushState(null, null, urlHash);
-                    history.replaceState(null, null, urlHash);// wont make the browser back button go back to prev has value
-                }
-                else {
+                    history.replaceState(null, null, urlHash); // wont make the browser back button go back to prev has value
+                } else {
                     window.location.hash = urlHash;
                 }
-
             }
         }
-
+        
         //Make Tab Active
         activeTab.removeClass('geodir-tab-active');
         tab.addClass('geodir-tab-active');
-
+        
         //Show Tab Content
         jQuery(contentLocation).closest('.geodir-tabs-content').children('li').hide();
         jQuery(contentLocation).fadeIn();
-        jQuery(contentLocation).css({'display': 'inline-block'});
-
-        if (urlHash == '#post_map') {
-            window.setTimeout(function () {
+        jQuery(contentLocation).css({
+            'display': 'inline-block'
+        });
+        
+        if (urlHash == '#post_map' && window.gdMaps) {
+            window.setTimeout(function() {
                 jQuery("#detail_page_map_canvas").goMap();
                 var center = jQuery.goMap.map.getCenter();
-                google.maps.event.trigger(jQuery.goMap.map, 'resize');
-                jQuery.goMap.map.setCenter(center);
+                if (window.gdMaps == 'osm') {
+                    jQuery.goMap.map.invalidateSize();
+                    jQuery.goMap.map._onResize();
+                    jQuery.goMap.map.panTo(center);
+                } else {
+                    google.maps.event.trigger(jQuery.goMap.map, 'resize');
+                    jQuery.goMap.map.setCenter(center);
+                }
             }, 100);
         }
-
+        
         if (history.pushState && window.location.hash && jQuery('#publish_listing').length === 0) {
             if (jQuery(window).width() < 1060) {
-                jQuery('html, body').animate({scrollTop: jQuery(urlHash).offset().top}, 500);
+                jQuery('html, body').animate({
+                    scrollTop: jQuery(urlHash).offset().top
+                }, 500);
             }
         }
     }
-
-    jQuery('dl.geodir-tab-head').each(function () {
-
+    
+    jQuery('dl.geodir-tab-head').each(function() {
         //Get all tabs
         var tabs = jQuery(this).children('dd');
-
-        tabs.click(function (e) {
+        tabs.click(function(e) {
             if (jQuery(this).find('a').attr('data-status') == 'enable') {
                 activateTab(jQuery(this));
             }
         });
-
     });
-
-
+    
     if (window.location.hash) {
         activateTab(jQuery('a[data-tab="' + window.location.hash + '"]').parent());
     }
 
-    /*jQuery('p').each(function() {
-     var $this = jQuery(this);
-     if($this.html().replace(/\s|&nbsp;/g, '').length == 0)
-     $this.remove();
-     });*/
-
-    jQuery('.gd-tabs .gd-tab-next').click(function (ele) {
-
+    jQuery('.gd-tabs .gd-tab-next').click(function(ele) {
         var is_validate = true;
-
-        /*jQuery(this).parent('li').find(".required_field").each(function(){
-         jQuery(this).find("select, textarea, input").each(function(rq_field){
-         validate_field( rq_field );
-         });
-         });*/
 
         if (is_validate) {
             var tab = jQuery('dl.geodir-tab-head').find('dd.geodir-tab-active').next();
-
             if (tab.find('a').attr('data-status') == 'enable') {
                 activateTab(tab);
             }
-
-
             if (!jQuery('dl.geodir-tab-head').find('dd.geodir-tab-active').next().is('dd')) {
                 jQuery(this).hide();
                 jQuery('#gd-add-listing-submit').show();
             }
         }
-
     });
-
-    jQuery('#gd-login-options input').change(function () {
+    
+    jQuery('#gd-login-options input').change(function() {
         jQuery('.gd-login_submit').toggle();
     });
-
-    jQuery('ul.geodir-tabs-content').css({'z-index': '0', 'position': 'relative'});
+    
+    jQuery('ul.geodir-tabs-content').css({
+        'z-index': '0',
+        'position': 'relative'
+    });
+    
     jQuery('dl.geodir-tab-head dd.geodir-tab-active').trigger('click');
-
 });
 
 
 /*-----------------------------------------------------------------------------------*/
-/*	Auto Fill
- /*-----------------------------------------------------------------------------------*/
-
+/* Auto Fill
+/*-----------------------------------------------------------------------------------*/
 function autofill_click(ele) {
     var fill_value = jQuery(ele).html();
     jQuery(ele).closest('div.gd-autofill-dl').closest('div.gd-autofill').find('input[type=text]').val(fill_value);
     jQuery(ele).closest('.gd-autofill-dl').remove();
 };
 
-jQuery(document).ready(function () {
-    jQuery('input[type=text]').keyup(function () {
+jQuery(document).ready(function() {
+    jQuery('input[type=text]').keyup(function() {
         var input_field = jQuery(this);
         if (input_field.attr('data-type') == 'autofill' && input_field.attr('data-fill') != '') {
             var data_fill = input_field.attr('data-fill');
@@ -325,7 +294,7 @@ jQuery(document).ready(function () {
             jQuery.get(geodir_var.geodir_ajax_url, {
                 autofill: data_fill,
                 fill_str: fill_value
-            }, function (data) {
+            }, function(data) {
                 if (data != '') {
                     if (input_field.closest('div.gd-autofill').length == 0) input_field.wrap('<div class="gd-autofill"></div>');
                     input_field.closest('div.gd-autofill').find('.gd-autofill-dl').remove();
@@ -336,36 +305,36 @@ jQuery(document).ready(function () {
             });
         }
     });
-
-    jQuery('input[type=text]').parent().mouseleave(function () {
+    
+    jQuery('input[type=text]').parent().mouseleave(function() {
         jQuery(this).find('.gd-autofill-dl').remove();
     });
-
-    jQuery(".trigger").click(function () {
+    
+    jQuery(".trigger").click(function() {
         jQuery(this).toggleClass("active").next().slideToggle("slow");
-		var aD = jQuery(this).toggleClass("active").next().hasClass('map_category') ? true : false;
-		if (jQuery(".trigger").hasClass("triggeroff")) {
-			jQuery(".trigger").removeClass('triggeroff');
+        var aD = jQuery(this).toggleClass("active").next().hasClass('map_category') ? true : false;
+        if (jQuery(".trigger").hasClass("triggeroff")) {
+            jQuery(".trigger").removeClass('triggeroff');
             jQuery(".trigger").addClass('triggeron');
-			if (aD) {
-				gd_compress_animate(this, 0);
-			}
+            if (aD) {
+                gd_compress_animate(this, 0);
+            }
         } else {
-			jQuery(".trigger").removeClass('triggeron');
+            jQuery(".trigger").removeClass('triggeron');
             jQuery(".trigger").addClass('triggeroff');
-			
-			if (aD) {
-				gd_compress_animate(this, parseFloat(jQuery(this).toggleClass("active").next().outerWidth()));
-			}
+            if (aD) {
+                gd_compress_animate(this, parseFloat(jQuery(this).toggleClass("active").next().outerWidth()));
+            }
         }
     });
-	jQuery(".trigger").each(function() {
-		if (jQuery(this).hasClass('triggeroff') && jQuery(this).next().hasClass('map_category')) {
-			gd_compress_animate(this, parseFloat(jQuery(this).next().outerWidth()));
-		}
-	});
-
-    jQuery(".trigger_sticky").click(function () {
+    
+    jQuery(".trigger").each(function() {
+        if (jQuery(this).hasClass('triggeroff') && jQuery(this).next().hasClass('map_category')) {
+            gd_compress_animate(this, parseFloat(jQuery(this).next().outerWidth()));
+        }
+    });
+    
+    jQuery(".trigger_sticky").click(function() {
         var effect = 'slide';
         var options = {
             direction: 'right'
@@ -373,7 +342,7 @@ jQuery(document).ready(function () {
         var duration = 500;
         var tigger_sticky = jQuery(this);
         tigger_sticky.hide();
-        jQuery('div.stickymap').toggle(effect, options, duration, function () {
+        jQuery('div.stickymap').toggle(effect, options, duration, function() {
             tigger_sticky.show();
         });
         if (tigger_sticky.hasClass("triggeroff_sticky")) {
@@ -386,55 +355,61 @@ jQuery(document).ready(function () {
             setCookie('geodir_stickystatus', 'sshow', 1);
         }
     });
-	
-	function gd_compress_animate(e, r) {
-		jQuery(e).animate({"margin-right":r + "px"}, "fast");
-	}
-	
-	var gd_modal = "undefined" != typeof geodir_var.geodir_gd_modal && 1 == parseInt(geodir_var.geodir_gd_modal) ? false : true;
-	if (gd_modal) {
-		jQuery(".geodir-custom-post-gallery").each(function(){
-			jQuery("a", this).lightBox({
-				overlayOpacity: .5,
-				imageLoading: geodir_var.geodir_plugin_url + "/geodirectory-assets/images/lightbox-ico-loading.gif",
-				imageBtnNext: geodir_var.geodir_plugin_url + "/geodirectory-assets/images/lightbox-btn-next.gif",
-				imageBtnPrev: geodir_var.geodir_plugin_url + "/geodirectory-assets/images/lightbox-btn-prev.gif",
-				imageBtnClose: geodir_var.geodir_plugin_url + "/geodirectory-assets/images/lightbox-btn-close.gif",
-				imageBlank: geodir_var.geodir_plugin_url + "/geodirectory-assets/images/lightbox-blank.gif"
-			})
-		});
-	}
-});
 
-/* Show Hide Rating for reply */
-jQuery(document).ready(function () {
-    jQuery('.gd_comment_replaylink a').bind('click', function () {
+    function gd_compress_animate(e, r) {
+        jQuery(e).animate({
+            "margin-right": r + "px"
+        }, "fast");
+    }
+    
+    var gd_modal = "undefined" != typeof geodir_var.geodir_gd_modal && 1 == parseInt(geodir_var.geodir_gd_modal) ? false : true;
+    
+    if (gd_modal) {
+        jQuery(".geodir-custom-post-gallery").each(function() {
+            jQuery("a", this).lightBox({
+                overlayOpacity: .5,
+                imageLoading: geodir_var.geodir_plugin_url + "/geodirectory-assets/images/lightbox-ico-loading.gif",
+                imageBtnNext: geodir_var.geodir_plugin_url + "/geodirectory-assets/images/lightbox-btn-next.gif",
+                imageBtnPrev: geodir_var.geodir_plugin_url + "/geodirectory-assets/images/lightbox-btn-prev.gif",
+                imageBtnClose: geodir_var.geodir_plugin_url + "/geodirectory-assets/images/lightbox-btn-close.gif",
+                imageBlank: geodir_var.geodir_plugin_url + "/geodirectory-assets/images/lightbox-blank.gif"
+            })
+        });
+    }
+
+    /* Show Hide Rating for reply */
+    jQuery('.gd_comment_replaylink a').bind('click', function() {
         jQuery('#commentform #err_no_rating').remove();
         jQuery('#commentform .gd_rating').hide();
-		jQuery('#commentform .br-wrapper.br-theme-fontawesome-stars').hide();
-		jQuery('#commentform #geodir_overallrating').val('0');
+        jQuery('#commentform .br-wrapper.br-theme-fontawesome-stars').hide();
+        jQuery('#commentform #geodir_overallrating').val('0');
         jQuery('#respond .form-submit input#submit').val(geodir_all_js_msg.gd_cmt_btn_post_reply);
         jQuery('#respond .comment-form-comment label').html(geodir_all_js_msg.gd_cmt_btn_reply_text);
     });
-    jQuery('.gd-cancel-replaylink a').bind('click', function () {
+    
+    jQuery('.gd-cancel-replaylink a').bind('click', function() {
         jQuery('#commentform #err_no_rating').remove();
         jQuery('#commentform .gd_rating').show();
-		jQuery('#commentform .br-wrapper.br-theme-fontawesome-stars').show();
-		jQuery('#commentform #geodir_overallrating').val('0');
+        jQuery('#commentform .br-wrapper.br-theme-fontawesome-stars').show();
+        jQuery('#commentform #geodir_overallrating').val('0');
         jQuery('#respond .form-submit input#submit').val(geodir_all_js_msg.gd_cmt_btn_post_review);
         jQuery('#respond .comment-form-comment label').html(geodir_all_js_msg.gd_cmt_btn_review_text);
     });
-    jQuery('#commentform .gd_rating').each(function () {
+    
+    jQuery('#commentform .gd_rating').each(function() {
         var rat_obj = this;
         var $frm_obj = jQuery(rat_obj).closest('#commentform');
+        
         if (parseInt($frm_obj.find('#comment_parent').val()) > 0) {
             jQuery('#commentform #err_no_rating').remove();
             jQuery('#commentform .gd_rating').hide();
             jQuery('#respond .form-submit input#submit').val(geodir_all_js_msg.gd_cmt_btn_post_reply);
             jQuery('#respond .comment-form-comment label').html(geodir_all_js_msg.gd_cmt_btn_reply_text);
         }
-        $frm_obj.find('input[name="submit"]').click(function (e) {
+        
+        $frm_obj.find('input[name="submit"]').click(function(e) {
             $frm_obj.find('#err_no_rating').remove();
+            
             // skip rating stars validation if rating stars disabled
             if (typeof geodir_all_js_msg.gd_cmt_disable_rating != 'undefined' && geodir_all_js_msg.gd_cmt_disable_rating) {
                 return true;
@@ -442,16 +417,19 @@ jQuery(document).ready(function () {
             //
             var is_review = parseInt($frm_obj.find('#comment_parent').val());
             is_review = is_review == 0 ? true : false;
+            
             if (is_review) {
                 var btn_obj = this;
                 var invalid = 0;
-                $frm_obj.find('input[name^=geodir_overallrating]').each(function () {
+                
+                $frm_obj.find('input[name^=geodir_overallrating]').each(function() {
                     var star_obj = this;
                     var star = parseInt(jQuery(star_obj).val());
                     if (!star > 0) {
                         invalid++;
                     }
                 });
+                
                 if (invalid > 0) {
                     jQuery(rat_obj).after('<div id="err_no_rating" class="err-no-rating">' + geodir_all_js_msg.gd_cmt_err_no_rating + '</div>');
                     return false;
@@ -462,9 +440,8 @@ jQuery(document).ready(function () {
     });
 });
 
-
-/* Show Hide Filters End*/
-/* Hide Pinpoint If Listing MAP Not On Page*/
+/* Show Hide Filters End */
+/* Hide Pinpoint If Listing MAP Not On Page */
 jQuery(window).load(function () {
     if (jQuery(".map_background").length == 0) {
         jQuery('.geodir-pinpoint').hide();
@@ -493,29 +470,27 @@ function geodir_get_post_term(el) {
     });
 }
 
-/*
- we recalc the stars because some browsers can't do subpixle percents, we should be able to remove this in a few years.
- */
+/* we recalc the stars because some browsers can't do subpixle percents, we should be able to remove this in a few years. */
 jQuery(window).load(function() {
-	geodir_resize_rating_stars();
+    geodir_resize_rating_stars();
 });
+
 jQuery(window).resize(function() {
-	geodir_resize_rating_stars(true);
+    geodir_resize_rating_stars(true);
 });
-/**
- * Adjust/resize rating stars width.
- */
+
+/* Adjust/resize rating stars width. */
 function geodir_resize_rating_stars(re) {
-	jQuery('.geodir-rating').each(function() {
-		var $this = jQuery(this);
-		var parent_width = $this.width();
-		if (!parent_width) {
-			return true;
-		}
-		var star_width = $this.find(".geodir_Star img").width();
-		var star_count = $this.find(".geodir_Star img").length;
-		var width_calc = star_width * star_count;
-		width_calc = typeof re != 'undefined' && re ? 'auto' : width_calc;
-		$this.width(width_calc);
-	});
+    jQuery('.geodir-rating').each(function() {
+        var $this = jQuery(this);
+        var parent_width = $this.width();
+        if (!parent_width) {
+            return true;
+        }
+        var star_width = $this.find(".geodir_Star img").width();
+        var star_count = $this.find(".geodir_Star img").length;
+        var width_calc = star_width * star_count;
+        width_calc = typeof re != 'undefined' && re ? 'auto' : width_calc;
+        $this.width(width_calc);
+    });
 }
