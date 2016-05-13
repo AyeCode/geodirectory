@@ -2433,8 +2433,9 @@ function geodir_admin_current_post_type() {
 	global $post, $typenow, $current_screen;
 	
 	$post_type = NULL;
-	
-	if ($post && isset($post->post_type))
+    if (isset($_REQUEST['post']) && get_post_type($_REQUEST['post']))
+		$post_type = get_post_type($_REQUEST['post']);
+    elseif ($post && isset($post->post_type))
 		$post_type = $post->post_type;
 	elseif ($typenow)
 		$post_type = $typenow;
@@ -2442,8 +2443,7 @@ function geodir_admin_current_post_type() {
 		$post_type = $current_screen->post_type;
 	elseif (isset($_REQUEST['post_type']))
 		$post_type = sanitize_key($_REQUEST['post_type']);
-	elseif (isset($_REQUEST['post']) && get_post_type($_REQUEST['post']))
-		$post_type = get_post_type($_REQUEST['post']);
+
 
 	return $post_type;
 }

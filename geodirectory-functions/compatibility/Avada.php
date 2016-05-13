@@ -236,3 +236,14 @@ function geodir_search_form_class_avada($class)
 
 // run Avada compat
 gd_compat_php_avada();
+
+// Avada sets the search page to use wither post or page, we need it to be 'any'
+function gd_avada_search_filter( $query ) {
+    if ( geodir_is_page('search')) {
+            $query->set('post_type', 'any');
+    }
+    return $query;
+}
+if ( ! is_admin() ) {
+    add_filter( 'pre_get_posts', 'gd_avada_search_filter',11 );
+}

@@ -3438,7 +3438,6 @@ function geodir_count_reviews_by_terms($force_update = false, $post_ID = 0) {
     if (!$option_data || $force_update) {
         if ((int)$post_ID > 0) { // Update reviews count for specific post categories only.
             global $gd_session;
-                        
             $term_array = (array)$option_data;
             $post_type = get_post_type($post_ID);
             $taxonomy = $post_type . 'category';
@@ -3544,6 +3543,10 @@ function geodir_term_review_count_force_update($new_status, $old_status = '', $p
     }
 
     return true;
+}
+
+function geodir_term_review_count_force_update_single_post($post_id){
+    geodir_count_reviews_by_terms(true, $post_id); 
 }
 
 /*-----------------------------------------------------------------------------------*/
