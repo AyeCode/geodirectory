@@ -3438,7 +3438,6 @@ function geodir_count_reviews_by_terms($force_update = false, $post_ID = 0) {
     if (!$option_data || $force_update) {
         if ((int)$post_ID > 0) { // Update reviews count for specific post categories only.
             global $gd_session;
-                        
             $term_array = (array)$option_data;
             $post_type = get_post_type($post_ID);
             $taxonomy = $post_type . 'category';
@@ -3544,6 +3543,10 @@ function geodir_term_review_count_force_update($new_status, $old_status = '', $p
     }
 
     return true;
+}
+
+function geodir_term_review_count_force_update_single_post($post_id){
+    geodir_count_reviews_by_terms(true, $post_id); 
 }
 
 /*-----------------------------------------------------------------------------------*/
@@ -4729,5 +4732,27 @@ function geodir_title_meta_pagenumbering($request = 'nr') {
             break;
     }
 
+    return $return;
+}
+
+/**
+ * Filter the terms with count empty.
+ *
+ * @since 1.5.4
+ *
+ * @param array $terms Terms array.
+ * @return array Terms.
+ */
+function geodir_filter_empty_terms($terms) {
+    if (empty($terms)) {
+        return $terms;
+    }
+
+    $return = array();
+    foreach ($terms as $term) {
+        if (isset($term->count) && $term->count > 0) {
+            $return[] = $term;
+        }
+    }
     return $return;
 }

@@ -12,6 +12,7 @@ Large number of categories slow down the add listing page - FIXED
 Removed DONOTCACHEPAGE for frontpage as it is no longer dynamic for locations - CHANGED
 geodir_setup_submit_search() can set multiple click events on search submit - FIXED
 OpenStreetMap integration added for maps - ADDED
+New Avada theme can break search filters depending on settings - FIXED
 
 v1.6.0
 GD export should not export deleted listings - CHANGED
