@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 1.6.1\n"
+"Project-Id-Version: GeoDirectory 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-13 18:12+0100\n"
-"PO-Revision-Date: 2016-05-13 18:12+0100\n"
+"POT-Creation-Date: 2016-05-13 23:43+0100\n"
+"PO-Revision-Date: 2016-05-13 23:43+0100\n"
 "Last-Translator: \n"
 "Language-Team: GeoDirectory <info@wpgeodirectory.com>\n"
 "Language: en_US\n"
@@ -94,7 +94,7 @@ msgstr ""
 #: geodirectory-admin/admin_db_install.php:675
 #: geodirectory-admin/admin_db_install.php:681
 #: geodirectory-admin/admin_hooks_actions.php:516
-#: geodirectory-functions/general_functions.php:3032
+#: geodirectory-functions/general_functions.php:3033
 #: geodirectory-templates/popup-forms.php:69
 #: geodirectory-templates/popup-forms.php:95
 #: geodirectory-templates/popup-forms.php:185 language.php:39 language.php:64
@@ -1367,8 +1367,8 @@ msgstr ""
 
 #: geodirectory-admin/admin_hooks_actions.php:1345
 #: geodirectory-admin/admin_install.php:109
-#: geodirectory-functions/general_functions.php:2913
 #: geodirectory-functions/general_functions.php:2914
+#: geodirectory-functions/general_functions.php:2915
 #: geodirectory-functions/taxonomy_functions.php:248
 msgid "Add Listing"
 msgstr ""
@@ -1547,7 +1547,7 @@ msgstr ""
 #: geodirectory-admin/admin_install.php:255
 #: geodirectory-admin/admin_install.php:266
 #: geodirectory-functions/general_functions.php:1191
-#: geodirectory-functions/general_functions.php:2857
+#: geodirectory-functions/general_functions.php:2858
 msgid "My Dashboard"
 msgstr ""
 
@@ -4651,7 +4651,7 @@ msgid "reviewed"
 msgstr ""
 
 #: geodirectory-functions/custom_functions.php:1993
-#: geodirectory-functions/general_functions.php:2500
+#: geodirectory-functions/general_functions.php:2501
 #, php-format
 msgid "%s Categories"
 msgstr ""
@@ -4814,52 +4814,52 @@ msgstr ""
 msgid "1 Review"
 msgstr ""
 
-#: geodirectory-functions/general_functions.php:2530
+#: geodirectory-functions/general_functions.php:2531
 msgid "More Categories"
 msgstr ""
 
-#: geodirectory-functions/general_functions.php:2531
+#: geodirectory-functions/general_functions.php:2532
 msgid "Less Categories"
 msgstr ""
 
-#: geodirectory-functions/general_functions.php:2872 language.php:165
+#: geodirectory-functions/general_functions.php:2873 language.php:165
 #: language.php:181
 msgid "Logout"
 msgstr ""
 
-#: geodirectory-functions/general_functions.php:2957
 #: geodirectory-functions/general_functions.php:2958
+#: geodirectory-functions/general_functions.php:2959
 #: geodirectory-functions/user_functions.php:98 language.php:110
 msgid "My Favorites"
 msgstr ""
 
-#: geodirectory-functions/general_functions.php:3002
 #: geodirectory-functions/general_functions.php:3003
+#: geodirectory-functions/general_functions.php:3004
 #: geodirectory-functions/user_functions.php:164
 msgid "My Listings"
 msgstr ""
 
-#: geodirectory-functions/general_functions.php:3035 language.php:189
+#: geodirectory-functions/general_functions.php:3036 language.php:189
 msgid "Password"
 msgstr ""
 
-#: geodirectory-functions/general_functions.php:3306
+#: geodirectory-functions/general_functions.php:3307
 #: geodirectory-widgets/geodirectory_bestof_widget.php:324
 #: geodirectory-widgets/geodirectory_bestof_widget.php:665
 msgid "View all"
 msgstr ""
 
-#: geodirectory-functions/general_functions.php:4093
-#: geodirectory-functions/general_functions.php:4389
+#: geodirectory-functions/general_functions.php:4094
+#: geodirectory-functions/general_functions.php:4390
 msgid "in "
 msgstr ""
 
-#: geodirectory-functions/general_functions.php:4099
-#: geodirectory-functions/general_functions.php:4396
+#: geodirectory-functions/general_functions.php:4100
+#: geodirectory-functions/general_functions.php:4397
 msgid "in"
 msgstr ""
 
-#: geodirectory-functions/general_functions.php:4640
+#: geodirectory-functions/general_functions.php:4641
 #, php-format
 msgid "Page %1$d of %2$d"
 msgstr ""
