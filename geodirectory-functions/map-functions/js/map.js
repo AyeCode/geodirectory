@@ -1002,7 +1002,7 @@ function parse_marker_jason_osm(data, map_canvas_var) {
         if (eval(map_canvas_var).enable_marker_cluster_no_reposition) {
         } //dont reposition after load
         else {
-            jQuery.goMap.map.setView(eval(map_canvas_var).mapcenter, eval(map_canvas_var).zoom);
+            jQuery.goMap.map.setView(mapcenter, eval(map_canvas_var).zoom);
         }
     } else {
         document.getElementById(map_canvas_var + '_map_nofound').style.display = 'none';
