@@ -439,7 +439,7 @@ function geodir_handle_option_form_submit($current_tab)
 }
 
 
-if (!function_exists('geodir_autoinstall_admin_header') && get_option('geodir_installed')) {
+if (!function_exists('geodir_autoinstall_admin_header') && (get_option('geodir_installed') || defined( 'GD_TESTING_MODE' ))) {
     /**
      * GeoDirectory dummy data installation.
      *
