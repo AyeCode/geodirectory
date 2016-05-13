@@ -1436,8 +1436,8 @@ function geodir_show_detail_page_tabs()
 
         global $map_jason;
         $marker_json = $post->marker_json != '' ? json_decode($post->marker_json, true) : array();
-        $icon_size = (!empty($marker_json) && !empty($marker_json['icon'])) ? $marker_json['icon'] : '';             
-        $icon_size = geodir_get_marker_size($marker_json['icon']);
+        $marker_icon = (!empty($marker_json) && !empty($marker_json['i'])) ? $marker_json['i'] : '';
+        $icon_size = geodir_get_marker_size($marker_icon);
         $marker_json['w'] = $icon_size['w'];
         $marker_json['h'] = $icon_size['h'];
         $map_jason[] = json_encode($marker_json);
