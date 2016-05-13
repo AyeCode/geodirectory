@@ -81,7 +81,7 @@ class GeoDirectoryTests extends WP_UnitTestCase
         geodir_admin_option_form('compatibility_settings');
         $output = ob_get_contents();
         ob_end_clean();
-        $this->assertContains('Theme Compatability Settings', $output);
+        $this->assertContains('Theme Compatibility Settings', $output);
 
         ob_start();
         geodir_admin_option_form('import_export');
