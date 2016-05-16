@@ -2464,13 +2464,19 @@ function geodir_popular_post_category_output($args = '', $instance = '')
     $gd_post_type = geodir_get_current_posttype();
 
     $category_limit = isset($instance['category_limit']) && $instance['category_limit'] > 0 ? (int)$instance['category_limit'] : 15;
-    $default_post_type = !empty($gd_post_type) ? $gd_post_type : (isset($instance['default_post_type']) && gdsc_is_post_type_valid($instance['default_post_type']) ? $instance['default_post_type'] : '');
+    if(!empty($gd_post_type)){
+        $default_post_type = $gd_post_type;
+    }elseif(isset($instance['default_post_type']) && gdsc_is_post_type_valid($instance['default_post_type']) ){
+        $default_post_type = $instance['default_post_type'];
+    }else{
+        $all_gd_post_type = geodir_get_posttypes();
+        $default_post_type = (isset($all_gd_post_type[0])) ? $all_gd_post_type[0] : '';
+    }
 
     $taxonomy = array();
     if (!empty($gd_post_type)) {
         $taxonomy[] = $gd_post_type . "category";
     } else {
-        $default_post_type = geodir_get_posttypes()[0];
         $taxonomy = geodir_get_taxonomies($gd_post_type);
     }
 
