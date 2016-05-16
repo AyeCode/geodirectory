@@ -605,14 +605,19 @@ function geodir_add_sharelocation_scripts()
 		}
 
         function updateSearchPosition(latLng, $form) {
-            jQuery('.sgeo_lat').val(latLng.lat());
-            jQuery('.sgeo_lon').val(latLng.lng());
+            if (window.gdMaps === 'google') {
+                jQuery('.sgeo_lat').val(latLng.lat());
+                jQuery('.sgeo_lon').val(latLng.lng());
+            } else if (window.gdMaps === 'osm') {
+                jQuery('.sgeo_lat').val(latLng.lat);
+                jQuery('.sgeo_lon').val(latLng.lon);
+            }
             jQuery($form).submit(); // submit form after insering the lat long positions
         }
 
         function geocodeAddress($form) {
             // Call the geocode function
-            Sgeocoder = (typeof google!=='undefined' && typeof google.maps!=='undefined') ? new google.maps.Geocoder() : {};
+            Sgeocoder = window.gdMaps == 'google' ? new google.maps.Geocoder() : null;
 
             if (jQuery('.snear', $form).val() == '' || ( jQuery('.sgeo_lat').val() != '' && jQuery('.sgeo_lon').val() != ''  ) || jQuery('.snear', $form).val().match("^<?php _e('In:','geodirectory');?>")) {
                 if (jQuery('.snear', $form).val().match("^<?php _e('In:','geodirectory');?>")) {
@@ -620,44 +625,66 @@ function geodir_add_sharelocation_scripts()
                 }
                 jQuery($form).submit();
             } else {
-                if (jQuery.isEmptyObject(Sgeocoder)) {
-                    jQuery($form).submit();
-                } else {
-                    var address = jQuery(".snear", $form).val();
+                var address = jQuery(".snear", $form).val();
 
-                    if (jQuery('.snear', $form).val() == '<?php echo $default_near_text;?>') {
-                        initialise2();
-                    } else {
-                        Sgeocoder.geocode({'address': address<?php
-                        if($near_add = get_option('geodir_search_near_addition')){echo '+", '.$near_add.'"';}
-                        if($near_add2 =
-                        /**
-                         * Adds any extra info to the near search box query when trying to geolocate it via google api.
-                         *
-                         * @since 1.0.0
-                         */
-                        apply_filters('geodir_search_near_addition','')){echo $near_add2;}//gt_advanced_near_search();?>},
+                if (jQuery('.snear', $form).val() == '<?php echo $default_near_text;?>') {
+                    initialise2();
+                } else {
+                    <?php
+                    $near_add = get_option('geodir_search_near_addition');
+                    /**
+                     * Adds any extra info to the near search box query when trying to geolocate it via google api.
+                     *
+                     * @since 1.0.0
+                     */
+                    $near_add2 = apply_filters('geodir_search_near_addition', '');
+                    ?>
+                    if (window.gdMaps === 'google') {
+                        Sgeocoder.geocode({'address': address<?php echo ($near_add ? '+", ' . $near_add . '"' : '') . $near_add2;?>},
                             function (results, status) {
                                 if (status == google.maps.GeocoderStatus.OK) {
                                     updateSearchPosition(results[0].geometry.location, $form);
                                 } else {
-                                    alert("<?php _e('Search was not successful for the following reason:','geodirectory');?>" + status);
+                                    alert("<?php esc_attr_e('Search was not successful for the following reason:', 'geodirectory');?>" + status);
                                 }
                             });
+                    } else if (window.gdMaps === 'osm') {
+                        geocodePositionOSM(false, address, false, false, 
+                            function(geo) {
+                                if (typeof geo !== 'undefined' && geo.lat && geo.lon) {
+                                    updateSearchPosition(geo, $form);
+                                } else {
+                                    alert("<?php esc_attr_e('Search was not successful for the requested address.', 'geodirectory');?>");
+                                }
+                            });
+                    } else {
+                        jQuery($form).submit();
                     }
                 }
             }
         }
 
         function initialise2() {
-            var latlng = new google.maps.LatLng(56.494343, -4.205446);
-            var myOptions = {
-                zoom: 4,
-                mapTypeId: google.maps.MapTypeId.TERRAIN,
-                disableDefaultUI: true
+            if (!window.gdMaps) {
+                return;
             }
-            //alert(latLng);
-            prepareGeolocation();
+            
+            if (window.gdMaps === 'google') {
+                var latlng = new google.maps.LatLng(56.494343, -4.205446);
+                var myOptions = {
+                    zoom: 4,
+                    mapTypeId: google.maps.MapTypeId.TERRAIN,
+                    disableDefaultUI: true
+                }
+            } else if (window.gdMaps === 'osm') {
+                var latlng = new L.LatLng(56.494343, -4.205446);
+                var myOptions = {
+                    zoom: 4,
+                    mapTypeId: 'TERRAIN',
+                    disableDefaultUI: true
+                }
+            }
+            try { prepareGeolocation(); } catch (e) {}
             doGeolocation();
         }
 
@@ -695,10 +722,8 @@ function geodir_add_sharelocation_scripts()
             jQuery('.sgeo_lat').val(coords.latitude);
             jQuery('.sgeo_lon').val(coords.longitude);
 
-            jQuery($form).submit();
+            jQuery('.geodir-listing-search').submit();
         }
-
-
     </script>
 <?php
 }
