@@ -51,11 +51,23 @@ do_action('geodir_sidebar_signup_top');
 
 ###### MAIN CONTENT ######
 /**
+ * Adds page content to the page.
+ *
+ * @since 1.6.3
+ *
+ * @param string 'before' Position to add the post content. 'before' or 'after'.
+ */
+do_action('geodir_add_page_content', 'before');
+
+/**
  * Adds the register/signin page main content like the signin box and the register box to the register/signin template page.
  *
  * @since 1.1.0
  */
 do_action('geodir_signup_forms');
+
+/** This action is documented in geodirectory-templates/geodir-signup.php */
+do_action('geodir_add_page_content', 'after');
 
 ###### MAIN CONTENT WRAPPERS CLOSE ######
 /** This action is documented in geodirectory-templates/add-listing.php */

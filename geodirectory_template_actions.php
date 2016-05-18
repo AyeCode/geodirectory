@@ -3348,3 +3348,32 @@ function geodir_filter_listing_page_title($list_title)
 
 add_action('geodir_message_not_found_on_listing', 'geodir_display_message_not_found_on_listing');
 add_filter('geodir_breadcrumb', 'geodir_strip_breadcrumb_li_wrappers', 999, 2);
+
+/**
+ * Adds page content to the page.
+ *
+ * @since 1.6.3
+ *
+ * @param string $postition Position to add the post content. 'before' or 'after'. Default 'before'.
+ */
+function geodir_add_page_content( $postition = 'before' ) {
+    if (have_posts() && is_single() OR is_page()) {
+        $display = 'before';
+        
+        /**
+         * Filter the position to display the page content.
+         *
+         * @since 1.6.3
+         *
+         * @param string $display Position to add the post content.
+         */
+        $display = apply_filters( 'geodir_add_page_content_position', $display );
+        
+        if ( $postition === $display && get_the_content() ) {
+            ?>
+            <section class="entry-content clearfix" itemprop="articleBody"><?php the_content(); ?></section>
+            <?php
+        }
+    }
+}
+add_action('geodir_add_page_content', 'geodir_add_page_content', 10, 1);
