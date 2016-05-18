@@ -420,7 +420,7 @@ function gd_osm_parse_name(name, search) {
     return name.slice(0, n) + name.slice(n).replace(pat, "");
 }
 
-function geocodePositionOSM(latLon, address, countrycodes, updateMap) {
+function geocodePositionOSM(latLon, address, countrycodes, updateMap, callback) {
     data = {format: 'json', addressdetails: 1, limit: 1};
     
     if (address) {
@@ -430,10 +430,12 @@ function geocodePositionOSM(latLon, address, countrycodes, updateMap) {
         if (countrycodes) {
             data.countrycodes = countrycodes.toLowerCase();
         }
-    } else {
+    } else if(latLon && typeof latLon === 'object') {
        type = 'reverse';
        data.lat = latLon.lat;
        data.lon = latLon.lng;
+    } else {
+        return;
     }
     
     jQuery.ajax({
@@ -446,7 +448,11 @@ function geocodePositionOSM(latLon, address, countrycodes, updateMap) {
             }
             data = gd_osm_parse_item(data);
             
-            geocodeResponseOSM(data, updateMap);
+            if (typeof callback === 'function') {
+                callback(data);
+            } else {
+                geocodeResponseOSM(data, updateMap);
+            }
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(errorThrown);
