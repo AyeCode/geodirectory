@@ -61,7 +61,7 @@ do_action('geodir_add_page_content', 'before', 'home-page');
 do_action('geodir_home_content');
 
 /** This action is documented in geodirectory-templates/geodir-home.php */
-do_action('geodir_add_page_content', 'before', 'home-page');
+do_action('geodir_add_page_content', 'after', 'home-page');
 
 ###### MAIN CONTENT WRAPPERS CLOSE ######
 /** This action is documented in geodirectory-templates/add-listing.php */
