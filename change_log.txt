@@ -1,6 +1,7 @@
 v1.6.3
 Popular post categories widget not adhering to default post type setting - FIXED
 OpenStreetMap breaks images on https sites when SSL is active - FIXED
+Show page content for all GD pages - ADDED
 
 v1.6.2
 GD Search widget bug with Display Widgets plugin - FIXED
