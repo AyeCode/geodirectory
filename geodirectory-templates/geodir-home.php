@@ -44,11 +44,24 @@ do_action('geodir_wrapper_content_open', 'home-page', 'geodir-wrapper-content', 
 
 ###### MAIN CONTENT ######
 /**
+ * Adds page content to the page.
+ *
+ * @since 1.6.3
+ *
+ * @param string 'before' Position to add the post content. 'before' or 'after'.
+ * @param string 'home-page' Current page type.
+ */
+do_action('geodir_add_page_content', 'before', 'home-page');
+
+/**
  * Calls the home page main content area on the home template page.
  *
  * @since 1.1.0
  */
 do_action('geodir_home_content');
+
+/** This action is documented in geodirectory-templates/geodir-home.php */
+do_action('geodir_add_page_content', 'before', 'home-page');
 
 ###### MAIN CONTENT WRAPPERS CLOSE ######
 /** This action is documented in geodirectory-templates/add-listing.php */

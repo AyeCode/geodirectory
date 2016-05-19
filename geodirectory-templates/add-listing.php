@@ -88,12 +88,19 @@ do_action('geodir_add_listing_page_title');
  * @since 1.1.0
  */
 do_action('geodir_add_listing_page_mandatory');
+
+/** This action is documented in geodirectory-templates/geodir-home.php */
+do_action('geodir_add_page_content', 'before', 'add-listing-page');
+
 /**
  * Adds the add listing form.
  *
  * @since 1.1.0
  */
 do_action('geodir_add_listing_form');
+
+/** This action is documented in geodirectory-templates/geodir-home.php */
+do_action('geodir_add_page_content', 'after', 'add-listing-page');
 
 ###### MAIN CONTENT WRAPPERS CLOSE ######
 
