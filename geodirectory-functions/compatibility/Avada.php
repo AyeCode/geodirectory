@@ -239,7 +239,7 @@ gd_compat_php_avada();
 
 // Avada sets the search page to use wither post or page, we need it to be 'any'
 function gd_avada_search_filter( $query ) {
-    if ( geodir_is_page('search')) {
+    if ( geodir_is_page('search') && is_search() && $query->is_search) {
             $query->set('post_type', 'any');
     }
     return $query;
