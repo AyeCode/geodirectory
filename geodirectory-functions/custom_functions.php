@@ -1382,7 +1382,12 @@ function geodir_show_detail_page_tabs()
                 'list_sort' => get_option('geodir_related_post_sortby'),
                 'character_count' => get_option('geodir_related_post_excerpt'));
 
-            $related_listing = geodir_related_posts_display($request);
+            if ($post->post_type == 'gd_event' && defined('GDEVENTS_VERSION')) {
+                $related_listing = geodir_get_detail_page_related_events($request);
+            } else {
+                $related_listing = geodir_related_posts_display($request);
+            }
+
         }
 
         $post_images = geodir_get_images($post->ID, 'thumbnail');
