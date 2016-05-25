@@ -435,7 +435,7 @@ function geodir_pagination($before = '', $after = '', $prelabel = '', $nxtlabel 
                 }
             }
             
-            echo "$before <div class='Navi'>";
+            echo "$before <div class='Navi gd-navi'>";
             if ($paged >= ($pages_to_show - 1)) {
                 echo '<a href="' . str_replace('&paged', '&amp;paged', get_pagenum_link()) . '">&laquo;</a>';
             }
