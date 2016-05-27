@@ -110,7 +110,7 @@ if (!function_exists('geodir_admin_scripts')) {
 
         wp_enqueue_script('geodirectory-jquery-ui-timepicker-js', geodir_plugin_url() . '/geodirectory-assets/js/jquery.ui.timepicker.js', array('jquery-ui-datepicker', 'jquery-ui-slider'), '', true);
 
-        wp_register_script('chosen', geodir_plugin_url() . '/geodirectory-assets/js/chosen.jquery.js', array(), GEODIRECTORY_VERSION);
+        wp_register_script('chosen', geodir_plugin_url() . '/geodirectory-assets/js/chosen.jquery.js', array('jquery'), GEODIRECTORY_VERSION);
         wp_enqueue_script('chosen');
 
         wp_register_script('geodirectory-choose-ajax', geodir_plugin_url() . '/geodirectory-assets/js/ajax-chosen.js', array(), GEODIRECTORY_VERSION);
@@ -6587,6 +6587,26 @@ function geodir_imex_export_skip_statuses() {
     $statuses = apply_filters( 'geodir_imex_export_skip_statuses', $statuses );
      
     return $statuses;
+}
+
+/**
+ * Dequeue jQuery chosen javascript.
+ * 
+ * Fix conflicts between jQuery chosen javascripts.
+ *
+ * @package GeoDirectory
+ * @since 1.6.3
+ */
+function geodir_admin_dequeue_scripts() {
+    // EDD
+    if (wp_script_is('jquery-chosen', 'enqueued')) {
+        wp_dequeue_script('jquery-chosen');
+    }
+    
+    // Ultimate Addons for Visual Composer
+    if (wp_script_is('ultimate-vc-backend-script', 'enqueued')) {
+        wp_dequeue_script('ultimate-vc-backend-script');
+    }
 }
 
 /*

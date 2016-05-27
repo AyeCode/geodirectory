@@ -79,6 +79,7 @@ add_action('geodir_before_update_options', 'geodir_before_update_options',10,2);
  *
  * @since 1.0.0
  * @since 1.6.0 Changes to work category icon and default image uploader for WP 4.5.
+ * @since 1.6.3 Modified to fix jQuery chosen js conflicts.
  * @package GeoDirectory
  * @global string $pagenow The current screen.
  */
@@ -93,6 +94,7 @@ function geodir_conditional_admin_script_load()
 	if ((isset($_REQUEST['page']) && $_REQUEST['page'] == 'geodirectory') || (($pagenow == 'post.php' || $pagenow == 'post-new.php' || $pagenow == 'edit.php') && $post_type && in_array($post_type, $geodir_post_types)) || ($pagenow == 'edit-tags.php' || $pagenow == 'term.php' || $pagenow == 'edit-comments.php' || $pagenow == 'comment.php')) {
         add_action('admin_enqueue_scripts', 'geodir_admin_scripts');
         add_action('admin_enqueue_scripts', 'geodir_admin_styles');
+        add_action('admin_enqueue_scripts', 'geodir_admin_dequeue_scripts', 100);
     }
 
     add_action('admin_enqueue_scripts', 'geodir_admin_styles_req');
