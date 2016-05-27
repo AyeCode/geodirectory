@@ -1869,7 +1869,6 @@ foreach ($post_info as $post_info) {
 
     }
     geodir_save_listing($post_info, true);
-
 }
 
 /*if( $dummy_post_index==1);	

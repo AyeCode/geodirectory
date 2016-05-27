@@ -611,6 +611,7 @@ function geodir_insert_dummy_posts()
      * @package GeoDirectory
      */
     include_once('place_dummy_post.php');
+    delete_transient( 'cached_dummy_images' );
 
 }
 

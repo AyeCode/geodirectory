@@ -1577,7 +1577,12 @@ if (!function_exists('geodir_show_image')) {
                 if (is_admin() && !isset($_REQUEST['geodir_ajax'])){
                     $html = '<div class="geodir_thumbnail"><img style="max-height:' . $max_size->h . 'px;" alt="place image" src="' . $image->src . '"  /></div>';
                 } else {
-                    $html = '<div class="geodir_thumbnail" style="background-image:url(\'' . $image->src . '\');"></div>';
+                    $bg_image = apply_filters('display_geodir_thumbnail_as_bg_image', false);
+                    if ($bg_image) {
+                        $html = '<div class="geodir_thumbnail" style="background-image:url(\'' . $image->src . '\');"></div>';
+                    } else {
+                        $html = '<div class="geodir_thumbnail"><img style="display:block;" alt="place image" src="' . $image->src . '"  /></div>';
+                    }
                 }
             }
         }
