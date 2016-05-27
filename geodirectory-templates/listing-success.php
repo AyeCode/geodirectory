@@ -36,8 +36,14 @@ do_action('geodir_wrapper_content_open', 'success-page', 'geodir-wrapper-content
 
 
 ###### MAIN CONTENT ######
+/** This action is documented in geodirectory-templates/geodir-home.php */
+do_action('geodir_add_page_content', 'before', 'success-page');
+
 // this call the main page content
 geodir_get_template_part('preview', 'success');
+
+/** This action is documented in geodirectory-templates/geodir-home.php */
+do_action('geodir_add_page_content', 'after', 'success-page');
 
 
 ###### MAIN CONTENT WRAPPERS CLOSE ######

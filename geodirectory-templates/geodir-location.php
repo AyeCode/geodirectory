@@ -40,12 +40,18 @@ do_action('geodir_location_sidebar_left');
 do_action('geodir_wrapper_content_open', 'home-page', 'geodir-wrapper-content', '');
 
 ###### MAIN CONTENT ######
+/** This action is documented in geodirectory-templates/geodir-home.php */
+do_action('geodir_add_page_content', 'before', 'location-page');
+
 /**
  * Calls the locations page main content area on the locations template page.
  *
  * @since 1.1.0
  */
 do_action('geodir_location_content');
+
+/** This action is documented in geodirectory-templates/geodir-home.php */
+do_action('geodir_add_page_content', 'after', 'location-page');
 
 ###### MAIN CONTENT WRAPPERS CLOSE ######
 /** This action is documented in geodirectory-templates/add-listing.php */

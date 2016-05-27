@@ -1587,7 +1587,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                         foreach ($option_values as $option_value) {
                             if (empty($option_value['optgroup'])) {
                                 ?>
-                                <input name="<?php echo $name;?>" id="<?php echo $name;?>" <?php checked($value, $option_value['value']);?> value="<?php echo esc_attr($option_value['value']); ?>" class="gd-checkbox" field_type="<?php echo $type;?>" type="radio" /><?php echo $option_value['label']; ?>
+                                <span class="gd-radios"><input name="<?php echo $name;?>" id="<?php echo $name;?>" <?php checked($value, $option_value['value']);?> value="<?php echo esc_attr($option_value['value']); ?>" class="gd-checkbox" field_type="<?php echo $type;?>" type="radio" /><?php echo $option_value['label']; ?></span>
                                 <?php
                             }
                         }

@@ -60,6 +60,9 @@ do_action('geodir_wrapper_content_open', 'details-page', 'geodir-wrapper-content
 do_action('geodir_article_open', 'details-page', 'post-' . get_the_ID(), get_post_class(), '');
 
 ###### MAIN CONTENT ######
+/** This action is documented in geodirectory-templates/geodir-home.php */
+do_action('geodir_add_page_content', 'before', 'details-page');
+
 // this call the main page content
 global $preview;
 if (have_posts() && !$preview) {
@@ -88,6 +91,8 @@ if (have_posts() && !$preview) {
     do_action('geodir_details_main_content', $post);
 }
 
+/** This action is documented in geodirectory-templates/geodir-home.php */
+do_action('geodir_add_page_content', 'after', 'details-page');
 
 ###### MAIN CONTENT WRAPPERS CLOSE ######
 /**

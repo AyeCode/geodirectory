@@ -1438,7 +1438,7 @@ function geodir_action_before_single_post()
 {
     global $post;
     /**
-     * Called at the very start fo the details page output, before the title section.
+     * Called at the very start of the details page output, before the title section.
      *
      * @since 1.0.0
      * @param object $post The current post object.
@@ -2199,7 +2199,7 @@ function geodir_action_add_listing_form()
          *
          * @since 1.0.0
          * @param string $desc The text for the description field.
-         * @param int $desc_limit The character limit numer if any.
+         * @param int $desc_limit The character limit number if any.
          */
         $desc = apply_filters('geodir_description_field_desc', $desc, $desc_limit);
         $desc_limit_msg = '';
@@ -3348,3 +3348,71 @@ function geodir_filter_listing_page_title($list_title)
 
 add_action('geodir_message_not_found_on_listing', 'geodir_display_message_not_found_on_listing');
 add_filter('geodir_breadcrumb', 'geodir_strip_breadcrumb_li_wrappers', 999, 2);
+
+/**
+ * Adds page content to the page.
+ *
+ * @since 1.6.3
+ *
+ * @param string $position Position to add the post content. 'before' or 'after'. Default 'before'.
+ * @param string $gd_page The geodirectory page type. Default null.
+ */
+function geodir_add_page_content( $position = 'before', $gd_page = '' ) {
+    global $post;
+        
+    $gd_page_id = NULL;
+    if ($gd_page == 'home-page' && geodir_is_page('home')) {
+        $gd_page_id = geodir_home_page_id();
+    } else if ($gd_page == 'details-page' && geodir_is_page('preview')) {
+        $gd_page_id = geodir_preview_page_id();
+    } else if ($gd_page == 'add-listing-page' && geodir_is_page('add-listing')) {
+        $gd_page_id = geodir_add_listing_page_id();
+    } else if ($gd_page == 'success-page' && geodir_is_page('listing-success')) {
+        $gd_page_id = geodir_success_page_id();
+    } else if ($gd_page == 'location-page' && geodir_is_page('location')) {
+        $gd_page_id = geodir_location_page_id();
+    } else if ($gd_page == 'info-page' && geodir_is_page('info')) {
+        $gd_page_id = geodir_info_page_id();
+    } else if ($gd_page == 'signup-page' && geodir_is_page('login')) {
+        $gd_page_id = geodir_login_page_id();
+    } else if ($gd_page == 'checkout-page' && geodir_is_page('checkout')) {
+        $gd_page_id = geodir_payment_checkout_page_id();
+    } else if ($gd_page == 'invoices-page' && geodir_is_page('invoices')) {
+        $gd_page_id = geodir_payment_invoices_page_id();
+    }
+    
+    if (!$gd_page_id > 0) {
+        return;
+    }
+    
+    $display = 'before';
+    /**
+     * Filter the position to display the page content.
+     *
+     * @since 1.6.3
+     *
+     * @param string $display Position to add the post content.
+     * @param string $gd_page The geodirectory page type.
+     */
+    $display = apply_filters('geodir_add_page_content_position', $display, $gd_page);
+    
+    if ($position !== $display) {
+        return;
+    }
+        
+    $gd_post = $post;
+    
+    setup_postdata(get_post($gd_page_id));
+    
+    if (get_the_content()) {
+        ?>
+        <section class="entry-content clearfix" itemprop="articleBody"><?php the_content(); ?></section>
+        <?php
+    }
+    
+    $post = $gd_post;
+    if (!empty($gd_post) && is_object($gd_post)) {
+        setup_postdata($gd_post);
+    }
+}
+add_action('geodir_add_page_content', 'geodir_add_page_content', 10, 2);
