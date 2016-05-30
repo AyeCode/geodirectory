@@ -5,6 +5,7 @@ Show page content for all GD pages - ADDED
 jQuery chosen conflicts causes problem when add new region/city in backend add listing - FIXED
 gd-Navi CSS min-width set to avoid hiding on small screens - FIXED
 Lazy load GD images option added in Design>Scripts - ADDED
+Wrong class spelling for search widget shortcode - FIXED
 
 v1.6.2
 GD Search widget bug with Display Widgets plugin - FIXED

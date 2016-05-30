@@ -879,7 +879,7 @@ function geodir_sc_related_listings($atts)
 function geodir_sc_advanced_search($atts) {
     $defaults = array(
 		'title' => '',
-		'before_widget' => '<section id="geodir_advanced_search-1" class="widget geodir-widget geodir_advanced_search_widget">',
+		'before_widget' => '<section id="geodir_advanced_search-1" class="widget geodir-widget geodir_advance_search_widget">',
         'after_widget' => '</section>',
         'before_title' => '<h3 class="widget-title">',
         'after_title' => '</h3>',
