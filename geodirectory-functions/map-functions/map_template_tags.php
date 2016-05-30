@@ -348,7 +348,6 @@ function geodir_draw_map($map_args = array())
                                 <input type="hidden" id="<?php echo $map_canvas_name; ?>_child_collapse" value="0"/>
                             <?php }?>
                             <div class="BottomRight"></div>
-                            <br/>
 
                         </div>
                     </div>

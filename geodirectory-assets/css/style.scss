@@ -1191,6 +1191,10 @@ span.geodir_term_class {
     margin-bottom: 10px;
 }
 
+.geodir-loginbox-list i.fa {
+    margin-right: 5px;
+}
+
 .loginform1 .user_login1,
 .loginform1 .user_pass1 {
     width: 100%;
@@ -1860,4 +1864,8 @@ div#jquery-lightbox {
 .gd-star-rating.gd-fa-star-rating i.fa {
 	font-size: 20px;
     margin-right: 2px;
+}
+
+.geodir_lazy_load_thumbnail {
+    opacity:0;transition: opacity .5s ease-in;
 }

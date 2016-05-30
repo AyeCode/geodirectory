@@ -4,6 +4,7 @@ OpenStreetMap breaks images on https sites when SSL is active - FIXED
 Show page content for all GD pages - ADDED
 jQuery chosen conflicts causes problem when add new region/city in backend add listing - FIXED
 gd-Navi CSS min-width set to avoid hiding on small screens - FIXED
+Lazy load GD images option added in Design>Scripts - ADDED
 
 v1.6.2
 GD Search widget bug with Display Widgets plugin - FIXED
