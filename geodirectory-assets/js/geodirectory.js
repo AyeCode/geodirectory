@@ -1,3 +1,89 @@
+/* GD lazy load images */
+;(function($) {
+    $.fn.gdunveil = function(threshold, callback,extra1) {
+
+        var $w = $(window),
+            th = threshold || 0,
+            retina = window.devicePixelRatio > 1,
+            attrib = retina? "data-src-retina" : "data-src",
+            images = this,
+            loaded;
+        
+        if(extra1){
+            var $e1 = $(extra1),
+                th = threshold || 0,
+                retina = window.devicePixelRatio > 1,
+                attrib = retina? "data-src-retina" : "data-src",
+                images = this,
+                loaded;
+        }
+
+        this.one("gdunveil", function() {
+            var source = this.getAttribute(attrib);
+            source = source || this.getAttribute("data-src");
+            if (source) {
+                //this.setAttribute("src", source);
+                // $(this).removeClass('geodir_lazy_load_thumbnail');
+                $(this).css('background-image', 'url(' + source + ')');
+                if (typeof callback === "function") callback.call(this);
+            }
+        });
+
+        function gdunveil() {
+            var inview = images.filter(function() {
+                var $e = $(this);
+                if ($e.is(":hidden")) return;
+
+                var wt = $w.scrollTop(),
+                    wb = wt + $w.height(),
+                    et = $e.offset().top,
+                    eb = et + $e.height();
+
+                return eb >= wt - th && et <= wb + th;
+            });
+
+            loaded = inview.trigger("gdunveil");
+            images = images.not(loaded);
+        }
+
+        $w.on("scroll.gdunveil resize.gdunveil lookup.gdunveil", gdunveil);
+        if(extra1){
+            $e1.on("scroll.gdunveil resize.gdunveil lookup.gdunveil", gdunveil);
+        }
+
+        gdunveil();
+
+        return this;
+
+    };
+
+})(window.jQuery || window.Zepto);
+
+function geodir_init_lazy_load(){
+    // load for GD images
+    jQuery(".geodir_thumbnail").gdunveil(100,function() {this.style.opacity = 1;},'#geodir_content');
+
+    // fire when the image tab is clicked on details page
+    jQuery('#gd-tabs').click(function() {
+        setTimeout(function(){jQuery(window).trigger("lookup"); }, 100);
+    });
+
+    // fire after document load, just incase
+    jQuery(document).ready(function() {
+        setTimeout(function(){jQuery(window).trigger("lookup"); }, 100);
+    });
+}
+
+
+jQuery(function() {
+    // start lazy load if it's turned on
+    if(geodir_var.geodir_lazy_load==1){
+        geodir_init_lazy_load();
+    }
+});
+
+
+
 /* Placeholders.js v3.0.2  fixes placeholder support for older browsers */
 (function (t) {
     "use strict";

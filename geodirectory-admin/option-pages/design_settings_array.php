@@ -994,6 +994,20 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
 
     */
 
+    array('name' => __('GD Lazy Load Images', 'geodirectory'),
+        'type' => 'sectionstart',
+        'desc' => '',
+        'id' => 'geodir_gdll_settings'),
+
+    array(
+        'name' => __('Enable lazy load images?', 'geodirectory'),
+        'desc' => __('GD images will be loaded only when visible on the page', 'geodirectory'),
+        'id' => 'geodir_lazy_load',
+        'type' => 'checkbox',
+        'std' => '1' // Default value to show home top section
+    ),
+    array('type' => 'sectionend', 'id' => 'geodir_gdll_settings'),
+
     array('name' => __('SCSS Settings (CSS combine and minify)', 'geodirectory'),
         'type' => 'sectionstart',
         'desc' => '',
