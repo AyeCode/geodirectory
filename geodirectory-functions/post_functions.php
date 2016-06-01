@@ -1946,7 +1946,18 @@ if (!function_exists('geodir_get_infowindow_html')) {
                             ?>
                             <span class="geodir_address"><i class="fa fa-home"></i> <?php echo $address; ?></span>
                             <?php if ($contact) { ?><span class="geodir_contact"><i
-                                class="fa fa-phone"></i> <?php echo $contact; ?></span><?php } ?>
+                                class="fa fa-phone"></i>
+                                <?php
+                                $tel_link = apply_filters('geodir_map_bubble_tel_linkable', false);
+                                if ($tel_link) {
+                                    ?>
+                                    <a href="tel:<?php echo preg_replace('/[^0-9+]/', '', $contact); ?>"><?php echo stripslashes($contact); ?></a>
+                                    <?php
+                                } else {
+                                    echo $contact;
+                                }
+                                ?>
+                                </span><?php } ?>
                             <?php if ($timing) { ?><span class="geodir_timing"><i
                                 class="fa fa-clock-o"></i> <?php echo $timing; ?></span><?php }
 

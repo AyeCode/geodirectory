@@ -6,6 +6,9 @@ jQuery chosen conflicts causes problem when add new region/city in backend add l
 gd-Navi CSS min-width set to avoid hiding on small screens - FIXED
 Lazy load GD images option added in Design>Scripts - ADDED
 Wrong class spelling for search widget shortcode - FIXED
+dummy data images are being cached now - ADDED
+No reviews link points to #respond instead of #reviews - FIXED
+Filter added to make telephone linkable in home map bubble - ADDED
 
 v1.6.2
 GD Search widget bug with Display Widgets plugin - FIXED
