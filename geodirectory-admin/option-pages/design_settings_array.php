@@ -1007,21 +1007,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
         'std' => '1' // Default value to show home top section
     ),
     array('type' => 'sectionend', 'id' => 'geodir_gdll_settings'),
-
-    array('name' => __('SCSS Settings (CSS combine and minify)', 'geodirectory'),
-        'type' => 'sectionstart',
-        'desc' => '',
-        'id' => 'geodir_scss_settings'),
-
-    array(
-        'name' => __('Disable Core SCSS', 'geodirectory'),
-        'desc' => __('Stops the CSS files being minified and output as one.', 'geodirectory'),
-        'id' => 'geodir_scss_core',
-        'type' => 'checkbox',
-        'std' => '0' // Default value to show home top section
-    ),
-
-    array('type' => 'sectionend', 'id' => 'geodir_scss_settings'),
+    
 
     array('name' => __('Script Settings', 'geodirectory'),
         'type' => 'sectionstart',
