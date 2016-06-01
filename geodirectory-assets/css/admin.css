@@ -432,6 +432,13 @@ body.term-php .form-field textarea {
     font-size: 14px;
 }
 
+.geodir_running_info {
+    border: 1px #9f9f82 dotted;
+    background: #ffdd9a;
+    font-style: italic;
+    padding: 10px;
+}
+
 .geodir_problem_info {
     border: 1px #9f9f82 dotted;
     background: #ffe0c7;

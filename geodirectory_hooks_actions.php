@@ -350,7 +350,7 @@ function geodir_detail_page_sidebar_content_sorting()
                 'geodir_share_this_button',
                 'geodir_detail_page_google_analytics',
                 'geodir_edit_post_link',
-                'geodir_detail_page_review_rating',
+                //'geodir_detail_page_review_rating',
                 'geodir_detail_page_more_info'
             ) // end of array 
         ); // end of apply filter
@@ -1117,6 +1117,8 @@ function geodir_detail_page_google_analytics()
  * @global bool $preview True if the current page is add listing preview page. False if not.
  * @global object $post_images Image objects of current post if available.
  * @since 1.0.0
+ * @deprecated 1.6.3 Use geodir_action_details_micordata()
+ * @see geodir_action_details_micordata()
  * @package GeoDirectory
  */
 function geodir_detail_page_review_rating()
@@ -1167,7 +1169,7 @@ function geodir_detail_page_review_rating()
         }
 
         if (isset($post_img) && $post_img) {
-            $html .= '<br /><img src="' . $post_img . '" class="photo hreview-img" alt="' . esc_attr($post->post_title) . '" itemprop="photo" content="' . $post_img . '" class="photo hreview-img" />';
+            $html .= '<br /><img src="' . $post_img . '" class="photo" alt="' . esc_attr($post->post_title) . '" itemprop="photo" content="' . $post_img . '" class="photo" />';
         }
 
         $html .= '</span>';

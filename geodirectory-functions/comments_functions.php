@@ -805,7 +805,7 @@ if (!function_exists('geodir_comment')) {
                 global $post;
                 ?>
             <li <?php comment_class('geodir-comment'); ?> id="li-comment-<?php comment_ID(); ?>">
-                <article id="comment-<?php comment_ID(); ?>" class="comment hreview">
+                <article id="comment-<?php comment_ID(); ?>" class="comment">
                     <header class="comment-meta comment-author vcard">
                         <?php
                         /**

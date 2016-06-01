@@ -66,6 +66,7 @@ if (is_admin()) {
             'BikeStore' => 'BikeStore',
             'BookStore' => 'BookStore',
             'CafeOrCoffeeShop' => 'CafeOrCoffeeShop',
+            'Campground' => 'Campground',
             'ChildCare' => 'ChildCare',
             'ClothingStore' => 'ClothingStore',
             'ComputerStore' => 'ComputerStore',
@@ -93,6 +94,7 @@ if (is_admin()) {
             'HomeAndConstructionBusiness' => 'HomeAndConstructionBusiness',
             'HomeGoodsStore' => 'HomeGoodsStore',
             'Hospital' => 'Hospital',
+            'Hostel' => 'Hostel',
             'Hotel' => 'Hotel',
             'HousePainter' => 'HousePainter',
             'HVACBusiness' => 'HVACBusiness',
@@ -137,6 +139,7 @@ if (is_admin()) {
             'TouristAttraction' => 'TouristAttraction',
             'ToyStore' => 'ToyStore',
             'TravelAgency' => 'TravelAgency',
+            //'VacationRentals' => 'VacationRentals', // Not recognised by google yet
             'VeterinaryCare' => 'VeterinaryCare',
             'WholesaleStore' => 'WholesaleStore',
             'Winery' => 'Winery'

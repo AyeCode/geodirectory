@@ -1000,6 +1000,7 @@ function places_custom_fields_tab($tabs)
  */
 function geodir_tools_setting_tab($tabs)
 {
+    wp_enqueue_script( 'jquery-ui-progressbar' );
     $tabs['tools_settings'] = array('label' => __('GD Tools', 'geodirectory'));
     return $tabs;
 }
@@ -3239,15 +3240,7 @@ function gd_imex_showStatusMsg(el, type) {
     return;
 }
 
-function gd_progressbar(el, value, label) {
-    var value = parseFloat(value);
-    if ( value <= 100 ) {
-        jQuery(el).find('#gd_progressbar').progressbar("value",value);
-        if (typeof label != 'undefined') {
-            jQuery(el).find('#gd_progressbar .gd-progress-label').html(label);
-        }
-    }
-}
+
 
 jQuery(function(){
     jQuery('.postbox.gd-hndle-pbox').addClass('closed');
