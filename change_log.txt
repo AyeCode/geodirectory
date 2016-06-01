@@ -4,7 +4,6 @@ OpenStreetMap breaks images on https sites when SSL is active - FIXED
 Show page content for all GD pages - ADDED
 jQuery chosen conflicts causes problem when add new region/city in backend add listing - FIXED
 gd-Navi CSS min-width set to avoid hiding on small screens - FIXED
-thumbnail uses img tab instead of bg image - CHANGED
 dummy data images are being cached now - ADDED
 No reviews link points to #respond instead of #reviews - FIXED
 Filter added to make telephone linkable in home map bubble - ADDED
