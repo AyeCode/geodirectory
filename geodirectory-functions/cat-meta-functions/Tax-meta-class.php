@@ -423,7 +423,7 @@ if (!class_exists('Tax_Meta_Class')) :
 
             if ($this->has_field('date') && $this->is_edit_page()) {
                 // Enqueu JQuery UI, use proper version.
-                wp_enqueue_style('tmc-jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $this->get_jqueryui_ver() . '/themes/base/jquery-ui.css');
+                wp_enqueue_style('tmc-jquery-ui-css', 'https://ajax.googleapis.com/ajax/libs/jqueryui/' . $this->get_jqueryui_ver() . '/themes/base/jquery-ui.css');
                 wp_enqueue_script('tmc-jquery-ui', 'https://ajax.googleapis.com/ajax/libs/jqueryui/' . $this->get_jqueryui_ver() . '/jquery-ui.min.js', array('jquery'));
             }
 

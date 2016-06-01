@@ -1238,6 +1238,13 @@ if (!function_exists('geodir_get_featured_image')) {
      */
     function geodir_get_featured_image($post_id = '', $size = '', $no_image = false, $file = false)
     {
+
+        /*$img_arr['src'] = get_the_post_thumbnail_url( $post_id,  'medium');//medium/thumbnail
+        $img_arr['path'] = '';
+        $img_arr['width'] = '';
+        $img_arr['height'] = '';
+        $img_arr['title'] = '';
+        return (object)$img_arr;*/
         global $wpdb, $plugin_prefix, $post;
 
         if (isset($post->ID) && isset($post->post_type) && $post->ID == $post_id) {
@@ -1577,7 +1584,15 @@ if (!function_exists('geodir_show_image')) {
                 if (is_admin() && !isset($_REQUEST['geodir_ajax'])){
                     $html = '<div class="geodir_thumbnail"><img style="max-height:' . $max_size->h . 'px;" alt="place image" src="' . $image->src . '"  /></div>';
                 } else {
-                    $html = '<div class="geodir_thumbnail" style="background-image:url(\'' . $image->src . '\');"></div>';
+                    if($size=='widget-thumb' || !get_option('geodir_lazy_load',1)){
+                        $html = '<div class="geodir_thumbnail" style="background-image:url(\'' . $image->src . '\');"></div>';
+                    }else{
+                        //$html = '<div class="geodir_thumbnail" style="background-image:url(\'' . $image->src . '\');"></div>';
+                        //$html = '<div data-src="'.$image->src.'" class="geodir_thumbnail" ></div>';
+                        $html = '<div data-src="'.$image->src.'" class="geodir_thumbnail geodir_lazy_load_thumbnail" ></div>';
+
+                    }
+
                 }
             }
         }

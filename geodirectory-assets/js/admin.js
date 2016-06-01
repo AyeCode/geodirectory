@@ -249,3 +249,13 @@ function geodir_enable_fix_buttons() {
         }); // end of ajax
     });
 }
+
+function gd_progressbar(el, value, label) {
+    var value = parseFloat(value);
+    if ( value <= 100 ) {
+        jQuery(el).find('#gd_progressbar').progressbar("value",value);
+        if (typeof label != 'undefined') {
+            jQuery(el).find('#gd_progressbar .gd-progress-label').html(label);
+        }
+    }
+}
