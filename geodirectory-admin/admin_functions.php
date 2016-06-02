@@ -4778,7 +4778,7 @@ function geodir_ajax_import_export() {
                                             }
                                         }
                                     }
-                                    
+
                                     foreach ( $post_images as $post_image ) {
                                         $image_name = basename( $post_image );
                                         $saved_post_images_arr[] = $image_name;
@@ -4825,6 +4825,8 @@ function geodir_ajax_import_export() {
                                     $wpdb->query( "DELETE FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE post_id = " . (int)$saved_post_id . " " . $saved_post_images_sql );
                                     
                                     if ( !empty( $saved_post_images_arr ) ) {
+                                        geodir_set_wp_featured_image($saved_post_id);
+                                        /*
                                         $menu_order = 1;
                                         
                                         foreach ( $saved_post_images_arr as $img_name ) {
@@ -4836,7 +4838,7 @@ function geodir_ajax_import_export() {
                                                 }
                                             }
                                             $menu_order++;
-                                        }
+                                        }*/
                                     }
                                     
                                     if ( $order > 1 ) {
