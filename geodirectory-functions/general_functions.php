@@ -1311,7 +1311,23 @@ function fetch_remote_file($url)
     if (strpos($file_name, '?') !== false) {
         list($file_name) = explode('?', $file_name);
     }
-
+    $dummy = false;
+    $add_to_cache = false;
+    $key = null;
+    if (strpos($url, '/dummy/') !== false) {
+        $dummy = true;
+        $key = "dummy_".str_replace('.', '_', $file_name);
+        $value = get_transient('cached_dummy_images');
+        if ($value) {
+            if (isset($value[$key])) {
+                return $value[$key];
+            } else {
+                $add_to_cache = true;
+            }
+        } else {
+            $add_to_cache = true;
+        }
+    }
 
     // get placeholder file in the upload dir with a unique, sanitized filename
 
@@ -1347,6 +1363,16 @@ function fetch_remote_file($url)
         return new WP_Error('import_file_error',$log_message );
     }
 
+    if ($dummy && $add_to_cache && is_array($upload)) {
+        $images = get_transient('cached_dummy_images');
+        if(is_array($images))
+            $images[$key] = $upload;
+        else
+            $images = array($key => $upload);
+
+        //setting the cache using the WP Transient API
+        set_transient('cached_dummy_images', $images, 60 * 10); //10 minutes cache
+    }
 
     return $upload;
 }
