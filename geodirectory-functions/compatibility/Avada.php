@@ -93,9 +93,13 @@ function gd_avada_current_page_title_bar()
         $title = ob_get_clean();
         avada_page_title_bar($title, $subtitle, $secondary_content);
     }
+    
 
     if (geodir_is_page('detail') || geodir_is_page('preview')) {
-        $title = get_the_title();
+        if ( $title = get_post_meta( get_the_ID(), 'pyre_page_title_custom_text', true ) ) {}
+        else {
+            $title = get_the_title();
+        }
         avada_page_title_bar($title, $subtitle, $secondary_content);
     }
 
