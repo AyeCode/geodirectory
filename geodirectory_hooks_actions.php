@@ -1445,7 +1445,7 @@ function geodir_restore_sidebars()
         $geodir_old_sidebars = get_option('geodir_sidebars');
         if (is_array($geodir_old_sidebars)) {
             foreach ($geodir_old_sidebars as $key => $val) {
-                //if(array_key_exists($key, $sidebars_widgets))
+                if(0 === strpos($key, 'geodir_'))// if gd widget
                 {
                     $sidebars_widgets[$key] = $geodir_old_sidebars[$key];
                 }
@@ -1454,12 +1454,6 @@ function geodir_restore_sidebars()
             }
         }
 
-        // now clear all non geodiretory sidebars 
-        foreach ($sidebars_widgets as $key => $val) {
-            if (!array_key_exists($key, $geodir_old_sidebars)) {
-                $sidebars_widgets[$key] = array();
-            }
-        }
     }
 
     update_option('sidebars_widgets', $sidebars_widgets);
@@ -2044,7 +2038,7 @@ function geodir_set_status_draft_to_publish_for_own_post($post)
     global $wp;
     $user_id = get_current_user_id();
 
-    if (!empty($post) && $post[0]->post_author == $user_id) {
+    if (!empty($post) && $post[0]->post_author == $user_id && !isset($_REQUEST['fl_builder'])) {
         $post[0]->post_status = 'publish';
     }
     return $post;

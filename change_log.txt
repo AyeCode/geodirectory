@@ -9,6 +9,9 @@ Wrong class spelling for search widget shortcode - FIXED
 dummy data images are being cached now - ADDED
 No reviews link points to #respond instead of #reviews - FIXED
 Filter added to make telephone linkable in home map bubble - ADDED
+Switching themes will persist GD widgets but now keep theme specific widget settings - FIXED
+If new import has new featured image it does not set it properly as featured image - FIXED
+Beaver Builder plugin has problems with draft posts when GD installed - FIXED
 
 v1.6.2
 GD Search widget bug with Display Widgets plugin - FIXED
