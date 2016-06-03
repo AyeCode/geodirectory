@@ -110,6 +110,7 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
     }
     
     function geocodeResponse(responses) {
+        console.log(responses);//keep this for debugging
         if (responses && responses.length > 0) {
             var getAddress = '';
             var getZip = '';

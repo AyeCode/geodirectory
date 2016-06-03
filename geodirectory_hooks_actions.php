@@ -2038,7 +2038,7 @@ function geodir_set_status_draft_to_publish_for_own_post($post)
     global $wp;
     $user_id = get_current_user_id();
 
-    if (!empty($post) && $post[0]->post_author == $user_id) {
+    if (!empty($post) && $post[0]->post_author == $user_id && !isset($_REQUEST['fl_builder'])) {
         $post[0]->post_status = 'publish';
     }
     return $post;
