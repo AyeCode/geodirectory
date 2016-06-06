@@ -12,6 +12,7 @@ Filter added to make telephone linkable in home map bubble - ADDED
 Switching themes will persist GD widgets but now keep theme specific widget settings - FIXED
 If new import has new featured image it does not set it properly as featured image - FIXED
 Beaver Builder plugin has problems with draft posts when GD installed - FIXED
+Second line menus items can show over first line sub menu items becase of z-index - FIXED
 
 v1.6.2
 GD Search widget bug with Display Widgets plugin - FIXED
