@@ -110,7 +110,7 @@ if (!defined('GEODIR_CUSTOM_SORT_FIELDS_TABLE')) define('GEODIR_CUSTOM_SORT_FIEL
 if (!defined('GEODIRECTORY_TEXTDOMAIN')) define('GEODIRECTORY_TEXTDOMAIN', 'geodirectory');
 
 // Load geodirectory plugin textdomain.
-add_action( 'plugins_loaded', 'geodir_load_textdomain' );
+add_action( 'init', 'geodir_load_textdomain' );
 
 /*
  * A function to log GD errors no matter the type given.
