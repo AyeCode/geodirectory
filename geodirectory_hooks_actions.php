@@ -1946,22 +1946,25 @@ function geodir_set_post_attachment()
 
         $all_postypes = geodir_get_posttypes();
 
-        $args = array(
-            'posts_per_page' => -1,
-            'post_type' => $all_postypes,
-            'post_status' => 'publish');
+        foreach($all_postypes as $post_type){
+            $args = array(
+                'posts_per_page' => -1,
+                'post_type' => $post_type,
+                'post_status' => 'publish');
 
-        $posts_array = get_posts($args);
+            $posts_array = get_posts($args);
 
-        if (!empty($posts_array)) {
+            if (!empty($posts_array)) {
 
-            foreach ($posts_array as $post) {
+                foreach ($posts_array as $post) {
 
-                geodir_set_wp_featured_image($post->ID);
+                    geodir_set_wp_featured_image($post->ID);
+
+                }
 
             }
-
         }
+
 
         update_option('geodir_set_post_attachments', '1');
 
@@ -2035,10 +2038,13 @@ if (!is_admin()) {
  */
 function geodir_set_status_draft_to_publish_for_own_post($post)
 {
-    global $wp;
     $user_id = get_current_user_id();
 
-    if (!empty($post) && $post[0]->post_author == $user_id && !isset($_REQUEST['fl_builder'])) {
+    if(!$user_id){return $post;}
+
+    $gd_post_types = geodir_get_posttypes();
+
+    if (!empty($post) && $post[0]->post_author == $user_id && in_array($post[0]->post_type, $gd_post_types) && !isset($_REQUEST['fl_builder'])) {
         $post[0]->post_status = 'publish';
     }
     return $post;
@@ -3289,3 +3295,27 @@ function gd_get_comments_link($comments_link, $post_id) {
 
     return $comments_link;
 }
+
+
+/**
+ * Add a class to theme menus so we can adjust the z-index.
+ *
+ * We add a class and adjust the z-index so menus don't hide behind maps and menus on second lines
+ * don't overlap submenus of first line menus.
+ *
+ * @package GeoDirectory
+ * @since 1.6.3
+ * @param array $args The array of menu arguments.
+ * @return array The modified arguments.
+ */
+function geodir_add_nav_menu_class( $args )
+{
+
+        if(isset($args['menu_class'])){
+            $args['menu_class'] = $args['menu_class']." gd-menu-z";
+        }
+    
+    return $args;
+}
+
+add_filter( 'wp_nav_menu_args', 'geodir_add_nav_menu_class' );

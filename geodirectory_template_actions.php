@@ -2437,8 +2437,8 @@ function geodir_action_add_listing_form()
         <!-- add captcha code -->
 
         <script>
-            <!--<script>-->
-            document.write('<inp' + 'ut type="hidden" id="geodir_sp' + 'amblocker_top_form" name="geodir_sp' + 'amblocker" value="64"/>')
+            /*<!--<script>-->*/
+            document.write('<inp' + 'ut type="hidden" id="geodir_sp' + 'amblocker_top_form" name="geodir_sp' + 'amblocker" value="64"/>');
         </script>
         <noscript>
             <div>
