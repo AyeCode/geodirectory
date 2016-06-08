@@ -2145,6 +2145,15 @@ function geodir_action_add_listing_form()
     if ($current_user->ID != '0') {
         $user_login = true;
     }
+
+    $post_type_info = geodir_get_posttype_info($listing_type);
+
+    print_r($post_type_info);
+
+    $cpt_singular_name = (isset($post_type_info['labels']['singular_name']) && $post_type_info['labels']['singular_name']) ? $post_type_info['labels']['singular_name'] : __('Listing','geodirectory');
+
+
+
     ?>
     <form name="propertyform" id="propertyform" action="<?php echo get_page_link(geodir_preview_page_id());?>" method="post" enctype="multipart/form-data">
         <input type="hidden" name="preview" value="<?php echo sanitize_text_field($listing_type);?>"/>
@@ -2178,7 +2187,7 @@ function geodir_action_add_listing_form()
         do_action('geodir_before_main_form_fields');
         ?>
         <div id="geodir_post_title_row" class="required_field geodir_form_row clearfix gd-fieldset-details">
-            <label><?php echo PLACE_TITLE_TEXT;?><span>*</span> </label>
+            <label><?php echo sprintf( __('%s Title', 'geodirectory'), $cpt_singular_name ); ?><span>*</span> </label>
             <input type="text" field_type="text" name="post_title" id="post_title" class="geodir_textfield"
                    value="<?php echo esc_attr(stripslashes($title)); ?>"/>
             <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory');?></span>
@@ -2230,7 +2239,7 @@ function geodir_action_add_listing_form()
         }
         ?>
         <div id="geodir_post_desc_row" class="geodir_form_row clearfix gd-fieldset-details<?php echo $desc_class;?>">
-            <label><?php echo PLACE_DESC_TEXT;?><span><?php if ($desc_limit != '0') { echo '*'; } ?></span> </label>
+            <label><?php echo sprintf( __('%s Description', 'geodirectory'), $cpt_singular_name ); ?><span><?php if ($desc_limit != '0') { echo '*'; } ?></span> </label>
             <?php
             if (!empty($show_editor) && in_array($listing_type, $show_editor)) {
                 $editor_settings = array('media_buttons' => false, 'textarea_rows' => 10);
