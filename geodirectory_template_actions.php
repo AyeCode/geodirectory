@@ -2148,11 +2148,7 @@ function geodir_action_add_listing_form()
 
     $post_type_info = geodir_get_posttype_info($listing_type);
 
-    print_r($post_type_info);
-
     $cpt_singular_name = (isset($post_type_info['labels']['singular_name']) && $post_type_info['labels']['singular_name']) ? $post_type_info['labels']['singular_name'] : __('Listing','geodirectory');
-
-
 
     ?>
     <form name="propertyform" id="propertyform" action="<?php echo get_page_link(geodir_preview_page_id());?>" method="post" enctype="multipart/form-data">
