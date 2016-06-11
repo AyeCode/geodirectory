@@ -298,6 +298,13 @@ function geodir_draw_map($map_args = array())
 				if (empty($geodir_default_map_search_pt))
 					$geodir_default_map_search_pt = 'gd_place';
 
+                global $gd_session;
+                $homemap_catlist_ptype = $gd_session->get('homemap_catlist_ptype');
+
+                if ($homemap_catlist_ptype) {
+                    $geodir_default_map_search_pt = $homemap_catlist_ptype;
+                }
+
 				/**
 				 * Filter the post type to retrive data for map
 				 *
