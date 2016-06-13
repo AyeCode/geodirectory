@@ -1602,7 +1602,7 @@ function geodir_show_detail_page_tabs()
                                 echo apply_filters('the_content', stripslashes($video));// we apply the_content filter so oembed works also;
                                 break;
                             case 'special_offers':
-                                echo wpautop(stripslashes($special_offers));
+                                echo apply_filters('gd_special_offers_content', wpautop(stripslashes($special_offers)));
 
                                 break;
                             case 'post_map':

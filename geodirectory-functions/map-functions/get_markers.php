@@ -7,7 +7,9 @@
  */
  
 if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'homemap_catlist') {
+    global $gd_session;
     $gd_post_type = sanitize_text_field($_REQUEST['post_type']);
+    $gd_session->set('homemap_catlist_ptype', $gd_post_type);
     $post_taxonomy = geodir_get_taxonomies($gd_post_type);
     $map_canvas_name = sanitize_text_field($_REQUEST['map_canvas']);
     $child_collapse = (bool)$_REQUEST['child_collapse'];

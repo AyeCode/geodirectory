@@ -15,6 +15,8 @@ Beaver Builder plugin has problems with draft posts when GD installed - FIXED
 Second line menus items can show over first line sub menu items becase of z-index - FIXED
 Changed load_textdomain to init hook for WPML compatibility - CHANGED
 Text `Listing Title` and `Listing Description` changed to CPT specific - CHANGED
+Added filter to modify special offers tab content - ADDED
+switching post type on home map are persistent now - CHANGED
 
 v1.6.2
 GD Search widget bug with Display Widgets plugin - FIXED
