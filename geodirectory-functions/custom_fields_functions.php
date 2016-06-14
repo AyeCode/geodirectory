@@ -430,6 +430,7 @@ if (!function_exists('geodir_custom_field_save')) {
 
             $default_value_add = '';
 
+
             if (!empty($post_meta_info)) {
                 switch ($field_type):
 
