@@ -2787,15 +2787,20 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                             }
                             $html .= ' </span>';
 
+                            $html .= ' <span class="gd-multiselect-value-output gd-val-'.$type['htmlvar_name'].'" >';
+
                             if (count($option_values) > 1) {
-                                $html .= '<ul>';
-                                foreach ($option_values as $val) {
-                                    $html .= '<li>' . $val . '</li>';
-                                }
-                                $html .= '</ul>';
+                                $html .= "<span>".implode('</span>, <span>',$option_values)."</span>";
                             } else {
-                                $html .= $post->{$type['htmlvar_name']};
+                                $vals = explode(",",$post->{$type['htmlvar_name']});
+                                $html .= "<span>".implode('</span>, <span>', $vals)."</span>";
                             }
+
+                            $html .= ' </span>';
+
+
+
+
                             $html .= '</div>';
                         }
                             break;
