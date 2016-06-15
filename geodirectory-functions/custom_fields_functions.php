@@ -2189,6 +2189,8 @@ if (!function_exists('geodir_show_listing_info')) {
         $fields_info = geodir_post_custom_fields($post_package_id, 'default', $p_type, $fields_location);
 
         if (!empty($fields_info)) {
+            $post = stripslashes_deep($post); // strip slashes
+            
             //echo '<div class="geodir-company_info field-group">';
             $field_set_start = 0;
 
@@ -2352,7 +2354,7 @@ if (!function_exists('geodir_show_listing_info')) {
                             $html .= '</span>';
 
                             if ($preview) {
-                                $html .= stripslashes($post->{$html_var}) . $addition_fields . '</p></div>';
+                                $html .= $post->{$html_var} . $addition_fields . '</p></div>';
                             } else {
                                 if ($post->post_address) {
                                     $html .= '<span itemprop="streetAddress">' . $post->post_address . '</span><br>';
@@ -2466,7 +2468,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                             $html = '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $type['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-contact" style="' . $field_icon . '">' . $field_icon_af .
                                 $html .= (trim($type['site_title'])) ? __($type['site_title'], 'geodirectory') . ': ' : '&nbsp;';
-                            $html .= '</span><a href="tel:' . preg_replace('/[^0-9+]/', '', $post->{$type['htmlvar_name']}) . '">' . stripslashes($post->{$type['htmlvar_name']}) . '</a></div>';
+                            $html .= '</span><a href="tel:' . preg_replace('/[^0-9+]/', '', $post->{$type['htmlvar_name']}) . '">' . $post->{$type['htmlvar_name']} . '</a></div>';
 
                         endif;
 
@@ -2504,7 +2506,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                             $html = '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $type['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-time" style="' . $field_icon . '">' . $field_icon_af;
                             $html .= (trim($type['site_title'])) ? __($type['site_title'], 'geodirectory') . ': ' : '&nbsp;';
-                            $html .= '</span>' . stripslashes($value) . '</div>';
+                            $html .= '</span>' . $value . '</div>';
 
                         endif;
 
@@ -2588,7 +2590,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                             $html = '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $type['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-time" style="' . $field_icon . '">' . $field_icon_af;
                             $html .= (trim($type['site_title'])) ? __($type['site_title'], 'geodirectory') . ': ' : '&nbsp;';
-                            $html .= '</span>' . stripslashes($post->{$type['htmlvar_name']}) . '</div>';
+                            $html .= '</span>' . $post->{$type['htmlvar_name']} . '</div>';
 
                         elseif (isset($post->{$type['htmlvar_name']}) && $post->{$type['htmlvar_name']}):
 
@@ -2613,7 +2615,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                             $html = '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $type['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-text" style="' . $field_icon . '">' . $field_icon_af;
                             $html .= (trim($type['site_title'])) ? __($type['site_title'], 'geodirectory') . ': ' : '';
-                            $html .= '</span>' . stripslashes($post->{$type['htmlvar_name']}) . '</div>';
+                            $html .= '</span>' . $post->{$type['htmlvar_name']} . '</div>';
 
                         endif;
 
@@ -2903,7 +2905,7 @@ if (!function_exists('geodir_show_listing_info')) {
                                 $html = '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $type['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-email" style="' . $field_icon . '">' . $field_icon_af;
                                 $html .= (trim($type['site_title'])) ? __($type['site_title'], 'geodirectory') . ': ' : '';
                                 $html .= '</span><span class="geodir-email-address-output">';
-                                $email = stripslashes($post->{$type['htmlvar_name']}) ;
+                                $email = $post->{$type['htmlvar_name']} ;
                                 if($e_split = explode('@',$email)){
                                     /**
                                      * Filter email custom field name output.
@@ -3036,7 +3038,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                             $html = '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $type['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-text" style="' . $field_icon . '">' . $field_icon_af;
                             $html .= (trim($type['site_title'])) ? __($type['site_title'], 'geodirectory') . ': ' : '';
-                            $html .= '</span>' . wpautop(stripslashes($post->{$type['htmlvar_name']})) . '</div>';
+                            $html .= '</span>' . wpautop($post->{$type['htmlvar_name']}) . '</div>';
 
                         }
                         break;
@@ -3065,7 +3067,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
                             $html = '<div class="geodir_more_info ' . $geodir_odd_even . ' ' . $type['css_class'] . ' ' . $type['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-text" style="' . $field_icon . '">' . $field_icon_af;
                             $html .= (trim($type['site_title'])) ? __($type['site_title'], 'geodirectory') . ': ' : '';
-                            $html .= '</span>' . wpautop(stripslashes($post->{$type['htmlvar_name']})) . '</div>';
+                            $html .= '</span>' . wpautop($post->{$type['htmlvar_name']}) . '</div>';
 
                         }
                         break;
