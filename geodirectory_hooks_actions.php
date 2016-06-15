@@ -2450,6 +2450,8 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
         }
 
         if (!empty($custom_fields)) {
+            $post = stripslashes_deep($post); // strip slashes
+            
             $field_set_start = 0;
             $fieldset_count = 0;
             $fieldset = '';
@@ -2559,7 +2561,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                             if ($field_set_start == 1 && $site_title != '') {
                                 $html .= ' ' . __($site_title, 'geodirectory') . ': ';
                             }
-                            $html .= ' </span>' . stripslashes($post->{$type['htmlvar_name']}) . '</div>';
+                            $html .= ' </span>' . $post->{$type['htmlvar_name']} . '</div>';
                         }
                             break;
                         case 'time': {
@@ -2582,7 +2584,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                             if ($field_set_start == 1 && $site_title != '') {
                                 $html .= ' ' . __($site_title, 'geodirectory') . ': ';
                             }
-                            $html .= ' </span>' . stripslashes($value) . '</div>';
+                            $html .= ' </span>' . $value . '</div>';
                         }
                             break;
                         case 'datepicker': {
@@ -2637,7 +2639,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                             if ($field_set_start == 1 && $site_title != '') {
                                 $html .= ' ' . __($site_title, 'geodirectory') . ': ';
                             }
-                            $html .= ' </span>' . stripslashes($post->{$type['htmlvar_name']}) . '</div>';
+                            $html .= ' </span>' . $post->{$type['htmlvar_name']} . '</div>';
                         }
                             break;
                         case 'radio': {
@@ -2820,7 +2822,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                             if ($field_set_start == 1 && $site_title != '') {
                                 $html .= ' ' . __($site_title, 'geodirectory') . ': ';
                             }
-                            $html .= ' </span>' . stripslashes($post->{$type['htmlvar_name']}) . '</div>';
+                            $html .= ' </span>' . $post->{$type['htmlvar_name']} . '</div>';
                         }
                             break;
                         case 'textarea': {
@@ -2839,7 +2841,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                             if ($field_set_start == 1 && $site_title != '') {
                                 $html .= ' ' . __($site_title, 'geodirectory') . ': ';
                             }
-                            $html .= '</span>' . wpautop(stripslashes($post->{$type['htmlvar_name']})) . '</div>';
+                            $html .= '</span>' . wpautop($post->{$type['htmlvar_name']}) . '</div>';
                         }
                             break;
                         case 'html': {
@@ -2858,7 +2860,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                             if ($field_set_start == 1 && $site_title != '') {
                                 $html .= ' ' . __($site_title, 'geodirectory') . ': ';
                             }
-                            $html .= ' </span>' . wpautop(stripslashes($post->{$type['htmlvar_name']})) . '</div>';
+                            $html .= ' </span>' . wpautop($post->{$type['htmlvar_name']}) . '</div>';
                         }
                         break;
                         case 'file': {
