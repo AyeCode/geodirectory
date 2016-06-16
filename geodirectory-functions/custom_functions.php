@@ -2121,6 +2121,9 @@ function geodir_listing_bounce_map_pin_on_hover() {
                     }, function () {
                         stop_marker_animation('listing_map_canvas', String($(this).data("post-id")));
                     });
+                }else{
+                    window.animate_marker= function(){};
+                    window.stop_marker_animation= function(){};
                 }
             });
         </script>
