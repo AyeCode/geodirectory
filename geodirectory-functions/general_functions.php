@@ -1337,10 +1337,18 @@ function fetch_remote_file($url)
     if ($upload['error'])
         return new WP_Error('upload_dir_error', $upload['error']);
 
+
+    sleep(0.3);// if multiple remote file this can cause the remote server to timeout so we add a slight delay
+
     // fetch the remote url and write it to the placeholder file
     $headers = wp_remote_get($url, array('stream' => true,'filename' => $upload['file']));
 
     $log_message = '';
+    if( is_wp_error( $headers  ) ) {
+        echo 'file: '.$url;
+        return new WP_Error('import_file_error',$headers->get_error_message());
+    }
+
     $filesize = filesize($upload['file']);
     // request failed
     if (!$headers) {
@@ -4457,7 +4465,7 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
             $queried_object = get_queried_object();
             
             if (isset($queried_object->data->user_nicename)) {
-                $author_name = $queried_object->data->user_nicename;
+                $author_name = $queried_object->data->display_name;
             }
         }
         $title = str_replace("%%name%%", $author_name, $title);
