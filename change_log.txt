@@ -17,6 +17,8 @@ Changed load_textdomain to init hook for WPML compatibility - CHANGED
 Text `Listing Title` and `Listing Description` changed to CPT specific - CHANGED
 Added filter to modify special offers tab content - ADDED
 switching post type on home map are persistent now - CHANGED
+Multiselect custom field now output as comma separated list instead of ul - CHANGED
+Apostrophe problem in address field - FIXED
 
 v1.6.2
 GD Search widget bug with Display Widgets plugin - FIXED

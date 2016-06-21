@@ -58,8 +58,7 @@ if(wp_get_referer()){
         echo '<p class="sucess_msg">' . PW_SEND_CONFIRM_MSG . '</p>';
 
     ?>
-    <form name="cus_loginform" id="cus_loginform" action="<?php echo esc_url(geodir_curPageURL()); ?>"
-          method="post">
+    <form name="cus_loginform" id="cus_loginform" method="post">
 
         <div class="form_row clearfix">
             <input placeholder='<?php echo USERNAME_TEXT; ?>' type="text" name="log" id="user_login"
