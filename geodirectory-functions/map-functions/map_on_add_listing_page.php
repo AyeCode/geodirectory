@@ -96,7 +96,8 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
     var oldstr_zip;
     var strictBounds;
     function geocodePosition(latLon, address) {
-        if (address) {
+        console.log(address);
+        if (address && address.country!='TR') {// turkey select address does not return enough info so we get info from GPS only.
             doGeoCode = address;
         } else {
             doGeoCode = {

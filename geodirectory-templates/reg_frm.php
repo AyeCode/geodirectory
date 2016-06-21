@@ -49,8 +49,7 @@ if (isset($_GET['redirect_to']) && $_GET['redirect_to'] != '') {
         }
         ?>
 
-        <form name="cus_registerform" id="cus_registerform"
-              action="<?php echo htmlspecialchars(geodir_curPageURL()); ?>" method="post">
+        <form name="cus_registerform" id="cus_registerform" method="post">
             <input type="hidden" name="action" value="register"/>
             <input type="hidden" name="redirect_to" value="<?php echo htmlspecialchars($redirect_to); ?>"/>
 
