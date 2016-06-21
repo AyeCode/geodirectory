@@ -1,3 +1,6 @@
+v1.6.4
+& symbol causing problem in listing tag display - FIXED
+
 v1.6.3
 Popular post categories widget not adhering to default post type setting - FIXED
 OpenStreetMap breaks images on https sites when SSL is active - FIXED
