@@ -1,5 +1,6 @@
 v1.6.4
 & symbol causing problem in listing tag display - FIXED
+Option added to export listings which are published between specific dates - CHANGED
 
 v1.6.3
 Popular post categories widget not adhering to default post type setting - FIXED
@@ -15,7 +16,7 @@ Filter added to make telephone linkable in home map bubble - ADDED
 Switching themes will persist GD widgets but now keep theme specific widget settings - FIXED
 If new import has new featured image it does not set it properly as featured image - FIXED
 Beaver Builder plugin has problems with draft posts when GD installed - FIXED
-Second line menus items can show over first line sub menu items becase of z-index - FIXED
+Second line menus items can show over first line sub menu items because of z-index - FIXED
 Changed load_textdomain to init hook for WPML compatibility - CHANGED
 Text `Listing Title` and `Listing Description` changed to CPT specific - CHANGED
 Added filter to modify special offers tab content - ADDED
