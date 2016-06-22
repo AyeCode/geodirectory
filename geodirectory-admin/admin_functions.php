@@ -2724,7 +2724,11 @@ function geodir_import_export_page() {
 				<tr>
 					<td class="fld" style="vertical-align:top"><label for="gd_chunk_size"><?php _e( 'Max entries per csv file:', 'geodirectory' );?></label></td>
 					<td><select name="gd_chunk_size" id="gd_chunk_size" style="min-width:140px"><?php echo $gd_chunksize_option;?></select><span class="description"><?php _e( 'Please select the maximum number of entries per csv file (defaults to 5000, you might want to lower this to prevent memory issues on some installs)', 'geodirectory' );?></span></td>
-				  </tr>
+				</tr>
+                <tr class="gd-imex-dates">
+					<td class="fld"><label><?php _e( 'Published Date:', 'geodirectory' );?></label></td>
+					<td><label><span class="label-responsive"><?php _e( 'Start date:', 'geodirectory' );?></span><input type="text" id="gd_imex_start_date" name="gd_imex[start_date]" placeholder="<?php echo esc_attr( date_i18n( 'Y-m-d', ( current_time( 'timestamp' ) - MONTH_IN_SECONDS ) ) ) ;?>" data-type="date" /></label><label><span class="label-responsive"><?php _e( 'End date:', 'geodirectory' );?></span><input type="text" id="gd_imex_end_date" name="gd_imex[end_date]" placeholder="<?php echo esc_attr( date_i18n( 'Y-m-d', current_time( 'timestamp' ) ) ) ;?>" data-type="date" /></label></td>
+				</tr>
 				<tr>
 				  <td class="fld" style="vertical-align:top"><label>
 					<?php _e( 'Progress:', 'geodirectory' );?>
@@ -3323,7 +3327,17 @@ jQuery(function(){
         }
         var pages = Math.ceil( total_posts / chunk_size );
         
-        gd_process_export_posts(el, post_type, total_posts, chunk_size, pages, 1);
+        var filters = ''; 
+        var v;
+        jQuery('[name^="gd_imex["]', el).each(function() {
+           v = jQuery(this).val();
+           v = typeof v == 'string' && v !== '' ? v.trim() : '';
+           if (v !== '') {
+               filters += '&' + jQuery(this).prop('name') + '=' + v;
+           }
+        });
+        
+        gd_process_export_posts(el, post_type, total_posts, chunk_size, pages, 1, filters, true);
     });
 
     jQuery.fn.gdposts_timer = function() {
@@ -3379,9 +3393,17 @@ jQuery(function(){
         return time;
     }
         
-    function gd_process_export_posts(el, post_type, total_posts, chunk_size, pages, page) {
+    function gd_process_export_posts(el, post_type, total_posts, chunk_size, pages, page, filters, doFilter) {
+        var attach = (typeof filters !== 'undefined' && filters) ? filters : '';
+        var getTotal = false;
         if (page < 2) {
-            gd_progressbar(el, 0, '0% (0 / ' + total_posts + ') <i class="fa fa-refresh fa-spin"></i><?php echo esc_attr( __( 'Exporting...', 'geodirectory' ) );?>');
+            if (typeof filters !== 'undefined' && filters && doFilter) {
+                getTotal = true;
+                attach += '&_c=1';
+                gd_progressbar(el, 0, '<i class="fa fa-refresh fa-spin"></i><?php echo esc_attr( __( 'Preparing...', 'geodirectory' ) );?>');
+            } else {
+                gd_progressbar(el, 0, '0% (0 / ' + total_posts + ') <i class="fa fa-refresh fa-spin"></i><?php echo esc_attr( __( 'Exporting...', 'geodirectory' ) );?>');
+            }
             jQuery(el).find('#gd_timer').text('00:00:01');
             jQuery('#gd_ie_ex_files', el).html('');
         }
@@ -3389,7 +3411,7 @@ jQuery(function(){
         jQuery.ajax({
             url: ajaxurl,
             type: "POST",
-            data: 'action=geodir_import_export&task=export_posts&_pt=' + post_type + '&_n=' + chunk_size + '&_nonce=<?php echo $nonce;?>&_p=' + page,
+            data: 'action=geodir_import_export&task=export_posts&_pt=' + post_type + '&_n=' + chunk_size + '&_nonce=<?php echo $nonce;?>&_p=' + page + attach,
             dataType : 'json',
             cache: false,
             beforeSend: function (jqXHR, settings) {},
@@ -3401,25 +3423,37 @@ jQuery(function(){
                         gd_progressbar(el, 0, '<i class="fa fa-warning"></i>' + data.error);
                         window.clearInterval(timer_posts);
                     } else {
-                        if (pages < page || pages == page) {
-                            window.clearInterval(timer_posts);
-                            gd_progressbar(el, 100, '100% (' + total_posts + ' / ' + total_posts + ') <i class="fa fa-check"></i><?php echo esc_attr( __( 'Complete!', 'geodirectory' ) );?>');
+                        if (getTotal) {
+                            if (typeof data.total != 'undefined' ) {
+                                total_posts = parseInt(data.total);
+                                if (chunk_size > total_posts) {
+                                    chunk_size = total_posts;
+                                }
+                                pages = Math.ceil( total_posts / chunk_size );
+                                
+                                return gd_process_export_posts(el, post_type, total_posts, chunk_size, pages, 1, filters);
+                            }
                         } else {
-                            var percentage = Math.round(((page * chunk_size) / total_posts) * 100);
-                            percentage = percentage > 100 ? 100 : percentage;
-                            gd_progressbar(el, percentage, '' + percentage + '% (' + ( page * chunk_size ) + ' / ' + total_posts + ') <i class="fa fa-refresh fa-spin"></i><?php echo esc_attr( __( 'Exporting...', 'geodirectory' ) );?>');
-                        }
-                        if (typeof data.files != 'undefined' && jQuery(data.files).length ) {
-                            var obj_files = data.files;
-                            var files = '';
-                            for (var i in data.files) {
-                                files += '<p>'+ obj_files[i].i +' <a class="gd-ie-file" href="' + obj_files[i].u + '" target="_blank">' + obj_files[i].u + '</a> (' + obj_files[i].s + ')</p>';
+                            if (pages < page || pages == page) {
+                                window.clearInterval(timer_posts);
+                                gd_progressbar(el, 100, '100% (' + total_posts + ' / ' + total_posts + ') <i class="fa fa-check"></i><?php echo esc_attr( __( 'Complete!', 'geodirectory' ) );?>');
+                            } else {
+                                var percentage = Math.round(((page * chunk_size) / total_posts) * 100);
+                                percentage = percentage > 100 ? 100 : percentage;
+                                gd_progressbar(el, percentage, '' + percentage + '% (' + ( page * chunk_size ) + ' / ' + total_posts + ') <i class="fa fa-refresh fa-spin"></i><?php echo esc_attr( __( 'Exporting...', 'geodirectory' ) );?>');
                             }
-                            jQuery('#gd_ie_ex_files', el).append(files);
-                            if (pages > page) {
-                                return gd_process_export_posts(el, post_type, total_posts, chunk_size, pages, (page + 1));
+                            if (typeof data.files != 'undefined' && jQuery(data.files).length ) {
+                                var obj_files = data.files;
+                                var files = '';
+                                for (var i in data.files) {
+                                    files += '<p>'+ obj_files[i].i +' <a class="gd-ie-file" href="' + obj_files[i].u + '" target="_blank">' + obj_files[i].u + '</a> (' + obj_files[i].s + ')</p>';
+                                }
+                                jQuery('#gd_ie_ex_files', el).append(files);
+                                if (pages > page) {
+                                    return gd_process_export_posts(el, post_type, total_posts, chunk_size, pages, (page + 1));
+                                }
+                                return true;
                             }
-                            return true;
                         }
                     }
                 }
@@ -3682,7 +3716,12 @@ function geodir_ajax_import_export() {
             if ( $post_type == 'gd_event' ) {
                 add_filter( 'geodir_imex_export_posts_query', 'geodir_imex_get_events_query', 10, 2 );
             }
+            $filters = !empty( $_REQUEST['gd_imex'] ) && is_array( $_REQUEST['gd_imex'] ) ? $_REQUEST['gd_imex'] : NULL;
+            
             $file_name = $post_type . '_' . date( 'dmyHi' );
+            if ( $filters && isset( $filters['start_date'] ) && isset( $filters['end_date'] ) ) {
+                $file_name = $post_type . '_' . date_i18n( 'dmy', strtotime( $filters['start_date'] ) ) . '_' . date_i18n( 'dmy', strtotime( $filters['end_date'] ) );
+            }
             $posts_count = geodir_get_posts_count( $post_type );
             $file_url_base = geodir_path_import_export() . '/';
             $file_url = $file_url_base . $file_name . '.csv';
@@ -3691,7 +3730,16 @@ function geodir_ajax_import_export() {
             
             $chunk_file_paths = array();
 
-            if ( isset( $_REQUEST['_st'] ) ) {
+            if ( isset( $_REQUEST['_c'] ) ) {
+                $json['total'] = $posts_count;
+                // WPML
+                if ($is_wpml) {
+                    $sitepress->switch_lang($active_lang, true);
+                }
+                // WPML
+                wp_send_json( $json );
+                gd_die();
+            } else if ( isset( $_REQUEST['_st'] ) ) {
                 $line_count = (int)geodir_import_export_line_count( $file_path_temp );
                 $percentage = count( $posts_count ) > 0 && $line_count > 0 ? ceil( $line_count / $posts_count ) * 100 : 0;
                 $percentage = min( $percentage, 100 );
@@ -5229,6 +5277,7 @@ function geodir_imex_update_term( $taxonomy, $term_data ) {
  * Get the posts counts for the current post type.
  *
  * @since 1.4.6
+ * @since 1.6.4 Updated to filter posts.
  * @package GeoDirectory
  *
  * @global object $wpdb WordPress Database object.
@@ -5252,6 +5301,16 @@ function geodir_get_posts_count( $post_type ) {
     if ( !empty( $skip_statuses ) && is_array( $skip_statuses ) ) {
         $where_statuses = "AND `" . $wpdb->posts . "`.`post_status` NOT IN('" . implode( "','", $skip_statuses ) . "')";
     }
+    
+    /**
+     * Filter the SQL where clause part to filter posts count in import/export.
+     *
+     * @since 1.6.4
+     * @package GeoDirectory
+     *
+     * @param string $where SQL where clause part.
+     */
+    $where_statuses = apply_filters( 'geodir_get_posts_count', $where_statuses, $post_type );
 
     $query = $wpdb->prepare( "SELECT COUNT({$wpdb->posts}.ID) FROM {$wpdb->posts} INNER JOIN {$table} ON {$table}.post_id = {$wpdb->posts}.ID WHERE {$wpdb->posts}.post_type = %s " . $where_statuses, $post_type );
 
@@ -5334,6 +5393,7 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
 			$csv_row[] = 'package_id';
 			$csv_row[] = 'expire_date';
 		}
+        $csv_row[] = 'post_date';
 		$csv_row[] = 'geodir_video';
 		$csv_row[] = 'post_address';
 		$csv_row[] = 'post_city';
@@ -5516,6 +5576,7 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
 				$csv_row[] = (int)$post_info['package_id']; // package_id
 				$csv_row[] = $post_info['expire_date'] != '' && geodir_strtolower($post_info['expire_date']) != 'never' ? date_i18n('Y-m-d', strtotime($post_info['expire_date'])) : 'Never'; // expire_date
 			}
+            $csv_row[] = $post_info['post_date']; // post_date
 			$csv_row[] = $post_info['geodir_video']; // geodir_video
 			$csv_row[] = $post_info['post_address']; // post_address
 			$csv_row[] = $post_info['post_city']; // post_city
@@ -5633,8 +5694,18 @@ function geodir_get_export_posts( $post_type, $per_page = 0, $page_no = 0 ) {
     if ( !empty( $skip_statuses ) && is_array( $skip_statuses ) ) {
         $where_statuses = "AND `" . $wpdb->posts . "`.`post_status` NOT IN('" . implode( "','", $skip_statuses ) . "')";
     }
+    
+    /**
+     * Filter the SQL where clause part to filter posts in import/export.
+     *
+     * @since 1.6.4
+     * @package GeoDirectory
+     *
+     * @param string $where SQL where clause part.
+     */
+    $where_statuses = apply_filters( 'geodir_get_export_posts', $where_statuses, $post_type );
 
-    $query = "SELECT {$wpdb->posts}.ID FROM {$wpdb->posts} INNER JOIN {$table} ON {$table}.post_id = {$wpdb->posts}.ID WHERE {$wpdb->posts}.post_type = %s " . $where_statuses . " ORDER BY {$wpdb->posts}.ID ASC" . $limit;
+    $query = $wpdb->prepare( "SELECT {$wpdb->posts}.ID FROM {$wpdb->posts} INNER JOIN {$table} ON {$table}.post_id = {$wpdb->posts}.ID WHERE {$wpdb->posts}.post_type = %s " . $where_statuses . " ORDER BY {$wpdb->posts}.ID ASC" . $limit, $post_type );
     /**
      * Modify returned posts SQL query for the current post type.
      *
@@ -5645,7 +5716,6 @@ function geodir_get_export_posts( $post_type, $per_page = 0, $page_no = 0 ) {
      * @param string $post_type Post type.
      */
     $query = apply_filters( 'geodir_imex_export_posts_query', $query, $post_type );
-
     $results = (array)$wpdb->get_results( $wpdb->prepare( $query, $post_type ), ARRAY_A );
 
     /**
@@ -5665,6 +5735,7 @@ function geodir_get_export_posts( $post_type, $per_page = 0, $page_no = 0 ) {
  *
  * @since 1.4.6
  * @since 1.5.1 Query updated to get distinct posts. 
+ * @since 1.6.4 Updated to filter events.
  * @package GeoDirectory
  *
  * @global object $wpdb WordPress Database object.
@@ -5687,8 +5758,11 @@ function geodir_imex_get_events_query( $query, $post_type ) {
         if ( !empty( $skip_statuses ) && is_array( $skip_statuses ) ) {
             $where_statuses = "AND `" . $wpdb->posts . "`.`post_status` NOT IN('" . implode( "','", $skip_statuses ) . "')";
         }
+        
+        /** This action is documented in geodirectory-functions/geodirectory-admin/admin_functions.php */
+        $where_statuses = apply_filters( 'geodir_get_export_posts', $where_statuses, $post_type );
 
-        $query = "SELECT {$wpdb->posts}.ID, {$schedule_table}.event_date, {$schedule_table}.event_enddate AS enddate, {$schedule_table}.event_starttime AS starttime, {$schedule_table}.event_endtime AS endtime FROM {$wpdb->posts} INNER JOIN {$table} ON ({$table}.post_id = {$wpdb->posts}.ID) INNER JOIN {$schedule_table} ON ({$schedule_table}.event_id = {$wpdb->posts}.ID) WHERE {$wpdb->posts}.post_type = %s " . $where_statuses . " GROUP BY {$table}.post_id ORDER BY {$wpdb->posts}.ID ASC, {$schedule_table}.schedule_id ASC";
+        $query = $wpdb->prepare( "SELECT {$wpdb->posts}.ID, {$schedule_table}.event_date, {$schedule_table}.event_enddate AS enddate, {$schedule_table}.event_starttime AS starttime, {$schedule_table}.event_endtime AS endtime FROM {$wpdb->posts} INNER JOIN {$table} ON ({$table}.post_id = {$wpdb->posts}.ID) INNER JOIN {$schedule_table} ON ({$schedule_table}.event_id = {$wpdb->posts}.ID) WHERE {$wpdb->posts}.post_type = %s " . $where_statuses . " GROUP BY {$table}.post_id ORDER BY {$wpdb->posts}.ID ASC, {$schedule_table}.schedule_id ASC", $post_type );
     }
 
     return $query;
@@ -6603,6 +6677,41 @@ function geodir_admin_dequeue_scripts() {
         wp_dequeue_script('ultimate-vc-backend-script');
     }
 }
+
+/**
+ * Get the SQL where clause part to filter posts in import/export.
+ *
+ * @package GeoDirectory
+ * @since 1.6.4
+ *
+ * @global object $wpdb WordPress Database object.
+ * 
+ * @param string $where The SQL where clause part. Default empty.
+ * @param string $post_type The post type.
+ * @return string SQL where clause part.
+ */
+function geodir_imex_get_filter_where($where = '', $post_type = '') {
+    global $wpdb;
+    
+    $filters = !empty( $_REQUEST['gd_imex'] ) && is_array( $_REQUEST['gd_imex'] ) ? $_REQUEST['gd_imex'] : NULL;
+    
+    if ( !empty( $filters ) ) {
+        foreach ( $filters as $field => $value ) {
+            switch ($field) {
+                case 'start_date':
+                    $where .= " AND `" . $wpdb->posts . "`.`post_date` >= '" . sanitize_text_field( $value ) . " 23:59:59'";
+                break;
+                case 'end_date':
+                    $where .= " AND `" . $wpdb->posts . "`.`post_date` <= '" . sanitize_text_field( $value ) . " 23:59:59'";
+                break;
+            }
+        }
+    }
+    
+    return $where;
+}
+add_filter('geodir_get_posts_count', 'geodir_imex_get_filter_where', 10, 2);
+add_filter('geodir_get_export_posts', 'geodir_imex_get_filter_where', 10, 2);
 
 /*
  * Look at doing menu items this way, must be customiser ready
