@@ -1131,6 +1131,7 @@ function geodir_action_details_taxonomies()
             $post->post_tags = $post_tags;
             $post_tags = explode(",", trim($post->post_tags, ","));
 
+
             foreach ($post_tags as $post_term) {
 
                 // fix slug creation order for tags & location
@@ -1138,7 +1139,7 @@ function geodir_action_details_taxonomies()
 
                 $priority_location = false;
                 if ($insert_term = term_exists($post_term, $post_type . '_tags')) {
-                    $term = get_term_by('name', $post_term, $post_type . '_tags');
+                    $term = get_term_by('id', $insert_term['term_id'], $post_type . '_tags');
                 } else {
                     $post_country = isset($_REQUEST['post_country']) && $_REQUEST['post_country'] != '' ? sanitize_text_field($_REQUEST['post_country']) : NULL;
                     $post_region = isset($_REQUEST['post_region']) && $_REQUEST['post_region'] != '' ? sanitize_text_field($_REQUEST['post_region']) : NULL;
