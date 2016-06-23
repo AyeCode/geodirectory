@@ -2727,7 +2727,7 @@ function geodir_import_export_page() {
 				</tr>
                 <tr class="gd-imex-dates">
 					<td class="fld"><label><?php _e( 'Published Date:', 'geodirectory' );?></label></td>
-					<td><label><span class="label-responsive"><?php _e( 'Start date:', 'geodirectory' );?></span><input type="text" id="gd_imex_start_date" name="gd_imex[start_date]" placeholder="<?php echo esc_attr( date_i18n( 'Y-m-d', ( current_time( 'timestamp' ) - MONTH_IN_SECONDS ) ) ) ;?>" data-type="date" /></label><label><span class="label-responsive"><?php _e( 'End date:', 'geodirectory' );?></span><input type="text" id="gd_imex_end_date" name="gd_imex[end_date]" placeholder="<?php echo esc_attr( date_i18n( 'Y-m-d', current_time( 'timestamp' ) ) ) ;?>" data-type="date" /></label></td>
+					<td><label><span class="label-responsive"><?php _e( 'Start date:', 'geodirectory' );?></span><input type="text" id="gd_imex_start_date" name="gd_imex[start_date]" data-type="date" /></label><label><span class="label-responsive"><?php _e( 'End date:', 'geodirectory' );?></span><input type="text" id="gd_imex_end_date" name="gd_imex[end_date]" data-type="date" /></label></td>
 				</tr>
 				<tr>
 				  <td class="fld" style="vertical-align:top"><label>
