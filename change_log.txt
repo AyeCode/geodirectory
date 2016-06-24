@@ -4,6 +4,7 @@ Average review added back to sidebar - CHANGED
 & symbol causing problem in listing tag display - FIXED
 Option added to export listings which are published between specific dates - CHANGED
 Listings shortcode paging not working with lazy load images - FIXED
+Google maps now required API KEY, setting added - FIXED
 
 v1.6.3
 Popular post categories widget not adhering to default post type setting - FIXED
