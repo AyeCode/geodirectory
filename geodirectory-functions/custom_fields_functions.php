@@ -1801,18 +1801,28 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
             if ($extra_fields['date_format'] == '')
                 $extra_fields['date_format'] = 'yy-mm-dd';
 
+            $date_format = $extra_fields['date_format'];
+            $jquery_date_format  = $date_format;
 
-            $search = array('dd', 'mm', 'yy');
-            $replace = array('d', 'm', 'Y');
 
-            $date_format = str_replace($search, $replace, $extra_fields['date_format']);
+            // check if we need to change the format or not
+            $date_format_len = strlen(str_replace(' ', '', $date_format));
+            if($date_format_len>5){// if greater then 5 then it's the old style format.
+
+                $search = array('dd','d','DD','mm','m','MM','yy'); //jQuery UI datepicker format
+                $replace = array('d','j','l','m','n','F','Y');//PHP date format
+
+                $date_format = str_replace($search, $replace, $date_format);
+            }else{
+                $jquery_date_format = geodir_date_format_php_to_jqueryui( $jquery_date_format );
+            }
 
             if($value=='0000-00-00'){$value='';}//if date not set, then mark it empty
             if($value && !isset($_REQUEST['backandedit'])) {
                 $time = strtotime($value);
-                $value = date($date_format, $time);
+                $value = date_i18n($date_format, $time);
             }
-
+            
             ?>
             <script type="text/javascript">
 
@@ -1827,7 +1837,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                          */
                         echo apply_filters("gd_datepicker_extra_{$name}",'');?>});
 
-                    jQuery("#<?php echo $name;?>").datepicker("option", "dateFormat", '<?php echo $extra_fields['date_format'];?>');
+                    jQuery("#<?php echo $name;?>").datepicker("option", "dateFormat", '<?php echo $jquery_date_format;?>');
 
                     <?php if(!empty($value)){?>
                     jQuery("#<?php echo $name;?>").datepicker("setDate", "<?php echo $value;?>");
@@ -2521,17 +2531,22 @@ if (!function_exists('geodir_show_listing_info')) {
                                 $date_format = unserialize($type['extra_fields']);
                                 $date_format = $date_format['date_format'];
                             }
+                            // check if we need to change the format or not
+                            $date_format_len = strlen(str_replace(' ', '', $date_format));
+                            if($date_format_len>5){// if greater then 4 then it's the old style format.
 
-                            $search = array('dd','d','DD','mm','m','MM','yy'); //jQuery UI datepicker format
-                            $replace = array('d','j','l','m','n','F','Y');//PHP date format
+                                $search = array('dd','d','DD','mm','m','MM','yy'); //jQuery UI datepicker format
+                                $replace = array('d','j','l','m','n','F','Y');//PHP date format
 
-                            $date_format = str_replace($search, $replace, $date_format);
+                                $date_format = str_replace($search, $replace, $date_format);
 
-                            $post_htmlvar_value = ($date_format == 'd/m/Y' || $date_format == 'j/n/Y' ) ? str_replace('/', '-', $post->{$type['htmlvar_name']}) : $post->{$type['htmlvar_name']}; // PHP doesn't work well with dd/mm/yyyy format
+                                $post_htmlvar_value = ($date_format == 'd/m/Y' || $date_format == 'j/n/Y' ) ? str_replace('/', '-', $post->{$type['htmlvar_name']}) : $post->{$type['htmlvar_name']}; // PHP doesn't work well with dd/mm/yyyy format
+                            }else{
+                                $post_htmlvar_value = $post->{$type['htmlvar_name']};
+                            }
 
-                            $value = '';
                             if ($post->{$type['htmlvar_name']} != '' && $post->{$type['htmlvar_name']}!="0000-00-00") {
-                                $value = date($date_format, strtotime($post_htmlvar_value));
+                                $value = date_i18n($date_format, strtotime($post_htmlvar_value));
                             }else{
                                 continue;
                             }
