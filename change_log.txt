@@ -1,3 +1,6 @@
+v1.6.5
+Location page breadcrumb now uses location page slug - CHANGED
+
 v1.6.4
 Date custom field can sometimes display default date on preview page - FIXED
 Average review added back to sidebar - CHANGED
