@@ -4361,6 +4361,7 @@ function geodir_ajax_import_export() {
                 //remove_all_actions('publish_future_post');
 
                 if (!empty($file)) {
+                    $is_claim_active = is_plugin_active( 'geodir_claim_listing/geodir_claim_listing.php' ) && get_option('geodir_claim_enable') === 'yes' ? true : false;
                     $wp_post_statuses = get_post_statuses(); // All of the WordPress supported post statuses.
                     $default_status = 'publish';
                     $current_date = date_i18n( 'Y-m-d', time() );
@@ -4420,7 +4421,7 @@ function geodir_ajax_import_export() {
                             
                             $language = '';
                             $original_post_id = '';
-                                                        
+                            
                             $c = 0;
                             foreach ($columns as $column ) {
                                 $gd_post[$column] = $row[$c];
@@ -4498,6 +4499,10 @@ function geodir_ajax_import_export() {
                                 }
                                 // WPML
                                 $c++;
+                            }
+                            // listing claimed or not
+                            if ($is_claim_active && isset($gd_post['claimed'])) {
+                                $gd_post['claimed'] = (int)$gd_post['claimed'] == 1 ? 1 : 0;
                             }
                             
                             // WPML
@@ -5373,6 +5378,7 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
         $location_manager = function_exists('geodir_location_plugin_activated') ? true : false; // Check location manager installed & active.
         $location_allowed = function_exists( 'geodir_cpt_no_location' ) && geodir_cpt_no_location( $post_type ) ? false : true;
         $neighbourhood_active = $location_manager && $location_allowed && get_option('location_neighbourhoods') ? true : false;
+        $is_claim_active = is_plugin_active( 'geodir_claim_listing/geodir_claim_listing.php' ) && get_option('geodir_claim_enable') === 'yes' ? true : false;
 		
 		$csv_row = array();
 		$csv_row[] = 'post_id';
@@ -5404,6 +5410,10 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
 		}
 		$csv_row[] = 'post_status';
 		$csv_row[] = 'is_featured';
+        // Export claim listing field
+		if ($is_claim_active) {
+			$csv_row[] = 'claimed';
+		}
 		if ($is_payment_plugin) {
 			$csv_row[] = 'package_id';
 			$csv_row[] = 'expire_date';
@@ -5452,6 +5462,17 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
 			$csv_row[] = 'gd_franchise_lock';
 			$csv_row[] = 'franchise';
 		}
+        
+        /**
+         * Filter columns feild names of gd export listings csv.
+         *
+         * @since 1.6.5
+         * @package GeoDirectory
+         *
+         * @param array $csv_row Column names being exported in csv.
+         * @param string $post_type The post type.
+         */
+        $csv_row = apply_filters('geodir_export_listing_csv_column_names', $csv_row, $post_type);
 		
 		$csv_rows[] = $csv_row;
 
@@ -5587,6 +5608,9 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
 			}
 			$csv_row[] = $post_info['post_status']; // post_status
 			$csv_row[] = (int)$post_info['is_featured'] == 1 ? 1 : ''; // is_featured
+            if ($is_claim_active) {
+                $csv_row[] = !empty($post_info['claimed']) && (int)$post_info['claimed'] == 1 ? 1 : ''; // claimed
+            }
 			if ($is_payment_plugin) {
 				$csv_row[] = (int)$post_info['package_id']; // package_id
 				$csv_row[] = $post_info['expire_date'] != '' && geodir_strtolower($post_info['expire_date']) != 'never' ? date_i18n('Y-m-d', strtotime($post_info['expire_date'])) : 'Never'; // expire_date
@@ -5653,6 +5677,17 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
 				$csv_row[] = $locaked_fields; // gd_franchise_lock fields
 				$csv_row[] = (int)$franchise; // franchise id
 			}
+            
+            /**
+             * Filter columns values of gd export listings csv file
+             *
+             * @since 1.6.5
+             * @package GeoDirectory
+             *
+             * @param array $csv_row Field values being exported in csv.
+             * @param array $post_info The post info.
+             */
+            $csv_row = apply_filters('geodir_export_listing_csv_column_values', $csv_row, $post_info);
 			
 			for ( $c = 0; $c < $images_count; $c++ ) {
 				$csv_row[] = isset( $current_images[$c] ) ? $current_images[$c] : ''; // IMAGE
