@@ -127,9 +127,10 @@ if (!function_exists('geodir_admin_scripts')) {
 
         if (in_array($geodir_map_name, array('auto', 'google'))) {
             $map_lang = "&language=" . geodir_get_map_default_language();
+            $map_key = "&key=" . geodir_get_map_api_key();
             /** This filter is documented in geodirectory_template_tags.php */
             $map_extra = apply_filters('geodir_googlemap_script_extra', '');
-            wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?' . $map_lang . $map_extra, '', NULL);
+            wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?' . $map_lang . $map_key . $map_extra, '', NULL);
         }
         
         if ($geodir_map_name == 'osm') {
@@ -357,6 +358,16 @@ function geodir_before_admin_panel()
         }
     }
 
+    $geodir_load_map = get_option('geodir_load_map');
+    $need_map_key = false;
+    if($geodir_load_map=='' || $geodir_load_map=='google' || $geodir_load_map=='auto' ){
+        $need_map_key = true;
+    }
+
+    if (!geodir_get_map_api_key() && $need_map_key) {
+        echo '<div class="error"><p><strong>' . sprintf(__('Google Maps API KEY not set, %sclick here%s to set one OR use Open Street Maps instead.', 'geodirectory'), '<a href=\'' . admin_url('admin.php?page=geodirectory&tab=design_settings&active_tab=geodir_map_settings') . '\'>', '</a>') . '</strong></p></div>';
+    }
+
     if (!geodir_is_default_location_set()) {
         echo '<div class="updated fade"><p><strong>' . sprintf(__('Please %sclick here%s to set a default location, this will make the plugin work properly.', 'geodirectory'), '<a href=\'' . admin_url('admin.php?page=geodirectory&tab=default_location_settings') . '\'>', '</a>') . '</strong></p></div>';
 
@@ -366,6 +377,10 @@ function geodir_before_admin_panel()
         echo '<div class="error"><p><strong>' . __('CURL is not installed on this server, this can cause problems, please ask your server admin to install it.', 'geodirectory') . '</strong></p></div>';
 
     }
+
+
+
+
 }
 
 /**

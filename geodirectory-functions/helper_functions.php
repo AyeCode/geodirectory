@@ -472,3 +472,158 @@ function gd_die( $message = '', $title = '', $status = 400 ) {
     add_filter( 'wp_die_handler', '_gd_die_handler', 10, 3 );
     wp_die( $message, $title, array( 'response' => $status ));
 }
+
+/*
+ * Matches each symbol of PHP date format standard with jQuery equivalent codeword
+ *
+ * @since 1.6.5
+ * @param string $php_format The PHP date format.
+ * @return string The jQuery format date string.
+ */
+function geodir_date_format_php_to_jqueryui( $php_format ) {
+	$symbols = array(
+		// Day
+		'd' => 'dd',
+		'D' => 'D',
+		'j' => 'd',
+		'l' => 'DD',
+		'N' => '',
+		'S' => '',
+		'w' => '',
+		'z' => 'o',
+		// Week
+		'W' => '',
+		// Month
+		'F' => 'MM',
+		'm' => 'mm',
+		'M' => 'M',
+		'n' => 'm',
+		't' => '',
+		// Year
+		'L' => '',
+		'o' => '',
+		'Y' => 'yy',
+		'y' => 'y',
+		// Time
+		'a' => 'tt',
+		'A' => 'TT',
+		'B' => '',
+		'g' => 'h',
+		'G' => 'H',
+		'h' => 'hh',
+		'H' => 'HH',
+		'i' => 'mm',
+		's' => '',
+		'u' => ''
+	);
+
+	$jqueryui_format = "";
+	$escaping = false;
+
+	for ( $i = 0; $i < strlen( $php_format ); $i++ ) {
+		$char = $php_format[$i];
+
+		// PHP date format escaping character
+		if ( $char === '\\' ) {
+			$i++;
+
+			if ( $escaping ) {
+				$jqueryui_format .= $php_format[$i];
+			} else {
+				$jqueryui_format .= '\'' . $php_format[$i];
+			}
+
+			$escaping = true;
+		} else {
+			if ( $escaping ) {
+				$jqueryui_format .= "'";
+				$escaping = false;
+			}
+
+			if ( isset( $symbols[$char] ) ) {
+				$jqueryui_format .= $symbols[$char];
+			} else {
+				$jqueryui_format .= $char;
+			}
+		}
+	}
+
+	return $jqueryui_format;
+}
+
+/**
+ * Maybe untranslate date string for saving to the database.
+ *
+ * @param string $date The date string.
+ *
+ * @return string The untranslated date string.
+ * @since 1.6.5
+ */
+function geodir_maybe_untranslate_date($date){
+	$english_long_months = array(
+		'January',
+		'February',
+		'March',
+		'April',
+		'May',
+		'June',
+		'July',
+		'August',
+		'September',
+		'October',
+		'November',
+		'December',
+	);
+
+	$non_english_long_months  = array(
+		__('January'),
+		__('February'),
+		__('March'),
+		__('April'),
+		__('May'),
+		__('June'),
+		__('July'),
+		__('August'),
+		__('September'),
+		__('October'),
+		__('November'),
+		__('December'),
+	);
+	$date = str_replace($non_english_long_months,$english_long_months,$date);
+
+
+	$english_short_months = array(
+		' Jan ',
+		' Feb ',
+		' Mar ',
+		' Apr ',
+		' May ',
+		' Jun ',
+		' Jul ',
+		' Aug ',
+		' Sep ',
+		' Oct ',
+		' Nov ',
+		' Dec ',
+	);
+
+	$non_english_short_months = array(
+		' '._x( 'Jan', 'January abbreviation' ).' ',
+		' '._x( 'Feb', 'February abbreviation' ).' ',
+		' '._x( 'Mar', 'March abbreviation' ).' ',
+		' '._x( 'Apr', 'April abbreviation' ).' ',
+		' '._x( 'May', 'May abbreviation' ).' ',
+		' '._x( 'Jun', 'June abbreviation' ).' ',
+		' '._x( 'Jul', 'July abbreviation' ).' ',
+		' '._x( 'Aug', 'August abbreviation' ).' ',
+		' '._x( 'Sep', 'September abbreviation' ).' ',
+		' '._x( 'Oct', 'October abbreviation' ).' ',
+		' '._x( 'Nov', 'November abbreviation' ).' ',
+		' '._x( 'Dec', 'December abbreviation' ).' ',
+	);
+
+	$date = str_replace($non_english_short_months,$english_short_months,$date);
+
+
+	return $date;
+}
