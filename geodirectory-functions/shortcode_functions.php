@@ -761,6 +761,14 @@ function geodir_sc_gd_listings_output($args = array()) {
 			jQuery.post(geodir_var.geodir_ajax_url, data, function(response) {
 			  if(response && response != '0') {
 				jQuery(container).html(response);
+                  <?php
+                  /**
+                   * if lazyload images enabled then refresh them once ajax page changed.
+                   */
+                  if(get_option('geodir_lazy_load',1)){?>
+                  geodir_init_lazy_load();
+                  <?php }?>
+
 			  }
 			});
 		  }

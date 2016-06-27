@@ -388,14 +388,25 @@ if (!function_exists('geodir_save_listing')) {
                         $date_format = isset($extra_fields['date_format']) && $extra_fields['date_format'] != '' ? $extra_fields['date_format'] : $date_format;
                     }
 
-                    $search = array('dd', 'mm', 'yy');
-                    $replace = array('d', 'm', 'Y');
+                    // check if we need to change the format or not
+                    $date_format_len = strlen(str_replace(' ', '', $date_format));
+                    if($date_format_len>5){// if greater then 5 then it's the old style format.
 
-                    $date_format = str_replace($search, $replace, $date_format);
+                        $search = array('dd','d','DD','mm','m','MM','yy'); //jQuery UI datepicker format
+                        $replace = array('d','j','l','m','n','F','Y');//PHP date format
 
-                    $post_htmlvar_value = $date_format == 'd/m/Y' ? str_replace('/', '-', $request_info[$name]) : $request_info[$name]; // PHP doesn't work well with dd/mm/yyyy format
+                        $date_format = str_replace($search, $replace, $date_format);
 
-                    $datetime = date("Y-m-d", strtotime($post_htmlvar_value));
+                        $post_htmlvar_value = $date_format == 'd/m/Y' ? str_replace('/', '-', $request_info[$name]) : $request_info[$name];
+
+                    }else{
+                        $post_htmlvar_value = $request_info[$name];
+                    }
+
+                    $post_htmlvar_value =  geodir_maybe_untranslate_date($post_htmlvar_value); // maybe untranslate date string if it was translated
+
+                    $datetime = date("Y-m-d", strtotime($post_htmlvar_value)); // save as sql format Y-m-d
+
                 }
                 $gd_post_info[$name] = $datetime;
             } else if ($type == 'multiselect') {

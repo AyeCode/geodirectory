@@ -683,88 +683,37 @@ $field_data_type = isset($field_info->data_type) ? $field_info->data_type : '';
                     <tr>
                         <td><strong><?php _e('Date Format :', 'geodirectory');?></strong></td>
                         <td align="left" style="overflow:inherit;">
-                            <input type="text" name="extra[date_format]" id="date_format"
-                                   value="<?php if (isset($extra['date_format'])) {
-                                       echo esc_attr($extra['date_format']);
-                                   }else{echo "mm/dd/yy";}?>"/>
-
-                            <div style="position:relative; cursor:pointer;">
-                        <span onclick="jQuery('#show_dateformat').toggle();">
-                            [Valid Date Formats]
-                        </span>
-
-                                <div id="show_dateformat"
-                                     style=" background:#CCCCCC; height:auto;position:absolute; z-index:100; display:none;">
-
-                                    <table class="doctable table">
-                                        <caption><strong><?php _e('Date Formats: dd/mm/yy', 'geodirectory'); ?></strong>
-                                        </caption>
-
-                                        <thead>
-
-                                        <tr>
-                                            <th><?php _e('Format', 'geodirectory'); ?></th>
-                                            <th><?php _e('Description', 'geodirectory'); ?></th>
-                                        </tr>
-                                        </thead>
-
-                                        <tbody class="tbody">
-
-                                        <tr>
-                                            <td>d</td>
-                                            <td><?php _e('day of month (no leading zero)', 'geodirectory'); ?></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>dd</td>
-                                            <td><?php _e('day of month (two digit)', 'geodirectory'); ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td>D</td>
-                                            <td><?php _e('day name short', 'geodirectory'); ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td>DD</td>
-                                            <td><?php _e('day name long', 'geodirectory'); ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td>m</td>
-                                            <td><?php _e('month of year (no leading zero)', 'geodirectory'); ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td>mm</td>
-                                            <td><?php _e('month of year (two digit)', 'geodirectory'); ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td>M</td>
-                                            <td><?php _e('month name short', 'geodirectory'); ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td>MM</td>
-                                            <td><?php _e('month name long', 'geodirectory'); ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td>y</td>
-                                            <td><?php _e('year (two digit)', 'geodirectory'); ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td>yy</td>
-                                            <td><?php _e('year (four digit)', 'geodirectory'); ?></td>
-                                        </tr>
-
-
-
-
-
-                                        </tbody>
-
-                                    </table>
-
-                                </div>
-
-                            </div>
-                            <br/>
-                            <span><?php _e('Enter the date format.', 'geodirectory');?></span>
+                            <?php
+                            $date_formats = array(
+                                'm/d/Y',
+                                'd/m/Y',
+                                'Y/m/d',
+                                'm-d-Y',
+                                'd-m-Y',
+                                'Y-m-d',
+                                'F j, Y',
+                            );
+                            /**
+                             * Filter the custom field date format options.
+                             *
+                             * @since 1.6.5
+                             * @param array $date_formats The PHP date format array.
+                             */
+                            $date_formats = apply_filters('geodir_date_formats',$date_formats);
+                            ?>
+                            <select name="extra[date_format]" id="date_format">
+                                <?php
+                                foreach($date_formats as $format){
+                                    $selected = '';
+                                    if(esc_attr($extra['date_format'])==$format){
+                                        $selected = "selected='selected'";
+                                    }
+                                    echo "<option $selected value='$format'>$format       (".date_i18n( $format, time()).")</option>";
+                                }
+                                ?>
+                            </select>
+                            
+                            <span><?php _e('Select the date format.', 'geodirectory');?></span>
                         </td>
                     </tr>
                 <?php

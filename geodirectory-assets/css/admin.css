@@ -567,7 +567,11 @@ body.term-php .form-field textarea {
 #gd_ie_reqs .form-table td {
 	padding: 3px 5px;
 }
-
+.gd-import-export .gd-imex-dates input[type="text"]{
+    margin-left: 3px;
+    margin-right: 15px;
+    width: 140px;
+}
 div.update-nag{width: 95%;}
 
 /***********************---------------MEDIA CSS-------------*****************************/

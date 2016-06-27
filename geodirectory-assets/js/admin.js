@@ -85,6 +85,10 @@ jQuery(document).ready(function() {
             jQuery(this).closest('.gd-parent-cats-list').find('.gd-cat-row-' + chkVal + ' input[type="checkbox"]').prop("checked", isChecked);
         }
     });
+    
+    jQuery('.gd-import-export [data-type="date"]').each(function() {
+        jQuery(this).datepicker({changeMonth: true, changeYear: true, dateFormat:'yy-mm-dd'});
+    });
 });
 /* Check Uncheck All Related Options End*/
 

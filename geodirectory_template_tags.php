@@ -90,6 +90,7 @@ function geodir_templates_scripts()
 
     if (in_array($geodir_map_name, array('auto', 'google'))) {
         $map_lang = "&language=" . geodir_get_map_default_language();
+        $map_key = "&key=" . geodir_get_map_api_key();
         /**
          * Filter the variables that are added to the end of the google maps script call.
          *
@@ -99,7 +100,7 @@ function geodir_templates_scripts()
          * @param string $var The string to filter, default is empty string.
          */
         $map_extra = apply_filters('geodir_googlemap_script_extra', '');
-        wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?' . $map_lang . $map_extra, '', NULL);
+        wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?' . $map_lang . $map_key . $map_extra , '', NULL);
     }
     
     if ($geodir_map_name == 'osm') {
