@@ -2,6 +2,7 @@ v1.6.5
 Location page breadcrumb now uses location page slug - CHANGED
 Date custom field date formats now more standardized - CHANGED
 Claimed column added in exported listings csv file - FIXED
+Detail map displaying multiple listings - FIXED
 
 v1.6.4
 Date custom field can sometimes display default date on preview page - FIXED
