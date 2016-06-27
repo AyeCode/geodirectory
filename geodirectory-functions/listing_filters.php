@@ -951,21 +951,3 @@ function geodir_filter_widget_where($where)
     }
     return $where;
 }
-
-
-function geodir_related_posts_fields($fields) {
-    global $wp_query, $wpdb, $table, $post;
-
-//    $fields .= ", " . $table . ".* ";
-//
-//    $DistanceRadius = geodir_getDistanceRadius(get_option('geodir_search_dist_1'));
-//
-//    $mylat = $post->post_latitude;
-//    $mylon = $post->post_longitude;
-//
-//    $fields .= " , (" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(" . $table . ".post_latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(" . $table . ".post_latitude) * pi()/180) *POWER(SIN(($mylon - " . $table . ".post_longitude) * pi()/180 / 2), 2) )))as distance ";
-
-//    var_dump($fields);
-    return $fields;
-}
-//add_filter('posts_fields', 'geodir_related_posts_fields', 100);
