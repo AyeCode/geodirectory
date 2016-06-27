@@ -1223,7 +1223,11 @@ function geodir_breadcrumb()
             $page_title = get_the_title();
 
             if (geodir_is_page('location')) {
-                $page_title = defined('GD_LOCATION') ? GD_LOCATION : __('Location', 'geodirectory');
+                $location_page_id = geodir_location_page_id();
+                $loc_post = get_post( $location_page_id );
+                $post_name = $loc_post->post_name;
+                $slug= ucwords(str_replace('-',' ',$post_name));
+                $page_title = !empty($slug )? $slug : __('Location', 'geodirectory');
             }
 
             $breadcrumb .= '<li>' . $separator;

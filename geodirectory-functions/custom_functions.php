@@ -922,6 +922,25 @@ function geodir_get_map_default_language()
     return apply_filters('geodir_default_map_language', $geodir_default_map_language);
 }
 
+/**
+ * Returns the Google maps api key.
+ *
+ * @since 1.6.4
+ * @package GeoDirectory
+ * @return string Returns the api key.
+ */
+function geodir_get_map_api_key()
+{
+    $key = get_option('geodir_google_api_key');
+    /**
+     * Filter Google maps api key.
+     *
+     * @since 1.6.4
+     * @param string $key Google maps api key.
+     */
+    return apply_filters('geodir_google_api_key', $key);
+}
+
 
 /**
  * Adds meta keywords and description for SEO.

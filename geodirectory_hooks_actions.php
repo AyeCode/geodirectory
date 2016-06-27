@@ -350,7 +350,7 @@ function geodir_detail_page_sidebar_content_sorting()
                 'geodir_share_this_button',
                 'geodir_detail_page_google_analytics',
                 'geodir_edit_post_link',
-                //'geodir_detail_page_review_rating',
+                'geodir_detail_page_review_rating',
                 'geodir_detail_page_more_info'
             ) // end of array 
         ); // end of apply filter
@@ -2594,16 +2594,23 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                                 $date_format = $date_format['date_format'];
                             }
 
-                            $search = array('dd','d','DD','mm','m','MM','yy'); //jQuery UI datepicker format
-                            $replace = array('d','j','l','m','n','F','Y');//PHP date format
+                            // check if we need to change the format or not
+                            $date_format_len = strlen(str_replace(' ', '', $date_format));
+                            if($date_format_len>5){// if greater then 5 then it's the old style format.
 
-                            $date_format = str_replace($search, $replace, $date_format);
+                                $search = array('dd','d','DD','mm','m','MM','yy'); //jQuery UI datepicker format
+                                $replace = array('d','j','l','m','n','F','Y');//PHP date format
 
-                            $post_htmlvar_value = $date_format == 'd/m/Y' ? str_replace('/', '-', $post->{$type['htmlvar_name']}) : $post->{$type['htmlvar_name']}; // PHP doesn't work well with dd/mm/yyyy format
+                                $date_format = str_replace($search, $replace, $date_format);
+
+                                $post_htmlvar_value = ($date_format == 'd/m/Y' || $date_format == 'j/n/Y' ) ? str_replace('/', '-', $post->{$type['htmlvar_name']}) : $post->{$type['htmlvar_name']}; // PHP doesn't work well with dd/mm/yyyy format
+                            }else{
+                                $post_htmlvar_value = $post->{$type['htmlvar_name']};
+                            }
 
                             $value = '';
                             if ($post->{$type['htmlvar_name']} != '')
-                                $value = date($date_format, strtotime($post_htmlvar_value));
+                                $value = date_i18n($date_format, strtotime($post_htmlvar_value));
 
                             if (strpos($field_icon, 'http') !== false) {
                                 $field_icon_af = '';
