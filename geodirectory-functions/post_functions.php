@@ -1600,7 +1600,7 @@ if (!function_exists('geodir_show_image')) {
                     }else{
                         //$html = '<div class="geodir_thumbnail" style="background-image:url(\'' . $image->src . '\');"></div>';
                         //$html = '<div data-src="'.$image->src.'" class="geodir_thumbnail" ></div>';
-                        $html = '<div data-src="'.$image->src.'" class="geodir_thumbnail geodir_lazy_load_thumbnail" ></div>';
+                        $html = '<div data-src="'.str_replace(' ','%20',$image->src).'" class="geodir_thumbnail geodir_lazy_load_thumbnail" ></div>';
 
                     }
 
