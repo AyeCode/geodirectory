@@ -540,6 +540,7 @@ function gdsc_validate_list_filter_choice($filter_choice)
  * Get the geodirectory listings.
  *
  * @since 1.4.2
+ * @since 1.6.5 $tags parameter added.
  *
  * @global string $gridview_columns_widget The girdview style of the listings for widget.
  * @global bool $geodir_is_widget_listing Is this a widget listing?. Default: false.
@@ -564,6 +565,7 @@ function geodir_sc_gd_listings_output($args = array()) {
 	$with_pagination 	 = !empty($args['with_pagination']) ? true : false;
 	$event_type 	 	 = !empty($args['event_type']) ? $args['event_type'] : '';
     $shortcode_content   = !empty($args['shortcode_content']) ? trim($args['shortcode_content']) : '';
+    $tags                = !empty($args['tags']) ? $args['tags'] : array();
     /**
      * Filter the content text displayed when no listings found.
      *
@@ -634,6 +636,32 @@ function geodir_sc_gd_listings_output($args = array()) {
         );
 
         $query_args['tax_query'] = array($tax_query);
+    }
+    
+    if (!empty($tags)) {
+        // Clean tags
+        if (!is_array($tags)) {
+            $comma = _x(',', 'tag delimiter');
+            if ( ',' !== $comma ) {
+                $tags = str_replace($comma, ',', $tags);
+            }
+            $tags = explode(',', trim($tags, " \n\t\r\0\x0B,"));
+            $tags = array_map('trim', $tags);
+        }
+        
+        if (!empty($tags)) {
+            $tag_query = array(
+                'taxonomy' => $post_type . '_tags',
+                'field' => 'name',
+                'terms' => $tags
+            );
+
+            if (!empty($query_args['tax_query'])) {
+                $query_args['tax_query'][] = $tag_query;
+            } else {
+                $query_args['tax_query'] = array($tag_query);
+            }
+        }
     }
 
     global $gridview_columns_widget, $geodir_is_widget_listing;
