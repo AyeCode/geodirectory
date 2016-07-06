@@ -1006,6 +1006,7 @@ add_shortcode('gd_bestof_widget', 'geodir_sc_bestof_widget');
  *
  * @since 1.4.2
  * @since 1.5.9 New parameter "post_author" added.
+ * @since 1.6.5 tags parameter added.
  *
  * @global object $post The current post object.
  *
@@ -1036,13 +1037,13 @@ add_shortcode('gd_bestof_widget', 'geodir_sc_bestof_widget');
                                            Required $with_pagination true.
  *     @type int|bool $bottom_pagination   Display pagination on bottom of listings. Default 1.
                                            Required $with_pagination true.
+       @type string $tags                  Post tags. Ex: "Tag1,TagB" Optional.
  * }
  * @param string $content The enclosed content. Optional.
  * @return string HTML content to display geodirectory listings.
  */
 function geodir_sc_gd_listings($atts, $content = '') {
     global $post;
-    
     $defaults = array(
         'title'                 => '',
         'post_type'             => 'gd_place',
@@ -1062,7 +1063,8 @@ function geodir_sc_gd_listings($atts, $content = '') {
         'with_pagination'       => '1',
         'top_pagination'        => '0',
         'bottom_pagination'     => '1',
-        'without_no_results'     => 0,
+        'without_no_results'    => 0,
+        'tags'                  => ''
     );
     $params = shortcode_atts($defaults, $atts);
 
@@ -1124,6 +1126,20 @@ function geodir_sc_gd_listings($atts, $content = '') {
     $params['with_pagination']      = gdsc_to_bool_val($params['with_pagination']);
     $params['top_pagination']       = gdsc_to_bool_val($params['top_pagination']);
     $params['bottom_pagination']    = gdsc_to_bool_val($params['bottom_pagination']);
+
+    // Clean tags
+    if (!empty($params['tags'])) {
+        if (!is_array($params['tags'])) {
+            $comma = _x(',', 'tag delimiter');
+            if ( ',' !== $comma ) {
+                $params['tags'] = str_replace($comma, ',', $params['tags']);
+            }
+            $params['tags'] = explode(',', trim($params['tags'], " \n\t\r\0\x0B,"));
+            $params['tags'] = array_map('trim', $params['tags']);
+        }
+    } else {
+        $params['tags'] = array();
+    }
 
     /**
      * End of validation

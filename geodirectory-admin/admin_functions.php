@@ -4065,6 +4065,8 @@ function geodir_ajax_import_export() {
                     $json['error'] = NULL;
                     $json['rows'] = 0;
                     
+                    $lc_all = setlocale(LC_ALL, 0); // Fix issue of fgetcsv ignores special characters when they are at the beginning of line
+                    setlocale(LC_ALL, 'en_US.UTF-8');
                     if ( ( $handle = fopen($target_path, "r" ) ) !== FALSE ) {
                         while ( ( $data = fgetcsv( $handle, 100000, "," ) ) !== FALSE ) {
                             if ( !empty( $data ) ) {
@@ -4073,6 +4075,7 @@ function geodir_ajax_import_export() {
                         }
                         fclose($handle);
                     }
+                    setlocale(LC_ALL, $lc_all);
 
                     $json['rows'] = (!empty($file) && count($file) > 1) ? count($file) - 1 : 0;
                     
@@ -6749,7 +6752,7 @@ function geodir_imex_get_filter_where($where = '', $post_type = '') {
         foreach ( $filters as $field => $value ) {
             switch ($field) {
                 case 'start_date':
-                    $where .= " AND `" . $wpdb->posts . "`.`post_date` >= '" . sanitize_text_field( $value ) . " 23:59:59'";
+                    $where .= " AND `" . $wpdb->posts . "`.`post_date` >= '" . sanitize_text_field( $value ) . " 00:00:00'";
                 break;
                 case 'end_date':
                     $where .= " AND `" . $wpdb->posts . "`.`post_date` <= '" . sanitize_text_field( $value ) . " 23:59:59'";
