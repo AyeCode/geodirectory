@@ -12,7 +12,7 @@ More information can be found at [wpgeodirectory.com](http://wpgeodirectory.com/
 ### Minimum Requirements ###
 
 * WordPress 3.1 or greater
-* PHP version 5.2.4 or greater
+* PHP version 5.3 or greater
 * MySQL version 5.0 or greater
 
 ### Automatic installation ###
