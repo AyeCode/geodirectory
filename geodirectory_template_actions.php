@@ -1673,6 +1673,13 @@ function geodir_action_listings_description()
         if ($term_desc && !$saved_data) {
             $saved_data = $term_desc;
         }
+
+        // stop payment manager filtering content length
+        $filter_priority = has_filter( 'the_content', 'geodir_payments_the_content' );
+        if ( false !== $filter_priority ) {
+            remove_filter( 'the_content', 'geodir_payments_the_content', $filter_priority );
+        }
+
         /**
          * Apply the core filter `the_content` filter to the variable string.
          *
@@ -1682,6 +1689,12 @@ function geodir_action_listings_description()
          * @param string $var The string to apply the filter to.
          */
         $cat_description = apply_filters('the_content', $saved_data);
+
+
+        if ( false !== $filter_priority ) {
+            add_filter( 'the_content', 'geodir_payments_the_content', $filter_priority );
+        }
+
         if ($cat_description) {
             ?>
 
