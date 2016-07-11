@@ -4780,3 +4780,20 @@ function geodir_filter_empty_terms($terms) {
     }
     return $return;
 }
+
+
+/**
+ * Remove the hentry class structured data from details pages.
+ *
+ * @since 1.6.5
+ * @param $class
+ *
+ * @return array
+ */
+function geodir_remove_hentry( $class ) {
+    if(geodir_is_page('detail')){
+        $class = array_diff( $class, array( 'hentry' ) );
+    }
+    return $class;
+}
+add_filter( 'post_class', 'geodir_remove_hentry' );
