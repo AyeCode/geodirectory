@@ -713,6 +713,8 @@ function geodir_related_posts_display($request) {
         global $wpdb, $post, $gd_session, $related_nearest, $related_parent_lat, $related_parent_lon;
         $related_parent_lat = $post->post_latitude;
         $related_parent_lon = $post->post_longitude;
+        $arr_detail_page_tabs = geodir_detail_page_tabs_list();
+        $is_display = $arr_detail_page_tabs['related_listing']['is_display'];
         $origi_post = $post;
         $post_type = '';
         $post_id = '';
@@ -827,7 +829,7 @@ function geodir_related_posts_display($request) {
                 'order_by' => $list_sort,
                 'post__not_in' => array($post_id),
                 'excerpt_length' => $character_count,
-                'related_listings' => true
+                'related_listings' => $is_display
             );
 
             $tax_query = array('taxonomy' => $category_taxonomy,
@@ -1405,7 +1407,7 @@ function geodir_show_detail_page_tabs()
             $related_listing_array = get_option('geodir_add_related_listing_posttypes');
 
         $related_listing = '';
-        if (in_array($post->post_type, $related_listing_array) && $arr_detail_page_tabs['related_listing']['is_display']) {
+        if (in_array($post->post_type, $related_listing_array) && isset($arr_detail_page_tabs['related_listing']['is_display']) && $arr_detail_page_tabs['related_listing']['is_display']) {
             $request = array('post_number' => get_option('geodir_related_post_count'),
                 'relate_to' => get_option('geodir_related_post_relate_to'),
                 'layout' => get_option('geodir_related_post_listing_view'),
