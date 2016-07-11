@@ -967,13 +967,11 @@ function geodir_related_posts_fields($fields) {
     return $fields;
 }
 function geodir_related_posts_fields_filter($query) {
-    if (geodir_is_page('detail')) {
-        if ( isset($query->query_vars['is_geodir_loop']) && $query->query_vars['is_geodir_loop']
-            && isset($query->query_vars['order_by']) && $query->query_vars['order_by'] == 'nearest'
-            && isset($query->query_vars['related_listings']) && $query->query_vars['related_listings']
-        ) {
-            add_filter('posts_fields', 'geodir_related_posts_fields', 1);
-        }
+    if ( isset($query->query_vars['is_geodir_loop']) && $query->query_vars['is_geodir_loop']
+        && isset($query->query_vars['order_by']) && $query->query_vars['order_by'] == 'nearest'
+        && isset($query->query_vars['related_listings']) && $query->query_vars['related_listings']
+    ) {
+        add_filter('posts_fields', 'geodir_related_posts_fields', 1);
     }
 }
 add_action('pre_get_posts', 'geodir_related_posts_fields_filter', 1);

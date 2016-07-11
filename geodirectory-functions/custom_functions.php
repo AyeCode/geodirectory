@@ -714,6 +714,14 @@ function geodir_related_posts_display($request) {
         $related_parent_lat = $post->post_latitude;
         $related_parent_lon = $post->post_longitude;
         $arr_detail_page_tabs = geodir_detail_page_tabs_list();
+
+        $related_listing_array = array();
+        if (get_option('geodir_add_related_listing_posttypes'))
+            $related_listing_array = get_option('geodir_add_related_listing_posttypes');
+        if (in_array($post->post_type, $related_listing_array)) {
+            $arr_detail_page_tabs['related_listing']['is_display'] = true;
+        }
+
         $is_display = $arr_detail_page_tabs['related_listing']['is_display'];
         $origi_post = $post;
         $post_type = '';
@@ -1405,6 +1413,10 @@ function geodir_show_detail_page_tabs()
         $related_listing_array = array();
         if (get_option('geodir_add_related_listing_posttypes'))
             $related_listing_array = get_option('geodir_add_related_listing_posttypes');
+
+        if (in_array($post->post_type, $related_listing_array)) {
+            $arr_detail_page_tabs['related_listing']['is_display'] = true;
+        }
 
         $related_listing = '';
         if (in_array($post->post_type, $related_listing_array) && isset($arr_detail_page_tabs['related_listing']['is_display']) && $arr_detail_page_tabs['related_listing']['is_display']) {
