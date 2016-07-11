@@ -5422,7 +5422,6 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
 			$csv_row[] = 'expire_date';
 		}
         $csv_row[] = 'post_date';
-		$csv_row[] = 'geodir_video';
 		$csv_row[] = 'post_address';
 		$csv_row[] = 'post_city';
 		$csv_row[] = 'post_region';
@@ -5467,7 +5466,7 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
 		}
         
         /**
-         * Filter columns feild names of gd export listings csv.
+         * Filter columns field names of gd export listings csv.
          *
          * @since 1.6.5
          * @package GeoDirectory
@@ -5619,7 +5618,6 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
 				$csv_row[] = $post_info['expire_date'] != '' && geodir_strtolower($post_info['expire_date']) != 'never' ? date_i18n('Y-m-d', strtotime($post_info['expire_date'])) : 'Never'; // expire_date
 			}
             $csv_row[] = $post_info['post_date']; // post_date
-			$csv_row[] = $post_info['geodir_video']; // geodir_video
 			$csv_row[] = $post_info['post_address']; // post_address
 			$csv_row[] = $post_info['post_city']; // post_city
 			$csv_row[] = $post_info['post_region']; // post_region
