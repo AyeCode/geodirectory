@@ -217,9 +217,11 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = 
 
         $geodir_cat_icons = geodir_get_term_icon();
 
+        $geodir_default_map_search_pt = (get_option('geodir_default_map_search_pt')) ? get_option('geodir_default_map_search_pt') :  'gd_place';
+        $post_type = isset($_REQUEST['post_type']) ? $_REQUEST['post_type'] : $geodir_default_map_search_pt;
         foreach ($cat_terms as $cat_term):
 
-            $post_type = isset($_REQUEST['post_type']) ? $_REQUEST['post_type'] : 'gd_place';
+
 
             $icon = !empty($geodir_cat_icons) && isset($geodir_cat_icons[$cat_term->term_id]) ? $geodir_cat_icons[$cat_term->term_id] : '';
 

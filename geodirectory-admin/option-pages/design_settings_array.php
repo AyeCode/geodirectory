@@ -1158,7 +1158,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
                         'auto' => __('Load Automatic', 'geodirectory'),
                         'google' => __('Load Google Maps API', 'geodirectory'),
                         'osm' => __('Load OpenStreetMap API', 'geodirectory'),
-                        'none' => __('Disbale Maps', 'geodirectory')
+                        'none' => __('Disable Maps', 'geodirectory')
                     )
     ),
 

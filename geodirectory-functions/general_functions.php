@@ -1898,11 +1898,11 @@ function geodir_get_wpml_element_id($page_id, $post_type)
 }
 
 /**
- * WPML check elemet ID.
+ * WPML check element ID.
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @deprecated 1.4.6 No longer needed as we handel translating GD pages as normal now.
+ * @deprecated 1.4.6 No longer needed as we handle translating GD pages as normal now.
  */
 function geodir_wpml_check_element_id()
 {
@@ -1979,7 +1979,7 @@ function geodir_widget_listings_get_order($query_args)
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @since 1.4.2 New paramater $count_only added
+ * @since 1.4.2 New parameter $count_only added
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @global string $table_prefix WordPress Database Table prefix.
@@ -2808,7 +2808,7 @@ function geodir_listing_slider_widget_output($args = '', $instance = '')
 
     if ($post_type == 'gd_event') {
         $query_args['gedir_event_listing_filter'] = 'upcoming';
-    }// show only upcomming events
+    }// show only upcoming events
 
     $widget_listings = geodir_get_widget_listings($query_args);
     if (!empty($widget_listings) || (isset($with_no_results) && $with_no_results)) {
@@ -4163,39 +4163,53 @@ function geodir_wpseo_replacements($vars){
 add_filter('geodir_seo_meta_title','geodir_filter_title_variables',10,3);
 add_filter('geodir_seo_page_title','geodir_filter_title_variables',10,2);
 add_filter('geodir_seo_meta_description_pre','geodir_filter_title_variables',10,3);
-function geodir_filter_title_variables($title, $gd_page, $sep=''){
 
+/**
+ * Filter the title variables.
+ *
+ * %%date%%	                    Replaced with the date of the post/page
+ * %%title%%	                Replaced with the title of the post/page
+ * %%sitename%%	                The site's name
+ * %%sitedesc%%	                The site's tagline / description
+ * %%excerpt%%	                Replaced with the post/page excerpt (or auto-generated if it does not exist)
+ * %%tag%%	                    Replaced with the current tag/tags
+ * %%category%%	                Replaced with the post categories (comma separated)
+ * %%category_description%%	    Replaced with the category description
+ * %%tag_description%%	        Replaced with the tag description
+ * %%term_description%%	        Replaced with the term description
+ * %%term_title%%	            Replaced with the term name
+ * %%searchphrase%%	            Replaced with the current search phrase
+ * %%sep%%	                    The separator defined in your theme's wp_title() tag.
+ * 
+ * ADVANCED
+ * %%pt_single%%	            Replaced with the post type single label
+ * %%pt_plural%%	            Replaced with the post type plural label
+ * %%modified%%	                Replaced with the post/page modified time
+ * %%id%%	                    Replaced with the post/page ID
+ * %%name%%	                    Replaced with the post/page author's 'nicename'
+ * %%userid%%	                Replaced with the post/page author's userid
+ * %%page%%	                    Replaced with the current page number (i.e. page 2 of 4)
+ * %%pagetotal%%	            Replaced with the current page total
+ * %%pagenumber%%	            Replaced with the current page number
+ *
+ * @since 1.5.7
+ * @package GeoDirectory
+ *
+ * @global object $wp WordPress object.
+ * @global object $post The current post object.
+ *
+ * @param string $title The title with variables.
+ * @param string $gd_page The page being filtered.
+ * @param string $sep The separator, default: `|`.
+ * @return string Title after filtered variables.
+ */
+function geodir_filter_title_variables($title, $gd_page, $sep = '') {
+    global $wp, $post;
 
-    if(!$gd_page || !$title){return $title;}// if no a GD page then bail.
-    global $post;
-    //print_r($post);
-    /*
-    %%date%%	                Replaced with the date of the post/page
-    %%title%%	                Replaced with the title of the post/page
-    %%sitename%%	            The site's name
-    %%sitedesc%%	            The site's tagline / description
-    %%excerpt%%	                Replaced with the post/page excerpt (or auto-generated if it does not exist)
-    %%tag%%	                    Replaced with the current tag/tags
-    %%category%%	            Replaced with the post categories (comma separated)
-    %%category_description%%	Replaced with the category description
-    %%tag_description%%	        Replaced with the tag description
-    %%term_description%%	    Replaced with the term description
-    %%term_title%%	            Replaced with the term name
-    %%searchphrase%%	        Replaced with the current search phrase
-    %%sep%%	                    The separator defined in your theme's wp_title() tag.
-
-    ADVANCED
-    %%pt_single%%	            Replaced with the post type single label
-    %%pt_plural%%	            Replaced with the post type plural label
-    %%modified%%	            Replaced with the post/page modified time
-    %%id%%	                    Replaced with the post/page ID
-    %%name%%	                Replaced with the post/page author's 'nicename'
-    %%userid%%	                Replaced with the post/page author's userid
-    %%page%%	                Replaced with the current page number (i.e. page 2 of 4)
-    %%pagetotal%%	            Replaced with the current page total
-    %%pagenumber%%	            Replaced with the current page number
-     */
-
+    if (!$gd_page || !$title) {
+        return $title; // if no a GD page then bail.
+    }
+    
     if ($sep == '') {
         /**
          * Filter the page title separator.
@@ -4207,128 +4221,94 @@ function geodir_filter_title_variables($title, $gd_page, $sep=''){
         $sep = apply_filters('geodir_page_title_separator', '|');
     }
 
-
-    if(strpos($title,'%%title%%') !== false){
-        $title = str_replace("%%title%%",$post->post_title,$title);
+    if (strpos($title,'%%title%%') !== false) {
+        $title = str_replace("%%title%%", $post->post_title, $title);
     }
 
-    if(strpos($title,'%%sitename%%') !== false){
-        $title = str_replace("%%sitename%%",get_bloginfo('name'),$title);
+    if (strpos($title,'%%sitename%%') !== false) {
+        $title = str_replace("%%sitename%%", get_bloginfo('name'), $title);
     }
 
-    if(strpos($title,'%%sitedesc%%') !== false){
-        $title = str_replace("%%sitedesc%%",get_bloginfo('description'),$title);
+    if (strpos($title,'%%sitedesc%%') !== false) {
+        $title = str_replace("%%sitedesc%%", get_bloginfo('description'), $title);
     }
 
-    if(strpos($title,'%%excerpt%%') !== false){
-        $title = str_replace("%%excerpt%%",strip_tags(get_the_excerpt()),$title);
+    if (strpos($title,'%%excerpt%%') !== false) {
+        $title = str_replace("%%excerpt%%", strip_tags(get_the_excerpt()), $title);
     }
-
-    if(strpos($title,'%%pt_single%%') !== false){
-        $single_name = '';
-        if($gd_page=='search' || $gd_page=='author'){
-            $geodir_post_types = get_option('geodir_post_types');
-            $spt = esc_attr($_REQUEST['stype']);
-            if(isset($geodir_post_types[$spt]['labels']['singular_name'])){
-                $single_name = __($geodir_post_types[$spt]['labels']['singular_name'],'geodirectory');
-            }
-        }elseif($gd_page=='add-listing'){
-            $geodir_post_types = get_option('geodir_post_types');
-            $spt = isset($_REQUEST['listing_type']) ? esc_attr($_REQUEST['listing_type']) : '';
-            if(!$spt && isset($_REQUEST['pid'])){
-                $spt = get_post_type( $_REQUEST['pid'] );
-            }
-            if(!$spt){$spt='gd_place';}
-            if(isset($geodir_post_types[$spt]['labels']['singular_name'])){
-                $single_name = __($geodir_post_types[$spt]['labels']['singular_name'],'geodirectory');
-            }
+    
+    if ($gd_page == 'search' || $gd_page == 'author') {
+        $post_type = sanitize_text_field($_REQUEST['stype']);
+    } else if ($gd_page == 'add-listing') {
+        $post_type = sanitize_text_field($_REQUEST['listing_type']);
+        $post_type = !$post_type && !empty($_REQUEST['pid']) ? get_post_type((int)$_REQUEST['pid']) : $post_type;
+    } else if (isset($post->post_type) && $post->post_type && in_array($post->post_type , geodir_get_posttypes())) {
+        $post_type = $post->post_type;
+    } else {
+        $post_type = get_query_var('post_type');
+    }
+    
+    if (strpos($title, '%%pt_single%%') !== false) {        
+        $singular_name = '';
+        if ($post_type && $singular_name = get_post_type_singular_label($post_type)) {
+            $singular_name = __($singular_name, 'geodirectory');
         }
-        elseif($post->post_type){
-            $geodir_post_types = get_option('geodir_post_types');
-            if(isset($geodir_post_types[$post->post_type]['labels']['singular_name'])){
-                $single_name = __($geodir_post_types[$post->post_type]['labels']['singular_name'],'geodirectory');
-            }
-
-
-        }
-        $title = str_replace("%%pt_single%%",$single_name,$title);
+        
+        $title = str_replace("%%pt_single%%", $singular_name, $title);
     }
 
-    if(strpos($title,'%%pt_plural%%') !== false){
+    if (strpos($title, '%%pt_plural%%') !== false) {        
         $plural_name = '';
-        if($gd_page=='search' || $gd_page=='author'){
-            $geodir_post_types = get_option('geodir_post_types');
-            $spt = esc_attr($_REQUEST['stype']);
-            if(isset($geodir_post_types[$spt]['labels']['name'])){
-                $plural_name = __($geodir_post_types[$spt]['labels']['name'],'geodirectory');
-            }
-        }elseif($gd_page=='add-listing'){
-            $geodir_post_types = get_option('geodir_post_types');
-            $spt = sanitize_text_field($_REQUEST['listing_type']);
-            if(!$spt){$spt='gd_place';}
-            if(isset($geodir_post_types[$spt]['labels']['name'])){
-                $plural_name = __($geodir_post_types[$spt]['labels']['name'],'geodirectory');
-            }
+        if ($post_type && $plural_name = get_post_type_plural_label($post_type)) {
+            $plural_name = __($plural_name, 'geodirectory');
         }
-        elseif(isset($post->post_type) && $post->post_type){
-            $geodir_post_types = get_option('geodir_post_types');
-            if(isset($geodir_post_types[$post->post_type]['labels']['name'])){
-                $plural_name = __($geodir_post_types[$post->post_type]['labels']['name'],'geodirectory');
-            }
-
-        }
-        $title = str_replace("%%pt_plural%%",$plural_name,$title);
+        
+        $title = str_replace("%%pt_plural%%", $plural_name, $title);
     }
 
-
-
-    if(strpos($title,'%%category%%') !== false){
+    if (strpos($title, '%%category%%') !== false) {
         $cat_name = '';
 
-        if($gd_page=='detail') {
+        if ($gd_page=='detail') {
             if ($post->default_category) {
                 $cat = get_term($post->default_category, $post->post_type . 'category');
                 $cat_name = (isset($cat->name)) ? $cat->name : '';
             }
-        }elseif($gd_page=='listing'){
+        } else if ($gd_page == 'listing') {
             $queried_object = get_queried_object();
-            if(isset($queried_object->name)){
+            if (isset($queried_object->name)) {
                 $cat_name = $queried_object->name;
             }
         }
-        $title = str_replace("%%category%%",$cat_name,$title);
+        $title = str_replace("%%category%%", $cat_name, $title);
     }
 
-    if(strpos($title,'%%tag%%') !== false){
+    if (strpos($title, '%%tag%%') !== false) {
         $cat_name = '';
 
-        if($gd_page=='detail') {
+        if ($gd_page=='detail') {
             if ($post->default_category) {
                 $cat = get_term($post->default_category, $post->post_type . 'category');
                 $cat_name = (isset($cat->name)) ? $cat->name : '';
             }
-        }elseif($gd_page=='listing'){
+        } else if($gd_page == 'listing') {
             $queried_object = get_queried_object();
-            if(isset($queried_object->name)){
+            if (isset($queried_object->name)) {
                 $cat_name = $queried_object->name;
             }
         }
-        $title = str_replace("%%tag%%",$cat_name,$title);
+        $title = str_replace("%%tag%%", $cat_name, $title);
     }
 
-
-
-    if(strpos($title,'%%id%%') !== false){
+    if (strpos($title, '%%id%%') !== false) {
         $ID = (isset($post->ID)) ? $post->ID : '';
-        $title = str_replace("%%id%%",$ID,$title);
+        $title = str_replace("%%id%%", $ID, $title);
     }
 
-    if(strpos($title,'%%sep%%') !== false){
-        $title = str_replace("%%sep%%",$sep,$title);
+    if (strpos($title,'%%sep%%') !== false) {
+        $title = str_replace("%%sep%%", $sep, $title);
     }
 
-
-    global $wp;
     // location variables
     $gd_post_type = geodir_get_current_posttype();
     $location_array = geodir_get_current_location_terms('query_vars', $gd_post_type);
@@ -4800,3 +4780,20 @@ function geodir_filter_empty_terms($terms) {
     }
     return $return;
 }
+
+
+/**
+ * Remove the hentry class structured data from details pages.
+ *
+ * @since 1.6.5
+ * @param $class
+ *
+ * @return array
+ */
+function geodir_remove_hentry( $class ) {
+    if(geodir_is_page('detail')){
+        $class = array_diff( $class, array( 'hentry' ) );
+    }
+    return $class;
+}
+add_filter( 'post_class', 'geodir_remove_hentry' );
