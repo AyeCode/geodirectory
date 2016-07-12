@@ -4240,7 +4240,7 @@ function geodir_filter_title_variables($title, $gd_page, $sep = '') {
     if ($gd_page == 'search' || $gd_page == 'author') {
         $post_type = sanitize_text_field($_REQUEST['stype']);
     } else if ($gd_page == 'add-listing') {
-        $post_type = sanitize_text_field($_REQUEST['listing_type']);
+        $post_type = (isset($_REQUEST['listing_type'])) ? sanitize_text_field($_REQUEST['listing_type']) : '';
         $post_type = !$post_type && !empty($_REQUEST['pid']) ? get_post_type((int)$_REQUEST['pid']) : $post_type;
     } else if (isset($post->post_type) && $post->post_type && in_array($post->post_type , geodir_get_posttypes())) {
         $post_type = $post->post_type;

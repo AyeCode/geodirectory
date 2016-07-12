@@ -1414,7 +1414,7 @@ function geodir_show_detail_page_tabs()
         if (get_option('geodir_add_related_listing_posttypes'))
             $related_listing_array = get_option('geodir_add_related_listing_posttypes');
 
-        if (in_array($post->post_type, $related_listing_array)) {
+        if (in_array($post->post_type, $related_listing_array) && isset($arr_detail_page_tabs['related_listing'])) {
             $arr_detail_page_tabs['related_listing']['is_display'] = true;
         }
 

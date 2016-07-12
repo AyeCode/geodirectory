@@ -651,7 +651,6 @@ if (!function_exists('geodir_save_post_info')) {
          * @param array $postinfo_array See {@see geodir_save_post_info()} for accepted args.
          * @param int $post_id The post ID.
          */
-
         $postmeta = apply_filters('geodir_listinginfo_request', $postinfo_array, $post_id);
 
         if (!empty($postmeta) && $post_id) {
