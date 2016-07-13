@@ -8,6 +8,7 @@ fgetcsv ignores special characters when they are at the beginning of line - FIXE
 When a CPT has no listing it replaces the blank CPT name in meta titles - FIXED
 Map un-ticked cats wrong on first load if default place CPT not used - FIXED
 Nearest option added to related listings - ADDED
+Add listing shortcode can sometimes show form twice - FIXED
 
 v1.6.4
 Date custom field can sometimes display default date on preview page - FIXED

@@ -62,12 +62,7 @@ function geodir_sc_add_listing($atts)
 
 
     } else {
-        ###### MAIN CONTENT ######
-
-        /** This action is documented in geodirectory-templates/add-listing.php */
-        do_action('geodir_add_listing_page_mandatory');
-        /** This action is documented in geodirectory-templates/add-listing.php */
-        do_action('geodir_add_listing_form');
+       // Add listing page will be used if shortcode is detected in page content, no need to call it here
     }
     $output = ob_get_contents();
 
