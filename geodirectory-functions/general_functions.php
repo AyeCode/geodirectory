@@ -4444,7 +4444,12 @@ function geodir_filter_title_variables($title, $gd_page, $sep = '') {
     }
 
     if(strpos($title,'%%name%%') !== false){
-        $author_name = get_the_author();
+        if (is_author()) {
+            $curauth = (get_query_var('author_name')) ? get_user_by('slug', get_query_var('author_name')) : get_userdata(get_query_var('author'));
+            $author_name = $curauth->display_name;
+        } else {
+            $author_name = get_the_author();
+        }
         if (!$author_name || $author_name === '') {
             $queried_object = get_queried_object();
             
