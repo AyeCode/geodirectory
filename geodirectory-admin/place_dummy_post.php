@@ -1819,57 +1819,55 @@ foreach ($post_info as $post_info) {
         $dummy_post_longitude = geodir_random_float(geodir_random_float($city_bound_lng1, $city_bound_lng2), geodir_random_float($city_bound_lng2, $city_bound_lng1));
     else
         $dummy_post_longitude = geodir_random_float(geodir_random_float($city_bound_lng2, $city_bound_lng1), geodir_random_float($city_bound_lng1, $city_bound_lng2));
-    $post_address = array();
+
+    $load_map = get_option('geodir_load_map');
+    
+    if ($load_map == 'osm') {
+        $post_address = geodir_get_osm_address_by_lat_lan($dummy_post_latitude, $dummy_post_longitude);
+    } else {
+        $post_address = geodir_get_address_by_lat_lan($dummy_post_latitude, $dummy_post_longitude);
+    }
+
     $postal_code = '';
-    $address = '';
-
-    $post_address = geodir_get_address_by_lat_lan($dummy_post_latitude, $dummy_post_longitude);
-
-
     if (!empty($post_address)) {
-        foreach ($post_address as $add_key => $add_value) {
-            if ($add_value->types[0] == 'postal_code') {
-                $postal_code = $add_value->long_name;
+        if ($load_map == 'osm') {
+            $address = !empty($post_address->formatted_address) ? $post_address->formatted_address : '';
+            $postal_code = !empty($post_address->address->postcode) ? $post_address->address->postcode : '';
+        } else {
+            $addresses = array();
+            $addresses_default = array();
+            
+            foreach ($post_address as $add_key => $add_value) {
+                if ($add_key < 2 && !empty($add_value->long_name)) {
+                    $addresses_default[] = $add_value->long_name;
+                }
+                if ($add_value->types[0] == 'postal_code') {
+                    $postal_code = $add_value->long_name;
+                }
+                if ($add_value->types[0] == 'street_number') {
+                    $addresses[] = $add_value->long_name;
+                }
+                if ($add_value->types[0] == 'route') {
+                    $addresses[] = $add_value->long_name;
+                }
+                if ($add_value->types[0] == 'neighborhood') {
+                    $addresses[] = $add_value->long_name;
+                }
+                if ($add_value->types[0] == 'sublocality') {
+                    $addresses[] = $add_value->long_name;
+                }
             }
-
-            if ($add_value->types[0] == 'street_number') {
-                if ($address != '')
-                    $address .= ',' . $add_value->long_name;
-                else
-                    $address .= $add_value->long_name;
-            }
-            if ($add_value->types[0] == 'route') {
-                if ($address != '')
-                    $address .= ',' . $add_value->long_name;
-                else
-                    $address .= $add_value->long_name;
-            }
-            if ($add_value->types[0] == 'neighborhood') {
-                if ($address != '')
-                    $address .= ',' . $add_value->long_name;
-                else
-                    $address .= $add_value->long_name;
-            }
-            if ($add_value->types[0] == 'sublocality') {
-                if ($address != '')
-                    $address .= ',' . $add_value->long_name;
-                else
-                    $address .= $add_value->long_name;
-            }
-
+            $address = !empty($addresses) ? implode(', ', $addresses) : (!empty($addresses_default) ? implode(', ', $addresses_default) : '');
         }
 
-        $post_info['post_address'] = $address;
+        $post_info['post_address'] = !empty($address) ? $address : $default_location->city;
         $post_info['post_city'] = $default_location->city;
         $post_info['post_region'] = $default_location->region;
         $post_info['post_country'] = $default_location->country;
         $post_info['post_zip'] = $postal_code;
         $post_info['post_latitude'] = $dummy_post_latitude;
         $post_info['post_longitude'] = $dummy_post_longitude;
-
     }
+    
     geodir_save_listing($post_info, true);
 }
-
-/*if( $dummy_post_index==1);	
-geodir_set_default_location(1);		*/			

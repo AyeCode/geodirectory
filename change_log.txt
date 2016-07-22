@@ -11,6 +11,7 @@ Nearest option added to related listings - ADDED
 Add listing shortcode can sometimes show form twice - FIXED
 My Favorite page uses first listing author name instead of logged in user name - FIXED
 Is active option removed from the address field to avoid confusion - CHANGED
+Unable to populate dummy data with OpenStreetMap enabled - FIXED
 
 v1.6.4
 Date custom field can sometimes display default date on preview page - FIXED
