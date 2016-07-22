@@ -9,7 +9,8 @@ When a CPT has no listing it replaces the blank CPT name in meta titles - FIXED
 Map un-ticked cats wrong on first load if default place CPT not used - FIXED
 Nearest option added to related listings - ADDED
 Add listing shortcode can sometimes show form twice - FIXED
-My Favorite page uses first listing author name instaed of logged in user name - FIXED
+My Favorite page uses first listing author name instead of logged in user name - FIXED
+Is active option removed from the address field to avoid confusion - CHANGED
 
 v1.6.4
 Date custom field can sometimes display default date on preview page - FIXED
@@ -142,7 +143,7 @@ v1.5.6
 In add listing form sub-categories are no longer showing in hierarchy for checkbox display type - FIXED
 Tick parent category should not tick sub-categories but untick parent category should untick sub-categories - CHANGED
 Filter added to modify unfavorite icon - ADDED
-Details page map can have overlaping sidebar map elements - FIXED
+Details page map can have overlapping sidebar map elements - FIXED
 Schema description HTML tags now removed - CHANGED
 New widget added to display content like features - ADDED
 URL Schema can have validation error - FIXED
@@ -247,7 +248,7 @@ Unused css image classes removed - REMOVED
 Email custom field now used mailto: for the address and filter added to change the name output - CHANGED
 Preview page missing address closing div which can break the footer in some themes - FIXED
 New widget "CPT Categories" added to list categories - ADDED
-Visiting a place while session is set ot another location can show wrong breadcrumbs - FIXED
+Visiting a place while session is set to another location can show wrong breadcrumbs - FIXED
 Added some filters in listview template and widget listview for jobby theme compatibility - ADDED
 Fixed html_var variable in custom fields output - FIXED
 Added class for fieldset field - ADDED
@@ -373,7 +374,7 @@ Function codeAddress changed to geodir_codeAddress for compatibility - CHANGED
 
 v1.4.7
 Search not working for empty keyword search - FIXED
-Review counts lost during virtual page conversion (alos fixed by saving any place) - FIXED
+Review counts lost during virtual page conversion (also fixed by saving any place) - FIXED
 Option added to allow/restrict some file types for custom field file upload - ADDED
 Some DocBlocks added for documentation - ADDED
 
@@ -424,7 +425,7 @@ All Listings virtual page removed - CHANGED
 Shortcode added for best of widget - ADDED
 Recent reviews widget ratings stars color not changed with multirating color setting - FIXED
 geodir_curPageURL() changed slightly for https url's, we no longer add the port number - CHANGED
-Shortcode added for to display GeoDirectoy Listings with pagination - ADDED
+Shortcode added for to display GeoDirectory Listings with pagination - ADDED
 Marker cluster not working in maps added via shortcode - FIXED
 Add to fav/remove from fav text now filterable - ADDED
 Awesome font upgraded with new Awesome font version 4.3.0 - ADDED
@@ -459,10 +460,10 @@ v1.3.9
 Moved change log into core files as we lost 1.3.9 change log due to SSD failure - CHANGED
 Virgin islands have duplicate entries in country list, removed from db install script - FIXED
 Search changed for better individual word results - CHANGED
-Excerpt length hook priority changed so it's not overriden by avada - CHANGED
+Excerpt length hook priority changed so it's not overridden by avada - CHANGED
 Upload error message can now be translated - FIXED
 Several W3C validation fixes/changes made - CHANGED
-Switching between listing types can add an aditional "enable dragging" message - FIXED
+Switching between listing types can add an additional "enable dragging" message - FIXED
 Category widget has a default of 15 changing this in widget does not take affect - FIXED
 Dummy data can sometimes not delete post_details info - FIXED
 Recent reviews widget can sometimes show replies as reviews - FIXED

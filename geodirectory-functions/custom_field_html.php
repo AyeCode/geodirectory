@@ -311,10 +311,10 @@ $field_data_type = isset($field_info->data_type) ? $field_info->data_type : '';
 			 * @param object $field_info Current field object.
 			 */
 			echo $html = apply_filters('geodir_packages_list_on_custom_fields', $html, $field_info);
-
+            $field_display = $field_type == 'address' && $field_info->htmlvar_name == 'post' ? 'style="display:none"' : '';
             ?>
 
-            <tr>
+            <tr <?php echo $field_display; ?>>
                 <td><strong><?php _e('Is active :', 'geodirectory'); ?></strong></td>
                 <td align="left">
                     <select name="is_active" id="is_active">
@@ -527,7 +527,7 @@ $field_data_type = isset($field_info->data_type) ? $field_info->data_type : '';
                      *
                      * @since 1.0.0
                      * @param array $address The address settings array.
-                     * @param object $field_info Extra fileds info.
+                     * @param object $field_info Extra fields info.
                      */
                     do_action('geodir_address_extra_admin_fields', $address, $field_info); ?>
 
@@ -617,7 +617,7 @@ $field_data_type = isset($field_info->data_type) ? $field_info->data_type : '';
                                    value="1" <?php if (isset($address['show_latlng']) && $address['show_latlng'] == '1') {
                                 echo 'checked="checked"';
                             }?>/>
-                            <span><?php _e('Select if you want to show latitude and logatude fields in address section from front-end.', 'geodirectory');?></span>
+                            <span><?php _e('Select if you want to show latitude and longitude fields in address section from front-end.', 'geodirectory');?></span>
                         </td>
                     </tr>
                 <?php } // end of extra fields for address field type
@@ -746,8 +746,8 @@ $field_data_type = isset($field_info->data_type) ? $field_info->data_type : '';
 					}
 					break;
 
-            endswitch; ?>
-            <?php if ($field_type != 'fieldset') {
+            endswitch;
+            if ($field_type != 'fieldset') {
                 ?>
                 <tr>
                     <td colspan="2" align="left"><h3><?php echo __('Custom css', 'geodirectory'); ?></h3></td>
@@ -782,9 +782,6 @@ $field_data_type = isset($field_info->data_type) ? $field_info->data_type : '';
                 </tr>
             <?php
             }
-            ?>
-
-            <?php
 
             switch ($field_type):
                 case 'html':
@@ -794,7 +791,6 @@ $field_data_type = isset($field_info->data_type) ? $field_info->data_type : '';
                     break;
                 default:
                     ?>
-
                     <tr>
                         <td colspan="2" align="left">
                             <h3><?php
@@ -848,14 +844,10 @@ $field_data_type = isset($field_info->data_type) ? $field_info->data_type : '';
 					</td>
 				</tr>
 				<?php }*/ ?>
-
                 <?php endswitch; ?>
-
-
             <tr>
                 <td>&nbsp;</td>
                 <td align="left">
-
                     <input type="button" class="button" name="save" id="save" value="<?php echo esc_attr(__('Save','geodirectory'));?>"
                            onclick="save_field('<?php echo esc_attr($result_str); ?>')"/>
                     <?php if (!$default): ?>
@@ -863,10 +855,8 @@ $field_data_type = isset($field_info->data_type) ? $field_info->data_type : '';
                                                             onclick="delete_field('<?php echo esc_attr($result_str); ?>', '<?php echo $nonce; ?>')"
                                                             class="button_n"/></a>
                     <?php endif; ?>
-
                 </td>
             </tr>
         </table>
-
     </div>
 </li>
