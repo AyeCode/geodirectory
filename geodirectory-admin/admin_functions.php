@@ -499,70 +499,68 @@ if (!function_exists('geodir_autoinstall_admin_header') && (get_option('geodir_i
 
             }
             echo $dummy_msg;
+            
+            $default_location = geodir_get_default_location();
+            $city = isset($default_location->city) ? $default_location->city : '';
+            $region = isset($default_location->region) ? $default_location->region : '';
+            $country = isset($default_location->country) ? $default_location->country : '';
+            $city_latitude = isset($default_location->city_latitude) ? $default_location->city_latitude : '';
+            $city_longitude = isset($default_location->city_longitude) ? $default_location->city_longitude : '';
             ?>
-            <script>
-                <?php
-                  $default_location = geodir_get_default_location();
-                  $city =  isset($default_location->city) ? $default_location->city : '';
-                  $region =isset($default_location->region) ? $default_location->region : '';
-                  $country =isset($default_location->country) ? $default_location->country : '';
-                  $city_latitude =isset($default_location->city_latitude) ? $default_location->city_latitude : '';
-                  $city_longitude =isset($default_location->city_longitude) ? $default_location->city_longitude : '';
-                ?>
+            <script type="text/javascript">
                 var geocoder = window.gdMaps == 'google' ? new google.maps.Geocoder() : null;
-                var CITY_ADDRESS = '<?php echo $city.','.$region.','.$country;?>';
+                var CITY_ADDRESS = '<?php echo addslashes( $city . ',' . $region . ',' . $country );?>';
                 var bound_lat_lng;
                 var latlng = ['<?php echo $city_latitude; ?>', <?php echo $city_longitude; ?>];
                 var lat = <?php echo $city_latitude; ?>;
                 var lng = <?php echo $city_longitude; ?>;
+                
                 if (window.gdMaps == 'google') {
                     latlng = new google.maps.LatLng(lat, lng);
-                } else if (window.gdMaps == 'osm') {
-                    latlng = L.latLng(lat, lng);
-                }
-                if (window.gdMaps == 'google') {
+                    
                     geocoder.geocode({'address': CITY_ADDRESS},
                         function (results, status) {
-
                             if (status == google.maps.GeocoderStatus.OK) {
                                 // Bounds for North America
-                                //	 alert((results[0].geometry.bounds==null))
                                 if (results[0].geometry.bounds == null) {
-
                                     bound_lat_lng1 = String(results[0].geometry.viewport.getSouthWest());
                                     bound_lat_lng1 = bound_lat_lng1.replace(/[()]/g, "");
-
                                     bound_lat_lng2 = String(results[0].geometry.viewport.getNorthEast());
                                     bound_lat_lng2 = bound_lat_lng2.replace(/[()]/g, "");
                                     bound_lat_lng2 = bound_lat_lng1 + "," + bound_lat_lng2;
                                     bound_lat_lng = bound_lat_lng2.split(',');
-                                }
-                                else {
+                                } else {
                                     bound_lat_lng = String(results[0].geometry.bounds);
-
                                     bound_lat_lng = bound_lat_lng.replace(/[()]/g, "");
-
                                     bound_lat_lng = bound_lat_lng.split(',');
                                 }
 
-                                bound_lat_lng = bound_lat_lng.map(function(x){return x.replace(" ", '');});// remove spaces from lat/lon
-
-                                strictBounds = new google.maps.LatLngBounds(
-                                    new google.maps.LatLng(bound_lat_lng[0], bound_lat_lng[1]),
-                                    new google.maps.LatLng(bound_lat_lng[2], bound_lat_lng[3])
-                                );
-
+                                bound_lat_lng = bound_lat_lng.map( function(x) {
+                                    return x.replace(" ", '');
+                                }); // remove spaces from lat/lon
                             } else {
                                 alert("<?php _e('Geocode was not successful for the following reason:','geodirectory');?> " + status);
                             }
                         });
+                } else if (window.gdMaps == 'osm') {
+                    latlng = L.latLng(lat, lng);
+                    
+                    geocodePositionOSM(false, CITY_ADDRESS, false, false, function(geodata) {
+                        if (typeof geodata == 'object' && geodata.boundingbox) {
+                            bound_lat_lng = [geodata.boundingbox[0], geodata.boundingbox[2], geodata.boundingbox[1], geodata.boundingbox[3]];
+                        } else {
+                            geocodePositionOSM(latlng, false, false, false, function(geodata) {
+                                if (typeof geodata == 'object' && geodata.boundingbox) {
+                                    bound_lat_lng = [geodata.boundingbox[0], geodata.boundingbox[2], geodata.boundingbox[1], geodata.boundingbox[3]];
+                                }
+                            });
+                        }
+                    });
                 }
 
                 var dummy_post_index = 1;
                 function geodir_autoinstall(obj, id, nonce, posttype) {
-
                     var active_tab = jQuery(obj).closest('form').find('dl dd.gd-tab-active').attr('id');
-
                     var total_dummy_post_count = jQuery('#sub_' + active_tab).find('.selected_sample_data').val();
 
                     if (id == 'geodir_dummy_delete') {
@@ -577,25 +575,27 @@ if (!function_exists('geodir_autoinstall_admin_header') && (get_option('geodir_i
                         } else {
                             return false;
                         }
-                    }
-                    else {
-
+                    } else {
+                        if (!(typeof bound_lat_lng == 'object' && bound_lat_lng.length == 4)) {
+                            bound_lat_lng = ['<?php echo $city_latitude; ?>', <?php echo $city_longitude; ?>, '<?php echo $city_latitude; ?>', <?php echo $city_longitude; ?>];
+                        }
                         jQuery('#sub_' + active_tab).find('.geodir_auto_install').hide();
                         jQuery('#sub_' + active_tab).find('.geodir_show_progress').show();
-                        jQuery.post('<?php echo geodir_get_ajax_url(); ?>&geodir_autofill=' + id + '&posttype=' + posttype + '&insert_dummy_post_index=' + dummy_post_index + '&city_bound_lat1=' + bound_lat_lng[0] + '&city_bound_lng1=' + bound_lat_lng[1] + '&city_bound_lat2=' + bound_lat_lng[2] + '&city_bound_lng2=' + bound_lat_lng[3] + '&_wpnonce=' + nonce,
-                            function (data) {
-
-                                jQuery(obj).closest('form').find('.dummy_post_inserted').html('<?php _e('Dummy post(s) inserted:','geodirectory');?> ' + dummy_post_index + ' <?php _e('of' ,'geodirectory'); ?> ' + total_dummy_post_count + '');
-                                dummy_post_index++;
-                                if (dummy_post_index <= total_dummy_post_count)
-                                    geodir_autoinstall(obj, id, nonce, posttype);
-                                else {
-                                    window.location.href = jQuery('#' + id).attr('redirect_to') + active_tab;
-                                }
-
-                            });
+                        
+                        var post_url = '<?php echo geodir_get_ajax_url(); ?>&geodir_autofill=' + id + '&posttype=' + posttype + '&insert_dummy_post_index=' + dummy_post_index + '&city_bound_lat1=' + bound_lat_lng[0] + '&city_bound_lng1=' + bound_lat_lng[1] + '&city_bound_lat2=' + bound_lat_lng[2] + '&city_bound_lng2=' + bound_lat_lng[3] + '&_wpnonce=' + nonce;
+                        
+                        jQuery.post( post_url, function (data) {
+                            jQuery(obj).closest('form').find('.dummy_post_inserted').html('<?php _e('Dummy post(s) inserted:','geodirectory');?> ' + dummy_post_index + ' <?php _e('of' ,'geodirectory'); ?> ' + total_dummy_post_count + '');
+                            
+                            dummy_post_index++;
+                            
+                            if (dummy_post_index <= total_dummy_post_count)
+                                geodir_autoinstall(obj, id, nonce, posttype);
+                            else {
+                                window.location.href = jQuery('#' + id).attr('redirect_to') + active_tab;
+                            }
+                        });
                     }
-
                 }
             </script>
         <?php
