@@ -9,6 +9,12 @@
  * @package GeoDirectory
  */
 
+// We are submitting iframes etc so we turn this off to allow them to show on preview.
+if(geodir_is_page('preview')){
+    header("X-XSS-Protection: 0");
+}
+
+
 // call header
 get_header();
 
