@@ -13,6 +13,7 @@ My Favorite page uses first listing author name instead of logged in user name -
 Is active option removed from the address field to avoid confusion - CHANGED
 Unable to populate dummy data with OpenStreetMap enabled - FIXED
 Editor/Authors can access some parts of the backend even if setting set to not allow - FIXED
+Listing success template now uses author sidebar instead of details page sidebar - CHANGED
 
 v1.6.4
 Date custom field can sometimes display default date on preview page - FIXED
