@@ -55,11 +55,11 @@ do_action('geodir_wrapper_content_close', 'details-page');
 
 ###### SIDEBAR ######
 /**
- * Adds the add listing success page sidebar to the success template page.
+ * Adds the author page right sidebar to the success template page.
  *
- * @since 1.1.0
+ * @since 1.6.5
  */
-do_action('geodir_detail_sidebar');
+do_action('geodir_author_sidebar_right');
 
 
 ###### WRAPPER CLOSE ######	
