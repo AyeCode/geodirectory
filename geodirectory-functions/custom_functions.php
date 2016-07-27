@@ -1170,19 +1170,6 @@ function geodir_add_meta_keywords()
     }
 
 
-    /*
-    $geodir_meta_desc = $geodir_meta_desc != '' ? $geodir_meta_desc : $meta_desc;
-    if ($geodir_meta_desc != '') {
-        $geodir_meta_desc = strip_tags($geodir_meta_desc);
-        $geodir_meta_desc = esc_html($geodir_meta_desc);
-        $geodir_meta_desc = wp_html_excerpt($geodir_meta_desc, 1000, '.');
-        $geodir_meta_desc = isset($replace_location) ? str_replace('%location%', $replace_location, $geodir_meta_desc) : $geodir_meta_desc;
-
-        $meta_desc = $geodir_meta_desc != '' ? $geodir_meta_desc : $meta_desc;
-    }
-    */
-
-
     if ($meta_desc) {
         $meta_desc = stripslashes_deep($meta_desc);
         /**
