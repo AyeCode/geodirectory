@@ -243,10 +243,17 @@ jQuery(document).ready(function($) {
     });
 
     jQuery('.geodir-delete').click(function() {
-        if (confirm(geodir_all_js_msg.my_place_listing_del)) {
+        var message = geodir_all_js_msg.my_place_listing_del;
+        
+        if (jQuery(this).closest('.geodir-gridview').hasClass('gdp-franchise-m') || jQuery(this).closest('.geodir-listview').hasClass('gdp-franchise-m')) {
+            message = geodir_all_js_msg.my_main_listing_del;
+        }
+        
+        if (confirm(message)) {
             return true;
-        } else
+        } else {
             return false;
+        }
     });
     
     jQuery('.gd-category-dd').hover(function() {

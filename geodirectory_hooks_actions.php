@@ -1298,6 +1298,7 @@ function geodir_localize_all_js_msg()
         'address_not_found_on_map_msg' => __('Address not found for:', 'geodirectory'),
         // end not show alert msg
         'my_place_listing_del' => __('Are you wish to delete this listing?', 'geodirectory'),
+        'my_main_listing_del' => __('Deleting the main listing of a franchise will turn all franchises in regular listings. Are you sure wish to delete this main listing?', 'geodirectory'),
         //start not show alert msg
         'rating_error_msg' => __('Error : please retry', 'geodirectory'),
         'listing_url_prefix_msg' => __('Please enter listing url prefix', 'geodirectory'),

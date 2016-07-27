@@ -1170,19 +1170,6 @@ function geodir_add_meta_keywords()
     }
 
 
-    /*
-    $geodir_meta_desc = $geodir_meta_desc != '' ? $geodir_meta_desc : $meta_desc;
-    if ($geodir_meta_desc != '') {
-        $geodir_meta_desc = strip_tags($geodir_meta_desc);
-        $geodir_meta_desc = esc_html($geodir_meta_desc);
-        $geodir_meta_desc = wp_html_excerpt($geodir_meta_desc, 1000, '.');
-        $geodir_meta_desc = isset($replace_location) ? str_replace('%location%', $replace_location, $geodir_meta_desc) : $geodir_meta_desc;
-
-        $meta_desc = $geodir_meta_desc != '' ? $geodir_meta_desc : $meta_desc;
-    }
-    */
-
-
     if ($meta_desc) {
         $meta_desc = stripslashes_deep($meta_desc);
         /**
@@ -1405,7 +1392,6 @@ function geodir_show_detail_page_tabs()
 
     $geodir_post_detail_fields = geodir_show_listing_info('detail');
 
-    $arr_detail_page_tabs = geodir_detail_page_tabs_list();// get this sooner so we can get the active tab for the user
 
     if (geodir_is_page('detail')) {
         $video = geodir_get_video($post->ID);
@@ -1414,12 +1400,12 @@ function geodir_show_detail_page_tabs()
         if (get_option('geodir_add_related_listing_posttypes'))
             $related_listing_array = get_option('geodir_add_related_listing_posttypes');
 
-        if (in_array($post->post_type, $related_listing_array) && isset($arr_detail_page_tabs['related_listing'])) {
-            $arr_detail_page_tabs['related_listing']['is_display'] = true;
-        }
+
+        $excluded_tabs = get_option('geodir_detail_page_tabs_excluded');
+        if(!$excluded_tabs){$excluded_tabs = array();}
 
         $related_listing = '';
-        if (in_array($post->post_type, $related_listing_array) && isset($arr_detail_page_tabs['related_listing']['is_display']) && $arr_detail_page_tabs['related_listing']['is_display']) {
+        if (in_array($post->post_type, $related_listing_array) && !in_array('related_listing', $excluded_tabs)) {
             $request = array('post_number' => get_option('geodir_related_post_count'),
                 'relate_to' => get_option('geodir_related_post_relate_to'),
                 'layout' => get_option('geodir_related_post_listing_view'),
@@ -1518,6 +1504,8 @@ function geodir_show_detail_page_tabs()
         $map_args['enable_map_direction'] = true;
         $map_args['map_class_name'] = 'geodir-map-preview-page';
     }
+
+    $arr_detail_page_tabs = geodir_detail_page_tabs_list();// get this sooner so we can get the active tab for the user
 
     $active_tab = '';
     $active_tab_name = '';

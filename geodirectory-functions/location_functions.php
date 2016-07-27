@@ -420,3 +420,43 @@ function geodir_get_location_link($which_location = 'current') {
     }
     return $location_link;
 }
+
+/**
+ * Returns openstreetmap address using latitude and longitude.
+ *
+ * @since 1.6.5
+ * @package GeoDirectory
+ * @param string $lat Latitude string.
+ * @param string $lng Longitude string.
+ * @return array|bool Returns address on success.
+ */
+function geodir_get_osm_address_by_lat_lan($lat, $lng) {
+    $url = is_ssl() ? 'https:' : 'http:';
+    $url .= '//nominatim.openstreetmap.org/reverse?format=json&lat=' . trim($lat) . '&lon=' . trim($lng) . '&zoom=16&addressdetails=1&email=' . get_option('admin_email');
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_PROXYPORT, 3128);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    $response = curl_exec($ch);
+    curl_close($ch);
+    $data = json_decode($response);
+    
+    if (!empty($data) && !empty($data->address)) {
+        $address_fields = array('public_building', 'house', 'house_number', 'bakery', 'footway', 'street', 'road', 'village', 'attraction', 'pedestrian', 'neighbourhood', 'suburb');
+        $formatted_address = (array)$data->address;
+        
+        foreach ( $data->address as $key => $value ) {
+            if (!in_array($key, $address_fields)) {
+                unset($formatted_address[$key]);
+            }
+        }
+        $data->formatted_address = !empty($formatted_address) ? implode(', ', $formatted_address) : '';
+        
+        return $data;
+    } else {
+        return false;
+    }
+}

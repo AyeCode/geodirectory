@@ -1285,9 +1285,9 @@ if (!function_exists('geodir_allow_wpadmin')) {
     function geodir_allow_wpadmin()
     {
         global $wpdb;
-        if (get_option('geodir_allow_wpadmin') == '0' && is_user_logged_in() && (!isset($_REQUEST['action']))) // checking action in request to allow ajax request go through
+        if (get_option('geodir_allow_wpadmin') == '0' && is_user_logged_in() && (!defined( 'DOING_AJAX' )) ) // checking action in request to allow ajax request go through
         {
-            if (current_user_can('manage_options')) {
+            if (current_user_can('administrator')) {
             } else {
 
                 wp_redirect(home_url());
