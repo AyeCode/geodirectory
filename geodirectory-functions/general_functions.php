@@ -4782,6 +4782,15 @@ function geodir_filter_empty_terms($terms) {
     foreach ($terms as $term) {
         if (isset($term->count) && $term->count > 0) {
             $return[] = $term;
+        }else{
+            /**
+             * Allow to filter terms with no count.
+             *
+             * @since 1.6.6
+             * @param array $return The array or terms to return.
+             * @param object $term The term object.
+             */
+            $return =  apply_filters( 'geodir_filter_empty_terms_filter',$return, $term);
         }
     }
     return $return;
