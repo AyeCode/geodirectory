@@ -1151,7 +1151,8 @@ function geodir_breadcrumb()
                         if (!empty($term_info) && isset($term_info['name']) && $term_info['name'] != '') {
                             $term_link_text = urldecode($term_info['name']);
                         } else {
-                            $term_link_text = geodir_ucwords(urldecode($term_link_text));
+                            continue;
+                            //$term_link_text = wp_strip_all_tags(geodir_ucwords(urldecode($term_link_text)));
                         }
 
                         if ($term_index == count($term_array) && $is_taxonomy_last)
@@ -4238,7 +4239,7 @@ function geodir_filter_title_variables($title, $gd_page, $sep = '') {
     }
     
     if ($gd_page == 'search' || $gd_page == 'author') {
-        $post_type = sanitize_text_field($_REQUEST['stype']);
+        $post_type = isset($_REQUEST['stype']) ? sanitize_text_field($_REQUEST['stype']) : '';
     } else if ($gd_page == 'add-listing') {
         $post_type = (isset($_REQUEST['listing_type'])) ? sanitize_text_field($_REQUEST['listing_type']) : '';
         $post_type = !$post_type && !empty($_REQUEST['pid']) ? get_post_type((int)$_REQUEST['pid']) : $post_type;
