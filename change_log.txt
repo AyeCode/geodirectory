@@ -1,5 +1,6 @@
 v1.6.6
 Added filter to geodir_filter_empty_terms function - ADDED
+Mouse scroll zoom control setting not working for OpenStreetMap - FIXED
 
 v1.6.5
 Location page breadcrumb now uses location page slug - CHANGED
