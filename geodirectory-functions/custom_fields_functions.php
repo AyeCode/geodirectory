@@ -2192,7 +2192,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
         $package_info = geodir_post_package_info($package_info, $post);
         $post_package_id = $package_info->pid;
-        $p_type = (geodir_get_current_posttype()) ? geodir_get_current_posttype() : $post->post_type;
+        $p_type = !empty($post->post_type) ? $post->post_type : geodir_get_current_posttype();
         $send_to_friend = false;
 
         ob_start();
