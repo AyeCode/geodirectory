@@ -163,37 +163,22 @@
                 zoom: opts.zoom,
                 minZoom: opts.minZoom ? opts.minZoom : 1,
                 maxZoom: opts.maxZoom,
-                /*
-                disableDoubleClickZoom: opts.disableDoubleClickZoom,
-                mapTypeControl: opts.mapTypeControl,
-                streetViewControl: opts.streetViewControl,
-                streetViewControlOptions: {
-                    position: opts.streetViewControlOptions.position.toLowerCase()
-                },
-                mapTypeControlOptions: {
-                    position: opts.mapTypeControlOptions.position.toLowerCase(),
-                    style: opts.mapTypeControlOptions.style.toLowerCase()
-                },
-                mapTypeId: opts.maptype.toLowerCase(),
-                navigationControl: opts.navigationControl,
-                navigationControlOptions: {
-                    position: opts.navigationControlOptions.position.toLowerCase(),
-                    style: opts.navigationControlOptions.style.toLowerCase()
-                },
                 zoomControl: true,
-                zoomControlOptions: {
-                    position: opts.zoomControlOptions.position.toLowerCase()
-                },
-                scaleControl: opts.scaleControl,
-                scrollwheel: opts.scrollwheel,
-                */
+                doubleClickZoom: opts.disableDoubleClickZoom === "0" || !opts.disableDoubleClickZoom ? true : false,
+                dragging: true,
+                scrollWheelZoom: opts.scrollwheel === "0" || !opts.scrollwheel ? false : opts.scrollwheel,
+                attributionControl: typeof opts.attributionControl !== 'undefined' ? opts.attributionControl : true,
             };
-            
+
             var osmUrl = '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            osmAttrib = '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            osmAttrib = 'Map data &copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             osm = L.tileLayer(osmUrl, {maxZoom: opts.maxZoom, attribution: osmAttrib});
-            
+
             this.map = new L.Map(el, myOptions).addLayer(osm);
+            
+            if (myOptions.zoomControl && (zoomPosition = this.parsePosition(opts.zoomControlOptions.position, 'topleft')) !== 'topleft') {
+                this.map.zoomControl.setPosition(zoomPosition);
+            }
             
             if (parseInt(options.enable_marker_cluster) === 1) {
                 jQuery('#gdOSMprogress').remove();
@@ -280,6 +265,41 @@
         geocode: function (address, options) {            
             var gdcoder = new L.Control.gdGeoCode({ provider: new L.gdGeoCode.Provider.OpenStreetMap() });
             var results = gdcoder.geosearch(address);
+        },
+        
+        parsePosition: function (position, $default) {
+            var parsed = position;
+            if (position && typeof position == 'string') {
+                switch(position.toUpperCase()) {
+                    case 'TOP':
+                    case 'LEFT':
+                    case 'TOP_LEFT':
+                    case 'topleft':
+                        parsed = 'topleft';
+                    break;
+                    case 'RIGHT':
+                    case 'TOP_RIGHT':
+                    case 'topright':
+                        parsed = 'topright';
+                    break;
+                    case 'BOTTOM':
+                    case 'BOTTOM_LEFT':
+                    case 'bottomleft':
+                        parsed = 'bottomleft';
+                    break;
+                    case 'BOTTOM_RIGHT':
+                    case 'bottomright':
+                        parsed = 'bottomright';
+                    break;
+                    default:
+                        parsed = typeof $default !== 'undefined' ? $default : parsed;
+                    break;
+                }
+            } else if (typeof $default !== 'undefined') {
+                parsed = $default;
+            }
+            
+            return parsed;
         },
 
         geoMarker: function () {
