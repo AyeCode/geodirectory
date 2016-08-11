@@ -1,5 +1,7 @@
 v1.6.6
 Added filter to geodir_filter_empty_terms function - ADDED
+Mouse scroll zoom control setting not working for OpenStreetMap - FIXED
+Popular post view widget -> "Post Type:" setting not working on CPT pages - FIXED
 
 v1.6.5
 Location page breadcrumb now uses location page slug - CHANGED
