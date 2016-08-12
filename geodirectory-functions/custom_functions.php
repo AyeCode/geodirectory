@@ -847,7 +847,6 @@ function geodir_related_posts_display($request) {
 
             $query_args['tax_query'] = array($tax_query);
 
-
             global $gridview_columns, $post;
 
 
