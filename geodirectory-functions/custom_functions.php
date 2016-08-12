@@ -1389,7 +1389,7 @@ function geodir_show_detail_page_tabs()
         setup_postdata($post);
     }
 
-    $geodir_post_detail_fields = geodir_show_listing_info('detail');
+    $geodir_post_detail_fields = geodir_show_listing_info('moreinfo');
 
 
     if (geodir_is_page('detail')) {
@@ -1439,6 +1439,7 @@ function geodir_show_detail_page_tabs()
             $map_args['zoom'] = '' . $post->post_mapzoom . '';
         }
         $map_args['autozoom'] = false;
+        $map_args['scrollwheel'] = (get_option('geodir_add_listing_mouse_scroll')) ? 0 : 1;
         $map_args['child_collapse'] = '0';
         $map_args['enable_cat_filters'] = false;
         $map_args['enable_text_search'] = false;

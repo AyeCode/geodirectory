@@ -2,6 +2,7 @@ is_zooming = false;
 zoom_listener = '';
 gd_current_query = '';
 gd_map_first_load = true;
+gd_fullscreen_parent = '';
 
 function initMap(map_options) {
     if (window.gdMaps == 'osm') {
@@ -103,7 +104,19 @@ function initMap(map_options) {
         google.maps.event.addDomListener(maxMap, 'click', gdMaxMap);
     }
 
+
     function gdMaxMap() {
+
+
+        if(jQuery('body').hasClass('body_fullscreen')){
+            jQuery('#placeholder_' + map_canvas).after(jQuery(gd_fullscreen_parent ));
+            jQuery('#placeholder_' + map_canvas).remove();
+        }else{
+            gd_fullscreen_parent  = jQuery('#' + map_canvas).parents(".stick_trigger_container");//.parent();
+            jQuery(gd_fullscreen_parent ).before('<div id="placeholder_' + map_canvas+ '"></div>');
+            jQuery(gd_fullscreen_parent).prependTo("body");
+        }
+
         jQuery('#' + map_canvas).toggleClass('map-fullscreen');
         jQuery('.' + map_canvas + '_map_category').toggleClass('map_category_fullscreen');
         jQuery('#' + map_canvas + '_trigger').toggleClass('map_category_fullscreen');

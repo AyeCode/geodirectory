@@ -1225,7 +1225,7 @@ function geodir_detail_page_more_info()
      * @since 1.0.0
      */
     do_action('geodir_before_detail_page_more_info');
-    if ($geodir_post_detail_fields = geodir_show_listing_info()) {
+    if ($geodir_post_detail_fields = geodir_show_listing_info('detail')) {
         echo $geodir_post_detail_fields;
     }
     /**
@@ -1588,7 +1588,7 @@ function geodir_detail_page_tab_is_display($is_display, $tab)
     
     if ($tab == 'post_info')
         $is_display = (!empty($geodir_post_detail_fields)) ? true : false;
-
+    
     if ($tab == 'post_images')
         $is_display = (!empty($post_images)) ? true : false;
 
