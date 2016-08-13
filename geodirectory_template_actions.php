@@ -2600,7 +2600,7 @@ function geodir_action_signup_forms()
         foreach ($errors as $errorsObj) {
             foreach ($errorsObj as $key => $val) {
                 for ($i = 0; $i < count($val); $i++) {
-                    echo "<div class=sucess_msg>" . $val[$i] . '</div>';
+                    echo "<div class=error_msg_fix>" . $val[$i] . '</div>';
                     $registration_error_msg = 1;
                 }
             }

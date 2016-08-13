@@ -1242,4 +1242,19 @@ function geodir_sc_cpt_categories_widget($atts, $content = '') {
     return $output;
 }
 add_shortcode('gd_cpt_categories', 'geodir_sc_cpt_categories_widget');
+
+/**
+ * Responsive videos shortcode.
+ *
+ * Responsive videos requires a wrapper. This shortcode adds a wrapper for the iframe code
+ *
+ * @since 1.6.6
+ * @param array $atts Not being used.
+ * @param string $content The iframe video code. Required.
+ * @return string HTML code.
+ */
+function geodir_sc_responsive_videos($atts, $content) {
+    return '<div class="geodir-video-wrapper">'.$content.'</div>';
+}
+add_shortcode('gd_video', 'geodir_sc_responsive_videos');
 ?>

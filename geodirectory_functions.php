@@ -74,6 +74,12 @@ include_once('geodirectory-functions/post_functions.php');
  */
 include_once('geodirectory-functions/taxonomy_functions.php');
 /**
+ * Contains functions outputting the custom fields html.
+ *
+ * @since 1.6.6
+ */
+include_once('geodirectory-functions/custom_fields_output_functions.php');
+/**
  * Contains functions for building and storing custom fields.
  *
  * @since 1.0.0

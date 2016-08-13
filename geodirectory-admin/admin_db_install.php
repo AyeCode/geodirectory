@@ -422,6 +422,7 @@ if (!function_exists('geodir_create_tables')) {
 							  is_required enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  required_msg varchar(255) NULL DEFAULT NULL,
 							  show_on_listing enum( '0', '1' ) NOT NULL DEFAULT '1',
+							  show_in text NULL DEFAULT NULL,
 							  show_on_detail enum( '0', '1' ) NOT NULL DEFAULT '1',
 							  show_as_tab enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  for_admin_use enum( '0', '1' ) NOT NULL DEFAULT '0',

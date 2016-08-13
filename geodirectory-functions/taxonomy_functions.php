@@ -1993,5 +1993,5 @@ function geodir_get_term_icon($term_id = false, $rebuild = false)
         $terms_icons = str_replace("http:","https:",$terms_icons );
     }
 
-    return $terms_icons;
+    return apply_filters('geodir_get_term_icons', $terms_icons, $term_id);
 }
