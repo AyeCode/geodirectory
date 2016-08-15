@@ -8,6 +8,7 @@ Popular post view widget -> "Post Type:" setting not working on CPT pages - FIXE
 Responsive video shortcode - ADDED
 Claim listing error message incorrect class - FIXED
 Address field not showing the same on prview page - FIXED
+Options added in CPT categories widget to disable viewing post type & category filters - ADDED
 
 v1.6.5
 Location page breadcrumb now uses location page slug - CHANGED
