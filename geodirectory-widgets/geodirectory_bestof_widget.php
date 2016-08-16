@@ -740,6 +740,12 @@ function geodir_bestof_js()
                 jQuery.post(geodir_var.geodir_ajax_url, data, function (response) {
                     container.html(response);
                     jQuery(widgetBox).find('.geodir_category_list_view li .geodir-post-img .geodir_thumbnail img').css('display', 'block');
+
+                    // start lazy load if it's turned on
+                    if(geodir_var.geodir_lazy_load==1){
+                        geodir_init_lazy_load();
+                    }
+
                 });
             })
         });

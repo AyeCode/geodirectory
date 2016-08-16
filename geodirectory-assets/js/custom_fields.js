@@ -15,6 +15,8 @@ jQuery(document).ready(function () {
             }, function (data) {
                 jQuery('.field_row_main ul.core').append(data);
                 jQuery('#licontainer_' + id).find('#sort_order').val(parseInt(jQuery('#licontainer_' + id).index()) + 1);
+                // reset the chosen selects
+                jQuery("select.chosen_select").chosen();
             });
             if (manage_field_type == 'sorting_options') {
                 jQuery(this).closest('li').hide();
@@ -103,6 +105,9 @@ function save_field(id) {
                 jQuery('.field_frm').hide();
             }
 
+            // reset the chosen selects
+            jQuery("select.chosen_select").chosen();
+
 
         }
     });
@@ -113,6 +118,15 @@ function save_field(id) {
 
 function show_hide(id) {
     jQuery('#' + id).toggle();
+}
+
+function show_hide_radio(id,sh,cl) {
+    if(sh=='hide'){
+        jQuery( id ).closest( '.widefat' ).find('.'+cl).hide('fast');
+    }else{
+        jQuery( id ).closest( '.widefat' ).find('.'+cl).show('fast');
+    }
+
 }
 
 

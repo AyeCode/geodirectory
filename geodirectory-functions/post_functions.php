@@ -1842,18 +1842,12 @@ if (!function_exists('geodir_get_infowindow_html')) {
             $title = str_replace($srcharr, $replarr, ($postinfo_obj->post_title));
             $lat = $postinfo_obj->post_latitude;
             $lng = $postinfo_obj->post_longitude;
-            $address = str_replace($srcharr, $replarr, ($postinfo_obj->post_address));
-            $contact = str_replace($srcharr, $replarr, ($postinfo_obj->geodir_contact));
-            $timing = str_replace($srcharr, $replarr, ($postinfo_obj->geodir_timing));
         } else {
             $ID = $postinfo_obj->post_id;
             $title = str_replace($srcharr, $replarr, htmlentities($postinfo_obj->post_title, ENT_COMPAT, 'UTF-8')); // fix by Stiofan
             $plink = get_permalink($ID);
             $lat = htmlentities(geodir_get_post_meta($ID, 'post_latitude', true));
             $lng = htmlentities(geodir_get_post_meta($ID, 'post_longitude', true));
-            $address = str_replace($srcharr, $replarr, htmlentities(geodir_get_post_meta($ID, 'post_address', true), ENT_COMPAT, 'UTF-8')); // fix by Stiofan
-            $contact = str_replace($srcharr, $replarr, htmlentities(geodir_get_post_meta($ID, 'geodir_contact', true), ENT_COMPAT, 'UTF-8'));
-            $timing = str_replace($srcharr, $replarr, (geodir_get_post_meta($ID, 'geodir_timing', true)));
         }
 
         // filter field as per price package
@@ -1953,23 +1947,11 @@ if (!function_exists('geodir_get_infowindow_html')) {
                              * @param bool|string $post_preview True if currently in post preview page. Empty string if not.                           *
                              */
                             do_action('geodir_infowindow_meta_before', $ID, $postinfo_obj, $post_preview);
-                            ?>
-                            <span class="geodir_address"><i class="fa fa-home"></i> <?php echo $address; ?></span>
-                            <?php if ($contact) { ?><span class="geodir_contact"><i
-                                class="fa fa-phone"></i>
-                                <?php
-                                $tel_link = apply_filters('geodir_map_bubble_tel_linkable', false);
-                                if ($tel_link) {
-                                    ?>
-                                    <a href="tel:<?php echo preg_replace('/[^0-9+]/', '', $contact); ?>"><?php echo stripslashes($contact); ?></a>
-                                    <?php
-                                } else {
-                                    echo $contact;
-                                }
-                                ?>
-                                </span><?php } ?>
-                            <?php if ($timing) { ?><span class="geodir_timing"><i
-                                class="fa fa-clock-o"></i> <?php echo $timing; ?></span><?php }
+
+
+                            echo geodir_show_listing_info('mapbubble');
+                            
+                                                      
 
                             /**
                              * Fires after the meta info in the map info window.

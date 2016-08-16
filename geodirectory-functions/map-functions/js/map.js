@@ -2,6 +2,7 @@ is_zooming = false;
 zoom_listener = '';
 gd_current_query = '';
 gd_map_first_load = true;
+gd_fullscreen_parent = '';
 
 function initMap(map_options) {
     if (window.gdMaps == 'osm') {
@@ -103,7 +104,19 @@ function initMap(map_options) {
         google.maps.event.addDomListener(maxMap, 'click', gdMaxMap);
     }
 
+
     function gdMaxMap() {
+
+
+        if(jQuery('body').hasClass('body_fullscreen')){
+            jQuery('#placeholder_' + map_canvas).after(jQuery(gd_fullscreen_parent ));
+            jQuery('#placeholder_' + map_canvas).remove();
+        }else{
+            gd_fullscreen_parent  = jQuery('#' + map_canvas).parents(".stick_trigger_container");//.parent();
+            jQuery(gd_fullscreen_parent ).before('<div id="placeholder_' + map_canvas+ '"></div>');
+            jQuery(gd_fullscreen_parent).prependTo("body");
+        }
+
         jQuery('#' + map_canvas).toggleClass('map-fullscreen');
         jQuery('.' + map_canvas + '_map_category').toggleClass('map_category_fullscreen');
         jQuery('#' + map_canvas + '_trigger').toggleClass('map_category_fullscreen');
@@ -202,10 +215,18 @@ function build_map_ajax_search_param(map_canvas_var, reload_cat_list, catObj, hi
     if (jQuery.goMap.map && eval(map_canvas_var).enable_marker_cluster_server) { // map loaded so we know the bounds
         bounds = jQuery.goMap.map.getBounds();
         gd_zl = jQuery.goMap.map.getZoom();
-        gd_lat_ne = bounds.getNorthEast().lat();
-        gd_lon_ne = bounds.getNorthEast().lng();
-        gd_lat_sw = bounds.getSouthWest().lat();
-        gd_lon_sw = bounds.getSouthWest().lng();
+        
+        if (window.gdMaps == 'osm') {
+            gd_lat_ne = bounds.getNorthEast().lat;
+            gd_lon_ne = bounds.getNorthEast().lng;
+            gd_lat_sw = bounds.getSouthWest().lat;
+            gd_lon_sw = bounds.getSouthWest().lng;
+        } else {
+            gd_lat_ne = bounds.getNorthEast().lat();
+            gd_lon_ne = bounds.getNorthEast().lng();
+            gd_lat_sw = bounds.getSouthWest().lat();
+            gd_lon_sw = bounds.getSouthWest().lng();
+        }
         map_info = "&zl=" + gd_zl + "&lat_ne=" + gd_lat_ne + "&lon_ne=" + gd_lon_ne + "&lat_sw=" + gd_lat_sw + "&lon_sw=" + gd_lon_sw;
     } else if (eval(map_canvas_var).enable_marker_cluster_server && !eval(map_canvas_var).autozoom) { // map not loaded and auto zoom not set
         gd_zl = eval(map_canvas_var).zoom;
@@ -933,7 +954,7 @@ function initMapOSM(map_options) {
         jQuery.goMap.map.controls[controlPosition].push(centerControlDiv);
     }
 
-    L.DomEvent.addListener(jQuery.goMap.map, 'idle', function() {
+    L.DomEvent.addListener(jQuery.goMap.map, 'moveend', function() {
         if (eval(map_canvas).enable_marker_cluster_server) {
             if (gd_map_first_load) { // first load do nothing
                 gd_map_first_load = false;
@@ -1070,15 +1091,60 @@ function create_marker_osm(input, map_canvas_var) {
             icon: input.i,
             label: cs,
             w: input.w,
-            h: input.h
+            h: input.h,
+            clustered: (parseInt(options.enable_marker_cluster) === 1) && typeof input.cs !== 'undefined' ? true : false
         });
         
-        bounds.extend(coord);
+        if ((parseInt(options.enable_marker_cluster) === 1) && cs) {
+            var labels = cs.split("_");
+            bounds.extend(new L.latLng(labels[1], labels[2]));
+            if (labels[1] != labels[3] && labels[2] != labels[4]) {
+                bounds.extend(new L.latLng(labels[3], labels[4]));
+            }
+        } else {
+            bounds.extend(coord);
+        }
         
         // Adding a click event to the marker
         L.DomEvent.addListener(marker, 'click', function() {
-            is_zooming = true;
-            jQuery("#" + map_canvas_var).goMap();
+            if (marker.options.clustered) {
+                jQuery("#" + map_canvas_var).goMap();
+                
+                marker.closePopup().unbindPopup();
+                var fitBounds = false;
+                if (marker.options.label) {
+                    var labels = marker.options.label.split("_");
+                    var newBounds = new L.LatLngBounds([]);
+                    
+                    var lat1 = labels[1];
+                    var lng1 = labels[2];
+                    var lat2 = labels[3];
+                    var lng2 = labels[4];
+                    
+                    newBounds.extend(new L.latLng(lat1, lng1));
+                    
+                    if (lat1 == lat2 && lng1 == lng2) {
+                        var lat2 = lat2 * 1.00000001;
+                        var lng2 = lng2 * 1.00000001;
+                    }
+                                        
+                    newBounds.extend(new L.latLng(lat2, lng2));
+                    jQuery.goMap.map.fitBounds(newBounds);
+                    bounds = newBounds;
+                    
+                    if (jQuery.goMap.map.getZoom() > eval(map_canvas_var).maxZoom) {
+                        jQuery.goMap.map.setZoom(eval(map_canvas_var).maxZoom);
+                    }
+                } else {
+                    zoom = parseInt(jQuery.goMap.map.getZoom()) + 1 > parseInt(eval(map_canvas_var).maxZoom) && parseInt(eval(map_canvas_var).maxZoom) > 0 ? parseInt(eval(map_canvas_var).maxZoom) : parseInt(jQuery.goMap.map.getZoom()) + 1;
+                    jQuery.goMap.map.setView(marker.getLatLng(), zoom);
+                }
+                return;
+            } else {
+                is_zooming = true;
+                jQuery("#" + map_canvas_var).goMap();
+            }
+            
             var preview_query_str = '';
             
             if (input.post_preview) {
