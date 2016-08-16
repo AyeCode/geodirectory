@@ -9,6 +9,7 @@ Responsive video shortcode - ADDED
 Claim listing error message incorrect class - FIXED
 Address field not showing the same on prview page - FIXED
 Options added in CPT categories widget to disable viewing post type & category filters - ADDED
+Server side marker clustering not working with OpenStreetMap - FIXED
 
 v1.6.5
 Location page breadcrumb now uses location page slug - CHANGED
