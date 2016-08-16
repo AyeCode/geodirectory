@@ -366,7 +366,7 @@ add_shortcode('gd_listing_slider', 'geodir_sc_listing_slider');
  *     @type string $order_by               Order by filter. Default. latest.
  *     @type string $post_number            Number of listings to display. Default. 5.
  *     @type string $post_type              Post type of listing. Default. gd_place.
- *     @type string $show_featured_only     Do you want to display only featured losting? Can be 1 or 0. Default. Empty.
+ *     @type string $show_featured_only     Do you want to display only featured listing? Can be 1 or 0. Default. Empty.
  *     @type string $show_title             Do you want to display title? Can be 1 or 0. Default. Empty.
  *     @type string $slideshow              Setup a slideshow for the slider to animate automatically. Default. 0.
  *     @type int    $slideshow_speed        Set the speed of the slideshow cycling, in milliseconds. Default. 5000.
@@ -923,7 +923,7 @@ add_shortcode('gd_advanced_search', 'geodir_sc_advanced_search');
  *     @type int    $post_limit    No. of post to display. Default 5.
  *     @type int    $categ_limit   No. of categories to display. Default 3.
  *     @type int    $character_count       The excerpt length
- *     @type int    $use_viewing_post_type Filter veiwing post type. Default 1.
+ *     @type int    $use_viewing_post_type Filter viewing post type. Default 1.
  *     @type int    $add_location_filter   Filter current location. Default 1.
  *     @type string $tab_layout    Tab layout to display listing. Default 'bestof-tabs-on-top'.
  *     @type string $before_widget HTML content to prepend to each widget's HTML output.
@@ -1016,7 +1016,7 @@ add_shortcode('gd_bestof_widget', 'geodir_sc_bestof_widget');
  *     @type string $event_type    Event type filter. Should today, upcoming, past, all. Default empty.
                                    For post type gd_event only. 
  *     @type int    $post_number   No. of post to display. Default 10.
- *     @type int|string $post_author       Fitler the posts by author. Either author ID or 'current'(it uses 
+ *     @type int|string $post_author       Filter the posts by author. Either author ID or 'current'(it uses 
                                            the author ID of the current post. Default empty.
  *     @type string $layout        Layout to display listing. Should be gridview_onehalf, gridview_onethird
                                    gridview_onefourth, gridview_onefifth, list. Default 'gridview_onehalf'.
@@ -1169,6 +1169,7 @@ add_shortcode('gd_listings', 'geodir_sc_gd_listings');
  * all geodirectory categories.
  *
  * @since 1.5.5
+ * @since 1.6.6 New parameters $no_cpt_filter &no_cat_filter added.
  *
  * @param array $atts {
  *     Attributes of the shortcode.
@@ -1182,6 +1183,8 @@ add_shortcode('gd_listings', 'geodir_sc_gd_listings');
  *     @type string $sort_by       Categories sort by. 'az' or 'count'. Default 'count'.
  *     @type string|int $max_count Max no of sub-categories count. Default 'all'.
  *     @type string|int $max_level Max level of sub-categories depth. Default 1.
+ *     @type bool   $no_cpt_filter Disable filter current viewing post type. Default empty.
+ *     @type bool   $no_cat_filter Disable filter current viewing category. Default empty.
  *     @type string $before_widget HTML content to prepend to each widget's HTML output.
  *                                 Default is an opening list item element.
  *     @type string $after_widget  HTML content to append to each widget's HTML output.
@@ -1195,47 +1198,52 @@ add_shortcode('gd_listings', 'geodir_sc_gd_listings');
  * @return string HTML content to display CPT categories.
  */
 function geodir_sc_cpt_categories_widget($atts, $content = '') {
-	$defaults = array(
-		'title' => '',
-		'post_type' => '', // NULL for all
-		'hide_empty' => '',
-		'show_count' => '',
-		'hide_icon' => '',
-		'cpt_left' => '',
-		'sort_by' => 'count',
-		'max_count' => 'all',
-		'max_level' => '1',
-		'before_widget' => '<section id="geodir_cpt_categories_widget-1" class="widget geodir-widget geodir_cpt_categories_widget geodir_sc_cpt_categories_widget">',
+    $defaults = array(
+        'title' => '',
+        'post_type' => '', // NULL for all
+        'hide_empty' => '',
+        'show_count' => '',
+        'hide_icon' => '',
+        'cpt_left' => '',
+        'sort_by' => 'count',
+        'max_count' => 'all',
+        'max_level' => '1',
+        'no_cpt_filter' => '',
+        'no_cat_filter' => '',
+        'before_widget' => '<section id="geodir_cpt_categories_widget-1" class="widget geodir-widget geodir_cpt_categories_widget geodir_sc_cpt_categories_widget">',
         'after_widget' => '</section>',
         'before_title' => '<h3 class="widget-title">',
         'after_title' => '</h3>',
-	);
-	$params = shortcode_atts($defaults, $atts);
+    );
+    $params = shortcode_atts($defaults, $atts);
 
     /**
      * Validate our incoming params
      */
-	// Make sure we have an array
+    // Make sure we have an array
     $params['post_type'] = !is_array($params['post_type']) && trim($params['post_type']) != '' ? explode(',', trim($params['post_type'])) : array();
-	 
-	// Validate the checkboxes used on the widget
+     
+    // Validate the checkboxes used on the widget
     $params['hide_empty'] 	= gdsc_to_bool_val($params['hide_empty']);
     $params['show_count'] 	= gdsc_to_bool_val($params['show_count']);
     $params['hide_icon'] 	= gdsc_to_bool_val($params['hide_icon']);
     $params['cpt_left'] 	= gdsc_to_bool_val($params['cpt_left']);
-	
-	if ($params['max_count'] != 'all') {
-		$params['max_count'] = absint($params['max_count']);
-	}
-	
-	if ($params['max_level'] != 'all') {
-		$params['max_level'] = absint($params['max_level']);
-	}
-	
-	$params['sort_by'] = $params['sort_by'] == 'az' ? 'az' : 'count';
 
-	ob_start();
-	the_widget('geodir_cpt_categories_widget', $params, $params);
+    if ($params['max_count'] != 'all') {
+        $params['max_count'] = absint($params['max_count']);
+    }
+
+    if ($params['max_level'] != 'all') {
+        $params['max_level'] = absint($params['max_level']);
+    }
+
+    $params['no_cpt_filter'] = gdsc_to_bool_val($params['no_cpt_filter']);
+    $params['no_cat_filter'] = gdsc_to_bool_val($params['no_cat_filter']);
+
+    $params['sort_by'] = $params['sort_by'] == 'az' ? 'az' : 'count';
+
+    ob_start();
+    the_widget('geodir_cpt_categories_widget', $params, $params);
     $output = ob_get_contents();
     ob_end_clean();
 

@@ -162,7 +162,7 @@
                 center: this.centerLatLng,
                 zoom: opts.zoom,
                 minZoom: opts.minZoom ? opts.minZoom : 1,
-                maxZoom: opts.maxZoom,
+                maxZoom: opts.maxZoom > 18 ? 18 : opts.maxZoom,
                 zoomControl: true,
                 doubleClickZoom: opts.disableDoubleClickZoom === "0" || !opts.disableDoubleClickZoom ? true : false,
                 dragging: true,
@@ -180,7 +180,7 @@
                 this.map.zoomControl.setPosition(zoomPosition);
             }
             
-            if (parseInt(options.enable_marker_cluster) === 1) {
+            if (parseInt(options.enable_marker_cluster) === 1 && !options.enable_marker_cluster_server) {
                 jQuery('#gdOSMprogress').remove();
                 jQuery('#gdOSMprogressBar').remove();
                 jQuery(el).before('<div id="gdOSMprogress"><div id="gdOSMprogressBar"></div></div>');
@@ -559,6 +559,23 @@
                         iconOptions.className = marker.className;
                     }
                     
+                    if (marker.clustered) {
+                        options.clustered = true;
+                        var c = 'marker-cluster marker-cluster-';
+                        
+                        if (marker.title < 10) {
+                            c += 'small';
+                        } else if (marker.title < 100) {
+                            c += 'medium';
+                        } else {
+                            c += 'large';
+                        }
+                        iconOptions.className = c;
+                        iconOptions.html = '<div><span>' + marker.title + '</span></div>';
+                        marker.w = 40;
+                        marker.h = 40;
+                    }
+                    
                     if (!iconOptions.iconSize && marker.w && marker.h && parseInt(marker.w) > 0 && parseInt(marker.h) > 0) {
                         var w = parseFloat(marker.w);
                         var h = parseFloat(marker.h);
@@ -567,16 +584,21 @@
                         iconOptions.popupAnchor = [0, (h * -1) + (h * 0.05)];
                     }
                     
-                    options.icon = L.icon(iconOptions);
+                    if (marker.clustered) {
+                        options.icon = new L.DivIcon(iconOptions);
+                    } else {
+                        options.icon = L.icon(iconOptions);
+                    }
 
                 } else {
                     options.icon = new L.Icon.Default();
                 }
+                
                 options.position = marker.position ? marker.position : L.latLng(marker.latitude, marker.longitude);
 
                 var cmarker = new L.Marker(options.position, options);
 
-                if (marker.html) {
+                if (marker.html && !marker.clustered) {
                     if (!marker.html.content && !marker.html.ajax && !marker.html.id)
                         marker.html = {content: marker.html};
                     else if (!marker.html.content)

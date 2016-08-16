@@ -46,6 +46,10 @@ if (get_option('geodirectory' . '_db_version') != GEODIRECTORY_VERSION) {
         add_action('init', 'geodir_upgrade_154', 11);
     }
 
+    if (GEODIRECTORY_VERSION <= '1.6.6') {
+        add_action('init', 'geodir_upgrade_166', 11);
+    }
+
 
     add_action('init', 'gd_fix_cpt_rewrite_slug', 11);// this needs to be kept for a few versions
 
@@ -145,6 +149,16 @@ function geodir_upgrade_154(){
  */
 function geodir_upgrade_152(){
     gd_fix_address_detail_table_limit();
+}
+
+/**
+ * Handles upgrade for geodirectory versions <= 1.6.6.
+ *
+ * @since 1.6.6
+ * @package GeoDirectory
+ */
+function geodir_upgrade_166(){
+    gd_convert_custom_field_display();
 }
 
 
@@ -267,6 +281,60 @@ function geodir_fix_review_overall_rating()
     }
 }
 
+
+function gd_convert_custom_field_display(){
+    global $wpdb;
+
+    $field_info = $wpdb->get_results("select * from " . GEODIR_CUSTOM_FIELDS_TABLE);
+
+    $has_run = get_option('gd_convert_custom_field_display');
+    if($has_run){return;}
+
+
+
+    if(is_array( $field_info)){
+
+        foreach( $field_info as $cf){
+
+            $id = $cf->id;
+
+            if(!property_exists($cf,'show_in') || !$id){return;}
+
+            $show_in_arr = array();
+
+            if($cf->is_default){
+                $show_in_arr[] = "[detail]";
+            }
+
+            if($cf->show_on_detail){
+                $show_in_arr[] = "[moreinfo]";
+            }
+
+            if($cf->show_on_listing){
+                $show_in_arr[] = "[listing]";
+            }
+
+            if($cf->show_as_tab || $cf->htmlvar_name=='geodir_video' || $cf->htmlvar_name=='geodir_special_offers'){
+                $show_in_arr[] = "[owntab]";
+            }
+
+            if($cf->htmlvar_name=='post' || $cf->htmlvar_name=='geodir_contact' || $cf->htmlvar_name=='geodir_timing'){
+                $show_in_arr[] = "[mapbubble]";
+            }
+
+            if(!empty($show_in_arr )){
+                $show_in_arr = implode(',',$show_in_arr);
+            }else{
+                $show_in_arr = '';
+            }
+
+            $wpdb->query("UPDATE ".GEODIR_CUSTOM_FIELDS_TABLE." SET show_in='$show_in_arr' WHERE id=$id");
+
+        }
+
+        update_option('gd_convert_custom_field_display',1);
+    }
+}
 
 ############################################
 ########### THEME COMPATIBILITY ############

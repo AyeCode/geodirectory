@@ -1103,8 +1103,8 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
         'id' => 'geodir_add_listing_map_section'
     ),
     array(
-        'name' => __('Disable mouse scroll', 'geodirectory'),
-        'desc' => __('Stops the mouse scroll zooming the map', 'geodirectory'),
+        'name' => __('Disable mouse scroll on details page map tab', 'geodirectory'),
+        'desc' => __('Stops the mouse scroll zooming the map (home and listings settings set from widget)', 'geodirectory'),
         'id' => 'geodir_add_listing_mouse_scroll',
         'type' => 'checkbox',
         'std' => '0' // Default value to show home top section

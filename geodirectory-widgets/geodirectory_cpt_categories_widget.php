@@ -27,6 +27,7 @@ class geodir_cpt_categories_widget extends WP_Widget {
      * Front-end display content for cpt categories widget.
      *
      * @since 1.5.4
+     * @since 1.6.6 New parameters $no_cpt_filter &no_cat_filter added.
      *
      * @param array $args Widget arguments.
      * @param array $instance Saved values from database.
@@ -131,6 +132,28 @@ class geodir_cpt_categories_widget extends WP_Widget {
          * @param mixed       $id_base The widget ID.
          */
         $params['max_level'] = apply_filters('geodir_cpt_categories_widget_max_level', !isset($instance['max_level']) ? 'all' : strip_tags($instance['max_level']), $instance, $this->id_base);
+        
+        /**
+         * Filter the widget setting to disable filter current viewing post type.
+         *
+         * @since 1.6.6
+         *
+         * @param bool  $no_cpt_filter If true then it doesn't filter current viewing post type.
+         * @param array $instance An array of the widget's settings.
+         * @param mixed $id_base The widget ID.
+         */
+        $params['no_cpt_filter'] = apply_filters('geodir_cpt_categories_widget_no_cpt_filter', empty($instance['no_cpt_filter']) ? 0 : 1, $instance, $this->id_base);
+        
+        /**
+         * Filter the widget setting to disable current viewing category.
+         *
+         * @since 1.6.6
+         *
+         * @param bool  $no_cat_filter If true then it doesn't filter current viewing category.
+         * @param array $instance An array of the widget's settings.
+         * @param mixed $id_base The widget ID.
+         */
+        $params['no_cat_filter'] = apply_filters('geodir_cpt_categories_widget_no_cat_filter', empty($instance['no_cat_filter']) ? 0 : 1, $instance, $this->id_base);
 
         /**
          * Filter the widget parameters.
@@ -161,6 +184,7 @@ class geodir_cpt_categories_widget extends WP_Widget {
      * Sanitize cpt categories widget values as they are saved.
      *
      * @since 1.5.4
+     * @since 1.6.6 New parameters $no_cpt_filter &no_cat_filter added.
      *
      * @param array $new_instance Values just sent to be saved.
      * @param array $old_instance Previously saved values from database.
@@ -179,6 +203,8 @@ class geodir_cpt_categories_widget extends WP_Widget {
         $instance['sort_by'] = isset($new_instance['sort_by']) && in_array($new_instance['sort_by'], array('az', 'count')) ? $new_instance['sort_by'] : 'count';
         $instance['max_count'] = strip_tags($new_instance['max_count']);
         $instance['max_level'] = strip_tags($new_instance['max_level']);
+        $instance['no_cpt_filter'] = !empty($new_instance['no_cpt_filter']) ? 1 : 0;
+        $instance['no_cat_filter'] = !empty($new_instance['no_cat_filter']) ? 1 : 0;
 
         return $instance;
     }
@@ -187,6 +213,7 @@ class geodir_cpt_categories_widget extends WP_Widget {
      * Back-end cpt categories settings form.
      *
      * @since 1.5.4
+     * @since 1.6.6 New parameters $no_cpt_filter &no_cat_filter added.
      *
      * @param array $instance Previously saved values from database.
      */
@@ -201,7 +228,9 @@ class geodir_cpt_categories_widget extends WP_Widget {
                 'cpt_left' => '',
                 'sort_by' => 'count',
                 'max_count' => 'all',
-                'max_level' => '1'
+                'max_level' => '1',
+                'no_cpt_filter' => '',
+                'no_cat_filter' => '',
             )
         );
 
@@ -214,6 +243,8 @@ class geodir_cpt_categories_widget extends WP_Widget {
         $max_count = strip_tags($instance['max_count']);
         $max_level = strip_tags($instance['max_level']);
         $sort_by = isset($instance['sort_by']) && in_array($instance['sort_by'], array('az', 'count')) ? $instance['sort_by'] : 'count';
+        $no_cpt_filter = !empty($instance['no_cpt_filter']) ? true : false;
+        $no_cat_filter = !empty($instance['no_cat_filter']) ? true : false;
 
         $post_type_options = geodir_get_posttypes('options');
         ?>
@@ -260,6 +291,12 @@ class geodir_cpt_categories_widget extends WP_Widget {
                 <?php } ?>
             </select>
         </p>
+        <p>
+            <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('no_cpt_filter'); ?>" name="<?php echo $this->get_field_name('no_cpt_filter'); ?>"<?php checked( $no_cpt_filter ); ?> value="1" />
+            <label for="<?php echo $this->get_field_id('no_cpt_filter'); ?>"><?php _e( 'Don\'t filter for current viewing post type', 'geodirectory' ); ?></label>
+            <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('no_cat_filter'); ?>" name="<?php echo $this->get_field_name('no_cat_filter'); ?>"<?php checked( $no_cat_filter ); ?> value="1" />
+            <label for="<?php echo $this->get_field_id('no_cat_filter'); ?>"><?php _e( 'Don\'t filter for current viewing category', 'geodirectory' ); ?></label>
+        </p>
     <?php
     }
 } // class geodir_cpt_categories_widget
@@ -270,6 +307,7 @@ register_widget('geodir_cpt_categories_widget');
  * Get the cpt categories content.
  *
  * @since 1.5.4
+ * @since 1.6.6 New parameters $no_cpt_filter &no_cat_filter added.
  *
  * @param array $params An array of cpt categories parameters.
  * @return string CPT categories content.
@@ -286,10 +324,14 @@ function geodir_cpt_categories_output($params) {
             'sort_by' => 'count',
             'max_count' => 'all',
             'max_level' => '1',
+            'no_cpt_filter' => '',
+            'no_cat_filter' => '',
         )
     );
 
     $sort_by = isset($args['sort_by']) && in_array($args['sort_by'], array('az', 'count')) ? $args['sort_by'] : 'count';
+    $cpt_filter = empty($args['no_cpt_filter']) ? true : false;
+    $cat_filter = empty($args['no_cat_filter']) ? true : false;
 
     $gd_post_types = geodir_get_posttypes('array');
 
@@ -317,12 +359,8 @@ function geodir_cpt_categories_output($params) {
     }
 
     $parent_category = 0;
-    if ($is_listing) {
+    if ($is_listing && $cpt_filter) {
         $post_type_arr = array($current_posttype);
-
-        if ($is_category) {
-            $parent_category = $current_term_id;
-        }
     }
 
     $post_types = array();
@@ -367,6 +405,7 @@ function geodir_cpt_categories_output($params) {
     $output = '';
     if (!empty($post_types)) {
         foreach ($post_types as $cpt => $cpt_info) {
+            $parent_category = ($is_category && $cat_filter && $cpt == $current_posttype) ? $current_term_id : 0;
             $cat_taxonomy = $cpt . 'category';
             $categories = get_terms($cat_taxonomy, array('orderby' => $orderby, 'order' => $order, 'hide_empty' => $hide_empty, 'parent' => $parent_category));
             if ($hide_empty) {
@@ -385,7 +424,7 @@ function geodir_cpt_categories_output($params) {
                 }
                 $cpt_row = '<div class="gd-cptcat-row gd-cptcat-' . $cpt . $row_class . ' '.$cpt_left.'">';
 
-                if ($is_category) {
+                if ($is_category && $cat_filter && $cpt == $current_posttype) {
                     $term_info = get_term($current_term_id, $cat_taxonomy);
 
                     $term_icon_url = !empty($term_icons) && isset($term_icons[$term_info->term_id]) ? $term_icons[$term_info->term_id] : '';
