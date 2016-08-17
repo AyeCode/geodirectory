@@ -8,6 +8,7 @@
 
 $data_type = isset($_REQUEST['data_type']) ? sanitize_text_field($_REQUEST['data_type']) : '';
 $field_type = isset($_REQUEST['field_type']) ? sanitize_text_field($_REQUEST['field_type']) : '';
+$field_type_key = isset($_REQUEST['field_type_key']) ? sanitize_text_field($_REQUEST['field_type_key']) : '';
 $field_action = isset($_REQUEST['field_ins_upd']) ? sanitize_text_field($_REQUEST['field_ins_upd']) : '';
 $field_id = isset($_REQUEST['field_id']) ? sanitize_text_field($_REQUEST['field_id']) : '';
 
@@ -36,7 +37,7 @@ if (isset($_REQUEST['update']) && $_REQUEST['update'] == "update" && isset($_REQ
 
 /* ---- Show field form in admin ---- */
 if ($field_type != '' && $field_id != '' && $field_action == 'new' && isset($_REQUEST['create_field']) && isset($_REQUEST['manage_field_type']) && $_REQUEST['manage_field_type'] == 'custom_fields') {
-    geodir_custom_field_adminhtml($field_type, $field_id, $field_action);
+    geodir_custom_field_adminhtml($field_type, $field_id, $field_action,$field_type_key);
 }
 
 if ($field_type != '' && $field_id != '' && $field_action == 'new' && isset($_REQUEST['create_field']) && isset($_REQUEST['manage_field_type']) && $_REQUEST['manage_field_type'] == 'sorting_options') {
@@ -79,7 +80,7 @@ if ($field_id != '' && $field_action == 'submit' && isset($_REQUEST['_wpnonce'])
 
     if (is_int($return)) {
         $lastid = $return;
-        geodir_custom_field_adminhtml($field_type, $lastid, 'submit');
+        geodir_custom_field_adminhtml($field_type, $lastid, 'submit',$field_type_key);
     } else {
         echo $return;
     }

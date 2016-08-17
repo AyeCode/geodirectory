@@ -86,12 +86,12 @@
     width: 100%;
 }
 
-.gt-draggable-form-items {
+.gd-draggable-form-items {
     border: 1px solid #BBBBBB;
     color: #464646;
     display: block;
     margin-right: 8px;
-    padding: 4px 0 4px 34px;
+    padding: 4px 0 4px 5px;
     position: relative;
     text-align: left;
     text-decoration: none;
@@ -265,11 +265,15 @@
 }
 
 .field_row_main .title .handlediv.close {
-    background: url(../images/cross-img.png) no-repeat center center;
+    font-size: 18px;
+    color: #D70000;
+    margin-top: -2px;
 }
 
 .field_row_main .title .handlediv.move {
-    background: url(../images/move.png) no-repeat center center;
+    font-size: 18px;
+    color: #666;
+    margin-top: -2px;
 }
 
 .field_row_main .gt-fieldset {
@@ -548,7 +552,12 @@ Radio input buttons
 .gd-switch input { display: none; }
 .gd-switch {height: 32px;}
 
+.core.ui-sortable .ui-state-highlight{
+    width: 100%;
+    height:37px;
+    background: #fd9720;
 
+}
 
 
 @media screen and (max-width: 768px) {

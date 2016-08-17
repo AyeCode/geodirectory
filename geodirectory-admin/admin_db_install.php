@@ -408,6 +408,7 @@ if (!function_exists('geodir_create_tables')) {
 							  post_type varchar(100) NULL,
 							  data_type varchar(100) NULL DEFAULT NULL,
 							  field_type varchar(255) NOT NULL COMMENT 'text,checkbox,radio,select,textarea',
+							  field_type_key varchar(255) NOT NULL,
 							  admin_title varchar(255) NULL DEFAULT NULL,
 							  admin_desc text NULL DEFAULT NULL,
 							  site_title varchar(255) NULL DEFAULT NULL,

@@ -17,7 +17,7 @@
  * Text Domain: geodirectory
  * Domain Path: /geodirectory-languages
  * Requires at least: 3.1
- * Tested up to: 4.5
+ * Tested up to: 4.6
  */
 
 /**
