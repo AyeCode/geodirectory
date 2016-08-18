@@ -151,7 +151,6 @@ function geodir_post_custom_fields($package_id = '', $default = 'all', $post_typ
     return $return_arr;
 }
 
-if (!function_exists('geodir_custom_field_adminhtml')) {
     /**
      * Adds admin html for custom fields.
      *
@@ -161,9 +160,9 @@ if (!function_exists('geodir_custom_field_adminhtml')) {
      * @param string $field_type The form field type.
      * @param object|int $result_str The custom field results object or row id.
      * @param string $field_ins_upd When set to "submit" displays form.
-     * @param bool $default when set to true field will be for admin use only.
+     * @param string $field_type_key The key of the custom field.
      */
-    function geodir_custom_field_adminhtml($field_type, $result_str, $field_ins_upd = '', $default = false)
+    function geodir_custom_field_adminhtml($field_type, $result_str, $field_ins_upd = '', $field_type_key ='')
     {
         global $wpdb;
         $cf = $result_str;
@@ -183,7 +182,7 @@ if (!function_exists('geodir_custom_field_adminhtml')) {
         include('custom_field_html.php');
 
     }
-}
+
 
 if (!function_exists('geodir_custom_field_delete')) {
     /**
@@ -359,6 +358,7 @@ if (!function_exists('geodir_custom_field_save')) {
             $site_title = $request_field['site_title'];
             $data_type = $request_field['data_type'];
             $field_type = $request_field['field_type'];
+            $field_type_key = $request_field['field_type_key'];
             $htmlvar_name = isset($request_field['htmlvar_name']) ? $request_field['htmlvar_name'] : '';
             $admin_desc = $request_field['admin_desc'];
             $clabels = $request_field['clabels'];
@@ -775,6 +775,7 @@ if (!function_exists('geodir_custom_field_save')) {
 					admin_title = %s,
 					site_title = %s,
 					field_type = %s,
+					field_type_key = %s,
 					htmlvar_name = %s,
 					admin_desc = %s,
 					clabels = %s,
@@ -803,7 +804,7 @@ if (!function_exists('geodir_custom_field_save')) {
 					for_admin_use = %s
 					where id = %d",
 
-                        array($post_type, $admin_title, $site_title, $field_type, $htmlvar_name, $admin_desc, $clabels, $default_value, $sort_order, $is_active, $is_default, $is_required, $required_msg, $css_class, $field_icon, $field_icon, $show_on_listing, $show_in, $show_on_detail, $show_as_tab, $option_values, $price_pkg, $cat_sort, $cat_filter, $data_type, $extra_field_query, $decimal_point,$validation_pattern,$validation_msg, $for_admin_use, $cf)
+                        array($post_type, $admin_title, $site_title, $field_type, $field_type_key, $htmlvar_name, $admin_desc, $clabels, $default_value, $sort_order, $is_active, $is_default, $is_required, $required_msg, $css_class, $field_icon, $field_icon, $show_on_listing, $show_in, $show_on_detail, $show_as_tab, $option_values, $price_pkg, $cat_sort, $cat_filter, $data_type, $extra_field_query, $decimal_point,$validation_pattern,$validation_msg, $for_admin_use, $cf)
                     )
 
                 );
@@ -1109,6 +1110,7 @@ if (!function_exists('geodir_custom_field_save')) {
 					admin_title = %s,
 					site_title = %s,
 					field_type = %s,
+					field_type_key = %s,
 					htmlvar_name = %s,
 					admin_desc = %s,
 					clabels = %s,
@@ -1136,7 +1138,7 @@ if (!function_exists('geodir_custom_field_save')) {
 					validation_msg = %s,
 					for_admin_use = %s ",
 
-                        array($post_type, $admin_title, $site_title, $field_type, $htmlvar_name, $admin_desc, $clabels, $default_value, $sort_order, $is_active, $is_default, $is_admin, $is_required, $required_msg, $css_class, $field_icon, $show_on_listing,$show_in, $show_on_detail, $show_as_tab, $option_values, $price_pkg, $cat_sort, $cat_filter, $data_type, $extra_field_query, $decimal_point,$validation_pattern,$validation_msg, $for_admin_use)
+                        array($post_type, $admin_title, $site_title, $field_type, $field_type_key, $htmlvar_name, $admin_desc, $clabels, $default_value, $sort_order, $is_active, $is_default, $is_admin, $is_required, $required_msg, $css_class, $field_icon, $show_on_listing,$show_in, $show_on_detail, $show_as_tab, $option_values, $price_pkg, $cat_sort, $cat_filter, $data_type, $extra_field_query, $decimal_point,$validation_pattern,$validation_msg, $for_admin_use)
 
                     )
 
@@ -1197,6 +1199,28 @@ function godir_set_field_order($field_ids = array())
 }
 
 
+function geodir_get_cf_value($cf){
+    $value = '';
+    if (is_admin()) {
+        global $post,$gd_session;
+
+        if (isset($_REQUEST['post']))
+            $_REQUEST['pid'] = $_REQUEST['post'];
+    }
+
+    if (isset($_REQUEST['backandedit']) && $_REQUEST['backandedit'] && $gd_ses_listing = $gd_session->get('listing')) {
+        $post = $gd_ses_listing;
+        $value = isset($post[$cf['name']]) ? $post[$cf['name']] : '';
+    } elseif (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
+        $value = geodir_get_post_meta($_REQUEST['pid'], $cf['name'], true);
+    } else {
+        if ($value == '') {
+            $value = $cf['default'];
+        }
+    }
+    return $value;
+}
+
 /**
  * Displays custom fields html.
  *
@@ -1215,26 +1239,15 @@ function godir_set_field_order($field_ids = array())
 function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $post_type = 'gd_place') {
     global $is_default, $mapzoom, $gd_session;
 
-    $show_editors = array();
     $listing_type = $post_type;
 
     $custom_fields = geodir_post_custom_fields($package_id, $default, $post_type);
 
-    $fieldset_id = '';
-    $fieldset_field_class = 'gd-fieldset-details';
     foreach ($custom_fields as $key => $val) {
         $val = stripslashes_deep($val); // strip slashes from labels
         $name = $val['name'];
-        $site_title = $val['site_title'];
         $type = $val['type'];
-        $admin_desc = $val['desc'];
-        $option_values = $val['option_values'];
-        $is_required = $val['is_required'];
         $is_default = $val['is_default'];
-        $is_admin = $val['is_admin'];
-        $required_msg = $val['required_msg'];
-        $extra_fields = unserialize($val['extra_fields']);
-        $value = '';
 
         /* field available to site admin only for edit */
         $for_admin_use = isset($val['for_admin_use']) && (int)$val['for_admin_use'] == 1 ? true : false;
@@ -1249,16 +1262,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
                 $_REQUEST['pid'] = $_REQUEST['post'];
         }
 
-        if (isset($_REQUEST['backandedit']) && $_REQUEST['backandedit'] && $gd_ses_listing = $gd_session->get('listing')) {
-            $post = $gd_ses_listing;
-            $value = isset($post[$name]) ? $post[$name] : '';
-        } elseif (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
-            $value = geodir_get_post_meta($_REQUEST['pid'], $name, true);
-        } else {
-            if ($value == '') {
-                $value = $val['default'];
-            }
-        }
+        
 
         /**
          * Called before the custom fields info is output for submitting a post.
@@ -1273,855 +1277,21 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
          */
         do_action('geodir_before_custom_form_field_' . $name, $listing_type, $package_id, $val);
 
-        if ($type == 'fieldset') {
-            $fieldset_id = (int)$val['id'];
-            $fieldset_field_class = 'gd-fieldset-' . $fieldset_id;
-            ?>
-            <h5 id="geodir_fieldset_<?php echo $fieldset_id;?>" class="geodir-fieldset-row" gd-fieldset="<?php echo $fieldset_id;?>"><?php echo $site_title;?>
-                <?php if ($admin_desc != '') echo '<small>( ' . $admin_desc . ' )</small>';?></h5>
-            <?php
-        } else if ($type == 'address') {
-            $prefix = $name . '_';
 
-            ($site_title != '') ? $address_title = $site_title : $address_title = geodir_ucwords($prefix . ' address');
-            ($extra_fields['zip_lable'] != '') ? $zip_title = $extra_fields['zip_lable'] : $zip_title = geodir_ucwords($prefix . ' zip/post code ');
-            ($extra_fields['map_lable'] != '') ? $map_title = $extra_fields['map_lable'] : $map_title = geodir_ucwords('set address on map');
-            ($extra_fields['mapview_lable'] != '') ? $mapview_title = $extra_fields['mapview_lable'] : $mapview_title = geodir_ucwords($prefix . ' mapview');
+        $custom_field = $val;
+        $html ='';
+        /**
+         * Filter the output for custom fields.
+         *
+         * Here we can remove or add new functions depending on the field type.
+         *
+         * @param string $html The html to be filtered (blank).
+         * @param array $custom_field The custom field array values.
+         */
+        echo apply_filters("geodir_custom_field_input_{$type}",$html,$custom_field);
 
-            $address = '';
-            $zip = '';
-            $mapview = '';
-            $mapzoom = '';
-            $lat = '';
-            $lng = '';
 
-            if (isset($_REQUEST['backandedit']) && $_REQUEST['backandedit'] && $gd_ses_listing = $gd_session->get('listing')) {
-                $post = $gd_ses_listing;
-                $address = $post[$prefix . 'address'];
-                $zip = isset($post[$prefix . 'zip']) ? $post[$prefix . 'zip'] : '';
-                $lat = isset($post[$prefix . 'latitude']) ? $post[$prefix . 'latitude'] : '';
-                $lng = isset($post[$prefix . 'longitude']) ? $post[$prefix . 'longitude'] : '';
-                $mapview = isset($post[$prefix . 'mapview']) ? $post[$prefix . 'mapview'] : '';
-                $mapzoom = isset($post[$prefix . 'mapzoom']) ? $post[$prefix . 'mapzoom'] : '';
-            } else if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '' && $post_info = geodir_get_post_info($_REQUEST['pid'])) {
-                $post_info = (array)$post_info;
 
-                $address = $post_info[$prefix . 'address'];
-                $zip = isset($post_info[$prefix . 'zip']) ? $post_info[$prefix . 'zip'] : '';
-                $lat = isset($post_info[$prefix . 'latitude']) ? $post_info[$prefix . 'latitude'] : '';
-                $lng = isset($post_info[$prefix . 'longitude']) ? $post_info[$prefix . 'longitude'] : '';
-                $mapview = isset($post_info[$prefix . 'mapview']) ? $post_info[$prefix . 'mapview'] : '';
-                $mapzoom = isset($post_info[$prefix . 'mapzoom']) ? $post_info[$prefix . 'mapzoom'] : '';
-            }
-
-            $location = geodir_get_default_location();
-            if (empty($city)) $city = isset($location->city) ? $location->city : '';
-            if (empty($region)) $region = isset($location->region) ? $location->region : '';
-            if (empty($country)) $country = isset($location->country) ? $location->country : '';
-
-            $lat_lng_blank = false;
-            if (empty($lat) && empty($lng)) {
-                $lat_lng_blank = true;
-            }
-
-            if (empty($lat)) $lat = isset($location->city_latitude) ? $location->city_latitude : '';
-            if (empty($lng)) $lng = isset($location->city_longitude) ? $location->city_longitude : '';
-
-            /**
-             * Filter the default latitude.
-             *
-             * @since 1.0.0
-             *
-             * @param float $lat Default latitude.
-             * @param bool $is_admin For admin use only?.
-             */
-            $lat = apply_filters('geodir_default_latitude', $lat, $is_admin);
-            /**
-             * Filter the default longitude.
-             *
-             * @since 1.0.0
-             *
-             * @param float $lat Default longitude.
-             * @param bool $is_admin For admin use only?.
-             */
-            $lng = apply_filters('geodir_default_longitude', $lng, $is_admin);
-
-            ?>
-
-            <div id="geodir_<?php echo $prefix . 'address';?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
-                <label>
-                    <?php _e($address_title, 'geodirectory'); ?>
-                    <?php if ($is_required) echo '<span>*</span>';?>
-                </label>
-                <input type="text" field_type="<?php echo $type;?>" name="<?php echo $prefix . 'address';?>"
-                       id="<?php echo $prefix . 'address';?>" class="geodir_textfield"
-                       value="<?php echo esc_attr(stripslashes($address)); ?>"/>
-                <span class="geodir_message_note"><?php _e($admin_desc, 'geodirectory');?></span>
-                <?php if ($is_required) { ?>
-                    <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
-                <?php } ?>
-            </div>
-
-
-            <?php
-            /**
-             * Called after the address input on the add listings.
-             *
-             * This is used by the location manage to add further locations info etc.
-             *
-             * @since 1.0.0
-             * @param array $val The array of setting for the custom field. {@see geodir_custom_field_save()}.
-             */
-            do_action('geodir_address_extra_listing_fields', $val);
-
-            if (isset($extra_fields['show_zip']) && $extra_fields['show_zip']) { ?>
-
-                <div id="geodir_<?php echo $prefix . 'zip'; ?>_row"
-                     class="<?php /*if($is_required) echo 'required_field';*/ ?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
-                    <label>
-                        <?php _e($zip_title, 'geodirectory'); ?>
-                        <?php /*if($is_required) echo '<span>*</span>';*/ ?>
-                    </label>
-                    <input type="text" field_type="<?php echo $type; ?>" name="<?php echo $prefix . 'zip'; ?>"
-                           id="<?php echo $prefix . 'zip'; ?>" class="geodir_textfield autofill"
-                           value="<?php echo esc_attr(stripslashes($zip)); ?>"/>
-                    <?php /*if($is_required) {?>
-					<span class="geodir_message_error"><?php echo _e($required_msg,'geodirectory');?></span>
-					<?php }*/ ?>
-                </div>
-            <?php } ?>
-
-            <?php if (isset($extra_fields['show_map']) && $extra_fields['show_map']) { ?>
-
-                <div id="geodir_<?php echo $prefix . 'map'; ?>_row" class="geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
-                    <?php
-                    /**
-                     * Contains add listing page map functions.
-                     *
-                     * @since 1.0.0
-                     */
-                    include(geodir_plugin_path() . "/geodirectory-functions/map-functions/map_on_add_listing_page.php");
-                    if ($lat_lng_blank) {
-                        $lat = '';
-                        $lng = '';
-                    }
-                    ?>
-                    <span class="geodir_message_note"><?php echo GET_MAP_MSG; ?></span>
-                </div>
-                <?php
-                /* show lat lng */
-                $style_latlng = ((isset($extra_fields['show_latlng']) && $extra_fields['show_latlng']) || is_admin()) ? '' : 'style="display:none"'; ?>
-                <div id="geodir_<?php echo $prefix . 'latitude'; ?>_row"
-                     class="<?php if ($is_required) echo 'required_field'; ?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>" <?php echo $style_latlng; ?>>
-                    <label>
-                        <?php echo PLACE_ADDRESS_LAT; ?>
-                        <?php if ($is_required) echo '<span>*</span>'; ?>
-                    </label>
-                    <input type="text" field_type="<?php echo $type; ?>" name="<?php echo $prefix . 'latitude'; ?>"
-                           id="<?php echo $prefix . 'latitude'; ?>" class="geodir_textfield"
-                           value="<?php echo esc_attr(stripslashes($lat)); ?>" size="25"/>
-                    <span class="geodir_message_note"><?php echo GET_LATITUDE_MSG; ?></span>
-                    <?php if ($is_required) { ?>
-                        <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
-                    <?php } ?>
-                </div>
-
-                <div id="geodir_<?php echo $prefix . 'longitude'; ?>_row"
-                     class="<?php if ($is_required) echo 'required_field'; ?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>" <?php echo $style_latlng; ?>>
-                    <label>
-                        <?php echo PLACE_ADDRESS_LNG; ?>
-                        <?php if ($is_required) echo '<span>*</span>'; ?>
-                    </label>
-                    <input type="text" field_type="<?php echo $type; ?>" name="<?php echo $prefix . 'longitude'; ?>"
-                           id="<?php echo $prefix . 'longitude'; ?>" class="geodir_textfield"
-                           value="<?php echo esc_attr(stripslashes($lng)); ?>" size="25"/>
-                    <span class="geodir_message_note"><?php echo GET_LOGNGITUDE_MSG; ?></span>
-                    <?php if ($is_required) { ?>
-                        <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
-                    <?php } ?>
-                </div>
-            <?php } ?>
-
-            <?php if (isset($extra_fields['show_mapview']) && $extra_fields['show_mapview']) { ?>
-                <div id="geodir_<?php echo $prefix . 'mapview'; ?>_row" class="geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
-                    <label><?php _e($mapview_title, 'geodirectory'); ?></label>
-
-
-                    <span class="geodir_user_define"><input field_type="<?php echo $type; ?>" type="radio"
-                                                            class="gd-checkbox"
-                                                            name="<?php echo $prefix . 'mapview'; ?>"
-                                                            id="<?php echo $prefix . 'mapview'; ?>" <?php if ($mapview == 'ROADMAP' || $mapview == '') {
-                            echo 'checked="checked"';
-                        } ?>  value="ROADMAP" size="25"/> <?php _e('Default Map', 'geodirectory'); ?></span>
-                    <span class="geodir_user_define"> <input field_type="<?php echo $type; ?>" type="radio"
-                                                             class="gd-checkbox"
-                                                             name="<?php echo $prefix . 'mapview'; ?>"
-                                                             id="map_view1" <?php if ($mapview == 'SATELLITE') {
-                            echo 'checked="checked"';
-                        } ?> value="SATELLITE" size="25"/> <?php _e('Satellite Map', 'geodirectory'); ?></span>
-
-                    <span class="geodir_user_define"><input field_type="<?php echo $type; ?>" type="radio"
-                                                            class="gd-checkbox"
-                                                            name="<?php echo $prefix . 'mapview'; ?>"
-                                                            id="map_view2" <?php if ($mapview == 'HYBRID') {
-                            echo 'checked="checked"';
-                        } ?>  value="HYBRID" size="25"/> <?php _e('Hybrid Map', 'geodirectory'); ?></span>
-					<span class="geodir_user_define"><input field_type="<?php echo $type; ?>" type="radio"
-                                                            class="gd-checkbox"
-                                                            name="<?php echo $prefix . 'mapview'; ?>"
-                                                            id="map_view3" <?php if ($mapview == 'TERRAIN') {
-                            echo 'checked="checked"';
-                        } ?>  value="TERRAIN" size="25"/> <?php _e('Terrain Map', 'geodirectory'); ?></span>
-
-
-                </div>
-            <?php }?>
-
-            <?php if (isset($extra_fields['show_mapzoom']) && $extra_fields['show_mapzoom']) { ?>
-                <input type="hidden" value="<?php if (isset($mapzoom)) {
-                    echo esc_attr($mapzoom);
-                } ?>" name="<?php echo $prefix . 'mapzoom'; ?>" id="<?php echo $prefix . 'mapzoom'; ?>"/>
-            <?php }?>
-        <?php } elseif ($type == 'text') {
-
-            //number and float validation $validation_pattern
-            if(isset($val['data_type']) && $val['data_type']=='INT'){$type = 'number';}
-            elseif(isset($val['data_type']) && $val['data_type']=='FLOAT'){$type = 'float';}
-            //print_r($val);
-            //validation
-            if(isset($val['validation_pattern']) && $val['validation_pattern']){
-                $validation = 'pattern="'.$val['validation_pattern'].'"';
-            }else{$validation='';}
-
-            // validation message
-            if(isset($val['validation_msg']) && $val['validation_msg']){
-                $validation_msg = 'title="'.$val['validation_msg'].'"';
-            }else{$validation_msg='';}
-            ?>
-
-            <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
-                <label>
-                    <?php $site_title = __($site_title, 'geodirectory');
-                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-                    <?php if ($is_required) echo '<span>*</span>';?>
-                </label>
-                <input field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>"
-                       value="<?php echo esc_attr(stripslashes($value));?>" type="<?php echo $type;?>" class="geodir_textfield" <?php echo $validation;echo $validation_msg;?> />
-                <span class="geodir_message_note"><?php _e($admin_desc, 'geodirectory');?></span>
-                <?php if ($is_required) { ?>
-                    <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
-                <?php } ?>
-            </div>
-
-        <?php } elseif ($type == 'email') {
-            if ($value == $val['default']) {
-                $value = '';
-            }?>
-
-            <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
-                <label>
-                    <?php $site_title = __($site_title, 'geodirectory');
-                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-                    <?php if ($is_required) echo '<span>*</span>';?>
-                </label>
-                <input field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>"
-                       value="<?php echo esc_attr(stripslashes($value));?>" type="email" class="geodir_textfield"/>
-                <span class="geodir_message_note"><?php _e($admin_desc, 'geodirectory');?></span>
-                <?php if ($is_required) { ?>
-                    <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
-                <?php } ?>
-            </div>
-
-        <?php } elseif ($type == 'phone') {
-            if ($value == $val['default']) {
-                $value = '';
-            } ?>
-
-            <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
-                <label>
-                    <?php $site_title = __($site_title, 'geodirectory');
-                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-                    <?php if ($is_required) echo '<span>*</span>';?>
-                </label>
-                <input field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>"
-                       value="<?php echo esc_attr(stripslashes($value));?>" type="tel" class="geodir_textfield"/>
-                <span class="geodir_message_note"><?php _e($admin_desc, 'geodirectory');?></span>
-                <?php if ($is_required) { ?>
-                    <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
-                <?php } ?>
-            </div>
-
-        <?php } elseif ($type == 'url') {
-            if ($value == $val['default']) {
-                $value = '';
-            }?>
-
-            <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
-                <label>
-                    <?php $site_title = __($site_title, 'geodirectory');
-                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-                    <?php if ($is_required) echo '<span>*</span>';?>
-                </label>
-                <input field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>"
-                       value="<?php echo esc_attr(stripslashes($value));?>" type="url" class="geodir_textfield"
-                       oninvalid="setCustomValidity('<?php _e('Please enter a valid URL including http://', 'geodirectory'); ?>')"
-                       onchange="try{setCustomValidity('')}catch(e){}"
-                />
-                <span class="geodir_message_note"><?php _e($admin_desc, 'geodirectory');?></span>
-                <?php if ($is_required) { ?>
-                    <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
-                <?php } ?>
-            </div>
-
-        <?php } elseif ($type == 'radio') { ?>
-            <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
-                <label>
-                    <?php $site_title = __($site_title, 'geodirectory');
-                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-                    <?php if ($is_required) echo '<span>*</span>';?>
-                </label>
-                <?php if ($option_values) {
-                    $option_values = geodir_string_values_to_options($option_values, true);
-
-                    if (!empty($option_values)) {
-                        foreach ($option_values as $option_value) {
-                            if (empty($option_value['optgroup'])) {
-                                ?>
-                                <span class="gd-radios"><input name="<?php echo $name;?>" id="<?php echo $name;?>" <?php checked($value, $option_value['value']);?> value="<?php echo esc_attr($option_value['value']); ?>" class="gd-checkbox" field_type="<?php echo $type;?>" type="radio" /><?php echo $option_value['label']; ?></span>
-                                <?php
-                            }
-                        }
-                    }
-                }
-                ?>
-                <span class="geodir_message_note"><?php _e($admin_desc, 'geodirectory');?></span>
-                <?php if ($is_required) { ?>
-                    <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
-                <?php } ?>
-            </div>
-
-        <?php } elseif ($type == 'checkbox') { ?>
-
-            <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
-                <label>
-                    <?php $site_title = __($site_title, 'geodirectory');
-                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-                    <?php if ($is_required) echo '<span>*</span>';?>
-                </label>
-                <?php if ($value != '1') {
-                    $value = '0';
-                }?>
-                <input type="hidden" name="<?php echo $name;?>" id="<?php echo $name;?>" value="<?php echo esc_attr($value);?>"/>
-                <input  <?php if ($value == '1') {
-                    echo 'checked="checked"';
-                }?>  value="1" class="gd-checkbox" field_type="<?php echo $type;?>" type="checkbox"
-                     onchange="if(this.checked){jQuery('#<?php echo $name;?>').val('1');} else{ jQuery('#<?php echo $name;?>').val('0');}"/>
-                <span class="geodir_message_note"><?php _e($admin_desc, 'geodirectory');?></span>
-                <?php if ($is_required) { ?>
-                    <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
-                <?php } ?>
-            </div>
-
-        <?php } elseif ($type == 'textarea') {
-            ?>
-
-            <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
-                <label>
-                    <?php $site_title = __($site_title, 'geodirectory');
-                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-                    <?php if ($is_required) echo '<span>*</span>';?>
-                </label><?php
-
-
-                if (is_array($extra_fields) && in_array('1', $extra_fields)) {
-
-                    $editor_settings = array('media_buttons' => false, 'textarea_rows' => 10);?>
-
-                <div class="editor" field_id="<?php echo $name;?>" field_type="editor">
-                    <?php wp_editor(stripslashes($value), $name, $editor_settings); ?>
-                    </div><?php
-
-                } else {
-
-                    ?><textarea field_type="<?php echo $type;?>" class="geodir_textarea" name="<?php echo $name;?>"
-                                id="<?php echo $name;?>"><?php echo stripslashes($value);?></textarea><?php
-
-                }?>
-
-
-                <span class="geodir_message_note"><?php _e($admin_desc, 'geodirectory');?></span>
-                <?php if ($is_required) { ?>
-                    <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
-                <?php } ?>
-            </div>
-
-        <?php } elseif ($type == 'select') { ?>
-            <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row geodir_custom_fields clearfix <?php echo $fieldset_field_class;?>">
-                <label>
-                    <?php $site_title = __($site_title, 'geodirectory');
-                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-                    <?php if ($is_required) echo '<span>*</span>';?>
-                </label>
-                <?php
-                $option_values_arr = geodir_string_values_to_options($option_values, true);
-                $select_options = '';
-                if (!empty($option_values_arr)) {
-                    foreach ($option_values_arr as $option_row) {
-                        if (isset($option_row['optgroup']) && ($option_row['optgroup'] == 'start' || $option_row['optgroup'] == 'end')) {
-                            $option_label = isset($option_row['label']) ? $option_row['label'] : '';
-
-                            $select_options .= $option_row['optgroup'] == 'start' ? '<optgroup label="' . esc_attr($option_label) . '">' : '</optgroup>';
-                        } else {
-                            $option_label = isset($option_row['label']) ? $option_row['label'] : '';
-                            $option_value = isset($option_row['value']) ? $option_row['value'] : '';
-                            $selected = $option_value == $value ? 'selected="selected"' : '';
-
-                            $select_options .= '<option value="' . esc_attr($option_value) . '" ' . $selected . '>' . $option_label . '</option>';
-                        }
-                    }
-                }
-                ?>
-                <select field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>"
-                        class="geodir_textfield textfield_x chosen_select"
-                        data-placeholder="<?php echo __('Choose', 'geodirectory') . ' ' . $site_title . '&hellip;';?>"
-                        option-ajaxchosen="false"><?php echo $select_options;?></select>
-                <span class="geodir_message_note"><?php _e($admin_desc, 'geodirectory');?></span>
-                <?php if ($is_required) { ?>
-                    <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
-                <?php } ?>
-            </div>
-
-            <?php
-        } else if ($type == 'multiselect') {
-            $multi_display = 'select';
-            if (!empty($val['extra_fields'])) {
-                $multi_display = unserialize($val['extra_fields']);
-            }
-            ?>
-            <div id="<?php echo $name; ?>_row"
-                 class="<?php if ($is_required) echo 'required_field'; ?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
-                <label>
-                    <?php $site_title = __($site_title, 'geodirectory');
-                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-                    <?php if ($is_required) echo '<span>*</span>'; ?>
-                </label>
-                <input type="hidden" name="gd_field_<?php echo $name; ?>" value="1"/>
-                <?php if ($multi_display == 'select') { ?>
-                <div class="geodir_multiselect_list">
-                    <select field_type="<?php echo $type; ?>" name="<?php echo $name; ?>[]" id="<?php echo $name; ?>"
-                            multiple="multiple" class="geodir_textfield textfield_x chosen_select"
-                            data-placeholder="<?php _e('Select', 'geodirectory'); ?>"
-                            option-ajaxchosen="false">
-                        <?php
-                        } else {
-                            echo '<ul class="gd_multi_choice">';
-                        }
-
-                        $option_values_arr = geodir_string_values_to_options($option_values, true);
-                        $select_options = '';
-                        if (!empty($option_values_arr)) {
-                            foreach ($option_values_arr as $option_row) {
-                                if (isset($option_row['optgroup']) && ($option_row['optgroup'] == 'start' || $option_row['optgroup'] == 'end')) {
-                                    $option_label = isset($option_row['label']) ? $option_row['label'] : '';
-
-                                    if ($multi_display == 'select') {
-                                        $select_options .= $option_row['optgroup'] == 'start' ? '<optgroup label="' . esc_attr($option_label) . '">' : '</optgroup>';
-                                    } else {
-                                        $select_options .= $option_row['optgroup'] == 'start' ? '<li>' . $option_label . '</li>' : '';
-                                    }
-                                } else {
-                                    $option_label = isset($option_row['label']) ? $option_row['label'] : '';
-                                    $option_value = isset($option_row['value']) ? $option_row['value'] : '';
-                                    $selected = $option_value == $value ? 'selected="selected"' : '';
-                                    $selected = '';
-                                    $checked = '';
-
-                                    if ((!is_array($value) && trim($value) != '') || (is_array($value) && !empty($value))) {
-                                        if (!is_array($value)) {
-                                            $value_array = explode(',', $value);
-                                        } else {
-                                            $value_array = $value;
-                                        }
-
-                                        if (is_array($value_array)) {
-                                            if (in_array($option_value, $value_array)) {
-                                                $selected = 'selected="selected"';
-                                                $checked = 'checked="checked"';
-                                            }
-                                        }
-                                    }
-
-                                    if ($multi_display == 'select') {
-                                        $select_options .= '<option value="' . esc_attr($option_value) . '" ' . $selected . '>' . $option_label . '</option>';
-                                    } else {
-                                        $select_options .= '<li><input name="' . $name . '[]" ' . $checked . ' value="' . esc_attr($option_value) . '" class="gd-' . $multi_display . '" field_type="' . $multi_display . '" type="' . $multi_display . '" />&nbsp;' . $option_label . ' </li>';
-                                    }
-                                }
-                            }
-                        }
-                        echo $select_options;
-
-                        if ($multi_display == 'select') { ?></select></div>
-            <?php } else { ?></ul><?php } ?>
-                <span class="geodir_message_note"><?php _e($admin_desc, 'geodirectory'); ?></span>
-                <?php if ($is_required) { ?>
-                    <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
-                <?php } ?>
-            </div>
-            <?php
-        } else if ($type == 'html') {
-            ?>
-
-            <div id="<?php echo $name; ?>_row"
-                 class="<?php if ($is_required) echo 'required_field'; ?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
-                <label>
-                    <?php $site_title = __($site_title, 'geodirectory');
-                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-                    <?php if ($is_required) echo '<span>*</span>'; ?>
-                </label>
-
-                <?php $editor_settings = array('media_buttons' => false, 'textarea_rows' => 10); ?>
-
-                <div class="editor" field_id="<?php echo $name; ?>" field_type="editor">
-                    <?php wp_editor(stripslashes($value), $name, $editor_settings); ?>
-                </div>
-
-                <span class="geodir_message_note"><?php _e($admin_desc, 'geodirectory'); ?></span>
-                <?php if ($is_required) { ?>
-                    <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
-                <?php } ?>
-
-            </div>
-        <?php } elseif ($type == 'datepicker') {
-
-            if ($extra_fields['date_format'] == '')
-                $extra_fields['date_format'] = 'yy-mm-dd';
-
-            $date_format = $extra_fields['date_format'];
-            $jquery_date_format  = $date_format;
-
-
-            // check if we need to change the format or not
-            $date_format_len = strlen(str_replace(' ', '', $date_format));
-            if($date_format_len>5){// if greater then 5 then it's the old style format.
-
-                $search = array('dd','d','DD','mm','m','MM','yy'); //jQuery UI datepicker format
-                $replace = array('d','j','l','m','n','F','Y');//PHP date format
-
-                $date_format = str_replace($search, $replace, $date_format);
-            }else{
-                $jquery_date_format = geodir_date_format_php_to_jqueryui( $jquery_date_format );
-            }
-
-            if($value=='0000-00-00'){$value='';}//if date not set, then mark it empty
-            if($value && !isset($_REQUEST['backandedit'])) {
-                $time = strtotime($value);
-                $value = date_i18n($date_format, $time);
-            }
-            
-            ?>
-            <script type="text/javascript">
-
-                jQuery(function () {
-
-                    jQuery("#<?php echo $name;?>").datepicker({changeMonth: true, changeYear: true <?php
-                        /**
-                         * Used to add extra option to datepicker per custom field.
-                         *
-                         * @since 1.5.7
-                         * @param string $name The custom field name.
-                         */
-                        echo apply_filters("gd_datepicker_extra_{$name}",'');?>});
-
-                    jQuery("#<?php echo $name;?>").datepicker("option", "dateFormat", '<?php echo $jquery_date_format;?>');
-
-                    <?php if(!empty($value)){?>
-                    jQuery("#<?php echo $name;?>").datepicker("setDate", "<?php echo $value;?>");
-                    <?php } ?>
-
-                });
-
-            </script>
-            <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
-                <label>
-
-                    <?php $site_title = __($site_title, 'geodirectory');
-                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-                    <?php if ($is_required) echo '<span>*</span>';?>
-                </label>
-
-                <input field_type="<?php echo $type;?>" name="<?php echo $name;?>" id="<?php echo $name;?>"
-                       value="<?php echo esc_attr($value);?>" type="text" class="geodir_textfield"/>
-
-                <span class="geodir_message_note"><?php _e($admin_desc, 'geodirectory');?></span>
-                <?php if ($is_required) { ?>
-                    <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
-                <?php } ?>
-            </div>
-
-        <?php } elseif ($type == 'time') {
-
-            if ($value != '')
-                $value = date('H:i', strtotime($value));
-            ?>
-            <script type="text/javascript">
-                jQuery(document).ready(function () {
-
-                    jQuery('#<?php echo $name;?>').timepicker({
-                        showPeriod: true,
-                        showLeadingZero: true,
-                        showPeriod: true,
-                    });
-                });
-            </script>
-            <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
-                <label>
-
-                    <?php $site_title = __($site_title, 'geodirectory');
-                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-                    <?php if ($is_required) echo '<span>*</span>';?>
-                </label>
-                <input readonly="readonly" field_type="<?php echo $type;?>" name="<?php echo $name;?>"
-                       id="<?php echo $name;?>" value="<?php echo esc_attr($value);?>" type="text" class="geodir_textfield"/>
-
-                <span class="geodir_message_note"><?php _e($admin_desc, 'geodirectory');?></span>
-                <?php if ($is_required) { ?>
-                    <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
-                <?php } ?>
-            </div>
-
-        <?php } elseif ($type == 'taxonomy') {
-            if ($value == $val['default']) {
-                $value = '';
-            } ?>
-            <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
-                <label>
-                    <?php $site_title = __($site_title, 'geodirectory');
-                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-                    <?php if ($is_required) echo '<span>*</span>';?>
-                </label>
-
-                <div id="<?php echo $name;?>" class="geodir_taxonomy_field" style="float:left; width:70%;">
-                    <?php
-                    global $wpdb, $post, $cat_display, $post_cat, $package_id, $exclude_cats;
-
-                    $exclude_cats = array();
-
-                    if ($is_admin == '1') {
-
-                        $post_type = get_post_type();
-
-                        $package_info = array();
-
-                        $package_info = (array)geodir_post_package_info($package_info, $post, $post_type);
-
-                        if (!empty($package_info)) {
-
-                            if (isset($package_info['cat']) && $package_info['cat'] != '') {
-
-                                $exclude_cats = explode(',', $package_info['cat']);
-
-                            }
-                        }
-                    }
-
-                    $cat_display = unserialize($val['extra_fields']);
-
-                    if (isset($_REQUEST['backandedit']) && (is_array($post_cat[$name]) && !empty($post_cat[$name]))) {
-
-                        $post_cat = implode(",", $post_cat[$name]);
-
-                    } else {
-                        if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '')
-                            $post_cat = geodir_get_post_meta($_REQUEST['pid'], $name, true);
-                    }
-
-
-                    global $geodir_addon_list;
-                    if (!empty($geodir_addon_list) && array_key_exists('geodir_payment_manager', $geodir_addon_list) && $geodir_addon_list['geodir_payment_manager'] == 'yes') {
-
-                        $catadd_limit = $wpdb->get_var(
-                            $wpdb->prepare(
-                                "SELECT cat_limit FROM " . GEODIR_PRICE_TABLE . " WHERE pid = %d",
-                                array($package_id)
-                            )
-                        );
-
-
-                    } else {
-                        $catadd_limit = 0;
-                    }
-
-
-                    if ($cat_display != '' && $cat_display != 'ajax_chained') {
-
-                        $required_limit_msg = '';
-                        if ($catadd_limit > 0 && $cat_display != 'select' && $cat_display != 'radio') {
-
-                            $required_limit_msg = __('Only select', 'geodirectory') . ' ' . $catadd_limit . __(' categories for this package.', 'geodirectory');
-
-                        } else {
-                            $required_limit_msg = $required_msg;
-                        }
-
-                        echo '<input type="hidden" cat_limit="' . $catadd_limit . '" id="cat_limit" value="' . esc_attr($required_limit_msg) . '" name="cat_limit[' . $name . ']"  />';
-
-
-                        if ($cat_display == 'select' || $cat_display == 'multiselect') {
-
-                            $cat_display == '';
-                            $multiple = '';
-                            if ($cat_display == 'multiselect')
-                                $multiple = 'multiple="multiple"';
-
-                            echo '<select id="' . $name . '" ' . $multiple . ' type="' . $name . '" name="post_category[' . $name . '][]" alt="' . $name . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x chosen_select" data-placeholder="' . __('Select Category', 'geodirectory') . '">';
-
-
-                            if ($cat_display == 'select')
-                                echo '<option value="">' . __('Select Category', 'geodirectory') . '</option>';
-
-                        }
-
-                        echo geodir_custom_taxonomy_walker($name, $catadd_limit = 0);
-
-                        if ($cat_display == 'select' || $cat_display == 'multiselect')
-                            echo '</select>';
-
-                    } else {
-
-                        echo geodir_custom_taxonomy_walker2($name, $catadd_limit);
-
-                    }
-
-                    ?>
-                </div>
-
-                <span class="geodir_message_note"><?php _e($admin_desc, 'geodirectory');?></span>
-                <?php if ($is_required) { ?>
-                    <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
-                <?php } ?>
-            </div>
-
-        <?php } elseif ($type == 'file') { ?>
-
-            <?php
-
-
-
-            // adjust values here
-            $file_id = $name; // this will be the name of form field. Image url(s) will be submitted in $_POST using this key. So if $id == �img1� then $_POST[�img1�] will have all the image urls
-
-            if ($value != '') {
-
-                $file_value = trim($value, ","); // this will be initial value of the above form field. Image urls.
-
-            } else
-                $file_value = '';
-
-            if (isset($extra_fields['file_multiple']) && $extra_fields['file_multiple'])
-                $file_multiple = true; // allow multiple files upload
-            else
-                $file_multiple = false;
-
-            if (isset($extra_fields['image_limit']) && $extra_fields['image_limit'])
-                $file_image_limit = $extra_fields['image_limit'];
-            else
-                $file_image_limit = 1;
-
-            $file_width = geodir_media_image_large_width(); // If you want to automatically resize all uploaded images then provide width here (in pixels)
-
-            $file_height = geodir_media_image_large_height(); // If you want to automatically resize all uploaded images then provide height here (in pixels)
-
-            if (!empty($file_value)) {
-                $curImages = explode(',', $file_value);
-                if (!empty($curImages))
-                    $file_totImg = count($curImages);
-            }
-
-            $allowed_file_types = !empty($extra_fields['gd_file_types']) && is_array($extra_fields['gd_file_types']) && !in_array("*", $extra_fields['gd_file_types'] ) ? implode(",", $extra_fields['gd_file_types']) : '';
-            $display_file_types = $allowed_file_types != '' ? '.' . implode(", .", $extra_fields['gd_file_types']) : '';
-
-            ?>
-            <?php /*?> <h5 class="geodir-form_title"> <?php echo $site_title; ?>
-				 <?php if($file_image_limit!=0 && $file_image_limit==1 ){echo '<br /><small>('.__('You can upload').' '.$file_image_limit.' '.__('image with this package').')</small>';} ?>
-				 <?php if($file_image_limit!=0 && $file_image_limit>1 ){echo '<br /><small>('.__('You can upload').' '.$file_image_limit.' '.__('images with this package').')</small>';} ?>
-				 <?php if($file_image_limit==0){echo '<br /><small>('.__('You can upload unlimited images with this package').')</small>';} ?>
-			</h5>   <?php */
-            ?>
-
-            <div id="<?php echo $name;?>_row"
-                 class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix <?php echo $fieldset_field_class;?>">
-
-                <div id="<?php echo $file_id; ?>dropbox" style="text-align:center;">
-                    <label
-                        style="text-align:left; padding-top:10px;"><?php $site_title = __($site_title, 'geodirectory');
-                        echo $site_title; ?><?php if ($is_required) echo '<span>*</span>';?></label>
-                    <input class="geodir-custom-file-upload" field_type="file" type="hidden"
-                           name="<?php echo $file_id; ?>" id="<?php echo $file_id; ?>"
-                           value="<?php echo esc_attr($file_value); ?>"/>
-                    <input type="hidden" name="<?php echo $file_id; ?>image_limit"
-                           id="<?php echo $file_id; ?>image_limit" value="<?php echo $file_image_limit; ?>"/>
-                    <?php if ($allowed_file_types != '') { ?>
-                        <input type="hidden" name="<?php echo $file_id; ?>_allowed_types"
-                               id="<?php echo $file_id; ?>_allowed_types" value="<?php echo esc_attr($allowed_file_types); ?>" data-exts="<?php echo esc_attr($display_file_types);?>"/>
-                    <?php } ?>
-                    <input type="hidden" name="<?php echo $file_id; ?>totImg" id="<?php echo $file_id; ?>totImg"
-                           value="<?php if (isset($file_totImg)) {
-                               echo esc_attr($file_totImg);
-                           } else {
-                               echo '0';
-                           } ?>"/>
-
-                    <div style="float:left; width:55%;">
-                        <div
-                            class="plupload-upload-uic hide-if-no-js <?php if ($file_multiple): ?>plupload-upload-uic-multiple<?php endif; ?>"
-                            id="<?php echo $file_id; ?>plupload-upload-ui" style="float:left; width:30%;">
-                            <?php /*?><h4><?php _e('Drop files to upload');?></h4><br/><?php */
-                            ?>
-                            <input id="<?php echo $file_id; ?>plupload-browse-button" type="button"
-                                   value="<?php ($file_image_limit > 1 ? esc_attr_e('Select Files', 'geodirectory') : esc_attr_e('Select File', 'geodirectory') ); ?>"
-                                   class="geodir_button" style="margin-top:10px;"/>
-                            <span class="ajaxnonceplu"
-                                  id="ajaxnonceplu<?php echo wp_create_nonce($file_id . 'pluploadan'); ?>"></span>
-                            <?php if ($file_width && $file_height): ?>
-                                <span class="plupload-resize"></span>
-                                <span class="plupload-width" id="plupload-width<?php echo $file_width; ?>"></span>
-                                <span class="plupload-height" id="plupload-height<?php echo $file_height; ?>"></span>
-                            <?php endif; ?>
-                            <div class="filelist"></div>
-                        </div>
-                        <div
-                            class="plupload-thumbs <?php if ($file_multiple): ?>plupload-thumbs-multiple<?php endif; ?> "
-                            id="<?php echo $file_id; ?>plupload-thumbs"
-                            style=" clear:inherit; margin-top:0; margin-left:15px; padding-top:10px; float:left; width:50%;">
-                        </div>
-                        <?php /*?><span id="upload-msg" ><?php _e('Please drag &amp; drop the images to rearrange the order');?></span><?php */
-                        ?>
-
-                        <span id="<?php echo $file_id; ?>upload-error" style="display:none"></span>
-
-                    </div>
-                </div>
-                <span class="geodir_message_note"><?php _e($admin_desc, 'geodirectory');?> <?php echo ( $display_file_types != '' ? __('Allowed file types:', 'geodirectory') . ' ' . $display_file_types : '' );?></span>
-                <?php if ($is_required) { ?>
-                    <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
-                <?php } ?>
-            </div>
-
-
-        <?php }
         /**
          * Called after the custom fields info is output for submitting a post.
          *
@@ -3326,3 +2496,559 @@ function geodir_string_values_to_options($option_values = '', $translated = fals
 
     return $options;
 }
+
+
+function geodir_cfa_data_type_text($output,$result_str,$cf,$field_info){
+    ob_start();
+    ?>
+    <li>
+        <label for="data_type""><?php _e('Field Data Type ? :', 'geodirectory'); ?></label>
+        <div class="gd-cf-input-wrap">
+
+            <select name="data_type" id="data_type"
+                    onchange="javascript:gd_data_type_changed(this, '<?php echo $result_str; ?>');">
+                <option
+                    value="XVARCHAR" <?php if (isset($field_info->data_type) && $field_info->data_type == 'VARCHAR') {
+                    echo 'selected="selected"';
+                } ?>><?php _e('CHARACTER', 'geodirectory'); ?></option>
+                <option
+                    value="INT" <?php if (isset($field_info->data_type) && $field_info->data_type == 'INT') {
+                    echo 'selected="selected"';
+                } ?>><?php _e('NUMBER', 'geodirectory'); ?></option>
+                <option
+                    value="FLOAT" <?php if (isset($field_info->data_type) && $field_info->data_type == 'FLOAT') {
+                    echo 'selected="selected"';
+                } ?>><?php _e('DECIMAL', 'geodirectory'); ?></option>
+            </select>
+            <br/> <span><?php _e('Select Custom Field type', 'geodirectory'); ?></span>
+
+        </div>
+    </li>
+    <li class="decimal-point-wrapper"
+        style="<?php echo (isset($field_info->data_type) && $field_info->data_type == 'FLOAT') ? '' : 'display:none' ?>">
+        <label for="decimal_point"><?php _e('Select decimal point :', 'geodirectory'); ?></label>
+        <div class="gd-cf-input-wrap">
+            <select name="decimal_point" id="decimal_point">
+                <option value=""><?php echo _e('Select', 'geodirectory'); ?></option>
+                <?php for ($i = 1; $i <= 10; $i++) {
+                    $decimal_point = isset($field_info->decimal_point) ? $field_info->decimal_point : '';
+                    $selected = $i == $decimal_point ? 'selected="selected"' : ''; ?>
+                    <option value="<?php echo $i; ?>" <?php echo $selected; ?>><?php echo $i; ?></option>
+                <?php } ?>
+            </select>
+            <br/> <span><?php _e('Decimal point to display after point', 'geodirectory'); ?></span>
+        </div>
+    </li>
+<?php
+
+    $output = ob_get_clean();
+    return $output;
+}
+add_filter('geodir_cfa_data_type_text','geodir_cfa_data_type_text',10,4);
+
+// htmlvar not needed for fieldset and taxonomy
+add_filter('geodir_cfa_htmlvar_name_fieldset','__return_empty_string',10,4);
+add_filter('geodir_cfa_htmlvar_name_taxonomy','__return_empty_string',10,4);
+
+
+// default_value not needed for textarea, html, file, fieldset, taxonomy, address
+add_filter('geodir_cfa_default_value_textarea','__return_empty_string',10,4);
+add_filter('geodir_cfa_default_value_html','__return_empty_string',10,4);
+add_filter('geodir_cfa_default_value_file','__return_empty_string',10,4);
+add_filter('geodir_cfa_default_value_taxonomy','__return_empty_string',10,4);
+add_filter('geodir_cfa_default_value_address','__return_empty_string',10,4);
+add_filter('geodir_cfa_default_value_fieldset','__return_empty_string',10,4);
+
+// is_required not needed for fieldset
+add_filter('geodir_cfa_is_required_fieldset','__return_empty_string',10,4);
+add_filter('geodir_cfa_required_msg_fieldset','__return_empty_string',10,4);
+
+// field_icon not needed for fieldset
+add_filter('geodir_cfa_field_icon_fieldset','__return_empty_string',10,4);
+add_filter('geodir_cfa_css_class_fieldset','__return_empty_string',10,4);
+
+// cat_sort not needed for some fields
+add_filter('geodir_cfa_cat_sort_html','__return_empty_string',10,4);
+add_filter('geodir_cfa_cat_sort_file','__return_empty_string',10,4);
+add_filter('geodir_cfa_cat_sort_url','__return_empty_string',10,4);
+add_filter('geodir_cfa_cat_sort_fieldset','__return_empty_string',10,4);
+add_filter('geodir_cfa_cat_sort_multiselect','__return_empty_string',10,4);
+add_filter('geodir_cfa_cat_sort_textarea','__return_empty_string',10,4);
+add_filter('geodir_cfa_cat_sort_taxonomy','__return_empty_string',10,4);
+add_filter('geodir_cfa_cat_sort_address','__return_empty_string',10,4);
+
+
+
+function geodir_cfa_advanced_editor_geodir_special_offers($output,$result_str,$cf,$field_info){
+    if($field_info->htmlvar_name != 'geodir_special_offers'){return '';}
+    ob_start();
+    ?>
+    <li>
+        <label for="advanced_editor" class="gd-cf-tooltip-wrap"><i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Show advanced editor :', 'geodirectory'); ?>
+            <div class="gdcf-tooltip">
+                <?php _e('Select if you want to show the advanced editor on add listing page.', 'geodirectory'); ?>
+            </div>
+        </label>
+
+        <div class="gd-cf-input-wrap">
+
+            <?php
+            $selected = '';
+            if (isset($field_info->extra_fields))
+                $advanced_editor = unserialize($field_info->extra_fields);
+
+            if (!empty($advanced_editor) && is_array($advanced_editor) && in_array('1', $advanced_editor))
+                $selected = 'checked="checked"';
+            ?>
+
+            <input type="checkbox" name="advanced_editor[]" id="advanced_editor"
+                   value="1" <?php echo $selected; ?>/>
+        </div>
+
+    </li>
+    <?php
+
+    $output = ob_get_clean();
+    return $output;
+}
+add_filter('geodir_cfa_advanced_editor_textarea','geodir_cfa_advanced_editor_geodir_special_offers',10,4);
+
+
+function geodir_cfa_validation_pattern_text($output,$result_str,$cf,$field_info){
+    ob_start();
+    ?>
+    <li>
+        <label for="validation_pattern" class="gd-cf-tooltip-wrap">
+            <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Validation Pattern:', 'geodirectory'); ?>
+            <div class="gdcf-tooltip">
+                <?php _e('Enter regex expression for HTML5 pattern validation.', 'geodirectory'); ?>
+            </div>
+        </label>
+        <div class="gd-cf-input-wrap">
+            <input type="text" name="validation_pattern" id="validation_pattern"
+                   value="<?php if (isset($field_info->validation_pattern)) {
+                       echo esc_attr($field_info->validation_pattern);
+                   } ?>"/>
+        </div>
+    </li>
+
+    <li>
+        <label for="validation_msg" class="gd-cf-tooltip-wrap">
+            <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Validation Message:', 'geodirectory'); ?>
+            <div class="gdcf-tooltip">
+                <?php _e('Enter a extra validation message to show to the user if validation fails.', 'geodirectory'); ?>
+            </div>
+        </label>
+        <div class="gd-cf-input-wrap">
+            <input type="text" name="validation_msg" id="validation_msg"
+                   value="<?php if (isset($field_info->validation_msg)) {
+                       echo esc_attr($field_info->validation_msg);
+                   } ?>"/>
+        </div>
+    </li>
+    <?php
+
+    $output = ob_get_clean();
+    return $output;
+}
+add_filter('geodir_cfa_validation_pattern_text','geodir_cfa_validation_pattern_text',10,4);
+
+
+function geodir_cfa_htmlvar_name_taxonomy($output,$result_str,$cf,$field_info){
+    ob_start();
+    global $post_type;
+
+    if (!isset($field_info->post_type)) {
+        $post_type = sanitize_text_field($_REQUEST['listing_type']);
+    } else
+        $post_type = $field_info->post_type;
+    ?>
+    <li style="display: none;">
+        <label for="htmlvar_name" class="gd-cf-tooltip-wrap">
+            <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Select taxonomy:', 'geodirectory'); ?>
+            <div class="gdcf-tooltip">
+                <?php _e('Selected taxonomy name use as field name index. ex:-( post_category[gd_placecategory] )', 'geodirectory'); ?>
+            </div>
+        </label>
+        <div class="gd-cf-input-wrap">
+            <select name="htmlvar_name" id="htmlvar_name">
+                <?php
+                $gd_taxonomy = geodir_get_taxonomies($post_type);
+
+                foreach ($gd_taxonomy as $gd_tax) {
+                    ?>
+                    <option <?php if (isset($field_info->htmlvar_name) && $field_info->htmlvar_name == $gd_tax) {
+                        echo 'selected="selected"';
+                    }?> id="<?php echo $gd_tax;?>"><?php echo $gd_tax;?></option><?php
+                }
+                ?>
+            </select>
+        </div>
+    </li>
+
+    <li>
+        <label for="cat_display_type" class="gd-cf-tooltip-wrap">
+            <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Category display type :', 'geodirectory'); ?>
+            <div class="gdcf-tooltip">
+                <?php _e('Show categories list as select, multiselect, checkbox or radio', 'geodirectory');?>
+            </div>
+        </label>
+        <div class="gd-cf-input-wrap">
+
+            <select name="cat_display_type" id="cat_display_type">
+                <option <?php if (isset($field_info->extra_fields) && unserialize($field_info->extra_fields) == 'ajax_chained') {
+                    echo 'selected="selected"';
+                }?> value="ajax_chained"><?php _e('Ajax Chained', 'geodirectory');?></option>
+                <option <?php if (isset($field_info->extra_fields) && unserialize($field_info->extra_fields) == 'select') {
+                    echo 'selected="selected"';
+                }?> value="select"><?php _e('Select', 'geodirectory');?></option>
+                <option <?php if (isset($field_info->extra_fields) && unserialize($field_info->extra_fields) == 'multiselect') {
+                    echo 'selected="selected"';
+                }?> value="multiselect"><?php _e('Multiselect', 'geodirectory');?></option>
+                <option <?php if (isset($field_info->extra_fields) && unserialize($field_info->extra_fields) == 'checkbox') {
+                    echo 'selected="selected"';
+                }?> value="checkbox"><?php _e('Checkbox', 'geodirectory');?></option>
+                <option <?php if (isset($field_info->extra_fields) && unserialize($field_info->extra_fields) == 'radio') {
+                    echo 'selected="selected"';
+                }?> value="radio"><?php _e('Radio', 'geodirectory');?></option>
+            </select>
+        </div>
+    </li>
+    <?php
+
+    $output = ob_get_clean();
+    return $output;
+}
+add_filter('geodir_cfa_htmlvar_name_taxonomy','geodir_cfa_htmlvar_name_taxonomy',10,4);
+
+
+function geodir_cfa_extra_fields_address($output,$result_str,$cf,$field_info){
+
+    ob_start();
+    if (isset($field_info->extra_fields) && $field_info->extra_fields != '') {
+        $address = unserialize($field_info->extra_fields);
+    }
+    ?>
+    <?php
+    /**
+     * Called on the add custom fields settings page before the address field is output.
+     *
+     * @since 1.0.0
+     * @param array $address The address settings array.
+     * @param object $field_info Extra fields info.
+     */
+    do_action('geodir_address_extra_admin_fields', $address, $field_info); ?>
+
+    <li>
+        <label for="show_zip" class="gd-cf-tooltip-wrap">
+            <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Display zip/post code :', 'geodirectory'); ?>
+            <div class="gdcf-tooltip">
+                <?php _e('Select if you want to show zip/post code field in address section.', 'geodirectory');?>
+            </div>
+        </label>
+        <div class="gd-cf-input-wrap gd-switch">
+
+            <input type="radio" id="show_zip_yes<?php echo $radio_id;?>" name="extra[show_zip]" class="gdri-enabled"  value="1"
+                <?php if (isset($address['show_zip']) && $address['show_zip'] == '1') {
+                    echo 'checked';
+                } ?>/>
+            <label onclick="show_hide_radio(this,'show','cf-zip-lable');" for="show_zip_yes<?php echo $radio_id;?>" class="gdcb-enable"><span><?php _e('Yes', 'geodirectory'); ?></span></label>
+
+            <input type="radio" id="show_zip_no<?php echo $radio_id;?>" name="extra[show_zip]" class="gdri-disabled" value="0"
+                <?php if ((isset($address['show_zip']) && !$address['show_zip']) || !isset($address['show_zip'])) {
+                    echo 'checked';
+                } ?>/>
+            <label onclick="show_hide_radio(this,'hide','cf-zip-lable');" for="show_zip_no<?php echo $radio_id;?>" class="gdcb-disable"><span><?php _e('No', 'geodirectory'); ?></span></label>
+
+
+        </div>
+    </li>
+
+    <li class="cf-zip-lable"  <?php if ((isset($address['show_zip']) && !$address['show_zip']) || !isset($address['show_zip'])) {echo "style='display:none;'";}?> >
+        <label for="zip_lable" class="gd-cf-tooltip-wrap">
+            <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Zip/Post code label :', 'geodirectory'); ?>
+            <div class="gdcf-tooltip">
+                <?php _e('Enter zip/post code field label in address section.', 'geodirectory');?>
+            </div>
+        </label>
+        <div class="gd-cf-input-wrap">
+            <input type="text" name="extra[zip_lable]" id="zip_lable"
+                   value="<?php if (isset($address['zip_lable'])) {
+                       echo esc_attr($address['zip_lable']);
+                   }?>"/>
+        </div>
+    </li>
+
+    <input type="hidden" name="extra[show_map]" value="1" />
+
+
+    <li>
+        <label for="map_lable" class="gd-cf-tooltip-wrap">
+            <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Map button label :', 'geodirectory'); ?>
+            <div class="gdcf-tooltip">
+                <?php _e('Enter text for `set address on map` button in address section.', 'geodirectory');?>
+            </div>
+        </label>
+        <div class="gd-cf-input-wrap">
+            <input type="text" name="extra[map_lable]" id="map_lable"
+                   value="<?php if (isset($address['map_lable'])) {
+                       echo esc_attr($address['map_lable']);
+                   }?>"/>
+        </div>
+    </li>
+
+    <li>
+        <label for="show_mapzoom" class="gd-cf-tooltip-wrap">
+            <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Use user zoom level:', 'geodirectory'); ?>
+            <div class="gdcf-tooltip">
+                <?php _e('Do you want to use the user defined map zoom level from the add listing page?', 'geodirectory');?>
+            </div>
+        </label>
+        <div class="gd-cf-input-wrap gd-switch">
+
+            <input type="radio" id="show_mapzoom_yes<?php echo $radio_id;?>" name="extra[show_mapzoom]" class="gdri-enabled"  value="1"
+                <?php if (isset($address['show_mapzoom']) && $address['show_mapzoom'] == '1') {
+                    echo 'checked';
+                } ?>/>
+            <label for="show_mapzoom_yes<?php echo $radio_id;?>" class="gdcb-enable"><span><?php _e('Yes', 'geodirectory'); ?></span></label>
+
+            <input type="radio" id="show_mapzoom_no<?php echo $radio_id;?>" name="extra[show_mapzoom]" class="gdri-disabled" value="0"
+                <?php if ((isset($address['show_mapzoom']) && !$address['show_mapzoom']) || !isset($address['show_mapzoom'])) {
+                    echo 'checked';
+                } ?>/>
+            <label for="show_mapzoom_no<?php echo $radio_id;?>" class="gdcb-disable"><span><?php _e('No', 'geodirectory'); ?></span></label>
+
+        </div>
+    </li>
+
+    <li>
+        <label for="show_mapview" class="gd-cf-tooltip-wrap">
+            <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Display map view:', 'geodirectory'); ?>
+            <div class="gdcf-tooltip">
+                <?php _e('Select if you want to `set default map` options in address section. ( Satellite Map, Hybrid Map, Terrain Map)', 'geodirectory');?>
+            </div>
+        </label>
+        <div class="gd-cf-input-wrap gd-switch">
+
+            <input type="radio" id="show_mapview_yes<?php echo $radio_id;?>" name="extra[show_mapview]" class="gdri-enabled"  value="1"
+                <?php if (isset($address['show_mapview']) && $address['show_mapview'] == '1') {
+                    echo 'checked';
+                } ?>/>
+            <label for="show_mapview_yes<?php echo $radio_id;?>" class="gdcb-enable"><span><?php _e('Yes', 'geodirectory'); ?></span></label>
+
+            <input type="radio" id="show_mapview_no<?php echo $radio_id;?>" name="extra[show_mapview]" class="gdri-disabled" value="0"
+                <?php if ((isset($address['show_mapview']) && !$address['show_mapview']) || !isset($address['show_mapview'])) {
+                    echo 'checked';
+                } ?>/>
+            <label for="show_mapview_no<?php echo $radio_id;?>" class="gdcb-disable"><span><?php _e('No', 'geodirectory'); ?></span></label>
+
+        </div>
+    </li>
+
+
+    <li>
+        <label for="mapview_lable" class="gd-cf-tooltip-wrap">
+            <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Map view label:', 'geodirectory'); ?>
+            <div class="gdcf-tooltip">
+                <?php _e('Enter mapview field label in address section.', 'geodirectory');?>
+            </div>
+        </label>
+        <div class="gd-cf-input-wrap">
+            <input type="text" name="extra[mapview_lable]" id="mapview_lable"
+                   value="<?php if (isset($address['mapview_lable'])) {
+                       echo esc_attr($address['mapview_lable']);
+                   }?>"/>
+        </div>
+    </li>
+    <li>
+        <label for="show_latlng" class="gd-cf-tooltip-wrap">
+            <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Show latitude and longitude', 'geodirectory'); ?>
+            <div class="gdcf-tooltip">
+                <?php _e('This will show/hide the longitude fields in the address section add listing form.', 'geodirectory');?>
+            </div>
+        </label>
+        <div class="gd-cf-input-wrap gd-switch">
+
+            <input type="radio" id="show_latlng_yes<?php echo $radio_id;?>" name="extra[show_latlng]" class="gdri-enabled"  value="1"
+                <?php if (isset($address['show_latlng']) && $address['show_latlng'] == '1') {
+                    echo 'checked';
+                } ?>/>
+            <label for="show_latlng_yes<?php echo $radio_id;?>" class="gdcb-enable"><span><?php _e('Yes', 'geodirectory'); ?></span></label>
+
+            <input type="radio" id="show_latlng_no<?php echo $radio_id;?>" name="extra[show_latlng]" class="gdri-disabled" value="0"
+                <?php if ((isset($address['show_latlng']) && !$address['show_latlng']) || !isset($address['show_latlng'])) {
+                    echo 'checked';
+                } ?>/>
+            <label for="show_latlng_no<?php echo $radio_id;?>" class="gdcb-disable"><span><?php _e('No', 'geodirectory'); ?></span></label>
+
+        </div>
+    </li>
+    <?php
+
+    $output = ob_get_clean();
+    return $output;
+}
+add_filter('geodir_cfa_extra_fields_address','geodir_cfa_extra_fields_address',10,4);
+
+
+function geodir_cfa_extra_fields_multiselect($output,$result_str,$cf,$field_info){
+    ob_start();
+    ?>
+    <li>
+        <label for="multi_display_type" class="gd-cf-tooltip-wrap">
+            <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Multiselect display type :', 'geodirectory'); ?>
+            <div class="gdcf-tooltip">
+                <?php _e('Show multiselect list as multiselect,checkbox or radio.', 'geodirectory');?>
+            </div>
+        </label>
+        <div class="gd-cf-input-wrap">
+
+            <select name="multi_display_type" id="multi_display_type">
+                <option <?php if (isset($field_info->extra_fields) && unserialize($field_info->extra_fields) == 'select') {
+                    echo 'selected="selected"';
+                }?> value="select"><?php _e('Select', 'geodirectory');?></option>
+                <option <?php if (isset($field_info->extra_fields) && unserialize($field_info->extra_fields) == 'checkbox') {
+                    echo 'selected="selected"';
+                }?> value="checkbox"><?php _e('Checkbox', 'geodirectory');?></option>
+                <option <?php if (isset($field_info->extra_fields) && unserialize($field_info->extra_fields) == 'radio') {
+                    echo 'selected="selected"';
+                }?> value="radio"><?php _e('Radio', 'geodirectory');?></option>
+            </select>
+
+            <br/>
+        </div>
+    </li>
+    <?php
+
+    $output = ob_get_clean();
+    return $output;
+}
+add_filter('geodir_cfa_extra_fields_multiselect','geodir_cfa_extra_fields_multiselect',10,4);
+
+
+function geodir_cfa_extra_fields_smr($output,$result_str,$cf,$field_info){
+    ob_start();
+    ?>
+    <li>
+        <label for="option_values" class="gd-cf-tooltip-wrap">
+            <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Option Values :', 'geodirectory'); ?>
+            <div class="gdcf-tooltip">
+                <span><?php _e('Option Values should be separated by comma.', 'geodirectory');?></span>
+                <br/>
+                <small><span><?php _e('If using for a "tick filter" place a / and then either a 1 for true or 0 for false', 'geodirectory');?></span>
+                    <br/>
+                    <span><?php _e('eg: "No Dogs Allowed/0,Dogs Allowed/1" (Select only, not multiselect)', 'geodirectory');?></span>
+                    <?php if ($field_type == 'multiselect' || $field_type == 'select') { ?>
+                        <br/>
+                        <span><?php _e('- If using OPTGROUP tag to grouping options, use "{optgroup}OPTGROUP-LABEL|OPTION-1,OPTION-2{/optgroup}"', 'geodirectory'); ?></span>
+                        <br/>
+                        <span><?php _e('eg: "{optgroup}Pets Allowed|No Dogs Allowed/0,Dogs Allowed/1{/optgroup},{optgroup}Sports|Cricket/Cricket,Football/Football,Hockey{/optgroup}"', 'geodirectory'); ?></span>
+                    <?php } ?></small>
+            </div>
+        </label>
+        <div class="gd-cf-input-wrap">
+            <input type="text" name="option_values" id="option_values"
+                   value="<?php if (isset($field_info->option_values)) {
+                       echo esc_attr($field_info->option_values);
+                   }?>"/>
+            <br/>
+
+        </div>
+    </li>
+    <?php
+
+    $output = ob_get_clean();
+    return $output;
+}
+add_filter('geodir_cfa_extra_fields_multiselect','geodir_cfa_extra_fields_smr',10,4);
+add_filter('geodir_cfa_extra_fields_select','geodir_cfa_extra_fields_smr',10,4);
+add_filter('geodir_cfa_extra_fields_radio','geodir_cfa_extra_fields_smr',10,4);
+
+
+function geodir_cfa_extra_fields_datepicker($output,$result_str,$cf,$field_info){
+    ob_start();
+    if (isset($field_info->extra_fields) && $field_info->extra_fields != '') {
+        $extra = unserialize($field_info->extra_fields);
+    }
+    ?>
+    <li>
+        <label for="date_format" class="gd-cf-tooltip-wrap">
+            <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Date Format :', 'geodirectory'); ?>
+            <div class="gdcf-tooltip">
+                <?php _e('Select the date format.', 'geodirectory');?>
+            </div>
+        </label>
+        <div class="gd-cf-input-wrap" style="overflow:inherit;">
+            <?php
+            $date_formats = array(
+                'm/d/Y',
+                'd/m/Y',
+                'Y/m/d',
+                'm-d-Y',
+                'd-m-Y',
+                'Y-m-d',
+                'F j, Y',
+            );
+            /**
+             * Filter the custom field date format options.
+             *
+             * @since 1.6.5
+             * @param array $date_formats The PHP date format array.
+             */
+            $date_formats = apply_filters('geodir_date_formats',$date_formats);
+            ?>
+            <select name="extra[date_format]" id="date_format">
+                <?php
+                foreach($date_formats as $format){
+                    $selected = '';
+                    if(esc_attr($extra['date_format'])==$format){
+                        $selected = "selected='selected'";
+                    }
+                    echo "<option $selected value='$format'>$format       (".date_i18n( $format, time()).")</option>";
+                }
+                ?>
+            </select>
+
+        </div>
+    </li>
+    <?php
+
+    $output = ob_get_clean();
+    return $output;
+}
+add_filter('geodir_cfa_extra_fields_datepicker','geodir_cfa_extra_fields_datepicker',10,4);
+
+
+function geodir_cfa_extra_fields_file($output,$result_str,$cf,$field_info){
+    ob_start();
+    $allowed_file_types = geodir_allowed_mime_types();
+
+    $extra_fields = isset($field_info->extra_fields) && $field_info->extra_fields != '' ? maybe_unserialize($field_info->extra_fields) : '';
+    $gd_file_types = !empty($extra_fields) && !empty($extra_fields['gd_file_types']) ? $extra_fields['gd_file_types'] : array('*');
+    ?>
+    <li>
+        <label for="gd_file_types" class="gd-cf-tooltip-wrap">
+            <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Allowed file types :', 'geodirectory'); ?>
+            <div class="gdcf-tooltip">
+                <?php _e('Select file types to allowed for file uploading. (Select multiple file types by holding down "Ctrl" key.)', 'geodirectory');?>
+            </div>
+        </label>
+        <div class="gd-cf-input-wrap">
+            <select name="extra[gd_file_types][]" id="gd_file_types" multiple="multiple" style="height:100px;width:90%;">
+                <option value="*" <?php selected(true, in_array('*', $gd_file_types));?>><?php _e('All types', 'geodirectory') ;?></option>
+                <?php foreach ( $allowed_file_types as $format => $types ) { ?>
+                    <optgroup label="<?php echo esc_attr( wp_sprintf(__('%s formats', 'geodirectory'), __($format, 'geodirectory') ) ) ;?>">
+                        <?php foreach ( $types as $ext => $type ) { ?>
+                            <option value="<?php echo esc_attr($ext) ;?>" <?php selected(true, in_array($ext, $gd_file_types));?>><?php echo '.' . $ext ;?></option>
+                        <?php } ?>
+                    </optgroup>
+                <?php } ?>
+            </select>
+        </div>
+    </li>
+    <?php
+
+    $output = ob_get_clean();
+    return $output;
+}
+add_filter('geodir_cfa_extra_fields_file','geodir_cfa_extra_fields_file',10,4);

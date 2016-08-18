@@ -484,6 +484,158 @@ function geodir_sorting_options_selected_fields()
     <?php
 }
 
+
+/**
+ * Returns the array of custom fields that can be used.
+ *
+ * @since 1.6.6
+ * @package GeoDirectory
+ */
+function geodir_custom_fields($post_type=''){
+    
+    $custom_fields = array(
+        'text' => array(
+            'field_type'  =>  'text',
+            'class' =>  'gd-text',
+            'icon'  =>  'fa fa-minus',
+            'name'  =>  __('Text', 'geodirectory'),
+            'description' =>  __('Add any sort of text field, text or numbers', 'geodirectory')
+        ),
+        'datepicker' => array(
+            'field_type'  =>  'datepicker',
+            'class' =>  'gd-datepicker',
+            'icon'  =>  'fa fa-calendar',
+            'name'  =>  __('Date', 'geodirectory'),
+            'description' =>  __('Adds a date picker.', 'geodirectory')
+        ),
+        'textarea' => array(
+            'field_type'  =>  'textarea',
+            'class' =>  'gd-textarea',
+            'icon'  =>  'fa fa-bars',
+            'name'  =>  __('Textarea', 'geodirectory'),
+            'description' =>  __('Adds a textarea', 'geodirectory')
+        ),
+        'time' => array(
+            'field_type'  =>  'time',
+            'class' =>  'gd-time',
+            'icon' =>  'fa fa-clock-o',
+            'name'  =>  __('Time', 'geodirectory'),
+            'description' =>  __('Adds a time picker', 'geodirectory')
+        ),
+        'checkbox' => array(
+            'field_type'  =>  'checkbox',
+            'class' =>  'gd-checkbox',
+            'icon' =>  'fa fa-check-square-o',
+            'name'  =>  __('Checkbox', 'geodirectory'),
+            'description' =>  __('Adds a checkbox', 'geodirectory')
+        ),
+        'phone' => array(
+            'field_type'  =>  'phone',
+            'class' =>  'gd-phone',
+            'icon' =>  'fa fa-phone',
+            'name'  =>  __('Phone', 'geodirectory'),
+            'description' =>  __('Adds a phone input', 'geodirectory')
+        ),
+        'radio' => array(
+            'field_type'  =>  'radio',
+            'class' =>  'gd-radio',
+            'icon' =>  'fa fa-dot-circle-o',
+            'name'  =>  __('Radio', 'geodirectory'),
+            'description' =>  __('Adds a radio input', 'geodirectory')
+        ),
+        'email' => array(
+            'field_type'  =>  'email',
+            'class' =>  'gd-email',
+            'icon' =>  'fa fa-envelope-o',
+            'name'  =>  __('Email', 'geodirectory'),
+            'description' =>  __('Adds a email input', 'geodirectory')
+        ),
+        'select' => array(
+            'field_type'  =>  'select',
+            'class' =>  'gd-select',
+            'icon' =>  'fa fa-caret-square-o-down',
+            'name'  =>  __('Select', 'geodirectory'),
+            'description' =>  __('Adds a select input', 'geodirectory')
+        ),
+        'multiselect' => array(
+            'field_type'  =>  'multiselect',
+            'class' =>  'gd-multiselect',
+            'icon' =>  'fa fa-caret-square-o-down',
+            'name'  =>  __('Multi Select', 'geodirectory'),
+            'description' =>  __('Adds a multiselect input', 'geodirectory')
+        ),
+        'url' => array(
+            'field_type'  =>  'url',
+            'class' =>  'gd-url',
+            'icon' =>  'fa fa-link',
+            'name'  =>  __('URL', 'geodirectory'),
+            'description' =>  __('Adds a url input', 'geodirectory')
+        ),
+        'html' => array(
+            'field_type'  =>  'html',
+            'class' =>  'gd-html',
+            'icon' =>  'fa fa-code',
+            'name'  =>  __('HTML', 'geodirectory'),
+            'description' =>  __('Adds a html input textarea', 'geodirectory')
+        ),
+        'file' => array(
+            'field_type'  =>  'file',
+            'class' =>  'gd-file',
+            'icon' =>  'fa fa-file',
+            'name'  =>  __('File Upload', 'geodirectory'),
+            'description' =>  __('Adds a file input', 'geodirectory')
+        ),
+        'test' => array(
+            'field_type'  =>  'text',
+            'class' =>  'gd-testing',
+            'icon' =>  'fa fa-cog',
+            'name'  =>  __('Test', 'geodirectory'),
+            'description' =>  __('Adds a test value bla bla', 'geodirectory'),
+            'defaults'  => array(
+                'data_type'     =>  '',   // true to show options, or define the SQL data type.
+                'admin_title'   =>  'testing yo', // pre-fill value
+                'site_title'    =>  '', // pre-fill value
+            )
+        )
+        
+    );
+
+    /**
+     * Filter the custom fields array to be able to add or remove items.
+     * 
+     * @since 1.6.6
+     *
+     * @param array $custom_fields {
+     *     The custom fields array to be filtered.
+     *
+     *     @type string $field_type The type of field, eg: text, datepicker, textarea, time, checkbox, phone, radio, email, select, multiselect, url, html, file.
+     *     @type string $class The class for the field in backend.
+     *     @type string $icon Can be font-awesome class name or icon image url.
+     *     @type string $name The name of the field.
+     *     @type string $description A short description about the field.
+     *     @type array $defaults {
+     *                    Optional. Used to set the default value of the field.
+     *
+     *                    @type string data_type The SQL data type for the field.
+     *                    @type string admin_title The admin title for the field.
+     *                    @type string site_title This will be the title for the field on the frontend.
+     *                    @type string admin_desc This will be shown below the field on the add listing form.
+     *                    @type string htmlvar_name This is a unique identifier used in the HTML, it MUST NOT contain spaces or special characters.
+     *                    @type bool is_active If false the field will not be displayed anywhere.
+     *                    @type bool for_admin_use If true then only site admin can see and edit this field.
+     *                    @type string default_value The default value for the input on the add listing page.
+     *                    @type bool is_required If true the field will be required on the add listing page.
+     *                    @type string required_msg Required warning message.
+     *                    @type string field_icon Icon url or font awesome class.
+     *                    @type string css_class Field custom css class for field custom style.
+     *                    @type bool cat_sort If true the field will appear in the category sort options.
+     *     }
+     * }
+     * @param string $post_type The post type requested.
+     */
+    return apply_filters('geodir_custom_fields',$custom_fields,$post_type);
+}
+
 /**
  * Adds admin html for custom fields available fields.
  *
@@ -496,37 +648,45 @@ function geodir_custom_available_fields()
     ?>
     <input type="hidden" name="listing_type" id="new_post_type" value="<?php echo $listing_type;?>"/>
     <input type="hidden" name="manage_field_type" class="manage_field_type" value="<?php echo sanitize_text_field($_REQUEST['subtab']); ?>"/>
-    <ul class="full">
-        <li><a id="gt-fieldset" class="gt-draggable-form-items gt-fieldset" href="javascript:void(0);"><?php _e('Fieldset', 'geodirectory');?></a></li>
+    <ul class="full gd-cf-tooltip-wrap">
+        <li>
+            <div class="gdcf-tooltip">
+                <?php _e('This adds a section separator with a title.', 'geodirectory');?>
+            </div>
+            <a id="gt-fieldset" class="gd-draggable-form-items gt-fieldset" href="javascript:void(0);">
+                <i class="fa fa-long-arrow-left " aria-hidden="true"></i>
+                <i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+                <?php _e('Fieldset (section separator)', 'geodirectory');?>
+            </a>
+        </li>
     </ul>
     <ul>
-        <li><a id="gt-text" class="gt-draggable-form-items gt-text"
-               href="javascript:void(0);"><b></b><?php _e('Text', 'geodirectory');?></a></li>
-        <li><a id="gt-datepicker" class="gt-draggable-form-items gt-datepicker"
-               href="javascript:void(0);"><b></b><?php _e('Date', 'geodirectory');?></a></li>
-        <li><a id="gt-textarea" class="gt-draggable-form-items gt-textarea"
-               href="javascript:void(0);"><b></b><?php _e('Textarea', 'geodirectory');?></a></li>
-        <li><a id="gt-time" class="gt-draggable-form-items gt-time"
-               href="javascript:void(0);"><b></b><?php _e('Time', 'geodirectory');?></a></li>
-        <li><a id="gt-checkbox" class="gt-draggable-form-items gt-checkbox"
-               href="javascript:void(0);"><b></b><?php _e('Checkbox', 'geodirectory');?></a></li>
-        <li><a id="gt-phone" class="gt-draggable-form-items gt-phone"
-               href="javascript:void(0);"><b></b><?php _e('Phone', 'geodirectory');?></a></li>
-        <li><a id="gt-radio" class="gt-draggable-form-items gt-radio"
-               href="javascript:void(0);"><b></b><?php _e('Radio', 'geodirectory');?></a></li>
-        <li><a id="gt-email" class="gt-draggable-form-items gt-email"
-               href="javascript:void(0);"><b></b><?php _e('Email', 'geodirectory');?></a></li>
-        <li><a id="gt-select" class="gt-draggable-form-items gt-select"
-               href="javascript:void(0);"><b></b><?php _e('Select', 'geodirectory');?></a></li>
-        <!--<li><a id="gt-taxonomy" class="gt-draggable-form-items gt-select" href="javascript:void(0);"><b></b><?php _e('Taxonomy', 'geodirectory');?></a></li>-->
-        <li><a id="gt-multiselect" class="gt-draggable-form-items gt-multiselect"
-               href="javascript:void(0);"><b></b><?php _e('Multi Select', 'geodirectory');?></a></li>
-        <li><a id="gt-url" class="gt-draggable-form-items gt-url"
-               href="javascript:void(0);"><b></b><?php _e('URL', 'geodirectory');?></a></li>
-        <li><a id="gt-html" class="gt-draggable-form-items gt-html"
-               href="javascript:void(0);"><b></b><?php _e('HTML', 'geodirectory');?></a></li>
-        <li><a id="gt-file" class="gt-draggable-form-items gt-file"
-               href="javascript:void(0);"><b></b><?php _e('File Upload', 'geodirectory');?></a></li>
+        <?php
+        $cfs = geodir_custom_fields($listing_type);
+
+        foreach($cfs as $id=>$cf){
+            ?>
+            <li   class="gd-cf-tooltip-wrap">
+                <?php
+                if(isset($cf['description']) && $cf['description']){
+                   echo '<div class="gdcf-tooltip">'.$cf['description'].'</div>';
+                }?>
+
+                <a id="gd-<?php echo $id;?>" data-field-type-key="<?php echo $id;?>"  data-field-type="<?php echo $cf['field_type'];?>" class="gd-draggable-form-items <?php echo $cf['class'];?>" href="javascript:void(0);">
+                    <?php if (isset($cf['icon']) && strpos($cf['icon'], 'fa fa-') !== false) {
+                        echo '<i class="'.$cf['icon'].'" aria-hidden="true"></i>';
+                    }elseif(isset($cf['icon']) && $cf['icon'] ){
+                        echo '<b style="background-image: url("'.$cf['icon'].'")"></b>';
+                    }else{
+                        echo '<i class="fa fa-cog" aria-hidden="true"></i>';
+                    }?>
+                    <?php echo $cf['name'];?>
+                </a>
+            </li>
+        <?php
+        }
+        ?>
+
 
     </ul>
 
@@ -557,9 +717,10 @@ function geodir_custom_selected_fields()
                 //$result_str = $field->id;
                 $result_str = $field;
                 $field_type = $field->field_type;
+                $field_type_key = $field->field_type_key;
                 $field_ins_upd = 'display';
 
-                geodir_custom_field_adminhtml($field_type, $result_str, $field_ins_upd);
+                geodir_custom_field_adminhtml($field_type, $result_str, $field_ins_upd,$field_type_key);
             }
         }
         ?></ul>
