@@ -290,6 +290,8 @@ function gd_convert_custom_field_display(){
     $has_run = get_option('gd_convert_custom_field_display');
     if($has_run){return;}
 
+    // set the field_type_key for standard fields
+    $wpdb->query("UPDATE ".GEODIR_CUSTOM_FIELDS_TABLE." SET field_type_key = field_type");
 
 
     if(is_array( $field_info)){

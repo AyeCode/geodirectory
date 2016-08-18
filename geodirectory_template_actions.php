@@ -1404,6 +1404,21 @@ function geodir_action_details_micordata($post='')
 
     echo '<script type="application/ld+json">' . json_encode($schema) . '</script>';
 
+
+    $uploads = wp_upload_dir();
+    $facebook_og = (isset($post->featured_image) && $post->featured_image) ? '<meta property="og:image" content="'.$uploads['baseurl'].$post->featured_image.'"/>' : '';
+
+    /**
+     * Show facebook open graph meta info
+     *
+     * @since 1.6.6
+     * @param string $facebook_og The open graph html to be filtered.
+     * @param object $post The post object.
+     */
+    echo apply_filters('geodir_details_facebook_og', $facebook_og,$post);
+
+
+
 }
 
 add_action('geodir_details_tabs', 'geodir_show_detail_page_tabs', 10);

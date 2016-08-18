@@ -3,7 +3,7 @@ Contributors: stiofansisland, paoltaia
 Donate link: https://wpgeodirectory.com
 Tags:  address book, addressbook, addresses, bio, biographies, bios, business, business directory plugin, business-directory, businesses, church, directories, directory, directory plugin, directory widget, geodirectory, googlemap, googlemaps, google maps, list, listings, lists, member directory, members directories, members directory, microformat, microformats, multisite, profile, profiles, staff, user, users, vcard, wordpress business directory, wordpress directory, wordpress directory plugin, yelp clone, tripadvisor clone, yellow pages clone, wordpress business directory plugin, wordpress directory theme, wordpress business directory theme, wordpress city directory plugin, wordpress local directory plugin
 Requires at least: 3.1
-Tested up to: 4.5
+Tested up to: 4.6
 Stable tag: 1.6.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html

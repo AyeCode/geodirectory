@@ -70,7 +70,7 @@ function geodir_on_init()
 
 
 
-    if (get_option('geodir_allow_wpadmin') == '0' && is_user_logged_in() && !current_user_can('manage_options')) {
+    if (get_option('geodir_allow_wpadmin') == '0' && is_user_logged_in() && !current_user_can('manage_options') && !class_exists('BuddyPress')) {
         show_admin_bar(false);
     }
 
