@@ -584,20 +584,7 @@ function geodir_custom_fields($post_type=''){
             'icon' =>  'fa fa-file',
             'name'  =>  __('File Upload', 'geodirectory'),
             'description' =>  __('Adds a file input', 'geodirectory')
-        ),
-        'test' => array(
-            'field_type'  =>  'text',
-            'class' =>  'gd-testing',
-            'icon' =>  'fa fa-cog',
-            'name'  =>  __('Test', 'geodirectory'),
-            'description' =>  __('Adds a test value bla bla', 'geodirectory'),
-            'defaults'  => array(
-                'data_type'     =>  '',   // true to show options, or define the SQL data type.
-                'admin_title'   =>  'testing yo', // pre-fill value
-                'site_title'    =>  '', // pre-fill value
-            )
         )
-        
     );
 
     /**
@@ -624,11 +611,14 @@ function geodir_custom_fields($post_type=''){
      *                    @type bool is_active If false the field will not be displayed anywhere.
      *                    @type bool for_admin_use If true then only site admin can see and edit this field.
      *                    @type string default_value The default value for the input on the add listing page.
+     *                    @type string show_in The locations to show in. [detail],[moreinfo],[listing],[owntab],[mapbubble]
      *                    @type bool is_required If true the field will be required on the add listing page.
+     *                    @type string validation_pattern HTML5 validation pattern (text input only by default).
+     *                    @type string validation_msg HTML5 validation message (text input only by default).
      *                    @type string required_msg Required warning message.
      *                    @type string field_icon Icon url or font awesome class.
      *                    @type string css_class Field custom css class for field custom style.
-     *                    @type bool cat_sort If true the field will appear in the category sort options.
+     *                    @type bool cat_sort If true the field will appear in the category sort options, if false the field will be hidden, leave blank to show option.
      *     }
      * }
      * @param string $post_type The post type requested.
