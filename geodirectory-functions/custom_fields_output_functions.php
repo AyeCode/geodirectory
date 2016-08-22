@@ -33,7 +33,7 @@ function geodir_cf_checkbox($html,$location,$cf,$p=''){
     $html_var = $cf['htmlvar_name'];
 
     // Check if there is a location specific filter.
-    if(has_filter("geodir_custom_field_output_checkbox_{$location}")){
+    if(has_filter("geodir_custom_field_output_checkbox_loc_{$location}")){
         /**
          * Filter the checkbox html by location.
          *
@@ -41,11 +41,11 @@ function geodir_cf_checkbox($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_checkbox_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_checkbox_loc_{$location}",$html,$cf);
     }
 
     // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_checkbox_{$html_var}")){
+    if(has_filter("geodir_custom_field_output_checkbox_var_{$html_var}")){
         /**
          * Filter the checkbox html by individual custom field.
          *
@@ -54,19 +54,20 @@ function geodir_cf_checkbox($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_checkbox_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_checkbox_var_{$html_var}",$html,$location,$cf);
     }
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_checkbox_{$location}_{$html_var}")){
+    // Check if there is a custom field key specific filter.
+    if(has_filter("geodir_custom_field_output_checkbox_key_{$cf['field_type_key']}")){
         /**
-         * Filter the checkbox html by location and individual custom field.
+         * Filter the checkbox html by field type key.
          *
          * @param string $html The html to filter.
+         * @param string $location The location to output the html.
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_checkbox_{$location}_{$html_var}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_checkbox_key_{$cf['field_type_key']}",$html,$location,$cf);
     }
 
     // If not html then we run the standard output.
@@ -126,7 +127,7 @@ function geodir_cf_fieldset($html,$location,$cf,$p=''){
     $html_var = $cf['htmlvar_name'];
 
     // Check if there is a location specific filter.
-    if(has_filter("geodir_custom_field_output_fieldset_{$location}")){
+    if(has_filter("geodir_custom_field_output_fieldset_loc_{$location}")){
         /**
          * Filter the fieldset html by location.
          *
@@ -134,11 +135,11 @@ function geodir_cf_fieldset($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_fieldset_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_fieldset_loc_{$location}",$html,$cf);
     }
 
     // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_fieldset_{$html_var}")){
+    if(has_filter("geodir_custom_field_output_fieldset_var_{$html_var}")){
         /**
          * Filter the fieldset html by individual custom field.
          *
@@ -147,19 +148,20 @@ function geodir_cf_fieldset($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_fieldset_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_fieldset_var_{$html_var}",$html,$location,$cf);
     }
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_fieldset_{$location}_{$html_var}")){
+    // Check if there is a custom field key specific filter.
+    if(has_filter("geodir_custom_field_output_fieldset_key_{$cf['field_type_key']}")){
         /**
-         * Filter the fieldset html by location and individual custom field.
+         * Filter the fieldset html by field type key.
          *
          * @param string $html The html to filter.
+         * @param string $location The location to output the html.
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_fieldset_{$location}_{$html_var}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_fieldset_key_{$cf['field_type_key']}",$html,$location,$cf);
     }
 
     // If not html then we run the standard output.
@@ -206,7 +208,7 @@ function geodir_cf_url($html,$location,$cf,$p=''){
     $html_var = $cf['htmlvar_name'];
 
     // Check if there is a location specific filter.
-    if(has_filter("geodir_custom_field_output_url_{$location}")){
+    if(has_filter("geodir_custom_field_output_url_loc_{$location}")){
         /**
          * Filter the url html by location.
          *
@@ -214,11 +216,11 @@ function geodir_cf_url($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_url_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_url_loc_{$location}",$html,$cf);
     }
 
     // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_url_{$html_var}")){
+    if(has_filter("geodir_custom_field_output_url_var_{$html_var}")){
         /**
          * Filter the url html by individual custom field.
          *
@@ -227,19 +229,20 @@ function geodir_cf_url($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_url_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_url_var_{$html_var}",$html,$location,$cf);
     }
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_url_{$location}_{$html_var}")){
+    // Check if there is a custom field key specific filter.
+    if(has_filter("geodir_custom_field_output_url_key_{$cf['field_type_key']}")){
         /**
-         * Filter the url html by location and individual custom field.
+         * Filter the url html by field type key.
          *
          * @param string $html The html to filter.
+         * @param string $location The location to output the html.
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_url_{$location}_{$html_var}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_url_key_{$cf['field_type_key']}",$html,$location,$cf);
     }
 
     // If not html then we run the standard output.
@@ -321,7 +324,7 @@ function geodir_cf_phone($html,$location,$cf,$p=''){
     $html_var = $cf['htmlvar_name'];
 
     // Check if there is a location specific filter.
-    if(has_filter("geodir_custom_field_output_phone_{$location}")){
+    if(has_filter("geodir_custom_field_output_phone_loc_{$location}")){
         /**
          * Filter the phone html by location.
          *
@@ -329,11 +332,11 @@ function geodir_cf_phone($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_phone_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_phone_loc_{$location}",$html,$cf);
     }
 
     // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_phone_{$html_var}")){
+    if(has_filter("geodir_custom_field_output_phone_var_{$html_var}")){
         /**
          * Filter the phone html by individual custom field.
          *
@@ -342,19 +345,20 @@ function geodir_cf_phone($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_phone_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_phone_var_{$html_var}",$html,$location,$cf);
     }
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_phone_{$location}_{$html_var}")){
+    // Check if there is a custom field key specific filter.
+    if(has_filter("geodir_custom_field_output_phone_key_{$cf['field_type_key']}")){
         /**
-         * Filter the phone html by location and individual custom field.
+         * Filter the phone html by field type key.
          *
          * @param string $html The html to filter.
+         * @param string $location The location to output the html.
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_phone_{$location}_{$html_var}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_phone_key_{$cf['field_type_key']}",$html,$location,$cf);
     }
 
     // If not html then we run the standard output.
@@ -410,7 +414,7 @@ function geodir_cf_time($html,$location,$cf,$p=''){
     $html_var = $cf['htmlvar_name'];
 
     // Check if there is a location specific filter.
-    if(has_filter("geodir_custom_field_output_time_{$location}")){
+    if(has_filter("geodir_custom_field_output_time_loc_{$location}")){
         /**
          * Filter the time html by location.
          *
@@ -418,11 +422,11 @@ function geodir_cf_time($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_time_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_time_loc_{$location}",$html,$cf);
     }
 
     // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_time_{$html_var}")){
+    if(has_filter("geodir_custom_field_output_time_var_{$html_var}")){
         /**
          * Filter the time html by individual custom field.
          *
@@ -431,19 +435,20 @@ function geodir_cf_time($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_time_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_time_var_{$html_var}",$html,$location,$cf);
     }
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_time_{$location}_{$html_var}")){
+    // Check if there is a custom field key specific filter.
+    if(has_filter("geodir_custom_field_output_time_key_{$cf['field_type_key']}")){
         /**
-         * Filter the time html by location and individual custom field.
+         * Filter the time html by field type key.
          *
          * @param string $html The html to filter.
+         * @param string $location The location to output the html.
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_time_{$location}_{$html_var}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_time_key_{$cf['field_type_key']}",$html,$location,$cf);
     }
 
     // If not html then we run the standard output.
@@ -504,7 +509,7 @@ function geodir_cf_datepicker($html,$location,$cf,$p=''){
     $html_var = $cf['htmlvar_name'];
 
     // Check if there is a location specific filter.
-    if(has_filter("geodir_custom_field_output_datepicker_{$location}")){
+    if(has_filter("geodir_custom_field_output_datepicker_loc_{$location}")){
         /**
          * Filter the datepicker html by location.
          *
@@ -512,11 +517,11 @@ function geodir_cf_datepicker($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_datepicker_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_datepicker_loc_{$location}",$html,$cf);
     }
 
     // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_datepicker_{$html_var}")){
+    if(has_filter("geodir_custom_field_output_datepicker_var_{$html_var}")){
         /**
          * Filter the datepicker html by individual custom field.
          *
@@ -525,19 +530,20 @@ function geodir_cf_datepicker($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_datepicker_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_datepicker_var_{$html_var}",$html,$location,$cf);
     }
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_datepicker_{$location}_{$html_var}")){
+    // Check if there is a custom field key specific filter.
+    if(has_filter("geodir_custom_field_output_datepicker_key_{$cf['field_type_key']}")){
         /**
-         * Filter the datepicker html by location and individual custom field.
+         * Filter the datepicker html by field type key.
          *
          * @param string $html The html to filter.
+         * @param string $location The location to output the html.
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_datepicker_{$location}_{$html_var}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_datepicker_key_{$cf['field_type_key']}",$html,$location,$cf);
     }
 
     // If not html then we run the standard output.
@@ -620,7 +626,7 @@ function geodir_cf_text($html,$location,$cf,$p=''){
     $html_var = $cf['htmlvar_name'];
 
     // Check if there is a location specific filter.
-    if(has_filter("geodir_custom_field_output_text_{$location}")){
+    if(has_filter("geodir_custom_field_output_text_loc_{$location}")){
         /**
          * Filter the text html by location.
          *
@@ -628,11 +634,11 @@ function geodir_cf_text($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_text_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_text_loc_{$location}",$html,$cf);
     }
 
     // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_text_{$html_var}")){
+    if(has_filter("geodir_custom_field_output_text_var_{$html_var}")){
         /**
          * Filter the text html by individual custom field.
          *
@@ -641,20 +647,23 @@ function geodir_cf_text($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_text_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_text_var_{$html_var}",$html,$location,$cf);
     }
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_text_{$location}_{$html_var}")){
+    // Check if there is a custom field key specific filter.
+    if(has_filter("geodir_custom_field_output_text_key_{$cf['field_type_key']}")){
         /**
-         * Filter the text html by location and individual custom field.
+         * Filter the text html by field type key.
          *
          * @param string $html The html to filter.
+         * @param string $location The location to output the html.
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_text_{$location}_{$html_var}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_text_key_{$cf['field_type_key']}",$html,$location,$cf);
     }
+
+    
 
     // If not html then we run the standard output.
     if(empty($html)){
@@ -711,7 +720,7 @@ function geodir_cf_radio($html,$location,$cf,$p=''){
     $html_var = $cf['htmlvar_name'];
 
     // Check if there is a location specific filter.
-    if(has_filter("geodir_custom_field_output_radio_{$location}")){
+    if(has_filter("geodir_custom_field_output_radio_loc_{$location}")){
         /**
          * Filter the radio html by location.
          *
@@ -719,11 +728,11 @@ function geodir_cf_radio($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_radio_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_radio_loc_{$location}",$html,$cf);
     }
 
     // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_radio_{$html_var}")){
+    if(has_filter("geodir_custom_field_output_radio_var_{$html_var}")){
         /**
          * Filter the radio html by individual custom field.
          *
@@ -732,19 +741,20 @@ function geodir_cf_radio($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_radio_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_radio_var_{$html_var}",$html,$location,$cf);
     }
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_radio_{$location}_{$html_var}")){
+    // Check if there is a custom field key specific filter.
+    if(has_filter("geodir_custom_field_output_radio_key_{$cf['field_type_key']}")){
         /**
-         * Filter the radio html by location and individual custom field.
+         * Filter the radio html by field type key.
          *
          * @param string $html The html to filter.
+         * @param string $location The location to output the html.
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_radio_{$location}_{$html_var}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_radio_key_{$cf['field_type_key']}",$html,$location,$cf);
     }
 
     // If not html then we run the standard output.
@@ -818,7 +828,7 @@ function geodir_cf_select($html,$location,$cf,$p=''){
     $html_var = $cf['htmlvar_name'];
 
     // Check if there is a location specific filter.
-    if(has_filter("geodir_custom_field_output_select_{$location}")){
+    if(has_filter("geodir_custom_field_output_select_loc_{$location}")){
         /**
          * Filter the select html by location.
          *
@@ -826,11 +836,11 @@ function geodir_cf_select($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_select_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_select_loc_{$location}",$html,$cf);
     }
 
     // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_select_{$html_var}")){
+    if(has_filter("geodir_custom_field_output_select_var_{$html_var}")){
         /**
          * Filter the select html by individual custom field.
          *
@@ -839,19 +849,20 @@ function geodir_cf_select($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_select_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_select_var_{$html_var}",$html,$location,$cf);
     }
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_select_{$location}_{$html_var}")){
+    // Check if there is a custom field key specific filter.
+    if(has_filter("geodir_custom_field_output_select_key_{$cf['field_type_key']}")){
         /**
-         * Filter the select html by location and individual custom field.
+         * Filter the select html by field type key.
          *
          * @param string $html The html to filter.
+         * @param string $location The location to output the html.
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_select_{$location}_{$html_var}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_select_key_{$cf['field_type_key']}",$html,$location,$cf);
     }
 
     // If not html then we run the standard output.
@@ -919,7 +930,7 @@ function geodir_cf_multiselect($html,$location,$cf,$p=''){
     $html_var = $cf['htmlvar_name'];
 
     // Check if there is a location specific filter.
-    if(has_filter("geodir_custom_field_output_multiselect_{$location}")){
+    if(has_filter("geodir_custom_field_output_multiselect_loc_{$location}")){
         /**
          * Filter the multiselect html by location.
          *
@@ -927,11 +938,11 @@ function geodir_cf_multiselect($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_multiselect_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_multiselect_loc_{$location}",$html,$cf);
     }
 
     // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_multiselect_{$html_var}")){
+    if(has_filter("geodir_custom_field_output_multiselect_var_{$html_var}")){
         /**
          * Filter the multiselect html by individual custom field.
          *
@@ -940,19 +951,20 @@ function geodir_cf_multiselect($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_multiselect_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_multiselect_var_{$html_var}",$html,$location,$cf);
     }
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_multiselect_{$location}_{$html_var}")){
+    // Check if there is a custom field key specific filter.
+    if(has_filter("geodir_custom_field_output_multiselect_key_{$cf['field_type_key']}")){
         /**
-         * Filter the multiselect html by location and individual custom field.
+         * Filter the multiselect html by field type key.
          *
          * @param string $html The html to filter.
+         * @param string $location The location to output the html.
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_multiselect_{$location}_{$html_var}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_multiselect_key_{$cf['field_type_key']}",$html,$location,$cf);
     }
 
     // If not html then we run the standard output.
@@ -1041,7 +1053,7 @@ function geodir_cf_email($html,$location,$cf,$p=''){
     $html_var = $cf['htmlvar_name'];
 
     // Check if there is a location specific filter.
-    if(has_filter("geodir_custom_field_output_email_{$location}")){
+    if(has_filter("geodir_custom_field_output_email_loc_{$location}")){
         /**
          * Filter the email html by location.
          *
@@ -1049,11 +1061,11 @@ function geodir_cf_email($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_email_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_email_loc_{$location}",$html,$cf);
     }
 
     // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_email_{$html_var}")){
+    if(has_filter("geodir_custom_field_output_email_var_{$html_var}")){
         /**
          * Filter the email html by individual custom field.
          *
@@ -1062,19 +1074,20 @@ function geodir_cf_email($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_email_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_email_var_{$html_var}",$html,$location,$cf);
     }
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_email_{$location}_{$html_var}")){
+    // Check if there is a custom field key specific filter.
+    if(has_filter("geodir_custom_field_output_email_key_{$cf['field_type_key']}")){
         /**
-         * Filter the email html by location and individual custom field.
+         * Filter the email html by field type key.
          *
          * @param string $html The html to filter.
+         * @param string $location The location to output the html.
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_email_{$location}_{$html_var}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_email_key_{$cf['field_type_key']}",$html,$location,$cf);
     }
 
     // If not html then we run the standard output.
@@ -1084,6 +1097,8 @@ function geodir_cf_email($html,$location,$cf,$p=''){
         if ($cf['htmlvar_name'] == 'geodir_email' && !(geodir_is_page('detail') || geodir_is_page('preview'))) {
             return ''; // Remove Send Enquiry | Send To Friend from listings page
         }
+
+        $package_info = (array)geodir_post_package_info(array(), $post, $post->post_type);
 
         if ($cf['htmlvar_name'] == 'geodir_email' && ((isset($package_info->sendtofriend) && $package_info->sendtofriend) || $post->{$cf['htmlvar_name']})) {
             $send_to_friend = true;
@@ -1201,7 +1216,7 @@ function geodir_cf_file($html,$location,$cf,$p=''){
     $html_var = $cf['htmlvar_name'];
 
     // Check if there is a location specific filter.
-    if(has_filter("geodir_custom_field_output_file_{$location}")){
+    if(has_filter("geodir_custom_field_output_file_loc_{$location}")){
         /**
          * Filter the file html by location.
          *
@@ -1209,11 +1224,11 @@ function geodir_cf_file($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_file_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_file_loc_{$location}",$html,$cf);
     }
 
     // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_file_{$html_var}")){
+    if(has_filter("geodir_custom_field_output_file_var_{$html_var}")){
         /**
          * Filter the file html by individual custom field.
          *
@@ -1222,19 +1237,20 @@ function geodir_cf_file($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_file_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_file_var_{$html_var}",$html,$location,$cf);
     }
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_file_{$location}_{$html_var}")){
+    // Check if there is a custom field key specific filter.
+    if(has_filter("geodir_custom_field_output_file_key_{$cf['field_type_key']}")){
         /**
-         * Filter the file html by location and individual custom field.
+         * Filter the file html by field type key.
          *
          * @param string $html The html to filter.
+         * @param string $location The location to output the html.
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_file_{$location}_{$html_var}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_file_key_{$cf['field_type_key']}",$html,$location,$cf);
     }
 
     // If not html then we run the standard output.
@@ -1341,7 +1357,7 @@ function geodir_cf_textarea($html,$location,$cf,$p=''){
     $html_var = $cf['htmlvar_name'];
 
     // Check if there is a location specific filter.
-    if(has_filter("geodir_custom_field_output_textarea_{$location}")){
+    if(has_filter("geodir_custom_field_output_textarea_loc_{$location}")){
         /**
          * Filter the textarea html by location.
          *
@@ -1349,11 +1365,11 @@ function geodir_cf_textarea($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_textarea_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_textarea_loc_{$location}",$html,$cf);
     }
 
     // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_textarea_{$html_var}")){
+    if(has_filter("geodir_custom_field_output_textarea_var_{$html_var}")){
         /**
          * Filter the textarea html by individual custom field.
          *
@@ -1362,19 +1378,20 @@ function geodir_cf_textarea($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_textarea_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_textarea_var_{$html_var}",$html,$location,$cf);
     }
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_textarea_{$location}_{$html_var}")){
+    // Check if there is a custom field key specific filter.
+    if(has_filter("geodir_custom_field_output_textarea_key_{$cf['field_type_key']}")){
         /**
-         * Filter the textarea html by location and individual custom field.
+         * Filter the textarea html by field type key.
          *
          * @param string $html The html to filter.
+         * @param string $location The location to output the html.
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_textarea_{$location}_{$html_var}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_textarea_key_{$cf['field_type_key']}",$html,$location,$cf);
     }
 
     // If not html then we run the standard output.
@@ -1431,7 +1448,7 @@ function geodir_cf_html($html,$location,$cf,$p=''){
     $html_var = $cf['htmlvar_name'];
 
     // Check if there is a location specific filter.
-    if(has_filter("geodir_custom_field_output_html_{$location}")){
+    if(has_filter("geodir_custom_field_output_html_loc_{$location}")){
         /**
          * Filter the html html by location.
          *
@@ -1439,11 +1456,11 @@ function geodir_cf_html($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_html_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_html_loc_{$location}",$html,$cf);
     }
 
     // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_html_{$html_var}")){
+    if(has_filter("geodir_custom_field_output_html_var_{$html_var}")){
         /**
          * Filter the html html by individual custom field.
          *
@@ -1452,19 +1469,20 @@ function geodir_cf_html($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_html_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_html_var_{$html_var}",$html,$location,$cf);
     }
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_html_{$location}_{$html_var}")){
+    // Check if there is a custom field key specific filter.
+    if(has_filter("geodir_custom_field_output_html_key_{$cf['field_type_key']}")){
         /**
-         * Filter the html html by location and individual custom field.
+         * Filter the html html by field type key.
          *
          * @param string $html The html to filter.
+         * @param string $location The location to output the html.
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_html_{$location}_{$html_var}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_html_key_{$cf['field_type_key']}",$html,$location,$cf);
     }
 
     // If not html then we run the standard output.
@@ -1520,7 +1538,7 @@ function geodir_cf_taxonomy($html,$location,$cf,$p=''){
     $html_var = $cf['htmlvar_name'];
 
     // Check if there is a location specific filter.
-    if(has_filter("geodir_custom_field_output_taxonomy_{$location}")){
+    if(has_filter("geodir_custom_field_output_taxonomy_loc_{$location}")){
         /**
          * Filter the taxonomy html by location.
          *
@@ -1528,11 +1546,11 @@ function geodir_cf_taxonomy($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_taxonomy_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_taxonomy_loc_{$location}",$html,$cf);
     }
 
     // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_taxonomy_{$html_var}")){
+    if(has_filter("geodir_custom_field_output_taxonomy_var_{$html_var}")){
         /**
          * Filter the taxonomy html by individual custom field.
          *
@@ -1541,19 +1559,20 @@ function geodir_cf_taxonomy($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_taxonomy_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_taxonomy_var_{$html_var}",$html,$location,$cf);
     }
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_taxonomy_{$location}_{$html_var}")){
+    // Check if there is a custom field key specific filter.
+    if(has_filter("geodir_custom_field_output_taxonomy_key_{$cf['field_type_key']}")){
         /**
-         * Filter the taxonomy html by location and individual custom field.
+         * Filter the taxonomy html by field type key.
          *
          * @param string $html The html to filter.
+         * @param string $location The location to output the html.
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_taxonomy_{$location}_{$html_var}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_taxonomy_key_{$cf['field_type_key']}",$html,$location,$cf);
     }
 
     // If not html then we run the standard output.
@@ -1642,7 +1661,7 @@ function geodir_cf_address($html,$location,$cf,$p=''){
     $html_var = $cf['htmlvar_name'];
 
     // Check if there is a location specific filter.
-    if(has_filter("geodir_custom_field_output_address_{$location}")){
+    if(has_filter("geodir_custom_field_output_address_loc_{$location}")){
         /**
          * Filter the address html by location.
          *
@@ -1650,11 +1669,11 @@ function geodir_cf_address($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_address_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_address_loc_{$location}",$html,$cf);
     }
 
     // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_address_{$html_var}")){
+    if(has_filter("geodir_custom_field_output_address_var_{$html_var}")){
         /**
          * Filter the address html by individual custom field.
          *
@@ -1663,19 +1682,20 @@ function geodir_cf_address($html,$location,$cf,$p=''){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_address_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_address_var_{$html_var}",$html,$location,$cf);
     }
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_address_{$location}_{$html_var}")){
+    // Check if there is a custom field key specific filter.
+    if(has_filter("geodir_custom_field_output_address_key_{$cf['field_type_key']}")){
         /**
-         * Filter the address html by location and individual custom field.
+         * Filter the address html by field type key.
          *
          * @param string $html The html to filter.
+         * @param string $location The location to output the html.
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_address_{$location}_{$html_var}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_address_key_{$cf['field_type_key']}",$html,$location,$cf);
     }
 
     // If not html then we run the standard output.

@@ -166,7 +166,7 @@ function geodir_cfi_email($html,$cf){
                 echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
                 <?php if ($cf['is_required']) echo '<span>*</span>';?>
             </label>
-            <input field_type="<?php echo $cf['type'];?>" name="<?php  $cf['name'];?>" id="<?php echo $cf['name'];?>"
+            <input field_type="<?php echo $cf['type'];?>" name="<?php  echo $cf['name'];?>" id="<?php echo $cf['name'];?>"
                    value="<?php echo esc_attr(stripslashes($value));?>" type="email" class="geodir_textfield"/>
             <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
             <?php if ($cf['is_required']) { ?>
@@ -226,7 +226,7 @@ function geodir_cfi_phone($html,$cf){
                 echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
                 <?php if ($cf['is_required']) echo '<span>*</span>';?>
             </label>
-            <input field_type="<?php echo $cf['type'];?>" name="<?php  $cf['name'];?>" id="<?php echo $cf['name'];?>"
+            <input field_type="<?php echo $cf['type'];?>" name="<?php  echo $cf['name'];?>" id="<?php echo $cf['name'];?>"
                    value="<?php echo esc_attr(stripslashes($value));?>" type="tel" class="geodir_textfield"/>
             <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
             <?php if ($cf['is_required']) { ?>
