@@ -1829,7 +1829,7 @@ function geodir_add_custom_sort_options($fields, $post_type)
 
             $custom_fields = $wpdb->get_results(
                 $wpdb->prepare(
-                    "select post_type,data_type,field_type,site_title,htmlvar_name from " . GEODIR_CUSTOM_FIELDS_TABLE . " where post_type = %s and is_active='1' and cat_sort='1' AND field_type != 'address' order by sort_order asc",
+                    "select post_type,data_type,field_type,site_title,htmlvar_name,field_icon from " . GEODIR_CUSTOM_FIELDS_TABLE . " where post_type = %s and is_active='1' and cat_sort='1' AND field_type != 'address' order by sort_order asc",
                     array($post_type)
                 ), 'ARRAY_A'
             );
@@ -1877,7 +1877,9 @@ function geodir_get_custom_sort_options($post_type = '')
             'data_type' => '',
             'field_type' => 'random',
             'site_title' => 'Random',
-            'htmlvar_name' => 'post_title'
+            'htmlvar_name' => 'post_title',
+            'field_icon' =>  'fa fa-random',
+            'description' =>  __('Random sort (not recommended for large sites)', 'geodirectory')
         );
 
         $fields[] = array(
@@ -1885,28 +1887,36 @@ function geodir_get_custom_sort_options($post_type = '')
             'data_type' => '',
             'field_type' => 'datetime',
             'site_title' => __('Add date', 'geodirectory'),
-            'htmlvar_name' => 'post_date'
+            'htmlvar_name' => 'post_date',
+            'field_icon' =>  'fa fa-calendar',
+            'description' =>  __('Sort by date added', 'geodirectory')
         );
         $fields[] = array(
             'post_type' => $post_type,
             'data_type' => '',
             'field_type' => 'bigint',
             'site_title' => __('Review', 'geodirectory'),
-            'htmlvar_name' => 'comment_count'
+            'htmlvar_name' => 'comment_count',
+            'field_icon' =>  'fa fa-commenting-o',
+            'description' =>  __('Sort by the number of reviews', 'geodirectory')
         );
         $fields[] = array(
             'post_type' => $post_type,
             'data_type' => '',
             'field_type' => 'float',
             'site_title' => __('Rating', 'geodirectory'),
-            'htmlvar_name' => 'overall_rating'
+            'htmlvar_name' => 'overall_rating',
+            'field_icon' =>  'fa fa-star-o',
+            'description' =>  __('Sort by the overall rating value', 'geodirectory')
         );
         $fields[] = array(
             'post_type' => $post_type,
             'data_type' => '',
             'field_type' => 'text',
             'site_title' => __('Title', 'geodirectory'),
-            'htmlvar_name' => 'post_title'
+            'htmlvar_name' => 'post_title',
+            'field_icon' =>  'fa fa-sort-alpha-desc',
+            'description' =>  __('Sort alphabetically by title', 'geodirectory')
         );
 
         /**
@@ -2149,7 +2159,7 @@ if (!function_exists('geodir_custom_sort_field_adminhtml')) {
      * @param string $field_ins_upd When set to "submit" displays form.
      * @param bool $default when set to true field will be for admin use only.
      */
-    function geodir_custom_sort_field_adminhtml($field_type, $result_str, $field_ins_upd = '', $default = false)
+    function geodir_custom_sort_field_adminhtml($field_type, $result_str, $field_ins_upd = '', $field_type_key='')
     {
         global $wpdb;
         $cf = $result_str;
@@ -2168,9 +2178,8 @@ if (!function_exists('geodir_custom_sort_field_adminhtml')) {
             $post_type = $field_info->post_type;
         }
 
-        $field_types = explode('-_-', $field_type);
-        $field_type = $field_types[0];
-        $htmlvar_name = isset($field_types[1]) ? $field_types[1] : '';
+
+        $htmlvar_name = isset($field_type_key) ? $field_type_key : '';
 
         $site_title = '';
         if ($site_title == '')
@@ -2193,20 +2202,40 @@ if (!function_exists('geodir_custom_sort_field_adminhtml')) {
 
         $nonce = wp_create_nonce('custom_fields_' . $result_str);
 
+        $field_icon = '<i class="fa fa-cog" aria-hidden="true"></i>';
+        $cso_arr = geodir_get_custom_sort_options($post_type);
+
+        $cur_field_type = (isset($cf->field_type)) ? $cf->field_type : esc_html($_REQUEST['field_type']);
+        foreach($cso_arr as $cso){
+            if($cur_field_type==$cso['field_type']){
+
+                if (isset($cso['field_icon']) && strpos($cso['field_icon'], 'fa fa-') !== false) {
+                    $field_icon = '<i class="'.$cso['field_icon'].'" aria-hidden="true"></i>';
+                }elseif(isset($cso['field_icon']) && $cso['field_icon']){
+                    $field_icon = '<b style="background-image: url("'.$cso['field_icon'].'")"></b>';
+                }
+
+            }
+        }
+
+        $radio_id = (isset($field_info->htmlvar_name)) ? $field_info->htmlvar_name : rand(5, 500);
         ?>
+
         <li class="text" id="licontainer_<?php echo $result_str;?>">
+            <form><!-- we need to wrap in a fom so we can use radio buttons with same name -->
             <div class="title title<?php echo $result_str;?> gt-fieldset"
                  title="<?php _e('Double Click to toggle and drag-drop to sort', 'geodirectory');?>"
                  ondblclick="show_hide('field_frm<?php echo $result_str;?>')">
                 <?php
 
-                $nonce = wp_create_nonce('custom_fields_' . $result_str);
                 ?>
 
                 <div title="<?php _e('Click to remove field', 'geodirectory');?>"
                      onclick="delete_sort_field('<?php echo $result_str;?>', '<?php echo $nonce;?>', this)"
-                     class="handlediv close"></div>
+                     class="handlediv close"><i class="fa fa-times" aria-hidden="true"></i></div>
 
+
+                <?php echo $field_icon;?>
                 <b style="cursor:pointer;"
                    onclick="show_hide('field_frm<?php echo $result_str;?>')"><?php echo geodir_ucwords(__('Field:', 'geodirectory') . ' (' . $site_title . ')');?></b>
 
@@ -2228,128 +2257,240 @@ if (!function_exists('geodir_custom_sort_field_adminhtml')) {
                 <input type="hidden" name="htmlvar_name" id="htmlvar_name" value="<?php echo $htmlvar_name;?>"/>
 
 
-                <table class="widefat post fixed" border="0" style="width:100%;">
+                <ul class="widefat post fixed" border="0" style="width:100%;">
 
                     <?php if ($field_type != 'random') { ?>
 
                         <input type="hidden" name="site_title" id="site_title" value="<?php echo esc_attr($site_title); ?>"/>
 
-                        <tr>
-                            <td>Select Ascending</td>
-                            <td>
-                                <input type="checkbox" name="asc" id="asc"
-                                       value="1" <?php if (isset($field_info->sort_asc) && $field_info->sort_asc == '1') {
-                                    echo 'checked="checked"';
-                                } ?>/>
+                        <li>
+                            <?php $value = (isset($field_info->sort_asc) && $field_info->sort_asc) ? $field_info->sort_asc : 0;?>
 
-                                <input type="text" name="asc_title" id="asc_title"
-                                       placeholder="<?php esc_attr_e('Ascending title', 'geodirectory'); ?>"
-                                       value="<?php if (isset($field_info->asc_title)) {
-                                           echo esc_attr($field_info->asc_title);
-                                       } ?>" style="width:45%;"/>
+                            <label for="asc" class="gd-cf-tooltip-wrap">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Show Ascending Sort (low to high)', 'geodirectory'); ?>
+                                <div class="gdcf-tooltip">
+                                    <?php _e('Select if you want to show this option in the sort options. (A-Z,0-100 or OFF)', 'geodirectory'); ?>
+                                </div>
+                            </label>
+                            <div class="gd-cf-input-wrap gd-switch">
+
+                                <input type="radio" id="asc_yes<?php echo $radio_id;?>" name="asc" class="gdri-enabled"  value="1"
+                                    <?php if ($value == '1') {
+                                        echo 'checked';
+                                    } ?>/>
+                                <label onclick="show_hide_radio(this,'show','cfs-asc-title');" for="asc_yes<?php echo $radio_id;?>" class="gdcb-enable"><span><?php _e('Yes', 'geodirectory'); ?></span></label>
+
+                                <input type="radio" id="asc_no<?php echo $radio_id;?>" name="asc" class="gdri-disabled" value="0"
+                                    <?php if ($value == '0' || !$value) {
+                                        echo 'checked';
+                                    } ?>/>
+                                <label onclick="show_hide_radio(this,'hide','cfs-asc-title');" for="asc_no<?php echo $radio_id;?>" class="gdcb-disable"><span><?php _e('No', 'geodirectory'); ?></span></label>
+
+                            </div>
+
+                        </li>
+
+                        <li class="cfs-asc-title" <?php if ((isset($field_info->sort_asc) && $field_info->sort_asc == '0') || !isset($field_info->sort_asc)) {echo "style='display:none;'";}?>>
+                            <?php $value = (isset($field_info->asc_title) && $field_info->asc_title) ? esc_attr($field_info->asc_title) : '';?>
+
+                            <label for="asc_title" class="gd-cf-tooltip-wrap">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Ascending title', 'geodirectory'); ?>
+                                <div class="gdcf-tooltip">
+                                    <?php _e('This is the text used for the sort option.', 'geodirectory'); ?>
+                                </div>
+                            </label>
+                            <div class="gd-cf-input-wrap">
+
+                                <input type="text" name="asc_title" id="asc_title" value="<?php echo $value;?>" />
+                            </div>
+
+
+                        </li>
+
+
+                        <li class="cfs-asc-title" <?php if ((isset($field_info->sort_asc) && $field_info->sort_asc == '0') || !isset($field_info->sort_asc)) {echo "style='display:none;'";}?>>
+
+                            <label for="is_default" class="gd-cf-tooltip-wrap">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Default sort?', 'geodirectory'); ?>
+                                <div class="gdcf-tooltip">
+                                    <?php _e('This sets the option as the overall default sort value, there can be only one.', 'geodirectory'); ?>
+                                </div>
+                            </label>
+                            <div class="gd-cf-input-wrap">
 
                                 <input type="radio" name="is_default"
                                        value="<?php echo $htmlvar_name; ?>_asc" <?php if (isset($field_info->default_order) && $field_info->default_order == $htmlvar_name . '_asc') {
                                     echo 'checked="checked"';
-                                } ?>/><span><?php _e('Set as default sort.', 'geodirectory'); ?></span>
-
-                                <br/>
-                                <span><?php _e('Select if you want to show option in sort.', 'geodirectory'); ?></span>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>Select Descending</td>
-                            <td>
-                                <input type="checkbox" name="desc" id="desc"
-                                       value="1" <?php if (isset($field_info->sort_desc) && $field_info->sort_desc == '1') {
-                                    echo 'checked="checked"';
                                 } ?>/>
+                            </div>
 
-                                <input type="text" name="desc_title" id="desc_title"
-                                       placeholder="<?php esc_attr_e('Descending title', 'geodirectory'); ?>"
-                                       value="<?php if (isset($field_info->desc_title)) {
-                                           echo esc_attr($field_info->desc_title);
-                                       } ?>" style="width:45%;"/>
+                        </li>
+
+
+
+                        <li>
+                            <?php $value = (isset($field_info->sort_desc) && $field_info->sort_desc) ? $field_info->sort_desc : 0;?>
+
+                            <label for="desc" class="gd-cf-tooltip-wrap">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Show Descending Sort (high to low)', 'geodirectory'); ?>
+                                <div class="gdcf-tooltip">
+                                    <?php _e('Select if you want to show this option in the sort options. (Z-A,100-0 or ON)', 'geodirectory'); ?>
+                                </div>
+                            </label>
+                            <div class="gd-cf-input-wrap gd-switch">
+
+                                <input type="radio" id="desc_yes<?php echo $radio_id;?>" name="desc" class="gdri-enabled"  value="1"
+                                    <?php if ($value == '1') {
+                                        echo 'checked';
+                                    } ?>/>
+                                <label onclick="show_hide_radio(this,'show','cfs-desc-title');" for="desc_yes<?php echo $radio_id;?>" class="gdcb-enable"><span><?php _e('Yes', 'geodirectory'); ?></span></label>
+
+                                <input type="radio" id="desc_no<?php echo $radio_id;?>" name="desc" class="gdri-disabled" value="0"
+                                    <?php if ($value == '0' || !$value) {
+                                        echo 'checked';
+                                    } ?>/>
+                                <label onclick="show_hide_radio(this,'hide','cfs-desc-title');" for="desc_no<?php echo $radio_id;?>" class="gdcb-disable"><span><?php _e('No', 'geodirectory'); ?></span></label>
+
+                            </div>
+
+                        </li>
+
+                        <li class="cfs-desc-title" <?php if ((isset($field_info->sort_desc) && $field_info->sort_desc == '0') || !isset($field_info->sort_desc)) {echo "style='display:none;'";}?>>
+                            <?php $value = (isset($field_info->desc_title) && $field_info->desc_title) ? esc_attr($field_info->desc_title) : '';?>
+
+                            <label for="desc_title" class="gd-cf-tooltip-wrap">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Descending title', 'geodirectory'); ?>
+                                <div class="gdcf-tooltip">
+                                    <?php _e('This is the text used for the sort option.', 'geodirectory'); ?>
+                                </div>
+                            </label>
+                            <div class="gd-cf-input-wrap">
+
+                                <input type="text" name="desc_title" id="desc_title" value="<?php echo $value;?>" />
+                            </div>
+
+
+                        </li>
+
+                        <li class="cfs-desc-title" <?php if ((isset($field_info->sort_desc) && $field_info->sort_desc == '0') || !isset($field_info->sort_desc)) {echo "style='display:none;'";}?>>
+
+                            <label for="is_default" class="gd-cf-tooltip-wrap">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Default sort?', 'geodirectory'); ?>
+                                <div class="gdcf-tooltip">
+                                    <?php _e('This sets the option as the overall default sort value, there can be only one.', 'geodirectory'); ?>
+                                </div>
+                            </label>
+                            <div class="gd-cf-input-wrap">
+
                                 <input type="radio" name="is_default"
                                        value="<?php echo $htmlvar_name; ?>_desc" <?php if (isset($field_info->default_order) && $field_info->default_order == $htmlvar_name . '_desc') {
                                     echo 'checked="checked"';
-                                } ?>/><span><?php _e('Set as default sort.', 'geodirectory'); ?></span>
-                                <br/>
-                                <span><?php _e('Select if you want to show option in sort.', 'geodirectory'); ?></span>
-                            </td>
-                        </tr>
+                                } ?>/>
+                            </div>
+
+                        </li>
+
 
                     <?php } else { ?>
 
 
-                        <tr>
-                            <td><strong><?php _e('Frontend title :', 'geodirectory'); ?></strong></td>
-                            <td align="left">
-                                <input type="text" name="site_title" id="site_title" value="<?php echo esc_attr($site_title); ?>"
-                                       size="50"/>
-                                <br/><span><?php _e('Section title which you wish to display in frontend', 'geodirectory'); ?></span>
-                            </td>
-                        </tr>
 
-                        <tr>
-                            <td><strong><?php _e('Default sort option :', 'geodirectory'); ?></strong></td>
-                            <td align="left">
+
+
+                        <li>
+                            <?php $value = esc_attr($site_title)?>
+
+                            <label for="site_title" class="gd-cf-tooltip-wrap">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Frontend title', 'geodirectory'); ?>
+                                <div class="gdcf-tooltip">
+                                    <?php _e('This is the text used for the sort option.', 'geodirectory'); ?>
+                                </div>
+                            </label>
+                            <div class="gd-cf-input-wrap">
+
+                                <input type="text" name="site_title" id="site_title" value="<?php echo $value;?>" />
+                            </div>
+
+
+                        </li>
+
+                        <li>
+                            <?php $value = (isset($field_info->is_default) && $field_info->is_default) ? esc_attr($field_info->is_default) : '';?>
+
+                            <label for="is_default" class="gd-cf-tooltip-wrap">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Default sort?', 'geodirectory'); ?>
+                                <div class="gdcf-tooltip">
+                                    <?php _e('This sets the option as the overall default sort value, there can be only one.', 'geodirectory'); ?>
+                                </div>
+                            </label>
+                            <div class="gd-cf-input-wrap">
+
                                 <input type="checkbox" name="is_default"
-                                       value="<?php echo $field_type; ?>"  <?php if (isset($field_info->is_default) && $field_info->is_default == '1') {
+                                       value="<?php echo $field_type; ?>"  <?php if (isset($value) && $value == '1') {
                                     echo 'checked="checked"';
                                 } ?>/>
-                                <br/>
-                                <span><?php _e('If field is checked then the field will be use as default sort.', 'geodirectory'); ?></span>
-                            </td>
-                        </tr>
+                            </div>
+
+
+                        </li>
+                        
 
                     <?php } ?>
 
-                    <tr>
-                        <td><strong><?php _e('Is active :', 'geodirectory');?></strong></td>
-                        <td align="left">
-                            <select name="is_active" id="is_active">
-                                <option
-                                    value="1" <?php if (isset($field_info->is_active) && $field_info->is_active == '1') {
-                                    echo 'selected="selected"';
-                                }?>><?php _e('Yes', 'geodirectory');?></option>
-                                <option
-                                    value="0" <?php if (isset($field_info->is_active) && $field_info->is_active == '0') {
-                                    echo 'selected="selected"';
-                                }?>><?php _e('No', 'geodirectory');?></option>
-                            </select>
-                            <br/>
-                            <span><?php _e('Select yes or no. If no is selected then the field will not be displayed anywhere.', 'geodirectory');?></span>
-                        </td>
-                    </tr>
 
-                    <tr>
-                        <td><strong><?php _e('Display order :', 'geodirectory');?></strong></td>
-                        <td align="left"><input type="text" readonly="readonly" name="sort_order" id="sort_order"
+                    <li>
+                        <?php $value = (isset($field_info->is_active) && $field_info->is_active) ? $field_info->is_active: 0;?>
+
+                        <label for="is_active" class="gd-cf-tooltip-wrap">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Is active', 'geodirectory'); ?>
+                            <div class="gdcf-tooltip">
+                                <?php _e('Set if this sort option is active or not, if not it will not be shown to users.', 'geodirectory'); ?>
+                            </div>
+                        </label>
+                        <div class="gd-cf-input-wrap gd-switch">
+
+                            <input type="radio" id="is_active_yes<?php echo $radio_id;?>" name="is_active" class="gdri-enabled"  value="1"
+                                <?php if ($value == '1') {
+                                    echo 'checked';
+                                } ?>/>
+                            <label for="is_active_yes<?php echo $radio_id;?>" class="gdcb-enable"><span><?php _e('Yes', 'geodirectory'); ?></span></label>
+
+                            <input type="radio" id="is_active_no<?php echo $radio_id;?>" name="is_active" class="gdri-disabled" value="0"
+                                <?php if ($value == '0' || !$value) {
+                                    echo 'checked';
+                                } ?>/>
+                            <label for="is_active_no<?php echo $radio_id;?>" class="gdcb-disable"><span><?php _e('No', 'geodirectory'); ?></span></label>
+
+                        </div>
+
+                    </li>
+
+
+                    <input type="hidden" readonly="readonly" name="sort_order" id="sort_order"
                                                 value="<?php if (isset($field_info->sort_order)) {
                                                     echo esc_attr($field_info->sort_order);
                                                 }?>" size="50"/>
-                            <br/>
-                            <span><?php _e('Enter the display order of this field in backend. e.g. 5', 'geodirectory');?></span>
-                        </td>
-                    </tr>
 
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td align="left">
-                            <input type="button" class="button" name="save" id="save" value="<?php esc_attr_e('Save', 'geodirectory');?>"
-                                   onclick="save_sort_field('<?php echo $result_str;?>')"/>
 
-                            <a href="javascript:void(0)"><input type="button" name="delete" value="<?php esc_attr_e('Delete', 'geodirectory');?>"
-                                                                onclick="delete_sort_field('<?php echo $result_str;?>', '<?php echo $nonce;?>', this)"
-                                                                class="button_n"/></a>
 
-                        </td>
-                    </tr>
-                </table>
+
+                    <li>
+
+                        <label for="save" class="gd-cf-tooltip-wrap">
+                            <h3></h3>
+                        </label>
+                        <div class="gd-cf-input-wrap">
+                            <input type="button" class="button button-primary" name="save" id="save" value="<?php echo esc_attr(__('Save','geodirectory'));?>"
+                                   onclick="save_sort_field('<?php echo esc_attr($result_str); ?>')"/>
+                                <a href="javascript:void(0)"><input type="button" name="delete" value="<?php echo esc_attr(__('Delete','geodirectory'));?>"
+                                                                    onclick="delete_sort_field('<?php echo $result_str;?>', '<?php echo $nonce;?>', this)"
+                                                                    class="button"/></a>
+                        </div>
+                    </li>
+                </ul>
 
             </div>
+            </form>
         </li> <?php
 
     }

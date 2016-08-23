@@ -586,7 +586,7 @@ if (isset($cf['icon']) && strpos($cf['icon'], 'fa fa-') !== false) {
                     $value = $cf['defaults']['required_msg'];
                 }
                 ?>
-                <li class="cf-is-required-msg"<?php if ((isset($field_info->is_required) && $field_info->is_required == '0') || !isset($field_info->is_required)) {echo "style='display:none;'";}?>>
+                <li class="cf-is-required-msg" <?php if ((isset($field_info->is_required) && $field_info->is_required == '0') || !isset($field_info->is_required)) {echo "style='display:none;'";}?>>
                     <label for="required_msg" class="gd-cf-tooltip-wrap">
                         <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Required message:', 'geodirectory'); ?>
                         <div class="gdcf-tooltip">
@@ -698,7 +698,7 @@ if (isset($cf['icon']) && strpos($cf['icon'], 'fa fa-') !== false) {
                     $hide_cat_sort = ($value===false) ? "style='display:none;'" : '';
                 }
 
-                $hide_cat_sort = ($cf['defaults']['cat_sort']===false) ? "style='display:none;'" : '';
+                $hide_cat_sort = (isset($cf['defaults']['cat_sort']) && $cf['defaults']['cat_sort']===false) ? "style='display:none;'" : '';
                 ?>
                 <li <?php echo $hide_cat_sort ;?>>
                     <h3><?php
@@ -758,9 +758,11 @@ if (isset($cf['icon']) && strpos($cf['icon'], 'fa fa-') !== false) {
                      * Can be used to add or deal with different settings types.
                      *
                      * @since 1.0.0
+                     * @since 1.6.6 $cf param added.
                      * @param object $field_info The current fields info.
+                     * @param array $cf The custom field settings
                      */
-                    do_action('geodir_advance_custom_fields', $field_info);?>
+                    do_action('geodir_advance_custom_fields', $field_info,$cf);?>
 
 
                 <?php endswitch; ?>
