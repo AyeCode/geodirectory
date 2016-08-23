@@ -212,8 +212,7 @@ if (isset($cf['icon']) && strpos($cf['icon'], 'fa fa-') !== false) {
                         </div>
                     </label>
                     <div class="gd-cf-input-wrap">
-                        <input type="text" name="admin_desc" id="admin_desc"
-                               value="<?php echo $value;?>"/>
+                        <input type="text" name="admin_desc" id="admin_desc" value="<?php echo $value;?>"/>
                     </div>
                 </li>
                 <?php
@@ -382,6 +381,11 @@ if (isset($cf['icon']) && strpos($cf['icon'], 'fa fa-') !== false) {
 
             }else{
                 $value = '';
+                if (isset($field_info->show_in)) {
+                    $value = esc_attr($field_info->show_in);
+                }elseif(isset($cf['defaults']['show_in']) && $cf['defaults']['show_in']){
+                    $value = esc_attr($cf['defaults']['show_in']);
+                }
                 ?>
                 <li>
                     <label for="show_in" class="gd-cf-tooltip-wrap"><i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Show in what locations?:', 'geodirectory'); ?>
@@ -438,7 +442,7 @@ if (isset($cf['icon']) && strpos($cf['icon'], 'fa fa-') !== false) {
                                 option-ajaxchosen="false">
                             <?php
 
-                            $show_in_values = explode(',',$field_info->show_in);
+                            $show_in_values = explode(',',$value);
 
                             foreach( $show_in_locations as $key => $val){
                                 $selected = '';
@@ -686,13 +690,17 @@ if (isset($cf['icon']) && strpos($cf['icon'], 'fa fa-') !== false) {
 
             }else{
                 $value = '';
+                $hide_cat_sort  ='';
                 if (isset($field_info->cat_sort)) {
                     $value = esc_attr($field_info->cat_sort);
                 }elseif(isset($cf['defaults']['cat_sort']) && $cf['defaults']['cat_sort']){
                     $value = $cf['defaults']['cat_sort'];
+                    $hide_cat_sort = ($value===false) ? "style='display:none;'" : '';
                 }
+
+                $hide_cat_sort = ($cf['defaults']['cat_sort']===false) ? "style='display:none;'" : '';
                 ?>
-                <li>
+                <li <?php echo $hide_cat_sort ;?>>
                     <h3><?php
                         /**
                          * Filter the section title.

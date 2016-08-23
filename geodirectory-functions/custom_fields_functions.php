@@ -1200,6 +1200,7 @@ function godir_set_field_order($field_ids = array())
 
 
 function geodir_get_cf_value($cf){
+    global $gd_session;
     $value = '';
     if (is_admin()) {
         global $post,$gd_session;
@@ -2616,6 +2617,13 @@ add_filter('geodir_cfa_advanced_editor_textarea','geodir_cfa_advanced_editor_geo
 
 function geodir_cfa_validation_pattern_text($output,$result_str,$cf,$field_info){
     ob_start();
+
+    $value = '';
+    if (isset($field_info->validation_pattern)) {
+        $value = esc_attr($field_info->validation_pattern);
+    }elseif(isset($cf['defaults']['validation_pattern']) && $cf['defaults']['validation_pattern']){
+        $value = esc_attr($cf['defaults']['validation_pattern']);
+    }
     ?>
     <li>
         <label for="validation_pattern" class="gd-cf-tooltip-wrap">
@@ -2626,12 +2634,17 @@ function geodir_cfa_validation_pattern_text($output,$result_str,$cf,$field_info)
         </label>
         <div class="gd-cf-input-wrap">
             <input type="text" name="validation_pattern" id="validation_pattern"
-                   value="<?php if (isset($field_info->validation_pattern)) {
-                       echo esc_attr($field_info->validation_pattern);
-                   } ?>"/>
+                   value="<?php echo $value; ?>"/>
         </div>
     </li>
-
+    <?php
+    $value = '';
+    if (isset($field_info->validation_msg)) {
+        $value = esc_attr($field_info->validation_msg);
+    }elseif(isset($cf['defaults']['validation_msg']) && $cf['defaults']['validation_msg']){
+        $value = esc_attr($cf['defaults']['validation_msg']);
+    }
+    ?>
     <li>
         <label for="validation_msg" class="gd-cf-tooltip-wrap">
             <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Validation Message:', 'geodirectory'); ?>
@@ -2641,9 +2654,7 @@ function geodir_cfa_validation_pattern_text($output,$result_str,$cf,$field_info)
         </label>
         <div class="gd-cf-input-wrap">
             <input type="text" name="validation_msg" id="validation_msg"
-                   value="<?php if (isset($field_info->validation_msg)) {
-                       echo esc_attr($field_info->validation_msg);
-                   } ?>"/>
+                   value="<?php echo $value; ?>"/>
         </div>
     </li>
     <?php
