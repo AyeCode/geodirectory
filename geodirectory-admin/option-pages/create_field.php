@@ -41,7 +41,7 @@ if ($field_type != '' && $field_id != '' && $field_action == 'new' && isset($_RE
 }
 
 if ($field_type != '' && $field_id != '' && $field_action == 'new' && isset($_REQUEST['create_field']) && isset($_REQUEST['manage_field_type']) && $_REQUEST['manage_field_type'] == 'sorting_options') {
-    geodir_custom_sort_field_adminhtml($field_type, $field_id, $field_action);
+    geodir_custom_sort_field_adminhtml($field_type, $field_id, $field_action,$field_type_key);
 }
 
 /* ---- Delete field ---- */

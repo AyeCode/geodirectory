@@ -435,13 +435,29 @@ function geodir_sorting_options_available_fields()
             );
             
             $display = $check_html_variable ? ' style="display:none;"' : '';
-            ?>
-            <li <?php echo $display;?>>
-            <a id="gt-<?php echo $val['field_type'];?>-_-<?php echo $val['htmlvar_name'];?>"
-               title="<?php echo $val['site_title'];?>"
-               class="gt-draggable-form-items gt-<?php echo $val['field_type'];?> geodir-sort-<?php echo $val['htmlvar_name'];?>"
-               href="javascript:void(0);"><b></b><?php _e($val['site_title'], 'geodirectory');?></a>
+           ?>
+
+            <li   class="gd-cf-tooltip-wrap" <?php echo $display;?>>
+                <?php
+                if(isset($val['description']) && $val['description']){
+                    echo '<div class="gdcf-tooltip">'.$val['description'].'</div>';
+                }?>
+
+                <a id="gd-<?php echo $val['field_type'];?>-_-<?php echo $val['htmlvar_name'];?>" data-field-type-key="<?php echo $val['htmlvar_name'];?>"  data-field-type="<?php echo $val['field_type'];?>"
+                   title="<?php echo $val['site_title'];?>"
+                   class="gd-draggable-form-items <?php echo $val['class'];?> gd-<?php echo $val['field_type'];?> geodir-sort-<?php echo $val['htmlvar_name'];?>" href="javascript:void(0);">
+                    <?php if (isset($val['field_icon']) && strpos($val['field_icon'], 'fa fa-') !== false) {
+                        echo '<i class="'.$val['field_icon'].'" aria-hidden="true"></i>';
+                    }elseif(isset($val['field_icon']) && $val['field_icon'] ){
+                        echo '<b style="background-image: url("'.$val['field_icon'].'")"></b>';
+                    }else{
+                        echo '<i class="fa fa-cog" aria-hidden="true"></i>';
+                    }?>
+                    <?php echo $val['site_title'];?>
+                </a>
             </li>
+
+
             <?php
         }
     ?>
@@ -619,6 +635,7 @@ function geodir_custom_fields($post_type=''){
      *                    @type string field_icon Icon url or font awesome class.
      *                    @type string css_class Field custom css class for field custom style.
      *                    @type bool cat_sort If true the field will appear in the category sort options, if false the field will be hidden, leave blank to show option.
+     *                    @type bool cat_sort If true the field will appear in the advanced search sort options, if false the field will be hidden, leave blank to show option. (advanced search addon required)
      *     }
      * }
      * @param string $post_type The post type requested.
