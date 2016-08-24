@@ -115,7 +115,7 @@ function send_marker_jason_to_js()
                 $totalcount = count(array_unique($map_jason));
                 if (!empty($cat_content_info)) {
                     $json_content = substr(implode(',', $cat_content_info), 1);
-                    $json_content = htmlentities($json_content, ENT_QUOTES); // Quotes in csv title import break maps - FIXED by kiran on 2nd March, 2016
+                    $json_content = htmlentities($json_content, ENT_QUOTES, get_option('blog_charset')); // Quotes in csv title import break maps - FIXED by kiran on 2nd March, 2016
                     $canvas_jason = '[{"totalcount":"' . $totalcount . '",' . $json_content . ']';
                 } else {
                     $canvas_jason = '[{"totalcount":"0"}]';
