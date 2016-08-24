@@ -12,6 +12,8 @@ Options added in CPT categories widget to disable viewing post type & category f
 Server side marker clustering not working with OpenStreetMap - FIXED
 BuddyPress admin bar not availble for non admin users - FIXED
 Fixed map marker title special characters encoding - FIXED
+Let popup forms template override from theme - FIXED
+Added a filter to modify My Dashboard widget title - ADDED
 
 v1.6.5
 Location page breadcrumb now uses location page slug - CHANGED
