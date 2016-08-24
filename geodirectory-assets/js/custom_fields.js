@@ -218,7 +218,7 @@ function delete_sort_field(id, nonce, obj) {
                 var field_type = jQuery(obj).closest('li').find('#field_type').val();
                 var htmlvar_name = jQuery(obj).closest('li').find('#htmlvar_name').val();
 
-                jQuery('#gt-' + field_type + '-_-' + htmlvar_name).closest('li').show();
+                jQuery('#gd-' + field_type + '-_-' + htmlvar_name).closest('li').show();
 
             });
 
