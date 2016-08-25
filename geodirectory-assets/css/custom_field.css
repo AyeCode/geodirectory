@@ -552,6 +552,7 @@ Radio input buttons
 .gd-switch input { display: none; }
 .gd-switch {height: 32px;}
 
+.advance.ui-sortable .ui-state-highlight,
 .core.ui-sortable .ui-state-highlight{
     width: 100%;
     height:37px;

@@ -120,7 +120,6 @@ function send_marker_jason_to_js()
                 } else {
                     $canvas_jason = '[{"totalcount":"0"}]';
                 }
-
                 $map_canvas_jason_args = array($canvas . '_jason' => $canvas_jason);
 
                 /**
