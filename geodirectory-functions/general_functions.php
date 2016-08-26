@@ -3253,7 +3253,7 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 	extract( $args, EXTR_SKIP );
 
 	/** This filter is documented in geodirectory_widgets.php */
-	$title = empty( $instance['title'] ) ? __( 'My Dashboard', 'geodirectory' ) : apply_filters( 'widget_title', __( $instance['title'], 'geodirectory' ) );
+	$title = empty( $instance['title'] ) ? __( 'My Dashboard', 'geodirectory' ) : apply_filters( 'my_dashboard_widget_title', __( $instance['title'], 'geodirectory' ) );
 
 	echo $before_widget;
 	echo $before_title . $title . $after_title;
