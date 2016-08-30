@@ -171,10 +171,11 @@ function geodir_cf_fieldset($html,$location,$cf,$p=''){
         $fieldset_class = 'fieldset-'.sanitize_title_with_dashes($cf['site_title']);
 
         if ($field_set_start == 1) {
-            echo '</div><div class="geodir-company_info field-group ' . $cf['htmlvar_name'] . '"><h2 class="'.$fieldset_class.'">' . __($cf['site_title'], 'geodirectory') . '</h2>';
+            $html = '';//'<h2 class="'.$fieldset_class.'">xxx'.$field_set_start  . __($cf['site_title'], 'geodirectory') . '</h2>';
+           //$html = '</div><div class="geodir-company_info field-group ' . $cf['htmlvar_name'] . '"><h2 class="'.$fieldset_class.'">' . __($cf['site_title'], 'geodirectory') . '</h2>';
         } else {
-            echo '<h2 class="'.$fieldset_class.'">' . __($cf['site_title'], 'geodirectory') . '</h2>';
-            $field_set_start = 1;
+            $html = '<h2 class="'.$fieldset_class.'">'. __($cf['site_title'], 'geodirectory') . '</h2>';
+            //$field_set_start = 1;
         }
 
     }

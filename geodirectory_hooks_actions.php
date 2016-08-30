@@ -2430,6 +2430,9 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
         $fields_location = 'owntab';
 
         $custom_fields = geodir_post_custom_fields($post_package_id, 'custom', $post_type, $fields_location);
+
+
+
         if (!empty($custom_fields)) {
             $parse_custom_fields = array();
             foreach ($custom_fields as $field) {
@@ -2451,8 +2454,11 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
             }
             $custom_fields = $parse_custom_fields;
         }
-
+        //print_r($custom_fields);
         if (!empty($custom_fields)) {
+
+            global $field_set_start;
+
             $post = stripslashes_deep($post); // strip slashes
             
             $field_set_start = 0;
@@ -2487,6 +2493,12 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                         $variables_array['label'] = __($type['site_title'], 'geodirectory');
                         $variables_array['value'] = '';
                         $variables_array['value'] = $post->{$type['htmlvar_name']};
+                    }else{
+                        $i = 0;
+                        $fieldset_count++;
+                        $field_set_start = 1;
+                        $fieldset_arr[$fieldset_count]['htmlvar_name'] = 'gd_tab_' . $fieldset_count;
+                        $fieldset_arr[$fieldset_count]['label'] = $label;
                     }
 
 
@@ -2551,7 +2563,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                                  * @param string $htmlvar_name The field HTML var name.
                                  */
                                 'is_display' => apply_filters('geodir_detail_page_tab_is_display', true, $htmlvar_name),
-                                'tab_content' => '<div class="geodir-company_info field-group">' . $fieldset_html . '</html>'
+                                'tab_content' => '<div class="geodir-company_info field-group xxx">' . $fieldset_html . '</div>'
                             );
                         }
                     } else {

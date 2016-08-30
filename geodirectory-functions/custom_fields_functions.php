@@ -2880,6 +2880,8 @@ function geodir_cfa_extra_fields_address($output,$result_str,$cf,$field_info){
     if (isset($field_info->extra_fields) && $field_info->extra_fields != '') {
         $address = unserialize($field_info->extra_fields);
     }
+
+    $radio_id = (isset($field_info->htmlvar_name)) ? $field_info->htmlvar_name : rand(5, 500);
     ?>
     <?php
     /**
