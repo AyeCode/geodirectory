@@ -1340,6 +1340,9 @@ function geodir_localize_all_js_msg()
 		'fa_rating' => (int)get_option('geodir_reviewrating_enable_font_awesome') == 1 ? 1 : '',
 		'reviewrating' => defined('GEODIRREVIEWRATING_VERSION') ? 1 : '',
         'geodir_map_name' => geodir_map_name(),
+        'osmStart' => __('Start', 'geodirectory'),
+        'osmVia' => __('Via {viaNumber}', 'geodirectory'),
+        'osmEnd' => __('Enter Your Location', 'geodirectory'),
     );
 
     /**

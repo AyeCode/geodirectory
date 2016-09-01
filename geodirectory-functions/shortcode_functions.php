@@ -676,13 +676,12 @@ function geodir_sc_gd_listings_output($args = array()) {
 				
 		$total_posts = geodir_event_get_widget_events($query_args, true);
 		$widget_listings = $total_posts > 0 ? geodir_event_get_widget_events($query_args) : array();
-		
 	} else {
 		$total_posts = geodir_get_widget_listings($query_args, true);
 		$widget_listings = $total_posts > 0 ? geodir_get_widget_listings($query_args) : array();
 	}
 	$current_gridview_columns_widget = $gridview_columns_widget;
-
+    $identifier = ' gd-wgt-pagi-' . mt_rand();
     ob_start();
 	if (!empty($widget_listings) || $with_no_results) {
 		if (!$geodir_ajax) {
@@ -693,14 +692,15 @@ function geodir_sc_gd_listings_output($args = array()) {
          */
         do_action('geodir_before_sc_gd_listings');
 		?>
-        <div class="geodir_locations geodir_location_listing geodir-sc-gd-listings">
-		<?php } ?>
+        <div class="geodir_locations geodir_location_listing geodir-sc-gd-listings <?php echo $identifier;?>">
             <?php if ($title != '') { ?>
             <div class="geodir_list_heading clearfix">
                 <?php echo $title; ?>
             </div>
 			<?php } ?>
-            <?php
+            <div class="gd-sc-loader">
+                <div class="gd-sc-content">
+            <?php }
             if (!(empty($widget_listings) && !empty($shortcode_content))) {
                 if (strstr($layout, 'gridview')) {
                     $listing_view_exp = explode('_', $layout);
@@ -756,51 +756,56 @@ function geodir_sc_gd_listings_output($args = array()) {
                 echo $shortcode_content;
             }
 			?>
-			<p class="geodir-sclisting-loading" style="display:none;"><i class="fa fa-cog fa-spin"></i></p>
 			<?php
             if (!$geodir_ajax) { 
 			?>
-        </div>
-		<script type="text/javascript">
-		  function gd_sc_gopage(obj, pid) {
-			var pid = parseInt(pid);
-			var container = jQuery(obj).closest('.geodir-sc-gd-listings');
-			if(!pid > 0 || !(container && typeof container != 'undefined')) {
-			  return false;
-			}
-			var scatts = "<?php echo addslashes(json_encode($shortcode_atts));?>";
-			
-			var data = {
-			  'action': 'geodir_sclistings',
-			  'geodir_sclistings_nonce': '<?php echo wp_create_nonce("geodir-sclistings-nonce"); ?>',
-			  'scatts': scatts,
-			  'geodir_ajax': true,
-			  'pageno': pid
-			};
-			
-			jQuery(document).ajaxStop(function() {
-			  jQuery(container).find('.geodir_category_list_view').css({'opacity': '1'});
-			  jQuery(container).find('.geodir-sclisting-loading').hide();
-			});
-			
-			jQuery(container).find('.geodir_category_list_view').css({'opacity': '0.4'});
-			jQuery(container).find('.geodir-sclisting-loading').show();
-			
-			jQuery.post(geodir_var.geodir_ajax_url, data, function(response) {
-			  if(response && response != '0') {
-				jQuery(container).html(response);
-                  <?php
-                  /**
-                   * if lazyload images enabled then refresh them once ajax page changed.
-                   */
-                  if(get_option('geodir_lazy_load',1)){?>
-                  geodir_init_lazy_load();
-                  <?php }?>
+            </div><p class="geodir-sclisting-loading" style="display:none;"><i class="fa fa-cog fa-spin"></i></p></div>
+<script type="text/javascript">
+jQuery(document).on('click', '.<?php echo trim($identifier);?> .gd-wgt-page', function(e) {
+    var container = jQuery( '.<?php echo trim($identifier);?>');
+    var obj = this;
+    var pid = parseInt(jQuery(this).data('page'));
+    var items = jQuery(obj).closest('.gd-sc-content');
+    var loading = jQuery('.geodir-sclisting-loading', container);
+    
+    if (!pid > 0 || !(items && typeof items != 'undefined')) {
+        return false;
+    }
+    
+    var scatts = "<?php echo addslashes(json_encode($shortcode_atts));?>";
+    
+    var data = {
+      'action': 'geodir_sclistings',
+      'geodir_sclistings_nonce': '<?php echo wp_create_nonce("geodir-sclistings-nonce"); ?>',
+      'scatts': scatts,
+      'geodir_ajax': true,
+      'pageno': pid
+    };
+    
+    jQuery(document).ajaxStop(function() {
+        jQuery(items).css({'opacity': '1'});
+        loading.hide();
+    });
 
-			  }
-			});
-		  }
-		</script>
+    jQuery(items).css({'opacity': '0.4'});
+    loading.show();
+
+    jQuery.post(geodir_var.geodir_ajax_url, data, function(response) {
+        if (response && response != '0') {
+            loading.hide();
+            jQuery(items).html(response);
+            <?php
+              /**
+               * if lazyload images enabled then refresh them once ajax page changed.
+               */
+              if (get_option('geodir_lazy_load', 1)) { ?>
+              geodir_init_lazy_load();
+              <?php } ?>
+        }
+    });
+});
+</script>
+</div>
 		<?php } ?>
     <?php
     }
@@ -860,7 +865,7 @@ function geodir_sc_listings_pagination($total_posts, $posts_per_page, $pageno, $
 		$end_no = min($pageno * $posts_per_page, $numposts);
 		
 		if ($geodir_pagination_more_info != '') {
-			$pagination_info = '<div class="gd-pagination-details">' . wp_sprintf(__('Showing listings %d-%d of %d', 'geodirectory'), $start_no, $end_no, $numposts) . '</div>';
+			$pagination_info = '<div class="gd-pagination-details gd-pagination-details-' . $geodir_pagination_more_info . '">' . wp_sprintf(__('Showing listings %d-%d of %d', 'geodirectory'), $start_no, $end_no, $numposts) . '</div>';
 			
 			if ($geodir_pagination_more_info == 'before') {
 				$before = $before . $pagination_info;
@@ -869,13 +874,13 @@ function geodir_sc_listings_pagination($total_posts, $posts_per_page, $pageno, $
 			}
 		}
 			
-		echo "$before <div class='Navi geodir-ajax-pagination'>";		
+		echo "<div class='gd-pagi-container'> $before <div class='Navi geodir-ajax-pagination'>";
 		if ($pageno > 1) {
-			echo '<a class="gd-page-sc-fst" href="javascript:void(0);" onclick="gd_sc_gopage(this, 1);">&laquo;</a>&nbsp;';
+			echo '<a class="gd-page-sc-fst gd-wgt-page" data-page="1" href="javascript:void(0);">&laquo;</a>&nbsp;';
 		}
 		
 		if (($pageno - 1) > 0) {
-			echo '<a class="gd-page-sc-prev" href="javascript:void(0);" onclick="gd_sc_gopage(this, ' . (int)($pageno - 1) . ');">' . $prelabel . '</a>&nbsp;';
+            echo '<a class="gd-page-sc-prev gd-wgt-page" data-page="' . (int)($pageno - 1) . '" href="javascript:void(0);">' . $prelabel . '</a>&nbsp;';
 		}
 		
 		for ($i = $pageno - $half_pages_to_show; $i <= $pageno + $half_pages_to_show; $i++) {
@@ -883,19 +888,19 @@ function geodir_sc_listings_pagination($total_posts, $posts_per_page, $pageno, $
 				if ($i == $pageno) {
 					echo "<strong class='on' class='gd-page-sc-act'>$i</strong>";
 				} else {
-					echo ' <a class="gd-page-sc-no" href="javascript:void(0);" onclick="gd_sc_gopage(this, ' . (int)$i . ');">' . $i . '</a> ';
+					echo ' <a class="gd-page-sc-no gd-wgt-page" data-page="' . (int)$i . '" href="javascript:void(0);">' . $i . '</a> ';
 				}
 			}
 		}
 		
 		if (($pageno + 1) <= $max_page) {
-			echo '&nbsp;<a class="gd-page-sc-nxt" href="javascript:void(0);" onclick="gd_sc_gopage(this, ' . (int)($pageno + 1) . ');">' . $nxtlabel . '</a>';
+			echo '&nbsp;<a class="gd-page-sc-nxt gd-wgt-page" data-page="' . (int)($pageno + 1) . '" href="javascript:void(0);">' . $nxtlabel . '</a>';
 		}
 		
 		if ($pageno < $max_page) {
-			echo '&nbsp;<a class="gd-page-sc-lst" href="javascript:void(0);" onclick="gd_sc_gopage(this, ' . (int)$max_page . ');">&raquo;</a>';
+			echo '&nbsp;<a class="gd-page-sc-lst gd-wgt-page" data-page="' . (int)$max_page . '" href="javascript:void(0);">&raquo;</a>';
 		}
-		echo "</div> $after";
+		echo "</div> $after </div>";
 	}
 	$output = ob_get_contents();
     ob_end_clean();
