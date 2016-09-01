@@ -2054,8 +2054,13 @@ function geodir_home_map_cats_key_value_array()
  */
 function geodir_twitter_tweet_button()
 {
+    if (isset($_GET['gde'])) {
+        $link = '?url='.urlencode(geodir_curPageURL());
+    } else {
+        $link = '';
+    }
     ?>
-    <a href="http://twitter.com/share"
+    <a href="http://twitter.com/share<?php echo $link; ?>"
        class="twitter-share-button"><?php _e('Tweet', 'geodirectory'); ?></a>
     <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
 <?php
