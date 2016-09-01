@@ -108,10 +108,10 @@ if (isset($cf['icon']) && strpos($cf['icon'], 'fa fa-') !== false) {
         } ?>"/>
         <input type="hidden" name="is_active" id="is_active" value="1"/>
 
-        <input type="hidden" name="is_default" value="<?php echo $field_info->is_default;?>" /><?php // show in sidebar value?>
-        <input type="hidden" name="show_on_listing" value="<?php echo $field_info->show_on_listing;?>" />
-        <input type="hidden" name="show_on_detail" value="<?php echo $field_info->show_on_listing;?>" />
-        <input type="hidden" name="show_as_tab" value="<?php echo $field_info->show_as_tab;?>" />
+        <input type="hidden" name="is_default" value="<?php echo isset($field_info->is_default) ? $field_info->is_default : '';?>" /><?php // show in sidebar value?>
+        <input type="hidden" name="show_on_listing" value="<?php echo isset($field_info->show_on_listing) ? $field_info->show_on_listing : '';?>" />
+        <input type="hidden" name="show_on_detail" value="<?php echo isset($field_info->show_on_listing) ? $field_info->show_on_listing : '';?>" />
+        <input type="hidden" name="show_as_tab" value="<?php echo isset($field_info->show_as_tab) ? $field_info->show_as_tab : '';?>" />
 
         <ul class="widefat post fixed" border="0" style="width:100%;">
 

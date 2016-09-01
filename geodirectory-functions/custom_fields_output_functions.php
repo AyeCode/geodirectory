@@ -171,8 +171,7 @@ function geodir_cf_fieldset($html,$location,$cf,$p=''){
         $fieldset_class = 'fieldset-'.sanitize_title_with_dashes($cf['site_title']);
 
         if ($field_set_start == 1) {
-            $html = '';//'<h2 class="'.$fieldset_class.'">xxx'.$field_set_start  . __($cf['site_title'], 'geodirectory') . '</h2>';
-           //$html = '</div><div class="geodir-company_info field-group ' . $cf['htmlvar_name'] . '"><h2 class="'.$fieldset_class.'">' . __($cf['site_title'], 'geodirectory') . '</h2>';
+            $html = '';
         } else {
             $html = '<h2 class="'.$fieldset_class.'">'. __($cf['site_title'], 'geodirectory') . '</h2>';
             //$field_set_start = 1;
@@ -1101,7 +1100,7 @@ function geodir_cf_email($html,$location,$cf,$p=''){
 
         $package_info = (array)geodir_post_package_info(array(), $post, $post->post_type);
 
-        if ($cf['htmlvar_name'] == 'geodir_email' && ((isset($package_info->sendtofriend) && $package_info->sendtofriend) || $post->{$cf['htmlvar_name']})) {
+        if ($cf['htmlvar_name'] == 'geodir_email' && ((isset($package_info['sendtofriend']) && $package_info['sendtofriend']) || $post->{$cf['htmlvar_name']})) {
             $send_to_friend = true;
             $b_send_inquiry = '';
             $b_sendtofriend = '';
@@ -1123,7 +1122,6 @@ function geodir_cf_email($html,$location,$cf,$p=''){
                 $field_icon = '';
             }
 
-
             $html .= '<div class="geodir_more_info  ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '"><span class="geodir-i-email" style="' . $field_icon . '">' . $field_icon_af;
             $seperator = '';
             if ($post->{$cf['htmlvar_name']}) {
@@ -1131,7 +1129,7 @@ function geodir_cf_email($html,$location,$cf,$p=''){
                 $seperator = ' | ';
             }
 
-            if (isset($package_info->sendtofriend) && $package_info->sendtofriend) {
+            if (isset($package_info['sendtofriend']) && $package_info['sendtofriend']) {
                 $html .= $seperator . '<a href="javascript:void(0);" class="' . $b_sendtofriend . '">' . SEND_TO_FRIEND . '</a>';
             }
 

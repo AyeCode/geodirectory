@@ -475,6 +475,9 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
             } else {
                 address = address + ',' + city + ',' + region + ',' + country + ',' + zip;
             }
+
+            // incase there are any null values
+            address =  address.replace(",null,", ",");
         }
         <?php $codeAddress = ob_get_clean();
         /**

@@ -49,6 +49,9 @@ preview details page
 details page 
 ######################################### */
 
+.average-review img.photo{
+    max-width:150px;
+}
 .gd-tab-list-title{
     font-size: 24px;
 }
@@ -106,6 +109,7 @@ ul.geodir-tabs-content {
 }
 
 .geodir-breadcrumb ul li {
+    width: 100%;
     font-size: 12px;
     float: left;
     padding: 5px 5px 5px 0;
