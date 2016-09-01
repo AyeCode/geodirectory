@@ -445,7 +445,7 @@ function geodir_sorting_options_available_fields()
 
                 <a id="gd-<?php echo $val['field_type'];?>-_-<?php echo $val['htmlvar_name'];?>" data-field-type-key="<?php echo $val['htmlvar_name'];?>"  data-field-type="<?php echo $val['field_type'];?>"
                    title="<?php echo $val['site_title'];?>"
-                   class="gd-draggable-form-items <?php echo $val['class'];?> gd-<?php echo $val['field_type'];?> geodir-sort-<?php echo $val['htmlvar_name'];?>" href="javascript:void(0);">
+                   class="gd-draggable-form-items  gd-<?php echo $val['field_type'];?> geodir-sort-<?php echo $val['htmlvar_name'];?>" href="javascript:void(0);">
                     <?php if (isset($val['field_icon']) && strpos($val['field_icon'], 'fa fa-') !== false) {
                         echo '<i class="'.$val['field_icon'].'" aria-hidden="true"></i>';
                     }elseif(isset($val['field_icon']) && $val['field_icon'] ){
@@ -654,13 +654,13 @@ function geodir_custom_available_fields()
     $listing_type = ($_REQUEST['listing_type'] != '') ? sanitize_text_field($_REQUEST['listing_type']) : 'gd_place';
     ?>
     <input type="hidden" name="listing_type" id="new_post_type" value="<?php echo $listing_type;?>"/>
-    <input type="hidden" name="manage_field_type" class="manage_field_type" value="<?php echo sanitize_text_field($_REQUEST['subtab']); ?>"/>
+    <input type="hidden" name="manage_field_type" class="manage_field_type" value="<?php echo sanitize_text_field($_REQUEST['subtab']); ?>" />
     <ul class="full gd-cf-tooltip-wrap">
         <li>
             <div class="gdcf-tooltip">
                 <?php _e('This adds a section separator with a title.', 'geodirectory');?>
             </div>
-            <a id="gt-fieldset" class="gd-draggable-form-items gt-fieldset" href="javascript:void(0);">
+            <a id="gt-fieldset" class="gd-draggable-form-items gt-fieldset" href="javascript:void(0);" data-field-type="fieldset" data-field-type-key="fieldset">
                 <i class="fa fa-long-arrow-left " aria-hidden="true"></i>
                 <i class="fa fa-long-arrow-right " aria-hidden="true"></i>
                 <?php _e('Fieldset (section separator)', 'geodirectory');?>

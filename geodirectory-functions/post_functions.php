@@ -2272,7 +2272,7 @@ if (!function_exists('geodir_add_to_favorite')) {
          */
         do_action('geodir_before_add_from_favorite', $post_id);
 
-        echo '<a href="javascript:void(0);" title="' . $remove_favourite_text . '" class="geodir-addtofav geodir-removetofav-icon" onclick="javascript:addToFavourite(\'' . $post_id . '\',\'remove\');"><i class="'. $favourite_icon .'"></i> ' . $unfavourite_text . '</a>';
+        echo '<a href="javascript:void(0);" title="' . $remove_favourite_text . '" class="geodir-removetofav-icon" onclick="javascript:addToFavourite(\'' . $post_id . '\',\'remove\');"><i class="'. $favourite_icon .'"></i> ' . $unfavourite_text . '</a>';
 
         /**
          * Called after adding the post from favourites.
@@ -2351,7 +2351,7 @@ if (!function_exists('geodir_remove_from_favorite')) {
          */
         do_action('geodir_before_remove_from_favorite', $post_id);
 
-        echo '<a href="javascript:void(0);"  title="' . $add_favourite_text . '" class="geodir-addtofav geodir-addtofav-icon" onclick="javascript:addToFavourite(\'' . $post_id . '\',\'add\');"><i class="'. $favourite_icon .'"></i> ' . $favourite_text . '</a>';
+        echo '<a href="javascript:void(0);"  title="' . $add_favourite_text . '" class="geodir-addtofav-icon" onclick="javascript:addToFavourite(\'' . $post_id . '\',\'add\');"><i class="'. $favourite_icon .'"></i> ' . $favourite_text . '</a>';
 
         /**
          * Called after removing the post from favourites.
