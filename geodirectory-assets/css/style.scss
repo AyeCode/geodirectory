@@ -1874,3 +1874,30 @@ div#jquery-lightbox {
 .geodir_lazy_load_thumbnail {
     opacity:0;transition: opacity .5s ease-in;
 }
+.geodir-sc-gd-listings .gd-pagi-container .gd-pagination-details-before {
+    margin-top: 0
+}
+.geodir-sc-gd-listings ul.geodir_category_list_view {
+    padding-bottom: 0
+}
+.gd-pagi-container {
+    clear: both;
+    display: block;
+    width: 100%;
+}
+.gd-pagi-container .geodir-ajax-pagination {
+    border: medium none;
+    clear: both;
+    display: block;
+    padding: 10px 0;
+}
+.gd-pagi-container .gd-pagination-details {
+    clear: both;
+    display: block;
+}
+.gd-pagi-container .gd-pagination-details-before {
+    margin-top: 12px;
+}
+.gd-pagi-container .gd-pagination-details-after {
+    margin-bottom: 12px;
+}

@@ -14,6 +14,8 @@ BuddyPress admin bar not availble for non admin users - FIXED
 Fixed map marker title special characters encoding - FIXED
 Let popup forms template override from theme - FIXED
 Added a filter to modify My Dashboard widget title - ADDED
+Map routing direction feature added for detail page OpenStreetMap - CHANGED
+Ajax pagination not working when more then gd_listings shortcodes added to the same page - FIXED
 
 v1.6.5
 Location page breadcrumb now uses location page slug - CHANGED
