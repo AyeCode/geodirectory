@@ -1377,7 +1377,6 @@ if (!function_exists('geodir_show_listing_info')) {
     function geodir_show_listing_info($fields_location = '') {
         global $post, $preview, $wpdb, $send_to_friend;
 
-        $payment_info = array();
         $package_info = array();
 
         $package_info = geodir_post_package_info($package_info, $post);
@@ -1400,9 +1399,10 @@ if (!function_exists('geodir_show_listing_info')) {
             foreach ($fields_info as $type) {
                 $type = stripslashes_deep($type); // strip slashes
                 $html = '';
-                $html_var = '';
                 $field_icon = geodir_field_icon_proccess($type);
                 $filed_type = $type['type'];
+                $html_var = isset($type['htmlvar_name']) ? $type['htmlvar_name'] : '';
+                if($html_var=='post'){$html_var='post_address';}
 
                 /**
                  * Filter the output for custom fields.
@@ -1428,7 +1428,6 @@ if (!function_exists('geodir_show_listing_info')) {
                     if (isset($post->{$type['htmlvar_name']}))
                         $variables_array['value'] = $post->{$type['htmlvar_name']};
                 endif;
-
 
 
                 if ($html):
