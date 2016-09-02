@@ -1,5 +1,6 @@
 v1.6.7
 Original custom fields hook htmlvar broken - FIXED
+Default custom fields not able to show in custom tab - FIXED
 
 v1.6.6
 Added filter to geodir_filter_empty_terms function - ADDED
