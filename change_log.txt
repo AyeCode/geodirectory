@@ -1,3 +1,6 @@
+v1.6.7
+Original custom fields hook htmlvar broken - FIXED
+
 v1.6.6
 Added filter to geodir_filter_empty_terms function - ADDED
 Best of widget not showing lazyload images on ajax change - FIXED
