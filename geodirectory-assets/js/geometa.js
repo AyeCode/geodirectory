@@ -1,4 +1,3 @@
-// From
 // http://google-ajax-examples.googlecode.com/svn/trunk/whereareyou/scripts/geometa.js
 function prepareGeolocation(opt_force) {
     if (opt_force || typeof navigator.geolocation == "undefined" || navigator.geolocation.shim) (function () {

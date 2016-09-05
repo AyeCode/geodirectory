@@ -875,12 +875,16 @@ span.geodir_term_class {
     margin: 5px;
 }
 
-.geodir-content-right .geodir-search input,
-.geodir-content-left .geodir-search input,
-.geodir-content-right .geodir-search select,
-.geodir-content-left .geodir-search select {
-    width: 100%;
-    box-sizing: border-box;
+.geodir-content-right,
+.geodir-content-right{
+    .geodir-search{
+        input,
+        input[type="text"],
+        select{
+            width: 100%;
+            box-sizing: border-box;
+        }
+    }
 }
 
 .geodir-search .search_by_post {
