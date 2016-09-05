@@ -2432,8 +2432,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
         $post_package_id = $package_info->pid;
         $fields_location = 'owntab';
 
-        $custom_fields = geodir_post_custom_fields($post_package_id, 'custom', $post_type, $fields_location);
-
+        $custom_fields = geodir_post_custom_fields($post_package_id, 'all', $post_type, $fields_location);
 
 
         if (!empty($custom_fields)) {
