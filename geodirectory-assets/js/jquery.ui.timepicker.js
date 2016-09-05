@@ -6,7 +6,6 @@
  * You may use this project under MIT license.
  * http://trentrichardson.com/Impromptu/MIT-LICENSE.txt
  */
-
 (function ($) {
 
     /*
