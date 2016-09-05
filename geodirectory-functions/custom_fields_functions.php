@@ -3122,6 +3122,7 @@ add_filter('geodir_cfa_extra_fields_radio','geodir_cfa_extra_fields_smr',10,4);
 
 function geodir_cfa_extra_fields_datepicker($output,$result_str,$cf,$field_info){
     ob_start();
+    $extra = array();
     if (isset($field_info->extra_fields) && $field_info->extra_fields != '') {
         $extra = unserialize($field_info->extra_fields);
     }
@@ -3156,7 +3157,7 @@ function geodir_cfa_extra_fields_datepicker($output,$result_str,$cf,$field_info)
                 <?php
                 foreach($date_formats as $format){
                     $selected = '';
-                    if(esc_attr($extra['date_format'])==$format){
+                    if(!empty($extra) && esc_attr($extra['date_format'])==$format){
                         $selected = "selected='selected'";
                     }
                     echo "<option $selected value='$format'>$format       (".date_i18n( $format, time()).")</option>";

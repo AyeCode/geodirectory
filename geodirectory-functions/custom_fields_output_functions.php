@@ -496,7 +496,7 @@ add_filter('geodir_custom_field_output_time','geodir_cf_time',10,3);
  * @return string The html to output for the custom field.
  */
 function geodir_cf_datepicker($html,$location,$cf,$p=''){
-
+    global $preview;
     // check we have the post value
     if(is_int($p)){$post = geodir_get_post_info($p);}
     else{ global $post;}
@@ -571,7 +571,10 @@ function geodir_cf_datepicker($html,$location,$cf,$p=''){
             }
 
             if ($post->{$cf['htmlvar_name']} != '' && $post->{$cf['htmlvar_name']}!="0000-00-00") {
-                $value = date_i18n($date_format, strtotime($post_htmlvar_value));
+                $date_format_from = $preview ? $date_format : 'Y-m-d';
+                $value = geodir_date($post_htmlvar_value, $date_format, $date_format_from); // save as sql format Y-m-d
+                //$post_htmlvar_value = strpos($post_htmlvar_value, '/') !== false ? str_replace('/', '-', $post_htmlvar_value) : $post_htmlvar_value;
+                //$value = date_i18n($date_format, strtotime($post_htmlvar_value));
             }else{
                 return '';
             }
@@ -760,8 +763,8 @@ function geodir_cf_radio($html,$location,$cf,$p=''){
     // If not html then we run the standard output.
     if(empty($html)){
 
-        $html_val = __($post->{$cf['htmlvar_name']}, 'geodirectory');
-        if ($post->{$cf['htmlvar_name']} != ''):
+        $html_val = isset($post->{$cf['htmlvar_name']}) ? __($post->{$cf['htmlvar_name']}, 'geodirectory') : '';
+        if (isset($post->{$cf['htmlvar_name']}) && $post->{$cf['htmlvar_name']} != ''):
 
             if ($post->{$cf['htmlvar_name']} == 'f' || $post->{$cf['htmlvar_name']} == '0') {
                 $html_val = __('No', 'geodirectory');

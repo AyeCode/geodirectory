@@ -403,9 +403,10 @@ if (!function_exists('geodir_save_listing')) {
                         $post_htmlvar_value = $request_info[$name];
                     }
 
-                    $post_htmlvar_value =  geodir_maybe_untranslate_date($post_htmlvar_value); // maybe untranslate date string if it was translated
+                    $post_htmlvar_value = geodir_date($post_htmlvar_value, 'Y-m-d', $date_format); // save as sql format Y-m-d
+                    $datetime = geodir_maybe_untranslate_date($post_htmlvar_value); // maybe untranslate date string if it was translated
 
-                    $datetime = date("Y-m-d", strtotime($post_htmlvar_value)); // save as sql format Y-m-d
+                    //$datetime = date_i18n("Y-m-d", strtotime($post_htmlvar_value)); // save as sql format Y-m-d
 
                 }
                 $gd_post_info[$name] = $datetime;
