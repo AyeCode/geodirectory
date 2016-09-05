@@ -405,9 +405,11 @@ function geodir_cfi_checkbox($html,$cf){
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
 
-        if ($value == $cf['default']) {
-            $value = '';
-        }?>
+
+        if ($value == '' && $cf['default']) {
+            $value = '1';
+        }
+        ?>
 
         <div id="<?php echo $cf['name'];?>_row"
              class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
