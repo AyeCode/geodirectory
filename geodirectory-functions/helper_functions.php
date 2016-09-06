@@ -633,25 +633,41 @@ function geodir_maybe_untranslate_date($date){
  *
  * @since 1.6.7
  *
- * @param string $date The date string.
+ * @param string $date_input The date string.
  * @param string $date_to The destination date format.
  * @param string $date_from The source date format.
  * @return string The formatted date.
  */
-function geodir_date($date, $date_to, $date_from) {
-    if (empty($date)) {
-        return $date;
+function geodir_date($date_input, $date_to, $date_from = '') {
+    if (empty($date_input) || empty($date_to)) {
+        return NULL;
     }
     
-    $datetime = date_create_from_format($date_from, $date);
+    $date = '';
+    if (!empty($date_from)) {
+        $datetime = date_create_from_format($date_from, $date_input);
+        
+        if (!empty($datetime)) {
+            $date = $datetime->format($date_to);
+        }
+    }
     
-    if (empty($datetime)) {
+    if (empty($date)) {
+        $date = strpos($date_input, '/') !== false ? str_replace('/', '-', $date_input) : $date_input;
         $date = date_i18n($date_to, strtotime($date));
-    } else {
-        $date = $datetime->format($date_to);
     }
     
     $date = geodir_maybe_untranslate_date($date);
-    
-    return $date;
+    /**
+     * Filter the the date format conversion.
+     *
+     * @since 1.6.7
+     * @package GeoDirectory
+     *
+     * @param string $date The date string.
+     * @param string $date_input The date input.
+     * @param string $date_to The destination date format.
+     * @param string $date_from The source date format.
+     */
+    return apply_filters('geodir_date', $date, $date_input, $date_to, $date_from);
 }
