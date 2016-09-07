@@ -3,6 +3,7 @@ Address field output containd class post instead of post_address - FIXED
 Video and special offers tabs can show twice - FIXED
 Custom field position change function sometimes not run - FIXED
 Multiselect custom field can now be show as comma separated by adding class `gd-comma-list` - ADDED
+With Avada theme "GD Home Top Section" widgets dont work on GD Home page - FIXED
 
 v1.6.7
 Original custom fields hook htmlvar broken - FIXED
