@@ -405,9 +405,11 @@ function geodir_cfi_checkbox($html,$cf){
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
 
-        if ($value == $cf['default']) {
-            $value = '';
-        }?>
+
+        if ($value == '' && $cf['default']) {
+            $value = '1';
+        }
+        ?>
 
         <div id="<?php echo $cf['name'];?>_row"
              class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
@@ -823,9 +825,10 @@ function geodir_cfi_datepicker($html,$cf){
 
         if($value=='0000-00-00'){$value='';}//if date not set, then mark it empty
         if($value && !isset($_REQUEST['backandedit'])) {
-            $time = strtotime($value);
-            $value = date_i18n($date_format, $time);
+            //$time = strtotime($value);
+            //$value = date_i18n($date_format, $time);
         }
+        $value = geodir_date($value, 'Y-m-d', $date_format);
 
         ?>
         <script type="text/javascript">
@@ -844,7 +847,7 @@ function geodir_cfi_datepicker($html,$cf){
                 jQuery("#<?php echo $name;?>").datepicker("option", "dateFormat", '<?php echo $jquery_date_format;?>');
 
                 <?php if(!empty($value)){?>
-                jQuery("#<?php echo $name;?>").datepicker("setDate", "<?php echo $value;?>");
+                jQuery("#<?php echo $name;?>").datepicker("setDate", '<?php echo $value;?>');
                 <?php } ?>
 
             });

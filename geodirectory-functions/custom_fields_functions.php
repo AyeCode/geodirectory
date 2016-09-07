@@ -358,7 +358,7 @@ if (!function_exists('geodir_custom_field_save')) {
             $site_title = $request_field['site_title'];
             $data_type = $request_field['data_type'];
             $field_type = $request_field['field_type'];
-            $field_type_key = $request_field['field_type_key'];
+            $field_type_key = isset($request_field['field_type_key']) ? $request_field['field_type_key'] : $field_type;
             $htmlvar_name = isset($request_field['htmlvar_name']) ? $request_field['htmlvar_name'] : '';
             $admin_desc = $request_field['admin_desc'];
             $clabels = $request_field['clabels'];
@@ -402,7 +402,7 @@ if (!function_exists('geodir_custom_field_save')) {
                 $package_info = array();
 
                 $package_info = geodir_post_package_info($package_info, '', $post_type);
-                $price_pkg = $package_info->pid;
+                $price_pkg = !empty($package_info->pid) ? $package_info->pid : '';
             }
 
 
@@ -1377,11 +1377,10 @@ if (!function_exists('geodir_show_listing_info')) {
     function geodir_show_listing_info($fields_location = '') {
         global $post, $preview, $wpdb, $send_to_friend;
 
-        $payment_info = array();
         $package_info = array();
 
         $package_info = geodir_post_package_info($package_info, $post);
-        $post_package_id = $package_info->pid;
+        $post_package_id = !empty($package_info->pid) ? $package_info->pid : '';
         $p_type = !empty($post->post_type) ? $post->post_type : geodir_get_current_posttype();
         $send_to_friend = false;
 
@@ -1400,9 +1399,10 @@ if (!function_exists('geodir_show_listing_info')) {
             foreach ($fields_info as $type) {
                 $type = stripslashes_deep($type); // strip slashes
                 $html = '';
-                $html_var = '';
                 $field_icon = geodir_field_icon_proccess($type);
                 $filed_type = $type['type'];
+                $html_var = isset($type['htmlvar_name']) ? $type['htmlvar_name'] : '';
+                if($html_var=='post'){$html_var='post_address';}
 
                 /**
                  * Filter the output for custom fields.
@@ -1417,9 +1417,9 @@ if (!function_exists('geodir_show_listing_info')) {
 
                 $variables_array = array();
 
-                if ($fields_location == 'detail' && isset($type['show_as_tab']) && (int)$type['show_as_tab'] == 1 && in_array($type['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file'))) {
-                    continue;
-                }
+//                if ($fields_location == 'detail' && isset($type['show_as_tab']) && (int)$type['show_as_tab'] == 1 && in_array($type['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file'))) {
+//                    continue;
+//                }
 
                 if ($type['type'] != 'fieldset'):
                     $variables_array['post_id'] = $post->ID;
@@ -1428,7 +1428,6 @@ if (!function_exists('geodir_show_listing_info')) {
                     if (isset($post->{$type['htmlvar_name']}))
                         $variables_array['value'] = $post->{$type['htmlvar_name']};
                 endif;
-
 
 
                 if ($html):
@@ -2218,7 +2217,7 @@ if (!function_exists('geodir_custom_sort_field_adminhtml')) {
             }
         }
 
-        $radio_id = (isset($field_info->htmlvar_name)) ? $field_info->htmlvar_name : rand(5, 500);
+        $radio_id = (isset($field_info->htmlvar_name)) ? $field_info->htmlvar_name.$field_type : rand(5, 500);
         ?>
 
         <li class="text" id="licontainer_<?php echo $result_str;?>">
@@ -3081,7 +3080,9 @@ add_filter('geodir_cfa_extra_fields_multiselect','geodir_cfa_extra_fields_multis
 
 
 function geodir_cfa_extra_fields_smr($output,$result_str,$cf,$field_info){
+
     ob_start();
+    $field_type = isset($field_info->field_type) ? $field_info->field_type : '';
     ?>
     <li>
         <label for="option_values" class="gd-cf-tooltip-wrap">
@@ -3121,6 +3122,7 @@ add_filter('geodir_cfa_extra_fields_radio','geodir_cfa_extra_fields_smr',10,4);
 
 function geodir_cfa_extra_fields_datepicker($output,$result_str,$cf,$field_info){
     ob_start();
+    $extra = array();
     if (isset($field_info->extra_fields) && $field_info->extra_fields != '') {
         $extra = unserialize($field_info->extra_fields);
     }
@@ -3155,7 +3157,7 @@ function geodir_cfa_extra_fields_datepicker($output,$result_str,$cf,$field_info)
                 <?php
                 foreach($date_formats as $format){
                     $selected = '';
-                    if(esc_attr($extra['date_format'])==$format){
+                    if(!empty($extra) && esc_attr($extra['date_format'])==$format){
                         $selected = "selected='selected'";
                     }
                     echo "<option $selected value='$format'>$format       (".date_i18n( $format, time()).")</option>";
@@ -3206,3 +3208,178 @@ function geodir_cfa_extra_fields_file($output,$result_str,$cf,$field_info){
     return $output;
 }
 add_filter('geodir_cfa_extra_fields_file','geodir_cfa_extra_fields_file',10,4);
+
+function geodir_default_custom_fields($post_type='gd_place',$package_id=''){
+    $fields = array();
+    $package = ($package_id=='') ? '' : array($package_id);
+
+    $fields[] = array('listing_type' => $post_type,
+                      'data_type' => 'VARCHAR',
+                      'field_type' => 'taxonomy',
+                      'admin_title' => __('Category', 'geodirectory'),
+                      'admin_desc' => __('SELECT listing category FROM here. SELECT at least one CATEGORY', 'geodirectory'),
+                      'site_title' => __('Category', 'geodirectory'),
+                      'htmlvar_name' => $post_type.'category',
+                      'default_value' => '',
+                      'is_default' => '1',
+                      'is_admin' => '1',
+                      'is_required' => '1',
+                      'show_in'   =>  '[detail]',
+                      'show_on_pkg' => $package,
+                      'clabels' => __('Category', 'geodirectory'));
+
+    $fields[] = array('listing_type' => $post_type,
+                      'data_type' => 'VARCHAR',
+                      'field_type' => 'address',
+                      'admin_title' => __('Address', 'geodirectory'),
+                      'admin_desc' => ADDRESS_MSG,
+                      'site_title' => __('Address', 'geodirectory'),
+                      'htmlvar_name' => 'post',
+                      'default_value' => '',
+                      'option_values' => '',
+                      'is_default' => '1',
+                      'is_admin' => '1',
+                      'is_required' => '1',
+                      'show_in'   =>  '[detail],[mapbubble]',
+                      'show_on_pkg' => $package,
+                      'required_msg' => __('Address fields are required', 'geodirectory'),
+                      'clabels' => __('Address', 'geodirectory'),
+                      'extra' => array('show_city' => 1, 'city_lable' => __('City', 'geodirectory'),
+                                       'show_region' => 1, 'region_lable' => __('Region', 'geodirectory'),
+                                       'show_country' => 1, 'country_lable' => __('Country', 'geodirectory'),
+                                       'show_zip' => 1, 'zip_lable' => __('Zip/Post Code', 'geodirectory'),
+                                       'show_map' => 1, 'map_lable' => __('Set Address On Map', 'geodirectory'),
+                                       'show_mapview' => 1, 'mapview_lable' => __('Select Map View', 'geodirectory'),
+                                       'show_mapzoom' => 1, 'mapzoom_lable' => 'hidden',
+                                       'show_latlng' => 1));
+
+    $fields[] = array('listing_type' => $post_type,
+                      'data_type' => 'VARCHAR',
+                      'field_type' => 'text',
+                      'admin_title' => __('Time', 'geodirectory'),
+                      'admin_desc' => __('Enter Business or Listing Timing Information.<br/>eg. : 10.00 am to 6 pm every day', 'geodirectory'),
+                      'site_title' => __('Time', 'geodirectory'),
+                      'htmlvar_name' => 'timing',
+                      'default_value' => '',
+                      'option_values' => '',
+                      'is_default' => '1',
+                      'is_admin' => '1',
+                      'show_in' =>  '[detail],[mapbubble]',
+                      'show_on_pkg' => $package,
+                      'clabels' => __('Time', 'geodirectory'));
+
+    $fields[] = array('listing_type' => $post_type,
+                      'data_type' => 'VARCHAR',
+                      'field_type' => 'phone',
+                      'admin_title' => __('Phone', 'geodirectory'),
+                      'admin_desc' => __('You can enter phone number,cell phone number etc.', 'geodirectory'),
+                      'site_title' => __('Phone', 'geodirectory'),
+                      'htmlvar_name' => 'contact',
+                      'default_value' => '',
+                      'option_values' => '',
+                      'is_default' => '1',
+                      'is_admin' => '1',
+                      'show_in' =>  '[detail],[mapbubble]',
+                      'show_on_pkg' => $package,
+                      'clabels' => __('Phone', 'geodirectory'));
+
+    $fields[] = array('listing_type' => $post_type,
+                      'data_type' => 'VARCHAR',
+                      'field_type' => 'email',
+                      'admin_title' => __('Email', 'geodirectory'),
+                      'admin_desc' => __('You can enter your business or listing email.', 'geodirectory'),
+                      'site_title' => __('Email', 'geodirectory'),
+                      'htmlvar_name' => 'email',
+                      'default_value' => '',
+                      'option_values' => '',
+                      'is_default' => '1',
+                      'is_admin' => '1',
+                      'show_in' => '[detail]',
+                      'show_on_pkg' => $package,
+                      'clabels' => __('Email', 'geodirectory'));
+
+    $fields[] = array('listing_type' => $post_type,
+                      'data_type' => 'VARCHAR',
+                      'field_type' => 'url',
+                      'admin_title' => __('Website', 'geodirectory'),
+                      'admin_desc' => __('You can enter your business or listing website.', 'geodirectory'),
+                      'site_title' => __('Website', 'geodirectory'),
+                      'htmlvar_name' => 'website',
+                      'default_value' => '',
+                      'option_values' => '',
+                      'is_default' => '1',
+                      'is_admin' => '1',
+                      'show_in' => '[detail]',
+                      'show_on_pkg' => $package,
+                      'clabels' => __('Website', 'geodirectory'));
+
+    $fields[] = array('listing_type' => $post_type,
+                      'data_type' => 'VARCHAR',
+                      'field_type' => 'url',
+                      'admin_title' => __('Twitter', 'geodirectory'),
+                      'admin_desc' => __('You can enter your business or listing twitter url.', 'geodirectory'),
+                      'site_title' => __('Twitter', 'geodirectory'),
+                      'htmlvar_name' => 'twitter',
+                      'default_value' => '',
+                      'option_values' => '',
+                      'is_default' => '1',
+                      'is_admin' => '1',
+                      'show_in' => '[detail]',
+                      'show_on_pkg' => $package,
+                      'clabels' => __('Twitter', 'geodirectory'));
+
+    $fields[] = array('listing_type' => $post_type,
+                      'data_type' => 'VARCHAR',
+                      'field_type' => 'url',
+                      'admin_title' => __('Facebook', 'geodirectory'),
+                      'admin_desc' => __('You can enter your business or listing facebook url.', 'geodirectory'),
+                      'site_title' => __('Facebook', 'geodirectory'),
+                      'htmlvar_name' => 'facebook',
+                      'default_value' => '',
+                      'option_values' => '',
+                      'is_default' => '1',
+                      'is_admin' => '1',
+                      'show_in' => '[detail]',
+                      'show_on_pkg' => $package,
+                      'clabels' => __('Facebook', 'geodirectory'));
+
+    $fields[] = array('listing_type' => $post_type,
+                      'data_type' => 'TEXT',
+                      'field_type' => 'textarea',
+                      'admin_title' => __('Video', 'geodirectory'),
+                      'admin_desc' => __('Add video code here, YouTube etc.', 'geodirectory'),
+                      'site_title' => __('Video', 'geodirectory'),
+                      'htmlvar_name' => 'video',
+                      'default_value' => '',
+                      'option_values' => '',
+                      'is_default' => '0',
+                      'is_admin' => '1',
+                      'show_in' => '[owntab]',
+                      'show_on_pkg' => $package,
+                      'clabels' => __('Video', 'geodirectory'));
+
+    $fields[] = array('listing_type' => $post_type,
+                      'data_type' => 'TEXT',
+                      'field_type' => 'textarea',
+                      'admin_title' => __('Special Offers', 'geodirectory'),
+                      'admin_desc' => __('Note: List out any special offers (optional)', 'geodirectory'),
+                      'site_title' => __('Special Offers', 'geodirectory'),
+                      'htmlvar_name' => 'special_offers',
+                      'default_value' => '',
+                      'option_values' => '',
+                      'is_default' => '0',
+                      'is_admin' => '1',
+                      'show_in' => '[owntab]',
+                      'show_on_pkg' => $package,
+                      'clabels' => __('Special Offers', 'geodirectory'));
+
+    /**
+     * Filter the array of default custom fields DB table data.
+     *
+     * @since 1.6.6
+     * @param string $fields The default custom fields as an array.
+     */
+    $fields = apply_filters('geodir_default_custom_fields', $fields);
+
+    return  $fields;
+}

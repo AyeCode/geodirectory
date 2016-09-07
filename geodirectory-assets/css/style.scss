@@ -49,6 +49,9 @@ preview details page
 details page 
 ######################################### */
 
+.average-review img.photo{
+    max-width:150px;
+}
 .gd-tab-list-title{
     font-size: 24px;
 }
@@ -106,6 +109,7 @@ ul.geodir-tabs-content {
 }
 
 .geodir-breadcrumb ul li {
+    width: 100%;
     font-size: 12px;
     float: left;
     padding: 5px 5px 5px 0;
@@ -871,12 +875,16 @@ span.geodir_term_class {
     margin: 5px;
 }
 
-.geodir-content-right .geodir-search input,
-.geodir-content-left .geodir-search input,
-.geodir-content-right .geodir-search select,
-.geodir-content-left .geodir-search select {
-    width: 100%;
-    box-sizing: border-box;
+.geodir-content-right,
+.geodir-content-right{
+    .geodir-search{
+        input,
+        input[type="text"],
+        select{
+            width: 100%;
+            box-sizing: border-box;
+        }
+    }
 }
 
 .geodir-search .search_by_post {
@@ -1873,4 +1881,31 @@ div#jquery-lightbox {
 
 .geodir_lazy_load_thumbnail {
     opacity:0;transition: opacity .5s ease-in;
+}
+.geodir-sc-gd-listings .gd-pagi-container .gd-pagination-details-before {
+    margin-top: 0
+}
+.geodir-sc-gd-listings ul.geodir_category_list_view {
+    padding-bottom: 0
+}
+.gd-pagi-container {
+    clear: both;
+    display: block;
+    width: 100%;
+}
+.gd-pagi-container .geodir-ajax-pagination {
+    border: medium none;
+    clear: both;
+    display: block;
+    padding: 10px 0;
+}
+.gd-pagi-container .gd-pagination-details {
+    clear: both;
+    display: block;
+}
+.gd-pagi-container .gd-pagination-details-before {
+    margin-top: 12px;
+}
+.gd-pagi-container .gd-pagination-details-after {
+    margin-bottom: 12px;
 }

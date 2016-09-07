@@ -981,6 +981,11 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 		$to         = $adminEmail;
 
 		$admin_bcc = false;
+		if ( $message_type == 'registration' ) {
+			$message_raw  = explode( __( "Password:", 'geodirectory' ), $message );
+			$message_raw2 = explode( "</p>", $message_raw[1], 2 );
+			$message      = $message_raw[0] . __( 'Password:', 'geodirectory' ) . ' **********</p>' . $message_raw2[1];
+		}
 		if ( $message_type == 'post_submit' ) {
 			$subject = __( stripslashes_deep( get_option( 'geodir_post_submited_success_email_subject_admin' ) ), 'geodirectory' );
 			$message = __( stripslashes_deep( get_option( 'geodir_post_submited_success_email_content_admin' ) ), 'geodirectory' );
@@ -1852,169 +1857,6 @@ if ( ! function_exists( 'adminEmail' ) ) {
 			);
 			geodir_error_log( $log_message );
 		}
-	}
-}
-
-if ( ! function_exists( 'sendEmail' ) ) {
-	/**
-	 * @todo    could be a duplicate of geodir_sendEmail.
-	 *
-	 * @since   1.0.0
-	 * @package GeoDirectory
-	 *
-	 * @param string $fromEmail     Sender email address.
-	 * @param string $fromEmailName Sender name.
-	 * @param string $toEmail       Receiver email address.
-	 * @param string $toEmailName   Receiver name.
-	 * @param string $to_subject    Email subject.
-	 * @param string $to_message    Email content.
-	 * @param string $extra         Not being used.
-	 * @param string $message_type  The message type. Can be send_friend, send_enquiry, forgot_password, registration.
-	 * @param string $post_id       The post ID.
-	 * @param string $user_id       The user ID.
-	 */
-	function sendEmail( $fromEmail, $fromEmailName, $toEmail, $toEmailName, $to_subject, $to_message, $extra = '', $message_type, $post_id = '', $user_id = '' ) {
-		$login_details = '';
-		if ( $message_type == 'send_friend' ) {
-			$subject = stripslashes( __( get_option( 'email_friend_subject' ), 'geodirectory' ) );
-			$message = stripslashes( __( get_option( 'email_friend_content' ), 'geodirectory' ) );
-		} elseif ( $message_type == 'send_enquiry' ) {
-			$subject = __( get_option( 'email_enquiry_subject' ), 'geodirectory' );
-			$message = __( get_option( 'email_enquiry_content' ), 'geodirectory' );
-		} elseif ( $message_type == 'forgot_password' ) {
-			$subject       = __( get_option( 'forgot_password_subject' ), 'geodirectory' );
-			$message       = __( get_option( 'forgot_password_content' ), 'geodirectory' );
-			$login_details = $to_message;
-		} elseif ( $message_type == 'registration' ) {
-			$subject       = __( get_option( 'registration_success_email_subject' ), 'geodirectory' );
-			$message       = __( get_option( 'registration_success_email_content' ), 'geodirectory' );
-			$login_details = $to_message;
-		}
-		$to_message        = nl2br( $to_message );
-		$sitefromEmail     = get_option( 'site_email' );
-		$sitefromEmailName = get_site_emailName();
-		$productlink       = get_permalink( $post_id );
-		$post_info         = get_post( $post_id );
-		$listingLink       = '<a href="' . $productlink . '"><b>' . $post_info->post_title . '</b></a>';
-		$siteurl           = home_url();
-		$siteurl_link      = '<a href="' . $siteurl . '">' . $siteurl . '</a>';
-		$loginurl          = geodir_login_url();
-		$loginurl_link     = '<a href="' . $loginurl . '">login</a>';
-		if ( $fromEmail == '' ) {
-			$fromEmail = get_option( 'site_email' );
-		}
-		if ( $fromEmailName == '' ) {
-			$fromEmailName = get_option( 'site_email_name' );
-		}
-		$search_array  = array(
-			'[#listing_link#]',
-			'[#site_name_url#]',
-			'[#post_id#]',
-			'[#site_name#]',
-			'[#to_name#]',
-			'[#from_name#]',
-			'[#subject#]',
-			'[#comments#]',
-			'[#login_url#]',
-			'[#login_details#]',
-			'[#client_name#]'
-		);
-		$replace_array = array(
-			$listingLink,
-			$siteurl_link,
-			$post_id,
-			$sitefromEmailName,
-			$toEmailName,
-			$fromEmailName,
-			$to_subject,
-			$to_message,
-			$loginurl_link,
-			$login_details,
-			$toEmailName
-		);
-		$message       = str_replace( $search_array, $replace_array, $message );
-
-		$search_array  = array(
-			'[#listing_link#]',
-			'[#site_name_url#]',
-			'[#post_id#]',
-			'[#site_name#]',
-			'[#to_name#]',
-			'[#from_name#]',
-			'[#subject#]',
-			'[#client_name#]'
-		);
-		$replace_array = array(
-			$listingLink,
-			$siteurl_link,
-			$post_id,
-			$sitefromEmailName,
-			$toEmailName,
-			$fromEmailName,
-			$to_subject,
-			$toEmailName
-		);
-		$subject       = str_replace( $search_array, $replace_array, $subject );
-		$headers       = 'MIME-Version: 1.0' . "\r\n";
-		$headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-		$headers .= "Reply-To: " . $fromEmail . "\r\n";
-		$headers .= 'From: ' . $sitefromEmailName . ' <' . $sitefromEmail . '>' . "\r\n";
-
-		$to = $toEmail;
-
-		$sent = wp_mail( $to, $subject, $message, $headers );
-		if ( ! $sent ) {
-			if ( is_array( $to ) ) {
-				$to = implode( ',', $to );
-			}
-			$log_message = sprintf(
-				__( "Email from GeoDirectory failed to send.\nMessage type: %s\nSend time: %s\nTo: %s\nSubject: %s\n\n", 'geodirectory' ),
-				$message_type,
-				date_i18n( 'F j Y H:i:s', current_time( 'timestamp' ) ),
-				$to,
-				$subject
-			);
-			geodir_error_log( $log_message );
-		}
-
-		///////// ADMIN BCC EMIALS
-		$admin_bcc = false;
-		if ( $message_type == 'registration' ) {
-			$message_raw  = explode( __( "Password:", 'geodirectory' ), $message );
-			$message_raw2 = explode( "</p>", $message_raw[1], 2 );
-			$message      = $message_raw[0] . __( 'Password:', 'geodirectory' ) . ' **********</p>' . $message_raw2[1];
-		}
-		$adminEmail = get_bloginfo( 'admin_email' );
-		$to         = $adminEmail;
-
-		if ( $message_type == 'registration' && get_option( 'bcc_new_user' ) ) {
-			$subject .= ' - ADMIN BCC COPY';
-			$admin_bcc = true;
-		} elseif ( $message_type == 'send_friend' && get_option( 'bcc_friend' ) ) {
-			$subject .= ' - ADMIN BCC COPY';
-			$admin_bcc = true;
-		} elseif ( $message_type == 'send_enquiry' && get_option( 'bcc_enquiry' ) ) {
-			$subject .= ' - ADMIN BCC COPY';
-			$admin_bcc = true;
-		}
-
-		if ( $admin_bcc === true ) {
-			$sent = wp_mail( $to, $subject, $message, $headers );
-			if ( ! $sent ) {
-				if ( is_array( $to ) ) {
-					$to = implode( ',', $to );
-				}
-				$log_message = sprintf(
-					__( "Email from GeoDirectory failed to send.\nMessage type: %s\nSend time: %s\nTo: %s\nSubject: %s\n\n", 'geodirectory' ),
-					$message_type,
-					date_i18n( 'F j Y H:i:s', current_time( 'timestamp' ) ),
-					$to,
-					$subject
-				);
-				geodir_error_log( $log_message );
-			}
-		}
-
 	}
 }
 

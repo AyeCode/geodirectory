@@ -6,7 +6,6 @@
  * @package GeoDirectory
  */
 
-
 function geodir_get_popup_forms(e, i, r, o) {
     var s = geodir_var.geodir_ajax_url,
         a = i.closest("li");

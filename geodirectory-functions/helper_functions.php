@@ -325,7 +325,7 @@ function geodir_parse_custom_field_url($url, $formatted = true) {
 }
 
 /**
- * Set parent categories to fix categoires tree structure.
+ * Set parent categories to fix categories tree structure.
  *
  * @since 1.5.7
  * @package GeoDirectory
@@ -626,4 +626,48 @@ function geodir_maybe_untranslate_date($date){
 
 
 	return $date;
+}
+
+/**
+ * Convert date to given format.
+ *
+ * @since 1.6.7
+ *
+ * @param string $date_input The date string.
+ * @param string $date_to The destination date format.
+ * @param string $date_from The source date format.
+ * @return string The formatted date.
+ */
+function geodir_date($date_input, $date_to, $date_from = '') {
+    if (empty($date_input) || empty($date_to)) {
+        return NULL;
+    }
+    
+    $date = '';
+    if (!empty($date_from)) {
+        $datetime = date_create_from_format($date_from, $date_input);
+        
+        if (!empty($datetime)) {
+            $date = $datetime->format($date_to);
+        }
+    }
+    
+    if (empty($date)) {
+        $date = strpos($date_input, '/') !== false ? str_replace('/', '-', $date_input) : $date_input;
+        $date = date_i18n($date_to, strtotime($date));
+    }
+    
+    $date = geodir_maybe_untranslate_date($date);
+    /**
+     * Filter the the date format conversion.
+     *
+     * @since 1.6.7
+     * @package GeoDirectory
+     *
+     * @param string $date The date string.
+     * @param string $date_input The date input.
+     * @param string $date_to The destination date format.
+     * @param string $date_from The source date format.
+     */
+    return apply_filters('geodir_date', $date, $date_input, $date_to, $date_from);
 }

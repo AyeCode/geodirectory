@@ -171,8 +171,7 @@ function geodir_cf_fieldset($html,$location,$cf,$p=''){
         $fieldset_class = 'fieldset-'.sanitize_title_with_dashes($cf['site_title']);
 
         if ($field_set_start == 1) {
-            $html = '';//'<h2 class="'.$fieldset_class.'">xxx'.$field_set_start  . __($cf['site_title'], 'geodirectory') . '</h2>';
-           //$html = '</div><div class="geodir-company_info field-group ' . $cf['htmlvar_name'] . '"><h2 class="'.$fieldset_class.'">' . __($cf['site_title'], 'geodirectory') . '</h2>';
+            $html = '';
         } else {
             $html = '<h2 class="'.$fieldset_class.'">'. __($cf['site_title'], 'geodirectory') . '</h2>';
             //$field_set_start = 1;
@@ -497,7 +496,7 @@ add_filter('geodir_custom_field_output_time','geodir_cf_time',10,3);
  * @return string The html to output for the custom field.
  */
 function geodir_cf_datepicker($html,$location,$cf,$p=''){
-
+    global $preview;
     // check we have the post value
     if(is_int($p)){$post = geodir_get_post_info($p);}
     else{ global $post;}
@@ -572,7 +571,10 @@ function geodir_cf_datepicker($html,$location,$cf,$p=''){
             }
 
             if ($post->{$cf['htmlvar_name']} != '' && $post->{$cf['htmlvar_name']}!="0000-00-00") {
-                $value = date_i18n($date_format, strtotime($post_htmlvar_value));
+                $date_format_from = $preview ? $date_format : 'Y-m-d';
+                $value = geodir_date($post_htmlvar_value, $date_format, $date_format_from); // save as sql format Y-m-d
+                //$post_htmlvar_value = strpos($post_htmlvar_value, '/') !== false ? str_replace('/', '-', $post_htmlvar_value) : $post_htmlvar_value;
+                //$value = date_i18n($date_format, strtotime($post_htmlvar_value));
             }else{
                 return '';
             }
@@ -761,8 +763,8 @@ function geodir_cf_radio($html,$location,$cf,$p=''){
     // If not html then we run the standard output.
     if(empty($html)){
 
-        $html_val = __($post->{$cf['htmlvar_name']}, 'geodirectory');
-        if ($post->{$cf['htmlvar_name']} != ''):
+        $html_val = isset($post->{$cf['htmlvar_name']}) ? __($post->{$cf['htmlvar_name']}, 'geodirectory') : '';
+        if (isset($post->{$cf['htmlvar_name']}) && $post->{$cf['htmlvar_name']} != ''):
 
             if ($post->{$cf['htmlvar_name']} == 'f' || $post->{$cf['htmlvar_name']} == '0') {
                 $html_val = __('No', 'geodirectory');
@@ -1101,7 +1103,7 @@ function geodir_cf_email($html,$location,$cf,$p=''){
 
         $package_info = (array)geodir_post_package_info(array(), $post, $post->post_type);
 
-        if ($cf['htmlvar_name'] == 'geodir_email' && ((isset($package_info->sendtofriend) && $package_info->sendtofriend) || $post->{$cf['htmlvar_name']})) {
+        if ($cf['htmlvar_name'] == 'geodir_email' && ((isset($package_info['sendtofriend']) && $package_info['sendtofriend']) || $post->{$cf['htmlvar_name']})) {
             $send_to_friend = true;
             $b_send_inquiry = '';
             $b_sendtofriend = '';
@@ -1123,7 +1125,6 @@ function geodir_cf_email($html,$location,$cf,$p=''){
                 $field_icon = '';
             }
 
-
             $html .= '<div class="geodir_more_info  ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '"><span class="geodir-i-email" style="' . $field_icon . '">' . $field_icon_af;
             $seperator = '';
             if ($post->{$cf['htmlvar_name']}) {
@@ -1131,7 +1132,7 @@ function geodir_cf_email($html,$location,$cf,$p=''){
                 $seperator = ' | ';
             }
 
-            if (isset($package_info->sendtofriend) && $package_info->sendtofriend) {
+            if (isset($package_info['sendtofriend']) && $package_info['sendtofriend']) {
                 $html .= $seperator . '<a href="javascript:void(0);" class="' . $b_sendtofriend . '">' . SEND_TO_FRIEND . '</a>';
             }
 

@@ -1,3 +1,9 @@
+v1.6.7
+Original custom fields hook htmlvar broken - FIXED
+Default custom fields not able to show in custom tab - FIXED
+Function added to convert date formats - ADDED
+Checkbox custom field can fail to show if previously set as own tab - FIXED
+
 v1.6.6
 Added filter to geodir_filter_empty_terms function - ADDED
 Best of widget not showing lazyload images on ajax change - FIXED
@@ -14,6 +20,8 @@ BuddyPress admin bar not availble for non admin users - FIXED
 Fixed map marker title special characters encoding - FIXED
 Let popup forms template override from theme - FIXED
 Added a filter to modify My Dashboard widget title - ADDED
+Map routing direction feature added for detail page OpenStreetMap - CHANGED
+Ajax pagination not working when more then gd_listings shortcodes added to the same page - FIXED
 
 v1.6.5
 Location page breadcrumb now uses location page slug - CHANGED

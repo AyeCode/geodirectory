@@ -6,7 +6,6 @@
  * @version    1.3.2 2011.07.01
  * This software is released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
-
 (function ($) {
     if (typeof google!=='undefined' && typeof google.maps!=='undefined') {
         gdMaps = 'google';

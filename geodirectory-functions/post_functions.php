@@ -403,9 +403,10 @@ if (!function_exists('geodir_save_listing')) {
                         $post_htmlvar_value = $request_info[$name];
                     }
 
-                    $post_htmlvar_value =  geodir_maybe_untranslate_date($post_htmlvar_value); // maybe untranslate date string if it was translated
+                    $post_htmlvar_value = geodir_date($post_htmlvar_value, 'Y-m-d', $date_format); // save as sql format Y-m-d
+                    $datetime = geodir_maybe_untranslate_date($post_htmlvar_value); // maybe untranslate date string if it was translated
 
-                    $datetime = date("Y-m-d", strtotime($post_htmlvar_value)); // save as sql format Y-m-d
+                    //$datetime = date_i18n("Y-m-d", strtotime($post_htmlvar_value)); // save as sql format Y-m-d
 
                 }
                 $gd_post_info[$name] = $datetime;
@@ -2272,7 +2273,7 @@ if (!function_exists('geodir_add_to_favorite')) {
          */
         do_action('geodir_before_add_from_favorite', $post_id);
 
-        echo '<a href="javascript:void(0);" title="' . $remove_favourite_text . '" class="geodir-addtofav geodir-removetofav-icon" onclick="javascript:addToFavourite(\'' . $post_id . '\',\'remove\');"><i class="'. $favourite_icon .'"></i> ' . $unfavourite_text . '</a>';
+        echo '<a href="javascript:void(0);" title="' . $remove_favourite_text . '" class="geodir-removetofav-icon" onclick="javascript:addToFavourite(\'' . $post_id . '\',\'remove\');"><i class="'. $favourite_icon .'"></i> ' . $unfavourite_text . '</a>';
 
         /**
          * Called after adding the post from favourites.
@@ -2351,7 +2352,7 @@ if (!function_exists('geodir_remove_from_favorite')) {
          */
         do_action('geodir_before_remove_from_favorite', $post_id);
 
-        echo '<a href="javascript:void(0);"  title="' . $add_favourite_text . '" class="geodir-addtofav geodir-addtofav-icon" onclick="javascript:addToFavourite(\'' . $post_id . '\',\'add\');"><i class="'. $favourite_icon .'"></i> ' . $favourite_text . '</a>';
+        echo '<a href="javascript:void(0);"  title="' . $add_favourite_text . '" class="geodir-addtofav-icon" onclick="javascript:addToFavourite(\'' . $post_id . '\',\'add\');"><i class="'. $favourite_icon .'"></i> ' . $favourite_text . '</a>';
 
         /**
          * Called after removing the post from favourites.

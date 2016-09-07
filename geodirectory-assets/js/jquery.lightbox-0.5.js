@@ -14,7 +14,6 @@
  * @example Visit http://leandrovieira.com/projects/jquery/lightbox/ for more informations about this jQuery plugin
  */
 
-
 ! function(e) {
     e.fn.lightBox = function(t) {
         function i() {

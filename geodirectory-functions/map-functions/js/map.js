@@ -139,6 +139,9 @@ function initMap(map_options) {
 }
 
 function gdCustomControl(controlDiv, cat_filters, gdMap) {
+    if (window.gdMaps !== 'google') {
+        return;
+    }
     // Set CSS for the control border
     var controlUI = document.createElement('div');
     jQuery(controlUI).addClass('gd-dragg-ui');
@@ -771,29 +774,63 @@ function calcRoute(map_canvas) {
     initMap(map_canvas);
     var optionsname = map_canvas;
     var map_options = eval(optionsname);
-    // Direction map
-    directionsDisplay.setMap(jQuery.goMap.map);
-    directionsDisplay.setPanel(document.getElementById(map_canvas + "_directionsPanel"));
-    google.maps.event.addListener(directionsDisplay, 'directions_changed', function() {
-        computeTotalDistance(directionsDisplay.directions, map_canvas);
-    });
-    jQuery('#directions-options').show();
-    var from_address = document.getElementById(map_canvas + '_fromAddress').value;
-    var request = {
-        origin: from_address,
-        destination: gd_single_marker_lat + ',' + gd_single_marker_lon,
-        travelMode: gdGetTravelMode(),
-        unitSystem: gdGetTravelUnits()
-    };
-    directionsService.route(request, function(response, status) {
-        if (status == google.maps.DirectionsStatus.OK) {
-            directionsDisplay.setDirections(response);
-            //map = new google.maps.Map(document.getElementById(map_canvas), map_options);
-            //directionsDisplay.setMap(map);
-        } else {
-            alert(geodir_all_js_msg.address_not_found_on_map_msg + from_address);
+    
+    if (window.gdMaps == 'osm') {
+        try {
+            var control = L.Routing.control({
+                waypoints: [
+                    L.latLng(gd_single_marker_lat, gd_single_marker_lon)
+                ],
+                routeWhileDragging: true,
+                geocoder: L.Control.Geocoder.nominatim(),
+                waypointNameFallback: function(latLng) {
+                    function zeroPad(n) {
+                        n = Math.round(n);
+                        return n < 10 ? '0' + n : n;
+                    }
+                    function hexagecimal(p, pos, neg) {
+                        var n = Math.abs(p),
+                            degs = Math.floor(n),
+                            mins = (n - degs) * 60,
+                            secs = (mins - Math.floor(mins)) * 60,
+                            frac = Math.round((secs - Math.floor(secs)) * 100);
+                        return (n >= 0 ? pos : neg) + degs + '°' + zeroPad(mins) + '\'' + zeroPad(secs) + '.' + zeroPad(frac) + '"';
+                    }
+
+                    return hexagecimal(latLng.lat, 'N', 'S') + ' ' + hexagecimal(latLng.lng, 'E', 'W');
+                }
+            });
+            control.addTo(jQuery.goMap.map);
+            
+            L.Routing.errorControl(control).addTo(jQuery.goMap.map);
+        } catch(e) {
+            console.log(e);
         }
-    });
+    } else if (window.gdMaps == 'google') {
+        // Direction map
+        directionsDisplay.setMap(jQuery.goMap.map);
+        directionsDisplay.setPanel(document.getElementById(map_canvas + "_directionsPanel"));
+        google.maps.event.addListener(directionsDisplay, 'directions_changed', function() {
+            computeTotalDistance(directionsDisplay.directions, map_canvas);
+        });
+        jQuery('#directions-options').show();
+        var from_address = document.getElementById(map_canvas + '_fromAddress').value;
+        var request = {
+            origin: from_address,
+            destination: gd_single_marker_lat + ',' + gd_single_marker_lon,
+            travelMode: gdGetTravelMode(),
+            unitSystem: gdGetTravelUnits()
+        };
+        directionsService.route(request, function(response, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+                directionsDisplay.setDirections(response);
+                //map = new google.maps.Map(document.getElementById(map_canvas), map_options);
+                //directionsDisplay.setMap(map);
+            } else {
+                alert(geodir_all_js_msg.address_not_found_on_map_msg + from_address);
+            }
+        });
+    }
 }
 
 function gdGetTravelMode() {
@@ -951,7 +988,7 @@ function initMapOSM(map_options) {
         var centerControl = new gdCustomControl(centerControlDiv, options.enable_cat_filters, jQuery.goMap.map);
         var controlPosition = options.enable_cat_filters ? 'bottomleft' : 'bottomright';
         
-        jQuery.goMap.map.controls[controlPosition].push(centerControlDiv);
+        //jQuery.goMap.map.controls[controlPosition].push(centerControlDiv);
     }
 
     L.DomEvent.addListener(jQuery.goMap.map, 'moveend', function() {

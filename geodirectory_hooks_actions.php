@@ -1340,6 +1340,9 @@ function geodir_localize_all_js_msg()
 		'fa_rating' => (int)get_option('geodir_reviewrating_enable_font_awesome') == 1 ? 1 : '',
 		'reviewrating' => defined('GEODIRREVIEWRATING_VERSION') ? 1 : '',
         'geodir_map_name' => geodir_map_name(),
+        'osmStart' => __('Start', 'geodirectory'),
+        'osmVia' => __('Via {viaNumber}', 'geodirectory'),
+        'osmEnd' => __('Enter Your Location', 'geodirectory'),
     );
 
     /**
@@ -2426,11 +2429,10 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
     if (!empty($tabs_arr) && $post_type != '' && in_array($post_type, $all_postypes) && (geodir_is_page('detail') || geodir_is_page('preview'))) {
         $package_info = array();
         $package_info = geodir_post_package_info($package_info, $post);
-        $post_package_id = $package_info->pid;
+        $post_package_id = !empty($package_info->pid) ? $package_info->pid : '';
         $fields_location = 'owntab';
 
-        $custom_fields = geodir_post_custom_fields($post_package_id, 'custom', $post_type, $fields_location);
-
+        $custom_fields = geodir_post_custom_fields($post_package_id, 'all', $post_type, $fields_location);
 
 
         if (!empty($custom_fields)) {

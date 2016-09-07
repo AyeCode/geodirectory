@@ -70,7 +70,6 @@ function geodir_list_view_select() {
 <?php
 }
 
-//add_action('geodir_before_listing_post_listview', 'geodir_list_view_select');
 add_action('geodir_before_listing', 'geodir_list_view_select', 100);
 
 /**
@@ -1354,6 +1353,7 @@ function geodir_detail_page_tabs_list()
 {
     $tabs_excluded = get_option('geodir_detail_page_tabs_excluded');
     $tabs_array = geodir_detail_page_tabs_array();
+    
     if (!empty($tabs_excluded)) {
         foreach ($tabs_excluded as $tab) {
             if (array_key_exists($tab, $tabs_array))

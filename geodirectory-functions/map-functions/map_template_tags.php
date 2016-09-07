@@ -249,7 +249,7 @@ function geodir_draw_map($map_args = array())
                         <?php }?>
 
                         function gd_initialize_ac() {
-                            if (typeof google!=='undefined' && typeof google.maps!=='undefined') {
+                            if (window.gdMaps == 'google') {
                                 // Create the autocomplete object, restricting the search
                                 // to geographical location types.
                                 autocomplete = new google.maps.places.Autocomplete(
@@ -263,6 +263,12 @@ function geodir_draw_map($map_args = array())
                             } else {
                                 jQuery('#<?php echo $map_canvas_name; ?>_fromAddress').hide();
                                 jQuery('.<?php echo $map_canvas_name; ?>_getdirection').hide();
+                                
+                                if (window.gdMaps == 'osm') {
+                                    window.setTimeout(function() {
+                                        calcRoute('<?php echo $map_canvas_name;?>');
+                                    }, 1000);
+                                }
                             }
                         }
 
