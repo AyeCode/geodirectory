@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 1.6.7\n"
+"Project-Id-Version: GeoDirectory 1.6.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-06 11:38+0100\n"
-"PO-Revision-Date: 2016-09-06 11:38+0100\n"
+"POT-Creation-Date: 2016-09-07 18:56+0100\n"
+"PO-Revision-Date: 2016-09-07 18:56+0100\n"
 "Last-Translator: \n"
 "Language-Team: GeoDirectory <info@wpgeodirectory.com>\n"
 "Language: en_US\n"
@@ -494,7 +494,7 @@ msgstr ""
 #: geodirectory-functions/custom_field_html.php:280
 #: geodirectory-functions/custom_field_html.php:319
 #: geodirectory-functions/custom_field_html.php:561
-#: geodirectory-functions/custom_field_html.php:732
+#: geodirectory-functions/custom_field_html.php:733
 #: geodirectory-functions/custom_fields_functions.php:2280
 #: geodirectory-functions/custom_fields_functions.php:2345
 #: geodirectory-functions/custom_fields_functions.php:2455
@@ -519,7 +519,7 @@ msgstr ""
 #: geodirectory-functions/custom_field_html.php:286
 #: geodirectory-functions/custom_field_html.php:325
 #: geodirectory-functions/custom_field_html.php:567
-#: geodirectory-functions/custom_field_html.php:738
+#: geodirectory-functions/custom_field_html.php:739
 #: geodirectory-functions/custom_fields_functions.php:2286
 #: geodirectory-functions/custom_fields_functions.php:2351
 #: geodirectory-functions/custom_fields_functions.php:2461
@@ -1308,7 +1308,7 @@ msgstr ""
 #: geodirectory-admin/admin_hooks_actions.php:1490
 #: geodirectory-admin/admin_install.php:108
 #: geodirectory-admin/option-pages/permalink_settings_array.php:130
-#: upgrade.php:141
+#: upgrade.php:139
 msgid "GD Home page"
 msgstr ""
 
@@ -1395,7 +1395,7 @@ msgid "Info page is missing."
 msgstr ""
 
 #: geodirectory-admin/admin_hooks_actions.php:1591
-#: geodirectory-admin/admin_install.php:115 upgrade.php:130
+#: geodirectory-admin/admin_install.php:115 upgrade.php:128
 msgid "Info"
 msgstr ""
 
@@ -1416,7 +1416,7 @@ msgid "Login page is missing."
 msgstr ""
 
 #: geodirectory-admin/admin_hooks_actions.php:1616
-#: geodirectory-admin/admin_install.php:116 language.php:32 upgrade.php:131
+#: geodirectory-admin/admin_install.php:116 language.php:32 upgrade.php:129
 msgid "Login"
 msgstr ""
 
@@ -1465,7 +1465,7 @@ msgstr ""
 msgid "Something went wrong"
 msgstr ""
 
-#: geodirectory-admin/admin_install.php:108 upgrade.php:141
+#: geodirectory-admin/admin_install.php:108 upgrade.php:139
 msgid "gd-home"
 msgstr ""
 
@@ -1485,11 +1485,11 @@ msgstr ""
 msgid "location"
 msgstr ""
 
-#: geodirectory-admin/admin_install.php:115 upgrade.php:130
+#: geodirectory-admin/admin_install.php:115 upgrade.php:128
 msgid "gd-info"
 msgstr ""
 
-#: geodirectory-admin/admin_install.php:116 upgrade.php:131
+#: geodirectory-admin/admin_install.php:116 upgrade.php:129
 msgid "gd-login"
 msgstr ""
 
@@ -4128,25 +4128,29 @@ msgstr ""
 msgid "Enter custom css class for field custom style."
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:716
+#: geodirectory-functions/custom_field_html.php:673
+msgid "(Enter class `gd-comma-list` to show list as comma separated)"
+msgstr ""
+
+#: geodirectory-functions/custom_field_html.php:717
 msgid "Posts sort options"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:720
+#: geodirectory-functions/custom_field_html.php:721
 msgid "Include this field in sorting options :"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:722
+#: geodirectory-functions/custom_field_html.php:723
 msgid ""
 "Lets you use this filed as a sorting option, set from sorting options above."
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:777
+#: geodirectory-functions/custom_field_html.php:778
 #: geodirectory-functions/custom_fields_functions.php:2482
 msgid "Save"
 msgstr ""
 
-#: geodirectory-functions/custom_field_html.php:780
+#: geodirectory-functions/custom_field_html.php:781
 #: geodirectory-functions/custom_fields_functions.php:2484
 #: geodirectory-templates/listing-listview.php:373
 #: geodirectory-templates/widget-listing-listview.php:243 language.php:172
@@ -6197,15 +6201,15 @@ msgstr ""
 msgid "Please accept our terms and conditions"
 msgstr ""
 
-#: geodirectory_hooks_actions.php:2621
+#: geodirectory_hooks_actions.php:2641
 msgid "Published"
 msgstr ""
 
-#: geodirectory_hooks_actions.php:2623
+#: geodirectory_hooks_actions.php:2643
 msgid "Not published"
 msgstr ""
 
-#: geodirectory_hooks_actions.php:2628
+#: geodirectory_hooks_actions.php:2648
 msgid "Status: "
 msgstr ""
 
