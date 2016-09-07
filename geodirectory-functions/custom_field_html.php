@@ -670,6 +670,7 @@ if (isset($cf['icon']) && strpos($cf['icon'], 'fa fa-') !== false) {
                         <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Css class :', 'geodirectory'); ?>
                         <div class="gdcf-tooltip">
                             <?php _e('Enter custom css class for field custom style.', 'geodirectory');?>
+                            <?php if($field_type=='multiselect'){_e('(Enter class `gd-comma-list` to show list as comma separated)', 'geodirectory');}?>
                         </div>
                     </label>
                     <div class="gd-cf-input-wrap">

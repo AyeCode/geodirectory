@@ -1909,3 +1909,24 @@ div#jquery-lightbox {
 .gd-pagi-container .gd-pagination-details-after {
     margin-bottom: 12px;
 }
+
+/* custom fields */
+.geodir_more_info.gd-comma-list{
+    ul{
+        display: inline-block;
+        list-style: none;
+        padding-left: 0px;
+        li{
+            display: inline-block;
+            &:first-child:before{
+                content: "";
+            }
+            &:before{
+                content: ", ";
+            }
+
+        }
+
+
+    }
+}

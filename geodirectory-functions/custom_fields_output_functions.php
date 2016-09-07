@@ -992,6 +992,10 @@ function geodir_cf_multiselect($html,$location,$cf,$p=''){
 
             $field_values = explode(',', trim($post->{$cf['htmlvar_name']}, ","));
 
+            if(is_array($field_values)){
+                $field_values = array_map('trim', $field_values);
+            }
+
             $option_values = array();
             if (!empty($cf['option_values'])) {
                 $cf_option_values = geodir_string_values_to_options(stripslashes_deep($cf['option_values']), true);
