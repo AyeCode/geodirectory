@@ -1913,14 +1913,23 @@ div#jquery-lightbox {
 
 /* custom fields */
 .geodir_more_info.gd-comma-list{
+    span{
+        float: left;
+    }
     ul{
         display: inline-block;
         list-style: none;
-        padding-left: 0px;
+        padding: 0px;
+        margin: 0px;
+
         li{
             display: inline-block;
+            width: auto;
+            margin: 0px;
+            padding: 0px;
             &:first-child:before{
                 content: "";
+                margin-left: 2px;
             }
             &:before{
                 content: ", ";
