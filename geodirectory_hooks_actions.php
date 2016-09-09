@@ -2526,7 +2526,8 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
 
                     $type = stripslashes_deep($type); // strip slashes
                     $html = '';
-                    $html_var = '';
+                    $html_var = isset($type['htmlvar_name']) ? $type['htmlvar_name'] : '';
+                    if($html_var=='post'){$html_var='post_address';}
                     $field_icon = geodir_field_icon_proccess($type);
                     $filed_type = $type['type'];
 
