@@ -53,6 +53,9 @@ function create_marker_jason_of_posts($post)
     global $wpdb, $map_jason, $add_post_in_marker_array, $geodir_cat_icons, $gd_marker_sizes;
 
     if (!empty($post) && isset($post->ID) && $post->ID > 0 && (is_main_query() || $add_post_in_marker_array) && $post->marker_json != '') {
+
+        if(isset($map_jason[$post->ID])){return null;}
+
         $srcharr = array("'", "/", "-", '"', '\\');
         $replarr = array("&prime;", "&frasl;", "&ndash;", "&ldquo;", '');
 
@@ -89,7 +92,7 @@ function create_marker_jason_of_posts($post)
          * @param string $post_json JSON representation of the post marker info.
          * @param object $post The post object.
          */
-        $map_jason[] = apply_filters('geodir_create_marker_jason_of_posts',$post_json, $post);
+        $map_jason[$post->ID] = apply_filters('geodir_create_marker_jason_of_posts',$post_json, $post);
     }
 }
 
@@ -108,6 +111,14 @@ function send_marker_jason_to_js()
     if (is_array($map_canvas_arr) && !empty($map_canvas_arr)) {
         foreach ($map_canvas_arr as $canvas => $jason) {
             if (is_array($map_jason) && !empty($map_jason)) {
+
+                // on details page only show the main marker on the map
+                if(geodir_is_page('detail')){
+                    global $post;
+                    if(isset($map_jason[$post->ID])){
+                        $map_jason = array($map_jason[$post->ID]);
+                    }
+                }
                 $canvas_jason = $canvas . "_jason";
                 $map_canvas_arr[$canvas] = array_unique($map_jason);
                 unset($cat_content_info);

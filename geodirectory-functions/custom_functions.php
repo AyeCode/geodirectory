@@ -1353,7 +1353,7 @@ function geodir_detail_page_tabs_list()
 {
     $tabs_excluded = get_option('geodir_detail_page_tabs_excluded');
     $tabs_array = geodir_detail_page_tabs_array();
-    
+
     if (!empty($tabs_excluded)) {
         foreach ($tabs_excluded as $tab) {
             if (array_key_exists($tab, $tabs_array))
