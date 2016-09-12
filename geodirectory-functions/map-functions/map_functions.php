@@ -353,27 +353,6 @@ function geodir_get_marker_size($icon, $default_size = array('w' => 36, 'h' => 4
     return $sizes;
 }
 
-add_action('wp_head', 'geodir_map_load_style', 10);
-add_action('admin_head', 'geodir_map_load_style', 10);
-/**
- * Adds the marker cluster style for OpenStreetMap when Google JS Library not loaded.
- *
- * @since 1.6.1
- * @package GeoDirectory
- */
-function geodir_map_load_style() {    
-    if (in_array(geodir_map_name(), array('auto', 'google')) && wp_script_is( 'geodirectory-googlemap-script', 'done')) {
-?>
-<script type="text/javascript">
-if (!(window.google && typeof google.maps !== 'undefined')) {
-    document.write('<' + 'link id="geodirectory-leaflet-style-css" media="all" type="text/css" href="<?php echo geodir_plugin_url();?>/geodirectory-assets/leaflet/leaflet.css?ver=<?php echo GEODIRECTORY_VERSION;?>" rel="stylesheet"' + '>');
-    document.write('<' + 'link id="geodirectory-leaflet-routing-style" media="all" type="text/css" href="<?php echo geodir_plugin_url();?>/geodirectory-assets/leaflet/routing/leaflet-routing-machine.css?ver=<?php echo GEODIRECTORY_VERSION;?>" rel="stylesheet"' + '>');
-}
-</script>
-<?php
-    }
-}
-
 add_action('wp_footer', 'geodir_map_load_script', 10);
 add_action('admin_footer', 'geodir_map_load_script', 10);
 /**
@@ -384,12 +363,17 @@ add_action('admin_footer', 'geodir_map_load_script', 10);
  */
 function geodir_map_load_script() {
     if (in_array(geodir_map_name(), array('auto', 'google')) && wp_script_is( 'geodirectory-googlemap-script', 'done')) {
+        $plugin_url = geodir_plugin_url();
 ?>
 <script type="text/javascript">
 if (!(window.google && typeof google.maps !== 'undefined')) {
-    document.write('<' + 'script id="geodirectory-leaflet-script" src="<?php echo geodir_plugin_url();?>/geodirectory-assets/leaflet/leaflet.min.js?ver=<?php echo GEODIRECTORY_VERSION;?>" type="text/javascript"><' + '/script>');
-    document.write('<' + 'script id="geodirectory-leaflet-geo-script" src="<?php echo geodir_plugin_url();?>/geodirectory-assets/leaflet/osm.geocode.js?ver=<?php echo GEODIRECTORY_VERSION;?>" type="text/javascript"><' + '/script>');
-    document.write('<' + 'script id="geodirectory-leaflet-routing-script" src="<?php echo geodir_plugin_url();?>/geodirectory-assets/leaflet/routing/leaflet-routing-machine.js?ver=<?php echo GEODIRECTORY_VERSION;?>" type="text/javascript"><' + '/script>');
+    var css = document.createElement("link");css.setAttribute("rel","stylesheet");css.setAttribute("type","text/css");css.setAttribute("media","all");css.setAttribute("id","geodirectory-leaflet-style-css");css.setAttribute("href","<?php echo $plugin_url;?>/geodirectory-assets/leaflet/leaflet.css?ver=<?php echo GEODIRECTORY_VERSION;?>");
+    document.getElementsByTagName("head")[0].appendChild(css);
+    var css = document.createElement("link");css.setAttribute("rel","stylesheet");css.setAttribute("type","text/css");css.setAttribute("media","all");css.setAttribute("id","geodirectory-leaflet-routing-style");css.setAttribute("href","<?php echo $plugin_url;?>/geodirectory-assets/leaflet/routing/leaflet-routing-machine.css?ver=<?php echo GEODIRECTORY_VERSION;?>");
+    document.getElementsByTagName("head")[0].appendChild(css);
+    document.write('<' + 'script id="geodirectory-leaflet-script" src="<?php echo $plugin_url;?>/geodirectory-assets/leaflet/leaflet.min.js?ver=<?php echo GEODIRECTORY_VERSION;?>" type="text/javascript"><' + '/script>');
+    document.write('<' + 'script id="geodirectory-leaflet-geo-script" src="<?php echo $plugin_url;?>/geodirectory-assets/leaflet/osm.geocode.js?ver=<?php echo GEODIRECTORY_VERSION;?>" type="text/javascript"><' + '/script>');
+    document.write('<' + 'script id="geodirectory-leaflet-routing-script" src="<?php echo $plugin_url;?>/geodirectory-assets/leaflet/routing/leaflet-routing-machine.js?ver=<?php echo GEODIRECTORY_VERSION;?>" type="text/javascript"><' + '/script>');
 }
 </script>
 <?php
