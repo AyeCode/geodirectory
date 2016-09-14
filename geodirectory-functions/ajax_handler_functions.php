@@ -354,26 +354,28 @@ function geodir_ajax_handler() {
         include_once(geodir_plugin_path() . '/geodirectory-functions/geodirectory_reg.php');
     }
 
-
     if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'geodir_get_term_list') {
-        $terms_o = get_terms(sanitize_text_field($_REQUEST['term']));
-		
-		// Skip terms which has no listing
-		if (!empty($terms_o)) {
-			$filter_terms = array();
-			
-			foreach ($terms_o as $term) {	
-				if (isset($term->count) && $term->count > 0) {
-					$filter_terms[] = $term;
-				}
-			}
-			$terms_o = $filter_terms;
-		}
-		
+        $args = array('taxonomy' => sanitize_text_field($_REQUEST['term']));
+        if (!empty($_REQUEST['parent_only'])) {
+            $args['parent'] = 0;
+        }
+        $terms_o = get_terms($args);
+        
+        // Skip terms which has no listing
+        if (!empty($terms_o)) {
+            $filter_terms = array();
+            
+            foreach ($terms_o as $term) {
+                if (isset($term->count) && $term->count > 0) {
+                    $filter_terms[] = $term;
+                }
+            }
+            $terms_o = $filter_terms;
+        }
+        
         $terms = geodir_sort_terms($terms_o, 'count');
         geodir_helper_cat_list_output($terms, intval($_REQUEST['limit']));
         exit();
-
     }
 
     gd_die();

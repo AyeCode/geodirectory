@@ -2659,6 +2659,7 @@ add_filter( 'geodir_googlemap_script_extra', 'geodir_googlemap_script_extra_deta
  *
  * @since   1.0.0
  * @since   1.5.1 Added option to set default post type.
+ * @since   1.6.9 Added option to show parent categories only.
  * @package GeoDirectory
  * @global object $wpdb                     WordPress Database object.
  * @global string $plugin_prefix            Geodirectory plugin table prefix.
@@ -2689,6 +2690,7 @@ function geodir_popular_post_category_output( $args = '', $instance = '' ) {
 		$all_gd_post_type  = geodir_get_posttypes();
 		$default_post_type = ( isset( $all_gd_post_type[0] ) ) ? $all_gd_post_type[0] : '';
 	}
+	$parent_only = !empty( $instance['parent_only'] ) ? true : false;
 
 	$taxonomy = array();
 	if ( ! empty( $gd_post_type ) ) {
@@ -2696,8 +2698,13 @@ function geodir_popular_post_category_output( $args = '', $instance = '' ) {
 	} else {
 		$taxonomy = geodir_get_taxonomies( $gd_post_type );
 	}
+    
+	$term_args = array( 'taxonomy' => $taxonomy );
+	if ( $parent_only ) {
+		$term_args['parent'] = 0;
+	}
 
-	$terms   = get_terms( $taxonomy );
+	$terms   = get_terms( $term_args );
 	$a_terms = array();
 	$b_terms = array();
 
@@ -2716,7 +2723,7 @@ function geodir_popular_post_category_output( $args = '', $instance = '' ) {
 
 		$tax_change_output = '';
 		if ( count( $b_terms ) > 1 ) {
-			$tax_change_output .= "<select data-limit='$category_limit' class='geodir-cat-list-tax'  onchange='geodir_get_post_term(this);'>";
+			$tax_change_output .= "<select data-limit='$category_limit' data-parent='" . (int)$parent_only . "' class='geodir-cat-list-tax'  onchange='geodir_get_post_term(this);'>";
 			foreach ( $b_terms as $key => $val ) {
 				$ptype    = get_post_type_object( str_replace( "category", "", $key ) );
 				$cpt_name = __( $ptype->labels->singular_name, 'geodirectory' );
