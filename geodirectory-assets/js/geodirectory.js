@@ -564,12 +564,14 @@ jQuery(window).load(function () {
 function geodir_get_post_term(el) {
     limit = jQuery(el).data('limit');
     term = jQuery(el).val();//data('term');
+    var parent_only = parseInt(jQuery(el).data('parent')) > 0 ? 1 : 0;
     jQuery(el).parent().parent().find('.geodir-popular-cat-list').html('<i class="fa fa-cog fa-spin"></i>');
     jQuery(el).parent().parent().parent().find('.geodir-cat-list-more').hide();
     jQuery.post(geodir_all_js_msg.geodir_admin_ajax_url + '?action=geodir_ajax_action', {
         ajax_action: "geodir_get_term_list",
         term: term,
-        limit: limit
+        limit: limit,
+        parent_only: parent_only
     }).done(function (data) {
         if (jQuery.trim(data) != '') {
             jQuery(el).parent().parent().find('.geodir-popular-cat-list').hide().html(data).fadeIn('slow');
