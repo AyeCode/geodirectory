@@ -1357,7 +1357,7 @@ function geodir_action_details_micordata($post='')
     $schema = array();
     $schema['@context'] = "http://schema.org";
     $schema['@type'] = $schema_type;
-    $schema['name'] = $post->post_name;
+    $schema['name'] = $post->post_title;
     $schema['description'] = wp_strip_all_tags( $post->post_content, true );
     $schema['telephone'] = $post->geodir_contact;
     $schema['url'] = $c_url;
@@ -3394,7 +3394,7 @@ add_filter('geodir_breadcrumb', 'geodir_strip_breadcrumb_li_wrappers', 999, 2);
  */
 function geodir_add_page_content( $position = 'before', $gd_page = '' ) {
     global $post;
-        
+
     $gd_page_id = NULL;
     if ($gd_page == 'home-page' && geodir_is_page('home')) {
         $gd_page_id = geodir_home_page_id();
@@ -3415,7 +3415,7 @@ function geodir_add_page_content( $position = 'before', $gd_page = '' ) {
     } else if ($gd_page == 'invoices-page' && geodir_is_page('invoices')) {
         $gd_page_id = geodir_payment_invoices_page_id();
     }
-    
+
     if (!$gd_page_id > 0) {
         return;
     }
@@ -3430,24 +3430,25 @@ function geodir_add_page_content( $position = 'before', $gd_page = '' ) {
      * @param string $gd_page The geodirectory page type.
      */
     $display = apply_filters('geodir_add_page_content_position', $display, $gd_page);
-    
+
     if ($position !== $display) {
         return;
     }
-        
+
     $gd_post = $post;
     
     setup_postdata(get_post($gd_page_id));
-    
+
     if (get_the_content()) {
         ?>
         <section class="entry-content clearfix" itemprop="articleBody"><?php the_content(); ?></section>
         <?php
     }
-    
+
     $post = $gd_post;
     if (!empty($gd_post) && is_object($gd_post)) {
         setup_postdata($gd_post);
     }
+
 }
 add_action('geodir_add_page_content', 'geodir_add_page_content', 10, 2);

@@ -130,7 +130,7 @@ if (!function_exists('geodir_admin_scripts')) {
             $map_key = "&key=" . geodir_get_map_api_key();
             /** This filter is documented in geodirectory_template_tags.php */
             $map_extra = apply_filters('geodir_googlemap_script_extra', '');
-            wp_enqueue_script('geodirectory-googlemap-script', '//maps.google.com/maps/api/js?' . $map_lang . $map_key . $map_extra, '', NULL);
+            wp_enqueue_script('geodirectory-googlemap-script', 'https://maps.google.com/maps/api/js?' . $map_lang . $map_key . $map_extra, '', NULL);
         }
         
         if ($geodir_map_name == 'osm') {

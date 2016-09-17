@@ -4,6 +4,7 @@ Some CSS tweaks for gd-comma-list in tabs - CHANGED
 linked place marker can sometime show on details page map of original place - FIXED
 Changes for custom OpenStreetMap integration - CHANGED
 Option added in Popular Category Widget to show parent categories only - ADDED
+Video preview placeholder shown on preview page - CHANGED
 
 v1.6.8
 Address field output containd class post instead of post_address - FIXED
