@@ -136,7 +136,7 @@
     display: inline-block;
     vertical-align: top;
     width: 100%;
-    padding: 0 5px;
+    padding: 0 5px 5px 5px;
     overflow-y: auto;
     margin-top: -6px;
   height: calc(50% - 11px);
@@ -172,11 +172,11 @@
     margin-right: 3px;
 }
 
-.geodir-bubble-meta-side .geodir_more_info.post span[itemprop="addressLocality"],
-.geodir-bubble-meta-side .geodir_more_info.post span[itemprop="addressRegion"],
-.geodir-bubble-meta-side .geodir_more_info.post span[itemprop="postalCode"],
-.geodir-bubble-meta-side .geodir_more_info.post span[itemprop="addressCountry"],
-.geodir-bubble-meta-side .geodir_more_info.post br{
+.geodir-bubble-meta-side .geodir_more_info.post_address span[itemprop="addressLocality"],
+.geodir-bubble-meta-side .geodir_more_info.post_address span[itemprop="addressRegion"],
+.geodir-bubble-meta-side .geodir_more_info.post_address span[itemprop="postalCode"],
+.geodir-bubble-meta-side .geodir_more_info.post_address span[itemprop="addressCountry"],
+.geodir-bubble-meta-side .geodir_more_info.post_address br{
    display:none;
 }
 
@@ -309,7 +309,7 @@
   position: absolute;
   height: 15%;
   width: 94%;
-  bottom: 22px;
+  bottom: 20px;
   left: 1px;
   background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 60%);
   background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 60%);

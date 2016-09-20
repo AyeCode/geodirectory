@@ -992,6 +992,10 @@ function geodir_cf_multiselect($html,$location,$cf,$p=''){
 
             $field_values = explode(',', trim($post->{$cf['htmlvar_name']}, ","));
 
+            if(is_array($field_values)){
+                $field_values = array_map('trim', $field_values);
+            }
+
             $option_values = array();
             if (!empty($cf['option_values'])) {
                 $cf_option_values = geodir_string_values_to_options(stripslashes_deep($cf['option_values']), true);
@@ -1779,7 +1783,7 @@ function geodir_cf_address($html,$location,$cf,$p=''){
             
 
 
-            $html = '<div class="geodir_more_info ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '" style="clear:both;"  itemscope itemtype="http://schema.org/PostalAddress">';
+            $html = '<div class="geodir_more_info ' . $cf['css_class'] . ' ' . $html_var . '" style="clear:both;"  itemscope itemtype="http://schema.org/PostalAddress">';
             $html .= '<span class="geodir-i-location" style="' . $field_icon . '">' . $field_icon_af;
             $html .= ( trim( $cf['site_title'] ) ) ? __( $cf['site_title'], 'geodirectory' ) . ': ' : '&nbsp;';
             $html .= '</span>';

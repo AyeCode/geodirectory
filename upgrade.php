@@ -46,9 +46,6 @@ if (get_option('geodirectory' . '_db_version') != GEODIRECTORY_VERSION) {
         add_action('init', 'geodir_upgrade_154', 11);
     }
 
-    if (GEODIRECTORY_VERSION <= '1.6.6') {
-        add_action('init', 'geodir_upgrade_166', 11);
-    }
 
 
     add_action('init', 'gd_fix_cpt_rewrite_slug', 11);// this needs to be kept for a few versions
@@ -69,6 +66,7 @@ function geodirectory_upgrade_all()
     geodir_create_tables();
     geodir_update_review_db();
     gd_install_theme_compat();
+    gd_convert_custom_field_display();
 }
 
 /**
@@ -151,15 +149,7 @@ function geodir_upgrade_152(){
     gd_fix_address_detail_table_limit();
 }
 
-/**
- * Handles upgrade for geodirectory versions <= 1.6.6.
- *
- * @since 1.6.6
- * @package GeoDirectory
- */
-function geodir_upgrade_166(){
-    gd_convert_custom_field_display();
-}
+
 
 
 /**

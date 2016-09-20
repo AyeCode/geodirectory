@@ -472,6 +472,7 @@ listings page
     margin-bottom: 15px;
     display: block;
     list-style: none;
+    overflow: hidden;
 }
 
 .geodir_category_list_view li .geodir-post-img {
@@ -1908,4 +1909,54 @@ div#jquery-lightbox {
 }
 .gd-pagi-container .gd-pagination-details-after {
     margin-bottom: 12px;
+}
+
+/* custom fields */
+.geodir_more_info.gd-comma-list{
+    span{
+        float: left;
+    }
+    ul{
+        display: inline;
+        list-style: none;
+        padding: 0px;
+        margin: 0px;
+
+        li{
+            display: inline;
+            width: auto;
+            margin: 0px;
+            padding: 0px;
+            &:first-child:before{
+                content: "";
+                margin-left: 2px;
+            }
+            &:before{
+                content: ", ";
+            }
+
+        }
+
+
+    }
+}
+
+.gd-video-embed-preview{
+    width: 100%;
+    background: #ccc;
+    display: block;
+    height: 85%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    .fa{
+        font-size: 75px;
+    }
+    p.gd-video-preview-text {
+        text-align: center;
+        top: calc(50% - 60px);
+        position: relative;
+        font-size: 33px !important;
+        line-height: initial !important;
+    }
 }

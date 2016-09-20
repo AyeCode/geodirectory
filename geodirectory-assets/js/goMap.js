@@ -119,6 +119,8 @@
             html_prepend: '<div class=gomapMarker>',
             html_append: '</div>',
             addMarker: false,
+            osmBaseLayer: [],
+            osmOverlays: [],
         },
         map: null,
         count: 0,
@@ -142,7 +144,7 @@
         centerLatLng: null,
 
         init: function (el, options) {
-            var opts = $.extend(true, {}, $.osmMapBase.defaults, options);
+            var opts = $.extend(true, {}, $.osmMapBase.defaults, options), baseLayer, customMap;
             this.mapId = $(el);
             this.opts = opts;
 
@@ -167,13 +169,38 @@
                 dragging: true,
                 scrollWheelZoom: opts.scrollwheel === "0" || !opts.scrollwheel ? false : opts.scrollwheel,
                 attributionControl: typeof opts.attributionControl !== 'undefined' ? opts.attributionControl : true,
+                defaultBaseLayer: typeof opts.osmBaseLayer !== 'undefined' && opts.osmBaseLayer ? opts.osmBaseLayer : [],
+                defaultOverlays: typeof opts.osmOverlays !== 'undefined' && opts.osmOverlays ? opts.osmOverlays : [],
             };
 
-            var osmUrl = '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            osmAttrib = 'Map data &copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            osm = L.tileLayer(osmUrl, {maxZoom: opts.maxZoom, attribution: osmAttrib});
+            if (myOptions.defaultBaseLayer) {
+                try {
+                    baseLayer = L.tileLayer.provider(myOptions.defaultBaseLayer);
+                    customMap = true;
+                } catch(e) {
+                    console.log(e);
+                }
+            }
+            
+            if (!baseLayer) {
+                var osmUrl = '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                osmAttrib = 'Map data &copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                baseLayer = L.tileLayer(osmUrl, {maxZoom: opts.maxZoom, attribution: osmAttrib});
+            }
+            
+            this.map = new L.Map(el, myOptions).addLayer(baseLayer);
 
-            this.map = new L.Map(el, myOptions).addLayer(osm);
+            if (customMap && myOptions.defaultOverlays && myOptions.defaultOverlays.length > 0) {
+                for (var i in myOptions.defaultOverlays) {
+                    if (myOptions.defaultOverlays[i]) {
+                        try {
+                            L.tileLayer.provider(myOptions.defaultOverlays[i]).addTo(this.map);
+                        } catch(e) {
+                            console.log(e);
+                        }
+                    }
+                }
+            }
             
             if (myOptions.zoomControl && (zoomPosition = this.parsePosition(opts.zoomControlOptions.position, 'topleft')) !== 'topleft') {
                 this.map.zoomControl.setPosition(zoomPosition);

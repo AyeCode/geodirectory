@@ -1353,7 +1353,7 @@ function geodir_detail_page_tabs_list()
 {
     $tabs_excluded = get_option('geodir_detail_page_tabs_excluded');
     $tabs_array = geodir_detail_page_tabs_array();
-    
+
     if (!empty($tabs_excluded)) {
         foreach ($tabs_excluded as $tab) {
             if (array_key_exists($tab, $tabs_array))
@@ -1378,7 +1378,7 @@ function geodir_detail_page_tabs_list()
  */
 function geodir_show_detail_page_tabs()
 {
-    global $post, $post_images, $video, $special_offers, $related_listing, $geodir_post_detail_fields;
+    global $post, $post_images, $video, $special_offers, $related_listing, $geodir_post_detail_fields, $preview;
 
     $post_id = !empty($post) && isset($post->ID) ? (int)$post->ID : 0;
     $request_post_id = !empty($_REQUEST['p']) ? (int)$_REQUEST['p'] : 0;
@@ -1629,8 +1629,15 @@ function geodir_show_detail_page_tabs()
                                 echo $thumb_image;
                                 break;
                             case 'post_video':
-                                /** This action is documented in geodirectory_template_actions.php */
-                                echo apply_filters('the_content', stripslashes($video));// we apply the_content filter so oembed works also;
+                                // some browsers hide $_POST data if used for embeds so we repalce with a placeholder
+                                if($preview){
+                                    if($video){
+                                        echo "<span class='gd-video-embed-preview' ><p class='gd-video-preview-text'><i class=\"fa fa-video-camera\" aria-hidden=\"true\"></i><br />".__('Video Preview Placeholder', 'geodirectory')."</p></span>";
+                                    }
+                                }else{
+                                    /** This action is documented in geodirectory_template_actions.php */
+                                    echo apply_filters('the_content', stripslashes($video));// we apply the_content filter so oembed works also;
+                                }
                                 break;
                             case 'special_offers':
                                 echo apply_filters('gd_special_offers_content', wpautop(stripslashes($special_offers)));
