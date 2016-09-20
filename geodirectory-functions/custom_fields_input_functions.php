@@ -624,8 +624,8 @@ function geodir_cfi_multiselect($html,$cf){
         $value = geodir_get_cf_value($cf);
 
         $multi_display = 'select';
-        if (!empty($val['extra_fields'])) {
-            $multi_display = unserialize($val['extra_fields']);
+        if (!empty($cf['extra_fields'])) {
+            $multi_display = unserialize($cf['extra_fields']);
         }
         ?>
         <div id="<?php echo $cf['name']; ?>_row"

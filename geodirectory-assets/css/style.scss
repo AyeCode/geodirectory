@@ -1940,3 +1940,23 @@ div#jquery-lightbox {
 
     }
 }
+
+.gd-video-embed-preview{
+    width: 100%;
+    background: #ccc;
+    display: block;
+    height: 85%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    .fa{
+        font-size: 75px;
+    }
+    p.gd-video-preview-text {
+        text-align: center;
+        top: calc(50% - 60px);
+        position: relative;
+        font-size: 33px !important;
+        line-height: initial !important;
+    }
+}

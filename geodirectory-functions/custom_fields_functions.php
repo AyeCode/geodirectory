@@ -3038,8 +3038,8 @@ function geodir_cfa_extra_fields_address($output,$result_str,$cf,$field_info){
     </li>
     <?php
 
-    $output = ob_get_clean();
-    return $output;
+    $html = ob_get_clean();
+    return $output.$html;
 }
 add_filter('geodir_cfa_extra_fields_address','geodir_cfa_extra_fields_address',10,4);
 
@@ -3073,8 +3073,8 @@ function geodir_cfa_extra_fields_multiselect($output,$result_str,$cf,$field_info
     </li>
     <?php
 
-    $output = ob_get_clean();
-    return $output;
+    $html = ob_get_clean();
+    return $output.$html;
 }
 add_filter('geodir_cfa_extra_fields_multiselect','geodir_cfa_extra_fields_multiselect',10,4);
 
@@ -3112,8 +3112,8 @@ function geodir_cfa_extra_fields_smr($output,$result_str,$cf,$field_info){
     </li>
     <?php
 
-    $output = ob_get_clean();
-    return $output;
+    $html = ob_get_clean();
+    return $output.$html;
 }
 add_filter('geodir_cfa_extra_fields_multiselect','geodir_cfa_extra_fields_smr',10,4);
 add_filter('geodir_cfa_extra_fields_select','geodir_cfa_extra_fields_smr',10,4);
@@ -3169,8 +3169,8 @@ function geodir_cfa_extra_fields_datepicker($output,$result_str,$cf,$field_info)
     </li>
     <?php
 
-    $output = ob_get_clean();
-    return $output;
+    $html = ob_get_clean();
+    return $output.$html;
 }
 add_filter('geodir_cfa_extra_fields_datepicker','geodir_cfa_extra_fields_datepicker',10,4);
 
@@ -3204,8 +3204,8 @@ function geodir_cfa_extra_fields_file($output,$result_str,$cf,$field_info){
     </li>
     <?php
 
-    $output = ob_get_clean();
-    return $output;
+    $html = ob_get_clean();
+    return $output.$html;
 }
 add_filter('geodir_cfa_extra_fields_file','geodir_cfa_extra_fields_file',10,4);
 
