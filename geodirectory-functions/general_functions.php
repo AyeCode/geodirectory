@@ -2852,6 +2852,14 @@ function geodir_listing_slider_widget_output( $args = '', $instance = '' ) {
 	 */
 	$category = empty( $instance['category'] ) ? '0' : apply_filters( 'widget_category', $instance['category'] );
 	/**
+	 * Filter widget's "add_location_filter" value.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string|bool $instance ['add_location_filter'] Do you want to add location filter? Can be 1 or 0.
+	 */
+	$add_location_filter = empty( $instance['add_location_filter'] ) ? '0' : apply_filters( 'widget_add_location_filter', $instance['add_location_filter'] );
+	/**
 	 * Filter the widget listings limit.
 	 *
 	 * @since 1.0.0
@@ -2988,9 +2996,11 @@ function geodir_listing_slider_widget_output( $args = '', $instance = '' ) {
 	$query_args = array(
 		'posts_per_page' => $post_number,
 		'is_geodir_loop' => true,
+		'gd_location'    => $add_location_filter ? true : false,
 		'post_type'      => $post_type,
 		'order_by'       => $list_sort
 	);
+
 	if ( $show_featured_only ) {
 		$query_args['show_featured_only'] = 1;
 	}

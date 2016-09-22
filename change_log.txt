@@ -5,6 +5,7 @@ linked place marker can sometime show on details page map of original place - FI
 Changes for custom OpenStreetMap integration - CHANGED
 Option added in Popular Category Widget to show parent categories only - ADDED
 Video preview placeholder shown on preview page - CHANGED
+Enable location filter option added for slider widget - ADDED
 
 v1.6.8
 Address field output containd class post instead of post_address - FIXED
