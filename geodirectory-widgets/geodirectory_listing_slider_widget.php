@@ -74,6 +74,10 @@ class geodir_listing_slider_widget extends WP_Widget
         $instance['animation'] = $new_instance['animation'];
         $instance['list_sort'] = isset($new_instance['list_sort']) ? $new_instance['list_sort'] : '';
         $instance['show_featured_only'] = isset($new_instance['show_featured_only']) && $new_instance['show_featured_only'] ? 1 : 0;
+        if (isset($new_instance['add_location_filter']) && $new_instance['add_location_filter'] != '')
+            $instance['add_location_filter'] = strip_tags($new_instance['add_location_filter']);
+        else
+            $instance['add_location_filter'] = '0';
 
         return $instance;
     }
@@ -106,6 +110,7 @@ class geodir_listing_slider_widget extends WP_Widget
                 'animation' => '',
                 'list_sort' => 'latest',
                 'show_featured_only' => '',
+                'add_location_filter' => '0',
             )
         );
 
@@ -132,6 +137,8 @@ class geodir_listing_slider_widget extends WP_Widget
         $slideshowSpeed = $instance['slideshowSpeed'];
 
         $animationSpeed = $instance['animationSpeed'];
+
+        $add_location_filter = strip_tags($instance['add_location_filter']);
 
         $animation = $instance['animation'];
         $list_sort = $instance['list_sort'];
@@ -333,6 +340,14 @@ class geodir_listing_slider_widget extends WP_Widget
                 for="<?php echo $this->get_field_id('show_featured_only'); ?>"><?php _e('Show only featured listings:', 'geodirectory'); ?>
                 <input type="checkbox" id="<?php echo $this->get_field_id('show_featured_only'); ?>"
                        name="<?php echo $this->get_field_name('show_featured_only'); ?>" <?php if ($show_featured_only) echo 'checked="checked"'; ?>
+                       value="1"/>
+            </label>
+        </p>
+        <p>
+            <label for="<?php echo $this->get_field_id('add_location_filter'); ?>">
+                <?php _e('Enable Location Filter:', 'geodirectory');?>
+                <input type="checkbox" id="<?php echo $this->get_field_id('add_location_filter'); ?>"
+                       name="<?php echo $this->get_field_name('add_location_filter'); ?>" <?php if ($add_location_filter) echo 'checked="checked"';?>
                        value="1"/>
             </label>
         </p>
