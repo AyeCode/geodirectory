@@ -430,6 +430,34 @@ function geodir_get_current_posttype()
 }
 
 /**
+ * Get default Post Type.
+ *
+ * @since 1.6.9
+ * @package GeoDirectory
+ * @global object $wp_query WordPress Query object.
+ * @global string $geodir_post_type The post type.
+ * @return string The post type.
+ */
+function geodir_get_default_posttype()
+{
+    $post_types = apply_filters( 'geodir_get_default_posttype', geodir_get_posttypes( 'object' ) );
+
+    foreach ( $post_types as $post_type => $info ) {
+        global $wpdb;
+        $has_posts = $wpdb->get_row( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s AND post_status='publish' LIMIT 1", $post_type ) );
+        if ( $has_posts ) {
+            $stype = $post_type; break;
+        }
+    }
+
+    if(!$stype){
+        $stype = 'gd_place';
+    }
+
+    return $stype;
+}
+
+/**
  * Get list of geodirectory Post Types.
  *
  * @since 1.0.0
@@ -1349,7 +1377,9 @@ function gd_wpml_get_lang_from_url($url){
 
     //
     $url = str_replace(array("http://","https://"),"",$url);
-    $site_url = str_replace(array("http://","https://"),"",get_bloginfo('url'));
+
+    // site_url() seems to work better than get_bloginfo('url') here, WPML can change get_bloginfo('url') to add the lang.
+    $site_url = str_replace(array("http://","https://"),"",site_url());
 
     $url = str_replace($site_url,"",$url);
 
@@ -1454,7 +1484,7 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
         if ($fix_url) {
             $post_link = str_replace($site_url, '', $post_link);
         }
-        
+
         $post_link = trailingslashit(
             preg_replace(  "/" . preg_quote( $slug, "/" ) . "/", $slug ."/%gd_taxonomy%",$post_link, 1 )
         );

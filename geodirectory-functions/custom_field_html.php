@@ -22,7 +22,20 @@ if (!isset($field_info->post_type)) {
 } else
     $post_type = $field_info->post_type;
 
-$cf_arr = geodir_custom_fields($post_type);
+//if(isset($_REQUEST['custom_type']) && $_REQUEST['custom_type']=='predefined'){
+//    $cf_arr = geodir_custom_fields_predefined($post_type);
+//}elseif(isset($_REQUEST['custom_type']) && $_REQUEST['custom_type']=='custom'){
+//    $cf_arr = geodir_custom_fields_custom($post_type);
+//}else{
+//    $cf_arr = geodir_custom_fields($post_type);
+//}
+
+$cf_arr1 = geodir_custom_fields($post_type);
+$cf_arr2 = geodir_custom_fields_predefined($post_type);
+$cf_arr3 = geodir_custom_fields_custom($post_type);
+
+$cf_arr = $cf_arr1 + $cf_arr2 + $cf_arr3; // this way defaults can't be overwritten
+
 $cf = (isset($cf_arr[$field_type_key])) ? $cf_arr[$field_type_key] : '';
 
 $field_info = stripslashes_deep($field_info); // strip slashes from labels
@@ -58,6 +71,12 @@ if (isset($cf['icon']) && strpos($cf['icon'], 'fa fa-') !== false) {
     $field_icon = '<i class="fa fa-cog" aria-hidden="true"></i>';
 }
 
+if(isset($cf['name']) && $cf['name']){
+    $field_type_name = $cf['name'];
+}else{
+    $field_type_name = $field_type;
+}
+
 ?>
 <li class="text" id="licontainer_<?php echo $result_str; ?>">
     <div class="title title<?php echo $result_str; ?> gt-fieldset"
@@ -85,7 +104,7 @@ if (isset($cf['icon']) && strpos($cf['icon'], 'fa fa-') !== false) {
         } else {echo $field_icon;
             ?>
             <b style="cursor:pointer;"
-               onclick="show_hide('field_frm<?php echo $result_str;?>')"><?php echo geodir_ucwords(' ' . $field_admin_title . ' (' . $field_type . ')');?></b>
+               onclick="show_hide('field_frm<?php echo $result_str;?>')"><?php echo geodir_ucwords(' ' . $field_admin_title . ' (' . $field_type_name . ')');?></b>
         <?php
         }
         ?>
