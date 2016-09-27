@@ -352,6 +352,20 @@ function geodir_enable_editor_on_design_settings($design_setting)
 }
 
 /* ----------- START MANAGE CUSTOM FIELDS ---------------- */
+add_action('geodir_manage_available_fields_predefined', 'geodir_manage_available_fields_predefined');
+add_action('geodir_manage_available_fields_custom', 'geodir_manage_available_fields_custom');
+
+function geodir_manage_available_fields_predefined($sub_tab){
+    if($sub_tab=='custom_fields'){
+        geodir_custom_available_fields('predefined');
+    }
+}
+
+function geodir_manage_available_fields_custom($sub_tab){
+    if($sub_tab=='custom_fields'){
+        geodir_custom_available_fields('custom');
+    }
+}
 
 
 add_action('geodir_manage_available_fields', 'geodir_manage_available_fields');
@@ -500,6 +514,23 @@ function geodir_sorting_options_selected_fields()
     <?php
 }
 
+/**
+ * Returns the array of custom fields that can be used.
+ *
+ * @since 1.6.9
+ * @package GeoDirectory
+ */
+function geodir_custom_fields_custom($post_type=''){
+
+    $custom_fields = array();
+
+    /**
+     * @see `geodir_custom_fields`
+     */
+    return apply_filters('geodir_custom_fields_custom',$custom_fields,$post_type);
+}
+
+
 
 /**
  * Returns the array of custom fields that can be used.
@@ -619,7 +650,7 @@ function geodir_custom_fields($post_type=''){
      *     @type array $defaults {
      *                    Optional. Used to set the default value of the field.
      *
-     *                    @type string data_type The SQL data type for the field.
+     *                    @type string data_type The SQL data type for the field. VARCHAR, TEXT, TIME, TINYINT, INT, FLOAT, DATE
      *                    @type string admin_title The admin title for the field.
      *                    @type string site_title This will be the title for the field on the frontend.
      *                    @type string admin_desc This will be shown below the field on the add listing form.
@@ -629,6 +660,7 @@ function geodir_custom_fields($post_type=''){
      *                    @type string default_value The default value for the input on the add listing page.
      *                    @type string show_in The locations to show in. [detail],[moreinfo],[listing],[owntab],[mapbubble]
      *                    @type bool is_required If true the field will be required on the add listing page.
+     *                    @type string option_values The option values for select and multiselect only
      *                    @type string validation_pattern HTML5 validation pattern (text input only by default).
      *                    @type string validation_msg HTML5 validation message (text input only by default).
      *                    @type string required_msg Required warning message.
@@ -647,51 +679,80 @@ function geodir_custom_fields($post_type=''){
  * Adds admin html for custom fields available fields.
  *
  * @since 1.0.0
+ * @since 1.6.9 Added
+ * @param string $type The custom field type, predefined, custom or blank for default
  * @package GeoDirectory
  */
-function geodir_custom_available_fields()
+function geodir_custom_available_fields($type='')
 {
     $listing_type = ($_REQUEST['listing_type'] != '') ? sanitize_text_field($_REQUEST['listing_type']) : 'gd_place';
     ?>
     <input type="hidden" name="listing_type" id="new_post_type" value="<?php echo $listing_type;?>"/>
     <input type="hidden" name="manage_field_type" class="manage_field_type" value="<?php echo sanitize_text_field($_REQUEST['subtab']); ?>" />
-    <ul class="full gd-cf-tooltip-wrap">
-        <li>
-            <div class="gdcf-tooltip">
-                <?php _e('This adds a section separator with a title.', 'geodirectory');?>
-            </div>
-            <a id="gt-fieldset" class="gd-draggable-form-items gt-fieldset" href="javascript:void(0);" data-field-type="fieldset" data-field-type-key="fieldset">
-                <i class="fa fa-long-arrow-left " aria-hidden="true"></i>
-                <i class="fa fa-long-arrow-right " aria-hidden="true"></i>
-                <?php _e('Fieldset (section separator)', 'geodirectory');?>
-            </a>
-        </li>
-    </ul>
-    <ul>
+
         <?php
-        $cfs = geodir_custom_fields($listing_type);
-
-        foreach($cfs as $id=>$cf){
+        if($type=='predefined'){
+            $cfs = geodir_custom_fields_predefined($listing_type);
+        }elseif($type=='custom'){
+            $cfs = geodir_custom_fields_custom($listing_type);
+        }else{
+            $cfs = geodir_custom_fields($listing_type);
             ?>
-            <li   class="gd-cf-tooltip-wrap">
-                <?php
-                if(isset($cf['description']) && $cf['description']){
-                   echo '<div class="gdcf-tooltip">'.$cf['description'].'</div>';
-                }?>
+            <ul class="full gd-cf-tooltip-wrap">
+                <li>
+                    <div class="gdcf-tooltip">
+                        <?php _e('This adds a section separator with a title.', 'geodirectory');?>
+                    </div>
+                    <a id="gt-fieldset"
+                       class="gd-draggable-form-items gt-fieldset"
+                       href="javascript:void(0);"
+                       data-field-custom-type=""
+                       data-field-type="fieldset"
+                       data-field-type-key="fieldset">
 
-                <a id="gd-<?php echo $id;?>" data-field-type-key="<?php echo $id;?>"  data-field-type="<?php echo $cf['field_type'];?>" class="gd-draggable-form-items <?php echo $cf['class'];?>" href="javascript:void(0);">
-                    <?php if (isset($cf['icon']) && strpos($cf['icon'], 'fa fa-') !== false) {
-                        echo '<i class="'.$cf['icon'].'" aria-hidden="true"></i>';
-                    }elseif(isset($cf['icon']) && $cf['icon'] ){
-                        echo '<b style="background-image: url("'.$cf['icon'].'")"></b>';
-                    }else{
+                        <i class="fa fa-long-arrow-left " aria-hidden="true"></i>
+                        <i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+                        <?php _e('Fieldset (section separator)', 'geodirectory');?>
+                    </a>
+                </li>
+            </ul>
+
+            <?php
+        }
+
+    if(!empty($cfs)) {
+
+        foreach ( $cfs as $id => $cf ) {
+            ?>
+            <ul>
+            <li class="gd-cf-tooltip-wrap">
+                <?php
+                if ( isset( $cf['description'] ) && $cf['description'] ) {
+                    echo '<div class="gdcf-tooltip">' . $cf['description'] . '</div>';
+                } ?>
+
+                <a id="gd-<?php echo $id; ?>"
+                   data-field-custom-type="<?php echo $type; ?>"
+                   data-field-type-key="<?php echo $id; ?>"
+                   data-field-type="<?php echo $cf['field_type']; ?>"
+                   class="gd-draggable-form-items <?php echo $cf['class']; ?>"
+                   href="javascript:void(0);">
+
+                    <?php if ( isset( $cf['icon'] ) && strpos( $cf['icon'], 'fa fa-' ) !== false ) {
+                        echo '<i class="' . $cf['icon'] . '" aria-hidden="true"></i>';
+                    } elseif ( isset( $cf['icon'] ) && $cf['icon'] ) {
+                        echo '<b style="background-image: url("' . $cf['icon'] . '")"></b>';
+                    } else {
                         echo '<i class="fa fa-cog" aria-hidden="true"></i>';
-                    }?>
-                    <?php echo $cf['name'];?>
+                    } ?>
+                    <?php echo $cf['name']; ?>
                 </a>
             </li>
-        <?php
+            <?php
         }
+    }else{
+        _e('There are no custom fields here yet.', 'geodirectory');
+    }
         ?>
 
 

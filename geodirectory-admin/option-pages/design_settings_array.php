@@ -438,7 +438,15 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
     array('type' => 'sectionend', 'id' => 'geodir_search_layout'),
 
 
-    array('name' => __('Search form default text settings', 'geodirectory'), 'type' => 'sectionstart', 'desc' => '', 'id' => 'geodir_search_form_default_text_settings'),
+    array('name' => __('Search form settings', 'geodirectory'), 'type' => 'sectionstart', 'desc' => '', 'id' => 'geodir_search_form_default_text_settings'),
+
+    array(
+        'name' => __('Use old non-styled form', 'geodirectory'),
+        'desc' => __('Will show the old type form (not recommended unless you had added your own styles)', 'geodirectory'),
+        'id' => 'geodir_show_search_old_search_from',
+        'type' => 'checkbox',
+        'std' => '0' // Default value to show
+    ),
 
     array(
         'name' => __('Search field default value', 'geodirectory'),

@@ -1490,6 +1490,7 @@ function geodir_custom_post_type_form()
                 ?>
                 <p><?php echo apply_filters('geodir_cf_panel_available_fields_note', '', $sub_tab, $listing_type);?></p>
 
+                <h3><?php _e('Setup New Field','geodirectory');?></h3>
                 <div class="inside">
 
                     <div id="gt-form-builder-tab" class="gt-tabs-panel">
@@ -1507,6 +1508,45 @@ function geodir_custom_post_type_form()
                     </div>
 
                 </div>
+
+                <h3><?php _e('Predefined Fields','geodirectory');?></h3>
+                <div class="inside">
+
+                    <div id="gt-form-builder-tab" class="gt-tabs-panel">
+
+                        <?php
+                        /**
+                         * Adds the available fields to the custom fields predefined settings page per post type.
+                         *
+                         * @since 1.6.9
+                         * @param string $sub_tab The current settings tab name.
+                         */
+                        do_action('geodir_manage_available_fields_predefined', $sub_tab); ?>
+
+                        <div style="clear:both"></div>
+                    </div>
+
+                </div>
+
+                <h3><?php _e('Custom Fields','geodirectory');?></h3>
+                <div class="inside">
+
+                    <div id="gt-form-builder-tab" class="gt-tabs-panel">
+
+                        <?php
+                        /**
+                         * Adds the available fields to the custom fields custom added settings page per post type.
+                         *
+                         * @since 1.6.9
+                         * @param string $sub_tab The current settings tab name.
+                         */
+                        do_action('geodir_manage_available_fields_custom', $sub_tab); ?>
+
+                        <div style="clear:both"></div>
+                    </div>
+
+                </div>
+
             </div>
             <!--side-sortables -->
 
