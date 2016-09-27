@@ -86,6 +86,12 @@ include_once('geodirectory-functions/custom_fields_input_functions.php');
  */
 include_once('geodirectory-functions/custom_fields_output_functions.php');
 /**
+ * Contains functions for predefined custom fields.
+ *
+ * @since 1.6.9
+ */
+include_once('geodirectory-functions/custom_fields_predefined.php');
+/**
  * Contains functions for building and storing custom fields.
  *
  * @since 1.0.0

@@ -6,6 +6,9 @@ Changes for custom OpenStreetMap integration - CHANGED
 Option added in Popular Category Widget to show parent categories only - ADDED
 Video preview placeholder shown on preview page - CHANGED
 Enable location filter option added for slider widget - ADDED
+Changed for WPML not getting correct lang from url - FIXED
+Predefined custom fields section added to place settings - ADDED
+Search bar styles change (to use original GD>Design>Search>Use old non-styled form) - STYLE BREAKING CHANGE
 
 v1.6.8
 Address field output containd class post instead of post_address - FIXED

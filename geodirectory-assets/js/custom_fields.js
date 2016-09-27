@@ -4,6 +4,7 @@ jQuery(document).ready(function () {
         //var type = jQuery(this).attr('id').replace('gd-', '');
         var type = jQuery(this).data("field-type");
         var type_key = jQuery(this).data("field-type-key");
+        var custom_type = jQuery(this).data("field-custom-type");
         var post_type = jQuery(this).closest('#gt-form-builder-tab').find('#new_post_type').val();
         var id = 'new' + jQuery(".field_row_main ul.core li:last").index();
         var manage_field_type = jQuery(this).closest('#geodir-available-fields').find(".manage_field_type").val();
@@ -14,7 +15,8 @@ jQuery(document).ready(function () {
                 listing_type: post_type,
                 field_id: id,
                 field_ins_upd: 'new',
-                manage_field_type: manage_field_type
+                manage_field_type: manage_field_type,
+                custom_type: custom_type
             }, function (data) {
                 jQuery('.field_row_main ul.core').append(data);
                 jQuery('#licontainer_' + id).find('#sort_order').val(parseInt(jQuery('#licontainer_' + id).index()) + 1);

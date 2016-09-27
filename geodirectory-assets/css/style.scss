@@ -1,3 +1,7 @@
+
+
+@import "partials/search_form";
+
 /* ########################################
 preview details page 
 ######################################### */
@@ -852,72 +856,15 @@ span.geodir_term_class {
     padding: 5px;
 }
 
-.geodir-search {
-    float: left;
-    margin-right: 20px;
-}
 
-.geodir-search input[type="text"] {
-    display: block;
-    float: left;
-    border: 1px solid #CCCCCC;
-    border-radius: 3px 3px 3px 3px;
-    background: #fff;
-    padding: 5px;
-    margin-right: 7px;
-    width: 150px;
-    margin: 5px;
-}
 
-.geodir-search input[type="button"],
-.geodir-search input[type="submit"] {
-    display: block;
-    float: left;
-    margin: 5px;
-}
-
-.geodir-content-right,
-.geodir-content-right{
-    .geodir-search{
-        input,
-        input[type="text"],
-        select{
-            width: 100%;
-            box-sizing: border-box;
-        }
-    }
-}
-
-.geodir-search .search_by_post {
-    float: left;
-}
 
 .geodir-link-left {
     float: left;
     padding-top: 5px;
 }
 
-.customize_filter-in {
-    background: #F4F4F4;
-    border: 1px #e6e6e6 solid;
-    border-top: none;
-    padding: 1%;
-    width: 98%;
-}
 
-.customize_filter span {
-    display: inline-block;
-    font-size: 15px;
-    font-weight: bold;
-    color: #777777;
-    padding-bottom: 10px;
-}
-
-.customize_filter ul li {
-    font-size: 13px;
-    padding: 6px 0;
-    border-bottom: 1px #d8d8d8 solid;
-}
 
 /* GD > Subscribe */
 .geodir-subscribe .fa-rss-square {

@@ -3082,6 +3082,14 @@ add_filter('geodir_cfa_extra_fields_multiselect','geodir_cfa_extra_fields_multis
 function geodir_cfa_extra_fields_smr($output,$result_str,$cf,$field_info){
 
     ob_start();
+
+    $value = '';
+    if (isset($field_info->option_values)) {
+        $value = esc_attr($field_info->option_values);
+    }elseif(isset($cf['defaults']['option_values']) && $cf['defaults']['option_values']){
+        $value = esc_attr($cf['defaults']['option_values']);
+    }
+
     $field_type = isset($field_info->field_type) ? $field_info->field_type : '';
     ?>
     <li>
@@ -3103,9 +3111,7 @@ function geodir_cfa_extra_fields_smr($output,$result_str,$cf,$field_info){
         </label>
         <div class="gd-cf-input-wrap">
             <input type="text" name="option_values" id="option_values"
-                   value="<?php if (isset($field_info->option_values)) {
-                       echo esc_attr($field_info->option_values);
-                   }?>"/>
+                   value="<?php echo $value;?>"/>
             <br/>
 
         </div>
