@@ -1467,7 +1467,16 @@ if (!function_exists('geodir_show_listing_info')) {
         }
 
 
-        return $html = ob_get_clean();
+        $html = ob_get_clean();
+
+        /**
+         * Filter the custom fields over all output.
+         *
+         * @param string $html The html of the custom fields.
+         * @param string $fields_location The location the fields are being output.
+         * @since 1.6.9
+         */
+        return apply_filters('geodir_show_listing_info',$html,$fields_location);
 
     }
 }
@@ -2641,23 +2650,30 @@ function geodir_string_values_to_options($option_values = '', $translated = fals
 
 function geodir_cfa_data_type_text($output,$result_str,$cf,$field_info){
     ob_start();
+
+    $dt_value = '';
+    if (isset($field_info->data_type)) {
+        $dt_value  = esc_attr($field_info->data_type);
+    }elseif(isset($cf['defaults']['data_type']) && $cf['defaults']['data_type']){
+        $dt_value  = $cf['defaults']['data_type'];
+    }
     ?>
     <li>
-        <label for="data_type""><?php _e('Field Data Type ? :', 'geodirectory'); ?></label>
+        <label for="data_type"><?php _e('Field Data Type ? :', 'geodirectory'); ?></label>
         <div class="gd-cf-input-wrap">
 
             <select name="data_type" id="data_type"
                     onchange="javascript:gd_data_type_changed(this, '<?php echo $result_str; ?>');">
                 <option
-                    value="XVARCHAR" <?php if (isset($field_info->data_type) && $field_info->data_type == 'VARCHAR') {
+                    value="XVARCHAR" <?php if ($dt_value  == 'VARCHAR') {
                     echo 'selected="selected"';
                 } ?>><?php _e('CHARACTER', 'geodirectory'); ?></option>
                 <option
-                    value="INT" <?php if (isset($field_info->data_type) && $field_info->data_type == 'INT') {
+                    value="INT" <?php if ($dt_value   == 'INT') {
                     echo 'selected="selected"';
                 } ?>><?php _e('NUMBER', 'geodirectory'); ?></option>
                 <option
-                    value="FLOAT" <?php if (isset($field_info->data_type) && $field_info->data_type == 'FLOAT') {
+                    value="FLOAT" <?php if ($dt_value   == 'FLOAT') {
                     echo 'selected="selected"';
                 } ?>><?php _e('DECIMAL', 'geodirectory'); ?></option>
             </select>
@@ -2665,15 +2681,24 @@ function geodir_cfa_data_type_text($output,$result_str,$cf,$field_info){
 
         </div>
     </li>
+
+    <?php
+    $value = '';
+    if (isset($field_info->decimal_point)) {
+        $value = esc_attr($field_info->decimal_point);
+    }elseif(isset($cf['defaults']['decimal_point']) && $cf['defaults']['decimal_point']){
+        $value = $cf['defaults']['decimal_point'];
+    }
+    ?>
+
     <li class="decimal-point-wrapper"
-        style="<?php echo (isset($field_info->data_type) && $field_info->data_type == 'FLOAT') ? '' : 'display:none' ?>">
+        style="<?php echo ($dt_value  == 'FLOAT') ? '' : 'display:none' ?>">
         <label for="decimal_point"><?php _e('Select decimal point :', 'geodirectory'); ?></label>
         <div class="gd-cf-input-wrap">
             <select name="decimal_point" id="decimal_point">
                 <option value=""><?php echo _e('Select', 'geodirectory'); ?></option>
                 <?php for ($i = 1; $i <= 10; $i++) {
-                    $decimal_point = isset($field_info->decimal_point) ? $field_info->decimal_point : '';
-                    $selected = $i == $decimal_point ? 'selected="selected"' : ''; ?>
+                    $selected = $i == $value ? 'selected="selected"' : ''; ?>
                     <option value="<?php echo $i; ?>" <?php echo $selected; ?>><?php echo $i; ?></option>
                 <?php } ?>
             </select>

@@ -265,6 +265,14 @@ jQuery(document).ready(function($) {
         jQuery('.gd-category-dd > a').html(jQuery(this).attr('data-name'));
         jQuery('.gd-category-dd ul').hide();
     });
+
+
+
+    // setup search forms
+    geodir_setup_search_form();
+
+
+
 });
 
 
@@ -605,4 +613,90 @@ function geodir_resize_rating_stars(re) {
         width_calc = typeof re != 'undefined' && re ? 'auto' : width_calc;
         $this.width(width_calc);
     });
+}
+
+function geodir_load_search_form(stype, el) {
+    var $adv_show = jQuery(el).closest('.geodir_advance_search_widget').attr('data-show-adv');
+
+    jQuery.ajax({
+        url: geodir_all_js_msg.geodir_admin_ajax_url,
+        type: 'POST',
+        dataType: 'html',
+        data: {
+            action: 'geodir_search_form',
+            stype: stype,
+            adv: $adv_show
+        },
+        beforeSend: function() {
+            geodir_search_wait(1);
+        },
+        success: function(data, textStatus, xhr) {
+            // replace whole form
+            jQuery(el).closest('.geodir_advance_search_widget').html(data);
+
+            geodir_setup_search_form();
+            // trigger a custom event wen setting up the search form so we can hook to it from addons
+            jQuery("body").trigger("geodir_setup_search_form");
+
+            geodir_search_wait(0);
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            console.log(textStatus);geodir_search_wait(0);
+        }
+    });
+}
+
+function geodir_setup_search_form(){
+    //  new seach form change
+    if (jQuery('.search_by_post').val()) {
+        gd_s_post_type = jQuery('.search_by_post').val();
+    } else {
+        gd_s_post_type = "gd_place";
+    }
+
+
+    setTimeout(function(){
+        jQuery('.search_by_post').change(function() {
+            gd_s_post_type = jQuery(this).val();
+
+            geodir_load_search_form(gd_s_post_type, this);
+
+        });
+    }, 100);
+}
+
+gdSearchDoing = 0;
+var gdNearChanged = 0;
+gd_search_icon ='';
+function geodir_search_wait(on){
+    waitTime = 300;
+
+    if(on){
+        if(gdSearchDoing){return;}
+        gdSearchDoing = 1;
+        jQuery('.geodir_submit_search').addClass('gd-wait-btnsearch').prop('disabled', true);
+        jQuery('.showFilters').prop('disabled', true);
+        searchPos = 1;
+        gd_search_icon = jQuery('.geodir_submit_search').html();
+        function geodir_search_wait_animate() {
+            if(!searchPos){return;}
+            if(searchPos==1){jQuery('input[type="button"].geodir_submit_search').val('  ');searchPos=2;window.setTimeout(geodir_search_wait_animate, waitTime );return;}
+            if(searchPos==2){jQuery('input[type="button"].geodir_submit_search').val('  ');searchPos=3;window.setTimeout(geodir_search_wait_animate, waitTime );return;}
+            if(searchPos==3){jQuery('input[type="button"].geodir_submit_search').val('  ');searchPos=1;window.setTimeout(geodir_search_wait_animate, waitTime );return;}
+
+
+
+        }
+        geodir_search_wait_animate();
+        jQuery('button.geodir_submit_search').html('<i class="fa fa-hourglass fa-spin" aria-hidden="true"></i>');
+    } else {
+        searchPos = 0;
+        gdSearchDoing = 0;
+        jQuery('.geodir_submit_search').removeClass('gd-wait-btnsearch').prop('disabled', false);
+        jQuery('.showFilters').prop('disabled', false);
+        jQuery('input[type="button"].geodir_submit_search').val(gdsText);
+
+        jQuery('button.geodir_submit_search').html(gd_search_icon);
+    }
+
 }

@@ -1406,6 +1406,9 @@
                 options.zIndex = marker.zIndex ? marker.zIndex : 0;
                 options.zIndexOrg = marker.zIndexOrg ? marker.zIndexOrg : 0;
 
+
+                options.optimized = false; // fixes this bug https://code.google.com/p/gmaps-api-issues/issues/detail?id=4431
+
                 if (marker.visible == false)
                     options.visible = marker.visible;
 

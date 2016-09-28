@@ -651,6 +651,7 @@ function geodir_custom_fields($post_type=''){
      *                    Optional. Used to set the default value of the field.
      *
      *                    @type string data_type The SQL data type for the field. VARCHAR, TEXT, TIME, TINYINT, INT, FLOAT, DATE
+     *                    @type int decimal_point limit if usinf FLOAT data_type
      *                    @type string admin_title The admin title for the field.
      *                    @type string site_title This will be the title for the field on the frontend.
      *                    @type string admin_desc This will be shown below the field on the add listing form.
