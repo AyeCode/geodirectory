@@ -2308,38 +2308,56 @@ add_action( 'geodir_before_search_button', 'geodir_search_form_submit_button', 5
 function geodir_search_form_post_type_input() {
 	$post_types     = apply_filters( 'geodir_search_form_post_types', geodir_get_posttypes( 'object' ) );
 	$curr_post_type = geodir_get_current_posttype();
-	if ( ! empty( $post_types ) && count( (array) $post_types ) > 1 ){
+	if ( ! empty( $post_types ) && count( (array) $post_types ) > 1 ) {
 
-		$new_style = get_option( 'geodir_show_search_old_search_from' ) ? false : true;
-		if ( $new_style ) {
-			echo "<div class='gd-search-input-wrapper gd-search-field-cpt'>";
+		foreach ( $post_types as $post_type => $info ){
+			global $wpdb;
+			$has_posts = $wpdb->get_row( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s AND post_status='publish' LIMIT 1", $post_type ) );
+			if ( ! $has_posts ) {
+				unset($post_types->{$post_type});
+			}
 		}
-		?>
-		<select name="stype" class="search_by_post">
-			<?php foreach ( $post_types as $post_type => $info ):
-				global $wpdb;
-				$has_posts = '';
-				$has_posts = $wpdb->get_row( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s AND post_status='publish' LIMIT 1", $post_type ) );
-				if ( ! $has_posts ) {
-					continue;
-				}
-				?>
 
-				<option data-label="<?php echo get_post_type_archive_link( $post_type ); ?>"
-				        value="<?php echo $post_type; ?>" <?php if ( isset( $_REQUEST['stype'] ) ) {
-					if ( $post_type == $_REQUEST['stype'] ) {
+		if ( ! empty( $post_types ) && count( (array) $post_types ) > 1 ) {
+
+			$new_style = get_option( 'geodir_show_search_old_search_from' ) ? false : true;
+			if ( $new_style ) {
+				echo "<div class='gd-search-input-wrapper gd-search-field-cpt'>";
+			}
+			?>
+			<select name="stype" class="search_by_post">
+				<?php foreach ( $post_types as $post_type => $info ):
+					global $wpdb;
+//					$has_posts = $wpdb->get_row( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s AND post_status='publish' LIMIT 1", $post_type ) );
+//					if ( ! $has_posts ) {
+//						continue;
+//					}
+					?>
+
+					<option data-label="<?php echo get_post_type_archive_link( $post_type ); ?>"
+					        value="<?php echo $post_type; ?>" <?php if ( isset( $_REQUEST['stype'] ) ) {
+						if ( $post_type == $_REQUEST['stype'] ) {
+							echo 'selected="selected"';
+						}
+					} elseif ( $curr_post_type == $post_type ) {
 						echo 'selected="selected"';
-					}
-				} elseif ( $curr_post_type == $post_type ) {
-					echo 'selected="selected"';
-				} ?>><?php _e( ucfirst( $info->labels->name ), 'geodirectory' ); ?></option>
+					} ?>><?php _e( ucfirst( $info->labels->name ), 'geodirectory' ); ?></option>
 
-			<?php endforeach; ?>
-		</select>
-		<?php
-		if ( $new_style ) {
-			echo "</div>";
+				<?php endforeach; ?>
+			</select>
+			<?php
+			if ( $new_style ) {
+				echo "</div>";
+			}
+		}else{
+			if(! empty( $post_types )){
+				echo '<input type="hidden" name="stype" value="' . key( $post_types ) . '"  />';
+			}else{
+				echo '<input type="hidden" name="stype" value="gd_place"  />';
+			}
+
 		}
+
 	}elseif ( ! empty( $post_types ) ) {
 		echo '<input type="hidden" name="stype" value="' . key( $post_types ) . '"  />';
 	}
