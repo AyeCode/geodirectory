@@ -26,6 +26,7 @@
 .geodir-content-right,
 .geodir-content-right{
   .geodir-search{
+    button,
     input,
     input[type="text"],
     select{
@@ -65,10 +66,10 @@ body {
             width: 100% !important;
 
           }
-          input {
+          input, button {
             height: 38px;
           }
-          input[type=button] {
+          input[type=button], button {
             flex: 1 1 auto;
             min-width: 40px;
             margin: 5px 3px 5px 3px !important;

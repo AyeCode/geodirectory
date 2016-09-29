@@ -425,6 +425,10 @@ function geodir_get_current_posttype()
     if (is_array($all_postypes) && !in_array($geodir_post_type, $all_postypes))
         $geodir_post_type = '';
 
+    if( defined( 'DOING_AJAX' ) && isset($_REQUEST['stype'])){
+        $geodir_post_type = sanitize_text_field($_REQUEST['stype']);
+    }
+
 
     return $geodir_post_type;
 }

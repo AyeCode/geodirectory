@@ -2266,7 +2266,13 @@ function geodir_output_pinpoint_html_listings( $post_id, $post ) {
 
 function geodir_search_form_submit_button() {
 
-	$default_search_button_label = __( '&#xf002;', 'geodirectory' );
+	$new_style = get_option( 'geodir_show_search_old_search_from' ) ? false : true;
+
+	if ( $new_style ) {
+		$default_search_button_label = '<i class="fa fa-search" aria-hidden="true"></i>';
+	}else{
+		$default_search_button_label = 'Search';
+	}
 	if ( get_option( 'geodir_search_button_label' ) && get_option( 'geodir_search_button_label' ) != 'Search' ) {
 		$default_search_button_label = __( get_option( 'geodir_search_button_label' ), 'geodirectory' );
 	}
@@ -2286,10 +2292,15 @@ function geodir_search_form_submit_button() {
 	if ( strpos( $default_search_button_label, '&#' ) !== false ) {
 		$fa_class = 'fa';
 	}
+
+
+	if ( $new_style ) {
 	?>
-	<input type="button" value="<?php esc_attr_e( $default_search_button_label ); ?>"
+		<button class="geodir_submit_search <?php echo $fa_class; ?>"><?php _e( $default_search_button_label ,'geodirectory'); ?></button>
+<?php }else{?>
+		<input type="button" value="<?php esc_attr_e( $default_search_button_label ); ?>"
 	       class="geodir_submit_search <?php echo $fa_class; ?>"/>
-	<?php
+	<?php }
 }
 
 add_action( 'geodir_before_search_button', 'geodir_search_form_submit_button', 5000 );
@@ -2407,7 +2418,10 @@ function geodir_search_form_near_input() {
 	$new_style = get_option('geodir_show_search_old_search_from') ? false : true;
 	if($new_style){
 		echo "<div class='gd-search-input-wrapper gd-search-field-near'>";
-		echo "<div class='gd-append-near-wrapper'>";
+
+		if(defined('GEODIRADVANCESEARCH_TEXTDOMAIN')) {
+			echo "<div class='gd-append-near-wrapper'>";
+		}
 	}
 	?>
 	<input name="snear" class="snear <?php echo $near_class; ?>" type="text" value="<?php echo $near; ?>"
@@ -2416,8 +2430,10 @@ function geodir_search_form_near_input() {
 	       onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);"/>
 	<?php
 	if($new_style){
-		echo '<span class="near-compass gd-search-near-input" data-dropdown=".gd-near-me-dropdown" ><i class="fa fa-compass" aria-hidden="true"></i></span>';
-		echo "</div>";
+		if(defined('GEODIRADVANCESEARCH_TEXTDOMAIN')){
+			echo '<span class="near-compass gd-search-near-input" data-dropdown=".gd-near-me-dropdown" ><i class="fa fa-compass" aria-hidden="true"></i></span></div>';
+		}
+
 		echo "</div>";
 	}
 }
@@ -2425,3 +2441,15 @@ function geodir_search_form_near_input() {
 add_action( 'geodir_search_form_inputs', 'geodir_search_form_post_type_input', 10 );
 add_action( 'geodir_search_form_inputs', 'geodir_search_form_search_input', 20 );
 add_action( 'geodir_search_form_inputs', 'geodir_search_form_near_input', 30 );
+
+
+function geodir_search_form() {
+
+	geodir_get_template_part('listing', 'filter-form');
+
+	// Always die in functions echoing ajax content
+	die();
+}
+
+add_action( 'wp_ajax_geodir_search_form', 'geodir_search_form' );
+add_action( 'wp_ajax_nopriv_geodir_search_form', 'geodir_search_form' );
