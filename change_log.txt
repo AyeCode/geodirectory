@@ -10,6 +10,7 @@ Changed for WPML not getting correct lang from url - FIXED
 Predefined custom fields section added to place settings - ADDED
 Search bar styles change (to use original GD>Design>Search>Use old non-styled form) - STYLE BREAKING CHANGE
 Firefox marker title hover fails on multiple repeat hovers - FIXED
+If multiple CPT but only one has posts then search CPT switcher will not show - CHANGED
 
 v1.6.8
 Address field output containd class post instead of post_address - FIXED

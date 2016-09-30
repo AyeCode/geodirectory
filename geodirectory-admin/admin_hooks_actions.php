@@ -867,11 +867,11 @@ function geodir_cf_panel_available_fields_note($note, $sub_tab, $listing_type)
 
     switch ($sub_tab) {
         case 'custom_fields':
-            $note = sprintf(__('Click on any box below to add a field of that type on add %s listing form. You must be use a fieldset to group your fields.', 'geodirectory'), get_post_type_singular_label($listing_type));;
+            $note = sprintf(__('Click on any box below to add a field of that type to the add %s listing form. You can use a fieldset to group your fields.', 'geodirectory'), get_post_type_singular_label($listing_type));;
             break;
 
         case 'sorting_options':
-            $note = sprintf(__('Click on any box below to make it appear in sorting option dropdown on %s listing and search results.<br />To make a field available here, go to custom fields tab and expand any field from selected fields panel and tick the checkbox saying \'Include this field in sort option\'.', 'geodirectory'), get_post_type_singular_label($listing_type));
+            $note = sprintf(__('Click on any box below to make it appear in the sorting option dropdown on %s listing and search results.<br />To make a field available here, go to custom fields tab and expand any field from selected fields panel and tick the checkbox saying \'Include this field in sort option\'.', 'geodirectory'), get_post_type_singular_label($listing_type));
             break;
     }
     return $note;
@@ -894,11 +894,11 @@ function geodir_cf_panel_selected_fields_head($heading, $sub_tab, $listing_type)
 
     switch ($sub_tab) {
         case 'custom_fields':
-            $heading = sprintf(__('List of fields those will appear on add new %s listing form', 'geodirectory'), get_post_type_singular_label($listing_type));
+            $heading = sprintf(__('List of fields that will appear on add new %s listing form', 'geodirectory'), get_post_type_singular_label($listing_type));
             break;
 
         case 'sorting_options':
-            $heading = sprintf(__('List of fields those will appear in %s listing and search results sorting option dropdown box.', 'geodirectory'), get_post_type_singular_label($listing_type));
+            $heading = sprintf(__('List of fields that will appear in %s listing and search results sorting option dropdown box.', 'geodirectory'), get_post_type_singular_label($listing_type));
             break;
     }
     return $heading;
