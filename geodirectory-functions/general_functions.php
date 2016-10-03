@@ -1152,7 +1152,7 @@ function geodir_wpml_post_type_archive_link($link, $post_type){
 		$post_types   = get_option( 'geodir_post_types' );
 		$slug         = $post_types[ $post_type ]['rewrite']['slug'];
 
-		echo $link.'###'.gd_wpml_get_lang_from_url( $link) ;
+		//echo $link.'###'.gd_wpml_get_lang_from_url( $link) ;
 
 		// Alter the CPT slug if WPML is set to do so
 		if ( function_exists( 'icl_object_id' ) ) {
@@ -1174,7 +1174,7 @@ function geodir_wpml_post_type_archive_link($link, $post_type){
 			}
 		}
 
-		echo $link.'####'.gd_wpml_get_lang_from_url( $link) ;
+		//echo $link.'####'.gd_wpml_get_lang_from_url( $link) ;
 	}
 
 	return $link;
@@ -3011,6 +3011,9 @@ function geodir_listing_slider_widget_output( $args = '', $instance = '' ) {
 	?>
 	<script type="text/javascript">
 		jQuery(window).load(function () {
+			// chrome 53 introduced a bug, so we need to repaint the slider when shown.
+			jQuery('.geodir-slides').addClass('flexslider-fix-rtl');
+
 			jQuery('#geodir_widget_carousel').flexslider({
 				animation: "slide",
 				selector: ".geodir-slides > li",
@@ -3042,6 +3045,10 @@ function geodir_listing_slider_widget_output( $args = '', $instance = '' ) {
 			}?>
 				sync: "#geodir_widget_carousel",
 				start: function (slider) {
+
+					// chrome 53 introduced a bug, so we need to repaint the slider when shown.
+					jQuery('.geodir-slides').removeClass('flexslider-fix-rtl');
+
 					jQuery('.geodir-listing-flex-loader').hide();
 					jQuery('#geodir_widget_slider').css({'visibility': 'visible'});
 					jQuery('#geodir_widget_carousel').css({'visibility': 'visible'});

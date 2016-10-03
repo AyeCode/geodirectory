@@ -46,6 +46,7 @@
 body {
   .geodir-listing-search.gd-search-bar-style{
     .geodir-loc-bar {
+      position: relative;
       .clearfix.geodir-loc-bar-in {
         .geodir-search {
           display: flex;
@@ -64,6 +65,7 @@ body {
             height: 38px;
             font-size: 14px;
             width: 100% !important;
+            max-width: 100%;
 
           }
           input, button {
@@ -125,6 +127,22 @@ body {
               }
             }
           }
+
+        }
+      }
+
+      .geodir-filter-container .geodir-advance-search {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        margin: 0 auto;
+
+        .geodir_submit_search {
+          flex: 1 1 auto;
+          min-width: 40px;
+          margin: 5px 3px 5px 3px !important;
+          border-radius: 3px 3px 3px 3px;
+          height: 38px;
 
         }
       }
