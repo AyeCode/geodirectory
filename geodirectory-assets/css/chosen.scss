@@ -31,9 +31,21 @@
     box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
 }
 
+/* RTL support */
+body.rtl .geodir-chosen-container .chosen-drop {
+    left: inherit;
+    right: -9999px;
+}
+
+body.rtl .geodir-chosen-container.chosen-with-drop .chosen-drop,
 .geodir-chosen-container.chosen-with-drop .chosen-drop {
     left: 0;
+    right: 0;
 }
+
+
+
+
 
 .geodir-chosen-container a {
     cursor: pointer;
