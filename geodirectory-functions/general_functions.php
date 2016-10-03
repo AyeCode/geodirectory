@@ -190,16 +190,41 @@ function geodir_get_addlisting_link( $post_type = '' ) {
  * @since   1.0.0
  * @package GeoDirectory
  * @since   1.4.2 Removed the port number from the URL if port 80 is not being used.
+ * @since   1.6.9 Fix $_SERVER['SERVER_NAME'] with nginx server.
  * @return string The current URL.
  */
 function geodir_curPageURL() {
 	$pageURL = 'http';
-	if ( isset( $_SERVER["HTTPS"] ) && $_SERVER["HTTPS"] == "on" ) {
+	if (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) == 'on')) {
 		$pageURL .= "s";
 	}
 	$pageURL .= "://";
-	$pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
-
+	
+	/*
+	 * Since we are assigning the URI from the server variables, we first need
+	 * to determine if we are running on apache or IIS.  If PHP_SELF and REQUEST_URI
+	 * are present, we will assume we are running on apache.
+	 */
+	if (!empty($_SERVER['PHP_SELF']) && !empty($_SERVER['REQUEST_URI'])) {
+		// To build the entire URI we need to prepend the protocol, and the http host
+		// to the URI string.
+		$pageURL .= $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+	} else {
+		/*
+		 * Since we do not have REQUEST_URI to work with, we will assume we are
+		 * running on IIS and will therefore need to work some magic with the SCRIPT_NAME and
+		 * QUERY_STRING environment variables.
+		 *
+		 * IIS uses the SCRIPT_NAME variable instead of a REQUEST_URI variable... thanks, MS
+		 */
+		$pageURL .= $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'];
+		
+		// If the query string exists append it to the URI string
+		if (isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING'])) {
+			$pageURL .= '?' . $_SERVER['QUERY_STRING'];
+		}
+	}
+	
 	/**
 	 * Filter the current page URL returned by function geodir_curPageURL().
 	 *
@@ -209,7 +234,6 @@ function geodir_curPageURL() {
 	 */
 	return apply_filters( 'geodir_curPageURL', $pageURL );
 }
-
 
 /**
  * Clean variables.
