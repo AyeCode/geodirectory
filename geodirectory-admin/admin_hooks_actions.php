@@ -2448,7 +2448,7 @@ add_action('geodir_settings_uninstall_settings_main_start', 'geodir_uninstall_se
  * @return bool If True then plugin will be displayed in uninstall settings.
  */
 function geodir_has_uninstall_settings($return, $plugin) {
-    $gd_plugins = array('geodir_claim_listing');
+    $gd_plugins = array('geodir_advance_search_filters', 'geodir_claim_listing', 'geodir_custom_posts', 'geodir_event_manager', 'geodir_location_manager', 'geodir_payment_manager', 'geodir_review_rating_manager');
     
     if (!($plugin && in_array($plugin, $gd_plugins))) {
         $return = false;
@@ -2457,3 +2457,29 @@ function geodir_has_uninstall_settings($return, $plugin) {
     return $return;
 }
 add_filter('geodir_has_uninstall_settings', 'geodir_has_uninstall_settings', 10, 2);
+
+/**
+ * Handle the plugin settings for plugin deactivate to activate.
+ *
+ * It manages the the settings without loosing previous settings saved when plugin
+ * status changed from deactivate to activate.
+ *
+ * @since 1.6.9
+ *
+ * @param array $settings The option settings array.
+ * @return array The settings array.
+ */
+function geodir_resave_settings($settings = array()) {
+    if (!empty($settings) && is_array($settings)) {
+        $c = 0;
+        
+        foreach ($settings as $setting) {
+            if (!empty($setting['id']) && false !== ($value = get_option($setting['id']))) {
+                $settings[$c]['std'] = $value;
+            }
+            $c++;
+        }
+    }
+
+    return $settings;
+}
