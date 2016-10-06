@@ -7,7 +7,7 @@
  */
 
 /**
- * Register the texonomies.
+ * Register the taxonomies.
  *
  * @since 1.0.0
  */
@@ -22,7 +22,7 @@ function geodir_register_taxonomies()
 
         // Register taxonomies
         foreach ($taxonomies as $taxonomy => $args) {
-            // Allow taxonomie names to be translated
+            // Allow taxonomy names to be translated
             if (!empty($args['args']['labels'])) {
                 foreach ($args['args']['labels'] as $key => $tax_label) {
                     $args['args']['labels'][$key] = __($tax_label, 'geodirectory');
@@ -361,7 +361,7 @@ function geodir_add_location_var($public_query_vars)
 }
 
 /**
- * Add the variable to the query variables to indentify geodir page.
+ * Add the variable to the query variables to identify geodir page.
  *
  * @since 1.0.0
  *
@@ -691,7 +691,7 @@ function geodir_set_location_var_in_session_in_core($wp) {
                         $gd_country = $default_location->country_slug;
                     }
                 }
-                // if locaton still not found then clear location related session variables
+                // if location still not found then clear location related session variables
                 if ($is_geodir_location_found && $geodir_set_location_session) {
                     $gd_session->set('gd_multi_location', 1);
                     $gd_session->set('gd_country', $gd_country);
@@ -790,7 +790,7 @@ function geodir_set_location_var_in_session_in_core($wp) {
 }
 
 /**
- * Ragister a custom post status.
+ * Register a custom post status.
  *
  * This will add a new post status in the system called: Virtual.
  *
@@ -800,7 +800,7 @@ function geodir_set_location_var_in_session_in_core($wp) {
  */
 function geodir_custom_post_status()
 {
-    // Vertual Page Status
+    // Virtual Page Status
     register_post_status('virtual', array(
         'label' => _x('Virtual', 'page', 'geodirectory'),
         'public' => true,
@@ -902,3 +902,33 @@ function geodir_exclude_page_where($where)
 
     return $where;
 }
+
+/**
+ * Add category meta image in Yoast SEO taxonomy data.
+ *
+ * @since 1.6.9
+ *
+ * @global object $wp_query WordPress Query object.
+ *
+ * @param array $value Taxonomy meta value.
+ * @param string $option Option name.
+ * @return mixed The taxonomy option value.
+ */
+function geodir_wpseo_taxonomy_meta( $value, $option = '' ) {
+    global $wp_query;
+    
+    if ( !empty( $value ) && ( is_category() || is_tax() ) ) {
+        $term = $wp_query->get_queried_object();
+        
+        if ( !empty( $term->term_id ) && !empty( $term->taxonomy ) && isset( $value[$term->taxonomy][$term->term_id] ) && in_array( str_replace( 'category', '', $term->taxonomy ), geodir_get_posttypes() ) ) {
+            $image  = geodir_get_default_catimage( $term->term_id, str_replace( 'category', '', $term->taxonomy ) );
+            
+            if ( !empty( $image['src'] ) ) {
+                $value[$term->taxonomy][$term->term_id]['wpseo_twitter-image'] = $image['src'];
+                $value[$term->taxonomy][$term->term_id]['wpseo_opengraph-image'] = $image['src'];
+            }
+        }
+    }
+    return $value;
+}
+add_filter( 'option_wpseo_taxonomy_meta', 'geodir_wpseo_taxonomy_meta', 10, 2 );
