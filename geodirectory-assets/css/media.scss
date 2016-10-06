@@ -204,6 +204,21 @@
         right: 0px !important;
     }
 
+    .geodir_popular_post_category .geodir-cat-list ul.geodir-popular-cat-list{
+        margin-left: 0;
+        li{
+            padding-left: 0;
+            margin-left: 0;
+            width: 50%;
+            margin: 0;
+            padding: 7px 0;
+            font-size: 22px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+    }
+
 }
 
 @media only screen and (max-width: 420px) {
