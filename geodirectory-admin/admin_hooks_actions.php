@@ -2337,38 +2337,6 @@ if (isset($_REQUEST['tab']) && $_REQUEST['tab'] == 'permalink_settings') {
 }
 
 /**
- * Get all GeoDirectory plugins.
- *
- * @since 1.6.9
- *
- * @return array Plugins array.
- */
-function geodir_get_gd_plugins() {
-    $gd_plugins = apply_filters('geodir_all_gd_plugins', array('geodirectory', 'geodir_advance_search_filters', 'geodir_affiliate', 'geodir_ajax_duplicate_alert', 'geodir_api', 'geodir_buddypress', 'geodir_claim_listing', 'geodir_custom_google_maps', 'geodir_custom_posts', 'geodir_event_manager', 'geodir_franchise', 'geodir_gd_booster', 'geodir_gt2gd', 'geodir_location_manager', 'geodir_marker_cluster', 'geodir_payment_manager', 'geodir_recaptcha', 'geodir_review_rating_manager', 'geodir_stripe_payment_manager'));
-    
-    $plugins = get_plugins();
-    
-    $gd_all_plugins = array();    
-    if (!empty($gd_plugins) && !empty($plugins)) {
-        foreach ($plugins as $plugin => $data) {
-            $plugin_name = dirname($plugin);
-            
-            if (in_array($plugin_name, $gd_plugins)) {
-                $gd_all_plugins[$plugin_name] = $data['Name'];
-            }
-        }
-    }
-    /**
-     * Filter the GeoDirectory plugins array.
-     *
-     * @since 1.6.9
-     *
-     * @param array $gd_all_plugins The GeoDirectory plugins array.
-     */
-    return apply_filters('geodir_get_gd_plugins', $gd_all_plugins);
-}
-
-/**
  * Add uninstall settings for GeoDirectory plugins.
  *
  * @since 1.6.9
@@ -2377,38 +2345,29 @@ function geodir_get_gd_plugins() {
  * @return array Array of settings.
  */
 function geodir_uninstall_settings($general_settings) {
-    $gd_plugins = geodir_get_gd_plugins();
-    
     $settings   = array();
     $settings[] = array('type' => 'title', 'id' => 'uninstall_settings', 'name' => __('Uninstall Settings', 'geodirectory'));
     $settings[] = array('type' => 'sectionstart', 'id' => 'uninstall_settings_main', 'name' => __('Remove Data on Uninstall?', 'geodirectory' ));
     
-    if (!empty($gd_plugins)) {
-        foreach ($gd_plugins as $plugin => $name) {
-            $setting = array(
-                'type' => 'checkbox',
-                'id' => 'geodir_un_' . $plugin,
-                'name' => $name,
-                'desc' => wp_sprintf(__('Remove all of its data when the <b>%s</b> is deleted', 'geodirectory'), $plugin),
-                'std' => '0'
-            );
+    $plugins    = get_plugins();
+    $un_plugins = apply_filters('geodir_plugins_uninstall_settings', array());
+    
+    if (!empty($plugins) && !empty($un_plugins)) {
+        foreach ($plugins as $plugin => $data) {
+            $plugin_name = plugin_basename(dirname($plugin));
             
-            /**
-             * Whether the plugin should be display in uninstall settings or not.
-             *
-             * @since 1.6.9
-             *
-             * @param bool $return If True then plugin will be displayed in uninstall settings. Default true.
-             * @param array $plugin The plugin name.
-             */
-            $has_uninstall = apply_filters('geodir_has_uninstall_settings', true, $plugin) && apply_filters('geodir_has_uninstall_' . $plugin, true, $plugin);
-            
-            if ($has_uninstall) {
-                $settings[] = $setting;
+            if (in_array($plugin_name, $un_plugins)) {
+                $settings[] = array(
+                    'type' => 'checkbox',
+                    'id' => 'geodir_un_' . $plugin_name,
+                    'name' => $data['Name'],
+                    'desc' => wp_sprintf(__('Remove all of its data when the <b>%s</b> is deleted', 'geodirectory'), $plugin_name),
+                    'std' => '0'
+                );
             }
         }
     }
-    
+        
     $settings[] = array('type' => 'sectionend', 'id' => 'uninstall_settings_main');
     
     /**
@@ -2437,26 +2396,6 @@ function geodir_uninstall_settings_desc() {
     echo '<p class="gd-un-settings-desc">' . __('Select the plugins that you would like to completely remove all of its data when the plugin is deleted.', 'geodirectory') . '</p>';
 }
 add_action('geodir_settings_uninstall_settings_main_start', 'geodir_uninstall_settings_desc');
-
-/**
- * Whether to plugin in uninstall settings or not.
- *
- * @since 1.6.9
- *
- * @param bool $return Show plugin in uninstall settings or not.
- * @param array $plugin The plugin name.
- * @return bool If True then plugin will be displayed in uninstall settings.
- */
-function geodir_has_uninstall_settings($return, $plugin) {
-    $gd_plugins = array('geodir_advance_search_filters', 'geodir_claim_listing', 'geodir_custom_posts', 'geodir_event_manager', 'geodir_location_manager', 'geodir_payment_manager', 'geodir_review_rating_manager');
-    
-    if (!($plugin && in_array($plugin, $gd_plugins))) {
-        $return = false;
-    }
-    
-    return $return;
-}
-add_filter('geodir_has_uninstall_settings', 'geodir_has_uninstall_settings', 10, 2);
 
 /**
  * Handle the plugin settings for plugin deactivate to activate.
