@@ -11,13 +11,13 @@ Predefined custom fields section added to place settings - ADDED
 Search bar styles change (to use original GD>Design>Search>Use old non-styled form) - STYLE BREAKING CHANGE
 Firefox marker title hover fails on multiple repeat hovers - FIXED
 If multiple CPT but only one has posts then search CPT switcher will not show - CHANGED
-Settings added to remove data on plugin uninstall - ADDED
 $_SERVER['SERVER_NAME'] returns empty host with nginx server - FIXED
 Flexslider RTL chrome 53 bug, slider not showing - FIXED
 Chosen select RTL display bug - FIXED
 Yoast SEO meta tags should add category default image in meta - ADDED
 Lazyload images not loading if they have parentheses in the url (x) - FIXED
 Price output settings added to numerical text custom fields - ADDED
+Settings added to remove data on plugin uninstall - ADDED
 
 v1.6.8
 Address field output containd class post instead of post_address - FIXED

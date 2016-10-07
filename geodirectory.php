@@ -213,7 +213,6 @@ if (is_admin() || defined( 'GD_TESTING_MODE' )) {
         register_activation_hook(__FILE__, 'geodir_activation');
     }
     register_deactivation_hook(__FILE__, 'geodir_deactivation');
-    register_uninstall_hook(__FILE__, 'geodir_uninstall');
 
     /*
      * Show a upgrade warning message if applicable.
