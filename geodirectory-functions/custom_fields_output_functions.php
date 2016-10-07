@@ -688,7 +688,19 @@ function geodir_cf_text($html,$location,$cf,$p=''){
 
             $html = '<div class="geodir_more_info ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="'.$class.'" style="' . $field_icon . '">' . $field_icon_af;
             $html .= (trim($cf['site_title'])) ? __($cf['site_title'], 'geodirectory') . ': ' : '';
-            $html .= '</span>' . $post->{$cf['htmlvar_name']} . '</div>';
+            $html .= '</span>';
+
+            $value = $post->{$cf['htmlvar_name']};
+            if(isset($cf['data_type']) && ($cf['data_type']=='INT' || $cf['data_type']=='FLOAT') && isset($cf['extra_fields']) && $cf['extra_fields']){
+                $extra_fields = maybe_unserialize($cf['extra_fields']);
+                if(isset($extra_fields['is_price']) && $extra_fields['is_price']){
+                    $value = geodir_currency_format_number($value,$cf);
+                }
+            }
+
+
+            $html .= $value;
+            $html .= '</div>';
 
         endif;
 

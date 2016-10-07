@@ -41,7 +41,7 @@ var gdUrlParam = function gdUrlParam(sParam) {
             if (source) {
                 //this.setAttribute("src", source);
                 // $(this).removeClass('geodir_lazy_load_thumbnail');
-                $(this).css('background-image', 'url(' + source + ')');
+                $(this).css('background-image', 'url("' + source + '")');
                 if (typeof callback === "function") callback.call(this);
             }
         });

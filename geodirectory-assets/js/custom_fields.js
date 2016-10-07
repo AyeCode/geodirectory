@@ -57,6 +57,18 @@ function gd_data_type_changed(obj, cont) {
         if (jQuery(obj).val() == 'FLOAT') {
             jQuery('#licontainer_' + cont).find('.decimal-point-wrapper').show();
         }
+
+        if (jQuery(obj).val() == 'FLOAT' || jQuery(obj).val() == 'INT') {
+            jQuery('#licontainer_' + cont).find('.gdcf-price-extra-set').show();
+
+            if(jQuery('#licontainer_' + cont).find(".gdcf-price-extra-set input[name='extra[is_price]']:checked").val()=='1'){
+                jQuery('#licontainer_' + cont).find('.gdcf-price-extra').show();
+            }
+
+        }else{
+            jQuery('#licontainer_' + cont).find('.gdcf-price-extra-set').hide();
+            jQuery('#licontainer_' + cont).find('.gdcf-price-extra').hide();
+        }
     }
 }
 
