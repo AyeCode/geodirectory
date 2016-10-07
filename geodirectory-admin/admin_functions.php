@@ -12,28 +12,12 @@
  * @since 1.0.0
  * @package GeoDirectory
  */
-function geodir_deactivation()
-{
-
+function geodir_deactivation() {
     // Update installed variable
     update_option("geodir_installed", 0);
 
     // Remove rewrite rules and then recreate rewrite rules.
     flush_rewrite_rules();
-}
-
-
-/**
- * Deletes option value when GeoDirectory get uninstalled.
- *
- * @since 1.0.0
- * @package GeoDirectory
- */
-function geodir_uninstall()
-{
-
-    delete_option('geodir_default_data_installed');
-
 }
 
 if (!function_exists('geodir_admin_styles')) {
@@ -43,9 +27,7 @@ if (!function_exists('geodir_admin_styles')) {
      * @since 1.0.0
      * @package GeoDirectory
      */
-    function geodir_admin_styles()
-    {
-
+    function geodir_admin_styles() {
         wp_register_style('geodirectory-admin-css', geodir_plugin_url() . '/geodirectory-assets/css/admin.css', array(), GEODIRECTORY_VERSION);
         wp_enqueue_style('geodirectory-admin-css');
 
@@ -72,7 +54,6 @@ if (!function_exists('geodir_admin_styles')) {
 
         wp_register_style('geodir-rtl-style', geodir_plugin_url() . '/geodirectory-assets/css/rtl.css', array(), GEODIRECTORY_VERSION);
         wp_enqueue_style('geodir-rtl-style');
-
     }
 }
 

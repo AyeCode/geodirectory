@@ -2422,3 +2422,18 @@ function geodir_resave_settings($settings = array()) {
 
     return $settings;
 }
+
+/**
+ * Add the plugin to uninstall settings.
+ *
+ * @since 1.6.9
+ *
+ * @return array $settings the settings array.
+ * @return array The modified settings.
+ */
+function geodir_core_uninstall_settings($settings) {
+    $settings[] = plugin_basename(dirname(dirname(__FILE__)));
+    
+    return $settings;
+}
+add_filter('geodir_plugins_uninstall_settings', 'geodir_core_uninstall_settings', 10, 1);
