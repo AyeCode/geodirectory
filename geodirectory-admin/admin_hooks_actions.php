@@ -2361,7 +2361,7 @@ function geodir_uninstall_settings($general_settings) {
                     'type' => 'checkbox',
                     'id' => 'geodir_un_' . $plugin_name,
                     'name' => $data['Name'],
-                    'desc' => wp_sprintf(__('Remove all of its data when the <b>%s</b> is deleted', 'geodirectory'), $plugin_name),
+                    'desc' => __('Remove all data when deleted?', 'geodirectory'),
                     'std' => '0'
                 );
             }

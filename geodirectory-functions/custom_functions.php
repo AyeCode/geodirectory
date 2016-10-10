@@ -2402,6 +2402,18 @@ function geodir_search_form_near_input() {
 	} else {
 		$near = $default_near_text;
 	}
+
+
+	$curr_post_type = geodir_get_current_posttype();
+	/**
+	 * Used to hide the near field and other things.
+	 *
+	 * @since 1.6.9
+	 * @param string $curr_post_type The current post type.
+	 */
+	$near_input_extra = apply_filters('geodir_near_input_extra','',$curr_post_type);
+
+
 	/**
 	 * Filter the "Near" text value for the search form.
 	 *
@@ -2435,22 +2447,19 @@ function geodir_search_form_near_input() {
 
 	$new_style = get_option('geodir_show_search_old_search_from') ? false : true;
 	if($new_style){
-		echo "<div class='gd-search-input-wrapper gd-search-field-near'>";
-
-		if(defined('GEODIRADVANCESEARCH_TEXTDOMAIN')) {
-			echo "<div class='gd-append-near-wrapper'>";
-		}
+		echo "<div class='gd-search-input-wrapper gd-search-field-near' $near_input_extra>";
+		
+		do_action('geodir_before_near_input');
 	}
+
 	?>
 	<input name="snear" class="snear <?php echo $near_class; ?>" type="text" value="<?php echo $near; ?>"
 	       onblur="if (this.value.trim() == '') {this.value = ('<?php echo esc_sql( $near ); ?>' != '' ? '<?php echo esc_sql( $near ); ?>' : '<?php echo $default_near_text; ?>');}"
 	       onfocus="if (this.value == '<?php echo $default_near_text; ?>' || this.value =='<?php echo esc_sql( $near ); ?>') {this.value = '';}"
-	       onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);"/>
+	       onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);" <?php echo $near_input_extra;?>/>
 	<?php
 	if($new_style){
-		if(defined('GEODIRADVANCESEARCH_TEXTDOMAIN')){
-			echo '<span class="near-compass gd-search-near-input" data-dropdown=".gd-near-me-dropdown" ><i class="fa fa-compass" aria-hidden="true"></i></span></div>';
-		}
+		do_action('geodir_after_near_input');
 
 		echo "</div>";
 	}

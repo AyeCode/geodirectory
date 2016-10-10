@@ -1030,7 +1030,7 @@ function geodir_compatibility_setting_tab($tabs)
  */
 function geodir_extend_geodirectory_setting_tab($tabs)
 {
-    $tabs['extend_geodirectory_settings'] = array('label' => __('Extend Geodirectory', 'geodirectory'). ' <i class="fa fa-plug"></i>', 'url' => 'http://wpgeodirectory.com', 'target' => '_blank');
+    $tabs['extend_geodirectory_settings'] = array('label' => __('Extend Geodirectory', 'geodirectory'). ' <i class="fa fa-plug"></i>', 'url' => 'https://wpgeodirectory.com', 'target' => '_blank');
     return $tabs;
 }
 
