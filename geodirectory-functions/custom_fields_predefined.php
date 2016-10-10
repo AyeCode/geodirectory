@@ -13,6 +13,7 @@
  * @param string $post_type The post type being added.
  * @since 1.6.9
  * @package GeoDirectory
+ * @see `geodir_custom_field_save` for array details.
  */
 function geodir_custom_fields_predefined($post_type=''){
 
@@ -44,7 +45,15 @@ function geodir_custom_fields_predefined($post_type=''){
             'field_icon'          =>  'fa fa-usd',
             'css_class'           =>  '',
             'cat_sort'            =>  true,
-            'cat_filter'	      =>  true
+            'cat_filter'	      =>  true,
+            'extra_fields'        =>  array(
+                'is_price'                  =>  1,
+                'thousand_separator'        =>  'comma',
+                'decimal_separator'         =>  'period',
+                'decimal_display'           =>  'if',
+                'currency_symbol'           =>  '$',
+                'currency_symbol_placement' =>  'left'
+            )
         )
     );
 

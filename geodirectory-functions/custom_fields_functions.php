@@ -287,6 +287,7 @@ if (!function_exists('geodir_custom_field_save')) {
      *    @type string $option_values Option Values should be separated by comma.
      *    @type string $field_icon Upload icon using media and enter its url path, or enter font awesome class.
      *    @type string $css_class Enter custom css class for field custom style.
+     *    @type array $extra_fields An array of extra fields to store.
      *
      * }
      * @param bool $default Not yet implemented.
@@ -3259,8 +3260,10 @@ function geodir_cfa_extra_fields_text($output,$result_str,$cf,$field_info){
     }
 
     $show_price_extra = ($value==1) ? 1 : 0;
+
+    $show_price = (isset($field_info->data_type) && ($field_info->data_type=='INT' && $field_info->data_type=='FLOAT')) ? 1 : 0;
     ?>
-    <li class="gdcf-price-extra-set">
+    <li class="gdcf-price-extra-set" <?php if(!$show_price){ echo "style='display:none;'";}?>>
         <label for="is_price" class="gd-cf-tooltip-wrap">
             <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Display as price? :', 'geodirectory'); ?>
             <div class="gdcf-tooltip">
