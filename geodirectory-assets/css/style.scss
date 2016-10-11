@@ -476,7 +476,10 @@ listings page
     margin-bottom: 15px;
     display: block;
     list-style: none;
-    overflow: hidden;
+
+    .geodir-content, .geodir-addinfo{
+        overflow: hidden;
+    }
 }
 
 .geodir_category_list_view li .geodir-post-img {

@@ -430,7 +430,12 @@ function geodir_get_current_posttype()
     }
 
 
-    return $geodir_post_type;
+    /**
+     * Filter the default CPT return.
+     *
+     * @since 1.6.9
+     */
+    return apply_filters('geodir_get_current_posttype',$geodir_post_type);
 }
 
 /**

@@ -49,7 +49,9 @@ body {
       position: relative;
       .clearfix.geodir-loc-bar-in {
         .geodir-search {
+          display: -webkit-flex; /* NEW */
           display: flex;
+          -webkit-flex-wrap: wrap; /* NEW */
           flex-wrap: wrap;
           width: 100%;
           margin: 0 auto;
@@ -72,6 +74,7 @@ body {
             height: 38px;
           }
           input[type=button], button {
+            -webkit-flex: 1 1 auto;
             flex: 1 1 auto;
             min-width: 40px;
             margin: 5px 3px 5px 3px !important;
@@ -87,6 +90,7 @@ body {
             float: left;
             padding: 0 3px;
             margin: 5px 0;
+            -webkit-flex: 50;
             flex: 50;
             min-width: 150px;
             select, input[type=text], select.search_by_post {
@@ -94,35 +98,34 @@ body {
             }
           }
           .gd-search-input-wrapper.gd-search-field-cpt {
+            -webkit-flex: 25;
             flex: 25;
             min-width: 130px;
           }
           .gd-search-input-wrapper.gd-search-field-near {
             .gd-append-near-wrapper {
-              display: table;
-              cursor: pointer;
+              position: relative;
               input {
-                border-bottom-right-radius: 0;
-                border-top-right-radius: 0;
-                display: table-cell;
+                padding-right: 40px;
               }
               span {
-                padding: 0 5px;
+                padding: 0;
                 font-weight: normal;
                 line-height: 0;
                 text-align: center;
                 background-color: #eee;
                 border: 1px solid #ccc;
                 border-radius: 3px;
-                border-left: 0;
                 border-bottom-left-radius: 0;
                 border-top-left-radius: 0;
-                display: table-cell;
-                width: 1%;
-                white-space: nowrap;
-                vertical-align: middle;
+                position: absolute;
+                right: 0;
+                height: 38px;
+                cursor: pointer;
+                width: 38px;
                 .fa {
                   font-size: 30px;
+                  line-height: 37px;
                 }
               }
             }
@@ -132,12 +135,15 @@ body {
       }
 
       .geodir-filter-container .geodir-advance-search {
+        display: -webkit-flex; /* NEW */
         display: flex;
+        -webkit-flex-wrap: wrap; /* NEW */
         flex-wrap: wrap;
         width: 100%;
         margin: 0 auto;
 
         .geodir_submit_search {
+          -webkit-flex: 1 1 auto;
           flex: 1 1 auto;
           min-width: 40px;
           margin: 5px 3px 5px 3px !important;
@@ -170,6 +176,7 @@ SIDEBAR STYLES
     .geodir-search{
       .gd-search-input-wrapper{
         min-width: 100%;
+
       }
     }
 
