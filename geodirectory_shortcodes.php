@@ -882,7 +882,8 @@ function geodir_sc_advanced_search($atts) {
         'after_widget' => '</section>',
         'before_title' => '<h3 class="widget-title">',
         'after_title' => '</h3>',
-		'show_adv_search' => 'default'
+        'show_adv_search' => 'default',
+		'post_type' => ''
 	);
 	
 	$params = shortcode_atts($defaults, $atts);

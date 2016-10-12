@@ -387,7 +387,7 @@ function geodir_add_page_id_in_query_var()
 
     $page_id = $wp_query->get_queried_object_id();
 
-    if (!get_query_var('page_id')) {
+    if (!get_query_var('page_id') && !is_archive()) {
         // fix for WP tags conflict with enfold theme
         $theme_name = geodir_strtolower(wp_get_theme());
         if (!geodir_is_geodir_page() && strpos($theme_name, 'enfold') !== false) {

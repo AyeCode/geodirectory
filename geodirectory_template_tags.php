@@ -542,10 +542,13 @@ function geodir_add_sharelocation_scripts()
 
 		function geodir_setup_submit_search() {
             jQuery('.geodir_submit_search').unbind('click');// unbind any other click events
-			jQuery('.geodir_submit_search').click(function() {
+			jQuery('.geodir_submit_search').click(function(e) {
+
+                e.preventDefault();
+
 				var s = ' ';
 				var $form = jQuery(this).closest('form');
-				
+
 				if (jQuery("#sdist input[type='radio']:checked").length != 0) dist = jQuery("#sdist input[type='radio']:checked").val();
 				if (jQuery('.search_text', $form).val() == '' || jQuery('.search_text', $form).val() == '<?php echo $default_search_for_text;?>') jQuery('.search_text', $form).val(s);
 				
@@ -571,12 +574,11 @@ function geodir_add_sharelocation_scripts()
 		}
 
         jQuery(document).ready(function() {
-            /*
-            jQuery('#sort_by').change(function() {
-                jQuery('.geodir_submit_search:first').click();
-            });
-            */
             geodir_setup_submit_search();
+            //setup advanced search form on form ajax load
+            jQuery("body").on("geodir_setup_search_form", function(){
+                geodir_setup_submit_search();
+            });
         });
         
 		function geodir_setsearch($form) {
@@ -625,7 +627,7 @@ function geodir_add_sharelocation_scripts()
                                 if (status == google.maps.GeocoderStatus.OK) {
                                     updateSearchPosition(results[0].geometry.location, $form);
                                 } else {
-                                    alert("<?php esc_attr_e('Search was not successful for the following reason:', 'geodirectory');?>" + status);
+                                    alert("<?php esc_attr_e('Search was not successful for the following reason x:', 'geodirectory');?>" + status);
                                 }
                             });
                     } else if (window.gdMaps === 'osm') {
