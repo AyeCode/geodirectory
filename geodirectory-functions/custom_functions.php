@@ -2306,8 +2306,10 @@ function geodir_search_form_submit_button() {
 add_action( 'geodir_before_search_button', 'geodir_search_form_submit_button', 5000 );
 
 function geodir_search_form_post_type_input() {
+	global $geodir_search_post_type;
 	$post_types     = apply_filters( 'geodir_search_form_post_types', geodir_get_posttypes( 'object' ) );
-	$curr_post_type = geodir_get_current_posttype();
+	$curr_post_type = $geodir_search_post_type;
+
 	if ( ! empty( $post_types ) && count( (array) $post_types ) > 1 ) {
 
 		foreach ( $post_types as $post_type => $info ){
@@ -2328,10 +2330,6 @@ function geodir_search_form_post_type_input() {
 			<select name="stype" class="search_by_post">
 				<?php foreach ( $post_types as $post_type => $info ):
 					global $wpdb;
-//					$has_posts = $wpdb->get_row( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s AND post_status='publish' LIMIT 1", $post_type ) );
-//					if ( ! $has_posts ) {
-//						continue;
-//					}
 					?>
 
 					<option data-label="<?php echo get_post_type_archive_link( $post_type ); ?>"
@@ -2351,7 +2349,8 @@ function geodir_search_form_post_type_input() {
 			}
 		}else{
 			if(! empty( $post_types )){
-				echo '<input type="hidden" name="stype" value="' . key( $post_types ) . '"  />';
+				$pt_arr = (array)$post_types;
+				echo '<input type="hidden" name="stype" value="' . key( $pt_arr  ) . '"  />';
 			}else{
 				echo '<input type="hidden" name="stype" value="gd_place"  />';
 			}
@@ -2359,7 +2358,7 @@ function geodir_search_form_post_type_input() {
 		}
 
 	}elseif ( ! empty( $post_types ) ) {
-		echo '<input type="hidden" name="stype" value="' . key( $post_types ) . '"  />';
+		echo '<input type="hidden" name="stype" value="gd_place"  />';
 	}
 }
 
@@ -2404,7 +2403,8 @@ function geodir_search_form_near_input() {
 	}
 
 
-	$curr_post_type = geodir_get_current_posttype();
+	global $geodir_search_post_type;
+	$curr_post_type = $geodir_search_post_type;
 	/**
 	 * Used to hide the near field and other things.
 	 *
@@ -2469,8 +2469,25 @@ add_action( 'geodir_search_form_inputs', 'geodir_search_form_post_type_input', 1
 add_action( 'geodir_search_form_inputs', 'geodir_search_form_search_input', 20 );
 add_action( 'geodir_search_form_inputs', 'geodir_search_form_near_input', 30 );
 
+function geodir_get_search_post_type($pt=''){
+	global $geodir_search_post_type;
 
-function geodir_search_form() {
+	if($pt!=''){return $geodir_search_post_type = $pt;}
+	if(!empty($geodir_search_post_type)){ return $geodir_search_post_type;}
+
+	$geodir_search_post_type = geodir_get_current_posttype();
+
+	if(!$geodir_search_post_type) {
+		$geodir_search_post_type = geodir_get_default_posttype();
+	}
+
+
+	return $geodir_search_post_type;
+}
+
+function geodir_search_form(){
+
+	geodir_get_search_post_type();
 
 	geodir_get_template_part('listing', 'filter-form');
 

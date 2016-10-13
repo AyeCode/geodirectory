@@ -59,7 +59,6 @@ body {
           select, input[type=text], input[type=text].ac_input {
             border: 1px solid #ccc;
             border-radius: 3px 3px 3px 3px;
-            background: #fff;
             padding: 5px;
             display: block;
             float: left;
@@ -76,6 +75,7 @@ body {
           input[type=button], button {
             -webkit-flex: 1 1 auto;
             flex: 1 1 auto;
+            width: initial;
             min-width: 40px;
             margin: 5px 3px 5px 3px !important;
             border-radius: 3px 3px 3px 3px;
@@ -126,6 +126,8 @@ body {
                 .fa {
                   font-size: 30px;
                   line-height: 37px;
+                  margin: 0;
+                  padding: 0;
                 }
               }
             }

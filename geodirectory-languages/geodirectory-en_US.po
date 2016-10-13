@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 1.6.9\n"
+"Project-Id-Version: GeoDirectory 1.6.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-10 17:24+0100\n"
-"PO-Revision-Date: 2016-10-10 17:24+0100\n"
+"POT-Creation-Date: 2016-10-12 16:17+0100\n"
+"PO-Revision-Date: 2016-10-12 16:17+0100\n"
 "Last-Translator: \n"
 "Language-Team: GeoDirectory <info@wpgeodirectory.com>\n"
 "Language: en_US\n"
@@ -2123,7 +2123,7 @@ msgstr ""
 #: geodirectory_template_actions.php:1616
 #: geodirectory_template_actions.php:2722
 #: geodirectory_template_actions.php:2966
-#: geodirectory_template_actions.php:3379 geodirectory_widgets.php:1001
+#: geodirectory_template_actions.php:3379 geodirectory_widgets.php:1007
 #: language.php:21
 msgid "Search"
 msgstr ""
@@ -5384,7 +5384,7 @@ msgid "You must be <a href=\"%s\">logged in</a> to post a comment."
 msgstr ""
 
 #: geodirectory-functions/shortcode_functions.php:644
-#: geodirectory_shortcodes.php:1132
+#: geodirectory_shortcodes.php:1133
 msgid ","
 msgstr ""
 
@@ -6529,35 +6529,35 @@ msgstr ""
 msgid "Showing %s %d-%d of %d"
 msgstr ""
 
-#: geodirectory_template_tags.php:602 geodirectory_template_tags.php:603
+#: geodirectory_template_tags.php:604 geodirectory_template_tags.php:605
 msgid "In:"
 msgstr ""
 
-#: geodirectory_template_tags.php:628
-msgid "Search was not successful for the following reason:"
+#: geodirectory_template_tags.php:630
+msgid "Search was not successful for the following reason x:"
 msgstr ""
 
-#: geodirectory_template_tags.php:637
+#: geodirectory_template_tags.php:639
 msgid "Search was not successful for the requested address."
 msgstr ""
 
-#: geodirectory_template_tags.php:683
+#: geodirectory_template_tags.php:685
 msgid "Unable to find your location"
 msgstr ""
 
-#: geodirectory_template_tags.php:686
+#: geodirectory_template_tags.php:688
 msgid "Permission denied in finding your location"
 msgstr ""
 
-#: geodirectory_template_tags.php:689
+#: geodirectory_template_tags.php:691
 msgid "Your location is currently unknown"
 msgstr ""
 
-#: geodirectory_template_tags.php:692
+#: geodirectory_template_tags.php:694
 msgid "Attempt to find location took too long"
 msgstr ""
 
-#: geodirectory_template_tags.php:695
+#: geodirectory_template_tags.php:697
 msgid "Location detection not supported in browser"
 msgstr ""
 
@@ -6730,7 +6730,7 @@ msgstr ""
 msgid "GD > Search"
 msgstr ""
 
-#: geodirectory_widgets.php:1038
+#: geodirectory_widgets.php:1048
 msgid ""
 "This is a search widget to show advance search for gedodirectory listings."
 msgstr ""

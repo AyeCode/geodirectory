@@ -963,7 +963,7 @@ if (!function_exists('register_geodir_widgets')) {
              * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
              */
             public function __construct() {
-                $widget_ops = array('classname' => 'geodir_advance_search_widget', 'description' => __('GD > Search', 'geodirectory'));
+                $widget_ops = array('classname' => 'geodir_advance_search_widget', 'description' => __('GD > Search', 'geodirectory'),'post_type'=>'');
                 parent::__construct(
                     'geodir_advance_search', // Base ID
                     __('GD > Search', 'geodirectory'), // Name
@@ -995,6 +995,12 @@ if (!function_exists('register_geodir_widgets')) {
                 // prints the widget
                 extract($args, EXTR_SKIP);
 
+                if(isset($post_type) && $post_type){
+                    geodir_get_search_post_type($post_type);// set the post type
+                }else{
+                    geodir_get_search_post_type();// set the post type
+                }
+
                 echo $before_widget;
 
                 /** This filter is documented in geodirectory_widgets.php */
@@ -1003,6 +1009,10 @@ if (!function_exists('register_geodir_widgets')) {
                 geodir_get_template_part('listing', 'filter-form');
 
                 echo $after_widget;
+
+                // after outputing the search reset the CPT
+                global $geodir_search_post_type;
+                $geodir_search_post_type = '';
             }
 
             /**
