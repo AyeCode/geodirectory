@@ -759,6 +759,16 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 		} elseif ( $message_type == 'send_enquiry' ) {
 			$subject = get_option( 'geodir_email_enquiry_subject' );
 			$message = get_option( 'geodir_email_enquiry_content' );
+
+			// change to name in some cases
+			$post_author = get_post_field( 'post_author', $post_id );
+			if(is_super_admin( $post_author  )){// if admin probably not the post author so change name
+				$toEmailName = __('Business Owner','geodirectory');
+			}elseif(defined('GEODIRCLAIM_VERSION') && geodir_get_post_meta($post_id,'claimed')!='1'){// if claim manager installed but listing not claimed
+				$toEmailName = __('Business Owner','geodirectory');
+			}
+
+
 		} elseif ( $message_type == 'forgot_password' ) {
 			$subject       = get_option( 'geodir_forgot_password_subject' );
 			$message       = get_option( 'geodir_forgot_password_content' );
