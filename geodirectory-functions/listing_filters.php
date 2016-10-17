@@ -391,7 +391,7 @@ function geodir_posts_orderby($orderby)
             $sort_by = 'az';
         }
 
-        if ($snear != '') {
+        if ($snear != '' &&  $sort_by!='farthest') {
             $sort_by = 'nearest';
         }
     }
