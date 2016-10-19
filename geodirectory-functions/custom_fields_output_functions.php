@@ -688,7 +688,19 @@ function geodir_cf_text($html,$location,$cf,$p=''){
 
             $html = '<div class="geodir_more_info ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="'.$class.'" style="' . $field_icon . '">' . $field_icon_af;
             $html .= (trim($cf['site_title'])) ? __($cf['site_title'], 'geodirectory') . ': ' : '';
-            $html .= '</span>' . $post->{$cf['htmlvar_name']} . '</div>';
+            $html .= '</span>';
+
+            $value = $post->{$cf['htmlvar_name']};
+            if(isset($cf['data_type']) && ($cf['data_type']=='INT' || $cf['data_type']=='FLOAT') && isset($cf['extra_fields']) && $cf['extra_fields']){
+                $extra_fields = maybe_unserialize($cf['extra_fields']);
+                if(isset($extra_fields['is_price']) && $extra_fields['is_price']){
+                    $value = geodir_currency_format_number($value,$cf);
+                }
+            }
+
+
+            $html .= $value;
+            $html .= '</div>';
 
         endif;
 
@@ -1788,20 +1800,19 @@ function geodir_cf_address($html,$location,$cf,$p=''){
             $html .= ( trim( $cf['site_title'] ) ) ? __( $cf['site_title'], 'geodirectory' ) . ': ' : '&nbsp;';
             $html .= '</span>';
 
-
-            if ( $post->post_address ) {
+            if ( isset($post->post_address) ) {
                 $html .= '<span itemprop="streetAddress">' . $post->post_address . '</span><br>';
             }
-            if ($show_city_in_address && $post->post_city ) {
+            if ($show_city_in_address && isset( $post->post_city ) && $post->post_city ) {
                 $html .= '<span itemprop="addressLocality">' . $post->post_city . '</span><br>';
             }
-            if ($show_region_in_address && $post->post_region ) {
+            if ($show_region_in_address && isset( $post->post_region ) && $post->post_region ) {
                 $html .= '<span itemprop="addressRegion">' . $post->post_region . '</span><br>';
             }
-            if ($show_zip_in_address && $post->post_zip ) {
+            if ($show_zip_in_address && isset( $post->post_zip ) && $post->post_zip ) {
                 $html .= '<span itemprop="postalCode">' . $post->post_zip . '</span><br>';
             }
-            if ($show_country_in_address && $post->post_country ) {
+            if ($show_country_in_address && isset( $post->post_country ) && $post->post_country ) {
                 $html .= '<span itemprop="addressCountry">' . __( $post->post_country, 'geodirectory' ) . '</span><br>';
             }
             $html .= '</div>';

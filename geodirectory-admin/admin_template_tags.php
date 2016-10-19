@@ -1509,6 +1509,8 @@ function geodir_custom_post_type_form()
 
                 </div>
 
+                <?php if($sub_tab=='custom_fields'){ ?>
+
                 <h3><?php _e('Predefined Fields','geodirectory');?></h3>
                 <div class="inside">
 
@@ -1547,7 +1549,10 @@ function geodir_custom_post_type_form()
 
                 </div>
 
-            </div>
+                <?php }?>
+
+
+        </div>
             <!--side-sortables -->
 
 

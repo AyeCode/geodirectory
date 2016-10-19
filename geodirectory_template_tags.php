@@ -241,6 +241,15 @@ function geodir_footer_scripts()
 {	
 	echo stripslashes(get_option('geodir_ga_tracking_code'));
     echo stripslashes(get_option('geodir_footer_scripts'));
+
+    /*
+     * Apple suck and can't/won't fix bugs: https://bugs.webkit.org/show_bug.cgi?id=136041
+     *
+     * Flexbox wont wrap on ios for search form items
+     */
+    if (preg_match( '/iPad|iPod|iPhone|Safari/', $_SERVER['HTTP_USER_AGENT'] ) ) {
+        echo "<style>body .geodir-listing-search.gd-search-bar-style .geodir-loc-bar .clearfix.geodir-loc-bar-in .geodir-search .gd-search-input-wrapper{flex:50 1 auto !important;min-width: initial !important;width:auto !important;}</style>";
+    }
 }
 
 
@@ -533,10 +542,13 @@ function geodir_add_sharelocation_scripts()
 
 		function geodir_setup_submit_search() {
             jQuery('.geodir_submit_search').unbind('click');// unbind any other click events
-			jQuery('.geodir_submit_search').click(function() {
+			jQuery('.geodir_submit_search').click(function(e) {
+
+                e.preventDefault();
+
 				var s = ' ';
 				var $form = jQuery(this).closest('form');
-				
+
 				if (jQuery("#sdist input[type='radio']:checked").length != 0) dist = jQuery("#sdist input[type='radio']:checked").val();
 				if (jQuery('.search_text', $form).val() == '' || jQuery('.search_text', $form).val() == '<?php echo $default_search_for_text;?>') jQuery('.search_text', $form).val(s);
 				
@@ -562,12 +574,11 @@ function geodir_add_sharelocation_scripts()
 		}
 
         jQuery(document).ready(function() {
-            /*
-            jQuery('#sort_by').change(function() {
-                jQuery('.geodir_submit_search:first').click();
-            });
-            */
             geodir_setup_submit_search();
+            //setup advanced search form on form ajax load
+            jQuery("body").on("geodir_setup_search_form", function(){
+                geodir_setup_submit_search();
+            });
         });
         
 		function geodir_setsearch($form) {
@@ -616,7 +627,7 @@ function geodir_add_sharelocation_scripts()
                                 if (status == google.maps.GeocoderStatus.OK) {
                                     updateSearchPosition(results[0].geometry.location, $form);
                                 } else {
-                                    alert("<?php esc_attr_e('Search was not successful for the following reason:', 'geodirectory');?>" + status);
+                                    alert("<?php esc_attr_e('Search was not successful for the following reason x:', 'geodirectory');?>" + status);
                                 }
                             });
                     } else if (window.gdMaps === 'osm') {

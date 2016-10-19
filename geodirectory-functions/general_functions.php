@@ -190,16 +190,41 @@ function geodir_get_addlisting_link( $post_type = '' ) {
  * @since   1.0.0
  * @package GeoDirectory
  * @since   1.4.2 Removed the port number from the URL if port 80 is not being used.
+ * @since   1.6.9 Fix $_SERVER['SERVER_NAME'] with nginx server.
  * @return string The current URL.
  */
 function geodir_curPageURL() {
 	$pageURL = 'http';
-	if ( isset( $_SERVER["HTTPS"] ) && $_SERVER["HTTPS"] == "on" ) {
+	if (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) == 'on')) {
 		$pageURL .= "s";
 	}
 	$pageURL .= "://";
-	$pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
-
+	
+	/*
+	 * Since we are assigning the URI from the server variables, we first need
+	 * to determine if we are running on apache or IIS.  If PHP_SELF and REQUEST_URI
+	 * are present, we will assume we are running on apache.
+	 */
+	if (!empty($_SERVER['PHP_SELF']) && !empty($_SERVER['REQUEST_URI'])) {
+		// To build the entire URI we need to prepend the protocol, and the http host
+		// to the URI string.
+		$pageURL .= $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+	} else {
+		/*
+		 * Since we do not have REQUEST_URI to work with, we will assume we are
+		 * running on IIS and will therefore need to work some magic with the SCRIPT_NAME and
+		 * QUERY_STRING environment variables.
+		 *
+		 * IIS uses the SCRIPT_NAME variable instead of a REQUEST_URI variable... thanks, MS
+		 */
+		$pageURL .= $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'];
+		
+		// If the query string exists append it to the URI string
+		if (isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING'])) {
+			$pageURL .= '?' . $_SERVER['QUERY_STRING'];
+		}
+	}
+	
 	/**
 	 * Filter the current page URL returned by function geodir_curPageURL().
 	 *
@@ -209,7 +234,6 @@ function geodir_curPageURL() {
 	 */
 	return apply_filters( 'geodir_curPageURL', $pageURL );
 }
-
 
 /**
  * Clean variables.
@@ -735,6 +759,16 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 		} elseif ( $message_type == 'send_enquiry' ) {
 			$subject = get_option( 'geodir_email_enquiry_subject' );
 			$message = get_option( 'geodir_email_enquiry_content' );
+
+			// change to name in some cases
+			$post_author = get_post_field( 'post_author', $post_id );
+			if(is_super_admin( $post_author  )){// if admin probably not the post author so change name
+				$toEmailName = __('Business Owner','geodirectory');
+			}elseif(defined('GEODIRCLAIM_VERSION') && geodir_get_post_meta($post_id,'claimed')!='1'){// if claim manager installed but listing not claimed
+				$toEmailName = __('Business Owner','geodirectory');
+			}
+
+
 		} elseif ( $message_type == 'forgot_password' ) {
 			$subject       = get_option( 'geodir_forgot_password_subject' );
 			$message       = get_option( 'geodir_forgot_password_content' );
@@ -1122,7 +1156,41 @@ function geodir_taxonomy_breadcrumb() {
 	echo '<li> > ' . $term->name . '</li>';
 }
 
+function geodir_wpml_post_type_archive_link($link, $post_type){
 
+	if(function_exists('icl_object_id')) {
+		$post_types   = get_option( 'geodir_post_types' );
+		$slug         = $post_types[ $post_type ]['rewrite']['slug'];
+
+		//echo $link.'###'.gd_wpml_get_lang_from_url( $link) ;
+
+		// Alter the CPT slug if WPML is set to do so
+		if ( function_exists( 'icl_object_id' ) ) {
+			if ( gd_wpml_slug_translation_turned_on( $post_type ) && $language_code = gd_wpml_get_lang_from_url( $link) ) {
+
+				$org_slug = $slug;
+				$slug     = apply_filters( 'wpml_translate_single_string',
+					$slug,
+					'WordPress',
+					'URL slug: ' . $slug,
+					$language_code );
+
+				if ( ! $slug ) {
+					$slug = $org_slug;
+				} else {
+					$link = str_replace( $org_slug, $slug, $link );
+				}
+
+			}
+		}
+
+		//echo $link.'####'.gd_wpml_get_lang_from_url( $link) ;
+	}
+
+	return $link;
+}
+
+//add_filter( 'post_type_archive_link','geodir_wpml_post_type_archive_link', 1000,2);
 /**
  * Main function that generates breadcrumb for all pages.
  *
@@ -2953,6 +3021,9 @@ function geodir_listing_slider_widget_output( $args = '', $instance = '' ) {
 	?>
 	<script type="text/javascript">
 		jQuery(window).load(function () {
+			// chrome 53 introduced a bug, so we need to repaint the slider when shown.
+			jQuery('.geodir-slides').addClass('flexslider-fix-rtl');
+
 			jQuery('#geodir_widget_carousel').flexslider({
 				animation: "slide",
 				selector: ".geodir-slides > li",
@@ -2984,6 +3055,10 @@ function geodir_listing_slider_widget_output( $args = '', $instance = '' ) {
 			}?>
 				sync: "#geodir_widget_carousel",
 				start: function (slider) {
+
+					// chrome 53 introduced a bug, so we need to repaint the slider when shown.
+					jQuery('.geodir-slides').removeClass('flexslider-fix-rtl');
+
 					jQuery('.geodir-listing-flex-loader').hide();
 					jQuery('#geodir_widget_slider').css({'visibility': 'visible'});
 					jQuery('#geodir_widget_carousel').css({'visibility': 'visible'});

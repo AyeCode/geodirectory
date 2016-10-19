@@ -13,6 +13,7 @@
  * @param string $post_type The post type being added.
  * @since 1.6.9
  * @package GeoDirectory
+ * @see `geodir_custom_field_save` for array details.
  */
 function geodir_custom_fields_predefined($post_type=''){
 
@@ -28,6 +29,7 @@ function geodir_custom_fields_predefined($post_type=''){
         'description' =>  __('Adds a input for a price field. This will let you filter and sort by price.', 'geodirectory'),
         'defaults'    => array(
             'data_type'           =>  'FLOAT',
+            'decimal_point'       =>  '2',
             'admin_title'         =>  'Price',
             'site_title'          =>  'Price',
             'admin_desc'          =>  'Enter the price in $ (no currency symbol)',
@@ -43,7 +45,15 @@ function geodir_custom_fields_predefined($post_type=''){
             'field_icon'          =>  'fa fa-usd',
             'css_class'           =>  '',
             'cat_sort'            =>  true,
-            'cat_filter'	      =>  true
+            'cat_filter'	      =>  true,
+            'extra_fields'        =>  array(
+                'is_price'                  =>  1,
+                'thousand_separator'        =>  'comma',
+                'decimal_separator'         =>  'period',
+                'decimal_display'           =>  'if',
+                'currency_symbol'           =>  '$',
+                'currency_symbol_placement' =>  'left'
+            )
         )
     );
 
@@ -98,7 +108,7 @@ function geodir_custom_fields_predefined($post_type=''){
             'validation_pattern'  =>  '',
             'validation_msg'      =>  '',
             'required_msg'        =>  '',
-            'field_icon'          =>  'fa fa-th-larg',
+            'field_icon'          =>  'fa fa-th-large',
             'css_class'           =>  '',
             'cat_sort'            =>  true,
             'cat_filter'	      =>  true

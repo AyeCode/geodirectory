@@ -65,14 +65,6 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
         'id' => 'geodir_home_top_section'),
 
     array(
-        'name' => __('Geodirectory home page', 'geodirectory'),
-        'desc' => __('Set geodirectory home page as your home. <b style="color:red;">This setting has been depreciated and will be removed in the next version, instead please set the GD home page in GD>Permalinks and then set this page to the front page under Settings>Reading>Front Page</b>', 'geodirectory'),
-        'id' => 'geodir_set_as_home',
-        'type' => 'checkbox',
-        'std' => '0' // Default value to show home top section
-    ),
-
-    array(
         'name' => __('Home top section', 'geodirectory'),
         'desc' => __('Show the top section of home page', 'geodirectory'),
         'id' => 'geodir_show_home_top_section',

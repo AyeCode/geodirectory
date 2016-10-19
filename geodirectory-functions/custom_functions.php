@@ -2266,7 +2266,13 @@ function geodir_output_pinpoint_html_listings( $post_id, $post ) {
 
 function geodir_search_form_submit_button() {
 
-	$default_search_button_label = __( '&#xf002;', 'geodirectory' );
+	$new_style = get_option( 'geodir_show_search_old_search_from' ) ? false : true;
+
+	if ( $new_style ) {
+		$default_search_button_label = '<i class="fa fa-search" aria-hidden="true"></i>';
+	}else{
+		$default_search_button_label = 'Search';
+	}
 	if ( get_option( 'geodir_search_button_label' ) && get_option( 'geodir_search_button_label' ) != 'Search' ) {
 		$default_search_button_label = __( get_option( 'geodir_search_button_label' ), 'geodirectory' );
 	}
@@ -2286,51 +2292,73 @@ function geodir_search_form_submit_button() {
 	if ( strpos( $default_search_button_label, '&#' ) !== false ) {
 		$fa_class = 'fa';
 	}
+
+
+	if ( $new_style ) {
 	?>
-	<input type="button" value="<?php esc_attr_e( $default_search_button_label ); ?>"
+		<button class="geodir_submit_search <?php echo $fa_class; ?>"><?php _e( $default_search_button_label ,'geodirectory'); ?></button>
+<?php }else{?>
+		<input type="button" value="<?php esc_attr_e( $default_search_button_label ); ?>"
 	       class="geodir_submit_search <?php echo $fa_class; ?>"/>
-	<?php
+	<?php }
 }
 
 add_action( 'geodir_before_search_button', 'geodir_search_form_submit_button', 5000 );
 
 function geodir_search_form_post_type_input() {
+	global $geodir_search_post_type;
 	$post_types     = apply_filters( 'geodir_search_form_post_types', geodir_get_posttypes( 'object' ) );
-	$curr_post_type = geodir_get_current_posttype();
-	if ( ! empty( $post_types ) && count( (array) $post_types ) > 1 ){
+	$curr_post_type = $geodir_search_post_type;
 
-		$new_style = get_option( 'geodir_show_search_old_search_from' ) ? false : true;
-		if ( $new_style ) {
-			echo "<div class='gd-search-input-wrapper gd-search-field-cpt'>";
+	if ( ! empty( $post_types ) && count( (array) $post_types ) > 1 ) {
+
+		foreach ( $post_types as $post_type => $info ){
+			global $wpdb;
+			$has_posts = $wpdb->get_row( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s AND post_status='publish' LIMIT 1", $post_type ) );
+			if ( ! $has_posts ) {
+				unset($post_types->{$post_type});
+			}
 		}
-		?>
-		<select name="stype" class="search_by_post">
-			<?php foreach ( $post_types as $post_type => $info ):
-				global $wpdb;
-				$has_posts = '';
-				$has_posts = $wpdb->get_row( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s AND post_status='publish' LIMIT 1", $post_type ) );
-				if ( ! $has_posts ) {
-					continue;
-				}
-				?>
 
-				<option data-label="<?php echo get_post_type_archive_link( $post_type ); ?>"
-				        value="<?php echo $post_type; ?>" <?php if ( isset( $_REQUEST['stype'] ) ) {
-					if ( $post_type == $_REQUEST['stype'] ) {
+		if ( ! empty( $post_types ) && count( (array) $post_types ) > 1 ) {
+
+			$new_style = get_option( 'geodir_show_search_old_search_from' ) ? false : true;
+			if ( $new_style ) {
+				echo "<div class='gd-search-input-wrapper gd-search-field-cpt'>";
+			}
+			?>
+			<select name="stype" class="search_by_post">
+				<?php foreach ( $post_types as $post_type => $info ):
+					global $wpdb;
+					?>
+
+					<option data-label="<?php echo get_post_type_archive_link( $post_type ); ?>"
+					        value="<?php echo $post_type; ?>" <?php if ( isset( $_REQUEST['stype'] ) ) {
+						if ( $post_type == $_REQUEST['stype'] ) {
+							echo 'selected="selected"';
+						}
+					} elseif ( $curr_post_type == $post_type ) {
 						echo 'selected="selected"';
-					}
-				} elseif ( $curr_post_type == $post_type ) {
-					echo 'selected="selected"';
-				} ?>><?php _e( ucfirst( $info->labels->name ), 'geodirectory' ); ?></option>
+					} ?>><?php _e( ucfirst( $info->labels->name ), 'geodirectory' ); ?></option>
 
-			<?php endforeach; ?>
-		</select>
-		<?php
-		if ( $new_style ) {
-			echo "</div>";
+				<?php endforeach; ?>
+			</select>
+			<?php
+			if ( $new_style ) {
+				echo "</div>";
+			}
+		}else{
+			if(! empty( $post_types )){
+				$pt_arr = (array)$post_types;
+				echo '<input type="hidden" name="stype" value="' . key( $pt_arr  ) . '"  />';
+			}else{
+				echo '<input type="hidden" name="stype" value="gd_place"  />';
+			}
+
 		}
+
 	}elseif ( ! empty( $post_types ) ) {
-		echo '<input type="hidden" name="stype" value="' . key( $post_types ) . '"  />';
+		echo '<input type="hidden" name="stype" value="gd_place"  />';
 	}
 }
 
@@ -2373,6 +2401,19 @@ function geodir_search_form_near_input() {
 	} else {
 		$near = $default_near_text;
 	}
+
+
+	global $geodir_search_post_type;
+	$curr_post_type = $geodir_search_post_type;
+	/**
+	 * Used to hide the near field and other things.
+	 *
+	 * @since 1.6.9
+	 * @param string $curr_post_type The current post type.
+	 */
+	$near_input_extra = apply_filters('geodir_near_input_extra','',$curr_post_type);
+
+
 	/**
 	 * Filter the "Near" text value for the search form.
 	 *
@@ -2406,18 +2447,20 @@ function geodir_search_form_near_input() {
 
 	$new_style = get_option('geodir_show_search_old_search_from') ? false : true;
 	if($new_style){
-		echo "<div class='gd-search-input-wrapper gd-search-field-near'>";
-		echo "<div class='gd-append-near-wrapper'>";
+		echo "<div class='gd-search-input-wrapper gd-search-field-near' $near_input_extra>";
+		
+		do_action('geodir_before_near_input');
 	}
+
 	?>
 	<input name="snear" class="snear <?php echo $near_class; ?>" type="text" value="<?php echo $near; ?>"
 	       onblur="if (this.value.trim() == '') {this.value = ('<?php echo esc_sql( $near ); ?>' != '' ? '<?php echo esc_sql( $near ); ?>' : '<?php echo $default_near_text; ?>');}"
 	       onfocus="if (this.value == '<?php echo $default_near_text; ?>' || this.value =='<?php echo esc_sql( $near ); ?>') {this.value = '';}"
-	       onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);"/>
+	       onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);" <?php echo $near_input_extra;?>/>
 	<?php
 	if($new_style){
-		echo '<span class="near-compass gd-search-near-input" data-dropdown=".gd-near-me-dropdown" ><i class="fa fa-compass" aria-hidden="true"></i></span>';
-		echo "</div>";
+		do_action('geodir_after_near_input');
+
 		echo "</div>";
 	}
 }
@@ -2425,3 +2468,32 @@ function geodir_search_form_near_input() {
 add_action( 'geodir_search_form_inputs', 'geodir_search_form_post_type_input', 10 );
 add_action( 'geodir_search_form_inputs', 'geodir_search_form_search_input', 20 );
 add_action( 'geodir_search_form_inputs', 'geodir_search_form_near_input', 30 );
+
+function geodir_get_search_post_type($pt=''){
+	global $geodir_search_post_type;
+
+	if($pt!=''){return $geodir_search_post_type = $pt;}
+	if(!empty($geodir_search_post_type)){ return $geodir_search_post_type;}
+
+	$geodir_search_post_type = geodir_get_current_posttype();
+
+	if(!$geodir_search_post_type) {
+		$geodir_search_post_type = geodir_get_default_posttype();
+	}
+
+
+	return $geodir_search_post_type;
+}
+
+function geodir_search_form(){
+
+	geodir_get_search_post_type();
+
+	geodir_get_template_part('listing', 'filter-form');
+
+	// Always die in functions echoing ajax content
+	die();
+}
+
+add_action( 'wp_ajax_geodir_search_form', 'geodir_search_form' );
+add_action( 'wp_ajax_nopriv_geodir_search_form', 'geodir_search_form' );

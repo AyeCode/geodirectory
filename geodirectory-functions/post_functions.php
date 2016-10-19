@@ -668,6 +668,10 @@ if (!function_exists('geodir_save_post_info')) {
             }
 
             $post_meta_set_query = trim($post_meta_set_query, ", ");
+            
+            if (empty($post_meta_set_query) || trim($post_meta_set_query) == '') {
+                return false;
+            }
 
             $post_meta_set_query = str_replace('%', '%%', $post_meta_set_query);// escape %
 
@@ -806,6 +810,10 @@ if (!function_exists('geodir_delete_post_meta')) {
             }
 
             $post_meta_set_query = trim($post_meta_set_query, ", ");
+            
+            if (empty($post_meta_set_query) || trim($post_meta_set_query) == '') {
+                return false;
+            }
 
             if ($wpdb->get_var("SHOW COLUMNS FROM " . $table . " WHERE field = '" . $postmeta . "'") != '') {
 

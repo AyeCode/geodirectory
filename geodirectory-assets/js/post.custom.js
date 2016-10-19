@@ -51,6 +51,9 @@ function geodir_transliterate(e) {
     return r
 }
 jQuery(document).ready(function() {
+    // chrome 53 introduced a bug, so we need to repaint the slider when shown.
+    jQuery('.geodir-slides').addClass('flexslider-fix-rtl');
+
     var e = "undefined" != typeof geodir_var.geodir_gd_modal && 1 == parseInt(geodir_var.geodir_gd_modal) ? !0 : !1;
     e || jQuery("#geodir-post-gallery a").lightBox({
         overlayOpacity: .5,
@@ -80,11 +83,17 @@ jQuery(document).ready(function() {
         slideshow: !0,
         sync: "#geodir_carousel",
         start: function() {
+
+            // chrome 53 introduced a bug, so we need to repaint the slider when shown.
+            jQuery('.geodir-slides').removeClass('flexslider-fix-rtl');
+
             jQuery(".geodir_flex-loader").hide(), jQuery("#geodir_slider").css({
                 visibility: "visible"
             }), jQuery("#geodir_carousel").css({
                 visibility: "visible"
-            })
+            });
+
+
         },
         rtl: 1 == parseInt(geodir_var.is_rtl) ? !0 : !1
     }), jQuery("a.b_sendtofriend").click(function(e) {

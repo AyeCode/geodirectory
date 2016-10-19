@@ -476,7 +476,10 @@ listings page
     margin-bottom: 15px;
     display: block;
     list-style: none;
-    overflow: hidden;
+
+    .geodir-content, .geodir-addinfo{
+        overflow: hidden;
+    }
 }
 
 .geodir_category_list_view li .geodir-post-img {
@@ -1349,6 +1352,11 @@ ul.geodir_recent_reviews li {
     list-style: none;
 }
 
+.geodir_category_list_view .geodir_more_info ul li {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
 .geodir-content .geodir_more_info {
     font-size: 12px;
     line-height: 17px;
@@ -1906,4 +1914,9 @@ div#jquery-lightbox {
         font-size: 33px !important;
         line-height: initial !important;
     }
+}
+
+.flexslider-fix-rtl{
+    width: 100% !important;
+    transform: initial !important;
 }

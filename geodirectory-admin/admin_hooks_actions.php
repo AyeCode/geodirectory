@@ -651,6 +651,7 @@ function geodir_custom_fields($post_type=''){
      *                    Optional. Used to set the default value of the field.
      *
      *                    @type string data_type The SQL data type for the field. VARCHAR, TEXT, TIME, TINYINT, INT, FLOAT, DATE
+     *                    @type int decimal_point limit if using FLOAT data_type
      *                    @type string admin_title The admin title for the field.
      *                    @type string site_title This will be the title for the field on the frontend.
      *                    @type string admin_desc This will be shown below the field on the add listing form.
@@ -866,11 +867,11 @@ function geodir_cf_panel_available_fields_note($note, $sub_tab, $listing_type)
 
     switch ($sub_tab) {
         case 'custom_fields':
-            $note = sprintf(__('Click on any box below to add a field of that type on add %s listing form. You must be use a fieldset to group your fields.', 'geodirectory'), get_post_type_singular_label($listing_type));;
+            $note = sprintf(__('Click on any box below to add a field of that type to the add %s listing form. You can use a fieldset to group your fields.', 'geodirectory'), get_post_type_singular_label($listing_type));;
             break;
 
         case 'sorting_options':
-            $note = sprintf(__('Click on any box below to make it appear in sorting option dropdown on %s listing and search results.<br />To make a field available here, go to custom fields tab and expand any field from selected fields panel and tick the checkbox saying \'Include this field in sort option\'.', 'geodirectory'), get_post_type_singular_label($listing_type));
+            $note = sprintf(__('Click on any box below to make it appear in the sorting option dropdown on %s listing and search results.<br />To make a field available here, go to custom fields tab and expand any field from selected fields panel and tick the checkbox saying \'Include this field in sort option\'.', 'geodirectory'), get_post_type_singular_label($listing_type));
             break;
     }
     return $note;
@@ -893,11 +894,11 @@ function geodir_cf_panel_selected_fields_head($heading, $sub_tab, $listing_type)
 
     switch ($sub_tab) {
         case 'custom_fields':
-            $heading = sprintf(__('List of fields those will appear on add new %s listing form', 'geodirectory'), get_post_type_singular_label($listing_type));
+            $heading = sprintf(__('List of fields that will appear on add new %s listing form', 'geodirectory'), get_post_type_singular_label($listing_type));
             break;
 
         case 'sorting_options':
-            $heading = sprintf(__('List of fields those will appear in %s listing and search results sorting option dropdown box.', 'geodirectory'), get_post_type_singular_label($listing_type));
+            $heading = sprintf(__('List of fields that will appear in %s listing and search results sorting option dropdown box.', 'geodirectory'), get_post_type_singular_label($listing_type));
             break;
     }
     return $heading;
@@ -2334,3 +2335,105 @@ add_filter( 'icl_make_duplicate', 'geodir_icl_make_duplicate', 11, 4 );
 if (isset($_REQUEST['tab']) && $_REQUEST['tab'] == 'permalink_settings') {
 	add_action('geodir_before_admin_panel', 'geodir_wpml_permalink_setting_notice');
 }
+
+/**
+ * Add uninstall settings for GeoDirectory plugins.
+ *
+ * @since 1.6.9
+ *
+ * @param array $settings Array of GeoDirectory general settings.
+ * @return array Array of settings.
+ */
+function geodir_uninstall_settings($general_settings) {
+    $settings   = array();
+    $settings[] = array('type' => 'title', 'id' => 'uninstall_settings', 'name' => __('Uninstall Settings', 'geodirectory'));
+    $settings[] = array('type' => 'sectionstart', 'id' => 'uninstall_settings_main', 'name' => __('Remove Data on Uninstall?', 'geodirectory' ));
+    
+    $plugins    = get_plugins();
+    $un_plugins = apply_filters('geodir_plugins_uninstall_settings', array());
+    
+    if (!empty($plugins) && !empty($un_plugins)) {
+        foreach ($plugins as $plugin => $data) {
+            $plugin_name = plugin_basename(dirname($plugin));
+            
+            if (in_array($plugin_name, $un_plugins)) {
+                $settings[] = array(
+                    'type' => 'checkbox',
+                    'id' => 'geodir_un_' . $plugin_name,
+                    'name' => $data['Name'],
+                    'desc' => __('Remove all data when deleted?', 'geodirectory'),
+                    'std' => '0'
+                );
+            }
+        }
+    }
+        
+    $settings[] = array('type' => 'sectionend', 'id' => 'uninstall_settings_main');
+    
+    /**
+     * Filter the uninstall settings array.
+     *
+     * @since 1.6.9
+     *
+     * @param array $settings The settings array.
+     */
+    $settings = apply_filters('geodir_uninstall_settings', $settings);
+    
+    if (!empty($settings) && count($settings) > 3) {
+        return array_merge($general_settings, $settings);
+    }
+    
+    return $general_settings;
+}
+add_filter('geodir_general_settings', 'geodir_uninstall_settings', 100, 1);
+
+/**
+ * Show the description in uninstall settings section.
+ *
+ * @since 1.6.9
+ */
+function geodir_uninstall_settings_desc() {
+    echo '<p class="gd-un-settings-desc">' . __('Select the plugins that you would like to completely remove all of its data when the plugin is deleted.', 'geodirectory') . '</p>';
+}
+add_action('geodir_settings_uninstall_settings_main_start', 'geodir_uninstall_settings_desc');
+
+/**
+ * Handle the plugin settings for plugin deactivate to activate.
+ *
+ * It manages the the settings without loosing previous settings saved when plugin
+ * status changed from deactivate to activate.
+ *
+ * @since 1.6.9
+ *
+ * @param array $settings The option settings array.
+ * @return array The settings array.
+ */
+function geodir_resave_settings($settings = array()) {
+    if (!empty($settings) && is_array($settings)) {
+        $c = 0;
+        
+        foreach ($settings as $setting) {
+            if (!empty($setting['id']) && false !== ($value = get_option($setting['id']))) {
+                $settings[$c]['std'] = $value;
+            }
+            $c++;
+        }
+    }
+
+    return $settings;
+}
+
+/**
+ * Add the plugin to uninstall settings.
+ *
+ * @since 1.6.9
+ *
+ * @return array $settings the settings array.
+ * @return array The modified settings.
+ */
+function geodir_core_uninstall_settings($settings) {
+    $settings[] = plugin_basename(dirname(dirname(__FILE__)));
+    
+    return $settings;
+}
+add_filter('geodir_plugins_uninstall_settings', 'geodir_core_uninstall_settings', 10, 1);
