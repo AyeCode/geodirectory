@@ -1339,6 +1339,7 @@ function geodir_localize_all_js_msg()
 		'geodir_txt_form_searching' => __('Searching...', 'geodirectory'),
 		'fa_rating' => (int)get_option('geodir_reviewrating_enable_font_awesome') == 1 ? 1 : '',
 		'reviewrating' => defined('GEODIRREVIEWRATING_VERSION') ? 1 : '',
+        'multirating' => defined('GEODIRREVIEWRATING_VERSION') && get_option('geodir_reviewrating_enable_rating') ? true : false,
         'geodir_map_name' => geodir_map_name(),
         'osmStart' => __('Start', 'geodirectory'),
         'osmVia' => __('Via {viaNumber}', 'geodirectory'),
@@ -2704,7 +2705,11 @@ function geodir_no_rating_rating_fields()
 
     if (!empty($post) && isset($post->post_type) && in_array($post->post_type, $post_types)) {
         if (is_plugin_active('geodir_review_rating_manager/geodir_review_rating_manager.php')) {
-            echo '<input type="hidden" value="1" name="geodir_rating[overall]" />';
+            if (get_option('geodir_reviewrating_enable_rating')) {
+                echo '<input type="hidden" value="1" name="geodir_rating[overall]" />';
+            } else {
+                echo '<input type="hidden" id="geodir_overallrating" name="geodir_overallrating" value="1" />';
+            }
             if (get_option('geodir_reviewrating_enable_images')) {
                 geodir_reviewrating_rating_img_html();
             }

@@ -514,7 +514,7 @@ jQuery(document).ready(function() {
         jQuery('#respond .comment-form-comment label').html(geodir_all_js_msg.gd_cmt_btn_review_text);
     });
     
-    jQuery('#commentform .gd_rating').each(function() {
+    jQuery('#commentform .gd_rating, #commentform .gd-fa-rating').each(function() {
         var rat_obj = this;
         var $frm_obj = jQuery(rat_obj).closest('#commentform');
         
@@ -524,37 +524,39 @@ jQuery(document).ready(function() {
             jQuery('#respond .form-submit input#submit').val(geodir_all_js_msg.gd_cmt_btn_post_reply);
             jQuery('#respond .comment-form-comment label').html(geodir_all_js_msg.gd_cmt_btn_reply_text);
         }
-        
-        $frm_obj.find('input[name="submit"]').click(function(e) {
-            $frm_obj.find('#err_no_rating').remove();
-            
-            // skip rating stars validation if rating stars disabled
-            if (typeof geodir_all_js_msg.gd_cmt_disable_rating != 'undefined' && geodir_all_js_msg.gd_cmt_disable_rating) {
-                return true;
-            }
-            //
-            var is_review = parseInt($frm_obj.find('#comment_parent').val());
-            is_review = is_review == 0 ? true : false;
-            
-            if (is_review) {
-                var btn_obj = this;
-                var invalid = 0;
+
+        if (!geodir_all_js_msg.multirating) {
+            $frm_obj.find('input[name="submit"]').click(function(e) {
+                $frm_obj.find('#err_no_rating').remove();
                 
-                $frm_obj.find('input[name^=geodir_overallrating]').each(function() {
-                    var star_obj = this;
-                    var star = parseInt(jQuery(star_obj).val());
-                    if (!star > 0) {
-                        invalid++;
-                    }
-                });
-                
-                if (invalid > 0) {
-                    jQuery(rat_obj).after('<div id="err_no_rating" class="err-no-rating">' + geodir_all_js_msg.gd_cmt_err_no_rating + '</div>');
-                    return false;
+                // skip rating stars validation if rating stars disabled
+                if (typeof geodir_all_js_msg.gd_cmt_disable_rating != 'undefined' && geodir_all_js_msg.gd_cmt_disable_rating) {
+                    return true;
                 }
-                return true;
-            }
-        });
+                //
+                var is_review = parseInt($frm_obj.find('#comment_parent').val());
+                is_review = is_review == 0 ? true : false;
+                
+                if (is_review) {
+                    var btn_obj = this;
+                    var invalid = 0;
+                    
+                    $frm_obj.find('input[name^=geodir_overallrating]').each(function() {
+                        var star_obj = this;
+                        var star = parseInt(jQuery(star_obj).val());
+                        if (!star > 0) {
+                            invalid++;
+                        }
+                    });
+                    
+                    if (invalid > 0) {
+                        jQuery(rat_obj).after('<div id="err_no_rating" class="err-no-rating">' + geodir_all_js_msg.gd_cmt_err_no_rating + '</div>');
+                        return false;
+                    }
+                    return true;
+                }
+            });
+        }
     });
 });
 
