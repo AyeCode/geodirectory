@@ -41,7 +41,7 @@ jQuery(document).ready(function($) {
         jQuery('.gd-fa-rating').barrating({
             theme: 'fontawesome-stars',
             onSelect: function(value, text, event) {
-                if (geodir_all_js_msg.reviewrating) {
+                if (geodir_all_js_msg.multirating) {
                     if (jQuery(this.$elem).closest('form').attr('id') == 'post') {
                         jQuery(this.$elem).closest('.br-theme-fontawesome-stars').parent().find('[name^=geodir_rating]').val(value);
                     } else {
