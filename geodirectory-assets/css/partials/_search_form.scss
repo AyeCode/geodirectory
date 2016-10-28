@@ -67,10 +67,12 @@ body {
             font-size: 14px;
             width: 100% !important;
             max-width: 100%;
+            box-sizing: border-box;
 
           }
           input, button {
             height: 38px;
+            box-sizing: border-box;
           }
           input[type=button], button {
             -webkit-flex: 1 1 auto;
@@ -79,6 +81,7 @@ body {
             min-width: 40px;
             margin: 5px 3px 5px 3px !important;
             border-radius: 3px 3px 3px 3px;
+            box-sizing: border-box;
           }
 
           input[type=button].fa {
@@ -123,6 +126,7 @@ body {
                 height: 38px;
                 cursor: pointer;
                 width: 38px;
+                box-sizing: border-box;
                 .fa {
                   font-size: 30px;
                   line-height: 37px;

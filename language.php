@@ -238,7 +238,7 @@ define('CSV_INVALID_POST_TYPE', __('%s out of %s record(s) could not be inserted
 
 define('CSV_BLANK_POST_TITLE', __('%s out of %s record(s) could not be inserted due to blank post title.', 'geodirectory'));
 
-define('CSV_TRANSFER_IMG_FOLDER', __("Please trasfer all images in <b>'/wp_content/uploads %s '</b> folder.", 'geodirectory'));
+define('CSV_TRANSFER_IMG_FOLDER', __("Please transfer all images in <b>'/wp_content/uploads %s '</b> folder.", 'geodirectory'));
 define('CSV_INVAILD_FILE', __('File you are uploading is not valid. First colum should be "Post Title".', 'geodirectory'));
 define('CSV_UPLOAD_ONLY', __('Please upload CSV file only.', 'geodirectory'));
 define('SELECT_CSV_FILE', __('Select CSV file to upload', 'geodirectory'));

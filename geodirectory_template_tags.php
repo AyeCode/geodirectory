@@ -248,7 +248,7 @@ function geodir_footer_scripts()
      * Flexbox wont wrap on ios for search form items
      */
     if (preg_match( '/iPad|iPod|iPhone|Safari/', $_SERVER['HTTP_USER_AGENT'] ) ) {
-        echo "<style>body .geodir-listing-search.gd-search-bar-style .geodir-loc-bar .clearfix.geodir-loc-bar-in .geodir-search .gd-search-input-wrapper{flex:50 1 auto !important;min-width: initial !important;width:auto !important;}</style>";
+        echo "<style>body .geodir-listing-search.gd-search-bar-style .geodir-loc-bar .clearfix.geodir-loc-bar-in .geodir-search .gd-search-input-wrapper{flex:50 1 auto !important;min-width: initial !important;width:auto !important;}.geodir-filter-container .geodir-filter-cat{width:auto !important;}</style>";
     }
 }
 
@@ -336,7 +336,7 @@ function geodir_pagination($before = '', $after = '', $prelabel = '', $nxtlabel 
 
     $half_pages_to_show = round($pages_to_show / 2);
 
-    if (geodir_is_page('home') || (get_option('geodir_set_as_home') && is_home())) // dont apply default  pagination for geodirectory home page.
+    if (geodir_is_page('home')) // dont apply default  pagination for geodirectory home page.
         return;
 
     if (!is_single()) {
