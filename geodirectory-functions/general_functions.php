@@ -1017,7 +1017,7 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 			$message_raw2 = explode( "</p>", $message_raw[1], 2 );
 			$message      = $message_raw[0] . __( 'Password:', 'geodirectory' ) . ' **********</p>' . $message_raw2[1];
 		}
-		if ( $message_type == 'post_submit' ) {
+		if ( $message_type == 'post_submit' ) {!
 			$subject = __( stripslashes_deep( get_option( 'geodir_post_submited_success_email_subject_admin' ) ), 'geodirectory' );
 			$message = __( stripslashes_deep( get_option( 'geodir_post_submited_success_email_content_admin' ) ), 'geodirectory' );
 
@@ -1085,6 +1085,13 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 
 			$subject .= ' - ADMIN BCC COPY';
 			$admin_bcc = true;
+
+			/** This filter is documented in general_functions.php */
+			$subject = apply_filters( 'geodir_sendEmail_subject', $subject, $fromEmail, $fromEmailName, $toEmail, $toEmailName, $to_subject, $to_message, $extra, $message_type, $post_id, $user_id );
+			/** This filter is documented in general_functions.php */
+			$message = apply_filters( 'geodir_sendEmail_message', $message, $fromEmail, $fromEmailName, $toEmail, $toEmailName, $to_subject, $to_message, $extra, $message_type, $post_id, $user_id );
+
+
 
 		} elseif ( $message_type == 'registration' && get_option( 'geodir_bcc_new_user' ) ) {
 			$subject .= ' - ADMIN BCC COPY';
