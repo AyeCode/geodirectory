@@ -53,6 +53,16 @@ if (isset($_GET['redirect_to']) && $_GET['redirect_to'] != '') {
             <input type="hidden" name="action" value="register"/>
             <input type="hidden" name="redirect_to" value="<?php echo htmlspecialchars($redirect_to); ?>"/>
 
+            <div class="row_spacer_registration clearfix">
+                <div class="form_row clearfix">
+                    <input placeholder='<?php echo FIRST_NAME_TEXT; ?>' type="text" name="user_fname" id="user_fname"
+                           class="textfield" value="<?php if (isset($user_fname)) {
+                        echo esc_attr(stripslashes($user_fname));
+                    } ?>" size="25"/>
+                    <span id="user_fnameInfo"></span>
+                </div>
+            </div>
+
             <div class="form_row clearfix">
                 <input placeholder='<?php echo EMAIL_TEXT; ?>' type="text" name="user_email" id="user_email"
                        class="textfield" value="<?php global $user_email;
@@ -67,16 +77,6 @@ if (isset($_GET['redirect_to']) && $_GET['redirect_to'] != '') {
                 </div>
 				<?php } ?>
                 <span id="user_emailInfo"></span>
-            </div>
-
-            <div class="row_spacer_registration clearfix">
-                <div class="form_row clearfix">
-                    <input placeholder='<?php echo FIRST_NAME_TEXT; ?>' type="text" name="user_fname" id="user_fname"
-                           class="textfield" value="<?php if (isset($user_fname)) {
-                        echo esc_attr(stripslashes($user_fname));
-                    } ?>" size="25"/>
-                    <span id="user_fnameInfo"></span>
-                </div>
             </div>
 
             <?php if (get_option('geodir_allow_cpass')) { ?>

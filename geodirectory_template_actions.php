@@ -1622,6 +1622,7 @@ function geodir_action_listings_title()
 
 
     $title = $list_title;
+    $gd_page = '';
     if(geodir_is_page('pt')){
         $gd_page = 'pt';
         $title  = (get_option('geodir_page_title_pt')) ? get_option('geodir_page_title_pt') : $title;

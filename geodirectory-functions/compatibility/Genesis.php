@@ -183,7 +183,7 @@ function gd_genesis_compat_add_top_section_back()
  */
 function geodir_replace_breadcrumb()
 {
-    if (is_front_page() && get_option('geodir_set_as_home') && !geodir_is_page('login')) {
+    if (is_front_page() && geodir_is_page('home') && !geodir_is_page('login')) {
     } else {
         echo '<div class="geodir-breadcrumb-bar"><div class="wrap">';
         geodir_breadcrumb();
