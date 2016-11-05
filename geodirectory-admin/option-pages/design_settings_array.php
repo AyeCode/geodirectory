@@ -1060,7 +1060,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
         'name' => __('Google Maps API KEY', 'geodirectory'),
         'desc' => sprintf(
             __('This is a requirement to use Google Maps, you can get a key from <a href="%s" target="_blank">here</a> OR you can set GD to use Open Street Maps below under Select Maps API setting.   (<a href="%s" target="_blank">How to add a Google API KEY?</a>)', 'geodirectory'),
-            'https://console.developers.google.com/flows/enableapi?apiid=maps_backend,geocoding_backend,directions_backend,distance_matrix_backend,elevation_backend&keyType=CLIENT_SIDE&reusekey=true','https://wpgeodirectory.com/docs/add-google-api-key/' ),
+            'https://console.developers.google.com/flows/enableapi?apiid=places_backend,maps_backend,geocoding_backend,directions_backend,distance_matrix_backend,elevation_backend&keyType=CLIENT_SIDE&reusekey=true','https://wpgeodirectory.com/docs/add-google-api-key/' ),
         'tip' => '',
         'id' => 'geodir_google_api_key',
         'css' => 'min-width:300px;',

@@ -463,8 +463,8 @@ function parse_marker_jason(data, map_canvas_var) {
             else{jQuery.goMap.map.setCenter(center);}
         }
 
-        if (jQuery.goMap.map.getZoom() > eval(map_canvas_var).maxZoom) {
-             jQuery.goMap.map.setZoom(eval(map_canvas_var).maxZoom);
+        if (jQuery.goMap.map.getZoom() > parseInt(eval(map_canvas_var).maxZoom)) {
+             jQuery.goMap.map.setZoom(parseInt(eval(map_canvas_var).maxZoom));
         }
     }
 
@@ -1087,8 +1087,8 @@ function parse_marker_jason_osm(data, map_canvas_var) {
             }
         }
 
-        if (jQuery.goMap.map.getZoom() > eval(map_canvas_var).maxZoom) {
-            jQuery.goMap.map.setZoom(eval(map_canvas_var).maxZoom);
+        if (jQuery.goMap.map.getZoom() > parseInt(eval(map_canvas_var).maxZoom)) {
+            jQuery.goMap.map.setZoom(parseInt(eval(map_canvas_var).maxZoom));
         }
     }
     
@@ -1169,8 +1169,8 @@ function create_marker_osm(input, map_canvas_var) {
                     jQuery.goMap.map.fitBounds(newBounds);
                     bounds = newBounds;
                     
-                    if (jQuery.goMap.map.getZoom() > eval(map_canvas_var).maxZoom) {
-                        jQuery.goMap.map.setZoom(eval(map_canvas_var).maxZoom);
+                    if (jQuery.goMap.map.getZoom() > parseInt(eval(map_canvas_var).maxZoom)) {
+                        jQuery.goMap.map.setZoom(parseInt(eval(map_canvas_var).maxZoom));
                     }
                 } else {
                     zoom = parseInt(jQuery.goMap.map.getZoom()) + 1 > parseInt(eval(map_canvas_var).maxZoom) && parseInt(eval(map_canvas_var).maxZoom) > 0 ? parseInt(eval(map_canvas_var).maxZoom) : parseInt(jQuery.goMap.map.getZoom()) + 1;

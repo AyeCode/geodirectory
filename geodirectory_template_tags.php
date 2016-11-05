@@ -627,7 +627,7 @@ function geodir_add_sharelocation_scripts()
                                 if (status == google.maps.GeocoderStatus.OK) {
                                     updateSearchPosition(results[0].geometry.location, $form);
                                 } else {
-                                    alert("<?php esc_attr_e('Search was not successful for the following reason x:', 'geodirectory');?>" + status);
+                                    alert("<?php esc_attr_e('Search was not successful for the following reason :', 'geodirectory');?>" + status);
                                 }
                             });
                     } else if (window.gdMaps === 'osm') {

@@ -1795,7 +1795,7 @@ function geodir_cf_address($html,$location,$cf,$p=''){
             
 
 
-            $html = '<div class="geodir_more_info ' . $cf['css_class'] . ' ' . $html_var . '" style="clear:both;"  itemscope itemtype="http://schema.org/PostalAddress">';
+            $html = '<div class="geodir_more_info ' . $cf['css_class'] . ' ' . $html_var . '" style="clear:both;"  itemscope itemtype="https://schema.org/PostalAddress">';
             $html .= '<span class="geodir-i-location" style="' . $field_icon . '">' . $field_icon_af;
             $html .= ( trim( $cf['site_title'] ) ) ? __( $cf['site_title'], 'geodirectory' ) . ': ' : '&nbsp;';
             $html .= '</span>';

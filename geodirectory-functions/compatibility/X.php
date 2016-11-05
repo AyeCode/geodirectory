@@ -231,7 +231,7 @@ function geodir_x_action_wrapper_content_close()
  * @param string $type Page type.
  * @param string $id The id of the HTML element.
  * @param string $class The class of the HTML element.
- * @param string $itemtype HTML itemtype 'http://schema.org/WPSideBar'.
+ * @param string $itemtype HTML itemtype 'https://schema.org/WPSideBar'.
  */
 function geodir_x_action_sidebar_right_open($type = '', $id = '', $class = '', $itemtype = '')
 {
