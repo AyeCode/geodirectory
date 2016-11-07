@@ -270,7 +270,7 @@ function enfold_action_wrapper_content_open($type = '', $id = '', $class = '')
  * @param string $type Page type.
  * @param string $id The id of the HTML element.
  * @param string $class The class of the HTML element.
- * @param string $itemtype HTML itemtype 'http://schema.org/WPSideBar'.
+ * @param string $itemtype HTML itemtype 'https://schema.org/WPSideBar'.
  */
 function enfold_action_sidebar_right_open($type = '', $id = '', $class = '', $itemtype = '')
 {
@@ -287,7 +287,7 @@ function enfold_action_sidebar_right_open($type = '', $id = '', $class = '', $it
  * @param string $type Page type.
  * @param string $id The id of the HTML element.
  * @param string $class The class of the HTML element.
- * @param string $itemtype HTML itemtype 'http://schema.org/WPSideBar'.
+ * @param string $itemtype HTML itemtype 'https://schema.org/WPSideBar'.
  */
 function enfold_action_sidebar_left_open($type = '', $id = '', $class = '', $itemtype = '')
 {
