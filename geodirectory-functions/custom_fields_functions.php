@@ -1418,9 +1418,6 @@ if (!function_exists('geodir_show_listing_info')) {
 
                 $variables_array = array();
 
-//                if ($fields_location == 'detail' && isset($type['show_as_tab']) && (int)$type['show_as_tab'] == 1 && in_array($type['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file'))) {
-//                    continue;
-//                }
 
                 if ($type['type'] != 'fieldset'):
                     $variables_array['post_id'] = $post->ID;

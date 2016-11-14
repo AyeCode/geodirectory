@@ -28,11 +28,11 @@ get_header();
                     <div class="geodir-gd-sidebar">
                         <?php
                         /**
-                         * Calls the standard sidebar.
+                         * Calls the author sidebar.
                          *
-                         * @since 1.0.0
+                         * @since 1.6.11
                          */
-                        do_action('geodir_sidebar'); ?>
+                        dynamic_sidebar('geodir_author_right_sidebar'); ?>
                     </div>
                 </div>
             </div>

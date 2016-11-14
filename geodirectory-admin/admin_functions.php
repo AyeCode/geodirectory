@@ -6745,6 +6745,29 @@ function geodir_imex_get_filter_where($where = '', $post_type = '') {
 add_filter('geodir_get_posts_count', 'geodir_imex_get_filter_where', 10, 2);
 add_filter('geodir_get_export_posts', 'geodir_imex_get_filter_where', 10, 2);
 
+
+function geodir_fix_for_primer_theme(){
+    if(!defined( 'PRIMER_VERSION' )){return;}
+    global $pagenow;
+
+    if ( ( 'post.php' === $pagenow || 'post-new.php' === $pagenow ) && (isset($_REQUEST['post_type']) || isset($_REQUEST['post']) )  ){
+
+        $post_type = isset($_REQUEST['post_type']) ? esc_attr($_REQUEST['post_type']) : get_post_type( $_GET['post'] );
+
+        $post_types = geodir_get_posttypes();
+        if ($post_type && in_array($post_type, $post_types) ) {
+            global $primer_customizer_layouts;
+            remove_action( 'add_meta_boxes', array( $primer_customizer_layouts, 'add_meta_box' ), 10);
+        }
+    }
+
+}
+
+if(is_admin()){
+    add_action('add_meta_boxes','geodir_fix_for_primer_theme',0);  
+}
+
+
 /*
  * Look at doing menu items this way, must be customiser ready
  * @todo research below

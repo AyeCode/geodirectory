@@ -449,9 +449,6 @@ function geodir_set_is_geodir_page( $wp ) {
 				'cpage'
 			) )
 		) {
-			if ( get_option( 'geodir_set_as_home' ) ) {
-				$wp->query_vars['gd_is_geodir_page'] = true;
-			}
 			if ( geodir_is_page( 'home' ) ) {
 				$wp->query_vars['gd_is_geodir_page'] = true;
 			}

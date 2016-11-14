@@ -5,7 +5,7 @@
  * @since 1.0.0
  * @package GeoDirectory
  */
- 
+
 /**
  * Starts session if not started.
  *
@@ -65,7 +65,7 @@ function geodir_modified_query($query)
  * @global string $s_A Extra parameters.
  * @global string $s_SA Extra parameters.
  */
-function set_listing_request()
+function set_listing_request($query )
 {
     global $wp_query, $wpdb, $geodir_post_type, $table, $dist, $mylat, $mylon, $s, $snear, $s, $s_A, $s_SA;
 
@@ -234,10 +234,10 @@ function geodir_posts_fields($fields) {
 
     // Filter-Location-Manager to add location table.
     $fields .= ", " . $table . ".* ";
-    
+
 	if ($snear != '' || $gd_session->get('all_near_me')) {
         $DistanceRadius = geodir_getDistanceRadius(get_option('geodir_search_dist_1'));
-        
+
 		if ($gd_session->get('all_near_me')) {
             $mylat = $gd_session->get('user_lat');
             $mylon = $gd_session->get('user_lon');
@@ -700,7 +700,7 @@ function geodir_default_where($where)
  */
 function searching_filter_where($where) {
     global $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $mylat, $mylon, $s, $snear, $s_A, $s_SA, $search_term, $gd_session;
-	
+
     $search_term = 'OR';
     $search_term = 'AND';
     $geodir_custom_search = '';
@@ -713,7 +713,7 @@ function searching_filter_where($where) {
     if (is_tax()) {
 		return $where;
 	}
-	
+
 	$s = trim($s);
     $s  = wp_specialchars_decode($s ,ENT_QUOTES);
     $s_A = wp_specialchars_decode($s_A ,ENT_QUOTES);
@@ -781,7 +781,7 @@ function searching_filter_where($where) {
          */
         $terms_where = apply_filters("geodir_search_terms_where"," AND ($wpdb->terms.name LIKE \"$s\" OR $wpdb->terms.name LIKE \"$s%\" OR $wpdb->terms.name LIKE \"% $s%\" OR $wpdb->terms.name IN ($s_A)) ");
 	}
-		
+
     if ($snear != '') {
 
 
@@ -838,17 +838,17 @@ function searching_filter_where($where) {
 				AND $wpdb->posts.post_type in ('$post_types')
 				AND ($wpdb->posts.post_status = 'publish') ";
     }
-	
+
 	########### WPML ###########
-    if ( function_exists( 'icl_object_id' ) ) {       
+    if ( function_exists( 'icl_object_id' ) ) {
 		$lang_code = ICL_LANGUAGE_CODE;
-		
+
 		if ($lang_code && $post_types) {
             $where .= " AND icl_t.language_code = '".$lang_code."' AND icl_t.element_type IN('post_" . $post_types . "') ";
         }
     }
     ########### WPML ###########
-	
+
     return $where;
 }
 
@@ -868,7 +868,7 @@ function author_filter_where($where) {
 
     $curauth = (get_query_var('author_name')) ? get_user_by('slug', get_query_var('author_name')) : get_userdata(get_query_var('author'));
     $user_id = !empty($curauth->ID) ? (int)$curauth->ID : 0;
-    
+
     if (isset($_REQUEST['stype'])) {
         $where = $wpdb->prepare(" AND $wpdb->posts.post_type IN (%s) ",$_REQUEST['stype']);
     } else {
@@ -901,7 +901,7 @@ function author_filter_where($where) {
 
     }
     ########### WPML ###########
-    
+
     return $where;
 }
 

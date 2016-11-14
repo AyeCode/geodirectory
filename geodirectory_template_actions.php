@@ -889,7 +889,7 @@ function geodir_action_details_sidebar()
          * @param string $class The class of the sidebar wrapper. 'geodir-sidebar-left geodir-details-sidebar-left'.
          * @param string $itemtype HTML itemtype 'http://schema.org/WPSideBar'.
          */
-        do_action('geodir_sidebar_left_open', 'details-page', 'geodir-sidebar', 'geodir-sidebar-left geodir-details-sidebar-left', 'http://schema.org/WPSideBar');
+        do_action('geodir_sidebar_left_open', 'details-page', 'geodir-sidebar', 'geodir-sidebar-left geodir-details-sidebar-left', 'https://schema.org/WPSideBar');
         ?>
         <div class="geodir-content-left geodir-sidebar-wrap"><?php
         /**
@@ -1355,7 +1355,7 @@ function geodir_action_details_micordata($post='')
     }
 
     $schema = array();
-    $schema['@context'] = "http://schema.org";
+    $schema['@context'] = "https://schema.org";
     $schema['@type'] = $schema_type;
     $schema['name'] = $post->post_title;
     $schema['description'] = wp_strip_all_tags( $post->post_content, true );
@@ -1622,6 +1622,7 @@ function geodir_action_listings_title()
 
 
     $title = $list_title;
+    $gd_page = '';
     if(geodir_is_page('pt')){
         $gd_page = 'pt';
         $title  = (get_option('geodir_page_title_pt')) ? get_option('geodir_page_title_pt') : $title;
@@ -1845,7 +1846,7 @@ function geodir_action_listings_sidebar_left()
 {
     if (get_option('geodir_show_listing_left_section')) {
         /** This action is documented in geodirectory_template_actions.php */
-        do_action('geodir_sidebar_left_open', 'listings-page', 'geodir-sidebar-left', 'geodir-sidebar-left geodir-listings-sidebar-left', 'http://schema.org/WPSideBar');
+        do_action('geodir_sidebar_left_open', 'listings-page', 'geodir-sidebar-left', 'geodir-sidebar-left geodir-listings-sidebar-left', 'https://schema.org/WPSideBar');
         /**
          * Calls the listings page (category) left sidebar content.
          *

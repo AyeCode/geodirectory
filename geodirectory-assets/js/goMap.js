@@ -826,8 +826,11 @@
                 },
                 scaleControl: opts.scaleControl,
                 scrollwheel: opts.scrollwheel,
-                zoom: opts.zoom
+                zoom: opts.zoom,
+                minZoom: parseInt(opts.minZoom),
+                maxZoom: parseInt(opts.maxZoom)
             };
+
 
             this.map = new google.maps.Map(el, myOptions);
             this.overlay = new MyOverlay(this.map);
