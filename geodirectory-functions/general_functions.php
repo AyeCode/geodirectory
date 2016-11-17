@@ -4178,6 +4178,7 @@ function geodirectory_load_db_language() {
  *
  * @since   1.4.2
  * @since   1.5.7 Option values are translatable via db translation.
+ * @since   1.6.11 Some new labels translation for advance custom fields.
  * @package GeoDirectory
  *
  * @global object $wpdb             WordPress database abstraction object.
@@ -4190,7 +4191,7 @@ function geodir_load_custom_field_translation( $translation_texts = array() ) {
 	global $wpdb;
 
 	// Custom fields table
-	$sql  = "SELECT admin_title, admin_desc, site_title, clabels, required_msg, default_value, option_values FROM " . GEODIR_CUSTOM_FIELDS_TABLE;
+	$sql  = "SELECT admin_title, admin_desc, site_title, clabels, required_msg, default_value, option_values, validation_msg FROM " . GEODIR_CUSTOM_FIELDS_TABLE;
 	$rows = $wpdb->get_results( $sql );
 
 	if ( ! empty( $rows ) ) {
@@ -4213,6 +4214,10 @@ function geodir_load_custom_field_translation( $translation_texts = array() ) {
 
 			if ( ! empty( $row->required_msg ) ) {
 				$translation_texts[] = stripslashes_deep( $row->required_msg );
+			}
+            
+			if ( ! empty( $row->validation_msg ) ) {
+				$translation_texts[] = stripslashes_deep( $row->validation_msg );
 			}
 
 			if ( ! empty( $row->default_value ) ) {
@@ -4255,7 +4260,7 @@ function geodir_load_custom_field_translation( $translation_texts = array() ) {
 
 	// Advance search filter fields table
 	if ( defined( 'GEODIR_ADVANCE_SEARCH_TABLE' ) ) {
-		$sql  = "SELECT field_site_name, front_search_title, field_desc FROM " . GEODIR_ADVANCE_SEARCH_TABLE;
+		$sql  = "SELECT field_site_name, front_search_title, first_search_text, last_search_text, field_desc FROM " . GEODIR_ADVANCE_SEARCH_TABLE;
 		$rows = $wpdb->get_results( $sql );
 
 		if ( ! empty( $rows ) ) {
@@ -4266,6 +4271,14 @@ function geodir_load_custom_field_translation( $translation_texts = array() ) {
 
 				if ( ! empty( $row->front_search_title ) ) {
 					$translation_texts[] = stripslashes_deep( $row->front_search_title );
+				}
+
+				if ( ! empty( $row->first_search_text ) ) {
+					$translation_texts[] = stripslashes_deep( $row->first_search_text );
+				}
+
+				if ( ! empty( $row->last_search_text ) ) {
+					$translation_texts[] = stripslashes_deep( $row->last_search_text );
 				}
 
 				if ( ! empty( $row->field_desc ) ) {
