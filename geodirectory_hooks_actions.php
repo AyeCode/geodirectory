@@ -2525,7 +2525,9 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                     }
 
 
+                    if(isset($type['extra_fields'])){$extra_fields= $type['extra_fields'];}
                     $type = stripslashes_deep($type); // strip slashes
+                    if(isset($type['extra_fields'])){$type['extra_fields'] = $extra_fields;}
                     $html = '';
                     $html_var = isset($type['htmlvar_name']) ? $type['htmlvar_name'] : '';
                     if($html_var=='post'){$html_var='post_address';}

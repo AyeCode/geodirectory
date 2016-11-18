@@ -345,7 +345,7 @@ function geodir_template_loader($template)
 
     }
 
-    if (get_option('geodir_set_as_home') || geodir_is_page('home') || geodir_is_page('location')) {
+    if ( geodir_is_page('home') || geodir_is_page('location')) {
 
         global $post, $wp_query;
 

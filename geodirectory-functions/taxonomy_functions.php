@@ -69,7 +69,7 @@ function geodir_add_nav_menu_items()
                             $a_class = apply_filters('geodir_menu_a_class', '');
                             $items .= '<li class="' . $li_class . '">
 									<a href="' . get_post_type_archive_link($post_type) . '" class="' . $a_class . '">
-										' . __(ucfirst($args->labels->name)) . '
+										' . __(ucfirst($args->labels->name),'geodirectory') . '
 									</a>
 								</li>';
                         }

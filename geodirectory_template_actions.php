@@ -2213,7 +2213,16 @@ function geodir_action_add_listing_form()
         do_action('geodir_before_main_form_fields');
         ?>
         <div id="geodir_post_title_row" class="required_field geodir_form_row clearfix gd-fieldset-details">
-            <label><?php echo sprintf( __('%s Title', 'geodirectory'), $cpt_singular_name ); ?><span>*</span> </label>
+            <label><?php
+                /**
+                 * Filter the add listing page title input label.
+                 *
+                 * @since 1.6.11
+                 * @param string $title The title to be output.
+                 * @param string $cpt_singular_name The singular title of the curent CPT.
+                 * @param string $listing_type The CPT being requested. ie: gd_place.
+                 */
+                echo apply_filters('geodir_add_listing_title_label', sprintf( __('%s Title', 'geodirectory'), $cpt_singular_name ),$cpt_singular_name,$listing_type); ?><span>*</span> </label>
             <input type="text" field_type="text" name="post_title" id="post_title" class="geodir_textfield"
                    value="<?php echo esc_attr(stripslashes($title)); ?>"/>
             <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory');?></span>
@@ -2265,7 +2274,16 @@ function geodir_action_add_listing_form()
         }
         ?>
         <div id="geodir_post_desc_row" class="geodir_form_row clearfix gd-fieldset-details<?php echo $desc_class;?>">
-            <label><?php echo sprintf( __('%s Description', 'geodirectory'), $cpt_singular_name ); ?><span><?php if ($desc_limit != '0') { echo '*'; } ?></span> </label>
+            <label><?php
+                /**
+                 * Filter the add listing page description input label.
+                 *
+                 * @since 1.6.11
+                 * @param string $title The title to be output.
+                 * @param string $cpt_singular_name The singular title of the curent CPT.
+                 * @param string $listing_type The CPT being requested. ie: gd_place.
+                 */
+                echo apply_filters('geodir_add_listing_description_label',sprintf( __('%s Description', 'geodirectory'), $cpt_singular_name ),$cpt_singular_name,$listing_type); ?><span><?php if ($desc_limit != '0') { echo '*'; } ?></span> </label>
             <?php
             if (!empty($show_editor) && in_array($listing_type, $show_editor)) {
                 $editor_settings = array('media_buttons' => false, 'textarea_rows' => 10);

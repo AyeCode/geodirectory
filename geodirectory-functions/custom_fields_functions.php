@@ -1246,7 +1246,10 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
     $custom_fields = geodir_post_custom_fields($package_id, $default, $post_type);
 
     foreach ($custom_fields as $key => $val) {
+        if(isset($val['extra_fields'])){$extra_fields = $val['extra_fields'];}
         $val = stripslashes_deep($val); // strip slashes from labels
+        if(isset($val['extra_fields'])){$val['extra_fields'] = $extra_fields;}
+
         $name = $val['name'];
         $type = $val['type'];
         $is_default = $val['is_default'];
@@ -1398,7 +1401,9 @@ if (!function_exists('geodir_show_listing_info')) {
 
 
             foreach ($fields_info as $type) {
+                if(isset($type['extra_fields'])){$extra_fields= $type['extra_fields'];}
                 $type = stripslashes_deep($type); // strip slashes
+                if(isset($type['extra_fields'])){$type['extra_fields'] = $extra_fields;}
                 $html = '';
                 $field_icon = geodir_field_icon_proccess($type);
                 $filed_type = $type['type'];
@@ -2901,7 +2906,7 @@ function geodir_cfa_extra_fields_address($output,$result_str,$cf,$field_info){
 
     ob_start();
     if (isset($field_info->extra_fields) && $field_info->extra_fields != '') {
-        $address = unserialize($field_info->extra_fields);
+        $address = stripslashes_deep(unserialize($field_info->extra_fields));
     }
 
     $radio_id = (isset($field_info->htmlvar_name)) ? $field_info->htmlvar_name : rand(5, 500);

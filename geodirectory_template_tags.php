@@ -205,7 +205,7 @@ function geodir_templates_scripts()
 		wp_enqueue_script('geodir-jRating-js');
 	}
 
-    wp_register_script('geodir-on-document-load', geodir_plugin_url() . '/geodirectory-assets/js/on_document_load.js#asyncload', array(), GEODIRECTORY_VERSION, true);
+    wp_register_script('geodir-on-document-load', geodir_plugin_url() . '/geodirectory-assets/js/on_document_load.min.js#asyncload', array(), GEODIRECTORY_VERSION, true);
     wp_enqueue_script('geodir-on-document-load');
 
     wp_register_script('google-geometa', geodir_plugin_url() . '/geodirectory-assets/js/geometa.min.js#asyncload', array(), GEODIRECTORY_VERSION, true);

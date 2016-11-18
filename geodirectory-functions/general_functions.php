@@ -907,10 +907,10 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 		);
 		$subject       = str_replace( $search_array, $replace_array, $subject );
 
-		$headers = 'MIME-Version: 1.0' . "\r\n";
-		$headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-		$headers .= "Reply-To: " . $fromEmail . "\r\n";
-		$headers .= 'From: ' . $sitefromEmailName . ' <' . $sitefromEmail . '>' . "\r\n";
+		$headers =  array();
+		$headers[] = 'Content-type: text/html; charset=UTF-8';
+		$headers[] = "Reply-To: " . $fromEmail;
+		$headers[] = 'From: ' . $sitefromEmailName . ' <' . $sitefromEmail . '>';
 
 		$to = $toEmail;
 
@@ -975,9 +975,9 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 		 * Filter the client email headers.
 		 *
 		 * @since   1.6.1
-		 * @package GeoDirectory_Payment_Manager
+		 * @since 1.6.11 $headers changed from string to an array.
 		 *
-		 * @param string $headers       The email headers.
+		 * @param array $headers       The email headers.
 		 * @param string $fromEmail     Sender email address.
 		 * @param string $fromEmailName Sender name.
 		 * @param string $toEmail       Receiver email address.
@@ -1846,9 +1846,11 @@ if ( ! function_exists( 'adminEmail' ) ) {
 		);
 		$client_message = str_replace( $search_array, $replace_array, $client_message );
 		$subject        = str_replace( $search_array, $replace_array, $subject );
-		$headers        = 'MIME-Version: 1.0' . "\r\n";
-		$headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-		$headers .= 'From: ' . $fromEmailName . ' <' . $fromEmail . '>' . "\r\n";
+		
+		
+		$headers  = array();
+		$headers[] = 'Content-type: text/html; charset=UTF-8';
+		$headers[] = 'From: ' . $fromEmailName . ' <' . $fromEmail . '>';
 
 		$to      = $fromEmail;
 		$message = $client_message;
@@ -1897,9 +1899,9 @@ if ( ! function_exists( 'adminEmail' ) ) {
 		 * Filter the admin email headers.
 		 *
 		 * @since   1.6.1
-		 * @package GeoDirectory_Payment_Manager
+		 * @since 1.6.11 $headers changed from string to an array.         
 		 *
-		 * @param string $headers      The email headers.
+		 * @param array $headers      The email headers.
 		 * @param int|string $page_id  Page ID.
 		 * @param int|string $user_id  User ID.
 		 * @param string $message_type Can be 'expiration','post_submited','renew','upgrade','claim_approved','claim_rejected','claim_requested','auto_claim','payment_success','payment_fail'.

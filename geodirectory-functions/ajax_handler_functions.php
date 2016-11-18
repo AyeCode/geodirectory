@@ -151,7 +151,7 @@ function geodir_ajax_handler() {
         if (current_user_can('manage_options')) {
             switch ($_REQUEST['geodir_autofill']):
                 case "geodir_dummy_delete" :
-                    if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'geodir_dummy_posts_delete_noncename'))
+                    if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'geodir_dummy_posts_insert_noncename'))
                         return;
 
                     if (isset($_REQUEST['posttype']))
@@ -160,30 +160,36 @@ function geodir_ajax_handler() {
                          *
                          * Uses dynamic hook, geodir_delete_dummy_posts_$_REQUEST['posttype'].
                          *
-                         * @since 1.0.0
+                         * @since 1.6.11
+                         * @param string $posttype The post type to insert.
+                         * @param string $datatype The type of dummy data to insert.
                          */
-                        do_action('geodir_delete_dummy_posts_' . $_REQUEST['posttype']);
+                        do_action('geodir_delete_dummy_posts' ,sanitize_key($_REQUEST['posttype']),sanitize_key(['datatype']));
                     break;
                 case "geodir_dummy_insert" :
                     if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'geodir_dummy_posts_insert_noncename'))
                         return;
 
-                    global $dummy_post_index, $city_bound_lat1, $city_bound_lng1, $city_bound_lat2, $city_bound_lng2;
-                    $dummy_post_index = $_REQUEST['insert_dummy_post_index'];
+                    global $city_bound_lat1, $city_bound_lng1, $city_bound_lat2, $city_bound_lng2;
                     $city_bound_lat1 = $_REQUEST['city_bound_lat1'];
                     $city_bound_lng1 = $_REQUEST['city_bound_lng1'];
                     $city_bound_lat2 = $_REQUEST['city_bound_lat2'];
                     $city_bound_lng2 = $_REQUEST['city_bound_lng2'];
 
-                    if (isset($_REQUEST['posttype']))
+                    if (isset($_REQUEST['posttype'])){
                         /**
                          * Used to insert the dummy post data per post type.
                          *
                          * Uses dynamic hook, geodir_insert_dummy_posts_$_REQUEST['posttype'].
                          *
-                         * @since 1.0.0
+                         * @since 1.6.11
+                         * @param string $posttype The post type to insert.
+                         * @param string $datatype The type of dummy data to insert.
+                         * @param int $post_index The item number to insert.
                          */
-                        do_action('geodir_insert_dummy_posts_' . $_REQUEST['posttype']);
+                        do_action('geodir_insert_dummy_posts',sanitize_key($_REQUEST['posttype']),sanitize_key($_REQUEST['datatype']),absint($_REQUEST['insert_dummy_post_index']));
+                    }
+
 
                     break;
             endswitch;
