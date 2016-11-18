@@ -241,7 +241,14 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = 
 
                 // Untick the category by default on home map
                 if ($is_home_map && $geodir_home_map_untick = get_option('geodir_home_map_untick')) {
-                    if (!empty($geodir_home_map_untick) && in_array($post_type . '_' . $cat_term->term_id, $geodir_home_map_untick)) {
+                    if (function_exists('icl_object_id')) { // if WPML
+                        global $sitepress;
+                        $default_lang = $sitepress->get_default_language();
+                        $term_id = icl_object_id($cat_term->term_id, $post_type.'category', true, $default_lang);
+                    }else{
+                        $term_id = $cat_term->term_id;
+                    }
+                    if (!empty($geodir_home_map_untick) && in_array($post_type . '_' . $term_id, $geodir_home_map_untick)) {
                         $checked = '';
                     }
                 }

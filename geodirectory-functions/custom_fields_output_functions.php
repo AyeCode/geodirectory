@@ -553,7 +553,7 @@ function geodir_cf_datepicker($html,$location,$cf,$p=''){
 
             $date_format = geodir_default_date_format();
             if ($cf['extra_fields'] != '') {
-                $date_format = unserialize($cf['extra_fields']);
+                $date_format = stripslashes_deep(unserialize($cf['extra_fields']));
                 $date_format = $date_format['date_format'];
             }
             // check if we need to change the format or not
@@ -692,7 +692,7 @@ function geodir_cf_text($html,$location,$cf,$p=''){
 
             $value = $post->{$cf['htmlvar_name']};
             if(isset($cf['data_type']) && ($cf['data_type']=='INT' || $cf['data_type']=='FLOAT') && isset($cf['extra_fields']) && $cf['extra_fields']){
-                $extra_fields = maybe_unserialize($cf['extra_fields']);
+                $extra_fields = stripslashes_deep(maybe_unserialize($cf['extra_fields']));
                 if(isset($extra_fields['is_price']) && $extra_fields['is_price']){
                     $value = geodir_currency_format_number($value,$cf);
                 }
@@ -1120,6 +1120,7 @@ function geodir_cf_email($html,$location,$cf,$p=''){
         $package_info = (array)geodir_post_package_info(array(), $post, $post->post_type);
 
         if ($cf['htmlvar_name'] == 'geodir_email' && ((isset($package_info['sendtofriend']) && $package_info['sendtofriend']) || $post->{$cf['htmlvar_name']})) {
+            global $send_to_friend;
             $send_to_friend = true;
             $b_send_inquiry = '';
             $b_sendtofriend = '';
@@ -1279,7 +1280,7 @@ function geodir_cf_file($html,$location,$cf,$p=''){
             $files = explode(",", $post->{$cf['htmlvar_name']});
             if (!empty($files)):
 
-                $extra_fields = !empty($cf['extra_fields']) ? maybe_unserialize($cf['extra_fields']) : NULL;
+                $extra_fields = !empty($cf['extra_fields']) ? stripslashes_deep(maybe_unserialize($cf['extra_fields'])) : NULL;
                 $allowed_file_types = !empty($extra_fields['gd_file_types']) && is_array($extra_fields['gd_file_types']) && !in_array("*", $extra_fields['gd_file_types'] ) ? $extra_fields['gd_file_types'] : '';
 
                 $file_paths = '';
@@ -1724,7 +1725,7 @@ function geodir_cf_address($html,$location,$cf,$p=''){
 
         if ($cf['extra_fields']) {
 
-            $extra_fields = unserialize($cf['extra_fields']);
+            $extra_fields = stripslashes_deep(unserialize($cf['extra_fields']));
 
             $addition_fields = '';
 

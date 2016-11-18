@@ -182,6 +182,12 @@ if (is_admin() || defined( 'GD_TESTING_MODE' )) {
     /**
      * Most actions/hooks used in admin area only are called from here.
      *
+     * @since 1.6.11
+     */
+    require_once('geodirectory-admin/admin_dummy_data_functions.php');
+    /**
+     * Most actions/hooks used in admin area only are called from here.
+     *
      * @since 1.0.0
      */
     require_once('geodirectory-admin/admin_hooks_actions.php');

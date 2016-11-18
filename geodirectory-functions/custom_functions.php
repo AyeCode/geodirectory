@@ -1688,8 +1688,19 @@ function geodir_show_detail_page_tabs() {
 										echo "<span class='gd-video-embed-preview' ><p class='gd-video-preview-text'><i class=\"fa fa-video-camera\" aria-hidden=\"true\"></i><br />" . __( 'Video Preview Placeholder', 'geodirectory' ) . "</p></span>";
 									}
 								} else {
+
+									// stop payment manager filtering content length
+									$filter_priority = has_filter( 'the_content', 'geodir_payments_the_content' );
+									if ( false !== $filter_priority ) {
+										remove_filter( 'the_content', 'geodir_payments_the_content', $filter_priority );
+									}
+
 									/** This action is documented in geodirectory_template_actions.php */
 									echo apply_filters( 'the_content', stripslashes( $video ) );// we apply the_content filter so oembed works also;
+
+									if ( false !== $filter_priority ) {
+										add_filter( 'the_content', 'geodir_payments_the_content', $filter_priority );
+									}
 								}
 								break;
 							case 'special_offers':

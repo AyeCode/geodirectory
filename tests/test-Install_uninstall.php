@@ -18,7 +18,7 @@ class Install_Uninstall extends WP_UnitTestCase
 		geodir_create_pages();
 		geodir_set_default_widgets();
 		gd_install_theme_compat();
-		geodir_default_taxonomies();
+		geodir_dummy_data_taxonomies();
 
 	}
 

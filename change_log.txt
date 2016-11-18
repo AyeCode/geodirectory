@@ -6,6 +6,13 @@ Font awesome rating validation not working - FIXED
 Admin BCC post_submit subject/message hooks not applied - FIXED
 Google maps on some mobile devices adds a new span which breaks slide out menu - FIXED
 Max and min map zoom levels set via hooks not working - FIXED
+$extra_fields in custom field stripping slashes too early - FIXED
+Email headers changed from string to array() and MIME-Version removed - CHANGED
+Added filters to the add listing page title and description labels for difficult translations - ADDED
+Reunion (island) added and Burma removed (replaced with Myanmar) - CHANGED
+Payment manager restrict description input count can affect video tab - FIXED
+WPML exclude cats on map does not work for translations of categories - FIXED
+Dummy data section improved and additional industries added - ADDED
 
 v1.6.10
 Search can fail if more than one CPT but one is empty - FIXED

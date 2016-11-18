@@ -131,7 +131,6 @@ if (!function_exists('geodir_create_tables')) {
 	(36, 'Brunei Darussalam', 'BX', 'BN', 'BRN', '96', 'BN', '', '', '', '', 'Brunei Dollar', 'BND', 372361, 'Brunei', ''),
 	(37, 'Bulgaria', 'BU', 'BG', 'BGR', '100', 'BG', 'Sofia ', 'Europe ', 'Bulgarian', 'Bulgarians', 'Lev ', 'BGN', 7707495, 'Bulgaria', ''),
 	(38, 'Burkina Faso', 'UV', 'BF', 'BFA', '854', 'BF', 'Ouagadougou ', 'Africa ', 'Burkinabe', 'Burkinabe', 'CFA Franc BCEAO', 'XOF', 12272289, 'Burkina Faso', ''),
-	//(39, 'Burma', 'BM', 'MM', 'MMR', '104', 'MM', 'Rangoon ', 'Southeast Asia ', 'Burmese', 'Burmese', 'kyat ', 'MMK', 41994678, 'Burma', 'ISO uses the name Myanmar'),
 	(40, 'Burundi', 'BY', 'BI', 'BDI', '108', 'BI', 'Bujumbura ', 'Africa ', 'Burundi', 'Burundians', 'Burundi Franc ', 'BIF', 6223897, 'Burundi', ''),
 	(41, 'Cambodia', 'CB', 'KH', 'KHM', '116', 'KH', 'Phnom Penh ', 'Southeast Asia ', 'Cambodian', 'Cambodians', 'Riel ', 'KHR', 12491501, 'Cambodia', ''),
 	(42, 'Cameroon', 'CM', 'CM', 'CMR', '120', 'CM', 'Yaounde ', 'Africa ', 'Cameroonian', 'Cameroonians', 'CFA Franc BEAC', 'XAF', 15803220, 'Cameroon', ''),
@@ -366,7 +365,8 @@ if (!function_exists('geodir_create_tables')) {
 	(273, 'Zimbabwe', 'ZI', 'ZW', 'ZWE', '716', 'ZW', 'Harare ', 'Africa ', 'Zimbabwean', 'Zimbabweans', 'Zimbabwe Dollar', 'ZWD', 11365366, 'Zimbabwe', ''),
 	(276, 'Curaçao', 'UC', 'CW', 'CUW', '531', 'CW', 'Willemstad ', 'Central America and the Caribbean', 'Curaçaoan', 'Curaçaoans', 'Netherlands Antillean guilder', 'ANG', 152760, 'Curaçao', ''),
 	(277, 'Caribbean Netherlands', '--', 'BQ', 'BES', '535', 'BQ', '--', 'Central America and the Caribbean', '--', '--', 'United States dollar', 'USD', 21133, 'Caribbean Netherlands', ''),
-	(278, 'Kosovo', 'XK', 'XK', '--', '--', 'XK', 'Pristina', 'Europe', '--', '--', 'Euro', 'EUR', 1859203, 'Caribbean Netherlands', 'Kosovo')";
+	(278, 'Kosovo', 'XK', 'XK', '--', '--', 'XK', 'Pristina', 'Europe', '--', '--', 'Euro', 'EUR', 1859203, 'Caribbean Netherlands', 'Kosovo'),
+    (279, 'Reunion', 'RE', 'RE', '-- ', '--', 'RE', '', '', '', '', 'Euro', 'EUR', 0, 'Metropolitan France', 'Reunion')";
 
             /**
              * Filter the SQL query that inserts the country DB table data.
