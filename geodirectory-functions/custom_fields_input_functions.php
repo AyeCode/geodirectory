@@ -989,7 +989,7 @@ function geodir_cfi_address($html,$cf){
         $required_msg = $cf['required_msg'];
         $site_title = $cf['site_title'];
         $is_admin = $cf['is_admin'];
-        $extra_fields = unserialize($cf['extra_fields']);
+        $extra_fields = stripslashes_deep(unserialize($cf['extra_fields']));
         $prefix = $name . '_';
 
         ($site_title != '') ? $address_title = $site_title : $address_title = geodir_ucwords($prefix . ' address');

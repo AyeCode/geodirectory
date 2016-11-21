@@ -230,7 +230,7 @@ function geodir_custom_fields_predefined($post_type=''){
         )
     );
 
-    // property type
+    // property features
     $custom_fields['property_features'] = array( // The key value should be unique and not contain any spaces.
         'field_type'  =>  'multiselect',
         'class'       =>  'gd-property-features',
@@ -315,6 +315,66 @@ function geodir_custom_fields_predefined($post_type=''){
         )
     );
 
+
+    // JOB TYPE CF
+
+    // job type
+    $custom_fields['job_type'] = array( // The key value should be unique and not contain any spaces.
+        'field_type'  =>  'select',
+        'class'       =>  'gd-job-type',
+        'icon'        =>  'fa fa-briefcase',
+        'name'        =>  __('Job Type', 'geodirectory'),
+        'description' =>  __('Adds a select input to be able to set the type of a job ie: Full Time, Part Time', 'geodirectory'),
+        'defaults'    => array(
+            'data_type'           =>  'VARCHAR',
+            'admin_title'         =>  'Job Type',
+            'site_title'          =>  'Job Type',
+            'admin_desc'          =>  'Select the type of job.',
+            'htmlvar_name'        =>  'job_type',
+            'is_active'           =>  true,
+            'for_admin_use'       =>  false,
+            'default_value'       =>  '',
+            'show_in' 	          =>  '[detail],[listing]',
+            'is_required'         =>  true,
+            'option_values'       =>  __('Select Type/,Freelance,Full Time,Internship,Part Time,Temporary,Other','geodirectory'),
+            'validation_pattern'  =>  '',
+            'validation_msg'      =>  '',
+            'required_msg'        =>  '',
+            'field_icon'          =>  'fa fa-briefcase',
+            'css_class'           =>  '',
+            'cat_sort'            =>  true,
+            'cat_filter'	      =>  true
+        )
+    );
+
+    // job sector
+    $custom_fields['job_sector'] = array( // The key value should be unique and not contain any spaces.
+        'field_type'  =>  'select',
+        'class'       =>  'gd-job-type',
+        'icon'        =>  'fa fa-briefcase',
+        'name'        =>  __('Job Sector', 'geodirectory'),
+        'description' =>  __('Adds a select input to be able to set the type of a job Sector ie: Private Sector,Public Sector', 'geodirectory'),
+        'defaults'    => array(
+            'data_type'           =>  'VARCHAR',
+            'admin_title'         =>  'Job Sector',
+            'site_title'          =>  'Job Sector',
+            'admin_desc'          =>  'Select the job sector.',
+            'htmlvar_name'        =>  'job_sector',
+            'is_active'           =>  true,
+            'for_admin_use'       =>  false,
+            'default_value'       =>  '',
+            'show_in' 	          =>  '[detail]',
+            'is_required'         =>  true,
+            'option_values'       =>  __('Select Sector/,Private Sector,Public Sector,Agencies','geodirectory'),
+            'validation_pattern'  =>  '',
+            'validation_msg'      =>  '',
+            'required_msg'        =>  '',
+            'field_icon'          =>  'fa fa-briefcase',
+            'css_class'           =>  '',
+            'cat_sort'            =>  true,
+            'cat_filter'	      =>  true
+        )
+    );
 
 
     /**

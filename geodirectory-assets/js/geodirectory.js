@@ -95,7 +95,9 @@ function geodir_init_lazy_load(){
 jQuery(function() {
     // start lazy load if it's turned on
     if(geodir_var.geodir_lazy_load==1){
+        setTimeout(function(){ // FF seems to load this too early
         geodir_init_lazy_load();
+        }, 50);
     }
 });
 

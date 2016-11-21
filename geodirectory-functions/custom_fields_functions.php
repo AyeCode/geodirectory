@@ -279,7 +279,7 @@ if (!function_exists('geodir_custom_field_save')) {
      *    @type string $is_default Either "1" or "0". If "0" is used then the field will be displayed as main form field or additional field.
      *    @type string $for_admin_use Either "1" or "0". If "0" is used then only site admin can edit this field.
      *    @type string $is_required Use "1" to set field as required.
-     *    @type string $required_msg Enter text for error message if field required and have not full fill requirment.
+     *    @type string $required_msg Enter text for error message if field required and have not full fill requirement.
      *    @type string $show_on_listing Want to show this on listing page?.
      *    @type string $show_in What locations to show the custom field in.
      *    @type string $show_on_detail Want to show this in More Info tab on detail page?.
@@ -312,7 +312,7 @@ if (!function_exists('geodir_custom_field_save')) {
         $cf = trim($result_str, '_');
 
 
-        /*-------- check dublicate validation --------*/
+        /*-------- check duplicate validation --------*/
 
         $cehhtmlvar_name = isset($request_field['htmlvar_name']) ? $request_field['htmlvar_name'] : '';
         $post_type = $request_field['listing_type'];
@@ -732,7 +732,7 @@ if (!function_exists('geodir_custom_field_save')) {
                         break;
 
                     case 'fieldset':
-                        // Nothig happend for fieldset
+                        // Nothing happened for fieldset
                         break;
 
                     default:
@@ -1246,7 +1246,10 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
     $custom_fields = geodir_post_custom_fields($package_id, $default, $post_type);
 
     foreach ($custom_fields as $key => $val) {
+        if(isset($val['extra_fields'])){$extra_fields = $val['extra_fields'];}
         $val = stripslashes_deep($val); // strip slashes from labels
+        if(isset($val['extra_fields'])){$val['extra_fields'] = $extra_fields;}
+
         $name = $val['name'];
         $type = $val['type'];
         $is_default = $val['is_default'];
@@ -1398,7 +1401,9 @@ if (!function_exists('geodir_show_listing_info')) {
 
 
             foreach ($fields_info as $type) {
+                if(isset($type['extra_fields'])){$extra_fields= $type['extra_fields'];}
                 $type = stripslashes_deep($type); // strip slashes
+                if(isset($type['extra_fields'])){$type['extra_fields'] = $extra_fields;}
                 $html = '';
                 $field_icon = geodir_field_icon_proccess($type);
                 $filed_type = $type['type'];
@@ -1706,7 +1711,7 @@ if (!function_exists('geodir_plupload_action')) {
      */
     function geodir_plupload_action()
     {
-        // check ajax noonce
+        // check ajax nonce
         $imgid = $_POST["imgid"];
 
         check_ajax_referer($imgid . 'pluploadan');
@@ -1714,7 +1719,7 @@ if (!function_exists('geodir_plupload_action')) {
         // handle custom file uploaddir
         add_filter('upload_dir', 'geodir_upload_dir');
 
-        // change file orinetation if needed
+        // change file orientation if needed
         $fixed_file = geodir_exif($_FILES[$imgid . 'async-upload']);
 
         // handle file upload
@@ -2017,7 +2022,7 @@ if (!function_exists('geodir_custom_sort_field_save')) {
 
         $cf = trim($result_str, '_');
 
-        /*-------- check dublicate validation --------*/
+        /*-------- check duplicate validation --------*/
 
         $field_type = isset($request_field['field_type']) ? $request_field['field_type'] : '';
         $cehhtmlvar_name = isset($request_field['htmlvar_name']) ? $request_field['htmlvar_name'] : '';
@@ -2228,7 +2233,7 @@ if (!function_exists('geodir_custom_sort_field_adminhtml')) {
         ?>
 
         <li class="text" id="licontainer_<?php echo $result_str;?>">
-            <form><!-- we need to wrap in a fom so we can use radio buttons with same name -->
+            <form><!-- we need to wrap in a form so we can use radio buttons with same name -->
             <div class="title title<?php echo $result_str;?> gt-fieldset"
                  title="<?php _e('Double Click to toggle and drag-drop to sort', 'geodirectory');?>"
                  ondblclick="show_hide('field_frm<?php echo $result_str;?>')">
@@ -2538,6 +2543,7 @@ if (!function_exists('check_field_visibility')) {
  *
  * @since 1.0.0
  * @since 1.5.7 New parameter $translated added.
+ * @since 1.6.11 Input option value should not be translated.
  * @package GeoDirectory
  * @param string $input The string input.
  * @param bool $translated True if label needs to be translated.
@@ -2568,11 +2574,11 @@ function geodir_string_to_options($input = '', $translated = false)
                 $label = ucfirst($label);
                 $value = trim($input_str[1]);
             } else {
+                $value = $input_str;
                 if ($translated && $input_str != '') {
                     $input_str = __($input_str, 'geodirectory');
                 }
                 $label = ucfirst($input_str);
-                $value = $input_str;
             }
 
             if ($label != '') {
@@ -2900,7 +2906,7 @@ function geodir_cfa_extra_fields_address($output,$result_str,$cf,$field_info){
 
     ob_start();
     if (isset($field_info->extra_fields) && $field_info->extra_fields != '') {
-        $address = unserialize($field_info->extra_fields);
+        $address = stripslashes_deep(unserialize($field_info->extra_fields));
     }
 
     $radio_id = (isset($field_info->htmlvar_name)) ? $field_info->htmlvar_name : rand(5, 500);

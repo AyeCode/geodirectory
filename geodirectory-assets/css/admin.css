@@ -574,6 +574,18 @@ body.term-php .form-field textarea {
 }
 div.update-nag{width: 95%;}
 
+.wp-core-ui .button-primary.gd-remove-data{
+    background: #d10008;
+    border-color: #D10008;
+    text-shadow: none;
+    box-shadow: none;
+}
+
+
+.gd-admin-input{
+    padding: 6px !important;
+    margin: 1px 0 1px 0 !important;
+}
 /***********************---------------MEDIA CSS-------------*****************************/
 
 @media screen and (min-width: 860px) and (max-width: 960px) {
