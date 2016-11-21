@@ -432,6 +432,13 @@ function geodir_posts_orderby($orderby)
         case 'az':
             $orderby = "$wpdb->posts.post_title asc, ";
             break;
+        // sort by rating
+        case 'overall_rating_desc':
+            $orderby = " " . $table . ".overall_rating DESC, " . $table . ".rating_count DESC, ";
+            break;
+        case 'overall_rating_asc':
+            $orderby = " " . $table . ".overall_rating ASC, " . $table . ".rating_count ASC, ";
+            break;
         default:
 
             break;
@@ -495,7 +502,7 @@ function geodir_posts_order_by_custom_sort($orderby, $sort_by, $table)
 
     global $wpdb;
 
-    if ($sort_by != '' && !is_search()) {
+    if ($sort_by != '' && (!is_search() || ( isset($_REQUEST['s']) && isset($_REQUEST['snear']) && $_REQUEST['snear']=='' && ( $_REQUEST['s']=='' ||  $_REQUEST['s']==' ') ) )) {
 
         $sort_array = explode('_', $sort_by);
 

@@ -699,6 +699,11 @@ function gd_install_theme_compat()
         'geodir_theme_compat_code' => 'Multi_News'
     );
 
+    //Kelo
+    $theme_compat['Kleo'] = array(
+        'geodir_theme_compat_code' => 'Kleo'
+    );
+
     update_option('gd_theme_compats', $theme_compat);
 
     gd_set_theme_compat();// set the compat pack if avail

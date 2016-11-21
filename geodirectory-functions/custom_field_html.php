@@ -38,7 +38,11 @@ $cf_arr = $cf_arr1 + $cf_arr2 + $cf_arr3; // this way defaults can't be overwrit
 
 $cf = (isset($cf_arr[$field_type_key])) ? $cf_arr[$field_type_key] : '';
 
+
+if(isset($field_info->extra_fields)){$extra_fields = $field_info->extra_fields;}
 $field_info = stripslashes_deep($field_info); // strip slashes from labels
+if(isset($field_info->extra_fields)){$field_info->extra_fields = $extra_fields;}
+
 
 $nonce = wp_create_nonce('custom_fields_' . $result_str);
 

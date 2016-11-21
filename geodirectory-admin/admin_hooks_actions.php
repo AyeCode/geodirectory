@@ -120,8 +120,9 @@ add_action('admin_panel_init', 'create_default_admin_main_nav', 1);
 add_action('admin_panel_init', 'geodir_admin_list_columns', 2);
 
 /* --- insert dummy post action ---*/
-add_action('geodir_insert_dummy_posts_gd_place', 'geodir_insert_dummy_posts', 1);
-add_action('geodir_delete_dummy_posts_gd_place', 'geodir_delete_dummy_posts', 1);
+add_action('geodir_insert_dummy_posts', 'geodir_insert_dummy_posts', 1,3);
+add_action('geodir_delete_dummy_posts', 'geodir_delete_dummy_posts', 1,3);
+
 
 /**
  * Creates default admin navigation.
