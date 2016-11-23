@@ -4,6 +4,7 @@
  *
  * @since 1.0.0
  * @since 1.5.6 Fixed breaking maps when there is an apostrophe in location name.
+ * @since 1.6.11 Fix: OpenStreetMap does not working when third party plugin using the Google Maps JS API.
  * @package GeoDirectory
  */
 
@@ -71,9 +72,9 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
 	 */
 	do_action('geodir_add_listing_js_start', $prefix);
 	?>
-    if (typeof google!=='undefined' && typeof google.maps!=='undefined') {
+    if ((window.gdSetMap=='google' || window.gdSetMap=='auto') && window.google && typeof google.maps!=='undefined') {
         gdMaps = 'google';
-    } else if (typeof L!=='undefined' && typeof L.version!=='undefined') {
+    } else if ((window.gdSetMap=='osm' || window.gdSetMap=='auto') && typeof L!=='undefined' && typeof L.version!=='undefined') {
         gdMaps = 'osm';
     } else {
         gdMaps = null;

@@ -312,7 +312,7 @@ function geodir_draw_map($map_args = array())
                 }
 
 				/**
-				 * Filter the post type to retrive data for map
+				 * Filter the post type to retrieve data for map
 				 *
 				 * @since 1.0.0
 				 *
@@ -503,4 +503,14 @@ function geodir_draw_map($map_args = array())
     endif; // Exclude posttypes if end
 }
 
-?>
+/**
+ * Set current active map variable to the window javascript object.
+ *
+ * @since 1.6.11
+ *
+ */
+function geodir_set_gd_map() {
+?><script type="text/javascript">window.gdSetMap = window.gdSetMap || '<?php echo geodir_map_name(); ?>';</script><?php
+}
+add_action('wp_head', 'geodir_set_gd_map', -99);
+add_action('admin_head', 'geodir_set_gd_map', -99);
