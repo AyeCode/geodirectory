@@ -13,6 +13,9 @@ Reunion (island) added and Burma removed (replaced with Myanmar) - CHANGED
 Payment manager restrict description input count can affect video tab - FIXED
 WPML exclude cats on map does not work for translations of categories - FIXED
 Dummy data section improved and additional industries added - ADDED
+On detail page current location parameters should be added to the term links - CHANGED
+OpenStreetMap does not working when third party plugin using the Google Maps JS API - FIXED
+GD listings query returns wrong total when category has sub categories - FIXED
 
 v1.6.10
 Search can fail if more than one CPT but one is empty - FIXED

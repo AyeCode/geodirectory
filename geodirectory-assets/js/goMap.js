@@ -7,9 +7,9 @@
  * This software is released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
 (function ($) {
-    if (typeof google!=='undefined' && typeof google.maps!=='undefined') {
+    if ((window.gdSetMap=='google' || window.gdSetMap=='auto') && window.google && typeof google.maps!=='undefined') {
         gdMaps = 'google';
-    } else if (typeof L!=='undefined' && typeof L.version!=='undefined') {
+    } else if ((window.gdSetMap=='osm' || window.gdSetMap=='auto') && typeof L!=='undefined' && typeof L.version!=='undefined') {
         gdMaps = 'osm';
     } else {
         gdMaps = null;
@@ -119,7 +119,7 @@
             html_prepend: '<div class=gomapMarker>',
             html_append: '</div>',
             addMarker: false,
-            osmBaseLayer: [],
+            osmBaseLayer: null,
             osmOverlays: [],
         },
         map: null,
@@ -169,7 +169,7 @@
                 dragging: true,
                 scrollWheelZoom: opts.scrollwheel === "0" || !opts.scrollwheel ? false : opts.scrollwheel,
                 attributionControl: typeof opts.attributionControl !== 'undefined' ? opts.attributionControl : true,
-                defaultBaseLayer: typeof opts.osmBaseLayer !== 'undefined' && opts.osmBaseLayer ? opts.osmBaseLayer : [],
+                defaultBaseLayer: typeof opts.osmBaseLayer !== 'undefined' && opts.osmBaseLayer ? opts.osmBaseLayer : null,
                 defaultOverlays: typeof opts.osmOverlays !== 'undefined' && opts.osmOverlays ? opts.osmOverlays : [],
             };
 

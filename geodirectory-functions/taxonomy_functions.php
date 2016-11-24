@@ -1675,17 +1675,16 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
     if (isset($orig_post)) {
         $post = $orig_post;
     }
-    //echo $post_link ;
+
     return $post_link;
-
 }
-
 
 /**
  * Returns the term link with parameters.
  *
  * @since 1.0.0
  * @since 1.5.7 Changes for the neighbourhood system improvement.
+ * @since 1.6.11 Details page add locations to the term links.
  * @package GeoDirectory
  * @param string $termlink The term link
  * @param object $term Not yet implemented.
@@ -1699,32 +1698,36 @@ function geodir_term_link($termlink, $term, $taxonomy) {
         global $geodir_add_location_url, $gd_session;
         $include_location = false;
         $request_term = array();
+        $add_location_url = get_option('geodir_add_location_url');
+        $location_manager = defined('POST_LOCATION_TABLE') ? true : false;
 
         $listing_slug = geodir_get_listing_slug($taxonomy);
 
         if ($geodir_add_location_url != NULL && $geodir_add_location_url != '') {
-            if ($geodir_add_location_url && get_option('geodir_add_location_url')) {
+            if ($geodir_add_location_url && $add_location_url) {
                 $include_location = true;
             }
-        } elseif (get_option('geodir_add_location_url') && $gd_session->get('gd_multi_location') == 1)
+        } elseif ($add_location_url && $gd_session->get('gd_multi_location') == 1) {
             $include_location = true;
+        } elseif ($add_location_url && $location_manager && geodir_is_page('detail')) {
+            $include_location = true;
+        }
 
         if ($include_location) {
             global $post;
-			
-			$location_manager = defined('POST_LOCATION_TABLE') ? true : false;
-			$neighbourhood_active = $location_manager && get_option('location_neighbourhoods') ? true : false;
             
-			if(geodir_is_page('detail') && isset($post->country_slug)){
+            $neighbourhood_active = $location_manager && get_option('location_neighbourhoods') ? true : false;
+            
+            if (geodir_is_page('detail') && isset($post->country_slug)) {
                 $location_terms = array(
                     'gd_country' => $post->country_slug,
                     'gd_region' => $post->region_slug,
                     'gd_city' => $post->city_slug
                 );
-				
-				if ($neighbourhood_active && !empty($location_terms['gd_city']) && $gd_ses_neighbourhood = $gd_session->get('gd_neighbourhood')) {
-					$location_terms['gd_neighbourhood'] = $gd_ses_neighbourhood;
-				}
+                
+                if ($neighbourhood_active && !empty($location_terms['gd_city']) && $gd_ses_neighbourhood = $gd_session->get('gd_neighbourhood')) {
+                    $location_terms['gd_neighbourhood'] = $gd_ses_neighbourhood;
+                }
             } else {
                 $location_terms = geodir_get_current_location_terms('query_vars');
             }
@@ -1733,8 +1736,7 @@ function geodir_term_link($termlink, $term, $taxonomy) {
             $location_terms = geodir_remove_location_terms($location_terms);
 
             if (!empty($location_terms)) {
-
-                $url_separator = '';//get_option('geodir_listingurl_separator');
+                $url_separator = '';
 
                 if (get_option('permalink_structure') != '') {
                     $old_listing_slug = '/' . $listing_slug . '/';
@@ -1757,38 +1759,31 @@ function geodir_term_link($termlink, $term, $taxonomy) {
         }*/
 
         // Alter the CPT slug if WPML is set to do so
-        if(function_exists('icl_object_id')){
+        if (function_exists('icl_object_id')) {
             $post_types = get_option('geodir_post_types');
             $post_type = str_replace("category","",$taxonomy);
-			$post_type = str_replace("_tags","",$post_type);
+            $post_type = str_replace("_tags","",$post_type);
             $slug = $post_types[$post_type]['rewrite']['slug'];
-            if ( gd_wpml_slug_translation_turned_on( $post_type )) {
-
+            if (gd_wpml_slug_translation_turned_on($post_type)) {
                 global $sitepress;
                 $default_lang = $sitepress->get_default_language();
                 $language_code = gd_wpml_get_lang_from_url($termlink);
-                if(!$language_code ){$language_code  = $default_lang;}
+                if (!$language_code ) {
+                    $language_code  = $default_lang;
+                }
 
                 $org_slug = $slug;
-                $slug = apply_filters( 'wpml_translate_single_string',
-                    $slug,
-                    'WordPress',
-                    'URL slug: ' . $slug,
-                    $language_code);
+                $slug = apply_filters('wpml_translate_single_string', $slug, 'WordPress', 'URL slug: ' . $slug, $language_code);
 
+                if (!$slug) {
+                    $slug = $org_slug;
+                }
 
-                if(!$slug){$slug = $org_slug;}
-
-                $termlink = trailingslashit(
-
-                    preg_replace(  "/" . preg_quote( $org_slug, "/" ) . "/", $slug  ,$termlink, 1 )
-                );
-
+                $termlink = trailingslashit(preg_replace("/" . preg_quote($org_slug, "/") . "/", $slug  ,$termlink, 1));
             }
         }
-
     }
-	
+    
     return $termlink;
 }
 

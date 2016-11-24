@@ -312,10 +312,10 @@ jQuery(function(){
         jQuery('body').addClass('gd-no-gmaps');
     }
 });
-var gdMaps = null;
-if (typeof google!=='undefined' && typeof google.maps!=='undefined') {
+var gdMaps = null
+if ((window.gdSetMap=='google' || window.gdSetMap=='auto') && window.google && typeof google.maps!=='undefined') {
     gdMaps = 'google';
-} else if (typeof L!=='undefined' && typeof L.version!=='undefined') {
+} else if ((window.gdSetMap=='osm' || window.gdSetMap=='auto') && typeof L!=='undefined' && typeof L.version!=='undefined') {
     gdMaps = 'osm';
 }
 window.gdMaps = window.gdMaps || gdMaps;
