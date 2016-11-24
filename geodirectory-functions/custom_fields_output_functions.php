@@ -694,6 +694,7 @@ function geodir_cf_text($html,$location,$cf,$p=''){
             if(isset($cf['data_type']) && ($cf['data_type']=='INT' || $cf['data_type']=='FLOAT') && isset($cf['extra_fields']) && $cf['extra_fields']){
                 $extra_fields = stripslashes_deep(maybe_unserialize($cf['extra_fields']));
                 if(isset($extra_fields['is_price']) && $extra_fields['is_price']){
+                    if(!$value>0){return '';}// dont output blank prices
                     $value = geodir_currency_format_number($value,$cf);
                 }
             }

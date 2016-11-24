@@ -6,19 +6,19 @@
  * @package GeoDirectory
  */
 
-function geodir_property_rent_custom_fields($post_type='gd_place',$package_id=''){
+function geodir_property_sale_custom_fields($post_type='gd_place',$package_id=''){
     $fields = array();
     $package = ($package_id=='') ? '' : array($package_id);
 
-    // price
+    // Salary
     $fields[] = array('listing_type' => $post_type,
                       'field_type'          =>  'text',
                       'data_type'           =>  'FLOAT',
                       'decimal_point'       =>  '2',
-                      'admin_title'         =>  __('Price', 'geodirectory'),
-                      'site_title'          =>  __('Price', 'geodirectory'),
-                      'admin_desc'          =>  __('Enter the price per calendar month (PCM)in $ (no currency symbol)', 'geodirectory'),
-                      'htmlvar_name'        =>  'price',
+                      'admin_title'         =>  __('Salary', 'geodirectory'),
+                      'site_title'          =>  __('Salary', 'geodirectory'),
+                      'admin_desc'          =>  __('Enter the Salary in $ (no currency symbol) ie: 25000', 'geodirectory'),
+                      'htmlvar_name'        =>  'salary',
                       'is_active'           =>  true,
                       'for_admin_use'       =>  false,
                       'default_value'       =>  '',
@@ -41,137 +41,92 @@ function geodir_property_rent_custom_fields($post_type='gd_place',$package_id=''
                       )
     );
 
-    // property status
-    $fields[] = array('listing_type' => $post_type,
-                      'data_type' => 'VARCHAR',
-                      'field_type' => 'select',
-                      'field_type_key' => 'property_status',
-                      'is_active' => 1,
-                      'for_admin_use' => 0,
-                      'is_default' => 0,
-                      'admin_title' => __('Property Status', 'geodirectory'),
-                      'admin_desc' => __('Enter the status of the property.', 'geodirectory'),
-                      'site_title' => __('Property Status', 'geodirectory'),
-                      'htmlvar_name' => 'property_status',
-                      'default_value' => '',
-                      'is_required' => '1',
-                      'required_msg' => '',
-                      'show_in'   =>  '[detail],[listing]',
-                      'show_on_pkg' => $package,
-                      'option_values' => 'Select Status/,For Rent,Let,Under Offer',
-                      'field_icon' => 'fa fa-home',
-                      'css_class' => '',
-                      'cat_sort' => 1,
-                      'cat_filter' => 1,
-    );
 
-    // property furnishing
+
+    // Job Type
     $fields[] = array('listing_type' => $post_type,
                       'field_type'          =>  'select',
                       'data_type'           =>  'VARCHAR',
-                      'admin_title'         =>  __('Furnishing', 'geodirectory'),
-                      'site_title'          =>  __('Furnishing', 'geodirectory'),
-                      'admin_desc'          =>  __('Enter the furnishing status of the property.', 'geodirectory'),
-                      'htmlvar_name'        =>  'property_furnishing',
+                      'admin_title'         =>  __('Job Type', 'geodirectory'),
+                      'site_title'          =>  __('Job Type','geodirectory'),
+                      'admin_desc'          =>  __('Select the type of job.','geodirectory'),
+                      'htmlvar_name'        =>  'job_type',
                       'is_active'           =>  true,
                       'for_admin_use'       =>  false,
                       'default_value'       =>  '',
                       'show_in' 	        =>  '[detail],[listing]',
                       'is_required'         =>  true,
-                      'option_values'       =>  __('Select Status/,Unfurnished,Furnished,Partially furnished,Optional','geodirectory'),
+                      'option_values'       =>  __('Select Type/,Freelance,Full Time,Internship,Part Time,Temporary,Other','geodirectory'),
                       'validation_pattern'  =>  '',
                       'validation_msg'      =>  '',
                       'required_msg'        =>  '',
-                      'field_icon'          =>  'fa fa-th-large',
+                      'field_icon'          =>  'fa fa-briefcase',
                       'css_class'           =>  '',
                       'cat_sort'            =>  true,
                       'cat_filter'	        =>  true
     );
 
-    // property type
+    // Job Sector
     $fields[] = array('listing_type' => $post_type,
                       'field_type'          =>  'select',
                       'data_type'           =>  'VARCHAR',
-                      'admin_title'         =>  __('Property Type', 'geodirectory'),
-                      'site_title'          =>  __('Property Type', 'geodirectory'),
-                      'admin_desc'          =>  __('Select the property type.', 'geodirectory'),
-                      'htmlvar_name'        =>  'property_type',
+                      'admin_title'         =>  __('Job Sector','geodirectory'),
+                      'site_title'          =>  __('Job Sector','geodirectory'),
+                      'admin_desc'          =>  __('Select the job sector.','geodirectory'),
+                      'htmlvar_name'        =>  'job_sector',
+                      'is_active'           =>  true,
+                      'for_admin_use'       =>  false,
+                      'default_value'       =>  '',
+                      'show_in' 	          =>  '[detail]',
+                      'is_required'         =>  true,
+                      'option_values'       =>  __('Select Sector/,Private Sector,Public Sector,Agencies','geodirectory'),
+                      'validation_pattern'  =>  '',
+                      'validation_msg'      =>  '',
+                      'required_msg'        =>  '',
+                      'field_icon'          =>  'fa fa-briefcase',
+                      'css_class'           =>  '',
+                      'cat_sort'            =>  true,
+                      'cat_filter'	      =>  true
+    );
+
+    // Required Experience
+    $fields[] = array('listing_type' => $post_type,
+                      'field_type'          =>  'select',
+                      'data_type'           =>  'VARCHAR',
+                      'admin_title'         =>  __('Required Experience', 'geodirectory'),
+                      'site_title'          =>  __('Required Experience', 'geodirectory'),
+                      'admin_desc'          =>  __('Select the number of years required experience', 'geodirectory'),
+                      'htmlvar_name'        =>  'job_experience',
                       'is_active'           =>  true,
                       'for_admin_use'       =>  false,
                       'default_value'       =>  '',
                       'show_in' 	        =>  '[detail],[listing]',
                       'is_required'         =>  true,
-                      'option_values'       =>  __('Select Type/,Detached house,Semi-detached house,Apartment,Bungalow,Semi-detached bungalow,Chalet,Town House,End-terrace house,Terrace house,Cottage,Hotel,Land','geodirectory'),
+                      'option_values'       =>  __('Select Experience/,No Experience Required,1 Year,2 Years,3 Years,4 Years,5 Years,6 Years,7 Years,8 Years,9 Years,10+ Years','geodirectory'),
                       'validation_pattern'  =>  '',
                       'validation_msg'      =>  '',
                       'required_msg'        =>  '',
-                      'field_icon'          =>  'fa fa-home',
+                      'field_icon'          =>  'fa fa-life-ring',
                       'css_class'           =>  '',
                       'cat_sort'            =>  true,
                       'cat_filter'	        =>  true
     );
 
-    // property bedrooms
+    // Required Skills
     $fields[] = array('listing_type' => $post_type,
-                      'field_type'          =>  'select',
-                      'data_type'           =>  'VARCHAR',
-                      'admin_title'         =>  __('Property Bedrooms', 'geodirectory'),
-                      'site_title'          =>  __('Bedrooms', 'geodirectory'),
-                      'admin_desc'          =>  __('Select the number of bedrooms', 'geodirectory'),
-                      'htmlvar_name'        =>  'property_bedrooms',
-                      'is_active'           =>  true,
-                      'for_admin_use'       =>  false,
-                      'default_value'       =>  '',
-                      'show_in' 	        =>  '[detail],[listing]',
-                      'is_required'         =>  true,
-                      'option_values'       =>  __('Select Bedrooms/,1,2,3,4,5,6,7,8,9,10','geodirectory'),
-                      'validation_pattern'  =>  '',
-                      'validation_msg'      =>  '',
-                      'required_msg'        =>  '',
-                      'field_icon'          =>  'fa fa-bed',
-                      'css_class'           =>  '',
-                      'cat_sort'            =>  true,
-                      'cat_filter'	        =>  true
-    );
-
-    // property bathrooms
-    $fields[] = array('listing_type' => $post_type,
-                      'field_type'          =>  'select',
-                      'data_type'           =>  'VARCHAR',
-                      'admin_title'         =>  __('Property Bathrooms', 'geodirectory'),
-                      'site_title'          =>  __('Bathrooms', 'geodirectory'),
-                      'admin_desc'          =>  __('Select the number of bathrooms', 'geodirectory'),
-                      'htmlvar_name'        =>  'property_bathrooms',
-                      'is_active'           =>  true,
-                      'for_admin_use'       =>  false,
-                      'default_value'       =>  '',
-                      'show_in' 	        =>  '[detail],[listing]',
-                      'is_required'         =>  true,
-                      'option_values'       =>  __('Select Bathrooms/,1,2,3,4,5,6,7,8,9,10','geodirectory'),
-                      'validation_pattern'  =>  '',
-                      'validation_msg'      =>  '',
-                      'required_msg'        =>  '',
-                      'field_icon'          =>  'fa fa-bold',
-                      'css_class'           =>  '',
-                      'cat_sort'            =>  true,
-                      'cat_filter'	        =>  true
-    );
-
-    // property area
-    $fields[] = array('listing_type' => $post_type,
-                      'field_type'          =>  'text',
-                      'data_type'           =>  'FLOAT',
-                      'admin_title'         =>  __('Property Area', 'geodirectory'),
-                      'site_title'          =>  __('Area (Sq Ft)', 'geodirectory'),
-                      'admin_desc'          =>  __('Enter the Sq Ft value for the property', 'geodirectory'),
+                      'field_type'          =>  'textarea',
+                      'data_type'           =>  'TEXT',
+                      'admin_title'         =>  __('Required Skills', 'geodirectory'),
+                      'site_title'          =>  __('Required Skills', 'geodirectory'),
+                      'admin_desc'          =>  __('Enter the required skills for the job', 'geodirectory'),
                       'htmlvar_name'        =>  'property_area',
                       'is_active'           =>  true,
                       'for_admin_use'       =>  false,
                       'default_value'       =>  '',
                       'show_in' 	        =>  '[detail],[listing]',
                       'is_required'         =>  false,
-                      'validation_pattern'  =>  '\d+(\.\d{2})?',
-                      'validation_msg'      =>  'Please enter the property area in numbers only: 1500',
+                      'validation_pattern'  =>  '',
+                      'validation_msg'      =>  '',
                       'required_msg'        =>  '',
                       'field_icon'          =>  'fa fa-area-chart',
                       'css_class'           =>  '',
@@ -179,27 +134,92 @@ function geodir_property_rent_custom_fields($post_type='gd_place',$package_id=''
                       'cat_filter'	        =>  true
     );
 
-    // property features
+
+
+    // Company details fieldset
     $fields[] = array('listing_type' => $post_type,
-                      'field_type'          =>  'multiselect',
+                      'field_type'          =>  'fieldset',
+                      'data_type'           =>  '',
+                      'admin_title'         =>  __('Company Details', 'geodirectory'),
+                      'site_title'          =>  __('Company Details', 'geodirectory'),
+                      'admin_desc'          =>  __('Enter your company details here', 'geodirectory'),
+                      'htmlvar_name'        =>  'job_company_details',
+                      'is_active'           =>  true,
+                      'for_admin_use'       =>  false,
+                      'show_in' 	        =>  '[owntab]'
+
+    );
+
+    // Company Name
+    $fields[] = array('listing_type' => $post_type,
+                      'field_type'          =>  'text',
                       'data_type'           =>  'VARCHAR',
-                      'admin_title'         =>  __('Property Features', 'geodirectory'),
-                      'site_title'          =>  __('Features', 'geodirectory'),
-                      'admin_desc'          =>  __('Select the property features.', 'geodirectory'),
-                      'htmlvar_name'        =>  'property_features',
+                      'admin_title'         =>  __('Company Name', 'geodirectory'),
+                      'site_title'          =>  __('Company Name', 'geodirectory'),
+                      'admin_desc'          =>  __('Enter your company name', 'geodirectory'),
+                      'htmlvar_name'        =>  'job_company_name',
                       'is_active'           =>  true,
                       'for_admin_use'       =>  false,
                       'default_value'       =>  '',
-                      'show_in' 	        =>  '[detail],[listing]',
-                      'is_required'         =>  true,
-                      'option_values'       =>  __('Select Features/,Gas Central Heating,Oil Central Heating,Double Glazing,Triple Glazing,Front Garden,Garage,Private driveway,Off Road Parking,Fireplace','geodirectory'),
+                      'show_in' 	        =>  '[owntab]',
+                      'is_required'         =>  false,
                       'validation_pattern'  =>  '',
                       'validation_msg'      =>  '',
                       'required_msg'        =>  '',
-                      'field_icon'          =>  'fa fa-plus-square',
-                      'css_class'           =>  'gd-comma-list',
-                      'cat_sort'            =>  true,
-                      'cat_filter'	        =>  true
+                      'field_icon'          =>  'fa fa-arrow-circle-right',
+                      'css_class'           =>  '',
+                      'cat_sort'            =>  false,
+                      'cat_filter'	        =>  false
+    );
+
+    // Company Logo
+    $fields[] = array('listing_type' => $post_type,
+                      'field_type'          =>  'file',
+                      'data_type'           =>  '',
+                      'admin_title'         =>  __('Company Logo', 'geodirectory'),
+                      'site_title'          =>  __('Company Logo', 'geodirectory'),
+                      'admin_desc'          =>  __('Enter your company Logo', 'geodirectory'),
+                      'htmlvar_name'        =>  'job_company_logo',
+                      'is_active'           =>  true,
+                      'for_admin_use'       =>  false,
+                      'default_value'       =>  '',
+                      'show_in' 	        =>  '[owntab]',
+                      'is_required'         =>  false,
+                      'validation_pattern'  =>  '',
+                      'validation_msg'      =>  '',
+                      'required_msg'        =>  '',
+                      'field_icon'          =>  'fa fa-arrow-circle-right',
+                      'css_class'           =>  '',
+                      'cat_sort'            =>  false,
+                      'cat_filter'	        =>  false,
+                      'extra'               =>  array(
+                          'gd_file_types'   =>  'jpg',
+                          'gd_file_types'   =>  'jpeg',
+                          'gd_file_types'   =>  'gif',
+                          'gd_file_types'   =>  'png',
+                      )
+    );
+
+    // Company Url
+    $fields[] = array('listing_type' => $post_type,
+                      'field_type'          =>  'url',
+                      'data_type'           =>  'VARCHAR',
+                      'admin_title'         =>  __('Company Url', 'geodirectory'),
+                      'site_title'          =>  __('Company Url', 'geodirectory'),
+                      'admin_desc'          =>  __('Enter your company Url', 'geodirectory'),
+                      'htmlvar_name'        =>  'job_company_url',
+                      'is_active'           =>  true,
+                      'for_admin_use'       =>  false,
+                      'default_value'       =>  '',
+                      'show_in' 	        =>  '[owntab]',
+                      'is_required'         =>  false,
+                      'validation_pattern'  =>  '',
+                      'validation_msg'      =>  '',
+                      'required_msg'        =>  '',
+                      'field_icon'          =>  'fa fa-arrow-circle-right',
+                      'css_class'           =>  '',
+                      'cat_sort'            =>  false,
+                      'cat_filter'	        =>  false
     );
 
 
@@ -210,168 +230,9 @@ function geodir_property_rent_custom_fields($post_type='gd_place',$package_id=''
      * @since 1.6.6
      * @param string $fields The default custom fields as an array.
      */
-    $fields = apply_filters('geodir_property_rent_custom_fields', $fields);
+    $fields = apply_filters('geodir_property_sale_custom_fields', $fields);
 
     return  $fields;
-}
-
-function geodir_property_rent_custom_fields_advanced_search($post_type='gd_place') {
-
-
-    $fields = array();
-
-    // Price range
-    $fields[] = array(
-        'create_field'            => true,
-        'listing_type'            => $post_type,
-        'field_type'              => 'text',
-        'data_type'               => 'RANGE',
-        'is_active'               => 1,
-        'site_field_title'        => 'Price',
-        'field_data_type'         => 'FLOAT',
-        'main_search'             => 1,
-        'main_search_priority'    => 15,
-        'data_type_change'        => 'SELECT',
-        'search_condition_select' => 'SINGLE',
-        'search_min_value'        => '1000',
-        'search_max_value'        => '10000',
-        'search_diff_value'       => '1000',
-        'first_search_value'      => '0',
-        'first_search_text'       => '',
-        'last_search_text'        => '',
-        'search_condition'        => 'SELECT',
-        'site_htmlvar_name'       => 'geodir_price',
-        'htmlvar_name'            => 'geodir_price',
-        'field_title'             => 'geodir_price',
-        'expand_custom_value'     => '',
-        'front_search_title'      => 'Price Range pm',
-        'field_desc'              => ''
-    );
-
-    // bedrooms
-    $fields[] = array(
-        'create_field'            => true,
-        'listing_type'            => $post_type,
-        'field_type'              => 'select',
-        'data_type'               => 'SELECT',
-        'is_active'               => 1,
-        'site_field_title'        => 'Bedrooms',
-        'field_data_type'         => 'VARCHAR',
-        'main_search'             => 1,
-        'main_search_priority'    => 16,
-        'search_condition'        => 'SINGLE',
-        'site_htmlvar_name'       => 'geodir_property_bedrooms',
-        'htmlvar_name'            => 'geodir_property_bedrooms',
-        'field_title'             => 'geodir_property_bedrooms',
-        'front_search_title'      => 'Bedrooms',
-        'field_desc'              => ''
-    );
-
-    // Property type
-    $fields[] = array(
-        'create_field'            => true,
-        'listing_type'            => $post_type,
-        'field_type'              => 'select',
-        'data_type'               => 'SELECT',
-        'is_active'               => 1,
-        'site_field_title'        => 'Property Type',
-        'field_data_type'         => 'VARCHAR',
-        'main_search'             => 0,
-        //'main_search_priority'    => 16,
-        'search_condition'        => 'SINGLE',
-        'site_htmlvar_name'       => 'geodir_property_type',
-        'htmlvar_name'            => 'geodir_property_type',
-        'field_title'             => 'geodir_property_type',
-        'front_search_title'      => 'Property Type',
-        'field_desc'              => ''
-    );
-
-    // Property Bathrooms
-    $fields[] = array(
-        'create_field'            => true,
-        'listing_type'            => $post_type,
-        'field_type'              => 'select',
-        'data_type'               => 'SELECT',
-        'is_active'               => 1,
-        'site_field_title'        => 'Bathrooms',
-        'field_data_type'         => 'VARCHAR',
-        'main_search'             => 0,
-        //'main_search_priority'    => 16,
-        'search_condition'        => 'SINGLE',
-        'site_htmlvar_name'       => 'geodir_property_bathrooms',
-        'htmlvar_name'            => 'geodir_property_bathrooms',
-        'field_title'             => 'geodir_property_bathrooms',
-        'front_search_title'      => 'Bathrooms',
-        'field_desc'              => ''
-    );
-
-    // Property Furnishing
-    $fields[] = array(
-        'create_field'            => true,
-        'listing_type'            => $post_type,
-        'field_type'              => 'select',
-        'data_type'               => 'SELECT',
-        'is_active'               => 1,
-        'site_field_title'        => 'Furnishing',
-        'field_data_type'         => 'VARCHAR',
-        'main_search'             => 0,
-        //'main_search_priority'    => 16,
-        'search_condition'        => 'SINGLE',
-        'site_htmlvar_name'       => 'geodir_property_furnishing',
-        'htmlvar_name'            => 'geodir_property_furnishing',
-        'field_title'             => 'geodir_property_furnishing',
-        'front_search_title'      => 'Furnishing',
-        'field_desc'              => ''
-    );
-
-    // Property Status
-    $fields[] = array(
-        'create_field'            => true,
-        'listing_type'            => $post_type,
-        'field_type'              => 'select',
-        'data_type'               => 'SELECT',
-        'is_active'               => 1,
-        'site_field_title'        => 'Property Status',
-        'field_data_type'         => 'VARCHAR',
-        'main_search'             => 0,
-        //'main_search_priority'    => 16,
-        'search_condition'        => 'SINGLE',
-        'site_htmlvar_name'       => 'geodir_property_status',
-        'htmlvar_name'            => 'geodir_property_status',
-        'field_title'             => 'geodir_property_status',
-        'front_search_title'      => 'Property Status',
-        'field_desc'              => ''
-    );
-
-    // Property Status
-    $fields[] = array(
-        'create_field'            => true,
-        'listing_type'            => $post_type,
-        'field_type'              => 'select',
-        'data_type'               => 'SELECT',
-        'is_active'               => 1,
-        'site_field_title'        => 'Property Status',
-        'field_data_type'         => 'VARCHAR',
-        'main_search'             => 0,
-        //'main_search_priority'    => 16,
-        'search_condition'        => 'SINGLE',
-        'site_htmlvar_name'       => 'geodir_property_status',
-        'htmlvar_name'            => 'geodir_property_status',
-        'field_title'             => 'geodir_property_status',
-        'front_search_title'      => 'Property Status',
-        'field_desc'              => ''
-    );
-
-
-    /**
-     * Filter the array of advanced search fields DB table data.
-     *
-     * @since 1.6.6
-     * @param string $fields The default custom fields as an array.
-     */
-    $fields = apply_filters('geodir_property_rent_custom_fields_advanced_search', $fields);
-
-    return $fields;
 }
 
 global $city_bound_lat1, $city_bound_lng1, $city_bound_lat2, $city_bound_lng2,$wpdb, $current_user,$dummy_post_index;
@@ -385,19 +246,9 @@ if($dummy_post_index==1){
     geodir_dummy_data_taxonomies($post_type,$category_array );
 
     // add the dummy custom fields
-    $fields = geodir_property_rent_custom_fields($post_type);
+    $fields = geodir_property_sale_custom_fields($post_type);
     geodir_create_dummy_fields($fields);
-
-    // update the type currently installed
-    update_option($post_type.'_dummy_data_type','property_rent');
-
-    // add the advanced search fields
-    if (defined('GEODIRADVANCESEARCH_VERSION')){
-        $search_fields = geodir_property_rent_custom_fields_advanced_search($post_type);
-        foreach($search_fields as $sfield){
-            geodir_custom_advance_search_field_save( $sfield );
-        }
-    }
+    update_option($post_type.'_dummy_data_type','property_sale');
 }
 
 if (geodir_dummy_folder_exists())
@@ -439,8 +290,8 @@ Suspendisse interdum accumsan magna et tempor. Suspendisse scelerisque at lorem 
             "geodir_website" => 'http://example.com/',
             "geodir_twitter" => 'http://example.com/',
             "geodir_facebook" => 'http://example.com/',
-            "geodir_price" => '1750',
-            "geodir_property_status" => 'For Rent',
+            "geodir_price" => '350000',
+            "geodir_property_status" => 'For Sale',
             'geodir_property_furnishing' => 'Furnished',
             'geodir_property_type' => 'Detached house',
             'geodir_property_bedrooms' => '3',
@@ -484,8 +335,8 @@ Mauris ac elit vitae massa dignissim posuere. Sed blandit nibh ut elementum ulla
             "geodir_website" => 'http://example.com/',
             "geodir_twitter" => 'http://example.com/',
             "geodir_facebook" => 'http://example.com/',
-            "geodir_price" => '1150',
-            "geodir_property_status" => 'Let',
+            "geodir_price" => '230000',
+            "geodir_property_status" => 'Sold',
             'geodir_property_furnishing' => 'Unfurnished',
             'geodir_property_type' => 'Detached house',
             'geodir_property_bedrooms' => '5',
@@ -529,7 +380,7 @@ Mauris ac elit vitae massa dignissim posuere. Sed blandit nibh ut elementum ulla
             "geodir_website" => 'http://example.com/',
             "geodir_twitter" => 'http://example.com/',
             "geodir_facebook" => 'http://example.com/',
-            "geodir_price" => '1300',
+            "geodir_price" => '260000',
             "geodir_property_status" => 'Under Offer',
             'geodir_property_furnishing' => 'Unfurnished',
             'geodir_property_type' => 'Detached house',
@@ -575,7 +426,7 @@ Mauris ac elit vitae massa dignissim posuere. Sed blandit nibh ut elementum ulla
             "geodir_website" => 'http://example.com/',
             "geodir_twitter" => 'http://example.com/',
             "geodir_facebook" => 'http://example.com/',
-            "geodir_price" => '13000',
+            "geodir_price" => '2300000',
             "geodir_property_status" => 'Under Offer',
             'geodir_property_furnishing' => 'Partially furnished',
             'geodir_property_type' => 'Detached house',
@@ -620,8 +471,8 @@ Mauris ac elit vitae massa dignissim posuere. Sed blandit nibh ut elementum ulla
             "geodir_website" => 'http://example.com/',
             "geodir_twitter" => 'http://example.com/',
             "geodir_facebook" => 'http://example.com/',
-            "geodir_price" => '1800',
-            "geodir_property_status" => 'For Rent',
+            "geodir_price" => '330000',
+            "geodir_property_status" => 'For Sale',
             'geodir_property_furnishing' => 'Optional',
             'geodir_property_type' => 'Detached house',
             'geodir_property_bedrooms' => '4',
@@ -665,8 +516,8 @@ Mauris ac elit vitae massa dignissim posuere. Sed blandit nibh ut elementum ulla
             "geodir_website" => 'http://example.com/',
             "geodir_twitter" => 'http://example.com/',
             "geodir_facebook" => 'http://example.com/',
-            "geodir_price" => '2700',
-            "geodir_property_status" => 'For Rent',
+            "geodir_price" => '530000',
+            "geodir_property_status" => 'For Sale',
             'geodir_property_furnishing' => 'Unfurnished',
             'geodir_property_type' => 'Detached house',
             'geodir_property_bedrooms' => '5',
@@ -710,8 +561,8 @@ Mauris ac elit vitae massa dignissim posuere. Sed blandit nibh ut elementum ulla
             "geodir_website" => 'http://example.com/',
             "geodir_twitter" => 'http://example.com/',
             "geodir_facebook" => 'http://example.com/',
-            "geodir_price" => '1450',
-            "geodir_property_status" => 'For Rent',
+            "geodir_price" => '245000',
+            "geodir_property_status" => 'For Sale',
             'geodir_property_furnishing' => 'Unfurnished',
             'geodir_property_type' => 'Apartment',
             'geodir_property_bedrooms' => '3',
@@ -755,8 +606,8 @@ Mauris ac elit vitae massa dignissim posuere. Sed blandit nibh ut elementum ulla
             "geodir_website" => 'http://example.com/',
             "geodir_twitter" => 'http://example.com/',
             "geodir_facebook" => 'http://example.com/',
-            "geodir_price" => '2000',
-            "geodir_property_status" => 'For Rent',
+            "geodir_price" => '395000',
+            "geodir_property_status" => 'For Sale',
             'geodir_property_furnishing' => 'Unfurnished',
             'geodir_property_type' => 'Apartment',
             'geodir_property_bedrooms' => '2',
@@ -801,8 +652,8 @@ Mauris ac elit vitae massa dignissim posuere. Sed blandit nibh ut elementum ulla
             "geodir_website" => 'http://example.com/',
             "geodir_twitter" => 'http://example.com/',
             "geodir_facebook" => 'http://example.com/',
-            "geodir_price" => '60000',
-            "geodir_property_status" => 'For Rent',
+            "geodir_price" => '12500000',
+            "geodir_property_status" => 'For Sale',
             'geodir_property_furnishing' => 'Furnished',
             'geodir_property_type' => 'Hotel',
             'geodir_property_bedrooms' => '120',
@@ -843,8 +694,8 @@ Mauris ac elit vitae massa dignissim posuere. Sed blandit nibh ut elementum ulla
             "geodir_website" => 'http://example.com/',
             "geodir_twitter" => 'http://example.com/',
             "geodir_facebook" => 'http://example.com/',
-            "geodir_price" => '800',
-            "geodir_property_status" => 'For Rent',
+            "geodir_price" => '80000',
+            "geodir_property_status" => 'For Sale',
             'geodir_property_furnishing' => '',
             'geodir_property_type' => 'Land',
             'geodir_property_bedrooms' => '',

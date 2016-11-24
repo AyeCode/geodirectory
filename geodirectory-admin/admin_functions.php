@@ -1525,7 +1525,6 @@ function geodir_admin_fields($options)
 
             case 'google_analytics' :
                 $selections = (array)get_option($value['id']);
-                if(get_option('geodir_ga_client_id') && get_option('geodir_ga_client_secret') ) {
                     ?>
                     <tr valign="top">
                         <th scope="row" class="titledesc"><?php echo $value['name'] ?></th>
@@ -1546,32 +1545,17 @@ function geodir_admin_fields($options)
                             $auth_url = $oAuthURL . $scope . $state . $redirect_uri . $response_type . $client_id . $access_type . $approval_prompt;
 
 
-                            ?>
-                            <script>
-                                function gd_ga_popup() {
-                                    var win = window.open("<?php echo $auth_url;?>", "Google Analytics", "");
-                                    var pollTimer = window.setInterval(function () {
-                                        if (win.closed !== false) { // !== is required for compatibility with Opera
-                                            window.clearInterval(pollTimer);
-
-                                            jQuery(".general_settings .submit .button-primary").trigger('click');
-                                        }
-                                    }, 200);
-                                }
-                            </script>
-
-                            <?php
-                            if (get_option('gd_ga_refresh_token')) {
+                            if (get_option('geodir_ga_auth_token')) {
                                 ?>
                                 <span class="button-primary"
-                                      onclick="gd_ga_popup();"><?php _e('Re-authorize', 'geodirectory'); ?></span>
+                                      onclick="window.open('<?php echo  geodir_ga_activation_url();?>', 'activate','width=700, height=600, menubar=0, status=0, location=0, toolbar=0')"><?php _e('Re-authorize', 'geodirectory'); ?></span>
                                 <span
                                     style="color: green; font-weight: bold;"><?php _e('Authorized', 'geodirectory'); ?></span>
                             <?php
                             } else {
                                 ?>
                                 <span class="button-primary"
-                                      onclick="gd_ga_popup();"><?php _e('Authorize', 'geodirectory');?></span>
+                                      onclick="window.open('<?php echo  geodir_ga_activation_url();?>', 'activate','width=700, height=600, menubar=0, status=0, location=0, toolbar=0')"><?php _e('Authorize', 'geodirectory');?></span>
                             <?php
                             }
                             ?>
@@ -1579,7 +1563,7 @@ function geodir_admin_fields($options)
                     </tr>
 
                 <?php
-                }
+
 
                 break;
 
@@ -6573,3 +6557,68 @@ function geodir_render_menu_metabox( $object, $args ) {
 <?php
 }
 */
+
+function geodir_ga_activation_url() {
+
+    return add_query_arg( array(
+        'next'          => admin_url("admin.php?page=geodirectory&active_tab=google_analytic_settings"),
+        'scope'         => GEODIR_GA_SCOPE,
+        'response_type' => 'code',
+        'redirect_uri'  => GEODIR_GA_REDIRECT,
+        'client_id'     => GEODIR_GA_CLIENTID,
+    ), 'https://accounts.google.com/o/oauth2/auth' );
+
+    return $url;
+}
+
+function geodir_gd_accounts(){
+    $accounts = array();
+    $useAuth = ( get_option( 'geodir_ga_auth_code' ) == '' ? false : true );
+    if($useAuth){
+        $accounts = geodir_ga_get_analytics_accounts();
+        if(is_array($accounts)){
+            $accounts = array_merge(array(__('Select Account','geodirectory')),$accounts);
+        }elseif(get_option('geodir_ga_account_id')){
+            $accounts = array();
+            $accounts[get_option('geodir_ga_account_id')] = __('Account re-authorization may be required','geodirectory').' ('.get_option('geodir_ga_account_id').')';
+        }
+    }
+    return $accounts;
+}
+
+function geodir_ga_get_analytics_accounts()
+{
+    $accounts = array();
+
+    if(get_option('geodir_ga_auth_token')===false){update_option('geodir_ga_auth_token','');}
+
+
+    if(get_option('geodir_gd_uids') && !isset($_POST['geodir_ga_auth_code'])){
+        return get_option('geodir_gd_uids');
+    }
+
+    
+    # Create a new Gdata call
+    if ( trim(get_option('geodir_ga_auth_code')) != '' )
+        $stats = new GDGoogleAnalyticsStats();
+    else
+        return false;
+
+    # Check if Google sucessfully logged in
+    if ( ! $stats->checkLogin() )
+        return false;
+
+    # Get a list of accounts
+    $accounts = $stats->getAllProfiles();
+
+    natcasesort ($accounts);
+
+    # Return the account array if there are accounts
+    if ( count($accounts) > 0 ){
+        update_option('geodir_gd_uids',$accounts);
+        return $accounts;
+    }
+    else
+        return false;
+}
+

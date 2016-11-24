@@ -103,6 +103,14 @@ if (!defined('GEODIR_REVIEW_TABLE')) define('GEODIR_REVIEW_TABLE', $plugin_prefi
 /** Define the database name for the custom sort fields table. */
 if (!defined('GEODIR_CUSTOM_SORT_FIELDS_TABLE')) define('GEODIR_CUSTOM_SORT_FIELDS_TABLE', $plugin_prefix . 'custom_sort_fields');
 
+/*
+ * Define our Google Analytic app settings
+ */
+if (!defined('GEODIR_GA_CLIENTID')) define('GEODIR_GA_CLIENTID', '687912069872-sdpsjssrdt7t3ao1dnv1ib71hkckbt5s.apps.googleusercontent.com');
+if (!defined('GEODIR_GA_CLIENTSECRET')) define('GEODIR_GA_CLIENTSECRET', 'yBVkDpqJ1B9nAETHy738Zn8C'); //don't worry - this don't need to be secret in our case
+if (!defined('GEODIR_GA_REDIRECT')) define('GEODIR_GA_REDIRECT', 'urn:ietf:wg:oauth:2.0:oob');
+if (!defined('GEODIR_GA_SCOPE')) define('GEODIR_GA_SCOPE', 'https://www.googleapis.com/auth/analytics');//.readonly
+
 
 /*
  * Localisation items.
@@ -197,6 +205,12 @@ if (is_admin() || defined( 'GD_TESTING_MODE' )) {
      * @since 1.0.0
      */
     require_once('geodirectory-admin/admin_template_tags.php');
+    /**
+     * Include Google Analytics Class.
+     *
+     * @since 1.6.11
+     */
+    require_once('geodirectory-admin/class.analytics.stats.php');
     /**
      * Include any functions needed for upgrades.
      *

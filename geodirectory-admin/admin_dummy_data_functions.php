@@ -296,6 +296,8 @@ if (!function_exists('geodir_autoinstall_admin_header') && (get_option('geodir_i
 
                     $set_dt = get_option($post_type.'_dummy_data_type');
 
+                    $count = 30;
+
                     geodir_add_column_if_not_exist($plugin_prefix . $post_type. "_detail", 'post_dummy', "enum( '1', '0' ) NULL DEFAULT '0'");
 
                     $post_counts = $wpdb->get_var("SELECT count(post_id) FROM " . $plugin_prefix . $post_type . "_detail WHERE post_dummy='1'");
@@ -309,6 +311,7 @@ if (!function_exists('geodir_autoinstall_admin_header') && (get_option('geodir_i
                     echo "<select id='".$post_type."_data_type' onchange='geodir_dummy_set_count(this,\"$post_type\");' $select_disabled>";
                     foreach($data_types_for as $key=>$val){
                         $selected = ($key==$set_dt) ? "selected='selected'" : '';
+                        if($selected){$count = $val['count'];}
                         echo "<option $selected value='$key' data-count='".$val['count']."'>".$val['name']."</option>";
                     }
                     echo "</select>";
@@ -316,8 +319,8 @@ if (!function_exists('geodir_autoinstall_admin_header') && (get_option('geodir_i
                     $select_display = $post_counts > 0 ? 'display:none;' : '';
                     echo "<select id='".$post_type."_data_type_count' style='$select_display' >";
                     $x = 1;
-                    while($x <= $val['count']){
-                        $selected = ($x==$val['count']) ? "selected='selected'" : '';
+                    while($x <= $count){
+                        $selected = ($x==$count) ? "selected='selected'" : '';
                         echo "<option $selected value='$x'>".$x."</option>";
                         $x++;
                     }
