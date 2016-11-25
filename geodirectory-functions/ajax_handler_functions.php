@@ -86,20 +86,6 @@ function geodir_on_init()
         die;
     }
 
-    if (isset($_REQUEST['ptype']) && $_REQUEST['ptype'] == 'ga') {
-        if (isset($_REQUEST['ga_start'])) {
-            $ga_start = $_REQUEST['ga_start'];
-        } else {
-            $ga_start = '';
-        }
-        if (isset($_REQUEST['ga_end'])) {
-            $ga_end = $_REQUEST['ga_end'];
-        } else {
-            $ga_end = '';
-        }
-        geodir_getGoogleAnalytics($_REQUEST['ga_page'], $ga_start, $ga_end);
-        die;
-    }
 
 
 }
@@ -118,7 +104,7 @@ function geodir_on_init()
  * @todo check if nonce is required here and if so add one.
  */
 function geodir_ajax_handler() {
-    global $wpdb, $gd_session;
+    global $wpdb, $gd_session,$post;
 
     if (isset($_REQUEST['gd_listing_view']) && $_REQUEST['gd_listing_view'] != '') {
 		$gd_session->set('gd_listing_view', $_REQUEST['gd_listing_view']);
@@ -386,3 +372,21 @@ function geodir_ajax_handler() {
 
     gd_die();
 }
+
+
+function geodir_show_ga_stats(){
+    if (isset($_REQUEST['ga_start'])) {
+        $ga_start = $_REQUEST['ga_start'];
+    } else {
+        $ga_start = '';
+    }
+    if (isset($_REQUEST['ga_end'])) {
+        $ga_end = $_REQUEST['ga_end'];
+    } else {
+        $ga_end = '';
+    }
+    geodir_getGoogleAnalytics($_REQUEST['ga_page'], $ga_start, $ga_end);
+    die;
+}
+add_action( 'wp_ajax_gdga', 'geodir_show_ga_stats' );
+add_action( 'wp_ajax_nopriv_gdga', 'geodir_show_ga_stats' );

@@ -663,7 +663,7 @@ if (!function_exists('geodir_save_post_info')) {
                         $mval = implode(",", $mval);
                     }
 
-                    $post_meta_set_query .= $mkey . " = '" . $mval . "', ";
+                    $post_meta_set_query .= $mkey . " = '" . addslashes_gpc($mval) . "', ";
                 }
             }
 
@@ -674,6 +674,7 @@ if (!function_exists('geodir_save_post_info')) {
             }
 
             $post_meta_set_query = str_replace('%', '%%', $post_meta_set_query);// escape %
+
 
             /**
              * Called before saving the listing info.

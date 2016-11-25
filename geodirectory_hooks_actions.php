@@ -618,34 +618,34 @@ function geodir_detail_page_google_analytics()
             });
 
             function gdga_weekVSweek() {
-                jQuery.ajax({url: "<?php echo get_bloginfo('url').'/?ptype=ga&ga_page='.$page_url; ?>&ga_type=thisweek", success: function(result){
+                jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=gdga&ga_page='.$page_url.'&ga_type=thisweek'); ?>", success: function(result){
                     ga_data1 = jQuery.parseJSON(result);
                     if(ga_data1.error){jQuery('#ga_stats').html(result);return;}
                     gd_renderWeekOverWeekChart();
                 }});
 
-                jQuery.ajax({url: "<?php echo get_bloginfo('url').'/?ptype=ga&ga_page='.$page_url; ?>&ga_type=lastweek", success: function(result){
+                jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=gdga&ga_page='.$page_url.'&ga_type=lastweek'); ?>", success: function(result){
                     ga_data2 = jQuery.parseJSON(result);
                     gd_renderWeekOverWeekChart();
                 }});
             }
 
             function gdga_yearVSyear() {
-                jQuery.ajax({url: "<?php echo get_bloginfo('url').'/?ptype=ga&ga_page='.$page_url; ?>&ga_type=thisyear", success: function(result){
+                jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=gdga&ga_page='.$page_url.'&ga_type=thisyear'); ?>", success: function(result){
                     ga_data3 = jQuery.parseJSON(result);
                     if(ga_data3.error){jQuery('#ga_stats').html(result);return;}
 
                     gd_renderYearOverYearChart()
                 }});
 
-                jQuery.ajax({url: "<?php echo get_bloginfo('url').'/?ptype=ga&ga_page='.$page_url; ?>&ga_type=lastyear", success: function(result){
+                jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=gdga&ga_page='.$page_url.'&ga_type=lastyear'); ?>", success: function(result){
                     ga_data4 = jQuery.parseJSON(result);
                     gd_renderYearOverYearChart()
                 }});
             }
 
             function gdga_country() {
-                jQuery.ajax({url: "<?php echo get_bloginfo('url').'/?ptype=ga&ga_page='.$page_url; ?>&ga_type=country", success: function(result){
+                jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=gdga&ga_page='.$page_url.'&ga_type=country'); ?>", success: function(result){
                     ga_data5 = jQuery.parseJSON(result);
                     if(ga_data5.error){jQuery('#ga_stats').html(result);return;}
                     gd_renderTopCountriesChart();
@@ -653,7 +653,7 @@ function geodir_detail_page_google_analytics()
             }
 
             function gdga_realtime(dom_ready) {
-                jQuery.ajax({url: "<?php echo get_bloginfo('url').'/?ptype=ga&ga_page='.$page_url; ?>&ga_type=realtime", success: function(result) {
+                jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=gdga&ga_page='.$page_url.'&ga_type=realtime'); ?>", success: function(result) {
                     ga_data6 = jQuery.parseJSON(result);
                     if (ga_data6.error) {
                         jQuery('#ga_stats').html(result);

@@ -215,6 +215,50 @@ function geodir_property_sale_custom_fields($post_type='gd_place',$package_id=''
     return  $fields;
 }
 
+function geodir_property_sale_custom_fields_advanced_search($post_type='gd_place') {
+
+
+    $fields = array();
+
+    // price range
+    $fields[] = array(
+        'create_field'            => true,
+        'listing_type'            => $post_type,
+        'field_type'              => 'text',
+        'data_type'               => 'RANGE',
+        'is_active'               => 1,
+        'site_field_title'        => 'Price',
+        'field_data_type'         => 'FLOAT',
+        'main_search'             => 1,
+        'main_search_priority'    => 15,
+        'data_type_change'        => 'SELECT',
+        'search_condition_select' => 'SINGLE',
+        'search_min_value'        => '50000',
+        'search_max_value'        => '1000000',
+        'search_diff_value'       => '100000',
+        'first_search_value'      => '0',
+        'first_search_text'       => '',
+        'last_search_text'        => '',
+        'search_condition'        => 'SELECT',
+        'site_htmlvar_name'       => 'geodir_price',
+        'htmlvar_name'            => 'geodir_price',
+        'field_title'             => 'geodir_price',
+        'expand_custom_value'     => '',
+        'front_search_title'      => 'Price Range',
+        'field_desc'              => ''
+    );
+
+    /**
+     * Filter the array of advanced search fields DB table data.
+     *
+     * @since 1.6.6
+     * @param string $fields The default custom fields as an array.
+     */
+    $fields = apply_filters('geodir_property_sale_custom_fields_advanced_search', $fields);
+
+    return $fields;
+}
+
 global $city_bound_lat1, $city_bound_lng1, $city_bound_lat2, $city_bound_lng2,$wpdb, $current_user,$dummy_post_index;
 $post_info = array();
 $image_array = array();
@@ -228,7 +272,17 @@ if($dummy_post_index==1){
     // add the dummy custom fields
     $fields = geodir_property_sale_custom_fields($post_type);
     geodir_create_dummy_fields($fields);
+
+    // update the type currently installed
     update_option($post_type.'_dummy_data_type','property_sale');
+
+    // add the advanced search fields
+    if (defined('GEODIRADVANCESEARCH_VERSION')){
+        $search_fields = geodir_property_sale_custom_fields_advanced_search($post_type);
+        foreach($search_fields as $sfield){
+            geodir_custom_advance_search_field_save( $sfield );
+        }
+    }
 }
 
 if (geodir_dummy_folder_exists())
