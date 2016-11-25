@@ -2251,6 +2251,7 @@ function geodir_import_export_page() {
 	}
 	
 	$uploads = wp_upload_dir();
+	$upload_dir = wp_sprintf( CSV_TRANSFER_IMG_FOLDER, str_replace( ABSPATH, '', $uploads['path'] ) );
 ?>
 </form>
 <div class="inner_content_tab_main gd-import-export">
@@ -2895,7 +2896,7 @@ function gd_imex_showStatusMsg(el, type) {
     }
 
     if (images > 0) {
-        gdMsg += '<p><?php echo addslashes( sprintf( CSV_TRANSFER_IMG_FOLDER, $uploads['subdir'] ) );?></p>';
+        gdMsg += '<p><?php echo addslashes( $upload_dir );?></p>';
     }
     gdMsg += '<p></p>';
     jQuery('#gd-import-msg', cont).find('#message').removeClass('error').addClass('updated').html(gdMsg);
