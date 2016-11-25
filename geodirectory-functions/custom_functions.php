@@ -897,6 +897,15 @@ function geodir_related_posts_display( $request ) {
 
 			global $gridview_columns, $post;
 
+			/**
+			 * Filters related listing query args.
+			 *
+			 * @since 1.6.11
+			 *
+			 * @param array $query_args The query array.
+			 * @param array $request Related posts request array.
+			 */
+			$query_args = apply_filters( 'geodir_related_posts_widget_query_args', $query_args, $request );
 
 			query_posts( $query_args );
 
