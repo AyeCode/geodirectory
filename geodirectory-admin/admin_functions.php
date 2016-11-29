@@ -3289,6 +3289,7 @@ function geodir_filesystem_notice()
  * @since 1.4.6
  * @since 1.5.4 Modified to add default category via csv import.
  * @since 1.5.7 Modified to fix 504 Gateway Time-out for very large data.
+ * @since 1.6.11 alive_days column added in exported csv.
  * @package GeoDirectory
  *
  * @global object $wpdb WordPress Database object.
@@ -4568,6 +4569,9 @@ function geodir_ajax_import_export() {
                                 if (isset($is_featured)) {
                                     geodir_save_post_meta($saved_post_id, 'is_featured', $is_featured);
                                 }
+                                if (isset($gd_post['alive_days'])) {
+                                    geodir_save_post_meta($saved_post_id, 'alive_days', $gd_post['alive_days']);
+                                }
                                 if (isset($gd_post['expire_date'])) {
                                     geodir_save_post_meta($saved_post_id, 'expire_date', $gd_post['expire_date']);
                                 }
@@ -5005,6 +5009,7 @@ function geodir_get_posts_count( $post_type ) {
  * @since 1.5.1 Updated to import & export recurring events.
  * @since 1.5.3 Fixed to get wpml original post id.
  * @since 1.5.7 $per_page & $page_no parameters added.
+ * @since 1.6.11 alive_days column added in exported csv.
  * @package GeoDirectory
  *
  * @global object $wp_filesystem WordPress FileSystem object.
@@ -5064,6 +5069,7 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
 		}
 		if ($is_payment_plugin) {
 			$csv_row[] = 'package_id';
+			$csv_row[] = 'alive_days';
 			$csv_row[] = 'expire_date';
 		}
         $csv_row[] = 'post_date';
@@ -5130,7 +5136,7 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
 			
 			$gd_post_info = geodir_get_post_info( $post_id );
 			$post_info = (array)$gd_post_info;
-						
+			
 			$taxonomy_category = $post_type . 'category';
 			$taxonomy_tags = $post_type . '_tags';
 			
@@ -5260,14 +5266,15 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
             }
 			if ($is_payment_plugin) {
 				$csv_row[] = (int)$post_info['package_id']; // package_id
+				$csv_row[] = $post_info['alive_days'] !== '' ? absint($post_info['alive_days']) : ''; // alive_days
 				$csv_row[] = $post_info['expire_date'] != '' && geodir_strtolower($post_info['expire_date']) != 'never' ? date_i18n('Y-m-d', strtotime($post_info['expire_date'])) : 'Never'; // expire_date
 			}
             $csv_row[] = $post_info['post_date']; // post_date
-			$csv_row[] = $post_info['post_address']; // post_address
-			$csv_row[] = $post_info['post_city']; // post_city
-			$csv_row[] = $post_info['post_region']; // post_region
-			$csv_row[] = $post_info['post_country']; // post_country
-			$csv_row[] = $post_info['post_zip']; // post_zip
+			$csv_row[] = stripslashes($post_info['post_address']); // post_address
+			$csv_row[] = stripslashes($post_info['post_city']); // post_city
+			$csv_row[] = stripslashes($post_info['post_region']); // post_region
+			$csv_row[] = stripslashes($post_info['post_country']); // post_country
+			$csv_row[] = stripslashes($post_info['post_zip']); // post_zip
 			$csv_row[] = $post_info['post_latitude']; // post_latitude
 			$csv_row[] = $post_info['post_longitude']; // post_longitude
             if ($neighbourhood_active) {
@@ -5281,18 +5288,18 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
                         $neighbourhood_longitude = $hood_info->hood_longitude;
                     }
                 }
-                $csv_row[] = $post_neighbourhood; // post_neighbourhood
+                $csv_row[] = stripslashes($post_neighbourhood); // post_neighbourhood
                 $csv_row[] = $neighbourhood_latitude; // neighbourhood_latitude
                 $csv_row[] = $neighbourhood_longitude; // neighbourhood_longitude
             }
-			$csv_row[] = $post_info['geodir_timing']; // geodir_timing
-			$csv_row[] = $post_info['geodir_contact']; // geodir_contact
-			$csv_row[] = $post_info['geodir_email']; // geodir_email
-			$csv_row[] = $post_info['geodir_website']; // geodir_website
-			$csv_row[] = $post_info['geodir_twitter']; // geodir_twitter
-			$csv_row[] = $post_info['geodir_facebook']; // geodir_facebook
-			$csv_row[] = $post_info['geodir_video']; // geodir_video
-			$csv_row[] = $post_info['geodir_special_offers']; // geodir_special_offers
+			$csv_row[] = stripslashes($post_info['geodir_timing']); // geodir_timing
+			$csv_row[] = stripslashes($post_info['geodir_contact']); // geodir_contact
+			$csv_row[] = stripslashes($post_info['geodir_email']); // geodir_email
+			$csv_row[] = stripslashes($post_info['geodir_website']); // geodir_website
+			$csv_row[] = stripslashes($post_info['geodir_twitter']); // geodir_twitter
+			$csv_row[] = stripslashes($post_info['geodir_facebook']); // geodir_facebook
+			$csv_row[] = stripslashes($post_info['geodir_video']); // geodir_video
+			$csv_row[] = stripslashes($post_info['geodir_special_offers']); // geodir_special_offers
 			// WPML
 			if ($is_wpml) {
 				$csv_row[] = geodir_get_language_for_element( $post_id, 'post_' . $post_type );
