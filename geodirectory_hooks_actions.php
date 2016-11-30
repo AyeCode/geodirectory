@@ -2635,7 +2635,9 @@ function geodir_add_post_status_author_page()
 
     $html = '';
     if (get_current_user_id()) {
-        if (geodir_is_page('author') && !empty($post) && isset($post->post_author) && $post->post_author == get_current_user_id()) {
+
+        $is_author_page = apply_filters('geodir_post_status_is_author_page', geodir_is_page('author'));
+        if ($is_author_page && !empty($post) && isset($post->post_author) && $post->post_author == get_current_user_id()) {
 
             // we need to query real status direct as we dynamically change the status for author on author page so even non author status can view them.
             $real_status = $wpdb->get_var("SELECT post_status from $wpdb->posts WHERE ID=$post->ID");
