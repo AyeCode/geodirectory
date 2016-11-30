@@ -24,7 +24,7 @@ function geodir_property_sale_custom_fields($post_type='gd_place',$package_id=''
                       'default_value'       =>  '',
                       'show_in' 	        =>  '[detail],[listing]',
                       'is_required'         =>  false,
-                      'validation_pattern'  =>  '\d+(\.\d{2})?',
+                      'validation_pattern'  =>  addslashes_gpc('\d+(\.\d{2})?'), // add slashes required
                       'validation_msg'      =>  'Please enter number and decimal only ie: 100.50',
                       'required_msg'        =>  '',
                       'field_icon'          =>  'fa fa-usd',
@@ -160,7 +160,7 @@ function geodir_property_sale_custom_fields($post_type='gd_place',$package_id=''
     // property area
     $fields[] = array('listing_type' => $post_type,
                       'field_type'          =>  'text',
-                      'data_type'           =>  'FLOAT',
+                      'data_type'           =>  'INT',
                       'admin_title'         =>  __('Property Area', 'geodirectory'),
                       'site_title'          =>  __('Area (Sq Ft)', 'geodirectory'),
                       'admin_desc'          =>  __('Enter the Sq Ft value for the property', 'geodirectory'),
@@ -170,7 +170,7 @@ function geodir_property_sale_custom_fields($post_type='gd_place',$package_id=''
                       'default_value'       =>  '',
                       'show_in' 	        =>  '[detail],[listing]',
                       'is_required'         =>  false,
-                      'validation_pattern'  =>  '\d+(\.\d{2})?',
+                      'validation_pattern'  =>  addslashes_gpc('\d+(\.\d{2})?'), // add slashes required
                       'validation_msg'      =>  'Please enter the property area in numbers only: 1500',
                       'required_msg'        =>  '',
                       'field_icon'          =>  'fa fa-area-chart',
@@ -191,8 +191,8 @@ function geodir_property_sale_custom_fields($post_type='gd_place',$package_id=''
                       'for_admin_use'       =>  false,
                       'default_value'       =>  '',
                       'show_in' 	        =>  '[detail],[listing]',
-                      'is_required'         =>  true,
-                      'option_values'       =>  __('Select Features/,Gas Central Heating,Oil Central Heating,Double Glazing,Triple Glazing,Front Garden,Garage,Private driveway,Off Road Parking,Fireplace','geodirectory'),
+                      'is_required'         =>  false,
+                      'option_values'       =>  __('Gas Central Heating,Oil Central Heating,Double Glazing,Triple Glazing,Front Garden,Garage,Private driveway,Off Road Parking,Fireplace','geodirectory'),
                       'validation_pattern'  =>  '',
                       'validation_msg'      =>  '',
                       'required_msg'        =>  '',
@@ -215,6 +215,247 @@ function geodir_property_sale_custom_fields($post_type='gd_place',$package_id=''
     return  $fields;
 }
 
+function geodir_property_sale_custom_fields_sort($post_type='gd_place') {
+
+
+    $fields = array();
+
+    // price sort
+    $fields[] = array(
+        'create_field'            => true,
+        'listing_type'            => $post_type,
+        'field_type'              => 'text',
+        'data_type'               => '',
+        'htmlvar_name'            => 'geodir_price',
+        'site_title'              => __('Price','geodirectory'),
+        'asc'                     => 1,
+        'asc_title'               => __('Price (lowest first)','geodirectory'),
+        'desc'                    => 1,
+        'desc_title'              => __('Price (highest first)','geodirectory'),
+        'is_active'               => 1
+    );
+
+    // area sort
+    $fields[] = array(
+        'create_field'            => true,
+        'listing_type'            => $post_type,
+        'field_type'              => 'text',
+        'data_type'               => '',
+        'htmlvar_name'            => 'geodir_property_area',
+        'site_title'              => __('Area (Sq Ft)','geodirectory'),
+        'asc'                     => 1,
+        'asc_title'               => __('Area (smallest first)','geodirectory'),
+        'desc'                    => 1,
+        'desc_title'              => __('Area (largest first)','geodirectory'),
+        'is_active'               => 1
+    );
+
+    // bedrooms sort
+    $fields[] = array(
+        'create_field'            => true,
+        'listing_type'            => $post_type,
+        'field_type'              => 'select',
+        'data_type'               => '',
+        'htmlvar_name'            => 'geodir_property_bedrooms',
+        'site_title'              => __('Area (Sq Ft)','geodirectory'),
+        'asc'                     => 1,
+        'asc_title'               => __('Bedrooms (least)','geodirectory'),
+        'desc'                    => 1,
+        'desc_title'              => __('Bedrooms (most)','geodirectory'),
+        'is_active'               => 1
+    );
+
+
+    /**
+     * Filter the array of advanced search fields DB table data.
+     *
+     * @since 1.6.6
+     * @param string $fields The default custom fields as an array.
+     */
+    $fields = apply_filters('geodir_property_sale_custom_fields_sort', $fields);
+
+    return $fields;
+
+}
+
+function geodir_property_sale_custom_fields_advanced_search($post_type='gd_place') {
+
+
+    $fields = array();
+
+    // price range
+    $fields[] = array(
+        'create_field'            => true,
+        'listing_type'            => $post_type,
+        'field_type'              => 'text',
+        'data_type'               => 'RANGE',
+        'is_active'               => 1,
+        'site_field_title'        => 'Price',
+        'field_data_type'         => 'FLOAT',
+        'main_search'             => 1,
+        'main_search_priority'    => 15,
+        'data_type_change'        => 'SELECT',
+        'search_condition_select' => 'SINGLE',
+        'search_min_value'        => '50000',
+        'search_max_value'        => '1000000',
+        'search_diff_value'       => '100000',
+        'first_search_value'      => '0',
+        'first_search_text'       => '',
+        'last_search_text'        => '',
+        'search_condition'        => 'SELECT',
+        'site_htmlvar_name'       => 'geodir_price',
+        'htmlvar_name'            => 'geodir_price',
+        'field_title'             => 'geodir_price',
+        'expand_custom_value'     => '',
+        'front_search_title'      => 'Price Range',
+        'field_desc'              => ''
+    );
+
+    // bedrooms
+    $fields[] = array(
+        'create_field'            => true,
+        'listing_type'            => $post_type,
+        'field_type'              => 'select',
+        'data_type'               => 'CHECK',
+        'is_active'               => 1,
+        'site_field_title'        => 'Bedrooms',
+        'field_data_type'         => 'VARCHAR',
+        'main_search'             => 1,
+        'main_search_priority'    => 16,
+        'search_condition'        => 'SINGLE',
+        'site_htmlvar_name'       => 'geodir_property_bedrooms',
+        'htmlvar_name'            => 'geodir_property_bedrooms',
+        'field_title'             => 'geodir_property_bedrooms',
+        'front_search_title'      => 'Bedrooms',
+        'field_desc'              => '',
+        'expand_custom_value'     => 5,
+        'expand_search'           => 1,
+        'search_operator'         => 'OR'
+    );
+
+    // Property type
+    $fields[] = array(
+        'create_field'            => true,
+        'listing_type'            => $post_type,
+        'field_type'              => 'select',
+        'data_type'               => 'CHECK',
+        'is_active'               => 1,
+        'site_field_title'        => 'Property Type',
+        'field_data_type'         => 'VARCHAR',
+        'main_search'             => 0,
+        //'main_search_priority'    => 16,
+        'search_condition'        => 'SINGLE',
+        'site_htmlvar_name'       => 'geodir_property_type',
+        'htmlvar_name'            => 'geodir_property_type',
+        'field_title'             => 'geodir_property_type',
+        'front_search_title'      => 'Property Type',
+        'field_desc'              => '',
+        'expand_custom_value'     => 5,
+        'expand_search'           => 1,
+        'search_operator'         => 'OR'
+    );
+
+    // Property Features
+    $fields[] = array(
+        'create_field'            => true,
+        'listing_type'            => $post_type,
+        'field_type'              => 'multiselect',
+        'data_type'               => 'CHECK',
+        'is_active'               => 1,
+        'site_field_title'        => 'Features',
+        'field_data_type'         => 'VARCHAR',
+        'main_search'             => 0,
+        //'main_search_priority'    => 16,
+        'search_condition'        => 'SINGLE',
+        'site_htmlvar_name'       => 'geodir_property_features',
+        'htmlvar_name'            => 'geodir_property_features',
+        'field_title'             => 'geodir_property_features',
+        'front_search_title'      => 'Property Features',
+        'field_desc'              => '',
+        'expand_custom_value'     => 5,
+        'expand_search'           => 1,
+        'search_operator'         => 'AND'
+    );
+
+    // Property Bathrooms
+    $fields[] = array(
+        'create_field'            => true,
+        'listing_type'            => $post_type,
+        'field_type'              => 'select',
+        'data_type'               => 'CHECK',
+        'is_active'               => 1,
+        'site_field_title'        => 'Bathrooms',
+        'field_data_type'         => 'VARCHAR',
+        'main_search'             => 0,
+        //'main_search_priority'    => 16,
+        'search_condition'        => 'SINGLE',
+        'site_htmlvar_name'       => 'geodir_property_bathrooms',
+        'htmlvar_name'            => 'geodir_property_bathrooms',
+        'field_title'             => 'geodir_property_bathrooms',
+        'front_search_title'      => 'Bathrooms',
+        'field_desc'              => '',
+        'expand_custom_value'     => 5,
+        'expand_search'           => 1,
+        'search_operator'         => 'OR'
+    );
+
+    // Property Furnishing
+    $fields[] = array(
+        'create_field'            => true,
+        'listing_type'            => $post_type,
+        'field_type'              => 'select',
+        'data_type'               => 'CHECK',
+        'is_active'               => 1,
+        'site_field_title'        => 'Furnishing',
+        'field_data_type'         => 'VARCHAR',
+        'main_search'             => 0,
+        //'main_search_priority'    => 16,
+        'search_condition'        => 'SINGLE',
+        'site_htmlvar_name'       => 'geodir_property_furnishing',
+        'htmlvar_name'            => 'geodir_property_furnishing',
+        'field_title'             => 'geodir_property_furnishing',
+        'front_search_title'      => 'Furnishing',
+        'field_desc'              => '',
+        'expand_custom_value'     => 5,
+        'expand_search'           => 1,
+        'search_operator'         => 'OR'
+    );
+
+    // Property Status
+    $fields[] = array(
+        'create_field'            => true,
+        'listing_type'            => $post_type,
+        'field_type'              => 'select',
+        'data_type'               => 'CHECK',
+        'is_active'               => 1,
+        'site_field_title'        => 'Property Status',
+        'field_data_type'         => 'VARCHAR',
+        'main_search'             => 0,
+        //'main_search_priority'    => 16,
+        'search_condition'        => 'SINGLE',
+        'site_htmlvar_name'       => 'geodir_property_status',
+        'htmlvar_name'            => 'geodir_property_status',
+        'field_title'             => 'geodir_property_status',
+        'front_search_title'      => 'Property Status',
+        'field_desc'              => '',
+        'expand_custom_value'     => 5,
+        'expand_search'           => 1,
+        'search_operator'         => 'OR'
+    );
+
+
+
+    /**
+     * Filter the array of advanced search fields DB table data.
+     *
+     * @since 1.6.6
+     * @param string $fields The default custom fields as an array.
+     */
+    $fields = apply_filters('geodir_property_sale_custom_fields_advanced_search', $fields);
+
+    return $fields;
+}
+
 global $city_bound_lat1, $city_bound_lng1, $city_bound_lat2, $city_bound_lng2,$wpdb, $current_user,$dummy_post_index;
 $post_info = array();
 $image_array = array();
@@ -228,13 +469,29 @@ if($dummy_post_index==1){
     // add the dummy custom fields
     $fields = geodir_property_sale_custom_fields($post_type);
     geodir_create_dummy_fields($fields);
+
+    // add sort order items
+    $sort_fields = geodir_property_sale_custom_fields_sort($post_type);
+    foreach($sort_fields as $sort){
+        geodir_custom_sort_field_save($sort);
+    }
+
+    // update the type currently installed
     update_option($post_type.'_dummy_data_type','property_sale');
+
+    // add the advanced search fields
+    if (defined('GEODIRADVANCESEARCH_VERSION')){
+        $search_fields = geodir_property_sale_custom_fields_advanced_search($post_type);
+        foreach($search_fields as $sfield){
+            geodir_custom_advance_search_field_save( $sfield );
+        }
+    }
 }
 
 if (geodir_dummy_folder_exists())
     $dummy_image_url = geodir_plugin_url() . "/geodirectory-admin/dummy";
 else
-    $dummy_image_url = 'http://www.wpgeodirectory.com/dummy';
+    $dummy_image_url = 'https://www.wpgeodirectory.com/dummy';
 
 $dummy_image_url = apply_filters('place_dummy_image_url', $dummy_image_url);
 

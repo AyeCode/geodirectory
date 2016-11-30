@@ -95,9 +95,7 @@ function geodir_init_lazy_load(){
 jQuery(function() {
     // start lazy load if it's turned on
     if(geodir_var.geodir_lazy_load==1){
-        setTimeout(function(){ // FF seems to load this too early
         geodir_init_lazy_load();
-        }, 50);
     }
 });
 
@@ -430,26 +428,26 @@ jQuery(document).ready(function() {
         jQuery(this).find('.gd-autofill-dl').remove();
     });
     
-    jQuery(".trigger").click(function() {
+    jQuery(".gd-trigger").click(function() {
         jQuery(this).toggleClass("active").next().slideToggle("slow");
         var aD = jQuery(this).toggleClass("active").next().hasClass('map_category') ? true : false;
-        if (jQuery(".trigger").hasClass("triggeroff")) {
-            jQuery(".trigger").removeClass('triggeroff');
-            jQuery(".trigger").addClass('triggeron');
+        if (jQuery(".gd-trigger").hasClass("gd-triggeroff")) {
+            jQuery(".gd-trigger").removeClass('gd-triggeroff');
+            jQuery(".gd-trigger").addClass('gd-triggeron');
             if (aD) {
                 gd_compress_animate(this, 0);
             }
         } else {
-            jQuery(".trigger").removeClass('triggeron');
-            jQuery(".trigger").addClass('triggeroff');
+            jQuery(".gd-trigger").removeClass('gd-triggeron');
+            jQuery(".gd-trigger").addClass('gd-triggeroff');
             if (aD) {
                 gd_compress_animate(this, parseFloat(jQuery(this).toggleClass("active").next().outerWidth()));
             }
         }
     });
     
-    jQuery(".trigger").each(function() {
-        if (jQuery(this).hasClass('triggeroff') && jQuery(this).next().hasClass('map_category')) {
+    jQuery(".gd-trigger").each(function() {
+        if (jQuery(this).hasClass('gd-triggeroff') && jQuery(this).next().hasClass('map_category')) {
             gd_compress_animate(this, parseFloat(jQuery(this).next().outerWidth()));
         }
     });

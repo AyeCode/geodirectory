@@ -86,20 +86,6 @@ function geodir_on_init()
         die;
     }
 
-    if (isset($_REQUEST['ptype']) && $_REQUEST['ptype'] == 'ga') {
-        if (isset($_REQUEST['ga_start'])) {
-            $ga_start = $_REQUEST['ga_start'];
-        } else {
-            $ga_start = '';
-        }
-        if (isset($_REQUEST['ga_end'])) {
-            $ga_end = $_REQUEST['ga_end'];
-        } else {
-            $ga_end = '';
-        }
-        geodir_getGoogleAnalytics($_REQUEST['ga_page'], $ga_start, $ga_end);
-        die;
-    }
 
 
 }
@@ -118,7 +104,7 @@ function geodir_on_init()
  * @todo check if nonce is required here and if so add one.
  */
 function geodir_ajax_handler() {
-    global $wpdb, $gd_session;
+    global $wpdb, $gd_session,$post;
 
     if (isset($_REQUEST['gd_listing_view']) && $_REQUEST['gd_listing_view'] != '') {
 		$gd_session->set('gd_listing_view', $_REQUEST['gd_listing_view']);
@@ -154,6 +140,7 @@ function geodir_ajax_handler() {
                     if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'geodir_dummy_posts_insert_noncename'))
                         return;
 
+                    $datatype = isset($_REQUEST['datatype']) ? sanitize_key($_REQUEST['datatype']) : '';
                     if (isset($_REQUEST['posttype']))
                         /**
                          * Used to delete the dummy post data per post type.
@@ -164,7 +151,7 @@ function geodir_ajax_handler() {
                          * @param string $posttype The post type to insert.
                          * @param string $datatype The type of dummy data to insert.
                          */
-                        do_action('geodir_delete_dummy_posts' ,sanitize_key($_REQUEST['posttype']),sanitize_key(['datatype']));
+                        do_action('geodir_delete_dummy_posts' ,sanitize_key($_REQUEST['posttype']),$datatype);
                     break;
                 case "geodir_dummy_insert" :
                     if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'geodir_dummy_posts_insert_noncename'))
@@ -386,3 +373,21 @@ function geodir_ajax_handler() {
 
     gd_die();
 }
+
+
+function geodir_show_ga_stats(){
+    if (isset($_REQUEST['ga_start'])) {
+        $ga_start = $_REQUEST['ga_start'];
+    } else {
+        $ga_start = '';
+    }
+    if (isset($_REQUEST['ga_end'])) {
+        $ga_end = $_REQUEST['ga_end'];
+    } else {
+        $ga_end = '';
+    }
+    geodir_getGoogleAnalytics($_REQUEST['ga_page'], $ga_start, $ga_end);
+    die;
+}
+add_action( 'wp_ajax_gdga', 'geodir_show_ga_stats' );
+add_action( 'wp_ajax_nopriv_gdga', 'geodir_show_ga_stats' );

@@ -776,6 +776,7 @@ section.widget {
 
 .geodir-popular-cat-list {
     margin: 0px;
+    list-style: outside none none;
 }
 
 .geodir-popular-cat-list li {
@@ -867,6 +868,9 @@ span.geodir_term_class {
 }
 
 
+.geodir_sc_recent_reviews {
+    list-style: outside none none;
+}
 
 /* GD > Subscribe */
 .geodir-subscribe .fa-rss-square {

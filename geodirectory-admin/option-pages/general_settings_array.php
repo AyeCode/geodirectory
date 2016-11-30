@@ -134,36 +134,6 @@ $google_analytic_settings = apply_filters('geodir_google_analytic_settings', arr
     ),
 
     array(
-        'name' => __('Google analytics "Profile ID(ie: ga:12345678)?', 'geodirectory') . ' ' .
-            '<a target="_blank" href="https://docs.wpgeodirectory.com/gd-core-plugin-google-analytics/">' . __('help', 'geodirectory') . '</a>',
-        'desc' => '',
-        'id' => 'geodir_ga_id',
-        'type' => 'text',
-        'css' => 'min-width:300px;',
-        'std' => '' // Default value for the page title - changed in settings
-    ),
-
-    array(
-        'name' => __('Client ID', 'geodirectory') . ' ' .
-            '<a target="_blank" href="https://docs.wpgeodirectory.com/gd-core-plugin-google-analytics/">' . __('help', 'geodirectory') . '</a>',
-        'desc' => '',
-        'id' => 'geodir_ga_client_id',
-        'type' => 'text',
-        'css' => 'min-width:300px;',
-        'std' => '' // Default value for the page title - changed in settings
-    ),
-
-    array(
-        'name' => __('Client secret', 'geodirectory') . ' ' .
-            '<a target="_blank" href="https://docs.wpgeodirectory.com/gd-core-plugin-google-analytics/">' . __('help', 'geodirectory') . '</a>',
-        'desc' => '',
-        'id' => 'geodir_ga_client_secret',
-        'type' => 'password',
-        'css' => 'min-width:300px;',
-        'std' => '' // Default value for the page title - changed in settings
-    ),
-
-    array(
         'name' => __('Google analytics access', 'geodirectory'),
         'desc' => '',
         'id' => 'geodir_ga_token',
@@ -172,15 +142,46 @@ $google_analytic_settings = apply_filters('geodir_google_analytic_settings', arr
         'std' => '' // Default value for the page title - changed in settings
     ),
 
-
     array(
-        'name' => __('Google analytics tracking code', 'geodirectory'),
-        'desc' => '',
-        'id' => 'geodir_ga_tracking_code',
-        'type' => 'textarea',
+        'name' => __('Google analytics Auth Code', 'geodirectory'),
+        'desc' => __('You must save this setting before accounts will show.', 'geodirectory'),
+        'id' => 'geodir_ga_auth_code',
+        'type' => 'text',
         'css' => 'min-width:300px;',
         'std' => '' // Default value for the page title - changed in settings
     ),
+
+    array(
+        'name' => __('Analytics Account', 'geodirectory'),
+        'desc' => __('Select the account that you setup for this site.', 'geodirectory'),
+        'id' => 'geodir_ga_account_id',
+        'css' => 'min-width:300px;',
+        'std' => 'gridview_onehalf',
+        'type' => 'select',
+        'class' => 'chosen_select',
+        'options' => geodir_gd_accounts()
+    ),
+
+
+    array(
+        'name' => __('Add Google analytics tracking code to site?', 'geodirectory'),
+        'desc' => __('Yes <small>(this will automatically add the correct tracking code to your site)</small>', 'geodirectory'),
+        'id' => 'geodir_ga_add_tracking_code',
+        'std' => '0',
+        'type' => 'radio',
+        'value' => '1',
+        'radiogroup' => 'start'
+    ),
+    array(
+        'name' => __('Add Google analytics tracking code to site?', 'geodirectory'),
+        'desc' => __('No <small>(if you already have tracking code added you should not add it again)</small>', 'geodirectory'),
+        'id' => 'geodir_ga_add_tracking_code',
+        'std' => '1',
+        'type' => 'radio',
+        'value' => '0',
+        'radiogroup' => 'end'
+    ),
+
     array(
         'name' => __('Auto refresh active users?', 'geodirectory'),
         'desc' => __('If ticked it uses the auto refresh time below, if not it never refreshes unless the refresh button is clicked.', 'geodirectory'),
