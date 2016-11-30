@@ -2205,6 +2205,7 @@ function geodir_widget_listings_get_order( $query_args ) {
  * @since   1.0.0
  * @package GeoDirectory
  * @since   1.4.2 New parameter $count_only added
+ * @since   1.6.11 FIXED: GD listings query returns wrong total when category has sub categories.
  * @global object $wpdb          WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @global string $table_prefix  WordPress Database Table prefix.
@@ -2292,7 +2293,7 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	$groupby = apply_filters( 'geodir_filter_widget_listings_groupby', $groupby, $post_type );
 
 	if ( $count_only ) {
-		$sql  = "SELECT COUNT(" . $wpdb->posts . ".ID) AS total FROM " . $wpdb->posts . "
+		$sql  = "SELECT COUNT(DISTINCT " . $wpdb->posts . ".ID) AS total FROM " . $wpdb->posts . "
 			" . $join . "
 			" . $where;
 		$rows = (int) $wpdb->get_var( $sql );

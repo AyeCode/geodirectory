@@ -897,6 +897,15 @@ function geodir_related_posts_display( $request ) {
 
 			global $gridview_columns, $post;
 
+			/**
+			 * Filters related listing query args.
+			 *
+			 * @since 1.6.11
+			 *
+			 * @param array $query_args The query array.
+			 * @param array $request Related posts request array.
+			 */
+			$query_args = apply_filters( 'geodir_related_posts_widget_query_args', $query_args, $request );
 
 			query_posts( $query_args );
 
@@ -2189,40 +2198,6 @@ function geodir_google_plus_button() {
 	<?php
 }
 
-/**
- * "Share this" button code.
- *
- * To display "share this" button, you can call this function.
- *
- * @since   1.0.0
- * @package GeoDirectory
- * @global object $post The current post object.
- */
-function geodir_share_this_button_code() {
-	global $post;
-	?>
-	<div class="addthis_toolbox addthis_default_style">
-		<span id='st_sharethis'></span>
-		<script type="text/javascript">var switchTo5x = false;</script>
-		<script type="text/javascript" src="//ws.sharethis.com/button/buttons.js"></script>
-		<script type="text/javascript">stLight.options({
-				publisher: "2bee0c38-7c7d-4ce7-9d9a-05e920d509b4",
-				doNotHash: false,
-				doNotCopy: false,
-				hashAddressBar: false
-			});
-			stWidget.addEntry({
-				"service": "sharethis",
-				"element": document.getElementById('st_sharethis'),
-				"url": "<?php echo geodir_curPageURL();?>",
-				"title": "<?php echo $post->post_title;?>",
-				"type": "chicklet",
-				"text": "<?php _e( 'Share', 'geodirectory' );?>"
-			});
-		</script>
-	</div>
-	<?php
-}
 
 function geodir_listing_bounce_map_pin_on_hover() {
 	if ( get_option( 'geodir_listing_hover_bounce_map_pin', true ) ) {

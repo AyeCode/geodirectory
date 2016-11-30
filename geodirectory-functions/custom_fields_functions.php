@@ -362,7 +362,7 @@ if (!function_exists('geodir_custom_field_save')) {
             $field_type_key = isset($request_field['field_type_key']) ? $request_field['field_type_key'] : $field_type;
             $htmlvar_name = isset($request_field['htmlvar_name']) ? $request_field['htmlvar_name'] : '';
             $admin_desc = $request_field['admin_desc'];
-            $clabels = $request_field['clabels'];
+            $clabels = isset($request_field['clabels']) ? $request_field['clabels'] : '';
             $default_value = isset($request_field['default_value']) ? $request_field['default_value'] : '';
             $sort_order = isset($request_field['sort_order']) ? $request_field['sort_order'] : '';
             $is_active = isset($request_field['is_active']) ? $request_field['is_active'] : '';

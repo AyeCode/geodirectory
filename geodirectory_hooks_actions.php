@@ -347,7 +347,6 @@ function geodir_detail_page_sidebar_content_sorting()
          */
         apply_filters('geodir_detail_page_sidebar_content',
             array('geodir_social_sharing_buttons',
-                'geodir_share_this_button',
                 'geodir_detail_page_google_analytics',
                 'geodir_edit_post_link',
                 'geodir_detail_page_review_rating',
@@ -435,52 +434,6 @@ function geodir_social_sharing_buttons()
 
 }
 
-/**
- * Outputs the share this button.
- *
- * Outputs the share this button html into a containing div if not on the add listing preview page.
- *
- * @global bool $preview True if the current page is add listing preview page. False if not.
- * @since 1.0.0
- * @package GeoDirectory
- */
-function geodir_share_this_button()
-{
-    global $preview;
-    ob_start(); // Start buffering;
-    /**
-     * This is called before the share this html in the function geodir_share_this_button()
-     *
-     * @since 1.0.0
-     */
-    do_action('geodir_before_share_this_button');
-    if (!$preview) {
-        ?>
-        <div class="share clearfix">
-            <?php geodir_share_this_button_code(); ?>
-        </div>
-    <?php
-    }// end of if, if its a preview or not
-    /**
-     * This is called after the share this html in the function geodir_share_this_button()
-     *
-     * @since 1.0.0
-     */
-    do_action('geodir_after_share_this_button');
-    $content_html = ob_get_clean();
-    if (trim($content_html) != '')
-        $content_html = '<div class="geodir-company_info geodir-details-sidebar-sharethis">' . $content_html . '</div>';
-    if ((int)get_option('geodir_disable_sharethis_button_section') != 1) {
-        /**
-         * Filter the geodir_share_this_button() function content.
-         *
-         * @param string $content_html The output html of the geodir_share_this_button() function.
-         * @since 1.0.0
-         */
-        echo $content_html = apply_filters('geodir_share_this_button_html', $content_html);
-    }
-
-}
 
 /**
  * Outputs the edit post link.
@@ -547,11 +500,12 @@ function geodir_edit_post_link()
  */
 function geodir_detail_page_google_analytics()
 {
-    global $post;
+    global $post,$preview;
+    if($preview){return '';}
     $package_info = array();
     $package_info = geodir_post_package_info($package_info, $post);
 
-    $id = trim(get_option('geodir_ga_id'));
+    $id = trim(get_option('geodir_ga_account_id'));
 
     if (!$id) {
         return; //if no Google Analytics ID then bail.
@@ -618,34 +572,34 @@ function geodir_detail_page_google_analytics()
             });
 
             function gdga_weekVSweek() {
-                jQuery.ajax({url: "<?php echo get_bloginfo('url').'/?ptype=ga&ga_page='.$page_url; ?>&ga_type=thisweek", success: function(result){
+                jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=gdga&ga_page='.$page_url.'&ga_type=thisweek'); ?>", success: function(result){
                     ga_data1 = jQuery.parseJSON(result);
                     if(ga_data1.error){jQuery('#ga_stats').html(result);return;}
                     gd_renderWeekOverWeekChart();
                 }});
 
-                jQuery.ajax({url: "<?php echo get_bloginfo('url').'/?ptype=ga&ga_page='.$page_url; ?>&ga_type=lastweek", success: function(result){
+                jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=gdga&ga_page='.$page_url.'&ga_type=lastweek'); ?>", success: function(result){
                     ga_data2 = jQuery.parseJSON(result);
                     gd_renderWeekOverWeekChart();
                 }});
             }
 
             function gdga_yearVSyear() {
-                jQuery.ajax({url: "<?php echo get_bloginfo('url').'/?ptype=ga&ga_page='.$page_url; ?>&ga_type=thisyear", success: function(result){
+                jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=gdga&ga_page='.$page_url.'&ga_type=thisyear'); ?>", success: function(result){
                     ga_data3 = jQuery.parseJSON(result);
                     if(ga_data3.error){jQuery('#ga_stats').html(result);return;}
 
                     gd_renderYearOverYearChart()
                 }});
 
-                jQuery.ajax({url: "<?php echo get_bloginfo('url').'/?ptype=ga&ga_page='.$page_url; ?>&ga_type=lastyear", success: function(result){
+                jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=gdga&ga_page='.$page_url.'&ga_type=lastyear'); ?>", success: function(result){
                     ga_data4 = jQuery.parseJSON(result);
                     gd_renderYearOverYearChart()
                 }});
             }
 
             function gdga_country() {
-                jQuery.ajax({url: "<?php echo get_bloginfo('url').'/?ptype=ga&ga_page='.$page_url; ?>&ga_type=country", success: function(result){
+                jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=gdga&ga_page='.$page_url.'&ga_type=country'); ?>", success: function(result){
                     ga_data5 = jQuery.parseJSON(result);
                     if(ga_data5.error){jQuery('#ga_stats').html(result);return;}
                     gd_renderTopCountriesChart();
@@ -653,7 +607,7 @@ function geodir_detail_page_google_analytics()
             }
 
             function gdga_realtime(dom_ready) {
-                jQuery.ajax({url: "<?php echo get_bloginfo('url').'/?ptype=ga&ga_page='.$page_url; ?>&ga_type=realtime", success: function(result) {
+                jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=gdga&ga_page='.$page_url.'&ga_type=realtime'); ?>", success: function(result) {
                     ga_data6 = jQuery.parseJSON(result);
                     if (ga_data6.error) {
                         jQuery('#ga_stats').html(result);

@@ -44,7 +44,7 @@ function geodir_templates_scripts()
 
     wp_enqueue_script('jquery');
 
-    wp_register_script('geodirectory-script', geodir_plugin_url() . '/geodirectory-assets/js/geodirectory.min.js#asyncload', array(), GEODIRECTORY_VERSION);
+    wp_register_script('geodirectory-script', geodir_plugin_url() . '/geodirectory-assets/js/geodirectory.min.js', array(), GEODIRECTORY_VERSION);
     wp_enqueue_script('geodirectory-script');
 
     $geodir_vars_data = array(
@@ -239,7 +239,25 @@ function geodir_header_scripts()
  */
 function geodir_footer_scripts()
 {	
-	echo stripslashes(get_option('geodir_ga_tracking_code'));
+
+    if(get_option('geodir_ga_add_tracking_code') && get_option('geodir_ga_account_id')){?>
+
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+            ga('create', '<?php echo esc_attr(get_option('geodir_ga_account_id'));?>', 'auto');
+            ga('send', 'pageview');
+
+        </script>
+
+<?php
+    }elseif(get_option('geodir_ga_tracking_code') && !get_option('geodir_ga_account_id')){
+        echo stripslashes(get_option('geodir_ga_tracking_code'));
+    }
+
     echo stripslashes(get_option('geodir_footer_scripts'));
 
     /*

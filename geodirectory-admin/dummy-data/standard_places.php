@@ -20,7 +20,7 @@ if($dummy_post_index==1){
 if (geodir_dummy_folder_exists())
     $dummy_image_url = geodir_plugin_url() . "/geodirectory-admin/dummy";
 else
-    $dummy_image_url = 'http://www.wpgeodirectory.com/dummy';
+    $dummy_image_url = 'https://www.wpgeodirectory.com/dummy';
 
 $dummy_image_url = apply_filters('place_dummy_image_url', $dummy_image_url);
 
@@ -1812,8 +1812,7 @@ switch ($dummy_post_index) {
     /// Restaurants ////post start 10///
 } // end of switch
 
-echo '###4.1';
-foreach ($post_info as $post_info) {echo '###5';
+foreach ($post_info as $post_info) {
     $default_location = geodir_get_default_location();
     if ($city_bound_lat1 > $city_bound_lat2)
         $dummy_post_latitude = geodir_random_float(geodir_random_float($city_bound_lat1, $city_bound_lat2), geodir_random_float($city_bound_lat2, $city_bound_lat1));
@@ -1876,5 +1875,4 @@ foreach ($post_info as $post_info) {echo '###5';
     }
     
     geodir_save_listing($post_info, true);
-    echo '###6';
 }

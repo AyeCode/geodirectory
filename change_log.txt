@@ -13,6 +13,15 @@ Reunion (island) added and Burma removed (replaced with Myanmar) - CHANGED
 Payment manager restrict description input count can affect video tab - FIXED
 WPML exclude cats on map does not work for translations of categories - FIXED
 Dummy data section improved and additional industries added - ADDED
+Empty price field outputs 0.00, now it is not displayed - CHANGED
+On detail page current location parameters should be added to the term links - CHANGED
+OpenStreetMap does not working when third party plugin using the Google Maps JS API - FIXED
+GD listings query returns wrong total when category has sub categories - FIXED
+BREAKING CHANGE: Google Analytics settings simplified, MUST be re-setup to continue use - BREAKING CHANGE
+On multisite after import it shows wrong directory location to upload images - FIXED
+alive_days column added in exported csv file - ADDED
+Share this section on details page removed, share this servers have been causing problems - REMOVED
+Full screen map button class changed to have gd- prefix to avoid conflicts - CHANGED
 
 v1.6.10
 Search can fail if more than one CPT but one is empty - FIXED

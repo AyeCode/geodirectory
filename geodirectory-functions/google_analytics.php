@@ -60,78 +60,82 @@ function geodir_sec2hms($sec, $padHours = false)
 function geodir_getGoogleAnalytics($page, $ga_start, $ga_end)
 {
 
-
-    // NOTE: the id is in the form ga:12345 and not just 12345
-    // if you do e.g. 12345 then no data will be returned
-    // read http://www.electrictoolbox.com/get-id-for-google-analytics-api/ for info about how to get this id from the GA web interface
-    // or load the accounts (see below) and get it from there
-    // if you don't specify an id here, then you'll get the "Badly formatted request to the Google Analytics API..." error message
-    $id = trim(get_option('geodir_ga_id'));
-
-    $at = geodir_ga_get_token();
+    // NEW ANALYTICS
 
     $start_date = '';
     $end_date = '';
-    $dimensions = "&filters=ga:pagePath==" . $page;
+    $dimensions = '';
+    $sort = '';
+    $filters = "ga:pagePath==".$page;
+    $metrics = "ga:pageviews";
+    $realtime = false;
+    $limit = false;
     if(isset($_REQUEST['ga_type']) && $_REQUEST['ga_type']=='thisweek'){
-        if(!$ga_start){$ga_start = date('Y-m-d', strtotime("-6 day"));}
-        if(!$ga_end){$ga_end = date('Y-m-d');}
-        $dimensions = "&dimensions=ga:date,ga:nthDay";
+        $start_date = date('Y-m-d', strtotime("-6 day"));
+        $end_date = date('Y-m-d');
+        $dimensions = "ga:date,ga:nthDay";
     }elseif(isset($_REQUEST['ga_type']) && $_REQUEST['ga_type']=='lastweek'){
-        if(!$ga_start){$ga_start = date('Y-m-d', strtotime("-13 day"));}
-        if(!$ga_end){$ga_end = date('Y-m-d', strtotime("-7 day"));}
-        $dimensions = "&dimensions=ga:date,ga:nthDay";
+        $start_date = date('Y-m-d', strtotime("-13 day"));
+        $end_date = date('Y-m-d', strtotime("-7 day"));
+        $dimensions = "ga:date,ga:nthDay";
     }
     elseif(isset($_REQUEST['ga_type']) && $_REQUEST['ga_type']=='thisyear'){
-        if(!$ga_start){$ga_start = date('Y')."-01-01";}
-        if(!$ga_end){$ga_end = date('Y-m-d');}
-        $dimensions = "&dimensions=ga:month,ga:nthMonth";
+        $start_date = date('Y')."-01-01";
+        $end_date = date('Y-m-d');
+        $dimensions = "ga:month,ga:nthMonth";
     }
     elseif(isset($_REQUEST['ga_type']) && $_REQUEST['ga_type']=='lastyear'){
-        if(!$ga_start){$ga_start = date('Y', strtotime("-1 year"))."-01-01";}
-        if(!$ga_end){$ga_end = date('Y', strtotime("-1 year"))."-12-31";}
-        $dimensions = "&dimensions=ga:month,ga:nthMonth";
+        $start_date = date('Y', strtotime("-1 year"))."-01-01";
+        $end_date = date('Y', strtotime("-1 year"))."-12-31";
+        $dimensions = "ga:month,ga:nthMonth";
     }
     elseif(isset($_REQUEST['ga_type']) && $_REQUEST['ga_type']=='country'){
-        if(!$ga_start){$ga_start = "14daysAgo";}
-        if(!$ga_end){$ga_end = "yesterday";}
-        $dimensions = "&dimensions=ga:country&sort=-ga:pageviews&max-results=5";
+        $start_date = "14daysAgo";
+        $end_date = "yesterday";
+        $dimensions = "ga:country";
+        $sort = "ga:pageviews";
+        $limit  = 5;
+    }elseif(isset($_REQUEST['ga_type']) && $_REQUEST['ga_type']=='realtime'){
+        $metrics = "rt:activeUsers";
+        $realtime = true;
     }
 
-    $APIURL = "https://www.googleapis.com/analytics/v3/data/ga?";
-    $ids = "ids=".$id;
-    if(!$start_date){$start_date = "&start-date=".$ga_start;}
-    if(!$end_date){$end_date = "&end-date=".$ga_end;}
-    $metrics = "&metrics=ga:pageviews";
-    $filters = "&filters=ga:pagePath==".$page;
-    $access_token = "&access_token=".$at;
+    # Create a new Gdata call
+    $gaApi = new GDGoogleAnalyticsStats();
 
-    $use_url = $APIURL.$ids.$start_date.$end_date.$dimensions.$metrics.$filters.$access_token;
-
-    if(isset($_REQUEST['ga_type']) && $_REQUEST['ga_type']=='realtime'){
-        $metrics = "&metrics=rt:activeUsers";
-        $dimensions = "&filters=ga:pagePath==".$page;
-
-        $use_url = "https://www.googleapis.com/analytics/v3/data/realtime?".$ids.$access_token.$metrics.$dimensions;
+    # Check if Google sucessfully logged in
+    if (!$gaApi->checkLogin()){
+        echo json_encode(array('error'=>__('Please check Google Analytics Settings','geodirectory')));
+        return false;
     }
 
-    $response =  wp_remote_get($use_url,array('timeout' => 15));
+    $account = $gaApi->getSingleProfile();
 
-    // Make countries translatable
-    if(isset($_REQUEST['ga_type']) && $_REQUEST['ga_type']=='country'){
-        $c_arr = json_decode($response['body']);
-        if(is_array($c_arr->rows)){
-            $new_rows = array();
-            foreach($c_arr->rows as $wow){
-                $new_rows[] = array(__($wow[0],'geodirectory'),$wow[1]);
-            }
-            $c_arr->rows = $new_rows;
-        }
-        $response['body'] = json_encode($c_arr);
+    if(!isset($account[0]['id'])){
+        echo json_encode(array('error'=>__('Please check Google Analytics Settings','geodirectory')));
+        return false;
     }
 
-    echo $response['body'];
+    $account = $account[0]['id'];
+
+    # Set the account to the one requested
+    $gaApi->setAccount($account);
+
+
+
+    # Get the metrics needed to build the visits graph;
+    try {
+        $stats = $gaApi->getMetrics($metrics, $start_date, $end_date, $dimensions, $sort, $filters, $limit , $realtime);
+    }
+    catch (Exception $e) {
+        print 'GA Summary Widget - there was a service error ' . $e->getCode() . ':' . $e->getMessage();
+    }
+
+
+    //print_r($stats);
+    echo json_encode($stats);
     exit;
+
 
 }// end GA function
 

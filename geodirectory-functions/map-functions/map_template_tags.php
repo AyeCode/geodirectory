@@ -312,7 +312,7 @@ function geodir_draw_map($map_args = array())
                 }
 
 				/**
-				 * Filter the post type to retrive data for map
+				 * Filter the post type to retrieve data for map
 				 *
 				 * @since 1.0.0
 				 *
@@ -331,7 +331,7 @@ function geodir_draw_map($map_args = array())
                     ?>
                     <div
                         class="map-category-listing<?php echo $map_cat_class;?>">
-                        <div class="trigger triggeroff"><i class="fa fa-compress"></i><i class="fa fa-expand"></i></div>
+                        <div class="gd-trigger gd-triggeroff"><i class="fa fa-compress"></i><i class="fa fa-expand"></i></div>
                         <div id="<?php echo $map_canvas_name;?>_cat"
                              class="<?php echo $map_canvas_name;?>_map_category  map_category"
                              <?php if ($child_collapse){ ?>checked="checked" <?php }?>
@@ -503,4 +503,14 @@ function geodir_draw_map($map_args = array())
     endif; // Exclude posttypes if end
 }
 
-?>
+/**
+ * Set current active map variable to the window javascript object.
+ *
+ * @since 1.6.11
+ *
+ */
+function geodir_set_gd_map() {
+?><script type="text/javascript">window.gdSetMap = window.gdSetMap || '<?php echo geodir_map_name(); ?>';</script><?php
+}
+add_action('wp_head', 'geodir_set_gd_map', -99);
+add_action('admin_head', 'geodir_set_gd_map', -99);
