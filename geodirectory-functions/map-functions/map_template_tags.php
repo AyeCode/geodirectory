@@ -331,7 +331,7 @@ function geodir_draw_map($map_args = array())
                     ?>
                     <div
                         class="map-category-listing<?php echo $map_cat_class;?>">
-                        <div class="trigger triggeroff"><i class="fa fa-compress"></i><i class="fa fa-expand"></i></div>
+                        <div class="gd-trigger gd-triggeroff"><i class="fa fa-compress"></i><i class="fa fa-expand"></i></div>
                         <div id="<?php echo $map_canvas_name;?>_cat"
                              class="<?php echo $map_canvas_name;?>_map_category  map_category"
                              <?php if ($child_collapse){ ?>checked="checked" <?php }?>

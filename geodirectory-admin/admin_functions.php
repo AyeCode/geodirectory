@@ -1012,6 +1012,25 @@ function geodir_admin_fields($options)
                 </tr><?php
                 break;
 
+            case 'map-key':
+                ?>
+                <tr valign="top">
+                <th scope="row" class="titledesc"><?php echo $value['name']; ?></th>
+                <td class="forminp"><input name="<?php echo esc_attr($value['id']); ?>"
+                                           id="<?php echo esc_attr($value['id']); ?>"
+                                           type="<?php echo esc_attr($value['type']); ?>"
+                                           <?php if(isset($value['placeholder'])){?>placeholder="<?php echo esc_attr($value['placeholder']); ?>"<?php }?>
+                                           style=" <?php echo esc_attr($value['css']); ?>"
+                                           value="<?php if (get_option($value['id']) !== false && get_option($value['id']) !== null) {
+                                               echo esc_attr(stripslashes(get_option($value['id'])));
+                                           } else {
+                                               echo esc_attr($value['std']);
+                                           } ?>"/>
+                    <a href='https://console.developers.google.com/henhouse/?pb=["hh-1","maps_backend",null,[],"https://developers.google.com",null,["maps_backend","geocoding_backend","directions_backend","distance_matrix_backend","elevation_backend","places_backend"],null]&TB_iframe=true&width=600&height=400' class="thickbox button-primary" name="<?php _e('Generate API Key - ( MUST be logged in to your Google account )','geodirectory');?>" ><?php _e('Generate API Key','geodirectory');?></a>
+                    <span class="description"><?php echo $value['desc']; ?></span></td>
+                </tr><?php
+                break;
+
             case 'password':
                 ?>
                 <tr valign="top">
