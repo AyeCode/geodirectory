@@ -22,17 +22,13 @@ class GDGoogleAnalyticsStats
 	public function __construct()
 	{
 
-			# Include SimplePie if it doesn't exist
-			if ( !class_exists('SimplePie') ) {
-				require_once (ABSPATH . WPINC . '/class-feed.php');
-			}
-			
-			if ( !class_exists('Google_Client') ) {
-				require_once 'google-api-php-client/src/Google_Client.php';
-			}
-			if ( !class_exists('Google_AnalyticsService') ) {
-				require_once 'google-api-php-client/src/contrib/Google_AnalyticsService.php';
-			}
+//			# Include SimplePie if it doesn't exist
+//			if ( !class_exists('SimplePie') ) {
+//				require_once (ABSPATH . WPINC . '/class-feed.php');
+//			}
+
+			// Include the Google Service API
+			include_once('google-api-php-client/src/Google/autoload.php');
 
             $this->client = new Google_Client();
             $this->client->setApprovalPrompt("force");
@@ -43,11 +39,8 @@ class GDGoogleAnalyticsStats
 			
             $this->client->setScopes(array("https://www.googleapis.com/auth/analytics"));
 
-            // Magic. Returns objects from the Analytics Service instead of associative arrays.
-            $this->client->setUseObjects(true);
-
             try {
-                    $this->analytics = new Google_AnalyticsService($this->client);
+                    $this->analytics = new Google_Service_Analytics($this->client);
                 }
             catch (Google_ServiceException $e)
                 {
@@ -169,7 +162,7 @@ class GDGoogleAnalyticsStats
 
 	function getAnalyticsAccounts()
 	{
-		$analytics = new Google_AnalyticsService($this->client);
+		$analytics = new Google_Service_Analytics($this->client);
 		$accounts = $analytics->management_accounts->listManagementAccounts();
 		$account_array = array();
 
@@ -227,7 +220,7 @@ class GDGoogleAnalyticsStats
 	 **/
 	function getMetrics($metric, $startDate, $endDate, $dimensions = false, $sort = false, $filter = false, $limit = false, $realtime = false)
 	{
-		$analytics = new Google_AnalyticsService($this->client);
+		$analytics = new Google_Service_Analytics($this->client);
 
 		$params = array();
 

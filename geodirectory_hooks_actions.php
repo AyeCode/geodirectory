@@ -1298,6 +1298,8 @@ function geodir_localize_all_js_msg()
         'osmStart' => __('Start', 'geodirectory'),
         'osmVia' => __('Via {viaNumber}', 'geodirectory'),
         'osmEnd' => __('Enter Your Location', 'geodirectory'),
+        'ga_delete_check' => __('Are you wish to Deauthorize and break Analytics?', 'geodirectory'),
+
     );
 
     /**

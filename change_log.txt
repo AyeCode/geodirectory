@@ -1,3 +1,7 @@
+v1.6.12
+Google Services API can conflict with newer version of the Google Service Class - UPDATED
+No way to deactivate GA Settings, deactivation button added - ADDED
+
 v1.6.11
 geodir_set_as_home rule still existed from depreciated option - FIXED
 Registration box, changed Name/Email around so to work with browser save user/pass - CHANGED

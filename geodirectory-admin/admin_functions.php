@@ -1567,9 +1567,8 @@ function geodir_admin_fields($options)
                             if (get_option('geodir_ga_auth_token')) {
                                 ?>
                                 <span class="button-primary"
-                                      onclick="window.open('<?php echo  geodir_ga_activation_url();?>', 'activate','width=700, height=600, menubar=0, status=0, location=0, toolbar=0')"><?php _e('Re-authorize', 'geodirectory'); ?></span>
-                                <span
-                                    style="color: green; font-weight: bold;"><?php _e('Authorized', 'geodirectory'); ?></span>
+                                      onclick="gd_GA_Deauthorize('<?php echo wp_create_nonce('gd_ga_deauthorize');?>');"><?php _e('Deauthorize', 'geodirectory'); ?></span>
+                                <span style="color: green; font-weight: bold;"><?php _e('Authorized', 'geodirectory'); ?></span>
                             <?php
                             } else {
                                 ?>
@@ -6621,9 +6620,8 @@ function geodir_ga_get_analytics_accounts()
 
 
     if(get_option('geodir_gd_uids') && !isset($_POST['geodir_ga_auth_code'])){
-        return get_option('geodir_gd_uids');
+      return get_option('geodir_gd_uids');
     }
-
     
     # Create a new Gdata call
     if ( trim(get_option('geodir_ga_auth_code')) != '' )
@@ -6649,3 +6647,21 @@ function geodir_ga_get_analytics_accounts()
         return false;
 }
 
+add_action( 'wp_ajax_geodir_ga_deauthorize', 'geodir_ga_deauthorize' );
+function geodir_ga_deauthorize(){
+
+    if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'gd_ga_deauthorize' ) ) {
+
+        die( 'Security check' );
+
+    } else {
+        update_option('geodir_ga_auth_token','');
+        update_option('geodir_ga_auth_code','');
+        update_option('geodir_gd_uids','');
+
+
+        echo admin_url('?page=geodirectory&active_tab=google_analytic_settings');
+    }
+
+    die();
+}
