@@ -451,6 +451,7 @@ function geodir_get_default_posttype()
 {
     $post_types = apply_filters( 'geodir_get_default_posttype', geodir_get_posttypes( 'object' ) );
 
+    $stype = false;
     foreach ( $post_types as $post_type => $info ) {
         global $wpdb;
         $has_posts = $wpdb->get_row( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s AND post_status='publish' LIMIT 1", $post_type ) );

@@ -335,6 +335,8 @@ function geodir_admin_option_form($tab_name)
             
 		<?php break;
         case 'design_settings' :
+
+            add_thickbox();
             geodir_admin_fields($geodir_settings['design_settings']);
 
 

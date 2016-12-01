@@ -57,6 +57,8 @@ if(wp_get_referer()){
     if (isset($_REQUEST['checkemail']) && $_REQUEST['checkemail'] == 'confirm')
         echo '<p class="sucess_msg">' . PW_SEND_CONFIRM_MSG . '</p>';
 
+    do_action('geodir_login_error_messages');
+
     ?>
     <form name="cus_loginform" id="cus_loginform" method="post">
 

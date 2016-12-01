@@ -47,6 +47,7 @@ function geodir_theme_location_setting_fun()
 
     return $post_type_arr;
 }
+
 /**
  * Filter GD design settings array.
  *
@@ -511,13 +512,6 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
         'name' => __('Disable Tweet, Fb Like, Google+ buttons section', 'geodirectory'),
         'desc' => __('Disable Tweet, Fb Like, Google+ buttons section that displays on Detail page sidebar', 'geodirectory'),
         'id' => 'geodir_disable_tfg_buttons_section',
-        'type' => 'checkbox',
-        'std' => '0'
-    ),
-    array(
-        'name' => __('Disable share this button section', 'geodirectory'),
-        'desc' => __('Disable share this button section that displays on Detail page sidebar', 'geodirectory'),
-        'id' => 'geodir_disable_sharethis_button_section',
         'type' => 'checkbox',
         'std' => '0'
     ),
@@ -1065,7 +1059,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
         'id' => 'geodir_google_api_key',
         'css' => 'min-width:300px;',
         'std' => '',
-        'type' => 'text',
+        'type' => 'map-key',
     ),
     array(
         'type' => 'sectionend',

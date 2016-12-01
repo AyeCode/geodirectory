@@ -347,7 +347,6 @@ function geodir_detail_page_sidebar_content_sorting()
          */
         apply_filters('geodir_detail_page_sidebar_content',
             array('geodir_social_sharing_buttons',
-                'geodir_share_this_button',
                 'geodir_detail_page_google_analytics',
                 'geodir_edit_post_link',
                 'geodir_detail_page_review_rating',
@@ -435,52 +434,6 @@ function geodir_social_sharing_buttons()
 
 }
 
-/**
- * Outputs the share this button.
- *
- * Outputs the share this button html into a containing div if not on the add listing preview page.
- *
- * @global bool $preview True if the current page is add listing preview page. False if not.
- * @since 1.0.0
- * @package GeoDirectory
- */
-function geodir_share_this_button()
-{
-    global $preview;
-    ob_start(); // Start buffering;
-    /**
-     * This is called before the share this html in the function geodir_share_this_button()
-     *
-     * @since 1.0.0
-     */
-    do_action('geodir_before_share_this_button');
-    if (!$preview) {
-        ?>
-        <div class="share clearfix">
-            <?php geodir_share_this_button_code(); ?>
-        </div>
-    <?php
-    }// end of if, if its a preview or not
-    /**
-     * This is called after the share this html in the function geodir_share_this_button()
-     *
-     * @since 1.0.0
-     */
-    do_action('geodir_after_share_this_button');
-    $content_html = ob_get_clean();
-    if (trim($content_html) != '')
-        $content_html = '<div class="geodir-company_info geodir-details-sidebar-sharethis">' . $content_html . '</div>';
-    if ((int)get_option('geodir_disable_sharethis_button_section') != 1) {
-        /**
-         * Filter the geodir_share_this_button() function content.
-         *
-         * @param string $content_html The output html of the geodir_share_this_button() function.
-         * @since 1.0.0
-         */
-        echo $content_html = apply_filters('geodir_share_this_button_html', $content_html);
-    }
-
-}
 
 /**
  * Outputs the edit post link.
@@ -547,11 +500,12 @@ function geodir_edit_post_link()
  */
 function geodir_detail_page_google_analytics()
 {
-    global $post;
+    global $post,$preview;
+    if($preview){return '';}
     $package_info = array();
     $package_info = geodir_post_package_info($package_info, $post);
 
-    $id = trim(get_option('geodir_ga_id'));
+    $id = trim(get_option('geodir_ga_account_id'));
 
     if (!$id) {
         return; //if no Google Analytics ID then bail.
@@ -2635,7 +2589,9 @@ function geodir_add_post_status_author_page()
 
     $html = '';
     if (get_current_user_id()) {
-        if (geodir_is_page('author') && !empty($post) && isset($post->post_author) && $post->post_author == get_current_user_id()) {
+
+        $is_author_page = apply_filters('geodir_post_status_is_author_page', geodir_is_page('author'));
+        if ($is_author_page && !empty($post) && isset($post->post_author) && $post->post_author == get_current_user_id()) {
 
             // we need to query real status direct as we dynamically change the status for author on author page so even non author status can view them.
             $real_status = $wpdb->get_var("SELECT post_status from $wpdb->posts WHERE ID=$post->ID");

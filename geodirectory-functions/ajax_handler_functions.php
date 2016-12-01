@@ -140,6 +140,7 @@ function geodir_ajax_handler() {
                     if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'geodir_dummy_posts_insert_noncename'))
                         return;
 
+                    $datatype = isset($_REQUEST['datatype']) ? sanitize_key($_REQUEST['datatype']) : '';
                     if (isset($_REQUEST['posttype']))
                         /**
                          * Used to delete the dummy post data per post type.
@@ -150,7 +151,7 @@ function geodir_ajax_handler() {
                          * @param string $posttype The post type to insert.
                          * @param string $datatype The type of dummy data to insert.
                          */
-                        do_action('geodir_delete_dummy_posts' ,sanitize_key($_REQUEST['posttype']),sanitize_key(['datatype']));
+                        do_action('geodir_delete_dummy_posts' ,sanitize_key($_REQUEST['posttype']),$datatype);
                     break;
                 case "geodir_dummy_insert" :
                     if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'geodir_dummy_posts_insert_noncename'))
