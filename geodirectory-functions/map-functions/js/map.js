@@ -511,16 +511,17 @@ function geodir_htmlEscape(str) {
         .replace(/&amp;apos;/g, "'");
 }
 
-gd_single_marker_lat = '';
-gd_single_marker_lon = '';
+var gd_single_marker_lat = '', gd_single_marker_lon = '';
 
 // create the marker and set up the event window
 function create_marker(input, map_canvas_var) {
     if (window.gdMaps == 'osm') {
         return create_marker_osm(input, map_canvas_var);
     }
-    gd_single_marker_lat = input.lt;
-    gd_single_marker_lon = input.ln;
+    if (map_canvas_var == 'detail_page_map_canvas') {
+        gd_single_marker_lat = input.lt;
+        gd_single_marker_lon = input.ln;
+    }
     jQuery("#" + map_canvas_var).goMap();
     if (input.lt && input.ln) {
         var coord = new google.maps.LatLng(input.lt, input.ln);
@@ -1097,8 +1098,10 @@ function parse_marker_jason_osm(data, map_canvas_var) {
 }
 
 function create_marker_osm(input, map_canvas_var) {
-    gd_single_marker_lat = input.lt;
-    gd_single_marker_lon = input.ln;
+    if (map_canvas_var == 'detail_page_map_canvas') {
+        gd_single_marker_lat = input.lt;
+        gd_single_marker_lon = input.ln;
+    }
     
     jQuery("#" + map_canvas_var).goMap();
     
