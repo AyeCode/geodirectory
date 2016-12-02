@@ -414,7 +414,7 @@
     z-index: 1007 !important;
 }
 
-.trigger {
+.gd-trigger {
     position: absolute;
     right: 0;
     bottom: 0;
@@ -423,7 +423,7 @@
     cursor: pointer;
 }
 
-.trigger.triggermap_fullscreen {
+.gd-trigger.triggermap_fullscreen {
     z-index: 1007 !important;
     top: auto !important;
     left: auto !important;
@@ -431,7 +431,7 @@
     right: 0px !important;
 }
 
-.trigger .fa-expand, .trigger .fa-compress {
+.gd-trigger .fa-expand, .gd-trigger .fa-compress {
     color: #FFF;
     text-shadow: 1px 1px 4px rgba(38, 38, 38, 1);
 }
@@ -440,7 +440,7 @@
     display: none;
 }
 
-.trigger.triggeron .fa-compress {
+.gd-trigger.gd-triggeron .fa-compress {
     display: none;
 }
 

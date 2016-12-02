@@ -2,6 +2,7 @@ v1.6.12
 Google Services API can conflict with newer version of the Google Service Class - UPDATED
 No way to deactivate GA Settings, deactivation button added - ADDED
 Google map directions not working on detail page map - FIXED
+CSS issue with map category show/hide icon - FIXED
 
 v1.6.11
 geodir_set_as_home rule still existed from depreciated option - FIXED
