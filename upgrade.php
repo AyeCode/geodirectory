@@ -561,7 +561,7 @@ function gd_install_theme_compat()
         'geodir_before_main_content_add' => '',
         'geodir_before_widget_filter' => '',
         'geodir_after_widget_filter' => '',
-        'geodir_theme_compat_css' => stripslashes('#left-area ul.geodir-direction-nav{list-style-type:none}#sidebar .geodir-company_info{margin-left:30px}#sidebar .geodir-widget{float:none;margin:0 0 30px 30px}.geodir_full_page .geodir-loc-bar{padding:0;margin:0;border:none}.geodir_full_page .geodir-category-list-in{margin-top:0}.geodir_full_page .top_banner_section{margin-bottom:0}.archive .entry-header,.geodir-breadcrumb{border-bottom:1px solid #e2e2e2}.archive .entry-header h1,ul#breadcrumbs{margin:0 auto;width:1080px}#left-area ul.geodir_category_list_view{padding:10px 0}.nav li#menu-item-gd-location-switcher ul{width:222px}#menu-item-gd-location-switcher li.gd-location-switcher-menu-item{padding-right:0}#menu-item-gd-location-switcher dd{margin-left:0}#menu-item-gd-location-switcher .geodir_location_tab_container dd a{padding:5px;width:auto}@media only screen and ( max-width: 980px ){.geodir-loc-bar-in,.geodir-cat-list,ul#breadcrumbs{width:690px}}@media only screen and ( max-width: 767px ){.geodir-loc-bar-in,.geodir-cat-list,ul#breadcrumbs{width:400px}}@media only screen and ( max-width: 479px ){.geodir-loc-bar-in,.geodir-cat-list,ul#breadcrumbs{width:280px}}.geodir_full_page .geodir-listing-search{text-align:center}.geodir_full_page .geodir-search{float:none;margin:0}.geodir_full_page .geodir-search select,.geodir_full_page .geodir-search .search_by_post,.geodir_full_page .geodir-search input[type="text"],.geodir_full_page .geodir-search input[type="button"],.geodir_full_page .geodir-search input[type="submit"]{display:inline-block;float:none}'),
+        'geodir_theme_compat_css' => stripslashes('#left-area ul.geodir-direction-nav{list-style-type:none}#sidebar .geodir-company_info{margin-left:30px}#sidebar .geodir-widget{float:none;margin:0 0 30px 30px}.geodir_full_page .geodir-loc-bar{padding:0;margin:0;border:none}.geodir_full_page .geodir-category-list-in{margin-top:0}.geodir_full_page .top_banner_section{margin-bottom:0}.archive .entry-header,.geodir-breadcrumb{border-bottom:1px solid #e2e2e2}.archive .entry-header h1,ul#breadcrumbs{padding:0 15px;width:100%}#left-area ul.geodir_category_list_view{padding:10px 0}.nav li#menu-item-gd-location-switcher ul{width:222px}#menu-item-gd-location-switcher li.gd-location-switcher-menu-item{padding-right:0}#menu-item-gd-location-switcher dd{margin-left:0}#menu-item-gd-location-switcher .geodir_location_tab_container dd a{padding:5px;width:auto}.geodir_full_page .geodir-listing-search{text-align:center}.geodir_full_page .geodir-search{float:none;margin:0}.geodir_full_page .geodir-search .search_by_post,.geodir_full_page .geodir-search input[type=button],.geodir_full_page .geodir-search input[type=submit],.geodir_full_page .geodir-search input[type=text],.geodir_full_page .geodir-search select{display:inline-block;float:none}'),
         'geodir_theme_compat_js' => '',
         'geodir_theme_compat_default_options' => '',
         'geodir_theme_compat_code' => 'Divi'
@@ -699,10 +699,22 @@ function gd_install_theme_compat()
         'geodir_theme_compat_code' => 'Multi_News'
     );
 
-    //Kelo
+    // Kelo
     $theme_compat['Kleo'] = array(
         'geodir_theme_compat_code' => 'Kleo'
     );
+
+
+    // Twenty Seventeen
+    $theme_compat['Twenty_Seventeen'] = array(
+        'geodir_wrapper_open_replace' => '<div class="wrap">',
+        'geodir_wrapper_content_open_replace' => '<div id="primary" class="content-area" >',
+        'geodir_sidebar_right_open_replace' => '<aside id="secondary"  class="widget-area" itemscope itemtype="[itemtype]" >',
+        'geodir_sidebar_left_open_replace' => '<aside id="secondary"  class="widget-area" itemscope itemtype="[itemtype]" >',
+        'geodir_theme_compat_css' => stripslashes('body.geodir-page #primary header.entry-header {margin-left:0;float:none !important;} .gxeodir_flex-container{float:left;} .geodir-tabs-content.entry-content{width:100% !important;} dl.geodir-tab-head, .geodir_map_container {z-index:2;} .entry-content .gm-style a img, .widget .gm-style a img {    box-sizing: none; -webkit-box-shadow: none; -moz-box-shadow: none;}'),
+        'geodir_theme_compat_code' => 'Twenty_Seventeen'
+    );
+
 
     update_option('gd_theme_compats', $theme_compat);
 

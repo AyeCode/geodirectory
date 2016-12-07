@@ -684,7 +684,7 @@ function geodir_update_options_compatibility_settings()
         $theme_name = str_replace(" ", "_", $theme->get('Name'));
     }
 
-    if (in_array($theme_name, array('Avada', 'Enfold', 'X', 'Divi', 'Genesis', 'Jupiter', 'Multi_News'))) {// list of themes that have php files
+    if (in_array($theme_name, array('Avada', 'Enfold', 'X', 'Divi', 'Genesis', 'Jupiter', 'Multi_News','Kleo','Twenty_Seventeen'))) {// list of themes that have php files
         $theme_settings['geodir_theme_compat_code'] = $theme_name;
     }
 

@@ -276,6 +276,7 @@ function geodir_content_actions_dynamic()
 {
 
     $tc = get_option('theme_compatibility_setting');
+//print_r($tc);
     if (empty($tc)) {
         return;
     }

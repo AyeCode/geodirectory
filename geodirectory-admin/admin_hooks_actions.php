@@ -723,10 +723,10 @@ function geodir_custom_available_fields($type='')
         }
 
     if(!empty($cfs)) {
-
+        echo '<ul>';
         foreach ( $cfs as $id => $cf ) {
             ?>
-            <ul>
+
             <li class="gd-cf-tooltip-wrap">
                 <?php
                 if ( isset( $cf['description'] ) && $cf['description'] ) {

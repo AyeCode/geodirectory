@@ -1005,7 +1005,7 @@ if (!function_exists('geodir_save_post_images')) {
                         }
 
                         $external_img = false;
-                        if (strpos(str_replace(array('http://','https://'),'',$curr_img_url), str_replace(array('http://','https://'),'',$uploads['baseurl'])) !== false) {
+                        if (strpos( str_replace( array('http://','https://'),'',$curr_img_url ), str_replace(array('http://','https://'),'',$uploads['baseurl'] ) ) !== false) {
                         } else {
                             $external_img = true;
                         }

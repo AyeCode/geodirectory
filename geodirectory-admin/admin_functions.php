@@ -1954,8 +1954,8 @@ function gd_set_theme_compat()
     $theme_compats = get_option('gd_theme_compats');
     $current_compat = get_option('gd_theme_compat');
     $current_compat = str_replace("_custom", "", $current_compat);
-
-    if ($current_compat == $theme_name && strpos("_custom", get_option('gd_theme_compat')) !== false) {
+ 
+    if ($current_compat == $theme_name && strpos(get_option('gd_theme_compat'), "_custom") !== false) {
         return;
     }// if already running correct compat then bail
 
@@ -3321,6 +3321,8 @@ function geodir_ajax_import_export() {
     
     error_reporting(0);
 
+    $xstart = microtime(true);
+
     // try to set higher limits for import
     $max_input_time = ini_get('max_input_time');
     $max_execution_time = ini_get('max_execution_time');
@@ -4018,14 +4020,15 @@ function geodir_ajax_import_export() {
                 wp_send_json( $json );
                 exit;
             } else if ( $task == 'import_post' ) {
+                $xtimings['###1'] = microtime(true)-$xstart;
                 //run some stuff to make the import quicker
                 wp_defer_term_counting( true );
                 wp_defer_comment_counting( true );
                 $wpdb->query( 'SET autocommit = 0;' );
-
-                //remove_all_actions('publish_post');
-                //remove_all_actions('transition_post_status');
-                //remove_all_actions('publish_future_post');
+//
+//                remove_all_actions('publish_post');
+//                remove_all_actions('transition_post_status');
+//                remove_all_actions('publish_future_post');
 
                 if (!empty($file)) {
                     $is_claim_active = is_plugin_active( 'geodir_claim_listing/geodir_claim_listing.php' ) && get_option('geodir_claim_enable') === 'yes' ? true : false;
@@ -4040,7 +4043,7 @@ function geodir_ajax_import_export() {
                         wp_send_json( $json );
                         exit;
                     }
-
+                    $xtimings['###2'] = microtime(true)-$xstart;
                     $gd_error_log = __('GD IMPORT LISTINGS [ROW %d]:', 'geodirectory');
                     $wp_chars_error = __( '(check & remove if any invalid characters used in data)', 'geodirectory' );
                     $processed_actual = 0;
@@ -4190,7 +4193,7 @@ function geodir_ajax_import_export() {
                                 $valid = false;
                                 geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . __( 'Could not be added due to blank title/invalid post type', 'geodirectory' ) );
                             }
-                            
+                            $xtimings['###3'] = microtime(true)-$xstart;
                             $location_allowed = function_exists( 'geodir_cpt_no_location' ) && geodir_cpt_no_location( $post_type ) ? false : true;
                             if ( $location_allowed ) {
                                 $location_result = geodir_get_default_location();
@@ -4210,7 +4213,7 @@ function geodir_ajax_import_export() {
                                     }
                                 }
                             }
-                            
+                            $xtimings['###4']   = microtime(true)-$xstart;
                             if ( !$valid ) {
                                 continue;
                             }
@@ -4256,7 +4259,7 @@ function geodir_ajax_import_export() {
                                     }
                                 }
                             }
-
+                            $xtimings['###5'] = microtime(true)-$xstart;
                             $save_post = array();
                             $save_post['post_title'] = $post_title;
                             $save_post['post_content'] = $post_content;
@@ -4321,7 +4324,7 @@ function geodir_ajax_import_export() {
                                 
                                 geodir_error_log( wp_sprintf( $gd_error_log, ($index + 1) ) . ' ' . $wp_chars_error );
                             }
-
+                            $xtimings['###6'] = microtime(true)-$xstart;
                             if ( (int)$saved_post_id > 0 ) {
                                 // WPML
                                 if ($is_wpml && $original_post_id > 0 && $language != '') {
@@ -4468,9 +4471,10 @@ function geodir_ajax_import_export() {
                                     }
                                     $gd_post[$cat_taxonomy] = $save_post['post_category'];
                                 }
-                                
+                                $xtimings['###7'] = microtime(true)-$xstart;
                                 // Save post info
                                 geodir_save_post_info( $saved_post_id, $gd_post );
+                                $xtimings['###8'] = microtime(true)-$xstart;
                                 // post taxonomies
                                 if ( !empty( $save_post['post_category'] ) ) {
                                     wp_set_object_terms( $saved_post_id, $save_post['post_category'], $cat_taxonomy );
@@ -4491,11 +4495,11 @@ function geodir_ajax_import_export() {
                                     
                                     geodir_set_postcat_structure( $saved_post_id, $cat_taxonomy, $post_default_category, $post_category_str );
                                 }
-
+                                $xtimings['###8.1'] = microtime(true)-$xstart;
                                 if ( !empty( $save_post['post_tags'] ) ) {
                                     wp_set_object_terms( $saved_post_id, $save_post['post_tags'], $tags_taxonomy );
                                 }
-
+                                $xtimings['###9'] = microtime(true)-$xstart;
                                 // Post images
                                 if ( !empty( $post_images ) ) {
                                     $post_images = array_unique($post_images);
@@ -4506,6 +4510,7 @@ function geodir_ajax_import_export() {
                                     $order = 1;
                                     
                                     $old_post_images = geodir_get_images( $saved_post_id );
+                                    $xtimings['###9.1'] = microtime(true)-$xstart;
                                     if (!empty($old_post_images)) {
                                         foreach( $old_post_images as $old_post_image ) {
                                             if (!empty($old_post_image) && isset($old_post_image->file) && $old_post_image->file != '') {
@@ -4525,9 +4530,9 @@ function geodir_ajax_import_export() {
                                         $image_name_parts = explode( '.', $image_name );
                                         array_pop( $image_name_parts );
                                         $proper_image_name = implode( '.', $image_name_parts );
-                                        
+                                        $xtimings['###9.2'] = microtime(true)-$xstart;
                                         $arr_file_type = wp_check_filetype( $image_name );
-                                        
+                                        $xtimings['###9.3'] = microtime(true)-$xstart;
                                         if ( !empty( $arr_file_type ) ) {
                                             $uploaded_file_type = $arr_file_type['type'];
                                             
@@ -4549,8 +4554,9 @@ function geodir_ajax_import_export() {
                                             $attachment_set = trim( $attachment_set, ", " );
                                                                                         
                                             // Add new attachment
+                                            $xtimings['###9.4'] = microtime(true)-$xstart;
                                             $wpdb->query( "INSERT INTO " . GEODIR_ATTACHMENT_TABLE . " SET " . $attachment_set );
-                                                                                        
+                                            $xtimings['###9.5'] = microtime(true)-$xstart;
                                             $order++;
                                         }
                                     }
@@ -4558,9 +4564,10 @@ function geodir_ajax_import_export() {
                                     $saved_post_images_sql = !empty($saved_post_images_arr) ? " AND ( file NOT LIKE '%/" . implode("' AND file NOT LIKE '%/",  $saved_post_images_arr) . "' )" : '';
                                     // Remove previous attachment
                                     $wpdb->query( "DELETE FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE post_id = " . (int)$saved_post_id . " " . $saved_post_images_sql );
-                                    
+                                    $xtimings['###9.6'] = microtime(true)-$xstart;
                                     if ( !empty( $saved_post_images_arr ) ) {
                                         geodir_set_wp_featured_image($saved_post_id);
+                                        $xtimings['###9.7'] = microtime(true)-$xstart;
                                         /*
                                         $menu_order = 1;
                                         
@@ -4580,10 +4587,10 @@ function geodir_ajax_import_export() {
                                         $images++;
                                     }
                                 }
-
+                                $xtimings['###10'] = microtime(true)-$xstart;
                                 /** This action is documented in geodirectory-functions/post-functions.php */
                                 do_action( 'geodir_after_save_listing', $saved_post_id, $gd_post );
-                                
+                                $xtimings['###11'] = microtime(true)-$xstart;
                                 if (isset($is_featured)) {
                                     geodir_save_post_meta($saved_post_id, 'is_featured', $is_featured);
                                 }
@@ -4593,6 +4600,7 @@ function geodir_ajax_import_export() {
                                 if (isset($gd_post['expire_date'])) {
                                     geodir_save_post_meta($saved_post_id, 'expire_date', $gd_post['expire_date']);
                                 }
+                                $xtimings['###12'] = microtime(true)-$xstart;
                             }
                             
                             // WPML
@@ -4609,7 +4617,7 @@ function geodir_ajax_import_export() {
                 wp_defer_comment_counting( false );
                 $wpdb->query( 'COMMIT;' );
                 $wpdb->query( 'SET autocommit = 1;' );
-
+                $xtimings['###13'] = microtime(true)-$xstart;
                 $json = array();
                 $json['processed'] = $processed_actual;
                 $json['created'] = $created;
@@ -4618,7 +4626,10 @@ function geodir_ajax_import_export() {
                 $json['invalid'] = $invalid;
                 $json['invalid_addr'] = $invalid_addr;
                 $json['images'] = $images;
+                $json['timing'] = microtime(true)-$xstart;
+                $json['timings'] = $xtimings;
                 
+
                 wp_send_json( $json );
                 exit;
             } else if ( $task == 'import_loc' ) {
@@ -6622,7 +6633,7 @@ function geodir_ga_get_analytics_accounts()
     if(get_option('geodir_gd_uids') && !isset($_POST['geodir_ga_auth_code'])){
       return get_option('geodir_gd_uids');
     }
-    
+
     # Create a new Gdata call
     if ( trim(get_option('geodir_ga_auth_code')) != '' )
         $stats = new GDGoogleAnalyticsStats();

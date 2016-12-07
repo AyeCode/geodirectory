@@ -1101,6 +1101,47 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 		}
 
 		if ( $admin_bcc === true ) {
+
+			/**
+			 * Filter the client email subject.
+			 *
+			 * @since   1.6.1
+			 * @package GeoDirectory_Payment_Manager
+			 *
+			 * @param string $subject       The email subject.
+			 * @param string $fromEmail     Sender email address.
+			 * @param string $fromEmailName Sender name.
+			 * @param string $toEmail       Receiver email address.
+			 * @param string $toEmailName   Receiver name.
+			 * @param string $to_subject    Email subject.
+			 * @param string $to_message    Email content.
+			 * @param string $extra         Not being used.
+			 * @param string $message_type  The message type. Can be send_friend, send_enquiry, forgot_password, registration, post_submit, listing_published.
+			 * @param string $post_id       The post ID.
+			 * @param string $user_id       The user ID.
+			 */
+			$subject = apply_filters( 'geodir_sendEmail_subject_admin_bcc', $subject, $fromEmail, $fromEmailName, $toEmail, $toEmailName, $to_subject, $to_message, $extra, $message_type, $post_id, $user_id );
+			/**
+			 * Filter the client email message.
+			 *
+			 * @since   1.6.1
+			 * @package GeoDirectory_Payment_Manager
+			 *
+			 * @param string $message       The email message text.
+			 * @param string $fromEmail     Sender email address.
+			 * @param string $fromEmailName Sender name.
+			 * @param string $toEmail       Receiver email address.
+			 * @param string $toEmailName   Receiver name.
+			 * @param string $to_subject    Email subject.
+			 * @param string $to_message    Email content.
+			 * @param string $extra         Not being used.
+			 * @param string $message_type  The message type. Can be send_friend, send_enquiry, forgot_password, registration, post_submit, listing_published.
+			 * @param string $post_id       The post ID.
+			 * @param string $user_id       The user ID.
+			 */
+			$message = apply_filters( 'geodir_sendEmail_message_admin_bcc', $message, $fromEmail, $fromEmailName, $toEmail, $toEmailName, $to_subject, $to_message, $extra, $message_type, $post_id, $user_id );
+
+
 			$sent = wp_mail( $to, $subject, $message, $headers );
 
 			if ( ! $sent ) {
