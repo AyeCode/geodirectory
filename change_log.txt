@@ -5,6 +5,7 @@ Google map directions not working on detail page map - FIXED
 CSS issue with map category show/hide icon - FIXED
 Filters added to admin BCC emails - ADDED
 Twenty Seventeen theme compatibility settings added - ADDED
+geodir_save_post_info() now faster and escapes values better - CHANGED
 
 v1.6.11
 geodir_set_as_home rule still existed from depreciated option - FIXED

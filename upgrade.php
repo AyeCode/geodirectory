@@ -711,7 +711,7 @@ function gd_install_theme_compat()
         'geodir_wrapper_content_open_replace' => '<div id="primary" class="content-area" >',
         'geodir_sidebar_right_open_replace' => '<aside id="secondary"  class="widget-area" itemscope itemtype="[itemtype]" >',
         'geodir_sidebar_left_open_replace' => '<aside id="secondary"  class="widget-area" itemscope itemtype="[itemtype]" >',
-        'geodir_theme_compat_css' => stripslashes('body.geodir-page #primary header.entry-header {margin-left:0;float:none !important;} .gxeodir_flex-container{float:left;} .geodir-tabs-content.entry-content{width:100% !important;} dl.geodir-tab-head, .geodir_map_container {z-index:2;} .entry-content .gm-style a img, .widget .gm-style a img {    box-sizing: none; -webkit-box-shadow: none; -moz-box-shadow: none;}'),
+        'geodir_theme_compat_css' => stripslashes('body.geodir-page #primary header.entry-header {margin-left:0;float:none !important;} .gxeodir_flex-container{float:left;} .geodir-tabs-content.entry-content{width:100% !important;} dl.geodir-tab-head, .geodir_map_container {z-index:2;} .geodir-cat-list ul.geodir-popular-cat-list  li + li {    margin-top: 0;} .geodir-cat-list .geodir-popular-cat-list a img, .entry-content .gm-style a img, .widget .gm-style a img {    box-sizing: none; -webkit-box-shadow: none; -moz-box-shadow: none;}'),
         'geodir_theme_compat_code' => 'Twenty_Seventeen'
     );
 

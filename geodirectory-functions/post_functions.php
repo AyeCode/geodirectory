@@ -654,26 +654,30 @@ if (!function_exists('geodir_save_post_info')) {
          */
         $postmeta = apply_filters('geodir_listinginfo_request', $postinfo_array, $post_id);
 
-        if (!empty($postmeta) && $post_id) {
-            $post_meta_set_query = '';
+        $query_string_escaped = '';
+        $query_string_array = array();
 
+        if (!empty($postmeta) && $post_id) {
+
+            $columns = $wpdb->get_col("show columns from $table");
             foreach ($postmeta as $mkey => $mval) {
-                if (geodir_column_exist($table, $mkey)) {
+                if(in_array($mkey,$columns)) {
                     if (is_array($mval)) {
                         $mval = implode(",", $mval);
                     }
+                    $query_string_escaped .= " $mkey = %s, "; // we can set the key here as we check if the column exists above
+                    $query_string_array[] = stripslashes($mval); // we strip slashes as we are using wpdb prepare
 
-                    $post_meta_set_query .= $mkey . " = '" . addslashes_gpc($mval) . "', ";
                 }
             }
 
-            $post_meta_set_query = trim($post_meta_set_query, ", ");
-            
-            if (empty($post_meta_set_query) || trim($post_meta_set_query) == '') {
+            $query_string_escaped = trim($query_string_escaped, ", ");
+
+            if (empty($query_string_array) || trim($query_string_escaped) == '') {
                 return false;
             }
 
-            $post_meta_set_query = str_replace('%', '%%', $post_meta_set_query);// escape %
+            $query_string_array = str_replace(array("'%", "%'"), array("'%%", "%%'"), $query_string_array);
 
 
             /**
@@ -688,23 +692,25 @@ if (!function_exists('geodir_save_post_info')) {
 
             if ($wpdb->get_var($wpdb->prepare("SELECT post_id from " . $table . " where post_id = %d", array($post_id)))) {
 
+                $query_string_array[] = $post_id;
                 $wpdb->query(
                     $wpdb->prepare(
-                        "UPDATE " . $table . " SET " . $post_meta_set_query . " where post_id =%d",
-                        array($post_id)
+                        "UPDATE " . $table . " SET " . $query_string_escaped . " where post_id =%d",
+                        $query_string_array
                     )
                 );
 
 
             } else {
 
+                array_unshift($query_string_array, $post_id);
                 $wpdb->query(
                     $wpdb->prepare(
-                        "INSERT INTO " . $table . " SET post_id = %d," . $post_meta_set_query,
-                        array($post_id)
+                        "INSERT INTO " . $table . " SET post_id = %d," . $query_string_escaped,
+                        $query_string_array
                     )
                 );
-
+                
             }
 
             /**
