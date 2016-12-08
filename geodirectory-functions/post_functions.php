@@ -1861,6 +1861,7 @@ if (!function_exists('geodir_get_infowindow_html')) {
         } else {
             $ID = $postinfo_obj->post_id;
             $title = str_replace($srcharr, $replarr, htmlentities($postinfo_obj->post_title, ENT_COMPAT, 'UTF-8')); // fix by Stiofan
+            $title = wp_specialchars_decode($title); // Fixed #post-320722 on 2016-12-08
             $plink = get_permalink($ID);
             $lat = htmlentities(geodir_get_post_meta($ID, 'post_latitude', true));
             $lng = htmlentities(geodir_get_post_meta($ID, 'post_longitude', true));

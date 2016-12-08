@@ -84,8 +84,8 @@ function get_markers() {
     $search = '';
     $main_query_array;
 
-    $srcharr = array("'", "/", "-", '"', '\\');
-    $replarr = array("&prime;", "&frasl;", "&ndash;", "&ldquo;", '');
+    $srcharr = array("'", "/", "-", '"', '\\', '&#39;');
+    $replarr = array("&prime;", "&frasl;", "&ndash;", "&ldquo;", '', "&prime;");
 
     $post_type = isset($_REQUEST['gd_posttype']) ? $_REQUEST['gd_posttype'] : 'gd_place';
 
