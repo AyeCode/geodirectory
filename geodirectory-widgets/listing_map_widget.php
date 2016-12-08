@@ -72,6 +72,7 @@ function show_listing_widget_map()
     if (!empty($cat_content_info)) {
         $json_content = substr(implode(',', $cat_content_info), 1);
         $json_content = htmlentities($json_content, ENT_QUOTES, get_option('blog_charset')); // Quotes in csv title import break maps - FIXED by kiran on 2nd March, 2016
+        $json_content = wp_specialchars_decode($json_content); // Fixed #post-320722 on 2016-12-08
         $list_json = '[{"totalcount":"' . $totalcount . '",' . $json_content . ']';
     } else {
         $list_json = '[{"totalcount":"0"}]';

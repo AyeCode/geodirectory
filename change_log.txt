@@ -6,6 +6,7 @@ CSS issue with map category show/hide icon - FIXED
 Filters added to admin BCC emails - ADDED
 Twenty Seventeen theme compatibility settings added - ADDED
 geodir_save_post_info() now faster and escapes values better - CHANGED
+Using apostrophe(&#39;) in title breaks title in map info window  - FIXED
 
 v1.6.11
 geodir_set_as_home rule still existed from depreciated option - FIXED
