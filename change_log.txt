@@ -1,4 +1,4 @@
-v1.6.12
+v1.6.15
 Google Services API can conflict with newer version of the Google Service Class - UPDATED
 No way to deactivate GA Settings, deactivation button added - ADDED
 Google map directions not working on detail page map - FIXED
