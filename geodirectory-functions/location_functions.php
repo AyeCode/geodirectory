@@ -246,6 +246,7 @@ function geodir_add_new_location($location_info = array())
         ));
 
 
+        /* // Not allowed to create country in DB : 2016-12-09
         if ($geodir_location->country) {
 
             $get_country = $wpdb->get_var($wpdb->prepare("SELECT Country FROM " . GEODIR_COUNTRIES_TABLE . " WHERE Country=%s", array($geodir_location->country)));
@@ -257,6 +258,7 @@ function geodir_add_new_location($location_info = array())
             }
 
         }
+        */
 
         if ($geodir_location->is_default)
             update_option('geodir_default_location', $geodir_location);

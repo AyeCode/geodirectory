@@ -1,3 +1,6 @@
+v1.6.16
+Country should be not added in DB via query - FIXED
+
 v1.6.15
 Google Services API can conflict with newer version of the Google Service Class - UPDATED
 No way to deactivate GA Settings, deactivation button added - ADDED
