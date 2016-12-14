@@ -183,6 +183,14 @@ $google_analytic_settings = apply_filters('geodir_google_analytic_settings', arr
     ),
 
     array(
+        'name' => __('Anonymize user IP?', 'geodirectory'),
+        'desc' => __('In most cases this is not required, this is to comply with certain country laws such as Germany.', 'geodirectory'),
+        'id' => 'geodir_ga_anonymize_ip',
+        'type' => 'checkbox',
+        'std' => '0'
+    ),
+
+    array(
         'name' => __('Auto refresh active users?', 'geodirectory'),
         'desc' => __('If ticked it uses the auto refresh time below, if not it never refreshes unless the refresh button is clicked.', 'geodirectory'),
         'id' => 'geodir_ga_auto_refresh',

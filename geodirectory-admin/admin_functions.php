@@ -1570,6 +1570,10 @@ function geodir_admin_fields($options)
                                       onclick="gd_GA_Deauthorize('<?php echo wp_create_nonce('gd_ga_deauthorize');?>');"><?php _e('Deauthorize', 'geodirectory'); ?></span>
                                 <span style="color: green; font-weight: bold;"><?php _e('Authorized', 'geodirectory'); ?></span>
                             <?php
+                                global $gd_ga_errors;
+                                if(!empty($gd_ga_errors)){
+                                    print_r($gd_ga_errors);
+                                }
                             } else {
                                 ?>
                                 <span class="button-primary"
@@ -6625,6 +6629,7 @@ function geodir_gd_accounts(){
 
 function geodir_ga_get_analytics_accounts()
 {
+    global $gd_ga_errors;
     $accounts = array();
 
     if(get_option('geodir_ga_auth_token')===false){update_option('geodir_ga_auth_token','');}
@@ -6645,7 +6650,13 @@ function geodir_ga_get_analytics_accounts()
         return false;
 
     # Get a list of accounts
-    $accounts = $stats->getAllProfiles();
+    try {
+        $accounts = $stats->getAllProfiles();
+    } catch (Exception $e) {
+        $gd_ga_errors[] = $e->getMessage();
+        return false;
+    }
+
 
     natcasesort ($accounts);
 

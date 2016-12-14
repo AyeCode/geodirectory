@@ -1,6 +1,9 @@
 v1.6.16
 Country should be not added in DB via query - FIXED
 New parameters post_type & category added to the listings map shortcode - CHANGED
+WPML geodir_info_url and geodir_login_url now uses lang code in url when needed - CHANGED
+Added try catch to Google analytics account call which can break if no accounts present - FIXED
+Added Google Analytics option to anonymize IP to comply with German law - ADDED
 
 v1.6.15
 Google Services API can conflict with newer version of the Google Service Class - UPDATED
