@@ -624,23 +624,57 @@ function openMarker(map_canvas, id) {
             jQuery('html,body').animate({ scrollTop: mTag }, 'slow');
         }
     }
-    google.maps.event.trigger(jQuery.goMap.mapId.data(id), 'click');
+    try {
+        if (window.gdMaps == 'google') {
+            google.maps.event.trigger(jQuery.goMap.mapId.data(id), 'click');
+        } else if(window.gdMaps == 'osm') {
+            jQuery.goMap.gdlayers.eachLayer(function(marker) {
+                if (id && marker.options.id == id){
+                    marker.fireEvent('click');
+                }
+            });
+        }
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 function animate_marker(map_canvas, id) {
     jQuery("#" + map_canvas).goMap();
     try {
-        jQuery.goMap.mapId.data(id).setAnimation(google.maps.Animation.BOUNCE);
-    } catch (e) {}
+        if (window.gdMaps == 'google') {
+            jQuery.goMap.mapId.data(id).setAnimation(google.maps.Animation.BOUNCE);
+        } else if(window.gdMaps == 'osm') {
+            jQuery.goMap.gdlayers.eachLayer(function(marker) {
+                if (id && marker.options.id == id){
+                    if (!jQuery(marker._icon).hasClass('gd-osm-marker-bounce')) {
+                        jQuery(marker._icon).addClass('gd-osm-marker-bounce');
+                    }
+                }
+            });
+        }
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 function stop_marker_animation(map_canvas, id) {
     jQuery("#" + map_canvas).goMap();
     try {
-        if (jQuery.goMap.mapId.data(id).getAnimation() != null) {
-            jQuery.goMap.mapId.data(id).setAnimation(null);
+        if (window.gdMaps == 'google') {
+            if (jQuery.goMap.mapId.data(id).getAnimation() != null) {
+                jQuery.goMap.mapId.data(id).setAnimation(null);
+            }
+        } else if(window.gdMaps == 'osm') {
+            jQuery.goMap.gdlayers.eachLayer(function(marker) {
+                if (id && marker.options.id == id){
+                    jQuery(marker._icon).removeClass('gd-osm-marker-bounce');
+                }
+            });
         }
-    } catch (e) {}
+    } catch (e) {
+        console.log(e);
+    }
 }
 // Listing map sticky script //
 function getCookie(cname) {
