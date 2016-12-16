@@ -6,6 +6,8 @@ Added try catch to Google analytics account call which can break if no accounts 
 Added Google Analytics option to anonymize IP to comply with German law - ADDED
 Marker pins not bouncing for OpenStreetMap - FIXED
 Make ratings stars clickable on listing - ADDED
+Fix for WordFence warning on registration via GD Login - FIXED
+Textarea and html custom field can now use default value - CHANGED
 
 v1.6.15
 Google Services API can conflict with newer version of the Google Service Class - UPDATED
