@@ -595,6 +595,20 @@ function geodir_get_post_term(el) {
 /* we recalc the stars because some browsers can't do subpixle percents, we should be able to remove this in a few years. */
 jQuery(window).load(function() {
     geodir_resize_rating_stars();
+    
+    jQuery(document).on('click', '.geodir-rating,.gd-star-rating', function(e) {
+        if (reviewLink = jQuery(this).closest('.geodir-category-listing').find('a.geodir-pcomments').attr('href')) {
+            window.location = reviewLink;
+        } else if (reviewLink = jQuery(this).closest('.gd-bubble').find('a.geodir-pcomments').attr('href')) {
+            window.location = reviewLink;
+        }
+    });
+    jQuery('.geodir-details-sidebar-rating').on('click', '.geodir-rating,.gd-star-rating', function(e) {
+        jQuery('#gd-tabs [data-tab="#reviews"]').trigger('click');
+        jQuery('html, body').animate({
+            scrollTop: jQuery('#reviews-wrap').offset().top
+        }, 500);
+    });
 });
 
 jQuery(window).resize(function() {
