@@ -1990,3 +1990,13 @@ body > span[style*='top: -999px']{display: none;}
     -o-animation: gdbounce .7s infinite;
     animation: gdbounce .7s infinite;
 }
+.geodir-gridview .geodir-rating,
+.geodir-listview .geodir-rating,
+.gd-bubble .geodir-rating,
+.geodir-details-sidebar-rating .geodir-rating,
+.geodir-gridview .gd-star-rating,
+.geodir-listview .gd-star-rating,
+.gd-bubble .gd-star-rating,
+.geodir-details-sidebar-rating .gd-star-rating {
+    cursor: pointer;
+}
