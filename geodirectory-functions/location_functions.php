@@ -462,3 +462,98 @@ function geodir_get_osm_address_by_lat_lan($lat, $lng) {
         return false;
     }
 }
+
+/**
+ * Get normal untranslated country name.
+ *
+ * @since 1.6.16
+ * @package GeoDirectory
+ * @param string $country The country name.
+ * @return string Returns the country.
+ */
+function geodir_get_normal_country($country) {
+    global $wpdb;
+    if ($result = geodir_get_country_by_name($country)) {
+        return $result;
+    }
+    
+    if (defined('POST_LOCATION_TABLE')) {
+        $rows = $wpdb->get_results($wpdb->prepare("SELECT DISTINCT country FROM " . POST_LOCATION_TABLE . " WHERE country NOT LIKE %s ORDER BY location_id ASC", $country));
+        if (!empty($rows)) {
+            foreach ($rows as $row) {
+                $translated = __($row->country, 'geodirectory');
+                if (geodir_strtolower($translated) == geodir_strtolower($country) && $result = geodir_get_country_by_name($row->country)) {
+                    return $result;
+                }
+            }
+        }
+        
+        $rows = $wpdb->get_results( $wpdb->prepare( "SELECT DISTINCT country FROM " . POST_LOCATION_TABLE . " WHERE country_slug LIKE %s AND country NOT LIKE %s ORDER BY location_id", $country, $country ) );
+        if (!empty($rows)) {
+            foreach ($rows as $row) {
+                $translated = __($row->country, 'geodirectory');
+                if (geodir_strtolower($translated) == geodir_strtolower($country) && $result = geodir_get_country_by_name($row->country)) {
+                    return $result;
+                }
+            }
+        }
+    }
+    
+    $default_location = geodir_get_default_location();
+    if (!empty($default_location->country) && $result = geodir_get_country_by_name($default_location->country)) {
+        return $result;
+    }
+    
+    if (!empty($default_location->country_slug) && $result = geodir_get_country_by_name($default_location->country_slug)) {
+        return $result;
+    }
+    
+    if (!empty($default_location->country_ISO2) && $result = geodir_get_country_by_name($default_location->country_ISO2, true)) {
+        return $result;
+    }
+    
+    return $country;
+}
+
+/**
+ * Get ISO2 of the country.
+ *
+ * @since 1.6.16
+ * @package GeoDirectory
+ * @param string $country The country name.
+ * @return string Country ISO2 code.
+ */
+function geodir_get_country_iso2($country) {
+    global $wpdb;
+    
+    if ($result = $wpdb->get_var($wpdb->prepare("SELECT ISO2 FROM " . GEODIR_COUNTRIES_TABLE . " WHERE Country LIKE %s", $country))) {
+        return $result;
+    }
+    if ($result = $wpdb->get_var($wpdb->prepare("SELECT ISO2 FROM " . GEODIR_COUNTRIES_TABLE . " WHERE Country LIKE %s", geodir_get_normal_country($country)))) {
+        return $result;
+    }
+    
+    return $country;
+}
+
+/**
+ * Get the country name from DB.
+ *
+ * @since 1.6.16
+ * @package GeoDirectory
+ * @param string $country The country name or iso2.
+ * @param bool $iso2 If true it searchs by country iso2.
+ * @return string|null Country ISO2 code.
+ */
+function geodir_get_country_by_name($country, $iso2 = false) {
+    global $wpdb;
+    
+    if ($result = $wpdb->get_var($wpdb->prepare("SELECT Country FROM " . GEODIR_COUNTRIES_TABLE . " WHERE Country LIKE %s", $country))) {
+        return $result;
+    }
+    if ($iso2 && $result = $wpdb->get_var($wpdb->prepare("SELECT Country FROM " . GEODIR_COUNTRIES_TABLE . " WHERE ISO2 LIKE %s", $country))) {
+        return $result;
+    }
+    
+    return NULL;
+}
