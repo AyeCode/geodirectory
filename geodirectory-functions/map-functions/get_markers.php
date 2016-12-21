@@ -300,7 +300,7 @@ function get_markers() {
             } else {
                 $icon_size = array('w' => 36, 'h' => 45);
             }
-
+            $icon_size = array('w' => 36, 'h' => 45);
             $content_data[] = '{"id":"' . $catinfo_obj->post_id . '","t": "' . $title . '","lt": "' . $catinfo_obj->post_latitude . '","ln": "' . $catinfo_obj->post_longitude . '","mk_id":"' . $catinfo_obj->post_id . '_' . $catinfo_obj->default_category . '","i":"' . $icon . '","w":"' . $icon_size['w'] . '","h":"' . $icon_size['h'] . '"'.$mark_extra.'}';
             $post_ids[] = $catinfo_obj->post_id;
         }
