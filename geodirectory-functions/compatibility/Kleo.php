@@ -10,7 +10,7 @@
 
 // Page titles translatable CPT names
 function geodir_kelo_title_translation( $args) {
-    if(function_exists('geodir_is_geodir_page') && geodir_is_geodir_page('preview')){
+    if(function_exists('geodir_is_geodir_page') && geodir_is_page('preview') ){
         $args['title'] = __(stripslashes_deep(esc_html($_POST['post_title'])),'geodirectory');
     }elseif(function_exists('geodir_is_geodir_page')){
         $args['title'] = __($args['title'],'geodirectory');
