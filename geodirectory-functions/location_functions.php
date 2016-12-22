@@ -198,6 +198,7 @@ function geodir_location_form_submit()
  * Adds new location using location info.
  *
  * @since 1.0.0
+ * @since 1.6.16 Fix country translation.
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @param array $location_info {
@@ -217,17 +218,16 @@ function geodir_add_new_location($location_info = array())
     global $wpdb;
 
     if (!empty($location_info)) {
-
         $location_city = ($location_info['city'] != '') ? $location_info['city'] : 'all';
         $location_region = ($location_info['region'] != '') ? $location_info['region'] : 'all';
-        $location_country = ($location_info['country'] != '') ? $location_info['country'] : 'all';
+        $location_country = ($location_info['country'] != '') ? geodir_get_normal_country($location_info['country']) : 'all';
         $location_lat = ($location_info['geo_lat'] != '') ? $location_info['geo_lat'] : '';
         $location_lng = ($location_info['geo_lng'] != '') ? $location_info['geo_lng'] : '';
         $is_default = isset($location_info['is_default']) ? $location_info['is_default'] : '';
         $country_slug = create_location_slug(__($location_country, 'geodirectory'));
         $region_slug = create_location_slug($location_region);
         $city_slug = create_location_slug($location_city);
-
+        
         /**
          * Filter add new location data.
          *
@@ -244,7 +244,6 @@ function geodir_add_new_location($location_info = array())
             'city_longitude' => $location_lng,
             'is_default' => $is_default
         ));
-
 
         /* // Not allowed to create country in DB : 2016-12-09
         if ($geodir_location->country) {
@@ -542,7 +541,7 @@ function geodir_get_country_iso2($country) {
  * @since 1.6.16
  * @package GeoDirectory
  * @param string $country The country name or iso2.
- * @param bool $iso2 If true it searchs by country iso2.
+ * @param bool $iso2 If true it searches by country iso2.
  * @return string|null Country ISO2 code.
  */
 function geodir_get_country_by_name($country, $iso2 = false) {
