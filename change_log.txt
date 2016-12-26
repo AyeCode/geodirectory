@@ -9,7 +9,8 @@ Make ratings stars clickable on listing - ADDED
 Fix for WordFence warning on registration via GD Login - FIXED
 Textarea and html custom field can now use default value - CHANGED
 Kleo theme title not show on preview page - FIXED
-Fix ISO2 for translated country - FIXED 
+Fix ISO2 for translated country - FIXED
+Breadcrumb formatting issue with the neighbourhood name - FIXED
 
 v1.6.15
 Google Services API can conflict with newer version of the Google Service Class - UPDATED
