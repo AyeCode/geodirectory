@@ -752,15 +752,15 @@ function geodir_related_posts_display( $request ) {
 		$character_count     = ( isset( $request['character_count'] ) && ! empty( $request['character_count'] ) ) ? $request['character_count'] : '';
 
 		global $wpdb, $post, $gd_session, $related_nearest, $related_parent_lat, $related_parent_lon;
-		$related_parent_lat   = $post->post_latitude;
-		$related_parent_lon   = $post->post_longitude;
+		$related_parent_lat   = !empty($post->post_latitude) ? $post->post_latitude : '';
+		$related_parent_lon   = !empty($post->post_longitude) ? $post->post_longitude : '';
 		$arr_detail_page_tabs = geodir_detail_page_tabs_list();
 
 		$related_listing_array = array();
 		if ( get_option( 'geodir_add_related_listing_posttypes' ) ) {
 			$related_listing_array = get_option( 'geodir_add_related_listing_posttypes' );
 		}
-		if ( in_array( $post->post_type, $related_listing_array ) ) {
+		if ( isset($post->post_type) && in_array( $post->post_type, $related_listing_array ) ) {
 			$arr_detail_page_tabs['related_listing']['is_display'] = true;
 		}
 

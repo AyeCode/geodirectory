@@ -1234,6 +1234,7 @@ function geodir_wpml_post_type_archive_link($link, $post_type){
  *
  * @since   1.0.0
  * @since   1.5.7 Changes for the neighbourhood system improvement.
+ * @since   1.6.16 Fix: Breadcrumb formatting issue with the neighbourhood name.
  * @package GeoDirectory
  * @global object $wp_query   WordPress Query object.
  * @global object $post       The current post object.
@@ -1372,6 +1373,7 @@ function geodir_breadcrumb() {
 						$location_term_actual_country = '';
 						$location_term_actual_region  = '';
 						$location_term_actual_city    = '';
+						$location_term_actual_neighbourhood = '';
 						if ( $geodir_get_locations ) {
 							if ( $key == 'gd_country' ) {
 								$location_term_actual_country = get_actual_location_name( 'country', $location_term, true );
@@ -1379,6 +1381,8 @@ function geodir_breadcrumb() {
 								$location_term_actual_region = get_actual_location_name( 'region', $location_term, true );
 							} else if ( $key == 'gd_city' ) {
 								$location_term_actual_city = get_actual_location_name( 'city', $location_term, true );
+							} else if ( $key == 'gd_neighbourhood' ) {
+								$location_term_actual_neighbourhood = get_actual_location_name( 'neighbourhood', $location_term, true );
 							}
 						} else {
 							$location_info = geodir_get_location();
@@ -1401,7 +1405,7 @@ function geodir_breadcrumb() {
 						} else if ( $is_location_last && $key == 'gd_city' && empty( $location_terms['gd_neighbourhood'] ) ) {
 							$breadcrumb .= $location_term_actual_city != '' ? $separator . $location_term_actual_city : $separator . $gd_location_link_text;
 						} else if ( $is_location_last && $key == 'gd_neighbourhood' ) {
-							$breadcrumb .= $separator . $gd_location_link_text;
+							$breadcrumb .= $location_term_actual_neighbourhood != '' ? $separator . $location_term_actual_neighbourhood : $separator . $gd_location_link_text;
 						} else {
 							if ( get_option( 'permalink_structure' ) != '' ) {
 								$location_link .= $location_term . '/';
@@ -1415,6 +1419,8 @@ function geodir_breadcrumb() {
 								$gd_location_link_text = $location_term_actual_region;
 							} else if ( $key == 'gd_city' && $location_term_actual_city != '' ) {
 								$gd_location_link_text = $location_term_actual_city;
+							} else if ( $key == 'gd_neighbourhood' && $location_term_actual_neighbourhood != '' ) {
+								$gd_location_link_text = $location_term_actual_neighbourhood;
 							}
 
 							/*
@@ -4175,6 +4181,7 @@ function geodirectory_load_db_language() {
 	 * Filter the language string from database to translate via po editor
 	 *
 	 * @since 1.4.2
+	 * @since 1.6.16 Register the string for WPML translation.
 	 *
 	 * @param array $contents_strings Array of strings.
 	 */
@@ -4203,6 +4210,7 @@ function geodirectory_load_db_language() {
 		foreach ( $contents_strings as $string ) {
 			if ( is_scalar( $string ) && $string != '' ) {
 				$string = str_replace( "'", "\'", $string );
+				geodir_wpml_register_string( $string );
 				$contents .= PHP_EOL . "__('" . $string . "', 'geodirectory');";
 			}
 		}
@@ -5270,3 +5278,33 @@ function geodir_remove_hentry( $class ) {
 }
 
 add_filter( 'post_class', 'geodir_remove_hentry' );
+
+/**
+ * Registers a individual text string for WPML translation.
+ *
+ * @since 1.6.16 Details page add locations to the term links.
+ * @package GeoDirectory
+ *
+ * @param string $string The string that needs to be translated.
+ * @param string $domain The plugin domain. Default geodirectory.
+ * @param string $name The name of the string which helps to know what's being translated.
+ */
+function geodir_wpml_register_string( $string, $domain = 'geodirectory', $name = '' ) {
+    do_action( 'wpml_register_single_string', $domain, $name, $string );
+}
+
+/**
+ * Retrieves an individual WPML text string translation.
+ *
+ * @since 1.6.16 Details page add locations to the term links.
+ * @package GeoDirectory
+ *
+ * @param string $string The string that needs to be translated.
+ * @param string $domain The plugin domain. Default geodirectory.
+ * @param string $name The name of the string which helps to know what's being translated.
+ * @param string $language_code Return the translation in this language. Default is NULL which returns the current language.
+ * @return string The translated string.
+ */
+function geodir_wpml_translate_string( $string, $domain = 'geodirectory', $name = '', $language_code = NULL ) {
+    return apply_filters( 'wpml_translate_single_string', $string, $domain, $name, $language_code );
+}

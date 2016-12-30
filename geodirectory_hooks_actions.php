@@ -2901,3 +2901,65 @@ function geodir_add_nav_menu_class( $args )
 }
 
 add_filter( 'wp_nav_menu_args', 'geodir_add_nav_menu_class' );
+
+/**
+ * Filters WordPress locale ID.
+ *
+ * Load current WPML language when editing the GD CPT.
+ *
+ * @since 1.6.16
+ * @package GeoDirectory
+ *
+ * @param string $locale The locale ID.
+ * @return string Filtered locale ID.
+ */
+function geodir_wpml_filter_locale($locale) {
+    global $sitepress;
+    
+    $post_type = !empty($_REQUEST['post_type']) ? $_REQUEST['post_type'] : (!empty($_REQUEST['post']) ? get_post_type($_REQUEST['post']) : '');
+    
+    if (!empty($sitepress) && $sitepress->is_post_edit_screen() && $post_type && in_array($post_type, geodir_get_posttypes()) && $current_lang = $sitepress->get_current_language()) {
+        $locale = $sitepress->get_locale($current_lang);
+    }
+    
+    return $locale;
+}
+
+/**
+ * Set WordPress locale filter.
+ *
+ * @since 1.6.16
+ * @package GeoDirectory
+ */
+function geodir_wpml_set_filter() {
+    if (!function_exists('icl_object_id') || defined('DOING_AJAX')) {
+        return;
+    }
+    if (is_admin()) {
+        //add_filter('locale', 'geodir_wpml_filter_locale', 100, 1);
+    } else {
+        add_filter('wp_nav_menu_objects', 'geodir_wpml_nav_menu_filter', 11, 2);
+    }
+}
+add_filter('plugins_loaded', 'geodir_wpml_set_filter');
+
+/**
+ * Filters the sorted list of menu item objects before generating the menu's HTML.
+ *
+ * @since 1.6.16
+ *
+ * @param array    $menu_items The menu items.
+ * @param stdClass $args An object containing wp_nav_menu() arguments.
+ * @return array Filtered menu items.
+ */
+function geodir_wpml_nav_menu_filter($menu_items, $args = array()) {
+    if (!empty($_REQUEST['listing_type']) && geodir_is_page('add-listing')) {
+        foreach ($menu_items as $key => $menu_item) {
+            if (!empty($menu_item->type) && $menu_item->type == 'wpml_ls_menu_item') {
+                $url = remove_query_arg(array('listing_type'), $menu_item->url);
+                $menu_items[$key]->url = add_query_arg(array('listing_type' => $_REQUEST['listing_type']), $url);
+            }
+        }
+    }
+    return $menu_items;
+}
