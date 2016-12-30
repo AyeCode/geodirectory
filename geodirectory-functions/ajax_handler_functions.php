@@ -386,7 +386,11 @@ function geodir_show_ga_stats(){
     } else {
         $ga_end = '';
     }
-    geodir_getGoogleAnalytics($_REQUEST['ga_page'], $ga_start, $ga_end);
+    try {
+        geodir_getGoogleAnalytics($_REQUEST['ga_page'], $ga_start, $ga_end);
+    } catch (Exception $e) {
+        geodir_error_log( wp_sprintf( __( 'GD Google Analytics API Error(%s) : %s', 'geodirectory' ), $e->getCode(), $e->getMessage() ) );
+    }
     die;
 }
 add_action( 'wp_ajax_gdga', 'geodir_show_ga_stats' );

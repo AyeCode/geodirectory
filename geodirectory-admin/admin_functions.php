@@ -6616,7 +6616,12 @@ function geodir_gd_accounts(){
     $accounts = array();
     $useAuth = ( get_option( 'geodir_ga_auth_code' ) == '' ? false : true );
     if($useAuth){
-        $accounts = geodir_ga_get_analytics_accounts();
+        try {
+            $accounts = geodir_ga_get_analytics_accounts();
+        } catch (Exception $e) {
+            geodir_error_log( wp_sprintf( __( 'GD Google Analytics API Error(%s) : %s', 'geodirectory' ), $e->getCode(), $e->getMessage() ) );
+        }
+        
         if(is_array($accounts)){
             $accounts = array_merge(array(__('Select Account','geodirectory')),$accounts);
         }elseif(get_option('geodir_ga_account_id')){
