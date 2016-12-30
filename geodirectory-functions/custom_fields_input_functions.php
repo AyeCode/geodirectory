@@ -39,9 +39,9 @@ function geodir_cfi_fieldset($html,$cf){
         ob_start(); // Start  buffering;
         ?>
         <h5 id="geodir_fieldset_<?php echo (int) $cf['id']; ?>" class="geodir-fieldset-row"
-            gd-fieldset="<?php echo (int) $cf['id']; ?>"><?php echo $cf['site_title']; ?>
+            gd-fieldset="<?php echo (int) $cf['id']; ?>"><?php echo __( $cf['site_title'], 'geodirectory' ); ?>
             <?php if ( $cf['desc'] != '' ) {
-                echo '<small>( ' . $cf['desc'] . ' )</small>';
+                echo '<small>( ' . __( $cf['desc'], 'geodirectory' ) . ' )</small>';
             } ?></h5>
         <?php
         $html = ob_get_clean();
