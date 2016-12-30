@@ -474,7 +474,9 @@ if (!function_exists('geodir_create_tables')) {
 						rating_count int(11) DEFAULT '0', 
 						post_locations varchar( 254 ) NULL DEFAULT NULL,
 						post_dummy enum( '1', '0' ) NULL DEFAULT '0', 
-						PRIMARY KEY  (post_id)
+						PRIMARY KEY  (post_id),
+						KEY post_locations (post_locations),
+						KEY is_featured (is_featured)
 						) $collate ";
 
         /**

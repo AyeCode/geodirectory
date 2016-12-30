@@ -2328,7 +2328,7 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	$where = apply_filters( 'geodir_filter_widget_listings_where', $where, $post_type );
 	$where = $where != '' ? " WHERE 1=1 " . $where : '';
 
-	$groupby = " GROUP BY $wpdb->posts.ID ";
+	$groupby = " GROUP BY $wpdb->posts.ID "; //@todo is this needed? faster withotu
 	/**
 	 * Filter widget listing groupby clause string part that is being used for query.
 	 *
@@ -2377,7 +2377,8 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 
 		$limit = (int) $limit > 0 ? " LIMIT " . absint( ( $page - 1 ) * (int) $limit ) . ", " . (int) $limit : "";
 
-		$sql  = "SELECT SQL_CALC_FOUND_ROWS " . $fields . " FROM " . $wpdb->posts . "
+		//@todo removed SQL_CALC_FOUND_ROWS from below as don't think it is needed and query is faster without
+		$sql  = "SELECT " . $fields . " FROM " . $wpdb->posts . "
 			" . $join . "
 			" . $where . "
 			" . $groupby . "
