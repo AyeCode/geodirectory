@@ -2390,7 +2390,6 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
         $fields_location = 'owntab';
 
         $custom_fields = geodir_post_custom_fields($post_package_id, 'all', $post_type, $fields_location);
-
         //remove video and special offers if it is already set to show
         if(isset($tabs_arr['post_video']['is_display']) && $tabs_arr['post_video']['is_display']){
             $unset_video = true;
@@ -2411,19 +2410,17 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
         }
 
 
-
         if (!empty($custom_fields)) {
             $parse_custom_fields = array();
             foreach ($custom_fields as $field) {
                 $field = stripslashes_deep($field); // strip slashes
-                
                 $type = $field;
                 $field_name = $field['htmlvar_name'];
                 if (empty($geodir_post_info) && geodir_is_page('preview') && $field_name != '' && !isset($post->{$field_name}) && isset($_REQUEST[$field_name])) {
                     $post->{$field_name} = $_REQUEST[$field_name];
                 }
 
-                if (isset($field['show_in']) && strpos($field['show_in'], '[owntab]') !== false  && ((isset($post->{$field_name}) && $post->{$field_name} != '') || $field['type'] == 'fieldset') && in_array($field['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file'))) {
+                if (isset($field['show_in']) && strpos($field['show_in'], '[owntab]') !== false  && ((isset($post->{$field_name}) && $post->{$field_name} != '') || $field['type'] == 'fieldset' || $field['type'] == 'address') && in_array($field['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file','address','taxonomy'))) {
                     if ($type['type'] == 'datepicker' && ($post->{$type['htmlvar_name']} == '' || $post->{$type['htmlvar_name']} == '0000-00-00')) {
                         continue;
                     }
@@ -2456,7 +2453,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                     $post->{$field_name} = $_REQUEST[$field_name];
                 }
 
-                if (isset($field['show_in']) && strpos($field['show_in'], '[owntab]') !== false && ((isset($post->{$field_name}) && $post->{$field_name} != '') || $field['type'] == 'fieldset') && in_array($field['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file'))) {
+                if (isset($field['show_in']) && strpos($field['show_in'], '[owntab]') !== false && ((isset($post->{$field_name}) && $post->{$field_name} != '') || $field['type'] == 'fieldset' || $field['type'] == 'address') && in_array($field['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file','address','taxonomy'))) {
                     $label = $field['site_title'] != '' ? $field['site_title'] : $field['admin_title'];
                     $site_title = trim($field['site_title']);
                     $type = $field;
@@ -2550,7 +2547,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                         }
                     } else {
                         if ($html != '') {
-                            $tabs_arr[$field['htmlvar_name']] = array(
+                            $tabs_arr[$html_var] = array(
                                 'heading_text' => __($label, 'geodirectory'),
                                 'is_active_tab' => false,
                                 /** This action is documented in geodirectory_hooks_actions.php */
