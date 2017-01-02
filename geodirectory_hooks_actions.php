@@ -2938,28 +2938,57 @@ function geodir_wpml_set_filter() {
     if (is_admin()) {
         //add_filter('locale', 'geodir_wpml_filter_locale', 100, 1);
     } else {
-        add_filter('wp_nav_menu_objects', 'geodir_wpml_nav_menu_filter', 11, 2);
     }
 }
 add_filter('plugins_loaded', 'geodir_wpml_set_filter');
 
 /**
- * Filters the sorted list of menu item objects before generating the menu's HTML.
+ * Filters the WPML language switcher urls for GeoDirectory pages.
  *
  * @since 1.6.16
  *
- * @param array    $menu_items The menu items.
- * @param stdClass $args An object containing wp_nav_menu() arguments.
- * @return array Filtered menu items.
+ * @param array    $languages WPML active languages.
+ * @return array Filtered languages.
  */
-function geodir_wpml_nav_menu_filter($menu_items, $args = array()) {
-    if (!empty($_REQUEST['listing_type']) && geodir_is_page('add-listing')) {
-        foreach ($menu_items as $key => $menu_item) {
-            if (!empty($menu_item->type) && $menu_item->type == 'wpml_ls_menu_item') {
-                $url = remove_query_arg(array('listing_type'), $menu_item->url);
-                $menu_items[$key]->url = add_query_arg(array('listing_type' => $_REQUEST['listing_type']), $url);
+function geodir_wpml_filter_ls_languages($languages) {
+    global $gd_icl_ls_languages;
+    
+    if (geodir_is_geodir_page()) {
+        if ($gd_icl_ls_languages) {
+            return $languages;
+        }
+        
+        $keep_vars = array();
+        
+        if (geodir_is_page('add-listing')) {
+            $keep_vars = array('listing_type', 'package_id');
+        } else if (geodir_is_page('search')) {
+            $keep_vars = array('geodir_search', 'stype', 'snear', 'set_location_type', 'set_location_val', 'sgeo_lat', 'sgeo_lon');
+        } else if (geodir_is_page('author')) {
+            $keep_vars = array('geodir_dashbord', 'stype', 'list');
+        } else if (geodir_is_page('login')) {
+            $keep_vars = array('forgot', 'signup');
+        }        
+        
+        if (!empty($keep_vars)) {
+            foreach ( $languages as $code => $url) {
+                $filter_url = $url['url'];
+                
+                foreach ($keep_vars as $var) {
+                    if (isset($_GET[$var]) && !is_array($_GET[$var])) {
+                        $filter_url = remove_query_arg(array($var), $filter_url);
+                        $filter_url = add_query_arg(array($var => $_GET[$var]), $filter_url);
+                    }
+                }
+                
+                if ($filter_url != $url['url']) {
+                    $languages[$code]['url'] = $filter_url;
+                }
             }
+            $gd_icl_ls_languages = true;
         }
     }
-    return $menu_items;
+
+    return $languages;
 }
+add_filter( 'icl_ls_languages', 'geodir_wpml_filter_ls_languages', 11, 1 );
