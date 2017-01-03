@@ -11,12 +11,15 @@ Textarea and html custom field can now use default value - CHANGED
 Kleo theme title not show on preview page - FIXED
 Fix ISO2 for translated country - FIXED
 Breadcrumb formatting issue with the neighbourhood name - FIXED
+On add listing page switching WPML language changes the listing type - CHANGED
 Option added in listing map widget to enable marker cluster for map - CHANGED
 Google Analytics account error breaks the site - FIXED
 Auto register custom fields for WPML translation via GD custom field translation tool - CHANGED
 Fix ISO2 for translated country - FIXED
 Updated Generate API KEY button to add access for all APIs - CHANGED
 Switching language from WPML location switcher looses the page variables on GeoDirectory pages - FIXED
+Set address on map can sometimes not work right if no zip is provided - FIXED
+Address and Category cant be shown on their own tab - FIXED
 
 v1.6.15
 Google Services API can conflict with newer version of the Google Service Class - UPDATED
