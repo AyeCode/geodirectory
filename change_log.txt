@@ -21,6 +21,7 @@ Switching language from WPML location switcher looses the page variables on GeoD
 Set address on map can sometimes not work right if no zip is provided - FIXED
 Address and Category cant be shown on their own tab - FIXED
 The country code is undefined when default country is set and translated - FIXED
+Single quote in default city name causes problem in add new city - FIXED
 
 v1.6.15
 Google Services API can conflict with newer version of the Google Service Class - UPDATED
