@@ -20,6 +20,7 @@ Updated Generate API KEY button to add access for all APIs - CHANGED
 Switching language from WPML location switcher looses the page variables on GeoDirectory pages - FIXED
 Set address on map can sometimes not work right if no zip is provided - FIXED
 Address and Category cant be shown on their own tab - FIXED
+The country code is undefined when default country is set and translated - FIXED
 
 v1.6.15
 Google Services API can conflict with newer version of the Google Service Class - UPDATED
