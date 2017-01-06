@@ -22,6 +22,7 @@ Set address on map can sometimes not work right if no zip is provided - FIXED
 Address and Category cant be shown on their own tab - FIXED
 The country code is undefined when default country is set and translated - FIXED
 Single quote in default city name causes problem in add new city - FIXED
+Popular post view widget Featured sort now secondarily ordered by date added -  CHANGED
 
 v1.6.15
 Google Services API can conflict with newer version of the Google Service Class - UPDATED
