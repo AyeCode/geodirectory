@@ -467,6 +467,9 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
         } else {
             if (typeof address === 'undefined')
                 address = '';
+
+            if( address == city || address == region || address == country || address == zip )
+                address = '';
             <?php
             if(is_admin() && isset($_REQUEST['tab'])){?>
             if (jQuery.trim(city) == '' || jQuery.trim(region) == '') {
