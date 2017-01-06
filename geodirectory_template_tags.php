@@ -536,11 +536,10 @@ function geodir_listingsearch_scripts()
  * Prints location related javascript.
  *
  * @since 1.0.0
+ * @since 1.6.16 Fix: Single quote in default city name causes problem in add new city.
  * @package GeoDirectory
  */
-function geodir_add_sharelocation_scripts()
-{
-
+function geodir_add_sharelocation_scripts() {
     $default_search_for_text = SEARCH_FOR_TEXT;
     if (get_option('geodir_search_field_default_text'))
         $default_search_for_text = __(get_option('geodir_search_field_default_text'), 'geodirectory');
@@ -548,12 +547,15 @@ function geodir_add_sharelocation_scripts()
     $default_near_text = NEAR_TEXT;
     if (get_option('geodir_near_field_default_text'))
         $default_near_text = __(get_option('geodir_near_field_default_text'), 'geodirectory');
-
+    
+    $search_location = geodir_get_default_location();
+    
+    $default_search_for_text = addslashes(stripslashes($default_search_for_text));
+    $default_near_text = addslashes(stripslashes($default_near_text));
+    $city = !empty($search_location) ? addslashes(stripslashes($search_location->city)) : '';
     ?>
-
-
     <script type="text/javascript">
-        var default_location = '<?php if($search_location = geodir_get_default_location())  echo $search_location->city ;?>';
+        var default_location = '<?php echo $city ;?>';
         var latlng;
         var address;
         var dist = 0;

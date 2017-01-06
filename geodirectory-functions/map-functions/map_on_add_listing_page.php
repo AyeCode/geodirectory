@@ -437,6 +437,9 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
         var country = jQuery('#<?php echo $prefix.'country';?>').val();
         var country_selected = jQuery('#<?php echo $prefix.'country';?>').find('option:selected');
         var ISO2 = country_selected.data('country_code');
+        if (!ISO2 && jQuery('#<?php echo $prefix.'country';?>').data('country_code')) {
+            ISO2 = jQuery('#<?php echo $prefix.'country';?>').data('country_code');
+        }
         if (ISO2 == '--') {
             ISO2 = '';
         }
