@@ -2224,7 +2224,7 @@ function geodir_widget_listings_get_order( $query_args ) {
 			$orderby = $wpdb->posts . ".post_date DESC, ";
 			break;
 		case 'featured':
-			$orderby = $table . ".is_featured ASC, ";
+			$orderby = $table . ".is_featured ASC, ". $wpdb->posts . ".post_date DESC, ";
 			break;
 		case 'az':
 			$orderby = $wpdb->posts . ".post_title ASC, ";
