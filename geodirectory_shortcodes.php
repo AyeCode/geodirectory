@@ -262,163 +262,243 @@ add_shortcode('gd_listing_map', 'geodir_sc_listing_map');
  * @return string Map HTML.
  */
 function geodir_sc_listing_map($atts) {
-    global $add_post_in_marker_array, $gd_sc_map_params;
-    $backup_globals = array();
-    $backup_globals['add_post_in_marker_array'] = $add_post_in_marker_array;
-    $backup_globals['gd_sc_map_params'] = $gd_sc_map_params;
-    
-    $defaults = array(
-        'width' => '294',
-        'height' => '370',
-        'zoom' => '13',
-        'autozoom' => '',
-        'sticky' => '',
-        'showall' => '0',
-        'scrollwheel' => '0',
-        'maptype' => 'ROADMAP',
-        'child_collapse' => 0,
-        'marker_cluster' => false,
-        'post_type' => 'gd_place',
-        'category' => '0',
-        'event_type' => 'all'
-    );
 
-    $params = shortcode_atts($defaults, $atts);
-    
-    if (!(gdsc_is_post_type_valid($params['post_type']))) {
-        $params['post_type'] = 'gd_place';
-    }
-    
-    // Validate the selected category/ies - Grab the current list based on post_type
-    $category_taxonomy      = geodir_get_taxonomies($params['post_type']);
-    $categories             = get_terms($category_taxonomy, array('orderby' => 'count', 'order' => 'DESC', 'fields' => 'ids'));
+    // if some params are set then we need a new query, if not then we can use the main query
+    if( isset($atts['post_type']) || isset($atts['category']) || isset($atts['event_type']) ) {
 
-    // Make sure we have an array
-    if (!(is_array($params['category']))) {
-        $params['category'] = explode(',', $params['category']);
-    }
+        global $add_post_in_marker_array, $gd_sc_map_params;
+        $backup_globals                             = array();
+        $backup_globals['add_post_in_marker_array'] = $add_post_in_marker_array;
+        $backup_globals['gd_sc_map_params']         = $gd_sc_map_params;
 
-    // Array_intersect returns only the items in $params['category'] that are also in our category list
-    // Otherwise it becomes empty and later on that will mean "All"
-    $params['category']     = array_intersect($params['category'], $categories);
-    
-    if ($params['post_type'] == 'gd_event') {
-        $params['event_type'] = gdsc_validate_list_filter_choice($params['event_type']);
-    }
-
-    $params = gdsc_validate_map_args($params);
-    
-    $gd_sc_map_params = $params;
-    
-    $query_args = array(
-        'posts_per_page' => 1000000,
-        'is_geodir_loop' => true,
-        'gd_location' => false,
-    );
-    
-    if (!empty($params['category']) && isset($params['category'][0]) && (int)$params['category'][0] != 0) {
-        $category_taxonomy = geodir_get_taxonomies($params['post_type']);
-
-        ######### WPML #########
-        if (function_exists('icl_object_id')) {
-            $category = gd_lang_object_ids($params['category'], $category_taxonomy[0]);
-        }
-        ######### WPML #########
-
-        $tax_query = array(
-            'taxonomy' => $category_taxonomy[0],
-            'field' => 'id',
-            'terms' => $params['category']
+        $defaults = array(
+            'width'          => '294',
+            'height'         => '370',
+            'zoom'           => '13',
+            'autozoom'       => '',
+            'sticky'         => '',
+            'showall'        => '0',
+            'scrollwheel'    => '0',
+            'maptype'        => 'ROADMAP',
+            'child_collapse' => 0,
+            'marker_cluster' => false,
+            'post_type'      => 'gd_place',
+            'category'       => '0',
+            'event_type'     => 'all'
         );
 
-        $query_args['tax_query'] = array($tax_query);
-    }
-    
-    $add_post_in_marker_array = true;
-    
-    if ($params['post_type'] == 'gd_event' && function_exists('geodir_event_get_widget_events')) {
-        global $geodir_event_widget_listview;
-        $geodir_event_widget_listview = true;
-        
-        $query_args['geodir_event_type'] = $params['event_type'];
-        
-        $listings = geodir_event_get_widget_events($query_args);
-        
-        $geodir_event_widget_listview = false;
-    } else {
-        $listings = geodir_get_widget_listings($query_args);
-    }
+        $params = shortcode_atts( $defaults, $atts );
 
-    if (!empty($listings)) {
-        foreach ($listings as $listing) {
-            create_marker_jason_of_posts($listing);
+        if ( ! ( gdsc_is_post_type_valid( $params['post_type'] ) ) ) {
+            $params['post_type'] = 'gd_place';
         }
-    }
-    
-    ob_start();
-    add_action('wp_head', 'init_listing_map_script'); // Initialize the map object and marker array
 
-    add_action('the_post', 'create_list_jsondata'); // Add marker in json array
+        // Validate the selected category/ies - Grab the current list based on post_type
+        $category_taxonomy = geodir_get_taxonomies( $params['post_type'] );
+        $categories        = get_terms( $category_taxonomy, array(
+            'orderby' => 'count',
+            'order'   => 'DESC',
+            'fields'  => 'ids'
+        ) );
 
-    add_action('wp_footer', 'show_listing_widget_map'); // Show map for listings with markers
-
-    $default_location = geodir_get_default_location();
-    
-    $map_args = array(
-        'map_canvas_name' => 'gd_listing_map',
-        'width' => $params['width'],
-        'height' => $params['height'],
-        'zoom' => $params['zoom'],
-        'autozoom' => $params['autozoom'],
-        'sticky' => $params['sticky'],
-        'showall' => $params['showall'],
-        'scrollwheel' => $params['scrollwheel'],
-        'maptype' => $params['maptype'],
-        'child_collapse' => 0,
-        'enable_cat_filters' => false,
-        'enable_text_search' => false,
-        'enable_post_type_filters' => false,
-        'enable_location_filters' => false,
-        'enable_jason_on_load' => true,
-        'ajax_url' => geodir_get_ajax_url(),
-        'latitude' => isset($default_location->city_latitude) ? $default_location->city_latitude : '',
-        'longitude' => isset($default_location->city_longitude) ? $default_location->city_longitude : '',
-        'streetViewControl' => true,
-        'showPreview' => '0',
-        'maxZoom' => 21,
-        'bubble_size' => 'small',
-    );
-    
-    if (is_single()) {
-        global $post;
-        if (isset($post->post_latitude)) {
-            $map_args['latitude'] = $post->post_latitude;
-            $map_args['longitude'] = $post->post_longitude;
+        // Make sure we have an array
+        if ( ! ( is_array( $params['category'] ) ) ) {
+            $params['category'] = explode( ',', $params['category'] );
         }
-        
-        $map_args['map_class_name'] = 'geodir-map-listing-page-single';
-    } else {
-        $map_args['map_class_name'] = 'geodir-map-listing-page';
+
+        // Array_intersect returns only the items in $params['category'] that are also in our category list
+        // Otherwise it becomes empty and later on that will mean "All"
+        $params['category'] = array_intersect( $params['category'], $categories );
+
+        if ( $params['post_type'] == 'gd_event' ) {
+            $params['event_type'] = gdsc_validate_list_filter_choice( $params['event_type'] );
+        }
+
+        $params = gdsc_validate_map_args( $params );
+
+        $gd_sc_map_params = $params;
+
+        $query_args = array(
+            'posts_per_page' => 1000000, //@todo kiran why was this added? 
+            'is_geodir_loop' => true,
+            'gd_location'    => false,
+        );
+
+        if ( ! empty( $params['category'] ) && isset( $params['category'][0] ) && (int) $params['category'][0] != 0 ) {
+            $category_taxonomy = geodir_get_taxonomies( $params['post_type'] );
+
+            ######### WPML #########
+            if ( function_exists( 'icl_object_id' ) ) {
+                $category = gd_lang_object_ids( $params['category'], $category_taxonomy[0] );
+            }
+            ######### WPML #########
+
+            $tax_query = array(
+                'taxonomy' => $category_taxonomy[0],
+                'field'    => 'id',
+                'terms'    => $params['category']
+            );
+
+            $query_args['tax_query'] = array( $tax_query );
+        }
+
+        $add_post_in_marker_array = true;
+
+        if ( $params['post_type'] == 'gd_event' && function_exists( 'geodir_event_get_widget_events' ) ) {
+            global $geodir_event_widget_listview;
+            $geodir_event_widget_listview = true;
+
+            $query_args['geodir_event_type'] = $params['event_type'];
+
+            $listings = geodir_event_get_widget_events( $query_args );
+
+            $geodir_event_widget_listview = false;
+        } else {
+            $listings = geodir_get_widget_listings( $query_args );
+        }
+
+        if ( ! empty( $listings ) ) {
+            foreach ( $listings as $listing ) {
+                create_marker_jason_of_posts( $listing );
+            }
+        }
+
+        ob_start();
+        add_action( 'wp_head', 'init_listing_map_script' ); // Initialize the map object and marker array
+
+        add_action( 'the_post', 'create_list_jsondata' ); // Add marker in json array
+
+        add_action( 'wp_footer', 'show_listing_widget_map' ); // Show map for listings with markers
+
+        $default_location = geodir_get_default_location();
+
+        $map_args = array(
+            'map_canvas_name'          => 'gd_listing_map',
+            'width'                    => $params['width'],
+            'height'                   => $params['height'],
+            'zoom'                     => $params['zoom'],
+            'autozoom'                 => $params['autozoom'],
+            'sticky'                   => $params['sticky'],
+            'showall'                  => $params['showall'],
+            'scrollwheel'              => $params['scrollwheel'],
+            'maptype'                  => $params['maptype'],
+            'child_collapse'           => 0,
+            'enable_cat_filters'       => false,
+            'enable_text_search'       => false,
+            'enable_post_type_filters' => false,
+            'enable_location_filters'  => false,
+            'enable_jason_on_load'     => true,
+            'ajax_url'                 => geodir_get_ajax_url(),
+            'latitude'                 => isset( $default_location->city_latitude ) ? $default_location->city_latitude : '',
+            'longitude'                => isset( $default_location->city_longitude ) ? $default_location->city_longitude : '',
+            'streetViewControl'        => true,
+            'showPreview'              => '0',
+            'maxZoom'                  => 21,
+            'bubble_size'              => 'small',
+        );
+
+        if ( is_single() ) {
+            global $post;
+            if ( isset( $post->post_latitude ) ) {
+                $map_args['latitude']  = $post->post_latitude;
+                $map_args['longitude'] = $post->post_longitude;
+            }
+
+            $map_args['map_class_name'] = 'geodir-map-listing-page-single';
+        } else {
+            $map_args['map_class_name'] = 'geodir-map-listing-page';
+        }
+
+        // Add marker cluster
+        if ( isset( $params['marker_cluster'] ) && gdsc_to_bool_val( $params['marker_cluster'] ) && defined( 'GDCLUSTER_VERSION' ) ) {
+            $map_args['enable_marker_cluster'] = true;
+        } else {
+            $map_args['enable_marker_cluster'] = false;
+        }
+
+        geodir_draw_map( $map_args );
+
+        $output = ob_get_contents();
+
+        ob_end_clean();
+
+        foreach ( $backup_globals as $global => $value ) {
+            ${$global} = $value;
+        }
+
+        return $output;
+    }else{
+        ob_start();
+        add_action('wp_head', 'init_listing_map_script'); // Initialize the map object and marker array
+        add_action('the_post', 'create_list_jsondata'); // Add marker in json array
+        add_action('wp_footer', 'show_listing_widget_map'); // Show map for listings with markers
+        $defaults = array(
+            'width' => '294',
+            'height' => '370',
+            'zoom' => '13',
+            'autozoom' => '',
+            'sticky' => '',
+            'showall' => '0',
+            'scrollwheel' => '0',
+            'maptype' => 'ROADMAP',
+            'child_collapse' => 0,
+            'marker_cluster' => false
+        );
+        $params = shortcode_atts($defaults, $atts);
+        $params = gdsc_validate_map_args($params);
+        $map_args = array(
+            'map_canvas_name' => 'gd_listing_map',
+            'width' => $params['width'],
+            'height' => $params['height'],
+            'zoom' => $params['zoom'],
+            'autozoom' => $params['autozoom'],
+            'sticky' => $params['sticky'],
+            'showall' => $params['showall'],
+            'scrollwheel' => $params['scrollwheel'],
+            'child_collapse' => 0,
+            'enable_cat_filters' => false,
+            'enable_text_search' => false,
+            'enable_post_type_filters' => false,
+            'enable_location_filters' => false,
+            'enable_jason_on_load' => true,
+        );
+        if (is_single()) {
+            global $post;
+            $map_default_lat = $address_latitude = $post->post_latitude;
+            $map_default_lng = $address_longitude = $post->post_longitude;
+            $mapview = $post->post_mapview;
+            $map_args['zoom'] = $post->post_mapzoom;
+            $map_args['map_class_name'] = 'geodir-map-listing-page-single';
+        } else {
+            $default_location = geodir_get_default_location();
+            $map_default_lat = isset($default_location->city_latitude) ? $default_location->city_latitude : '';
+            $map_default_lng = isset($default_location->city_longitude) ? $default_location->city_longitude : '';
+            $map_args['map_class_name'] = 'geodir-map-listing-page';
+        }
+        if (empty($mapview)) {
+            $mapview = 'ROADMAP';
+        }
+        // Set default map options
+        $map_args['ajax_url'] = geodir_get_ajax_url();
+        $map_args['latitude'] = $map_default_lat;
+        $map_args['longitude'] = $map_default_lng;
+        $map_args['streetViewControl'] = true;
+        $map_args['maptype'] = $mapview;
+        $map_args['showPreview'] = '0';
+        $map_args['maxZoom'] = 21;
+        $map_args['bubble_size'] = 'small';
+
+        // Add marker cluster
+        if (isset($params['marker_cluster']) && gdsc_to_bool_val($params['marker_cluster']) && defined('GDCLUSTER_VERSION')) {
+            $map_args['enable_marker_cluster'] = true;
+        } else {
+            $map_args['enable_marker_cluster'] = false;
+        }
+        geodir_draw_map($map_args);
+        $output = ob_get_contents();
+        ob_end_clean();
+        return $output;
     }
-
-    // Add marker cluster
-    if (isset($params['marker_cluster']) && gdsc_to_bool_val($params['marker_cluster']) && defined('GDCLUSTER_VERSION')) {
-        $map_args['enable_marker_cluster'] = true;
-    } else {
-        $map_args['enable_marker_cluster'] = false;
-    }
-
-    geodir_draw_map($map_args);
-
-    $output = ob_get_contents();
-
-    ob_end_clean();
-    
-    foreach ($backup_globals as $global => $value) {
-        ${$global} = $value;
-    }
-
-    return $output;
 }
 
 add_shortcode('gd_listing_slider', 'geodir_sc_listing_slider');
