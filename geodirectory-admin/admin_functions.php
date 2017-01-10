@@ -6401,8 +6401,13 @@ function geodir_imex_export_skip_statuses() {
  *
  * @package GeoDirectory
  * @since 1.6.3
+ * @since 1.6.16 Fix Fusion Builder jQuery chosen conflicts with GD jQuery chosen.
+ *
+ * @global string $typenow Current post type.
  */
 function geodir_admin_dequeue_scripts() {
+    global $typenow;
+    
     // EDD
     if (wp_script_is('jquery-chosen', 'enqueued')) {
         wp_dequeue_script('jquery-chosen');
@@ -6411,6 +6416,13 @@ function geodir_admin_dequeue_scripts() {
     // Ultimate Addons for Visual Composer
     if (wp_script_is('ultimate-vc-backend-script', 'enqueued')) {
         wp_dequeue_script('ultimate-vc-backend-script');
+    }
+    
+    // Fix conflict Fusion Builder jquery chosen with GD jquery chosen.
+    if (class_exists('FusionBuilder')) {
+        if (wp_script_is('fusion_builder_chosen_js', 'enqueued') && $typenow && in_array($typenow, geodir_get_posttypes())) {
+            wp_dequeue_script('fusion_builder_chosen_js');
+        }
     }
 }
 

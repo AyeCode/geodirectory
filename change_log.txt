@@ -24,6 +24,7 @@ The country code is undefined when default country is set and translated - FIXED
 Single quote in default city name causes problem in add new city - FIXED
 Popular post view widget Featured sort now secondarily ordered by date added -  CHANGED
 Geocode address add listing page on FireFox can cause ZERO_RESULTS in some circumstances - FIXED
+Fusion Builder jQuery chosen conflicts with GD jQuery chosen - FIXED
 
 v1.6.15
 Google Services API can conflict with newer version of the Google Service Class - UPDATED
