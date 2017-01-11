@@ -2862,7 +2862,7 @@ function geodir_popular_post_category_output( $args = '', $instance = '' ) {
 
 					echo '<ul class="geodir-popular-cat-list">';
 
-					geodir_helper_cat_list_output( $terms, $category_limit );
+					geodir_helper_cat_list_output( $terms, $category_limit, $category_restrict);
 
 					echo '</ul>';
 					?>
@@ -2895,8 +2895,9 @@ function geodir_popular_post_category_output( $args = '', $instance = '' ) {
  *
  * @param array $terms                      An array of term objects.
  * @param int $category_limit               Number of categories to display by default.
+ * @param bool $category_restrict           If the cat limit shoudl be hidden or not shown.
  */
-function geodir_helper_cat_list_output( $terms, $category_limit ) {
+function geodir_helper_cat_list_output( $terms, $category_limit , $category_restrict=false) {
 	global $geodir_post_category_str, $cat_count;
 	$term_icons = geodir_get_term_icon();
 
@@ -2912,6 +2913,9 @@ function geodir_helper_cat_list_output( $terms, $category_limit ) {
 		$geodir_post_category_str[] = array( 'posttype' => $post_type, 'termid' => $cat->term_id );
 
 		$class_row  = $cat_count > $category_limit ? 'geodir-pcat-hide geodir-hide' : 'geodir-pcat-show';
+		if($category_restrict && $cat_count > $category_limit ){
+			continue;
+		}
 		$total_post = $cat->count;
 
 		$term_link = get_term_link( $cat, $cat->taxonomy );

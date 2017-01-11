@@ -258,7 +258,14 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
 
             //$country_arr = ["US", "CA", "IN","DE","NL"];
             // fix for regions in GB
-            $country_arr = ["GB"];
+
+            $country_arr = <?php
+            /**
+             * Filter the regions array that uses administrative_area_level_2 instead of administrative_area_level_1.
+             *
+             * @since 1.6.16
+             */
+            echo apply_filters("geodir_geocode_region_level",'["GB","ES"]');?>;
             if (jQuery.inArray(rr, $country_arr) !== -1) {
                 if (administrative_area_level_2.long_name) {
                     getState = administrative_area_level_2.long_name;
