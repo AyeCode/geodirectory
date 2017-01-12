@@ -718,6 +718,7 @@ function geodir_sc_popular_post_category($atts)
     global $geodir_post_category_str;
     $defaults = array(
         'category_limit' => 15,
+        'category_restrict' => false,
         'before_widget' => '',
         'after_widget' => '',
         'before_title' => '',
