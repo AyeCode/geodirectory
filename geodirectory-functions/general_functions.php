@@ -2798,6 +2798,9 @@ function geodir_popular_post_category_output( $args = '', $instance = '' ) {
 	$gd_post_type = geodir_get_current_posttype();
 
 	$category_limit = isset( $instance['category_limit'] ) && $instance['category_limit'] > 0 ? (int) $instance['category_limit'] : 15;
+	if (!isset($category_restrict)) {
+		$category_restrict = false;
+	}
 	if ( ! empty( $gd_post_type ) ) {
 		$default_post_type = $gd_post_type;
 	} elseif ( isset( $instance['default_post_type'] ) && gdsc_is_post_type_valid( $instance['default_post_type'] ) ) {
