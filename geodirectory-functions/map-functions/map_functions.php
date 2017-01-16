@@ -92,7 +92,13 @@ function create_marker_jason_of_posts($post)
          * @param string $post_json JSON representation of the post marker info.
          * @param object $post The post object.
          */
-        $map_jason[$post->ID] = apply_filters('geodir_create_marker_jason_of_posts',$post_json, $post);
+        $post_map_json = apply_filters('geodir_create_marker_jason_of_posts',$post_json, $post);
+
+        // only assign it if it has a value
+        if($post_map_json){
+            $map_jason[$post->ID] = $post_map_json;
+        }
+
     }
 }
 
