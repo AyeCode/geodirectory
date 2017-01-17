@@ -2929,12 +2929,12 @@ function geodir_wpml_filter_locale($locale) {
  * @package GeoDirectory
  */
 function geodir_wpml_set_filter() {
-    if (!function_exists('icl_object_id') || defined('DOING_AJAX')) {
-        return;
-    }
-    if (is_admin()) {
-        //add_filter('locale', 'geodir_wpml_filter_locale', 100, 1);
-    } else {
+    if (function_exists('icl_object_id')) {
+        global $sitepress;
+        
+        if ($sitepress->get_setting('sync_comments_on_duplicates')) {
+            add_action('comment_post', 'gepdir_wpml_sync_comment', 100, 1);
+        }
     }
 }
 add_filter('plugins_loaded', 'geodir_wpml_set_filter');

@@ -183,6 +183,9 @@ function geodir_save_rating($comment = 0)
     $rating_ip = getenv("REMOTE_ADDR");
 	
     $post = geodir_get_post_info($post_id);
+    if (empty($post)) {
+        return;
+    }
 
     if ($post->post_status == 'publish') {
         $post_status = '1';
