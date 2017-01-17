@@ -2331,8 +2331,6 @@ if(isset($_REQUEST['code']) && $_REQUEST['code']) {
     exit;
 }
 
-add_filter( 'icl_make_duplicate', 'geodir_icl_make_duplicate', 11, 4 );
-
 if (isset($_REQUEST['tab']) && $_REQUEST['tab'] == 'permalink_settings') {
 	add_action('geodir_before_admin_panel', 'geodir_wpml_permalink_setting_notice');
 }

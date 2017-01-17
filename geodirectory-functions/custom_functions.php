@@ -2483,3 +2483,363 @@ function geodir_search_form(){
 
 add_action( 'wp_ajax_geodir_search_form', 'geodir_search_form' );
 add_action( 'wp_ajax_nopriv_geodir_search_form', 'geodir_search_form' );
+
+/**
+ * Check wpml active or not.
+ *
+ * @since 1.5.0
+ *
+ * @return True if WPML is active else False.
+ */
+function geodir_is_wpml() {
+    if (function_exists('icl_object_id')) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Get WPML language code for current term.
+ *
+ * @since 1.5.0
+ *
+ * @global object $sitepress Sitepress WPML object.
+ *
+ * @param int $element_id Post ID or Term id.
+ * @param string $element_type Element type. Ex: post_gd_place or tax_gd_placecategory.
+ * @return Language code.
+ */
+function geodir_get_language_for_element($element_id, $element_type) {
+    global $sitepress;
+
+    return $sitepress->get_language_for_element($element_id, $element_type);
+}
+
+/**
+ * Duplicate post details for WPML translation post.
+ *
+ * @since 1.5.0
+ * @since 1.6.16 Sync reviews if sync comments allowed.
+ *
+ * @param int $master_post_id Original Post ID.
+ * @param string $lang Language code for translating post.
+ * @param array $postarr Array of post data.
+ * @param int $tr_post_id Translation Post ID.
+ */
+function geodir_icl_make_duplicate($master_post_id, $lang, $postarr, $tr_post_id) {
+    global $sitepress;
+
+    $post_type = get_post_type($master_post_id);
+
+    if (in_array($post_type, geodir_get_posttypes())) {
+        // Duplicate post details
+        geodir_icl_duplicate_post_details($master_post_id, $tr_post_id, $lang);
+        
+        // Duplicate taxonomies
+        geodir_icl_duplicate_taxonomies($master_post_id, $tr_post_id, $lang);
+        
+        // Duplicate post images
+        geodir_icl_duplicate_post_images($master_post_id, $tr_post_id, $lang);
+        
+        // Sync post reviews
+        if ($sitepress->get_setting('sync_comments_on_duplicates')) {
+            geodir_wpml_duplicate_post_reviews($master_post_id, $tr_post_id, $lang);
+        }
+    }
+}
+add_filter( 'icl_make_duplicate', 'geodir_icl_make_duplicate', 11, 4 );
+
+/**
+ * Duplicate post reviews for WPML translation post.
+ *
+ * @since 1.6.16
+ *
+ * @global object $wpdb WordPress Database object.
+ *
+ * @param int $master_post_id Original Post ID.
+ * @param int $tr_post_id Translation Post ID.
+ * @param string $lang Language code for translating post.
+ * @return bool True for success, False for fail.
+ */
+function geodir_wpml_duplicate_post_reviews($master_post_id, $tr_post_id, $lang) {
+    global $wpdb;
+
+    $reviews = $wpdb->get_results($wpdb->prepare("SELECT comment_id FROM " . GEODIR_REVIEW_TABLE . " WHERE post_id=%d ORDER BY id ASC", $master_post_id), ARRAY_A);
+
+    if (!empty($reviews)) {
+        foreach ($reviews as $review) {
+            geodir_wpml_duplicate_post_review($review['comment_id'], $master_post_id, $tr_post_id, $lang);
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Duplicate post general details for WPML translation post.
+ *
+ * @since 1.5.0
+ *
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ *
+ * @param int $master_post_id Original Post ID.
+ * @param int $tr_post_id Translation Post ID.
+ * @param string $lang Language code for translating post.
+ * @return bool True for success, False for fail.
+ */
+function geodir_icl_duplicate_post_details($master_post_id, $tr_post_id, $lang) {
+    global $wpdb, $plugin_prefix;
+
+    $post_type = get_post_type($master_post_id);
+    $post_table = $plugin_prefix . $post_type . '_detail';
+
+    $query = $wpdb->prepare("SELECT * FROM " . $post_table . " WHERE post_id = %d", array($master_post_id));
+    $data = (array)$wpdb->get_row($query);
+
+    if ( !empty( $data ) ) {
+        $data['post_id'] = $tr_post_id;
+        unset($data['default_category'], $data['marker_json'], $data['featured_image'], $data[$post_type . 'category'], $data['overall_rating'], $data['rating_count'], $data['ratings']);
+        
+        $wpdb->update($post_table, $data, array('post_id' => $tr_post_id));		
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Duplicate post taxonomies for WPML translation post.
+ *
+ * @since 1.5.0
+ *
+ * @global object $sitepress Sitepress WPML object.
+ * @global object $wpdb WordPress Database object.
+ *
+ * @param int $master_post_id Original Post ID.
+ * @param int $tr_post_id Translation Post ID.
+ * @param string $lang Language code for translating post.
+ * @return bool True for success, False for fail.
+ */
+function geodir_icl_duplicate_taxonomies($master_post_id, $tr_post_id, $lang) {
+    global $sitepress, $wpdb;
+    $post_type = get_post_type($master_post_id);
+
+    remove_filter('get_term', array($sitepress,'get_term_adjust_id')); // AVOID filtering to current language
+
+    $taxonomies = get_object_taxonomies($post_type);
+    foreach ($taxonomies as $taxonomy) {
+        $terms = get_the_terms($master_post_id, $taxonomy);
+        $terms_array = array();
+        
+        if ($terms) {
+            foreach ($terms as $term) {
+                $tr_id = apply_filters( 'translate_object_id',$term->term_id, $taxonomy, false, $lang);
+                
+                if (!is_null($tr_id)){
+                    // not using get_term - unfiltered get_term
+                    $translated_term = $wpdb->get_row($wpdb->prepare("
+                        SELECT * FROM {$wpdb->terms} t JOIN {$wpdb->term_taxonomy} x ON x.term_id = t.term_id WHERE t.term_id = %d AND x.taxonomy = %s", $tr_id, $taxonomy));
+
+                    $terms_array[] = $translated_term->term_id;
+                }
+            }
+
+            if (!is_taxonomy_hierarchical($taxonomy)){
+                $terms_array = array_unique( array_map( 'intval', $terms_array ) );
+            }
+
+            wp_set_post_terms($tr_post_id, $terms_array, $taxonomy);
+            
+            if ($taxonomy == $post_type . 'category') {
+                geodir_set_postcat_structure($tr_post_id, $post_type . 'category');
+            }
+        }
+    }
+}
+
+/**
+ * Duplicate post images for WPML translation post.
+ *
+ * @since 1.5.0
+ *
+ * @global object $wpdb WordPress Database object.
+ *
+ * @param int $master_post_id Original Post ID.
+ * @param int $tr_post_id Translation Post ID.
+ * @param string $lang Language code for translating post.
+ * @return bool True for success, False for fail.
+ */
+function geodir_icl_duplicate_post_images($master_post_id, $tr_post_id, $lang) {
+    global $wpdb;
+
+    $query = $wpdb->prepare("DELETE FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE mime_type like %s AND post_id = %d", array('%image%', $tr_post_id));
+    $wpdb->query($query);
+
+    $query = $wpdb->prepare("SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE mime_type like %s AND post_id = %d ORDER BY menu_order ASC", array('%image%', $master_post_id));
+    $post_images = $wpdb->get_results($query);
+
+    if ( !empty( $post_images ) ) {
+        foreach ( $post_images as $post_image) {
+            $image_data = (array)$post_image;
+            unset($image_data['ID']);
+            $image_data['post_id'] = $tr_post_id;
+            
+            $wpdb->insert(GEODIR_ATTACHMENT_TABLE, $image_data);
+            
+            geodir_set_wp_featured_image($tr_post_id);
+        }
+        
+        return true;
+    }
+
+    return false;
+}
+
+
+/**
+ * Duplicate post review for WPML translation post.
+ *
+ * @since 1.6.16
+ *
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ *
+ * @param int $master_comment_id Original Comment ID.
+ * @param int $master_post_id Original Post ID.
+ * @param int $tr_post_id Translation Post ID.
+ * @param string $lang Language code for translating post.
+ * @return bool True for success, False for fail.
+ */
+function geodir_wpml_duplicate_post_review($master_comment_id, $master_post_id, $tr_post_id, $lang) {
+    global $wpdb, $plugin_prefix;
+
+    $review = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . GEODIR_REVIEW_TABLE . " WHERE comment_id=%d ORDER BY id ASC", $master_comment_id), ARRAY_A);
+
+    if (empty($review)) {
+        return false;
+    }
+    if ($review['post_id'] != $master_post_id) {
+        $wpdb->query($wpdb->prepare("UPDATE " . GEODIR_REVIEW_TABLE . " SET post_id=%d WHERE comment_id=%d", $master_post_id, $master_comment_id));
+        geodir_update_postrating($master_post_id, $post_type);
+    }
+
+    $tr_comment_id = geodir_wpml_duplicate_comment_exists($tr_post_id, $master_comment_id);
+
+    if (empty($tr_comment_id)) {
+        return false;
+    }
+
+    $post_type = get_post_type($master_post_id);
+    $post_table = $plugin_prefix . $post_type . '_detail';
+
+    $translated_post = $wpdb->get_row($wpdb->prepare("SELECT post_title, post_latitude, post_longitude, post_city, post_region, post_country FROM " . $post_table . " WHERE post_id = %d", $tr_post_id), ARRAY_A);
+    if (empty($translated_post)) {
+        return false;
+    }
+
+    $review['comment_id'] = $tr_comment_id;
+    $review['post_id'] = $tr_post_id;
+    $review['post_title'] = $translated_post['post_title'];
+    $review['post_city'] = $translated_post['post_city'];
+    $review['post_region'] = $translated_post['post_region'];
+    $review['post_country'] = $translated_post['post_country'];
+    $review['post_latitude'] = $translated_post['post_latitude'];
+    $review['post_longitude'] = $translated_post['post_longitude'];
+
+    if (isset($review['id'])) {
+        unset($review['id']);
+    }
+
+    $tr_review_id = $wpdb->get_var($wpdb->prepare("SELECT id FROM " . GEODIR_REVIEW_TABLE . " WHERE comment_id=%d AND post_id=%d ORDER BY id ASC", $tr_comment_id, $tr_post_id));
+
+    if ($tr_review_id) { // update review
+        $wpdb->update(GEODIR_REVIEW_TABLE, $review, array('id' => $$tr_review_id));
+    } else { // insert review
+        $wpdb->insert(GEODIR_REVIEW_TABLE, $review);
+        $tr_review_id = $wpdb->insert_id;
+    }
+
+    if ($tr_post_id) {
+        geodir_update_postrating($tr_post_id, $post_type);
+    }
+
+    return $tr_review_id;
+}
+
+/**
+ * Synchronize review for WPML translation post.
+ *
+ * @since 1.6.16
+ *
+ * @global object $wpdb WordPress Database object.
+ * @global object $sitepress Sitepress WPML object.
+ * @global array $gd_wpml_posttypes Geodirectory post types array.
+ *
+ * @param int $comment_id The Comment ID.
+ */
+function gepdir_wpml_sync_comment($comment_id) {
+    global $wpdb, $sitepress, $gd_wpml_posttypes;
+
+    if (empty($gd_post_types)) {
+        $gd_wpml_posttypes = geodir_get_posttypes();
+    }
+
+    $comment = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->comments} WHERE comment_ID=%d", $comment_id), ARRAY_A);
+    if (empty($comment)) {
+        return;
+    }
+
+    $post_id = $comment['comment_post_ID'];
+    $post_type = $post_id ? get_post_type($post_id) : NULL;
+
+    if (!($post_type && in_array($post_type, $gd_wpml_posttypes))) {
+        return;
+    }
+
+    $post_duplicates = $sitepress->get_duplicates($post_id);
+    if (empty($post_duplicates)) {
+        return;
+    }
+
+    foreach ($post_duplicates as $lang => $dup_post_id) {
+        if (empty($comment['comment_parent'])) {
+            geodir_wpml_duplicate_post_review($comment_id, $post_id, $dup_post_id, $lang);
+        }
+    }
+    
+    return true;
+}
+
+/**
+ * Get the WPML duplicate comment ID of the comment.
+ *
+ * @since 1.6.16
+ *
+ * @global object $dup_post_id WordPress Database object.
+ *
+ * @param int $dup_post_id The duplicate post ID.
+ * @param int $original_cid The original Comment ID.
+ * @return int The duplicate comment ID.
+ */
+function geodir_wpml_duplicate_comment_exists($dup_post_id, $original_cid) {
+    global $wpdb;
+
+    $duplicate = $wpdb->get_var(
+        $wpdb->prepare(
+            "   SELECT comm.comment_ID
+                FROM {$wpdb->comments} comm
+                JOIN {$wpdb->commentmeta} cm
+                    ON comm.comment_ID = cm.comment_id
+                WHERE comm.comment_post_ID = %d
+                    AND cm.meta_key = '_icl_duplicate_of'
+                    AND cm.meta_value = %d
+                LIMIT 1",
+            $dup_post_id,
+            $original_cid
+        )
+    );
+
+    return $duplicate;
+}
