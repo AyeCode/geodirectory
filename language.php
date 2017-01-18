@@ -77,7 +77,7 @@ define('HTML_VIDEO_TEXT', __('Add video code here, YouTube etc', 'geodirectory')
 
 define('PRO_ADDFEATURE_TEXT', __('Add custom feature', 'geodirectory'));
 
-define('MAP_NO_RESULTS', __('<h3>No Records Found</h3><p>Sorry, no record were found. Please adjust your search criteria and try again.</p>', 'geodirectory'));
+define('MAP_NO_RESULTS', __('<h3>No Records Found</h3><p>Sorry, no records were found. Please adjust your search criteria and try again.</p>', 'geodirectory'));
 
 define('LISTINGMAP_PAGE_VALIDATION_TEXT', __('<h3>No Record Found</h3><p>Sorry, This widget can only be used on listing page.</p>', 'geodirectory'));
 define('SINGLEMAP_PAGE_VALIDATION_TEXT', __('<h3>No Record Found</h3><p>Sorry, This widget can only be used on place page.</p>', 'geodirectory'));
