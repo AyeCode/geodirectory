@@ -24,11 +24,8 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
     /* Listing Permalink Settings start */
     array('name' => __('Title / Meta', 'geodirectory'), 'type' => 'no_tabs', 'desc' => 'Settings to set page title and meta', 'id' => 'geodir_title_meta_settings '),
 
-
-
-
     array('name' => $gd_wpseo_use.__('Available Variables', 'geodirectory'),
-        'desc' => __('%%title%%, %%sitename%%, %%sitedesc%%, %%excerpt%%, %%pt_single%%, %%pt_plural%%, %%category%%, %%id%%, %%sep%%, %%location%%, %%in_location%%, %%in_location_single%%, %%location_single%%, %%search_term%%, %%search_near%%, %%name%%, %%page%%, %%pagenumber%%, %%pagetotal%%', 'geodirectory'),
+        'desc' => '%%title%%, %%sitename%%, %%sitedesc%%, %%excerpt%%, %%pt_single%%, %%pt_plural%%, %%category%%, %%id%%, %%sep%%, %%location%%, %%in_location%%, %%in_location_single%%, %%location_single%%, %%location_country%%, %%in_location_country%%, %%location_region%%, %%in_location_region%%, %%location_city%%, %%in_location_city%%, %%location_sep%%, %%search_term%%, %%search_near%%, %%name%%, %%page%%, %%pagenumber%%, %%pagetotal%%',
         'type' => 'sectionstart',
         'id' => 'geodir_meta_vars'),
 
