@@ -30,6 +30,7 @@ Spain now uses administrative_area_level_2 for regions (this will affect current
 Category are not unticked on page refresh for map post type other than default - FIXED
 Synchronize the post reviews if "Synchronize comment on duplicate content" is set - CHANGED
 New title variables added to display country/region/city/neighbourhood - CHANGED
+Some functions added for truncate, strlen, substr the text - ADDED
 
 v1.6.15
 Google Services API can conflict with newer version of the Google Service Class - UPDATED
