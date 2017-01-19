@@ -4491,95 +4491,23 @@ function geodir_wpseo_replacements( $vars ) {
 		if ( get_query_var( 'gd_city_full' ) ) {
 			$location_array['gd_city'] = get_query_var( 'gd_city_full' );
 		}
-	}
-	$location_single = '';
-	$gd_country      = ( isset( $wp->query_vars['gd_country'] ) && $wp->query_vars['gd_country'] != '' ) ? $wp->query_vars['gd_country'] : '';
-	$gd_region       = ( isset( $wp->query_vars['gd_region'] ) && $wp->query_vars['gd_region'] != '' ) ? $wp->query_vars['gd_region'] : '';
-	$gd_city         = ( isset( $wp->query_vars['gd_city'] ) && $wp->query_vars['gd_city'] != '' ) ? $wp->query_vars['gd_city'] : '';
-
-	$gd_country_actual = $gd_region_actual = $gd_city_actual = '';
-
-	if ( function_exists( 'get_actual_location_name' ) ) {
-		$gd_country_actual = $gd_country != '' ? get_actual_location_name( 'country', $gd_country, true ) : $gd_country;
-		$gd_region_actual  = $gd_region != '' ? get_actual_location_name( 'region', $gd_region ) : $gd_region;
-		$gd_city_actual    = $gd_city != '' ? get_actual_location_name( 'city', $gd_city ) : $gd_city;
-	}
-
-	if ( $gd_city != '' ) {
-		if ( $gd_city_actual != '' ) {
-			$gd_city = $gd_city_actual;
-		} else {
-			$gd_city = preg_replace( '/-(\d+)$/', '', $gd_city );
-			$gd_city = preg_replace( '/[_-]/', ' ', $gd_city );
-			$gd_city = __( geodir_ucwords( $gd_city ), 'geodirectory' );
-		}
-		$location_single = $gd_city;
-
-	} else if ( $gd_region != '' ) {
-		if ( $gd_region_actual != '' ) {
-			$gd_region = $gd_region_actual;
-		} else {
-			$gd_region = preg_replace( '/-(\d+)$/', '', $gd_region );
-			$gd_region = preg_replace( '/[_-]/', ' ', $gd_region );
-			$gd_region = __( geodir_ucwords( $gd_region ), 'geodirectory' );
-		}
-
-		$location_single = $gd_region;
-	} else if ( $gd_country != '' ) {
-		if ( $gd_country_actual != '' ) {
-			$gd_country = $gd_country_actual;
-		} else {
-			$gd_country = preg_replace( '/-(\d+)$/', '', $gd_country );
-			$gd_country = preg_replace( '/[_-]/', ' ', $gd_country );
-			$gd_country = __( geodir_ucwords( $gd_country ), 'geodirectory' );
-		}
-
-		$location_single = $gd_country;
-	}
-
-	if ( ! empty( $location_array ) ) {
-
-		$actual_location_name = function_exists( 'get_actual_location_name' ) ? true : false;
-		$location_array       = array_reverse( $location_array );
-
-		foreach ( $location_array as $location_type => $location ) {
-			$gd_location_link_text = preg_replace( '/-(\d+)$/', '', $location );
-			$gd_location_link_text = preg_replace( '/[_-]/', ' ', $gd_location_link_text );
-
-			$location_name = geodir_ucwords( $gd_location_link_text );
-			$location_name = __( $location_name, 'geodirectory' );
-
-			if ( $actual_location_name ) {
-				$location_type = strpos( $location_type, 'gd_' ) === 0 ? substr( $location_type, 3 ) : $location_type;
-				$location_name = get_actual_location_name( $location_type, $location, true );
-			}
-
-			$location_titles[] = $location_name;
-		}
-		if ( ! empty( $location_titles ) ) {
-			$location_titles = array_unique( $location_titles );
+		if ( get_query_var( 'gd_neighbourhood_full' ) ) {
+			$location_array['gd_neighbourhood'] = get_query_var( 'gd_neighbourhood_full' );
 		}
 	}
-
-
-	if ( ! empty( $location_titles ) ) {
-		$vars['%%location%%'] = implode( ", ", $location_titles );
-	}
-
-
-	if ( ! empty( $location_titles ) ) {
-		$vars['%%in_location%%'] = __( 'in ', 'geodirectory' ) . implode( ", ", $location_titles );
-	}
-
-
-	if ( $location_single ) {
-		$vars['%%in_location_single%%'] = __( 'in', 'geodirectory' ) . ' ' . $location_single;
-	}
-
-
-	if ( $location_single ) {
-		$vars['%%location_single%%'] = $location_single;
-	}
+	
+	/**
+	 * Filter the location terms variables.
+	 *
+	 * @since   1.6.16
+	 * @package GeoDirectory
+	 *
+	 * @param string $title         The title with variables.
+	 * @param array $location_array The array of location variables.
+	 * @param string $gd_page       The page being filtered.
+	 * @param string $sep           The separator, default: `|`.
+	 */
+	$title = apply_filters( 'geodir_replace_location_variables_seo', $title, $location_array, '', '' );
 
 	/**
 	 * Filter the title variables after standard ones have been filtered for wpseo.
@@ -4748,6 +4676,7 @@ function geodir_filter_title_variables( $title, $gd_page, $sep = '' ) {
 	// location variables
 	$gd_post_type   = geodir_get_current_posttype();
 	$location_array = geodir_get_current_location_terms( 'query_vars', $gd_post_type );
+	
 	/**
 	 * Filter the title variables location variables array
 	 *
@@ -4760,7 +4689,7 @@ function geodir_filter_title_variables( $title, $gd_page, $sep = '' ) {
 	 * @param string $sep           The separator, default: `|`.
 	 */
 	$location_array  = apply_filters( 'geodir_filter_title_variables_location_arr', $location_array, $title, $gd_page, $sep );
-	$location_titles = array();
+	
 	if ( $gd_page == 'location' && get_query_var( 'gd_country_full' ) ) {
 		if ( get_query_var( 'gd_country_full' ) ) {
 			$location_array['gd_country'] = get_query_var( 'gd_country_full' );
@@ -4771,105 +4700,24 @@ function geodir_filter_title_variables( $title, $gd_page, $sep = '' ) {
 		if ( get_query_var( 'gd_city_full' ) ) {
 			$location_array['gd_city'] = get_query_var( 'gd_city_full' );
 		}
-	}
-	$location_single = '';
-	$gd_country      = ( isset( $wp->query_vars['gd_country'] ) && $wp->query_vars['gd_country'] != '' ) ? $wp->query_vars['gd_country'] : '';
-	$gd_region       = ( isset( $wp->query_vars['gd_region'] ) && $wp->query_vars['gd_region'] != '' ) ? $wp->query_vars['gd_region'] : '';
-	$gd_city         = ( isset( $wp->query_vars['gd_city'] ) && $wp->query_vars['gd_city'] != '' ) ? $wp->query_vars['gd_city'] : '';
-
-	$gd_country_actual = $gd_region_actual = $gd_city_actual = '';
-
-	if ( function_exists( 'get_actual_location_name' ) ) {
-		$gd_country_actual = $gd_country != '' ? get_actual_location_name( 'country', $gd_country, true ) : $gd_country;
-		$gd_region_actual  = $gd_region != '' ? get_actual_location_name( 'region', $gd_region ) : $gd_region;
-		$gd_city_actual    = $gd_city != '' ? get_actual_location_name( 'city', $gd_city ) : $gd_city;
-	}
-
-	if ( $gd_city != '' ) {
-		if ( $gd_city_actual != '' ) {
-			$gd_city = $gd_city_actual;
-		} else {
-			$gd_city = preg_replace( '/-(\d+)$/', '', $gd_city );
-			$gd_city = preg_replace( '/[_-]/', ' ', $gd_city );
-			$gd_city = __( geodir_ucwords( $gd_city ), 'geodirectory' );
-		}
-		$location_single = $gd_city;
-
-	} else if ( $gd_region != '' ) {
-		if ( $gd_region_actual != '' ) {
-			$gd_region = $gd_region_actual;
-		} else {
-			$gd_region = preg_replace( '/-(\d+)$/', '', $gd_region );
-			$gd_region = preg_replace( '/[_-]/', ' ', $gd_region );
-			$gd_region = __( geodir_ucwords( $gd_region ), 'geodirectory' );
-		}
-
-		$location_single = $gd_region;
-	} else if ( $gd_country != '' ) {
-		if ( $gd_country_actual != '' ) {
-			$gd_country = $gd_country_actual;
-		} else {
-			$gd_country = preg_replace( '/-(\d+)$/', '', $gd_country );
-			$gd_country = preg_replace( '/[_-]/', ' ', $gd_country );
-			$gd_country = __( geodir_ucwords( $gd_country ), 'geodirectory' );
-		}
-
-		$location_single = $gd_country;
-	}
-
-	if ( ! empty( $location_array ) ) {
-
-		$actual_location_name = function_exists( 'get_actual_location_name' ) ? true : false;
-		$location_array       = array_reverse( $location_array );
-
-		foreach ( $location_array as $location_type => $location ) {
-			$gd_location_link_text = preg_replace( '/-(\d+)$/', '', $location );
-			$gd_location_link_text = preg_replace( '/[_-]/', ' ', $gd_location_link_text );
-
-			$location_name = geodir_ucwords( $gd_location_link_text );
-			$location_name = __( $location_name, 'geodirectory' );
-
-			if ( $actual_location_name ) {
-				$location_type = strpos( $location_type, 'gd_' ) === 0 ? substr( $location_type, 3 ) : $location_type;
-				$location_name = get_actual_location_name( $location_type, $location, true );
-			}
-
-			$location_titles[] = $location_name;
-		}
-		if ( ! empty( $location_titles ) ) {
-			$location_titles = array_unique( $location_titles );
+		if ( get_query_var( 'gd_neighbourhood_full' ) ) {
+			$location_array['gd_neighbourhood'] = get_query_var( 'gd_neighbourhood_full' );
 		}
 	}
-
-
-	if ( strpos( $title, '%%location%%' ) !== false ) {
-		$location = '';
-		if ( $location_titles ) {
-			$location = implode( ", ", $location_titles );
-		}
-		$title = str_replace( "%%location%%", $location, $title );
-	}
-
-	if ( strpos( $title, '%%in_location%%' ) !== false ) {
-		$location = '';
-		if ( $location_titles ) {
-			$location = __( 'in ', 'geodirectory' ) . implode( ", ", $location_titles );
-		}
-		$title = str_replace( "%%in_location%%", $location, $title );
-	}
-
-	if ( strpos( $title, '%%in_location_single%%' ) !== false ) {
-		if ( $location_single ) {
-			$location_single = __( 'in', 'geodirectory' ) . ' ' . $location_single;
-		}
-		$title = str_replace( "%%in_location_single%%", $location_single, $title );
-	}
-
-	if ( strpos( $title, '%%location_single%%' ) !== false ) {
-		$title = str_replace( "%%location_single%%", $location_single, $title );
-	}
-
-
+	
+	/**
+	 * Filter the location terms variables.
+	 *
+	 * @since   1.6.16
+	 * @package GeoDirectory
+	 *
+	 * @param string $title         The title with variables.
+	 * @param array $location_array The array of location variables.
+	 * @param string $gd_page       The page being filtered.
+	 * @param string $sep           The separator, default: `|`.
+	 */
+	$title = apply_filters( 'geodir_replace_location_variables', $title, $location_array, $gd_page, $sep );
+	
 	if ( strpos( $title, '%%search_term%%' ) !== false ) {
 		$search_term = '';
 		if ( isset( $_REQUEST['s'] ) ) {
