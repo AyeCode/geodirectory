@@ -3992,7 +3992,7 @@ function geodir_ajax_import_export() {
                                 if ( isset( $term_data['icon'] ) && $term_data['icon'] != '' ) {
                                     $cat_icon = get_tax_meta( $term_id, 'ct_cat_icon', false, $cat_posttype );
                                     $cat_icon = !empty( $cat_icon ) && isset( $cat_icon['src'] ) ? $cat_icon['src'] : '';
-                                        
+
                                     if ( basename($cat_icon) != $term_data['icon'] ) {
                                         $attachment = true;
                                         update_tax_meta( $term_id, 'ct_cat_icon', array( 'id' => 'icon', 'src' => $uploads['url'] . '/' . $term_data['icon'] ), $cat_posttype );
