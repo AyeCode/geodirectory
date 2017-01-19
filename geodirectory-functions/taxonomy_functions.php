@@ -1977,7 +1977,7 @@ function geodir_get_term_icon($term_id = false, $rebuild = false)
     if (!$rebuild) {
         $terms_icons = get_option('gd_term_icons');
     } else {
-        $terms_icons = '';
+        $terms_icons = array();
     }
 
     if (empty($terms_icons)) {
