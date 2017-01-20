@@ -30,6 +30,7 @@ Category are not unticked on page refresh for map post type other than default -
 Synchronize the post reviews if "Synchronize comment on duplicate content" is set - CHANGED
 New title variables added to display country/region/city/neighbourhood - CHANGED
 Some functions added for truncate, strlen, substr the text - ADDED
+WPML duplicate should not be posts edited from frontend - FIXED
 
 v1.6.15
 Google Services API can conflict with newer version of the Google Service Class - UPDATED

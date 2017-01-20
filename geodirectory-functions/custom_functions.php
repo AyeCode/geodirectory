@@ -2526,21 +2526,26 @@ function geodir_get_language_for_element($element_id, $element_type) {
  * @param string $lang Language code for translating post.
  * @param array $postarr Array of post data.
  * @param int $tr_post_id Translation Post ID.
+ * @param bool $after_save If true it will force duplicate. 
+ *                         Added to fix duplicate transaltion for front end.
  */
-function geodir_icl_make_duplicate($master_post_id, $lang, $postarr, $tr_post_id) {
+function geodir_icl_make_duplicate($master_post_id, $lang, $postarr, $tr_post_id, $after_save = false) {
     global $sitepress;
-
+    
     $post_type = get_post_type($master_post_id);
-
+    $icl_ajx_action = !empty($_REQUEST['icl_ajx_action']) && $_REQUEST['icl_ajx_action'] == 'make_duplicates' ? true : false;
+    
     if (in_array($post_type, geodir_get_posttypes())) {
-        // Duplicate post details
-        geodir_icl_duplicate_post_details($master_post_id, $tr_post_id, $lang);
-        
-        // Duplicate taxonomies
-        geodir_icl_duplicate_taxonomies($master_post_id, $tr_post_id, $lang);
-        
-        // Duplicate post images
-        geodir_icl_duplicate_post_images($master_post_id, $tr_post_id, $lang);
+        if ($icl_ajx_action || $after_save) {
+            // Duplicate post details
+            geodir_icl_duplicate_post_details($master_post_id, $tr_post_id, $lang);
+            
+            // Duplicate taxonomies
+            geodir_icl_duplicate_taxonomies($master_post_id, $tr_post_id, $lang);
+            
+            // Duplicate post images
+            geodir_icl_duplicate_post_images($master_post_id, $tr_post_id, $lang);
+        }
         
         // Sync post reviews
         if ($sitepress->get_setting('sync_comments_on_duplicates')) {
@@ -2549,6 +2554,27 @@ function geodir_icl_make_duplicate($master_post_id, $lang, $postarr, $tr_post_id
     }
 }
 add_filter( 'icl_make_duplicate', 'geodir_icl_make_duplicate', 11, 4 );
+
+/**
+ * Duplicate post listing manually after listing saved.
+ *
+ * @since 1.6.16 Sync reviews if sync comments allowed.
+ *
+ * @param int $post_id The Post ID.
+ * @param string $lang Language code for translating post.
+ * @param array $request_info The post details in an array.
+ */
+function geodir_wpml_duplicate_listing($post_id, $request_info) {
+    global $sitepress;
+    
+    $icl_ajx_action = !empty($_REQUEST['icl_ajx_action']) && $_REQUEST['icl_ajx_action'] == 'make_duplicates' ? true : false;
+    
+    if (!$icl_ajx_action && in_array(get_post_type($post_id), geodir_get_posttypes()) && $post_duplicates = $sitepress->get_duplicates($post_id)) {
+        foreach ($post_duplicates as $lang => $dup_post_id) {
+            geodir_icl_make_duplicate($post_id, $lang, $request_info, $dup_post_id, true);
+        }
+    }
+}
 
 /**
  * Duplicate post reviews for WPML translation post.
@@ -2600,9 +2626,8 @@ function geodir_icl_duplicate_post_details($master_post_id, $tr_post_id, $lang) 
 
     if ( !empty( $data ) ) {
         $data['post_id'] = $tr_post_id;
-        unset($data['default_category'], $data['marker_json'], $data['featured_image'], $data[$post_type . 'category'], $data['overall_rating'], $data['rating_count'], $data['ratings']);
-        
-        $wpdb->update($post_table, $data, array('post_id' => $tr_post_id));		
+        unset($data['default_category'], $data['marker_json'], $data['featured_image'], $data[$post_type . 'category']);
+        $wpdb->update($post_table, $data, array('post_id' => $tr_post_id));
         return true;
     }
 
@@ -2713,7 +2738,7 @@ function geodir_icl_duplicate_post_images($master_post_id, $tr_post_id, $lang) {
  * @return bool True for success, False for fail.
  */
 function geodir_wpml_duplicate_post_review($master_comment_id, $master_post_id, $tr_post_id, $lang) {
-    global $wpdb, $plugin_prefix;
+    global $wpdb, $plugin_prefix, $sitepress;
 
     $review = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . GEODIR_REVIEW_TABLE . " WHERE comment_id=%d ORDER BY id ASC", $master_comment_id), ARRAY_A);
 
@@ -2755,7 +2780,7 @@ function geodir_wpml_duplicate_post_review($master_comment_id, $master_post_id, 
     $tr_review_id = $wpdb->get_var($wpdb->prepare("SELECT id FROM " . GEODIR_REVIEW_TABLE . " WHERE comment_id=%d AND post_id=%d ORDER BY id ASC", $tr_comment_id, $tr_post_id));
 
     if ($tr_review_id) { // update review
-        $wpdb->update(GEODIR_REVIEW_TABLE, $review, array('id' => $$tr_review_id));
+        $wpdb->update(GEODIR_REVIEW_TABLE, $review, array('id' => $tr_review_id));
     } else { // insert review
         $wpdb->insert(GEODIR_REVIEW_TABLE, $review);
         $tr_review_id = $wpdb->insert_id;
@@ -2763,6 +2788,20 @@ function geodir_wpml_duplicate_post_review($master_comment_id, $master_post_id, 
 
     if ($tr_post_id) {
         geodir_update_postrating($tr_post_id, $post_type);
+        
+        if (defined('GEODIRREVIEWRATING_VERSION') && get_option('geodir_reviewrating_enable_review') && $sitepress->get_setting('sync_comments_on_duplicates')) {
+            $wpdb->query($wpdb->prepare("DELETE FROM " . GEODIR_COMMENTS_REVIEWS_TABLE . " WHERE comment_id = %d", array($tr_comment_id)));
+            $likes = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . GEODIR_COMMENTS_REVIEWS_TABLE . " WHERE comment_id=%d ORDER BY like_date ASC", $master_comment_id, $tr_post_id), ARRAY_A);
+
+            if (!empty($likes)) {
+                foreach ($likes as $like) {
+                    unset($like['like_id']);
+                    $like['comment_id'] = $tr_comment_id;
+                    
+                    $wpdb->insert(GEODIR_COMMENTS_REVIEWS_TABLE, $like);
+                }
+            }
+        }
     }
 
     return $tr_review_id;
