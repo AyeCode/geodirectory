@@ -141,9 +141,20 @@ if (!function_exists('geodir_save_listing')) {
             $request_info = array_merge($_REQUEST, $request_session);
         } else if (!$gd_session->get('listing') && !$dummy) {
             global $post;
-            $request_info['pid'] = !empty($post->ID) ? $post->ID : (!empty($request_info['post_id']) ? $request_info['post_id'] : NULL);
+            
+            $gd_post = $post;
+            if (!empty($gd_post) && is_array($gd_post)) {
+                $gd_post = (object)$post;
+                
+                // Fix WPML duplicate.
+                if (geodir_is_wpml() && !empty($request_info['action']) && $request_info['action'] == 'editpost' && !empty($request_info['icl_trid']) && !isset($post['post_date'])) {
+                    return false;
+                }
+            }
+            
+            $request_info['pid'] = !empty($gd_post->ID) ? $gd_post->ID : (!empty($request_info['post_id']) ? $request_info['post_id'] : NULL);
             $request_info['post_title'] = $request_info['post_title'];
-            $request_info['listing_type'] = $post->post_type;
+            $request_info['listing_type'] = !empty($gd_post->post_type) ? $gd_post->post_type : (!empty($request_info['post_type']) ? $request_info['post_type'] : get_post_type($request_info['pid']));
             $request_info['post_desc'] = $request_info['content'];
         } else if (!$dummy) {
             return false;

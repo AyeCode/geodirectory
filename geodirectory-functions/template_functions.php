@@ -213,6 +213,23 @@ function geodir_template_loader($template)
         }
         // check if pid exists in the record if yes then check if this post belongs to the user who is logged in.
         if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
+            /// WPML
+            if (geodir_is_wpml() && $duplicate_of = wpml_get_master_post_from_duplicate((int)$_GET['pid'])) {
+                global $sitepress;
+                
+                $lang_of_duplicate = geodir_get_language_for_element($duplicate_of, 'post_' . get_post_type($duplicate_of));
+                $sitepress->switch_lang($lang_of_duplicate, true);
+        
+                $redirect_to = get_permalink(geodir_add_listing_page_id());
+                $_GET['pid'] = $duplicate_of;
+                if (!empty($_GET)) {
+                    $redirect_to = add_query_arg($_GET, $redirect_to);
+                }
+                wp_redirect($redirect_to);
+                exit;
+            }
+            /// WPML
+            
             global $information;
             $information = __('This listing does not belong to your account, please check the listing id carefully.', 'geodirectory');
             $is_current_user_owner = geodir_listing_belong_to_current_user();

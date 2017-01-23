@@ -639,10 +639,10 @@ function places_custom_fields_tab($tabs)
 
         foreach ($geodir_post_types as $geodir_post_type => $geodir_posttype_info):
 
-            $listing_slug = $geodir_posttype_info['labels']['singular_name'];
+            $listing_slug = __($geodir_posttype_info['labels']['singular_name'], 'geodirectory');
 
             $tabs[$geodir_post_type . '_fields_settings'] = array(
-                'label' => __(ucfirst($listing_slug) . ' Settings', 'geodirectory'),
+                'label' => wp_sprintf(__('%s Settings', 'geodirectory'), $listing_slug),
                 'subtabs' => array(
                     array('subtab' => 'custom_fields',
                         'label' => __('Custom Fields', 'geodirectory'),
@@ -1289,7 +1289,7 @@ function geodir_admin_fields($options)
 
                                     ?>
                                     <option
-                                        value="<?php echo $key?>" <?php echo $geodir_search_pt_selected; ?>><?php echo $post_types_obj['labels']['singular_name']; ?></option>
+                                        value="<?php echo $key?>" <?php echo $geodir_search_pt_selected; ?>><?php echo __($post_types_obj['labels']['singular_name'], 'geodirectory'); ?></option>
 
                                 <?php }
 
@@ -1343,7 +1343,7 @@ function geodir_admin_fields($options)
                                                                                            id="<?php echo esc_attr($value['id']); ?>"
                                                                                            value="<?php echo $key; ?>"
                                                                                            class="map_post_type" <?php echo $checked;?> />
-                                        <?php echo $post_types_obj->labels->singular_name; ?></td>
+                                        <?php echo __($post_types_obj->labels->singular_name, 'geodirectory'); ?></td>
                                     <td width="40%">
                                         <div class="home_map_category" style="overflow:auto;width:200px;height:100px;"
                                              id="<?php echo $key; ?>"><?php echo $gd_taxonomy_list; ?></div>
