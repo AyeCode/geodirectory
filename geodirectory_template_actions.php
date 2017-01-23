@@ -1515,7 +1515,7 @@ function geodir_action_listings_title()
         $add_string_in_title = __('My Favorite', 'geodirectory') . ' ';
     }
 
-    $list_title = $add_string_in_title . __(ucfirst($post_type_info->labels->name), 'geodirectory');
+    $list_title = $add_string_in_title . __($post_type_info->labels->name, 'geodirectory');
     $single_name = $post_type_info->labels->singular_name;
 
     $taxonomy = geodir_get_taxonomies($gd_post_type, true);
@@ -2179,7 +2179,7 @@ function geodir_action_add_listing_form()
 
     $post_type_info = geodir_get_posttype_info($listing_type);
 
-    $cpt_singular_name = (isset($post_type_info['labels']['singular_name']) && $post_type_info['labels']['singular_name']) ? $post_type_info['labels']['singular_name'] : __('Listing','geodirectory');
+    $cpt_singular_name = (isset($post_type_info['labels']['singular_name']) && $post_type_info['labels']['singular_name']) ? __($post_type_info['labels']['singular_name'], 'geodirectory') : __('Listing','geodirectory');
     
     $package_info = array();
     $package_info = geodir_post_package_info($package_info, $post);

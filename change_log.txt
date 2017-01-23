@@ -31,6 +31,7 @@ Synchronize the post reviews if "Synchronize comment on duplicate content" is se
 New title variables added to display country/region/city/neighbourhood - CHANGED
 Some functions added for truncate, strlen, substr the text - ADDED
 WPML duplicate should not be posts edited from frontend - FIXED
+"Place" and "Places" in latest core PO file is not translating anymore - FIXED
 
 v1.6.15
 Google Services API can conflict with newer version of the Google Service Class - UPDATED

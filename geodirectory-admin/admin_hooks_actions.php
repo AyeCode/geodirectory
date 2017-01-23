@@ -225,7 +225,8 @@ function geodir_meta_box_add()
     if (isset($post->post_type) && in_array($post->post_type, $geodir_posttypes)):
 
         $geodir_posttype = $post->post_type;
-        $post_typename = geodir_ucwords($geodir_post_types[$geodir_posttype]['labels']['singular_name']);
+        $post_typename = __($geodir_post_types[$geodir_posttype]['labels']['singular_name'], 'geodirectory');
+        $post_typename = geodir_ucwords($post_typename);
 
         // Filter-Payment-Manager
 
@@ -814,11 +815,11 @@ function geodir_custom_fields_panel_head($heading, $sub_tab, $listing_type)
 
     switch ($sub_tab) {
         case 'custom_fields':
-            $heading = sprintf(__('Manage %s Custom Fields', 'geodirectory'), get_post_type_singular_label($listing_type));
+            $heading = sprintf(__('Manage %s Custom Fields', 'geodirectory'), get_post_type_singular_label($listing_type, false, true));
             break;
 
         case 'sorting_options':
-            $heading = sprintf(__('Manage %s Listing Sorting Options Fields', 'geodirectory'), get_post_type_singular_label($listing_type));
+            $heading = sprintf(__('Manage %s Listing Sorting Options Fields', 'geodirectory'), get_post_type_singular_label($listing_type, false, true));
             break;
     }
     return $heading;
@@ -841,11 +842,11 @@ function geodir_cf_panel_available_fields_head($heading, $sub_tab, $listing_type
 
     switch ($sub_tab) {
         case 'custom_fields':
-            $heading = sprintf(__('Add new %s form field', 'geodirectory'), get_post_type_singular_label($listing_type));
+            $heading = sprintf(__('Add new %s form field', 'geodirectory'), get_post_type_singular_label($listing_type, false, true));
             break;
 
         case 'sorting_options':
-            $heading = sprintf(__('Available sorting options for %s listing and search results', 'geodirectory'), get_post_type_singular_label($listing_type));
+            $heading = sprintf(__('Available sorting options for %s listing and search results', 'geodirectory'), get_post_type_singular_label($listing_type, false, true));
             break;
     }
     return $heading;
@@ -868,11 +869,11 @@ function geodir_cf_panel_available_fields_note($note, $sub_tab, $listing_type)
 
     switch ($sub_tab) {
         case 'custom_fields':
-            $note = sprintf(__('Click on any box below to add a field of that type to the add %s listing form. You can use a fieldset to group your fields.', 'geodirectory'), get_post_type_singular_label($listing_type));;
+            $note = sprintf(__('Click on any box below to add a field of that type to the add %s listing form. You can use a fieldset to group your fields.', 'geodirectory'), get_post_type_singular_label($listing_type, false, true));
             break;
 
         case 'sorting_options':
-            $note = sprintf(__('Click on any box below to make it appear in the sorting option dropdown on %s listing and search results.<br />To make a field available here, go to custom fields tab and expand any field from selected fields panel and tick the checkbox saying \'Include this field in sort option\'.', 'geodirectory'), get_post_type_singular_label($listing_type));
+            $note = sprintf(__('Click on any box below to make it appear in the sorting option dropdown on %s listing and search results.<br />To make a field available here, go to custom fields tab and expand any field from selected fields panel and tick the checkbox saying \'Include this field in sort option\'.', 'geodirectory'), get_post_type_singular_label($listing_type, false, true));
             break;
     }
     return $note;
@@ -895,11 +896,11 @@ function geodir_cf_panel_selected_fields_head($heading, $sub_tab, $listing_type)
 
     switch ($sub_tab) {
         case 'custom_fields':
-            $heading = sprintf(__('List of fields that will appear on add new %s listing form', 'geodirectory'), get_post_type_singular_label($listing_type));
+            $heading = sprintf(__('List of fields that will appear on add new %s listing form', 'geodirectory'), get_post_type_singular_label($listing_type, false, true));
             break;
 
         case 'sorting_options':
-            $heading = sprintf(__('List of fields that will appear in %s listing and search results sorting option dropdown box.', 'geodirectory'), get_post_type_singular_label($listing_type));
+            $heading = sprintf(__('List of fields that will appear in %s listing and search results sorting option dropdown box.', 'geodirectory'), get_post_type_singular_label($listing_type, false, true));
             break;
     }
     return $heading;
@@ -922,11 +923,11 @@ function geodir_cf_panel_selected_fields_note($note, $sub_tab, $listing_type)
 
     switch ($sub_tab) {
         case 'custom_fields':
-            $note = sprintf(__('Click to expand and view field related settings. You may drag and drop to arrange fields order on add %s listing form too.', 'geodirectory'), get_post_type_singular_label($listing_type));;
+            $note = sprintf(__('Click to expand and view field related settings. You may drag and drop to arrange fields order on add %s listing form too.', 'geodirectory'), get_post_type_singular_label($listing_type, false, true));
             break;
 
         case 'sorting_options':
-            $note = sprintf(__('Click to expand and view field related settings. You may drag and drop to arrange fields order in sorting option dropdown box on %s listing and search results page.', 'geodirectory'), get_post_type_singular_label($listing_type));
+            $note = sprintf(__('Click to expand and view field related settings. You may drag and drop to arrange fields order in sorting option dropdown box on %s listing and search results page.', 'geodirectory'), get_post_type_singular_label($listing_type, false, true));
             break;
     }
     return $note;
