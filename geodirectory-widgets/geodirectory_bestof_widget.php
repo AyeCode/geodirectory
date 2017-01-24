@@ -153,6 +153,8 @@ class geodir_bestof_widget extends WP_Widget
             'parent' => 0
         );
 
+        $term_args = apply_filters('bestof_widget_term_args', $term_args);
+
         if (is_tax()) {
             $taxonomy = get_query_var('taxonomy');
             $cur_term = get_query_var('term');
@@ -180,7 +182,7 @@ class geodir_bestof_widget extends WP_Widget
         }
 
 
-        $terms = geodir_sort_terms($a_terms, 'review_count');
+        $terms = apply_filters('bestof_widget_sort_terms', geodir_sort_terms($a_terms, 'review_count'), $a_terms);
 
         $query_args = array(
             'posts_per_page' => $post_limit,
