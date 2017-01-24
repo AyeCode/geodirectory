@@ -1,3 +1,48 @@
+v1.6.16
+Country should be not added in DB via query - FIXED
+New parameters post_type & category added to the listings map shortcode - CHANGED
+WPML geodir_info_url and geodir_login_url now uses lang code in url when needed - CHANGED
+Added try catch to Google analytics account call which can break if no accounts present - FIXED
+Added Google Analytics option to anonymize IP to comply with German law - ADDED
+Marker pins not bouncing for OpenStreetMap - FIXED
+Make ratings stars clickable on listing - ADDED
+Fix for WordFence warning on registration via GD Login - FIXED
+Textarea and html custom field can now use default value - CHANGED
+Kleo theme title not show on preview page - FIXED
+Breadcrumb formatting issue with the neighbourhood name - FIXED
+On add listing page switching WPML language changes the listing type - CHANGED
+Option added in listing map widget to enable marker cluster for map - CHANGED
+Google Analytics account error breaks the site - FIXED
+Auto register custom fields for WPML translation via GD custom field translation tool - CHANGED
+Fix ISO2 for translated country - FIXED
+Updated Generate API KEY button to add access for all APIs - CHANGED
+Switching language from WPML location switcher looses the page variables on GeoDirectory pages - FIXED
+Set address on map can sometimes not work right if no zip is provided - FIXED
+Address and Category cant be shown on their own tab - FIXED
+The country code is undefined when default country is set and translated - FIXED
+Single quote in default city name causes problem in add new city - FIXED
+Popular post view widget Featured sort now secondarily ordered by date added -  CHANGED
+Geocode address add listing page on FireFox can cause ZERO_RESULTS in some circumstances - FIXED
+Fusion Builder jQuery chosen conflicts with GD jQuery chosen - FIXED
+Hook added to enable/disable editor for description field - CHANGED
+Spain now uses administrative_area_level_2 for regions (this will affect current Spanish listings, you should add new regions and then merge out old ones) -  CHANGED
+Category are not unticked on page refresh for map post type other than default - FIXED
+Synchronize the post reviews if "Synchronize comment on duplicate content" is set - CHANGED
+New title variables added to display country/region/city/neighbourhood - CHANGED
+Some functions added for truncate, strlen, substr the text - ADDED
+WPML duplicate should not be posts edited from frontend - FIXED
+"Place" and "Places" in latest core PO file is not translating anymore - FIXED
+
+v1.6.15
+Google Services API can conflict with newer version of the Google Service Class - UPDATED
+No way to deactivate GA Settings, deactivation button added - ADDED
+Google map directions not working on detail page map - FIXED
+CSS issue with map category show/hide icon - FIXED
+Filters added to admin BCC emails - ADDED
+Twenty Seventeen theme compatibility settings added - ADDED
+geodir_save_post_info() now faster and escapes values better - CHANGED
+Using apostrophe(&#39;) in title breaks title in map info window  - FIXED
+
 v1.6.11
 geodir_set_as_home rule still existed from depreciated option - FIXED
 Registration box, changed Name/Email around so to work with browser save user/pass - CHANGED

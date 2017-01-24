@@ -65,7 +65,7 @@ if ($field_id != '' && $field_action == 'submit' && isset($_REQUEST['_wpnonce'])
         return;
 
     foreach ($_REQUEST as $pkey => $pval) {
-        if (is_array($_REQUEST[$pkey])) {
+        if (is_array($_REQUEST[$pkey]) || $pkey=='default_value') {
             $tags = 'skip_field';
         } else {
             $tags = '';

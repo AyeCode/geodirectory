@@ -141,9 +141,20 @@ if (!function_exists('geodir_save_listing')) {
             $request_info = array_merge($_REQUEST, $request_session);
         } else if (!$gd_session->get('listing') && !$dummy) {
             global $post;
-            $request_info['pid'] = !empty($post->ID) ? $post->ID : (!empty($request_info['post_id']) ? $request_info['post_id'] : NULL);
+            
+            $gd_post = $post;
+            if (!empty($gd_post) && is_array($gd_post)) {
+                $gd_post = (object)$post;
+                
+                // Fix WPML duplicate.
+                if (geodir_is_wpml() && !empty($request_info['action']) && $request_info['action'] == 'editpost' && !empty($request_info['icl_trid']) && !isset($post['post_date'])) {
+                    return false;
+                }
+            }
+            
+            $request_info['pid'] = !empty($gd_post->ID) ? $gd_post->ID : (!empty($request_info['post_id']) ? $request_info['post_id'] : NULL);
             $request_info['post_title'] = $request_info['post_title'];
-            $request_info['listing_type'] = $post->post_type;
+            $request_info['listing_type'] = !empty($gd_post->post_type) ? $gd_post->post_type : (!empty($request_info['post_type']) ? $request_info['post_type'] : get_post_type($request_info['pid']));
             $request_info['post_desc'] = $request_info['content'];
         } else if (!$dummy) {
             return false;
@@ -654,26 +665,30 @@ if (!function_exists('geodir_save_post_info')) {
          */
         $postmeta = apply_filters('geodir_listinginfo_request', $postinfo_array, $post_id);
 
-        if (!empty($postmeta) && $post_id) {
-            $post_meta_set_query = '';
+        $query_string_escaped = '';
+        $query_string_array = array();
 
+        if (!empty($postmeta) && $post_id) {
+
+            $columns = $wpdb->get_col("show columns from $table");
             foreach ($postmeta as $mkey => $mval) {
-                if (geodir_column_exist($table, $mkey)) {
+                if(in_array($mkey,$columns)) {
                     if (is_array($mval)) {
                         $mval = implode(",", $mval);
                     }
+                    $query_string_escaped .= " $mkey = %s, "; // we can set the key here as we check if the column exists above
+                    $query_string_array[] = stripslashes($mval); // we strip slashes as we are using wpdb prepare
 
-                    $post_meta_set_query .= $mkey . " = '" . addslashes_gpc($mval) . "', ";
                 }
             }
 
-            $post_meta_set_query = trim($post_meta_set_query, ", ");
-            
-            if (empty($post_meta_set_query) || trim($post_meta_set_query) == '') {
+            $query_string_escaped = trim($query_string_escaped, ", ");
+
+            if (empty($query_string_array) || trim($query_string_escaped) == '') {
                 return false;
             }
 
-            $post_meta_set_query = str_replace('%', '%%', $post_meta_set_query);// escape %
+            $query_string_array = str_replace(array("'%", "%'"), array("'%%", "%%'"), $query_string_array);
 
 
             /**
@@ -688,23 +703,25 @@ if (!function_exists('geodir_save_post_info')) {
 
             if ($wpdb->get_var($wpdb->prepare("SELECT post_id from " . $table . " where post_id = %d", array($post_id)))) {
 
+                $query_string_array[] = $post_id;
                 $wpdb->query(
                     $wpdb->prepare(
-                        "UPDATE " . $table . " SET " . $post_meta_set_query . " where post_id =%d",
-                        array($post_id)
+                        "UPDATE " . $table . " SET " . $query_string_escaped . " where post_id =%d",
+                        $query_string_array
                     )
                 );
 
 
             } else {
 
+                array_unshift($query_string_array, $post_id);
                 $wpdb->query(
                     $wpdb->prepare(
-                        "INSERT INTO " . $table . " SET post_id = %d," . $post_meta_set_query,
-                        array($post_id)
+                        "INSERT INTO " . $table . " SET post_id = %d," . $query_string_escaped,
+                        $query_string_array
                     )
                 );
-
+                
             }
 
             /**
@@ -1004,7 +1021,7 @@ if (!function_exists('geodir_save_post_images')) {
                         }
 
                         $external_img = false;
-                        if (strpos(str_replace(array('http://','https://'),'',$curr_img_url), str_replace(array('http://','https://'),'',$uploads['baseurl'])) !== false) {
+                        if (strpos( str_replace( array('http://','https://'),'',$curr_img_url ), str_replace(array('http://','https://'),'',$uploads['baseurl'] ) ) !== false) {
                         } else {
                             $external_img = true;
                         }
@@ -1854,6 +1871,7 @@ if (!function_exists('geodir_get_infowindow_html')) {
         } else {
             $ID = $postinfo_obj->post_id;
             $title = str_replace($srcharr, $replarr, htmlentities($postinfo_obj->post_title, ENT_COMPAT, 'UTF-8')); // fix by Stiofan
+            $title = wp_specialchars_decode($title); // Fixed #post-320722 on 2016-12-08
             $plink = get_permalink($ID);
             $lat = htmlentities(geodir_get_post_meta($ID, 'post_latitude', true));
             $lng = htmlentities(geodir_get_post_meta($ID, 'post_longitude', true));

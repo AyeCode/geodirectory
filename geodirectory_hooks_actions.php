@@ -1298,6 +1298,8 @@ function geodir_localize_all_js_msg()
         'osmStart' => __('Start', 'geodirectory'),
         'osmVia' => __('Via {viaNumber}', 'geodirectory'),
         'osmEnd' => __('Enter Your Location', 'geodirectory'),
+        'ga_delete_check' => __('Are you wish to Deauthorize and break Analytics?', 'geodirectory'),
+
     );
 
     /**
@@ -2388,7 +2390,6 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
         $fields_location = 'owntab';
 
         $custom_fields = geodir_post_custom_fields($post_package_id, 'all', $post_type, $fields_location);
-
         //remove video and special offers if it is already set to show
         if(isset($tabs_arr['post_video']['is_display']) && $tabs_arr['post_video']['is_display']){
             $unset_video = true;
@@ -2409,19 +2410,17 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
         }
 
 
-
         if (!empty($custom_fields)) {
             $parse_custom_fields = array();
             foreach ($custom_fields as $field) {
                 $field = stripslashes_deep($field); // strip slashes
-                
                 $type = $field;
                 $field_name = $field['htmlvar_name'];
                 if (empty($geodir_post_info) && geodir_is_page('preview') && $field_name != '' && !isset($post->{$field_name}) && isset($_REQUEST[$field_name])) {
                     $post->{$field_name} = $_REQUEST[$field_name];
                 }
 
-                if (isset($field['show_in']) && strpos($field['show_in'], '[owntab]') !== false  && ((isset($post->{$field_name}) && $post->{$field_name} != '') || $field['type'] == 'fieldset') && in_array($field['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file'))) {
+                if (isset($field['show_in']) && strpos($field['show_in'], '[owntab]') !== false  && ((isset($post->{$field_name}) && $post->{$field_name} != '') || $field['type'] == 'fieldset' || $field['type'] == 'address') && in_array($field['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file','address','taxonomy'))) {
                     if ($type['type'] == 'datepicker' && ($post->{$type['htmlvar_name']} == '' || $post->{$type['htmlvar_name']} == '0000-00-00')) {
                         continue;
                     }
@@ -2454,7 +2453,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                     $post->{$field_name} = $_REQUEST[$field_name];
                 }
 
-                if (isset($field['show_in']) && strpos($field['show_in'], '[owntab]') !== false && ((isset($post->{$field_name}) && $post->{$field_name} != '') || $field['type'] == 'fieldset') && in_array($field['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file'))) {
+                if (isset($field['show_in']) && strpos($field['show_in'], '[owntab]') !== false && ((isset($post->{$field_name}) && $post->{$field_name} != '') || $field['type'] == 'fieldset' || $field['type'] == 'address') && in_array($field['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file','address','taxonomy'))) {
                     $label = $field['site_title'] != '' ? $field['site_title'] : $field['admin_title'];
                     $site_title = trim($field['site_title']);
                     $type = $field;
@@ -2548,7 +2547,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                         }
                     } else {
                         if ($html != '') {
-                            $tabs_arr[$field['htmlvar_name']] = array(
+                            $tabs_arr[$html_var] = array(
                                 'heading_text' => __($label, 'geodirectory'),
                                 'is_active_tab' => false,
                                 /** This action is documented in geodirectory_hooks_actions.php */
@@ -2899,3 +2898,96 @@ function geodir_add_nav_menu_class( $args )
 }
 
 add_filter( 'wp_nav_menu_args', 'geodir_add_nav_menu_class' );
+
+/**
+ * Filters WordPress locale ID.
+ *
+ * Load current WPML language when editing the GD CPT.
+ *
+ * @since 1.6.16
+ * @package GeoDirectory
+ *
+ * @param string $locale The locale ID.
+ * @return string Filtered locale ID.
+ */
+function geodir_wpml_filter_locale($locale) {
+    global $sitepress;
+    
+    $post_type = !empty($_REQUEST['post_type']) ? $_REQUEST['post_type'] : (!empty($_REQUEST['post']) ? get_post_type($_REQUEST['post']) : '');
+    
+    if (!empty($sitepress) && $sitepress->is_post_edit_screen() && $post_type && in_array($post_type, geodir_get_posttypes()) && $current_lang = $sitepress->get_current_language()) {
+        $locale = $sitepress->get_locale($current_lang);
+    }
+    
+    return $locale;
+}
+
+/**
+ * Set WordPress locale filter.
+ *
+ * @since 1.6.16
+ * @package GeoDirectory
+ */
+function geodir_wpml_set_filter() {
+    if (function_exists('icl_object_id')) {
+        global $sitepress;
+        
+        if ($sitepress->get_setting('sync_comments_on_duplicates')) {
+            add_action('comment_post', 'gepdir_wpml_sync_comment', 100, 1);
+        }
+        
+        add_action('geodir_after_save_listing', 'geodir_wpml_duplicate_listing', 100, 2);
+    }
+}
+add_filter('plugins_loaded', 'geodir_wpml_set_filter');
+
+/**
+ * Filters the WPML language switcher urls for GeoDirectory pages.
+ *
+ * @since 1.6.16
+ *
+ * @param array    $languages WPML active languages.
+ * @return array Filtered languages.
+ */
+function geodir_wpml_filter_ls_languages($languages) {
+    global $gd_icl_ls_languages;
+    
+    if (geodir_is_geodir_page()) {
+        if ($gd_icl_ls_languages) {
+            return $languages;
+        }
+        
+        $keep_vars = array();
+        
+        if (geodir_is_page('add-listing')) {
+            $keep_vars = array('listing_type', 'package_id');
+        } else if (geodir_is_page('search')) {
+            $keep_vars = array('geodir_search', 'stype', 'snear', 'set_location_type', 'set_location_val', 'sgeo_lat', 'sgeo_lon');
+        } else if (geodir_is_page('author')) {
+            $keep_vars = array('geodir_dashbord', 'stype', 'list');
+        } else if (geodir_is_page('login')) {
+            $keep_vars = array('forgot', 'signup');
+        }        
+        
+        if (!empty($keep_vars)) {
+            foreach ( $languages as $code => $url) {
+                $filter_url = $url['url'];
+                
+                foreach ($keep_vars as $var) {
+                    if (isset($_GET[$var]) && !is_array($_GET[$var])) {
+                        $filter_url = remove_query_arg(array($var), $filter_url);
+                        $filter_url = add_query_arg(array($var => $_GET[$var]), $filter_url);
+                    }
+                }
+                
+                if ($filter_url != $url['url']) {
+                    $languages[$code]['url'] = $filter_url;
+                }
+            }
+            $gd_icl_ls_languages = true;
+        }
+    }
+
+    return $languages;
+}
+add_filter( 'icl_ls_languages', 'geodir_wpml_filter_ls_languages', 11, 1 );

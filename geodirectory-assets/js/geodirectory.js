@@ -16,65 +16,63 @@ var gdUrlParam = function gdUrlParam(sParam) {
 
 
 /* GD lazy load images */
-;(function($) {
-    $.fn.gdunveil = function(threshold, callback,extra1) {
+jQuery.fn.gdunveil = function(threshold, callback,extra1) {
 
-        var $w = $(window),
+    var $w = jQuery(window),
+        th = threshold || 0,
+        retina = window.devicePixelRatio > 1,
+        attrib = retina? "data-src-retina" : "data-src",
+        images = this,
+        loaded;
+
+    if(extra1){
+        var $e1 = jQuery(extra1),
             th = threshold || 0,
             retina = window.devicePixelRatio > 1,
             attrib = retina? "data-src-retina" : "data-src",
             images = this,
             loaded;
-        
-        if(extra1){
-            var $e1 = $(extra1),
-                th = threshold || 0,
-                retina = window.devicePixelRatio > 1,
-                attrib = retina? "data-src-retina" : "data-src",
-                images = this,
-                loaded;
-        }
+    }
 
-        this.one("gdunveil", function() {
-            var source = this.getAttribute(attrib);
-            source = source || this.getAttribute("data-src");
-            if (source) {
-                //this.setAttribute("src", source);
-                // $(this).removeClass('geodir_lazy_load_thumbnail');
-                $(this).css('background-image', 'url("' + source + '")');
-                if (typeof callback === "function") callback.call(this);
-            }
+    this.one("gdunveil", function() {
+        var source = this.getAttribute(attrib);
+        source = source || this.getAttribute("data-src");
+        if (source) {
+            //this.setAttribute("src", source);
+            // $(this).removeClass('geodir_lazy_load_thumbnail');
+            jQuery(this).css('background-image', 'url("' + source + '")');
+            if (typeof callback === "function") callback.call(this);
+        }
+    });
+
+    function gdunveil() {
+        var inview = images.filter(function() {
+            var $e = jQuery(this);
+            if ($e.is(":hidden")) return;
+
+            var wt = $w.scrollTop(),
+                wb = wt + $w.height(),
+                et = $e.offset().top,
+                eb = et + $e.height();
+
+            return eb >= wt - th && et <= wb + th;
         });
 
-        function gdunveil() {
-            var inview = images.filter(function() {
-                var $e = $(this);
-                if ($e.is(":hidden")) return;
+        loaded = inview.trigger("gdunveil");
+        images = images.not(loaded);
+    }
 
-                var wt = $w.scrollTop(),
-                    wb = wt + $w.height(),
-                    et = $e.offset().top,
-                    eb = et + $e.height();
+    $w.on("scroll.gdunveil resize.gdunveil lookup.gdunveil", gdunveil);
+    if(extra1){
+        $e1.on("scroll.gdunveil resize.gdunveil lookup.gdunveil", gdunveil);
+    }
 
-                return eb >= wt - th && et <= wb + th;
-            });
+    gdunveil();
 
-            loaded = inview.trigger("gdunveil");
-            images = images.not(loaded);
-        }
+    return this;
 
-        $w.on("scroll.gdunveil resize.gdunveil lookup.gdunveil", gdunveil);
-        if(extra1){
-            $e1.on("scroll.gdunveil resize.gdunveil lookup.gdunveil", gdunveil);
-        }
+};
 
-        gdunveil();
-
-        return this;
-
-    };
-
-})(window.jQuery || window.Zepto);
 
 function geodir_init_lazy_load(){
     // load for GD images
@@ -595,6 +593,20 @@ function geodir_get_post_term(el) {
 /* we recalc the stars because some browsers can't do subpixle percents, we should be able to remove this in a few years. */
 jQuery(window).load(function() {
     geodir_resize_rating_stars();
+    
+    jQuery(document).on('click', '.geodir-rating,.gd-star-rating', function(e) {
+        if (reviewLink = jQuery(this).closest('.geodir-category-listing').find('a.geodir-pcomments').attr('href')) {
+            window.location = reviewLink;
+        } else if (reviewLink = jQuery(this).closest('.gd-bubble').find('a.geodir-pcomments').attr('href')) {
+            window.location = reviewLink;
+        }
+    });
+    jQuery('.geodir-details-sidebar-rating').on('click', '.geodir-rating,.gd-star-rating', function(e) {
+        jQuery('#gd-tabs [data-tab="#reviews"]').trigger('click');
+        jQuery('html, body').animate({
+            scrollTop: jQuery('#reviews-wrap').offset().top
+        }, 500);
+    });
 });
 
 jQuery(window).resize(function() {

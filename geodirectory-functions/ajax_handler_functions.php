@@ -353,11 +353,11 @@ function geodir_ajax_handler() {
             $args['parent'] = 0;
         }
         $terms_o = get_terms($args);
-        
+
         // Skip terms which has no listing
         if (!empty($terms_o)) {
             $filter_terms = array();
-            
+
             foreach ($terms_o as $term) {
                 if (isset($term->count) && $term->count > 0) {
                     $filter_terms[] = $term;
@@ -365,7 +365,7 @@ function geodir_ajax_handler() {
             }
             $terms_o = $filter_terms;
         }
-        
+
         $terms = geodir_sort_terms($terms_o, 'count');
         geodir_helper_cat_list_output($terms, intval($_REQUEST['limit']));
         exit();
@@ -386,7 +386,11 @@ function geodir_show_ga_stats(){
     } else {
         $ga_end = '';
     }
-    geodir_getGoogleAnalytics($_REQUEST['ga_page'], $ga_start, $ga_end);
+    try {
+        geodir_getGoogleAnalytics($_REQUEST['ga_page'], $ga_start, $ga_end);
+    } catch (Exception $e) {
+        geodir_error_log( wp_sprintf( __( 'GD Google Analytics API Error(%s) : %s', 'geodirectory' ), $e->getCode(), $e->getMessage() ) );
+    }
     die;
 }
 add_action( 'wp_ajax_gdga', 'geodir_show_ga_stats' );

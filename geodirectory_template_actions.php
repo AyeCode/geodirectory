@@ -276,6 +276,7 @@ function geodir_content_actions_dynamic()
 {
 
     $tc = get_option('theme_compatibility_setting');
+//print_r($tc);
     if (empty($tc)) {
         return;
     }
@@ -1514,7 +1515,7 @@ function geodir_action_listings_title()
         $add_string_in_title = __('My Favorite', 'geodirectory') . ' ';
     }
 
-    $list_title = $add_string_in_title . __(ucfirst($post_type_info->labels->name), 'geodirectory');
+    $list_title = $add_string_in_title . __($post_type_info->labels->name, 'geodirectory');
     $single_name = $post_type_info->labels->singular_name;
 
     $taxonomy = geodir_get_taxonomies($gd_post_type, true);
@@ -2178,8 +2179,10 @@ function geodir_action_add_listing_form()
 
     $post_type_info = geodir_get_posttype_info($listing_type);
 
-    $cpt_singular_name = (isset($post_type_info['labels']['singular_name']) && $post_type_info['labels']['singular_name']) ? $post_type_info['labels']['singular_name'] : __('Listing','geodirectory');
-
+    $cpt_singular_name = (isset($post_type_info['labels']['singular_name']) && $post_type_info['labels']['singular_name']) ? __($post_type_info['labels']['singular_name'], 'geodirectory') : __('Listing','geodirectory');
+    
+    $package_info = array();
+    $package_info = geodir_post_package_info($package_info, $post);
     ?>
     <form name="propertyform" id="propertyform" action="<?php echo get_page_link(geodir_preview_page_id());?>" method="post" enctype="multipart/form-data">
         <input type="hidden" name="preview" value="<?php echo sanitize_text_field($listing_type);?>"/>
@@ -2229,6 +2232,17 @@ function geodir_action_add_listing_form()
         </div>
         <?php
         $show_editor = get_option('geodir_tiny_editor_on_add_listing');
+        $show_editor = !empty($show_editor) && in_array($listing_type, $show_editor) ? true : false;
+        /**
+         * Filter whether to show or don't show the editor.
+         *
+         * @since 1.6.16
+         * @param bool $show_editor If true the editor will be available for description field.
+         * @param object $package_info The listing package.
+         * @param string $listing_type The current post type.
+         * @param object $post The current post object.
+         */
+        $show_editor = apply_filters('geodir_description_field_show_editor', $show_editor, $package_info, $listing_type, $post);
 
         $desc = $show_editor ? stripslashes($desc) : esc_attr(stripslashes($desc));
         $desc_limit = '';
@@ -2285,7 +2299,7 @@ function geodir_action_add_listing_form()
                  */
                 echo apply_filters('geodir_add_listing_description_label',sprintf( __('%s Description', 'geodirectory'), $cpt_singular_name ),$cpt_singular_name,$listing_type); ?><span><?php if ($desc_limit != '0') { echo '*'; } ?></span> </label>
             <?php
-            if (!empty($show_editor) && in_array($listing_type, $show_editor)) {
+            if ($show_editor) {
                 $editor_settings = array('media_buttons' => false, 'textarea_rows' => 10);
             ?>
                 <div class="editor" field_id="post_desc" field_type="editor">

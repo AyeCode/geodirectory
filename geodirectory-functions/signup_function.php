@@ -315,7 +315,7 @@ function geodir_register_new_user($user_login, $user_email)
      *
      * @param object $errors Registration error messages.
      */
-    $errors = apply_filters('registration_errors', $errors);
+    $errors = apply_filters('registration_errors', $errors,$user_login,$user_email);
 
     if ($errors->get_error_code())
         return $errors;

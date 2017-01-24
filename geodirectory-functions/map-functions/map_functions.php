@@ -92,7 +92,13 @@ function create_marker_jason_of_posts($post)
          * @param string $post_json JSON representation of the post marker info.
          * @param object $post The post object.
          */
-        $map_jason[$post->ID] = apply_filters('geodir_create_marker_jason_of_posts',$post_json, $post);
+        $post_map_json = apply_filters('geodir_create_marker_jason_of_posts',$post_json, $post);
+
+        // only assign it if it has a value
+        if($post_map_json){
+            $map_jason[$post->ID] = $post_map_json;
+        }
+
     }
 }
 
@@ -127,6 +133,7 @@ function send_marker_jason_to_js()
                 if (!empty($cat_content_info)) {
                     $json_content = substr(implode(',', $cat_content_info), 1);
                     $json_content = htmlentities($json_content, ENT_QUOTES, get_option('blog_charset')); // Quotes in csv title import break maps - FIXED by kiran on 2nd March, 2016
+                    $json_content = wp_specialchars_decode($json_content); // Fixed #post-320722 on 2016-12-08
                     $canvas_jason = '[{"totalcount":"' . $totalcount . '",' . $json_content . ']';
                 } else {
                     $canvas_jason = '[{"totalcount":"0"}]';
@@ -172,7 +179,11 @@ function send_marker_jason_to_js()
  * Home map Taxonomy walker.
  *
  * @since 1.0.0
+ * @since 1.6.16 Fix: Category are not unticked on page refresh for map post type other than default.
  * @package GeoDirectory
+ *
+ * @global object $gd_session GeoDirectory Session object.
+ *
  * @param string $cat_taxonomy Name of the taxonomy e.g place_category.
  * @param int $cat_parent Optional. Parent term ID to retrieve its child terms. Default 0.
  * @param bool $hide_empty Optional. Do you want to hide the terms that has no posts. Default true.
@@ -184,7 +195,7 @@ function send_marker_jason_to_js()
  */
 function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = true, $pading = 0, $map_canvas_name = '', $child_collapse, $is_home_map = false)
 {
-    global $cat_count, $geodir_cat_icons;
+    global $cat_count, $geodir_cat_icons, $gd_session;
 
     $exclude_categories = get_option('geodir_exclude_cat_on_map');
     $exclude_categories_new = get_option('geodir_exclude_cat_on_map_upgrade');
@@ -222,17 +233,17 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = 
             $display = !$child_collapse ? '' : 'display:none';
         }
 
-
         $out = '<ul class="treeview ' . $list_class . '" style="margin-left:' . $p . 'px;' . $display . ';">';
 
         $geodir_cat_icons = geodir_get_term_icon();
 
         $geodir_default_map_search_pt = (get_option('geodir_default_map_search_pt')) ? get_option('geodir_default_map_search_pt') :  'gd_place';
-        $post_type = isset($_REQUEST['post_type']) ? $_REQUEST['post_type'] : $geodir_default_map_search_pt;
+        if ($is_home_map && $homemap_catlist_ptype = $gd_session->get('homemap_catlist_ptype')) {
+            $geodir_default_map_search_pt = $homemap_catlist_ptype;
+        }
+        $post_type = isset($_REQUEST['post_type']) ? $_REQUEST['post_type'] : (isset($_REQUEST['gd_posttype']) ? $_REQUEST['gd_posttype'] : $geodir_default_map_search_pt);
+        
         foreach ($cat_terms as $cat_term):
-
-
-
             $icon = !empty($geodir_cat_icons) && isset($geodir_cat_icons[$cat_term->term_id]) ? $geodir_cat_icons[$cat_term->term_id] : '';
 
             if (!in_array($cat_term->term_id, $exclude_categories)):

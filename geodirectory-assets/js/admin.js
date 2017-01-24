@@ -263,3 +263,27 @@ function gd_progressbar(el, value, label) {
         }
     }
 }
+
+function gd_GA_Deauthorize(nonce){
+    var result = confirm(geodir_all_js_msg.ga_delete_check);
+    if (result) {
+        jQuery.ajax({
+            url: geodir_all_js_msg.geodir_admin_ajax_url,
+            type: 'POST',
+            dataType: 'html',
+            data: {
+                action: 'geodir_ga_deauthorize',
+                _wpnonce: nonce
+            },
+            beforeSend: function() {},
+            success: function(data, textStatus, xhr) {
+                if(data){
+                    window.location.assign(data);
+                }
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                alert(textStatus);
+            }
+        }); // end of ajax
+    }
+}

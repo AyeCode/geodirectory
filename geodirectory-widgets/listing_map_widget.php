@@ -72,6 +72,7 @@ function show_listing_widget_map()
     if (!empty($cat_content_info)) {
         $json_content = substr(implode(',', $cat_content_info), 1);
         $json_content = htmlentities($json_content, ENT_QUOTES, get_option('blog_charset')); // Quotes in csv title import break maps - FIXED by kiran on 2nd March, 2016
+        $json_content = wp_specialchars_decode($json_content); // Fixed #post-320722 on 2016-12-08
         $list_json = '[{"totalcount":"' . $totalcount . '",' . $json_content . ']';
     } else {
         $list_json = '[{"totalcount":"0"}]';
@@ -214,6 +215,8 @@ class geodir_map_listingpage extends WP_Widget
             $map_args['maxZoom'] = 21;
             $map_args['autozoom'] = $autozoom;
             $map_args['bubble_size'] = 'small';
+            
+            $map_args['enable_marker_cluster'] = defined('GDCLUSTER_VERSION') && !empty($instance['marker_cluster']) ? true : false;
 
             echo $before_widget;
             geodir_draw_map($map_args);
@@ -233,8 +236,7 @@ class geodir_map_listingpage extends WP_Widget
 	 *
 	 * @return array Updated safe values to be saved.
 	 */
-    public function update($new_instance, $old_instance)
-    {
+    public function update($new_instance, $old_instance) {
         //save the widget
         $instance = $old_instance;
         $instance['width'] = strip_tags($new_instance['width']);
@@ -245,6 +247,7 @@ class geodir_map_listingpage extends WP_Widget
         $instance['sticky'] = isset($new_instance['sticky']) ? $new_instance['sticky'] : '';
         $instance['scrollwheel'] = isset($new_instance['scrollwheel']) ? ($new_instance['scrollwheel']) : '';
         $instance['showall'] = isset($new_instance['showall']) ? ($new_instance['showall']) : '';
+        $instance['marker_cluster'] = defined('GDCLUSTER_VERSION') && !empty($new_instance['marker_cluster']) ? 1 : '';
 
         return $instance;
     }
@@ -257,10 +260,10 @@ class geodir_map_listingpage extends WP_Widget
 	 *
 	 * @param array $instance Previously saved values from database.
 	 */
-    public function form($instance)
-    {
-        //widgetform in backend
-        $instance = wp_parse_args((array)$instance, array('width' => '', 'heigh' => '', 'maptype' => '', 'zoom' => '', 'autozoom' => '', 'sticky' => '', 'scrollwheel' => '0', 'showall' => '0'));
+    public function form($instance) {
+        // widget form in backend
+        $instance = wp_parse_args((array)$instance, array('width' => '', 'heigh' => '', 'maptype' => '', 'zoom' => '', 'autozoom' => '', 'sticky' => '', 'scrollwheel' => '0', 'showall' => '0', 'marker_cluster' => '0'));
+        
         $width = strip_tags($instance['width']);
         $heigh = strip_tags($instance['heigh']);
         $maptype = strip_tags($instance['maptype']);
@@ -269,6 +272,7 @@ class geodir_map_listingpage extends WP_Widget
         $sticky = strip_tags($instance['sticky']);
         $scrollwheel = strip_tags($instance['scrollwheel']);
         $showall = strip_tags($instance['showall']);
+        $marker_cluster = (int)$instance['marker_cluster'];
         ?>
         <p>
             <label
@@ -340,33 +344,37 @@ class geodir_map_listingpage extends WP_Widget
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('autozoom'); ?>"><?php _e('Map Auto Zoom ?', 'geodirectory'); ?>
-                :
+                for="<?php echo $this->get_field_id('autozoom'); ?>">
                 <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('autozoom'); ?>"
                        name="<?php echo $this->get_field_name('autozoom'); ?>"<?php if ($autozoom) {
                     echo 'checked="checked"';
-                } ?> /></label>
+                } ?> /> <?php _e('Map Auto Zoom ?', 'geodirectory'); ?></label>
         </p>
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('sticky'); ?>"><?php _e('Map Sticky(should stick to the right of screen) ?', 'geodirectory'); ?>
-                :
+                for="<?php echo $this->get_field_id('sticky'); ?>">
                 <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('sticky'); ?>"
                        name="<?php echo $this->get_field_name('sticky'); ?>"<?php if ($sticky) {
                     echo 'checked="checked"';
-                } ?> /> </label>
+                } ?> /> <?php _e('Map Sticky(should stick to the right of screen) ?', 'geodirectory'); ?>
+            </label>
         </p>
 
         <p>
             <label
-                for="<?php echo $this->get_field_id('scrollwheel'); ?>"><?php _e('Enable mouse scroll zoom ?', 'geodirectory'); ?>
-                :
+                for="<?php echo $this->get_field_id('scrollwheel'); ?>">
                 <input id="<?php echo $this->get_field_id('scrollwheel'); ?>"
                        name="<?php echo $this->get_field_name('scrollwheel'); ?>" type="checkbox" value="1"
-                       <?php if ($scrollwheel){ ?>checked="checked" <?php } ?> />
+                       <?php if ($scrollwheel){ ?>checked="checked" <?php } ?> /> <?php _e('Enable mouse scroll zoom ?', 'geodirectory'); ?>
             </label>
         </p>
+        <?php if (defined('GDCLUSTER_VERSION')) { ?>
+        <p>
+            <label for="<?php echo $this->get_field_id('marker_cluster'); ?>"><input id="<?php echo $this->get_field_id('marker_cluster'); ?>" name="<?php echo $this->get_field_name('marker_cluster'); ?>" type="checkbox" value="1" <?php checked($marker_cluster, 1); ?> /> <?php _e('Enable marker cluster?', 'geodirectory'); ?>
+            </label>
+        </p>
+        <?php } ?>
 
         <!-- <p>
       <label for="<?php echo $this->get_field_id('showall'); ?>"><?php _e('Show all listings on map? (not just page list)', 'geodirectory'); ?>:

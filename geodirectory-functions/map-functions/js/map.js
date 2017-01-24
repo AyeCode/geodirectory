@@ -511,16 +511,17 @@ function geodir_htmlEscape(str) {
         .replace(/&amp;apos;/g, "'");
 }
 
-gd_single_marker_lat = '';
-gd_single_marker_lon = '';
+var gd_single_marker_lat = '', gd_single_marker_lon = '';
 
 // create the marker and set up the event window
 function create_marker(input, map_canvas_var) {
     if (window.gdMaps == 'osm') {
         return create_marker_osm(input, map_canvas_var);
     }
-    gd_single_marker_lat = input.lt;
-    gd_single_marker_lon = input.ln;
+    if (map_canvas_var == 'detail_page_map_canvas') {
+        gd_single_marker_lat = input.lt;
+        gd_single_marker_lon = input.ln;
+    }
     jQuery("#" + map_canvas_var).goMap();
     if (input.lt && input.ln) {
         var coord = new google.maps.LatLng(input.lt, input.ln);
@@ -623,23 +624,57 @@ function openMarker(map_canvas, id) {
             jQuery('html,body').animate({ scrollTop: mTag }, 'slow');
         }
     }
-    google.maps.event.trigger(jQuery.goMap.mapId.data(id), 'click');
+    try {
+        if (window.gdMaps == 'google') {
+            google.maps.event.trigger(jQuery.goMap.mapId.data(id), 'click');
+        } else if(window.gdMaps == 'osm') {
+            jQuery.goMap.gdlayers.eachLayer(function(marker) {
+                if (id && marker.options.id == id){
+                    marker.fireEvent('click');
+                }
+            });
+        }
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 function animate_marker(map_canvas, id) {
     jQuery("#" + map_canvas).goMap();
     try {
-        jQuery.goMap.mapId.data(id).setAnimation(google.maps.Animation.BOUNCE);
-    } catch (e) {}
+        if (window.gdMaps == 'google') {
+            jQuery.goMap.mapId.data(id).setAnimation(google.maps.Animation.BOUNCE);
+        } else if(window.gdMaps == 'osm') {
+            jQuery.goMap.gdlayers.eachLayer(function(marker) {
+                if (id && marker.options.id == id){
+                    if (!jQuery(marker._icon).hasClass('gd-osm-marker-bounce')) {
+                        jQuery(marker._icon).addClass('gd-osm-marker-bounce');
+                    }
+                }
+            });
+        }
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 function stop_marker_animation(map_canvas, id) {
     jQuery("#" + map_canvas).goMap();
     try {
-        if (jQuery.goMap.mapId.data(id).getAnimation() != null) {
-            jQuery.goMap.mapId.data(id).setAnimation(null);
+        if (window.gdMaps == 'google') {
+            if (jQuery.goMap.mapId.data(id).getAnimation() != null) {
+                jQuery.goMap.mapId.data(id).setAnimation(null);
+            }
+        } else if(window.gdMaps == 'osm') {
+            jQuery.goMap.gdlayers.eachLayer(function(marker) {
+                if (id && marker.options.id == id){
+                    jQuery(marker._icon).removeClass('gd-osm-marker-bounce');
+                }
+            });
         }
-    } catch (e) {}
+    } catch (e) {
+        console.log(e);
+    }
 }
 // Listing map sticky script //
 function getCookie(cname) {
@@ -1097,8 +1132,10 @@ function parse_marker_jason_osm(data, map_canvas_var) {
 }
 
 function create_marker_osm(input, map_canvas_var) {
-    gd_single_marker_lat = input.lt;
-    gd_single_marker_lon = input.ln;
+    if (map_canvas_var == 'detail_page_map_canvas') {
+        gd_single_marker_lat = input.lt;
+        gd_single_marker_lon = input.ln;
+    }
     
     jQuery("#" + map_canvas_var).goMap();
     

@@ -258,7 +258,14 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
 
             //$country_arr = ["US", "CA", "IN","DE","NL"];
             // fix for regions in GB
-            $country_arr = ["GB"];
+
+            $country_arr = <?php
+            /**
+             * Filter the regions array that uses administrative_area_level_2 instead of administrative_area_level_1.
+             *
+             * @since 1.6.16
+             */
+            echo apply_filters("geodir_geocode_region_level",'["GB","ES"]');?>;
             if (jQuery.inArray(rr, $country_arr) !== -1) {
                 if (administrative_area_level_2.long_name) {
                     getState = administrative_area_level_2.long_name;
@@ -396,13 +403,14 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
         if (getAddress) {
             oldstr_address = getAddress;
         }
-        
+
         jQuery("#<?php echo $prefix.'zip';?>").val(getZip);
         if (getZip) {
             oldstr_zip = getZip;
         }
         if (set_map_val_in_fields) {
             if (getCountry) {
+                jQuery('#<?php echo $prefix .'country'; ?> option[value=""]').attr("selected",false);
                 jQuery('#<?php echo $prefix.'country';?> option[data-country_code="' + getCountryISO + '"]').attr("selected", true);
                 jQuery("#<?php echo $prefix.'country';?>").trigger("chosen:updated");
             }
@@ -436,6 +444,9 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
         var country = jQuery('#<?php echo $prefix.'country';?>').val();
         var country_selected = jQuery('#<?php echo $prefix.'country';?>').find('option:selected');
         var ISO2 = country_selected.data('country_code');
+        if (!ISO2 && jQuery('#<?php echo $prefix.'country';?>').data('country_code')) {
+            ISO2 = jQuery('#<?php echo $prefix.'country';?>').data('country_code');
+        }
         if (ISO2 == '--') {
             ISO2 = '';
         }
@@ -463,6 +474,9 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
         } else {
             if (typeof address === 'undefined')
                 address = '';
+
+            if( address == city || address == region || address == country || address == zip )
+                address = '';
             <?php
             if(is_admin() && isset($_REQUEST['tab'])){?>
             if (jQuery.trim(city) == '' || jQuery.trim(region) == '') {
@@ -472,9 +486,13 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
                }?>
 
             if (ISO2 == 'GB') {
-                address = address + ',' + city + ',' + country + ',' + zip; // UK is funny with regions
+                address = address + ',' + city + ',' + country; // UK is funny with regions
             } else {
-                address = address + ',' + city + ',' + region + ',' + country + ',' + zip;
+                address = address + ',' + city + ',' + region + ',' + country;
+            }
+
+            if(zip!=''){
+                address = address + ',' + zip;
             }
 
             // incase there are any null values

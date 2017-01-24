@@ -238,17 +238,18 @@ function geodir_header_scripts()
  * @package GeoDirectory
  */
 function geodir_footer_scripts()
-{	
+{
 
     if(get_option('geodir_ga_add_tracking_code') && get_option('geodir_ga_account_id')){?>
 
         <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (function(i,s,o,g,r,a,m){ i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
                 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
             })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
             ga('create', '<?php echo esc_attr(get_option('geodir_ga_account_id'));?>', 'auto');
+            <?php if(get_option('geodir_ga_anonymize_ip')){echo "ga('set', 'anonymizeIP', true);";}?>
             ga('send', 'pageview');
 
         </script>
@@ -535,11 +536,10 @@ function geodir_listingsearch_scripts()
  * Prints location related javascript.
  *
  * @since 1.0.0
+ * @since 1.6.16 Fix: Single quote in default city name causes problem in add new city.
  * @package GeoDirectory
  */
-function geodir_add_sharelocation_scripts()
-{
-
+function geodir_add_sharelocation_scripts() {
     $default_search_for_text = SEARCH_FOR_TEXT;
     if (get_option('geodir_search_field_default_text'))
         $default_search_for_text = __(get_option('geodir_search_field_default_text'), 'geodirectory');
@@ -547,12 +547,15 @@ function geodir_add_sharelocation_scripts()
     $default_near_text = NEAR_TEXT;
     if (get_option('geodir_near_field_default_text'))
         $default_near_text = __(get_option('geodir_near_field_default_text'), 'geodirectory');
-
+    
+    $search_location = geodir_get_default_location();
+    
+    $default_search_for_text = addslashes(stripslashes($default_search_for_text));
+    $default_near_text = addslashes(stripslashes($default_near_text));
+    $city = !empty($search_location) ? addslashes(stripslashes($search_location->city)) : '';
     ?>
-
-
     <script type="text/javascript">
-        var default_location = '<?php if($search_location = geodir_get_default_location())  echo $search_location->city ;?>';
+        var default_location = '<?php echo $city ;?>';
         var latlng;
         var address;
         var dist = 0;

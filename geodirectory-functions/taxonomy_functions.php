@@ -1842,46 +1842,52 @@ function geodir_posttype_link($link, $post_type) {
  * Print or Get post type singular label.
  *
  * @since 1.0.0
+ * @since 1.6.16 New $translate parameter added.
  * @package GeoDirectory
  * @param string $post_type The post type.
  * @param bool $echo Prints the label when set to true.
+ * @param bool $translate Returns translated label if True. DefauT false.
  * @return void|string Label.
  */
-function get_post_type_singular_label($post_type, $echo = false)
-{
+function get_post_type_singular_label($post_type, $echo = false, $translate = false) {
     $obj_post_type = get_post_type_object($post_type);
     if (!is_object($obj_post_type)) {
         return;
     }
+    
+    $label = $translate ? __($obj_post_type->labels->singular_name, 'geodirectory') : $obj_post_type->labels->singular_name;
+    
     if ($echo)
-        echo $obj_post_type->labels->singular_name;
+        echo $label;
     else
-        return $obj_post_type->labels->singular_name;
-
+        return $label;
 }
 
 /**
  * Print or Get post type plural label.
  *
  * @since 1.0.0
+ * @since 1.6.16 New $translate parameter added.
  * @package GeoDirectory
  * @param string $post_type The post type.
  * @param bool $echo Prints the label when set to true.
+ * @param bool $translate Returns translated label if True. DefauT false.
  * @return void|string Label.
  */
-function get_post_type_plural_label($post_type, $echo = false)
-{
+function get_post_type_plural_label($post_type, $echo = false, $translate = false) {
     $all_postypes = geodir_get_posttypes();
 
     if (!in_array($post_type, $all_postypes))
         return false;
 
     $obj_post_type = get_post_type_object($post_type);
+    
+    $label = $translate ? __($obj_post_type->labels->name, 'geodirectory') : $obj_post_type->labels->name;
+    
     if ($echo)
-        echo $obj_post_type->labels->name;
+        echo $label;
     else
-        return $obj_post_type->labels->name;
-
+        return $label;
 }
 
 /**
@@ -1977,7 +1983,7 @@ function geodir_get_term_icon($term_id = false, $rebuild = false)
     if (!$rebuild) {
         $terms_icons = get_option('gd_term_icons');
     } else {
-        $terms_icons = '';
+        $terms_icons = array();
     }
 
     if (empty($terms_icons)) {

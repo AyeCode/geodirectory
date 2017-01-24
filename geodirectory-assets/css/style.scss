@@ -189,7 +189,7 @@ dl.geodir-tab-head dd {
     float: left;
     display: block;
     cursor: pointer;
-    margin-left: 0;
+    margin: 0;
     padding: 0;
 }
 
@@ -1715,7 +1715,7 @@ div#jquery-lightbox {
 }
 
 .map-cat-ptypes .map_category,
-.map-cat-ptypes .trigger {
+.map-cat-ptypes .gd-trigger {
 	margin-bottom: 30px;
 }
 .gd-cpt-widget-box {
@@ -1924,5 +1924,79 @@ div#jquery-lightbox {
     transform: initial !important;
 }
 
-// Google maps adds a span which breaks our mobile slide out menus
+/* Google maps adds a span which breaks our mobile slide out menus */
 body > span[style*='top: -999px']{display: none;}
+
+/* OpenStreetMap marker bounce */
+@-webkit-keyframes gdbounce {
+    0%, 100% { 
+        top: inherit; 
+    }
+    20%, 80% { 
+        top: -0.8em; 
+    }
+    40%, 60% { 
+        top: -1.6em; 
+    }
+    50% { 
+        top: -2em; 
+    }
+}
+@-moz-keyframes gdbounce {
+    0%, 100% { 
+        top: inherit; 
+    }
+    20%, 80% { 
+        top: -0.8em; 
+    }
+    40%, 60% { 
+        top: -1.6em; 
+    }
+    50% { 
+        top: -2em; 
+    }
+}
+@-o-keyframes gdbounce {
+    0%, 100% { 
+        top: inherit; 
+    }
+    20%, 80% { 
+        top: -0.8em; 
+    }
+    40%, 60% { 
+        top: -1.6em; 
+    }
+    50% { 
+        top: -2em; 
+    }
+}
+@keyframes gdbounce {
+    0%, 100% { 
+        top: inherit; 
+    }
+    20%, 80% { 
+        top: -0.8em; 
+    }
+    40%, 60% { 
+        top: -1.6em; 
+    }
+    50% { 
+        top: -2em; 
+    }
+}
+.gd-osm-marker-bounce {
+    -webkit-animation: gdbounce .7s infinite;
+    -moz-animation: gdbounce .7s infinite;
+    -o-animation: gdbounce .7s infinite;
+    animation: gdbounce .7s infinite;
+}
+.geodir-gridview .geodir-rating,
+.geodir-listview .geodir-rating,
+.gd-bubble .geodir-rating,
+.geodir-details-sidebar-rating .geodir-rating,
+.geodir-gridview .gd-star-rating,
+.geodir-listview .gd-star-rating,
+.gd-bubble .gd-star-rating,
+.geodir-details-sidebar-rating .gd-star-rating {
+    cursor: pointer;
+}

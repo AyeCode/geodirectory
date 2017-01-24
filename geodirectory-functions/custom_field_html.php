@@ -445,8 +445,7 @@ if(isset($cf['name']) && $cf['name']){
                         // remove some locations for some field types
 
                         // don't show new tab option for some types
-
-                        if (in_array($field_type, array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file'))) {
+                        if (in_array($field_type, array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file','address','taxonomy'))) {
                         }else{
                             unset($show_in_locations['[owntab]']);
                         }

@@ -410,7 +410,7 @@ function geodir_add_page_id_in_query_var()
  */
 function geodir_set_location_var_in_session_in_core($wp) {
 	global $gd_session;
-	
+
     // Fix for WPML removing page_id query var:
     if (isset($wp->query_vars['page']) && !isset($wp->query_vars['page_id']) && isset($wp->query_vars['pagename']) && !is_home()) {
         global $wpdb;
@@ -425,7 +425,6 @@ function geodir_set_location_var_in_session_in_core($wp) {
             $wp->query_vars['page_id'] = $real_page_id;
         }
     }
-	
 	// Query Vars will have page_id parameter
 	// check if query var has page_id and that page id is location page
     geodir_set_is_geodir_page($wp);

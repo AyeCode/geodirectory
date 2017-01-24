@@ -2722,8 +2722,6 @@ add_filter('geodir_cfa_htmlvar_name_taxonomy','__return_empty_string',10,4);
 
 
 // default_value not needed for textarea, html, file, fieldset, taxonomy, address
-add_filter('geodir_cfa_default_value_textarea','__return_empty_string',10,4);
-add_filter('geodir_cfa_default_value_html','__return_empty_string',10,4);
 add_filter('geodir_cfa_default_value_file','__return_empty_string',10,4);
 add_filter('geodir_cfa_default_value_taxonomy','__return_empty_string',10,4);
 add_filter('geodir_cfa_default_value_address','__return_empty_string',10,4);

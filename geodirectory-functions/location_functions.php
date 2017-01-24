@@ -198,6 +198,7 @@ function geodir_location_form_submit()
  * Adds new location using location info.
  *
  * @since 1.0.0
+ * @since 1.6.16 Fix country translation.
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @param array $location_info {
@@ -217,17 +218,16 @@ function geodir_add_new_location($location_info = array())
     global $wpdb;
 
     if (!empty($location_info)) {
-
         $location_city = ($location_info['city'] != '') ? $location_info['city'] : 'all';
         $location_region = ($location_info['region'] != '') ? $location_info['region'] : 'all';
-        $location_country = ($location_info['country'] != '') ? $location_info['country'] : 'all';
+        $location_country = ($location_info['country'] != '') ? geodir_get_normal_country($location_info['country']) : 'all';
         $location_lat = ($location_info['geo_lat'] != '') ? $location_info['geo_lat'] : '';
         $location_lng = ($location_info['geo_lng'] != '') ? $location_info['geo_lng'] : '';
         $is_default = isset($location_info['is_default']) ? $location_info['is_default'] : '';
         $country_slug = create_location_slug(__($location_country, 'geodirectory'));
         $region_slug = create_location_slug($location_region);
         $city_slug = create_location_slug($location_city);
-
+        
         /**
          * Filter add new location data.
          *
@@ -245,7 +245,7 @@ function geodir_add_new_location($location_info = array())
             'is_default' => $is_default
         ));
 
-
+        /* // Not allowed to create country in DB : 2016-12-09
         if ($geodir_location->country) {
 
             $get_country = $wpdb->get_var($wpdb->prepare("SELECT Country FROM " . GEODIR_COUNTRIES_TABLE . " WHERE Country=%s", array($geodir_location->country)));
@@ -257,6 +257,7 @@ function geodir_add_new_location($location_info = array())
             }
 
         }
+        */
 
         if ($geodir_location->is_default)
             update_option('geodir_default_location', $geodir_location);
@@ -460,3 +461,237 @@ function geodir_get_osm_address_by_lat_lan($lat, $lng) {
         return false;
     }
 }
+
+/**
+ * Get normal untranslated country name.
+ *
+ * @since 1.6.16
+ * @package GeoDirectory
+ * @param string $country The country name.
+ * @return string Returns the country.
+ */
+function geodir_get_normal_country($country) {
+    global $wpdb;
+    if ($result = geodir_get_country_by_name($country)) {
+        return $result;
+    }
+    
+    if (defined('POST_LOCATION_TABLE')) {
+        $rows = $wpdb->get_results($wpdb->prepare("SELECT DISTINCT country FROM " . POST_LOCATION_TABLE . " WHERE country NOT LIKE %s ORDER BY location_id ASC", $country));
+        if (!empty($rows)) {
+            foreach ($rows as $row) {
+                $translated = __($row->country, 'geodirectory');
+                if (geodir_strtolower($translated) == geodir_strtolower($country) && $result = geodir_get_country_by_name($row->country)) {
+                    return $result;
+                }
+            }
+        }
+        
+        $rows = $wpdb->get_results( $wpdb->prepare( "SELECT DISTINCT country FROM " . POST_LOCATION_TABLE . " WHERE country_slug LIKE %s AND country NOT LIKE %s ORDER BY location_id", $country, $country ) );
+        if (!empty($rows)) {
+            foreach ($rows as $row) {
+                $translated = __($row->country, 'geodirectory');
+                if (geodir_strtolower($translated) == geodir_strtolower($country) && $result = geodir_get_country_by_name($row->country)) {
+                    return $result;
+                }
+            }
+        }
+    }
+    
+    $default_location = geodir_get_default_location();
+    if (!empty($default_location->country) && $result = geodir_get_country_by_name($default_location->country)) {
+        return $result;
+    }
+    
+    if (!empty($default_location->country_slug) && $result = geodir_get_country_by_name($default_location->country_slug)) {
+        return $result;
+    }
+    
+    if (!empty($default_location->country_ISO2) && $result = geodir_get_country_by_name($default_location->country_ISO2, true)) {
+        return $result;
+    }
+    
+    return $country;
+}
+
+/**
+ * Get ISO2 of the country.
+ *
+ * @since 1.6.16
+ * @package GeoDirectory
+ * @param string $country The country name.
+ * @return string Country ISO2 code.
+ */
+function geodir_get_country_iso2($country) {
+    global $wpdb;
+    
+    if ($result = $wpdb->get_var($wpdb->prepare("SELECT ISO2 FROM " . GEODIR_COUNTRIES_TABLE . " WHERE Country LIKE %s", $country))) {
+        return $result;
+    }
+    if ($result = $wpdb->get_var($wpdb->prepare("SELECT ISO2 FROM " . GEODIR_COUNTRIES_TABLE . " WHERE Country LIKE %s", geodir_get_normal_country($country)))) {
+        return $result;
+    }
+    
+    return $country;
+}
+
+/**
+ * Get the country name from DB.
+ *
+ * @since 1.6.16
+ * @package GeoDirectory
+ * @param string $country The country name or iso2.
+ * @param bool $iso2 If true it searches by country iso2.
+ * @return string|null Country ISO2 code.
+ */
+function geodir_get_country_by_name($country, $iso2 = false) {
+    global $wpdb;
+    
+    if ($result = $wpdb->get_var($wpdb->prepare("SELECT Country FROM " . GEODIR_COUNTRIES_TABLE . " WHERE Country LIKE %s", $country))) {
+        return $result;
+    }
+    if ($iso2 && $result = $wpdb->get_var($wpdb->prepare("SELECT Country FROM " . GEODIR_COUNTRIES_TABLE . " WHERE ISO2 LIKE %s", $country))) {
+        return $result;
+    }
+    
+    return NULL;
+}
+
+
+/**
+ * Replace the location variables.
+ *
+ * @since   1.6.16
+ * @package GeoDirectory
+ *
+ * @global object $wp WordPress object.
+ *
+ * @param string $content       The content with variables.
+ * @param array $location_array The array of location variables.
+ * @param string $sep           The separator, Optional.
+ * @param string $gd_page       The page being filtered. Optional.
+ * @return string Filtered content.
+ */
+function geodir_replace_location_variables($content, $location_array = array(), $sep = NULL, $gd_page = '') {
+    global $wp;
+    
+    if (empty($content)) {
+        return $content;
+    }
+    
+    $location_manager = defined('GEODIRLOCATION_VERSION') ? true : false;
+    
+    if (empty($location_array)) {
+        $location_array = geodir_get_current_location_terms('query_vars');
+    }
+    
+    $location_terms = array();
+    $location_terms['gd_neighbourhood'] = !empty($wp->query_vars['gd_neighbourhood']) ? $wp->query_vars['gd_neighbourhood'] : '';
+    $location_terms['gd_city'] = !empty($wp->query_vars['gd_city']) ? $wp->query_vars['gd_city'] : '';
+    $location_terms['gd_region'] = !empty($wp->query_vars['gd_region']) ? $wp->query_vars['gd_region'] : '';
+    $location_terms['gd_country'] = !empty($wp->query_vars['gd_country']) ? $wp->query_vars['gd_country'] : '';
+
+    $location_names = array();
+    foreach ($location_terms as $type => $location) {
+        $location_name = $location;
+        
+        if (!empty($location_name)) {
+            if ($location_manager) {
+                $location_type = strpos($type, 'gd_') === 0 ? substr($type, 3) : $type;
+                $location_name = get_actual_location_name($location_type, $location, true);
+            } else {
+                $location_name = preg_replace( '/-(\d+)$/', '', $location_name);
+                $location_name = preg_replace( '/[_-]/', ' ', $location_name );
+                $location_name = __(geodir_ucwords($location_name), 'geodirectory');
+            }
+        }
+
+        $location_names[$type] = $location_name;
+    }
+    
+    $location_single = '';
+    foreach ($location_terms as $type => $location) {
+        if (!empty($location)) {
+            if (!empty($location_names[$type])) {
+                $location_single = $location_names[$type];
+            } else {
+                if ($location_manager) {
+                    $location_type = strpos($type, 'gd_') === 0 ? substr($type, 3) : $type;
+                    $location_single = get_actual_location_name($location_type, $location, true);
+                } else {
+                    $location_name = preg_replace( '/-(\d+)$/', '', $location);
+                    $location_name = preg_replace( '/[_-]/', ' ', $location_name );
+                    $location_single = __(geodir_ucwords($location_name), 'geodirectory');
+                }
+            }
+            break;
+        }
+    }
+    
+    $full_location = array();
+    if (!empty($location_array)) {
+        $location_array = array_reverse($location_array);
+
+        foreach ($location_array as $type => $location) {
+            if (!empty($location_names[$type])) {
+                $location_name = $location_names[$type];
+            } else {
+                if ($location_manager) {
+                    $location_type = strpos($type, 'gd_') === 0 ? substr($type, 3) : $type;
+                    $location_name = get_actual_location_name($location_type, $location, true);
+                } else {
+                    $location_name = preg_replace( '/-(\d+)$/', '', $location);
+                    $location_name = preg_replace( '/[_-]/', ' ', $location_name );
+                    $location_name = __(geodir_ucwords($location_name), 'geodirectory');
+                }
+            }
+
+            $full_location[] = $location_name;
+        }
+        
+        if (!empty($full_location)) {
+            $full_location = array_unique($full_location);
+        }
+    }
+    $full_location = !empty($full_location) ? implode(', ', $full_location): '';
+    
+    $location_replace_vars = array();
+    $location_replace_vars['%%location_sep%%'] = $sep !== NULL ? $sep : '|';
+    $location_replace_vars['%%location%%'] = $full_location;
+    $location_replace_vars['%%in_location%%'] = $full_location != '' ? __( 'in', 'geodirectory' ) . ' ' . $full_location : '';
+    $location_replace_vars['%%location_single%%'] = $location_single;
+    $location_replace_vars['%%in_location_single%%'] = $location_single != '' ? __( 'in', 'geodirectory' ) . ' ' . $location_single : '';
+    
+    foreach ($location_names as $type => $name) {
+        $location_type = strpos($type, 'gd_') === 0 ? substr($type, 3) : $type;
+        
+        $location_replace_vars['%%location_' . $location_type . '%%'] = $name;
+        $location_replace_vars['%%in_location_' . $location_type . '%%'] = !empty($name) ? __( 'in', 'geodirectory' ) . ' ' . $name : '';
+    }
+
+    /**
+     * Filter the location terms variables to search & replace.
+     *
+     * @since   1.6.16
+     * @package GeoDirectory
+     *
+     * @param array $location_replace_vars The array of search & replace variables.
+     * @param string $content       The content with variables.
+     * @param array $location_array The array of location variables.
+     * @param string $gd_page       The page being filtered.
+     * @param string $sep           The separator.
+     */
+    $location_replace_vars = apply_filters( 'geodir_filter_location_replace_variables', $location_replace_vars, $content, $location_array, $gd_page, $sep );
+
+    if (!empty($location_replace_vars)) {
+        foreach ($location_replace_vars as $search => $replace) {
+            if (!empty($search) && strpos($content, $search) !== false) {
+                $content = str_replace($search, $replace, $content);
+            }
+        }
+    }
+
+    return $content;
+}
+add_filter('geodir_replace_location_variables', 'geodir_replace_location_variables');
+add_filter('geodir_replace_location_variables_seo', 'geodir_replace_location_variables');
