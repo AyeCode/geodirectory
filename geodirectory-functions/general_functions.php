@@ -2817,7 +2817,9 @@ function geodir_popular_post_category_output( $args = '', $instance = '' ) {
 	} else {
 		$taxonomy = geodir_get_taxonomies( $gd_post_type );
 	}
-    
+
+	$taxonomy = apply_filters('geodir_pp_category_taxonomy', $taxonomy);
+
 	$term_args = array( 'taxonomy' => $taxonomy );
 	if ( $parent_only ) {
 		$term_args['parent'] = 0;

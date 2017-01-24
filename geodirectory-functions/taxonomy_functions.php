@@ -1987,6 +1987,7 @@ function geodir_get_term_icon($term_id = false, $rebuild = false)
     }
 
     if (empty($terms_icons)) {
+        $terms_icons = array();
         $default_icon_url = get_option('geodir_default_marker_icon');
         $taxonomy = geodir_get_taxonomies();
         $post_types = geodir_get_posttypes();
