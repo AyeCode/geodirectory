@@ -1195,12 +1195,9 @@ function geodir_taxonomy_breadcrumb() {
 }
 
 function geodir_wpml_post_type_archive_link($link, $post_type){
-
-	if(function_exists('icl_object_id')) {
+	if (function_exists('icl_object_id')) {
 		$post_types   = get_option( 'geodir_post_types' );
 		$slug         = $post_types[ $post_type ]['rewrite']['slug'];
-
-		//echo $link.'###'.gd_wpml_get_lang_from_url( $link) ;
 
 		// Alter the CPT slug if WPML is set to do so
 		if ( function_exists( 'icl_object_id' ) ) {
@@ -1212,23 +1209,20 @@ function geodir_wpml_post_type_archive_link($link, $post_type){
 					'WordPress',
 					'URL slug: ' . $slug,
 					$language_code );
-
+                    
 				if ( ! $slug ) {
 					$slug = $org_slug;
 				} else {
 					$link = str_replace( $org_slug, $slug, $link );
 				}
-
 			}
 		}
-
-		//echo $link.'####'.gd_wpml_get_lang_from_url( $link) ;
 	}
 
 	return $link;
 }
+add_filter( 'post_type_archive_link','geodir_wpml_post_type_archive_link', 1000, 2);
 
-//add_filter( 'post_type_archive_link','geodir_wpml_post_type_archive_link', 1000,2);
 /**
  * Main function that generates breadcrumb for all pages.
  *
