@@ -1043,7 +1043,14 @@ function geodir_action_details_slider()
     } else {
         $main_slides = '';
         $nav_slides = '';
-        $post_images = geodir_get_images($post->ID, 'thumbnail', false); // Hide default image on listing preview/detail page.
+        /**
+         * Filter if default images should show on the details page.
+         *
+         * @param bool $use_default_image Default false.
+         * @since 1.6.16
+         */
+        $use_default_image = apply_filters('geodir_details_default_image_show', false);
+        $post_images = geodir_get_images($post->ID, 'thumbnail', $use_default_image); // Hide default image on listing preview/detail page.
         $slides = 0;
 
         if (!empty($post_images)) {

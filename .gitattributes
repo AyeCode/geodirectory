@@ -4,7 +4,10 @@
 .gitignore export-ignore
 .scrutinizer.yml export-ignore
 composer.json export-ignore
+composer.lock export-ignore
 CONTRIBUTING.md export-ignore
 phpunit.xml export-ignore
 README.md export-ignore
 /tests/ export-ignore
+/vendor/ export-ignore
+/.idea/ export-ignore
