@@ -2335,6 +2335,7 @@ function geodir_import_export_page() {
 							<input type="text" readonly="readonly" name="gd_im_post_file" class="gd-imex-file gd_im_post_file" id="gd_im_post" onclick="jQuery('#gd_im_postplupload-browse-button').trigger('click');" />
 							<input id="gd_im_postplupload-browse-button" type="button" value="<?php echo SELECT_UPLOAD_CSV; ?>" class="gd-imex-pupload button-primary" /><input type="button" value="<?php echo esc_attr( __( 'Download Sample CSV', 'geodirectory' ) );?>" class="button-secondary" name="gd_ie_imposts_sample" id="gd_ie_imposts_sample">
 						<input type="hidden" id="gd_ie_imposts_csv" value="<?php echo $gd_posts_sample_csv;?>" />
+						<input type="hidden" id="gd_im_post_allowed_types" data-exts=".csv" value="csv" />
 							<?php
 							/**
 							 * Called just after the sample CSV download link.
@@ -2346,7 +2347,7 @@ function geodir_import_export_page() {
 							<span class="ajaxnonceplu" id="ajaxnonceplu<?php echo wp_create_nonce( 'gd_im_postpluploadan' ); ?>"></span>
 							<div class="filelist"></div>
 						</div>
-						<span id="gd_im_catupload-error" style="display:none"></span>
+						<span id="gd_im_postupload-error" style="display:none"></span>
 						<span class="description"></span>
 						<div id="gd_importer" style="display:none">
 							<input type="hidden" id="gd_total" value="0"/>
@@ -2455,6 +2456,7 @@ function geodir_import_export_page() {
 							<input type="text" readonly="readonly" name="gd_im_cat_file" class="gd-imex-file gd_im_cat_file" id="gd_im_cat" onclick="jQuery('#gd_im_catplupload-browse-button').trigger('click');" />
 							<input id="gd_im_catplupload-browse-button" type="button" value="<?php echo SELECT_UPLOAD_CSV; ?>" class="gd-imex-cupload button-primary" /><input type="button" value="<?php echo esc_attr( __( 'Download Sample CSV', 'geodirectory' ) );?>" class="button-secondary" name="gd_ie_imcats_sample" id="gd_ie_imcats_sample">
 						<input type="hidden" id="gd_ie_imcats_csv" value="<?php echo $gd_cats_sample_csv;?>" />
+						<input type="hidden" id="gd_im_cat_allowed_types" data-exts=".csv" value="csv" />
 						<?php
 						/**
 						 * Called just after the sample CSV download link.
