@@ -280,7 +280,7 @@ function build_map_ajax_search_param(map_canvas_var, reload_cat_list, catObj, hi
             child_collapse: child_collapse
         }, function(data) {
             if (data) {
-                jQuery('#' + map_canvas_var + '_cat .toggle').html(data);
+                jQuery('#' + map_canvas_var + '_cat .geodir_toggle').html(data);
                 //show_category_filter(map_canvas_var);
                 geodir_show_sub_cat_collapse_button();
                 build_map_ajax_search_param(map_canvas_var, false);

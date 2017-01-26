@@ -350,7 +350,7 @@ function geodir_draw_map($map_args = array())
                                     <input type="hidden" id="<?php echo $map_canvas_name;?>_child_collapse" value="0"/>
                                 <?php } ?>
                                 <input type="hidden" id="<?php echo $map_canvas_name; ?>_cat_enabled" value="1"/>
-                                <div class="toggle">
+                                <div class="geodir_toggle">
                                     <?php echo home_map_taxonomy_walker(array($map_search_pt.'category'),0,true,0,$map_canvas_name,$child_collapse,true); ?>
                                     <script>jQuery( document ).ready(function() {
                                             geodir_show_sub_cat_collapse_button();
