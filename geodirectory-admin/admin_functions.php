@@ -6226,6 +6226,7 @@ function geodir_imex_export_skip_statuses() {
  * @package GeoDirectory
  * @since 1.6.3
  * @since 1.6.16 Fix Fusion Builder jQuery chosen conflicts with GD jQuery chosen.
+ *               Fix Ultimate VC Addons script conflict.
  *
  * @global string $typenow Current post type.
  */
@@ -6242,11 +6243,24 @@ function geodir_admin_dequeue_scripts() {
         wp_dequeue_script('ultimate-vc-backend-script');
     }
     
+    // VC editor conflicts
+    if (class_exists('Vc_Role_Access_Controller') && wp_script_is('dfd_vc_damin_scripts', 'enqueued')) {
+        wp_dequeue_script('dfd_vc_damin_scripts');
+    }
+    
+    // Ultimate chosen
+    if (wp_script_is('ultimate-chosen-script', 'enqueued')) {
+        wp_dequeue_script('ultimate-chosen-script');
+    }
+    
+    // Crum composer choosen
+    if (wp_script_is('crum-composer-choosen', 'enqueued')) {
+        wp_dequeue_script('crum-composer-choosen');
+    }
+    
     // Fix conflict Fusion Builder jquery chosen with GD jquery chosen.
-    if (class_exists('FusionBuilder')) {
-        if (wp_script_is('fusion_builder_chosen_js', 'enqueued') && $typenow && in_array($typenow, geodir_get_posttypes())) {
-            wp_dequeue_script('fusion_builder_chosen_js');
-        }
+    if (class_exists('FusionBuilder') && wp_script_is('fusion_builder_chosen_js', 'enqueued')) {
+        wp_dequeue_script('fusion_builder_chosen_js');
     }
 }
 
