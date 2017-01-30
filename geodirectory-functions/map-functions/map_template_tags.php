@@ -237,6 +237,7 @@ function geodir_draw_map($map_args = array())
                            value="<?php echo ENTER_LOCATION_TEXT; ?>"
                            onblur="if (this.value == '') {this.value = '<?php echo ENTER_LOCATION_TEXT; ?>';}"
                            onfocus="if (this.value == '<?php echo ENTER_LOCATION_TEXT; ?>') {this.value = '';}"/>
+                    <span title="<?php echo esc_attr__('My location', 'geodirectory'); ?>" id="<?php echo $map_canvas_name; ?>_mylocation" class="gd-map-mylocation"><i class="fa fa-crosshairs" aria-hidden="true"></i></span>
                     <input type="button" value="<?php _e('Get Directions', 'geodirectory'); ?>"
                            class="<?php echo $map_canvas_name; ?>_getdirection" id="directions"
                            onclick="calcRoute('<?php echo $map_canvas_name; ?>')"/>
@@ -262,6 +263,7 @@ function geodir_draw_map($map_args = array())
                                 });
                             } else {
                                 jQuery('#<?php echo $map_canvas_name; ?>_fromAddress').hide();
+                                jQuery('.<?php echo $map_canvas_name; ?>_mylocation').hide();
                                 jQuery('.<?php echo $map_canvas_name; ?>_getdirection').hide();
                                 
                                 if (window.gdMaps == 'osm') {

@@ -2000,3 +2000,37 @@ body > span[style*='top: -999px']{display: none;}
 .geodir-details-sidebar-rating .gd-star-rating {
     cursor: pointer;
 }
+.geodir_map_container .gd-map-mylocation {
+    padding: 0;
+    font-weight: normal;
+    line-height: 0;
+    text-align: center;
+    cursor: pointer;
+    box-sizing: border-box;
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    color: #757575;
+    margin: 11px 0 0 -43px;
+}
+.gd-osm-gmaps .geodir_map_container .gd-map-mylocation {
+    margin: -3px 12px 0 0;
+    float: right;
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    line-height: normal;
+}
+.geodir_map_container .gd-map-mylocation:hover {
+    color: #333;
+}
+.geodir_map_container .gd-map-mylocation .fa {
+    font-size: 22px;
+    line-height: 35px;
+    margin: 0;
+    padding: 0
+}
+.gd-osm-gmaps .geodir_map_container .gd-map-mylocation .fa {
+    font-size: 18px;
+    line-height: normal;
+}
