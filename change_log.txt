@@ -35,6 +35,7 @@ WPML duplicate should not be posts edited from frontend - FIXED
 WPML "view all" does not use the translated CPT slug - FIXED
 White spaces in multiselect comma separated custom fields does not ticked in edit form - FIXED 
 Ultimate VC Addons script breaks backend add/edit listings - FIXED
+Widget CPT Categories has extra closing ul tag - FIXED
 
 v1.6.15
 Google Services API can conflict with newer version of the Google Service Class - UPDATED
