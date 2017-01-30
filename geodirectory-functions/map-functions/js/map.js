@@ -838,6 +838,8 @@ function calcRoute(map_canvas) {
             control.addTo(jQuery.goMap.map);
             
             L.Routing.errorControl(control).addTo(jQuery.goMap.map);
+            
+            jQuery('.leaflet-routing-geocoders .leaflet-routing-search-info').append('<span title="' + geodir_all_js_msg.geoMyLocation + '" onclick="gdMyGeoDirection();" id="detail_page_map_canvas_mylocation" class="gd-map-mylocation"><i class="fa fa-crosshairs" aria-hidden="true"></i></span>');
         } catch(e) {
             console.log(e);
         }
@@ -1261,5 +1263,93 @@ function create_marker_osm(input, map_canvas_var) {
     } else {
         //no lat & long, return no marker
         return false;
+    }
+}
+
+jQuery(function() {
+    if (jQuery('.geodir_map_container > #detail_page_map_canvas_mylocation').length > 0) {
+        var st = jQuery('.geodir_map_container > #detail_page_map_canvas_fromAddress'),
+            ml = jQuery('.geodir_map_container > #detail_page_map_canvas_mylocation');
+        var sh = st.outerHeight(),
+            sw = st.outerWidth(),
+            stmt = st.css('marginTop'),
+            stmr = st.css('marginRight');
+        var mLeft = (parseFloat(stmr) + 37) * -1;
+        ml.height(sh).width(sh).css({
+            'margin-top': stmt,
+            'margin-left': mLeft
+        });
+        ml.find('.fa').css({
+            'line-height': sh + 'px'
+        });
+        jQuery('#detail_page_map_canvas_mylocation').click(function(e) {
+            gdMyGeoDirection();
+        });
+    }
+});
+
+function gdMyGeoDirection() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(gdMyGeoPositionSuccess, gdMyGeoPositionError);
+    } else {
+        gdMyGeoPositionError(-1);
+    }
+}
+
+function gdMyGeoPositionError(err) {
+    var msg;
+    switch (err.code) {
+        case err.UNKNOWN_ERROR:
+            msg = geodir_all_js_msg.geoErrUNKNOWN_ERROR;
+            break;
+        case err.PERMISSION_DENINED:
+            msg = geodir_all_js_msg.geoErrPERMISSION_DENINED;
+            break;
+        case err.POSITION_UNAVAILABLE:
+            msg = geodir_all_js_msg.geoErrPOSITION_UNAVAILABLE;
+            break;
+        case err.BREAK:
+            msg = geodir_all_js_msg.geoErrBREAK;
+            break;
+        default:
+            msg = geodir_all_js_msg.geoErrDEFAULT;
+    }
+    alert(msg);
+}
+
+function gdMyGeoPositionSuccess(position) {
+    var coords = position.coords || position.coordinate || position;
+    if (coords && coords.latitude && coords.longitude) {
+        var myLat = coords.latitude,
+            myLng = coords.longitude;
+        var geoAddress = myLat + ', ' + myLng;
+        if (window.gdMaps == 'google') {
+            var gdMyGeocoder = new google.maps.Geocoder(),
+                myLatLng = new google.maps.LatLng(myLat, myLng);
+            gdMyGeocoder.geocode({
+                latLng: myLatLng
+            }, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK && results && results[0].formatted_address) {
+                    geoAddress = results[0].formatted_address;
+                }
+                // Directions to user geo location.
+                gdMyGeoGetDirections(geoAddress);
+            });
+        } else if (window.gdMaps == 'osm') {
+            gdMyGeoGetDirections(geoAddress);
+        }
+    }
+}
+
+function gdMyGeoGetDirections(address) {
+    if (!address) {
+        return false;
+    }
+    window.gdMyGeo = true;
+    if (window.gdMaps == 'google') {
+        jQuery('#detail_page_map_canvas_fromAddress').val(address);
+        calcRoute('detail_page_map_canvas');
+    } else if (window.gdMaps == 'osm') {
+        jQuery('.leaflet-routing-geocoders .leaflet-routing-geocoder:last input').val(address).focus();
     }
 }

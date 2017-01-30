@@ -816,9 +816,11 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 		$siteurl_link  = '<a href="' . $siteurl . '">' . $siteurl . '</a>';
 		$loginurl      = geodir_login_url();
 		$loginurl_link = '<a href="' . $loginurl . '">login</a>';
-
+        
 		$post_author_id   = ! empty( $post_info ) ? $post_info->post_author : 0;
+		$post_author_data = $post_author_id ? get_userdata( $post_author_id ) : NULL;
 		$post_author_name = geodir_get_client_name( $post_author_id );
+		$post_author_email = !empty( $post_author_data->user_email ) ? $post_author_data->user_email : '';
 		$current_date     = date_i18n( 'Y-m-d H:i:s', current_time( 'timestamp' ) );
 
 		if ( $fromEmail == '' ) {
@@ -847,7 +849,8 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 			'[#username#]',
 			'[#post_author_id#]',
 			'[#post_author_name#]',
-			'[#current_date#]'
+			'[#user_email#]',
+			'[#current_date#]',
 		);
 		$replace_array = array(
 			$listingLink,
@@ -867,7 +870,8 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 			$user_login,
 			$post_author_id,
 			$post_author_name,
-			$current_date
+			$post_author_email,
+			$current_date,
 		);
 		$message       = str_replace( $search_array, $replace_array, $message );
 
@@ -886,6 +890,7 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 			'[#username#]',
 			'[#post_author_id#]',
 			'[#post_author_name#]',
+			'[#user_email#]',
 			'[#current_date#]'
 		);
 		$replace_array = array(
@@ -903,6 +908,7 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 			$user_login,
 			$post_author_id,
 			$post_author_name,
+			$post_author_email,
 			$current_date
 		);
 		$subject       = str_replace( $search_array, $replace_array, $subject );
@@ -1028,6 +1034,7 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 				'[#site_name#]',
 				'[#to_name#]',
 				'[#from_name#]',
+				'[#from_email#]',
 				'[#subject#]',
 				'[#comments#]',
 				'[#login_url#]',
@@ -1035,7 +1042,8 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 				'[#client_name#]',
 				'[#posted_date#]',
 				'[#user_login#]',
-				'[#username#]'
+				'[#username#]',
+				'[#user_email#]',
 			);
 			$replace_array = array(
 				$listingLink,
@@ -1044,6 +1052,7 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 				$sitefromEmailName,
 				$toEmailName,
 				$fromEmailName,
+				$fromEmail,
 				$to_subject,
 				$to_message,
 				$loginurl_link,
@@ -1051,7 +1060,8 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 				$toEmailName,
 				$posted_date,
 				$user_login,
-				$user_login
+				$user_login,
+				$post_author_email,
 			);
 			$message       = str_replace( $search_array, $replace_array, $message );
 
@@ -1062,11 +1072,13 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 				'[#site_name#]',
 				'[#to_name#]',
 				'[#from_name#]',
+				'[#from_email#]',
 				'[#subject#]',
 				'[#client_name#]',
 				'[#posted_date#]',
 				'[#user_login#]',
-				'[#username#]'
+				'[#username#]',
+				'[#user_email#]',
 			);
 			$replace_array = array(
 				$listingLink,
@@ -1075,11 +1087,13 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 				$sitefromEmailName,
 				$toEmailName,
 				$fromEmailName,
+				$fromEmail,
 				$to_subject,
 				$toEmailName,
 				$posted_date,
 				$user_login,
-				$user_login
+				$user_login,
+				$post_author_email,
 			);
 			$subject       = str_replace( $search_array, $replace_array, $subject );
 
