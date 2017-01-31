@@ -1122,7 +1122,7 @@ function geodir_cfi_address($html,$cf){
                     $lng = '';
                 }
                 ?>
-                <span class="geodir_message_note"><?php echo GET_MAP_MSG; ?></span>
+                <span class="geodir_message_note"><?php echo stripslashes(GET_MAP_MSG); ?></span>
             </div>
             <?php
             /* show lat lng */

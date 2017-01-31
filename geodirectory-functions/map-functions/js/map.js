@@ -1266,28 +1266,6 @@ function create_marker_osm(input, map_canvas_var) {
     }
 }
 
-jQuery(function() {
-    if (jQuery('.geodir_map_container > #detail_page_map_canvas_mylocation').length > 0) {
-        var st = jQuery('.geodir_map_container > #detail_page_map_canvas_fromAddress'),
-            ml = jQuery('.geodir_map_container > #detail_page_map_canvas_mylocation');
-        var sh = st.outerHeight(),
-            sw = st.outerWidth(),
-            stmt = st.css('marginTop'),
-            stmr = st.css('marginRight');
-        var mLeft = (parseFloat(stmr) + 37) * -1;
-        ml.height(sh).width(sh).css({
-            'margin-top': stmt,
-            'margin-left': mLeft
-        });
-        ml.find('.fa').css({
-            'line-height': sh + 'px'
-        });
-        jQuery('#detail_page_map_canvas_mylocation').click(function(e) {
-            gdMyGeoDirection();
-        });
-    }
-});
-
 function gdMyGeoDirection() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(gdMyGeoPositionSuccess, gdMyGeoPositionError);
