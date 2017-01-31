@@ -1301,19 +1301,7 @@ function gdMyGeoPositionSuccess(position) {
         var myLat = coords.latitude,
             myLng = coords.longitude;
         var geoAddress = myLat + ', ' + myLng;
-        if (window.gdMaps == 'google') {
-            var gdMyGeocoder = new google.maps.Geocoder(),
-                myLatLng = new google.maps.LatLng(myLat, myLng);
-            gdMyGeocoder.geocode({
-                latLng: myLatLng
-            }, function(results, status) {
-                if (status == google.maps.GeocoderStatus.OK && results && results[0].formatted_address) {
-                    geoAddress = results[0].formatted_address;
-                }
-                // Directions to user geo location.
-                gdMyGeoGetDirections(geoAddress);
-            });
-        } else if (window.gdMaps == 'osm') {
+        if (window.gdMaps == 'google' || window.gdMaps == 'osm') {
             gdMyGeoGetDirections(geoAddress);
         }
     }
