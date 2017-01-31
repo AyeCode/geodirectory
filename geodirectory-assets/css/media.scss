@@ -234,6 +234,17 @@
     /*.geodir_flexslider .geodir-slides img {max-height: 255px !important;}*/
 }
 
+@media only screen and (max-width: 375px) {
+    .geodir-content-right .geodir_category_list_view li.gridview_onehalf,
+    .geodir-content-left .geodir_category_list_view li.gridview_onehalf,
+    .geodir_category_list_view li.gridview_onethird,
+    .geodir_category_list_view li.gridview_onehalf,
+    .geodir_category_list_view li.gridview_onefourth,
+    .geodir_category_list_view li.gridview_onefifth {
+        width: 100%;
+    }
+}
+
 @media only screen and (max-width: 320px) {
     .geodir_category_list_view li.gridview_onethird, .geodir_category_list_view li.gridview_onefifth, .geodir_category_list_view li.gridview_onehalf, .geodir_category_list_view li.gridview_onefourth {
         max-width: inherit;
