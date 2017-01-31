@@ -232,16 +232,15 @@ function geodir_draw_map($map_args = array())
                 ?>
 
                 <?php if ($geodir_map_options['enable_map_direction']) { ?>
-
-                    <input type="text" id="<?php echo $map_canvas_name; ?>_fromAddress" name="from" class="textfield"
-                           value="<?php echo ENTER_LOCATION_TEXT; ?>"
-                           onblur="if (this.value == '') {this.value = '<?php echo ENTER_LOCATION_TEXT; ?>';}"
-                           onfocus="if (this.value == '<?php echo ENTER_LOCATION_TEXT; ?>') {this.value = '';}"/>
-                    <span title="<?php echo esc_attr__('My location', 'geodirectory'); ?>" id="<?php echo $map_canvas_name; ?>_mylocation" class="gd-map-mylocation"><i class="fa fa-crosshairs" aria-hidden="true"></i></span>
-                    <input type="button" value="<?php _e('Get Directions', 'geodirectory'); ?>"
-                           class="<?php echo $map_canvas_name; ?>_getdirection" id="directions"
-                           onclick="calcRoute('<?php echo $map_canvas_name; ?>')"/>
-
+                    <div class="gd-input-group gd-get-directions">
+                      <div class="gd-input-group-addon gd-directions-left">
+                        <div class="gd-input-group">
+                              <input type="text" id="<?php echo $map_canvas_name; ?>_fromAddress" name="from" class="gd-form-control textfield" value="<?php echo ENTER_LOCATION_TEXT; ?>" onblur="if (this.value == '') {this.value = '<?php echo ENTER_LOCATION_TEXT; ?>';}" onfocus="if (this.value == '<?php echo ENTER_LOCATION_TEXT; ?>') {this.value = '';}" />
+                              <div id="<?php echo $map_canvas_name; ?>_mylocation" class="gd-input-group-addon gd-map-mylocation" onclick="gdMyGeoDirection();" title="<?php echo esc_attr__('My location', 'geodirectory'); ?>"><i class="fa fa-crosshairs fa-fw"></i></div>
+                        </div>
+                      </div>
+                      <div class="gd-input-group-addon gd-directions-right gd-mylocation-go"><input type="button" value="<?php _e('Get Directions', 'geodirectory'); ?>" class="<?php echo $map_canvas_name; ?>_getdirection" id="directions" onclick="calcRoute('<?php echo $map_canvas_name; ?>')" /></div>
+                    </div>
                     <script>
                         <?php if(geodir_is_page('detail')){?>
                         jQuery(function () {
@@ -263,7 +262,7 @@ function geodir_draw_map($map_args = array())
                                 });
                             } else {
                                 jQuery('#<?php echo $map_canvas_name; ?>_fromAddress').hide();
-                                jQuery('.<?php echo $map_canvas_name; ?>_mylocation').hide();
+                                jQuery('.gd-get-directions').hide();
                                 jQuery('.<?php echo $map_canvas_name; ?>_getdirection').hide();
                                 
                                 if (window.gdMaps == 'osm') {
