@@ -2954,14 +2954,8 @@ add_filter('plugins_loaded', 'geodir_wpml_set_filter');
  * @param array    $languages WPML active languages.
  * @return array Filtered languages.
  */
-function geodir_wpml_filter_ls_languages($languages) {
-    global $gd_icl_ls_languages;
-    
-    if (geodir_is_geodir_page()) {
-        if ($gd_icl_ls_languages) {
-            return $languages;
-        }
-        
+function geodir_wpml_filter_ls_languages($languages) {    
+    if (geodir_is_geodir_page()) {        
         $keep_vars = array();
         
         if (geodir_is_page('add-listing')) {
@@ -2989,7 +2983,6 @@ function geodir_wpml_filter_ls_languages($languages) {
                     $languages[$code]['url'] = $filter_url;
                 }
             }
-            $gd_icl_ls_languages = true;
         }
     }
 
