@@ -1843,6 +1843,7 @@ if (!function_exists('geodir_get_infowindow_html')) {
      *
      * @since 1.0.0
      * @since 1.5.4 Modified to add new action "geodir_infowindow_meta_before".
+     * @since 1.6.16 Changes for disable review stars for certain post type.
      * @package GeoDirectory
      * @global array $geodir_addon_list List of active GeoDirectory extensions.
      * @global object $gd_session GeoDirectory Session object.
@@ -1876,11 +1877,12 @@ if (!function_exists('geodir_get_infowindow_html')) {
             $lat = htmlentities(geodir_get_post_meta($ID, 'post_latitude', true));
             $lng = htmlentities(geodir_get_post_meta($ID, 'post_longitude', true));
         }
+        
+        $post_type = $ID ? get_post_type($ID) : '';
 
         // filter field as per price package
         global $geodir_addon_list;
-        if (isset($geodir_addon_list['geodir_payment_manager']) && $geodir_addon_list['geodir_payment_manager'] == 'yes') {
-            $post_type = get_post_type($ID);
+        if ($post_type && defined('GEODIRPAYMENT_VERSION')) {
             $package_id = isset($postinfo_obj->package_id) && $postinfo_obj->package_id ? $postinfo_obj->package_id : NULL;
             $field_name = 'geodir_contact';
             if (!check_field_visibility($package_id, $field_name, $post_type)) {
@@ -1900,7 +1902,7 @@ if (!function_exists('geodir_get_infowindow_html')) {
                     <?php
                     $comment_count = '';
                     $rating_star = '';
-                    if ($ID != '') {
+                    if ($ID != '' && $post_type != '' && !geodir_cpt_has_rating_disabled($post_type)) {
                         $rating_star = '';
                         $comment_count = geodir_get_review_count_total($ID);
 
@@ -1975,10 +1977,7 @@ if (!function_exists('geodir_get_infowindow_html')) {
                              */
                             do_action('geodir_infowindow_meta_before', $ID, $postinfo_obj, $post_preview);
 
-
                             echo geodir_show_listing_info('mapbubble');
-                            
-                                                      
 
                             /**
                              * Fires after the meta info in the map info window.
@@ -1993,26 +1992,20 @@ if (!function_exists('geodir_get_infowindow_html')) {
                             ?>
                         </div>
                         <?php
-
                         if ($ID) {
-
                             $post_author = isset($postinfo_obj->post_author) ? $postinfo_obj->post_author : get_post_field('post_author', $ID);
                             ?>
                             <div class="geodir-bubble-meta-fade"></div>
-
                             <div class="geodir-bubble-meta-bottom">
+                                <?php if ($rating_star != '') { ?>
                                 <span class="geodir-bubble-rating"><?php echo $rating_star;?></span>
-
-                                <span
-                                    class="geodir-bubble-fav"><?php echo geodir_favourite_html($post_author, $ID);?></span>
-                  <span class="geodir-bubble-reviews"><a href="<?php echo get_comments_link($ID); ?>"
-                                                         class="geodir-pcomments"><i class="fa fa-comments"></i>
-                          <?php echo get_comments_number($ID); ?>
-                      </a></span>
+                                <?php } ?>
+                                <span class="geodir-bubble-fav"><?php echo geodir_favourite_html($post_author, $ID);?></span>
+                                <span class="geodir-bubble-reviews">
+                                    <a href="<?php echo get_comments_link($ID); ?>" class="geodir-pcomments"><i class="fa fa-comments"></i> <?php echo get_comments_number($ID); ?></a>
+                                </span>
                             </div>
-
                         <?php } ?>
-
                     </div>
                 </div>
             </div>

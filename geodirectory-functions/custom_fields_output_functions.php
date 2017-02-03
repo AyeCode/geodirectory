@@ -1036,7 +1036,7 @@ function geodir_cf_multiselect($html,$location,$cf,$p=''){
 
                 $html .= '</ul>';
             } else {
-                $html .= $post->{$cf['htmlvar_name']};
+                $html .= __($post->{$cf['htmlvar_name']}, 'geodirectory');
             }
 
             $html .= '</div>';

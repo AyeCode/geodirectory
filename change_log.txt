@@ -39,6 +39,8 @@ Widget CPT Categories has extra closing ul tag - FIXED
 Detail page map get directions should user user location - CHANGED
 [#user_email#] shortcode variable is not working in listing notification emails - FIXED
 Added media query for 375px to show listings 100% at below that - ADDED
+Some WPML compatibility fix - FIXED
+Option added to disable review stars for certain post type - CHANGED
 
 v1.6.15
 Google Services API can conflict with newer version of the Google Service Class - UPDATED
