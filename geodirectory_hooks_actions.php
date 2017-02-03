@@ -1071,6 +1071,7 @@ function geodir_detail_page_google_analytics()
  * @global bool $preview True if the current page is add listing preview page. False if not.
  * @global object $post_images Image objects of current post if available.
  * @since 1.0.0
+ * @since 1.6.16 Changes for disable review stars for certain post type.
  * @deprecated 1.6.3 Use geodir_action_details_micordata()
  * @see geodir_action_details_micordata()
  * @package GeoDirectory
@@ -1078,6 +1079,10 @@ function geodir_detail_page_google_analytics()
 function geodir_detail_page_review_rating()
 {
     global $post, $preview, $post_images;
+    
+    if (!empty($post->ID) && geodir_cpt_has_rating_disabled((int)$post->ID)) {
+        return;
+    }
     ob_start(); // Start  buffering;
     /**
      * This is called before the rating html in the function geodir_detail_page_review_rating().
@@ -2631,186 +2636,73 @@ add_action('init', 'geodir_init_no_rating', 100);
  * remove rating stars fields if disabled.
  *
  * @since 1.0.0
+ * @since 1.6.16 Changes for disable review stars for certain post type.
  * @package GeoDirectory
  */
-function geodir_init_no_rating()
-{
-    if (get_option('geodir_disable_rating')) {
-        remove_action('comment_form_logged_in_after', 'geodir_comment_rating_fields');
-        remove_action('comment_form_before_fields', 'geodir_comment_rating_fields');
-        remove_action('comment_form_logged_in_after', 'geodir_reviewrating_comment_rating_fields');
-        remove_action('comment_form_before_fields', 'geodir_reviewrating_comment_rating_fields');
-        remove_action('add_meta_boxes_comment', 'geodir_comment_add_meta_box');
-        remove_action('add_meta_boxes', 'geodir_reviewrating_comment_metabox', 13);
-        remove_filter('comment_text', 'geodir_wrap_comment_text', 40);
-
-        add_action('comment_form_logged_in_after', 'geodir_no_rating_rating_fields');
-        add_action('comment_form_before_fields', 'geodir_no_rating_rating_fields');
-        add_filter('comment_text', 'geodir_no_rating_comment_text', 100, 2);
-        add_filter('geodir_detail_page_review_rating_html', 'geodir_no_rating_review_rating_html', 100);
+function geodir_init_no_rating() {
+    if (geodir_rating_disabled_post_types()) {
         add_filter('geodir_get_sort_options', 'geodir_no_rating_get_sort_options', 100, 2);
     }
-}
-
-/**
- * Modify rating fields when rating disabled.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @global object $post The current post object.
- */
-function geodir_no_rating_rating_fields()
-{
-    global $post;
-
-    $post_types = geodir_get_posttypes();
-
-    if (!empty($post) && isset($post->post_type) && in_array($post->post_type, $post_types)) {
-        if (is_plugin_active('geodir_review_rating_manager/geodir_review_rating_manager.php')) {
-            if (get_option('geodir_reviewrating_enable_rating')) {
-                echo '<input type="hidden" value="1" name="geodir_rating[overall]" />';
-            } else {
-                echo '<input type="hidden" id="geodir_overallrating" name="geodir_overallrating" value="1" />';
-            }
-            if (get_option('geodir_reviewrating_enable_images')) {
-                geodir_reviewrating_rating_img_html();
-            }
-        } else {
-            echo '<input type="hidden" id="geodir_overallrating" name="geodir_overallrating" value="1" />';
-        }
-    }
-}
-
-/**
- * Returns normal comment text when rating disabled.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @param string $content Comment text.
- * @param string|object $comment Comment object.
- * @return string Comment HTML.
- */
-function geodir_no_rating_comment_text($content, $comment = '')
-{
-    if (!is_admin()) {
-        return '<div class="description">' . $content . '</div>';
-    } else {
-        return $content;
-    }
-}
-
-/**
- * Remove rating HTML when rating disabled.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @param string $content HTML content.
- * @return null
- */
-function geodir_no_rating_review_rating_html($content = '')
-{
-    return NULL;
 }
 
 /**
  * Skip overall rating sort option when rating disabled.
  *
  * @since 1.0.0
+ * @since 1.6.16 Changes for disable review stars for certain post type.
  * @package GeoDirectory
  * @param array $options Sort options array.
  * @param string $post_type The post type.
  * @return array Modified sort options array.
  */
-function geodir_no_rating_get_sort_options($options, $post_type = '')
-{
-    $new_options = array();
-    if (!empty($options)) {
-        foreach ($options as $option) {
-            if (is_object($option) && isset($option->htmlvar_name) && $option->htmlvar_name == 'overall_rating') {
-                continue;
+function geodir_no_rating_get_sort_options($options, $post_type = '') {
+    if (!empty($post_type) && geodir_cpt_has_rating_disabled($post_type)) {
+        $new_options = array();
+        
+        if (!empty($options)) {
+            foreach ($options as $option) {
+                if (is_object($option) && isset($option->htmlvar_name) && $option->htmlvar_name == 'overall_rating') {
+                    continue;
+                }
+                $new_options[] = $option;
             }
-            $new_options[] = $option;
-        }
 
-        $options = $new_options;
+            $options = $new_options;
+        }
     }
 
     return $options;
 }
 
-add_filter('geodir_all_js_msg', 'geodir_all_js_msg_no_rating', 100);
 /**
- * skip rating stars validation if rating stars disabled.
+ * Add body class for current active map.
  *
- * @since 1.0.0
- * @package GeoDirectory
- * @param array $msg Message array.
- * @return array Modified message array.
- */
-function geodir_all_js_msg_no_rating($msg = array())
-{
-    if (get_option('geodir_disable_rating')) {
-        $msg['gd_cmt_no_rating'] = true;
-    }
-
-    return $msg;
-}
-
-add_filter('body_class', 'geodir_body_class_no_rating', 100);
-/**
- * add body class when rating stars if disabled.
- *
- * @since 1.0.0
+ * @since 1.6.16
  * @package GeoDirectory
  * @param array $classes The class array of the HTML element.
  * @return array Modified class array.
  */
-function geodir_body_class_no_rating($classes = array())
-{
-    if (get_option('geodir_disable_rating')) {
-        $classes[] = 'gd-no-rating';
-    }
-    
+function geodir_body_class_active_map($classes = array()) {
     $classes[] = 'gd-map-' . geodir_map_name();
 
     return $classes;
 }
+add_filter('body_class', 'geodir_body_class_active_map', 100);
 
-add_filter('admin_body_class', 'geodir_admin_body_class_no_rating', 100);
 /**
- * Adds class to disable rating.
+ * Add body class for current active map.
  *
  * @since 1.0.0
  * @package GeoDirectory
  * @param string $class The class of the HTML element.
  * @return string Modified class string.
  */
-function geodir_admin_body_class_no_rating($class = '')
-{
-    if (get_option('geodir_disable_rating')) {
-        $class .= ' gd-no-rating';
-    }
-    
+function geodir_admin_body_class_active_map($class = '') {    
     $class .= ' gd-map-' . geodir_map_name();
 
     return $class;
 }
-
-add_action('wp_head', 'geodir_wp_head_no_rating');
-add_action('admin_head', 'geodir_wp_head_no_rating');
-/**
- * hide rating stars if disabled.
- *
- * @since 1.0.0
- * @package GeoDirectory
- */
-function geodir_wp_head_no_rating()
-{
-    if (get_option('geodir_disable_rating')) {
-        echo '<style>body .geodir-rating, body .geodir-bubble-rating, body .gd_ratings_module_box{display:none!important;}</style>';
-        echo '<script type="text/javascript">jQuery(function(){jQuery(".gd_rating_show").parent(".geodir-rating").remove();});</script>';
-    }
-}
+add_filter('admin_body_class', 'geodir_admin_body_class_active_map', 100);
 
 add_filter('geodir_load_db_language', 'geodir_load_custom_field_translation');
 
