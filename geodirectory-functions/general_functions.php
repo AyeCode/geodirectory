@@ -3487,11 +3487,15 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 					 *
 					 * @since 1.0.0
 					 */
+					$is_enable_signup = get_option( 'users_can_register' );
+					
+					if ( $is_enable_signup ) {
 					?>
-					<a href="<?php echo geodir_login_url( array( 'signup' => true ) ); ?>"
-					   class="goedir-newuser-link"><?php echo NEW_USER_TEXT; ?></a>
+						<a href="<?php echo geodir_login_url( array( 'signup' => true ) ); ?>"
+						   class="goedir-newuser-link"><?php echo NEW_USER_TEXT; ?></a>
 
 					<?php
+					}
 					/**
 					 * Filter signup page forgot password form link.
 					 *
