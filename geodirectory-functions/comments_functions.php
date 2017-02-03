@@ -105,31 +105,24 @@ add_action('comment_form_before_fields', 'geodir_comment_rating_fields');
  * @package GeoDirectory
  * @global object $post The post object.
  */
-function geodir_comment_rating_fields()
-{
+function geodir_comment_rating_fields() {
     global $post;
 
     $post_types = geodir_get_posttypes();
 
-    if (in_array($post->post_type, $post_types)) {
-        if (!empty($geodir_post_type) && geodir_cpt_has_rating_disabled($geodir_post_type)) {
-            ?>
-            <input type="hidden" id="geodir_overallrating" name="geodir_overallrating" value="1" />
-            <?php
-        } else {
-            $star_texts = array();
-            $star_texts[] = __('Terrible', 'geodirectory');
-            $star_texts[] = __('Poor', 'geodirectory');
-            $star_texts[] = __('Average', 'geodirectory');
-            $star_texts[] = __('Very Good', 'geodirectory');
-            $star_texts[] = __('Excellent', 'geodirectory');
-            
-            $gd_rating_html = apply_filters('gd_rating_form_html', '<div class="gd_rating" data-average="0" data-id="5"></div>', $star_texts);
-            echo $gd_rating_html;
-            ?>
-            <input type="hidden" id="geodir_overallrating" name="geodir_overallrating" value="0"/>
-            <?php
-        }
+    if (!empty($post->post_type) && in_array($post->post_type, $post_types) && !(!empty($post->post_type) && geodir_cpt_has_rating_disabled($post->post_type))) {
+        $star_texts = array();
+        $star_texts[] = __('Terrible', 'geodirectory');
+        $star_texts[] = __('Poor', 'geodirectory');
+        $star_texts[] = __('Average', 'geodirectory');
+        $star_texts[] = __('Very Good', 'geodirectory');
+        $star_texts[] = __('Excellent', 'geodirectory');
+        
+        $gd_rating_html = apply_filters('gd_rating_form_html', '<div class="gd_rating" data-average="0" data-id="5"></div>', $star_texts);
+        echo $gd_rating_html;
+        ?>
+        <input type="hidden" id="geodir_overallrating" name="geodir_overallrating" value="0"/>
+        <?php
     }
 }
 
@@ -763,6 +756,10 @@ function geodir_comment_template($comment_template)
         return;
     }
     if (in_array($post->post_type, $post_types)) { // assuming there is a post type called business
+        if (geodir_cpt_has_rating_disabled($post->post_type)) {
+            return $comment_template;
+        }
+        
         $template = locate_template(array("geodirectory/reviews.php")); // Use theme template if available
         if (!$template) {
             $template = dirname(__FILE__) . '/reviews.php';
@@ -895,7 +892,7 @@ if (!function_exists('geodir_fix_comment_count')) {
             global $post;
             $post_types = geodir_get_posttypes();
 
-            if (in_array(get_post_type($post_id), $post_types)) {
+            if (in_array(get_post_type($post_id), $post_types) && !geodir_cpt_has_rating_disabled((int)$post_id)) {
                 $review_count = geodir_get_review_count_total($post_id);
                 return $review_count;
 
@@ -1017,3 +1014,27 @@ function geodir_option_disqus_active($disqus_active){
     return $disqus_active;
 }
 
+/**
+ * Detail page change tab title from reviews to comments.
+ *
+ * @since 1.0.0
+ * 
+ * @package GeoDirectory
+ * 
+ * @param array $tabs_arr Tabs array {@see geodir_detail_page_tab_headings_change()}.
+ * @return array Modified tabs array.
+ */
+function geodir_detail_reviews_tab_title($tabs_arr) {
+    if (defined('GEODIR_CP_VERSION')) {
+        return $tabs_arr;
+    }
+    
+    $post_type = geodir_get_current_posttype();
+    
+    if (!empty($tabs_arr) && !empty($tabs_arr['reviews']) && isset($tabs_arr['reviews']['heading_text']) && $post_type != '' && geodir_cpt_has_rating_disabled($post_type)) {
+        $tabs_arr['reviews']['heading_text'] = __('Comments', 'geodirectory');
+    }
+    
+    return $tabs_arr;
+}
+add_filter('geodir_detail_page_tab_list_extend', 'geodir_detail_reviews_tab_title', 1000, 1);

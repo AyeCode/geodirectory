@@ -2680,20 +2680,37 @@ function geodir_sanitize_location_name( $type, $name, $translate = true ) {
 /**
  * Pluralize comment number.
  *
- * @since   1.0.0
+ * @since 1.0.0
+ * @since 1.6.16 Changes for disable review stars for certain post type.
  * @package GeoDirectory
+ *
+ * @global object $post The current post object.
  *
  * @param int $number Comments number.
  */
 function geodir_comments_number( $number ) {
-
-	if ( $number > 1 ) {
-		$output = str_replace( '%', number_format_i18n( $number ), __( '% Reviews', 'geodirectory' ) );
-	} elseif ( $number == 0 || $number == '' ) {
-		$output = __( 'No Reviews', 'geodirectory' );
-	} else { // must be one
-		$output = __( '1 Review', 'geodirectory' );
+	global $post;
+	
+	if ( !empty( $post->post_type ) && geodir_cpt_has_rating_disabled( $post->post_type ) ) {
+		$number = get_comments_number();
+		
+		if ( $number > 1 ) {
+			$output = str_replace( '%', number_format_i18n( $number ), __( '% Comments', 'geodirectory' ) );
+		} elseif ( $number == 0 || $number == '' ) {
+			$output = __( 'No Comments', 'geodirectory' );
+		} else { // must be one
+			$output = __( '1 Comment', 'geodirectory' );
+		}
+	} else {    
+		if ( $number > 1 ) {
+			$output = str_replace( '%', number_format_i18n( $number ), __( '% Reviews', 'geodirectory' ) );
+		} elseif ( $number == 0 || $number == '' ) {
+			$output = __( 'No Reviews', 'geodirectory' );
+		} else { // must be one
+			$output = __( '1 Review', 'geodirectory' );
+		}
 	}
+	
 	echo $output;
 }
 
