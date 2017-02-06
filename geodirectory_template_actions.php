@@ -2610,7 +2610,9 @@ function geodir_action_signup_forms()
 {
 
     global $user_login;
-
+    
+    $is_enable_signup = get_option( 'users_can_register' );
+    
     ?>
     <script type="text/javascript">
         <?php if ( $user_login ) { ?>
@@ -2675,7 +2677,7 @@ function geodir_action_signup_forms()
             include(geodir_plugin_path() . "/geodirectory-templates/login_frm.php"); ?>
         </div>
 
-    <?php } elseif (isset($_REQUEST['page']) && $_REQUEST['page'] == 'login' && isset($_REQUEST['page1']) && $_REQUEST['page1'] == 'sign_up') { ?>
+    <?php } elseif (isset($_REQUEST['page']) && $_REQUEST['page'] == 'login' && isset($_REQUEST['page1']) && $_REQUEST['page1'] == 'sign_up' && $is_enable_signup ) { ?>
 
         <div class="registration_form">
             <?php
@@ -2698,15 +2700,18 @@ function geodir_action_signup_forms()
              */
             include(geodir_plugin_path() . "/geodirectory-templates/login_frm.php"); ?>
         </div>
-        <div class="registration_form_r">
-            <?php
-            /**
-             * Contains registration form template.
-             *
-             * @since 1.0.0
-             */
-            include(geodir_plugin_path() . "/geodirectory-templates/reg_frm.php"); ?>
-        </div>
+        
+        <?php if ( $is_enable_signup ) { ?>
+            <div class="registration_form_r">
+                <?php
+                /**
+                 * Contains registration form template.
+                 *
+                 * @since 1.0.0
+                 */
+                include(geodir_plugin_path() . "/geodirectory-templates/reg_frm.php"); ?>
+            </div>
+        <?php } ?>
 
     <?php }?>
     <script type="text/javascript">
