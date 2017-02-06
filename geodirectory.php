@@ -179,7 +179,7 @@ include_once('geodirectory_template_actions.php');
 /*
  * Admin init + activation hooks
  */
-if (is_admin() || defined( 'GD_TESTING_MODE' )) {
+if (is_admin() || defined( 'GD_TESTING_MODE' ) || ( defined( 'WP_CLI' ) && WP_CLI )) {
 
     /**
      * Include functions used in admin area only.
