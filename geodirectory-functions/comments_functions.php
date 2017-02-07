@@ -1025,14 +1025,20 @@ function geodir_option_disqus_active($disqus_active){
  * @return array Modified tabs array.
  */
 function geodir_detail_reviews_tab_title($tabs_arr) {
-    if (defined('GEODIR_CP_VERSION')) {
-        return $tabs_arr;
-    }
-    
     $post_type = geodir_get_current_posttype();
-    
+
     if (!empty($tabs_arr) && !empty($tabs_arr['reviews']) && isset($tabs_arr['reviews']['heading_text']) && $post_type != '' && geodir_cpt_has_rating_disabled($post_type)) {
-        $tabs_arr['reviews']['heading_text'] = __('Comments', 'geodirectory');
+        $label_reviews = __('Comments', 'geodirectory');
+        
+        if (defined('GEODIR_CP_VERSION')) {
+            $post_types = geodir_get_posttypes('array');
+            
+            if (!empty($post_types[$post_type]['labels']['label_reviews'])) {
+                $label_reviews = stripslashes(__($post_types[$post_type]['labels']['label_reviews'], 'geodirectory'));
+            }
+        }
+        
+        $tabs_arr['reviews']['heading_text'] = $label_reviews;
     }
     
     return $tabs_arr;
