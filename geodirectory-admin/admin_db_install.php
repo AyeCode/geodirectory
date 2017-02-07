@@ -366,7 +366,9 @@ if (!function_exists('geodir_create_tables')) {
 	(276, 'Curaçao', 'UC', 'CW', 'CUW', '531', 'CW', 'Willemstad ', 'Central America and the Caribbean', 'Curaçaoan', 'Curaçaoans', 'Netherlands Antillean guilder', 'ANG', 152760, 'Curaçao', ''),
 	(277, 'Caribbean Netherlands', '--', 'BQ', 'BES', '535', 'BQ', '--', 'Central America and the Caribbean', '--', '--', 'United States dollar', 'USD', 21133, 'Caribbean Netherlands', ''),
 	(278, 'Kosovo', 'XK', 'XK', '--', '--', 'XK', 'Pristina', 'Europe', '--', '--', 'Euro', 'EUR', 1859203, 'Caribbean Netherlands', 'Kosovo'),
-    (279, 'Reunion', 'RE', 'RE', '-- ', '--', 'RE', '', '', '', '', 'Euro', 'EUR', 0, 'Metropolitan France', 'Reunion')";
+    (279, 'Reunion', 'RE', 'RE', '-- ', '--', 'RE', '', '', '', '', 'Euro', 'EUR', 0, 'Metropolitan France', 'Reunion'),
+    (280, 'São Tomé and Príncipe', '--', 'ST', '-- ', '--', 'ST', '', '', '', '', 'Dobra', 'STD', 190428, 'São Tomé', ''),
+    (281, 'South Sudan', '--', 'SS', '-- ', '--', 'SS', '', '', '', '', 'South Sudanese pound', 'SSP', 12340000, 'South Sudan', '')";
 
             /**
              * Filter the SQL query that inserts the country DB table data.

@@ -42,6 +42,8 @@ Added media query for 375px to show listings 100% at below that - ADDED
 Some WPML compatibility fix - FIXED
 Option added to disable review stars for certain post type - CHANGED
 Fix issue for plugin installation via WP-CLI - FIXED
+Sao Tome and Principe and South Sudan countries added to DB list - CHANGED
+GD Tools> reload countries table tool added to update new countries - ADDED
 
 v1.6.15
 Google Services API can conflict with newer version of the Google Service Class - UPDATED
