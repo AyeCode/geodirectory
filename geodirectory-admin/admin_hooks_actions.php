@@ -2443,3 +2443,43 @@ function geodir_core_uninstall_settings($settings) {
     return $settings;
 }
 add_filter('geodir_plugins_uninstall_settings', 'geodir_core_uninstall_settings', 10, 1);
+
+/**
+ * Clears all GD version numbers so any upgrade functions will run again.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ */
+function geodir_diagnose_reload_db_countries()
+{
+    global $wpdb, $plugin_prefix;
+
+    $is_error_during_diagnose = false;
+    $output_str = '';
+
+    $delete = $wpdb->query("TRUNCATE TABLE ".GEODIR_COUNTRIES_TABLE);
+
+
+    if ($delete) {
+            $output_str .= "<li><strong>" . __('Table dropped, refresh page to reinstall.', 'geodirectory') . "</strong></li>";
+        ob_start();
+        geodir_diagnose_version_clear();
+        ob_end_clean();
+    }else{
+        $output_str .= "<li><strong>" . __('Seomething went wrong.', 'geodirectory') . "</strong></li>";
+    }
+
+    if ($is_error_during_diagnose) {
+        $info_div_class = "geodir_problem_info";
+        $fix_button_txt = "";
+    } else {
+        $info_div_class = "geodir_noproblem_info";
+        $fix_button_txt = '';
+    }
+    echo "<ul class='$info_div_class'>";
+    echo $output_str;
+    echo $fix_button_txt;
+    echo "</ul>";
+}

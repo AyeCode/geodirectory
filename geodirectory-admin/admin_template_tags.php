@@ -1717,6 +1717,15 @@ function geodir_diagnostic_tools_setting_page()
 						<input type="button" value="<?php _e('Run', 'geodirectory');?>" class="button-primary geodir_diagnosis_button" data-diagnose="load_db_language"/>
 					</td>
 				</tr>
+                <tr>
+                    <td><?php _e('Reload Countries table', 'geodirectory');?></td>
+                    <td>
+                        <small><?php _e('This tool will drop and re-add the countries table, it is meant to refresh the list when countries are added/removed, if you have duplicate country problems you should merge those first or you could have orphaned posts.', 'geodirectory');?></small>
+                    </td>
+                    <td>
+                        <input type="button" value="<?php _e('Run', 'geodirectory');?>" class="button-primary geodir_diagnosis_button" data-diagnose="reload_db_countries"/>
+                    </td>
+                </tr>
                 <?php
                 /**
                  * Allows you to add more setting to the GD>Tools settings page.
