@@ -3497,3 +3497,76 @@ function geodir_add_page_content( $position = 'before', $gd_page = '' ) {
 
 }
 add_action('geodir_add_page_content', 'geodir_add_page_content', 10, 2);
+
+/**
+ * Filters the JOIN clause in the SQL for an adjacent post query.
+ *
+ * @since 1.6.16
+ * @package GeoDirectory
+ *
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ *
+ * @param string  $join           The JOIN clause in the SQL.
+ * @param bool    $in_same_term   Whether post should be in a same taxonomy term.
+ * @param array   $excluded_terms Array of excluded term IDs.
+ * @param string  $taxonomy       Taxonomy. Used to identify the term used when `$in_same_term` is true.
+ * @param WP_Post $post           WP_Post object.
+ * @return string Filtered SQL JOIN clause.
+ */
+function geodir_previous_next_post_join( $join, $in_same_term, $excluded_terms, $taxonomy, $post ) {
+    global $plugin_prefix;
+
+    if ( !empty($post->post_type) && in_array( $post->post_type, geodir_get_posttypes() ) ) {
+        $join .= " INNER JOIN " . $plugin_prefix . $post->post_type . "_detail AS gd ON gd.post_id = p.ID";
+    }
+    
+    return $join;
+}
+add_filter( 'get_previous_post_join', 'geodir_previous_next_post_join', 10, 5 );
+add_filter( 'get_next_post_join', 'geodir_previous_next_post_join', 10, 5 );
+
+/**
+ * Filters the WHERE clause in the SQL for an adjacent post query.
+ *
+ * @since 1.6.16
+ * @package GeoDirectory
+ *
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ *
+ * @param string $where          The `WHERE` clause in the SQL.
+ * @param bool   $in_same_term   Whether post should be in a same taxonomy term.
+ * @param array  $excluded_terms Array of excluded term IDs.
+ * @param string $taxonomy       Taxonomy. Used to identify the term used when `$in_same_term` is true.
+ * @param WP_Post $post          WP_Post object.
+ * @return string Filtered SQL WHERE clause.
+ */
+function geodir_previous_next_post_where( $where, $in_same_term, $excluded_terms, $taxonomy, $post ) {
+    global $wpdb, $plugin_prefix;
+
+    if ( !empty($post->post_type) && ( !empty( $post->country_slug ) || !empty( $post->region_slug ) || !empty( $post->city_slug ) ) && in_array( $post->post_type, geodir_get_posttypes() ) ) {
+        $post_locations = '';
+        $post_locations_var = array();
+        
+        if ( !empty( $post->country_slug ) ) {
+            $post_locations .= " AND post_locations LIKE %s";
+            $post_locations_var[] = "%,[" . $post->country_slug . "]";
+        }
+
+        if ( !empty( $post->region_slug ) ) {
+            $post_locations .= " AND post_locations LIKE %s";
+            $post_locations_var[] = "%,[" . $post->region_slug . "],%";
+        }
+
+        if ( !empty( $post->city_slug ) ) {
+            $post_locations .= " AND post_locations LIKE %s";
+            $post_locations_var[] = "[" . $post->city_slug . "],%";
+        }
+        
+        $where .= $wpdb->prepare( $post_locations, $post_locations_var );
+    }
+    
+    return $where;
+}
+add_filter( 'get_previous_post_where', 'geodir_previous_next_post_where', 10, 5 );
+add_filter( 'get_next_post_where', 'geodir_previous_next_post_where', 10, 5 );
