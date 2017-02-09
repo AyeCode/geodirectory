@@ -2445,9 +2445,9 @@ function geodir_core_uninstall_settings($settings) {
 add_filter('geodir_plugins_uninstall_settings', 'geodir_core_uninstall_settings', 10, 1);
 
 /**
- * Clears all GD version numbers so any upgrade functions will run again.
+ * Truncate the countries table and clear version numbers so it will be installed on refresh..
  *
- * @since 1.0.0
+ * @since 1.6.16
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.

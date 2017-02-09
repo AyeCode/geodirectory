@@ -227,19 +227,16 @@ function geodir_header_scripts()
     echo stripslashes(get_option('geodir_header_scripts'));
 }
 
-
 /**
- * Loads custom JS and Google Analytics JS on footer.
+ * Loads Google Analytics JS on header.
  *
- * WP Admin -> Geodirectory -> Design -> Scripts -> Footer script code.
  * WP Admin -> Geodirectory -> General -> Google Analytics -> Google analytics tracking code.
  *
- * @since 1.0.0
+ * @since 1.6.16
  * @package GeoDirectory
  */
-function geodir_footer_scripts()
+function geodir_google_analytics_tracking_code()
 {
-
     if(get_option('geodir_ga_add_tracking_code') && get_option('geodir_ga_account_id')){?>
 
         <script>
@@ -254,10 +251,22 @@ function geodir_footer_scripts()
 
         </script>
 
-<?php
+        <?php
     }elseif(get_option('geodir_ga_tracking_code') && !get_option('geodir_ga_account_id')){
         echo stripslashes(get_option('geodir_ga_tracking_code'));
     }
+}
+
+/**
+ * Loads custom JS in footer.
+ *
+ * WP Admin -> Geodirectory -> Design -> Scripts -> Footer script code.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
+function geodir_footer_scripts()
+{
 
     echo stripslashes(get_option('geodir_footer_scripts'));
 

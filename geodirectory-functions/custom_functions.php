@@ -1343,7 +1343,7 @@ function geodir_detail_page_tabs_array() {
 	);
 
 	$arr_tabs['post_images'] = array(
-		'heading_text'  => __( 'Photo', 'geodirectory' ),
+		'heading_text'  => __( 'Photos', 'geodirectory' ),
 		'is_active_tab' => false,
 		'is_display'    => apply_filters( 'geodir_detail_page_tab_is_display', true, 'post_images' ),
 		'tab_content'   => ''
