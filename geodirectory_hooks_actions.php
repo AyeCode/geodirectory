@@ -204,6 +204,7 @@ add_action('admin_head-media-upload-popup', 'geodir_localize_all_js_msg');
 add_action('customize_controls_print_footer_scripts', 'geodir_localize_all_js_msg');
 
 add_action('wp_head', 'geodir_add_meta_keywords');
+add_action('wp_head', 'geodir_google_analytics_tracking_code');
 
 /* Sharelocation scripts */
 //global $geodir_addon_list;

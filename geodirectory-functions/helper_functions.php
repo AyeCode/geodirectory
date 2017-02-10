@@ -706,13 +706,13 @@ function geodir_date($date_input, $date_to, $date_from = '') {
  * }
  * @return string Trimmed string.
  */
-function geodir_excerpt($text, $length = 100, array $options = []) {
+function geodir_excerpt($text, $length = 100, $options = array()) {
     if (!(int)$length > 0) {
         return $text;
     }
-    $default = [
+    $default = array(
         'ellipsis' => '', 'exact' => true, 'html' => true, 'trimWidth' => false,
-    ];
+	);
     if (!empty($options['html']) && strtolower(mb_internal_encoding()) === 'utf-8') {
         $default['ellipsis'] = "";
     }
@@ -726,7 +726,7 @@ function geodir_excerpt($text, $length = 100, array $options = []) {
 
         $truncateLength = 0;
         $totalLength = 0;
-        $openTags = [];
+        $openTags = array();
         $truncate = '';
 
         preg_match_all('/(<\/?([\w+]+)[^>]*>)?([^<>]*)/', $text, $tags, PREG_SET_ORDER);
