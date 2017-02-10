@@ -2534,6 +2534,9 @@ function geodir_icl_make_duplicate($master_post_id, $lang, $postarr, $tr_post_id
     
     $post_type = get_post_type($master_post_id);
     $icl_ajx_action = !empty($_REQUEST['icl_ajx_action']) && $_REQUEST['icl_ajx_action'] == 'make_duplicates' ? true : false;
+    if (!empty($_REQUEST['action']) && $_REQUEST['action'] == 'wpml_duplicate_dashboard' && !empty($_REQUEST['duplicate_post_ids'])) {
+        $icl_ajx_action = true;
+    }
     
     if (in_array($post_type, geodir_get_posttypes())) {
         if ($icl_ajx_action || $after_save) {
@@ -2568,6 +2571,9 @@ function geodir_wpml_duplicate_listing($post_id, $request_info) {
     global $sitepress;
     
     $icl_ajx_action = !empty($_REQUEST['icl_ajx_action']) && $_REQUEST['icl_ajx_action'] == 'make_duplicates' ? true : false;
+    if (!empty($_REQUEST['action']) && $_REQUEST['action'] == 'wpml_duplicate_dashboard' && !empty($_REQUEST['duplicate_post_ids'])) {
+        $icl_ajx_action = true;
+    }
     
     if (!$icl_ajx_action && in_array(get_post_type($post_id), geodir_get_posttypes()) && $post_duplicates = $sitepress->get_duplicates($post_id)) {
         foreach ($post_duplicates as $lang => $dup_post_id) {
