@@ -1,5 +1,6 @@
 v1.6.17
 Changes for batch WPML duplicates feature - CHANGED
+Yoast SEO location replacement tags no longer working - FIXED
 
 v1.6.16
 Country should be not added in DB via query - FIXED

@@ -863,7 +863,7 @@ function geodir_substr($text, $start, $length, array $options) {
         $substr = 'mb_strimwidth';
     }
 
-    $maxPosition = geodir_strlen($text, ['trimWidth' => false] + $options);
+    $maxPosition = geodir_strlen($text, array('trimWidth' => false) + $options);
     if ($start < 0) {
         $start += $maxPosition;
         if ($start < 0) {
@@ -902,7 +902,7 @@ function geodir_substr($text, $start, $length, array $options) {
         $offset = 0;
 
         if ($totalOffset < $start) {
-            $len = geodir_strlen($part, ['trimWidth' => false] + $options);
+            $len = geodir_strlen($part, array('trimWidth' => false) + $options);
             if ($totalOffset + $len <= $start) {
                 $totalOffset += $len;
                 continue;
