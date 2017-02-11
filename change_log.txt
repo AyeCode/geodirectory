@@ -1,3 +1,6 @@
+v1.6.17
+Changes for batch WPML duplicates feature - CHANGED
+
 v1.6.16
 Country should be not added in DB via query - FIXED
 New parameters post_type & category added to the listings map shortcode - CHANGED
