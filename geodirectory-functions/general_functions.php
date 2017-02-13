@@ -4496,8 +4496,6 @@ add_filter( 'wpseo_replacements', 'geodir_wpseo_replacements', 10, 1 );
  */
 function geodir_wpseo_replacements( $vars ) {
 
-	global $wp;
-	$title = '';
 	// location variables
 	$gd_post_type   = geodir_get_current_posttype();
 	$location_array = geodir_get_current_location_terms( 'query_vars', $gd_post_type );
@@ -4511,34 +4509,10 @@ function geodir_wpseo_replacements( $vars ) {
 	 * @param array $vars           The page title variables.
 	 */
 	$location_array  = apply_filters( 'geodir_filter_title_variables_location_arr_seo', $location_array, $vars );
-	$location_titles = array();
-	if ( get_query_var( 'gd_country_full' ) ) {
-		if ( get_query_var( 'gd_country_full' ) ) {
-			$location_array['gd_country'] = get_query_var( 'gd_country_full' );
-		}
-		if ( get_query_var( 'gd_region_full' ) ) {
-			$location_array['gd_region'] = get_query_var( 'gd_region_full' );
-		}
-		if ( get_query_var( 'gd_city_full' ) ) {
-			$location_array['gd_city'] = get_query_var( 'gd_city_full' );
-		}
-		if ( get_query_var( 'gd_neighbourhood_full' ) ) {
-			$location_array['gd_neighbourhood'] = get_query_var( 'gd_neighbourhood_full' );
-		}
-	}
-	
-	/**
-	 * Filter the location terms variables.
-	 *
-	 * @since   1.6.16
-	 * @package GeoDirectory
-	 *
-	 * @param string $title         The title with variables.
-	 * @param array $location_array The array of location variables.
-	 * @param string $gd_page       The page being filtered.
-	 * @param string $sep           The separator, default: `|`.
-	 */
-	$title = apply_filters( 'geodir_replace_location_variables_seo', $title, $location_array, '', '' );
+
+
+	$location_replace_vars = geodir_location_replace_vars($location_array, NULL, '');
+	$vars = $vars + $location_replace_vars;
 
 	/**
 	 * Filter the title variables after standard ones have been filtered for wpseo.

@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 1.6.16\n"
+"Project-Id-Version: GeoDirectory 1.6.17\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-09 13:49+0000\n"
-"PO-Revision-Date: 2017-02-09 13:50+0000\n"
+"POT-Creation-Date: 2017-02-11 12:50+0000\n"
+"PO-Revision-Date: 2017-02-11 12:50+0000\n"
 "Last-Translator: \n"
 "Language-Team: GeoDirectory <info@wpgeodirectory.com>\n"
 "Language: en_US\n"
@@ -5534,7 +5534,7 @@ msgstr ""
 msgid "View all"
 msgstr ""
 
-#: geodirectory-functions/general_functions.php:5017
+#: geodirectory-functions/general_functions.php:4991
 #, php-format
 msgid "Page %1$d of %2$d"
 msgstr ""
@@ -5662,9 +5662,9 @@ msgstr ""
 msgid "Select Country"
 msgstr ""
 
-#: geodirectory-functions/location_functions.php:661
-#: geodirectory-functions/location_functions.php:663
-#: geodirectory-functions/location_functions.php:669
+#: geodirectory-functions/location_functions.php:680
+#: geodirectory-functions/location_functions.php:682
+#: geodirectory-functions/location_functions.php:688
 msgid "in"
 msgstr ""
 
