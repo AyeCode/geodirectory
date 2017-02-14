@@ -827,7 +827,7 @@ add_filter('geodir_custom_field_output_radio','geodir_cf_radio',10,3);
  * @param string $location The location to output the html.
  * @param array $cf The custom field array details.
  * @since 1.6.6
- * @since 1.6.17 Fix: Custom field should display label instead of value if set in option values.
+ * @since 1.6.18 Fix: Custom field should display label instead of value if set in option values.
  *
  * @return string The html to output for the custom field.
  */
