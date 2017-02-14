@@ -1,3 +1,6 @@
+v1.6.18
+Custom field should display label instead of value if set in option values - FIXED
+
 v1.6.17
 Changes for batch WPML duplicates feature - CHANGED
 Yoast SEO location replacement tags no longer working - FIXED
