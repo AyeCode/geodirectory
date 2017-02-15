@@ -232,15 +232,15 @@ function geodir_draw_map($map_args = array())
                 ?>
 
                 <?php if ($geodir_map_options['enable_map_direction']) { ?>
-
-                    <input type="text" id="<?php echo $map_canvas_name; ?>_fromAddress" name="from" class="textfield"
-                           value="<?php echo ENTER_LOCATION_TEXT; ?>"
-                           onblur="if (this.value == '') {this.value = '<?php echo ENTER_LOCATION_TEXT; ?>';}"
-                           onfocus="if (this.value == '<?php echo ENTER_LOCATION_TEXT; ?>') {this.value = '';}"/>
-                    <input type="button" value="<?php _e('Get Directions', 'geodirectory'); ?>"
-                           class="<?php echo $map_canvas_name; ?>_getdirection" id="directions"
-                           onclick="calcRoute('<?php echo $map_canvas_name; ?>')"/>
-
+                    <div class="gd-input-group gd-get-directions">
+                      <div class="gd-input-group-addon gd-directions-left">
+                        <div class="gd-input-group">
+                              <input type="text" id="<?php echo $map_canvas_name; ?>_fromAddress" name="from" class="gd-form-control textfield" value="<?php echo ENTER_LOCATION_TEXT; ?>" onblur="if (this.value == '') {this.value = '<?php echo ENTER_LOCATION_TEXT; ?>';}" onfocus="if (this.value == '<?php echo ENTER_LOCATION_TEXT; ?>') {this.value = '';}" />
+                              <div id="<?php echo $map_canvas_name; ?>_mylocation" class="gd-input-group-addon gd-map-mylocation" onclick="gdMyGeoDirection();" title="<?php echo esc_attr__('My location', 'geodirectory'); ?>"><i class="fa fa-crosshairs fa-fw"></i></div>
+                        </div>
+                      </div>
+                      <div class="gd-input-group-addon gd-directions-right gd-mylocation-go"><input type="button" value="<?php _e('Get Directions', 'geodirectory'); ?>" class="<?php echo $map_canvas_name; ?>_getdirection" id="directions" onclick="calcRoute('<?php echo $map_canvas_name; ?>')" /></div>
+                    </div>
                     <script>
                         <?php if(geodir_is_page('detail')){?>
                         jQuery(function () {
@@ -262,6 +262,7 @@ function geodir_draw_map($map_args = array())
                                 });
                             } else {
                                 jQuery('#<?php echo $map_canvas_name; ?>_fromAddress').hide();
+                                jQuery('.gd-get-directions').hide();
                                 jQuery('.<?php echo $map_canvas_name; ?>_getdirection').hide();
                                 
                                 if (window.gdMaps == 'osm') {
@@ -350,7 +351,7 @@ function geodir_draw_map($map_args = array())
                                     <input type="hidden" id="<?php echo $map_canvas_name;?>_child_collapse" value="0"/>
                                 <?php } ?>
                                 <input type="hidden" id="<?php echo $map_canvas_name; ?>_cat_enabled" value="1"/>
-                                <div class="toggle">
+                                <div class="geodir_toggle">
                                     <?php echo home_map_taxonomy_walker(array($map_search_pt.'category'),0,true,0,$map_canvas_name,$child_collapse,true); ?>
                                     <script>jQuery( document ).ready(function() {
                                             geodir_show_sub_cat_collapse_button();
@@ -415,7 +416,7 @@ function geodir_draw_map($map_args = array())
                                     foreach ($post_types as $post_type => $args) {
                                         if (!in_array($post_type, $exclude_post_types)) {
                                             $class = $map_search_pt == $post_type ? 'class="gd-map-search-pt"' : '';
-											echo '<li id="' . $post_type . '" ' . $class . '><a href="javascript:void(0);" onclick="jQuery(\'#' . $map_canvas_name . '_posttype\').val(\'' . $post_type . '\');build_map_ajax_search_param(\'' . $map_canvas_name . '\', true)">' . __(ucfirst($args->labels->name), 'geodirectory') . '</a></li>';
+											echo '<li id="' . $post_type . '" ' . $class . '><a href="javascript:void(0);" onclick="jQuery(\'#' . $map_canvas_name . '_posttype\').val(\'' . $post_type . '\');build_map_ajax_search_param(\'' . $map_canvas_name . '\', true)">' . __($args->labels->name, 'geodirectory') . '</a></li>';
                                         }
                                     }
                                     ?>

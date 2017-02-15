@@ -2000,3 +2000,184 @@ body > span[style*='top: -999px']{display: none;}
 .geodir-details-sidebar-rating .gd-star-rating {
     cursor: pointer;
 }
+.gd-form-control {
+  display: block;
+  width: 100%;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+       -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+          transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+.gd-form-control:focus {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+          box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+}
+.gd-form-control::-moz-placeholder {
+  color: #999;
+  opacity: 1;
+}
+.gd-form-control:-ms-input-placeholder {
+  color: #999;
+}
+.gd-form-control::-webkit-input-placeholder {
+  color: #999;
+}
+.gd-form-control::-ms-expand {
+  background-color: transparent;
+  border: 0;
+}
+.gd-form-group {
+  margin-bottom: 15px;
+}
+.gd-input-group {
+  position: relative;
+  display: table;
+  border-collapse: separate;
+}
+.gd-input-group[class*="col-"] {
+  float: none;
+  padding-right: 0;
+  padding-left: 0;
+}
+.gd-input-group .gd-form-control {
+  position: relative;
+  z-index: 2;
+  float: left;
+  width: 100%;
+  margin-bottom: 0;
+}
+.gd-input-group .gd-form-control:focus {
+  z-index: 3;
+}
+.gd-input-group-addon,
+.gd-input-group .gd-form-control {
+  display: table-cell;
+}
+.gd-input-group-addon:not(:first-child):not(:last-child),
+.gd-input-group .gd-form-control:not(:first-child):not(:last-child) {
+  border-radius: 0;
+}
+.gd-input-group-addon {
+  width: 1%;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.gd-input-group-addon {
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1;
+  color: #555;
+  text-align: center;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.gd-input-group .gd-form-control:first-child,
+.gd-input-group-addon:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.gd-input-group-addon:first-child {
+  border-right: 0;
+}
+.gd-input-group .gd-form-control:last-child,
+.gd-input-group-addon:last-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.gd-input-group-addon:last-child {
+  border-left: 0;
+}
+
+.geodir_map_container .gd-get-directions {
+    margin-top: 15px!important;
+    margin-bottom: 5px!important;
+}
+#post_mapTab .geodir_map_container .gd-get-directions input[type="text"] {
+    margin: 0;
+    width: 100%!important;
+    padding: 6px 8px!important;
+}
+.geodir_map_container .gd-get-directions .gd-map-mylocation {
+    cursor: pointer;
+}
+.gd-get-directions .gd-map-mylocation .fa {
+    font-size: 22px!important;
+}
+.gd-get-directions .gd-map-mylocation {
+    color: #666!important;
+    padding: 6px!important;
+    border-top-right-radius: 4px!important;
+    border-bottom-right-radius: 4px!important;
+    border-left: 0!important;
+}
+.gd-get-directions .gd-mylocation-go {
+    padding: 0 0 0 15px!important;
+    border-color: transparent!important;
+    margin: 0!important;
+    background: none !important;
+}
+.gd-mylocation-go [type="button"] {
+    margin: 0!important;
+}
+.gd-get-directions .gd-map-mylocation:hover {
+    color: #333!important;
+}
+.gd-get-directions .gd-input-group-addon,
+.gd-get-directions [type="text"] {
+    height: 38px!important;
+    line-height: normal!important;
+}
+.gd-get-directions button::-moz-focus-inner,
+.gd-get-directions input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+.gd-get-directions,
+.gd-get-directions *,
+.gd-get-directions::after, .gd-get-directions::before,
+.gd-get-directions *::after, .gd-get-directions *::before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.gd-get-directions > .gd-input-group-addon {
+    background: none !important;
+    border: none !important;
+    margin: 0;
+    padding: 0;
+}
+.gd-get-directions > .gd-directions-left {
+    width: auto;
+}
+.gd-get-directions > .gd-directions-left .gd-input-group {
+    width: 100%;
+}
+@media (max-width: 579px) {
+  div.gd-get-directions,
+  div.gd-get-directions > .gd-input-group-addon {
+      display: block!important;
+      width: 100%!important;
+      padding: 0!important;
+  }
+  .gd-get-directions > .gd-directions-right {
+      margin-top: 5px!important;
+  }
+  .gd-get-directions > .gd-directions-right [type="button"] {
+      width: 100%!important;
+      float: none!important;
+  }
+}

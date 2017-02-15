@@ -827,6 +827,7 @@ add_filter('geodir_custom_field_output_radio','geodir_cf_radio',10,3);
  * @param string $location The location to output the html.
  * @param array $cf The custom field array details.
  * @since 1.6.6
+ * @since 1.6.18 Fix: Custom field should display label instead of value if set in option values.
  *
  * @return string The html to output for the custom field.
  */
@@ -893,7 +894,7 @@ function geodir_cf_select($html,$location,$cf,$p=''){
                 if (!empty($cf_option_values)) {
                     foreach ($cf_option_values as $cf_option_value) {
                         if (isset($cf_option_value['value']) && $cf_option_value['value'] == $post->{$cf['htmlvar_name']}) {
-                            //$field_value = $cf_option_value['label']; // no longer needed here.
+                            $field_value = $cf_option_value['label']; // no longer needed here. Removed comment because it displays number instead of label if option vales set like "Good/1,Fair/2".
                         }
                     }
                 }
@@ -1036,7 +1037,7 @@ function geodir_cf_multiselect($html,$location,$cf,$p=''){
 
                 $html .= '</ul>';
             } else {
-                $html .= $post->{$cf['htmlvar_name']};
+                $html .= __($post->{$cf['htmlvar_name']}, 'geodirectory');
             }
 
             $html .= '</div>';

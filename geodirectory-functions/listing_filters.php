@@ -409,7 +409,7 @@ function geodir_posts_orderby($orderby)
             break;
         case 'high_review':
         case 'rating_count_desc':
-			$orderby = $table . ".rating_count DESC, " . $table . ".overall_rating DESC, ";
+            $orderby = $table . ".rating_count DESC, " . $table . ".overall_rating DESC, ";
             break;
         case 'low_rating':
             $orderby = "( " . $table . ".overall_rating  ) ASC, " . $table . ".rating_count ASC,  ";
@@ -443,6 +443,16 @@ function geodir_posts_orderby($orderby)
 
             break;
     endswitch;
+
+    if ($sort_by != '' && geodir_cpt_has_rating_disabled($geodir_post_type)) {
+        if (in_array($sort_by, array('high_review', 'rating_count_desc', 'high_rating', 'overall_rating_desc'))) {
+            $orderby = "$wpdb->posts.comment_count DESC, ";
+            $sort_by = 'comment_count_desc';
+        } else if (in_array($sort_by, array('low_review', 'rating_count_asc', 'low_rating', 'overall_rating_asc'))) {
+            $orderby = "$wpdb->posts.comment_count ASC, ";
+            $sort_by = 'comment_count_asc';
+        }
+    }
 
     global $s;
 

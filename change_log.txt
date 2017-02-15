@@ -1,3 +1,10 @@
+v1.6.18
+Custom field should display label instead of value if set in option values - FIXED
+
+v1.6.17
+Changes for batch WPML duplicates feature - CHANGED
+Yoast SEO location replacement tags no longer working - FIXED
+
 v1.6.16
 Country should be not added in DB via query - FIXED
 New parameters post_type & category added to the listings map shortcode - CHANGED
@@ -32,6 +39,19 @@ New title variables added to display country/region/city/neighbourhood - CHANGED
 Some functions added for truncate, strlen, substr the text - ADDED
 WPML duplicate should not be posts edited from frontend - FIXED
 "Place" and "Places" in latest core PO file is not translating anymore - FIXED
+WPML "view all" does not use the translated CPT slug - FIXED
+White spaces in multiselect comma separated custom fields does not ticked in edit form - FIXED 
+Ultimate VC Addons script breaks backend add/edit listings - FIXED
+Widget CPT Categories has extra closing ul tag - FIXED
+Detail page map get directions should user user location - CHANGED
+[#user_email#] shortcode variable is not working in listing notification emails - FIXED
+Added media query for 375px to show listings 100% at below that - ADDED
+Some WPML compatibility fix - FIXED
+Option added to disable review stars for certain post type - CHANGED
+Fix issue for plugin installation via WP-CLI - FIXED
+Sao Tome and Principe and South Sudan countries added to DB list - CHANGED
+GD Tools> reload countries table tool added to update new countries - ADDED
+Detail page previous and next links broken if WPML is active - FIXED
 
 v1.6.15
 Google Services API can conflict with newer version of the Google Service Class - UPDATED

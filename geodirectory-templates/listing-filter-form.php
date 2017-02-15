@@ -12,24 +12,29 @@
  */
 global $wp_query, $current_term, $query;
 
-
 if (function_exists('geodir_location_geo_home_link')) {
     remove_filter('home_url', 'geodir_location_geo_home_link', 100000);
 }
-$search_url = trailingslashit(get_home_url());
+
+if (defined('ICL_LANGUAGE_CODE') && defined('DOING_AJAX') && DOING_AJAX){
+    $search_url = icl_get_home_url();
+} else {
+    $search_url = get_home_url();
+}
+
+$search_url = trailingslashit($search_url);
+
 if (function_exists('geodir_location_geo_home_link')) {
     add_filter('home_url', 'geodir_location_geo_home_link', 100000, 2);
 }
 
-
 $new_style = get_option('geodir_show_search_old_search_from') ? false : true;
 $form_class = 'geodir-listing-search';
+
 if($new_style){
     $form_class .= ' gd-search-bar-style';
 }
 ?>
-
-
 <form class="<?php
 /**
  * Filters the GD search form class.

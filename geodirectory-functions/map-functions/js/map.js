@@ -280,7 +280,7 @@ function build_map_ajax_search_param(map_canvas_var, reload_cat_list, catObj, hi
             child_collapse: child_collapse
         }, function(data) {
             if (data) {
-                jQuery('#' + map_canvas_var + '_cat .toggle').html(data);
+                jQuery('#' + map_canvas_var + '_cat .geodir_toggle').html(data);
                 //show_category_filter(map_canvas_var);
                 geodir_show_sub_cat_collapse_button();
                 build_map_ajax_search_param(map_canvas_var, false);
@@ -838,6 +838,8 @@ function calcRoute(map_canvas) {
             control.addTo(jQuery.goMap.map);
             
             L.Routing.errorControl(control).addTo(jQuery.goMap.map);
+            
+            jQuery('.leaflet-routing-geocoders .leaflet-routing-search-info').append('<span title="' + geodir_all_js_msg.geoMyLocation + '" onclick="gdMyGeoDirection();" id="detail_page_map_canvas_mylocation" class="gd-map-mylocation"><i class="fa fa-crosshairs" aria-hidden="true"></i></span>');
         } catch(e) {
             console.log(e);
         }
@@ -1261,5 +1263,59 @@ function create_marker_osm(input, map_canvas_var) {
     } else {
         //no lat & long, return no marker
         return false;
+    }
+}
+
+function gdMyGeoDirection() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(gdMyGeoPositionSuccess, gdMyGeoPositionError);
+    } else {
+        gdMyGeoPositionError(-1);
+    }
+}
+
+function gdMyGeoPositionError(err) {
+    var msg;
+    switch (err.code) {
+        case err.UNKNOWN_ERROR:
+            msg = geodir_all_js_msg.geoErrUNKNOWN_ERROR;
+            break;
+        case err.PERMISSION_DENINED:
+            msg = geodir_all_js_msg.geoErrPERMISSION_DENINED;
+            break;
+        case err.POSITION_UNAVAILABLE:
+            msg = geodir_all_js_msg.geoErrPOSITION_UNAVAILABLE;
+            break;
+        case err.BREAK:
+            msg = geodir_all_js_msg.geoErrBREAK;
+            break;
+        default:
+            msg = geodir_all_js_msg.geoErrDEFAULT;
+    }
+    alert(msg);
+}
+
+function gdMyGeoPositionSuccess(position) {
+    var coords = position.coords || position.coordinate || position;
+    if (coords && coords.latitude && coords.longitude) {
+        var myLat = coords.latitude,
+            myLng = coords.longitude;
+        var geoAddress = myLat + ', ' + myLng;
+        if (window.gdMaps == 'google' || window.gdMaps == 'osm') {
+            gdMyGeoGetDirections(geoAddress);
+        }
+    }
+}
+
+function gdMyGeoGetDirections(address) {
+    if (!address) {
+        return false;
+    }
+    window.gdMyGeo = true;
+    if (window.gdMaps == 'google') {
+        jQuery('#detail_page_map_canvas_fromAddress').val(address);
+        calcRoute('detail_page_map_canvas');
+    } else if (window.gdMaps == 'osm') {
+        jQuery('.leaflet-routing-geocoders .leaflet-routing-geocoder:last input').val(address).focus();
     }
 }
