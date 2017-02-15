@@ -573,18 +573,37 @@ function geodir_get_country_by_name($country, $iso2 = false) {
  * @return string Filtered content.
  */
 function geodir_replace_location_variables($content, $location_array = array(), $sep = NULL, $gd_page = '') {
-    global $wp;
-    
+
     if (empty($content)) {
         return $content;
     }
+
+
+    $location_replace_vars = geodir_location_replace_vars($location_array, $sep, $gd_page);
+
+    if (!empty($location_replace_vars)) {
+        foreach ($location_replace_vars as $search => $replace) {
+            if (!empty($search) && strpos($content, $search) !== false) {
+                $content = str_replace($search, $replace, $content);
+            }
+        }
+    }
+
+    return $content;
+}
+add_filter('geodir_replace_location_variables', 'geodir_replace_location_variables');
+
+
+function geodir_location_replace_vars($location_array = array(), $sep = NULL, $gd_page = ''){
+
+    global $wp;
     
     $location_manager = defined('GEODIRLOCATION_VERSION') ? true : false;
-    
+
     if (empty($location_array)) {
         $location_array = geodir_get_current_location_terms('query_vars');
     }
-    
+
     $location_terms = array();
     $location_terms['gd_neighbourhood'] = !empty($wp->query_vars['gd_neighbourhood']) ? $wp->query_vars['gd_neighbourhood'] : '';
     $location_terms['gd_city'] = !empty($wp->query_vars['gd_city']) ? $wp->query_vars['gd_city'] : '';
@@ -594,7 +613,7 @@ function geodir_replace_location_variables($content, $location_array = array(), 
     $location_names = array();
     foreach ($location_terms as $type => $location) {
         $location_name = $location;
-        
+
         if (!empty($location_name)) {
             if ($location_manager) {
                 $location_type = strpos($type, 'gd_') === 0 ? substr($type, 3) : $type;
@@ -608,7 +627,7 @@ function geodir_replace_location_variables($content, $location_array = array(), 
 
         $location_names[$type] = $location_name;
     }
-    
+
     $location_single = '';
     foreach ($location_terms as $type => $location) {
         if (!empty($location)) {
@@ -627,7 +646,7 @@ function geodir_replace_location_variables($content, $location_array = array(), 
             break;
         }
     }
-    
+
     $full_location = array();
     if (!empty($location_array)) {
         $location_array = array_reverse($location_array);
@@ -648,23 +667,23 @@ function geodir_replace_location_variables($content, $location_array = array(), 
 
             $full_location[] = $location_name;
         }
-        
+
         if (!empty($full_location)) {
             $full_location = array_unique($full_location);
         }
     }
     $full_location = !empty($full_location) ? implode(', ', $full_location): '';
-    
+
     $location_replace_vars = array();
     $location_replace_vars['%%location_sep%%'] = $sep !== NULL ? $sep : '|';
     $location_replace_vars['%%location%%'] = $full_location;
     $location_replace_vars['%%in_location%%'] = $full_location != '' ? __( 'in', 'geodirectory' ) . ' ' . $full_location : '';
     $location_replace_vars['%%location_single%%'] = $location_single;
     $location_replace_vars['%%in_location_single%%'] = $location_single != '' ? __( 'in', 'geodirectory' ) . ' ' . $location_single : '';
-    
+
     foreach ($location_names as $type => $name) {
         $location_type = strpos($type, 'gd_') === 0 ? substr($type, 3) : $type;
-        
+
         $location_replace_vars['%%location_' . $location_type . '%%'] = $name;
         $location_replace_vars['%%in_location_' . $location_type . '%%'] = !empty($name) ? __( 'in', 'geodirectory' ) . ' ' . $name : '';
     }
@@ -676,22 +695,9 @@ function geodir_replace_location_variables($content, $location_array = array(), 
      * @package GeoDirectory
      *
      * @param array $location_replace_vars The array of search & replace variables.
-     * @param string $content       The content with variables.
      * @param array $location_array The array of location variables.
      * @param string $gd_page       The page being filtered.
      * @param string $sep           The separator.
      */
-    $location_replace_vars = apply_filters( 'geodir_filter_location_replace_variables', $location_replace_vars, $content, $location_array, $gd_page, $sep );
-
-    if (!empty($location_replace_vars)) {
-        foreach ($location_replace_vars as $search => $replace) {
-            if (!empty($search) && strpos($content, $search) !== false) {
-                $content = str_replace($search, $replace, $content);
-            }
-        }
-    }
-
-    return $content;
+    return apply_filters( 'geodir_filter_location_replace_variables', $location_replace_vars, $location_array, $gd_page, $sep );
 }
-add_filter('geodir_replace_location_variables', 'geodir_replace_location_variables');
-add_filter('geodir_replace_location_variables_seo', 'geodir_replace_location_variables');

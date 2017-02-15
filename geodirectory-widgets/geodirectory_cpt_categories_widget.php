@@ -453,7 +453,7 @@ function geodir_cpt_categories_output($params) {
                     $cpt_row .= '</li>';
                     $cpt_row .= '</ul>';
                 }
-                $cpt_row .= '</ul></div>';
+                $cpt_row .= '</div>';
 
                 $output .= $cpt_row;
             }

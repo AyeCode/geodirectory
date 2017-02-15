@@ -706,13 +706,13 @@ function geodir_date($date_input, $date_to, $date_from = '') {
  * }
  * @return string Trimmed string.
  */
-function geodir_excerpt($text, $length = 100, array $options = []) {
+function geodir_excerpt($text, $length = 100, $options = array()) {
     if (!(int)$length > 0) {
         return $text;
     }
-    $default = [
+    $default = array(
         'ellipsis' => '', 'exact' => true, 'html' => true, 'trimWidth' => false,
-    ];
+	);
     if (!empty($options['html']) && strtolower(mb_internal_encoding()) === 'utf-8') {
         $default['ellipsis'] = "";
     }
@@ -726,7 +726,7 @@ function geodir_excerpt($text, $length = 100, array $options = []) {
 
         $truncateLength = 0;
         $totalLength = 0;
-        $openTags = [];
+        $openTags = array();
         $truncate = '';
 
         preg_match_all('/(<\/?([\w+]+)[^>]*>)?([^<>]*)/', $text, $tags, PREG_SET_ORDER);
@@ -863,7 +863,7 @@ function geodir_substr($text, $start, $length, array $options) {
         $substr = 'mb_strimwidth';
     }
 
-    $maxPosition = geodir_strlen($text, ['trimWidth' => false] + $options);
+    $maxPosition = geodir_strlen($text, array('trimWidth' => false) + $options);
     if ($start < 0) {
         $start += $maxPosition;
         if ($start < 0) {
@@ -902,7 +902,7 @@ function geodir_substr($text, $start, $length, array $options) {
         $offset = 0;
 
         if ($totalOffset < $start) {
-            $len = geodir_strlen($part, ['trimWidth' => false] + $options);
+            $len = geodir_strlen($part, array('trimWidth' => false) + $options);
             if ($totalOffset + $len <= $start) {
                 $totalOffset += $len;
                 continue;
@@ -958,4 +958,104 @@ function geodir_remove_last_word($text) {
     }
 
     return '';
+}
+
+function geodir_tool_restore_cpt_from_taxonomies(){
+
+	$cpts = get_option('geodir_post_types');
+
+	if(!empty($cpts)){return;}
+
+	$taxonomies = get_option('geodir_taxonomies');
+
+	if(empty($taxonomies)){return;}
+
+	$cpts = array();
+
+	foreach($taxonomies as $key => $val){
+
+		if(strpos($val['listing_slug'], '/') === false) {
+			$cpts[$val['object_type']] = array('cpt'=>$val['object_type'],'slug'=>$val['listing_slug']);
+		}
+
+	}
+
+	if(empty($cpts)){return;}
+
+
+	$cpts_restore = $cpts;
+
+	foreach($cpts as $cpt){
+
+
+		$is_custom = $cpt['cpt']=='gd_place' ? 0 : 1;
+
+		$cpts_restore[$cpt['cpt']] = array (
+				'labels' =>
+					array (
+						'name' => $cpt['slug'],
+						'singular_name' => $cpt['slug'],
+						'add_new' => 'Add New',
+						'add_new_item' => 'Add New '.$cpt['slug'],
+						'edit_item' => 'Edit '.$cpt['slug'],
+						'new_item' => 'New '.$cpt['slug'],
+						'view_item' => 'View '.$cpt['slug'],
+						'search_items' => 'Search '.$cpt['slug'],
+						'not_found' => 'No '.$cpt['slug'].' Found',
+						'not_found_in_trash' => 'No '.$cpt['slug'].' Found In Trash',
+						'label_post_profile' => '',
+						'label_post_info' => '',
+						'label_post_images' => '',
+						'label_post_map' => '',
+						'label_reviews' => '',
+						'label_related_listing' => '',
+					),
+				'can_export' => true,
+				'capability_type' => 'post',
+				'description' => '',
+				'has_archive' => $cpt['slug'],
+				'hierarchical' => false,
+				'map_meta_cap' => true,
+				'menu_icon' => '',
+				'public' => true,
+				'query_var' => true,
+				'rewrite' =>
+					array (
+						'slug' => $cpt['slug'],
+						'with_front' => false,
+						'hierarchical' => true,
+						'feeds' => true,
+					),
+				'supports' =>
+					array (
+						0 => 'title',
+						1 => 'editor',
+						2 => 'author',
+						3 => 'thumbnail',
+						4 => 'excerpt',
+						5 => 'custom-fields',
+						6 => 'comments',
+					),
+				'taxonomies' =>
+					array (
+						0 => $cpt['cpt'].'category',
+						1 => $cpt['cpt'].'_tags',
+					),
+				'is_custom' => $is_custom,
+				'listing_order' => '1',
+				'seo' =>
+					array (
+						'meta_keyword' => '',
+						'meta_description' => '',
+					),
+				'show_in_nav_menus' => 1,
+				'link_business' => 0,
+				'linkable_to' => '',
+				'linkable_from' => '',
+			);
+	}
+
+
+	update_option('geodir_post_types',$cpts_restore);
+
 }

@@ -75,11 +75,16 @@ $general_options = apply_filters('geodir_general_options', array(
         'radiogroup' => 'end'
     ),
     array(
-        'name' => __('Disable rating on comments', 'geodirectory'),
-        'desc' => __('Disable rating without disabling comments on listings', 'geodirectory'),
-        'id' => 'geodir_disable_rating',
-        'type' => 'checkbox',
-        'std' => '0'
+        'name' => __('Disable review stars for CPT', 'geodirectory'),
+        'desc' => __('Disable review stars for certain CPT without disabling comments on listings.', 'geodirectory'),
+        'tip' => '',
+        'id' => 'geodir_disable_rating_cpt',
+        'css' => 'min-width:300px;',
+        'std' => '',
+        'type' => 'multiselect',
+        'placeholder_text' => __('Select post types', 'geodirectory'),
+        'class' => 'chosen_select',
+        'options' => array_unique(geodir_post_type_setting_fun())
     ),
     array(
         'name' => __('User deleted posts go to trash', 'geodirectory'),

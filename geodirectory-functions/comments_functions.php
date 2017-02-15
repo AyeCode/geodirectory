@@ -35,7 +35,6 @@ function geodir_comment_meta_row_action($a)
 
     $rating = geodir_get_commentoverall($comment->comment_ID);
     if ($rating != 0) {
-        //echo '<div class="gd_rating_show" data-average="'.$rating.'" data-id="'.$comment->comment_ID.'"></div>';
         echo geodir_get_rating_stars($rating, $comment->comment_ID);
     }
     return $a;
@@ -62,13 +61,13 @@ function geodir_comment_add_meta_box($comment)
  * Adds form fields to the function {@see 'geodir_comment_add_meta_box'}.
  *
  * @since 1.0.0
+ * @since 1.6.16 Changes for disable review stars for certain post type.
  * @package GeoDirectory
  * @param object $comment The comment object.
  */
-function geodir_comment_rating_meta($comment)
-{
+function geodir_comment_rating_meta($comment) {
     $post_type = get_post_type($comment->comment_post_ID);
-	if (in_array($post_type, (array)geodir_get_posttypes()) && (int)$comment->comment_parent == 0) {
+	if (in_array($post_type, (array)geodir_get_posttypes()) && (int)$comment->comment_parent == 0 && !(!empty($post_type) && geodir_cpt_has_rating_disabled($post_type))) {
 		$rating = geodir_get_commentoverall($comment->comment_ID);
 		
 		if ((int)get_option('geodir_reviewrating_enable_font_awesome') == 1) {
@@ -102,30 +101,30 @@ add_action('comment_form_before_fields', 'geodir_comment_rating_fields');
  * Adds a rating input field in comment form.
  *
  * @since 1.0.0
+ * @since 1.6.16 Changes for disable review stars for certain post type.
  * @package GeoDirectory
  * @global object $post The post object.
  */
-function geodir_comment_rating_fields()
-{
+function geodir_comment_rating_fields() {
     global $post;
 
     $post_types = geodir_get_posttypes();
 
-    if (in_array($post->post_type, $post_types)) {
+    if (!empty($post->post_type) && in_array($post->post_type, $post_types) && !(!empty($post->post_type) && geodir_cpt_has_rating_disabled($post->post_type))) {
         $star_texts = array();
-		$star_texts[] = __('Terrible', 'geodirectory');
-		$star_texts[] = __('Poor', 'geodirectory');
-		$star_texts[] = __('Average', 'geodirectory');
-		$star_texts[] = __('Very Good', 'geodirectory');
-		$star_texts[] = __('Excellent', 'geodirectory');
-		
-		$gd_rating_html = apply_filters('gd_rating_form_html', '<div class="gd_rating" data-average="0" data-id="5"></div>', $star_texts);
+        $star_texts[] = __('Terrible', 'geodirectory');
+        $star_texts[] = __('Poor', 'geodirectory');
+        $star_texts[] = __('Average', 'geodirectory');
+        $star_texts[] = __('Very Good', 'geodirectory');
+        $star_texts[] = __('Excellent', 'geodirectory');
+        
+        $gd_rating_html = apply_filters('gd_rating_form_html', '<div class="gd_rating" data-average="0" data-id="5"></div>', $star_texts);
         echo $gd_rating_html;
         ?>
-        <input type="hidden" id="geodir_overallrating" name="geodir_overallrating" value="0"/><?php
+        <input type="hidden" id="geodir_overallrating" name="geodir_overallrating" value="0"/>
+        <?php
     }
 }
-
 
 add_filter('comment_reply_link', 'geodir_comment_replaylink');
 /**
@@ -397,21 +396,28 @@ add_filter('comment_text', 'geodir_wrap_comment_text', 40, 2);
  * Add rating information in comment text.
  *
  * @since 1.0.0
+ * @since 1.6.16 Changes for disable review stars for certain post type.
  * @package GeoDirectory
  * @param string $content The comment content.
  * @param object|string $comment The comment object.
  * @return string The comment content.
  */
-function geodir_wrap_comment_text($content, $comment = '')
-{
-    $rating = 0;
-    if (!empty($comment))
-        $rating = geodir_get_commentoverall($comment->comment_ID);
-    if ($rating != 0 && !is_admin()) {
-        return '<div><div class="gd-rating-text">' . __('Overall Rating', 'geodirectory') . ': <div class="rating">' . $rating . '</div></div>' . geodir_get_rating_stars($rating, $comment->comment_ID) . '</div><div class="description">' . $content . '</div>';
-    } else
-        return $content;
-
+function geodir_wrap_comment_text($content, $comment = '') {
+    if (!empty($comment->comment_post_ID) && geodir_cpt_has_rating_disabled((int)$comment->comment_post_ID)) {
+        if (!is_admin()) {
+            return '<div class="description">' . $content . '</div>';
+        } else {
+            return $content;
+        }
+    } else {
+        $rating = 0;
+        if (!empty($comment))
+            $rating = geodir_get_commentoverall($comment->comment_ID);
+        if ($rating != 0 && !is_admin()) {
+            return '<div><div class="gd-rating-text">' . __('Overall Rating', 'geodirectory') . ': <div class="rating">' . $rating . '</div></div>' . geodir_get_rating_stars($rating, $comment->comment_ID) . '</div><div class="description">' . $content . '</div>';
+        } else
+            return $content;
+    }
 }
 
 
@@ -750,6 +756,10 @@ function geodir_comment_template($comment_template)
         return;
     }
     if (in_array($post->post_type, $post_types)) { // assuming there is a post type called business
+        if (geodir_cpt_has_rating_disabled($post->post_type)) {
+            return $comment_template;
+        }
+        
         $template = locate_template(array("geodirectory/reviews.php")); // Use theme template if available
         if (!$template) {
             $template = dirname(__FILE__) . '/reviews.php';
@@ -882,7 +892,7 @@ if (!function_exists('geodir_fix_comment_count')) {
             global $post;
             $post_types = geodir_get_posttypes();
 
-            if (in_array(get_post_type($post_id), $post_types)) {
+            if (in_array(get_post_type($post_id), $post_types) && !geodir_cpt_has_rating_disabled((int)$post_id)) {
                 $review_count = geodir_get_review_count_total($post_id);
                 return $review_count;
 
@@ -906,6 +916,7 @@ if (!function_exists('geodir_fix_comment_count')) {
  * This is the main HTML markup that displays rating stars.
  *
  * @since 1.0.0
+ * @since 1.6.16 Changes for disable review stars for certain post type.
  * @package GeoDirectory
  * @param float $rating The post average rating.
  * @param int $post_id The post ID.
@@ -914,6 +925,9 @@ if (!function_exists('geodir_fix_comment_count')) {
  */
 function geodir_get_rating_stars($rating, $post_id, $small = false)
 {
+    if (!empty($post_id) && geodir_cpt_has_rating_disabled((int)$post_id)) {
+        return NULL;
+    }
     $a_rating = $rating / 5 * 100;
 
     if ($small) {
@@ -927,8 +941,7 @@ function geodir_get_rating_stars($rating, $post_id, $small = false)
 			
 			/* fix rating star for safari */
 			$star_width = 23 * 5;
-			//global $is_safari, $is_iphone, $ios, $is_chrome;
-			//$attach_style = ( $is_safari || $is_iphone || $ios || $is_chrome ) && $star_width > 0 ? 'width:' . $star_width . 'px;max-width:none' : '';
+			
 			if ($star_width > 0) {
 				$attach_style = 'max-width:' . $star_width . 'px';
 			} else {
@@ -1001,3 +1014,33 @@ function geodir_option_disqus_active($disqus_active){
     return $disqus_active;
 }
 
+/**
+ * Detail page change tab title from reviews to comments.
+ *
+ * @since 1.0.0
+ * 
+ * @package GeoDirectory
+ * 
+ * @param array $tabs_arr Tabs array {@see geodir_detail_page_tab_headings_change()}.
+ * @return array Modified tabs array.
+ */
+function geodir_detail_reviews_tab_title($tabs_arr) {
+    $post_type = geodir_get_current_posttype();
+
+    if (!empty($tabs_arr) && !empty($tabs_arr['reviews']) && isset($tabs_arr['reviews']['heading_text']) && $post_type != '' && geodir_cpt_has_rating_disabled($post_type)) {
+        $label_reviews = __('Comments', 'geodirectory');
+        
+        if (defined('GEODIR_CP_VERSION')) {
+            $post_types = geodir_get_posttypes('array');
+            
+            if (!empty($post_types[$post_type]['labels']['label_reviews'])) {
+                $label_reviews = stripslashes(__($post_types[$post_type]['labels']['label_reviews'], 'geodirectory'));
+            }
+        }
+        
+        $tabs_arr['reviews']['heading_text'] = $label_reviews;
+    }
+    
+    return $tabs_arr;
+}
+add_filter('geodir_detail_page_tab_list_extend', 'geodir_detail_reviews_tab_title', 1000, 1);

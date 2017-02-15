@@ -816,9 +816,11 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 		$siteurl_link  = '<a href="' . $siteurl . '">' . $siteurl . '</a>';
 		$loginurl      = geodir_login_url();
 		$loginurl_link = '<a href="' . $loginurl . '">login</a>';
-
+        
 		$post_author_id   = ! empty( $post_info ) ? $post_info->post_author : 0;
+		$post_author_data = $post_author_id ? get_userdata( $post_author_id ) : NULL;
 		$post_author_name = geodir_get_client_name( $post_author_id );
+		$post_author_email = !empty( $post_author_data->user_email ) ? $post_author_data->user_email : '';
 		$current_date     = date_i18n( 'Y-m-d H:i:s', current_time( 'timestamp' ) );
 
 		if ( $fromEmail == '' ) {
@@ -847,7 +849,8 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 			'[#username#]',
 			'[#post_author_id#]',
 			'[#post_author_name#]',
-			'[#current_date#]'
+			'[#user_email#]',
+			'[#current_date#]',
 		);
 		$replace_array = array(
 			$listingLink,
@@ -867,7 +870,8 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 			$user_login,
 			$post_author_id,
 			$post_author_name,
-			$current_date
+			$post_author_email,
+			$current_date,
 		);
 		$message       = str_replace( $search_array, $replace_array, $message );
 
@@ -886,6 +890,7 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 			'[#username#]',
 			'[#post_author_id#]',
 			'[#post_author_name#]',
+			'[#user_email#]',
 			'[#current_date#]'
 		);
 		$replace_array = array(
@@ -903,6 +908,7 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 			$user_login,
 			$post_author_id,
 			$post_author_name,
+			$post_author_email,
 			$current_date
 		);
 		$subject       = str_replace( $search_array, $replace_array, $subject );
@@ -1028,6 +1034,7 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 				'[#site_name#]',
 				'[#to_name#]',
 				'[#from_name#]',
+				'[#from_email#]',
 				'[#subject#]',
 				'[#comments#]',
 				'[#login_url#]',
@@ -1035,7 +1042,8 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 				'[#client_name#]',
 				'[#posted_date#]',
 				'[#user_login#]',
-				'[#username#]'
+				'[#username#]',
+				'[#user_email#]',
 			);
 			$replace_array = array(
 				$listingLink,
@@ -1044,6 +1052,7 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 				$sitefromEmailName,
 				$toEmailName,
 				$fromEmailName,
+				$fromEmail,
 				$to_subject,
 				$to_message,
 				$loginurl_link,
@@ -1051,7 +1060,8 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 				$toEmailName,
 				$posted_date,
 				$user_login,
-				$user_login
+				$user_login,
+				$post_author_email,
 			);
 			$message       = str_replace( $search_array, $replace_array, $message );
 
@@ -1062,11 +1072,13 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 				'[#site_name#]',
 				'[#to_name#]',
 				'[#from_name#]',
+				'[#from_email#]',
 				'[#subject#]',
 				'[#client_name#]',
 				'[#posted_date#]',
 				'[#user_login#]',
-				'[#username#]'
+				'[#username#]',
+				'[#user_email#]',
 			);
 			$replace_array = array(
 				$listingLink,
@@ -1075,11 +1087,13 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 				$sitefromEmailName,
 				$toEmailName,
 				$fromEmailName,
+				$fromEmail,
 				$to_subject,
 				$toEmailName,
 				$posted_date,
 				$user_login,
-				$user_login
+				$user_login,
+				$post_author_email,
 			);
 			$subject       = str_replace( $search_array, $replace_array, $subject );
 
@@ -1195,12 +1209,9 @@ function geodir_taxonomy_breadcrumb() {
 }
 
 function geodir_wpml_post_type_archive_link($link, $post_type){
-
-	if(function_exists('icl_object_id')) {
+	if (function_exists('icl_object_id')) {
 		$post_types   = get_option( 'geodir_post_types' );
 		$slug         = $post_types[ $post_type ]['rewrite']['slug'];
-
-		//echo $link.'###'.gd_wpml_get_lang_from_url( $link) ;
 
 		// Alter the CPT slug if WPML is set to do so
 		if ( function_exists( 'icl_object_id' ) ) {
@@ -1212,23 +1223,20 @@ function geodir_wpml_post_type_archive_link($link, $post_type){
 					'WordPress',
 					'URL slug: ' . $slug,
 					$language_code );
-
+                    
 				if ( ! $slug ) {
 					$slug = $org_slug;
 				} else {
 					$link = str_replace( $org_slug, $slug, $link );
 				}
-
 			}
 		}
-
-		//echo $link.'####'.gd_wpml_get_lang_from_url( $link) ;
 	}
 
 	return $link;
 }
+add_filter( 'post_type_archive_link','geodir_wpml_post_type_archive_link', 1000, 2);
 
-//add_filter( 'post_type_archive_link','geodir_wpml_post_type_archive_link', 1000,2);
 /**
  * Main function that generates breadcrumb for all pages.
  *
@@ -2672,20 +2680,37 @@ function geodir_sanitize_location_name( $type, $name, $translate = true ) {
 /**
  * Pluralize comment number.
  *
- * @since   1.0.0
+ * @since 1.0.0
+ * @since 1.6.16 Changes for disable review stars for certain post type.
  * @package GeoDirectory
+ *
+ * @global object $post The current post object.
  *
  * @param int $number Comments number.
  */
 function geodir_comments_number( $number ) {
-
-	if ( $number > 1 ) {
-		$output = str_replace( '%', number_format_i18n( $number ), __( '% Reviews', 'geodirectory' ) );
-	} elseif ( $number == 0 || $number == '' ) {
-		$output = __( 'No Reviews', 'geodirectory' );
-	} else { // must be one
-		$output = __( '1 Review', 'geodirectory' );
+	global $post;
+	
+	if ( !empty( $post->post_type ) && geodir_cpt_has_rating_disabled( $post->post_type ) ) {
+		$number = get_comments_number();
+		
+		if ( $number > 1 ) {
+			$output = str_replace( '%', number_format_i18n( $number ), __( '% Comments', 'geodirectory' ) );
+		} elseif ( $number == 0 || $number == '' ) {
+			$output = __( 'No Comments', 'geodirectory' );
+		} else { // must be one
+			$output = __( '1 Comment', 'geodirectory' );
+		}
+	} else {    
+		if ( $number > 1 ) {
+			$output = str_replace( '%', number_format_i18n( $number ), __( '% Reviews', 'geodirectory' ) );
+		} elseif ( $number == 0 || $number == '' ) {
+			$output = __( 'No Reviews', 'geodirectory' );
+		} else { // must be one
+			$output = __( '1 Review', 'geodirectory' );
+		}
 	}
+	
 	echo $output;
 }
 
@@ -3462,11 +3487,15 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 					 *
 					 * @since 1.0.0
 					 */
+					$is_enable_signup = get_option( 'users_can_register' );
+					
+					if ( $is_enable_signup ) {
 					?>
-					<a href="<?php echo geodir_login_url( array( 'signup' => true ) ); ?>"
-					   class="goedir-newuser-link"><?php echo NEW_USER_TEXT; ?></a>
+						<a href="<?php echo geodir_login_url( array( 'signup' => true ) ); ?>"
+						   class="goedir-newuser-link"><?php echo NEW_USER_TEXT; ?></a>
 
 					<?php
+					}
 					/**
 					 * Filter signup page forgot password form link.
 					 *
@@ -4467,8 +4496,6 @@ add_filter( 'wpseo_replacements', 'geodir_wpseo_replacements', 10, 1 );
  */
 function geodir_wpseo_replacements( $vars ) {
 
-	global $wp;
-	$title = '';
 	// location variables
 	$gd_post_type   = geodir_get_current_posttype();
 	$location_array = geodir_get_current_location_terms( 'query_vars', $gd_post_type );
@@ -4482,34 +4509,10 @@ function geodir_wpseo_replacements( $vars ) {
 	 * @param array $vars           The page title variables.
 	 */
 	$location_array  = apply_filters( 'geodir_filter_title_variables_location_arr_seo', $location_array, $vars );
-	$location_titles = array();
-	if ( get_query_var( 'gd_country_full' ) ) {
-		if ( get_query_var( 'gd_country_full' ) ) {
-			$location_array['gd_country'] = get_query_var( 'gd_country_full' );
-		}
-		if ( get_query_var( 'gd_region_full' ) ) {
-			$location_array['gd_region'] = get_query_var( 'gd_region_full' );
-		}
-		if ( get_query_var( 'gd_city_full' ) ) {
-			$location_array['gd_city'] = get_query_var( 'gd_city_full' );
-		}
-		if ( get_query_var( 'gd_neighbourhood_full' ) ) {
-			$location_array['gd_neighbourhood'] = get_query_var( 'gd_neighbourhood_full' );
-		}
-	}
-	
-	/**
-	 * Filter the location terms variables.
-	 *
-	 * @since   1.6.16
-	 * @package GeoDirectory
-	 *
-	 * @param string $title         The title with variables.
-	 * @param array $location_array The array of location variables.
-	 * @param string $gd_page       The page being filtered.
-	 * @param string $sep           The separator, default: `|`.
-	 */
-	$title = apply_filters( 'geodir_replace_location_variables_seo', $title, $location_array, '', '' );
+
+
+	$location_replace_vars = geodir_location_replace_vars($location_array, NULL, '');
+	$vars = $vars + $location_replace_vars;
 
 	/**
 	 * Filter the title variables after standard ones have been filtered for wpseo.

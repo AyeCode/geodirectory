@@ -149,7 +149,7 @@ function geodir_user_show_listings($user_id='',$output_type='select'){
                 if($output_type=='select') {
                     $listing_links .= '<option ' . $selected . ' value="' . $listing_link . '">' . __(ucfirst($name), 'geodirectory') . '</option>';
                 }elseif($output_type=='link'){
-                    $listing_links [] = '<a href="' .$listing_link . '">' . __(ucfirst($name), 'geodirectory') . '</a>';
+                    $listing_links[] = '<a href="' .$listing_link . '">' . __(ucfirst($name), 'geodirectory') . '</a>';
                 }
             }
         }

@@ -660,6 +660,10 @@ function geodir_cfi_multiselect($html,$cf){
                                     $select_options .= $option_row['optgroup'] == 'start' ? '<li>' . $option_label . '</li>' : '';
                                 }
                             } else {
+                                if (!is_array($value) && $value != '') {
+                                    $value = trim($value);
+                                }
+                                
                                 $option_label = isset($option_row['label']) ? $option_row['label'] : '';
                                 $option_value = isset($option_row['value']) ? $option_row['value'] : '';
                                 $selected = $option_value == $value ? 'selected="selected"' : '';
@@ -674,6 +678,8 @@ function geodir_cfi_multiselect($html,$cf){
                                     }
 
                                     if (is_array($value_array)) {
+                                        $value_array = array_map('trim', $value_array);
+                                        
                                         if (in_array($option_value, $value_array)) {
                                             $selected = 'selected="selected"';
                                             $checked = 'checked="checked"';
@@ -1116,7 +1122,7 @@ function geodir_cfi_address($html,$cf){
                     $lng = '';
                 }
                 ?>
-                <span class="geodir_message_note"><?php echo GET_MAP_MSG; ?></span>
+                <span class="geodir_message_note"><?php echo stripslashes(GET_MAP_MSG); ?></span>
             </div>
             <?php
             /* show lat lng */

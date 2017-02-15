@@ -1343,7 +1343,7 @@ function geodir_detail_page_tabs_array() {
 	);
 
 	$arr_tabs['post_images'] = array(
-		'heading_text'  => __( 'Photo', 'geodirectory' ),
+		'heading_text'  => __( 'Photos', 'geodirectory' ),
 		'is_active_tab' => false,
 		'is_display'    => apply_filters( 'geodir_detail_page_tab_is_display', true, 'post_images' ),
 		'tab_content'   => ''
@@ -2534,6 +2534,9 @@ function geodir_icl_make_duplicate($master_post_id, $lang, $postarr, $tr_post_id
     
     $post_type = get_post_type($master_post_id);
     $icl_ajx_action = !empty($_REQUEST['icl_ajx_action']) && $_REQUEST['icl_ajx_action'] == 'make_duplicates' ? true : false;
+    if (!empty($_REQUEST['action']) && $_REQUEST['action'] == 'wpml_duplicate_dashboard' && !empty($_REQUEST['duplicate_post_ids'])) {
+        $icl_ajx_action = true;
+    }
     
     if (in_array($post_type, geodir_get_posttypes())) {
         if ($icl_ajx_action || $after_save) {
@@ -2568,6 +2571,9 @@ function geodir_wpml_duplicate_listing($post_id, $request_info) {
     global $sitepress;
     
     $icl_ajx_action = !empty($_REQUEST['icl_ajx_action']) && $_REQUEST['icl_ajx_action'] == 'make_duplicates' ? true : false;
+    if (!empty($_REQUEST['action']) && $_REQUEST['action'] == 'wpml_duplicate_dashboard' && !empty($_REQUEST['duplicate_post_ids'])) {
+        $icl_ajx_action = true;
+    }
     
     if (!$icl_ajx_action && in_array(get_post_type($post_id), geodir_get_posttypes()) && $post_duplicates = $sitepress->get_duplicates($post_id)) {
         foreach ($post_duplicates as $lang => $dup_post_id) {
@@ -2881,4 +2887,65 @@ function geodir_wpml_duplicate_comment_exists($dup_post_id, $original_cid) {
     );
 
     return $duplicate;
+}
+
+/**
+ * Get the CPT that disabled review stars.
+ *
+ * @since 1.6.16
+ *
+ * @param string $post_type WP post type or WP texonomy. Ex: gd_place.
+ * @param bool $taxonomy Whether $post_type is taxonomy or not.
+ * @return bool True if review star disabled, otherwise false.
+ */ 
+function geodir_rating_disabled_post_types() {
+	$post_types = get_option( 'geodir_disable_rating_cpt' );
+	
+	/**
+	 * Filter the post types array which have rating disabled.
+	 *
+	 * @since 1.6.16
+	 *
+	 * @param array $post_types Array of post types which have rating starts disabled.
+	 */
+	return apply_filters( 'geodir_rating_disabled_post_types', $post_types );
+}
+
+/**
+ * Check review star disabled for certain CPT.
+ *
+ * @since 1.6.16
+ *
+ * @param string|int $post_type WP post type or Post ID or WP texonomy. Ex: gd_place.
+ * @param bool $taxonomy Whether $post_type is taxonomy or not.
+ * @return bool True if review star disabled, otherwise false.
+ */ 
+function geodir_cpt_has_rating_disabled( $post_type = '', $taxonomy = false ) {
+	$post_types = geodir_rating_disabled_post_types();
+	
+	if ( empty( $post_types ) ) {
+		return false;
+	}
+	
+	if ( is_int( $post_type ) ) {
+		$post_type = get_post_type( $post_type );
+	}
+	
+	if ( $taxonomy && !empty( $post_types ) ) {
+		$posttypes = array();
+		
+		foreach ( $post_types as $posttype ) {
+			$posttypes[] = $posttype . 'category';
+			$posttypes[] = $posttype . '_tags';
+		}
+		
+		$post_types = $posttypes;
+	}
+
+	$return = false;
+	if ( $post_type != '' && !empty( $post_types ) && in_array( $post_type, $post_types ) ) {
+		$return = true;
+	}
+
+	return $return;
 }

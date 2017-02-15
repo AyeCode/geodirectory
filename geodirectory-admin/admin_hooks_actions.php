@@ -80,6 +80,7 @@ add_action('geodir_before_update_options', 'geodir_before_update_options',10,2);
  * @since 1.0.0
  * @since 1.6.0 Changes to work category icon and default image uploader for WP 4.5.
  * @since 1.6.3 Modified to fix jQuery chosen js conflicts.
+ * @since 1.6.16 Fixed VC editor conflicts for GD post types.
  * @package GeoDirectory
  * @global string $pagenow The current screen.
  */
@@ -95,6 +96,11 @@ function geodir_conditional_admin_script_load()
         add_action('admin_enqueue_scripts', 'geodir_admin_scripts');
         add_action('admin_enqueue_scripts', 'geodir_admin_styles');
         add_action('admin_enqueue_scripts', 'geodir_admin_dequeue_scripts', 100);
+        
+        // Disable VC editor for GD post types.
+        if (class_exists('Vc_Role_Access_Controller')) {
+            add_filter( 'vc_role_access_with_post_types_can', '__return_false', 100 );
+        }
     }
 
     add_action('admin_enqueue_scripts', 'geodir_admin_styles_req');
@@ -2437,3 +2443,43 @@ function geodir_core_uninstall_settings($settings) {
     return $settings;
 }
 add_filter('geodir_plugins_uninstall_settings', 'geodir_core_uninstall_settings', 10, 1);
+
+/**
+ * Truncate the countries table and clear version numbers so it will be installed on refresh..
+ *
+ * @since 1.6.16
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ */
+function geodir_diagnose_reload_db_countries()
+{
+    global $wpdb, $plugin_prefix;
+
+    $is_error_during_diagnose = false;
+    $output_str = '';
+
+    $delete = $wpdb->query("TRUNCATE TABLE ".GEODIR_COUNTRIES_TABLE);
+
+
+    if ($delete) {
+            $output_str .= "<li><strong>" . __('Table dropped, refresh page to reinstall.', 'geodirectory') . "</strong></li>";
+        ob_start();
+        geodir_diagnose_version_clear();
+        ob_end_clean();
+    }else{
+        $output_str .= "<li><strong>" . __('Seomething went wrong.', 'geodirectory') . "</strong></li>";
+    }
+
+    if ($is_error_during_diagnose) {
+        $info_div_class = "geodir_problem_info";
+        $fix_button_txt = "";
+    } else {
+        $info_div_class = "geodir_noproblem_info";
+        $fix_button_txt = '';
+    }
+    echo "<ul class='$info_div_class'>";
+    echo $output_str;
+    echo $fix_button_txt;
+    echo "</ul>";
+}
