@@ -1146,12 +1146,14 @@ function geodir_cf_email($html,$location,$cf,$p=''){
             $html .= '<div class="geodir_more_info  ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '"><span class="geodir-i-email" style="' . $field_icon . '">' . $field_icon_af;
             $seperator = '';
             if ($post->{$cf['htmlvar_name']}) {
-                $html .= '<a href="javascript:void(0);" class="' . $b_send_inquiry . '" >' . SEND_INQUIRY . '</a>';
+                $b_send_inquiry_url = apply_filters('b_send_inquiry_url', 'javascript:void(0);');
+                $html .= '<a href="'.$b_send_inquiry_url.'" class="' . $b_send_inquiry . '" >' . SEND_INQUIRY . '</a>';
                 $seperator = ' | ';
             }
 
             if (isset($package_info['sendtofriend']) && $package_info['sendtofriend']) {
-                $html .= $seperator . '<a href="javascript:void(0);" class="' . $b_sendtofriend . '">' . SEND_TO_FRIEND . '</a>';
+                $b_sendtofriend_url = apply_filters('b_sendtofriend_url', 'javascript:void(0);');
+                $html .= $seperator . '<a href="'.$b_sendtofriend_url.'" class="' . $b_sendtofriend . '">' . SEND_TO_FRIEND . '</a>';
             }
 
             $html .= '</span></div>';
