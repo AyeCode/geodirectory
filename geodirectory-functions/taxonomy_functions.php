@@ -1379,13 +1379,17 @@ function geodir_register_defaults()
 }
 
 $gd_wpml_get_languages = "";
-function gd_wpml_get_lang_from_url($url){
+function gd_wpml_get_lang_from_url($url) {
+    global $sitepress, $gd_wpml_get_languages;
+    
+    if (geodir_is_wpml()) {
+        return $sitepress->get_language_from_url($url);
+    }
+    
+    if (isset($_REQUEST['lang']) && $_REQUEST['lang']) {
+        return $_REQUEST['lang'];
+    }
 
-    global $gd_wpml_get_languages;
-    if(isset($_REQUEST['lang']) && $_REQUEST['lang']){return $_REQUEST['lang'];}
-
-
-    //
     $url = str_replace(array("http://","https://"),"",$url);
 
     // site_url() seems to work better than get_bloginfo('url') here, WPML can change get_bloginfo('url') to add the lang.
@@ -1393,14 +1397,11 @@ function gd_wpml_get_lang_from_url($url){
 
     $url = str_replace($site_url,"",$url);
 
-
     $segments = explode('/', trim($url, '/'));
 
-    //print_r( $segments);
-    if($gd_wpml_get_languages){
+    if ($gd_wpml_get_languages) {
         $langs = $gd_wpml_get_languages;
-    }else{
-        global $sitepress;
+    } else {
         $gd_wpml_get_languages = $sitepress->get_active_languages();
     }
 
@@ -1409,8 +1410,6 @@ function gd_wpml_get_lang_from_url($url){
     }
 
     return false;
-
-
 }
 
 function gd_wpml_slug_translation_turned_on($post_type) {
@@ -1432,6 +1431,8 @@ $gd_permalink_cache = array();
  * @since 1.0.0
  * @since 1.5.9 Fix the broken links when domain name contain CPT and home page 
  *              is set to current location.
+ * @since 1.6.18 Fix with WPML the location terms added twice when CPT slug is translated.
+ * 
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
@@ -1662,6 +1663,12 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
                 if (isset($term_request) && $term_request != '') $request_term .= $term_request;
             }
             $request_term = trim($request_term, '/');
+            
+            // Fix with WPML the location terms added twice when CPT slug is translated.
+            if ($sample && !empty($location_request) && geodir_is_wpml() && strpos($post_link, '%gd_taxonomy%/' . $request_term . $detailurl_separator) !== false) {
+                $post_link = str_replace('%gd_taxonomy%/', '', $post_link);
+            }
+            
             if (!empty($request_term))
                 $post_link = str_replace('%gd_taxonomy%', $request_term . $detailurl_separator, $post_link);
             else

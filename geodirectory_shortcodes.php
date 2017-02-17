@@ -239,6 +239,7 @@ add_shortcode('gd_listing_map', 'geodir_sc_listing_map');
  * @since 1.0.0
  * @since 1.5.2 Added TERRAIN for $maptype attribute.
  * @since 1.6.16 CHANGED: New parameters post_type, category & event_type added.
+ * @since 1.6.18 FIXED: For CPT other then "gd_place" not working.
  * @package GeoDirectory
  * @global object $post The current post object.
  * @param array $atts {
@@ -322,6 +323,7 @@ function geodir_sc_listing_map($atts) {
             'posts_per_page' => 1000000, //@todo kiran why was this added? 
             'is_geodir_loop' => true,
             'gd_location'    => false,
+            'post_type'      => $params['post_type'],
         );
 
         if ( ! empty( $params['category'] ) && isset( $params['category'][0] ) && (int) $params['category'][0] != 0 ) {

@@ -22,18 +22,20 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
  * Return the plugin folder url WITHOUT TRAILING SLASH.
  *
  * @since   1.0.0
+ * @since   1.6.18 Fix: GD Booster causes problem when used http in urls on SSL enabled site.
  * @package GeoDirectory
  * @return string example url eg: http://wpgeo.directory/wp-content/plugins/geodirectory
  */
 function geodir_plugin_url() {
-
+	return plugins_url( '', dirname( __FILE__ ) );
+	/*
 	if ( is_ssl() ) :
 		return str_replace( 'http://', 'https://', WP_PLUGIN_URL ) . "/" . plugin_basename( dirname( dirname( __FILE__ ) ) );
 	else :
 		return WP_PLUGIN_URL . "/" . plugin_basename( dirname( dirname( __FILE__ ) ) );
 	endif;
+	*/
 }
-
 
 /**
  * Return the plugin path.
