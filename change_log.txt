@@ -3,6 +3,7 @@ Custom field should display label instead of value if set in option values - FIX
 With WPML the location terms added twice when CPT slug is translated - FIXED
 gd_listing_map shortcode not working for CPT other then "gd_place" - FIXED
 GD Booster causes problem when used http in urls on SSL enabled site - FIXED
+Listing slider widget breaks slider if on detail page - FIXED
 
 v1.6.17
 Changes for batch WPML duplicates feature - CHANGED

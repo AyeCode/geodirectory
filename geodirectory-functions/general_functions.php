@@ -3103,11 +3103,12 @@ function geodir_listing_slider_widget_output( $args = '', $instance = '' ) {
 
 	wp_enqueue_script( 'geodirectory-jquery-flexslider-js' );
 	?>
-	<script type="text/javascript">
+		<script type="text/javascript">
 		jQuery(window).load(function () {
 			// chrome 53 introduced a bug, so we need to repaint the slider when shown.
-			jQuery('.geodir-slides').addClass('flexslider-fix-rtl');
-
+			jQuery('#geodir_widget_carousel .geodir-slides').addClass('flexslider-fix-rtl');
+			jQuery('#geodir_widget_slider .geodir-slides').addClass('flexslider-fix-rtl');
+			
 			jQuery('#geodir_widget_carousel').flexslider({
 				animation: "slide",
 				selector: ".geodir-slides > li",
@@ -3119,9 +3120,13 @@ function geodir_listing_slider_widget_output( $args = '', $instance = '' ) {
 				itemWidth: 75,
 				itemMargin: 5,
 				asNavFor: '#geodir_widget_slider',
-				rtl: <?php echo( is_rtl() ? 'true' : 'false' ); /* fix rtl issue */ ?>
+				rtl: <?php echo( is_rtl() ? 'true' : 'false' ); /* fix rtl issue */ ?>,
+				start: function (slider) {
+					// chrome 53 introduced a bug, so we need to repaint the slider when shown.
+					jQuery('.geodir-slides', jQuery(slider)).removeClass('flexslider-fix-rtl');
+				},
 			});
-
+			
 			jQuery('#geodir_widget_slider').flexslider({
 				animation: "<?php echo $animation;?>",
 				selector: ".geodir-slides > li",
@@ -3139,10 +3144,9 @@ function geodir_listing_slider_widget_output( $args = '', $instance = '' ) {
 			}?>
 				sync: "#geodir_widget_carousel",
 				start: function (slider) {
-
 					// chrome 53 introduced a bug, so we need to repaint the slider when shown.
-					jQuery('.geodir-slides').removeClass('flexslider-fix-rtl');
-
+					jQuery('.geodir-slides', jQuery(slider)).removeClass('flexslider-fix-rtl');
+					
 					jQuery('.geodir-listing-flex-loader').hide();
 					jQuery('#geodir_widget_slider').css({'visibility': 'visible'});
 					jQuery('#geodir_widget_carousel').css({'visibility': 'visible'});
