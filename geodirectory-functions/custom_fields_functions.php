@@ -3594,7 +3594,7 @@ function geodir_currency_format_number($number='',$cf=''){
 
     $symbol = isset($cs['currency_symbol']) ? $cs['currency_symbol'] : '$';
     $decimals = isset($cf['decimal_point']) && $cf['decimal_point'] ? $cf['decimal_point'] : 2;
-    $decimal_display = isset($cf['decimal_display']) && $cf['decimal_display'] ? $cf['decimal_display'] : 'if';
+    $decimal_display = !empty($cf['decimal_display']) ? $cf['decimal_display'] : (!empty($cs['decimal_display']) ? $cs['decimal_display'] : 'if');
     $decimalpoint = '.';
 
     if(isset($cs['decimal_separator']) && $cs['decimal_separator']=='comma'){
