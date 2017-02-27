@@ -5,6 +5,7 @@ gd_listing_map shortcode not working for CPT other then "gd_place" - FIXED
 GD Booster causes problem when used http in urls on SSL enabled site - FIXED
 Listing slider widget breaks slider if on detail page - FIXED
 For price custom field option "Decimal display" does not working - FIXED
+Use of ICL_LANGUAGE_CODE conflicts if used to check WPML installed - CHANGED
 
 v1.6.17
 Changes for batch WPML duplicates feature - CHANGED
