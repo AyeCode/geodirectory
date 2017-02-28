@@ -2467,6 +2467,7 @@ function geodir_function_widget_listings_join( $join ) {
  * Listing query where clause SQL part for widgets.
  *
  * @since   1.0.0
+ * @since   1.6.18 New attributes added in gd_listings shortcode to filter user favorite listings.
  * @package GeoDirectory
  * @global object $wpdb          WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
@@ -2512,6 +2513,17 @@ function geodir_function_widget_listings_where( $where ) {
 
 		if ( ! empty( $query_args['with_videos_only'] ) ) {
 			$where .= " AND ( " . $table . ".geodir_video != '' AND " . $table . ".geodir_video IS NOT NULL )";
+		}
+        
+		if ( ! empty( $query_args['show_favorites_only'] ) ) {
+			$user_favorites = '-1';
+			
+			if ( !empty( $query_args['favorites_by_user'] ) ) {
+				$user_favorites = get_user_meta( (int)$query_args['favorites_by_user'], 'gd_user_favourite_post', true );
+				$user_favorites = !empty($user_favorites) && is_array($user_favorites) ? implode("','", $user_favorites) : '-1';
+			}
+			
+			$where .= " AND `" . $wpdb->posts . "`.`ID` IN('" . $user_favorites . "')";
 		}
 
 		if ( ! empty( $query_args['tax_query'] ) ) {
