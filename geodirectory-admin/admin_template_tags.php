@@ -1679,12 +1679,50 @@ function geodir_diagnostic_tools_setting_page()
                 </tr>
 
                 <tr>
+                    <?php
+                    $l_count = geodir_total_listings_count();
+                    $step_max_items = geodir_get_diagnose_step_max_items();
+                    if ($l_count > $step_max_items) {
+                        $multiple = 'data-step="1"';
+                    } else {
+                        $multiple = "";
+                    }
+                    ?>
                     <td><?php _e('Sync GD tags', 'geodirectory');?></td>
                     <td>
                         <small><?php _e('This tool can be used when tags are showing in the backend but missing from the front end.', 'geodirectory');?></small>
+                        <?php
+                        if ($l_count > $step_max_items) {
+                            ?>
+                            <table id="tags_sync_sub_table" style="display: none;">
+                                <?php
+                                $all_postypes = geodir_get_posttypes();
+
+                                if (!empty($all_postypes)) {
+                                    foreach ($all_postypes as $key) {
+                                        ?>
+                                        <tr>
+                                            <td>
+                                                <?php echo $key; ?>
+                                            </td>
+                                            <td>
+                                                <input type="button" value="<?php _e('Run', 'geodirectory');?>"
+                                                       class="button-primary geodir_diagnosis_button" data-ptype="<?php echo $key; ?>" data-diagnose="tags_sync"/>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </table>
+                            <?php
+                        }
+                        ?>
                     </td>
-                    <td><input type="button" value="<?php _e('Run', 'geodirectory');?>"
-                               class="button-primary geodir_diagnosis_button" data-diagnose="tags_sync"/>
+                    <td>
+                        <input type="button" value="<?php _e('Run', 'geodirectory');?>"
+                               class="button-primary geodir_diagnosis_button" <?php echo $multiple; ?> data-diagnose="tags_sync"/>
+
                     </td>
                 </tr>
 
