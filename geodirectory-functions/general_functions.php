@@ -22,18 +22,20 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
  * Return the plugin folder url WITHOUT TRAILING SLASH.
  *
  * @since   1.0.0
+ * @since   1.6.18 Fix: GD Booster causes problem when used http in urls on SSL enabled site.
  * @package GeoDirectory
  * @return string example url eg: http://wpgeo.directory/wp-content/plugins/geodirectory
  */
 function geodir_plugin_url() {
-
+	return plugins_url( '', dirname( __FILE__ ) );
+	/*
 	if ( is_ssl() ) :
 		return str_replace( 'http://', 'https://', WP_PLUGIN_URL ) . "/" . plugin_basename( dirname( dirname( __FILE__ ) ) );
 	else :
 		return WP_PLUGIN_URL . "/" . plugin_basename( dirname( dirname( __FILE__ ) ) );
 	endif;
+	*/
 }
-
 
 /**
  * Return the plugin path.
@@ -2465,6 +2467,7 @@ function geodir_function_widget_listings_join( $join ) {
  * Listing query where clause SQL part for widgets.
  *
  * @since   1.0.0
+ * @since   1.6.18 New attributes added in gd_listings shortcode to filter user favorite listings.
  * @package GeoDirectory
  * @global object $wpdb          WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
@@ -2510,6 +2513,17 @@ function geodir_function_widget_listings_where( $where ) {
 
 		if ( ! empty( $query_args['with_videos_only'] ) ) {
 			$where .= " AND ( " . $table . ".geodir_video != '' AND " . $table . ".geodir_video IS NOT NULL )";
+		}
+        
+		if ( ! empty( $query_args['show_favorites_only'] ) ) {
+			$user_favorites = '-1';
+			
+			if ( !empty( $query_args['favorites_by_user'] ) ) {
+				$user_favorites = get_user_meta( (int)$query_args['favorites_by_user'], 'gd_user_favourite_post', true );
+				$user_favorites = !empty($user_favorites) && is_array($user_favorites) ? implode("','", $user_favorites) : '-1';
+			}
+			
+			$where .= " AND `" . $wpdb->posts . "`.`ID` IN('" . $user_favorites . "')";
 		}
 
 		if ( ! empty( $query_args['tax_query'] ) ) {
@@ -3101,11 +3115,12 @@ function geodir_listing_slider_widget_output( $args = '', $instance = '' ) {
 
 	wp_enqueue_script( 'geodirectory-jquery-flexslider-js' );
 	?>
-	<script type="text/javascript">
+		<script type="text/javascript">
 		jQuery(window).load(function () {
 			// chrome 53 introduced a bug, so we need to repaint the slider when shown.
-			jQuery('.geodir-slides').addClass('flexslider-fix-rtl');
-
+			jQuery('#geodir_widget_carousel .geodir-slides').addClass('flexslider-fix-rtl');
+			jQuery('#geodir_widget_slider .geodir-slides').addClass('flexslider-fix-rtl');
+			
 			jQuery('#geodir_widget_carousel').flexslider({
 				animation: "slide",
 				selector: ".geodir-slides > li",
@@ -3117,9 +3132,13 @@ function geodir_listing_slider_widget_output( $args = '', $instance = '' ) {
 				itemWidth: 75,
 				itemMargin: 5,
 				asNavFor: '#geodir_widget_slider',
-				rtl: <?php echo( is_rtl() ? 'true' : 'false' ); /* fix rtl issue */ ?>
+				rtl: <?php echo( is_rtl() ? 'true' : 'false' ); /* fix rtl issue */ ?>,
+				start: function (slider) {
+					// chrome 53 introduced a bug, so we need to repaint the slider when shown.
+					jQuery('.geodir-slides', jQuery(slider)).removeClass('flexslider-fix-rtl');
+				},
 			});
-
+			
 			jQuery('#geodir_widget_slider').flexslider({
 				animation: "<?php echo $animation;?>",
 				selector: ".geodir-slides > li",
@@ -3137,10 +3156,9 @@ function geodir_listing_slider_widget_output( $args = '', $instance = '' ) {
 			}?>
 				sync: "#geodir_widget_carousel",
 				start: function (slider) {
-
 					// chrome 53 introduced a bug, so we need to repaint the slider when shown.
-					jQuery('.geodir-slides').removeClass('flexslider-fix-rtl');
-
+					jQuery('.geodir-slides', jQuery(slider)).removeClass('flexslider-fix-rtl');
+					
 					jQuery('.geodir-listing-flex-loader').hide();
 					jQuery('#geodir_widget_slider').css({'visibility': 'visible'});
 					jQuery('#geodir_widget_carousel').css({'visibility': 'visible'});

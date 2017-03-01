@@ -239,6 +239,7 @@ add_shortcode('gd_listing_map', 'geodir_sc_listing_map');
  * @since 1.0.0
  * @since 1.5.2 Added TERRAIN for $maptype attribute.
  * @since 1.6.16 CHANGED: New parameters post_type, category & event_type added.
+ * @since 1.6.18 FIXED: For CPT other then "gd_place" not working.
  * @package GeoDirectory
  * @global object $post The current post object.
  * @param array $atts {
@@ -322,6 +323,7 @@ function geodir_sc_listing_map($atts) {
             'posts_per_page' => 1000000, //@todo kiran why was this added? 
             'is_geodir_loop' => true,
             'gd_location'    => false,
+            'post_type'      => $params['post_type'],
         );
 
         if ( ! empty( $params['category'] ) && isset( $params['category'][0] ) && (int) $params['category'][0] != 0 ) {
@@ -1162,6 +1164,7 @@ add_shortcode('gd_bestof_widget', 'geodir_sc_bestof_widget');
  * @since 1.4.2
  * @since 1.5.9 New parameter "post_author" added.
  * @since 1.6.5 tags parameter added.
+ * @since 1.6.18 New attributes added in gd_listings shortcode to filter user favorite listings.
  *
  * @global object $post The current post object.
  *
@@ -1193,6 +1196,9 @@ add_shortcode('gd_bestof_widget', 'geodir_sc_bestof_widget');
  *     @type int|bool $bottom_pagination   Display pagination on bottom of listings. Default 1.
                                            Required $with_pagination true.
        @type string $tags                  Post tags. Ex: "Tag1,TagB" Optional.
+ *     @type int|bool $show_favorites_only    Display listings which are favorited by user. Default empty.
+ *     @type int|string $favorites_by_user    Filter the posts favorites by user. Should be user ID or 'current' or empty. Default empty.
+                                   ('current' uses the author Id of current viewing post, If empty then uses the current logged user ID).
  * }
  * @param string $content The enclosed content. Optional.
  * @return string HTML content to display geodirectory listings.
@@ -1219,7 +1225,9 @@ function geodir_sc_gd_listings($atts, $content = '') {
         'top_pagination'        => '0',
         'bottom_pagination'     => '1',
         'without_no_results'    => 0,
-        'tags'                  => ''
+        'tags'                  => '',
+        'show_favorites_only'   => '',
+        'favorites_by_user'     => '',
     );
     $params = shortcode_atts($defaults, $atts);
 
@@ -1281,6 +1289,20 @@ function geodir_sc_gd_listings($atts, $content = '') {
     $params['with_pagination']      = gdsc_to_bool_val($params['with_pagination']);
     $params['top_pagination']       = gdsc_to_bool_val($params['top_pagination']);
     $params['bottom_pagination']    = gdsc_to_bool_val($params['bottom_pagination']);
+    
+    // User favorites
+    $params['show_favorites_only']  = gdsc_to_bool_val($params['show_favorites_only']);
+    if (!empty($params['show_favorites_only'])) {
+        if ($params['favorites_by_user'] == 'current' && !empty($post) && isset($post->post_author) && $post->post_type != 'page') {
+            $params['favorites_by_user'] = $post->post_author;
+        } else if ($params['favorites_by_user'] != 'current' && absint($params['favorites_by_user']) > 0) {
+            $params['favorites_by_user'] = absint($atts['favorites_by_user']);
+        } else if ($params['favorites_by_user'] != 'current' && $current_user_id = get_current_user_id()) {
+            $params['favorites_by_user'] = $current_user_id;
+        } else {
+            $params['favorites_by_user'] = 0;
+        }
+    }
 
     // Clean tags
     if (!empty($params['tags'])) {

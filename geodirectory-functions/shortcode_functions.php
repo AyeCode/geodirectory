@@ -541,6 +541,7 @@ function gdsc_validate_list_filter_choice($filter_choice)
  *
  * @since 1.4.2
  * @since 1.6.5 $tags parameter added.
+ * @since 1.6.18 New attributes added in gd_listings shortcode to filter user favorite listings.
  *
  * @global string $gridview_columns_widget The girdview style of the listings for widget.
  * @global bool $geodir_is_widget_listing Is this a widget listing?. Default: false.
@@ -617,6 +618,11 @@ function geodir_sc_gd_listings_output($args = array()) {
 
     if (!empty($args['with_videos_only'])) {
         $query_args['with_videos_only'] = 1;
+    }
+    
+    if (!empty($args['show_favorites_only'])) {
+        $query_args['show_favorites_only'] = 1;
+        $query_args['favorites_by_user'] = !empty($args['favorites_by_user']) ? $args['favorites_by_user'] : 0;
     }
     $with_no_results = !empty($args['without_no_results']) ? false : true;
 

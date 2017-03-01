@@ -144,11 +144,11 @@ function geodir_login_url($args=array()){
         remove_filter('home_url', 'geodir_location_geo_home_link', 100000);
     }
 
-	if (defined('ICL_LANGUAGE_CODE')){
-		$home_url = icl_get_home_url();
-	}else{
-		$home_url = home_url();
-	}
+    if (geodir_is_wpml()){
+        $home_url = icl_get_home_url();
+    }else{
+        $home_url = home_url();
+    }
 
     if (function_exists('geodir_location_geo_home_link')) {
         add_filter('home_url', 'geodir_location_geo_home_link', 100000, 2);
@@ -193,18 +193,18 @@ function geodir_info_url($args=array()){
     $gd_page_id = get_option('geodir_info_page');
 
     if (function_exists('icl_object_id')) {
-	    $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
+        $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
     }
 
     if (function_exists('geodir_location_geo_home_link')) {
         remove_filter('home_url', 'geodir_location_geo_home_link', 100000);
     }
 
-	if (defined('ICL_LANGUAGE_CODE')){
-		$home_url = icl_get_home_url();
-	}else{
-		$home_url = home_url();
-	}
+    if (geodir_is_wpml()){
+        $home_url = icl_get_home_url();
+    }else{
+        $home_url = home_url();
+    }
 
     if (function_exists('geodir_location_geo_home_link')) {
         add_filter('home_url', 'geodir_location_geo_home_link', 100000, 2);
