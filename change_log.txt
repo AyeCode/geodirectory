@@ -7,6 +7,7 @@ Listing slider widget breaks slider if on detail page - FIXED
 For price custom field option "Decimal display" does not working - FIXED
 Use of ICL_LANGUAGE_CODE conflicts if used to check WPML installed - CHANGED
 New attributes added in gd_listings shortcode to filter user favorite listings - ADDED
+Backward compatibility for multibyte string functions - CHANGED
 
 v1.6.17
 Changes for batch WPML duplicates feature - CHANGED
