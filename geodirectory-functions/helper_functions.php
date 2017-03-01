@@ -1083,9 +1083,5 @@ function geodir_total_listings_count($post_type = false)
 }
 
 function geodir_get_diagnose_step_max_items() {
-	return 100;
-}
-
-function geodir_calc_diagnose_percent() {
-	
+	return 5;
 }

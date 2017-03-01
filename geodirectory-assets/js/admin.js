@@ -205,7 +205,11 @@ jQuery(document).ready(function() {
             jQuery('.tool-' + diagnose).remove();
             var result_container = jQuery('.geodir_diagnostic_result-' + diagnose);
             if (!result_container.length) {
-                jQuery('<tr class="gd-tool-results tool-' + diagnose + '" ><td colspan="3"><span class="gd-tool-results-remove" onclick="jQuery(this).closest(\'tr\').remove();"><i class="fa fa-spinner fa-spin"></i></span><div class="geodir_diagnostic_result-' + diagnose + '"></div></td></tr>').insertAfter(jQuery(this).parents('tr'));
+                if( typeof ptype !== "undefined") {
+                    jQuery('<tr class="gd-tool-results tool-' + diagnose + '" ><td colspan="3"><span class="gd-tool-results-remove" onclick="jQuery(this).closest(\'tr\').remove();"></span><div class="geodir_diagnostic_result-' + diagnose + '"></div></td></tr>').insertAfter(jQuery('#' + diagnose +'_'+ ptype));
+                } else {
+                    jQuery('<tr class="gd-tool-results tool-' + diagnose + '" ><td colspan="3"><span class="gd-tool-results-remove" onclick="jQuery(this).closest(\'tr\').remove();"><i class="fa fa-spinner fa-spin"></i></span><div class="geodir_diagnostic_result-' + diagnose + '"></div></td></tr>').insertAfter(jQuery(this).parents('tr'));
+                }
                 var result_container = jQuery('.geodir_diagnostic_result-' + diagnose);
             }
 
@@ -218,7 +222,7 @@ jQuery(document).ready(function() {
                     '</div>' +
                     '</div>' +
                     '</td>' +
-                    '</tr>').insertAfter(jQuery(this).parents('tr'));
+                    '</tr>').insertAfter(jQuery('#' + diagnose +'_'+ ptype));
 
                 jQuery('#gd_progressbar').progressbar({value: 0});
                 jQuery('#gd_progressbar .gd-progress-label').html('<i class="fa fa-refresh fa-spin"></i> Processing...');
@@ -226,7 +230,7 @@ jQuery(document).ready(function() {
             }
 
             // start the process
-            gd_process_diagnose_step( 0, ptype, diagnose, result_container );    
+            gd_process_diagnose_step( 0, ptype, diagnose, result_container );
         }
         
     });
@@ -249,9 +253,15 @@ function gd_process_diagnose_step(step, ptype, diagnose, result_container) {
         beforeSend: function() {},
         success: function(data, textStatus, xhr) {
             if( typeof ptype === "undefined" || 'done' == data ) {
-                jQuery('.tool-' + diagnose + ' .gd-tool-results-remove').html('<i class="fa fa-times"></i>');
-                result_container.html(data);
-                jQuery('#gd_progressbar').remove();
+                if( typeof ptype !== "undefined"){
+                    jQuery('#' + diagnose +'_'+ ptype).html('<ul class="geodir_noproblem_info"><li>'+data+'</li></ul>');
+                    jQuery('#gd_progressbar').remove();
+                    jQuery('#' + diagnose + '_sub_table').find('.gd-tool-results').remove();
+
+                } else {
+                    jQuery('.tool-' + diagnose + ' .gd-tool-results-remove').html('<i class="fa fa-times"></i>');
+                    result_container.html(data);
+                }
                 geodir_enable_fix_buttons(); //enable new fix buttons
             } else {
                 resp = JSON.parse(data);

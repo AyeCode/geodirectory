@@ -1694,16 +1694,16 @@ function geodir_diagnostic_tools_setting_page()
                         <?php
                         if ($l_count > $step_max_items) {
                             ?>
-                            <table id="tags_sync_sub_table" style="display: none;">
+                            <table id="tags_sync_sub_table" class="widefat" style="display: none">
                                 <?php
-                                $all_postypes = geodir_get_posttypes();
+                                $all_postypes = geodir_get_posttypes('array');
 
                                 if (!empty($all_postypes)) {
-                                    foreach ($all_postypes as $key) {
+                                    foreach ($all_postypes as $key => $value) {
                                         ?>
-                                        <tr>
+                                        <tr id="tags_sync_<?php echo $key; ?>">
                                             <td>
-                                                <?php echo $key; ?>
+                                                <?php echo $value['labels']['name']; ?>
                                             </td>
                                             <td>
                                                 <input type="button" value="<?php _e('Run', 'geodirectory');?>"
