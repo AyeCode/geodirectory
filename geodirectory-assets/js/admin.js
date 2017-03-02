@@ -194,38 +194,87 @@ function gd_copy_translation(url) {
 // Diagnosis related js starts here
 /* Check Uncheck All Related Options Start*/
 jQuery(document).ready(function() {
-    jQuery('.geodir_diagnosis_button').click(function() {
-        var diagnose = (jQuery(this).data('diagnose'))
-        jQuery('.tool-' + diagnose).remove();
-        var result_container = jQuery('.geodir_diagnostic_result-' + diagnose);
-        if (!result_container.length) {
-            jQuery('<tr class="gd-tool-results tool-' + diagnose + '" ><td colspan="3"><span class="gd-tool-results-remove" onclick="jQuery(this).closest(\'tr\').remove();"><i class="fa fa-spinner fa-spin"></i></span><div class="geodir_diagnostic_result-' + diagnose + '"></div></td></tr>').insertAfter(jQuery(this).parents('tr'));
+    jQuery('.geodir_diagnosis_button').click(function(e) {
+        e.preventDefault();
+        var diagnose = (jQuery(this).data('diagnose'));
+        var step_process = (jQuery(this).data('step'));
+        var ptype = (jQuery(this).data('ptype'));
+        if (step_process == '1') {
+            jQuery('#' + diagnose + '_sub_table').show();
+        } else {
+            jQuery('.tool-' + diagnose).remove();
             var result_container = jQuery('.geodir_diagnostic_result-' + diagnose);
-        }
-
-        jQuery.ajax({
-            url: geodir_all_js_msg.geodir_admin_ajax_url,
-            type: 'POST',
-            dataType: 'html',
-            data: {
-                action: 'geodir_admin_ajax',
-                geodir_admin_ajax_action: 'diagnosis',
-                diagnose_this: diagnose
-            },
-            beforeSend: function() {},
-            success: function(data, textStatus, xhr) {
-                jQuery('.tool-' + diagnose + ' .gd-tool-results-remove').html('<i class="fa fa-times"></i>');
-                result_container.html(data);
-                geodir_enable_fix_buttons(); //enable new fix buttons
-            },
-            error: function(xhr, textStatus, errorThrown) {
-                alert(textStatus);
+            if (!result_container.length) {
+                if( typeof ptype !== "undefined") {
+                    jQuery('<tr class="gd-tool-results tool-' + diagnose + '" ><td colspan="3"><span class="gd-tool-results-remove" onclick="jQuery(this).closest(\'tr\').remove();"></span><div class="geodir_diagnostic_result-' + diagnose + '"></div></td></tr>').insertAfter(jQuery('#' + diagnose +'_'+ ptype));
+                } else {
+                    jQuery('<tr class="gd-tool-results tool-' + diagnose + '" ><td colspan="3"><span class="gd-tool-results-remove" onclick="jQuery(this).closest(\'tr\').remove();"><i class="fa fa-spinner fa-spin"></i></span><div class="geodir_diagnostic_result-' + diagnose + '"></div></td></tr>').insertAfter(jQuery(this).parents('tr'));
+                }
+                var result_container = jQuery('.geodir_diagnostic_result-' + diagnose);
             }
-        }); // end of ajax
+
+            if( typeof ptype !== "undefined") {
+                jQuery('<tr>'+
+                    '<td colspan="3">' +
+                    '<div class="">' +
+                    '<div id="gd_progressbar">' +
+                    '<div class="gd-progress-label"></div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</td>' +
+                    '</tr>').insertAfter(jQuery('#' + diagnose +'_'+ ptype));
+
+                jQuery('#gd_progressbar').progressbar({value: 0});
+                jQuery('#gd_progressbar .gd-progress-label').html('<i class="fa fa-refresh fa-spin"></i> Processing...');
+
+            }
+
+            // start the process
+            gd_process_diagnose_step( 0, ptype, diagnose, result_container );
+        }
+        
     });
 
     geodir_enable_fix_buttons(); // enabel fix buttons
 });
+
+function gd_process_diagnose_step(step, ptype, diagnose, result_container) {
+    jQuery.ajax({
+        url: geodir_all_js_msg.geodir_admin_ajax_url,
+        type: 'POST',
+        dataType: 'html',
+        data: {
+            action: 'geodir_admin_ajax',
+            geodir_admin_ajax_action: 'diagnosis',
+            diagnose_this: diagnose,
+            step: step,
+            ptype: ptype
+        },
+        beforeSend: function() {},
+        success: function(data, textStatus, xhr) {
+            if( typeof ptype === "undefined" || 'done' == data ) {
+                if( typeof ptype !== "undefined"){
+                    jQuery('#' + diagnose +'_'+ ptype).html('<ul class="geodir_noproblem_info"><li>'+data+'</li></ul>');
+                    jQuery('#gd_progressbar').remove();
+                    jQuery('#' + diagnose + '_sub_table').find('.gd-tool-results').remove();
+
+                } else {
+                    jQuery('.tool-' + diagnose + ' .gd-tool-results-remove').html('<i class="fa fa-times"></i>');
+                    result_container.html(data);
+                }
+                geodir_enable_fix_buttons(); //enable new fix buttons
+            } else {
+                resp = JSON.parse(data);
+                jQuery('#gd_progressbar').progressbar({value: resp.percent});
+                jQuery('#gd_progressbar .gd-progress-label').html('<i class="fa fa-refresh fa-spin"></i> Processing...');
+                gd_process_diagnose_step(parseInt( resp.step ), ptype, diagnose, result_container)
+            }
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            alert(textStatus);
+        }
+    }); // end of ajax
+}
 
 function geodir_enable_fix_buttons() {
     jQuery('.geodir_fix_diagnostic_issue').click(function() {

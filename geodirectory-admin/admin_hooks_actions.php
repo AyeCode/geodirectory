@@ -981,11 +981,14 @@ function geodir_admin_ajax_handler()
 {
     if (isset($_REQUEST['geodir_admin_ajax_action']) && $_REQUEST['geodir_admin_ajax_action'] != '') {
         $geodir_admin_ajax_action = $_REQUEST['geodir_admin_ajax_action'];
+        $diagnose_this = "";
         switch ($geodir_admin_ajax_action) {
             case 'diagnosis' :
-                if (isset($_REQUEST['diagnose_this']) && $_REQUEST['diagnose_this'] != '')
+                if (isset($_REQUEST['diagnose_this']) && $_REQUEST['diagnose_this'] != '') {
                     $diagnose_this = sanitize_text_field($_REQUEST['diagnose_this']);
-                call_user_func('geodir_diagnose_' . $diagnose_this);
+                    call_user_func('geodir_diagnose_' . $diagnose_this);
+
+                }
                 exit();
                 break;
 
@@ -1151,39 +1154,83 @@ function geodir_diagnose_tags_sync()
 {
     global $wpdb, $plugin_prefix;
     $fix = isset($_POST['fix']) ? true : false;
+    $step = isset($_POST['step']) ? strip_tags(esc_sql($_POST['step'])) : 0;
+    $step_max_items = geodir_get_diagnose_step_max_items();
+    $offset = (int) $step * $step_max_items;
+    $ptype = isset($_POST['ptype']) ? strip_tags(esc_sql($_POST['ptype'])) : false;
 
+    $total_listings = geodir_total_listings_count();
+    $total_ptype_listings = 0;
+    if ($ptype) {
+        $total_ptype_listings = geodir_total_listings_count($ptype);
+    }
+    $max_step = ceil($total_ptype_listings / $step_max_items) - 1;
+    
     //if($fix){echo 'true';}else{echo 'false';}
     $is_error_during_diagnose = false;
     $output_str = '';
+    
+    if ($ptype && !empty($ptype) && $total_listings > $step_max_items) {
+        $stepped_process = true;
+    } else {
+        $stepped_process = false;
+    }
 
+    if ($stepped_process) {
+        $sql = $wpdb->prepare( "SELECT * FROM " . $wpdb->prefix . "geodir_" . $ptype . "_detail LIMIT %d OFFSET %d", $step_max_items, $offset );
+        $posts = $wpdb->get_results( $sql );
 
-    $all_postypes = geodir_get_posttypes();
+        if (!empty($posts)) {
 
-    if (!empty($all_postypes)) {
-        foreach ($all_postypes as $key) {
-            // update each GD CPT
-            $posts = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . "geodir_" . $key . "_detail d");
-
-            if (!empty($posts)) {
-
-                foreach ($posts as $p) {
-                    $p->post_type = $key;
-                    $raw_tags = wp_get_object_terms($p->post_id, $p->post_type . '_tags', array('fields' => 'names'));
-                    if (empty($raw_tags)) {
-                        $post_tags = '';
-                    } else {
-                        $post_tags = implode(",", $raw_tags);
-                    }
-                    $tablename = $plugin_prefix . $p->post_type . '_detail';
-                    $wpdb->query($wpdb->prepare("UPDATE " . $tablename . " SET post_tags=%s WHERE post_id =%d", $post_tags, $p->post_id));
-
+            foreach ($posts as $p) {
+                $p->post_type = $ptype;
+                $raw_tags = wp_get_object_terms($p->post_id, $p->post_type . '_tags', array('fields' => 'names'));
+                if (empty($raw_tags)) {
+                    $post_tags = '';
+                } else {
+                    $post_tags = implode(",", $raw_tags);
                 }
-                $output_str .= "<li>" . $key . __(': Done', 'geodirectory') . "</li>";
+                $tablename = $plugin_prefix . $p->post_type . '_detail';
+                $wpdb->query($wpdb->prepare("UPDATE " . $tablename . " SET post_tags=%s WHERE post_id =%d", $post_tags, $p->post_id));
+
+            }
+            if ($step >= $max_step) {
+                $output_str = "done";    
+            } else {
+                $output_str = $step + 1;
+            }
+        }
+
+    } else {
+        $all_postypes = geodir_get_posttypes();
+
+        if (!empty($all_postypes)) {
+            foreach ($all_postypes as $key) {
+                // update each GD CPT
+                $posts = $wpdb->get_results( "SELECT * FROM " . $wpdb->prefix . "geodir_" . $key . "_detail");
+
+                if (!empty($posts)) {
+
+                    foreach ($posts as $p) {
+                        $p->post_type = $key;
+                        $raw_tags = wp_get_object_terms($p->post_id, $p->post_type . '_tags', array('fields' => 'names'));
+                        if (empty($raw_tags)) {
+                            $post_tags = '';
+                        } else {
+                            $post_tags = implode(",", $raw_tags);
+                        }
+                        $tablename = $plugin_prefix . $p->post_type . '_detail';
+                        $wpdb->query($wpdb->prepare("UPDATE " . $tablename . " SET post_tags=%s WHERE post_id =%d", $post_tags, $p->post_id));
+
+                    }
+                    $output_str .= "<li>" . $key . __(': Done', 'geodirectory') . "</li>";
+                }
+
             }
 
         }
-
     }
+
 
     if ($is_error_during_diagnose) {
         $info_div_class = "geodir_problem_info";
@@ -1192,11 +1239,24 @@ function geodir_diagnose_tags_sync()
         $info_div_class = "geodir_noproblem_info";
         $fix_button_txt = '';
     }
-    echo "<ul class='$info_div_class'>";
-    echo $output_str;
-    echo $fix_button_txt;
-    echo "</ul>";
 
+    if ($stepped_process) {
+        $percent = ($step/$max_step) * 100;
+        if ($output_str == 'done') {
+            echo $output_str;
+        } else {
+            $output = array(
+                'step' => $output_str,
+                'percent' => $percent
+            );
+            echo json_encode($output);
+        }
+    } else {
+        echo "<ul class='$info_div_class'>";
+        echo $output_str;
+        echo $fix_button_txt;
+        echo "</ul>";
+    }
 }
 
 /**
