@@ -103,20 +103,20 @@ function geodir_max_excerpt( $charlength ) {
 
 	$charlength ++;
 	$excerpt_more = function_exists( 'geodirf_excerpt_more' ) ? geodirf_excerpt_more( '' ) : geodir_excerpt_more( '' );
-	if ( mb_strlen( $excerpt ) > $charlength ) {
-		if ( mb_strlen( $excerpt_more ) > 0 && mb_strpos( $excerpt, $excerpt_more ) !== false ) {
-			$excut = - ( mb_strlen( $excerpt_more ) );
-			$subex = mb_substr( $excerpt, 0, $excut );
-			if ( $charlength > 0 && mb_strlen( $subex ) > $charlength ) {
-				$subex = mb_substr( $subex, 0, $charlength );
+	if ( geodir_utf8_strlen( $excerpt ) > $charlength ) {
+		if ( geodir_utf8_strlen( $excerpt_more ) > 0 && geodir_utf8_strpos( $excerpt, $excerpt_more ) !== false ) {
+			$excut = - ( geodir_utf8_strlen( $excerpt_more ) );
+			$subex = geodir_utf8_substr( $excerpt, 0, $excut );
+			if ( $charlength > 0 && geodir_utf8_strlen( $subex ) > $charlength ) {
+				$subex = geodir_utf8_substr( $subex, 0, $charlength );
 			}
 			$out .= $subex;
 		} else {
-			$subex   = mb_substr( $excerpt, 0, $charlength - 5 );
+			$subex   = geodir_utf8_substr( $excerpt, 0, $charlength - 5 );
 			$exwords = explode( ' ', $subex );
-			$excut   = - ( mb_strlen( $exwords[ count( $exwords ) - 1 ] ) );
+			$excut   = - ( geodir_utf8_strlen( $exwords[ count( $exwords ) - 1 ] ) );
 			if ( $excut < 0 ) {
-				$out .= mb_substr( $subex, 0, $excut );
+				$out .= geodir_utf8_substr( $subex, 0, $excut );
 			} else {
 				$out .= $subex;
 			}
@@ -131,9 +131,9 @@ function geodir_max_excerpt( $charlength ) {
 		$out .= '</a>';
 
 	} else {
-		if ( mb_strlen( $excerpt_more ) > 0 && mb_strpos( $excerpt, $excerpt_more ) !== false ) {
-			$excut = - ( mb_strlen( $excerpt_more ) );
-			$out .= mb_substr( $excerpt, 0, $excut );
+		if ( geodir_utf8_strlen( $excerpt_more ) > 0 && geodir_utf8_strpos( $excerpt, $excerpt_more ) !== false ) {
+			$excut = - ( geodir_utf8_strlen( $excerpt_more ) );
+			$out .= geodir_utf8_substr( $excerpt, 0, $excut );
 			$out .= ' <a class="excerpt-read-more" href="' . get_permalink() . '" title="' . get_the_title() . '">';
 			/**
 			 * Filter excerpt read more text.
@@ -2024,7 +2024,7 @@ function geodir_get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_le
 
 		$comment_content_length = strlen( $comment_content );
 		if ( $comment_content_length > $comment_lenth ) {
-			$comment_excerpt = mb_substr( $comment_content, 0, $comment_lenth ) . '... ' . $read_more;
+			$comment_excerpt = geodir_utf8_substr( $comment_content, 0, $comment_lenth ) . '... ' . $read_more;
 		} else {
 			$comment_excerpt = $comment_content;
 		}
