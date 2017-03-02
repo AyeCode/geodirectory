@@ -78,35 +78,29 @@ function gd_avada_current_page_title_bar()
         geodir_action_listings_title();
         $title = ob_get_clean();
         avada_page_title_bar($title, $subtitle, $secondary_content);
-    }
-
-    if (geodir_is_page('add-listing')) {
+    }elseif (geodir_is_page('add-listing')) {
         ob_start(); // Start buffering;
         geodir_action_add_listing_page_title();
         $title = ob_get_clean();
         avada_page_title_bar($title, $subtitle, $secondary_content);
-    }
-
-    if (geodir_is_page('author')) {
+    }elseif (geodir_is_page('author')) {
         ob_start(); // Start buffering;
         geodir_action_author_page_title();
         $title = ob_get_clean();
         avada_page_title_bar($title, $subtitle, $secondary_content);
-    }
-
-
-    if (geodir_is_page('detail') || geodir_is_page('preview')) {
+    }elseif (geodir_is_page('detail') || geodir_is_page('preview')) {
         if ( $title = get_post_meta( get_the_ID(), 'pyre_page_title_custom_text', true ) ) {}
         else {
             $title = get_the_title();
         }
         avada_page_title_bar($title, $subtitle, $secondary_content);
-    }
-
-    if (geodir_is_page('search')) {
+    }elseif (geodir_is_page('search')) {
         ob_start(); // Start buffering;
         geodir_action_search_page_title();
         $title = ob_get_clean();
+        avada_page_title_bar($title, $subtitle, $secondary_content);
+    }else{
+        $title = get_the_title();
         avada_page_title_bar($title, $subtitle, $secondary_content);
     }
 }

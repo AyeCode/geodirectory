@@ -1176,12 +1176,12 @@ function geodir_utf8_substr( $str, $start, $length = null, $encoding = 'UTF-8' )
  * @return string The width of string.
  */
 function geodir_utf8_strwidth( $str, $encoding = 'UTF-8' ) {
-    if ( function_exists( 'mb_strwidth' ) ) {
-        return mb_strwidth( $str, $encoding );
-    }
-    
-    return geodir_utf8_strlen( $str, $encoding );
-=======
+	if ( function_exists( 'mb_strwidth' ) ) {
+		return mb_strwidth( $str, $encoding );
+	}
+
+	return geodir_utf8_strlen( $str, $encoding );
+}
 
 function geodir_total_listings_count($post_type = false)
 {
