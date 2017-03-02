@@ -1059,3 +1059,29 @@ function geodir_tool_restore_cpt_from_taxonomies(){
 	update_option('geodir_post_types',$cpts_restore);
 
 }
+
+
+function geodir_total_listings_count($post_type = false)
+{
+	global $wpdb;
+
+	$count = 0;
+	
+	if ($post_type) {
+		$count = $count + $wpdb->get_var("select count(post_id) from " . $wpdb->prefix . "geodir_" . $post_type . "_detail");
+	} else {
+		$all_postypes = geodir_get_posttypes();
+
+		if (!empty($all_postypes)) {
+			foreach ($all_postypes as $key) {
+				$count = $count + $wpdb->get_var("select count(post_id) from " . $wpdb->prefix . "geodir_" . $key . "_detail");
+			}
+		}	
+	}
+
+	return $count;
+}
+
+function geodir_get_diagnose_step_max_items() {
+	return 5;
+}
