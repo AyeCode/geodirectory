@@ -515,6 +515,8 @@ var gd_single_marker_lat = '', gd_single_marker_lon = '';
 
 // create the marker and set up the event window
 function create_marker(input, map_canvas_var) {
+
+    //console.log(input);
     if (window.gdMaps == 'osm') {
         return create_marker_osm(input, map_canvas_var);
     }
@@ -536,6 +538,15 @@ function create_marker(input, map_canvas_var) {
             input.i = geodir_all_js_msg.geodir_default_marker_icon;
         }
         cs = input.cs;
+
+        // input.i = {
+        //     url: input.i ,
+        //     size: new google.maps.Size(71, 71),
+        //     origin: new google.maps.Point(0, 0),
+        //     anchor: new google.maps.Point(17, 34),
+        //     scaledSize: new google.maps.Size(25, 25)
+        // };
+
         var marker = jQuery.goMap.createMarker({
             id: marker_id,
             title: title,
