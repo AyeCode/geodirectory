@@ -6262,6 +6262,11 @@ function geodir_admin_dequeue_scripts() {
     if (class_exists('FusionBuilder') && wp_script_is('fusion_builder_chosen_js', 'enqueued')) {
         wp_dequeue_script('fusion_builder_chosen_js');
     }
+    
+    // Fix conflicts timepicker & setting date value.
+    if (class_exists('acf') && wp_script_is('acf-timepicker', 'enqueued')) {
+        wp_dequeue_script('acf-timepicker');
+    }
 }
 
 /**
