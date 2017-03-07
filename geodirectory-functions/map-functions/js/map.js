@@ -654,7 +654,9 @@ function animate_marker(map_canvas, id) {
     jQuery("#" + map_canvas).goMap();
     try {
         if (window.gdMaps == 'google') {
-            jQuery.goMap.mapId.data(id).setAnimation(google.maps.Animation.BOUNCE);
+            if (jQuery.goMap.mapId.data(id) != null) {
+                jQuery.goMap.mapId.data(id).setAnimation(google.maps.Animation.BOUNCE);
+            }
         } else if(window.gdMaps == 'osm') {
             jQuery.goMap.gdlayers.eachLayer(function(marker) {
                 if (id && marker.options.id == id){
@@ -673,7 +675,7 @@ function stop_marker_animation(map_canvas, id) {
     jQuery("#" + map_canvas).goMap();
     try {
         if (window.gdMaps == 'google') {
-            if (jQuery.goMap.mapId.data(id).getAnimation() != null) {
+            if (jQuery.goMap.mapId.data(id) != null) {
                 jQuery.goMap.mapId.data(id).setAnimation(null);
             }
         } else if(window.gdMaps == 'osm') {
