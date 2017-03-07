@@ -10,6 +10,7 @@ Use of ICL_LANGUAGE_CODE conflicts if used to check WPML installed - CHANGED
 New attributes added in gd_listings shortcode to filter user favorite listings - ADDED
 Backward compatibility for multibyte string functions - CHANGED
 Facebook login will not redirect back to add listing page - FIXED
+Fix conflict Advanced Custom Fields timepicker - FIXED
 
 v1.6.17
 Changes for batch WPML duplicates feature - CHANGED
