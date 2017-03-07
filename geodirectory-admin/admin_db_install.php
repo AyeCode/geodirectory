@@ -368,7 +368,8 @@ if (!function_exists('geodir_create_tables')) {
 	(278, 'Kosovo', 'XK', 'XK', '--', '--', 'XK', 'Pristina', 'Europe', '--', '--', 'Euro', 'EUR', 1859203, 'Caribbean Netherlands', 'Kosovo'),
     (279, 'Reunion', 'RE', 'RE', '-- ', '--', 'RE', '', '', '', '', 'Euro', 'EUR', 0, 'Metropolitan France', 'Reunion'),
     (280, 'São Tomé and Príncipe', '--', 'ST', '-- ', '--', 'ST', '', '', '', '', 'Dobra', 'STD', 190428, 'São Tomé', ''),
-    (281, 'South Sudan', '--', 'SS', '-- ', '--', 'SS', '', '', '', '', 'South Sudanese pound', 'SSP', 12340000, 'South Sudan', '')";
+    (281, 'South Sudan', '--', 'SS', '-- ', '--', 'SS', '', '', '', '', 'South Sudanese pound', 'SSP', 12340000, 'South Sudan', ''),
+    (282, 'Isle of Man', '--', 'IM', '-- ', '--', 'IM', '', '', '', '', 'Manx pound', 'IMP', 84497, 'Isle of Man', '')";
 
             /**
              * Filter the SQL query that inserts the country DB table data.

@@ -282,6 +282,13 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
                 }
             }
 
+            // fix some countries without regions, Isle of Man, Singapore
+            if(getCountryISO=='IM'){
+                getState = "Isle of Man";
+            }else if(getCountryISO=='SG'){
+                getState = "Singapore";
+            }
+
             //getCity
             // fix for cities in Ireland
             $country_arr2 = ["IE"];
