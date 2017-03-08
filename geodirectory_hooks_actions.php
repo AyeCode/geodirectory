@@ -1821,6 +1821,7 @@ add_filter('wp_title', 'geodir_custom_page_title', 100, 2);
  * Set custom page title.
  *
  * @since 1.0.0
+ * @since 1.6.18 Option added to disable overwrite by Yoast SEO titles & metas on GD pages.
  * @package GeoDirectory
  * @global object $wp WordPress object.
  * @param string $title Old title.
@@ -1830,7 +1831,7 @@ add_filter('wp_title', 'geodir_custom_page_title', 100, 2);
 function geodir_custom_page_title($title = '', $sep = '')
 {
     global $wp;
-    if (class_exists('WPSEO_Frontend') || class_exists('All_in_One_SEO_Pack')) {
+    if ((class_exists('WPSEO_Frontend') || class_exists('All_in_One_SEO_Pack')) && !geodir_disable_yoast_seo_metas()) {
         return $title;
     }
 
@@ -2882,3 +2883,24 @@ function geodir_wpml_filter_ls_languages($languages) {
     return $languages;
 }
 add_filter( 'icl_ls_languages', 'geodir_wpml_filter_ls_languages', 11, 1 );
+
+/**
+ * Remove Yoast SEO hook if disabled on GD pages.
+ *
+ * @since 1.6.18
+ *
+ */
+function geodir_remove_yoast_seo_metas(){
+    if ( class_exists( 'WPSEO_Frontend' ) && geodir_is_geodir_page() && geodir_disable_yoast_seo_metas() ) {
+        $wpseo = WPSEO_Frontend::get_instance();
+        
+        remove_action( 'wp_head', array( $wpseo, 'metadesc' ), 6 );
+        remove_action( 'wp_head', array( $wpseo, 'metakeywords' ), 11 );
+        remove_filter( 'pre_get_document_title', array( $wpseo, 'title' ), 15 );
+        remove_filter( 'wp_title', array( $wpseo, 'title' ), 15, 3 );
+        remove_filter( 'thematic_doctitle', array( $wpseo, 'title' ), 15 );
+        remove_filter( 'woo_title', array( $wpseo, 'fix_woo_title' ), 99 );
+        
+        remove_action( 'template_redirect', 'wpseo_frontend_head_init', 999 );
+    }
+}

@@ -1025,6 +1025,7 @@ function geodir_get_map_api_key() {
  *
  * @since   1.0.0
  * @since   1.5.4 Modified to replace %location% from meta when Yoast SEO plugin active.
+ * @since   1.6.18 Option added to disable overwrite by Yoast SEO titles & metas on GD pages.
  * @package GeoDirectory
  * @global object $wpdb             WordPress Database object.
  * @global object $post             The current post object.
@@ -1040,7 +1041,7 @@ function geodir_add_meta_keywords() {
 	}// if non GD page, bail
 
 	$use_gd_meta = true;
-	if ( class_exists( 'WPSEO_Frontend' ) || class_exists( 'All_in_One_SEO_Pack' ) ) {
+	if ( ( class_exists( 'WPSEO_Frontend' ) || class_exists( 'All_in_One_SEO_Pack' ) ) && !geodir_disable_yoast_seo_metas() ) {
 		$use_gd_meta = false;
 
 		if ( geodir_is_page( 'search' ) ) {
@@ -2948,4 +2949,15 @@ function geodir_cpt_has_rating_disabled( $post_type = '', $taxonomy = false ) {
 	}
 
 	return $return;
+}
+
+/**
+ * Checks that Yoast SEO is disabled on GD pages.
+ *
+ * @since 1.6.18
+ *
+ * @return bool True if Yoast SEO disabled on GD pages.
+ */
+function geodir_disable_yoast_seo_metas() {
+    return (bool)get_option( 'geodir_disable_yoast_meta' );
 }
