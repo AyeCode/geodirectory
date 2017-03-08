@@ -9,7 +9,7 @@
 global $geodir_settings;
 
 $gd_wpseo_use = '';
-if (class_exists('WPSEO_Frontend') || class_exists('All_in_One_SEO_Pack')) {
+if ((class_exists('WPSEO_Frontend') || class_exists('All_in_One_SEO_Pack')) && !geodir_disable_yoast_seo_metas()) {
     $gd_wpseo_use = "<b style='color:red;'>".__('Please use the WPSEO settings instead.','geodirectory')."</b><br />";
 }
 
@@ -30,6 +30,21 @@ $geodir_settings['title_meta_settings'] = apply_filters('geodir_title_meta_setti
         'id' => 'geodir_meta_vars'),
 
     array('type' => 'sectionend', 'id' => 'geodir_meta_vars'),
+    
+    array('name' => __('Title & Metas Settings', 'geodirectory'),
+        'type' => 'sectionstart',
+        'desc' => '',
+        'id' => 'geodir_titles_and_metas'),
+
+    array(  
+        'name' => __( 'Disable overwrite by Yoast SEO titles & metas on GD pages', 'geodirectory' ),
+        'desc' => __( 'This allows to disable overwriting by Yoast SEO titles & metas on GD pages. If ticked then GD pages will use titles & metas settings from GeoDirectory > Titles & Metas. Otherwise it will use titles & metas settings from SEO > Titles & Metas.', 'geodirectory' ),
+        'id' => 'geodir_disable_yoast_meta',
+        'type' => 'checkbox',
+        'std' => '0'
+    ),
+
+    array('type' => 'sectionend', 'id' => 'geodir_titles_and_metas'),
 
     array('name' => __('Homepage Meta Settings', 'geodirectory'),
         'type' => 'sectionstart',

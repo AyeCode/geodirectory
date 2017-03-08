@@ -54,6 +54,7 @@ function geodir_on_wp()
  * Geodirectory Post or Get request handler on init.
  *
  * @since 1.0.0
+ * @since 1.6.18 Option added to disable overwrite by Yoast SEO titles & metas on GD pages.
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  */
@@ -85,9 +86,10 @@ function geodir_on_init()
         include_once(geodir_plugin_path() . '/geodirectory-functions/map-functions/get_markers.php');
         die;
     }
-
-
-
+    
+    if ( class_exists( 'WPSEO_Frontend' ) && !is_admin() ) {
+        add_action( 'template_redirect', 'geodir_remove_yoast_seo_metas' );
+    }
 }
 
 
