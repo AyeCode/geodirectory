@@ -588,9 +588,9 @@ function geodir_get_post_info($post_id = '')
      * @since 1.0.0
      * @package GeoDirectory
      */
-    $query = apply_filters('geodir_post_info_query', "SELECT p.*,pd.* FROM " . $wpdb->posts . " p," . $table . " pd
+    $query = apply_filters('geodir_post_info_query', $wpdb->prepare("SELECT p.*,pd.* FROM " . $wpdb->posts . " p," . $table . " pd
 			  WHERE p.ID = pd.post_id
-			  AND post_id = " . $post_id);
+			  AND pd.post_id = %d", $post_id));
 
     $post_detail = $wpdb->get_row($query);
 

@@ -1257,7 +1257,7 @@ function geodir_localize_all_js_msg()
         'tax_meta_class_not_permission_record_img_msg' => __('You do not have permission to reorder images.', 'geodirectory'),
         'address_not_found_on_map_msg' => __('Address not found for:', 'geodirectory'),
         // end not show alert msg
-        'my_place_listing_del' => __('Are you wish to delete this listing?', 'geodirectory'),
+        'my_place_listing_del' => __('Are you sure you wish to delete this listing?', 'geodirectory'),
         'my_main_listing_del' => __('Deleting the main listing of a franchise will turn all franchises in regular listings. Are you sure wish to delete this main listing?', 'geodirectory'),
         //start not show alert msg
         'rating_error_msg' => __('Error : please retry', 'geodirectory'),
