@@ -14,7 +14,7 @@ Fix conflict Advanced Custom Fields timepicker - FIXED
 Isle of Man added as own country and regions fixed - FIXED
 Undefined error when map marker animating - FIXED
 Option added to disable overwrite by Yoast SEO titles & metas on GD pages - ADDED
-
+On Custom AJAX request WPML uses default language for non logged user - FIXED
 
 v1.6.17
 Changes for batch WPML duplicates feature - CHANGED
