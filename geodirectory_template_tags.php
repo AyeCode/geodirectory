@@ -275,7 +275,7 @@ function geodir_footer_scripts()
      *
      * Flexbox wont wrap on ios for search form items
      */
-    if (preg_match( '/iPad|iPod|iPhone|Safari/', $_SERVER['HTTP_USER_AGENT'] ) ) {
+    if ( !empty( $_SERVER['HTTP_USER_AGENT'] ) && preg_match( '/iPad|iPod|iPhone|Safari/', $_SERVER['HTTP_USER_AGENT'] ) ) {
         echo "<style>body .geodir-listing-search.gd-search-bar-style .geodir-loc-bar .clearfix.geodir-loc-bar-in .geodir-search .gd-search-input-wrapper{flex:50 1 auto !important;min-width: initial !important;width:auto !important;}.geodir-filter-container .geodir-filter-cat{width:auto !important;}</style>";
     }
 }

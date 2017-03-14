@@ -713,7 +713,7 @@ function geodir_excerpt($text, $length = 100, $options = array()) {
     $default = array(
         'ellipsis' => '', 'exact' => true, 'html' => true, 'trimWidth' => false,
 	);
-    if (!empty($options['html']) && strtolower(mb_internal_encoding()) === 'utf-8') {
+    if (!empty($options['html']) && function_exists('mb_internal_encoding') && strtolower(mb_internal_encoding()) === 'utf-8') {
         $default['ellipsis'] = "";
     }
     $options += $default;
@@ -816,9 +816,9 @@ function geodir_excerpt($text, $length = 100, $options = array()) {
  */
 function geodir_strlen($text, array $options) {
     if (empty($options['trimWidth'])) {
-        $strlen = 'mb_strlen';
+        $strlen = 'geodir_utf8_strlen';
     } else {
-        $strlen = 'mb_strwidth';
+        $strlen = 'geodir_utf8_strwidth';
     }
 
     if (empty($options['html'])) {
@@ -858,9 +858,9 @@ function geodir_strlen($text, array $options) {
  */
 function geodir_substr($text, $start, $length, array $options) {
     if (empty($options['trimWidth'])) {
-        $substr = 'mb_substr';
+        $substr = 'geodir_utf8_substr';
     } else {
-        $substr = 'mb_strimwidth';
+        $substr = 'geodir_utf8_strimwidth';
     }
 
     $maxPosition = geodir_strlen($text, array('trimWidth' => false) + $options);
@@ -943,15 +943,15 @@ function geodir_substr($text, $start, $length, array $options) {
  * @return string
  */
 function geodir_remove_last_word($text) {
-    $spacepos = mb_strrpos($text, ' ');
+    $spacepos = geodir_utf8_strrpos($text, ' ');
 
     if ($spacepos !== false) {
-        $lastWord = mb_strrpos($text, $spacepos);
+        $lastWord = geodir_utf8_strrpos($text, $spacepos);
 
         // Some languages are written without word separation.
         // We recognize a string as a word if it does not contain any full-width characters.
-        if (mb_strwidth($lastWord) === mb_strlen($lastWord)) {
-            $text = mb_substr($text, 0, $spacepos);
+        if (geodir_utf8_strwidth($lastWord) === geodir_utf8_strlen($lastWord)) {
+            $text = geodir_utf8_substr($text, 0, $spacepos);
         }
 
         return $text;
@@ -1060,6 +1060,128 @@ function geodir_tool_restore_cpt_from_taxonomies(){
 
 }
 
+/**
+ * Get truncated string with specified width.
+ *
+ * @since 1.6.18
+ * @package Geodirectory
+ *
+ * @param string $str The string being decoded.
+ * @param int $start The start position offset. Number of characters from the beginning of string.
+ *                      For negative value, number of characters from the end of the string.
+ * @param int $width The width of the desired trim. Negative widths count from the end of the string.
+ * @param string $trimmaker A string that is added to the end of string when string is truncated. Ex: "...".
+ * @param string $encoding The encoding parameter is the character encoding. Default "UTF-8".
+ * @return string
+ */
+function geodir_utf8_strimwidth( $str, $start, $width, $trimmaker = '', $encoding = 'UTF-8' ) {
+    if ( function_exists( 'mb_strimwidth' ) ) {
+        return mb_strimwidth( $str, $start, $width, $trimmaker, $encoding );
+    }
+    
+    return geodir_utf8_substr( $str, $start, $width, $encoding ) . $trimmaker;
+}
+
+/**
+ * Get the string length.
+ *
+ * @since 1.6.18
+ * @package Geodirectory
+ *
+ * @param string $str The string being checked for length. 
+ * @param string $encoding The encoding parameter is the character encoding. Default "UTF-8".
+ * @return int Returns the number of characters in string.
+ */
+function geodir_utf8_strlen( $str, $encoding = 'UTF-8' ) {
+    if ( function_exists( 'mb_strlen' ) ) {
+        return mb_strlen( $str, $encoding );
+    }
+        
+    return strlen( $str );
+}
+
+/**
+ * Find position of first occurrence of string in a string
+ *
+ * @since 1.6.18
+ * @package Geodirectory
+ *
+ * @param string $str The string being checked.
+ * @param string $find The string to find in input string.
+ * @param int $offset The search offset. Default "0". A negative offset counts from the end of the string.
+ * @param string $encoding The encoding parameter is the character encoding. Default "UTF-8".
+ * @return int Returns the position of the first occurrence of search in the string.
+ */
+function geodir_utf8_strpos( $str, $find, $offset = 0, $encoding = 'UTF-8' ) {
+    if ( function_exists( 'mb_strpos' ) ) {
+        return mb_strpos( $str, $find, $offset, $encoding );
+    }
+        
+    return strpos( $str, $find, $offset );
+}
+
+/**
+ * Find position of last occurrence of a string in a string.
+ *
+ * @since 1.6.18
+ * @package Geodirectory
+ *
+ * @param string $str The string being checked, for the last occurrence of search.
+ * @param string $find The string to find in input string.
+ * @param int $offset Specifies begin searching an arbitrary number of characters into the string.
+ * @param string $encoding The encoding parameter is the character encoding. Default "UTF-8".
+ * @return int Returns the position of the last occurrence of search.
+ */
+function geodir_utf8_strrpos( $str, $find, $offset = 0, $encoding = 'UTF-8' ) {
+    if ( function_exists( 'mb_strrpos' ) ) {
+        return mb_strrpos( $str, $find, $offset, $encoding );
+    }
+        
+    return strrpos( $str, $find, $offset );
+}
+
+/**
+ * Get the part of string.
+ *
+ * @since 1.6.18
+ * @package Geodirectory
+ *
+ * @param string $str The string to extract the substring from.
+ * @param int $start If start is non-negative, the returned string will start at the entered position in string, counting from zero.
+ *                      If start is negative, the returned string will start at the entered position from the end of string. 
+ * @param int|null $length Maximum number of characters to use from string.
+ * @param string $encoding The encoding parameter is the character encoding. Default "UTF-8".
+ * @return string
+ */
+function geodir_utf8_substr( $str, $start, $length = null, $encoding = 'UTF-8' ) {
+    if ( function_exists( 'mb_substr' ) ) {
+        if ( $length === null ) {
+            return mb_substr( $str, $start, geodir_utf8_strlen( $str, $encoding ), $encoding );
+        } else {
+            return mb_substr( $str, $start, $length, $encoding );
+        }
+    }
+        
+    return substr( $str, $start, $length );
+}
+
+/**
+ * Get the width of string.
+ *
+ * @since 1.6.18
+ * @package Geodirectory
+ *
+ * @param string $str The string being decoded.
+ * @param string $encoding The encoding parameter is the character encoding. Default "UTF-8".
+ * @return string The width of string.
+ */
+function geodir_utf8_strwidth( $str, $encoding = 'UTF-8' ) {
+	if ( function_exists( 'mb_strwidth' ) ) {
+		return mb_strwidth( $str, $encoding );
+	}
+
+	return geodir_utf8_strlen( $str, $encoding );
+}
 
 function geodir_total_listings_count($post_type = false)
 {

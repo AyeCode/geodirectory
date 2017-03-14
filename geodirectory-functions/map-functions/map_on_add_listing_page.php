@@ -98,7 +98,7 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
     var strictBounds;
     function geocodePosition(latLon, address) {
         console.log(address);
-        if (address && address.country!='TR') {// turkey select address does not return enough info so we get info from GPS only.
+        if (address && address.country!='TR' && address.country!='SG' ) {// turkey select address does not return enough info so we get info from GPS only.
             doGeoCode = address;
         } else {
             doGeoCode = {
@@ -280,6 +280,13 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
                 else if (administrative_area_level_2.long_name) {
                     getState = administrative_area_level_2.long_name;
                 }
+            }
+
+            // fix some countries without regions, Isle of Man, Singapore
+            if(getCountryISO=='IM'){
+                getState = "Isle of Man";
+            }else if(getCountryISO=='SG'){
+                getState = "Singapore";
             }
 
             //getCity
