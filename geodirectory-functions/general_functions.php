@@ -2338,7 +2338,7 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	$where = apply_filters( 'geodir_filter_widget_listings_where', $where, $post_type );
 	$where = $where != '' ? " WHERE 1=1 " . $where : '';
 
-	$groupby = " GROUP BY $wpdb->posts.ID "; //@todo is this needed? faster withotu
+	$groupby = " GROUP BY $wpdb->posts.ID "; //@todo is this needed? faster without
 	/**
 	 * Filter widget listing groupby clause string part that is being used for query.
 	 *
@@ -2815,6 +2815,7 @@ add_filter( 'geodir_googlemap_script_extra', 'geodir_googlemap_script_extra_deta
  * @since   1.0.0
  * @since   1.5.1 Added option to set default post type.
  * @since   1.6.9 Added option to show parent categories only.
+ * @since   1.6.18 Added option to show parent categories only.
  * @package GeoDirectory
  * @global object $wpdb                     WordPress Database object.
  * @global string $plugin_prefix            Geodirectory plugin table prefix.
@@ -2875,6 +2876,21 @@ function geodir_popular_post_category_output( $args = '', $instance = '' ) {
 	}
 
 	if ( ! empty( $a_terms ) ) {
+		// Sort CPT taxonomies in categories widget.
+		if ( !empty( $taxonomy ) && is_array( $taxonomy ) && count( $taxonomy ) > 1 ) {
+			$gd_post_types = geodir_get_posttypes();
+			$sort_taxonomies = array();
+			
+			foreach ( $gd_post_types as $gd_post_type ) {
+				$taxonomy_name = $gd_post_type . 'category';
+				
+				if ( !empty( $a_terms[$taxonomy_name] ) ) {
+					$sort_taxonomies[$taxonomy_name] = $a_terms[$taxonomy_name];
+				}
+			}
+			$a_terms = !empty( $sort_taxonomies ) ? $sort_taxonomies : $a_terms;
+		}
+		
 		foreach ( $a_terms as $b_key => $b_val ) {
 			$b_terms[ $b_key ] = geodir_sort_terms( $b_val, 'count' );
 		}
@@ -2939,7 +2955,7 @@ function geodir_popular_post_category_output( $args = '', $instance = '' ) {
  *
  * @param array $terms                      An array of term objects.
  * @param int $category_limit               Number of categories to display by default.
- * @param bool $category_restrict           If the cat limit shoudl be hidden or not shown.
+ * @param bool $category_restrict           If the cat limit should be hidden or not shown.
  */
 function geodir_helper_cat_list_output( $terms, $category_limit , $category_restrict=false) {
 	global $geodir_post_category_str, $cat_count;
