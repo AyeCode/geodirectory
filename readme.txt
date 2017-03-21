@@ -14,6 +14,8 @@ Create huge location-based business directories with this fully-featured directo
 
 Turn any WordPress theme into a lightning-fast global business directory. Now 100% Multisite compatible! Includes extensive new set of shortcodes. New! CSV import, export, re-import and update. You asked for it, we built it!
 
+[youtube https://www.youtube.com/watch?v=_MXfot6buMc]
+
 = Scale easily - go global =
 
 Millions of listings? Massive traffic? GeoDirectory is the only WordPress directory plugin capable of scaling to this degree, thanks to its highly-optimized database structure and queries. No need to come second: if you need scale, GeoDirectory has your back.
@@ -53,10 +55,13 @@ We have been wholly focused on directory tools for WordPress since 2011. That's 
 * New! Improved Google Analytics widget for listings owners.
 * New! Titles and metas settings page for better SEO optimization.
 
+= Directory Starter and its Supreme Directory Child Theme =
+
+We created a new free [Directory Themes for WordPress](https://wordpress.org/themes/supreme-directory) called Directory Starter and its child theme called Supreme Directory. Try them out, we think that you are going to like them
 
 = WordPress Directory Theme? Whoop! =
 
-Whoop! is our new [Directory Theme for WordPress](https://wpgeodirectory.com/themes/wordpress-directory-theme-whoop/ "The Yelp Clone for GD") focusing on Reviews. Integrated with GeoDirectory, BuddyPress and BBpress it allows to create an awesome Yelp Clone.
+Whoop! is our new Directory Theme for WordPress focusing on Reviews. Integrated with GeoDirectory, BuddyPress and BBpress it allows to create an awesome Yelp Clone.
 
 Whoop! was built on top of GeoDirectory Framework so it features the same great responsiveness for Mobile devices and the same customization tools, allowing to modify virtually any element of the website without writing 1 line of css or code..
 
