@@ -131,6 +131,7 @@ add_filter('comment_reply_link', 'geodir_comment_replaylink');
  * Wrap comment reply link with custom div.
  *
  * @since 1.0.0
+ * @since 1.6.18 Replace standard login link on login to reply link.
  * @package GeoDirectory
  * @param string $link The HTML link.
  * @return string The HTML link.
@@ -138,6 +139,9 @@ add_filter('comment_reply_link', 'geodir_comment_replaylink');
 function geodir_comment_replaylink($link)
 {
 
+    if (strpos($link, 'wp-login.php?') !== false) {
+        $link = str_replace(wp_login_url(),geodir_login_url(),$link);
+    }
     $link = '<div class="gd_comment_replaylink">' . $link . '</div>';
 
     return $link;

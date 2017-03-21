@@ -1460,6 +1460,14 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
 
     if (in_array($post->post_type, geodir_get_posttypes())) {
 
+        // if we dont have a GD post then try to grab it
+        if(!isset($post->default_category)){
+            $gd_post = geodir_get_post_info($post->ID);
+            if(!empty($gd_post)){
+                $post = $gd_post;
+            }
+        }
+
 
         $post_types = get_option('geodir_post_types');
         $slug = $post_types[$post->post_type]['rewrite']['slug'];
