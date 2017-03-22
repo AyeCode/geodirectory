@@ -457,6 +457,7 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
         if (ISO2 == '--') {
             ISO2 = '';
         }
+        
         if (typeof zip == "undefined") {
             zip = '';
         }
@@ -666,10 +667,11 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
             });
             google.maps.event.addListener($.goMap.map, 'dragend', function () {
                 // updateMarkerStatus('Drag ended');
+                centerMarker();
                 <?php if ($auto_change_address_fields_pin_move) { ?>
                 geocodePosition(baseMarker.getPosition());
                 <?php } ?>
-                centerMarker();
+
                 updateMarkerPosition(baseMarker.getPosition());
             });
             google.maps.event.addListener($.goMap.map, 'zoom_changed', function () {

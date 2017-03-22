@@ -17,6 +17,7 @@ Option added to disable overwrite by Yoast SEO titles & metas on GD pages - ADDE
 On Custom AJAX request WPML uses default language for non logged user - FIXED
 Search returns all the posts for Kleo theme - FIXED
 Sort CPT taxonomy in popular categories widget - CHANGED
+Fixed some countries missing ISO country code - FIXED
 
 v1.6.17
 Changes for batch WPML duplicates feature - CHANGED
