@@ -317,6 +317,7 @@ __('Croatia', 'geodirectory');
 __('Cuba', 'geodirectory');
 __('Cyprus', 'geodirectory');
 __('Czech Republic', 'geodirectory');
+__('Czechia', 'geodirectory');
 __('Denmark', 'geodirectory');
 __('Djibouti', 'geodirectory');
 __('Dominica', 'geodirectory');
