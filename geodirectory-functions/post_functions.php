@@ -75,11 +75,12 @@ if (!function_exists('geodir_save_listing')) {
      *
      * @since 1.0.0
      * @since 1.5.4 New parameter $wp_error added.
+     * @since 1.6.18 Admin use only date field should not lost value if saved by user - FIXED
      * @package GeoDirectory
      * @global object $wpdb WordPress Database object.
      * @global object $post The current post object.
      * @global object $current_user Current user object.
-	 * @global object $gd_session GeoDirectory Session object.
+     * @global object $gd_session GeoDirectory Session object.
      * @param array $request_info {
      *    Array of request info arguments.
      *
@@ -116,7 +117,7 @@ if (!function_exists('geodir_save_listing')) {
      *    @type string $geodir_twitter                          Twitter link.
      *    @type string $geodir_facebook                         Facebook link.
      *    @type string $geodir_video                            Video link.
-     *    @type string $geodir_special_offers                   Speacial offers.
+     *    @type string $geodir_special_offers                   Special offers.
      *    @type string $post_images                             Post image urls.
      *    @type string $post_imagesimage_limit                  Post images limit.
      *    @type string $post_imagestotImg                       Todo Desc needed.
@@ -388,39 +389,39 @@ if (!function_exists('geodir_save_listing')) {
 
                     $extrafields = $extrafields != '' ? maybe_unserialize($extrafields) : NULL;
                     geodir_save_post_file_fields($last_post_id, $name, $request_files, $extrafields);
-
                 }
             } elseif (trim($type) == 'datepicker') {
-                $datetime = '';
-                if (isset($request_info[$name]) && $request_info[$name] != '') {
-                    $date_format = geodir_default_date_format();
-                    if (isset($val['extra_fields']) && $val['extra_fields'] != '') {
-                        $extra_fields = unserialize($val['extra_fields']);
-                        $date_format = isset($extra_fields['date_format']) && $extra_fields['date_format'] != '' ? $extra_fields['date_format'] : $date_format;
+                if (isset($request_info[$name])) {
+                    $datetime = '';
+                    
+                    if (!empty($request_info[$name])) {
+                        $date_format = geodir_default_date_format();
+                        if (isset($val['extra_fields']) && $val['extra_fields'] != '') {
+                            $extra_fields = unserialize($val['extra_fields']);
+                            $date_format = isset($extra_fields['date_format']) && $extra_fields['date_format'] != '' ? $extra_fields['date_format'] : $date_format;
+                        }
+
+                        // check if we need to change the format or not
+                        $date_format_len = strlen(str_replace(' ', '', $date_format));
+                        if($date_format_len>5){// if greater then 5 then it's the old style format.
+
+                            $search = array('dd','d','DD','mm','m','MM','yy'); //jQuery UI datepicker format
+                            $replace = array('d','j','l','m','n','F','Y');//PHP date format
+
+                            $date_format = str_replace($search, $replace, $date_format);
+
+                            $post_htmlvar_value = $date_format == 'd/m/Y' ? str_replace('/', '-', $request_info[$name]) : $request_info[$name];
+
+                        }else{
+                            $post_htmlvar_value = $request_info[$name];
+                        }
+
+                        $post_htmlvar_value = geodir_date($post_htmlvar_value, 'Y-m-d', $date_format); // save as sql format Y-m-d
+                        $datetime = geodir_maybe_untranslate_date($post_htmlvar_value); // maybe untranslate date string if it was translated
                     }
 
-                    // check if we need to change the format or not
-                    $date_format_len = strlen(str_replace(' ', '', $date_format));
-                    if($date_format_len>5){// if greater then 5 then it's the old style format.
-
-                        $search = array('dd','d','DD','mm','m','MM','yy'); //jQuery UI datepicker format
-                        $replace = array('d','j','l','m','n','F','Y');//PHP date format
-
-                        $date_format = str_replace($search, $replace, $date_format);
-
-                        $post_htmlvar_value = $date_format == 'd/m/Y' ? str_replace('/', '-', $request_info[$name]) : $request_info[$name];
-
-                    }else{
-                        $post_htmlvar_value = $request_info[$name];
-                    }
-
-                    $post_htmlvar_value = geodir_date($post_htmlvar_value, 'Y-m-d', $date_format); // save as sql format Y-m-d
-                    $datetime = geodir_maybe_untranslate_date($post_htmlvar_value); // maybe untranslate date string if it was translated
-
-                    //$datetime = date_i18n("Y-m-d", strtotime($post_htmlvar_value)); // save as sql format Y-m-d
-
+                    $gd_post_info[$name] = $datetime;
                 }
-                $gd_post_info[$name] = $datetime;
             } else if ($type == 'multiselect') {
                 if (isset($request_info[$name])) {
                     $gd_post_info[$name] = $request_info[$name];
@@ -490,7 +491,7 @@ if (!function_exists('geodir_save_listing')) {
         }
 
 
-        // Insert attechment
+        // Insert attachment
 
         if (isset($request_info['post_images']) && !is_wp_error($last_post_id)) {
             if (!$dummy) {
@@ -640,7 +641,7 @@ if (!function_exists('geodir_save_post_info')) {
      *    @type string $geodir_twitter          Twitter link.
      *    @type string $geodir_facebook         Facebook link.
      *    @type string $geodir_video            Video link.
-     *    @type string $geodir_special_offers   Speacial offers.
+     *    @type string $geodir_special_offers   Special offers.
      *
      * }
      * @return bool
