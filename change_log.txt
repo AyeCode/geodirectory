@@ -18,6 +18,8 @@ On Custom AJAX request WPML uses default language for non logged user - FIXED
 Search returns all the posts for Kleo theme - FIXED
 Sort CPT taxonomy in popular categories widget - CHANGED
 Fixed some countries missing ISO country code - FIXED
+Admin use only date field should not lost value if saved by user - FIXED
+Post date should be updated via CSV import - CHANGED
 
 v1.6.17
 Changes for batch WPML duplicates feature - CHANGED

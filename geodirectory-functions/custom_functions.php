@@ -2244,9 +2244,9 @@ function geodir_output_pinpoint_html_listings( $post_id, $post ) {
 		<span class="geodir-pinpoint"
 		      style="background:url('<?php echo $marker_icon; ?>') no-repeat scroll left top transparent;background-size:auto 100%; -webkit-background-size:auto 100%;-moz-background-size:auto 100%;height:9px;width:14px;"><?php echo apply_filters( 'geodir_listing_listview_pinpoint_inner_content', '', 'listing' ); ?></span>
 		<a class="geodir-pinpoint-link" href="javascript:void(0)"
-		   onclick="openMarker('listing_map_canvas' ,'<?php echo $post->ID; ?>')"
-		   onmouseover="animate_marker('listing_map_canvas' ,'<?php echo $post->ID; ?>')"
-		   onmouseout="stop_marker_animation('listing_map_canvas' ,'<?php echo $post->ID; ?>')"><?php _e( 'Pinpoint', 'geodirectory' ); ?></a>
+		   onclick="if(typeof openMarker=='function'){openMarker('listing_map_canvas' ,'<?php echo $post->ID; ?>')}"
+		   onmouseover="if(typeof animate_marker=='function'){animate_marker('listing_map_canvas' ,'<?php echo $post->ID; ?>')}"
+		   onmouseout="if(typeof stop_marker_animation=='function'){stop_marker_animation('listing_map_canvas' ,'<?php echo $post->ID; ?>')}"><?php _e( 'Pinpoint', 'geodirectory' ); ?></a>
 		<?php
 	}
 }

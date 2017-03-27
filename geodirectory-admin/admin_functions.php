@@ -4066,6 +4066,7 @@ function geodir_ajax_import_export() {
                             
                             $post_id = '';
                             $post_title = '';
+                            $post_date = '';
                             $post_author = '';
                             $post_content = '';
                             $post_category_arr = array();
@@ -4108,6 +4109,8 @@ function geodir_ajax_import_export() {
                                     $post_title = sanitize_text_field($row[$c]);
                                 } else if ( $column == 'post_author' ) {
                                     $post_author = $row[$c];
+                                } else if ( $column == 'post_date' ) {
+                                    $post_date = $row[$c];
                                 } else if ( $column == 'post_content' ) {
                                     $post_content = $row[$c];
                                 } else if ( $column == 'post_category' && $row[$c] != '' ) {
@@ -4268,6 +4271,10 @@ function geodir_ajax_import_export() {
                             $xtimings['###5'] = microtime(true)-$xstart;
                             $save_post = array();
                             $save_post['post_title'] = $post_title;
+                            if (!empty($post_date)) {
+                                $save_post['post_date'] = $post_date;
+                                $save_post['post_date_gmt'] = get_gmt_from_date( $post_date );
+                            }
                             $save_post['post_content'] = $post_content;
                             $save_post['post_type'] = $post_type;
                             $save_post['post_author'] = $post_author;
