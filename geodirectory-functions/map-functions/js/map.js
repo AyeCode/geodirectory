@@ -646,7 +646,7 @@ function openMarker(map_canvas, id) {
             });
         }
     } catch (e) {
-        console.log(e);
+        console.log(e.message);
     }
 }
 
@@ -667,7 +667,7 @@ function animate_marker(map_canvas, id) {
             });
         }
     } catch (e) {
-        console.log(e);
+        console.log(e.message);
     }
 }
 
@@ -686,7 +686,7 @@ function stop_marker_animation(map_canvas, id) {
             });
         }
     } catch (e) {
-        console.log(e);
+        console.log(e.message);
     }
 }
 // Listing map sticky script //
@@ -854,7 +854,7 @@ function calcRoute(map_canvas) {
             
             jQuery('.leaflet-routing-geocoders .leaflet-routing-search-info').append('<span title="' + geodir_all_js_msg.geoMyLocation + '" onclick="gdMyGeoDirection();" id="detail_page_map_canvas_mylocation" class="gd-map-mylocation"><i class="fa fa-crosshairs" aria-hidden="true"></i></span>');
         } catch(e) {
-            console.log(e);
+            console.log(e.message);
         }
     } else if (window.gdMaps == 'google') {
         // Direction map
