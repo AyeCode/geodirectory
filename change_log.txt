@@ -20,6 +20,7 @@ Sort CPT taxonomy in popular categories widget - CHANGED
 Fixed some countries missing ISO country code - FIXED
 Admin use only date field should not lost value if saved by user - FIXED
 Post date should be updated via CSV import - CHANGED
+In [gd_listings] shortcode if category has no posts then it shows all the results - FIXED
 
 v1.6.17
 Changes for batch WPML duplicates feature - CHANGED
