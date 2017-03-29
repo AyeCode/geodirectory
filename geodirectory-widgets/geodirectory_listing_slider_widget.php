@@ -176,7 +176,7 @@ class geodir_listing_slider_widget extends WP_Widget
                         <option <?php if ($post_type == $postypes_obj) {
                             echo 'selected="selected"';
                         } ?> value="<?php echo $postypes_obj; ?>"><?php $extvalue = explode('_', $postypes_obj);
-                            echo ucfirst($extvalue[1]); ?></option>
+                            echo geodir_utf8_ucfirst($extvalue[1]); ?></option>
 
                     <?php } ?>
 
@@ -204,7 +204,7 @@ class geodir_listing_slider_widget extends WP_Widget
                         <option <?php if ($category == $category_obj->term_id) {
                             echo 'selected="selected"';
                         } ?>
-                            value="<?php echo $category_obj->term_id; ?>"><?php echo ucfirst($category_obj->name); ?></option>
+                            value="<?php echo $category_obj->term_id; ?>"><?php echo geodir_utf8_ucfirst($category_obj->name); ?></option>
 
                     <?php } ?>
 

@@ -79,9 +79,9 @@ function geodir_user_show_favourites($user_id='',$output_type='select'){
                 $post_type_link = apply_filters('geodir_dashboard_link_favorite_listing', $post_type_link, $key, $user_id);
 
                 if($output_type=='select'){
-                    $favourite_links .= '<option ' . $selected . ' value="' . $post_type_link . '">' . __(ucfirst($name), 'geodirectory') . '</option>';
+                    $favourite_links .= '<option ' . $selected . ' value="' . $post_type_link . '">' . __(geodir_utf8_ucfirst($name), 'geodirectory') . '</option>';
                 }elseif($output_type=='link'){
-                    $favourite_links[] = '<a href="' . $post_type_link . '">' . __(ucfirst($name), 'geodirectory') . '</a>';
+                    $favourite_links[] = '<a href="' . $post_type_link . '">' . __(geodir_utf8_ucfirst($name), 'geodirectory') . '</a>';
                 }
 
 
@@ -97,7 +97,7 @@ function geodir_user_show_favourites($user_id='',$output_type='select'){
                             option-autoredirect="1" name="geodir_my_favourites" option-ajaxchosen="false"
                             data-placeholder="<?php echo esc_attr(__('My Favorites', 'geodirectory')); ?>">
                         <option value="" disabled="disabled" selected="selected"
-                                style='display:none;'><?php echo ucfirst(esc_attr(sprintf(__("%s's Favorites", 'geodirectory'), $user->user_nicename))); ?></option>
+                                style='display:none;'><?php echo geodir_utf8_ucfirst(esc_attr(sprintf(__("%s's Favorites", 'geodirectory'), $user->user_nicename))); ?></option>
                         <?php echo $favourite_links; ?>
                     </select>
                 </li>
@@ -147,9 +147,9 @@ function geodir_user_show_listings($user_id='',$output_type='select'){
                  */
                 $listing_link = apply_filters('geodir_dashboard_link_my_listing', $listing_link, $key, $user_id);
                 if($output_type=='select') {
-                    $listing_links .= '<option ' . $selected . ' value="' . $listing_link . '">' . __(ucfirst($name), 'geodirectory') . '</option>';
+                    $listing_links .= '<option ' . $selected . ' value="' . $listing_link . '">' . __(geodir_utf8_ucfirst($name), 'geodirectory') . '</option>';
                 }elseif($output_type=='link'){
-                    $listing_links[] = '<a href="' .$listing_link . '">' . __(ucfirst($name), 'geodirectory') . '</a>';
+                    $listing_links[] = '<a href="' .$listing_link . '">' . __(geodir_utf8_ucfirst($name), 'geodirectory') . '</a>';
                 }
             }
         }
@@ -163,7 +163,7 @@ function geodir_user_show_listings($user_id='',$output_type='select'){
                             option-autoredirect="1" name="geodir_my_listings" option-ajaxchosen="false"
                             data-placeholder="<?php echo esc_attr(__('My Listings', 'geodirectory')); ?>">
                         <option value="" disabled="disabled" selected="selected"
-                                style='display:none;'><?php echo ucfirst(esc_attr(sprintf(__("%s's Listings", 'geodirectory'), $user->user_nicename))); ?></option>
+                                style='display:none;'><?php echo geodir_utf8_ucfirst(esc_attr(sprintf(__("%s's Listings", 'geodirectory'), $user->user_nicename))); ?></option>
                         <?php echo $listing_links; ?>
                     </select>
                 </li>

@@ -1354,7 +1354,7 @@ function geodir_breadcrumb() {
 				$gd_taxonomy = $gd_post_type . '_tags';
 			}
 
-			$breadcrumb .= $separator . '<a href="' . $listing_link . '">' . __( ucfirst( $post_type_info->label ), 'geodirectory' ) . '</a>';
+			$breadcrumb .= $separator . '<a href="' . $listing_link . '">' . __( geodir_utf8_ucfirst( $post_type_info->label ), 'geodirectory' ) . '</a>';
 			if ( ! empty( $gd_taxonomy ) || geodir_is_page( 'detail' ) ) {
 				$is_location_last = false;
 			} else {
@@ -1378,7 +1378,7 @@ function geodir_breadcrumb() {
 
 						$gd_location_link_text = preg_replace( '/-(\d+)$/', '', $location_term );
 						$gd_location_link_text = preg_replace( '/[_-]/', ' ', $gd_location_link_text );
-						$gd_location_link_text = ucfirst( $gd_location_link_text );
+						$gd_location_link_text = geodir_utf8_ucfirst( $gd_location_link_text );
 
 						$location_term_actual_country = '';
 						$location_term_actual_region  = '';
@@ -1540,10 +1540,10 @@ function geodir_breadcrumb() {
 				 */
 				$author_link = apply_filters( 'geodir_dashboard_author_link', $author_link, $user_id, $_REQUEST['stype'] );
 
-				$breadcrumb .= $separator . '<a href="' . $author_link . '">' . __( ucfirst( $post_type_info->label ), 'geodirectory' ) . '</a>';
-				$breadcrumb .= $separator . ucfirst( __( 'My', 'geodirectory' ) . ' ' . $_REQUEST['list'] );
+				$breadcrumb .= $separator . '<a href="' . $author_link . '">' . __( geodir_utf8_ucfirst( $post_type_info->label ), 'geodirectory' ) . '</a>';
+				$breadcrumb .= $separator . geodir_utf8_ucfirst( __( 'My', 'geodirectory' ) . ' ' . $_REQUEST['list'] );
 			} else {
-				$breadcrumb .= $separator . __( ucfirst( $post_type_info->label ), 'geodirectory' );
+				$breadcrumb .= $separator . __( geodir_utf8_ucfirst( $post_type_info->label ), 'geodirectory' );
 			}
 
 			$breadcrumb .= '</li>';
@@ -3350,7 +3350,7 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 						 */
 						$add_link = apply_filters( 'geodir_dashboard_link_add_listing', $add_link, $key, $current_user->ID );
 
-						$addlisting_links .= '<option ' . $selected . ' value="' . $add_link . '">' . __( ucfirst( $name ), 'geodirectory' ) . '</option>';
+						$addlisting_links .= '<option ' . $selected . ' value="' . $add_link . '">' . __( geodir_utf8_ucfirst( $name ), 'geodirectory' ) . '</option>';
 
 					}
 				}
@@ -3401,7 +3401,7 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 					 */
 					$post_type_link = apply_filters( 'geodir_dashboard_link_favorite_listing', $post_type_link, $key, $current_user->ID );
 
-					$favourite_links .= '<option ' . $selected . ' value="' . $post_type_link . '">' . __( ucfirst( $name ), 'geodirectory' ) . '</option>';
+					$favourite_links .= '<option ' . $selected . ' value="' . $post_type_link . '">' . __( geodir_utf8_ucfirst( $name ), 'geodirectory' ) . '</option>';
 				}
 			}
 
@@ -3448,7 +3448,7 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 					 */
 					$listing_link = apply_filters( 'geodir_dashboard_link_my_listing', $listing_link, $key, $current_user->ID );
 
-					$listing_links .= '<option ' . $selected . ' value="' . $listing_link . '">' . __( ucfirst( $name ), 'geodirectory' ) . '</option>';
+					$listing_links .= '<option ' . $selected . ' value="' . $listing_link . '">' . __( geodir_utf8_ucfirst( $name ), 'geodirectory' ) . '</option>';
 				}
 			}
 
@@ -4954,13 +4954,18 @@ function geodir_remove_location_terms( $location_terms = array() ) {
  * Send notification when a listing has been edited by it's author.
  *
  * @since   1.5.9
+ * @since   1.6.18 Some times it sends email twice when listing edited - FIXED
  * @package GeoDirectory
+ *
+ * @global array $gd_notified_edited  Array of post ID which has post edited notification set.
  *
  * @param int $post_ID  Post ID.
  * @param WP_Post $post Post object.
  * @param bool $update  Whether this is an existing listing being updated or not.
  */
 function geodir_on_wp_insert_post( $post_ID, $post, $update ) {
+	global $gd_notified_edited;
+	
 	if ( ! $update ) {
 		return;
 	}
@@ -4982,7 +4987,12 @@ function geodir_on_wp_insert_post( $post_ID, $post, $update ) {
 	if ( $user_id > 0 && get_option( 'geodir_notify_post_edited' ) && ! wp_is_post_revision( $post_ID ) && in_array( $post->post_type, geodir_get_posttypes() ) ) {
 		$author_id = ! empty( $post->post_author ) ? $post->post_author : 0;
 
-		if ( $user_id == $author_id && ! is_super_admin() ) {
+		if ( $user_id == $author_id && ! is_super_admin() && empty( $gd_notified_edited[$post_ID] ) ) {
+			if ( !empty( $gd_notified_edited ) ) {
+				$gd_notified_edited = array();
+			}
+			$gd_notified_edited[$post_ID] = true;
+			
 			$from_email   = get_option( 'site_email' );
 			$from_name    = get_site_emailName();
 			$to_email     = get_option( 'admin_email' );

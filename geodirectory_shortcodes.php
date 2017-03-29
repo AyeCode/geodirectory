@@ -1165,6 +1165,7 @@ add_shortcode('gd_bestof_widget', 'geodir_sc_bestof_widget');
  * @since 1.5.9 New parameter "post_author" added.
  * @since 1.6.5 tags parameter added.
  * @since 1.6.18 New attributes added in gd_listings shortcode to filter user favorite listings.
+ *               In [gd_listings] shortcode if category has no posts then it shows all the results - FIXED
  *
  * @global object $post The current post object.
  *
@@ -1236,7 +1237,7 @@ function geodir_sc_gd_listings($atts, $content = '') {
 
     // Validate the selected category/ies - Grab the current list based on post_type
     $category_taxonomy      = geodir_get_taxonomies($params['post_type']);
-    $categories             = get_terms($category_taxonomy, array('orderby' => 'count', 'order' => 'DESC', 'fields' => 'ids'));
+    $categories             = get_terms($category_taxonomy, array('orderby' => 'count', 'order' => 'DESC', 'fields' => 'ids', 'hide_empty' => 0));
 
     // Make sure we have an array
     if (!(is_array($params['category']))) {

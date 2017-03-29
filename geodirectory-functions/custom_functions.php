@@ -1093,9 +1093,9 @@ function geodir_add_meta_keywords() {
 		}
 	} elseif ( ( is_category() || is_tag() ) && isset( $current_term->taxonomy ) && in_array( $current_term->taxonomy, $geodir_taxonomies ) ) {
 		if ( is_category() ) {
-			$meta_desc .= __( "Posts related to Category:", 'geodirectory' ) . " " . ucfirst( single_cat_title( "", false ) );
+			$meta_desc .= __( "Posts related to Category:", 'geodirectory' ) . " " . geodir_utf8_ucfirst( single_cat_title( "", false ) );
 		} elseif ( is_tag() ) {
-			$meta_desc .= __( "Posts related to Tag:", 'geodirectory' ) . " " . ucfirst( single_tag_title( "", false ) );
+			$meta_desc .= __( "Posts related to Tag:", 'geodirectory' ) . " " . geodir_utf8_ucfirst( single_tag_title( "", false ) );
 		}
 	} elseif ( isset( $current_term->taxonomy ) && in_array( $current_term->taxonomy, $geodir_taxonomies ) ) {
 		$meta_desc .= isset( $current_term->description ) ? $current_term->description : '';
@@ -1174,10 +1174,10 @@ function geodir_add_meta_keywords() {
 							$category_desc = isset( $option['gd_cat_loc_desc'] ) && trim( $option['gd_cat_loc_desc'] ) != '' ? trim( $option['gd_cat_loc_desc'] ) : $category_desc;
 						}
 					}
-					$geodir_meta_desc = __( "Posts related to Category:", 'geodirectory' ) . " " . ucfirst( single_cat_title( "", false ) ) . '. ' . $category_desc;
+					$geodir_meta_desc = __( "Posts related to Category:", 'geodirectory' ) . " " . geodir_utf8_ucfirst( single_cat_title( "", false ) ) . '. ' . $category_desc;
 				}
 			} else if ( $geodir_is_tag ) {
-				$geodir_meta_desc = __( "Posts related to Tag:", 'geodirectory' ) . " " . ucfirst( single_tag_title( "", false ) ) . '. ' . $geodir_meta_desc;
+				$geodir_meta_desc = __( "Posts related to Tag:", 'geodirectory' ) . " " . geodir_utf8_ucfirst( single_tag_title( "", false ) ) . '. ' . $geodir_meta_desc;
 			}
 		}
 	}
@@ -2326,7 +2326,7 @@ function geodir_search_form_post_type_input() {
 						}
 					} elseif ( $curr_post_type == $post_type ) {
 						echo 'selected="selected"';
-					} ?>><?php _e( ucfirst( $info->labels->name ), 'geodirectory' ); ?></option>
+					} ?>><?php _e( geodir_utf8_ucfirst( $info->labels->name ), 'geodirectory' ); ?></option>
 
 				<?php endforeach; ?>
 			</select>
