@@ -266,9 +266,9 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = 
 
                 $term_check = '<input type="checkbox" ' . $checked . ' id="' .$map_canvas_name.'_tick_cat_'. $cat_term->term_id . '" class="group_selector ' . $main_list_class . '"';
                 $term_check .= ' name="' . $map_canvas_name . '_cat[]" ';
-                $term_check .= '  title="' . esc_attr(ucfirst($cat_term->name)) . '" value="' . $cat_term->term_id . '" onclick="javascript:build_map_ajax_search_param(\'' . $map_canvas_name . '\',false, this)">';
-                $term_img = '<img height="15" width="15" alt="' . $cat_term->taxonomy . '" src="' . $icon . '" title="' . ucfirst($cat_term->name) . '"/>';
-                $out .= '<li>' . $term_check . '<label for="' . $map_canvas_name.'_tick_cat_'. $cat_term->term_id . '">' . $term_img . ucfirst($cat_term->name) . '</label><i class="fa fa-long-arrow-down"></i>';
+                $term_check .= '  title="' . esc_attr(geodir_utf8_ucfirst($cat_term->name)) . '" value="' . $cat_term->term_id . '" onclick="javascript:build_map_ajax_search_param(\'' . $map_canvas_name . '\',false, this)">';
+                $term_img = '<img height="15" width="15" alt="' . $cat_term->taxonomy . '" src="' . $icon . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '"/>';
+                $out .= '<li>' . $term_check . '<label for="' . $map_canvas_name.'_tick_cat_'. $cat_term->term_id . '">' . $term_img . geodir_utf8_ucfirst($cat_term->name) . '</label><i class="fa fa-long-arrow-down"></i>';
 
             endif;
 

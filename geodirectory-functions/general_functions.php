@@ -1354,7 +1354,7 @@ function geodir_breadcrumb() {
 				$gd_taxonomy = $gd_post_type . '_tags';
 			}
 
-			$breadcrumb .= $separator . '<a href="' . $listing_link . '">' . __( ucfirst( $post_type_info->label ), 'geodirectory' ) . '</a>';
+			$breadcrumb .= $separator . '<a href="' . $listing_link . '">' . __( geodir_utf8_ucfirst( $post_type_info->label ), 'geodirectory' ) . '</a>';
 			if ( ! empty( $gd_taxonomy ) || geodir_is_page( 'detail' ) ) {
 				$is_location_last = false;
 			} else {
@@ -1378,7 +1378,7 @@ function geodir_breadcrumb() {
 
 						$gd_location_link_text = preg_replace( '/-(\d+)$/', '', $location_term );
 						$gd_location_link_text = preg_replace( '/[_-]/', ' ', $gd_location_link_text );
-						$gd_location_link_text = ucfirst( $gd_location_link_text );
+						$gd_location_link_text = geodir_utf8_ucfirst( $gd_location_link_text );
 
 						$location_term_actual_country = '';
 						$location_term_actual_region  = '';
@@ -1540,10 +1540,10 @@ function geodir_breadcrumb() {
 				 */
 				$author_link = apply_filters( 'geodir_dashboard_author_link', $author_link, $user_id, $_REQUEST['stype'] );
 
-				$breadcrumb .= $separator . '<a href="' . $author_link . '">' . __( ucfirst( $post_type_info->label ), 'geodirectory' ) . '</a>';
-				$breadcrumb .= $separator . ucfirst( __( 'My', 'geodirectory' ) . ' ' . $_REQUEST['list'] );
+				$breadcrumb .= $separator . '<a href="' . $author_link . '">' . __( geodir_utf8_ucfirst( $post_type_info->label ), 'geodirectory' ) . '</a>';
+				$breadcrumb .= $separator . geodir_utf8_ucfirst( __( 'My', 'geodirectory' ) . ' ' . $_REQUEST['list'] );
 			} else {
-				$breadcrumb .= $separator . __( ucfirst( $post_type_info->label ), 'geodirectory' );
+				$breadcrumb .= $separator . __( geodir_utf8_ucfirst( $post_type_info->label ), 'geodirectory' );
 			}
 
 			$breadcrumb .= '</li>';
@@ -3350,7 +3350,7 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 						 */
 						$add_link = apply_filters( 'geodir_dashboard_link_add_listing', $add_link, $key, $current_user->ID );
 
-						$addlisting_links .= '<option ' . $selected . ' value="' . $add_link . '">' . __( ucfirst( $name ), 'geodirectory' ) . '</option>';
+						$addlisting_links .= '<option ' . $selected . ' value="' . $add_link . '">' . __( geodir_utf8_ucfirst( $name ), 'geodirectory' ) . '</option>';
 
 					}
 				}
@@ -3401,7 +3401,7 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 					 */
 					$post_type_link = apply_filters( 'geodir_dashboard_link_favorite_listing', $post_type_link, $key, $current_user->ID );
 
-					$favourite_links .= '<option ' . $selected . ' value="' . $post_type_link . '">' . __( ucfirst( $name ), 'geodirectory' ) . '</option>';
+					$favourite_links .= '<option ' . $selected . ' value="' . $post_type_link . '">' . __( geodir_utf8_ucfirst( $name ), 'geodirectory' ) . '</option>';
 				}
 			}
 
@@ -3448,7 +3448,7 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 					 */
 					$listing_link = apply_filters( 'geodir_dashboard_link_my_listing', $listing_link, $key, $current_user->ID );
 
-					$listing_links .= '<option ' . $selected . ' value="' . $listing_link . '">' . __( ucfirst( $name ), 'geodirectory' ) . '</option>';
+					$listing_links .= '<option ' . $selected . ' value="' . $listing_link . '">' . __( geodir_utf8_ucfirst( $name ), 'geodirectory' ) . '</option>';
 				}
 			}
 

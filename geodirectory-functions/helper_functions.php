@@ -1183,6 +1183,34 @@ function geodir_utf8_strwidth( $str, $encoding = 'UTF-8' ) {
 	return geodir_utf8_strlen( $str, $encoding );
 }
 
+/**
+ * Get a string with the first character of string capitalized.
+ *
+ * @since 1.6.18
+ * @package Geodirectory
+ *
+ * @param string $str The input string.
+ * @param bool $lower_str_end If true it returns string lowercased except first character.
+ * @param string $encoding The encoding parameter is the character encoding. Default "UTF-8".
+ * @return string The resulting string.
+ */
+function geodir_utf8_ucfirst( $str, $lower_str_end = false, $encoding = 'UTF-8' ) {
+    if ( function_exists( 'mb_strlen' ) ) {
+        $first_letter = geodir_strtoupper( geodir_utf8_substr( $str, 0, 1, $encoding ), $encoding );
+        $str_end = "";
+        
+        if ( $lower_str_end ) {
+            $str_end = geodir_strtolower( geodir_utf8_substr( $str, 1, geodir_utf8_strlen( $str, $encoding ), $encoding ), $encoding );
+        } else {
+            $str_end = geodir_utf8_substr( $str, 1, geodir_utf8_strlen( $str, $encoding ), $encoding );
+        }
+        
+        return $first_letter . $str_end;
+    }
+
+    return ucfirst( $str );
+}
+
 function geodir_total_listings_count($post_type = false)
 {
 	global $wpdb;

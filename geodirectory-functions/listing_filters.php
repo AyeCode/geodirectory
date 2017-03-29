@@ -121,8 +121,8 @@ function set_listing_request($query )
         if ($snear == 'NEAR ME') {
             $ip = $_SERVER['REMOTE_ADDR'];
             $addr_details = unserialize(file_get_contents('http://www.geoplugin.net/php.gp?ip=' . $ip));
-            $mylat = stripslashes(ucfirst($addr_details[geoplugin_latitude]));
-            $mylon = stripslashes(ucfirst($addr_details[geoplugin_longitude]));
+            $mylat = stripslashes(geodir_utf8_ucfirst($addr_details[geoplugin_latitude]));
+            $mylon = stripslashes(geodir_utf8_ucfirst($addr_details[geoplugin_longitude]));
         }
 
 
