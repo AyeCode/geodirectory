@@ -2932,3 +2932,44 @@ function geodir_remove_yoast_seo_metas(){
     }
 }
 add_action( 'plugins_loaded', 'geodir_wpml_ajax_set_guest_lang', -1 );
+
+/**
+ * Change country slug czech-republic to czechia and redirect.
+ *
+ * @since 1.6.18
+ *
+ * @param object $wp The WordPress object.
+ */
+function geodir_check_redirect($wp) {
+    if (is_404() || (!empty($wp->query_vars['error']) && $wp->query_vars['error'] == '404')) {
+        $current_url = geodir_curPageURL();
+        $search = 'czech-republic';
+        $replace = 'czechia';        
+        
+        $has_slash = substr($current_url, -1);
+        if ($has_slash != "/") {
+            $current_url .= '/';
+        }
+        
+        $redirect = false;
+        if (strpos($current_url, '/' . $search . '/') !== false) {
+            $redirect = true;
+            $current_url = preg_replace('/\/' . $search . '\//', '/' . $replace . '/', $current_url, 1);
+        }
+        
+        if ($has_slash != "/") {
+            $current_url = trim($current_url, '/');
+        }
+        
+        if (strpos($current_url, 'gd_country=' . $search) !== false) {
+            $redirect = true;
+            $current_url = str_replace('gd_country=' . $search, 'gd_country=' . $replace, $current_url);
+        }
+
+        if ($redirect) {
+            wp_redirect($current_url);
+            exit;
+        }
+    }
+}
+add_action('parse_request', 'geodir_check_redirect', 101, 1);
