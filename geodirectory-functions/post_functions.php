@@ -1311,9 +1311,6 @@ if (!function_exists('geodir_get_featured_image')) {
             $sub_dir = '';
             if ($file_info['dirname'] != '.' && $file_info['dirname'] != '..') {
                 $sub_dir = stripslashes_deep($file_info['dirname']);
-                if ((substr( $sub_dir, 0, 7 ) === "http://") || (substr( $sub_dir, 0, 8 ) === "https://")) {
-                    $sub_dir = str_replace($uploads['baseurl'], "", $sub_dir);
-                }
             }
 
             $uploads = wp_upload_dir(trim($sub_dir, '/')); // Array of key => value pairs
