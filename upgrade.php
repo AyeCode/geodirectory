@@ -45,8 +45,10 @@ if (get_option('geodirectory' . '_db_version') != GEODIRECTORY_VERSION) {
     if (GEODIRECTORY_VERSION <= '1.5.4') {
         add_action('init', 'geodir_upgrade_154', 11);
     }
-
-
+    
+    if (GEODIRECTORY_VERSION <= '1.6.18') {
+        add_action('init', 'geodir_upgrade_1618', 11);
+    }
 
     add_action('init', 'gd_fix_cpt_rewrite_slug', 11);// this needs to be kept for a few versions
 
@@ -849,4 +851,72 @@ function gd_fix_address_detail_table_limit()
             }
         }
     }
+}
+
+/**
+ * Change Czech Republic country name to Czechia.
+ *
+ * @since 1.6.18
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @return bool
+ */
+function geodir_upgrade_1618() {
+    global $wpdb;
+
+    $gd_posttypes = geodir_get_posttypes();
+    $default_location = geodir_get_default_location();
+    
+    $old_country = 'Czech Republic';
+    $old_slug = 'czech-republic';
+    $new_country = 'Czechia';
+    $new_slug = 'czechia';
+    $flush_rewrite_rules = false;
+
+    if (!empty($gd_posttypes) && defined('POST_LOCATION_TABLE')) {        
+        // Update locations
+        if ($wpdb->query($wpdb->prepare("UPDATE `" . POST_LOCATION_TABLE . "` SET `country` = %s, country_slug = %s WHERE `country` LIKE %s OR country_slug LIKE %s", array($new_country, $new_slug, $old_country, $old_slug)))) {
+            $flush_rewrite_rules = true;
+        }
+        
+        // Update locations seo
+        if ($wpdb->query($wpdb->prepare("UPDATE `" . LOCATION_SEO_TABLE . "` SET `country_slug` = %s WHERE country_slug LIKE %s", array($new_slug, $old_slug)))) {
+            $flush_rewrite_rules = true;
+        }
+
+        // Update term meta
+        if ($wpdb->query($wpdb->prepare("UPDATE `" . GEODIR_TERM_META . "` SET `country_slug` = %s WHERE country_slug LIKE %s", array($new_slug, $old_slug)))) {
+            $flush_rewrite_rules = true;
+        }
+
+        if ($wpdb->query($wpdb->prepare("UPDATE `" . GEODIR_TERM_META . "` SET `location_name` = %s WHERE location_type LIKE 'gd_country' AND location_name LIKE %s", array($new_slug, $old_slug)))) {
+            $flush_rewrite_rules = true;
+        }
+
+        // Update detail table
+        foreach ($gd_posttypes as $pos_type) {
+            try {
+                if ($wpdb->query("UPDATE `" . $wpdb->prefix . "geodir_" . $pos_type . "_detail` SET post_country = '" . $new_country . "', post_locations = REPLACE ( post_locations, ',[" . $old_slug . "]', ',[" . $new_slug . "]' ) WHERE post_locations LIKE '%[" . $old_slug . "]' OR post_country LIKE '" . $old_country . "'")) {
+                    $flush_rewrite_rules = true;
+                }
+            } catch(Exception $e) {
+                error_log( 'Error: ' . $e->getMessage() );
+            }
+        }
+    }
+    
+    if (!empty($default_location) && ((isset($default_location->country) && $default_location->country == $old_country) || (isset($default_location->country_slug) && $default_location->country_slug == $old_slug))) {
+        $default_location->country = $new_country;
+        $default_location->country_slug = $new_slug;
+        
+        update_option('geodir_default_location', $default_location);
+        
+        $flush_rewrite_rules = true;
+    }
+    
+    if ($flush_rewrite_rules) {
+        flush_rewrite_rules();
+    }
+    
+    return true;
 }

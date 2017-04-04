@@ -436,7 +436,7 @@ class geodir_bestof_widget extends WP_Widget
                         <option <?php if ($post_type == $postypes_obj) {
                             echo 'selected="selected"';
                         } ?> value="<?php echo $postypes_obj; ?>"><?php $extvalue = explode('_', $postypes_obj);
-                            echo ucfirst($extvalue[1]); ?></option>
+                            echo geodir_utf8_ucfirst($extvalue[1]); ?></option>
 
                     <?php } ?>
 

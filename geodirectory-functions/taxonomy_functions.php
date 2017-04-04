@@ -69,7 +69,7 @@ function geodir_add_nav_menu_items()
                             $a_class = apply_filters('geodir_menu_a_class', '');
                             $items .= '<li class="' . $li_class . '">
 									<a href="' . get_post_type_archive_link($post_type) . '" class="' . $a_class . '">
-										' . __(ucfirst($args->labels->name),'geodirectory') . '
+										' . __(geodir_utf8_ucfirst($args->labels->name),'geodirectory') . '
 									</a>
 								</li>';
                         }
@@ -135,7 +135,7 @@ function geodir_add_nav_menu_items()
 
                                 $items .= '<li class="' . $sub_li_class . '">
 														<a href="' . get_post_type_archive_link($post_type) . '" class="' . $sub_a_class . '">
-															' . __(ucfirst($args->labels->name),'geodirectory') . '
+															' . __(geodir_utf8_ucfirst($args->labels->name),'geodirectory') . '
 														</a>
 													</li>';
                             }
@@ -618,7 +618,7 @@ if (!function_exists(' geodir_get_categories_dl')) {
                 $select_opt = 'selected="selected"';
             }
             $html .= '<option ' . $select_opt . ' value="' . $category_obj->term_id . '">'
-                . ucfirst($category_obj->name) . '</option>';
+                . geodir_utf8_ucfirst($category_obj->name) . '</option>';
         }
 
         if ($echo)
@@ -765,12 +765,12 @@ if (!function_exists('geodir_custom_taxonomy_walker')) {
                 }
 
                 if ($cat_display == 'radio')
-                    $out .= '<span style="display:block" ><input type="radio" field_type="radio" name="post_category[' . $cat_term->taxonomy . '][]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" >' . $term_check . ucfirst($cat_term->name) . '</span>';
+                    $out .= '<span style="display:block" ><input type="radio" field_type="radio" name="post_category[' . $cat_term->taxonomy . '][]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" >' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '</span>';
                 elseif ($cat_display == 'select' || $cat_display == 'multiselect')
-                    $out .= '<option ' . $main_list_class . ' style="margin-left:' . $p . 'px;" alt="' . $cat_term->taxonomy . '" title="' . ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' >' . $term_check . ucfirst($cat_term->name) . '</option>';
+                    $out .= '<option ' . $main_list_class . ' style="margin-left:' . $p . 'px;" alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' >' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '</option>';
 
                 else {
-                    $out .= '<span style="display:block"><input style="display:inline-block" type="checkbox" field_type="checkbox" name="post_category[' . $cat_term->taxonomy . '][]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" >' . $term_check . ucfirst($cat_term->name) . '</span>';
+                    $out .= '<span style="display:block"><input style="display:inline-block" type="checkbox" field_type="checkbox" name="post_category[' . $cat_term->taxonomy . '][]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" >' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '</span>';
                 }
 
                 // Call recurson to print sub cats
@@ -1189,7 +1189,7 @@ function geodir_get_catlist($cat_taxonomy, $parrent = 0, $selected = false)
             $child_terms = get_terms( $cat_taxonomy, array( 'parent' => $cat_term->term_id, 'hide_empty' => false, 'exclude' => $exclude_cats, 'number' => 1 ) );
             $has_child = !empty( $child_terms ) ? 't' : 'f';
 
-            echo '<option  ' . $option_selected . ' alt="' . $cat_term->taxonomy . '" title="' . ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" _hc="' . $has_child . '" >' . ucfirst($cat_term->name) . '</option>';
+            echo '<option  ' . $option_selected . ' alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" _hc="' . $has_child . '" >' . geodir_utf8_ucfirst($cat_term->name) . '</option>';
         }
         echo '</select>';
     }

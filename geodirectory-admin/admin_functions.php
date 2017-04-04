@@ -1122,7 +1122,7 @@ function geodir_admin_fields($options)
                             }
                             ?>
                             <option
-                                value="<?php echo esc_attr($key); ?>" <?php echo $geodir_select_value; ?> ><?php echo ucfirst($val) ?></option>
+                                value="<?php echo esc_attr($key); ?>" <?php echo $geodir_select_value; ?> ><?php echo geodir_utf8_ucfirst($val) ?></option>
                         <?php
                         }
                         ?>
@@ -1149,13 +1149,13 @@ function geodir_admin_fields($options)
                         <?php
                         foreach ($value['options'] as $key => $val) {
                             if (strpos($key, 'optgroup_start-') === 0) {
-                                ?><optgroup label="<?php echo ucfirst($val); ?>"><?php
+                                ?><optgroup label="<?php echo geodir_utf8_ucfirst($val); ?>"><?php
                             } else if (strpos($key, 'optgroup_end-') === 0) {
                                 ?></optgroup><?php
                             } else {
                                 ?>
                                 <option
-                                    value="<?php echo esc_attr($key); ?>" <?php selected(true, (is_array($option_values) && in_array($key, $option_values)));?>><?php echo ucfirst($val) ?></option>
+                                    value="<?php echo esc_attr($key); ?>" <?php selected(true, (is_array($option_values) && in_array($key, $option_values)));?>><?php echo geodir_utf8_ucfirst($val) ?></option>
                             <?php
                             }
                         }

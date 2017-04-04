@@ -1549,7 +1549,7 @@ function geodir_action_listings_title()
 
         $current_term = get_term_by('slug', $term, $taxonomy[0]);
         if (!empty($current_term)) {
-            $current_term_name = __(ucfirst($current_term->name), 'geodirectory');
+            $current_term_name = __(geodir_utf8_ucfirst($current_term->name), 'geodirectory');
             if ($current_term_name != '' && $location_name != '' && isset($current_term->taxonomy) && $current_term->taxonomy == $gd_post_type . 'category') {
                 $location_last_char = substr($location_name, -1);
                 $location_name_attach = geodir_strtolower($location_last_char) == 's' ? __("'", 'geodirectory') : __("'s", 'geodirectory');
@@ -1562,7 +1562,7 @@ function geodir_action_listings_title()
                 $current_term = get_term_by('slug', $term, $taxonomy[1]);
 
                 if (!empty($current_term)) {
-                    $current_term_name = __(ucfirst($current_term->name), 'geodirectory');
+                    $current_term_name = __(geodir_utf8_ucfirst($current_term->name), 'geodirectory');
                     if ($current_term_name != '' && $location_name != '' && isset($current_term->taxonomy) && $current_term->taxonomy == $gd_post_type . 'category') {
                         $location_last_char = substr($location_name, -1);
                         $location_name_attach = geodir_strtolower($location_last_char) == 's' ? __("'", 'geodirectory') : __("'s", 'geodirectory');
@@ -1621,7 +1621,7 @@ function geodir_action_listings_title()
     }
 
     if (is_search()) {
-        $list_title = __('Search', 'geodirectory') . ' ' . __(ucfirst($post_type_info->labels->name), 'geodirectory') . __(' For :', 'geodirectory') . " '" . get_search_query() . "'";
+        $list_title = __('Search', 'geodirectory') . ' ' . __(geodir_utf8_ucfirst($post_type_info->labels->name), 'geodirectory') . __(' For :', 'geodirectory') . " '" . get_search_query() . "'";
     }
     /** This action is documented in geodirectory_template_actions.php */
     $class = apply_filters('geodir_page_title_class', 'entry-title fn');
@@ -3421,7 +3421,7 @@ function geodir_filter_listing_page_title($list_title)
         $gd_post_type = geodir_get_current_posttype();
         $post_type_info = get_post_type_object($gd_post_type);
 
-        $list_title = __('Search', 'geodirectory') . ' ' . __(ucfirst($post_type_info->labels->name), 'geodirectory') . __(' :', 'geodirectory');
+        $list_title = __('Search', 'geodirectory') . ' ' . __(geodir_utf8_ucfirst($post_type_info->labels->name), 'geodirectory') . __(' :', 'geodirectory');
     }
     return $list_title;
 }
