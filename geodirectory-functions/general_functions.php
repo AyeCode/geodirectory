@@ -3315,6 +3315,7 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 						 * @param int $current_user ->ID Current user ID.
 						 */
 						$add_link = apply_filters( 'geodir_dashboard_link_add_listing', $add_link, $key, $current_user->ID );
+						$name = apply_filters( 'geodir_dashboard_label_add_listing', $name, $key, $current_user->ID );
 
 						$addlisting_links .= '<option ' . $selected . ' value="' . $add_link . '">' . __( ucfirst( $name ), 'geodirectory' ) . '</option>';
 
