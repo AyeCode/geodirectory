@@ -750,6 +750,7 @@ add_shortcode('gd_popular_post_view', 'geodir_sc_popular_post_view');
  * This implements the functionality of the shortcode for displaying popular post view.
  *
  * @since 1.0.0
+ * @since 1.6.18 [gd_popular_post_view] shortcode character_count=0 not working - FIXED
  * @package GeoDirectory
  * @param array $atts {
  *     Attributes of the shortcode.
@@ -842,9 +843,8 @@ function geodir_sc_popular_post_view($atts)
     $params['list_sort'] = gdsc_validate_sort_choice($params['list_sort']);
 
     // Validate character_count
-    $params['character_count'] = absint($params['character_count']);
-    if (20 > $params['character_count']) {
-        $params['character_count'] = 20;
+    if ($params['character_count'] !== '') {
+        $params['character_count'] = absint($params['character_count']);
     }
 
     // Validate Listing width, used in the template widget-listing-listview.php
@@ -997,9 +997,8 @@ function geodir_sc_related_listings($atts)
     $params['listing_width'] = gdsc_validate_listing_width($params['listing_width']);
 
     // Validate character_count
-    $params['character_count'] = absint($params['character_count']);
-    if (20 > $params['character_count']) {
-        $params['character_count'] = 20;
+    if ($params['character_count'] !== '') {
+        $params['character_count'] = absint($params['character_count']);
     }
 
     if ($related_display = geodir_related_posts_display($params)) {
