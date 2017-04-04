@@ -63,7 +63,7 @@ $field_data_type = isset($field_info->data_type) ? $field_info->data_type : '';
 
 $field_display = $field_type == 'address' && $field_info->htmlvar_name == 'post' ? 'style="display:none"' : '';
 
-$radio_id = (isset($field_info->htmlvar_name)) ? $field_info->htmlvar_name : rand(5, 500);
+$radio_id = (isset($field_info->htmlvar_name) && $field_info->htmlvar_name) ? $field_info->htmlvar_name : rand(5, 500);
 
 //print_r($field_info);
 

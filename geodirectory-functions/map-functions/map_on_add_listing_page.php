@@ -98,7 +98,7 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
     var strictBounds;
     function geocodePosition(latLon, address) {
         console.log(address);
-        if (address && address.country!='TR') {// turkey select address does not return enough info so we get info from GPS only.
+        if (address && address.country!='TR' && address.country!='SG' ) {// turkey select address does not return enough info so we get info from GPS only.
             doGeoCode = address;
         } else {
             doGeoCode = {
@@ -282,6 +282,13 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
                 }
             }
 
+            // fix some countries without regions, Isle of Man, Singapore
+            if(getCountryISO=='IM'){
+                getState = "Isle of Man";
+            }else if(getCountryISO=='SG'){
+                getState = "Singapore";
+            }
+
             //getCity
             // fix for cities in Ireland
             $country_arr2 = ["IE"];
@@ -450,6 +457,7 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
         if (ISO2 == '--') {
             ISO2 = '';
         }
+        
         if (typeof zip == "undefined") {
             zip = '';
         }
@@ -659,10 +667,11 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
             });
             google.maps.event.addListener($.goMap.map, 'dragend', function () {
                 // updateMarkerStatus('Drag ended');
+                centerMarker();
                 <?php if ($auto_change_address_fields_pin_move) { ?>
                 geocodePosition(baseMarker.getPosition());
                 <?php } ?>
-                centerMarker();
+
                 updateMarkerPosition(baseMarker.getPosition());
             });
             google.maps.event.addListener($.goMap.map, 'zoom_changed', function () {

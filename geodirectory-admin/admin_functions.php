@@ -1122,7 +1122,7 @@ function geodir_admin_fields($options)
                             }
                             ?>
                             <option
-                                value="<?php echo esc_attr($key); ?>" <?php echo $geodir_select_value; ?> ><?php echo ucfirst($val) ?></option>
+                                value="<?php echo esc_attr($key); ?>" <?php echo $geodir_select_value; ?> ><?php echo geodir_utf8_ucfirst($val) ?></option>
                         <?php
                         }
                         ?>
@@ -1149,13 +1149,13 @@ function geodir_admin_fields($options)
                         <?php
                         foreach ($value['options'] as $key => $val) {
                             if (strpos($key, 'optgroup_start-') === 0) {
-                                ?><optgroup label="<?php echo ucfirst($val); ?>"><?php
+                                ?><optgroup label="<?php echo geodir_utf8_ucfirst($val); ?>"><?php
                             } else if (strpos($key, 'optgroup_end-') === 0) {
                                 ?></optgroup><?php
                             } else {
                                 ?>
                                 <option
-                                    value="<?php echo esc_attr($key); ?>" <?php selected(true, (is_array($option_values) && in_array($key, $option_values)));?>><?php echo ucfirst($val) ?></option>
+                                    value="<?php echo esc_attr($key); ?>" <?php selected(true, (is_array($option_values) && in_array($key, $option_values)));?>><?php echo geodir_utf8_ucfirst($val) ?></option>
                             <?php
                             }
                         }
@@ -4066,6 +4066,7 @@ function geodir_ajax_import_export() {
                             
                             $post_id = '';
                             $post_title = '';
+                            $post_date = '';
                             $post_author = '';
                             $post_content = '';
                             $post_category_arr = array();
@@ -4108,6 +4109,8 @@ function geodir_ajax_import_export() {
                                     $post_title = sanitize_text_field($row[$c]);
                                 } else if ( $column == 'post_author' ) {
                                     $post_author = $row[$c];
+                                } else if ( $column == 'post_date' ) {
+                                    $post_date = $row[$c];
                                 } else if ( $column == 'post_content' ) {
                                     $post_content = $row[$c];
                                 } else if ( $column == 'post_category' && $row[$c] != '' ) {
@@ -4268,6 +4271,10 @@ function geodir_ajax_import_export() {
                             $xtimings['###5'] = microtime(true)-$xstart;
                             $save_post = array();
                             $save_post['post_title'] = $post_title;
+                            if (!empty($post_date)) {
+                                $save_post['post_date'] = $post_date;
+                                $save_post['post_date_gmt'] = get_gmt_from_date( $post_date );
+                            }
                             $save_post['post_content'] = $post_content;
                             $save_post['post_type'] = $post_type;
                             $save_post['post_author'] = $post_author;
@@ -6261,6 +6268,11 @@ function geodir_admin_dequeue_scripts() {
     // Fix conflict Fusion Builder jquery chosen with GD jquery chosen.
     if (class_exists('FusionBuilder') && wp_script_is('fusion_builder_chosen_js', 'enqueued')) {
         wp_dequeue_script('fusion_builder_chosen_js');
+    }
+    
+    // Fix conflicts timepicker & setting date value.
+    if (class_exists('acf') && wp_script_is('acf-timepicker', 'enqueued')) {
+        wp_dequeue_script('acf-timepicker');
     }
 }
 

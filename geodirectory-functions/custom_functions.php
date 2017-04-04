@@ -103,20 +103,20 @@ function geodir_max_excerpt( $charlength ) {
 
 	$charlength ++;
 	$excerpt_more = function_exists( 'geodirf_excerpt_more' ) ? geodirf_excerpt_more( '' ) : geodir_excerpt_more( '' );
-	if ( mb_strlen( $excerpt ) > $charlength ) {
-		if ( mb_strlen( $excerpt_more ) > 0 && mb_strpos( $excerpt, $excerpt_more ) !== false ) {
-			$excut = - ( mb_strlen( $excerpt_more ) );
-			$subex = mb_substr( $excerpt, 0, $excut );
-			if ( $charlength > 0 && mb_strlen( $subex ) > $charlength ) {
-				$subex = mb_substr( $subex, 0, $charlength );
+	if ( geodir_utf8_strlen( $excerpt ) > $charlength ) {
+		if ( geodir_utf8_strlen( $excerpt_more ) > 0 && geodir_utf8_strpos( $excerpt, $excerpt_more ) !== false ) {
+			$excut = - ( geodir_utf8_strlen( $excerpt_more ) );
+			$subex = geodir_utf8_substr( $excerpt, 0, $excut );
+			if ( $charlength > 0 && geodir_utf8_strlen( $subex ) > $charlength ) {
+				$subex = geodir_utf8_substr( $subex, 0, $charlength );
 			}
 			$out .= $subex;
 		} else {
-			$subex   = mb_substr( $excerpt, 0, $charlength - 5 );
+			$subex   = geodir_utf8_substr( $excerpt, 0, $charlength - 5 );
 			$exwords = explode( ' ', $subex );
-			$excut   = - ( mb_strlen( $exwords[ count( $exwords ) - 1 ] ) );
+			$excut   = - ( geodir_utf8_strlen( $exwords[ count( $exwords ) - 1 ] ) );
 			if ( $excut < 0 ) {
-				$out .= mb_substr( $subex, 0, $excut );
+				$out .= geodir_utf8_substr( $subex, 0, $excut );
 			} else {
 				$out .= $subex;
 			}
@@ -131,9 +131,9 @@ function geodir_max_excerpt( $charlength ) {
 		$out .= '</a>';
 
 	} else {
-		if ( mb_strlen( $excerpt_more ) > 0 && mb_strpos( $excerpt, $excerpt_more ) !== false ) {
-			$excut = - ( mb_strlen( $excerpt_more ) );
-			$out .= mb_substr( $excerpt, 0, $excut );
+		if ( geodir_utf8_strlen( $excerpt_more ) > 0 && geodir_utf8_strpos( $excerpt, $excerpt_more ) !== false ) {
+			$excut = - ( geodir_utf8_strlen( $excerpt_more ) );
+			$out .= geodir_utf8_substr( $excerpt, 0, $excut );
 			$out .= ' <a class="excerpt-read-more" href="' . get_permalink() . '" title="' . get_the_title() . '">';
 			/**
 			 * Filter excerpt read more text.
@@ -1025,6 +1025,7 @@ function geodir_get_map_api_key() {
  *
  * @since   1.0.0
  * @since   1.5.4 Modified to replace %location% from meta when Yoast SEO plugin active.
+ * @since   1.6.18 Option added to disable overwrite by Yoast SEO titles & metas on GD pages.
  * @package GeoDirectory
  * @global object $wpdb             WordPress Database object.
  * @global object $post             The current post object.
@@ -1040,7 +1041,7 @@ function geodir_add_meta_keywords() {
 	}// if non GD page, bail
 
 	$use_gd_meta = true;
-	if ( class_exists( 'WPSEO_Frontend' ) || class_exists( 'All_in_One_SEO_Pack' ) ) {
+	if ( ( class_exists( 'WPSEO_Frontend' ) || class_exists( 'All_in_One_SEO_Pack' ) ) && !geodir_disable_yoast_seo_metas() ) {
 		$use_gd_meta = false;
 
 		if ( geodir_is_page( 'search' ) ) {
@@ -1092,9 +1093,9 @@ function geodir_add_meta_keywords() {
 		}
 	} elseif ( ( is_category() || is_tag() ) && isset( $current_term->taxonomy ) && in_array( $current_term->taxonomy, $geodir_taxonomies ) ) {
 		if ( is_category() ) {
-			$meta_desc .= __( "Posts related to Category:", 'geodirectory' ) . " " . ucfirst( single_cat_title( "", false ) );
+			$meta_desc .= __( "Posts related to Category:", 'geodirectory' ) . " " . geodir_utf8_ucfirst( single_cat_title( "", false ) );
 		} elseif ( is_tag() ) {
-			$meta_desc .= __( "Posts related to Tag:", 'geodirectory' ) . " " . ucfirst( single_tag_title( "", false ) );
+			$meta_desc .= __( "Posts related to Tag:", 'geodirectory' ) . " " . geodir_utf8_ucfirst( single_tag_title( "", false ) );
 		}
 	} elseif ( isset( $current_term->taxonomy ) && in_array( $current_term->taxonomy, $geodir_taxonomies ) ) {
 		$meta_desc .= isset( $current_term->description ) ? $current_term->description : '';
@@ -1173,10 +1174,10 @@ function geodir_add_meta_keywords() {
 							$category_desc = isset( $option['gd_cat_loc_desc'] ) && trim( $option['gd_cat_loc_desc'] ) != '' ? trim( $option['gd_cat_loc_desc'] ) : $category_desc;
 						}
 					}
-					$geodir_meta_desc = __( "Posts related to Category:", 'geodirectory' ) . " " . ucfirst( single_cat_title( "", false ) ) . '. ' . $category_desc;
+					$geodir_meta_desc = __( "Posts related to Category:", 'geodirectory' ) . " " . geodir_utf8_ucfirst( single_cat_title( "", false ) ) . '. ' . $category_desc;
 				}
 			} else if ( $geodir_is_tag ) {
-				$geodir_meta_desc = __( "Posts related to Tag:", 'geodirectory' ) . " " . ucfirst( single_tag_title( "", false ) ) . '. ' . $geodir_meta_desc;
+				$geodir_meta_desc = __( "Posts related to Tag:", 'geodirectory' ) . " " . geodir_utf8_ucfirst( single_tag_title( "", false ) ) . '. ' . $geodir_meta_desc;
 			}
 		}
 	}
@@ -2024,7 +2025,7 @@ function geodir_get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_le
 
 		$comment_content_length = strlen( $comment_content );
 		if ( $comment_content_length > $comment_lenth ) {
-			$comment_excerpt = mb_substr( $comment_content, 0, $comment_lenth ) . '... ' . $read_more;
+			$comment_excerpt = geodir_utf8_substr( $comment_content, 0, $comment_lenth ) . '... ' . $read_more;
 		} else {
 			$comment_excerpt = $comment_content;
 		}
@@ -2243,9 +2244,9 @@ function geodir_output_pinpoint_html_listings( $post_id, $post ) {
 		<span class="geodir-pinpoint"
 		      style="background:url('<?php echo $marker_icon; ?>') no-repeat scroll left top transparent;background-size:auto 100%; -webkit-background-size:auto 100%;-moz-background-size:auto 100%;height:9px;width:14px;"><?php echo apply_filters( 'geodir_listing_listview_pinpoint_inner_content', '', 'listing' ); ?></span>
 		<a class="geodir-pinpoint-link" href="javascript:void(0)"
-		   onclick="openMarker('listing_map_canvas' ,'<?php echo $post->ID; ?>')"
-		   onmouseover="animate_marker('listing_map_canvas' ,'<?php echo $post->ID; ?>')"
-		   onmouseout="stop_marker_animation('listing_map_canvas' ,'<?php echo $post->ID; ?>')"><?php _e( 'Pinpoint', 'geodirectory' ); ?></a>
+		   onclick="if(typeof openMarker=='function'){openMarker('listing_map_canvas' ,'<?php echo $post->ID; ?>')}"
+		   onmouseover="if(typeof animate_marker=='function'){animate_marker('listing_map_canvas' ,'<?php echo $post->ID; ?>')}"
+		   onmouseout="if(typeof stop_marker_animation=='function'){stop_marker_animation('listing_map_canvas' ,'<?php echo $post->ID; ?>')}"><?php _e( 'Pinpoint', 'geodirectory' ); ?></a>
 		<?php
 	}
 }
@@ -2325,7 +2326,7 @@ function geodir_search_form_post_type_input() {
 						}
 					} elseif ( $curr_post_type == $post_type ) {
 						echo 'selected="selected"';
-					} ?>><?php _e( ucfirst( $info->labels->name ), 'geodirectory' ); ?></option>
+					} ?>><?php _e( geodir_utf8_ucfirst( $info->labels->name ), 'geodirectory' ); ?></option>
 
 				<?php endforeach; ?>
 			</select>
@@ -2948,4 +2949,15 @@ function geodir_cpt_has_rating_disabled( $post_type = '', $taxonomy = false ) {
 	}
 
 	return $return;
+}
+
+/**
+ * Checks that Yoast SEO is disabled on GD pages.
+ *
+ * @since 1.6.18
+ *
+ * @return bool True if Yoast SEO disabled on GD pages.
+ */
+function geodir_disable_yoast_seo_metas() {
+    return (bool)get_option( 'geodir_disable_yoast_meta' );
 }

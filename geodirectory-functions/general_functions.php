@@ -22,18 +22,20 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
  * Return the plugin folder url WITHOUT TRAILING SLASH.
  *
  * @since   1.0.0
+ * @since   1.6.18 Fix: GD Booster causes problem when used http in urls on SSL enabled site.
  * @package GeoDirectory
  * @return string example url eg: http://wpgeo.directory/wp-content/plugins/geodirectory
  */
 function geodir_plugin_url() {
-
+	return plugins_url( '', dirname( __FILE__ ) );
+	/*
 	if ( is_ssl() ) :
 		return str_replace( 'http://', 'https://', WP_PLUGIN_URL ) . "/" . plugin_basename( dirname( dirname( __FILE__ ) ) );
 	else :
 		return WP_PLUGIN_URL . "/" . plugin_basename( dirname( dirname( __FILE__ ) ) );
 	endif;
+	*/
 }
-
 
 /**
  * Return the plugin path.
@@ -1352,7 +1354,7 @@ function geodir_breadcrumb() {
 				$gd_taxonomy = $gd_post_type . '_tags';
 			}
 
-			$breadcrumb .= $separator . '<a href="' . $listing_link . '">' . __( ucfirst( $post_type_info->label ), 'geodirectory' ) . '</a>';
+			$breadcrumb .= $separator . '<a href="' . $listing_link . '">' . __( geodir_utf8_ucfirst( $post_type_info->label ), 'geodirectory' ) . '</a>';
 			if ( ! empty( $gd_taxonomy ) || geodir_is_page( 'detail' ) ) {
 				$is_location_last = false;
 			} else {
@@ -1376,7 +1378,7 @@ function geodir_breadcrumb() {
 
 						$gd_location_link_text = preg_replace( '/-(\d+)$/', '', $location_term );
 						$gd_location_link_text = preg_replace( '/[_-]/', ' ', $gd_location_link_text );
-						$gd_location_link_text = ucfirst( $gd_location_link_text );
+						$gd_location_link_text = geodir_utf8_ucfirst( $gd_location_link_text );
 
 						$location_term_actual_country = '';
 						$location_term_actual_region  = '';
@@ -1538,10 +1540,10 @@ function geodir_breadcrumb() {
 				 */
 				$author_link = apply_filters( 'geodir_dashboard_author_link', $author_link, $user_id, $_REQUEST['stype'] );
 
-				$breadcrumb .= $separator . '<a href="' . $author_link . '">' . __( ucfirst( $post_type_info->label ), 'geodirectory' ) . '</a>';
-				$breadcrumb .= $separator . ucfirst( __( 'My', 'geodirectory' ) . ' ' . $_REQUEST['list'] );
+				$breadcrumb .= $separator . '<a href="' . $author_link . '">' . __( geodir_utf8_ucfirst( $post_type_info->label ), 'geodirectory' ) . '</a>';
+				$breadcrumb .= $separator . geodir_utf8_ucfirst( __( 'My', 'geodirectory' ) . ' ' . $_REQUEST['list'] );
 			} else {
-				$breadcrumb .= $separator . __( ucfirst( $post_type_info->label ), 'geodirectory' );
+				$breadcrumb .= $separator . __( geodir_utf8_ucfirst( $post_type_info->label ), 'geodirectory' );
 			}
 
 			$breadcrumb .= '</li>';
@@ -2336,7 +2338,7 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	$where = apply_filters( 'geodir_filter_widget_listings_where', $where, $post_type );
 	$where = $where != '' ? " WHERE 1=1 " . $where : '';
 
-	$groupby = " GROUP BY $wpdb->posts.ID "; //@todo is this needed? faster withotu
+	$groupby = " GROUP BY $wpdb->posts.ID "; //@todo is this needed? faster without
 	/**
 	 * Filter widget listing groupby clause string part that is being used for query.
 	 *
@@ -2465,6 +2467,7 @@ function geodir_function_widget_listings_join( $join ) {
  * Listing query where clause SQL part for widgets.
  *
  * @since   1.0.0
+ * @since   1.6.18 New attributes added in gd_listings shortcode to filter user favorite listings.
  * @package GeoDirectory
  * @global object $wpdb          WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
@@ -2510,6 +2513,17 @@ function geodir_function_widget_listings_where( $where ) {
 
 		if ( ! empty( $query_args['with_videos_only'] ) ) {
 			$where .= " AND ( " . $table . ".geodir_video != '' AND " . $table . ".geodir_video IS NOT NULL )";
+		}
+        
+		if ( ! empty( $query_args['show_favorites_only'] ) ) {
+			$user_favorites = '-1';
+			
+			if ( !empty( $query_args['favorites_by_user'] ) ) {
+				$user_favorites = get_user_meta( (int)$query_args['favorites_by_user'], 'gd_user_favourite_post', true );
+				$user_favorites = !empty($user_favorites) && is_array($user_favorites) ? implode("','", $user_favorites) : '-1';
+			}
+			
+			$where .= " AND `" . $wpdb->posts . "`.`ID` IN('" . $user_favorites . "')";
 		}
 
 		if ( ! empty( $query_args['tax_query'] ) ) {
@@ -2801,6 +2815,7 @@ add_filter( 'geodir_googlemap_script_extra', 'geodir_googlemap_script_extra_deta
  * @since   1.0.0
  * @since   1.5.1 Added option to set default post type.
  * @since   1.6.9 Added option to show parent categories only.
+ * @since   1.6.18 Added option to show parent categories only.
  * @package GeoDirectory
  * @global object $wpdb                     WordPress Database object.
  * @global string $plugin_prefix            Geodirectory plugin table prefix.
@@ -2861,6 +2876,21 @@ function geodir_popular_post_category_output( $args = '', $instance = '' ) {
 	}
 
 	if ( ! empty( $a_terms ) ) {
+		// Sort CPT taxonomies in categories widget.
+		if ( !empty( $taxonomy ) && is_array( $taxonomy ) && count( $taxonomy ) > 1 ) {
+			$gd_post_types = geodir_get_posttypes();
+			$sort_taxonomies = array();
+			
+			foreach ( $gd_post_types as $gd_post_type ) {
+				$taxonomy_name = $gd_post_type . 'category';
+				
+				if ( !empty( $a_terms[$taxonomy_name] ) ) {
+					$sort_taxonomies[$taxonomy_name] = $a_terms[$taxonomy_name];
+				}
+			}
+			$a_terms = !empty( $sort_taxonomies ) ? $sort_taxonomies : $a_terms;
+		}
+		
 		foreach ( $a_terms as $b_key => $b_val ) {
 			$b_terms[ $b_key ] = geodir_sort_terms( $b_val, 'count' );
 		}
@@ -2925,7 +2955,7 @@ function geodir_popular_post_category_output( $args = '', $instance = '' ) {
  *
  * @param array $terms                      An array of term objects.
  * @param int $category_limit               Number of categories to display by default.
- * @param bool $category_restrict           If the cat limit shoudl be hidden or not shown.
+ * @param bool $category_restrict           If the cat limit should be hidden or not shown.
  */
 function geodir_helper_cat_list_output( $terms, $category_limit , $category_restrict=false) {
 	global $geodir_post_category_str, $cat_count;
@@ -3101,11 +3131,12 @@ function geodir_listing_slider_widget_output( $args = '', $instance = '' ) {
 
 	wp_enqueue_script( 'geodirectory-jquery-flexslider-js' );
 	?>
-	<script type="text/javascript">
+		<script type="text/javascript">
 		jQuery(window).load(function () {
 			// chrome 53 introduced a bug, so we need to repaint the slider when shown.
-			jQuery('.geodir-slides').addClass('flexslider-fix-rtl');
-
+			jQuery('#geodir_widget_carousel .geodir-slides').addClass('flexslider-fix-rtl');
+			jQuery('#geodir_widget_slider .geodir-slides').addClass('flexslider-fix-rtl');
+			
 			jQuery('#geodir_widget_carousel').flexslider({
 				animation: "slide",
 				selector: ".geodir-slides > li",
@@ -3117,9 +3148,13 @@ function geodir_listing_slider_widget_output( $args = '', $instance = '' ) {
 				itemWidth: 75,
 				itemMargin: 5,
 				asNavFor: '#geodir_widget_slider',
-				rtl: <?php echo( is_rtl() ? 'true' : 'false' ); /* fix rtl issue */ ?>
+				rtl: <?php echo( is_rtl() ? 'true' : 'false' ); /* fix rtl issue */ ?>,
+				start: function (slider) {
+					// chrome 53 introduced a bug, so we need to repaint the slider when shown.
+					jQuery('.geodir-slides', jQuery(slider)).removeClass('flexslider-fix-rtl');
+				},
 			});
-
+			
 			jQuery('#geodir_widget_slider').flexslider({
 				animation: "<?php echo $animation;?>",
 				selector: ".geodir-slides > li",
@@ -3137,10 +3172,9 @@ function geodir_listing_slider_widget_output( $args = '', $instance = '' ) {
 			}?>
 				sync: "#geodir_widget_carousel",
 				start: function (slider) {
-
 					// chrome 53 introduced a bug, so we need to repaint the slider when shown.
-					jQuery('.geodir-slides').removeClass('flexslider-fix-rtl');
-
+					jQuery('.geodir-slides', jQuery(slider)).removeClass('flexslider-fix-rtl');
+					
 					jQuery('.geodir-listing-flex-loader').hide();
 					jQuery('#geodir_widget_slider').css({'visibility': 'visible'});
 					jQuery('#geodir_widget_carousel').css({'visibility': 'visible'});
@@ -3317,7 +3351,7 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 						$add_link = apply_filters( 'geodir_dashboard_link_add_listing', $add_link, $key, $current_user->ID );
 						$name = apply_filters( 'geodir_dashboard_label_add_listing', $name, $key, $current_user->ID );
 
-						$addlisting_links .= '<option ' . $selected . ' value="' . $add_link . '">' . __( ucfirst( $name ), 'geodirectory' ) . '</option>';
+						$addlisting_links .= '<option ' . $selected . ' value="' . $add_link . '">' . __( geodir_utf8_ucfirst( $name ), 'geodirectory' ) . '</option>';
 
 					}
 				}
@@ -3368,7 +3402,7 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 					 */
 					$post_type_link = apply_filters( 'geodir_dashboard_link_favorite_listing', $post_type_link, $key, $current_user->ID );
 
-					$favourite_links .= '<option ' . $selected . ' value="' . $post_type_link . '">' . __( ucfirst( $name ), 'geodirectory' ) . '</option>';
+					$favourite_links .= '<option ' . $selected . ' value="' . $post_type_link . '">' . __( geodir_utf8_ucfirst( $name ), 'geodirectory' ) . '</option>';
 				}
 			}
 
@@ -3415,7 +3449,7 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 					 */
 					$listing_link = apply_filters( 'geodir_dashboard_link_my_listing', $listing_link, $key, $current_user->ID );
 
-					$listing_links .= '<option ' . $selected . ' value="' . $listing_link . '">' . __( ucfirst( $name ), 'geodirectory' ) . '</option>';
+					$listing_links .= '<option ' . $selected . ' value="' . $listing_link . '">' . __( geodir_utf8_ucfirst( $name ), 'geodirectory' ) . '</option>';
 				}
 			}
 
@@ -4921,13 +4955,18 @@ function geodir_remove_location_terms( $location_terms = array() ) {
  * Send notification when a listing has been edited by it's author.
  *
  * @since   1.5.9
+ * @since   1.6.18 Some times it sends email twice when listing edited - FIXED
  * @package GeoDirectory
+ *
+ * @global array $gd_notified_edited  Array of post ID which has post edited notification set.
  *
  * @param int $post_ID  Post ID.
  * @param WP_Post $post Post object.
  * @param bool $update  Whether this is an existing listing being updated or not.
  */
 function geodir_on_wp_insert_post( $post_ID, $post, $update ) {
+	global $gd_notified_edited;
+	
 	if ( ! $update ) {
 		return;
 	}
@@ -4949,7 +4988,12 @@ function geodir_on_wp_insert_post( $post_ID, $post, $update ) {
 	if ( $user_id > 0 && get_option( 'geodir_notify_post_edited' ) && ! wp_is_post_revision( $post_ID ) && in_array( $post->post_type, geodir_get_posttypes() ) ) {
 		$author_id = ! empty( $post->post_author ) ? $post->post_author : 0;
 
-		if ( $user_id == $author_id && ! is_super_admin() ) {
+		if ( $user_id == $author_id && ! is_super_admin() && empty( $gd_notified_edited[$post_ID] ) ) {
+			if ( !empty( $gd_notified_edited ) ) {
+				$gd_notified_edited = array();
+			}
+			$gd_notified_edited[$post_ID] = true;
+			
 			$from_email   = get_option( 'site_email' );
 			$from_name    = get_site_emailName();
 			$to_email     = get_option( 'admin_email' );

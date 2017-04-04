@@ -69,7 +69,7 @@ function geodir_add_nav_menu_items()
                             $a_class = apply_filters('geodir_menu_a_class', '');
                             $items .= '<li class="' . $li_class . '">
 									<a href="' . get_post_type_archive_link($post_type) . '" class="' . $a_class . '">
-										' . __(ucfirst($args->labels->name),'geodirectory') . '
+										' . __(geodir_utf8_ucfirst($args->labels->name),'geodirectory') . '
 									</a>
 								</li>';
                         }
@@ -135,7 +135,7 @@ function geodir_add_nav_menu_items()
 
                                 $items .= '<li class="' . $sub_li_class . '">
 														<a href="' . get_post_type_archive_link($post_type) . '" class="' . $sub_a_class . '">
-															' . __(ucfirst($args->labels->name),'geodirectory') . '
+															' . __(geodir_utf8_ucfirst($args->labels->name),'geodirectory') . '
 														</a>
 													</li>';
                             }
@@ -618,7 +618,7 @@ if (!function_exists(' geodir_get_categories_dl')) {
                 $select_opt = 'selected="selected"';
             }
             $html .= '<option ' . $select_opt . ' value="' . $category_obj->term_id . '">'
-                . ucfirst($category_obj->name) . '</option>';
+                . geodir_utf8_ucfirst($category_obj->name) . '</option>';
         }
 
         if ($echo)
@@ -765,12 +765,12 @@ if (!function_exists('geodir_custom_taxonomy_walker')) {
                 }
 
                 if ($cat_display == 'radio')
-                    $out .= '<span style="display:block" ><input type="radio" field_type="radio" name="post_category[' . $cat_term->taxonomy . '][]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" >' . $term_check . ucfirst($cat_term->name) . '</span>';
+                    $out .= '<span style="display:block" ><input type="radio" field_type="radio" name="post_category[' . $cat_term->taxonomy . '][]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" >' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '</span>';
                 elseif ($cat_display == 'select' || $cat_display == 'multiselect')
-                    $out .= '<option ' . $main_list_class . ' style="margin-left:' . $p . 'px;" alt="' . $cat_term->taxonomy . '" title="' . ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' >' . $term_check . ucfirst($cat_term->name) . '</option>';
+                    $out .= '<option ' . $main_list_class . ' style="margin-left:' . $p . 'px;" alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' >' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '</option>';
 
                 else {
-                    $out .= '<span style="display:block"><input style="display:inline-block" type="checkbox" field_type="checkbox" name="post_category[' . $cat_term->taxonomy . '][]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" >' . $term_check . ucfirst($cat_term->name) . '</span>';
+                    $out .= '<span style="display:block"><input style="display:inline-block" type="checkbox" field_type="checkbox" name="post_category[' . $cat_term->taxonomy . '][]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" >' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '</span>';
                 }
 
                 // Call recurson to print sub cats
@@ -1189,7 +1189,7 @@ function geodir_get_catlist($cat_taxonomy, $parrent = 0, $selected = false)
             $child_terms = get_terms( $cat_taxonomy, array( 'parent' => $cat_term->term_id, 'hide_empty' => false, 'exclude' => $exclude_cats, 'number' => 1 ) );
             $has_child = !empty( $child_terms ) ? 't' : 'f';
 
-            echo '<option  ' . $option_selected . ' alt="' . $cat_term->taxonomy . '" title="' . ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" _hc="' . $has_child . '" >' . ucfirst($cat_term->name) . '</option>';
+            echo '<option  ' . $option_selected . ' alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" _hc="' . $has_child . '" >' . geodir_utf8_ucfirst($cat_term->name) . '</option>';
         }
         echo '</select>';
     }
@@ -1379,13 +1379,17 @@ function geodir_register_defaults()
 }
 
 $gd_wpml_get_languages = "";
-function gd_wpml_get_lang_from_url($url){
+function gd_wpml_get_lang_from_url($url) {
+    global $sitepress, $gd_wpml_get_languages;
+    
+    if (geodir_is_wpml()) {
+        return $sitepress->get_language_from_url($url);
+    }
+    
+    if (isset($_REQUEST['lang']) && $_REQUEST['lang']) {
+        return $_REQUEST['lang'];
+    }
 
-    global $gd_wpml_get_languages;
-    if(isset($_REQUEST['lang']) && $_REQUEST['lang']){return $_REQUEST['lang'];}
-
-
-    //
     $url = str_replace(array("http://","https://"),"",$url);
 
     // site_url() seems to work better than get_bloginfo('url') here, WPML can change get_bloginfo('url') to add the lang.
@@ -1393,14 +1397,11 @@ function gd_wpml_get_lang_from_url($url){
 
     $url = str_replace($site_url,"",$url);
 
-
     $segments = explode('/', trim($url, '/'));
 
-    //print_r( $segments);
-    if($gd_wpml_get_languages){
+    if ($gd_wpml_get_languages) {
         $langs = $gd_wpml_get_languages;
-    }else{
-        global $sitepress;
+    } else {
         $gd_wpml_get_languages = $sitepress->get_active_languages();
     }
 
@@ -1409,8 +1410,6 @@ function gd_wpml_get_lang_from_url($url){
     }
 
     return false;
-
-
 }
 
 function gd_wpml_slug_translation_turned_on($post_type) {
@@ -1432,6 +1431,8 @@ $gd_permalink_cache = array();
  * @since 1.0.0
  * @since 1.5.9 Fix the broken links when domain name contain CPT and home page 
  *              is set to current location.
+ * @since 1.6.18 Fix with WPML the location terms added twice when CPT slug is translated.
+ * 
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
@@ -1458,6 +1459,14 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
     }
 
     if (in_array($post->post_type, geodir_get_posttypes())) {
+
+        // if we dont have a GD post then try to grab it
+        if(!isset($post->default_category)){
+            $gd_post = geodir_get_post_info($post->ID);
+            if(!empty($gd_post)){
+                $post = $gd_post;
+            }
+        }
 
 
         $post_types = get_option('geodir_post_types');
@@ -1621,7 +1630,12 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
                 } else {
                     $post_terms = '';
 
-                    if (isset($post->{$taxonomies})) {
+                    if(isset($_POST['post_default_category']) && $_POST['post_default_category']){
+                        $post_terms = absint($_POST['post_default_category']);
+                    }elseif(isset($_POST['post_category'][$taxonomies]) && $_POST['post_category'][$taxonomies]){
+                        $post_terms = explode(",", trim($_POST['post_category'][$taxonomies], ","));
+                        $post_terms = absint($post_terms[0]);
+                    }elseif (isset($post->{$taxonomies})) {
                         $post_terms = explode(",", trim($post->{$taxonomies}, ","));
                         $post_terms = $post_terms[0];
                     }
@@ -1662,6 +1676,12 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
                 if (isset($term_request) && $term_request != '') $request_term .= $term_request;
             }
             $request_term = trim($request_term, '/');
+            
+            // Fix with WPML the location terms added twice when CPT slug is translated.
+            if ($sample && !empty($location_request) && geodir_is_wpml() && strpos($post_link, '%gd_taxonomy%/' . $request_term . $detailurl_separator) !== false) {
+                $post_link = str_replace('%gd_taxonomy%/', '', $post_link);
+            }
+            
             if (!empty($request_term))
                 $post_link = str_replace('%gd_taxonomy%', $request_term . $detailurl_separator, $post_link);
             else

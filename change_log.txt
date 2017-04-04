@@ -1,5 +1,28 @@
 v1.6.18
 Custom field should display label instead of value if set in option values - FIXED
+With WPML the location terms added twice when CPT slug is translated - FIXED
+gd_listing_map shortcode not working for CPT other then "gd_place" - FIXED
+GD Booster causes problem when used http in urls on SSL enabled site - FIXED
+Listing slider widget breaks slider if on detail page - FIXED
+For price custom field option "Decimal display" does not working - FIXED
+Singapore set address on map does not always return country - FIXED
+Use of ICL_LANGUAGE_CODE conflicts if used to check WPML installed - CHANGED
+New attributes added in gd_listings shortcode to filter user favorite listings - ADDED
+Backward compatibility for multibyte string functions - CHANGED
+Facebook login will not redirect back to add listing page - FIXED
+Fix conflict Advanced Custom Fields timepicker - FIXED
+Isle of Man added as own country and regions fixed - FIXED
+Undefined error when map marker animating - FIXED
+Option added to disable overwrite by Yoast SEO titles & metas on GD pages - ADDED
+On Custom AJAX request WPML uses default language for non logged user - FIXED
+Search returns all the posts for Kleo theme - FIXED
+Sort CPT taxonomy in popular categories widget - CHANGED
+Fixed some countries missing ISO country code - FIXED
+Admin use only date field should not lost value if saved by user - FIXED
+Post date should be updated via CSV import - CHANGED
+In [gd_listings] shortcode if category has no posts then it shows all the results - FIXED
+[gd_popular_post_view] shortcode character_count=0 not working - FIXED
+
 
 v1.6.17
 Changes for batch WPML duplicates feature - CHANGED

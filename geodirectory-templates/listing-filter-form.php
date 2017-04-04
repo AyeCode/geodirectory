@@ -16,7 +16,7 @@ if (function_exists('geodir_location_geo_home_link')) {
     remove_filter('home_url', 'geodir_location_geo_home_link', 100000);
 }
 
-if (defined('ICL_LANGUAGE_CODE') && defined('DOING_AJAX') && DOING_AJAX){
+if (geodir_is_wpml() && defined('DOING_AJAX') && DOING_AJAX){
     $search_url = icl_get_home_url();
 } else {
     $search_url = get_home_url();

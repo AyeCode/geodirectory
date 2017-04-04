@@ -352,7 +352,7 @@ function geodir_cfi_radio($html,$cf){
                     foreach ($option_values as $option_value) {
                         if (empty($option_value['optgroup'])) {
                             ?>
-                            <span class="gd-radios"><input name="<?php echo $cf['name'];?>" id="<?php echo $cf['name'];?>" <?php checked($value, $option_value['value']);?> value="<?php echo esc_attr($option_value['value']); ?>" class="gd-checkbox" field_type="<?php echo $cf['type'];?>" type="radio" /><?php echo $option_value['label']; ?></span>
+                            <span class="gd-radios"><input name="<?php echo $cf['name'];?>" id="<?php echo $cf['name'];?>" <?php checked(stripslashes($value), $option_value['value']);?> value="<?php echo esc_attr($option_value['value']); ?>" class="gd-checkbox" field_type="<?php echo $cf['type'];?>" type="radio" /><?php echo $option_value['label']; ?></span>
                             <?php
                         }
                     }
@@ -566,7 +566,7 @@ function geodir_cfi_select($html,$cf){
                     } else {
                         $option_label = isset($option_row['label']) ? $option_row['label'] : '';
                         $option_value = isset($option_row['value']) ? $option_row['value'] : '';
-                        $selected = $option_value == $value ? 'selected="selected"' : '';
+                        $selected = $option_value == stripslashes($value) ? 'selected="selected"' : '';
 
                         $select_options .= '<option value="' . esc_attr($option_value) . '" ' . $selected . '>' . $option_label . '</option>';
                     }
@@ -676,6 +676,8 @@ function geodir_cfi_multiselect($html,$cf){
                                     } else {
                                         $value_array = $value;
                                     }
+                                    
+                                    $value_array = stripslashes_deep($value_array);
 
                                     if (is_array($value_array)) {
                                         $value_array = array_map('trim', $value_array);

@@ -10,10 +10,16 @@
  */
 
 /*
- * If user is not signed in, redirect home.
+ * If user is not signed in, redirect home or to redirect location.
  */
 if (get_current_user_id()) {
-    wp_redirect(home_url(), 302);
+
+    $_redirect = home_url();
+    if (isset($_REQUEST['redirect_add_listing'])) {
+        $_redirect = $_REQUEST['redirect_add_listing'];
+    }
+
+    wp_safe_redirect($_redirect , 302);
     exit;
 }
 

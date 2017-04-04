@@ -68,7 +68,7 @@ add_action('wp_ajax_plupload_action', "geodir_plupload_action");
 add_action('wp_ajax_nopriv_plupload_action', 'geodir_plupload_action'); // call for not logged in ajax
 
 ////////////////////////
-/* Widget Initalizaion */
+/* Widget Initialization */
 ////////////////////////
 
 add_action('widgets_init', 'register_geodir_widgets');
@@ -103,7 +103,7 @@ add_action('wp', 'geodir_on_wp', 10);
 
 
 /////////////////////////////
-/* ON WP HEADE ACTIONS */
+/* ON WP HEAD ACTIONS */
 /////////////////////////////
 
 add_action('wp_head', 'geodir_header_scripts');
@@ -117,7 +117,7 @@ add_action('wp_head', 'geodir_init_map_canvas_array'); // Related to MAP
 add_action('wp_head', 'geodir_restrict_widget'); // Related to widgets
 
 //////////////////////////////
-/* ENQUE SCRIPTS AND STYLES */
+/* ENQUEUE SCRIPTS AND STYLES */
 //////////////////////////////
 
 add_action('wp_enqueue_scripts', 'geodir_templates_scripts');
@@ -154,7 +154,7 @@ add_filter('post_type_link', 'geodir_listing_permalink_structure', 10, 4);
 /* POST AND LOOP ACTIONS */
 ////////////////////////
 if (!is_admin()) {
-    add_action('pre_get_posts', 'geodir_exclude_page', 100); /// Will help to exclude virtural page from everywhere
+    add_action('pre_get_posts', 'geodir_exclude_page', 100); /// Will help to exclude virtual page from everywhere
     add_filter('wp_list_pages_excludes', 'exclude_from_wp_list_pages', 100);
     /** Exclude Virtual Pages From Pages List **/
     add_action('pre_get_posts', 'set_listing_request', 0);
@@ -329,7 +329,7 @@ add_action('geodir_detail_page_sidebar', 'geodir_detail_page_sidebar_content_sor
 /**
  * Builds an array of elements for the details (post) page sidebar.
  *
- * Builds an array fo functions to be called in the details page (post) sidebar, this array can be changed via hook or filter.
+ * Builds an array of functions to be called in the details page (post) sidebar, this array can be changed via hook or filter.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -1104,7 +1104,7 @@ function geodir_detail_page_review_rating()
          * This is called inside the check for an actual rating and the check for preview page.
          *
          * @since 1.0.0
-         * @param float $post_avgratings Average rating for the surrent post.
+         * @param float $post_avgratings Average rating for the current post.
          * @param int $post->ID Current post ID.
          */
         do_action('geodir_before_review_rating_stars_on_detail', $post_avgratings, $post->ID);
@@ -1141,7 +1141,7 @@ function geodir_detail_page_review_rating()
          * This is called inside the check for an actual rating and the check for preview page.
          *
          * @since 1.0.0
-         * @param float $post_avgratings Average rating for the surrent post.
+         * @param float $post_avgratings Average rating for the current post.
          * @param int $post->ID Current post ID.
          */
         do_action('geodir_after_review_rating_stars_on_detail', $post_avgratings, $post->ID);
@@ -1172,7 +1172,7 @@ function geodir_detail_page_review_rating()
 /**
  * This outputs the info section of the details page.
  *
- * This outputs the info section fo the details page which includes all the post custom fields.
+ * This outputs the info section of the details page which includes all the post custom fields.
  * @since 1.0.0
  * @package GeoDirectory
  */
@@ -1213,13 +1213,13 @@ function geodir_detail_page_more_info()
 /**
  * Outputs translated JS text strings.
  *
- * This function outputs text strings used in JS fils as a json array of strings so they can be translated and still be used in JS files.
+ * This function outputs text strings used in JS files as a json array of strings so they can be translated and still be used in JS files.
  *
  * @since 1.0.0
  * @package GeoDirectory
  */
 function geodir_localize_all_js_msg()
-{// check_ajax_referer function is used to make sure no files are uplaoded remotly but it will fail if used between https and non https so we do the check below of the urls
+{// check_ajax_referer function is used to make sure no files are uploaded remotely but it will fail if used between https and non https so we do the check below of the urls
     if (str_replace("https", "http", admin_url('admin-ajax.php')) && !empty($_SERVER['HTTPS'])) {
         $ajax_url = admin_url('admin-ajax.php');
     } elseif (!str_replace("https", "http", admin_url('admin-ajax.php')) && empty($_SERVER['HTTPS'])) {
@@ -1257,7 +1257,7 @@ function geodir_localize_all_js_msg()
         'tax_meta_class_not_permission_record_img_msg' => __('You do not have permission to reorder images.', 'geodirectory'),
         'address_not_found_on_map_msg' => __('Address not found for:', 'geodirectory'),
         // end not show alert msg
-        'my_place_listing_del' => __('Are you wish to delete this listing?', 'geodirectory'),
+        'my_place_listing_del' => __('Are you sure you wish to delete this listing?', 'geodirectory'),
         'my_main_listing_del' => __('Deleting the main listing of a franchise will turn all franchises in regular listings. Are you sure wish to delete this main listing?', 'geodirectory'),
         //start not show alert msg
         'rating_error_msg' => __('Error : please retry', 'geodirectory'),
@@ -1821,6 +1821,7 @@ add_filter('wp_title', 'geodir_custom_page_title', 100, 2);
  * Set custom page title.
  *
  * @since 1.0.0
+ * @since 1.6.18 Option added to disable overwrite by Yoast SEO titles & metas on GD pages.
  * @package GeoDirectory
  * @global object $wp WordPress object.
  * @param string $title Old title.
@@ -1830,7 +1831,7 @@ add_filter('wp_title', 'geodir_custom_page_title', 100, 2);
 function geodir_custom_page_title($title = '', $sep = '')
 {
     global $wp;
-    if (class_exists('WPSEO_Frontend') || class_exists('All_in_One_SEO_Pack')) {
+    if ((class_exists('WPSEO_Frontend') || class_exists('All_in_One_SEO_Pack')) && !geodir_disable_yoast_seo_metas()) {
         return $title;
     }
 
@@ -1902,7 +1903,7 @@ function geodir_custom_page_title($title = '', $sep = '')
 }
 
 
-//add_action('init', 'geodir_set_post_attachment'); // we need to make a tool somwhere to run this function maybe via ajax or something in batch form, it is crashing servers with lots of listings
+//add_action('init', 'geodir_set_post_attachment'); // we need to make a tool somewhere to run this function maybe via ajax or something in batch form, it is crashing servers with lots of listings
 
 /**
  * set attachments for all geodir posts.
@@ -2882,3 +2883,93 @@ function geodir_wpml_filter_ls_languages($languages) {
     return $languages;
 }
 add_filter( 'icl_ls_languages', 'geodir_wpml_filter_ls_languages', 11, 1 );
+
+/**
+ * Remove Yoast SEO hook if disabled on GD pages.
+ *
+ * @since 1.6.18
+ *
+ */
+function geodir_remove_yoast_seo_metas(){
+    if ( class_exists( 'WPSEO_Frontend' ) && geodir_is_geodir_page() && geodir_disable_yoast_seo_metas() ) {
+        $wpseo = WPSEO_Frontend::get_instance();
+        
+        remove_action( 'wp_head', array( $wpseo, 'metadesc' ), 6 );
+        remove_action( 'wp_head', array( $wpseo, 'metakeywords' ), 11 );
+        remove_filter( 'pre_get_document_title', array( $wpseo, 'title' ), 15 );
+        remove_filter( 'wp_title', array( $wpseo, 'title' ), 15, 3 );
+        remove_filter( 'thematic_doctitle', array( $wpseo, 'title' ), 15 );
+        remove_filter( 'woo_title', array( $wpseo, 'fix_woo_title' ), 99 );
+        
+        remove_action( 'template_redirect', 'wpseo_frontend_head_init', 999 );
+    }
+}
+
+/**
+ * Set the WPML language for AJAX requests for non logged user.
+ *
+ * Custom AJAX requests always return the default language content.
+ *
+ * @since 1.6.18
+ *
+ * @global object $sitepress Sitepress WPML object.
+ *
+ */
+ function geodir_wpml_ajax_set_guest_lang() {    
+    if ( geodir_is_wpml() && wpml_is_ajax() && !is_user_logged_in() ) {
+        if ( empty( $_GET['lang'] ) && !( !empty( $_SERVER['REQUEST_URI'] ) && preg_match( '@\.(css|js|png|jpg|gif|jpeg|bmp)@i', basename( preg_replace( '@\?.*$@', '', $_SERVER['REQUEST_URI'] ) ) ) ) ) {
+            global $sitepress;
+            
+            $referer = wp_get_referer();
+            
+            $current_lang = $sitepress->get_current_language();
+            $referrer_lang = $sitepress->get_language_from_url( $referer );
+            
+            if ( $referrer_lang && $current_lang != $referrer_lang ) {
+                $_GET['lang'] = $referrer_lang;
+            }
+        }
+    }
+}
+add_action( 'plugins_loaded', 'geodir_wpml_ajax_set_guest_lang', -1 );
+
+/**
+ * Change country slug czech-republic to czechia and redirect.
+ *
+ * @since 1.6.18
+ *
+ * @param object $wp The WordPress object.
+ */
+function geodir_check_redirect($wp) {
+    if (is_404() || (!empty($wp->query_vars['error']) && $wp->query_vars['error'] == '404')) {
+        $current_url = geodir_curPageURL();
+        $search = 'czech-republic';
+        $replace = 'czechia';        
+        
+        $has_slash = substr($current_url, -1);
+        if ($has_slash != "/") {
+            $current_url .= '/';
+        }
+        
+        $redirect = false;
+        if (strpos($current_url, '/' . $search . '/') !== false) {
+            $redirect = true;
+            $current_url = preg_replace('/\/' . $search . '\//', '/' . $replace . '/', $current_url, 1);
+        }
+        
+        if ($has_slash != "/") {
+            $current_url = trim($current_url, '/');
+        }
+        
+        if (strpos($current_url, 'gd_country=' . $search) !== false) {
+            $redirect = true;
+            $current_url = str_replace('gd_country=' . $search, 'gd_country=' . $replace, $current_url);
+        }
+
+        if ($redirect) {
+            wp_redirect($current_url);
+            exit;
+        }
+    }
+}
+add_action('parse_request', 'geodir_check_redirect', 101, 1);

@@ -515,6 +515,8 @@ var gd_single_marker_lat = '', gd_single_marker_lon = '';
 
 // create the marker and set up the event window
 function create_marker(input, map_canvas_var) {
+
+    //console.log(input);
     if (window.gdMaps == 'osm') {
         return create_marker_osm(input, map_canvas_var);
     }
@@ -536,6 +538,15 @@ function create_marker(input, map_canvas_var) {
             input.i = geodir_all_js_msg.geodir_default_marker_icon;
         }
         cs = input.cs;
+
+        // input.i = {
+        //     url: input.i ,
+        //     size: new google.maps.Size(71, 71),
+        //     origin: new google.maps.Point(0, 0),
+        //     anchor: new google.maps.Point(17, 34),
+        //     scaledSize: new google.maps.Size(25, 25)
+        // };
+
         var marker = jQuery.goMap.createMarker({
             id: marker_id,
             title: title,
@@ -635,7 +646,7 @@ function openMarker(map_canvas, id) {
             });
         }
     } catch (e) {
-        console.log(e);
+        console.log(e.message);
     }
 }
 
@@ -643,7 +654,9 @@ function animate_marker(map_canvas, id) {
     jQuery("#" + map_canvas).goMap();
     try {
         if (window.gdMaps == 'google') {
-            jQuery.goMap.mapId.data(id).setAnimation(google.maps.Animation.BOUNCE);
+            if (jQuery.goMap.mapId.data(id) != null) {
+                jQuery.goMap.mapId.data(id).setAnimation(google.maps.Animation.BOUNCE);
+            }
         } else if(window.gdMaps == 'osm') {
             jQuery.goMap.gdlayers.eachLayer(function(marker) {
                 if (id && marker.options.id == id){
@@ -654,7 +667,7 @@ function animate_marker(map_canvas, id) {
             });
         }
     } catch (e) {
-        console.log(e);
+        console.log(e.message);
     }
 }
 
@@ -662,7 +675,7 @@ function stop_marker_animation(map_canvas, id) {
     jQuery("#" + map_canvas).goMap();
     try {
         if (window.gdMaps == 'google') {
-            if (jQuery.goMap.mapId.data(id).getAnimation() != null) {
+            if (jQuery.goMap.mapId.data(id) != null) {
                 jQuery.goMap.mapId.data(id).setAnimation(null);
             }
         } else if(window.gdMaps == 'osm') {
@@ -673,7 +686,7 @@ function stop_marker_animation(map_canvas, id) {
             });
         }
     } catch (e) {
-        console.log(e);
+        console.log(e.message);
     }
 }
 // Listing map sticky script //
@@ -841,7 +854,7 @@ function calcRoute(map_canvas) {
             
             jQuery('.leaflet-routing-geocoders .leaflet-routing-search-info').append('<span title="' + geodir_all_js_msg.geoMyLocation + '" onclick="gdMyGeoDirection();" id="detail_page_map_canvas_mylocation" class="gd-map-mylocation"><i class="fa fa-crosshairs" aria-hidden="true"></i></span>');
         } catch(e) {
-            console.log(e);
+            console.log(e.message);
         }
     } else if (window.gdMaps == 'google') {
         // Direction map
