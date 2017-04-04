@@ -717,6 +717,44 @@ function gd_install_theme_compat()
         'geodir_theme_compat_code' => 'Twenty_Seventeen'
     );
 
+    // buddyBoss
+    $theme_compat['Boss.'] = array(
+        'geodir_wrapper_open_replace' => '<div class="page-right-sidebar">',
+        'geodir_wrapper_content_open_replace' => '<div id="primary" class="site-content">',
+        'geodir_article_open_replace' => '<div  id="[id]" class="[class]" itemscope itemtype="[itemtype]">',
+        'geodir_article_close_replace' => '</div>',
+        'geodir_sidebar_right_open_replace' => '<div id="secondary" class="widget-area" >',
+        'geodir_sidebar_right_close_replace' => '</div>',
+        'geodir_sidebar_left_open_replace' => '<div id="secondary" class="widget-area" >',
+        'geodir_sidebar_left_close_replace' => '</div>',
+        'geodir_theme_compat_css' => stripslashes('.geodir-breadcrumb{padding-top:20px;border-bottom:1px solid #ddd;padding-bottom:0} article.geodir-category-listing{padding: 0 !important;}'),
+        'geodir_theme_compat_code' => 'BuddyBoss'
+
+
+    );
+
+    // Flatsome
+    $theme_compat['Flatsome'] = array(
+        'geodir_wrapper_open_replace' => '<div class="page-wrapper page-right-sidebar"><div class="row">',
+        'geodir_wrapper_close_replace' => '</div></div>',
+        'geodir_wrapper_content_open_replace' => '<div id="content" class="large-9 left col col-divided" role="main"><div class="page-inner">',
+        'geodir_wrapper_content_close_replace' => '</div></div>',
+        'geodir_sidebar_right_open_replace' => '<div class="large-3 col"><div id="secondary" class="widget-area " role="complementary">',
+        'geodir_sidebar_right_close_replace' => '</div></div>',
+        'geodir_sidebar_left_open_replace' => '<div class="large-3 col"><div id="secondary" class="widget-area " role="complementary">',
+        'geodir_sidebar_left_close_replace' => '</div></div>',
+        'geodir_menu_li_class_filter' => 'menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children  has-dropdown',
+        'geodir_sub_menu_ul_class_filter' => 'nav-dropdown nav-dropdown-default gd-nav-dropdown',
+        'geodir_sub_menu_li_class_filter' => 'menu-item menu-item-type-custom menu-item-object-custom',
+        'geodir_menu_a_class_filter' => 'nav-top-link gd-nav-top-link',
+        'geodir_location_switcher_menu_li_class_filter' => 'menu-item menu-item-type-social menu-item-type-social gd-location-switcher has-dropdown',
+        'geodir_location_switcher_menu_sub_ul_class_filter' => 'nav-dropdown nav-dropdown-default',
+        'geodir_theme_compat_css' => stripslashes('dl.geodir_location_tabs_head dt{margin:0;}.header{z-index:90;}'),
+        'geodir_theme_compat_js' => stripslashes('jQuery(function(){jQuery("#masthead .gd-nav-top-link").append(\'<i class="icon-angle-down"></i>\'),jQuery("#menu-item-gd-location-switcher >  a").append(\'<i class="icon-angle-down"></i>\'),jQuery(".mobile-sidebar .gd-nav-dropdown").addClass("children"),jQuery(".mobile-sidebar .gd-nav-dropdown").removeClass("nav-dropdown nav-dropdown-default"),jQuery(".mobile-sidebar #menu-item-gd-location-switcher ul").removeClass("nav-dropdown nav-dropdown-default"),setTimeout(function(){},5e3)});'),
+
+
+    );
+
 
     update_option('gd_theme_compats', $theme_compat);
 

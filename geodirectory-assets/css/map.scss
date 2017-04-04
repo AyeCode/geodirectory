@@ -136,7 +136,7 @@
     display: inline-block;
     vertical-align: top;
     width: 100%;
-    padding: 0 5px 5px 5px;
+    padding: 5px 5px 15px 5px;
     overflow-y: auto;
     margin-top: -6px;
   height: calc(50% - 11px);
@@ -146,7 +146,12 @@
 .geodir-bubble_desc div,
 .geodir-bubble_desc h4{
   box-sizing: border-box;
+    a {
+        color: #fff;
+        font-weight: bold;
+    }
 }
+
 
 .geodir-bubble-meta-side::-webkit-scrollbar
 {

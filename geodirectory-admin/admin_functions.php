@@ -1154,8 +1154,9 @@ function geodir_admin_fields($options)
                                 ?></optgroup><?php
                             } else {
                                 ?>
-                                <option
-                                    value="<?php echo esc_attr($key); ?>" <?php selected(true, (is_array($option_values) && in_array($key, $option_values)));?>><?php echo geodir_utf8_ucfirst($val) ?></option>
+                                <option value="<?php echo esc_attr($key); ?>" <?php selected(true, (is_array($option_values) && in_array($key, $option_values)));?>>
+                                    <?php echo geodir_utf8_ucfirst($val) ?>
+                                </option>
                             <?php
                             }
                         }
@@ -2116,7 +2117,9 @@ function geodir_admin_current_post_type() {
 	global $post, $typenow, $current_screen;
 	
 	$post_type = NULL;
-    if (isset($_REQUEST['post']) && get_post_type($_REQUEST['post']))
+    if (isset($_REQUEST['post_type']))
+		$post_type = sanitize_key($_REQUEST['post_type']);
+    elseif (isset($_REQUEST['post']) && get_post_type($_REQUEST['post']))
 		$post_type = get_post_type($_REQUEST['post']);
     elseif ($post && isset($post->post_type))
 		$post_type = $post->post_type;
@@ -2124,8 +2127,7 @@ function geodir_admin_current_post_type() {
 		$post_type = $typenow;
 	elseif ($current_screen && isset($current_screen->post_type))
 		$post_type = $current_screen->post_type;
-	elseif (isset($_REQUEST['post_type']))
-		$post_type = sanitize_key($_REQUEST['post_type']);
+
 
 
 	return $post_type;
