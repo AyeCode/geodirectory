@@ -1309,8 +1309,9 @@ if (!function_exists('geodir_get_featured_image')) {
 
             $file_info = pathinfo($file);
             $sub_dir = '';
-            if ($file_info['dirname'] != '.' && $file_info['dirname'] != '..')
+            if ($file_info['dirname'] != '.' && $file_info['dirname'] != '..') {
                 $sub_dir = stripslashes_deep($file_info['dirname']);
+            }
 
             $uploads = wp_upload_dir(trim($sub_dir, '/')); // Array of key => value pairs
             $uploads_baseurl = $uploads['baseurl'];

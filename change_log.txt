@@ -22,6 +22,11 @@ Admin use only date field should not lost value if saved by user - FIXED
 Post date should be updated via CSV import - CHANGED
 In [gd_listings] shortcode if category has no posts then it shows all the results - FIXED
 [gd_popular_post_view] shortcode character_count=0 not working - FIXED
+Popup forms not using correct language with WPML - FIXED
+Flatsome theme compatibility settings added - ADDED
+BuddyBoss theme compatibility settings added - ADDED
+
+
 
 v1.6.17
 Changes for batch WPML duplicates feature - CHANGED
