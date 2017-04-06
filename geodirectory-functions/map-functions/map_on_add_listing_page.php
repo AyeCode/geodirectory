@@ -98,7 +98,7 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
     var strictBounds;
     function geocodePosition(latLon, address) {
         console.log(address);
-        if (address && address.country!='TR' && address.country!='SG' ) {// turkey select address does not return enough info so we get info from GPS only.
+        if (address && (address.locality || address.postal_town) && address.country!='TR' && address.country!='SG' ) {// turkey select address does not return enough info so we get info from GPS only.
             doGeoCode = address;
         } else {
             doGeoCode = {
@@ -453,6 +453,20 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
         var ISO2 = country_selected.data('country_code');
         if (!ISO2 && jQuery('#<?php echo $prefix.'country';?>').data('country_code')) {
             ISO2 = jQuery('#<?php echo $prefix.'country';?>').data('country_code');
+        }
+        if(!ISO2){
+            <?php
+            if(!defined('GEODIRLOCATION_TEXTDOMAIN')){
+                global $wpdb;
+                $location_result = geodir_get_default_location();
+                if(!empty($location_result)){
+                    $ISO2 = $wpdb->get_var($wpdb->prepare("SELECT ISO2 FROM " . GEODIR_COUNTRIES_TABLE . " WHERE Country=%s",$location_result->country));
+                    echo "ISO2 = '$ISO2';";
+                }
+            }
+
+
+            ?>
         }
         if (ISO2 == '--') {
             ISO2 = '';
