@@ -1184,10 +1184,10 @@ function create_marker_osm(input, map_canvas_var) {
             label: cs,
             w: input.w,
             h: input.h,
-            clustered: (parseInt(options.enable_marker_cluster) === 1) && typeof input.cs !== 'undefined' ? true : false
+            clustered: (parseInt(eval(map_canvas_var).enable_marker_cluster) === 1) && typeof input.cs !== 'undefined' ? true : false
         });
         
-        if ((parseInt(options.enable_marker_cluster) === 1) && cs) {
+        if ((parseInt(eval(map_canvas_var).enable_marker_cluster) === 1) && cs) {
             var labels = cs.split("_");
             bounds.extend(new L.latLng(labels[1], labels[2]));
             if (labels[1] != labels[3] && labels[2] != labels[4]) {
