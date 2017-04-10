@@ -1582,3 +1582,62 @@
         }
     }
 })(jQuery);
+function gdGeoLocateMe(el, type) {
+    window.gdLocate = '';
+    if (typeof type != 'undefined') {
+        window.gdLocate = type;
+    }
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(gdGeoLocateMeSuccess, gdGeoLocateMeError);
+    } else {
+        gdGeoLocateMeError(-1);
+    }
+}
+function gdGeoLocateMeSuccess(position) {
+    var coords = position.coords || position.coordinate || position;
+    if (coords && coords.latitude && coords.longitude) {
+        var myLat = coords.latitude, myLng = coords.longitude;
+        var geoAddress = myLat + ', ' + myLng;
+        if (window.gdMaps == 'google' || window.gdMaps == 'osm') {
+            if (window.gdLocate && window.gdLocate == 'add-listing') {
+                if (typeof geocodePosition != 'undefined') {
+                    jQuery("#postmap").goMap();
+                    user_address = false;
+                    if (window.gdMaps == 'google') {
+                        jQuery.goMap.map.setCenter(new google.maps.LatLng(myLat, myLng));
+                        baseMarker.setPosition(new google.maps.LatLng(myLat, myLng));
+                        updateMarkerPosition(baseMarker.getPosition());
+                        geocodePosition(baseMarker.getPosition());
+                    } else if (window.gdMaps == 'osm') {
+                        centerMap(new L.latLng(myLat, myLng));
+                        baseMarker.setLatLng(new L.latLng(myLat, myLng));
+                        updateMarkerPositionOSM(baseMarker.getLatLng());
+                        geocodePositionOSM(baseMarker.getLatLng());
+                    }
+                }
+            } else {
+                //
+            }
+        }
+    }
+}
+function gdGeoLocateMeError(err) {
+    var msg;
+    switch (err.code) {
+        case err.UNKNOWN_ERROR:
+            msg = geodir_all_js_msg.geoErrUNKNOWN_ERROR;
+            break;
+        case err.PERMISSION_DENINED:
+            msg = geodir_all_js_msg.geoErrPERMISSION_DENINED;
+            break;
+        case err.POSITION_UNAVAILABLE:
+            msg = geodir_all_js_msg.geoErrPOSITION_UNAVAILABLE;
+            break;
+        case err.BREAK:
+            msg = geodir_all_js_msg.geoErrBREAK;
+            break;
+        default:
+            msg = geodir_all_js_msg.geoErrDEFAULT;
+    }
+    alert(msg);
+}

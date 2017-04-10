@@ -25,8 +25,7 @@ In [gd_listings] shortcode if category has no posts then it shows all the result
 Popup forms not using correct language with WPML - FIXED
 Flatsome theme compatibility settings added - ADDED
 BuddyBoss theme compatibility settings added - ADDED
-
-
+Add locate me button to address input on add listing page - ADDED
 
 v1.6.17
 Changes for batch WPML duplicates feature - CHANGED

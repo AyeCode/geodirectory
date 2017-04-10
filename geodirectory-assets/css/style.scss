@@ -2166,6 +2166,29 @@ body > span[style*='top: -999px']{display: none;}
 .gd-get-directions > .gd-directions-left .gd-input-group {
     width: 100%;
 }
+.gd-locate-me .gd-locate-me-btn {
+    color: #777!important;
+    padding: 6px!important;
+    border-top-right-radius: 4px!important;
+    border-bottom-right-radius: 4px!important;
+    border-left: 0!important;
+    cursor: pointer;
+}
+.gd-locate-me .gd-locate-me-btn:hover {
+    color: #333!important;
+}
+.gd-locate-me .gd-locate-me-btn .fa {
+    font-size: 150%!important;
+}
+@media only screen and (max-width: 480px) {
+    .gd-locate-me {
+        margin-top: 10px;
+    }
+    
+    .gd-locate-me .geodir_textfield {
+        margin-top: 0px!important;
+    }
+}
 @media (max-width: 579px) {
   div.gd-get-directions,
   div.gd-get-directions > .gd-input-group-addon {

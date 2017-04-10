@@ -1063,24 +1063,26 @@ function geodir_cfi_address($html,$cf){
          */
         $lng = apply_filters('geodir_default_longitude', $lng, $is_admin);
 
+        $locate_me = !empty($extra_fields['show_map']) && geodir_map_name() != 'none' ? true : false;
+        $locate_me_class = $locate_me ? ' gd-form-control' : '';
         ?>
-
         <div id="geodir_<?php echo $prefix . 'address';?>_row"
              class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
-            <label>
-                <?php _e($address_title, 'geodirectory'); ?>
-                <?php if ($is_required) echo '<span>*</span>';?>
-            </label>
-            <input type="text" field_type="<?php echo $type;?>" name="<?php echo $prefix . 'address';?>"
-                   id="<?php echo $prefix . 'address';?>" class="geodir_textfield"
-                   value="<?php echo esc_attr(stripslashes($address)); ?>"/>
+            <label><?php _e($address_title, 'geodirectory'); ?> <?php if ($is_required) echo '<span>*</span>';?></label>
+            <?php if ($locate_me) { ?>
+            <div class="gd-input-group gd-locate-me">
+            <?php } ?>
+                <input type="text" field_type="<?php echo $type;?>" name="<?php echo $prefix . 'address';?>" id="<?php echo $prefix . 'address';?>" class="geodir_textfield<?php echo $locate_me_class;?>" value="<?php echo esc_attr(stripslashes($address)); ?>" />
+                <?php if ($locate_me) { ?>
+                <span onclick="gdGeoLocateMe(this, 'add-listing');" class="gd-locate-me-btn gd-input-group-addon" title="<?php esc_attr_e('My location', 'geodirlocation'); ?>"><i class="fa fa-crosshairs fa-fw" aria-hidden="true"></i></span>
+            </div>
+            <?php } ?>
             <span class="geodir_message_note"><?php _e($admin_desc, 'geodirectory');?></span>
             <?php if ($is_required) { ?>
                 <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
             <?php } ?>
         </div>
-
-
+        
         <?php
         /**
          * Called after the address input on the add listings.
