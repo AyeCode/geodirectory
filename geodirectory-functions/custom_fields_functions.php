@@ -1425,7 +1425,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
 
                 if ($type['type'] != 'fieldset'):
-                    $variables_array['post_id'] = $post->ID;
+                    $variables_array['post_id'] = !empty($post->ID) ? $post->ID : (!empty($post->pid) ? $post->pid : NULL);
                     $variables_array['label'] = __($type['site_title'], 'geodirectory');
                     $variables_array['value'] = '';
                     if (isset($post->{$type['htmlvar_name']}))

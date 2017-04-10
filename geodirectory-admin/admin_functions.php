@@ -4274,6 +4274,8 @@ function geodir_ajax_import_export() {
                             $save_post = array();
                             $save_post['post_title'] = $post_title;
                             if (!empty($post_date)) {
+                                $post_date = geodir_date( $post_date, 'Y-m-d H:i:s' ); // convert to mysql date format.
+                                
                                 $save_post['post_date'] = $post_date;
                                 $save_post['post_date_gmt'] = get_gmt_from_date( $post_date );
                             }
@@ -5932,8 +5934,8 @@ function geodir_imex_process_event_data($gd_post) {
 	$recurring_pkg = geodir_event_recurring_pkg( (object)$gd_post );
 
 	$is_recurring = isset( $gd_post['is_recurring_event'] ) && (int)$gd_post['is_recurring_event'] == 0 ? false : true;
-	$event_date = isset($gd_post['event_date']) && $gd_post['event_date'] != '' ? geodir_imex_get_date_ymd($gd_post['event_date']) : '';
-	$event_enddate = isset($gd_post['event_enddate']) && $gd_post['event_enddate'] != '' ? geodir_imex_get_date_ymd($gd_post['event_enddate']) : $event_date;
+	$event_date = isset($gd_post['event_date']) && $gd_post['event_date'] != '' ? geodir_date($gd_post['event_date'], 'Y-m-d') : '';
+	$event_enddate = isset($gd_post['event_enddate']) && $gd_post['event_enddate'] != '' ? geodir_date($gd_post['event_enddate'], 'Y-m-d') : $event_date;
 	$all_day = isset($gd_post['is_whole_day_event']) && !empty($gd_post['is_whole_day_event']) ? true : false;
 	$starttime = isset($gd_post['starttime']) && !$all_day ? $gd_post['starttime'] : '';
 	$endtime = isset($gd_post['endtime']) && !$all_day ? $gd_post['endtime'] : '';
@@ -5970,7 +5972,7 @@ function geodir_imex_process_event_data($gd_post) {
 					$recurring_date = trim($recurring_date);
 					
 					if ($recurring_date != '') {
-						$event_recurring_dates[] = geodir_imex_get_date_ymd($recurring_date);
+						$event_recurring_dates[] = geodir_date($recurring_date, 'Y-m-d');
 					}
 				}
 				
@@ -5981,7 +5983,7 @@ function geodir_imex_process_event_data($gd_post) {
 			$duration_x = !empty( $gd_post['event_duration_days'] ) ? (int)$gd_post['event_duration_days'] : 1;
 			$repeat_x = !empty( $gd_post['recurring_interval'] ) ? (int)$gd_post['recurring_interval'] : 1;
 			$max_repeat = !empty( $gd_post['max_recurring_count'] ) ? (int)$gd_post['max_recurring_count'] : 1;
-			$repeat_end = !empty( $gd_post['recurring_end_date'] ) ? geodir_imex_get_date_ymd($gd_post['recurring_end_date']) : '';
+			$repeat_end = !empty( $gd_post['recurring_end_date'] ) ? geodir_date($gd_post['recurring_end_date'], 'Y-m-d') : '';
 			
 			$repeat_end_type = $repeat_end != '' ? 1 : 0;
 			$max_repeat = $repeat_end != '' ? '' : $max_repeat;
