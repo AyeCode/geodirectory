@@ -840,7 +840,7 @@ function geodir_sc_popular_post_view($atts)
     $params['layout'] = gdsc_validate_layout_choice($params['layout']);
 
     // Validate our sorting choice
-    $params['list_sort'] = gdsc_validate_sort_choice($params['list_sort']);
+    $params['list_sort'] = gdsc_validate_sort_choice($params['list_sort'], $params['post_type']);
 
     // Validate character_count
     if ($params['character_count'] !== '') {
@@ -1274,7 +1274,7 @@ function geodir_sc_gd_listings($atts, $content = '') {
     $params['layout']           = gdsc_validate_layout_choice($params['layout']);
 
     // Validate our sorting choice
-    $params['list_sort']        = gdsc_validate_sort_choice($params['list_sort']);
+    $params['list_sort']        = gdsc_validate_sort_choice($params['list_sort'], $params['post_type']);
 
     // Validate Listing width, used in the template widget-listing-listview.php
     // The context is in width=$listing_width% - So we need a positive number between 0 & 100
