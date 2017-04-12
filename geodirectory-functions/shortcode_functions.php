@@ -462,12 +462,18 @@ function gdsc_validate_layout_choice($layout_choice)
  * Validate & get the correct sorting option.
  *
  * @since 1.0.0
+ * @since 1.6.18 Allow order by custom field in widget listings results sorting.
+ *
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
  *
  * @param string $sort_choice Listing sort option.
+ * @param string $post_type Post type to validate custom field sort.
  * @return string Listing sort.
  */
-function gdsc_validate_sort_choice($sort_choice)
+function gdsc_validate_sort_choice($sort_choice, $post_type = '')
 {
+    global $plugin_prefix;
+
     $sorts = array(
         'az',
         'latest',
@@ -477,7 +483,19 @@ function gdsc_validate_sort_choice($sort_choice)
         'random',
     );
 
-    if (!(in_array($sort_choice, $sorts))) {
+    if (in_array($sort_choice, $sorts)) {
+        return $sort_choice;
+    }
+
+    if (!empty($post_type)) {
+        $table = $plugin_prefix . $post_type . '_detail';
+        
+        if (!geodir_prepare_custom_sorting($sort_choice, $table)) {
+            $sort_choice = '';
+        }
+    }
+
+    if (empty($post_type) || empty($sort_choice)) {
         $sort_choice = 'latest';
     }
 

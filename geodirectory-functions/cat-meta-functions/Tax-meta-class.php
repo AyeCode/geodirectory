@@ -940,28 +940,27 @@ if (!class_exists('Tax_Meta_Class')) :
 
             $uploads = wp_upload_dir();
             if (is_array($meta) && isset($meta['src']) && $meta['src'] != '') {
-
                 $file_info = pathinfo($meta['src']);
-
-                //print_r($meta);
-                //print_r($uploads);
-                //print_r($file_info);
 
                 if ($file_info['dirname'] != '.' && $file_info['dirname'] != '..')
                     $sub_dir = $file_info['dirname'];
 
-                $uploads = wp_upload_dir(trim($sub_dir, '/')); // Array of key => value pairs	
+                $uploads = wp_upload_dir(trim($sub_dir, '/')); // Array of key => value pairs
                 $uploads_baseurl = $uploads['baseurl'];
                 $uploads_path = $uploads['path'];
 
                 $file_name = $file_info['basename'];
 
-                $sub_dir = str_replace($uploads_baseurl, '', $sub_dir);
+                if (strpos($sub_dir, 'https://') !== false) {
+                    $uploads['baseurl'] = str_replace('http://', 'https://', $uploads['baseurl']);
+                } else {
+                    $uploads['baseurl'] = str_replace('https://', 'http://', $uploads['baseurl']);
+                }
+                $sub_dir = str_replace($uploads['baseurl'], '', $sub_dir);
 
                 $uploads_url = $uploads_baseurl . $sub_dir;
 
                 $meta['src'] = $uploads_url . '/' . $file_name;
-
 
                 $html .= "<span class='mupload_img_holder'><img src='" . $meta['src'] . "' style='max-height: 150px;max-width: 150px;' /></span>";
                 $html .= "<input type='hidden' name='" . $field['id'] . "[id]' id='" . $field['id'] . "[id]' value='" . $meta['id'] . "' />";

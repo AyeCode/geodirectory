@@ -26,6 +26,7 @@ Popup forms not using correct language with WPML - FIXED
 Flatsome theme compatibility settings added - ADDED
 BuddyBoss theme compatibility settings added - ADDED
 Add locate me button to address input on add listing page - ADDED
+Categories icon urls are broken if site moved from http to https - FIXED
 
 v1.6.17
 Changes for batch WPML duplicates feature - CHANGED

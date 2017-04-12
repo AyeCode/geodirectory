@@ -102,7 +102,7 @@ function set_listing_request($query )
             $mylat = (float)esc_attr($_REQUEST['sgeo_lat']);
         } else {
             $mylat = (float)geodir_get_current_city_lat();
-        } //  Latatude
+        } //  Latitude
 
         if (isset($_REQUEST['sgeo_lon'])) {
             $mylon = (float)esc_attr($_REQUEST['sgeo_lon']);
@@ -992,3 +992,40 @@ function geodir_related_posts_fields_filter($query) {
     }
 }
 add_action('pre_get_posts', 'geodir_related_posts_fields_filter', 1);
+
+/**
+ * Make custom field order by clause for custom sorting.
+ *
+ * @since 1.6.18
+ * @package GeoDirectory
+ *
+ * @param string $sorting Listing sort option.
+ * @param string $table Listing table name.
+ * @return string|null If field exists in table returns order by clause else returns empty.
+ */
+function geodir_prepare_custom_sorting( $sorting, $table ) {
+    $orderby = '';
+    
+    if ( empty( $sorting ) || empty( $table ) ) {
+        return $orderby;
+    }
+    
+    if ( strpos( strtoupper( $sorting ), '_ASC' ) !== false || strpos( strtoupper( $sorting ), '_DESC') !== false ) {
+        $sorting_array = explode( '_', $sorting );
+        
+        if ( ( $count = count( $sorting_array ) ) > 1 ) {
+            $order = !empty( $sorting_array[$count - 1] ) ? strtoupper( $sorting_array[$count - 1] ) : '';
+            array_pop( $sorting_array );
+            
+            if ( !empty( $sorting_array ) && ( $order == 'ASC' || $order == 'DESC' ) ) {
+                $sort_by = implode( '_', $sorting_array );
+                
+                if ( geodir_column_exist( $table, $sort_by ) ) {
+                    $orderby = $table . "." . $sort_by . " " . $order;
+                }
+            }
+        }
+    }
+
+    return $orderby;
+}

@@ -2207,6 +2207,7 @@ function geodir_wpml_check_element_id() {
  * Returns orderby SQL using the given query args.
  *
  * @since   1.0.0
+ * @since   1.6.18 Allow order by custom field in widget listings results sorting.
  * @package GeoDirectory
  * @global object $wpdb          WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
@@ -2249,7 +2250,11 @@ function geodir_widget_listings_get_order( $query_args ) {
 			$orderby = "RAND(), ";
 			break;
 		default:
-			$orderby = $wpdb->posts . ".post_title ASC, ";
+			if ( $custom_orderby = geodir_prepare_custom_sorting( $sort_by, $table ) ) {
+				$orderby = $custom_orderby . ", ";
+			} else {
+				$orderby = $wpdb->posts . ".post_title ASC, ";
+			}
 			break;
 	}
 
@@ -2263,6 +2268,7 @@ function geodir_widget_listings_get_order( $query_args ) {
  * @package GeoDirectory
  * @since   1.4.2 New parameter $count_only added
  * @since   1.6.11 FIXED: GD listings query returns wrong total when category has sub categories.
+ * @since   1.6.18 Allow order by custom field in widget listings results sorting.
  * @global object $wpdb          WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @global string $table_prefix  WordPress Database Table prefix.
@@ -2366,7 +2372,29 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 		 * @param string $post_type Post type.
 		 */
 		$orderby = apply_filters( 'geodir_filter_widget_listings_orderby', $orderby, $table, $post_type );
-		$orderby .= $wpdb->posts . ".post_title ASC";
+		
+		$second_orderby = array();
+		if ( strpos( $orderby, strtolower( $table . ".is_featured" )  ) === false ) {
+			$second_orderby[] = $table . ".is_featured ASC";
+		}
+		
+		if ( strpos( $orderby, strtolower( $wpdb->posts . ".post_date" )  ) === false ) {
+			$second_orderby[] = $wpdb->posts . ".post_date DESC";
+		}
+		
+		if ( strpos( $orderby, strtolower( $wpdb->posts . ".post_title" )  ) === false ) {
+			$second_orderby[] = $wpdb->posts . ".post_title ASC";
+		}
+		
+		if ( !empty( $second_orderby ) ) {
+			$orderby .= implode( ', ', $second_orderby );
+		}
+		
+		if ( !empty( $orderby ) ) {
+			$orderby = trim( $orderby );
+			$orderby = rtrim( $orderby, "," );
+		}
+		
 		$orderby = $orderby != '' ? " ORDER BY " . $orderby : '';
 
 		$limit = ! empty( $query_args['posts_per_page'] ) ? $query_args['posts_per_page'] : 5;
