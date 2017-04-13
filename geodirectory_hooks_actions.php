@@ -2836,6 +2836,7 @@ function geodir_wpml_set_filter() {
         }
         
         add_action('geodir_after_save_listing', 'geodir_wpml_duplicate_listing', 100, 2);
+        add_action( 'geodir_edit_post_link_html', 'geodir_wpml_frontend_duplicate_listing', 0, 1 );
     }
 }
 add_filter('plugins_loaded', 'geodir_wpml_set_filter');
