@@ -3316,6 +3316,7 @@ function geodir_filesystem_notice()
  * @since 1.5.4 Modified to add default category via csv import.
  * @since 1.5.7 Modified to fix 504 Gateway Time-out for very large data.
  * @since 1.6.11 alive_days column added in exported csv.
+ * @since 1.6.18 Allow import/export linked business cpt ids.
  * @package GeoDirectory
  *
  * @global object $wpdb WordPress Database object.
@@ -4094,6 +4095,7 @@ function geodir_ajax_import_export() {
                             $geodir_twitter = '';
                             $geodir_facebook = '';
                             $geodir_twitter = '';
+                            $geodir_link_business = null;
                             $post_images = array();
                             
                             $expire_date = 'Never';
@@ -4169,6 +4171,8 @@ function geodir_ajax_import_export() {
                                 } else if ( $column == 'expire_date' && $row[$c] != '' && geodir_strtolower($row[$c]) != 'never' ) {
                                     $row[$c] = str_replace('/', '-', $row[$c]);
                                     $expire_date = date_i18n( 'Y-m-d', strtotime( $row[$c] ) );
+                                } else if ( strpos( $column, 'linked_' ) === 0 ) {
+                                    $geodir_link_business = (int)$row[$c];
                                 }
                                 // WPML
                                 if ($is_wpml) {
@@ -4412,6 +4416,10 @@ function geodir_ajax_import_export() {
                                     }
                                 }
                                 $gd_post['post_location_id'] = $post_location_id;
+                                
+                                if ($geodir_link_business !== null) {
+                                    $gd_post['geodir_link_business'] = $geodir_link_business > 0 ? $geodir_link_business : '';
+                                }
                                 
                                 // post package info
                                 $package_id = isset( $gd_post['package_id'] ) && !empty( $gd_post['package_id'] ) ? (int)$gd_post['package_id'] : 0;
@@ -5074,10 +5082,14 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
 	
 	if ( !empty( $posts ) ) {
 		$is_payment_plugin = is_plugin_active( 'geodir_payment_manager/geodir_payment_manager.php' );
-        $location_manager = function_exists('geodir_location_plugin_activated') ? true : false; // Check location manager installed & active.
-        $location_allowed = function_exists( 'geodir_cpt_no_location' ) && geodir_cpt_no_location( $post_type ) ? false : true;
-        $neighbourhood_active = $location_manager && $location_allowed && get_option('location_neighbourhoods') ? true : false;
-        $is_claim_active = is_plugin_active( 'geodir_claim_listing/geodir_claim_listing.php' ) && get_option('geodir_claim_enable') === 'yes' ? true : false;
+		$location_manager = function_exists('geodir_location_plugin_activated') ? true : false; // Check location manager installed & active.
+		$location_allowed = function_exists( 'geodir_cpt_no_location' ) && geodir_cpt_no_location( $post_type ) ? false : true;
+		$neighbourhood_active = $location_manager && $location_allowed && get_option('location_neighbourhoods') ? true : false;
+		$is_claim_active = is_plugin_active( 'geodir_claim_listing/geodir_claim_listing.php' ) && get_option('geodir_claim_enable') === 'yes' ? true : false;
+		$is_events_active = function_exists('geodir_event_plugin_activated') ? true : false;
+		$is_custom_posts_active = function_exists('geodir_custom_post_type_plugin_activated') ? true : false;
+		
+		$post_ypes = geodir_get_posttypes('array');
 		
 		$csv_row = array();
 		$csv_row[] = 'post_id';
@@ -5139,6 +5151,9 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
 		$csv_row[] = 'geodir_facebook';
 		$csv_row[] = 'geodir_video';
 		$csv_row[] = 'geodir_special_offers';
+		if ($is_events_active || $is_custom_posts_active) {
+			$csv_row[] = !empty($post_ypes[$post_type]['linkable_to']) ? 'linked_' . $post_ypes[$post_type]['linkable_to'] . '_ID' : 'linked_cpt_ID';
+		}
 		// WPML
 		$is_wpml = geodir_is_wpml();
 		if ($is_wpml) {
@@ -5346,6 +5361,9 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
 			$csv_row[] = stripslashes($post_info['geodir_facebook']); // geodir_facebook
 			$csv_row[] = stripslashes($post_info['geodir_video']); // geodir_video
 			$csv_row[] = stripslashes($post_info['geodir_special_offers']); // geodir_special_offers
+			if ($is_events_active || $is_custom_posts_active) {
+				$csv_row[] = !empty($post_info['geodir_link_business']) ? (int)$post_info['geodir_link_business'] : ''; // linked business
+			}
 			// WPML
 			if ($is_wpml) {
 				$csv_row[] = geodir_get_language_for_element( $post_id, 'post_' . $post_type );
@@ -5465,7 +5483,7 @@ function geodir_get_export_posts( $post_type, $per_page = 0, $page_no = 0 ) {
      * @param string $post_type Post type.
      */
     $query = apply_filters( 'geodir_imex_export_posts_query', $query, $post_type );
-    $results = (array)$wpdb->get_results( $wpdb->prepare( $query, $post_type ), ARRAY_A );
+    $results = (array)$wpdb->get_results( $query, ARRAY_A );
 
     /**
      * Modify returned post results for the current post type.
