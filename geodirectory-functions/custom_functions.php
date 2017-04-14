@@ -1301,7 +1301,7 @@ function geodir_add_meta_keywords() {
  *
  * @since   1.0.0
  * @package GeoDirectory
- * @return array eturns list of options available as an array.
+ * @return array returns list of options available as an array.
  */
 function geodir_detail_page_tabs_key_value_array() {
 	$geodir_detail_page_tabs_key_value_array = array();
@@ -1584,7 +1584,7 @@ function geodir_show_detail_page_tabs() {
 		}
 	}
 
-	if ( $active_tab === '' && $default_tab !== '' ) { // Make first tab acs a active tab if not any tab is active.
+	if ( $active_tab === '' && $default_tab !== '' ) { // Make first tab as a active tab if not any tab is active.
 		if ( isset( $arr_detail_page_tabs[ $active_tab ] ) && isset( $arr_detail_page_tabs[ $active_tab ]['is_active_tab'] ) ) {
 			$arr_detail_page_tabs[ $active_tab ]['is_active_tab'] = false;
 		}
@@ -1692,7 +1692,7 @@ function geodir_show_detail_page_tabs() {
 								echo $thumb_image;
 								break;
 							case 'post_video':
-								// some browsers hide $_POST data if used for embeds so we repalce with a placeholder
+								// some browsers hide $_POST data if used for embeds so we replace with a placeholder
 								if ( $preview ) {
 									if ( $video ) {
 										echo "<span class='gd-video-embed-preview' ><p class='gd-video-preview-text'><i class=\"fa fa-video-camera\" aria-hidden=\"true\"></i><br />" . __( 'Video Preview Placeholder', 'geodirectory' ) . "</p></span>";
@@ -2528,7 +2528,7 @@ function geodir_get_language_for_element($element_id, $element_type) {
  * @param array $postarr Array of post data.
  * @param int $tr_post_id Translation Post ID.
  * @param bool $after_save If true it will force duplicate. 
- *                         Added to fix duplicate transaltion for front end.
+ *                         Added to fix duplicate translation for front end.
  */
 function geodir_icl_make_duplicate($master_post_id, $lang, $postarr, $tr_post_id, $after_save = false) {
     global $sitepress;
@@ -2983,12 +2983,18 @@ function geodir_wpml_allowed_to_duplicate( $post_id ) {
         return $allowed;
     }
     
-    if ( !is_post_type_translated( get_post_type( $post_id ) ) || get_post_meta( $post_id, '_icl_lang_duplicate_of', true ) ) {
+    $post_type = get_post_type( $post_id );
+    if ( !is_post_type_translated( $post_type ) || get_post_meta( $post_id, '_icl_lang_duplicate_of', true ) ) {
         return $allowed;
     }
     
     if ( geodir_listing_belong_to_current_user( $post_id ) ) {
         $allowed = true;
+    }
+    
+    $disable_cpts = get_option( 'geodir_wpml_disable_duplicate' );
+    if ( $allowed && !empty( $disable_cpts ) && in_array( $post_type, $disable_cpts ) ) {
+        $allowed = false;
     }
     
     /**
@@ -3078,4 +3084,37 @@ function geodir_wpml_frontend_duplicate_listing( $content_html ) {
     }
     
     return $content_html;
+}
+
+/**
+ * Add setting for WPML front-end duplicate translation in design page setting section.
+ *
+ * @since 1.6.18
+ *
+ * @param array $settings GD design settings array.
+ * @return array Filtered GD design settings array..
+ */
+function geodir_wpml_duplicate_settings( $settings = array() ) {
+    $new_settings = array();
+    
+    foreach ( $settings as $key => $setting ) {
+        
+        if ( isset( $setting['type'] ) && $setting['type'] == 'sectionend' && $setting['id'] == 'detail_page_settings' ) {
+            $new_settings[] = array(
+                'name' => __('Disable WPML duplicate translation', 'geodirectory'),
+                'desc' => __('Select post types to disable front end WPML duplicate translation. For selected post types the WPML duplicate option will be disabled from listing detail page sidebar.', 'geodirectory'),
+                'tip' => '',
+                'id' => 'geodir_wpml_disable_duplicate',
+                'css' => 'min-width:300px;',
+                'std' => '',
+                'type' => 'multiselect',
+                'placeholder_text' => __('Select post types', 'geodirectory'),
+                'class' => 'chosen_select',
+                'options' => array_unique(geodir_post_type_setting_fun())
+            );
+        }
+        $new_settings[] = $setting;
+    }
+    
+    return $new_settings;
 }
