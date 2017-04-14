@@ -580,11 +580,31 @@ div.update-nag{width: 95%;}
     text-shadow: none;
     box-shadow: none;
 }
-
-
 .gd-admin-input{
     padding: 6px !important;
     margin: 1px 0 1px 0 !important;
+}
+.gd-locate-me {
+    width: 70%;
+}
+.gd-locate-me .geodir_textfield {
+    margin: 0px!important;
+    border-radius: 0;
+}
+.gd-locate-me .gd-locate-me-btn {
+    color: #777!important;
+    padding: 6px!important;
+    border-top-right-radius: 4px!important;
+    border-bottom-right-radius: 4px!important;
+    border-left: 0!important;
+    cursor: pointer;
+    font-size: 13px;
+}
+.gd-locate-me .gd-locate-me-btn:hover {
+    color: #333!important;
+}
+.gd-locate-me .gd-locate-me-btn .fa {
+    font-size: 150%!important;
 }
 /***********************---------------MEDIA CSS-------------*****************************/
 

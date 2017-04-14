@@ -298,6 +298,53 @@ jQuery(function($) {
     }
     } catch (e) {
     }
+    
+    $('#gd_make_duplicates').click(function() {
+        var $btn = $(this);
+        var $el = $(this).closest('.gd-duplicate-table');
+        var nonce = $(this).data('nonce');
+        var post_id = $(this).data('post-id');
+        var dups = [];
+        $.each($('input[name="gd_icl_dup[]"]:checked', $el), function() {
+            dups.push($(this).val());
+        });
+        if (!dups.length || !post_id) {
+            $('input[name="gd_icl_dup[]"]', $el).focus();
+            return false;
+        }
+        var data = {
+            action: 'geodir_ajax_action',
+            geodir_ajax: 'duplicate',
+            post_id: post_id,
+            dups: dups.join(','),
+            _nonce: nonce
+        };
+        jQuery.ajax({
+            url: geodir_all_js_msg.geodir_admin_ajax_url,
+            data: data,
+            type: 'POST',
+            cache: false,
+            dataType: 'json',
+            beforeSend: function(xhr) {
+                $('.fa-refresh', $el).show();
+                $btn.attr('disabled', 'disabled');
+            },
+            success: function(res, status, xhr) {
+                if (typeof res == 'object' && res) {
+                    if (res.success) {
+                        window.location.href = document.location.href;
+                        return;
+                    }
+                    if (res.error) {
+                        alert(res.error);
+                    }
+                }
+            }
+        }).complete(function(xhr, status) {
+            $('.fa-refresh', $el).hide();
+            $btn.removeAttr('disabled');
+        })
+    });
 });
 
 jQuery(function(){

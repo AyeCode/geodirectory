@@ -271,7 +271,7 @@ function geodir_add_nav_menu_items()
                                          */
                                         $li_class = apply_filters('geodir_menu_li_class', 'menu-item ' . $menu_class);
                                         $cpt_name = __($args->labels->singular_name, 'geodirectory');
-                                        $items .= '<li class="' . $li_class . '">
+                                        $items .= '<li class="' . $sub_li_class . '">
 														<a href="' . geodir_get_addlisting_link($post_type) . '" class="' . $sub_a_class . '">
 															' . sprintf( __('Add %s', 'geodirectory'), $cpt_name ) . '
 														</a>
@@ -394,14 +394,15 @@ function geodir_get_category_all_array()
  * Get Current Post Type.
  *
  * @since 1.0.0
+ * @since 1.6.18 Get the post type on map marker info request with preview mode.
  * @package GeoDirectory
  * @global object $wp_query WordPress Query object.
+ * @global object $post WordPress Post object.
  * @global string $geodir_post_type The post type.
  * @return string The post type.
  */
-function geodir_get_current_posttype()
-{
-    global $wp_query, $geodir_post_type;
+function geodir_get_current_posttype() {
+    global $wp_query, $post, $geodir_post_type;
 
     $geodir_post_type = get_query_var('post_type');
 
@@ -418,6 +419,14 @@ function geodir_get_current_posttype()
     if (is_tax())
         $geodir_post_type = geodir_get_taxonomy_posttype();
 
+    // Retrive post type for map marker html ajax request on preview page.
+    if (empty($geodir_post_type) && defined('DOING_AJAX') && !empty($post)) {
+        if (!empty($post->post_type)) {
+            $geodir_post_type = $post->post_type;
+        } else if (!empty($post->listing_type)) {
+            $geodir_post_type = $post->listing_type;
+        }
+    }
 
     $all_postypes = geodir_get_posttypes();
     $all_postypes = stripslashes_deep($all_postypes);

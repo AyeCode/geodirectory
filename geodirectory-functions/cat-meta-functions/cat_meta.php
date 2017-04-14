@@ -210,12 +210,13 @@ function manage_category_custom_fields($deprecated, $column_name, $term_id)
         $term_icon_url = get_tax_meta($term_id, 'ct_cat_icon');
 
         if ($term_icon_url != '') {
-
             $file_info = pathinfo($term_icon_url['src']);
 
-            if (isset($file_info['dirname'] ) && $file_info['dirname'] != '.' && $file_info['dirname'] != '..')
+            if (isset($file_info['dirname'] ) && $file_info['dirname'] != '.' && $file_info['dirname'] != '..') {
                 $sub_dir = $file_info['dirname'];
-            else{$sub_dir = '';}
+            } else {
+                $sub_dir = '';
+            }
 
             $uploads = wp_upload_dir(trim($sub_dir, '/')); // Array of key => value pairs
             $uploads_baseurl = $uploads['baseurl'];
@@ -223,13 +224,17 @@ function manage_category_custom_fields($deprecated, $column_name, $term_id)
 
             $file_name = $file_info['basename'];
 
-            $sub_dir = str_replace($uploads_baseurl, '', $sub_dir);
+            if (strpos($sub_dir, 'https://') !== false) {
+                $uploads['baseurl'] = str_replace('http://', 'https://', $uploads['baseurl']);
+            } else {
+                $uploads['baseurl'] = str_replace('https://', 'http://', $uploads['baseurl']);
+            }
+            $sub_dir = str_replace($uploads['baseurl'], '', $sub_dir);
 
             $uploads_url = $uploads_baseurl . $sub_dir;
 
             $term_icon_url['src'] = $uploads_url . '/' . $file_name;
             echo '<img src="' . $term_icon_url['src'] . '" />';
-
         }
     }
 

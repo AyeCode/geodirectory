@@ -1,8 +1,8 @@
-is_zooming = false;
-zoom_listener = '';
-gd_current_query = '';
-gd_map_first_load = true;
-gd_fullscreen_parent = '';
+var is_zooming = false;
+var zoom_listener = '';
+var gd_current_query = '';
+var gd_map_first_load = true;
+var gd_fullscreen_parent = '';
 
 function initMap(map_options) {
     if (window.gdMaps == 'osm') {
@@ -12,7 +12,7 @@ function initMap(map_options) {
     // alert(map_options)
     map_options = eval(map_options);
     map_options.zoom = parseInt(map_options.zoom);
-    options = map_options;
+    var options = map_options;
     var pscaleFactor;
     var pstartmin;
     var ajax_url = options.ajax_url;
@@ -310,9 +310,10 @@ function build_map_ajax_search_param(map_canvas_var, reload_cat_list, catObj, hi
         hood_string = location_string + '&gd_neighbourhood=' + $gd_neighbourhood;
     }
     //loop through available categories
-    mapcat = document.getElementsByName(map_canvas_var + "_cat[]");
+    var mapcat = document.getElementsByName(map_canvas_var + "_cat[]");
     var checked = "";
     var none_checked = "";
+    var i = 0;
     for (i = 0; i < mapcat.length; i++) {
         if (mapcat[i].checked) {
             checked += mapcat[i].value + ",";
@@ -348,10 +349,11 @@ function geodir_show_sub_cat_collapse_button() {
             }
             jQuery(this).find('i').show();
             /**/
-        } else
+        } else {
             jQuery(this).find('i').hide();
-        /**/
-    })
+            /**/
+        }
+    });
     geodir_activate_collapse_pan();
 }
 
@@ -411,6 +413,7 @@ function map_ajax_search(map_canvas_var, search_query_string, marker_jason, hide
     return;
 } // End  map_ajax_search
 // read the data, create markers
+var bounds ='';
 function parse_marker_jason(data, map_canvas_var) {
     if (window.gdMaps == 'osm') {
         parse_marker_jason_osm(data, map_canvas_var);
@@ -435,7 +438,7 @@ function parse_marker_jason(data, map_canvas_var) {
     jQuery.goMap.clearMarkers(); //deleteMarkers();
 
     //json evaluate returned data
-    jsonData = jQuery.parseJSON(data);
+    var jsonData = jQuery.parseJSON(data);
 
     // if no markers found, display home_map_nofound div with no search criteria met message
     if (jsonData[0].totalcount <= 0) {
@@ -537,7 +540,7 @@ function create_marker(input, map_canvas_var) {
         if (!input.i) {
             input.i = geodir_all_js_msg.geodir_default_marker_icon;
         }
-        cs = input.cs;
+        var cs = input.cs;
 
         // input.i = {
         //     url: input.i ,
@@ -971,7 +974,7 @@ function GeodirIsiPhone() {
 function initMapOSM(map_options) {
     map_options = eval(map_options);
     map_options.zoom = parseInt(map_options.zoom);
-    options = map_options;
+    var options = map_options;
     var pscaleFactor;
     var pstartmin;
     var ajax_url = options.ajax_url;
@@ -1181,10 +1184,10 @@ function create_marker_osm(input, map_canvas_var) {
             label: cs,
             w: input.w,
             h: input.h,
-            clustered: (parseInt(options.enable_marker_cluster) === 1) && typeof input.cs !== 'undefined' ? true : false
+            clustered: (parseInt(eval(map_canvas_var).enable_marker_cluster) === 1) && typeof input.cs !== 'undefined' ? true : false
         });
         
-        if ((parseInt(options.enable_marker_cluster) === 1) && cs) {
+        if ((parseInt(eval(map_canvas_var).enable_marker_cluster) === 1) && cs) {
             var labels = cs.split("_");
             bounds.extend(new L.latLng(labels[1], labels[2]));
             if (labels[1] != labels[3] && labels[2] != labels[4]) {

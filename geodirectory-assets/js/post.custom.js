@@ -11,6 +11,12 @@ function geodir_get_popup_forms(e, i, r, o) {
         a = i.closest("li");
     i.closest(".geodir-company_info").length > 0 && (a = i.closest(".geodir-company_info"));
     var d = a.find('input[name="geodir_popup_post_id"]').val();
+
+    //WPML
+    if (typeof icl_vars !== 'undefined' && icl_vars.current_language) {
+        s = s+"&lang="+icl_vars.current_language;
+    }
+
     jQuery.gdmodal('<div id="basic-modal-content" class="clearfix simplemodal-data" style="display: block;"><div class="geodir-modal-loading"><i class="fa fa-refresh fa-spin "></i></div></div>'), jQuery.post(s, {
         popuptype: r,
         post_id: d

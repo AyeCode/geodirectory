@@ -1154,8 +1154,9 @@ function geodir_admin_fields($options)
                                 ?></optgroup><?php
                             } else {
                                 ?>
-                                <option
-                                    value="<?php echo esc_attr($key); ?>" <?php selected(true, (is_array($option_values) && in_array($key, $option_values)));?>><?php echo geodir_utf8_ucfirst($val) ?></option>
+                                <option value="<?php echo esc_attr($key); ?>" <?php selected(true, (is_array($option_values) && in_array($key, $option_values)));?>>
+                                    <?php echo geodir_utf8_ucfirst($val) ?>
+                                </option>
                             <?php
                             }
                         }
@@ -2116,7 +2117,9 @@ function geodir_admin_current_post_type() {
 	global $post, $typenow, $current_screen;
 	
 	$post_type = NULL;
-    if (isset($_REQUEST['post']) && get_post_type($_REQUEST['post']))
+    if (isset($_REQUEST['post_type']))
+		$post_type = sanitize_key($_REQUEST['post_type']);
+    elseif (isset($_REQUEST['post']) && get_post_type($_REQUEST['post']))
 		$post_type = get_post_type($_REQUEST['post']);
     elseif ($post && isset($post->post_type))
 		$post_type = $post->post_type;
@@ -2124,8 +2127,7 @@ function geodir_admin_current_post_type() {
 		$post_type = $typenow;
 	elseif ($current_screen && isset($current_screen->post_type))
 		$post_type = $current_screen->post_type;
-	elseif (isset($_REQUEST['post_type']))
-		$post_type = sanitize_key($_REQUEST['post_type']);
+
 
 
 	return $post_type;
@@ -3314,6 +3316,7 @@ function geodir_filesystem_notice()
  * @since 1.5.4 Modified to add default category via csv import.
  * @since 1.5.7 Modified to fix 504 Gateway Time-out for very large data.
  * @since 1.6.11 alive_days column added in exported csv.
+ * @since 1.6.18 Allow import/export linked business cpt ids.
  * @package GeoDirectory
  *
  * @global object $wpdb WordPress Database object.
@@ -4092,6 +4095,7 @@ function geodir_ajax_import_export() {
                             $geodir_twitter = '';
                             $geodir_facebook = '';
                             $geodir_twitter = '';
+                            $geodir_link_business = null;
                             $post_images = array();
                             
                             $expire_date = 'Never';
@@ -4167,6 +4171,8 @@ function geodir_ajax_import_export() {
                                 } else if ( $column == 'expire_date' && $row[$c] != '' && geodir_strtolower($row[$c]) != 'never' ) {
                                     $row[$c] = str_replace('/', '-', $row[$c]);
                                     $expire_date = date_i18n( 'Y-m-d', strtotime( $row[$c] ) );
+                                } else if ( strpos( $column, 'linked_' ) === 0 ) {
+                                    $geodir_link_business = (int)$row[$c];
                                 }
                                 // WPML
                                 if ($is_wpml) {
@@ -4272,6 +4278,8 @@ function geodir_ajax_import_export() {
                             $save_post = array();
                             $save_post['post_title'] = $post_title;
                             if (!empty($post_date)) {
+                                $post_date = geodir_date( $post_date, 'Y-m-d H:i:s' ); // convert to mysql date format.
+                                
                                 $save_post['post_date'] = $post_date;
                                 $save_post['post_date_gmt'] = get_gmt_from_date( $post_date );
                             }
@@ -4408,6 +4416,10 @@ function geodir_ajax_import_export() {
                                     }
                                 }
                                 $gd_post['post_location_id'] = $post_location_id;
+                                
+                                if ($geodir_link_business !== null) {
+                                    $gd_post['geodir_link_business'] = $geodir_link_business > 0 ? $geodir_link_business : '';
+                                }
                                 
                                 // post package info
                                 $package_id = isset( $gd_post['package_id'] ) && !empty( $gd_post['package_id'] ) ? (int)$gd_post['package_id'] : 0;
@@ -5070,10 +5082,14 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
 	
 	if ( !empty( $posts ) ) {
 		$is_payment_plugin = is_plugin_active( 'geodir_payment_manager/geodir_payment_manager.php' );
-        $location_manager = function_exists('geodir_location_plugin_activated') ? true : false; // Check location manager installed & active.
-        $location_allowed = function_exists( 'geodir_cpt_no_location' ) && geodir_cpt_no_location( $post_type ) ? false : true;
-        $neighbourhood_active = $location_manager && $location_allowed && get_option('location_neighbourhoods') ? true : false;
-        $is_claim_active = is_plugin_active( 'geodir_claim_listing/geodir_claim_listing.php' ) && get_option('geodir_claim_enable') === 'yes' ? true : false;
+		$location_manager = function_exists('geodir_location_plugin_activated') ? true : false; // Check location manager installed & active.
+		$location_allowed = function_exists( 'geodir_cpt_no_location' ) && geodir_cpt_no_location( $post_type ) ? false : true;
+		$neighbourhood_active = $location_manager && $location_allowed && get_option('location_neighbourhoods') ? true : false;
+		$is_claim_active = is_plugin_active( 'geodir_claim_listing/geodir_claim_listing.php' ) && get_option('geodir_claim_enable') === 'yes' ? true : false;
+		$is_events_active = function_exists('geodir_event_plugin_activated') ? true : false;
+		$is_custom_posts_active = function_exists('geodir_custom_post_type_plugin_activated') ? true : false;
+		
+		$post_ypes = geodir_get_posttypes('array');
 		
 		$csv_row = array();
 		$csv_row[] = 'post_id';
@@ -5135,6 +5151,9 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
 		$csv_row[] = 'geodir_facebook';
 		$csv_row[] = 'geodir_video';
 		$csv_row[] = 'geodir_special_offers';
+		if ($is_events_active || $is_custom_posts_active) {
+			$csv_row[] = !empty($post_ypes[$post_type]['linkable_to']) ? 'linked_' . $post_ypes[$post_type]['linkable_to'] . '_ID' : 'linked_cpt_ID';
+		}
 		// WPML
 		$is_wpml = geodir_is_wpml();
 		if ($is_wpml) {
@@ -5342,6 +5361,9 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
 			$csv_row[] = stripslashes($post_info['geodir_facebook']); // geodir_facebook
 			$csv_row[] = stripslashes($post_info['geodir_video']); // geodir_video
 			$csv_row[] = stripslashes($post_info['geodir_special_offers']); // geodir_special_offers
+			if ($is_events_active || $is_custom_posts_active) {
+				$csv_row[] = !empty($post_info['geodir_link_business']) ? (int)$post_info['geodir_link_business'] : ''; // linked business
+			}
 			// WPML
 			if ($is_wpml) {
 				$csv_row[] = geodir_get_language_for_element( $post_id, 'post_' . $post_type );
@@ -5461,7 +5483,7 @@ function geodir_get_export_posts( $post_type, $per_page = 0, $page_no = 0 ) {
      * @param string $post_type Post type.
      */
     $query = apply_filters( 'geodir_imex_export_posts_query', $query, $post_type );
-    $results = (array)$wpdb->get_results( $wpdb->prepare( $query, $post_type ), ARRAY_A );
+    $results = (array)$wpdb->get_results( $query, ARRAY_A );
 
     /**
      * Modify returned post results for the current post type.
@@ -5930,8 +5952,8 @@ function geodir_imex_process_event_data($gd_post) {
 	$recurring_pkg = geodir_event_recurring_pkg( (object)$gd_post );
 
 	$is_recurring = isset( $gd_post['is_recurring_event'] ) && (int)$gd_post['is_recurring_event'] == 0 ? false : true;
-	$event_date = isset($gd_post['event_date']) && $gd_post['event_date'] != '' ? geodir_imex_get_date_ymd($gd_post['event_date']) : '';
-	$event_enddate = isset($gd_post['event_enddate']) && $gd_post['event_enddate'] != '' ? geodir_imex_get_date_ymd($gd_post['event_enddate']) : $event_date;
+	$event_date = isset($gd_post['event_date']) && $gd_post['event_date'] != '' ? geodir_date($gd_post['event_date'], 'Y-m-d') : '';
+	$event_enddate = isset($gd_post['event_enddate']) && $gd_post['event_enddate'] != '' ? geodir_date($gd_post['event_enddate'], 'Y-m-d') : $event_date;
 	$all_day = isset($gd_post['is_whole_day_event']) && !empty($gd_post['is_whole_day_event']) ? true : false;
 	$starttime = isset($gd_post['starttime']) && !$all_day ? $gd_post['starttime'] : '';
 	$endtime = isset($gd_post['endtime']) && !$all_day ? $gd_post['endtime'] : '';
@@ -5968,7 +5990,7 @@ function geodir_imex_process_event_data($gd_post) {
 					$recurring_date = trim($recurring_date);
 					
 					if ($recurring_date != '') {
-						$event_recurring_dates[] = geodir_imex_get_date_ymd($recurring_date);
+						$event_recurring_dates[] = geodir_date($recurring_date, 'Y-m-d');
 					}
 				}
 				
@@ -5979,7 +6001,7 @@ function geodir_imex_process_event_data($gd_post) {
 			$duration_x = !empty( $gd_post['event_duration_days'] ) ? (int)$gd_post['event_duration_days'] : 1;
 			$repeat_x = !empty( $gd_post['recurring_interval'] ) ? (int)$gd_post['recurring_interval'] : 1;
 			$max_repeat = !empty( $gd_post['max_recurring_count'] ) ? (int)$gd_post['max_recurring_count'] : 1;
-			$repeat_end = !empty( $gd_post['recurring_end_date'] ) ? geodir_imex_get_date_ymd($gd_post['recurring_end_date']) : '';
+			$repeat_end = !empty( $gd_post['recurring_end_date'] ) ? geodir_date($gd_post['recurring_end_date'], 'Y-m-d') : '';
 			
 			$repeat_end_type = $repeat_end != '' ? 1 : 0;
 			$max_repeat = $repeat_end != '' ? '' : $max_repeat;

@@ -1846,16 +1846,17 @@ if (!function_exists('geodir_get_infowindow_html')) {
      * @since 1.0.0
      * @since 1.5.4 Modified to add new action "geodir_infowindow_meta_before".
      * @since 1.6.16 Changes for disable review stars for certain post type.
+     * @since 1.6.18 Fix: Map marker not showing custom fields in bubble info.
      * @package GeoDirectory
      * @global array $geodir_addon_list List of active GeoDirectory extensions.
      * @global object $gd_session GeoDirectory Session object.
      * @param object $postinfo_obj The post details object.
      * @param string $post_preview Is this a post preview?.
+     * @global object $post WordPress Post object.
      * @return mixed|string|void
      */
-    function geodir_get_infowindow_html($postinfo_obj, $post_preview = '')
-    {
-        global $preview, $gd_session;
+    function geodir_get_infowindow_html($postinfo_obj, $post_preview = '') {
+        global $preview, $post, $gd_session;
         $srcharr = array("'", "/", "-", '"', '\\');
         $replarr = array("&prime;", "&frasl;", "&ndash;", "&ldquo;", '');
 
@@ -1878,6 +1879,11 @@ if (!function_exists('geodir_get_infowindow_html')) {
             $plink = get_permalink($ID);
             $lat = htmlentities(geodir_get_post_meta($ID, 'post_latitude', true));
             $lng = htmlentities(geodir_get_post_meta($ID, 'post_longitude', true));
+        }
+        
+        // Some theme overwrites global gd listing $post
+        if (!empty($ID) && (!empty($post->ID) && $post->ID != $ID) || empty($post)) {
+            $post = geodir_get_post_info($ID);
         }
         
         $post_type = $ID ? get_post_type($ID) : '';
