@@ -1294,6 +1294,20 @@ if (!function_exists('geodir_get_featured_image')) {
             return false;// if not a GD CPT return;
         }
 
+
+        /**
+         * Filter to force the list images to be smaller.
+         * @since 1.6.18
+         */
+        if( $size=='list-thumb' && apply_filters('geodir_use_small_list_img',false) ){
+            $fimg = get_the_post_thumbnail_url($post_id,'medium');
+            if($fimg){
+                $uploads = wp_upload_dir(); 
+                $uploads_baseurl = $uploads['baseurl'];
+                $file = str_replace($uploads_baseurl,'',$fimg);
+            }
+        }
+
         $table = $plugin_prefix . $post_type . '_detail';
 
         if (!$file) {
