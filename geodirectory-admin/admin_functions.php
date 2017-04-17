@@ -3738,8 +3738,7 @@ function geodir_ajax_import_export() {
                 
                 if (!empty($wp_filetype) && isset($wp_filetype['ext']) && geodir_strtolower($wp_filetype['ext']) == 'csv') {
                     $json['error'] = NULL;
-                    $json['rows'] = 0;
-                    
+
                     $lc_all = setlocale(LC_ALL, 0); // Fix issue of fgetcsv ignores special characters when they are at the beginning of line
                     setlocale(LC_ALL, 'en_US.UTF-8');
                     if ( ( $handle = fopen($target_path, "r" ) ) !== FALSE ) {
