@@ -30,6 +30,7 @@ Categories icon urls are broken if site moved from http to https - FIXED
 Allow import/export linked business cpt ids - ADDED
 In front end allowed to translate listing via WPML duplicate translation - ADDED
 Fix issue with Paris sometimes returning a sub section name from Google API - FIXED
+Fix Tax Meta Class conflicts - FIXED
 
 v1.6.17
 Changes for batch WPML duplicates feature - CHANGED

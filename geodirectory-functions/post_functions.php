@@ -1728,7 +1728,7 @@ if (!function_exists('geodir_set_post_terms')) {
 
                     foreach ($post_term as $cat_id):
 
-                        $term_icon_url = get_tax_meta($cat_id, 'ct_cat_icon', false, $post_type);
+                        $term_icon_url = geodir_get_tax_meta($cat_id, 'ct_cat_icon', false, $post_type);
                         $term_icon = isset($term_icon_url['src']) ? $term_icon_url['src'] : '';
 
                         $post_title = $post_obj->title;

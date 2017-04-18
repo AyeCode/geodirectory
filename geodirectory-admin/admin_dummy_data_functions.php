@@ -74,8 +74,8 @@ function geodir_dummy_data_taxonomies($post_type,$category_array) {
                     $attach_data = wp_generate_attachment_metadata($attach_id, $new_path);
                     wp_update_attachment_metadata($attach_id, $attach_data);
 
-                    if (!get_tax_meta($last_catid['term_id'], 'ct_cat_icon', false, $post_type)) {
-                        update_tax_meta($last_catid['term_id'], 'ct_cat_icon', array('id' => 'icon', 'src' => $new_url), $post_type);
+                    if (!geodir_get_tax_meta($last_catid['term_id'], 'ct_cat_icon', false, $post_type)) {
+                        geodir_update_tax_meta($last_catid['term_id'], 'ct_cat_icon', array('id' => 'icon', 'src' => $new_url), $post_type);
                     }
                 }
             }
@@ -120,8 +120,8 @@ function geodir_dummy_data_taxonomies($post_type,$category_array) {
                 $attach_data = wp_generate_attachment_metadata($attach_id, $new_path);
                 wp_update_attachment_metadata($attach_id, $attach_data);
 
-                if (!get_tax_meta($last_catid['term_id'], 'ct_cat_icon', false, $post_type)) {
-                    update_tax_meta($last_catid['term_id'], 'ct_cat_icon', array('id' => $attach_id, 'src' => $new_url), $post_type);
+                if (!geodir_get_tax_meta($last_catid['term_id'], 'ct_cat_icon', false, $post_type)) {
+                    geodir_update_tax_meta($last_catid['term_id'], 'ct_cat_icon', array('id' => $attach_id, 'src' => $new_url), $post_type);
                 }
             }
         }

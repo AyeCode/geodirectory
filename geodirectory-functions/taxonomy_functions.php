@@ -2040,7 +2040,7 @@ function geodir_get_term_icon($term_id = false, $rebuild = false)
             foreach ($a_terms as $pt => $t2) {
 
                 foreach ($t2 as $term) {
-                    $term_icon = get_tax_meta($term->term_id, 'ct_cat_icon', false, $pt);
+                    $term_icon = geodir_get_tax_meta($term->term_id, 'ct_cat_icon', false, $pt);
                     if ($term_icon) {
                         $term_icon_url = $term_icon["src"];
                     } else {
