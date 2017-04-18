@@ -3975,11 +3975,11 @@ function geodir_ajax_import_export() {
                                 // WPML
                                 
                                 if ( isset( $term_data['top_description'] ) ) {
-                                    update_tax_meta( $term_id, 'ct_cat_top_desc', $term_data['top_description'], $cat_posttype );
+                                    geodir_update_tax_meta( $term_id, 'ct_cat_top_desc', $term_data['top_description'], $cat_posttype );
                                 }
                                 
                                 if ( isset( $term_data['cat_schema'] ) ) {
-                                    update_tax_meta( $term_id, 'ct_cat_schema', $term_data['cat_schema'], $cat_posttype );
+                                    geodir_update_tax_meta( $term_id, 'ct_cat_schema', $term_data['cat_schema'], $cat_posttype );
                                 }
             
                                 $attachment = false;
@@ -3989,17 +3989,17 @@ function geodir_ajax_import_export() {
                                     
                                     if ( basename($cat_image) != $term_data['image'] ) {
                                         $attachment = true;
-                                        update_tax_meta( $term_id, 'ct_cat_default_img', array( 'id' => 'image', 'src' => $uploads['url'] . '/' . $term_data['image'] ), $cat_posttype );
+                                        geodir_update_tax_meta( $term_id, 'ct_cat_default_img', array( 'id' => 'image', 'src' => $uploads['url'] . '/' . $term_data['image'] ), $cat_posttype );
                                     }
                                 }
                                 
                                 if ( isset( $term_data['icon'] ) && $term_data['icon'] != '' ) {
-                                    $cat_icon = get_tax_meta( $term_id, 'ct_cat_icon', false, $cat_posttype );
+                                    $cat_icon = geodir_get_tax_meta( $term_id, 'ct_cat_icon', false, $cat_posttype );
                                     $cat_icon = !empty( $cat_icon ) && isset( $cat_icon['src'] ) ? $cat_icon['src'] : '';
 
                                     if ( basename($cat_icon) != $term_data['icon'] ) {
                                         $attachment = true;
-                                        update_tax_meta( $term_id, 'ct_cat_icon', array( 'id' => 'icon', 'src' => $uploads['url'] . '/' . $term_data['icon'] ), $cat_posttype );
+                                        geodir_update_tax_meta( $term_id, 'ct_cat_icon', array( 'id' => 'icon', 'src' => $uploads['url'] . '/' . $term_data['icon'] ), $cat_posttype );
                                     }
                                 }
                                 
@@ -5636,7 +5636,7 @@ function geodir_imex_get_terms( $post_type, $per_page = 0, $page_no = 0 ) {
 		$csv_rows[] = $csv_row;
 		
 		foreach ( $terms as $term ) {
-			$cat_icon = get_tax_meta( $term->term_id, 'ct_cat_icon', false, $post_type );
+			$cat_icon = geodir_get_tax_meta( $term->term_id, 'ct_cat_icon', false, $post_type );
 			$cat_icon = !empty( $cat_icon ) && isset( $cat_icon['src'] ) ? $cat_icon['src'] : '';
 			
 			$cat_image = geodir_get_default_catimage( $term->term_id, $post_type );
@@ -5654,7 +5654,7 @@ function geodir_imex_get_terms( $post_type, $per_page = 0, $page_no = 0 ) {
 			$csv_row[] = $term->slug;
 			$csv_row[] = $post_type;
 			$csv_row[] = $cat_parent;
-			$csv_row[] = get_tax_meta( $term->term_id, 'ct_cat_schema', false, $post_type );
+			$csv_row[] = geodir_get_tax_meta( $term->term_id, 'ct_cat_schema', false, $post_type );
             // WPML
 			if ($is_wpml) {
 				$csv_row[] = geodir_get_language_for_element( $term->term_id, 'tax_' . $taxonomy );
@@ -5662,7 +5662,7 @@ function geodir_imex_get_terms( $post_type, $per_page = 0, $page_no = 0 ) {
 			}
 			// WPML
 			$csv_row[] = $term->description;
-			$csv_row[] = get_tax_meta( $term->term_id, 'ct_cat_top_desc', false, $post_type );
+			$csv_row[] = geodir_get_tax_meta( $term->term_id, 'ct_cat_top_desc', false, $post_type );
 			$csv_row[] = $cat_image;
 			$csv_row[] = $cat_icon;
 			

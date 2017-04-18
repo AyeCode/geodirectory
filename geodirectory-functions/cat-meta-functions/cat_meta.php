@@ -37,7 +37,7 @@ if (is_admin()) {
     /*
      * Initiate your meta box
      */
-    $my_meta = new Tax_Meta_Class($config);
+    $my_meta = new Geodir_Tax_Meta_Class($config);
     $my_meta->addWysiwyg($prefix . 'cat_top_desc', array('name' => __('Category Top Description', 'geodirectory'), 'desc' => __('This will appear at the top of the category listing.', 'geodirectory')));
     $my_meta->addImage($prefix . 'cat_default_img', array('name' => __('Default Listing Image', 'geodirectory'), 'desc' => __('Choose a default "no image"', 'geodirectory')));
     $my_meta->addImage($prefix . 'cat_icon', array('name' => __('Category Icon', 'geodirectory'), 'desc' => __('Choose a category icon', 'geodirectory'), 'validate_func' => '!empty'));
@@ -207,7 +207,7 @@ function manage_category_custom_fields($deprecated, $column_name, $term_id)
         echo $term_id;
 
     if ($column_name == 'cat_icon') {
-        $term_icon_url = get_tax_meta($term_id, 'ct_cat_icon');
+        $term_icon_url = geodir_get_tax_meta($term_id, 'ct_cat_icon');
 
         if ($term_icon_url != '') {
             $file_info = pathinfo($term_icon_url['src']);
@@ -239,7 +239,7 @@ function manage_category_custom_fields($deprecated, $column_name, $term_id)
     }
 
     if ($column_name == 'cat_default_img') {
-        $cat_default_img = get_tax_meta($term_id, 'ct_cat_default_img');
+        $cat_default_img = geodir_get_tax_meta($term_id, 'ct_cat_default_img');
         if ($cat_default_img != '')
             echo '<img src="' . $cat_default_img['src'] . '" style="max-height:60px;max-width:60px;"/>';
 
@@ -249,7 +249,7 @@ function manage_category_custom_fields($deprecated, $column_name, $term_id)
 function geodir_get_default_catimage($term_id, $post_type = 'gd_place')
 {
 
-    if ($cat_default_img = get_tax_meta($term_id, 'ct_cat_default_img', '', $post_type))
+    if ($cat_default_img = geodir_get_tax_meta($term_id, 'ct_cat_default_img', '', $post_type))
         return $cat_default_img;
     else
         return false;
