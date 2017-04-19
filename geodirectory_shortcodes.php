@@ -1253,8 +1253,17 @@ function geodir_sc_gd_listings($atts, $content = '') {
     
     // Post_number needs to be a positive integer
     if (!empty($atts['post_author'])) {
-        if ($atts['post_author'] == 'current' && !empty($post) && isset($post->post_author) && $post->post_type != 'page') {
+
+        // 'current' left for backwards compatibility
+        if ( ($atts['post_author'] == 'current' || $atts['post_author'] == 'current_author') && !empty($post) && isset($post->post_author) && $post->post_type != 'page') {
             $params['post_author'] = $post->post_author;
+        } else if ($atts['post_author'] == 'current_user' ) {
+            if($uid = get_current_user_id()){
+                $params['post_author'] = absint($uid);
+            }else{
+                $params['post_author'] = -1;// if not logged in then don't show any listings.
+            }
+
         } else if ($atts['post_author'] != 'current' && absint($atts['post_author']) > 0) {
             $params['post_author'] = absint($atts['post_author']);
         } else {
