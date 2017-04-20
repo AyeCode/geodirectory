@@ -8,6 +8,9 @@
  * @package GeoDirectory
  */
 
+
+//return;
+
 // call
 add_action('after_setup_theme', 'geodir_x_action_calls', 11);
 /**
@@ -170,7 +173,8 @@ function geodir_x_search_container_close()
  */
 function geodir_x_action_wrapper_open()
 {
-    global $stack;
+    $stack = x_get_stack();
+
     if ($stack == 'integrity') {
         echo '<div class="x-container-fluid x-container max width offset">';
     } elseif ($stack == 'renew') {
@@ -179,6 +183,8 @@ function geodir_x_action_wrapper_open()
         echo '<div class="x-main full" role="main">';
     } elseif ($stack == 'ethos') {
         echo '<div class="x-container-fluid x-container max width main"><div class="offset cf">';
+    }else{
+        echo '<div class="x-container max width offset">';
     }
 }
 
@@ -190,7 +196,7 @@ function geodir_x_action_wrapper_open()
  */
 function geodir_x_action_wrapper_close()
 {
-    global $stack;
+    $stack = x_get_stack();
     if ($stack == 'ethos') {
         echo '</div></div>';
     } else {
@@ -209,7 +215,9 @@ function geodir_x_action_wrapper_close()
  */
 function geodir_x_action_wrapper_content_open($type = '', $id = '', $class = '')
 {
-    echo '<div class="x-main left ' . $class . '" role="main">';
+    $content_class = ' entry-wrap ';
+
+    echo '<div class="x-main left ' . $class . $content_class . ' " role="main">';
 }
 
 /**

@@ -1,3 +1,6 @@
+v1.6.19
+X theme update causes some layout issues - FIXED
+
 v1.6.18
 Custom field should display label instead of value if set in option values - FIXED
 With WPML the location terms added twice when CPT slug is translated - FIXED
