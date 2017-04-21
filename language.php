@@ -120,8 +120,8 @@ define('EMAIL_TEXT_MSG', __('Enter valid Email otherwise you will face an error.
 define('GET_MAP_MSG', __('Click on "Set Address on Map" and then you can also drag pinpoint to locate the correct address', 'geodirectory'));
 define('GET_LATITUDE_MSG', __('Please enter latitude for google map perfection. eg. : <b>39.955823048131286</b>', 'geodirectory'));
 define('GET_LOGNGITUDE_MSG', __('Please enter longitude for google map perfection. eg. : <b>-75.14408111572266</b>', 'geodirectory'));
-define('GEODIR_LATITUDE_ERROR_MSG', __('A numeric value is required. Please make sure you have either draged the marker or clicked the button: Set Address On Map', 'geodirectory'));
-define('GEODIR_LOGNGITUDE_ERROR_MSG', __('A numeric value is required. Please make sure you have either draged the marker or clicked the button: Set Address On Map', 'geodirectory'));
+define('GEODIR_LATITUDE_ERROR_MSG', __('A numeric value is required. Please make sure you have either dragged the marker or clicked the button: Set Address On Map', 'geodirectory'));
+define('GEODIR_LOGNGITUDE_ERROR_MSG', __('A numeric value is required. Please make sure you have either dragged the marker or clicked the button: Set Address On Map', 'geodirectory'));
 define('CONTACT_MSG', __('You can enter phone number,cell phone number etc.', 'geodirectory'));
 define('WEBSITE_MSG', __('Enter website URL. eg. : <b>http://myplace.com</b>', 'geodirectory'));
 define('TWITTER_MSG', __('Enter twitter URL. eg. : <b>http://twitter.com/myplace</b>', 'geodirectory'));
