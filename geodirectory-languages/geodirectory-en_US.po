@@ -7469,7 +7469,7 @@ msgstr ""
 
 #: language.php:123 language.php:124
 msgid ""
-"A numeric value is required. Please make sure you have either draged the "
+"A numeric value is required. Please make sure you have either dragged the "
 "marker or clicked the button: Set Address On Map"
 msgstr ""
 
