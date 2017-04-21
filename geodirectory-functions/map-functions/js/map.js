@@ -136,6 +136,9 @@ function initMap(map_options) {
             setGeodirMapSize(true);
         }, 100);
     }
+    
+    // Overlapping Marker Spiderfier
+    window.oms = jQuery.goMap.oms;
 }
 
 function gdCustomControl(controlDiv, cat_filters, gdMap) {
@@ -561,7 +564,7 @@ function create_marker(input, map_canvas_var) {
         });
         bounds.extend(coord);
         // Adding a click event to the marker
-        google.maps.event.addListener(marker, 'click', function() {
+        google.maps.event.addListener(marker, 'spider_click', function() { // 'click' => normal, 'spider_click' => Overlapping Marker Spiderfier
             is_zooming = true;
             jQuery("#" + map_canvas_var).goMap();
             var preview_query_str = '';
@@ -596,6 +599,10 @@ function create_marker(input, map_canvas_var) {
             });
             return;
         });
+        
+        // Overlapping Marker Spiderfier
+        jQuery.goMap.oms.addMarker(marker);
+        
         // Adding a visible_changed event to the marker
         google.maps.event.addListener(marker, 'visible_changed', function() {
             gd_infowindow.close(jQuery.goMap.map, marker);
@@ -1086,6 +1093,14 @@ function initMapOSM(map_options) {
             jQuery.goMap.map.invalidateSize();
         }, 100);
     }
+    
+    // Overlapping Marker Spiderfier LeafLet
+    
+    jQuery.goMap.oms.addListener('spiderfy', function(markers) {
+        jQuery.goMap.map.closePopup();
+    });
+    
+    window.oms = jQuery.goMap.oms;
 }
 
 function parse_marker_jason_osm(data, map_canvas_var) {    
@@ -1270,6 +1285,9 @@ function create_marker_osm(input, map_canvas_var) {
             });
             return;
         });
+        
+        // Overlapping Marker Spiderfier LeafLet
+        jQuery.goMap.oms.addMarker(marker);
         
         // Adding a visible_changed event to the marker
         L.DomEvent.addListener(marker, 'visible_changed', function() {

@@ -1,5 +1,6 @@
 v1.6.19
 X theme update causes some layout issues - FIXED
+Overlapping Marker Spiderfier added to fix overlapping map markers - CHANGED
 
 v1.6.18
 Custom field should display label instead of value if set in option values - FIXED
