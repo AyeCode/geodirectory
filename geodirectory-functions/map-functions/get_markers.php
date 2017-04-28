@@ -284,7 +284,15 @@ function get_markers() {
                 $post_title .= $event_dates;
             }
 
-            $icon = !empty($geodir_cat_icons) && isset($geodir_cat_icons[$catinfo_obj->default_category]) ? $geodir_cat_icons[$catinfo_obj->default_category] : '';
+            $map_cat_ids_array;
+            $default_cat = isset($catinfo_obj->default_category) ? $catinfo_obj->default_category : '';
+
+            // if single cat lets just show that icon
+            if(is_array($map_cat_ids_array) && count($map_cat_ids_array)==1){
+                $default_cat = (int)$map_cat_ids_array[0];
+            }
+
+            $icon = !empty($geodir_cat_icons) && isset($geodir_cat_icons[$default_cat]) ? $geodir_cat_icons[$default_cat] : '';
             $mark_extra = (isset($catinfo_obj->marker_extra)) ? $catinfo_obj->marker_extra : '';
             $title = str_replace($srcharr, $replarr, $post_title);
             
@@ -301,7 +309,7 @@ function get_markers() {
                 $icon_size = array('w' => 36, 'h' => 45);
             }
 
-            $content_data[] = '{"id":"' . $catinfo_obj->post_id . '","t": "' . $title . '","lt": "' . $catinfo_obj->post_latitude . '","ln": "' . $catinfo_obj->post_longitude . '","mk_id":"' . $catinfo_obj->post_id . '_' . $catinfo_obj->default_category . '","i":"' . $icon . '","w":"' . $icon_size['w'] . '","h":"' . $icon_size['h'] . '"'.$mark_extra.'}';
+            $content_data[] = '{"id":"' . $catinfo_obj->post_id . '","t": "' . $title . '","lt": "' . $catinfo_obj->post_latitude . '","ln": "' . $catinfo_obj->post_longitude . '","mk_id":"' . $catinfo_obj->post_id . '_' . $default_cat . '","i":"' . $icon . '","w":"' . $icon_size['w'] . '","h":"' . $icon_size['h'] . '"'.$mark_extra.'}';
             $post_ids[] = $catinfo_obj->post_id;
         }
     }
