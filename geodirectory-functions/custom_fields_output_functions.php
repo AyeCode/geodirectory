@@ -1312,6 +1312,7 @@ function geodir_cf_file($html,$location,$cf,$p=''){
 
                         //$allowed_file_types = array('application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv', 'text/plain');
                         $image_file_types = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/bmp', 'image/x-icon');
+                        $audio_file_types = array('audio/mpeg', 'audio/ogg', 'audio/mp4', 'audio/vnd.wav', 'audio/basic', 'audio/mid');
 
                         // If the uploaded file is image
                         if (in_array($uploaded_file_type, $image_file_types)) {
@@ -1321,6 +1322,11 @@ function geodir_cf_file($html,$location,$cf,$p=''){
                             $file_paths .= '</a>';
                             //$file_paths .= '<img src="'.$file.'"  />';	
                             $file_paths .= '</div>';
+                        }elseif (in_array($uploaded_file_type, $audio_file_types)) {// if audio
+                            $ext_path = '_' . $html_var . '_';
+                            $filename = explode($ext_path, $filename);
+                            $file_paths .= '<span class="gd-audio-name">'.$filename[count($filename) - 1].'</span>';
+                            $file_paths .= do_shortcode('[audio src="'.$file.'" ]');
                         } else {
                             $ext_path = '_' . $html_var . '_';
                             $filename = explode($ext_path, $filename);
