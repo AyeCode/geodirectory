@@ -62,6 +62,14 @@ class Geodir_Session {
 			if ( !class_exists( 'Recursive_ArrayAccess' ) ) {
 				require_once GEODIRECTORY_PLUGIN_DIR . 'geodirectory-functions/wp-session/class-recursive-arrayaccess.php';
 			}
+            
+			if ( !class_exists( 'WP_Session_Utils' ) ) {
+				require_once GEODIRECTORY_PLUGIN_DIR . 'geodirectory-functions/wp-session/class-wp-session-utils.php';
+			}
+            
+			if ( defined( 'WP_CLI' ) && WP_CLI && !class_exists( 'WP_Session_Command' ) ) {
+				require_once GEODIRECTORY_PLUGIN_DIR . 'geodirectory-functions/wp-session/wp-cli.php';
+			}
 
 			if ( !class_exists( 'WP_Session' ) ) {
 				require_once GEODIRECTORY_PLUGIN_DIR . 'geodirectory-functions/wp-session/class-wp-session.php';
@@ -104,7 +112,12 @@ class Geodir_Session {
 	 * @return string Session ID
 	 */
 	public function get_id() {
-		return $this->session->session_id;
+		if ( $this->use_php_sessions ) {
+			$session_id = !empty( $_SESSION ) && function_exists( 'session_id' ) ? session_id() : NULL;
+		} else {
+			$session_id = !empty( $this->session ) && isset( $this->session->session_id ) ? $this->session->session_id : NULL;
+		}
+		return $session_id;
 	}
 
 	/**
@@ -279,22 +292,6 @@ class Geodir_Session {
 		if ( !session_id() && !headers_sent() ) {
 			session_start();
 		}
-	}
-
-	/**
-	 * Determines if a user has set the GEODIR_USE_CART_COOKIE
-	 *
-	 * @since  1.5.7
-	 * @return bool If the store should use the geodir_items_in_cart cookie to help avoid caching
-	 */
-	public function use_cart_cookie() {
-		$ret = true;
-
-		if ( defined( 'GEODIR_USE_CART_COOKIE' ) && ! GEODIR_USE_CART_COOKIE ) {
-			$ret = false;
-		}
-
-		return (bool) apply_filters( 'geodir_use_cart_cookie', $ret );
 	}
 }
 
