@@ -4518,6 +4518,7 @@ function geodir_allowed_mime_types() {
 				'xls'  => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 				'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 				'zip'  => 'application/zip',
+				'gpx'  => 'application/gpx',
 			)
 		)
 	);

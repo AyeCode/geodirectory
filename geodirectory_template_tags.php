@@ -736,6 +736,17 @@ function geodir_add_sharelocation_scripts() {
 
             jQuery('.geodir-listing-search').submit();
         }
+
+        /**
+         * On unload page do some cleaning so back button cache does not store these values.
+         */
+        window.onunload = function(){
+            if(jQuery('.sgeo_lat').length ){
+                jQuery('.sgeo_lat').val('');
+                jQuery('.sgeo_lon').val('');
+            }
+        };
+
     </script>
 <?php
 }
