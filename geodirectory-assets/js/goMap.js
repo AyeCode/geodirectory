@@ -228,6 +228,9 @@
             } else {
                 this.gdlayers = new L.featureGroup([]);
             }
+            
+            // Overlapping Marker Spiderfier LeafLet
+            this.oms = new OverlappingMarkerSpiderfier(this.map);
 
             for (var j = 0, l = opts.markers.length; j < l; j++)
                 this.createMarker(opts.markers[j]);
@@ -834,6 +837,13 @@
 
             this.map = new google.maps.Map(el, myOptions);
             this.overlay = new MyOverlay(this.map);
+            
+            // Overlapping Marker Spiderfier
+            this.oms = new OverlappingMarkerSpiderfier(this.map, { 
+                markersWontMove: true,   // we promise not to move any markers, allowing optimizations
+                markersWontHide: true,   // we promise not to change visibility of any markers, allowing optimizations
+                basicFormatEvents: true  // allow the library to skip calculating advanced formatting information
+            });
 
             this.overlays = {
                 polyline: {id: 'plId', array: 'polylines', create: 'createPolyline'},

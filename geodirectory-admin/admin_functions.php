@@ -112,6 +112,10 @@ if (!function_exists('geodir_admin_scripts')) {
             /** This filter is documented in geodirectory_template_tags.php */
             $map_extra = apply_filters('geodir_googlemap_script_extra', '');
             wp_enqueue_script('geodirectory-googlemap-script', 'https://maps.google.com/maps/api/js?' . $map_lang . $map_key . $map_extra, '', NULL);
+            
+            // Overlapping Marker Spiderfier
+            wp_register_script('geodirectory-g-overlappingmarker-script', geodir_plugin_url() . '/geodirectory-assets/jawj/oms.min.js', array(), GEODIRECTORY_VERSION);
+            wp_enqueue_script('geodirectory-g-overlappingmarker-script');
         }
         
         if ($geodir_map_name == 'osm') {
@@ -124,6 +128,10 @@ if (!function_exists('geodir_admin_scripts')) {
             
             wp_register_script('geodirectory-leaflet-geo-script', geodir_plugin_url() . '/geodirectory-assets/leaflet/osm.geocode.js', array('geodirectory-leaflet-script'), GEODIRECTORY_VERSION);
             wp_enqueue_script('geodirectory-leaflet-geo-script');
+            
+            // Overlapping Marker Spiderfier Leaflet
+            wp_register_script('geodirectory-o-overlappingmarker-script', geodir_plugin_url() . '/geodirectory-assets/jawj/oms-leaflet.min.js', array(), GEODIRECTORY_VERSION);
+            wp_enqueue_script('geodirectory-o-overlappingmarker-script');
         }
         wp_enqueue_script( 'jquery-ui-autocomplete' );
         

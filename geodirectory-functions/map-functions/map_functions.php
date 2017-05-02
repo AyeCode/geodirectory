@@ -392,6 +392,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
     document.write('<' + 'script id="geodirectory-leaflet-script" src="<?php echo $plugin_url;?>/geodirectory-assets/leaflet/leaflet.min.js?ver=<?php echo GEODIRECTORY_VERSION;?>" type="text/javascript"><' + '/script>');
     document.write('<' + 'script id="geodirectory-leaflet-geo-script" src="<?php echo $plugin_url;?>/geodirectory-assets/leaflet/osm.geocode.js?ver=<?php echo GEODIRECTORY_VERSION;?>" type="text/javascript"><' + '/script>');
     document.write('<' + 'script id="geodirectory-leaflet-routing-script" src="<?php echo $plugin_url;?>/geodirectory-assets/leaflet/routing/leaflet-routing-machine.js?ver=<?php echo GEODIRECTORY_VERSION;?>" type="text/javascript"><' + '/script>');
+    document.write('<' + 'script id="geodirectory-o-overlappingmarker-script" src="<?php echo $plugin_url;?>/geodirectory-assets/jawj/oms-leaflet.min.js?ver=<?php echo GEODIRECTORY_VERSION;?>" type="text/javascript"><' + '/script>');
 }
 </script>
 <?php

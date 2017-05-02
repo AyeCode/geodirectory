@@ -2296,8 +2296,8 @@ if (!function_exists('geodir_add_to_favorite')) {
          */
         $favourite_icon = apply_filters('geodir_favourite_icon', 'fa fa-heart');
 
-        $user_meta_data = array();
         $user_meta_data = get_user_meta($current_user->data->ID, 'gd_user_favourite_post', true);
+        $user_meta_data = !empty($user_meta_data) && is_array($user_meta_data) ? $user_meta_data : array();
 
         if (empty($user_meta_data) || (!empty($user_meta_data) && !in_array($post_id, $user_meta_data))) {
             $user_meta_data[] = $post_id;
