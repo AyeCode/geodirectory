@@ -101,6 +101,10 @@ function geodir_templates_scripts()
          */
         $map_extra = apply_filters('geodir_googlemap_script_extra', '');
         wp_enqueue_script('geodirectory-googlemap-script', 'https://maps.google.com/maps/api/js?' . $map_lang . $map_key . $map_extra , '', NULL);
+        
+        // Overlapping Marker Spiderfier
+        wp_register_script('geodirectory-g-overlappingmarker-script', geodir_plugin_url() . '/geodirectory-assets/jawj/oms.min.js', array(), GEODIRECTORY_VERSION);
+        wp_enqueue_script('geodirectory-g-overlappingmarker-script');
     }
     
     if ($geodir_map_name == 'osm') {
@@ -121,12 +125,15 @@ function geodir_templates_scripts()
             wp_register_script('geodirectory-leaflet-routing-script', geodir_plugin_url() . '/geodirectory-assets/leaflet/routing/leaflet-routing-machine.js', array(), GEODIRECTORY_VERSION);
             wp_enqueue_script('geodirectory-leaflet-routing-script');
         }
+        
+        // Overlapping Marker Spiderfier Leaflet
+        wp_register_script('geodirectory-o-overlappingmarker-script', geodir_plugin_url() . '/geodirectory-assets/jawj/oms-leaflet.min.js', array(), GEODIRECTORY_VERSION);
+        wp_enqueue_script('geodirectory-o-overlappingmarker-script');
     }
     wp_enqueue_script( 'jquery-ui-autocomplete' );
     
-    wp_register_script('geodirectory-goMap-script', geodir_plugin_url() . '/geodirectory-assets/js/goMap.min.js', array(), GEODIRECTORY_VERSION,true);
+    wp_register_script('geodirectory-goMap-script', geodir_plugin_url() . '/geodirectory-assets/js/goMap.min.js', array(), GEODIRECTORY_VERSION, true);
     wp_enqueue_script('geodirectory-goMap-script');
-
 
     wp_register_script('chosen', geodir_plugin_url() . '/geodirectory-assets/js/chosen.jquery.min.js', array(), GEODIRECTORY_VERSION);
     wp_enqueue_script('chosen');
@@ -736,6 +743,17 @@ function geodir_add_sharelocation_scripts() {
 
             jQuery('.geodir-listing-search').submit();
         }
+
+        /**
+         * On unload page do some cleaning so back button cache does not store these values.
+         */
+        window.onunload = function(){
+            if(jQuery('.sgeo_lat').length ){
+                jQuery('.sgeo_lat').val('');
+                jQuery('.sgeo_lon').val('');
+            }
+        };
+
     </script>
 <?php
 }

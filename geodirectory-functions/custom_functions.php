@@ -2388,7 +2388,7 @@ function geodir_search_form_near_input() {
 	} else {
 		$near = $default_near_text;
 	}
-
+	
 
 	global $geodir_search_post_type;
 	$curr_post_type = $geodir_search_post_type;

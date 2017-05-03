@@ -1,9 +1,7 @@
 v1.6.19
 X theme update causes some layout issues - FIXED
-Kleo listing and CPT pages not using GD titles - FIXED
-Audio custom file fields will now show audio player instead of link - CHANGED
-If single cat selected in home map, show that marker rather than post default marker - CHANGED
-Security vulnerability updates in the WP Session - CHANGED
+Overlapping Marker Spiderfier added to fix overlapping map markers - CHANGED
+Error loading listing on click add to favorite - FIXED
 
 v1.6.18
 Custom field should display label instead of value if set in option values - FIXED

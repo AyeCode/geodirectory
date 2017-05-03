@@ -120,7 +120,7 @@ function geodir_user_show_listings($user_id='',$output_type='select'){
     $user_listing = geodir_user_post_listing_count($user_id);
 
     if (!empty($show_listing_link_user_dashboard) && !empty($user_listing)) {
-        $listing_links = '';
+        $listing_links = array();
 
         $post_types = geodir_get_posttypes('object');
 
