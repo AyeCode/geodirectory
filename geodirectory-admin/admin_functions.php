@@ -126,7 +126,7 @@ if (!function_exists('geodir_admin_scripts')) {
             wp_register_script('geodirectory-leaflet-script', geodir_plugin_url() . '/geodirectory-assets/leaflet/leaflet.min.js', array(), GEODIRECTORY_VERSION);
             wp_enqueue_script('geodirectory-leaflet-script');
             
-            wp_register_script('geodirectory-leaflet-geo-script', geodir_plugin_url() . '/geodirectory-assets/leaflet/osm.geocode.js', array('geodirectory-leaflet-script'), GEODIRECTORY_VERSION);
+            wp_register_script('geodirectory-leaflet-geo-script', geodir_plugin_url() . '/geodirectory-assets/leaflet/osm.geocode.min.js', array('geodirectory-leaflet-script'), GEODIRECTORY_VERSION);
             wp_enqueue_script('geodirectory-leaflet-geo-script');
             
             // Overlapping Marker Spiderfier Leaflet
