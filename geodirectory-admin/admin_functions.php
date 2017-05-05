@@ -4084,6 +4084,7 @@ function geodir_ajax_import_export() {
                             $post_tags = array();
                             $post_type = '';
                             $post_status = '';
+                            $is_featured = 0;
                             $geodir_video = '';
                             $post_address = '';
                             $post_city = '';

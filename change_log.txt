@@ -1,3 +1,6 @@
+v1.6.20
+is_featured column added in listing sample CSV file - CHANGED
+
 v1.6.19
 X theme update causes some layout issues - FIXED
 Kleo listing and CPT pages not using GD titles - FIXED
