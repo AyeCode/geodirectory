@@ -2528,7 +2528,7 @@ function geodir_diagnose_reload_db_countries()
         geodir_diagnose_version_clear();
         ob_end_clean();
     }else{
-        $output_str .= "<li><strong>" . __('Seomething went wrong.', 'geodirectory') . "</strong></li>";
+        $output_str .= "<li><strong>" . __('Something went wrong.', 'geodirectory') . "</strong></li>";
     }
 
     if ($is_error_during_diagnose) {

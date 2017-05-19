@@ -1,5 +1,6 @@
 v1.6.20
 is_featured column added in listing sample CSV file - CHANGED
+Map Bubble placement problem for OpenStreetMap - FIXED
 
 v1.6.19
 X theme update causes some layout issues - FIXED

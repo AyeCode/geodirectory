@@ -2232,12 +2232,12 @@ function geodir_output_favourite_html_listings( $post_id ) {
 }
 
 add_action( 'geodir_listing_after_pinpoint', 'geodir_output_pinpoint_html_listings', 1, 2 );
-function geodir_output_pinpoint_html_listings( $post_id, $post ) {
+function geodir_output_pinpoint_html_listings( $post_id, $post = array() ) {
 	global $wp_query;
 
 	$show_pin_point = $wp_query->is_main_query();
 
-	if ( ! empty( $show_pin_point ) && is_active_widget( false, "", "geodir_map_v3_listing_map" ) ) {
+	if ( ! empty( $post ) && ! empty( $show_pin_point ) && is_active_widget( false, "", "geodir_map_v3_listing_map" ) ) {
 		$term_icon_url = geodir_get_tax_meta( $post->default_category, 'ct_cat_icon', false, $post->post_type );
 		$marker_icon   = isset( $term_icon_url['src'] ) ? $term_icon_url['src'] : get_option( 'geodir_default_marker_icon' );
 		?>

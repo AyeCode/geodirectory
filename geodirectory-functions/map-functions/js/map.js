@@ -624,6 +624,11 @@ function geodir_fix_marker_pos(map_canvas_var) {
     
     var iwBackground = iwOuter.parent();
     org_height = iwBackground.height();
+    if (window.gdMaps == 'osm') {
+        var mainH = jQuery('#' + map_canvas_var).height();
+        org_height = mainH < org_height ? mainH : org_height;
+        org_height -= (org_height * 0.10);
+    }
     jQuery('#' + map_canvas_var + ' .geodir-bubble_desc').attr('style', 'height:' + org_height + 'px !important');
 }
 
@@ -1264,7 +1269,9 @@ function create_marker_osm(input, map_canvas_var) {
                 var marker_url = eval(map_canvas_var).ajax_url + "&geodir_ajax=map_ajax&ajax_action=info&m_id=" + input.id + preview_query_str;
             }
             var loading = '<div id="map_loading"></div>';
-            marker.closePopup().unbindPopup().bindPopup(loading).openPopup();
+            var maxH = jQuery("#" + map_canvas_var).height();
+            maxH -= ( maxH * 0.10) + jQuery(marker._icon).outerHeight() + 20;
+            marker.closePopup().unbindPopup().bindPopup(loading, {className: 'gd-osm-bubble', maxHeight: maxH}).openPopup();
             
             jQuery.ajax({
                 type: "GET",
