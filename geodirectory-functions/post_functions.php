@@ -1525,7 +1525,14 @@ if (!function_exists('geodir_get_images')) {
 
                 $counter++;
             }
-            return (object)$return_arr;
+            //return (object)$return_arr;
+            /**
+             * Filter the images array so things can be changed.
+             *
+             * @since 1.6.20
+             * @param array $return_arr The array of image objects.
+             */
+            return apply_filters('geodir_get_images_arr',$return_arr);
         } else if ($no_images) {
             $default_img = '';
             $default_cat = geodir_get_post_meta($post_id, 'default_category', true);
@@ -1566,7 +1573,13 @@ if (!function_exists('geodir_get_images')) {
 
                 $return_arr[] = (object)$img_arr;
 
-                return $return_arr;
+                /**
+                 * Filter the images array so things can be changed.
+                 * 
+                 * @since 1.6.20
+                 * @param array $return_arr The array of image objects.
+                 */
+                return apply_filters('geodir_get_images_arr',$return_arr);
             } else
                 return false;
         }

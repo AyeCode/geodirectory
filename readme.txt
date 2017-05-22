@@ -406,8 +406,5 @@ initial release
 
 == Upgrade Notice ==
 
-= 1.6.19 =
-SECURITY: WP Session class lib can expose the Session ID publicly - Please Update to 1.6.19 or greater to resolve.
-
 = 1.6.11 =
 Google Analytics BREAKING CHANGE, you must update settings at GD>General>Google Analytics: once you have updated.
