@@ -79,7 +79,8 @@ if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'cat') { // R
  * @return string
  */
 function get_markers() {
-    global $wpdb, $plugin_prefix, $geodir_cat_icons, $gd_marker_sizes;
+
+    global $wpdb, $plugin_prefix, $geodir_cat_icons, $gd_marker_sizes,$gd_session;
 
     $search = '';
     $main_query_array;
@@ -208,6 +209,10 @@ function get_markers() {
 	 * @param string $search Row of searched fields to use in WHERE clause.
 	 */
 	$catsql = apply_filters('geodir_home_map_listing_query', $catsql, $search);
+
+//    global $gd_session;
+//    print_r($gd_session);
+//    print_r($_SESSION);
 
     $catinfo = $wpdb->get_results($catsql);
 	

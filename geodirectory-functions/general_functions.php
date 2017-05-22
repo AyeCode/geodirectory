@@ -3289,7 +3289,7 @@ function geodir_listing_slider_widget_output( $args = '', $instance = '' ) {
 					$title = apply_filters( 'geodir_listing_slider_title', $title_html, $post_id, $post_permalink, $post_title );
 				}
 
-				$widget_main_slides .= $title . '<img src="' . $widget_image->src . '" alt="' . $widget_image->title . '" title="' . $widget_image->title . '" style="max-height:200px;margin:0 auto;" /></li>';
+				$widget_main_slides .= $title . '<a href="' . get_permalink( $post->ID ) . '"><img src="' . $widget_image->src . '" alt="' . $widget_image->title . '" title="' . $widget_image->title . '" style="max-height:200px;margin:0 auto;" /></a></li>';
 				$nav_slides .= '<li><img src="' . $widget_image->src . '" alt="' . $widget_image->title . '" title="' . $widget_image->title . '" style="max-height:48px;margin:0 auto;" /></li>';
 				$widget_slides ++;
 			}
@@ -3335,6 +3335,10 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 
 	echo $before_widget;
 	echo $before_title . $title . $after_title;
+
+//	global $gd_session;
+//	print_r($gd_session);
+//	print_r($_SESSION);
 
 	if ( is_user_logged_in() ) {
 		global $current_user;
