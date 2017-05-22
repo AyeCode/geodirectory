@@ -870,6 +870,7 @@ if (!function_exists('geodir_get_post_meta')) {
      * Get post custom meta.
      *
      * @since 1.0.0
+     * @since 1.6.20 Hook added to filter value.
      * @package GeoDirectory
      * @global object $wpdb WordPress Database object.
      * @global string $plugin_prefix Geodirectory plugin table prefix.
@@ -879,8 +880,7 @@ if (!function_exists('geodir_get_post_meta')) {
      * @todo single variable not yet implemented.
      * @return bool|mixed|null|string Will be an array if $single is false. Will be value of meta data field if $single is true.
      */
-    function geodir_get_post_meta($post_id, $meta_key, $single = false)
-    {
+    function geodir_get_post_meta($post_id, $meta_key, $single = false) {
         if (!$post_id) {
             return false;
         }
@@ -897,13 +897,25 @@ if (!function_exists('geodir_get_post_meta')) {
 
         if ($wpdb->get_var("SHOW COLUMNS FROM " . $table . " WHERE field = '" . $meta_key . "'") != '') {
             $meta_value = $wpdb->get_var($wpdb->prepare("SELECT " . $meta_key . " from " . $table . " where post_id = %d", array($post_id)));
+            
             if ($meta_value && $meta_value !== '') {
-                return maybe_serialize($meta_value);
-            } else
-                return $meta_value;
+                $meta_value = maybe_serialize($meta_value);
+            }
         } else {
-            return false;
+            $meta_value = false;
         }
+        
+        /**
+         * Filter the listing custom meta.
+         *
+         * @since 1.6.20
+         * 
+         * @param bool|mixed|null|string $meta_value Will be an array if $single is false. Will be value of meta data field if $single is true.
+         * @param int $post_id The post ID.
+         * @param string $meta_key The meta key to retrieve.
+         * @param bool $single Optional. Whether to return a single value. Default false.
+         */
+        return apply_filters( 'geodir_get_post_meta', $meta_value, $post_id, $meta_key, $single );
     }
 }
 

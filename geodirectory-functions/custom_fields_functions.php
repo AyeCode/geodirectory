@@ -1199,15 +1199,15 @@ function godir_set_field_order($field_ids = array())
     endif;
 }
 
-
-function geodir_get_cf_value($cf){
+function geodir_get_cf_value($cf) {
     global $gd_session;
     $value = '';
     if (is_admin()) {
-        global $post,$gd_session;
+        global $post;
 
-        if (isset($_REQUEST['post']))
-            $_REQUEST['pid'] = $_REQUEST['post'];
+        if (isset($_REQUEST['post'])) {
+            $_REQUEST['pid'] = (int)$_REQUEST['post'];
+        }
     }
 
     if (isset($_REQUEST['backandedit']) && $_REQUEST['backandedit'] && $gd_ses_listing = $gd_session->get('listing')) {
@@ -1220,7 +1220,16 @@ function geodir_get_cf_value($cf){
             $value = $cf['default'];
         }
     }
-    return $value;
+    
+    /**
+     * Filter the custom field value.
+     *
+     * @since 1.6.20
+     * 
+     * @param mixed $value Custom field value.
+     * @param array $cf Custom field info.
+     */
+    return apply_filters( 'geodir_get_cf_value', $value, $cf );
 }
 
 /**
