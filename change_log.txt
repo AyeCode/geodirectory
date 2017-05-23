@@ -2,6 +2,8 @@ v1.6.20
 is_featured column added in listing sample CSV file - CHANGED
 Map Bubble placement problem for OpenStreetMap - FIXED
 Listing slider widget image not a link - CHANGED
+Hooks added to filter custom field value - CHANGED
+Problem when listing title matches category or tag name - FIXED
 
 v1.6.19
 X theme update causes some layout issues - FIXED

@@ -1641,9 +1641,9 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
 
                     if(isset($_POST['post_default_category']) && $_POST['post_default_category']){
                         $post_terms = absint($_POST['post_default_category']);
-                    }elseif(isset($_POST['post_category'][$taxonomies]) && $_POST['post_category'][$taxonomies]){
-                        $post_terms = explode(",", trim($_POST['post_category'][$taxonomies], ","));
-                        $post_terms = absint($post_terms[0]);
+                    }elseif(isset($_POST['post_category'][$taxonomies]) && $_POST['post_category'][$taxonomies]) {
+                        $post_terms = is_array($_POST['post_category'][$taxonomies]) ? $_POST['post_category'][$taxonomies] : explode(",", trim($_POST['post_category'][$taxonomies], ","));
+                        $post_terms = !empty($post_terms) ? absint($post_terms[0]) : 0;
                     }elseif (isset($post->{$taxonomies})) {
                         $post_terms = explode(",", trim($post->{$taxonomies}, ","));
                         $post_terms = $post_terms[0];
