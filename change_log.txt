@@ -4,6 +4,7 @@ Map Bubble placement problem for OpenStreetMap - FIXED
 Listing slider widget image not a link - CHANGED
 Hooks added to filter custom field value - CHANGED
 Problem when listing title matches category or tag name - FIXED
+Map ajax now sends location info to bust some caching problems - FIXED
 
 v1.6.19
 X theme update causes some layout issues - FIXED

@@ -362,11 +362,11 @@ function geodir_pagination($before = '', $after = '', $prelabel = '', $nxtlabel 
     global $wp_query, $posts_per_page, $wpdb, $paged, $blog_id;
 
     if (empty($prelabel)) {
-        $prelabel = '<strong>&laquo;</strong>';
+        $prelabel = '<strong>&lt;</strong>';
     }
 
     if (empty($nxtlabel)) {
-        $nxtlabel = '<strong>&raquo;</strong>';
+        $nxtlabel = '<strong>&gt;</strong>';
     }
 
     $half_pages_to_show = round($pages_to_show / 2);
