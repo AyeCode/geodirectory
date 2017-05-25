@@ -467,7 +467,7 @@ function parse_marker_jason(data, map_canvas_var) {
         list_markers(jsonData, map_canvas_var);
         if(eval(map_canvas_var).enable_marker_cluster_no_reposition) {}//dont reposition after load
         else {
-            jQuery.goMap.map.setCenter(eval(map_canvas_var).mapcenter);
+            jQuery.goMap.map.setCenter(mapcenter);
             jQuery.goMap.map.setZoom(eval(map_canvas_var).zoom);
         }
     } else {
