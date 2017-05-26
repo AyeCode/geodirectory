@@ -333,15 +333,15 @@ function geodir_get_current_location_terms($location_array_from = 'session', $gd
             return $location_array;
         }
 
-        $country = $gd_session->get('gd_country');
+        $country = isset($_REQUEST['gd_country']) ? $_REQUEST['gd_country'] : $gd_session->get('gd_country');
         if ($country != '' && $country)
             $location_array['gd_country'] = urldecode($country);
 
-        $region = $gd_session->get('gd_region');
+        $region = isset($_REQUEST['gd_region']) ? $_REQUEST['gd_region'] : $gd_session->get('gd_region');
         if ($region != '' && $region)
             $location_array['gd_region'] = urldecode($region);
 
-        $city = $gd_session->get('gd_city');
+        $city = isset($_REQUEST['gd_city']) ? $_REQUEST['gd_city'] : $gd_session->get('gd_city');
         if ($city != '' && $city)
             $location_array['gd_city'] = urldecode($city);
     } else {
@@ -369,6 +369,7 @@ function geodir_get_current_location_terms($location_array_from = 'session', $gd
 			$location_array = geodir_get_current_location_terms('session');
 		}
     }
+
 
 	/**
 	 * Filter the location terms.
