@@ -64,6 +64,7 @@ class geodir_homepage_map extends WP_Widget
         $map_args['height'] = $height;
         $map_args['maptype'] = $maptype;
         $map_args['scrollwheel'] = $scrollwheel;
+        $map_args['fullscreenControl'] = false;
         $map_args['zoom'] = $zoom;
         $map_args['autozoom'] = $autozoom;
         $map_args['child_collapse'] = $child_collapse;

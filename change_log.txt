@@ -6,6 +6,8 @@ Hooks added to filter custom field value - CHANGED
 Problem when listing title matches category or tag name - FIXED
 Map ajax now sends location info to bust some caching problems - FIXED
 If map first loads empty then changing CPT on map might not work - FIXED
+Dummy images urls www. removed as some servers do not follow redirect - FIXED
+Default Google maps mobile view full screen map button removed as we have our own - CHANGED
 
 v1.6.19
 X theme update causes some layout issues - FIXED

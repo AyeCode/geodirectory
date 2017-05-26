@@ -27,6 +27,7 @@ function initMap(map_options) {
     var etype = options.etype;
     var autozoom = options.autozoom;
     var scrollwheel = options.scrollwheel;
+    var fullscreenControl = options.fullscreenControl;
     var streetview = options.streetViewControl;
     var bubble_size = options.bubble_size;
     var map_canvas = options.map_canvas_name;
@@ -1018,6 +1019,7 @@ function initMapOSM(map_options) {
     var etype = options.etype;
     var autozoom = options.autozoom;
     var scrollwheel = options.scrollwheel;
+    var fullscreenControl = options.fullscreenControl;
     var streetview = options.streetViewControl;
     var bubble_size = options.bubble_size;
     var map_canvas = options.map_canvas_name;
