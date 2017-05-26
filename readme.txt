@@ -1,10 +1,10 @@
 === GeoDirectory - Directory Plugin ===
-Contributors: stiofansisland, paoltaia
+Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
 Tags:  directory plugin, business directory, listings directory, yelp clone, tripadvisor clone, address book, addressbook, addresses, bio, biographies, bios, business, business directory plugin, business-directory, businesses, church, directories, directory, directory widget, geodirectory, googlemap, googlemaps, google maps, list, listings, lists, member directory, members directories, members directory, microformat, microformats, multisite, profile, profiles, staff, user, users, vcard, wordpress business directory, wordpress directory, wordpress directory plugin, yellow pages clone, wordpress business directory plugin, wordpress directory theme, wordpress business directory theme, wordpress city directory plugin, wordpress local directory plugin
 Requires at least: 3.1
 Tested up to: 4.7
-Stable tag: 1.6.19
+Stable tag: 1.6.20
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -149,6 +149,10 @@ GeoDirectory comes with some dummy data you can use to see how listings look. Yo
 7. GD WordPress Admin Page.
 
 == Changelog ==
+
+= 1.6.20 =
+
+[GeoDirectory changelog for version 1.6.20](http://wpgeodirectory.com/change-logs/#v1.6.20).
 
 = 1.6.19 =
 
@@ -406,5 +410,5 @@ initial release
 
 == Upgrade Notice ==
 
-= 1.6.11 =
-Google Analytics BREAKING CHANGE, you must update settings at GD>General>Google Analytics: once you have updated.
+= 1.6.19 =
+SECURITY: WP Session class lib can expose the Session ID publicly - Please Update to 1.6.19 or greater to fix.
