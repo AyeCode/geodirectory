@@ -80,6 +80,7 @@
             },
             scaleControl: false, // Show or hide scale
             scrollwheel: true, // Mouse scroll whell
+            fullscreenControl: false, // disable fullscreen button as we add our own
             directions: false,
             directionsResult: null,
             disableDoubleClickZoom: false,
@@ -726,6 +727,7 @@
             },
             scaleControl: false, // Show or hide scale
             scrollwheel: true, // Mouse scroll whell
+            fullscreenControl: false, // disable fullscreen button as we add our own
             directions: false,
             directionsResult: null,
             disableDoubleClickZoom: false,
@@ -829,6 +831,7 @@
                 },
                 scaleControl: opts.scaleControl,
                 scrollwheel: opts.scrollwheel,
+                fullscreenControl: opts.fullscreenControl,
                 zoom: opts.zoom,
                 minZoom: parseInt(opts.minZoom),
                 maxZoom: parseInt(opts.maxZoom)

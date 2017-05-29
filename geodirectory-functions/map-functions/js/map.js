@@ -27,6 +27,7 @@ function initMap(map_options) {
     var etype = options.etype;
     var autozoom = options.autozoom;
     var scrollwheel = options.scrollwheel;
+    var fullscreenControl = options.fullscreenControl;
     var streetview = options.streetViewControl;
     var bubble_size = options.bubble_size;
     var map_canvas = options.map_canvas_name;
@@ -467,7 +468,7 @@ function parse_marker_jason(data, map_canvas_var) {
         list_markers(jsonData, map_canvas_var);
         if(eval(map_canvas_var).enable_marker_cluster_no_reposition) {}//dont reposition after load
         else {
-            jQuery.goMap.map.setCenter(eval(map_canvas_var).mapcenter);
+            jQuery.goMap.map.setCenter(mapcenter);
             jQuery.goMap.map.setZoom(eval(map_canvas_var).zoom);
         }
     } else {
@@ -1018,6 +1019,7 @@ function initMapOSM(map_options) {
     var etype = options.etype;
     var autozoom = options.autozoom;
     var scrollwheel = options.scrollwheel;
+    var fullscreenControl = options.fullscreenControl;
     var streetview = options.streetViewControl;
     var bubble_size = options.bubble_size;
     var map_canvas = options.map_canvas_name;

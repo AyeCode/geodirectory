@@ -45,7 +45,7 @@ function geodir_dummy_data_taxonomies($post_type,$category_array) {
                     if (geodir_dummy_folder_exists())
                         $dummy_image_url = geodir_plugin_url() . "/geodirectory-admin/dummy/cat_icon";
                     else
-                        $dummy_image_url = 'http://www.wpgeodirectory.com/dummy/cat_icon';
+                        $dummy_image_url = 'http://wpgeodirectory.com/dummy/cat_icon';
 
                     $dummy_image_url = apply_filters('place_dummy_cat_image_url', $dummy_image_url);
 
@@ -89,7 +89,7 @@ function geodir_dummy_data_taxonomies($post_type,$category_array) {
                 if (geodir_dummy_folder_exists())
                     $dummy_image_url = geodir_plugin_url() . "/geodirectory-admin/dummy/cat_icon";
                 else
-                    $dummy_image_url = 'http://www.wpgeodirectory.com/dummy/cat_icon';
+                    $dummy_image_url = 'http://wpgeodirectory.com/dummy/cat_icon';
 
                 $dummy_image_url = apply_filters('place_dummy_cat_image_url', $dummy_image_url);
 

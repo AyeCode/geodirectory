@@ -112,6 +112,7 @@ function geodir_draw_map($map_args = array())
         'zoom' => $map_default_zoom,
         'scrollwheel' => true,
         'streetViewControl' => true,
+        'fullscreenControl' => false,
         'maptype' => $maptype,
         'showPreview' => '0',
         'maxZoom' => 21,
