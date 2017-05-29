@@ -1949,6 +1949,7 @@ function geodir_exif( $file ) {
  * Returns the recent reviews.
  *
  * @since   1.0.0
+ * @since   1.6.21 Recent reviews doesn't working well with WPML.
  * @package GeoDirectory
  *
  * @global object $wpdb        WordPress Database object.
@@ -1963,7 +1964,7 @@ function geodir_exif( $file ) {
  * @return string Returns the recent reviews html.
  */
 function geodir_get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_lenth = 60, $show_pass_post = false ) {
-	global $wpdb, $tablecomments, $tableposts, $rating_table_name, $gd_session;
+	global $wpdb, $tablecomments, $tableposts, $rating_table_name, $gd_session, $table_prefix;
 	$tablecomments = $wpdb->comments;
 	$tableposts    = $wpdb->posts;
 
@@ -1985,16 +1986,26 @@ function geodir_get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_le
 			$city_filter = $wpdb->prepare( " AND r.post_city=%s ", str_replace( "-", " ", $gd_ses_city ) );
 		}
 	}
-
-	$review_table = GEODIR_REVIEW_TABLE;
-	$request      = "SELECT r.id as ID, r.post_type, r.comment_id as comment_ID, r.post_date as comment_date,r.overall_rating, r.user_id, r.post_id FROM $review_table as r WHERE r.post_status = 1 AND r.status =1 AND r.overall_rating>=1 $country_filter $region_filter $city_filter ORDER BY r.post_date DESC, r.id DESC LIMIT $no_comments";
-
+	
+	$join = '';
+	$where = '';
+	
+	if (geodir_is_wpml()) {
+		$lang_code = ICL_LANGUAGE_CODE;
+		
+		if ($lang_code) {
+			$join .= " JOIN " . $table_prefix . "icl_translations AS icltr2 ON icltr2.element_id = c.comment_post_ID AND p.ID = icltr2.element_id AND CONCAT('post_', p.post_type) = icltr2.element_type LEFT JOIN " . $table_prefix . "icl_translations AS icltr_comment ON icltr_comment.element_id = c.comment_ID AND icltr_comment.element_type = 'comment'";
+			$where .= " AND icltr2.language_code = '" . $lang_code . "' AND (icltr_comment.language_code IS NULL OR icltr_comment.language_code = icltr2.language_code)";
+		}
+	}
+	
+	$request = "SELECT r.id AS ID, r.post_type, r.comment_id AS comment_ID, r.post_date AS comment_date, r.overall_rating, r.user_id, r.post_id FROM " . GEODIR_REVIEW_TABLE . " AS r JOIN " . $wpdb->comments . " AS c ON c.comment_ID = r.comment_id JOIN " . $wpdb->posts . " AS p ON p.ID = c.comment_post_ID " . $join . " WHERE c.comment_parent = 0 AND c.comment_approved = 1 AND r.status = 1 AND r.overall_rating >= 1 AND p.post_status = 'publish' " . $where . " ORDER BY r.post_date DESC, r.id DESC LIMIT 5";
+	
 	$comments = $wpdb->get_results( $request );
-
+	
 	foreach ( $comments as $comment ) {
 		// Set the extra comment info needed.
 		$comment_extra = $wpdb->get_row( "SELECT * FROM $wpdb->comments WHERE comment_ID =$comment->comment_ID" );
-		//echo "SELECT * FROM $wpdb->comments WHERE comment_ID =$comment->comment_ID";
 		$comment->comment_content      = $comment_extra->comment_content;
 		$comment->comment_author       = $comment_extra->comment_author;
 		$comment->comment_author_email = $comment_extra->comment_author_email;
@@ -2008,15 +2019,6 @@ function geodir_get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_le
 		$permalink            = get_permalink( $comment->ID ) . "#comment-" . $comment->comment_ID;
 		$comment_author_email = $comment->comment_author_email;
 		$comment_post_ID      = $comment->post_id;
-
-		$na = true;
-		if ( function_exists( 'icl_object_id' ) && icl_object_id( $comment_post_ID, $comment->post_type, true ) ) {
-			$comment_post_ID2 = icl_object_id( $comment_post_ID, $comment->post_type, false );
-			if ( $comment_post_ID == $comment_post_ID2 ) {
-			} else {
-				$na = false;
-			}
-		}
 
 		$post_title        = get_the_title( $comment_post_ID );
 		$permalink         = get_permalink( $comment_post_ID );
@@ -2036,7 +2038,7 @@ function geodir_get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_le
 			$user_profile_url = '';
 		}
 
-		if ( $comment_id && $na ) {
+		if ( $comment_id ) {
 			$comments_echo .= '<li class="clearfix">';
 			$comments_echo .= "<span class=\"li" . $comment_id . " geodir_reviewer_image\">";
 			if ( function_exists( 'get_avatar' ) ) {
