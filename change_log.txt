@@ -1,3 +1,6 @@
+v1.6.21
+Recent reviews doesn't working well with WPML - FIXED
+
 v1.6.20
 is_featured column added in listing sample CSV file - CHANGED
 Map Bubble placement problem for OpenStreetMap - FIXED

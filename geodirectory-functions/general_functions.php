@@ -1503,11 +1503,12 @@ function geodir_breadcrumb() {
 
 
 		} elseif ( geodir_is_page( 'author' ) ) {
+			$dashboard_post_type = isset($_REQUEST['stype']) ? sanitize_text_field($_REQUEST['stype']) : $gd_post_type;
 			$user_id             = get_current_user_id();
 			$author_link         = get_author_posts_url( $user_id );
 			$default_author_link = geodir_getlink( $author_link, array(
 				'geodir_dashbord' => 'true',
-				'stype'           => 'gd_place'
+				'stype'           => $dashboard_post_type
 			), false );
 
 			/**

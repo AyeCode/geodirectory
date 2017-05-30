@@ -2156,7 +2156,7 @@ function geodir_action_add_listing_form()
         $listing_type = $post->listing_type;
         $title = $post->post_title;
         $desc = $post->post_desc;
-        $post_cat = $post->post_category;
+        $post_cat = isset($post->post_category) ? $post->post_category : '';
 
         $kw_tags = $post->post_tags;
         $curImages = isset($post->post_images) ? $post->post_images : '';
