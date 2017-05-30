@@ -4478,17 +4478,23 @@ function geodir_ajax_import_export() {
                                 // Export franchise fields
                                 $is_franchise_active = is_plugin_active( 'geodir_franchise/geodir_franchise.php' ) && geodir_franchise_enabled( $post_type ) ? true : false;
                                 if ($is_franchise_active) {
-                                    if ( isset( $gd_post['gd_is_franchise'] ) && (int)$gd_post['gd_is_franchise'] == 1 ) {
-                                        $gd_franchise_lock = array();
-                                        
-                                        if ( isset( $gd_post['gd_franchise_lock'] ) ) {
-                                            $gd_franchise_lock = str_replace(" ", "", $gd_post['gd_franchise_lock'] );
-                                            $gd_franchise_lock = trim( $gd_franchise_lock );
-                                            $gd_franchise_lock = explode( ",", $gd_franchise_lock );
+                                    if ( isset( $gd_post['gd_is_franchise'] ) && empty( $gd_post['franchise'] ) ) {
+                                        if ( absint( $gd_post['gd_is_franchise'] ) != 0 ) {
+                                            $gd_franchise_lock = array();
+                                            
+                                            if ( isset( $gd_post['gd_franchise_lock'] ) ) {
+                                                $gd_franchise_lock = str_replace(" ", "", $gd_post['gd_franchise_lock'] );
+                                                $gd_franchise_lock = trim( $gd_franchise_lock );
+                                                $gd_franchise_lock = explode( ",", $gd_franchise_lock );
+                                            }
+                                            
+                                            update_post_meta( $saved_post_id, 'gd_is_franchise', 1 );
+                                            update_post_meta( $saved_post_id, 'gd_franchise_lock', $gd_franchise_lock );
+                                        } else {
+                                            if ( function_exists( 'geodir_franchise_remove_franchise' ) ) {
+                                                geodir_franchise_remove_franchise( $saved_post_id );
+                                            }
                                         }
-                                        
-                                        update_post_meta( $saved_post_id, 'gd_is_franchise', 1 );
-                                        update_post_meta( $saved_post_id, 'gd_franchise_lock', $gd_franchise_lock );
                                     } else {
                                         if ( isset( $gd_post['franchise'] ) && (int)$gd_post['franchise'] > 0 && geodir_franchise_check( (int)$gd_post['franchise'] ) ) {
                                             geodir_save_post_meta( $saved_post_id, 'franchise', (int)$gd_post['franchise'] );
