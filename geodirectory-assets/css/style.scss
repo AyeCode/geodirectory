@@ -835,6 +835,13 @@ span.geodir_term_class {
 }
 
 /* GD > Search */
+
+/* X theme rule */
+body.geodir-x-search {
+    .x-header-landmark, .x-breadcrumb-wrap {
+        display: none;
+    }
+}
 .geodir-search select {
     border: 1px solid #CCCCCC;
     border-radius: 3px 3px 3px 3px;
@@ -1929,59 +1936,59 @@ body > span[style*='top: -999px']{display: none;}
 
 /* OpenStreetMap marker bounce */
 @-webkit-keyframes gdbounce {
-    0%, 100% { 
-        top: inherit; 
+    0%, 100% {
+        top: inherit;
     }
-    20%, 80% { 
-        top: -0.8em; 
+    20%, 80% {
+        top: -0.8em;
     }
-    40%, 60% { 
-        top: -1.6em; 
+    40%, 60% {
+        top: -1.6em;
     }
-    50% { 
-        top: -2em; 
+    50% {
+        top: -2em;
     }
 }
 @-moz-keyframes gdbounce {
-    0%, 100% { 
-        top: inherit; 
+    0%, 100% {
+        top: inherit;
     }
-    20%, 80% { 
-        top: -0.8em; 
+    20%, 80% {
+        top: -0.8em;
     }
-    40%, 60% { 
-        top: -1.6em; 
+    40%, 60% {
+        top: -1.6em;
     }
-    50% { 
-        top: -2em; 
+    50% {
+        top: -2em;
     }
 }
 @-o-keyframes gdbounce {
-    0%, 100% { 
-        top: inherit; 
+    0%, 100% {
+        top: inherit;
     }
-    20%, 80% { 
-        top: -0.8em; 
+    20%, 80% {
+        top: -0.8em;
     }
-    40%, 60% { 
-        top: -1.6em; 
+    40%, 60% {
+        top: -1.6em;
     }
-    50% { 
-        top: -2em; 
+    50% {
+        top: -2em;
     }
 }
 @keyframes gdbounce {
-    0%, 100% { 
-        top: inherit; 
+    0%, 100% {
+        top: inherit;
     }
-    20%, 80% { 
-        top: -0.8em; 
+    20%, 80% {
+        top: -0.8em;
     }
-    40%, 60% { 
-        top: -1.6em; 
+    40%, 60% {
+        top: -1.6em;
     }
-    50% { 
-        top: -2em; 
+    50% {
+        top: -2em;
     }
 }
 .gd-osm-marker-bounce {
@@ -2184,7 +2191,7 @@ body > span[style*='top: -999px']{display: none;}
     .gd-locate-me {
         margin-top: 10px;
     }
-    
+
     .gd-locate-me .geodir_textfield {
         margin-top: 0px!important;
     }

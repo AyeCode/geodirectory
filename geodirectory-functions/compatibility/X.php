@@ -121,6 +121,10 @@ function gd_X_compat_add_top_section_back()
 function geodir_x_body_class($classes)
 {
     $classes[] = 'geodir-x';
+
+    if(isset($_REQUEST['geodir_search'])){
+        $classes[] = 'geodir-x-search';
+    }
     return $classes;
 }
 
