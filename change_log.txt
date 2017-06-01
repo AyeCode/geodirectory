@@ -2,6 +2,7 @@ v1.6.21
 Recent reviews doesn't work well with WPML - FIXED
 Changed "Get Directions" custom field to apple maps link as it redirects better on all devices - CHANGED
 Remove X theme search page titles and breadcrumbs - CHANGED
+Post type conflict on add listing page  - FIXED
 
 v1.6.20
 is_featured column added in listing sample CSV file - CHANGED
