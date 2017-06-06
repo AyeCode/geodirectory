@@ -21,6 +21,13 @@ if (!function_exists('geodir_create_tables')) {
 
         $wpdb->hide_errors();
 
+        /*
+         * Indexes have a maximum size of 767 bytes. Historically, we haven't need to be concerned about that.
+         * As of 4.2, however, we moved to utf8mb4, which uses 4 bytes per character. This means that an index which
+         * used to have room for floor(767/3) = 255 characters, now only has room for floor(767/4) = 191 characters.
+         */
+        $max_index_length = 191;
+
         $collate = '';
         if ($wpdb->has_cap('collation')) {
             if (!empty($wpdb->charset)) $collate = "DEFAULT CHARACTER SET $wpdb->charset";
@@ -476,7 +483,7 @@ if (!function_exists('geodir_create_tables')) {
 						post_locations varchar( 254 ) NULL DEFAULT NULL,
 						post_dummy enum( '1', '0' ) NULL DEFAULT '0', 
 						PRIMARY KEY  (post_id),
-						KEY post_locations (post_locations),
+						KEY post_locations (post_locations($max_index_length)),
 						KEY is_featured (is_featured)
 						) $collate ";
 
