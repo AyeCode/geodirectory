@@ -6608,3 +6608,44 @@ function geodir_post_type_setting_fun() {
     }
     return $post_type_arr;
 }
+
+/**
+ * Get the array of images sizes in use to use in the listing size images.
+ *
+ * @since 1.6.21
+ * @return array
+ */
+function geodir_listing_image_size_arr(){
+
+    global $_wp_additional_image_sizes;
+
+    $sizes = array();
+
+    foreach ( get_intermediate_image_sizes() as $_size ) {
+        if ( in_array( $_size, array('thumbnail', 'medium', 'medium_large', 'large') ) ) {
+            $sizes[ $_size ]['width']  = get_option( "{$_size}_size_w" );
+            $sizes[ $_size ]['height'] = get_option( "{$_size}_size_h" );
+            $sizes[ $_size ]['crop']   = (bool) get_option( "{$_size}_crop" );
+        } elseif ( isset( $_wp_additional_image_sizes[ $_size ] ) ) {
+            $sizes[ $_size ] = array(
+                'width'  => $_wp_additional_image_sizes[ $_size ]['width'],
+                'height' => $_wp_additional_image_sizes[ $_size ]['height'],
+                'crop'   => $_wp_additional_image_sizes[ $_size ]['crop'],
+            );
+        }
+    }
+
+
+
+    $options = array();
+
+    $options['default'] = __('GD Default', 'geodirectory');
+
+    if(!empty($sizes)){
+        foreach($sizes as $key=>$val){
+            $options[$key] = $key. ' ( '.$val['width'].' x '.$val['height']. ' )';
+        }
+    }
+
+    return $options;
+}

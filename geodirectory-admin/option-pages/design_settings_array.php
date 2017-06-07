@@ -230,6 +230,17 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
         'std' => '0' // Default value to show home top section
     ),
 
+	array(
+		'name' => __('Listing image size', 'geodirectory'),
+		'desc' => __('Set the size of the image to use on the listing pages and widgets.', 'geodirectory'),
+		'id' => 'geodir_listing_img_size',
+		'css' => 'min-width:300px;',
+		'std' => 'gridview_onehalf',
+		'type' => 'select',
+		'class' => 'chosen_select',
+		'options' => geodir_listing_image_size_arr()
+	),
+
     array(
         'name' => __('Description word limit', 'geodirectory'),
         'desc' => '',
