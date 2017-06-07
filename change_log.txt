@@ -5,6 +5,7 @@ Remove X theme search page titles and breadcrumbs - CHANGED
 Post type conflict on add listing page  - FIXED
 Listings & terms uniqe slug validation with WPML - CHANGED
 DB Max index length variable added - ADDED
+In location transaltion change to in %s to fix prefix location - CHANGED
 
 v1.6.20
 is_featured column added in listing sample CSV file - CHANGED
