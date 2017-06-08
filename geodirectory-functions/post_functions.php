@@ -1311,8 +1311,11 @@ if (!function_exists('geodir_get_featured_image')) {
          * Filter to force the list images to be smaller.
          * @since 1.6.18
          */
-        if( $size=='list-thumb' && apply_filters('geodir_use_small_list_img',false) ){
-            $fimg = get_the_post_thumbnail_url($post_id,'medium');
+
+        $list_img_size = get_option('geodir_listing_img_size','default');
+
+        if( $size=='list-thumb' && $list_img_size != 'default' ){
+            $fimg = get_the_post_thumbnail_url($post_id,$list_img_size);
             if($fimg){
                 $uploads = wp_upload_dir(); 
                 $uploads_baseurl = $uploads['baseurl'];

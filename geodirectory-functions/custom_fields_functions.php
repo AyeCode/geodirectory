@@ -863,7 +863,7 @@ if (!function_exists('geodir_custom_field_save')) {
 
                             if (isset($extra_fields['show_city']) && $extra_fields['show_city']) {
                                 $meta_field_add = "ALTER TABLE " . $detail_table . " ADD `" . $prefix . "city` VARCHAR( 30 ) NULL";
-                                $meta_field_add = "VARCHAR( 30 ) NULL";
+                                $meta_field_add = "VARCHAR( 50 ) NULL";
                                 if ($default_value != '') {
                                     $meta_field_add .= " DEFAULT '" . $default_value . "'";
                                 }
@@ -873,7 +873,7 @@ if (!function_exists('geodir_custom_field_save')) {
                             }
                             if (isset($extra_fields['show_region']) && $extra_fields['show_region']) {
                                 $meta_field_add = "ALTER TABLE " . $detail_table . " ADD `" . $prefix . "region` VARCHAR( 30 ) NULL";
-                                $meta_field_add = "VARCHAR( 30 ) NULL";
+                                $meta_field_add = "VARCHAR( 50 ) NULL";
                                 if ($default_value != '') {
                                     $meta_field_add .= " DEFAULT '" . $default_value . "'";
                                 }
