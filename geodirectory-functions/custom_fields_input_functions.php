@@ -1287,10 +1287,8 @@ function geodir_cfi_taxonomy($html,$cf){
 
                 $cat_display = unserialize($cf['extra_fields']);
 
-                if (isset($_REQUEST['backandedit']) && (is_array($post_cat[$name]) && !empty($post_cat[$name]))) {
-
+                if (isset($_REQUEST['backandedit']) && !empty($post_cat[$name]) && is_array($post_cat[$name])) {
                     $post_cat = implode(",", $post_cat[$name]);
-
                 } else {
                     if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '')
                         $post_cat = geodir_get_post_meta($_REQUEST['pid'], $name, true);

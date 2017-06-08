@@ -360,8 +360,8 @@ function geodir_posts_orderby($orderby)
 
         $current_term->term_id;
 
-        if(get_tax_meta($current_term->term_id,'ct_cat_sort')){
-            $sort_by = get_tax_meta($current_term->term_id,'ct_cat_sort');
+        if(geodir_get_tax_meta($current_term->term_id,'ct_cat_sort')){
+            $sort_by = geodir_get_tax_meta($current_term->term_id,'ct_cat_sort');
         }
     }*/
 

@@ -870,6 +870,7 @@ if (!function_exists('geodir_get_post_meta')) {
      * Get post custom meta.
      *
      * @since 1.0.0
+     * @since 1.6.20 Hook added to filter value.
      * @package GeoDirectory
      * @global object $wpdb WordPress Database object.
      * @global string $plugin_prefix Geodirectory plugin table prefix.
@@ -879,8 +880,7 @@ if (!function_exists('geodir_get_post_meta')) {
      * @todo single variable not yet implemented.
      * @return bool|mixed|null|string Will be an array if $single is false. Will be value of meta data field if $single is true.
      */
-    function geodir_get_post_meta($post_id, $meta_key, $single = false)
-    {
+    function geodir_get_post_meta($post_id, $meta_key, $single = false) {
         if (!$post_id) {
             return false;
         }
@@ -897,13 +897,25 @@ if (!function_exists('geodir_get_post_meta')) {
 
         if ($wpdb->get_var("SHOW COLUMNS FROM " . $table . " WHERE field = '" . $meta_key . "'") != '') {
             $meta_value = $wpdb->get_var($wpdb->prepare("SELECT " . $meta_key . " from " . $table . " where post_id = %d", array($post_id)));
+            
             if ($meta_value && $meta_value !== '') {
-                return maybe_serialize($meta_value);
-            } else
-                return $meta_value;
+                $meta_value = maybe_serialize($meta_value);
+            }
         } else {
-            return false;
+            $meta_value = false;
         }
+        
+        /**
+         * Filter the listing custom meta.
+         *
+         * @since 1.6.20
+         * 
+         * @param bool|mixed|null|string $meta_value Will be an array if $single is false. Will be value of meta data field if $single is true.
+         * @param int $post_id The post ID.
+         * @param string $meta_key The meta key to retrieve.
+         * @param bool $single Optional. Whether to return a single value. Default false.
+         */
+        return apply_filters( 'geodir_get_post_meta', $meta_value, $post_id, $meta_key, $single );
     }
 }
 
@@ -1294,6 +1306,23 @@ if (!function_exists('geodir_get_featured_image')) {
             return false;// if not a GD CPT return;
         }
 
+
+        /**
+         * Filter to force the list images to be smaller.
+         * @since 1.6.18
+         */
+
+        $list_img_size = get_option('geodir_listing_img_size','default');
+
+        if( $size=='list-thumb' && $list_img_size != 'default' ){
+            $fimg = get_the_post_thumbnail_url($post_id,$list_img_size);
+            if($fimg){
+                $uploads = wp_upload_dir(); 
+                $uploads_baseurl = $uploads['baseurl'];
+                $file = str_replace($uploads_baseurl,'',$fimg);
+            }
+        }
+
         $table = $plugin_prefix . $post_type . '_detail';
 
         if (!$file) {
@@ -1511,7 +1540,14 @@ if (!function_exists('geodir_get_images')) {
 
                 $counter++;
             }
-            return (object)$return_arr;
+            //return (object)$return_arr;
+            /**
+             * Filter the images array so things can be changed.
+             *
+             * @since 1.6.20
+             * @param array $return_arr The array of image objects.
+             */
+            return apply_filters('geodir_get_images_arr',$return_arr);
         } else if ($no_images) {
             $default_img = '';
             $default_cat = geodir_get_post_meta($post_id, 'default_category', true);
@@ -1552,7 +1588,13 @@ if (!function_exists('geodir_get_images')) {
 
                 $return_arr[] = (object)$img_arr;
 
-                return $return_arr;
+                /**
+                 * Filter the images array so things can be changed.
+                 * 
+                 * @since 1.6.20
+                 * @param array $return_arr The array of image objects.
+                 */
+                return apply_filters('geodir_get_images_arr',$return_arr);
             } else
                 return false;
         }
@@ -1714,7 +1756,7 @@ if (!function_exists('geodir_set_post_terms')) {
 
                     foreach ($post_term as $cat_id):
 
-                        $term_icon_url = get_tax_meta($cat_id, 'ct_cat_icon', false, $post_type);
+                        $term_icon_url = geodir_get_tax_meta($cat_id, 'ct_cat_icon', false, $post_type);
                         $term_icon = isset($term_icon_url['src']) ? $term_icon_url['src'] : '';
 
                         $post_title = $post_obj->title;
@@ -2282,8 +2324,8 @@ if (!function_exists('geodir_add_to_favorite')) {
          */
         $favourite_icon = apply_filters('geodir_favourite_icon', 'fa fa-heart');
 
-        $user_meta_data = array();
         $user_meta_data = get_user_meta($current_user->data->ID, 'gd_user_favourite_post', true);
+        $user_meta_data = !empty($user_meta_data) && is_array($user_meta_data) ? $user_meta_data : array();
 
         if (empty($user_meta_data) || (!empty($user_meta_data) && !in_array($post_id, $user_meta_data))) {
             $user_meta_data[] = $post_id;

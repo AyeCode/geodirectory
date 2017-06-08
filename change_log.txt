@@ -1,3 +1,32 @@
+v1.6.21
+Recent reviews doesn't work well with WPML - FIXED
+Changed "Get Directions" custom field to apple maps link as it redirects better on all devices - CHANGED
+Remove X theme search page titles and breadcrumbs - CHANGED
+Post type conflict on add listing page  - FIXED
+Listings & terms uniqe slug validation with WPML - CHANGED
+DB Max index length variable added - ADDED
+In location transaltion change to in %s to fix prefix location - CHANGED
+Added option to change default list thumbnail image size - ADDED
+
+v1.6.20
+is_featured column added in listing sample CSV file - CHANGED
+Map Bubble placement problem for OpenStreetMap - FIXED
+Listing slider widget image not a link - CHANGED
+Hooks added to filter custom field value - CHANGED
+Problem when listing title matches category or tag name - FIXED
+Map ajax now sends location info to bust some caching problems - FIXED
+If map first loads empty then changing CPT on map might not work - FIXED
+Dummy images urls www. removed as some servers do not follow redirect - FIXED
+Default Google maps mobile view full screen map button removed as we have our own - CHANGED
+
+v1.6.19
+X theme update causes some layout issues - FIXED
+Kleo listing and CPT pages not using GD titles - FIXED
+Audio custom file fields will now show audio player instead of link - CHANGED
+If single cat selected in home map, show that marker rather than post default marker - CHANGED
+Geolocation on near field can be cached when browser back button used - FIXED
+WP Session class lib can expose the Session ID publicly - SECURITY
+
 v1.6.18
 Custom field should display label instead of value if set in option values - FIXED
 With WPML the location terms added twice when CPT slug is translated - FIXED
@@ -29,6 +58,8 @@ Add locate me button to address input on add listing page - ADDED
 Categories icon urls are broken if site moved from http to https - FIXED
 Allow import/export linked business cpt ids - ADDED
 In front end allowed to translate listing via WPML duplicate translation - ADDED
+Fix issue with Paris sometimes returning a sub section name from Google API - FIXED
+Fix Tax Meta Class conflicts - FIXED
 
 v1.6.17
 Changes for batch WPML duplicates feature - CHANGED

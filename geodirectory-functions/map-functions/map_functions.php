@@ -390,8 +390,9 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
     var css = document.createElement("link");css.setAttribute("rel","stylesheet");css.setAttribute("type","text/css");css.setAttribute("media","all");css.setAttribute("id","geodirectory-leaflet-routing-style");css.setAttribute("href","<?php echo $plugin_url;?>/geodirectory-assets/leaflet/routing/leaflet-routing-machine.css?ver=<?php echo GEODIRECTORY_VERSION;?>");
     document.getElementsByTagName("head")[0].appendChild(css);
     document.write('<' + 'script id="geodirectory-leaflet-script" src="<?php echo $plugin_url;?>/geodirectory-assets/leaflet/leaflet.min.js?ver=<?php echo GEODIRECTORY_VERSION;?>" type="text/javascript"><' + '/script>');
-    document.write('<' + 'script id="geodirectory-leaflet-geo-script" src="<?php echo $plugin_url;?>/geodirectory-assets/leaflet/osm.geocode.js?ver=<?php echo GEODIRECTORY_VERSION;?>" type="text/javascript"><' + '/script>');
-    document.write('<' + 'script id="geodirectory-leaflet-routing-script" src="<?php echo $plugin_url;?>/geodirectory-assets/leaflet/routing/leaflet-routing-machine.js?ver=<?php echo GEODIRECTORY_VERSION;?>" type="text/javascript"><' + '/script>');
+    document.write('<' + 'script id="geodirectory-leaflet-geo-script" src="<?php echo $plugin_url;?>/geodirectory-assets/leaflet/osm.geocode.min.js?ver=<?php echo GEODIRECTORY_VERSION;?>" type="text/javascript"><' + '/script>');
+    document.write('<' + 'script id="geodirectory-leaflet-routing-script" src="<?php echo $plugin_url;?>/geodirectory-assets/leaflet/routing/leaflet-routing-machine.min.js?ver=<?php echo GEODIRECTORY_VERSION;?>" type="text/javascript"><' + '/script>');
+    document.write('<' + 'script id="geodirectory-o-overlappingmarker-script" src="<?php echo $plugin_url;?>/geodirectory-assets/jawj/oms-leaflet.min.js?ver=<?php echo GEODIRECTORY_VERSION;?>" type="text/javascript"><' + '/script>');
 }
 </script>
 <?php

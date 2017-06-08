@@ -112,6 +112,7 @@ function geodir_draw_map($map_args = array())
         'zoom' => $map_default_zoom,
         'scrollwheel' => true,
         'streetViewControl' => true,
+        'fullscreenControl' => false,
         'maptype' => $maptype,
         'showPreview' => '0',
         'maxZoom' => 21,
@@ -370,15 +371,16 @@ function geodir_draw_map($map_args = array())
 
                 <?php
                 if ($geodir_map_options['enable_location_filters']) {
-					$country = get_query_var('gd_country');
+                    $country = get_query_var('gd_country');
 					$region = get_query_var('gd_region');
 					$city = get_query_var('gd_city');
+                    $gd_neighbourhood = get_query_var('gd_neighbourhood');
                     
                     //fix for location/me page
                     $country = $country != 'me' ? $country : '';
 					$region = $region != 'me' ? $region : '';
 					$city = $country != 'me' ? $city : '';
-                    $gd_neighbourhood = isset($_REQUEST['gd_neighbourhood']) ? sanitize_text_field($_REQUEST['gd_neighbourhood']) : '';
+                    $gd_neighbourhood = $country != 'me' ? $gd_neighbourhood : '';
                     ?>
                     <input type="hidden" id="<?php echo $map_canvas_name;?>_location_enabled" value="1"/>
                     <input type="hidden" id="<?php echo $map_canvas_name;?>_country" name="gd_country"

@@ -2837,6 +2837,9 @@ function geodir_wpml_set_filter() {
         
         add_action('geodir_after_save_listing', 'geodir_wpml_duplicate_listing', 100, 2);
         add_action( 'geodir_edit_post_link_html', 'geodir_wpml_frontend_duplicate_listing', 0, 1 );
+        if (is_admin()) {
+            add_filter( 'geodir_design_settings', 'geodir_wpml_duplicate_settings', 10, 1 );
+        }
     }
 }
 add_filter('plugins_loaded', 'geodir_wpml_set_filter');
@@ -2974,3 +2977,127 @@ function geodir_check_redirect($wp) {
     }
 }
 add_action('parse_request', 'geodir_check_redirect', 101, 1);
+
+/**
+ * Filters the unique post slug.
+ *
+ * @since 1.6.20
+ *
+ * @global object $wpdb WordPress Database object.
+ * @global object $sitepress Sitepress WPML object.
+ *
+ * @param string $slug          The post slug.
+ * @param int    $post_ID       Post ID.
+ * @param string $post_status   The post status.
+ * @param string $post_type     Post type.
+ * @param int    $post_parent   Post parent ID
+ * @param string $original_slug The original post slug.
+ */
+function geodir_check_post_to_term_slug( $slug, $post_ID, $post_status, $post_type, $post_parent, $original_slug ) {
+    global $wpdb, $sitepress;
+    
+    if ( $post_type && strpos( $post_type, 'gd_' ) === 0 ) {
+        $wpml_post_join = "";
+        $wpml_post_where = "";
+        $wpml_term_join = "";
+        $wpml_term_where = "";
+        
+        if (geodir_is_wpml()) {
+            $post_language = $post_ID ? $sitepress->post_translations()->get_element_lang_code($post_ID) : $sitepress->get_current_language();
+            $post_language = $post_language ? $post_language : $sitepress->post_translations()->get_save_post_lang($post_ID, $sitepress);
+            if (!$post_language) {
+                $post_language = $sitepress->get_current_language();
+            }
+            
+            $wpml_post_join = " JOIN {$wpdb->prefix}icl_translations AS icl_t ON p.ID = icl_t.element_id AND icl_t.element_type = CONCAT('post_', p.post_type)";
+            $wpml_post_where = " AND icl_t.language_code = '" . $post_language ."'";
+            
+            $wpml_term_join = " JOIN {$wpdb->prefix}icl_translations AS icl_t ON icl_t.element_id = tt.term_taxonomy_id AND icl_t.element_type = CONCAT('tax_', tt.taxonomy)";
+            $wpml_term_where = " AND icl_t.language_code = '" . $post_language ."'";
+        }
+
+        $term_slug_check = $wpdb->get_var( $wpdb->prepare( "SELECT t.slug FROM $wpdb->terms AS t LEFT JOIN $wpdb->term_taxonomy AS tt ON tt.term_id = t.term_id {$wpml_term_join} WHERE t.slug = '%s' AND ( tt.taxonomy = '" . $post_type . "category' OR tt.taxonomy = '" . $post_type . "_tags' ) {$wpml_term_where} LIMIT 1", $slug ) );
+
+        if ( $term_slug_check ) {
+            $suffix = 1;
+            
+            do {
+                $alt_slug = _truncate_post_slug( $original_slug, 200 - ( strlen( $suffix ) + 1 ) ) . "-$suffix";
+                
+                $term_check = $wpdb->get_var( $wpdb->prepare( "SELECT t.slug FROM $wpdb->terms AS t LEFT JOIN $wpdb->term_taxonomy AS tt ON tt.term_id = t.term_id {$wpml_term_join} WHERE t.slug = '%s' AND ( tt.taxonomy = '" . $post_type . "category' OR tt.taxonomy = '" . $post_type . "_tags' ) {$wpml_term_where} LIMIT 1", $alt_slug ) );
+                
+                $post_check = !$term_check && $wpdb->get_var( $wpdb->prepare( "SELECT p.post_name FROM $wpdb->posts p {$wpml_post_join} WHERE p.post_name = %s AND p.post_type = %s AND p.ID != %d {$wpml_term_where} LIMIT 1", $alt_slug, $post_type, $post_ID ) );
+                
+                $term_slug_check = $term_check || $post_check;
+                
+                $suffix++;
+            } while ( $term_slug_check );
+            
+            $slug = $alt_slug;
+        }
+    }
+    
+    return $slug;
+}
+add_filter( 'wp_unique_post_slug', 'geodir_check_post_to_term_slug', 101, 6 );
+
+/**
+ * Check whether a post name with slug exists or not.
+ *
+ * @since 1.6.20
+ *
+ * @global object $wpdb WordPress Database object.
+ * @global array $gd_term_post_type Cached array for term post type.
+ * @global array $gd_term_taxonomy Cached array for term taxonomy.
+ * @global object $sitepress Sitepress WPML object.
+ *
+ * @param bool $slug_exists Default: false.
+ * @param string $slug Term slug.
+ * @param int $term_id The term ID.
+ * @return bool true when exists. false when not exists.
+ */
+function geodir_check_term_to_post_slug( $slug_exists, $slug, $term_id ) {
+    global $wpdb, $gd_term_post_type, $gd_term_taxonomy, $sitepress;
+    
+    if ( $slug_exists ) {
+        return $slug_exists;
+    }
+    
+    if ( !empty( $gd_term_taxonomy ) && $gd_term_taxonomy[$term_id] ) {
+        $taxonomy = $gd_term_taxonomy[$term_id];
+    } else {
+        $taxonomy = $wpdb->get_var( $wpdb->prepare( "SELECT taxonomy FROM $wpdb->term_taxonomy WHERE term_id = %d LIMIT 1", $term_id ) );
+        $gd_term_taxonomy[$term_id] = $taxonomy;
+    }
+    
+    if ( empty($taxonomy) ) {
+        return $slug_exists;
+    }
+    
+    if ( !empty( $gd_term_post_type ) && $gd_term_post_type[$term_id] ) {
+        $post_type = $gd_term_post_type[$term_id];
+    } else {
+        $taxonomy_obj = get_taxonomy( $taxonomy );
+        $post_type = !empty( $taxonomy_obj->object_type ) ? $taxonomy_obj->object_type[0] : NULL;
+    }
+    
+    $wpml_post_join = "";
+    $wpml_post_where = "";
+    
+    if (geodir_is_wpml()) {
+        $term_language = $term_id ? geodir_get_language_for_element($term_id, 'tax_' . $taxonomy) : $sitepress->get_current_language();
+        if (!$term_language) {
+            $term_language = $sitepress->get_current_language();
+        }
+        
+        $wpml_post_join = " JOIN {$wpdb->prefix}icl_translations AS icl_t ON p.ID = icl_t.element_id AND icl_t.element_type = CONCAT('post_', p.post_type)";
+        $wpml_post_where = " AND icl_t.language_code = '" . $term_language ."'";
+    }
+    
+    if ( $post_type && $wpdb->get_var( $wpdb->prepare( "SELECT p.post_name FROM $wpdb->posts p {$wpml_post_join} WHERE p.post_name = %s AND p.post_type = %s  {$wpml_post_where} LIMIT 1", $slug, $post_type ) ) ) {
+        $slug_exists = true;
+    }
+
+    return $slug_exists;
+}
+add_filter( 'geodir_term_slug_is_exists', 'geodir_check_term_to_post_slug', 10, 3 );

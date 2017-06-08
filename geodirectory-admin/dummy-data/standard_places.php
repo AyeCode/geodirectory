@@ -20,7 +20,7 @@ if($dummy_post_index==1){
 if (geodir_dummy_folder_exists())
     $dummy_image_url = geodir_plugin_url() . "/geodirectory-admin/dummy";
 else
-    $dummy_image_url = 'https://www.wpgeodirectory.com/dummy';
+    $dummy_image_url = 'https://wpgeodirectory.com/dummy';
 
 $dummy_image_url = apply_filters('place_dummy_image_url', $dummy_image_url);
 

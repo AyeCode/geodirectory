@@ -458,7 +458,8 @@ function geodir_predefined_custom_field_output_get_directions($html,$location,$c
             $html .= $field_icon_af;
         }
 
-        $html .= '<a href="https://www.google.com/maps/dir//\'' . $post->post_latitude . ',' . $post->post_longitude . '\'/" target="_blank" >' . $link_text . '</a>';
+        // We use maps.apple.com here because it will handle redirects nicely in most cases
+        $html .= '<a href="https://maps.apple.com/?daddr=' . $post->post_latitude . ',' . $post->post_longitude . '" target="_blank" >' . $link_text . '</a>';
         $html .= '</div>';
 
     }else{

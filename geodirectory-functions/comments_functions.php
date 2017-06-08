@@ -1048,3 +1048,21 @@ function geodir_detail_reviews_tab_title($tabs_arr) {
     return $tabs_arr;
 }
 add_filter('geodir_detail_page_tab_list_extend', 'geodir_detail_reviews_tab_title', 1000, 1);
+
+
+/**
+ * Disable JetPack comments on GD post types.
+ *
+ * @since 1.6.21
+ */
+function geodir_jetpack_disable_comments(){
+    //only run if jetpack installed
+    if(defined('JETPACK__VERSION')){
+        $post_types = geodir_get_posttypes();
+        foreach($post_types as $post_type){
+            add_filter('jetpack_comment_form_enabled_for_' . $post_type, '__return_false');
+        }
+    }
+}
+
+add_action('plugins_loaded','geodir_jetpack_disable_comments');

@@ -333,15 +333,15 @@ function geodir_get_current_location_terms($location_array_from = 'session', $gd
             return $location_array;
         }
 
-        $country = $gd_session->get('gd_country');
+        $country = isset($_REQUEST['gd_country']) ? $_REQUEST['gd_country'] : $gd_session->get('gd_country');
         if ($country != '' && $country)
             $location_array['gd_country'] = urldecode($country);
 
-        $region = $gd_session->get('gd_region');
+        $region = isset($_REQUEST['gd_region']) ? $_REQUEST['gd_region'] : $gd_session->get('gd_region');
         if ($region != '' && $region)
             $location_array['gd_region'] = urldecode($region);
 
-        $city = $gd_session->get('gd_city');
+        $city = isset($_REQUEST['gd_city']) ? $_REQUEST['gd_city'] : $gd_session->get('gd_city');
         if ($city != '' && $city)
             $location_array['gd_city'] = urldecode($city);
     } else {
@@ -369,6 +369,7 @@ function geodir_get_current_location_terms($location_array_from = 'session', $gd
 			$location_array = geodir_get_current_location_terms('session');
 		}
     }
+
 
 	/**
 	 * Filter the location terms.
@@ -677,15 +678,15 @@ function geodir_location_replace_vars($location_array = array(), $sep = NULL, $g
     $location_replace_vars = array();
     $location_replace_vars['%%location_sep%%'] = $sep !== NULL ? $sep : '|';
     $location_replace_vars['%%location%%'] = $full_location;
-    $location_replace_vars['%%in_location%%'] = $full_location != '' ? __( 'in', 'geodirectory' ) . ' ' . $full_location : '';
+    $location_replace_vars['%%in_location%%'] = $full_location != '' ? sprintf( _x('in %s','in location', 'geodirectory'), $full_location ) : '';
     $location_replace_vars['%%location_single%%'] = $location_single;
-    $location_replace_vars['%%in_location_single%%'] = $location_single != '' ? __( 'in', 'geodirectory' ) . ' ' . $location_single : '';
+    $location_replace_vars['%%in_location_single%%'] = $location_single != '' ? sprintf( _x('in %s','in location', 'geodirectory'), $location_single ) : '';
 
     foreach ($location_names as $type => $name) {
         $location_type = strpos($type, 'gd_') === 0 ? substr($type, 3) : $type;
 
         $location_replace_vars['%%location_' . $location_type . '%%'] = $name;
-        $location_replace_vars['%%in_location_' . $location_type . '%%'] = !empty($name) ? __( 'in', 'geodirectory' ) . ' ' . $name : '';
+        $location_replace_vars['%%in_location_' . $location_type . '%%'] = !empty($name) ? sprintf( _x('in %s','in location', 'geodirectory'), $name ) : '';
     }
 
     /**

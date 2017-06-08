@@ -112,6 +112,10 @@ if (!function_exists('geodir_admin_scripts')) {
             /** This filter is documented in geodirectory_template_tags.php */
             $map_extra = apply_filters('geodir_googlemap_script_extra', '');
             wp_enqueue_script('geodirectory-googlemap-script', 'https://maps.google.com/maps/api/js?' . $map_lang . $map_key . $map_extra, '', NULL);
+            
+            // Overlapping Marker Spiderfier
+            wp_register_script('geodirectory-g-overlappingmarker-script', geodir_plugin_url() . '/geodirectory-assets/jawj/oms.min.js', array(), GEODIRECTORY_VERSION);
+            wp_enqueue_script('geodirectory-g-overlappingmarker-script');
         }
         
         if ($geodir_map_name == 'osm') {
@@ -122,8 +126,12 @@ if (!function_exists('geodir_admin_scripts')) {
             wp_register_script('geodirectory-leaflet-script', geodir_plugin_url() . '/geodirectory-assets/leaflet/leaflet.min.js', array(), GEODIRECTORY_VERSION);
             wp_enqueue_script('geodirectory-leaflet-script');
             
-            wp_register_script('geodirectory-leaflet-geo-script', geodir_plugin_url() . '/geodirectory-assets/leaflet/osm.geocode.js', array('geodirectory-leaflet-script'), GEODIRECTORY_VERSION);
+            wp_register_script('geodirectory-leaflet-geo-script', geodir_plugin_url() . '/geodirectory-assets/leaflet/osm.geocode.min.js', array('geodirectory-leaflet-script'), GEODIRECTORY_VERSION);
             wp_enqueue_script('geodirectory-leaflet-geo-script');
+            
+            // Overlapping Marker Spiderfier Leaflet
+            wp_register_script('geodirectory-o-overlappingmarker-script', geodir_plugin_url() . '/geodirectory-assets/jawj/oms-leaflet.min.js', array(), GEODIRECTORY_VERSION);
+            wp_enqueue_script('geodirectory-o-overlappingmarker-script');
         }
         wp_enqueue_script( 'jquery-ui-autocomplete' );
         
@@ -3738,8 +3746,7 @@ function geodir_ajax_import_export() {
                 
                 if (!empty($wp_filetype) && isset($wp_filetype['ext']) && geodir_strtolower($wp_filetype['ext']) == 'csv') {
                     $json['error'] = NULL;
-                    $json['rows'] = 0;
-                    
+
                     $lc_all = setlocale(LC_ALL, 0); // Fix issue of fgetcsv ignores special characters when they are at the beginning of line
                     setlocale(LC_ALL, 'en_US.UTF-8');
                     if ( ( $handle = fopen($target_path, "r" ) ) !== FALSE ) {
@@ -3976,11 +3983,11 @@ function geodir_ajax_import_export() {
                                 // WPML
                                 
                                 if ( isset( $term_data['top_description'] ) ) {
-                                    update_tax_meta( $term_id, 'ct_cat_top_desc', $term_data['top_description'], $cat_posttype );
+                                    geodir_update_tax_meta( $term_id, 'ct_cat_top_desc', $term_data['top_description'], $cat_posttype );
                                 }
                                 
                                 if ( isset( $term_data['cat_schema'] ) ) {
-                                    update_tax_meta( $term_id, 'ct_cat_schema', $term_data['cat_schema'], $cat_posttype );
+                                    geodir_update_tax_meta( $term_id, 'ct_cat_schema', $term_data['cat_schema'], $cat_posttype );
                                 }
             
                                 $attachment = false;
@@ -3990,17 +3997,17 @@ function geodir_ajax_import_export() {
                                     
                                     if ( basename($cat_image) != $term_data['image'] ) {
                                         $attachment = true;
-                                        update_tax_meta( $term_id, 'ct_cat_default_img', array( 'id' => 'image', 'src' => $uploads['url'] . '/' . $term_data['image'] ), $cat_posttype );
+                                        geodir_update_tax_meta( $term_id, 'ct_cat_default_img', array( 'id' => 'image', 'src' => $uploads['url'] . '/' . $term_data['image'] ), $cat_posttype );
                                     }
                                 }
                                 
                                 if ( isset( $term_data['icon'] ) && $term_data['icon'] != '' ) {
-                                    $cat_icon = get_tax_meta( $term_id, 'ct_cat_icon', false, $cat_posttype );
+                                    $cat_icon = geodir_get_tax_meta( $term_id, 'ct_cat_icon', false, $cat_posttype );
                                     $cat_icon = !empty( $cat_icon ) && isset( $cat_icon['src'] ) ? $cat_icon['src'] : '';
 
                                     if ( basename($cat_icon) != $term_data['icon'] ) {
                                         $attachment = true;
-                                        update_tax_meta( $term_id, 'ct_cat_icon', array( 'id' => 'icon', 'src' => $uploads['url'] . '/' . $term_data['icon'] ), $cat_posttype );
+                                        geodir_update_tax_meta( $term_id, 'ct_cat_icon', array( 'id' => 'icon', 'src' => $uploads['url'] . '/' . $term_data['icon'] ), $cat_posttype );
                                     }
                                 }
                                 
@@ -4077,6 +4084,7 @@ function geodir_ajax_import_export() {
                             $post_tags = array();
                             $post_type = '';
                             $post_status = '';
+                            $is_featured = 0;
                             $geodir_video = '';
                             $post_address = '';
                             $post_city = '';
@@ -4470,17 +4478,23 @@ function geodir_ajax_import_export() {
                                 // Export franchise fields
                                 $is_franchise_active = is_plugin_active( 'geodir_franchise/geodir_franchise.php' ) && geodir_franchise_enabled( $post_type ) ? true : false;
                                 if ($is_franchise_active) {
-                                    if ( isset( $gd_post['gd_is_franchise'] ) && (int)$gd_post['gd_is_franchise'] == 1 ) {
-                                        $gd_franchise_lock = array();
-                                        
-                                        if ( isset( $gd_post['gd_franchise_lock'] ) ) {
-                                            $gd_franchise_lock = str_replace(" ", "", $gd_post['gd_franchise_lock'] );
-                                            $gd_franchise_lock = trim( $gd_franchise_lock );
-                                            $gd_franchise_lock = explode( ",", $gd_franchise_lock );
+                                    if ( isset( $gd_post['gd_is_franchise'] ) && empty( $gd_post['franchise'] ) ) {
+                                        if ( absint( $gd_post['gd_is_franchise'] ) != 0 ) {
+                                            $gd_franchise_lock = array();
+                                            
+                                            if ( isset( $gd_post['gd_franchise_lock'] ) ) {
+                                                $gd_franchise_lock = str_replace(" ", "", $gd_post['gd_franchise_lock'] );
+                                                $gd_franchise_lock = trim( $gd_franchise_lock );
+                                                $gd_franchise_lock = explode( ",", $gd_franchise_lock );
+                                            }
+                                            
+                                            update_post_meta( $saved_post_id, 'gd_is_franchise', 1 );
+                                            update_post_meta( $saved_post_id, 'gd_franchise_lock', $gd_franchise_lock );
+                                        } else {
+                                            if ( function_exists( 'geodir_franchise_remove_franchise' ) ) {
+                                                geodir_franchise_remove_franchise( $saved_post_id );
+                                            }
                                         }
-                                        
-                                        update_post_meta( $saved_post_id, 'gd_is_franchise', 1 );
-                                        update_post_meta( $saved_post_id, 'gd_franchise_lock', $gd_franchise_lock );
                                     } else {
                                         if ( isset( $gd_post['franchise'] ) && (int)$gd_post['franchise'] > 0 && geodir_franchise_check( (int)$gd_post['franchise'] ) ) {
                                             geodir_save_post_meta( $saved_post_id, 'franchise', (int)$gd_post['franchise'] );
@@ -5637,7 +5651,7 @@ function geodir_imex_get_terms( $post_type, $per_page = 0, $page_no = 0 ) {
 		$csv_rows[] = $csv_row;
 		
 		foreach ( $terms as $term ) {
-			$cat_icon = get_tax_meta( $term->term_id, 'ct_cat_icon', false, $post_type );
+			$cat_icon = geodir_get_tax_meta( $term->term_id, 'ct_cat_icon', false, $post_type );
 			$cat_icon = !empty( $cat_icon ) && isset( $cat_icon['src'] ) ? $cat_icon['src'] : '';
 			
 			$cat_image = geodir_get_default_catimage( $term->term_id, $post_type );
@@ -5655,7 +5669,7 @@ function geodir_imex_get_terms( $post_type, $per_page = 0, $page_no = 0 ) {
 			$csv_row[] = $term->slug;
 			$csv_row[] = $post_type;
 			$csv_row[] = $cat_parent;
-			$csv_row[] = get_tax_meta( $term->term_id, 'ct_cat_schema', false, $post_type );
+			$csv_row[] = geodir_get_tax_meta( $term->term_id, 'ct_cat_schema', false, $post_type );
             // WPML
 			if ($is_wpml) {
 				$csv_row[] = geodir_get_language_for_element( $term->term_id, 'tax_' . $taxonomy );
@@ -5663,7 +5677,7 @@ function geodir_imex_get_terms( $post_type, $per_page = 0, $page_no = 0 ) {
 			}
 			// WPML
 			$csv_row[] = $term->description;
-			$csv_row[] = get_tax_meta( $term->term_id, 'ct_cat_top_desc', false, $post_type );
+			$csv_row[] = geodir_get_tax_meta( $term->term_id, 'ct_cat_top_desc', false, $post_type );
 			$csv_row[] = $cat_image;
 			$csv_row[] = $cat_icon;
 			
@@ -6593,4 +6607,45 @@ function geodir_post_type_setting_fun() {
         $post_type_arr[$key] = $post_types_obj->labels->singular_name;
     }
     return $post_type_arr;
+}
+
+/**
+ * Get the array of images sizes in use to use in the listing size images.
+ *
+ * @since 1.6.21
+ * @return array
+ */
+function geodir_listing_image_size_arr(){
+
+    global $_wp_additional_image_sizes;
+
+    $sizes = array();
+
+    foreach ( get_intermediate_image_sizes() as $_size ) {
+        if ( in_array( $_size, array('thumbnail', 'medium', 'medium_large', 'large') ) ) {
+            $sizes[ $_size ]['width']  = get_option( "{$_size}_size_w" );
+            $sizes[ $_size ]['height'] = get_option( "{$_size}_size_h" );
+            $sizes[ $_size ]['crop']   = (bool) get_option( "{$_size}_crop" );
+        } elseif ( isset( $_wp_additional_image_sizes[ $_size ] ) ) {
+            $sizes[ $_size ] = array(
+                'width'  => $_wp_additional_image_sizes[ $_size ]['width'],
+                'height' => $_wp_additional_image_sizes[ $_size ]['height'],
+                'crop'   => $_wp_additional_image_sizes[ $_size ]['crop'],
+            );
+        }
+    }
+
+
+
+    $options = array();
+
+    $options['default'] = __('GD Default', 'geodirectory');
+
+    if(!empty($sizes)){
+        foreach($sizes as $key=>$val){
+            $options[$key] = $key. ' ( '.$val['width'].' x '.$val['height']. ' )';
+        }
+    }
+
+    return $options;
 }

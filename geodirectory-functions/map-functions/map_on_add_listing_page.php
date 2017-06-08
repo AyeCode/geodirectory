@@ -323,6 +323,26 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
                 else if (administrative_area_level_1.long_name) {
                     getCity = administrative_area_level_1.long_name;
                 }
+            }else if(rr=="FR") {
+
+                if (administrative_area_level_2.long_name=='Paris') {
+                    getCity = administrative_area_level_2.long_name;
+                }else{
+                    if (locality.long_name) {
+                        getCity = locality.long_name;
+                    }else if (postal_town.long_name) {
+                        getCity = postal_town.long_name;
+                    }
+                    else if (sublocality_level_1.long_name) {
+                        getCity = sublocality_level_1.long_name;
+                    }
+                    else if (administrative_area_level_3.long_name) {
+                        getCity = administrative_area_level_3.long_name;
+                    }
+                    else if (administrative_area_level_1.long_name) {
+                        getCity = administrative_area_level_1.long_name;
+                    }
+                }
             }else {
                 if (locality.long_name) {
                     getCity = locality.long_name;

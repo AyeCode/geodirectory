@@ -1162,7 +1162,7 @@ function geodir_add_meta_keywords() {
 				$category = $geodir_is_category ? get_term_by( 'slug', $geodir_is_category, $category_taxonomy[0] ) : null;
 				if ( isset( $category->term_id ) && ! empty( $category->term_id ) ) {
 					$category_id   = $category->term_id;
-					$category_desc = trim( $category->description ) != '' ? trim( $category->description ) : get_tax_meta( $category_id, 'ct_cat_top_desc', false, $geodir_post_type );
+					$category_desc = trim( $category->description ) != '' ? trim( $category->description ) : geodir_get_tax_meta( $category_id, 'ct_cat_top_desc', false, $geodir_post_type );
 					if ( $location_id ) {
 						$option_name    = 'geodir_cat_loc_' . $geodir_post_type . '_' . $category_id;
 						$cat_loc_option = get_option( $option_name );
@@ -1301,7 +1301,7 @@ function geodir_add_meta_keywords() {
  *
  * @since   1.0.0
  * @package GeoDirectory
- * @return array eturns list of options available as an array.
+ * @return array returns list of options available as an array.
  */
 function geodir_detail_page_tabs_key_value_array() {
 	$geodir_detail_page_tabs_key_value_array = array();
@@ -1584,7 +1584,7 @@ function geodir_show_detail_page_tabs() {
 		}
 	}
 
-	if ( $active_tab === '' && $default_tab !== '' ) { // Make first tab acs a active tab if not any tab is active.
+	if ( $active_tab === '' && $default_tab !== '' ) { // Make first tab as a active tab if not any tab is active.
 		if ( isset( $arr_detail_page_tabs[ $active_tab ] ) && isset( $arr_detail_page_tabs[ $active_tab ]['is_active_tab'] ) ) {
 			$arr_detail_page_tabs[ $active_tab ]['is_active_tab'] = false;
 		}
@@ -1692,7 +1692,7 @@ function geodir_show_detail_page_tabs() {
 								echo $thumb_image;
 								break;
 							case 'post_video':
-								// some browsers hide $_POST data if used for embeds so we repalce with a placeholder
+								// some browsers hide $_POST data if used for embeds so we replace with a placeholder
 								if ( $preview ) {
 									if ( $video ) {
 										echo "<span class='gd-video-embed-preview' ><p class='gd-video-preview-text'><i class=\"fa fa-video-camera\" aria-hidden=\"true\"></i><br />" . __( 'Video Preview Placeholder', 'geodirectory' ) . "</p></span>";
@@ -1949,6 +1949,7 @@ function geodir_exif( $file ) {
  * Returns the recent reviews.
  *
  * @since   1.0.0
+ * @since   1.6.21 Recent reviews doesn't working well with WPML.
  * @package GeoDirectory
  *
  * @global object $wpdb        WordPress Database object.
@@ -1963,7 +1964,7 @@ function geodir_exif( $file ) {
  * @return string Returns the recent reviews html.
  */
 function geodir_get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_lenth = 60, $show_pass_post = false ) {
-	global $wpdb, $tablecomments, $tableposts, $rating_table_name, $gd_session;
+	global $wpdb, $tablecomments, $tableposts, $rating_table_name, $gd_session, $table_prefix;
 	$tablecomments = $wpdb->comments;
 	$tableposts    = $wpdb->posts;
 
@@ -1985,16 +1986,26 @@ function geodir_get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_le
 			$city_filter = $wpdb->prepare( " AND r.post_city=%s ", str_replace( "-", " ", $gd_ses_city ) );
 		}
 	}
-
-	$review_table = GEODIR_REVIEW_TABLE;
-	$request      = "SELECT r.id as ID, r.post_type, r.comment_id as comment_ID, r.post_date as comment_date,r.overall_rating, r.user_id, r.post_id FROM $review_table as r WHERE r.post_status = 1 AND r.status =1 AND r.overall_rating>=1 $country_filter $region_filter $city_filter ORDER BY r.post_date DESC, r.id DESC LIMIT $no_comments";
-
+	
+	$join = '';
+	$where = '';
+	
+	if (geodir_is_wpml()) {
+		$lang_code = ICL_LANGUAGE_CODE;
+		
+		if ($lang_code) {
+			$join .= " JOIN " . $table_prefix . "icl_translations AS icltr2 ON icltr2.element_id = c.comment_post_ID AND p.ID = icltr2.element_id AND CONCAT('post_', p.post_type) = icltr2.element_type LEFT JOIN " . $table_prefix . "icl_translations AS icltr_comment ON icltr_comment.element_id = c.comment_ID AND icltr_comment.element_type = 'comment'";
+			$where .= " AND icltr2.language_code = '" . $lang_code . "' AND (icltr_comment.language_code IS NULL OR icltr_comment.language_code = icltr2.language_code)";
+		}
+	}
+	
+	$request = "SELECT r.id AS ID, r.post_type, r.comment_id AS comment_ID, r.post_date AS comment_date, r.overall_rating, r.user_id, r.post_id FROM " . GEODIR_REVIEW_TABLE . " AS r JOIN " . $wpdb->comments . " AS c ON c.comment_ID = r.comment_id JOIN " . $wpdb->posts . " AS p ON p.ID = c.comment_post_ID " . $join . " WHERE c.comment_parent = 0 AND c.comment_approved = 1 AND r.status = 1 AND r.overall_rating >= 1 AND p.post_status = 'publish' " . $where . " ORDER BY r.post_date DESC, r.id DESC LIMIT 5";
+	
 	$comments = $wpdb->get_results( $request );
-
+	
 	foreach ( $comments as $comment ) {
 		// Set the extra comment info needed.
 		$comment_extra = $wpdb->get_row( "SELECT * FROM $wpdb->comments WHERE comment_ID =$comment->comment_ID" );
-		//echo "SELECT * FROM $wpdb->comments WHERE comment_ID =$comment->comment_ID";
 		$comment->comment_content      = $comment_extra->comment_content;
 		$comment->comment_author       = $comment_extra->comment_author;
 		$comment->comment_author_email = $comment_extra->comment_author_email;
@@ -2008,15 +2019,6 @@ function geodir_get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_le
 		$permalink            = get_permalink( $comment->ID ) . "#comment-" . $comment->comment_ID;
 		$comment_author_email = $comment->comment_author_email;
 		$comment_post_ID      = $comment->post_id;
-
-		$na = true;
-		if ( function_exists( 'icl_object_id' ) && icl_object_id( $comment_post_ID, $comment->post_type, true ) ) {
-			$comment_post_ID2 = icl_object_id( $comment_post_ID, $comment->post_type, false );
-			if ( $comment_post_ID == $comment_post_ID2 ) {
-			} else {
-				$na = false;
-			}
-		}
 
 		$post_title        = get_the_title( $comment_post_ID );
 		$permalink         = get_permalink( $comment_post_ID );
@@ -2036,7 +2038,7 @@ function geodir_get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_le
 			$user_profile_url = '';
 		}
 
-		if ( $comment_id && $na ) {
+		if ( $comment_id ) {
 			$comments_echo .= '<li class="clearfix">';
 			$comments_echo .= "<span class=\"li" . $comment_id . " geodir_reviewer_image\">";
 			if ( function_exists( 'get_avatar' ) ) {
@@ -2232,13 +2234,13 @@ function geodir_output_favourite_html_listings( $post_id ) {
 }
 
 add_action( 'geodir_listing_after_pinpoint', 'geodir_output_pinpoint_html_listings', 1, 2 );
-function geodir_output_pinpoint_html_listings( $post_id, $post ) {
+function geodir_output_pinpoint_html_listings( $post_id, $post = array() ) {
 	global $wp_query;
 
 	$show_pin_point = $wp_query->is_main_query();
 
-	if ( ! empty( $show_pin_point ) && is_active_widget( false, "", "geodir_map_v3_listing_map" ) ) {
-		$term_icon_url = get_tax_meta( $post->default_category, 'ct_cat_icon', false, $post->post_type );
+	if ( ! empty( $post ) && ! empty( $show_pin_point ) && is_active_widget( false, "", "geodir_map_v3_listing_map" ) ) {
+		$term_icon_url = geodir_get_tax_meta( $post->default_category, 'ct_cat_icon', false, $post->post_type );
 		$marker_icon   = isset( $term_icon_url['src'] ) ? $term_icon_url['src'] : get_option( 'geodir_default_marker_icon' );
 		?>
 		<span class="geodir-pinpoint"
@@ -2388,7 +2390,7 @@ function geodir_search_form_near_input() {
 	} else {
 		$near = $default_near_text;
 	}
-
+	
 
 	global $geodir_search_post_type;
 	$curr_post_type = $geodir_search_post_type;
@@ -2528,7 +2530,7 @@ function geodir_get_language_for_element($element_id, $element_type) {
  * @param array $postarr Array of post data.
  * @param int $tr_post_id Translation Post ID.
  * @param bool $after_save If true it will force duplicate. 
- *                         Added to fix duplicate transaltion for front end.
+ *                         Added to fix duplicate translation for front end.
  */
 function geodir_icl_make_duplicate($master_post_id, $lang, $postarr, $tr_post_id, $after_save = false) {
     global $sitepress;
@@ -2983,12 +2985,18 @@ function geodir_wpml_allowed_to_duplicate( $post_id ) {
         return $allowed;
     }
     
-    if ( !is_post_type_translated( get_post_type( $post_id ) ) || get_post_meta( $post_id, '_icl_lang_duplicate_of', true ) ) {
+    $post_type = get_post_type( $post_id );
+    if ( !is_post_type_translated( $post_type ) || get_post_meta( $post_id, '_icl_lang_duplicate_of', true ) ) {
         return $allowed;
     }
     
     if ( geodir_listing_belong_to_current_user( $post_id ) ) {
         $allowed = true;
+    }
+    
+    $disable_cpts = get_option( 'geodir_wpml_disable_duplicate' );
+    if ( $allowed && !empty( $disable_cpts ) && in_array( $post_type, $disable_cpts ) ) {
+        $allowed = false;
     }
     
     /**
@@ -3078,4 +3086,37 @@ function geodir_wpml_frontend_duplicate_listing( $content_html ) {
     }
     
     return $content_html;
+}
+
+/**
+ * Add setting for WPML front-end duplicate translation in design page setting section.
+ *
+ * @since 1.6.18
+ *
+ * @param array $settings GD design settings array.
+ * @return array Filtered GD design settings array..
+ */
+function geodir_wpml_duplicate_settings( $settings = array() ) {
+    $new_settings = array();
+    
+    foreach ( $settings as $key => $setting ) {
+        
+        if ( isset( $setting['type'] ) && $setting['type'] == 'sectionend' && $setting['id'] == 'detail_page_settings' ) {
+            $new_settings[] = array(
+                'name' => __('Disable WPML duplicate translation', 'geodirectory'),
+                'desc' => __('Select post types to disable front end WPML duplicate translation. For selected post types the WPML duplicate option will be disabled from listing detail page sidebar.', 'geodirectory'),
+                'tip' => '',
+                'id' => 'geodir_wpml_disable_duplicate',
+                'css' => 'min-width:300px;',
+                'std' => '',
+                'type' => 'multiselect',
+                'placeholder_text' => __('Select post types', 'geodirectory'),
+                'class' => 'chosen_select',
+                'options' => array_unique(geodir_post_type_setting_fun())
+            );
+        }
+        $new_settings[] = $setting;
+    }
+    
+    return $new_settings;
 }
