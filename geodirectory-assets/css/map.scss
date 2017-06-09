@@ -143,7 +143,10 @@
   box-sizing: border-box;
 }
 
-.geodir-bubble_desc div,
+.geodir-bubble_desc div{
+    box-sizing: border-box;
+}
+
 .geodir-bubble_desc h4{
   box-sizing: border-box;
     a {
