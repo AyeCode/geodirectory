@@ -1307,11 +1307,6 @@ if (!function_exists('geodir_get_featured_image')) {
         }
 
 
-        /**
-         * Filter to force the list images to be smaller.
-         * @since 1.6.18
-         */
-
         $list_img_size = get_option('geodir_listing_img_size','default');
 
         if( $size=='list-thumb' && $list_img_size != 'default' ){
