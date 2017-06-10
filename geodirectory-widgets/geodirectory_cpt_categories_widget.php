@@ -309,10 +309,19 @@ register_widget('geodir_cpt_categories_widget');
  * @since 1.5.4
  * @since 1.6.6 New parameters $no_cpt_filter &no_cat_filter added.
  *
+ * @global object $post The post object.
+ * @global bool $gd_use_query_vars If true then use query vars to get current location terms.
+ *
  * @param array $params An array of cpt categories parameters.
  * @return string CPT categories content.
  */
 function geodir_cpt_categories_output($params) {
+    global $post, $gd_use_query_vars;
+    
+    $old_gd_use_query_vars = $gd_use_query_vars;
+    
+    $gd_use_query_vars = geodir_is_page('detail') ? true : false;
+    
     $args = wp_parse_args((array)$params,
         array(
             'title' => '',
@@ -339,27 +348,35 @@ function geodir_cpt_categories_output($params) {
     $current_posttype = geodir_get_current_posttype();
 
     $is_listing = false;
+    $is_detail = false;
     $is_category = false;
-    if (geodir_is_page('listing')) {
+    $post_ID = 0;
+    $is_listing_page = geodir_is_page('listing');
+    $is_detail_page = geodir_is_page('detail');
+    if ($is_listing_page || $is_detail_page) {
         $current_posttype = geodir_get_current_posttype();
 
         if ($current_posttype != '' && isset($gd_post_types[$current_posttype])) {
-            $is_listing = true;
+            if ($is_detail_page) {
+                $is_detail = true;
+                $post_ID = is_object($post) && !empty($post->ID) ? (int)$post->ID : 0;
+            } else {
+                $is_listing = true;
+                if (is_tax()) { // category page
+                    $current_term_id = get_queried_object_id();
+                    $current_taxonomy = get_query_var('taxonomy');
+                    $current_posttype = geodir_get_current_posttype();
 
-            if (is_tax()) { // category page
-                $current_term_id = get_queried_object_id();
-                $current_taxonomy = get_query_var('taxonomy');
-                $current_posttype = geodir_get_current_posttype();
-
-                if ($current_term_id && $current_posttype && get_query_var('taxonomy') == $current_posttype . 'category') {
-                    $is_category = true;
+                    if ($current_term_id && $current_posttype && get_query_var('taxonomy') == $current_posttype . 'category') {
+                        $is_category = true;
+                    }
                 }
             }
         }
     }
 
     $parent_category = 0;
-    if ($is_listing && $cpt_filter) {
+    if (($is_listing || $is_detail) && $cpt_filter) {
         $post_type_arr = array($current_posttype);
     }
 
@@ -407,7 +424,14 @@ function geodir_cpt_categories_output($params) {
         foreach ($post_types as $cpt => $cpt_info) {
             $parent_category = ($is_category && $cat_filter && $cpt == $current_posttype) ? $current_term_id : 0;
             $cat_taxonomy = $cpt . 'category';
-            $categories = get_terms($cat_taxonomy, array('orderby' => $orderby, 'order' => $order, 'hide_empty' => $hide_empty, 'parent' => $parent_category));
+            $skip_childs = false;
+            if ($cat_filter && $cpt == $current_posttype && $is_detail && $post_ID) {
+                $skip_childs = true;
+                $categories = get_terms($cat_taxonomy, array('orderby' => $orderby, 'order' => $order, 'hide_empty' => $hide_empty, 'object_ids' => $post_ID));
+            } else {
+                $categories = get_terms($cat_taxonomy, array('orderby' => $orderby, 'order' => $order, 'hide_empty' => $hide_empty, 'parent' => $parent_category));
+            }
+
             if ($hide_empty) {
                 $categories = geodir_filter_empty_terms($categories);
             }
@@ -447,7 +471,7 @@ function geodir_cpt_categories_output($params) {
                     $cpt_row .= '<li class="gd-cptcat-li gd-cptcat-li-main">';
                     $count = $show_count ? ' <span class="gd-cptcat-count">(' . $category->count . ')</span>' : '';
                     $cpt_row .= '<h3 class="gd-cptcat-cat"><a href="' . esc_url($term_link) . '" title="' . esc_attr($category->name) . '">'  .$term_icon_url . $category->name . $count . '</a></h3>';
-                    if (($all_childs || $max_count > 0) && ($max_level == 'all' || (int)$max_level > 0)) {
+                    if (!$skip_childs && ($all_childs || $max_count > 0) && ($max_level == 'all' || (int)$max_level > 0)) {
                         $cpt_row .= geodir_cpt_categories_child_cats($category->term_id, $cpt, $hide_empty, $show_count, $sort_by, $max_count, $max_level, $term_icons);
                     }
                     $cpt_row .= '</li>';
@@ -459,6 +483,9 @@ function geodir_cpt_categories_output($params) {
             }
         }
     }
+        
+    $gd_use_query_vars = $old_gd_use_query_vars;
+    
     return $output;
 }
 

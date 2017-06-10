@@ -7,6 +7,7 @@ Listings & terms uniqe slug validation with WPML - CHANGED
 DB Max index length variable added - ADDED
 In location transaltion change to in %s to fix prefix location - CHANGED
 Added option to change default list thumbnail image size - ADDED
+CPT > Categories widget on detail page should filter post type & category if allowed - CHANGED
 
 v1.6.20
 is_featured column added in listing sample CSV file - CHANGED
