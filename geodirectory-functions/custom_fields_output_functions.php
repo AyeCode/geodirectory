@@ -1673,6 +1673,7 @@ add_filter('geodir_custom_field_output_taxonomy','geodir_cf_taxonomy',10,3);
  * @param string $location The location to output the html.
  * @param array $cf The custom field array details.
  * @since 1.6.6
+ * @since 1.6.21 New hook added to filter address fields being displayed.
  *
  * @return string The html to output for the custom field.
  */
@@ -1804,34 +1805,49 @@ function geodir_cf_address($html,$location,$cf,$p=''){
                 $field_icon    = '';
             }
             
-
-
             $html = '<div class="geodir_more_info ' . $cf['css_class'] . ' ' . $html_var . '" style="clear:both;"  itemscope itemtype="https://schema.org/PostalAddress">';
             $html .= '<span class="geodir-i-location" style="' . $field_icon . '">' . $field_icon_af;
             $html .= ( trim( $cf['site_title'] ) ) ? __( $cf['site_title'], 'geodirectory' ) . ': ' : '&nbsp;';
             $html .= '</span>';
+            
+            $address_fields = array();
 
             if ( isset($post->post_address) ) {
-                $html .= '<span itemprop="streetAddress">' . $post->post_address . '</span><br>';
+                $address_fields['post_address'] = '<span itemprop="streetAddress">' . $post->post_address . '</span>';
             }
             if ($show_city_in_address && isset( $post->post_city ) && $post->post_city ) {
-                $html .= '<span itemprop="addressLocality">' . $post->post_city . '</span><br>';
+                $address_fields['post_city'] = '<span itemprop="addressLocality">' . $post->post_city . '</span>';
             }
             if ($show_region_in_address && isset( $post->post_region ) && $post->post_region ) {
-                $html .= '<span itemprop="addressRegion">' . $post->post_region . '</span><br>';
+                $address_fields['post_region'] = '<span itemprop="addressRegion">' . $post->post_region . '</span>';
             }
             if ($show_zip_in_address && isset( $post->post_zip ) && $post->post_zip ) {
-                $html .= '<span itemprop="postalCode">' . $post->post_zip . '</span><br>';
+                $address_fields['post_zip'] = '<span itemprop="postalCode">' . $post->post_zip . '</span>';
             }
             if ($show_country_in_address && isset( $post->post_country ) && $post->post_country ) {
-                $html .= '<span itemprop="addressCountry">' . __( $post->post_country, 'geodirectory' ) . '</span><br>';
+                $address_fields['post_country'] = '<span itemprop="addressCountry">' . __( $post->post_country, 'geodirectory' ) . '</span>';
             }
+            
+            /**
+             * Filter the address fields array being displayed.
+             *
+             * @param array $address_fields The array of address fields.
+             * @param object $post The current post object.
+             * @param array $cf The custom field array details.
+             * @param string $location The location to output the html.
+             * 
+             * @since 1.6.21
+             */
+            $address_fields = apply_filters('geodir_custom_field_output_address_fields', $address_fields, $post, $cf, $location);
+            
+            if (!empty($address_fields) && is_array($address_fields)) {
+                $address_fields = array_values($address_fields);
+                $html .= implode('<br>', $address_fields);
+            }
+            
             $html .= '</div>';
-
         }
-
     }
-
 
     return $html;
 }

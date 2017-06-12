@@ -8,6 +8,7 @@ DB Max index length variable added - ADDED
 In location transaltion change to in %s to fix prefix location - CHANGED
 Added option to change default list thumbnail image size - ADDED
 CPT > Categories widget on detail page should filter post type & category if allowed - CHANGED
+New hook added to filter address fields being displayed - ADDED
 
 v1.6.20
 is_featured column added in listing sample CSV file - CHANGED
