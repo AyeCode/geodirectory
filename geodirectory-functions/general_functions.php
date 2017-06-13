@@ -3414,7 +3414,8 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 			foreach ( $post_types as $key => $postobj ) {
 				if ( in_array( $key, $show_favorite_link_user_dashboard ) && array_key_exists( $key, $user_favourite ) ) {
 					$name           = $postobj->labels->name;
-					$post_type_link = geodir_getlink( $author_link, array(
+					$fav_author_link = apply_filters('gd_dash_fav_author_link', $author_link, $current_user->data->ID);
+					$post_type_link = geodir_getlink( $fav_author_link, array(
 						'stype' => $key,
 						'list'  => 'favourite'
 					), false );
@@ -3464,7 +3465,8 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 			foreach ( $post_types as $key => $postobj ) {
 				if ( in_array( $key, $show_listing_link_user_dashboard ) && array_key_exists( $key, $user_listing ) ) {
 					$name         = $postobj->labels->name;
-					$listing_link = geodir_getlink( $author_link, array( 'stype' => $key ), false );
+					$listing_author_link = apply_filters('gd_dash_listing_author_link', $author_link, $current_user->data->ID);
+					$listing_link = geodir_getlink( $listing_author_link, array( 'stype' => $key ), false );
 
 					$selected = '';
 					if ( ! isset( $_REQUEST['list'] ) && isset( $_REQUEST['geodir_dashbord'] ) && isset( $_REQUEST['stype'] ) && $_REQUEST['stype'] == $key ) {
