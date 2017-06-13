@@ -3,10 +3,13 @@ Recent reviews doesn't work well with WPML - FIXED
 Changed "Get Directions" custom field to apple maps link as it redirects better on all devices - CHANGED
 Remove X theme search page titles and breadcrumbs - CHANGED
 Post type conflict on add listing page  - FIXED
-Listings & terms uniqe slug validation with WPML - CHANGED
+Listings & terms unique slug validation with WPML - CHANGED
 DB Max index length variable added - ADDED
-In location transaltion change to in %s to fix prefix location - CHANGED
+In location translation change to in %s to fix prefix location - CHANGED
 Added option to change default list thumbnail image size - ADDED
+Added title attribute to listing images - ADDED
+CPT > Categories widget on detail page should filter post type & category if allowed - CHANGED
+New hook added to filter address fields being displayed - ADDED
 
 v1.6.20
 is_featured column added in listing sample CSV file - CHANGED

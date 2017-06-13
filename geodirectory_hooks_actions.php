@@ -3063,7 +3063,7 @@ function geodir_check_term_to_post_slug( $slug_exists, $slug, $term_id ) {
         return $slug_exists;
     }
     
-    if ( !empty( $gd_term_taxonomy ) && $gd_term_taxonomy[$term_id] ) {
+    if ( !empty( $gd_term_taxonomy ) && isset($gd_term_taxonomy[$term_id]) ) {
         $taxonomy = $gd_term_taxonomy[$term_id];
     } else {
         $taxonomy = $wpdb->get_var( $wpdb->prepare( "SELECT taxonomy FROM $wpdb->term_taxonomy WHERE term_id = %d LIMIT 1", $term_id ) );

@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 1.6.20\n"
+"Project-Id-Version: GeoDirectory 1.6.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-06 18:35+0100\n"
-"PO-Revision-Date: 2017-06-06 18:36+0100\n"
+"POT-Creation-Date: 2017-06-13 12:07+0100\n"
+"PO-Revision-Date: 2017-06-13 12:07+0100\n"
 "Last-Translator: \n"
 "Language-Team: GeoDirectory <info@wpgeodirectory.com>\n"
 "Language: en_US\n"
@@ -191,7 +191,7 @@ msgid "Location (ID)"
 msgstr ""
 
 #: geodirectory-admin/admin_functions.php:738
-#: geodirectory-admin/option-pages/design_settings_array.php:615
+#: geodirectory-admin/option-pages/design_settings_array.php:626
 #: geodirectory-widgets/geodirectory_related_listing_widget.php:225
 msgid "Categories"
 msgstr ""
@@ -956,6 +956,10 @@ msgstr ""
 
 #: geodirectory-admin/admin_functions.php:6527
 msgid "Account re-authorization may be required"
+msgstr ""
+
+#: geodirectory-admin/admin_functions.php:6642
+msgid "GD Default"
 msgstr ""
 
 #: geodirectory-admin/admin_hooks_actions.php:182
@@ -2278,7 +2282,7 @@ msgid "Width of home left section"
 msgstr ""
 
 #: geodirectory-admin/option-pages/design_settings_array.php:110
-#: geodirectory-admin/option-pages/design_settings_array.php:748
+#: geodirectory-admin/option-pages/design_settings_array.php:759
 msgid "Enter the width of left section of home page in %"
 msgstr ""
 
@@ -2315,7 +2319,7 @@ msgid "Listing top section"
 msgstr ""
 
 #: geodirectory-admin/option-pages/design_settings_array.php:150
-#: geodirectory-admin/option-pages/design_settings_array.php:465
+#: geodirectory-admin/option-pages/design_settings_array.php:476
 msgid "Show the top section of listing page"
 msgstr ""
 
@@ -2344,45 +2348,45 @@ msgid "Set the listing view of listing page"
 msgstr ""
 
 #: geodirectory-admin/option-pages/design_settings_array.php:183
-#: geodirectory-admin/option-pages/design_settings_array.php:355
-#: geodirectory-admin/option-pages/design_settings_array.php:629
-#: geodirectory-admin/option-pages/design_settings_array.php:721
+#: geodirectory-admin/option-pages/design_settings_array.php:366
+#: geodirectory-admin/option-pages/design_settings_array.php:640
+#: geodirectory-admin/option-pages/design_settings_array.php:732
 #: geodirectory-widgets/geodirectory_popular_widget.php:412
 #: geodirectory-widgets/geodirectory_related_listing_widget.php:241
 msgid "Grid View (Two Columns)"
 msgstr ""
 
 #: geodirectory-admin/option-pages/design_settings_array.php:184
-#: geodirectory-admin/option-pages/design_settings_array.php:356
-#: geodirectory-admin/option-pages/design_settings_array.php:630
-#: geodirectory-admin/option-pages/design_settings_array.php:722
+#: geodirectory-admin/option-pages/design_settings_array.php:367
+#: geodirectory-admin/option-pages/design_settings_array.php:641
+#: geodirectory-admin/option-pages/design_settings_array.php:733
 #: geodirectory-widgets/geodirectory_popular_widget.php:416
 #: geodirectory-widgets/geodirectory_related_listing_widget.php:245
 msgid "Grid View (Three Columns)"
 msgstr ""
 
 #: geodirectory-admin/option-pages/design_settings_array.php:185
-#: geodirectory-admin/option-pages/design_settings_array.php:357
-#: geodirectory-admin/option-pages/design_settings_array.php:631
-#: geodirectory-admin/option-pages/design_settings_array.php:723
+#: geodirectory-admin/option-pages/design_settings_array.php:368
+#: geodirectory-admin/option-pages/design_settings_array.php:642
+#: geodirectory-admin/option-pages/design_settings_array.php:734
 #: geodirectory-widgets/geodirectory_popular_widget.php:420
 #: geodirectory-widgets/geodirectory_related_listing_widget.php:249
 msgid "Grid View (Four Columns)"
 msgstr ""
 
 #: geodirectory-admin/option-pages/design_settings_array.php:186
-#: geodirectory-admin/option-pages/design_settings_array.php:358
-#: geodirectory-admin/option-pages/design_settings_array.php:632
-#: geodirectory-admin/option-pages/design_settings_array.php:724
+#: geodirectory-admin/option-pages/design_settings_array.php:369
+#: geodirectory-admin/option-pages/design_settings_array.php:643
+#: geodirectory-admin/option-pages/design_settings_array.php:735
 #: geodirectory-widgets/geodirectory_popular_widget.php:424
 #: geodirectory-widgets/geodirectory_related_listing_widget.php:253
 msgid "Grid View (Five Columns)"
 msgstr ""
 
 #: geodirectory-admin/option-pages/design_settings_array.php:187
-#: geodirectory-admin/option-pages/design_settings_array.php:359
-#: geodirectory-admin/option-pages/design_settings_array.php:633
-#: geodirectory-admin/option-pages/design_settings_array.php:725
+#: geodirectory-admin/option-pages/design_settings_array.php:370
+#: geodirectory-admin/option-pages/design_settings_array.php:644
+#: geodirectory-admin/option-pages/design_settings_array.php:736
 #: geodirectory-widgets/geodirectory_popular_widget.php:427
 #: geodirectory-widgets/geodirectory_related_listing_widget.php:256
 msgid "List view"
@@ -2417,7 +2421,7 @@ msgid "Listing bottom section"
 msgstr ""
 
 #: geodirectory-admin/option-pages/design_settings_array.php:219
-#: geodirectory-admin/option-pages/design_settings_array.php:473
+#: geodirectory-admin/option-pages/design_settings_array.php:484
 msgid "Show the bottom section of listing page"
 msgstr ""
 
@@ -2426,82 +2430,90 @@ msgid "Upload listing no image"
 msgstr ""
 
 #: geodirectory-admin/option-pages/design_settings_array.php:234
-#: geodirectory-admin/option-pages/design_settings_array.php:765
+msgid "Listing image size"
+msgstr ""
+
+#: geodirectory-admin/option-pages/design_settings_array.php:235
+msgid "Set the size of the image to use on the listing pages and widgets."
+msgstr ""
+
+#: geodirectory-admin/option-pages/design_settings_array.php:245
+#: geodirectory-admin/option-pages/design_settings_array.php:776
 msgid "Description word limit"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:243
+#: geodirectory-admin/option-pages/design_settings_array.php:254
 msgid "Hover listing map animation"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:244
+#: geodirectory-admin/option-pages/design_settings_array.php:255
 msgid "Bounce map pin if listing hovered"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:253
+#: geodirectory-admin/option-pages/design_settings_array.php:264
 msgid "Listing General Settings"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:256
+#: geodirectory-admin/option-pages/design_settings_array.php:267
 msgid "New listing default status"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:257
+#: geodirectory-admin/option-pages/design_settings_array.php:268
 msgid "Select new listing default status."
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:265
+#: geodirectory-admin/option-pages/design_settings_array.php:276
 msgid "publish"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:266
+#: geodirectory-admin/option-pages/design_settings_array.php:277
 msgid "draft"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:271
+#: geodirectory-admin/option-pages/design_settings_array.php:282
 msgid "New listings settings"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:272
+#: geodirectory-admin/option-pages/design_settings_array.php:283
 msgid ""
 "Enter number of days a listing will appear new.(enter 0 to disable feature)"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:282
+#: geodirectory-admin/option-pages/design_settings_array.php:293
 msgid "Add Listing Form Settings"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:285
+#: geodirectory-admin/option-pages/design_settings_array.php:296
 msgid "Enable \"Accept Terms and Conditions\""
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:286
+#: geodirectory-admin/option-pages/design_settings_array.php:297
 msgid "Show the \"Accept Terms and Conditions\" field on add listing."
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:294
+#: geodirectory-admin/option-pages/design_settings_array.php:305
 msgid "Show description field as editor"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:295
+#: geodirectory-admin/option-pages/design_settings_array.php:306
 msgid "Select post types to show advanced editor on add listing page."
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:301
-#: geodirectory-admin/option-pages/design_settings_array.php:601
-#: geodirectory-admin/option-pages/design_settings_array.php:840
-#: geodirectory-admin/option-pages/design_settings_array.php:853
-#: geodirectory-admin/option-pages/design_settings_array.php:866
-#: geodirectory-admin/option-pages/design_settings_array.php:879
-#: geodirectory-admin/option-pages/design_settings_array.php:910
-#: geodirectory-admin/option-pages/design_settings_array.php:923
-#: geodirectory-admin/option-pages/design_settings_array.php:936
+#: geodirectory-admin/option-pages/design_settings_array.php:312
+#: geodirectory-admin/option-pages/design_settings_array.php:612
+#: geodirectory-admin/option-pages/design_settings_array.php:851
+#: geodirectory-admin/option-pages/design_settings_array.php:864
+#: geodirectory-admin/option-pages/design_settings_array.php:877
+#: geodirectory-admin/option-pages/design_settings_array.php:890
+#: geodirectory-admin/option-pages/design_settings_array.php:921
+#: geodirectory-admin/option-pages/design_settings_array.php:934
+#: geodirectory-admin/option-pages/design_settings_array.php:947
 #: geodirectory-admin/option-pages/general_settings_array.php:85
 #: geodirectory-functions/custom_functions.php:3113
 msgid "Select post types"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:312
+#: geodirectory-admin/option-pages/design_settings_array.php:323
 #: geodirectory-admin/option-pages/general_settings_array.php:225
 #: geodirectory_template_actions.php:1624
 #: geodirectory_template_actions.php:2767
@@ -2511,317 +2523,317 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:315
+#: geodirectory-admin/option-pages/design_settings_array.php:326
 msgid "Search Page Layout Settings"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:321
+#: geodirectory-admin/option-pages/design_settings_array.php:332
 msgid "Search top section"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:322
+#: geodirectory-admin/option-pages/design_settings_array.php:333
 msgid "Show the top section of search page"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:329
+#: geodirectory-admin/option-pages/design_settings_array.php:340
 msgid "Search right section"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:330
+#: geodirectory-admin/option-pages/design_settings_array.php:341
 msgid "Show the right section of search page"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:337
+#: geodirectory-admin/option-pages/design_settings_array.php:348
 msgid "Width of search right section"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:338
+#: geodirectory-admin/option-pages/design_settings_array.php:349
 msgid "Enter the width of right section of search page in %"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:347
+#: geodirectory-admin/option-pages/design_settings_array.php:358
 msgid "Search content section view"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:348
+#: geodirectory-admin/option-pages/design_settings_array.php:359
 msgid "Set the listing view of search page"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:364
+#: geodirectory-admin/option-pages/design_settings_array.php:375
 msgid "Width of search content section"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:365
+#: geodirectory-admin/option-pages/design_settings_array.php:376
 msgid "Enter the width of content section of search page in %"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:373
+#: geodirectory-admin/option-pages/design_settings_array.php:384
 msgid "Search left section"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:374
+#: geodirectory-admin/option-pages/design_settings_array.php:385
 msgid "Show the left section of search page"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:381
+#: geodirectory-admin/option-pages/design_settings_array.php:392
 msgid "Width of search left section"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:382
+#: geodirectory-admin/option-pages/design_settings_array.php:393
 msgid "Enter the width of left section of search in %"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:390
+#: geodirectory-admin/option-pages/design_settings_array.php:401
 msgid "Search bottom section"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:391
+#: geodirectory-admin/option-pages/design_settings_array.php:402
 msgid "Show the bottom section of search page"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:398
+#: geodirectory-admin/option-pages/design_settings_array.php:409
 msgid "Show advanced pagination details"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:399
+#: geodirectory-admin/option-pages/design_settings_array.php:410
 msgid ""
 "This will add extra pagination info like \"Showing listings x-y of z\" after/"
 "before pagination."
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:406
+#: geodirectory-admin/option-pages/design_settings_array.php:417
 msgid "Never Display"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:407
+#: geodirectory-admin/option-pages/design_settings_array.php:418
 msgid "After Pagination"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:408
+#: geodirectory-admin/option-pages/design_settings_array.php:419
 msgid "Before Pagination"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:415
+#: geodirectory-admin/option-pages/design_settings_array.php:426
 msgid "Search form settings"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:418
+#: geodirectory-admin/option-pages/design_settings_array.php:429
 msgid "Use old non-styled form"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:419
+#: geodirectory-admin/option-pages/design_settings_array.php:430
 msgid ""
 "Will show the old type form (not recommended unless you had added your own "
 "styles)"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:426
+#: geodirectory-admin/option-pages/design_settings_array.php:437
 msgid "Search field default value"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:427
+#: geodirectory-admin/option-pages/design_settings_array.php:438
 msgid "Show the search text box 'placeholder' value on search form."
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:435
+#: geodirectory-admin/option-pages/design_settings_array.php:446
 msgid "Near field default value"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:436
+#: geodirectory-admin/option-pages/design_settings_array.php:447
 msgid "Show the near text box 'placeholder' value on search form."
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:444
+#: geodirectory-admin/option-pages/design_settings_array.php:455
 msgid "Search button label"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:445
+#: geodirectory-admin/option-pages/design_settings_array.php:456
 msgid "Show the search button label on search form."
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:459
+#: geodirectory-admin/option-pages/design_settings_array.php:470
 msgid "Detail"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:461
+#: geodirectory-admin/option-pages/design_settings_array.php:472
 msgid "Detail/Single Page Settings"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:464
+#: geodirectory-admin/option-pages/design_settings_array.php:475
 msgid "Detail top section"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:472
+#: geodirectory-admin/option-pages/design_settings_array.php:483
 msgid "Detail bottom section"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:479
+#: geodirectory-admin/option-pages/design_settings_array.php:490
 msgid "Detail sidebar section on left side"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:480
+#: geodirectory-admin/option-pages/design_settings_array.php:491
 msgid "Display detail sidebar section on left side of the detail page"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:486
+#: geodirectory-admin/option-pages/design_settings_array.php:497
 msgid "Disable GD modal"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:487
+#: geodirectory-admin/option-pages/design_settings_array.php:498
 msgid "Disable GD modal that displays slideshow images in popup"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:493
+#: geodirectory-admin/option-pages/design_settings_array.php:504
 msgid "Disable Tweet, Fb Like, Google+ buttons section"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:494
+#: geodirectory-admin/option-pages/design_settings_array.php:505
 msgid ""
 "Disable Tweet, Fb Like, Google+ buttons section that displays on Detail page "
 "sidebar"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:500
+#: geodirectory-admin/option-pages/design_settings_array.php:511
 msgid "Disable Google Analytics section"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:501
+#: geodirectory-admin/option-pages/design_settings_array.php:512
 msgid "Disable Google Analytics section that displays on Detail page sidebar"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:507
+#: geodirectory-admin/option-pages/design_settings_array.php:518
 msgid "Disable User Links section"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:508
+#: geodirectory-admin/option-pages/design_settings_array.php:519
 msgid ""
 "Disable User Links section (Edit post, Favorite etc..) that displays on "
 "Detail page sidebar"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:514
+#: geodirectory-admin/option-pages/design_settings_array.php:525
 msgid "Disable Rating Info section"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:515
+#: geodirectory-admin/option-pages/design_settings_array.php:526
 msgid "Disable Rating Info section that displays on Detail page sidebar"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:521
+#: geodirectory-admin/option-pages/design_settings_array.php:532
 msgid "Disable Listing Info section"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:522
+#: geodirectory-admin/option-pages/design_settings_array.php:533
 msgid "Disable Listing Info section that displays on Detail page sidebar"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:533
+#: geodirectory-admin/option-pages/design_settings_array.php:544
 msgid "Detail Page Tab Settings"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:536
+#: geodirectory-admin/option-pages/design_settings_array.php:547
 msgid "Exclude selected tabs from detail page"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:537
+#: geodirectory-admin/option-pages/design_settings_array.php:548
 msgid ""
 "Select tabs to exclude from the list of all appearing tabs on detail page."
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:543
+#: geodirectory-admin/option-pages/design_settings_array.php:554
 msgid "Select tabs"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:549
+#: geodirectory-admin/option-pages/design_settings_array.php:560
 msgid "Show as list"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:550
+#: geodirectory-admin/option-pages/design_settings_array.php:561
 msgid "Show as list instead of tabs"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:560
+#: geodirectory-admin/option-pages/design_settings_array.php:571
 msgid "Default Rating Settings"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:563
+#: geodirectory-admin/option-pages/design_settings_array.php:574
 msgid "Upload default rating star icon"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:571
+#: geodirectory-admin/option-pages/design_settings_array.php:582
 msgid "Enable Font Awesome"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:572
+#: geodirectory-admin/option-pages/design_settings_array.php:583
 msgid ""
 "When enabled all rating images will be using font awesome rating icons as "
 "images."
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:578
+#: geodirectory-admin/option-pages/design_settings_array.php:589
 msgid "Rating Icon Color"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:579
+#: geodirectory-admin/option-pages/design_settings_array.php:590
 msgid "Enter hexadecimal color for font awesome rating icons. Default: #757575"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:591
+#: geodirectory-admin/option-pages/design_settings_array.php:602
 msgid "Related Post Settings"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:594
+#: geodirectory-admin/option-pages/design_settings_array.php:605
 msgid "Show related post listing on"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:595
+#: geodirectory-admin/option-pages/design_settings_array.php:606
 msgid "Select the post types to display related listing on detail page."
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:607
+#: geodirectory-admin/option-pages/design_settings_array.php:618
 msgid "Relate to"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:608
+#: geodirectory-admin/option-pages/design_settings_array.php:619
 msgid "Set the relation between current post to related posts."
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:616
+#: geodirectory-admin/option-pages/design_settings_array.php:627
 #: geodirectory-widgets/geodirectory_related_listing_widget.php:228
 msgid "Tags"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:621
+#: geodirectory-admin/option-pages/design_settings_array.php:632
 msgid "Layout"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:622
+#: geodirectory-admin/option-pages/design_settings_array.php:633
 msgid "Set the listing view of relate post on detail page"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:638
+#: geodirectory-admin/option-pages/design_settings_array.php:649
 msgid "Sort by"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:639
+#: geodirectory-admin/option-pages/design_settings_array.php:650
 msgid "Set the related post listing sort by view"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:646
+#: geodirectory-admin/option-pages/design_settings_array.php:657
 #: geodirectory-widgets/geodirectory_listing_slider_widget.php:148
 #: geodirectory-widgets/geodirectory_popular_widget.php:371
 #: geodirectory-widgets/geodirectory_related_listing_widget.php:188
 msgid "Latest"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:647
+#: geodirectory-admin/option-pages/design_settings_array.php:658
 #: geodirectory-widgets/geodirectory_listing_slider_widget.php:149
 #: geodirectory-widgets/geodirectory_popular_widget.php:375
 #: geodirectory-widgets/geodirectory_related_listing_widget.php:192
 msgid "Featured"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:648
+#: geodirectory-admin/option-pages/design_settings_array.php:659
 #: geodirectory-functions/custom_fields_functions.php:1918
 #: geodirectory-widgets/geodirectory_listing_slider_widget.php:150
 #: geodirectory-widgets/geodirectory_popular_widget.php:379
@@ -2830,7 +2842,7 @@ msgstr ""
 msgid "Review"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:649
+#: geodirectory-admin/option-pages/design_settings_array.php:660
 #: geodirectory-functions/custom_fields_functions.php:1927
 #: geodirectory-widgets/geodirectory_listing_slider_widget.php:151
 #: geodirectory-widgets/geodirectory_popular_widget.php:383
@@ -2838,238 +2850,238 @@ msgstr ""
 msgid "Rating"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:650
+#: geodirectory-admin/option-pages/design_settings_array.php:661
 #: geodirectory-widgets/geodirectory_listing_slider_widget.php:152
 #: geodirectory-widgets/geodirectory_popular_widget.php:387
 #: geodirectory-widgets/geodirectory_related_listing_widget.php:204
 msgid "Random"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:651
+#: geodirectory-admin/option-pages/design_settings_array.php:662
 msgid "Nearest"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:656
+#: geodirectory-admin/option-pages/design_settings_array.php:667
 #: geodirectory-widgets/geodirectory_bestof_widget.php:450
 #: geodirectory-widgets/geodirectory_popular_widget.php:396
 #: geodirectory-widgets/geodirectory_related_listing_widget.php:211
 msgid "Number of posts:"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:657
+#: geodirectory-admin/option-pages/design_settings_array.php:668
 msgid "Enter number of posts to display on related posts listing"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:665
+#: geodirectory-admin/option-pages/design_settings_array.php:676
 msgid "Post excerpt"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:666
+#: geodirectory-admin/option-pages/design_settings_array.php:677
 msgid "Post content excerpt character count"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:679
+#: geodirectory-admin/option-pages/design_settings_array.php:690
 msgid "Author"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:682
+#: geodirectory-admin/option-pages/design_settings_array.php:693
 msgid "Author Page Layout Settings"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:688
+#: geodirectory-admin/option-pages/design_settings_array.php:699
 msgid "Author top section"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:689
+#: geodirectory-admin/option-pages/design_settings_array.php:700
 msgid "Show the top section of author page"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:696
+#: geodirectory-admin/option-pages/design_settings_array.php:707
 msgid "Author right section"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:697
+#: geodirectory-admin/option-pages/design_settings_array.php:708
 msgid "Show the right section of author page"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:704
+#: geodirectory-admin/option-pages/design_settings_array.php:715
 msgid "Width of author right section"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:705
+#: geodirectory-admin/option-pages/design_settings_array.php:716
 msgid "Enter the width of right section of author page in %"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:713
+#: geodirectory-admin/option-pages/design_settings_array.php:724
 msgid "Author content section view"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:714
+#: geodirectory-admin/option-pages/design_settings_array.php:725
 msgid "Set the listing view of author page"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:730
+#: geodirectory-admin/option-pages/design_settings_array.php:741
 msgid "Width of author content section"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:731
+#: geodirectory-admin/option-pages/design_settings_array.php:742
 msgid "Enter the width of content section of author page in %"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:739
+#: geodirectory-admin/option-pages/design_settings_array.php:750
 msgid "Author left section"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:740
+#: geodirectory-admin/option-pages/design_settings_array.php:751
 msgid "Show the left section of author page"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:747
+#: geodirectory-admin/option-pages/design_settings_array.php:758
 msgid "Width of author left section"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:756
+#: geodirectory-admin/option-pages/design_settings_array.php:767
 msgid "Author bottom section"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:757
+#: geodirectory-admin/option-pages/design_settings_array.php:768
 msgid "Show the bottom section of author page"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:778
+#: geodirectory-admin/option-pages/design_settings_array.php:789
 msgid "Navigation"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:783
+#: geodirectory-admin/option-pages/design_settings_array.php:794
 msgid "Navigation Locations"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:789
+#: geodirectory-admin/option-pages/design_settings_array.php:800
 msgid "Show geodirectory navigation in selected menu locations"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:796
+#: geodirectory-admin/option-pages/design_settings_array.php:807
 msgid "Select menu locations"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:803
+#: geodirectory-admin/option-pages/design_settings_array.php:814
 msgid "Navigation Settings"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:810
+#: geodirectory-admin/option-pages/design_settings_array.php:821
 msgid "Show add listing navigation in menu"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:811
+#: geodirectory-admin/option-pages/design_settings_array.php:822
 msgid ""
 "Show add listing navigation in main menu? (untick to disable) If you disable "
 "this option, none of the add listing link will appear in main navigation."
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:818
+#: geodirectory-admin/option-pages/design_settings_array.php:829
 msgid "Show listings navigation in menu"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:819
+#: geodirectory-admin/option-pages/design_settings_array.php:830
 msgid ""
 "Show listing navigation in main menu? (untick to disable) If you disable "
 "this option, none of the listing link will appear in main navigation."
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:828
+#: geodirectory-admin/option-pages/design_settings_array.php:839
 msgid "Post Type Navigation Settings"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:833
+#: geodirectory-admin/option-pages/design_settings_array.php:844
 msgid "Show listing link in main navigation"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:846
+#: geodirectory-admin/option-pages/design_settings_array.php:857
 msgid "Show listing link in listing navigation"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:859
+#: geodirectory-admin/option-pages/design_settings_array.php:870
 msgid "Allow post type to add from frontend"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:872
+#: geodirectory-admin/option-pages/design_settings_array.php:883
 msgid "Show add listing link in main navigation"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:885
+#: geodirectory-admin/option-pages/design_settings_array.php:896
 msgid "Show add listing link in add listing navigation"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:899
+#: geodirectory-admin/option-pages/design_settings_array.php:910
 msgid "User Dashboard Post Type Navigation Settings"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:903
+#: geodirectory-admin/option-pages/design_settings_array.php:914
 msgid "Show add listing link in user dashboard"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:916
+#: geodirectory-admin/option-pages/design_settings_array.php:927
 msgid "Show favorite link in user dashboard"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:917
+#: geodirectory-admin/option-pages/design_settings_array.php:928
 msgid ""
 "Option will not appear if user does not have a favorite of that post type"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:929
+#: geodirectory-admin/option-pages/design_settings_array.php:940
 msgid "Show listing link in user dashboard"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:930
+#: geodirectory-admin/option-pages/design_settings_array.php:941
 msgid ""
 "Option will not appear if user does not have his/her own listing of that "
 "post type"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:945
+#: geodirectory-admin/option-pages/design_settings_array.php:956
 msgid "Scripts"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:973
+#: geodirectory-admin/option-pages/design_settings_array.php:984
 msgid "GD Lazy Load Images"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:979
+#: geodirectory-admin/option-pages/design_settings_array.php:990
 msgid "Enable lazy load images?"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:980
+#: geodirectory-admin/option-pages/design_settings_array.php:991
 msgid "GD images will be loaded only when visible on the page"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:988
+#: geodirectory-admin/option-pages/design_settings_array.php:999
 msgid "Script Settings"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:994
+#: geodirectory-admin/option-pages/design_settings_array.php:1005
 msgid "Custom style css code"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1003
+#: geodirectory-admin/option-pages/design_settings_array.php:1014
 msgid "Header script code"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1012
+#: geodirectory-admin/option-pages/design_settings_array.php:1023
 msgid "Footer script code"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1024
+#: geodirectory-admin/option-pages/design_settings_array.php:1035
 #: geodirectory-functions/custom_functions.php:1368
 msgid "Map"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1029
-#: geodirectory-admin/option-pages/design_settings_array.php:1035
+#: geodirectory-admin/option-pages/design_settings_array.php:1040
+#: geodirectory-admin/option-pages/design_settings_array.php:1046
 msgid "Google Maps API KEY"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1037
+#: geodirectory-admin/option-pages/design_settings_array.php:1048
 #, php-format
 msgid ""
 "This is a requirement to use Google Maps, you can get a key from <a href=\"%s"
@@ -3078,59 +3090,59 @@ msgid ""
 "to add a Google API KEY?</a>)"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1052
+#: geodirectory-admin/option-pages/design_settings_array.php:1063
 msgid "Home Map Settings"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1058
+#: geodirectory-admin/option-pages/design_settings_array.php:1069
 msgid "Select category to untick by default on map"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1059
+#: geodirectory-admin/option-pages/design_settings_array.php:1070
 msgid "Select category to untick by default on the home map."
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1065
+#: geodirectory-admin/option-pages/design_settings_array.php:1076
 msgid "Select category"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1075
+#: geodirectory-admin/option-pages/design_settings_array.php:1086
 msgid "Add Listing Map Settings"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1081
+#: geodirectory-admin/option-pages/design_settings_array.php:1092
 msgid "Disable mouse scroll on details page map tab"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1082
+#: geodirectory-admin/option-pages/design_settings_array.php:1093
 msgid ""
 "Stops the mouse scroll zooming the map (home and listings settings set from "
 "widget)"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1093
+#: geodirectory-admin/option-pages/design_settings_array.php:1104
 msgid "Default map settings"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1108
+#: geodirectory-admin/option-pages/design_settings_array.php:1119
 msgid "Upload map default marker icon"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1117
+#: geodirectory-admin/option-pages/design_settings_array.php:1128
 msgid "Show button control on map to enable/disable dragging"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1118
+#: geodirectory-admin/option-pages/design_settings_array.php:1129
 msgid ""
 "If checked, it displays button control to enable/disable dragging on google "
 "maps for phone devices"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1124
+#: geodirectory-admin/option-pages/design_settings_array.php:1135
 msgid "Select Maps API"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1125
+#: geodirectory-admin/option-pages/design_settings_array.php:1136
 msgid ""
 "- Google Maps API will force to load Google JS library only.<br>- "
 "OpenStreetMap API will force to load OpenStreetMap JS library only.<br>- "
@@ -3140,31 +3152,31 @@ msgid ""
 "will disable and hides maps for entire site."
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1131
+#: geodirectory-admin/option-pages/design_settings_array.php:1142
 msgid "Select Map"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1133
+#: geodirectory-admin/option-pages/design_settings_array.php:1144
 msgid "Load Automatic"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1134
+#: geodirectory-admin/option-pages/design_settings_array.php:1145
 msgid "Load Google Maps API"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1135
+#: geodirectory-admin/option-pages/design_settings_array.php:1146
 msgid "Load OpenStreetMap API"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1136
+#: geodirectory-admin/option-pages/design_settings_array.php:1147
 msgid "Disable Maps"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1142
+#: geodirectory-admin/option-pages/design_settings_array.php:1153
 msgid "Show / hide post type and category on map"
 msgstr ""
 
-#: geodirectory-admin/option-pages/design_settings_array.php:1148
+#: geodirectory-admin/option-pages/design_settings_array.php:1159
 msgid "Select Map Category"
 msgstr ""
 
@@ -3541,12 +3553,12 @@ msgid "Listing published email"
 msgstr ""
 
 #: geodirectory-admin/option-pages/notifications_settings_array.php:242
-#: geodirectory-functions/post_functions.php:3090
+#: geodirectory-functions/post_functions.php:3087
 msgid "Listing Published Successfully"
 msgstr ""
 
 #: geodirectory-admin/option-pages/notifications_settings_array.php:250
-#: geodirectory-functions/post_functions.php:3094
+#: geodirectory-functions/post_functions.php:3091
 msgid ""
 "<p>Dear [#client_name#],</p><p>Your listing [#listing_link#] has been "
 "published. This email is just for your information.</p><p>[#listing_link#]</"
