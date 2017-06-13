@@ -3,8 +3,8 @@ Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
 Tags:  directory plugin, business directory, listings, classifieds, real estate
 Requires at least: 3.1
-Tested up to: 4.7
-Stable tag: 1.6.20
+Tested up to: 4.8
+Stable tag: 1.6.21
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -149,6 +149,10 @@ GeoDirectory comes with some dummy data you can use to see how listings look. Yo
 7. GD WordPress Admin Page.
 
 == Changelog ==
+
+= 1.6.21 =
+
+[GeoDirectory changelog for version 1.6.21](http://wpgeodirectory.com/change-logs/#v1.6.21).
 
 = 1.6.20 =
 
