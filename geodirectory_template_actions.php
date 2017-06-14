@@ -1305,18 +1305,22 @@ function geodir_action_details_micordata($post='')
         $reviews = '';
     } else {
         foreach ($post_reviews as $review) {
-            $reviews[] = array(
-                "@type" => "Review",
-                "author" => $review->comment_author,
-                "datePublished" => $review->comment_date,
-                "description" => $review->comment_content,
-                "reviewRating" => array(
-                    "@type" => "Rating",
-                    "bestRating" => "5",// @todo this will need to be filtered for review manager if user changes the score.
-                    "ratingValue" => geodir_get_commentoverall($review->comment_ID),
-                    "worstRating" => "1"
-                )
-            );
+
+            if($rating_value = geodir_get_commentoverall($review->comment_ID)){
+                $reviews[] = array(
+                    "@type" => "Review",
+                    "author" => $review->comment_author,
+                    "datePublished" => $review->comment_date,
+                    "description" => $review->comment_content,
+                    "reviewRating" => array(
+                        "@type" => "Rating",
+                        "bestRating" => "5",// @todo this will need to be filtered for review manager if user changes the score.
+                        "ratingValue" => $rating_value,
+                        "worstRating" => "1"
+                    )
+                );
+            }
+
         }
 
     }
@@ -1359,7 +1363,7 @@ function geodir_action_details_micordata($post='')
     if(isset($post->default_category) && $post->default_category){
         $cat_schema = geodir_get_tax_meta($post->default_category, 'ct_cat_schema', false, $post->post_type);
         if($cat_schema){$schema_type = $cat_schema;}
-        if(!$schema_type && $post->post_type=='gd_event'){$schema_type = 'Event';}
+        if(!$cat_schema && $schema_type=='LocalBusiness' && $post->post_type=='gd_event'){$schema_type = 'Event';}
     }
 
     $schema = array();
