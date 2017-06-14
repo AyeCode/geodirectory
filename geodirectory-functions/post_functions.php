@@ -1364,7 +1364,7 @@ if (!function_exists('geodir_get_featured_image')) {
             }
             $img_arr['width'] = $width;
             $img_arr['height'] = $height;
-            $img_arr['title'] = '';
+            $img_arr['title'] = $post->post_title;
         } elseif ($post_images = geodir_get_images($post_id, $size, $no_image, 1)) {
             foreach ($post_images as $image) {
                 return $image;
@@ -1409,7 +1409,7 @@ if (!function_exists('geodir_get_featured_image')) {
                 $img_arr['width'] = $width;
                 $img_arr['height'] = $height;
 
-                $img_arr['title'] = ''; // add the title to the array
+                $img_arr['title'] = $post->post_title; // add the title to the array
             }
         }
 
@@ -1640,9 +1640,11 @@ if (!function_exists('geodir_show_image')) {
                 $height = !empty($imagesize) && isset($imagesize[1]) ? $imagesize[1] : '';
             }
 
+
             $image->src = $request->src;
             $image->width = $width;
             $image->height = $height;
+            $image->title = isset($request->title) ? $request->title : '';
 
             $max_size = (object)geodir_get_imagesize($size);
 
@@ -1660,12 +1662,9 @@ if (!function_exists('geodir_show_image')) {
                     $html = '<div class="geodir_thumbnail"><img style="max-height:' . $max_size->h . 'px;" alt="place image" src="' . $image->src . '"  /></div>';
                 } else {
                     if($size=='widget-thumb' || !get_option('geodir_lazy_load',1)){
-                        $html = '<div class="geodir_thumbnail" style="background-image:url(\'' . $image->src . '\');"></div>';
+                        $html = '<div class="geodir_thumbnail" style="background-image:url(\'' . $image->src . '\');" title="'.$image->title.'" aria-label="'.$image->title.'" ></div>';
                     }else{
-                        //$html = '<div class="geodir_thumbnail" style="background-image:url(\'' . $image->src . '\');"></div>';
-                        //$html = '<div data-src="'.$image->src.'" class="geodir_thumbnail" ></div>';
-                        $html = '<div data-src="'.str_replace(' ','%20',$image->src).'" class="geodir_thumbnail geodir_lazy_load_thumbnail" ></div>';
-
+                        $html = '<div data-src="'.str_replace(' ','%20',$image->src).'" class="geodir_thumbnail geodir_lazy_load_thumbnail" title="'.$image->title.'" aria-label="'.$image->title.'"></div>';
                     }
 
                 }

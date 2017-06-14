@@ -548,6 +548,11 @@
 
 .geodir_map_container_fullscreen {
     z-index: 99999 !important;
+    .map-category-listing-main{
+        .gd-trigger{
+            position: fixed !important;
+        }
+    }
 }
 
 /* MAP FULL SCREEN CSS END ########################################################################## */
