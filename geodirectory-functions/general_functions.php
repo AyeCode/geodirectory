@@ -3685,6 +3685,17 @@ function geodir_popular_postview_output( $args = '', $instance = '' ) {
 
 	$title = str_replace( "%posttype_plural_label%", $posttype_plural_label, $title );
 	$title = str_replace( "%posttype_singular_label%", $posttype_singular_label, $title );
+    
+	$categories = $category;
+	if ( ! empty( $category ) && $category[0] != '0' ) {
+		$category_taxonomy = geodir_get_taxonomies( $post_type );
+		
+		######### WPML #########
+		if ( function_exists( 'icl_object_id' ) ) {
+			$category = gd_lang_object_ids( $category, $category_taxonomy[0] );
+		}
+		######### WPML #########
+	}
 
 	if ( isset( $instance['character_count'] ) ) {
 		/**
@@ -3796,15 +3807,7 @@ function geodir_popular_postview_output( $args = '', $instance = '' ) {
 	}
 	$with_no_results = ! empty( $instance['without_no_results'] ) ? false : true;
 
-	if ( ! empty( $category ) && $category[0] != '0' ) {
-		$category_taxonomy = geodir_get_taxonomies( $post_type );
-
-		######### WPML #########
-		if ( function_exists( 'icl_object_id' ) ) {
-			$category = gd_lang_object_ids( $category, $category_taxonomy[0] );
-		}
-		######### WPML #########
-
+	if ( ! empty( $categories ) && $categories[0] != '0' && !empty( $category_taxonomy ) ) {
 		$tax_query = array(
 			'taxonomy' => $category_taxonomy[0],
 			'field'    => 'id',

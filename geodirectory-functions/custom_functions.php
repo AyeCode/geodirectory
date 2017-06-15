@@ -1119,7 +1119,14 @@ function geodir_add_meta_keywords() {
 	$gd_city                 = $geodir_location_manager && isset( $godir_location_terms['gd_city'] ) ? $godir_location_terms['gd_city'] : null;
 	$gd_region               = $geodir_location_manager && isset( $godir_location_terms['gd_region'] ) ? $godir_location_terms['gd_region'] : null;
 	$gd_country              = $geodir_location_manager && isset( $godir_location_terms['gd_country'] ) ? $godir_location_terms['gd_country'] : null;
-	$replace_location        = __( 'Everywhere', 'geodirectory' );
+	/**
+	 * Filter the Everywhere text in location description.
+	 *
+	 * @since 1.6.22
+	 * 
+	 * @param string $replace_location Everywhere text.
+	 */
+	$replace_location        = apply_filters( 'geodir_location_description_everywhere_text', __( 'Everywhere', 'geodirectory' ) );
 	$location_id             = null;
 	if ( $geodir_location_manager ) {
 		$sql           = $wpdb->prepare( "SELECT location_id FROM " . POST_LOCATION_TABLE . " WHERE city_slug=%s ORDER BY location_id ASC LIMIT 1", array( $gd_city ) );
