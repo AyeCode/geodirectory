@@ -674,6 +674,34 @@ function geodir_location_replace_vars($location_array = array(), $sep = NULL, $g
         }
     }
     $full_location = !empty($full_location) ? implode(', ', $full_location): '';
+    
+    if ( empty( $full_location ) ) {
+        /**
+         * Filter the text in meta description in full location is empty.
+         *
+         * @since 1.6.22
+         * 
+         * @param string $full_location Default: Empty.
+         * @param array  $location_array The array of location variables.
+         * @param string $gd_page       The page being filtered.
+         * @param string $sep           The separator.
+         */
+         $full_location = apply_filters( 'geodir_meta_description_location_empty_text', '', $location_array, $gd_page, $sep );
+    }
+    
+    if ( empty( $location_single ) ) {
+        /**
+         * Filter the text in meta description in single location is empty.
+         *
+         * @since 1.6.22
+         * 
+         * @param string $location_single Default: Empty.
+         * @param array $location_array The array of location variables.
+         * @param string $gd_page       The page being filtered.
+         * @param string $sep           The separator.
+         */
+         $location_single = apply_filters( 'geodir_meta_description_single_location_empty_text', '', $location_array, $gd_page, $sep );
+    }
 
     $location_replace_vars = array();
     $location_replace_vars['%%location_sep%%'] = $sep !== NULL ? $sep : '|';

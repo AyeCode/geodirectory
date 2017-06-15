@@ -1,5 +1,6 @@
 v1.6.22
 Comment replies should not add review structured data - FIXED
+Hooks added to customize texts in location description when for empty location - ADDED
 
 v1.6.21
 Recent reviews doesn't work well with WPML - FIXED
