@@ -4987,7 +4987,13 @@ function geodir_remove_location_terms( $location_terms = array() ) {
 		}
 	}
 
-	return $location_terms;
+	/**
+	 * Filter the remove location terms array.
+	 * 
+	 * @since 1.6.22
+	 * @param array $location_terms The array of location terms.
+	 */
+	return apply_filters('geodir_remove_location_terms',$location_terms);
 }
 
 /**

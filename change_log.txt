@@ -2,6 +2,7 @@ v1.6.22
 Comment replies should not add review structured data - FIXED
 Hooks added to customize texts in location description when for empty location - ADDED
 Popular post widget view all link should have url with current language - FIXED
+Mobile details page tabs now close and scroll to show tab title - CHANGED
 
 v1.6.21
 Recent reviews doesn't work well with WPML - FIXED
