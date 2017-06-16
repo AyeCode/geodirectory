@@ -83,7 +83,14 @@ function create_marker_jason_of_posts($post)
             $icon_size = array('w' => 36, 'h' => 45);
         }
 
-        $post_json = '{"id":"' . $post->ID . '","t": "' . $title . '","lt": "' . $post->post_latitude . '","ln": "' . $post->post_longitude . '","mk_id":"' . $post->ID . '_' . $post->default_category . '","i":"' . $icon . '","w":"' . $icon_size['w'] . '","h":"' . $icon_size['h'] . '"}';
+        $post_json = '{"id":"' . $post->ID
+                     . '","t": "' . $title
+                     . '","lt": "' . $post->post_latitude
+                     . '","ln": "' . $post->post_longitude
+                     . '","mk_id":"' . $post->ID . '_' . $post->default_category
+                     . '","i":"' . $icon
+                     . '","w":"' . $icon_size['w']
+                     . '","h":"' . $icon_size['h'] . '"}';
 
         /**
          * Filter the json data when creating output for post json marker..
