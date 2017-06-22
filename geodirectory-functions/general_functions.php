@@ -3609,8 +3609,6 @@ function geodir_popular_postview_output( $args = '', $instance = '' ) {
 	// prints the widget
 	extract( $args, EXTR_SKIP );
 
-	echo $before_widget;
-
 	/** This filter is documented in geodirectory_widgets.php */
 	$title = empty( $instance['title'] ) ? geodir_ucwords( $instance['category_title'] ) : apply_filters( 'widget_title', __( $instance['title'], 'geodirectory' ) );
 	/**
@@ -3805,7 +3803,7 @@ function geodir_popular_postview_output( $args = '', $instance = '' ) {
 	if ( ! empty( $instance['with_videos_only'] ) ) {
 		$query_args['with_videos_only'] = 1;
 	}
-	$with_no_results = ! empty( $instance['without_no_results'] ) ? false : true;
+	$hide_if_empty = ! empty( $instance['hide_if_empty'] ) ? true : false;
 
 	if ( ! empty( $categories ) && $categories[0] != '0' && !empty( $category_taxonomy ) ) {
 		$tax_query = array(
@@ -3820,84 +3818,86 @@ function geodir_popular_postview_output( $args = '', $instance = '' ) {
 	global $gridview_columns_widget, $geodir_is_widget_listing;
 
 	$widget_listings = geodir_get_widget_listings( $query_args );
+    
+	if ( $hide_if_empty && empty( $widget_listings ) ) {
+		return;
+	}
+    
+	echo $before_widget;
 
-	if ( ! empty( $widget_listings ) || $with_no_results ) {
-		?>
-		<div class="geodir_locations geodir_location_listing">
+	?>
+	<div class="geodir_locations geodir_location_listing">
 
-			<?php
-			/**
-			 * Called before the div containing the title and view all link in popular post view widget.
-			 *
-			 * @since 1.0.0
-			 */
-			do_action( 'geodir_before_view_all_link_in_widget' ); ?>
-			<div class="geodir_list_heading clearfix">
-				<?php echo $before_title . $title . $after_title; ?>
-				<a href="<?php echo $viewall_url; ?>"
-				   class="geodir-viewall"><?php _e( 'View all', 'geodirectory' ); ?></a>
-			</div>
-			<?php
-			/**
-			 * Called after the div containing the title and view all link in popular post view widget.
-			 *
-			 * @since 1.0.0
-			 */
-			do_action( 'geodir_after_view_all_link_in_widget' ); ?>
-			<?php
-			if ( strstr( $layout, 'gridview' ) ) {
-				$listing_view_exp        = explode( '_', $layout );
-				$gridview_columns_widget = $layout;
-				$layout                  = $listing_view_exp[0];
-			} else {
-				$gridview_columns_widget = '';
-			}
-
-			/**
-			 * Filter the widget listing listview template path.
-			 *
-			 * @since 1.0.0
-			 */
-			$template = apply_filters( "geodir_template_part-widget-listing-listview", geodir_locate_template( 'widget-listing-listview' ) );
-			if ( ! isset( $character_count ) ) {
-				/**
-				 * Filter the widget's excerpt character count.
-				 *
-				 * @since 1.0.0
-				 *
-				 * @param int $instance ['character_count'] Excerpt character count.
-				 */
-				$character_count = $character_count == '' ? 50 : apply_filters( 'widget_character_count', $character_count );
-			}
-
-			global $post, $map_jason, $map_canvas_arr;
-
-			$current_post             = $post;
-			$current_map_jason        = $map_jason;
-			$current_map_canvas_arr   = $map_canvas_arr;
-			$geodir_is_widget_listing = true;
-
-			/**
-			 * Includes related listing listview template.
-			 *
-			 * @since 1.0.0
-			 */
-			include( $template );
-
-			$geodir_is_widget_listing = false;
-
-			$GLOBALS['post'] = $current_post;
-			if ( ! empty( $current_post ) ) {
-				setup_postdata( $current_post );
-			}
-			$map_jason      = $current_map_jason;
-			$map_canvas_arr = $current_map_canvas_arr;
-			?>
+		<?php
+		/**
+		 * Called before the div containing the title and view all link in popular post view widget.
+		 *
+		 * @since 1.0.0
+		 */
+		do_action( 'geodir_before_view_all_link_in_widget' ); ?>
+		<div class="geodir_list_heading clearfix">
+			<?php echo $before_title . $title . $after_title; ?>
+			<a href="<?php echo $viewall_url; ?>"
+			   class="geodir-viewall"><?php _e( 'View all', 'geodirectory' ); ?></a>
 		</div>
 		<?php
-	}
-	echo $after_widget;
+		/**
+		 * Called after the div containing the title and view all link in popular post view widget.
+		 *
+		 * @since 1.0.0
+		 */
+		do_action( 'geodir_after_view_all_link_in_widget' ); ?>
+		<?php
+		if ( strstr( $layout, 'gridview' ) ) {
+			$listing_view_exp        = explode( '_', $layout );
+			$gridview_columns_widget = $layout;
+			$layout                  = $listing_view_exp[0];
+		} else {
+			$gridview_columns_widget = '';
+		}
+			/**
+		 * Filter the widget listing listview template path.
+		 *
+		 * @since 1.0.0
+		 */
+		$template = apply_filters( "geodir_template_part-widget-listing-listview", geodir_locate_template( 'widget-listing-listview' ) );
+		if ( ! isset( $character_count ) ) {
+			/**
+			 * Filter the widget's excerpt character count.
+			 *
+			 * @since 1.0.0
+			 *
+			 * @param int $instance ['character_count'] Excerpt character count.
+			 */
+			$character_count = $character_count == '' ? 50 : apply_filters( 'widget_character_count', $character_count );
+		}
 
+		global $post, $map_jason, $map_canvas_arr;
+
+		$current_post             = $post;
+		$current_map_jason        = $map_jason;
+		$current_map_canvas_arr   = $map_canvas_arr;
+		$geodir_is_widget_listing = true;
+
+		/**
+		 * Includes related listing listview template.
+		 *
+		 * @since 1.0.0
+		 */
+		include( $template );
+
+		$geodir_is_widget_listing = false;
+
+		$GLOBALS['post'] = $current_post;
+		if ( ! empty( $current_post ) ) {
+			setup_postdata( $current_post );
+		}
+		$map_jason      = $current_map_jason;
+		$map_canvas_arr = $current_map_canvas_arr;
+		?>
+	</div>
+	<?php
+	echo $after_widget;
 }
 
 
