@@ -257,13 +257,20 @@ function geodir_get_default_catimage($term_id, $post_type = 'gd_place')
 
 //Clear custom fields
 add_action('in_admin_footer', 'geodir_tax_meta_clear_custom_field');
-function geodir_tax_meta_clear_custom_field()
-{
+function geodir_tax_meta_clear_custom_field() {
     if (isset($_REQUEST['taxonomy']) && !empty($_REQUEST['taxonomy'])):
         ?>
         <script type="text/javascript">
             jQuery(document).ready(function () {
                 jQuery('#addtag #submit').click(function () {
+                    try {
+                        var mceField = typeof tinymce != 'undefined' && typeof tinymce.editors != 'undefined' && typeof tinymce.editors['ct_cat_top_desc'] == 'object' ? tinymce.editors['ct_cat_top_desc'] : null;
+                        if (mceField) {
+                            mceField.editorManager.triggerSave();
+                        }
+                    } catch(e) {
+                        console.log(e);
+                    }
                     setTimeout(function () {
                         if (!jQuery('#addtag .form-invalid').length) {
                             jQuery('#addtag .rw-checkbox').prop('checked', false);
