@@ -2479,8 +2479,8 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                         $i++;
                         $variables_array['post_id'] = $post->ID;
                         $variables_array['label'] = __($type['site_title'], 'geodirectory');
-                        $variables_array['value'] = '';
-                        $variables_array['value'] = $post->{$type['htmlvar_name']};
+                        $variables_array['value'] = isset($post->{$type['htmlvar_name']}) ? $post->{$type['htmlvar_name']} : '';
+
                     }else{
                         $i = 0;
                         $fieldset_count++;
