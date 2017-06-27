@@ -1213,23 +1213,26 @@ function geodir_taxonomy_breadcrumb() {
 function geodir_wpml_post_type_archive_link($link, $post_type){
 	if (function_exists('icl_object_id')) {
 		$post_types   = get_option( 'geodir_post_types' );
-		$slug         = $post_types[ $post_type ]['rewrite']['slug'];
+		
+		if ( isset( $post_types[ $post_type ] ) ) {
+			$slug = $post_types[ $post_type ]['rewrite']['slug'];
 
-		// Alter the CPT slug if WPML is set to do so
-		if ( function_exists( 'icl_object_id' ) ) {
-			if ( gd_wpml_slug_translation_turned_on( $post_type ) && $language_code = gd_wpml_get_lang_from_url( $link) ) {
+			// Alter the CPT slug if WPML is set to do so
+			if ( geodir_wpml_is_post_type_translated( $post_type ) ) {
+				if ( gd_wpml_slug_translation_turned_on( $post_type ) && $language_code = gd_wpml_get_lang_from_url( $link) ) {
 
-				$org_slug = $slug;
-				$slug     = apply_filters( 'wpml_translate_single_string',
-					$slug,
-					'WordPress',
-					'URL slug: ' . $slug,
-					$language_code );
+					$org_slug = $slug;
+					$slug     = apply_filters( 'wpml_translate_single_string',
+						$slug,
+						'WordPress',
+						'URL slug: ' . $slug,
+						$language_code );
                     
-				if ( ! $slug ) {
-					$slug = $org_slug;
-				} else {
-					$link = str_replace( $org_slug, $slug, $link );
+					if ( ! $slug ) {
+						$slug = $org_slug;
+					} else {
+						$link = str_replace( $org_slug, $slug, $link );
+					}
 				}
 			}
 		}
@@ -2286,6 +2289,7 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 
 	$post_type = empty( $query_args['post_type'] ) ? 'gd_place' : $query_args['post_type'];
 	$table     = $plugin_prefix . $post_type . '_detail';
+	$supports_wpml = geodir_wpml_is_post_type_translated( $post_type );
 
 	$fields = $wpdb->posts . ".*, " . $table . ".*";
 	/**
@@ -2303,7 +2307,7 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 
 	########### WPML ###########
 
-	if ( function_exists( 'icl_object_id' ) ) {
+	if ( $supports_wpml ) {
 		global $sitepress;
 		$lang_code = ICL_LANGUAGE_CODE;
 		if ( $lang_code ) {
@@ -2328,7 +2332,7 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	$where = " AND ( " . $wpdb->posts . ".post_status = 'publish' " . $post_status . " ) AND " . $wpdb->posts . ".post_type = '" . $post_type . "'";
 
 	########### WPML ###########
-	if ( function_exists( 'icl_object_id' ) ) {
+	if ( $supports_wpml ) {
 		if ( $lang_code ) {
 			$where .= " AND icl_t.language_code = '$lang_code' AND icl_t.element_type = 'post_$post_type' ";
 		}
@@ -3689,7 +3693,7 @@ function geodir_popular_postview_output( $args = '', $instance = '' ) {
 		$category_taxonomy = geodir_get_taxonomies( $post_type );
 		
 		######### WPML #########
-		if ( function_exists( 'icl_object_id' ) ) {
+		if ( geodir_wpml_is_taxonomy_translated( $category_taxonomy[0] ) ) {
 			$category = gd_lang_object_ids( $category, $category_taxonomy[0] );
 		}
 		######### WPML #########

@@ -1482,7 +1482,7 @@ function geodir_listing_permalink_structure($post_link, $post_obj, $leavename, $
         $slug = $post_types[$post->post_type]['rewrite']['slug'];
 
         // Alter the CPT slug if WPML is set to do so
-        if(function_exists('icl_object_id')){
+        if(geodir_wpml_is_post_type_translated($post->post_type)){
             if ( gd_wpml_slug_translation_turned_on( $post->post_type ) && $language_code = gd_wpml_get_lang_from_url($post_link)) {
 
                 $org_slug = $slug;
@@ -1794,7 +1794,7 @@ function geodir_term_link($termlink, $term, $taxonomy) {
             $post_type = str_replace("category","",$taxonomy);
             $post_type = str_replace("_tags","",$post_type);
             $slug = $post_types[$post_type]['rewrite']['slug'];
-            if (gd_wpml_slug_translation_turned_on($post_type)) {
+            if (geodir_wpml_is_post_type_translated($post_type) && gd_wpml_slug_translation_turned_on($post_type)) {
                 global $sitepress;
                 $default_lang = $sitepress->get_default_language();
                 $language_code = gd_wpml_get_lang_from_url($termlink);

@@ -2993,7 +2993,7 @@ function geodir_wpml_allowed_to_duplicate( $post_id ) {
     }
     
     $post_type = get_post_type( $post_id );
-    if ( !is_post_type_translated( $post_type ) || get_post_meta( $post_id, '_icl_lang_duplicate_of', true ) ) {
+    if ( !geodir_wpml_is_post_type_translated( $post_type ) || get_post_meta( $post_id, '_icl_lang_duplicate_of', true ) ) {
         return $allowed;
     }
     
@@ -3126,4 +3126,44 @@ function geodir_wpml_duplicate_settings( $settings = array() ) {
     }
     
     return $new_settings;
+}
+
+/**
+ * Checks if a given taxonomy is currently translated.
+ *
+ * @since 1.6.22
+ *
+ * @param string $taxonomy name/slug of a taxonomy.
+ * @return bool true if the taxonomy is currently set to being translatable in WPML.
+ */
+function geodir_wpml_is_taxonomy_translated( $taxonomy ) {
+    if ( empty( $taxonomy ) || !geodir_is_wpml() || !function_exists( 'is_taxonomy_translated' ) ) {
+        return false;
+    }
+    
+    if ( is_taxonomy_translated( $taxonomy ) ) {
+        return true;
+    }
+    
+    return false;
+}
+
+/**
+ * Checks if a given post_type is currently translated.
+ *
+ * @since 1.6.22
+ *
+ * @param string $post_type name/slug of a post_type.
+ * @return bool true if the post_type is currently set to being translatable in WPML.
+ */
+function geodir_wpml_is_post_type_translated( $post_type ) {
+    if ( empty( $post_type ) || !geodir_is_wpml() || !function_exists( 'is_post_type_translated' ) ) {
+        return false;
+    }
+    
+    if ( is_post_type_translated( $post_type ) ) {
+        return true;
+    }
+    
+    return false;
 }

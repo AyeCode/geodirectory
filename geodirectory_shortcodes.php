@@ -330,7 +330,7 @@ function geodir_sc_listing_map($atts) {
             $category_taxonomy = geodir_get_taxonomies( $params['post_type'] );
 
             ######### WPML #########
-            if ( function_exists( 'icl_object_id' ) ) {
+            if ( geodir_wpml_is_taxonomy_translated( $category_taxonomy[0] ) ) {
                 $category = gd_lang_object_ids( $params['category'], $category_taxonomy[0] );
             }
             ######### WPML #########

@@ -311,7 +311,7 @@ function geodir_posts_join($join)
 
     ########### WPML ###########
 
-    if (function_exists('icl_object_id')) {
+    if ( geodir_wpml_is_post_type_translated( $geodir_post_type ) ) {
         global $sitepress;
         $lang_code = ICL_LANGUAGE_CODE;
         $default_lang_code = $sitepress->get_default_language();
@@ -664,7 +664,7 @@ function geodir_default_where($where)
         $default_lang_code = $sitepress->get_default_language();
         $q_post_type = isset($wp_query->query['post_type']) ? $wp_query->query['post_type'] : '';
         //echo '##########'.$q_post_type;
-        if ($lang_code && $q_post_type) {
+        if ($lang_code && $q_post_type && geodir_wpml_is_post_type_translated($q_post_type)) {
             $where .= " AND icl_t.language_code = '$lang_code' AND icl_t.element_type IN('post_" . $q_post_type . "') ";
             //$where .= " AND icl_t.language_code = '$lang_code' ";
         }
@@ -857,7 +857,7 @@ function searching_filter_where($where) {
     }
 
 	########### WPML ###########
-    if ( function_exists( 'icl_object_id' ) ) {
+    if ( geodir_wpml_is_post_type_translated( $post_types ) ) {
 		$lang_code = ICL_LANGUAGE_CODE;
 
 		if ($lang_code && $post_types) {
@@ -910,7 +910,7 @@ function author_filter_where($where) {
     }
 
     ########### WPML ###########
-    if (function_exists('icl_object_id')) {
+    if (geodir_wpml_is_post_type_translated(sanitize_text_field($_REQUEST['stype']))) {
         $lang_code = ICL_LANGUAGE_CODE;
         if ($lang_code) {
             $where .= " AND icl_t.language_code='" . $lang_code . "' ";
