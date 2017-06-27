@@ -259,7 +259,7 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = 
 
                 // Untick the category by default on home map
                 if ($is_home_map && $geodir_home_map_untick = get_option('geodir_home_map_untick')) {
-                    if (function_exists('icl_object_id')) { // if WPML
+                    if (geodir_wpml_is_taxonomy_translated($post_type . 'category')) { // if WPML
                         global $sitepress;
                         $default_lang = $sitepress->get_default_language();
                         $term_id = icl_object_id($cat_term->term_id, $post_type.'category', true, $default_lang);
