@@ -13,11 +13,11 @@
 get_header();
 
 ###### WRAPPER OPEN ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_open', 'success-page', 'geodir-wrapper', '');
 
 ###### TOP CONTENT ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_top_content', 'success-page');
 
 /**
@@ -27,29 +27,29 @@ do_action('geodir_top_content', 'success-page');
  */
 do_action('geodir_success_before_main_content');
 
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_before_main_content', 'success-page');
 
 ###### MAIN CONTENT WRAPPERS OPEN ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_content_open', 'success-page', 'geodir-wrapper-content', '');
 
 
 ###### MAIN CONTENT ######
-/** This action is documented in geodirectory-templates/geodir-home.php */
+/** This action is documented in includes/templates/geodir-home.php */
 do_action('geodir_add_page_content', 'before', 'success-page');
 
 // this call the main page content
 geodir_get_template_part('preview', 'success');
 
-/** This action is documented in geodirectory-templates/geodir-home.php */
+/** This action is documented in includes/templates/geodir-home.php */
 do_action('geodir_add_page_content', 'after', 'success-page');
 
 
 ###### MAIN CONTENT WRAPPERS CLOSE ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_after_main_content');
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_content_close', 'details-page');
 
 
@@ -63,7 +63,7 @@ do_action('geodir_author_sidebar_right');
 
 
 ###### WRAPPER CLOSE ######	
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_close', 'success-page');
 
 get_footer();   

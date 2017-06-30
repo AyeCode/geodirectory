@@ -272,18 +272,16 @@ add_action('setup_theme', 'geodir_content_actions_dynamic', 10);
  * @since 1.0.0
  * @package GeoDirectory
  */
-function geodir_content_actions_dynamic()
-{
-
+function geodir_content_actions_dynamic() {
     $tc = get_option('theme_compatibility_setting');
-//print_r($tc);
+
     if (empty($tc)) {
         return;
     }
 
     //php
     if (!empty($tc['geodir_theme_compat_code'])) {
-        include_once('geodirectory-functions/compatibility/' . $tc['geodir_theme_compat_code'] . '.php');
+        include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/compatibility/' . $tc['geodir_theme_compat_code'] . '.php' );
     }
 
     //geodir_full_page_class
@@ -1032,7 +1030,7 @@ function geodir_action_details_slider()
 
                         $image_title = isset($image->title) ? $image->title : '';
 
-                        $main_slides .= '<li><img src="' . geodir_plugin_url() . "/geodirectory-assets/images/spacer.gif" . '" alt="' . $image_title . '" title="' . $image_title . '" style="max-height:' . $spacer_height . 'px;margin:0 auto;" />';
+                        $main_slides .= '<li><img src="' . geodir_plugin_url() . "/assets/images/spacer.gif" . '" alt="' . $image_title . '" title="' . $image_title . '" style="max-height:' . $spacer_height . 'px;margin:0 auto;" />';
                         $main_slides .= '<img src="' . $image->src . '" alt="' . $image_title . '" title="' . $image_title . '" style="max-height:400px;margin:0 auto;" /></li>';
                         $nav_slides .= '<li><img src="' . $image->src . '" alt="' . $image_title . '" title="' . $image_title . '" style="max-height:48px;margin:0 auto;" /></li>';
                         $slides++;
@@ -1061,7 +1059,7 @@ function geodir_action_details_slider()
                     $spacer_height = ((400 - $image->height) / 2);
                 }
                 $caption = '';//(!empty($image->caption)) ? '<p class="flex-caption">'.$image->caption.'</p>' : '';
-                $main_slides .= '<li><img src="' . geodir_plugin_url() . "/geodirectory-assets/images/spacer.gif" . '" alt="' . $image->title . '" title="' . $image->title . '" style="max-height:' . $spacer_height . 'px;margin:0 auto;" />';
+                $main_slides .= '<li><img src="' . geodir_plugin_url() . "/assets/images/spacer.gif" . '" alt="' . $image->title . '" title="' . $image->title . '" style="max-height:' . $spacer_height . 'px;margin:0 auto;" />';
                 $main_slides .= '<img src="' . $image->src . '" alt="' . $image->title . '" title="' . $image->title . '" style="max-height:400px;margin:0 auto;" />'.$caption.'</li>';
                 $nav_slides .= '<li><img src="' . $image->src . '" alt="' . $image->title . '" title="' . $image->title . '" style="max-height:48px;margin:0 auto;" /></li>';
                 $slides++;
@@ -2678,7 +2676,7 @@ function geodir_action_signup_forms()
              *
              * @since 1.0.0
              */
-            include(geodir_plugin_path() . "/geodirectory-templates/login_frm.php"); ?>
+            include(geodir_plugin_path() . "/includes/templates/login_frm.php"); ?>
         </div>
 
     <?php } elseif (isset($_REQUEST['page']) && $_REQUEST['page'] == 'login' && isset($_REQUEST['page1']) && $_REQUEST['page1'] == 'sign_up' && $is_enable_signup ) { ?>
@@ -2690,7 +2688,7 @@ function geodir_action_signup_forms()
              *
              * @since 1.0.0
              */
-            include(geodir_plugin_path() . "/geodirectory-templates/reg_frm.php"); ?>
+            include(geodir_plugin_path() . "/includes/templates/reg_frm.php"); ?>
         </div>
 
     <?php } else { ?>
@@ -2702,7 +2700,7 @@ function geodir_action_signup_forms()
              *
              * @since 1.0.0
              */
-            include(geodir_plugin_path() . "/geodirectory-templates/login_frm.php"); ?>
+            include(geodir_plugin_path() . "/includes/templates/login_frm.php"); ?>
         </div>
         
         <?php if ( $is_enable_signup ) { ?>
@@ -2713,7 +2711,7 @@ function geodir_action_signup_forms()
                  *
                  * @since 1.0.0
                  */
-                include(geodir_plugin_path() . "/geodirectory-templates/reg_frm.php"); ?>
+                include(geodir_plugin_path() . "/includes/templates/reg_frm.php"); ?>
             </div>
         <?php } ?>
 

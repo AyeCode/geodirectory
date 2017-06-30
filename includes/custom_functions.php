@@ -2053,7 +2053,7 @@ function geodir_get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_le
 					if ( $user_profile_url ) {
 						$comments_echo .= '<a href="' . $user_profile_url . '">';
 					}
-					$comments_echo .= get_avatar( $comment->comment_author_email, $g_size, geodir_plugin_url() . '/geodirectory-assets/images/gravatar2.png' );
+					$comments_echo .= get_avatar( $comment->comment_author_email, $g_size, geodir_plugin_url() . '/assets/images/gravatar2.png' );
 					if ( $user_profile_url ) {
 						$comments_echo .= '</a>';
 					}
@@ -2061,7 +2061,7 @@ function geodir_get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_le
 					if ( $user_profile_url ) {
 						$comments_echo .= '<a href="' . $user_profile_url . '">';
 					}
-					$comments_echo .= get_avatar( $comment->comment_author_url, $g_size, geodir_plugin_url() . '/geodirectory-assets/images/gravatar2.png' );
+					$comments_echo .= get_avatar( $comment->comment_author_url, $g_size, geodir_plugin_url() . '/assets/images/gravatar2.png' );
 				}
 			} elseif ( function_exists( 'gravatar' ) ) {
 				if ( $user_profile_url ) {
@@ -2069,7 +2069,7 @@ function geodir_get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_le
 				}
 				$comments_echo .= "<img src=\"";
 				if ( '' == $comment->comment_type ) {
-					$comments_echo .= gravatar( $comment->comment_author_email, $g_size, geodir_plugin_url() . '/geodirectory-assets/images/gravatar2.png' );
+					$comments_echo .= gravatar( $comment->comment_author_email, $g_size, geodir_plugin_url() . '/assets/images/gravatar2.png' );
 					if ( $user_profile_url ) {
 						$comments_echo .= '</a>';
 					}
@@ -2077,7 +2077,7 @@ function geodir_get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_le
 					if ( $user_profile_url ) {
 						$comments_echo .= '<a href="' . $user_profile_url . '">';
 					}
-					$comments_echo .= gravatar( $comment->comment_author_url, $g_size, geodir_plugin_url() . '/geodirectory-assets/images/gravatar2.png' );
+					$comments_echo .= gravatar( $comment->comment_author_url, $g_size, geodir_plugin_url() . '/assets/images/gravatar2.png' );
 					if ( $user_profile_url ) {
 						$comments_echo .= '</a>';
 					}

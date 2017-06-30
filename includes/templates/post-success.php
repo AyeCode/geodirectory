@@ -21,11 +21,11 @@ get_header();
 do_action('geodir_before_main_content');
 
 ###### WRAPPER OPEN ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_open', 'success-page', 'geodir-wrapper', '');
 
 ###### TOP CONTENT ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_top_content', 'success-page');
 /**
  * Called before the main content of a template page.
@@ -36,7 +36,7 @@ do_action('geodir_top_content', 'success-page');
 do_action('geodir_before_main_content', 'success-page');
 
 ###### MAIN CONTENT WRAPPERS OPEN ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_content_open', 'success-page', 'geodir-wrapper-content', '');
 
 
@@ -44,9 +44,9 @@ geodir_get_template_part('preview', 'success');
 
 
 ###### MAIN CONTENT WRAPPERS CLOSE ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_article_close', 'success-page');
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_after_main_content');
 
 ###### SIDEBAR ######
@@ -59,6 +59,6 @@ do_action('geodir_detail_sidebar');
 
 
 # WRAPPER CLOSE ######	
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_close', 'success-page');
 get_footer();   

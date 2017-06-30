@@ -13,11 +13,11 @@
 get_header();
 
 ###### WRAPPER OPEN ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_open', 'author-page', 'geodir-wrapper', '');
 
 ###### TOP CONTENT ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_top_content', 'author-page');
 /**
  * Calls the top section widget area and the breadcrumbs on the author page.
@@ -25,7 +25,7 @@ do_action('geodir_top_content', 'author-page');
  * @since 1.1.0
  */
 do_action('geodir_author_before_main_content');
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_before_main_content', 'author-page');
 
 /**
@@ -54,7 +54,7 @@ do_action('geodir_author_page_description');
 do_action('geodir_author_sidebar_left');
 
 ###### MAIN CONTENT WRAPPERS OPEN ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_content_open', 'author-page', 'geodir-wrapper-content', '');
 
 
@@ -68,7 +68,7 @@ do_action('geodir_author_content');
 
 
 ###### MAIN CONTENT WRAPPERS CLOSE ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_content_close', 'author-page');
 
 ###### SIDEBAR ######
@@ -80,7 +80,7 @@ do_action('geodir_wrapper_content_close', 'author-page');
 do_action('geodir_author_sidebar_right');
 
 ###### WRAPPER CLOSE ######	
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_close', 'author-page');
 
 ###### BOTTOM SECTION WIDGET AREA ######

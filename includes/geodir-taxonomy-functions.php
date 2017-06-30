@@ -1066,10 +1066,10 @@ function geodir_addpost_categories_html($request_taxonomy, $parrent, $selected =
         <?php $main_cat = get_term($parrent, $request_taxonomy); ?>
 
         <div class="post_catlist_item" style="border:1px solid #CCCCCC; margin:5px auto; padding:5px;">
-            <img alt="move icon" src="<?php echo geodir_plugin_url() . '/geodirectory-assets/images/move.png';?>"
+            <img alt="move icon" src="<?php echo geodir_plugin_url() . '/assets/images/move.png';?>"
                  onclick="jQuery(this).closest('div').remove();update_listing_cat(this);" align="right"/>
             <?php /* ?>
-		<img src="<?php echo geodir_plugin_url().'/geodirectory-assets/images/move.png';?>" onclick="jQuery(this).closest('div').remove();show_subcatlist();" align="right" /> 
+		<img src="<?php echo geodir_plugin_url().'/assets/images/move.png';?>" onclick="jQuery(this).closest('div').remove();show_subcatlist();" align="right" /> 
 		<?php */ ?>
 
             <input type="checkbox" value="<?php echo $main_cat->term_id;?>" class="listing_main_cat"
@@ -1250,12 +1250,10 @@ function geodir_custom_update_messages($messages)
  * @global object $wpdb WordPress Database object.
  */
 
-function geodir_register_defaults()
-{
-
+function geodir_register_defaults() {
     global $wpdb;
 
-    $menu_icon = geodir_plugin_url() . '/geodirectory-assets/images/favicon.ico';
+    $menu_icon = geodir_plugin_url() . '/assets/images/favicon.ico';
 
     if (!$listing_slug = get_option('geodir_listing_prefix'))
         $listing_slug = 'places';

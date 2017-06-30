@@ -12,12 +12,12 @@
  * @global object $gd_session GeoDirectory Session object.
  */
 
-/** This action is documented in geodirectory-templates/listing-listview.php */
+/** This action is documented in includes/templates/listing-listview.php */
 do_action('geodir_before_listing_listview');
 
 global $gridview_columns_widget, $gd_session;
 
-/** This action is documented in geodirectory-templates/listing-listview.php */
+/** This action is documented in includes/templates/listing-listview.php */
 $grid_view_class = apply_filters('geodir_grid_view_widget_columns', $gridview_columns_widget);
 if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
     $grid_view_class = geodir_convert_listing_view_class($gd_session->get('gd_listing_view'));
@@ -26,7 +26,7 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
     <ul class="geodir_category_list_view clearfix <?php echo apply_filters('geodir_listing_listview_ul_extra_class', '', 'widget'); ?>">
         <?php
         if (!empty($widget_listings)) {
-            /** This action is documented in geodirectory-templates/listing-listview.php */
+            /** This action is documented in includes/templates/listing-listview.php */
             do_action('geodir_before_listing_post_listview');
             $all_postypes = geodir_get_posttypes();
             $geodir_days_new = (int)get_option('geodir_listing_new_days');
@@ -39,10 +39,10 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
 
                 $gd_widget_listing_type = $post->post_type;
 
-                /** This action is documented in geodirectory-templates/listing-listview.php */
+                /** This action is documented in includes/templates/listing-listview.php */
                 $post_view_class = apply_filters('geodir_post_view_extra_class', '', $all_postypes);
 
-                /** This action is documented in geodirectory-templates/listing-listview.php */
+                /** This action is documented in includes/templates/listing-listview.php */
                 $post_view_article_class = apply_filters('geodir_post_view_article_extra_class', '');
                 ?>
                 <li class="clearfix <?php if ($grid_view_class) {
@@ -56,7 +56,7 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
                 }
 
                 echo " data-post-id='$post->ID' ";
-                /** This action is documented in geodirectory-templates/listing-listview.php */
+                /** This action is documented in includes/templates/listing-listview.php */
                 do_action('geodir_listview_inside_li', $post, 'widget');
                 ?>>
                     <article class="geodir-category-listing <?php if ($post_view_article_class) {
@@ -66,7 +66,7 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
                             <?php if ($fimage = geodir_show_featured_image($post->ID, 'list-thumb', true, false, $post->featured_image)) { ?>
                                 <a href="<?php the_permalink(); ?>"><?php echo $fimage; ?></a>
                                 <?php
-                                /** This action is documented in geodirectory-templates/listing-listview.php */
+                                /** This action is documented in includes/templates/listing-listview.php */
                                 do_action('geodir_before_badge_on_image', $post);
                                 if ($post->is_featured) {
                                     echo geodir_show_badges_on_image('featured', $post, get_permalink());
@@ -77,14 +77,14 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
                                     echo geodir_show_badges_on_image('new', $post, get_permalink());
                                 }
 
-                                /** This action is documented in geodirectory-templates/listing-listview.php */
+                                /** This action is documented in includes/templates/listing-listview.php */
                                 do_action('geodir_after_badge_on_image', $post);
                             }
                             ?>
                         </div>
                         <div class="geodir-content <?php echo apply_filters('geodir_listing_listview_content_extra_class', '', 'widget'); ?>">
                             <?php
-                            /** This action is documented in geodirectory-templates/listing-listview.php */
+                            /** This action is documented in includes/templates/listing-listview.php */
                             do_action('geodir_before_listing_post_title', 'listview', $post); ?>
                             <header class="geodir-entry-header">
                                 <h3 class="geodir-entry-title">
@@ -94,7 +94,7 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
                             </header>
                             <!-- .entry-header -->
                             <?php
-                            /** This action is documented in geodirectory-templates/listing-listview.php */
+                            /** This action is documented in includes/templates/listing-listview.php */
                             do_action('geodir_after_listing_post_title', 'listview', $post); ?>
                             <?php /// Print Distance
                             if (isset($_REQUEST['sgeo_lat']) && $_REQUEST['sgeo_lat'] != '') {
@@ -133,7 +133,7 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
                                 </h3>
                             <?php } ?>
                             <?php
-                            /** This action is documented in geodirectory-templates/listing-listview.php */
+                            /** This action is documented in includes/templates/listing-listview.php */
                             do_action('geodir_before_listing_post_excerpt', $post); ?>
                             <?php echo geodir_show_listing_info('listing'); ?>
                             <?php if (isset($character_count) && $character_count == '0') {
@@ -162,7 +162,7 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
                                 </div>
                             <?php } ?>
                             <?php
-                            /** This action is documented in geodirectory-templates/listing-listview.php */
+                            /** This action is documented in includes/templates/listing-listview.php */
                             do_action('geodir_after_listing_post_excerpt', $post); ?>
                         </div>
                         <!-- gd-content ends here-->
@@ -191,12 +191,12 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
 
                                     $post_avgratings = geodir_get_post_rating($post->ID);
 
-                                    /** This action is documented in geodirectory-templates/listing-listview.php */
+                                    /** This action is documented in includes/templates/listing-listview.php */
                                     do_action('geodir_before_review_rating_stars_on_listview', $post_avgratings, $post->ID);
 
                                     echo geodir_get_rating_stars($post_avgratings, $post->ID);
 
-                                    /** This action is documented in geodirectory-templates/listing-listview.php */
+                                    /** This action is documented in includes/templates/listing-listview.php */
                                     do_action('geodir_after_review_rating_stars_on_listview', $post_avgratings, $post->ID);
                                     ?><a href="<?php comments_link(); ?>" class="geodir-pcomments"><i
                                         class="fa fa-comments"></i> <?php geodir_comments_number($post->rating_count); ?>
@@ -223,7 +223,7 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
                                     <span class="geodir-authorlink clearfix">
                                 <?php
                 if (isset($_REQUEST['geodir_dashbord']) && $_REQUEST['geodir_dashbord']) {
-                    /** This action is documented in geodirectory-templates/listing-listview.php */
+                    /** This action is documented in includes/templates/listing-listview.php */
                     do_action('geodir_before_edit_post_link_on_listing');
                     ?>
                     <a href="<?php echo esc_url($editlink); ?>" class="geodir-edit"
@@ -243,7 +243,7 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
                         <?php _e('Delete', 'geodirectory'); ?>
                     </a>
                     <?php
-                    /** This action is documented in geodirectory-templates/listing-listview.php */
+                    /** This action is documented in includes/templates/listing-listview.php */
                     do_action('geodir_after_edit_post_link_on_listing');
                 } ?>
 					</span>
@@ -257,17 +257,17 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
                 <?php
                 unset($gd_widget_listing_type);
             }
-            /** This action is documented in geodirectory-templates/listing-listview.php */
+            /** This action is documented in includes/templates/listing-listview.php */
             do_action('geodir_after_listing_post_listview');
         } else {
 			$favorite = isset($_REQUEST['list']) && $_REQUEST['list'] == 'favourite' ? true : false;
             
-			/** This action is documented in geodirectory-templates/listing-listview.php */
+			/** This action is documented in includes/templates/listing-listview.php */
             do_action('geodir_message_not_found_on_listing', 'widget-listing-listview', $favorite);
         }
         ?>
     </ul>  <!-- geodir_category_list_view ends here-->
     <div class="clear"></div>
 <?php
-/** This action is documented in geodirectory-templates/listing-listview.php */
+/** This action is documented in includes/templates/listing-listview.php */
 do_action('geodir_after_listing_listview');

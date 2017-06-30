@@ -1,6 +1,6 @@
 <?php
 /**
- * GeoDirectory Popular Post Category Widget & GeoDirectory Popular Post View Widget
+ * GeoDirectory GeoDirectory Popular Post View Widget
  *
  * @since 1.0.0
  *
@@ -8,29 +8,28 @@
  */
 
 /**
- * GeoDirectory popular post category widget class.
+ * GeoDirectory popular posts widget class.
  *
  * @since 1.0.0
  */
-class geodir_popular_post_category extends WP_Widget
-{
+class GeoDir_Widget_Popular_Post_View extends WP_Widget {
+
     /**
-     * Register the popular post category widget.
+     * Register the popular posts widget.
      *
      * @since 1.0.0
      * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
      */
     public function __construct() {
-        $widget_ops = array('classname' => 'geodir_popular_post_category', 'description' => __('GD > Popular Post Category', 'geodirectory'));
-        parent::__construct(
-            'popular_post_category', // Base ID
-            __('GD > Popular Post Category', 'geodirectory'), // Name
-            $widget_ops// Args
+        $widget_ops = array(
+            'classname' => 'geodir_popular_post_view',
+            'description' => __( 'GD > Popular Post View', 'geodirectory' )
         );
+        parent::__construct( 'popular_post_view', __( 'GD > Popular Post View', 'geodirectory' ), $widget_ops );
     }
 
     /**
-     * Front-end display content for popular post category widget.
+     * Front-end display content for popular posts widget.
      *
      * @since 1.0.0
      * @since 1.5.1 Declare function public.
@@ -38,140 +37,22 @@ class geodir_popular_post_category extends WP_Widget
      * @param array $args     Widget arguments.
      * @param array $instance Saved values from database.
      */
-    public function widget($args, $instance)
-    {
-        geodir_popular_post_category_output($args, $instance);
+    public function widget($args, $instance) {
+        geodir_popular_postview_output($args, $instance);
     }
 
     /**
-     * Sanitize popular post category widget form values as they are saved.
+     * Sanitize popular posts widget form values as they are saved.
      *
      * @since 1.0.0
      * @since 1.5.1 Declare function public.
-     * @since 1.5.1 Added default_post_type parameter.
-     * @since 1.6.9 Added parent_only parameter.
      *
      * @param array $new_instance Values just sent to be saved.
      * @param array $old_instance Previously saved values from database.
      *
      * @return array Updated safe values to be saved.
-     */ 
-    public function update($new_instance, $old_instance)
-    {
-        //save the widget
-        $instance = $old_instance;
-        $instance['title'] = strip_tags($new_instance['title']);
-        $category_limit = (int)$new_instance['category_limit'];
-        $instance['category_limit'] = $category_limit > 0 ? $category_limit : 15;
-        $instance['default_post_type'] = isset($new_instance['default_post_type']) ? $new_instance['default_post_type'] : '';
-        $instance['parent_only'] = !empty($new_instance['parent_only']) ? true : false;
-        return $instance;
-    }
-
-    /**
-     * Back-end popular post category widget settings form.
-     *
-     * @since 1.0.0
-     * @since 1.5.1 Declare function public.
-     * @since 1.5.1 Added option to set default post type.
-     * @since 1.6.9 Added option to show parent categories only.
-     *
-     * @param array $instance Previously saved values from database.
      */
-    public function form($instance) 
-    {
-        //widgetform in backend
-        $instance = wp_parse_args((array)$instance, array('title' => '', 'category_limit' => 15, 'default_post_type' => '', 'parent_only' => false));
-
-        $title = strip_tags($instance['title']);
-        $category_limit = (int)$instance['category_limit'];
-        $category_limit = $category_limit > 0 ? $category_limit : 15;
-        $default_post_type = isset($instance['default_post_type']) ? $instance['default_post_type'] : '';
-        $parent_only = !empty($instance['parent_only']) ? true: false;
-        
-        $post_type_options = geodir_get_posttypes('options');
-        ?>
-        <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'geodirectory'); ?>
-                <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>"/>
-            </label>
-        </p>
-        <p>
-            <label for="<?php echo $this->get_field_id('post_type'); ?>"><?php _e('Default post type to use (if not set by page)', 'geodirectory');?>
-                <select class="widefat" id="<?php echo $this->get_field_id('default_post_type'); ?>" name="<?php echo $this->get_field_name('default_post_type'); ?>">
-                <?php foreach ($post_type_options as $name => $title) { ?>
-                    <option value="<?php echo $name;?>" <?php selected($name, $default_post_type);?>><?php echo $title; ?></option>
-                <?php } ?>
-                </select>
-            </label>
-        </p>
-        <p>
-            <label for="<?php echo $this->get_field_id('category_limit'); ?>"><?php _e('Customize categories count to appear by default:', 'geodirectory'); ?>
-                <input class="widefat" id="<?php echo $this->get_field_id('category_limit'); ?>" name="<?php echo $this->get_field_name('category_limit'); ?>" type="text" value="<?php echo (int)esc_attr($category_limit); ?>"/>
-                <p class="description" style="padding:0"><?php _e('After categories count reaches this limit option More Categories / Less Categoris will be displayed to show/hide categories. Default: 15', 'geodirectory'); ?></p>
-            </label>
-        </p>
-        <p>
-            <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('parent_only'); ?>" name="<?php echo $this->get_field_name('parent_only'); ?>"<?php checked( $parent_only ); ?> value="1" />
-            <label for="<?php echo $this->get_field_id('parent_only'); ?>"><?php _e( 'Show parent categories only', 'geodirectory' ); ?></label>
-        </p>
-    <?php
-    }
-} // class geodir_popular_post_category
-
-register_widget('geodir_popular_post_category');
-
-
-/**
- * GeoDirectory popular posts widget class.
- *
- * @since 1.0.0
- */
-class geodir_popular_postview extends WP_Widget
-{
-
-    /**
-	 * Register the popular posts widget.
-	 *
-	 * @since 1.0.0
-     * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
-	 */
-    public function __construct() {
-        $widget_ops = array('classname' => 'geodir_popular_post_view', 'description' => __('GD > Popular Post View', 'geodirectory'));
-        parent::__construct(
-            'popular_post_view', // Base ID
-            __('GD > Popular Post View', 'geodirectory'), // Name
-            $widget_ops// Args
-        );
-    }
-
-	/**
-	 * Front-end display content for popular posts widget.
-	 *
-	 * @since 1.0.0
-     * @since 1.5.1 Declare function public.
-	 *
-	 * @param array $args     Widget arguments.
-	 * @param array $instance Saved values from database.
-	 */
-	public function widget($args, $instance)
-    {
-        geodir_popular_postview_output($args, $instance);
-    }
-
-	/**
-	 * Sanitize popular posts widget form values as they are saved.
-	 *
-	 * @since 1.0.0
-     * @since 1.5.1 Declare function public.
-	 *
-	 * @param array $new_instance Values just sent to be saved.
-	 * @param array $old_instance Previously saved values from database.
-	 *
-	 * @return array Updated safe values to be saved.
-	 */
-	public function update($new_instance, $old_instance)
-    {
+    public function update($new_instance, $old_instance) {
         //save the widget
         $instance = $old_instance;
 
@@ -205,16 +86,15 @@ class geodir_popular_postview extends WP_Widget
         return $instance;
     }
 
-	/**
-	 * Back-end popular posts widget settings form.
-	 *
-	 * @since 1.0.0
+    /**
+     * Back-end popular posts widget settings form.
+     *
+     * @since 1.0.0
      * @since 1.5.1 Declare function public.
-	 *
-	 * @param array $instance Previously saved values from database.
-	 */
-	public function form($instance)
-    {
+     *
+     * @param array $instance Previously saved values from database.
+     */
+    public function form($instance) {
         //widgetform in backend
         $instance = wp_parse_args((array)$instance,
             array('title' => '',
@@ -238,34 +118,22 @@ class geodir_popular_postview extends WP_Widget
         );
 
         $title = strip_tags($instance['title']);
-
         $post_type = strip_tags($instance['post_type']);
-
         $category = $instance['category'];
-
         $category_title = strip_tags($instance['category_title']);
-
         $list_sort = strip_tags($instance['list_sort']);
-
         $list_order = strip_tags($instance['list_order']);
-
         $post_number = strip_tags($instance['post_number']);
-
         $layout = strip_tags($instance['layout']);
-
         $listing_width = strip_tags($instance['listing_width']);
-
         $add_location_filter = strip_tags($instance['add_location_filter']);
-
         $character_count = $instance['character_count'];
-
         $show_featured_only = isset($instance['show_featured_only']) && $instance['show_featured_only'] ? true : false;
         $show_special_only = isset($instance['show_special_only']) && $instance['show_special_only'] ? true : false;
         $with_pics_only = isset($instance['with_pics_only']) && $instance['with_pics_only'] ? true : false;
         $with_videos_only = isset($instance['with_videos_only']) && $instance['with_videos_only'] ? true : false;
         $use_viewing_post_type = isset($instance['use_viewing_post_type']) && $instance['use_viewing_post_type'] ? true : false;
         $hide_if_empty = !empty($instance['hide_if_empty']) ? true : false;
-
         ?>
         <p>
             <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'geodirectory');?>
@@ -278,20 +146,19 @@ class geodir_popular_postview extends WP_Widget
                        value="<?php echo esc_attr($title); ?>"/>
             </label>
         </p>
-
         <p>
             <label
                 for="<?php echo $this->get_field_id('post_type'); ?>"><?php _e('Post Type:', 'geodirectory');?>
 
                 <?php $postypes = geodir_get_posttypes();
-				/**
-				 * Filter the post types to display in widget.
-				 *
-				 * @since 1.0.0
-				 *
-				 * @param array $postypes Post types array.
-				 */
-				$postypes = apply_filters('geodir_post_type_list_in_p_widget', $postypes); ?>
+                /**
+                 * Filter the post types to display in widget.
+                 *
+                 * @since 1.0.0
+                 *
+                 * @param array $postypes Post types array.
+                 */
+                $postypes = apply_filters('geodir_post_type_list_in_p_widget', $postypes); ?>
 
                 <select class="widefat" id="<?php echo $this->get_field_id('post_type'); ?>"
                         name="<?php echo $this->get_field_name('post_type'); ?>"
@@ -305,20 +172,15 @@ class geodir_popular_postview extends WP_Widget
                             echo geodir_utf8_ucfirst($extvalue[1]); ?></option>
 
                     <?php } ?>
-
                 </select>
             </label>
         </p>
-
-
         <p id="post_type_cats">
             <label
                 for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Post Category:', 'geodirectory');?>
 
                 <?php
-
                 $post_type = ($post_type != '') ? $post_type : 'gd_place';
-
                 $all_postypes = geodir_get_posttypes();
 
                 if (!in_array($post_type, $all_postypes))
@@ -356,7 +218,6 @@ class geodir_popular_postview extends WP_Widget
 
             </label>
         </p>
-
         <p>
             <label
                 for="<?php echo $this->get_field_id('list_sort'); ?>"><?php _e('Sort by:', 'geodirectory');?>
@@ -391,7 +252,6 @@ class geodir_popular_postview extends WP_Widget
                 </select>
             </label>
         </p>
-
         <p>
 
             <label
@@ -402,7 +262,6 @@ class geodir_popular_postview extends WP_Widget
                        value="<?php echo esc_attr($post_number); ?>"/>
             </label>
         </p>
-
         <p>
             <label for="<?php echo $this->get_field_id('layout'); ?>">
                 <?php _e('Layout:', 'geodirectory');?>
@@ -431,7 +290,6 @@ class geodir_popular_postview extends WP_Widget
                 </select>
             </label>
         </p>
-
         <p>
             <label
                 for="<?php echo $this->get_field_id('listing_width'); ?>"><?php _e('Listing width:', 'geodirectory');?>
@@ -441,7 +299,6 @@ class geodir_popular_postview extends WP_Widget
                        value="<?php echo esc_attr($listing_width); ?>"/>
             </label>
         </p>
-
         <p>
             <label
                 for="<?php echo $this->get_field_id('character_count'); ?>"><?php _e('Post Content excerpt character count :', 'geodirectory');?>
@@ -450,7 +307,6 @@ class geodir_popular_postview extends WP_Widget
                        value="<?php echo esc_attr($character_count); ?>"/>
             </label>
         </p>
-
         <p>
             <label for="<?php echo $this->get_field_id('add_location_filter'); ?>">
                 <?php _e('Enable Location Filter:', 'geodirectory');?>
@@ -546,6 +402,4 @@ class geodir_popular_postview extends WP_Widget
 
     <?php
     }
-} // class geodir_popular_postview
-
-register_widget('geodir_popular_postview');
+}

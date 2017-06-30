@@ -252,7 +252,7 @@ if($dummy_post_index==1){
 }
 
 if (geodir_dummy_folder_exists())
-    $dummy_image_url = geodir_plugin_url() . "/geodirectory-admin/dummy";
+    $dummy_image_url = geodir_plugin_url() . "/includes/admin/dummy";
 else
     $dummy_image_url = 'http://wpgeodirectory.com/dummy';
 

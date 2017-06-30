@@ -12,57 +12,55 @@
  *
  * @since 1.0.0
  */
-class geodir_recent_reviews_widget extends WP_Widget
-{
+class GeoDir_Widget_Recent_Reviews extends WP_Widget {
+    
     /**
-	 * Register the recent reviews widget.
-	 *
-	 * @since 1.0.0
+     * Register the recent reviews widget.
+     *
+     * @since 1.0.0
      * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
-	 */
+     */
     public function __construct() {
-        $widget_ops = array('classname' => 'geodir_recent_reviews', 'description' => __('GD > Recent Reviews', 'geodirectory'));
-        parent::__construct(
-            'geodir_recent_reviews', // Base ID
-            __('GD > Recent Reviews', 'geodirectory'), // Name
-            $widget_ops// Args
+        $widget_ops = array(
+            'classname' => 'geodir_recent_reviews',
+            'description' => __( 'GD > Recent Reviews', 'geodirectory' )
         );
+        parent::__construct( 'geodir_recent_reviews', __( 'GD > Recent Reviews', 'geodirectory' ), $widget_ops );
     }
 
-	/**
-	 * Front-end display content for recent reviews widget.
-	 *
-	 * @since 1.0.0
+    /**
+     * Front-end display content for recent reviews widget.
+     *
+     * @since 1.0.0
      * @since 1.5.1 Declare function public.
-	 *
-	 * @param array $args     Widget arguments.
-	 * @param array $instance Saved values from database.
-	 */
-	public function widget($args, $instance)
-    {
+     *
+     * @param array $args     Widget arguments.
+     * @param array $instance Saved values from database.
+     */
+    public function widget($args, $instance) {
         // prints the widget
         extract($args, EXTR_SKIP);
 
-        /** This filter is documented in geodirectory_widgets.php */
+        /** This filter is documented in includes/widget/class-geodir-widget-advance-search.php.php */
         $title = empty($instance['title']) ? '' : apply_filters('widget_title', __($instance['title'], 'geodirectory'));
-		
-		/**
-		 * Filter the number of reviews to display.
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param int $instance['count'] Number of reviews to display.
-		 */
-		$count = empty($instance['count']) ? '5' : apply_filters('widget_count', $instance['count']);
+        
+        /**
+         * Filter the number of reviews to display.
+         *
+         * @since 1.0.0
+         *
+         * @param int $instance['count'] Number of reviews to display.
+         */
+        $count = empty($instance['count']) ? '5' : apply_filters('widget_count', $instance['count']);
 
-		/**
-		 * Filter the height and width of the avatar image in pixels.
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param int $g_size Height and width of the avatar image in pixels. Default 30.
-		 */
-		$g_size = apply_filters('geodir_recent_reviews_g_size', 30);
+        /**
+         * Filter the height and width of the avatar image in pixels.
+         *
+         * @since 1.0.0
+         *
+         * @param int $g_size Height and width of the avatar image in pixels. Default 30.
+         */
+        $g_size = apply_filters('geodir_recent_reviews_g_size', 30);
         /**
          * Filter the excerpt length
          *
@@ -87,19 +85,18 @@ class geodir_recent_reviews_widget extends WP_Widget
         }
     }
 
-	/**
-	 * Sanitize recent reviews widget form values as they are saved.
-	 *
-	 * @since 1.0.0
+    /**
+     * Sanitize recent reviews widget form values as they are saved.
+     *
+     * @since 1.0.0
      * @since 1.5.1 Declare function public.
-	 *
-	 * @param array $new_instance Values just sent to be saved.
-	 * @param array $old_instance Previously saved values from database.
-	 *
-	 * @return array Updated safe values to be saved.
-	 */
-	public function update($new_instance, $old_instance)
-    {
+     *
+     * @param array $new_instance Values just sent to be saved.
+     * @param array $old_instance Previously saved values from database.
+     *
+     * @return array Updated safe values to be saved.
+     */
+    public function update($new_instance, $old_instance) {
         //save the widget
         $instance = $old_instance;
         $instance['title'] = strip_tags($new_instance['title']);
@@ -107,16 +104,15 @@ class geodir_recent_reviews_widget extends WP_Widget
         return $instance;
     }
     
-	/**
-	 * Back-end recent reviews widget settings form.
-	 *
-	 * @since 1.0.0
+    /**
+     * Back-end recent reviews widget settings form.
+     *
+     * @since 1.0.0
      * @since 1.5.1 Declare function public.
-	 *
-	 * @param array $instance Previously saved values from database.
-	 */
-	public function form($instance)
-    {
+     *
+     * @param array $instance Previously saved values from database.
+     */
+    public function form($instance) {
         //widgetform in backend
         $instance = wp_parse_args((array)$instance, array('title' => '', 't1' => '', 't2' => '', 't3' => '', 'img1' => '', 'count' => ''));
         $title = strip_tags($instance['title']);
@@ -136,6 +132,4 @@ class geodir_recent_reviews_widget extends WP_Widget
         </p>
     <?php
     }
-} // class geodir_recent_reviews_widget
-
-register_widget('geodir_recent_reviews_widget');
+}

@@ -1168,7 +1168,7 @@ function geodir_cf_email($html,$location,$cf,$p=''){
                 $html .= '<p class="error_msg_fix">' . WRONG_CAPTCH_MSG . '</p>';
             }
 
-            /*if(!$preview){require_once (geodir_plugin_path().'/geodirectory-templates/popup-forms.php');}*/
+            /*if(!$preview){require_once (geodir_plugin_path().'/includes/templates/popup-forms.php');}*/
 
         } else {
 

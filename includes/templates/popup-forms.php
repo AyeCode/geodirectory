@@ -58,34 +58,34 @@ if ($_REQUEST['popuptype'] == 'b_sendtofriend') { ?>
              */
             do_action('geodir_after_stf_form_field', 'to_name');?>
             <?php
-            /** This action is documented in geodirectory-templates/popup-forms.php */
+            /** This action is documented in includes/templates/popup-forms.php */
             do_action('geodir_before_stf_form_field', 'to_email');?>
             <div class="row  clearfix">
                     <input required field_type="email" name="to_email" id="to_email" type="email" value="" placeholder="<?php _e('Friend Email', 'geodirectory');?>"/>
             </div>
             <?php
-            /** This action is documented in geodirectory-templates/popup-forms.php */
+            /** This action is documented in includes/templates/popup-forms.php */
             do_action('geodir_after_stf_form_field', 'to_email');?>
             <?php
-            /** This action is documented in geodirectory-templates/popup-forms.php */
+            /** This action is documented in includes/templates/popup-forms.php */
             do_action('geodir_before_stf_form_field', 'yourname');?>
             <div class="row  clearfix">
                     <input required field_type="text" name="yourname" id="yourname" type="text" value="" placeholder="<?php _e('Your Name', 'geodirectory');?>"/>
             </div>
             <?php
-            /** This action is documented in geodirectory-templates/popup-forms.php */
+            /** This action is documented in includes/templates/popup-forms.php */
             do_action('geodir_after_stf_form_field', 'yourname');?>
             <?php
-            /** This action is documented in geodirectory-templates/popup-forms.php */
+            /** This action is documented in includes/templates/popup-forms.php */
             do_action('geodir_before_stf_form_field', 'youremail');?>
             <div class="row  clearfix">
                     <input required field_type="email" name="youremail" id="youremail" type="email" value="" placeholder="<?php _e('Your Email', 'geodirectory');?>"/>
             </div>
             <?php
-            /** This action is documented in geodirectory-templates/popup-forms.php */
+            /** This action is documented in includes/templates/popup-forms.php */
             do_action('geodir_after_stf_form_field', 'youremail');?>
             <?php
-            /** This action is documented in geodirectory-templates/popup-forms.php */
+            /** This action is documented in includes/templates/popup-forms.php */
             do_action('geodir_before_stf_form_field', 'frnd_subject');?>
             <div class="row  clearfix">
                     <input required field_type="text" name="frnd_subject"
@@ -93,17 +93,17 @@ if ($_REQUEST['popuptype'] == 'b_sendtofriend') { ?>
                            id="frnd_subject" type="text"  placeholder="<?php _e('Subject', 'geodirectory');?>"/>
             </div>
             <?php
-            /** This action is documented in geodirectory-templates/popup-forms.php */
+            /** This action is documented in includes/templates/popup-forms.php */
             do_action('geodir_after_stf_form_field', 'frnd_subject');?>
             <?php
-            /** This action is documented in geodirectory-templates/popup-forms.php */
+            /** This action is documented in includes/templates/popup-forms.php */
             do_action('geodir_before_stf_form_field', 'frnd_comments');?>
             <div class="row  clearfix">
                     <textarea required field_type="textarea" name="frnd_comments" id="frnd_comments" cols=""
                               rows="" placeholder="<?php echo SEND_TO_FRIEND_SAMPLE_CONTENT;?>"><?php echo SEND_TO_FRIEND_SAMPLE_CONTENT;?></textarea>
             </div>
             <?php
-            /** This action is documented in geodirectory-templates/popup-forms.php */
+            /** This action is documented in includes/templates/popup-forms.php */
             do_action('geodir_after_stf_form_field', 'frnd_comments');?>
             <?php if (function_exists('geodir_get_captch')) {
                 geodir_get_captch('-1');
@@ -150,32 +150,32 @@ if ($_REQUEST['popuptype'] == 'b_sendtofriend') { ?>
              */
             do_action('geodir_after_inquiry_form_field', 'inq_name');?>
             <?php
-            /** This action is documented in geodirectory-templates/popup-forms.php */
+            /** This action is documented in includes/templates/popup-forms.php */
             do_action('geodir_before_inquiry_form_field', 'inq_email');?>
             <div class="row  clearfix">
                     <input required field_type="email" name="inq_email" type="email" value="" placeholder="<?php _e('Email', 'geodirectory');?>"/>
             </div>
             <?php
-            /** This action is documented in geodirectory-templates/popup-forms.php */
+            /** This action is documented in includes/templates/popup-forms.php */
             do_action('geodir_after_inquiry_form_field', 'inq_email');?>
             <?php
-            /** This action is documented in geodirectory-templates/popup-forms.php */
+            /** This action is documented in includes/templates/popup-forms.php */
             do_action('geodir_before_inquiry_form_field', 'inq_phone');?>
             <div class="row  clearfix">
                     <input name="inq_phone" id="agt_mail_phone" type="text" value="" placeholder="<?php _e('Phone number', 'geodirectory');?>"/>
             </div>
             <?php
-            /** This action is documented in geodirectory-templates/popup-forms.php */
+            /** This action is documented in includes/templates/popup-forms.php */
             do_action('geodir_after_inquiry_form_field', 'inq_phone');?>
             <?php
-            /** This action is documented in geodirectory-templates/popup-forms.php */
+            /** This action is documented in includes/templates/popup-forms.php */
             do_action('geodir_before_inquiry_form_field', 'inq_msg');?>
             <div class="row  clearfix">
                     <textarea required field_type="textarea" name="inq_msg" cols=""
                               rows="" placeholder="<?php echo SEND_INQUIRY_SAMPLE_CONTENT;?>"></textarea>
             </div>
             <?php
-            /** This action is documented in geodirectory-templates/popup-forms.php */
+            /** This action is documented in includes/templates/popup-forms.php */
             do_action('geodir_after_inquiry_form_field', 'inq_msg');?>
             <input name="Send" type="submit" value="<?php _e('Send', 'geodirectory');?>"
                    class="button clearfix"/>

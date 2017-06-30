@@ -7,14 +7,6 @@
  */
 
 /**
- * Contains all map related templates used by the plugin.
- *
- * @since 1.0.0
- * @package GeoDirectory
- */
-include_once('geodirectory-functions/map-functions/map_template_tags.php');
-
-/**
  * Dequeue flexslider javscript.
  *
  * @since 1.0.0
@@ -45,7 +37,7 @@ function geodir_templates_scripts()
 
     wp_enqueue_script('jquery');
 
-    wp_register_script('geodirectory-script', geodir_plugin_url() . '/geodirectory-assets/js/geodirectory.min.js', array(), GEODIRECTORY_VERSION);
+    wp_register_script('geodirectory-script', geodir_plugin_url() . '/assets/js/geodirectory.min.js', array(), GEODIRECTORY_VERSION);
     wp_enqueue_script('geodirectory-script');
 
     $geodir_vars_data = array(
@@ -78,13 +70,13 @@ function geodir_templates_scripts()
 
     wp_localize_script('geodirectory-script', 'geodir_var', $geodir_vars_data);
 
-    wp_register_script('geodirectory-jquery-flexslider-js', geodir_plugin_url() . '/geodirectory-assets/js/jquery.flexslider.min.js', array(), GEODIRECTORY_VERSION,true);
+    wp_register_script('geodirectory-jquery-flexslider-js', geodir_plugin_url() . '/assets/js/jquery.flexslider.min.js', array(), GEODIRECTORY_VERSION,true);
     if($is_detail_page){wp_enqueue_script('geodirectory-jquery-flexslider-js');}
 
-    wp_register_script('geodirectory-lightbox-jquery', geodir_plugin_url() . '/geodirectory-assets/js/jquery.lightbox-0.5.min.js', array(), GEODIRECTORY_VERSION,true);
+    wp_register_script('geodirectory-lightbox-jquery', geodir_plugin_url() . '/assets/js/jquery.lightbox-0.5.min.js', array(), GEODIRECTORY_VERSION,true);
     wp_enqueue_script('geodirectory-lightbox-jquery');
 
-    wp_register_script('geodirectory-jquery-simplemodal', geodir_plugin_url() . '/geodirectory-assets/js/jquery.simplemodal.min.js', array(), GEODIRECTORY_VERSION,true);
+    wp_register_script('geodirectory-jquery-simplemodal', geodir_plugin_url() . '/assets/js/jquery.simplemodal.min.js', array(), GEODIRECTORY_VERSION,true);
     if ($is_detail_page) {
         wp_enqueue_script('geodirectory-jquery-simplemodal');
     }
@@ -104,52 +96,52 @@ function geodir_templates_scripts()
         wp_enqueue_script('geodirectory-googlemap-script', 'https://maps.google.com/maps/api/js?' . $map_lang . $map_key . $map_extra , '', NULL);
         
         // Overlapping Marker Spiderfier
-        wp_register_script('geodirectory-g-overlappingmarker-script', geodir_plugin_url() . '/geodirectory-assets/jawj/oms.min.js', array(), GEODIRECTORY_VERSION);
+        wp_register_script('geodirectory-g-overlappingmarker-script', geodir_plugin_url() . '/assets/jawj/oms.min.js', array(), GEODIRECTORY_VERSION);
         wp_enqueue_script('geodirectory-g-overlappingmarker-script');
     }
     
     if ($geodir_map_name == 'osm') {
         // Leaflet OpenStreetMap
-        wp_register_style('geodirectory-leaflet-style', geodir_plugin_url() . '/geodirectory-assets/leaflet/leaflet.css', array(), GEODIRECTORY_VERSION);
+        wp_register_style('geodirectory-leaflet-style', geodir_plugin_url() . '/assets/leaflet/leaflet.css', array(), GEODIRECTORY_VERSION);
         wp_enqueue_style('geodirectory-leaflet-style');
             
-        wp_register_script('geodirectory-leaflet-script', geodir_plugin_url() . '/geodirectory-assets/leaflet/leaflet.min.js', array(), GEODIRECTORY_VERSION);
+        wp_register_script('geodirectory-leaflet-script', geodir_plugin_url() . '/assets/leaflet/leaflet.min.js', array(), GEODIRECTORY_VERSION);
         wp_enqueue_script('geodirectory-leaflet-script');
         
-        wp_register_script('geodirectory-leaflet-geo-script', geodir_plugin_url() . '/geodirectory-assets/leaflet/osm.geocode.min.js', array(), GEODIRECTORY_VERSION);
+        wp_register_script('geodirectory-leaflet-geo-script', geodir_plugin_url() . '/assets/leaflet/osm.geocode.min.js', array(), GEODIRECTORY_VERSION);
         wp_enqueue_script('geodirectory-leaflet-geo-script');
         
         if ($is_detail_page) {
-            wp_register_style('geodirectory-leaflet-routing-style', geodir_plugin_url() . '/geodirectory-assets/leaflet/routing/leaflet-routing-machine.css', array(), GEODIRECTORY_VERSION);
+            wp_register_style('geodirectory-leaflet-routing-style', geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine.css', array(), GEODIRECTORY_VERSION);
             wp_enqueue_style('geodirectory-leaflet-routing-style');
                 
-            wp_register_script('geodirectory-leaflet-routing-script', geodir_plugin_url() . '/geodirectory-assets/leaflet/routing/leaflet-routing-machine.min.js', array(), GEODIRECTORY_VERSION);
+            wp_register_script('geodirectory-leaflet-routing-script', geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine.min.js', array(), GEODIRECTORY_VERSION);
             wp_enqueue_script('geodirectory-leaflet-routing-script');
         }
         
         // Overlapping Marker Spiderfier Leaflet
-        wp_register_script('geodirectory-o-overlappingmarker-script', geodir_plugin_url() . '/geodirectory-assets/jawj/oms-leaflet.min.js', array(), GEODIRECTORY_VERSION);
+        wp_register_script('geodirectory-o-overlappingmarker-script', geodir_plugin_url() . '/assets/jawj/oms-leaflet.min.js', array(), GEODIRECTORY_VERSION);
         wp_enqueue_script('geodirectory-o-overlappingmarker-script');
     }
     wp_enqueue_script( 'jquery-ui-autocomplete' );
     
-    wp_register_script('geodirectory-goMap-script', geodir_plugin_url() . '/geodirectory-assets/js/goMap.min.js', array(), GEODIRECTORY_VERSION, true);
+    wp_register_script('geodirectory-goMap-script', geodir_plugin_url() . '/assets/js/goMap.min.js', array(), GEODIRECTORY_VERSION, true);
     wp_enqueue_script('geodirectory-goMap-script');
 
-    wp_register_script('chosen', geodir_plugin_url() . '/geodirectory-assets/js/chosen.jquery.min.js', array(), GEODIRECTORY_VERSION);
+    wp_register_script('chosen', geodir_plugin_url() . '/assets/js/chosen.jquery.min.js', array(), GEODIRECTORY_VERSION);
     wp_enqueue_script('chosen');
 
-    wp_register_script('geodirectory-choose-ajax', geodir_plugin_url() . '/geodirectory-assets/js/ajax-chosen.min.js', array(), GEODIRECTORY_VERSION);
+    wp_register_script('geodirectory-choose-ajax', geodir_plugin_url() . '/assets/js/ajax-chosen.min.js', array(), GEODIRECTORY_VERSION);
     wp_enqueue_script('geodirectory-choose-ajax');
 
-    wp_enqueue_script('geodirectory-jquery-ui-timepicker-js', geodir_plugin_url() . '/geodirectory-assets/js/jquery.ui.timepicker.min.js', array('jquery-ui-datepicker', 'jquery-ui-slider', 'jquery-effects-core', 'jquery-effects-slide'), '', true);
+    wp_enqueue_script('geodirectory-jquery-ui-timepicker-js', geodir_plugin_url() . '/assets/js/jquery.ui.timepicker.min.js', array('jquery-ui-datepicker', 'jquery-ui-slider', 'jquery-effects-core', 'jquery-effects-slide'), '', true);
 
     if (is_page() && geodir_is_page('add-listing')) {
         // SCRIPT FOR UPLOAD
         wp_enqueue_script('plupload-all');
         wp_enqueue_script('jquery-ui-sortable');
 
-        wp_register_script('geodirectory-plupload-script', geodir_plugin_url() . '/geodirectory-assets/js/geodirectory-plupload.min.js#asyncload', array(), GEODIRECTORY_VERSION,true);
+        wp_register_script('geodirectory-plupload-script', geodir_plugin_url() . '/assets/js/geodirectory-plupload.min.js#asyncload', array(), GEODIRECTORY_VERSION,true);
         wp_enqueue_script('geodirectory-plupload-script');
         // SCRIPT FOR UPLOAD END
 
@@ -196,27 +188,27 @@ function geodir_templates_scripts()
 
         wp_localize_script('geodirectory-plupload-script', 'gd_plupload', $gd_plupload_init);
 
-        wp_enqueue_script('geodirectory-listing-validation-script', geodir_plugin_url() . '/geodirectory-assets/js/listing_validation.min.js#asyncload');
+        wp_enqueue_script('geodirectory-listing-validation-script', geodir_plugin_url() . '/assets/js/listing_validation.min.js#asyncload');
     } // End if for add place page
 
-    wp_register_script('geodirectory-post-custom-js', geodir_plugin_url() . '/geodirectory-assets/js/post.custom.min.js#asyncload', array(), GEODIRECTORY_VERSION, true);
+    wp_register_script('geodirectory-post-custom-js', geodir_plugin_url() . '/assets/js/post.custom.min.js#asyncload', array(), GEODIRECTORY_VERSION, true);
     if ($is_detail_page) {
 		wp_enqueue_script('geodirectory-post-custom-js');
 	}
 
     // font awesome rating script
 	if (get_option('geodir_reviewrating_enable_font_awesome')) {
-		wp_register_script('geodir-barrating-js', geodir_plugin_url() . '/geodirectory-assets/js/jquery.barrating.min.js', array(), GEODIRECTORY_VERSION, true);
+		wp_register_script('geodir-barrating-js', geodir_plugin_url() . '/assets/js/jquery.barrating.min.js', array(), GEODIRECTORY_VERSION, true);
 		wp_enqueue_script('geodir-barrating-js');
 	} else { // default rating script
-		wp_register_script('geodir-jRating-js', geodir_plugin_url() . '/geodirectory-assets/js/jRating.jquery.min.js', array(), GEODIRECTORY_VERSION, true);
+		wp_register_script('geodir-jRating-js', geodir_plugin_url() . '/assets/js/jRating.jquery.min.js', array(), GEODIRECTORY_VERSION, true);
 		wp_enqueue_script('geodir-jRating-js');
 	}
 
-    wp_register_script('geodir-on-document-load', geodir_plugin_url() . '/geodirectory-assets/js/on_document_load.min.js#asyncload', array(), GEODIRECTORY_VERSION, true);
+    wp_register_script('geodir-on-document-load', geodir_plugin_url() . '/assets/js/on_document_load.min.js#asyncload', array(), GEODIRECTORY_VERSION, true);
     wp_enqueue_script('geodir-on-document-load');
 
-    wp_register_script('google-geometa', geodir_plugin_url() . '/geodirectory-assets/js/geometa.min.js#asyncload', array(), GEODIRECTORY_VERSION, true);
+    wp_register_script('google-geometa', geodir_plugin_url() . '/assets/js/geometa.min.js#asyncload', array(), GEODIRECTORY_VERSION, true);
     wp_enqueue_script('google-geometa');
 }
 
@@ -317,12 +309,12 @@ add_filter('clean_url', 'geodir_add_async_forscript', 11, 1);
 function geodir_templates_styles()
 {
 
-    wp_register_style('geodir-core-scss', geodir_plugin_url() . '/geodirectory-assets/css/gd_core_frontend.css', array(), GEODIRECTORY_VERSION);
+    wp_register_style('geodir-core-scss', geodir_plugin_url() . '/assets/css/gd_core_frontend.css', array(), GEODIRECTORY_VERSION);
     wp_enqueue_style('geodir-core-scss');
-    wp_register_style('geodir-core-scss-footer', geodir_plugin_url() . '/geodirectory-assets/css/gd_core_frontend_footer.css', array(), GEODIRECTORY_VERSION);
+    wp_register_style('geodir-core-scss-footer', geodir_plugin_url() . '/assets/css/gd_core_frontend_footer.css', array(), GEODIRECTORY_VERSION);
 
     if(is_rtl()){
-    wp_register_style('geodirectory-frontend-rtl-style', geodir_plugin_url() . '/geodirectory-assets/css/rtl-frontend.css', array(), GEODIRECTORY_VERSION);
+    wp_register_style('geodirectory-frontend-rtl-style', geodir_plugin_url() . '/assets/css/rtl-frontend.css', array(), GEODIRECTORY_VERSION);
     wp_enqueue_style('geodirectory-frontend-rtl-style');
     }
 

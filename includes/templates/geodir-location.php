@@ -12,11 +12,11 @@
 get_header();
 
 ###### WRAPPER OPEN ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_open', 'home-page', 'geodir-wrapper', '');
 
 ###### TOP CONTENT ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_top_content', 'home-page');
 /**
  * Calls the top section widget area and the breadcrumbs on the locations page.
@@ -24,7 +24,7 @@ do_action('geodir_top_content', 'home-page');
  * @since 1.1.0
  */
 do_action('geodir_location_before_main_content');
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_before_main_content', 'home-page');
 
 ###### SIDEBAR ######
@@ -36,11 +36,11 @@ do_action('geodir_before_main_content', 'home-page');
 do_action('geodir_location_sidebar_left');
 
 ###### MAIN CONTENT WRAPPERS OPEN ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_content_open', 'home-page', 'geodir-wrapper-content', '');
 
 ###### MAIN CONTENT ######
-/** This action is documented in geodirectory-templates/geodir-home.php */
+/** This action is documented in includes/templates/geodir-home.php */
 do_action('geodir_add_page_content', 'before', 'location-page');
 
 /**
@@ -50,11 +50,11 @@ do_action('geodir_add_page_content', 'before', 'location-page');
  */
 do_action('geodir_location_content');
 
-/** This action is documented in geodirectory-templates/geodir-home.php */
+/** This action is documented in includes/templates/geodir-home.php */
 do_action('geodir_add_page_content', 'after', 'location-page');
 
 ###### MAIN CONTENT WRAPPERS CLOSE ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_content_close', 'home-page');
 
 ###### SIDEBAR ######
@@ -66,7 +66,7 @@ do_action('geodir_wrapper_content_close', 'home-page');
 do_action('geodir_location_sidebar_right');
 
 # WRAPPER CLOSE ######	
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_close', 'home-page');
 
 ###### BOTTOM SECTION WIDGET AREA ######

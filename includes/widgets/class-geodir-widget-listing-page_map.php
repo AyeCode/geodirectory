@@ -10,128 +10,45 @@
  */
 
 /**
- * Enque listing map script.
- *
- * @since 1.0.0
- *
- * @global array $list_map_json Empty array.
- */
-function init_listing_map_script()
-{
-    global $list_map_json;
-
-    $list_map_json = array();
-
-}
-
-/**
- * Create listing json for map script.
- *
- * @since 1.0.0
- *
- * @global object $wpdb WordPress Database object.
- * @global array $list_map_json Listing map data in json format.
- * @global bool $add_post_in_marker_array Displays posts in marker array when the value is true.
- */
-function create_list_jsondata($post)
-{
-    global $wpdb, $list_map_json, $add_post_in_marker_array;
-
-    if ((is_main_query() || $add_post_in_marker_array) && isset($post->marker_json) && $post->marker_json != '') {
-        /**
-         * Filter the json data for search listing map.
-         *
-         * @since 1.5.7
-         * @param string $post->marker_json JSON representation of the post marker info.
-         * @param object $post The post object.
-         */
-        $list_map_json[] = apply_filters('geodir_create_list_jsondata',$post->marker_json,$post);
-    }
-
-}
-
-/**
- * Send json data to script and show listing map.
- *
- * @since 1.0.0
- *
- * @global array $list_map_json Listing map data in json format.
- */
-function show_listing_widget_map()
-{
-    global $list_map_json;
-
-    if (!empty($list_map_json)) {
-        $list_map_json = array_unique($list_map_json);
-        $cat_content_info[] = implode(',', $list_map_json);
-    }
-
-    $totalcount = count(array_unique($list_map_json));
-
-
-    if (!empty($cat_content_info)) {
-        $json_content = substr(implode(',', $cat_content_info), 1);
-        $json_content = htmlentities($json_content, ENT_QUOTES, get_option('blog_charset')); // Quotes in csv title import break maps - FIXED by kiran on 2nd March, 2016
-        $json_content = wp_specialchars_decode($json_content); // Fixed #post-320722 on 2016-12-08
-        $list_json = '[{"totalcount":"' . $totalcount . '",' . $json_content . ']';
-    } else {
-        $list_json = '[{"totalcount":"0"}]';
-    }
-
-    $listing_map_args = array('list_json' => $list_json);
-
-    // Pass the json data in listing map script
-    wp_localize_script('geodir-listing-map-widget', 'listing_map_args', $listing_map_args);
-
-}
-
-/**
  * GeoDirectory listing page map widget class.
  *
  * @since 1.0.0
  */
-class geodir_map_listingpage extends WP_Widget
-{
+class GeoDir_Widget_Listing_Page_Map extends WP_Widget {
 
     /**
-	 * Register the listing page map widget.
-	 *
-	 * @since 1.0.0
+     * Register the listing page map widget.
+     *
+     * @since 1.0.0
      * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
-	 */
+     */
     public function __construct() {
-        $widget_ops = array('classname' => 'widget geodir-map-listing-page', 'description' => __('Google Map for Listing page. It will show you google map V3 for Listing page.', 'geodirectory'));
-        parent::__construct(
-            'geodir_map_v3_listing_map', // Base ID
-            __('GD > GMap - Listing page', 'geodirectory'), // Name
-            $widget_ops// Args
+        $widget_ops = array(
+            'classname' => 'widget geodir-map-listing-page',
+            'description' => __( 'Google Map for Listing page. It will show you google map V3 for Listing page.', 'geodirectory' )
         );
+        parent::__construct( 'geodir_map_v3_listing_map', __( 'GD > GMap - Listing page', 'geodirectory' ), $widget_ops );
 
-        add_action('wp_head', 'init_listing_map_script'); // Initialize the map object and marker array
-
-        add_action('the_post', 'create_list_jsondata'); // Add marker in json array
-
-        add_action('wp_footer', 'show_listing_widget_map'); // Show map for listings with markers
+        add_action( 'wp_head', 'init_listing_map_script' ); // Initialize the map object and marker array
+        add_action( 'the_post', 'create_list_jsondata' ); // Add marker in json array
+        add_action( 'wp_footer', 'show_listing_widget_map' ); // Show map for listings with markers
     }
 
-	/**
-	 * Front-end display content for listing page map widget.
-	 *
-	 * @since 1.0.0
+    /**
+     * Front-end display content for listing page map widget.
+     *
+     * @since 1.0.0
      * @since 1.5.1 Declare function public.
-	 *
+     *
      * @global object $post The current post object.
      *
-	 * @param array $args     Widget arguments.
-	 * @param array $instance Saved values from database.
-	 */
-    public function widget($args, $instance)
-    {
-
+     * @param array $args     Widget arguments.
+     * @param array $instance Saved values from database.
+     */
+    public function widget($args, $instance) {
         if (geodir_is_page('listing') || geodir_is_page('author') || geodir_is_page('search')
             || geodir_is_page('detail')
         ) :
-
             extract($args, EXTR_SKIP);
             /** This action is documented in geodirectory_shortcodes.php */
             $width = empty($instance['width']) ? '294' : apply_filters('widget_width', $instance['width']);
@@ -384,6 +301,4 @@ class geodir_map_listingpage extends WP_Widget
 
     <?php
     }
-} // class geodir_map_listingpage
-
-register_widget('geodir_map_listingpage');
+}
