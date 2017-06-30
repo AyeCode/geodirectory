@@ -14,12 +14,12 @@ get_header();
 
 
 ###### WRAPPER OPEN ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_open', 'search-page', 'geodir-wrapper', '');
 
 
 ###### TOP CONTENT ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_top_content', 'search-page');
 /**
  * Calls the top section widget area and the breadcrumbs on the search page.
@@ -27,7 +27,7 @@ do_action('geodir_top_content', 'search-page');
  * @since 1.1.0
  */
 do_action('geodir_search_before_main_content');
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_before_main_content', 'search-page');
 
 /**
@@ -54,7 +54,7 @@ do_action('geodir_search_page_description');
 do_action('geodir_search_sidebar_left');
 
 ###### MAIN CONTENT WRAPPERS OPEN ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_content_open', 'search-page', 'geodir-wrapper-content', '');
 
 ###### MAIN CONTENT ######
@@ -66,7 +66,7 @@ do_action('geodir_wrapper_content_open', 'search-page', 'geodir-wrapper-content'
 do_action('geodir_search_content');
 
 ###### MAIN CONTENT WRAPPERS CLOSE ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_content_close', 'search-page');
 
 
@@ -80,7 +80,7 @@ do_action('geodir_search_sidebar_right');
 
 
 ###### WRAPPER CLOSE ######	
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_close', 'search-page');
 
 ###### BOTTOM SECTION WIDGET AREA ######

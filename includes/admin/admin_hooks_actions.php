@@ -2290,7 +2290,7 @@ function geodir_ajax_import_csv()
 
                     $gd_post_info['package_id'] = $package_id;
 
-                    /** This action is documented in geodirectory-functions/post-functions.php */
+                    /** This action is documented in includes/post-functions.php */
                     do_action('geodir_after_save_listing', $last_postid, $gd_post_info);
 
                     if (!empty($buffer[5])) {

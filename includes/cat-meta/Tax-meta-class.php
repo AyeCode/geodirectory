@@ -115,7 +115,7 @@ if (!class_exists('Geodir_Tax_Meta_Class')) :
                 if ($meta_box['use_with_theme'] === true) {
                     $this->SelfPath = get_stylesheet_directory_uri() . '/library/cat-meta';
                 } elseif ($meta_box['use_with_theme'] === false) {
-                    $this->SelfPath = plugins_url('cat-meta-functions', plugin_basename(dirname(__FILE__)));
+                    $this->SelfPath = plugins_url('cat-meta', plugin_basename(dirname(__FILE__)));
                 } else {
                     $this->SelfPath = $meta_box['use_with_theme'];
                 }
@@ -2166,7 +2166,7 @@ if (!function_exists('geodir_update_tax_meta')) {
         $m[$key] = $value;
         update_option('tax_meta_' . $post_type . $term_id, $m);
 
-        /** This action is documented in geodirectory-functions/cat-meta-functions/Tax-meta-class.php */
+        /** This action is documented in includes/cat-meta/Tax-meta-class.php */
         do_action('gd_tax_meta_updated', false, true, $term_id, $post_type);
     }
 }

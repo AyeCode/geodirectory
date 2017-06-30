@@ -27,11 +27,11 @@ if (get_current_user_id()) {
 get_header();
 
 ###### WRAPPER OPEN ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_open', 'signup-page', 'geodir-wrapper', '');
 
 ###### TOP CONTENT ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_top_content', 'signup-page');
 
 /**
@@ -41,11 +41,11 @@ do_action('geodir_top_content', 'signup-page');
  */
 do_action('geodir_signin_before_main_content');
 
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_before_main_content', 'signup-page');
 
 ###### MAIN CONTENT WRAPPERS OPEN ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_content_open', 'signup-page', 'geodir-wrapper-content', 'geodir-content-fullwidth');
 
 /**
@@ -56,7 +56,7 @@ do_action('geodir_wrapper_content_open', 'signup-page', 'geodir-wrapper-content'
 do_action('geodir_sidebar_signup_top');
 
 ###### MAIN CONTENT ######
-/** This action is documented in geodirectory-templates/geodir-home.php */
+/** This action is documented in includes/templates/geodir-home.php */
 do_action('geodir_add_page_content', 'before', 'signup-page');
 
 /**
@@ -66,15 +66,15 @@ do_action('geodir_add_page_content', 'before', 'signup-page');
  */
 do_action('geodir_signup_forms');
 
-/** This action is documented in geodirectory-templates/geodir-home.php */
+/** This action is documented in includes/templates/geodir-home.php */
 do_action('geodir_add_page_content', 'after', 'signup-page');
 
 ###### MAIN CONTENT WRAPPERS CLOSE ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_content_close', 'signup-page');
 
 ###### WRAPPER CLOSE ######	
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_close', 'signup-page');
 
 get_footer();  

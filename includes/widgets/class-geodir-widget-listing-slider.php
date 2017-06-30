@@ -12,51 +12,47 @@
  *
  * @since 1.0.0
  */
-class geodir_listing_slider_widget extends WP_Widget
-{
+class GeoDir_Widget_Listing_Slider extends WP_Widget {
 
     /**
-	 * Register the listing slider widget.
-	 *
-	 * @since 1.0.0
+     * Register the listing slider widget.
+     *
+     * @since 1.0.0
      * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
-	 */
+     */
     public function __construct() {
-        $widget_ops = array('classname' => 'geodir_listing_slider_view', 'description' => __('GD > Listing Slider', 'geodirectory'));
-        parent::__construct(
-            'listing_slider_view', // Base ID
-            __('GD > Listing Slider', 'geodirectory'), // Name
-            $widget_ops// Args
+        $widget_ops = array(
+            'classname' => 'geodir_listing_slider_view',
+            'description' => __( 'GD > Listing Slider', 'geodirectory' )
         );
+        parent::__construct( 'listing_slider_view', __( 'GD > Listing Slider', 'geodirectory' ), $widget_ops );
     }
-	
-	/**
-	 * Front-end display content for listing slider widget.
-	 *
-	 * @since 1.0.0
+
+    /**
+     * Front-end display content for listing slider widget.
+     *
+     * @since 1.0.0
      * @since 1.5.1 Declare function public.
-	 *
-	 * @param array $args     Widget arguments.
-	 * @param array $instance Saved values from database.
-	 */
-    public function widget($args, $instance)
-    {
+     *
+     * @param array $args     Widget arguments.
+     * @param array $instance Saved values from database.
+     */
+    public function widget($args, $instance) {
         geodir_listing_slider_widget_output($args, $instance);
     }
 
-	/**
-	 * Sanitize listing slider widget form values as they are saved.
-	 *
-	 * @since 1.0.0
+    /**
+     * Sanitize listing slider widget form values as they are saved.
+     *
+     * @since 1.0.0
      * @since 1.5.1 Declare function public.
-	 *
-	 * @param array $new_instance Values just sent to be saved.
-	 * @param array $old_instance Previously saved values from database.
-	 *
-	 * @return array Updated safe values to be saved.
-	 */
-	public function update($new_instance, $old_instance)
-    {
+     *
+     * @param array $new_instance Values just sent to be saved.
+     * @param array $old_instance Previously saved values from database.
+     *
+     * @return array Updated safe values to be saved.
+     */
+    public function update($new_instance, $old_instance) {
         //save the widget
         $instance = $old_instance;
         $instance['title'] = strip_tags($new_instance['title']);
@@ -82,17 +78,15 @@ class geodir_listing_slider_widget extends WP_Widget
         return $instance;
     }
 
-	/**
-	 * Back-end listing slider widget settings form.
-	 *
-	 * @since 1.0.0
+    /**
+     * Back-end listing slider widget settings form.
+     *
+     * @since 1.0.0
      * @since 1.5.1 Declare function public.
-	 *
-	 * @param array $instance Previously saved values from database.
-	 */
-	public function form($instance)
-    {
-
+     *
+     * @param array $instance Previously saved values from database.
+     */
+    public function form($instance) {
         //widgetform in backend
         $instance = wp_parse_args((array)$instance,
             array('title' => '',
@@ -151,7 +145,6 @@ class geodir_listing_slider_widget extends WP_Widget
         $sort_fields[] = array('field' => 'high_rating', 'label' => __('Rating', 'geodirectory'));
         $sort_fields[] = array('field' => 'random', 'label' => __('Random', 'geodirectory'));
         ?>
-
         <p>
             <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'geodirectory');?>
 
@@ -160,7 +153,6 @@ class geodir_listing_slider_widget extends WP_Widget
                        value="<?php echo esc_attr($title); ?>"/>
             </label>
         </p>
-
         <p>
             <label
                 for="<?php echo $this->get_field_id('post_type'); ?>"><?php _e('Post Type:', 'geodirectory');?>
@@ -183,8 +175,6 @@ class geodir_listing_slider_widget extends WP_Widget
                 </select>
             </label>
         </p>
-
-
         <p>
             <label
                 for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Post Category:', 'geodirectory');?>
@@ -230,7 +220,6 @@ class geodir_listing_slider_widget extends WP_Widget
                        value="<?php echo esc_attr($post_number); ?>"/>
             </label>
         </p>
-
         <p>
             <label
                 for="<?php echo $this->get_field_id('max_show'); ?>"><?php _e('Number of posts(shown at one time, requires a slide width to be set):', 'geodirectory');?>
@@ -239,7 +228,6 @@ class geodir_listing_slider_widget extends WP_Widget
                        value="<?php echo esc_attr($max_show); ?>"/>
             </label>
         </p>
-
         <p>
             <label
                 for="<?php echo $this->get_field_id('slide_width'); ?>"><?php _e('Slide width(leave blank unless showing more than one slide at a time, ex: 210):', 'geodirectory');?>
@@ -248,7 +236,6 @@ class geodir_listing_slider_widget extends WP_Widget
                        value="<?php echo esc_attr($slide_width); ?>"/>
             </label>
         </p>
-
         <p>
             <label
                 for="<?php echo $this->get_field_id('animation'); ?>"><?php _e('Animation:', 'geodirectory');?>
@@ -266,7 +253,6 @@ class geodir_listing_slider_widget extends WP_Widget
                 </select>
             </label>
         </p>
-
         <p>
             <label
                 for="<?php echo $this->get_field_id('slideshowSpeed'); ?>"><?php _e('Slide Show Speed: (milliseconds)', 'geodirectory');?>
@@ -276,7 +262,6 @@ class geodir_listing_slider_widget extends WP_Widget
                        value="<?php echo esc_attr($slideshowSpeed); ?>"/>
             </label>
         </p>
-
         <p>
             <label
                 for="<?php echo $this->get_field_id('animationSpeed'); ?>"><?php _e('Animation Speed: (milliseconds)', 'geodirectory');?>
@@ -286,7 +271,6 @@ class geodir_listing_slider_widget extends WP_Widget
                        value="<?php echo esc_attr($animationSpeed); ?>"/>
             </label>
         </p>
-
         <p>
             <label
                 for="<?php echo $this->get_field_id('slideshow'); ?>"><?php _e('SlideShow:', 'geodirectory');?>
@@ -295,10 +279,8 @@ class geodir_listing_slider_widget extends WP_Widget
                     echo 'checked="checked"';
                 } ?> id="<?php echo $this->get_field_id('slideshow'); ?>" value="1"
                        name="<?php echo $this->get_field_name('slideshow'); ?>"/>
-
             </label>
         </p>
-
         <p>
             <label
                 for="<?php echo $this->get_field_id('animationLoop'); ?>"><?php _e('AnimationLoop:', 'geodirectory');?>
@@ -307,10 +289,8 @@ class geodir_listing_slider_widget extends WP_Widget
                     echo 'checked="checked"';
                 } ?> id="<?php echo $this->get_field_id('animationLoop'); ?>" value="1"
                        name="<?php echo $this->get_field_name('animationLoop'); ?>"/>
-
             </label>
         </p>
-
         <p>
             <label
                 for="<?php echo $this->get_field_id('directionNav'); ?>"><?php _e('DirectionNav:', 'geodirectory');?>
@@ -322,8 +302,6 @@ class geodir_listing_slider_widget extends WP_Widget
 
             </label>
         </p>
-
-
         <p>
             <label
                 for="<?php echo $this->get_field_id('show_title'); ?>"><?php _e('Show Title:', 'geodirectory');?>
@@ -353,11 +331,8 @@ class geodir_listing_slider_widget extends WP_Widget
         </p>
         <script type="text/javascript">
             function geodir_change_category_list(post_type, selected) {
-
                 var ajax_url = '<?php echo geodir_get_ajax_url(); ?>'
-
                 var myurl = ajax_url + "&geodir_ajax=admin_ajax&ajax_action=get_cat_dl&post_type=" + post_type + "&selected=" + selected;
-
                 jQuery.ajax({
                     type: "GET",
                     url: myurl,
@@ -365,9 +340,7 @@ class geodir_listing_slider_widget extends WP_Widget
                         jQuery('#<?php echo $this->get_field_id('category'); ?>').html(data);
                     }
                 });
-
             }
-
             <?php if(is_active_widget( false, false, $this->id_base, true )){ ?>
             var post_type = jQuery('#<?php echo $this->get_field_id('post_type'); ?>').val();
 
@@ -375,10 +348,6 @@ class geodir_listing_slider_widget extends WP_Widget
             <?php } ?>
 
         </script>
-
-
     <?php
     }
-} // class geodir_listing_slider_widget
-
-register_widget('geodir_listing_slider_widget');
+}

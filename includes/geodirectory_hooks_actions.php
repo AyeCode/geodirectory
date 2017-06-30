@@ -68,12 +68,6 @@ add_action('wp_ajax_plupload_action', "geodir_plupload_action");
 add_action('wp_ajax_nopriv_plupload_action', 'geodir_plupload_action'); // call for not logged in ajax
 
 ////////////////////////
-/* Widget Initialization */
-////////////////////////
-
-add_action('widgets_init', 'register_geodir_widgets');
-
-////////////////////////
 /* REWRITE RULES */
 ////////////////////////
 
@@ -235,29 +229,20 @@ function geodir_unset_prev_theme_nav_location($newname)
 add_action("switch_theme", "geodir_unset_prev_theme_nav_location", 10, 2);
 
 /**
- * Contains functions/hooks for setting up the CPT and taxonomies for the plugin.
- *
- * @since 1.0.0
- */
-require_once('geodirectory-functions/custom_taxonomy_hooks_actions.php');
-
-/**
  * Includes the file that adds filters/functions to change the database queries.
  *
  * @since 1.0.0
  * @package GeoDirectory
  */
-function geodir_add_post_filters()
-{
+function geodir_add_post_filters() {
     /**
      * Contains all function for filtering listing.
      *
      * @since 1.0.0
      * @package GeoDirectory
      */
-    include_once('geodirectory-functions/listing_filters.php');
+    include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/listing_filters.php' );
 }
-
 
 if (!function_exists('geodir_init_defaults')) {
     /**
@@ -266,17 +251,12 @@ if (!function_exists('geodir_init_defaults')) {
      * @since 1.0.0
      * @package GeoDirectory
      */
-    function geodir_init_defaults()
-    {
+    function geodir_init_defaults() {
         if (function_exists('geodir_register_defaults')) {
-
             geodir_register_defaults();
-
         }
-
     }
 }
-
 
 /* Sidebar */
 add_action('geodir_sidebar', 'geodir_get_sidebar', 10);
@@ -1575,7 +1555,7 @@ function geodir_detail_page_tab_is_display($is_display, $tab)
     if ($tab == 'related_listing') {
        $message = __('No listings found which match your selection.', 'geodirectory');
        
-       /** This action is documented in geodirectory-functions/template_functions.php */
+       /** This action is documented in includes/template_functions.php */
        $message = apply_filters('geodir_message_listing_not_found', $message, 'listing-listview', false);
        
        $is_display = ((strpos($related_listing, $message) !== false || $related_listing == '' || !geodir_is_page('detail'))) ? false : true;
@@ -1617,7 +1597,7 @@ function geodir_changes_in_custom_fields_table() {
 
         /* --- terms meta value set --- */
 
-        update_option('geodir_default_marker_icon', geodir_plugin_url() . '/geodirectory-functions/map-functions/icons/pin.png');
+        update_option('geodir_default_marker_icon', geodir_plugin_url() . '/includes/maps/icons/pin.png');
 
         $options_data = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "options WHERE option_name LIKE %s", array('%tax_meta_%')));
 
@@ -2331,7 +2311,7 @@ function geodir_default_rating_star_icon()
 {
 
     if (!get_option('geodir_default_rating_star_icon')) {
-        update_option('geodir_default_rating_star_icon', geodir_plugin_url() . '/geodirectory-assets/images/stars.png');
+        update_option('geodir_default_rating_star_icon', geodir_plugin_url() . '/assets/images/stars.png');
     }
 
 }

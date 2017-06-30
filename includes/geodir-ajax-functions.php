@@ -83,7 +83,7 @@ function geodir_on_init()
          * @since 1.0.0
          * @package GeoDirectory
          */
-        include_once(geodir_plugin_path() . '/geodirectory-functions/map-functions/get_markers.php');
+        include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/maps/get_markers.php' );
         die;
     }
     
@@ -128,7 +128,7 @@ function geodir_ajax_handler() {
              * @since 1.0.0
              * @package GeoDirectory
              */
-            include_once(geodir_plugin_path() . '/geodirectory-admin/geodir_admin_ajax.php');
+            include_once(geodir_plugin_path() . '/includes/admin/geodir_admin_ajax.php');
         } else {
             wp_redirect(geodir_login_url());
             gd_die();
@@ -193,7 +193,7 @@ function geodir_ajax_handler() {
         if ($_REQUEST['popuptype'] == 'b_send_inquiry' || $_REQUEST['popuptype'] == 'b_sendtofriend') {
             $template = locate_template(array("geodirectory/popup-forms.php"));
             if (!$template) {
-                $template = geodir_plugin_path() . '/geodirectory-templates/popup-forms.php';
+                $template = geodir_plugin_path() . '/includes/templates/popup-forms.php';
             }
             require_once($template);
         }
@@ -202,7 +202,7 @@ function geodir_ajax_handler() {
     }
 
     /*if(isset($_REQUEST['geodir_ajax']) && $_REQUEST['geodir_ajax'] == 'filter_ajax'){
-        include_once ( geodir_plugin_path() . '/geodirectory-templates/advance-search-form.php');
+        include_once ( geodir_plugin_path() . '/includes/templates/advance-search-form.php');
     }*/
 
     if (isset($_REQUEST['geodir_ajax']) && $_REQUEST['geodir_ajax'] == 'map_ajax') {
@@ -212,7 +212,7 @@ function geodir_ajax_handler() {
          * @since 1.0.0
          * @package GeoDirectory
          */
-        include_once(geodir_plugin_path() . '/geodirectory-functions/map-functions/get_markers.php');
+        include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/maps/get_markers.php' );
     }
 
     if (isset($_REQUEST['geodir_ajax']) && $_REQUEST['geodir_ajax'] == 'favorite') {
@@ -346,7 +346,7 @@ function geodir_ajax_handler() {
          * @since 1.0.0
          * @package GeoDirectory
          */
-        include_once(geodir_plugin_path() . '/geodirectory-functions/geodirectory_reg.php');
+        include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodirectory_reg.php' );
     }
 
     if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'geodir_get_term_list') {

@@ -1819,7 +1819,7 @@ if (!function_exists('geodir_max_upload_size')) {
         } else {
             $max_filesize = $max_filesize > 0 ? $max_filesize . 'mb' : '2mb';
         }
-        /** Filter documented in geodirectory-functions/general_functions.php **/
+        /** Filter documented in includes/general_functions.php **/
         return apply_filters('geodir_default_image_upload_size_limit', $max_filesize);
     }
 }

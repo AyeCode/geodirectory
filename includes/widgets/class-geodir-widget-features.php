@@ -1,18 +1,16 @@
 <?php
 
-class Geodir_Features_Widget extends WP_Widget
-{
+class GeoDir_Widget_Features extends WP_Widget {
 
     /**
      * Class constructor.
      */
-    public function __construct()
-    {
+    public function __construct() {
         $widget_ops = array(
-            'description' => __('Displays "GD Features" widget', 'geodirectory'),
+            'description' => __( 'Displays "GD Features" widget', 'geodirectory' ),
             'classname' => 'widget_gd_features',
         );
-        parent::__construct(false, $name = _x('GD > Features', 'widget name', 'geodirectory'), $widget_ops);
+        parent::__construct( false, $name = _x( 'GD > Features', 'widget name', 'geodirectory' ), $widget_ops );
 
     }
 
@@ -22,8 +20,7 @@ class Geodir_Features_Widget extends WP_Widget
      * @param array $args Widget arguments.
      * @param array $instance The widget settings, as saved by the user.
      */
-    public function widget($args, $instance)
-    {
+    public function widget($args, $instance) {
         extract($args);
 
         $title = empty($instance['title']) ? '' : apply_filters('gd_features_widget_title', __($instance['title'], 'geodirectory'));
@@ -67,8 +64,7 @@ class Geodir_Features_Widget extends WP_Widget
     <?php
     }
 
-    public function update($new_instance, $old_instance)
-    {
+    public function update($new_instance, $old_instance) {
         //save the widget
         $instance = $old_instance;
 
@@ -98,8 +94,7 @@ class Geodir_Features_Widget extends WP_Widget
         return $instance;
     }
 
-    public function form($instance)
-    {
+    public function form($instance) {
         //widgetform in backend
         $instance = wp_parse_args((array)$instance, array(
             'title' => '',
@@ -182,28 +177,6 @@ class Geodir_Features_Widget extends WP_Widget
                    onclick="gd_featured_widget_repeat('gd-fet-rep-<?php echo $this->get_field_id('xxx');?>','<?php echo $this->get_field_name('xxx');?>')"
                    type="button" value="<?php _e('Add item', 'geodirectory');?>"/>
         </div>
-
-
     <?php
     }
-
-}
-
-register_widget("Geodir_Features_Widget");
-function gd_features_parse_image($image, $icon_color)
-{
-    if (substr($image, 0, 4) === "http") {
-        $image = '<img src="' . $image . '" />';
-    } elseif (substr($image, 0, 3) === "fa-") {
-        if (empty($icon_color)) {
-            $icon_color = '#757575';
-        }
-        $image = '<i style="color:' . $icon_color . '" class="fa ' . $image . '"></i>';
-    }
-    return $image;
-}
-
-function gd_features_parse_desc($desc)
-{
-    return $desc;
 }

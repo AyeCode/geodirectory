@@ -576,7 +576,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
         'id' => 'geodir_default_rating_star_icon',
         'type' => 'file',
         'std' => '0',
-        'value' => geodir_plugin_url() . '/geodirectory-assets/images/stars.png'// Default value to show home top section
+        'value' => geodir_plugin_url() . '/assets/images/stars.png'// Default value to show home top section
     ),
 	array(
 		'name' => __('Enable Font Awesome', 'geodirectory'),
@@ -1121,7 +1121,7 @@ $geodir_settings['design_settings'] = apply_filters('geodir_design_settings', ar
         'id' => 'geodir_default_marker_icon',
         'type' => 'file',
         'std' => '0',
-        'value' => geodir_plugin_url() . '/geodirectory-functions/map-functions/icons/pin.png'// Default value to show home top section
+        'value' => geodir_plugin_url() . '/includes/maps/icons/pin.png'// Default value to show home top section
     ),
     // add option that allows enable/disable map dragging to phone devices
     array(

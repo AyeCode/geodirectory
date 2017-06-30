@@ -38,9 +38,9 @@ if (!function_exists('geodir_admin_panel')) {
             <div class="gd-wrapper gd-wrapper-vr clearfix">
 
                 <div class="gd-left-nav">
-                    <img src="<?php echo geodir_plugin_url(); ?>/geodirectory-assets/images/geo-logo.png" alt="geo-logo"
+                    <img src="<?php echo geodir_plugin_url(); ?>/assets/images/geo-logo.png" alt="geo-logo"
                          class="geo-logo"/>
-                    <img src="<?php echo geodir_plugin_url(); ?>/geodirectory-assets/images/geo-logoalter.png"
+                    <img src="<?php echo geodir_plugin_url(); ?>/assets/images/geo-logoalter.png"
                          alt="geo-logo" class="geo-logoalter"/>
                     <ul>
                         <?php
@@ -477,7 +477,7 @@ function geodir_admin_option_form($tab_name)
                                  *
                                  * @since 1.0.0
                                  */
-                                include(geodir_plugin_path() . "/geodirectory-functions/map-functions/map_on_add_listing_page.php");?>
+                                include( GEODIRECTORY_PLUGIN_DIR . 'includes/maps/map_on_add_listing_page.php' );?>
                             </td>
                         </tr>
                         <tr valign="top" class="single_select_page">
@@ -572,7 +572,7 @@ if ( ! WP_Filesystem($creds) ) {
 global $wp_filesystem;
 
 $wp_filesystem->put_contents(
-  plugin_dir_path( __FILE__ ).'/geodirectory/geodirectory-templates/compatibility/'.$theme.'php',
+  plugin_dir_path( __FILE__ ).'/geodirectory/includes/templates/compatibility/'.$theme.'php',
   'Example contents of a file',
   FS_CHMOD_FILE // predefined mode settings for WP files
 );

@@ -93,14 +93,19 @@ final class GeoDirectory {
      * @return void
      */
     private function setup_constants() {
-        global $wpdb, $plugin_prefix;
+        global $wpdb, $plugin_prefix, $geodir_post_custom_fields_cache;
         
         $plugin_prefix = $wpdb->prefix . 'geodir_';
         
+        if ( $this->is_request( 'test' ) ) {
+            $plugin_path = dirname( __FILE__ );
+        } else {
+            $plugin_path = plugin_dir_path( __FILE__ );
+        }
+        
         $this->define( 'GEODIRECTORY_VERSION', $this->version );
         $this->define( 'GEODIRECTORY_PLUGIN_FILE', __FILE__ );
-        $this->define( 'GEODIRECTORY_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
-        $this->define( 'GEODIRECTORY_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+        $this->define( 'GEODIRECTORY_PLUGIN_DIR', $plugin_path );
         $this->define( 'GEODIRECTORY_TEXTDOMAIN', 'geodirectory' );
         
         // Database tables
@@ -170,6 +175,11 @@ final class GeoDirectory {
     private function includes() {
         global $pagenow;
         
+        /**
+         * Class autoloader.
+         */
+        include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-autoloader.php' );
+        
         if ( !defined( 'GEODIR_LATITUDE_ERROR_MSG' ) ) {
             require_once( GEODIRECTORY_PLUGIN_DIR . 'language.php' ); // Define language constants.
         }
@@ -177,55 +187,60 @@ final class GeoDirectory {
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-class-session.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/helper_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/user_functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/ajax_handler_functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-ajax-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/general_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/listing_filters.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/template_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/signup_function.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post_functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/taxonomy_functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-taxonomy-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_fields_input_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_fields_output_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_fields_predefined.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_fields_functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-custom-fields-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/comments_functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/cat-meta-functions/cat_meta.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/map-functions/map_functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/cat-meta/cat_meta.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/location_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/google_analytics.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodirectory_shortcodes.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-shortcode-functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_taxonomy_hooks_actions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodirectory_hooks_actions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodirectory_widgets.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-widget-functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/maps/map_functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/maps/map_template_tags.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodirectory_template_tags.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodirectory_template_actions.php' );
         
-        if ( is_admin() || defined( 'GD_TESTING_MODE' ) || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+        if ( $this->is_request( 'admin' ) || $this->is_request( 'test' ) || $this->is_request( 'cli' ) ) {
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/admin_functions.php' );
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/admin_dummy_data_functions.php' );
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/admin_hooks_actions.php' );
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/admin_template_tags.php' );
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/class.analytics.stats.php' );
+            require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/install.php' );
             require_once( GEODIRECTORY_PLUGIN_DIR . 'upgrade.php' );
-            
-            if ( get_option( 'geodir_installed' ) != 1 ) {
-                require_once( 'geodirectory-admin/admin_install.php' );
-                
-                register_activation_hook( GEODIRECTORY_PLUGIN_FILE, 'geodir_activation' );
-            }
-            
-            register_deactivation_hook( GEODIRECTORY_PLUGIN_FILE, 'geodir_deactivation' );
 
             if( 'plugins.php' === $pagenow ) {
                 // Better update message
                 $file   = basename( GEODIRECTORY_PLUGIN_FILE );
                 $folder = basename( dirname( GEODIRECTORY_PLUGIN_FILE ) );
-                $hook = "in_plugin_update_message-{$folder}/{$file}";
+                $hook   = "in_plugin_update_message-{$folder}/{$file}";
                 add_action( $hook, 'geodire_admin_upgrade_notice', 20, 2 );
             }
-
         }
         
+        $this->load_db_language();
+        
+        if ( $this->is_request( 'frontend' ) ) {
+            require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-shortcodes.php' ); // Shortcodes class
+        }
+    }
+    
+    /**
+     * Load the language for custom fields, custom text.
+     */
+    public function load_db_language() {
         $language_file = GEODIRECTORY_PLUGIN_DIR . 'db-language.php';
         
         // Load language string file if not created yet.
@@ -252,6 +267,37 @@ final class GeoDirectory {
         if ( ! defined( $name ) ) {
             define( $name, $value );
         }
+    }
+    
+    /**
+     * Request type.
+     *
+     * @param  string $type admin, frontend, ajax, cron, test or CLI.
+     * @return bool
+     */
+    private function is_request( $type ) {
+        switch ( $type ) {
+            case 'admin' :
+                return is_admin();
+                break;
+            case 'ajax' :
+                return defined( 'DOING_AJAX' );
+                break;
+            case 'cli' :
+                return ( defined( 'WP_CLI' ) && WP_CLI );
+                break;
+            case 'cron' :
+                return defined( 'DOING_CRON' );
+                break;
+            case 'frontend' :
+                return ( ! is_admin() || defined( 'DOING_AJAX' ) ) && ! defined( 'DOING_CRON' );
+                break;
+            case 'test' :
+                return defined( 'GD_TESTING_MODE' );
+                break;
+        }
+        
+        return null;
     }
 }
 

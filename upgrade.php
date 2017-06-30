@@ -9,14 +9,14 @@
 
 global $wpdb;
 
-if (get_option('geodirectory' . '_db_version') != GEODIRECTORY_VERSION) {
+if (get_option('geodirectory_db_version') != GEODIRECTORY_VERSION) {
     /**
      * Include custom database table related functions.
      *
      * @since 1.0.0
      * @package GeoDirectory
      */
-    include_once('geodirectory-admin/admin_db_install.php');
+    include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/admin_db_install.php' );
     add_action('plugins_loaded', 'geodirectory_upgrade_all', 10);
     if (GEODIRECTORY_VERSION <= '1.3.6') {
         add_action('plugins_loaded', 'geodir_upgrade_136', 11);

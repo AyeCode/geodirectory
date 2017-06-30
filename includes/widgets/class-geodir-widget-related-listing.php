@@ -12,43 +12,40 @@
  *
  * @since 1.0.0
  */
-class geodir_related_listing_postview extends WP_Widget
-{
+class GeoDir_Widget_Related_Listing extends WP_Widget {
+    
     /**
-	 * Register the related listing widget.
-	 *
-	 * @since 1.0.0
+     * Register the related listing widget.
+     *
+     * @since 1.0.0
      * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
-	 */
+     */
     public function __construct() {
-        $widget_ops = array('classname' => 'geodir_related_listing_post_view', 'description' => __('GD > Related Listing', 'geodirectory'));
-        parent::__construct(
-            'post_related_listing', // Base ID
-            __('GD > Related Listing', 'geodirectory'), // Name
-            $widget_ops// Args
+        $widget_ops = array(
+            'classname' => 'geodir_related_listing_post_view',
+            'description' => __( 'GD > Related Listing', 'geodirectory' )
         );
+        parent::__construct( 'post_related_listing', __( 'GD > Related Listing', 'geodirectory' ), $widget_ops );
     }
 
-	/**
-	 * Front-end display content for related listing widget.
-	 *
-	 * @since 1.0.0
+    /**
+     * Front-end display content for related listing widget.
+     *
+     * @since 1.0.0
      * @since 1.5.1 Declare function public.
-	 *
-	 * @param array $args     Widget arguments.
-	 * @param array $instance Saved values from database.
-	 */
-    public function widget($args, $instance)
-    {
-
+     *
+     * @param array $args     Widget arguments.
+     * @param array $instance Saved values from database.
+     */
+    public function widget($args, $instance) {
         // prints the widget
         extract($args, EXTR_SKIP);
 
-        /** This filter is documented in geodirectory_widgets.php */
+        /** This filter is documented in includes/widget/class-geodir-widget-advance-search.php.php */
         $title = empty($instance['title']) ? __('Related Listing', 'geodirectory') : apply_filters('widget_title', __($instance['title'], 'geodirectory'));
 
-        /** This filter is documented in geodirectory-functions/general_functions.php */
-		$post_number = empty($instance['post_number']) ? '5' : apply_filters('widget_post_number', $instance['post_number']);
+        /** This filter is documented in includes/general_functions.php */
+        $post_number = empty($instance['post_number']) ? '5' : apply_filters('widget_post_number', $instance['post_number']);
 
         /**
          * Filter the relation type to get related listing.
@@ -56,22 +53,22 @@ class geodir_related_listing_postview extends WP_Widget
          * @since 1.0.0
          * @param string $instance['relate_to'] Can be tags or category.
          */
-		$relate_to = empty($instance['relate_to']) ? 'category' : apply_filters('widget_relate_to', $instance['relate_to']);
+        $relate_to = empty($instance['relate_to']) ? 'category' : apply_filters('widget_relate_to', $instance['relate_to']);
 
-        /** This filter is documented in geodirectory-functions/general_functions.php */
-		$layout = empty($instance['layout']) ? 'gridview_onehalf' : apply_filters('widget_layout', $instance['layout']);
+        /** This filter is documented in includes/general_functions.php */
+        $layout = empty($instance['layout']) ? 'gridview_onehalf' : apply_filters('widget_layout', $instance['layout']);
 
-        /** This filter is documented in geodirectory-functions/general_functions.php */
-		$add_location_filter = empty($instance['add_location_filter']) ? '0' : apply_filters('widget_add_location_filter', $instance['add_location_filter']);
+        /** This filter is documented in includes/general_functions.php */
+        $add_location_filter = empty($instance['add_location_filter']) ? '0' : apply_filters('widget_add_location_filter', $instance['add_location_filter']);
 
-        /** This filter is documented in geodirectory-functions/general_functions.php */
-		$listing_width = empty($instance['listing_width']) ? '' : apply_filters('widget_listing_width', $instance['listing_width']);
+        /** This filter is documented in includes/general_functions.php */
+        $listing_width = empty($instance['listing_width']) ? '' : apply_filters('widget_listing_width', $instance['listing_width']);
 
-        /** This filter is documented in geodirectory-functions/general_functions.php */
-		$list_sort = empty($instance['list_sort']) ? 'latest' : apply_filters('widget_list_sort', $instance['list_sort']);
+        /** This filter is documented in includes/general_functions.php */
+        $list_sort = empty($instance['list_sort']) ? 'latest' : apply_filters('widget_list_sort', $instance['list_sort']);
 
-        /** This filter is documented in geodirectory-functions/general_functions.php */
-		$character_count = empty($instance['character_count']) ? 20 : apply_filters('widget_list_character_count', $instance['character_count']);
+        /** This filter is documented in includes/general_functions.php */
+        $character_count = empty($instance['character_count']) ? 20 : apply_filters('widget_list_character_count', $instance['character_count']);
 
         $arr = array(
             'before_title' => $before_title,
@@ -95,19 +92,18 @@ class geodir_related_listing_postview extends WP_Widget
         }
     }
 
-	/**
-	 * Sanitize related listing widget form values as they are saved.
-	 *
-	 * @since 1.0.0
+    /**
+     * Sanitize related listing widget form values as they are saved.
+     *
+     * @since 1.0.0
      * @since 1.5.1 Declare function public.
-	 *
-	 * @param array $new_instance Values just sent to be saved.
-	 * @param array $old_instance Previously saved values from database.
-	 *
-	 * @return array Updated safe values to be saved.
-	 */
-    public function update($new_instance, $old_instance)
-    {
+     *
+     * @param array $new_instance Values just sent to be saved.
+     * @param array $old_instance Previously saved values from database.
+     *
+     * @return array Updated safe values to be saved.
+     */
+    public function update($new_instance, $old_instance) {
         //save the widget
         $instance = $old_instance;
 
@@ -126,16 +122,15 @@ class geodir_related_listing_postview extends WP_Widget
         return $instance;
     }
 
-	/**
-	 * Back-end related listing widget settings form.
-	 *
-	 * @since 1.0.0
+    /**
+     * Back-end related listing widget settings form.
+     *
+     * @since 1.0.0
      * @since 1.5.1 Declare function public.
-	 *
-	 * @param array $instance Previously saved values from database.
-	 */
-    public function form($instance)
-    {
+     *
+     * @param array $instance Previously saved values from database.
+     */
+    public function form($instance) {
         //widgetform in backend
         $instance = wp_parse_args((array)$instance,
             array('title' => '',
@@ -150,23 +145,14 @@ class geodir_related_listing_postview extends WP_Widget
         );
 
         $title = strip_tags($instance['title']);
-
         $list_sort = strip_tags($instance['list_sort']);
-
         $list_order = strip_tags($instance['list_order']);
-
         $post_number = strip_tags($instance['post_number']);
-
         $relate_to = strip_tags($instance['relate_to']);
-
         $layout = strip_tags($instance['layout']);
-
         $listing_width = strip_tags($instance['listing_width']);
-
         $add_location_filter = strip_tags($instance['add_location_filter']);
-
         $character_count = $instance['character_count'];
-
         ?>
         <p>
             <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'geodirectory');?>
@@ -286,6 +272,4 @@ class geodir_related_listing_postview extends WP_Widget
 
     <?php
     }
-} // class geodir_related_listing_postview
-
-register_widget('geodir_related_listing_postview');
+}

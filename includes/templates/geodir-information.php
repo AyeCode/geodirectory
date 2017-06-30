@@ -12,13 +12,13 @@ get_header();
         <div class="clearfix">
             <div id="geodir_content">
                 <?php
-                /** This action is documented in geodirectory-templates/geodir-home.php */
+                /** This action is documented in includes/templates/geodir-home.php */
                 do_action('geodir_add_page_content', 'before', 'info-page');
                 global $information;
                 echo '<h5 class="geodir_information">';
                 echo $information;
                 echo '</h5>';
-                /** This action is documented in geodirectory-templates/geodir-home.php */
+                /** This action is documented in includes/templates/geodir-home.php */
                 do_action('geodir_add_page_content', 'after', 'info-page');
                 ?>
             </div>

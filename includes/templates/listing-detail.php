@@ -19,11 +19,11 @@ if(geodir_is_page('preview')){
 get_header();
 
 ###### WRAPPER OPEN ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_open', 'details-page', 'geodir-wrapper', '');
 
 ###### TOP CONTENT ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_top_content', 'details-page');
 
 /**
@@ -33,7 +33,7 @@ do_action('geodir_top_content', 'details-page');
  */
 do_action('geodir_detail_before_main_content');
 
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_before_main_content', 'details-page');
 
 ###### SIDEBAR ON LEFT ######
@@ -47,7 +47,7 @@ if (get_option('geodir_detail_sidebar_left_section')) {
 }
 
 ###### MAIN CONTENT WRAPPERS OPEN ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_content_open', 'details-page', 'geodir-wrapper-content', '');
 
 /**
@@ -66,7 +66,7 @@ do_action('geodir_wrapper_content_open', 'details-page', 'geodir-wrapper-content
 do_action('geodir_article_open', 'details-page', 'post-' . get_the_ID(), get_post_class(), '');
 
 ###### MAIN CONTENT ######
-/** This action is documented in geodirectory-templates/geodir-home.php */
+/** This action is documented in includes/templates/geodir-home.php */
 do_action('geodir_add_page_content', 'before', 'details-page');
 
 // this call the main page content
@@ -93,11 +93,11 @@ if (have_posts() && !$preview) {
     if (defined( 'GD_TESTING_MODE' )) {
         global $post;
     }
-    /** This action is documented in geodirectory-templates/listing-detail.php */
+    /** This action is documented in includes/templates/listing-detail.php */
     do_action('geodir_details_main_content', $post);
 }
 
-/** This action is documented in geodirectory-templates/geodir-home.php */
+/** This action is documented in includes/templates/geodir-home.php */
 do_action('geodir_add_page_content', 'after', 'details-page');
 
 ###### MAIN CONTENT WRAPPERS CLOSE ######
@@ -110,21 +110,21 @@ do_action('geodir_add_page_content', 'after', 'details-page');
  */
 do_action('geodir_article_close', 'details-page');
 
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_after_main_content');
 
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_content_close', 'details-page');
 
 ###### SIDEBAR ON RIGHT ######
 if (!get_option('geodir_detail_sidebar_left_section')) {
-    /** This action is documented in geodirectory-templates/listing-detail.php */
+    /** This action is documented in includes/templates/listing-detail.php */
     do_action('geodir_detail_sidebar');
 }
 
 
 ###### WRAPPER CLOSE ######
-/** This action is documented in geodirectory-templates/add-listing.php */
+/** This action is documented in includes/templates/add-listing.php */
 do_action('geodir_wrapper_close', 'details-page');
 
 ###### BOTTOM SECTION WIDGET AREA ######

@@ -1120,7 +1120,7 @@ function geodir_cfi_address($html,$cf){
                  *
                  * @since 1.0.0
                  */
-                include(geodir_plugin_path() . "/geodirectory-functions/map-functions/map_on_add_listing_page.php");
+                include( GEODIRECTORY_PLUGIN_DIR . 'includes/maps/map_on_add_listing_page.php' );
                 if ($lat_lng_blank) {
                     $lat = '';
                     $lng = '';

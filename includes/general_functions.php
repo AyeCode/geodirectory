@@ -47,6 +47,10 @@ function geodir_plugin_url() {
  * @return string example url eg: /home/geo/public_html/wp-content/plugins/geodirectory
  */
 function geodir_plugin_path() {
+	if ( defined( 'GEODIRECTORY_PLUGIN_DIR' ) ) {
+		return GEODIRECTORY_PLUGIN_DIR;
+	}
+	
 	if ( defined( 'GD_TESTING_MODE' ) && GD_TESTING_MODE ) {
 		return dirname( dirname( __FILE__ ) );
 	} else {
@@ -1771,7 +1775,7 @@ function geodir_max_upload_size() {
  * @return bool If dummy folder exists returns true, else false.
  */
 function geodir_dummy_folder_exists() {
-	$path = geodir_plugin_path() . '/geodirectory-admin/dummy/';
+	$path = geodir_plugin_path() . '/includes/admin/dummy/';
 	if ( ! is_dir( $path ) ) {
 		return false;
 	} else {
@@ -2865,7 +2869,7 @@ function geodir_popular_post_category_output( $args = '', $instance = '' ) {
 
 	echo $before_widget;
 
-	/** This filter is documented in geodirectory_widgets.php */
+	/** This filter is documented in includes/widget/class-geodir-widget-advance-search.php.php */
 	$title = empty( $instance['title'] ) ? __( 'Popular Categories', 'geodirectory' ) : apply_filters( 'widget_title', __( $instance['title'], 'geodirectory' ) );
 
 	$gd_post_type = geodir_get_current_posttype();
@@ -3273,7 +3277,7 @@ function geodir_listing_slider_widget_output( $args = '', $instance = '' ) {
 					$widget_spacer_height = ( ( 200 - $widget_image->height ) / 2 );
 				}
 
-				$widget_main_slides .= '<li class="geodir-listing-slider-widget"><img class="geodir-listing-slider-spacer" src="' . geodir_plugin_url() . "/geodirectory-assets/images/spacer.gif" . '" alt="' . $widget_image->title . '" title="' . $widget_image->title . '" style="max-height:' . $widget_spacer_height . 'px !important;margin:0 auto;" width="100" />';
+				$widget_main_slides .= '<li class="geodir-listing-slider-widget"><img class="geodir-listing-slider-spacer" src="' . geodir_plugin_url() . "/assets/images/spacer.gif" . '" alt="' . $widget_image->title . '" title="' . $widget_image->title . '" style="max-height:' . $widget_spacer_height . 'px !important;margin:0 auto;" width="100" />';
 
 				$title = '';
 				if ( $show_title ) {
@@ -3613,7 +3617,7 @@ function geodir_popular_postview_output( $args = '', $instance = '' ) {
 	// prints the widget
 	extract( $args, EXTR_SKIP );
 
-	/** This filter is documented in geodirectory_widgets.php */
+	/** This filter is documented in includes/widget/class-geodir-widget-advance-search.php.php */
 	$title = empty( $instance['title'] ) ? geodir_ucwords( $instance['category_title'] ) : apply_filters( 'widget_title', __( $instance['title'], 'geodirectory' ) );
 	/**
 	 * Filter the widget post type.
