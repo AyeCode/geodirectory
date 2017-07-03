@@ -44,14 +44,7 @@ if (!function_exists('geodir_admin_panel')) {
                          alt="geo-logo" class="geo-logoalter"/>
                     <ul>
                         <?php
-                        $tabs = array();
-                        /**
-                         * Filter the GD admin settings tabs on the left of the admin menu.
-                         *
-                         * @since 1.0.0
-                         * @param array $tabs The array of tabs to display.
-                         */
-                        $tabs = apply_filters('geodir_settings_tabs_array', $tabs);
+                        $tabs = geodir_get_settings_tabs();
                         update_option('geodir_tabs', $tabs);// Important to show settings menu dropdown
 
                         foreach ($tabs as $name => $args) :
@@ -284,7 +277,7 @@ function geodir_admin_option_form($tab_name)
 {
 
     //echo $tab_name.'_array.php' ;
-    global $geodir_settings, $is_default, $mapzoom;
+    global $geodir_settings, $is_default, $mapzoom; //gddev_log( $geodir_settings, 'geodir_settings', __FILE__, __LINE__ );
     if (file_exists(dirname(__FILE__) . '/option-pages/' . $tab_name . '_array.php')) {
         /**
          * Contains settings array for given tab.
@@ -294,7 +287,7 @@ function geodir_admin_option_form($tab_name)
          */
         include_once('option-pages/' . $tab_name . '_array.php');
     }
-
+//gddev_log( $geodir_settings, 'geodir_settings', __FILE__, __LINE__ );
     $listing_type = isset($_REQUEST['listing_type']) ? $_REQUEST['listing_type'] : '';
 
     switch ($tab_name) {

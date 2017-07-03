@@ -173,12 +173,17 @@ final class GeoDirectory {
      * @return void
      */
     private function includes() {
-        global $pagenow;
+        global $pagenow, $geodir_options;
         
         /**
          * Class autoloader.
          */
         include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-autoloader.php' );
+        
+        global $edd_options;
+
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/settings/register-settings.php' );
+        $geodir_options = geodir_get_settings();
         
         if ( !defined( 'GEODIR_LATITUDE_ERROR_MSG' ) ) {
             require_once( GEODIRECTORY_PLUGIN_DIR . 'language.php' ); // Define language constants.
