@@ -143,42 +143,7 @@ function geodir_installation_end() {
  * @global array $geodir_settings Geodirectory settings array.
  */
 function geodir_set_default_options() {
-    global $geodir_settings;
-    /**
-     * Contains settings array for general tab.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     */
-    include_once("option-pages/general_settings_array.php");
-    /**
-     * Contains settings array for design tab.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     */
-    include_once("option-pages/design_settings_array.php");
-    /**
-     * Contains settings array for notifications tab.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     */
-    include_once("option-pages/notifications_settings_array.php");
-    /**
-     * Contains settings array for permalink tab.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     */
-    include_once("option-pages/permalink_settings_array.php");
-    /**
-     * Contains settings array for title / meta tab.
-     *
-     * @since 1.5.4
-     * @package GeoDirectory
-     */
-    include_once("option-pages/title_meta_settings_array.php");
+    $geodir_settings = geodir_get_registered_settings();
     
     foreach ($geodir_settings as $value) {
         geodir_update_options($value, true);

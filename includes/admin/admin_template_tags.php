@@ -273,21 +273,11 @@ if (!function_exists('geodir_admin_panel')) {
  * @global object $wpdb WordPress Database object.
  * @param string $tab_name Tab name.
  */
-function geodir_admin_option_form($tab_name)
-{
-
-    //echo $tab_name.'_array.php' ;
-    global $geodir_settings, $is_default, $mapzoom; //gddev_log( $geodir_settings, 'geodir_settings', __FILE__, __LINE__ );
-    if (file_exists(dirname(__FILE__) . '/option-pages/' . $tab_name . '_array.php')) {
-        /**
-         * Contains settings array for given tab.
-         *
-         * @since 1.0.0
-         * @package GeoDirectory
-         */
-        include_once('option-pages/' . $tab_name . '_array.php');
-    }
-//gddev_log( $geodir_settings, 'geodir_settings', __FILE__, __LINE__ );
+function geodir_admin_option_form($tab_name) {
+    global $is_default, $mapzoom;
+    
+    $geodir_settings = geodir_get_registered_settings();
+    
     $listing_type = isset($_REQUEST['listing_type']) ? $_REQUEST['listing_type'] : '';
 
     switch ($tab_name) {

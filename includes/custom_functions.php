@@ -3119,7 +3119,7 @@ function geodir_wpml_duplicate_settings( $settings = array() ) {
                 'type' => 'multiselect',
                 'placeholder_text' => __('Select post types', 'geodirectory'),
                 'class' => 'chosen_select',
-                'options' => array_unique(geodir_post_type_setting_fun())
+                'options' => geodir_post_type_options()
             );
         }
         $new_settings[] = $setting;
@@ -3166,4 +3166,23 @@ function geodir_wpml_is_post_type_translated( $post_type ) {
     }
     
     return false;
+}
+
+/**
+ * Get the listing view layout options array.
+ *
+ * @since 1.6.22
+ *
+ * @return array The listing view layout options.
+ */
+function geodir_listing_view_options() {
+    $options = array(
+        'gridview_onehalf' => __( 'Grid View (Two Columns)', 'geodirectory' ),
+        'gridview_onethird' => __( 'Grid View (Three Columns)', 'geodirectory' ),
+        'gridview_onefourth' => __( 'Grid View (Four Columns)', 'geodirectory' ),
+        'gridview_onefifth' => __( 'Grid View (Five Columns)', 'geodirectory' ),
+        'listview' => __( 'List view', 'geodirectory' ),
+    );
+    
+    return apply_filters( 'geodir_listing_view_options', $options );
 }

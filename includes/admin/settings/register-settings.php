@@ -9,6 +9,26 @@
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
+/**
+ * Get theme location settings.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
+function geodir_get_theme_menu_locations() {
+    $nav_menus = get_registered_nav_menus();
+    $menu_locations = get_nav_menu_locations();
+    
+    $gd_menu_locations = array();
+    if ( ! empty( $menu_locations ) && is_array( $menu_locations ) ) {
+        foreach ( $menu_locations as $key => $theme_location ) {
+            if ( ! empty( $nav_menus ) && is_array( $nav_menus ) && array_key_exists( $key, $nav_menus ) )
+                $gd_menu_locations[ $key ] = $nav_menus[ $key ];
+        }
+    }
+
+    return ( ! empty( $gd_menu_locations ) ? array_unique( $gd_menu_locations ) : array() );
+}
 
 /**
  * Get an option.
@@ -54,6 +74,9 @@ function geodir_update_option( $key = '', $value = false ) {
     }
 
     $options = get_option( 'geodir_settings' );
+    if ( empty( $options ) ) {
+        $options = array();
+    }
 
     $value = apply_filters( 'geodir_update_option', $value, $key );
 
@@ -63,7 +86,6 @@ function geodir_update_option( $key = '', $value = false ) {
     if ( $updated ){
         global $geodir_options;
         $geodir_options[ $key ] = $value;
-
     }
 
     return $updated;
@@ -87,6 +109,9 @@ function geodir_delete_option( $key = '' ) {
     }
 
     $options = get_option( 'geodir_settings' );
+    if ( empty( $options ) ) {
+        $options = array();
+    }
 
     if ( isset( $options[ $key ] ) ) {
         unset( $options[ $key ] );
@@ -113,13 +138,14 @@ function geodir_delete_option( $key = '' ) {
  */
 function geodir_get_settings() {
     $settings = get_option( 'geodir_settings' );
-
+    
     if ( empty( $settings ) ) {
         // Update old settings with new single option.
-
+        $settings = array();
+        
         update_option( 'geodir_settings', $settings );
-
     }
+    
     return apply_filters( 'geodir_get_settings', $settings );
 }
 

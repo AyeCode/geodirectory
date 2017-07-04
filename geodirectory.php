@@ -189,9 +189,10 @@ final class GeoDirectory {
             require_once( GEODIRECTORY_PLUGIN_DIR . 'language.php' ); // Define language constants.
         }
         
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-class-session.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-session.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/helper_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/user_functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/deprecated-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-ajax-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/general_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_functions.php' );
@@ -199,6 +200,7 @@ final class GeoDirectory {
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/template_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/signup_function.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post_functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post-types-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-taxonomy-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_fields_input_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_fields_output_functions.php' );

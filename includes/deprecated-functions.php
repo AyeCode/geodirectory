@@ -88,3 +88,20 @@ function geodir_load_textdomain() {
 		}
 	}
 }
+
+/**
+ * function for post type settings.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
+function geodir_post_type_setting_fun() {
+    $post_type_arr = array();
+
+    $post_types = geodir_get_posttypes('object');
+
+    foreach ($post_types as $key => $post_types_obj) {
+        $post_type_arr[$key] = $post_types_obj->labels->singular_name;
+    }
+    return $post_type_arr;
+}

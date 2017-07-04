@@ -352,10 +352,6 @@ function geodir_before_admin_panel()
         echo '<div class="error"><p><strong>' . __('CURL is not installed on this server, this can cause problems, please ask your server admin to install it.', 'geodirectory') . '</strong></p></div>';
 
     }
-
-
-
-
 }
 
 /**
@@ -366,34 +362,34 @@ function geodir_before_admin_panel()
  * @global array $geodir_settings Geodirectory settings array.
  * @param string $current_tab The current settings tab name.
  */
-function geodir_handle_option_form_submit($current_tab)
-{
-    global $geodir_settings;
-    if (file_exists(dirname(__FILE__) . '/option-pages/' . $current_tab . '_array.php')) {
+function geodir_handle_option_form_submit( $current_tab ) {
+    $geodir_settings = geodir_get_registered_settings();
+    
+    $page       = isset( $_GET['page'] )       ? strtolower( $_GET['page'] )       : false;
+    
+    if ( ! empty( $_POST ) && isset( $_REQUEST['page'] ) && $_REQUEST['page'] == 'geodirectory' ) {
+        if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'geodir-settings' ) ) {
+            die( __( 'Action failed. Please refresh the page and retry.', 'geodirectory' ) );
+        }
+        if ( ! wp_verify_nonce( $_REQUEST['_wpnonce-' . $current_tab], 'geodir-settings-' . $current_tab ) ) {
+            die( __( 'Action failed. Please refresh the page and retry.', 'geodirectory' ) );
+        }
+        
+        $active_tab = isset( $_REQUEST['active_tab'] ) ? $_REQUEST['active_tab'] : '';
+        
         /**
-         * Contains settings array for current tab.
+         * Fires before updating geodirectory admin settings.
          *
-         * @since 1.0.0
-         * @package GeoDirectory
+         * @since 1.4.2
+         *
+         * @param string $current_tab Current tab in geodirectory settings.
+         * @param array  $geodir_settings Array of geodirectory settings.
          */
-        include_once('option-pages/' . $current_tab . '_array.php');
-    }
-    if (isset($_POST) && $_POST && isset($_REQUEST['page']) && $_REQUEST['page'] == 'geodirectory') :
-        if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'geodir-settings')) die(__('Action failed. Please refresh the page and retry.', 'geodirectory'));
-        if (!wp_verify_nonce($_REQUEST['_wpnonce-' . $current_tab], 'geodir-settings-' . $current_tab)) die(__('Action failed. Please refresh the page and retry.', 'geodirectory'));
-		
-		/**
-		 * Fires before updating geodirectory admin settings.
-		 *
-		 * @since 1.4.2
-		 *
-		 * @param string $current_tab Current tab in geodirectory settings.
-		 * @param array  $geodir_settings Array of geodirectory settings.
-		 */
-		do_action('geodir_before_update_options', $current_tab, $geodir_settings);		
-		
-        if (!empty($geodir_settings[$current_tab]))
-            geodir_update_options($geodir_settings[$current_tab]);
+        do_action( 'geodir_before_update_options', $current_tab, $geodir_settings );
+        
+        if ( !empty( $geodir_settings[ $current_tab ] ) ) {
+            geodir_update_options( $geodir_settings[ $current_tab ] );
+        }
 
         /**
          * Called after GeoDirectory options settings are updated.
@@ -402,7 +398,7 @@ function geodir_handle_option_form_submit($current_tab)
          * @param array $geodir_settings The array of GeoDirectory settings.
          * @see 'geodir_before_update_options'
          */
-        do_action('geodir_update_options', $geodir_settings);
+        do_action( 'geodir_update_options', $geodir_settings );
 
         /**
          * Called after GeoDirectory options settings are updated.
@@ -413,19 +409,15 @@ function geodir_handle_option_form_submit($current_tab)
          * @param string $current_tab The current settings tab name.
          * @param array $geodir_settings[$current_tab] The array of settings for the current settings tab.
          */
-        do_action('geodir_update_options_' . $current_tab, $geodir_settings[$current_tab]);
+        do_action( 'geodir_update_options_' . $current_tab, $geodir_settings[ $current_tab ] );
 
-        flush_rewrite_rules(false);
+        flush_rewrite_rules( false );
 
-        $current_tab = isset($_REQUEST['tab']) ? $_REQUEST['tab'] : '';
+        $redirect_url = admin_url( 'admin.php?page=geodirectory&tab=' . $current_tab . '&active_tab=' . $active_tab . '&msg=success' );
 
-        $redirect_url = admin_url('admin.php?page=geodirectory&tab=' . $current_tab . '&active_tab=' . $_REQUEST['active_tab'] . '&msg=success');
-
-        wp_redirect($redirect_url);
+        wp_redirect( $redirect_url );
         exit();
-    endif;
-
-
+    }
 }
 
 
@@ -440,146 +432,183 @@ function geodir_handle_option_form_submit($current_tab)
  * @param bool $dummy Is this dummy settings? Default: false.
  * @return bool Returns true if saved.
  */
-function geodir_update_options($options, $dummy = false) {
-    if ((!isset($_POST) || !$_POST) && !$dummy) return false;
+function geodir_update_options( $options, $dummy = false ) {
+    if ( ( !isset( $_POST ) || !$_POST ) && !$dummy ) {
+        return false;
+    }
 
-    foreach ($options as $value) {
-        if ($dummy && isset($value['std']))
-            $_POST[$value['id']] = $value['std'];
+    foreach ( $options as $option ) {
+        if ( $dummy && isset( $option['std'] ) ) {
+            $_POST[ $option['id'] ] = $option['std'];
+        }
 
-
-        if (isset($value['type']) && $value['type'] == 'checkbox') :
-
-            if (isset($value['id']) && isset($_POST[$value['id']])) {
-                update_option($value['id'], $_POST[$value['id']]);
+        if ( isset( $option['type'] ) && $option['type'] == 'checkbox' ) {
+            // remove
+            if ( isset( $option['id'] ) && isset( $_POST[ $option['id'] ] ) ) {
+                update_option( $option['id'], $_POST[$option['id']] );
             } else {
-                update_option($value['id'], 0);
+                update_option( $option['id'], 0 );
             }
-
-        elseif (isset($value['type']) && $value['type'] == 'image_width') :
-
-            if (isset($value['id']) && isset($_POST[$value['id'] . '_width'])) {
-                update_option($value['id'] . '_width', $_POST[$value['id'] . '_width']);
-                update_option($value['id'] . '_height', $_POST[$value['id'] . '_height']);
-                if (isset($_POST[$value['id'] . '_crop'])) :
-                    update_option($value['id'] . '_crop', 1);
-                else :
-                    update_option($value['id'] . '_crop', 0);
-                endif;
+            //
+            
+            if ( isset( $option['id'] ) && isset( $_POST[ $option['id'] ] ) ) {
+                geodir_update_option( $option['id'], $_POST[$option['id']] );
             } else {
-                update_option($value['id'] . '_width', $value['std']);
-                update_option($value['id'] . '_height', $value['std']);
-                update_option($value['id'] . '_crop', 1);
+                geodir_update_option( $option['id'], 0 );
             }
-
-        elseif (isset($value['type']) && $value['type'] == 'map') :
+        } else if ( isset( $option['type'] ) && $option['type'] == 'image_width' ) {
+            // remove
+            if ( isset( $option['id'] ) && isset( $_POST[$option['id'] . '_width'] ) ) {
+                update_option( $option['id'] . '_width', $_POST[$option['id'] . '_width'] );
+                update_option( $option['id'] . '_height', $_POST[$option['id'] . '_height'] );
+                
+                if ( isset( $_POST[$option['id'] . '_crop'] ) ) {
+                    update_option( $option['id'] . '_crop', 1 );
+                } else {
+                    update_option( $option['id'] . '_crop', 0 );
+                }
+            } else {
+                update_option( $option['id'] . '_width', $option['std'] );
+                update_option( $option['id'] . '_height', $option['std'] );
+                update_option( $option['id'] . '_crop', 1 );
+            }
+            //
+            
+            if ( isset( $option['id'] ) && isset( $_POST[$option['id'] . '_width'] ) ) {
+                geodir_update_option( $option['id'] . '_width', $_POST[$option['id'] . '_width'] );
+                geodir_update_option( $option['id'] . '_height', $_POST[$option['id'] . '_height'] );
+                if ( isset( $_POST[$option['id'] . '_crop'] ) ) {
+                    geodir_update_option( $option['id'] . '_crop', 1 );
+                } else {
+                    geodir_update_option( $option['id'] . '_crop', 0 );
+                }
+            } else {
+                geodir_update_option( $option['id'] . '_width', $option['std'] );
+                geodir_update_option( $option['id'] . '_height', $option['std'] );
+                geodir_update_option( $option['id'] . '_crop', 1 );
+            }
+        } else if ( isset( $option['type'] ) && $option['type'] == 'map' ) {
             $post_types = array();
             $categories = array();
 
-            if (!empty($_POST['home_map_post_types'])) :
-                foreach ($_POST['home_map_post_types'] as $post_type) :
+            if ( !empty( $_POST['home_map_post_types'] ) ) {
+                foreach ( $_POST['home_map_post_types'] as $post_type ) {
                     $post_types[] = $post_type;
-                endforeach;
-            endif;
+                }
+            }
 
-            update_option('geodir_exclude_post_type_on_map', $post_types);
-
-            if (!empty($_POST['post_category'])) :
-                foreach ($_POST['post_category'] as $texonomy => $cat_arr) :
+            if ( !empty( $_POST['post_category'] ) ) {
+                foreach ( $_POST['post_category'] as $texonomy => $cat_arr ) {
                     $categories[$texonomy] = array();
-                    foreach ($cat_arr as $category) :
+                    
+                    foreach ( $cat_arr as $category ) {
                         $categories[$texonomy][] = $category;
-                    endforeach;
-                    $categories[$texonomy] = !empty($categories[$texonomy]) ? array_unique($categories[$texonomy]) : array();
-                endforeach;
-            endif;
+                    }
+                    
+                    $categories[$texonomy] = !empty( $categories[$texonomy] ) ? array_unique( $categories[$texonomy] ) : array();
+                }
+            }
+            
+            // remove
+            update_option( 'geodir_exclude_post_type_on_map', $post_types );
             update_option('geodir_exclude_cat_on_map', $categories);
             update_option('geodir_exclude_cat_on_map_upgrade', 1);
-        elseif (isset($value['type']) && $value['type'] == 'map_default_settings') :
-
-
-            if (!empty($_POST['geodir_default_map_language'])):
-                update_option('geodir_default_map_language', $_POST['geodir_default_map_language']);
-            endif;
-
-
-            if (!empty($_POST['geodir_default_map_search_pt'])):
-                update_option('geodir_default_map_search_pt', $_POST['geodir_default_map_search_pt']);
-            endif;
-
-
-        elseif (isset($value['type']) && $value['type'] == 'file') :
-
-
-            if (isset($_POST[$value['id'] . '_remove']) && $_POST[$value['id'] . '_remove']) {// if remove is set then remove the file
-
-                if (get_option($value['id'])) {
-                    $image_name_arr = explode('/', get_option($value['id']));
-                    $noimg_name = end($image_name_arr);
+            //
+            
+            geodir_update_option( 'geodir_exclude_post_type_on_map', $post_types );
+            geodir_update_option( 'geodir_exclude_cat_on_map', $categories );
+            geodir_update_option( 'geodir_exclude_cat_on_map_upgrade', 1 );
+        } else if ( isset( $option['type'] ) && $option['type'] == 'map_default_settings' ) {
+            if ( !empty( $_POST['geodir_default_map_language'] ) ) {
+                update_option( 'geodir_default_map_language', $_POST['geodir_default_map_language'] );
+            }
+            
+            if ( !empty( $_POST['geodir_default_map_search_pt'] ) ) {
+                update_option( 'geodir_default_map_search_pt', $_POST['geodir_default_map_search_pt'] );
+            }
+        } else if ( isset( $option['type'] ) && $option['type'] == 'file' ) {
+            if ( isset( $_POST[$option['id'] . '_remove'] ) && $_POST[$option['id'] . '_remove'] ) {
+                if ( get_option( $option['id'] ) ) {
+                    $image_name_arr = explode( '/', get_option( $option['id'] ) );
+                    $noimg_name = end( $image_name_arr );
                     $img_path = $uploads['path'] . '/' . $noimg_name;
-                    if (file_exists($img_path))
-                        unlink($img_path);
+                    
+                    if ( file_exists( $img_path ) ) {
+                        unlink( $img_path );
+                    }
                 }
-
-                update_option($value['id'], '');
+                
+                update_option( $option['id'], '' );
             }
 
-            $uploadedfile = isset($_FILES[$value['id']]) ? $_FILES[$value['id']] : '';
-            $filename = isset($_FILES[$value['id']]['name']) ? $_FILES[$value['id']]['name'] : '';
+            $uploadedfile = isset( $_FILES[$option['id']] ) ? $_FILES[$option['id']] : '';
+            $filename = isset( $_FILES[$option['id']]['name'] ) ? $_FILES[$option['id']]['name'] : '';
 
-            if (!empty($filename)):
-                $ext = pathinfo($filename, PATHINFO_EXTENSION);
+            if ( !empty( $filename ) ) {
+                $ext = pathinfo( $filename, PATHINFO_EXTENSION );
                 $uplaods = array();
 
-                foreach ($uploadedfile as $key => $uplaod):
-                    if ($key == 'name'):
+                foreach ( $uploadedfile as $key => $uplaod ) {
+                    if ( $key == 'name') {
                         $uplaods[$key] = $filename;
-                    else :
+                    } else {
                         $uplaods[$key] = $uplaod;
-                    endif;
-                endforeach;
-
+                    }
+                }
+                
                 $uploads = wp_upload_dir();
 
-                if (get_option($value['id'])) {
-                    $image_name_arr = explode('/', get_option($value['id']));
-                    $noimg_name = end($image_name_arr);
+                if ( get_option( $option['id'] ) ) {
+                    $image_name_arr = explode( '/', get_option( $option['id'] ) );
+                    $noimg_name = end( $image_name_arr );
                     $img_path = $uploads['path'] . '/' . $noimg_name;
-                    if (file_exists($img_path))
-                        unlink($img_path);
+                    
+                    if ( file_exists( $img_path ) ) {
+                        unlink( $img_path );
+                    }
                 }
+                
+                $upload_overrides = array( 'test_form' => false );
+                $movefile = wp_handle_upload( $uplaods, $upload_overrides );
 
-                $upload_overrides = array('test_form' => false);
-                $movefile = wp_handle_upload($uplaods, $upload_overrides);
+                update_option( $option['id'], $movefile['url'] );
+            }
 
-                update_option($value['id'], $movefile['url']);
-
-            endif;
-
-            if (!get_option($value['id']) && isset($value['value'])):
-                update_option($value['id'], $value['value']);
-            endif;
-
-
-        else :
-            // same menu setting per theme.
-            if (isset($value['id']) && $value['id'] == 'geodir_theme_location_nav' && isset($_POST[$value['id']])) {
+            if ( !get_option( $option['id'] ) && isset( $option['value'] ) ) {
+                update_option( $option['id'], $option['value'] );
+            }
+        } else {
+            // remove
+            if ( isset( $option['id'] ) && $option['id'] == 'geodir_theme_location_nav' && isset( $_POST[$option['id']] ) ) {
                 $theme = wp_get_theme();
-                update_option('geodir_theme_location_nav_' . $theme->name, $_POST[$value['id']]);
+                update_option( 'geodir_theme_location_nav_' . $theme->name, $_POST[$option['id']] );
             }
 
-            if (isset($value['id']) && isset($_POST[$value['id']])) {
-                update_option($value['id'], $_POST[$value['id']]);
+            if ( isset( $option['id'] ) && isset( $_POST[$option['id']] ) ) {
+                update_option( $option['id'], $_POST[$option['id']] );
             } else {
-                delete_option($value['id']);
+                delete_option( $option['id'] );
+            }
+            //
+            
+            if ( isset( $option['id'] ) && $option['id'] == 'geodir_theme_location_nav' && isset( $_POST[ $option['id'] ] ) ) {
+                $theme = wp_get_theme();
+                geodir_update_option( 'geodir_theme_location_nav_' . $theme->name, $_POST[ $option['id'] ] );
             }
 
-        endif;
+            if ( isset( $option['id'] ) && isset( $_POST[ $option['id'] ] ) ) {
+                geodir_update_option( $option['id'], $_POST[ $option['id'] ] );
+            } else {
+                geodir_delete_option( $option['id'] );
+            }
+        }
     }
-    if ($dummy)
+    
+    if ( $dummy ) {
         $_POST = array();
+    }
+    
     return true;
-
 }
 
 /**
@@ -6575,24 +6604,6 @@ function geodir_ga_deauthorize(){
     }
 
     die();
-}
-
-
-/**
- * function for post type settings.
- *
- * @since 1.0.0
- * @package GeoDirectory
- */
-function geodir_post_type_setting_fun() {
-    $post_type_arr = array();
-
-    $post_types = geodir_get_posttypes('object');
-
-    foreach ($post_types as $key => $post_types_obj) {
-        $post_type_arr[$key] = $post_types_obj->labels->singular_name;
-    }
-    return $post_type_arr;
 }
 
 /**

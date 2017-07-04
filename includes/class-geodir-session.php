@@ -3,11 +3,11 @@
 if (!defined( 'ABSPATH' ) ) exit;
 
 /**
- * Geodir_Session Class.
+ * GeoDir_Session Class.
  *
  * @since 1.5.7
  */
-class Geodir_Session {
+class GeoDir_Session {
 	/**
 	 * Holds our session data.
 	 *
@@ -296,4 +296,4 @@ class Geodir_Session {
 }
 
 global $gd_session;
-$gd_session = new Geodir_Session();
+$gd_session = new GeoDir_Session();
