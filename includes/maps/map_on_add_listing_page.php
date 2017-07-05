@@ -58,7 +58,7 @@ if (is_admin() && isset($_REQUEST['tab']) && $mapzoom == '') {
  * @param bool $var Whether to auto fill country, state, city values in fields.
  */
 $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
-$marker_icon = get_option('geodir_default_marker_icon');
+$marker_icon = geodir_get_option('geodir_default_marker_icon');
 $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
 ?>
 <script type="text/javascript">
@@ -686,7 +686,7 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
             zoom: <?php echo $prefix;?>CITY_MAP_ZOOMING_FACT,
             maptype: 'ROADMAP', // Map type - HYBRID, ROADMAP, SATELLITE, TERRAIN
             streetViewControl: true,
-            <?php if(get_option('geodir_add_listing_mouse_scroll')) { echo 'scrollwheel: false,';}?>
+            <?php if(geodir_get_option('geodir_add_listing_mouse_scroll')) { echo 'scrollwheel: false,';}?>
         });
 
         if (window.gdMaps) {

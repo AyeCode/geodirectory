@@ -48,7 +48,7 @@ function geodir_get_default_location()
      *
      * @param string $location_result The default location object.
      */
-    return $location_result = apply_filters('geodir_get_default_location', get_option('geodir_default_location'));
+    return $location_result = apply_filters('geodir_get_default_location', geodir_get_option('geodir_default_location'));
 }
 
 /**
@@ -108,7 +108,7 @@ function geodir_get_location($id = '')
      *
      * @param string $id The location ID.
      */
-    return $location_result = apply_filters('geodir_get_location_by_id', get_option('geodir_default_location'), $id);
+    return $location_result = apply_filters('geodir_get_location_by_id', geodir_get_option('geodir_default_location'), $id);
 }
 
 /**
@@ -260,7 +260,7 @@ function geodir_add_new_location($location_info = array())
         */
 
         if ($geodir_location->is_default)
-            update_option('geodir_default_location', $geodir_location);
+            geodir_update_option('geodir_default_location', $geodir_location);
 
         return $geodir_location->location_id;
 

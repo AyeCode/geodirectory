@@ -35,7 +35,7 @@
     $username = $user_info->user_login;
     $user_email = $user_info->user_email;
 
-    $message = wpautop(__(stripslashes_deep(get_option('geodir_post_added_success_msg_content')),'geodirectory'));
+    $message = wpautop(__(stripslashes_deep(geodir_get_option('geodir_post_added_success_msg_content')),'geodirectory'));
 
     /*
      * Filter the success page message before variable replacements.

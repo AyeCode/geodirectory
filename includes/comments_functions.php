@@ -70,7 +70,7 @@ function geodir_comment_rating_meta($comment) {
 	if (in_array($post_type, (array)geodir_get_posttypes()) && (int)$comment->comment_parent == 0 && !(!empty($post_type) && geodir_cpt_has_rating_disabled($post_type))) {
 		$rating = geodir_get_commentoverall($comment->comment_ID);
 		
-		if ((int)get_option('geodir_reviewrating_enable_font_awesome') == 1) {
+		if ((int)geodir_get_option('geodir_reviewrating_enable_font_awesome') == 1) {
 			$star_texts = array();
 			$star_texts[] = __('Terrible', 'geodirectory');
 			$star_texts[] = __('Poor', 'geodirectory');
@@ -941,7 +941,7 @@ function geodir_get_rating_stars($rating, $post_id, $small = false)
 			// Show rating stars from review rating manager
 			$r_html = geodir_reviewrating_draw_overall_rating($rating);
 		} else {
-			$rating_img = '<img alt="rating icon" src="' . get_option('geodir_default_rating_star_icon') . '" />';
+			$rating_img = '<img alt="rating icon" src="' . geodir_get_option('geodir_default_rating_star_icon') . '" />';
 			
 			/* fix rating star for safari */
 			$star_width = 23 * 5;
@@ -968,7 +968,7 @@ function geodir_get_rating_stars($rating, $post_id, $small = false)
 function geodir_is_reviews_show($pageview = '')
 {
 
-    $active_tabs = get_option('geodir_detail_page_tabs_excluded');
+    $active_tabs = geodir_get_option('geodir_detail_page_tabs_excluded');
 
     $is_display = true;
     if (!empty($active_tabs) && in_array('reviews', $active_tabs))

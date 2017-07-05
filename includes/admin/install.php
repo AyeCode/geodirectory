@@ -76,7 +76,7 @@ function geodir_install() {
     do_action('geodir_installation_start');
 
     // Do install
-    if (!get_option('geodir_default_data_installed')) {
+    if ( !geodir_get_option( 'geodir_default_data_installed' ) ) {
         geodir_create_tables(); // in admin db install.php
         geodir_register_defaults(); // geodir_functions/ taxonomy_functions.php
         geodir_create_default_fields();
@@ -85,12 +85,12 @@ function geodir_install() {
         geodir_set_default_widgets();
         gd_install_theme_compat();
 
-        update_option('geodir_default_data_installed', 1);
+        geodir_update_option( 'geodir_default_data_installed', 1 );
     }
 
-    if (!get_option('geodir_default_data_installed_1.2.8')) {
+    if ( !geodir_get_option( 'geodir_default_data_installed_1.2.8' ) ) {
         //geodir_create_tables(); // in admin db install.php
-        update_option('geodir_default_data_installed_1.2.8', 1);
+        geodir_update_option( 'geodir_default_data_installed_1.2.8', 1 );
     }
 
     geodir_installation_end();
@@ -128,9 +128,9 @@ function geodir_create_pages() {
  * @package GeoDirectory
  */
 function geodir_installation_end() {
-    update_option("geodir_installed", 1);
-    update_option("geodir_installation_redirect", 1);
-    update_option('skip_install_geodir_pages', 0);
+    update_option( 'geodir_installed', 1 );
+    geodir_update_option( 'geodir_installation_redirect', 1 );
+    geodir_update_option( 'skip_install_geodir_pages', 0 );
 }
 
 /**

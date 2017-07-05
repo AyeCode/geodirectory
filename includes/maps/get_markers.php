@@ -248,7 +248,7 @@ function get_markers() {
         global $geodir_date_time_format, $geodir_date_format, $geodir_time_format;
 
         $today = strtotime(date_i18n('Y-m-d'));
-        $show_dates = $post_type == 'gd_event' ? (int)get_option('geodir_event_infowindow_dates_count', 1) : 0;
+        $show_dates = $post_type == 'gd_event' ? (int)geodir_get_option('geodir_event_infowindow_dates_count', 1) : 0;
         
         foreach ($catinfo as $catinfo_obj) {
             $post_title = $catinfo_obj->post_title;

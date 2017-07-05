@@ -2024,7 +2024,7 @@ if (!class_exists('Geodir_Tax_Meta_Class')) :
 
             $t_id = (is_object($term_id)) ? $term_id->term_id : $term_id;
 
-            $m = get_option('tax_meta_' . $post_type  . $t_id);
+            $m = geodir_get_option('tax_meta_' . $post_type  . $t_id);
             if (isset($m[$key])) {
                 return $m[$key];
             } else {
@@ -2044,12 +2044,12 @@ if (!class_exists('Geodir_Tax_Meta_Class')) :
             if($post_type=='post'){$post_type='';}
             if($post_type){$post_type = $post_type.'_';}
 
-            $m = get_option('tax_meta_' . $post_type  . $term_id);
+            $m = geodir_get_option('tax_meta_' . $post_type  . $term_id);
 
             if (isset($m[$key])) {
                 unset($m[$key]);
             }
-            update_option('tax_meta_' . $post_type  . $term_id, $m);
+            geodir_update_option('tax_meta_' . $post_type  . $term_id, $m);
         }
 
         //update meta
@@ -2064,10 +2064,10 @@ if (!class_exists('Geodir_Tax_Meta_Class')) :
             if($post_type=='post'){$post_type='';}
             if($post_type){$post_type = $post_type.'_';}
 
-            $m = get_option('tax_meta_' . $post_type  . $term_id);
+            $m = geodir_get_option('tax_meta_' . $post_type  . $term_id);
 
             $m[$key] = $value;
-            update_option('tax_meta_' . $post_type  . $term_id, $m);
+            geodir_update_option('tax_meta_' . $post_type  . $term_id, $m);
 
             /**
              * Called after the tax meta is updated.
@@ -2112,7 +2112,7 @@ if (!function_exists('geodir_get_tax_meta')) {
 
         $t_id = (is_object($term_id)) ? $term_id->term_id : $term_id;
 
-        $m = get_option('tax_meta_' . $post_type  . $t_id);
+        $m = geodir_get_option('tax_meta_' . $post_type  . $t_id);
         if (isset($m[$key])) {
             return $m[$key];
         } else {
@@ -2134,12 +2134,12 @@ if (!function_exists('geodir_delete_tax_meta')) {
             $post_type = $post_type . '_';
         }
 
-        $m = get_option('tax_meta_' . $post_type . $term_id);
+        $m = geodir_get_option('tax_meta_' . $post_type . $term_id);
 
         if (isset($m[$key])) {
             unset($m[$key]);
         }
-        update_option('tax_meta_' . $post_type  . $term_id, $m);
+        geodir_update_option('tax_meta_' . $post_type  . $term_id, $m);
     }
 }
 
@@ -2161,10 +2161,10 @@ if (!function_exists('geodir_update_tax_meta')) {
             $post_type = $post_type . '_';
         }
 
-        $m = get_option('tax_meta_' . $post_type  . $term_id);
+        $m = geodir_get_option('tax_meta_' . $post_type  . $term_id);
 
         $m[$key] = $value;
-        update_option('tax_meta_' . $post_type . $term_id, $m);
+        geodir_update_option('tax_meta_' . $post_type . $term_id, $m);
 
         /** This action is documented in includes/cat-meta/Tax-meta-class.php */
         do_action('gd_tax_meta_updated', false, true, $term_id, $post_type);

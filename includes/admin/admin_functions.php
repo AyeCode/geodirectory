@@ -128,7 +128,7 @@ if (!function_exists('geodir_admin_scripts')) {
         wp_enqueue_script('geodirectory-goMap-script');
 
 		// font awesome rating script
-		if (get_option('geodir_reviewrating_enable_font_awesome')) {
+		if (geodir_get_option('geodir_reviewrating_enable_font_awesome')) {
 			wp_register_script('geodir-barrating-js', geodir_plugin_url() . '/assets/js/jquery.barrating.min.js', array(), GEODIRECTORY_VERSION);
 			wp_enqueue_script('geodir-barrating-js');
 		} else { // default rating script
@@ -333,7 +333,7 @@ function geodir_before_admin_panel()
         }
     }
 
-    $geodir_load_map = get_option('geodir_load_map');
+    $geodir_load_map = geodir_get_option('geodir_load_map');
     $need_map_key = false;
     if($geodir_load_map=='' || $geodir_load_map=='google' || $geodir_load_map=='auto' ){
         $need_map_key = true;
@@ -365,7 +365,7 @@ function geodir_before_admin_panel()
 function geodir_handle_option_form_submit( $current_tab ) {
     $geodir_settings = geodir_get_registered_settings();
     
-    $page       = isset( $_GET['page'] )       ? strtolower( $_GET['page'] )       : false;
+    $page = isset( $_GET['page'] )       ? strtolower( $_GET['page'] )       : false;
     
     if ( ! empty( $_POST ) && isset( $_REQUEST['page'] ) && $_REQUEST['page'] == 'geodirectory' ) {
         if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'geodir-settings' ) ) {
@@ -399,17 +399,19 @@ function geodir_handle_option_form_submit( $current_tab ) {
          * @see 'geodir_before_update_options'
          */
         do_action( 'geodir_update_options', $geodir_settings );
-
-        /**
-         * Called after GeoDirectory options settings are updated.
-         *
-         * Provides tab specific settings.
-         *
-         * @since 1.0.0
-         * @param string $current_tab The current settings tab name.
-         * @param array $geodir_settings[$current_tab] The array of settings for the current settings tab.
-         */
-        do_action( 'geodir_update_options_' . $current_tab, $geodir_settings[ $current_tab ] );
+        
+        if ( !empty( $geodir_settings[ $current_tab ] ) ) {
+            /**
+             * Called after GeoDirectory options settings are updated.
+             *
+             * Provides tab specific settings.
+             *
+             * @since 1.0.0
+             * @param string $current_tab The current settings tab name.
+             * @param array $geodir_settings[$current_tab] The array of settings for the current settings tab.
+             */
+            do_action( 'geodir_update_options_' . $current_tab, $geodir_settings[ $current_tab ] );
+        }
 
         flush_rewrite_rules( false );
 
@@ -436,47 +438,23 @@ function geodir_update_options( $options, $dummy = false ) {
     if ( ( !isset( $_POST ) || !$_POST ) && !$dummy ) {
         return false;
     }
-
+    
     foreach ( $options as $option ) {
         if ( $dummy && isset( $option['std'] ) ) {
             $_POST[ $option['id'] ] = $option['std'];
         }
 
         if ( isset( $option['type'] ) && $option['type'] == 'checkbox' ) {
-            // remove
-            if ( isset( $option['id'] ) && isset( $_POST[ $option['id'] ] ) ) {
-                update_option( $option['id'], $_POST[$option['id']] );
-            } else {
-                update_option( $option['id'], 0 );
-            }
-            //
-            
             if ( isset( $option['id'] ) && isset( $_POST[ $option['id'] ] ) ) {
                 geodir_update_option( $option['id'], $_POST[$option['id']] );
             } else {
                 geodir_update_option( $option['id'], 0 );
             }
         } else if ( isset( $option['type'] ) && $option['type'] == 'image_width' ) {
-            // remove
-            if ( isset( $option['id'] ) && isset( $_POST[$option['id'] . '_width'] ) ) {
-                update_option( $option['id'] . '_width', $_POST[$option['id'] . '_width'] );
-                update_option( $option['id'] . '_height', $_POST[$option['id'] . '_height'] );
-                
-                if ( isset( $_POST[$option['id'] . '_crop'] ) ) {
-                    update_option( $option['id'] . '_crop', 1 );
-                } else {
-                    update_option( $option['id'] . '_crop', 0 );
-                }
-            } else {
-                update_option( $option['id'] . '_width', $option['std'] );
-                update_option( $option['id'] . '_height', $option['std'] );
-                update_option( $option['id'] . '_crop', 1 );
-            }
-            //
-            
             if ( isset( $option['id'] ) && isset( $_POST[$option['id'] . '_width'] ) ) {
                 geodir_update_option( $option['id'] . '_width', $_POST[$option['id'] . '_width'] );
                 geodir_update_option( $option['id'] . '_height', $_POST[$option['id'] . '_height'] );
+                
                 if ( isset( $_POST[$option['id'] . '_crop'] ) ) {
                     geodir_update_option( $option['id'] . '_crop', 1 );
                 } else {
@@ -499,105 +477,81 @@ function geodir_update_options( $options, $dummy = false ) {
 
             if ( !empty( $_POST['post_category'] ) ) {
                 foreach ( $_POST['post_category'] as $texonomy => $cat_arr ) {
-                    $categories[$texonomy] = array();
+                    $categories[ $texonomy ] = array();
                     
                     foreach ( $cat_arr as $category ) {
-                        $categories[$texonomy][] = $category;
+                        $categories[ $texonomy ][] = $category;
                     }
                     
-                    $categories[$texonomy] = !empty( $categories[$texonomy] ) ? array_unique( $categories[$texonomy] ) : array();
+                    $categories[$texonomy] = !empty( $categories[ $texonomy ] ) ? array_unique( $categories[ $texonomy ] ) : array();
                 }
             }
             
-            // remove
-            update_option( 'geodir_exclude_post_type_on_map', $post_types );
-            update_option('geodir_exclude_cat_on_map', $categories);
-            update_option('geodir_exclude_cat_on_map_upgrade', 1);
-            //
-            
             geodir_update_option( 'geodir_exclude_post_type_on_map', $post_types );
-            geodir_update_option( 'geodir_exclude_cat_on_map', $categories );
-            geodir_update_option( 'geodir_exclude_cat_on_map_upgrade', 1 );
+            geodir_update_option('geodir_exclude_cat_on_map', $categories);
+            geodir_update_option('geodir_exclude_cat_on_map_upgrade', 1);
         } else if ( isset( $option['type'] ) && $option['type'] == 'map_default_settings' ) {
             if ( !empty( $_POST['geodir_default_map_language'] ) ) {
-                update_option( 'geodir_default_map_language', $_POST['geodir_default_map_language'] );
+                geodir_update_option( 'geodir_default_map_language', $_POST['geodir_default_map_language'] );
             }
             
             if ( !empty( $_POST['geodir_default_map_search_pt'] ) ) {
-                update_option( 'geodir_default_map_search_pt', $_POST['geodir_default_map_search_pt'] );
+                geodir_update_option( 'geodir_default_map_search_pt', $_POST['geodir_default_map_search_pt'] );
             }
         } else if ( isset( $option['type'] ) && $option['type'] == 'file' ) {
+            $uploads = wp_upload_dir();
+            
             if ( isset( $_POST[$option['id'] . '_remove'] ) && $_POST[$option['id'] . '_remove'] ) {
-                if ( get_option( $option['id'] ) ) {
-                    $image_name_arr = explode( '/', get_option( $option['id'] ) );
-                    $noimg_name = end( $image_name_arr );
-                    $img_path = $uploads['path'] . '/' . $noimg_name;
-                    
-                    if ( file_exists( $img_path ) ) {
-                        unlink( $img_path );
+                if ( $option_value = geodir_get_option( $option['id'] ) ) {
+                    $file_path = $uploads['path'] . '/' . $option_value;
+                    if ( is_file( $file_path ) && file_exists( $file_path ) ) {
+                        unlink( $file_path );
                     }
                 }
                 
-                update_option( $option['id'], '' );
+                geodir_update_option( $option['id'], '' );
             }
 
             $uploadedfile = isset( $_FILES[$option['id']] ) ? $_FILES[$option['id']] : '';
             $filename = isset( $_FILES[$option['id']]['name'] ) ? $_FILES[$option['id']]['name'] : '';
 
             if ( !empty( $filename ) ) {
-                $ext = pathinfo( $filename, PATHINFO_EXTENSION );
-                $uplaods = array();
-
+                $file_uplaods = array();
                 foreach ( $uploadedfile as $key => $uplaod ) {
                     if ( $key == 'name') {
-                        $uplaods[$key] = $filename;
+                        $file_uplaods[ $key ] = $filename;
                     } else {
-                        $uplaods[$key] = $uplaod;
+                        $file_uplaods[ $key ] = $uplaod;
                     }
                 }
                 
-                $uploads = wp_upload_dir();
-
-                if ( get_option( $option['id'] ) ) {
-                    $image_name_arr = explode( '/', get_option( $option['id'] ) );
-                    $noimg_name = end( $image_name_arr );
-                    $img_path = $uploads['path'] . '/' . $noimg_name;
-                    
-                    if ( file_exists( $img_path ) ) {
-                        unlink( $img_path );
+                if ( $option_value = geodir_get_option( $option['id'] ) ) {
+                    $file_path = $uploads['path'] . '/' . $option_value;
+                    if ( is_file( $file_path ) && file_exists( $file_path ) ) {
+                        unlink( $file_path );
                     }
                 }
                 
                 $upload_overrides = array( 'test_form' => false );
-                $movefile = wp_handle_upload( $uplaods, $upload_overrides );
-
-                update_option( $option['id'], $movefile['url'] );
+                $movefile = wp_handle_upload( $file_uplaods, $upload_overrides );
+                
+                if ( !empty( $movefile ) && empty( $movefile['error'] ) ) {
+                    $option_value = str_replace( $uploads['baseurl'], '', $movefile['url'] );
+                    geodir_update_option( $option['id'], trim( $option_value, '/' ) );
+                }
             }
-
-            if ( !get_option( $option['id'] ) && isset( $option['value'] ) ) {
-                update_option( $option['id'], $option['value'] );
+            
+            if ( !geodir_get_option( $option['id'] ) && isset( $option['value'] ) ) {
+                geodir_update_option( $option['id'], $option['value'] );
             }
         } else {
-            // remove
             if ( isset( $option['id'] ) && $option['id'] == 'geodir_theme_location_nav' && isset( $_POST[$option['id']] ) ) {
                 $theme = wp_get_theme();
-                update_option( 'geodir_theme_location_nav_' . $theme->name, $_POST[$option['id']] );
+                geodir_update_option( 'geodir_theme_location_nav_' . $theme->name, $_POST[$option['id']] );
             }
 
             if ( isset( $option['id'] ) && isset( $_POST[$option['id']] ) ) {
-                update_option( $option['id'], $_POST[$option['id']] );
-            } else {
-                delete_option( $option['id'] );
-            }
-            //
-            
-            if ( isset( $option['id'] ) && $option['id'] == 'geodir_theme_location_nav' && isset( $_POST[ $option['id'] ] ) ) {
-                $theme = wp_get_theme();
-                geodir_update_option( 'geodir_theme_location_nav_' . $theme->name, $_POST[ $option['id'] ] );
-            }
-
-            if ( isset( $option['id'] ) && isset( $_POST[ $option['id'] ] ) ) {
-                geodir_update_option( $option['id'], $_POST[ $option['id'] ] );
+                geodir_update_option( $option['id'], $_POST[$option['id']] );
             } else {
                 geodir_delete_option( $option['id'] );
             }
@@ -656,7 +610,7 @@ function geodir_update_options( $options, $dummy = false ) {
 function places_custom_fields_tab($tabs)
 {
 
-    $geodir_post_types = get_option('geodir_post_types');
+    $geodir_post_types = geodir_get_option('geodir_post_types');
 
     if (!empty($geodir_post_types)) {
 
@@ -1027,8 +981,8 @@ function geodir_admin_fields($options)
                                            type="<?php echo esc_attr($value['type']); ?>"
                                            <?php if(isset($value['placeholder'])){?>placeholder="<?php echo esc_attr($value['placeholder']); ?>"<?php }?>
                                            style=" <?php echo esc_attr($value['css']); ?>"
-                                           value="<?php if (get_option($value['id']) !== false && get_option($value['id']) !== null) {
-                                               echo esc_attr(stripslashes(get_option($value['id'])));
+                                           value="<?php if (geodir_get_option($value['id']) !== false && geodir_get_option($value['id']) !== null) {
+                                               echo esc_attr(stripslashes(geodir_get_option($value['id'])));
                                            } else {
                                                echo esc_attr($value['std']);
                                            } ?>"/> <span class="description"><?php echo $value['desc']; ?></span></td>
@@ -1044,8 +998,8 @@ function geodir_admin_fields($options)
                                            type="<?php echo esc_attr($value['type']); ?>"
                                            <?php if(isset($value['placeholder'])){?>placeholder="<?php echo esc_attr($value['placeholder']); ?>"<?php }?>
                                            style=" <?php echo esc_attr($value['css']); ?>"
-                                           value="<?php if (get_option($value['id']) !== false && get_option($value['id']) !== null) {
-                                               echo esc_attr(stripslashes(get_option($value['id'])));
+                                           value="<?php if (geodir_get_option($value['id']) !== false && geodir_get_option($value['id']) !== null) {
+                                               echo esc_attr(stripslashes(geodir_get_option($value['id'])));
                                            } else {
                                                echo esc_attr($value['std']);
                                            } ?>"/>
@@ -1063,8 +1017,8 @@ function geodir_admin_fields($options)
                                            type="<?php echo esc_attr($value['type']); ?>"
                                            <?php if(isset($value['placeholder'])){?>placeholder="<?php echo esc_attr($value['placeholder']); ?>"<?php }?>
                                            style="<?php echo esc_attr($value['css']); ?>"
-                                           value="<?php if (get_option($value['id']) !== false && get_option($value['id']) !== null) {
-                                               echo esc_attr(stripslashes(get_option($value['id'])));
+                                           value="<?php if (geodir_get_option($value['id']) !== false && geodir_get_option($value['id']) !== null) {
+                                               echo esc_attr(stripslashes(geodir_get_option($value['id'])));
                                            } else {
                                                echo esc_attr($value['std']);
                                            } ?>"/> <span class="description"><?php echo $value['desc']; ?></span></td>
@@ -1086,8 +1040,8 @@ function geodir_admin_fields($options)
                 <td class="forminp"><input name="<?php echo esc_attr($value['id']); ?>"
                                            id="<?php echo esc_attr($value['id']); ?>" type="text"
                                            style="<?php echo esc_attr($value['css']); ?>"
-                                           value="<?php if (get_option($value['id']) !== false && get_option($value['id']) !== null) {
-                                               echo esc_attr(stripslashes(get_option($value['id'])));
+                                           value="<?php if (geodir_get_option($value['id']) !== false && geodir_get_option($value['id']) !== null) {
+                                               echo esc_attr(stripslashes(geodir_get_option($value['id'])));
                                            } else {
                                                echo esc_attr($value['std']);
                                            } ?>" class="colorpick"/> <span
@@ -1107,23 +1061,23 @@ function geodir_admin_fields($options)
                     <?php _e('Width', 'geodirectory'); ?> <input
                         name="<?php echo esc_attr($value['id']); ?>_width"
                         id="<?php echo esc_attr($value['id']); ?>_width" type="text" size="3"
-                        value="<?php if ($size = get_option($value['id'] . '_width')) echo stripslashes($size); else echo $value['std']; ?>"/>
+                        value="<?php if ($size = geodir_get_option($value['id'] . '_width')) echo stripslashes($size); else echo $value['std']; ?>"/>
 
                     <?php _e('Height', 'geodirectory'); ?> <input
                         name="<?php echo esc_attr($value['id']); ?>_height"
                         id="<?php echo esc_attr($value['id']); ?>_height" type="text" size="3"
-                        value="<?php if ($size = get_option($value['id'] . '_height')) echo stripslashes($size); else echo $value['std']; ?>"/>
+                        value="<?php if ($size = geodir_get_option($value['id'] . '_height')) echo stripslashes($size); else echo $value['std']; ?>"/>
 
                     <label><?php _e('Hard Crop', 'geodirectory'); ?> <input
                             name="<?php echo esc_attr($value['id']); ?>_crop"
                             id="<?php echo esc_attr($value['id']); ?>_crop"
-                            type="checkbox" <?php if (get_option($value['id'] . '_crop') != '') checked(get_option($value['id'] . '_crop'), 1); else checked(1); ?> /></label>
+                            type="checkbox" <?php if (geodir_get_option($value['id'] . '_crop') != '') checked(geodir_get_option($value['id'] . '_crop'), 1); else checked(1); ?> /></label>
 
                     <span class="description"><?php echo $value['desc'] ?></span></td>
                 </tr><?php
                 break;
             case 'select':
-                $option_value = get_option($value['id']);
+                $option_value = geodir_get_option($value['id']);
                 $option_value = !empty($option_value) ? stripslashes_deep($option_value) : $option_value;
                 ?>
                 <tr valign="top">
@@ -1155,7 +1109,7 @@ function geodir_admin_fields($options)
                 break;
 
             case 'multiselect':
-                $option_values = get_option($value['id']);
+                $option_values = geodir_get_option($value['id']);
                 if ($option_values === '' && !empty($value['std']) && is_array($value['std'])) {
                    $option_values = $value['std'];
                 }
@@ -1196,12 +1150,12 @@ function geodir_admin_fields($options)
                     <input type="file" name="<?php echo esc_attr($value['id']); ?>"
                            id="<?php echo esc_attr($value['id']); ?>" style="<?php echo esc_attr($value['css']); ?>"
                            class="<?php if (isset($value['class'])) echo $value['class']; ?>"/>
-                    <?php if (get_option($value['id'])) { ?>
+                    <?php if (geodir_get_option($value['id'])) { ?>
                         <input type="hidden" name="<?php echo esc_attr($value['id']); ?>_remove"
                                id="<?php echo esc_attr($value['id']); ?>_remove" value="0">
                         <span class="description"> <a
-                                href="<?php echo get_option($value['id']); ?>"
-                                target="_blank"><?php echo get_option($value['id']); ?></a> <i
+                                href="<?php echo geodir_get_option($value['id']); ?>"
+                                target="_blank"><?php echo geodir_get_option($value['id']); ?></a> <i
                                 title="<?php _e('remove file (set to empty)', 'geodirectory'); ?>"
                                 onclick="jQuery('#<?php echo esc_attr($value['id']); ?>_remove').val('1'); jQuery( this ).parent().text('<?php _e('save to remove file', 'geodirectory'); ?>');"
                                 class="fa fa-times gd-remove-file"></i></span>
@@ -1275,7 +1229,7 @@ function geodir_admin_fields($options)
                                 'zh-CN' => __('CHINESE (SIMPLIFIED)', 'geodirectory'),
                                 'zh-TW' => __('CHINESE (TRADITIONAL)', 'geodirectory'),
                             );
-                            $geodir_default_map_language = get_option('geodir_default_map_language');
+                            $geodir_default_map_language = geodir_get_option('geodir_default_map_language');
                             if (empty($geodir_default_map_language))
                                 $geodir_default_map_language = 'en';
                             foreach ($arr_map_langages as $language_key => $language_txt) {
@@ -1301,7 +1255,7 @@ function geodir_admin_fields($options)
                         <select name="geodir_default_map_search_pt" style="width:60%">
                             <?php
                             $post_types = geodir_get_posttypes('array');
-                            $geodir_default_map_search_pt = get_option('geodir_default_map_search_pt');
+                            $geodir_default_map_search_pt = geodir_get_option('geodir_default_map_search_pt');
                             if (empty($geodir_default_map_search_pt))
                                 $geodir_default_map_search_pt = 'gd_place';
                             if (is_array($post_types)) {
@@ -1335,9 +1289,9 @@ function geodir_admin_fields($options)
                         global $post_cat, $cat_display;
                         $post_types = geodir_get_posttypes('object');
                         $cat_display = 'checkbox';
-                        $gd_post_types = get_option('geodir_exclude_post_type_on_map');
-                        $gd_cats = get_option('geodir_exclude_cat_on_map');
-                        $gd_cats_upgrade = (int)get_option('geodir_exclude_cat_on_map_upgrade');
+                        $gd_post_types = geodir_get_option('geodir_exclude_post_type_on_map');
+                        $gd_cats = geodir_get_option('geodir_exclude_cat_on_map');
+                        $gd_cats_upgrade = (int)geodir_get_option('geodir_exclude_cat_on_map_upgrade');
                         $count = 1;
                         ?>
                         <table width="70%" class="widefat">
@@ -1397,7 +1351,7 @@ function geodir_admin_fields($options)
                     <legend class="screen-reader-text"><span><?php echo $value['name'] ?></span></legend>
                     <label for="<?php echo $value['id'] ?>">
                         <input name="<?php echo esc_attr($value['id']); ?>" id="<?php echo esc_attr($value['id']); ?>"
-                               type="checkbox" value="1" <?php checked(get_option($value['id']), true); ?> />
+                               type="checkbox" value="1" <?php checked(geodir_get_option($value['id']), true); ?> />
                         <?php echo $value['desc'] ?></label><br>
                 </fieldset>
                 <?php
@@ -1427,9 +1381,9 @@ function geodir_admin_fields($options)
                     <label for="<?php echo $value['id'];?>">
                         <input name="<?php echo esc_attr($value['id']); ?>"
                                id="<?php echo esc_attr($value['id'] . $value['value']); ?>" type="radio"
-                               value="<?php echo $value['value'] ?>" <?php if (get_option($value['id']) == $value['value']) {
+                               value="<?php echo $value['value'] ?>" <?php if (geodir_get_option($value['id']) == $value['value']) {
                             echo 'checked="checked"';
-                        }elseif(get_option($value['id'])=='' && $value['std']==$value['value']){echo 'checked="checked"';} ?> />
+                        }elseif(geodir_get_option($value['id'])=='' && $value['std']==$value['value']){echo 'checked="checked"';} ?> />
                         <?php echo $value['desc']; ?></label><br>
                 </fieldset>
                 <?php
@@ -1452,7 +1406,7 @@ function geodir_admin_fields($options)
                         <?php if (isset($value['args'])) echo $value['args'] . ' '; ?>name="<?php echo esc_attr($value['id']); ?>"
                         id="<?php echo esc_attr($value['id']); ?>"
                         <?php if(isset($value['placeholder'])){?>placeholder="<?php echo esc_attr($value['placeholder']); ?>"<?php }?>
-                        style="<?php echo esc_attr($value['css']); ?>"><?php if (get_option($value['id'])) echo esc_textarea(stripslashes(get_option($value['id']))); else echo esc_textarea($value['std']); ?></textarea><span
+                        style="<?php echo esc_attr($value['css']); ?>"><?php if (geodir_get_option($value['id'])) echo esc_textarea(stripslashes(geodir_get_option($value['id']))); else echo esc_textarea($value['std']); ?></textarea><span
                         class="description"><?php echo $value['desc'] ?></span>
 
                 </td>
@@ -1464,8 +1418,8 @@ function geodir_admin_fields($options)
                 <tr valign="top">
                 <th scope="row" class="titledesc"><?php echo $value['name'] ?></th>
                 <td class="forminp"><?php
-                    if (get_option($value['id']))
-                        $content = stripslashes(get_option($value['id']));
+                    if (geodir_get_option($value['id']))
+                        $content = stripslashes(geodir_get_option($value['id']));
                     else
                         $content = $value['std'];
 
@@ -1496,7 +1450,7 @@ function geodir_admin_fields($options)
 					}
 				}
 				//
-				$page_setting = (int)get_option($value['id']);
+				$page_setting = (int)geodir_get_option($value['id']);
 
                 $args = array('name' => $value['id'],
                     'id' => $value['id'],
@@ -1522,7 +1476,7 @@ function geodir_admin_fields($options)
 				}
                 break;
             case 'single_select_country' :
-                $country_setting = (string)get_option($value['id']);
+                $country_setting = (string)geodir_get_option($value['id']);
                 if (strstr($country_setting, ':')) :
                     $country = current(explode(':', $country_setting));
                     $state = end(explode(':', $country_setting));
@@ -1545,7 +1499,7 @@ function geodir_admin_fields($options)
             case 'multi_select_countries' :
                 $countries = $geodirectory->countries->countries;
                 asort($countries);
-                $selections = (array)get_option($value['id']);
+                $selections = (array)geodir_get_option($value['id']);
                 ?>
                 <tr valign="top">
                 <th scope="row" class="titledesc"><?php echo $value['name'] ?></th>
@@ -1567,7 +1521,7 @@ function geodir_admin_fields($options)
                 break;
 
             case 'google_analytics' :
-                $selections = (array)get_option($value['id']);
+                $selections = (array)geodir_get_option($value['id']);
                     ?>
                     <tr valign="top">
                         <th scope="row" class="titledesc"><?php echo $value['name'] ?></th>
@@ -1581,14 +1535,14 @@ function geodir_admin_fields($options)
                             $state = "&state=123";//any string
                             $redirect_uri = "&redirect_uri=" . admin_url('admin-ajax.php') . "?action=geodir_ga_callback";
                             $response_type = "&response_type=code";
-                            $client_id = "&client_id=".get_option('geodir_ga_client_id');
+                            $client_id = "&client_id=".geodir_get_option('geodir_ga_client_id');
                             $access_type = "&access_type=offline";
                             $approval_prompt = "&approval_prompt=force";
 
                             $auth_url = $oAuthURL . $scope . $state . $redirect_uri . $response_type . $client_id . $access_type . $approval_prompt;
 
 
-                            if (get_option('geodir_ga_auth_token')) {
+                            if (geodir_get_option('geodir_ga_auth_token')) {
                                 ?>
                                 <span class="button-primary"
                                       onclick="gd_GA_Deauthorize('<?php echo wp_create_nonce('gd_ga_deauthorize');?>');"><?php _e('Deauthorize', 'geodirectory'); ?></span>
@@ -1919,7 +1873,7 @@ add_action('wp_ajax_get_gd_theme_compat_callback', 'get_gd_theme_compat_callback
 function get_gd_theme_compat_callback()
 {
     global $wpdb;
-    $themes = get_option('gd_theme_compats');
+    $themes = geodir_get_option('gd_theme_compats');
 
     if (isset($_POST['theme']) && isset($themes[$_POST['theme']]) && !empty($themes[$_POST['theme']])) {
         if (isset($_POST['export'])) {
@@ -1945,13 +1899,13 @@ add_action('wp_ajax_get_gd_theme_compat_import_callback', 'get_gd_theme_compat_i
 function get_gd_theme_compat_import_callback()
 {
     global $wpdb;
-    $themes = get_option('gd_theme_compats');
+    $themes = geodir_get_option('gd_theme_compats');
     if (isset($_POST['theme']) && !empty($_POST['theme'])) {
         $json = json_decode(stripslashes($_POST['theme']), true);
         if (!empty($json) && is_array($json)) {
             $key = sanitize_text_field(key($json));
             $themes[$key] = $json[$key];
-            update_option('gd_theme_compats', $themes);
+            geodir_update_option('gd_theme_compats', $themes);
             echo $key;
             die();
         }
@@ -1979,29 +1933,29 @@ function gd_set_theme_compat()
         $theme_name = str_replace(" ", "_", $theme->get('Name'));
     }
 
-    $theme_compats = get_option('gd_theme_compats');
-    $current_compat = get_option('gd_theme_compat');
+    $theme_compats = geodir_get_option('gd_theme_compats');
+    $current_compat = geodir_get_option('gd_theme_compat');
     $current_compat = str_replace("_custom", "", $current_compat);
  
-    if ($current_compat == $theme_name && strpos(get_option('gd_theme_compat'), "_custom") !== false) {
+    if ($current_compat == $theme_name && strpos(geodir_get_option('gd_theme_compat'), "_custom") !== false) {
         return;
     }// if already running correct compat then bail
 
     if (isset($theme_compats[$theme_name])) {// if there is a compat avail then set it
-        update_option('gd_theme_compat', $theme_name);
-        update_option('theme_compatibility_setting', $theme_compats[$theme_name]);
+        geodir_update_option('gd_theme_compat', $theme_name);
+        geodir_update_option('theme_compatibility_setting', $theme_compats[$theme_name]);
 
         // if there are default options to set then set them
         if (isset($theme_compats[$theme_name]['geodir_theme_compat_default_options']) && !empty($theme_compats[$theme_name]['geodir_theme_compat_default_options'])) {
 
             foreach ($theme_compats[$theme_name]['geodir_theme_compat_default_options'] as $key => $val) {
-                update_option($key, $val);
+                geodir_update_option($key, $val);
             }
         }
 
     } else {
-        update_option('gd_theme_compat', '');
-        update_option('theme_compatibility_setting', '');
+        geodir_update_option('gd_theme_compat', '');
+        geodir_update_option('theme_compatibility_setting', '');
     }
 
 
@@ -2015,10 +1969,9 @@ add_action('wp_loaded', 'gd_check_avada_compat');
  * @since 1.0.0
  * @package GeoDirectory
  */
-function gd_check_avada_compat()
-{
-    if (function_exists('avada_load_textdomain') && !get_option('avada_nag')) {
-        add_action('admin_notices', 'gd_avada_compat_warning');
+function gd_check_avada_compat() {
+    if ( function_exists( 'avada_load_textdomain' ) && !geodir_get_option( 'avada_nag' ) ) {
+        add_action( 'admin_notices', 'gd_avada_compat_warning' );
     }
 }
 
@@ -2113,9 +2066,8 @@ function gd_avada_compat_warning()
  * @since 1.0.0
  * @package GeoDirectory
  */
-function geodir_avada_remove_notification()
-{
-    update_option('avada_nag', TRUE);
+function geodir_avada_remove_notification() {
+    geodir_update_option( 'avada_nag', TRUE );
 
     // Always die in functions echoing ajax content
     die();
@@ -3413,7 +3365,7 @@ function geodir_ajax_import_export() {
     }
     
     $location_manager = function_exists('geodir_location_plugin_activated') ? true : false; // Check location manager installed & active.
-    $neighbourhood_active = $location_manager && get_option('location_neighbourhoods') ? true : false;
+    $neighbourhood_active = $location_manager && geodir_get_option('location_neighbourhoods') ? true : false;
 
     switch ( $task ) {
         case 'export_posts': {
@@ -4062,7 +4014,7 @@ function geodir_ajax_import_export() {
 //                remove_all_actions('publish_future_post');
 
                 if (!empty($file)) {
-                    $is_claim_active = is_plugin_active( 'geodir_claim_listing/geodir_claim_listing.php' ) && get_option('geodir_claim_enable') === 'yes' ? true : false;
+                    $is_claim_active = is_plugin_active( 'geodir_claim_listing/geodir_claim_listing.php' ) && geodir_get_option('geodir_claim_enable') === 'yes' ? true : false;
                     $wp_post_statuses = get_post_statuses(); // All of the WordPress supported post statuses.
                     $default_status = 'publish';
                     $current_date = date_i18n( 'Y-m-d', time() );
@@ -5113,8 +5065,8 @@ function geodir_imex_get_posts( $post_type, $per_page = 0, $page_no = 0 ) {
 		$is_payment_plugin = is_plugin_active( 'geodir_payment_manager/geodir_payment_manager.php' );
 		$location_manager = function_exists('geodir_location_plugin_activated') ? true : false; // Check location manager installed & active.
 		$location_allowed = function_exists( 'geodir_cpt_no_location' ) && geodir_cpt_no_location( $post_type ) ? false : true;
-		$neighbourhood_active = $location_manager && $location_allowed && get_option('location_neighbourhoods') ? true : false;
-		$is_claim_active = is_plugin_active( 'geodir_claim_listing/geodir_claim_listing.php' ) && get_option('geodir_claim_enable') === 'yes' ? true : false;
+		$neighbourhood_active = $location_manager && $location_allowed && geodir_get_option('location_neighbourhoods') ? true : false;
+		$is_claim_active = is_plugin_active( 'geodir_claim_listing/geodir_claim_listing.php' ) && geodir_get_option('geodir_claim_enable') === 'yes' ? true : false;
 		$is_events_active = function_exists('geodir_event_plugin_activated') ? true : false;
 		$is_custom_posts_active = function_exists('geodir_custom_post_type_plugin_activated') ? true : false;
 		
@@ -6108,7 +6060,7 @@ function geodir_imex_process_event_data($gd_post) {
 function geodir_create_page($slug, $option, $page_title = '', $page_content = '', $post_parent = 0, $status = 'publish') {
     global $wpdb, $current_user;
 
-    $option_value = get_option($option);
+    $option_value = geodir_get_option($option);
 
     if ($option_value > 0) :
         if (get_post($option_value)) :
@@ -6126,7 +6078,7 @@ function geodir_create_page($slug, $option, $page_title = '', $page_content = ''
 
     if ($page_found) :
         // Page exists
-        if (!$option_value) update_option($option, $page_found);
+        if (!$option_value) geodir_update_option($option, $page_found);
         return;
     endif;
 
@@ -6527,7 +6479,7 @@ function geodir_ga_activation_url() {
 
 function geodir_gd_accounts(){
     $accounts = array();
-    $useAuth = ( get_option( 'geodir_ga_auth_code' ) == '' ? false : true );
+    $useAuth = ( geodir_get_option( 'geodir_ga_auth_code' ) == '' ? false : true );
     if($useAuth){
         try {
             $accounts = geodir_ga_get_analytics_accounts();
@@ -6537,9 +6489,9 @@ function geodir_gd_accounts(){
         
         if(is_array($accounts)){
             $accounts = array_merge(array(__('Select Account','geodirectory')),$accounts);
-        }elseif(get_option('geodir_ga_account_id')){
+        }elseif(geodir_get_option('geodir_ga_account_id')){
             $accounts = array();
-            $accounts[get_option('geodir_ga_account_id')] = __('Account re-authorization may be required','geodirectory').' ('.get_option('geodir_ga_account_id').')';
+            $accounts[geodir_get_option('geodir_ga_account_id')] = __('Account re-authorization may be required','geodirectory').' ('.geodir_get_option('geodir_ga_account_id').')';
         }
     }
     return $accounts;
@@ -6550,15 +6502,15 @@ function geodir_ga_get_analytics_accounts()
     global $gd_ga_errors;
     $accounts = array();
 
-    if(get_option('geodir_ga_auth_token')===false){update_option('geodir_ga_auth_token','');}
+    if(geodir_get_option('geodir_ga_auth_token')===false){geodir_update_option('geodir_ga_auth_token','');}
 
 
-    if(get_option('geodir_gd_uids') && !isset($_POST['geodir_ga_auth_code'])){
-      return get_option('geodir_gd_uids');
+    if(geodir_get_option('geodir_gd_uids') && !isset($_POST['geodir_ga_auth_code'])){
+      return geodir_get_option('geodir_gd_uids');
     }
 
     # Create a new Gdata call
-    if ( trim(get_option('geodir_ga_auth_code')) != '' )
+    if ( trim(geodir_get_option('geodir_ga_auth_code')) != '' )
         $stats = new GDGoogleAnalyticsStats();
     else
         return false;
@@ -6580,7 +6532,7 @@ function geodir_ga_get_analytics_accounts()
 
     # Return the account array if there are accounts
     if ( count($accounts) > 0 ){
-        update_option('geodir_gd_uids',$accounts);
+        geodir_update_option('geodir_gd_uids',$accounts);
         return $accounts;
     }
     else
@@ -6595,9 +6547,9 @@ function geodir_ga_deauthorize(){
         die( 'Security check' );
 
     } else {
-        update_option('geodir_ga_auth_token','');
-        update_option('geodir_ga_auth_code','');
-        update_option('geodir_gd_uids','');
+        geodir_update_option('geodir_ga_auth_token','');
+        geodir_update_option('geodir_ga_auth_code','');
+        geodir_update_option('geodir_gd_uids','');
 
 
         echo admin_url('?page=geodirectory&active_tab=google_analytic_settings');
@@ -6620,9 +6572,9 @@ function geodir_listing_image_size_arr(){
 
     foreach ( get_intermediate_image_sizes() as $_size ) {
         if ( in_array( $_size, array('thumbnail', 'medium', 'medium_large', 'large') ) ) {
-            $sizes[ $_size ]['width']  = get_option( "{$_size}_size_w" );
-            $sizes[ $_size ]['height'] = get_option( "{$_size}_size_h" );
-            $sizes[ $_size ]['crop']   = (bool) get_option( "{$_size}_crop" );
+            $sizes[ $_size ]['width']  = geodir_get_option( "{$_size}_size_w" );
+            $sizes[ $_size ]['height'] = geodir_get_option( "{$_size}_size_h" );
+            $sizes[ $_size ]['crop']   = (bool) geodir_get_option( "{$_size}_crop" );
         } elseif ( isset( $_wp_additional_image_sizes[ $_size ] ) ) {
             $sizes[ $_size ] = array(
                 'width'  => $_wp_additional_image_sizes[ $_size ]['width'],

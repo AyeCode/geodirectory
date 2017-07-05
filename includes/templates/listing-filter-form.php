@@ -28,7 +28,7 @@ if (function_exists('geodir_location_geo_home_link')) {
     add_filter('home_url', 'geodir_location_geo_home_link', 100000, 2);
 }
 
-$new_style = get_option('geodir_show_search_old_search_from') ? false : true;
+$new_style = geodir_get_option('geodir_show_search_old_search_from') ? false : true;
 $form_class = 'geodir-listing-search';
 
 if($new_style){

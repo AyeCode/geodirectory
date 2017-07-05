@@ -140,14 +140,12 @@ function geodir_kleo_custom_the_title()
     $gd_page = '';
     if(geodir_is_page('pt')){
         $gd_page = 'pt';
-        $output = (get_option('geodir_page_title_pt')) ? get_option('geodir_page_title_pt') : '';
+        $output = geodir_get_option( 'geodir_page_title_pt', '' );
     }
     elseif(geodir_is_page('listing')){
         $gd_page = 'listing';
-        $output = (get_option('geodir_page_title_cat-listing')) ? get_option('geodir_page_title_cat-listing') : '';
+        $output = geodir_get_option( 'geodir_page_title_cat-listing', '' );
     }
-
-
 
     /**
      * Filter page meta title to replace variables.

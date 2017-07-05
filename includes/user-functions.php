@@ -11,15 +11,14 @@
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @return array User listing count for each post type.
  */
-function geodir_user_favourite_listing_count($user_id=false)
-{
+function geodir_user_favourite_listing_count( $user_id = false ) {
     global $wpdb, $plugin_prefix, $current_user;
 
     if(!$user_id){$user_id = $current_user->ID;}
     if(!$user_id){return array();}
 
     $user_favorites = get_user_meta($user_id, 'gd_user_favourite_post', true);
-    $all_posts = get_option('geodir_favorite_link_user_dashboard');
+    $all_posts = geodir_get_option('geodir_favorite_link_user_dashboard');
 
     $user_listing = array();
     if (is_array($all_posts) && !empty($all_posts) && is_array($user_favorites) && !empty($user_favorites)) {
@@ -46,9 +45,9 @@ function geodir_user_favourite_listing_count($user_id=false)
  * @package GeoDirectory
  */
 
-function geodir_user_show_favourites($user_id='',$output_type='select'){
+function geodir_user_show_favourites( $user_id = '', $output_type = 'select' ) {
     // My Favourites in Dashboard
-    $show_favorite_link_user_dashboard = get_option('geodir_favorite_link_user_dashboard');
+    $show_favorite_link_user_dashboard = geodir_get_option('geodir_favorite_link_user_dashboard');
     $user_favourite = geodir_user_favourite_listing_count($user_id);
 
     if (!empty($show_favorite_link_user_dashboard) && !empty($user_favourite)) {
@@ -112,11 +111,8 @@ function geodir_user_show_favourites($user_id='',$output_type='select'){
     }
 }
 
-
-
-function geodir_user_show_listings($user_id='',$output_type='select'){
-
-    $show_listing_link_user_dashboard = get_option('geodir_listing_link_user_dashboard');
+function geodir_user_show_listings( $user_id = '',$output_type = 'select') {
+    $show_listing_link_user_dashboard = geodir_get_option( 'geodir_listing_link_user_dashboard' );
     $user_listing = geodir_user_post_listing_count($user_id);
 
     if (!empty($show_listing_link_user_dashboard) && !empty($user_listing)) {

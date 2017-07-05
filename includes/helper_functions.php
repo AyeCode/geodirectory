@@ -14,7 +14,7 @@
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_add_listing_page_id(){
-    $gd_page_id = get_option('geodir_add_listing_page');
+    $gd_page_id = geodir_get_option('geodir_add_listing_page');
 
     if (function_exists('icl_object_id')) {
         $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
@@ -31,7 +31,7 @@ function geodir_add_listing_page_id(){
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_preview_page_id(){
-    $gd_page_id = get_option('geodir_preview_page');
+    $gd_page_id = geodir_get_option('geodir_preview_page');
 
     if (function_exists('icl_object_id')) {
         $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
@@ -48,7 +48,7 @@ function geodir_preview_page_id(){
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_success_page_id(){
-    $gd_page_id = get_option('geodir_success_page');
+    $gd_page_id = geodir_get_option('geodir_success_page');
 
     if (function_exists('icl_object_id')) {
         $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
@@ -65,7 +65,7 @@ function geodir_success_page_id(){
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_location_page_id(){
-    $gd_page_id = get_option('geodir_location_page');
+    $gd_page_id = geodir_get_option('geodir_location_page');
 
     if (function_exists('icl_object_id')) {
         $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
@@ -82,7 +82,7 @@ function geodir_location_page_id(){
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_home_page_id(){
-    $gd_page_id = get_option('geodir_home_page');
+    $gd_page_id = geodir_get_option('geodir_home_page');
 
     if (function_exists('icl_object_id')) {
         $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
@@ -99,7 +99,7 @@ function geodir_home_page_id(){
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_info_page_id(){
-    $gd_page_id = get_option('geodir_info_page');
+    $gd_page_id = geodir_get_option('geodir_info_page');
 
     if (function_exists('icl_object_id')) {
         $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
@@ -116,7 +116,7 @@ function geodir_info_page_id(){
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_login_page_id(){
-    $gd_page_id = get_option('geodir_login_page');
+    $gd_page_id = geodir_get_option('geodir_login_page');
 
     if (function_exists('icl_object_id')) {
         $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
@@ -134,7 +134,7 @@ function geodir_login_page_id(){
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_login_url($args=array()){
-    $gd_page_id = get_option('geodir_login_page');
+    $gd_page_id = geodir_get_option('geodir_login_page');
 
     if (function_exists('icl_object_id')) {
         $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
@@ -190,7 +190,7 @@ function geodir_login_url($args=array()){
  * @return string Info page url.
  */
 function geodir_info_url($args=array()){
-    $gd_page_id = get_option('geodir_info_page');
+    $gd_page_id = geodir_get_option('geodir_info_page');
 
     if (function_exists('icl_object_id')) {
         $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
@@ -960,104 +960,97 @@ function geodir_remove_last_word($text) {
     return '';
 }
 
-function geodir_tool_restore_cpt_from_taxonomies(){
+function geodir_tool_restore_cpt_from_taxonomies() {
+    $cpts = geodir_get_option('geodir_post_types');
+    if ( !empty( $cpts ) ) {
+        return;
+    }
 
-	$cpts = get_option('geodir_post_types');
+    $taxonomies = geodir_get_option( 'geodir_taxonomies' );
+    if ( !empty( $taxonomies ) ) {
+        return;
+    }
 
-	if(!empty($cpts)){return;}
+    $cpts = array();
+    foreach( $taxonomies as $key => $val ) {
+        if ( strpos( $val['listing_slug'], '/' ) === false ) {
+            $cpts[ $val['object_type'] ] = array(
+                'cpt' => $val['object_type'],
+                'slug' => $val['listing_slug']
+            );
+        }
+    }
 
-	$taxonomies = get_option('geodir_taxonomies');
-
-	if(empty($taxonomies)){return;}
-
-	$cpts = array();
-
-	foreach($taxonomies as $key => $val){
-
-		if(strpos($val['listing_slug'], '/') === false) {
-			$cpts[$val['object_type']] = array('cpt'=>$val['object_type'],'slug'=>$val['listing_slug']);
-		}
-
-	}
-
-	if(empty($cpts)){return;}
-
-
-	$cpts_restore = $cpts;
-
-	foreach($cpts as $cpt){
-
-
-		$is_custom = $cpt['cpt']=='gd_place' ? 0 : 1;
-
-		$cpts_restore[$cpt['cpt']] = array (
-				'labels' =>
-					array (
-						'name' => $cpt['slug'],
-						'singular_name' => $cpt['slug'],
-						'add_new' => 'Add New',
-						'add_new_item' => 'Add New '.$cpt['slug'],
-						'edit_item' => 'Edit '.$cpt['slug'],
-						'new_item' => 'New '.$cpt['slug'],
-						'view_item' => 'View '.$cpt['slug'],
-						'search_items' => 'Search '.$cpt['slug'],
-						'not_found' => 'No '.$cpt['slug'].' Found',
-						'not_found_in_trash' => 'No '.$cpt['slug'].' Found In Trash',
-						'label_post_profile' => '',
-						'label_post_info' => '',
-						'label_post_images' => '',
-						'label_post_map' => '',
-						'label_reviews' => '',
-						'label_related_listing' => '',
-					),
-				'can_export' => true,
-				'capability_type' => 'post',
-				'description' => '',
-				'has_archive' => $cpt['slug'],
-				'hierarchical' => false,
-				'map_meta_cap' => true,
-				'menu_icon' => '',
-				'public' => true,
-				'query_var' => true,
-				'rewrite' =>
-					array (
-						'slug' => $cpt['slug'],
-						'with_front' => false,
-						'hierarchical' => true,
-						'feeds' => true,
-					),
-				'supports' =>
-					array (
-						0 => 'title',
-						1 => 'editor',
-						2 => 'author',
-						3 => 'thumbnail',
-						4 => 'excerpt',
-						5 => 'custom-fields',
-						6 => 'comments',
-					),
-				'taxonomies' =>
-					array (
-						0 => $cpt['cpt'].'category',
-						1 => $cpt['cpt'].'_tags',
-					),
-				'is_custom' => $is_custom,
-				'listing_order' => '1',
-				'seo' =>
-					array (
-						'meta_keyword' => '',
-						'meta_description' => '',
-					),
-				'show_in_nav_menus' => 1,
-				'link_business' => 0,
-				'linkable_to' => '',
-				'linkable_from' => '',
-			);
-	}
-
-
-	update_option('geodir_post_types',$cpts_restore);
-
+    if ( !empty( $cpts ) ) {
+        return;
+    }
+    
+    $cpts_restore = $cpts;
+    
+    foreach ( $cpts as $cpt ) {
+        $is_custom = $cpt['cpt'] == 'gd_place' ? 0 : 1;
+        
+        $cpts_restore[ $cpt['cpt'] ] = array(
+            'labels' => array (
+                'name' => $cpt['slug'],
+                'singular_name' => $cpt['slug'],
+                'add_new' => 'Add New',
+                'add_new_item' => 'Add New ' . $cpt['slug'],
+                'edit_item' => 'Edit ' . $cpt['slug'],
+                'new_item' => 'New ' . $cpt['slug'],
+                'view_item' => 'View ' . $cpt['slug'],
+                'search_items' => 'Search ' . $cpt['slug'],
+                'not_found' => 'No ' . $cpt['slug'] . ' Found',
+                'not_found_in_trash' => 'No ' . $cpt['slug'] . ' Found In Trash',
+                'label_post_profile' => '',
+                'label_post_info' => '',
+                'label_post_images' => '',
+                'label_post_map' => '',
+                'label_reviews' => '',
+                'label_related_listing' => '',
+            ),
+            'can_export' => true,
+            'capability_type' => 'post',
+            'description' => '',
+            'has_archive' => $cpt['slug'],
+            'hierarchical' => false,
+            'map_meta_cap' => true,
+            'menu_icon' => '',
+            'public' => true,
+            'query_var' => true,
+            'rewrite' => array (
+                'slug' => $cpt['slug'],
+                'with_front' => false,
+                'hierarchical' => true,
+                'feeds' => true,
+            ),
+            'supports' => array (
+                0 => 'title',
+                1 => 'editor',
+                2 => 'author',
+                3 => 'thumbnail',
+                4 => 'excerpt',
+                5 => 'custom-fields',
+                6 => 'comments',
+            ),
+            'taxonomies' => array (
+                0 => $cpt['cpt'] . 'category',
+                1 => $cpt['cpt'] . '_tags',
+            ),
+            'is_custom' => $is_custom,
+            'listing_order' => '1',
+            'seo' => array (
+                'meta_keyword' => '',
+                'meta_description' => '',
+            ),
+            'show_in_nav_menus' => 1,
+            'link_business' => 0,
+            'linkable_to' => '',
+            'linkable_from' => '',
+        );
+    }
+    
+    geodir_update_option( 'geodir_post_types',$cpts_restore );
 }
 
 /**
@@ -1234,46 +1227,4 @@ function geodir_total_listings_count($post_type = false)
 
 function geodir_get_diagnose_step_max_items() {
 	return 5;
-}
-
-/*
- * A function to log GD errors no matter the type given.
- *
- * This function will log GD errors if the WP_DEBUG constant is true, it can be filtered.
- *
- * @since 1.5.7
- * @param mixed $log The thing that should be logged.
- * @package GeoDirectory
- */
-function geodir_error_log( $log, $title = '', $file = '', $line = '', $exit = false ) {
-    /*
-     * A filter to override the WP_DEBUG setting for function geodir_error_log().
-     *
-     * @since 1.5.7
-     */
-    $should_log = apply_filters( 'geodir_log_errors', WP_DEBUG );
-
-    if ( $should_log ) {
-        $label = '';
-        if ( $file && $file !== '' ) {
-            $label .= basename( $file ) . ( $line ? '(' . $line . ')' : '' );
-        }
-        
-        if ( $title && $title !== '' ) {
-            $label = $label !== '' ? $label . ' ' : '';
-            $label .= $title . ' ';
-        }
-        
-        $label = $label !== '' ? trim( $label ) . ' : ' : '';
-        
-        if ( is_array( $log ) || is_object( $log ) ) {
-            error_log( $label . print_r( $log, true ) );
-        } else {
-            error_log( $label . $log );
-        }
-        
-        if ( $exit ) {
-            exit;
-        }
-    }
 }

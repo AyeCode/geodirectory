@@ -477,7 +477,7 @@ if($dummy_post_index==1){
     }
 
     // update the type currently installed
-    update_option($post_type.'_dummy_data_type','property_sale');
+    geodir_update_option($post_type.'_dummy_data_type','property_sale');
 
     // add the advanced search fields
     if (defined('GEODIRADVANCESEARCH_VERSION')){
@@ -959,7 +959,7 @@ foreach ($post_info as $post_info) {
     else
         $dummy_post_longitude = geodir_random_float(geodir_random_float($city_bound_lng2, $city_bound_lng1), geodir_random_float($city_bound_lng1, $city_bound_lng2));
 
-    $load_map = get_option('geodir_load_map');
+    $load_map = geodir_get_option('geodir_load_map');
     
     if ($load_map == 'osm') {
         $post_address = geodir_get_osm_address_by_lat_lan($dummy_post_latitude, $dummy_post_longitude);

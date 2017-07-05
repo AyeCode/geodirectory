@@ -204,8 +204,8 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = 
 {
     global $cat_count, $geodir_cat_icons, $gd_session;
 
-    $exclude_categories = get_option('geodir_exclude_cat_on_map');
-    $exclude_categories_new = get_option('geodir_exclude_cat_on_map_upgrade');
+    $exclude_categories = geodir_get_option('geodir_exclude_cat_on_map');
+    $exclude_categories_new = geodir_get_option('geodir_exclude_cat_on_map_upgrade');
 
     // check if exclude categories saved before fix of categories identical names
     if ($exclude_categories_new) {
@@ -244,7 +244,7 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = 
 
         $geodir_cat_icons = geodir_get_term_icon();
 
-        $geodir_default_map_search_pt = (get_option('geodir_default_map_search_pt')) ? get_option('geodir_default_map_search_pt') :  'gd_place';
+        $geodir_default_map_search_pt = (geodir_get_option('geodir_default_map_search_pt')) ? geodir_get_option('geodir_default_map_search_pt') :  'gd_place';
         if ($is_home_map && $homemap_catlist_ptype = $gd_session->get('homemap_catlist_ptype')) {
             $geodir_default_map_search_pt = $homemap_catlist_ptype;
         }
@@ -258,7 +258,7 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = 
                 $checked = 'checked="checked"';
 
                 // Untick the category by default on home map
-                if ($is_home_map && $geodir_home_map_untick = get_option('geodir_home_map_untick')) {
+                if ($is_home_map && $geodir_home_map_untick = geodir_get_option('geodir_home_map_untick')) {
                     if (geodir_wpml_is_taxonomy_translated($post_type . 'category')) { // if WPML
                         global $sitepress;
                         $default_lang = $sitepress->get_default_language();
@@ -306,7 +306,7 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = 
  * @return string The map API provider name.
  */
 function geodir_map_name() {
-    $geodir_map_name = get_option('geodir_load_map', 'google');
+    $geodir_map_name = geodir_get_option('geodir_load_map', 'google');
     
     if (!in_array($geodir_map_name, array('none', 'auto', 'google', 'osm'))) {
         $geodir_map_name = 'auto';

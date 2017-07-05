@@ -20,7 +20,7 @@ if (isset($_GET['redirect_to']) && $_GET['redirect_to'] != '') {
 ?>
 <div id="sign_up">
     <div class="login_content">
-        <?php echo stripslashes(get_option('ptthemes_reg_page_content')); ?>
+        <?php echo stripslashes(geodir_get_option('ptthemes_reg_page_content')); ?>
     </div>
     <div class="registration_form_box">
         <h4>
@@ -71,16 +71,15 @@ if (isset($_GET['redirect_to']) && $_GET['redirect_to'] != '') {
                 }
                 echo esc_attr(stripslashes($user_email)); ?>" size="25"/>
 
-                <?php if (!get_option('geodir_allow_cpass')) { ?>
+                <?php if (!geodir_get_option('geodir_allow_cpass')) { ?>
 				<div id="reg_passmail">
                     <?php echo REGISTRATION_MESSAGE; ?>
                 </div>
 				<?php } ?>
                 <span id="user_emailInfo"></span>
             </div>
-
-            <?php if (get_option('geodir_allow_cpass')) { ?>
-
+            <?php //if ( geodir_get_option( 'geodir_allow_cpass' ) ) { //remove c ?>
+            <?php if (geodir_get_option('geodir_allow_cpass')) { ?>
                 <div class="row_spacer_registration clearfix">
                     <div class="form_row clearfix">
                         <input placeholder='<?php echo PASSWORD_TEXT; ?>' type="password" name="user_pass"

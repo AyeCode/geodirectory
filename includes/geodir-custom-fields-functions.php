@@ -1812,7 +1812,7 @@ if (!function_exists('geodir_max_upload_size')) {
      */
     function geodir_max_upload_size()
     {
-        $max_filesize = (float)get_option('geodir_upload_max_filesize', 2);
+        $max_filesize = (float)geodir_get_option('geodir_upload_max_filesize', 2);
 
         if ($max_filesize > 0 && $max_filesize < 1) {
             $max_filesize = (int)($max_filesize * 1024) . 'kb';

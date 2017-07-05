@@ -52,7 +52,7 @@ if (get_option('geodirectory_db_version') != GEODIRECTORY_VERSION) {
 
     add_action('init', 'gd_fix_cpt_rewrite_slug', 11);// this needs to be kept for a few versions
 
-    update_option('geodirectory' . '_db_version', GEODIRECTORY_VERSION);
+    update_option('geodirectory_db_version', GEODIRECTORY_VERSION);
 
 }
 
@@ -110,13 +110,12 @@ function geodir_upgrade_150(){
  * @since 1.4.8
  * @package GeoDirectory
  */
-function geodir_upgrade_148(){
+function geodir_upgrade_148() {
     /*
      * Blank the users google password if present as we now use oAuth 2.0
      */
-    update_option('geodir_ga_pass','');
-    update_option('geodir_ga_user','');
-
+    geodir_update_option( 'geodir_ga_pass', '' );
+    geodir_update_option( 'geodir_ga_user', '' );
 }
 
 
@@ -274,59 +273,59 @@ function geodir_fix_review_overall_rating()
 }
 
 
-function gd_convert_custom_field_display(){
+function gd_convert_custom_field_display() {
     global $wpdb;
 
-    $field_info = $wpdb->get_results("select * from " . GEODIR_CUSTOM_FIELDS_TABLE);
-
-    $has_run = get_option('gd_convert_custom_field_display');
-    if($has_run){return;}
+    $field_info = $wpdb->get_results( "SELECT * FROM " . GEODIR_CUSTOM_FIELDS_TABLE );
+    
+    $has_run = geodir_get_option( 'gd_convert_custom_field_display' );
+    if ( $has_run ) {
+        return;
+    }
 
     // set the field_type_key for standard fields
-    $wpdb->query("UPDATE ".GEODIR_CUSTOM_FIELDS_TABLE." SET field_type_key = field_type");
+    $wpdb->query( "UPDATE " . GEODIR_CUSTOM_FIELDS_TABLE . " SET field_type_key = field_type" );
 
-
-    if(is_array( $field_info)){
-
-        foreach( $field_info as $cf){
-
+    if ( is_array( $field_info ) ) {
+        foreach( $field_info as $cf ) {
             $id = $cf->id;
 
-            if(!property_exists($cf,'show_in') || !$id){return;}
+            if ( !property_exists( $cf, 'show_in' ) || !$id ) {
+                return;
+            }
 
             $show_in_arr = array();
 
-            if($cf->is_default){
+            if ( $cf->is_default ) {
                 $show_in_arr[] = "[detail]";
             }
 
-            if($cf->show_on_detail){
+            if ( $cf->show_on_detail ) {
                 $show_in_arr[] = "[moreinfo]";
             }
 
-            if($cf->show_on_listing){
+            if ( $cf->show_on_listing ) {
                 $show_in_arr[] = "[listing]";
             }
 
-            if($cf->show_as_tab || $cf->htmlvar_name=='geodir_video' || $cf->htmlvar_name=='geodir_special_offers'){
+            if ( $cf->show_as_tab || $cf->htmlvar_name=='geodir_video' || $cf->htmlvar_name=='geodir_special_offers' ) {
                 $show_in_arr[] = "[owntab]";
             }
 
-            if($cf->htmlvar_name=='post' || $cf->htmlvar_name=='geodir_contact' || $cf->htmlvar_name=='geodir_timing'){
+            if ( $cf->htmlvar_name=='post' || $cf->htmlvar_name=='geodir_contact' || $cf->htmlvar_name=='geodir_timing' ) {
                 $show_in_arr[] = "[mapbubble]";
             }
 
-            if(!empty($show_in_arr )){
-                $show_in_arr = implode(',',$show_in_arr);
-            }else{
+            if ( !empty( $show_in_arr ) ) {
+                $show_in_arr = implode( ',', $show_in_arr );
+            } else {
                 $show_in_arr = '';
             }
-
-            $wpdb->query("UPDATE ".GEODIR_CUSTOM_FIELDS_TABLE." SET show_in='$show_in_arr' WHERE id=$id");
-
+            
+            $wpdb->query( "UPDATE " . GEODIR_CUSTOM_FIELDS_TABLE . " SET show_in='$show_in_arr' WHERE id=$id" );
         }
-
-        update_option('gd_convert_custom_field_display',1);
+        
+        geodir_update_option( 'gd_convert_custom_field_display', 1 );
     }
 }
 
@@ -341,13 +340,11 @@ function gd_convert_custom_field_display(){
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  */
-function gd_install_theme_compat()
-{
+function gd_install_theme_compat() {
     global $wpdb;
-
-    $theme_compat = array();
-    $theme_compat = get_option('gd_theme_compats');
-//GDF
+    
+    $theme_compat = geodir_get_option( 'gd_theme_compats' );
+    // GDF
     $theme_compat['GeoDirectory_Framework'] = array(
         'geodir_wrapper_open_id' => 'geodir_wrapper',
         'geodir_wrapper_open_class' => '',
@@ -383,7 +380,7 @@ function gd_install_theme_compat()
         'geodir_theme_compat_code' => ''
     );
 
-//Directory Theme
+    // Directory Theme
     $theme_compat['Directory_Starter'] = array(
         'geodir_wrapper_open_id' => 'geodir_wrapper',
         'geodir_wrapper_open_class' => '',
@@ -419,13 +416,13 @@ function gd_install_theme_compat()
         'geodir_theme_compat_code' => ''
     );
 
-//Jobby
+    // Jobby
     $theme_compat['Jobby'] = $theme_compat['Directory_Starter'];
 
-//GeoProperty
+    // GeoProperty
     $theme_compat['GeoProperty'] = $theme_compat['Directory_Starter'];
 
-//Avada
+    // Avada
     $theme_compat['Avada'] = array(
         'geodir_wrapper_open_id' => '',
         'geodir_wrapper_open_class' => '',
@@ -461,7 +458,7 @@ function gd_install_theme_compat()
         'geodir_theme_compat_code' => 'Avada'
     );
 
-//Enfold
+    // Enfold
     $theme_compat['Enfold'] = array(
         'geodir_wrapper_open_id' => '',
         'geodir_wrapper_open_class' => '',
@@ -497,7 +494,7 @@ function gd_install_theme_compat()
         'geodir_theme_compat_code' => 'Enfold'
     );
 
-// X
+    // X
     $theme_compat['X'] = array(
         'geodir_wrapper_open_id' => '',
         'geodir_wrapper_open_class' => '',
@@ -533,7 +530,7 @@ function gd_install_theme_compat()
         'geodir_theme_compat_code' => 'X'
     );
 
-// Divi
+    // Divi
     $theme_compat['Divi'] = array(
         'geodir_wrapper_open_id' => 'main-content',
         'geodir_wrapper_open_class' => '',
@@ -569,7 +566,7 @@ function gd_install_theme_compat()
         'geodir_theme_compat_code' => 'Divi'
     );
 
-// Genesis
+    // Genesis
     $theme_compat['Genesis'] = array(
         'geodir_wrapper_open_id' => '',
         'geodir_wrapper_open_class' => 'content-sidebar-wrap',
@@ -606,7 +603,7 @@ function gd_install_theme_compat()
         'geodir_theme_compat_code' => 'Genesis'
     );
 
-// Jupiter
+    // Jupiter
     $theme_compat['Jupiter'] = array(
         'geodir_wrapper_open_id' => '',
         'geodir_wrapper_open_class' => '',
@@ -653,7 +650,7 @@ function gd_install_theme_compat()
         'geodir_theme_compat_code' => 'Jupiter'
     );
 
-// Multi News
+    // Multi News
     $theme_compat['Multi_News'] = array(
         'geodir_wrapper_open_id' => '',
         'geodir_wrapper_open_class' => 'main-container clearfix',
@@ -705,8 +702,7 @@ function gd_install_theme_compat()
     $theme_compat['Kleo'] = array(
         'geodir_theme_compat_code' => 'Kleo'
     );
-
-
+    
     // Twenty Seventeen
     $theme_compat['Twenty_Seventeen'] = array(
         'geodir_wrapper_open_replace' => '<div class="wrap">',
@@ -717,7 +713,7 @@ function gd_install_theme_compat()
         'geodir_theme_compat_code' => 'Twenty_Seventeen'
     );
 
-    // buddyBoss
+    // BuddyBoss
     $theme_compat['Boss.'] = array(
         'geodir_wrapper_open_replace' => '<div class="page-right-sidebar">',
         'geodir_wrapper_content_open_replace' => '<div id="primary" class="site-content">',
@@ -729,8 +725,6 @@ function gd_install_theme_compat()
         'geodir_sidebar_left_close_replace' => '</div>',
         'geodir_theme_compat_css' => stripslashes('.geodir-breadcrumb{padding-top:20px;border-bottom:1px solid #ddd;padding-bottom:0} article.geodir-category-listing{padding: 0 !important;}'),
         'geodir_theme_compat_code' => 'BuddyBoss'
-
-
     );
 
     // Flatsome
@@ -751,16 +745,12 @@ function gd_install_theme_compat()
         'geodir_location_switcher_menu_sub_ul_class_filter' => 'nav-dropdown nav-dropdown-default',
         'geodir_theme_compat_css' => stripslashes('dl.geodir_location_tabs_head dt{margin:0;}.header{z-index:90;}'),
         'geodir_theme_compat_js' => stripslashes('jQuery(function(){jQuery("#masthead .gd-nav-top-link").append(\'<i class="icon-angle-down"></i>\'),jQuery("#menu-item-gd-location-switcher >  a").append(\'<i class="icon-angle-down"></i>\'),jQuery(".mobile-sidebar .gd-nav-dropdown").addClass("children"),jQuery(".mobile-sidebar .gd-nav-dropdown").removeClass("nav-dropdown nav-dropdown-default"),jQuery(".mobile-sidebar #menu-item-gd-location-switcher ul").removeClass("nav-dropdown nav-dropdown-default"),setTimeout(function(){},5e3)});'),
-
-
     );
-
-
-    update_option('gd_theme_compats', $theme_compat);
-
-    gd_set_theme_compat();// set the compat pack if avail
+    
+    geodir_update_option( 'gd_theme_compats', $theme_compat );
+    
+    gd_set_theme_compat(); // set the compat pack if availalbe.
 }
-
 
 /**
  * Converts virtual pages to normal pages.
@@ -769,65 +759,43 @@ function gd_install_theme_compat()
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  */
-function gd_convert_virtual_pages(){
+function gd_convert_virtual_pages() {
     global $wpdb;
 
     // Update the add listing page settings
-    $add_listing_page = $wpdb->get_var(
-        $wpdb->prepare(
-            "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_status='virtual' LIMIT 1;",
-            array('add-listing')
-        )
-    );
-
-    if($add_listing_page){
-        wp_update_post( array('ID' => $add_listing_page, 'post_status' => 'publish') );
-        update_option( 'geodir_add_listing_page', $add_listing_page);
+    $add_listing_page = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_status='virtual' LIMIT 1;", array( 'add-listing' ) ) );
+    if ( $add_listing_page ) {
+        wp_update_post( array( 'ID' => $add_listing_page, 'post_status' => 'publish' ) );
+        geodir_update_option( 'geodir_add_listing_page', $add_listing_page);
     }
 
     // Update the listing preview page settings
-    $listing_preview_page = $wpdb->get_var(
-        $wpdb->prepare(
-            "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_status='virtual' LIMIT 1;",
-            array('listing-preview')
-        )
-    );
-
-    if($listing_preview_page){
-        wp_update_post( array('ID' => $listing_preview_page, 'post_status' => 'publish') );
-        update_option( 'geodir_preview_page', $listing_preview_page);
+    $listing_preview_page = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_status='virtual' LIMIT 1;", array( 'listing-preview' ) ) );
+    if ( $listing_preview_page ) {
+        wp_update_post( array( 'ID' => $listing_preview_page, 'post_status' => 'publish' ) );
+        geodir_update_option( 'geodir_preview_page', $listing_preview_page );
     }
 
     // Update the listing success page settings
-    $listing_success_page = $wpdb->get_var(
-        $wpdb->prepare(
-            "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_status='virtual' LIMIT 1;",
-            array('listing-success')
-        )
-    );
-
-    if($listing_success_page){
-        wp_update_post( array('ID' => $listing_success_page, 'post_status' => 'publish') );
-        update_option( 'geodir_success_page', $listing_success_page);
+    $listing_success_page = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_status='virtual' LIMIT 1;", array( 'listing-success' ) ) );
+    if ( $listing_success_page ) {
+        wp_update_post( array( 'ID' => $listing_success_page, 'post_status' => 'publish' ) );
+        geodir_update_option( 'geodir_success_page', $listing_success_page );
     }
 
     // Update the listing success page settings
-    $location_page = $wpdb->get_var(
-        $wpdb->prepare(
-            "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_status='virtual' LIMIT 1;",
-            array('location')
-        )
-    );
-
-    if($location_page){
-        $location_slug = get_option('geodir_location_prefix');
-        if(!$location_slug ){$location_slug  = 'location';}
-        wp_update_post( array('ID' => $location_page, 'post_status' => 'publish','post_name' => $location_slug) );
-        update_option( 'geodir_location_page', $location_page);
+    $location_page = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_status='virtual' LIMIT 1;", array( 'location' ) ) );
+    if ( $location_page ) {
+        $location_slug = geodir_get_option( 'geodir_location_prefix' );
+        
+        if ( !$location_slug ) {
+            $location_slug  = 'location';
+        }
+        
+        wp_update_post( array( 'ID' => $location_page, 'post_status' => 'publish', 'post_name' => $location_slug ) );
+        geodir_update_option( 'geodir_location_page', $location_page );
     }
-
 }
-
 
 /**
  * Converts all GD CPT's to the new rewrite slug by removing /%gd_taxonomy% from the slug
@@ -835,32 +803,25 @@ function gd_convert_virtual_pages(){
  * @since 1.5.0
  * @package GeoDirectory
  */
-function gd_fix_cpt_rewrite_slug()
-{
-
+function gd_fix_cpt_rewrite_slug() {
     $alt_post_types = array();
-    $post_types = get_option('geodir_post_types');
-
-
-    if (is_array($post_types)){
-
-        foreach ($post_types as $post_type => $args) {
-
-
-            if(isset($args['rewrite']['slug'])){
-                $args['rewrite']['slug'] = str_replace("/%gd_taxonomy%","",$args['rewrite']['slug']);
+    
+    $post_types = geodir_get_option( 'geodir_post_types' );
+    
+    if ( is_array( $post_types ) ) {
+        foreach ( $post_types as $post_type => $args ) {
+            if ( isset( $args['rewrite']['slug'] ) ) {
+                $args['rewrite']['slug'] = str_replace( "/%gd_taxonomy%", "", $args['rewrite']['slug'] );
             }
-
-                $alt_post_types[$post_type] = $args;
-
+            
+            $alt_post_types[$post_type] = $args;
         }
     }
 
-    if(!empty($alt_post_types)) {
-        update_option('geodir_post_types',$alt_post_types);
-        }
-
-
+    if ( !empty( $alt_post_types ) ) {
+        geodir_update_option( 'geodir_post_types', $alt_post_types );
+    }
+    
     // flush the rewrite rules
     flush_rewrite_rules();
 }
@@ -943,16 +904,16 @@ function geodir_upgrade_1618() {
         }
     }
     
-    if (!empty($default_location) && ((isset($default_location->country) && $default_location->country == $old_country) || (isset($default_location->country_slug) && $default_location->country_slug == $old_slug))) {
+    if ( !empty( $default_location ) && ( ( isset( $default_location->country ) && $default_location->country == $old_country ) || ( isset( $default_location->country_slug ) && $default_location->country_slug == $old_slug ) ) ) {
         $default_location->country = $new_country;
         $default_location->country_slug = $new_slug;
         
-        update_option('geodir_default_location', $default_location);
+        geodir_update_option( 'geodir_default_location', $default_location );
         
         $flush_rewrite_rules = true;
     }
     
-    if ($flush_rewrite_rules) {
+    if ( $flush_rewrite_rules ) {
         flush_rewrite_rules();
     }
     

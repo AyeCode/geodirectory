@@ -29,7 +29,7 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
             /** This action is documented in includes/templates/listing-listview.php */
             do_action('geodir_before_listing_post_listview');
             $all_postypes = geodir_get_posttypes();
-            $geodir_days_new = (int)get_option('geodir_listing_new_days');
+            $geodir_days_new = (int)geodir_get_option('geodir_listing_new_days');
             foreach ($widget_listings as $widget_listing) {
                 global $gd_widget_listing_type;
                 $post = $widget_listing;
@@ -103,13 +103,13 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
                                 $endLat = $post->post_latitude;
                                 $endLon = $post->post_longitude;
                                 $endPoint = array('latitude' => $endLat, 'longitude' => $endLon);
-                                $uom = get_option('geodir_search_dist_1');
+                                $uom = geodir_get_option('geodir_search_dist_1');
                                 $distance = geodir_calculateDistanceFromLatLong($startPoint, $endPoint, $uom);
                                 ?>
                                 <h3>
                                     <?php
                                     if (round($distance, 2) == 0) {
-                                        $uom = get_option('geodir_search_dist_2');
+                                        $uom = geodir_get_option('geodir_search_dist_2');
                                         $distance = geodir_calculateDistanceFromLatLong($startPoint, $endPoint, $uom);
                                         if ($uom == 'feet') {
                                             $uom = __('feet', 'geodirectory');

@@ -14,7 +14,7 @@ $post_meta = array();
 if($dummy_post_index==1){
     $category_array = array('Attractions', 'Hotels', 'Restaurants', 'Food Nightlife', 'Festival', 'Videos', 'Feature');
     geodir_dummy_data_taxonomies($post_type,$category_array );
-    update_option($post_type.'_dummy_data_type','standard_places');
+    geodir_update_option($post_type.'_dummy_data_type','standard_places');
 }
 
 if (geodir_dummy_folder_exists())
@@ -1825,7 +1825,7 @@ foreach ($post_info as $post_info) {
     else
         $dummy_post_longitude = geodir_random_float(geodir_random_float($city_bound_lng2, $city_bound_lng1), geodir_random_float($city_bound_lng1, $city_bound_lng2));
 
-    $load_map = get_option('geodir_load_map');
+    $load_map = geodir_get_option('geodir_load_map');
     
     if ($load_map == 'osm') {
         $post_address = geodir_get_osm_address_by_lat_lan($dummy_post_latitude, $dummy_post_longitude);

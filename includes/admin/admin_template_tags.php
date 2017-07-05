@@ -45,7 +45,7 @@ if (!function_exists('geodir_admin_panel')) {
                     <ul>
                         <?php
                         $tabs = geodir_get_settings_tabs();
-                        update_option('geodir_tabs', $tabs);// Important to show settings menu dropdown
+                        geodir_update_option('geodir_tabs', $tabs);// Important to show settings menu dropdown
 
                         foreach ($tabs as $name => $args) :
                             $label = $args['label'];
@@ -647,8 +647,8 @@ function geodir_update_options_compatibility_settings()
 // theme compat name
     $theme_settings['gd_theme_compat'] = $_POST['gd_theme_compat'];
     if ($theme_settings['gd_theme_compat'] == '') {
-        update_option('gd_theme_compat', '');
-        update_option('theme_compatibility_setting', '');
+        geodir_update_option('gd_theme_compat', '');
+        geodir_update_option('theme_compatibility_setting', '');
         return;
     }
 
@@ -673,8 +673,8 @@ function geodir_update_options_compatibility_settings()
 
 
     $theme_name = $theme_name . "_custom";
-    $theme_arr = get_option('gd_theme_compats');
-    update_option('gd_theme_compat', $theme_name);
+    $theme_arr = geodir_get_option('gd_theme_compats');
+    geodir_update_option('gd_theme_compat', $theme_name);
     /**
      * Called before the theme compatibility settings are saved to the DB.
      *
@@ -732,14 +732,10 @@ function geodir_update_options_compatibility_settings()
      */
     do_action('gd_compat_save_settings', $theme_settings);
 
-//if($_POST['gd_theme_compat'])==
     $theme_arr[$theme_name] = $theme_settings;
-    update_option('gd_theme_compats', $theme_arr);
-
-
-//print_r($theme_settings);exit;
-    update_option('theme_compatibility_setting', $theme_settings);
-
+    
+    geodir_update_option( 'gd_theme_compats', $theme_arr );
+    geodir_update_option( 'theme_compatibility_setting', $theme_settings );
 }
 
 /**
@@ -752,7 +748,7 @@ function geodir_update_options_compatibility_settings()
 function geodir_theme_compatibility_setting_page()
 {
     global $wpdb;
-    $tc = get_option('theme_compatibility_setting');
+    $tc = geodir_get_option( 'theme_compatibility_setting' );
     //print_r($tc);
     //print_r(wp_get_theme());
 
@@ -786,7 +782,7 @@ function geodir_theme_compatibility_setting_page()
 
             </style>
 
-            <?php if (str_replace("_custom", "", get_option('gd_theme_compat')) == 'Avada') { ?>
+            <?php if (str_replace("_custom", "", geodir_get_option('gd_theme_compat')) == 'Avada') { ?>
                 <div id="gd-compat-warnings">
                     <h3><?php _e('Since Avada 3.8+ they have added hooks for compatibility for GeoDirectory so the header.php modification is no longer required. <a href="http://docs.wpgeodirectory.com/avada-compatibility-header-php/" target="_blank">See here</a>', 'geodirectory'); ?></h3>
                 </div>
@@ -798,8 +794,8 @@ function geodir_theme_compatibility_setting_page()
                 <option value=""><?php _e('Select Theme', 'geodirectory');?></option>
                 <option value="custom"><?php _e('Custom', 'geodirectory');?></option>
                 <?php
-                $theme_arr = get_option('gd_theme_compats');
-                $theme_active = get_option('gd_theme_compat');
+                $theme_arr = geodir_get_option('gd_theme_compats');
+                $theme_active = geodir_get_option('gd_theme_compat');
                 if (is_array($theme_arr)) {
                     foreach ($theme_arr as $key => $theme) {
                         $sel = '';

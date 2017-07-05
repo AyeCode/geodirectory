@@ -257,7 +257,7 @@ class GeoDir_Session {
 		$ret = false;
 
 		// If the database variable is already set, no need to run autodetection
-		$geodir_use_php_sessions = (bool)get_option( 'geodir_use_php_sessions' );
+		$geodir_use_php_sessions = (bool)geodir_get_option( 'geodir_use_php_sessions' );
 
 		if (!$geodir_use_php_sessions ) {
 			// Attempt to detect if the server supports PHP sessions
@@ -268,7 +268,7 @@ class GeoDir_Session {
 					$ret = true;
 
 					// Set the database option
-					update_option( 'geodir_use_php_sessions', true );
+					geodir_update_option( 'geodir_use_php_sessions', true );
 				}
 			}
 		} else {

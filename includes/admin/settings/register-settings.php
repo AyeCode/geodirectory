@@ -43,7 +43,12 @@ function geodir_get_theme_menu_locations() {
  */
 function geodir_get_option( $key = '', $default = false ) {
     global $geodir_options;
-    $value = ! empty( $geodir_options[ $key ] ) ? $geodir_options[ $key ] : $default;
+    if ( isset( $geodir_options[ $key ] ) ) {
+        $value = ! empty( $geodir_options[ $key ] ) ? $geodir_options[ $key ] : $default;
+    } else { // TODO remove once all settings moved to one option
+        $value = get_option( $key, $default );
+        geodir_error_log( $key, '', __FILE__, __LINE__ );
+    }
     $value = apply_filters( 'geodir_get_option', $value, $key, $default );
     return apply_filters( 'geodir_get_option_' . $key, $value, $key, $default );
 }
@@ -68,10 +73,7 @@ function geodir_update_option( $key = '', $value = false ) {
         return false;
     }
 
-    if ( empty( $value ) ) {
-        $remove_option = geodir_delete_option( $key );
-        return $remove_option;
-    }
+    update_option( $key, $value ); // TODO remove once all settings moved to one option
 
     $options = get_option( 'geodir_settings' );
     if ( empty( $options ) ) {
@@ -107,6 +109,8 @@ function geodir_delete_option( $key = '' ) {
     if ( empty( $key ) ){
         return false;
     }
+    
+    delete_option( $key ); // TODO remove once all settings moved to one option
 
     $options = get_option( 'geodir_settings' );
     if ( empty( $options ) ) {

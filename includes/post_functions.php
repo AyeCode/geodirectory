@@ -1307,7 +1307,7 @@ if (!function_exists('geodir_get_featured_image')) {
         }
 
 
-        $list_img_size = get_option('geodir_listing_img_size','default');
+        $list_img_size = geodir_get_option('geodir_listing_img_size','default');
 
         if( $size=='list-thumb' && $list_img_size != 'default' ){
             $fimg = get_the_post_thumbnail_url($post_id,$list_img_size);
@@ -1382,7 +1382,7 @@ if (!function_exists('geodir_get_featured_image')) {
             if ($default_catimg = geodir_get_default_catimage($default_cat, $post_type))
                 $default_img = $default_catimg['src'];
             elseif ($no_image) {
-                $default_img = get_option('geodir_listing_no_img');
+                $default_img = geodir_get_option('geodir_listing_no_img');
             }
 
             if (!empty($default_img)) {
@@ -1550,7 +1550,7 @@ if (!function_exists('geodir_get_images')) {
             if ($default_catimg = geodir_get_default_catimage($default_cat, $post_type))
                 $default_img = $default_catimg['src'];
             elseif ($no_images) {
-                $default_img = get_option('geodir_listing_no_img');
+                $default_img = geodir_get_option('geodir_listing_no_img');
             }
 
             if (!empty($default_img)) {
@@ -1661,7 +1661,7 @@ if (!function_exists('geodir_show_image')) {
                 if (is_admin() && !isset($_REQUEST['geodir_ajax'])){
                     $html = '<div class="geodir_thumbnail"><img style="max-height:' . $max_size->h . 'px;" alt="place image" src="' . $image->src . '"  /></div>';
                 } else {
-                    if($size=='widget-thumb' || !get_option('geodir_lazy_load',1)){
+                    if($size=='widget-thumb' || !geodir_get_option('geodir_lazy_load',1)){
                         $html = '<div class="geodir_thumbnail" style="background-image:url(\'' . $image->src . '\');" title="'.$image->title.'" aria-label="'.$image->title.'" ></div>';
                     }else{
                         $html = '<div data-src="'.str_replace(' ','%20',$image->src).'" class="geodir_thumbnail geodir_lazy_load_thumbnail" title="'.$image->title.'" aria-label="'.$image->title.'"></div>';
@@ -2083,8 +2083,8 @@ if (!function_exists('geodir_new_post_default_status')) {
      */
     function geodir_new_post_default_status()
     {
-        if (get_option('geodir_new_post_default_status'))
-            return get_option('geodir_new_post_default_status');
+        if (geodir_get_option('geodir_new_post_default_status'))
+            return geodir_get_option('geodir_new_post_default_status');
         else
             return 'publish';
 
@@ -2606,7 +2606,7 @@ function geodir_get_cat_postcount($term = array())
  */
 function geodir_allow_post_type_frontend()
 {
-    $geodir_allow_posttype_frontend = get_option('geodir_allow_posttype_frontend');
+    $geodir_allow_posttype_frontend = geodir_get_option('geodir_allow_posttype_frontend');
 
     if (!is_admin() && isset($_REQUEST['listing_type'])
         && !empty($geodir_allow_posttype_frontend)
@@ -2638,13 +2638,13 @@ function geodir_excerpt_length($length)
 		return $length;
 	}
 	
-    if (isset($wp_query->query_vars['is_geodir_loop']) && $wp_query->query_vars['is_geodir_loop'] && get_option('geodir_desc_word_limit'))
-        $length = get_option('geodir_desc_word_limit');
+    if (isset($wp_query->query_vars['is_geodir_loop']) && $wp_query->query_vars['is_geodir_loop'] && geodir_get_option('geodir_desc_word_limit'))
+        $length = geodir_get_option('geodir_desc_word_limit');
     elseif (get_query_var('excerpt_length'))
         $length = get_query_var('excerpt_length');
 
-    if (geodir_is_page('author') && get_option('geodir_author_desc_word_limit'))
-        $length = get_option('geodir_author_desc_word_limit');
+    if (geodir_is_page('author') && geodir_get_option('geodir_author_desc_word_limit'))
+        $length = geodir_get_option('geodir_author_desc_word_limit');
 
     return $length;
 }
@@ -3083,12 +3083,12 @@ function geodir_function_post_updated($post_ID, $post_after, $post_before)
 
             $message_type = 'listing_published';
 
-            if (get_option('geodir_post_published_email_subject') == '') {
-                update_option('geodir_post_published_email_subject', __('Listing Published Successfully', 'geodirectory'));
+            if (geodir_get_option('geodir_post_published_email_subject') == '') {
+                geodir_update_option('geodir_post_published_email_subject', __('Listing Published Successfully', 'geodirectory'));
             }
 
-            if (get_option('geodir_post_published_email_content') == '') {
-                update_option('geodir_post_published_email_content', __("<p>Dear [#client_name#],</p><p>Your listing [#listing_link#] has been published. This email is just for your information.</p><p>[#listing_link#]</p><br><p>Thank you for your contribution.</p><p>[#site_name#]</p>", 'geodirectory'));
+            if (geodir_get_option('geodir_post_published_email_content') == '') {
+                geodir_update_option('geodir_post_published_email_content', __("<p>Dear [#client_name#],</p><p>Your listing [#listing_link#] has been published. This email is just for your information.</p><p>[#listing_link#]</p><br><p>Thank you for your contribution.</p><p>[#site_name#]</p>", 'geodirectory'));
             }
 
             /**

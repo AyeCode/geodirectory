@@ -14,7 +14,7 @@
 function geodir_register_taxonomies()
 {
     $taxonomies = array();
-    $taxonomies = get_option('geodir_taxonomies');
+    $taxonomies = geodir_get_option('geodir_taxonomies');
     // If custom taxonomies are present, register them
     if (is_array($taxonomies)) {
         // Sort taxonomies
@@ -56,7 +56,7 @@ function geodir_register_post_types()
     global $wp_post_types;
 
     $post_types = array();
-    $post_types = get_option('geodir_post_types');
+    $post_types = geodir_get_option('geodir_post_types');
 
     // Register each post type if array of data is returned
     if (is_array($post_types)):
@@ -98,71 +98,76 @@ function geodir_register_post_types()
  * @param  string $post_type Post type name
  * @return array Array or string of arguments.
  */
-function geodir_post_type_args_modify($args, $post_type)
-{
-    $geodir_location_prefix = isset($_REQUEST['geodir_location_prefix']) ? trim($_REQUEST['geodir_location_prefix']) : get_option('geodir_location_prefix');
-	if (isset($_REQUEST['geodir_listing_prefix']) && $_REQUEST['geodir_listing_prefix'] != '' && geodir_strtolower($_REQUEST['geodir_listing_prefix']) != geodir_strtolower($geodir_location_prefix)) {
+function geodir_post_type_args_modify( $args, $post_type ) {
+    $geodir_location_prefix = isset( $_REQUEST['geodir_location_prefix'] ) ? trim( $_REQUEST['geodir_location_prefix'] ) : geodir_get_option( 'geodir_location_prefix' );
+    
+    if ( isset( $_REQUEST['geodir_listing_prefix'] ) && $_REQUEST['geodir_listing_prefix'] != '' && geodir_strtolower( $_REQUEST['geodir_listing_prefix'] ) != geodir_strtolower( $geodir_location_prefix ) ) {
+        $listing_slug = htmlentities( trim( $_REQUEST['geodir_listing_prefix'] ) );
 
-        $listing_slug = htmlentities(trim($_REQUEST['geodir_listing_prefix']));
-
-        if ($post_type == 'gd_place') {
-            if (array_key_exists('has_archive', $args))
+        if ( $post_type == 'gd_place' ) {
+            if ( array_key_exists( 'has_archive', $args ) ) {
                 $args['has_archive'] = $listing_slug;
-
-            if (array_key_exists('rewrite', $args)) {
-                if (array_key_exists('slug', $args['rewrite']))
-                    $args['rewrite']['slug'] = $listing_slug;// . '/%gd_taxonomy%';
             }
 
-            $geodir_post_types = get_option('geodir_post_types');
-
-            if (array_key_exists($post_type, $geodir_post_types)) {
-
-                if (array_key_exists('has_archive', $geodir_post_types[$post_type]))
-                    $geodir_post_types[$post_type]['has_archive'] = $listing_slug;
-
-                if (array_key_exists('rewrite', $geodir_post_types[$post_type]))
-                    if (array_key_exists('slug', $geodir_post_types[$post_type]['rewrite']))
-                        $geodir_post_types[$post_type]['rewrite']['slug'] = $listing_slug;// . '/%gd_taxonomy%';
-
-                update_option('geodir_post_types', $geodir_post_types);
-
+            if ( array_key_exists( 'rewrite', $args ) ) {
+                if ( array_key_exists( 'slug', $args['rewrite'] ) ) {
+                    $args['rewrite']['slug'] = $listing_slug;
+                }
             }
 
-            $geodir_post_types = get_option('geodir_post_types');
+            $geodir_post_types = geodir_get_option( 'geodir_post_types' );
 
-            /* --- update taxonomies (category) --- */
+            if ( array_key_exists( $post_type, $geodir_post_types ) ) {
+                if ( array_key_exists( 'has_archive', $geodir_post_types[ $post_type ] ) ) {
+                    $geodir_post_types[ $post_type ]['has_archive'] = $listing_slug;
+                }
 
-            $geodir_taxonomies = get_option('geodir_taxonomies');
+                if ( array_key_exists( 'rewrite', $geodir_post_types[ $post_type] ) ) {
+                    if ( array_key_exists( 'slug', $geodir_post_types[ $post_type ]['rewrite'] ) ) {
+                        $geodir_post_types[ $post_type ]['rewrite']['slug'] = $listing_slug;
+                    }
+                }
 
-            if (array_key_exists('listing_slug', $geodir_taxonomies[$post_type . 'category'])) {
-                $geodir_taxonomies[$post_type . 'category']['listing_slug'] = $listing_slug;
-
-                if (array_key_exists('args', $geodir_taxonomies[$post_type . 'category']))
-                    if (array_key_exists('rewrite', $geodir_taxonomies[$post_type . 'category']['args']))
-                        if (array_key_exists('slug', $geodir_taxonomies[$post_type . 'category']['args']['rewrite']))
-                            $geodir_taxonomies[$post_type . 'category']['args']['rewrite']['slug'] = $listing_slug;
-
-                update_option('geodir_taxonomies', $geodir_taxonomies);
-
+                geodir_update_option('geodir_post_types', $geodir_post_types);
             }
-
-            /* --- update taxonomies (tags) --- */
-            $geodir_taxonomies_tag = get_option('geodir_taxonomies');
-            if (array_key_exists('listing_slug', $geodir_taxonomies_tag[$post_type . '_tags'])) {
-                $geodir_taxonomies_tag[$post_type . '_tags']['listing_slug'] = $listing_slug . '/tags';
-
-                if (array_key_exists('args', $geodir_taxonomies_tag[$post_type . '_tags']))
-                    if (array_key_exists('rewrite', $geodir_taxonomies_tag[$post_type . '_tags']['args']))
-                        if (array_key_exists('slug', $geodir_taxonomies_tag[$post_type . '_tags']['args']['rewrite']))
-                            $geodir_taxonomies_tag[$post_type . '_tags']['args']['rewrite']['slug'] = $listing_slug . '/tags';
-
-                update_option('geodir_taxonomies', $geodir_taxonomies_tag);
-
+            
+            $geodir_taxonomies = geodir_get_option( 'geodir_taxonomies' );
+            $updated = false;
+            
+            // update taxonomies (category)
+            $cat_taxonomy = $post_type . 'category';
+            if ( array_key_exists( 'listing_slug', $geodir_taxonomies[ $cat_taxonomy ] ) ) {
+                $updated = true;
+                $geodir_taxonomies[ $cat_taxonomy ]['listing_slug'] = $listing_slug;
+                
+                if ( array_key_exists( 'args', $geodir_taxonomies[ $cat_taxonomy ] ) ) {
+                    if ( array_key_exists( 'rewrite', $geodir_taxonomies[ $cat_taxonomy ]['args'] ) ) {
+                        if ( array_key_exists( 'slug', $geodir_taxonomies[ $cat_taxonomy ]['args']['rewrite'] ) ) {
+                            $geodir_taxonomies[ $cat_taxonomy ]['args']['rewrite']['slug'] = $listing_slug;
+                        }
+                    }
+                }
             }
-
+            
+            // update taxonomies (tags)
+            $tag_taxonomy = $post_type . '_tags';
+            if ( array_key_exists( 'listing_slug', $geodir_taxonomies[ $tag_taxonomy ] ) ) {
+                $updated = true;
+                $geodir_taxonomies[ $tag_taxonomy ]['listing_slug'] = $listing_slug . '/tags';
+                
+                if ( array_key_exists( 'args', $geodir_taxonomies[ $tag_taxonomy ] ) ) {
+                    if ( array_key_exists( 'rewrite', $geodir_taxonomies[ $tag_taxonomy ]['args'] ) ) {
+                        if ( array_key_exists( 'slug', $geodir_taxonomies[ $tag_taxonomy ]['args']['rewrite'] ) ) {
+                            $geodir_taxonomies[ $tag_taxonomy ]['args']['rewrite']['slug'] = $listing_slug . '/tags';
+                        }
+                    }
+                }
+            }
+            
+            if ( $updated ) {
+                geodir_update_option('geodir_taxonomies', $geodir_taxonomies);
+            }
         }
-
     }
 
     return $args;
@@ -195,8 +200,8 @@ function geodir_flush_rewrite_rules()
  */
 function geodir_listing_rewrite_rules($rules) {
     $newrules = array();
-    $taxonomies = get_option('geodir_taxonomies');
-    $detail_url_seprator = get_option('geodir_detailurl_separator');
+    $taxonomies = geodir_get_option('geodir_taxonomies');
+    $detail_url_seprator = geodir_get_option('geodir_detailurl_separator');
     
 	// create rules for post listing
     if (is_array($taxonomies)):
@@ -215,7 +220,7 @@ function geodir_listing_rewrite_rules($rules) {
     endif;
 
     // create rules for location listing
-    $location_page = get_option('geodir_location_page');
+    $location_page = geodir_get_option('geodir_location_page');
 	
     if($location_page) {
         global $wpdb;
@@ -226,10 +231,10 @@ function geodir_listing_rewrite_rules($rules) {
 
 	$location_manager = function_exists('geodir_location_plugin_activated') ? true : false; // Check location manager installed & active.
 	if ($location_manager) {
-		$hide_country_part = get_option('geodir_location_hide_country_part');
-		$hide_region_part = get_option('geodir_location_hide_region_part');
+		$hide_country_part = geodir_get_option('geodir_location_hide_country_part');
+		$hide_region_part = geodir_get_option('geodir_location_hide_region_part');
 	}
-	$neighbourhood_active = $location_manager && get_option('location_neighbourhoods') ? true : false;
+	$neighbourhood_active = $location_manager && geodir_get_option('location_neighbourhoods') ? true : false;
 	
 	if ($location_manager && ($hide_country_part || $hide_region_part)) {
 		$matches2 = '';
@@ -330,7 +335,7 @@ function geodir_listing_rewrite_rules($rules) {
 function geodir_htaccess_contents($rules)
 {
     global $wpdb;
-    $location_prefix = get_option('geodir_location_prefix');
+    $location_prefix = geodir_get_option('geodir_location_prefix');
     // if location page slug changed then add redirect
     if ($location_prefix == 'location') {
         return $rules;
@@ -434,7 +439,7 @@ function geodir_set_location_var_in_session_in_core($wp) {
 	}
 
 	// The location url format (all or country_city or region_city or city).
-	$geodir_show_location_url = get_option('geodir_show_location_url');
+	$geodir_show_location_url = geodir_get_option('geodir_show_location_url');
 
     if (isset($wp->query_vars['page_id']) && $wp->query_vars['page_id'] == geodir_location_page_id()) {
         $gd_country = '';
@@ -452,7 +457,7 @@ function geodir_set_location_var_in_session_in_core($wp) {
         if (!($gd_country == '' && $gd_region == '' && $gd_city == '')) {
             $default_location = geodir_get_default_location();
 
-            if (get_option('geodir_add_location_url')) {
+            if (geodir_get_option('geodir_add_location_url')) {
                 if ($geodir_show_location_url != 'all') {
                     if ($gd_region == '') {
                         if ($gd_ses_region = $gd_session->get('gd_region'))
@@ -606,7 +611,7 @@ function geodir_set_location_var_in_session_in_core($wp) {
 
 
             // now check if there is location parts in the url or not
-            if (get_option('geodir_add_location_url')) {				
+            if (geodir_get_option('geodir_add_location_url')) {				
 				$default_location = geodir_get_default_location();
                 
 				if ($geodir_show_location_url == 'all') {
@@ -761,7 +766,7 @@ function geodir_set_location_var_in_session_in_core($wp) {
     }
 
     // now check if there is location parts in the url or not
-    if (get_option('geodir_add_location_url')) {        
+    if (geodir_get_option('geodir_add_location_url')) {        
 		if ($geodir_show_location_url == 'all') {
 		} else if ($geodir_show_location_url == 'country_city') {
 			 if (isset($wp->query_vars['gd_region']))

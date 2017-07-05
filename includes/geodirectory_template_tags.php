@@ -43,9 +43,9 @@ function geodir_templates_scripts()
     $geodir_vars_data = array(
         'siteurl' => get_option('siteurl'),
         'geodir_plugin_url' => geodir_plugin_url(),
-        'geodir_lazy_load' => get_option('geodir_lazy_load',1),
+        'geodir_lazy_load' => geodir_get_option('geodir_lazy_load',1),
         'geodir_ajax_url' => geodir_get_ajax_url(),
-        'geodir_gd_modal' => (int)get_option('geodir_disable_gb_modal'),
+        'geodir_gd_modal' => (int)geodir_get_option('geodir_disable_gb_modal'),
         'is_rtl' => is_rtl() ? 1 : 0 // fix rtl issue
     );
 
@@ -197,7 +197,7 @@ function geodir_templates_scripts()
 	}
 
     // font awesome rating script
-	if (get_option('geodir_reviewrating_enable_font_awesome')) {
+	if (geodir_get_option('geodir_reviewrating_enable_font_awesome')) {
 		wp_register_script('geodir-barrating-js', geodir_plugin_url() . '/assets/js/jquery.barrating.min.js', array(), GEODIRECTORY_VERSION, true);
 		wp_enqueue_script('geodir-barrating-js');
 	} else { // default rating script
@@ -223,8 +223,8 @@ function geodir_templates_scripts()
  */
 function geodir_header_scripts()
 {
-    echo '<style>' . stripslashes(get_option('geodir_coustem_css')) . '</style>';
-    echo stripslashes(get_option('geodir_header_scripts'));
+    echo '<style>' . stripslashes(geodir_get_option('geodir_coustem_css')) . '</style>';
+    echo stripslashes(geodir_get_option('geodir_header_scripts'));
 }
 
 /**
@@ -237,7 +237,7 @@ function geodir_header_scripts()
  */
 function geodir_google_analytics_tracking_code()
 {
-    if(get_option('geodir_ga_add_tracking_code') && get_option('geodir_ga_account_id')){?>
+    if(geodir_get_option('geodir_ga_add_tracking_code') && geodir_get_option('geodir_ga_account_id')){?>
 
         <script>
             (function(i,s,o,g,r,a,m){ i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -245,15 +245,15 @@ function geodir_google_analytics_tracking_code()
                 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
             })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-            ga('create', '<?php echo esc_attr(get_option('geodir_ga_account_id'));?>', 'auto');
-            <?php if(get_option('geodir_ga_anonymize_ip')){echo "ga('set', 'anonymizeIP', true);";}?>
+            ga('create', '<?php echo esc_attr(geodir_get_option('geodir_ga_account_id'));?>', 'auto');
+            <?php if(geodir_get_option('geodir_ga_anonymize_ip')){echo "ga('set', 'anonymizeIP', true);";}?>
             ga('send', 'pageview');
 
         </script>
 
         <?php
-    }elseif(get_option('geodir_ga_tracking_code') && !get_option('geodir_ga_account_id')){
-        echo stripslashes(get_option('geodir_ga_tracking_code'));
+    }elseif(geodir_get_option('geodir_ga_tracking_code') && !geodir_get_option('geodir_ga_account_id')){
+        echo stripslashes(geodir_get_option('geodir_ga_tracking_code'));
     }
 }
 
@@ -268,7 +268,7 @@ function geodir_google_analytics_tracking_code()
 function geodir_footer_scripts()
 {
 
-    echo stripslashes(get_option('geodir_footer_scripts'));
+    echo stripslashes(geodir_get_option('geodir_footer_scripts'));
 
     /*
      * Apple suck and can't/won't fix bugs: https://bugs.webkit.org/show_bug.cgi?id=136041
@@ -410,7 +410,7 @@ function geodir_pagination($before = '', $after = '', $prelabel = '', $nxtlabel 
 
         if ($max_page > 1 || $always_show) {            
             // Extra pagination info
-            $geodir_pagination_more_info = get_option('geodir_pagination_advance_info');
+            $geodir_pagination_more_info = geodir_get_option('geodir_pagination_advance_info');
             $start_no = ( $paged - 1 ) * $posts_per_page + 1;
             $end_no = min($paged * $posts_per_page, $numposts);
 
@@ -478,8 +478,8 @@ function geodir_pagination($before = '', $after = '', $prelabel = '', $nxtlabel 
  */
 function geodir_listingsearch_scripts()
 {
-    if (get_option('gd_search_dist') != '') {
-        $dist = get_option('gd_search_dist');
+    if (geodir_get_option('gd_search_dist') != '') {
+        $dist = geodir_get_option('gd_search_dist');
     } else {
         $dist = 500;
     }
@@ -550,12 +550,12 @@ function geodir_listingsearch_scripts()
  */
 function geodir_add_sharelocation_scripts() {
     $default_search_for_text = SEARCH_FOR_TEXT;
-    if (get_option('geodir_search_field_default_text'))
-        $default_search_for_text = __(get_option('geodir_search_field_default_text'), 'geodirectory');
+    if (geodir_get_option('geodir_search_field_default_text'))
+        $default_search_for_text = __(geodir_get_option('geodir_search_field_default_text'), 'geodirectory');
 
     $default_near_text = NEAR_TEXT;
-    if (get_option('geodir_near_field_default_text'))
-        $default_near_text = __(get_option('geodir_near_field_default_text'), 'geodirectory');
+    if (geodir_get_option('geodir_near_field_default_text'))
+        $default_near_text = __(geodir_get_option('geodir_near_field_default_text'), 'geodirectory');
     
     $search_location = geodir_get_default_location();
     
@@ -643,7 +643,7 @@ function geodir_add_sharelocation_scripts() {
                     initialise2();
                 } else {
                     <?php
-                    $near_add = get_option('geodir_search_near_addition');
+                    $near_add = geodir_get_option('geodir_search_near_addition');
                     /**
                      * Adds any extra info to the near search box query when trying to geolocate it via google api.
                      *

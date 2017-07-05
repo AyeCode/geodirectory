@@ -106,31 +106,31 @@ function geodir_register_sidebar()
          */
         $after_title = apply_filters('geodir_after_title', '</h3>');
 
-        if (get_option('geodir_show_home_top_section')) {
+        if (geodir_get_option('geodir_show_home_top_section')) {
             register_sidebars(1, array('id' => 'geodir_home_top', 'name' => __('GD Home Top Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_home_top';
         }
 
-        if (get_option('geodir_show_home_contant_section')) {
+        if (geodir_get_option('geodir_show_home_contant_section')) {
             register_sidebars(1, array('id' => 'geodir_home_content', 'name' => __('GD Home Content Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_home_content';
         }
 
-        if (get_option('geodir_show_home_right_section')) {
+        if (geodir_get_option('geodir_show_home_right_section')) {
             register_sidebars(1, array('id' => 'geodir_home_right', 'name' => __('GD Home Right Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_home_right';
         }
 
-        if (get_option('geodir_show_home_left_section')) {
+        if (geodir_get_option('geodir_show_home_left_section')) {
             register_sidebars(1, array('id' => 'geodir_home_left', 'name' => __('GD Home Left Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_home_left';
         }
 
-        if (get_option('geodir_show_home_bottom_section')) {
+        if (geodir_get_option('geodir_show_home_bottom_section')) {
             register_sidebars(1, array('id' => 'geodir_home_bottom', 'name' => __('GD Home Bottom Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_home_bottom';
@@ -144,25 +144,25 @@ function geodir_register_sidebar()
         /* Listing page sidebars start*/
         /*===========================*/
 
-        if (get_option('geodir_show_listing_top_section')) {
+        if (geodir_get_option('geodir_show_listing_top_section')) {
             register_sidebars(1, array('id' => 'geodir_listing_top', 'name' => __('GD Listing Top Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_listing_top';
         }
 
-        if (get_option('geodir_show_listing_left_section')) {
+        if (geodir_get_option('geodir_show_listing_left_section')) {
             register_sidebars(1, array('id' => 'geodir_listing_left_sidebar', 'name' => __('GD Listing Left Sidebar', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_listing_left_sidebar';
         }
 
-        if (get_option('geodir_show_listing_right_section')) {
+        if (geodir_get_option('geodir_show_listing_right_section')) {
             register_sidebars(1, array('id' => 'geodir_listing_right_sidebar', 'name' => __('GD Listing Right Sidebar', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_listing_right_sidebar';
         }
 
-        if (get_option('geodir_show_listing_bottom_section')) {
+        if (geodir_get_option('geodir_show_listing_bottom_section')) {
             register_sidebars(1, array('id' => 'geodir_listing_bottom', 'name' => __('GD Listing Bottom Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_listing_bottom';
@@ -176,25 +176,25 @@ function geodir_register_sidebar()
         /* Search page sidebars start*/
         /*===========================*/
 
-        if (get_option('geodir_show_search_top_section')) {
+        if (geodir_get_option('geodir_show_search_top_section')) {
             register_sidebars(1, array('id' => 'geodir_search_top', 'name' => __('GD Search Top Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_search_top';
         }
 
-        if (get_option('geodir_show_search_left_section')) {
+        if (geodir_get_option('geodir_show_search_left_section')) {
             register_sidebars(1, array('id' => 'geodir_search_left_sidebar', 'name' => __('GD Search Left Sidebar', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_search_left_sidebar';
         }
 
-        if (get_option('geodir_show_search_right_section')) {
+        if (geodir_get_option('geodir_show_search_right_section')) {
             register_sidebars(1, array('id' => 'geodir_search_right_sidebar', 'name' => __('GD Search Right Sidebar', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_search_right_sidebar';
         }
 
-        if (get_option('geodir_show_search_bottom_section')) {
+        if (geodir_get_option('geodir_show_search_bottom_section')) {
             register_sidebars(1, array('id' => 'geodir_search_bottom', 'name' => __('GD Search Bottom Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_search_bottom';
@@ -207,7 +207,7 @@ function geodir_register_sidebar()
         /*==================================*/
         /* Detail/Single page sidebars start*/
         /*==================================*/
-        if (get_option('geodir_show_detail_top_section')) {
+        if (geodir_get_option('geodir_show_detail_top_section')) {
             register_sidebars(1, array('id' => 'geodir_detail_top', 'name' => __('GD Detail Top Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_detail_top';
@@ -217,7 +217,7 @@ function geodir_register_sidebar()
 
         $geodir_sidebars[] = 'geodir_detail_sidebar';
 
-        if (get_option('geodir_show_detail_bottom_section')) {
+        if (geodir_get_option('geodir_show_detail_bottom_section')) {
             register_sidebars(1, array('id' => 'geodir_detail_bottom', 'name' => __('GD Detail Bottom Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_detail_bottom';
@@ -231,25 +231,25 @@ function geodir_register_sidebar()
         /* Author page sidebars start       */
         /*==================================*/
 
-        if (get_option('geodir_show_author_top_section')) {
+        if (geodir_get_option('geodir_show_author_top_section')) {
             register_sidebars(1, array('id' => 'geodir_author_top', 'name' => __('GD Author Top Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_author_top';
         }
 
-        if (get_option('geodir_show_author_left_section')) {
+        if (geodir_get_option('geodir_show_author_left_section')) {
             register_sidebars(1, array('id' => 'geodir_author_left_sidebar', 'name' => __('GD Author Left Sidebar', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_author_left_sidebar';
         }
 
-        if (get_option('geodir_show_author_right_section')) {
+        if (geodir_get_option('geodir_show_author_right_section')) {
             register_sidebars(1, array('id' => 'geodir_author_right_sidebar', 'name' => __('GD Author Right Sidebar', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_author_right_sidebar';
         }
 
-        if (get_option('geodir_show_author_bottom_section')) {
+        if (geodir_get_option('geodir_show_author_bottom_section')) {
             register_sidebars(1, array('id' => 'geodir_author_bottom', 'name' => __('GD Author Bottom Section', 'geodirectory'), 'before_widget' => $before_widget, 'after_widget' => $after_widget, 'before_title' => $before_title, 'after_title' => $after_title));
 
             $geodir_sidebars[] = 'geodir_author_bottom';

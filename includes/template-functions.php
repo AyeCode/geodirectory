@@ -589,9 +589,9 @@ function geodir_convert_listing_view_class($columns = '') {
 function geodir_show_listing_post_excerpt($display, $view, $post) {
 	if ($view == 'listview') {
 		if (geodir_is_page('author')) {
-			$word_limit = get_option('geodir_author_desc_word_limit');
+			$word_limit = geodir_get_option('geodir_author_desc_word_limit');
 		} else {
-			$word_limit = get_option('geodir_desc_word_limit');
+			$word_limit = geodir_get_option('geodir_desc_word_limit');
 		}
 		
 		if ($word_limit !== '' && ($word_limit == 0 || $word_limit == '0')) {
@@ -613,7 +613,7 @@ function geodir_show_listing_post_excerpt($display, $view, $post) {
  * @return string Rating icons html content.
  */
 function geodir_font_awesome_rating_form_html($html, $star_texts = array(), $default = '') {
-	if (get_option('geodir_reviewrating_enable_font_awesome') == '1') {
+	if ( geodir_get_option( 'geodir_reviewrating_enable_font_awesome' ) == '1' ) {
 		$html = '<select class="gd-fa-rating">';
 		$html .= '<option value=""></option>';
 		if (!empty($star_texts) && is_array($star_texts)) {
@@ -645,7 +645,7 @@ function geodir_font_awesome_rating_form_html($html, $star_texts = array(), $def
  * @return string Rating icons html content.
  */
 function geodir_font_awesome_rating_stars_html($html, $rating, $star_count = 5) {
-	if (get_option('geodir_reviewrating_enable_font_awesome') == '1') {
+	if ( geodir_get_option( 'geodir_reviewrating_enable_font_awesome' ) == '1' ) {
 		$rating = min($rating, $star_count);
 		$full_stars = floor( $rating );
 		$half_stars = ceil( $rating - $full_stars );
@@ -669,11 +669,11 @@ function geodir_font_awesome_rating_stars_html($html, $rating, $star_count = 5) 
  */
 function geodir_font_awesome_rating_css() {
 	// Font awesome rating style
-	if (get_option('geodir_reviewrating_enable_font_awesome') == '1') {
-		$full_color = get_option('geodir_reviewrating_fa_full_rating_color', '#757575');
-		if ($full_color != '#757575') {
+	if ( geodir_get_option( 'geodir_reviewrating_enable_font_awesome' ) == '1' ) {
+		$full_color = geodir_get_option( 'geodir_reviewrating_fa_full_rating_color', '#757575' );
+		if ( $full_color != '#757575' ) {
 			echo '<style type="text/css">.br-theme-fontawesome-stars .br-widget a.br-active:after,.br-theme-fontawesome-stars .br-widget a.br-selected:after,
-			.gd-star-rating i.fa {color:' . stripslashes($full_color) . '!important;}</style>';
+			.gd-star-rating i.fa {color:' . stripslashes( $full_color ) . '!important;}</style>';
 		}
 	}
 }

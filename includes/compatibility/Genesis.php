@@ -62,7 +62,7 @@ function gd_genesis_compat_left_sidebars()
     } elseif (geodir_is_page('listing')) {
         remove_action('geodir_listings_sidebar_left', 'geodir_action_listings_sidebar_left', 10);
         add_action('geodir_wrapper_close', 'geodir_action_listings_sidebar_left', 11);
-    } elseif (geodir_is_page('detail') && get_option('geodir_detail_sidebar_left_section')) {
+    } elseif (geodir_is_page('detail') && geodir_get_option('geodir_detail_sidebar_left_section')) {
         //remove_action( 'geodir_detail_sidebar', 'geodir_action_details_sidebar', 10 );
         //add_action( 'geodir_wrapper_close', 'geodir_action_details_sidebar', 11 );
     } elseif (geodir_is_page('search')) {
@@ -92,47 +92,47 @@ function geodir_set_body_scs($classes)
     $new_class = '';
     if (is_page_geodir_home() || geodir_is_page('location')) {
         $remove_class = true;
-        if (get_option('geodir_show_home_left_section')) {
+        if (geodir_get_option('geodir_show_home_left_section')) {
             $new_class .= 'sidebar-';
         }
-        if (get_option('geodir_show_home_contant_section')) {
+        if (geodir_get_option('geodir_show_home_contant_section')) {
             $new_class .= 'content';
         }
-        if (get_option('geodir_show_home_right_section')) {
+        if (geodir_get_option('geodir_show_home_right_section')) {
             $new_class .= '-sidebar';
         }
     } elseif (geodir_is_page('listing')) {
         $remove_class = true;
-        if (get_option('geodir_show_listing_left_section')) {
+        if (geodir_get_option('geodir_show_listing_left_section')) {
             $new_class .= 'sidebar-';
         }
         $new_class .= 'content';
-        if (get_option('geodir_show_listing_right_section')) {
+        if (geodir_get_option('geodir_show_listing_right_section')) {
             $new_class .= '-sidebar';
         }
     } elseif (geodir_is_page('detail')) {
         $remove_class = true;
-        if (get_option('geodir_detail_sidebar_left_section')) {
+        if (geodir_get_option('geodir_detail_sidebar_left_section')) {
             $new_class .= 'sidebar-content gd-details-sidebar-left';
         } else {
             $new_class .= 'content-sidebar';
         }
     } elseif (geodir_is_page('search')) {
         $remove_class = true;
-        if (get_option('geodir_show_search_left_section')) {
+        if (geodir_get_option('geodir_show_search_left_section')) {
             $new_class .= 'sidebar-';
         }
         $new_class .= 'content';
-        if (get_option('geodir_show_search_right_section')) {
+        if (geodir_get_option('geodir_show_search_right_section')) {
             $new_class .= '-sidebar';
         }
     } elseif (geodir_is_page('author')) {
         $remove_class = true;
-        if (get_option('geodir_show_author_left_section')) {
+        if (geodir_get_option('geodir_show_author_left_section')) {
             $new_class .= 'sidebar-';
         }
         $new_class .= 'content';
-        if (get_option('geodir_show_author_right_section')) {
+        if (geodir_get_option('geodir_show_author_right_section')) {
             $new_class .= '-sidebar';
         }
     } elseif (geodir_is_page('add-listing')) {
