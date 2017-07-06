@@ -1,6 +1,6 @@
 <?php
 /**
- * Account Signup functions.
+ * Account functions.
  *
  * @since 1.0.0
  * @package GeoDirectory
@@ -15,20 +15,21 @@
  * @param bool $redirect Optional. Do you want to redirect to signup page, if user not logged in? Default: false.
  * @return bool
  */
-function geodir_is_login($redirect = false)
-{
+function geodir_is_login( $redirect = false ) {
     global $current_user;
-    if (!$current_user->ID) {
-        if ($redirect) {
+    if ( !$current_user->ID ) {
+        if ( $redirect ) {
             ?>
             <script type="text/javascript">
                 window.location.href = '<?php echo geodir_login_url();?>';
             </script>
         <?php
-        } else
+        } else {
             return false;
-    } else
+        }
+    } else {
         return true;
+    }
 }
 
 /**
@@ -38,16 +39,14 @@ function geodir_is_login($redirect = false)
  * @package GeoDirectory
  * @todo fix unknown $message variable
  */
-function geodir_check_ssl()
-{
-
-// Redirect to https login if forced to use SSL
-    if (force_ssl_admin() && !is_ssl()) {
-        if (0 === strpos($_SERVER['REQUEST_URI'], 'http')) {
-            wp_redirect(preg_replace('|^http://|', 'https://', $_SERVER['REQUEST_URI']));
+function geodir_check_ssl() {
+    // Redirect to https login if forced to use SSL
+    if ( force_ssl_admin() && !is_ssl() ) {
+        if ( 0 === strpos( $_SERVER['REQUEST_URI'], 'http' ) ) {
+            wp_redirect( preg_replace( '|^http://|', 'https://', $_SERVER['REQUEST_URI'] ) );
             exit();
         } else {
-            wp_redirect('https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+            wp_redirect( 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
             exit();
         }
     }
@@ -59,72 +58,9 @@ function geodir_check_ssl()
      *
      * @param string $message Login message.
      */
-    $message = apply_filters('login_message', $message);
-    if (!empty($message)) echo $message . "\n";
-
-}
-
-/**
- * Get site email ID or site admin email ID.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @return string|mixed|void The email ID.
- */
-function geodir_get_site_email_id()
-{
-    if (get_option('site_email')) {
-
-        return get_option('site_email');
-
-    } else {
-
-        return get_option('admin_email');
-
-    }
-
-}
-
-
-if (!function_exists('get_site_emailName')) {
-    /**
-     * Get site name for sending emails.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @return string Site name.
-     */
-    function get_site_emailName()
-
-    {
-
-        if (geodir_get_option('site_email_name')) {
-
-            return stripslashes(geodir_get_option('site_email_name'));
-
-        } else {
-
-            return stripslashes(get_option('blogname'));
-
-        }
-
-    }
-}
-
-if (!function_exists('is_allow_user_register')) {
-    /**
-     * Checks whether the site allowing user registration or not.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @return bool|string
-     */
-    function is_allow_user_register()
-
-    {
-
-        return get_option('users_can_register');
-
+    $message = apply_filters( 'login_message', $message );
+    if ( !empty( $message ) ) {
+        echo $message . "\n";
     }
 }
 
@@ -136,8 +72,7 @@ if (!function_exists('is_allow_user_register')) {
  * @global object $wpdb WordPress Database object.
  * @return bool|WP_Error True: when finish. WP_Error on error.
  */
-function geodir_retrieve_password()
-{
+function geodir_retrieve_password() {
     global $wpdb;
 
     $errors = new WP_Error();
@@ -215,8 +150,8 @@ function geodir_retrieve_password()
     //$message .= '<p>Thank You,<br> '.get_option('blogname').'</p>';
     $user_email = $user_data->user_email;
     $user_name = geodir_get_client_name($user->ID);
-    $fromEmail = geodir_get_site_email_id();
-    $fromEmailName = get_site_emailName();
+    $fromEmail = geodir_get_mail_from();
+    $fromEmailName = geodir_get_mail_from_name();
     $title = sprintf(__('[%s] Your new password', 'geodirectory'), get_option('blogname'));
     /**
      * Filter the password reset email subject part.
@@ -251,11 +186,9 @@ function geodir_retrieve_password()
  * @global object $wpdb WordPress Database object.
  * @return int|WP_Error Either user's ID or error on failure.
  */
-function geodir_register_new_user($user_login, $user_email)
-{
+function geodir_register_new_user($user_login, $user_email) {
     global $wpdb;
     $errors = new WP_Error();
-
 
     $user_login = sanitize_user($user_login);
     $user_login = str_replace(",", "", $user_login);
@@ -268,7 +201,6 @@ function geodir_register_new_user($user_login, $user_email)
      * @param string $user_email User registration email.
      */
     $user_email = apply_filters('user_registration_email', $user_email);
-
 
     if (geodir_get_option('geodir_allow_cpass')) {
         $user_pass = $_REQUEST['user_pass'];
@@ -388,8 +320,8 @@ function geodir_register_new_user($user_login, $user_email)
          */
         do_action('geodir_user_register', $user_id);
         ///////REGISTRATION EMAIL START//////
-        $fromEmail = geodir_get_site_email_id();
-        $fromEmailName = get_site_emailName();
+        $fromEmail = geodir_get_mail_from();
+        $fromEmailName = geodir_get_mail_from_name();
         $message = __('<p><b>' . __('Your login Information :', 'geodirectory') . '</b></p>
 <p>' . __('Username:', 'geodirectory') . ' ' . $user_login . '</p>
 <p>' . __('Password:', 'geodirectory') . ' ' . $user_pass . '</p>');
@@ -416,8 +348,7 @@ function geodir_register_new_user($user_login, $user_email)
  * @package GeoDirectory
  * @global object $errors WordPress Error object.
  */
-function geodir_user_signup()
-{
+function geodir_user_signup() {
     global $errors;
     $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'login';
 

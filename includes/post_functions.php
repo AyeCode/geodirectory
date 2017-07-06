@@ -3073,8 +3073,8 @@ function geodir_function_post_updated($post_ID, $post_after, $post_before)
 
             $to_name = geodir_get_client_name($post_author_id);
 
-            $from_email = geodir_get_site_email_id();
-            $from_name = get_site_emailName();
+            $from_email = geodir_get_mail_from();
+            $from_name = geodir_get_mail_from_name();
             $to_email = $post_author_data->user_email;
 
             if (!is_email($to_email) && !empty($post_author_data->user_email)) {

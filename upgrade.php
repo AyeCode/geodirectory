@@ -49,6 +49,11 @@ if (get_option('geodirectory_db_version') != GEODIRECTORY_VERSION) {
     if (GEODIRECTORY_VERSION <= '1.6.18') {
         add_action('init', 'geodir_upgrade_1618', 11);
     }
+    
+    // Upgrade old options to new options before loading the rest GD options.
+    if (GEODIRECTORY_VERSION <= '2.0.0') {
+        add_action('init', 'geodir_upgrade_200');
+    }
 
     add_action('init', 'gd_fix_cpt_rewrite_slug', 11);// this needs to be kept for a few versions
 
@@ -919,3 +924,30 @@ function geodir_upgrade_1618() {
     
     return true;
 }
+
+function geodir_upgrade_200() {
+    global $geodir_options;
+    
+    $options = geodir_core_option_names();
+
+    if ( !empty( $options ) ) {
+        $saved_options = geodir_get_settings();
+        if ( empty( $saved_options ) ) {
+            $saved_options = array();
+        }
+    
+        foreach ( $options as $key => $option ) {
+            $value = get_option( $option, NULL );
+            
+            if ( $value !== NULL ) {
+                $saved_options[ $option ] = $value;
+            }
+        }
+        
+        if ( update_option( 'geodir_settings', $saved_options ) ) {
+            $geodir_options = $saved_options;
+        }
+    }
+
+    return true; 
+} 

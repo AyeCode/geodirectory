@@ -800,8 +800,8 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 		}
 
 		$to_message        = nl2br( $to_message );
-		$sitefromEmail     = get_option( 'site_email' );
-		$sitefromEmailName = get_site_emailName();
+		$sitefromEmail     = geodir_get_mail_from();
+		$sitefromEmailName = geodir_get_mail_from_name();
 		$productlink       = get_permalink( $post_id );
 
 		$user_login = '';
@@ -830,11 +830,11 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 		$current_date     = date_i18n( 'Y-m-d H:i:s', current_time( 'timestamp' ) );
 
 		if ( $fromEmail == '' ) {
-			$fromEmail = get_option( 'site_email' );
+			$fromEmail = geodir_get_mail_from();
 		}
 
 		if ( $fromEmailName == '' ) {
-			$fromEmailName = geodir_get_option( 'site_email_name' );
+			$fromEmailName = geodir_get_mail_from_name();
 		}
 
 		$search_array  = array(
@@ -1852,9 +1852,8 @@ if ( ! function_exists( 'adminEmail' ) ) {
 			$client_message = __( geodir_get_option( 'post_payment_fail_admin_email_content' ), 'geodirectory' );
 		}
 		$transaction_details = $custom_1;
-		$fromEmail           = geodir_get_option( 'site_email' );
-		$fromEmailName       = get_site_emailName();
-//$alivedays = get_post_meta($page_id,'alive_days',true);
+		$fromEmail            = geodir_get_mail_from();
+		$fromEmailName        = geodir_get_mail_from_name();
 		$pkg_limit            = get_property_price_info_listing( $page_id );
 		$alivedays            = $pkg_limit['days'];
 		$productlink          = get_permalink( $page_id );
@@ -5001,8 +5000,8 @@ function geodir_on_wp_insert_post( $post_ID, $post, $update ) {
 			}
 			$gd_notified_edited[$post_ID] = true;
 			
-			$from_email   = get_option( 'site_email' );
-			$from_name    = get_site_emailName();
+			$from_email   = geodir_get_mail_from();
+			$from_name    = geodir_get_mail_from_name();
 			$to_email     = get_option( 'admin_email' );
 			$to_name      = get_option( 'name' );
 			$message_type = 'listing_edited';

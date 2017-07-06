@@ -677,3 +677,15 @@ function geodir_font_awesome_rating_css() {
 		}
 	}
 }
+
+/**
+ * Get current WP theme name.
+ *
+ * @since 2.0.0
+ * @package GeoDirectory
+ */
+function geodir_wp_theme_name() {
+    $theme = wp_get_theme();
+    
+    return $theme->name;
+}

@@ -488,8 +488,8 @@ function geodir_update_options( $options, $dummy = false ) {
             }
             
             geodir_update_option( 'geodir_exclude_post_type_on_map', $post_types );
-            geodir_update_option('geodir_exclude_cat_on_map', $categories);
-            geodir_update_option('geodir_exclude_cat_on_map_upgrade', 1);
+            geodir_update_option( 'geodir_exclude_cat_on_map', $categories );
+            geodir_update_option( 'geodir_exclude_cat_on_map_upgrade', 1 );
         } else if ( isset( $option['type'] ) && $option['type'] == 'map_default_settings' ) {
             if ( !empty( $_POST['geodir_default_map_language'] ) ) {
                 geodir_update_option( 'geodir_default_map_language', $_POST['geodir_default_map_language'] );
@@ -6564,17 +6564,15 @@ function geodir_ga_deauthorize(){
  * @since 1.6.21
  * @return array
  */
-function geodir_listing_image_size_arr(){
-
+function geodir_listing_image_size_arr() {
     global $_wp_additional_image_sizes;
 
     $sizes = array();
-
     foreach ( get_intermediate_image_sizes() as $_size ) {
         if ( in_array( $_size, array('thumbnail', 'medium', 'medium_large', 'large') ) ) {
-            $sizes[ $_size ]['width']  = geodir_get_option( "{$_size}_size_w" );
-            $sizes[ $_size ]['height'] = geodir_get_option( "{$_size}_size_h" );
-            $sizes[ $_size ]['crop']   = (bool) geodir_get_option( "{$_size}_crop" );
+            $sizes[ $_size ]['width']  = get_option( "{$_size}_size_w" );
+            $sizes[ $_size ]['height'] = get_option( "{$_size}_size_h" );
+            $sizes[ $_size ]['crop']   = (bool)get_option( "{$_size}_crop" );
         } elseif ( isset( $_wp_additional_image_sizes[ $_size ] ) ) {
             $sizes[ $_size ] = array(
                 'width'  => $_wp_additional_image_sizes[ $_size ]['width'],
@@ -6583,16 +6581,13 @@ function geodir_listing_image_size_arr(){
             );
         }
     }
-
-
-
+    
     $options = array();
-
     $options['default'] = __('GD Default', 'geodirectory');
 
-    if(!empty($sizes)){
-        foreach($sizes as $key=>$val){
-            $options[$key] = $key. ' ( '.$val['width'].' x '.$val['height']. ' )';
+    if ( !empty( $sizes ) ) {
+        foreach ( $sizes as $key => $val ) {
+            $options[ $key ] = $key . ' ( ' . $val['width'] . ' x ' . $val['height'] . ' )';
         }
     }
 
