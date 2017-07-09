@@ -37,7 +37,7 @@ do_action('geodir_detail_before_main_content');
 do_action('geodir_before_main_content', 'details-page');
 
 ###### SIDEBAR ON LEFT ######
-if (get_option('geodir_detail_sidebar_left_section')) {
+if (geodir_get_option('geodir_detail_sidebar_left_section')) {
     /**
      * Adds the details page sidebar to the details template page.
      *
@@ -117,7 +117,7 @@ do_action('geodir_after_main_content');
 do_action('geodir_wrapper_content_close', 'details-page');
 
 ###### SIDEBAR ON RIGHT ######
-if (!get_option('geodir_detail_sidebar_left_section')) {
+if (!geodir_get_option('geodir_detail_sidebar_left_section')) {
     /** This action is documented in includes/templates/listing-detail.php */
     do_action('geodir_detail_sidebar');
 }

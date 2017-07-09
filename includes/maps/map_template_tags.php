@@ -165,7 +165,7 @@ function geodir_draw_map($map_args = array())
 	 *
 	 * @param array Array of post types to exclude to display data on map.
 	 */
-	$exclude_post_types = apply_filters("geodir_exclude_post_type_on_map_{$map_canvas_name}", get_option('geodir_exclude_post_type_on_map'));
+	$exclude_post_types = apply_filters("geodir_exclude_post_type_on_map_{$map_canvas_name}", geodir_get_option('geodir_exclude_post_type_on_map'));
 
     if (count((array)$post_types) != count($exclude_post_types) || ($enable_jason_on_load)):
         // Set default map options
@@ -292,7 +292,7 @@ function geodir_draw_map($map_args = array())
 
                         <select id="travel-units" onchange="calcRoute('<?php echo $map_canvas_name; ?>')">
                             <option value="miles"><?php _e('Miles', 'geodirectory'); ?></option>
-                            <option <?php if (get_option('geodir_search_dist_1') == 'km') {
+                            <option <?php if (geodir_get_option('geodir_search_dist_1') == 'km') {
                                 echo 'selected="selected"';
                             } ?> value="kilometers"><?php _e('Kilometers', 'geodirectory'); ?></option>
                         </select>
@@ -302,7 +302,7 @@ function geodir_draw_map($map_args = array())
                 <?php 
 				}
 				
-				$geodir_default_map_search_pt = get_option('geodir_default_map_search_pt');
+				$geodir_default_map_search_pt = geodir_get_option('geodir_default_map_search_pt');
 				if (empty($geodir_default_map_search_pt))
 					$geodir_default_map_search_pt = 'gd_place';
 
@@ -324,7 +324,7 @@ function geodir_draw_map($map_args = array())
 				?>
                 <div class="map-category-listing-main" style="display:<?php echo $show_entire_cat_panel;?>">
                     <?php
-                    $exclude_post_types = get_option('geodir_exclude_post_type_on_map');
+                    $exclude_post_types = geodir_get_option('geodir_exclude_post_type_on_map');
                     $geodir_available_pt_on_map = count(geodir_get_posttypes('array')) - count($exclude_post_types);
 					$map_cat_class = '';
 					if ($geodir_map_options['enable_post_type_filters']) {
@@ -405,7 +405,7 @@ function geodir_draw_map($map_args = array())
                 <?php if ($geodir_map_options['enable_post_type_filters']) {
                     $post_types = geodir_get_posttypes('object');
                     $all_post_types = geodir_get_posttypes('names');
-                    $exclude_post_types = get_option('geodir_exclude_post_type_on_map');
+                    $exclude_post_types = geodir_get_option('geodir_exclude_post_type_on_map');
                     if (is_array($exclude_post_types)) {
                         $map_post_types = array_diff($all_post_types, $exclude_post_types);
                     } else {

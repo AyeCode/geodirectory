@@ -189,7 +189,7 @@ function geodir_delete_dummy_posts($post_type,$data_type)
     //double check posts are deleted
     $wpdb->get_results("DELETE FROM " . $plugin_prefix . $post_type. "_detail WHERE post_dummy='1'");
 
-    update_option($post_type.'_dummy_data_type','');
+    geodir_update_option($post_type.'_dummy_data_type','');
 }
 
 /**
@@ -255,7 +255,7 @@ function geodir_insert_dummy_posts($post_type,$data_type,$item_index)
 }
 
 
-if (!function_exists('geodir_autoinstall_admin_header') && (get_option('geodir_installed') || defined( 'GD_TESTING_MODE' ))) {
+if ( !function_exists( 'geodir_autoinstall_admin_header' ) && ( get_option( 'geodir_installed' ) || defined( 'GD_TESTING_MODE' ) ) ) {
     /**
      * GeoDirectory dummy data installation.
      *
@@ -297,7 +297,7 @@ if (!function_exists('geodir_autoinstall_admin_header') && (get_option('geodir_i
                     $data_types_for = apply_filters('geodir_dummy_date_types_for',$data_types,$post_type);
 
 
-                    $set_dt = get_option($post_type.'_dummy_data_type');
+                    $set_dt = geodir_get_option($post_type.'_dummy_data_type');
 
                     $count = 30;
 

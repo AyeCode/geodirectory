@@ -15,16 +15,14 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 global $wpdb;
 
-if (get_option('geodir_un_geodirectory')) {
+if ( !defined( 'GEODIRECTORY_VERSION' ) ) {
+    // Load plugin file.
+    include_once( 'geodirectory.php' );
+}
+
+if ( geodir_get_option( 'geodir_un_geodirectory' ) ) {
     $wpdb->hide_errors();
-    
-    /*
-    if (!defined('GEODIRECTORY_VERSION')) {
-        // Load plugin file.
-        include_once('geodirectory.php');
-    }
-    */
 
     // Delete default data.
-    delete_option('geodir_default_data_installed');
+    geodir_delete_option( 'geodir_default_data_installed' );
 }

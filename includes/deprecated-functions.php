@@ -88,3 +88,70 @@ function geodir_load_textdomain() {
 		}
 	}
 }
+
+/**
+ * function for post type settings.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
+function geodir_post_type_setting_fun() {
+    $post_type_arr = array();
+
+    $post_types = geodir_get_posttypes('object');
+
+    foreach ($post_types as $key => $post_types_obj) {
+        $post_type_arr[$key] = $post_types_obj->labels->singular_name;
+    }
+    return $post_type_arr;
+}
+
+// Should be removed as no longer in use within plugins/themes.
+if ( !function_exists( 'is_allow_user_register' ) ) {
+    /**
+     * Checks whether the site allowing user registration or not.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @return bool|string
+     */
+    function is_allow_user_register() {
+        return get_option('users_can_register');
+    }
+}
+
+/**
+ * Get site email ID or site admin email ID.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @return string|mixed|void The email ID.
+ */
+function geodir_get_site_email_id() {
+    $site_email = geodir_get_option( 'site_email' );
+    
+    if ( !$site_email ) {
+        $site_email = get_option( 'admin_email' );
+    }
+    
+    return apply_filters( 'geodir_get_site_email_id', $site_email );
+}
+
+if ( !function_exists( 'get_site_emailName' ) ) {
+    /**
+     * Get site name for sending emails.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @return string Site name.
+     */
+    function get_site_emailName() {
+        $site_email_name = geodir_get_option( 'site_email_name' );
+    
+        if ( !$site_email_name ) {
+            $site_email_name = get_option( 'blogname' );
+        }
+        
+        return apply_filters( 'get_site_emailName', stripslashes( $site_email_name ) );
+    }
+}

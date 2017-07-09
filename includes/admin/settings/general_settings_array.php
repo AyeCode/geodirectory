@@ -6,6 +6,7 @@
  * @package GeoDirectory
  * @global array $geodir_settings Geodirectory settings array.
  */
+ 
 global $geodir_settings;
 
 /**
@@ -15,27 +16,24 @@ global $geodir_settings;
  * @package GeoDirectory
  */
 $general_options = apply_filters('geodir_general_options', array(
-
     array('name' => __('General', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'general_options'),
 
     array('name' => __('General Options', 'geodirectory'), 'type' => 'sectionstart', 'id' => 'general_options'),
-
     array(
         'name' => __('Sender name', 'geodirectory'),
         'desc' => __('(Name that will be shown as email sender when users receive emails from this site)', 'geodirectory'),
         'id' => 'site_email_name',
         'type' => 'text',
         'css' => 'min-width:300px;',
-        'std' => get_bloginfo('name') // Default value for the page title - changed in settings
+        'std' => get_bloginfo('name')
     ),
-
     array(
         'name' => __('Email address', 'geodirectory'),
         'desc' => __('(Emails to users will be sent via this mail ID)', 'geodirectory'),
         'id' => 'site_email',
         'type' => 'text',
         'css' => 'min-width:300px;',
-        'std' => get_bloginfo('admin_email') // Default value for the page title - changed in settings
+        'std' => get_bloginfo('admin_email')
     ),
     array(
         'name' => __('Allow user to see wp-admin area', 'geodirectory'),
@@ -55,7 +53,6 @@ $general_options = apply_filters('geodir_general_options', array(
         'value' => '0',
         'radiogroup' => 'end'
     ),
-
     array(
         'name' => __('Allow user to choose own password', 'geodirectory'),
         'desc' => __('Yes', 'geodirectory'),
@@ -84,7 +81,7 @@ $general_options = apply_filters('geodir_general_options', array(
         'type' => 'multiselect',
         'placeholder_text' => __('Select post types', 'geodirectory'),
         'class' => 'chosen_select',
-        'options' => array_unique(geodir_post_type_setting_fun())
+        'options' => geodir_post_type_options()
     ),
     array(
         'name' => __('User deleted posts go to trash', 'geodirectory'),
@@ -112,13 +109,9 @@ $general_options = apply_filters('geodir_general_options', array(
  * @package GeoDirectory
  */
 $google_analytic_settings = apply_filters('geodir_google_analytic_settings', array(
-
     array('name' => __('Google Analytics', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'google_analytic_settings'),
 
     array('name' => __('Google Analytic Settings', 'geodirectory'), 'type' => 'sectionstart', 'id' => 'google_analytic_settings'),
-
-
-
     array(
         'name' => __('Show business owner google analytics stats?', 'geodirectory'),
         'desc' => __('Yes', 'geodirectory'),
@@ -137,25 +130,22 @@ $google_analytic_settings = apply_filters('geodir_google_analytic_settings', arr
         'value' => '0',
         'radiogroup' => 'end'
     ),
-
     array(
         'name' => __('Google analytics access', 'geodirectory'),
         'desc' => '',
         'id' => 'geodir_ga_token',
         'type' => 'google_analytics',
         'css' => 'min-width:300px;',
-        'std' => '' // Default value for the page title - changed in settings
+        'std' => ''
     ),
-
     array(
         'name' => __('Google analytics Auth Code', 'geodirectory'),
         'desc' => __('You must save this setting before accounts will show.', 'geodirectory'),
         'id' => 'geodir_ga_auth_code',
         'type' => 'text',
         'css' => 'min-width:300px;',
-        'std' => '' // Default value for the page title - changed in settings
+        'std' => ''
     ),
-
     array(
         'name' => __('Analytics Account', 'geodirectory'),
         'desc' => __('Select the account that you setup for this site.', 'geodirectory'),
@@ -166,8 +156,6 @@ $google_analytic_settings = apply_filters('geodir_google_analytic_settings', arr
         'class' => 'chosen_select',
         'options' => geodir_gd_accounts()
     ),
-
-
     array(
         'name' => __('Add Google analytics tracking code to site?', 'geodirectory'),
         'desc' => __('Yes <small>(this will automatically add the correct tracking code to your site)</small>', 'geodirectory'),
@@ -186,7 +174,6 @@ $google_analytic_settings = apply_filters('geodir_google_analytic_settings', arr
         'value' => '0',
         'radiogroup' => 'end'
     ),
-
     array(
         'name' => __('Anonymize user IP?', 'geodirectory'),
         'desc' => __('In most cases this is not required, this is to comply with certain country laws such as Germany.', 'geodirectory'),
@@ -194,7 +181,6 @@ $google_analytic_settings = apply_filters('geodir_google_analytic_settings', arr
         'type' => 'checkbox',
         'std' => '0'
     ),
-
     array(
         'name' => __('Auto refresh active users?', 'geodirectory'),
         'desc' => __('If ticked it uses the auto refresh time below, if not it never refreshes unless the refresh button is clicked.', 'geodirectory'),
@@ -209,9 +195,7 @@ $google_analytic_settings = apply_filters('geodir_google_analytic_settings', arr
         'type' => 'text',
         'std' => '5'
     ),
-
     array('type' => 'sectionend', 'id' => 'google_analytic_settings'),
-
 )); // google_analytic_settings End
 
 /**
@@ -221,20 +205,17 @@ $google_analytic_settings = apply_filters('geodir_google_analytic_settings', arr
  * @package GeoDirectory
  */
 $search_settings = apply_filters('geodir_search_settings', array(
-
     array('name' => __('Search', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'search_settings'),
 
     array('name' => __('Search Settings', 'geodirectory'), 'type' => 'sectionstart', 'id' => 'search_settings'),
-
     array(
         'name' => __('Limit squared distance area to X miles (helps improve search speed)', 'geodirectory'),
         'desc' => __('Enter whole number only ex. 40 (Tokyo is largest city in the world @40 sq miles) LEAVE BLANK FOR NO DISTANCE LIMIT', 'geodirectory'),
         'id' => 'geodir_search_dist',
         'type' => 'text',
         'css' => 'min-width:300px;',
-        'std' => '40' // Default value for the page title - changed in settings
+        'std' => '40'
     ),
-
     array(
         'name' => __('Show search distances in miles or km', 'geodirectory'),
         'desc' => __('Miles', 'geodirectory'),
@@ -253,7 +234,6 @@ $search_settings = apply_filters('geodir_search_settings', array(
         'value' => 'km',
         'radiogroup' => 'end'
     ),
-
     array(
         'name' => __('If distance is less than 0.01 show distance in meters or feet', 'geodirectory'),
         'desc' => __('Meters', 'geodirectory'),
@@ -263,7 +243,6 @@ $search_settings = apply_filters('geodir_search_settings', array(
         'value' => 'meters',
         'radiogroup' => 'start'
     ),
-
     array(
         'name' => __('If distance is less than 0.01 show distance in meters or feet', 'geodirectory'),
         'desc' => __('Feet', 'geodirectory'),
@@ -273,7 +252,6 @@ $search_settings = apply_filters('geodir_search_settings', array(
         'value' => 'feet',
         'radiogroup' => 'end'
     ),
-
     array(
         'name' => __('Add location specific text to (Near) search for Google', 'geodirectory'),
         'desc' => __('This is usefull if your directory is limted to one location such as: New York or Australia (this setting should be blank if using default country, regions etc with multilocation addon as it will automatically add them)', 'geodirectory'),
@@ -297,11 +275,8 @@ $search_settings = apply_filters('geodir_search_settings', array(
             '3' => __('3 Character words and less excluded', 'geodirectory'),
         ))
     ),
-
-
     array('type' => 'sectionend', 'id' => 'search_settings'),
-
-)); //search_settings End
+)); // search_settings End
 
 /**
  * Filter GD Dummy data Settings array.
@@ -310,7 +285,6 @@ $search_settings = apply_filters('geodir_search_settings', array(
  * @package GeoDirectory
  */
 $dummy_data_settings = apply_filters('geodir_dummy_data_settings', array(
-
     array('name' => __('Dummy Data', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'dummy_data_settings'),
 
     array(
@@ -319,13 +293,13 @@ $dummy_data_settings = apply_filters('geodir_dummy_data_settings', array(
         'id' => 'geodir_dummy_data_installer',
         'type' => 'dummy_installer',
         'css' => 'min-width:300px;',
-        'std' => '40' // Default value for the page title - changed in settings
+        'std' => '40'
     ),
     array('type' => 'sectionend', 'id' => 'geodir_dummy_data_settings'),
 
-)); //dummy_data_settings End
+)); // dummy_data_settings End
 
-$general_settings = array_merge($general_options, $google_analytic_settings, $search_settings, $dummy_data_settings);
+$general_settings = array_merge( $general_options, $google_analytic_settings, $search_settings, $dummy_data_settings );
 
 /**
  * Filter GD General Settings array.

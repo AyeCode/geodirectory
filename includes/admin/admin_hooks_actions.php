@@ -45,11 +45,10 @@ if (!function_exists('geodir_admin_init')) {
  * @since 1.0.0
  * @package GeoDirectory
  */
-function geodir_redirect_to_admin_panel_on_installed()
-{
-    if (get_option('geodir_installation_redirect', false)) {
-        delete_option('geodir_installation_redirect');
-        wp_redirect(admin_url('admin.php?page=geodirectory&installed=yes'));
+function geodir_redirect_to_admin_panel_on_installed() {
+    if ( geodir_get_option( 'geodir_installation_redirect', false ) ) {
+        geodir_delete_option( 'geodir_installation_redirect' );
+        wp_redirect( admin_url( 'admin.php?page=geodirectory&installed=yes' ) );
     }
 }
 
@@ -267,7 +266,7 @@ add_action('admin_menu', 'geodir_hide_post_taxonomy_meta_boxes');
 function geodir_hide_post_taxonomy_meta_boxes()
 {
 
-    $geodir_post_types = get_option('geodir_post_types');
+    $geodir_post_types = geodir_get_option('geodir_post_types');
 
     if (!empty($geodir_post_types)) {
         foreach ($geodir_post_types as $geodir_post_type => $geodir_posttype_info) {
@@ -321,7 +320,7 @@ add_filter('geodir_notifications_settings', 'geodir_enable_editor_on_notificatio
 function geodir_enable_editor_on_notifications($notification)
 {
 
-    if (!empty($notification) && get_option('geodir_tiny_editor') == '1') {
+    if (!empty($notification) && geodir_get_option('geodir_tiny_editor') == '1') {
 
         foreach ($notification as $key => $value) {
             if ($value['type'] == 'textarea')
@@ -347,7 +346,7 @@ add_filter('geodir_design_settings', 'geodir_enable_editor_on_design_settings', 
 function geodir_enable_editor_on_design_settings($design_setting)
 {
 
-    if (!empty($design_setting) && get_option('geodir_tiny_editor') == '1') {
+    if (!empty($design_setting) && geodir_get_option('geodir_tiny_editor') == '1') {
 
         foreach ($design_setting as $key => $value) {
             if ($value['type'] == 'textarea' && $value['id'] == 'geodir_term_condition_content')
@@ -954,12 +953,12 @@ function geodir_remove_unnecessary_fields()
 {
     global $wpdb, $plugin_prefix;
 
-    if (!get_option('geodir_remove_unnecessary_fields')) {
+    if (!geodir_get_option('geodir_remove_unnecessary_fields')) {
 
         if ($wpdb->get_var("SHOW COLUMNS FROM " . $plugin_prefix . "gd_place_detail WHERE field = 'categories'"))
             $wpdb->query("ALTER TABLE `" . $plugin_prefix . "gd_place_detail` DROP `categories`");
 
-        update_option('geodir_remove_unnecessary_fields', '1');
+        geodir_update_option('geodir_remove_unnecessary_fields', '1');
 
     }
 
@@ -1582,7 +1581,7 @@ function geodir_fix_virtual_page($slug, $page_title, $old_id, $option)
         'comment_status' => 'closed'
     );
     $page_id = wp_insert_post($page_data);
-    update_option($option, $page_id);
+    geodir_update_option($option, $page_id);
     if ($page_id) {
         return true;
     } else {
@@ -1607,7 +1606,7 @@ function geodir_diagnose_default_pages()
     //////////////////////////////////
     /* Diagnose GD Home Page Starts */
     //////////////////////////////////
-    $option_value = get_option('geodir_home_page');
+    $option_value = geodir_get_option('geodir_home_page');
     $page = get_post($option_value);
     if(!empty($page)){$page_found = $page->ID;}else{$page_found = '';}
 
@@ -1632,7 +1631,7 @@ function geodir_diagnose_default_pages()
     //////////////////////////////////
     /* Diagnose Add Listing Page Starts */
     //////////////////////////////////
-    $option_value = get_option('geodir_add_listing_page');
+    $option_value = geodir_get_option('geodir_add_listing_page');
     $page = get_post($option_value);
     if(!empty($page)){$page_found = $page->ID;}else{$page_found = '';}
 
@@ -1658,7 +1657,7 @@ function geodir_diagnose_default_pages()
     //////////////////////////////////
     /* Diagnose Listing Preview Page Starts */
     //////////////////////////////////
-    $option_value = get_option('geodir_preview_page');
+    $option_value = geodir_get_option('geodir_preview_page');
     $page = get_post($option_value);
     if(!empty($page)){$page_found = $page->ID;}else{$page_found = '';}
 
@@ -1683,7 +1682,7 @@ function geodir_diagnose_default_pages()
     //////////////////////////////////
     /* Diagnose Listing Success Page Starts */
     //////////////////////////////////
-    $option_value = get_option('geodir_success_page');
+    $option_value = geodir_get_option('geodir_success_page');
     $page = get_post($option_value);
     if(!empty($page)){$page_found = $page->ID;}else{$page_found = '';}
 
@@ -1708,7 +1707,7 @@ function geodir_diagnose_default_pages()
     //////////////////////////////////
     /* Diagnose Info Page Starts */
     //////////////////////////////////
-    $option_value = get_option('geodir_info_page');
+    $option_value = geodir_get_option('geodir_info_page');
     $page = get_post($option_value);
     if(!empty($page)){$page_found = $page->ID;}else{$page_found = '';}
 
@@ -1733,7 +1732,7 @@ function geodir_diagnose_default_pages()
     //////////////////////////////////
     /* Diagnose Login Page Starts */
     //////////////////////////////////
-    $option_value = get_option('geodir_login_page');
+    $option_value = geodir_get_option('geodir_login_page');
     $page = get_post($option_value);
     if(!empty($page)){$page_found = $page->ID;}else{$page_found = '';}
 
@@ -1758,7 +1757,7 @@ function geodir_diagnose_default_pages()
     //////////////////////////////////
     /* Diagnose Location Page Starts */
     //////////////////////////////////
-    $option_value = get_option('geodir_location_page');
+    $option_value = geodir_get_option('geodir_location_page');
     $page = get_post($option_value);
     if(!empty($page)){$page_found = $page->ID;}else{$page_found = '';}
 
@@ -2339,8 +2338,8 @@ add_action( 'wp_ajax_nopriv_geodir_import_exportn', 'geodir_ajax_import_export' 
  * @param $post object $post The post object of the post being saved.
  */
 function geodir_update_location_prefix($post_id,$post){
-    if($post->post_type=='page' && $post->post_name && $post_id==get_option('geodir_location_page')){
-        update_option('geodir_location_prefix',$post->post_name);
+    if($post->post_type=='page' && $post->post_name && $post_id==geodir_get_option('geodir_location_page')){
+        geodir_update_option('geodir_location_prefix',$post->post_name);
     }
 
 }
@@ -2356,8 +2355,8 @@ if(isset($_REQUEST['code']) && $_REQUEST['code']) {
     $code = "code=".$_REQUEST['code'];
     $grant_type = "&grant_type=authorization_code";
     $redirect_uri = "&redirect_uri=" . admin_url('admin-ajax.php') . "?action=geodir_ga_callback";
-    $client_id = "&client_id=".get_option('geodir_ga_client_id');
-    $client_secret = "&client_secret=".get_option('geodir_ga_client_secret');
+    $client_id = "&client_id=".geodir_get_option('geodir_ga_client_id');
+    $client_secret = "&client_secret=".geodir_get_option('geodir_ga_client_secret');
 
     $auth_url = $oAuthURL . $code . $redirect_uri .  $grant_type . $client_id .$client_secret;
 
@@ -2373,8 +2372,8 @@ if(isset($_REQUEST['code']) && $_REQUEST['code']) {
         if(!isset($parts->access_token)){echo $error_msg." - #1";exit;}
         else{
 
-            update_option('gd_ga_access_token', $parts->access_token);
-            update_option('gd_ga_refresh_token', $parts->refresh_token);
+            geodir_update_option('gd_ga_access_token', $parts->access_token);
+            geodir_update_option('gd_ga_refresh_token', $parts->refresh_token);
             ?><script>window.close();</script><?php
         }
 
@@ -2479,7 +2478,7 @@ function geodir_resave_settings($settings = array()) {
         $c = 0;
         
         foreach ($settings as $setting) {
-            if (!empty($setting['id']) && false !== ($value = get_option($setting['id']))) {
+            if (!empty($setting['id']) && false !== ($value = geodir_get_option($setting['id']))) {
                 $settings[$c]['std'] = $value;
             }
             $c++;

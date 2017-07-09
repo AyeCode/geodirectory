@@ -3,11 +3,11 @@
 if (!defined( 'ABSPATH' ) ) exit;
 
 /**
- * Geodir_Session Class.
+ * GeoDir_Session Class.
  *
  * @since 1.5.7
  */
-class Geodir_Session {
+class GeoDir_Session {
 	/**
 	 * Holds our session data.
 	 *
@@ -257,7 +257,7 @@ class Geodir_Session {
 		$ret = false;
 
 		// If the database variable is already set, no need to run autodetection
-		$geodir_use_php_sessions = (bool)get_option( 'geodir_use_php_sessions' );
+		$geodir_use_php_sessions = (bool)geodir_get_option( 'geodir_use_php_sessions' );
 
 		if (!$geodir_use_php_sessions ) {
 			// Attempt to detect if the server supports PHP sessions
@@ -268,7 +268,7 @@ class Geodir_Session {
 					$ret = true;
 
 					// Set the database option
-					update_option( 'geodir_use_php_sessions', true );
+					geodir_update_option( 'geodir_use_php_sessions', true );
 				}
 			}
 		} else {
@@ -296,4 +296,4 @@ class Geodir_Session {
 }
 
 global $gd_session;
-$gd_session = new Geodir_Session();
+$gd_session = new GeoDir_Session();

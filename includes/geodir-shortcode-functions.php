@@ -195,7 +195,7 @@ function geodir_sc_home_map($atts)
 	// Add marker cluster
 	if (isset($params['marker_cluster']) && gdsc_to_bool_val($params['marker_cluster']) && defined('GDCLUSTER_VERSION')) {
         $map_args['enable_marker_cluster'] = true;
-        if(get_option('geodir_marker_cluster_type')) {
+        if(geodir_get_option('geodir_marker_cluster_type')) {
             if ($map_args['autozoom']) {
                 $map_args['enable_marker_cluster_no_reposition'] = false;
             } else {
@@ -2260,7 +2260,7 @@ jQuery(document).on('click', '.<?php echo trim($identifier);?> .gd-wgt-page', fu
               /**
                * if lazyload images enabled then refresh them once ajax page changed.
                */
-              if (get_option('geodir_lazy_load', 1)) { ?>
+              if (geodir_get_option('geodir_lazy_load', 1)) { ?>
               geodir_init_lazy_load();
               <?php } ?>
         }
@@ -2322,7 +2322,7 @@ function geodir_sc_listings_pagination($total_posts, $posts_per_page, $pageno, $
 	ob_start();
 	if ($max_page > 1 || $always_show) {
 		// Extra pagination info
-		$geodir_pagination_more_info = get_option('geodir_pagination_advance_info');
+		$geodir_pagination_more_info = geodir_get_option('geodir_pagination_advance_info');
 		$start_no = ( $pageno - 1 ) * $posts_per_page + 1;
 		$end_no = min($pageno * $posts_per_page, $numposts);
 		

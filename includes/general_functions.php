@@ -622,7 +622,7 @@ if ( ! function_exists( 'geodir_get_imagesize' ) ) {
 function geodir_get_image_size( $image_size ) {
 	$return = '';
 	switch ($image_size) :
-		case "list_thumbnail_size" : $return = get_option('geodirectory_list_thumbnail_size'); break;
+		case "list_thumbnail_size" : $return = geodir_get_option('geodirectory_list_thumbnail_size'); break;
 	endswitch;
 	return apply_filters( 'geodir_get_image_size_'.$image_size, $return );
 }
@@ -757,11 +757,11 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 		$to_message = stripslashes_deep( $to_message );
 
 		if ( $message_type == 'send_friend' ) {
-			$subject = get_option( 'geodir_email_friend_subject' );
-			$message = get_option( 'geodir_email_friend_content' );
+			$subject = geodir_get_option( 'geodir_email_friend_subject' );
+			$message = geodir_get_option( 'geodir_email_friend_content' );
 		} elseif ( $message_type == 'send_enquiry' ) {
-			$subject = get_option( 'geodir_email_enquiry_subject' );
-			$message = get_option( 'geodir_email_enquiry_content' );
+			$subject = geodir_get_option( 'geodir_email_enquiry_subject' );
+			$message = geodir_get_option( 'geodir_email_enquiry_content' );
 
 			// change to name in some cases
 			$post_author = get_post_field( 'post_author', $post_id );
@@ -773,22 +773,22 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 
 
 		} elseif ( $message_type == 'forgot_password' ) {
-			$subject       = get_option( 'geodir_forgot_password_subject' );
-			$message       = get_option( 'geodir_forgot_password_content' );
+			$subject       = geodir_get_option( 'geodir_forgot_password_subject' );
+			$message       = geodir_get_option( 'geodir_forgot_password_content' );
 			$login_details = $to_message;
 		} elseif ( $message_type == 'registration' ) {
-			$subject       = get_option( 'geodir_registration_success_email_subject' );
-			$message       = get_option( 'geodir_registration_success_email_content' );
+			$subject       = geodir_get_option( 'geodir_registration_success_email_subject' );
+			$message       = geodir_get_option( 'geodir_registration_success_email_content' );
 			$login_details = $to_message;
 		} elseif ( $message_type == 'post_submit' ) {
-			$subject = get_option( 'geodir_post_submited_success_email_subject' );
-			$message = get_option( 'geodir_post_submited_success_email_content' );
+			$subject = geodir_get_option( 'geodir_post_submited_success_email_subject' );
+			$message = geodir_get_option( 'geodir_post_submited_success_email_content' );
 		} elseif ( $message_type == 'listing_published' ) {
-			$subject = get_option( 'geodir_post_published_email_subject' );
-			$message = get_option( 'geodir_post_published_email_content' );
+			$subject = geodir_get_option( 'geodir_post_published_email_subject' );
+			$message = geodir_get_option( 'geodir_post_published_email_content' );
 		} elseif ( $message_type == 'listing_edited' ) {
-			$subject = get_option( 'geodir_post_edited_email_subject_admin' );
-			$message = get_option( 'geodir_post_edited_email_content_admin' );
+			$subject = geodir_get_option( 'geodir_post_edited_email_subject_admin' );
+			$message = geodir_get_option( 'geodir_post_edited_email_content_admin' );
 		}
 
 		if ( ! empty( $subject ) ) {
@@ -800,8 +800,8 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 		}
 
 		$to_message        = nl2br( $to_message );
-		$sitefromEmail     = get_option( 'site_email' );
-		$sitefromEmailName = get_site_emailName();
+		$sitefromEmail     = geodir_get_mail_from();
+		$sitefromEmailName = geodir_get_mail_from_name();
 		$productlink       = get_permalink( $post_id );
 
 		$user_login = '';
@@ -830,11 +830,11 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 		$current_date     = date_i18n( 'Y-m-d H:i:s', current_time( 'timestamp' ) );
 
 		if ( $fromEmail == '' ) {
-			$fromEmail = get_option( 'site_email' );
+			$fromEmail = geodir_get_mail_from();
 		}
 
 		if ( $fromEmailName == '' ) {
-			$fromEmailName = get_option( 'site_email_name' );
+			$fromEmailName = geodir_get_mail_from_name();
 		}
 
 		$search_array  = array(
@@ -1030,8 +1030,8 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 			$message      = $message_raw[0] . __( 'Password:', 'geodirectory' ) . ' **********</p>' . $message_raw2[1];
 		}
 		if ( $message_type == 'post_submit' ) {
-			$subject = __( stripslashes_deep( get_option( 'geodir_post_submited_success_email_subject_admin' ) ), 'geodirectory' );
-			$message = __( stripslashes_deep( get_option( 'geodir_post_submited_success_email_content_admin' ) ), 'geodirectory' );
+			$subject = __( stripslashes_deep( geodir_get_option( 'geodir_post_submited_success_email_subject_admin' ) ), 'geodirectory' );
+			$message = __( stripslashes_deep( geodir_get_option( 'geodir_post_submited_success_email_content_admin' ) ), 'geodirectory' );
 
 			$search_array  = array(
 				'[#listing_link#]',
@@ -1106,16 +1106,16 @@ if ( ! function_exists( 'geodir_sendEmail' ) ) {
 			$subject .= ' - ADMIN BCC COPY';
 			$admin_bcc = true;
 
-		} elseif ( $message_type == 'registration' && get_option( 'geodir_bcc_new_user' ) ) {
+		} elseif ( $message_type == 'registration' && geodir_get_option( 'geodir_bcc_new_user' ) ) {
 			$subject .= ' - ADMIN BCC COPY';
 			$admin_bcc = true;
-		} elseif ( $message_type == 'send_friend' && get_option( 'geodir_bcc_friend' ) ) {
+		} elseif ( $message_type == 'send_friend' && geodir_get_option( 'geodir_bcc_friend' ) ) {
 			$subject .= ' - ADMIN BCC COPY';
 			$admin_bcc = true;
-		} elseif ( $message_type == 'send_enquiry' && get_option( 'geodir_bcc_enquiry' ) ) {
+		} elseif ( $message_type == 'send_enquiry' && geodir_get_option( 'geodir_bcc_enquiry' ) ) {
 			$subject .= ' - ADMIN BCC COPY';
 			$admin_bcc = true;
-		} elseif ( $message_type == 'listing_published' && get_option( 'geodir_bcc_listing_published' ) ) {
+		} elseif ( $message_type == 'listing_published' && geodir_get_option( 'geodir_bcc_listing_published' ) ) {
 			$subject .= ' - ADMIN BCC COPY';
 			$admin_bcc = true;
 		}
@@ -1216,7 +1216,7 @@ function geodir_taxonomy_breadcrumb() {
 
 function geodir_wpml_post_type_archive_link($link, $post_type){
 	if (function_exists('icl_object_id')) {
-		$post_types   = get_option( 'geodir_post_types' );
+		$post_types   = geodir_get_option( 'geodir_post_types' );
 		
 		if ( isset( $post_types[ $post_type ] ) ) {
 			$slug = $post_types[ $post_type ]['rewrite']['slug'];
@@ -1298,7 +1298,7 @@ function geodir_breadcrumb() {
 		if ( geodir_is_page( 'detail' ) || geodir_is_page( 'listing' ) ) {
 			global $post;
 			$location_manager     = defined( 'POST_LOCATION_TABLE' ) ? true : false;
-			$neighbourhood_active = $location_manager && get_option( 'location_neighbourhoods' ) ? true : false;
+			$neighbourhood_active = $location_manager && geodir_get_option( 'location_neighbourhoods' ) ? true : false;
 
 			if ( geodir_is_page( 'detail' ) && isset( $post->country_slug ) ) {
 				$location_terms = array(
@@ -1312,12 +1312,12 @@ function geodir_breadcrumb() {
 				}
 			}
 
-			$geodir_show_location_url = get_option( 'geodir_show_location_url' );
+			$geodir_show_location_url = geodir_get_option( 'geodir_show_location_url' );
 
 			$hide_url_part = array();
 			if ( $location_manager ) {
-				$hide_country_part = get_option( 'geodir_location_hide_country_part' );
-				$hide_region_part  = get_option( 'geodir_location_hide_region_part' );
+				$hide_country_part = geodir_get_option( 'geodir_location_hide_country_part' );
+				$hide_region_part  = geodir_get_option( 'geodir_location_hide_region_part' );
 
 				if ( $hide_region_part && $hide_country_part ) {
 					$hide_url_part = array( 'gd_country', 'gd_region' );
@@ -1455,7 +1455,7 @@ function geodir_breadcrumb() {
 			if ( ! empty( $gd_taxonomy ) ) {
 				$term_index = 1;
 
-				//if(get_option('geodir_add_categories_url'))
+				//if(geodir_get_option('geodir_add_categories_url'))
 				{
 					if ( get_query_var( $gd_post_type . '_tags' ) ) {
 						$cat_link = $listing_link . 'tags/';
@@ -1631,7 +1631,7 @@ if ( ! function_exists( 'geodir_allow_wpadmin' ) ) {
 	 */
 	function geodir_allow_wpadmin() {
 		global $wpdb;
-		if ( get_option( 'geodir_allow_wpadmin' ) == '0' && is_user_logged_in() && ( ! defined( 'DOING_AJAX' ) ) ) // checking action in request to allow ajax request go through
+		if ( geodir_get_option( 'geodir_allow_wpadmin' ) == '0' && is_user_logged_in() && ( ! defined( 'DOING_AJAX' ) ) ) // checking action in request to allow ajax request go through
 		{
 			if ( current_user_can( 'administrator' ) ) {
 			} else {
@@ -1747,7 +1747,7 @@ function fetch_remote_file( $url ) {
  * @return string|void Max upload size.
  */
 function geodir_max_upload_size() {
-	$max_filesize = (float) get_option( 'geodir_upload_max_filesize', 2 );
+	$max_filesize = (float) geodir_get_option( 'geodir_upload_max_filesize', 2 );
 
 	if ( $max_filesize > 0 && $max_filesize < 1 ) {
 		$max_filesize = (int) ( $max_filesize * 1024 ) . 'kb';
@@ -1821,40 +1821,39 @@ if ( ! function_exists( 'adminEmail' ) ) {
 	function adminEmail( $page_id, $user_id, $message_type, $custom_1 = '' ) {
 		global $wpdb;
 		if ( $message_type == 'expiration' ) {
-			$subject        = stripslashes( __( get_option( 'renew_email_subject' ), 'geodirectory' ) );
-			$client_message = stripslashes( __( get_option( 'renew_email_content' ), 'geodirectory' ) );
+			$subject        = stripslashes( __( geodir_get_option( 'renew_email_subject' ), 'geodirectory' ) );
+			$client_message = stripslashes( __( geodir_get_option( 'renew_email_content' ), 'geodirectory' ) );
 		} elseif ( $message_type == 'post_submited' ) {
-			$subject        = __( get_option( 'post_submited_success_email_subject_admin' ), 'geodirectory' );
-			$client_message = __( get_option( 'post_submited_success_email_content_admin' ), 'geodirectory' );
+			$subject        = __( geodir_get_option( 'post_submited_success_email_subject_admin' ), 'geodirectory' );
+			$client_message = __( geodir_get_option( 'post_submited_success_email_content_admin' ), 'geodirectory' );
 		} elseif ( $message_type == 'renew' ) {
-			$subject        = __( get_option( 'post_renew_success_email_subject_admin' ), 'geodirectory' );
-			$client_message = __( get_option( 'post_renew_success_email_content_admin' ), 'geodirectory' );
+			$subject        = __( geodir_get_option( 'post_renew_success_email_subject_admin' ), 'geodirectory' );
+			$client_message = __( geodir_get_option( 'post_renew_success_email_content_admin' ), 'geodirectory' );
 		} elseif ( $message_type == 'upgrade' ) {
-			$subject        = __( get_option( 'post_upgrade_success_email_subject_admin' ), 'geodirectory' );
-			$client_message = __( get_option( 'post_upgrade_success_email_content_admin' ), 'geodirectory' );
+			$subject        = __( geodir_get_option( 'post_upgrade_success_email_subject_admin' ), 'geodirectory' );
+			$client_message = __( geodir_get_option( 'post_upgrade_success_email_content_admin' ), 'geodirectory' );
 		} elseif ( $message_type == 'claim_approved' ) {
-			$subject        = __( get_option( 'claim_approved_email_subject' ), 'geodirectory' );
-			$client_message = __( get_option( 'claim_approved_email_content' ), 'geodirectory' );
+			$subject        = __( geodir_get_option( 'claim_approved_email_subject' ), 'geodirectory' );
+			$client_message = __( geodir_get_option( 'claim_approved_email_content' ), 'geodirectory' );
 		} elseif ( $message_type == 'claim_rejected' ) {
-			$subject        = __( get_option( 'claim_rejected_email_subject' ), 'geodirectory' );
-			$client_message = __( get_option( 'claim_rejected_email_content' ), 'geodirectory' );
+			$subject        = __( geodir_get_option( 'claim_rejected_email_subject' ), 'geodirectory' );
+			$client_message = __( geodir_get_option( 'claim_rejected_email_content' ), 'geodirectory' );
 		} elseif ( $message_type == 'claim_requested' ) {
-			$subject        = __( get_option( 'claim_email_subject_admin' ), 'geodirectory' );
-			$client_message = __( get_option( 'claim_email_content_admin' ), 'geodirectory' );
+			$subject        = __( geodir_get_option( 'claim_email_subject_admin' ), 'geodirectory' );
+			$client_message = __( geodir_get_option( 'claim_email_content_admin' ), 'geodirectory' );
 		} elseif ( $message_type == 'auto_claim' ) {
-			$subject        = __( get_option( 'auto_claim_email_subject' ), 'geodirectory' );
-			$client_message = __( get_option( 'auto_claim_email_content' ), 'geodirectory' );
+			$subject        = __( geodir_get_option( 'auto_claim_email_subject' ), 'geodirectory' );
+			$client_message = __( geodir_get_option( 'auto_claim_email_content' ), 'geodirectory' );
 		} elseif ( $message_type == 'payment_success' ) {
-			$subject        = __( get_option( 'post_payment_success_admin_email_subject' ), 'geodirectory' );
-			$client_message = __( get_option( 'post_payment_success_admin_email_content' ), 'geodirectory' );
+			$subject        = __( geodir_get_option( 'post_payment_success_admin_email_subject' ), 'geodirectory' );
+			$client_message = __( geodir_get_option( 'post_payment_success_admin_email_content' ), 'geodirectory' );
 		} elseif ( $message_type == 'payment_fail' ) {
-			$subject        = __( get_option( 'post_payment_fail_admin_email_subject' ), 'geodirectory' );
-			$client_message = __( get_option( 'post_payment_fail_admin_email_content' ), 'geodirectory' );
+			$subject        = __( geodir_get_option( 'post_payment_fail_admin_email_subject' ), 'geodirectory' );
+			$client_message = __( geodir_get_option( 'post_payment_fail_admin_email_content' ), 'geodirectory' );
 		}
 		$transaction_details = $custom_1;
-		$fromEmail           = get_option( 'site_email' );
-		$fromEmailName       = get_site_emailName();
-//$alivedays = get_post_meta($page_id,'alive_days',true);
+		$fromEmail            = geodir_get_mail_from();
+		$fromEmailName        = geodir_get_mail_from_name();
 		$pkg_limit            = get_property_price_info_listing( $page_id );
 		$alivedays            = $pkg_limit['days'];
 		$productlink          = get_permalink( $page_id );
@@ -1869,7 +1868,7 @@ if ( ! function_exists( 'adminEmail' ) ) {
 		$user_email           = $user_info->user_email;
 		$display_name         = geodir_get_client_name( $user_id );
 		$user_login           = $user_info->user_login;
-		$number_of_grace_days = get_option( 'ptthemes_listing_preexpiry_notice_days' );
+		$number_of_grace_days = geodir_get_option( 'ptthemes_listing_preexpiry_notice_days' );
 		if ( $number_of_grace_days == '' ) {
 			$number_of_grace_days = 1;
 		}
@@ -2115,7 +2114,7 @@ function geodir_map_zoom_level() {
  */
 function geodir_option_version_backup( $geodir_option_name ) {
 	$version_date  = time();
-	$geodir_option = get_option( $geodir_option_name );
+	$geodir_option = geodir_get_option( $geodir_option_name );
 
 	if ( ! empty( $geodir_option ) ) {
 		add_option( $geodir_option_name . '_' . $version_date, $geodir_option );
@@ -2198,7 +2197,7 @@ function geodir_wpml_check_element_id() {
 	global $sitepress;
 	if ( geodir_wpml_multilingual_status() && ! empty( $sitepress ) && isset( $sitepress->queries ) ) {
 		$el_type      = 'post_page';
-		$el_id        = get_option( 'geodir_add_listing_page' );
+		$el_id        = geodir_get_option( 'geodir_add_listing_page' );
 		$default_lang = $sitepress->get_default_language();
 		$el_details   = $sitepress->get_element_language_details( $el_id, $el_type );
 
@@ -2641,7 +2640,7 @@ function geodir_media_image_large_width( $default = 800, $params = '' ) {
 	$large_size_w = $large_size_w > 0 ? $large_size_w : $default;
 	$large_size_w = absint( $large_size_w );
 
-	if ( ! get_option( 'geodir_use_wp_media_large_size' ) ) {
+	if ( ! geodir_get_option( 'geodir_use_wp_media_large_size' ) ) {
 		$large_size_w = 800;
 	}
 
@@ -2675,7 +2674,7 @@ function geodir_media_image_large_height( $default = 800, $params = '' ) {
 	$large_size_h = $large_size_h > 0 ? $large_size_h : $default;
 	$large_size_h = absint( $large_size_h );
 
-	if ( ! get_option( 'geodir_use_wp_media_large_size' ) ) {
+	if ( ! geodir_get_option( 'geodir_use_wp_media_large_size' ) ) {
 		$large_size_h = 800;
 	}
 
@@ -2784,9 +2783,9 @@ function is_page_geodir_home() {
 		add_filter( 'home_url', 'geodir_location_geo_home_link', 100000, 2 );
 	}
 	$home_url = str_replace( "www.", "", $home_url );
-	if ( ( strpos( $home_url, $cur_url ) !== false || strpos( $home_url . '/', $cur_url ) !== false ) && ( 'page' == get_option( 'show_on_front' ) && get_option( 'page_on_front' ) && get_option( 'page_on_front' ) == get_option( 'geodir_home_page' ) ) ) {
+	if ( ( strpos( $home_url, $cur_url ) !== false || strpos( $home_url . '/', $cur_url ) !== false ) && ( 'page' == get_option( 'show_on_front' ) && get_option( 'page_on_front' ) && get_option( 'page_on_front' ) == geodir_get_option( 'geodir_home_page' ) ) ) {
 		return true;
-	} elseif ( get_query_var( 'page_id' ) == get_option( 'page_on_front' ) && 'page' == get_option( 'show_on_front' ) && get_option( 'page_on_front' ) && get_option( 'page_on_front' ) == get_option( 'geodir_home_page' ) ) {
+	} elseif ( get_query_var( 'page_id' ) == get_option( 'page_on_front' ) && 'page' == get_option( 'show_on_front' ) && get_option( 'page_on_front' ) && get_option( 'page_on_front' ) == geodir_get_option( 'geodir_home_page' ) ) {
 		return true;
 	} else {
 		return false;
@@ -3268,7 +3267,7 @@ function geodir_listing_slider_widget_output( $args = '', $instance = '' ) {
 		foreach ( $widget_listings as $widget_listing ) {
 			global $gd_widget_listing_type;
 			$post         = $widget_listing;
-			$widget_image = geodir_get_featured_image( $post->ID, 'thumbnail', get_option( 'geodir_listing_no_img' ) );
+			$widget_image = geodir_get_featured_image( $post->ID, 'thumbnail', geodir_get_option( 'geodir_listing_no_img' ) );
 
 			if ( ! empty( $widget_image ) ) {
 				if ( $widget_image->height >= 200 ) {
@@ -3362,8 +3361,8 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 		       href="<?php echo wp_logout_url( home_url() ); ?>"><?php _e( 'Logout', 'geodirectory' ); ?></a></li>
 		<?php
 		$post_types                           = geodir_get_posttypes( 'object' );
-		$show_add_listing_post_types_main_nav = get_option( 'geodir_add_listing_link_user_dashboard' );
-		$geodir_allow_posttype_frontend       = get_option( 'geodir_allow_posttype_frontend' );
+		$show_add_listing_post_types_main_nav = geodir_get_option( 'geodir_add_listing_link_user_dashboard' );
+		$geodir_allow_posttype_frontend       = geodir_get_option( 'geodir_allow_posttype_frontend' );
 
 		if ( ! empty( $show_add_listing_post_types_main_nav ) ) {
 			$addlisting_links = '';
@@ -3413,7 +3412,7 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 
 		}
 		// My Favourites in Dashboard
-		$show_favorite_link_user_dashboard = get_option( 'geodir_favorite_link_user_dashboard' );
+		$show_favorite_link_user_dashboard = geodir_get_option( 'geodir_favorite_link_user_dashboard' );
 		$user_favourite                    = geodir_user_favourite_listing_count();
 
 		if ( ! empty( $show_favorite_link_user_dashboard ) && ! empty( $user_favourite ) ) {
@@ -3464,7 +3463,7 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 		}
 
 
-		$show_listing_link_user_dashboard = get_option( 'geodir_listing_link_user_dashboard' );
+		$show_listing_link_user_dashboard = geodir_get_option( 'geodir_listing_link_user_dashboard' );
 		$user_listing                     = geodir_user_post_listing_count();
 
 		if ( ! empty( $show_listing_link_user_dashboard ) && ! empty( $user_listing ) ) {
@@ -3726,7 +3725,7 @@ function geodir_popular_postview_output( $args = '', $instance = '' ) {
 		$country = get_query_var( 'gd_country' );
 		$region  = get_query_var( 'gd_region' );
 
-		$geodir_show_location_url = get_option( 'geodir_show_location_url' );
+		$geodir_show_location_url = geodir_get_option( 'geodir_show_location_url' );
 
 		if ( $geodir_show_location_url == 'all' ) {
 			if ( $country != '' ) {
@@ -3979,7 +3978,7 @@ function geodir_count_reviews_by_terms( $force_update = false, $post_ID = 0 ) {
 		return $option_data;
 	}
 
-	$option_data = get_option( 'geodir_global_review_count' );
+	$option_data = geodir_get_option( 'geodir_global_review_count' );
 
 	if ( ! $option_data || $force_update ) {
 		if ( (int) $post_ID > 0 ) { // Update reviews count for specific post categories only.
@@ -4043,7 +4042,7 @@ function geodir_count_reviews_by_terms( $force_update = false, $post_ID = 0 ) {
 			}
 		}
 
-		update_option( 'geodir_global_review_count', $term_array );
+		geodir_update_option( 'geodir_global_review_count', $term_array );
 		//clear cache
 		wp_cache_delete( 'geodir_global_review_count' );
 
@@ -4928,8 +4927,8 @@ function geodir_remove_location_terms( $location_terms = array() ) {
 	$location_manager = defined( 'POST_LOCATION_TABLE' ) ? true : false;
 
 	if ( ! empty( $location_terms ) && $location_manager ) {
-		$hide_country_part = get_option( 'geodir_location_hide_country_part' );
-		$hide_region_part  = get_option( 'geodir_location_hide_region_part' );
+		$hide_country_part = geodir_get_option( 'geodir_location_hide_country_part' );
+		$hide_region_part  = geodir_get_option( 'geodir_location_hide_region_part' );
 
 		if ( $hide_region_part && $hide_country_part ) {
 			if ( isset( $location_terms['gd_country'] ) ) {
@@ -4992,7 +4991,7 @@ function geodir_on_wp_insert_post( $post_ID, $post, $update ) {
 
 	$user_id = (int) get_current_user_id();
 
-	if ( $user_id > 0 && get_option( 'geodir_notify_post_edited' ) && ! wp_is_post_revision( $post_ID ) && in_array( $post->post_type, geodir_get_posttypes() ) ) {
+	if ( $user_id > 0 && geodir_get_option( 'geodir_notify_post_edited' ) && ! wp_is_post_revision( $post_ID ) && in_array( $post->post_type, geodir_get_posttypes() ) ) {
 		$author_id = ! empty( $post->post_author ) ? $post->post_author : 0;
 
 		if ( $user_id == $author_id && ! is_super_admin() && empty( $gd_notified_edited[$post_ID] ) ) {
@@ -5001,8 +5000,8 @@ function geodir_on_wp_insert_post( $post_ID, $post, $update ) {
 			}
 			$gd_notified_edited[$post_ID] = true;
 			
-			$from_email   = get_option( 'site_email' );
-			$from_name    = get_site_emailName();
+			$from_email   = geodir_get_mail_from();
+			$from_name    = geodir_get_mail_from_name();
 			$to_email     = get_option( 'admin_email' );
 			$to_name      = get_option( 'name' );
 			$message_type = 'listing_edited';

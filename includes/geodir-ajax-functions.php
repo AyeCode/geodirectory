@@ -71,7 +71,7 @@ function geodir_on_init()
 
 
 
-    if (get_option('geodir_allow_wpadmin') == '0' && is_user_logged_in() && !current_user_can('manage_options') && !class_exists('BuddyPress')) {
+    if (geodir_get_option('geodir_allow_wpadmin') == '0' && is_user_logged_in() && !current_user_can('manage_options') && !class_exists('BuddyPress')) {
         show_admin_bar(false);
     }
 
@@ -316,7 +316,7 @@ function geodir_ajax_handler() {
                     if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
                         global $current_user;
 
-                        if (get_option('geodir_disable_perm_delete')) {
+                        if (geodir_get_option('geodir_disable_perm_delete')) {
                             $lastid = wp_trash_post($_REQUEST['pid']);
                         } else {
                             $lastid = wp_delete_post($_REQUEST['pid']);

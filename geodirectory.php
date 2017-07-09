@@ -180,8 +180,7 @@ final class GeoDirectory {
          */
         include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-autoloader.php' );
         
-        global $edd_options;
-
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/core-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/settings/register-settings.php' );
         $geodir_options = geodir_get_settings();
         
@@ -189,16 +188,19 @@ final class GeoDirectory {
             require_once( GEODIRECTORY_PLUGIN_DIR . 'language.php' ); // Define language constants.
         }
         
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-class-session.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-session.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/email-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/helper_functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/user_functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/user-functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/deprecated-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-ajax-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/general_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/listing_filters.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/template_functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/signup_function.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/template-functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/account-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post_functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post-types-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-taxonomy-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_fields_input_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_fields_output_functions.php' );

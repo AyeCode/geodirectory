@@ -141,7 +141,7 @@ function geodir_getGoogleAnalytics($page, $ga_start, $ga_end)
 
 
 function geodir_ga_get_token(){
-    $at = get_option('gd_ga_access_token');
+    $at = geodir_get_option('gd_ga_access_token');
     $use_url = "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=".$at;
     $response =  wp_remote_get($use_url,array('timeout' => 15));
 
@@ -150,14 +150,14 @@ function geodir_ga_get_token(){
     return $at;
     }else{//else get new access token
 
-        $refresh_at = get_option('gd_ga_refresh_token');
+        $refresh_at = geodir_get_option('gd_ga_refresh_token');
         if(!$refresh_at){
             echo json_encode(array('error'=>__('Not authorized, please click authorized in GD > Google analytic settings.', 'geodirectory')));exit;
         }
 
         $rat_url = "https://www.googleapis.com/oauth2/v3/token?";
-        $client_id = "client_id=".get_option('geodir_ga_client_id');
-        $client_secret = "&client_secret=".get_option('geodir_ga_client_secret');
+        $client_id = "client_id=".geodir_get_option('geodir_ga_client_id');
+        $client_secret = "&client_secret=".geodir_get_option('geodir_ga_client_secret');
         $refresh_token = "&refresh_token=".$refresh_at;
         $grant_type = "&grant_type=refresh_token";
 
@@ -168,7 +168,7 @@ function geodir_ga_get_token(){
             $parts = json_decode($rat_response['body']);
 
 
-            update_option('gd_ga_access_token', $parts->access_token);
+            geodir_update_option('gd_ga_access_token', $parts->access_token);
             return $parts->access_token;
 
         }else{

@@ -30,7 +30,7 @@ if(wp_get_referer()){
 ?>
 
 <div class="login_content">
-    <?php echo stripslashes(get_option('ptthemes_logoin_page_content')); ?>
+    <?php echo stripslashes(geodir_get_option('ptthemes_logoin_page_content')); ?>
 </div>
 
 <div class="login_form_box">

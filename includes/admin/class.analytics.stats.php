@@ -51,7 +51,7 @@ class GDGoogleAnalyticsStats
 
 	function checkLogin()
 	{
-            $ga_google_authtoken = get_option('geodir_ga_auth_token');
+            $ga_google_authtoken = geodir_get_option('geodir_ga_auth_token');
 
             if (!empty($ga_google_authtoken))
             {
@@ -72,7 +72,7 @@ class GDGoogleAnalyticsStats
             }
             else
             {
-                $authCode = get_option('geodir_ga_auth_code');
+                $authCode = geodir_get_option('geodir_ga_auth_code');
 
                 if (empty($authCode)) return false;
 
@@ -94,7 +94,7 @@ class GDGoogleAnalyticsStats
                 if($accessToken)
                 {
                     $this->client->setAccessToken($accessToken);
-                    update_option('geodir_ga_auth_token', $accessToken);
+                    geodir_update_option('geodir_ga_auth_token', $accessToken);
                 }
                 else
                 {
@@ -108,13 +108,13 @@ class GDGoogleAnalyticsStats
 
 	function deauthorize()
 	{
-            update_option('geodir_ga_auth_code', '');
-            update_option('geodir_ga_auth_token', '');
+            geodir_update_option('geodir_ga_auth_code', '');
+            geodir_update_option('geodir_ga_auth_token', '');
 	}
 
 	function getSingleProfile()
 	{
-            $webproperty_id = get_option('geodir_ga_account_id');
+            $webproperty_id = geodir_get_option('geodir_ga_account_id');
             list($pre, $account_id, $post) = explode('-',$webproperty_id);
 
             if (empty($webproperty_id)) return false;

@@ -91,8 +91,8 @@ function set_listing_request($query )
 
         if (isset($_REQUEST['sdist'])) {
             ($_REQUEST['sdist'] != '0' && $_REQUEST['sdist'] != '') ? $dist = esc_attr($_REQUEST['sdist']) : $dist = 25000;
-        } elseif (get_option('geodir_search_dist') != '') {
-            $dist = get_option('geodir_search_dist');
+        } elseif (geodir_get_option('geodir_search_dist') != '') {
+            $dist = geodir_get_option('geodir_search_dist');
 
         } else {
             $dist = 25000;
@@ -236,7 +236,7 @@ function geodir_posts_fields($fields) {
     $fields .= ", " . $table . ".* ";
 
 	if ($snear != '' || $gd_session->get('all_near_me')) {
-        $DistanceRadius = geodir_getDistanceRadius(get_option('geodir_search_dist_1'));
+        $DistanceRadius = geodir_getDistanceRadius(geodir_get_option('geodir_search_dist_1'));
 
 		if ($gd_session->get('all_near_me')) {
             $mylat = $gd_session->get('user_lat');
@@ -250,7 +250,7 @@ function geodir_posts_fields($fields) {
     if (is_search() && isset($_REQUEST['geodir_search']) && $s && trim($s) != '') {
         $keywords = explode(" ", $s);
 
-        if(is_array($keywords) && $klimit = get_option('geodir_search_word_limit')){
+        if(is_array($keywords) && $klimit = geodir_get_option('geodir_search_word_limit')){
             foreach($keywords as $kkey=>$kword){
                 if(geodir_utf8_strlen($kword)<=$klimit){
                     unset($keywords[$kkey]);
@@ -458,7 +458,7 @@ function geodir_posts_orderby($orderby)
 
     if (is_search() && isset($_REQUEST['geodir_search']) && $s && trim($s) != '') {
         $keywords = explode(" ", $s);
-        if(is_array($keywords) && $klimit = get_option('geodir_search_word_limit')){
+        if(is_array($keywords) && $klimit = geodir_get_option('geodir_search_word_limit')){
             foreach($keywords as $kkey=>$kword){
                 if(geodir_utf8_strlen($kword)<=$klimit){
                     unset($keywords[$kkey]);
@@ -744,7 +744,7 @@ function searching_filter_where($where) {
 
     if ($s != '') {
         $keywords = explode(" ", $s);
-        if(is_array($keywords) && $klimit = get_option('geodir_search_word_limit')){
+        if(is_array($keywords) && $klimit = geodir_get_option('geodir_search_word_limit')){
             foreach($keywords as $kkey=>$kword){
                 if(geodir_utf8_strlen($kword)<=$klimit){
                     unset($keywords[$kkey]);
@@ -835,7 +835,7 @@ function searching_filter_where($where) {
 						AND ( " . $table . ".post_longitude between $rlon1 and $rlon2 ) ";
 
         if (isset($_REQUEST['sdist']) && $_REQUEST['sdist'] != 'all') {
-            $DistanceRadius = geodir_getDistanceRadius(get_option('geodir_search_dist_1'));
+            $DistanceRadius = geodir_getDistanceRadius(geodir_get_option('geodir_search_dist_1'));
             $where .= " AND CONVERT((" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(" . $table . ".post_latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(" . $table . ".post_latitude) * pi()/180) *POWER(SIN(($mylon - " . $table . ".post_longitude) * pi()/180 / 2), 2) ))),DECIMAL(64,4)) <= " . $dist;
         }
 
@@ -975,7 +975,7 @@ function geodir_related_posts_fields($fields) {
 
     $fields .= ", " . $table . ".* ";
 
-    $DistanceRadius = geodir_getDistanceRadius(get_option('geodir_search_dist_1'));
+    $DistanceRadius = geodir_getDistanceRadius(geodir_get_option('geodir_search_dist_1'));
 
     $mylat = $post->post_latitude;
     $mylon = $post->post_longitude;

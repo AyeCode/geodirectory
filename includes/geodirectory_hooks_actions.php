@@ -217,11 +217,11 @@ add_action('wp_footer', 'geodir_add_sharelocation_scripts');
  */
 function geodir_unset_prev_theme_nav_location($newname)
 {
-    $geodir_theme_location = get_option('geodir_theme_location_nav_' . $newname);
+    $geodir_theme_location = geodir_get_option('geodir_theme_location_nav_' . $newname);
     if ($geodir_theme_location) {
-        update_option('geodir_theme_location_nav', $geodir_theme_location);
+        geodir_update_option('geodir_theme_location_nav', $geodir_theme_location);
     } else {
-        update_option('geodir_theme_location_nav', '');
+        geodir_update_option('geodir_theme_location_nav', '');
     }
 }
 
@@ -242,6 +242,11 @@ function geodir_add_post_filters() {
      * @package GeoDirectory
      */
     include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/listing_filters.php' );
+    
+    // Theme My Login compatibility fix
+    if ( isset( $_REQUEST['geodir_search'] ) && class_exists( 'Theme_My_Login' ) ) {
+        remove_action( 'pre_get_posts', array( Theme_My_Login::get_object(), 'pre_get_posts' ) );
+    }
 }
 
 if (!function_exists('geodir_init_defaults')) {
@@ -403,7 +408,7 @@ function geodir_social_sharing_buttons()
     $content_html = ob_get_clean();
     if (trim($content_html) != '')
         $content_html = '<div class="geodir-company_info geodir-details-sidebar-social-sharing">' . $content_html . '</div>';
-    if ((int)get_option('geodir_disable_tfg_buttons_section') != 1) {
+    if ((int)geodir_get_option('geodir_disable_tfg_buttons_section') != 1) {
         /**
          * Filter the geodir_social_sharing_buttons() function content.
          *
@@ -460,7 +465,7 @@ function geodir_edit_post_link()
     $content_html = ob_get_clean();
     if (trim($content_html) != '')
         $content_html = '<div class="geodir-company_info geodir-details-sidebar-user-links">' . $content_html . '</div>';
-    if ((int)get_option('geodir_disable_user_links_section') != 1) {
+    if ((int)geodir_get_option('geodir_disable_user_links_section') != 1) {
         /**
          * Filter the geodir_edit_post_link() function content.
          *
@@ -486,7 +491,7 @@ function geodir_detail_page_google_analytics()
     $package_info = array();
     $package_info = geodir_post_package_info($package_info, $post);
 
-    $id = trim(get_option('geodir_ga_account_id'));
+    $id = trim(geodir_get_option('geodir_ga_account_id'));
 
     if (!$id) {
         return; //if no Google Analytics ID then bail.
@@ -500,7 +505,7 @@ function geodir_detail_page_google_analytics()
      */
     do_action('geodir_before_google_analytics');
     
-    $refresh_time = get_option('geodir_ga_refresh_time', 5);
+    $refresh_time = geodir_get_option('geodir_ga_refresh_time', 5);
     /**
      * Filter the time interval to check & refresh new users results.
      *
@@ -511,10 +516,10 @@ function geodir_detail_page_google_analytics()
     $refresh_time = apply_filters('geodir_google_analytics_refresh_time', $refresh_time);
     $refresh_time = absint($refresh_time * 1000);
     
-    $hide_refresh = get_option('geodir_ga_auto_refresh');
+    $hide_refresh = geodir_get_option('geodir_ga_auto_refresh');
     
     $auto_refresh = $hide_refresh && $refresh_time && $refresh_time > 0 ? 1 : 0;
-    if (get_option('geodir_ga_stats') && is_user_logged_in() &&  (isset($package_info->google_analytics) && $package_info->google_analytics == '1') && (get_current_user_id()==$post->post_author || current_user_can( 'manage_options' )) ) {
+    if (geodir_get_option('geodir_ga_stats') && is_user_logged_in() &&  (isset($package_info->google_analytics) && $package_info->google_analytics == '1') && (get_current_user_id()==$post->post_author || current_user_can( 'manage_options' )) ) {
         $page_url = urlencode($_SERVER['REQUEST_URI']);
         ?>
         <script type="text/javascript">
@@ -1035,7 +1040,7 @@ function geodir_detail_page_google_analytics()
     $content_html = ob_get_clean();
     if (trim($content_html) != '')
         $content_html = '<div class="geodir-company_info geodir-details-sidebar-google-analytics">' . $content_html . '</div>';
-    if ((int)get_option('geodir_disable_google_analytics_section') != 1) {
+    if ((int)geodir_get_option('geodir_disable_google_analytics_section') != 1) {
         /**
          * Filter the geodir_edit_post_link() function content.
          *
@@ -1138,7 +1143,7 @@ function geodir_detail_page_review_rating()
     if (trim($content_html) != '') {
         $content_html = '<div class="geodir-company_info geodir-details-sidebar-rating">' . $content_html . '</div>';
     }
-    if ((int)get_option('geodir_disable_rating_info_section') != 1) {
+    if ((int)geodir_get_option('geodir_disable_rating_info_section') != 1) {
         /**
          * Filter the geodir_detail_page_review_rating() function content.
          *
@@ -1178,7 +1183,7 @@ function geodir_detail_page_more_info()
     $content_html = ob_get_clean();
     if (trim($content_html) != '')
         $content_html = '<div class="geodir-company_info geodir-details-sidebar-listing-info">' . $content_html . '</div>';
-    if ((int)get_option('geodir_disable_listing_info_section') != 1) {
+    if ((int)geodir_get_option('geodir_disable_listing_info_section') != 1) {
         /**
          * Filter the output html for function geodir_detail_page_more_info().
          *
@@ -1218,7 +1223,7 @@ function geodir_localize_all_js_msg()
 	 */
 	$allowed_img_types = apply_filters('geodir_allowed_post_image_exts', array('jpg', 'jpeg', 'jpe', 'gif', 'png'));
 	
-    $default_marker_icon = get_option('geodir_default_marker_icon');
+    $default_marker_icon = geodir_get_option('geodir_default_marker_icon');
     $default_marker_size = geodir_get_marker_size($default_marker_icon, array('w' => 20, 'h' => 34));
     $default_marker_width = $default_marker_size['w'];
     $default_marker_height = $default_marker_size['h'];
@@ -1257,14 +1262,14 @@ function geodir_localize_all_js_msg()
         'geodir_default_marker_h' => $default_marker_height,
         'geodir_latitude_error_msg' => GEODIR_LATITUDE_ERROR_MSG,
         'geodir_longgitude_error_msg' => GEODIR_LOGNGITUDE_ERROR_MSG,
-        'geodir_default_rating_star_icon' => get_option('geodir_default_rating_star_icon'),
+        'geodir_default_rating_star_icon' => geodir_get_option('geodir_default_rating_star_icon'),
         'gd_cmt_btn_post_reply' => __('Post Reply', 'geodirectory'),
         'gd_cmt_btn_reply_text' => __('Reply text', 'geodirectory'),
         'gd_cmt_btn_post_review' => __('Post Review', 'geodirectory'),
         'gd_cmt_btn_review_text' => __('Review text', 'geodirectory'),
         'gd_cmt_err_no_rating' => __("Please select star rating, you can't leave a review without stars.", 'geodirectory'),
         /* on/off dragging for phone devices */
-        'geodir_onoff_dragging' => get_option('geodir_map_onoff_dragging') ? true : false,
+        'geodir_onoff_dragging' => geodir_get_option('geodir_map_onoff_dragging') ? true : false,
         'geodir_is_mobile' => wp_is_mobile() ? true : false,
         'geodir_on_dragging_text' => __('Enable Dragging', 'geodirectory'),
         'geodir_off_dragging_text' => __('Disable Dragging', 'geodirectory'),
@@ -1277,9 +1282,9 @@ function geodir_localize_all_js_msg()
 		'gd_allowed_img_types' => !empty($allowed_img_types) ? implode(',', $allowed_img_types) : '',
 		'geodir_txt_form_wait' => __('Wait...', 'geodirectory'),
 		'geodir_txt_form_searching' => __('Searching...', 'geodirectory'),
-		'fa_rating' => (int)get_option('geodir_reviewrating_enable_font_awesome') == 1 ? 1 : '',
+		'fa_rating' => (int)geodir_get_option('geodir_reviewrating_enable_font_awesome') == 1 ? 1 : '',
 		'reviewrating' => defined('GEODIRREVIEWRATING_VERSION') ? 1 : '',
-        'multirating' => defined('GEODIRREVIEWRATING_VERSION') && get_option('geodir_reviewrating_enable_rating') ? true : false,
+        'multirating' => defined('GEODIRREVIEWRATING_VERSION') && geodir_get_option('geodir_reviewrating_enable_rating') ? true : false,
         'geodir_map_name' => geodir_map_name(),
         'osmStart' => __('Start', 'geodirectory'),
         'osmVia' => __('Via {viaNumber}', 'geodirectory'),
@@ -1326,11 +1331,10 @@ add_action('admin_bar_menu', 'geodir_admin_bar_site_menu', 31);
  * @package GeoDirectory
  * @param object $wp_admin_bar The admin bar object.
  */
-function geodir_admin_bar_site_menu($wp_admin_bar)
-{
-    if (get_option("geodir_installed")) {
-        if (current_user_can('manage_options')) {
-            $wp_admin_bar->add_menu(array('parent' => 'appearance', 'id' => 'geodirectory', 'title' => __('GeoDirectory', 'geodirectory'), 'href' => admin_url('?page=geodirectory')));
+function geodir_admin_bar_site_menu($wp_admin_bar) {
+    if ( get_option( 'geodir_installed' ) ) {
+        if ( current_user_can( 'manage_options' ) ) {
+            $wp_admin_bar->add_menu( array( 'parent' => 'appearance', 'id' => 'geodirectory', 'title' => __( 'GeoDirectory', 'geodirectory' ), 'href' => admin_url( '?page=geodirectory' ) ) );
         }
     }
 }
@@ -1356,28 +1360,28 @@ add_action('switch_theme', 'geodir_store_sidebars');
  * @global array $geodir_sidebars List of geodirectory sidebars.
  * @global array $sidebars_widgets List of geodirectory sidebar widgets.
  */
-function geodir_store_sidebars()
-{
-    global $geodir_sidebars;
-    global $sidebars_widgets;
+function geodir_store_sidebars() {
+    global $geodir_sidebars, $sidebars_widgets;
 
-    if (!is_array($sidebars_widgets))
+    if ( !is_array( $sidebars_widgets ) ) {
         $sidebars_widgets = wp_get_sidebars_widgets();
+    }
     $geodir_old_sidebars = array();
 
-    if (is_array($geodir_sidebars)) {
-        foreach ($geodir_sidebars as $val) {
-            if (is_array($sidebars_widgets)) {
-                if (array_key_exists($val, $sidebars_widgets))
-                    $geodir_old_sidebars[$val] = $sidebars_widgets[$val];
-                else
-                    $geodir_old_sidebars[$val] = array();
+    if ( is_array( $geodir_sidebars ) ) {
+        foreach ( $geodir_sidebars as $val ) {
+            if ( is_array( $sidebars_widgets ) ) {
+                if ( array_key_exists( $val, $sidebars_widgets ) ) {
+                    $geodir_old_sidebars[ $val ] = $sidebars_widgets[ $val ];
+                } else {
+                    $geodir_old_sidebars[ $val ] = array();
+                }
             }
         }
     }
-    update_option('geodir_sidebars', $geodir_old_sidebars);
-    geodir_option_version_backup('geodir_sidebars');
-
+    
+    geodir_update_option( 'geodir_sidebars', $geodir_old_sidebars );
+    geodir_option_version_backup( 'geodir_sidebars' );
 }
 
 add_action('after_switch_theme', 'geodir_restore_sidebars');
@@ -1388,30 +1392,28 @@ add_action('after_switch_theme', 'geodir_restore_sidebars');
  * @package GeoDirectory
  * @global array $sidebars_widgets List of geodirectory sidebar widgets.
  */
-function geodir_restore_sidebars()
-{
+function geodir_restore_sidebars() {
     global $sidebars_widgets;
 
-    if (!is_array($sidebars_widgets))
+    if ( !is_array( $sidebars_widgets ) ) {
         $sidebars_widgets = wp_get_sidebars_widgets();
-
-    if (is_array($sidebars_widgets)) {
-        $geodir_old_sidebars = get_option('geodir_sidebars');
-        if (is_array($geodir_old_sidebars)) {
-            foreach ($geodir_old_sidebars as $key => $val) {
-                if(0 === strpos($key, 'geodir_'))// if gd widget
-                {
-                    $sidebars_widgets[$key] = $geodir_old_sidebars[$key];
-                }
-
-
-            }
-        }
-
     }
 
-    update_option('sidebars_widgets', $sidebars_widgets);
-    update_option('geodir_sidebars', '');
+    if ( is_array( $sidebars_widgets ) ) {
+        $geodir_old_sidebars = geodir_get_option( 'geodir_sidebars' );
+        
+        if ( is_array( $geodir_old_sidebars ) ) {
+            foreach ( $geodir_old_sidebars as $key => $val ) {
+                // GD widget
+                if ( 0 === strpos( $key, 'geodir_' ) ) {
+                    $sidebars_widgets[ $key ] = $geodir_old_sidebars[ $key ];
+                }
+            }
+        }
+    }
+
+    update_option( 'sidebars_widgets', $sidebars_widgets );
+    geodir_update_option( 'geodir_sidebars', '' );
 }
 
 add_action('geodir_after_listing_post_gridview', 'geodir_after_listing_post_gridview');
@@ -1474,7 +1476,7 @@ add_action('geodir_after_main_form_fields', 'geodir_after_main_form_fields', 1);
 function geodir_after_main_form_fields() {
 	global $gd_session;
 	
-    if (get_option('geodir_accept_term_condition')) {
+    if (geodir_get_option('geodir_accept_term_condition')) {
         global $post;
         $term_condition = '';
         if (isset($_REQUEST['backandedit'])) {
@@ -1492,7 +1494,7 @@ function geodir_after_main_form_fields() {
                     echo 'checked="checked"';
                 } ?> field_type="checkbox" name="geodir_accept_term_condition" id="geodir_accept_term_condition"
                        class="geodir_textfield" value="1"
-                       style="display:inline-block"/><a href="<?php $terms_page = get_option('geodir_term_condition_page'); if($terms_page){ echo get_permalink($terms_page);}?>" target="_blank"><?php _e('Please accept our terms and conditions', 'geodirectory'); ?></a>
+                       style="display:inline-block"/><a href="<?php $terms_page = geodir_get_option('geodir_term_condition_page'); if($terms_page){ echo get_permalink($terms_page);}?>" target="_blank"><?php _e('Please accept our terms and conditions', 'geodirectory'); ?></a>
 				</span>
             </div>
             <span class="geodir_message_error"><?php if (isset($required_msg)) {
@@ -1580,13 +1582,13 @@ function geodir_changes_in_custom_fields_table() {
     global $wpdb, $plugin_prefix;
 	
 	// Remove unused virtual page
-	$listings_page_id = (int)get_option('geodir_listing_page');
+	$listings_page_id = (int)geodir_get_option('geodir_listing_page');
 	if ($listings_page_id) {
 		$wpdb->query($wpdb->prepare("DELETE FROM " . $wpdb->posts . " WHERE ID=%d AND post_name = %s AND post_type=%s", array($listings_page_id, 'listings', 'page')));
-        delete_option('geodir_listing_page');
+        geodir_delete_option('geodir_listing_page');
 	}
 
-    if (!get_option('geodir_changes_in_custom_fields_table')) {
+    if (!geodir_get_option('geodir_changes_in_custom_fields_table')) {
         $wpdb->query(
             $wpdb->prepare(
                 "UPDATE " . GEODIR_CUSTOM_FIELDS_TABLE . " SET is_default=%s, is_admin=%s WHERE is_default=%s",
@@ -1597,7 +1599,7 @@ function geodir_changes_in_custom_fields_table() {
 
         /* --- terms meta value set --- */
 
-        update_option('geodir_default_marker_icon', geodir_plugin_url() . '/includes/maps/icons/pin.png');
+        geodir_update_option('geodir_default_marker_icon', geodir_plugin_url() . '/includes/maps/icons/pin.png');
 
         $options_data = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "options WHERE option_name LIKE %s", array('%tax_meta_%')));
 
@@ -1637,7 +1639,7 @@ function geodir_changes_in_custom_fields_table() {
             }
         }
 
-        update_option('geodir_changes_in_custom_fields_table', '1');
+        geodir_update_option('geodir_changes_in_custom_fields_table', '1');
 
     }
 
@@ -1830,43 +1832,43 @@ function geodir_custom_page_title($title = '', $sep = '')
     $gd_page = '';
     if(geodir_is_page('home')){
         $gd_page = 'home';
-        $title = (get_option('geodir_meta_title_homepage')) ? get_option('geodir_meta_title_homepage') : $title;
+        $title = (geodir_get_option('geodir_meta_title_homepage')) ? geodir_get_option('geodir_meta_title_homepage') : $title;
     }
     elseif(geodir_is_page('detail')){
         $gd_page = 'detail';
-        $title = (get_option('geodir_meta_title_detail')) ? get_option('geodir_meta_title_detail') : $title;
+        $title = (geodir_get_option('geodir_meta_title_detail')) ? geodir_get_option('geodir_meta_title_detail') : $title;
     }
     elseif(geodir_is_page('pt')){
         $gd_page = 'pt';
-        $title = (get_option('geodir_meta_title_pt')) ? get_option('geodir_meta_title_pt') : $title;
+        $title = (geodir_get_option('geodir_meta_title_pt')) ? geodir_get_option('geodir_meta_title_pt') : $title;
     }
     elseif(geodir_is_page('listing')){
         $gd_page = 'listing';
-        $title = (get_option('geodir_meta_title_listing')) ? get_option('geodir_meta_title_listing') : $title;
+        $title = (geodir_get_option('geodir_meta_title_listing')) ? geodir_get_option('geodir_meta_title_listing') : $title;
     }
     elseif(geodir_is_page('location')){
         $gd_page = 'location';
-        $title = (get_option('geodir_meta_title_location')) ? get_option('geodir_meta_title_location') : $title;
+        $title = (geodir_get_option('geodir_meta_title_location')) ? geodir_get_option('geodir_meta_title_location') : $title;
     }
     elseif(geodir_is_page('search')){
         $gd_page = 'search';
-        $title = (get_option('geodir_meta_title_search')) ? get_option('geodir_meta_title_search') : $title;
+        $title = (geodir_get_option('geodir_meta_title_search')) ? geodir_get_option('geodir_meta_title_search') : $title;
     }
     elseif(geodir_is_page('add-listing')){
         $gd_page = 'add-listing';
-        $title = (get_option('geodir_meta_title_add-listing')) ? get_option('geodir_meta_title_add-listing') : $title;
+        $title = (geodir_get_option('geodir_meta_title_add-listing')) ? geodir_get_option('geodir_meta_title_add-listing') : $title;
     }
     elseif(geodir_is_page('author')){
         $gd_page = 'author';
-        $title = (get_option('geodir_meta_title_author')) ? get_option('geodir_meta_title_author') : $title;
+        $title = (geodir_get_option('geodir_meta_title_author')) ? geodir_get_option('geodir_meta_title_author') : $title;
     }
     elseif(geodir_is_page('login')){
         $gd_page = 'login';
-        $title = (get_option('geodir_meta_title_login')) ? get_option('geodir_meta_title_login') : $title;
+        $title = (geodir_get_option('geodir_meta_title_login')) ? geodir_get_option('geodir_meta_title_login') : $title;
     }
     elseif(geodir_is_page('listing-success')){
         $gd_page = 'listing-success';
-        $title = (get_option('geodir_meta_title_listing-success')) ? get_option('geodir_meta_title_listing-success') : $title;
+        $title = (geodir_get_option('geodir_meta_title_listing-success')) ? geodir_get_option('geodir_meta_title_listing-success') : $title;
     }
 
 
@@ -1894,7 +1896,7 @@ function geodir_custom_page_title($title = '', $sep = '')
 function geodir_set_post_attachment()
 {
 
-    if (!get_option('geodir_set_post_attachments')) {
+    if (!geodir_get_option('geodir_set_post_attachments')) {
 
         require_once(ABSPATH . 'wp-admin/includes/image.php');
         require_once(ABSPATH . 'wp-admin/includes/file.php');
@@ -1921,7 +1923,7 @@ function geodir_set_post_attachment()
         }
 
 
-        update_option('geodir_set_post_attachments', '1');
+        geodir_update_option('geodir_set_post_attachments', '1');
 
     }
 
@@ -1940,17 +1942,17 @@ add_action('init', 'geodir_remove_url_seperator');
 function geodir_remove_url_seperator()
 {
 
-    if (!get_option('geodir_remove_url_seperator')) {
+    if (!geodir_get_option('geodir_remove_url_seperator')) {
 
-        if (get_option('geodir_listingurl_separator'))
-            delete_option('geodir_listingurl_separator');
+        if (geodir_get_option('geodir_listingurl_separator'))
+            geodir_delete_option('geodir_listingurl_separator');
 
-        if (get_option('geodir_detailurl_separator'))
-            delete_option('geodir_detailurl_separator');
+        if (geodir_get_option('geodir_detailurl_separator'))
+            geodir_delete_option('geodir_detailurl_separator');
 
         flush_rewrite_rules(false);
 
-        update_option('geodir_remove_url_seperator', '1');
+        geodir_update_option('geodir_remove_url_seperator', '1');
 
     }
 
@@ -2310,8 +2312,8 @@ add_action('init', 'geodir_default_rating_star_icon');
 function geodir_default_rating_star_icon()
 {
 
-    if (!get_option('geodir_default_rating_star_icon')) {
-        update_option('geodir_default_rating_star_icon', geodir_plugin_url() . '/assets/images/stars.png');
+    if (!geodir_get_option('geodir_default_rating_star_icon')) {
+        geodir_update_option('geodir_default_rating_star_icon', geodir_plugin_url() . '/assets/images/stars.png');
     }
 
 }
@@ -2337,7 +2339,7 @@ function geodir_user_post_listing_count($user_id=null)
 
     $user_id = $current_user->ID;
     $all_postypes = geodir_get_posttypes();
-    $all_posts = get_option('geodir_listing_link_user_dashboard');
+    $all_posts = geodir_get_option('geodir_listing_link_user_dashboard');
 
     $user_listing = array();
     if (is_array($all_posts) && !empty($all_posts)) {
@@ -2717,7 +2719,7 @@ function geodir_load_gd_options_text_translation($translation_texts = array()) {
 
     if (!empty($gd_options)) {
         foreach ($gd_options as $gd_option) {
-            if ($gd_option != '' && $option_value = get_option($gd_option)) {
+            if ($gd_option != '' && $option_value = geodir_get_option($gd_option)) {
                 $option_value = is_string($option_value) ? stripslashes_deep($option_value) : '';
                 
                 if ($option_value != '' && !in_array($option_value, $translation_texts)) {

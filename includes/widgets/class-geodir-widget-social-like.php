@@ -48,7 +48,7 @@ class GeoDir_Widget_Social_Like extends WP_Widget {
         echo $before_widget;
         ?>
 
-        <?php //if ( get_option('gd_tweet_button') ) {
+        <?php //if ( geodir_get_option('gd_tweet_button') ) {
         ?>
 
         <a href="http://twitter.com/share"
@@ -59,7 +59,7 @@ class GeoDir_Widget_Social_Like extends WP_Widget {
         <?php //}
         ?>
 
-        <?php // if ( get_option('gd_facebook_button') ) {
+        <?php // if ( geodir_get_option('gd_facebook_button') ) {
         ?>
 
         <iframe <?php if (isset($_SERVER['HTTP_USER_AGENT']) && (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)) {
@@ -72,7 +72,7 @@ class GeoDir_Widget_Social_Like extends WP_Widget {
         <?php //}
         ?>
 
-        <?php //if ( get_option('gd_google_button') ) {
+        <?php //if ( geodir_get_option('gd_google_button') ) {
         ?>
         <script>
             window.___gcfg = {
