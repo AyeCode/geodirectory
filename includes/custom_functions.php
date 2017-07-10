@@ -1169,7 +1169,7 @@ function geodir_add_meta_keywords() {
 				$category = $geodir_is_category ? get_term_by( 'slug', $geodir_is_category, $category_taxonomy[0] ) : null;
 				if ( isset( $category->term_id ) && ! empty( $category->term_id ) ) {
 					$category_id   = $category->term_id;
-					$category_desc = trim( $category->description ) != '' ? trim( $category->description ) : geodir_get_tax_meta( $category_id, 'ct_cat_top_desc', false, $geodir_post_type );
+					$category_desc = trim( $category->description ) != '' ? trim( $category->description ) : get_term_meta( $category_id, 'ct_cat_top_desc', true );
 					if ( $location_id ) {
 						$option_name    = 'geodir_cat_loc_' . $geodir_post_type . '_' . $category_id;
 						$cat_loc_option = geodir_get_option( $option_name );
@@ -2247,8 +2247,7 @@ function geodir_output_pinpoint_html_listings( $post_id, $post = array() ) {
 	$show_pin_point = $wp_query->is_main_query();
 
 	if ( ! empty( $post ) && ! empty( $show_pin_point ) && is_active_widget( false, "", "geodir_map_v3_listing_map" ) ) {
-		$term_icon_url = geodir_get_tax_meta( $post->default_category, 'ct_cat_icon', false, $post->post_type );
-		$marker_icon   = isset( $term_icon_url['src'] ) ? $term_icon_url['src'] : geodir_get_option( 'geodir_default_marker_icon' );
+		$marker_icon = geodir_get_cat_icon( $post->default_category, true, true );
 		?>
 		<span class="geodir-pinpoint"
 		      style="background:url('<?php echo $marker_icon; ?>') no-repeat scroll left top transparent;background-size:auto 100%; -webkit-background-size:auto 100%;-moz-background-size:auto 100%;height:9px;width:14px;"><?php echo apply_filters( 'geodir_listing_listview_pinpoint_inner_content', '', 'listing' ); ?></span>

@@ -178,6 +178,7 @@ if (is_admin()) {
 ##############################################################
 ############## LETS ADD CUSTOM COLUMN HERE ###################
 ##############################################################
+/*
 $gd_taxonomies = geodir_get_taxonomies();
 if (!empty($gd_taxonomies)) {
     foreach ($gd_taxonomies as $gd_taxonomy) {
@@ -187,6 +188,7 @@ if (!empty($gd_taxonomies)) {
 
     }
 }
+*/
 
 function addCat_column($columns)
 {
@@ -201,58 +203,26 @@ function addCat_column($columns)
 }
 
 #############################################################
-function manage_category_custom_fields($deprecated, $column_name, $term_id)
-{
-    if ($column_name == 'cat_ID_num')
+function manage_category_custom_fields( $deprecated, $column_name, $term_id ) {
+    if ( $column_name == 'cat_ID_num' ) {
         echo $term_id;
-
-    if ($column_name == 'cat_icon') {
-        $term_icon_url = geodir_get_tax_meta($term_id, 'ct_cat_icon');
-
-        if ($term_icon_url != '') {
-            $file_info = pathinfo($term_icon_url['src']);
-
-            if (isset($file_info['dirname'] ) && $file_info['dirname'] != '.' && $file_info['dirname'] != '..') {
-                $sub_dir = $file_info['dirname'];
-            } else {
-                $sub_dir = '';
-            }
-
-            $uploads = wp_upload_dir(trim($sub_dir, '/')); // Array of key => value pairs
-            $uploads_baseurl = $uploads['baseurl'];
-            $uploads_path = $uploads['path'];
-
-            $file_name = $file_info['basename'];
-
-            if (strpos($sub_dir, 'https://') !== false) {
-                $uploads['baseurl'] = str_replace('http://', 'https://', $uploads['baseurl']);
-            } else {
-                $uploads['baseurl'] = str_replace('https://', 'http://', $uploads['baseurl']);
-            }
-            $sub_dir = str_replace($uploads['baseurl'], '', $sub_dir);
-
-            $uploads_url = $uploads_baseurl . $sub_dir;
-
-            $term_icon_url['src'] = $uploads_url . '/' . $file_name;
-            echo '<img src="' . $term_icon_url['src'] . '" />';
-        }
+    }
+    
+    if ( $column_name == 'cat_icon' && $cat_icon = geodir_get_cat_icon( $term_id, true ) ) {
+        echo '<img src="' . $cat_icon . '" />';
     }
 
-    if ($column_name == 'cat_default_img') {
-        $cat_default_img = geodir_get_tax_meta($term_id, 'ct_cat_default_img');
-        if ($cat_default_img != '')
-            echo '<img src="' . $cat_default_img['src'] . '" style="max-height:60px;max-width:60px;"/>';
-
+    if ( $column_name == 'cat_default_img' && $cat_image = geodir_get_cat_image( $term_id, true ) ) {
+        echo '<img src="' . $cat_image . '" style="max-height:60px;max-width:60px;" />';
     }
 }
 
-function geodir_get_default_catimage($term_id, $post_type = 'gd_place')
-{
-
-    if ($cat_default_img = geodir_get_tax_meta($term_id, 'ct_cat_default_img', '', $post_type))
+function geodir_get_default_catimage($term_id, $post_type = 'gd_place') {
+    if ( $cat_default_img = get_term_meta( $term_id, 'ct_cat_default_img', true ) ) {
         return $cat_default_img;
-    else
-        return false;
+    }
+    
+    return false;
 }
 
 //Clear custom fields

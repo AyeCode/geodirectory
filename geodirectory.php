@@ -201,6 +201,7 @@ final class GeoDirectory {
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/account-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post-types-functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/term-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-taxonomy-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_fields_input_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_fields_output_functions.php' );
@@ -220,6 +221,9 @@ final class GeoDirectory {
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodirectory_template_actions.php' );
         
         if ( $this->is_request( 'admin' ) || $this->is_request( 'test' ) || $this->is_request( 'cli' ) ) {
+            if ( ( $pagenow == 'edit-tags.php' || $pagenow == 'term.php' ) && !empty( $_REQUEST['taxonomy'] ) ) {
+                require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/class-geodir-admin-taxonomies.php' );
+            }
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/admin_functions.php' );
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/admin_dummy_data_functions.php' );
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/admin_hooks_actions.php' );

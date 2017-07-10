@@ -971,32 +971,31 @@ function geodir_upgrade_200() {
     
     // Migrate tax meta.
     $tax_meta_options = geodir_old_tax_meta_options();
-    if ( !empty( $options ) ) {
-        foreach ( $tax_meta_options as $option ) {
-            $explode = explode( '_', $option->option_name );
-            $index = count( $explode ) - 1;
+    foreach ( $tax_meta_options as $option ) {
+        $explode = explode( '_', $option->option_name );
+        $index = count( $explode ) - 1;
+        
+        if ( !empty( $explode[ $index ] ) ) {
+            $term_id = $explode[ $index ];
+            $value = maybe_unserialize( $option->option_value );
+            $value = !empty( $value[0] ) && is_array( $value[0] ) ? $value[0] : $value;
             
-            if ( !empty( $explode[ $index ] ) ) {
-                $term_id = $explode[ $index ];
-                $value = maybe_unserialize( $option->option_value );
-                
-                $meta_key = 'ct_cat_icon';
-                
-                if ( !empty( $value[ $meta_key ]['src'] ) ) {
-                    $meta_value = $value[ $meta_key ];
-                } else if ( !empty( $value[0][ $meta_key ]['src'] ) ) {
-                    $meta_value = $value[0][ $meta_key ];
-                } else {
-                    continue;
+            if ( !empty( $value ) && is_array( $value ) ) {
+                foreach ( $value as $meta_key => $meta_value ) {
+                    if ( $meta_key == 'ct_cat_icon' || $meta_key == 'ct_cat_default_img' ) {
+                        if ( empty( $meta_value['src'] ) ) {
+                            continue;
+                        }
+                        
+                        // Make icon url relative.
+                        $meta_value['src'] = str_replace( $https_plugin_url . '/', '', $meta_value['src'] );
+                        $meta_value['src'] = str_replace( $http_plugin_url . '/', '', $meta_value['src'] );
+                        $meta_value['src'] = str_replace( $https_baseurl . '/', '', $meta_value['src'] );
+                        $meta_value['src'] = str_replace( $http_baseurl . '/', '', $meta_value['src'] );
+                    }
+                    
+                    update_term_meta( $term_id, $meta_key, $meta_value );
                 }
-                
-                // Make icon url relative.
-                $meta_value['src'] = str_replace( $https_plugin_url . '/', '', $meta_value['src'] );
-                $meta_value['src'] = str_replace( $http_plugin_url . '/', '', $meta_value['src'] );
-                $meta_value['src'] = str_replace( $https_baseurl . '/', '', $meta_value['src'] );
-                $meta_value['src'] = str_replace( $http_baseurl . '/', '', $meta_value['src'] );
-                
-                update_term_meta( $term_id, $meta_key, $meta_value );
             }
         }
     }

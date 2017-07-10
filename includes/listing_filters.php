@@ -342,42 +342,29 @@ function geodir_posts_join($join)
  * @param string $orderby The orderby query string.
  * @return string Modified orderby query.
  */
-function geodir_posts_orderby($orderby)
-{
+function geodir_posts_orderby( $orderby ) {
     global $wpdb, $wp_query, $geodir_post_type, $table, $plugin_prefix, $snear, $default_sort;
 
     $sort_by = '';
     $orderby = ' ';
 
-    if (get_query_var('order_by'))
-        $sort_by = get_query_var('order_by');
-
-    /*if(isset($wp_query->tax_query->queries) && $wp_query->tax_query->queries){
-        $current_term = $wp_query->get_queried_object();
+    if ( get_query_var( 'order_by' ) ) {
+        $sort_by = get_query_var( 'order_by' );
     }
 
-    if(isset($current_term->term_id)){
-
-        $current_term->term_id;
-
-        if(geodir_get_tax_meta($current_term->term_id,'ct_cat_sort')){
-            $sort_by = geodir_get_tax_meta($current_term->term_id,'ct_cat_sort');
-        }
-    }*/
-
-
-    if ($snear != '') {
+    if ( $snear != '' ) {
         $orderby .= " distance,";
     }
 
-    if (isset($_REQUEST['sort_by']) && $_REQUEST['sort_by'] != '' && is_main_query())
-        $sort_by = esc_attr($_REQUEST['sort_by']);
+    if ( isset( $_REQUEST['sort_by'] ) && $_REQUEST['sort_by'] != '' && is_main_query() ) {
+        $sort_by = esc_attr( $_REQUEST['sort_by'] );
+    }
 
-
-    if ($sort_by == '') {
-        $default_sort = geodir_get_posts_default_sort($geodir_post_type);
-        if (!empty($default_sort))
+    if ( $sort_by == '' ) {
+        $default_sort = geodir_get_posts_default_sort( $geodir_post_type );
+        if ( !empty( $default_sort ) ) {
             $sort_by = $default_sort;
+        }
     }
 
     /*

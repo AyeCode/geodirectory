@@ -303,7 +303,7 @@ function geodir_core_option_names() {
 function geodir_old_tax_meta_options() {
     global $wpdb;
     
-    $results = $wpdb->get_results( "SELECT option_name, option_value FROM " . $wpdb->options . " WHERE option_name LIKE 'tax_meta_gd_%'" );
+    $results = $wpdb->get_results( "SELECT option_name, option_value FROM " . $wpdb->options . " WHERE option_name LIKE 'tax_meta_%'" );
     
     return $results;
 }
