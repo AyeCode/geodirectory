@@ -18,117 +18,112 @@
  * @global object $wpdb WordPress Database object.
  * @global string $dummy_image_path The dummy image path.
  */
-function geodir_dummy_data_taxonomies($post_type,$category_array) {
+function geodir_dummy_data_taxonomies( $post_type,$category_array ) {
     global $wpdb, $dummy_image_path;
-
-
 
     $last_catid = '';
 
     $uploads = wp_upload_dir(); // Array of key => value pairs
 
-    for ($i = 0; $i < count($category_array); $i++) {
+    for ( $i = 0; $i < count( $category_array ); $i++ ) {
         $parent_catid = 0;
-        if (is_array($category_array[$i])) {
-            $cat_name_arr = $category_array[$i];
-            for ($j = 0; $j < count($cat_name_arr); $j++) {
-                $catname = $cat_name_arr[$j];
-
-                if (!term_exists($catname, $post_type.'category')) {
-                    $last_catid = wp_insert_term($catname, $post_type.'category', $args = array('parent' => $parent_catid));
-
-                    if ($j == 0) {
+        
+        if ( is_array( $category_array[ $i ] ) ) {
+            $cat_name_arr = $category_array[ $i ];
+            
+            for ( $j = 0; $j < count( $cat_name_arr ); $j++ ) {
+                $catname = $cat_name_arr[ $j ];
+                
+                if ( !term_exists( $catname, $post_type.'category' ) ) {
+                    $last_catid = wp_insert_term( $catname, $post_type.'category', $args = array( 'parent' => $parent_catid ) );
+                    
+                    if ( $j == 0 ) {
                         $parent_catid = $last_catid;
                     }
-
-
-                    if (geodir_dummy_folder_exists())
+                    
+                    if ( geodir_dummy_folder_exists() )
                         $dummy_image_url = geodir_plugin_url() . "/includes/admin/dummy/cat_icon";
                     else
                         $dummy_image_url = 'http://wpgeodirectory.com/dummy/cat_icon';
 
-                    $dummy_image_url = apply_filters('place_dummy_cat_image_url', $dummy_image_url);
+                    $dummy_image_url = apply_filters( 'place_dummy_cat_image_url', $dummy_image_url );
 
                     $catname = str_replace(' ', '_', $catname);
-                    $uploaded = (array)fetch_remote_file("$dummy_image_url/" . $catname . ".png");
+                    $uploaded = (array)fetch_remote_file( "$dummy_image_url/" . $catname . ".png" );
 
-                    if (empty($uploaded['error'])) {
+                    if ( empty( $uploaded['error'] ) ) {
                         $new_path = $uploaded['file'];
                         $new_url = $uploaded['url'];
                     }
 
-                    $wp_filetype = wp_check_filetype(basename($new_path), null);
+                    $wp_filetype = wp_check_filetype( basename( $new_path ), null );
 
                     $attachment = array(
-                        'guid' => $uploads['baseurl'] . '/' . basename($new_path),
+                        'guid' => $uploads['baseurl'] . '/' . basename( $new_path ),
                         'post_mime_type' => $wp_filetype['type'],
-                        'post_title' => preg_replace('/\.[^.]+$/', '', basename($new_path)),
+                        'post_title' => preg_replace( '/\.[^.]+$/', '', basename( $new_path ) ),
                         'post_content' => '',
                         'post_status' => 'inherit'
                     );
-                    $attach_id = wp_insert_attachment($attachment, $new_path);
+                    $attach_id = wp_insert_attachment( $attachment, $new_path );
 
                     // you must first include the image.php file
                     // for the function wp_generate_attachment_metadata() to work
                     require_once(ABSPATH . 'wp-admin/includes/image.php');
-                    $attach_data = wp_generate_attachment_metadata($attach_id, $new_path);
-                    wp_update_attachment_metadata($attach_id, $attach_data);
+                    $attach_data = wp_generate_attachment_metadata( $attach_id, $new_path );
+                    wp_update_attachment_metadata( $attach_id, $attach_data );
 
-                    if (!geodir_get_tax_meta($last_catid['term_id'], 'ct_cat_icon', false, $post_type)) {
-                        geodir_update_tax_meta($last_catid['term_id'], 'ct_cat_icon', array('id' => 'icon', 'src' => $new_url), $post_type);
+                    if ( !geodir_get_cat_icon( $last_catid['term_id'] ) ) {
+                        update_term_meta( $last_catid['term_id'], 'ct_cat_icon', array( 'id' => 'icon', 'src' => $new_url ) );
                     }
                 }
             }
-
         } else {
             $catname = $category_array[$i];
 
-            if (!term_exists($catname, $post_type.'category')) {
-                $last_catid = wp_insert_term($catname, $post_type.'category');
+            if ( !term_exists( $catname, $post_type . 'category' ) ) {
+                $last_catid = wp_insert_term( $catname, $post_type . 'category' );
 
-                if (geodir_dummy_folder_exists())
+                if ( geodir_dummy_folder_exists() )
                     $dummy_image_url = geodir_plugin_url() . "/includes/admin/dummy/cat_icon";
                 else
                     $dummy_image_url = 'http://wpgeodirectory.com/dummy/cat_icon';
 
-                $dummy_image_url = apply_filters('place_dummy_cat_image_url', $dummy_image_url);
+                $dummy_image_url = apply_filters( 'place_dummy_cat_image_url', $dummy_image_url );
 
-                $catname = str_replace(' ', '_', $catname);
-                $uploaded = (array)fetch_remote_file("$dummy_image_url/" . $catname . ".png");
+                $catname = str_replace( ' ', '_', $catname );
+                $uploaded = (array)fetch_remote_file( "$dummy_image_url/" . $catname . ".png" );
 
-                if (empty($uploaded['error'])) {
+                if ( empty( $uploaded['error'] ) ) {
                     $new_path = $uploaded['file'];
                     $new_url = $uploaded['url'];
                 }
 
-                $wp_filetype = wp_check_filetype(basename($new_path), null);
+                $wp_filetype = wp_check_filetype( basename( $new_path ), null );
 
                 $attachment = array(
-                    'guid' => $uploads['baseurl'] . '/' . basename($new_path),
+                    'guid' => $uploads['baseurl'] . '/' . basename( $new_path ),
                     'post_mime_type' => $wp_filetype['type'],
-                    'post_title' => preg_replace('/\.[^.]+$/', '', basename($new_path)),
+                    'post_title' => preg_replace( '/\.[^.]+$/', '', basename( $new_path ) ),
                     'post_content' => '',
                     'post_status' => 'inherit'
                 );
 
-                $attach_id = wp_insert_attachment($attachment, $new_path);
-
-
+                $attach_id = wp_insert_attachment( $attachment, $new_path );
+                
                 // you must first include the image.php file
                 // for the function wp_generate_attachment_metadata() to work
                 require_once(ABSPATH . 'wp-admin/includes/image.php');
                 $attach_data = wp_generate_attachment_metadata($attach_id, $new_path);
                 wp_update_attachment_metadata($attach_id, $attach_data);
 
-                if (!geodir_get_tax_meta($last_catid['term_id'], 'ct_cat_icon', false, $post_type)) {
-                    geodir_update_tax_meta($last_catid['term_id'], 'ct_cat_icon', array('id' => $attach_id, 'src' => $new_url), $post_type);
+                if ( !geodir_get_cat_icon( $last_catid['term_id'] ) ) {
+                    update_term_meta( $last_catid['term_id'], 'ct_cat_icon', array( 'id' => $attach_id, 'src' => $new_url ) );
                 }
             }
         }
-
     }
 }
-
 
 function geodir_dummy_data_types(){
     $data =  array(

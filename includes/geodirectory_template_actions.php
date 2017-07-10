@@ -712,9 +712,8 @@ function geodir_action_geodir_set_preview_post()
                         $term_icon = geodir_get_option('geodir_default_marker_icon');
 
                         if (isset($post->post_default_category) && $post->post_default_category == $cat_id) {
-                            if ($term_icon_url = geodir_get_tax_meta($cat_id, 'ct_cat_icon', false, $post_type)) {
-                                if (isset($term_icon_url['src']) && $term_icon_url['src'] != '')
-                                    $term_icon = $term_icon_url['src'];
+                            if ( $term_icon_url = geodir_get_cat_icon( $cat_id, true ) ) {
+                                $term_icon = $term_icon_url;
                                 break;
                             }
                         }
@@ -1359,7 +1358,7 @@ function geodir_action_details_micordata($post='')
     // schema type
     $schema_type = 'LocalBusiness';
     if(isset($post->default_category) && $post->default_category){
-        $cat_schema = geodir_get_tax_meta($post->default_category, 'ct_cat_schema', false, $post->post_type);
+        $cat_schema = get_term_meta( $post->default_category, 'ct_cat_schema', true );
         if($cat_schema){$schema_type = $cat_schema;}
         if(!$cat_schema && $schema_type=='LocalBusiness' && $post->post_type=='gd_event'){$schema_type = 'Event';}
     }
@@ -1695,7 +1694,7 @@ function geodir_action_listings_description()
     if (isset($current_term->term_id) && $current_term->term_id != '') {
 
         $term_desc = term_description($current_term->term_id, $gd_post_type . '_tags');
-        $saved_data = stripslashes(geodir_get_tax_meta($current_term->term_id, 'ct_cat_top_desc', false, $gd_post_type));
+        $saved_data = stripslashes( get_term_meta( $current_term->term_id, 'ct_cat_top_desc', true ) );
         if ($term_desc && !$saved_data) {
             $saved_data = $term_desc;
         }

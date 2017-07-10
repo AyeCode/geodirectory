@@ -2011,9 +2011,9 @@ if (!class_exists('Geodir_Tax_Meta_Class')) :
 
 
         //get term meta field
-        public function get_tax_meta($term_id, $key, $multi = false, $post_type = '')
-        {
-
+        public function get_tax_meta($term_id, $key, $multi = false, $post_type = '') {
+            return get_term_meta( $term_id, $key, true );
+            
             if (empty($post_type) && isset($_REQUEST['taxonomy'])) {
                 $taxObject = get_taxonomy($_REQUEST['taxonomy']);
                 $post_type = $taxObject->object_type[0];
@@ -2033,9 +2033,9 @@ if (!class_exists('Geodir_Tax_Meta_Class')) :
         }
 
         //delete meta
-        public function delete_tax_meta($term_id, $key, $post_type = '')
-        {
-
+        public function delete_tax_meta($term_id, $key, $post_type = '') {
+            return delete_term_meta( $term_id, $key );
+            
             if (empty($post_type) && isset($_REQUEST['taxonomy'])) {
                 $taxObject = get_taxonomy($_REQUEST['taxonomy']);
                 $post_type = $taxObject->object_type[0];
@@ -2053,9 +2053,9 @@ if (!class_exists('Geodir_Tax_Meta_Class')) :
         }
 
         //update meta
-        public function update_tax_meta($term_id, $key, $value, $post_type = '')
-        {
-
+        public function update_tax_meta($term_id, $key, $value, $post_type = '') {
+            return update_term_meta( $term_id, $key, $value );
+            
             if (empty($post_type) && isset($_REQUEST['taxonomy'])) {
                 $taxObject = get_taxonomy($_REQUEST['taxonomy']);
                 $post_type = $taxObject->object_type[0];
@@ -2095,6 +2095,8 @@ endif; // End Check Class Exists
 //get term meta field
 if (!function_exists('geodir_get_tax_meta')) {
     function geodir_get_tax_meta($term_id, $key, $multi = false, $post_type = '') {
+        return get_term_meta( $term_id, $key, true );
+        
         if (empty($post_type) && isset($_REQUEST['taxonomy'])) {
             $taxObject = get_taxonomy($_REQUEST['taxonomy']);
             
@@ -2124,6 +2126,8 @@ if (!function_exists('geodir_get_tax_meta')) {
 //delete meta
 if (!function_exists('geodir_delete_tax_meta')) {
     function geodir_delete_tax_meta($term_id, $key) {
+        return delete_term_meta( $term_id, $key );
+        
         $taxObject = get_taxonomy($_REQUEST['taxonomy']);
         $post_type = !empty($taxObject->object_type) ? $taxObject->object_type[0] : '';
 
@@ -2146,6 +2150,8 @@ if (!function_exists('geodir_delete_tax_meta')) {
 //update meta
 if (!function_exists('geodir_update_tax_meta')) {
     function geodir_update_tax_meta($term_id, $key, $value, $post_type = '') {
+        return update_term_meta( $term_id, $key, $value );
+        
         if (empty($post_type) && isset($_REQUEST['taxonomy'])) {
             $taxObject = get_taxonomy($_REQUEST['taxonomy']);
             

@@ -3950,31 +3950,29 @@ function geodir_ajax_import_export() {
                                 // WPML
                                 
                                 if ( isset( $term_data['top_description'] ) ) {
-                                    geodir_update_tax_meta( $term_id, 'ct_cat_top_desc', $term_data['top_description'], $cat_posttype );
+                                    update_term_meta( $term_id, 'ct_cat_top_desc', $term_data['top_description'] );
                                 }
                                 
                                 if ( isset( $term_data['cat_schema'] ) ) {
-                                    geodir_update_tax_meta( $term_id, 'ct_cat_schema', $term_data['cat_schema'], $cat_posttype );
+                                    update_term_meta( $term_id, 'ct_cat_schema', $term_data['cat_schema'] );
                                 }
             
                                 $attachment = false;
                                 if ( isset( $term_data['image'] ) && $term_data['image'] != '' ) {
-                                    $cat_image = geodir_get_default_catimage( $term_id, $cat_posttype );
-                                    $cat_image = !empty( $cat_image ) && isset( $cat_image['src'] ) ? $cat_image['src'] : '';
+                                    $cat_image = geodir_get_cat_image( $term_id );
                                     
-                                    if ( basename($cat_image) != $term_data['image'] ) {
+                                    if ( empty( $cat_image ) || ( !empty( $cat_image ) && basename($cat_image) != $term_data['image'] ) ) {
                                         $attachment = true;
-                                        geodir_update_tax_meta( $term_id, 'ct_cat_default_img', array( 'id' => 'image', 'src' => $uploads['url'] . '/' . $term_data['image'] ), $cat_posttype );
+                                        update_term_meta( $term_id, 'ct_cat_default_img', array( 'id' => 'image', 'src' => trim( $uploads['subdir'] . '/' . $term_data['image'], '/\\' ) ) );
                                     }
                                 }
                                 
                                 if ( isset( $term_data['icon'] ) && $term_data['icon'] != '' ) {
-                                    $cat_icon = geodir_get_tax_meta( $term_id, 'ct_cat_icon', false, $cat_posttype );
-                                    $cat_icon = !empty( $cat_icon ) && isset( $cat_icon['src'] ) ? $cat_icon['src'] : '';
+                                    $cat_icon = geodir_get_cat_icon( $term_id );
 
-                                    if ( basename($cat_icon) != $term_data['icon'] ) {
+                                    if ( empty( $cat_icon ) || ( !empty( $cat_icon ) && basename($cat_icon) != $term_data['icon'] ) ) {
                                         $attachment = true;
-                                        geodir_update_tax_meta( $term_id, 'ct_cat_icon', array( 'id' => 'icon', 'src' => $uploads['url'] . '/' . $term_data['icon'] ), $cat_posttype );
+                                        update_term_meta( $term_id, 'ct_cat_icon', array( 'id' => 'icon', 'src' => trim( $uploads['subdir'] . '/' . $term_data['icon'], '/\\' ) ) );
                                     }
                                 }
                                 
@@ -5618,11 +5616,8 @@ function geodir_imex_get_terms( $post_type, $per_page = 0, $page_no = 0 ) {
 		$csv_rows[] = $csv_row;
 		
 		foreach ( $terms as $term ) {
-			$cat_icon = geodir_get_tax_meta( $term->term_id, 'ct_cat_icon', false, $post_type );
-			$cat_icon = !empty( $cat_icon ) && isset( $cat_icon['src'] ) ? $cat_icon['src'] : '';
-			
-			$cat_image = geodir_get_default_catimage( $term->term_id, $post_type );
-			$cat_image = !empty( $cat_image ) && isset( $cat_image['src'] ) ? $cat_image['src'] : ''; 
+			$cat_icon = geodir_get_cat_icon( $term->term_id, true );
+			$cat_image = geodir_get_cat_image( $term->term_id, true );
 			
 			$cat_parent = '';
 			if (isset($term->parent) && (int)$term->parent > 0 && term_exists((int)$term->parent, $taxonomy)) {
@@ -5636,7 +5631,7 @@ function geodir_imex_get_terms( $post_type, $per_page = 0, $page_no = 0 ) {
 			$csv_row[] = $term->slug;
 			$csv_row[] = $post_type;
 			$csv_row[] = $cat_parent;
-			$csv_row[] = geodir_get_tax_meta( $term->term_id, 'ct_cat_schema', false, $post_type );
+			$csv_row[] = get_term_meta( $term->term_id, 'ct_cat_schema', true );
             // WPML
 			if ($is_wpml) {
 				$csv_row[] = geodir_get_language_for_element( $term->term_id, 'tax_' . $taxonomy );
@@ -5644,7 +5639,7 @@ function geodir_imex_get_terms( $post_type, $per_page = 0, $page_no = 0 ) {
 			}
 			// WPML
 			$csv_row[] = $term->description;
-			$csv_row[] = geodir_get_tax_meta( $term->term_id, 'ct_cat_top_desc', false, $post_type );
+			$csv_row[] = get_term_meta( $term->term_id, 'ct_cat_top_desc', true );
 			$csv_row[] = $cat_image;
 			$csv_row[] = $cat_icon;
 			

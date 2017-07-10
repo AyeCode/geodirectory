@@ -56,6 +56,10 @@ function geodir_is_gd_post_type( $post_type ) {
         return false;
     }
     
+    if ( strpos( $post_type, 'gd_' ) !== 0 ) {
+        return false;
+    }
+    
     if ( !empty( $gd_is_post_type ) && !empty( $gd_is_post_type[ $post_type ] ) ) {
         return true;
     }

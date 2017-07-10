@@ -2036,12 +2036,9 @@ function geodir_get_term_icon($term_id = false, $rebuild = false)
 
         if($a_terms) {
             foreach ($a_terms as $pt => $t2) {
-
-                foreach ($t2 as $term) {
-                    $term_icon = geodir_get_tax_meta($term->term_id, 'ct_cat_icon', false, $pt);
-                    if ($term_icon) {
-                        $term_icon_url = $term_icon["src"];
-                    } else {
+                foreach ( $t2 as $term ) {
+                    $term_icon = geodir_get_cat_icon( $term->term_id, true );
+                    if ( !$term_icon ) {
                         $term_icon_url = $default_icon_url;
                     }
                     $terms_icons[$term->term_id] = $term_icon_url;
@@ -2063,4 +2060,62 @@ function geodir_get_term_icon($term_id = false, $rebuild = false)
     }
 
     return apply_filters('geodir_get_term_icons', $terms_icons, $term_id);
+}
+
+/**
+ * Check given taxonomy belongs to GD.
+ *
+ * @since 2.0.0
+ *
+ * @param string $taxonomy The taxonomy.
+ * @return boll True if given taxonomy belongs to GD., otherwise False.
+ */
+function geodir_is_gd_taxonomy( $taxonomy ) {
+    global $gd_is_taxonomy;
+    
+    if ( empty( $taxonomy ) ) {
+        return false;
+    }
+    
+    if ( strpos( $taxonomy, 'gd_' ) !== 0 ) {
+        return false;
+    }
+    
+    if ( !empty( $gd_is_taxonomy ) && !empty( $gd_is_taxonomy[ $taxonomy ] ) ) {
+        return true;
+    }
+    
+    $gd_taxonomies = geodir_get_taxonomies( '', true );
+    
+    if ( !empty( $gd_taxonomies ) && in_array( $taxonomy, $gd_taxonomies ) ) {
+        if ( !is_array( $gd_is_taxonomy ) ) {
+            $gd_is_taxonomy = array();
+        }
+        
+        $gd_is_taxonomy[ $taxonomy ] = true;
+        
+        return true;
+    }
+    
+    return false;
+}
+
+function geodir_taxonomy_type( $taxonomy ) {
+    global $gd_taxonomy_type;
+    
+    if ( empty( $taxonomy ) ) {
+        return NULL;
+    }
+    
+    if ( strpos( $taxonomy, 'gd_' ) !== 0 ) {
+        return NULL;
+    }
+    
+    if ( substr( $taxonomy , -8 ) == 'category' ) {
+        return 'category';
+    } else if ( substr( $taxonomy , -5 ) == '_tags' ) {
+        return 'tag';
+    }
+    
+    return NULL;
 }
