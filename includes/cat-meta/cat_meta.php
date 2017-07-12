@@ -38,18 +38,18 @@ if (is_admin()) {
      * Initiate your meta box
      */
     $my_meta = new Geodir_Tax_Meta_Class($config);
-    $my_meta->addWysiwyg($prefix . 'cat_top_desc', array('name' => __('Category Top Description', 'geodirectory'), 'desc' => __('This will appear at the top of the category listing.', 'geodirectory')));
+    //$my_meta->addWysiwyg($prefix . 'cat_top_desc', array('name' => __('Category Top Description', 'geodirectory'), 'desc' => __('This will appear at the top of the category listing.', 'geodirectory')));
     $my_meta->addImage($prefix . 'cat_default_img', array('name' => __('Default Listing Image', 'geodirectory'), 'desc' => __('Choose a default "no image"', 'geodirectory')));
     $my_meta->addImage($prefix . 'cat_icon', array('name' => __('Category Icon', 'geodirectory'), 'desc' => __('Choose a category icon', 'geodirectory'), 'validate_func' => '!empty'));
     /*$my_meta->addCheckbox($prefix.'pointless',array('name'=> __('<b>Exclude</b> Rating sort option','geodirectory'),'style'=>'hidden'));*/// hidden setting to trick WPML
 
-    $my_meta->addSelect($prefix . 'cat_schema',
+    /*$my_meta->addSelect($prefix . 'cat_schema',*/
     /*
      * Allows you to add/filter the cat schema types.
      *
      * @since 1.5.7
      */
-        apply_filters('geodir_cat_schemas',array(
+      /*  apply_filters('geodir_cat_schemas',array(
             '' => __('Default (LocalBusiness)', 'geodirectory'),
             'AccountingService' => 'AccountingService',
             'Attorney' => 'Attorney',

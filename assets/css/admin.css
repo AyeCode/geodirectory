@@ -606,6 +606,12 @@ div.update-nag{width: 95%;}
 .gd-locate-me .gd-locate-me-btn .fa {
     font-size: 150%!important;
 }
+.wp-list-table .column-cat_default_img,
+.wp-list-table .column-cat_ID_num {
+    min-width: 60px;
+    text-align: center;
+    white-space: nowrap;
+}
 /***********************---------------MEDIA CSS-------------*****************************/
 
 @media screen and (min-width: 860px) and (max-width: 960px) {
