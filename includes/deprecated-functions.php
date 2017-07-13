@@ -155,3 +155,98 @@ if ( !function_exists( 'get_site_emailName' ) ) {
         return apply_filters( 'get_site_emailName', stripslashes( $site_email_name ) );
     }
 }
+
+/**
+ * @deprecated 2.0.0
+ */
+function geodir_get_tax_meta($term_id, $key, $multi = false, $post_type = '') {
+    return get_term_meta( $term_id, $key, true );
+    
+    if (empty($post_type) && isset($_REQUEST['taxonomy'])) {
+        $taxObject = get_taxonomy($_REQUEST['taxonomy']);
+        
+        if (!empty($taxObject->object_type)) {
+            $post_type = $taxObject->object_type[0];
+        }
+    }
+
+    if ($post_type == 'post') {
+        $post_type = '';
+    }
+    if ($post_type) {
+        $post_type = $post_type . '_';
+    }
+
+    $t_id = (is_object($term_id)) ? $term_id->term_id : $term_id;
+
+    $m = geodir_get_option('tax_meta_' . $post_type  . $t_id);
+    if (isset($m[$key])) {
+        return $m[$key];
+    } else {
+        return '';
+    }
+}
+
+/**
+ * @deprecated 2.0.0
+ */
+function geodir_delete_tax_meta($term_id, $key) {
+    return delete_term_meta( $term_id, $key );
+    
+    $taxObject = get_taxonomy($_REQUEST['taxonomy']);
+    $post_type = !empty($taxObject->object_type) ? $taxObject->object_type[0] : '';
+
+    if ($post_type == 'post') {
+        $post_type = '';
+    }
+    if ($post_type) {
+        $post_type = $post_type . '_';
+    }
+
+    $m = geodir_get_option('tax_meta_' . $post_type . $term_id);
+
+    if (isset($m[$key])) {
+        unset($m[$key]);
+    }
+    geodir_update_option('tax_meta_' . $post_type  . $term_id, $m);
+}
+
+/**
+ * @deprecated 2.0.0
+ */
+function geodir_update_tax_meta($term_id, $key, $value, $post_type = '') {
+    return update_term_meta( $term_id, $key, $value );
+    
+    if (empty($post_type) && isset($_REQUEST['taxonomy'])) {
+        $taxObject = get_taxonomy($_REQUEST['taxonomy']);
+        
+        if (!empty($taxObject->object_type)) {
+            $post_type = $taxObject->object_type[0];
+        }
+    }
+
+    if ($post_type == 'post') {
+        $post_type = '';
+    }
+    if ($post_type) {
+        $post_type = $post_type . '_';
+    }
+
+    $m = geodir_get_option('tax_meta_' . $post_type  . $term_id);
+
+    $m[$key] = $value;
+    geodir_update_option('tax_meta_' . $post_type . $term_id, $m);
+
+    do_action('gd_tax_meta_updated', false, true, $term_id, $post_type);
+}
+
+/**
+ * @deprecated 2.0.0
+ */
+function geodir_get_default_catimage($term_id, $post_type = 'gd_place') {
+    if ( $cat_default_img = get_term_meta( $term_id, 'ct_cat_default_img', true ) ) {
+        return $cat_default_img;
+    }
+    
+    return false;
+}

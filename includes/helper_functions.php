@@ -1228,3 +1228,54 @@ function geodir_total_listings_count($post_type = false)
 function geodir_get_diagnose_step_max_items() {
 	return 5;
 }
+
+function geodir_with_upload_baseurl( $url ) {
+    global $gd_upload_baseurl;
+    
+    $url = geodir_clean_upload_baseurl( $url );
+    
+    if ( !$url ) {
+        return $url;
+    }
+    
+    if ( empty( $gd_upload_baseurl ) ) {
+        $upload_dir = wp_upload_dir();
+        $gd_upload_baseurl = $upload_dir['baseurl'];
+    }
+    
+    if ( strpos( $url, 'http://' ) !== 0 && strpos( $url, 'https://' ) !== 0 ) {
+        $url = $gd_upload_baseurl . '/' . $url;
+    }
+    
+    return $url;
+}
+
+function geodir_clean_upload_baseurl( $url ) {
+    global $gd_upload_baseurl;
+    
+    if ( !$url ) {
+        return $url;
+    }
+    
+    if ( strpos( $url, 'http://' ) !== 0 && strpos( $url, 'https://' ) !== 0 ) {
+        return $url;
+    }
+    
+    if ( empty( $gd_upload_baseurl ) ) {
+        $upload_dir = wp_upload_dir();
+        $gd_upload_baseurl = $upload_dir['baseurl'];
+    }
+    
+    if ( strpos( $gd_upload_baseurl, 'https://' ) !== false ) {
+        $https_baseurl = $gd_upload_baseurl;
+        $http_baseurl = str_replace( 'https://', 'http://', $gd_upload_baseurl );
+    } else {
+        $https_baseurl = str_replace( 'http://', 'https://', $gd_upload_baseurl );
+        $http_baseurl = $gd_upload_baseurl;
+    }
+    
+    $url = str_replace( $https_baseurl . '/', '', $url );
+    $url = str_replace( $http_baseurl . '/', '', $url );
+    
+    return $url;
+}

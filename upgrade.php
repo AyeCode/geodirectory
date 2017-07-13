@@ -928,17 +928,7 @@ function geodir_upgrade_1618() {
 function geodir_upgrade_200() {
     global $geodir_options;
     
-    $upload_dir = wp_upload_dir();
-    $upload_baseurl = $upload_dir['baseurl'];
     $plugin_url = geodir_plugin_url();
-    
-    if ( strpos( $upload_baseurl, 'https://' ) !== false ) {
-        $https_baseurl = $upload_baseurl;
-        $http_baseurl = str_replace( 'https://', 'http://', $upload_baseurl );
-    } else {
-        $https_baseurl = str_replace( 'http://', 'https://', $upload_baseurl );
-        $http_baseurl = $upload_baseurl;
-    }
     
     if ( strpos( $plugin_url, 'https://' ) !== false ) {
         $https_plugin_url = $plugin_url;
@@ -990,8 +980,7 @@ function geodir_upgrade_200() {
                         // Make icon url relative.
                         $meta_value['src'] = str_replace( $https_plugin_url . '/', '', $meta_value['src'] );
                         $meta_value['src'] = str_replace( $http_plugin_url . '/', '', $meta_value['src'] );
-                        $meta_value['src'] = str_replace( $https_baseurl . '/', '', $meta_value['src'] );
-                        $meta_value['src'] = str_replace( $http_baseurl . '/', '', $meta_value['src'] );
+                        $meta_value['src'] = geodir_clean_upload_baseurl( $meta_value['src'] );
                     }
                     
                     update_term_meta( $term_id, $meta_key, $meta_value );

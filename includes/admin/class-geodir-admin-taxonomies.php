@@ -41,7 +41,7 @@ class GeoDir_Admin_Taxonomies {
         }
         
         $this->taxonomy = $_REQUEST['taxonomy'];
-        
+
         if ( !geodir_is_gd_taxonomy( $this->taxonomy ) ) {
             return;
         }
@@ -54,7 +54,7 @@ class GeoDir_Admin_Taxonomies {
             add_action( $this->taxonomy . '_edit_form_fields', array( $this, 'edit_category_fields' ), 10, 2 );
             
             // Save fields
-            add_action( 'created_term', array( $this, 'save_category_fields' ), 10, 3 );
+            add_action( 'create_term', array( $this, 'save_category_fields' ), 10, 3 );
             add_action( 'edit_term', array( $this, 'save_category_fields' ), 10, 3 );
             
             // Add columns
@@ -84,12 +84,12 @@ class GeoDir_Admin_Taxonomies {
             <?php echo $this->render_cat_default_img(); ?>
         </div>
         <?php do_action( 'geodir_add_category_after_cat_default_img', $taxonomy ); ?>
-        <div class="form-field term-ct_cat_icon-wrap gd-term-form-field">
+        <div class="form-field term-ct_cat_icon-wrap gd-term-form-field form-required">
             <label for="ct_cat_icon"><?php _e( 'Category Icon', 'geodirectory' ); ?></label>
             <?php echo $this->render_cat_icon(); ?>
         </div>
         <?php do_action( 'geodir_add_category_after_cat_icon', $taxonomy ); ?>
-        <div class="form-field term-ct_cat_schema-wrap gd-term-form-field">
+        <div class="form-field term-ct_cat_schema-wrap gd-term-form-field ">
             <label for="ct_cat_schema"><?php _e( 'Schema Type', 'geodirectory' ); ?></label>
             <?php echo $this->render_cat_schema(); ?>
         </div>
@@ -110,6 +110,12 @@ class GeoDir_Admin_Taxonomies {
         $cat_default_img = get_term_meta( $term->term_id, 'ct_cat_default_img', true );
         $cat_icon = get_term_meta( $term->term_id, 'ct_cat_icon', true );
         $cat_schema = get_term_meta( $term->term_id, 'ct_cat_schema', true );
+        if ( !empty( $cat_default_img['id'] ) ) {
+            $cat_default_img['full'] = geodir_get_cat_image( $term->term_id, true );
+        }
+        if ( !empty( $cat_icon['id'] ) ) {
+            $cat_icon['full'] = geodir_get_cat_icon( $term->term_id, true );
+        }
         ?>
         <?php do_action( 'geodir_edit_category_top', $term, $taxonomy ); ?>
         <tr class="form-field term-ct_cat_top_desc-wrap gd-term-form-field">
@@ -122,7 +128,7 @@ class GeoDir_Admin_Taxonomies {
             <td><?php echo $this->render_cat_default_img( $cat_default_img ); ?></td>
         </tr>
         <?php do_action( 'geodir_edit_category_after_cat_default_img', $term, $taxonomy ); ?>
-        <tr class="form-field term-ct_cat_icon-wrap gd-term-form-field">
+        <tr class="form-field term-ct_cat_icon-wrap gd-term-form-field form-required">
             <th scope="row"><label for="ct_cat_icon"><?php _e( 'Category Icon', 'geodirectory' ); ?></label></th>
             <td><?php echo $this->render_cat_icon( $cat_icon ); ?></td>
         </tr>
@@ -148,32 +154,52 @@ class GeoDir_Admin_Taxonomies {
         return ob_get_clean();
     }
     
-    public function render_cat_default_img( $content = '', $id = 'ct_cat_default_img', $name = '' ) {
+    public function render_cat_default_img( $default_img = array(), $id = 'ct_cat_default_img', $name = '' ) {
         if ( empty( $name ) ) {
             $name = $id;
         }
+        
+        $img_id = !empty( $default_img['id'] ) ? $default_img['id'] : '';
+        $img_src = !empty( $default_img['src'] ) ? $default_img['src'] : '';
+        $show_img = !empty( $default_img['full'] ) ? $default_img['full'] : admin_url( 'images/media-button-image.gif' );
          
         ob_start();
         ?>
-        <div id="<?php echo $id; ?>" style="float:left;margin-right:10px;"><img src="" width="60px" height="60px" /></div>
-        <div style="line-height:60px;">
-            <input type="hidden" id="<?php echo $id; ?>" name="<?php echo $name; ?>" />
-            <button type="button" class="upload_image_button button"><?php _e( 'Upload image', 'geodirectory' ); ?></button>
-            <button type="button" class="remove_image_button button"><?php _e( 'Remove image', 'geodirectory' ); ?></button>
+        <div class="gd-upload-img" data-field="<?php echo $name; ?>">
+            <div class="gd-upload-display thumbnail"><div class="centered"><img src="<?php echo $show_img; ?>" /></div></div>
+            <div class="gd-upload-fields">
+                <input type="hidden" id="<?php echo $id; ?>[id]" name="<?php echo $name; ?>[id]" value="<?php echo $img_id; ?>" />
+                <input type="hidden" id="<?php echo $id; ?>[src]" name="<?php echo $name; ?>[src]" value="<?php echo $img_src; ?>" />
+                <button type="button" class="gd_upload_image_button button"><?php _e( 'Upload Image', 'geodirectory' ); ?></button>
+                <button type="button" class="gd_remove_image_button button"><?php _e( 'Remove Image', 'geodirectory' ); ?></button>
+            </div>
         </div>
-        <p class="description"><?php _e( 'Choose a default image for the listing within this category.', 'geodirectory' ); ?></p>
+        <p class="description clear"><?php _e( 'Choose a default image for the listing within this category.', 'geodirectory' ); ?></p>
         <?php
         return ob_get_clean();
     }
     
-    public function render_cat_icon( $content = '', $id = 'ct_cat_icon', $name = '' ) {
+    public function render_cat_icon( $cat_icon = array(), $id = 'ct_cat_icon', $name = '' ) {
         if ( empty( $name ) ) {
             $name = $id;
         }
+        
+        $img_id = !empty( $cat_icon['id'] ) ? $cat_icon['id'] : '';
+        $img_src = !empty( $cat_icon['src'] ) ? $cat_icon['src'] : '';
+        $show_img = !empty( $cat_icon['full'] ) ? $cat_icon['full'] : admin_url( 'images/media-button-image.gif' );
          
         ob_start();
         ?>
-        <p class="description"><?php _e( 'Choose a category icon', 'geodirectory' ); ?></p>
+        <div class="gd-upload-img" data-field="<?php echo $name; ?>">
+            <div class="gd-upload-display thumbnail"><div class="centered"><img src="<?php echo $show_img; ?>" /></div></div>
+            <div class="gd-upload-fields">
+                <input type="hidden" id="<?php echo $id; ?>[id]" name="<?php echo $name; ?>[id]" value="<?php echo $img_id; ?>" />
+                <input type="text" id="<?php echo $id; ?>[src]" name="<?php echo $name; ?>[src]" value="<?php echo $img_src; ?>" required style="position:absolute;left:-500px;width:50px;" />
+                <button type="button" class="gd_upload_image_button button"><?php _e( 'Upload Icon', 'geodirectory' ); ?></button>
+                <button type="button" class="gd_remove_image_button button"><?php _e( 'Remove Icon', 'geodirectory' ); ?></button>
+            </div>
+        </div>
+        <p class="description clear"><?php _e( 'Choose a category icon', 'geodirectory' ); ?></p>
         <?php
         return ob_get_clean();
     }
@@ -207,6 +233,43 @@ class GeoDir_Admin_Taxonomies {
      * @param string $taxonomy Taxonomy slug.
      */
     public function save_category_fields( $term_id, $tt_id = '', $taxonomy = '' ) {
+        // Category top description.
+        if ( isset( $_POST['ct_cat_top_desc'] ) ) {
+            update_term_meta( $term_id, 'ct_cat_top_desc', $_POST['ct_cat_top_desc'] );
+        }
+        
+        // Categoty listing default image.
+        if ( isset( $_POST['ct_cat_default_img'] ) ) {
+            $cat_default_img = $_POST['ct_cat_default_img'];
+            
+            if ( !empty( $cat_default_img['src'] ) ) {
+                $cat_default_img['src'] = geodir_clean_upload_baseurl( $cat_default_img['src'] );
+            } else {
+                $cat_default_img = array();
+            }
+            
+            update_term_meta( $term_id, 'ct_cat_default_img', $cat_default_img );
+        }
+        
+        // Categoty icon.
+        if ( isset( $_POST['ct_cat_icon'] ) ) {
+            $cat_icon = $_POST['ct_cat_icon'];
+            
+            if ( !empty( $cat_icon['src'] ) ) {
+                $cat_icon['src'] = geodir_clean_upload_baseurl( $cat_icon['src'] );
+            } else {
+                $cat_icon = array();
+            }
+            
+            update_term_meta( $term_id, 'ct_cat_icon', $cat_icon );
+        }
+        
+        // Category schema.
+        if ( isset( $_POST['ct_cat_schema'] ) ) {
+            update_term_meta( $term_id, 'ct_cat_schema', sanitize_text_field( $_POST['ct_cat_schema'] ) );
+        }
+        
+        do_action( 'geodir_term_save_category_fields', $term_id, $tt_id, $taxonomy );
     }
 
     /**

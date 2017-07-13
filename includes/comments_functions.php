@@ -766,7 +766,7 @@ function geodir_comment_template($comment_template)
         
         $template = locate_template(array("geodirectory/reviews.php")); // Use theme template if available
         if (!$template) {
-            $template = dirname(__FILE__) . '/reviews.php';
+            $template = geodir_plugin_path() . '/includes/templates/reviews.php';
         }
         return $template;
     }
