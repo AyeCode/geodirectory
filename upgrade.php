@@ -927,17 +927,7 @@ function geodir_upgrade_1618() {
 
 function geodir_upgrade_200() {
     global $geodir_options;
-    
-    $plugin_url = geodir_plugin_url();
-    
-    if ( strpos( $plugin_url, 'https://' ) !== false ) {
-        $https_plugin_url = $plugin_url;
-        $http_plugin_url = str_replace( 'https://', 'http://', $plugin_url );
-    } else {
-        $https_plugin_url = str_replace( 'http://', 'https://', $plugin_url );
-        $http_plugin_url = $plugin_url;
-    }
-    
+
     // Migrate options.
     $options = geodir_core_option_names();
     if ( !empty( $options ) ) {
@@ -952,6 +942,20 @@ function geodir_upgrade_200() {
             if ( $value !== NULL ) {
                 $saved_options[ $option ] = $value;
             }
+        }
+        
+        if ( empty( $saved_options['geodir_default_rating_star_icon'] ) ) {
+            $saved_options['geodir_default_rating_star_icon'] = geodir_plugin_url() . '/assets/images/stars.png';
+        }
+        
+        if ( empty( $saved_options['geodir_default_marker_icon'] ) ) {
+            $saved_options['geodir_default_marker_icon'] = geodir_plugin_url() . '/includes/maps/icons/pin.png';
+        }
+        
+        $saved_options['geodir_default_rating_star_icon'] = geodir_file_relative_url( $saved_options['geodir_default_rating_star_icon'] );
+        $saved_options['geodir_default_marker_icon'] = geodir_file_relative_url( $saved_options['geodir_default_marker_icon'] );
+        if ( !empty( $saved_options['geodir_listing_no_img'] ) ) {
+            $saved_options['geodir_listing_no_img'] = geodir_file_relative_url( $saved_options['geodir_listing_no_img'] );
         }
         
         if ( update_option( 'geodir_settings', $saved_options ) ) {
@@ -977,10 +981,7 @@ function geodir_upgrade_200() {
                             continue;
                         }
                         
-                        // Make icon url relative.
-                        $meta_value['src'] = str_replace( $https_plugin_url . '/', '', $meta_value['src'] );
-                        $meta_value['src'] = str_replace( $http_plugin_url . '/', '', $meta_value['src'] );
-                        $meta_value['src'] = geodir_clean_upload_baseurl( $meta_value['src'] );
+                        $meta_value['src'] = geodir_file_relative_url( $meta_value['src'] );
                     }
                     
                     update_term_meta( $term_id, $meta_key, $meta_value );

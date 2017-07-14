@@ -190,7 +190,7 @@ final class GeoDirectory {
         
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-session.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/email-functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/helper_functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/helper-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/user-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/deprecated-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-ajax-functions.php' );
@@ -206,7 +206,7 @@ final class GeoDirectory {
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_fields_output_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_fields_predefined.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-custom-fields-functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/comments_functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/comments-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/location_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/google_analytics.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-shortcode-functions.php' );

@@ -250,3 +250,15 @@ function geodir_get_default_catimage($term_id, $post_type = 'gd_place') {
     
     return false;
 }
+
+/**
+ * @deprecated 2.0.0
+ */
+function geodir_default_rating_star_icon() {
+    return;
+    
+    if (!geodir_get_option('geodir_default_rating_star_icon')) {
+        geodir_update_option('geodir_default_rating_star_icon', geodir_plugin_url() . '/assets/images/stars.png');
+    }
+}
+//add_action( 'init', 'geodir_default_rating_star_icon' );

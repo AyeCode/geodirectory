@@ -58,7 +58,7 @@ if (is_admin() && isset($_REQUEST['tab']) && $mapzoom == '') {
  * @param bool $var Whether to auto fill country, state, city values in fields.
  */
 $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
-$marker_icon = geodir_get_option('geodir_default_marker_icon');
+$marker_icon = geodir_default_marker_icon( true );
 $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
 ?>
 <script type="text/javascript">

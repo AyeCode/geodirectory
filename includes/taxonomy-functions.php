@@ -2001,62 +2001,54 @@ function geodir_get_term_icon_rebuild() {
  * @param bool $rebuild Force rebuild the icons when set to true.
  * @return mixed|string|void Term icon(s).
  */
-function geodir_get_term_icon($term_id = false, $rebuild = false)
-{
+function geodir_get_term_icon( $term_id = false, $rebuild = false ) {
     global $wpdb;
-    if (!$rebuild) {
-        $terms_icons = geodir_get_option('gd_term_icons');
+    
+    if ( !$rebuild ) {
+        $terms_icons = geodir_get_option( 'gd_term_icons' );
     } else {
         $terms_icons = array();
     }
-
-    if (empty($terms_icons)) {
-        $terms_icons = array();
-        $default_icon_url = geodir_get_option('geodir_default_marker_icon');
-        $taxonomy = geodir_get_taxonomies();
+    
+    if ( empty( $terms_icons ) ) {
         $post_types = geodir_get_posttypes();
+        $terms_icons = array();
         $tax_arr = array();
-        foreach ($post_types as $post_type) {
-            $tax_arr[] = "'" . $post_type . "category'";
+        
+        foreach ( $post_types as $post_type ) {
+            $tax_arr[ $post_type . 'category' ] = $post_type;
         }
-        $tax_c = implode(',', $tax_arr);
-        $terms = $wpdb->get_results("SELECT * FROM $wpdb->term_taxonomy WHERE taxonomy IN ($tax_c)");
-        //$terms = get_terms( $taxonomy );
-
-        if($terms) {
-            foreach ($terms as $term) {
-                $post_type = str_replace("category", "", $term->taxonomy);
-                $a_terms[$post_type][] = $term;
-
+        
+        $terms = $wpdb->get_results( "SELECT term_id, taxonomy FROM $wpdb->term_taxonomy WHERE taxonomy IN ('" . implode( "','", array_keys( $tax_arr ) ) . "')" );
+        if ( !empty( $terms ) ) {
+            $a_terms = array();
+            foreach ( $terms as $term ) {
+                $a_terms[ $tax_arr[ $term->taxonomy ] ][] = $term;
             }
-        }
-
-        if($a_terms) {
-            foreach ($a_terms as $pt => $t2) {
+            
+            foreach ( $a_terms as $pt => $t2 ) {
                 foreach ( $t2 as $term ) {
-                    $term_icon = geodir_get_cat_icon( $term->term_id, true );
-                    if ( !$term_icon ) {
-                        $term_icon_url = $default_icon_url;
-                    }
-                    $terms_icons[$term->term_id] = $term_icon_url;
+                    $terms_icons[ $term->term_id ] = geodir_get_cat_icon( $term->term_id, true, true );
                 }
             }
         }
-
-        geodir_update_option('gd_term_icons', $terms_icons);
+        
+        geodir_update_option( 'gd_term_icons', $terms_icons );
     }
-
-    if ($term_id && isset($terms_icons[$term_id])) {
-        return $terms_icons[$term_id];
-    } elseif ($term_id && !isset($terms_icons[$term_id])) {
-        return geodir_get_option('geodir_default_marker_icon');
+    
+    if ( !empty( $term_id ) ) {
+        if ( isset( $terms_icons[ $term_id ] ) ) {
+            return $terms_icons[ $term_id ];
+        } else {
+            return geodir_default_marker_icon( true );
+        }
     }
-
-    if (is_ssl()) {
-        $terms_icons = str_replace("http:","https:",$terms_icons );
+    
+    if ( is_ssl() ) {
+        $terms_icons = str_replace( "http:", "https:", $terms_icons );
     }
-
-    return apply_filters('geodir_get_term_icons', $terms_icons, $term_id);
+    
+    return apply_filters( 'geodir_get_term_icons', $terms_icons, $term_id );
 }
 
 /**
@@ -2123,11 +2115,11 @@ function geodir_get_cat_icon( $term_id, $full_path = false, $default = false ) {
     $cat_icon = is_array( $term_meta ) && !empty( $term_meta['src'] ) ? $term_meta['src'] : '';
     
     if ( !$cat_icon && $default ) {
-        $cat_icon = geodir_get_option( 'geodir_default_marker_icon' );
+        $cat_icon = geodir_default_marker_icon( $full_path );
     }
     
     if ( $cat_icon && $full_path ) {
-        $cat_icon = geodir_with_upload_baseurl( $cat_icon );
+        $cat_icon = geodir_file_relative_url( $cat_icon, true );
     }
     
     return apply_filters( 'geodir_get_cat_icon', $cat_icon, $term_id, $full_path, $default );
@@ -2139,7 +2131,7 @@ function geodir_get_cat_image( $term_id, $full_path = false ) {
     $cat_image = is_array( $term_meta ) && !empty( $term_meta['src'] ) ? $term_meta['src'] : '';
         
     if ( $cat_image && $full_path && strpos( $cat_image, 'http://' ) !== 0 && strpos( $cat_image, 'https://' ) !== 0 ) {
-        $cat_image = geodir_with_upload_baseurl( $cat_image );
+        $cat_image = geodir_file_relative_url( $cat_image, true );
     }
     
     return apply_filters( 'geodir_get_cat_image', $cat_image, $term_id, $full_path );

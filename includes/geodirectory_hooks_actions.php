@@ -1223,7 +1223,7 @@ function geodir_localize_all_js_msg()
 	 */
 	$allowed_img_types = apply_filters('geodir_allowed_post_image_exts', array('jpg', 'jpeg', 'jpe', 'gif', 'png'));
 	
-    $default_marker_icon = geodir_get_option('geodir_default_marker_icon');
+    $default_marker_icon = geodir_default_marker_icon( true );
     $default_marker_size = geodir_get_marker_size($default_marker_icon, array('w' => 20, 'h' => 34));
     $default_marker_width = $default_marker_size['w'];
     $default_marker_height = $default_marker_size['h'];
@@ -1262,7 +1262,7 @@ function geodir_localize_all_js_msg()
         'geodir_default_marker_h' => $default_marker_height,
         'geodir_latitude_error_msg' => GEODIR_LATITUDE_ERROR_MSG,
         'geodir_longgitude_error_msg' => GEODIR_LOGNGITUDE_ERROR_MSG,
-        'geodir_default_rating_star_icon' => geodir_get_option('geodir_default_rating_star_icon'),
+        'geodir_default_rating_star_icon' => geodir_default_rating_icon( true ),
         'gd_cmt_btn_post_reply' => __('Post Reply', 'geodirectory'),
         'gd_cmt_btn_reply_text' => __('Reply text', 'geodirectory'),
         'gd_cmt_btn_post_review' => __('Post Review', 'geodirectory'),
@@ -1598,9 +1598,6 @@ function geodir_changes_in_custom_fields_table() {
 
 
         /* --- terms meta value set --- */
-
-        geodir_update_option('geodir_default_marker_icon', geodir_plugin_url() . '/includes/maps/icons/pin.png');
-
         $options_data = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "options WHERE option_name LIKE %s", array('%tax_meta_%')));
 
         if (!empty($options_data)) {
@@ -2297,27 +2294,6 @@ function geodir_temp_set_post_attachment()
     }
 
 }
-
-
-/* -------- GEODIR FUNCTION TO UPDATE geodir_default_rating_star_icon ------ */
-
-add_action('init', 'geodir_default_rating_star_icon');
-
-/**
- * Update default rating star icon.
- *
- * @since 1.0.0
- * @package GeoDirectory
- */
-function geodir_default_rating_star_icon()
-{
-
-    if (!geodir_get_option('geodir_default_rating_star_icon')) {
-        geodir_update_option('geodir_default_rating_star_icon', geodir_plugin_url() . '/assets/images/stars.png');
-    }
-
-}
-
 
 /* ------- GET CURRENT USER POST LISTING -------*/
 /**

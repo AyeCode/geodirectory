@@ -44,7 +44,7 @@ function geodir_get_theme_menu_locations() {
 function geodir_get_option( $key = '', $default = false ) {
     global $geodir_options;
     //if ( isset( $geodir_options[ $key ] ) ) {
-        $value = ! empty( $geodir_options[ $key ] ) ? $geodir_options[ $key ] : $default;
+        $value = isset( $geodir_options[ $key ] ) ? $geodir_options[ $key ] : $default;
     /*} else { // TODO remove once all settings moved to one option
         $value = get_option( $key, $default );
         geodir_error_log( $key, '', __FILE__, __LINE__ );

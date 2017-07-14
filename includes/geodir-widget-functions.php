@@ -20,7 +20,7 @@ include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-cp
 include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-features.php' );
 include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-flickr.php' );
 include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-home-page-map.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-listing-page_map.php' );
+include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-listing-page-map.php' );
 include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-listing-slider.php' );
 include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-login.php' );
 include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-subscribe.php' );
