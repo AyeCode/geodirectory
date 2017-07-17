@@ -1,6 +1,6 @@
 <?php
 /**
-* GeoDirectory Detail Social Sharing Widget
+* GeoDirectory Detail User Actions Widget
 *
 * @since 2.0.0
 *
@@ -12,32 +12,32 @@
  *
  * @since 2.0.0
  */
-class GeoDir_Widget_Detail_Social_Sharing extends WP_Widget {
+class GeoDir_Widget_Detail_User_Actions extends WP_Widget {
     
     /**
-     * Sets up a new Detail Social Sharing widget instance.
+     * Sets up a new Detail User Actions widget instance.
      *
      * @since 2.0.0
      * @access public
      */
     public function __construct() {
         $widget_ops = array(
-            'classname' => 'geodir-widget gd-widget-detail-social-sharing',
-            'description' => __( 'Display social sharing buttons on the lisitng detail page.', 'geodirectory' ),
+            'classname' => 'geodir-widget gd-widget-detail-user-actions',
+            'description' => __( 'Display user actions on the lisitng detail page.', 'geodirectory' ),
             'customize_selective_refresh' => true,
         );
-        parent::__construct( 'detail_social_sharing', __( 'GD > Detail Social Sharing', 'geodirectory' ), $widget_ops );
+        parent::__construct( 'detail_user_actions', __( 'GD > Detail User Actions', 'geodirectory' ), $widget_ops );
     }
 
     /**
-     * Outputs the content for the current Detail Social Sharing widget instance.
+     * Outputs the content for the current Detail User Actions widget instance.
      *
      * @since 2.0.0
      * @access public
      *
      * @param array $args     Display arguments including 'before_title', 'after_title',
      *                        'before_widget', and 'after_widget'.
-     * @param array $instance Settings for the current Detail Social Sharing widget instance.
+     * @param array $instance Settings for the current Detail User Actions widget instance.
      */
     public function widget( $args, $instance ) {
         if ( !geodir_is_page( 'detail' ) ) {
@@ -61,17 +61,17 @@ class GeoDir_Widget_Detail_Social_Sharing extends WP_Widget {
             echo $args['before_title'] . $title . $args['after_title'];
         }
         
-        do_action( 'geodir_widget_before_detail_social_sharing' );
+        do_action( 'geodir_widget_before_detail_user_actions' );
         
-        geodir_social_sharing_buttons();
+        geodir_edit_post_link();
         
-        do_action( 'geodir_widget_after_detail_social_sharing' );
+        do_action( 'geodir_widget_after_detail_user_actions' );
         
         echo $args['after_widget'];
     }
 
     /**
-     * Handles updating settings for the current Detail Social Sharing widget instance.
+     * Handles updating settings for the current Detail User Actions widget instance.
      *
      * @since 2.0.0
      * @access public
@@ -90,7 +90,7 @@ class GeoDir_Widget_Detail_Social_Sharing extends WP_Widget {
     }
     
     /**
-     * Outputs the settings form for the Detail Social Sharing widget.
+     * Outputs the settings form for the Detail User Actions widget.
      *
      * @since 2.0.0
      * @access public
