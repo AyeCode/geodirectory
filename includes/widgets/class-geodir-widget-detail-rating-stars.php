@@ -1,6 +1,6 @@
 <?php
 /**
-* GeoDirectory Detail Social Sharing Widget
+* GeoDirectory Detail Rating Stars Widget
 *
 * @since 2.0.0
 *
@@ -8,36 +8,36 @@
 */
 
 /**
- * GeoDir_Widget_Detail_Social_Sharing class.
+ * GeoDir_Widget_Detail_Rating_Stars class.
  *
  * @since 2.0.0
  */
-class GeoDir_Widget_Detail_Social_Sharing extends WP_Widget {
+class GeoDir_Widget_Detail_Rating_Stars extends WP_Widget {
     
     /**
-     * Sets up a new Detail Social Sharing widget instance.
+     * Sets up a new Detail Rating Stars widget instance.
      *
      * @since 2.0.0
      * @access public
      */
     public function __construct() {
         $widget_ops = array(
-            'classname' => 'geodir-widget gd-widget-detail-social-sharing',
-            'description' => __( 'Display social sharing buttons on the listing detail page.', 'geodirectory' ),
+            'classname' => 'geodir-widget gd-widget-detail-rating-stars',
+            'description' => __( 'Display rating stars on the listing detail page.', 'geodirectory' ),
             'customize_selective_refresh' => true,
         );
-        parent::__construct( 'detail_social_sharing', __( 'GD > Detail Social Sharing', 'geodirectory' ), $widget_ops );
+        parent::__construct( 'detail_rating_stars', __( 'GD > Detail Rating Stars', 'geodirectory' ), $widget_ops );
     }
 
     /**
-     * Outputs the content for the current Detail Social Sharing widget instance.
+     * Outputs the content for the current Detail Rating Stars widget instance.
      *
      * @since 2.0.0
      * @access public
      *
      * @param array $args     Display arguments including 'before_title', 'after_title',
      *                        'before_widget', and 'after_widget'.
-     * @param array $instance Settings for the current Detail Social Sharing widget instance.
+     * @param array $instance Settings for the current Detail Rating widget instance.
      */
     public function widget( $args, $instance ) {
         if ( !geodir_is_page( 'detail' ) ) {
@@ -57,11 +57,11 @@ class GeoDir_Widget_Detail_Social_Sharing extends WP_Widget {
         
         ob_start();
         
-        do_action( 'geodir_widget_before_detail_social_sharing' );
+        do_action( 'geodir_widget_before_detail_rating_stars' );
         
-        geodir_social_sharing_buttons();
+        geodir_detail_page_review_rating();
         
-        do_action( 'geodir_widget_after_detail_social_sharing' );
+        do_action( 'geodir_widget_after_detail_rating_stars' );
         
         $content = ob_get_clean();
         
@@ -82,7 +82,7 @@ class GeoDir_Widget_Detail_Social_Sharing extends WP_Widget {
     }
 
     /**
-     * Handles updating settings for the current Detail Social Sharing widget instance.
+     * Handles updating settings for the current Detail Rating Stars widget instance.
      *
      * @since 2.0.0
      * @access public
@@ -101,7 +101,7 @@ class GeoDir_Widget_Detail_Social_Sharing extends WP_Widget {
     }
     
     /**
-     * Outputs the settings form for the Detail Social Sharing widget.
+     * Outputs the settings form for the Detail Rating Stars widget.
      *
      * @since 2.0.0
      * @access public

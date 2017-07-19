@@ -30,9 +30,13 @@ include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-re
 include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-related-listing.php' );
 include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-social-like.php' );
 include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-twitter.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-sidebar.php' );
+// Detail page widgets
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-sidebar.php' );
 include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-social-sharing.php' );
+include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-google-analytics.php' );
 include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-user-actions.php' );
+include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-rating-stars.php' );
+include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-sidebar-info.php' );
 
 /**
  * Register Widgets.
@@ -57,9 +61,14 @@ function goedir_register_widgets() {
     register_widget( 'GeoDir_Widget_Related_Listing' );
     register_widget( 'GeoDir_Widget_Social_Like' );
     register_widget( 'GeoDir_Widget_Twitter' );
-    register_widget( 'GeoDir_Widget_Detail_Sidebar' );
+    
+    // Register detail page widgets
+    //register_widget( 'GeoDir_Widget_Detail_Sidebar' );
     register_widget( 'GeoDir_Widget_Detail_Social_Sharing' );
+    register_widget( 'GeoDir_Widget_Detail_Google_Analytics' );
     register_widget( 'GeoDir_Widget_Detail_User_Actions' );
+    register_widget( 'GeoDir_Widget_Detail_Rating_Stars' );
+    register_widget( 'GeoDir_Widget_Detail_Sidebar_Info' );
 }
 add_action( 'widgets_init', 'goedir_register_widgets' );
 

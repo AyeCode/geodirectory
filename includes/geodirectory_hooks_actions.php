@@ -310,7 +310,7 @@ add_action('geodir_before_tab_content', 'geodir_before_tab_content');// this fun
 add_action('geodir_after_tab_content', 'geodir_after_tab_content');// this function is in custom_functions.php and it is used to wrap detail page tab content
 
 // Detail page sidebar content 
-add_action('geodir_detail_page_sidebar', 'geodir_detail_page_sidebar_content_sorting', 1);
+//add_action('geodir_detail_page_sidebar', 'geodir_detail_page_sidebar_content_sorting', 1);
 /**
  * Builds an array of elements for the details (post) page sidebar.
  *

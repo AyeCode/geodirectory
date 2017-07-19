@@ -23,7 +23,7 @@ class GeoDir_Widget_Detail_User_Actions extends WP_Widget {
     public function __construct() {
         $widget_ops = array(
             'classname' => 'geodir-widget gd-widget-detail-user-actions',
-            'description' => __( 'Display user actions on the lisitng detail page.', 'geodirectory' ),
+            'description' => __( 'Display user actions on the listing detail page.', 'geodirectory' ),
             'customize_selective_refresh' => true,
         );
         parent::__construct( 'detail_user_actions', __( 'GD > Detail User Actions', 'geodirectory' ), $widget_ops );
@@ -55,17 +55,28 @@ class GeoDir_Widget_Detail_User_Actions extends WP_Widget {
          */
         $title = apply_filters( 'widget_title', empty( $instance['title'] ) ? '' : $instance['title'], $instance, $this->id_base );
         
-        echo $args['before_widget'];
-        
-        if ( $title ) {
-            echo $args['before_title'] . $title . $args['after_title'];
-        }
+        ob_start();
         
         do_action( 'geodir_widget_before_detail_user_actions' );
         
         geodir_edit_post_link();
         
         do_action( 'geodir_widget_after_detail_user_actions' );
+        
+        $content = ob_get_clean();
+        
+        $content = trim( $content );
+        if ( empty( $content ) ) {
+            return;
+        }
+        
+        echo $args['before_widget'];
+        
+        if ( $title ) {
+            echo $args['before_title'] . $title . $args['after_title'];
+        }
+        
+        echo $content;
         
         echo $args['after_widget'];
     }

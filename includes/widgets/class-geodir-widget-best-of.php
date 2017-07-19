@@ -310,7 +310,7 @@ class GeoDir_Widget_Best_Of extends WP_Widget {
             if ($terms) {
                 $view_all_link = add_query_arg(array('sort_by' => 'rating_count_desc'), get_term_link($first_term, $first_term->taxonomy));
                 /**
-                 * Filter the page link to view all lisitngs.
+                 * Filter the page link to view all listings.
                  *
                  * @since 1.5.1
                  *
