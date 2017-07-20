@@ -106,6 +106,7 @@ final class GeoDirectory {
         $this->define( 'GEODIRECTORY_VERSION', $this->version );
         $this->define( 'GEODIRECTORY_PLUGIN_FILE', __FILE__ );
         $this->define( 'GEODIRECTORY_PLUGIN_DIR', $plugin_path );
+        $this->define( 'GEODIRECTORY_PLUGIN_URL', untrailingslashit( plugins_url( '/', __FILE__ ) ) );
         $this->define( 'GEODIRECTORY_TEXTDOMAIN', 'geodirectory' );
         
         // Database tables
@@ -190,7 +191,7 @@ final class GeoDirectory {
         
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-session.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/email-functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/helper_functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/helper-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/user-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/deprecated-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-ajax-functions.php' );
@@ -201,14 +202,12 @@ final class GeoDirectory {
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/account-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post-types-functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/term-functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-taxonomy-functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/taxonomy-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_fields_input_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_fields_output_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_fields_predefined.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-custom-fields-functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/comments_functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/cat-meta/cat_meta.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/comments-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/location_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/google_analytics.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-shortcode-functions.php' );
@@ -221,7 +220,7 @@ final class GeoDirectory {
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodirectory_template_actions.php' );
         
         if ( $this->is_request( 'admin' ) || $this->is_request( 'test' ) || $this->is_request( 'cli' ) ) {
-            if ( ( $pagenow == 'edit-tags.php' || $pagenow == 'term.php' ) && !empty( $_REQUEST['taxonomy'] ) ) {
+            if ( !empty( $_REQUEST['taxonomy'] ) ) {
                 require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/class-geodir-admin-taxonomies.php' );
             }
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/admin_functions.php' );
@@ -244,6 +243,7 @@ final class GeoDirectory {
         $this->load_db_language();
         
         if ( $this->is_request( 'frontend' ) ) {
+            require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-template-loader.php' ); // Template Loader
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-shortcodes.php' ); // Shortcodes class
         }
     }

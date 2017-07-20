@@ -709,7 +709,7 @@ function geodir_action_geodir_set_preview_post()
                     $cat_id = trim($cat_id);
 
                     if ($cat_id != '') {
-                        $term_icon = geodir_get_option('geodir_default_marker_icon');
+                        $term_icon = geodir_default_marker_icon( true );
 
                         if (isset($post->post_default_category) && $post->post_default_category == $cat_id) {
                             if ( $term_icon_url = geodir_get_cat_icon( $cat_id, true ) ) {

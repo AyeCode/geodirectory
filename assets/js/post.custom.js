@@ -63,11 +63,11 @@ jQuery(document).ready(function() {
     var e = "undefined" != typeof geodir_var.geodir_gd_modal && 1 == parseInt(geodir_var.geodir_gd_modal) ? !0 : !1;
     e || jQuery("#geodir-post-gallery a").lightBox({
         overlayOpacity: .5,
-        imageLoading: geodir_var.geodir_plugin_url + "/geodirectory-assets/images/lightbox-ico-loading.gif",
-        imageBtnNext: geodir_var.geodir_plugin_url + "/geodirectory-assets/images/lightbox-btn-next.gif",
-        imageBtnPrev: geodir_var.geodir_plugin_url + "/geodirectory-assets/images/lightbox-btn-prev.gif",
-        imageBtnClose: geodir_var.geodir_plugin_url + "/geodirectory-assets/images/lightbox-btn-close.gif",
-        imageBlank: geodir_var.geodir_plugin_url + "/geodirectory-assets/images/lightbox-blank.gif"
+        imageLoading: geodir_var.geodir_plugin_url + "/assets/images/lightbox-ico-loading.gif",
+        imageBtnNext: geodir_var.geodir_plugin_url + "/assets/images/lightbox-btn-next.gif",
+        imageBtnPrev: geodir_var.geodir_plugin_url + "/assets/images/lightbox-btn-prev.gif",
+        imageBtnClose: geodir_var.geodir_plugin_url + "/assets/images/lightbox-btn-close.gif",
+        imageBlank: geodir_var.geodir_plugin_url + "/assets/images/lightbox-blank.gif"
     }), jQuery("#geodir_carousel").flexslider({
         animation: "slide",
         namespace: "geodir-",

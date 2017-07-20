@@ -158,6 +158,8 @@ function geodir_draw_map($map_args = array())
 	 */
 	$post_types = apply_filters("geodir_map_post_type_list_{$map_canvas_name}", geodir_get_posttypes('object'));
     
+   $exclude_post_types = geodir_get_option('geodir_exclude_post_type_on_map');
+   $exclude_post_types = is_array( $exclude_post_types ) ? $exclude_post_types : array();
 	/**
 	 * Filter the post types to exclude to display data on map.
 	 *
@@ -165,7 +167,7 @@ function geodir_draw_map($map_args = array())
 	 *
 	 * @param array Array of post types to exclude to display data on map.
 	 */
-	$exclude_post_types = apply_filters("geodir_exclude_post_type_on_map_{$map_canvas_name}", geodir_get_option('geodir_exclude_post_type_on_map'));
+	$exclude_post_types = apply_filters("geodir_exclude_post_type_on_map_{$map_canvas_name}", $exclude_post_types);
 
     if (count((array)$post_types) != count($exclude_post_types) || ($enable_jason_on_load)):
         // Set default map options

@@ -766,7 +766,7 @@ function geodir_comment_template($comment_template)
         
         $template = locate_template(array("geodirectory/reviews.php")); // Use theme template if available
         if (!$template) {
-            $template = dirname(__FILE__) . '/reviews.php';
+            $template = geodir_plugin_path() . '/includes/templates/reviews.php';
         }
         return $template;
     }
@@ -941,7 +941,7 @@ function geodir_get_rating_stars($rating, $post_id, $small = false)
 			// Show rating stars from review rating manager
 			$r_html = geodir_reviewrating_draw_overall_rating($rating);
 		} else {
-			$rating_img = '<img alt="rating icon" src="' . geodir_get_option('geodir_default_rating_star_icon') . '" />';
+			$rating_img = '<img alt="rating icon" src="' . geodir_default_rating_icon( true ) . '" />';
 			
 			/* fix rating star for safari */
 			$star_width = 23 * 5;
@@ -1086,3 +1086,16 @@ function geodir_check_reviews_open( $open, $post_id ) {
     return $open;
 }
 add_filter( 'comments_open', 'geodir_check_reviews_open', 10, 2 );
+
+function geodir_default_rating_icon( $full_path = false ) {
+    $icon = geodir_get_option( 'geodir_default_rating_star_icon' );
+    
+    if ( !$icon ) {
+        $icon = geodir_file_relative_url( geodir_plugin_url() . '/assets/images/stars.png' );
+        geodir_update_option( 'geodir_default_rating_star_icon', $icon );
+    }
+    
+    $icon = geodir_file_relative_url( $icon, $full_path );
+    
+    return apply_filters( 'geodir_default_rating_icon', $icon, $full_path );
+}

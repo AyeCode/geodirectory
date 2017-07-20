@@ -38,12 +38,6 @@ function geodir_register_taxonomies()
     }
 }
 
-
-/**
- * Get available custom posttypes and taxonomies and register them.
- */
-_x('places', 'URL slug', 'geodirectory');
-
 /**
  * Register the post types.
  *
@@ -51,9 +45,13 @@ _x('places', 'URL slug', 'geodirectory');
  *
  * @global array $wp_post_types List of post types.
  */
-function geodir_register_post_types() 
-{
+function geodir_register_post_types() {
     global $wp_post_types;
+    
+    /**
+     * Get available custom posttypes and taxonomies and register them.
+     */
+    _x('places', 'URL slug', 'geodirectory');
 
     $post_types = array();
     $post_types = geodir_get_option('geodir_post_types');
@@ -924,15 +922,33 @@ function geodir_wpseo_taxonomy_meta( $value, $option = '' ) {
     if ( !empty( $value ) && ( is_category() || is_tax() ) ) {
         $term = $wp_query->get_queried_object();
         
-        if ( !empty( $term->term_id ) && !empty( $term->taxonomy ) && isset( $value[$term->taxonomy][$term->term_id] ) && in_array( str_replace( 'category', '', $term->taxonomy ), geodir_get_posttypes() ) ) {
-            $image  = geodir_get_default_catimage( $term->term_id, str_replace( 'category', '', $term->taxonomy ) );
+        if ( !empty( $term->term_id ) && !empty( $term->taxonomy ) && isset( $value[$term->taxonomy][$term->term_id] ) && geodir_is_gd_taxonomy( $term->taxonomy ) ) {
+            $image  = geodir_get_cat_image( $term->term_id, true );
             
-            if ( !empty( $image['src'] ) ) {
-                $value[$term->taxonomy][$term->term_id]['wpseo_twitter-image'] = $image['src'];
-                $value[$term->taxonomy][$term->term_id]['wpseo_opengraph-image'] = $image['src'];
+            if ( !empty( $image ) ) {
+                $value[$term->taxonomy][$term->term_id]['wpseo_twitter-image'] = $image;
+                $value[$term->taxonomy][$term->term_id]['wpseo_opengraph-image'] = $image;
             }
         }
     }
     return $value;
 }
 add_filter( 'option_wpseo_taxonomy_meta', 'geodir_wpseo_taxonomy_meta', 10, 2 );
+
+
+/**
+ * Fires after a new term is created or term updated.
+ *
+ * @since 2.0.0
+ *
+ * @param int    $term_id  Term ID.
+ * @param int    $tt_id    Term taxonomy ID.
+ * @param string $taxonomy Taxonomy slug.
+ */
+function geodir_on_update_term( $term_id, $tt_id, $taxonomy ) {
+    if ( geodir_is_gd_taxonomy( $taxonomy ) ) {
+        geodir_update_option( 'gd_term_icons', '' ); // Rebuild term icons.
+    }
+}
+add_action( 'created_term', 'geodir_on_update_term', 10, 3 );
+add_action( 'edited_term', 'geodir_on_update_term', 10, 3 );

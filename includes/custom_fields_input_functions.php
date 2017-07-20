@@ -1399,6 +1399,20 @@ function geodir_cfi_file($html,$cf){
 
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
+        if ( !empty( $value ) ) {
+            $value_arr = explode( ",", $value );
+            $values = array();
+            
+            if ( !empty( $value_arr ) ) {
+                foreach ( $value_arr as $value_str ) {
+                    if ( !empty( $value_str ) ) {
+                        $values[] = geodir_file_relative_url( $value_str, true );
+                    }
+                }
+            }
+            
+            $value = !empty( $values) ? implode( ",", $values ) : '';
+        }
 
         $name = $cf['name'];
         $site_title = $cf['site_title'];

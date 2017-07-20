@@ -88,10 +88,7 @@ if (!function_exists('geodir_admin_scripts')) {
         }
 
         wp_enqueue_script('geodirectory-custom-fields-script');
-        $plugin_path = geodir_plugin_url() . '/includes/cat-meta';
-
-        wp_enqueue_script('tax-meta-clss', $plugin_path . '/js/tax-meta-clss.js', array('jquery'), null, true);
-
+        
         if (in_array($geodir_map_name, array('auto', 'google'))) {
             $map_lang = "&language=" . geodir_get_map_default_language();
             $map_key = "&key=" . geodir_get_map_api_key();
@@ -208,10 +205,19 @@ if (!function_exists('geodir_admin_scripts')) {
         if ($screen->base == 'post' && in_array($screen->post_type, geodir_get_posttypes())) {
             wp_enqueue_script('geodirectory-listing-validation-script', geodir_plugin_url() . '/assets/js/listing_validation_admin.js');
         }
-
-        $ajax_cons_data = array('url' => esc_url(__(get_option('siteurl') . '?geodir_ajax=true')));
+        
+        $ajax_cons_data = array(
+            'url' => esc_url(__(get_option('siteurl') . '?geodir_ajax=true')),
+            'txt_choose_image' => __( 'Choose an image', 'geodirectory' ),
+            'txt_use_image' => __( 'Use image', 'geodirectory' ),
+            'img_spacer' => admin_url( 'images/media-button-image.gif' )
+        );
         wp_localize_script('geodirectory-admin-script', 'geodir_ajax', $ajax_cons_data);
-
+        
+        if ( !empty( $screen->taxonomy ) && geodir_taxonomy_type( $screen->taxonomy ) == 'category' ) {
+            wp_register_script( 'geodir-admin-term-script', geodir_plugin_url() . '/assets/js/admin-term.min.js', array( 'geodirectory-admin-script' ), GEODIRECTORY_VERSION );
+            wp_enqueue_script( 'geodir-admin-term-script' );
+        }
     }
 }
 
@@ -499,16 +505,7 @@ function geodir_update_options( $options, $dummy = false ) {
                 geodir_update_option( 'geodir_default_map_search_pt', $_POST['geodir_default_map_search_pt'] );
             }
         } else if ( isset( $option['type'] ) && $option['type'] == 'file' ) {
-            $uploads = wp_upload_dir();
-            
             if ( isset( $_POST[$option['id'] . '_remove'] ) && $_POST[$option['id'] . '_remove'] ) {
-                if ( $option_value = geodir_get_option( $option['id'] ) ) {
-                    $file_path = $uploads['path'] . '/' . $option_value;
-                    if ( is_file( $file_path ) && file_exists( $file_path ) ) {
-                        unlink( $file_path );
-                    }
-                }
-                
                 geodir_update_option( $option['id'], '' );
             }
 
@@ -525,24 +522,15 @@ function geodir_update_options( $options, $dummy = false ) {
                     }
                 }
                 
-                if ( $option_value = geodir_get_option( $option['id'] ) ) {
-                    $file_path = $uploads['path'] . '/' . $option_value;
-                    if ( is_file( $file_path ) && file_exists( $file_path ) ) {
-                        unlink( $file_path );
-                    }
-                }
-                
                 $upload_overrides = array( 'test_form' => false );
                 $movefile = wp_handle_upload( $file_uplaods, $upload_overrides );
-                
                 if ( !empty( $movefile ) && empty( $movefile['error'] ) ) {
-                    $option_value = str_replace( $uploads['baseurl'], '', $movefile['url'] );
-                    geodir_update_option( $option['id'], trim( $option_value, '/' ) );
+                    geodir_update_option( $option['id'], geodir_file_relative_url( $movefile['url'] ) );
                 }
             }
             
             if ( !geodir_get_option( $option['id'] ) && isset( $option['value'] ) ) {
-                geodir_update_option( $option['id'], $option['value'] );
+                geodir_update_option( $option['id'], geodir_file_relative_url( $option['value'] ) );
             }
         } else {
             if ( isset( $option['id'] ) && $option['id'] == 'geodir_theme_location_nav' && isset( $_POST[$option['id']] ) ) {
@@ -1150,12 +1138,20 @@ function geodir_admin_fields($options)
                     <input type="file" name="<?php echo esc_attr($value['id']); ?>"
                            id="<?php echo esc_attr($value['id']); ?>" style="<?php echo esc_attr($value['css']); ?>"
                            class="<?php if (isset($value['class'])) echo $value['class']; ?>"/>
-                    <?php if (geodir_get_option($value['id'])) { ?>
+                    <?php 
+                    if ( $option_value = geodir_get_option( $value['id'] ) ) {
+                        $option_value = geodir_file_relative_url( $option_value, true );
+                        if ( geodir_is_image_file( $option_value ) ) {
+                            $option_title = '<img src="' . $option_value . '" alt="' . esc_attr( $option_value ) . '" style="max-width:90px;max-height:90px;" />';
+                        } else {
+                            $option_title = $option_value;
+                        }
+                    ?>
                         <input type="hidden" name="<?php echo esc_attr($value['id']); ?>_remove"
                                id="<?php echo esc_attr($value['id']); ?>_remove" value="0">
                         <span class="description"> <a
-                                href="<?php echo geodir_get_option($value['id']); ?>"
-                                target="_blank"><?php echo geodir_get_option($value['id']); ?></a> <i
+                                href="<?php echo esc_url( $option_value ); ?>"
+                                target="_blank"><?php echo $option_title; ?></a> <i
                                 title="<?php _e('remove file (set to empty)', 'geodirectory'); ?>"
                                 onclick="jQuery('#<?php echo esc_attr($value['id']); ?>_remove').val('1'); jQuery( this ).parent().text('<?php _e('save to remove file', 'geodirectory'); ?>');"
                                 class="fa fa-times gd-remove-file"></i></span>

@@ -47,3 +47,14 @@ function geodir_error_log( $log, $title = '', $file = '', $line = '', $exit = fa
         }
     }
 }
+
+function geodir_doing_it_wrong( $function, $message, $version ) {
+    $message .= ' Backtrace: ' . wp_debug_backtrace_summary();
+
+    if ( is_ajax() ) {
+        do_action( 'doing_it_wrong_run', $function, $message, $version );
+        geodir_error_log( $function . ' was called incorrectly. ' . $message . '. This message was added in version ' . $version . '.' );
+    } else {
+        _doing_it_wrong( $function, $message, $version );
+    }
+}

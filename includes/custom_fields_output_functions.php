@@ -1289,10 +1289,9 @@ function geodir_cf_file($html,$location,$cf,$p=''){
 
                 $file_paths = '';
                 foreach ($files as $file) {
-                    if (!empty($file)) {
-
-                        // $filetype = wp_check_filetype($file);
-
+                    $file = !empty( $file ) ? geodir_file_relative_url( $file, true ) : '';
+                    
+                    if ( !empty( $file ) ) {
                         $image_name_arr = explode('/', $file);
                         $curr_img_dir = $image_name_arr[count($image_name_arr) - 2];
                         $filename = end($image_name_arr);

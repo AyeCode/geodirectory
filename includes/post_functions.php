@@ -1379,10 +1379,9 @@ if (!function_exists('geodir_get_featured_image')) {
                 $default_cat = geodir_get_post_meta($post_id, 'default_category', true);
             }
 
-            if ($default_catimg = geodir_get_default_catimage($default_cat, $post_type))
-                $default_img = $default_catimg['src'];
-            elseif ($no_image) {
-                $default_img = geodir_get_option('geodir_listing_no_img');
+            $default_img = geodir_get_cat_image( $default_cat, true );
+            if ( !$default_img ) {
+                $default_img = geodir_get_option( 'geodir_listing_no_img' );
             }
 
             if (!empty($default_img)) {
@@ -1544,13 +1543,11 @@ if (!function_exists('geodir_get_images')) {
              */
             return apply_filters('geodir_get_images_arr',$return_arr);
         } else if ($no_images) {
-            $default_img = '';
-            $default_cat = geodir_get_post_meta($post_id, 'default_category', true);
-            $post_type = get_post_type($post_id);
-            if ($default_catimg = geodir_get_default_catimage($default_cat, $post_type))
-                $default_img = $default_catimg['src'];
-            elseif ($no_images) {
-                $default_img = geodir_get_option('geodir_listing_no_img');
+            $default_cat = geodir_get_post_meta( $post_id, 'default_category', true );
+            $default_img = geodir_get_cat_image( $default_cat, true );
+            
+            if ( !$default_img ) {
+                $default_img = geodir_get_option( 'geodir_listing_no_img' );
             }
 
             if (!empty($default_img)) {

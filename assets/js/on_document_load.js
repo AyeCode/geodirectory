@@ -55,9 +55,9 @@ jQuery(document).ready(function($) {
     } else { // default rating
         jQuery('.gd_rating').jRating({
             /** String vars **/
-            //bigStarsPath : geodir_all_js_msg.geodir_plugin_url+'/geodirectory-assets/images/stars.png',
+            //bigStarsPath : geodir_all_js_msg.geodir_plugin_url+'/assets/images/stars.png',
             bigStarsPath: geodir_all_js_msg.geodir_default_rating_star_icon,
-            smallStarsPath: geodir_all_js_msg.geodir_plugin_url + '/geodirectory-assets/images/small.png',
+            smallStarsPath: geodir_all_js_msg.geodir_plugin_url + '/assets/images/small.png',
             phpPath: geodir_all_js_msg.geodir_plugin_url + '/jRating.php',
             type: 'big', // can be set to 'small' or 'big'
             /** Boolean vars **/

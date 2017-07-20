@@ -405,3 +405,16 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 <?php
     }
 }
+
+function geodir_default_marker_icon( $full_path = false ) {
+    $icon = geodir_get_option( 'geodir_default_marker_icon' );
+    
+    if ( !$icon ) {
+        $icon = geodir_file_relative_url( geodir_plugin_url() . '/includes/maps/icons/pin.png' );
+        geodir_update_option( 'geodir_default_marker_icon', $icon );
+    }
+    
+    $icon = geodir_file_relative_url( $icon, $full_path );
+    
+    return apply_filters( 'geodir_default_marker_icon', $icon, $full_path );
+}

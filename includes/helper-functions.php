@@ -1228,3 +1228,69 @@ function geodir_total_listings_count($post_type = false)
 function geodir_get_diagnose_step_max_items() {
 	return 5;
 }
+
+function geodir_file_relative_url( $url, $full_path = false ) {
+    $url = trim( $url );
+    
+    if ( !$url ) {
+        return $url;
+    }
+    
+    $relative_url = $url;
+    $url = trim( $url, '/\\' ); // clean slashes
+    
+    $upload_dir = wp_upload_dir();
+    $upload_basedir = $upload_dir['basedir'];
+    $upload_baseurl = $upload_dir['baseurl'];
+    $content_dir = untrailingslashit( WP_CONTENT_DIR );
+    $content_url = untrailingslashit( WP_CONTENT_URL );
+
+    if ( strpos( $upload_baseurl, 'https://' ) === 0 ) {
+        $https = 'https://';
+        $match_upload_baseurl = str_replace( 'https://', '', $upload_baseurl );
+        $content_url = str_replace( 'http://', 'https://', $content_url );
+    } else {
+        $https = 'http://';
+        $match_upload_baseurl = str_replace( 'http://', '', $upload_baseurl );
+        $content_url = str_replace( 'https://', 'http://', $content_url );
+    }    
+    
+    $match_content_url = strpos( $content_url, 'https://' ) === 0 ? str_replace( 'https://', '', $content_url ) : str_replace( 'http://', '', $content_url );
+    $match_url = strpos( $url, 'https://' ) === 0 ? str_replace( 'https://', '', $url ) : str_replace( 'http://', '', $url );
+        
+    if ( $full_path ) {
+        if ( strpos( $relative_url, 'http://' ) === 0 || strpos( $relative_url, 'https://' ) === 0 ) {
+            if ( strpos( $match_url, $match_upload_baseurl ) === 0 || strpos( $match_url, $match_content_url ) === 0 ) {
+                $relative_url = $https . $match_url;
+            }
+        } else {
+            if ( is_file( $content_dir . '/' . $match_url ) && file_exists( $content_dir . '/' . $match_url ) ) { // url contains content url
+                $relative_url = $content_url . '/' . $match_url;
+            } elseif ( is_file( $upload_basedir . '/' . $match_url ) && file_exists( $upload_basedir . '/' . $match_url ) ) { // url contains content url
+                $relative_url = $upload_baseurl . '/' . $match_url;
+            }
+        }
+    } else {
+        if ( strpos( $match_url, $match_upload_baseurl ) === 0 ) { // url contains uploads baseurl
+            $relative_url = str_replace( $match_upload_baseurl, '', $match_url );
+        } elseif ( strpos( $match_url, $match_content_url ) === 0 ) { // url contains content url
+            $relative_url = str_replace( $match_content_url, '', $match_url );
+        }
+        
+        $relative_url = trim( $relative_url, '/\\' );
+    }
+    
+    return apply_filters( 'geodir_file_relative_url', $relative_url, $url, $full_path );
+}
+
+function geodir_is_image_file( $url ) {
+    if ( !empty( $url ) ) {
+        $filetype = wp_check_filetype( $url );
+        
+        if ( !empty( $filetype['ext'] ) && in_array( $filetype['ext'], array( 'jpg', 'jpeg', 'jpe',  'gif',  'png',  'bmp',   'tif',  'tiff', 'ico' ) ) ) {
+            return true;
+        }
+    }
+    
+    return false;
+}

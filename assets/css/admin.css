@@ -606,6 +606,46 @@ div.update-nag{width: 95%;}
 .gd-locate-me .gd-locate-me-btn .fa {
     font-size: 150%!important;
 }
+.wp-list-table .column-cat_default_img,
+.wp-list-table .column-cat_ID_num {
+    min-width: 60px;
+    text-align: center;
+    white-space: nowrap;
+}
+.gd-term-form-field .gd-upload-img {
+    clear: both;
+    padding: 7px 0;
+    min-height: 30px;
+}
+.gd-upload-img .thumbnail {
+    min-width: 25px;
+    min-height: 25px
+}
+.gd-upload-img .centered {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
+}
+.gd-term-form-field.form-invalid .button {
+    border-color: red;
+}
+.gd-term-form-field.form-invalid > label {
+    color: red;
+}
+.gd-upload-img .gd-upload-display,
+.gd-upload-img .gd-upload-fields {
+    float: left;
+}
+.gd-upload-img .gd-upload-fields {
+    margin-left: 12px;
+}
+.gd-upload-display img {
+    max-height: 100px;
+    max-width: 100px;
+    vertical-align: middle;
+    margin: auto;
+}
 /***********************---------------MEDIA CSS-------------*****************************/
 
 @media screen and (min-width: 860px) and (max-width: 960px) {
