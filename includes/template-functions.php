@@ -5,7 +5,112 @@
  * @since 1.0.0
  * @package GeoDirectory
  */
+ 
+function geodir_get_templates_dir() {
+    return GEODIRECTORY_PLUGIN_DIR . 'templates';
+}
 
+function geodir_get_templates_url() {
+    return GEODIRECTORY_PLUGIN_URL . '/templates';
+}
+
+function geodir_get_theme_template_dir_name() {
+    return untrailingslashit( apply_filters( 'geodir_templates_dir', 'geodirectory' ) );
+}
+
+function geodir_get_template_part( $slug, $name = '' ) {
+    $load_template = apply_filters( 'geodir_allow_template_part_' . $slug . '_' . $name, true );
+    if ( false === $load_template ) {
+        return '';
+    }
+    
+    $template = '';
+
+    // Look in yourtheme/slug-name.php and yourtheme/woocommerce/slug-name.php
+    if ( $name ) {
+        $template = locate_template( array( "{$slug}-{$name}.php", geodir_get_theme_template_dir_name() . "/{$slug}-{$name}.php" ) );
+    }
+
+    // Get default slug-name.php
+    if ( !$template && $name && file_exists( geodir_get_templates_dir() . "/{$slug}-{$name}.php" ) ) {
+        $template = geodir_get_templates_dir() . "/{$slug}-{$name}.php";
+    }
+
+    // If template file doesn't exist, look in yourtheme/slug.php and yourtheme/woocommerce/slug.php
+    if ( !$template ) {
+        $template = locate_template( array( "{$slug}.php", geodir_get_theme_template_dir_name() . "/{$slug}.php" ) );
+    }
+
+    // Allow 3rd party plugins to filter template file from their plugin.
+    $template = apply_filters( 'geodir_get_template_part', $template, $slug, $name );
+
+    if ( $template ) {
+        load_template( $template, false );
+    }
+}
+
+function geodir_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' ) {
+    if ( !empty( $args ) && is_array( $args ) ) {
+        extract( $args );
+    }
+
+    $located = geodir_locate_template( $template_name, $template_path, $default_path );
+
+    if ( !file_exists( $located ) ) {
+        geodir_doing_it_wrong( __FUNCTION__, sprintf( __( '%s does not exist.', 'geodirectory' ), '<code>' . $located . '</code>' ), '2.1' );
+        return;
+    }
+
+    // Allow 3rd party plugin filter template file from their plugin.
+    $located = apply_filters( 'geodir_get_template', $located, $template_name, $args, $template_path, $default_path );
+
+    do_action( 'geodir_before_template_part', $template_name, $template_path, $located, $args );
+
+    include( $located );
+
+    do_action( 'geodir_after_template_part', $template_name, $template_path, $located, $args );
+}
+
+function geodir_get_template_html( $template_name, $args = array(), $template_path = '', $default_path = '' ) {
+    ob_start();
+    geodir_get_template( $template_name, $args, $template_path, $default_path );
+    return ob_get_clean();
+}
+
+function geodir_locate_template( $template_name, $template_path = '', $default_path = '' ) {
+    if ( !$template_path ) {
+        $template_path = geodir_get_theme_template_dir_name();
+    }
+
+    if ( ! $default_path ) {
+        $default_path = geodir_get_templates_dir();
+    }
+
+    // Look within passed path within the theme - this is priority.
+    $template = locate_template(
+        array(
+            untrailingslashit( $template_path ) . '/' . $template_name,
+            $template_name,
+        )
+    );
+
+    // Get default template
+    if ( !$template ) {
+        $template = untrailingslashit( $default_path ) . '/' . $template_name;
+    }
+
+    // Return what we found.
+    return apply_filters( 'geodir_locate_template', $template, $template_name, $template_path );
+}
+
+function geodir_add_body_classes( $class ) {
+    $classes = (array) $class;
+
+    return array_unique( $classes );
+}
+add_filter( 'body_class', 'geodir_add_body_classes' );
+
+// TODO remove
 /**
  * Locates template based on the template type.
  *
@@ -17,7 +122,7 @@
  * @param string $template The template type.
  * @return bool|string The template path.
  */
-function geodir_locate_template($template = '')
+function geodir_locate_template_old($template = '')
 {
     global $post_type, $wp, $post;
     $fields = array();
@@ -414,6 +519,7 @@ function geodir_template_loader($template)
     return $template;
 }
 
+// TODO remove
 /**
  * Locates template part based on the template slug.
  *
@@ -424,7 +530,7 @@ function geodir_template_loader($template)
  * @param string $slug The template slug.
  * @param null $name The template name.
  */
-function geodir_get_template_part($slug = '', $name = NULL)
+function geodir_get_template_part_old($slug = '', $name = NULL)
 {
     global $geodirectory, $post;
     /**

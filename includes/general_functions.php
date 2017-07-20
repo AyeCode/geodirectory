@@ -27,14 +27,7 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
  * @return string example url eg: http://wpgeo.directory/wp-content/plugins/geodirectory
  */
 function geodir_plugin_url() {
-	return plugins_url( '', dirname( __FILE__ ) );
-	/*
-	if ( is_ssl() ) :
-		return str_replace( 'http://', 'https://', WP_PLUGIN_URL ) . "/" . plugin_basename( dirname( dirname( __FILE__ ) ) );
-	else :
-		return WP_PLUGIN_URL . "/" . plugin_basename( dirname( dirname( __FILE__ ) ) );
-	endif;
-	*/
+	return GEODIRECTORY_PLUGIN_URL;
 }
 
 /**
@@ -1702,6 +1695,10 @@ function fetch_remote_file( $url ) {
 		return new WP_Error( 'import_file_error', $headers->get_error_message() );
 	}
 
+	// clear cache to make compat with EWWW Image Optimizer
+	if(defined( 'EWWW_IMAGE_OPTIMIZER_PLUGIN_FILE')){
+		clearstatcache();
+	}
 	$filesize = filesize( $upload['file'] );
 	// request failed
 	if ( ! $headers ) {

@@ -106,6 +106,7 @@ final class GeoDirectory {
         $this->define( 'GEODIRECTORY_VERSION', $this->version );
         $this->define( 'GEODIRECTORY_PLUGIN_FILE', __FILE__ );
         $this->define( 'GEODIRECTORY_PLUGIN_DIR', $plugin_path );
+        $this->define( 'GEODIRECTORY_PLUGIN_URL', untrailingslashit( plugins_url( '/', __FILE__ ) ) );
         $this->define( 'GEODIRECTORY_TEXTDOMAIN', 'geodirectory' );
         
         // Database tables
@@ -242,6 +243,7 @@ final class GeoDirectory {
         $this->load_db_language();
         
         if ( $this->is_request( 'frontend' ) ) {
+            require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-template-loader.php' ); // Template Loader
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-shortcodes.php' ); // Shortcodes class
         }
     }
