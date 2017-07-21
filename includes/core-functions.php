@@ -58,3 +58,27 @@ function geodir_doing_it_wrong( $function, $message, $version ) {
         _doing_it_wrong( $function, $message, $version );
     }
 }
+
+function geodir_is_singular( $post_types = array() ) {
+    if ( empty( $post_types ) ) {
+        $post_types = geodir_get_posttypes();
+    }
+
+    return is_singular( $post_types );
+}
+
+function geodir_is_taxonomy( $taxonomies = array() ) {
+    if ( empty( $taxonomis ) ) {
+        $taxonomis = geodir_get_taxonomies( '', true );
+    }
+
+    return is_tax( $taxonomis );
+}
+
+function geodir_is_post_type_archive( $post_types = array() ) {
+    if ( empty( $post_types ) ) {
+        $post_types = geodir_get_posttypes();
+    }
+
+    return is_post_type_archive( $post_types );
+}
