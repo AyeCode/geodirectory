@@ -816,3 +816,63 @@ function geodir_detail_page_sidebar_functions() {
      */
     return apply_filters( 'geodir_detail_page_sidebar_content', $detail_sidebar_content );
 }
+
+function geodir_page_title( $echo = true ) {
+    if ( is_search() ) {
+        $page_title = sprintf( __( 'Search results: &ldquo;%s&rdquo;', 'geodirectory' ), get_search_query() );
+
+        if ( get_query_var( 'paged' ) )
+            $page_title .= sprintf( __( '&nbsp;&ndash; Page %s', 'geodirectory' ), get_query_var( 'paged' ) );
+
+    } elseif ( is_tax() ) {
+        $page_title = single_term_title( "", false );
+    } else {
+        $page_title = get_the_title();
+    }
+
+    $page_title = apply_filters( 'geodir_page_title', $page_title );
+
+    if ( $echo ) {
+        echo $page_title;
+    } else {
+        return $page_title;
+    }
+}
+
+function geodir_listing_loop_start( $echo = true ) {
+    ob_start();
+    
+    $GLOBALS['geodir_loop']['loop'] = 0;
+    
+    geodir_get_template( 'view/loop-start.php' );
+    
+    if ( $echo ) {
+        echo ob_get_clean();
+    } else {
+        return ob_get_clean();
+    }
+}
+
+function geodir_listing_loop_end( $echo = true ) {
+    ob_start();
+
+    geodir_get_template( 'view/loop-end.php' );
+
+    if ( $echo ) {
+        echo ob_get_clean();
+    } else {
+        return ob_get_clean();
+    }
+}
+
+function geodir_output_content_wrapper() {
+    geodir_get_template( 'view/wrapper-start.php' );
+}
+
+function geodir_output_content_wrapper_end() {
+    geodir_get_template( 'view/wrapper-end.php' );
+}
+
+function geodir_get_sidebar() {
+    geodir_get_template( 'view/sidebar.php' );
+}

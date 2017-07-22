@@ -324,18 +324,6 @@ function geodir_templates_styles()
 
 }
 
-
-/**
- * Returns geodirectory sidebar.
- *
- * @since 1.0.0
- * @package GeoDirectory
- */
-function geodir_get_sidebar()
-{
-    get_sidebar('geodirectory');
-}
-
 /**
  * Returns paginated HTML string based on the given parameters.
  *
