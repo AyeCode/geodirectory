@@ -280,7 +280,7 @@ function geodir_content_actions_dynamic() {
     }
 
     //php
-    if (!empty($tc['geodir_theme_compat_code'])) {
+    if (!empty($tc['geodir_theme_compat_code']) && file_exists( GEODIRECTORY_PLUGIN_DIR . 'includes/compatibility/' . $tc['geodir_theme_compat_code'] . '.php' ) ) {
         include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/compatibility/' . $tc['geodir_theme_compat_code'] . '.php' );
     }
 
