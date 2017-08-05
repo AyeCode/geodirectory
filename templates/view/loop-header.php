@@ -14,19 +14,21 @@
  * @global string $gridview_columns The girdview style of the listings.
  * @global object $gd_session GeoDirectory Session object.
  */
+ ?>
+ 
+<?php if ( !empty( $sorting ) || !empty( $layout_selection ) ) { ?>
+<div class="clearfix">
+    <?php if ( !empty( $sorting ) ) { ?>
+        
+        <?php echo $sorting; ?>
+        
+    <?php } ?>
+    
+    <?php if ( !empty( $layout_selection ) ) { ?>
+        
+        <?php echo $layout_selection; ?>
+        
+    <?php } ?>
+</div>
 
-
-if ( ! defined( 'ABSPATH' ) ) {
-    exit; // Exit if accessed directly
-}
-
-$template = get_option( 'template' );
-
-switch ( $template ) {
-    case 'twentytwelve' :
-        echo '<div id="primary" class="site-content"><div id="content" role="main" class="twentytwelve">';
-        break;
-    default :
-        echo '<div id="container"><div id="content" role="main" class="' . sanitize_html_class( $template ) . '">';
-        break;
-}
+<?php } ?>

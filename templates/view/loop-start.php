@@ -15,5 +15,10 @@
  * @global object $gd_session GeoDirectory Session object.
  */
  ?>
-<?php $class = apply_filters( 'geodir_listing_loop_class', '' ); ?>
-<ul class="geodir_category_list_view clearfix <?php echo sanitize_html_class( $class ); ?>">
+ 
+<?php if ( !empty( $header_options ) ) { ?>
+
+    <?php echo $header_options; ?>
+    
+<?php } ?>
+<ul <?php geodir_listing_loop_class(); ?>>

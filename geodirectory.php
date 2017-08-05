@@ -245,7 +245,14 @@ final class GeoDirectory {
         if ( $this->is_request( 'frontend' ) ) {
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-template-loader.php' ); // Template Loader
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-shortcodes.php' ); // Shortcodes class
-            require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/template-hooks.php' ); // Shortcodes class
+            require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/template-hooks.php' );
+            
+            // Theme Compatibility
+            $compatibility_file = geodir_theme_compatibility_file();
+            
+            if ( is_file( $compatibility_file ) && file_exists( $compatibility_file ) ) {
+                require_once( $compatibility_file );
+            }
         }
     }
     
