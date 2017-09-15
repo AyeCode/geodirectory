@@ -406,18 +406,17 @@ function geodir_handle_option_form_submit( $current_tab ) {
          */
         do_action( 'geodir_update_options', $geodir_settings );
         
-        if ( !empty( $geodir_settings[ $current_tab ] ) ) {
-            /**
-             * Called after GeoDirectory options settings are updated.
-             *
-             * Provides tab specific settings.
-             *
-             * @since 1.0.0
-             * @param string $current_tab The current settings tab name.
-             * @param array $geodir_settings[$current_tab] The array of settings for the current settings tab.
-             */
-            do_action( 'geodir_update_options_' . $current_tab, $geodir_settings[ $current_tab ] );
-        }
+        $current_tab_settings = isset( $geodir_settings[ $current_tab ] ) ? $geodir_settings[ $current_tab ] : array();
+        /**
+         * Called after GeoDirectory options settings are updated.
+         *
+         * Provides tab specific settings.
+         *
+         * @since 1.0.0
+         * @param string $current_tab The current settings tab name.
+         * @param array $current_tab_settings The array of settings for the current settings tab.
+         */
+        do_action( 'geodir_update_options_' . $current_tab, $current_tab_settings );
 
         flush_rewrite_rules( false );
 

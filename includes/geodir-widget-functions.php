@@ -327,9 +327,6 @@ function geodir_bestof_places_by_term($query_args) {
         $character_count = $character_count == '' ? 50 : apply_filters('bestof_widget_character_count', $character_count);
     }
 
-    /** This filter is documented in includes/general_functions.php */
-    $template = apply_filters("geodir_template_part-widget-listing-listview", geodir_locate_template('widget-listing-listview'));
-
     global $post, $map_jason, $map_canvas_arr, $gridview_columns_widget, $geodir_is_widget_listing;
     $current_post = $post;
     $current_map_jason = $map_jason;
@@ -343,12 +340,7 @@ function geodir_bestof_places_by_term($query_args) {
     $gd_session->set('gd_listing_view', '1');
     $geodir_is_widget_listing = true;
 
-    /**
-     * Includes the template for the listing listview.
-     *
-     * @since 1.3.9
-     */
-    include($template);
+    geodir_get_template( 'widget-listing-listview.php', array( 'widget_listings' => $widget_listings, 'character_count' => $character_count, 'gridview_columns_widget' => $gridview_columns_widget, 'before_widget' => $before_widget ) );
 
     $geodir_is_widget_listing = false;
 
