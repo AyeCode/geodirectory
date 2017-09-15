@@ -2171,15 +2171,6 @@ function geodir_sc_gd_listings_output($args = array()) {
                 } else {
                     $gridview_columns_widget = '';
                 }
-
-                /**
-                 * Filter the widget listing listview template.
-                 *
-                 * @since 1.0.0
-                 *
-                 * @param string The template file to display listing.
-                 */
-                $template = apply_filters("geodir_template_part-widget-listing-listview", geodir_locate_template('widget-listing-listview'));
                             
                 global $post, $map_jason, $map_canvas_arr, $gd_session;
 
@@ -2193,12 +2184,7 @@ function geodir_sc_gd_listings_output($args = array()) {
                     echo geodir_sc_listings_pagination($total_posts, $post_number, $pageno);
                 }
 
-                /**
-                 * Includes listing listview template.
-                 *
-                 * @since 1.0.0
-                 */
-                include($template);
+                geodir_get_template( 'widget-listing-listview.php', array( 'widget_listings' => $widget_listings, 'character_count' => $character_count, 'gridview_columns_widget' => $gridview_columns_widget, 'before_widget' => $before_widget ) );
                 
                 if ($with_pagination && $bottom_pagination) {				
                     echo geodir_sc_listings_pagination($total_posts, $post_number, $pageno);

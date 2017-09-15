@@ -275,9 +275,9 @@ add_action('setup_theme', 'geodir_content_actions_dynamic', 10);
 function geodir_content_actions_dynamic() {
     $tc = geodir_get_option( 'theme_compatibility_setting' );
 
-    if (empty($tc)) {
+    //if (empty($tc)) {
         return;
-    }
+    //}
 
     //php
     if (!empty($tc['geodir_theme_compat_code']) && file_exists( GEODIRECTORY_PLUGIN_DIR . 'includes/compatibility/' . $tc['geodir_theme_compat_code'] . '.php' ) ) {

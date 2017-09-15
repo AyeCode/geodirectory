@@ -3487,12 +3487,7 @@ function geodir_popular_postview_output( $args = '', $instance = '' ) {
 		} else {
 			$gridview_columns_widget = '';
 		}
-			/**
-		 * Filter the widget listing listview template path.
-		 *
-		 * @since 1.0.0
-		 */
-		$template = apply_filters( "geodir_template_part-widget-listing-listview", geodir_locate_template( 'widget-listing-listview' ) );
+
 		if ( ! isset( $character_count ) ) {
 			/**
 			 * Filter the widget's excerpt character count.
@@ -3511,12 +3506,7 @@ function geodir_popular_postview_output( $args = '', $instance = '' ) {
 		$current_map_canvas_arr   = $map_canvas_arr;
 		$geodir_is_widget_listing = true;
 
-		/**
-		 * Includes related listing listview template.
-		 *
-		 * @since 1.0.0
-		 */
-		include( $template );
+		geodir_get_template( 'widget-listing-listview.php', array( 'widget_listings' => $widget_listings, 'character_count' => $character_count, 'gridview_columns_widget' => $gridview_columns_widget, 'before_widget' => $before_widget ) );
 
 		$geodir_is_widget_listing = false;
 
