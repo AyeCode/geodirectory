@@ -14,4 +14,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<h1 class="geodir-archive-header-title archive-title"><?php geodir_page_title(); ?></h1>
+<?php geodir_page_title();

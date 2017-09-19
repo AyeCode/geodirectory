@@ -68,6 +68,20 @@ class GeoDir_Template_Loader {
             $default_file = 'taxonomy-listing.php';
         } elseif ( geodir_is_post_type_archive() ) {
             $default_file = 'archive-listing.php';
+        } elseif ( geodir_is_page( 'add-listing' ) ) {
+            $default_file = 'add-listing.php';
+        } elseif ( geodir_is_page( 'author' ) ) {
+            $default_file = 'author.php';
+        } elseif ( geodir_is_page( 'home' ) ) {
+            $default_file = 'home.php';
+        } elseif ( geodir_is_page( 'location' ) ) {
+            $default_file = 'location.php';
+        } elseif ( geodir_is_page( 'search' ) ) {
+            $default_file = 'search.php';
+        } elseif ( geodir_is_page( 'login' ) ) {
+            $default_file = 'signup.php';
+        } elseif ( geodir_is_page( 'listing-success' ) ) {
+            $default_file = 'listing-success.php';
         } else {
             $default_file = '';
         }

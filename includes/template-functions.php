@@ -196,7 +196,7 @@ function geodir_locate_template_old($template = '')
         case 'preview':
             if (in_array(get_post_type(), geodir_get_posttypes()))
                 $post_type = get_post_type();
-            return $template = locate_template(array("geodirectory/single-{$post_type}.php", "geodirectory/listing-detail.php"));
+            return $template = locate_template(array("geodirectory/single-{$post_type}.php", "geodirectory/single-listing.php"));
             break;
         case 'listing':
             $templates = array();
@@ -392,7 +392,7 @@ function geodir_template_loader($template)
 
         $template = geodir_locate_template('preview');
 
-        if (!$template) $template = geodir_plugin_path() . '/includes/templates/listing-detail.php';
+        if (!$template) $template = geodir_plugin_path() . '/includes/templates/single-listing.php';
         /**
          * Filter the preview template path.
          *
@@ -423,7 +423,7 @@ function geodir_template_loader($template)
 
         $template = geodir_locate_template('detail');
 
-        if (!$template) $template = geodir_plugin_path() . '/includes/templates/listing-detail.php';
+        if (!$template) $template = geodir_plugin_path() . '/includes/templates/single-listing.php';
         /**
          * Filter the detail template path.
          *
@@ -893,7 +893,7 @@ function geodir_listing_loop_end( $echo = true ) {
     }
 }
 
-function geodir_output_content_wrapper() {
+function geodir_output_content_wrapper_start() {
     geodir_get_template( 'view/wrapper-start.php' );
 }
 

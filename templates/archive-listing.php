@@ -19,17 +19,15 @@ if ( ! defined( 'ABSPATH' ) ) {
     <?php
         /**
          *
-         * @hook geodir_output_content_wrapper - 10 (outputs opening divs for the content)
+         * @hook geodir_output_content_wrapper_start - 10 (outputs opening divs for the content)
          * @hook geodir_breadcrumb - 20
          */
         do_action( 'geodir_before_main_content' );
     ?>
     
-    <header class="geodir-archive-header archive-header">
-        
-        <?php if ( apply_filters( 'geodir_show_page_title', true ) ) { ?>
-            <?php geodir_get_template_part( 'title', 'archive' ); ?>
-        <?php } ?>
+    <?php if ( apply_filters( 'geodir_show_page_title', true ) ) { ?>
+        <?php geodir_get_template_part( 'title', 'archive' ); ?>
+    <?php } ?>
 
         <?php
             /**
@@ -39,8 +37,6 @@ if ( ! defined( 'ABSPATH' ) ) {
              */
             do_action( 'geodir_archive_description' );
         ?>
-    </header>
-    
         <?php if ( have_posts() ) { ?>
 
             <?php
