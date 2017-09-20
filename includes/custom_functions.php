@@ -922,21 +922,8 @@ function geodir_related_posts_display( $request ) {
 			if ( $list_sort == 'nearest' ) {
 				$related_nearest = true;
 			}
-
-
-			/**
-			 * Filters related listing listview template.
-			 *
-			 * @since 1.0.0
-			 */
-			$template = apply_filters( "geodir_template_part-related-listing-listview", geodir_locate_template( 'listing-listview' ) );
-
-			/**
-			 * Includes related listing listview template.
-			 *
-			 * @since 1.0.0
-			 */
-			include( $template );
+            
+			geodir_get_template( 'listing-listview.php', array( 'character_count' => $character_count, 'related_posts' => $related_posts ) );
 
 			wp_reset_query();
 			$post            = $origi_post;

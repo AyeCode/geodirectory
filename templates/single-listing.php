@@ -91,7 +91,7 @@ if (have_posts() && !$preview) {
     if (defined( 'GD_TESTING_MODE' )) {
         global $post;
     }
-    /** This action is documented in includes/templates/listing-detail.php */
+    /** This action is documented in includes/templates/single-listing.php */
     do_action('geodir_details_main_content', $post);
 }
 
@@ -116,7 +116,7 @@ do_action('geodir_wrapper_content_close', 'details-page');
 
 ###### SIDEBAR ON RIGHT ######
 if (!geodir_get_option('geodir_detail_sidebar_left_section')) {
-    /** This action is documented in includes/templates/listing-detail.php */
+    /** This action is documented in includes/templates/single-listing.php */
     do_action('geodir_detail_sidebar');
 }
 

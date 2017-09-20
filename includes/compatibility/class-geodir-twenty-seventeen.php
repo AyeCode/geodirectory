@@ -38,7 +38,7 @@ class GeoDir_Twenty_Seventeen {
     public static function output_content_wrapper_end() { ?>
                 </main>
             </div>
-            <?php get_sidebar(); ?>
+            <?php get_sidebar( 'geodirectory' ); ?>
         </div>
         <?php
     }
