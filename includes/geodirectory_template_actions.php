@@ -2109,20 +2109,16 @@ function geodir_action_add_listing_page_title()
     echo '</h1></header>';
 }
 
-add_action('geodir_add_listing_page_mandatory', 'geodir_action_add_listing_page_mandatory', 10);
 /**
  * Outputs the add listing page mandatory message.
  *
  * @since 1.0.0
  * @package GeoDirectory
  */
-function geodir_action_add_listing_page_mandatory()
-{?>
-    <p class="geodir-note "><span class="geodir-required">*</span>&nbsp;<?php echo INDICATES_MANDATORY_FIELDS_TEXT;?></p>
-<?php
+function geodir_action_add_listing_page_mandatory( $listing_type = '', $post = array(), $package_info = array() ) {
+    ?><p class="geodir-note "><span class="geodir-required">*</span>&nbsp;<?php echo __('Indicates mandatory fields', 'geodirectory'); ?></p><?php
 }
 
-add_action('geodir_add_listing_form', 'geodir_action_add_listing_form', 10);
 /**
  * Outputs the add listing form HTML content.
  *
@@ -2135,8 +2131,7 @@ add_action('geodir_add_listing_form', 'geodir_action_add_listing_form', 10);
  * @global object $post_images Image objects of current post if available.
  * @global object $gd_session GeoDirectory Session object.
  */
-function geodir_action_add_listing_form()
-{
+function geodir_action_add_listing_form() {
     global $cat_display, $post_cat, $current_user, $gd_session;
     $page_id = get_the_ID();
     $post = '';
@@ -2191,6 +2186,8 @@ function geodir_action_add_listing_form()
     
     $package_info = array();
     $package_info = geodir_post_package_info($package_info, $post);
+
+    do_action( 'geodir_before_add_listing_form', $listing_type, $post, $package_info );
     ?>
     <form name="propertyform" id="propertyform" action="<?php echo get_page_link(geodir_preview_page_id());?>" method="post" enctype="multipart/form-data">
         <input type="hidden" name="preview" value="<?php echo sanitize_text_field($listing_type);?>"/>
@@ -2202,7 +2199,8 @@ function geodir_action_add_listing_form()
         <?php } if (isset($_REQUEST['backandedit'])) { ?>
             <input type="hidden" name="backandedit" value="<?php echo sanitize_text_field($_REQUEST['backandedit']);?>"/>
         <?php
-        } 
+        }
+        do_action( 'geodir_add_listing_form_start', $listing_type, $post, $package_info );
         /**
          * Called at the very top of the add listing page form for frontend.
          *
@@ -2333,15 +2331,14 @@ function geodir_action_add_listing_form()
         }
         
         $kw_tags = esc_attr(stripslashes($kw_tags));
-        $kw_tags_count = TAGKW_TEXT_COUNT;
-        $kw_tags_msg = TAGKW_MSG;
         /**
          * Filter the add listing tags character limit.
          *
          * @since 1.0.0
          * @param int $kw_tags_count The character count limit if any.
          */
-        $kw_tags_count = apply_filters('geodir_listing_tags_field_tags_count', $kw_tags_count);
+        $kw_tags_count = apply_filters('geodir_listing_tags_field_tags_count', 40);
+        $kw_tags_msg = wp_sprintf(__('Tags are short keywords, with no space within.(eg: tag1, tag2, tag3) Up to %s characters only.', 'geodirectory'), $kw_tags_count);
         /**
          * Filter the add listing tags field value.
          *
@@ -2374,7 +2371,7 @@ function geodir_action_add_listing_form()
         }
         ?>
         <div id="geodir_post_tags_row" class="geodir_form_row clearfix gd-fieldset-details<?php echo $tags_class;?>">
-            <label><?php echo TAGKW_TEXT; ?></label>
+            <label><?php echo __('Tag Keywords', 'geodirectory'); ?></label>
             <input name="post_tags" id="post_tags" value="<?php echo $kw_tags; ?>" type="text" class="geodir_textfield"
                    maxlength="<?php echo $kw_tags_count;?>"/>
             <span class="geodir_message_note"><?php echo $kw_tags_msg;?></span>
@@ -2527,14 +2524,15 @@ function geodir_action_add_listing_form()
         <!-- end captcha code -->
 
         <div id="geodir-add-listing-submit" class="geodir_form_row clear_both" style="padding:2px;text-align:center;">
-            <input type="submit" value="<?php echo PRO_PREVIEW_BUTTON;?>"
+            <input type="submit" value="<?php echo __('Review Your Listing', 'geodirectory');?>"
                    class="geodir_button" <?php echo $submit_button;?>/>
             <span class="geodir_message_note"
                   style="padding-left:0px;"> <?php _e('Note: You will be able to see a preview in the next page', 'geodirectory');?></span>
         </div>
-
+        <?php do_action( 'geodir_add_listing_form_end', $listing_type, $post, $package_info ); ?>
     </form>
     <?php
+    do_action( 'geodir_after_add_listing_form', $listing_type, $post, $package_info );
     wp_reset_query();
 }
 
@@ -3446,8 +3444,8 @@ function geodir_add_page_content( $position = 'before', $gd_page = '' ) {
         $gd_page_id = geodir_home_page_id();
     } else if ($gd_page == 'details-page' && geodir_is_page('preview')) {
         $gd_page_id = geodir_preview_page_id();
-    } else if ($gd_page == 'add-listing-page' && geodir_is_page('add-listing')) {
-        $gd_page_id = geodir_add_listing_page_id();
+    //} else if ($gd_page == 'add-listing-page' && geodir_is_page('add-listing')) {
+        //$gd_page_id = geodir_add_listing_page_id();
     } else if ($gd_page == 'success-page' && geodir_is_page('listing-success')) {
         $gd_page_id = geodir_success_page_id();
     } else if ($gd_page == 'location-page' && geodir_is_page('location')) {

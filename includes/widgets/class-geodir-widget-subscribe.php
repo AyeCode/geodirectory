@@ -23,7 +23,10 @@ class GeoDir_Widget_Subscribe extends WP_Widget {
     public function __construct() {
         $widget_ops = array(
             'classname' => 'geodir-subscribe',
-            'description' => __( 'GD > Google Feedburner Subscribe', 'geodirectory' )
+            'description' => __( 'GD > Google Feedburner Subscribe', 'geodirectory' ),
+            'customize_selective_refresh' => true,
+            'geodirectory' => true,
+            'gd_show_pages' => array(),
         );
         parent::__construct( 'widget_subscribeWidget', __( 'GD > Subscribe', 'geodirectory' ), $widget_ops );
     }

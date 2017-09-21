@@ -25,6 +25,8 @@ class GeoDir_Widget_Detail_User_Actions extends WP_Widget {
             'classname' => 'geodir-widget gd-widget-detail-user-actions',
             'description' => __( 'Display user actions on the listing detail page.', 'geodirectory' ),
             'customize_selective_refresh' => true,
+            'geodirectory' => true,
+            'gd_show_pages' => array( 'detail' ),
         );
         parent::__construct( 'detail_user_actions', __( 'GD > Detail User Actions', 'geodirectory' ), $widget_ops );
     }

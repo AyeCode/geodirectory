@@ -23,7 +23,10 @@ class GeoDir_Widget_Social_Like extends WP_Widget {
     public function __construct() {
         $widget_ops = array(
             'classname' => 'geodir_social_like_widget',
-            'description' => __( 'GD > Twitter,Facebook and Google+ buttons', 'geodirectory' )
+            'description' => __( 'GD > Twitter,Facebook and Google+ buttons', 'geodirectory' ),
+            'customize_selective_refresh' => true,
+            'geodirectory' => true,
+            'gd_show_pages' => array(),
         );
         parent::__construct( 'social_like_widget', __( 'GD > Social Like', 'geodirectory' ), $widget_ops );
     }

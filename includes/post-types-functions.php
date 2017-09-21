@@ -120,3 +120,33 @@ function geodir_post_type_singular_name( $post_type, $translated = false ) {
     
     return apply_filters( 'geodir_post_type_singular_name', $singular_name, $post_type, $translated );
 }
+
+function geodir_add_listing_allowed_post_types() {
+    $post_types = geodir_get_option( 'geodir_allow_posttype_frontend' );
+
+    return apply_filters( 'geodir_add_listing_allowed_post_types', $post_types );
+}
+
+function geodir_add_listing_default_post_type() {
+    $post_types = geodir_add_listing_allowed_post_types();
+
+    $post_type = !empty( $post_types ) && is_array( $post_types ) ? $post_types[0] : '';
+
+    return apply_filters( 'geodir_add_listing_default_post_type', $post_type );
+}
+
+function geodir_add_listing_check_post_type( $post_type ) {
+    if ( !geodir_is_gd_post_type( $post_type ) ) {
+        return false;
+    }
+
+    $allowed_post_types = geodir_add_listing_allowed_post_types();
+
+    if ( !empty( $allowed_post_types ) && is_array( $allowed_post_types ) && in_array( $post_type, $allowed_post_types ) ) {
+        $return = true;
+    } else {
+        $return = false;
+    }
+
+    return apply_filters( 'geodir_add_listing_check_post_type', $return, $post_type );
+}

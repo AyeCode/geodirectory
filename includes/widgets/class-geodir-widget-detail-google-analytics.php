@@ -25,6 +25,8 @@ class GeoDir_Widget_Detail_Google_Analytics extends WP_Widget {
             'classname' => 'geodir-widget gd-widget-detail-google-analytics',
             'description' => __( 'Show google analytics on detail page.', 'geodirectory' ),
             'customize_selective_refresh' => true,
+            'geodirectory' => true,
+            'gd_show_pages' => array( 'detail' ),
         );
         parent::__construct( 'detail_google_analytics', __( 'GD > Detail Google Analytics', 'geodirectory' ), $widget_ops );
     }

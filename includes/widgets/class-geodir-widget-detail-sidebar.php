@@ -25,6 +25,8 @@ class GeoDir_Widget_Detail_Sidebar extends WP_Widget {
             'classname' => 'geodir-widget gd-widget-detail-sidebars',
             'description' => __( 'Display listing sidebar widget.', 'geodirectory' ),
             'customize_selective_refresh' => true,
+            'geodirectory' => true,
+            'gd_show_pages' => array( 'detail' ),
         );
         parent::__construct( 'detail_sidebar', __( 'GD > Detail Sidebar', 'geodirectory' ), $widget_ops );
     }

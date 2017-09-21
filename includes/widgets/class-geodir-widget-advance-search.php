@@ -20,7 +20,10 @@ class GeoDir_Widget_Advance_Search extends WP_Widget {
         $widget_ops = array(
             'classname' => 'geodir_advance_search_widget',
             'description' => __( 'GD > Search', 'geodirectory' ),
-            'post_type' => ''
+            'post_type' => '',
+            'customize_selective_refresh' => true,
+            'geodirectory' => true,
+            'gd_show_pages' => array(),
         );
         
         parent::__construct( 'geodir_advance_search', __('GD > Search', 'geodirectory'), $widget_ops );

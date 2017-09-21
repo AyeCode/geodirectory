@@ -23,7 +23,10 @@ class GeoDir_Widget_Login extends WP_Widget {
     public function __construct() {
         $widget_ops = array(
             'classname' => 'geodir_loginbox',
-            'description' => __( 'Geodirectory Loginbox Widget', 'geodirectory' )
+            'description' => __( 'Geodirectory Loginbox Widget', 'geodirectory' ),
+            'customize_selective_refresh' => true,
+            'geodirectory' => true,
+            'gd_show_pages' => array(),
         );
         parent::__construct( 'geodir_loginbox', __( 'GD > Loginbox', 'geodirectory' ), $widget_ops );
     }

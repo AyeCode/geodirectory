@@ -9,6 +9,9 @@ class GeoDir_Widget_Features extends WP_Widget {
         $widget_ops = array(
             'description' => __( 'Displays "GD Features" widget', 'geodirectory' ),
             'classname' => 'widget_gd_features',
+            'customize_selective_refresh' => true,
+            'geodirectory' => true,
+            'gd_show_pages' => array(),
         );
         parent::__construct( false, $name = _x( 'GD > Features', 'widget name', 'geodirectory' ), $widget_ops );
 

@@ -23,7 +23,10 @@ class GeoDir_Widget_Best_Of extends WP_Widget {
     public function __construct() {
         $widget_ops = array(
             'classname' => 'geodir_bestof_widget',
-            'description' => __( 'GD > Best of widget', 'geodirectory' )
+            'description' => __( 'GD > Best of widget', 'geodirectory' ),
+            'customize_selective_refresh' => true,
+            'geodirectory' => true,
+            'gd_show_pages' => array(),
         );
         parent::__construct( 'bestof_widget', __( 'GD > Best of widget', 'geodirectory' ), $widget_ops );
     }

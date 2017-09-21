@@ -25,6 +25,8 @@ class GeoDir_Widget_Detail_Social_Sharing extends WP_Widget {
             'classname' => 'geodir-widget gd-widget-detail-social-sharing',
             'description' => __( 'Display social sharing buttons on the listing detail page.', 'geodirectory' ),
             'customize_selective_refresh' => true,
+            'geodirectory' => true,
+            'gd_show_pages' => array( 'detail' ),
         );
         parent::__construct( 'detail_social_sharing', __( 'GD > Detail Social Sharing', 'geodirectory' ), $widget_ops );
     }

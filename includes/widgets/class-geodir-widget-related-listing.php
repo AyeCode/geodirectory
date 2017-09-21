@@ -23,7 +23,10 @@ class GeoDir_Widget_Related_Listing extends WP_Widget {
     public function __construct() {
         $widget_ops = array(
             'classname' => 'geodir_related_listing_post_view',
-            'description' => __( 'GD > Related Listing', 'geodirectory' )
+            'description' => __( 'GD > Related Listing', 'geodirectory' ),
+            'customize_selective_refresh' => true,
+            'geodirectory' => true,
+            'gd_show_pages' => array(),
         );
         parent::__construct( 'post_related_listing', __( 'GD > Related Listing', 'geodirectory' ), $widget_ops );
     }

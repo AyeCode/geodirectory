@@ -23,7 +23,10 @@ class GeoDir_Widget_Listing_Slider extends WP_Widget {
     public function __construct() {
         $widget_ops = array(
             'classname' => 'geodir_listing_slider_view',
-            'description' => __( 'GD > Listing Slider', 'geodirectory' )
+            'description' => __( 'GD > Listing Slider', 'geodirectory' ),
+            'customize_selective_refresh' => true,
+            'geodirectory' => true,
+            'gd_show_pages' => array(),
         );
         parent::__construct( 'listing_slider_view', __( 'GD > Listing Slider', 'geodirectory' ), $widget_ops );
     }

@@ -28,45 +28,57 @@ if (!defined('WPINC')) {
  * }
  * @return string Add listing page HTML.
  */
-function geodir_sc_add_listing($atts)
-{
-    ob_start();
-    $defaults = array(
-        'pid' => '',
-        'listing_type' => 'gd_place',
-        'login_msg' => __('You must login to post.', 'geodirectory'),
-        'show_login' => false,
-    );
-    $params = shortcode_atts($defaults, $atts);
+function geodir_sc_add_listing( $atts, $content = '' ) {
+    $default_post_type = geodir_add_listing_default_post_type();
 
-    foreach ($params as $key => $value) {
-        $_REQUEST[$key] = $value;
+    $defaults = array(
+        'pid'           => '',
+        'listing_type'  => $default_post_type,
+        'login_msg'     => __( 'You must login to post.', 'geodirectory' ),
+        'show_login'    => false,
+    );
+
+    $params = shortcode_atts( $defaults, $atts, 'gd_add_listing' );
+    
+    if ( !empty( $_REQUEST['pid'] ) && $post_type = get_post_type( absint( $_REQUEST['pid'] ) ) ) {
+        $params['pid'] = absint( $_REQUEST['pid'] );
+        $params['listing_type'] = $post_type;
+    } else if ( isset( $_REQUEST['listing_type'] ) ) {
+        $params['listing_type'] = sanitize_text_field( $_REQUEST['listing_type'] );
+    }
+
+    if ( !geodir_add_listing_check_post_type( $params['listing_type'] ) ) {
+        return __( 'Post type has not allowed to add listing.', 'geodirectory' );
+    }
+
+    foreach ( $params as $key => $value ) {
+        $_REQUEST[ $key ] = $value;
     }
 
     $user_id = get_current_user_id();
-    if (!$user_id) {
+
+    ob_start();
+
+    if ( !$user_id ) {
         echo $params['login_msg'];
-        if ($params['show_login']) {
+
+        if ( $params['show_login'] ) {
             echo "<br />";
+
             $defaults = array(
                 'before_widget' => '',
-                'after_widget' => '',
-                'before_title' => '',
-                'after_title' => '',
+                'after_widget'  => '',
+                'before_title'  => '',
+                'after_title'   => '',
             );
 
-            geodir_loginwidget_output($defaults, $defaults);
+            geodir_loginwidget_output( $defaults, $defaults );
         }
-
-
     } else {
-       // Add listing page will be used if shortcode is detected in page content, no need to call it here
+        geodir_render_add_listing_form();
     }
-    $output = ob_get_contents();
 
-    ob_end_clean();
-
-    return $output;
+    return ob_get_clean();
 }
 
 /**
@@ -1485,7 +1497,7 @@ function gdsc_validate_measurements($value)
  * @since 1.5.2 Added TERRAIN map type.
  *
  * @param string $value Input value to validate measurement.
- * @return string The measurement valud in valid format.
+ * @return string The measurement value in valid format.
  */
 function gdsc_validate_map_args($params)
 {
@@ -1608,7 +1620,7 @@ function gdsc_is_post_type_valid($incoming_post_type)
 }
 
 /**
- * Adds the filetrs and gets the query.
+ * Adds the filters and gets the query.
  *
  * @since 1.0.0
  *
@@ -2007,7 +2019,7 @@ function gdsc_validate_list_filter_choice($filter_choice)
  * @global array $map_canvas_arr Map canvas array.
  * @global object $gd_session GeoDirectory Session object.
  *
- * @param array $args Array of arguements to filter listings.
+ * @param array $args Array of arguments to filter listings.
  * @return string Listings HTML content.
  */
 function geodir_sc_gd_listings_output($args = array()) {
@@ -2029,7 +2041,7 @@ function geodir_sc_gd_listings_output($args = array()) {
      * @since 1.6.0
      *
      * @param string $shortcode_content The shortcode content text.
-     * @param array $args Array of arguements to filter listings.
+     * @param array $args Array of arguments to filter listings.
      */
     $shortcode_content = apply_filters('geodir_sc_gd_listings_not_found_content', $shortcode_content, $args);
 		

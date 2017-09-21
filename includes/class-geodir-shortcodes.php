@@ -47,18 +47,12 @@ class GeoDir_Shortcodes {
      * @param array $atts (default: array())
      * @return string
      */
-    public static function shortcode_wrapper( $function, $atts = array(), $content = null, $wrapper = array( 'before' => null, 'after'  => null ) ) {
+    public static function shortcode_wrapper( $function, $atts = array(), $content = null, $wrapper = array( 'class' => 'geodirectory', 'before' => null, 'after'  => null ) ) {
         ob_start();
 
-        if ( !empty( $wrapper['before'] ) ) {
-            echo $wrapper['before'];
-        }
-        
-        call_user_func( $function, $atts, $content );
-        
-        if ( !empty( $wrapper['after'] ) ) {
-            echo $wrapper['after'];
-        }
+        echo empty( $wrapper['before'] ) ? '<div class="' . esc_attr( $wrapper['class'] ) . '">' : $wrapper['before'];
+        echo call_user_func( $function, $atts );
+        echo empty( $wrapper['after'] ) ? '</div>' : $wrapper['after'];
 
         return ob_get_clean();
     }

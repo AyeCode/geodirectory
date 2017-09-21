@@ -21,7 +21,10 @@ class GeoDir_Widget_CPT_Categories extends WP_Widget {
     public function __construct() {
         $widget_ops = array(
             'classname' => 'geodir_cpt_categories_widget',
-            'description' => __( 'A list of GeoDirectory CPT categories.', 'geodirectory' )
+            'description' => __( 'A list of GeoDirectory CPT categories.', 'geodirectory' ),
+            'customize_selective_refresh' => true,
+            'geodirectory' => true,
+            'gd_show_pages' => array(),
         );
         parent::__construct( 'geodir_cpt_categories_widget', __( 'GD > CPT Categories', 'geodirectory' ), $widget_ops );
     }
