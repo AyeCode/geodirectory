@@ -23,8 +23,6 @@ define('SEARCH', __('Search', 'geodirectory'));
 
 /* ---- Add Listing ---- */
 
-define('INDICATES_MANDATORY_FIELDS_TEXT', __('Indicates mandatory fields', 'geodirectory'));
-
 define('LOGINORREGISTER', __("Login or Register", 'geodirectory'));
 define('IAM_TEXT', __("I am", 'geodirectory'));
 define('EXISTING_USER_TEXT', __("Existing User", 'geodirectory'));
@@ -67,7 +65,6 @@ define('TWITTER_TEXT', __('Twitter', 'geodirectory'));
 define('FACEBOOK_TEXT', __('Facebook', 'geodirectory'));
 
 define('PLACE_CATEGORY_TEXT', __('Category', 'geodirectory'));
-define('TAGKW_TEXT', __('Tag Keywords', 'geodirectory'));
 
 define('PRO_PHOTO_TEXT', __('Add Images : <small>(You can upload more than one images to create image gallery on detail page)</small>', 'geodirectory'));
 define('PHOTOES_BUTTON', __('Select Images', 'geodirectory'));
@@ -85,9 +82,6 @@ define('SINGLEMAP_PAGE_VALIDATION_TEXT', __('<h3>No Record Found</h3><p>Sorry, T
 
 define('CAPTCHA_TITLE_TEXT', __('Captcha Verification', 'geodirectory'));
 define('CAPTCHA', __('Word Verification', 'geodirectory'));
-
-
-define('PRO_PREVIEW_BUTTON', __('Review Your Listing', 'geodirectory'));
 
 define('GOING_TO_PAY_MSG', __('This is a preview of your listing and its not published yet. <br />If there is something wrong then "Go back and edit" or if you want to add listing then click on "Publish".<br> You are going to pay <b>%s</b> &  alive days are <b>%s</b> as %s listing', 'geodirectory'));
 define('GOING_TO_UPDATE_MSG', __('This is a preview of your listing and its not updated yet. <br />If there is something wrong then "Go back and edit" or if you want to update listing then click on "Update now"', 'geodirectory'));
@@ -127,7 +121,6 @@ define('WEBSITE_MSG', __('Enter website URL. eg. : <b>http://myplace.com</b>', '
 define('TWITTER_MSG', __('Enter twitter URL. eg. : <b>http://twitter.com/myplace</b>', 'geodirectory'));
 define('FACEBOOK_MSG', __('Enter facebook URL. eg. : <b>http://facebook.com/myplace</b>', 'geodirectory'));
 define('CATEGORY_MSG', __('Select listing category from here. Select at least one category', 'geodirectory'));
-define('TAGKW_MSG', __('Tags are short keywords, with no space within.(eg: tag1, tag2, tag3) Up to 40 characters only.', 'geodirectory'));
 define('HTML_TAGS_ALLOW_MSG', __('Note : Basic HTML tags are allowed', 'geodirectory'));
 define('HTML_SPECIAL_TEXT', __('Note: List out any special offers (optional)', 'geodirectory'));
 define('IMAGE_SAVE_ORDERING_MSG', __('Note : You can sort images once the post is saved by clicking on "Edit" on the listing', 'geodirectory'));
@@ -247,9 +240,6 @@ define('CSV_IMPORT_DATA', __('Import data now', 'geodirectory'));
 define('PLZ_SELECT_CSV_FILE', __('Please select csv file.', 'geodirectory'));
 
 define('FEATURED_IMG_CLASS', __('featured_img_class', 'geodirectory'));
-
-define('TAGKW_TEXT_COUNT', 40);
-
 
 /*
  * Here we declare every country name so that is can be read by PO editors and translated easily.

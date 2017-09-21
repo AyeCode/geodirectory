@@ -25,7 +25,10 @@ class GeoDir_Widget_Home_Page_Map extends WP_Widget {
     public function __construct() {
         $widget_ops = array(
             'classname' => 'widget Google Map in Home page',
-            'description' => __( 'Google Map in Home page. It will show you google map V3 for Home page with category checkbox selection.', 'geodirectory' )
+            'description' => __( 'Google Map in Home page. It will show you google map V3 for Home page with category checkbox selection.', 'geodirectory' ),
+            'customize_selective_refresh' => true,
+            'geodirectory' => true,
+            'gd_show_pages' => array(),
         );
         parent::__construct( 'geodir_map_v3_home_map', __('GD > GMap - Home page', 'geodirectory'), $widget_ops );
     }

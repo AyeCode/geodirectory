@@ -78,6 +78,7 @@ final class GeoDirectory {
             }
 
             self::$instance->includes();
+            self::$instance->init_hooks();
 
             do_action( 'geodirectory_loaded' );
         }
@@ -254,6 +255,26 @@ final class GeoDirectory {
                 require_once( $compatibility_file );
             }
         }
+    }
+    
+    /**
+     * Hook into actions and filters.
+     * @since  2.3
+     */
+    private function init_hooks() {
+        add_action( 'init', array( $this, 'init' ), 0 );
+        add_action( 'init', array( 'GeoDir_Shortcodes', 'init' ) );
+    }
+    
+    /**
+     * Init GeoDirectory when WordPress Initialises.
+     */
+    public function init() {
+        // Before init action.
+        do_action( 'geodirectory_before_init' );
+
+        // Init action.
+        do_action( 'geodirectory_init' );
     }
     
     /**

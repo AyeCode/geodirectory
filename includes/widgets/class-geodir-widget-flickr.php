@@ -16,7 +16,10 @@ class GeoDir_Widget_Flickr extends WP_Widget {
     public function __construct() {
         $widget_ops = array(
             'classname' => 'Geo Dir Flickr Photos ',
-            'description' => __( 'GD > Flickr Photos', 'geodirectory' )
+            'description' => __( 'GD > Flickr Photos', 'geodirectory' ),
+            'customize_selective_refresh' => true,
+            'geodirectory' => true,
+            'gd_show_pages' => array(),
         );
         parent::__construct( 'widget_flickrwidget', __( 'GD > Flickr Photos', 'geodirectory' ), $widget_ops );
     }

@@ -1449,3 +1449,61 @@ function geodir_listing_inner_old_classes( $classes, $post ) {
     
     return $classes;
 }
+
+/**
+ * Handle redirects before content is output - hooked into template_redirect so is_page works.
+ */
+function geodir_template_redirect() {
+    global $wp_query, $wp, $post; //geodir_error_log( $wp->query_vars, 'query_vars', __FILE__, __LINE__ );
+
+    if ( is_page() ) {
+        $page_id = !empty( $wp->query_vars['page_id'] ) ? $wp->query_vars['page_id'] : '';
+        $pagename = !empty( $wp->query_vars['pagename'] ) ? $wp->query_vars['pagename'] : '';
+
+        if ( !isset( $_REQUEST['listing_type'] ) && geodir_is_page( 'add-listing' ) ) {
+            if ( !empty( $_REQUEST['pid'] ) && $post_type = get_post_type( absint( $_REQUEST['pid'] ) ) ) {
+            } else {
+                $post_type = geodir_add_listing_default_post_type();
+
+                if ( !empty( $post->post_content ) && has_shortcode( $post->post_content, 'gd_add_listing' ) ) {
+                    $gd_page_id = $post->ID;
+
+                    $regex_pattern = get_shortcode_regex();
+                    preg_match( '/' . $regex_pattern . '/s', $post->post_content, $regex_matches );
+
+                    if ( !empty( $regex_matches ) && !empty( $regex_matches[2] ) == 'gd_add_listing' && !empty( $regex_matches[3] ) ) {
+                        $shortcode_atts = shortcode_parse_atts( $regex_matches[3] );
+                        $post_type = !empty( $shortcode_atts ) && !empty( $shortcode_atts['listing_type'] ) ? $shortcode_atts['listing_type'] : $post_type;
+                    }
+                }
+            }
+
+            if ( !empty( $post_type ) ) {
+                wp_redirect( add_query_arg( array( 'listing_type' => $post_type ) ) );
+                exit;
+            }
+        }
+    }
+}
+
+function geodir_render_add_listing_form() {
+    global $gd_session;
+
+    if (!isset($_REQUEST['backandedit'])) {
+        $gd_session->un_set('listing');
+    }
+
+    do_action( 'geodir_before_wrap_add_listing_form' );
+    
+    geodir_action_add_listing_form();
+    
+    do_action( 'geodir_after_wrap_add_listing_form' );
+}
+
+function geodir_add_listing_form_wrap_start( $listing_type = '', $post = array(), $package_info = array() ) {
+    ?><div class="gd-form-wrap gd-listing-form-wrap"><?php
+}
+
+function geodir_add_listing_form_wrap_end( $listing_type = '', $post = array(), $package_info = array() ) {
+    ?></div><?php
+}

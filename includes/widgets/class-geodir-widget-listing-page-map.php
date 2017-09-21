@@ -25,7 +25,10 @@ class GeoDir_Widget_Listing_Page_Map extends WP_Widget {
     public function __construct() {
         $widget_ops = array(
             'classname' => 'widget geodir-map-listing-page',
-            'description' => __( 'Google Map for Listing page. It will show you google map V3 for Listing page.', 'geodirectory' )
+            'description' => __( 'Google Map for Listing page. It will show you google map V3 for Listing page.', 'geodirectory' ),
+            'customize_selective_refresh' => true,
+            'geodirectory' => true,
+            'gd_show_pages' => array(),
         );
         parent::__construct( 'geodir_map_v3_listing_map', __( 'GD > GMap - Listing page', 'geodirectory' ), $widget_ops );
 

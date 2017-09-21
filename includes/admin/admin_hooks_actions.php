@@ -2542,3 +2542,20 @@ function geodir_diagnose_reload_db_countries()
     echo $fix_button_txt;
     echo "</ul>";
 }
+
+function geodir_widget_visibility_options( $widget, $form, $instance ) {
+    $options = array(
+        'all' => __( 'All', 'widget-context' ),
+        'add-listing' => __( 'GD Add Listing', 'widget-context' ),
+        'detail' => __( 'GD Detail', 'widget-context' ),
+        'home' => __( 'GD Home', 'widget-context' ),
+        'listing' => __( 'GD Listing', 'widget-context' ),
+        'preview' => __( 'GD Preview', 'widget-context' ),
+        'search' => __( 'GD Search', 'widget-context' ),
+        'location' => __( 'GD Location', 'widget-context' ),
+    );
+            
+    if ( !empty( $widget->widget_options['geodirectory'] ) ) {
+    }
+}
+add_action( 'in_widget_form', 'geodir_widget_visibility_options', 100, 3 );

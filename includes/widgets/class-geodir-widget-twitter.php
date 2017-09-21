@@ -22,7 +22,10 @@ class GeoDir_Widget_Twitter extends WP_Widget {
     public function __construct() {
         $widget_ops = array(
             'classname' => 'Twitter',
-            'description' => __( 'GD > Twitter Feed', 'geodirectory' )
+            'description' => __( 'GD > Twitter Feed', 'geodirectory' ),
+            'customize_selective_refresh' => true,
+            'geodirectory' => true,
+            'gd_show_pages' => array(),
         );
         parent::__construct( 'widget_Twidget', __( 'GD > Twitter', 'geodirectory' ), $widget_ops );
     }

@@ -89,7 +89,7 @@ do_action('geodir_add_listing_page_title');
  */
 do_action('geodir_add_listing_page_mandatory');
 
-/** This action is documented in includes/templates/geodir-home.php */
+/** This action is documented in geodirectory-templates/geodir-home.php */
 do_action('geodir_add_page_content', 'before', 'add-listing-page');
 
 /**
@@ -99,7 +99,7 @@ do_action('geodir_add_page_content', 'before', 'add-listing-page');
  */
 do_action('geodir_add_listing_form');
 
-/** This action is documented in includes/templates/geodir-home.php */
+/** This action is documented in geodirectory-templates/geodir-home.php */
 do_action('geodir_add_page_content', 'after', 'add-listing-page');
 
 ###### MAIN CONTENT WRAPPERS CLOSE ######

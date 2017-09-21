@@ -64,7 +64,7 @@ function geodir_is_singular( $post_types = array() ) {
         $post_types = geodir_get_posttypes();
     }
 
-    return is_singular( $post_types );
+    return is_singular( $post_types ) || geodir_is_page( 'preview' );
 }
 
 function geodir_is_taxonomy( $taxonomies = array() ) {

@@ -31,11 +31,9 @@ function geodir_session_start()
  * @param WP_Query $query The WP_Query instance.
  * @return WP_Query
  */
-function geodir_modified_query($query)
-{
+function geodir_modified_query($query) {
     if ($query->is_main_query() && (
-            (geodir_is_page('add-listing') && isset($_REQUEST['pid']) && $_REQUEST['pid'] != '')
-            || geodir_is_page('listing')
+            geodir_is_page('listing')
             || geodir_is_page('author')
             || geodir_is_page('search')
             || geodir_is_page('detail'))

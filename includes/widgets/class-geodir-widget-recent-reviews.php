@@ -23,7 +23,10 @@ class GeoDir_Widget_Recent_Reviews extends WP_Widget {
     public function __construct() {
         $widget_ops = array(
             'classname' => 'geodir_recent_reviews',
-            'description' => __( 'GD > Recent Reviews', 'geodirectory' )
+            'description' => __( 'GD > Recent Reviews', 'geodirectory' ),
+            'customize_selective_refresh' => true,
+            'geodirectory' => true,
+            'gd_show_pages' => array(),
         );
         parent::__construct( 'geodir_recent_reviews', __( 'GD > Recent Reviews', 'geodirectory' ), $widget_ops );
     }

@@ -23,7 +23,10 @@ class GeoDir_Widget_Popular_Post_Category extends WP_Widget {
     public function __construct() {
         $widget_ops = array(
             'classname' => 'geodir_popular_post_category',
-            'description' => __( 'GD > Popular Post Category', 'geodirectory' )
+            'description' => __( 'GD > Popular Post Category', 'geodirectory' ),
+            'customize_selective_refresh' => true,
+            'geodirectory' => true,
+            'gd_show_pages' => array(),
         );
         parent::__construct( 'popular_post_category', __( 'GD > Popular Post Category', 'geodirectory' ), $widget_ops );
     }

@@ -25,6 +25,8 @@ class GeoDir_Widget_Detail_Rating_Stars extends WP_Widget {
             'classname' => 'geodir-widget gd-widget-detail-rating-stars',
             'description' => __( 'Display rating stars on the listing detail page.', 'geodirectory' ),
             'customize_selective_refresh' => true,
+            'geodirectory' => true,
+            'gd_show_pages' => array( 'detail' ),
         );
         parent::__construct( 'detail_rating_stars', __( 'GD > Detail Rating Stars', 'geodirectory' ), $widget_ops );
     }
