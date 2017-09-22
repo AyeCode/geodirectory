@@ -2543,19 +2543,89 @@ function geodir_diagnose_reload_db_countries()
     echo "</ul>";
 }
 
-function geodir_widget_visibility_options( $widget, $form, $instance ) {
-    $options = array(
-        'all' => __( 'All', 'widget-context' ),
-        'add-listing' => __( 'GD Add Listing', 'widget-context' ),
-        'detail' => __( 'GD Detail', 'widget-context' ),
-        'home' => __( 'GD Home', 'widget-context' ),
-        'listing' => __( 'GD Listing', 'widget-context' ),
-        'preview' => __( 'GD Preview', 'widget-context' ),
-        'search' => __( 'GD Search', 'widget-context' ),
-        'location' => __( 'GD Location', 'widget-context' ),
-    );
-            
-    if ( !empty( $widget->widget_options['geodirectory'] ) ) {
+function geodir_widget_pages_options() {
+    global $gd_widget_pages;
+
+    if ( !empty( $gd_widget_pages ) && is_array( $gd_widget_pages ) ) {
+        return $gd_widget_pages;
     }
+    
+    $gd_widget_pages = array();
+    $gd_widget_pages['gd'] = array(
+        'label'     => __( 'GD Pages', 'geodirectory' ),
+        'pages'     => array(
+            'home'              => __( 'GD Home Page', 'geodirectory' ),
+            'add-listing'       => __( 'Add Listing Page', 'geodirectory' ),
+            'author'            => __( 'Author Page', 'geodirectory' ),
+            'detail'            => __( 'Listing Detail Page', 'geodirectory' ),
+            'preview'           => __( 'Listing Preview Page', 'geodirectory' ),
+            'listing-success'   => __( 'Listing Success Page', 'geodirectory' ),
+            'location'          => __( 'Location Page', 'geodirectory' ),
+            'login'             => __( 'Login Page', 'geodirectory' ),
+            'pt'                => __( 'Post Type Archive', 'geodirectory' ),
+            'search'            => __( 'Search Page', 'geodirectory' ),
+            'listing'           => __( 'Taxonomies Page', 'geodirectory' ),
+        ),
+    );
+
+    return apply_filters( 'geodir_widget_pages_options', $gd_widget_pages );
+}
+
+function geodir_widget_visibility_options( $widget, $form, $instance ) {
+    if ( empty( $widget->widget_options['geodirectory'] ) ) {
+        return;
+    }
+
+    $gd_widget_pages = geodir_widget_pages_options();
+
+    $showhide = !empty( $instance['gd_wgt_showhide'] ) ? $instance['gd_wgt_showhide'] : 'gd';
+    $restrict = !empty( $instance['gd_wgt_restrict'] ) ? $instance['gd_wgt_restrict'] : array();
+    if ( !is_array( $restrict ) ) {
+        $restrict = array();
+    }
+    ?>
+    <p class="gd-wgt-showhide-wrap">
+        <label for="<?php echo esc_attr( $widget->get_field_id( 'gd_wgt_showhide' ) ); ?>"><?php _e( 'Show / Hide Widget:', 'geodirectory' ); ?></label>
+        <select name="<?php echo esc_attr( $widget->get_field_name( 'gd_wgt_showhide' ) ); ?>" id="<?php echo esc_attr( $widget->get_field_id( 'gd_wgt_showhide' ) ); ?>" class="widefat">
+            <option value="show" <?php selected( $showhide, 'show' ); ?>><?php _e( 'Show widget everywhere', 'geodirectory' ); ?></option>
+            <option value="gd" <?php selected( $showhide, 'gd' ); ?>><?php _e( 'Show widget on GD pages', 'geodirectory' ); ?></option>
+            <option value="show_on" <?php selected( $showhide, 'show_on' ); ?>><?php _e( 'Show widget on selected pages', 'geodirectory' ); ?></option>
+            <option value="hide_on" <?php selected( $showhide, 'hide_on' ); ?>><?php _e( 'Hide widget on selected pages', 'geodirectory' ); ?></option>
+            <option value="hide" <?php selected( $showhide, 'hide' ); ?>><?php _e( 'Hide widget everywhere', 'geodirectory' ); ?></option>
+        </select>
+    </p>
+    <p class="gd-wgt-restrict-wrap">
+        <select name="<?php echo esc_attr( $widget->get_field_name( 'gd_wgt_restrict' ) ); ?>[]" id="<?php echo esc_attr( $widget->get_field_id( 'gd_wgt_restrict' ) ); ?>" class="widefat" multiple="multiple" size="6">
+            <?php foreach ( $gd_widget_pages as $group => $options ) { ?>
+                <?php if ( !empty( $group ) && !empty( $options['pages'] ) ) { $label = !empty( $options['label'] ) ? esc_attr( $options['label'] ) : ''; ?>
+                <optgroup label="<?php echo $label; ?>">
+                    <?php foreach ( $options['pages'] as $value => $label ) { $selected = !empty( $restrict ) && in_array( $group . '-' . $value, $restrict ) ? true : false; ?>
+                        <option value="<?php echo esc_attr( $group . '-' . $value ); ?>" <?php selected( $selected, true ); ?>><?php echo $label; ?></option>
+                    <?php } ?>
+                </optgroup>
+                <?php } ?>
+            <?php } ?>
+        </select>
+    </p>
+    <?php
 }
 add_action( 'in_widget_form', 'geodir_widget_visibility_options', 100, 3 );
+
+function geodir_widget_update_callback( $instance, $new_instance, $old_instance, $widget ) {
+    if ( !empty( $widget->widget_options['geodirectory'] ) ) {
+        geodir_error_log( $new_instance, 'new_instance', __FILE__, __LINE__ );
+        geodir_error_log( $old_instance, 'old_instance', __FILE__, __LINE__ );
+        geodir_error_log( $instance, 'instance', __FILE__, __LINE__ );
+    }
+
+    return $instance;
+}
+add_filter( 'widget_update_callback', 'geodir_widget_update_callback', 10, 4 );
+
+function geodir_widget_display_callback( $instance, $widget, $args ) {
+    if ( !empty( $widget->widget_options['geodirectory'] ) ) {
+    }
+    
+    return $instance;
+}
+add_filter( 'widget_display_callback', 'geodir_widget_display_callback', 10, 3 );
