@@ -1779,6 +1779,81 @@ function geodir_diagnose_default_pages()
     /* Diagnose Location Page Ends */
     ////////////////////////////////
 
+    //////////////////////////////////
+    /* Diagnose Archive Page Starts */
+    //////////////////////////////////
+    $option_value = geodir_get_option('geodir_archive_page');
+    $page = get_post($option_value);
+    if(!empty($page)){$page_found = $page->ID;}else{$page_found = '';}
+
+    if(!empty($option_value) && !empty($page_found) && $option_value == $page_found && $page->post_status=='publish')
+        $output_str .= "<li>" . __('Archive page exists with proper setting.', 'geodirectory') . "</li>";
+    else {
+        $is_error_during_diagnose = true;
+        $output_str .= "<li><strong>" . __('Archive page is missing.', 'geodirectory') . "</strong></li>";
+        if ($fix) {
+            if (geodir_fix_virtual_page('gd-archive', __('GD Archive', 'geodirectory'), $page_found, 'geodir_archive_page')) {
+                $output_str .= "<li><strong>" . __('-->FIXED: Archive page fixed', 'geodirectory') . "</strong></li>";
+            } else {
+                $output_str .= "<li><strong>" . __('-->FAILED: Archive page fix failed', 'geodirectory') . "</strong></li>";
+            }
+        }
+    }
+
+    ////////////////////////////////
+    /* Diagnose Archive Page Ends */
+    ////////////////////////////////
+
+    //////////////////////////////////
+    /* Diagnose Search Page Starts */
+    //////////////////////////////////
+    $option_value = geodir_get_option('geodir_search_page');
+    $page = get_post($option_value);
+    if(!empty($page)){$page_found = $page->ID;}else{$page_found = '';}
+
+    if(!empty($option_value) && !empty($page_found) && $option_value == $page_found && $page->post_status=='publish')
+        $output_str .= "<li>" . __('Search page exists with proper setting.', 'geodirectory') . "</li>";
+    else {
+        $is_error_during_diagnose = true;
+        $output_str .= "<li><strong>" . __('Search page is missing.', 'geodirectory') . "</strong></li>";
+        if ($fix) {
+            if (geodir_fix_virtual_page('gd-search', __('GD Search', 'geodirectory'), $page_found, 'geodir_search_page')) {
+                $output_str .= "<li><strong>" . __('-->FIXED: Search page fixed', 'geodirectory') . "</strong></li>";
+            } else {
+                $output_str .= "<li><strong>" . __('-->FAILED: Search page fix failed', 'geodirectory') . "</strong></li>";
+            }
+        }
+    }
+
+    ////////////////////////////////
+    /* Diagnose Search Page Ends */
+    ////////////////////////////////
+
+    //////////////////////////////////
+    /* Diagnose Details Page Starts */
+    //////////////////////////////////
+    $option_value = geodir_get_option('geodir_details_page');
+    $page = get_post($option_value);
+    if(!empty($page)){$page_found = $page->ID;}else{$page_found = '';}
+
+    if(!empty($option_value) && !empty($page_found) && $option_value == $page_found && $page->post_status=='publish')
+        $output_str .= "<li>" . __('Details page exists with proper setting.', 'geodirectory') . "</li>";
+    else {
+        $is_error_during_diagnose = true;
+        $output_str .= "<li><strong>" . __('Details page is missing.', 'geodirectory') . "</strong></li>";
+        if ($fix) {
+            if (geodir_fix_virtual_page('gd-details', __('GD Details', 'geodirectory'), $page_found, 'geodir_details_page')) {
+                $output_str .= "<li><strong>" . __('-->FIXED: Details page fixed', 'geodirectory') . "</strong></li>";
+            } else {
+                $output_str .= "<li><strong>" . __('-->FAILED: Details page fix failed', 'geodirectory') . "</strong></li>";
+            }
+        }
+    }
+
+    ////////////////////////////////
+    /* Diagnose Details Page Ends */
+    ////////////////////////////////
+
     $page_chk_arr = array('output_str'=>$output_str,'is_error_during_diagnose'=>$is_error_during_diagnose );
     /**
      * This action is called at the end of the GD Tools page check function.
