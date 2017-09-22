@@ -26,17 +26,24 @@ function geodir_get_template_part( $slug, $name = '' ) {
     
     $template = '';
 
-    // Look in yourtheme/slug-name.php and yourtheme/woocommerce/slug-name.php
     if ( $name ) {
+        // Look in yourtheme/slug-name.php and yourtheme/geodirectory/slug-name.php
         $template = locate_template( array( "{$slug}-{$name}.php", geodir_get_theme_template_dir_name() . "/{$slug}-{$name}.php" ) );
+    } else {
+        // Look in yourtheme/slug-name.php and yourtheme/geodirectory/slug.php
+        $template = locate_template( array( "{$slug}.php", geodir_get_theme_template_dir_name() . "/{$slug}.php" ) );
     }
 
     // Get default slug-name.php
-    if ( !$template && $name && file_exists( geodir_get_templates_dir() . "/{$slug}-{$name}.php" ) ) {
-        $template = geodir_get_templates_dir() . "/{$slug}-{$name}.php";
+    if ( !$template ) {
+        if ( $name && file_exists( geodir_get_templates_dir() . "/{$slug}-{$name}.php" ) ) {
+            $template = geodir_get_templates_dir() . "/{$slug}-{$name}.php";
+        } else if ( !$name && file_exists( geodir_get_templates_dir() . "/{$slug}.php" ) ) {
+            $template = geodir_get_templates_dir() . "/{$slug}.php";
+        }
     }
 
-    // If template file doesn't exist, look in yourtheme/slug.php and yourtheme/woocommerce/slug.php
+    // If template file doesn't exist, look in yourtheme/slug.php and yourtheme/geodirectory/slug.php
     if ( !$template ) {
         $template = locate_template( array( "{$slug}.php", geodir_get_theme_template_dir_name() . "/{$slug}.php" ) );
     }
@@ -842,7 +849,7 @@ function geodir_listing_loop_header( $echo = true ) {
     
     ob_start();
     
-    geodir_get_template( 'view/loop-header.php', array( 'sorting' => trim( $sorting ), 'layout_selection' => trim( $layout_selection ) ) );
+    geodir_get_template( 'listing/loop-header.php', array( 'sorting' => trim( $sorting ), 'layout_selection' => trim( $layout_selection ) ) );
     
     if ( $echo ) {
         echo ob_get_clean();
@@ -872,7 +879,7 @@ function geodir_listing_loop_start( $echo = true ) {
     
     $header_options = geodir_listing_loop_header( false );
     
-    geodir_get_template( 'view/loop-start.php', array( 'header_options' => $header_options ) );
+    geodir_get_template( 'listing/loop-start.php', array( 'header_options' => $header_options ) );
     
     if ( $echo ) {
         echo ob_get_clean();
@@ -884,7 +891,7 @@ function geodir_listing_loop_start( $echo = true ) {
 function geodir_listing_loop_end( $echo = true ) {
     ob_start();
 
-    geodir_get_template( 'view/loop-end.php' );
+    geodir_get_template( 'listing/loop-end.php' );
 
     if ( $echo ) {
         echo ob_get_clean();
@@ -1506,4 +1513,20 @@ function geodir_add_listing_form_wrap_start( $listing_type = '', $post = array()
 
 function geodir_add_listing_form_wrap_end( $listing_type = '', $post = array(), $package_info = array() ) {
     ?></div><?php
+}
+
+function geodir_replace_the_content( $content ) {
+    if ( !is_main_query() ) {
+        return $content;
+    }
+
+    if ( geodir_is_taxonomy() || geodir_is_post_type_archive() ) {
+        ob_start();
+        
+        geodir_get_template_part( 'listing/list' );
+
+        $content = ob_get_clean();
+    }
+
+    return $content;
 }
