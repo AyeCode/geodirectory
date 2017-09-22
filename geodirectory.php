@@ -360,3 +360,138 @@ function GeoDir() {
 }
 // Global for backwards compatibility.
 $GLOBALS['geodirectory'] = GeoDir();
+
+
+
+//return;
+function _my_template_change($template, $type, $templates ){
+
+    //print_r($template);
+
+    global $gd_template_run;
+
+    if($type=='archive' && geodir_is_geodir_page() && !$gd_template_run){
+        global $wp_query,$temp_wp_query;
+
+        $temp_wp_query = $wp_query->posts;
+
+        //print_r($temp_wp_query);
+
+        $archive_page = get_post(2);
+
+        $wp_query->posts = array($archive_page);
+
+        //print_r($wp_query);
+        $wp_query->current_post = $wp_query->post_count-1;
+        global $post;
+        setup_postdata(2);
+
+        // if we replace archive with page then we don't get the paging.
+        $template = str_replace('archive.php','page.php',$template);
+        //echo '###'.$type.'###';
+
+        $gd_template_run++;
+    }
+
+
+    if($type=='archive' && geodir_is_geodir_page()){
+        // if we replace archive with page then we don't get the paging.
+        //$template = str_replace('archive.php','index.php',$template);
+    }
+
+
+
+
+
+    //print_r($templates);
+    //print_r($template);
+
+    return $template;
+}
+add_filter('archive_template','_my_template_change',10,3);
+//add_action( 'the_post', '_my_the_post_action' );
+
+function _my_the_post_action( $post_object ) {
+
+
+    if ( is_main_query()) {
+        //echo 123;
+        ?>
+        <ul class="geodir_category_list_view clearfix <?php echo apply_filters('geodir_listing_listview_ul_extra_class', '', 'listing'); ?>">
+            <?php
+
+            remove_action( 'the_post', '_my_the_post_action' );
+            while ( have_posts() ) : the_post();
+                //echo '321';
+
+                // Include the page content template that we need for GD
+                get_template_part( 'content' );
+
+                //geodir_get_template_part('listing', 'list');
+
+
+                // End the loop.
+            endwhile;
+            add_action( 'the_post', '_my_the_post_action' );
+
+            ?>
+        </ul>
+        <?php
+    }
+
+    // set the main have_post() to false so we don't loop any further
+    global $wp_query;
+    $wp_query->current_post = $wp_query->post_count;
+
+
+}
+
+
+// returns the content of $GLOBALS['post']
+// if the page is called 'debug'
+function _my_the_content_filter($content) {
+
+    //return $content;
+
+    global $gd_loop;
+
+
+
+
+
+//if(!$gd_loop){
+    remove_filter( 'the_content', '_my_the_content_filter' );
+    rewind_posts();
+
+
+    global $wp_query,$temp_wp_query;
+
+    $wp_query->posts = $temp_wp_query;
+
+    $new_content = '';
+    $new_content = geodir_get_template_part('listing', 'listview');
+    global $post;
+
+    //print_r($wp_query->posts );
+
+    foreach($wp_query->posts as $post){//the_post();
+        //$new_content .= geodir_get_template_part('listing', 'list');
+    }
+
+    add_filter( 'the_content', '_my_the_content_filter' );
+    $gd_loop++;
+
+
+
+    $wp_query->current_post = $wp_query->post_count;
+
+
+
+    return $new_content;
+    return 'xxx';// $content;
+//}
+//return $content;
+
+}
+
+add_filter( 'the_content', '_my_the_content_filter' );

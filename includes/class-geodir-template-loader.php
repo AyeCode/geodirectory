@@ -32,7 +32,7 @@ class GeoDir_Template_Loader {
      * @param mixed $template
      * @return string
      */
-    public static function template_loader( $template ) {
+    public static function template_loader( $template ) { //return $template;
         if ( is_embed() ) {
             return $template;
         }

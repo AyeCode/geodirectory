@@ -1521,11 +1521,13 @@ function geodir_replace_the_content( $content ) {
     }
 
     if ( geodir_is_taxonomy() || geodir_is_post_type_archive() ) {
+        remove_filter( 'the_content', 'geodir_replace_the_content' );
         ob_start();
         
         geodir_get_template_part( 'listing/list' );
 
         $content = ob_get_clean();
+        add_filter( 'the_content', 'geodir_replace_the_content' );
     }
 
     return $content;
