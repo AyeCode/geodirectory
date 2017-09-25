@@ -125,6 +125,57 @@ function geodir_login_page_id(){
     return $gd_page_id;
 }
 
+/**
+ * Get the page ID of the GD archive page.
+ *
+ * @package Geodirectory
+ * @since 2.0.0
+ * @return int|null Return the page ID if present or null if not.
+ */
+function geodir_archive_page_id(){
+	$gd_page_id = geodir_get_option('geodir_archive_page');
+
+	if (function_exists('icl_object_id')) {
+		$gd_page_id =  icl_object_id($gd_page_id, 'page', true);
+	}
+
+	return $gd_page_id;
+}
+
+/**
+ * Get the page ID of the GD search page.
+ *
+ * @package Geodirectory
+ * @since 2.0.0
+ * @return int|null Return the page ID if present or null if not.
+ */
+function geodir_search_page_id(){
+	$gd_page_id = geodir_get_option('geodir_search_page');
+
+	if (function_exists('icl_object_id')) {
+		$gd_page_id =  icl_object_id($gd_page_id, 'page', true);
+	}
+
+	return $gd_page_id;
+}
+
+/**
+ * Get the page ID of the GD details page.
+ *
+ * @package Geodirectory
+ * @since 2.0.0
+ * @return int|null Return the page ID if present or null if not.
+ */
+function geodir_details_page_id(){
+	$gd_page_id = geodir_get_option('geodir_details_page');
+
+	if (function_exists('icl_object_id')) {
+		$gd_page_id =  icl_object_id($gd_page_id, 'page', true);
+	}
+
+	return $gd_page_id;
+}
+
 
 /**
  * Get the page ID of the login page.

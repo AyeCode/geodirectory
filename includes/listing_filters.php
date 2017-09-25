@@ -886,7 +886,7 @@ function author_filter_where($where) {
 
     if ($user_id > 0) {
         if (isset($_REQUEST['list']) && $_REQUEST['list'] == 'favourite') {
-            $user_fav_posts = get_user_meta($user_id, 'gd_user_favourite_post', true);
+            $user_fav_posts = geodir_get_user_favourites($user_id);
             $user_fav_posts = !empty($user_fav_posts) && is_array($user_fav_posts) ? implode("','", $user_fav_posts) : '-1';
             $where .= " AND $wpdb->posts.ID IN ('$user_fav_posts')";
         } else

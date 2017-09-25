@@ -1514,19 +1514,3 @@ function geodir_add_listing_form_wrap_start( $listing_type = '', $post = array()
 function geodir_add_listing_form_wrap_end( $listing_type = '', $post = array(), $package_info = array() ) {
     ?></div><?php
 }
-
-function geodir_replace_the_content( $content ) {
-    if ( !is_main_query() ) {
-        return $content;
-    }
-
-    if ( geodir_is_taxonomy() || geodir_is_post_type_archive() ) {
-        ob_start();
-        
-        geodir_get_template_part( 'listing/list' );
-
-        $content = ob_get_clean();
-    }
-
-    return $content;
-}

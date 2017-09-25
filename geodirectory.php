@@ -360,3 +360,18 @@ function GeoDir() {
 }
 // Global for backwards compatibility.
 $GLOBALS['geodirectory'] = GeoDir();
+
+add_filter('display_post_states','_gd_page_states',10,2);
+function _gd_page_states($post_states, $post ){
+
+    //print_r($post_states);
+    if($post->ID==geodir_home_page_id()){
+        $post_states['geodir_home_page'] = __('GD Home Page','geodirectory');
+    }elseif( $post->ID == geodir_add_listing_page_id() ){
+        $post_states['geodir_add_listing_page'] = __('Add listing page','geodirectory');
+    }elseif( $post->ID == geodir_add_listing_page_id() ){
+        $post_states['geodir_add_listing_page'] = __('Add listing page','geodirectory');
+    }
+
+    return $post_states;
+}

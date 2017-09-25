@@ -32,7 +32,7 @@ class GeoDir_Template_Loader {
      * @param mixed $template
      * @return string
      */
-    public static function template_loader( $template ) {
+    public static function template_loader( $template ) { //return $template;
         if ( is_embed() ) {
             return $template;
         }
@@ -62,12 +62,17 @@ class GeoDir_Template_Loader {
      * @return string
      */
     private static function get_template_loader_default_file() {
+
         if ( geodir_is_singular() ) {
             $default_file = 'single-listing.php';
         } elseif ( geodir_is_taxonomy() ) {
-            $default_file = 'page.php';
+            //$default_file = 'page.php'; // i think index.php works better here, more likely to have paging
+            $default_file = 'index.php';
+            self::setup_archive_loop_as_page();
         } elseif ( geodir_is_post_type_archive() ) {
-            $default_file = 'page.php';
+            //$default_file = 'page.php'; // i think index.php works better here, more likely to have paging
+            $default_file = 'index.php';
+            self::setup_archive_loop_as_page();
         } elseif ( geodir_is_page( 'author' ) ) {
             $default_file = 'author.php';
         } elseif ( geodir_is_page( 'home' ) ) {
@@ -85,6 +90,54 @@ class GeoDir_Template_Loader {
         }
 
         return $default_file;
+    }
+
+
+    public static function setup_archive_page_content(){
+
+        // remove our filter so we don't get stuck in a loop
+        remove_filter( 'the_content', array( __CLASS__, 'setup_archive_page_content' ) );
+
+        // reset the query count so the correct number of listings are output.
+        rewind_posts();
+
+        // reset the proper loop content
+        global $wp_query,$gd_temp_wp_query;
+        $wp_query->posts = $gd_temp_wp_query;
+
+        // run our own loop with the correct loop content
+        $content = geodir_get_template_part('listing', 'listview');
+
+        // add our filter back, not sure we even need to add it back if we are only running it once.
+        add_filter( 'the_content', array( __CLASS__, 'setup_archive_page_content' ) );
+
+        // fake the has_posts() to false so it will not loop any more.
+        $wp_query->current_post = $wp_query->post_count;
+
+        return $content;
+    }
+
+    public static function setup_archive_loop_as_page(){
+
+        // get the main query
+        global $wp_query;
+
+        // declare our global var so we can store the main query temporarily.
+        global $gd_temp_wp_query;
+
+        // Set our temp var with the main query posts.
+        $gd_temp_wp_query = $wp_query->posts;
+
+        // Set the main query to our archive page template
+        $archive_page_id = geodir_archive_page_id();
+        $archive_page = get_post($archive_page_id);
+        $wp_query->posts = array($archive_page);
+
+        //$wp_query->current_post = $wp_query->post_count-1;
+
+
+        // add the filter to call our own loop for the archive page content.
+        add_filter( 'the_content', array( __CLASS__, 'setup_archive_page_content' ) );
     }
 
     /**

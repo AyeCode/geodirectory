@@ -118,7 +118,9 @@ function geodir_create_pages() {
     geodir_create_page(esc_sql(_x('listing-success', 'page_slug', 'geodirectory')), 'geodir_success_page', __('Listing Success', 'geodirectory'), '');
     geodir_create_page(esc_sql(_x('location', 'page_slug', 'geodirectory')), 'geodir_location_page', __('Location', 'geodirectory'), '');
     geodir_create_page(esc_sql(_x('gd-info', 'page_slug', 'geodirectory')), 'geodir_info_page', __('Info', 'geodirectory'), '');
-    geodir_create_page(esc_sql(_x('gd-login', 'page_slug', 'geodirectory')), 'geodir_login_page', __('Login', 'geodirectory'), '');
+    geodir_create_page(esc_sql(_x('gd-archive', 'page_slug', 'geodirectory')), 'geodir_archive_page', __('GD Archive', 'geodirectory'), '');
+    geodir_create_page(esc_sql(_x('gd-search', 'page_slug', 'geodirectory')), 'geodir_search_page', __('GD Search', 'geodirectory'), '');
+    geodir_create_page(esc_sql(_x('gd-details', 'page_slug', 'geodirectory')), 'geodir_details_page', __('GD Details', 'geodirectory'), '');
 }
 
 /**

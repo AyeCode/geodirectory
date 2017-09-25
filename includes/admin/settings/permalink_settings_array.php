@@ -168,6 +168,27 @@ $geodir_settings['permalink_settings'] = apply_filters('geodir_permalink_setting
         'type' => 'single_select_page',
         'class' => 'chosen_select'
     ),
+    array(
+        'name' => __('Archive page', 'geodirectory'),
+        'desc' => __('Select the page to use for GD archives such as taxonomy and CPT pages', 'geodirectory'),
+        'id' => 'geodir_archive_page',
+        'type' => 'single_select_page',
+        'class' => 'chosen_select'
+    ),
+    array(
+        'name' => __('Search Page', 'geodirectory'),
+        'desc' => __('Select the page to use as the GD search page', 'geodirectory'),
+        'id' => 'geodir_search_page',
+        'type' => 'single_select_page',
+        'class' => 'chosen_select'
+    ),
+    array(
+        'name' => __('Details Page', 'geodirectory'),
+        'desc' => __('Select the page to use as the GD details page template', 'geodirectory'),
+        'id' => 'geodir_details_page',
+        'type' => 'single_select_page',
+        'class' => 'chosen_select'
+    ),
     array('type' => 'sectionend', 'id' => 'geodir_pages'),
     /* Listing Detail Permalink Settings End */
 )); // End Design settings

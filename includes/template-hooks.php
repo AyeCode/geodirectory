@@ -18,4 +18,3 @@ add_action( 'template_redirect', 'geodir_template_redirect' );
 add_action( 'geodir_add_listing_form_start', 'geodir_action_add_listing_page_mandatory', -10, 3 );
 add_action( 'geodir_before_add_listing_form', 'geodir_add_listing_form_wrap_start', 100.5, 3 );
 add_action( 'geodir_after_add_listing_form', 'geodir_add_listing_form_wrap_end', 100.5, 3 );
-add_filter( 'the_content', 'geodir_replace_the_content', 10, 1 );
