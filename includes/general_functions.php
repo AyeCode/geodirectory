@@ -3025,7 +3025,7 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 
 			if ( $addlisting_links != '' ) { ?>
 
-				<li><select id="geodir_add_listing" class="chosen_select" onchange="window.location.href=this.value"
+				<li><select id="geodir_add_listing" class="geodir-select" onchange="window.location.href=this.value"
 				            option-autoredirect="1" name="geodir_add_listing" option-ajaxchosen="false"
 				            data-placeholder="<?php echo esc_attr( __( 'Add Listing', 'geodirectory' ) ); ?>">
 						<option value="" disabled="disabled" selected="selected"
@@ -3075,7 +3075,7 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 			if ( $favourite_links != '' ) {
 				?>
 				<li>
-					<select id="geodir_my_favourites" class="chosen_select" onchange="window.location.href=this.value"
+					<select id="geodir_my_favourites" class="geodir-select" onchange="window.location.href=this.value"
 					        option-autoredirect="1" name="geodir_my_favourites" option-ajaxchosen="false"
 					        data-placeholder="<?php echo esc_attr( __( 'My Favorites', 'geodirectory' ) ); ?>">
 						<option value="" disabled="disabled" selected="selected"
@@ -3123,7 +3123,7 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 			if ( $listing_links != '' ) {
 				?>
 				<li>
-					<select id="geodir_my_listings" class="chosen_select" onchange="window.location.href=this.value"
+					<select id="geodir_my_listings" class="geodir-select" onchange="window.location.href=this.value"
 					        option-autoredirect="1" name="geodir_my_listings" option-ajaxchosen="false"
 					        data-placeholder="<?php echo esc_attr( __( 'My Listings', 'geodirectory' ) ); ?>">
 						<option value="" disabled="disabled" selected="selected"

@@ -215,7 +215,7 @@ class GeoDir_Widget_Best_Of extends WP_Widget {
             $is_dropdown = ($tab_layout == 'bestof-tabs-as-dropdown') ? true : false;
 
             if ($is_dropdown) {
-                $nav_html .= '<select id="geodir_bestof_tab_dd" class="chosen_select" name="geodir_bestof_tab_dd" data-placeholder="' . esc_attr(__('Select Category', 'geodirectory')) . '">';
+                $nav_html .= '<select id="geodir_bestof_tab_dd" class="geodir-select" name="geodir_bestof_tab_dd" data-placeholder="' . esc_attr(__('Select Category', 'geodirectory')) . '">';
             } else {
                 $nav_html .= '<dl class="geodir-tab-head geodir-bestof-cat-list">';
                 $nav_html .= '<dt></dt>';

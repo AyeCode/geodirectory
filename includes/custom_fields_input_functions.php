@@ -574,7 +574,7 @@ function geodir_cfi_select($html,$cf){
             }
             ?>
             <select field_type="<?php echo $cf['type'];?>" name="<?php echo $cf['name'];?>" id="<?php echo $cf['name'];?>"
-                    class="geodir_textfield textfield_x chosen_select"
+                    class="geodir_textfield textfield_x geodir-select"
                     data-placeholder="<?php echo __('Choose', 'geodirectory') . ' ' . $site_title . '&hellip;';?>"
                     option-ajaxchosen="false"><?php echo $select_options;?></select>
             <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
@@ -639,7 +639,7 @@ function geodir_cfi_multiselect($html,$cf){
             <?php if ($multi_display == 'select') { ?>
             <div class="geodir_multiselect_list">
                 <select field_type="<?php echo $cf['type']; ?>" name="<?php echo $cf['name']; ?>[]" id="<?php echo $cf['name']; ?>"
-                        multiple="multiple" class="geodir_textfield textfield_x chosen_select"
+                        multiple="multiple" class="geodir_textfield textfield_x geodir-select"
                         data-placeholder="<?php _e('Select', 'geodirectory'); ?>"
                         option-ajaxchosen="false">
                     <?php
@@ -1332,7 +1332,7 @@ function geodir_cfi_taxonomy($html,$cf){
                         if ($cat_display == 'multiselect')
                             $multiple = 'multiple="multiple"';
 
-                        echo '<select id="' . $name . '" ' . $multiple . ' type="' . $name . '" name="post_category[' . $name . '][]" alt="' . $name . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x chosen_select" data-placeholder="' . __('Select Category', 'geodirectory') . '">';
+                        echo '<select id="' . $name . '" ' . $multiple . ' type="' . $name . '" name="post_category[' . $name . '][]" alt="' . $name . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . __('Select Category', 'geodirectory') . '">';
 
 
                         if ($cat_display == 'select')

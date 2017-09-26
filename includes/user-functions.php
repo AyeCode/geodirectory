@@ -92,7 +92,7 @@ function geodir_user_show_favourites( $user_id = '', $output_type = 'select' ) {
             if($output_type=='select') {
                 ?>
                 <li>
-                    <select id="geodir_my_favourites" class="chosen_select" onchange="window.location.href=this.value"
+                    <select id="geodir_my_favourites" class="geodir-select" onchange="window.location.href=this.value"
                             option-autoredirect="1" name="geodir_my_favourites" option-ajaxchosen="false"
                             data-placeholder="<?php echo esc_attr(__('My Favorites', 'geodirectory')); ?>">
                         <option value="" disabled="disabled" selected="selected"
@@ -155,7 +155,7 @@ function geodir_user_show_listings( $user_id = '',$output_type = 'select') {
             if($output_type=='select') {
                 ?>
                 <li>
-                    <select id="geodir_my_listings" class="chosen_select" onchange="window.location.href=this.value"
+                    <select id="geodir_my_listings" class="geodir-select" onchange="window.location.href=this.value"
                             option-autoredirect="1" name="geodir_my_listings" option-ajaxchosen="false"
                             data-placeholder="<?php echo esc_attr(__('My Listings', 'geodirectory')); ?>">
                         <option value="" disabled="disabled" selected="selected"

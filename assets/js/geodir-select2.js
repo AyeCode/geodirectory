@@ -1,0 +1,76 @@
+/* global geodir_select2_params */
+jQuery(function($) {
+    function geodirSelect2FormatString() {
+        return {
+            'language': {
+                errorLoading: function() {
+                    // Workaround for https://github.com/select2/select2/issues/4355 instead of i18n_ajax_error.
+                    return geodir_select2_params.i18n_searching;
+                },
+                inputTooLong: function(args) {
+                    var overChars = args.input.length - args.maximum;
+                    if (1 === overChars) {
+                        return geodir_select2_params.i18n_input_too_long_1;
+                    }
+                    return geodir_select2_params.i18n_input_too_long_n.replace('%item%', overChars);
+                },
+                inputTooShort: function(args) {
+                    var remainingChars = args.minimum - args.input.length;
+                    if (1 === remainingChars) {
+                        return geodir_select2_params.i18n_input_too_short_1;
+                    }
+                    return geodir_select2_params.i18n_input_too_short_n.replace('%item%', remainingChars);
+                },
+                loadingMore: function() {
+                    return geodir_select2_params.i18n_load_more;
+                },
+                maximumSelected: function(args) {
+                    if (args.maximum === 1) {
+                        return geodir_select2_params.i18n_selection_too_long_1;
+                    }
+                    return geodir_select2_params.i18n_selection_too_long_n.replace('%item%', args.maximum);
+                },
+                noResults: function() {
+                    return geodir_select2_params.i18n_no_matches;
+                },
+                searching: function() {
+                    return geodir_select2_params.i18n_searching;
+                }
+            }
+        };
+    }
+    try {
+        $(document.body).on('geodir-select-init', function() {
+            // Regular select boxes
+            $(':input.geodir-select').filter(':not(.enhanced)').each(function() {
+                var select2_args = $.extend({
+                    minimumResultsForSearch: 10,
+                    allowClear: $(this).data('allow_clear') ? true : false,
+                    adaptDropdownCssClass: 'gdd',
+                    containerCssClass: 'gd-select2-container',
+                    dropdownCssClass: 'gd-select2-dropdown',
+                    placeholder: $(this).data('placeholder')
+                }, geodirSelect2FormatString());
+                $(this).select2(select2_args).addClass('enhanced');
+            });
+            $(':input.geodir-select-nostd').filter(':not(.enhanced)').each(function() {
+                var select2_args = $.extend({
+                    minimumResultsForSearch: 10,
+                    allowClear: true,
+                    adaptDropdownCssClass: 'gdd',
+                    containerCssClass: 'gd-select2-container',
+                    dropdownCssClass: 'gd-select2-dropdown',
+                    placeholder: $(this).data('placeholder')
+                }, geodirSelect2FormatString());
+                $(this).select2(select2_args).addClass('enhanced');
+            });
+        }).trigger('geodir-select-init');
+        $('html').on('click', function(event) {
+            if (this === event.target) {
+                $('.geodir-select').filter('.select2-hidden-accessible').select2('close');
+            }
+        });
+    } catch (err) {
+        window.console.log(err);
+    }
+});

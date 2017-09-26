@@ -19,9 +19,14 @@ if (!function_exists('geodir_admin_styles')) {
 
         wp_register_style('geodirectory-frontend-style', geodir_plugin_url() . '/assets/css/style.css', array(), GEODIRECTORY_VERSION);
         wp_enqueue_style('geodirectory-frontend-style');
+        
+        // select2
+        wp_register_style('select2', geodir_plugin_url() . '/assets/css/select2/select2.css', array(), GEODIRECTORY_VERSION);
+        wp_enqueue_style('select2');
 
-        wp_register_style('geodir-chosen-style', geodir_plugin_url() . '/assets/css/chosen.css', array(), GEODIRECTORY_VERSION);
-        wp_enqueue_style('geodir-chosen-style');
+        // TODO remove
+        //wp_register_style('geodir-chosen-style', geodir_plugin_url() . '/assets/css/chosen.css', array(), GEODIRECTORY_VERSION);
+        //wp_enqueue_style('geodir-chosen-style');
 
         wp_register_style('geodirectory-jquery-ui-timepicker-css', geodir_plugin_url() . '/assets/css/jquery.ui.timepicker.css', array(), GEODIRECTORY_VERSION);
         wp_enqueue_style('geodirectory-jquery-ui-timepicker-css');
@@ -69,8 +74,9 @@ if (!function_exists('geodir_admin_scripts')) {
      * @since 1.0.0
      * @package GeoDirectory
      */
-    function geodir_admin_scripts()
-    {
+    function geodir_admin_scripts() {
+        $suffix = '';//defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min'; // TODO
+
         $geodir_map_name = geodir_map_name();
         
         wp_enqueue_script('jquery');
@@ -79,9 +85,28 @@ if (!function_exists('geodir_admin_scripts')) {
 
         wp_register_script('chosen', geodir_plugin_url() . '/assets/js/chosen.jquery.js', array('jquery'), GEODIRECTORY_VERSION);
         wp_enqueue_script('chosen');
+        
+        // select2
+        wp_register_script( 'select2', geodir_plugin_url() . '/assets/js/select2/select2.full' . $suffix . '.js', array( 'jquery' ), '4.0.4' );
+        wp_register_script( 'geodir-select2', geodir_plugin_url() . '/assets/js/geodir-select2' . $suffix . '.js', array( 'jquery', 'select2' ), GEODIRECTORY_VERSION );
+        wp_localize_script( 'geodir-select2', 'geodir_select2_params', array(
+            'i18n_no_matches'           => _x( 'No matches found', 'geodir select', 'geodirectory' ),
+            'i18n_ajax_error'           => _x( 'Loading failed', 'geodir select', 'geodirectory' ),
+            'i18n_input_too_short_1'    => _x( 'Please enter 1 or more characters', 'geodir select', 'geodirectory' ),
+            'i18n_input_too_short_n'    => _x( 'Please enter %item% or more characters', 'geodir select', 'geodirectory' ),
+            'i18n_input_too_long_1'     => _x( 'Please delete 1 character', 'geodir select', 'geodirectory' ),
+            'i18n_input_too_long_n'     => _x( 'Please delete %item% characters', 'geodir select', 'geodirectory' ),
+            'i18n_selection_too_long_1' => _x( 'You can only select 1 item', 'geodir select', 'geodirectory' ),
+            'i18n_selection_too_long_n' => _x( 'You can only select %item% items', 'geodir select', 'geodirectory' ),
+            'i18n_load_more'            => _x( 'Loading more results&hellip;', 'geodir select', 'geodirectory' ),
+            'i18n_searching'            => _x( 'Searching&hellip;', 'geodir select', 'geodirectory' ),
+            'ajax_url'                  => admin_url( 'admin-ajax.php' ),
+        ) );
+        wp_enqueue_script( 'geodir-select2' );
 
-        wp_register_script('geodirectory-choose-ajax', geodir_plugin_url() . '/assets/js/ajax-chosen.js', array(), GEODIRECTORY_VERSION);
-        wp_enqueue_script('geodirectory-choose-ajax');
+        // TODO remove
+        //wp_register_script('geodirectory-choose-ajax', geodir_plugin_url() . '/assets/js/ajax-chosen.js', array(), GEODIRECTORY_VERSION);
+        //wp_enqueue_script('geodirectory-choose-ajax');
 
         if (isset($_REQUEST['listing_type'])) {
             wp_register_script('geodirectory-custom-fields-script', geodir_plugin_url() . '/assets/js/custom_fields.js', array(), GEODIRECTORY_VERSION);
@@ -1485,7 +1510,7 @@ function geodir_admin_fields($options)
                 <td class="forminp"><select name="<?php echo esc_attr($value['id']); ?>"
                                             style="<?php echo esc_attr($value['css']); ?>"
                                             data-placeholder="<?php _e('Choose a country&hellip;', 'geodirectory'); ?>"
-                                            title="Country" class="chosen_select">
+                                            title="Country" class="geodir-select">
                         <?php echo $geodirectory->countries->country_dropdown_options($country, $state); ?>
                     </select> <span class="description"><?php echo $value['desc'] ?></span>
                 </td>
@@ -1501,7 +1526,7 @@ function geodir_admin_fields($options)
                 <td class="forminp">
                     <select multiple="multiple" name="<?php echo esc_attr($value['id']); ?>[]" style="width:450px;"
                             data-placeholder="<?php _e('Choose countries&hellip;', 'geodirectory'); ?>"
-                            title="Country" class="chosen_select">
+                            title="Country" class="geodir-select">
                         <?php
                         if ($countries) foreach ($countries as $key => $val) :
                             echo '<option value="' . $key . '" ' . selected(in_array($key, $selections), true, false) . '>' . $val . '</option>';

@@ -26,8 +26,8 @@ add_action('wp_print_scripts', 'geodir_core_dequeue_script', 100);
  * @since 1.0.0
  * @package GeoDirectory
  */
-function geodir_templates_scripts()
-{
+function geodir_templates_scripts() {
+    $suffix = '';//defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min'; // TODO
     $is_detail_page = false;
     $geodir_map_name = geodir_map_name();
 
@@ -125,14 +125,33 @@ function geodir_templates_scripts()
     }
     wp_enqueue_script( 'jquery-ui-autocomplete' );
     
+    // select2
+    wp_register_script( 'select2', geodir_plugin_url() . '/assets/js/select2/select2.full' . $suffix . '.js', array( 'jquery' ), '4.0.4' );
+    wp_register_script( 'geodir-select', geodir_plugin_url() . '/assets/js/geodir-select' . $suffix . '.js', array( 'jquery', 'select2' ), GEODIRECTORY_VERSION );
+    wp_localize_script( 'geodir-select', 'geodir_select2_params', array(
+        'i18n_no_matches'           => _x( 'No matches found', 'geodir select', 'geodirectory' ),
+        'i18n_ajax_error'           => _x( 'Loading failed', 'geodir select', 'geodirectory' ),
+        'i18n_input_too_short_1'    => _x( 'Please enter 1 or more characters', 'geodir select', 'geodirectory' ),
+        'i18n_input_too_short_n'    => _x( 'Please enter %item% or more characters', 'geodir select', 'geodirectory' ),
+        'i18n_input_too_long_1'     => _x( 'Please delete 1 character', 'geodir select', 'geodirectory' ),
+        'i18n_input_too_long_n'     => _x( 'Please delete %item% characters', 'geodir select', 'geodirectory' ),
+        'i18n_selection_too_long_1' => _x( 'You can only select 1 item', 'geodir select', 'geodirectory' ),
+        'i18n_selection_too_long_n' => _x( 'You can only select %item% items', 'geodir select', 'geodirectory' ),
+        'i18n_load_more'            => _x( 'Loading more results&hellip;', 'geodir select', 'geodirectory' ),
+        'i18n_searching'            => _x( 'Searching&hellip;', 'geodir select', 'geodirectory' ),
+        'ajax_url'                  => admin_url( 'admin-ajax.php' ),
+    ) );
+    wp_enqueue_script( 'geodir-select' );
+    
     wp_register_script('geodirectory-goMap-script', geodir_plugin_url() . '/assets/js/goMap.min.js', array(), GEODIRECTORY_VERSION, true);
     wp_enqueue_script('geodirectory-goMap-script');
 
-    wp_register_script('chosen', geodir_plugin_url() . '/assets/js/chosen.jquery.min.js', array(), GEODIRECTORY_VERSION);
-    wp_enqueue_script('chosen');
+    // TODO remove
+    //wp_register_script('chosen', geodir_plugin_url() . '/assets/js/chosen.jquery.min.js', array(), GEODIRECTORY_VERSION);
+    //wp_enqueue_script('chosen');
 
-    wp_register_script('geodirectory-choose-ajax', geodir_plugin_url() . '/assets/js/ajax-chosen.min.js', array(), GEODIRECTORY_VERSION);
-    wp_enqueue_script('geodirectory-choose-ajax');
+    //wp_register_script('geodirectory-choose-ajax', geodir_plugin_url() . '/assets/js/ajax-chosen.min.js', array(), GEODIRECTORY_VERSION);
+    //wp_enqueue_script('geodirectory-choose-ajax');
 
     wp_enqueue_script('geodirectory-jquery-ui-timepicker-js', geodir_plugin_url() . '/assets/js/jquery.ui.timepicker.min.js', array('jquery-ui-datepicker', 'jquery-ui-slider', 'jquery-effects-core', 'jquery-effects-slide'), '', true);
 

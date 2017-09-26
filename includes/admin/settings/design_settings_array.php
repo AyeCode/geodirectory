@@ -138,7 +138,7 @@ $geodir_settings['design_settings'] = apply_filters( 'geodir_design_settings', a
         'css' => 'min-width:300px;',
         'std' => 'gridview_onehalf',
         'type' => 'select',
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => $listing_view_options
     ),
     array(
@@ -185,7 +185,7 @@ $geodir_settings['design_settings'] = apply_filters( 'geodir_design_settings', a
         'css' => 'min-width:300px;',
         'std' => 'gridview_onehalf',
         'type' => 'select',
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => geodir_listing_image_size_arr()
     ),
     array(
@@ -214,7 +214,7 @@ $geodir_settings['design_settings'] = apply_filters( 'geodir_design_settings', a
         'css' => 'min-width:300px;',
         'std' => 'publish',
         'type' => 'select',
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => array_unique(array(
             'publish' => __('publish', 'geodirectory'),
             'draft' => __('draft', 'geodirectory'),
@@ -247,7 +247,7 @@ $geodir_settings['design_settings'] = apply_filters( 'geodir_design_settings', a
         'std' => array(),
         'type' => 'multiselect',
         'placeholder_text' => __('Select post types', 'geodirectory'),
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => $post_type_options
     ),
     array('type' => 'sectionend', 'id' => 'geodir_add_listing_gen_settings'),
@@ -289,7 +289,7 @@ $geodir_settings['design_settings'] = apply_filters( 'geodir_design_settings', a
         'css' => 'min-width:300px;',
         'std' => 'gridview_onehalf',
         'type' => 'select',
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => $listing_view_options
     ),
     array(
@@ -329,7 +329,7 @@ $geodir_settings['design_settings'] = apply_filters( 'geodir_design_settings', a
         'css' => 'min-width:300px;',
         'std' => '',
         'type' => 'select',
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => array(
             '' => __('Never Display', 'geodirectory'),
             'after' => __('After Pagination', 'geodirectory'),
@@ -454,7 +454,7 @@ $geodir_settings['design_settings'] = apply_filters( 'geodir_design_settings', a
         'std' => $gd_post_types,
         'type' => 'multiselect',
         'placeholder_text' => __('Select tabs', 'geodirectory'),
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => array_unique(geodir_detail_page_tabs_key_value_array())
     ),
     array(
@@ -507,7 +507,7 @@ $geodir_settings['design_settings'] = apply_filters( 'geodir_design_settings', a
         'std' => $gd_post_types,
         'type' => 'multiselect',
         'placeholder_text' => __('Select post types', 'geodirectory'),
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => $post_type_options
     ),
     array(
@@ -517,7 +517,7 @@ $geodir_settings['design_settings'] = apply_filters( 'geodir_design_settings', a
         'css' => 'min-width:300px;',
         'std' => 'category',
         'type' => 'select',
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => array_unique(array(
             'category' => __('Categories', 'geodirectory'),
             'tags' => __('Tags', 'geodirectory'),
@@ -530,7 +530,7 @@ $geodir_settings['design_settings'] = apply_filters( 'geodir_design_settings', a
         'css' => 'min-width:300px;',
         'std' => 'gridview_onehalf',
         'type' => 'select',
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => $listing_view_options
     ),
     array(
@@ -540,7 +540,7 @@ $geodir_settings['design_settings'] = apply_filters( 'geodir_design_settings', a
         'css' => 'min-width:300px;',
         'std' => 'latest',
         'type' => 'select',
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => array_unique(array(
             'latest' => __('Latest', 'geodirectory'),
             'featured' => __('Featured', 'geodirectory'),
@@ -605,7 +605,7 @@ $geodir_settings['design_settings'] = apply_filters( 'geodir_design_settings', a
         'css' => 'min-width:300px;',
         'std' => 'gridview_onehalf',
         'type' => 'select',
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => $listing_view_options
     ),
     array(
@@ -666,7 +666,7 @@ $geodir_settings['design_settings'] = apply_filters( 'geodir_design_settings', a
         'std' => array(),
         'type' => 'multiselect',
         'placeholder_text' => __('Select menu locations', 'geodirectory'),
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => array_unique(geodir_get_theme_menu_locations())
     ),
     array('type' => 'sectionend', 'id' => 'geodir_navigation_options'),
@@ -703,7 +703,7 @@ $geodir_settings['design_settings'] = apply_filters( 'geodir_design_settings', a
         'std' => array(),
         'type' => 'multiselect',
         'placeholder_text' => __('Select post types', 'geodirectory'),
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => $post_type_options
     ),
     array(
@@ -715,7 +715,7 @@ $geodir_settings['design_settings'] = apply_filters( 'geodir_design_settings', a
         'std' => $gd_post_types,
         'type' => 'multiselect',
         'placeholder_text' => __('Select post types', 'geodirectory'),
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => $post_type_options
     ),
     array(
@@ -727,7 +727,7 @@ $geodir_settings['design_settings'] = apply_filters( 'geodir_design_settings', a
         'std' => $gd_post_types,
         'type' => 'multiselect',
         'placeholder_text' => __('Select post types', 'geodirectory'),
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => $post_type_options
     ),
     array(
@@ -739,7 +739,7 @@ $geodir_settings['design_settings'] = apply_filters( 'geodir_design_settings', a
         'std' => array(),
         'type' => 'multiselect',
         'placeholder_text' => __('Select post types', 'geodirectory'),
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => $post_type_options
     ),
     array(
@@ -750,7 +750,7 @@ $geodir_settings['design_settings'] = apply_filters( 'geodir_design_settings', a
         'css' => 'min-width:300px;',
         'std' => $gd_post_types,
         'type' => 'multiselect',
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => $post_type_options
     ),
     array('type' => 'sectionend', 'id' => 'geodir_post_type_navigation_layout'),
@@ -765,7 +765,7 @@ $geodir_settings['design_settings'] = apply_filters( 'geodir_design_settings', a
         'std' => $gd_post_types,
         'type' => 'multiselect',
         'placeholder_text' => __('Select post types', 'geodirectory'),
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => $post_type_options
     ),
     array(
@@ -777,7 +777,7 @@ $geodir_settings['design_settings'] = apply_filters( 'geodir_design_settings', a
         'std' => $gd_post_types,
         'type' => 'multiselect',
         'placeholder_text' => __('Select post types', 'geodirectory'),
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => $post_type_options
     ),
     array(
@@ -789,7 +789,7 @@ $geodir_settings['design_settings'] = apply_filters( 'geodir_design_settings', a
         'std' => $gd_post_types,
         'type' => 'multiselect',
         'placeholder_text' => __('Select post types', 'geodirectory'),
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => $post_type_options
     ),
     array('type' => 'sectionend', 'id' => 'geodir_user_dashboard_post_type'),
@@ -884,7 +884,7 @@ $geodir_settings['design_settings'] = apply_filters( 'geodir_design_settings', a
         'std' => '',
         'type' => 'multiselect',
         'placeholder_text' => __('Select category', 'geodirectory'),
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => geodir_home_map_cats_key_value_array()
     ),
     array(

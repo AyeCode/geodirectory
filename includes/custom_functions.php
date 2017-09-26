@@ -3104,7 +3104,7 @@ function geodir_wpml_duplicate_settings( $settings = array() ) {
                 'std' => '',
                 'type' => 'multiselect',
                 'placeholder_text' => __('Select post types', 'geodirectory'),
-                'class' => 'chosen_select',
+                'class' => 'geodir-select',
                 'options' => geodir_post_type_options()
             );
         }
