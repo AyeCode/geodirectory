@@ -46,7 +46,6 @@ jQuery(function($) {
                 var select2_args = $.extend({
                     minimumResultsForSearch: 10,
                     allowClear: $(this).data('allow_clear') ? true : false,
-                    adaptDropdownCssClass: 'gdd',
                     containerCssClass: 'gd-select2-container',
                     dropdownCssClass: 'gd-select2-dropdown',
                     placeholder: $(this).data('placeholder')
@@ -57,7 +56,6 @@ jQuery(function($) {
                 var select2_args = $.extend({
                     minimumResultsForSearch: 10,
                     allowClear: true,
-                    adaptDropdownCssClass: 'gdd',
                     containerCssClass: 'gd-select2-container',
                     dropdownCssClass: 'gd-select2-dropdown',
                     placeholder: $(this).data('placeholder')
