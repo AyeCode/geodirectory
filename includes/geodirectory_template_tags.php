@@ -127,8 +127,8 @@ function geodir_templates_scripts() {
     
     // select2
     wp_register_script( 'select2', geodir_plugin_url() . '/assets/js/select2/select2.full' . $suffix . '.js', array( 'jquery' ), '4.0.4' );
-    wp_register_script( 'geodir-select', geodir_plugin_url() . '/assets/js/geodir-select' . $suffix . '.js', array( 'jquery', 'select2' ), GEODIRECTORY_VERSION );
-    wp_localize_script( 'geodir-select', 'geodir_select2_params', array(
+    wp_register_script( 'geodir-select2', geodir_plugin_url() . '/assets/js/geodir-select2' . $suffix . '.js', array( 'jquery', 'select2' ), GEODIRECTORY_VERSION );
+    wp_localize_script( 'geodir-select2', 'geodir_select2_params', array(
         'i18n_no_matches'           => _x( 'No matches found', 'geodir select', 'geodirectory' ),
         'i18n_ajax_error'           => _x( 'Loading failed', 'geodir select', 'geodirectory' ),
         'i18n_input_too_short_1'    => _x( 'Please enter 1 or more characters', 'geodir select', 'geodirectory' ),
@@ -141,7 +141,7 @@ function geodir_templates_scripts() {
         'i18n_searching'            => _x( 'Searching&hellip;', 'geodir select', 'geodirectory' ),
         'ajax_url'                  => admin_url( 'admin-ajax.php' ),
     ) );
-    wp_enqueue_script( 'geodir-select' );
+    wp_enqueue_script( 'geodir-select2' );
     
     wp_register_script('geodirectory-goMap-script', geodir_plugin_url() . '/assets/js/goMap.min.js', array(), GEODIRECTORY_VERSION, true);
     wp_enqueue_script('geodirectory-goMap-script');
@@ -325,9 +325,11 @@ add_filter('clean_url', 'geodir_add_async_forscript', 11, 1);
  * @since 1.0.0
  * @package GeoDirectory
  */
-function geodir_templates_styles()
-{
-
+function geodir_templates_styles() {
+    // TODO combie in core file
+    wp_register_style('geodir-select2', geodir_plugin_url() . '/assets/css/geodir-select2.css', array('select2'), GEODIRECTORY_VERSION);
+    wp_enqueue_style('geodir-select2');
+        
     wp_register_style('geodir-core-scss', geodir_plugin_url() . '/assets/css/gd_core_frontend.css', array(), GEODIRECTORY_VERSION);
     wp_enqueue_style('geodir-core-scss');
     wp_register_style('geodir-core-scss-footer', geodir_plugin_url() . '/assets/css/gd_core_frontend_footer.css', array(), GEODIRECTORY_VERSION);

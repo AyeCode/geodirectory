@@ -23,6 +23,9 @@ if (!function_exists('geodir_admin_styles')) {
         // select2
         wp_register_style('select2', geodir_plugin_url() . '/assets/css/select2/select2.css', array(), GEODIRECTORY_VERSION);
         wp_enqueue_style('select2');
+        
+        wp_register_style('geodir-select2', geodir_plugin_url() . '/assets/css/geodir-select2.css', array('select2'), GEODIRECTORY_VERSION);
+        wp_enqueue_style('geodir-select2');
 
         // TODO remove
         //wp_register_style('geodir-chosen-style', geodir_plugin_url() . '/assets/css/chosen.css', array(), GEODIRECTORY_VERSION);

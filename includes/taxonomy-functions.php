@@ -917,21 +917,25 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
                             jQuery('#' + cat_taxonomy).find('.cat_sublist').append(data);
 
                             setTimeout(function () {
-                                jQuery('#' + cat_taxonomy).find('.cat_sublist').find('.chosen_select').chosen();
+                                jQuery('#' + cat_taxonomy).find('.cat_sublist').find('.geodir-select').trigger('geodir-select-init');
                             }, 200);
 
 
                         }
                         maincat_obj = jQuery('#' + cat_taxonomy).find('.main_cat_list');
 
-                        if (cat_limit != '' && jQuery('#' + cat_taxonomy).find('.cat_sublist .chosen_select').length >= cat_limit) {
-                            maincat_obj.find('.chosen_select').chosen('destroy');
+                        if (cat_limit != '' && jQuery('#' + cat_taxonomy).find('.cat_sublist .geodir-select').length >= cat_limit) {
+                            if (maincat_obj.find('.geodir-select').data('select2')) {
+                                maincat_obj.find('.geodir-select').removeClass('enhanced').select2('destroy');
+                            }
                             maincat_obj.hide();
                         } else {
                             maincat_obj.show();
-                            maincat_obj.find('.chosen_select').chosen('destroy');
-                            maincat_obj.find('.chosen_select').prop('selectedIndex', 0);
-                            maincat_obj.find('.chosen_select').chosen();
+                            if (maincat_obj.find('.geodir-select').data('select2')) {
+                                maincat_obj.find('.geodir-select').removeClass('enhanced').select2('destroy');
+                            }
+                            maincat_obj.find('.geodir-select').prop('selectedIndex', 0);
+                            maincat_obj.find('.geodir-select').trigger('geodir-select-init');
                         }
 
                         update_listing_cat();
@@ -963,8 +967,8 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
                 jQuery('#' + cat_taxonomy).find('.cat_sublist > div').each(function () {
                     main_cat = jQuery(this).find('.listing_main_cat').val();
 
-                    if (jQuery(this).find('.chosen_select').length > 0)
-                        sub_cat = jQuery(this).find('.chosen_select').val()
+                    if (jQuery(this).find('.geodir-select').length > 0)
+                        sub_cat = jQuery(this).find('.geodir-select').val()
 
                     if (post_cat_str != '')
                         post_cat_str = post_cat_str + '#';
@@ -993,16 +997,20 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
 
                 maincat_obj = jQuery('#' + cat_taxonomy).find('.main_cat_list');
                 if (cat_limit != '' && jQuery('#' + cat_taxonomy).find('.cat_sublist > div.post_catlist_item').length >= cat_limit && cat_limit != 0) {
-                    maincat_obj.find('.chosen_select').chosen('destroy');
+                    if (maincat_obj.find('.geodir-select').data('select2')) {
+                        maincat_obj.find('.geodir-select').removeClass('enhanced').select2('destroy');
+                    }
                     maincat_obj.hide();
                 } else {
                     maincat_obj.show();
-                    maincat_obj.find('.chosen_select').chosen('destroy');
-                    maincat_obj.find('.chosen_select').prop('selectedIndex', 0);
-                    maincat_obj.find('.chosen_select').chosen();
+                    if (maincat_obj.find('.geodir-select').data('select2')) {
+                        maincat_obj.find('.geodir-select').removeClass('enhanced').select2('destroy');
+                    }
+                    maincat_obj.find('.geodir-select').prop('selectedIndex', 0);
+                    maincat_obj.find('.geodir-select').trigger('geodir-select-init');
                 }
 
-                maincat_obj.find('.chosen_select').trigger("chosen:updated");
+                //maincat_obj.find('.chosen_select').trigger("chosen:updated");
                 jQuery('#' + cat_taxonomy).find('#post_category').val(cat_ids);
                 jQuery('#' + cat_taxonomy).find('#post_category_str').val(post_cat_str);
             }
