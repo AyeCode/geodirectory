@@ -1073,35 +1073,23 @@ function geodir_addpost_categories_html($request_taxonomy, $parrent, $selected =
 
         <?php $main_cat = get_term($parrent, $request_taxonomy); ?>
 
-        <div class="post_catlist_item" style="border:1px solid #CCCCCC; margin:5px auto; padding:5px;">
-            <img alt="move icon" src="<?php echo geodir_plugin_url() . '/assets/images/move.png';?>"
-                 onclick="jQuery(this).closest('div').remove();update_listing_cat(this);" align="right"/>
-            <?php /* ?>
-		<img src="<?php echo geodir_plugin_url().'/assets/images/move.png';?>" onclick="jQuery(this).closest('div').remove();show_subcatlist();" align="right" /> 
-		<?php */ ?>
-
-            <input type="checkbox" value="<?php echo $main_cat->term_id;?>" class="listing_main_cat"
-                   onchange="if(jQuery(this).is(':checked')){jQuery(this).closest('div').find('.post_default_category').prop('checked',false).show();}else{jQuery(this).closest('div').find('.post_default_category').prop('checked',false).hide();};update_listing_cat()"
-                   checked="checked" disabled="disabled"/>
-       <span> 
-        <?php printf(__('Add listing in %s category', 'geodirectory'), geodir_ucwords($main_cat->name));?>
-        </span>
-            <br/>
-
-            <div class="post_default_category">
-                <input type="radio" name="post_default_category" value="<?php echo $main_cat->term_id;?>"
-                       onchange="update_listing_cat()" <?php if ($default) echo ' checked="checked" ';?>   />
-        <span> 
-        <?php printf(__('Set %s as default category', 'geodirectory'), geodir_ucwords($main_cat->name));?>
-        </span>
+        <div class="post_catlist_item">
+            <span class="gd-catlist-remove" onclick="jQuery(this).closest('div').remove();update_listing_cat(this);"><i class="fa fa-times"></i></span>
+            <div class="gd-catlist-chkbox gd-catlist-row">
+                <input type="checkbox" value="<?php echo $main_cat->term_id;?>" class="listing_main_cat" onchange="if(jQuery(this).is(':checked')){jQuery(this).closest('div').find('.post_default_category').prop('checked',false).show();}else{jQuery(this).closest('div').find('.post_default_category').prop('checked',false).hide();};update_listing_cat()" checked="checked" disabled="disabled"/> 
+                <span> <?php printf(__('Add listing in %s category', 'geodirectory'), geodir_ucwords($main_cat->name));?></span>
             </div>
-
-            <br/>
+            <div class="post_default_category gd-catlist-row">
+                <input id="post_default_category" type="radio" name="post_default_category" value="<?php echo $main_cat->term_id;?>" onchange="update_listing_cat()" <?php if ($default) echo ' checked="checked" ';?> /> 
+                <span><?php printf(__('Set %s as default category', 'geodirectory'), geodir_ucwords($main_cat->name));?> </span>
+            </div>
             <?php
             $cat_terms = get_terms($request_taxonomy, array('parent' => $main_cat->term_id, 'hide_empty' => false, 'exclude' => $exclude_cats));
             if (!empty($cat_terms)) { ?>
-                <span> <?php printf(__('Add listing in category', 'geodirectory')); ?></span>
-                <?php geodir_get_catlist($request_taxonomy, $parrent, $selected) ?>
+                <div class="gd-catlist-subcatlist gd-catlist-row">
+                    <span> <?php printf(__('Add listing in category', 'geodirectory')); ?></span>
+                    <?php geodir_get_catlist($request_taxonomy, $parrent, $selected) ?>
+                </div>
             <?php } ?>
         </div>
 

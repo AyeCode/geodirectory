@@ -327,6 +327,9 @@ add_filter('clean_url', 'geodir_add_async_forscript', 11, 1);
  */
 function geodir_templates_styles() {
     // TODO combie in core file
+    wp_register_style('select2', geodir_plugin_url() . '/assets/css/select2/select2.css', array(), GEODIRECTORY_VERSION);
+    wp_enqueue_style('select2');
+        
     wp_register_style('geodir-select2', geodir_plugin_url() . '/assets/css/geodir-select2.css', array('select2'), GEODIRECTORY_VERSION);
     wp_enqueue_style('geodir-select2');
         

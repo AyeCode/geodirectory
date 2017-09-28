@@ -117,77 +117,88 @@ $geodir_settings['permalink_settings'] = apply_filters('geodir_permalink_setting
         'desc' => __('Select the page to use for the GD homepage (you must also set this page in Settings>Reading>Front page for it to work)', 'geodirectory'),
         'id' => 'geodir_home_page',
         'type' => 'single_select_page',
-        'class' => 'geodir-select'
+        'class' => 'geodir-select',
+        'css' => 'min-width:300px;'
     ),
     array(
         'name' => __('Add listing page', 'geodirectory'),
         'desc' => __('Select the page to use for adding listings', 'geodirectory'),
         'id' => 'geodir_add_listing_page',
         'type' => 'single_select_page',
-        'class' => 'geodir-select'
+        'class' => 'geodir-select',
+        'css' => 'min-width:300px;'
     ),
     array(
         'name' => __('Listing preview page', 'geodirectory'),
         'desc' => __('Select the page to use for listing preview', 'geodirectory'),
         'id' => 'geodir_preview_page',
         'type' => 'single_select_page',
-        'class' => 'geodir-select'
+        'class' => 'geodir-select',
+        'css' => 'min-width:300px;'
     ),
     array(
         'name' => __('Listing success page', 'geodirectory'),
         'desc' => __('Select the page to use for listing success', 'geodirectory'),
         'id' => 'geodir_success_page',
         'type' => 'single_select_page',
-        'class' => 'geodir-select'
+        'class' => 'geodir-select',
+        'css' => 'min-width:300px;'
     ),
     array(
         'name' => __('Location page', 'geodirectory'),
         'desc' => __('Select the page to use for locations', 'geodirectory'),
         'id' => 'geodir_location_page',
         'type' => 'single_select_page',
-        'class' => 'geodir-select'
+        'class' => 'geodir-select',
+        'css' => 'min-width:300px;'
     ),
     array(
         'name' => __('Terms and Conditions page', 'geodirectory'),
         'desc' => __('Select the page to use for Terms and Conditions (if enabled)', 'geodirectory'),
         'id' => 'geodir_term_condition_page',
         'type' => 'single_select_page',
-        'class' => 'geodir-select'
+        'class' => 'geodir-select',
+        'css' => 'min-width:300px;'
     ),
     array(
         'name' => __('Info page', 'geodirectory'),
         'desc' => __('Select the page to use for Gd general Info', 'geodirectory'),
         'id' => 'geodir_info_page',
         'type' => 'single_select_page',
-        'class' => 'geodir-select'
+        'class' => 'geodir-select',
+        'css' => 'min-width:300px;'
     ),
     array(
         'name' => __('Login page', 'geodirectory'),
         'desc' => __('Select the page to use for Login / Register', 'geodirectory'),
         'id' => 'geodir_login_page',
         'type' => 'single_select_page',
-        'class' => 'geodir-select'
+        'class' => 'geodir-select',
+        'css' => 'min-width:300px;'
     ),
     array(
         'name' => __('Archive page', 'geodirectory'),
         'desc' => __('Select the page to use for GD archives such as taxonomy and CPT pages', 'geodirectory'),
         'id' => 'geodir_archive_page',
         'type' => 'single_select_page',
-        'class' => 'geodir-select'
+        'class' => 'geodir-select',
+        'css' => 'min-width:300px;'
     ),
     array(
         'name' => __('Search Page', 'geodirectory'),
         'desc' => __('Select the page to use as the GD search page', 'geodirectory'),
         'id' => 'geodir_search_page',
         'type' => 'single_select_page',
-        'class' => 'geodir-select'
+        'class' => 'geodir-select',
+        'css' => 'min-width:300px;'
     ),
     array(
         'name' => __('Details Page', 'geodirectory'),
         'desc' => __('Select the page to use as the GD details page template', 'geodirectory'),
         'id' => 'geodir_details_page',
         'type' => 'single_select_page',
-        'class' => 'geodir-select'
+        'class' => 'geodir-select',
+        'css' => 'min-width:300px;'
     ),
     array('type' => 'sectionend', 'id' => 'geodir_pages'),
     /* Listing Detail Permalink Settings End */

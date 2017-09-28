@@ -48,7 +48,6 @@ jQuery(function($) {
                     allowClear: $(this).data('allow_clear') ? true : false,
                     containerCssClass: 'gd-select2-selection',
                     dropdownCssClass: 'gd-select2-dropdown',
-                    dropdownAutoWidth: true,
                     placeholder: $(this).data('placeholder')
                 }, geodirSelect2FormatString());
                 var $select2 = $(this).select2(select2_args);
