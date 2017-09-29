@@ -3172,3 +3172,30 @@ function geodir_listing_view_options() {
     
     return apply_filters( 'geodir_listing_view_options', $options );
 }
+
+/**
+ * Get the search page base url.
+ *
+ * @since 1.6.24
+ *
+ * @return string Filtered url.
+ */
+function geodir_search_page_base_url() {
+    if ( function_exists( 'geodir_location_geo_home_link' ) ) {
+        remove_filter( 'home_url', 'geodir_location_geo_home_link', 100000 );
+    }
+
+    if ( defined( 'DOING_AJAX' ) && DOING_AJAX && geodir_is_wpml() ) {
+        $url = icl_get_home_url();
+    } else {
+        $url = get_home_url();
+    }
+
+    $url = trailingslashit( $url );
+
+    if ( function_exists( 'geodir_location_geo_home_link' ) ) {
+        add_filter( 'home_url', 'geodir_location_geo_home_link', 100000, 2 );
+    }
+
+    return apply_filters( 'geodir_search_page_base_url', $url );
+}

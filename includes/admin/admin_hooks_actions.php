@@ -78,7 +78,6 @@ add_action('geodir_before_update_options', 'geodir_before_update_options',10,2);
  *
  * @since 1.0.0
  * @since 1.6.0 Changes to work category icon and default image uploader for WP 4.5.
- * @since 1.6.3 Modified to fix jQuery chosen js conflicts.
  * @since 1.6.16 Fixed VC editor conflicts for GD post types.
  * @package GeoDirectory
  * @global string $pagenow The current screen.

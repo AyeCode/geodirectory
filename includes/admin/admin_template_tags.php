@@ -248,14 +248,9 @@ if (!function_exists('geodir_admin_panel')) {
                         ui.item.removeAttr('style');
                     }
                 });
-
-                // Chosen selects
-                jQuery("select.chosen_select").chosen();
-
-                jQuery("select.chosen_select_nostd").chosen({
-                    allow_single_deselect: 'true'
-                });
-
+                
+                jQuery("select.geodir-select").trigger('geodir-select-init');
+                jQuery("select.geodir-select-nostd").trigger('geodir-select-init');
             });
         </script>
     <?php

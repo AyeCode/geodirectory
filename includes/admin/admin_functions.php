@@ -14,22 +14,15 @@ if (!function_exists('geodir_admin_styles')) {
      * @package GeoDirectory
      */
     function geodir_admin_styles() {
+        // select2
+        wp_register_style('select2', geodir_plugin_url() . '/assets/css/select2/select2.css', array(), GEODIRECTORY_VERSION);
+        wp_enqueue_style('select2');
+        
         wp_register_style('geodirectory-admin-css', geodir_plugin_url() . '/assets/css/admin.css', array(), GEODIRECTORY_VERSION);
         wp_enqueue_style('geodirectory-admin-css');
 
         wp_register_style('geodirectory-frontend-style', geodir_plugin_url() . '/assets/css/style.css', array(), GEODIRECTORY_VERSION);
         wp_enqueue_style('geodirectory-frontend-style');
-        
-        // select2
-        wp_register_style('select2', geodir_plugin_url() . '/assets/css/select2/select2.css', array(), GEODIRECTORY_VERSION);
-        wp_enqueue_style('select2');
-        
-        wp_register_style('geodir-select2', geodir_plugin_url() . '/assets/css/geodir-select2.css', array('select2'), GEODIRECTORY_VERSION);
-        wp_enqueue_style('geodir-select2');
-
-        // TODO remove
-        //wp_register_style('geodir-chosen-style', geodir_plugin_url() . '/assets/css/chosen.css', array(), GEODIRECTORY_VERSION);
-        //wp_enqueue_style('geodir-chosen-style');
 
         wp_register_style('geodirectory-jquery-ui-timepicker-css', geodir_plugin_url() . '/assets/css/jquery.ui.timepicker.css', array(), GEODIRECTORY_VERSION);
         wp_enqueue_style('geodirectory-jquery-ui-timepicker-css');
@@ -78,38 +71,17 @@ if (!function_exists('geodir_admin_scripts')) {
      * @package GeoDirectory
      */
     function geodir_admin_scripts() {
-        $suffix = '';//defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min'; // TODO
+        $suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
         $geodir_map_name = geodir_map_name();
         
         wp_enqueue_script('jquery');
 
-        wp_enqueue_script('geodirectory-jquery-ui-timepicker-js', geodir_plugin_url() . '/assets/js/jquery.ui.timepicker.js', array('jquery-ui-datepicker', 'jquery-ui-slider'), '', true);
-
-        wp_register_script('chosen', geodir_plugin_url() . '/assets/js/chosen.jquery.js', array('jquery'), GEODIRECTORY_VERSION);
-        wp_enqueue_script('chosen');
-        
         // select2
         wp_register_script( 'select2', geodir_plugin_url() . '/assets/js/select2/select2.full' . $suffix . '.js', array( 'jquery' ), '4.0.4' );
-        wp_register_script( 'geodir-select2', geodir_plugin_url() . '/assets/js/geodir-select2' . $suffix . '.js', array( 'jquery', 'select2' ), GEODIRECTORY_VERSION );
-        wp_localize_script( 'geodir-select2', 'geodir_select2_params', array(
-            'i18n_no_matches'           => _x( 'No matches found', 'geodir select', 'geodirectory' ),
-            'i18n_ajax_error'           => _x( 'Loading failed', 'geodir select', 'geodirectory' ),
-            'i18n_input_too_short_1'    => _x( 'Please enter 1 or more characters', 'geodir select', 'geodirectory' ),
-            'i18n_input_too_short_n'    => _x( 'Please enter %item% or more characters', 'geodir select', 'geodirectory' ),
-            'i18n_input_too_long_1'     => _x( 'Please delete 1 character', 'geodir select', 'geodirectory' ),
-            'i18n_input_too_long_n'     => _x( 'Please delete %item% characters', 'geodir select', 'geodirectory' ),
-            'i18n_selection_too_long_1' => _x( 'You can only select 1 item', 'geodir select', 'geodirectory' ),
-            'i18n_selection_too_long_n' => _x( 'You can only select %item% items', 'geodir select', 'geodirectory' ),
-            'i18n_load_more'            => _x( 'Loading more results&hellip;', 'geodir select', 'geodirectory' ),
-            'i18n_searching'            => _x( 'Searching&hellip;', 'geodir select', 'geodirectory' ),
-            'ajax_url'                  => admin_url( 'admin-ajax.php' ),
-        ) );
-        wp_enqueue_script( 'geodir-select2' );
+        wp_enqueue_script( 'select2' );
 
-        // TODO remove
-        //wp_register_script('geodirectory-choose-ajax', geodir_plugin_url() . '/assets/js/ajax-chosen.js', array(), GEODIRECTORY_VERSION);
-        //wp_enqueue_script('geodirectory-choose-ajax');
+        wp_enqueue_script('geodirectory-jquery-ui-timepicker-js', geodir_plugin_url() . '/assets/js/jquery.ui.timepicker.js', array('jquery-ui-datepicker', 'jquery-ui-slider'), '', true);
 
         if (isset($_REQUEST['listing_type'])) {
             wp_register_script('geodirectory-custom-fields-script', geodir_plugin_url() . '/assets/js/custom_fields.js', array(), GEODIRECTORY_VERSION);
@@ -1644,7 +1616,6 @@ function geodir_admin_fields($options)
                 jQuery('.gd-content-heading').hide();
                 jQuery('#sub_' + tab_id).show();
                 jQuery('.active_tab').val(tab_id);
-                jQuery("select.chosen_select").trigger("chosen:updated"); //refresh chosen
             });
 
             <?php if (isset($_REQUEST['active_tab']) && $_REQUEST['active_tab'] != '') { ?>
@@ -6247,24 +6218,16 @@ function geodir_imex_export_skip_statuses() {
 }
 
 /**
- * Dequeue jQuery chosen javascript.
- * 
- * Fix conflicts between jQuery chosen javascripts.
+ * Fix javascript conflicts.
  *
  * @package GeoDirectory
  * @since 1.6.3
- * @since 1.6.16 Fix Fusion Builder jQuery chosen conflicts with GD jQuery chosen.
- *               Fix Ultimate VC Addons script conflict.
+ * @since 1.6.16 Fix Ultimate VC Addons script conflict.
  *
  * @global string $typenow Current post type.
  */
 function geodir_admin_dequeue_scripts() {
     global $typenow;
-    
-    // EDD
-    if (wp_script_is('jquery-chosen', 'enqueued')) {
-        wp_dequeue_script('jquery-chosen');
-    }
     
     // Ultimate Addons for Visual Composer
     if (wp_script_is('ultimate-vc-backend-script', 'enqueued')) {
@@ -6274,21 +6237,6 @@ function geodir_admin_dequeue_scripts() {
     // VC editor conflicts
     if (class_exists('Vc_Role_Access_Controller') && wp_script_is('dfd_vc_damin_scripts', 'enqueued')) {
         wp_dequeue_script('dfd_vc_damin_scripts');
-    }
-    
-    // Ultimate chosen
-    if (wp_script_is('ultimate-chosen-script', 'enqueued')) {
-        wp_dequeue_script('ultimate-chosen-script');
-    }
-    
-    // Crum composer choosen
-    if (wp_script_is('crum-composer-choosen', 'enqueued')) {
-        wp_dequeue_script('crum-composer-choosen');
-    }
-    
-    // Fix conflict Fusion Builder jquery chosen with GD jquery chosen.
-    if (class_exists('FusionBuilder') && wp_script_is('fusion_builder_chosen_js', 'enqueued')) {
-        wp_dequeue_script('fusion_builder_chosen_js');
     }
     
     // Fix conflicts timepicker & setting date value.

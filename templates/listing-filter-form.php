@@ -12,42 +12,24 @@
  */
 global $wp_query, $current_term, $query;
 
-if (function_exists('geodir_location_geo_home_link')) {
-    remove_filter('home_url', 'geodir_location_geo_home_link', 100000);
-}
-
-if (geodir_is_wpml() && defined('DOING_AJAX') && DOING_AJAX){
-    $search_url = icl_get_home_url();
-} else {
-    $search_url = get_home_url();
-}
-
-$search_url = trailingslashit($search_url);
-
-if (function_exists('geodir_location_geo_home_link')) {
-    add_filter('home_url', 'geodir_location_geo_home_link', 100000, 2);
-}
-
 $new_style = geodir_get_option('geodir_show_search_old_search_from') ? false : true;
 $form_class = 'geodir-listing-search';
 
-if($new_style){
+if ( $new_style ) {
     $form_class .= ' gd-search-bar-style';
 }
-?>
-<form class="<?php
+
 /**
  * Filters the GD search form class.
  *
  * @since 1.0.0
  * @param string $form_class The class for the search form, default: 'geodir-listing-search'.
  */
-echo apply_filters('geodir_search_form_class', $form_class); ?> "
-      name="geodir-listing-search" action="<?php echo $search_url ?>" method="get">
-    <input type="hidden" name="geodir_search" value="1"/>
-
+$form_class = apply_filters('geodir_search_form_class', $form_class);
+?>
+<form class="<?php echo $form_class; ?>" name="geodir-listing-search" action="<?php echo geodir_search_page_base_url(); ?>" method="get">
+    <input type="hidden" name="geodir_search" value="1" />
     <div class="geodir-loc-bar">
-
         <?php
         /**
          * Called inside the search form but before any of the fields.

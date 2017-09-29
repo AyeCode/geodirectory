@@ -1010,7 +1010,6 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
                     maincat_obj.find('.geodir-select').trigger('geodir-select-init');
                 }
 
-                //maincat_obj.find('.chosen_select').trigger("chosen:updated");
                 jQuery('#' + cat_taxonomy).find('#post_category').val(cat_ids);
                 jQuery('#' + cat_taxonomy).find('#post_category_str').val(post_cat_str);
             }
