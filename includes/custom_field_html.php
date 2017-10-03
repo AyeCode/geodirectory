@@ -459,7 +459,7 @@ if(isset($cf['name']) && $cf['name']){
                         <select multiple="multiple" name="show_in[]"
                                 id="show_in"
                                 style="min-width:300px;"
-                                class="chosen_select"
+                                class="geodir-select"
                                 data-placeholder="<?php _e('Select locations', 'geodirectory'); ?>"
                                 option-ajaxchosen="false">
                             <?php

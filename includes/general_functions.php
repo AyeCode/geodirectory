@@ -3025,7 +3025,7 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 
 			if ( $addlisting_links != '' ) { ?>
 
-				<li><select id="geodir_add_listing" class="chosen_select" onchange="window.location.href=this.value"
+				<li><select id="geodir_add_listing" class="geodir-select" onchange="window.location.href=this.value"
 				            option-autoredirect="1" name="geodir_add_listing" option-ajaxchosen="false"
 				            data-placeholder="<?php echo esc_attr( __( 'Add Listing', 'geodirectory' ) ); ?>">
 						<option value="" disabled="disabled" selected="selected"
@@ -3075,7 +3075,7 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 			if ( $favourite_links != '' ) {
 				?>
 				<li>
-					<select id="geodir_my_favourites" class="chosen_select" onchange="window.location.href=this.value"
+					<select id="geodir_my_favourites" class="geodir-select" onchange="window.location.href=this.value"
 					        option-autoredirect="1" name="geodir_my_favourites" option-ajaxchosen="false"
 					        data-placeholder="<?php echo esc_attr( __( 'My Favorites', 'geodirectory' ) ); ?>">
 						<option value="" disabled="disabled" selected="selected"
@@ -3123,7 +3123,7 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 			if ( $listing_links != '' ) {
 				?>
 				<li>
-					<select id="geodir_my_listings" class="chosen_select" onchange="window.location.href=this.value"
+					<select id="geodir_my_listings" class="geodir-select" onchange="window.location.href=this.value"
 					        option-autoredirect="1" name="geodir_my_listings" option-ajaxchosen="false"
 					        data-placeholder="<?php echo esc_attr( __( 'My Listings', 'geodirectory' ) ); ?>">
 						<option value="" disabled="disabled" selected="selected"
@@ -3225,6 +3225,7 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
  *
  * @since   1.0.0
  * @since   1.5.1 View all link fixed for location filter disabled.
+ * @since   1.6.24 View all link should go to search page with near me selected.
  * @package GeoDirectory
  * @global object $post                    The current post object.
  * @global string $gridview_columns_widget The girdview style of the listings for widget.
@@ -3373,6 +3374,7 @@ function geodir_popular_postview_output( $args = '', $instance = '' ) {
 		$location_url[] = $city;
 	}
 
+	$location_allowed = function_exists( 'geodir_cpt_no_location' ) && geodir_cpt_no_location( $post_type ) ? false : true;
 	$location_url  = implode( '/', $location_url );
 	$skip_location = false;
 	if ( ! $add_location_filter && $gd_session->get( 'gd_multi_location' ) ) {
@@ -3380,25 +3382,41 @@ function geodir_popular_postview_output( $args = '', $instance = '' ) {
 		$gd_session->un_set( 'gd_multi_location' );
 	}
 
-	if ( get_option( 'permalink_structure' ) ) {
-		$viewall_url = get_post_type_archive_link( $post_type );
+	if ( $location_allowed && $add_location_filter && $gd_session->get( 'all_near_me' ) && geodir_is_page( 'location' ) ) {
+		$viewall_url = add_query_arg( array( 
+			'geodir_search' => 1, 
+			'stype' => $post_type,
+			's' => '',
+			'snear' => __( 'Near:', 'geodiradvancesearch' ) . ' ' . __( 'Me', 'geodiradvancesearch' ),
+			'sgeo_lat' => $gd_session->get( 'user_lat' ),
+			'sgeo_lon' => $gd_session->get( 'user_lon' )
+		), geodir_search_page_base_url() );
+
+		if ( ! empty( $category ) && !in_array( '0', $category ) ) {
+			$viewall_url = add_query_arg( array( 's' . $post_type . 'category' => $category ), $viewall_url );
+		}
 	} else {
-		$viewall_url = get_post_type_archive_link( $post_type );
-	}
-
-	if ( ! empty( $category ) && $category[0] != '0' ) {
-		global $geodir_add_location_url;
-
-		$geodir_add_location_url = '0';
-
-		if ( $add_location_filter != '0' ) {
-			$geodir_add_location_url = '1';
+		if ( get_option( 'permalink_structure' ) ) {
+			$viewall_url = get_post_type_archive_link( $post_type );
+		} else {
+			$viewall_url = get_post_type_archive_link( $post_type );
 		}
 
-		$viewall_url = get_term_link( (int) $category[0], $post_type . 'category' );
+		if ( ! empty( $category ) && $category[0] != '0' ) {
+			global $geodir_add_location_url;
 
-		$geodir_add_location_url = null;
+			$geodir_add_location_url = '0';
+
+			if ( $add_location_filter != '0' ) {
+				$geodir_add_location_url = '1';
+			}
+
+			$viewall_url = get_term_link( (int) $category[0], $post_type . 'category' );
+
+			$geodir_add_location_url = null;
+		}
 	}
+
 	if ( $skip_location ) {
 		$gd_session->set( 'gd_multi_location', 1 );
 	}

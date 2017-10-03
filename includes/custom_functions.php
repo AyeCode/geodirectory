@@ -1944,46 +1944,52 @@ function geodir_exif( $file ) {
  *
  * @since   1.0.0
  * @since   1.6.21 Recent reviews doesn't working well with WPML.
+ * @since   2.0.0 Location filter & current post type filter added.
  * @package GeoDirectory
  *
  * @global object $wpdb        WordPress Database object.
- * @global object $gd_session  GeoDirectory Session object.
  *
  * @param int $g_size          Optional. Avatar size in pixels. Default 60.
  * @param int $no_comments     Optional. Number of reviews you want to display. Default: 10.
  * @param int $comment_lenth   Optional. Maximum number of characters you want to display. After that read more link
  *                             will appear.
  * @param bool $show_pass_post Optional. Not yet implemented.
+ * @param string $post_type    The post type.
+ * @param bool $add_location_filter Whether the location filter is active. Default false.
  *
  * @return string Returns the recent reviews html.
  */
-function geodir_get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_lenth = 60, $show_pass_post = false ) {
-	global $wpdb, $tablecomments, $tableposts, $rating_table_name, $gd_session, $table_prefix;
+function geodir_get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_lenth = 60, $show_pass_post = false, $post_type = '', $add_location_filter = false ) {
+	global $wpdb, $tablecomments, $tableposts, $rating_table_name, $table_prefix;
 	$tablecomments = $wpdb->comments;
 	$tableposts    = $wpdb->posts;
-
 	$comments_echo  = '';
-	$city_filter    = '';
-	$region_filter  = '';
-	$country_filter = '';
-
-	if ( $gd_session->get( 'gd_multi_location' ) ) {
-		if ( $gd_ses_country = $gd_session->get( 'gd_country' ) ) {
-			$country_filter = $wpdb->prepare( " AND r.post_country=%s ", str_replace( "-", " ", $gd_ses_country ) );
-		}
-
-		if ( $gd_ses_region = $gd_session->get( 'gd_region' ) ) {
-			$region_filter = $wpdb->prepare( " AND r.post_region=%s ", str_replace( "-", " ", $gd_ses_region ) );
-		}
-
-		if ( $gd_ses_city = $gd_session->get( 'gd_city' ) ) {
-			$city_filter = $wpdb->prepare( " AND r.post_city=%s ", str_replace( "-", " ", $gd_ses_city ) );
-		}
-	}
-	
 	$join = '';
 	$where = '';
-	
+
+	if ( !empty( $post_type ) ) {
+		$where .= $wpdb->prepare( " AND r.post_type = %s", $post_type );
+	}
+
+	$location_allowed = !empty( $post_type ) && function_exists( 'geodir_cpt_no_location' ) && geodir_cpt_no_location( $post_type ) ? false : true;
+	if ( $location_allowed && $add_location_filter && defined( 'GEODIRLOCATION_VERSION' ) ) {
+		$source = geodir_is_page( 'search' ) ? 'session' : 'query_vars';
+		$location_terms = geodir_get_current_location_terms( $source );
+		$country = !empty( $location_terms['gd_country'] ) ? get_actual_location_name( 'country', $location_terms['gd_country'] ) : '';
+		$region = !empty( $location_terms['gd_region'] ) ? get_actual_location_name( 'region', $location_terms['gd_region'] ) : '';
+		$city = !empty( $location_terms['gd_city'] ) ? get_actual_location_name( 'city', $location_terms['gd_city'] ) : '';
+
+		if ( $country ) {
+			$where .= $wpdb->prepare( " AND r.post_country LIKE %s", $country );
+		}
+		if ( $region ) {
+			$where .= $wpdb->prepare( " AND r.post_region LIKE %s", $region );
+		}
+		if ( $city ) {
+			$where .= $wpdb->prepare( " AND r.post_city LIKE %s", $city );
+		}
+	}
+
 	if (geodir_is_wpml()) {
 		$lang_code = ICL_LANGUAGE_CODE;
 		
@@ -3104,7 +3110,7 @@ function geodir_wpml_duplicate_settings( $settings = array() ) {
                 'std' => '',
                 'type' => 'multiselect',
                 'placeholder_text' => __('Select post types', 'geodirectory'),
-                'class' => 'chosen_select',
+                'class' => 'geodir-select',
                 'options' => geodir_post_type_options()
             );
         }
@@ -3171,4 +3177,31 @@ function geodir_listing_view_options() {
     );
     
     return apply_filters( 'geodir_listing_view_options', $options );
+}
+
+/**
+ * Get the search page base url.
+ *
+ * @since 1.6.24
+ *
+ * @return string Filtered url.
+ */
+function geodir_search_page_base_url() {
+    if ( function_exists( 'geodir_location_geo_home_link' ) ) {
+        remove_filter( 'home_url', 'geodir_location_geo_home_link', 100000 );
+    }
+
+    if ( defined( 'DOING_AJAX' ) && DOING_AJAX && geodir_is_wpml() ) {
+        $url = icl_get_home_url();
+    } else {
+        $url = get_home_url();
+    }
+
+    $url = trailingslashit( $url );
+
+    if ( function_exists( 'geodir_location_geo_home_link' ) ) {
+        add_filter( 'home_url', 'geodir_location_geo_home_link', 100000, 2 );
+    }
+
+    return apply_filters( 'geodir_search_page_base_url', $url );
 }

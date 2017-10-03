@@ -917,21 +917,25 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
                             jQuery('#' + cat_taxonomy).find('.cat_sublist').append(data);
 
                             setTimeout(function () {
-                                jQuery('#' + cat_taxonomy).find('.cat_sublist').find('.chosen_select').chosen();
+                                jQuery('#' + cat_taxonomy).find('.cat_sublist').find('.geodir-select').trigger('geodir-select-init');
                             }, 200);
 
 
                         }
                         maincat_obj = jQuery('#' + cat_taxonomy).find('.main_cat_list');
 
-                        if (cat_limit != '' && jQuery('#' + cat_taxonomy).find('.cat_sublist .chosen_select').length >= cat_limit) {
-                            maincat_obj.find('.chosen_select').chosen('destroy');
+                        if (cat_limit != '' && jQuery('#' + cat_taxonomy).find('.cat_sublist .geodir-select').length >= cat_limit) {
+                            if (maincat_obj.find('.geodir-select').data('select2')) {
+                                maincat_obj.find('.geodir-select').removeClass('enhanced').select2('destroy');
+                            }
                             maincat_obj.hide();
                         } else {
                             maincat_obj.show();
-                            maincat_obj.find('.chosen_select').chosen('destroy');
-                            maincat_obj.find('.chosen_select').prop('selectedIndex', 0);
-                            maincat_obj.find('.chosen_select').chosen();
+                            if (maincat_obj.find('.geodir-select').data('select2')) {
+                                maincat_obj.find('.geodir-select').removeClass('enhanced').select2('destroy');
+                            }
+                            maincat_obj.find('.geodir-select').prop('selectedIndex', 0);
+                            maincat_obj.find('.geodir-select').trigger('geodir-select-init');
                         }
 
                         update_listing_cat();
@@ -963,8 +967,8 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
                 jQuery('#' + cat_taxonomy).find('.cat_sublist > div').each(function () {
                     main_cat = jQuery(this).find('.listing_main_cat').val();
 
-                    if (jQuery(this).find('.chosen_select').length > 0)
-                        sub_cat = jQuery(this).find('.chosen_select').val()
+                    if (jQuery(this).find('.geodir-select').length > 0)
+                        sub_cat = jQuery(this).find('.geodir-select').val()
 
                     if (post_cat_str != '')
                         post_cat_str = post_cat_str + '#';
@@ -993,16 +997,19 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
 
                 maincat_obj = jQuery('#' + cat_taxonomy).find('.main_cat_list');
                 if (cat_limit != '' && jQuery('#' + cat_taxonomy).find('.cat_sublist > div.post_catlist_item').length >= cat_limit && cat_limit != 0) {
-                    maincat_obj.find('.chosen_select').chosen('destroy');
+                    if (maincat_obj.find('.geodir-select').data('select2')) {
+                        maincat_obj.find('.geodir-select').removeClass('enhanced').select2('destroy');
+                    }
                     maincat_obj.hide();
                 } else {
                     maincat_obj.show();
-                    maincat_obj.find('.chosen_select').chosen('destroy');
-                    maincat_obj.find('.chosen_select').prop('selectedIndex', 0);
-                    maincat_obj.find('.chosen_select').chosen();
+                    if (maincat_obj.find('.geodir-select').data('select2')) {
+                        maincat_obj.find('.geodir-select').removeClass('enhanced').select2('destroy');
+                    }
+                    maincat_obj.find('.geodir-select').prop('selectedIndex', 0);
+                    maincat_obj.find('.geodir-select').trigger('geodir-select-init');
                 }
 
-                maincat_obj.find('.chosen_select').trigger("chosen:updated");
                 jQuery('#' + cat_taxonomy).find('#post_category').val(cat_ids);
                 jQuery('#' + cat_taxonomy).find('#post_category_str').val(post_cat_str);
             }
@@ -1065,35 +1072,23 @@ function geodir_addpost_categories_html($request_taxonomy, $parrent, $selected =
 
         <?php $main_cat = get_term($parrent, $request_taxonomy); ?>
 
-        <div class="post_catlist_item" style="border:1px solid #CCCCCC; margin:5px auto; padding:5px;">
-            <img alt="move icon" src="<?php echo geodir_plugin_url() . '/assets/images/move.png';?>"
-                 onclick="jQuery(this).closest('div').remove();update_listing_cat(this);" align="right"/>
-            <?php /* ?>
-		<img src="<?php echo geodir_plugin_url().'/assets/images/move.png';?>" onclick="jQuery(this).closest('div').remove();show_subcatlist();" align="right" /> 
-		<?php */ ?>
-
-            <input type="checkbox" value="<?php echo $main_cat->term_id;?>" class="listing_main_cat"
-                   onchange="if(jQuery(this).is(':checked')){jQuery(this).closest('div').find('.post_default_category').prop('checked',false).show();}else{jQuery(this).closest('div').find('.post_default_category').prop('checked',false).hide();};update_listing_cat()"
-                   checked="checked" disabled="disabled"/>
-       <span> 
-        <?php printf(__('Add listing in %s category', 'geodirectory'), geodir_ucwords($main_cat->name));?>
-        </span>
-            <br/>
-
-            <div class="post_default_category">
-                <input type="radio" name="post_default_category" value="<?php echo $main_cat->term_id;?>"
-                       onchange="update_listing_cat()" <?php if ($default) echo ' checked="checked" ';?>   />
-        <span> 
-        <?php printf(__('Set %s as default category', 'geodirectory'), geodir_ucwords($main_cat->name));?>
-        </span>
+        <div class="post_catlist_item">
+            <span class="gd-catlist-remove" onclick="jQuery(this).closest('div').remove();update_listing_cat(this);"><i class="fa fa-times"></i></span>
+            <div class="gd-catlist-chkbox gd-catlist-row">
+                <input type="checkbox" value="<?php echo $main_cat->term_id;?>" class="listing_main_cat" onchange="if(jQuery(this).is(':checked')){jQuery(this).closest('div').find('.post_default_category').prop('checked',false).show();}else{jQuery(this).closest('div').find('.post_default_category').prop('checked',false).hide();};update_listing_cat()" checked="checked" disabled="disabled"/> 
+                <span> <?php printf(__('Add listing in %s category', 'geodirectory'), geodir_ucwords($main_cat->name));?></span>
             </div>
-
-            <br/>
+            <div class="post_default_category gd-catlist-row">
+                <input id="post_default_category" type="radio" name="post_default_category" value="<?php echo $main_cat->term_id;?>" onchange="update_listing_cat()" <?php if ($default) echo ' checked="checked" ';?> /> 
+                <span><?php printf(__('Set %s as default category', 'geodirectory'), geodir_ucwords($main_cat->name));?> </span>
+            </div>
             <?php
             $cat_terms = get_terms($request_taxonomy, array('parent' => $main_cat->term_id, 'hide_empty' => false, 'exclude' => $exclude_cats));
             if (!empty($cat_terms)) { ?>
-                <span> <?php printf(__('Add listing in category', 'geodirectory')); ?></span>
-                <?php geodir_get_catlist($request_taxonomy, $parrent, $selected) ?>
+                <div class="gd-catlist-subcatlist gd-catlist-row">
+                    <span> <?php printf(__('Add listing in category', 'geodirectory')); ?></span>
+                    <?php geodir_get_catlist($request_taxonomy, $parrent, $selected) ?>
+                </div>
             <?php } ?>
         </div>
 
@@ -1185,7 +1180,7 @@ function geodir_get_catlist($cat_taxonomy, $parrent = 0, $selected = false)
         if (!$selected)
             $option_slected = ' selected="selected" ';
 
-        echo '<select field_type="select" id="' . sanitize_text_field($cat_taxonomy) . '" class="chosen_select" ' . $onchange . ' option-ajaxChosen="false" >';
+        echo '<select field_type="select" id="' . sanitize_text_field($cat_taxonomy) . '" class="geodir-select" ' . $onchange . ' option-ajaxChosen="false" >';
 
         echo '<option value="" ' . $option_selected . ' >' . __('Select Category', 'geodirectory') . '</option>';
 

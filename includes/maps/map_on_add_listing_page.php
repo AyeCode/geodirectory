@@ -467,6 +467,7 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
         }
         if (set_map_val_in_fields) {
             if (getCountry) {
+                /* TODO multilocations */
                 jQuery('#<?php echo $prefix .'country'; ?> option[value=""]').attr("selected",false);
                 jQuery('#<?php echo $prefix.'country';?> option[data-country_code="' + getCountryISO + '"]').attr("selected", true);
                 jQuery("#<?php echo $prefix.'country';?>").trigger("chosen:updated");

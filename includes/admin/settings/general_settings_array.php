@@ -80,7 +80,7 @@ $general_options = apply_filters('geodir_general_options', array(
         'std' => '',
         'type' => 'multiselect',
         'placeholder_text' => __('Select post types', 'geodirectory'),
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => geodir_post_type_options()
     ),
     array(
@@ -153,7 +153,7 @@ $google_analytic_settings = apply_filters('geodir_google_analytic_settings', arr
         'css' => 'min-width:300px;',
         'std' => 'gridview_onehalf',
         'type' => 'select',
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => geodir_gd_accounts()
     ),
     array(
@@ -267,7 +267,7 @@ $search_settings = apply_filters('geodir_search_settings', array(
         'css' => 'min-width:300px;',
         'std' => 'gridview_onehalf',
         'type' => 'select',
-        'class' => 'chosen_select',
+        'class' => 'geodir-select',
         'options' => array_unique(array(
             '0' => __('Disabled', 'geodirectory'),
             '1' => __('1 Character words excluded', 'geodirectory'),

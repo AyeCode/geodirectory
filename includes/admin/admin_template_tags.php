@@ -248,14 +248,9 @@ if (!function_exists('geodir_admin_panel')) {
                         ui.item.removeAttr('style');
                     }
                 });
-
-                // Chosen selects
-                jQuery("select.chosen_select").chosen();
-
-                jQuery("select.chosen_select_nostd").chosen({
-                    allow_single_deselect: 'true'
-                });
-
+                
+                jQuery("select.geodir-select").trigger('geodir-select-init');
+                jQuery("select.geodir-select-nostd").trigger('geodir-select-init');
             });
         </script>
     <?php
@@ -433,7 +428,7 @@ function geodir_admin_option_form($tab_name) {
 
                                     $country_result = isset($location_result->country) ? $location_result->country : '';
                                     ?>
-                                    <select id="<?php echo $prefix ?>country" class="chosen_select"
+                                    <select id="<?php echo $prefix ?>country" class="geodir-select"
                                             data-location_type="country" name="<?php echo $prefix ?>country"
                                             data-placeholder="<?php _e('Choose a country.', 'geodirectory');?>"
                                             data-addsearchtermonnorecord="1" data-ajaxchosen="0" data-autoredirect="0"
