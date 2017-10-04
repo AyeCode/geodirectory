@@ -89,6 +89,22 @@ jQuery(document).ready(function() {
     jQuery('.gd-import-export [data-type="date"]').each(function() {
         jQuery(this).datepicker({changeMonth: true, changeYear: true, dateFormat:'yy-mm-dd'});
     });
+    jQuery('#gd-wrapper-main .wp-editor-wrap').each(function() {
+        var elH = parseFloat(jQuery(this).find('.wp-editor-container').height());
+        if (elH > 30) {
+            jQuery(this).find('.wp-editor-container').attr('data-height', elH);
+        }
+    });
+    setTimeout(function() {
+        jQuery('#gd-wrapper-main .wp-editor-wrap').each(function() {
+            var elH = parseFloat(jQuery(this).find('.wp-editor-container').attr('data-height'));
+            if (elH > 30) {
+                jQuery(this).find('iframe').css({
+                    'height': elH + 'px'
+                });
+            }
+        });
+    }, 1000);
 });
 /* Check Uncheck All Related Options End*/
 

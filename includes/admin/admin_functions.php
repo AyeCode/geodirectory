@@ -863,9 +863,8 @@ function geodir_post_information_save($post_id, $post) {
  * @global object $sitepress Sitepress WPML object.
  * @param array $options The options array.
  */
-function geodir_admin_fields($options)
-{
-    global $geodirectory;
+function geodir_admin_fields($options) {
+    global $geodirectory, $geodir_options;
 
     $first_title = true;
     $tab_id = '';
@@ -1409,25 +1408,30 @@ function geodir_admin_fields($options)
                 break;
 
             case 'editor':
+                if ( isset( $geodir_options[ $value['id'] ] ) ) {
+                    $option_value = $geodir_options[ $value['id'] ];
+
+                    if ( empty( $args['allow_blank'] ) && empty( $option_value ) ) {
+                        $option_value = isset( $value['std'] ) ? $value['std'] : '';
+                    }
+                } else {
+                    $option_value = isset( $value['std'] ) ? $value['std'] : '';
+                }
+                
+                $wpautop = isset( $value['wpautop'] ) ? $value['wpautop'] : true;
+                $media_buttons = !empty( $value['media_buttons'] ) ? true : false;
+                $rows = !empty( $value['size'] ) ? absint( $value['size'] ) : 10;
+                $editor_settings = array( 'wpautop' => $wpautop, 'textarea_name' => esc_attr( $value['id'] ), 'media_buttons' => $media_buttons, 'textarea_rows' => $rows );
                 ?>
                 <tr valign="top">
                 <th scope="row" class="titledesc"><?php echo $value['name'] ?></th>
-                <td class="forminp"><?php
-                    if (geodir_get_option($value['id']))
-                        $content = stripslashes(geodir_get_option($value['id']));
-                    else
-                        $content = $value['std'];
-
-                    $editor_settings = array('media_buttons' => false, 'textarea_rows' => 10);
-
-                    wp_editor($content, esc_attr($value['id']), $editor_settings);
-
-                    ?> <span class="description"><?php echo $value['desc'] ?></span>
-
+                <td class="forminp">
+                    <?php wp_editor( stripslashes( $option_value ), esc_attr( $value['id'] ), $editor_settings ); ?>
+                    <span class="description"><?php echo $value['desc'] ?></span>
                 </td>
-                </tr><?php
+                </tr>
+                <?php
                 break;
-
             case 'single_select_page' :
                 // WPML
 				$switch_lang = false;

@@ -1099,3 +1099,94 @@ function geodir_default_rating_icon( $full_path = false ) {
     
     return apply_filters( 'geodir_default_rating_icon', $icon, $full_path );
 }
+
+function geodir_check_notify_moderator( $maybe_notify, $comment_id ) {
+    $comment = get_comment( $comment_id );
+
+    if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
+        $maybe_notify = (bool)geodir_get_option( 'geodir_notify_comment_moderation' );
+    }
+
+    return $maybe_notify;
+}
+add_filter( 'notify_moderator', 'geodir_check_notify_moderator', 99999, 2 );
+
+function geodir_comment_moderation_recipients( $emails, $comment_id ) {
+    $comment = get_comment( $comment_id );
+
+    if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
+        $emails = array( get_option( 'admin_email' ) );
+    }
+    
+    return $emails;
+}
+add_filter( 'comment_moderation_recipients', 'geodir_comment_moderation_recipients', 10, 2 );
+
+function geodir_comment_moderation_subject( $subject, $comment_id ) {
+    $comment = get_comment( $comment_id );
+
+    if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
+        $subject = geodir_email_get_subject( 'geodir_notify_comment_moderation' );
+    }
+    
+    return $subject;
+}
+add_filter( 'comment_moderation_subject', 'geodir_comment_moderation_subject', 10, 2 );
+
+function geodir_comment_moderation_text( $message, $comment_id ) {
+    $comment = get_comment( $comment_id );
+
+    if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
+        global $geodir_email_search, $geodir_email_replace;
+        
+        if ( empty( $geodir_email_search ) ) {
+            $geodir_email_search = array();
+        }
+        
+        if ( empty( $geodir_email_replace ) ) {
+            $geodir_email_replace = array();
+        }
+        
+        $geodir_email_search['listing_title'] = '[#listing_title#]';
+        $geodir_email_search['listing_url'] = '[#listing_url#]';
+        $geodir_email_search['listing_link'] = '[#listing_link#]';
+        $geodir_email_search['comment_ID'] = '[#comment_ID#]';
+        $geodir_email_search['comment_author'] = '[#comment_author#]';
+        $geodir_email_search['comment_author_IP'] = '[#comment_author_IP#]';
+        $geodir_email_search['comment_author_email'] = '[#comment_author_email#]';
+        $geodir_email_search['comment_content'] = '[#comment_content#]';
+        $geodir_email_search['comment_approve_link'] = '[#comment_approve_link#]';
+        $geodir_email_search['comment_trash_link'] = '[#comment_trash_link#]';
+        $geodir_email_search['comment_spam_link'] = '[#comment_spam_link#]';
+        $geodir_email_search['comment_moderation_link'] = '[#comment_moderation_link#]';
+        
+        $geodir_email_replace['listing_title'] = get_the_title( $comment->comment_post_ID );
+        $geodir_email_replace['listing_url'] = get_permalink( $comment->comment_post_ID );
+        $geodir_email_replace['listing_link'] = '<a href="' . esc_url( $geodir_email_replace['listing_url'] ) . '">' . $geodir_email_replace['listing_title'] . '</a>';
+        $geodir_email_replace['comment_ID'] = $comment_id;
+        $geodir_email_replace['comment_author'] = $comment->comment_author;
+        $geodir_email_replace['comment_author_IP'] = $comment->comment_author_IP;
+        $geodir_email_replace['comment_author_email'] = $comment->comment_author_email;
+        $geodir_email_replace['comment_content'] = wp_specialchars_decode( $comment->comment_content );
+        $geodir_email_replace['comment_approve_link'] = admin_url( "comment.php?action=approve&c={$comment_id}#wpbody-content" );
+        $geodir_email_replace['comment_trash_link'] = admin_url( "comment.php?action=trash&c={$comment_id}#wpbody-content" );
+        $geodir_email_replace['comment_spam_link'] = admin_url( "comment.php?action=spam&c={$comment_id}#wpbody-content" );
+        $geodir_email_replace['comment_moderation_link'] = admin_url( "edit-comments.php?comment_status=moderated#wpbody-content" );
+        
+        $message = geodir_email_get_content( 'geodir_notify_comment_moderation' );
+    }
+    
+    return $message;
+}
+add_filter( 'comment_moderation_text', 'geodir_comment_moderation_text', 10, 2 );
+
+function geodir_comment_moderation_headers( $headers, $comment_id ) {
+    $comment = get_comment( $comment_id );
+
+    if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
+        $headers =  geodir_email_get_headers();
+    }
+    
+    return $headers;
+}
+add_filter( 'comment_moderation_headers', 'geodir_comment_moderation_headers', 10, 2 );
