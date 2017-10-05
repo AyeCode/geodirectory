@@ -146,13 +146,11 @@ function geodir_retrieve_password() {
     $message = '<p><b>' . __('Your login Information :', 'geodirectory') . '</b></p>';
     $message .= '<p>' . sprintf(__('Username: %s', 'geodirectory'), $user->user_login) . "</p>";
     $message .= '<p>' . sprintf(__('Password: %s', 'geodirectory'), $new_pass) . "</p>";
-    //$message .= '<p>You can login to : <a href="'.home_url().'/?ptype=login' . "\">Login</a> or the URL is :  ".home_url()."/?ptype=login</p>";
-    //$message .= '<p>Thank You,<br> '.get_option('blogname').'</p>';
     $user_email = $user_data->user_email;
     $user_name = geodir_get_client_name($user->ID);
     $fromEmail = geodir_get_mail_from();
     $fromEmailName = geodir_get_mail_from_name();
-    $title = sprintf(__('[%s] Your new password', 'geodirectory'), get_option('blogname'));
+    $title = sprintf(__('[%s] Your new password', 'geodirectory'), geodir_get_blogname());
     /**
      * Filter the password reset email subject part.
      *

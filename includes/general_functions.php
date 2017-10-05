@@ -4873,3 +4873,15 @@ function geodir_theme_compatibility_file() {
 
     return apply_filters( 'geodir_theme_compatibility_file', $compatibility_file, $theme );
 }
+
+function geodir_get_blogname() {
+    $blogname = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
+    
+    return apply_filters( 'geodir_get_blogname', $blogname );
+}
+
+function geodir_get_blogurl() {
+    $blogurl = home_url( '/' );
+    
+    return apply_filters( 'geodir_get_blogurl', $blogurl );
+}

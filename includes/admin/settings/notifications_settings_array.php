@@ -191,8 +191,7 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
         'desc' => __('The content of the email that will be sent to Admin for comment moderation.', 'geodirectory'),
         'id' => 'geodir_notify_comment_moderation_content',
         'type' => 'editor',
-        'wpautop' => false,
-        'std' => __('<p>Hi Admin,</p><p>&nbsp;</p><p>A new comment has been submitted on the listing [#listing_link#] and it is waiting for your approval.</p><p>&nbsp;</p><p><b>Author:</b> [#comment_author#] (IP: [#comment_author_IP#])<br /><b>Email:</b> [#comment_author_email#]<br /><b>Comment:</b></p>[#comment_content#]<p>&nbsp;</p><p>Approve it: [#comment_approve_link#]</p><p>Trash it: [#comment_trash_link#]</p><p>Spam it: [#comment_spam_link#]</p><p>&nbsp;</p><p>Please visit the moderation panel for more details: [#comment_moderation_link#]</p><p>&nbsp;</p><p>Thank You,<br />[#site_name#]</p>', 'geodirectory')
+        'std' => __('<p>Hi Admin,</p><p>A new comment has been submitted on the listing [#listing_link#] and it is waiting for your approval.</p><p><b>Author:</b> [#comment_author#] ( IP: [#comment_author_IP#] )<br /><b>Email:</b> [#comment_author_email#]<br /><b>Comment:</b></p>[#comment_content#]<p>Approve it: [#comment_approve_link#]<br />Trash it: [#comment_trash_link#]<br />Spam it: [#comment_spam_link#]</p><p>Please visit the moderation panel for more details: [#comment_moderation_link#]</p><p>Thank You.</p>', 'geodirectory')
     ),
     array('type' => 'sectionend', 'id' => 'admin_emails'),
     
@@ -294,22 +293,21 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
         'desc' => __('The content of the email that will be sent to listing owner after the comment submitted on the listing.', 'geodirectory'),
         'id' => 'geodir_listing_owner_comment_email_content',
         'type' => 'editor',
-        'wpautop' => false,
-        'std' => __('<p>Hi [#client_name#],</p><p>&nbsp;</p><p>A new comment has been submitted on your listing [#listing_link#].</p><p>&nbsp;</p><p><b>Author:</b> [#comment_author#] (IP: [#comment_author_IP#])<br /><b>Email:</b> [#comment_author_email#]<br /><b>Comment:</b></p>[#comment_content#]<p>&nbsp;</p><p>Thank You,<br>[#site_name#]</p>', 'geodirectory')
+        'std' => __('<p>Hi [#client_name#],</p><p>A new comment has been submitted on your listing [#listing_link#].</p><p><b>Author:</b> [#comment_author#] ( IP: [#comment_author_IP#] )<br /><b>Email:</b> [#comment_author_email#]<br /><b>Comment:</b></p>[#comment_content#]<p>Thank You.</p>', 'geodirectory')
     ),
     array(
-        'name' => __('Notify to listing owner on comment approved/rejected?', 'geodirectory'),
+        'name' => __('Notify to listing owner on comment approved?', 'geodirectory'),
         'desc' => __('Yes', 'geodirectory'),
-        'id' => 'geodir_notify_listing_owner_on_moderated',
+        'id' => 'geodir_notify_listing_owner_on_approved',
         'std' => '0',
         'type' => 'radio',
         'value' => '1',
         'radiogroup' => 'start'
     ),
     array(
-        'name' => __('Notify to listing owner on comment approved/rejected?', 'geodirectory'),
+        'name' => __('Notify to listing owner on comment approved?', 'geodirectory'),
         'desc' => __('No', 'geodirectory'),
-        'id' => 'geodir_notify_listing_owner_on_moderated',
+        'id' => 'geodir_notify_listing_owner_on_approved',
         'std' => '0',
         'type' => 'radio',
         'value' => '0',
@@ -317,33 +315,32 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
     ),
     array(
         'name' => __('Email Subject', 'geodirectory'),
-        'desc' => __('The subject of the email that will be sent to listing owner after the comment approved/rejected by Admin.', 'geodirectory'),
-        'id' => 'geodir_listing_owner_moderated_email_subject',
+        'desc' => __('The subject of the email that will be sent to listing owner after the comment approved by Admin.', 'geodirectory'),
+        'id' => 'geodir_listing_owner_approved_email_subject',
         'type' => 'text',
         'css' => 'min-width:300px;width:100%',
-        'std' => __('[[#site_name#]] A comment on your listing [#listing_title#] has been [#comment_status#]', 'geodirectory')
+        'std' => __('[[#site_name#]] A comment on your listing [#listing_title#] has been approved', 'geodirectory')
     ),
     array(
         'name' => __('Email Content', 'geodirectory'),
-        'desc' => __('The content of the email that will be sent to listing owner after the comment approved/rejected by Admin.', 'geodirectory'),
-        'id' => 'geodir_listing_owner_moderated_email_content',
+        'desc' => __('The content of the email that will be sent to listing owner after the comment approved by Admin.', 'geodirectory'),
+        'id' => 'geodir_listing_owner_approved_email_content',
         'type' => 'editor',
-        'wpautop' => false,
-        'std' => __('<p>Hi [#client_name#],</p><p>&nbsp;</p><p>A comment on your listing [#listing_link#] has been moderated and [#comment_status#] by Admin.</p><p>&nbsp;</p><p><b>Author:</b> [#comment_author#] (IP: [#comment_author_IP#])<br /><b>Email:</b> [#comment_author_email#]<br /><b>Comment:</b></p>[#comment_content#]<p>&nbsp;</p><p>Thank You,<br />[#site_name#]</p>', 'geodirectory')
+        'std' => __('<p>Hi [#client_name#],</p><p>A comment on your listing [#listing_link#] has been approved by Admin.</p><p><b>Author:</b> [#comment_author#] ( IP: [#comment_author_IP#] )<br /><b>Email:</b> [#comment_author_email#]<br /><b>Comment:</b></p>[#comment_content#]<p>Thank You.</p>', 'geodirectory')
     ),
     array(
-        'name' => __('Notify to comment author on comment approved/rejected?', 'geodirectory'),
+        'name' => __('Notify to comment author on comment approved?', 'geodirectory'),
         'desc' => __('Yes', 'geodirectory'),
-        'id' => 'geodir_notify_comment_author_on_moderated',
+        'id' => 'geodir_notify_comment_author_on_approved',
         'std' => '0',
         'type' => 'radio',
         'value' => '1',
         'radiogroup' => 'start'
     ),
     array(
-        'name' => __('Notify to comment author on comment approved/rejected?', 'geodirectory'),
+        'name' => __('Notify to comment author on comment approved?', 'geodirectory'),
         'desc' => __('No', 'geodirectory'),
-        'id' => 'geodir_notify_comment_author_on_moderated',
+        'id' => 'geodir_notify_comment_author_on_approved',
         'std' => '0',
         'type' => 'radio',
         'value' => '0',
@@ -351,19 +348,18 @@ $geodir_settings['notifications_settings'] = apply_filters('geodir_notifications
     ),
     array(
         'name' => __('Email Subject', 'geodirectory'),
-        'desc' => __('The subject of the email that will be sent to comment author after the comment approved/rejected by Admin.', 'geodirectory'),
-        'id' => 'geodir_comment_author_moderated_email_subject',
+        'desc' => __('The subject of the email that will be sent to comment author after the comment approved by Admin.', 'geodirectory'),
+        'id' => 'geodir_comment_author_approved_email_subject',
         'type' => 'text',
         'css' => 'min-width:300px;width:100%',
-        'std' => __('[[#site_name#]] Your comment on listing [#listing_title#] has been [#comment_status#]', 'geodirectory')
+        'std' => __('[[#site_name#]] Your comment on listing [#listing_title#] has been approved', 'geodirectory')
     ),
     array(
         'name' => __('Email Content', 'geodirectory'),
-        'desc' => __('The content of the email that will be sent to comment author after the comment approved/rejected by Admin.', 'geodirectory'),
-        'id' => 'geodir_comment_author_moderated_email_content',
+        'desc' => __('The content of the email that will be sent to comment author after the comment approved by Admin.', 'geodirectory'),
+        'id' => 'geodir_comment_author_approved_email_content',
         'type' => 'editor',
-        'wpautop' => false,
-        'std' => __('<p>Hi [#comment_author#],</p><p>&nbsp;</p><p>Your comment on listing [#listing_link#] has been moderated and [#comment_status#] by Admin.</p><p>&nbsp;</p><p><b>Comment:</b></p>[#comment_content#]<p>&nbsp;</p><p>Thank You,<br />[#site_name#]</p>', 'geodirectory')
+        'std' => __('<p>Hi [#comment_author#],</p><p>Your comment on listing [#listing_link#] has been approved by Admin.</p><p><b>Comment:</b></p>[#comment_content#]<p>Thank You.</p>', 'geodirectory')
     ),
     array('type' => 'sectionend', 'id' => 'client_emails'),
     
