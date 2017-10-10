@@ -101,7 +101,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Widget {
         if ($comments_li) {
             echo $before_widget;
             ?>
-            <div class="widget geodir_recent_reviews_section">
+            <div class="geodir_recent_reviews_section">
                 <?php if ($title) {
                     echo $before_title . $title . $after_title;
                 } ?>

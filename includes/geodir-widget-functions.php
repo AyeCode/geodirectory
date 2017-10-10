@@ -856,3 +856,120 @@ function show_listing_widget_map() {
     // Pass the json data in listing map script
     wp_localize_script('geodir-listing-map-widget', 'listing_map_args', $listing_map_args);
 }
+
+function geodir_widget_pages_options() {
+    global $gd_widget_pages;
+
+    if ( !empty( $gd_widget_pages ) && is_array( $gd_widget_pages ) ) {
+        return $gd_widget_pages;
+    }
+    
+    $gd_widget_pages = array();
+    $gd_widget_pages['gd'] = array(
+        'label'     => __( 'GD Pages', 'geodirectory' ),
+        'pages'     => array(
+            'home'              => __( 'GD Home Page', 'geodirectory' ),
+            'add-listing'       => __( 'Add Listing Page', 'geodirectory' ),
+            'author'            => __( 'Author Page', 'geodirectory' ),
+            'detail'            => __( 'Listing Detail Page', 'geodirectory' ),
+            'preview'           => __( 'Listing Preview Page', 'geodirectory' ),
+            'listing-success'   => __( 'Listing Success Page', 'geodirectory' ),
+            'location'          => __( 'Location Page', 'geodirectory' ),
+            'login'             => __( 'Login Page', 'geodirectory' ),
+            'pt'                => __( 'Post Type Archive', 'geodirectory' ),
+            'search'            => __( 'Search Page', 'geodirectory' ),
+            'listing'           => __( 'Taxonomies Page', 'geodirectory' ),
+        ),
+    );
+
+    return apply_filters( 'geodir_widget_pages_options', $gd_widget_pages );
+}
+
+function geodir_detail_page_widget_id_bases() {
+    $id_bases = array(
+        'detail_user_actions',
+        'detail_social_sharing',
+        'detail_sidebar',
+        'detail_sidebar_info',
+        'detail_rating_stars',
+        'detail_google_analytics',
+    );
+    
+    return apply_filters( 'geodir_detail_page_widget_id_bases', $id_bases );
+}
+
+function geodir_is_detail_page_widget( $id_base ) {
+    $widgets = geodir_detail_page_widget_id_bases();
+    
+    $return = ! empty( $id_base ) && ! empty( $widgets ) && in_array( $id_base, $widgets ) ? true : false;
+    
+    return apply_filters( 'geodir_is_detail_page_widget', $return, $id_base, $widgets );
+}
+
+function geodir_widget_display_callback( $instance, $widget, $args ) {
+    if ( !empty( $widget->widget_options['geodirectory'] ) && !empty( $instance['gd_wgt_showhide'] ) ) {
+        $display_type = !empty( $instance['gd_wgt_showhide'] ) ? $instance['gd_wgt_showhide'] : '';
+        $pages = !empty( $instance['gd_wgt_restrict'] ) && is_array( $instance['gd_wgt_restrict'] ) ? $instance['gd_wgt_restrict'] : array();
+ 
+        $show = $instance;
+
+        if ( $display_type == 'show' ) {
+            $show = $instance; // Show on all pages.
+        } else if ( $display_type == 'hide' ) {
+            $show = false; // Hide on all pages.
+        } else if ( $display_type == 'gd' ) {
+            if ( ! geodir_is_geodir_page() ) {
+                $show = false; // Show only on GD pages.
+            }
+        } else {
+            if ( geodir_is_detail_page_widget( $widget->id_base ) ) {
+                if ( geodir_is_page( 'detail' ) ) {
+                    if ( ! in_array( 'gd-detail', $pages ) ) {
+                        $show = false;
+                    }
+                } else if ( geodir_is_page( 'preview' ) ) {
+                    if ( ! in_array( 'gd-preview', $pages ) ) {
+                        $show = false;
+                    }
+                } else {
+                    $show = false;
+                }
+            } else {
+                $gd_widget_pages = geodir_widget_pages_options();
+                $gd_page = '';
+
+                if ( !empty( $gd_widget_pages['gd']['pages'] ) ) {
+                    $gd_pages = $gd_widget_pages['gd']['pages'];
+
+                    foreach ( $gd_pages as $page => $page_title ) {
+                        if ( geodir_is_page( $page ) ) {
+                            $gd_page = $page;
+                            break;
+                        }
+                    }
+                }
+
+                if ( $display_type == 'show_on' ) {
+                    if ( $gd_page && in_array( 'gd-' . $gd_page, $pages ) ) {
+                        $show = $instance;
+                    } else {
+                        $show = false;
+                    }
+                } else if ( $display_type == 'hide_on' ) {
+                    if ( $gd_page && in_array( 'gd-' . $gd_page, $pages ) ) {
+                        $show = false;
+                    } else {
+                        $show = $instance;
+                    }
+                } else {
+                    $show = false;
+                }
+            }
+        }
+
+        $instance = $show;
+    }
+    
+    return $instance;
+}
+add_filter( 'widget_display_callback', 'geodir_widget_display_callback', 10, 3 );
