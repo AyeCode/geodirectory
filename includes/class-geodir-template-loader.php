@@ -65,6 +65,7 @@ class GeoDir_Template_Loader {
 
         if ( geodir_is_singular() ) {
             $default_file = 'single-listing.php';
+            $default_file = 'page.php';
         } elseif ( geodir_is_taxonomy() ) {
             //$default_file = 'page.php'; // i think index.php works better here, more likely to have paging
             $default_file = 'index.php';
@@ -105,8 +106,17 @@ class GeoDir_Template_Loader {
         global $wp_query,$gd_temp_wp_query;
         $wp_query->posts = $gd_temp_wp_query;
 
-        // run our own loop with the correct loop content
-        $content = geodir_get_template_part('listing', 'listview');
+        // get the archive template page content
+        $archive_page_id = geodir_archive_page_id();
+        $content = get_post_field('post_content', $archive_page_id  );
+
+        // if the content is blank then just add the main loop
+        if($content==''){
+            $content = "[gd_loop]";
+        }
+
+        // run the shortcodes on the content
+        $content = do_shortcode($content);
 
         // add our filter back, not sure we even need to add it back if we are only running it once.
         add_filter( 'the_content', array( __CLASS__, 'setup_archive_page_content' ) );
@@ -138,6 +148,10 @@ class GeoDir_Template_Loader {
 
         // add the filter to call our own loop for the archive page content.
         add_filter( 'the_content', array( __CLASS__, 'setup_archive_page_content' ) );
+
+        // if the template is only using the excerpt then bypass it.
+        add_filter( 'the_excerpt', array( __CLASS__, 'setup_archive_page_content' ) );
+
     }
 
     /**

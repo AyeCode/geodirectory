@@ -4827,7 +4827,7 @@ function geodir_remove_hentry( $class ) {
 	return $class;
 }
 
-add_filter( 'post_class', 'geodir_remove_hentry' );
+//add_filter( 'post_class', 'geodir_remove_hentry' ); //@todo we dont seem to need to remove this with new template system
 
 /**
  * Registers a individual text string for WPML translation.

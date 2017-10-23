@@ -33,6 +33,7 @@ class GeoDir_Shortcodes {
             'gd_recent_reviews'         => __CLASS__ . '::gd_recent_reviews',
             'gd_related_listings'       => __CLASS__ . '::gd_related_listings',
             'gd_video'                  => __CLASS__ . '::gd_video',
+            'gd_loop'                   => __CLASS__ . '::gd_loop',
         );
 
         foreach ( $shortcodes as $shortcode => $function ) {
@@ -111,5 +112,15 @@ class GeoDir_Shortcodes {
     
     public static function gd_video( $atts = array(), $content = null ) {
         return self::shortcode_wrapper( 'geodir_sc_responsive_videos', $atts, $content  );
+    }
+
+    public static function gd_loop( $atts = array(), $content = null ) {
+        if(geodir_is_post_type_archive() ||  geodir_is_taxonomy()){
+            ob_start();
+            geodir_get_template_part('listing', 'listview');
+            return ob_get_clean();
+        }else{
+            return "";
+        }
     }
 }
