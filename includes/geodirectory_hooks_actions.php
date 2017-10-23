@@ -125,13 +125,6 @@ add_filter('wp_nav_menu_items', 'geodir_menu_items', 100, 2);
 
 add_filter('wp_page_menu', 'geodir_pagemenu_items', 100, 2);
 
-
-/////////////////////////
-/* ON TEMPLATE INCLUDE */
-/////////////////////////
-
-//add_filter('template_include', 'geodir_template_loader',9); // TODO remove
-
 /////////////////////////
 /* CATEGORY / TAXONOMY / CUSTOM POST ACTIONS */
 /////////////////////////
