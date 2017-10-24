@@ -1021,7 +1021,9 @@ function geodir_output_breadcrumb( $args = array() ) {
 				$author_link = apply_filters( 'geodir_dashboard_author_link', $author_link, $user_id, $_REQUEST['stype'] );
 
 				$breadcrumb .= $separator . '<a href="' . $author_link . '">' . __( geodir_utf8_ucfirst( $post_type_info->label ), 'geodirectory' ) . '</a>';
-				$breadcrumb .= $separator . geodir_utf8_ucfirst( __( 'My', 'geodirectory' ) . ' ' . $_REQUEST['list'] );
+                if($_REQUEST['list']=='favourite'){
+                    $breadcrumb .= $separator . MY_FAVOURITE_TEXT;
+                }
 			} else {
 				$breadcrumb .= $separator . __( geodir_utf8_ucfirst( $post_type_info->label ), 'geodirectory' );
 			}
