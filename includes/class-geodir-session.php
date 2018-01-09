@@ -113,7 +113,8 @@ class GeoDir_Session {
 	 */
 	public function get_id() {
 		if ( $this->use_php_sessions ) {
-			$session_id = !empty( $_SESSION ) && function_exists( 'session_id' ) ? session_id() : NULL;
+			//$session_id = !empty( $_SESSION ) && function_exists( 'session_id' ) ? session_id() : NULL; // sometime we need the session id even if empty
+			$session_id = function_exists( 'session_id' ) ? session_id() : NULL;
 		} else {
 			$session_id = !empty( $this->session ) && isset( $this->session->session_id ) ? $this->session->session_id : NULL;
 		}

@@ -90,9 +90,9 @@ function geodir_conditional_admin_script_load()
 	$post_type = geodir_admin_current_post_type();
 	$geodir_post_types = geodir_get_posttypes();
     
-	if ((isset($_REQUEST['page']) && $_REQUEST['page'] == 'geodirectory') || (($pagenow == 'post.php' || $pagenow == 'post-new.php' || $pagenow == 'edit.php') && $post_type && in_array($post_type, $geodir_post_types)) || ($pagenow == 'edit-tags.php' || $pagenow == 'term.php' || $pagenow == 'edit-comments.php' || $pagenow == 'comment.php')) {
-        add_action('admin_enqueue_scripts', 'geodir_admin_scripts');
-        add_action('admin_enqueue_scripts', 'geodir_admin_styles');
+	if ((isset($_REQUEST['page']) && ($_REQUEST['page'] == 'geodirectory' || $_REQUEST['page'] == 'gd-settings') ) || (($pagenow == 'post.php' || $pagenow == 'post-new.php' || $pagenow == 'edit.php') && $post_type && in_array($post_type, $geodir_post_types)) || ($pagenow == 'edit-tags.php' || $pagenow == 'term.php' || $pagenow == 'edit-comments.php' || $pagenow == 'comment.php')) {
+        //add_action('admin_enqueue_scripts', 'geodir_admin_scripts');
+        //add_action('admin_enqueue_scripts', 'geodir_admin_styles');
         add_action('admin_enqueue_scripts', 'geodir_admin_dequeue_scripts', 100);
         
         // Disable VC editor for GD post types.
@@ -108,10 +108,7 @@ function geodir_conditional_admin_script_load()
 add_action('init', 'geodir_conditional_admin_script_load');
 
 
-/**
- * Admin Menus
- */
-add_action('admin_menu', 'geodir_admin_menu');
+
 
 /**
  * Order admin menus
@@ -246,7 +243,7 @@ function geodir_meta_box_add()
 
 }
 
-add_action('save_post', 'geodir_post_information_save',10,2);
+//add_action('save_post', 'geodir_post_information_save',10,2);
 
 
 
@@ -266,7 +263,7 @@ add_action('admin_menu', 'geodir_hide_post_taxonomy_meta_boxes');
 function geodir_hide_post_taxonomy_meta_boxes()
 {
 
-    $geodir_post_types = geodir_get_option('geodir_post_types');
+    $geodir_post_types = geodir_get_option('post_types');
 
     if (!empty($geodir_post_types)) {
         foreach ($geodir_post_types as $geodir_post_type => $geodir_posttype_info) {
@@ -358,49 +355,8 @@ function geodir_enable_editor_on_design_settings($design_setting)
     return $design_setting;
 }
 
-/* ----------- START MANAGE CUSTOM FIELDS ---------------- */
-add_action('geodir_manage_available_fields_predefined', 'geodir_manage_available_fields_predefined');
-add_action('geodir_manage_available_fields_custom', 'geodir_manage_available_fields_custom');
-
-function geodir_manage_available_fields_predefined($sub_tab){
-    if($sub_tab=='custom_fields'){
-        geodir_custom_available_fields('predefined');
-    }
-}
-
-function geodir_manage_available_fields_custom($sub_tab){
-    if($sub_tab=='custom_fields'){
-        geodir_custom_available_fields('custom');
-    }
-}
 
 
-add_action('geodir_manage_available_fields', 'geodir_manage_available_fields');
-
-/**
- * Lists available fields for the given sub tab.
- *
- * WP Admin -> Geodirectory -> (post type) Settings -> Custom Fields -> Add new Place form field.
- * WP Admin -> Geodirectory -> (post type) Settings -> Sorting Options -> Available sorting options for Place listing and search results.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @param string $sub_tab The sub tab slug.
- */
-function geodir_manage_available_fields($sub_tab)
-{
-
-    switch ($sub_tab) {
-        case 'custom_fields':
-            geodir_custom_available_fields();
-            break;
-
-        case 'sorting_options':
-            geodir_sorting_options_available_fields();
-            break;
-
-    }
-}
 
 
 add_action('geodir_manage_selected_fields', 'geodir_manage_selected_fields');
@@ -416,75 +372,18 @@ function geodir_manage_selected_fields($sub_tab)
 {
 
     switch ($sub_tab) {
-        case 'custom_fields':
+        case 'general':
             geodir_custom_selected_fields();
             break;
 
-        case 'sorting_options':
+        case 'cpt-sorting':
             geodir_sorting_options_selected_fields();
             break;
 
     }
 }
 
-/**
- * Adds admin html for sorting options available fields.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
- */
-function geodir_sorting_options_available_fields()
-{
-    global $wpdb;
-    $listing_type = ($_REQUEST['listing_type'] != '') ? sanitize_text_field($_REQUEST['listing_type']) : 'gd_place';
-    ?>
-    <input type="hidden" name="listing_type" id="new_post_type" value="<?php echo $listing_type;?>"/>
-    <input type="hidden" name="manage_field_type" class="manage_field_type" value="<?php echo sanitize_text_field($_REQUEST['subtab']); ?>"/>
-    <ul>
-    <?php
-        $sort_options = geodir_get_custom_sort_options($listing_type);
-        
-        foreach ($sort_options as $key => $val) {
-            $val = stripslashes_deep($val); // strip slashes
 
-            $check_html_variable = $wpdb->get_var(
-                $wpdb->prepare(
-                    "SELECT htmlvar_name FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE htmlvar_name = %s AND post_type = %s AND field_type=%s",
-                    array($val['htmlvar_name'], $listing_type, $val['field_type'])
-                )
-            );
-            
-            $display = $check_html_variable ? ' style="display:none;"' : '';
-           ?>
-
-            <li   class="gd-cf-tooltip-wrap" <?php echo $display;?>>
-                <?php
-                if(isset($val['description']) && $val['description']){
-                    echo '<div class="gdcf-tooltip">'.$val['description'].'</div>';
-                }?>
-
-                <a id="gd-<?php echo $val['field_type'];?>-_-<?php echo $val['htmlvar_name'];?>" data-field-type-key="<?php echo $val['htmlvar_name'];?>"  data-field-type="<?php echo $val['field_type'];?>"
-                   title="<?php echo $val['site_title'];?>"
-                   class="gd-draggable-form-items  gd-<?php echo $val['field_type'];?> geodir-sort-<?php echo $val['htmlvar_name'];?>" href="javascript:void(0);">
-                    <?php if (isset($val['field_icon']) && strpos($val['field_icon'], 'fa fa-') !== false) {
-                        echo '<i class="'.$val['field_icon'].'" aria-hidden="true"></i>';
-                    }elseif(isset($val['field_icon']) && $val['field_icon'] ){
-                        echo '<b style="background-image: url("'.$val['field_icon'].'")"></b>';
-                    }else{
-                        echo '<i class="fa fa-cog" aria-hidden="true"></i>';
-                    }?>
-                    <?php echo $val['site_title'];?>
-                </a>
-            </li>
-
-
-            <?php
-        }
-    ?>
-    </ul>
-    <?php
-}
 
 /**
  * Adds admin html for sorting options selected fields.
@@ -521,254 +420,11 @@ function geodir_sorting_options_selected_fields()
     <?php
 }
 
-/**
- * Returns the array of custom fields that can be used.
- *
- * @since 1.6.9
- * @package GeoDirectory
- */
-function geodir_custom_fields_custom($post_type=''){
-
-    $custom_fields = array();
-
-    /**
-     * @see `geodir_custom_fields`
-     */
-    return apply_filters('geodir_custom_fields_custom',$custom_fields,$post_type);
-}
 
 
 
-/**
- * Returns the array of custom fields that can be used.
- *
- * @since 1.6.6
- * @package GeoDirectory
- */
-function geodir_custom_fields($post_type=''){
-    
-    $custom_fields = array(
-        'text' => array(
-            'field_type'  =>  'text',
-            'class' =>  'gd-text',
-            'icon'  =>  'fa fa-minus',
-            'name'  =>  __('Text', 'geodirectory'),
-            'description' =>  __('Add any sort of text field, text or numbers', 'geodirectory')
-        ),
-        'datepicker' => array(
-            'field_type'  =>  'datepicker',
-            'class' =>  'gd-datepicker',
-            'icon'  =>  'fa fa-calendar',
-            'name'  =>  __('Date', 'geodirectory'),
-            'description' =>  __('Adds a date picker.', 'geodirectory')
-        ),
-        'textarea' => array(
-            'field_type'  =>  'textarea',
-            'class' =>  'gd-textarea',
-            'icon'  =>  'fa fa-bars',
-            'name'  =>  __('Textarea', 'geodirectory'),
-            'description' =>  __('Adds a textarea', 'geodirectory')
-        ),
-        'time' => array(
-            'field_type'  =>  'time',
-            'class' =>  'gd-time',
-            'icon' =>  'fa fa-clock-o',
-            'name'  =>  __('Time', 'geodirectory'),
-            'description' =>  __('Adds a time picker', 'geodirectory')
-        ),
-        'checkbox' => array(
-            'field_type'  =>  'checkbox',
-            'class' =>  'gd-checkbox',
-            'icon' =>  'fa fa-check-square-o',
-            'name'  =>  __('Checkbox', 'geodirectory'),
-            'description' =>  __('Adds a checkbox', 'geodirectory')
-        ),
-        'phone' => array(
-            'field_type'  =>  'phone',
-            'class' =>  'gd-phone',
-            'icon' =>  'fa fa-phone',
-            'name'  =>  __('Phone', 'geodirectory'),
-            'description' =>  __('Adds a phone input', 'geodirectory')
-        ),
-        'radio' => array(
-            'field_type'  =>  'radio',
-            'class' =>  'gd-radio',
-            'icon' =>  'fa fa-dot-circle-o',
-            'name'  =>  __('Radio', 'geodirectory'),
-            'description' =>  __('Adds a radio input', 'geodirectory')
-        ),
-        'email' => array(
-            'field_type'  =>  'email',
-            'class' =>  'gd-email',
-            'icon' =>  'fa fa-envelope-o',
-            'name'  =>  __('Email', 'geodirectory'),
-            'description' =>  __('Adds a email input', 'geodirectory')
-        ),
-        'select' => array(
-            'field_type'  =>  'select',
-            'class' =>  'gd-select',
-            'icon' =>  'fa fa-caret-square-o-down',
-            'name'  =>  __('Select', 'geodirectory'),
-            'description' =>  __('Adds a select input', 'geodirectory')
-        ),
-        'multiselect' => array(
-            'field_type'  =>  'multiselect',
-            'class' =>  'gd-multiselect',
-            'icon' =>  'fa fa-caret-square-o-down',
-            'name'  =>  __('Multi Select', 'geodirectory'),
-            'description' =>  __('Adds a multiselect input', 'geodirectory')
-        ),
-        'url' => array(
-            'field_type'  =>  'url',
-            'class' =>  'gd-url',
-            'icon' =>  'fa fa-link',
-            'name'  =>  __('URL', 'geodirectory'),
-            'description' =>  __('Adds a url input', 'geodirectory')
-        ),
-        'html' => array(
-            'field_type'  =>  'html',
-            'class' =>  'gd-html',
-            'icon' =>  'fa fa-code',
-            'name'  =>  __('HTML', 'geodirectory'),
-            'description' =>  __('Adds a html input textarea', 'geodirectory')
-        ),
-        'file' => array(
-            'field_type'  =>  'file',
-            'class' =>  'gd-file',
-            'icon' =>  'fa fa-file',
-            'name'  =>  __('File Upload', 'geodirectory'),
-            'description' =>  __('Adds a file input', 'geodirectory')
-        )
-    );
-
-    /**
-     * Filter the custom fields array to be able to add or remove items.
-     * 
-     * @since 1.6.6
-     *
-     * @param array $custom_fields {
-     *     The custom fields array to be filtered.
-     *
-     *     @type string $field_type The type of field, eg: text, datepicker, textarea, time, checkbox, phone, radio, email, select, multiselect, url, html, file.
-     *     @type string $class The class for the field in backend.
-     *     @type string $icon Can be font-awesome class name or icon image url.
-     *     @type string $name The name of the field.
-     *     @type string $description A short description about the field.
-     *     @type array $defaults {
-     *                    Optional. Used to set the default value of the field.
-     *
-     *                    @type string data_type The SQL data type for the field. VARCHAR, TEXT, TIME, TINYINT, INT, FLOAT, DATE
-     *                    @type int decimal_point limit if using FLOAT data_type
-     *                    @type string admin_title The admin title for the field.
-     *                    @type string site_title This will be the title for the field on the frontend.
-     *                    @type string admin_desc This will be shown below the field on the add listing form.
-     *                    @type string htmlvar_name This is a unique identifier used in the HTML, it MUST NOT contain spaces or special characters.
-     *                    @type bool is_active If false the field will not be displayed anywhere.
-     *                    @type bool for_admin_use If true then only site admin can see and edit this field.
-     *                    @type string default_value The default value for the input on the add listing page.
-     *                    @type string show_in The locations to show in. [detail],[moreinfo],[listing],[owntab],[mapbubble]
-     *                    @type bool is_required If true the field will be required on the add listing page.
-     *                    @type string option_values The option values for select and multiselect only
-     *                    @type string validation_pattern HTML5 validation pattern (text input only by default).
-     *                    @type string validation_msg HTML5 validation message (text input only by default).
-     *                    @type string required_msg Required warning message.
-     *                    @type string field_icon Icon url or font awesome class.
-     *                    @type string css_class Field custom css class for field custom style.
-     *                    @type bool cat_sort If true the field will appear in the category sort options, if false the field will be hidden, leave blank to show option.
-     *                    @type bool cat_sort If true the field will appear in the advanced search sort options, if false the field will be hidden, leave blank to show option. (advanced search addon required)
-     *     }
-     * }
-     * @param string $post_type The post type requested.
-     */
-    return apply_filters('geodir_custom_fields',$custom_fields,$post_type);
-}
-
-/**
- * Adds admin html for custom fields available fields.
- *
- * @since 1.0.0
- * @since 1.6.9 Added
- * @param string $type The custom field type, predefined, custom or blank for default
- * @package GeoDirectory
- */
-function geodir_custom_available_fields($type='')
-{
-    $listing_type = ($_REQUEST['listing_type'] != '') ? sanitize_text_field($_REQUEST['listing_type']) : 'gd_place';
-    ?>
-    <input type="hidden" name="listing_type" id="new_post_type" value="<?php echo $listing_type;?>"/>
-    <input type="hidden" name="manage_field_type" class="manage_field_type" value="<?php echo sanitize_text_field($_REQUEST['subtab']); ?>" />
-
-        <?php
-        if($type=='predefined'){
-            $cfs = geodir_custom_fields_predefined($listing_type);
-        }elseif($type=='custom'){
-            $cfs = geodir_custom_fields_custom($listing_type);
-        }else{
-            $cfs = geodir_custom_fields($listing_type);
-            ?>
-            <ul class="full gd-cf-tooltip-wrap">
-                <li>
-                    <div class="gdcf-tooltip">
-                        <?php _e('This adds a section separator with a title.', 'geodirectory');?>
-                    </div>
-                    <a id="gt-fieldset"
-                       class="gd-draggable-form-items gt-fieldset"
-                       href="javascript:void(0);"
-                       data-field-custom-type=""
-                       data-field-type="fieldset"
-                       data-field-type-key="fieldset">
-
-                        <i class="fa fa-long-arrow-left " aria-hidden="true"></i>
-                        <i class="fa fa-long-arrow-right " aria-hidden="true"></i>
-                        <?php _e('Fieldset (section separator)', 'geodirectory');?>
-                    </a>
-                </li>
-            </ul>
-
-            <?php
-        }
-
-    if(!empty($cfs)) {
-        echo '<ul>';
-        foreach ( $cfs as $id => $cf ) {
-            ?>
-
-            <li class="gd-cf-tooltip-wrap">
-                <?php
-                if ( isset( $cf['description'] ) && $cf['description'] ) {
-                    echo '<div class="gdcf-tooltip">' . $cf['description'] . '</div>';
-                } ?>
-
-                <a id="gd-<?php echo $id; ?>"
-                   data-field-custom-type="<?php echo $type; ?>"
-                   data-field-type-key="<?php echo $id; ?>"
-                   data-field-type="<?php echo $cf['field_type']; ?>"
-                   class="gd-draggable-form-items <?php echo $cf['class']; ?>"
-                   href="javascript:void(0);">
-
-                    <?php if ( isset( $cf['icon'] ) && strpos( $cf['icon'], 'fa fa-' ) !== false ) {
-                        echo '<i class="' . $cf['icon'] . '" aria-hidden="true"></i>';
-                    } elseif ( isset( $cf['icon'] ) && $cf['icon'] ) {
-                        echo '<b style="background-image: url("' . $cf['icon'] . '")"></b>';
-                    } else {
-                        echo '<i class="fa fa-cog" aria-hidden="true"></i>';
-                    } ?>
-                    <?php echo $cf['name']; ?>
-                </a>
-            </li>
-            <?php
-        }
-    }else{
-        _e('There are no custom fields here yet.', 'geodirectory');
-    }
-        ?>
 
 
-    </ul>
-
-<?php
-
-}
 
 
 /**
@@ -780,9 +436,10 @@ function geodir_custom_available_fields($type='')
  */
 function geodir_custom_selected_fields()
 {
-    $listing_type = ($_REQUEST['listing_type'] != '') ? sanitize_text_field($_REQUEST['listing_type']) : 'gd_place';
+    $listing_type = !empty($_REQUEST['post_type']) ? sanitize_text_field($_REQUEST['post_type']) : 'gd_place';
+    $sub_tab =  !empty($_REQUEST['tab']) ? sanitize_text_field($_REQUEST['tab']) : 'general';
     ?>
-    <input type="hidden" name="manage_field_type" class="manage_field_type" value="<?php echo sanitize_text_field($_REQUEST['subtab']); ?>"/>
+    <input type="hidden" name="manage_field_type" class="manage_field_type" value="<?php echo $sub_tab; ?>"/>
     <ul class="core">
     <?php 
         global $wpdb;
@@ -819,11 +476,11 @@ function geodir_custom_fields_panel_head($heading, $sub_tab, $listing_type)
 {
 
     switch ($sub_tab) {
-        case 'custom_fields':
+        case 'general':
             $heading = sprintf(__('Manage %s Custom Fields', 'geodirectory'), get_post_type_singular_label($listing_type, false, true));
             break;
 
-        case 'sorting_options':
+        case 'cpt-sorting':
             $heading = sprintf(__('Manage %s Listing Sorting Options Fields', 'geodirectory'), get_post_type_singular_label($listing_type, false, true));
             break;
     }
@@ -831,112 +488,7 @@ function geodir_custom_fields_panel_head($heading, $sub_tab, $listing_type)
 }
 
 
-add_filter('geodir_cf_panel_available_fields_head', 'geodir_cf_panel_available_fields_head', 1, 3);
-/**
- * Returns heading for given sub tab available fields box.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @param string $heading The page heading.
- * @param string $sub_tab The sub tab slug.
- * @param string $listing_type The post type.
- * @return string The page heading.
- */
-function geodir_cf_panel_available_fields_head($heading, $sub_tab, $listing_type)
-{
 
-    switch ($sub_tab) {
-        case 'custom_fields':
-            $heading = sprintf(__('Add new %s form field', 'geodirectory'), get_post_type_singular_label($listing_type, false, true));
-            break;
-
-        case 'sorting_options':
-            $heading = sprintf(__('Available sorting options for %s listing and search results', 'geodirectory'), get_post_type_singular_label($listing_type, false, true));
-            break;
-    }
-    return $heading;
-}
-
-
-add_filter('geodir_cf_panel_available_fields_note', 'geodir_cf_panel_available_fields_note', 1, 3);
-/**
- * Returns description for given sub tab - available fields box.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @param string $note The box description.
- * @param string $sub_tab The sub tab slug.
- * @param string $listing_type The post type.
- * @return string The box description.
- */
-function geodir_cf_panel_available_fields_note($note, $sub_tab, $listing_type)
-{
-
-    switch ($sub_tab) {
-        case 'custom_fields':
-            $note = sprintf(__('Click on any box below to add a field of that type to the add %s listing form. You can use a fieldset to group your fields.', 'geodirectory'), get_post_type_singular_label($listing_type, false, true));
-            break;
-
-        case 'sorting_options':
-            $note = sprintf(__('Click on any box below to make it appear in the sorting option dropdown on %s listing and search results.<br />To make a field available here, go to custom fields tab and expand any field from selected fields panel and tick the checkbox saying \'Include this field in sort option\'.', 'geodirectory'), get_post_type_singular_label($listing_type, false, true));
-            break;
-    }
-    return $note;
-}
-
-
-add_filter('geodir_cf_panel_selected_fields_head', 'geodir_cf_panel_selected_fields_head', 1, 3);
-/**
- * Returns heading for given sub tab selected fields box.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @param string $heading The page heading.
- * @param string $sub_tab The sub tab slug.
- * @param string $listing_type The post type.
- * @return string The page heading.
- */
-function geodir_cf_panel_selected_fields_head($heading, $sub_tab, $listing_type)
-{
-
-    switch ($sub_tab) {
-        case 'custom_fields':
-            $heading = sprintf(__('List of fields that will appear on add new %s listing form', 'geodirectory'), get_post_type_singular_label($listing_type, false, true));
-            break;
-
-        case 'sorting_options':
-            $heading = sprintf(__('List of fields that will appear in %s listing and search results sorting option dropdown box.', 'geodirectory'), get_post_type_singular_label($listing_type, false, true));
-            break;
-    }
-    return $heading;
-}
-
-
-add_filter('geodir_cf_panel_selected_fields_note', 'geodir_cf_panel_selected_fields_note', 1, 3);
-/**
- * Returns description for given sub tab - selected fields box.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @param string $note The box description.
- * @param string $sub_tab The sub tab slug.
- * @param string $listing_type The post type.
- * @return string The box description.
- */
-function geodir_cf_panel_selected_fields_note($note, $sub_tab, $listing_type)
-{
-
-    switch ($sub_tab) {
-        case 'custom_fields':
-            $note = sprintf(__('Click to expand and view field related settings. You may drag and drop to arrange fields order on add %s listing form too.', 'geodirectory'), get_post_type_singular_label($listing_type, false, true));
-            break;
-
-        case 'sorting_options':
-            $note = sprintf(__('Click to expand and view field related settings. You may drag and drop to arrange fields order in sorting option dropdown box on %s listing and search results page.', 'geodirectory'), get_post_type_singular_label($listing_type, false, true));
-            break;
-    }
-    return $note;
-}
 
 
 add_action('admin_init', 'geodir_remove_unnecessary_fields');
@@ -2419,7 +1971,7 @@ function geodir_update_location_prefix($post_id,$post){
 
 }
 
-add_action('save_post', 'geodir_update_location_prefix',10,2);
+//add_action('save_post', 'geodir_update_location_prefix',10,2);
 
 add_action( 'wp_ajax_geodir_ga_callback', 'geodir_ga_callback' );
 

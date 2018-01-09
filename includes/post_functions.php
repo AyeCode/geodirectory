@@ -130,7 +130,7 @@ if (!function_exists('geodir_save_listing')) {
      * @param bool $wp_error Optional. Allow return of WP_Error on failure. Default false.
      * @return int|string|WP_Error Created post id or WP_Error on failure.
      */
-    function geodir_save_listing($request_info = array(), $dummy = false, $wp_error = false)
+    function geodir_save_listingxx($request_info = array(), $dummy = false, $wp_error = false)
     {
         global $wpdb, $current_user, $gd_session;
 
@@ -279,7 +279,6 @@ if (!function_exists('geodir_save_listing')) {
             "post_status" => $post_status,
             "post_location_id" => $post_location_id,
             "claimed" => isset($request_info['claimed']) ? $request_info['claimed'] : '',
-            "businesses" => isset($request_info['a_businesses']) ? $request_info['a_businesses'] : '',
             "submit_time" => time(),
             "submit_ip" => $_SERVER['REMOTE_ADDR'],
         );
@@ -567,12 +566,25 @@ if (!function_exists('geodir_save_listing')) {
 function geodir_get_post_info($post_id = '')
 {
 
-    global $wpdb, $plugin_prefix, $post, $post_info;
+    global $wpdb, $plugin_prefix, $post, $post_info,$preview;
+    
+   
 
     if ($post_id == '' && !empty($post))
         $post_id = $post->ID;
 
+    
+
     $post_type = get_post_type($post_id);
+
+    if($post_type == 'revision'){
+        $post_type = get_post_type(wp_get_post_parent_id($post_id));
+    }
+
+    // check if preview
+    if($preview && $post->ID==$post_id){
+        $post_id = GeoDir_Post_Data::get_post_preview_id($post_id);
+    }
 
     $all_postypes = geodir_get_posttypes();
 
@@ -884,11 +896,20 @@ if (!function_exists('geodir_get_post_meta')) {
         if (!$post_id) {
             return false;
         }
-        global $wpdb, $plugin_prefix;
+        global $wpdb, $plugin_prefix,$preview;
 
         $all_postypes = geodir_get_posttypes();
 
         $post_type = get_post_type($post_id);
+
+        if($post_type == 'revision'){
+            $post_type = get_post_type(wp_get_post_parent_id($post_id));
+        }
+
+        // check if preview
+        if($preview){
+            $post_id = GeoDir_Post_Data::get_post_preview_id($post_id);
+        }
 
         if (!in_array($post_type, $all_postypes))
             return false;
@@ -1344,6 +1365,13 @@ if (!function_exists('geodir_get_featured_image')) {
             $file_name = $file_info['basename'];
 
             $uploads_url = $uploads_baseurl . $sub_dir;
+
+            $img_src = $uploads_url . '/' . $file_name;
+            // jetpack CDN check
+            if (strpos($file, '.wp.com/') !== false) {
+                $img_src = $file;
+            }
+
             /*
              * Allows the filter of image src for such things as CDN change.
              *
@@ -1353,7 +1381,7 @@ if (!function_exists('geodir_get_featured_image')) {
              * @param string $uploads_url The server upload directory url.
              * @param string $uploads_baseurl The uploads dir base url.
              */
-            $img_arr['src'] = apply_filters('geodir_get_featured_image_src',$uploads_url . '/' . $file_name,$file_name,$uploads_url,$uploads_baseurl);
+            $img_arr['src'] = apply_filters('geodir_get_featured_image_src',$img_src,$file_name,$uploads_url,$uploads_baseurl);
             $img_arr['path'] = $uploads_path . '/' . $file_name;
             $width = 0;
             $height = 0;
@@ -1527,7 +1555,7 @@ if (!function_exists('geodir_get_images')) {
                 $img_arr['file'] = $file_name; // add the title to the array
                 $img_arr['title'] = $attechment->title; // add the title to the array
                 $img_arr['caption'] = isset($attechment->caption) ? $attechment->caption : ''; // add the caption to the array
-                $img_arr['content'] = $attechment->content; // add the description to the array
+               // $img_arr['content'] = $attechment->content; // add the description to the array
                 $img_arr['is_approved'] = isset($attechment->is_approved) ? $attechment->is_approved : ''; // used for user image moderation. For backward compatibility Default value is 1.
 
                 $return_arr[] = (object)$img_arr;
@@ -1576,7 +1604,7 @@ if (!function_exists('geodir_get_images')) {
                 $img_arr['height'] = $height;
                 $img_arr['file'] = $file_name; // add the title to the array
                 $img_arr['title'] = $file_info['filename']; // add the title to the array
-                $img_arr['content'] = $file_info['filename']; // add the description to the array
+                //$img_arr['content'] = $file_info['filename']; // add the description to the array
 
                 $return_arr[] = (object)$img_arr;
 
@@ -1724,12 +1752,12 @@ if (!function_exists('geodir_set_post_terms')) {
                     $cat_ids_array_del = $cat_ids_array;
                     $cat_ids_array_del[] = $post_id;
 
-                    $wpdb->get_var(
-                        $wpdb->prepare(
-                            "DELETE from " . GEODIR_ICON_TABLE . " WHERE cat_id NOT IN ($format) AND post_id = %d ",
-                            $cat_ids_array_del
-                        )
-                    );
+//                    $wpdb->get_var(
+//                        $wpdb->prepare(
+//                            "DELETE from " . GEODIR_ICON_TABLE . " WHERE cat_id NOT IN ($format) AND post_id = %d ",
+//                            $cat_ids_array_del
+//                        )
+//                    );
 
 
                     $post_term = $wpdb->get_col(
@@ -2078,10 +2106,7 @@ if (!function_exists('geodir_new_post_default_status')) {
      */
     function geodir_new_post_default_status()
     {
-        if (geodir_get_option('geodir_new_post_default_status'))
-            return geodir_get_option('geodir_new_post_default_status');
-        else
-            return 'publish';
+        return GeoDir_Post_Data::get_post_default_status();
 
     }
 }
@@ -2269,170 +2294,170 @@ if (!function_exists('geodir_delete_listing_info')) {
 }
 
 
-if (!function_exists('geodir_add_to_favorite')) {
-    /**
-     * This function would add listing to favorite listing.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @global object $current_user Current user object.
-     * @param int $post_id The post ID.
-     */
-    function geodir_add_to_favorite($post_id)
-    {
-
-        global $current_user;
-
-        /**
-         * Filter to modify "Unfavorite" text
-         *
-         * You can use this filter to rename "Unfavorite" text to something else.
-         *
-         * @since 1.0.0
-         * @package GeoDirectory
-         */
-        $remove_favourite_text = apply_filters('geodir_remove_favourite_text', REMOVE_FAVOURITE_TEXT);
-
-        /**
-         * Filter to modify "Remove from Favorites" text
-         *
-         * You can use this filter to rename "Remove from Favorites" text to something else.
-         *
-         * @since 1.0.0
-         * @package GeoDirectory
-         */
-        $unfavourite_text = apply_filters('geodir_unfavourite_text', UNFAVOURITE_TEXT);
-
-        /**
-         * Filter to modify "fa fa-heart" icon
-         *
-         * You can use this filter to change "fa fa-heart" icon to something else.
-         *
-         * @since 1.0.0
-         * @package GeoDirectory
-         */
-        $favourite_icon = apply_filters('geodir_favourite_icon', 'fa fa-heart');
-
-        $user_meta_data = geodir_get_user_favourites($current_user->data->ID);
-        $user_meta_data = !empty($user_meta_data) && is_array($user_meta_data) ? $user_meta_data : array();
-
-        if (empty($user_meta_data) || (!empty($user_meta_data) && !in_array($post_id, $user_meta_data))) {
-            $user_meta_data[] = $post_id;
-        }
-
-        $site_id = '';
-        if ( is_multisite() ) {
-            $blog_id = get_current_blog_id();
-            if($blog_id && $blog_id!='1'){$site_id  = '_' . $blog_id ;}
-        }
-        update_user_meta($current_user->data->ID, 'gd_user_favourite_post'.$site_id, $user_meta_data);
-
-        /**
-         * Called before adding the post from favourites.
-         *
-         * @since 1.0.0
-         * @package GeoDirectory
-         * @param int $post_id The post ID.
-         */
-        do_action('geodir_before_add_from_favorite', $post_id);
-
-        echo '<a href="javascript:void(0);" title="' . $remove_favourite_text . '" class="geodir-removetofav-icon" onclick="javascript:addToFavourite(\'' . $post_id . '\',\'remove\');"><i class="'. $favourite_icon .'"></i> ' . $unfavourite_text . '</a>';
-
-        /**
-         * Called after adding the post from favourites.
-         *
-         * @since 1.0.0
-         * @package GeoDirectory
-         * @param int $post_id The post ID.
-         */
-        do_action('geodir_after_add_from_favorite', $post_id);
-
-    }
-}
-
-if (!function_exists('geodir_remove_from_favorite')) {
-    /**
-     * This function would remove the favourited property earlier.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @global object $current_user Current user object.
-     * @param int $post_id The post ID.
-     */
-    function geodir_remove_from_favorite($post_id)
-    {
-        global $current_user;
-
-        /**
-         * Filter to modify "Add to Favorites" text
-         *
-         * You can use this filter to rename "Add to Favorites" text to something else.
-         *
-         * @since 1.0.0
-         * @package GeoDirectory
-         */
-        $add_favourite_text = apply_filters('geodir_add_favourite_text', ADD_FAVOURITE_TEXT);
-
-        /**
-         * Filter to modify "Favourite" text
-         *
-         * You can use this filter to rename "Favourite" text to something else.
-         *
-         * @since 1.0.0
-         * @package GeoDirectory
-         */
-        $favourite_text = apply_filters('geodir_favourite_text', FAVOURITE_TEXT);
-
-        /**
-         * Filter to modify "fa fa-heart" icon
-         *
-         * You can use this filter to change "fa fa-heart" icon to something else.
-         *
-         * @since 1.0.0
-         * @package GeoDirectory
-         */
-        $favourite_icon = apply_filters('geodir_favourite_icon', 'fa fa-heart');
-
-        $user_meta_data = array();
-        $user_meta_data = geodir_get_user_favourites($current_user->data->ID);
-
-        if (!empty($user_meta_data)) {
-
-            if (($key = array_search($post_id, $user_meta_data)) !== false) {
-                unset($user_meta_data[$key]);
-            }
-
-        }
-
-        $site_id = '';
-        if ( is_multisite() ) {
-            $blog_id = get_current_blog_id();
-            if($blog_id && $blog_id!='1'){$site_id  = '_' . $blog_id ;}
-        }
-        update_user_meta($current_user->data->ID, 'gd_user_favourite_post'.$site_id, $user_meta_data);
-
-        /**
-         * Called before removing the post from favourites.
-         *
-         * @since 1.0.0
-         * @package GeoDirectory
-         * @param int $post_id The post ID.
-         */
-        do_action('geodir_before_remove_from_favorite', $post_id);
-
-        echo '<a href="javascript:void(0);"  title="' . $add_favourite_text . '" class="geodir-addtofav-icon" onclick="javascript:addToFavourite(\'' . $post_id . '\',\'add\');"><i class="'. $favourite_icon .'"></i> ' . $favourite_text . '</a>';
-
-        /**
-         * Called after removing the post from favourites.
-         *
-         * @since 1.0.0
-         * @package GeoDirectory
-         * @param int $post_id The post ID.
-         */
-        do_action('geodir_after_remove_from_favorite', $post_id);
-
-    }
-}
+//if (!function_exists('geodir_add_to_favorite')) {
+//    /**
+//     * This function would add listing to favorite listing.
+//     *
+//     * @since 1.0.0
+//     * @package GeoDirectory
+//     * @global object $current_user Current user object.
+//     * @param int $post_id The post ID.
+//     */
+//    function geodir_add_to_favorite($post_id)
+//    {
+//
+//        global $current_user;
+//
+//        /**
+//         * Filter to modify "Unfavorite" text
+//         *
+//         * You can use this filter to rename "Unfavorite" text to something else.
+//         *
+//         * @since 1.0.0
+//         * @package GeoDirectory
+//         */
+//        $remove_favourite_text = apply_filters('geodir_remove_favourite_text', REMOVE_FAVOURITE_TEXT);
+//
+//        /**
+//         * Filter to modify "Remove from Favorites" text
+//         *
+//         * You can use this filter to rename "Remove from Favorites" text to something else.
+//         *
+//         * @since 1.0.0
+//         * @package GeoDirectory
+//         */
+//        $unfavourite_text = apply_filters('geodir_unfavourite_text', UNFAVOURITE_TEXT);
+//
+//        /**
+//         * Filter to modify "fa fa-heart" icon
+//         *
+//         * You can use this filter to change "fa fa-heart" icon to something else.
+//         *
+//         * @since 1.0.0
+//         * @package GeoDirectory
+//         */
+//        $favourite_icon = apply_filters('geodir_favourite_icon', 'fa fa-heart');
+//
+//        $user_meta_data = geodir_get_user_favourites($current_user->data->ID);
+//        $user_meta_data = !empty($user_meta_data) && is_array($user_meta_data) ? $user_meta_data : array();
+//
+//        if (empty($user_meta_data) || (!empty($user_meta_data) && !in_array($post_id, $user_meta_data))) {
+//            $user_meta_data[] = $post_id;
+//        }
+//
+//        $site_id = '';
+//        if ( is_multisite() ) {
+//            $blog_id = get_current_blog_id();
+//            if($blog_id && $blog_id!='1'){$site_id  = '_' . $blog_id ;}
+//        }
+//        update_user_meta($current_user->data->ID, 'gd_user_favourite_post'.$site_id, $user_meta_data);
+//
+//        /**
+//         * Called before adding the post from favourites.
+//         *
+//         * @since 1.0.0
+//         * @package GeoDirectory
+//         * @param int $post_id The post ID.
+//         */
+//        do_action('geodir_before_add_from_favorite', $post_id);
+//
+//        echo '<a href="javascript:void(0);" title="' . $remove_favourite_text . '" class="geodir-removetofav-icon" onclick="javascript:addToFavourite(\'' . $post_id . '\',\'remove\');"><i class="'. $favourite_icon .'"></i> ' . $unfavourite_text . '</a>';
+//
+//        /**
+//         * Called after adding the post from favourites.
+//         *
+//         * @since 1.0.0
+//         * @package GeoDirectory
+//         * @param int $post_id The post ID.
+//         */
+//        do_action('geodir_after_add_from_favorite', $post_id);
+//
+//    }
+//}
+//
+//if (!function_exists('geodir_remove_from_favorite')) {
+//    /**
+//     * This function would remove the favourited property earlier.
+//     *
+//     * @since 1.0.0
+//     * @package GeoDirectory
+//     * @global object $current_user Current user object.
+//     * @param int $post_id The post ID.
+//     */
+//    function geodir_remove_from_favorite($post_id)
+//    {
+//        global $current_user;
+//
+//        /**
+//         * Filter to modify "Add to Favorites" text
+//         *
+//         * You can use this filter to rename "Add to Favorites" text to something else.
+//         *
+//         * @since 1.0.0
+//         * @package GeoDirectory
+//         */
+//        $add_favourite_text = apply_filters('geodir_add_favourite_text', ADD_FAVOURITE_TEXT);
+//
+//        /**
+//         * Filter to modify "Favourite" text
+//         *
+//         * You can use this filter to rename "Favourite" text to something else.
+//         *
+//         * @since 1.0.0
+//         * @package GeoDirectory
+//         */
+//        $favourite_text = apply_filters('geodir_favourite_text', FAVOURITE_TEXT);
+//
+//        /**
+//         * Filter to modify "fa fa-heart" icon
+//         *
+//         * You can use this filter to change "fa fa-heart" icon to something else.
+//         *
+//         * @since 1.0.0
+//         * @package GeoDirectory
+//         */
+//        $favourite_icon = apply_filters('geodir_favourite_icon', 'fa fa-heart');
+//
+//        $user_meta_data = array();
+//        $user_meta_data = geodir_get_user_favourites($current_user->data->ID);
+//
+//        if (!empty($user_meta_data)) {
+//
+//            if (($key = array_search($post_id, $user_meta_data)) !== false) {
+//                unset($user_meta_data[$key]);
+//            }
+//
+//        }
+//
+//        $site_id = '';
+//        if ( is_multisite() ) {
+//            $blog_id = get_current_blog_id();
+//            if($blog_id && $blog_id!='1'){$site_id  = '_' . $blog_id ;}
+//        }
+//        update_user_meta($current_user->data->ID, 'gd_user_favourite_post'.$site_id, $user_meta_data);
+//
+//        /**
+//         * Called before removing the post from favourites.
+//         *
+//         * @since 1.0.0
+//         * @package GeoDirectory
+//         * @param int $post_id The post ID.
+//         */
+//        do_action('geodir_before_remove_from_favorite', $post_id);
+//
+//        echo '<a href="javascript:void(0);"  title="' . $add_favourite_text . '" class="geodir-addtofav-icon" onclick="javascript:addToFavourite(\'' . $post_id . '\',\'add\');"><i class="'. $favourite_icon .'"></i> ' . $favourite_text . '</a>';
+//
+//        /**
+//         * Called after removing the post from favourites.
+//         *
+//         * @since 1.0.0
+//         * @package GeoDirectory
+//         * @param int $post_id The post ID.
+//         */
+//        do_action('geodir_after_remove_from_favorite', $post_id);
+//
+//    }
+//}
 
 if (!function_exists('geodir_favourite_html')) {
     /**
@@ -2517,7 +2542,7 @@ if (!function_exists('geodir_favourite_html')) {
         if (!empty($user_meta_data) && in_array($post_id, $user_meta_data)) {
             ?><span class="geodir-addtofav favorite_property_<?php echo $post_id;?>"  ><a
                 class="geodir-removetofav-icon" href="javascript:void(0);"
-                onclick="javascript:addToFavourite(<?php echo $post_id;?>,'remove');"
+                onclick="javascript:gd_fav_save(<?php echo $post_id;?>);"
                 title="<?php echo $remove_favourite_text;?>"><i class="<?php echo $unfavourite_icon; ?>"></i> <?php echo $unfavourite_text;?>
             </a>   </span><?php
 
@@ -2526,7 +2551,7 @@ if (!function_exists('geodir_favourite_html')) {
             if (!isset($current_user->data->ID) || $current_user->data->ID == '') {
                 $script_text = 'javascript:window.location.href=\'' . geodir_login_url() . '\'';
             } else
-                $script_text = 'javascript:addToFavourite(' . $post_id . ',\'add\')';
+                $script_text = 'javascript:gd_fav_save(' . $post_id . ')';
 
             ?><span class="geodir-addtofav favorite_property_<?php echo $post_id;?>"><a class="geodir-addtofav-icon"
                                                                                         href="javascript:void(0);"
@@ -2602,28 +2627,28 @@ function geodir_get_cat_postcount($term = array())
 
 }
 
-
-/**
- * Allow add post type from front end
- *
- * @since 1.0.0
- * @package GeoDirectory
- */
-function geodir_allow_post_type_frontend()
-{
-    $geodir_allow_posttype_frontend = geodir_get_option('geodir_allow_posttype_frontend');
-
-    if (!is_admin() && isset($_REQUEST['listing_type'])
-        && !empty($geodir_allow_posttype_frontend)
-        && !in_array($_REQUEST['listing_type'], $geodir_allow_posttype_frontend)
-    ) {
-
-        wp_redirect(home_url());
-        exit;
-
-    }
-
-}
+//
+///**
+// * Allow add post type from front end
+// *
+// * @since 1.0.0
+// * @package GeoDirectory
+// */
+//function geodir_allow_post_type_frontend()
+//{
+//    $geodir_allow_posttype_frontend = geodir_get_option('geodir_allow_posttype_frontend');
+//
+//    if (!is_admin() && isset($_REQUEST['listing_type'])
+//        && !empty($geodir_allow_posttype_frontend)
+//        && !in_array($_REQUEST['listing_type'], $geodir_allow_posttype_frontend)
+//    ) {
+//
+//        wp_redirect(home_url());
+//        exit;
+//
+//    }
+//
+//}
 
 /**
  * Changing excerpt length.

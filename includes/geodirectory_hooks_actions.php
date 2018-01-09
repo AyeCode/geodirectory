@@ -17,34 +17,32 @@
  * @package GeoDirectory
  * @return string The GeoDirectory ajax URL.
  */
-function geodir_get_ajax_url()
-{
-    return admin_url('admin-ajax.php?action=geodir_ajax_action');
-}
-
+//function geodir_get_ajax_url()
+//{
+//    return admin_url('admin-ajax.php?action=geodir_ajax_action');
+//}
+//return;
 /////////////////////
 /* ON INIT ACTIONS */
 /////////////////////
 
-add_action('init', 'geodir_on_init', 1);
+//add_action('init', 'geodir_on_init', 1);
 
 add_action('init', 'geodir_add_post_filters');
 
 //add_action('init', 'geodir_init_defaults');
 
-add_action('init', 'geodir_allow_post_type_frontend');
+//add_action('init', 'geodir_allow_post_type_frontend');
 
-add_action('init', 'geodir_register_taxonomies', 1);
+//add_action('init', 'geodir_register_taxonomies', 1);
 
-add_action('init', 'geodir_register_post_types', 2);
+//add_action('init', 'geodir_register_post_types', 2);
 
-add_filter('geodir_post_type_args', 'geodir_post_type_args_modify', 0, 2);
+//add_filter('geodir_post_type_args', 'geodir_post_type_args_modify', 0, 2);
 
 //add_action( 'init', 'geodir_flush_rewrite_rules', 99 );
 
-add_action('init', 'geodir_custom_post_status');
-
-add_action('widgets_init', 'geodir_register_sidebar'); // Takes care of widgets
+//add_action('widgets_init', 'geodir_register_sidebar'); // Takes care of widgets
 
 global $geodir_addon_list;
 /**
@@ -58,32 +56,33 @@ global $geodir_addon_list;
  */
 apply_filters('geodir_build_addon_list', $geodir_addon_list);
 
-add_action('wp_ajax_geodir_ajax_action', "geodir_ajax_handler");
+//add_action('wp_ajax_geodir_ajax_action', "geodir_ajax_handler");
 
-add_action('wp_ajax_nopriv_geodir_ajax_action', 'geodir_ajax_handler');
+//add_action('wp_ajax_nopriv_geodir_ajax_action', 'geodir_ajax_handler');
 
 /* Pluploader */
-add_action('wp_ajax_plupload_action', "geodir_plupload_action");
-
-add_action('wp_ajax_nopriv_plupload_action', 'geodir_plupload_action'); // call for not logged in ajax
+//add_action('wp_ajax_plupload_action', "geodir_plupload_action");
+//
+//add_action('wp_ajax_nopriv_plupload_action', 'geodir_plupload_action'); // call for not logged in ajax
 
 ////////////////////////
 /* REWRITE RULES */
 ////////////////////////
 
-add_filter('rewrite_rules_array', 'geodir_listing_rewrite_rules');
+//add_filter('rewrite_rules_array', 'geodir_listing_rewrite_rules');
 
 ////////////////////////
 /* QUERY VARS */
 ////////////////////////
 
-add_filter('query_vars', 'geodir_add_location_var');
-add_filter('query_vars', 'geodir_add_geodir_page_var');
-add_action('wp', 'geodir_add_page_id_in_query_var'); // problem fix in wordpress 3.8
-if (get_option('permalink_structure') != '')
-    add_filter('parse_request', 'geodir_set_location_var_in_session_in_core');
+//add_filter('query_vars', 'geodir_add_location_var');
+//add_filter('query_vars', 'geodir_add_geodir_page_var');
+//add_action('wp', 'geodir_add_page_id_in_query_var'); // problem fix in wordpress 3.8
+//if (geodir_get_option('permalink_structure') != '')
+//add_filter('parse_request', 'geodir_set_location_var_in_session_in_core');
+//add_filter('parse_request', 'geodir_set_is_geodir_page');
 
-add_filter('parse_query', 'geodir_modified_query');
+//add_filter('parse_query', 'geodir_modified_query');
 
 
 ////////////////////////
@@ -91,16 +90,16 @@ add_filter('parse_query', 'geodir_modified_query');
 ////////////////////////
 
 //add_action( 'wp_loaded','geodir_flush_rewrite_rules' );
-add_action('wp_loaded', 'geodir_on_wp_loaded', 10);
+add_action('wp_loaded', 'geodir_on_wp_loaded', 10); // todo details page forms, we need to change this to proper ajax
 
-add_action('wp', 'geodir_on_wp', 10);
+//add_action('wp', 'geodir_on_wp', 10);
 
 
 /////////////////////////////
 /* ON WP HEAD ACTIONS */
 /////////////////////////////
 
-add_action('wp_head', 'geodir_header_scripts');
+
 
 // add_action('admin_head', 'geodir_header_scripts'); // Removed since 1.5.0
 
@@ -114,16 +113,10 @@ add_action('wp_head', 'geodir_restrict_widget'); // Related to widgets
 /* ENQUEUE SCRIPTS AND STYLES */
 //////////////////////////////
 
-add_action('wp_enqueue_scripts', 'geodir_templates_scripts');
+//add_action('wp_enqueue_scripts', 'geodir_templates_scripts');
 
-add_action('wp_enqueue_scripts', 'geodir_templates_styles', 8);
+//add_action('wp_enqueue_scripts', 'geodir_templates_styles', 8);
 
-////////////////////////
-/* ON MAIN NAVIGATION */
-////////////////////////
-add_filter('wp_nav_menu_items', 'geodir_menu_items', 100, 2);
-
-add_filter('wp_page_menu', 'geodir_pagemenu_items', 100, 2);
 
 /////////////////////////
 /* CATEGORY / TAXONOMY / CUSTOM POST ACTIONS */
@@ -135,7 +128,7 @@ add_filter('term_link', 'geodir_get_term_link', 10, 3);
 
 add_filter('post_type_archive_link', 'geodir_get_posttype_link', 10, 2);
 
-add_filter('post_type_link', 'geodir_listing_permalink_structure', 10, 4);
+//add_filter('post_type_link', 'geodir_listing_permalink_structure', 10, 4);
 
 ////////////////////////
 /* POST AND LOOP ACTIONS */
@@ -152,7 +145,7 @@ if (!is_admin()) {
 }
 
 
-add_action('set_object_terms', 'geodir_set_post_terms', 10, 4);
+//add_action('set_object_terms', 'geodir_set_post_terms', 10, 4);
 
 add_action('transition_post_status', 'geodir_update_poststatus', 10, 3);
 
@@ -200,26 +193,6 @@ add_action('wp_footer', 'geodir_add_sharelocation_scripts');
 //}
 
 
-/**
- * Save and update GeoDirectory navigation settings per theme.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @param string $newname The theme name.
- * @ignore
- */
-function geodir_unset_prev_theme_nav_location($newname)
-{
-    $geodir_theme_location = geodir_get_option('geodir_theme_location_nav_' . $newname);
-    if ($geodir_theme_location) {
-        geodir_update_option('geodir_theme_location_nav', $geodir_theme_location);
-    } else {
-        geodir_update_option('geodir_theme_location_nav', '');
-    }
-}
-
-/// add action for theme switch to blank previous theme navigation location setting
-add_action("switch_theme", "geodir_unset_prev_theme_nav_location", 10, 2);
 
 /**
  * Includes the file that adds filters/functions to change the database queries.
@@ -242,22 +215,9 @@ function geodir_add_post_filters() {
     }
 }
 
-if (!function_exists('geodir_init_defaults')) {
-    /**
-     * Calls the function to register the GeoDirectory default CPT and taxonomies.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     */
-    function geodir_init_defaults() {
-        if (function_exists('geodir_register_defaults')) {
-            geodir_register_defaults();
-        }
-    }
-}
+
 
 /* Sidebar */
-add_action('geodir_sidebar', 'geodir_get_sidebar', 10);
 
 
 /* Pagination in loop-store */
@@ -1224,7 +1184,7 @@ function geodir_localize_all_js_msg()
     $arr_alert_msg = array(
         'geodir_plugin_url' => geodir_plugin_url(),
         'geodir_admin_ajax_url' => $ajax_url,
-        'custom_field_not_blank_var' => __('HTML Variable Name must not be blank', 'geodirectory'),
+        'custom_field_not_blank_var' => __('Frontend title must not be blank', 'geodirectory'),
         'custom_field_not_special_char' => __('Please do not use special character and spaces in HTML Variable Name.', 'geodirectory'),
         'custom_field_unique_name' => __('HTML Variable Name should be a unique name.', 'geodirectory'),
         'custom_field_delete' => __('Are you wish to delete this field?', 'geodirectory'),
@@ -1349,75 +1309,7 @@ add_filter('geodir_posts_order_by_sort', 'geodir_posts_order_by_custom_sort', 0,
 add_filter('geodir_advance_custom_fields_heading', 'geodir_advance_customfields_heading', 0, 2);
 
 
-add_action('switch_theme', 'geodir_store_sidebars');
 
-/**
- * Stores the GeoDirectory widget locations in the theme widget areas.
- *
- * This function loops through the GeoDirectory widgets and saves their locations in the widget areas to an option
- * so they can be restored later. This is called via hook.
- *    add_action('switch_theme', 'geodir_store_sidebars');
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @global array $geodir_sidebars List of geodirectory sidebars.
- * @global array $sidebars_widgets List of geodirectory sidebar widgets.
- */
-function geodir_store_sidebars() {
-    global $geodir_sidebars, $sidebars_widgets;
-
-    if ( !is_array( $sidebars_widgets ) ) {
-        $sidebars_widgets = wp_get_sidebars_widgets();
-    }
-    $geodir_old_sidebars = array();
-
-    if ( is_array( $geodir_sidebars ) ) {
-        foreach ( $geodir_sidebars as $val ) {
-            if ( is_array( $sidebars_widgets ) ) {
-                if ( array_key_exists( $val, $sidebars_widgets ) ) {
-                    $geodir_old_sidebars[ $val ] = $sidebars_widgets[ $val ];
-                } else {
-                    $geodir_old_sidebars[ $val ] = array();
-                }
-            }
-        }
-    }
-    
-    geodir_update_option( 'geodir_sidebars', $geodir_old_sidebars );
-    geodir_option_version_backup( 'geodir_sidebars' );
-}
-
-add_action('after_switch_theme', 'geodir_restore_sidebars');
-/**
- * Restore sidebars.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @global array $sidebars_widgets List of geodirectory sidebar widgets.
- */
-function geodir_restore_sidebars() {
-    global $sidebars_widgets;
-
-    if ( !is_array( $sidebars_widgets ) ) {
-        $sidebars_widgets = wp_get_sidebars_widgets();
-    }
-
-    if ( is_array( $sidebars_widgets ) ) {
-        $geodir_old_sidebars = geodir_get_option( 'geodir_sidebars' );
-        
-        if ( is_array( $geodir_old_sidebars ) ) {
-            foreach ( $geodir_old_sidebars as $key => $val ) {
-                // GD widget
-                if ( 0 === strpos( $key, 'geodir_' ) ) {
-                    $sidebars_widgets[ $key ] = $geodir_old_sidebars[ $key ];
-                }
-            }
-        }
-    }
-
-    update_option( 'sidebars_widgets', $sidebars_widgets );
-    geodir_update_option( 'geodir_sidebars', '' );
-}
 
 add_action('geodir_after_listing_post_gridview', 'geodir_after_listing_post_gridview');
 /**
@@ -1570,8 +1462,8 @@ function geodir_detail_page_tab_is_display($is_display, $tab)
 }
 
 
-add_action('wp', 'geodir_changes_in_custom_fields_table');
-add_action('wp_admin', 'geodir_changes_in_custom_fields_table');
+//add_action('wp', 'geodir_changes_in_custom_fields_table');
+//add_action('wp_admin', 'geodir_changes_in_custom_fields_table');
 
 /**
  * Geodirectory updated custom field table(add field and change show in sidebar value in db).
@@ -2106,7 +1998,7 @@ function geodir_detail_page_tab_headings_change($tabs_arr)
 
         if (array_key_exists('post_video', $tabs_arr)) {
 
-            $field_title = $wpdb->get_var($wpdb->prepare("select site_title from " . GEODIR_CUSTOM_FIELDS_TABLE . " where htmlvar_name = %s and post_type = %s ", array('geodir_video', $post_type)));
+            $field_title = $wpdb->get_var($wpdb->prepare("select frontend_title from " . GEODIR_CUSTOM_FIELDS_TABLE . " where htmlvar_name = %s and post_type = %s ", array('geodir_video', $post_type)));
 
             if (isset($tabs_arr['post_video']['heading_text']) && $field_title != '')
                 $tabs_arr['post_video']['heading_text'] = $field_title;
@@ -2114,7 +2006,7 @@ function geodir_detail_page_tab_headings_change($tabs_arr)
 
         if (array_key_exists('special_offers', $tabs_arr)) {
 
-            $field_title = $wpdb->get_var($wpdb->prepare("select site_title from " . GEODIR_CUSTOM_FIELDS_TABLE . " where htmlvar_name = %s and post_type = %s ", array('geodir_special_offers', $post_type)));
+            $field_title = $wpdb->get_var($wpdb->prepare("select frontend_title from " . GEODIR_CUSTOM_FIELDS_TABLE . " where htmlvar_name = %s and post_type = %s ", array('geodir_special_offers', $post_type)));
 
             if (isset($tabs_arr['special_offers']['heading_text']) && $field_title != '')
                 $tabs_arr['special_offers']['heading_text'] = $field_title;
@@ -2299,40 +2191,6 @@ function geodir_temp_set_post_attachment()
 }
 
 /* ------- GET CURRENT USER POST LISTING -------*/
-/**
- * Get user's post listing count.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
- * @global object $current_user Current user object.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
- * @return array User listing count for each post type.
- */
-function geodir_user_post_listing_count($user_id=null)
-{
-    global $wpdb, $plugin_prefix, $current_user;
-    if(!$user_id){
-        $user_id = $current_user->ID;
-    }
-
-    $user_id = $current_user->ID;
-    $all_postypes = geodir_get_posttypes();
-    $all_posts = geodir_get_option('geodir_listing_link_user_dashboard');
-
-    $user_listing = array();
-    if (is_array($all_posts) && !empty($all_posts)) {
-        foreach ($all_posts as $ptype) {
-            $total_posts = $wpdb->get_var("SELECT count( ID ) FROM " . $wpdb->prefix . "posts WHERE post_author=" . $user_id . " AND post_type='" . $ptype . "' AND ( post_status = 'publish' OR post_status = 'draft' OR post_status = 'private' )");
-
-            if ($total_posts > 0) {
-                $user_listing[$ptype] = $total_posts;
-            }
-        }
-    }
-
-    return $user_listing;
-}
 
 
 
@@ -2427,8 +2285,8 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                 }
 
                 if (isset($field['show_in']) && strpos($field['show_in'], '[owntab]') !== false && ((isset($post->{$field_name}) && $post->{$field_name} != '') || $field['type'] == 'fieldset' || $field['type'] == 'address') && in_array($field['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file','address','taxonomy'))) {
-                    $label = $field['site_title'] != '' ? $field['site_title'] : $field['admin_title'];
-                    $site_title = trim($field['site_title']);
+                    $label = $field['frontend_title'] != '' ? $field['frontend_title'] : $field['admin_title'];
+                    $frontend_title = trim($field['frontend_title']);
                     $type = $field;
                     $variables_array = array();
 
@@ -2439,7 +2297,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                     if ($type['type'] != 'fieldset') {
                         $i++;
                         $variables_array['post_id'] = $post->ID;
-                        $variables_array['label'] = __($type['site_title'], 'geodirectory');
+                        $variables_array['label'] = __($type['frontend_title'], 'geodirectory');
                         $variables_array['value'] = isset($post->{$type['htmlvar_name']}) ? $post->{$type['htmlvar_name']} : '';
 
                     }else{

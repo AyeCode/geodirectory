@@ -92,7 +92,7 @@ function geodir_init_lazy_load(){
 
 jQuery(function() {
     // start lazy load if it's turned on
-    if(geodir_var.geodir_lazy_load==1){
+    if(geodirectory_params.lazy_load==1){
         geodir_init_lazy_load();
     }
 });
@@ -408,7 +408,7 @@ jQuery(document).ready(function() {
         if (input_field.attr('data-type') == 'autofill' && input_field.attr('data-fill') != '') {
             var data_fill = input_field.attr('data-fill');
             var fill_value = jQuery(this).val();
-            jQuery.get(geodir_var.geodir_ajax_url, {
+            jQuery.get(geodirectory_params.ajax_url, {
                 autofill: data_fill,
                 fill_str: fill_value
             }, function(data) {
@@ -479,17 +479,17 @@ jQuery(document).ready(function() {
         }, "fast");
     }
     
-    var gd_modal = "undefined" != typeof geodir_var.geodir_gd_modal && 1 == parseInt(geodir_var.geodir_gd_modal) ? false : true;
+    var gd_modal = "undefined" != typeof geodirectory_params.gd_modal && 1 == parseInt(geodirectory_params.gd_modal) ? false : true;
     
     if (gd_modal) {
         jQuery(".geodir-custom-post-gallery").each(function() {
             jQuery("a", this).lightBox({
                 overlayOpacity: .5,
-                imageLoading: geodir_var.geodir_plugin_url + "/assets/images/lightbox-ico-loading.gif",
-                imageBtnNext: geodir_var.geodir_plugin_url + "/assets/images/lightbox-btn-next.gif",
-                imageBtnPrev: geodir_var.geodir_plugin_url + "/assets/images/lightbox-btn-prev.gif",
-                imageBtnClose: geodir_var.geodir_plugin_url + "/assets/images/lightbox-btn-close.gif",
-                imageBlank: geodir_var.geodir_plugin_url + "/assets/images/lightbox-blank.gif"
+                imageLoading: geodirectory_params.plugin_url + "/assets/images/lightbox-ico-loading.gif",
+                imageBtnNext: geodirectory_params.plugin_url + "/assets/images/lightbox-btn-next.gif",
+                imageBtnPrev: geodirectory_params.plugin_url + "/assets/images/lightbox-btn-prev.gif",
+                imageBtnClose: geodirectory_params.plugin_url + "/assets/images/lightbox-btn-close.gif",
+                imageBlank: geodirectory_params.plugin_url + "/assets/images/lightbox-blank.gif"
             })
         });
     }
@@ -715,3 +715,78 @@ function geodir_search_wait(on){
     }
 
 }
+
+function geodir_click_search($this) {
+    //we delay this so other functions have a change to change setting before search
+    setTimeout(function() {
+        jQuery($this).parent().find('.geodir_submit_search').click();
+    }, 100);
+}
+
+
+function gd_fav_save(post_id) {
+    var ajax_action;
+    if (jQuery('.favorite_property_' + post_id +' a').hasClass('geodir-removetofav-icon')) {
+        ajax_action = 'remove';
+    } else {
+        ajax_action = 'add';
+    }
+
+    jQuery.ajax({
+        url: geodirectory_params.ajax_url,
+        type: 'GET',
+        dataType: 'json',
+        data: {
+            action: 'geodir_user_add_fav',
+            type_action: ajax_action,
+            security: geodirectory_params.basic_nonce,
+            pid: post_id
+        },
+        timeout: 20000,
+        error: function() {
+            alert(geodir_all_js_msg.loading_listing_error_favorite);
+        },
+        success: function(data) {
+
+            if(data.success){
+
+                if(ajax_action=='remove'){
+                    jQuery('.favorite_property_' + post_id+' a')
+                        .removeClass('geodir-removetofav-icon')
+                        .addClass('geodir-addtofav-icon')
+                        .attr("title", geodirectory_params.text_add_fav)
+                        .html('<i class="'+geodirectory_params.icon_fav+'"></i>'+' '+geodirectory_params.text_fav);
+
+                }else{
+                    jQuery('.favorite_property_' + post_id+' a')
+                        .removeClass('geodir-addtofav-icon')
+                        .addClass('geodir-removetofav-icon')
+                        .attr("title", geodirectory_params.text_remove_fav)
+                        .html('<i class="'+geodirectory_params.icon_unfav+'"></i>'+' '+geodirectory_params.text_unfav);
+
+                }
+            }else{
+                alert(geodir_all_js_msg.loading_listing_error_favorite);
+            }
+            //jQuery('.favorite_property_' + post_id).html(html);
+        }
+    });
+    return false;
+}
+
+/**
+ * Our own switchClass so we don't have to add jQuery UI.
+ */
+(function($){
+    $.fn.GDswitchClass = function(remove, add){
+        var style = {
+            'transition-property'        : 'all',
+            'transition-duration'        : '0.6s',
+            'transition-timing-function' : 'ease-out'
+        };
+
+        return this.each(function(){
+            $(this).css(style).removeClass(remove).addClass(add)
+        });
+    };
+}(jQuery));

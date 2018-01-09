@@ -6,6 +6,7 @@ jQuery(document).ready(function ($) {
     if ($(".plupload-upload-uic").exists()) {
         var pconfig = false;
         var msgErr = '';
+        var post_id = jQuery("#geodirectory-add-post input[name='ID']").val();
 
         $(".plupload-upload-uic").each(function () {
             var $this = $(this);
@@ -14,19 +15,21 @@ jQuery(document).ready(function ($) {
 
             plu_show_thumbs(imgId);
 
-            pconfig = JSON.parse(gd_plupload.base_plupload_config);
+            pconfig = JSON.parse(geodir_plupload_params.base_plupload_config);
             pconfig["browse_button"] = imgId + pconfig["browse_button"];
             pconfig["container"] = imgId + pconfig["container"];
-            pconfig["drop_element"] = imgId + pconfig["drop_element"];
+            if(pconfig["drop_element"]){ pconfig["drop_element"] = imgId + pconfig["drop_element"];} // only add drop area if there is one
             pconfig["file_data_name"] = imgId + pconfig["file_data_name"];
             pconfig["multipart_params"]["imgid"] = imgId;
-            pconfig["multipart_params"]["_ajax_nonce"] = $this.find(".ajaxnonceplu").attr("id").replace("ajaxnonceplu", "");
+            pconfig["multipart_params"]["post_id"] = post_id;
+            //pconfig["multipart_params"]["_ajax_nonce"] = $this.find(".ajaxnonceplu").attr("id").replace("ajaxnonceplu", "");
 
             if ($this.hasClass("plupload-upload-uic-multiple")) {
                 pconfig["multi_selection"] = true;
             }
 
-            if ($this.find(".plupload-resize").exists()) {
+            // resizing in JS can actually cause a small image to grow in size and can lower quality of image even if set to 100%
+            /* if ($this.find(".plupload-resize").exists()) {
                 var w = parseInt($this.find(".plupload-width").attr("id").replace("plupload-width", ""));
                 var h = parseInt($this.find(".plupload-height").attr("id").replace("plupload-height", ""));
                 pconfig["resize"] = {
@@ -34,7 +37,7 @@ jQuery(document).ready(function ($) {
                     height: h,
                     quality: 90
                 };
-            }
+            } */
 			var allowed_exts = jQuery('#' + imgId + '_allowed_types').val();
 			allowed_exts = allowed_exts && allowed_exts != '' ? allowed_exts : '';
 			if (imgId == 'post_images' && typeof geodir_all_js_msg.gd_allowed_img_types != 'undefined' && geodir_all_js_msg.gd_allowed_img_types != '') {
@@ -60,7 +63,7 @@ jQuery(document).ready(function ($) {
                     } else {
                         msgErr = 'File size error : You tried to upload a file over %s';
                     }
-                    msgErr = msgErr.replace("%s", gd_plupload.upload_img_size);
+                    msgErr = msgErr.replace("%s", geodir_plupload_params.upload_img_size);
 
                     jQuery('#' + imgId + 'upload-error').html(msgErr);
                 } else if (files.code == -601) {
@@ -88,8 +91,8 @@ jQuery(document).ready(function ($) {
             limitImg = jQuery("#" + imgId + "image_limit").val();
 
             //a file was added in the queue
-            //totalImg = gd_plupload.totalImg;
-            //limitImg = gd_plupload.image_limit;
+            //totalImg = geodir_plupload_params.totalImg;
+            //limitImg = geodir_plupload_params.image_limit;
             uploader.bind('FilesAdded', function (up, files) {
                 jQuery('#' + imgId + 'upload-error').html('');
                 jQuery('#' + imgId + 'upload-error').removeClass('upload-error');
@@ -176,9 +179,11 @@ jQuery(document).ready(function ($) {
                         v1 = response;
                     }
                     $("#" + imgId).val(v1);
+                    console.log(v1);
                 } else {
                     // single
                     $("#" + imgId).val(response + "");
+                    console.log(response);
                 }
                 // show thumbs
                 plu_show_thumbs(imgId);
@@ -196,6 +201,7 @@ function geodir_remove_file_index(indexes) {
 }
 
 function plu_show_thumbs(imgId) {
+    console.log("plu_show_thumbs");
     var $ = jQuery;
     var thumbsC = $("#" + imgId + "plupload-thumbs");
     thumbsC.html("");
@@ -211,12 +217,34 @@ function plu_show_thumbs(imgId) {
 
     for (var i = 0; i < images.length; i++) {
         if (images[i] && images[i] != 'null') {
-            var file_ext = images[i].substring(images[i].lastIndexOf('.') + 1);
+
+            var img_arr = images[i].split("|");
+            var image_url = img_arr[0];
+            var image_id = img_arr[1];
+            var image_title = img_arr[2];
+            var image_caption = img_arr[3];
+            //console.log(img_arr);
+
+            // fix undefined id
+            if(typeof image_id === "undefined"){
+                image_id = '';
+            }
+            // fix undefined title
+            if(typeof image_title === "undefined"){
+                image_title = '';
+            }
+            // fix undefined title
+            if(typeof image_caption === "undefined"){
+                image_caption = '';
+            }
+
+            var file_ext = image_url.substring(images[i].lastIndexOf('.') + 1);
+
             file_ext = file_ext.split('?').shift();// in case the image url has params
-            var fileNameIndex = images[i].lastIndexOf("/") + 1;
-            var dotIndex = images[i].lastIndexOf('.');
+            var fileNameIndex = image_url.lastIndexOf("/") + 1;
+            var dotIndex = image_url.lastIndexOf('.');
             if(dotIndex < fileNameIndex){continue;}
-            var file_name = images[i].substr(fileNameIndex, dotIndex < fileNameIndex ? loc.length : dotIndex);
+            var file_name = image_url.substr(fileNameIndex, dotIndex < fileNameIndex ? loc.length : dotIndex);
 
             /*if (file_ext == 'pdf' || file_ext == 'xlsx' || file_ext == 'xls' || file_ext == 'csv' || file_ext == 'docx' || file_ext == 'doc' || file_ext == 'txt') {
                 file_name = file_name.split(imgId + '_');
@@ -225,15 +253,24 @@ function plu_show_thumbs(imgId) {
                 var thumb = $('<div class="thumb" id="thumb' + imgId + i + '"><div class="thumbi"><a id="thumbremovelink' + imgId + i + '" href="#">' + txtRemove + '</a></div><img src="' + images[i] + '" alt=""  /></div>');
             }*/
 			if (file_ext == 'jpg' || file_ext == 'jpe' || file_ext == 'jpeg' || file_ext == 'png' || file_ext == 'gif' || file_ext == 'bmp' || file_ext == 'ico') {
-                var thumb = $('<div class="thumb" id="thumb' + imgId + i + '"><div class="thumbi"><a id="thumbremovelink' + imgId + i + '" href="#">' + txtRemove + '</a></div><img src="' + images[i] + '" alt=""  /></div>');
+                var thumb = $('<div class="thumb" id="thumb' + imgId + i + '">' +
+                    '<img data-id="'+image_id+'" data-title="'+image_title+'" data-caption="'+image_caption+'" src="' + image_url + '" alt=""  />' +
+                    '<div class="gd-thumb-actions">'+
+                    '<span class="thumbeditlink" onclick="gd_edit_image_meta('+imgId+','+i+');"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>' +
+                    '<span class="thumbremovelink" id="thumbremovelink' + imgId + i + '"><i class="fa fa-trash-o" aria-hidden="true"></i></span>' +
+                    '</div>'+
+                    '</div>');
             } else {
                 file_name = file_name.split(imgId + '_');
-                var thumb = $('<div class="thumb geodir_file" id="thumb' + imgId + i + '"><div class="thumbi"><a id="thumbremovelink' + imgId + i + '" href="#">' + txtRemove + '</a></div><a target="_blank" href="' + images[i] + '">' + file_name[file_name.length - 1] + '</a></div>');
+                var thumb = $('<div class="thumb geodir_file" id="thumb' + imgId + i + '"><div class="thumbi"><a id="thumbremovelink' + imgId + i + '" href="#">' + txtRemove + '</a></div><a target="_blank" href="' +image_url + '">' + file_name[file_name.length - 1] + '</a></div>');
             }
 
             thumbsC.append(thumb);
 
-            thumb.find("a", "thumbi").click(function () {
+            thumb.find(".thumbremovelink").click(function () {
+
+                console.log("plu_show_thumbs-thumbremovelink");
+
                 if (jQuery('#' + imgId + 'plupload-upload-ui').hasClass("plupload-upload-uic-multiple")) totalImg--; // remove image from total
                 jQuery('#' + imgId + 'upload-error').html('');
                 jQuery('#' + imgId + 'upload-error').removeClass('upload-error');
@@ -248,23 +285,85 @@ function plu_show_thumbs(imgId) {
                     }
                 }
                 $("#" + imgId).val(kimages.join());
+                console.log("plu_show_thumbs-thumbremovelink-run");
                 plu_show_thumbs(imgId);
                 return false;
             });
         }
     }
 
-    if (images.length > 1) {
+    if (images.length > 1) {console.log("plu_show_thumbs-sortable");
         thumbsC.sortable({
             update: function (event, ui) {
                 var kimages = [];
                 thumbsC.find("img").each(function () {
-                    kimages[kimages.length] = $(this).attr("src");
+                    kimages[kimages.length] = $(this).attr("src")+"|"+$(this).data("id")+"|"+$(this).data("title")+"|"+$(this).data("caption");
                     $("#" + imgId).val(kimages.join());
                     plu_show_thumbs(imgId);
+                    console.log("plu_show_thumbs-sortable-run");
                 });
             }
         });
         thumbsC.disableSelection();
     }
+
+
+    // we need to run the basics here.
+    console.log("run basics");
+
+    var kimages = [];
+    thumbsC.find("img").each(function () {
+        kimages[kimages.length] = $(this).attr("src")+"|"+$(this).data("id")+"|"+$(this).data("title")+"|"+$(this).data("caption");
+        $("#" + imgId).val(kimages.join());
+        //plu_show_thumbs(imgId);
+        console.log("run basics-run");
+    });
+}
+
+
+/*
+@todo this needs UI bad.
+ */
+function gd_edit_image_meta(input,order_id){
+//alert(order_id);
+
+    var imagesS = jQuery("#" + input.id).val();
+console.log(imagesS);
+    var images = imagesS.split(",");
+    var img_arr = images[order_id].split("|");
+    console.log(img_arr);
+    var image_url = img_arr[0];
+    var image_id = img_arr[1];
+    var image_title = img_arr[2];
+    var image_caption = img_arr[3];
+    var html = '';
+// <div class="txt-fld">
+//         <label for="">Username</label>
+//         <input id="" class="good_input" name="" type="text">
+//
+//     </div>
+    html  = html + "<div class='gd-modal-text'><label for=''>Title</label><input id='gd-image-meta-title' value='"+image_title+"'></div>"; // title value
+    html  = html + "<div class='gd-modal-text'><label for=''>Caption</label><input id='gd-image-meta-caption' value='"+image_caption+"'></div>"; // caption value
+    // html  = html + "<input id='gd-image-meta-title' value='"+image_title+"'>"; // title value
+    // html  = html + "<input id='gd-image-meta-caption' value='"+image_caption+"'>"; // caption value
+    html  = html + "<div class='gd-modal-button'><button class='button button-primary button-large' onclick='gd_set_image_meta(\""+input.id+"\","+order_id+")'>Set</button></div>"; // caption value
+    jQuery('#gd-image-meta-input').html(html);
+    tb_show("Edit image meta", "#TB_inline?height=300&amp;width=400&amp;inlineId=gd-image-meta-input"); //@todo title needs to be translatable
+
+}
+
+function gd_set_image_meta(input_id,order_id){
+//alert(order_id);
+    var imagesS = jQuery("#" + input_id).val();
+    var images = imagesS.split(",");
+    var img_arr = images[order_id].split("|");
+    var image_url = img_arr[0];
+    var image_id = img_arr[1];
+    var image_title = jQuery('#gd-image-meta-title').val();
+    var image_caption = jQuery('#gd-image-meta-caption').val();
+    images[order_id] = image_url+"|"+image_id+"|"+image_title+"|"+image_caption;
+    imagesS = images.join(",");
+    jQuery("#" + input_id).val(imagesS);
+    plu_show_thumbs(input_id);
+    tb_remove();
 }

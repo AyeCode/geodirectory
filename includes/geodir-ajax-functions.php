@@ -35,20 +35,20 @@ function geodir_on_wp_loaded()
 
 }
 
-/**
- * Geodirectory Post or Get request handler on wp_loaded.
- *
- * @since 1.3.5
- * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
- */
-function geodir_on_wp()
-{
-    if(geodir_is_page('login')) {
-        geodir_user_signup();
-    }
-
-}
+///**
+// * Geodirectory Post or Get request handler on wp_loaded.
+// *
+// * @since 1.3.5
+// * @package GeoDirectory
+// * @global object $wpdb WordPress Database object.
+// */
+//function geodir_on_wp()
+//{
+//    if(geodir_is_page('login')) {
+//        geodir_user_signup();
+//    }
+//
+//}
 
 /**
  * Geodirectory Post or Get request handler on init.
@@ -128,7 +128,7 @@ function geodir_ajax_handler() {
              * @since 1.0.0
              * @package GeoDirectory
              */
-            include_once(geodir_plugin_path() . '/includes/admin/geodir_admin_ajax.php');
+            //include_once(geodir_plugin_path() . '/includes/admin/geodir_admin_ajax.php');
         } else {
             wp_redirect(geodir_login_url());
             gd_die();

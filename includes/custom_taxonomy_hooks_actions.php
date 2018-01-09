@@ -6,170 +6,6 @@
  * @package GeoDirectory
  */
 
-/**
- * Register the taxonomies.
- *
- * @since 1.0.0
- */
-function geodir_register_taxonomies()
-{
-    $taxonomies = array();
-    $taxonomies = geodir_get_option('geodir_taxonomies');
-    // If custom taxonomies are present, register them
-    if (is_array($taxonomies)) {
-        // Sort taxonomies
-        ksort($taxonomies);
-
-        // Register taxonomies
-        foreach ($taxonomies as $taxonomy => $args) {
-            // Allow taxonomy names to be translated
-            if (!empty($args['args']['labels'])) {
-                foreach ($args['args']['labels'] as $key => $tax_label) {
-                    $args['args']['labels'][$key] = __($tax_label, 'geodirectory');
-                }
-            }
-
-            $tax = register_taxonomy($taxonomy, $args['object_type'], $args['args']);
-
-            if (taxonomy_exists($taxonomy)) {
-                $tax = register_taxonomy_for_object_type($taxonomy, $args['object_type']);
-            }
-        }
-    }
-}
-
-/**
- * Register the post types.
- *
- * @since 1.0.0
- *
- * @global array $wp_post_types List of post types.
- */
-function geodir_register_post_types() {
-    global $wp_post_types;
-    
-    /**
-     * Get available custom posttypes and taxonomies and register them.
-     */
-    _x('places', 'URL slug', 'geodirectory');
-
-    $post_types = array();
-    $post_types = geodir_get_option('geodir_post_types');
-
-    // Register each post type if array of data is returned
-    if (is_array($post_types)):
-
-        foreach ($post_types as $post_type => $args):
-
-            if (!empty($args['rewrite']['slug'])) {
-                $args['rewrite']['slug'] = _x($args['rewrite']['slug'], 'URL slug', 'geodirectory');
-            }
-            $args = stripslashes_deep($args);
-
-            if (!empty($args['labels'])) {
-                foreach ($args['labels'] as $key => $val) {
-                    $args['labels'][$key] = __($val, 'geodirectory');// allow translation
-                }
-            }
-
-            /**
-             * Filter post type args.
-             *
-             * @since 1.0.0
-             * @param string $args Post type args.
-             * @param string $post_type The post type.
-             */
-            $args = apply_filters('geodir_post_type_args', $args, $post_type);
-
-            $post_type = register_post_type($post_type, $args);
-
-        endforeach;
-    endif;
-}
-
-/**
- * Filters arguments array for post type.
- *
- * @since 1.0.0
- *
- * @param  array $args Array or string of arguments for registering a post type.
- * @param  string $post_type Post type name
- * @return array Array or string of arguments.
- */
-function geodir_post_type_args_modify( $args, $post_type ) {
-    $geodir_location_prefix = isset( $_REQUEST['geodir_location_prefix'] ) ? trim( $_REQUEST['geodir_location_prefix'] ) : geodir_get_option( 'geodir_location_prefix' );
-    
-    if ( isset( $_REQUEST['geodir_listing_prefix'] ) && $_REQUEST['geodir_listing_prefix'] != '' && geodir_strtolower( $_REQUEST['geodir_listing_prefix'] ) != geodir_strtolower( $geodir_location_prefix ) ) {
-        $listing_slug = htmlentities( trim( $_REQUEST['geodir_listing_prefix'] ) );
-
-        if ( $post_type == 'gd_place' ) {
-            if ( array_key_exists( 'has_archive', $args ) ) {
-                $args['has_archive'] = $listing_slug;
-            }
-
-            if ( array_key_exists( 'rewrite', $args ) ) {
-                if ( array_key_exists( 'slug', $args['rewrite'] ) ) {
-                    $args['rewrite']['slug'] = $listing_slug;
-                }
-            }
-
-            $geodir_post_types = geodir_get_option( 'geodir_post_types' );
-
-            if ( array_key_exists( $post_type, $geodir_post_types ) ) {
-                if ( array_key_exists( 'has_archive', $geodir_post_types[ $post_type ] ) ) {
-                    $geodir_post_types[ $post_type ]['has_archive'] = $listing_slug;
-                }
-
-                if ( array_key_exists( 'rewrite', $geodir_post_types[ $post_type] ) ) {
-                    if ( array_key_exists( 'slug', $geodir_post_types[ $post_type ]['rewrite'] ) ) {
-                        $geodir_post_types[ $post_type ]['rewrite']['slug'] = $listing_slug;
-                    }
-                }
-
-                geodir_update_option('geodir_post_types', $geodir_post_types);
-            }
-            
-            $geodir_taxonomies = geodir_get_option( 'geodir_taxonomies' );
-            $updated = false;
-            
-            // update taxonomies (category)
-            $cat_taxonomy = $post_type . 'category';
-            if ( array_key_exists( 'listing_slug', $geodir_taxonomies[ $cat_taxonomy ] ) ) {
-                $updated = true;
-                $geodir_taxonomies[ $cat_taxonomy ]['listing_slug'] = $listing_slug;
-                
-                if ( array_key_exists( 'args', $geodir_taxonomies[ $cat_taxonomy ] ) ) {
-                    if ( array_key_exists( 'rewrite', $geodir_taxonomies[ $cat_taxonomy ]['args'] ) ) {
-                        if ( array_key_exists( 'slug', $geodir_taxonomies[ $cat_taxonomy ]['args']['rewrite'] ) ) {
-                            $geodir_taxonomies[ $cat_taxonomy ]['args']['rewrite']['slug'] = $listing_slug;
-                        }
-                    }
-                }
-            }
-            
-            // update taxonomies (tags)
-            $tag_taxonomy = $post_type . '_tags';
-            if ( array_key_exists( 'listing_slug', $geodir_taxonomies[ $tag_taxonomy ] ) ) {
-                $updated = true;
-                $geodir_taxonomies[ $tag_taxonomy ]['listing_slug'] = $listing_slug . '/tags';
-                
-                if ( array_key_exists( 'args', $geodir_taxonomies[ $tag_taxonomy ] ) ) {
-                    if ( array_key_exists( 'rewrite', $geodir_taxonomies[ $tag_taxonomy ]['args'] ) ) {
-                        if ( array_key_exists( 'slug', $geodir_taxonomies[ $tag_taxonomy ]['args']['rewrite'] ) ) {
-                            $geodir_taxonomies[ $tag_taxonomy ]['args']['rewrite']['slug'] = $listing_slug . '/tags';
-                        }
-                    }
-                }
-            }
-            
-            if ( $updated ) {
-                geodir_update_option('geodir_taxonomies', $geodir_taxonomies);
-            }
-        }
-    }
-
-    return $args;
-}
 
 /**
  * Remove rewrite rules and then recreate rewrite rules.
@@ -198,7 +34,7 @@ function geodir_flush_rewrite_rules()
  */
 function geodir_listing_rewrite_rules($rules) {
     $newrules = array();
-    $taxonomies = geodir_get_option('geodir_taxonomies');
+    $taxonomies = geodir_get_option('taxonomies');
     $detail_url_seprator = geodir_get_option('geodir_detailurl_separator');
     
 	// create rules for post listing
@@ -346,22 +182,22 @@ EOD;
     return $my_content . $rules;
 }
 //add_filter('mod_rewrite_rules', 'geodir_htaccess_contents');
-
-/**
- * Add the location variables to the query variables.
- *
- * @since 1.0.0
- *
- * @param array $public_query_vars The array of query variables.
- * @return array Query variables.
- */
-function geodir_add_location_var($public_query_vars)
-{
-    $public_query_vars[] = 'gd_country';
-    $public_query_vars[] = 'gd_region';
-    $public_query_vars[] = 'gd_city';
-    return $public_query_vars;
-}
+//
+///**
+// * Add the location variables to the query variables.
+// *
+// * @since 1.0.0
+// *
+// * @param array $public_query_vars The array of query variables.
+// * @return array Query variables.
+// */
+//function geodir_add_location_var($public_query_vars)
+//{
+//    $public_query_vars[] = 'gd_country';
+//    $public_query_vars[] = 'gd_region';
+//    $public_query_vars[] = 'gd_city';
+//    return $public_query_vars;
+//}
 
 /**
  * Add the variable to the query variables to identify geodir page.
@@ -371,11 +207,11 @@ function geodir_add_location_var($public_query_vars)
  * @param array $public_query_vars The array of query variables.
  * @return array Query variables.
  */
-function geodir_add_geodir_page_var($public_query_vars)
-{
-    $public_query_vars[] = 'gd_is_geodir_page';
-    return $public_query_vars;
-}
+//function geodir_add_geodir_page_var($public_query_vars)
+//{
+//    $public_query_vars[] = 'gd_is_geodir_page';
+//    return $public_query_vars;
+//}
 
 /**
  * Add the page id to the query variables.
@@ -396,7 +232,10 @@ function geodir_add_page_id_in_query_var()
         if (!geodir_is_geodir_page() && strpos($theme_name, 'enfold') !== false) {
             return $wp_query;
         }
-        $wp_query->set('page_id', $page_id);
+	    if($page_id){
+		    $wp_query->set('page_id', $page_id);
+	    }
+        
     }
 
     return $wp_query;
@@ -413,6 +252,8 @@ function geodir_add_page_id_in_query_var()
  */
 function geodir_set_location_var_in_session_in_core($wp) {
 	global $gd_session;
+
+	//return geodir_set_is_geodir_page($wp);
 
     // Fix for WPML removing page_id query var:
     if (isset($wp->query_vars['page']) && !isset($wp->query_vars['page_id']) && isset($wp->query_vars['pagename']) && !is_home()) {
@@ -791,36 +632,7 @@ function geodir_set_location_var_in_session_in_core($wp) {
     }
 }
 
-/**
- * Register a custom post status.
- *
- * This will add a new post status in the system called: Virtual.
- *
- * @since 1.0.0
- *
- * @param object $wp The WordPress object.
- */
-function geodir_custom_post_status()
-{
-    // Virtual Page Status
-    register_post_status('virtual', array(
-        'label' => _x('Virtual', 'page', 'geodirectory'),
-        'public' => true,
-        'exclude_from_search' => true,
-        'show_in_admin_all_list' => true,
-        'show_in_admin_status_list' => true,
-        'label_count' => _n_noop('Virtual <span class="count">(%s)</span>', 'Virtual <span class="count">(%s)</span>', 'geodirectory'),
-    ));
 
-    /**
-     * Called after we register the custom post status 'Virtual'.
-     *
-     * Can be use to add more post statuses.
-     *
-     * @since 1.0.0
-     */
-    do_action('geodir_custom_post_status');
-}
 
 /**
  * Retrieve the term link.

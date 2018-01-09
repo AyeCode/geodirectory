@@ -21,6 +21,7 @@ function geodir_list_view_select() {
 	global $gd_session;
 	?>
 	<script type="text/javascript">
+
 		function geodir_list_view_select(list) {
 			//alert(listval);
 			val = list.value;
@@ -40,16 +41,16 @@ function geodir_list_view_select() {
 				jQuery(listSel).children('li').removeClass('geodir-gridview gridview_onehalf gridview_onethird gridview_onefourth gridview_onefifth');
 			}
 			else if (val == 2) {
-				jQuery(listSel).children('li').switchClass('gridview_onethird gridview_onefourth gridview_onefifth', 'gridview_onehalf', 600);
+				jQuery(listSel).children('li').GDswitchClass('gridview_onethird gridview_onefourth gridview_onefifth', 'gridview_onehalf', 600);
 			}
 			else if (val == 3) {
-				jQuery(listSel).children('li').switchClass('gridview_onehalf gridview_onefourth gridview_onefifth', 'gridview_onethird', 600);
+				jQuery(listSel).children('li').GDswitchClass('gridview_onehalf gridview_onefourth gridview_onefifth', 'gridview_onethird', 600);
 			}
 			else if (val == 4) {
-				jQuery(listSel).children('li').switchClass('gridview_onehalf gridview_onethird gridview_onefifth', 'gridview_onefourth', 600);
+				jQuery(listSel).children('li').GDswitchClass('gridview_onehalf gridview_onethird gridview_onefifth', 'gridview_onefourth', 600);
 			}
 			else if (val == 5) {
-				jQuery(listSel).children('li').switchClass('gridview_onehalf gridview_onethird gridview_onefourth', 'gridview_onefifth', 600);
+				jQuery(listSel).children('li').GDswitchClass('gridview_onehalf gridview_onethird gridview_onefourth', 'gridview_onefifth', 600);
 			}
 
 			jQuery.post("<?php echo geodir_get_ajax_url();?>&gd_listing_view=" + val, function (data) {
@@ -525,178 +526,7 @@ function geodir_after_tab_content( $hash_key ) {
 }
 
 
-/**
- * Returns default sorting order of a post type.
- *
- * @since   1.0.0
- * @package GeoDirectory
- *
- * @param string $post_type The post type.
- *
- * @global object $wpdb     WordPress Database object.
- * @return bool|null|string Returns default sort results, when the post type is valid. Otherwise returns false.
- */
-function geodir_get_posts_default_sort( $post_type ) {
 
-	global $wpdb;
-
-	if ( $post_type != '' ) {
-
-		$all_postypes = geodir_get_posttypes();
-
-		if ( ! in_array( $post_type, $all_postypes ) ) {
-			return false;
-		}
-
-		$sort_field_info = $wpdb->get_var( $wpdb->prepare( "select default_order from " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " where	post_type= %s and is_active=%d and is_default=%d", array(
-			$post_type,
-			1,
-			1
-		) ) );
-
-		if ( ! empty( $sort_field_info ) ) {
-			return $sort_field_info;
-		}
-
-	}
-
-}
-
-
-/**
- * Returns sort options of a post type.
- *
- * @since   1.0.0
- * @package GeoDirectory
- *
- * @param string $post_type The post type.
- *
- * @global object $wpdb     WordPress Database object.
- * @return bool|mixed|void Returns sort results, when the post type is valid. Otherwise returns false.
- */
-function geodir_get_sort_options( $post_type ) {
-	global $wpdb;
-
-	if ( $post_type != '' ) {
-		$all_postypes = geodir_get_posttypes();
-
-		if ( ! in_array( $post_type, $all_postypes ) ) {
-			return false;
-		}
-
-		$sort_field_info = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE post_type=%s AND is_active=%d AND (sort_asc=1 || sort_desc=1 || field_type='random') AND field_type != 'address' ORDER BY sort_order ASC", array(
-			$post_type,
-			1
-		) ) );
-
-		/**
-		 * Filter post sort options.
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param array $sort_field_info Unfiltered sort field array.
-		 * @param string $post_type      Post type.
-		 */
-		return apply_filters( 'geodir_get_sort_options', $sort_field_info, $post_type );
-	}
-
-}
-
-
-/**
- * Display list of sort options available in front end using dropdown.
- *
- * @since   1.0.0
- * @package GeoDirectory
- * @global object $wp_query WordPress Query object.
- */
-function geodir_display_sort_options() {
-	global $wp_query;
-
-	/**
-	 * On search pages there should be no sort options, sorting is done by search criteria.
-	 *
-	 * @since 1.4.4
-	 */
-	if ( is_search() ) {
-		return;
-	}
-
-	$sort_by = '';
-
-	if ( isset( $_REQUEST['sort_by'] ) ) {
-		$sort_by = $_REQUEST['sort_by'];
-	}
-
-	$gd_post_type = geodir_get_current_posttype();
-
-	$sort_options = geodir_get_sort_options( $gd_post_type );
-
-
-	$sort_field_options = '';
-
-	if ( ! empty( $sort_options ) ) {
-		foreach ( $sort_options as $sort ) {
-			$sort = stripslashes_deep( $sort ); // strip slashes
-
-			$label = __( $sort->site_title, 'geodirectory' );
-
-			if ( $sort->field_type == 'random' ) {
-				$key = $sort->field_type;
-				( $sort_by == $key || ( $sort->is_default == '1' && ! isset( $_REQUEST['sort_by'] ) ) ) ? $selected = 'selected="selected"' : $selected = '';
-				$sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg( 'sort_by', $key ) ) . '">' . __( $label, 'geodirectory' ) . '</option>';
-			}
-
-			if ( $sort->htmlvar_name == 'comment_count' ) {
-				$sort->htmlvar_name = 'rating_count';
-			}
-
-			if ( $sort->sort_asc ) {
-				$key   = $sort->htmlvar_name . '_asc';
-				$label = $sort->site_title;
-				if ( $sort->asc_title ) {
-					$label = $sort->asc_title;
-				}
-				( $sort_by == $key || ( $sort->is_default == '1' && $sort->default_order == $key && ! isset( $_REQUEST['sort_by'] ) ) ) ? $selected = 'selected="selected"' : $selected = '';
-				$sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg( 'sort_by', $key ) ) . '">' . __( $label, 'geodirectory' ) . '</option>';
-			}
-
-			if ( $sort->sort_desc ) {
-				$key   = $sort->htmlvar_name . '_desc';
-				$label = $sort->site_title;
-				if ( $sort->desc_title ) {
-					$label = $sort->desc_title;
-				}
-				( $sort_by == $key || ( $sort->is_default == '1' && $sort->default_order == $key && ! isset( $_REQUEST['sort_by'] ) ) ) ? $selected = 'selected="selected"' : $selected = '';
-				$sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg( 'sort_by', $key ) ) . '">' . __( $label, 'geodirectory' ) . '</option>';
-			}
-
-		}
-	}
-
-	if ( $sort_field_options != '' ) {
-
-		?>
-
-		<div class="geodir-tax-sort">
-
-			<select name="sort_by" id="sort_by" onchange="javascript:window.location=this.value;">
-
-				<option
-					value="<?php echo esc_url( add_query_arg( 'sort_by', '' ) ); ?>" <?php if ( $sort_by == '' ) {
-					echo 'selected="selected"';
-				} ?>><?php _e( 'Sort By', 'geodirectory' ); ?></option><?php
-
-				echo $sort_field_options; ?>
-
-			</select>
-
-		</div>
-		<?php
-
-	}
-
-}
 
 
 /**
@@ -963,48 +793,6 @@ function geodir_category_count_script() {
 
 }
 
-/**
- * Returns the default language of the map.
- *
- * @since   1.0.0
- * @package GeoDirectory
- * @return string Returns the default language.
- */
-function geodir_get_map_default_language() {
-	$geodir_default_map_language = geodir_get_option( 'geodir_default_map_language' );
-	if ( empty( $geodir_default_map_language ) ) {
-		$geodir_default_map_language = 'en';
-	}
-
-	/**
-	 * Filter default map language.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $geodir_default_map_language Default map language.
-	 */
-	return apply_filters( 'geodir_default_map_language', $geodir_default_map_language );
-}
-
-/**
- * Returns the Google maps api key.
- *
- * @since   1.6.4
- * @package GeoDirectory
- * @return string Returns the api key.
- */
-function geodir_get_map_api_key() {
-	$key = geodir_get_option( 'geodir_google_api_key' );
-
-	/**
-	 * Filter Google maps api key.
-	 *
-	 * @since 1.6.4
-	 *
-	 * @param string $key Google maps api key.
-	 */
-	return apply_filters( 'geodir_google_api_key', $key );
-}
 
 
 /**
@@ -1426,7 +1214,11 @@ function geodir_detail_page_tabs_list() {
  * @global string $geodir_post_detail_fields Detail field html.
  */
 function geodir_show_detail_page_tabs() {
-	global $post, $post_images, $video, $special_offers, $related_listing, $geodir_post_detail_fields, $preview;
+	global $post,$gd_post, $post_images, $video, $special_offers, $related_listing, $geodir_post_detail_fields, $preview;
+
+//	print_r($post);
+//	print_r($gd_post);
+
 
 	$post_id            = ! empty( $post ) && isset( $post->ID ) ? (int) $post->ID : 0;
 	$request_post_id    = ! empty( $_REQUEST['p'] ) ? (int) $_REQUEST['p'] : 0;
@@ -1562,6 +1354,8 @@ function geodir_show_detail_page_tabs() {
 
 	$arr_detail_page_tabs = geodir_detail_page_tabs_list();// get this sooner so we can get the active tab for the user
 
+	//print_r($arr_detail_page_tabs);
+
 	$active_tab       = '';
 	$active_tab_name  = '';
 	$default_tab      = '';
@@ -1666,10 +1460,13 @@ function geodir_show_detail_page_tabs() {
 								 */
 								do_action( 'geodir_before_description_on_listing_detail' );
 								if ( geodir_is_page( 'detail' ) ) {
-									the_content();
+									//the_content();
+									echo stripslashes( $post->post_content );
+									//print_r($post);
 								} else {
 									/** This action is documented in geodirectory_template_actions.php */
-									echo apply_filters( 'the_content', stripslashes( $post->post_desc ) );
+									//echo apply_filters( 'the_content', stripslashes( $post->post_desc ) );
+									echo stripslashes( $post->post_content );
 								}
 
 								/**
@@ -2901,7 +2698,20 @@ function geodir_wpml_duplicate_comment_exists($dup_post_id, $original_cid) {
  * @return bool True if review star disabled, otherwise false.
  */ 
 function geodir_rating_disabled_post_types() {
-	$post_types = geodir_get_option( 'geodir_disable_rating_cpt' );
+	//$post_types = geodir_get_option( 'geodir_disable_rating_cpt' );
+
+	$disabled = array();
+
+	$post_types = geodir_get_posttypes('array');
+
+	if(!empty($post_types )){
+		foreach($post_types as $post_type => $val){
+			if(isset($val['disable_reviews']) && $val['disable_reviews']){
+				$disabled[] = $post_type;
+			}
+		}
+	}
+	
 	
 	/**
 	 * Filter the post types array which have rating disabled.
@@ -2910,7 +2720,7 @@ function geodir_rating_disabled_post_types() {
 	 *
 	 * @param array $post_types Array of post types which have rating starts disabled.
 	 */
-	return apply_filters( 'geodir_rating_disabled_post_types', $post_types );
+	return apply_filters( 'geodir_rating_disabled_post_types', $disabled );
 }
 
 /**
@@ -3191,11 +3001,7 @@ function geodir_search_page_base_url() {
         remove_filter( 'home_url', 'geodir_location_geo_home_link', 100000 );
     }
 
-    if ( defined( 'DOING_AJAX' ) && DOING_AJAX && geodir_is_wpml() ) {
-        $url = icl_get_home_url();
-    } else {
-        $url = get_home_url();
-    }
+    $url = get_permalink(geodir_search_page_id());
 
     $url = trailingslashit( $url );
 

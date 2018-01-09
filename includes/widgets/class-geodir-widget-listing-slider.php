@@ -333,21 +333,11 @@ class GeoDir_Widget_Listing_Slider extends WP_Widget {
             </label>
         </p>
         <script type="text/javascript">
-            function geodir_change_category_list(post_type, selected) {
-                var ajax_url = '<?php echo geodir_get_ajax_url(); ?>'
-                var myurl = ajax_url + "&geodir_ajax=admin_ajax&ajax_action=get_cat_dl&post_type=" + post_type + "&selected=" + selected;
-                jQuery.ajax({
-                    type: "GET",
-                    url: myurl,
-                    success: function (data) {
-                        jQuery('#<?php echo $this->get_field_id('category'); ?>').html(data);
-                    }
-                });
-            }
+           
             <?php if(is_active_widget( false, false, $this->id_base, true )){ ?>
             var post_type = jQuery('#<?php echo $this->get_field_id('post_type'); ?>').val();
 
-            geodir_change_category_list(post_type, '<?php echo $category;?>');
+            //geodir_change_category_list(post_type, '<?php echo $category;?>');
             <?php } ?>
 
         </script>

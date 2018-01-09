@@ -10,11 +10,17 @@
 /**
  * Get All Plugin functions from WordPress
  */
-include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+//include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
 /*-----------------------------------------------------------------------------------*/
 /* Helper functions */
 /*-----------------------------------------------------------------------------------*/
+
+
+function geodir_get_ajax_url()
+{
+    return admin_url('admin-ajax.php');
+}
 
 /**
  * Return the plugin url.
@@ -74,39 +80,6 @@ function geodir_is_plugin_active( $plugin ) {
 }
 
 
-/**
- * Return the formatted date.
- *
- * Return a formatted date from a date/time string according to WordPress date format. $date must be in format : 'Y-m-d
- * H:i:s'.
- *
- * @since   1.0.0
- * @package GeoDirectory
- *
- * @param string $date must be in format: 'Y-m-d H:i:s'.
- *
- * @return bool|int|string the formatted date.
- */
-function geodir_get_formated_date( $date ) {
-	return mysql2date( get_option( 'date_format' ), $date );
-}
-
-/**
- * Return the formatted time.
- *
- * Return a formatted time from a date/time string according to WordPress time format. $time must be in format : 'Y-m-d
- * H:i:s'.
- *
- * @since   1.0.0
- * @package GeoDirectory
- *
- * @param string $time must be in format: 'Y-m-d H:i:s'.
- *
- * @return bool|int|string the formatted time.
- */
-function geodir_get_formated_time( $time ) {
-	return mysql2date( get_option( 'time_format' ), $time, $translate = true );
-}
 
 
 /**
@@ -234,27 +207,6 @@ function geodir_curPageURL() {
 	return apply_filters( 'geodir_curPageURL', $pageURL );
 }
 
-/**
- * Clean variables.
- *
- * This function is used to create posttype, posts, taxonomy and terms slug.
- *
- * @since   1.0.0
- * @package GeoDirectory
- *
- * @param string $string The variable to clean.
- *
- * @return string Cleaned variable.
- */
-function geodir_clean( $string ) {
-
-	$string = trim( strip_tags( stripslashes( $string ) ) );
-	$string = str_replace( " ", "-", $string ); // Replaces all spaces with hyphens.
-	$string = preg_replace( '/[^A-Za-z0-9\-\_]/', '', $string ); // Removes special chars.
-	$string = preg_replace( '/-+/', '-', $string ); // Replaces multiple hyphens with single one.
-
-	return $string;
-}
 
 /**
  * Get Week Days list.
@@ -311,11 +263,18 @@ function geodir_is_page( $gdpage = '' ) {
 
 	global $wp_query, $post, $wp;
 	//if(!is_admin()):
+	$page_id = '';// get_query_var( 'page_id' ) ? get_query_var( 'page_id' ) : '';
+	//echo $page_id .'xxx';
+	if(empty($page_id) && $wp_query->is_page && $wp_query->queried_object_id){
+		$page_id = $wp_query->queried_object_id;
+	}
+//echo $gdpage.'###'.$page_id ;
+	//print_r($wp_query);
 
 	switch ( $gdpage ):
 		case 'add-listing':
 
-			if ( is_page() && get_query_var( 'page_id' ) == geodir_add_listing_page_id() ) {
+			if ( is_page() && $page_id == geodir_add_listing_page_id() ) {
 				return true;
 			} elseif ( is_page() && isset( $post->post_content ) && has_shortcode( $post->post_content, 'gd_add_listing' ) ) {
 				return true;
@@ -323,18 +282,19 @@ function geodir_is_page( $gdpage = '' ) {
 
 			break;
 		case 'preview':
-			if ( ( is_page() && get_query_var( 'page_id' ) == geodir_preview_page_id() ) && isset( $_REQUEST['listing_type'] )
+			if ( ( is_page() && $page_id === geodir_preview_page_id() ) && isset( $_REQUEST['listing_type'] )
 			     && in_array( $_REQUEST['listing_type'], geodir_get_posttypes() )
 			) {
 				return true;
 			}
 			break;
-		case 'listing-success':
-			if ( is_page() && get_query_var( 'page_id' ) == geodir_success_page_id() ) {
+		case 'listing-success':// @depreciated
+			if ( is_page() && $page_id === geodir_success_page_id() ) {
 				return true;
 			}
 			break;
-		case 'detail':
+		case 'single':
+		case 'detail': // @depreciated
 			$post_type = get_query_var( 'post_type' );
 			if ( is_array( $post_type ) ) {
 				$post_type = reset( $post_type );
@@ -343,7 +303,8 @@ function geodir_is_page( $gdpage = '' ) {
 				return true;
 			}
 			break;
-		case 'pt':
+		case 'post_type':
+		case 'pt': // @depreciated
 			$post_type = get_query_var( 'post_type' );
 			if ( is_array( $post_type ) ) {
 				$post_type = reset( $post_type );
@@ -353,7 +314,8 @@ function geodir_is_page( $gdpage = '' ) {
 			}
 
 			break;
-		case 'listing':
+		case 'archive':
+		case 'listing':// @depreciated
 			if ( is_tax() && geodir_get_taxonomy_posttype() ) {
 				global $current_term, $taxonomy, $term;
 
@@ -370,13 +332,13 @@ function geodir_is_page( $gdpage = '' ) {
 			break;
 		case 'home':
 
-			if ( ( is_page() && get_query_var( 'page_id' ) == geodir_home_page_id() ) || is_page_geodir_home() ) {
+			if ( ( is_page() && $page_id == geodir_home_page_id() ) || is_page_geodir_home() ) {
 				return true;
 			}
 
 			break;
 		case 'location':
-			if ( is_page() && get_query_var( 'page_id' ) == geodir_location_page_id() ) {
+			if ( is_page() && $page_id == geodir_location_page_id() ) {
 				return true;
 			}
 			break;
@@ -392,27 +354,34 @@ function geodir_is_page( $gdpage = '' ) {
 			}
 			break;
 		case 'search':
-			if ( is_search() && isset( $_REQUEST['geodir_search'] ) ) {
+//			if ( is_search() && isset( $_REQUEST['geodir_search'] ) ) {
+//				return true;
+//			}
+//			if ( (is_page() && $page_id == geodir_search_page_id()) || (is_archive() && $page_id == geodir_search_page_id()) ) {
+//				return true;
+//			}
+
+			if ( isset( $_REQUEST['geodir_search'] ) ) {
 				return true;
 			}
 			break;
-		case 'info':
-			if ( is_page() && get_query_var( 'page_id' ) == geodir_info_page_id() ) {
+		case 'info': // @depreciated
+			if ( is_page() && $page_id && $page_id == geodir_info_page_id() ) {
 				return true;
 			}
 			break;
-		case 'login':
-			if ( is_page() && get_query_var( 'page_id' ) == geodir_login_page_id() ) {
+		case 'login': // @depreciated
+			if ( is_page() && $page_id === geodir_login_page_id() ) {
 				return true;
 			}
 			break;
 		case 'checkout':
-			if ( is_page() && function_exists( 'geodir_payment_checkout_page_id' ) && get_query_var( 'page_id' ) == geodir_payment_checkout_page_id() ) {
+			if ( is_page() && function_exists( 'geodir_payment_checkout_page_id' ) && $page_id == geodir_payment_checkout_page_id() ) {
 				return true;
 			}
 			break;
 		case 'invoices':
-			if ( is_page() && function_exists( 'geodir_payment_invoices_page_id' ) && get_query_var( 'page_id' ) == geodir_payment_invoices_page_id() ) {
+			if ( is_page() && function_exists( 'geodir_payment_invoices_page_id' ) && $page_id == geodir_payment_invoices_page_id() ) {
 				return true;
 			}
 			break;
@@ -426,6 +395,7 @@ function geodir_is_page( $gdpage = '' ) {
 
 	return false;
 }
+
 
 /**
  * Sets a key and value in $wp object if the current page is a geodir page.
@@ -1209,7 +1179,7 @@ function geodir_taxonomy_breadcrumb() {
 
 function geodir_wpml_post_type_archive_link($link, $post_type){
 	if (function_exists('icl_object_id')) {
-		$post_types   = geodir_get_option( 'geodir_post_types' );
+		$post_types   = geodir_get_posttypes();
 		
 		if ( isset( $post_types[ $post_type ] ) ) {
 			$slug = $post_types[ $post_type ]['rewrite']['slug'];
@@ -2960,8 +2930,7 @@ function geodir_listing_slider_widget_output( $args = '', $instance = '' ) {
  * @param array|string $instance The settings for the particular instance of the widget.
  */
 function geodir_loginwidget_output( $args = '', $instance = '' ) {
-	//print_r($args);
-	//print_r($instance);
+	
 	// prints the widget
 	extract( $args, EXTR_SKIP );
 
@@ -2971,9 +2940,6 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 	echo $before_widget;
 	echo $before_title . $title . $after_title;
 
-//	global $gd_session;
-//	print_r($gd_session);
-//	print_r($_SESSION);
 
 	if ( is_user_logged_in() ) {
 		global $current_user;
@@ -2989,156 +2955,15 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 		<?php
 		do_action( 'geodir_dashboard_before_listings_links' );
 
-		$post_types                           = geodir_get_posttypes( 'object' );
-		$show_add_listing_post_types_main_nav = geodir_get_option( 'geodir_add_listing_link_user_dashboard' );
-		$geodir_allow_posttype_frontend       = geodir_get_option( 'geodir_allow_posttype_frontend' );
 
-		if ( ! empty( $show_add_listing_post_types_main_nav ) ) {
-			$addlisting_links = '';
-			foreach ( $post_types as $key => $postobj ) {
+		// Add listing links
+		GeoDir_User::show_add_listings();
 
-				if ( in_array( $key, $show_add_listing_post_types_main_nav ) ) {
-
-					if ( $add_link = geodir_get_addlisting_link( $key ) ) {
-
-						$name = $postobj->labels->name;
-
-						$selected = '';
-						if ( geodir_get_current_posttype() == $key && geodir_is_page( 'add-listing' ) ) {
-							$selected = 'selected="selected"';
-						}
-
-						/**
-						 * Filter add listing link.
-						 *
-						 * @since 1.0.0
-						 *
-						 * @param string $add_link  Add listing link.
-						 * @param string $key       Add listing array key.
-						 * @param int $current_user ->ID Current user ID.
-						 */
-						$add_link = apply_filters( 'geodir_dashboard_link_add_listing', $add_link, $key, $current_user->ID );
-						$name = apply_filters( 'geodir_dashboard_label_add_listing', $name, $key, $current_user->ID );
-
-						$addlisting_links .= '<option ' . $selected . ' value="' . $add_link . '">' . __( geodir_utf8_ucfirst( $name ), 'geodirectory' ) . '</option>';
-
-					}
-				}
-
-			}
-
-			if ( $addlisting_links != '' ) { ?>
-
-				<li><select id="geodir_add_listing" class="geodir-select" onchange="window.location.href=this.value"
-				            option-autoredirect="1" name="geodir_add_listing" option-ajaxchosen="false"
-				            data-placeholder="<?php echo esc_attr( __( 'Add Listing', 'geodirectory' ) ); ?>">
-						<option value="" disabled="disabled" selected="selected"
-						        style='display:none;'><?php echo esc_attr( __( 'Add Listing', 'geodirectory' ) ); ?></option>
-						<?php echo $addlisting_links; ?>
-					</select></li> <?php
-
-			}
-
-		}
 		// My Favourites in Dashboard
-		$show_favorite_link_user_dashboard = geodir_get_option( 'geodir_favorite_link_user_dashboard' );
-		$user_favourite                    = geodir_user_favourite_listing_count();
+		GeoDir_User::show_favourites( $current_user->data->ID, 'select' );
 
-		if ( ! empty( $show_favorite_link_user_dashboard ) && ! empty( $user_favourite ) ) {
-			$favourite_links = '';
-
-			foreach ( $post_types as $key => $postobj ) {
-				if ( in_array( $key, $show_favorite_link_user_dashboard ) && array_key_exists( $key, $user_favourite ) ) {
-					$name           = $postobj->labels->name;
-					$fav_author_link = apply_filters('gd_dash_fav_author_link', $author_link, $current_user->data->ID);
-					$post_type_link = geodir_getlink( $fav_author_link, array(
-						'stype' => $key,
-						'list'  => 'favourite'
-					), false );
-
-					$selected = '';
-
-					if ( isset( $_REQUEST['list'] ) && $_REQUEST['list'] == 'favourite' && isset( $_REQUEST['stype'] ) && $_REQUEST['stype'] == $key && isset( $_REQUEST['geodir_dashbord'] ) ) {
-						$selected = 'selected="selected"';
-					}
-					/**
-					 * Filter favorite listing link.
-					 *
-					 * @since 1.0.0
-					 *
-					 * @param string $post_type_link Favorite listing link.
-					 * @param string $key            Favorite listing array key.
-					 * @param int $current_user      ->ID Current user ID.
-					 */
-					$post_type_link = apply_filters( 'geodir_dashboard_link_favorite_listing', $post_type_link, $key, $current_user->ID );
-
-					$favourite_links .= '<option ' . $selected . ' value="' . $post_type_link . '">' . __( geodir_utf8_ucfirst( $name ), 'geodirectory' ) . '</option>';
-				}
-			}
-
-			if ( $favourite_links != '' ) {
-				?>
-				<li>
-					<select id="geodir_my_favourites" class="geodir-select" onchange="window.location.href=this.value"
-					        option-autoredirect="1" name="geodir_my_favourites" option-ajaxchosen="false"
-					        data-placeholder="<?php echo esc_attr( __( 'My Favorites', 'geodirectory' ) ); ?>">
-						<option value="" disabled="disabled" selected="selected"
-						        style='display:none;'><?php echo esc_attr( __( 'My Favorites', 'geodirectory' ) ); ?></option>
-						<?php echo $favourite_links; ?>
-					</select>
-				</li>
-				<?php
-			}
-		}
-
-
-		$show_listing_link_user_dashboard = geodir_get_option( 'geodir_listing_link_user_dashboard' );
-		$user_listing                     = geodir_user_post_listing_count();
-
-		if ( ! empty( $show_listing_link_user_dashboard ) && ! empty( $user_listing ) ) {
-			$listing_links = '';
-
-			foreach ( $post_types as $key => $postobj ) {
-				if ( in_array( $key, $show_listing_link_user_dashboard ) && array_key_exists( $key, $user_listing ) ) {
-					$name         = $postobj->labels->name;
-					$listing_author_link = apply_filters('gd_dash_listing_author_link', $author_link, $current_user->data->ID);
-					$listing_link = geodir_getlink( $listing_author_link, array( 'stype' => $key ), false );
-
-					$selected = '';
-					if ( ! isset( $_REQUEST['list'] ) && isset( $_REQUEST['geodir_dashbord'] ) && isset( $_REQUEST['stype'] ) && $_REQUEST['stype'] == $key ) {
-						$selected = 'selected="selected"';
-					}
-
-					/**
-					 * Filter my listing link.
-					 *
-					 * @since 1.0.0
-					 *
-					 * @param string $listing_link My listing link.
-					 * @param string $key          My listing array key.
-					 * @param int $current_user    ->ID Current user ID.
-					 */
-					$listing_link = apply_filters( 'geodir_dashboard_link_my_listing', $listing_link, $key, $current_user->ID );
-
-					$listing_links .= '<option ' . $selected . ' value="' . $listing_link . '">' . __( geodir_utf8_ucfirst( $name ), 'geodirectory' ) . '</option>';
-				}
-			}
-
-			if ( $listing_links != '' ) {
-				?>
-				<li>
-					<select id="geodir_my_listings" class="geodir-select" onchange="window.location.href=this.value"
-					        option-autoredirect="1" name="geodir_my_listings" option-ajaxchosen="false"
-					        data-placeholder="<?php echo esc_attr( __( 'My Listings', 'geodirectory' ) ); ?>">
-						<option value="" disabled="disabled" selected="selected"
-						        style='display:none;'><?php echo esc_attr( __( 'My Listings', 'geodirectory' ) ); ?></option>
-						<?php echo $listing_links; ?>
-					</select>
-				</li>
-				<?php
-			}
-		}
-        
+		// My Listings
+		GeoDir_User::show_listings( $current_user->data->ID, 'select' );
 
 		$dashboard_link = ob_get_clean();
 		/**
@@ -3954,7 +3779,7 @@ function geodir_load_custom_field_translation( $translation_texts = array() ) {
 	global $wpdb;
 
 	// Custom fields table
-	$sql  = "SELECT admin_title, admin_desc, site_title, clabels, required_msg, default_value, option_values, validation_msg FROM " . GEODIR_CUSTOM_FIELDS_TABLE;
+	$sql  = "SELECT admin_title, frontend_desc, frontend_title, clabels, required_msg, default_value, option_values, validation_msg FROM " . GEODIR_CUSTOM_FIELDS_TABLE;
 	$rows = $wpdb->get_results( $sql );
 
 	if ( ! empty( $rows ) ) {
@@ -3963,12 +3788,12 @@ function geodir_load_custom_field_translation( $translation_texts = array() ) {
 				$translation_texts[] = stripslashes_deep( $row->admin_title );
 			}
 
-			if ( ! empty( $row->admin_desc ) ) {
-				$translation_texts[] = stripslashes_deep( $row->admin_desc );
+			if ( ! empty( $row->frontend_desc ) ) {
+				$translation_texts[] = stripslashes_deep( $row->frontend_desc );
 			}
 
-			if ( ! empty( $row->site_title ) ) {
-				$translation_texts[] = stripslashes_deep( $row->site_title );
+			if ( ! empty( $row->frontend_title ) ) {
+				$translation_texts[] = stripslashes_deep( $row->frontend_title );
 			}
 
 			if ( ! empty( $row->clabels ) ) {
@@ -4002,13 +3827,13 @@ function geodir_load_custom_field_translation( $translation_texts = array() ) {
 	}
 
 	// Custom sorting fields table
-	$sql  = "SELECT site_title, asc_title, desc_title FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE;
+	$sql  = "SELECT frontend_title, asc_title, desc_title FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE;
 	$rows = $wpdb->get_results( $sql );
 
 	if ( ! empty( $rows ) ) {
 		foreach ( $rows as $row ) {
-			if ( ! empty( $row->site_title ) ) {
-				$translation_texts[] = stripslashes_deep( $row->site_title );
+			if ( ! empty( $row->frontend_title ) ) {
+				$translation_texts[] = stripslashes_deep( $row->frontend_title );
 			}
 
 			if ( ! empty( $row->asc_title ) ) {

@@ -68,6 +68,23 @@ jQuery(function($) {
                $select2.data('select2').$container.addClass('gd-select2-container');
                $select2.data('select2').$dropdown.addClass('gd-select2-container');
             });
+            $(':input.geodir-select-tags').filter(':not(.enhanced)').each(function() {
+                var select2_args = $.extend({
+                    tags: true,
+                    selectOnClose: true,
+                    tokenSeparators: [','],
+                    minimumResultsForSearch: 10,
+                    allowClear: $(this).data('allow_clear') ? true : false,
+                    containerCssClass: 'gd-select2-selection',
+                    dropdownCssClass: 'gd-select2-dropdown',
+                    placeholder: $(this).data('placeholder')
+                }, geodirSelect2FormatString());
+                var $select2 = $(this).select2(select2_args);
+                $select2.addClass('enhanced');
+                $select2.data('select2').$container.addClass('gd-select2-container');
+                $select2.data('select2').$dropdown.addClass('gd-select2-container');
+            });
+
         }).trigger('geodir-select-init');
         $('html').on('click', function(event) {
             if (this === event.target) {

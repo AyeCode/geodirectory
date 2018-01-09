@@ -1,32 +1,71 @@
 jQuery(document).ready(function () {
-    jQuery("#gt-form-builder-tab ul li a").click(function () {
+
+
+    //fire the toggle displays on advanced search show/hide
+    jQuery(".gd-advanced-toggle").click(function () {
+        setTimeout(function(){
+            gd_toggle_switch_display();
+        }, 100);
+
+    });
+
+
+
+    jQuery("#gd-form-builder-tab ul li a").click(function () {
+        console.log(1);
         if(!jQuery(this).attr('id')){return;}
+        console.log(2);
         //var type = jQuery(this).attr('id').replace('gd-', '');
         var type = jQuery(this).data("field-type");
         var type_key = jQuery(this).data("field-type-key");
         var custom_type = jQuery(this).data("field-custom-type");
-        var post_type = jQuery(this).closest('#gt-form-builder-tab').find('#new_post_type').val();
+        var post_type = jQuery('#new_post_type').val();
         var id = 'new' + jQuery(".field_row_main ul.core li:last").index();
-        var manage_field_type = jQuery(this).closest('#geodir-available-fields').find(".manage_field_type").val();
-        if (manage_field_type == 'custom_fields' || manage_field_type == 'sorting_options') {
-            jQuery.get(geodir_admin_ajax.url + '?action=geodir_ajax_action&create_field=true', {
+        var manage_field_type = jQuery(".manage_field_type").val();
+        var gd_nonce = jQuery("#gd_new_field_nonce").val();
+        console.log(3);
+        console.log(manage_field_type);
+        if (manage_field_type == 'general' || manage_field_type == 'cpt-sorting') {
+
+            if(manage_field_type == 'general'){
+                var action = "geodir_get_custom_field_form";
+            }else if(manage_field_type == 'cpt-sorting'){
+                var action = "geodir_get_custom_field_sorting_form";
+            }
+
+
+            jQuery.get(ajaxurl + '?action='+action, {
                 field_type: type,
                 field_type_key: type_key,
                 listing_type: post_type,
                 field_id: id,
                 field_ins_upd: 'new',
                 manage_field_type: manage_field_type,
-                custom_type: custom_type
+                custom_type: custom_type,
+                security: gd_nonce
             }, function (data) {
-                jQuery('.field_row_main ul.core').append(data);
+                
+                if(jQuery('.field_row_main ul.core li').length > 0){
+                    jQuery('.field_row_main ul.core').append(data);
+                }else{
+                    jQuery('.field_row_main ul.core').html(data);
+                }
                 jQuery('#licontainer_' + id).find('#sort_order').val(parseInt(jQuery('#licontainer_' + id).index()) + 1);
-                // reset the chosen selects
-                jQuery("select.chosen_select").chosen();
+
+                // int the new select2 boxes
+                jQuery("select.geodir-select").trigger('geodir-select-init');
+                jQuery("select.geodir-select-nostd").trigger('geodir-select-init');
 
                 show_hide('field_frm'+id);
                 jQuery('html, body').animate({
                     scrollTop: jQuery("#licontainer_"+id).offset().top
                 }, 1000);
+
+                // init new tooltips
+                gd_init_tooltips();
+
+                // init the toggle displays
+                gd_toggle_switch_display();
 
             });
             if (manage_field_type == 'sorting_options') {
@@ -40,15 +79,27 @@ jQuery(document).ready(function () {
         placeholder: "ui-state-highlight",
         cancel: "input,label,select",
         update: function () {
-            var manage_field_type = jQuery(this).closest('#geodir-selected-fields').find(".manage_field_type").val();
-            var order = jQuery(this).sortable("serialize") + '&update=update&manage_field_type=' + manage_field_type;
-            if (manage_field_type == 'custom_fields' || manage_field_type == 'sorting_options') {
-                jQuery.get(geodir_admin_ajax.url + '?action=geodir_ajax_action&create_field=true', order, function (theResponse) {
-                    //alert('Fields have been ordered.');
-                });
+           // var manage_field_type = jQuery(this).closest('#geodir-selected-fields').find(".manage_field_type").val();
+            var manage_field_type = jQuery(".manage_field_type").val();
+
+            //var order = jQuery(this).sortable("serialize") + '&update=update&manage_field_type=' + manage_field_type;
+            var order = jQuery(this).sortable("serialize");
+
+
+
+            // update the sort values on drag/drop
+            if(manage_field_type == 'general' ){
+                gd_order_custom_fields(order);
+            }else if(manage_field_type == 'cpt-sorting'){
+                gd_order_custom_sort_fields(order);
             }
         }
     });
+
+    //gd_toggle_display();
+    gd_toggle_switch_display();
+
+
 });
 
 function gd_data_type_changed(obj, cont) {
@@ -72,33 +123,21 @@ function gd_data_type_changed(obj, cont) {
     }
 }
 
-function save_field(id) {
+function gd_save_custom_field(id) {
 
-    if (jQuery('#licontainer_' + id + ' #htmlvar_name').length > 0) {
+    
+    // we will add a html_var from the title input during validation
+    if (jQuery('#licontainer_' + id + ' #frontend_title').length > 0) {
 
-        var htmlvar_name = jQuery('#licontainer_' + id + ' #htmlvar_name').val();
+        var frontend_title= jQuery('#licontainer_' + id + ' #frontend_title').val();
 
-        if (htmlvar_name == '') {
+        if (frontend_title == '') {
 
             alert(geodir_all_js_msg.custom_field_not_blank_var);
 
             return false;
         }
 
-        if (htmlvar_name != '') {
-
-            var iChars = "!`@#$%^&*()+=-[]\\\';,./{}|\":<>?~ ";
-
-            for (var i = 0; i < htmlvar_name.length; i++) {
-                if (iChars.indexOf(htmlvar_name.charAt(i)) != -1) {
-
-                    alert(geodir_all_js_msg.custom_field_not_special_char);
-
-
-                    return false;
-                }
-            }
-        }
     }
 
     var fieldrequest = jQuery('#licontainer_' + id).find("select, textarea, input").serialize();
@@ -106,23 +145,20 @@ function save_field(id) {
 
 
     jQuery.ajax({
-        'url': geodir_admin_ajax.url + '?action=geodir_ajax_action&manage_field_type=custom_fields',
+        'url': ajaxurl + '?action=geodir_save_custom_field',
         'type': 'POST',
         'data': request_data,
         'success': function (result) {
 
-            //alert(result);
-            if (jQuery.trim(result) == 'HTML Variable Name should be a unique name') {
-
-                alert(geodir_all_js_msg.custom_field_unique_name);
-
-            }
-            else {
+            var res = result;
+            if(res.success == false){
+                alert(res.data);
+            }else {
                 jQuery('#licontainer_' + id).replaceWith(jQuery.trim(result));
 
                 var order = jQuery(".field_row_main ul.core").sortable("serialize") + '&update=update&manage_field_type=custom_fields';
 
-                jQuery.get(geodir_admin_ajax.url + '?action=geodir_ajax_action&create_field=true', order,
+                jQuery.get(ajaxurl + '?action=geodir_ajax_action&create_field=true', order,
                     function (theResponse) {
                         //alert(theResponse);
                     });
@@ -130,8 +166,9 @@ function save_field(id) {
                 jQuery('.field_frm').hide();
             }
 
-            // reset the chosen selects
-            jQuery("select.chosen_select").chosen();
+            // int the new select2 boxes
+            jQuery("select.geodir-select").trigger('geodir-select-init');
+            jQuery("select.geodir-select-nostd").trigger('geodir-select-init');
 
 
         }
@@ -146,45 +183,98 @@ function show_hide(id) {
 }
 
 function show_hide_radio(id,sh,cl) {
-    if(sh=='hide'){
-        jQuery( id ).closest( '.widefat' ).find('.'+cl).hide('fast');
-    }else{
-        jQuery( id ).closest( '.widefat' ).find('.'+cl).show('fast');
-    }
+
+    setTimeout(function(){
+        gd_toggle_switch_display();
+    }, 100);
+    // if(sh=='hide'){
+    //     jQuery( id ).closest( '.widefat' ).find('.'+cl).hide('fast');
+    // }else{
+    //     jQuery( id ).closest( '.widefat' ).find('.'+cl).show('fast');
+    // }
 
 }
 
 
-function delete_field(id, nonce) {
+function gd_delete_custom_field(id, nonce) {
 
     var confarmation = confirm(geodir_all_js_msg.custom_field_delete);
 
     if (confarmation == true) {
 
-        jQuery.get(geodir_admin_ajax.url + '?action=geodir_ajax_action&create_field=true&manage_field_type=custom_fields', {
-                field_id: id,
-                field_ins_upd: 'delete',
-                _wpnonce: nonce
-            },
-            function (data) {
-                jQuery('#licontainer_' + id).remove();
-
-            });
+        // if its a new field not yet added then we just dump it, no need to run ajax
+        if (id.substring(0, 3) == "new") {
+            jQuery('#licontainer_' + id).remove();
+        }else{
+            jQuery.get(ajaxurl + '?action=geodir_delete_custom_field', {
+                    field_id: id,
+                    field_ins_upd: 'delete',
+                    security: nonce
+                },
+                function (data) {
+                    var res = data;
+                    if(!res.success){
+                        alert(res.data);
+                    }else{
+                        jQuery('#licontainer_' + id).remove();
+                    }
+                });
+        }
 
     }
 
 }
 
+/**
+ * Sort the custom fields when drag & dropped.
+ *
+ * @param order
+ */
+function gd_order_custom_fields(order) {
+    var gd_nonce = jQuery("#gd_new_field_nonce").val();
+    order = order + "&security="+gd_nonce;
+    jQuery.ajax({
+        'url': ajaxurl + '?action=geodir_order_custom_fields',
+        'type': 'POST',
+        'data': order,
+        'success': function (result) {
+            if(result.success==false){
+                alert(result.data);
+            }
+        }
+    });
+}
+
+/**
+ * Sort the custom sort fields when drag & dropped.
+ *
+ * @param order
+ */
+function gd_order_custom_sort_fields(order) {
+    var gd_nonce = jQuery("#gd_new_field_nonce").val();
+    order = order + "&security="+gd_nonce;
+    jQuery.ajax({
+        'url': ajaxurl + '?action=geodir_order_custom_sort_fields',
+        'type': 'POST',
+        'data': order,
+        'success': function (result) {
+            if(result.success==false){
+                alert(result.data);
+            }
+        }
+    });
+}
+
 
 /* ================== CUSTOM SORT FIELDS =================== */
 
-function save_sort_field(id) {
+function gd_save_sort_field(id) {
 
     var fieldrequest = jQuery('#licontainer_' + id).find("select, textarea, input").serialize();
     var request_data = 'create_field=true&field_ins_upd=submit&' + fieldrequest;
 
     jQuery.ajax({
-        'url': geodir_admin_ajax.url + '?action=geodir_ajax_action&manage_field_type=sorting_options',
+        'url': ajaxurl + '?action=geodir_save_custom_sort_field',
         'type': 'POST',
         'data': request_data,
         'success': function (result) {
@@ -193,8 +283,9 @@ function save_sort_field(id) {
 
             var order = jQuery(".field_row_main ul.core").sortable("serialize") + '&update=update&manage_field_type=sorting_options';
 
-            jQuery.get(geodir_admin_ajax.url + '?action=geodir_ajax_action&create_field=true', order,
-                function (theResponse) {
+            // check and set the default
+            // jQuery.get(ajaxurl + '?action=geodir_ajax_action&create_field=true', order,
+            //     function (theResponse) {
 
                     jQuery('#licontainer_' + id).find('input[name="is_default"]').each(function () {
                         if (jQuery(this).attr('checked') == 'checked') {
@@ -203,7 +294,7 @@ function save_sort_field(id) {
                     });
 
 
-                });
+               // });
 
             jQuery('.field_frm').hide();
 
@@ -211,31 +302,77 @@ function save_sort_field(id) {
         }
     });
 
-
 }
 
 
-function delete_sort_field(id, nonce, obj) {
+function gd_delete_sort_field(id, nonce, obj) {
 
     var confarmation = confirm(geodir_all_js_msg.custom_field_delete);
 
     if (confarmation == true) {
+        // if its a new field not yet added then we just dump it, no need to run ajax
+        if (id.substring(0, 3) == "new") {
+            jQuery('#licontainer_' + id).remove();
+        }else {
 
-        jQuery.get(geodir_admin_ajax.url + '?action=geodir_ajax_action&create_field=true&manage_field_type=sorting_options', {
-                field_id: id,
-                field_ins_upd: 'delete',
-                _wpnonce: nonce
-            },
-            function (data) {
-                jQuery('#licontainer_' + id).remove();
+            jQuery.get(ajaxurl + '?action=geodir_delete_custom_sort_field', {
+                    field_id: id,
+                    _wpnonce: nonce
+                },
+                function (data) {
+                    jQuery('#licontainer_' + id).remove();
 
-                var field_type = jQuery(obj).closest('li').find('#field_type').val();
-                var htmlvar_name = jQuery(obj).closest('li').find('#htmlvar_name').val();
+                    var field_type = jQuery(obj).closest('li').find('#field_type').val();
+                    var htmlvar_name = jQuery(obj).closest('li').find('#htmlvar_name').val();
 
-                jQuery('#gd-' + field_type + '-_-' + htmlvar_name).closest('li').show();
+                    jQuery('#gd-' + field_type + '-_-' + htmlvar_name).closest('li').show();
 
-            });
+                });
+        }
 
     }
 
 }
+
+
+
+/**
+ * Hides selected fields if they are only supposed to show if a switch field is set to true.
+ */
+function gd_toggle_switch_display(){
+    jQuery("[data-gdat-display-switch-set]").each(function(){
+
+
+        var toggleClass = jQuery(this).data('gdat-display-switch-set');
+        var switchValue = jQuery(this).find('input:checked').val();
+
+        jQuery(this).parent().find('.'+toggleClass).each(function(){
+
+            
+            // if advanced item
+            if(jQuery(this).hasClass('gd-advanced-setting')){
+
+                // if visible
+                if(jQuery(this).hasClass('gda-show') && switchValue == 1){
+                    jQuery(this).show();
+                }else{
+                    jQuery(this).hide();
+                }
+            }else{ // its not advanced but we still need to check if its should be shown
+                // if visible
+                if(switchValue == 1){
+                    jQuery(this).show();
+                }else{
+                    jQuery(this).hide();
+                }
+            }
+
+
+        });
+
+
+
+    });
+}
+
+

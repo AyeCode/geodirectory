@@ -82,3 +82,33 @@ function geodir_is_post_type_archive( $post_types = array() ) {
 
     return is_post_type_archive( $post_types );
 }
+
+
+/**
+ * Display a GeoDirectory help tip.
+ *
+ * @since  2.0.0
+ *
+ * @param  string $tip        Help tip text
+ * @param  bool   $allow_html Allow sanitized HTML if true or escape
+ * @return string
+ */
+function gd_help_tip( $tip, $allow_html = false ) {
+    if ( $allow_html ) {
+        $tip = geodir_sanitize_tooltip( $tip );
+    } else {
+        $tip = esc_attr( $tip );
+    }
+
+    return '<span class="gd-help-tip dashicons dashicons-editor-help" title="' . $tip . '"></span>';
+}
+
+/**
+ * Get permalink settings for GeoDirectory
+ *
+ * @since  2.0.0
+ * @return string
+ */
+function geodir_get_permalink_structure() {
+    return geodir_get_option( 'permalink_structure', '');
+}

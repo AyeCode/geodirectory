@@ -104,7 +104,7 @@ function geodir_draw_map($map_args = array())
         'enable_jason_on_load' => $enable_jason_on_load,
         'enable_map_direction' => $enable_map_direction,
         'enable_marker_cluster' => $enable_marker_cluster,
-        'ajax_url' => geodir_get_ajax_url(),
+        'ajax_url' => admin_url( 'admin-ajax.php' ),
         'map_canvas_name' => $map_canvas_name,
         'inputText' => __('Title or Keyword', 'geodirectory'),
         'latitude' => $map_default_lat,
@@ -524,5 +524,5 @@ function geodir_draw_map($map_args = array())
 function geodir_set_gd_map() {
 ?><script type="text/javascript">window.gdSetMap = window.gdSetMap || '<?php echo geodir_map_name(); ?>';</script><?php
 }
-add_action('wp_head', 'geodir_set_gd_map', -99);
-add_action('admin_head', 'geodir_set_gd_map', -99);
+//add_action('wp_head', 'geodir_set_gd_map', -999);
+//add_action('admin_head', 'geodir_set_gd_map', -999);

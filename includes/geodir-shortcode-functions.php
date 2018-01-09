@@ -35,7 +35,7 @@ function geodir_sc_add_listing( $atts, $content = '' ) {
         'pid'           => '',
         'listing_type'  => $default_post_type,
         'login_msg'     => __( 'You must login to post.', 'geodirectory' ),
-        'show_login'    => false,
+        'show_login'    => true,
     );
 
     $params = shortcode_atts( $defaults, $atts, 'gd_add_listing' );
@@ -48,7 +48,7 @@ function geodir_sc_add_listing( $atts, $content = '' ) {
     }
 
     if ( !geodir_add_listing_check_post_type( $params['listing_type'] ) ) {
-        return __( 'Post type has not allowed to add listing.', 'geodirectory' );
+        return __( 'Adding listings is disabled for this post type..', 'geodirectory' );
     }
 
     foreach ( $params as $key => $value ) {
@@ -59,23 +59,15 @@ function geodir_sc_add_listing( $atts, $content = '' ) {
 
     ob_start();
 
-    if ( !$user_id ) {
+    if ( !$user_id && !geodir_get_option('post_logged_out')) {
         echo $params['login_msg'];
-
         if ( $params['show_login'] ) {
             echo "<br />";
-
-            $defaults = array(
-                'before_widget' => '',
-                'after_widget'  => '',
-                'before_title'  => '',
-                'after_title'   => '',
-            );
-
-            geodir_loginwidget_output( $defaults, $defaults );
+            wp_login_form();
         }
     } else {
-        geodir_render_add_listing_form();
+        GeoDir_Post_Data::add_listing_form();
+        //geodir_render_add_listing_form();
     }
 
     return ob_get_clean();
@@ -1063,8 +1055,9 @@ function geodir_sc_advanced_search($atts) {
 	
 	ob_start();
 	
-	//geodir_get_template_part('listing', 'filter-form');
-	the_widget('geodir_advance_search_widget', $params, $params );
+	geodir_get_template_part('listing', 'filter-form');
+	//the_widget('geodir_advance_search_widget', $params, $params ); //@todo will be better if we can use widget ehre to keep aparams
+    
 	
 	$output = ob_get_contents();
     ob_end_clean();
@@ -2397,3 +2390,311 @@ function geodir_sclistings_callback() {
 }
 add_action('wp_ajax_geodir_sclistings', 'geodir_sclistings_callback');
 add_action('wp_ajax_nopriv_geodir_sclistings', 'geodir_sclistings_callback');
+
+/**
+ * Output link to the posts categories and tags.
+ *
+ * @global bool $preview True of on a preview page. False if not.
+ * @global object $post The current post object.
+ * @since 1.0.0
+ * @since 1.5.7 Modified to add parent categories if only sub category selected.
+ * @package GeoDirectory
+ */
+function geodir_sc_single_taxonomies()
+{
+    global $preview, $post,$gd_post;?>
+    <p class="geodir_post_taxomomies clearfix">
+    <?php
+    $taxonomies = array();
+
+    if ($preview) {
+        $post_type = $post->post_type;
+        $post_taxonomy = $post_type . 'category';
+        //$post->{$post_taxonomy} = $post->post_category[$post_taxonomy];
+    } else {
+        $post_type = $post->post_type;
+        $post_taxonomy = $post_type . 'category';
+    }
+
+    //print_r($gd_post);
+    //print_r($post);
+//{
+    $post_type_info = get_post_type_object($post_type);
+    $listing_label = __($post_type_info->labels->singular_name, 'geodirectory');
+
+    if (!empty($gd_post->post_tags)) {
+
+        if (taxonomy_exists($post_type . '_tags')):
+            $links = array();
+            $terms = array();
+            // to limit post tags
+            $post_tags = trim($gd_post->post_tags, ",");
+            $post_id = isset($post->ID) ? $post->ID : '';
+            /**
+             * Filter the post tags.
+             *
+             * Allows you to filter the post tags output on the details page of a post.
+             *
+             * @since 1.0.0
+             * @param string $post_tags A comma seperated list of tags.
+             * @param int $post_id The current post id.
+             */
+            $post_tags = apply_filters('geodir_action_details_post_tags', $post_tags, $post_id);
+
+            $gd_post->post_tags = $post_tags;
+            $post_tags = explode(",", trim($gd_post->post_tags, ","));
+
+
+            foreach ($post_tags as $post_term) {
+
+                // fix slug creation order for tags & location
+                $post_term = trim($post_term);
+
+                $priority_location = false;
+                if ($insert_term = term_exists($post_term, $post_type . '_tags')) {
+                    $term = get_term_by('id', $insert_term['term_id'], $post_type . '_tags');
+                }else{
+                    continue;
+                }
+
+                if (!is_wp_error($term) && is_object($term)) {
+
+                    // fix tag link on detail page
+                    if ($priority_location) {
+
+                        $tag_link = "<a href=''>$post_term</a>";
+                        /**
+                         * Filter the tag name on the details page.
+                         *
+                         * @since 1.5.6
+                         * @param string $tag_link The tag link html.
+                         * @param object $term The tag term object.
+                         */
+                        $tag_link = apply_filters('geodir_details_taxonomies_tag_link',$tag_link,$term);
+                        $links[] = $tag_link;
+                    } else {
+                        $tag_link = "<a href='" . esc_attr(get_term_link($term->term_id, $term->taxonomy)) . "'>$term->name</a>";
+                        /** This action is documented in geodirectory-template_actions.php */
+                        $tag_link = apply_filters('geodir_details_taxonomies_tag_link',$tag_link,$term);
+                        $links[] = $tag_link;
+                    }
+                    $terms[] = $term;
+                }
+                //
+            }
+            if (!isset($listing_label)) {
+                $listing_label = '';
+            }
+            $taxonomies[$post_type . '_tags'] = wp_sprintf(__('%s Tags: %l', 'geodirectory'), geodir_ucwords($listing_label), $links, (object)$terms);
+        endif;
+
+    }
+
+    if (!empty($gd_post->post_categories)) {
+        $links = array();
+        $terms = array();
+        $termsOrdered = array();
+        if (!is_array($gd_post->post_categories)) {
+            $post_terms = explode(",", trim($gd_post->post_categories, ","));
+        } else {
+            $post_terms = $gd_post->post_categories;
+
+            if ($preview) {
+                $post_terms = geodir_add_parent_terms($post_terms, $post_taxonomy);
+            }
+        }
+
+        $post_terms = array_unique($post_terms);
+        if (!empty($post_terms)) {
+            foreach ($post_terms as $post_term) {
+                $post_term = trim($post_term);
+
+                if ($post_term != ''):
+                    $term = get_term_by('id', $post_term, $post_taxonomy);
+
+                    if (is_object($term)) {
+                        $term_link = "<a href='" . esc_attr(get_term_link($term, $post_taxonomy)) . "'>$term->name</a>";
+                        /**
+                         * Filter the category name on the details page.
+                         *
+                         * @since 1.5.6
+                         * @param string $term_link The link html to the category.
+                         * @param object $term The category term object.
+                         */
+                        $term_link = apply_filters('geodir_details_taxonomies_cat_link',$term_link,$term);
+                        $links[] = $term_link;
+                        $terms[] = $term;
+                    }
+                endif;
+            }
+            // order alphabetically
+            asort($links);
+            foreach (array_keys($links) as $key) {
+                $termsOrdered[$key] = $terms[$key];
+            }
+            $terms = $termsOrdered;
+
+        }
+
+        if (!isset($listing_label)) {
+            $listing_label = '';
+        }
+        $taxonomies[$post_taxonomy] = wp_sprintf(__('%s Category: %l', 'geodirectory'), geodir_ucwords($listing_label), $links, (object)$terms);
+
+    }
+
+    /**
+     * Filter the taxonomies array before output.
+     *
+     * @since 1.5.9
+     * @param array $taxonomies The array of cats and tags.
+     * @param string $post_type The post type being output.
+     * @param string $listing_label The post type label.
+     * @param string $listing_label The post type label with ucwords function.
+     */
+    $taxonomies = apply_filters('geodir_details_taxonomies_output',$taxonomies,$post_type,$listing_label,geodir_ucwords($listing_label));
+
+    if (isset($taxonomies[$post_taxonomy])) {
+        echo '<span class="geodir-category">' . $taxonomies[$post_taxonomy] . '</span>';
+    }
+
+    if (isset($taxonomies[$post_type . '_tags']))
+        echo '<span class="geodir-tags">' . $taxonomies[$post_type . '_tags'] . '</span>';
+
+    ?>
+    </p><?php
+}
+
+/**
+ * Output the details page slider HTML.
+ *
+ * @since 1.0.0
+ * @since 1.5.4 itemprop="image" removed as added via JSON-LD.
+ * @since 1.5.7 Hide default image on listing detail preview page.
+ * @package GeoDirectory
+ * @global bool $preview True of on a preview page. False if not.
+ * @global object $post The current post object.
+ * @todo this needs fixed to use preview images and also it should be changed to use views so we can switch slider type if we want in future.
+ */
+function geodir_sc_single_slider()
+{
+    global $preview, $post;
+
+
+    if ($preview) {
+        $preview_get_images = geodir_get_images($post->ID, 'thumbnail', geodir_get_option('geodir_listing_no_img'));
+
+        $preview_post_images = array();
+        if ($preview_get_images) {
+            foreach ($preview_get_images as $row) {
+                $preview_post_images[] = $row->src;
+            }
+        }
+        if (!empty($preview_post_images)) {
+            $post->post_images = implode(',', $preview_post_images);
+        }
+    }
+
+    if ($preview) {
+        $post_images = array();
+        if (isset($post->post_images) && !empty($post->post_images)) {
+            $post->post_images = trim($post->post_images, ",");
+            $post_images = explode(",", $post->post_images);
+        }
+
+        $main_slides = '';
+        $nav_slides = '';
+        $slides = 0;
+
+        if (!empty($post_images)) {
+            foreach ($post_images as $image) {
+                if (!empty($image)) {
+                    $sizes = getimagesize(trim($image));
+                    $width = !empty($sizes) && isset($sizes[0]) ? $sizes[0] : 0;
+                    $height = !empty($sizes) && isset($sizes[1]) ? $sizes[1] : 0;
+
+                    if ($image && $width && $height) {
+                        $image = (object)array('src' => $image, 'width' => $width, 'height' => $height);
+                    }
+
+                    if (isset($image->src)) {
+                        if ($image->height >= 400) {
+                            $spacer_height = 0;
+                        } else {
+                            $spacer_height = ((400 - $image->height) / 2);
+                        }
+
+                        $image_title = isset($image->title) ? $image->title : '';
+
+                        $main_slides .= '<li><img src="' . geodir_plugin_url() . "/assets/images/spacer.gif" . '" alt="' . $image_title . '" title="' . $image_title . '" style="max-height:' . $spacer_height . 'px;margin:0 auto;" />';
+                        $main_slides .= '<img src="' . $image->src . '" alt="' . $image_title . '" title="' . $image_title . '" style="max-height:400px;margin:0 auto;" /></li>';
+                        $nav_slides .= '<li><img src="' . $image->src . '" alt="' . $image_title . '" title="' . $image_title . '" style="max-height:48px;margin:0 auto;" /></li>';
+                        $slides++;
+                    }
+                }
+            }// endfore
+        } //end if
+    } else {
+        $main_slides = '';
+        $nav_slides = '';
+        /**
+         * Filter if default images should show on the details page.
+         *
+         * @param bool $use_default_image Default false.
+         * @since 1.6.16
+         */
+        $use_default_image = apply_filters('geodir_details_default_image_show', false);
+        $post_images = geodir_get_images($post->ID, 'thumbnail', $use_default_image); // Hide default image on listing preview/detail page.
+        $slides = 0;
+
+        if (!empty($post_images)) {
+            foreach ($post_images as $image) {
+                if ($image->height >= 400) {
+                    $spacer_height = 0;
+                } else {
+                    $spacer_height = ((400 - $image->height) / 2);
+                }
+                $caption = '';//(!empty($image->caption)) ? '<p class="flex-caption">'.$image->caption.'</p>' : '';
+                $main_slides .= '<li><img src="' . geodir_plugin_url() . "/assets/images/spacer.gif" . '" alt="' . $image->title . '" title="' . $image->title . '" style="max-height:' . $spacer_height . 'px;margin:0 auto;" />';
+                $main_slides .= '<img src="' . $image->src . '" alt="' . $image->title . '" title="' . $image->title . '" style="max-height:400px;margin:0 auto;" />'.$caption.'</li>';
+                $nav_slides .= '<li><img src="' . $image->src . '" alt="' . $image->title . '" title="' . $image->title . '" style="max-height:48px;margin:0 auto;" /></li>';
+                $slides++;
+            }
+        }// endfore
+    }
+
+    if (!empty($post_images)) {
+        ?>
+        <div class="geodir_flex-container">
+            <div class="geodir_flex-loader"><i class="fa fa-refresh fa-spin"></i></div>
+            <div id="geodir_slider" class="geodir_flexslider ">
+                <ul class="geodir-slides clearfix"><?php echo $main_slides; ?></ul>
+            </div>
+            <?php if ($slides > 1) { ?>
+                <div id="geodir_carousel" class="geodir_flexslider">
+                    <ul class="geodir-slides clearfix"><?php echo $nav_slides; ?></ul>
+                </div>
+            <?php } ?>
+        </div>
+        <?php
+    }
+}
+
+/**
+ * Outputs the prev/next links of the post details page.
+ *
+ * This is called by a filter 'geodir_details_next_prev' and can be replaced.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
+function geodir_sc_single_next_prev()
+{
+    ?>
+    <div class="geodir-pos_navigation clearfix">
+    <div
+        class="geodir-post_left"><?php previous_post_link('%link', '' . __('Previous', 'geodirectory'), false) ?></div>
+    <div
+        class="geodir-post_right"><?php next_post_link('%link', __('Next', 'geodirectory') . '', false) ?></div>
+    </div><?php
+}

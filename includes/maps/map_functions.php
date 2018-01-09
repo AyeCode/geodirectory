@@ -204,7 +204,7 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = 
 {
     global $cat_count, $geodir_cat_icons, $gd_session;
 
-    $exclude_categories = geodir_get_option('geodir_exclude_cat_on_map');
+    $exclude_categories = geodir_get_option('geodir_exclude_cat_on_map',array());
     $exclude_categories_new = geodir_get_option('geodir_exclude_cat_on_map_upgrade');
 
     // check if exclude categories saved before fix of categories identical names
@@ -306,7 +306,7 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = 
  * @return string The map API provider name.
  */
 function geodir_map_name() {
-    $geodir_map_name = geodir_get_option('geodir_load_map', 'google');
+    $geodir_map_name = geodir_get_option('maps_api', 'google');
     
     if (!in_array($geodir_map_name, array('none', 'auto', 'google', 'osm'))) {
         $geodir_map_name = 'auto';
@@ -417,4 +417,47 @@ function geodir_default_marker_icon( $full_path = false ) {
     $icon = geodir_file_relative_url( $icon, $full_path );
     
     return apply_filters( 'geodir_default_marker_icon', $icon, $full_path );
+}
+
+/**
+ * Returns the default language of the map.
+ *
+ * @since   1.0.0
+ * @package GeoDirectory
+ * @return string Returns the default language.
+ */
+function geodir_get_map_default_language() {
+    $geodir_default_map_language = geodir_get_option( 'map_language' );
+    if ( empty( $geodir_default_map_language ) ) {
+        $geodir_default_map_language = 'en';
+    }
+
+    /**
+     * Filter default map language.
+     *
+     * @since 1.0.0
+     *
+     * @param string $geodir_default_map_language Default map language.
+     */
+    return apply_filters( 'geodir_default_map_language', $geodir_default_map_language );
+}
+
+/**
+ * Returns the Google maps api key.
+ *
+ * @since   1.6.4
+ * @package GeoDirectory
+ * @return string Returns the api key.
+ */
+function geodir_get_map_api_key() {
+    $key = geodir_get_option( 'google_maps_api_key' );
+
+    /**
+     * Filter Google maps api key.
+     *
+     * @since 1.6.4
+     *
+     * @param string $key Google maps api key.
+     */
+    return apply_filters( 'geodir_google_api_key', $key );
 }

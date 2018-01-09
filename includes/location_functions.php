@@ -10,7 +10,7 @@
 function geodir_get_current_city_lat()
 {
     $location = geodir_get_default_location();
-    $lat = isset($location_result->city_latitude) ? $location_result->city_latitude : '39.952484';
+    $lat = isset($location->city_latitude) ? $location->city_latitude : '39.952484';
 
     return $lat;
 }
@@ -26,7 +26,7 @@ function geodir_get_current_city_lat()
 function geodir_get_current_city_lng()
 {
     $location = geodir_get_default_location();
-    $lng = isset($location_result->city_longitude) ? $location_result->city_longitude : '-75.163786';
+    $lng = isset($location->city_longitude) ? $location->city_longitude : '-75.163786';
     return $lng;
 }
 
@@ -40,6 +40,19 @@ function geodir_get_current_city_lng()
  */
 function geodir_get_default_location()
 {
+
+    $location = new stdClass();
+    $location->city = geodir_get_option('default_location_city');
+    $location->region = geodir_get_option('default_location_region');
+    $location->country = geodir_get_option('default_location_country');
+    $location->latitude = geodir_get_option('default_location_latitude');
+    $location->longitude = geodir_get_option('default_location_longitude');
+
+    // slugs 
+    $location->city_slug = sanitize_title($location->city);
+    $location->region_slug = sanitize_title($location->region);
+    $location->country_slug = sanitize_title($location->country);
+
     /**
      * Filter the default location.
      *
@@ -48,7 +61,7 @@ function geodir_get_default_location()
      *
      * @param string $location_result The default location object.
      */
-    return $location_result = apply_filters('geodir_get_default_location', geodir_get_option('geodir_default_location'));
+    return $location_result = apply_filters('geodir_get_default_location', $location );
 }
 
 /**
@@ -144,6 +157,32 @@ function geodir_get_country_dl($post_country = '', $prefix = '')
     }
 
     echo $out_put;
+}
+
+/**
+ * Returns an array of all countries.
+ *
+ * @since 2.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ */
+function geodir_get_countries()
+{
+    global $wpdb;
+
+    $rows = $wpdb->get_results("SELECT Country,ISO2 FROM " . GEODIR_COUNTRIES_TABLE . " ORDER BY Country ASC");
+
+    $ISO2 = array();
+    $countries = array();
+
+    foreach ($rows as $row) {
+        $ISO2[$row->Country] = $row->ISO2;
+        $countries[$row->Country] = __($row->Country, 'geodirectory');
+    }
+
+    asort($countries);
+
+    return $countries;
 }
 
 

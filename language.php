@@ -43,7 +43,7 @@ define('PLACE_DESC_TEXT', __('Listing Description', 'geodirectory'));// deprecia
 
 define('LISTING_ADDRESS_TEXT', __('Listing Address:', 'geodirectory'));
 define('PLACE_ADDRESS', __('Address:', 'geodirectory'));
-define('ADDRESS_MSG', __('Please enter listing address. eg. : 230 Vine Street', 'geodirectory'));
+define('ADDRESS_MSG', __('Please enter the listing street address. eg. : 230 Vine Street', 'geodirectory'));
 define('PLACE_CITY_TEXT', __('City:', 'geodirectory'));
 define('PLACE_REGION_TEXT', __('Region:', 'geodirectory'));
 define('PLACE_COUNTRY_TEXT', __('Country:', 'geodirectory'));

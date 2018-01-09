@@ -1,0 +1,36 @@
+.gd-notification{
+  display: inline-block;
+  text-align: left;
+  margin: 0;
+  vertical-align: middle;
+  background: #0074d9;
+  color: #fff;
+  border: 0;
+  border-radius: 3px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  font-size: 14px;
+  padding: 15px 15px;
+  line-height: 20px;
+  width: 100%;
+
+  a{
+    color: #fff;
+    &:visited {
+      color: #fff;
+    }
+    &:hover {
+      color: #ccc;
+    }
+    &:active {
+      color: #fff;
+    }
+  }
+  .gd-info{
+
+  }
+}

@@ -763,7 +763,7 @@ function geodir_comment_template($comment_template)
         if (geodir_cpt_has_rating_disabled($post->post_type)) {
             return $comment_template;
         }
-        
+
         $template = locate_template(array("geodirectory/reviews.php")); // Use theme template if available
         if (!$template) {
             $template = geodir_plugin_path() . '/includes/templates/reviews.php';
