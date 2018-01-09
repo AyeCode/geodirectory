@@ -7,6 +7,22 @@
  */
 
 /**
+ * Get the Database table string from Custom Post Type.
+ * 
+ * @param $post_type
+ *
+ * @return bool|string
+ */
+function geodir_db_cpt_table($post_type){
+	if(!empty($post_type)){
+		global $plugin_prefix;
+		return $plugin_prefix . $post_type . '_detail';
+	}
+
+	return false;
+}
+
+/**
  * Get the page ID of the add listing page.
  *
  * @package Geodirectory
@@ -14,7 +30,7 @@
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_add_listing_page_id(){
-    $gd_page_id = geodir_get_option('geodir_add_listing_page');
+    $gd_page_id = geodir_get_option('page_add');
 
     if (function_exists('icl_object_id')) {
         $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
@@ -31,7 +47,7 @@ function geodir_add_listing_page_id(){
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_preview_page_id(){
-    $gd_page_id = geodir_get_option('geodir_preview_page');
+    $gd_page_id = geodir_get_option('page_preview');
 
     if (function_exists('icl_object_id')) {
         $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
@@ -48,7 +64,7 @@ function geodir_preview_page_id(){
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_success_page_id(){
-    $gd_page_id = geodir_get_option('geodir_success_page');
+    $gd_page_id = geodir_get_option('page_success');
 
     if (function_exists('icl_object_id')) {
         $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
@@ -65,7 +81,7 @@ function geodir_success_page_id(){
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_location_page_id(){
-    $gd_page_id = geodir_get_option('geodir_location_page');
+    $gd_page_id = geodir_get_option('page_location');
 
     if (function_exists('icl_object_id')) {
         $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
@@ -82,7 +98,7 @@ function geodir_location_page_id(){
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_home_page_id(){
-    $gd_page_id = geodir_get_option('geodir_home_page');
+    $gd_page_id = geodir_get_option('page_home');
 
     if (function_exists('icl_object_id')) {
         $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
@@ -97,6 +113,7 @@ function geodir_home_page_id(){
  * @package Geodirectory
  * @since 1.5.3
  * @return int|null Return the page ID if present or null if not.
+ * @deprecated No longer needed since version 2.0.0
  */
 function geodir_info_page_id(){
     $gd_page_id = geodir_get_option('geodir_info_page');
@@ -114,6 +131,7 @@ function geodir_info_page_id(){
  * @package Geodirectory
  * @since 1.5.3
  * @return int|null Return the page ID if present or null if not.
+ * @deprecated No longer needed since version 2.0.0
  */
 function geodir_login_page_id(){
     $gd_page_id = geodir_get_option('geodir_login_page');
@@ -133,7 +151,7 @@ function geodir_login_page_id(){
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_archive_page_id(){
-	$gd_page_id = geodir_get_option('geodir_archive_page');
+	$gd_page_id = geodir_get_option('page_archive');
 
 	if (function_exists('icl_object_id')) {
 		$gd_page_id =  icl_object_id($gd_page_id, 'page', true);
@@ -150,7 +168,7 @@ function geodir_archive_page_id(){
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_search_page_id(){
-	$gd_page_id = geodir_get_option('geodir_search_page');
+	$gd_page_id = geodir_get_option('page_search');
 
 	if (function_exists('icl_object_id')) {
 		$gd_page_id =  icl_object_id($gd_page_id, 'page', true);
@@ -167,7 +185,24 @@ function geodir_search_page_id(){
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_details_page_id(){
-	$gd_page_id = geodir_get_option('geodir_details_page');
+	$gd_page_id = geodir_get_option('page_details');
+
+	if (function_exists('icl_object_id')) {
+		$gd_page_id =  icl_object_id($gd_page_id, 'page', true);
+	}
+
+	return $gd_page_id;
+}
+
+/**
+ * Get the page ID of the GD search page.
+ *
+ * @package Geodirectory
+ * @since 2.0.0
+ * @return int|null Return the page ID if present or null if not.
+ */
+function geodir_terms_and_conditions_page_id(){
+	$gd_page_id = geodir_get_option('page_terms_conditions');
 
 	if (function_exists('icl_object_id')) {
 		$gd_page_id =  icl_object_id($gd_page_id, 'page', true);
@@ -1012,12 +1047,12 @@ function geodir_remove_last_word($text) {
 }
 
 function geodir_tool_restore_cpt_from_taxonomies() {
-    $cpts = geodir_get_option('geodir_post_types');
+    $cpts = geodir_get_posttypes();
     if ( !empty( $cpts ) ) {
         return;
     }
 
-    $taxonomies = geodir_get_option( 'geodir_taxonomies' );
+    $taxonomies = geodir_get_option( 'taxonomies' );
     if ( !empty( $taxonomies ) ) {
         return;
     }
@@ -1422,4 +1457,26 @@ function geodir_format_hex( $hex ) {
     }
 
     return $hex ? '#' . $hex : null;
+}
+
+/**
+ * Get a array of user roles.
+ *
+ * @param array $exclude An array of roles to exclude from the return array.
+ * @since 2.0.0
+ * @return array An array of roles.
+ */
+function geodir_user_roles($exclude = array()){
+	$user_roles = array();
+	if ( !function_exists('get_editable_roles') ) {
+		require_once( ABSPATH . '/wp-admin/includes/user.php' );
+	}
+	$roles = get_editable_roles();
+	foreach ( $roles as $role => $details ) {
+		if(in_array($role,$exclude)){}else{
+			$user_roles[esc_attr( $role )] = translate_user_role($details['name'] );
+		}
+
+	}
+	return $user_roles;
 }

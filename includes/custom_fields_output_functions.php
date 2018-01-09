@@ -92,7 +92,7 @@ function geodir_cf_checkbox($html,$location,$cf,$p=''){
             }
 
             $html = '<div class="geodir_more_info  ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-checkbox" style="' . $field_icon . '">' . $field_icon_af;
-            $html .= ( trim( $cf['site_title'] ) ) ? __( $cf['site_title'], 'geodirectory' ) . ': ' : '';
+            $html .= ( trim( $cf['frontend_title'] ) ) ? __( $cf['frontend_title'], 'geodirectory' ) . ': ' : '';
             $html .= '</span>' . $html_val . '</div>';
         endif;
 
@@ -168,12 +168,12 @@ function geodir_cf_fieldset($html,$location,$cf,$p=''){
     if(empty($html)){
 
         global $field_set_start;
-        $fieldset_class = 'fieldset-'.sanitize_title_with_dashes($cf['site_title']);
+        $fieldset_class = 'fieldset-'.sanitize_title_with_dashes($cf['frontend_title']);
 
         if ($field_set_start == 1) {
             $html = '';
         } else {
-            $html = '<h2 class="'.$fieldset_class.'">'. __($cf['site_title'], 'geodirectory') . '</h2>';
+            $html = '<h2 class="'.$fieldset_class.'">'. __($cf['frontend_title'], 'geodirectory') . '</h2>';
             //$field_set_start = 1;
         }
 
@@ -272,7 +272,7 @@ function geodir_cf_url($html,$location,$cf,$p=''){
 
 
             $website = !empty($a_url['url']) ? $a_url['url'] : '';
-            $title = !empty($a_url['label']) ? $a_url['label'] : $cf['site_title'];
+            $title = !empty($a_url['label']) ? $a_url['label'] : $cf['frontend_title'];
             if(!empty($cf['default_value'])){$title = $cf['default_value'];}
             $title = $title != '' ? __(stripslashes($title), 'geodirectory') : '';
 
@@ -378,7 +378,7 @@ function geodir_cf_phone($html,$location,$cf,$p=''){
 
 
             $html = '<div class="geodir_more_info  ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-contact" style="' . $field_icon . '">' . $field_icon_af .
-                    $html .= (trim($cf['site_title'])) ? __($cf['site_title'], 'geodirectory') . ': ' : '&nbsp;';
+                    $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '&nbsp;';
             $html .= '</span><a href="tel:' . preg_replace('/[^0-9+]/', '', $post->{$cf['htmlvar_name']}) . '">' . $post->{$cf['htmlvar_name']} . '</a></div>';
 
         endif;
@@ -473,7 +473,7 @@ function geodir_cf_time($html,$location,$cf,$p=''){
 
 
             $html = '<div class="geodir_more_info  ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-time" style="' . $field_icon . '">' . $field_icon_af;
-            $html .= (trim($cf['site_title'])) ? __($cf['site_title'], 'geodirectory') . ': ' : '&nbsp;';
+            $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '&nbsp;';
             $html .= '</span>' . $value . '</div>';
 
         endif;
@@ -593,7 +593,7 @@ function geodir_cf_datepicker($html,$location,$cf,$p=''){
 
 
             $html = '<div class="geodir_more_info  ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-datepicker" style="' . $field_icon . '">' . $field_icon_af;
-            $html .= (trim($cf['site_title'])) ? __($cf['site_title'], 'geodirectory') . ': ' : '';
+            $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
             $html .= '</span>' . $value . '</div>';
 
         endif;
@@ -687,7 +687,7 @@ function geodir_cf_text($html,$location,$cf,$p=''){
 
 
             $html = '<div class="geodir_more_info ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="'.$class.'" style="' . $field_icon . '">' . $field_icon_af;
-            $html .= (trim($cf['site_title'])) ? __($cf['site_title'], 'geodirectory') . ': ' : '';
+            $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
             $html .= '</span>';
 
             $value = $post->{$cf['htmlvar_name']};
@@ -809,7 +809,7 @@ function geodir_cf_radio($html,$location,$cf,$p=''){
 
 
             $html = '<div class="geodir_more_info ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-radio" style="' . $field_icon . '">' . $field_icon_af;
-            $html .= (trim($cf['site_title'])) ? __($cf['site_title'], 'geodirectory') . ': ' : '';
+            $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
             $html .= '</span>' . $html_val . '</div>';
         endif;
 
@@ -912,7 +912,7 @@ function geodir_cf_select($html,$location,$cf,$p=''){
 
 
             $html = '<div class="geodir_more_info ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-select" style="' . $field_icon . '">' . $field_icon_af;
-            $html .= (trim($cf['site_title'])) ? __($cf['site_title'], 'geodirectory') . ': ' : '';
+            $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
             $html .= '</span>' . $field_value . '</div>';
         endif;
 
@@ -1025,7 +1025,7 @@ function geodir_cf_multiselect($html,$location,$cf,$p=''){
 
 
             $html = '<div class="geodir_more_info ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-select" style="' . $field_icon . '">' . $field_icon_af;
-            $html .= (trim($cf['site_title'])) ? __($cf['site_title'], 'geodirectory') . ': ' : '';
+            $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
             $html .= '</span>';
 
             if (count($option_values) > 1) {
@@ -1186,7 +1186,7 @@ function geodir_cf_email($html,$location,$cf,$p=''){
 
 
                 $html = '<div class="geodir_more_info ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-email" style="' . $field_icon . '">' . $field_icon_af;
-                $html .= (trim($cf['site_title'])) ? __($cf['site_title'], 'geodirectory') . ': ' : '';
+                $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
                 $html .= '</span><span class="geodir-email-address-output">';
                 $email = $post->{$cf['htmlvar_name']} ;
                 if($e_split = explode('@',$email)){
@@ -1346,7 +1346,7 @@ function geodir_cf_file($html,$location,$cf,$p=''){
 
                 $html = '<div class="geodir_more_info  ' . $cf['css_class'] . ' geodir-custom-file-box ' . $cf['htmlvar_name'] . '"><div class="geodir-i-select" style="' . $field_icon . '">' . $field_icon_af;
                 $html .= '<span style="display: inline-block; vertical-align: top; padding-right: 14px;">';
-                $html .= (trim($cf['site_title'])) ? __($cf['site_title'], 'geodirectory') . ': ' : '';
+                $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
                 $html .= '</span>';
                 $html .= $file_paths . '</div></div>';
 
@@ -1439,7 +1439,7 @@ function geodir_cf_textarea($html,$location,$cf,$p=''){
 
 
             $html = '<div class="geodir_more_info ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-text" style="' . $field_icon . '">' . $field_icon_af;
-            $html .= (trim($cf['site_title'])) ? __($cf['site_title'], 'geodirectory') . ': ' : '';
+            $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
             $html .= '</span>' . wpautop($post->{$cf['htmlvar_name']}) . '</div>';
 
         }
@@ -1529,7 +1529,7 @@ function geodir_cf_html($html,$location,$cf,$p=''){
             }
 
             $html = '<div class="geodir_more_info  ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-text" style="' . $field_icon . '">' . $field_icon_af;
-            $html .= (trim($cf['site_title'])) ? __($cf['site_title'], 'geodirectory') . ': ' : '';
+            $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
             $html .= '</span>' . wpautop($post->{$cf['htmlvar_name']}) . '</div>';
 
         }
@@ -1653,7 +1653,7 @@ function geodir_cf_taxonomy($html,$location,$cf,$p=''){
                 }
 
                 $html = '<div class="geodir_more_info ' . $cf['css_class'] . ' ' . $html_var . '" style="clear:both;"><span class="geodir-i-taxonomy geodir-i-category" style="' . $field_icon . '">' . $field_icon_af;
-                $html .= (trim($cf['site_title'])) ? __($cf['site_title'], 'geodirectory') . ': ' : '';
+                $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
                 $html .= '</span> ' . $html_value . '</div>';
             }
         }
@@ -1791,8 +1791,9 @@ function geodir_cf_address($html,$location,$cf,$p=''){
 
         }
 
+        //print_r($post);
 
-        if ($post->{$html_var}) {
+        if ($post->street) {
 
             $field_icon = geodir_field_icon_proccess( $cf );
             if ( strpos( $field_icon, 'http' ) !== false ) {
@@ -1806,25 +1807,25 @@ function geodir_cf_address($html,$location,$cf,$p=''){
             
             $html = '<div class="geodir_more_info ' . $cf['css_class'] . ' ' . $html_var . '" style="clear:both;"  itemscope itemtype="https://schema.org/PostalAddress">';
             $html .= '<span class="geodir-i-location" style="' . $field_icon . '">' . $field_icon_af;
-            $html .= ( trim( $cf['site_title'] ) ) ? __( $cf['site_title'], 'geodirectory' ) . ': ' : '&nbsp;';
+            $html .= ( trim( $cf['frontend_title'] ) ) ? __( $cf['frontend_title'], 'geodirectory' ) . ': ' : '&nbsp;';
             $html .= '</span>';
             
             $address_fields = array();
 
-            if ( isset($post->post_address) ) {
-                $address_fields['post_address'] = '<span itemprop="streetAddress">' . $post->post_address . '</span>';
+            if ( isset($post->street) ) {
+                $address_fields['street'] = '<span itemprop="streetAddress">' . $post->street . '</span>';
             }
-            if ($show_city_in_address && isset( $post->post_city ) && $post->post_city ) {
-                $address_fields['post_city'] = '<span itemprop="addressLocality">' . $post->post_city . '</span>';
+            if ($show_city_in_address && isset( $post->city ) && $post->city ) {
+                $address_fields['city'] = '<span itemprop="addressLocality">' . $post->city. '</span>';
             }
-            if ($show_region_in_address && isset( $post->post_region ) && $post->post_region ) {
-                $address_fields['post_region'] = '<span itemprop="addressRegion">' . $post->post_region . '</span>';
+            if ($show_region_in_address && isset( $post->region ) && $post->region ) {
+                $address_fields['region'] = '<span itemprop="addressRegion">' . $post->region . '</span>';
             }
-            if ($show_zip_in_address && isset( $post->post_zip ) && $post->post_zip ) {
-                $address_fields['post_zip'] = '<span itemprop="postalCode">' . $post->post_zip . '</span>';
+            if ($show_zip_in_address && isset( $post->zip ) && $post->zip ) {
+                $address_fields['zip'] = '<span itemprop="postalCode">' . $post->zip . '</span>';
             }
-            if ($show_country_in_address && isset( $post->post_country ) && $post->post_country ) {
-                $address_fields['post_country'] = '<span itemprop="addressCountry">' . __( $post->post_country, 'geodirectory' ) . '</span>';
+            if ($show_country_in_address && isset( $post->country ) && $post->country ) {
+                $address_fields['country'] = '<span itemprop="addressCountry">' . __( $post->country, 'geodirectory' ) . '</span>';
             }
             
             /**
@@ -1851,3 +1852,89 @@ function geodir_cf_address($html,$location,$cf,$p=''){
     return $html;
 }
 add_filter('geodir_custom_field_output_address','geodir_cf_address',10,3);
+
+/**
+ * Filter the custom field output.
+ *
+ * @param string $html The html to be output.
+ * @param string $location The location name of the output location.
+ * @param object $cf The custom field object info.
+ *
+ * @since 1.6.9
+ * @return string The html to output.
+ */
+function geodir_predefined_custom_field_output_twitter_feed($html,$location,$cf){
+    global $post;
+
+
+    if (isset($post->{$cf['htmlvar_name']}) && $post->{$cf['htmlvar_name']} != '' ):
+
+        $class = ($cf['htmlvar_name'] == 'geodir_timing') ? "geodir-i-time" : "geodir-i-text";
+
+        $field_icon = geodir_field_icon_proccess($cf);
+        if (strpos($field_icon, 'http') !== false) {
+            $field_icon_af = '';
+        } elseif ($field_icon == '') {
+            $field_icon_af = ($cf['htmlvar_name'] == 'geodir_timing') ? '<i class="fa fa-clock-o"></i>' : "";
+        } else {
+            $field_icon_af = $field_icon;
+            $field_icon = '';
+        }
+
+
+        $html = '<div class="geodir_more_info ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '" style="clear:both;">';
+
+        $html .= '<a class="twitter-timeline" data-height="600" data-dnt="true" href="https://twitter.com/'.$post->{$cf['htmlvar_name']}.'">Tweets by '.$post->{$cf['htmlvar_name']}.'</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>';
+        $html .= '</div>';
+
+    endif;
+
+    return $html;
+}
+add_filter('geodir_custom_field_output_text_key_twitter_feed','geodir_predefined_custom_field_output_twitter_feed',10,3);
+
+/**
+ * Filter the get_directions custom field output to show a link.
+ *
+ * @param string $html The html to be output.
+ * @param string $location The location name of the output location.
+ * @param object $cf The custom field object info.
+ *
+ * @since 1.6.9
+ * @return string The html to output.
+ */
+function geodir_predefined_custom_field_output_get_directions($html,$location,$cf) {
+    global $post;
+
+
+    if ( isset( $post->{$cf['htmlvar_name']} ) && $post->{$cf['htmlvar_name']} != '' && isset( $post->post_latitude ) && $post->post_latitude ){
+
+        $field_icon = geodir_field_icon_proccess( $cf );
+        if ( strpos( $field_icon, 'http' ) !== false ) {
+            $field_icon_af = '';
+        } elseif ( $field_icon == '' ) {
+            $field_icon_af = '<i class="fa fa-location-arrow"></i>';
+        } else {
+            $field_icon_af = $field_icon;
+            $field_icon    = '';
+        }
+
+        $link_text = isset( $post->{$cf['default_value']} ) ? $post->{$cf['default_value']} : __( 'Get Directions', 'geodirectory' );
+
+        $html = '<div class="geodir_more_info ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '" style="clear:both;">';
+
+        if(isset( $cf['field_icon'] ) && $cf['field_icon']){
+            $html .= $field_icon_af;
+        }
+
+        // We use maps.apple.com here because it will handle redirects nicely in most cases
+        $html .= '<a href="https://maps.apple.com/?daddr=' . $post->post_latitude . ',' . $post->post_longitude . '" target="_blank" >' . $link_text . '</a>';
+        $html .= '</div>';
+
+    }else{
+        $html ='';
+    }
+
+    return $html;
+}
+add_filter('geodir_custom_field_output_text_key_get_directions','geodir_predefined_custom_field_output_get_directions',10,3);

@@ -106,6 +106,7 @@ class GeoDir_Admin_Taxonomies {
      * @param string $taxonomy Current taxonomy slug.
      */
     public function edit_category_fields( $term, $taxonomy ) {
+        //print_r(get_term_meta( $term->term_id));
         $cat_top_desc = get_term_meta( $term->term_id, 'ct_cat_top_desc', true );
         $cat_default_img = get_term_meta( $term->term_id, 'ct_cat_default_img', true );
         $cat_icon = get_term_meta( $term->term_id, 'ct_cat_icon', true );
@@ -205,7 +206,7 @@ class GeoDir_Admin_Taxonomies {
     }
     
     public function render_cat_schema( $cat_schema = '', $id = 'ct_cat_schema', $name = ''  ) {
-        $schemas = geodir_get_cat_schemas();
+        $schemas = self::get_schemas();
         
         if ( empty( $name ) ) {
             $name = $id;
@@ -325,6 +326,271 @@ class GeoDir_Admin_Taxonomies {
 
         return $columns;
     }
+
+    public static function taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = false, $pading = 0)
+    {
+        global $cat_display, $post_cat, $exclude_cats;
+
+        $search_terms = trim($post_cat, ",");
+
+        $search_terms = explode(",", $search_terms);
+
+        $cat_terms = get_terms($cat_taxonomy, array('parent' => $cat_parent, 'hide_empty' => $hide_empty, 'exclude' => $exclude_cats));
+
+        $display = '';
+        $onchange = '';
+        $term_check = '';
+        $main_list_class = '';
+        $out = '';
+        //If there are terms, start displaying
+        if (count($cat_terms) > 0) {
+            //Displaying as a list
+            $p = $pading * 20;
+            $pading++;
+
+
+            if ((!geodir_is_page('listing')) || (is_search() && $_REQUEST['search_taxonomy'] == '')) {
+                if ($cat_parent == 0) {
+                    $list_class = 'main_list gd-parent-cats-list gd-cats-display-' . $cat_display;
+                    $main_list_class = 'class="main_list_selecter"';
+                } else {
+                    //$display = 'display:none';
+                    $list_class = 'sub_list gd-sub-cats-list';
+                }
+            }
+
+            if ($cat_display == 'checkbox' || $cat_display == 'radio') {
+                $p = 0;
+                $out = '<div class="' . $list_class . ' gd-cat-row-' . $cat_parent . '" style="margin-left:' . $p . 'px;' . $display . ';">';
+            }
+
+            foreach ($cat_terms as $cat_term) {
+
+                $checked = '';
+
+                if (in_array($cat_term->term_id, $search_terms)) {
+                    if ($cat_display == 'select' || $cat_display == 'multiselect')
+                        $checked = 'selected="selected"';
+                    else
+                        $checked = 'checked="checked"';
+                }
+
+                if ($cat_display == 'radio')
+                    $out .= '<span style="display:block" ><input type="radio" field_type="radio" name="post_category[]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" >' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '</span>';
+                elseif ($cat_display == 'select' || $cat_display == 'multiselect')
+                    $out .= '<option ' . $main_list_class . ' style="margin-left:' . $p . 'px;" alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' >' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '</option>';
+
+                else {
+                    $out .= '<span style="display:block"><input style="display:inline-block" type="checkbox" field_type="checkbox" name="post_category[]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" >' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '</span>';
+                }
+
+                // Call recurson to print sub cats
+                $out .= self::taxonomy_walker($cat_taxonomy, $cat_term->term_id, $hide_empty, $pading);
+
+            }
+
+            if ($cat_display == 'checkbox' || $cat_display == 'radio')
+                $out .= '</div>';
+
+            return $out;
+        }
+        return '';
+    }
+
+    /*
+     * Get CPT taxonomy select.
+     */
+    public static function get_category_select($post_type = '', $selected = '', $is_tag = false, $echo = true){
+        $html = '';
+        $taxonomies = geodir_get_taxonomies($post_type, $is_tag);
+
+        $categories = get_terms($taxonomies);
+
+        $html .= '<option value="0">' . __('All', 'geodirectory') . '</option>';
+
+        foreach ($categories as $category_obj) {
+            $select_opt = '';
+            if ($selected == $category_obj->term_id) {
+                $select_opt = 'selected="selected"';
+            }
+            $html .= '<option ' . $select_opt . ' value="' . $category_obj->term_id . '">'
+                     . geodir_utf8_ucfirst($category_obj->name) . '</option>';
+        }
+
+        if ($echo)
+            echo $html;
+        else
+            return $html;
+    }
+
+    /**
+     * Return the schemas options as an array.
+     * 
+     * @return mixed|void
+     */
+    public static function get_schemas(){
+        $schemas = array(
+            '' => __( 'Default (LocalBusiness)', 'geodirectory' ),
+            'AccountingService' => 'AccountingService',
+            'Attorney' => 'Attorney',
+            'AutoBodyShop' => 'AutoBodyShop',
+            'AutoDealer' => 'AutoDealer',
+            'AutoPartsStore' => 'AutoPartsStore',
+            'AutoRental' => 'AutoRental',
+            'AutoRepair' => 'AutoRepair',
+            'AutoWash' => 'AutoWash',
+            'Bakery' => 'Bakery',
+            'BarOrPub' => 'BarOrPub',
+            'BeautySalon' => 'BeautySalon',
+            'BedAndBreakfast' => 'BedAndBreakfast',
+            'BikeStore' => 'BikeStore',
+            'BookStore' => 'BookStore',
+            'CafeOrCoffeeShop' => 'CafeOrCoffeeShop',
+            'Campground' => 'Campground',
+            'ChildCare' => 'ChildCare',
+            'ClothingStore' => 'ClothingStore',
+            'ComputerStore' => 'ComputerStore',
+            'DaySpa' => 'DaySpa',
+            'Dentist' => 'Dentist',
+            'DryCleaningOrLaundry' => 'DryCleaningOrLaundry',
+            'Electrician' => 'Electrician',
+            'ElectronicsStore' => 'ElectronicsStore',
+            'EmergencyService' => 'EmergencyService',
+            'EntertainmentBusiness' => 'EntertainmentBusiness',
+            'Event' => 'Event',
+            'EventVenue' => 'EventVenue',
+            'ExerciseGym' => 'ExerciseGym',
+            'FinancialService' => 'FinancialService',
+            'Florist' => 'Florist',
+            'FoodEstablishment' => 'FoodEstablishment',
+            'FurnitureStore' => 'FurnitureStore',
+            'GardenStore' => 'GardenStore',
+            'GeneralContractor' => 'GeneralContractor',
+            'GolfCourse' => 'GolfCourse',
+            'HairSalon' => 'HairSalon',
+            'HardwareStore' => 'HardwareStore',
+            'HealthAndBeautyBusiness' => 'HealthAndBeautyBusiness',
+            'HobbyShop' => 'HobbyShop',
+            'HomeAndConstructionBusiness' => 'HomeAndConstructionBusiness',
+            'HomeGoodsStore' => 'HomeGoodsStore',
+            'Hospital' => 'Hospital',
+            'Hostel' => 'Hostel',
+            'Hotel' => 'Hotel',
+            'HousePainter' => 'HousePainter',
+            'HVACBusiness' => 'HVACBusiness',
+            'InsuranceAgency' => 'InsuranceAgency',
+            'JewelryStore' => 'JewelryStore',
+            'LiquorStore' => 'LiquorStore',
+            'Locksmith' => 'Locksmith',
+            'LodgingBusiness' => 'LodgingBusiness',
+            'MedicalClinic' => 'MedicalClinic',
+            'MensClothingStore' => 'MensClothingStore',
+            'MobilePhoneStore' => 'MobilePhoneStore',
+            'Motel' => 'Motel',
+            'MotorcycleDealer' => 'MotorcycleDealer',
+            'MotorcycleRepair' => 'MotorcycleRepair',
+            'MovingCompany' => 'MovingCompany',
+            'MusicStore' => 'MusicStore',
+            'NailSalon' => 'NailSalon',
+            'NightClub' => 'NightClub',
+            'Notary' => 'Notary',
+            'OfficeEquipmentStore' => 'OfficeEquipmentStore',
+            'Optician' => 'Optician',
+            'PetStore' => 'PetStore',
+            'Physician' => 'Physician',
+            'Plumber' => 'Plumber',
+            'ProfessionalService' => 'ProfessionalService',
+            'RealEstateAgent' => 'RealEstateAgent',
+            'Residence' => 'Residence',
+            'Restaurant' => 'Restaurant',
+            'RoofingContractor' => 'RoofingContractor',
+            'RVPark' => 'RVPark',
+            'School' => 'School',
+            'SelfStorage' => 'SelfStorage',
+            'ShoeStore' => 'ShoeStore',
+            'SkiResort' => 'SkiResort',
+            'SportingGoodsStore' => 'SportingGoodsStore',
+            'SportsClub' => 'SportsClub',
+            'Store' => 'Store',
+            'TattooParlor' => 'TattooParlor',
+            'Taxi' => 'Taxi',
+            'TennisComplex' => 'TennisComplex',
+            'TireShop' => 'TireShop',
+            'TouristAttraction' => 'TouristAttraction',
+            'ToyStore' => 'ToyStore',
+            'TravelAgency' => 'TravelAgency',
+            //'VacationRentals' => 'VacationRentals', // Not recognised by google yet
+            'VeterinaryCare' => 'VeterinaryCare',
+            'WholesaleStore' => 'WholesaleStore',
+            'Winery' => 'Winery'
+        );
+
+        /*
+		 * Allows you to add/filter the cat schema types.
+		 *
+		 * @since 1.5.7
+		 */
+        return apply_filters( 'geodir_cat_schemas', $schemas );
+    }
+
+    /**
+     * Get the category top description html.
+     *
+     * @param int $term_id The term id.
+     *
+     * @return mixed|void
+     */
+    public static function get_cat_top_description( $term_id ) {
+        $top_description = get_term_meta( $term_id, 'ct_cat_top_desc', true );
+
+        return apply_filters( 'geodir_get_cat_top_description', $top_description, $term_id );
+    }
+
+    /**
+     * Get the category default image.
+     *
+     * @param $term_id
+     * @param bool $full_path
+     *
+     * @return mixed|void
+     */
+    public static function get_cat_image( $term_id, $full_path = false ) {
+        $term_meta = get_term_meta( $term_id, 'ct_cat_default_img', true );
+
+        $cat_image = is_array( $term_meta ) && !empty( $term_meta['src'] ) ? $term_meta['src'] : '';
+
+        if ( $cat_image && $full_path && strpos( $cat_image, 'http://' ) !== 0 && strpos( $cat_image, 'https://' ) !== 0 ) {
+            $cat_image = geodir_file_relative_url( $cat_image, true );
+        }
+
+        return apply_filters( 'geodir_get_cat_image', $cat_image, $term_id, $full_path );
+    }
+
+    /**
+     * Get the category icon url.
+     *
+     * @param $term_id
+     * @param bool $full_path
+     * @param bool $default
+     *
+     * @return mixed|void
+     */
+    public static function get_cat_icon( $term_id, $full_path = false, $default = false ) {
+        $term_meta = get_term_meta( $term_id, 'ct_cat_icon', true );
+
+        $cat_icon = is_array( $term_meta ) && !empty( $term_meta['src'] ) ? $term_meta['src'] : '';
+
+        if ( !$cat_icon && $default ) {
+            $cat_icon = geodir_default_marker_icon( $full_path );
+        }
+
+        if ( $cat_icon && $full_path ) {
+            $cat_icon = geodir_file_relative_url( $cat_icon, true );
+        }
+
+        return apply_filters( 'geodir_get_cat_icon', $cat_icon, $term_id, $full_path, $default );
+    }
+
 }
 
 new GeoDir_Admin_Taxonomies();

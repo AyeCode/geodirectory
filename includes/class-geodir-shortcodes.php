@@ -33,7 +33,11 @@ class GeoDir_Shortcodes {
             'gd_recent_reviews'         => __CLASS__ . '::gd_recent_reviews',
             'gd_related_listings'       => __CLASS__ . '::gd_related_listings',
             'gd_video'                  => __CLASS__ . '::gd_video',
-            'gd_loop'                   => __CLASS__ . '::gd_loop',
+            'gd_loop'                   => __CLASS__ . '::gd_loop', // only for GD archive page
+            'gd_single_slider'          => __CLASS__ . '::gd_single_slider',
+            'gd_single_taxonomies'      => __CLASS__ . '::gd_single_taxonomies',
+            'gd_single_tabs'            => __CLASS__ . '::gd_single_tabs',
+            'gd_single_next_prev'       => __CLASS__ . '::gd_single_next_prev',
         );
 
         foreach ( $shortcodes as $shortcode => $function ) {
@@ -115,12 +119,31 @@ class GeoDir_Shortcodes {
     }
 
     public static function gd_loop( $atts = array(), $content = null ) {
-        if(geodir_is_post_type_archive() ||  geodir_is_taxonomy()){
+        if(geodir_is_post_type_archive() ||  geodir_is_taxonomy() ||  geodir_is_page('search')){
             ob_start();
-            geodir_get_template_part('listing', 'listview');
+           // geodir_get_template_part('listing', 'listview');
+            geodir_action_listings_content();
             return ob_get_clean();
         }else{
             return "";
         }
+    }
+
+    // single page only shortcodes
+
+    public static function gd_single_slider( $atts = array(), $content = null ) {
+        return self::shortcode_wrapper( 'geodir_sc_single_slider', $atts, $content  );
+    }
+
+    public static function gd_single_taxonomies( $atts = array(), $content = null ) {
+        return self::shortcode_wrapper( 'geodir_sc_single_taxonomies', $atts, $content  );
+    }
+
+    public static function gd_single_tabs( $atts = array(), $content = null ) {
+        return self::shortcode_wrapper( 'geodir_show_detail_page_tabs', $atts, $content  );
+    }
+
+    public static function gd_single_next_prev( $atts = array(), $content = null ) {
+        return self::shortcode_wrapper( 'geodir_sc_single_next_prev', $atts, $content  );
     }
 }

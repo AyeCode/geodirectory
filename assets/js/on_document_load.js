@@ -1,40 +1,4 @@
-function geodir_click_search($this) {
-    //we delay this so other functions have a change to change setting before search
-    setTimeout(function() {
-        jQuery($this).parent().find('.geodir_submit_search').click();
-    }, 100);
-}
-
-function addToFavourite(post_id, action) {
-    var fav_url;
-    var ajax_action;
-    
-    if (action == 'add') {
-        ajax_action = 'add';
-    } else {
-        ajax_action = 'remove';
-    }
-    
-    jQuery.ajax({
-        url: geodir_all_js_msg.geodir_admin_ajax_url,
-        type: 'GET',
-        dataType: 'html',
-        data: {
-            action: 'geodir_ajax_action',
-            geodir_ajax: 'favorite',
-            ajax_action: ajax_action,
-            pid: post_id
-        },
-        timeout: 20000,
-        error: function() {
-            alert(geodir_all_js_msg.loading_listing_error_favorite);
-        },
-        success: function(html) {
-            jQuery('.favorite_property_' + post_id).html(html);
-        }
-    });
-    return false;
-}
+// @todo hopefully we can remove this script so its one less script to have to load
 
 jQuery(document).ready(function($) {
     if (geodir_all_js_msg.fa_rating) { // font awesome rating

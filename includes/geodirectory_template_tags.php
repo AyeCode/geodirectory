@@ -157,7 +157,7 @@ function geodir_templates_scripts() {
 
         // place js config array for plupload
         $plupload_init = array(
-            'runtimes' => 'html5,silverlight,flash,browserplus,gears,html4',
+            'runtimes' => 'html5,silverlight,browserplus,gears,html4',
             'browse_button' => 'plupload-browse-button', // will be adjusted per uploader
             'container' => 'plupload-upload-ui', // will be adjusted per uploader
             'drop_element' => 'dropbox', // will be adjusted per uploader
@@ -209,20 +209,7 @@ function geodir_templates_scripts() {
     wp_enqueue_script('google-geometa');
 }
 
-/**
- * Loads custom CSS and JS on header.
- *
- * WP Admin -> Geodirectory -> Design -> Scripts -> Custom style css code.
- * WP Admin -> Geodirectory -> Design -> Scripts -> Header script code.
- *
- * @since 1.0.0
- * @package GeoDirectory
- */
-function geodir_header_scripts()
-{
-    echo '<style>' . stripslashes(geodir_get_option('geodir_coustem_css')) . '</style>';
-    echo stripslashes(geodir_get_option('geodir_header_scripts'));
-}
+
 
 /**
  * Loads Google Analytics JS on header.
@@ -297,30 +284,7 @@ function geodir_add_async_forscript($url)
 }
 add_filter('clean_url', 'geodir_add_async_forscript', 11, 1);
 
-/**
- * Handles loading of all geodirectory stylesheets and its dependencies.
- *
- * @since 1.0.0
- * @package GeoDirectory
- */
-function geodir_templates_styles() {
-    wp_register_style('select2', geodir_plugin_url() . '/assets/css/select2/select2.css', array(), GEODIRECTORY_VERSION);
-    wp_enqueue_style('select2');
-    
-    wp_register_style('geodir-core-scss', geodir_plugin_url() . '/assets/css/gd_core_frontend.css', array(), GEODIRECTORY_VERSION);
-    wp_enqueue_style('geodir-core-scss');
-    wp_register_style('geodir-core-scss-footer', geodir_plugin_url() . '/assets/css/gd_core_frontend_footer.css', array(), GEODIRECTORY_VERSION);
 
-    if(is_rtl()){
-    wp_register_style('geodirectory-frontend-rtl-style', geodir_plugin_url() . '/assets/css/rtl-frontend.css', array(), GEODIRECTORY_VERSION);
-    wp_enqueue_style('geodirectory-frontend-rtl-style');
-    }
-
-    wp_register_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css', array(), GEODIRECTORY_VERSION);
-    wp_enqueue_style('font-awesome');
-
-
-}
 
 /**
  * Returns paginated HTML string based on the given parameters.

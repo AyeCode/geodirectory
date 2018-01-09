@@ -76,7 +76,7 @@ if ($field_id != '' && $field_action == 'submit' && isset($_REQUEST['_wpnonce'])
         }
     }
 
-    $return = geodir_custom_field_save($_REQUEST);
+   // $return = geodir_custom_field_save($_REQUEST);
 
     if (is_int($return)) {
         $lastid = $return;

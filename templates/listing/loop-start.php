@@ -15,10 +15,10 @@
  * @global object $gd_session GeoDirectory Session object.
  */
  ?>
- 
+
 <?php if ( !empty( $header_options ) ) { ?>
 
     <?php echo $header_options; ?>
-    
+
 <?php } ?>
 <ul <?php geodir_listing_loop_class(); ?>>

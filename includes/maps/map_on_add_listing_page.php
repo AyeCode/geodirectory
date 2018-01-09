@@ -34,16 +34,16 @@ $auto_change_address_fields_pin_move = apply_filters('geodir_auto_change_address
 $default_location = geodir_get_default_location();
 $defaultcity = isset($default_location->city) ? $default_location->city : '';
 $lat_lng_blank = false;
-if ($lat == '' && $lng == '') {
+if ( (!isset($lat) || $lat == '' ) && (!isset($lat) || $lng == '')) {
     $lat_lng_blank = true;
     $city = $defaultcity;
     $region = isset($default_location->region) ? $default_location->region : '';
     $country = isset($default_location->country) ? $default_location->country : '';
-    $lng = isset($default_location->city_longitude) ? $default_location->city_longitude : '';
-    $lat = isset($default_location->city_latitude) ? $default_location->city_latitude : '';
+    $lng = isset($default_location->longitude) ? $default_location->longitude : '';
+    $lat = isset($default_location->latitude) ? $default_location->latitude : '';
 }
-$default_lng = isset($default_location->city_longitude) ? $default_location->city_longitude : '';
-$default_lat = isset($default_location->city_latitude) ? $default_location->city_latitude : '';
+$default_lng = isset($default_location->longitude) ? $default_location->longitude : '';
+$default_lat = isset($default_location->latitude) ? $default_location->latitude : '';
 if (is_admin() && isset($_REQUEST['tab']) && $mapzoom == '') {
     $mapzoom = 4;
     if (isset($_REQUEST['add_hood']))
@@ -82,7 +82,7 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
     window.gdMaps = window.gdMaps || gdMaps;
     
     user_address = false;
-    jQuery('#<?php echo $prefix.'address';?>').keypress(function () {
+    jQuery('#<?php echo $prefix.'street';?>').keypress(function () {
         user_address = true;
     });
 
@@ -454,8 +454,8 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
         var old_country = jQuery("#<?php echo $prefix.'country';?>").val();
         var old_region = jQuery("#<?php echo $prefix.'region';?>").val();
         
-        if (user_address == false || jQuery('#<?php echo $prefix.'address';?>').val() == '') {
-            jQuery("#<?php echo $prefix.'address';?>").val(getAddress);
+        if (user_address == false || jQuery('#<?php echo $prefix.'street';?>').val() == '') {
+            jQuery("#<?php echo $prefix.'street';?>").val(getAddress);
         }
         if (getAddress) {
             oldstr_address = getAddress;
@@ -470,7 +470,9 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
                 /* TODO multilocations */
                 jQuery('#<?php echo $prefix .'country'; ?> option[value=""]').attr("selected",false);
                 jQuery('#<?php echo $prefix.'country';?> option[data-country_code="' + getCountryISO + '"]').attr("selected", true);
-                jQuery("#<?php echo $prefix.'country';?>").trigger("chosen:updated");
+               // jQuery("#<?php echo $prefix.'country';?>").trigger("chosen:updated");
+                jQuery("#<?php echo $prefix.'country';?>").trigger('change');
+                //alert(123);
             }
             if (getState) {
                 if (jQuery('input[id="<?php echo $prefix.'region';?>"]').attr('id')) {
@@ -495,7 +497,7 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
         ?>
     }
     function geodir_codeAddress(set_on_map) {
-        var address = jQuery('#<?php echo $prefix.'address';?>').val();
+        var address = jQuery('#<?php echo $prefix.'street';?>').val();
         var zip = jQuery('#<?php echo $prefix.'zip';?>').val();
         var city = jQuery('#<?php echo $prefix.'city';?>').val();
         var region = jQuery('#<?php echo $prefix.'region';?>').val();

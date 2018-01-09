@@ -1,6 +1,7 @@
 
 
 @import "partials/search_form";
+@import "partials/notifications";
 
 /* ########################################
 preview details page 
@@ -580,7 +581,7 @@ listings page
 /* ########################################
 add listings page 
 ######################################### */
-#propertyform h5 {
+#geodirectory-add-post h5 {
     font-size: 16px;
     padding: 15px 0 8px 0;
     border-bottom: 1px #CCCCCC solid;
@@ -640,6 +641,11 @@ add listings page
     padding-left: 30%;
     padding-top: 5px;
     color: #999;
+    &.gd_images_desc{
+        clear: none;
+        padding-top: 0;
+    }
+
 }
 
 #geodir_filled_by_spam_bot_top_form {

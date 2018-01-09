@@ -339,7 +339,7 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget) && !isset($rel
                                     $editlink = geodir_getlink($addplacelink, array('pid' => $post->ID), false);
                                     $upgradelink = geodir_getlink($editlink, array('upgrade' => '1'), false);
 
-                                    $ajaxlink = geodir_get_ajax_url();
+                                    $ajaxlink = admin_url( 'admin-ajax.php' );
                                     $deletelink = geodir_getlink($ajaxlink, array('geodir_ajax' => 'add_listing', 'ajax_action' => 'delete', 'pid' => $post->ID), false);
 
                                     ?>

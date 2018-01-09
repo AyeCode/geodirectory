@@ -6,22 +6,8 @@
  * @package GeoDirectory
  */
 
-/**
- * Starts session if not started.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @global bool $geodir_add_location_url If true it will add location name in url.
- * @deprecated 1.5.7 $_SESSION no longer used.
- */
-function geodir_session_start()
-{
-    if (!session_id()) session_start();
-    global $geodir_add_location_url;
 
-    $geodir_add_location_url = NULL;
-}
-
+//return;
 /**
  * Set geodir page variable in WP_Query instance.
  *
@@ -30,6 +16,7 @@ function geodir_session_start()
  *
  * @param WP_Query $query The WP_Query instance.
  * @return WP_Query
+ * @deprecated 
  */
 function geodir_modified_query($query) {
     if ($query->is_main_query() && (
@@ -586,26 +573,6 @@ function geodir_post_where()
     }
 }
 
-/**
- * Let subscribers edit their own posts.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @param array $allcaps An array of all the role's capabilities.
- * @param array $caps Actual capabilities for meta capability.
- * @param array $args Optional parameters passed to has_cap(), typically object ID.
- * @return array Modified capabilities array.
- */
-function geodir_preview_post_cap($allcaps, $caps, $args)
-{
-    $user_id = get_current_user_id();
-    if ($user_id && isset($_REQUEST['post_type']) && $_REQUEST['post_type'] != '' && isset($_REQUEST['p']) && $_REQUEST['p'] != '' && $args[0] == 'edit_post' && $_REQUEST['p'] == $args[2]) {
-
-        $allcaps['edit_posts'] = true;
-    }
-    //print_r($allcaps);
-    return $allcaps;
-}
 
 
 /**

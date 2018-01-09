@@ -8,7 +8,115 @@ jQuery(window).load(function() {
             allow_single_deselect: 'true'
         });
     }
+
+    // tooltips
+    gd_init_tooltips();
+    
+    // rating click
+    jQuery( 'a.gd-rating-link' ).click( function() {
+        jQuery.post( ajaxurl, { action: 'geodirectory_rated' } );
+        jQuery( this ).parent().text( jQuery( this ).data( 'rated' ) );
+    });
+
+    // image uploads
+    jQuery('.gd-upload-img').each(function() {
+        var $wrap = jQuery(this);
+        var field = $wrap.data('field');
+        if (jQuery('[name="' + field + '[id]"]').length && !jQuery('[name="' + field + '[id]"]').val()) {
+            jQuery('.gd_remove_image_button', $wrap).hide();
+        }
+    });
+
+    var media_frame = [];
+    jQuery(document).on('click', '.gd_upload_image_button', function(e) {
+        e.preventDefault();
+
+        var $this = jQuery(this);
+        var $wrap = $this.closest('.gd-upload-img');
+        var field = $wrap.data('field');
+
+        if ( !field ) {
+            return
+        }
+
+        if (media_frame && media_frame[field]) {
+            media_frame[field].open();
+            return;
+        }
+
+        media_frame[field] = wp.media.frames.downloadable_file = wp.media({
+            title: geodir_ajax.txt_choose_image,
+            button: {
+                text: geodir_ajax.txt_use_image
+            },
+            multiple: false
+        });
+
+        // When an image is selected, run a callback.
+        media_frame[field].on('select', function() {
+            var attachment = media_frame[field].state().get('selection').first().toJSON();
+
+            var thumbnail = attachment.sizes.medium || attachment.sizes.full;
+            if (field) {
+                if(jQuery('[name="' + field + '[id]"]').length){
+                    jQuery('[name="' + field + '[id]"]').val(attachment.id);
+                }
+                if(jQuery('[name="' + field + '[src]"]').length){
+                    jQuery('[name="' + field + '[src]"]').val(attachment.url);
+                }
+                if(jQuery('[name="' + field + '"]').length){
+                    jQuery('[name="' + field + '"]').val(attachment.id);
+                }
+
+
+            }
+            $wrap.closest('.form-field.form-invalid').removeClass('form-invalid');
+            jQuery('.gd-upload-display', $wrap).find('img').attr('src', thumbnail.url);
+            jQuery('.gd_remove_image_button').show();
+        });
+        // Finally, open the modal.
+        media_frame[field].open();
+    });
+
+    jQuery(document).on('click', '.gd_remove_image_button', function() {
+        var $this = jQuery(this);
+        var $wrap = $this.closest('.gd-upload-img');
+        var field = $wrap.data('field');
+        jQuery('.gd-upload-display', $wrap).find('img').attr('src', geodir_ajax.img_spacer);
+        if (field) {
+            jQuery('[name="' + field + '[id]"]').val('');
+            jQuery('[name="' + field + '[src]"]').val('');
+        }
+        $this.hide();
+        return false;
+    });
+
+
 });
+
+/**
+ * Init the tooltips
+ */
+function gd_init_tooltips(){
+    // Tooltips
+    jQuery('.gd-help-tip').tooltip({
+        content: function() {
+            return jQuery(this).prop('title');
+        },
+        tooltipClass: 'gd-ui-tooltip',
+        position: {
+            my: 'center top',
+            at: 'center bottom+10',
+            collision: 'flipfit',
+        },
+        hide: {
+            duration: 200,
+        },
+        show: {
+            duration: 200,
+        },
+    });
+}
 
 /* Check Uncheck All Related Options Start*/
 jQuery(document).ready(function() {

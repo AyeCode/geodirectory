@@ -21,7 +21,7 @@
     outline: none;
 }
 
-.geodir-slides, .geodir-control-nav, .geodir-direction-nav {
+#geodir_slider .geodir-slides, #geodir_slider .geodir-control-nav, #geodir_slider .geodir-direction-nav {
     margin: 0;
     padding: 0;
     list-style: none;
@@ -66,6 +66,7 @@
 .geodir_flexslider .geodir-slides > li {
     display: none;
     -webkit-backface-visibility: hidden;
+    margin: 0;
 }
 
 /* Hide the slides before the JS is loaded. Avoids image jumping */

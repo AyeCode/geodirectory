@@ -1,4 +1,10 @@
-function validate_field(field) {
+/**
+ * Validate add listing fields.
+ *
+ * @param field
+ * @returns {boolean}
+ */
+function geodir_validate_field(field) {
 
     var is_error = true;
     switch (jQuery(field).attr('field_type')) {
@@ -139,47 +145,56 @@ function validate_field(field) {
     }
 }
 
+/**
+ * Validate all required fields before submit.
+ *
+ * @returns {boolean}
+ */
+function geodir_validate_submit(form){
+    var is_validate = true;
+
+    jQuery(form).find(".required_field:visible").each(function () {
+        jQuery(form).find("[field_type]:visible, .chosen_select, .geodir_location_add_listing_chosen, .editor, .event_recurring_dates, .geodir-custom-file-upload").each(function () {
+
+            if (jQuery(this).is('.chosen_select, .geodir_location_add_listing_chosen')) {
+                var chosen_ele = jQuery(this);
+                jQuery('#' + jQuery(this).attr('id') + '_chzn').mouseleave(function () {
+                    geodir_validate_field(chosen_ele);
+                });
+
+            }
+            if (!geodir_validate_field(this))
+                is_validate = geodir_validate_field(this);
+        });
+    });
+
+    return false;// @todo remove
+
+
+    if (is_validate) {
+        return true;
+    } else {
+
+        jQuery(window).scrollTop(jQuery(".geodir_message_error:visible:first").closest('.required_field').offset().top);
+        return false;
+    }
+}
+
 jQuery(document).ready(function () {
 
     /// check validation on blur
-    jQuery('#propertyform').find(".required_field:visible").find("[field_type]:visible, .editor textarea").blur(function () {
-        validate_field(this);
+    jQuery('#geodirectory-add-post').find(".required_field:visible").find("[field_type]:visible, .editor textarea").blur(function () {
+        geodir_validate_field(this);
     });
 
-    jQuery('#propertyform').find(".required_field:visible").find("input[type='checkbox'],input[type='radio']").click(function () {
-        validate_field(this);
-
+    // Check for validation on click for checkbox, radio
+    jQuery('#geodirectory-add-post').find(".required_field:visible").find("input[type='checkbox'],input[type='radio']").click(function () {
+        geodir_validate_field(this);
     });
 
 
-    /*jQuery('#propertyform').submit(function(ele){*/
-    jQuery(document).delegate("#propertyform", "submit", function (ele) {
-
-        var is_validate = true;
-
-        jQuery(this).find(".required_field:visible").each(function () {
-            jQuery(this).find("[field_type]:visible, .chosen_select, .geodir_location_add_listing_chosen, .editor, .event_recurring_dates, .geodir-custom-file-upload").each(function () {
-
-                if (jQuery(this).is('.chosen_select, .geodir_location_add_listing_chosen')) {
-                    var chosen_ele = jQuery(this);
-                    jQuery('#' + jQuery(this).attr('id') + '_chzn').mouseleave(function () {
-                        validate_field(chosen_ele);
-                    });
-
-                }
-                if (!validate_field(this))
-                    is_validate = validate_field(this);
-            });
-        });
-
-
-        if (is_validate) {
-            return true;
-        } else {
-
-            jQuery(window).scrollTop(jQuery(".geodir_message_error:visible:first").closest('.required_field').offset().top);
-            return false;
-        }
-
+    /*jQuery('#geodirectory-add-post').submit(function(ele){*/
+    jQuery(document).delegate("#geodirectory-add-post", "submit", function (ele) {
+        return geodir_validate_submit(this);
     });
 });

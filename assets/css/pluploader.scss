@@ -84,16 +84,54 @@
 
 }
 
-.plupload-thumbs .thumb {
-    border: 1px solid #EBEBEB;
-    float: left;
-    height: 50px;
-    margin-right: 15px;
-    width: 50px;
-    margin-bottom: 15px;
-    position: relative;
-    padding: 5px;
+.plupload-thumbs {
+    //.thumb {
+    //    border: 1px solid #EBEBEB;
+    //    float: left;
+    //    height: 50px;
+    //    margin-right: 15px;
+    //    width: 50px;
+    //    margin-bottom: 15px;
+    //    position: relative;
+    //    padding: 5px;
+    //}
+    .thumb{
+        border: 1px solid #EBEBEB;
+        float: left;
+        height: 70px;
+        width: 108px;
+        position: relative;
+        padding: 3px;
+        margin: 2px;
+        box-sizing: content-box;
+
+        &:hover{
+            .gd-thumb-actions{
+                display: block;
+            }
+        }
+
+    }
+
+    .gd-thumb-actions {
+        background-color:rgba(0, 0, 0, 0.5);
+        margin-top: -25px;
+        position: relative;
+        color: #fff;
+        font-size: 20px;
+        display: none;
+        line-height: 0;
+
+        .thumbeditlink, .thumbremovelink {
+            width: 50%;
+            display: inline-block;
+            cursor: pointer;
+        }
+    }
+
 }
+
+
 
 .plupload-thumbs .thumb.geodir_file {
     border: none;
@@ -107,7 +145,7 @@
 }
 
 .ui-sortable .thumb img {
-    cursor: pointer;
+    cursor: move;
     width: 100% !important;
     height: 100% !important;
 }

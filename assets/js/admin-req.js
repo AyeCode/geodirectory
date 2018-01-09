@@ -18,3 +18,23 @@ function gd_featured_widget_repeat($rep,$name){
     jQuery('.'+$rep+' .gdrep'+num+' *[ data-gdrep-desc="1"]').val('').prop('name',$name.replace("xxx", "desc"+num));
 
 }
+
+function geodir_change_category_list(obj, selected) {
+    var post_type = obj.value;
+
+    jQuery.ajax({
+        type: "GET",
+        url: ajaxurl,
+        data: {
+            'action': 'geodir_get_category_select',
+            'post_type': post_type,
+            'selected': selected
+        },
+        success: function (data) {
+
+            jQuery(obj).closest('form').find('#post_type_cats select').html(data);
+
+        }
+    });
+
+}

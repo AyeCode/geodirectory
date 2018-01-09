@@ -108,6 +108,7 @@ final class GeoDirectory {
         $this->define( 'GEODIRECTORY_PLUGIN_FILE', __FILE__ );
         $this->define( 'GEODIRECTORY_PLUGIN_DIR', $plugin_path );
         $this->define( 'GEODIRECTORY_PLUGIN_URL', untrailingslashit( plugins_url( '/', __FILE__ ) ) );
+        $this->define( 'GEODIRECTORY_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
         $this->define( 'GEODIRECTORY_TEXTDOMAIN', 'geodirectory' );
         
         // Database tables
@@ -176,60 +177,81 @@ final class GeoDirectory {
      */
     private function includes() {
         global $pagenow, $geodir_options;
-        
+
         /**
          * Class autoloader.
          */
         include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-autoloader.php' );
-        
+
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/formatting-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/core-functions.php' );
+
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/settings/register-settings.php' );
         $geodir_options = geodir_get_settings();
+
+        include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-post-types.php' ); // Registers post types
+
+        //print_r($geodir_options);
         
         if ( !defined( 'GEODIR_LATITUDE_ERROR_MSG' ) ) {
             require_once( GEODIRECTORY_PLUGIN_DIR . 'language.php' ); // Define language constants.
         }
-        
+
+
+
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-session.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/email-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/helper-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/user-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/deprecated-functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-ajax-functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-ajax-functions.php' ); // @todo remove onece replced with below class-gd-ajax.php
+        //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-gd-ajax.php' );
+        GeoDir_AJAX::init();
+        GeoDir_Post_Data::init(); // post data
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/general_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/listing_filters.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/template-functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/account-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post-types-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/taxonomy-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_fields_input_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_fields_output_functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_fields_predefined.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-custom-fields-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/comments-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/location_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/google_analytics.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-shortcode-functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_taxonomy_hooks_actions.php' );
+
+
+        //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_taxonomy_hooks_actions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodirectory_hooks_actions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-widget-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/maps/map_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/maps/map_template_tags.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodirectory_template_tags.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodirectory_template_actions.php' );
-        
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-frontend-scripts.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-permalinks.php' );
+
+
         if ( $this->is_request( 'admin' ) || $this->is_request( 'test' ) || $this->is_request( 'cli' ) ) {
             if ( !empty( $_REQUEST['taxonomy'] ) ) {
                 require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/class-geodir-admin-taxonomies.php' );
             }
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/admin_functions.php' );
-            require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/admin_dummy_data_functions.php' );
+
+
+            //include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/class-geodir-admin.php' );
+            new GeoDir_Admin(); // init the GD admin class
+
+            //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/admin_dummy_data_functions.php' );
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/admin_hooks_actions.php' );
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/admin_template_tags.php' );
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/class.analytics.stats.php' );
-            require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/install.php' );
+            //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/install.php' );
+            //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/class-gd-admin-install.php' );
+            GeoDir_Admin_Install::init(); // init the install class
             require_once( GEODIRECTORY_PLUGIN_DIR . 'upgrade.php' );
 
             if( 'plugins.php' === $pagenow ) {
@@ -255,6 +277,8 @@ final class GeoDirectory {
                 require_once( $compatibility_file );
             }
         }
+
+        $this->query = new GeoDir_Query();
     }
     
     /**
@@ -361,17 +385,24 @@ function GeoDir() {
 // Global for backwards compatibility.
 $GLOBALS['geodirectory'] = GeoDir();
 
-add_filter('display_post_states','_gd_page_states',10,2);
-function _gd_page_states($post_states, $post ){
 
-    //print_r($post_states);
-    if($post->ID==geodir_home_page_id()){
-        $post_states['geodir_home_page'] = __('GD Home Page','geodirectory');
-    }elseif( $post->ID == geodir_add_listing_page_id() ){
-        $post_states['geodir_add_listing_page'] = __('Add listing page','geodirectory');
-    }elseif( $post->ID == geodir_add_listing_page_id() ){
-        $post_states['geodir_add_listing_page'] = __('Add listing page','geodirectory');
-    }
+//$fields = geodir_default_custom_fields('gd_place');
+//
+///**
+// * Filter the array of default custom fields DB table data.
+// *
+// * @since 1.0.0
+// * @param string $fields The default custom fields as an array.
+// */
+//$fields = apply_filters('geodir_before_default_custom_fields_saved', $fields);
+//foreach ($fields as $field_index => $field) {
+//    geodir_custom_field_save($field);
+//
+//}
 
-    return $post_states;
-}
+//function my_project_updated_send_email( $post_id, $post, $update ) {
+//
+//    print_r($post);exit;
+//}
+//add_action( 'wp_insert_post', 'my_project_updated_send_email', 10, 3 );
+
