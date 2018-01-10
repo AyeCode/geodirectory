@@ -3,8 +3,8 @@ Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
 Tags:  directory plugin, business directory, listings, classifieds, real estate
 Requires at least: 3.1
-Tested up to: 4.8
-Stable tag: 1.6.21
+Tested up to: 4.9.1
+Stable tag: 2.0.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 

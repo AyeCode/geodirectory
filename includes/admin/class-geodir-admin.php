@@ -138,7 +138,7 @@ class GeoDir_Admin {
 
 		switch ( $screen->id ) {
 			case 'dashboard' :
-				include( 'class-geodir-admin-dashboard.php' );
+				include( 'class-geodir-wp-dashboard.php' );
 			break;
 			case 'options-permalink' :
 				include( 'class-geodir-admin-permalink-settings.php' );

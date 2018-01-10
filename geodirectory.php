@@ -17,7 +17,7 @@
  * Text Domain: geodirectory
  * Domain Path: /geodirectory-languages
  * Requires at least: 3.1
- * Tested up to: 4.8
+ * Tested up to: 4.9.1
  */
 
 if ( ! class_exists( 'GeoDirectory' ) ) :
@@ -34,7 +34,7 @@ final class GeoDirectory {
      *
      * @var string
      */
-    public $version = '1.6.21';
+    public $version = '2.0.0';
     
     /**
      * GeoDirectory instance.

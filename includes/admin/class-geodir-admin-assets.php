@@ -35,6 +35,7 @@ class GeoDir_Admin_Assets {
 		$screen         = get_current_screen();
 		$screen_id      = $screen ? $screen->id : '';
 		$geodir_map_name = geodir_map_name();
+		$page = ! empty( $_GET['page'] ) ? $_GET['page'] : '';
 
 		// Register admin styles
 		wp_register_style('select2', geodir_plugin_url() . '/assets/css/select2/select2.css', array(), GEODIRECTORY_VERSION);
@@ -68,6 +69,14 @@ class GeoDir_Admin_Assets {
 			wp_enqueue_style( 'geodir-pluplodar-css');
 			wp_enqueue_style( 'geodir-rtl-style');
 
+		}
+
+		if ( $page == 'geodirectory' ) {
+			wp_register_style( 'geodir-admin-dashboard', geodir_plugin_url() . '/assets/css/admin-dashboard.css', array(), GEODIRECTORY_VERSION );
+			wp_enqueue_style( 'geodir-admin-dashboard' );
+			
+			wp_register_script( 'geodir-chart', 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js', array(), GEODIRECTORY_VERSION );
+			wp_enqueue_script( 'geodir-chart' );
 		}
 
 
