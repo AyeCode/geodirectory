@@ -39,9 +39,8 @@ class GeoDir_Admin_Dashboard {
 		if ( ! isset( self::$instance ) && ! ( self::$instance instanceof GeoDir_Admin_Dashboard ) ) {
 			self::$instance = new GeoDir_Admin_Dashboard;
 
-			self::$instance->setup_constants();
-			self::$instance->includes();
 			self::$instance->setup_actions();
+			self::$instance->setup_constants();
 		}
 		return self::$instance;
 	}
@@ -52,51 +51,9 @@ class GeoDir_Admin_Dashboard {
 	 * @since 2.0.0
 	 */
 	private function __construct() {
-		/* Do nothing here */ 
-	}
-	
-	/**
-	 * Setup constants
-	 *
-	 * @access private
-	 */
-	private function setup_constants() {
-		$current_url = geodir_curPageURL();
-		$this->gd_post_types = geodir_get_posttypes( 'array' );
-
-		$this->pages = apply_filters( 'geodir_admin_dashboard_pages', array(
-			'index' => array(
-				'link' => admin_url( 'admin.php?page=geodirectory' ),
-				'title' => __( 'Dashboard', 'geodirectory' ),
-				'icon' => 'fa-tachometer'
-			),
-			'listings' => array(
-				'link' => add_query_arg( 'type', 'listings', $current_url ),
-				'title' => __( 'Listings', 'geodirectory' ),
-				'icon' => 'fa-th-list'
-			),
-			'reviews' => array(
-				'link' => add_query_arg( 'type', 'reviews', $current_url ),
-				'title' => __( 'Reviews', 'geodirectory' ),
-				'icon' => 'fa-star'
-			),
-			'users' => array(
-				'link' => add_query_arg( 'type', 'users', $current_url ),
-				'title' => __( 'Users', 'geodirectory' ),
-				'icon' => 'fa-user'
-			),
-		) );
-		
-		$this->type = ! empty( $_REQUEST['type'] ) ? sanitize_text_field( $_REQUEST['type'] ) : 'index';
-		$this->subtype = ! empty( $_REQUEST['subtype'] ) ? sanitize_text_field( $_REQUEST['subtype'] ) : '';
-	}
-	
-	/**
-	 * Include required files
-	 *
-	 * @access private
-	 */
-	private function includes() {
+		$this->gd_post_types	= geodir_get_posttypes( 'array' );
+		$this->type 			= ! empty( $_REQUEST['type'] ) ? sanitize_text_field( $_REQUEST['type'] ) : 'index';
+		$this->subtype 			= ! empty( $_REQUEST['subtype'] ) ? sanitize_text_field( $_REQUEST['subtype'] ) : '';
 	}
 	
 	/**
@@ -105,14 +62,93 @@ class GeoDir_Admin_Dashboard {
 	 * @access private
 	 */
 	private function setup_actions() {
+		add_filter( 'geodir_admin_dashboard_pages', array( $this, 'setup_subtypes' ), 10, 2 );
+
 		add_action( 'geodir_admin_dashboard_top', array( $this, 'breadcrumb' ), -10, 1 );
 		add_action( 'geodir_admin_dashboard_top', array( $this, 'title' ), -10.1, 1 );
 		add_action( 'geodir_admin_dashboard_content', array( $this, 'dashboard_stats' ), 10, 1 );
 		add_action( 'geodir_admin_dashboard_bottom', array( $this, 'dashboard_chart' ), 10, 1 );
 		
-		add_filter( 'geodir_dashboard_stats_item_index_listings', array( $this, 'index_listings_stats' ), 10, 2 );
-		add_filter( 'geodir_dashboard_stats_item_index_reviews', array( $this, 'index_reviews_stats' ), 10, 2 );
-		add_filter( 'geodir_dashboard_stats_item_index_users', array( $this, 'index_users_stats' ), 10, 2 );
+		add_filter( 'geodir_dashboard_stats_item_index_listings', array( $this, 'listings_stats' ), 10, 5 );
+		add_filter( 'geodir_dashboard_stats_item_index_reviews', array( $this, 'reviews_stats' ), 10, 5 );
+		add_filter( 'geodir_dashboard_stats_item_index_users', array( $this, 'users_stats' ), 10, 5 );
+		
+		foreach ( $this->gd_post_types as $post_type => $info ) {
+			add_filter( 'geodir_dashboard_stats_item_listings_' . $post_type, array( $this, 'listings_post_type_stats' ), 10, 5 );
+			add_filter( 'geodir_dashboard_stats_item_reviews_' . $post_type, array( $this, 'reviews_post_type_stats' ), 10, 5 );
+		}
+		
+		add_filter( 'geodir_dashboard_get_listings_chart_stats', array( $this, 'get_listings_chart_stats' ), 10, 1 );
+	}
+
+	/**
+	 * Setup constants
+	 *
+	 * @access private
+	 */
+	private function setup_constants() {
+		$current_url 			= geodir_curPageURL();
+
+		$this->pages 			= apply_filters( 'geodir_admin_dashboard_pages', array(
+			'index' => array(
+				'link' => admin_url( 'admin.php?page=geodirectory' ),
+				'title' => __( 'Dashboard', 'geodirectory' ),
+				'icon' => 'fa-tachometer'
+			),
+			'listings' => array(
+				'link' => add_query_arg( array( 'type' => 'listings', 'stats' => true ), $current_url ),
+				'title' => __( 'Listings', 'geodirectory' ),
+				'icon' => 'fa-th-list'
+			),
+			'reviews' => array(
+				'link' => add_query_arg( array( 'type' => 'reviews', 'stats' => true ), $current_url ),
+				'title' => __( 'Reviews', 'geodirectory' ),
+				'icon' => 'fa-star'
+			),
+			'users' => array(
+				'link' => add_query_arg( array( 'type' => 'users', 'chart' => true ), $current_url ),
+				'title' => __( 'Users', 'geodirectory' ),
+				'icon' => 'fa-user'
+			),
+		) );
+	}
+	
+	public function setup_subtypes( $pages ) {
+		
+		if ( ! empty( $pages['listings'] ) ) {
+			$listings_link = remove_query_arg( array( 'stats' ), $pages['listings']['link'] );
+			$listings_link = add_query_arg( array( 'chart' => true ), $listings_link );
+
+			$subtypes = array();
+			foreach ( $this->gd_post_types as $post_type => $info ) {
+				$subtypes[ $post_type ] = array(
+					'link' 		=> add_query_arg( array( 'subtype' => $post_type ), $listings_link ),
+					'title'		=> __( $info['labels']['name'], 'geodirectory' ),
+					'icon' 		=> $pages['listings']['icon'],
+					'chart' 	=> true
+				);
+			}
+
+			$pages['listings']['subtypes'] = $subtypes;
+		}
+		
+		if ( ! empty( $pages['reviews'] ) ) {
+			$reviews_link = remove_query_arg( array( 'stats' ), $pages['reviews']['link'] );
+			$reviews_link = add_query_arg( array( 'chart' => true ), $reviews_link );
+			
+			$subtypes = array();
+			foreach ( $this->gd_post_types as $post_type => $info ) {
+				$subtypes[ $post_type ] = array(
+					'link' 		=> add_query_arg( array( 'subtype' => $post_type ), $reviews_link ),
+					'title' 	=> __( $info['labels']['name'], 'geodirectory' ),
+					'icon' 		=> $pages['reviews']['icon']
+				);
+			}
+
+			$pages['reviews']['subtypes'] = $subtypes;
+		}
+
+		return $pages;
 	}
 	
 	/**
@@ -167,7 +203,7 @@ class GeoDir_Admin_Dashboard {
 			<nav class="breadcrumb">
 				<?php $c = 1; foreach ( $breadcrumbs as $id => $breadcrumb ) { ?>
 					<?php if ( $c < count( $breadcrumbs ) ) { ?>
-						<a class="breadcrumb-item gd-dashb-<?php echo $id; ?>" href="<?php echo $breadcrumb['link']; ?>"><?php echo $breadcrumb['title']; ?></a>
+						<a class="breadcrumb-item gd-dashb-<?php echo $id; ?>" href="<?php echo $breadcrumb['link']; ?>"><?php echo $breadcrumb['title']; ?></a> / 
 					<?php } else { ?>
 						<span class="breadcrumb-item active gd-dashb-<?php echo $id; ?>"><?php echo $breadcrumb['title'] ; ?></span>
 					<?php } ?>
@@ -196,7 +232,7 @@ class GeoDir_Admin_Dashboard {
 		$fa_icon = ! empty( $icon ) ? '<i class="fa ' . $icon . '"></i> ' : '';
 		?>
 		<div class="row title-row">
-			<h2 class="gd-dash-title"><?php echo $fa_icon; ?><?php echo $title; ?></h2>
+			<h2 class="gd-dash-title"><?php echo $fa_icon; ?><?php echo apply_filters( 'geodir_dashboard_title', $title, $this ); ?></h2>
 		</div>
 		<?php
 	}
@@ -204,9 +240,11 @@ class GeoDir_Admin_Dashboard {
 	public function get_stats() {
 		$parent = 'index';
 		
+		$parent_item = $this->pages;
 		if ( ! empty( $this->subtype ) ) {
 			$items = isset( $this->pages[ $this->type ] ) && isset( $this->pages[ $this->type ]['subtypes'][ $this->subtype ] ) ? $this->pages[ $this->type ]['subtypes'][ $this->subtype ] : array();
 			$parent = $this->type . '_' . $this->subtype;
+			$parent_item = $this->pages[ $this->type ];
 		} elseif ( ! empty( $this->type ) && $this->type != 'index' ) {
 			$items = isset( $this->pages[ $this->type ] ) && isset( $this->pages[ $this->type ]['subtypes'] ) ? $this->pages[ $this->type ]['subtypes'] : array();
 			$parent = $this->type;
@@ -215,10 +253,15 @@ class GeoDir_Admin_Dashboard {
 		}
 		
 		$stats = array();
+
 		if ( ! empty( $items ) ) {
 			foreach ( $items as $key => $item ) {
-				$item_stats = apply_filters( 'geodir_dashboard_stats_' . $parent, array(), $key, $this );
-				$item_stats = apply_filters( 'geodir_dashboard_stats_item_' . $parent . '_' . $key, array(), $this );
+				if ( ! is_array( $item ) ) {
+					continue;
+				}
+				
+				$item_stats = apply_filters( 'geodir_dashboard_stats_' . $parent, array(), $this, $key, $parent, $parent_item );
+				$item_stats = apply_filters( 'geodir_dashboard_stats_item_' . $parent . '_' . $key, array(), $this, $key, $parent, $parent_item );
 
 				$item_stats = array( 'stats' => $item_stats );
 				$item_stats['filters'] = array( 'geodir_dashboard_stats_' . $parent, 'geodir_dashboard_stats_item_' . $parent . '_' . $key );
@@ -226,13 +269,16 @@ class GeoDir_Admin_Dashboard {
 				$stats[ $key ] = array_merge( $item, $item_stats );
 			}
 		}
-		//gddev_log( $stats, 'stats', __FILE__, __LINE__ );
+
 		return apply_filters( 'geodir_dashboard_get_stats', $stats, $this );
 	}
 	
 	public function dashboard_stats( $instance ) {
-		$items = $this->get_stats();
+		if ( empty( $_GET['stats'] ) && $this->type != 'index' ) {
+			return;
+		}
 		
+		$items = $this->get_stats(); geodir_error_log( $items, 'dashboard_stats()', __FILE__, __LINE__ );
 		if ( empty( $items ) ) {
 			return;
 		}
@@ -248,44 +294,15 @@ class GeoDir_Admin_Dashboard {
 	}
 	
 	public function dashboard_chart( $instance ) {
-		$items = $this->get_stats();
-		
-		if ( empty( $items ) ) {
+		if ( empty( $_GET['chart'] ) ) {
 			return;
 		}
-		$labels = array();
-		$data_total = array();
-		$data_new = array();
+
 		?>
-		<div class="row gd-dash-chart-wrap">
-		<canvas id="gdDashListings"></canvas>
-        <script type="text/javascript">
-            var ctx = document.getElementById('gdDashListings').getContext('2d');
-            var myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ["Listings", "Reviews", "Users"],
-                    datasets: [{
-                        label: 'Total',
-                        data: [10, 3, 2],
-                        fillColor : "rgba(220,220,220,0.5)",
-                        strokeColor : "rgba(220,220,220,1)",
-                        pointColor : "rgba(220,220,220,1)",
-                        pointStrokeColor : "#fff",
-                        backgroundColor: "rgba(220,220,220,0.5)"
-                    },{
-                        label: 'New',
-                        data: [2, 1, 1],
-                        fillColor : "rgba(151,187,205,0.5)",
-                        strokeColor : "rgba(151,187,205,1)",
-                        pointColor : "rgba(151,187,205,1)",
-                        pointStrokeColor : "#fff",
-                        backgroundColor: "rgba(151,187,205,0.5)"
-                    }]
-                }
-            });
-        </script>
-		</div>
+		<div class="wrap gd-chart-wrap">
+			<?php echo $this->get_chart_tabs(); ?>
+			<?php echo $this->get_chart_html(); ?>
+        </div>
 		<?php
 	}
 	
@@ -321,8 +338,36 @@ class GeoDir_Admin_Dashboard {
 		return $content;
 	}
 	
-	public function index_listings_stats( $stats, $instance ) {
+	public function listings_stats( $stats, $instance, $current, $parent, $parent_item ) {
 		$stats[__( 'Listings', 'geodirectory' )] = $this->get_listings_count();
+
+		return $stats;
+	}
+	
+	public function reviews_stats( $stats, $instance, $current, $parent, $parent_item ) {
+		$stats[__( 'Reviews', 'geodirectory' )] = $this->get_reviews_count();
+
+		return $stats;
+	}
+	
+	public function users_stats( $stats, $instance, $current, $parent, $parent_item ) {
+		$stats[__( 'Users', 'geodirectory' )] = $this->get_users_count();
+
+		return $stats;
+	}
+	
+	public function listings_post_type_stats( $stats, $instance, $current, $parent, $parent_item ) {
+		$parent_title = ! empty( $parent_item[ $parent ]['title'] ) ? $parent_item[ $parent ]['title'] : $parent;
+		$stats[ $parent_title  ] 														= $this->get_post_type_count( $current );
+		$stats[ wp_sprintf( __( '%s Categpries', 'geodirectory' ), $parent_title ) ]	= wp_count_terms( $current . 'category');
+		$stats[ wp_sprintf( __( '%s Tags', 'geodirectory' ), $parent_title ) ] 			= wp_count_terms( $current . '_tags');
+
+		return $stats;
+	}
+	
+	public function reviews_post_type_stats( $stats, $instance, $current, $parent, $parent_item ) {
+		$parent_title = ! empty( $parent_item[ $parent ]['title'] ) ? $parent_item[ $parent ]['title'] : $parent;
+		$stats[ $parent_title  ] = $this->get_post_type_reviews_count( $current );
 
 		return $stats;
 	}
@@ -344,18 +389,6 @@ class GeoDir_Admin_Dashboard {
 		
         return $count;
     }
-	
-	public function index_reviews_stats( $stats, $instance ) {
-		$stats[__( 'Reviews', 'geodirectory' )] = $this->get_reviews_count();
-
-		return $stats;
-	}
-	
-	public function index_users_stats( $stats, $instance ) {
-		$stats[__( 'Users', 'geodirectory' )] = $this->get_users_count();
-
-		return $stats;
-	}
 	
 	public function get_users_count() {
         global $wpdb;
@@ -380,6 +413,144 @@ class GeoDir_Admin_Dashboard {
 
         return $count;
     }
+	
+	public function get_chart_tabs() {
+		$current_url = geodir_curPageURL();
+		$duration = ! empty( $_GET['duration'] ) ? sanitize_text_field( $_GET['duration'] ) : 'this_year';
+		
+		?>
+		<div class="gd-dash-btn-group" data-toggle="buttons">
+			<label class="gd-dash-btn gd-dash-btn-sm gd-dash-btn-white <?php echo ( $duration == 'this_week' ? "active" : '' ); ?>">
+				<a href="<?php echo add_query_arg( 'duration', 'this_week', $current_url ); ?>"><?php _e( 'This Week', 'geodirectory' ); ?></a>
+			</label>
+			<label class="gd-dash-btn gd-dash-btn-sm gd-dash-btn-white <?php echo ( $duration == 'last_week' ? "active" : '' ); ?>">
+				<a href="<?php echo add_query_arg( 'duration', 'last_week', $current_url ); ?>"><?php _e( 'Last Week', 'geodirectory' ); ?></a>
+			</label>
+			<label class="gd-dash-btn gd-dash-btn-sm gd-dash-btn-white <?php echo ( $duration == 'this_month' ? "active" : '' ); ?>">
+				<a href="<?php echo add_query_arg( 'duration', 'this_month', $current_url ); ?>"><?php _e( 'This Month', 'geodirectory' ); ?></a>
+			</label>
+			<label class="gd-dash-btn gd-dash-btn-sm gd-dash-btn-white <?php echo ( $duration == 'last_month' ? "active" : '' ); ?>">
+				<a href="<?php echo add_query_arg( 'duration', 'last_month', $current_url ); ?>"><?php _e( 'Last Month', 'geodirectory' ); ?></a>
+			</label>
+			<label class="gd-dash-btn gd-dash-btn-sm gd-dash-btn-white <?php echo ( $duration == 'this_year' ? "active" : '' ); ?>">
+				<a href="<?php echo add_query_arg( 'duration', 'this_year', $current_url ); ?>"><?php _e( 'This Year', 'geodirectory' ); ?></a>
+			</label>
+			<label class="gd-dash-btn gd-dash-btn-sm gd-dash-btn-white <?php echo ( $duration == 'last_year' ? "active" : '' ); ?>">
+				<a href="<?php echo add_query_arg( 'duration', 'last_year', $current_url ); ?>"><?php _e( 'Last Year', 'geodirectory' ); ?></a>
+			</label>
+		</div>
+		<div class="gd-dash-box-sep"></div>
+		<?php
+	}
+	
+	public function get_chart_html() {
+		$chart_stats = apply_filters( 'geodir_dashboard_get_' . $this->type . '_chart_stats', array(), $this );
+		
+		if ( empty( $chart_stats ) ) {
+			//return;
+		}
+		?>
+		<div class="gd-chart-html">
+			<canvas id="gdDashListings"></canvas>
+			<script type="text/javascript">
+				var gdChartId = document.getElementById('gdDashListings').getContext('2d');
+				var myChart = new Chart(gdChartId, {
+					type: 'line',
+				});
+			</script>
+		</div>
+		<?php
+	}
+	
+	public function get_listings_chart_stats() {
+		$duration 	= ! empty( $_GET['duration'] ) ? sanitize_text_field( $_GET['duration'] ) : 'this_year';
+		$post_type 	= $this->subtype;
+		
+		if ( !empty( $this->gd_post_types[ $post_type ] ) ) {
+			return;
+		}
+		
+		$stats = $this->get_listings_stats_by( $duration, $post_type );
+		echo '<pre>'; print_r( $stats ); echo '</pre>';
+		if ( empty( $stats ) ) {
+			return;
+		}
+	}
+	
+	public function get_listings_stats_by( $stats_by, $post_type ) {
+		global $wpdb;
+
+		$stats = array();
+		if ( $duration == 'this_year' ) {
+            $months = array();
+			for ( $m = 1; $m <= 12; $m++ ) {
+				$months[ $m ]['start'] = date( 'Y-m-01 00:00:00', strtotime( date( 'Y-' . $m . '-01' ) ) );
+				$months[ $m ]['end'] = date( 'Y-m-t 23:59:59', strtotime( date( 'Y-' . $m . '-01' ) ) );
+			}
+			
+			$total = 0;
+			foreach ( $months as $month => $dates ) {
+				$stats[ $month ]['total'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM {$wpdb->posts} WHERE post_type = %s AND ( post_status = 'publish' OR post_status = 'draft'  OR post_status = 'pending' OR post_status = 'private' ) AND post_date <= %s AND post_date >= %s", $post_type, $dates['start'], $dates['end'] ) );
+			}
+        } elseif ($duration == 'last_year') {
+            $months = array();
+			for ( $m = 1; $m <= 12; $m++ ) {
+				$months[ $m ]['start'] = date( 'Y-m-01 00:00:00', strtotime( date( 'Y-' . $m . '-01' ) ) );
+				$months[ $m ]['end'] = date( 'Y-m-t 23:59:59', strtotime( date( 'Y-' . $m . '-01' ) ) );
+			}
+			
+			$total = 0;
+			foreach ( $months as $month => $dates ) {
+				$stats[ $month ]['total'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM {$wpdb->posts} WHERE post_type = %s AND ( post_status = 'publish' OR post_status = 'draft'  OR post_status = 'pending' OR post_status = 'private' ) AND post_date <= %s AND post_date >= %s", $post_type, $dates['start'], $dates['end'] ) );
+			}
+        } elseif ($duration == 'this_week') {
+            $months = array();
+			for ( $m = 1; $m <= 12; $m++ ) {
+				$months[ $m ]['start'] = date( 'Y-m-01 00:00:00', strtotime( date( 'Y-' . $m . '-01' ) ) );
+				$months[ $m ]['end'] = date( 'Y-m-t 23:59:59', strtotime( date( 'Y-' . $m . '-01' ) ) );
+			}
+			
+			$total = 0;
+			foreach ( $months as $month => $dates ) {
+				$stats[ $month ]['total'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM {$wpdb->posts} WHERE post_type = %s AND ( post_status = 'publish' OR post_status = 'draft'  OR post_status = 'pending' OR post_status = 'private' ) AND post_date <= %s AND post_date >= %s", $post_type, $dates['start'], $dates['end'] ) );
+			}
+        } elseif ($duration == 'last_week') {
+            $months = array();
+			for ( $m = 1; $m <= 12; $m++ ) {
+				$months[ $m ]['start'] = date( 'Y-m-01 00:00:00', strtotime( date( 'Y-' . $m . '-01' ) ) );
+				$months[ $m ]['end'] = date( 'Y-m-t 23:59:59', strtotime( date( 'Y-' . $m . '-01' ) ) );
+			}
+			
+			$total = 0;
+			foreach ( $months as $month => $dates ) {
+				$stats[ $month ]['total'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM {$wpdb->posts} WHERE post_type = %s AND ( post_status = 'publish' OR post_status = 'draft'  OR post_status = 'pending' OR post_status = 'private' ) AND post_date <= %s AND post_date >= %s", $post_type, $dates['start'], $dates['end'] ) );
+			}
+        } elseif ($duration == 'this_month') {
+            $months = array();
+			for ( $m = 1; $m <= 12; $m++ ) {
+				$months[ $m ]['start'] = date( 'Y-m-01 00:00:00', strtotime( date( 'Y-' . $m . '-01' ) ) );
+				$months[ $m ]['end'] = date( 'Y-m-t 23:59:59', strtotime( date( 'Y-' . $m . '-01' ) ) );
+			}
+			
+			$total = 0;
+			foreach ( $months as $month => $dates ) {
+				$stats[ $month ]['total'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM {$wpdb->posts} WHERE post_type = %s AND ( post_status = 'publish' OR post_status = 'draft'  OR post_status = 'pending' OR post_status = 'private' ) AND post_date <= %s AND post_date >= %s", $post_type, $dates['start'], $dates['end'] ) );
+			}
+        } elseif ($duration == 'last_month') {
+            $months = array();
+			for ( $m = 1; $m <= 12; $m++ ) {
+				$months[ $m ]['start'] = date( 'Y-m-01 00:00:00', strtotime( date( 'Y-' . $m . '-01' ) ) );
+				$months[ $m ]['end'] = date( 'Y-m-t 23:59:59', strtotime( date( 'Y-' . $m . '-01' ) ) );
+			}
+			
+			$total = 0;
+			foreach ( $months as $month => $dates ) {
+				$stats[ $month ]['total'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM {$wpdb->posts} WHERE post_type = %s AND ( post_status = 'publish' OR post_status = 'draft'  OR post_status = 'pending' OR post_status = 'private' ) AND post_date <= %s AND post_date >= %s", $post_type, $dates['start'], $dates['end'] ) );
+			}
+        }
+		
+		return apply_filters( 'geodir_dashboardget_listings_stats_by', $stats, $stats_by, $post_type );
+	}
 }
 
 }

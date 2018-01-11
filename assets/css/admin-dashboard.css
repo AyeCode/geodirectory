@@ -1178,16 +1178,14 @@ h2.gd-dash-title {
 }
 .gd-dashboard .breadcrumb a {
 	text-decoration: none;
+	padding: 0 5px;
+}
+.gd-dashboard .breadcrumb a:first-child {
+	padding-left: 0;
 }
 .gd-dashboard .breadcrumb-item {
 }
 .gd-dashboard .breadcrumb-item.active {
 	color: #636c72;
-}
-.breadcrumb-item + .breadcrumb-item::before {
-	display: inline-block;
-	padding-right: .5rem;
-	padding-left: .5rem;
-	color: #636c72;
-	content: "/";
+	padding: 0 5px;
 }
