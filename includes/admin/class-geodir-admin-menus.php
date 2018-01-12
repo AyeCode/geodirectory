@@ -34,7 +34,6 @@ class GD_Admin_Menus {
 
 		// Add endpoints custom URLs in Appearance > Menus > Pages.
 		add_action( 'admin_head-nav-menus.php', array( $this, 'add_nav_menu_meta_boxes' ) );
-
 	}
 
 	/**
@@ -46,9 +45,19 @@ class GD_Admin_Menus {
 		// @todo we should change this to manage_geodirectory capability on install
 		if (current_user_can('manage_options')) $menu[] = array('', 'read', 'separator-geodirectory', '', 'wp-menu-separator geodirectory');
 
-		add_menu_page(__('Geodirectory Dashboard', 'geodirectory'), __('GeoDirectory', 'geodirectory'), 'manage_options', 'geodirectory', 'geodir_admin_panel', 'dashicons-admin-site', '55.1984');
+		add_menu_page( __( 'Geodirectory Dashboard', 'geodirectory' ), __( 'GeoDirectory', 'geodirectory' ), 'manage_options', 'geodirectory', array( $this, 'dashboard_page' ), 'dashicons-admin-site', '55.1984' );
+		add_submenu_page( 'geodirectory', __( 'Geodirectory Dashboard', 'geodirectory' ), __( 'Dashboard', 'geodirectory' ), 'manage_options', 'geodirectory', array( $this, 'dashboard_page' ) );
 		
 
+	}
+	
+	/**
+	 * Dashboard page.
+	 */
+	public function dashboard_page(){
+		$dashboard = GeoDir_Admin_Dashboard::instance();
+		
+		$dashboard->output();
 	}
 
 	/**

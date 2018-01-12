@@ -54,6 +54,10 @@ class GeoDir_Admin_Dummy_Data {
 						continue;
 					}
 
+					if ( empty( $uploaded['file'] ) ) {
+						continue;
+					}
+
 					$wp_filetype = wp_check_filetype( basename( $uploaded['file'] ), null );
 
 					$attachment = array(

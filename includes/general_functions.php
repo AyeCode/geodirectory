@@ -1288,7 +1288,7 @@ function fetch_remote_file( $url ) {
 
 	$log_message = '';
 	if ( is_wp_error( $headers ) ) {
-		echo 'file: ' . $url;
+		geodir_error_log( $headers->get_error_message(), 'import_file_error (' . $url . ')', __FILE__, __LINE__ );
 
 		return new WP_Error( 'import_file_error', $headers->get_error_message() );
 	}

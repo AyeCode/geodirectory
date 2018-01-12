@@ -1,19 +1,18 @@
 <?php
 /**
- * Admin Dashboard
+ * GeoDirectory Admin Dashboard
  *
  * @author      AyeCode
  * @category    Admin
  * @package     GeoDirectory/Admin
- * @version     2.1.0
- * @todo replace this with our GD Dashbaord addon
+ * @version     2.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-if ( ! class_exists( 'GeoDir_Admin_Dashboard', false ) ) :
+if ( ! class_exists( 'GeoDir_Admin_Dashboard', false ) ) {
 
 /**
  * GeoDir_Admin_Dashboard Class.
@@ -21,272 +20,554 @@ if ( ! class_exists( 'GeoDir_Admin_Dashboard', false ) ) :
 class GeoDir_Admin_Dashboard {
 
 	/**
-	 * Hook in tabs.
+	 * GeoDirectory Dashboard instance.
 	 */
-	public function __construct() {
-		// Only hook in admin parts if the user has admin access
-		if ( current_user_can( 'manage_options' )  ) {
-			add_action( 'wp_dashboard_setup', array( $this, 'init' ) );
+	private static $instance;
+	
+	public $pages;
+	public $type;
+	public $subtype;
+	public $gd_post_types;
+	
+	/**
+	 * Main GeoDirectory Dashboard Instance.
+	 *
+	 * @since 2.0.0
+	 */
+	public static function instance() {
+
+		if ( ! isset( self::$instance ) && ! ( self::$instance instanceof GeoDir_Admin_Dashboard ) ) {
+			self::$instance = new GeoDir_Admin_Dashboard;
+
+			self::$instance->setup_actions();
+			self::$instance->setup_constants();
 		}
+		return self::$instance;
 	}
-
+	
 	/**
-	 * Init dashboard widgets.
+	 * A dummy constructor to prevent GeoDirectory Dashboard from being loaded more than once.
+	 *
+	 * @since 2.0.0
 	 */
-	public function init() {
-		if ( current_user_can( 'manage_options' ) ) {
-			wp_add_dashboard_widget( 'woocommerce_dashboard_recent_reviews', __( 'WooCommerce recent reviews', 'woocommerce' ), array( $this, 'recent_reviews' ) );
+	private function __construct() {
+		$this->gd_post_types	= geodir_get_posttypes( 'array' );
+		$this->type 			= ! empty( $_REQUEST['type'] ) ? sanitize_text_field( $_REQUEST['type'] ) : 'index';
+		$this->subtype 			= ! empty( $_REQUEST['subtype'] ) ? sanitize_text_field( $_REQUEST['subtype'] ) : '';
+	}
+	
+	/**
+	 * Include required files
+	 *
+	 * @access private
+	 */
+	private function setup_actions() {
+		add_filter( 'geodir_admin_dashboard_pages', array( $this, 'setup_subtypes' ), 10, 2 );
+
+		add_action( 'geodir_admin_dashboard_top', array( $this, 'breadcrumb' ), -10, 1 );
+		add_action( 'geodir_admin_dashboard_top', array( $this, 'title' ), -10.1, 1 );
+		add_action( 'geodir_admin_dashboard_content', array( $this, 'dashboard_stats' ), 10, 1 );
+		add_action( 'geodir_admin_dashboard_bottom', array( $this, 'dashboard_chart' ), 10, 1 );
+		
+		add_filter( 'geodir_dashboard_stats_item_index_listings', array( $this, 'listings_stats' ), 10, 6 );
+		add_filter( 'geodir_dashboard_stats_item_index_reviews', array( $this, 'reviews_stats' ), 10, 6 );
+		add_filter( 'geodir_dashboard_stats_item_index_users', array( $this, 'users_stats' ), 10, 6 );
+		
+		foreach ( $this->gd_post_types as $post_type => $info ) {
+			add_filter( 'geodir_dashboard_stats_item_listings_' . $post_type, array( $this, 'listings_post_type_stats' ), 10, 6 );
+			add_filter( 'geodir_dashboard_stats_item_reviews_' . $post_type, array( $this, 'reviews_post_type_stats' ), 10, 6 );
 		}
-		wp_add_dashboard_widget( 'woocommerce_dashboard_status', __( 'WooCommerce status', 'woocommerce' ), array( $this, 'status_widget' ) );
+		
+		add_filter( 'geodir_dashboard_get_listings_chart_stats', array( $this, 'get_listings_chart_stats' ), 10, 1 );
 	}
 
 	/**
-	 * Get top seller from DB.
-	 * @return object
+	 * Setup constants
+	 *
+	 * @access private
 	 */
-	private function get_top_seller() {
-		global $wpdb;
+	private function setup_constants() {
+		$current_url 			= geodir_curPageURL();
 
-		$query            = array();
-		$query['fields']  = "SELECT SUM( order_item_meta.meta_value ) as qty, order_item_meta_2.meta_value as product_id
-			FROM {$wpdb->posts} as posts";
-		$query['join']    = "INNER JOIN {$wpdb->prefix}woocommerce_order_items AS order_items ON posts.ID = order_id ";
-		$query['join']   .= "INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS order_item_meta ON order_items.order_item_id = order_item_meta.order_item_id ";
-		$query['join']   .= "INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS order_item_meta_2 ON order_items.order_item_id = order_item_meta_2.order_item_id ";
-		$query['where']   = "WHERE posts.post_type IN ( '" . implode( "','", wc_get_order_types( 'order-count' ) ) . "' ) ";
-		$query['where']  .= "AND posts.post_status IN ( 'wc-" . implode( "','wc-", apply_filters( 'woocommerce_reports_order_statuses', array( 'completed', 'processing', 'on-hold' ) ) ) . "' ) ";
-		$query['where']  .= "AND order_item_meta.meta_key = '_qty' ";
-		$query['where']  .= "AND order_item_meta_2.meta_key = '_product_id' ";
-		$query['where']  .= "AND posts.post_date >= '" . date( 'Y-m-01', current_time( 'timestamp' ) ) . "' ";
-		$query['where']  .= "AND posts.post_date <= '" . date( 'Y-m-d H:i:s', current_time( 'timestamp' ) ) . "' ";
-		$query['groupby'] = "GROUP BY product_id";
-		$query['orderby'] = "ORDER BY qty DESC";
-		$query['limits']  = "LIMIT 1";
-
-		return $wpdb->get_row( implode( ' ', apply_filters( 'woocommerce_dashboard_status_widget_top_seller_query', $query ) ) );
+		$this->pages 			= apply_filters( 'geodir_admin_dashboard_pages', array(
+			'index' => array(
+				'link' => admin_url( 'admin.php?page=geodirectory' ),
+				'title' => __( 'Dashboard', 'geodirectory' ),
+				'icon' => 'fa-tachometer'
+			),
+			'listings' => array(
+				'link' => add_query_arg( array( 'type' => 'listings', 'stats' => true ), $current_url ),
+				'title' => __( 'Listings', 'geodirectory' ),
+				'icon' => 'fa-th-list'
+			),
+			'reviews' => array(
+				'link' => add_query_arg( array( 'type' => 'reviews', 'stats' => true ), $current_url ),
+				'title' => __( 'Reviews', 'geodirectory' ),
+				'icon' => 'fa-star'
+			),
+			'users' => array(
+				'link' => add_query_arg( array( 'type' => 'users', 'chart' => true ), $current_url ),
+				'title' => __( 'Users', 'geodirectory' ),
+				'icon' => 'fa-user'
+			),
+		) );
 	}
+	
+	public function setup_subtypes( $pages ) {
+		
+		if ( ! empty( $pages['listings'] ) ) {
+			$listings_link = remove_query_arg( array( 'stats' ), $pages['listings']['link'] );
+			$listings_link = add_query_arg( array( 'chart' => true ), $listings_link );
 
-	/**
-	 * Get sales report data.
-	 * @return object
-	 */
-	private function get_sales_report_data() {
-		include_once( dirname( __FILE__ ) . '/reports/class-wc-report-sales-by-date.php' );
+			$subtypes = array();
+			foreach ( $this->gd_post_types as $post_type => $info ) {
+				$subtypes[ $post_type ] = array(
+					'link' 		=> add_query_arg( array( 'subtype' => $post_type ), $listings_link ),
+					'title'		=> __( $info['labels']['name'], 'geodirectory' ),
+					'icon' 		=> $pages['listings']['icon'],
+					'chart' 	=> true
+				);
+			}
 
-		$sales_by_date                 = new WC_Report_Sales_By_Date();
-		$sales_by_date->start_date     = strtotime( date( 'Y-m-01', current_time( 'timestamp' ) ) );
-		$sales_by_date->end_date       = current_time( 'timestamp' );
-		$sales_by_date->chart_groupby  = 'day';
-		$sales_by_date->group_by_query = 'YEAR(posts.post_date), MONTH(posts.post_date), DAY(posts.post_date)';
+			$pages['listings']['subtypes'] = $subtypes;
+		}
+		
+		if ( ! empty( $pages['reviews'] ) ) {
+			$reviews_link = remove_query_arg( array( 'stats' ), $pages['reviews']['link'] );
+			$reviews_link = add_query_arg( array( 'chart' => true ), $reviews_link );
+			
+			$subtypes = array();
+			foreach ( $this->gd_post_types as $post_type => $info ) {
+				$subtypes[ $post_type ] = array(
+					'link' 		=> add_query_arg( array( 'subtype' => $post_type ), $reviews_link ),
+					'title' 	=> __( $info['labels']['name'], 'geodirectory' ),
+					'icon' 		=> $pages['reviews']['icon']
+				);
+			}
 
-		return $sales_by_date->get_report_data();
-	}
-
-	/**
-	 * Show status widget.
-	 */
-	public function status_widget() {
-
-		return ;
-		include_once( dirname( __FILE__ ) . '/reports/class-wc-admin-report.php' );
-
-		$reports = new WC_Admin_Report();
-
-		echo '<ul class="wc_status_list">';
-
-		if ( current_user_can( 'view_woocommerce_reports' ) && ( $report_data = $this->get_sales_report_data() ) ) {
-			?>
-			<li class="sales-this-month">
-				<a href="<?php echo admin_url( 'admin.php?page=wc-reports&tab=orders&range=month' ); ?>">
-					<?php echo $reports->sales_sparkline( '', max( 7, date( 'd', current_time( 'timestamp' ) ) ) ); ?>
-					<?php
-						/* translators: %s: net sales */
-						printf(
-							__( '%s net sales this month', 'woocommerce' ),
-							'<strong>' . wc_price( $report_data->net_sales ) . '</strong>'
-							);
-					?>
-				</a>
-			</li>
-			<?php
+			$pages['reviews']['subtypes'] = $subtypes;
 		}
 
-		if ( current_user_can( 'view_woocommerce_reports' ) && ( $top_seller = $this->get_top_seller() ) && $top_seller->qty ) {
-			?>
-			<li class="best-seller-this-month">
-				<a href="<?php echo admin_url( 'admin.php?page=wc-reports&tab=orders&report=sales_by_product&range=month&product_ids=' . $top_seller->product_id ); ?>">
-					<?php echo $reports->sales_sparkline( $top_seller->product_id, max( 7, date( 'd', current_time( 'timestamp' ) ) ), 'count' ); ?>
-					<?php
-						/* translators: 1: top seller product title 2: top seller quantity */
-						printf(
-							__( '%1$s top seller this month (sold %2$d)', 'woocommerce' ),
-							'<strong>' . get_the_title( $top_seller->product_id ) . '</strong>',
-							$top_seller->qty
-						);
-					?>
-				</a>
-			</li>
-			<?php
-		}
-
-		$this->status_widget_order_rows();
-		$this->status_widget_stock_rows();
-
-		do_action( 'woocommerce_after_dashboard_status_widget', $reports );
-		echo '</ul>';
+		return $pages;
+	}
+	
+	/**
+	 * Handles output of the dashboard page in admin.
+	 */
+	public function output() {
+		do_action( 'geodir_admin_dashboard_before', $this );
+		?>
+		<div class="wrap gd-dashboard <?php echo 'gd-dasht-' . $this->type . ' gd-dashst-' . $this->subtype; ?>">
+			<div class="container">
+				<?php do_action( 'geodir_admin_dashboard_top', $this ); ?>
+				<?php do_action( 'geodir_admin_dashboard_content', $this ); ?>
+				<?php do_action( 'geodir_admin_dashboard_bottom', $this ); ?>
+			</div>
+		</div>
+		<?php
+		do_action( 'geodir_admin_dashboard_after' );
 	}
 
 	/**
-	 * Show order data is status widget.
+	 * Dashboard page breadcrumb.
 	 */
-	private function status_widget_order_rows() {
-		if ( ! current_user_can( 'edit_shop_orders' ) ) {
+	public function breadcrumb( $instance ) {
+		if ( $this->type == 'index' && empty( $this->subtype ) ) {
 			return;
 		}
-		$on_hold_count    = 0;
-		$processing_count = 0;
-
-		foreach ( wc_get_order_types( 'order-count' ) as $type ) {
-			$counts           = (array) wp_count_posts( $type );
-			$on_hold_count    += isset( $counts['wc-on-hold'] ) ? $counts['wc-on-hold'] : 0;
-			$processing_count += isset( $counts['wc-processing'] ) ? $counts['wc-processing'] : 0;
+		
+		$type = isset( $this->pages[ $this->type ] ) ? $this->pages[ $this->type ] : NULL;
+		$subtype = $this->subtype && ! empty( $type ) && isset( $type['subtypes'][ $this->subtype ] ) ? $type['subtypes'][ $this->subtype ] : NULL;
+		
+		$breadcrumbs = array();
+		$breadcrumbs['index'] = array(
+			'link' => $this->pages['index']['link'],
+			'title' => $this->pages['index']['title'],
+		);
+		if ( ! empty( $type ) ) {
+			$breadcrumbs[ $this->type ] = array(
+				'link' => ! empty( $type['link'] ) ? $type['link'] : '#',
+				'title' => ! empty( $type['title'] ) ? $type['title'] : geodir_utf8_ucfirst( $this->type ),
+				'active' => false
+			);
+		}
+		
+		if ( ! empty( $subtype ) ) {
+			$breadcrumbs[ $this->subtype ] = array(
+				'link' => ! empty( $subtype['link'] ) ? $subtype['link'] : '#',
+				'title' => ! empty( $subtype['title'] ) ? $subtype['title'] : geodir_utf8_ucfirst( $this->subtype ),
+			);
 		}
 		?>
-		<li class="processing-orders">
-			<a href="<?php echo admin_url( 'edit.php?post_status=wc-processing&post_type=shop_order' ); ?>">
-				<?php
-					/* translators: %s: order count */
-					printf(
-						_n( '<strong>%s order</strong> awaiting processing', '<strong>%s orders</strong> awaiting processing', $processing_count, 'woocommerce' ),
-						$processing_count
-					);
-				?>
-			</a>
-		</li>
-		<li class="on-hold-orders">
-			<a href="<?php echo admin_url( 'edit.php?post_status=wc-on-hold&post_type=shop_order' ); ?>">
-				<?php
-					/* translators: %s: order count */
-					printf(
-						_n( '<strong>%s order</strong> on-hold', '<strong>%s orders</strong> on-hold', $on_hold_count, 'woocommerce' ),
-						$on_hold_count
-					);
-				?>
-			</a>
-		</li>
+		<div class="row breadcrumb-row">
+			<nav class="breadcrumb">
+				<?php $c = 1; foreach ( $breadcrumbs as $id => $breadcrumb ) { ?>
+					<?php if ( $c < count( $breadcrumbs ) ) { ?>
+						<a class="breadcrumb-item gd-dashb-<?php echo $id; ?>" href="<?php echo $breadcrumb['link']; ?>"><?php echo $breadcrumb['title']; ?></a> / 
+					<?php } else { ?>
+						<span class="breadcrumb-item active gd-dashb-<?php echo $id; ?>"><?php echo $breadcrumb['title'] ; ?></span>
+					<?php } ?>
+				<?php $c++; } ?>
+			</nav>
+		</div>
 		<?php
 	}
-
+	
 	/**
-	 * Show stock data is status widget.
+	 * Dashboard page title.
 	 */
-	private function status_widget_stock_rows() {
-		global $wpdb;
-
-		// Get products using a query - this is too advanced for get_posts :(
-		$stock          = absint( max( get_option( 'woocommerce_notify_low_stock_amount' ), 1 ) );
-		$nostock        = absint( max( get_option( 'woocommerce_notify_no_stock_amount' ), 0 ) );
-		$transient_name = 'wc_low_stock_count';
-
-		if ( false === ( $lowinstock_count = get_transient( $transient_name ) ) ) {
-			$query_from = apply_filters( 'woocommerce_report_low_in_stock_query_from', "FROM {$wpdb->posts} as posts
-				INNER JOIN {$wpdb->postmeta} AS postmeta ON posts.ID = postmeta.post_id
-				INNER JOIN {$wpdb->postmeta} AS postmeta2 ON posts.ID = postmeta2.post_id
-				WHERE 1=1
-				AND posts.post_type IN ( 'product', 'product_variation' )
-				AND posts.post_status = 'publish'
-				AND postmeta2.meta_key = '_manage_stock' AND postmeta2.meta_value = 'yes'
-				AND postmeta.meta_key = '_stock' AND CAST(postmeta.meta_value AS SIGNED) <= '{$stock}'
-				AND postmeta.meta_key = '_stock' AND CAST(postmeta.meta_value AS SIGNED) > '{$nostock}'
-			" );
-			$lowinstock_count = absint( $wpdb->get_var( "SELECT COUNT( DISTINCT posts.ID ) {$query_from};" ) );
-			set_transient( $transient_name, $lowinstock_count, DAY_IN_SECONDS * 30 );
-		}
-
-		$transient_name = 'wc_outofstock_count';
-
-		if ( false === ( $outofstock_count = get_transient( $transient_name ) ) ) {
-			$query_from = apply_filters( 'woocommerce_report_out_of_stock_query_from', "FROM {$wpdb->posts} as posts
-				INNER JOIN {$wpdb->postmeta} AS postmeta ON posts.ID = postmeta.post_id
-				INNER JOIN {$wpdb->postmeta} AS postmeta2 ON posts.ID = postmeta2.post_id
-				WHERE 1=1
-				AND posts.post_type IN ( 'product', 'product_variation' )
-				AND posts.post_status = 'publish'
-				AND postmeta2.meta_key = '_manage_stock' AND postmeta2.meta_value = 'yes'
-				AND postmeta.meta_key = '_stock' AND CAST(postmeta.meta_value AS SIGNED) <= '{$nostock}'
-			" );
-			$outofstock_count = absint( $wpdb->get_var( "SELECT COUNT( DISTINCT posts.ID ) {$query_from};" ) );
-			set_transient( $transient_name, $outofstock_count, DAY_IN_SECONDS * 30 );
-		}
-		?>
-		<li class="low-in-stock">
-			<a href="<?php echo admin_url( 'admin.php?page=wc-reports&tab=stock&report=low_in_stock' ); ?>">
-				<?php
-					/* translators: %s: order count */
-					printf(
-						_n( '<strong>%s product</strong> low in stock', '<strong>%s products</strong> low in stock', $lowinstock_count, 'woocommerce' ),
-						$lowinstock_count
-					);
-				?>
-			</a>
-		</li>
-		<li class="out-of-stock">
-			<a href="<?php echo admin_url( 'admin.php?page=wc-reports&tab=stock&report=out_of_stock' ); ?>">
-				<?php
-					/* translators: %s: order count */
-					printf(
-						_n( '<strong>%s product</strong> out of stock', '<strong>%s products</strong> out of stock', $outofstock_count, 'woocommerce' ),
-						$outofstock_count
-					);
-				?>
-			</a>
-		</li>
-		<?php
-	}
-
-	/**
-	 * Recent reviews widget.
-	 */
-	public function recent_reviews() {
-		global $wpdb;
-		$comments = $wpdb->get_results( "
-			SELECT posts.ID, posts.post_title, comments.comment_author, comments.comment_ID, SUBSTRING(comments.comment_content,1,100) AS comment_excerpt
-			FROM $wpdb->comments comments
-			LEFT JOIN $wpdb->posts posts ON (comments.comment_post_ID = posts.ID)
-			WHERE comments.comment_approved = '1'
-			AND comments.comment_type = ''
-			AND posts.post_password = ''
-			AND posts.post_type = 'product'
-			AND comments.comment_parent = 0
-			ORDER BY comments.comment_date_gmt DESC
-			LIMIT 5
-		" );
-
-		if ( $comments ) {
-			echo '<ul>';
-			foreach ( $comments as $comment ) {
-
-				echo '<li>';
-
-				echo get_avatar( $comment->comment_author, '32' );
-
-				$rating = intval( get_comment_meta( $comment->comment_ID, 'rating', true ) );
-
-				/* translators: %s: rating */
-				echo '<div class="star-rating"><span style="width:' . ( $rating * 20 ) . '%">' . sprintf( __( '%s out of 5', 'woocommerce' ), $rating ) . '</span></div>';
-
-				/* translators: %s: review author */
-				echo '<h4 class="meta"><a href="' . get_permalink( $comment->ID ) . '#comment-' . absint( $comment->comment_ID ) . '">' . esc_html( apply_filters( 'woocommerce_admin_dashboard_recent_reviews', $comment->post_title, $comment ) ) . '</a> ' . sprintf( __( 'reviewed by %s', 'woocommerce' ), esc_html( $comment->comment_author ) ) . '</h4>';
-				echo '<blockquote>' . wp_kses_data( $comment->comment_excerpt ) . ' [...]</blockquote></li>';
-
-			}
-			echo '</ul>';
+	public function title( $instance ) {
+		$type = isset( $this->pages[ $this->type ] ) ? $this->pages[ $this->type ] : NULL;
+		$subtype = $this->subtype && ! empty( $type ) && isset( $type['subtypes'][ $this->subtype ] ) ? $type['subtypes'][ $this->subtype ] : NULL;
+		
+		if ( ! empty( $subtype ) ) {
+			$title = ! empty( $subtype['title'] ) ? $subtype['title'] : geodir_utf8_ucfirst( $this->subtype );
+			$url = ! empty( $subtype['link'] ) ? $subtype['link'] : '#';
+			$icon = ! empty( $subtype['icon'] ) ? $subtype['icon'] : '';
 		} else {
-			echo '<p>' . __( 'There are no product reviews yet.', 'woocommerce' ) . '</p>';
+			$title = ! empty( $type['title'] ) ? $type['title'] : geodir_utf8_ucfirst( $this->type );
+			$url = ! empty( $type['link'] ) ? $type['link'] : '#';
+			$icon = ! empty( $type['icon'] ) ? $type['icon'] : '';
 		}
+		$fa_icon = ! empty( $icon ) ? '<i class="fa ' . $icon . '"></i> ' : '';
+		?>
+		<div class="row title-row">
+			<h2 class="gd-dash-title"><?php echo $fa_icon; ?><?php echo apply_filters( 'geodir_dashboard_title', $title, $this ); ?></h2>
+		</div>
+		<?php
+	}
+	
+	public function get_stats() {
+		$parent = 'index';
+		
+		$parent_item = $this->pages;
+		if ( ! empty( $this->subtype ) ) {
+			$items = isset( $this->pages[ $this->type ] ) && isset( $this->pages[ $this->type ]['subtypes'][ $this->subtype ] ) ? $this->pages[ $this->type ]['subtypes'][ $this->subtype ] : array();
+			$parent = $this->type . '_' . $this->subtype;
+			$parent_item = $this->pages[ $this->type ];
+		} elseif ( ! empty( $this->type ) && $this->type != 'index' ) {
+			$items = isset( $this->pages[ $this->type ] ) && isset( $this->pages[ $this->type ]['subtypes'] ) ? $this->pages[ $this->type ]['subtypes'] : array();
+			$parent = $this->type;
+			$parent_item = $this->pages[ $this->type ];
+		} else {
+			$items = $this->pages;
+		}
+		
+		$stats = array();
+
+		if ( ! empty( $items ) ) {
+			foreach ( $items as $key => $item ) {
+				if ( ! is_array( $item ) ) {
+					continue;
+				}
+				
+				$item_stats = apply_filters( 'geodir_dashboard_stats_' . $parent, array(), $this, $key, $parent, $item, $parent_item );
+				$item_stats = apply_filters( 'geodir_dashboard_stats_item_' . $parent . '_' . $key, array(), $this, $key, $parent, $item, $parent_item );
+
+				$item_stats = array( 'stats' => $item_stats );
+				$item_stats['filters'] = array( 'geodir_dashboard_stats_' . $parent, 'geodir_dashboard_stats_item_' . $parent . '_' . $key );
+
+				$stats[ $key ] = array_merge( $item, $item_stats );
+			}
+		}
+
+		return apply_filters( 'geodir_dashboard_get_stats', $stats, $this );
+	}
+	
+	public function dashboard_stats( $instance ) {
+		if ( empty( $_GET['stats'] ) && $this->type != 'index' ) {
+			return;
+		}
+		
+		$items = $this->get_stats(); //geodir_error_log( $items, 'dashboard_stats()', __FILE__, __LINE__ );
+		if ( empty( $items ) ) {
+			return;
+		}
+		?>
+		<div class="row gd-dash-stats-wrap">
+		<?php foreach ( $items as $key => $item ) { ?>
+			<?php if ( !empty( $item['stats'] ) ) { ?>
+			<?php echo $this->get_stats_grid( $key, $item ); ?>
+			<?php } ?>
+		<?php } ?>
+		</div>
+		<?php
+	}
+	
+	public function dashboard_chart( $instance ) {
+		if ( empty( $_GET['chart'] ) ) {
+			return;
+		}
+
+		?>
+		<div class="wrap gd-chart-wrap">
+			<?php echo $this->get_chart_tabs(); ?>
+			<?php echo $this->get_chart_html(); ?>
+        </div>
+		<?php
+	}
+	
+	public function get_stats_grid( $type, $args ) {
+		$defaults = array(
+            'link' => '',
+            'icon' => "fa-th-list",
+            'title' => "",
+            'stats' => array()
+        );
+        $args = wp_parse_args( $args, $defaults );
+		
+		$link = ! empty( $args['link'] ) ? $args['link'] : '#';
+		$icon = ! empty( $args['icon'] ) ? '<i class="fa ' . $args['icon'] . '"></i>' : 'fa fa-th-list';
+
+		ob_start();
+		?>
+		<div class="gd-dash-box-wrap">
+            <section class="gd-dash-box">
+                <div class="gd-dash-box-inner">
+                    <a class="gd-dash-box-icon" href="<?php echo $link; ?>"><?php echo $icon ?></a>
+                    <div class="gd-dash-box-title"><?php echo $args['title']; ?></div>
+                    <div class="gd-dash-box-sep"></div>
+                    <?php foreach ( $args['stats'] as $key => $value ) { ?>
+						<h4 class="gd-dash-box-stat"><strong><?php echo $value; ?></strong><small><?php echo $key; ?></small></h4>
+					<?php } ?>
+                </div>
+            </section>
+        </div>
+		<?php
+		$content = ob_get_contents();
+        ob_end_clean();
+		return $content;
+	}
+	
+	public function listings_stats( $stats, $instance, $current, $parent, $current_item, $parent_item ) {
+		$stats[__( 'Listings', 'geodirectory' )] = $this->get_listings_count();
+
+		return $stats;
+	}
+	
+	public function reviews_stats( $stats, $instance, $current, $parent, $current_item, $parent_item ) {
+		$stats[__( 'Reviews', 'geodirectory' )] = $this->get_reviews_count();
+
+		return $stats;
+	}
+	
+	public function users_stats( $stats, $instance, $current, $parent, $current_item, $parent_item ) {
+		$stats[__( 'Users', 'geodirectory' )] = $this->get_users_count();
+
+		return $stats;
+	}
+	
+	public function listings_post_type_stats( $stats, $instance, $current, $parent, $current_item, $parent_item ) {
+		$title = ! empty( $current_item['title'] ) ? $current_item['title'] : $current;
+		$stats[ $title  ] 														= $this->get_post_type_count( $current );
+		$stats[ wp_sprintf( __( '%s Categpries', 'geodirectory' ), $title ) ]	= wp_count_terms( $current . 'category');
+		$stats[ wp_sprintf( __( '%s Tags', 'geodirectory' ), $title ) ] 		= wp_count_terms( $current . '_tags');
+
+		return $stats;
+	}
+	
+	public function reviews_post_type_stats( $stats, $instance, $current, $parent, $current_item, $parent_item ) {
+		$title = ! empty( $parent_item['title'] ) ? $parent_item['title'] : $parent;
+		$stats[ $title  ] = $this->get_post_type_reviews_count( $current );
+
+		return $stats;
+	}
+	
+	public function get_listings_count() {
+        $count = 0;
+
+		foreach ( $this->gd_post_types as $post_type => $info ) {
+			$count += (int)$this->get_post_type_count( $post_type );
+		}
+
+        return $count;
+    }
+	
+	public function get_post_type_count( $post_type ) {
+        $count_posts = wp_count_posts( $post_type );
+
+		$count = (int)$count_posts->publish + (int)$count_posts->draft + (int)$count_posts->trash + (int)$count_posts->pending;
+		
+        return $count;
+    }
+	
+	public function get_users_count() {
+        global $wpdb;
+        $count = $wpdb->get_var( "SELECT COUNT(ID) FROM {$wpdb->users}" );
+        return (int)$count;
+    }
+	
+	public function get_reviews_count() {
+        $count = 0;
+
+		foreach ( $this->gd_post_types as $post_type => $info ) {
+			$count += (int)$this->get_post_type_reviews_count( $post_type );
+		}
+
+        return $count;
+    }
+	
+	public function get_post_type_reviews_count( $post_type ) {
+        global $wpdb;
+
+        $count = (int)$wpdb->get_var( $wpdb->prepare( "SELECT COUNT( overall_rating ) FROM " . GEODIR_REVIEW_TABLE . " WHERE post_type = %s AND post_status = 1 AND status=1 AND overall_rating > 0", $post_type ) );
+
+        return $count;
+    }
+	
+	public function get_chart_tabs() {
+		$current_url = geodir_curPageURL();
+		$duration = ! empty( $_GET['duration'] ) ? sanitize_text_field( $_GET['duration'] ) : 'this_year';
+		
+		?>
+		<div class="gd-dash-btn-group" data-toggle="buttons">
+			<label class="gd-dash-btn gd-dash-btn-sm gd-dash-btn-white <?php echo ( $duration == 'this_week' ? "active" : '' ); ?>">
+				<a href="<?php echo add_query_arg( 'duration', 'this_week', $current_url ); ?>"><?php _e( 'This Week', 'geodirectory' ); ?></a>
+			</label>
+			<label class="gd-dash-btn gd-dash-btn-sm gd-dash-btn-white <?php echo ( $duration == 'last_week' ? "active" : '' ); ?>">
+				<a href="<?php echo add_query_arg( 'duration', 'last_week', $current_url ); ?>"><?php _e( 'Last Week', 'geodirectory' ); ?></a>
+			</label>
+			<label class="gd-dash-btn gd-dash-btn-sm gd-dash-btn-white <?php echo ( $duration == 'this_month' ? "active" : '' ); ?>">
+				<a href="<?php echo add_query_arg( 'duration', 'this_month', $current_url ); ?>"><?php _e( 'This Month', 'geodirectory' ); ?></a>
+			</label>
+			<label class="gd-dash-btn gd-dash-btn-sm gd-dash-btn-white <?php echo ( $duration == 'last_month' ? "active" : '' ); ?>">
+				<a href="<?php echo add_query_arg( 'duration', 'last_month', $current_url ); ?>"><?php _e( 'Last Month', 'geodirectory' ); ?></a>
+			</label>
+			<label class="gd-dash-btn gd-dash-btn-sm gd-dash-btn-white <?php echo ( $duration == 'this_year' ? "active" : '' ); ?>">
+				<a href="<?php echo add_query_arg( 'duration', 'this_year', $current_url ); ?>"><?php _e( 'This Year', 'geodirectory' ); ?></a>
+			</label>
+			<label class="gd-dash-btn gd-dash-btn-sm gd-dash-btn-white <?php echo ( $duration == 'last_year' ? "active" : '' ); ?>">
+				<a href="<?php echo add_query_arg( 'duration', 'last_year', $current_url ); ?>"><?php _e( 'Last Year', 'geodirectory' ); ?></a>
+			</label>
+		</div>
+		<div class="gd-dash-box-sep"></div>
+		<?php
+	}
+	
+	public function get_chart_html() {
+		$chart_stats = apply_filters( 'geodir_dashboard_get_' . $this->type . '_chart_stats', array(), $this );
+		
+		if ( empty( $chart_stats ) ) {
+			//return;
+		}
+		?>
+		<div class="gd-chart-html">
+			<canvas id="gdDashListings"></canvas>
+			<script type="text/javascript">
+				var gdChartId = document.getElementById('gdDashListings').getContext('2d');
+				var myChart = new Chart(gdChartId, {
+					type: 'line',
+				});
+			</script>
+		</div>
+		<?php
+	}
+	
+	public function get_listings_chart_stats() {
+		$duration 	= ! empty( $_GET['duration'] ) ? sanitize_text_field( $_GET['duration'] ) : 'this_year';//geodir_error_log( $duration, 'get_listings_chart_stats()', __FILE__, __LINE__ );
+		$post_type 	= $this->subtype;
+		if ( empty( $this->gd_post_types[ $post_type ] ) ) {
+			return;
+		}
+		
+		$stats = $this->get_listings_stats_by( $duration, $post_type );
+		geodir_error_log( $stats, 'get_listings_stats_by', __FILE__, __LINE__ );
+		if ( empty( $stats ) ) {
+			return;
+		}
+	}
+	
+	public function get_listings_stats_by( $stats_by, $post_type ) {
+		global $wpdb;
+
+		$stats = array();
+		if ( $stats_by == 'this_year' ) {
+            $months = $this->get_months_start_end_dates();
+
+			foreach ( $months as $month => $dates ) {
+				$stats[ $month ]['total'] = $this->query_posts_count( $post_type, "AND post_date <= '" . $dates['end'] . "'" );
+				$stats[ $month ]['new'] = $this->query_posts_count( $post_type, "AND post_date >= '" . $dates['start'] . "' AND post_date <= '" . $dates['end'] . "'" );
+			}
+        } elseif ($stats_by == 'last_year') {
+            $months = $this->get_months_start_end_dates( 'last_year' );
+
+			foreach ( $months as $month => $dates ) {
+				$stats[ $month ]['total'] = $this->query_posts_count( $post_type, "AND post_date <= '" . $dates['end'] . "'" );
+				$stats[ $month ]['new'] = $this->query_posts_count( $post_type, "AND post_date >= '" . $dates['start'] . "' AND post_date <= '" . $dates['end'] . "'" );
+			}
+        } elseif ($stats_by == 'this_week') {
+            $months = array();
+			for ( $m = 1; $m <= 12; $m++ ) {
+				$months[ $m ]['start'] = date( 'Y-m-01 00:00:00', strtotime( date( 'Y-' . $m . '-01' ) ) );
+				$months[ $m ]['end'] = date( 'Y-m-t 23:59:59', strtotime( date( 'Y-' . $m . '-01' ) ) );
+			}
+			
+			$total = 0;
+			foreach ( $months as $month => $dates ) {
+				$stats[ $month ]['total'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM {$wpdb->posts} WHERE post_type = %s AND ( post_status = 'publish' OR post_status = 'draft'  OR post_status = 'pending' OR post_status = 'private' ) AND post_date <= %s AND post_date >= %s", $post_type, $dates['start'], $dates['end'] ) );
+			}
+        } elseif ($stats_by == 'last_week') {
+            $months = array();
+			for ( $m = 1; $m <= 12; $m++ ) {
+				$months[ $m ]['start'] = date( 'Y-m-01 00:00:00', strtotime( date( 'Y-' . $m . '-01' ) ) );
+				$months[ $m ]['end'] = date( 'Y-m-t 23:59:59', strtotime( date( 'Y-' . $m . '-01' ) ) );
+			}
+			
+			$total = 0;
+			foreach ( $months as $month => $dates ) {
+				$stats[ $month ]['total'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM {$wpdb->posts} WHERE post_type = %s AND ( post_status = 'publish' OR post_status = 'draft'  OR post_status = 'pending' OR post_status = 'private' ) AND post_date <= %s AND post_date >= %s", $post_type, $dates['start'], $dates['end'] ) );
+			}
+        } elseif ($stats_by == 'this_month') {
+            $months = array();
+			for ( $m = 1; $m <= 12; $m++ ) {
+				$months[ $m ]['start'] = date( 'Y-m-01 00:00:00', strtotime( date( 'Y-' . $m . '-01' ) ) );
+				$months[ $m ]['end'] = date( 'Y-m-t 23:59:59', strtotime( date( 'Y-' . $m . '-01' ) ) );
+			}
+			
+			$total = 0;
+			foreach ( $months as $month => $dates ) {
+				$stats[ $month ]['total'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM {$wpdb->posts} WHERE post_type = %s AND ( post_status = 'publish' OR post_status = 'draft'  OR post_status = 'pending' OR post_status = 'private' ) AND post_date <= %s AND post_date >= %s", $post_type, $dates['start'], $dates['end'] ) );
+			}
+        } elseif ($stats_by == 'last_month') {
+            $months = array();
+			for ( $m = 1; $m <= 12; $m++ ) {
+				$months[ $m ]['start'] = date( 'Y-m-01 00:00:00', strtotime( date( 'Y-' . $m . '-01' ) ) );
+				$months[ $m ]['end'] = date( 'Y-m-t 23:59:59', strtotime( date( 'Y-' . $m . '-01' ) ) );
+			}
+			
+			$total = 0;
+			foreach ( $months as $month => $dates ) {
+				$stats[ $month ]['total'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM {$wpdb->posts} WHERE post_type = %s AND ( post_status = 'publish' OR post_status = 'draft'  OR post_status = 'pending' OR post_status = 'private' ) AND post_date <= %s AND post_date >= %s", $post_type, $dates['start'], $dates['end'] ) );
+			}
+        }
+		
+		return apply_filters( 'geodir_dashboardget_listings_stats_by', $stats, $stats_by, $post_type );
+	}
+	
+	public function query_posts_count( $post_type, $where ) {
+		global $wpdb;
+
+		$statuses = array_keys( get_post_statuses() );
+
+		$query = "SELECT COUNT(ID) FROM " . $wpdb->posts . " WHERE post_type = '" . $post_type . "' AND post_status IN('" . implode( "','", $statuses ) . "') " . $where;
+geodir_error_log( $query, 'query', __FILE__, __LINE__ );
+		return $wpdb->get_var( $query );
+	}
+	
+	public function get_months_start_end_dates( $type = 'this_year' ) {
+		$year = (int)date( 'Y' );
+		if ( $type == 'last_year' ) {
+			$year--;
+		}
+
+		$months = array();
+		for ( $m = 1; $m <= 12; $m++ ) {
+			$months[ $m ]['start'] = date( $year . '-m-01 00:00:00', strtotime( date( $year . '-' . $m . '-01' ) ) );
+			$months[ $m ]['end'] = date( $year . '-m-t 23:59:59', strtotime( date( $year . '-' . $m . '-01' ) ) );
+		}
+		
+		return $months;
 	}
 }
 
-endif;
-
-return new GeoDir_Admin_Dashboard();
+}
