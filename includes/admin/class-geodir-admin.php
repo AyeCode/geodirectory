@@ -116,8 +116,8 @@ class GeoDir_Admin {
 		// Setup/welcome
 		if ( ! empty( $_GET['page'] ) ) {
 			switch ( $_GET['page'] ) {
-				case 'wc-setup' :
-					//include_once( dirname( __FILE__ ) . '/class-wc-admin-setup-wizard.php' );
+				case 'gd-setup' :
+					include_once( dirname( __FILE__ ) . '/class-geodir-admin-setup-wizard.php' );
 				break;
 			}
 		}
@@ -177,13 +177,13 @@ class GeoDir_Admin {
 		if ( get_transient( '_wc_activation_redirect' ) ) {
 			delete_transient( '_wc_activation_redirect' );
 
-			if ( ( ! empty( $_GET['page'] ) && in_array( $_GET['page'], array( 'wc-setup' ) ) ) || is_network_admin() || isset( $_GET['activate-multi'] ) || ! current_user_can( 'manage_woocommerce' ) || apply_filters( 'woocommerce_prevent_automatic_wizard_redirect', false ) ) {
+			if ( ( ! empty( $_GET['page'] ) && in_array( $_GET['page'], array( 'gd-setup' ) ) ) || is_network_admin() || isset( $_GET['activate-multi'] ) || ! current_user_can( 'manage_woocommerce' ) || apply_filters( 'woocommerce_prevent_automatic_wizard_redirect', false ) ) {
 				return;
 			}
 
 			// If the user needs to install, send them to the setup wizard
 			if ( WC_Admin_Notices::has_notice( 'install' ) ) {
-				wp_safe_redirect( admin_url( 'index.php?page=wc-setup' ) );
+				wp_safe_redirect( admin_url( 'index.php?page=gd-setup' ) );
 				exit;
 			}
 		}

@@ -416,6 +416,7 @@ class GeoDir_Post_Data {
 	 * @global object $post The current post object.
 	 * @global object $post_images Image objects of current post if available.
 	 * @global object $gd_session GeoDirectory Session object.
+	 * @todo make the form work in sections with fieldsets, all collapsed apart from the one ur on.
 	 */
 	public static function add_listing_form() {
 

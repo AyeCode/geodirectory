@@ -120,7 +120,7 @@ abstract class GeoDir_Settings_Page {
 		<style>
 
 			.gd-advanced-setting,#default_location_set_address_button{display: none;}
-			.gd-advanced-setting.gda-show{display: block;}
+			.gd-advanced-setting.gda-show,#default_location_set_address_button.gda-show{display: block;}
 			tr.gd-advanced-setting.gda-show{display: table-row;}
 			li.gd-advanced-setting.gda-show{display: list-item;}
 			/* Show Advanced */
@@ -160,7 +160,7 @@ abstract class GeoDir_Settings_Page {
 		console.log('toggle');
 
 
-		jQuery(".gd-advanced-setting").toggleClass("gda-show");
+		jQuery(".gd-advanced-setting, #default_location_set_address_button").toggleClass("gda-show");
 //		jQuery( ".gd-advanced-setting" ).slideToggle( 0, function() {
 //			// Animation complete.
 //		});

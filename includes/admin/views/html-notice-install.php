@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 ?>
-<div id="message" class="updated geodirectory-message wc-setup">
+<div id="message" class="updated geodirectory-message gd-setup">
 	<p><?php _e( '<strong>Welcome to GeoDirectory</strong> &#8211; You&lsquo;re almost ready to start your directory! :)', 'geodirectory' ); ?></p>
-	<p class="submit"><a href="<?php echo esc_url( admin_url( 'admin.php?page=wc-setup' ) ); ?>" class="button-primary"><?php _e( 'Run the Setup Wizard', 'geodirectory' ); ?></a> <a class="button-secondary skip" href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'wc-hide-notice', 'install' ), 'woocommerce_hide_notices_nonce', '_wc_notice_nonce' ) ); ?>"><?php _e( 'Skip setup', 'geodirectory' ); ?></a></p>
+	<p class="submit"><a href="<?php echo esc_url( admin_url( 'admin.php?page=gd-setup' ) ); ?>" class="button-primary"><?php _e( 'Run the Setup Wizard', 'geodirectory' ); ?></a> <a class="button-secondary skip" href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'wc-hide-notice', 'install' ), 'woocommerce_hide_notices_nonce', '_wc_notice_nonce' ) ); ?>"><?php _e( 'Skip setup', 'geodirectory' ); ?></a></p>
 </div>
