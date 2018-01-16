@@ -400,7 +400,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'class'      => 'geodir-select',
 					'options' => array_unique(array(
 						'pending' => __('Pending Review', 'geodirectory'),
-						'draft' => __('Draft', 'geodirectory'),
 						'publish' => __('Publish', 'geodirectory'),
 
 					)),

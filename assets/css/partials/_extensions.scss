@@ -1,0 +1,31 @@
+
+
+.gd-products{
+  .gd-product{
+    background: #fff;
+    border: 1px solid #ccc;
+    float: left;
+    padding: 14px;
+    position: relative;
+    margin: 0 15px 15px 0;
+    width: 320px;
+    height: 315px;
+
+    .gd-product-image{
+      max-height: 155px;
+      display: block;
+      overflow: hidden;
+    }
+
+    .addons-button{
+      position: absolute;
+      bottom: 14px;
+      right: 14px;
+    }
+
+    img{
+      max-width: 100%;
+    }
+
+  }
+}

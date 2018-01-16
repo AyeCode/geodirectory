@@ -112,3 +112,14 @@ function gd_help_tip( $tip, $allow_html = false ) {
 function geodir_get_permalink_structure() {
     return geodir_get_option( 'permalink_structure', '');
 }
+
+
+/**
+ * GeoDirectory Core Supported Themes.
+ *
+ * @since 2.0.0
+ * @return string[]
+ */
+function geodir_get_core_supported_themes() {
+    return array( 'twentyseventeen', 'twentysixteen', 'twentyfifteen', 'twentyfourteen', 'twentythirteen', 'twentyeleven', 'twentytwelve', 'twentyten' );
+}

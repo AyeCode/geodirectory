@@ -1247,6 +1247,7 @@ if ( ! function_exists( 'geodir_allow_wpadmin' ) ) {
  * @return array|WP_Error The uploaded data as array. When failure returns error.
  */
 function fetch_remote_file( $url ) {
+	exit; //@todo this function shoudl no longer be needed
 	// extract the file name and extension from the url
 	require_once( ABSPATH . 'wp-includes/pluggable.php' );
 	$file_name = basename( $url );

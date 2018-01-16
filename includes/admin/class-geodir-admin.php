@@ -102,7 +102,7 @@ class GeoDir_Admin {
 //		include_once( dirname( __FILE__ ) . '/class--admin-post-types.php' );
 //		include_once( dirname( __FILE__ ) . '/class-wc-admin-taxonomies.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-menus.php' );
-//		include_once( dirname( __FILE__ ) . '/class-wc-admin-notices.php' );
+		include_once( dirname( __FILE__ ) . '/class-geodir-admin-notices.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-assets.php' );
 //		include_once( dirname( __FILE__ ) . '/class-wc-admin-api-keys.php' );
 //		include_once( dirname( __FILE__ ) . '/class-wc-admin-webhooks.php' );
