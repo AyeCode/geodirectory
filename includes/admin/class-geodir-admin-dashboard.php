@@ -63,7 +63,6 @@ class GeoDir_Admin_Dashboard {
 	 */
 	private function setup_actions() {
 		add_filter( 'geodir_admin_dashboard_pages', array( $this, 'setup_subtypes' ), 10, 2 );
-
 		add_action( 'geodir_admin_dashboard_top', array( $this, 'breadcrumb' ), -10, 1 );
 		add_action( 'geodir_admin_dashboard_top', array( $this, 'title' ), -10.1, 1 );
 		add_action( 'geodir_admin_dashboard_content', array( $this, 'dashboard_stats' ), 10, 1 );
@@ -72,6 +71,7 @@ class GeoDir_Admin_Dashboard {
 		add_filter( 'geodir_dashboard_stats_item_index_listings', array( $this, 'listings_stats' ), 10, 6 );
 		add_filter( 'geodir_dashboard_stats_item_index_reviews', array( $this, 'reviews_stats' ), 10, 6 );
 		add_filter( 'geodir_dashboard_stats_item_index_users', array( $this, 'users_stats' ), 10, 6 );
+		add_filter( 'geodir_dashboard_get_chart_js_params', array( $this, 'filter_chart_js_params' ), 10, 4 );
 		
 		foreach ( $this->gd_post_types as $post_type => $info ) {
 			add_filter( 'geodir_dashboard_stats_item_listings_' . $post_type, array( $this, 'listings_post_type_stats' ), 10, 6 );
@@ -79,6 +79,8 @@ class GeoDir_Admin_Dashboard {
 		}
 		
 		add_filter( 'geodir_dashboard_get_listings_chart_stats', array( $this, 'get_listings_chart_stats' ), 10, 1 );
+		add_filter( 'geodir_dashboard_get_reviews_chart_stats', array( $this, 'get_reviews_chart_stats' ), 10, 1 );
+		add_filter( 'geodir_dashboard_get_users_chart_stats', array( $this, 'get_users_chart_stats' ), 10, 1 );
 	}
 
 	/**
@@ -279,7 +281,7 @@ class GeoDir_Admin_Dashboard {
 			return;
 		}
 		
-		$items = $this->get_stats(); //geodir_error_log( $items, 'dashboard_stats()', __FILE__, __LINE__ );
+		$items = $this->get_stats();
 		if ( empty( $items ) ) {
 			return;
 		}
@@ -448,100 +450,119 @@ class GeoDir_Admin_Dashboard {
 		$chart_stats = apply_filters( 'geodir_dashboard_get_' . $this->type . '_chart_stats', array(), $this );
 		
 		if ( empty( $chart_stats ) ) {
-			//return;
+			return;
 		}
+		
+		$chart_js_data = $this->get_chart_js_params( $chart_stats );
+
 		?>
 		<div class="gd-chart-html">
 			<canvas id="gdDashListings"></canvas>
 			<script type="text/javascript">
 				var gdChartId = document.getElementById('gdDashListings').getContext('2d');
-				var myChart = new Chart(gdChartId, {
-					type: 'line',
-				});
+				var myChart = new Chart(gdChartId, <?php echo json_encode( $chart_js_data ); ?>);
 			</script>
 		</div>
 		<?php
 	}
 	
+	public function get_chart_js_params( $stats, $chart_type = 'line' ) {
+		if ( empty( $stats ) ) {
+			return array();
+		}
+
+		$datasets_data = array();
+		foreach ( $stats as $label => $values ) {
+			foreach ( $values as $label => $value ) {
+				if ( ! isset( $datasets_data[ $label ] ) )  {
+					$datasets_data[ $label ] = array();
+				}
+				$datasets_data[ $label ][] = $value;
+			}
+		}
+
+		$data = array();
+		$data['labels'] = array_keys( $stats );
+		$data['datasets'] = array();
+		foreach ( $datasets_data as $label => $values ) {
+			$data['datasets'][] = array(
+				'label' => ucfirst( $label ),
+				'data' => $values,
+				'fillColor' => 'rgba(220,220,220,0.5)',
+				'strokeColor' => 'rgba(220,220,220,1)',
+				'pointColor' => 'rgba(220,220,220,1)',
+				'pointStrokeColor' => '#fff',
+				'backgroundColor' => 'rgba(220,220,220,0.5)'
+			);
+		}
+		
+		$js_params = array();
+		$js_params['type'] = $chart_type;
+		$js_params['data'] = $data;
+		
+		return apply_filters( 'geodir_dashboard_get_chart_js_params', $js_params, $stats, $chart_type, $this );
+	}
+	
 	public function get_listings_chart_stats() {
-		$duration 	= ! empty( $_GET['duration'] ) ? sanitize_text_field( $_GET['duration'] ) : 'this_year';//geodir_error_log( $duration, 'get_listings_chart_stats()', __FILE__, __LINE__ );
+		$duration 	= ! empty( $_GET['duration'] ) ? sanitize_text_field( $_GET['duration'] ) : 'this_year';
 		$post_type 	= $this->subtype;
 		if ( empty( $this->gd_post_types[ $post_type ] ) ) {
 			return;
 		}
 		
-		$stats = $this->get_listings_stats_by( $duration, $post_type );
-		geodir_error_log( $stats, 'get_listings_stats_by', __FILE__, __LINE__ );
-		if ( empty( $stats ) ) {
+		return $this->get_listings_stats_by( $duration, $post_type );
+	}
+	
+	public function get_reviews_chart_stats() {
+		$duration 	= ! empty( $_GET['duration'] ) ? sanitize_text_field( $_GET['duration'] ) : 'this_year';
+		$post_type 	= $this->subtype;
+		if ( empty( $this->gd_post_types[ $post_type ] ) ) {
 			return;
 		}
+		
+		return $this->get_reviews_stats_by( $duration, $post_type );
+	}
+	
+	public function get_users_chart_stats() {
+		$duration 	= ! empty( $_GET['duration'] ) ? sanitize_text_field( $_GET['duration'] ) : 'this_year';
+		
+		return $this->get_users_stats_by( $duration );
 	}
 	
 	public function get_listings_stats_by( $stats_by, $post_type ) {
-		global $wpdb;
+		$dates = $this->get_start_end_dates( $stats_by );
 
 		$stats = array();
-		if ( $stats_by == 'this_year' ) {
-            $months = $this->get_months_start_end_dates();
-
-			foreach ( $months as $month => $dates ) {
-				$stats[ $month ]['total'] = $this->query_posts_count( $post_type, "AND post_date <= '" . $dates['end'] . "'" );
-				$stats[ $month ]['new'] = $this->query_posts_count( $post_type, "AND post_date >= '" . $dates['start'] . "' AND post_date <= '" . $dates['end'] . "'" );
-			}
-        } elseif ($stats_by == 'last_year') {
-            $months = $this->get_months_start_end_dates( 'last_year' );
-
-			foreach ( $months as $month => $dates ) {
-				$stats[ $month ]['total'] = $this->query_posts_count( $post_type, "AND post_date <= '" . $dates['end'] . "'" );
-				$stats[ $month ]['new'] = $this->query_posts_count( $post_type, "AND post_date >= '" . $dates['start'] . "' AND post_date <= '" . $dates['end'] . "'" );
-			}
-        } elseif ($stats_by == 'this_week') {
-            $months = array();
-			for ( $m = 1; $m <= 12; $m++ ) {
-				$months[ $m ]['start'] = date( 'Y-m-01 00:00:00', strtotime( date( 'Y-' . $m . '-01' ) ) );
-				$months[ $m ]['end'] = date( 'Y-m-t 23:59:59', strtotime( date( 'Y-' . $m . '-01' ) ) );
-			}
-			
-			$total = 0;
-			foreach ( $months as $month => $dates ) {
-				$stats[ $month ]['total'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM {$wpdb->posts} WHERE post_type = %s AND ( post_status = 'publish' OR post_status = 'draft'  OR post_status = 'pending' OR post_status = 'private' ) AND post_date <= %s AND post_date >= %s", $post_type, $dates['start'], $dates['end'] ) );
-			}
-        } elseif ($stats_by == 'last_week') {
-            $months = array();
-			for ( $m = 1; $m <= 12; $m++ ) {
-				$months[ $m ]['start'] = date( 'Y-m-01 00:00:00', strtotime( date( 'Y-' . $m . '-01' ) ) );
-				$months[ $m ]['end'] = date( 'Y-m-t 23:59:59', strtotime( date( 'Y-' . $m . '-01' ) ) );
-			}
-			
-			$total = 0;
-			foreach ( $months as $month => $dates ) {
-				$stats[ $month ]['total'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM {$wpdb->posts} WHERE post_type = %s AND ( post_status = 'publish' OR post_status = 'draft'  OR post_status = 'pending' OR post_status = 'private' ) AND post_date <= %s AND post_date >= %s", $post_type, $dates['start'], $dates['end'] ) );
-			}
-        } elseif ($stats_by == 'this_month') {
-            $months = array();
-			for ( $m = 1; $m <= 12; $m++ ) {
-				$months[ $m ]['start'] = date( 'Y-m-01 00:00:00', strtotime( date( 'Y-' . $m . '-01' ) ) );
-				$months[ $m ]['end'] = date( 'Y-m-t 23:59:59', strtotime( date( 'Y-' . $m . '-01' ) ) );
-			}
-			
-			$total = 0;
-			foreach ( $months as $month => $dates ) {
-				$stats[ $month ]['total'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM {$wpdb->posts} WHERE post_type = %s AND ( post_status = 'publish' OR post_status = 'draft'  OR post_status = 'pending' OR post_status = 'private' ) AND post_date <= %s AND post_date >= %s", $post_type, $dates['start'], $dates['end'] ) );
-			}
-        } elseif ($stats_by == 'last_month') {
-            $months = array();
-			for ( $m = 1; $m <= 12; $m++ ) {
-				$months[ $m ]['start'] = date( 'Y-m-01 00:00:00', strtotime( date( 'Y-' . $m . '-01' ) ) );
-				$months[ $m ]['end'] = date( 'Y-m-t 23:59:59', strtotime( date( 'Y-' . $m . '-01' ) ) );
-			}
-			
-			$total = 0;
-			foreach ( $months as $month => $dates ) {
-				$stats[ $month ]['total'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM {$wpdb->posts} WHERE post_type = %s AND ( post_status = 'publish' OR post_status = 'draft'  OR post_status = 'pending' OR post_status = 'private' ) AND post_date <= %s AND post_date >= %s", $post_type, $dates['start'], $dates['end'] ) );
-			}
-        }
+		foreach ( $dates as $day => $days ) {
+			$stats[ $day ]['total'] = $this->query_posts_count( $post_type, "AND post_date <= '" . $days['end'] . "'" );
+			$stats[ $day ]['new'] = $this->query_posts_count( $post_type, "AND post_date >= '" . $days['start'] . "' AND post_date <= '" . $days['end'] . "'" );
+		}
 		
-		return apply_filters( 'geodir_dashboardget_listings_stats_by', $stats, $stats_by, $post_type );
+		return apply_filters( 'geodir_dashboard_listings_stats_by', $stats, $stats_by, $post_type );
+	}
+	
+	public function get_reviews_stats_by( $stats_by, $post_type ) {
+		$dates = $this->get_start_end_dates( $stats_by );
+
+		$stats = array();
+		foreach ( $dates as $day => $days ) {
+			$stats[ $day ]['total'] = $this->query_reviews_count( $post_type, "AND post_date <= '" . $days['end'] . "'" );
+			$stats[ $day ]['new'] = $this->query_reviews_count( $post_type, "AND post_date >= '" . $days['start'] . "' AND post_date <= '" . $days['end'] . "'" );
+		}
+		
+		return apply_filters( 'geodir_dashboard_reviews_stats_by', $stats, $stats_by, $post_type );
+	}
+	
+	public function get_users_stats_by( $stats_by ) {
+		$dates = $this->get_start_end_dates( $stats_by );
+
+		$stats = array();
+		foreach ( $dates as $day => $days ) {
+			$stats[ $day ]['total'] = $this->query_users_count( "AND user_registered <= '" . $days['end'] . "'" );
+			$stats[ $day ]['new'] = $this->query_users_count( "AND user_registered >= '" . $days['start'] . "' AND user_registered <= '" . $days['end'] . "'" );
+		}
+		
+		return apply_filters( 'geodir_dashboard_users_stats_by', $stats, $stats_by );
 	}
 	
 	public function query_posts_count( $post_type, $where ) {
@@ -550,23 +571,106 @@ class GeoDir_Admin_Dashboard {
 		$statuses = array_keys( get_post_statuses() );
 
 		$query = "SELECT COUNT(ID) FROM " . $wpdb->posts . " WHERE post_type = '" . $post_type . "' AND post_status IN('" . implode( "','", $statuses ) . "') " . $where;
-geodir_error_log( $query, 'query', __FILE__, __LINE__ );
+
 		return $wpdb->get_var( $query );
 	}
 	
-	public function get_months_start_end_dates( $type = 'this_year' ) {
-		$year = (int)date( 'Y' );
-		if ( $type == 'last_year' ) {
-			$year--;
-		}
+	public function query_reviews_count( $post_type, $where ) {
+		global $wpdb;
 
-		$months = array();
-		for ( $m = 1; $m <= 12; $m++ ) {
-			$months[ $m ]['start'] = date( $year . '-m-01 00:00:00', strtotime( date( $year . '-' . $m . '-01' ) ) );
-			$months[ $m ]['end'] = date( $year . '-m-t 23:59:59', strtotime( date( $year . '-' . $m . '-01' ) ) );
+		$query = "SELECT COUNT(id) FROM " . GEODIR_REVIEW_TABLE . " WHERE post_type = '" . $post_type . "' AND post_status = 1 AND status = 1 AND overall_rating > 0 " . $where;
+
+		return $wpdb->get_var( $query );
+	}
+	
+	public function query_users_count( $where ) {
+		global $wpdb;
+
+		$query = "SELECT COUNT(ID) FROM " . $wpdb->users . " WHERE 1 " . $where;
+
+		return $wpdb->get_var( $query );
+	}
+
+	public function get_start_end_dates( $type = 'this_year' ) {
+		$dates = array();
+
+		switch ( $type ) {
+			case 'this_year':
+			case 'last_year':
+				$year = $type == 'this_year' ? date( 'Y', time() ) : date( 'Y', strtotime( '-1 year' ) );
+
+				for ( $m = 1; $m <= 12; $m++ ) {
+					$time = strtotime( date( $year . '-' . $m . '-01' ) );
+					$dates[ date( 'M', $time ) ] = array (
+						'start' => date( $year . '-m-01 00:00:00', $time ),
+						'end' => date( $year . '-m-t 23:59:59', $time )
+					);
+				}
+			break;
+			case 'this_month':
+			case 'last_month':
+				$time = $type == 'this_month' ? time() : strtotime( '-1 month' );
+				$year = date( 'Y', $time );
+				$month = date( 'm', $time );
+				$last_day = date( 't', $time );
+
+				for ( $d = 1; $d <= $last_day; $d++ ) {
+					$dates[ $d ] = array (
+						'start' => $year . '-' . $month . '-' . sprintf( '%02d', $d ) . ' 00:00:00',
+						'end' => $year . '-' . $month . '-' . sprintf( '%02d', $d ) . ' 23:59:59'
+					);
+				}
+			break;
+			case 'this_week':
+			case 'last_week':
+				$time = $type == 'this_week' ? time() : strtotime( '-1 week' );
+				$year = date( 'Y', $time );
+				$month = date( 'm', $time );
+				$week = date( 'W', $time );
+
+				for ( $d = 1; $d <= 7; $d++ ) {
+					$time = strtotime( $year . '-W' . $week . '-' . $d );
+					$dates[ date( 'D', $time ) ] = array (
+						'start' => date( 'Y-m-d 00:00:00', $time ),
+						'end' => date( 'Y-m-d 23:59:59', $time ),
+					);
+				}
+			break;
 		}
 		
-		return $months;
+		return $dates;
+	}
+	
+	public function filter_chart_js_params( $params, $stats, $chart_type, $class ) {
+		if ( ! empty( $params['data']['datasets'] ) ) {
+			$datasets = array();
+
+			foreach ( $params['data']['datasets'] as $key => $data ) {
+				$dataset = $data;
+
+				if ( ! empty( $data['label'] ) ) {
+					if ( $data['label'] == 'Total' ) {
+						$dataset['fillColor'] = 'rgba(220,220,220,0.5)';
+						$dataset['strokeColor'] = 'rgba(220,220,220,1)';
+						$dataset['pointColor'] = 'rgba(220,220,220,1)';
+						$dataset['pointStrokeColor'] = '#fff';
+						$dataset['backgroundColor'] = 'rgba(220,220,220,0.5)';
+					} elseif ( $data['label'] == 'New' ) {
+						$dataset['fillColor'] = 'rgba(151,187,205,0.5)';
+						$dataset['strokeColor'] = 'rgba(151,187,205,1)';
+						$dataset['pointColor'] = 'rgba(151,187,205,1)';
+						$dataset['pointStrokeColor'] = '#fff';
+						$dataset['backgroundColor'] = 'rgba(151,187,205,0.5)';
+					}					
+				}
+
+				$datasets[$key] = $dataset;
+			}
+
+			$params['data']['datasets'] = $datasets;
+		}
+
+		return $params;
 	}
 }
 
