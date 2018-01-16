@@ -240,7 +240,7 @@ function geodir_get_cf_value($cf) {
         if (isset($_REQUEST['post'])) {
             $_REQUEST['pid'] = (int)$_REQUEST['post'];
         }
-    }elseif(!empty(($gd_post))){
+    }elseif(!empty($gd_post)){
         $post = $gd_post;
     }
 
