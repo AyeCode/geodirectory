@@ -400,7 +400,7 @@ class GeoDir_Admin_Dummy_Data {
 
 					$select_disabled = $post_counts > 0 ? 'disabled' : '';
 					echo "<td>";
-					echo "<select id='" . $post_type . "_data_type' onchange='geodir_dummy_set_count(this,\"$post_type\");' $select_disabled>";
+					echo "<select id='" . $post_type . "_data_type' onchange='geodir_dummy_set_count(this,\"$post_type\");' $select_disabled class='geodir-select'>";
 
 					foreach ( $data_types_for as $key => $val ) {
 						$selected = ( $key == $set_dt ) ? "selected='selected'" : '';
@@ -412,7 +412,7 @@ class GeoDir_Admin_Dummy_Data {
 					echo "</select>";
 
 					$select_display = $post_counts > 0 ? 'display:none;' : '';
-					echo "<select id='" . $post_type . "_data_type_count' style='$select_display' >";
+					echo "<select id='" . $post_type . "_data_type_count' style='$select_display' class='geodir-select'>";
 					$x = 1;
 					while ( $x <= $count ) {
 						$selected = ( $x == $count ) ? "selected='selected'" : '';

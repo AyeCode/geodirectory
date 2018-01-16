@@ -1269,18 +1269,18 @@ function geodir_localize_all_js_msg()
      *
      * @since 1.0.0
      */
-    $arr_alert_msg = apply_filters('geodir_all_js_msg', $arr_alert_msg);
+    return apply_filters('geodir_all_js_msg', $arr_alert_msg);
 
-    foreach ($arr_alert_msg as $key => $value) {
-        if (!is_scalar($value))
-            continue;
-        $arr_alert_msg[$key] = html_entity_decode((string)$value, ENT_QUOTES, 'UTF-8');
-    }
-
-    $script = "var geodir_all_js_msg = " . json_encode($arr_alert_msg) . ';';
-    echo '<script>';
-    echo $script;
-    echo '</script>';
+//    foreach ($arr_alert_msg as $key => $value) {
+//        if (!is_scalar($value))
+//            continue;
+//        $arr_alert_msg[$key] = html_entity_decode((string)$value, ENT_QUOTES, 'UTF-8');
+//    }
+//
+//    $script = "var geodir_all_js_msg = " . json_encode($arr_alert_msg) . ';';
+//    echo '<script>';
+//    echo $script;
+//    echo '</script>';
 }
 
 add_action('admin_bar_menu', 'geodir_admin_bar_site_menu', 31);

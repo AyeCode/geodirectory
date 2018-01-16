@@ -54,8 +54,8 @@ function geodir_restrict_wpadmin() {
 		$roles = wp_get_current_user()->roles;
 		foreach($restricted_roles as $role){
 			if( in_array($role, $roles)){
-				wp_redirect( home_url() );
-				wp_die();
+				wp_safe_redirect( home_url() );
+				exit;
 			}
 		}
 	}

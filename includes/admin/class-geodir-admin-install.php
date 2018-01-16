@@ -151,7 +151,7 @@ class GeoDir_Admin_Install {
 		}
 
 		// Ensure needed classes are loaded
-		include_once( dirname( __FILE__ ) . '/class-geodir-admin-notices.php' );
+		//include_once( dirname( __FILE__ ) . '/class-geodir-admin-notices.php' );
 
 
 		self::create_tables();
@@ -177,20 +177,18 @@ class GeoDir_Admin_Install {
 		self::create_cron_jobs();
 
 		// Queue upgrades/setup wizard
-		$current_wc_version    = get_option( 'geodirectory_version', null );
+		$current_gd_version    = get_option( 'geodirectory_version', null );
 		$current_db_version    = get_option( 'geodirectory_db_version', null );
 
 		GeoDir_Admin_Notices::remove_all_notices();
 
-
-
 		// No versions? This is a new install :)
-		if ( is_null( $current_wc_version ) && is_null( $current_db_version ) && apply_filters( 'geodirectory_enable_setup_wizard', true ) ) {
+		if ( is_null( $current_gd_version ) && is_null( $current_db_version ) && apply_filters( 'geodirectory_enable_setup_wizard', true ) ) {
 			GeoDir_Admin_Notices::add_notice( 'install' );
 			set_transient( '_gd_activation_redirect', 1, 30 );
 
-		// No page? Let user run wizard again..
-		} elseif ( ! get_option( 'woocommerce_cart_page_id' ) ) {
+		// No archive page template? Let user run wizard again..
+		} elseif ( ! geodir_get_option( 'page_archive' ) ) {
 			GeoDir_Admin_Notices::add_notice( 'install' );
 		}
 
@@ -200,7 +198,7 @@ class GeoDir_Admin_Install {
 			self::update_db_version();
 		}
 
-		self::update_wc_version();
+		self::update_gd_version();
 
 		// Flush rules after install
 		do_action( 'geodirectory_flush_rewrite_rules' );
@@ -255,7 +253,7 @@ class GeoDir_Admin_Install {
 	/**
 	 * Update WC version to current.
 	 */
-	private static function update_wc_version() {
+	private static function update_gd_version() {
 		delete_option( 'geodirectory_version' );
 		add_option( 'geodirectory_version', GEODIRECTORY_VERSION );
 	}

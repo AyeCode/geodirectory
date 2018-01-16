@@ -210,6 +210,9 @@ class GeoDir_Admin_Assets {
 
 			wp_localize_script('geodir-plupload', 'geodir_plupload_params', $gd_plupload_init);
 
+			// geodir_all_js_msg
+			wp_localize_script('geodir-admin-script', 'geodir_all_js_msg', geodir_localize_all_js_msg());
+
 		}
 
 		// Load only on cat/tag pages

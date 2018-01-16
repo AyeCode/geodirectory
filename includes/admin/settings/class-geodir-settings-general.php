@@ -400,7 +400,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'class'      => 'geodir-select',
 					'options' => array_unique(array(
 						'pending' => __('Pending Review', 'geodirectory'),
-						'draft' => __('Draft', 'geodirectory'),
 						'publish' => __('Publish', 'geodirectory'),
 
 					)),
@@ -445,42 +444,11 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'    => 'general_options_map'
 				),
 
-				array(
-					'name' => __( 'Google Maps API KEY', 'geodirectory' ),
-					'desc' => __( 'This is a requirement to use Google Maps. If you would prefer to use the Open Street Maps API, select "show advanced" and set the Maps API to OSM.', 'geodirectory' ),
-					'id'   => 'google_maps_api_key',
-					'type' => 'map_key',
-					'default'  => '',
-					'desc_tip' => true,
-					//'advanced' => true
-				),
+				self::get_google_maps_api_key_setting(),
 
-				array(
-					'name'       => __( 'Maps API', 'geodirectory' ),
-					'desc'       => __( "- Google Maps API will force to load Google JS library only.
-- OpenStreetMap API will force to load OpenStreetMap JS library only.
-- Load Automatic will load Google JS library first, but if Google maps JS library not loaded it then loads the OpenStreetMap JS library to load the maps (recommended for regions where Google maps banned).
-- Disable Maps will disable and hides maps for entire site.", 'geodirectory' ),
-					'id'         => 'maps_api',
-					'default'    => 'auto',
-					'type'       => 'select',
-					'class'      => 'geodir-select',
-					'options'    => self::supported_maps_apis(),
-					'desc_tip' => true,
-					'advanced' => true
-				),
+				self::get_maps_api_setting(),
 
-				array(
-					'name'       => __( 'Default map language', 'geodirectory' ),
-					'desc'       => __( 'URLs will only be in one language, this will determine the language location slugs get. You should avoid changing this after listings have been added.', 'geodirectory' ),
-					'id'         => 'map_language',
-					'default'    => 'en',
-					'type'       => 'select',
-					'class'      => 'geodir-select',
-					'options'    => self::supported_map_languages(),
-					'desc_tip' => true,
-					'advanced' => true
-				),
+				self::get_map_language_setting(),
 
 				array(
 					'name'     => __( 'Default marker icon', 'geodirectory' ),
@@ -494,11 +462,74 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 
 				array( 'type' => 'sectionend', 'id' => 'general_options_map' ),
 
+				array(
+					'title' => __( 'Tracking Settings', 'woocommerce' ),
+					'type'  => 'title',
+					'desc'  => '',
+					'id'    => 'general_options_tracking',
+					'advanced' => true
+				),
+
+				array(
+					'name' => __( 'Allow Usage Tracking?', 'geodirectory' ),
+					'desc' => sprintf( __( 'Want to help make GeoDirectory even more awesome? Allow GeoDirectory to collect non-sensitive diagnostic data and usage information. %1$sFind out more%2$s.', 'geodirectory' ), '<a href="https://wpgeodirectory.com/usage-tracking/" target="_blank">', '</a>' ),
+					'id'   => 'usage_tracking',
+					'type' => 'checkbox',
+					'default'  => '0',
+					'advanced' => true
+				),
+
+				array( 'type' => 'sectionend', 'id' => 'general_options_map' ),
+
 			) );/* General Options End*/
 		}
 
 
 		return apply_filters( 'woocommerce_get_settings_' . $this->id, $settings );
+	}
+
+	public static function get_map_language_setting(){
+		return array(
+			'name'       => __( 'Default map language', 'geodirectory' ),
+			'desc'       => __( 'URLs will only be in one language, this will determine the language location slugs get. You should avoid changing this after listings have been added.', 'geodirectory' ),
+			'id'         => 'map_language',
+			'default'    => 'en',
+			'type'       => 'select',
+			'class'      => 'geodir-select',
+			'options'    => self::supported_map_languages(),
+			'desc_tip' => true,
+			'advanced' => true
+		);
+	}
+
+	public static function get_maps_api_setting(){
+		return array(
+			'name'       => __( 'Maps API', 'geodirectory' ),
+			'desc'       => __( "- Google Maps API will force to load Google JS library only.
+- OpenStreetMap API will force to load OpenStreetMap JS library only.
+- Load Automatic will load Google JS library first, but if Google maps JS library not loaded it then loads the OpenStreetMap JS library to load the maps (recommended for regions where Google maps banned).
+- Disable Maps will disable and hides maps for entire site.", 'geodirectory' ),
+			'id'         => 'maps_api',
+			'default'    => 'auto',
+			'type'       => 'select',
+			'class'      => 'geodir-select',
+			'options'    => self::supported_maps_apis(),
+			'desc_tip' => true,
+			'advanced' => true
+		);
+	}
+	
+	
+	public static function get_google_maps_api_key_setting(){
+		return array(
+			'name' => __( 'Google Maps API KEY', 'geodirectory' ),
+			'desc' => __( 'This is a requirement to use Google Maps. If you would prefer to use the Open Street Maps API, select "show advanced" and set the Maps API to OSM.', 'geodirectory' ),
+			'id'   => 'google_maps_api_key',
+			'type' => 'map_key',
+			'default'  => '',
+			'desc_tip' => true,
+			//'advanced' => true
+		);
 	}
 
 	/**
@@ -521,7 +552,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 	 */
 	public static function supported_maps_apis(){
 		return array(
-			'auto' => __('Automatic', 'geodirectory'),
+			'auto' => __('Automatic (recommended)', 'geodirectory'),
 			'google' => __('Google Maps API', 'geodirectory'),
 			'osm' => __('OpenStreetMap API', 'geodirectory'),
 			'none' => __('Disable Maps', 'geodirectory'),

@@ -130,8 +130,8 @@ class GD_Admin_Menus {
 	 * Init the addons page.
 	 */
 	public function addons_page() {
-		echo '### addons page';
-		//WC_Admin_Addons::output();
+		//echo '### addons page';
+		GeoDir_Admin_Addons::output();
 	}
 
 	/**
