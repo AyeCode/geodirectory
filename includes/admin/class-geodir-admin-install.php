@@ -323,25 +323,7 @@ class GeoDir_Admin_Install {
 		//@todo add crons here
 	}
 
-	/**
-	 * Create GD pages.
-	 *
-	 * Creates pages that the plugin relies on, storing page id's in variables.
-	 *
-	 * @since 1.0.0
-	 * @package GeoDirectory
-	 */
-	function geodir_create_pages() {
-		geodir_create_page(esc_sql(_x('gd-home', 'page_slug', 'geodirectory')), 'geodir_home_page', __('GD Home page', 'geodirectory'), '');
-		geodir_create_page(esc_sql(_x('add-listing', 'page_slug', 'geodirectory')), 'geodir_add_listing_page', __('Add Listing', 'geodirectory'), '');
-		geodir_create_page(esc_sql(_x('listing-preview', 'page_slug', 'geodirectory')), 'geodir_preview_page', __('Listing Preview', 'geodirectory'), '');
-		geodir_create_page(esc_sql(_x('listing-success', 'page_slug', 'geodirectory')), 'geodir_success_page', __('Listing Success', 'geodirectory'), '');
-		geodir_create_page(esc_sql(_x('location', 'page_slug', 'geodirectory')), 'geodir_location_page', __('Location', 'geodirectory'), '');
-		geodir_create_page(esc_sql(_x('gd-info', 'page_slug', 'geodirectory')), 'geodir_info_page', __('Info', 'geodirectory'), '');
-		geodir_create_page(esc_sql(_x('gd-archive', 'page_slug', 'geodirectory')), 'geodir_archive_page', __('GD Archive', 'geodirectory'), '');
-		geodir_create_page(esc_sql(_x('gd-search', 'page_slug', 'geodirectory')), 'geodir_search_page', __('GD Search', 'geodirectory'), '');
-		geodir_create_page(esc_sql(_x('gd-details', 'page_slug', 'geodirectory')), 'geodir_details_page', __('GD Details', 'geodirectory'), '');
-	}
+
 	/**
 	 * Create pages that the plugin relies on, storing page IDs in variables.
 	 */
@@ -361,7 +343,7 @@ class GeoDir_Admin_Install {
 			'page_search' => array(
 				'name'    => _x( 'search', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'Search page', 'Page title', 'geodirectory'),
-				'content' => "[gd_advanced_search]\n[gd_loop]",
+				'content' => "[gd_advanced_search]\n[gd_loop_actions]\n[gd_loop]\n[gd_loop_paging]",
 			),
 			'page_terms_conditions' => array(
 				'name'    => _x( 'terms-and-conditions', 'Page slug', 'geodirectory'),
@@ -376,7 +358,7 @@ class GeoDir_Admin_Install {
 			'page_archive' => array(
 				'name'    => _x( 'gd-archive', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'GD Archive', 'Page title', 'geodirectory'),
-				'content' => "[gd_advanced_search]\n[gd_loop]",
+				'content' => "[gd_advanced_search]\n[gd_loop_actions]\n[gd_loop]\n[gd_loop_paging]",
 			),
 			'page_details' => array(
 				'name'    => _x( 'gd-details', 'Page slug', 'geodirectory'),

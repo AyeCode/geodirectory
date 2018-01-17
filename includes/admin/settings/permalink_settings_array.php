@@ -129,22 +129,6 @@ $geodir_settings['permalink_settings'] = apply_filters('geodir_permalink_setting
         'css' => 'min-width:300px;'
     ),
     array(
-        'name' => __('Listing preview page', 'geodirectory'),
-        'desc' => __('Select the page to use for listing preview', 'geodirectory'),
-        'id' => 'geodir_preview_page',
-        'type' => 'single_select_page',
-        'class' => 'geodir-select',
-        'css' => 'min-width:300px;'
-    ),
-    array(
-        'name' => __('Listing success page', 'geodirectory'),
-        'desc' => __('Select the page to use for listing success', 'geodirectory'),
-        'id' => 'geodir_success_page',
-        'type' => 'single_select_page',
-        'class' => 'geodir-select',
-        'css' => 'min-width:300px;'
-    ),
-    array(
         'name' => __('Location page', 'geodirectory'),
         'desc' => __('Select the page to use for locations', 'geodirectory'),
         'id' => 'geodir_location_page',
@@ -164,14 +148,6 @@ $geodir_settings['permalink_settings'] = apply_filters('geodir_permalink_setting
         'name' => __('Info page', 'geodirectory'),
         'desc' => __('Select the page to use for Gd general Info', 'geodirectory'),
         'id' => 'geodir_info_page',
-        'type' => 'single_select_page',
-        'class' => 'geodir-select',
-        'css' => 'min-width:300px;'
-    ),
-    array(
-        'name' => __('Login page', 'geodirectory'),
-        'desc' => __('Select the page to use for Login / Register', 'geodirectory'),
-        'id' => 'geodir_login_page',
         'type' => 'single_select_page',
         'class' => 'geodir-select',
         'css' => 'min-width:300px;'

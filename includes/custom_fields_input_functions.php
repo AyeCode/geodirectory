@@ -429,7 +429,15 @@ function geodir_cfi_checkbox($html,$cf){
                 echo 'checked="checked"';
             }?>  value="1" class="gd-checkbox" field_type="<?php echo $cf['type'];?>" type="checkbox"
                  onchange="if(this.checked){jQuery('#<?php echo $cf['name'];?>').val('1');} else{ jQuery('#<?php echo $cf['name'];?>').val('0');}"/>
-            <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
+            <?php
+            if(isset($cf['field_type_key']) && $cf['field_type_key']=='terms_conditions'){
+                $tc = geodir_terms_and_conditions_page_id();
+                $tc_link = get_permalink($tc);
+                echo "<a href='$tc_link' target='_blank'>".__($cf['desc'], 'geodirectory')." <i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a>";
+            }else{
+                _e($cf['desc'], 'geodirectory');
+            }
+            ?>
             <?php if ($cf['is_required']) { ?>
                 <span class="geodir_message_error"><?php _e($cf['required_msg'], 'geodirectory'); ?></span>
             <?php } ?>

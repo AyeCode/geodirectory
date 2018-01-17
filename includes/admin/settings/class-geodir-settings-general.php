@@ -187,27 +187,10 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'class'      => 'geodir-select',
 					'desc_tip' => true,
 				),
-				//@todo can we merge add/preview/success pages to one page?
 				array(
 					'name'     => __( 'Add listing page', 'geodirectory' ),
 					'desc'     => __( 'Select the page to use for adding listings', 'geodirectory' ),
 					'id'       => 'page_add',
-					'type'     => 'single_select_page',
-					'class'      => 'geodir-select',
-					'desc_tip' => true,
-				),
-				array(
-					'name'     => __( 'Listing preview page', 'geodirectory' ),
-					'desc'     => __( 'Select the page to use for listing preview', 'geodirectory' ),
-					'id'       => 'page_preview',
-					'type'     => 'single_select_page',
-					'class'      => 'geodir-select',
-					'desc_tip' => true,
-				),
-				array(
-					'name'     => __( 'Listing success page', 'geodirectory' ),
-					'desc'     => __( 'Select the page to use for listing success', 'geodirectory' ),
-					'id'       => 'page_success',
 					'type'     => 'single_select_page',
 					'class'      => 'geodir-select',
 					'desc_tip' => true,

@@ -110,6 +110,32 @@ function geodir_locate_template( $template_name, $template_path = '', $default_p
     return apply_filters( 'geodir_locate_template', $template, $template_name, $template_path );
 }
 
+/**
+ * Content to display when no listings are found.
+ * 
+ */
+function geodir_no_listings_found() {
+	geodir_get_template( 'loop/no-listings-found.php' );
+}
+
+/**
+ * Content to display when no listings are found.
+ *
+ */
+function geodir_loop_paging() {
+	geodir_get_template( 'loop/pagination.php' );
+}
+
+
+/**
+ * Display loop actions such as sort order and listing view type.
+ *
+ */
+function geodir_loop_actions() {
+	do_action('geodir_before_loop_actions');
+	geodir_get_template( 'loop/actions.php' );
+	do_action('geodir_after_loop_actions');
+}
 
 /**
  * Display message when no listing result found.
@@ -584,4 +610,83 @@ function geodir_add_listing_form_wrap_start( $listing_type = '', $post = array()
 
 function geodir_add_listing_form_wrap_end( $listing_type = '', $post = array(), $package_info = array() ) {
     ?></div><?php
+}
+
+/**
+ * Front end listing view template selection.
+ *
+ * This function adds a drop down in front end listing page for selecting view template. Ex: list view, 2 column grid
+ * view, etc.
+ *
+ * @since   1.0.0
+ * @package GeoDirectory
+ *
+ * @global object $gd_session GeoDirectory Session object.
+ */
+function geodir_list_view_select() {
+	global $gd_session;
+	?>
+	<script type="text/javascript">
+
+		function geodir_list_view_select(list) {
+			//alert(listval);
+			val = list.value;
+			if (!val) {
+				return;
+			}
+
+			var listSel = jQuery(list).parent().parent().next('.geodir_category_list_view');
+			if (val != 1) {
+				jQuery(listSel).children('li').addClass('geodir-gridview');
+				jQuery(listSel).children('li').removeClass('geodir-listview');
+			} else {
+				jQuery(listSel).children('li').addClass('geodir-listview');
+			}
+
+			if (val == 1) {
+				jQuery(listSel).children('li').removeClass('geodir-gridview gridview_onehalf gridview_onethird gridview_onefourth gridview_onefifth');
+			}
+			else if (val == 2) {
+				jQuery(listSel).children('li').GDswitchClass('gridview_onethird gridview_onefourth gridview_onefifth', 'gridview_onehalf', 600);
+			}
+			else if (val == 3) {
+				jQuery(listSel).children('li').GDswitchClass('gridview_onehalf gridview_onefourth gridview_onefifth', 'gridview_onethird', 600);
+			}
+			else if (val == 4) {
+				jQuery(listSel).children('li').GDswitchClass('gridview_onehalf gridview_onethird gridview_onefifth', 'gridview_onefourth', 600);
+			}
+			else if (val == 5) {
+				jQuery(listSel).children('li').GDswitchClass('gridview_onehalf gridview_onethird gridview_onefourth', 'gridview_onefifth', 600);
+			}
+
+			jQuery.post("<?php echo geodir_get_ajax_url();?>&gd_listing_view=" + val, function (data) {
+				//alert(data );
+			});
+		}
+	</script>
+	<div class="geodir-list-view-select">
+		<select name="gd_list_view" id="gd_list_view" onchange="geodir_list_view_select(this);">
+			<?php $listing_view = (int) $gd_session->get( 'gd_listing_view' ); ?>
+			<option value=""><?php _e( 'View:', 'geodirectory' ); ?></option>
+			<option
+				value="1" <?php selected( 1, $listing_view ); ?>><?php _e( 'View: List', 'geodirectory' ); ?></option>
+			<option
+				value="2" <?php selected( 2, $listing_view ); ?>><?php _e( 'View: Grid 2', 'geodirectory' ); ?></option>
+			<option
+				value="3" <?php selected( 3, $listing_view ); ?>><?php _e( 'View: Grid 3', 'geodirectory' ); ?></option>
+			<option
+				value="4" <?php selected( 4, $listing_view ); ?>><?php _e( 'View: Grid 4', 'geodirectory' ); ?></option>
+			<option
+				value="5" <?php selected( 5, $listing_view ); ?>><?php _e( 'View: Grid 5', 'geodirectory' ); ?></option>
+		</select>
+	</div>
+	<?php
+}
+
+
+/**
+ * Output the listing archive image
+ */
+function geodir_listing_archive_image(){
+
 }
