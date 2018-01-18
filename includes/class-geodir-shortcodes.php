@@ -33,11 +33,14 @@ class GeoDir_Shortcodes {
             'gd_recent_reviews'         => __CLASS__ . '::gd_recent_reviews',
             'gd_related_listings'       => __CLASS__ . '::gd_related_listings',
             'gd_video'                  => __CLASS__ . '::gd_video',
-            'gd_loop'                   => __CLASS__ . '::gd_loop', // only for GD archive page
             'gd_single_slider'          => __CLASS__ . '::gd_single_slider',
             'gd_single_taxonomies'      => __CLASS__ . '::gd_single_taxonomies',
             'gd_single_tabs'            => __CLASS__ . '::gd_single_tabs',
             'gd_single_next_prev'       => __CLASS__ . '::gd_single_next_prev',
+            'gd_loop'                   => __CLASS__ . '::gd_loop', // only for GD archive page
+            'gd_loop_paging'            => __CLASS__ . '::gd_loop_paging', // only for GD archive page
+            'gd_loop_actions'            => __CLASS__ . '::gd_loop_actions', // only for GD archive page
+
         );
 
         foreach ( $shortcodes as $shortcode => $function ) {
@@ -121,8 +124,29 @@ class GeoDir_Shortcodes {
     public static function gd_loop( $atts = array(), $content = null ) {
         if(geodir_is_post_type_archive() ||  geodir_is_taxonomy() ||  geodir_is_page('search')){
             ob_start();
-           // geodir_get_template_part('listing', 'listview');
-            geodir_action_listings_content();
+            // geodir_get_template_part('listing', 'listview');
+            geodir_get_template_part('content', 'archive-listing');
+            //geodir_action_listings_content();
+            return ob_get_clean();
+        }else{
+            return "";
+        }
+    }
+
+    public static function gd_loop_paging( $atts = array(), $content = null ) {
+        if(geodir_is_post_type_archive() ||  geodir_is_taxonomy() ||  geodir_is_page('search')){
+            ob_start();
+            geodir_loop_paging();
+            return ob_get_clean();
+        }else{
+            return "";
+        }
+    }
+
+    public static function gd_loop_actions( $atts = array(), $content = null ) {
+        if(geodir_is_post_type_archive() ||  geodir_is_taxonomy() ||  geodir_is_page('search')){
+            ob_start();
+            geodir_loop_actions();
             return ob_get_clean();
         }else{
             return "";

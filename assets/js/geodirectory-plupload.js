@@ -6,7 +6,13 @@ jQuery(document).ready(function ($) {
     if ($(".plupload-upload-uic").exists()) {
         var pconfig = false;
         var msgErr = '';
-        var post_id = jQuery("#geodirectory-add-post input[name='ID']").val();
+        var post_id = '';
+        // set the post id
+        if(jQuery("#geodirectory-add-post input[name='ID']").length){
+            var post_id = jQuery("#geodirectory-add-post input[name='ID']").val(); // frontend
+        }else{
+            post_id = jQuery("#post input[name='post_ID']").val(); // backend
+        }
 
         $(".plupload-upload-uic").each(function () {
             var $this = $(this);

@@ -45,6 +45,7 @@ function geodir_add_listing_page_id(){
  * @package Geodirectory
  * @since 1.4.6
  * @return int|null Return the page ID if present or null if not.
+ * @todo we need to remove this function and all references to it.
  */
 function geodir_preview_page_id(){
     $gd_page_id = geodir_get_option('page_preview');
@@ -62,6 +63,7 @@ function geodir_preview_page_id(){
  * @package Geodirectory
  * @since 1.4.6
  * @return int|null Return the page ID if present or null if not.
+ * @todo we need to remove this function and all references to it.
  */
 function geodir_success_page_id(){
     $gd_page_id = geodir_get_option('page_success');

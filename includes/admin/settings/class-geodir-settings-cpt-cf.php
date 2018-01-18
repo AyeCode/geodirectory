@@ -615,6 +615,35 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				)
 			);
 
+			// Terms &amp; Conditions
+			$custom_fields['terms_conditions'] = array( // The key value should be unique and not contain any spaces.
+				'field_type'  => 'checkbox',
+				'class'       => 'gd-terms-conditions',
+				'icon'        => 'fa fa-file-text-o',
+				'name'        => __( 'Terms &amp; Conditions', 'geodirectory' ),
+				'description' => __( 'Adds a terms and conditions checkbox to your add listing page, the text links to your GD terms and conditions page set in the pages settings.', 'geodirectory' ),
+				'defaults'    => array(
+					'data_type'          => 'TINYINT',
+					'admin_title'        => 'Terms &amp; Conditions',
+					'frontend_title'     => 'Terms &amp; Conditions',
+					'frontend_desc'      => __('Please accept our terms and conditions','geodirectory'),
+					'htmlvar_name'       => 'terms_conditions',
+					'is_active'          => true,
+					'for_admin_use'      => false,
+					'default_value'      => '',
+					'show_in'            => '',
+					'is_required'        => true,
+					'option_values'      => '',
+					'validation_pattern' => '',
+					'validation_msg'     => '',
+					'required_msg'       => __('You MUST accept our terms and conditions to continue.','geodirectory'),
+					'field_icon'         => 'fa fa-file-text-o',
+					'css_class'          => '',
+					'cat_sort'           => false,
+					'cat_filter'         => false
+				)
+			);
+
 			// Video
 			$custom_fields['video'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'textarea',

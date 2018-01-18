@@ -580,6 +580,7 @@ function geodir_get_sort_options( $post_type ) {
  * @since   1.0.0
  * @package GeoDirectory
  * @global object $wp_query WordPress Query object.
+ * @todo this function can be made much simpler
  */
 function geodir_display_sort_options() {
     global $wp_query;
