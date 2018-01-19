@@ -535,12 +535,7 @@ if (!function_exists('geodir_save_listing')) {
          */
         do_action('geodir_after_save_listing', $last_post_id, $request_info);
 
-        //die;
-
-        if ($send_post_submit_mail) { // if new post send out email
-            $to_name = geodir_get_client_name($current_user->ID);
-            geodir_sendEmail('', '', $current_user->user_email, $to_name, '', '', $request_info, 'post_submit', $last_post_id, $current_user->ID);
-        }
+        do_action( 'geodir_send_email_on_listing_submit', $send_post_submit_mail, $last_post_id, $request_info, $current_user->ID );
         /*
          * Unset the session so we don't loop.
          */

@@ -127,7 +127,6 @@ function geodir_post_package_info( $package_info, $post = '', $post_type = '' ) 
 
 }
 
-
 /**
  * Send enquiry to listing author
  *
@@ -152,122 +151,57 @@ function geodir_post_package_info( $package_info, $post = '', $post_type = '' ) 
  * }
  */
 function geodir_send_inquiry( $request ) {
-	global $wpdb;
-
 	// strip slashes from text
+	if ( ! geodir_email_is_enabled( 'send_enquiry' ) ) {
+		return false;
+	}
+
 	$request = ! empty( $request ) ? stripslashes_deep( $request ) : $request;
 
-	$yourname      = $request['inq_name'];
-	$youremail     = $request['inq_email'];
-	$inq_phone     = $request['inq_phone'];
-	$frnd_comments = $request['inq_msg'];
-	$pid           = $request['pid'];
-
-	$author_id  = '';
-	$post_title = '';
-
-	if ( $request['pid'] ) {
-
-		$productinfosql = $wpdb->prepare(
-			"select ID,post_author,post_title from $wpdb->posts where ID =%d",
-			array( $request['pid'] )
-		);
-		$productinfo    = $wpdb->get_row( $productinfosql );
-
-		$author_id  = $productinfo->post_author;
-		$post_title = $productinfo->post_title;
+	$post_id = ! empty( $request['pid'] ) ? (int)$request['pid'] : 0;
+	if ( ! $post_id ) {
+		return false;
 	}
 
-	$post_title = '<a href="' . get_permalink( $pid ) . '">' . $post_title . '</a>';
-
-	$user_info = get_userdata( $author_id );
-	$to_email  = geodir_get_post_meta( $pid, 'geodir_email', true );
-	$to_name   = geodir_get_client_name( $author_id );
-
-	if ( $to_email == '' ) {
-		$to_email = get_option( 'admin_email' );
+	$post = geodir_get_post_info( $post_id );
+	if ( empty( $post ) ) {
+		return false;
 	}
 
-	/**
-	 * Called after the send enquiry var have been set but before the email has been sent.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $request   {
-	 *                         The submitted form fields as an array.
-	 *
-	 * @type string $sendact   Enquiry type. Default "send_inqury".
-	 * @type string $pid       Post ID.
-	 * @type string $inq_name  Sender name.
-	 * @type string $inq_email Sender mail.
-	 * @type string $inq_phone Sender phone.
-	 * @type string $inq_msg   Email message.
-	 *
-	 * }
-	 * @param string $type     The form type, default: `Enquiry`.
-	 */
-	do_action( 'geodir_after_send_enquiry', $request, 'Enquiry' );
+	$data = $request;
+	$data['post_id'] = $post->ID;
+	$data['from_name'] = ! empty( $request['inq_name'] ) ? $request['inq_name'] : '';
+	$data['from_email'] = ! empty( $request['inq_email'] ) ? $request['inq_email'] : '';
+	$data['phone'] = ! empty( $request['inq_phone'] ) ? $request['inq_phone'] : '';
+	$data['comments'] = ! empty( $request['inq_msg'] ) ? $request['inq_msg'] : '';
 
-	$client_message = $frnd_comments;
-	$client_message .= '<br>' . __( 'From :', 'geodirectory' ) . ' ' . $yourname . '<br>' . __( 'Phone :', 'geodirectory' ) . ' ' . $inq_phone . '<br>' . __( 'Email :', 'geodirectory' ) . ' ' . $youremail . '<br><br>' . __( 'Sent from', 'geodirectory' ) . ' - <b><a href="' . trailingslashit( home_url() ) . '">' . geodir_get_blogname() . '</a></b>.';
+	$allow = apply_filters( 'geodir_allow_send_enquiry_email', true, $post, $data );
+	if ( ! $allow ) {
+		return false;
+	}
+	
 	/**
-	 * Filter client message text.
+	 * Send enquiry email.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $client_message Client message text.
-	 */
-	$client_message = apply_filters( 'geodir_inquiry_email_msg', $client_message );
-
-	/**
-	 * Called before the send enquiry email is sent.
+	 * @param object $post The post object.
+	 * @param array $data {
+	 *     The submitted form fields as an array.
 	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $request   {
-	 *                         The submitted form fields as an array.
-	 *
-	 * @type string $sendact   Enquiry type. Default "send_inqury".
-	 * @type string $pid       Post ID.
-	 * @type string $inq_name  Sender name.
-	 * @type string $inq_email Sender mail.
-	 * @type string $inq_phone Sender phone.
-	 * @type string $inq_msg   Email message.
+	 *     @type string $sendact    Enquiry type. Default "send_inqury".
+	 *     @type string $pid        Post ID.
+	 *     @type string $from_name  Sender name.
+	 *     @type string $from_email Sender mail.
+	 *     @type string $phone 	    Sender phone.
+	 *     @type string $comments   Email message.
 	 *
 	 * }
 	 */
-	do_action( 'geodir_before_send_enquiry_email', $request );
-	if ( $to_email ) {
-		// strip slashes message
-		$client_message = stripslashes_deep( $client_message );
+	do_action( 'geodir_send_enquiry_email', $post, $data );
+	
+	$redirect_to = add_query_arg( array( 'send_inquiry' => 'success' ), get_permalink( $post_id ) );
 
-		geodir_sendEmail( $youremail, $yourname, $to_email, $to_name, '', $client_message, $extra = '', 'send_enquiry', $request['pid'] );//To client email
-	}
-
-	/**
-	 * Called after the send enquiry email is sent.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $request   {
-	 *                         The submitted form fields as an array.
-	 *
-	 * @type string $sendact   Enquiry type. Default "send_inqury".
-	 * @type string $pid       Post ID.
-	 * @type string $inq_name  Sender name.
-	 * @type string $inq_email Sender mail.
-	 * @type string $inq_phone Sender phone.
-	 * @type string $inq_msg   Email message.
-	 *
-	 * }
-	 */
-	do_action( 'geodir_after_send_enquiry_email', $request );
-	$url = get_permalink( $pid );
-	if ( strstr( $url, '?' ) ) {
-		$url = $url . "&send_inquiry=success";
-	} else {
-		$url = $url . "?send_inquiry=success";
-	}
 	/**
 	 * Filter redirect url after the send enquiry email is sent.
 	 *
@@ -275,10 +209,9 @@ function geodir_send_inquiry( $request ) {
 	 *
 	 * @param string $url Redirect url.
 	 */
-	$url = apply_filters( 'geodir_send_enquiry_after_submit_redirect', $url );
-	wp_redirect( $url );
+	$redirect_to = apply_filters( 'geodir_send_enquiry_after_submit_redirect', $redirect_to );
+	wp_redirect( $redirect_to );
 	gd_die();
-
 }
 
 /**
@@ -303,81 +236,57 @@ function geodir_send_inquiry( $request ) {
  * @type string $frnd_comments Email Message.
  *
  * }
- * @global object $wpdb        WordPress Database object.
  */
 function geodir_send_friend( $request ) {
-	global $wpdb;
+	if ( ! geodir_email_is_enabled( 'send_friend' ) ) {
+		return false;
+	}
 
-	// strip slashes from text
 	$request = ! empty( $request ) ? stripslashes_deep( $request ) : $request;
 
-	$yourname      = $request['yourname'];
-	$youremail     = $request['youremail'];
-	$frnd_subject  = $request['frnd_subject'];
-	$frnd_comments = $request['frnd_comments'];
-	$pid           = $request['pid'];
-	$to_email      = $request['to_email'];
-	$to_name       = $request['to_name'];
-	if ( $request['pid'] ) {
-		$productinfosql = $wpdb->prepare(
-			"select ID,post_title from $wpdb->posts where ID =%d",
-			array( $request['pid'] )
-		);
-		$productinfo    = $wpdb->get_results( $productinfosql );
-		foreach ( $productinfo as $productinfoObj ) {
-			$post_title = $productinfoObj->post_title;
-		}
+	$post_id = ! empty( $request['pid'] ) ? (int)$request['pid'] : 0;
+	if ( ! $post_id ) {
+		return false;
+	}
+
+	$post = geodir_get_post_info( $post_id );
+	if ( empty( $post ) ) {
+		return false;
+	}
+
+	$data = $request;
+	$data['post_id'] = $post->ID;
+	$data['from_name'] = ! empty( $request['yourname'] ) ? $request['yourname'] : '';
+	$data['from_email'] = ! empty( $request['youremail'] ) ? $request['youremail'] : '';
+	$data['subject'] = ! empty( $request['frnd_subject'] ) ? $request['frnd_subject'] : '';
+	$data['comments'] = ! empty( $request['frnd_comments'] ) ? $request['frnd_comments'] : '';
+
+	$allow = apply_filters( 'geodir_allow_send_to_friend_email', true, $post, $data );
+	if ( ! $allow ) {
+		return false;
 	}
 
 	/**
-	 * Called before the send to friend email is sent.
+	 * Send to friend email.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
-	 * @param array $request       {
-	 *                             The submitted form fields as an array.
+	 * @param object $post The post object.
+	 * @param array $data {
+	 *	   The submitted form fields as an array.
 	 *
-	 * @type string $sendact       Enquiry type. Default "email_frnd".
-	 * @type string $pid           Post ID.
-	 * @type string $to_name       Friend name.
-	 * @type string $to_email      Friend email.
-	 * @type string $yourname      Sender name.
-	 * @type string $youremail     Sender email.
-	 * @type string $frnd_subject  Email subject.
-	 * @type string $frnd_comments Email Message.
-	 *
-	 * }
-	 */
-	do_action( 'geodir_before_send_to_friend_email', $request );
-	geodir_sendEmail( $youremail, $yourname, $to_email, $to_name, $frnd_subject, $frnd_comments, $extra = '', 'send_friend', $request['pid'] );//To client email
-
-	/**
-	 * Called after the send to friend email is sent.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $request       {
-	 *                             The submitted form fields as an array.
-	 *
-	 * @type string $sendact       Enquiry type. Default "email_frnd".
-	 * @type string $pid           Post ID.
-	 * @type string $to_name       Friend name.
-	 * @type string $to_email      Friend email.
-	 * @type string $yourname      Sender name.
-	 * @type string $youremail     Sender email.
-	 * @type string $frnd_subject  Email subject.
-	 * @type string $frnd_comments Email Message.
+	 * 	   @type string $friend_name   Friend name.
+	 * 	   @type string $user_email    Friend email.
+	 * 	   @type string $user_name     Sender name.
+	 * 	   @type string $user_email    Sender email.
+	 * 	   @type string $subject       Email subject.
+	 *     @type string $comments      Email Message.
 	 *
 	 * }
 	 */
-	do_action( 'geodir_after_send_to_friend_email', $request );
+	do_action( 'geodir_send_to_friend_email', $post, $data );
 
-	$url = get_permalink( $pid );
-	if ( strstr( $url, '?' ) ) {
-		$url = $url . "&sendtofrnd=success";
-	} else {
-		$url = $url . "?sendtofrnd=success";
-	}
+	$redirect_to = add_query_arg( array( 'sendtofrnd' => 'success' ), get_permalink( $post_id ) );
 	/**
 	 * Filter redirect url after the send to friend email is sent.
 	 *
@@ -385,8 +294,8 @@ function geodir_send_friend( $request ) {
 	 *
 	 * @param string $url Redirect url.
 	 */
-	$url = apply_filters( 'geodir_send_to_friend_after_submit_redirect', $url );
-	wp_redirect( $url );
+	$redirect_to = apply_filters( 'geodir_send_to_friend_after_submit_redirect', $redirect_to );
+	wp_redirect( $redirect_to );
 	gd_die();
 }
 

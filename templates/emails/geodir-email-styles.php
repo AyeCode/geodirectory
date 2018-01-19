@@ -36,10 +36,10 @@ $text_lighter_20 = geodir_hex_lighter( $text, 20 );
     width: 100%;
 }
 #template_container {
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1) !important;
     background-color: <?php echo esc_attr( $body ); ?>;
     border: 1px solid <?php echo esc_attr( $bg_darker_10 ); ?>;
     border-radius: 3px !important;
+	box-shadow: 0 1px 4px rgba(0,0,0,0.1) !important;
 }
 #template_header {
     background-color: <?php echo esc_attr( $base ); ?>;

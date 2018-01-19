@@ -43,13 +43,14 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 		public function get_sections() {
 
 			$sections = array(
-				''          	=> __( 'Design options', 'woocommerce' ),
-				'admin_emails'       => __( 'Archives', 'woocommerce' ),
-				'client_emails' 	=> __( 'Details', 'woocommerce' ),
-				'other_emails' 	=> __( 'Reviews', 'woocommerce' ),
+				''          		=> __( 'Design options', 'geodirectory' ),
+				'admin_emails'  	=> __( 'Archives', 'geodirectory' ),
+				'client_emails' 	=> __( 'Details', 'geodirectory' ),
+				'other_emails' 		=> __( 'Reviews', 'geodirectory' ),
+				'email_template' 	=> __( 'Email Template', 'geodirectory' ),
 			);
 
-			return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
+			return apply_filters( 'geodir_get_sections_' . $this->id, $sections );
 		}
 
 		/**
@@ -84,17 +85,17 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 				$settings = apply_filters( 'woocommerce_other_email_settings', array(
 
 
-					array('name' => __('Send to friend', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_other_friend_settings'),
+					array('name' => __('Send to friend', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_send_friend_settings'),
 
 
 
-					array('type' => 'sectionend', 'id' => 'user_other_friend_settings'),
+					array('type' => 'sectionend', 'id' => 'user_send_friend_settings'),
 
-					array('name' => __('Send enquiry', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_other_enquiry_settings'),
+					array('name' => __('Send enquiry', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_send_enquiry_settings'),
 
 
 
-					array('type' => 'sectionend', 'id' => 'user_other_enquiry_settings'),
+					array('type' => 'sectionend', 'id' => 'user_send_enquiry_settings'),
 
 				));
 			}
@@ -156,6 +157,78 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 					array('type' => 'sectionend', 'id' => 'admin_email_comment_settings'),
 
 				));
+			} elseif ($current_section == 'email_template') {
+				$settings = apply_filters( 'geodir_email_template_settings', array(
+					array('name' => __('Email Template', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'email_template_settings'),
+					
+					/*array(
+						'type' => 'select',
+						'id' => 'email_type',
+						'name' => __('Email type', 'geodirectory'),
+						'desc' => __('Select format of the email to send.', 'geodirectory'),
+						'class' => 'geodir-select',
+						'options' => $this->get_email_type_options(),
+						'default' => 'html',
+						'desc_tip' => true,
+						'advanced' => true,
+					),*/
+					array(
+						'name' => __('Header Image', 'geodirectory'),
+						'desc' => __('URL to an image you want to show in the email header. Upload images using the media uploader (Admin > Media). Displayed on HTML emails only.', 'geodirectory'),
+						'id' => 'email_header_image',
+						'class' => 'large-text',
+						'type' => 'text',
+						'desc_tip' => true,
+					),
+					array(
+						'name' => __('Footer Text', 'geodirectory'),
+						'desc' => __('The text to appear in the footer of all GeoDirectory emails.', 'geodirectory'),
+						'id' => 'email_footer_text',
+						'type' => 'textarea',
+						'class' => 'code',
+						'desc_tip' => true,
+						'placeholder' => $this->email_footer_text()
+					),
+					'email_base_color' => array(
+                        'id'   => 'email_base_color',
+                        'name' => __( 'Base Color', 'geodirectory' ),
+                        'desc' => __( 'The base color for invoice email template. Default <code>#557da2</code>.', 'geodirectory' ),
+                        'default' => '#557da2',
+                        'type' => 'color',
+						'desc_tip' => true,
+						'advanced' => true,
+                    ),
+                    'email_background_color' => array(
+                        'id'   => 'email_background_color',
+                        'name' => __( 'Background Color', 'geodirectory' ),
+                        'desc' => __( 'The background color of email template. Default <code>#f5f5f5</code>.', 'geodirectory' ),
+                        'default' => '#f5f5f5',
+                        'type' => 'color',
+						'desc_tip' => true,
+						'advanced' => true,
+                    ),
+                    'email_body_background_color' => array(
+                        'id'   => 'email_body_background_color',
+                        'name' => __( 'Body Background Color', 'geodirectory' ),
+                        'desc' => __( 'The main body background color of email template. Default <code>#fdfdfd</code>.', 'geodirectory' ),
+                        'default' => '#fdfdfd',
+                        'type' => 'color',
+						'desc_tip' => true,
+						'advanced' => true,
+                    ),
+                    'email_text_color' => array(
+                        'id'   => 'email_text_color',
+                        'name' => __( 'Body Text Color', 'geodirectory' ),
+                        'desc' => __( 'The main body text color. Default <code>#505050</code>.', 'geodirectory' ),
+                        'default' => '#505050',
+                        'type' => 'color',
+						'desc_tip' => true,
+						'advanced' => true,
+                    ),
+
+					array('type' => 'sectionend', 'id' => 'email_template_settings'),
+
+				));
 			}else{
 				$settings = apply_filters( 'woocommerce_design_settings', array(
 
@@ -195,6 +268,35 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 		 */
 		public function email_name(){
 			return get_bloginfo('name');
+		}
+		
+		/**
+		 * The default email footer text.
+		 *
+		 * @since 2.0.0
+		 * @return string
+		 */
+		public function email_footer_text(){
+			return apply_filters('geodir_email_footer_text', 
+				get_bloginfo( 'name', 'display' ) . ' - ' . __( 'Powered by GeoDirectory', 'geodirectory' ) 
+			);
+		}
+		
+		/**
+		 * Email type options.
+		 *
+		 * @since 2.0.0
+		 * @return array
+		 */
+		public function get_email_type_options() {
+			$types = array();
+			if ( class_exists( 'DOMDocument' ) ) {
+				$types['html']      = __( 'HTML', 'geodirectory' );
+				$types['multipart'] = __( 'Multipart', 'geodirectory' );
+			}
+			$types['plain'] = __( 'Plain text', 'geodirectory' );
+
+			return $types;
 		}
 
 	}

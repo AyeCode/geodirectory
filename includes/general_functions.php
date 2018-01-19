@@ -3395,7 +3395,7 @@ function geodir_count_reviews_by_term_id( $term_id, $taxonomy, $post_type ) {
 
 	$detail_table = $plugin_prefix . $post_type . '_detail';
 
-	$sql = "SELECT COALESCE(SUM(rating_count),0) FROM " . $detail_table . " WHERE post_status = 'publish' AND rating_count > 0 AND FIND_IN_SET(" . $term_id . ", " . $taxonomy . ")";
+	$sql = "SELECT COALESCE(SUM(rating_count),0) FROM " . $detail_table . " WHERE post_status = 'publish' AND rating_count > 0 AND FIND_IN_SET(" . $term_id . ", " . $detail_table . ".post_categories)";
 
 	/**
 	 * Filter count review sql query.

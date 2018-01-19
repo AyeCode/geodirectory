@@ -824,7 +824,7 @@ class GeoDir_Post_Data {
 		}
 
 		// logged out user check
-		if($post->post_author==0 && !get_current_user_id()){
+		if(empty($post->post_author) && !get_current_user_id()){
 			$query_args['preview'] = true;
 		}
 

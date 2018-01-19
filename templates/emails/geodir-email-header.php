@@ -3,10 +3,12 @@
 if ( !defined('ABSPATH') )
     die('-1');
 
-if ( !isset( $gd_mail_vars ) ) {
-    global $gd_mail_vars;
+if ( !isset( $email_vars ) ) {
+    global $email_vars;
 }
-$email_heading = !empty( $gd_mail_vars['email_heading'] ) ? $gd_mail_vars['email_heading'] : '';
+if ( !isset( $email_heading ) ) {
+    global $email_heading;
+}
 ?>
 <!DOCTYPE html>
 <html dir="<?php echo is_rtl() ? 'rtl' : 'ltr'?>">

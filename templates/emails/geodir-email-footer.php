@@ -3,8 +3,8 @@
 if ( !defined('ABSPATH') )
     die('-1');
 
-if ( !isset( $gd_mail_vars ) ) {
-    global $gd_mail_vars;
+if ( !isset( $email_vars ) ) {
+    global $email_vars;
 }
 $email_footer = apply_filters( 'geodir_email_footer_text', geodir_get_option( 'email_footer_text' ) );
 $email_footer = $email_footer ? wpautop( wp_kses_post( wptexturize( $email_footer ) ) ) : '';

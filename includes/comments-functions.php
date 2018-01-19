@@ -1126,7 +1126,12 @@ function geodir_comment_moderation_subject( $subject, $comment_id ) {
     $comment = get_comment( $comment_id );
 
     if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
-        $subject = geodir_email_get_subject( 'geodir_notify_comment_moderation' );
+        $email_vars = array( 
+            'email_type' => 'admin_moderate_comment',
+            'comment' => $comment
+        );
+		
+		$subject = geodir_email_get_subject( 'admin_moderate_comment', $email_vars );
     }
     
     return $subject;
@@ -1173,13 +1178,13 @@ function geodir_comment_moderation_text( $message, $comment_id ) {
         $geodir_email_replace['comment_spam_link'] = admin_url( "comment.php?action=spam&c={$comment_id}#wpbody-content" );
         $geodir_email_replace['comment_moderation_link'] = admin_url( "edit-comments.php?comment_status=moderated#wpbody-content" );
 
-        $gd_mail_vars = array( 
-            'email_type' => 'geodir_notify_comment_moderation',
+        $email_vars = array( 
+            'email_type' => 'admin_moderate_comment',
             'comment' => $comment
         );
 
-        $message = geodir_email_get_content( 'geodir_notify_comment_moderation' );
-        $message = geodir_email_wrap_message( $message, $gd_mail_vars );
+        $message = geodir_email_get_content( 'admin_moderate_comment', $email_vars );
+        $message = geodir_email_wrap_message( $message, 'admin_moderate_comment', $email_vars, '', true );
     }
     
     return $message;
@@ -1190,7 +1195,12 @@ function geodir_comment_moderation_headers( $headers, $comment_id ) {
     $comment = get_comment( $comment_id );
 
     if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
-        $headers =  geodir_email_get_headers();
+        $email_vars = array( 
+            'email_type' => 'admin_moderate_comment',
+            'comment' => $comment
+        );
+		
+		$headers =  geodir_email_get_headers( 'admin_moderate_comment', $email_vars );
     }
     
     return $headers;
@@ -1266,13 +1276,13 @@ function geodir_comment_notification_text( $message, $comment_id ) {
         $geodir_email_replace['comment_moderation_link'] = admin_url( "edit-comments.php?comment_status=moderated#wpbody-content" );
         $geodir_email_replace['client_name'] = geodir_get_client_name( $post_author_ID );
 
-        $gd_mail_vars = array( 
+        $email_vars = array( 
             'email_type' => 'geodir_listing_owner_comment_email',
             'comment' => $comment
         );
 
         $message = geodir_email_get_content( 'geodir_listing_owner_comment_email' );
-        $message = geodir_email_wrap_message( $message, $gd_mail_vars );
+        $message = geodir_email_wrap_message( $message, $email_vars );
     }
     
     return $message;
@@ -1389,15 +1399,15 @@ function geodir_notify_on_comment_approved( $comment ) {
         $emails = apply_filters( 'geodir_notify_comment_author_recipients', $emails, $comment );
 
         if ( ! empty( $emails ) ) {
-            $gd_mail_vars = array( 
+            $email_vars = array( 
                 'email_type' => 'geodir_comment_author_approved_email',
                 'comment' => $comment
             );
 
             $headers = apply_filters( 'geodir_notify_comment_author_headers', $email_headers, $comment );
-            $subject = geodir_email_get_subject( 'geodir_comment_author_approved_email', $gd_mail_vars );
-            $message = geodir_email_get_content( 'geodir_comment_author_approved_email', $gd_mail_vars );
-            $message = geodir_email_wrap_message( $message, $gd_mail_vars );
+            $subject = geodir_email_get_subject( 'geodir_comment_author_approved_email', $email_vars );
+            $message = geodir_email_get_content( 'geodir_comment_author_approved_email', $email_vars );
+            $message = geodir_email_wrap_message( $message, $email_vars );
 
             update_comment_meta( $comment->comment_ID, 'gd_comment_author_notified', current_time( 'timestamp', 1 ) );
 
@@ -1417,15 +1427,15 @@ function geodir_notify_on_comment_approved( $comment ) {
         $emails = apply_filters( 'geodir_notify_listing_author_recipients', $emails, $comment );
 
         if ( ! empty( $emails ) ) {
-            $gd_mail_vars = array( 
+            $email_vars = array( 
                 'email_type' => 'geodir_listing_owner_approved_email',
                 'comment' => $comment
             );
 
             $headers = apply_filters( 'geodir_notify_listing_author_headers', $email_headers, $comment );
-            $subject = geodir_email_get_subject( 'geodir_listing_owner_approved_email', $gd_mail_vars );
-            $message = geodir_email_get_content( 'geodir_listing_owner_approved_email', $gd_mail_vars );
-            $message = geodir_email_wrap_message( $message, $gd_mail_vars );
+            $subject = geodir_email_get_subject( 'geodir_listing_owner_approved_email', $email_vars );
+            $message = geodir_email_get_content( 'geodir_listing_owner_approved_email', $email_vars );
+            $message = geodir_email_wrap_message( $message, $email_vars );
 
             update_comment_meta( $comment->comment_ID, 'gd_listing_author_notified', current_time( 'timestamp', 1 ) );
 
