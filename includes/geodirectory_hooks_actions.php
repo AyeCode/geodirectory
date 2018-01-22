@@ -1258,7 +1258,7 @@ function geodir_localize_all_js_msg()
         'i18n_selection_too_long_1' => _x( 'You can only select 1 item', 'geodir select', 'geodirectory' ),
         'i18n_selection_too_long_n' => _x( 'You can only select %item% items', 'geodir select', 'geodirectory' ),
         'i18n_load_more' => _x( 'Loading more results&hellip;', 'geodir select', 'geodirectory' ),
-        'i18n_searching' => _x( 'Searching&hellip;', 'geodir select', 'geodirectory' ),
+        'i18n_searching' => _x( 'Searching&hellip;', 'geodir select', 'geodirectory' )		
     );
 
     /**
@@ -2578,7 +2578,6 @@ add_filter('gd_rating_form_html', 'geodir_font_awesome_rating_form_html', 10, 2)
 add_filter('geodir_get_rating_stars_html', 'geodir_font_awesome_rating_stars_html', 10, 3);
 add_action('wp_head', 'geodir_font_awesome_rating_css');
 add_action('admin_head', 'geodir_font_awesome_rating_css');
-add_action('wp_insert_post', 'geodir_on_wp_insert_post', 10, 3);
 
 add_filter('get_comments_link', 'gd_get_comments_link', 10, 2);
 function gd_get_comments_link($comments_link, $post_id) {

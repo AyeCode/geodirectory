@@ -65,6 +65,7 @@ class GeoDir_Admin_Assets {
 			wp_enqueue_style( 'select2' );
 			wp_enqueue_style( 'geodir-jquery-ui-timepicker-css' );
 			wp_enqueue_style( 'geodir-jquery-ui-css' );
+			wp_enqueue_style( 'wp-color-picker' );
 			wp_enqueue_style( 'font-awesome' );
 			wp_enqueue_style( 'geodir-pluplodar-css');
 			wp_enqueue_style( 'geodir-rtl-style');
@@ -133,7 +134,8 @@ class GeoDir_Admin_Assets {
 
 		// Admin scripts for GD pages only
 		if ( in_array( $screen_id, gd_get_screen_ids() ) ) {
-
+			wp_enqueue_script( 'wp-color-picker' );
+			
 			// should prob only be loaded on details page
 			wp_enqueue_script('geodir-plupload');
 

@@ -308,25 +308,22 @@ class GeoDir_Admin_Settings {
 				case 'color' :
 					$option_value = self::get_option( $value['id'], $value['default'] );
 
-					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
+					?><tr valign="top" class="gd-row-color-picker <?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
 						<th scope="row" class="titledesc">
 							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
 							<?php echo $tooltip_html; ?>
 						</th>
-						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">&lrm;
-							<span class="colorpickpreview" style="background: <?php echo esc_attr( $option_value ); ?>"></span>
-							<input
-								name="<?php echo esc_attr( $value['id'] ); ?>"
-								id="<?php echo esc_attr( $value['id'] ); ?>"
-								type="text"
-								dir="ltr"
-								style="<?php echo esc_attr( $value['css'] ); ?>"
-								value="<?php echo esc_attr( $option_value ); ?>"
-								class="<?php echo esc_attr( $value['class'] ); ?>colorpick"
-								placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-								<?php echo implode( ' ', $custom_attributes ); ?>
-								/>&lrm; <?php echo $description; ?>
-								<div id="colorPickerDiv_<?php echo esc_attr( $value['id'] ); ?>" class="colorpickdiv" style="z-index: 100;background:#eee;border:1px solid #ccc;position:absolute;display:none;"></div>
+						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
+							<input 
+									name="<?php echo esc_attr( $value['id'] ); ?>" 
+									id="<?php echo sanitize_key( $value['id'] ); ?>" 
+									type="text" 
+									dir="ltr"
+									value="<?php echo esc_attr( $option_value ); ?>" 
+									class="gd-color-picker" 
+									placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>" 
+									data-default-color="<?php echo esc_attr( $value['default'] ); ?> 
+									<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?> "/>&lrm; <?php echo $description; ?>
 						</td>
 					</tr><?php
 					break;
@@ -389,6 +386,39 @@ class GeoDir_Admin_Settings {
 								placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
 								<?php echo implode( ' ', $custom_attributes ); ?>
 								><?php echo esc_textarea( $option_value );  ?></textarea>
+						</td>
+					</tr><?php
+					break;
+				// Editor
+				case 'editor':
+					global $wp_version;
+					$option_value = self::get_option( $value['id'] );
+					if ( empty( $option_value ) && empty( $value['allow_blank'] ) ) {
+						$option_value = isset( $value['default'] ) ? $value['default'] : '';
+					}
+
+					$rows = !empty( $value['size'] ) ? absint($value['size']) : 20;
+					?><tr valign="top" class="<?php echo (!empty($value['advanced']) ? 'gd-advanced-setting' : ''); ?>">
+						<th scope="row" class="titledesc">
+							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
+							<?php echo $tooltip_html; ?>
+						</th>
+						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
+							<?php echo $description; ?>
+							<?php
+							if ( $wp_version >= 3.3 && function_exists( 'wp_editor' ) ) {
+								wp_editor( stripslashes( $option_value ), $value['id'], array( 'textarea_name' => esc_attr( $value['id'] ), 'textarea_rows' => $rows, 'media_buttons' => false, 'editor_class' => 'gd-wp-editor', 'editor_height' => 16 * $rows ) );
+							} else { ?>
+								<textarea
+									name="<?php echo esc_attr( $value['id'] ); ?>"
+									id="<?php echo esc_attr( $value['id'] ); ?>"
+									style="<?php echo esc_attr( $value['css'] ); ?>"
+									class="large-text <?php echo esc_attr( $value['class'] ); ?>"
+									placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>" 
+									rows="<?php echo $rows; ?>"
+									<?php echo implode( ' ', $custom_attributes ); ?>
+									><?php echo esc_textarea( stripslashes( $option_value ) );  ?></textarea>
+							<?php } ?>
 						</td>
 					</tr><?php
 					break;
@@ -867,6 +897,7 @@ class GeoDir_Admin_Settings {
 					$value = '1' === $raw_value || 'yes' === $raw_value ? 'yes' : 'no';
 					break;
 				case 'textarea' :
+				case 'editor' :
 					$value = wp_kses_post( trim( $raw_value ) );
 					break;
 				case 'multiselect' :

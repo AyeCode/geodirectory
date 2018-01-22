@@ -14,13 +14,18 @@
  * @return string|mixed|void The email ID.
  */
 function geodir_get_mail_from() {
-    $mail_from = geodir_get_option( 'site_email' );
+    $mail_from = geodir_get_option( 'email_address' );
     
     if ( !$mail_from ) {
-        $mail_from = get_option( 'admin_email' );
+        $mail_from = geodir_get_admin_email();
     }
     
     return apply_filters( 'geodir_get_mail_from', $mail_from );
+}
+
+function geodir_get_admin_email() {
+    $admin_email = get_option( 'admin_email' );
+    return apply_filters( 'geodir_admin_email', $admin_email );
 }
 
 /**
@@ -31,7 +36,7 @@ function geodir_get_mail_from() {
  * @return string Site name.
  */
 function geodir_get_mail_from_name() {
-    $mail_from_name = geodir_get_option( 'site_email_name' );
+    $mail_from_name = geodir_get_option( 'email_name' );
     
     if ( !$mail_from_name ) {
         $mail_from_name = geodir_get_blogname();
@@ -58,13 +63,36 @@ function geodir_mail_get_content_type(  $content_type = 'text/html', $email_type
     return $content_type;
 }
 
-function geodir_mail( $to, $subject, $message, $headers, $attachments = array() ) {
+function geodir_mail_admin_bcc_active( $email_type = '' ) {
+    switch ( $email_type ) {
+		// TODO add some cases
+		default:
+			$active = geodir_get_option( 'email_bcc_' . $email_type );
+		break;
+	}
+
+    return apply_filters( 'geodir_mail_admin_bcc_active', $active, $email_type );
+}
+
+function geodir_email_is_enabled( $email_type ) {
+    switch ( $email_type ) {
+		// TODO add some cases
+		default:
+			$active = geodir_get_option( 'email_' . $email_type );
+			$active = $active == 'yes' || $active == '1' ? true : false;
+		break;
+	}
+
+    return apply_filters( 'geodir_email_is_enabled', $active, $email_type );
+}
+
+function geodir_mail( $to, $subject, $message, $headers, $attachments = array(), $email_type = '', $email_vars = array() ) {
     add_filter( 'wp_mail_from', 'geodir_get_mail_from' );
     add_filter( 'wp_mail_from_name', 'geodir_get_mail_from_name' );
     add_filter( 'wp_mail_content_type', 'geodir_mail_get_content_type' );
 
-    $message = geodir_email_style_body( $message );
-    $message = apply_filters( 'geodir_mail_content', $message );
+    $message = geodir_email_style_body( $message, $email_type, $email_vars );
+    $message = apply_filters( 'geodir_mail_content', $message, $email_type, $email_vars );
     
     $sent = wp_mail( $to, $subject, $message, $headers, $attachments );
     
@@ -80,7 +108,7 @@ function geodir_mail( $to, $subject, $message, $headers, $attachments = array() 
     return $sent;
 }
 
-function geodir_email_style_body( $content, $gd_mail_vars = array() ) {
+function geodir_email_style_body( $content, $email_type = '', $email_vars = array() ) {
     // make sure we only inline CSS for html emails
     if ( in_array( geodir_mail_get_content_type(), array( 'text/html', 'multipart/alternative' ) ) && class_exists( 'DOMDocument' ) ) {
         // include css inliner
@@ -89,7 +117,7 @@ function geodir_email_style_body( $content, $gd_mail_vars = array() ) {
         }
         
         ob_start();
-        geodir_get_template( 'emails/geodir-email-styles.php', array( 'gd_mail_vars' => $gd_mail_vars ) );
+        geodir_get_template( 'emails/geodir-email-styles.php', array( 'email_type' => $email_type, 'email_vars' => $email_vars ) );
         $css = apply_filters( 'geodir_email_styles', ob_get_clean() );
         
         // apply CSS styles inline for picky email clients
@@ -103,25 +131,25 @@ function geodir_email_style_body( $content, $gd_mail_vars = array() ) {
     return $content;
 }
 
-function geodir_email_header( $gd_mail_vars = array() ) {
-    geodir_get_template( 'emails/geodir-email-header.php', array( 'gd_mail_vars' => $gd_mail_vars ) );
+function geodir_email_header( $email_heading = '', $email_type = '', $email_vars = array(), $sent_to_admin = false ) {
+    geodir_get_template( 'emails/geodir-email-header.php', array( 'email_heading' => $email_heading, 'email_type' => $email_type, 'email_vars' => $email_vars, 'sent_to_admin' => $sent_to_admin ) );
 }
-add_action( 'geodir_email_header', 'geodir_email_header' );
+add_action( 'geodir_email_header', 'geodir_email_header', 10, 4 );
 
-function geodir_email_footer( $gd_mail_vars = array() ) {
-    geodir_get_template( 'emails/geodir-email-footer.php', array( 'gd_mail_vars' => $gd_mail_vars ) );
+function geodir_email_footer( $email_type = '', $email_vars = array(), $sent_to_admin = false ) {
+    geodir_get_template( 'emails/geodir-email-footer.php', array( 'email_type' => $email_type, 'email_vars' => $email_vars, 'sent_to_admin' => $sent_to_admin ) );
 }
-add_action( 'geodir_email_footer', 'geodir_email_footer' );
+add_action( 'geodir_email_footer', 'geodir_email_footer', 10, 3 );
 
-function geodir_email_wrap_message( $message, $gd_mail_vars = array() ) {
-    // Buffer
+function geodir_email_wrap_message( $message, $email_type = '', $email_vars = array(), $email_heading = '', $sent_to_admin = false ) {
+	// Buffer
     ob_start();
 
-    do_action( 'geodir_email_header', $gd_mail_vars );
+    do_action( 'geodir_email_header', $email_heading, $email_type, $email_vars, $sent_to_admin );
 
     echo wpautop( wptexturize( $message ) );
 
-    do_action( 'geodir_email_footer', $gd_mail_vars );
+    do_action( 'geodir_email_footer', $email_type, $email_vars, $sent_to_admin );
 
     // Get contents
     $message = ob_get_clean();
@@ -129,7 +157,7 @@ function geodir_email_wrap_message( $message, $gd_mail_vars = array() ) {
     return $message;
 }
 
-function geodir_email_get_headers( $from_email = '', $from_name = '' ) {
+function geodir_email_get_headers( $email_type, $email_vars = array(), $from_email = '', $from_name = '' ) {
     $from_email = !empty( $from_email ) ? $from_email : geodir_get_mail_from();
     $from_name = !empty( $from_name ) ? $from_name : geodir_get_mail_from_name();
     
@@ -137,69 +165,577 @@ function geodir_email_get_headers( $from_email = '', $from_name = '' ) {
     $headers    .= "Reply-To: ". $from_email . "\r\n";
     $headers    .= "Content-Type: " . geodir_mail_get_content_type() . "\r\n";
     
-    return apply_filters( 'geodir_email_get_headers', $headers, $from_email, $from_name );
+    return apply_filters( 'geodir_email_headers', $headers, $email_type, $email_type, $email_vars, $from_email, $from_name );
 }
 
-function geodir_email_get_subject( $email_type = '', $gd_mail_vars = array() ) {
-    $subject    = geodir_get_option( $email_type . '_subject' );
-    
-    $subject    = geodir_email_format_text( $subject );
-    
-    return apply_filters( 'geodir_email_get_subject', $subject, $email_type, $gd_mail_vars );
+function geodir_email_get_subject( $email_type = '', $email_vars = array() ) {
+    switch ( $email_type ) {
+		// TODO some custom options
+		default:
+			$subject	= geodir_get_option( 'email_' . $email_type . '_subject' );
+		break;
+	}
+
+    $subject = geodir_email_format_text( __( $subject, 'geodirectory' ), $email_type, $email_vars );
+
+    return apply_filters( 'geodir_email_subject', $subject, $email_type, $email_vars );
 }
 
-function geodir_email_get_content( $email_type = '', $gd_mail_vars = array() ) {
-    $content    = geodir_get_option( $email_type . '_content' );
-    
-    $content    = geodir_email_format_text( $content );
-    
-    return apply_filters( 'geodir_email_get_content', $content, $email_type, $gd_mail_vars );
+function geodir_email_get_heading( $email_type = '', $email_vars = array() ) {
+	switch ( $email_type ) {
+		// TODO some custom options
+		default:
+			$email_heading	= geodir_get_option( 'email_' . $email_type . '_heading' );
+		break;
+	}
+
+    $email_heading = geodir_email_format_text( __( $email_heading, 'geodirectory' ), $email_type, $email_vars );
+
+    return apply_filters( 'geodir_email_heading', $email_heading, $email_type, $email_vars );
 }
 
-function geodir_email_format_text( $content ) {
-    global $geodir_email_search, $geodir_email_replace;
-    
-    if ( empty( $geodir_email_search ) ) {
-        $geodir_email_search = array();
-    }
-    
-    if ( empty( $geodir_email_replace ) ) {
-        $geodir_email_replace = array();
-    }
-    
-    $geodir_email_search     = (array)apply_filters( 'geodir_email_format_text_search', $geodir_email_search );
-    $geodir_email_replace    = (array)apply_filters( 'geodir_email_format_text_replace', $geodir_email_replace );
-    
-    $global_vars    = geodir_email_global_vars();
-    
-    $search         = array_merge( $global_vars[0], $geodir_email_search );
-    $replace        = array_merge( $global_vars[1], $geodir_email_replace );
-    
-    if ( empty( $search ) || empty( $replace ) || !is_array( $search ) || !is_array( $replace ) ) {
-        return  $content;
-    }
-        
-    return str_replace( $search, $replace, $content );
+function geodir_email_get_content( $email_type = '', $email_vars = array() ) {
+    switch ( $email_type ) {
+		// TODO some custom options
+		default:
+			$content	= geodir_get_option( 'email_' . $email_type . '_body' );
+		break;
+	}
+
+    $content = geodir_email_format_text( __( $content, 'geodirectory' ), $email_type, $email_vars );
+
+    return apply_filters( 'geodir_email_content', $content, $email_type, $email_vars );
 }
 
-function geodir_email_global_vars() {
-    $blogname           = geodir_get_blogname();
+function geodir_email_get_attachments( $email_type = '', $email_vars = array() ) {
+    $attachments = array();
+    
+    return apply_filters( 'geodir_email_attachments', $attachments, $email_type, $email_vars );
+}
+
+function geodir_email_format_text( $content, $email_type = '', $email_vars = array() ) {
+    $site_url       	= home_url();
+	$blogname           = geodir_get_blogname();
     $email_from_anme    = geodir_get_mail_from_name();
-    
-    $search                 = array();
-    $replace                = array();
-    
-    $search['blogname']      = '[#blogname#]';
-    $search['site_name']     = '[#site_name#]';
-    
-    $replace['blogname']     = $blogname;
-    $replace['site_name']    = $email_from_anme;
-    
-    return apply_filters( 'geodir_email_global_vars', array( $search, $replace ) );
+	$login_url			= geodir_login_url();
+	$timestamp			= current_time( 'timestamp' );
+	$date				= date_i18n( get_option( 'date_format' ), $timestamp );
+	$time				= date_i18n( get_option( 'time_format' ), $timestamp );
+	$date_time			= $date . ' ' . $time;
+	
+	$replace_array = array(
+        '[#blogname#]'      => $blogname,
+		'[#site_url#]' 		=> $site_url,
+		'[#site_name_url#]' => '<a href="' . esc_url( $site_url ) . '">' . $site_url . '</a>',
+		'[#site_link#]' 	=> '<a href="' . esc_url( $site_url ) . '">' . $blogname . '</a>',
+		'[#site_name#]'     => $email_from_anme,
+		'[#login_url#]'  	=> $login_url,
+		'[#login_link#]'  	=> '<a href="' . esc_url( $login_url ) . '">' . __( 'Login', 'geodirectory' ) . '</a>',
+        '[#current_date#]'  => date_i18n( 'Y-m-d H:i:s', $timestamp ),
+		'[#date#]'  		=> $date,
+		'[#time#]'  		=> $time,
+		'[#date_time#]'  	=> $date_time,
+    );
+	
+	$post = ! empty( $email_vars['post'] ) ? $email_vars['post'] : NULL;
+	if ( empty( $post ) && ! empty( $email_vars['post_id'] ) ) {
+		$post = geodir_get_post_info( $email_vars['post_id'] );
+	}
+
+	if ( ! empty( $post ) ) {
+		$post_id = $post->ID;
+		$post_author_name = geodir_get_client_name( $post->post_author );
+
+		$replace_array['[#post_id#]'] = $post_id;
+		$replace_array['[#post_author_ID#]'] = $post->post_author;
+		$replace_array['[#post_author_name#]'] = $post_author_name;
+		$replace_array['[#client_name#]'] = $post_author_name;
+		$replace_array['[#listing_title#]'] = get_the_title( $post_id );
+		$replace_array['[#listing_url#]'] = get_permalink( $post_id );
+		$replace_array['[#listing_link#]'] = '<a href="' . esc_url( $replace_array['[#listing_url#]'] ) . '">' . $replace_array['[#listing_title#]'] . '</a>';
+	}
+	
+	$comment = ! empty( $email_vars['comment'] ) ? $email_vars['comment'] : NULL;
+	if ( empty( $comment ) && ! empty( $email_vars['comment_ID'] ) ) {
+		$comment = get_comment( $email_vars['comment_ID'] );
+	}
+	if ( ! empty( $comment ) ) {
+		$comment_ID = $comment->comment_ID;
+
+		$replace_array['[#comment_ID#]'] = $comment_ID;
+        $replace_array['[#comment_author#]'] = $comment->comment_author;
+        $replace_array['[#comment_author_IP#]'] = $comment->comment_author_IP;
+        $replace_array['[#comment_author_email#]'] = $comment->comment_author_email;
+        $replace_array['[#comment_content#]'] = wp_specialchars_decode( $comment->comment_content );
+        $replace_array['[#comment_approve_link#]'] = admin_url( "comment.php?action=approve&c={$comment_ID}#wpbody-content" );
+        $replace_array['[#comment_trash_link#]'] = admin_url( "comment.php?action=trash&c={$comment_ID}#wpbody-content" );
+        $replace_array['[#comment_spam_link#]'] = admin_url( "comment.php?action=spam&c={$comment_ID}#wpbody-content" );
+        $replace_array['[#comment_moderation_link#]'] = admin_url( "edit-comments.php?comment_status=moderated#wpbody-content" );
+	}
+	
+	foreach ( $email_vars as $key => $value ) {
+		if ( is_scalar( $value ) ) {
+			$replace_array['[#' . $key . '#]'] = $value;
+		}
+	}
+
+    $replace_array = apply_filters( 'geodir_email_wild_cards', $replace_array, $content, $email_type, $email_vars );
+
+    foreach ( $replace_array as $key => $value ) {
+        $content = str_replace( $key, $value, $content );
+    }
+
+    return apply_filters( 'geodir_email_content_replace_vars', $content, $email_type, $email_vars );
 }
 
-function geodir_email_footer_text( $footer_text = '' ) {
-    $footer_text = wp_sprintf( __( '<a href="%s">%s</a> - Powered by GeoDirectory', 'geodirectory' ), geodir_get_blogurl(), geodir_get_blogname() );
-    return $footer_text;
+function geodir_send_to_friend_email( $post, $data ) {
+    $email_type = 'send_friend';
+
+    if ( ! geodir_email_is_enabled( $email_type ) ) {
+        return false;
+    }
+	
+	$defaults = array(
+		'from_name' => '',
+		'from_email' => '',
+		'to_name' => '',
+		'to_email' => '',
+		'subject' => '',
+		'comments' => ''
+	);
+	$email_vars = wp_parse_args( $data, $defaults );
+	$email_vars['post'] = $post;
+
+	if ( empty( $post ) || ! is_email( $email_vars['to_email'] ) ) {
+        return;
+    }
+
+	$recipient = $email_vars['to_email'];
+	
+	do_action( 'geodir_pre_send_to_friend_email', $email_type, $email_vars );
+
+    $subject        = geodir_email_get_subject( $email_type, $email_vars );
+    $email_heading  = geodir_email_get_heading( $email_type, $email_vars );
+    $message_body   = geodir_email_get_content( $email_type, $email_vars );
+	$headers        = geodir_email_get_headers( $email_type, $email_vars, $email_vars['from_email'], $email_vars['from_name'] );
+    $attachments    = geodir_email_get_attachments( $email_type, $email_vars );
+
+    $content        = geodir_get_template_html( 'emails/geodir-email-' . $email_type . '.php', array(
+			'email_type'    => $email_type,
+			'email_vars'  	=> $email_vars,
+            'email_heading' => $email_heading,
+            'sent_to_admin' => false,
+            'plain_text'    => false,
+            'message_body'  => $message_body,
+        ) );
+
+    $sent = geodir_mail( $recipient, $subject, $content, $headers, $attachments );
+
+	if ( geodir_mail_admin_bcc_active( $email_type ) ) {
+        $recipient  = geodir_get_admin_email();
+        $subject    .= ' - ADMIN BCC COPY';
+        geodir_mail( $recipient, $subject, $content, $headers, $attachments );
+    }
+
+    do_action( 'geodir_post_send_to_friend_email', $email_type, $email_vars );
+
+    return $sent;
 }
-add_filter( 'geodir_email_footer_text', 'geodir_email_footer_text', 10, 1 );
+add_action( 'geodir_send_to_friend_email', 'geodir_send_to_friend_email', 10, 2 );
+
+function geodir_send_enquiry_email( $post, $data ) {
+    $email_type = 'send_enquiry';
+
+    if ( ! geodir_email_is_enabled( $email_type ) ) {
+        return false;
+    }
+	
+	$defaults = array(
+		'from_name' => '',
+		'from_email' => '',
+		'phone' => '',
+		'comments' => ''
+	);
+	$email_vars = wp_parse_args( $data, $defaults );
+	$email_vars['post'] = $post;
+	
+	$email_vars['to_name'] = geodir_get_client_name( $post->post_author );
+	$email_vars['to_email'] = geodir_get_post_meta( $post->ID, 'geodir_email', true );
+	if ( empty( $email_vars['to_email'] ) ) {
+		$author_data = get_userdata( $post->post_author );
+		$email_vars['to_email'] = !empty( $author_data->user_email ) ? $author_data->user_email : '';
+	}
+
+	if ( empty( $post ) || ! is_email( $email_vars['to_email'] ) ) {
+        return;
+    }
+
+	$recipient = $email_vars['to_email'];
+	
+	do_action( 'geodir_pre_send_enquiry_email', $email_type, $email_vars );
+
+    $subject        = geodir_email_get_subject( $email_type, $email_vars );
+    $email_heading  = geodir_email_get_heading( $email_type, $email_vars );
+    $message_body   = geodir_email_get_content( $email_type, $email_vars );
+	$headers        = geodir_email_get_headers( $email_type, $email_vars, $email_vars['from_email'], $email_vars['from_name'] );
+    $attachments    = geodir_email_get_attachments( $email_type, $email_vars );
+
+    $content        = geodir_get_template_html( 'emails/geodir-email-' . $email_type . '.php', array(
+			'email_type'    => $email_type,
+			'email_vars'  	=> $email_vars,
+            'email_heading' => $email_heading,
+            'sent_to_admin' => false,
+            'plain_text'    => false,
+            'message_body'  => $message_body,
+        ) );
+
+    $sent = geodir_mail( $recipient, $subject, $content, $headers, $attachments );
+
+	if ( geodir_mail_admin_bcc_active( $email_type ) ) {
+        $recipient  = geodir_get_admin_email();
+        $subject    .= ' - ADMIN BCC COPY';
+        geodir_mail( $recipient, $subject, $content, $headers, $attachments );
+    }
+
+    do_action( 'geodir_post_send_enquiry_email', $email_type, $email_vars );
+
+    return $sent;
+}
+add_action( 'geodir_send_enquiry_email', 'geodir_send_enquiry_email', 10, 2 );
+
+function geodir_send_admin_pending_post_email( $post, $data = array() ) {
+    $email_type = 'admin_pending_post';
+
+    if ( ! geodir_email_is_enabled( $email_type ) ) {
+        return false;
+    }
+	
+	$recipient = geodir_get_admin_email();
+
+	if ( empty( $post ) || ! is_email( $recipient ) ) {
+        return;
+    }
+	
+	$email_vars = $data;
+	$email_vars['post'] = $post;
+	$email_vars['to_email'] = geodir_get_admin_email();
+	
+	do_action( 'geodir_pre_admin_pending_post_email', $email_type, $email_vars );
+
+    $subject        = geodir_email_get_subject( $email_type, $email_vars );
+    $email_heading  = geodir_email_get_heading( $email_type, $email_vars );
+    $message_body   = geodir_email_get_content( $email_type, $email_vars );
+	$headers        = geodir_email_get_headers( $email_type, $email_vars );
+    $attachments    = geodir_email_get_attachments( $email_type, $email_vars );
+
+    $content        = geodir_get_template_html( 'emails/geodir-email-' . $email_type . '.php', array(
+			'email_type'    => $email_type,
+			'email_vars'  	=> $email_vars,
+            'email_heading' => $email_heading,
+            'sent_to_admin' => true,
+            'plain_text'    => false,
+            'message_body'  => $message_body,
+        ) );
+
+    $sent = geodir_mail( $recipient, $subject, $content, $headers, $attachments );
+
+    do_action( 'geodir_post_admin_pending_post_email', $email_type, $email_vars );
+
+    return $sent;
+}
+
+function geodir_send_user_pending_post_email( $post, $data = array() ) {
+    $email_type = 'user_pending_post';
+
+    if ( ! geodir_email_is_enabled( $email_type ) ) {
+        return false;
+    }
+	
+	$author_data = get_userdata( $post->post_author );
+	if ( empty( $author_data ) ) {
+        return false;
+    }
+	
+	$recipient = !empty( $author_data->user_email ) ? $author_data->user_email : '';
+
+	if ( empty( $post ) || ! is_email( $recipient ) ) {
+        return;
+    }
+	
+	$email_vars = $data;
+	$email_vars['post'] = $post;
+	$email_vars['to_name'] = geodir_get_client_name( $post->post_author );
+	$email_vars['to_email'] = $recipient;
+	
+	do_action( 'geodir_pre_user_pending_post_email', $email_type, $email_vars );
+
+    $subject        = geodir_email_get_subject( $email_type, $email_vars );
+    $email_heading  = geodir_email_get_heading( $email_type, $email_vars );
+    $message_body   = geodir_email_get_content( $email_type, $email_vars );
+	$headers        = geodir_email_get_headers( $email_type, $email_vars );
+    $attachments    = geodir_email_get_attachments( $email_type, $email_vars );
+
+    $content        = geodir_get_template_html( 'emails/geodir-email-' . $email_type . '.php', array(
+			'email_type'    => $email_type,
+			'email_vars'  	=> $email_vars,
+            'email_heading' => $email_heading,
+            'sent_to_admin' => false,
+            'plain_text'    => false,
+            'message_body'  => $message_body,
+        ) );
+
+    $sent = geodir_mail( $recipient, $subject, $content, $headers, $attachments );
+	
+	if ( geodir_mail_admin_bcc_active( $email_type ) ) {
+        $recipient  = geodir_get_admin_email();
+        $subject    .= ' - ADMIN BCC COPY';
+        geodir_mail( $recipient, $subject, $content, $headers, $attachments );
+    }
+
+    do_action( 'geodir_post_user_pending_post_email', $email_type, $email_vars );
+
+    return $sent;
+}
+
+function geodir_send_user_publish_post_email( $post, $data = array() ) {
+    $email_type = 'user_publish_post';
+
+    if ( ! geodir_email_is_enabled( $email_type ) ) {
+        return false;
+    }
+	
+	$author_data = get_userdata( $post->post_author );
+	if ( empty( $author_data ) ) {
+        return false;
+    }
+	
+	$recipient = !empty( $author_data->user_email ) ? $author_data->user_email : '';
+
+	if ( empty( $post ) || ! is_email( $recipient ) ) {
+        return;
+    }
+	
+	$email_vars = $data;
+	$email_vars['post'] = $post;
+	$email_vars['to_name'] = geodir_get_client_name( $post->post_author );
+	$email_vars['to_email'] = $recipient;
+	
+	do_action( 'geodir_pre_user_publish_post_email', $email_type, $email_vars );
+
+    $subject        = geodir_email_get_subject( $email_type, $email_vars );
+    $email_heading  = geodir_email_get_heading( $email_type, $email_vars );
+    $message_body   = geodir_email_get_content( $email_type, $email_vars );
+	$headers        = geodir_email_get_headers( $email_type, $email_vars );
+    $attachments    = geodir_email_get_attachments( $email_type, $email_vars );
+
+    $content        = geodir_get_template_html( 'emails/geodir-email-' . $email_type . '.php', array(
+			'email_type'    => $email_type,
+			'email_vars'  	=> $email_vars,
+            'email_heading' => $email_heading,
+            'sent_to_admin' => false,
+            'plain_text'    => false,
+            'message_body'  => $message_body,
+        ) );
+
+    $sent = geodir_mail( $recipient, $subject, $content, $headers, $attachments );
+	
+	if ( geodir_mail_admin_bcc_active( $email_type ) ) {
+        $recipient  = geodir_get_admin_email();
+        $subject    .= ' - ADMIN BCC COPY';
+        geodir_mail( $recipient, $subject, $content, $headers, $attachments );
+    }
+
+    do_action( 'geodir_post_user_publish_post_email', $email_type, $email_vars );
+
+    return $sent;
+}
+
+function geodir_send_admin_post_edit_email( $post, $data = array() ) {
+    $email_type = 'admin_post_edit';
+
+    if ( ! geodir_email_is_enabled( $email_type ) ) {
+        return false;
+    }
+	
+	$recipient = geodir_get_admin_email();
+
+	if ( empty( $post ) || ! is_email( $recipient ) ) {
+        return;
+    }
+	
+	$email_vars = $data;
+	$email_vars['post'] = $post;
+	$email_vars['to_email'] = geodir_get_admin_email();
+	
+	do_action( 'geodir_pre_admin_post_edit_email', $email_type, $email_vars );
+
+    $subject        = geodir_email_get_subject( $email_type, $email_vars );
+    $email_heading  = geodir_email_get_heading( $email_type, $email_vars );
+    $message_body   = geodir_email_get_content( $email_type, $email_vars );
+	$headers        = geodir_email_get_headers( $email_type, $email_vars );
+    $attachments    = geodir_email_get_attachments( $email_type, $email_vars );
+
+    $content        = geodir_get_template_html( 'emails/geodir-email-' . $email_type . '.php', array(
+			'email_type'    => $email_type,
+			'email_vars'  	=> $email_vars,
+            'email_heading' => $email_heading,
+            'sent_to_admin' => true,
+            'plain_text'    => false,
+            'message_body'  => $message_body,
+        ) );
+
+    $sent = geodir_mail( $recipient, $subject, $content, $headers, $attachments );
+
+    do_action( 'geodir_post_admin_post_edit_email', $email_type, $email_vars );
+
+    return $sent;
+}
+
+function geodir_send_email_on_post_saved( $post_data, $update = false ) {
+	global $gd_notified_edited;
+
+	if ( empty( $post_data['ID'] ) ) {
+		return;
+	}
+	
+	$post_ID = $post_data['ID'];
+	$post = geodir_get_post_info( $post_ID );
+	if ( empty( $post ) ) {
+		return;
+	}
+	if ( $update ) {
+		$user_id = (int) get_current_user_id();
+
+		if ( $user_id > 0 && ! empty( $post->post_author ) && $user_id == $post->post_author && ! is_super_admin() && empty( $gd_notified_edited[$post_ID] ) && geodir_email_is_enabled( 'admin_post_edit' ) ) {
+			if ( empty( $gd_notified_edited ) ) {
+				$gd_notified_edited = array();
+			}
+			$gd_notified_edited[$post_ID] = true;
+
+			geodir_send_admin_post_edit_email( $post );
+		}
+	}
+
+	if ( $post_data['post_status'] == 'pending' ) {
+		// Send email to admin
+		geodir_send_admin_pending_post_email( $post );
+		
+		// Send email to usre
+		geodir_send_user_pending_post_email( $post );
+	}
+}
+add_action( 'geodir_ajax_post_saved', 'geodir_send_email_on_post_saved', 10, 2 );
+
+function geodir_send_owner_comment_approved_email( $comment, $data = array() ) {
+    $email_type = 'owner_comment_approved';
+
+    if ( ! geodir_email_is_enabled( $email_type ) ) {
+        return false;
+    }
+	
+	$post = geodir_get_post_info( $comment->comment_post_ID );
+	if ( empty( $post ) || empty( $comment ) ) {
+        return;
+    }
+	
+	$author_data = get_userdata( $post->post_author );
+	if ( empty( $author_data ) ) {
+        return false;
+    }
+	
+	$recipient = !empty( $author_data->user_email ) ? $author_data->user_email : '';
+
+	if ( empty( $post ) || ! is_email( $recipient ) ) {
+        return;
+    }
+	
+	$email_vars = $data;
+	$email_vars['post'] = $post;
+	$email_vars['comment'] = $comment;
+	$email_vars['to_name'] = geodir_get_client_name( $post->post_author );
+	$email_vars['to_email'] = $recipient;
+	
+	do_action( 'geodir_pre_owner_comment_approved_email', $email_type, $email_vars );
+
+    $subject        = geodir_email_get_subject( $email_type, $email_vars );
+    $email_heading  = geodir_email_get_heading( $email_type, $email_vars );
+    $message_body   = geodir_email_get_content( $email_type, $email_vars );
+	$headers        = geodir_email_get_headers( $email_type, $email_vars );
+    $attachments    = geodir_email_get_attachments( $email_type, $email_vars );
+
+    $content        = geodir_get_template_html( 'emails/geodir-email-' . $email_type . '.php', array(
+			'email_type'    => $email_type,
+			'email_vars'  	=> $email_vars,
+            'email_heading' => $email_heading,
+            'sent_to_admin' => false,
+            'plain_text'    => false,
+            'message_body'  => $message_body,
+        ) );
+
+    $sent = geodir_mail( $recipient, $subject, $content, $headers, $attachments );
+	
+	if ( geodir_mail_admin_bcc_active( $email_type ) ) {
+        $recipient  = geodir_get_admin_email();
+        $subject    .= ' - ADMIN BCC COPY';
+        geodir_mail( $recipient, $subject, $content, $headers, $attachments );
+    }
+
+    do_action( 'geodir_post_owner_comment_approved_email', $email_type, $email_vars );
+
+    return $sent;
+}
+
+function geodir_send_author_comment_approved_email( $comment, $data = array() ) {
+    $email_type = 'author_comment_approved';
+
+    if ( ! geodir_email_is_enabled( $email_type ) ) {
+        return false;
+    }
+	
+	$recipient = !empty( $comment->comment_author_email ) ? $comment->comment_author_email : '';
+	$to_name = !empty( $comment->comment_author ) ? $comment->comment_author : __( 'Author', 'geodirectory' );
+
+	if ( empty( $comment ) || ! is_email( $recipient ) ) {
+        return;
+    }
+	
+	$post = geodir_get_post_info( $comment->comment_post_ID );
+	if ( empty( $post ) ) {
+        return;
+    }
+	
+	$email_vars = $data;
+	$email_vars['post'] = $post;
+	$email_vars['comment'] = $comment;
+	$email_vars['to_name'] = $to_name;
+	$email_vars['to_email'] = $recipient;
+	
+	do_action( 'geodir_pre_author_comment_approved_email', $email_type, $email_vars );
+
+    $subject        = geodir_email_get_subject( $email_type, $email_vars );
+    $email_heading  = geodir_email_get_heading( $email_type, $email_vars );
+    $message_body   = geodir_email_get_content( $email_type, $email_vars );
+	$headers        = geodir_email_get_headers( $email_type, $email_vars );
+    $attachments    = geodir_email_get_attachments( $email_type, $email_vars );
+
+    $content        = geodir_get_template_html( 'emails/geodir-email-' . $email_type . '.php', array(
+			'email_type'    => $email_type,
+			'email_vars'  	=> $email_vars,
+            'email_heading' => $email_heading,
+            'sent_to_admin' => false,
+            'plain_text'    => false,
+            'message_body'  => $message_body,
+        ) );
+
+    $sent = geodir_mail( $recipient, $subject, $content, $headers, $attachments );
+	
+	if ( geodir_mail_admin_bcc_active( $email_type ) ) {
+        $recipient  = geodir_get_admin_email();
+        $subject    .= ' - ADMIN BCC COPY';
+        geodir_mail( $recipient, $subject, $content, $headers, $attachments );
+    }
+
+    do_action( 'geodir_post_author_comment_approved_email', $email_type, $email_vars );
+
+    return $sent;
+}

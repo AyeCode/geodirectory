@@ -3,10 +3,12 @@
 if ( !defined('ABSPATH') )
     die('-1');
 
-if ( !isset( $gd_mail_vars ) ) {
-    global $gd_mail_vars;
+if ( !isset( $email_vars ) ) {
+    global $email_vars;
 }
-$email_heading = !empty( $gd_mail_vars['email_heading'] ) ? $gd_mail_vars['email_heading'] : '';
+if ( !isset( $email_heading ) ) {
+    global $email_heading;
+}
 ?>
 <!DOCTYPE html>
 <html dir="<?php echo is_rtl() ? 'rtl' : 'ltr'?>">
@@ -20,7 +22,7 @@ $email_heading = !empty( $gd_mail_vars['email_heading'] ) ? $gd_mail_vars['email
         <div id="wrapper" dir="<?php echo is_rtl() ? 'rtl' : 'ltr'?>">
             <table border="0" cellpadding="0" cellspacing="0" height="100%" class="wrapper-table">
                 <tr>
-                    <td align="center" valign="top">
+                    <td align="center" valign="middle" id="template_header">
                         <div id="template_header_image">
                         <?php
                             if ( $img = geodir_get_option( 'email_header_image' ) ) {
@@ -28,12 +30,16 @@ $email_heading = !empty( $gd_mail_vars['email_heading'] ) ? $gd_mail_vars['email
                             }
                         ?>
                         </div>
-                        <table border="0" cellpadding="0" cellspacing="0" width="100%" id="template_container">
+					</td>
+				</tr>
+				<tr>
+					<td align="center" valign="middle" id="template_body">
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
                             <?php if ( !empty( $email_heading ) ) { ?>
                             <tr>
                                 <td align="center" valign="top">
                                     <!-- Header -->
-                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" id="template_header">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" id="template_heading">
                                         <tr>
                                             <td id="header_wrapper">
                                                 <h1><?php echo $email_heading; ?></h1>
@@ -47,7 +53,7 @@ $email_heading = !empty( $gd_mail_vars['email_heading'] ) ? $gd_mail_vars['email
                             <tr>
                                 <td align="center" valign="top">
                                     <!-- Body -->
-                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" id="template_body">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" id="email_body">
                                         <tr>
                                             <td valign="top" id="body_content">
                                                 <!-- Content -->

@@ -535,12 +535,7 @@ if (!function_exists('geodir_save_listing')) {
          */
         do_action('geodir_after_save_listing', $last_post_id, $request_info);
 
-        //die;
-
-        if ($send_post_submit_mail) { // if new post send out email
-            $to_name = geodir_get_client_name($current_user->ID);
-            geodir_sendEmail('', '', $current_user->user_email, $to_name, '', '', $request_info, 'post_submit', $last_post_id, $current_user->ID);
-        }
+        do_action( 'geodir_send_email_on_listing_submit', $send_post_submit_mail, $last_post_id, $request_info, $current_user->ID );
         /*
          * Unset the session so we don't loop.
          */
@@ -3097,52 +3092,13 @@ function geodir_function_post_updated($post_ID, $post_after, $post_before)
 
     if ($post_type != '' && in_array($post_type, geodir_get_posttypes())) {
         // send notification to client when post moves from draft to publish
-        if (!empty($post_after->post_status) && $post_after->post_status == 'publish' && !empty($post_before->post_status) && ($post_before->post_status == 'draft' || $post_before->post_status == 'auto-draft')) {
-            $post_author_id = !empty($post_after->post_author) ? $post_after->post_author : NULL;
-            $post_author_data = get_userdata($post_author_id);
-
-            $to_name = geodir_get_client_name($post_author_id);
-
-            $from_email = geodir_get_mail_from();
-            $from_name = geodir_get_mail_from_name();
-            $to_email = $post_author_data->user_email;
-
-            if (!is_email($to_email) && !empty($post_author_data->user_email)) {
-                $to_email = $post_author_data->user_email;
-            }
-
-            $message_type = 'listing_published';
-
-            if (geodir_get_option('geodir_post_published_email_subject') == '') {
-                geodir_update_option('geodir_post_published_email_subject', __('Listing Published Successfully', 'geodirectory'));
-            }
-
-            if (geodir_get_option('geodir_post_published_email_content') == '') {
-                geodir_update_option('geodir_post_published_email_content', __("<p>Dear [#client_name#],</p><p>Your listing [#listing_link#] has been published. This email is just for your information.</p><p>[#listing_link#]</p><br><p>Thank you for your contribution.</p><p>[#site_name#]</p>", 'geodirectory'));
-            }
-
-            /**
-             * Called before sending the email when listing gets published.
-             *
-             * @since 1.0.0
-             * @package GeoDirectory
-             * @param object $post_after The post object after update.
-             * @param object $post_before The post object before update.
-             */
-            do_action('geodir_before_listing_published_email', $post_after, $post_before);
-            if (is_email($to_email)) {
-                geodir_sendEmail($from_email, $from_name, $to_email, $to_name, '', '', '', $message_type, $post_ID);
-            }
-
-            /**
-             * Called after sending the email when listing gets published.
-             *
-             * @since 1.0.0
-             * @package GeoDirectory
-             * @param object $post_after The post object after update.
-             * @param object $post_before The post object before update.
-             */
-            do_action('geodir_after_listing_published_email', $post_after, $post_before);
+        if (!empty($post_after->post_status) && $post_after->post_status == 'publish' && !empty($post_before->post_status) && $post_before->post_status != 'publish' && $post_before->post_status != 'trash') {
+            $post = geodir_get_post_info( $post_ID );
+			if ( empty( $post ) ) {
+				return;
+			}
+			// Send email to usre
+			geodir_send_user_publish_post_email( $post );
         }
     }
 }

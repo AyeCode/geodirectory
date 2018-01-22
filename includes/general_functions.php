@@ -3395,7 +3395,7 @@ function geodir_count_reviews_by_term_id( $term_id, $taxonomy, $post_type ) {
 
 	$detail_table = $plugin_prefix . $post_type . '_detail';
 
-	$sql = "SELECT COALESCE(SUM(rating_count),0) FROM " . $detail_table . " WHERE post_status = 'publish' AND rating_count > 0 AND FIND_IN_SET(" . $term_id . ", " . $taxonomy . ")";
+	$sql = "SELECT COALESCE(SUM(rating_count),0) FROM " . $detail_table . " WHERE post_status = 'publish' AND rating_count > 0 AND FIND_IN_SET(" . $term_id . ", " . $detail_table . ".post_categories)";
 
 	/**
 	 * Filter count review sql query.
@@ -4419,71 +4419,6 @@ function geodir_remove_location_terms( $location_terms = array() ) {
 	 * @param array $location_terms The array of location terms.
 	 */
 	return apply_filters('geodir_remove_location_terms',$location_terms);
-}
-
-/**
- * Send notification when a listing has been edited by it's author.
- *
- * @since   1.5.9
- * @since   1.6.18 Some times it sends email twice when listing edited - FIXED
- * @package GeoDirectory
- *
- * @global array $gd_notified_edited  Array of post ID which has post edited notification set.
- *
- * @param int $post_ID  Post ID.
- * @param WP_Post $post Post object.
- * @param bool $update  Whether this is an existing listing being updated or not.
- */
-function geodir_on_wp_insert_post( $post_ID, $post, $update ) {
-	global $gd_notified_edited;
-	
-	if ( ! $update ) {
-		return;
-	}
-
-	$action      = isset( $_REQUEST['action'] ) ? sanitize_text_field( $_REQUEST['action'] ) : '';
-	$is_admin    = is_admin() && ( ! defined( 'DOING_AJAX' ) || ( defined( 'DOING_AJAX' ) && ! DOING_AJAX ) ) ? true : false;
-	$inline_save = $action == 'inline-save' ? true : false;
-
-	if ( empty( $post->post_type ) || $is_admin || $inline_save || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) ) {
-		return;
-	}
-
-	if ( $action != '' && in_array( $action, array( 'geodir_import_export' ) ) ) {
-		return;
-	}
-
-	$user_id = (int) get_current_user_id();
-
-	if ( $user_id > 0 && geodir_get_option( 'geodir_notify_post_edited' ) && ! wp_is_post_revision( $post_ID ) && in_array( $post->post_type, geodir_get_posttypes() ) ) {
-		$author_id = ! empty( $post->post_author ) ? $post->post_author : 0;
-
-		if ( $user_id == $author_id && ! is_super_admin() && empty( $gd_notified_edited[$post_ID] ) ) {
-			if ( !empty( $gd_notified_edited ) ) {
-				$gd_notified_edited = array();
-			}
-			$gd_notified_edited[$post_ID] = true;
-			
-			$from_email   = geodir_get_mail_from();
-			$from_name    = geodir_get_mail_from_name();
-			$to_email     = get_option( 'admin_email' );
-			$to_name      = get_option( 'name' );
-			$message_type = 'listing_edited';
-
-			$notify_edited = true;
-			/**
-			 * Send notification when listing edited by author?
-			 *
-			 * @since 1.6.0
-			 *
-			 * @param bool $notify_edited Notify on listing edited by author?
-			 * @param object $post        The current post object.
-			 */
-			$notify_edited = apply_filters( 'geodir_notify_on_listing_edited', $notify_edited, $post );
-
-			geodir_sendEmail( $from_email, $from_name, $to_email, $to_name, '', '', '', $message_type, $post_ID );
-		}
-	}
 }
 
 /**

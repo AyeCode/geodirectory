@@ -90,7 +90,13 @@ jQuery(window).load(function() {
         $this.hide();
         return false;
     });
-
+	
+	// Load color picker
+	var gdColorPicker = jQuery('.gd-color-picker');
+	console.log('gdColorPicker');
+	if (gdColorPicker.length) {
+		gdColorPicker.wpColorPicker();
+	}
 
 });
 

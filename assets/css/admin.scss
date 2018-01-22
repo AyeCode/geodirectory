@@ -764,6 +764,13 @@ Radio input buttons
     background: #fd9720;
 
 }
+.gd-row-color-picker .wp-picker-holder {
+	position: absolute;
+	z-index: 999;
+}
+tr.gd-row-color-picker td > .wp-picker-container {
+	margin-top: 5px;
+}
 
 
 /********************************************************

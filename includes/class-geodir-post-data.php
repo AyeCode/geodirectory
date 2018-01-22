@@ -824,7 +824,7 @@ class GeoDir_Post_Data {
 		}
 
 		// logged out user check
-		if($post->post_author==0 && !get_current_user_id()){
+		if(empty($post->post_author) && !get_current_user_id()){
 			$query_args['preview'] = true;
 		}
 
@@ -916,6 +916,7 @@ class GeoDir_Post_Data {
 
 		// get the message response.
 		if(!is_wp_error($result)){
+			do_action( 'geodir_ajax_post_saved', $post_data, ! empty( $post_data['post_parent'] ) );
 			return self::ajax_save_post_message($post_data);
 		}
 

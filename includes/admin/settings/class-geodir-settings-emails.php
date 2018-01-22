@@ -84,67 +84,73 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 				$settings = apply_filters( 'woocommerce_other_email_settings', array(
 
 
-					array('name' => __('Send to friend', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_other_friend_settings'),
+					array('name' => __('Send to friend', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_send_friend_settings'),
 
 					array(
 						'name' => __('Enable email', 'geodirectory'),
 						'desc' => __('This will enable the "Send to friend" option for the details page.', 'geodirectory'),
-						'id' => 'email_other_friend',
+						'id' => 'email_send_friend',
 						'type' => 'checkbox',
 						'default' => 1,
 					),
 					array(
 						'name' => __('Subject', 'geodirectory'),
 						'desc' => __('The email subject.', 'geodirectory'),
-						'id' => 'email_other_friend_subject',
+						'id' => 'email_send_friend_subject',
 						'type' => 'text',
 						'desc_tip' => true,
-						'placeholder' => $this->other_friend_subject(),
+						'class' => 'large-text',
+						'default' => $this->send_friend_subject(),
+						'placeholder' => $this->send_friend_subject(),
 						'advanced' => true
 					),
 					array(
 						'name' => __('Body', 'geodirectory'),
 						'desc' => __('The email body, this can be text or HTML.', 'geodirectory'),
-						'id' => 'email_other_friend_body',
-						'type' => 'textarea',
+						'id' => 'email_send_friend_body',
+						'type' => 'editor',
 						'class' => 'code gd-email-body',
 						'desc_tip' => true,
 						'advanced' => true,
-						'placeholder' => $this->other_friend_body()
+						'default' => $this->send_friend_body(),
+						'placeholder' => $this->send_friend_body()
 					),
 
-					array('type' => 'sectionend', 'id' => 'user_other_friend_settings'),
+					array('type' => 'sectionend', 'id' => 'user_send_friend_settings'),
 
-					array('name' => __('Send enquiry', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_other_enquiry_settings'),
+					array('name' => __('Send enquiry', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_send_enquiry_settings'),
 
 					array(
 						'name' => __('Enable email', 'geodirectory'),
 						'desc' => __('This will enable the "Send enquiry" option for the details page.', 'geodirectory'),
-						'id' => 'email_other_enquiry',
+						'id' => 'email_send_enquiry',
 						'type' => 'checkbox',
 						'default' => 1,
 					),
 					array(
 						'name' => __('Subject', 'geodirectory'),
 						'desc' => __('The email subject.', 'geodirectory'),
-						'id' => 'email_other_enquiry_subject',
+						'id' => 'email_send_enquiry_subject',
 						'type' => 'text',
+						'class' => 'large-text',
 						'desc_tip' => true,
-						'placeholder' => $this->other_enquiry_subject(),
+						'default' => $this->send_enquiry_subject(),
+						'placeholder' => $this->send_enquiry_subject(),
 						'advanced' => true
 					),
 					array(
 						'name' => __('Body', 'geodirectory'),
 						'desc' => __('The email body, this can be text or HTML.', 'geodirectory'),
-						'id' => 'email_other_enquiry_body',
-						'type' => 'textarea',
+						'id' => 'email_send_enquiry_body',
+						'type' => 'editor',
 						'class' => 'code gd-email-body',
 						'desc_tip' => true,
 						'advanced' => true,
-						'placeholder' => $this->other_enquiry_body()
+						'default' => $this->send_enquiry_body(),
+						'placeholder' => $this->send_enquiry_body()
 					),
 
-					array('type' => 'sectionend', 'id' => 'user_other_enquiry_settings'),
+					array('type' => 'sectionend', 'id' => 'user_send_enquiry_settings'),
 
 				));
 			}
@@ -152,33 +158,36 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 				$settings = apply_filters( 'woocommerce_user_email_settings', array(
 
 
-					array('name' => __('Listing submitted', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_user_submitted_settings'),
+					array('name' => __('Pending listing submitted', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_user_pending_post_settings'),
 
 					array(
 						'name' => __('Enable email', 'geodirectory'),
-						'desc' => __('Send an email to user when their listing is submitted.', 'geodirectory'),
-						'id' => 'email_client_submitted',
+						'desc' => __('Send an email to user when their submitted listing is under pending review.', 'geodirectory'),
+						'id' => 'email_user_pending_post',
 						'type' => 'checkbox',
 						'default' => 1,
 					),
 					array(
 						'name' => __('Subject', 'geodirectory'),
 						'desc' => __('The email subject.', 'geodirectory'),
-						'id' => 'email_user_submitted_subject',
+						'id' => 'email_user_pending_post_subject',
 						'type' => 'text',
+						'class' => 'large-text',
 						'desc_tip' => true,
-						'placeholder' => $this->user_submitted_subject(),
+						'default' => $this->user_pending_post_subject(),
+						'placeholder' => $this->user_pending_post_subject(),
 						'advanced' => true
 					),
 					array(
 						'name' => __('Body', 'geodirectory'),
 						'desc' => __('The email body, this can be text or HTML.', 'geodirectory'),
-						'id' => 'email_user_submitted_body',
-						'type' => 'textarea',
+						'id' => 'email_user_pending_post_body',
+						'type' => 'editor',
 						'class' => 'code gd-email-body',
 						'desc_tip' => true,
 						'advanced' => true,
-						'placeholder' => $this->user_submitted_body()
+						'default' => $this->user_pending_post_body(),
+						'placeholder' => $this->user_pending_post_body()
 					),
 
 					array('type' => 'sectionend', 'id' => 'user_email_submitted_settings'),
@@ -190,28 +199,31 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 					array(
 						'name' => __('Enable email', 'geodirectory'),
 						'desc' => __('Send an email to user when their listing is published.', 'geodirectory'),
-						'id' => 'email_user_published',
+						'id' => 'email_user_publish_post',
 						'type' => 'checkbox',
 						'default' => 1,
 					),
 					array(
 						'name' => __('Subject', 'geodirectory'),
 						'desc' => __('The email subject.', 'geodirectory'),
-						'id' => 'email_user_published_subject',
+						'id' => 'email_user_publish_post_subject',
 						'type' => 'text',
+						'class' => 'large-text',
 						'desc_tip' => true,
-						'placeholder' => $this->user_published_subject(),
+						'default' => $this->user_publish_post_subject(),
+						'placeholder' => $this->user_publish_post_subject(),
 						'advanced' => true
 					),
 					array(
 						'name' => __('Body', 'geodirectory'),
 						'desc' => __('The email body, this can be text or HTML.', 'geodirectory'),
-						'id' => 'email_user_published_body',
-						'type' => 'textarea',
+						'id' => 'email_user_publish_post_body',
+						'type' => 'editor',
 						'class' => 'code gd-email-body',
 						'desc_tip' => true,
 						'advanced' => true,
-						'placeholder' => $this->user_published_body()
+						'default' => $this->user_publish_post_body(),
+						'placeholder' => $this->user_publish_post_body()
 					),
 
 					array('type' => 'sectionend', 'id' => 'user_email_published_settings'),
@@ -220,28 +232,31 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 					array(
 						'name' => __('Enable email', 'geodirectory'),
 						'desc' => __('Send an email to the listing owner when a comment is submitted.', 'geodirectory'),
-						'id' => 'email_owner_comment_submitted',
+						'id' => 'email_owner_comment_submit',
 						'type' => 'checkbox',
 						'default' => 0,
 					),
 					array(
 						'name' => __('Subject', 'geodirectory'),
 						'desc' => __('The email subject.', 'geodirectory'),
-						'id' => 'email_owner_comment_submitted_subject',
+						'id' => 'email_owner_comment_submit_subject',
 						'type' => 'text',
+						'class' => 'large-text',
 						'desc_tip' => true,
-						'placeholder' => $this->owner_comment_submitted_subject(),
+						'default' => $this->owner_comment_submit_subject(),
+						'placeholder' => $this->owner_comment_submit_subject(),
 						'advanced' => true
 					),
 					array(
 						'name' => __('Body', 'geodirectory'),
 						'desc' => __('The email body, this can be text or HTML.', 'geodirectory'),
-						'id' => 'email_owner_comment_submitted_body',
-						'type' => 'textarea',
+						'id' => 'email_owner_comment_submit_body',
+						'type' => 'editor',
 						'class' => 'code gd-email-body',
 						'desc_tip' => true,
 						'advanced' => true,
-						'placeholder' => $this->owner_comment_submitted_body()
+						'default' => $this->owner_comment_submit_body(),
+						'placeholder' => $this->owner_comment_submit_body()
 					),
 					array('type' => 'sectionend', 'id' => 'owner_email_comment_settings'),
 
@@ -259,7 +274,9 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'desc' => __('The email subject.', 'geodirectory'),
 						'id' => 'email_owner_comment_approved_subject',
 						'type' => 'text',
+						'class' => 'large-text',
 						'desc_tip' => true,
+						'default' => $this->owner_comment_approved_subject(),
 						'placeholder' => $this->owner_comment_approved_subject(),
 						'advanced' => true
 					),
@@ -267,10 +284,11 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'name' => __('Body', 'geodirectory'),
 						'desc' => __('The email body, this can be text or HTML.', 'geodirectory'),
 						'id' => 'email_owner_comment_approved_body',
-						'type' => 'textarea',
+						'type' => 'editor',
 						'class' => 'code gd-email-body',
 						'desc_tip' => true,
 						'advanced' => true,
+						'default' => $this->owner_comment_approved_body(),
 						'placeholder' => $this->owner_comment_approved_body()
 					),
 					array('type' => 'sectionend', 'id' => 'owner_email_comment_approved_settings'),
@@ -288,7 +306,9 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'desc' => __('The email subject.', 'geodirectory'),
 						'id' => 'email_author_comment_approved_subject',
 						'type' => 'text',
+						'class' => 'large-text',
 						'desc_tip' => true,
+						'default' => $this->author_comment_approved_subject(),
 						'placeholder' => $this->author_comment_approved_subject(),
 						'advanced' => true
 					),
@@ -296,10 +316,11 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'name' => __('Body', 'geodirectory'),
 						'desc' => __('The email body, this can be text or HTML.', 'geodirectory'),
 						'id' => 'email_author_comment_approved_body',
-						'type' => 'textarea',
+						'type' => 'editor',
 						'class' => 'code gd-email-body',
 						'desc_tip' => true,
 						'advanced' => true,
+						'default' => $this->author_comment_approved_body(),
 						'placeholder' => $this->author_comment_approved_body()
 					),
 					array('type' => 'sectionend', 'id' => 'author_email_comment_approved_settings'),
@@ -309,33 +330,36 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 				$settings = apply_filters( 'woocommerce_admin_email_settings', array(
 
 
-					array('name' => __('Listing submitted', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_email_submitted_settings'),
+					array('name' => __('Pending listing submitted', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_email_submitted_settings'),
 
 					array(
 						'name' => __('Enable email', 'geodirectory'),
-						'desc' => __('Send an email when a new listing is submitted by a user.', 'geodirectory'),
-						'id' => 'email_admin_submitted',
+						'desc' => __('Send an email to admin when the listing submitted by a user is under pending review.', 'geodirectory'),
+						'id' => 'email_admin_pending_post',
 						'type' => 'checkbox',
 						'default' => 1,
 					),
 					array(
 						'name' => __('Subject', 'geodirectory'),
 						'desc' => __('The email subject.', 'geodirectory'),
-						'id' => 'email_admin_submitted_subject',
+						'id' => 'email_admin_pending_post_subject',
 						'type' => 'text',
+						'class' => 'large-text',
 						'desc_tip' => true,
-						'placeholder' => $this->admin_submitted_subject(),
+						'placeholder' => $this->admin_pending_post_subject(),
+						'default' => $this->admin_pending_post_subject(),
 						'advanced' => true
 					),
 					array(
 						'name' => __('Body', 'geodirectory'),
 						'desc' => __('The email body, this can be text or HTML.', 'geodirectory'),
-						'id' => 'email_admin_submitted_body',
-						'type' => 'textarea',
+						'id' => 'email_admin_pending_post_body',
+						'type' => 'editor',
 						'class' => 'code gd-email-body',
 						'desc_tip' => true,
 						'advanced' => true,
-						'placeholder' => $this->admin_submitted_body()
+						'default' => $this->admin_pending_post_body(),
+						'placeholder' => $this->admin_pending_post_body()
 					),
 
 					array('type' => 'sectionend', 'id' => 'admin_email_submitted_settings'),
@@ -347,28 +371,31 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 					array(
 						'name' => __('Enable email', 'geodirectory'),
 						'desc' => __('Send an email when a listing is edited by a user.', 'geodirectory'),
-						'id' => 'email_admin_edited',
+						'id' => 'email_admin_post_edit',
 						'type' => 'checkbox',
 						'default' => 0,
 					),
 					array(
 						'name' => __('Subject', 'geodirectory'),
 						'desc' => __('The email subject.', 'geodirectory'),
-						'id' => 'email_admin_edited_subject',
+						'id' => 'email_admin_post_edit_subject',
 						'type' => 'text',
+						'class' => 'large-text',
 						'desc_tip' => true,
-						'placeholder' => $this->admin_edited_subject(),
+						'placeholder' => $this->admin_post_edit_subject(),
+						'default' => $this->admin_post_edit_subject(),
 						'advanced' => true
 					),
 					array(
 						'name' => __('Body', 'geodirectory'),
 						'desc' => __('The email body, this can be text or HTML.', 'geodirectory'),
-						'id' => 'email_admin_edited_body',
-						'type' => 'textarea',
+						'id' => 'email_admin_post_edit_body',
+						'type' => 'editor',
 						'class' => 'code gd-email-body',
 						'desc_tip' => true,
 						'advanced' => true,
-						'placeholder' => $this->admin_edited_body()
+						'default' => $this->admin_post_edit_body(),
+						'placeholder' => $this->admin_post_edit_body()
 					),
 
 					array('type' => 'sectionend', 'id' => 'admin_email_edited_settings'),
@@ -379,28 +406,31 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 					array(
 						'name' => __('Enable email', 'geodirectory'),
 						'desc' => __('Send an email when a comment/review needs approval. This will takeover the standard WordPress email.', 'geodirectory'),
-						'id' => 'email_admin_comment',
+						'id' => 'email_admin_moderate_comment',
 						'type' => 'checkbox',
 						'default' => 0,
 					),
 					array(
 						'name' => __('Subject', 'geodirectory'),
 						'desc' => __('The email subject.', 'geodirectory'),
-						'id' => 'email_admin_comment_subject',
+						'id' => 'email_admin_moderate_comment_subject',
 						'type' => 'text',
+						'class' => 'large-text',
 						'desc_tip' => true,
-						'placeholder' => $this->admin_comment_subject(),
+						'placeholder' => $this->admin_moderate_comment_subject(),
+						'default' => $this->admin_moderate_comment_subject(),
 						'advanced' => true
 					),
 					array(
 						'name' => __('Body', 'geodirectory'),
 						'desc' => __('The email body, this can be text or HTML.', 'geodirectory'),
-						'id' => 'email_admin_comment_body',
-						'type' => 'textarea',
+						'id' => 'email_admin_moderate_comment_body',
+						'type' => 'editor',
 						'class' => 'code gd-email-body',
 						'desc_tip' => true,
 						'advanced' => true,
-						'placeholder' => $this->admin_comment_body()
+						'default' => $this->admin_moderate_comment_body(),
+						'placeholder' => $this->admin_moderate_comment_body()
 					),
 
 					array('type' => 'sectionend', 'id' => 'admin_email_comment_settings'),
@@ -442,7 +472,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 					array(
 						'name' => __('Listing published', 'geodirectory'),
 						'desc' => __('This will send a BCC email to the site admin on listing published.', 'geodirectory'),
-						'id' => 'email_bcc_listing_publish',
+						'id' => 'email_bcc_user_publish_post',
 						'type' => 'checkbox',
 						'default' => 0,
 					),
@@ -463,7 +493,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 
 
 					array('type' => 'sectionend', 'id' => 'email_settings_bcc'),
-
+	
 				));
 			}
 
@@ -498,8 +528,8 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 		 * @since 2.0.0
 		 * @return string
 		 */
-		public function user_published_subject(){
-			return apply_filters('geodir_email_user_published_subject',__("Listing Published Successfully- [[#site_name#]]","geodirectory"));
+		public function user_publish_post_subject(){
+			return apply_filters('geodir_email_user_publish_post_subject',__("[[#site_name#]] Listing Published Successfully","geodirectory"));
 		}
 
 		/**
@@ -508,8 +538,8 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 		 * @since 2.0.0
 		 * @return string
 		 */
-		public function user_published_body(){
-			return apply_filters('geodir_email_user_published_body',
+		public function user_publish_post_body(){
+			return apply_filters('geodir_email_user_publish_post_body',
 				__("Dear [#client_name#],
 
 Your listing [#listing_link#] has been published. This email is just for your information.
@@ -527,8 +557,8 @@ Thank you for your contribution.","geodirectory"
 		 * @since 2.0.0
 		 * @return string
 		 */
-		public function user_submitted_subject(){
-			return apply_filters('geodir_email_user_submitted_subject',__("Listing Submitted Successfully - [[#site_name#]]","geodirectory"));
+		public function user_pending_post_subject(){
+			return apply_filters('geodir_email_user_pending_post_subject',__("[[#site_name#]] Your listing has been submitted for approval","geodirectory"));
 		}
 
 		/**
@@ -537,8 +567,8 @@ Thank you for your contribution.","geodirectory"
 		 * @since 2.0.0
 		 * @return string
 		 */
-		public function user_submitted_body(){
-			return apply_filters('geodir_email_user_submitted_body',
+		public function user_pending_post_body(){
+			return apply_filters('geodir_email_user_pending_post_body',
 				__("Dear [#client_name#],
 
 You submitted the below listing information. This email is just for your information.
@@ -556,8 +586,8 @@ Thank you for your contribution.","geodirectory"
 		 * @since 2.0.0
 		 * @return string
 		 */
-		public function admin_submitted_subject(){
-			return apply_filters('geodir_email_admin_submitted_subject',__("Listing Submitted Successfully - [[#site_name#]]","geodirectory"));
+		public function admin_pending_post_subject(){
+			return apply_filters('geodir_email_admin_pending_post_subject',__("[[#site_name#]] A new listing has been submitted for review","geodirectory"));
 		}
 
 		/**
@@ -566,13 +596,9 @@ Thank you for your contribution.","geodirectory"
 		 * @since 2.0.0
 		 * @return string
 		 */
-		public function admin_submitted_body(){
-			return apply_filters('geodir_email_admin_submitted_body',
-				__("Dear Admin,
-				
-A new listing has been published [#listing_link#]. 
-This email is just for your information.","geodirectory"
-				)
+		public function admin_pending_post_body(){
+			return apply_filters('geodir_email_admin_pending_post_body',
+				__("<p>Dear Admin,</p><p>A new listing has been submitted [#listing_link#]. This email is just for your information.</p><p>Thank you,<br /><br />[#site_name_url#]</p>","geodirectory")
 			);
 		}
 
@@ -582,8 +608,8 @@ This email is just for your information.","geodirectory"
 		 * @since 2.0.0
 		 * @return string
 		 */
-		public function admin_edited_subject(){
-			return apply_filters('geodir_email_admin_edited_subject',__("Listing edited by Author - [[#site_name#]]","geodirectory"));
+		public function admin_post_edit_subject(){
+			return apply_filters('geodir_email_admin_post_edit_subject',__("[[#site_name#]] Listing edited by Author","geodirectory"));
 		}
 
 		/**
@@ -592,8 +618,8 @@ This email is just for your information.","geodirectory"
 		 * @since 2.0.0
 		 * @return string
 		 */
-		public function admin_edited_body(){
-			return apply_filters('geodir_email_admin_edited_body',
+		public function admin_post_edit_body(){
+			return apply_filters('geodir_email_admin_post_edit_body',
 				__("Dear Admin,
 				
 A listing [#listing_link#] has been edited by it's author [#post_author_name#].
@@ -614,8 +640,8 @@ This email is just for your information.","geodirectory"
 		 * @since 2.0.0
 		 * @return string
 		 */
-		public function admin_comment_subject(){
-			return apply_filters('geodir_email_admin_comment_subject',__("A new comment is waiting for your approval - [[#site_name#]]","geodirectory"));
+		public function admin_moderate_comment_subject(){
+			return apply_filters('geodir_email_admin_moderate_comment_subject',__("[[#site_name#]] A new comment is waiting for your approval","geodirectory"));
 		}
 
 		/**
@@ -624,8 +650,8 @@ This email is just for your information.","geodirectory"
 		 * @since 2.0.0
 		 * @return string
 		 */
-		public function admin_comment_body(){
-			return apply_filters('geodir_email_admin_comment_body',
+		public function admin_moderate_comment_body(){
+			return apply_filters('geodir_email_admin_moderate_comment_body',
 				__("Dear Admin,
 				
 A new comment has been submitted on the listing [#listing_link#] and it is waiting for your approval.
@@ -651,8 +677,8 @@ Thank You.","geodirectory"
 		 * @since 2.0.0
 		 * @return string
 		 */
-		public function owner_comment_submitted_subject(){
-			return apply_filters('geodir_email_owner_comment_submitted_subject',__("[[#site_name#]] A new comment has been submitted on your listing [#listing_title#]","geodirectory"));
+		public function owner_comment_submit_subject(){
+			return apply_filters('geodir_email_owner_comment_submit_subject',__("[[#site_name#]] A new comment has been submitted on your listing [#listing_title#]","geodirectory"));
 		}
 
 		/**
@@ -661,8 +687,8 @@ Thank You.","geodirectory"
 		 * @since 2.0.0
 		 * @return string
 		 */
-		public function owner_comment_submitted_body(){
-			return apply_filters('geodir_email_owner_comment_submitted_body',
+		public function owner_comment_submit_body(){
+			return apply_filters('geodir_email_owner_comment_submit_body',
 				__("Dear [#client_name#],
 
 A new comment has been submitted on your listing [#listing_link#].
@@ -742,8 +768,8 @@ Thank You.","geodirectory"
 		 * @since 2.0.0
 		 * @return string
 		 */
-		public function other_friend_subject(){
-			return apply_filters('geodir_email_other_friend_subject',__("[#from_name#] thought you might be interested in.","geodirectory"));
+		public function send_friend_subject(){
+			return apply_filters('geodir_email_send_friend_subject',__("[[#site_name#]] thought you might be interested in.","geodirectory"));
 		}
 
 		/**
@@ -752,19 +778,9 @@ Thank You.","geodirectory"
 		 * @since 2.0.0
 		 * @return string
 		 */
-		public function other_friend_body(){
-			return apply_filters('geodir_email_other_friend_body',
-				__("Dear [#to_name#],
-
-Your friend has sent you a message from: [#site_name#]
-
-===============================
-Subject : [#subject#]
-[#comments#] 
-[#listing_link#]
-===============================
-
-Thank you.","geodirectory"
+		public function send_friend_body(){
+			return apply_filters('geodir_email_send_friend_body',
+				__("<p>Dear [#to_name#],<p><p>Your friend has sent you a message from <b>[#site_name#]</b> </p><p>===============================</p><p><b>Subject : [#subject#]</b></p><p>[#comments#] [#listing_link#]</p><p>===============================</p><p>Thank you,<br /><br />[#site_name_url#]</p>","geodirectory"
 				)
 			);
 		}
@@ -775,8 +791,8 @@ Thank you.","geodirectory"
 		 * @since 2.0.0
 		 * @return string
 		 */
-		public function other_enquiry_subject(){
-			return apply_filters('geodir_email_other_enquiry_subject',__("[#from_name#] Website Enquiry","geodirectory"));
+		public function send_enquiry_subject(){
+			return apply_filters('geodir_email_send_enquiry_subject',__("[[#site_name#]] Website Enquiry","geodirectory"));
 		}
 
 		/**
@@ -785,17 +801,9 @@ Thank you.","geodirectory"
 		 * @since 2.0.0
 		 * @return string
 		 */
-		public function other_enquiry_body(){
-			return apply_filters('geodir_email_other_enquiry_body',
-				__("Dear [#to_name#],
-
-An enquiry has been sent from: [#listing_link#]
-
-===============================
-[#comments#]
-===============================
-
-Thank you.","geodirectory"
+		public function send_enquiry_body(){
+			return apply_filters('geodir_email_send_enquiry_body',
+				__("<p>Dear [#to_name#],<p><p>An enquiry has been sent from <b>[#listing_link#]</b></p><p>===============================</p><p>[#comments#]<br>From : [#from_name#]<br>Email : [#from_email#]<br>Phone : [#phone#]<br><br>Sent from - <b>[#site_link#]</b>.</p><p>===============================</p><p>Thank you,<br /><br />[#site_name_url#]</p>","geodirectory"
 				)
 			);
 		}
