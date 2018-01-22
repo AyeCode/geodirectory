@@ -220,7 +220,7 @@ function geodir_save_rating($comment = 0)
 					post_latitude	= %s,
 					comment_content	= %s 
 					",
-                array($post_id, $post->post_type, $post->post_title, $user_ID, $comment, $rating_ip, $overall_rating, $status, $post_status, date_i18n('Y-m-d H:i:s', current_time('timestamp')), $post->post_city, $post->post_region, $post->post_country, $post->post_latitude, $post->post_longitude, $comment_info->comment_content)
+                array($post_id, $post->post_type, $post->post_title, $user_ID, $comment, $rating_ip, $overall_rating, $status, $post_status, date_i18n('Y-m-d H:i:s', current_time('timestamp')), $post->city, $post->region, $post->country, $post->latitude, $post->longitude, $comment_info->comment_content)
             );
 
             $wpdb->query($sqlqry);
@@ -1104,7 +1104,7 @@ function geodir_check_notify_moderator( $maybe_notify, $comment_id ) {
     $comment = get_comment( $comment_id );
 
     if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
-        $maybe_notify = (bool)geodir_get_option( 'geodir_notify_comment_moderation' );
+        $maybe_notify = '0' == $comment->comment_approved && (bool)geodir_email_is_enabled( 'admin_moderate_comment' );
     }
 
     return $maybe_notify;
@@ -1114,8 +1114,8 @@ add_filter( 'notify_moderator', 'geodir_check_notify_moderator', 99999, 2 );
 function geodir_comment_moderation_recipients( $emails, $comment_id ) {
     $comment = get_comment( $comment_id );
 
-    if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
-        $emails = array( get_option( 'admin_email' ) );
+    if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && geodir_email_is_enabled( 'admin_moderate_comment' ) ) {
+        $emails = array( geodir_get_admin_email() );
     }
     
     return $emails;
@@ -1125,10 +1125,13 @@ add_filter( 'comment_moderation_recipients', 'geodir_comment_moderation_recipien
 function geodir_comment_moderation_subject( $subject, $comment_id ) {
     $comment = get_comment( $comment_id );
 
-    if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
+    if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && geodir_email_is_enabled( 'admin_moderate_comment' ) ) {
+		$post = geodir_get_post_info( $comment->comment_post_ID );
+
         $email_vars = array( 
             'email_type' => 'admin_moderate_comment',
-            'comment' => $comment
+            'comment' => $comment,
+			'post' => $post
         );
 		
 		$subject = geodir_email_get_subject( 'admin_moderate_comment', $email_vars );
@@ -1141,50 +1144,28 @@ add_filter( 'comment_moderation_subject', 'geodir_comment_moderation_subject', 1
 function geodir_comment_moderation_text( $message, $comment_id ) {
     $comment = get_comment( $comment_id );
 
-    if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
-        global $geodir_email_search, $geodir_email_replace;
-        
-        if ( empty( $geodir_email_search ) ) {
-            $geodir_email_search = array();
-        }
-        
-        if ( empty( $geodir_email_replace ) ) {
-            $geodir_email_replace = array();
-        }
-        
-        $geodir_email_search['listing_title'] = '[#listing_title#]';
-        $geodir_email_search['listing_url'] = '[#listing_url#]';
-        $geodir_email_search['listing_link'] = '[#listing_link#]';
-        $geodir_email_search['comment_ID'] = '[#comment_ID#]';
-        $geodir_email_search['comment_author'] = '[#comment_author#]';
-        $geodir_email_search['comment_author_IP'] = '[#comment_author_IP#]';
-        $geodir_email_search['comment_author_email'] = '[#comment_author_email#]';
-        $geodir_email_search['comment_content'] = '[#comment_content#]';
-        $geodir_email_search['comment_approve_link'] = '[#comment_approve_link#]';
-        $geodir_email_search['comment_trash_link'] = '[#comment_trash_link#]';
-        $geodir_email_search['comment_spam_link'] = '[#comment_spam_link#]';
-        $geodir_email_search['comment_moderation_link'] = '[#comment_moderation_link#]';
-        
-        $geodir_email_replace['listing_title'] = get_the_title( $comment->comment_post_ID );
-        $geodir_email_replace['listing_url'] = get_permalink( $comment->comment_post_ID );
-        $geodir_email_replace['listing_link'] = '<a href="' . esc_url( $geodir_email_replace['listing_url'] ) . '">' . $geodir_email_replace['listing_title'] . '</a>';
-        $geodir_email_replace['comment_ID'] = $comment_id;
-        $geodir_email_replace['comment_author'] = $comment->comment_author;
-        $geodir_email_replace['comment_author_IP'] = $comment->comment_author_IP;
-        $geodir_email_replace['comment_author_email'] = $comment->comment_author_email;
-        $geodir_email_replace['comment_content'] = wp_specialchars_decode( $comment->comment_content );
-        $geodir_email_replace['comment_approve_link'] = admin_url( "comment.php?action=approve&c={$comment_id}#wpbody-content" );
-        $geodir_email_replace['comment_trash_link'] = admin_url( "comment.php?action=trash&c={$comment_id}#wpbody-content" );
-        $geodir_email_replace['comment_spam_link'] = admin_url( "comment.php?action=spam&c={$comment_id}#wpbody-content" );
-        $geodir_email_replace['comment_moderation_link'] = admin_url( "edit-comments.php?comment_status=moderated#wpbody-content" );
+    if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && geodir_email_is_enabled( 'admin_moderate_comment' ) ) {
+		$post = geodir_get_post_info( $comment->comment_post_ID );
+		$email_type = 'admin_moderate_comment';
 
-        $email_vars = array( 
-            'email_type' => 'admin_moderate_comment',
-            'comment' => $comment
+        $email_vars = array(
+            'comment' => $comment,
+			'post' => $post
         );
 
-        $message = geodir_email_get_content( 'admin_moderate_comment', $email_vars );
-        $message = geodir_email_wrap_message( $message, 'admin_moderate_comment', $email_vars, '', true );
+        $email_heading  = geodir_email_get_heading( $email_type, $email_vars );
+		$message_body   = geodir_email_get_content( $email_type, $email_vars );
+
+		$message        = geodir_get_template_html( 'emails/geodir-email-' . $email_type . '.php', array(
+				'email_type'    => $email_type,
+				'email_vars'  	=> $email_vars,
+				'email_heading' => $email_heading,
+				'sent_to_admin' => true,
+				'plain_text'    => false,
+				'message_body'  => $message_body,
+			) );
+		$message = geodir_email_style_body( $message, $email_type, $email_vars );
+		$message = apply_filters( 'geodir_mail_content', $message, $email_type, $email_vars );
     }
     
     return $message;
@@ -1194,10 +1175,13 @@ add_filter( 'comment_moderation_text', 'geodir_comment_moderation_text', 10, 2 )
 function geodir_comment_moderation_headers( $headers, $comment_id ) {
     $comment = get_comment( $comment_id );
 
-    if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
+    if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && geodir_email_is_enabled( 'admin_moderate_comment' ) ) {
+		$post = geodir_get_post_info( $comment->comment_post_ID );
+
         $email_vars = array( 
             'email_type' => 'admin_moderate_comment',
-            'comment' => $comment
+            'comment' => $comment,
+			'post' => $post
         );
 		
 		$headers =  geodir_email_get_headers( 'admin_moderate_comment', $email_vars );
@@ -1211,7 +1195,7 @@ function geodir_check_notify_post_author( $maybe_notify, $comment_id ) {
     $comment = get_comment( $comment_id );
 
     if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
-        $maybe_notify = (bool)geodir_get_option( 'geodir_notify_listing_owner_on_comment' );
+        $maybe_notify = (bool)geodir_email_is_enabled( 'owner_comment_submit' );
     }
 
     return $maybe_notify;
@@ -1221,8 +1205,16 @@ add_filter( 'notify_post_author', 'geodir_check_notify_post_author', 99999, 2 );
 function geodir_comment_notification_subject( $subject, $comment_id ) {
     $comment = get_comment( $comment_id );
 
-    if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
-        $subject = geodir_email_get_subject( 'geodir_listing_owner_comment_email' );
+    if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && geodir_email_is_enabled( 'owner_comment_submit' ) ) {
+		$post = geodir_get_post_info( $comment->comment_post_ID );
+
+        $email_vars = array( 
+            'email_type' => 'owner_comment_submit',
+            'comment' => $comment,
+			'post' => $post
+        );
+		
+		$subject = geodir_email_get_subject( 'owner_comment_submit', $email_vars );
     }
     
     return $subject;
@@ -1232,57 +1224,28 @@ add_filter( 'comment_notification_subject', 'geodir_comment_notification_subject
 function geodir_comment_notification_text( $message, $comment_id ) {
     $comment = get_comment( $comment_id );
 
-    if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
-        global $geodir_email_search, $geodir_email_replace;
-        
-        if ( empty( $geodir_email_search ) ) {
-            $geodir_email_search = array();
-        }
-        
-        if ( empty( $geodir_email_replace ) ) {
-            $geodir_email_replace = array();
-        }
-        
-        $comment_post_ID = $comment->comment_post_ID;
-        $post = get_post( $comment_post_ID );
-        $post_author_ID = $post->post_author;
-        $user = get_userdata( $post_author_ID );
-        
-        $geodir_email_search['listing_title'] = '[#listing_title#]';
-        $geodir_email_search['listing_url'] = '[#listing_url#]';
-        $geodir_email_search['listing_link'] = '[#listing_link#]';
-        $geodir_email_search['comment_ID'] = '[#comment_ID#]';
-        $geodir_email_search['comment_author'] = '[#comment_author#]';
-        $geodir_email_search['comment_author_IP'] = '[#comment_author_IP#]';
-        $geodir_email_search['comment_author_email'] = '[#comment_author_email#]';
-        $geodir_email_search['comment_content'] = '[#comment_content#]';
-        $geodir_email_search['comment_approve_link'] = '[#comment_approve_link#]';
-        $geodir_email_search['comment_trash_link'] = '[#comment_trash_link#]';
-        $geodir_email_search['comment_spam_link'] = '[#comment_spam_link#]';
-        $geodir_email_search['comment_moderation_link'] = '[#comment_moderation_link#]';
-        $geodir_email_search['client_name'] = '[#client_name#]';
-        
-        $geodir_email_replace['listing_title'] = get_the_title( $comment->comment_post_ID );
-        $geodir_email_replace['listing_url'] = get_permalink( $comment->comment_post_ID );
-        $geodir_email_replace['listing_link'] = '<a href="' . esc_url( $geodir_email_replace['listing_url'] ) . '">' . $geodir_email_replace['listing_title'] . '</a>';
-        $geodir_email_replace['comment_ID'] = $comment_id;
-        $geodir_email_replace['comment_author'] = $comment->comment_author;
-        $geodir_email_replace['comment_author_IP'] = $comment->comment_author_IP;
-        $geodir_email_replace['comment_author_email'] = $comment->comment_author_email;
-        $geodir_email_replace['comment_content'] = wp_specialchars_decode( $comment->comment_content );
-        $geodir_email_replace['comment_approve_link'] = admin_url( "comment.php?action=approve&c={$comment_id}#wpbody-content" );
-        $geodir_email_replace['comment_trash_link'] = admin_url( "comment.php?action=trash&c={$comment_id}#wpbody-content" );
-        $geodir_email_replace['comment_spam_link'] = admin_url( "comment.php?action=spam&c={$comment_id}#wpbody-content" );
-        $geodir_email_replace['comment_moderation_link'] = admin_url( "edit-comments.php?comment_status=moderated#wpbody-content" );
-        $geodir_email_replace['client_name'] = geodir_get_client_name( $post_author_ID );
+    if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && geodir_email_is_enabled( 'owner_comment_submit' ) ) {
+		$post = geodir_get_post_info( $comment->comment_post_ID );
+		$email_type = 'owner_comment_submit';
 
-        $email_vars = array( 
-            'email_type' => 'geodir_listing_owner_comment_email',
-            'comment' => $comment
+        $email_vars = array(
+            'comment' => $comment,
+			'post' => $post
         );
 
-        $message = geodir_email_get_content( 'geodir_listing_owner_comment_email' );
-        $message = geodir_email_wrap_message( $message, $email_vars );
+        $email_heading  = geodir_email_get_heading( $email_type, $email_vars );
+		$message_body   = geodir_email_get_content( $email_type, $email_vars );
+
+		$message        = geodir_get_template_html( 'emails/geodir-email-' . $email_type . '.php', array(
+				'email_type'    => $email_type,
+				'email_vars'  	=> $email_vars,
+				'email_heading' => $email_heading,
+				'sent_to_admin' => false,
+				'plain_text'    => false,
+				'message_body'  => $message_body,
+			) );
+		$message = geodir_email_style_body( $message, $email_type, $email_vars );
+		$message = apply_filters( 'geodir_mail_content', $message, $email_type, $email_vars );
     }
     
     return $message;
@@ -1292,8 +1255,15 @@ add_filter( 'comment_notification_text', 'geodir_comment_notification_text', 10,
 function geodir_comment_notification_headers( $headers, $comment_id ) {
     $comment = get_comment( $comment_id );
 
-    if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
-        $headers =  geodir_email_get_headers();
+    if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && geodir_email_is_enabled( 'owner_comment_submit' ) ) {
+		$post = geodir_get_post_info( $comment->comment_post_ID );
+
+        $email_vars = array(
+            'comment' => $comment,
+			'post' => $post
+        );
+		
+		$headers =  geodir_email_get_headers( 'owner_comment_submit', $email_vars );
     }
     
     return $headers;
@@ -1307,7 +1277,7 @@ function geodir_should_notify_comment_author( $comment ) {
         $comment_id = $comment;
     }
 
-    $notify = geodir_get_option( 'geodir_notify_comment_author_on_approved' );
+    $notify = geodir_email_is_enabled( 'author_comment_approved' );
     $notify_sent = get_comment_meta( $comment_id, 'gd_comment_author_notified', true );
 
     if ( ! empty( $notify ) && empty( $notify_sent ) ) {
@@ -1326,7 +1296,7 @@ function geodir_should_notify_listing_author( $comment ) {
         $comment_id = $comment;
     }
 
-    $notify = geodir_get_option( 'geodir_notify_listing_owner_on_approved' );
+    $notify = geodir_email_is_enabled( 'author_comment_approved' );
     $notify_sent = get_comment_meta( $comment_id, 'gd_listing_author_notified', true );
 
     if ( ! empty( $notify ) && empty( $notify_sent ) ) {
@@ -1351,98 +1321,18 @@ function geodir_notify_on_comment_approved( $comment ) {
     }
 
     
-    $comment_id = $comment->comment_ID;
-    $comment_post_ID = $comment->comment_post_ID;
-    $post = get_post( $comment_post_ID );
-    $post_author_ID = $post->post_author;
-    $user = get_userdata( $post_author_ID );
-    
-    $email_headers = geodir_email_get_headers();
-    
-    global $geodir_email_search, $geodir_email_replace;
-        
-    if ( empty( $geodir_email_search ) ) {
-        $geodir_email_search = array();
-    }
-    
-    if ( empty( $geodir_email_replace ) ) {
-        $geodir_email_replace = array();
-    }
-    
-    $geodir_email_search['listing_title'] = '[#listing_title#]';
-    $geodir_email_search['listing_url'] = '[#listing_url#]';
-    $geodir_email_search['listing_link'] = '[#listing_link#]';
-    $geodir_email_search['comment_ID'] = '[#comment_ID#]';
-    $geodir_email_search['comment_author'] = '[#comment_author#]';
-    $geodir_email_search['comment_author_IP'] = '[#comment_author_IP#]';
-    $geodir_email_search['comment_author_email'] = '[#comment_author_email#]';
-    $geodir_email_search['comment_content'] = '[#comment_content#]';
-    $geodir_email_search['client_name'] = '[#client_name#]';
-
-    $geodir_email_replace['listing_title'] = get_the_title( $comment->comment_post_ID );
-    $geodir_email_replace['listing_url'] = get_permalink( $comment->comment_post_ID );
-    $geodir_email_replace['listing_link'] = '<a href="' . esc_url( $geodir_email_replace['listing_url'] ) . '">' . $geodir_email_replace['listing_title'] . '</a>';
-    $geodir_email_replace['comment_ID'] = $comment_id;
-    $geodir_email_replace['comment_author'] = $comment->comment_author;
-    $geodir_email_replace['comment_author_IP'] = $comment->comment_author_IP;
-    $geodir_email_replace['comment_author_email'] = $comment->comment_author_email;
-    $geodir_email_replace['comment_content'] = wp_specialchars_decode( $comment->comment_content );
-    $geodir_email_replace['client_name'] = geodir_get_client_name( $post_author_ID );
-    
     // Notify to comment author
     if ( $notify_comment_author ) {
-        $emails = array();
-        if ( !empty( $comment->comment_author_email ) ) {
-            $emails[] = $comment->comment_author_email;
-        }
+        update_comment_meta( $comment->comment_ID, 'gd_comment_author_notified', current_time( 'timestamp', 1 ) );
 
-        $emails = apply_filters( 'geodir_notify_comment_author_recipients', $emails, $comment );
-
-        if ( ! empty( $emails ) ) {
-            $email_vars = array( 
-                'email_type' => 'geodir_comment_author_approved_email',
-                'comment' => $comment
-            );
-
-            $headers = apply_filters( 'geodir_notify_comment_author_headers', $email_headers, $comment );
-            $subject = geodir_email_get_subject( 'geodir_comment_author_approved_email', $email_vars );
-            $message = geodir_email_get_content( 'geodir_comment_author_approved_email', $email_vars );
-            $message = geodir_email_wrap_message( $message, $email_vars );
-
-            update_comment_meta( $comment->comment_ID, 'gd_comment_author_notified', current_time( 'timestamp', 1 ) );
-
-            foreach ( $emails as $email ) {
-                geodir_mail( $email, wp_specialchars_decode( $subject ), $message, $headers );
-            }
-        }
+        geodir_send_owner_comment_approved_email( $comment );
     }
 
     // Notify to listing author
     if ( $notify_listing_author ) {
-        $emails = array();
-        if ( !empty( $user->user_email ) ) {
-            $emails[] = $user->user_email;
-        }
-
-        $emails = apply_filters( 'geodir_notify_listing_author_recipients', $emails, $comment );
-
-        if ( ! empty( $emails ) ) {
-            $email_vars = array( 
-                'email_type' => 'geodir_listing_owner_approved_email',
-                'comment' => $comment
-            );
-
-            $headers = apply_filters( 'geodir_notify_listing_author_headers', $email_headers, $comment );
-            $subject = geodir_email_get_subject( 'geodir_listing_owner_approved_email', $email_vars );
-            $message = geodir_email_get_content( 'geodir_listing_owner_approved_email', $email_vars );
-            $message = geodir_email_wrap_message( $message, $email_vars );
-
-            update_comment_meta( $comment->comment_ID, 'gd_listing_author_notified', current_time( 'timestamp', 1 ) );
-
-            foreach ( $emails as $email ) {
-                geodir_mail( $email, wp_specialchars_decode( $subject ), $message, $headers );
-            }
-        }
+        update_comment_meta( $comment->comment_ID, 'gd_listing_author_notified', current_time( 'timestamp', 1 ) );
+		
+		geodir_send_author_comment_approved_email( $comment );
     }
 }
 add_action( 'comment_unapproved_to_approved', 'geodir_notify_on_comment_approved', 10, 2 );

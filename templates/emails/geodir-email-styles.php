@@ -16,6 +16,14 @@ $base_lighter_20 = geodir_hex_lighter( $base, 20 );
 $base_lighter_40 = geodir_hex_lighter( $base, 40 );
 $text_lighter_20 = geodir_hex_lighter( $text, 20 );
 
+$header_bg       		= geodir_get_option( 'email_header_background_color', '#e46c1d' );
+$header_color 			= geodir_get_option( 'email_header_text_color', '#ffffff' );
+$header_bg_darker_10 	= geodir_hex_darker( $header_bg, 10 );
+
+$footer_bg      		= geodir_get_option( 'email_footer_background_color', '#333333' );
+$footer_color 			= geodir_get_option( 'email_footer_text_color', '#eeeeee' );
+$footer_bg_darker_10  	= geodir_hex_darker( $footer_bg, 10 );
+
 // !important; is a gmail hack to prevent styles being stripped if it doesn't like something.
 ?>
 #wrapper {
@@ -35,13 +43,35 @@ $text_lighter_20 = geodir_hex_lighter( $text, 20 );
     max-width: 900px;
     width: 100%;
 }
-#template_container {
+#template_body {
     background-color: <?php echo esc_attr( $body ); ?>;
     border: 1px solid <?php echo esc_attr( $bg_darker_10 ); ?>;
     border-radius: 3px !important;
 	box-shadow: 0 1px 4px rgba(0,0,0,0.1) !important;
 }
 #template_header {
+	background-color: <?php echo esc_attr( $header_bg ); ?>;
+	border: 1px solid <?php echo esc_attr( $header_bg_darker_10 ); ?>;
+	padding: 15px;
+}
+#template_header,
+#template_header a {
+	color: <?php echo esc_attr( $header_color ); ?>;
+    font-family: Arial;
+}
+#template_footer {
+	background-color: <?php echo esc_attr( $footer_bg ); ?>;
+	border: 1px solid <?php echo esc_attr( $footer_bg_darker_10 ); ?>;
+    text-align:center;
+    padding: 10px 30px 10px 30px;
+}
+#template_footer,
+#template_footer a {
+	color: <?php echo esc_attr( $footer_color ); ?>;
+    font-family: Arial;
+    font-size:12px;
+}
+#template_heading {
     background-color: <?php echo esc_attr( $base ); ?>;
     border-radius: 3px 3px 0 0 !important;
     color: <?php echo esc_attr( $base_text ); ?>;
@@ -54,22 +84,16 @@ $text_lighter_20 = geodir_hex_lighter( $text, 20 );
 #template_header_image {
     width: 100%;
 }
-#template_header h1 {
+#template_header_image > p {
+	margin: 0;
+}
+#template_heading h1 {
     color: <?php echo esc_attr( $base_text ); ?>;
 }
 #template_footer td {
     padding: 0;
     -webkit-border-radius: 6px;
     font-size: 14px;
-}
-#template_footer #credit {
-    border:0;
-    color: <?php echo esc_attr( $base_lighter_40 ); ?>;
-    font-family: Arial;
-    font-size:12px;
-    line-height:125%;
-    text-align:center;
-    padding: 0 36px 36px 36px;
 }
 #body_content {
     background-color: <?php echo esc_attr( $body ); ?>;
@@ -154,6 +178,7 @@ img {
     outline: none;
     text-decoration: none;
     text-transform: capitalize;
+	vertical-align: middle;
 }
 .table-bordered {
     border: 1px solid <?php echo esc_attr( $body_darker_10 ); ?>;

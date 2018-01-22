@@ -916,6 +916,7 @@ class GeoDir_Post_Data {
 
 		// get the message response.
 		if(!is_wp_error($result)){
+			do_action( 'geodir_ajax_post_saved', $post_data, ! empty( $post_data['post_parent'] ) );
 			return self::ajax_save_post_message($post_data);
 		}
 

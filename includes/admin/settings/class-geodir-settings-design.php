@@ -103,7 +103,7 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 				$settings = apply_filters( 'woocommerce_user_email_settings', array(
 
 
-					array('name' => __('Listing submitted', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_user_submitted_settings'),
+					array('name' => __('Listing submitted', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_user_pending_post_settings'),
 
 
 
@@ -207,7 +207,7 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 						'desc_tip' => true,
 						'advanced' => true,
                     ),
-                    'email_body_background_color' => array(
+					'email_body_background_color' => array(
                         'id'   => 'email_body_background_color',
                         'name' => __( 'Body Background Color', 'geodirectory' ),
                         'desc' => __( 'The main body background color of email template. Default <code>#fdfdfd</code>.', 'geodirectory' ),
@@ -221,6 +221,42 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
                         'name' => __( 'Body Text Color', 'geodirectory' ),
                         'desc' => __( 'The main body text color. Default <code>#505050</code>.', 'geodirectory' ),
                         'default' => '#505050',
+                        'type' => 'color',
+						'desc_tip' => true,
+						'advanced' => true,
+                    ),
+					'email_header_background_color' => array(
+                        'id'   => 'email_header_background_color',
+                        'name' => __( 'Header Background Color', 'geodirectory' ),
+                        'desc' => __( 'The header background color of email template. Default <code>#ff8333</code>.', 'geodirectory' ),
+                        'default' => '#ff8333',
+                        'type' => 'color',
+						'desc_tip' => true,
+						'advanced' => true,
+                    ),
+					'email_header_text_color' => array(
+                        'id'   => 'email_header_text_color',
+                        'name' => __( 'Header Text Color', 'geodirectory' ),
+                        'desc' => __( 'The footer text color. Default <code>#ffffff</code>.', 'geodirectory' ),
+                        'default' => '#ffffff',
+                        'type' => 'color',
+						'desc_tip' => true,
+						'advanced' => true,
+                    ),
+					'email_footer_background_color' => array(
+                        'id'   => 'email_footer_background_color',
+                        'name' => __( 'Footer Background Color', 'geodirectory' ),
+                        'desc' => __( 'The footer background color of email template. Default <code>#333333</code>.', 'geodirectory' ),
+                        'default' => '#333333',
+                        'type' => 'color',
+						'desc_tip' => true,
+						'advanced' => true,
+                    ),
+					'email_footer_text_color' => array(
+                        'id'   => 'email_footer_text_color',
+                        'name' => __( 'Footer Text Color', 'geodirectory' ),
+                        'desc' => __( 'The footer text color. Default <code>#eeeeee</code>.', 'geodirectory' ),
+                        'default' => '#eeeeee',
                         'type' => 'color',
 						'desc_tip' => true,
 						'advanced' => true,

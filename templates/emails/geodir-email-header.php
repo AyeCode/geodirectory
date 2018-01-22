@@ -22,7 +22,7 @@ if ( !isset( $email_heading ) ) {
         <div id="wrapper" dir="<?php echo is_rtl() ? 'rtl' : 'ltr'?>">
             <table border="0" cellpadding="0" cellspacing="0" height="100%" class="wrapper-table">
                 <tr>
-                    <td align="center" valign="top">
+                    <td align="center" valign="middle" id="template_header">
                         <div id="template_header_image">
                         <?php
                             if ( $img = geodir_get_option( 'email_header_image' ) ) {
@@ -30,12 +30,16 @@ if ( !isset( $email_heading ) ) {
                             }
                         ?>
                         </div>
-                        <table border="0" cellpadding="0" cellspacing="0" width="100%" id="template_container">
+					</td>
+				</tr>
+				<tr>
+					<td align="center" valign="middle" id="template_body">
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
                             <?php if ( !empty( $email_heading ) ) { ?>
                             <tr>
                                 <td align="center" valign="top">
                                     <!-- Header -->
-                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" id="template_header">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" id="template_heading">
                                         <tr>
                                             <td id="header_wrapper">
                                                 <h1><?php echo $email_heading; ?></h1>
@@ -49,7 +53,7 @@ if ( !isset( $email_heading ) ) {
                             <tr>
                                 <td align="center" valign="top">
                                     <!-- Body -->
-                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" id="template_body">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" id="email_body">
                                         <tr>
                                             <td valign="top" id="body_content">
                                                 <!-- Content -->

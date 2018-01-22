@@ -573,7 +573,7 @@ function geodir_listing_inner_old_classes( $classes, $post ) {
  * Handle redirects before content is output - hooked into template_redirect so is_page works.
  */
 function geodir_template_redirect() {
-    global $wp_query, $wp, $post; //geodir_error_log( $wp->query_vars, 'query_vars', __FILE__, __LINE__ );
+    global $wp_query, $wp, $post;
 
     if ( is_page() ) {
 
