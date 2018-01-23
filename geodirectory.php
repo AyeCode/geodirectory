@@ -96,6 +96,7 @@ final class GeoDirectory {
     private function setup_constants() {
         global $wpdb, $plugin_prefix, $geodir_post_custom_fields_cache;
         
+		$upload_dir = wp_upload_dir( null, false );
         $plugin_prefix = $wpdb->prefix . 'geodir_';
         
         if ( $this->is_request( 'test' ) ) {
@@ -124,6 +125,8 @@ final class GeoDirectory {
         $this->define( 'GEODIR_GA_CLIENTSECRET', 'yBVkDpqJ1B9nAETHy738Zn8C' ); // don't worry - this don't need to be secret in our case
         $this->define( 'GEODIR_GA_REDIRECT', 'urn:ietf:wg:oauth:2.0:oob' );
         $this->define( 'GEODIR_GA_SCOPE', 'https://www.googleapis.com/auth/analytics' ); // .readonly
+		
+		$this->define( 'GEODIR_ROUNDING_PRECISION', 4 );
         
         // Do not store any revisions (except the one autosave per post).
         $this->define( 'WP_POST_REVISIONS', 0 );
@@ -264,6 +267,7 @@ final class GeoDirectory {
         }
         
         $this->load_db_language();
+		$this->rest_api_includes();
         
         if ( $this->is_request( 'frontend' ) ) {
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-template-loader.php' ); // Template Loader
@@ -280,6 +284,17 @@ final class GeoDirectory {
 
         $this->query = new GeoDir_Query();
     }
+	
+	private function rest_api_includes() {
+		include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-rest-functions.php' );
+
+		// Abstract controllers.
+		include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/abstracts/abstract-geodir-rest-controller.php' );
+
+		// REST API controllers.
+		include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/api/class-geodir-rest-system-status-controller.php' );
+		include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/api/class-geodir-rest-system-status-tools-controller.php' );
+	}
     
     /**
      * Hook into actions and filters.
@@ -363,6 +378,53 @@ final class GeoDirectory {
         
         return null;
     }
+	
+	/**
+	 * Check the active theme.
+	 *
+	 * @since  2.0.0
+	 * @param  string $theme Theme slug to check.
+	 * @return bool
+	 */
+	private function is_active_theme( $theme ) {
+		return get_template() === $theme;
+	}
+	
+	/**
+	 * Get the plugin url.
+	 *
+	 * @return string
+	 */
+	public function plugin_url() {
+		return untrailingslashit( plugins_url( '/', GEODIRECTORY_PLUGIN_FILE ) );
+	}
+
+	/**
+	 * Get the plugin path.
+	 *
+	 * @return string
+	 */
+	public function plugin_path() {
+		return untrailingslashit( plugin_dir_path( GEODIRECTORY_PLUGIN_FILE ) );
+	}
+
+	/**
+	 * Get the template path.
+	 *
+	 * @return string
+	 */
+	public function template_path() {
+		return trailingslashit( geodir_get_theme_template_dir_name() );
+	}
+
+	/**
+	 * Get Ajax URL.
+	 *
+	 * @return string
+	 */
+	public function ajax_url() {
+		return admin_url( 'admin-ajax.php', 'relative' );
+	}
 }
 
 endif;

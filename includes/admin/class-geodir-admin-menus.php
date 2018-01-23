@@ -122,8 +122,7 @@ class GD_Admin_Menus {
 	 * Init the status page.
 	 */
 	public function status_page() {
-		echo '### status';
-		//WC_Admin_Status::output();
+		GeoDir_Admin_Status::output();
 	}
 
 	/**

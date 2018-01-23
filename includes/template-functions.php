@@ -690,3 +690,21 @@ function geodir_list_view_select() {
 function geodir_listing_archive_image(){
 
 }
+
+/**
+ * Retrieve page ids - used for myaccount, edit_address, shop, cart, checkout, pay, view_order, terms. returns -1 if no page is found.
+ *
+ * @param string $page
+ * @return int
+ */
+function geodir_get_page_id( $page, $wpml = true ) {
+	$page = geodir_get_option( 'page_' . $page );
+	
+	if ( $wpml && function_exists( 'icl_object_id' ) ) {
+		$page =  icl_object_id( $page, 'page', true );
+	}
+	
+	$page = apply_filters( 'geodir_get_' . $page . '_page_id', $page, $wpml );
+
+	return $page ? absint( $page ) : -1;
+}
