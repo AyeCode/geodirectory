@@ -92,6 +92,7 @@ class GeoDir_Admin_Assets {
 
 		$screen       = get_current_screen();
 		$screen_id    = $screen ? $screen->id : '';
+		$gd_screen_id = sanitize_title( __( 'GeoDirectory', 'geodirectory' ) );
 		$suffix       = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		$post_type   = isset($_REQUEST['post_type']) && $_REQUEST['post_type'] ? sanitize_text_field($_REQUEST['post_type']) : '';
 		$geodir_map_name = geodir_map_name();
@@ -130,6 +131,18 @@ class GeoDir_Admin_Assets {
 		wp_register_script('geodir-google-maps', 'https://maps.google.com/maps/api/js?' . $map_lang . $map_key . $map_extra , array(), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-leaflet-script', geodir_plugin_url() . '/assets/leaflet/leaflet'.$suffix.'.js', array(), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-leaflet-routing-script', geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine'.$suffix.'.js', array(), GEODIRECTORY_VERSION);
+		// System status.
+		if ( $gd_screen_id . '_page_gd-status' === $screen_id ) {
+			wp_register_script( 'geodir-admin-system-status', geodir_plugin_url() . '/assets/js/system-status' . $suffix . '.js', array( 'jquery' ), GEODIRECTORY_VERSION );
+			wp_enqueue_script( 'geodir-admin-system-status' );
+			wp_localize_script(
+				'geodir-admin-system-status',
+				'geodir_admin_status_js_vars',
+				array(
+					'delete_log_confirmation' => esc_js( __( 'Are you sure you want to delete this log?', 'geodirectory' ) ),
+				)
+			);
+		}
 
 
 		// Admin scripts for GD pages only

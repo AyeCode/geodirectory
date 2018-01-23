@@ -133,3 +133,89 @@ function geodir_let_to_num( $size ) {
 	}
 	return $ret;
 }
+
+/**
+ * Return the thousand separator for prices.
+ * @since  2.0.0
+ * @return string
+ */
+function geodir_get_price_thousand_separator() {
+	$separator = apply_filters( 'geodir_get_price_thousand_separator', ',' );
+	return stripslashes( $separator );
+}
+
+/**
+ * Return the decimal separator for prices.
+ * @since  2.0.0
+ * @return string
+ */
+function geodir_get_price_decimal_separator() {
+	$separator = apply_filters( 'geodir_get_price_decimal_separator', '.' );
+	return $separator ? stripslashes( $separator ) : '.';
+}
+
+/**
+ * Return the number of decimals after the decimal point.
+ * @since  2.0.0
+ * @return int
+ */
+function geodir_get_price_decimals() {
+	$decimals = apply_filters( 'geodir_get_price_decimals', 2 );
+	return absint( $decimals );
+}
+
+/**
+ * Get rounding precision for internal WC calculations.
+ * Will increase the precision of wc_get_price_decimals by 2 decimals, unless GEODIR_ROUNDING_PRECISION is set to a higher number.
+ *
+ * @since 2.0.0
+ * @return int
+ */
+function geodir_get_rounding_precision() {
+	$precision = geodir_get_price_decimals() + 2;
+	if ( absint( GEODIR_ROUNDING_PRECISION ) > $precision ) {
+		$precision = absint( GEODIR_ROUNDING_PRECISION );
+	}
+	return $precision;
+}
+
+/**
+ * Format decimal numbers ready for DB storage.
+ *
+ * Sanitize, remove decimals, and optionally round + trim off zeros.
+ *
+ * This function does not remove thousands - this should be done before passing a value to the function.
+ *
+ * @param  float|string $number Expects either a float or a string with a decimal separator only (no thousands)
+ * @param  mixed $dp number of decimal points to use, blank to use woocommerce_price_num_decimals, or false to avoid all rounding.
+ * @param  bool $trim_zeros from end of string
+ * @return string
+ */
+function geodir_format_decimal( $number, $dp = false, $trim_zeros = false ) {
+	$locale   = localeconv();
+	$decimals = array( geodir_get_price_decimal_separator(), $locale['decimal_point'], $locale['mon_decimal_point'] );
+
+	// Remove locale from string.
+	if ( ! is_float( $number ) ) {
+		$number = str_replace( $decimals, '.', $number );
+		$number = preg_replace( '/[^0-9\.,-]/', '', geodir_clean( $number ) );
+	}
+
+	if ( false !== $dp ) {
+		$dp     = intval( '' == $dp ? geodir_get_price_decimals() : $dp );
+		$number = number_format( floatval( $number ), $dp, '.', '' );
+
+	// DP is false - don't use number format, just return a string in our format
+	} elseif ( is_float( $number ) ) {
+		// DP is false - don't use number format, just return a string using whatever is given. Remove scientific notation using sprintf.
+		$number     = str_replace( $decimals, '.', sprintf( '%.' . geodir_get_rounding_precision() . 'f', $number ) );
+		// We already had a float, so trailing zeros are not needed.
+		$trim_zeros = true;
+	}
+
+	if ( $trim_zeros && strstr( $number, '.' ) ) {
+		$number = rtrim( rtrim( $number, '0' ), '.' );
+	}
+
+	return $number;
+}

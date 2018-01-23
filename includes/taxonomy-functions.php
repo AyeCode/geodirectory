@@ -1063,3 +1063,90 @@ function geodir_get_cat_top_description( $term_id ) {
 function geodir_get_cat_schemas() {
     return GeoDir_Admin_Taxonomies::get_schemas();
 }
+
+/**
+ * Function for recounting product terms, ignoring hidden products.
+ *
+ * @param array $terms
+ * @param string $taxonomy
+ * @param bool $callback
+ * @param bool $terms_are_term_taxonomy_ids
+ */
+function geodir_term_recount( $terms, $taxonomy, $post_type, $callback = true, $terms_are_term_taxonomy_ids = true ) {
+	global $wpdb;
+
+	// Standard callback.
+	if ( $callback ) {
+		_update_post_term_count( $terms, $taxonomy );
+	}
+
+	$exclude_term_ids = array();
+
+	$query = array(
+		'fields' => "SELECT COUNT( DISTINCT ID ) FROM {$wpdb->posts} p",
+		'join'   => '',
+		'where'  => "
+			WHERE 1=1
+			AND p.post_status = 'publish'
+			AND p.post_type = '{$post_type}'
+		",
+	);
+
+	if ( count( $exclude_term_ids ) ) {
+		$query['join']  .= " LEFT JOIN ( SELECT object_id FROM {$wpdb->term_relationships} WHERE term_taxonomy_id IN ( " . implode( ',', array_map( 'absint', $exclude_term_ids ) ) . " ) ) AS exclude_join ON exclude_join.object_id = p.ID";
+		$query['where'] .= " AND exclude_join.object_id IS NULL";
+	}
+
+	// Pre-process term taxonomy ids.
+	if ( ! $terms_are_term_taxonomy_ids ) {
+		// We passed in an array of TERMS in format id=>parent.
+		$terms = array_filter( (array) array_keys( $terms ) );
+	} else {
+		// If we have term taxonomy IDs we need to get the term ID.
+		$term_taxonomy_ids = $terms;
+		$terms             = array();
+		foreach ( $term_taxonomy_ids as $term_taxonomy_id ) {
+			$term    = get_term_by( 'term_taxonomy_id', $term_taxonomy_id, $taxonomy->name );
+			$terms[] = $term->term_id;
+		}
+	}
+
+	// Exit if we have no terms to count.
+	if ( empty( $terms ) ) {
+		return;
+	}
+
+	// Ancestors need counting.
+	if ( is_taxonomy_hierarchical( $taxonomy->name ) ) {
+		foreach ( $terms as $term_id ) {
+			$terms = array_merge( $terms, get_ancestors( $term_id, $taxonomy->name ) );
+		}
+	}
+
+	// Unique terms only.
+	$terms = array_unique( $terms );
+
+	// Count the terms.
+	foreach ( $terms as $term_id ) {
+		$terms_to_count = array( absint( $term_id ) );
+
+		if ( is_taxonomy_hierarchical( $taxonomy->name ) ) {
+			// We need to get the $term's hierarchy so we can count its children too
+			if ( ( $children = get_term_children( $term_id, $taxonomy->name ) ) && ! is_wp_error( $children ) ) {
+				$terms_to_count = array_unique( array_map( 'absint', array_merge( $terms_to_count, $children ) ) );
+			}
+		}
+
+		// Generate term query
+		$term_query          = $query;
+		$term_query['join'] .= " INNER JOIN ( SELECT object_id FROM {$wpdb->term_relationships} INNER JOIN {$wpdb->term_taxonomy} using( term_taxonomy_id ) WHERE term_id IN ( " . implode( ',', array_map( 'absint', $terms_to_count ) ) . " ) ) AS include_join ON include_join.object_id = p.ID";
+
+		// Get the count
+		$count = $wpdb->get_var( implode( ' ', $term_query ) );
+
+		// Update the count
+		update_term_meta( $term_id, '_gd_post_count_' . $taxonomy->name, absint( $count ) );
+	}
+
+	delete_transient( 'geodir_term_counts' );
+}

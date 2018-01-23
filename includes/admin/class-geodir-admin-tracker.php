@@ -351,15 +351,15 @@ class GeoDir_Admin_Tracker {
 	 */
 	private static function get_all_template_overrides() {
 
-		return; // @todo make this work
+		//return; // @todo make this work
 		$override_data  = array();
-		$template_paths = apply_filters( 'geodirectory_template_overrides_scan_paths', array( 'WooCommerce' => WC()->plugin_path() . '/templates/' ) );
+		$template_paths = apply_filters( 'geodirectory_template_overrides_scan_paths', array( 'GeoDirectory' => GeoDir()->plugin_path() . '/templates/' ) );
 		$scanned_files  = array();
 
-		require_once( WC()->plugin_path() . '/includes/admin/class-wc-admin-status.php' );
+		require_once( GeoDir()->plugin_path() . '/includes/admin/class-geodir-admin-status.php' );
 
 		foreach ( $template_paths as $plugin_name => $template_path ) {
-			$scanned_files[ $plugin_name ] = WC_Admin_Status::scan_template_files( $template_path );
+			$scanned_files[ $plugin_name ] = GeoDir_Admin_Status::scan_template_files( $template_path );
 		}
 
 		foreach ( $scanned_files as $plugin_name => $files ) {
