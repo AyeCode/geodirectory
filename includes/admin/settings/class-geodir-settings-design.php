@@ -177,7 +177,7 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 						'desc' => __('URL to an image you want to show in the email header. Upload images using the media uploader (Admin > Media). Displayed on HTML emails only.', 'geodirectory'),
 						'id' => 'email_header_image',
 						'class' => 'large-text',
-						'type' => 'text',
+						'type' => 'image',
 						'desc_tip' => true,
 					),
 					array(
