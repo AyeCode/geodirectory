@@ -2490,14 +2490,14 @@ function geodir_sc_single_taxonomies()
 
     }
 
-    if (!empty($gd_post->post_categories)) {
+    if (!empty($gd_post->post_category)) {
         $links = array();
         $terms = array();
         $termsOrdered = array();
-        if (!is_array($gd_post->post_categories)) {
-            $post_terms = explode(",", trim($gd_post->post_categories, ","));
+        if (!is_array($gd_post->post_category)) {
+            $post_terms = explode(",", trim($gd_post->post_category, ","));
         } else {
-            $post_terms = $gd_post->post_categories;
+            $post_terms = $gd_post->post_category;
 
             if ($preview) {
                 $post_terms = geodir_add_parent_terms($post_terms, $post_taxonomy);

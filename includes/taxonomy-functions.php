@@ -285,8 +285,8 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
                 $post_category = $post->post_category[$cat_taxonomy];
 
             $post_categories = $post->post_category_str;
-            if (!empty($post_categories) && array_key_exists($cat_taxonomy, $post_categories))
-                $post_category_str = $post_categories[$cat_taxonomy];
+            if (!empty($post_categories) && array_key_exists($cat_taxonomy, $post_category))
+                $post_category_str = $post_category[$cat_taxonomy];
 
         } elseif ((geodir_is_page('add-listing') && isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') || (is_admin())) {
             global $post;
@@ -296,10 +296,10 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
                 $post_category = $post->{$cat_taxonomy};
             }
 
-            $post_categories = get_post_meta($post->ID, 'post_categories', true);
+            $post_category = get_post_meta($post->ID, 'post_category', true);
 
-            if (empty($post_category) && !empty($post_categories) && !empty($post_categories[$cat_taxonomy])) {
-                foreach (explode(",", $post_categories[$cat_taxonomy]) as $cat_part) {
+            if (empty($post_category) && !empty($post_category) && !empty($post_category[$cat_taxonomy])) {
+                foreach (explode(",", $post_category[$cat_taxonomy]) as $cat_part) {
                     if (is_numeric($cat_part)) {
                         $cat_part_arr[] = $cat_part;
                     }
@@ -329,7 +329,7 @@ if (!function_exists('geodir_custom_taxonomy_walker2')) {
             }
 
 
-            if (!empty($post_categories) && array_key_exists($cat_taxonomy, $post_categories)) {
+            if (!empty($post_category) && array_key_exists($cat_taxonomy, $post_categories)) {
                 $post_category_str = $post_categories[$cat_taxonomy];
             }
         }

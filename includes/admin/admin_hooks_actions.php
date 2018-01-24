@@ -844,11 +844,11 @@ function geodir_diagnose_cats_sync()
                     $raw_cats = wp_get_object_terms($p->post_id, $p->post_type . 'category', array('fields' => 'ids'));
 
                     if (empty($raw_cats)) {
-                        $post_categories = get_post_meta($p->post_id, 'post_categories', true);
+                        $post_category = get_post_meta($p->post_id, 'post_category', true);
 
-                        if (!empty($post_categories) && !empty($post_categories[$p->post_type . 'category'])) {
-                            $post_categories[$p->post_type . 'category'] = str_replace("d:", "", $post_categories[$p->post_type . 'category']);
-                            foreach (explode(",", $post_categories[$p->post_type . 'category']) as $cat_part) {
+                        if (!empty($post_category) && !empty($post_category[$p->post_type . 'category'])) {
+                            $post_category[$p->post_type . 'category'] = str_replace("d:", "", $post_category[$p->post_type . 'category']);
+                            foreach (explode(",", $post_category[$p->post_type . 'category']) as $cat_part) {
                                 if (is_numeric($cat_part)) {
                                     $raw_cats[] = (int)$cat_part;
                                 }
@@ -1952,8 +1952,8 @@ function geodir_ajax_import_csv()
 add_filter( 'geodir_settings_tabs_array', 'geodir_import_export_tab', 94 );
 
 // Handle ajax request for import/export.
-add_action( 'wp_ajax_geodir_import_export', 'geodir_ajax_import_export' );
-add_action( 'wp_ajax_nopriv_geodir_import_exportn', 'geodir_ajax_import_export' );
+//add_action( 'wp_ajax_geodir_import_export', 'geodir_ajax_import_export' );
+//add_action( 'wp_ajax_nopriv_geodir_import_exportn', 'geodir_ajax_import_export' );
 
 
 /**

@@ -44,6 +44,8 @@ class GeoDir_Session {
 	 * @since 1.5.7
 	 */
 	public function __construct() {
+
+
 		$this->use_php_sessions = $this->use_php_sessions();
 
 		if ( $this->use_php_sessions ) {
@@ -290,7 +292,7 @@ class GeoDir_Session {
 	 * Starts a new session if one hasn't started yet.
 	 */
 	public function maybe_start_session() {
-		if ( !session_id() && !headers_sent() ) {
+		if ( !session_id() && !headers_sent() && !isset($_POST['newcontent'])) { // @todo this is a quick hack to make the edit theme/plugin fiels work with new WP edit feature
 			session_start();
 		}
 	}

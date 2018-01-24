@@ -400,7 +400,7 @@ class GeoDir_Query {
 				if ( !empty ( $term_ids ) ) {
 
 					foreach ( $term_ids as $term ) {
-						$terms_sql .= " OR FIND_IN_SET( $term->term_id , ".$table.".post_categories ) ";
+						$terms_sql .= " OR FIND_IN_SET( $term->term_id , ".$table.".post_category ) ";
 					}
 				}
 			}

@@ -223,18 +223,24 @@ Tooltips
     float: none;
 }
 
-.gd-ui-tooltip {
-    background: #333 !important;
-    border-width: 1px !important;
-    border-radius: 3px !important;
-    box-shadow: 1px 1px 2px 1px rgba(214,214,214,0.5) !important;
-    color: #dedede !important;
-    max-width: 300px !important;
-    padding: 7px !important;
-    text-rendering: optimizeLegibility;
-    text-shadow: none !important;
-    z-index: 9999 !important;
+.ui-widget-content {
+    &.gd-ui-tooltip {
+        background: #333 !important;
+        border-width: 1px !important;
+        border-radius: 3px !important;
+        box-shadow: 1px 1px 2px 1px rgba(214,214,214,0.5) !important;
+        color: #dedede !important;
+        max-width: 300px !important;
+        padding: 7px !important;
+        text-rendering: optimizeLegibility;
+        text-shadow: none !important;
+        z-index: 9999 !important;
+        a{
+            color: #09afff;
+        }
+    }
 }
+
 
 
 
@@ -303,9 +309,16 @@ Import/export
 	margin-top: 20px;
 }
 
-.gd-import-export #gd-import-msg #message {
+.gd-import-export #gd-import-msg #message,
+.gd-import-export #gd-import-errors #gd-csv-errors {
     background-color: rgb(255, 251, 204);
 }
+
+.gd-import-export #gd-import-errors #gd-csv-errors{
+    max-height: 120px;
+    overflow-y: scroll;
+}
+
 .gd-import-export .gd-import-msg .message p {
 	margin-top: 3px;
 	margin-bottom: 3px;

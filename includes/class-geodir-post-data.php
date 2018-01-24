@@ -144,11 +144,12 @@ class GeoDir_Post_Data {
 					$categories = array_map( 'trim', $categories );
 				} else {
 					$categories = array_map( 'absint', $gd_post['post_category'] );
+					//$categories = array_map( 'trim', $gd_post['post_category'] );
 				}
 
 				$categories = self::set_object_terms( $post_id, $categories, sanitize_key( $post_type ) . "category" );
 
-				$postarr['post_categories'] = "," . implode( ",", $categories ) . ",";
+				$postarr['post_category'] = "," . implode( ",", $categories ) . ",";
 
 				if ( isset( $categories[0] ) ) {
 					$postarr['default_category'] = $categories[0];
@@ -205,6 +206,9 @@ class GeoDir_Post_Data {
 			//print_r(geodir_get_external_media( "http://localhost/wp-content/uploads/2017/11/temp_1/x.jpg" ) );exit;
 
 			// Save post images
+
+			//print_r($gd_post);exit;
+
 			if ( isset( $gd_post['post_images'] ) ) {
 				$featured_image = self::save_post_images( $post_id, $gd_post['post_images'], isset( $gd_post['post_dummy'] ) );
 				if ( $featured_image !== false ) {
@@ -214,7 +218,7 @@ class GeoDir_Post_Data {
 			unset( $postarr['post_images'] ); // unset the post_images as we save it in another table.
 
 
-			//$postarr['post_categories'] = $post['post_category'];
+			//$postarr['post_category'] = $post['post_category'];
 
 			//$postarr['featured_image'] = $post['featured_image'];// @todo we need to
 
@@ -283,12 +287,11 @@ class GeoDir_Post_Data {
 	 */
 	public static function save_post_images( $post_id = 0, $post_images = array(), $dummy = false ) {
 
-		// check for changes, maybe we don't need to run this
+		// check for changes, maybe we don't need to run the whole function
 		$curImages = GeoDir_Media::get_post_images_edit_string( $post_id );
 		if ( $curImages == $post_images ) {
 			return false;
 		}
-
 
 		$featured_image = '';
 
@@ -313,6 +316,8 @@ class GeoDir_Post_Data {
 
 			$image_ids = array();
 
+
+
 			foreach ( $post_images as $order => $image_string ) {
 				$image_info = array();
 				// check if the string contains more info
@@ -332,15 +337,23 @@ class GeoDir_Post_Data {
 				$image_id      = ! empty( $image_info[1] ) ? absint( $image_info[1] ) : '';
 				$image_title   = ! empty( $image_info[2] ) ? sanitize_text_field( $image_info[2] ) : '';
 				$image_caption = ! empty( $image_info[3] ) ? sanitize_text_field( $image_info[3] ) : '';
+				$approved      = 1; // we approve all images on save
 
 				// check if we already have the image.
 				if ( $image_url && $image_id ) { // we already have the image so just update the title, caption and order id
 					// update the image
-					$file        = GeoDir_Media::update_image_texts( $image_id, $post_id, $image_url, $image_title, $image_caption, $order );
+					$file        = GeoDir_Media::update_image_texts( $image_id, $post_id, $image_url, $image_title, $image_caption, $order, $approved );
 					$image_ids[] = $image_id;
 				} else { // its a new image we have to insert.
-					// insert the image
-					$file = GeoDir_Media::insert_image_attachment( $post_id, $image_url, $image_title, $image_caption, $order );
+					
+					
+					if(defined('GEODIR_DOING_IMPORT') && strpos($image_url, 'http') !== 0){// if doing import and its not a full url then add placeholder attachment
+						// insert the image
+						$file = GeoDir_Media::insert_placeholder_image_attachment( $post_id, $image_url, $image_title, $image_caption, $order , $approved );
+					}else{
+						// insert the image
+						$file = GeoDir_Media::insert_image_attachment( $post_id, $image_url, $image_title, $image_caption, $order , $approved );
+					}
 				}
 
 

@@ -106,7 +106,23 @@ jQuery(window).load(function() {
 function gd_init_tooltips(){
     // Tooltips
     jQuery('.gd-help-tip').tooltip({
-        content: function() {
+        // content: function() {
+        //     return jQuery(this).prop('title');
+        // },
+        // tooltipClass: 'gd-ui-tooltip',
+        // position: {
+        //     my: 'center top',
+        //     at: 'center bottom+10',
+        //     collision: 'flipfit',
+        // },
+        // hide: {
+        //     duration: 200,
+        // },
+        // show: {
+        //     duration: 200,
+        // },
+
+        content: function () {
             return jQuery(this).prop('title');
         },
         tooltipClass: 'gd-ui-tooltip',
@@ -115,12 +131,20 @@ function gd_init_tooltips(){
             at: 'center bottom+10',
             collision: 'flipfit',
         },
-        hide: {
-            duration: 200,
-        },
-        show: {
-            duration: 200,
-        },
+        show: null,
+        close: function (event, ui) {
+            ui.tooltip.hover(
+
+                function () {
+                    jQuery(this).stop(true).fadeTo(400, 1);
+                },
+
+                function () {
+                    jQuery(this).fadeOut("400", function () {
+                        jQuery(this).remove();
+                    })
+                });
+        }
     });
 }
 

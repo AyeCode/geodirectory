@@ -20,14 +20,15 @@ class GeoDir_Media {
 	public static function post_attachment_upload() {
 
 		// the post id
-		$imgid = $_POST["imgid"];
-		$post_id = absint($_POST["post_id"]);
+		$imgid = isset($_POST["imgid"]) ? esc_attr($_POST["imgid"]) : '';
+		$post_id = isset($_POST["post_id"]) ? absint($_POST["post_id"]) : '';
 
 		// set GD temp upload dir
 		add_filter( 'upload_dir', array( __CLASS__, 'temp_upload_dir' ) );
 
 		// change file orientation if needed
 		//$fixed_file = geodir_exif($_FILES[$imgid . 'async-upload']);
+
 		$fixed_file = $_FILES[ $imgid . 'async-upload' ];
 
 		// handle file upload
@@ -41,13 +42,15 @@ class GeoDir_Media {
 		if ( ! isset( $status['url'] ) && isset( $status['error'] ) ) {
 			print_r( $status );
 		}
+		//print_r( $status );exit;
+
 
 		// send the uploaded file url in response
-		if ( isset( $status['url'] ) ) {
+		if ( isset( $status['url'] ) && $post_id) {
 			//echo $status['url'];
 
 			// get the image id and path
-			$image_url = self::insert_image_attachment($post_id,$status['url'],'', '', -1,1);
+			$image_url = self::insert_image_attachment($post_id,$status['url'],'', '', -1,0);
 
 			if($image_url){
 				$image_id = self::get_id_from_file_path($image_url,$post_id);
@@ -59,7 +62,11 @@ class GeoDir_Media {
 			//echo '###'.$image_url.'###';
 
 
-		} else {
+		} elseif( isset( $status['url'] )) {
+			echo $status['url'];
+		}
+		else
+		{
 			echo 'x';
 		}
 
@@ -188,7 +195,7 @@ class GeoDir_Media {
 		}
 
 		// if menu order is 0 then its featured and we need to set the post thumbnail
-		if($order === 0){
+		if($order === 0 ){
 			$attachment_id = media_sideload_image($image_url, $post_id, $image_title, 'id');
 			// return error object if its an error
 			if (!$attachment_id || is_wp_error( $attachment_id ) ) {
@@ -197,7 +204,12 @@ class GeoDir_Media {
 
 			$metadata = wp_get_attachment_metadata( $attachment_id );
 			$file = wp_check_filetype(basename($image_url));
-			set_post_thumbnail($post_id, $attachment_id);
+
+			// only set the featured image if its approved
+			if($is_approved ){
+				set_post_thumbnail($post_id, $attachment_id);
+			}
+
 
 		}else{
 
@@ -234,6 +246,74 @@ class GeoDir_Media {
 				'caption' => $image_caption,
 				'file' => $metadata['file'],
 				'mime_type' => $file['type'],
+				'menu_order' => $order,
+				'is_featured' => $order === 0 ? 1 : 0,
+				'is_approved' => $is_approved,
+				'metadata' => maybe_serialize($metadata)
+			),
+			array(
+				'%d',
+				'%d',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%d',
+				'%d',
+				'%d',
+				'%s'
+			)
+		);
+
+		// if DB save failed then return error object
+		if ( !$result ) {
+			return new WP_Error( 'image_insert', __( "Failed to insert image info to DB.", "geodirectory" ) );
+		}
+
+		// return the file path
+		return $metadata['file'];
+
+	}
+
+	/**
+	 * Insert the placeholder image info to the DB and return the attachment ID.
+	 *
+	 * This is used for CSV import so the image can be added to the listing and uploaded after.
+	 *
+	 * @param $post_id
+	 * @param $image_url
+	 * @param string $image_title
+	 * @param string $image_caption
+	 * @param string $order
+	 * @param int $is_approved
+	 *
+	 * @return array|WP_Error
+	 */
+	public static function insert_placeholder_image_attachment($post_id,$image_url,$image_title = '', $image_caption = '', $order = '', $is_approved = 1){
+		global $wpdb;
+
+		// check we have what we need
+		if(!$post_id || !$image_url){
+			return new WP_Error( 'image_insert', __( "No post_id or image url, image insert failed.", "geodirectory" ) );
+		}
+
+		$upload_dir = wp_upload_dir();
+
+		$file = $upload_dir['subdir'].'/'.basename($image_url);
+		$file_type = wp_check_filetype( basename($image_url));
+		$metadata = '';
+
+
+		// insert into the DB
+		$result = $wpdb->insert(
+			GEODIR_ATTACHMENT_TABLE,
+			array(
+				'post_id' => $post_id,
+				'user_id'   => get_current_user_id(),
+				'title' => $image_title,
+				'caption' => $image_caption,
+				'file' => $file,
+				'mime_type' => $file_type,
 				'menu_order' => $order,
 				'is_featured' => $order === 0 ? 1 : 0,
 				'is_approved' => $is_approved,
@@ -393,6 +473,9 @@ class GeoDir_Media {
 			// Move the temporary file into the uploads directory
 			$results = wp_handle_sideload( $file, $overrides );
 
+			// unlink the temp file
+			@unlink($temp_file);
+
 			if ( ! empty( $results['error'] ) ) {
 				// Insert any error handling here
 				return $results;
@@ -452,7 +535,11 @@ class GeoDir_Media {
 			$wp_upload_dir = wp_upload_dir();
 			$images_arr = array();
 			foreach( $post_images as $image ){
-				$images_arr[] = $wp_upload_dir['baseurl'].$image->file."|".$image->ID."|".$image->title."|".$image->caption;
+
+				$is_approved = isset($image->is_approved) && $image->is_approved ? '' : '|0';
+
+				//print_r($image);
+				$images_arr[] = $wp_upload_dir['baseurl'].$image->file."|".$image->ID."|".$image->title."|".$image->caption . $is_approved;
 			}
 			return implode(",",$images_arr);
 
@@ -471,6 +558,7 @@ class GeoDir_Media {
 	public static function delete_post_images($post_id){
 		global $wpdb;
 		$result = $wpdb->query($wpdb->prepare("DELETE FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE post_id = %d AND type = 'post_image'", $post_id));
+		delete_post_thumbnail( $post_id);
 		return $result;
 	}
 

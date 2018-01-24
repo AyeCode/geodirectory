@@ -42,14 +42,14 @@ function geodir_set_postcat_structure($post_id, $taxonomy, $default_cat = '', $c
     if (isset($category_str) && empty($category_str)) {
 
         $post_cat_str = '';
-        $post_categories = array();
+        $post_category = array();
         if (isset($post_cat_array) && is_array($post_cat_array) && !empty($post_cat_array)) {
             $post_cat_str = implode(",y:#", $post_cat_array);
             $post_cat_str .= ",y:";
             $post_cat_str = substr_replace($post_cat_str, ',y,d:', strpos($post_cat_str, ',y:'), strlen(',y:'));
         }
-        $post_categories[$taxonomy] = $post_cat_str;
-        $category_str = $post_categories;
+        $post_category[$taxonomy] = $post_cat_str;
+        $category_str = $post_category;
     }
 
     $change_cat_str = $category_str[$taxonomy];
@@ -64,7 +64,7 @@ function geodir_set_postcat_structure($post_id, $taxonomy, $default_cat = '', $c
 
     $category_str[$taxonomy] = $change_cat_str;
 
-    update_post_meta($post_id, 'post_categories', $category_str);
+    update_post_meta($post_id, 'post_category', $category_str);
 
 }
 

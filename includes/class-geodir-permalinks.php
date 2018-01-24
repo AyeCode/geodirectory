@@ -436,8 +436,8 @@ class GeoDir_Permalinks {
 			if (strpos($permalink, '%category%') !== false) {
 				if(isset($post->default_category) && $post->default_category){
 					$term = get_term_by('id', absint($post->default_category), $post->post_type."category");
-				}elseif(isset($post->post_categories) && $post->post_categories){
-					$cat_id = explode(",", trim($post->post_categories, ","));
+				}elseif(isset($post->post_category) && $post->post_category){
+					$cat_id = explode(",", trim($post->post_category, ","));
 					$cat_id = !empty($cat_id) ? absint($cat_id [0]) : 0;
 					if($cat_id){
 						$term = get_term_by('id', $cat_id, $post->post_type."category");

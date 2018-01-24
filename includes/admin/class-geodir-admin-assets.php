@@ -123,7 +123,7 @@ class GeoDir_Admin_Assets {
 		wp_register_script('geodir-barrating-js', geodir_plugin_url() . '/assets/js/jquery.barrating'.$suffix.'.js', array('jquery'), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-jRating-js', geodir_plugin_url() . '/assets/js/jRating.jquery'.$suffix.'.js', array( 'jquery' ), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-on-document-load', geodir_plugin_url() . '/assets/js/on_document_load'.$suffix.'.js', array('jquery'), GEODIRECTORY_VERSION);
-		wp_register_script('geodir-plupload', geodir_plugin_url() . '/assets/js/geodirectory-plupload'.$suffix.'.js', array(), GEODIRECTORY_VERSION);
+		wp_register_script('geodir-plupload', geodir_plugin_url() . '/assets/js/geodirectory-plupload'.$suffix.'.js', array('plupload','jquery-ui-datepicker'), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-admin-script', geodir_plugin_url() . '/assets/js/admin'.$suffix.'.js', array('jquery','jquery-ui-tooltip'), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-admin-term-script', geodir_plugin_url() . '/assets/js/admin-term'.$suffix.'.js', array( 'jquery', 'geodir-admin-script' ), GEODIRECTORY_VERSION );
 		wp_register_script('geodir-jquery-ui-timepicker-js', geodir_plugin_url() . '/assets/js/jquery.ui.timepicker'.$suffix.'.js', array( 'jquery-ui-datepicker', 'jquery-ui-slider' ), GEODIRECTORY_VERSION );
