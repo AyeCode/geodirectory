@@ -60,7 +60,7 @@ class GeoDir_Admin_Settings {
 				$settings[] = include( 'settings/class-geodir-settings-emails.php' );
 				$settings[] = include( 'settings/class-geodir-settings-design.php' );
 				$settings[] = include( 'settings/class-geodir-settings-analytics.php' );
-				$settings[] = include( 'settings/class-geodir-settings-products.php' );
+				$settings[] = include( 'settings/class-geodir-settings-import-export.php' );
 //			$settings[] = include( 'settings/class-wc-settings-products.php' );
 //			$settings[] = include( 'settings/class-wc-settings-tax.php' );
 //			$settings[] = include( 'settings/class-wc-settings-shipping.php' );
@@ -282,6 +282,7 @@ class GeoDir_Admin_Settings {
 				case 'email':
 				case 'number':
 				case 'password' :
+
 					$option_value = self::get_option( $value['id'], $value['default'] );
 					//echo $value['id'].'zzz'.$option_value;
 					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
@@ -682,7 +683,66 @@ class GeoDir_Admin_Settings {
 						</td>
 					</tr><?php
 					break;
-					
+
+				// Import/Export Listings
+				case 'import_export_listings' :
+					?>
+
+					<tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
+						<td class="forminp" colspan="2">
+							<?php /**
+							 * Contains template for import/export listings settings.
+							 *
+							 * @since 2.0.0
+							 */
+							include_once( dirname( __FILE__ ) . '/views/html-admin-settings-import-export-listings.php' );
+							?>
+						</td>
+					</tr>
+
+					<?php
+
+					break;
+
+				// Import/Export Categories
+				case 'import_export_categories' :
+					?>
+
+					<tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
+						<td class="forminp" colspan="2">
+							<?php /**
+							 * Contains template for import/export listings settings.
+							 *
+							 * @since 2.0.0
+							 */
+							include_once( dirname( __FILE__ ) . '/views/html-admin-settings-import-export-categories.php' );
+							?>
+						</td>
+					</tr>
+
+					<?php
+
+					break;
+
+				// Import/Export Categories
+				case 'import_export_settings' :
+					?>
+
+					<tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
+						<td class="forminp" colspan="2">
+							<?php /**
+							 * Contains template for import/export geodirectory settings.
+							 *
+							 * @since 2.0.0
+							 */
+							include_once( dirname( __FILE__ ) . '/views/html-admin-settings-import-export-settings.php' );
+							?>
+						</td>
+					</tr>
+
+					<?php
+
+					break;
 					
 					// map
 				case 'default_location_map' :

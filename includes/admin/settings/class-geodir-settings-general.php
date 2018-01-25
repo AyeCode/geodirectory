@@ -27,7 +27,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 
 
 		$this->id    = 'general';
-		$this->label = __( 'General', 'woocommerce' );
+		$this->label = __( 'General', 'geodirectory' );
 
 		add_filter( 'woocommerce_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
 		add_action( 'woocommerce_settings_' . $this->id, array( $this, 'output' ) );
@@ -46,11 +46,12 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 	public function get_sections() {
 
 		$sections = array(
-			''          	=> __( 'General', 'woocommerce' ),
-			'location'       => __( 'Default location', 'woocommerce' ),
-			'pages' 	=> __( 'Pages', 'woocommerce' ),
-			'dummy_data' 	=> __( 'Dummy Data', 'woocommerce' ),
-			'uninstall' 	=> __( 'Uninstall', 'woocommerce' ),
+			''          	=> __( 'General', 'geodirectory' ),
+			'location'       => __( 'Default location', 'geodirectory' ),
+			'pages' 	=> __( 'Pages', 'geodirectory' ),
+			'search' 	=> __( 'Search', 'geodirectory' ),
+			'dummy_data' 	=> __( 'Dummy Data', 'geodirectory' ),
+			'uninstall' 	=> __( 'Uninstall', 'geodirectory' ),
 		);
 
 		return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
@@ -102,7 +103,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 			 */
 			$settings = apply_filters( 'geodir_uninstall_options', array(
 				array(
-					'title' => __( 'Uninstall Settings', 'woocommerce' ),
+					'title' => __( 'Uninstall Settings', 'geodirectory' ),
 					'type'  => 'title',
 					'desc'  => '',
 					'id'    => 'uninstall_options',
@@ -134,7 +135,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 			 */
 			$settings = apply_filters( 'geodir_dummy_data', array(
 				array(
-					'title' => __( 'Dummy data installer', 'woocommerce' ),
+					'title' => __( 'Dummy data installer', 'geodirectory' ),
 					'type'  => 'title',
 					'desc'  => '*Hint*: Installing our Advanced Search addon FIRST will add extra search fields to non-default data types.',
 					'id'    => 'dummy_data',
@@ -164,7 +165,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 			 */
 			$settings = apply_filters( 'geodir_page_options', array(
 				array(
-					'title' => __( 'Page Settings', 'woocommerce' ),
+					'title' => __( 'Page Settings', 'geodirectory' ),
 					'type'  => 'title',
 					//'desc'  => 'Drag the map or the marker to set the city/town you wish to use as the default location, then click save changes.',
 					'id'    => 'page_options',
@@ -214,7 +215,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				array( 'type' => 'sectionend', 'id' => 'page_options' ),
 
 				array(
-					'title' => __( 'Template Page Settings', 'woocommerce' ),
+					'title' => __( 'Template Page Settings', 'geodirectory' ),
 					'type'  => 'title',
 					'desc'  => 'Template pages are used to design the respective pages and should never be linked to directly.',
 					'id'    => 'page_template_options',
@@ -244,6 +245,145 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				array( 'type' => 'sectionend', 'id' => 'page_template_options' ),
 			));
 		}
+
+		else if ( 'search' == $current_section ) {
+			/**
+			 * Filter GD general settings array.
+			 *
+			 * @since 1.0.0
+			 * @package GeoDirectory
+			 */
+			$settings = apply_filters( 'geodir_search_options', array(
+				array(
+					'title' => __( 'Search bar settings', 'geodirectory' ),
+					'type'  => 'title',
+					'id'    => 'search_options',
+				),
+
+				array(
+					'name' => __('Search field default value', 'geodirectory'),
+					'desc' => __('Show the search text box \'placeholder\' value on search form.', 'geodirectory'),
+					'id' => 'search_default_text',
+					'type' => 'text',
+					'placeholder' => get_search_default_text(),
+					'desc_tip' => true,
+					'default'  => '',
+					'advanced' => false
+				),
+				array(
+					'name' => __('Near field default value', 'geodirectory'),
+					'desc' => __('Show the near text box \'placeholder\' value on search form.', 'geodirectory'),
+					'id' => 'search_default_near_text',
+					'type' => 'text',
+					'placeholder' => get_search_default_near_text(),
+					'desc_tip' => true,
+					'default'  => '',
+					'advanced' => false
+				),
+				array(
+					'name' => __('Search button label', 'geodirectory'),
+					'desc' => __('Show the search button label on search form. You can use font awesome unicode here (minus the &) from:', 'geodirectory')." <a href='http://fontawesome.io/cheatsheet/' target='_blank'>http://fontawesome.io/cheatsheet/</a>",
+					'id' => 'search_default_button_text',
+					'type' => 'text',
+					'placeholder' => get_search_default_button_text(),
+					'desc_tip' => true,
+					'default'  => '',
+					'advanced' => true
+				),
+				array(
+					'name' => __('Advanced pagination', 'geodirectory'),
+					'desc' => __('This will add extra pagination info like "Showing listings x-y of z" after/before pagination.', 'geodirectory'),
+					'id' => 'search_advanced_pagination',
+					'type' => 'select',
+					'class' => 'geodir-select',
+					'options' => array(
+						'' => __('Never Display', 'geodirectory'),
+						'after' => __('After Pagination', 'geodirectory'),
+						'before' => __('Before Pagination', 'geodirectory')
+					),
+					'desc_tip' => true,
+					'default'  => '',
+					'advanced' => true
+				),
+
+
+				array( 'type' => 'sectionend', 'id' => 'search_options' ),
+
+				array(
+					'title' => __( 'Search results settings', 'geodirectory' ),
+					'type'  => 'title',
+					'id'    => 'search_results_options',
+				),
+
+				array(
+					'name' => __('Search near radius', 'geodirectory'),
+					'desc' => __('Limits the search radius to X miles/km (lower numbers help with speed) ', 'geodirectory'),
+					'id' => 'search_radius',
+					'type' => 'number',
+					'default'  => '5',
+					'desc_tip' => true,
+					'advanced' => false
+				),
+				array(
+					'name' => __('Search distances', 'geodirectory'),
+					'desc' => __('Show search distances in miles or km', 'geodirectory'),
+					'id' => 'search_distance_long',
+					'type' => 'select',
+					'class' => 'geodir-select',
+					'options' => array(
+						'miles' => __('Miles', 'geodirectory'),
+						'km' => __('Kilometers', 'geodirectory')
+					),
+					'desc_tip' => true,
+					'default'  => 'miles',
+					'advanced' => false
+				),
+				array(
+					'name' => __('Search distances short', 'geodirectory'),
+					'desc' => __('If distance is less than 0.01 show distance in meters or feet', 'geodirectory'),
+					'id' => 'search_distance_short',
+					'type' => 'select',
+					'class' => 'geodir-select',
+					'options' => array(
+						'feet' => __('Feet', 'geodirectory'),
+						'meters' => __('Meters', 'geodirectory')
+					),
+					'default'  => 'feet',
+					'desc_tip' => true,
+					'advanced' => false
+				),
+				array(
+					'name' => __('Search near additional', 'geodirectory'),
+					'desc' => __('This is useful if your directory is limited to one location such as: New York or Australia (this setting should be blank if using default country, regions etc with multilocation addon as it will automatically add them)', 'geodirectory'),
+					'id' => 'search_near_addition',
+					'type' => 'text',
+					'placeholder' => __('New York','goedirectory'),
+					'default'  => '',
+					'desc_tip' => true,
+					'advanced' => true
+				),
+				array(
+					'name' => __('Individual word search limit', 'geodirectory'),
+					'desc' => __('With this option you can limit individual words being searched for, for example searching for `Jo Brown` would return results with words like `Jones`, you can exclude these types of small character words if you wish.', 'geodirectory'),
+					'id' => 'search_word_limit',
+					'type' => 'select',
+					'class' => 'geodir-select',
+					'options' => array_unique(array(
+						'0' => __('Disabled', 'geodirectory'),
+						'1' => __('1 Character words excluded', 'geodirectory'),
+						'2' => __('2 Character words and less excluded', 'geodirectory'),
+						'3' => __('3 Character words and less excluded', 'geodirectory'),
+					)),
+					'default'  => '0',
+					'desc_tip' => true,
+					'advanced' => true
+				),
+
+				array( 'type' => 'sectionend', 'id' => 'search_results_options' ),
+
+
+			));
+		}
 		else if ( 'location' == $current_section ) {
 			/**
 			 * Filter GD general settings array.
@@ -253,7 +393,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 			 */
 			$settings = apply_filters( 'geodir_default_location', array(
 				array(
-					'title' => __( 'Set default location', 'woocommerce' ),
+					'title' => __( 'Set default location', 'geodirectory' ),
 					'type'  => 'title',
 					'desc'  => 'Drag the map or the marker to set the city/town you wish to use as the default location, then click save changes.',
 					'id'    => 'default_location',
@@ -338,7 +478,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 			 */
 			$settings = apply_filters( 'geodir_general_options', array(
 				array(
-					'title' => __( 'Site Settings', 'woocommerce' ),
+					'title' => __( 'Site Settings', 'geodirectory' ),
 					'type'  => 'title',
 					'desc'  => '',
 					'id'    => 'general_options'
@@ -360,7 +500,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				array( 'type' => 'sectionend', 'id' => 'general_options' ),
 
 				array(
-					'title' => __( 'Listing Settings', 'woocommerce' ),
+					'title' => __( 'Listing Settings', 'geodirectory' ),
 					'type'  => 'title',
 					'desc'  => '',
 					'id'    => 'general_options_add'
@@ -421,7 +561,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				array( 'type' => 'sectionend', 'id' => 'general_options_add' ),
 
 				array(
-					'title' => __( 'Map Settings', 'woocommerce' ),
+					'title' => __( 'Map Settings', 'geodirectory' ),
 					'type'  => 'title',
 					'desc'  => '',
 					'id'    => 'general_options_map'
@@ -436,17 +576,27 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				array(
 					'name'     => __( 'Default marker icon', 'geodirectory' ),
 					'desc'     => __( 'This is the marker icon used if the category does not have a marker icon set.', 'geodirectory' ),
-					'id'       => 'default_marker_icon',
+					'id'       => 'map_default_marker_icon',
 					'type'     => 'image',
 					'default'  => '',
 					'desc_tip' => true,
 					'advanced' => true
 				),
 
+				array(
+					'name' => __('Enable map cache', 'geodirectory'), // @todo we ned to port this over from GDv1
+					'desc' => __('This will cache the map JSON for 24 hours or until a GD listing is saved.', 'geodirectory'),
+					'id' => 'map_cache',
+					'type' => 'checkbox',
+					'default'  => '0',
+					'desc_tip' => false,
+					'advanced' => true
+				),
+
 				array( 'type' => 'sectionend', 'id' => 'general_options_map' ),
 
 				array(
-					'title' => __( 'Tracking Settings', 'woocommerce' ),
+					'title' => __( 'Tracking Settings', 'geodirectory' ),
 					'type'  => 'title',
 					'desc'  => '',
 					'id'    => 'general_options_tracking',
@@ -562,7 +712,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 			'en-AU' => __('ENGLISH (AUSTRALIAN)', 'geodirectory'),
 			'en-GB' => __('ENGLISH (GREAT BRITAIN)', 'geodirectory'),
 			'es' => __('SPANISH', 'geodirectory'),
-			'eu' => __('BASQUE', 'geodirectory'),
 			'fa' => __('FARSI', 'geodirectory'),
 			'fi' => __('FINNISH', 'geodirectory'),
 			'fil' => __('FILIPINO', 'geodirectory'),
@@ -589,7 +738,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 			'pt-BR' => __('PORTUGUESE (BRAZIL)', 'geodirectory'),
 			'pt-PT' => __('PORTUGUESE (PORTUGAL)', 'geodirectory'),
 			'ro' => __('ROMANIAN', 'geodirectory'),
-			'ru' => __('RUSSIAN', 'geodirectory'),
 			'ru' => __('RUSSIAN', 'geodirectory'),
 			'sk' => __('SLOVAK', 'geodirectory'),
 			'sl' => __('SLOVENIAN', 'geodirectory'),

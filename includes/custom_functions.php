@@ -1889,17 +1889,10 @@ function geodir_output_pinpoint_html_listings( $post_id, $post = array() ) {
 }
 
 function geodir_search_form_submit_button() {
+	$default_search_button_label = geodir_get_option('search_default_button_text');
+	if(!$default_search_button_label){$default_search_button_label = get_search_default_button_text();}
 
-	$new_style = geodir_get_option( 'geodir_show_search_old_search_from' ) ? false : true;
 
-	if ( $new_style ) {
-		$default_search_button_label = '<i class="fa fa-search" aria-hidden="true"></i>';
-	}else{
-		$default_search_button_label = 'Search';
-	}
-	if ( geodir_get_option( 'geodir_search_button_label' ) && geodir_get_option( 'geodir_search_button_label' ) != 'Search' ) {
-		$default_search_button_label = __( geodir_get_option( 'geodir_search_button_label' ), 'geodirectory' );
-	}
 
 	/**
 	 * Filter the default search button text value for the search form.
@@ -1913,18 +1906,15 @@ function geodir_search_form_submit_button() {
 	$default_search_button_label = apply_filters( 'geodir_search_default_search_button_text', $default_search_button_label );
 
 	$fa_class = '';
-	if ( strpos( $default_search_button_label, '&#' ) !== false ) {
+	if ( strpos( $default_search_button_label, '#x' ) !== false ) {
 		$fa_class = 'fa';
+		$default_search_button_label = "&".$default_search_button_label;
 	}
 
 
-	if ( $new_style ) {
 	?>
-		<button class="geodir_submit_search <?php echo $fa_class; ?>"><?php _e( $default_search_button_label ,'geodirectory'); ?></button>
-<?php }else{?>
-		<input type="button" value="<?php esc_attr_e( $default_search_button_label ); ?>"
-	       class="geodir_submit_search <?php echo $fa_class; ?>"/>
-	<?php }
+	<button class="geodir_submit_search <?php echo $fa_class; ?>"><?php _e( $default_search_button_label ,'geodirectory'); ?>
+	<?php
 }
 
 add_action( 'geodir_before_search_button', 'geodir_search_form_submit_button', 5000 );
@@ -1987,43 +1977,30 @@ function geodir_search_form_post_type_input() {
 }
 
 function geodir_search_form_search_input() {
-
-	$default_search_for_text = SEARCH_FOR_TEXT;
-	if ( geodir_get_option( 'geodir_search_field_default_text' ) ) {
-		$default_search_for_text = __( geodir_get_option( 'geodir_search_field_default_text' ), 'geodirectory' );
-	}
-
-	$new_style = geodir_get_option('geodir_show_search_old_search_from') ? false : true;
-	if($new_style){
-		echo "<div class='gd-search-input-wrapper gd-search-field-search'>";
-	}
+	$default_search_for_text = geodir_get_option('search_default_text');
+	if(!$default_search_for_text){$default_search_for_text = get_search_default_text();}
 	?>
-	<input class="search_text" name="s"
-	       value="<?php if ( isset( $_REQUEST['s'] ) && trim( $_REQUEST['s'] ) != '' ) {
-		       echo esc_attr( stripslashes_deep( $_REQUEST['s'] ) );
-	       } else {
-		       echo $default_search_for_text;
-	       } ?>" type="text"
-	       onblur="if (this.value.trim() == '') {this.value = '<?php echo esc_sql( $default_search_for_text ); ?>';}"
-	       onfocus="if (this.value == '<?php echo esc_sql( $default_search_for_text ); ?>') {this.value = '';}"
-	       onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);">
+	<div class='gd-search-input-wrapper gd-search-field-search'>
+		<input class="search_text" name="s"
+		       value="<?php if ( isset( $_REQUEST['s'] ) && trim( $_REQUEST['s'] ) != '' ) {
+			       echo esc_attr( stripslashes_deep( $_REQUEST['s'] ) );
+		       } ?>" type="text"
+		       onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);"
+		       placeholder="<?php esc_html_e($default_search_for_text,'geodirectory') ?>"
+		/>
+	</div>
 	<?php
-	if($new_style){
-		echo "</div>";
-	}
 }
 
 function geodir_search_form_near_input() {
 
-	$default_near_text = NEAR_TEXT;
-	if ( geodir_get_option( 'geodir_near_field_default_text' ) ) {
-		$default_near_text = __( geodir_get_option( 'geodir_near_field_default_text' ), 'geodirectory' );
-	}
+	$default_near_text = geodir_get_option('search_default_near_text');
+	if(!$default_near_text){$default_near_text = get_search_default_near_text();}
 
 	if ( isset( $_REQUEST['snear'] ) && $_REQUEST['snear'] != '' ) {
 		$near = esc_attr( stripslashes_deep( $_REQUEST['snear'] ) );
 	} else {
-		$near = $default_near_text;
+		$near = '';
 	}
 	
 
@@ -2069,24 +2046,17 @@ function geodir_search_form_near_input() {
 	 */
 	$near_class = apply_filters( 'geodir_search_near_class', '' );
 
-	$new_style = geodir_get_option('geodir_show_search_old_search_from') ? false : true;
-	if($new_style){
-		echo "<div class='gd-search-input-wrapper gd-search-field-near' $near_input_extra>";
-		
-		do_action('geodir_before_near_input');
-	}
 
+	echo "<div class='gd-search-input-wrapper gd-search-field-near' $near_input_extra>";
+	do_action('geodir_before_near_input');
 	?>
 	<input name="snear" class="snear <?php echo $near_class; ?>" type="text" value="<?php echo $near; ?>"
-	       onblur="if (this.value.trim() == '') {this.value = ('<?php echo esc_sql( $near ); ?>' != '' ? '<?php echo esc_sql( $near ); ?>' : '<?php echo $default_near_text; ?>');}"
-	       onfocus="if (this.value == '<?php echo $default_near_text; ?>' || this.value =='<?php echo esc_sql( $near ); ?>') {this.value = '';}"
-	       onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);" <?php echo $near_input_extra;?>/>
+	       onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);" <?php echo $near_input_extra;?>
+	       placeholder="<?php esc_html_e($default_near_text,'geodirectory') ?>"
+	/>
 	<?php
-	if($new_style){
-		do_action('geodir_after_near_input');
-
-		echo "</div>";
-	}
+	do_action('geodir_after_near_input');
+	echo "</div>";
 }
 
 add_action( 'geodir_search_form_inputs', 'geodir_search_form_post_type_input', 10 );

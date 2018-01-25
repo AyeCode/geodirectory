@@ -388,6 +388,9 @@ add_filter('geodir_custom_field_input_radio','geodir_cfi_radio',10,2);
  */
 function geodir_cfi_checkbox($html,$cf){
 
+    // check it its a terms and conditions in admin area
+    if(is_admin() && isset($cf['field_type_key']) && $cf['field_type_key']=='terms_conditions'){ return $html;}
+
     $html_var = $cf['htmlvar_name'];
 
     // Check if there is a custom field specific filter.
@@ -1292,11 +1295,11 @@ function geodir_cfi_taxonomy($html,$cf){
 
                 $cat_display = unserialize($cf['extra_fields']);
 
-                if (isset($_REQUEST['backandedit']) && !empty($post_cat['post_categories']) && is_array($post_cat['post_categories'])) {
-                    $post_cat = implode(",", $post_cat['post_categories']);
+                if (isset($_REQUEST['backandedit']) && !empty($post_cat['post_category']) && is_array($post_cat['post_category'])) {
+                    $post_cat = implode(",", $post_cat['post_category']);
                 } else {
                     if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '')
-                        $post_cat = geodir_get_post_meta($_REQUEST['pid'], 'post_categories', true);
+                        $post_cat = geodir_get_post_meta($_REQUEST['pid'], 'post_category', true);
                 }
 
 
@@ -1460,11 +1463,11 @@ function geodir_cfi_categories($html,$cf){
                 }
                 //echo '###'.$cat_display;print_r($cf)
 
-//                if (isset($_REQUEST['backandedit']) && !empty($post_cat['post_categories']) && is_array($post_cat['post_categories'])) {
-//                    $post_cat = implode(",", $post_cat['post_categories']);
+//                if (isset($_REQUEST['backandedit']) && !empty($post_cat['post_category']) && is_array($post_cat['post_category'])) {
+//                    $post_cat = implode(",", $post_cat['post_category']);
 //                } else {
 //                    if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '')
-//                        $post_cat = geodir_get_post_meta($_REQUEST['pid'], 'post_categories', true);
+//                        $post_cat = geodir_get_post_meta($_REQUEST['pid'], 'post_category', true);
 //                }
 
                 $post_cat = geodir_get_cf_value($cf);

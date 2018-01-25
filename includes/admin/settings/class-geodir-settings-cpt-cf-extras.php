@@ -659,7 +659,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 		 */
 		public static function category_input_type( $output, $result_str, $cf, $field ) {
 
-			if ( $field->htmlvar_name == 'post_categories' ) {
+			if ( $field->htmlvar_name == 'post_category' ) {
 				ob_start();
 				//print_r($field->extra_fields);echo '###';
 				$extra = maybe_unserialize( $field->extra_fields );

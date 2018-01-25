@@ -1,0 +1,1545 @@
+<?php
+/**
+ * Handel import and exports.
+ *
+ * @author   AyeCode
+ * @category Admin
+ * @package  GeoDirectory/Admin
+ * @version  2.0.0
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
+/**
+ * WC_Admin_Menus Class.
+ */
+class GeoDir_Admin_Import_Export {
+
+	public static function start_import_export() {
+		global $wp_filesystem;
+
+
+		// Set doing import constant.
+		if ( ! defined( 'GEODIR_DOING_IMPORT' ) ) {
+			define( 'GEODIR_DOING_IMPORT', true );
+		}
+
+		//extra security check
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return new WP_Error( 'gd-no-auth', __( "You don't have permission to do this.", "geodirectory" ) );
+		}
+
+		// set the task
+		//$task = isset( $_POST['task'] ) ? esc_attr( $_POST['task'] ) : '';
+		$task = isset( $_REQUEST['task'] ) ? esc_attr( $_REQUEST['task'] ) : '';
+
+		// If we dont have a task then bail
+		if ( ! $task ) {
+			return new WP_Error( 'gd-no-task', __( "No task is set", "geodirectory" ) );
+		}
+
+		// set higher PHP limits
+		self::set_php_limits();
+
+		// check if we have access to the file system
+		$wp_filesystem = geodir_init_filesystem();
+		if ( ! empty( $wp_filesystem ) && isset( $wp_filesystem->errors ) && is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->get_error_code() ) {
+			return new WP_Error( 'gd-no-filesystem', __( "Filesystem ERROR: " . $wp_filesystem->errors->get_error_message(), "geodirectory" ) );
+		} elseif ( ! $wp_filesystem ) {
+			return new WP_Error( 'gd-no-filesystem', __( "There was a problem accessing the filesystem.", "geodirectory" ) );
+		}
+
+		// create the cache directory if it does not already exist.
+		$csv_file_dir = geodir_path_import_export( false );
+		if ( ! $wp_filesystem->is_dir( $csv_file_dir ) ) {
+			if ( ! $wp_filesystem->mkdir( $csv_file_dir, FS_CHMOD_DIR ) ) {
+				return new WP_Error( 'gd-no-filesystem', __( "ERROR: Could not create cache directory. This is usually due to inconsistent file permissions.", "geodirectory" ) );
+			}
+		}
+
+		switch ( $task ) {
+			case "prepare_import":
+				return self::validate_csv();// validate CSV
+				break;
+			case "import_post":
+				return self::import_posts();
+				break;
+			case "export_posts":
+				return self::export_posts();
+				break;
+			case "export_cats":
+				return self::export_categories();
+				break;
+			case "import_cat":
+				return self::import_categories();
+				break;
+			case "export_settings":
+				self::export_settings();
+				break;
+			case "import_settings":
+				return self::import_settings();
+				break;
+			case 'import_finish': {
+				/**
+				 * Run an action when an import finishes.
+				 *
+				 * This action can be used to fire functions after an import ends.
+				 *
+				 * @since 1.5.3
+				 * @package GeoDirectory
+				 */
+				do_action( 'geodir_import_finished' );
+			}
+				break;
+			default:
+				echo "Your favorite color is neither red, blue, nor green!";
+		}
+
+		return false;
+	}
+
+	/**
+	 * Try to set higher limits on the fly
+	 */
+	public static function set_php_limits() {
+		error_reporting( 0 );
+
+		// try to set higher limits for import
+		$max_input_time     = ini_get( 'max_input_time' );
+		$max_execution_time = ini_get( 'max_execution_time' );
+		$memory_limit       = ini_get( 'memory_limit' );
+
+		if ( ! $max_input_time || $max_input_time < 3000 ) {
+			ini_set( 'max_input_time', 3000 );
+		}
+
+		if ( ! $max_execution_time || $max_execution_time < 3000 ) {
+			ini_set( 'max_execution_time', 3000 );
+		}
+
+		if ( $memory_limit && str_replace( 'M', '', $memory_limit ) ) {
+			if ( str_replace( 'M', '', $memory_limit ) < 256 ) {
+				ini_set( 'memory_limit', '256M' );
+			}
+		}
+
+		ini_set( 'auto_detect_line_endings', true );
+	}
+
+	/**
+	 * Check the CSV is valid.
+	 *
+	 * @return bool|WP_Error
+	 */
+	public static function validate_csv() {
+		global $wp_filesystem;
+
+		$json        = array();
+		$uploads     = wp_upload_dir();
+		$uploads_dir = $uploads['basedir'];
+
+		$csv_file = isset( $_POST['_file'] ) ? $_POST['_file'] : null;
+
+		$csv_file_arr = explode( '/', $csv_file );
+		$csv_filename = end( $csv_file_arr );
+		$target_path  = $uploads_dir . '/geodir_temp/' . $csv_filename;
+
+
+		$json['file']  = $csv_file;
+		$json['error'] = __( 'The uploaded file is not a valid csv file. Please try again.', 'geodirectory' );
+		$file          = array();
+
+		if ( $csv_file && $wp_filesystem->is_file( $target_path ) && $wp_filesystem->exists( $target_path ) ) {
+			$wp_filetype = wp_check_filetype_and_ext( $target_path, $csv_filename );
+
+			if ( ! empty( $wp_filetype ) && isset( $wp_filetype['ext'] ) && geodir_strtolower( $wp_filetype['ext'] ) == 'csv' ) {
+				$json['error'] = null;
+
+				$lc_all = setlocale( LC_ALL, 0 ); // Fix issue of fgetcsv ignores special characters when they are at the beginning of line
+				setlocale( LC_ALL, 'en_US.UTF-8' );
+				if ( ( $handle = fopen( $target_path, "r" ) ) !== false ) {
+					while ( ( $data = fgetcsv( $handle, 100000, "," ) ) !== false ) {
+						if ( ! empty( $data ) ) {
+							$file[] = $data;
+						}
+					}
+					fclose( $handle );
+				}
+				setlocale( LC_ALL, $lc_all );
+
+				$json['rows'] = ( ! empty( $file ) && count( $file ) > 1 ) ? count( $file ) - 1 : 0;
+
+				if ( ! $json['rows'] > 0 ) {
+					$json['error'] = __( "No data found in csv file.", "geodirectory" );
+				}
+			}
+		}
+
+		return $json;
+	}
+
+	/**
+	 * Insert or Update the post info.
+	 *
+	 * @return array|string
+	 */
+	public static function import_posts() {
+
+		$limit     = isset( $_POST['limit'] ) && $_POST['limit'] ? (int) $_POST['limit'] : 1;
+		$processed = isset( $_POST['processed'] ) ? (int) $_POST['processed'] : 0;
+
+		$csv_row = $processed;
+
+		$processed ++;
+		$rows = self::get_csv_rows( $processed, $limit );
+
+		if ( ! empty( $rows ) ) {
+			$created         = 0;
+			$updated         = 0;
+			$skipped         = 0;
+			$invalid         = 0;
+			$invalid_address = 0;
+			$images          = 0;
+			$errors          = array();
+
+			$update_or_skip = isset( $_POST['_ch'] ) && $_POST['_ch'] == 'update' ? 'update' : 'skip';
+
+			foreach ( $rows as $post_info ) {
+				$csv_row++;
+				if ( $update_or_skip == 'skip' && isset( $post_info['ID'] ) && $post_info['ID'] ) {
+					$skipped ++;
+					continue;
+				}
+
+				$temp_title = isset($post_info['post_title']) ? esc_attr($post_info['post_title']) :'' ;
+
+				$post_info = self::validate_post( $post_info );
+
+				// set if there are images to upload
+				if ( isset( $post_info['_post_images_to_upload'] ) && $post_info['_post_images_to_upload'] ) {
+					$images = $images + $post_info['_post_images_to_upload'];
+				}
+
+				if ( $post_info ) {
+
+					// Update
+					if ( isset( $post_info['ID'] ) && $post_info['ID'] ) {
+
+						$result = wp_update_post( $post_info, true ); // we hook into the save_post hook
+						if ( $result ) {
+							$updated ++;
+						} else {
+							$invalid ++;
+							$errors[$csv_row] = sprintf( esc_attr__('Row %d Error: %s', 'geodirectory'), $csv_row, esc_attr($result->get_error_message()) );
+						}
+
+						// insert
+					} else {
+						$result = wp_insert_post( $post_info, true ); // we hook into the save_post hook
+						if ( $result ) {
+							$created ++;
+						} else {
+							$invalid ++;
+							$errors[$csv_row] = sprintf( esc_attr__('Row %d Error: %s', 'geodirectory'), $csv_row, esc_attr($result->get_error_message()) );
+						}
+					}
+
+				} else {
+					$invalid ++;
+					$errors[$csv_row] = array('title'=>esc_attr($temp_title),'error'=> esc_attr($post_info) );
+				}
+
+				//$errors[$csv_row] = sprintf( esc_attr__('Row %d Error: %s', 'geodirectory'), $csv_row, esc_attr("invalid title") );
+
+			}
+
+		} else {
+			return new WP_Error( 'gd-csv-empty', __( "No data found in csv file.", "geodirectory" ) );
+		}
+
+		return array(
+			"processed" => $processed,
+			"created"   => $created,
+			"updated"   => $updated,
+			"skipped"   => $skipped,
+			"invalid"   => $invalid,
+			"images"    => $images,
+			//"ID"        => $post_info['ID'],
+			"errors"    => $errors
+		);
+	}
+
+	/**
+	 * Get specific rows from a CSV file.
+	 *
+	 * @param int $row Optional. The row to start on.
+	 * @param int $count Optional. The number of rows to get.
+	 *
+	 * @return array
+	 */
+	public static function get_csv_rows( $row = 0, $count = 0 ) {
+
+		$csv_file = isset( $_POST['_file'] ) ? $_POST['_file'] : null;
+
+		$uploads      = wp_upload_dir();
+		$uploads_dir  = $uploads['baseurl'];
+		$csv_file_arr = explode( '/', $csv_file );
+		$csv_filename = end( $csv_file_arr );
+		$target_path  = $uploads_dir . '/geodir_temp/' . $csv_filename;
+
+		//echo '###'.$target_path;
+
+		$file   = array();
+		$lc_all = setlocale( LC_ALL, 0 ); // Fix issue of fgetcsv ignores special characters when they are at the beginning of line
+		setlocale( LC_ALL, 'en_US.UTF-8' );
+		$l       = 0; // loop count
+		$f       = 0; // file count
+		$headers = array();
+		if ( ( $handle = fopen( $target_path, "r" ) ) !== false ) {
+			while ( ( $data = fgetcsv( $handle, 100000, "," ) ) !== false ) {
+
+				// get headers
+				if ( $l === 0 ) {
+					$headers = $data;
+					$l ++;
+					continue;
+				}
+				// only get the rows needed
+				if ( $row && $count ) {
+
+					// if we have everything we need then break;
+					if ( $l == $row + $count ) {
+						break;
+
+						// if its less than the start row then continue;
+					} elseif ( $l && $l < $row ) {
+						$l ++;
+						continue;
+
+						// if we have the count we need then break;
+					} elseif ( $f > $count ) {
+						break;
+					}
+				}
+
+				if ( ! empty( $data ) ) {
+					//$file[] = $data;
+					$file[] = array_combine( $headers, $data ); // replace the keys with the CSV headers.
+					$f ++;
+					$l ++;
+				}
+			}
+			fclose( $handle );
+		}
+		setlocale( LC_ALL, $lc_all );
+
+		return $file;
+
+	}
+
+	/**
+	 * Validate the post info.
+	 *
+	 * @todo make this validate more of the post info.
+	 *
+	 * @param $post_info
+	 *
+	 * @return array
+	 */
+	public static function validate_post( $post_info ) {
+
+		if ( isset( $post_info['post_title'] ) && empty($post_info['post_title']) ) {
+			$post_info = esc_attr__('Title missing','geodirectory');
+		}
+
+		// change post_category to an array()
+		if ( isset( $post_info['post_category'] ) ) {
+			if ( empty( $post_info['post_category'] ) ) {
+				$post_info['post_category'] = array();
+			} else {
+				$post_info['post_category'] = array_map( 'trim', explode( ',', $post_info['post_category'] ) );
+			}
+		}
+
+		// change post_tags to an array()
+		if ( isset( $post_info['post_tags'] ) ) {
+			if ( empty( $post_info['post_tags'] ) ) {
+				$post_info['post_tagscategory'] = array();
+			} else {
+				$post_info['post_tags'] = array_map( 'trim', explode( ',', $post_info['post_tags'] ) );
+			}
+		}
+
+		// check if we have post images to upload
+		if ( isset( $post_info['post_images'] ) && $post_info['post_images'] ) {
+			$images = explode( ",", $post_info['post_images'] );
+			$i      = 0;
+			if ( ! empty( $images ) ) {
+				foreach ( $images as $image ) {
+					if ( strpos( $image, 'http' ) === 0 ) {
+						// It starts with 'http'
+					} else {
+						$i ++;
+					}
+				}
+				if ( $i ) {
+					$post_info['_post_images_to_upload'] = $i;
+				}
+			}
+		}
+
+		// fill in the GPS info from address if missing
+		if ( ( isset( $post_info['latitude'] ) && empty( $post_info['latitude'] ) ) || ( isset( $post_info['longitude'] ) && empty( $post_info['longitude'] ) ) ) {
+			$post_info = self::get_post_gps_from_address( $post_info );
+					// fill in the address if ONLY the GPS is provided
+		}elseif(
+			( isset( $post_info['city'] ) && empty( $post_info['city'] ) ) ||
+			( isset( $post_info['region'] ) && empty( $post_info['region'] ) ) ||
+			( isset( $post_info['country'] ) && empty( $post_info['country'] ) )
+		){
+			//$post_info = self::get_post_address_from_gps($post_info);
+			$post_info = esc_attr__('Address city, region or country missing','geodirectory');
+		}
+
+		return $post_info;
+	}
+
+	/**
+	 * Get the GPS from a post address.
+	 *
+	 * @param $post_info
+	 *
+	 * @return array|bool
+	 */
+	public static function get_post_gps_from_address( $post_info ) {
+
+		// @todo if users require a higher limit we should look at https://locationiq.org/
+
+		$address = array();
+		$api_url = "https://maps.googleapis.com/maps/api/geocode/json?address=";
+		$api_key = geodir_get_map_api_key();
+
+
+		// if we don't have either the street or zip then we can't get an accurate address
+		if( ( isset( $post_info['street'] ) && $post_info['street'] ) || ( isset( $post_info['zip'] ) && $post_info['zip'] ) ){}
+		else{return esc_attr__('Not enough location info for address.','geodirectory');}
+
+		// check we have an address
+		if( isset( $post_info['street'] ) && $post_info['street'] ){ $address[] = $post_info['street'];  }
+		if( isset( $post_info['city'] ) && $post_info['city'] ){ $address[] = $post_info['city'];  }
+		if( isset( $post_info['region'] ) && $post_info['region'] ){ $address[] = $post_info['region'];  }
+		if( isset( $post_info['country'] ) && $post_info['country'] ){ $address[] = $post_info['country'];  }
+		if( isset( $post_info['zip'] ) && $post_info['zip'] ){ $address[] = $post_info['zip'];  }
+
+		// we must have at least 4 address items
+		if( count($address) < 4 ){return false;}
+
+		$request_url = $api_url.implode(",",$address);
+
+		// add the api key if we have it, it helps with limits
+		if($api_key){
+			$request_url .= "&key=".$api_key;
+		}
+
+		global $wp_version;
+		$args = array(
+			'timeout'     => 5,
+			'redirection' => 5,
+			'httpversion' => '1.0',
+			'user-agent'  => 'WordPress/' . $wp_version . '; ' . home_url(),
+			'blocking'    => true,
+			'decompress'  => true,
+			'sslverify'   => false,
+		);
+		$response = wp_remote_get( $request_url , $args );
+
+		// Check for errors
+		if ( is_wp_error( $response ) ) {
+			return esc_attr__('Failed to reach Google geocode server.','geodirectory');
+		}
+
+		$body = wp_remote_retrieve_body( $response );
+		$json = json_decode( $body, true );
+
+		if(isset($json['status']) && $json['status']=='OK'){
+
+			if( isset( $json['results'][0]['geometry']['location']['lat'] ) && $json['results'][0]['geometry']['location']['lat'] ){
+				$post_info['latitude'] = $json['results'][0]['geometry']['location']['lat'];
+				$post_info['longitude'] = $json['results'][0]['geometry']['location']['lng'];
+			}else{
+				return esc_attr__('Listing has no GPS info, failed to geocode GPS info.','geodirectory');
+			}
+
+		}else{
+			if(isset($json['status'])){
+					return sprintf( esc_attr__('Google geocode failed: %s', 'geodirectory'),  esc_attr($json['status']) );
+
+			}else{
+				return esc_attr__('Failed to reach Google geocode server.','geodirectory');
+			}
+
+		}
+
+		return $post_info;
+	}
+
+	/**
+	 * Get the post address from the GPS info.
+	 *
+	 * @param $post_info
+	 *
+	 * @return array|bool
+	 */
+	public static function get_post_address_from_gps( $post_info ) {
+
+		// @todo if users require a higher limit we should look at https://locationiq.org/
+
+		$api_url = "https://maps.googleapis.com/maps/api/geocode/json?address=";
+		$api_key = geodir_get_map_api_key();
+
+
+		// if we don't have either the street or zip then we can't get an accurate address
+		if( ( isset( $post_info['latitude'] ) && $post_info['latitude'] ) && ( isset( $post_info['longitude'] ) && $post_info['longitude'] ) ){}
+		else{return esc_attr__('Not enough GPS info for address.','geodirectory');}
+
+		$request_url = $api_url.$post_info['latitude'].",".$post_info['longitude'];
+
+		// add the api key if we have it, it helps with limits
+		if($api_key){
+			$request_url .= "&key=".$api_key;
+		}
+
+		global $wp_version;
+		$args = array(
+			'timeout'     => 5,
+			'redirection' => 5,
+			'httpversion' => '1.0',
+			'user-agent'  => 'WordPress/' . $wp_version . '; ' . home_url(),
+			'blocking'    => true,
+			'decompress'  => true,
+			'sslverify'   => false,
+		);
+		$response = wp_remote_get( $request_url , $args );
+
+		// Check for errors
+		if ( is_wp_error( $response ) ) {
+			return esc_attr__('Failed to reach Google geocode server.','geodirectory');
+		}
+
+		$body = wp_remote_retrieve_body( $response );
+		$json = json_decode( $body, true );
+
+		//print_r($json);exit;
+
+		if(isset($json['status']) && $json['status']=='OK'){
+
+			$post_info = self::get_address_from_geocode($post_info,$json['results']);
+
+
+		}else{
+			if(isset($json['status'])){
+				return sprintf( esc_attr__('Google geocode failed: %s', 'geodirectory'),  esc_attr($json['status']) );
+
+			}else{
+				return esc_attr__('Failed to reach Google geocode server.','geodirectory');
+			}
+
+		}
+
+		return $post_info;
+	}
+
+
+	//@todo maybe make this work in future after v2 release.
+	public static function get_address_from_geocode($post_info,$geocodes){
+
+//
+//
+//		// @todo, lets just do the first one for now, its most accurate.
+//		$geocodes = $geocodes[0]['address_components'];
+//
+//		$address_components = array();
+//		foreach($geocodes as $geocode){
+//			$type = $geocode['types'][0];
+//			$address_components[$type] = $geocode['long_name'];
+//			if($type=='country'){
+//				$address_components['country_code'] = $geocode['short_name'];
+//			}
+//
+//		}
+//
+//		print_r($address_components );exit;
+//
+//		// check we have an address
+//		if( isset( $post_info['street'] ) && $post_info['street'] ){ $address[] = $post_info['street'];  }
+//		if( isset( $post_info['city'] ) && $post_info['city'] ){ $address[] = $post_info['city'];  }
+//		if( isset( $post_info['region'] ) && $post_info['region'] ){ $address[] = $post_info['region'];  }
+//		if( isset( $post_info['country'] ) && $post_info['country'] ){ $address[] = $post_info['country'];  }
+//		if( isset( $post_info['zip'] ) && $post_info['zip'] ){ $address[] = $post_info['zip'];  }
+//
+//
+//
+//		return $post_info;
+	}
+
+	/**
+	 * Export posts to CSV.
+	 */
+	public static function export_posts() {
+
+		global $wp_filesystem;
+
+		$nonce = isset( $_REQUEST['_nonce'] ) ? $_REQUEST['_nonce'] : null;
+
+		$post_type      = isset( $_REQUEST['_pt'] ) ? $_REQUEST['_pt'] : null;
+		$csv_file_dir   = geodir_path_import_export( false );
+		$chunk_per_page = isset( $_REQUEST['_n'] ) ? absint( $_REQUEST['_n'] ) : null;
+		$chunk_per_page = $chunk_per_page < 50 || $chunk_per_page > 100000 ? 5000 : $chunk_per_page;
+		$chunk_page_no  = isset( $_REQUEST['_p'] ) ? absint( $_REQUEST['_p'] ) : 1;
+
+		// WPML
+		$is_wpml = geodir_is_wpml();
+		if ( $is_wpml ) {
+			global $sitepress;
+			$active_lang = ICL_LANGUAGE_CODE;
+
+			$sitepress->switch_lang( 'all', true );
+		}
+		// WPML
+		if ( $post_type == 'gd_event' ) {
+			add_filter( 'geodir_imex_export_posts_query', 'geodir_imex_get_events_query', 10, 2 );
+		}
+		$filters = ! empty( $_REQUEST['gd_imex'] ) && is_array( $_REQUEST['gd_imex'] ) ? $_REQUEST['gd_imex'] : null;
+
+		$file_name = $post_type . '_' . date( 'dmyHi' );
+		if ( $filters && isset( $filters['start_date'] ) && isset( $filters['end_date'] ) ) {
+			$file_name = $post_type . '_' . date_i18n( 'dmy', strtotime( $filters['start_date'] ) ) . '_' . date_i18n( 'dmy', strtotime( $filters['end_date'] ) );
+		}
+		$posts_count    = geodir_get_posts_count( $post_type );
+		$file_url_base  = geodir_path_import_export() . '/';
+		$file_url       = $file_url_base . $file_name . '.csv';
+		$file_path      = $csv_file_dir . '/' . $file_name . '.csv';
+		$file_path_temp = $csv_file_dir . '/' . $post_type . '_' . $nonce . '.csv';
+
+		$chunk_file_paths = array();
+
+		if ( isset( $_REQUEST['_c'] ) ) {
+			$json['total'] = $posts_count;
+			// WPML
+			if ( $is_wpml ) {
+				$sitepress->switch_lang( $active_lang, true );
+			}
+			// WPML
+			wp_send_json( $json );
+			gd_die();
+		} else if ( isset( $_REQUEST['_st'] ) ) {
+			$line_count = (int) geodir_import_export_line_count( $file_path_temp );
+			$percentage = count( $posts_count ) > 0 && $line_count > 0 ? ceil( $line_count / $posts_count ) * 100 : 0;
+			$percentage = min( $percentage, 100 );
+
+			$json['percentage'] = $percentage;
+			// WPML
+			if ( $is_wpml ) {
+				$sitepress->switch_lang( $active_lang, true );
+			}
+			// WPML
+			wp_send_json( $json );
+			gd_die();
+		} else {
+			if ( ! $posts_count > 0 ) {
+				$json['error'] = __( 'No records to export.', 'geodirectory' );
+			} else {
+				$total_posts = $posts_count;
+				if ( $chunk_per_page > $total_posts ) {
+					$chunk_per_page = $total_posts;
+				}
+				$chunk_total_pages = ceil( $total_posts / $chunk_per_page );
+
+				$j                = $chunk_page_no;
+				$chunk_save_posts = self::get_posts_csv( $post_type, $chunk_per_page, $j );
+
+				$per_page = 500;
+				if ( $per_page > $chunk_per_page ) {
+					$per_page = $chunk_per_page;
+				}
+				$total_pages = ceil( $chunk_per_page / $per_page );
+
+				for ( $i = 0; $i <= $total_pages; $i ++ ) {
+					$save_posts = array_slice( $chunk_save_posts, ( $i * $per_page ), $per_page );
+
+					$clear = $i == 0 ? true : false;
+					self::save_csv_data( $file_path_temp, $save_posts, $clear );
+				}
+
+				if ( $wp_filesystem->exists( $file_path_temp ) ) {
+					$chunk_page_no   = $chunk_total_pages > 1 ? '-' . $j : '';
+					$chunk_file_name = $file_name . $chunk_page_no . '.csv';
+					$file_path       = $csv_file_dir . '/' . $chunk_file_name;
+					$wp_filesystem->move( $file_path_temp, $file_path, true );
+
+					$file_url           = $file_url_base . $chunk_file_name;
+					$chunk_file_paths[] = array(
+						'i' => $j . '.',
+						'u' => $file_url,
+						's' => size_format( filesize( $file_path ), 2 )
+					);
+				}
+
+				if ( ! empty( $chunk_file_paths ) ) {
+					$json['total'] = $posts_count;
+					$json['files'] = $chunk_file_paths;
+				} else {
+					if ( $j > 1 ) {
+						$json['total'] = $posts_count;
+						$json['files'] = array();
+					} else {
+						$json['error'] = __( 'ERROR: Could not create csv file. This is usually due to inconsistent file permissions.', 'geodirectory' );
+					}
+				}
+			}
+			// WPML
+			if ( $is_wpml ) {
+				$sitepress->switch_lang( $active_lang, true );
+			}
+			// WPML
+			//wp_send_json( $json );
+			//wp_send_json( $json );
+		}
+
+		return $json;
+	}
+
+	/**
+	 * Retrieves the posts for the current post type.
+	 *
+	 * @since 1.4.6
+	 * @since 1.5.1 Updated to import & export recurring events.
+	 * @since 1.5.3 Fixed to get wpml original post id.
+	 * @since 1.5.7 $per_page & $page_no parameters added.
+	 * @since 1.6.11 alive_days column added in exported csv.
+	 * @package GeoDirectory
+	 *
+	 * @global object $wp_filesystem WordPress FileSystem object.
+	 *
+	 * @param string $post_type Post type.
+	 * @param int $per_page Per page limit. Default 0.
+	 * @param int $page_no Page number. Default 0.
+	 *
+	 * @return array Array of posts data.
+	 */
+	public static function get_posts_csv( $post_type, $per_page = 0, $page_no = 0 ) {
+		global $wp_filesystem;
+
+		$posts = self::get_export_posts( $post_type, $per_page, $page_no );
+
+		//print_r($posts);exit;
+
+		$csv_rows = array();
+
+		if ( ! empty( $posts ) ) {
+
+
+			$i = 0; // posts processes
+			foreach ( $posts as $post_info ) {
+
+				// add the post_images column
+				$post_info['post_images'] = GeoDir_Media::get_post_images_edit_string( $post_info['ID'] );
+
+				// fill in the CSV header
+				if ( $i === 0 ) {
+					$csv_rows[] = array_keys( $post_info );
+				}
+
+				$csv_rows[] = $post_info;
+				$i ++;
+			}
+		}
+
+		return $csv_rows;
+
+	}
+
+	/**
+	 * Retrieves the posts for the current post type.
+	 *
+	 * @since 1.4.6
+	 * @since 1.5.7 $per_page & $page_no parameters added.
+	 * @package GeoDirectory
+	 *
+	 * @global object $wpdb WordPress Database object.
+	 * @global string $plugin_prefix Geodirectory plugin table prefix.
+	 *
+	 * @param string $post_type Post type.
+	 * @param int $per_page Per page limit. Default 0.
+	 * @param int $page_no Page number. Default 0.
+	 *
+	 * @return array Array of posts data.
+	 */
+	public static function get_export_posts( $post_type, $per_page = 0, $page_no = 0 ) {
+		global $wpdb, $plugin_prefix;
+
+		if ( ! post_type_exists( $post_type ) ) {
+			return new stdClass;
+		}
+
+		$table = $plugin_prefix . $post_type . '_detail';
+
+		$limit = '';
+		if ( $per_page > 0 && $page_no > 0 ) {
+			$offset = ( $page_no - 1 ) * $per_page;
+
+			if ( $offset > 0 ) {
+				$limit = " LIMIT " . $offset . "," . $per_page;
+			} else {
+				$limit = " LIMIT " . $per_page;
+			}
+		}
+
+		// Skip listing with statuses trash, auto-draft etc...
+		$skip_statuses  = geodir_imex_export_skip_statuses();
+		$where_statuses = '';
+		if ( ! empty( $skip_statuses ) && is_array( $skip_statuses ) ) {
+			$where_statuses = "AND `" . $wpdb->posts . "`.`post_status` NOT IN('" . implode( "','", $skip_statuses ) . "')";
+		}
+
+		/**
+		 * Filter the SQL where clause part to filter posts in import/export.
+		 *
+		 * @since 1.6.4
+		 * @package GeoDirectory
+		 *
+		 * @param string $where SQL where clause part.
+		 */
+		$where_statuses = apply_filters( 'geodir_get_export_posts', $where_statuses, $post_type );
+
+		$columns = array();
+
+		$columns[] = "{$wpdb->posts}.ID";
+		$columns[] = "{$wpdb->posts}.post_title";
+		$columns[] = "{$wpdb->posts}.post_content";
+		$columns[] = "{$wpdb->posts}.post_status";
+		$columns[] = "{$wpdb->posts}.post_author";
+		$columns[] = "{$wpdb->posts}.post_type";
+
+		// set the table fields
+		$cpt_exclude_columns = array(
+			'post_id',
+			'post_title',
+			'post_status',
+			'submit_ip',
+			'overall_rating',
+			'rating_count',
+			'marker_json',
+			'location_id',
+			'locations',
+			'mapview',
+			'mapzoom',
+			'post_dummy',
+			'featured_image',
+		);
+		$cols_sql            = "DESCRIBE $table";
+		$all_objects         = $wpdb->get_results( $cols_sql );
+		if ( ! empty( $all_objects ) ) {
+			foreach ( $all_objects as $column_schema ) {
+				if ( ! in_array( $column_schema->Field, $cpt_exclude_columns ) ) {
+					$columns[] = $column_schema->Field;
+				}
+			}
+		}
+
+
+		/**
+		 * Filter the SQL SELECT columns clause part to filter posts in import/export.
+		 *
+		 * @since 2.0.0
+		 * @package GeoDirectory
+		 *
+		 * @param array $select SQL where clause part.
+		 */
+		$columns = apply_filters( 'geodir_get_export_posts_columns', $columns, $post_type );
+
+		$columns = implode( ",", $columns );
+
+		$query = $wpdb->prepare( "SELECT {$columns} FROM {$wpdb->posts} INNER JOIN {$table} ON {$table}.post_id = {$wpdb->posts}.ID WHERE {$wpdb->posts}.post_type = %s " . $where_statuses . " ORDER BY {$wpdb->posts}.ID ASC" . $limit, $post_type );
+
+		/**
+		 * Modify returned posts SQL query for the current post type.
+		 *
+		 * @since 1.4.6
+		 * @package GeoDirectory
+		 *
+		 * @param int $query The SQL query.
+		 * @param string $post_type Post type.
+		 */
+		$query   = apply_filters( 'geodir_imex_export_posts_query', $query, $post_type );
+		$results = (array) $wpdb->get_results( $query, ARRAY_A );
+
+		/**
+		 * Modify returned post results for the current post type.
+		 *
+		 * @since 1.4.6
+		 * @package GeoDirectory
+		 *
+		 * @param object $results An object containing all post ids.
+		 * @param string $post_type Post type.
+		 */
+		return apply_filters( 'geodir_export_posts', $results, $post_type );
+	}
+
+	/**
+	 * Save the data in CSV file to export.
+	 *
+	 * @since 1.4.6
+	 * @package GeoDirectory
+	 *
+	 * @global null|object $wp_filesystem WP_Filesystem object.
+	 *
+	 * @param  string $file_path Full path to file.
+	 * @param  array $csv_data Array of csv data.
+	 * @param  bool $clear If true then it overwrite data otherwise add rows at the end of file.
+	 *
+	 * @return bool true if success otherwise false.
+	 */
+	public static function save_csv_data( $file_path, $csv_data = array(), $clear = true ) {
+		if ( empty( $csv_data ) ) {
+			return false;
+		}
+
+		global $wp_filesystem;
+
+		$mode = $clear ? 'w+' : 'a+';
+
+		if ( function_exists( 'fputcsv' ) ) {
+			$file = fopen( $file_path, $mode );
+			foreach ( $csv_data as $csv_row ) {
+				//$csv_row = array_map( 'utf8_decode', $csv_row );
+				$write_successful = fputcsv( $file, $csv_row, ",", $enclosure = '"' );
+			}
+			fclose( $file );
+		} else {
+			foreach ( $csv_data as $csv_row ) {
+				//$csv_row = array_map( 'utf8_decode', $csv_row );
+				$wp_filesystem->put_contents( $file_path, $csv_row );
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Export categories.
+	 */
+	public static function export_categories() {
+		global $wp_filesystem;
+
+		$nonce          = isset( $_REQUEST['_nonce'] ) ? $_REQUEST['_nonce'] : null;
+		$post_type      = isset( $_REQUEST['_pt'] ) ? $_REQUEST['_pt'] : null;
+		$chunk_per_page = isset( $_REQUEST['_n'] ) ? absint( $_REQUEST['_n'] ) : null;
+		$chunk_per_page = $chunk_per_page < 50 || $chunk_per_page > 100000 ? 5000 : $chunk_per_page;
+		$chunk_page_no  = isset( $_REQUEST['_p'] ) ? absint( $_REQUEST['_p'] ) : 1;
+		$csv_file_dir   = geodir_path_import_export( false );
+
+		// WPML
+		$is_wpml = geodir_is_wpml();
+		if ( $is_wpml ) {
+			global $sitepress;
+			$active_lang = ICL_LANGUAGE_CODE;
+
+			$sitepress->switch_lang( 'all', true );
+		}
+		// WPML
+		$file_name = $post_type . 'category_' . date( 'dmyHi' );
+
+		$terms_count    = geodir_get_terms_count( $post_type );
+		$file_url_base  = geodir_path_import_export() . '/';
+		$file_url       = $file_url_base . $file_name . '.csv';
+		$file_path      = $csv_file_dir . '/' . $file_name . '.csv';
+		$file_path_temp = $csv_file_dir . '/' . $post_type . 'category_' . $nonce . '.csv';
+
+		$chunk_file_paths = array();
+
+		if ( isset( $_REQUEST['_st'] ) ) {
+			$line_count = (int) geodir_import_export_line_count( $file_path_temp );
+			$percentage = count( $terms_count ) > 0 && $line_count > 0 ? ceil( $line_count / $terms_count ) * 100 : 0;
+			$percentage = min( $percentage, 100 );
+
+			$json['percentage'] = $percentage;
+			// WPML
+			if ( $is_wpml ) {
+				$sitepress->switch_lang( $active_lang, true );
+			}
+			// WPML
+			wp_send_json( $json );
+		} else {
+			if ( ! $terms_count > 0 ) {
+				$json['error'] = __( 'No records to export.', 'geodirectory' );
+			} else {
+				$total_terms = $terms_count;
+				if ( $chunk_per_page > $terms_count ) {
+					$chunk_per_page = $terms_count;
+				}
+				$chunk_total_pages = ceil( $total_terms / $chunk_per_page );
+
+				$j                = $chunk_page_no;
+				$chunk_save_terms = self::get_categories( $post_type, $chunk_per_page, $j );
+
+				$per_page = 500;
+				if ( $per_page > $chunk_per_page ) {
+					$per_page = $chunk_per_page;
+				}
+				$total_pages = ceil( $chunk_per_page / $per_page );
+
+				for ( $i = 0; $i <= $total_pages; $i ++ ) {
+					$save_terms = array_slice( $chunk_save_terms, ( $i * $per_page ), $per_page );
+
+					$clear = $i == 0 ? true : false;
+					self::save_csv_data( $file_path_temp, $save_terms, $clear );
+				}
+
+				if ( $wp_filesystem->exists( $file_path_temp ) ) {
+					$chunk_page_no   = $chunk_total_pages > 1 ? '-' . $j : '';
+					$chunk_file_name = $file_name . $chunk_page_no . '.csv';
+					$file_path       = $csv_file_dir . '/' . $chunk_file_name;
+					$wp_filesystem->move( $file_path_temp, $file_path, true );
+
+					$file_url           = $file_url_base . $chunk_file_name;
+					$chunk_file_paths[] = array(
+						'i' => $j . '.',
+						'u' => $file_url,
+						's' => size_format( filesize( $file_path ), 2 )
+					);
+				}
+
+				if ( ! empty( $chunk_file_paths ) ) {
+					$json['total'] = $terms_count;
+					$json['files'] = $chunk_file_paths;
+				} else {
+					$json['error'] = __( 'ERROR: Could not create csv file. This is usually due to inconsistent file permissions.', 'geodirectory' );
+				}
+			}
+			// WPML
+			if ( $is_wpml ) {
+				$sitepress->switch_lang( $active_lang, true );
+			}
+			// WPML
+			//wp_send_json( $json );
+		}
+
+		return $json;
+	}
+
+	/**
+	 * Retrieve terms for given post type.
+	 *
+	 * @since 1.4.6
+	 * @since 1.5.7 $per_page & $page_no parameters added.
+	 * @package GeoDirectory
+	 *
+	 * @param  string $post_type The post type.
+	 * @param int $per_page Per page limit. Default 0.
+	 * @param int $page_no Page number. Default 0.
+	 *
+	 * @return array Array of terms data.
+	 */
+	public static function get_categories( $post_type, $per_page = 0, $page_no = 0 ) {
+		$args = array( 'hide_empty' => 0, 'orderby' => 'id' );
+
+		remove_all_filters( 'get_terms' );
+
+		$taxonomy = $post_type . 'category';
+
+		if ( $per_page > 0 && $page_no > 0 ) {
+			$args['offset'] = ( $page_no - 1 ) * $per_page;
+			$args['number'] = $per_page;
+		}
+
+		$terms = get_terms( $taxonomy, $args );
+
+		//print_r($terms);exit;
+
+		$csv_rows = array();
+
+		if ( ! empty( $terms ) ) {
+			$csv_row   = array();
+			$csv_row[] = 'cat_id';
+			$csv_row[] = 'cat_name';
+			$csv_row[] = 'cat_slug';
+			$csv_row[] = 'cat_posttype';
+			$csv_row[] = 'cat_parent';
+			$csv_row[] = 'cat_schema';
+			// WPML
+			$is_wpml = geodir_wpml_is_taxonomy_translated( $taxonomy );
+			if ( $is_wpml ) {
+				$csv_row[] = 'cat_language';
+				$csv_row[] = 'cat_id_original';
+			}
+			// WPML
+			$csv_row[] = 'cat_description';
+			$csv_row[] = 'cat_top_description';
+			$csv_row[] = 'cat_image';
+			$csv_row[] = 'cat_icon';
+
+			$csv_rows[] = $csv_row;
+
+			foreach ( $terms as $term ) {
+				$cat_icon  = geodir_get_cat_icon( $term->term_id, true );
+				$cat_image = geodir_get_cat_image( $term->term_id, true );
+
+				$cat_parent = '';
+				if ( isset( $term->parent ) && (int) $term->parent > 0 && term_exists( (int) $term->parent, $taxonomy ) ) {
+					$parent_term = (array) get_term_by( 'id', (int) $term->parent, $taxonomy );
+					$cat_parent  = ! empty( $parent_term ) && isset( $parent_term['name'] ) ? $parent_term['name'] : '';
+				}
+
+				$csv_row   = array();
+				$csv_row[] = $term->term_id;
+				$csv_row[] = $term->name;
+				$csv_row[] = $term->slug;
+				$csv_row[] = $post_type;
+				$csv_row[] = $cat_parent;
+				$csv_row[] = get_term_meta( $term->term_id, 'ct_cat_schema', true );
+				// WPML
+				if ( $is_wpml ) {
+					$csv_row[] = geodir_get_language_for_element( $term->term_id, 'tax_' . $taxonomy );
+					$csv_row[] = geodir_imex_original_post_id( $term->term_id, 'tax_' . $taxonomy );
+				}
+				// WPML
+				$csv_row[] = $term->description;
+				$csv_row[] = get_term_meta( $term->term_id, 'ct_cat_top_desc', true );
+				$csv_row[] = $cat_image;
+				$csv_row[] = $cat_icon;
+
+				$csv_rows[] = $csv_row;
+			}
+		}
+
+		return $csv_rows;
+	}
+
+	/**
+	 * Import categories.
+	 *
+	 * @return array|string
+	 */
+	public static function import_categories() {
+
+		$limit     = isset( $_POST['limit'] ) && $_POST['limit'] ? (int) $_POST['limit'] : 1;
+		$processed = isset( $_POST['processed'] ) ? (int) $_POST['processed'] : 0;
+
+		$processed ++;
+		$rows = self::get_csv_rows( $processed, $limit );
+
+		// WPML
+		$is_wpml = geodir_is_wpml();
+		if ( $is_wpml ) {
+			global $sitepress;
+			$active_lang = ICL_LANGUAGE_CODE;
+		}
+		// WPML
+
+		//print_r($rows);exit;
+
+
+		if ( ! empty( $rows ) ) {
+			$created = 0;
+			$updated = 0;
+			$skipped = 0;
+			$invalid = 0;
+			$images  = 0;
+
+			$update_or_skip = isset( $_POST['_ch'] ) && $_POST['_ch'] == 'update' ? 'update' : 'skip';
+
+			foreach ( $rows as $cat_info ) {
+
+				$cat_info = self::validate_cat( $cat_info );
+
+				if ( $update_or_skip == 'skip' && isset( $cat_info['term_id'] ) && $cat_info['term_id'] ) {
+					$skipped ++;
+					continue;
+				}
+
+
+				//print_r($cat_info );exit;
+
+				if ( $cat_info ) {
+
+					// WPML
+					if ( $is_wpml && $cat_info['cat_language'] != '' ) {
+						$sitepress->switch_lang( $cat_info['cat_language'], true );
+					}
+					// WPML
+
+					// Update
+					if ( isset( $cat_info['term_id'] ) && $cat_info['term_id'] ) {
+
+						$result = self::update_term( $cat_info['taxonomy'], $cat_info );
+
+						if ( $result ) {
+							$updated ++;
+						} else {
+							$invalid ++;
+						}
+
+						// insert
+					} else {
+						$result = self::insert_term( $cat_info['taxonomy'], $cat_info );
+						if ( $result ) {
+							$created ++;
+						} else {
+							$invalid ++;
+						}
+					}
+
+
+					////////////////////////////////////////////////////////// update term meta
+					if ( $result ) {
+						$term_data       = $cat_info;
+						$term_id         = $result;
+						$taxonomy        = $cat_info['taxonomy'];
+						$cat_id_original = $cat_info['cat_id_original'];
+						$cat_language    = $cat_info['cat_language'];
+						$uploads         = wp_upload_dir();
+
+						// WPML
+						if ( $is_wpml && geodir_wpml_is_taxonomy_translated( $taxonomy ) && $cat_id_original > 0 && $cat_language != '' ) {
+							$wpml_element_type = 'tax_' . $taxonomy;
+							$source_language   = geodir_get_language_for_element( $cat_id_original, $wpml_element_type );
+							$source_language   = $source_language != '' ? $source_language : $sitepress->get_default_language();
+
+							$trid = $sitepress->get_element_trid( $cat_id_original, $wpml_element_type );
+
+							$sitepress->set_element_language_details( $term_id, $wpml_element_type, $trid, $cat_language, $source_language );
+						}
+						// WPML
+
+						//print_r($term_data);
+
+						if ( isset( $term_data['cat_top_description'] ) ) {
+							update_term_meta( $term_id, 'ct_cat_top_desc', $term_data['cat_top_description'] );
+						}
+
+						if ( isset( $term_data['cat_schema'] ) ) {
+							update_term_meta( $term_id, 'ct_cat_schema', $term_data['cat_schema'] );
+						}
+
+
+						$attachment = false;
+						if ( isset( $term_data['image'] ) && $term_data['image'] != '' ) {
+							$cat_image = geodir_get_cat_image( $term_id );
+
+							if ( empty( $cat_image ) || ( ! empty( $cat_image ) && basename( $cat_image ) != $term_data['image'] ) ) {
+								$attachment = true;
+								update_term_meta( $term_id, 'ct_cat_default_img', array(
+									'id'  => 'image',
+									'src' => trim( $uploads['subdir'] . '/' . $term_data['image'], '/\\' )
+								) );
+							}
+						}
+
+						if ( isset( $term_data['icon'] ) && $term_data['icon'] != '' ) {
+							$cat_icon = geodir_get_cat_icon( $term_id );
+
+							if ( empty( $cat_icon ) || ( ! empty( $cat_icon ) && basename( $cat_icon ) != $term_data['icon'] ) ) {
+								$attachment = true;
+								update_term_meta( $term_id, 'ct_cat_icon', array(
+									'id'  => 'icon',
+									'src' => trim( $uploads['subdir'] . '/' . $term_data['icon'], '/\\' )
+								) );
+							}
+						}
+
+						if ( $attachment ) {
+							$images ++;
+						}
+					}
+					///////////////////////////////////////////////////////////////////// update term meta end
+
+					// WPML
+					if ( $is_wpml && $cat_info['cat_language'] != '' ) {
+						$sitepress->switch_lang( $active_lang, true );
+					}
+					// WPML
+
+				} else {
+					$invalid ++;
+				}
+
+			}
+
+		} else {
+			return new WP_Error( 'gd-csv-empty', __( "No data found in csv file.", "geodirectory" ) );
+		}
+
+		return array(
+			"processed" => $processed,
+			"created"   => $created,
+			"updated"   => $updated,
+			"skipped"   => $skipped,
+			"invalid"   => $invalid,
+			"images"    => $images,
+			"ID"        => $cat_info['cat_id'],
+		);
+	}
+
+	/**
+	 * Validate the cat info.
+	 *
+	 * @todo make this actually validate the cat info.
+	 *
+	 * @param $cat_info
+	 *
+	 * @return array
+	 */
+	public static function validate_cat( $cat_info ) {
+
+		$cat_info_fixed = array();
+
+		// fix column names
+		$cat_info_fixed['taxonomy']            = isset( $cat_info['cat_posttype'] ) && $cat_info['cat_posttype'] ? esc_attr( $cat_info['cat_posttype'] . "category" ) : '';
+		$cat_info_fixed['term_id']             = isset( $cat_info['cat_id'] ) && $cat_info['cat_id'] ? absint( $cat_info['cat_id'] ) : '';
+		$cat_info_fixed['name']                = isset( $cat_info['cat_name'] ) && $cat_info['cat_name'] ? esc_attr( $cat_info['cat_name'] ) : '';
+		$cat_info_fixed['slug']                = isset( $cat_info['cat_slug'] ) && $cat_info['cat_slug'] ? esc_attr( $cat_info['cat_slug'] ) : '';
+		$cat_info_fixed['parent']              = isset( $cat_info['cat_parent'] ) && $cat_info['cat_parent'] ? absint( $cat_info['cat_parent'] ) : '';
+		$cat_info_fixed['description']         = isset( $cat_info['cat_description'] ) && $cat_info['cat_description'] ? esc_attr( $cat_info['cat_description'] ) : '';
+		$cat_info_fixed['cat_schema']          = isset( $cat_info['cat_schema'] ) && $cat_info['cat_schema'] ? esc_attr( $cat_info['cat_schema'] ) : '';
+		$cat_info_fixed['cat_top_description'] = isset( $cat_info['cat_top_description'] ) && $cat_info['cat_top_description'] ? esc_attr( $cat_info['cat_top_description'] ) : '';
+		$cat_info_fixed['image']               = isset( $cat_info['cat_image'] ) && $cat_info['cat_image'] ? $cat_info['cat_image'] : '';
+		$cat_info_fixed['icon']                = isset( $cat_info['cat_icon'] ) && $cat_info['cat_icon'] ? $cat_info['cat_icon'] : '';
+		//$cat_info_fixed[''] = isset($cat_info['']) && $cat_info[''] ? $cat_info[''] : '';
+		//$cat_info_fixed[''] = isset($cat_info['']) && $cat_info[''] ? $cat_info[''] : '';
+
+		// WPML
+		$is_wpml = geodir_is_wpml();
+		if ( $is_wpml ) {
+			$cat_info_fixed['cat_language']    = isset( $cat_info['cat_language'] ) && $cat_info['cat_language'] ? trim( $cat_info['cat_language'] ) : '';
+			$cat_info_fixed['cat_id_original'] = isset( $cat_info['cat_id_original'] ) && $cat_info['cat_id_original'] ? absint( $cat_info['cat_id_original'] ) : '';
+		}
+		// WPML
+
+
+		// validate @todo validate the info
+
+
+		// temp image fix
+		$cat_info_fixed['image'] = $cat_info_fixed['image'] != '' ? basename( $cat_info_fixed['image'] ) : '';
+		$cat_info_fixed['icon']  = $cat_info_fixed['icon'] != '' ? basename( $cat_info_fixed['icon'] ) : '';
+
+		return $cat_info_fixed;
+	}
+
+	/**
+	 * Update the post term.
+	 *
+	 * @since 1.4.6
+	 * @package GeoDirectory
+	 *
+	 * @param string $taxonomy Post taxonomy.
+	 * @param array $term_data {
+	 *    Attributes of term data.
+	 *
+	 * @type string $term_id Term ID.
+	 * @type string $name Term name.
+	 * @type string $slug Term slug.
+	 * @type string $description Term description.
+	 * @type string $top_description Term top description.
+	 * @type string $image Default Term image.
+	 * @type string $icon Default Term icon.
+	 * @type string $taxonomy Term taxonomy.
+	 * @type int $parent Term parent ID.
+	 *
+	 * }
+	 * @return int|bool Term id when success, false when fail.
+	 */
+	public static function update_term( $taxonomy, $term_data ) {
+		if ( empty( $taxonomy ) || empty( $term_data ) ) {
+			return false;
+		}
+
+		$term_id = isset( $term_data['term_id'] ) && ! empty( $term_data['term_id'] ) ? $term_data['term_id'] : 0;
+
+		$args                = array();
+		$args['description'] = isset( $term_data['description'] ) ? $term_data['description'] : '';
+		$args['slug']        = isset( $term_data['slug'] ) ? $term_data['slug'] : '';
+		$args['parent']      = isset( $term_data['parent'] ) ? (int) $term_data['parent'] : '';
+
+		if ( $term_id > 0 && $term_info = (array) get_term( $term_id, $taxonomy ) ) {
+			$term_data['term_id'] = $term_info['term_id'];
+
+			$result = wp_update_term( $term_data['term_id'], $taxonomy, $term_data );
+
+			if ( ! is_wp_error( $result ) ) {
+				return isset( $result['term_id'] ) ? $result['term_id'] : 0;
+			}
+		} else if ( $term_data['slug'] != '' && $term_info = (array) term_exists( $term_data['slug'], $taxonomy ) ) {
+			$term_data['term_id'] = $term_info['term_id'];
+
+			$result = wp_update_term( $term_data['term_id'], $taxonomy, $term_data );
+
+			if ( ! is_wp_error( $result ) ) {
+				return isset( $result['term_id'] ) ? $result['term_id'] : 0;
+			}
+		} else {
+			return self::insert_term( $taxonomy, $term_data );
+		}
+
+		return false;
+	}
+
+	/**
+	 * Create new the post term.
+	 *
+	 * @since 1.4.6
+	 * @package GeoDirectory
+	 *
+	 * @param string $taxonomy Post taxonomy.
+	 * @param array $term_data {
+	 *    Attributes of term data.
+	 *
+	 * @type string $name Term name.
+	 * @type string $slug Term slug.
+	 * @type string $description Term description.
+	 * @type string $top_description Term top description.
+	 * @type string $image Default Term image.
+	 * @type string $icon Default Term icon.
+	 * @type string $taxonomy Term taxonomy.
+	 * @type int $parent Term parent ID.
+	 *
+	 * }
+	 * @return int|bool Term id when success, false when fail.
+	 */
+	public static function insert_term( $taxonomy, $term_data ) {
+		if ( empty( $taxonomy ) || empty( $term_data ) ) {
+			return false;
+		}
+
+
+		$term                = isset( $term_data['name'] ) && ! empty( $term_data['name'] ) ? $term_data['name'] : '';
+		$args                = array();
+		$args['description'] = isset( $term_data['description'] ) ? $term_data['description'] : '';
+		$args['slug']        = isset( $term_data['slug'] ) ? $term_data['slug'] : '';
+		$args['parent']      = isset( $term_data['parent'] ) ? (int) $term_data['parent'] : '';
+
+		if ( ( ! empty( $args['slug'] ) && term_exists( $args['slug'], $taxonomy ) ) || empty( $args['slug'] ) ) {
+			$term_args    = array_merge( $term_data, $args );
+			$defaults     = array( 'alias_of' => '', 'description' => '', 'parent' => 0, 'slug' => '' );
+			$term_args    = wp_parse_args( $term_args, $defaults );
+			$term_args    = sanitize_term( $term_args, $taxonomy, 'db' );
+			$args['slug'] = wp_unique_term_slug( $args['slug'], (object) $term_args );
+		}
+
+		if ( ! empty( $term ) ) {
+			$result = wp_insert_term( $term, $taxonomy, $args );
+			if ( ! is_wp_error( $result ) ) {
+				return isset( $result['term_id'] ) ? $result['term_id'] : 0;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Export the GD settings to a time stamped .json file.
+	 */
+	public static function export_settings() {
+		$settings = geodir_get_settings();
+
+		// unset taxonomies and post_types, maybe we will allow this at a later stage
+		unset( $settings['taxonomies'] );
+		unset( $settings['post_types'] );
+
+		//print_r($settings );exit; // for testing
+
+		$filename = "geodirectory-settings-" . time();
+		header( 'Content-disposition: attachment; filename=' . $filename . '.json' );
+		header( 'Content-type: application/json' );
+		echo json_encode( $settings );
+		exit;
+	}
+
+	/**
+	 * Import GD settings.
+	 *
+	 * @return array|WP_Error
+	 */
+	public static function import_settings() {
+		$json_file = isset( $_POST['_file'] ) ? $_POST['_file'] : null;
+		$settings  = self::validate_json( $json_file );
+
+		//print_r($settings);exit;
+
+		if ( $settings === false ) {
+			return new WP_Error( 'gd-invalid-json', __( "json file is not valid.", "geodirectory" ) );
+		} elseif ( empty( $settings ) ) {
+			return new WP_Error( 'gd-empty-json', __( "json file is empty.", "geodirectory" ) );
+		}
+
+		$i = 0;
+		foreach ( $settings as $key => $setting ) {
+			geodir_update_option( $key, $setting );
+			$i ++;
+		}
+
+		return array(
+			'success' => true,
+			'updated' => $i,
+			'data'    => __( 'Settings updated.', 'geodirectory' )
+		);
+
+	}
+
+	/**
+	 * Check the CSV is valid.
+	 *
+	 * @return bool|WP_Error
+	 */
+	public static function validate_json( $json_file ) {
+		global $wp_filesystem;
+
+		$json        = array();
+		$uploads     = wp_upload_dir();
+		$uploads_dir = $uploads['basedir'];
+
+
+		$json_file_arr = explode( '/', $json_file );
+		$json_filename = end( $json_file_arr );
+		$target_path   = $uploads_dir . '/geodir_temp/' . $json_filename;
+
+		if ( $json_file && $wp_filesystem->is_file( $target_path ) && $wp_filesystem->exists( $target_path ) ) {
+			add_filter( 'upload_mimes', array(
+				'GeoDir_Admin_Import_Export',
+				'allow_json_mime'
+			) ); // make it recognise json files
+			$wp_filetype = wp_check_filetype_and_ext( $target_path, $json_filename );
+
+
+			if ( ! empty( $wp_filetype ) && isset( $wp_filetype['ext'] ) && geodir_strtolower( $wp_filetype['ext'] ) == 'json' ) {
+				$json['error'] = null;
+
+
+				$file_contents = $wp_filesystem->get_contents( $target_path );
+
+				if ( $json = json_decode( $file_contents, true ) ) {
+					if ( is_array( $json ) ) {
+						return $json;
+					}
+				}
+
+			}
+		}
+
+		return false;
+	}
+
+	public static function allow_json_mime( $mimes ) {
+		$mimes['json'] = 'application/json';
+
+		return $mimes;
+	}
+
+
+
+
+}

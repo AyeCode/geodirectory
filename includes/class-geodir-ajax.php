@@ -48,6 +48,7 @@ class GeoDir_AJAX {
 			'save_post'       => true,
 			'auto_save_post'       => true,
 			'delete_revision'       => true,
+			'import_export'         => false,
 		);
 
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
@@ -60,6 +61,28 @@ class GeoDir_AJAX {
 				add_action( 'wc_ajax_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 			}
 		}
+	}
+
+	public static function import_export(){
+		// security
+		check_ajax_referer( 'geodir_import_export_nonce', '_nonce' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1 );
+		}
+
+
+		$result = GeoDir_Admin_Import_Export::start_import_export();
+
+		if(is_wp_error( $result ) ){
+			wp_send_json_error( $result->get_error_message() );
+		}elseif(isset($result['error']) && !empty($result['error'])){
+			wp_send_json_error( $result['error'] );
+		}else{
+			wp_send_json($result);
+			//wp_send_json_success($result);
+		}
+
+		wp_die();
 	}
 
 	/**

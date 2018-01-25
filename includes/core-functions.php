@@ -125,36 +125,31 @@ function geodir_get_core_supported_themes() {
 }
 
 /**
- * Get template part (for templates like the shop-loop).
- *
- * WC_TEMPLATE_DEBUG_MODE will prevent overrides in themes from taking priority.
- *
- * @access public
- * @param mixed $slug
- * @param string $name (default: '')
+ * Get the search form default text.
+ * 
+ * @since 2.0.0
+ * @return string|void
  */
-function wc_get_template_part( $slug, $name = '' ) {
-    $template = '';
+function get_search_default_text(){
+    return __('Search for','geodirectory');
+}
 
-    // Look in yourtheme/slug-name.php and yourtheme/woocommerce/slug-name.php
-    if ( $name && ! WC_TEMPLATE_DEBUG_MODE ) {
-        $template = locate_template( array( "{$slug}-{$name}.php", WC()->template_path() . "{$slug}-{$name}.php" ) );
-    }
+/**
+ * Get the search near form default text.
+ *
+ * @since 2.0.0
+ * @return string|void
+ */
+function get_search_default_near_text(){
+    return __('Near','geodirectory');
+}
 
-    // Get default slug-name.php
-    if ( ! $template && $name && file_exists( WC()->plugin_path() . "/templates/{$slug}-{$name}.php" ) ) {
-        $template = WC()->plugin_path() . "/templates/{$slug}-{$name}.php";
-    }
-
-    // If template file doesn't exist, look in yourtheme/slug.php and yourtheme/woocommerce/slug.php
-    if ( ! $template && ! WC_TEMPLATE_DEBUG_MODE ) {
-        $template = locate_template( array( "{$slug}.php", WC()->template_path() . "{$slug}.php" ) );
-    }
-
-    // Allow 3rd party plugins to filter template file from their plugin.
-    $template = apply_filters( 'wc_get_template_part', $template, $slug, $name );
-
-    if ( $template ) {
-        load_template( $template, false );
-    }
+/**
+ * Get the search form default text.
+ *
+ * @since 2.0.0
+ * @return string|void
+ */
+function get_search_default_button_text(){
+    return __('#xf002;','geodirectory');
 }
