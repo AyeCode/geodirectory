@@ -487,19 +487,25 @@ class GeoDir_REST_System_Status_Controller extends GeoDir_REST_Controller {
 		if ( function_exists( 'memory_get_usage' ) ) {
 			$wp_memory_limit = max( $wp_memory_limit, geodir_let_to_num( @ini_get( 'memory_limit' ) ) );
 		}
+		
+		// User agent
+		$user_agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : '';
 
 		// Test POST requests
-		$post_response = wp_safe_remote_post( 'https://www.paypal.com/cgi-bin/webscr', array(
+		$post_response = wp_safe_remote_post( 'http://api.wordpress.org/core/browse-happy/1.1/', array(
 			'timeout'     => 10,
-			'user-agent'  => 'GeoDirectory/' . GeoDir()->version,
+			'user-agent'  => 'WordPress/' . get_bloginfo( 'version' ) . '; ' . home_url(),
 			'httpversion' => '1.1',
 			'body'        => array(
-				'cmd'    => '_notify-validate',
+				'useragent'	=> $user_agent,
 			),
 		) );
+		
+		$post_response_body = NULL;
 		$post_response_successful = false;
 		if ( ! is_wp_error( $post_response ) && $post_response['response']['code'] >= 200 && $post_response['response']['code'] < 300 ) {
 			$post_response_successful = true;
+			$post_response_body = json_decode( wp_remote_retrieve_body( $post_response ), true );
 		}
 
 		// Test GET requests
@@ -543,6 +549,10 @@ class GeoDir_REST_System_Status_Controller extends GeoDir_REST_Controller {
 			'remote_post_response'      => ( is_wp_error( $post_response ) ? $post_response->get_error_message() : $post_response['response']['code'] ),
 			'remote_get_successful'     => $get_response_successful,
 			'remote_get_response'       => ( is_wp_error( $get_response ) ? $get_response->get_error_message() : $get_response['response']['code'] ),
+			'platform'       			=> ! empty( $post_response_body['platform'] ) ? $post_response_body['platform'] : '-',
+			'browser_name'       		=> ! empty( $post_response_body['name'] ) ? $post_response_body['name'] : '-',
+			'browser_version'       	=> ! empty( $post_response_body['version'] ) ? $post_response_body['version'] : '-',
+			'user_agent'       			=> $user_agent
 		);
 	}
 
@@ -672,44 +682,17 @@ class GeoDir_REST_System_Status_Controller extends GeoDir_REST_Controller {
 
 		foreach ( $active_plugins as $plugin ) {
 			$data           = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
-			$dirname        = dirname( $plugin );
-			$version_latest = '';
-			$slug           = explode( '/', $plugin );
-			$slug           = explode( '.', end( $slug ) );
-			$slug           = $slug[0];
-
-			if ( 'geodirectory' !== $slug && ( strstr( $data['PluginURI'], 'wpgeodirectory.com' ) ) ) {
-				if ( false === ( $version_data = get_transient( md5( $plugin ) . '_version_data' ) ) ) {
-					$changelog = '';///wp_safe_remote_get( 'http://dzv365zjfbd8v.cloudfront.net/changelogs/' . $dirname . '/changelog.txt' ); //TODO
-					$cl_lines  = explode( "\n", wp_remote_retrieve_body( $changelog ) );
-					if ( ! empty( $cl_lines ) ) {
-						foreach ( $cl_lines as $line_num => $cl_line ) {
-							if ( preg_match( '/^[0-9]/', $cl_line ) ) {
-								$date         = str_replace( '.' , '-' , trim( substr( $cl_line , 0 , strpos( $cl_line , '-' ) ) ) );
-								$version      = preg_replace( '~[^0-9,.]~' , '' ,stristr( $cl_line , "version" ) );
-								$update       = trim( str_replace( "*" , "" , $cl_lines[ $line_num + 1 ] ) );
-								$version_data = array( 'date' => $date , 'version' => $version , 'update' => $update , 'changelog' => $changelog );
-								set_transient( md5( $plugin ) . '_version_data', $version_data, DAY_IN_SECONDS );
-								break;
-							}
-						}
-					}
-				}
-				$version_latest = $version_data['version'];
-			} elseif ( isset( $available_updates[ $plugin ]->update->new_version ) ) {
-				$version_latest = $available_updates[ $plugin ]->update->new_version;
-			}
 
 			// convert plugin data to json response format.
 			$active_plugins_data[] = array(
 				'plugin'            => $plugin,
 				'name'              => $data['Name'],
 				'version'           => $data['Version'],
-				'version_latest'    => $version_latest,
 				'url'               => $data['PluginURI'],
 				'author_name'       => $data['AuthorName'],
 				'author_url'        => esc_url_raw( $data['AuthorURI'] ),
 				'network_activated' => $data['Network'],
+				'latest_verison'	=> ( array_key_exists( $plugin, $available_updates ) ) ? $available_updates[$plugin]->update->new_version : $data['Version']
 			);
 		}
 
@@ -732,11 +715,11 @@ class GeoDir_REST_System_Status_Controller extends GeoDir_REST_Controller {
 			$parent_theme_info = array(
 				'parent_name'           => $parent_theme->Name,
 				'parent_version'        => $parent_theme->Version,
-				'parent_version_latest' => GeoDir_Admin_Status::get_latest_theme_version( $parent_theme ),
+				'parent_latest_verison' => GeoDir_Admin_Status::get_latest_theme_version( $parent_theme ),
 				'parent_author_url'     => $parent_theme->{'Author URI'},
 			);
 		} else {
-			$parent_theme_info = array( 'parent_name' => '', 'parent_version' => '', 'parent_version_latest' => '', 'parent_author_url' => '' );
+			$parent_theme_info = array( 'parent_name' => '', 'parent_version' => '', 'parent_latest_verison' => '', 'parent_author_url' => '' );
 		}
 
 		/**
@@ -778,7 +761,7 @@ class GeoDir_REST_System_Status_Controller extends GeoDir_REST_Controller {
 		$active_theme_info = array(
 			'name'                    => $active_theme->Name,
 			'version'                 => $active_theme->Version,
-			'version_latest'          => GeoDir_Admin_Status::get_latest_theme_version( $active_theme ),
+			'latest_verison'          => GeoDir_Admin_Status::get_latest_theme_version( $active_theme ),
 			'author_url'              => esc_url_raw( $active_theme->{'Author URI'} ),
 			'is_child_theme'          => is_child_theme(),
 			'has_geodirectory_support' => ( current_theme_supports( 'geodirectory' ) || in_array( $active_theme->template, geodir_get_core_supported_themes() ) ),
@@ -801,9 +784,7 @@ class GeoDir_REST_System_Status_Controller extends GeoDir_REST_Controller {
 			'upload_max_filesize'      => geodir_get_option( 'upload_max_filesize' ),
 			'default_status'      	   => geodir_get_option( 'default_status' ),
 			'maps_api_key'      	   => geodir_get_option( 'google_maps_api_key' ) ? true : false,
-			'thousand_separator'       => geodir_get_price_thousand_separator(),
-			'decimal_separator'        => geodir_get_price_decimal_separator(),
-			'number_of_decimals'       => geodir_get_price_decimals(),
+			'default_location'         => geodir_is_default_location_set(),
 		);
 	}
 

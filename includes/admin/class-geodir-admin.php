@@ -223,30 +223,24 @@ return;//
 	 * @return string
 	 */
 	public function preview_emails() {
-
-		if ( isset( $_GET['preview_geodirectory_mail'] ) ) {
-			if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'preview-mail' ) ) {
+		if ( isset( $_GET['geodir_preview_mail'] ) ) {
+			if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'geodir-preview-mail' ) ) {
 				die( 'Security check' );
 			}
 
-			// load the mailer class
-			$mailer        = WC()->mailer();
+			$email_name = 'preview_mail';
+			$email_vars = array();
 
-			// get the preview email subject
-			$email_heading = __( 'HTML email template', 'geodirectory' );
-
-			// get the preview email content
+			// Get the preview email content.
 			ob_start();
 			include( 'views/html-email-template-preview.php' );
-			$message       = ob_get_clean();
+			$message = ob_get_clean();
+			
+			$message 	= geodir_email_wrap_message( $message, $email_name, $email_vars );
+			$message 	= geodir_email_style_body( $message, $email_name, $email_vars );
+			$message 	= apply_filters( 'geodir_mail_content', $message, $email_name, $email_vars );
 
-			// create a new email
-			$email         = new WC_Email();
-
-			// wrap the content with the email template and then add styles
-			$message       = apply_filters( 'woocommerce_mail_content', $email->style_inline( $mailer->wrap_message( $email_heading, $message ) ) );
-
-			// print the preview email
+			// Print the preview email content.
 			echo $message;
 			exit;
 		}

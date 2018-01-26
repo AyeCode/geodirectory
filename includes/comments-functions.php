@@ -1129,7 +1129,7 @@ function geodir_comment_moderation_subject( $subject, $comment_id ) {
 		$post = geodir_get_post_info( $comment->comment_post_ID );
 
         $email_vars = array( 
-            'email_type' => 'admin_moderate_comment',
+            'email_name' => 'admin_moderate_comment',
             'comment' => $comment,
 			'post' => $post
         );
@@ -1146,26 +1146,32 @@ function geodir_comment_moderation_text( $message, $comment_id ) {
 
     if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && geodir_email_is_enabled( 'admin_moderate_comment' ) ) {
 		$post = geodir_get_post_info( $comment->comment_post_ID );
-		$email_type = 'admin_moderate_comment';
+		$email_name = 'admin_moderate_comment';
 
         $email_vars = array(
             'comment' => $comment,
 			'post' => $post
         );
 
-        $email_heading  = geodir_email_get_heading( $email_type, $email_vars );
-		$message_body   = geodir_email_get_content( $email_type, $email_vars );
+        $email_heading  = geodir_email_get_heading( $email_name, $email_vars );
+		$message_body   = geodir_email_get_content( $email_name, $email_vars );
 
-		$message        = geodir_get_template_html( 'emails/geodir-email-' . $email_type . '.php', array(
-				'email_type'    => $email_type,
+		$plain_text		= geodir_mail_get_email_type() != 'html' ? true : false;
+		$template		= $plain_text ? 'emails/plain/geodir-email-' . $email_name . '.php' : 'emails/geodir-email-' . $email_name . '.php';
+
+		$message        = geodir_get_template_html( $template, array(
+				'email_name'    => $email_name,
 				'email_vars'  	=> $email_vars,
 				'email_heading' => $email_heading,
 				'sent_to_admin' => true,
-				'plain_text'    => false,
+				'plain_text'    => $plain_text,
 				'message_body'  => $message_body,
 			) );
-		$message = geodir_email_style_body( $message, $email_type, $email_vars );
-		$message = apply_filters( 'geodir_mail_content', $message, $email_type, $email_vars );
+		$message = geodir_email_style_body( $message, $email_name, $email_vars );
+		$message = apply_filters( 'geodir_mail_content', $message, $email_name, $email_vars );
+		if ( $plain_text ) {
+			$message = wp_strip_all_tags( $message );
+		}
     }
     
     return $message;
@@ -1179,7 +1185,7 @@ function geodir_comment_moderation_headers( $headers, $comment_id ) {
 		$post = geodir_get_post_info( $comment->comment_post_ID );
 
         $email_vars = array( 
-            'email_type' => 'admin_moderate_comment',
+            'email_name' => 'admin_moderate_comment',
             'comment' => $comment,
 			'post' => $post
         );
@@ -1195,80 +1201,12 @@ function geodir_check_notify_post_author( $maybe_notify, $comment_id ) {
     $comment = get_comment( $comment_id );
 
     if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
-        $maybe_notify = (bool)geodir_email_is_enabled( 'owner_comment_submit' );
+        return false;
     }
 
     return $maybe_notify;
 }
 add_filter( 'notify_post_author', 'geodir_check_notify_post_author', 99999, 2 );
-
-function geodir_comment_notification_subject( $subject, $comment_id ) {
-    $comment = get_comment( $comment_id );
-
-    if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && geodir_email_is_enabled( 'owner_comment_submit' ) ) {
-		$post = geodir_get_post_info( $comment->comment_post_ID );
-
-        $email_vars = array( 
-            'email_type' => 'owner_comment_submit',
-            'comment' => $comment,
-			'post' => $post
-        );
-		
-		$subject = geodir_email_get_subject( 'owner_comment_submit', $email_vars );
-    }
-    
-    return $subject;
-}
-add_filter( 'comment_notification_subject', 'geodir_comment_notification_subject', 10, 2 );
-
-function geodir_comment_notification_text( $message, $comment_id ) {
-    $comment = get_comment( $comment_id );
-
-    if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && geodir_email_is_enabled( 'owner_comment_submit' ) ) {
-		$post = geodir_get_post_info( $comment->comment_post_ID );
-		$email_type = 'owner_comment_submit';
-
-        $email_vars = array(
-            'comment' => $comment,
-			'post' => $post
-        );
-
-        $email_heading  = geodir_email_get_heading( $email_type, $email_vars );
-		$message_body   = geodir_email_get_content( $email_type, $email_vars );
-
-		$message        = geodir_get_template_html( 'emails/geodir-email-' . $email_type . '.php', array(
-				'email_type'    => $email_type,
-				'email_vars'  	=> $email_vars,
-				'email_heading' => $email_heading,
-				'sent_to_admin' => false,
-				'plain_text'    => false,
-				'message_body'  => $message_body,
-			) );
-		$message = geodir_email_style_body( $message, $email_type, $email_vars );
-		$message = apply_filters( 'geodir_mail_content', $message, $email_type, $email_vars );
-    }
-    
-    return $message;
-}
-add_filter( 'comment_notification_text', 'geodir_comment_notification_text', 10, 2 );
-
-function geodir_comment_notification_headers( $headers, $comment_id ) {
-    $comment = get_comment( $comment_id );
-
-    if ( !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && geodir_email_is_enabled( 'owner_comment_submit' ) ) {
-		$post = geodir_get_post_info( $comment->comment_post_ID );
-
-        $email_vars = array(
-            'comment' => $comment,
-			'post' => $post
-        );
-		
-		$headers =  geodir_email_get_headers( 'owner_comment_submit', $email_vars );
-    }
-    
-    return $headers;
-}
-add_filter( 'comment_notification_headers', 'geodir_comment_notification_headers', 10, 2 );
 
 function geodir_should_notify_comment_author( $comment ) {
     if ( is_object( $comment ) && isset( $comment->comment_ID ) ) {
@@ -1336,3 +1274,94 @@ function geodir_notify_on_comment_approved( $comment ) {
     }
 }
 add_action( 'comment_unapproved_to_approved', 'geodir_notify_on_comment_approved', 10, 2 );
+
+/**
+ * Send a notification of a new comment to the post author.
+ *
+ * @since 2.0.0
+ *
+ *
+ * @param int $comment_ID Comment ID.
+ * @return bool True on success, false on failure.
+ */
+function geodir_new_comment_notify_postauthor( $comment_ID ) {
+	$comment = get_comment( $comment_ID );
+
+	$maybe_notify = get_option( 'comments_notify' );
+	
+	if ( $maybe_notify && !empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
+        $maybe_notify = (bool)geodir_email_is_enabled( 'owner_comment_submit' );
+    }
+
+	/**
+	 * Filters whether to send the post author new comment notification emails,
+	 * overriding the site setting.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param bool $maybe_notify Whether to notify the post author about the new comment.
+	 * @param int  $comment_ID   The ID of the comment for the notification.
+	 */
+	$maybe_notify = apply_filters( 'geodir_comment_notify_post_author', $maybe_notify, $comment_ID );
+
+	if ( ! $maybe_notify ) {
+		return false;
+	}
+
+	return geodir_send_owner_comment_submit_email( $comment );
+}
+add_action( 'comment_post', 'geodir_new_comment_notify_postauthor', 99999, 1 );
+
+function geodir_post_author_moderate_comment() {
+	if ( empty( $_REQUEST['_gd_action'] ) ) {
+		return;
+	}
+	$request = $_REQUEST;
+	$action = sanitize_text_field( $request['_gd_action'] );
+
+	if ( ! empty( $request['c'] ) && ! empty( $request['_nonce'] ) && ( $user_ID = get_current_user_id() ) ) {
+		$comment_ID = (int)$request['c'];
+		if ( md5( $action . '_' . $comment_ID ) != $request['_nonce'] ) {
+			return;
+		}
+
+		$comment = get_comment( $comment_ID );
+		if ( empty( $comment->comment_post_ID ) ) {
+			return;
+		}
+
+		// Comment approved.
+		if ( (int)$comment->comment_approved === 1 ) {
+			wp_safe_redirect( get_comment_link( $comment_ID ) );
+			exit;
+		}
+
+		$post = get_post( $comment->comment_post_ID );
+		if ( ! empty( $post ) ) {
+			$user  = get_userdata( $user_ID );
+			$redirect = get_permalink( $comment->comment_post_ID );
+			
+			if ( ! empty( $user ) && ( (int)$user_ID === (int)$post->post_author || $user->has_cap( 'moderate_comments' ) ) && geodir_is_gd_post_type( $post->post_type ) ) {
+				if ( $action == 'approve_comment' ) {
+					wp_set_comment_status( $comment, 'approve' );
+					$redirect = get_comment_link( $comment_ID );
+				} elseif ( $action == 'trash_comment' ) {
+					wp_trash_comment( $comment );
+				} elseif ( $action == 'spam_comment' ) {
+					wp_spam_comment( $comment );
+				}
+			}
+			wp_safe_redirect( $redirect );
+			exit;
+		}
+	}
+}
+add_action( 'template_redirect', 'geodir_post_author_moderate_comment' );
+
+function geodir_handle_comment_status_change( $comment_ID, $comment_status ) {
+	if ( ! ( $comment_status == '1' || $comment_status == 'approve' ) ) {
+		delete_comment_meta( $comment_ID, 'gd_comment_author_notified' );
+		delete_comment_meta( $comment_ID, 'gd_listing_author_notified' );
+	}
+}
+add_action( 'wp_set_comment_status', 'geodir_handle_comment_status_change', 10, 2 );

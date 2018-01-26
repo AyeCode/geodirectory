@@ -293,6 +293,35 @@ $pages            = $system_status->get_pages();
 <table class="gd_status_table widefat" cellspacing="0">
 	<thead>
 		<tr>
+			<th colspan="3" data-export-label="User platform"><h2><?php _e( 'User platform', 'geodirectory' ); ?></h2></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td data-export-label="Platform"><?php _e( 'Platform', 'geodirectory' ); ?>:</td>
+			<td class="help"></td>
+			<td><?php echo esc_html( $environment['platform'] ); ?></td>
+		</tr>
+		<tr>
+			<td data-export-label="Browser name"><?php _e( 'Browser name', 'geodirectory' ); ?>:</td>
+			<td class="help"></td>
+			<td><?php echo esc_html( $environment['browser_name'] ); ?></td>
+		</tr>
+		<tr>
+			<td data-export-label="Browser version"><?php _e( 'Browser version', 'geodirectory' ); ?>:</td>
+			<td class="help"></td>
+			<td><?php echo esc_html( $environment['browser_version'] ); ?></td>
+		</tr>
+		<tr>
+			<td data-export-label="User agent"><?php _e( 'User agent', 'geodirectory' ); ?>:</td>
+			<td class="help"></td>
+			<td><?php echo esc_html( $environment['user_agent'] ); ?></td>
+		</tr>
+	</tbody>
+</table>
+<table class="gd_status_table widefat" cellspacing="0">
+	<thead>
+		<tr>
 			<th colspan="3" data-export-label="Settings"><h2><?php _e( 'Settings', 'geodirectory' ); ?></h2></th>
 		</tr>
 	</thead>
@@ -308,9 +337,14 @@ $pages            = $system_status->get_pages();
 			<td><?php echo esc_html( $settings['default_status'] ) ?></td>
 		</tr>
 		<tr>
-			<td data-export-label="Force SSL"><?php _e( 'Google Maps API KEY', 'geodirectory' ); ?>:</td>
+			<td data-export-label="Google Maps API KEY"><?php _e( 'Google Maps API KEY', 'geodirectory' ); ?>:</td>
 			<td class="help"><?php echo gd_help_tip( __( 'This is a requirement to use Google Maps.', 'geodirectory' ) ); ?></td>
 			<td><?php echo $settings['maps_api_key'] ? '<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>' : '<mark class="no">&ndash;</mark>'; ?></td>
+		</tr>
+		<tr>
+			<td data-export-label="Set default location"><?php _e( 'Set default location', 'geodirectory' ); ?>:</td>
+			<td class="help"></td>
+			<td><?php echo $settings['default_location'] ? '<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>' : '<mark class="no">&ndash;</mark>'; ?></td>
 		</tr>
 	</tbody>
 </table>
@@ -452,15 +486,13 @@ $pages            = $system_status->get_pages();
 
 				$version_string = '';
 				$network_string = '';
-				if ( strstr( $plugin['url'], 'wpgeodirectory.com' ) ) {
-					if ( ! empty( $plugin['version_latest'] ) && version_compare( $plugin['version_latest'], $plugin['version'], '>' ) ) {
-						/* translators: %s: plugin latest version */
-						$version_string = ' &ndash; <strong style="color:red;">' . sprintf( esc_html__( '%s is available', 'geodirectory' ), $plugin['version_latest'] ) . '</strong>';
-					}
+				if ( ! empty( $plugin['latest_verison'] ) && version_compare( $plugin['latest_verison'], $plugin['version'], '>' ) ) {
+					/* translators: %s: plugin latest version */
+					$version_string = ' &ndash; <strong style="color:red;">' . sprintf( esc_html__( '%s is available', 'geodirectory' ), $plugin['latest_verison'] ) . '</strong>';
+				}
 
-					if ( false != $plugin['network_activated'] ) {
-						$network_string = ' &ndash; <strong style="color:black;">' . __( 'Network enabled', 'geodirectory' ) . '</strong>';
-					}
+				if ( false != $plugin['network_activated'] ) {
+					$network_string = ' &ndash; <strong style="color:black;">' . __( 'Network enabled', 'geodirectory' ) . '</strong>';
 				}
 				?>
 				<tr>
@@ -545,9 +577,9 @@ $pages            = $system_status->get_pages();
 			<td class="help"><?php echo gd_help_tip( __( 'The installed version of the current active theme.', 'geodirectory' ) ); ?></td>
 			<td><?php
 				echo esc_html( $theme['version'] );
-				if ( version_compare( $theme['version'], $theme['version_latest'], '<' ) ) {
+				if ( version_compare( $theme['version'], $theme['latest_verison'], '<' ) ) {
 					/* translators: %s: theme latest version */
-					echo ' &ndash; <strong style="color:red;">' . sprintf( __( '%s is available', 'geodirectory' ), esc_html( $theme['version_latest'] ) ) . '</strong>';
+					echo ' &ndash; <strong style="color:red;">' . sprintf( __( '%s is available', 'geodirectory' ), esc_html( $theme['latest_verison'] ) ) . '</strong>';
 				}
 			?></td>
 		</tr>
@@ -576,9 +608,9 @@ $pages            = $system_status->get_pages();
 			<td class="help"><?php echo gd_help_tip( __( 'The installed version of the parent theme.', 'geodirectory' ) ); ?></td>
 			<td><?php
 				echo esc_html( $theme['parent_version'] );
-				if ( version_compare( $theme['parent_version'], $theme['parent_version_latest'], '<' ) ) {
+				if ( version_compare( $theme['parent_version'], $theme['parent_latest_verison'], '<' ) ) {
 					/* translators: %s: parant theme latest version */
-					echo ' &ndash; <strong style="color:red;">' . sprintf( __( '%s is available', 'geodirectory' ), esc_html( $theme['parent_version_latest'] ) ) . '</strong>';
+					echo ' &ndash; <strong style="color:red;">' . sprintf( __( '%s is available', 'geodirectory' ), esc_html( $theme['parent_latest_verison'] ) ) . '</strong>';
 				}
 			?></td>
 		</tr>

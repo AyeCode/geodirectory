@@ -212,7 +212,7 @@ if (!function_exists('geodir_admin_panel')) {
                         changed = true;
                     });
 
-                    jQuery('.geodirectory-nav-tab-wrapper a').click(function () {
+                    jQuery('.gd-nav-tab-wrapper a').click(function () {
                         if (changed) {
                             window.onbeforeunload = function () {
                                 return '<?php echo __( 'The changes you made will be lost if you navigate away from this page.', 'geodirectory'); ?>';
