@@ -107,6 +107,7 @@ class GeoDir_Admin {
 //		include_once( dirname( __FILE__ ) . '/class-wc-admin-api-keys.php' );
 //		include_once( dirname( __FILE__ ) . '/class-wc-admin-webhooks.php' );
 //		include_once( dirname( __FILE__ ) . '/class-wc-admin-pointers.php' );
+		include_once( dirname( __FILE__ ) . '/class-geodir-admin-meta-boxes.php' );
 
 		// Help Tabs @todo to we want to use the help tabs?
 		if ( apply_filters( 'geodirectory_enable_admin_help_tab', true ) ) {

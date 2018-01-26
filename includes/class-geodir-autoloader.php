@@ -82,7 +82,9 @@ class GeoDir_Autoloader {
             $path = $this->include_path . 'admin/';
         }elseif ( strpos( $class, 'geodir_settings' ) === 0 ) {
             $path = $this->include_path . 'admin/settings/';
-        }
+        } elseif ( 0 === strpos( $class, 'geodir_meta_box' ) ) {
+			$path = $this->include_path . 'admin/meta-boxes/';
+		} 
 
 
         //echo '///'.$path.$file;

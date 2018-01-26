@@ -268,19 +268,19 @@ function geodir_email_format_text( $content, $email_name = '', $email_vars = arr
 	$date_time			= $date . ' ' . $time;
 	
 	$replace_array = array(
-        '{blogname}'      	=> $blogname,
-		'{site_url}' 	  	=> $site_url,
-		'{site_name_url}' 	=> '<a href="' . esc_url( $site_url ) . '">' . $site_url . '</a>',
-		'{site_link}' 		=> '<a href="' . esc_url( $site_url ) . '">' . $blogname . '</a>',
-		'{site_name}'   	=> $email_from_anme,
-		'{login_url}'  		=> $login_url,
-		'{login_link}' 		=> '<a href="' . esc_url( $login_url ) . '">' . __( 'Login', 'geodirectory' ) . '</a>',
-        '{current_date}'	=> date_i18n( 'Y-m-d H:i:s', $timestamp ),
-		'{date}'  			=> $date,
-		'{time}'  			=> $time,
-		'{date_time}'  		=> $date_time,
-		'{from_name}'  		=> geodir_get_mail_from_name(),
-		'{from_email}'  	=> geodir_get_mail_from(),
+        '[#blogname#]'      	=> $blogname,
+		'[#site_url#]' 	  	=> $site_url,
+		'[#site_name_url#]' 	=> '<a href="' . esc_url( $site_url ) . '">' . $site_url . '</a>',
+		'[#site_link#]' 		=> '<a href="' . esc_url( $site_url ) . '">' . $blogname . '</a>',
+		'[#site_name#]'   	=> $email_from_anme,
+		'[#login_url#]'  		=> $login_url,
+		'[#login_link#]' 		=> '<a href="' . esc_url( $login_url ) . '">' . __( 'Login', 'geodirectory' ) . '</a>',
+        '[#current_date#]'	=> date_i18n( 'Y-m-d H:i:s', $timestamp ),
+		'[#date#]'  			=> $date,
+		'[#time#]'  			=> $time,
+		'[#date_time#]'  		=> $date_time,
+		'[#from_name#]'  		=> geodir_get_mail_from_name(),
+		'[#from_email#]'  	=> geodir_get_mail_from(),
     );
 	
 	$post = ! empty( $email_vars['post'] ) ? $email_vars['post'] : NULL;
@@ -292,15 +292,15 @@ function geodir_email_format_text( $content, $email_name = '', $email_vars = arr
 		$post_id = $post->ID;
 		$post_author_name = geodir_get_client_name( $post->post_author );
 
-		$replace_array['{post_id}'] = $post_id;
-		$replace_array['{post_status}'] = $post->post_status;
-		$replace_array['{post_date}'] = $post->post_date;
-		$replace_array['{post_author_ID}'] = $post->post_author;
-		$replace_array['{post_author_name}'] = $post_author_name;
-		$replace_array['{client_name}'] = $post_author_name;
-		$replace_array['{listing_title}'] = get_the_title( $post_id );
-		$replace_array['{listing_url}'] = get_permalink( $post_id );
-		$replace_array['{listing_link}'] = '<a href="' . esc_url( $replace_array['{listing_url}'] ) . '">' . $replace_array['{listing_title}'] . '</a>';
+		$replace_array['[#post_id#]'] = $post_id;
+		$replace_array['[#post_status#]'] = $post->post_status;
+		$replace_array['[#post_date#]'] = $post->post_date;
+		$replace_array['[#post_author_ID#]'] = $post->post_author;
+		$replace_array['[#post_author_name#]'] = $post_author_name;
+		$replace_array['[#client_name#]'] = $post_author_name;
+		$replace_array['[#listing_title#]'] = get_the_title( $post_id );
+		$replace_array['[#listing_url#]'] = get_permalink( $post_id );
+		$replace_array['[#listing_link#]'] = '<a href="' . esc_url( $replace_array['[#listing_url#]'] ) . '">' . $replace_array['[#listing_title#]'] . '</a>';
 	}
 	
 	$comment = ! empty( $email_vars['comment'] ) ? $email_vars['comment'] : NULL;
@@ -310,21 +310,21 @@ function geodir_email_format_text( $content, $email_name = '', $email_vars = arr
 	if ( ! empty( $comment ) ) {
 		$comment_ID = $comment->comment_ID;
 
-		$replace_array['{comment_ID}'] = $comment_ID;
-        $replace_array['{comment_author}'] = $comment->comment_author;
-        $replace_array['{comment_author_IP}'] = $comment->comment_author_IP;
-        $replace_array['{comment_author_email}'] = $comment->comment_author_email;
-		$replace_array['{comment_date}'] = $comment->comment_date;
-        $replace_array['{comment_content}'] = wp_specialchars_decode( $comment->comment_content );
-        $replace_array['{comment_approve_link}'] = admin_url( "comment.php?action=approve&c={$comment_ID}#wpbody-content" );
-        $replace_array['{comment_trash_link}'] = admin_url( "comment.php?action=trash&c={$comment_ID}#wpbody-content" );
-        $replace_array['{comment_spam_link}'] = admin_url( "comment.php?action=spam&c={$comment_ID}#wpbody-content" );
-        $replace_array['{comment_moderation_link}'] = admin_url( "edit-comments.php?comment_status=moderated#wpbody-content" );
+		$replace_array['[#comment_ID#]'] = $comment_ID;
+        $replace_array['[#comment_author#]'] = $comment->comment_author;
+        $replace_array['[#comment_author_IP#]'] = $comment->comment_author_IP;
+        $replace_array['[#comment_author_email#]'] = $comment->comment_author_email;
+		$replace_array['[#comment_date#]'] = $comment->comment_date;
+        $replace_array['[#comment_content#]'] = wp_specialchars_decode( $comment->comment_content );
+        $replace_array['[#comment_approve_link#]'] = admin_url( "comment.php?action=approve&c={$comment_ID}#wpbody-content" );
+        $replace_array['[#comment_trash_link#]'] = admin_url( "comment.php?action=trash&c={$comment_ID}#wpbody-content" );
+        $replace_array['[#comment_spam_link#]'] = admin_url( "comment.php?action=spam&c={$comment_ID}#wpbody-content" );
+        $replace_array['[#comment_moderation_link#]'] = admin_url( "edit-comments.php?comment_status=moderated#wpbody-content" );
 	}
 	
 	foreach ( $email_vars as $key => $value ) {
 		if ( is_scalar( $value ) ) {
-			$replace_array['{' . $key . '}'] = $value;
+			$replace_array['[#' . $key . '#]'] = $value;
 		}
 	}
 
