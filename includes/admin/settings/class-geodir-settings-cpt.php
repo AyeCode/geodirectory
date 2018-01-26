@@ -222,6 +222,15 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 					'std'  => '0',
 					'advanced' => true
 				),
+				
+				array(
+					'name' => __( 'Enable opening hours', 'geodirectory' ),
+					'desc' => __( 'Enable to display business hours on the listing.', 'geodirectory' ),
+					'id'   => 'opening_hours',
+					'type' => 'checkbox',
+					'std'  => '0',
+					'advanced' => true
+				),
 
 				array( 'type' => 'sectionend', 'id' => 'cpt_settings' ),
 
@@ -484,22 +493,22 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 
 			// Set the labels
 			$output[$post_type]['labels'] = array(
-					'name' => $name,
-					'singular_name' => $singular_name,
-					'add_new' => isset($raw['add_new']) && $raw['add_new'] ? sanitize_key($raw['add_new']) : '',
-					'add_new_item' => isset($raw['add_new_item']) && $raw['add_new_item'] ? sanitize_key($raw['add_new_item']) : '',
-					'edit_item' => isset($raw['edit_item']) && $raw['edit_item'] ? sanitize_key($raw['edit_item']) : '',
-					'new_item' => isset($raw['new_item']) && $raw['new_item'] ? sanitize_key($raw['new_item']) : '',
-					'view_item' => isset($raw['view_item']) && $raw['view_item'] ? sanitize_key($raw['view_item']) : '',
-					'search_items' => isset($raw['search_items']) && $raw['search_items'] ? sanitize_key($raw['search_items']) : '',
-					'not_found' => isset($raw['not_found']) && $raw['not_found'] ? sanitize_key($raw['not_found']) : '',
-					'not_found_in_trash' => isset($raw['not_found_in_trash']) && $raw['not_found_in_trash'] ? sanitize_key($raw['not_found_in_trash']) : '',
-					'label_post_profile' => isset($raw['label_post_profile']) && $raw['label_post_profile'] ? sanitize_key($raw['label_post_profile']) : '',
-					'label_post_info' => isset($raw['label_post_info']) && $raw['label_post_info'] ? sanitize_key($raw['label_post_info']) : '',
-					'label_post_images' => isset($raw['label_post_images']) && $raw['label_post_images'] ? sanitize_key($raw['label_post_images']) : '',
-					'label_post_map' => isset($raw['label_post_map']) && $raw['label_post_map'] ? sanitize_key($raw['label_post_map']) : '',
-					'label_reviews' => isset($raw['label_reviews']) && $raw['label_reviews'] ? sanitize_key($raw['label_reviews']) : '',
-					'label_related_listing' => isset($raw['label_related_listing']) && $raw['label_related_listing'] ? sanitize_key($raw['label_related_listing']) : ''
+				'name' => $name,
+				'singular_name' => $singular_name,
+				'add_new' => isset($raw['add_new']) && $raw['add_new'] ? sanitize_text_field($raw['add_new']) : '',
+				'add_new_item' => isset($raw['add_new_item']) && $raw['add_new_item'] ? sanitize_text_field($raw['add_new_item']) : '',
+				'edit_item' => isset($raw['edit_item']) && $raw['edit_item'] ? sanitize_text_field($raw['edit_item']) : '',
+				'new_item' => isset($raw['new_item']) && $raw['new_item'] ? sanitize_text_field($raw['new_item']) : '',
+				'view_item' => isset($raw['view_item']) && $raw['view_item'] ? sanitize_text_field($raw['view_item']) : '',
+				'search_items' => isset($raw['search_items']) && $raw['search_items'] ? sanitize_text_field($raw['search_items']) : '',
+				'not_found' => isset($raw['not_found']) && $raw['not_found'] ? sanitize_text_field($raw['not_found']) : '',
+				'not_found_in_trash' => isset($raw['not_found_in_trash']) && $raw['not_found_in_trash'] ? sanitize_text_field($raw['not_found_in_trash']) : '',
+				'label_post_profile' => isset($raw['label_post_profile']) && $raw['label_post_profile'] ? sanitize_text_field($raw['label_post_profile']) : '',
+				'label_post_info' => isset($raw['label_post_info']) && $raw['label_post_info'] ? sanitize_text_field($raw['label_post_info']) : '',
+				'label_post_images' => isset($raw['label_post_images']) && $raw['label_post_images'] ? sanitize_text_field($raw['label_post_images']) : '',
+				'label_post_map' => isset($raw['label_post_map']) && $raw['label_post_map'] ? sanitize_text_field($raw['label_post_map']) : '',
+				'label_reviews' => isset($raw['label_reviews']) && $raw['label_reviews'] ? sanitize_text_field($raw['label_reviews']) : '',
+				'label_related_listing' => isset($raw['label_related_listing']) && $raw['label_related_listing'] ? sanitize_text_field($raw['label_related_listing']) : ''
 			);
 
 
@@ -526,6 +535,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$output[$post_type]['disable_reviews'] = isset($raw['disable_reviews']) && $raw['disable_reviews'] ? absint($raw['disable_reviews']) : 0;
 			$output[$post_type]['disable_favorites'] = isset($raw['disable_favorites']) && $raw['disable_favorites'] ? absint($raw['disable_favorites']) : 0;
 			$output[$post_type]['disable_frontend_add'] = isset($raw['disable_frontend_add']) && $raw['disable_frontend_add'] ? absint($raw['disable_frontend_add']) : 0;
+			
+			// enable features
+			$output[$post_type]['opening_hours'] = ! empty( $raw['opening_hours'] ) ? 1 : 0;
 
 			// seo content
 			$output[$post_type]['seo']['meta_keyword'] = isset($raw['meta_keyword']) && $raw['meta_keyword'] ? sanitize_text_field($raw['meta_keyword']) : '';
