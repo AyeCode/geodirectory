@@ -24,6 +24,13 @@ $footer_bg      		= geodir_get_option( 'email_footer_background_color', '#333333
 $footer_color 			= geodir_get_option( 'email_footer_text_color', '#eeeeee' );
 $footer_bg_darker_10  	= geodir_hex_darker( $footer_bg, 10 );
 
+if ( empty( $body ) ) { $body = 'transparent'; }
+if ( empty( $bg_darker_10 ) ) { $bg_darker_10 = 'transparent'; }
+if ( empty( $header_bg ) ) { $header_bg = 'transparent'; }
+if ( empty( $header_bg_darker_10 ) ) { $header_bg_darker_10 = 'transparent'; }
+if ( empty( $footer_bg ) ) { $footer_bg = 'transparent'; }
+if ( empty( $footer_bg_darker_10 ) ) { $footer_bg_darker_10 = 'transparent'; }
+
 // !important; is a gmail hack to prevent styles being stripped if it doesn't like something.
 ?>
 #wrapper {
@@ -71,6 +78,9 @@ $footer_bg_darker_10  	= geodir_hex_darker( $footer_bg, 10 );
     font-family: Arial;
     font-size:12px;
 }
+#footer_text > p {
+	margin: .5em 0;
+}
 #template_heading {
     background-color: <?php echo esc_attr( $base ); ?>;
     border-radius: 3px 3px 0 0 !important;
@@ -81,10 +91,10 @@ $footer_bg_darker_10  	= geodir_hex_darker( $footer_bg, 10 );
     vertical-align: middle;
     font-family: Arial,Helvetica,sans-serif;
 }
-#template_header_image {
+#template_header_logo {
     width: 100%;
 }
-#template_header_image > p {
+#template_header_logo > p {
 	margin: 0;
 }
 #template_heading h1 {

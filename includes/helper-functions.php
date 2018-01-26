@@ -1389,8 +1389,12 @@ function geodir_get_php_arg_separator_output() {
 
 function geodir_rgb_from_hex( $color ) {
     $color = str_replace( '#', '', $color );
+	
     // Convert shorthand colors to full format, e.g. "FFF" -> "FFFFFF"
     $color = preg_replace( '~^(.)(.)(.)$~', '$1$1$2$2$3$3', $color );
+	if ( empty( $color ) ) {
+		return NULL;
+	}
 
     $rgb      = array();
     $rgb['R'] = hexdec( $color{0}.$color{1} );
@@ -1402,8 +1406,11 @@ function geodir_rgb_from_hex( $color ) {
 
 function geodir_hex_darker( $color, $factor = 30 ) {
     $base  = geodir_rgb_from_hex( $color );
-    $color = '#';
+    if ( empty( $base ) ) {
+		return $color;
+	}
 
+	$color = '#';
     foreach ( $base as $k => $v ) {
         $amount      = $v / 100;
         $amount      = round( $amount * $factor );
@@ -1421,6 +1428,10 @@ function geodir_hex_darker( $color, $factor = 30 ) {
 
 function geodir_hex_lighter( $color, $factor = 30 ) {
     $base  = geodir_rgb_from_hex( $color );
+    if ( empty( $base ) ) {
+		return $color;
+	}
+
     $color = '#';
 
     foreach ( $base as $k => $v ) {
@@ -1441,6 +1452,9 @@ function geodir_hex_lighter( $color, $factor = 30 ) {
 
 function geodir_light_or_dark( $color, $dark = '#000000', $light = '#FFFFFF' ) {
     $hex = str_replace( '#', '', $color );
+    if ( empty( $hex ) ) {
+		return $color;
+	}
 
     $c_r = hexdec( substr( $hex, 0, 2 ) );
     $c_g = hexdec( substr( $hex, 2, 2 ) );
@@ -1453,6 +1467,9 @@ function geodir_light_or_dark( $color, $dark = '#000000', $light = '#FFFFFF' ) {
 
 function geodir_format_hex( $hex ) {
     $hex = trim( str_replace( '#', '', $hex ) );
+	if ( empty( $hex ) ) {
+		return NULL;
+	}
 
     if ( strlen( $hex ) == 3 ) {
         $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];

@@ -159,9 +159,9 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 				));
 			} elseif ($current_section == 'email_template') {
 				$settings = apply_filters( 'geodir_email_template_settings', array(
-					array('name' => __('Email Template', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'email_template_settings'),
+					array('name' => __('Email Template', 'geodirectory'), 'type' => 'title', 'desc' => wp_sprintf( __( 'This section lets you customize the GeoDirectory emails. <a href="%s" target="_blank">Click here to preview your email template</a>.', 'geodirectory' ), wp_nonce_url( admin_url( '?geodir_preview_mail=true' ), 'geodir-preview-mail' ) ), 'id' => 'email_template_settings'),
 					
-					/*array(
+					array(
 						'type' => 'select',
 						'id' => 'email_type',
 						'name' => __('Email type', 'geodirectory'),
@@ -171,13 +171,13 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 						'default' => 'html',
 						'desc_tip' => true,
 						'advanced' => true,
-					),*/
+					),
 					array(
-						'name' => __('Header Image', 'geodirectory'),
-						'desc' => __('URL to an image you want to show in the email header. Upload images using the media uploader (Admin > Media). Displayed on HTML emails only.', 'geodirectory'),
-						'id' => 'email_header_image',
-						'class' => 'large-text',
+						'name' => __('Logo', 'geodirectory'),
+						'desc' => __('Upload a logo to be displayed at the top of the emails. Displayed on HTML emails only.', 'geodirectory'),
+						'id' => 'email_logo',
 						'type' => 'image',
+						'image_size' => 'full',
 						'desc_tip' => true,
 					),
 					array(
@@ -228,8 +228,8 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 					'email_header_background_color' => array(
                         'id'   => 'email_header_background_color',
                         'name' => __( 'Header Background Color', 'geodirectory' ),
-                        'desc' => __( 'The header background color of email template. Default <code>#ff8333</code>.', 'geodirectory' ),
-                        'default' => '#ff8333',
+                        'desc' => __( 'The header background color of email template. Default <code>#555555</code>.', 'geodirectory' ),
+                        'default' => '#555555',
                         'type' => 'color',
 						'desc_tip' => true,
 						'advanced' => true,
@@ -246,8 +246,8 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 					'email_footer_background_color' => array(
                         'id'   => 'email_footer_background_color',
                         'name' => __( 'Footer Background Color', 'geodirectory' ),
-                        'desc' => __( 'The footer background color of email template. Default <code>#333333</code>.', 'geodirectory' ),
-                        'default' => '#333333',
+                        'desc' => __( 'The footer background color of email template. Default <code>#666666</code>.', 'geodirectory' ),
+                        'default' => '#666666',
                         'type' => 'color',
 						'desc_tip' => true,
 						'advanced' => true,
@@ -255,8 +255,8 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 					'email_footer_text_color' => array(
                         'id'   => 'email_footer_text_color',
                         'name' => __( 'Footer Text Color', 'geodirectory' ),
-                        'desc' => __( 'The footer text color. Default <code>#eeeeee</code>.', 'geodirectory' ),
-                        'default' => '#eeeeee',
+                        'desc' => __( 'The footer text color. Default <code>#dddddd</code>.', 'geodirectory' ),
+                        'default' => '#dddddd',
                         'type' => 'color',
 						'desc_tip' => true,
 						'advanced' => true,
@@ -327,8 +327,7 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 		public function get_email_type_options() {
 			$types = array();
 			if ( class_exists( 'DOMDocument' ) ) {
-				$types['html']      = __( 'HTML', 'geodirectory' );
-				$types['multipart'] = __( 'Multipart', 'geodirectory' );
+				$types['html'] = __( 'HTML', 'geodirectory' );
 			}
 			$types['plain'] = __( 'Plain text', 'geodirectory' );
 

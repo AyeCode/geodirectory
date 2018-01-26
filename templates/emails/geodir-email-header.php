@@ -23,10 +23,10 @@ if ( !isset( $email_heading ) ) {
             <table border="0" cellpadding="0" cellspacing="0" height="100%" class="wrapper-table">
                 <tr>
                     <td align="center" valign="middle" id="template_header">
-                        <div id="template_header_image">
+                        <div id="template_header_logo">
                         <?php
-                            if ( $img = geodir_get_option( 'email_header_image' ) ) {
-                                echo '<p style="margin-top:0;"><img style="max-width:100%" src="' . esc_url( $img ) . '" alt="' . esc_attr( geodir_get_blogname() ) . '" /></p>';
+                            if ( $logo = geodir_get_email_logo() ) {
+                                echo '<p style="margin-top:0;">' . $logo . '</p>';
                             }
                         ?>
                         </div>

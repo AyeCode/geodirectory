@@ -113,7 +113,8 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'desc_tip' => true,
 						'advanced' => true,
 						'default' => $this->send_friend_body(),
-						'placeholder' => $this->send_friend_body()
+						'placeholder' => $this->send_friend_body(),
+						'custom_desc' => __('Available template tags:', 'geodirectory') . ' ' . $this->send_friend_email_tags()
 					),
 
 					array('type' => 'sectionend', 'id' => 'user_send_friend_settings'),
@@ -147,7 +148,8 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'desc_tip' => true,
 						'advanced' => true,
 						'default' => $this->send_enquiry_body(),
-						'placeholder' => $this->send_enquiry_body()
+						'placeholder' => $this->send_enquiry_body(),
+						'custom_desc' => __('Available template tags:', 'geodirectory') . ' ' . $this->send_enquiry_email_tags()
 					),
 
 					array('type' => 'sectionend', 'id' => 'user_send_enquiry_settings'),
@@ -187,7 +189,8 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'desc_tip' => true,
 						'advanced' => true,
 						'default' => $this->user_pending_post_body(),
-						'placeholder' => $this->user_pending_post_body()
+						'placeholder' => $this->user_pending_post_body(),
+						'custom_desc' => __('Available template tags:', 'geodirectory') . ' ' . $this->user_pending_post_email_tags()
 					),
 
 					array('type' => 'sectionend', 'id' => 'user_email_submitted_settings'),
@@ -223,7 +226,8 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'desc_tip' => true,
 						'advanced' => true,
 						'default' => $this->user_publish_post_body(),
-						'placeholder' => $this->user_publish_post_body()
+						'placeholder' => $this->user_publish_post_body(),
+						'custom_desc' => __('Available template tags:', 'geodirectory') . ' ' . $this->user_publish_post_email_tags()
 					),
 
 					array('type' => 'sectionend', 'id' => 'user_email_published_settings'),
@@ -256,7 +260,8 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'desc_tip' => true,
 						'advanced' => true,
 						'default' => $this->owner_comment_submit_body(),
-						'placeholder' => $this->owner_comment_submit_body()
+						'placeholder' => $this->owner_comment_submit_body(),
+						'custom_desc' => __('Available template tags:', 'geodirectory') . ' ' . $this->owner_comment_submit_email_tags()
 					),
 					array('type' => 'sectionend', 'id' => 'owner_email_comment_settings'),
 
@@ -289,7 +294,8 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'desc_tip' => true,
 						'advanced' => true,
 						'default' => $this->owner_comment_approved_body(),
-						'placeholder' => $this->owner_comment_approved_body()
+						'placeholder' => $this->owner_comment_approved_body(),
+						'custom_desc' => __('Available template tags:', 'geodirectory') . ' ' . $this->owner_comment_approved_email_tags()
 					),
 					array('type' => 'sectionend', 'id' => 'owner_email_comment_approved_settings'),
 
@@ -321,7 +327,8 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'desc_tip' => true,
 						'advanced' => true,
 						'default' => $this->author_comment_approved_body(),
-						'placeholder' => $this->author_comment_approved_body()
+						'placeholder' => $this->author_comment_approved_body(),
+						'custom_desc' => __('Available template tags:', 'geodirectory') . ' ' . $this->author_comment_approved_email_tags()
 					),
 					array('type' => 'sectionend', 'id' => 'author_email_comment_approved_settings'),
 
@@ -359,7 +366,8 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'desc_tip' => true,
 						'advanced' => true,
 						'default' => $this->admin_pending_post_body(),
-						'placeholder' => $this->admin_pending_post_body()
+						'placeholder' => $this->admin_pending_post_body(),
+						'custom_desc' => __('Available template tags:', 'geodirectory') . ' ' . $this->admin_pending_post_email_tags()
 					),
 
 					array('type' => 'sectionend', 'id' => 'admin_email_submitted_settings'),
@@ -395,7 +403,8 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'desc_tip' => true,
 						'advanced' => true,
 						'default' => $this->admin_post_edit_body(),
-						'placeholder' => $this->admin_post_edit_body()
+						'placeholder' => $this->admin_post_edit_body(),
+						'custom_desc' => __('Available template tags:', 'geodirectory') . ' ' . $this->admin_post_edit_email_tags()
 					),
 
 					array('type' => 'sectionend', 'id' => 'admin_email_edited_settings'),
@@ -430,7 +439,8 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'desc_tip' => true,
 						'advanced' => true,
 						'default' => $this->admin_moderate_comment_body(),
-						'placeholder' => $this->admin_moderate_comment_body()
+						'placeholder' => $this->admin_moderate_comment_body(),
+						'custom_desc' => __('Available template tags:', 'geodirectory') . ' ' . $this->admin_moderate_comment_email_tags()
 					),
 
 					array('type' => 'sectionend', 'id' => 'admin_email_comment_settings'),
@@ -461,18 +471,17 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 					array('type' => 'sectionend', 'id' => 'email_settings'),
 
 					array('name' => __('Email BCC options', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'email_settings_bcc'),
-
-					array(
-						'name' => __('New user registration', 'geodirectory'),
-						'desc' => __('This will send a BCC email to the site admin on a new user registration.', 'geodirectory'),
-						'id' => 'email_bcc_new_user',
-						'type' => 'checkbox',
-						'default' => 0,
-					),
 					array(
 						'name' => __('Listing published', 'geodirectory'),
 						'desc' => __('This will send a BCC email to the site admin on listing published.', 'geodirectory'),
 						'id' => 'email_bcc_user_publish_post',
+						'type' => 'checkbox',
+						'default' => 0,
+					),
+					array(
+						'name' => __('Listing owner comment submitted', 'geodirectory'),
+						'desc' => __('This will send a BCC email to the site admin on listing owner comment submitted.', 'geodirectory'),
+						'id' => 'email_bcc_owner_comment_submit',
 						'type' => 'checkbox',
 						'default' => 0,
 					),
@@ -529,7 +538,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 		 * @return string
 		 */
 		public function user_publish_post_subject(){
-			return apply_filters('geodir_email_user_publish_post_subject',__("[[#site_name#]] Listing Published Successfully","geodirectory"));
+			return apply_filters('geodir_email_user_publish_post_subject',__("[{site_name}] Listing Published Successfully","geodirectory"));
 		}
 
 		/**
@@ -540,11 +549,11 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 		 */
 		public function user_publish_post_body(){
 			return apply_filters('geodir_email_user_publish_post_body',
-				__("Dear [#client_name#],
+				__("Dear {client_name},
 
-Your listing [#listing_link#] has been published. This email is just for your information.
+Your listing {listing_link} has been published. This email is just for your information.
 
-[#listing_link#]
+{listing_link}
 
 Thank you for your contribution.","geodirectory"
 				)
@@ -558,7 +567,7 @@ Thank you for your contribution.","geodirectory"
 		 * @return string
 		 */
 		public function user_pending_post_subject(){
-			return apply_filters('geodir_email_user_pending_post_subject',__("[[#site_name#]] Your listing has been submitted for approval","geodirectory"));
+			return apply_filters('geodir_email_user_pending_post_subject',__("[{site_name}] Your listing has been submitted for approval","geodirectory"));
 		}
 
 		/**
@@ -569,11 +578,11 @@ Thank you for your contribution.","geodirectory"
 		 */
 		public function user_pending_post_body(){
 			return apply_filters('geodir_email_user_pending_post_body',
-				__("Dear [#client_name#],
+				__("Dear {client_name},
 
 You submitted the below listing information. This email is just for your information.
 
-[#listing_link#]
+{listing_link}
 
 Thank you for your contribution.","geodirectory"
 				)
@@ -587,7 +596,7 @@ Thank you for your contribution.","geodirectory"
 		 * @return string
 		 */
 		public function admin_pending_post_subject(){
-			return apply_filters('geodir_email_admin_pending_post_subject',__("[[#site_name#]] A new listing has been submitted for review","geodirectory"));
+			return apply_filters('geodir_email_admin_pending_post_subject',__("[{site_name}] A new listing has been submitted for review","geodirectory"));
 		}
 
 		/**
@@ -598,7 +607,7 @@ Thank you for your contribution.","geodirectory"
 		 */
 		public function admin_pending_post_body(){
 			return apply_filters('geodir_email_admin_pending_post_body',
-				__("<p>Dear Admin,</p><p>A new listing has been submitted [#listing_link#]. This email is just for your information.</p><p>Thank you,<br /><br />[#site_name_url#]</p>","geodirectory")
+				__("<p>Dear Admin,</p><p>A new listing has been submitted {listing_link}. This email is just for your information.</p><p>Thank you,<br /><br />{site_name_url}</p>","geodirectory")
 			);
 		}
 
@@ -609,7 +618,7 @@ Thank you for your contribution.","geodirectory"
 		 * @return string
 		 */
 		public function admin_post_edit_subject(){
-			return apply_filters('geodir_email_admin_post_edit_subject',__("[[#site_name#]] Listing edited by Author","geodirectory"));
+			return apply_filters('geodir_email_admin_post_edit_subject',__("[{site_name}] Listing edited by Author","geodirectory"));
 		}
 
 		/**
@@ -622,12 +631,12 @@ Thank you for your contribution.","geodirectory"
 			return apply_filters('geodir_email_admin_post_edit_body',
 				__("Dear Admin,
 				
-A listing [#listing_link#] has been edited by it's author [#post_author_name#].
+A listing {listing_link} has been edited by it's author {post_author_name}.
 
 Listing Details:
-Listing ID: [#post_id#]
-Listing URL: [#listing_link#]
-Date: [#current_date#]
+Listing ID: {post_id}
+Listing URL: {listing_link}
+Date: {current_date}
 
 This email is just for your information.","geodirectory"
 				)
@@ -641,7 +650,7 @@ This email is just for your information.","geodirectory"
 		 * @return string
 		 */
 		public function admin_moderate_comment_subject(){
-			return apply_filters('geodir_email_admin_moderate_comment_subject',__("[[#site_name#]] A new comment is waiting for your approval","geodirectory"));
+			return apply_filters('geodir_email_admin_moderate_comment_subject',__("[{site_name}] A new comment is waiting for your approval","geodirectory"));
 		}
 
 		/**
@@ -654,17 +663,19 @@ This email is just for your information.","geodirectory"
 			return apply_filters('geodir_email_admin_moderate_comment_body',
 				__("Dear Admin,
 				
-A new comment has been submitted on the listing [#listing_link#] and it is waiting for your approval.
+A new comment has been submitted on the listing {listing_link} and it is waiting for your approval.
 
-Author: [#comment_author#] ( IP: [#comment_author_IP#] )
-Email: [#comment_author_email#]
-Comment: [#comment_content#]
+Author: {comment_author} ( IP: {comment_author_IP} )
+Email: {comment_author_email}
+Listing: {listing_url}
+Date: {comment_date}
+Comment: {comment_content}
 
-Approve it: [#comment_approve_link#]
-Trash it: [#comment_trash_link#]
-Spam it: [#comment_spam_link#]
+Approve it: {comment_approve_link}
+Trash it: {comment_trash_link}
+Spam it: {comment_spam_link}
 
-Please visit the moderation panel for more details: [#comment_moderation_link#]
+Please visit the moderation panel for more details: {comment_moderation_link}
 
 Thank You.","geodirectory"
 				)
@@ -678,7 +689,7 @@ Thank You.","geodirectory"
 		 * @return string
 		 */
 		public function owner_comment_submit_subject(){
-			return apply_filters('geodir_email_owner_comment_submit_subject',__("[[#site_name#]] A new comment has been submitted on your listing [#listing_title#]","geodirectory"));
+			return apply_filters('geodir_email_owner_comment_submit_subject',__("[{site_name}] A new comment has been submitted on your listing {listing_title}","geodirectory"));
 		}
 
 		/**
@@ -689,13 +700,19 @@ Thank You.","geodirectory"
 		 */
 		public function owner_comment_submit_body(){
 			return apply_filters('geodir_email_owner_comment_submit_body',
-				__("Dear [#client_name#],
+				__("Dear {client_name},
 
-A new comment has been submitted on your listing [#listing_link#].
+A new comment has been submitted on your listing {listing_link}.
 
-Author: [#comment_author#] ( IP: [#comment_author_IP#] )
-Email: [#comment_author_email#]
-Comment: [#comment_content#]
+Author: {comment_author} ( IP: {comment_author_IP} )
+Email: {comment_author_email}
+Listing: {listing_url}
+Date: {comment_date}
+Comment: {comment_content}
+
+Approve it: {comment_approve_link}
+Trash it: {comment_trash_link}
+Spam it: {comment_spam_link}
 
 Thank You.","geodirectory"
 				)
@@ -709,7 +726,7 @@ Thank You.","geodirectory"
 		 * @return string
 		 */
 		public function owner_comment_approved_subject(){
-			return apply_filters('geodir_email_owner_comment_approved_subject',__("[[#site_name#]] A comment on your listing [#listing_title#] has been approved","geodirectory"));
+			return apply_filters('geodir_email_owner_comment_approved_subject',__("[{site_name}] A comment on your listing {listing_title} has been approved","geodirectory"));
 		}
 
 		/**
@@ -720,13 +737,14 @@ Thank You.","geodirectory"
 		 */
 		public function owner_comment_approved_body(){
 			return apply_filters('geodir_email_owner_comment_approved_body',
-				__("Dear [#client_name#],
+				__("Dear {client_name},
 
-A comment on your listing [#listing_link#] has been approved.
+A comment on your listing {listing_link} has been approved.
 
-Author: [#comment_author#] ( IP: [#comment_author_IP#] )
-Email: [#comment_author_email#]
-Comment: [#comment_content#]
+Author: {comment_author} ( IP: {comment_author_IP} )
+Email: {comment_author_email}
+Listing: {listing_url}
+Comment: {comment_content}
 
 Thank You.","geodirectory"
 				)
@@ -740,7 +758,7 @@ Thank You.","geodirectory"
 		 * @return string
 		 */
 		public function author_comment_approved_subject(){
-			return apply_filters('geodir_email_author_comment_approved_subject',__("[[#site_name#]] Your comment on listing [#listing_title#] has been approved","geodirectory"));
+			return apply_filters('geodir_email_author_comment_approved_subject',__("[{site_name}] Your comment on listing {listing_title} has been approved","geodirectory"));
 		}
 
 		/**
@@ -751,11 +769,11 @@ Thank You.","geodirectory"
 		 */
 		public function author_comment_approved_body(){
 			return apply_filters('geodir_email_author_comment_approved_body',
-				__("Dear [#comment_author#],
+				__("Dear {comment_author},
 
-Your comment on listing [#listing_link#] has been approved.
+Your comment on listing {listing_link} has been approved.
 
-Comment: [#comment_content#]
+Comment: {comment_content}
 
 Thank You.","geodirectory"
 				)
@@ -769,7 +787,7 @@ Thank You.","geodirectory"
 		 * @return string
 		 */
 		public function send_friend_subject(){
-			return apply_filters('geodir_email_send_friend_subject',__("[[#site_name#]] thought you might be interested in.","geodirectory"));
+			return apply_filters('geodir_email_send_friend_subject',__("[{site_name}] thought you might be interested in.","geodirectory"));
 		}
 
 		/**
@@ -780,7 +798,7 @@ Thank You.","geodirectory"
 		 */
 		public function send_friend_body(){
 			return apply_filters('geodir_email_send_friend_body',
-				__("<p>Dear [#to_name#],<p><p>Your friend has sent you a message from <b>[#site_name#]</b> </p><p>===============================</p><p><b>Subject : [#subject#]</b></p><p>[#comments#] [#listing_link#]</p><p>===============================</p><p>Thank you,<br /><br />[#site_name_url#]</p>","geodirectory"
+				__("<p>Dear {to_name},<p><p>Your friend has sent you a message from <b>{site_name}</b> </p><p>===============================</p><p><b>Subject : {subject}</b></p><p>{comments} {listing_link}</p><p>===============================</p><p>Thank you,<br /><br />{site_name_url}</p>","geodirectory"
 				)
 			);
 		}
@@ -792,7 +810,7 @@ Thank You.","geodirectory"
 		 * @return string
 		 */
 		public function send_enquiry_subject(){
-			return apply_filters('geodir_email_send_enquiry_subject',__("[[#site_name#]] Website Enquiry","geodirectory"));
+			return apply_filters('geodir_email_send_enquiry_subject',__("[{site_name}] Website Enquiry","geodirectory"));
 		}
 
 		/**
@@ -803,9 +821,161 @@ Thank You.","geodirectory"
 		 */
 		public function send_enquiry_body(){
 			return apply_filters('geodir_email_send_enquiry_body',
-				__("<p>Dear [#to_name#],<p><p>An enquiry has been sent from <b>[#listing_link#]</b></p><p>===============================</p><p>[#comments#]<br>From : [#from_name#]<br>Email : [#from_email#]<br>Phone : [#phone#]<br><br>Sent from - <b>[#site_link#]</b>.</p><p>===============================</p><p>Thank you,<br /><br />[#site_name_url#]</p>","geodirectory"
+				__("<p>Dear {to_name},<p><p>An enquiry has been sent from <b>{listing_link}</b></p><p>===============================</p><p>{comments}<br>From : {from_name}<br>Email : {from_email}<br>Phone : {phone}<br><br>Sent from - <b>{site_link}</b>.</p><p>===============================</p><p>Thank you,<br /><br />{site_name_url}</p>","geodirectory"
 				)
 			);
+		}
+		
+		public function global_email_tags( $inline = true ) { 
+			$tags = array( '{blogname}', '{site_name}', '{site_url}', '{site_name_url}', '{login_url}', '{login_link}', '{date}', '{time}', '{date_time}', '{current_date}', '{to_name}', '{to_email}', '{from_name}', '{from_email}' );
+			
+			$tags = apply_filters( 'geodir_email_global_email_tags', $tags );
+
+			if ( $inline ) {
+				$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
+			}
+			
+			return $tags;
+		}
+		
+		public function send_friend_email_tags( $inline = true ) { 
+			$global_tags = $this->global_email_tags( false );
+
+			$tags = array_merge( $global_tags, array( '{post_id}', '{post_status}', '{post_date}', '{post_author_ID}', '{post_author_name}', '{client_name}', '{listing_title}', '{listing_url}', '{listing_link}', '{subject}', '{comments}' ) );
+			
+			$tags = apply_filters( 'geodir_email_send_friend_email_tags', $tags );
+
+			if ( $inline ) {
+				$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
+			}
+			
+			return $tags;
+		}
+		
+		public function send_enquiry_email_tags( $inline = true ) { 
+			$global_tags = $this->global_email_tags( false );
+
+			$tags = array_merge( $global_tags, array( '{post_id}', '{post_status}', '{post_date}', '{post_author_ID}', '{post_author_name}', '{client_name}', '{listing_title}', '{listing_url}', '{listing_link}', '{phone}', '{comments}' ) );
+			
+			$tags = apply_filters( 'geodir_email_send_enquiry_email_tags', $tags );
+
+			if ( $inline ) {
+				$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
+			}
+			
+			return $tags;
+		}
+		
+		public function user_pending_post_email_tags( $inline = true ) { 
+			$global_tags = $this->global_email_tags( false );
+
+			$tags = array_merge( $global_tags, array( '{post_id}', '{post_status}', '{post_date}', '{post_author_ID}', '{post_author_name}', '{client_name}', '{listing_title}', '{listing_url}', '{listing_link}' ) );
+			
+			$tags = apply_filters( 'geodir_email_user_pending_post_email_tags', $tags );
+
+			if ( $inline ) {
+				$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
+			}
+			
+			return $tags;
+		}
+		
+		public function user_publish_post_email_tags( $inline = true ) { 
+			$global_tags = $this->global_email_tags( false );
+
+			$tags = array_merge( $global_tags, array( '{post_id}', '{post_status}', '{post_date}', '{post_author_ID}', '{post_author_name}', '{client_name}', '{listing_title}', '{listing_url}', '{listing_link}' ) );
+			
+			$tags = apply_filters( 'geodir_email_user_publish_post_email_tags', $tags );
+
+			if ( $inline ) {
+				$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
+			}
+			
+			return $tags;
+		}
+		
+		public function owner_comment_submit_email_tags( $inline = true ) { 
+			$global_tags = $this->global_email_tags( false );
+
+			$tags = array_merge( $global_tags, array( '{post_id}', '{post_status}', '{post_date}', '{post_author_ID}', '{post_author_name}', '{client_name}', '{listing_title}', '{listing_url}', '{listing_link}', '{comment_ID}', '{comment_author}', '{comment_author_IP}', '{comment_author_email}', '{comment_date}', '{comment_content}', '{comment_approve_link}', '{comment_trash_link}', '{comment_spam_link}' ) );
+			
+			$tags = apply_filters( 'geodir_email_owner_comment_submit_email_tags', $tags );
+
+			if ( $inline ) {
+				$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
+			}
+			
+			return $tags;
+		}
+		
+		public function owner_comment_approved_email_tags( $inline = true ) { 
+			$global_tags = $this->global_email_tags( false );
+
+			$tags = array_merge( $global_tags, array( '{post_id}', '{post_status}', '{post_date}', '{post_author_ID}', '{post_author_name}', '{client_name}', '{listing_title}', '{listing_url}', '{listing_link}', '{comment_ID}', '{comment_author}', '{comment_author_IP}', '{comment_author_email}', '{comment_date}', '{comment_content}' ) );
+			
+			$tags = apply_filters( 'geodir_email_owner_comment_approved_email_tags', $tags );
+
+			if ( $inline ) {
+				$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
+			}
+			
+			return $tags;
+		}
+		
+		public function author_comment_approved_email_tags( $inline = true ) { 
+			$global_tags = $this->global_email_tags( false );
+
+			$tags = array_merge( $global_tags, array( '{post_id}', '{post_status}', '{post_date}', '{post_author_ID}', '{post_author_name}', '{client_name}', '{listing_title}', '{listing_url}', '{listing_link}', '{comment_ID}', '{comment_author}', '{comment_author_IP}', '{comment_author_email}', '{comment_date}', '{comment_content}' ) );
+			
+			$tags = apply_filters( 'geodir_email_author_comment_approved_email_tags', $tags );
+
+			if ( $inline ) {
+				$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
+			}
+			
+			return $tags;
+		}
+		
+		public function admin_pending_post_email_tags( $inline = true ) { 
+			$global_tags = $this->global_email_tags( false );
+
+			$tags = array_merge( $global_tags, array( '{post_id}', '{post_status}', '{post_date}', '{post_author_ID}', '{post_author_name}', '{client_name}', '{listing_title}', '{listing_url}', '{listing_link}' ) );
+			
+			$tags = apply_filters( 'geodir_email_admin_pending_post_email_tags', $tags );
+
+			if ( $inline ) {
+				$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
+			}
+			
+			return $tags;
+		}
+		
+		public function admin_post_edit_email_tags( $inline = true ) { 
+			$global_tags = $this->global_email_tags( false );
+
+			$tags = array_merge( $global_tags, array( '{post_id}', '{post_status}', '{post_date}', '{post_author_ID}', '{post_author_name}', '{client_name}', '{listing_title}', '{listing_url}', '{listing_link}' ) );
+			
+			$tags = apply_filters( 'geodir_email_admin_post_edit_email_tags', $tags );
+
+			if ( $inline ) {
+				$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
+			}
+			
+			return $tags;
+		}
+		
+		public function admin_moderate_comment_email_tags( $inline = true ) { 
+			$global_tags = $this->global_email_tags( false );
+
+			$tags = array_merge( $global_tags, array( '{post_id}', '{post_status}', '{post_date}', '{post_author_ID}', '{post_author_name}', '{client_name}', '{listing_title}', '{listing_url}', '{listing_link}', '{comment_ID}', '{comment_author}', '{comment_author_IP}', '{comment_author_email}', '{comment_date}', '{comment_content}', '{comment_approve_link}', '{comment_trash_link}', '{comment_spam_link}', '{comment_moderation_link}' ) );
+			
+			$tags = apply_filters( 'geodir_email_admin_moderate_comment_email_tags', $tags );
+
+			if ( $inline ) {
+				$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
+			}
+			
+			return $tags;
 		}
 	}
 

@@ -338,10 +338,11 @@ class GeoDir_Admin_Settings {
 
 
 					$option_value = self::get_option( $value['id'], $value['default'] );
+					$image_size = ! empty( $value['image_size'] ) ? $value['image_size'] : 'thumbnail';
 
 					if($option_value){
 						$remove_class = '';
-						$show_img = wp_get_attachment_image($option_value, 'thumbnail');
+						$show_img = wp_get_attachment_image($option_value, $image_size);
 					}else{
 						$remove_class = 'hidden';
 						$show_img = '<img src="'.admin_url( 'images/media-button-image.gif' ).'" />';
@@ -355,7 +356,7 @@ class GeoDir_Admin_Settings {
 					<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
 
 						<div class="gd-upload-img" data-field="<?php echo esc_attr( $value['id'] ); ?>">
-							<div class="gd-upload-display thumbnail"><div class="centered"><?php echo $show_img; ?></div></div>
+							<div class="gd-upload-display gd-img-size-<?php echo $image_size; ?> thumbnail"><div class="centered"><?php echo $show_img; ?></div></div>
 							<div class="gd-upload-fields">
 								<input type="hidden" id="<?php echo esc_attr( $value['id'] ); ?>" name="<?php echo esc_attr( $value['id'] ); ?>" value="<?php echo esc_attr( $option_value ); ?>" />
 								<button type="button" class="gd_upload_image_button button"><?php _e( 'Upload Image', 'geodirectory' ); ?></button>
@@ -419,6 +420,9 @@ class GeoDir_Admin_Settings {
 									rows="<?php echo $rows; ?>"
 									<?php echo implode( ' ', $custom_attributes ); ?>
 									><?php echo esc_textarea( stripslashes( $option_value ) );  ?></textarea>
+							<?php } ?>
+							<?php if ( ! empty( $value['custom_desc'] ) ) { ?>
+							<span class="gd-custom-desc"><?php echo $value['custom_desc']; ?></span>
 							<?php } ?>
 						</td>
 					</tr><?php

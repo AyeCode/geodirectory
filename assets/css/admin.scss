@@ -437,6 +437,14 @@ div.update-nag{width: 95%;}
     vertical-align: middle;
     margin: auto;
 }
+.gd-upload-display.gd-img-size-medium img {
+	max-height: 300px;
+	max-width: 300px;
+}
+.gd-upload-display.gd-img-size-full img {
+	max-height: 500px;
+	max-width: 500px;
+}
 
 /********************************************************
 Custom Post Type Settings
@@ -784,7 +792,97 @@ Radio input buttons
 tr.gd-row-color-picker td > .wp-picker-container {
 	margin-top: 5px;
 }
-
+.geodirectory nav.gd-nav-tab-wrapper {
+    margin: 1.5em 0 1em;
+}
+.geodirectory-message {
+    position: relative;
+    border-left-color: #cc99c2 !important;
+    overflow: hidden;
+}
+.wrap.geodirectory div.error, 
+.wrap.geodirectory div.updated {
+    margin-top: 10px;
+}
+#debug-report {
+    display: none;
+    margin: 10px 0;
+    padding: 0;
+    position: relative;
+}
+#debug-report textarea {
+    font-family: monospace;
+    width: 100%;
+    margin: 0;
+    height: 300px;
+    padding: 20px;
+    border-radius: 0;
+    resize: none;
+    font-size: 12px;
+    line-height: 20px;
+    outline: 0;
+}
+table.gd_status_table {
+    margin-bottom: 1em;
+}
+table.gd_status_table th {
+    font-weight: 700;
+    padding: 9px;
+}
+table.gd_status_table td, 
+table.gd_status_table th {
+    font-size: 1.1em;
+    font-weight: 400;
+}
+table.gd_status_table h2 {
+    font-size: 14px;
+    margin: 0;
+}
+table.gd_status_table td:first-child {
+    width: 33%;
+}
+table.gd_status_table td.help {
+    width: 1em;
+}
+table.gd_status_table td mark, 
+table.gd_status_table th mark {
+    background: transparent none;
+}
+table.gd_status_table td mark.yes, 
+table.gd_status_table th mark.yes {
+    color: #7ad03a;
+}
+h2 .gd-help-tip {
+    margin-top: -5px;
+    margin-left: .25em;
+	float: none;
+	vertical-align: middle;
+	height: 16px;
+	line-height: 16px;
+}
+table.gd_status_table--tools td,
+table.gd_status_table--tools th {
+    padding: 1.5em;
+	border-bottom: solid 1px #eee
+}
+table.gd_status_table td strong.name, 
+table.gd_status_table th strong.name {
+    display: block;
+    margin-bottom: .5em;
+}
+table.gd_status_table td.run-tool,
+table.gd_status_table th.run-tool {
+    text-align: right;
+}
+.gd-custom-desc {
+	display: block;
+	margin: 5px 0;
+	line-height: 1.8;
+}
+.gd-custom-desc code {
+	font-size: 12px;
+	cursor: default;
+}
 
 /********************************************************
 Media Queries
