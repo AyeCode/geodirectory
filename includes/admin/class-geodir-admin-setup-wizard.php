@@ -143,7 +143,7 @@ class GeoDir_Admin_Setup_Wizard {
 		wp_register_script( 'geodir-setup', GEODIRECTORY_PLUGIN_URL . '/assets/js/setup-wizard'.$suffix.'.js', $required_scripts ,GEODIRECTORY_VERSION);
 
 
-		wp_localize_script('geodir-setup', 'geodir_all_js_msg', geodir_localize_all_js_msg());
+		wp_localize_script('geodir-setup', 'geodir_params', geodir_params());
 
 		wp_enqueue_style('font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css', array(), GEODIRECTORY_VERSION);
 		wp_enqueue_style('geodir-admin-css', geodir_plugin_url() . '/assets/css/admin.css', array(), GEODIRECTORY_VERSION);

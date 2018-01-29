@@ -50,7 +50,7 @@ $dummy_categories['feature'] = array(
 
 // Set any custom fields
 $dummy_custom_fields = array();
-$dummy_custom_fields = geodir_extra_custom_fields($post_type); // set extra default fields
+$dummy_custom_fields = GeoDir_Admin_Dummy_Data::extra_custom_fields($post_type); // set extra default fields
 
 
 // Set dummy posts

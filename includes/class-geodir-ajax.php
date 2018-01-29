@@ -49,6 +49,7 @@ class GeoDir_AJAX {
 			'auto_save_post'       => true,
 			'delete_revision'       => true,
 			'import_export'         => false,
+			'ga_deauthorize'         => false,
 		);
 
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
@@ -61,6 +62,26 @@ class GeoDir_AJAX {
 				add_action( 'wc_ajax_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 			}
 		}
+	}
+
+	/**
+	 * Deauthorize Google Analytics
+	 */
+	public static function ga_deauthorize(){
+		// security
+		check_ajax_referer( 'gd_ga_deauthorize', '_wpnonce' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1 );
+		}
+
+		geodir_update_option('ga_auth_token','');
+		geodir_update_option('ga_auth_code','');
+		geodir_update_option('ga_uids','');
+		geodir_update_option('ga_account_id','');
+
+		echo admin_url('admin.php?page=gd-settings&tab=analytics');
+
+		wp_die();
 	}
 
 	public static function import_export(){
@@ -295,10 +316,8 @@ class GeoDir_AJAX {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( -1 );
 		}
-
-		//print_r($_REQUEST);exit;
-
-		$result = geodir_custom_sort_field_save($_POST);
+		
+		$result = GeoDir_Settings_Cpt_Sorting::save_custom_field($_POST);
 
 		if(is_wp_error( $result ) ){
 			wp_send_json_error( $result->get_error_message() );

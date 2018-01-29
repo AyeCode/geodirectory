@@ -51,6 +51,12 @@ class GeoDir_Post_Data {
 			add_filter( 'pre_get_posts', array( __CLASS__, 'show_public_preview' ) );
 		}
 
+		/*
+		 * We most likely don't need this yet, it will also fire twice on normal post saves so we will only add it if needed.
+		 */
+		//add_action( 'set_object_terms', array( __CLASS__, 'set_object_terms' ),10,6);
+
+
 	}
 
 	/**
@@ -80,16 +86,13 @@ class GeoDir_Post_Data {
 	 * Save post metadata when a post is saved.
 	 *
 	 * @param int $post_id The post ID.
-	 * @param post $post The post object.
+	 * @param WP_Post $post The post object.
 	 * @param bool $update Whether this is an existing post being updated or not.
 	 */
 	public static function save_post( $post_id, $post, $update ) {
 		global $wpdb, $plugin_prefix;
 
-		//echo '###';print_r(self::$post_temp);print_r($post);exit;
-
-		//	if(isset())
-
+	//echo '###';print_r($_REQUEST);print_r(self::$post_temp);print_r($post);exit;
 
 		// only fire if $post_temp is set
 		if ( $gd_post = self::$post_temp ) {
@@ -100,7 +103,7 @@ class GeoDir_Post_Data {
 			} elseif ( $gd_post['post_type'] == 'revision' ) {
 				$gd_post['post_type'] = get_post_type( $gd_post['post_parent'] );
 			}
-			$post_type = $gd_post['post_type']; // set the post type early
+			$post_type = esc_attr($gd_post['post_type']); // set the post type early
 
 			// unhook this function so it doesn't loop infinitely
 			remove_action( 'save_post', array( __CLASS__, 'save_post' ), 10 );
@@ -119,8 +122,6 @@ class GeoDir_Post_Data {
 
 			}
 
-			//echo '###';print_r($postarr);print_r($post);exit;
-
 			// Set the defaults.
 			$postarr['post_id']     = $post_id;
 			$postarr['post_status'] = $post->post_status;
@@ -138,17 +139,20 @@ class GeoDir_Post_Data {
 			unset( $postarr['post_content'] );
 
 			// Set categories
-			if ( isset( $gd_post['post_category'] ) && is_array( $gd_post['post_category'] ) ) {
+			if( isset($gd_post['tax_input'][$post_type.'category']) && !empty($gd_post['tax_input'][$post_type.'category'])){
+				$post_categories = $gd_post['tax_input'][$post_type.'category'];
+			}else{
+				$post_categories = '';
+			}
+			if ( $post_categories ) {
 				if ( isset( $gd_post['post_dummy'] ) && $gd_post['post_dummy'] ) {
-					$categories = array_map( 'sanitize_text_field', $gd_post['post_category'] );
+					$categories = array_map( 'sanitize_text_field', $post_categories );
 					$categories = array_map( 'trim', $categories );
 				} else {
-					$categories = array_map( 'absint', $gd_post['post_category'] );
-					//$categories = array_map( 'trim', $gd_post['post_category'] );
+					$categories = array_map( 'absint', $post_categories );
 				}
 
-				$categories = self::set_object_terms( $post_id, $categories, sanitize_key( $post_type ) . "category" );
-
+				$categories = array_filter(array_unique($categories));// remove duplicates and empty values
 				$postarr['post_category'] = "," . implode( ",", $categories ) . ",";
 
 				if ( isset( $categories[0] ) ) {
@@ -157,16 +161,31 @@ class GeoDir_Post_Data {
 			}
 
 			// Set tags
-			if ( isset( $postarr['post_tags'] ) && is_array( $postarr['post_tags'] ) ) {
+			if( empty($gd_post['post_tags']) && isset($gd_post['tax_input'][$post_type.'_tags']) && !empty($gd_post['tax_input'][$post_type.'_tags'])){
+
+				// quick edit returns tag ids, we need the strings
+				if( isset( $_REQUEST['action'] ) && $_REQUEST['action']=='inline-save' ){
+					$post_tags = isset($_REQUEST['tax_input'][$post_type.'_tags']) ? $_REQUEST['tax_input'][$post_type.'_tags'] : '';
+					if($post_tags){$post_tags = explode(",",$post_tags );}
+				}else{
+					$post_tags = $gd_post['tax_input'][$post_type.'_tags'];
+				}
+
+			}elseif( isset( $gd_post['post_tags'] ) && is_array( $gd_post['post_tags'] ) ){
+				$post_tags = $gd_post['post_tags'];
+			}else{
+				$post_tags = '';
+			}
+
+			if ( $post_tags ) {
 
 				if ( isset( $gd_post['post_dummy'] ) && $gd_post['post_dummy'] ) {
-					$tags = array_map( 'sanitize_text_field', $postarr['post_tags'] );
+					$tags = array_map( 'sanitize_text_field', $post_tags );
 					$tags = array_map( 'trim', $tags );
 				} else {
-					$tags = array_map( 'trim', $postarr['post_tags'] );
+					$tags = array_map( 'trim', $post_tags );
 				}
-				$tags_set = self::set_object_terms( $post_id, $tags, sanitize_key( $post_type ) . "_tags" );
-
+				$tags = array_filter(array_unique($tags));
 				// we need tags as a string
 				$postarr['post_tags'] = implode( ",", $tags );
 			}
@@ -202,13 +221,9 @@ class GeoDir_Post_Data {
 			if ( isset( $gd_post['post_dummy'] ) ) {
 				$postarr['post_dummy'] = $gd_post['post_dummy'];
 			}
-//echo '###x';
-			//print_r(geodir_get_external_media( "http://localhost/wp-content/uploads/2017/11/temp_1/x.jpg" ) );exit;
 
-			// Save post images
 
-			//print_r($gd_post);exit;
-
+			// set post images
 			if ( isset( $gd_post['post_images'] ) ) {
 				$featured_image = self::save_post_images( $post_id, $gd_post['post_images'], isset( $gd_post['post_dummy'] ) );
 				if ( $featured_image !== false ) {
@@ -218,25 +233,14 @@ class GeoDir_Post_Data {
 			unset( $postarr['post_images'] ); // unset the post_images as we save it in another table.
 
 
-			//$postarr['post_category'] = $post['post_category'];
+			//$postarr['featured_image'] = $post['featured_image'];// @todo we need to find a way to set default cat on add listing
 
-			//$postarr['featured_image'] = $post['featured_image'];// @todo we need to
-
-
-			//$postarr['default_category'] = $post['default_category']; // @todo we need to
-
-
-			//unset($postarr['post_tags'] );
 
 
 			$format = array_fill( 0, count( $postarr ), '%s' );
 
-//		print_r( $postarr );
-//			echo '###' . $table;
-//			print_r( $format );
-//
-//			print_r( $gd_post );
-//return;
+			//print_r($gd_post);print_r( $postarr );exit;
+
 			if ( $update ) {// update
 				$wpdb->update(
 					$table,
@@ -255,22 +259,19 @@ class GeoDir_Post_Data {
 			// re-hook this function
 			add_action( 'save_post', array( __CLASS__, 'save_post' ), 10, 3 );
 
-
-			//echo '###';
-
-
 		}
 
-
-//
-//		print_r($post);
-//		print_r(self::$post_temp);
-//		exit;
 	}
 
-	public static function set_object_terms( $object_id, $terms, $taxonomy, $append = false ) {
-		return wp_set_object_terms( $object_id, $terms, $taxonomy, $append );
+
+
+	/*
+	 * Not needed at present.
+	 */
+	public static function set_object_terms( $object_id, $terms, $tt_ids, $taxonomy, $append = false, $old_tt_ids ) {
+
 	}
+
 
 	/**
 	 * Save post attachments.
@@ -398,6 +399,8 @@ class GeoDir_Post_Data {
 	 * @return array
 	 */
 	public static function wp_insert_post_data( $data, $postarr ) {
+
+		//print_r($data);echo '###';print_r($postarr);exit;
 
 		// check its a GD CPT first
 		if (

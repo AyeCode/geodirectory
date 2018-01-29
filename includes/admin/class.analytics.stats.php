@@ -51,7 +51,7 @@ class GDGoogleAnalyticsStats
 
 	function checkLogin()
 	{
-            $ga_google_authtoken = geodir_get_option('geodir_ga_auth_token');
+            $ga_google_authtoken = geodir_get_option('ga_auth_token');
 
             if (!empty($ga_google_authtoken))
             {
@@ -61,18 +61,18 @@ class GDGoogleAnalyticsStats
 				}
 				catch( Google_AuthException $e )
                 {
-                    print '(cas:72) GeoDirectory was unable to authenticate you with
-                            Google using the Auth Token you pasted into the input box on the previous step. <br><br>
+                    print '<div id="message" class="error inline"><p>(cas:72) GeoDirectory was unable to authenticate you with
+                            Google using the Auth Token you pasted into the input box on the previous step. <br>
                             This could mean either you pasted the token wrong, or the time/date on your server is wrong,
-                            or an SSL issue preventing Google from Authenticating. <br><br>
-                            <br><br><strong>Tech Info </strong> ' . $e->getCode() . ':' . $e->getMessage();
+                            or an SSL issue preventing Google from Authenticating. <br>
+                            <strong>Tech Info </strong> ' . $e->getCode() . ':' . $e->getMessage().'</p></div>';
 
                     return false;
                 }
             }
             else
             {
-                $authCode = geodir_get_option('geodir_ga_auth_code');
+                $authCode = geodir_get_option('ga_auth_code');
 
                 if (empty($authCode)) return false;
 
@@ -82,11 +82,11 @@ class GDGoogleAnalyticsStats
                 }
                 catch( Exception $e )
                 {
-                    print '(cas:72) GeoDirectory was unable to authenticate you with
-                            Google using the Auth Token you pasted into the input box on the previous step. <br><br>
+                    print '<div id="message" class="error inline"><p>(cas:72) GeoDirectory was unable to authenticate you with
+                            Google using the Auth Token you pasted into the input box on the previous step. <br>
                             This could mean either you pasted the token wrong, or the time/date on your server is wrong,
-                            or an SSL issue preventing Google from Authenticating. <br><br>
-                            <br><br><strong>Tech Info </strong> ' . $e->getCode() . ':' . $e->getMessage();
+                            or an SSL issue preventing Google from Authenticating. <br>
+                            <strong>Tech Info </strong> ' . $e->getCode() . ':' . $e->getMessage().'</p></div>';
 
                     return false;
                 }
@@ -94,7 +94,7 @@ class GDGoogleAnalyticsStats
                 if($accessToken)
                 {
                     $this->client->setAccessToken($accessToken);
-                    geodir_update_option('geodir_ga_auth_token', $accessToken);
+                    geodir_update_option('ga_auth_token', $accessToken);
                 }
                 else
                 {
@@ -108,13 +108,13 @@ class GDGoogleAnalyticsStats
 
 	function deauthorize()
 	{
-            geodir_update_option('geodir_ga_auth_code', '');
-            geodir_update_option('geodir_ga_auth_token', '');
+            geodir_update_option('ga_auth_code', '');
+            geodir_update_option('ga_auth_token', '');
 	}
 
 	function getSingleProfile()
 	{
-            $webproperty_id = geodir_get_option('geodir_ga_account_id');
+            $webproperty_id = geodir_get_option('ga_account_id');
             list($pre, $account_id, $post) = explode('-',$webproperty_id);
 
             if (empty($webproperty_id)) return false;

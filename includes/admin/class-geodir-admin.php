@@ -28,7 +28,6 @@ class GeoDir_Admin {
 		add_action( 'admin_init', array( $this, 'preview_emails' ) );
 		add_action( 'admin_init', array( $this, 'prevent_admin_access' ) );
 		add_action( 'admin_init', array( $this, 'admin_redirects' ) );
-		//add_action( 'admin_footer', 'wc_print_js', 25 );
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
 		add_action( 'wp_ajax_geodirectory_rated', array( $this,'geodirectory_rated') );
 
@@ -50,7 +49,7 @@ class GeoDir_Admin {
 	}
 
 	/**
-	 * Add labels tot he GD pages to help identify them.
+	 * Add labels to the GD pages to help identify them.
 	 *
 	 * @param $post_states
 	 * @param $post
@@ -96,7 +95,7 @@ class GeoDir_Admin {
 	 * Include any classes we need within admin.
 	 */
 	public function includes() {
-		include_once( dirname( __FILE__ ) . '/gd-admin-functions.php' );
+		include_once( dirname( __FILE__ ) . '/admin-functions.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-settings.php' );
 //		include_once( dirname( __FILE__ ) . '/wc-meta-box-functions.php' );
 //		include_once( dirname( __FILE__ ) . '/class--admin-post-types.php' );
@@ -147,7 +146,10 @@ class GeoDir_Admin {
 			case 'user' :
 			case 'profile' :
 			case 'user-edit' :
-				include( 'class-wc-admin-profile.php' );
+				//include( 'class-wc-admin-profile.php' );
+			break;
+			case 'widgets' :
+				GeoDir_Admin_Widgets::init();
 			break;
 		}
 	}
@@ -160,7 +162,7 @@ class GeoDir_Admin {
 	public function admin_redirects() {
 		// Nonced plugin install redirects (whitelisted)
 		if ( ! empty( $_GET['wc-install-plugin-redirect'] ) ) {
-			$plugin_slug = wc_clean( $_GET['wc-install-plugin-redirect'] );
+			$plugin_slug = geodir_clean( $_GET['wc-install-plugin-redirect'] );
 
 			if ( current_user_can( 'install_plugins' ) && in_array( $plugin_slug, array( 'woocommerce-gateway-stripe' ) ) ) {
 				$nonce = wp_create_nonce( 'install-plugin_' . $plugin_slug );
@@ -174,15 +176,15 @@ class GeoDir_Admin {
 		}
 
 		// Setup wizard redirect
-		if ( get_transient( '_wc_activation_redirect' ) ) {
-			delete_transient( '_wc_activation_redirect' );
+		if ( get_transient( '_gd_activation_redirect' ) ) {
+			delete_transient( '_gd_activation_redirect' );
 
-			if ( ( ! empty( $_GET['page'] ) && in_array( $_GET['page'], array( 'gd-setup' ) ) ) || is_network_admin() || isset( $_GET['activate-multi'] ) || ! current_user_can( 'manage_woocommerce' ) || apply_filters( 'woocommerce_prevent_automatic_wizard_redirect', false ) ) {
+			if ( ( ! empty( $_GET['page'] ) && in_array( $_GET['page'], array( 'gd-setup' ) ) ) || is_network_admin() || isset( $_GET['activate-multi'] ) || ! current_user_can( 'manage_options' ) || apply_filters( 'geodir_prevent_automatic_wizard_redirect', false ) ) {
 				return;
 			}
 
 			// If the user needs to install, send them to the setup wizard
-			if ( WC_Admin_Notices::has_notice( 'install' ) ) {
+			if ( GeoDir_Admin_Notices::has_notice( 'install' ) ) {
 				wp_safe_redirect( admin_url( 'index.php?page=gd-setup' ) );
 				exit;
 			}
@@ -190,30 +192,19 @@ class GeoDir_Admin {
 	}
 
 	/**
-	 * Prevent any user who cannot 'edit_posts' (subscribers, customers etc) from accessing admin.
+	 * Restrict the wp-admin area from specific user roles if set to do so.
 	 */
 	public function prevent_admin_access() {
-		$prevent_access = false;
-return;//
-		if ( 'yes' === get_option( 'woocommerce_lock_down_admin', 'yes' ) && ! is_ajax() && basename( $_SERVER["SCRIPT_FILENAME"] ) !== 'admin-post.php' ) {
-			$has_cap     = false;
-			$access_caps = array( 'edit_posts', 'manage_woocommerce', 'view_admin_dashboard' );
-
-			foreach ( $access_caps as $access_cap ) {
-				if ( current_user_can( $access_cap ) ) {
-					$has_cap = true;
-					break;
+		$restricted_roles = geodir_get_option('admin_blocked_roles',array());
+		if ( !empty($restricted_roles) && is_user_logged_in() && ( ! defined( 'DOING_AJAX' ) ) ) // checking action in request to allow ajax request go through
+		{
+			$roles = wp_get_current_user()->roles;
+			foreach($restricted_roles as $role){
+				if( in_array($role, $roles)){
+					wp_safe_redirect( home_url() );
+					exit;
 				}
 			}
-
-			if ( ! $has_cap ) {
-				$prevent_access = true;
-			}
-		}
-
-		if ( apply_filters( 'woocommerce_prevent_admin_access', $prevent_access ) ) {
-			wp_safe_redirect( wc_get_page_permalink( 'myaccount' ) );
-			exit;
 		}
 	}
 

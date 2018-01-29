@@ -1638,19 +1638,19 @@ function gdGeoLocateMeError(err) {
     var msg;
     switch (err.code) {
         case err.UNKNOWN_ERROR:
-            msg = geodir_all_js_msg.geoErrUNKNOWN_ERROR;
+            msg = geodir_params.geoErrUNKNOWN_ERROR;
             break;
         case err.PERMISSION_DENINED:
-            msg = geodir_all_js_msg.geoErrPERMISSION_DENINED;
+            msg = geodir_params.geoErrPERMISSION_DENINED;
             break;
         case err.POSITION_UNAVAILABLE:
-            msg = geodir_all_js_msg.geoErrPOSITION_UNAVAILABLE;
+            msg = geodir_params.geoErrPOSITION_UNAVAILABLE;
             break;
         case err.BREAK:
-            msg = geodir_all_js_msg.geoErrBREAK;
+            msg = geodir_params.geoErrBREAK;
             break;
         default:
-            msg = geodir_all_js_msg.geoErrDEFAULT;
+            msg = geodir_params.geoErrDEFAULT;
     }
     alert(msg);
 }

@@ -63,18 +63,6 @@ function initMap(map_options) {
     /* custom google map style */
     jQuery.goMap.map.setOptions({ styles: styles });
 
-    // check if control al ready triggered
-    var hasControl = jQuery('#' + map_canvas).find('.gd-control-div').hasClass(map_canvas + '-control-div');
-    /* add option that allows enable/disable map dragging to phone devices */
-    if (geodir_all_js_msg.geodir_is_mobile && typeof geodir_all_js_msg.geodir_onoff_dragging != 'undefined' && geodir_all_js_msg.geodir_onoff_dragging && !hasControl) {
-        var centerControlDiv = document.createElement('div');
-        centerControlDiv.index = 1;
-        jQuery(centerControlDiv).addClass('gd-control-div');
-        jQuery(centerControlDiv).addClass(map_canvas + '-control-div');
-        var centerControl = new gdCustomControl(centerControlDiv, options.enable_cat_filters, jQuery.goMap.map);
-        var controlPosition = options.enable_cat_filters ? google.maps.ControlPosition.BOTTOM_LEFT : google.maps.ControlPosition.BOTTOM_RIGHT;
-        jQuery.goMap.map.controls[controlPosition].push(centerControlDiv);
-    }
     google.maps.event.addListenerOnce(jQuery.goMap.map, 'idle', function() {
         jQuery("#" + map_canvas).goMap();
         for (var i in google.maps.MapTypeId) {
@@ -142,55 +130,6 @@ function initMap(map_options) {
     window.oms = jQuery.goMap.oms;
 }
 
-function gdCustomControl(controlDiv, cat_filters, gdMap) {
-    if (window.gdMaps !== 'google') {
-        return;
-    }
-    // Set CSS for the control border
-    var controlUI = document.createElement('div');
-    jQuery(controlUI).addClass('gd-dragg-ui');
-    if (cat_filters) {
-        jQuery(controlUI).addClass('gd-dragg-with-cat');
-    }
-    gdMap.setOptions({ draggable: false });
-    jQuery(controlUI).addClass('gd-drag-inactive');
-    controlUI.style.backgroundColor = '#fff';
-    controlUI.style.borderRadius = '2px';
-    controlUI.style.boxShadow = '0 1px 4px -1px rgba(0, 0, 0, 0.3)';
-    controlUI.style.cursor = 'pointer';
-    if (cat_filters) {
-        controlUI.style.marginBottom = '40px';
-    } else {
-        controlUI.style.marginBottom = '5px';
-    }
-    controlUI.style.marginTop = '5px';
-    controlUI.style.textAlign = 'center';
-    controlDiv.appendChild(controlUI);
-    // Set CSS for the control interior
-    var controlText = document.createElement('div');
-    jQuery(controlText).addClass('gd-dragg-action');
-    controlUI.style.border = '1px solid rgba(0, 0, 0, 0.15)';
-    controlText.style.color = '#333';
-    controlText.style.fontSize = '11px';
-    controlText.style.lineHeight = '1.5';
-    controlText.style.paddingLeft = '6px';
-    controlText.style.paddingTop = '1px';
-    controlText.style.paddingBottom = '1px';
-    controlText.style.paddingRight = '6px';
-    controlText.innerHTML = geodir_all_js_msg.geodir_on_dragging_text;
-    controlUI.appendChild(controlText);
-    // Setup the click event listeners: simply set the map to
-    //
-    google.maps.event.addDomListener(controlUI, 'click', function() {
-        if (jQuery(this).hasClass('gd-drag-active')) {
-            jQuery(this).removeClass('gd-drag-active').addClass('gd-drag-inactive').find('.gd-dragg-action').text(geodir_all_js_msg.geodir_on_dragging_text);
-            gdMap.setOptions({ draggable: false });
-        } else {
-            jQuery(this).removeClass('gd-drag-inactive').addClass('gd-drag-active').find('.gd-dragg-action').text(geodir_all_js_msg.geodir_off_dragging_text);
-            gdMap.setOptions({ draggable: true });
-        }
-    });
-}
 
 function build_map_ajax_search_param(map_canvas_var, reload_cat_list, catObj, hide_loading) {
     if (!window.gdMaps) {
@@ -559,7 +498,7 @@ function create_marker(input, map_canvas_var) {
         var title = geodir_htmlEscape(input.t);
         //if(!input.i){return;}
         if (!input.i) {
-            input.i = geodir_all_js_msg.geodir_default_marker_icon;
+            input.i = geodir_params.default_marker_icon;
         }
         var cs = input.cs;
 
@@ -885,7 +824,7 @@ function calcRoute(map_canvas) {
             
             L.Routing.errorControl(control).addTo(jQuery.goMap.map);
             
-            jQuery('.leaflet-routing-geocoders .leaflet-routing-search-info').append('<span title="' + geodir_all_js_msg.geoMyLocation + '" onclick="gdMyGeoDirection();" id="detail_page_map_canvas_mylocation" class="gd-map-mylocation"><i class="fa fa-crosshairs" aria-hidden="true"></i></span>');
+            jQuery('.leaflet-routing-geocoders .leaflet-routing-search-info').append('<span title="' + geodir_params.geoMyLocation + '" onclick="gdMyGeoDirection();" id="detail_page_map_canvas_mylocation" class="gd-map-mylocation"><i class="fa fa-crosshairs" aria-hidden="true"></i></span>');
         } catch(e) {
             console.log(e.message);
         }
@@ -910,7 +849,7 @@ function calcRoute(map_canvas) {
                 //map = new google.maps.Map(document.getElementById(map_canvas), map_options);
                 //directionsDisplay.setMap(map);
             } else {
-                alert(geodir_all_js_msg.address_not_found_on_map_msg + from_address);
+                alert(geodir_params.address_not_found_on_map_msg + from_address);
             }
         });
     }
@@ -1059,22 +998,6 @@ function initMapOSM(map_options) {
     /* custom google map style */ // TODO for styles
     //jQuery.goMap.map = L.Util.setOptions(jQuery.goMap.map, { styles: styles });
     
-    // check if control al ready triggered
-    var hasControl = jQuery('#' + map_canvas).find('.gd-control-div').hasClass(map_canvas + '-control-div');
-    
-    /* add option that allows enable/disable map dragging to phone devices */
-    if (geodir_all_js_msg.geodir_is_mobile && typeof geodir_all_js_msg.geodir_onoff_dragging != 'undefined' && geodir_all_js_msg.geodir_onoff_dragging && !hasControl) {
-        var centerControlDiv = document.createElement('div');
-        centerControlDiv.index = 1;
-        jQuery(centerControlDiv).addClass('gd-control-div');
-        jQuery(centerControlDiv).addClass(map_canvas + '-control-div');
-        
-        var centerControl = new gdCustomControl(centerControlDiv, options.enable_cat_filters, jQuery.goMap.map);
-        var controlPosition = options.enable_cat_filters ? 'bottomleft' : 'bottomright';
-        
-        //jQuery.goMap.map.controls[controlPosition].push(centerControlDiv);
-    }
-
     L.DomEvent.addListener(jQuery.goMap.map, 'moveend', function() {
         if (eval(map_canvas).enable_marker_cluster_server) {
             if (gd_map_first_load) { // first load do nothing
@@ -1206,9 +1129,9 @@ function create_marker_osm(input, map_canvas_var) {
         var title = geodir_htmlEscape(input.t);
 
         if (!input.i) {
-            input.i = geodir_all_js_msg.geodir_default_marker_icon;
-            input.w = geodir_all_js_msg.geodir_default_marker_w;
-            input.h = geodir_all_js_msg.geodir_default_marker_h;
+            input.i = geodir_params.default_marker_icon;
+            input.w = geodir_params.default_marker_w;
+            input.h = geodir_params.default_marker_h;
         }
         
         cs = input.cs;
@@ -1338,19 +1261,19 @@ function gdMyGeoPositionError(err) {
     var msg;
     switch (err.code) {
         case err.UNKNOWN_ERROR:
-            msg = geodir_all_js_msg.geoErrUNKNOWN_ERROR;
+            msg = geodir_params.geoErrUNKNOWN_ERROR;
             break;
         case err.PERMISSION_DENINED:
-            msg = geodir_all_js_msg.geoErrPERMISSION_DENINED;
+            msg = geodir_params.geoErrPERMISSION_DENINED;
             break;
         case err.POSITION_UNAVAILABLE:
-            msg = geodir_all_js_msg.geoErrPOSITION_UNAVAILABLE;
+            msg = geodir_params.geoErrPOSITION_UNAVAILABLE;
             break;
         case err.BREAK:
-            msg = geodir_all_js_msg.geoErrBREAK;
+            msg = geodir_params.geoErrBREAK;
             break;
         default:
-            msg = geodir_all_js_msg.geoErrDEFAULT;
+            msg = geodir_params.geoErrDEFAULT;
     }
     alert(msg);
 }

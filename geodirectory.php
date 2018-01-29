@@ -130,6 +130,14 @@ final class GeoDirectory {
         
         // Do not store any revisions (except the one autosave per post).
         $this->define( 'WP_POST_REVISIONS', 0 );
+
+	    /*
+	 * Define our Google Analytic app settings
+	 */
+	    if (!defined('GEODIR_GA_CLIENTID')) define('GEODIR_GA_CLIENTID', '687912069872-sdpsjssrdt7t3ao1dnv1ib71hkckbt5s.apps.googleusercontent.com');
+	    if (!defined('GEODIR_GA_CLIENTSECRET')) define('GEODIR_GA_CLIENTSECRET', 'yBVkDpqJ1B9nAETHy738Zn8C'); //don't worry - this don't need to be secret in our case
+	    if (!defined('GEODIR_GA_REDIRECT')) define('GEODIR_GA_REDIRECT', 'urn:ietf:wg:oauth:2.0:oob');
+	    if (!defined('GEODIR_GA_SCOPE')) define('GEODIR_GA_SCOPE', 'https://www.googleapis.com/auth/analytics');//.readonly
         
         // This will store the cached post custom fields per package for each page load so not to run for each listing.
         $geodir_post_custom_fields_cache = array();
@@ -206,11 +214,11 @@ final class GeoDirectory {
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/email-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/helper-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/user-functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/deprecated-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-ajax-functions.php' ); // @todo remove onece replced with below class-gd-ajax.php
         //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-gd-ajax.php' );
         GeoDir_AJAX::init();
         GeoDir_Post_Data::init(); // post data
+	    
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/general_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/listing_filters.php' );
@@ -243,18 +251,15 @@ final class GeoDirectory {
             if ( !empty( $_REQUEST['taxonomy'] ) ) {
                 require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/class-geodir-admin-taxonomies.php' );
             }
-            require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/admin_functions.php' );
+
+	        
 
 
-            //include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/class-geodir-admin.php' );
+	        //include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/class-geodir-admin.php' );
             new GeoDir_Admin(); // init the GD admin class
 
-            //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/admin_dummy_data_functions.php' );
-            require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/admin_hooks_actions.php' );
-            require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/admin_template_tags.php' );
+            require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/diagnostic-functions.php' );
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/class.analytics.stats.php' );
-            //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/install.php' );
-            //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/class-gd-admin-install.php' );
             GeoDir_Admin_Install::init(); // init the install class
             require_once( GEODIRECTORY_PLUGIN_DIR . 'upgrade.php' );
 
@@ -263,8 +268,13 @@ final class GeoDirectory {
                 $file   = basename( GEODIRECTORY_PLUGIN_FILE );
                 $folder = basename( dirname( GEODIRECTORY_PLUGIN_FILE ) );
                 $hook   = "in_plugin_update_message-{$folder}/{$file}";
-                add_action( $hook, 'geodire_admin_upgrade_notice', 20, 2 );
+                add_action( $hook, 'geodir_admin_upgrade_notice', 20, 2 );
             }
+
+	        if( 'edit.php' === $pagenow || 'post.php' === $pagenow ) {
+		        GeoDir_Admin_Post_View::init();
+	        }
+	        
         }
         
         $this->load_db_language();
@@ -468,4 +478,3 @@ $GLOBALS['geodirectory'] = GeoDir();
 //    print_r($post);exit;
 //}
 //add_action( 'wp_insert_post', 'my_project_updated_send_email', 10, 3 );
-

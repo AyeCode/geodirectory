@@ -153,3 +153,172 @@ function get_search_default_near_text(){
 function get_search_default_button_text(){
     return __('#xf002;','geodirectory');
 }
+
+/**
+ * Outputs translated JS text strings.
+ *
+ * This function outputs text strings used in JS files as a json array of strings so they can be translated and still be used in JS files.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ */
+function geodir_params()
+{// check_ajax_referer function is used to make sure no files are uploaded remotely but it will fail if used between https and non https so we do the check below of the urls
+    if (str_replace("https", "http", admin_url('admin-ajax.php')) && !empty($_SERVER['HTTPS'])) {
+        $ajax_url = admin_url('admin-ajax.php');
+    } elseif (!str_replace("https", "http", admin_url('admin-ajax.php')) && empty($_SERVER['HTTPS'])) {
+        $ajax_url = admin_url('admin-ajax.php');
+    } elseif (str_replace("https", "http", admin_url('admin-ajax.php')) && empty($_SERVER['HTTPS'])) {
+        $ajax_url = str_replace("https", "http", admin_url('admin-ajax.php'));
+    } elseif (!str_replace("https", "http", admin_url('admin-ajax.php')) && !empty($_SERVER['HTTPS'])) {
+        $ajax_url = str_replace("http", "https", admin_url('admin-ajax.php'));
+    }
+
+    /**
+     * Filter the allowed image type extensions for post images.
+     *
+     * @since 1.4.7.1
+     * @param string $allowed_img_types The image type extensions array.
+     */
+    $allowed_img_types = apply_filters('geodir_allowed_post_image_exts', array('jpg', 'jpeg', 'jpe', 'gif', 'png'));
+
+    $default_marker_icon = geodir_default_marker_icon( true );
+    $default_marker_size = geodir_get_marker_size($default_marker_icon, array('w' => 20, 'h' => 34));
+    $default_marker_width = $default_marker_size['w'];
+    $default_marker_height = $default_marker_size['h'];
+
+    $arr_alert_msg = array(
+        'plugin_url' => geodir_plugin_url(),
+        'ajax_url' => $ajax_url,
+        'custom_field_not_blank_var' => __('Frontend title must not be blank', 'geodirectory'),
+        'custom_field_not_special_char' => __('Please do not use special character and spaces in HTML Variable Name.', 'geodirectory'),
+        'custom_field_unique_name' => __('HTML Variable Name should be a unique name.', 'geodirectory'),
+        'custom_field_delete' => __('Are you wish to delete this field?', 'geodirectory'),
+        //start not show alert msg
+        'tax_meta_class_succ_del_msg' => __('File has been successfully deleted.', 'geodirectory'),
+        'tax_meta_class_not_permission_to_del_msg' => __('You do NOT have permission to delete this file.', 'geodirectory'),
+        'tax_meta_class_order_save_msg' => __('Order saved!', 'geodirectory'),
+        'tax_meta_class_not_permission_record_img_msg' => __('You do not have permission to reorder images.', 'geodirectory'),
+        'address_not_found_on_map_msg' => __('Address not found for:', 'geodirectory'),
+        // end not show alert msg
+        'my_place_listing_del' => __('Are you sure you wish to delete this listing?', 'geodirectory'),
+        'my_main_listing_del' => __('Deleting the main listing of a franchise will turn all franchises in regular listings. Are you sure wish to delete this main listing?', 'geodirectory'),
+        //start not show alert msg
+        'rating_error_msg' => __('Error : please retry', 'geodirectory'),
+        'listing_url_prefix_msg' => __('Please enter listing url prefix', 'geodirectory'),
+        'invalid_listing_prefix_msg' => __('Invalid character in listing url prefix', 'geodirectory'),
+        'location_url_prefix_msg' => __('Please enter location url prefix', 'geodirectory'),
+        'invalid_location_prefix_msg' => __('Invalid character in location url prefix', 'geodirectory'),
+        'location_and_cat_url_separator_msg' => __('Please enter location and category url separator', 'geodirectory'),
+        'invalid_char_and_cat_url_separator_msg' => __('Invalid character in location and category url separator', 'geodirectory'),
+        'listing_det_url_separator_msg' => __('Please enter listing detail url separator', 'geodirectory'),
+        'invalid_char_listing_det_url_separator_msg' => __('Invalid character in listing detail url separator', 'geodirectory'),
+        'loading_listing_error_favorite' => __('Error loading listing.', 'geodirectory'),
+        'field_id_required' => __('This field is required.', 'geodirectory'),
+        'valid_email_address_msg' => __('Please enter valid email address.', 'geodirectory'),
+        'default_marker_icon' => $default_marker_icon,
+        'default_marker_w' => $default_marker_width,
+        'default_marker_h' => $default_marker_height,
+        'latitude_error_msg' => GEODIR_LATITUDE_ERROR_MSG,
+        'longgitude_error_msg' => GEODIR_LOGNGITUDE_ERROR_MSG,
+        'default_rating_star_icon' => geodir_default_rating_icon( true ),
+        'gd_cmt_btn_post_reply' => __('Post Reply', 'geodirectory'),
+        'gd_cmt_btn_reply_text' => __('Reply text', 'geodirectory'),
+        'gd_cmt_btn_post_review' => __('Post Review', 'geodirectory'),
+        'gd_cmt_btn_review_text' => __('Review text', 'geodirectory'),
+        'gd_cmt_err_no_rating' => __("Please select star rating, you can't leave a review without stars.", 'geodirectory'),
+        'err_max_file_size' => __('File size error : You tried to upload a file over %s', 'geodirectory'),
+        'err_file_upload_limit' => __('You have reached your upload limit of %s files.', 'geodirectory'),
+        'err_pkg_upload_limit' => __('You may only upload %s files with this package, please try again.', 'geodirectory'),
+        'action_remove' => __('Remove', 'geodirectory'),
+        'txt_all_files' => __('Allowed files', 'geodirectory'),
+        'err_file_type' => __('File type error. Allowed file types: %s', 'geodirectory'),
+        'gd_allowed_img_types' => !empty($allowed_img_types) ? implode(',', $allowed_img_types) : '',
+        'txt_form_wait' => __('Wait...', 'geodirectory'),
+        'txt_form_searching' => __('Searching...', 'geodirectory'),
+        'fa_rating' => (int)geodir_get_option('geodir_reviewrating_enable_font_awesome') == 1 ? 1 : '',
+        'reviewrating' => defined('GEODIRREVIEWRATING_VERSION') ? 1 : '',
+        'multirating' => defined('GEODIRREVIEWRATING_VERSION') && geodir_get_option('geodir_reviewrating_enable_rating') ? true : false,
+        'map_name' => geodir_map_name(),
+        'osmStart' => __('Start', 'geodirectory'),
+        'osmVia' => __('Via {viaNumber}', 'geodirectory'),
+        'osmEnd' => __('Enter Your Location', 'geodirectory'),
+        'ga_delete_check' => __('Are you wish to Deauthorize and break Analytics?', 'geodirectory'),
+        'geoMyLocation' => __('My Location', 'geodirectory'),
+        'geoErrUNKNOWN_ERROR' => addslashes(__('Unable to find your location', 'geodirectory')),
+        'geoErrPERMISSION_DENINED' => addslashes(__('Permission denied in finding your location', 'geodirectory')),
+        'geoErrPOSITION_UNAVAILABLE' => addslashes(__('Your location is currently unknown', 'geodirectory')),
+        'geoErrBREAK' => addslashes(__('Attempt to find location took too long', 'geodirectory')),
+        'geoErrDEFAULT' => addslashes(__('Location detection not supported in browser', 'geodirectory')),
+        'i18n_no_matches' => _x( 'No matches found', 'geodir select', 'geodirectory' ),
+        'i18n_ajax_error' => _x( 'Loading failed', 'geodir select', 'geodirectory' ),
+        'i18n_input_too_short_1' => _x( 'Please enter 1 or more characters', 'geodir select', 'geodirectory' ),
+        'i18n_input_too_short_n' => _x( 'Please enter %item% or more characters', 'geodir select', 'geodirectory' ),
+        'i18n_input_too_long_1' => _x( 'Please delete 1 character', 'geodir select', 'geodirectory' ),
+        'i18n_input_too_long_n' => _x( 'Please delete %item% characters', 'geodir select', 'geodirectory' ),
+        'i18n_selection_too_long_1' => _x( 'You can only select 1 item', 'geodir select', 'geodirectory' ),
+        'i18n_selection_too_long_n' => _x( 'You can only select %item% items', 'geodir select', 'geodirectory' ),
+        'i18n_load_more' => _x( 'Loading more results&hellip;', 'geodir select', 'geodirectory' ),
+        'i18n_searching' => _x( 'Searching&hellip;', 'geodir select', 'geodirectory' )	,
+        'txt_choose_image' => __( 'Choose an image', 'geodirectory' ),
+        'txt_use_image' => __( 'Use image', 'geodirectory' ),
+        'img_spacer' => admin_url( 'images/media-button-image.gif' ),
+    );
+
+    /**
+     * Filters the translated JS strings from function geodir_params().
+     *
+     * With this filter you can add, remove or change translated JS strings.
+     * You should add your own translations to this if you are building an addon rather than adding another script block.
+     *
+     * @since 1.0.0
+     */
+    return apply_filters('geodir_params', $arr_alert_msg);
+
+}
+
+/**
+ * Check table column exist or not.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @param string $db The table name.
+ * @param string $column The column name.
+ * @return bool If column exists returns true. Otherwise false.
+ */
+function geodir_column_exist($db, $column)
+{
+    global $wpdb;
+    $exists = false;
+    $columns = $wpdb->get_col("show columns from $db");
+    foreach ($columns as $c) {
+        if ($c == $column) {
+            $exists = true;
+            break;
+        }
+    }
+    return $exists;
+}
+
+
+/**
+ * Add column if table column not exist.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @param string $db The table name.
+ * @param string $column The column name.
+ * @param string $column_attr The column attributes.
+ */
+function geodir_add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 255 ) NOT NULL")
+{
+    global $wpdb;
+    $result = 0;// no rows affected
+    if (!geodir_column_exist($db, $column)) {
+        if (!empty($db) && !empty($column))
+            $result = $wpdb->query("ALTER TABLE `$db` ADD `$column`  $column_attr");
+    }
+    return $result;
+}

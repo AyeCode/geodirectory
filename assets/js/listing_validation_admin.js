@@ -96,9 +96,9 @@ function validate_field(field) {
                     is_error = false;
                 } else {
 
-                    var error_msg = geodir_all_js_msg.geodir_latitude_error_msg;
+                    var error_msg = geodir_params.latitude_error_msg;
                     if (jQuery(field).attr('id') == 'post_longitude')
-                        error_msg = geodir_all_js_msg.geodir_longgitude_error_msg;
+                        error_msg = geodir_params.longgitude_error_msg;
 
                     jQuery(field).closest('.required_field').find('.geodir_message_error').show();
                     jQuery(field).closest('.required_field').find('.geodir_message_error').html(error_msg);
@@ -124,7 +124,7 @@ function validate_field(field) {
 
     if (is_error) {
         if (jQuery(field).closest('.required_field').find('span.geodir_message_error').html() == '') {
-            jQuery(field).closest('.required_field').find('span.geodir_message_error').html(geodir_all_js_msg.geodir_field_id_required)
+            jQuery(field).closest('.required_field').find('span.geodir_message_error').html(geodir_params.field_id_required)
         }
 
         jQuery(field).closest('.required_field').find('span.geodir_message_error').fadeIn();

@@ -473,7 +473,7 @@ if($dummy_post_index==1){
     // add sort order items
     $sort_fields = geodir_property_sale_custom_fields_sort($post_type);
     foreach($sort_fields as $sort){
-        geodir_custom_sort_field_save($sort);
+        $return = GeoDir_Settings_Cpt_Sorting::save_custom_field($sort);
     }
 
     // update the type currently installed

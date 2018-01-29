@@ -45,9 +45,9 @@ jQuery(window).load(function() {
         }
 
         media_frame[field] = wp.media.frames.downloadable_file = wp.media({
-            title: geodir_ajax.txt_choose_image,
+            title: geodir_params.txt_choose_image,
             button: {
-                text: geodir_ajax.txt_use_image
+                text: geodir_params.txt_use_image
             },
             multiple: false
         });
@@ -82,7 +82,7 @@ jQuery(window).load(function() {
         var $this = jQuery(this);
         var $wrap = $this.closest('.gd-upload-img');
         var field = $wrap.data('field');
-        jQuery('.gd-upload-display', $wrap).find('img').attr('src', geodir_ajax.img_spacer).removeAttr('width height sizes alt class');
+        jQuery('.gd-upload-display', $wrap).find('img').attr('src', geodir_params.img_spacer).removeAttr('width height sizes alt class');
         if (field) {
             jQuery('[name="' + field + '[id]"]').val('');
             jQuery('[name="' + field + '[src]"]').val('');
@@ -394,7 +394,7 @@ jQuery(document).ready(function() {
 
 function gd_process_diagnose_step(step, ptype, diagnose, result_container) {
     jQuery.ajax({
-        url: geodir_all_js_msg.geodir_admin_ajax_url,
+        url: geodir_params.ajax_url,
         type: 'POST',
         dataType: 'html',
         data: {
@@ -436,7 +436,7 @@ function geodir_enable_fix_buttons() {
         var result_container = jQuery(this).parents('td').find("div")
 
         jQuery.ajax({
-            url: geodir_all_js_msg.geodir_admin_ajax_url,
+            url: geodir_params.ajax_url,
             type: 'POST',
             dataType: 'html',
             data: {
@@ -468,10 +468,10 @@ function gd_progressbar(el, value, label) {
 }
 
 function gd_GA_Deauthorize(nonce){
-    var result = confirm(geodir_all_js_msg.ga_delete_check);
+    var result = confirm(geodir_params.ga_delete_check);
     if (result) {
         jQuery.ajax({
-            url: geodir_all_js_msg.geodir_admin_ajax_url,
+            url: geodir_params.ajax_url,
             type: 'POST',
             dataType: 'html',
             data: {
@@ -495,11 +495,11 @@ function gd_GA_Deauthorize(nonce){
 // @todo hopefully we can remove this script so its one less script to have to load
 
 jQuery(document).ready(function($) {
-    if (geodir_all_js_msg.fa_rating) { // font awesome rating
+    if (geodir_params.fa_rating) { // font awesome rating
         jQuery('.gd-fa-rating').barrating({
             theme: 'fontawesome-stars',
             onSelect: function(value, text, event) {
-                if (geodir_all_js_msg.multirating) {
+                if (geodir_params.multirating) {
                     if (jQuery(this.$elem).closest('form').attr('id') == 'post') {
                         jQuery(this.$elem).closest('.br-theme-fontawesome-stars').parent().find('[name^=geodir_rating]').val(value);
                     } else {
@@ -513,10 +513,10 @@ jQuery(document).ready(function($) {
     } else { // default rating
         jQuery('.gd_rating').jRating({
             /** String vars **/
-            //bigStarsPath : geodir_all_js_msg.geodir_plugin_url+'/assets/images/stars.png',
-            bigStarsPath: geodir_all_js_msg.geodir_default_rating_star_icon,
-            smallStarsPath: geodir_all_js_msg.geodir_plugin_url + '/assets/images/small.png',
-            phpPath: geodir_all_js_msg.geodir_plugin_url + '/jRating.php',
+            //bigStarsPath : geodir_params.geodir_plugin_url+'/assets/images/stars.png',
+            bigStarsPath: geodir_params.default_rating_star_icon,
+            smallStarsPath: geodir_params.plugin_url + '/assets/images/small.png',
+            phpPath: geodir_params.plugin_url + '/jRating.php',
             type: 'big', // can be set to 'small' or 'big'
             /** Boolean vars **/
             step: true, // if true,  mouseover binded star by star,
@@ -538,7 +538,7 @@ jQuery(document).ready(function($) {
                 jQuery('#geodir_overallrating').val(rate);
             },
             onError: function() {
-                alert(geodir_all_js_msg.rating_error_msg);
+                alert(geodir_params.rating_error_msg);
             }
         });
     }
@@ -553,14 +553,14 @@ jQuery(document).ready(function($) {
         var detailurl_separator = jQuery('#geodir_detailurl_separator').val();
 
         if (listing_prefix == '') {
-            alert(geodir_all_js_msg.listing_url_prefix_msg);
+            alert(geodir_params.listing_url_prefix_msg);
             jQuery('#geodir_listing_prefix').focus();
             error = true;
         }
 
         if (/^[a-z0-90\_9_-]*$/.test(listing_prefix) == false && listing_prefix != '') {
             jQuery('#geodir_listing_prefix').focus();
-            alert(geodir_all_js_msg.invalid_listing_prefix_msg);
+            alert(geodir_params.invalid_listing_prefix_msg);
             error = true;
         }
 
@@ -764,7 +764,7 @@ jQuery(function($) {
             _nonce: nonce
         };
         jQuery.ajax({
-            url: geodir_all_js_msg.geodir_admin_ajax_url,
+            url: geodir_params.ajax_url,
             data: data,
             type: 'POST',
             cache: false,
@@ -796,36 +796,36 @@ jQuery(function($) {
             'language': {
                 errorLoading: function() {
                     // Workaround for https://github.com/select2/select2/issues/4355 instead of i18n_ajax_error.
-                    return geodir_all_js_msg.i18n_searching;
+                    return geodir_params.i18n_searching;
                 },
                 inputTooLong: function(args) {
                     var overChars = args.input.length - args.maximum;
                     if (1 === overChars) {
-                        return geodir_all_js_msg.i18n_input_too_long_1;
+                        return geodir_params.i18n_input_too_long_1;
                     }
-                    return geodir_all_js_msg.i18n_input_too_long_n.replace('%item%', overChars);
+                    return geodir_params.i18n_input_too_long_n.replace('%item%', overChars);
                 },
                 inputTooShort: function(args) {
                     var remainingChars = args.minimum - args.input.length;
                     if (1 === remainingChars) {
-                        return geodir_all_js_msg.i18n_input_too_short_1;
+                        return geodir_params.i18n_input_too_short_1;
                     }
-                    return geodir_all_js_msg.i18n_input_too_short_n.replace('%item%', remainingChars);
+                    return geodir_params.i18n_input_too_short_n.replace('%item%', remainingChars);
                 },
                 loadingMore: function() {
-                    return geodir_all_js_msg.i18n_load_more;
+                    return geodir_params.i18n_load_more;
                 },
                 maximumSelected: function(args) {
                     if (args.maximum === 1) {
-                        return geodir_all_js_msg.i18n_selection_too_long_1;
+                        return geodir_params.i18n_selection_too_long_1;
                     }
-                    return geodir_all_js_msg.i18n_selection_too_long_n.replace('%item%', args.maximum);
+                    return geodir_params.i18n_selection_too_long_n.replace('%item%', args.maximum);
                 },
                 noResults: function() {
-                    return geodir_all_js_msg.i18n_no_matches;
+                    return geodir_params.i18n_no_matches;
                 },
                 searching: function() {
-                    return geodir_all_js_msg.i18n_searching;
+                    return geodir_params.i18n_searching;
                 }
             }
         };
