@@ -204,25 +204,6 @@ function geodir_add_listing_allowed_post_types() {
     return apply_filters( 'geodir_add_listing_allowed_post_types', $allowed_post_types  );
 }
 
-/**
- * Get and array of CPTs with opening hours feature enabled.
- * 
- * @return mixed|void
- */
-function geodir_opening_hours_allowed_post_types() {
-    $allowed_post_types = array();
-    $post_types = geodir_get_posttypes( 'array' );
-    if ( !empty( $post_types ) ) {
-        foreach ( $post_types as $cpt => $post_type ) {
-            if ( ! empty( $post_type['opening_hours'] ) ) {
-                $allowed_post_types[] = $cpt;
-            }
-        }
-    }
-
-    return apply_filters( 'geodir_opening_hours_allowed_post_types', $allowed_post_types  );
-}
-
 function geodir_add_listing_default_post_type() {
     $post_types = geodir_add_listing_allowed_post_types();
 

@@ -592,7 +592,6 @@ Thank you for your contribution.","geodirectory"
 A new listing has been submitted [#listing_link#]. This email is just for your information.
 
 Thank you,
-
 [#site_name_url#]","geodirectory")
 			);
 		}
@@ -616,7 +615,7 @@ Thank you,
 		public function admin_post_edit_body(){
 			return apply_filters('geodir_email_admin_post_edit_body',
 				__("Dear Admin,
-				
+
 A listing [#listing_link#] has been edited by it's author [#post_author_name#].
 
 Listing Details:
@@ -648,7 +647,7 @@ This email is just for your information.","geodirectory"
 		public function admin_moderate_comment_body(){
 			return apply_filters('geodir_email_admin_moderate_comment_body',
 				__("Dear Admin,
-				
+
 A new comment has been submitted on the listing [#listing_link#] and it is waiting for your approval.
 
 Author: [#comment_author#] ( IP: [#comment_author_IP#] )
@@ -786,19 +785,16 @@ Thank You.","geodirectory"
 			return apply_filters('geodir_email_send_friend_body',
 				__("Dear [#to_name#],
 
-Your friend has sent you a message from <b>[#site_name#]</b>
+Your friend has sent you a message from: [#site_name#]
 
 ===============================
-
-<b>Subject : [#subject#]</b>
-
-[#comments#] [#listing_link#]
-
+Subject : [#subject#]
+[#comments#] 
+[#listing_link#]
 ===============================
 
 Thank you,
-
-[#site_name_url#].","geodirectory"
+[#site_name_url#]","geodirectory"
 				)
 			);
 		}
@@ -823,22 +819,18 @@ Thank you,
 			return apply_filters('geodir_email_send_enquiry_body',
 				__("Dear [#to_name#],
 
-An enquiry has been sent from <b>[#listing_link#]</b>
+An enquiry has been sent from: [#listing_link#]
 
 ===============================
-
 [#comments#]
 
 From : [#from_name#]
 Email : [#from_email#]
 Phone : [#phone#]
-
-Sent from - <b>{site_link}</b>.
-
 ===============================
 
 Thank you,
-[#site_name_url#].","geodirectory"
+[#site_name_url#]","geodirectory"
 				)
 			);
 		}

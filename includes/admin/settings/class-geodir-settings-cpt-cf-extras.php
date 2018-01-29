@@ -88,19 +88,23 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 
 			// REMOVE SOME FIELDS NO NEEDED FOR SOME CFs
 
-			// htmlvar not needed for fieldset and taxonomy
+			// htmlvar not needed for fieldset, taxonomy, business_hours
 			add_filter( 'geodir_cfa_htmlvar_name_fieldset', '__return_empty_string', 10, 4 );
 			add_filter( 'geodir_cfa_htmlvar_name_taxonomy', '__return_empty_string', 10, 4 );
+			add_filter( 'geodir_cfa_htmlvar_name_business_hours', '__return_empty_string', 10, 4 );
 
-			// default_value not needed for textarea, html, file, fieldset, taxonomy, address
+			// default_value not needed for textarea, html, file, fieldset, taxonomy, address, business_hours
 			add_filter( 'geodir_cfa_default_value_file', '__return_empty_string', 10, 4 );
 			add_filter( 'geodir_cfa_default_value_taxonomy', '__return_empty_string', 10, 4 );
 			add_filter( 'geodir_cfa_default_value_address', '__return_empty_string', 10, 4 );
 			add_filter( 'geodir_cfa_default_value_fieldset', '__return_empty_string', 10, 4 );
+			add_filter( 'geodir_cfa_default_value_business_hours', '__return_empty_string', 10, 4 );
 
 			// is_required not needed for fieldset
 			add_filter( 'geodir_cfa_is_required_fieldset', '__return_empty_string', 10, 4 );
 			add_filter( 'geodir_cfa_required_msg_fieldset', '__return_empty_string', 10, 4 );
+			add_filter( 'geodir_cfa_is_required_business_hours', '__return_empty_string', 10, 4 );
+			add_filter( 'geodir_cfa_required_msg_business_hours', '__return_empty_string', 10, 4 );
 
 			// field_icon not needed for fieldset
 			add_filter( 'geodir_cfa_field_icon_fieldset', '__return_empty_string', 10, 4 );
@@ -115,8 +119,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			add_filter( 'geodir_cfa_cat_sort_textarea', '__return_empty_string', 10, 4 );
 			add_filter( 'geodir_cfa_cat_sort_taxonomy', '__return_empty_string', 10, 4 );
 			add_filter( 'geodir_cfa_cat_sort_address', '__return_empty_string', 10, 4 );
-
-
+			add_filter( 'geodir_cfa_cat_sort_business_hours', '__return_empty_string', 10, 4 );
 		}
 
 		/*
@@ -894,7 +897,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 
 			return $output;
 		}
-
 
 	}
 

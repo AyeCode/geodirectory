@@ -222,15 +222,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 					'std'  => '0',
 					'advanced' => true
 				),
-				
-				array(
-					'name' => __( 'Enable opening hours', 'geodirectory' ),
-					'desc' => __( 'Enable to display business hours on the listing.', 'geodirectory' ),
-					'id'   => 'opening_hours',
-					'type' => 'checkbox',
-					'std'  => '0',
-					'advanced' => true
-				),
 
 				array( 'type' => 'sectionend', 'id' => 'cpt_settings' ),
 
@@ -535,9 +526,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$output[$post_type]['disable_reviews'] = isset($raw['disable_reviews']) && $raw['disable_reviews'] ? absint($raw['disable_reviews']) : 0;
 			$output[$post_type]['disable_favorites'] = isset($raw['disable_favorites']) && $raw['disable_favorites'] ? absint($raw['disable_favorites']) : 0;
 			$output[$post_type]['disable_frontend_add'] = isset($raw['disable_frontend_add']) && $raw['disable_frontend_add'] ? absint($raw['disable_frontend_add']) : 0;
-			
-			// enable features
-			$output[$post_type]['opening_hours'] = ! empty( $raw['opening_hours'] ) ? 1 : 0;
 
 			// seo content
 			$output[$post_type]['seo']['meta_keyword'] = isset($raw['meta_keyword']) && $raw['meta_keyword'] ? sanitize_text_field($raw['meta_keyword']) : '';

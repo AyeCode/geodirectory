@@ -1,6 +1,6 @@
 <?php
 /**
- * Opening hours related functions.
+ * Business hours related functions.
  *
  * @since 2.0.0
  * @package GeoDirectory

@@ -2008,3 +2008,116 @@ function geodir_cfi_images($html,$cf){
     return $html;
 }
 add_filter('geodir_custom_field_input_images','geodir_cfi_images',10,2);
+
+/**
+ * Get the html input for the custom field: business_hours
+ *
+ * @param string $html The html to be filtered.
+ * @param array $cf The custom field array details.
+ * @since 2.0.0
+ *
+ * @return string The html to output for the custom field.
+ */
+function geodir_cfi_business_hours( $html, $cf ) {
+    if ( empty( $html ) ) {
+        $value = geodir_get_cf_value( $cf );
+		$name = $cf['name'];
+		$label = __( $cf['frontend_title'], 'geodirectory' );
+		$description = __( $cf['desc'], 'geodirectory' );
+		$value = geodir_get_cf_value( $cf );
+		$display = $value == '1' ? '' : 'none';
+		
+		$weekdays = geodir_get_weekdays();
+
+		ob_start(); // Start  buffering;
+		// TODO move style into file
+		?>
+		<style>
+		.geodir_form_row .gd-business-hours-field {
+			float: left;
+			width: 70%;
+		}
+		.geodir_form_row .gd-business-hours table {
+			width: 100%;
+			border: none;
+			margin: 1em 0;
+		}
+		.geodir_form_row .gd-business-hours {
+		}
+		.geodir_form_row .gd-business-hours table td {
+			border: none;
+			border-bottom: 1px dashed #eee;
+		}
+		.geodir_form_row .gd-business-hours table th {
+			padding: 10px;
+			border: none;
+			border-bottom: 2px solid #eee;
+		}
+		.geodir_form_row .gd-business-hours .gd-bh-day {
+			text-align: left;
+			width: 90px;
+			padding-left: 10px;
+		}
+		.geodir_form_row .gd-business-hours .gd-bh-hours {
+			text-align: center;
+		}
+		.geodir_form_row .gd-bh-hours input[type="text"] {
+			width: 90px;
+			text-align: center;
+			display: inline-block;
+			padding: 3px 5px;
+		}
+		.geodir_form_row .gd-business-hours .gd-bh-act {
+			width: 25px;
+			text-align: center;
+			
+		}
+		.geodir_form_row .gd-business-hours .fa {
+			font-size: 125%;
+			cursor: pointer
+		}
+		</style>
+		<script type="text/javascript">
+		jQuery(function($) {
+			$('[name="business_hours"]').on("change", function(e) {
+				var $hours = $(this).closest('.geodir_form_row').find('.gd-business-hours');
+				if ($(this).val() == '1') {
+					$hours.slideDown(200);
+				} else {
+					$hours.slideUp(200);
+				}
+			});
+		});
+		</script>
+        <div id="<?php echo $name;?>_row" class="geodir_form_row clearfix gd-fieldset-details">
+            <label><?php echo $label; ?></label>
+			<div class="gd-business-hours-field">
+				<span class="gd-radios"><input name="business_hours" id="business_hours_1" value="1" class="gd-checkbox" field_type="radio" type="radio" <?php checked( $value, '1' ); ?>><?php _e( 'Yes', 'geodirectory' ); ?></span> 
+				<span class="gd-radios"><input name="business_hours" id="business_hours_0" value="0" class="gd-checkbox" field_type="radio" type="radio" <?php checked( $value, '0' ); ?>><?php _e( 'No', 'geodirectory' ); ?></span>
+				<div class="gd-business-hours" style="display:<?php echo $display; ?>">
+				<table class="form-table widefat fixed">
+					<thead>
+						<tr><th class="gd-bh-day"><?php _e( 'Day', 'geodirectory' ); ?></th><th class="gd-bh-hours"><?php _e( 'Opening Hours', 'geodirectory' ); ?></th><th class="gd-bh-act"></th></tr>
+					</thead>
+					<tbody>
+						<?php foreach ( $weekdays as $day_no => $day ) { ?>
+						<tr>
+							<td class="gd-bh-day"><?php echo $day; ?></td>
+							<td class="gd-bh-hours"><input type="text" name="business_hours_values[<?php $day_no; ?>]['open'][]"> - <input type="text" name="business_hours_values[<?php $day_no; ?>]['close'][]"> <a href="javascript:void(0);"><i class="fa fa-minus-circle"></i></a></td>
+							<td class="gd-bh-act"><a href="javascript:void(0);"><i class="fa fa-plus-circle"></i></a>
+							</td>
+						</tr>
+						<?php } ?>
+					</tbody>
+				</table>
+				</div>
+			</div>
+            <span class="geodir_message_note"><?php echo $description; ?></span>
+        </div>
+        <?php
+        $html = ob_get_clean();
+    }
+	
+	return $html;
+}
+add_filter( 'geodir_custom_field_input_business_hours', 'geodir_cfi_business_hours', 10, 2 );
