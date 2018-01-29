@@ -388,6 +388,9 @@ class GeoDir_Admin_Settings {
 								placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
 								<?php echo implode( ' ', $custom_attributes ); ?>
 								><?php echo esc_textarea( $option_value );  ?></textarea>
+							<?php if ( ! empty( $value['custom_desc'] ) ) { ?>
+							<span class="gd-custom-desc"><?php echo $value['custom_desc']; ?></span>
+							<?php } ?>
 						</td>
 					</tr><?php
 					break;

@@ -5604,6 +5604,22 @@ function geodir_default_custom_fields($post_type='gd_place',$package_id=''){
                                        'show_mapzoom' => 1, 'mapzoom_lable' => 'hidden',
                                        'show_latlng' => 1));
 
+	$fields[] = array('post_type' => $post_type,
+                      'data_type' => 'TINYINT',
+                      'field_type' => 'business_hours',
+                      'admin_title' => __('Business Hours', 'geodirectory'),
+                      'frontend_desc' => __('Select your business opening/operating hours.', 'geodirectory'),
+                      'frontend_title' => __('Business Hours', 'geodirectory'),
+                      'htmlvar_name' => 'business_hours',
+                      'default_value' => '',
+                      'is_default' => '1',
+                      'is_required' => '0',
+                      'is_active' => '1',
+                      'show_in'   =>  '[detail]',
+                      'show_on_pkg' => $package,
+                      'field_icon' => 'fa fa-clock-o',
+                      'clabels' => __('Business Hours', 'geodirectory'));
+
     $fields[] = array('post_type' => $post_type,
                       'data_type' => 'TEXT',
                       'field_type' => 'images',

@@ -84,7 +84,6 @@ class GeoDir_Autoloader {
             $path = $this->include_path . 'admin/settings/';
         }
 
-
         //echo '///'.$path.$file;
 
         if ( empty( $path ) || ! $this->load_file( $path . $file ) ) {

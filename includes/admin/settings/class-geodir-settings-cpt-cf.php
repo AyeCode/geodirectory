@@ -1213,6 +1213,13 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				$display_on_listing  = false;
 			}
 
+			// Hide the field from custom fields (i.e. address field from location less CPT)
+			if ( has_filter( "geodir_cfa_skip_item_output_{$field->field_type}" ) ) {
+				if ( apply_filters( "geodir_cfa_skip_item_output_{$field->field_type}", false, $field_id, $field, $cf ) === true ) {
+					return;
+				}
+			}
+			
 
 			// @todo do we need this?
 			$field_display = $field->field_type == 'address' && $field->htmlvar_name == 'post' ? 'style="display:none"' : '';
@@ -1220,12 +1227,14 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			// set a unique id for radio fields
 			$radio_id = ( isset( $field->htmlvar_name ) && $field->htmlvar_name ) ? $field->htmlvar_name : rand( 5, 500 );
 
+			// field icon
+			$icon = isset( $cf['icon'] ) ? $cf['icon'] : ( isset( $field->field_icon ) ? $field->field_icon : '' );
 
 			// Set the field icon
-			if ( isset( $cf['icon'] ) && strpos( $cf['icon'], 'fa fa-' ) !== false ) {
-				$field_icon = '<i class="' . $cf['icon'] . '" aria-hidden="true"></i>';
-			} elseif ( isset( $cf['icon'] ) && $cf['icon'] ) {
-				$field_icon = '<b style="background-image: url("' . $cf['icon'] . '")"></b>';
+			if ( strpos( $icon, 'fa fa-' ) !== false ) {
+				$field_icon = '<i class="' . $icon . '" aria-hidden="true"></i>';
+			} elseif ( $icon ) {
+				$field_icon = '<b style="background-image: url("' . $icon . '")"></b>';
 			} else {
 				$field_icon = '<i class="fa fa-cog" aria-hidden="true"></i>';
 			}
