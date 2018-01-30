@@ -369,7 +369,8 @@ class GeoDir_Frontend_Scripts {
 		self::enqueue_style( 'select2' );
 		self::enqueue_script( 'select2' );
 		self::enqueue_script( 'geodir-select2' );
-
+		
+		self::enqueue_script( 'geodir-jquery-ui-timepicker' );
 
 		self::enqueue_style( 'geodir-core' );
 		self::enqueue_style( 'font-awesome' );
