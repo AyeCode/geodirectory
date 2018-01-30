@@ -2022,12 +2022,12 @@ add_filter('geodir_custom_field_input_images','geodir_cfi_images',10,2);
  */
 function geodir_cfi_business_hours( $html, $cf ) {
     if ( empty( $html ) ) {
-        $value = geodir_get_cf_value( $cf );
+        $htmlvar_name = $cf['htmlvar_name'];
 		$name = $cf['name'];
 		$label = __( $cf['frontend_title'], 'geodirectory' );
 		$description = __( $cf['desc'], 'geodirectory' );
-		$value = geodir_get_cf_value( $cf );
-		$display = $value == '1' ? '' : 'none';
+		$active = geodir_get_cf_value( $cf );
+		$display = $active == '1' ? '' : 'none';
 		
 		$weekdays = geodir_get_weekdays();
 
@@ -2035,83 +2035,140 @@ function geodir_cfi_business_hours( $html, $cf ) {
 		// TODO move style into file
 		?>
 		<style>
-		.geodir_form_row .gd-business-hours-field {
+		.geodir_form_row .gd-bh-field {
 			float: left;
 			width: 70%;
 		}
-		.geodir_form_row .gd-business-hours table {
+		.gd-bh-items {
+			max-width: 420px;
+		}
+		.gd-bh-items table {
 			width: 100%;
 			border: none;
 			margin: 1em 0;
 		}
-		.geodir_form_row .gd-business-hours {
+		.gd-bh-items table th,
+		.gd-bh-items table td {
+			padding: 10px 5px;
+			vertical-align: top;
 		}
-		.geodir_form_row .gd-business-hours table td {
+		.gd-bh-items table td.gd-bh-time {
+			padding-top: 2px;
+			padding-bottom: 2px
+		}
+		.gd-bh-items table td {
 			border: none;
 			border-bottom: 1px dashed #eee;
 		}
-		.geodir_form_row .gd-business-hours table th {
-			padding: 10px;
+		.gd-bh-items table th {
 			border: none;
 			border-bottom: 2px solid #eee;
 		}
-		.geodir_form_row .gd-business-hours .gd-bh-day {
+		.gd-bh-items .gd-bh-time {
+			text-align: center;
+		}
+		.gd-bh-items .gd-bh-day {
 			text-align: left;
 			width: 90px;
 			padding-left: 10px;
 		}
-		.geodir_form_row .gd-business-hours .gd-bh-hours {
+		.gd-bh-items .gd-bh-act {
+			width: 25px;
 			text-align: center;
 		}
-		.geodir_form_row .gd-bh-hours input[type="text"] {
+		.gd-bh-item .gd-bh-time input[type="text"] {
 			width: 90px;
 			text-align: center;
 			display: inline-block;
 			padding: 3px 5px;
 		}
-		.geodir_form_row .gd-business-hours .gd-bh-act {
-			width: 25px;
-			text-align: center;
-			
+		.gd-bh-item .gd-bh-hours {
+			padding: 5px 0;
 		}
-		.geodir_form_row .gd-business-hours .fa {
+		.gd-bh-item .gd-bh-closed {
+			padding: 9px 0;
+		}
+		.gd-bh-item .fa {
 			font-size: 125%;
-			cursor: pointer
+			cursor: pointer;
+		}
+		.gd-bh-item a {
+			text-decoration: none;
 		}
 		</style>
 		<script type="text/javascript">
 		jQuery(function($) {
-			$('[name="business_hours"]').on("change", function(e) {
-				var $hours = $(this).closest('.geodir_form_row').find('.gd-business-hours');
-				if ($(this).val() == '1') {
-					$hours.slideDown(200);
-				} else {
-					$hours.slideUp(200);
-				}
+			$('.gd-bh-row').each(function(){
+				var $row = $(this);
+
+				$('[data-field="active"]', $row).on("change", function(e) {
+					if ($(this).val() == '1') {
+						$('.gd-bh-items', $row).slideDown(200);
+					} else {
+						$('.gd-bh-items', $row).slideUp(200);
+					}
+				});
 			});
+			
+			$(".gd-bh-add").on("click", function(e) {
+				var $item = $(this).closest('.gd-bh-item');
+				$('.gd-bh-closed', $item).remove();
+				var sample = $('.gd-bh-items .gd-bh-blank').html();
+				sample = sample.replace('data-field="open"', 'data-field="open" name="' + $('.gd-bh-time', $item).data('field') + '[open][]"');
+				sample = sample.replace('data-field="close"', 'data-field="close" name="' + $('.gd-bh-time', $item).data('field') + '[close][]"');
+				$('.gd-bh-time', $item).append(sample);
+				gdOnAddRemoveHours();
+				e.preventDefault();
+			});
+			function gdOnAddRemoveHours() {
+				$(".gd-bh-remove").on("click", function(e) {
+					var $item = $(this).closest('.gd-bh-time');
+					$(this).closest('.gd-bh-hours').remove();
+					console.log($('.gd-bh-hours', $item).length);
+					if ($('.gd-bh-hours', $item).length < 1) {
+						$item.html('<div class="gd-bh-closed">Closed</div>');// @todo add closed in js variable
+					}
+					e.preventDefault();
+				});
+				gdBHTimePicker();
+			}
+			if ($('.gd-bh-hours').length) {
+				gdOnAddRemoveHours();
+			}
+			function gdBHTimePicker() {
+				jQuery('.gd-bh-time [data-field="open"], .gd-bh-time [data-field="close"]').timepicker({
+					showPeriod: true,
+					showLeadingZero: true,
+					showPeriod: true,
+				});
+			}
 		});
 		</script>
-        <div id="<?php echo $name;?>_row" class="geodir_form_row clearfix gd-fieldset-details">
+        <div id="<?php echo $name;?>_row" class="geodir_form_row clearfix gd-fieldset-details gd-bh-row">
             <label><?php echo $label; ?></label>
-			<div class="gd-business-hours-field">
-				<span class="gd-radios"><input name="business_hours" id="business_hours_1" value="1" class="gd-checkbox" field_type="radio" type="radio" <?php checked( $value, '1' ); ?>><?php _e( 'Yes', 'geodirectory' ); ?></span> 
-				<span class="gd-radios"><input name="business_hours" id="business_hours_0" value="0" class="gd-checkbox" field_type="radio" type="radio" <?php checked( $value, '0' ); ?>><?php _e( 'No', 'geodirectory' ); ?></span>
-				<div class="gd-business-hours" style="display:<?php echo $display; ?>">
-				<table class="form-table widefat fixed">
-					<thead>
-						<tr><th class="gd-bh-day"><?php _e( 'Day', 'geodirectory' ); ?></th><th class="gd-bh-hours"><?php _e( 'Opening Hours', 'geodirectory' ); ?></th><th class="gd-bh-act"></th></tr>
-					</thead>
-					<tbody>
-						<?php foreach ( $weekdays as $day_no => $day ) { ?>
-						<tr>
-							<td class="gd-bh-day"><?php echo $day; ?></td>
-							<td class="gd-bh-hours"><input type="text" name="business_hours_values[<?php $day_no; ?>]['open'][]"> - <input type="text" name="business_hours_values[<?php $day_no; ?>]['close'][]"> <a href="javascript:void(0);"><i class="fa fa-minus-circle"></i></a></td>
-							<td class="gd-bh-act"><a href="javascript:void(0);"><i class="fa fa-plus-circle"></i></a>
-							</td>
-						</tr>
-						<?php } ?>
-					</tbody>
-				</table>
+			<div class="gd-bh-field">
+				<span class="gd-radios"><input name="<?php echo $htmlvar_name; ?>['active']" id="<?php echo $htmlvar_name; ?>_active_1" value="1" class="gd-checkbox" field_type="radio" type="radio" <?php checked( $active == '1', true ); ?> data-field="active"><?php _e( 'Yes', 'geodirectory' ); ?></span> 
+				<span class="gd-radios"><input name="<?php echo $htmlvar_name; ?>['active']" id="<?php echo $htmlvar_name; ?>_active_0" value="0" class="gd-checkbox" field_type="radio" type="radio" <?php checked( $active != '1', true ); ?> data-field="active"><?php _e( 'No', 'geodirectory' ); ?></span>
+				<div class="gd-bh-items" style="display:<?php echo $display; ?>">
+					<table class="form-table widefat fixed">
+						<thead>
+							<tr><th class="gd-bh-day"><?php _e( 'Day', 'geodirectory' ); ?></th><th class="gd-bh-time"><?php _e( 'Opening Hours', 'geodirectory' ); ?></th><th class="gd-bh-act"></th></tr>
+						</thead>
+						<tbody>
+							<tr style="display:none!important"><td colspan="3" class="gd-bh-blank"><div class="gd-bh-hours"><input type="text" data-field="open"> - <input type="text" data-field="close"> <a href="javascript:void(0);" class="gd-bh-remove"><i class="fa fa-minus-circle"></i></a></div></td></tr>
+							<?php foreach ( $weekdays as $day_no => $day ) { ?>
+							<tr class="gd-bh-item">
+								<td class="gd-bh-day"><?php echo $day; ?></td>
+								<td class="gd-bh-time" data-day="<?php echo $day_no; ?>" data-field="<?php echo $htmlvar_name; ?>['hours'][<?php echo $day_no; ?>]">
+									<div class="gd-bh-hours">
+										<input type="text" name="<?php echo $htmlvar_name; ?>['hours'][<?php echo $day_no; ?>]['open'][]" data-field="open"> - <input type="text" name="<?php echo $htmlvar_name; ?>['hours'][<?php echo $day_no; ?>]['close'][]" data-field="close"> <a href="javascript:void(0);" class="gd-bh-remove"><i class="fa fa-minus-circle"></i></a>
+									</div>
+								</td>
+								<td class="gd-bh-act"><a href="javascript:void(0);" class="gd-bh-add"><i class="fa fa-plus-circle"></i></a></td>
+							</tr>
+							<?php } ?>
+						</tbody>
+					</table>
 				</div>
 			</div>
             <span class="geodir_message_note"><?php echo $description; ?></span>

@@ -46,6 +46,8 @@ class GeoDir_Post_Data {
 
 		// set up $gd_post;
 		add_action( 'wp', array( __CLASS__, 'init_gd_post' ), 5 );
+		
+		add_filter( 'geodir_custom_field_value_business_hours', array( __CLASS__, 'parse_business_hours' ), 10, 5 );
 
 		if(!is_admin()){
 			add_filter( 'pre_get_posts', array( __CLASS__, 'show_public_preview' ) );
@@ -117,7 +119,7 @@ class GeoDir_Post_Data {
 			foreach ( $custom_fields as $cf ) {
 
 				if ( isset( $gd_post[ $cf->htmlvar_name ] ) ) {
-					$postarr[ $cf->htmlvar_name ] = $gd_post[ $cf->htmlvar_name ];
+					$postarr[ $cf->htmlvar_name ] = apply_filters("geodir_custom_field_value_{$cf->field_type}", $gd_post[ $cf->htmlvar_name ], $cf, $post_id, $post, $update);
 				}
 
 			}
@@ -235,7 +237,7 @@ class GeoDir_Post_Data {
 
 			//$postarr['featured_image'] = $post['featured_image'];// @todo we need to find a way to set default cat on add listing
 
-
+			geodir_error_log( $postarr, 'postarr', __FILE__, __LINE__ );
 
 			$format = array_fill( 0, count( $postarr ), '%s' );
 
@@ -1118,6 +1120,18 @@ class GeoDir_Post_Data {
 
 
 		return $posts;
+	}
+	
+	public static function parse_business_hours( $value, $cf, $post_id, $post, $update = false ) {
+		$hours = $value;
+		if ( is_array( $value ) ) {
+			if ( ( isset( $value['active'] ) && empty( $value['active'] ) || empty( $value['hours'] ) ) {
+				$hours = '';
+			} else {
+				$hours = json_encode( $value );
+			}
+		}
+		return $hours;
 	}
 
 }

@@ -478,7 +478,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
                 'name'        => __( 'Business Hours', 'geodirectory' ),
                 'description' => __( 'Adds a business hours input. This can display when the listing is open/closed/', 'geodirectory' ),
                 'defaults'    => array(
-	                'data_type'          => 'TINYINT',//@todo i think we should save this as TEXT and save it as the schema values http://schema.org/openingHours
+	                'data_type'          => 'TEXT',
 	                'admin_title'        => 'Business Hours',
 	                'frontend_title'     => 'Business Hours',
 	                'frontend_desc'      => 'Select your business opening/operating hours.',
