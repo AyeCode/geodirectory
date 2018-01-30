@@ -210,21 +210,6 @@ function geodir_ajax_handler() {
         include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/maps/get_markers.php' );
     }
 
-    if (isset($_REQUEST['geodir_ajax']) && $_REQUEST['geodir_ajax'] == 'favorite') {
-        if (is_user_logged_in()) {
-            switch ($_REQUEST['ajax_action']):
-                case "add" :
-                    geodir_add_to_favorite((int)$_REQUEST['pid']);
-                    break;
-                case "remove" :
-                    geodir_remove_from_favorite((int)$_REQUEST['pid']);
-                    break;
-            endswitch;
-        } else {
-            wp_redirect(geodir_login_url());
-            exit();
-        }
-    }
 
   
     if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'geodir_get_term_list') {

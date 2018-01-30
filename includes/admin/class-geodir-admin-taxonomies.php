@@ -61,6 +61,10 @@ class GeoDir_Admin_Taxonomies {
             add_filter( 'manage_edit-' . $this->taxonomy . '_columns', array( $this, 'get_columns' ) );
             add_filter( 'manage_edit-' . $this->taxonomy . '_sortable_columns', array( $this, 'get_sortable_columns' ), 10, 1 );
             add_filter( 'manage_' . $this->taxonomy . '_custom_column', array( $this, 'get_column' ), 10, 3 );
+
+            // update term icons on cat update/create
+            add_action( 'created_term', array( $this, 'update_term_icons'), 10, 3 );
+            add_action( 'edited_term', array( $this, 'update_term_icons'), 10, 3 );
         }
     }
 
@@ -589,6 +593,22 @@ class GeoDir_Admin_Taxonomies {
         }
 
         return apply_filters( 'geodir_get_cat_icon', $cat_icon, $term_id, $full_path, $default );
+    }
+
+
+    /**
+     * Fires after a new term is created or term updated.
+     *
+     * @since 2.0.0
+     *
+     * @param int    $term_id  Term ID.
+     * @param int    $tt_id    Term taxonomy ID.
+     * @param string $taxonomy Taxonomy slug.
+     */
+    public static function update_term_icons( $term_id, $tt_id, $taxonomy ) {
+        if ( geodir_is_gd_taxonomy( $taxonomy ) ) {
+            geodir_update_option( 'gd_term_icons', '' ); // Rebuild term icons.
+        }
     }
 
 }

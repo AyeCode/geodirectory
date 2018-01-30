@@ -32,7 +32,6 @@ add_action('init', 'geodir_add_post_filters');
 
 //add_action('init', 'geodir_init_defaults');
 
-//add_action('init', 'geodir_allow_post_type_frontend');
 
 //add_action('init', 'geodir_register_taxonomies', 1);
 
@@ -134,8 +133,6 @@ add_filter('post_type_archive_link', 'geodir_get_posttype_link', 10, 2);
 /* POST AND LOOP ACTIONS */
 ////////////////////////
 if (!is_admin()) {
-    add_action('pre_get_posts', 'geodir_exclude_page', 100); /// Will help to exclude virtual page from everywhere
-    add_filter('wp_list_pages_excludes', 'exclude_from_wp_list_pages', 100);
     /** Exclude Virtual Pages From Pages List **/
     add_action('pre_get_posts', 'set_listing_request', 0);
     add_action('pre_get_posts', 'geodir_listing_loop_filter', 1);
@@ -147,9 +144,7 @@ if (!is_admin()) {
 
 //add_action('set_object_terms', 'geodir_set_post_terms', 10, 4);
 
-add_action('transition_post_status', 'geodir_update_poststatus', 10, 3);
 
-add_action('before_delete_post', 'geodir_delete_listing_info', 10, 1);
 
 
 ////////////////////////
@@ -1638,50 +1633,6 @@ function geodir_custom_page_title($title = '', $sep = '')
 }
 
 
-//add_action('init', 'geodir_set_post_attachment'); // we need to make a tool somewhere to run this function maybe via ajax or something in batch form, it is crashing servers with lots of listings
-
-/**
- * set attachments for all geodir posts.
- *
- * @since 1.0.0
- * @package GeoDirectory
- */
-function geodir_set_post_attachment()
-{
-
-    if (!geodir_get_option('geodir_set_post_attachments')) {
-
-        require_once(ABSPATH . 'wp-admin/includes/image.php');
-        require_once(ABSPATH . 'wp-admin/includes/file.php');
-
-        $all_postypes = geodir_get_posttypes();
-
-        foreach($all_postypes as $post_type){
-            $args = array(
-                'posts_per_page' => -1,
-                'post_type' => $post_type,
-                'post_status' => 'publish');
-
-            $posts_array = get_posts($args);
-
-            if (!empty($posts_array)) {
-
-                foreach ($posts_array as $post) {
-
-                    geodir_set_wp_featured_image($post->ID);
-
-                }
-
-            }
-        }
-
-
-        geodir_update_option('geodir_set_post_attachments', '1');
-
-    }
-
-}
-
 
 /*   --------- geodir remove url seperator ------- */
 
@@ -1898,7 +1849,6 @@ function geodir_remove_template_redirect_actions()
 
 /* ---------- temp function to delete media post */
 
-add_action('delete_attachment', 'geodirectory_before_featured_image_delete');
 
 /**
  * temp function to delete media post.

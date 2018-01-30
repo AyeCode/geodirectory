@@ -478,15 +478,7 @@ function geodir_action_listings_content()
 
 
 
-/**
- * Outputs the add listing page mandatory message.
- *
- * @since 1.0.0
- * @package GeoDirectory
- */
-function geodir_action_add_listing_page_mandatory( $listing_type = '', $post = array(), $package_info = array() ) {
-    ?><p class="geodir-note "><span class="geodir-required">*</span>&nbsp;<?php echo __('Indicates mandatory fields', 'geodirectory'); ?></p><?php
-}
+
 
 
 

@@ -59,6 +59,11 @@ class GeoDir_Post_Data {
 		//add_action( 'set_object_terms', array( __CLASS__, 'set_object_terms' ),10,6);
 
 
+		// add mandatory not to add listing page
+		add_action( 'geodir_add_listing_form_start',  array( __CLASS__, 'add_listing_mandatory_note'), -10, 3 );
+
+
+
 	}
 
 	/**
@@ -401,9 +406,6 @@ class GeoDir_Post_Data {
 	 * @return array
 	 */
 	public static function wp_insert_post_data( $data, $postarr ) {
-
-		//print_r($data);echo '###';print_r($postarr);exit;
-
 		// check its a GD CPT first
 		if (
 			( isset( $data['post_type'] ) && in_array( $data['post_type'], geodir_get_posttypes() ) )
@@ -1062,6 +1064,16 @@ class GeoDir_Post_Data {
 		return true;
 	}
 
+	/**
+	 * Outputs the add listing page mandatory message.
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 */
+	public static function add_listing_mandatory_note( $listing_type = '', $post = array(), $package_info = array() ) {
+		?><p class="geodir-note "><span class="geodir-required">*</span>&nbsp;<?php echo __('Indicates mandatory fields', 'geodirectory'); ?></p><?php
+	}
+
 
 ######################## functions to show preview to logged out user ###########################
 
@@ -1125,7 +1137,7 @@ class GeoDir_Post_Data {
 	public static function parse_business_hours( $value, $cf, $post_id, $post, $update = false ) {
 		$hours = $value;
 		if ( is_array( $value ) ) {
-			if ( ( isset( $value['active'] ) && empty( $value['active'] ) || empty( $value['hours'] ) ) {
+			if ( ( isset( $value['active'] ) && empty( $value['active'] )) || empty( $value['hours'] ) ) {
 				$hours = '';
 			} else {
 				$hours = json_encode( $value );

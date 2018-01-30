@@ -40,7 +40,6 @@ function geodir_get_user_favourites( $user_id = '' ) {
 	return GeoDir_User::get_user_favs( $user_id );
 }
 
-
 /**
  * Get user's post listing count.
  *
@@ -75,7 +74,6 @@ function geodir_user_post_listing_count($user_id = null)
 	
 	return $user_listing;
 }
-
 
 /**
  * Generate a unique username.
