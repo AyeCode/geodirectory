@@ -241,10 +241,10 @@ jQuery(document).ready(function($) {
     });
 
     jQuery('.geodir-delete').click(function() {
-        var message = geodir_all_js_msg.my_place_listing_del;
+        var message = geodir_params.my_place_listing_del;
         
         if (jQuery(this).closest('.geodir-gridview').hasClass('gdp-franchise-m') || jQuery(this).closest('.geodir-listview').hasClass('gdp-franchise-m')) {
-            message = geodir_all_js_msg.my_main_listing_del;
+            message = geodir_params.my_main_listing_del;
         }
         
         if (confirm(message)) {
@@ -500,8 +500,8 @@ jQuery(document).ready(function() {
         jQuery('#commentform .gd_rating').hide();
         jQuery('#commentform .br-wrapper.br-theme-fontawesome-stars').hide();
         jQuery('#commentform #geodir_overallrating').val('0');
-        jQuery('#respond .form-submit input#submit').val(geodir_all_js_msg.gd_cmt_btn_post_reply);
-        jQuery('#respond .comment-form-comment label').html(geodir_all_js_msg.gd_cmt_btn_reply_text);
+        jQuery('#respond .form-submit input#submit').val(geodir_params.gd_cmt_btn_post_reply);
+        jQuery('#respond .comment-form-comment label').html(geodir_params.gd_cmt_btn_reply_text);
     });
     
     jQuery('.gd-cancel-replaylink a').bind('click', function() {
@@ -509,8 +509,8 @@ jQuery(document).ready(function() {
         jQuery('#commentform .gd_rating').show();
         jQuery('#commentform .br-wrapper.br-theme-fontawesome-stars').show();
         jQuery('#commentform #geodir_overallrating').val('0');
-        jQuery('#respond .form-submit input#submit').val(geodir_all_js_msg.gd_cmt_btn_post_review);
-        jQuery('#respond .comment-form-comment label').html(geodir_all_js_msg.gd_cmt_btn_review_text);
+        jQuery('#respond .form-submit input#submit').val(geodir_params.gd_cmt_btn_post_review);
+        jQuery('#respond .comment-form-comment label').html(geodir_params.gd_cmt_btn_review_text);
     });
     
     jQuery('#commentform .gd_rating, #commentform .gd-fa-rating').each(function() {
@@ -520,16 +520,16 @@ jQuery(document).ready(function() {
         if (parseInt($frm_obj.find('#comment_parent').val()) > 0) {
             jQuery('#commentform #err_no_rating').remove();
             jQuery('#commentform .gd_rating').hide();
-            jQuery('#respond .form-submit input#submit').val(geodir_all_js_msg.gd_cmt_btn_post_reply);
-            jQuery('#respond .comment-form-comment label').html(geodir_all_js_msg.gd_cmt_btn_reply_text);
+            jQuery('#respond .form-submit input#submit').val(geodir_params.gd_cmt_btn_post_reply);
+            jQuery('#respond .comment-form-comment label').html(geodir_params.gd_cmt_btn_reply_text);
         }
 
-        if (!geodir_all_js_msg.multirating) {
+        if (!geodir_params.multirating) {
             $frm_obj.find('input[name="submit"]').click(function(e) {
                 $frm_obj.find('#err_no_rating').remove();
                 
                 // skip rating stars validation if rating stars disabled
-                if (typeof geodir_all_js_msg.gd_cmt_disable_rating != 'undefined' && geodir_all_js_msg.gd_cmt_disable_rating) {
+                if (typeof geodir_params.gd_cmt_disable_rating != 'undefined' && geodir_params.gd_cmt_disable_rating) {
                     return true;
                 }
                 //
@@ -549,7 +549,7 @@ jQuery(document).ready(function() {
                     });
                     
                     if (invalid > 0) {
-                        jQuery(rat_obj).after('<div id="err_no_rating" class="err-no-rating">' + geodir_all_js_msg.gd_cmt_err_no_rating + '</div>');
+                        jQuery(rat_obj).after('<div id="err_no_rating" class="err-no-rating">' + geodir_params.gd_cmt_err_no_rating + '</div>');
                         return false;
                     }
                     return true;
@@ -576,7 +576,7 @@ function geodir_get_post_term(el) {
     var parent_only = parseInt(jQuery(el).data('parent')) > 0 ? 1 : 0;
     jQuery(el).parent().parent().find('.geodir-popular-cat-list').html('<i class="fa fa-cog fa-spin"></i>');
     jQuery(el).parent().parent().parent().find('.geodir-cat-list-more').hide();
-    jQuery.post(geodir_all_js_msg.geodir_admin_ajax_url + '?action=geodir_ajax_action', {
+    jQuery.post(geodir_params.ajax_url + '?action=geodir_ajax_action', {
         ajax_action: "geodir_get_term_list",
         term: term,
         limit: limit,
@@ -634,7 +634,7 @@ function geodir_load_search_form(stype, el) {
     var $adv_show = jQuery(el).closest('.geodir_advance_search_widget').attr('data-show-adv');
 
     jQuery.ajax({
-        url: geodir_all_js_msg.geodir_admin_ajax_url,
+        url: geodir_params.ajax_url,
         type: 'POST',
         dataType: 'html',
         data: {
@@ -744,7 +744,7 @@ function gd_fav_save(post_id) {
         },
         timeout: 20000,
         error: function() {
-            alert(geodir_all_js_msg.loading_listing_error_favorite);
+            alert(geodir_params.loading_listing_error_favorite);
         },
         success: function(data) {
 
@@ -766,7 +766,7 @@ function gd_fav_save(post_id) {
 
                 }
             }else{
-                alert(geodir_all_js_msg.loading_listing_error_favorite);
+                alert(geodir_params.loading_listing_error_favorite);
             }
             //jQuery('.favorite_property_' + post_id).html(html);
         }

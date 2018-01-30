@@ -1340,7 +1340,8 @@ function geodir_cfi_taxonomy($html,$cf){
                         if ($cat_display == 'multiselect')
                             $multiple = 'multiple="multiple"';
 
-                        echo '<select id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="post_category[' . $taxonomy . '][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . __('Select Category', 'geodirectory') . '">';
+                        //echo '<select id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="post_category[' . $taxonomy . '][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . __('Select Category', 'geodirectory') . '">';
+                        echo '<select id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="tax_input['.$taxonomy.'][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . __('Select Category', 'geodirectory') . '">';
 
 
                         if ($cat_display == 'select')
@@ -1510,7 +1511,8 @@ function geodir_cfi_categories($html,$cf){
                         if ($cat_display == 'multiselect')
                             $multiple = 'multiple="multiple"';
 
-                        echo '<select id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="post_category[]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . __('Select Category', 'geodirectory') . '">';
+                       // echo '<select id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="post_category[]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . __('Select Category', 'geodirectory') . '">';
+                        echo '<select id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="tax_input['.$taxonomy.'][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . __('Select Category', 'geodirectory') . '">';
 
 
                         if ($cat_display == 'select')
@@ -1791,7 +1793,7 @@ function geodir_cfi_tags($html,$cf){
             </label>
             <input type="hidden" name="gd_field_<?php echo $cf['name']; ?>" value="1"/>
             <div class="geodir_multiselect_list">
-                <select field_type="<?php echo $cf['type']; ?>" name="<?php echo $cf['name']; ?>[]" id="<?php echo $cf['name']; ?>"
+                <select field_type="<?php echo $cf['type']; ?>" name="tax_input[<?php echo $post_type."_tags"; ?>][]" id="<?php echo $cf['name']; ?>"
                         multiple="multiple" class="geodir_textfield textfield_x geodir-select-tags"
                         data-placeholder="<?php _e('Enter tags separated by a comma ,', 'geodirectory'); ?>"
                         >

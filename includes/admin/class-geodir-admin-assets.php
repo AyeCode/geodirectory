@@ -172,15 +172,7 @@ class GeoDir_Admin_Assets {
 			wp_enqueue_script( 'geodir-custom-fields-script' );
 			wp_enqueue_script( 'geodir-jRating-js' );
 
-
-			// localised constants
-			$ajax_cons_data = array(
-				'txt_choose_image' => __( 'Choose an image', 'geodirectory' ),
-				'txt_use_image' => __( 'Use image', 'geodirectory' ),
-				'img_spacer' => admin_url( 'images/media-button-image.gif' )
-			);
-			wp_localize_script('geodir-admin-script', 'geodir_ajax', $ajax_cons_data);
-
+			
 
 			// place js config array for plupload
 			$plupload_init = array(
@@ -223,8 +215,9 @@ class GeoDir_Admin_Assets {
 
 			wp_localize_script('geodir-plupload', 'geodir_plupload_params', $gd_plupload_init);
 
-			// geodir_all_js_msg
-			wp_localize_script('geodir-admin-script', 'geodir_all_js_msg', geodir_localize_all_js_msg());
+			// geodir_params
+			wp_localize_script('geodir-admin-script', 'geodir_params', geodir_params());
+
 
 		}
 

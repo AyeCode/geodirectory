@@ -807,19 +807,10 @@ class GeoDir_Admin_Settings {
 
                             <?php
 
-                            $oAuthURL = "https://accounts.google.com/o/oauth2/auth?";
-                            $scope = "scope=https://www.googleapis.com/auth/analytics.readonly";
-                            $state = "&state=123";//any string
-                            $redirect_uri = "&redirect_uri=" . admin_url('admin-ajax.php') . "?action=geodir_ga_callback";
-                            $response_type = "&response_type=code";
-                            $client_id = "&client_id=".geodir_get_option('geodir_ga_client_id');
-                            $access_type = "&access_type=offline";
-                            $approval_prompt = "&approval_prompt=force";
-
-                            $auth_url = $oAuthURL . $scope . $state . $redirect_uri . $response_type . $client_id . $access_type . $approval_prompt;
+                            global $gd_ga_errors;
 
 
-                            if (geodir_get_option('geodir_ga_auth_token')) {
+                            if (geodir_get_option('ga_auth_token')) {
                                 ?>
                                 <span class="button-primary"
                                       onclick="gd_GA_Deauthorize('<?php echo wp_create_nonce('gd_ga_deauthorize');?>');"><?php _e('Deauthorize', 'geodirectory'); ?></span>
@@ -832,9 +823,11 @@ class GeoDir_Admin_Settings {
                             } else {
                                 ?>
                                 <span class="button-primary"
-                                      onclick="window.open('<?php echo  geodir_ga_activation_url();?>', 'activate','width=700, height=600, menubar=0, status=0, location=0, toolbar=0')"><?php _e('Authorize', 'geodirectory');?></span>
+                                      onclick="window.open('<?php echo  GeoDir_Settings_Analytics::activation_url();?>', 'activate','width=700, height=600, menubar=0, status=0, location=0, toolbar=0')"><?php _e('Authorize', 'geodirectory');?></span>
                             <?php
                             }
+
+                             print_r($gd_ga_errors);
                             ?>
                         </td>
                     </tr>

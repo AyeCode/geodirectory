@@ -211,7 +211,7 @@ class GeoDir_Admin_Install {
 	 * Insert the default field for the CPTs
 	 */
 	public static function insert_default_fields(){
-		$fields = geodir_default_custom_fields('gd_place');
+		$fields = GeoDir_Admin_Dummy_Data::default_custom_fields('gd_place');
 
 		/**
 		 * Filter the array of default custom fields DB table data.
@@ -515,8 +515,8 @@ class GeoDir_Admin_Install {
 
 		// Table for storing place attribute - these are user defined
 		$tables .= " CREATE TABLE " . $plugin_prefix . "gd_place_detail (
-						".implode (",",geodir_db_cpt_default_columns(false)).",
-						".implode (",",geodir_db_cpt_default_keys(false))." 
+						".implode (",",self::db_cpt_default_columns(false)).",
+						".implode (",",self::db_cpt_default_keys(false))." 
 						) $collate; ";
 
 		// Table for storing place images - these are user defined
@@ -845,6 +845,85 @@ class GeoDir_Admin_Install {
 				}
 			}
 		}
+	}
+
+
+	/**
+	 * Get the Custom Post Type database default fields.
+	 *
+	 * @param bool $locationless Is the CPT locationless?
+	 * @since 2.0.0
+	 *
+	 * @return array The array of default fields.
+	 */
+	public static function db_cpt_default_columns($locationless = false){
+
+		$columns = array();
+
+		// Standard fields
+		$columns['post_id'] = "post_id int(11) NOT NULL";
+		$columns['post_title'] = "post_title text NULL DEFAULT NULL";
+		$columns['post_status'] = "post_status varchar(20) NULL DEFAULT NULL";
+		$columns['post_tags'] = "post_tags text NULL DEFAULT NULL";
+		$columns['post_category'] = "post_category varchar(254) NULL DEFAULT NULL";
+		$columns['default_category'] = "default_category INT NULL DEFAULT NULL";
+		$columns['link_business'] = "link_business varchar(10) NULL DEFAULT NULL";
+		$columns['is_featured'] = "is_featured tinyint(1) NOT NULL DEFAULT '0'";
+		$columns['featured_image'] = "featured_image varchar( 254 ) NULL DEFAULT NULL";
+		$columns['submit_ip'] = "submit_ip varchar(20) NULL DEFAULT NULL";
+		$columns['overall_rating'] = "overall_rating float(11) DEFAULT '0'";
+		$columns['rating_count'] = "rating_count int(11) DEFAULT '0'";
+
+		// Location fields
+		if(!$locationless){
+			$columns['marker_json'] = "marker_json text NULL DEFAULT NULL"; //@todo do we even still need this?
+			$columns['location_id'] = "location_id int(11) NOT NULL"; //@todo do we even still need this?
+			$columns['locations'] = "locations varchar( 254 ) NULL DEFAULT NULL"; //@todo do we even still need this?
+			$columns['street'] = "street VARCHAR( 254 ) NULL";
+			$columns['city'] = "city VARCHAR( 50 ) NULL";
+			$columns['region'] = "region VARCHAR( 50 ) NULL";
+			$columns['country'] = "country VARCHAR( 50 ) NULL";
+			$columns['zip'] = "zip VARCHAR( 20 ) NULL";
+			$columns['latitude'] = "latitude VARCHAR( 20 ) NULL";
+			$columns['longitude'] = "longitude VARCHAR( 20 ) NULL";
+			$columns['mapview'] = "mapview VARCHAR( 15 ) NULL";
+			$columns['mapzoom'] = "mapzoom VARCHAR( 3 ) NULL";
+		}
+
+
+		return apply_filters('geodir_db_cpt_default_columns',$columns,$locationless);
+	}
+
+	/**
+	 * Get the Custom Post Type database default keys.
+	 *
+	 * @param bool $locationless Is the CPT locationless?
+	 * @since 2.0.0
+	 *
+	 * @return array The array of default fields.
+	 */
+	public static function db_cpt_default_keys($locationless = false){
+
+		/*
+		 * Indexes have a maximum size of 767 bytes. Historically, we haven't need to be concerned about that.
+		 * As of 4.2, however, we moved to utf8mb4, which uses 4 bytes per character. This means that an index which
+		 * used to have room for floor(767/3) = 255 characters, now only has room for floor(767/4) = 191 characters.
+		 */
+		$max_index_length = 191;
+
+		$keys = array();
+
+		// Standard keys
+		$keys['post_id'] = "PRIMARY KEY  (post_id)";
+		$keys['is_featured'] = "KEY is_featured (is_featured)";
+
+		// Location keys
+		if(!$locationless){
+			$keys['locations'] = "KEY locations (locations($max_index_length))";
+		}
+
+
+		return apply_filters('geodir_db_cpt_default_columns',$keys,$locationless);
 	}
 }
 

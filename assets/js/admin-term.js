@@ -24,7 +24,7 @@ jQuery(function($) {
                     jQuery('[name="' + field + '[id]"]').val('');
                     jQuery('[name="' + field + '[src]"]').val('');
                 }
-                jQuery('.gd-upload-display', $this).find('img').attr('src', geodir_ajax.img_spacer);
+                jQuery('.gd-upload-display', $this).find('img').attr('src', geodir_params.img_spacer);
                 jQuery('.gd_remove_image_button', $this).hide();
             });
             jQuery('#addtag .gd-term-form-field checkbox').prop('checked', false);

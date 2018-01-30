@@ -469,6 +469,37 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 
 			$custom_fields = array();
 
+
+			// Business Hours
+			$custom_fields['business_hours'] = array(
+                'field_type'  => 'business_hours',
+                'class'       => 'gd-business-hours',
+                'icon'        => 'fa fa-clock-o',
+                'name'        => __( 'Business Hours', 'geodirectory' ),
+                'description' => __( 'Adds a business hours input. This can display when the listing is open/closed/', 'geodirectory' ),
+                'defaults'    => array(
+	                'data_type'          => 'TINYINT',//@todo i think we should save this as TEXT and save it as the schema values http://schema.org/openingHours
+	                'admin_title'        => 'Business Hours',
+	                'frontend_title'     => 'Business Hours',
+	                'frontend_desc'      => 'Select your business opening/operating hours.',
+	                'htmlvar_name'       => 'business_hours',
+	                'is_active'          => true,
+	                'for_admin_use'      => false,
+	                'default_value'      => '',
+	                'show_in'            => '[detail]',
+	                'is_required'        => false,
+	                'option_values'      => '',
+	                'validation_pattern' => '',
+	                'validation_msg'     => '',
+	                'required_msg'       => '',
+	                'field_icon'         => 'fa fa-clock-o',
+	                'css_class'          => '',
+	                'cat_sort'           => false,
+	                'cat_filter'         => false
+                )
+
+			);
+
 			// Email
 			$custom_fields['contact_email'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'email',
@@ -1594,7 +1625,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 */
 		public static function get_default_field_htmlvars(){
 			$htmlvars = array();
-			foreach(geodir_default_custom_fields() as $custom_field){
+			$custom_fields = GeoDir_Admin_Dummy_Data::default_custom_fields();
+			foreach($custom_fields as $custom_field){
 				$htmlvars[] = $custom_field['htmlvar_name'];
 			}
 			return $htmlvars;

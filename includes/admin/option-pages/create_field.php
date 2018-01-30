@@ -103,7 +103,7 @@ if ($field_id != '' && $field_action == 'submit' && isset($_REQUEST['_wpnonce'])
         }
     }
 
-    $return = geodir_custom_sort_field_save($_REQUEST);
+    $return = GeoDir_Settings_Cpt_Sorting::save_custom_field($_REQUEST);
 
     if (is_int($return)) {
         $lastid = $return;

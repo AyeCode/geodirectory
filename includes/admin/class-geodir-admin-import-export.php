@@ -32,6 +32,11 @@ class GeoDir_Admin_Import_Export {
 			return new WP_Error( 'gd-no-auth', __( "You don't have permission to do this.", "geodirectory" ) );
 		}
 
+
+		// add filter for dates
+		add_filter('geodir_get_posts_count', array( __CLASS__ , 'filter_where_query' ), 10, 2);
+		add_filter('geodir_get_export_posts', array( __CLASS__ , 'filter_where_query' ), 10, 2);
+
 		// set the task
 		//$task = isset( $_POST['task'] ) ? esc_attr( $_POST['task'] ) : '';
 		$task = isset( $_REQUEST['task'] ) ? esc_attr( $_REQUEST['task'] ) : '';
@@ -53,7 +58,7 @@ class GeoDir_Admin_Import_Export {
 		}
 
 		// create the cache directory if it does not already exist.
-		$csv_file_dir = geodir_path_import_export( false );
+		$csv_file_dir = self::import_export_cache_path( false );
 		if ( ! $wp_filesystem->is_dir( $csv_file_dir ) ) {
 			if ( ! $wp_filesystem->mkdir( $csv_file_dir, FS_CHMOD_DIR ) ) {
 				return new WP_Error( 'gd-no-filesystem', __( "ERROR: Could not create cache directory. This is usually due to inconsistent file permissions.", "geodirectory" ) );
@@ -191,9 +196,11 @@ class GeoDir_Admin_Import_Export {
 		$limit     = isset( $_POST['limit'] ) && $_POST['limit'] ? (int) $_POST['limit'] : 1;
 		$processed = isset( $_POST['processed'] ) ? (int) $_POST['processed'] : 0;
 
+		$processed ++; // add 1 to account for the csv header row
+
 		$csv_row = $processed;
 
-		$processed ++;
+
 		$rows = self::get_csv_rows( $processed, $limit );
 
 		if ( ! empty( $rows ) ) {
@@ -223,7 +230,8 @@ class GeoDir_Admin_Import_Export {
 					$images = $images + $post_info['_post_images_to_upload'];
 				}
 
-				if ( $post_info ) {
+
+				if ( is_array($post_info) ) {
 
 					// Update
 					if ( isset( $post_info['ID'] ) && $post_info['ID'] ) {
@@ -249,7 +257,7 @@ class GeoDir_Admin_Import_Export {
 
 				} else {
 					$invalid ++;
-					$errors[$csv_row] = array('title'=>esc_attr($temp_title),'error'=> esc_attr($post_info) );
+					$errors[$csv_row] = sprintf( esc_attr__('Row %d Error: %s', 'geodirectory'), $csv_row, esc_attr($post_info) );
 				}
 
 				//$errors[$csv_row] = sprintf( esc_attr__('Row %d Error: %s', 'geodirectory'), $csv_row, esc_attr("invalid title") );
@@ -351,26 +359,37 @@ class GeoDir_Admin_Import_Export {
 	 */
 	public static function validate_post( $post_info ) {
 
+		// validate post_type
+		if(isset($post_info['post_type']) && $post_info['post_type']){
+			$post_type = esc_attr($post_info['post_type']);
+		}else{
+			return esc_attr__('Post type missing','geodirectory');
+		}
+
+
+		// validate title
 		if ( isset( $post_info['post_title'] ) && empty($post_info['post_title']) ) {
-			$post_info = esc_attr__('Title missing','geodirectory');
+			return  esc_attr__('Title missing','geodirectory');
 		}
 
 		// change post_category to an array()
 		if ( isset( $post_info['post_category'] ) ) {
 			if ( empty( $post_info['post_category'] ) ) {
-				$post_info['post_category'] = array();
+				$post_info['tax_input'][$post_type.'category'] = array();
 			} else {
-				$post_info['post_category'] = array_map( 'trim', explode( ',', $post_info['post_category'] ) );
+				$post_info['tax_input'][$post_type.'category'] = array_map( 'trim', explode( ',', $post_info['post_category'] ) );
 			}
+			unset($post_info['post_category']);
 		}
 
 		// change post_tags to an array()
 		if ( isset( $post_info['post_tags'] ) ) {
 			if ( empty( $post_info['post_tags'] ) ) {
-				$post_info['post_tagscategory'] = array();
+				$post_info['tax_input'][$post_type.'_tags'] = array();
 			} else {
-				$post_info['post_tags'] = array_map( 'trim', explode( ',', $post_info['post_tags'] ) );
+				$post_info['tax_input'][$post_type.'_tags'] = array_map( 'trim', explode( ',', $post_info['post_tags'] ) );
 			}
+			unset($post_info['post_tags']);
 		}
 
 		// check if we have post images to upload
@@ -595,7 +614,7 @@ class GeoDir_Admin_Import_Export {
 		$nonce = isset( $_REQUEST['_nonce'] ) ? $_REQUEST['_nonce'] : null;
 
 		$post_type      = isset( $_REQUEST['_pt'] ) ? $_REQUEST['_pt'] : null;
-		$csv_file_dir   = geodir_path_import_export( false );
+		$csv_file_dir   = self::import_export_cache_path( false );
 		$chunk_per_page = isset( $_REQUEST['_n'] ) ? absint( $_REQUEST['_n'] ) : null;
 		$chunk_per_page = $chunk_per_page < 50 || $chunk_per_page > 100000 ? 5000 : $chunk_per_page;
 		$chunk_page_no  = isset( $_REQUEST['_p'] ) ? absint( $_REQUEST['_p'] ) : 1;
@@ -610,7 +629,7 @@ class GeoDir_Admin_Import_Export {
 		}
 		// WPML
 		if ( $post_type == 'gd_event' ) {
-			add_filter( 'geodir_imex_export_posts_query', 'geodir_imex_get_events_query', 10, 2 );
+			//add_filter( 'geodir_imex_export_posts_query', 'geodir_imex_get_events_query', 10, 2 ); // @todo this shoudl be done from events plugin
 		}
 		$filters = ! empty( $_REQUEST['gd_imex'] ) && is_array( $_REQUEST['gd_imex'] ) ? $_REQUEST['gd_imex'] : null;
 
@@ -619,7 +638,7 @@ class GeoDir_Admin_Import_Export {
 			$file_name = $post_type . '_' . date_i18n( 'dmy', strtotime( $filters['start_date'] ) ) . '_' . date_i18n( 'dmy', strtotime( $filters['end_date'] ) );
 		}
 		$posts_count    = geodir_get_posts_count( $post_type );
-		$file_url_base  = geodir_path_import_export() . '/';
+		$file_url_base  = self::import_export_cache_path() . '/';
 		$file_url       = $file_url_base . $file_name . '.csv';
 		$file_path      = $csv_file_dir . '/' . $file_name . '.csv';
 		$file_path_temp = $csv_file_dir . '/' . $post_type . '_' . $nonce . '.csv';
@@ -636,7 +655,7 @@ class GeoDir_Admin_Import_Export {
 			wp_send_json( $json );
 			gd_die();
 		} else if ( isset( $_REQUEST['_st'] ) ) {
-			$line_count = (int) geodir_import_export_line_count( $file_path_temp );
+			$line_count = (int) self::file_line_count( $file_path_temp );
 			$percentage = count( $posts_count ) > 0 && $line_count > 0 ? ceil( $line_count / $posts_count ) * 100 : 0;
 			$percentage = min( $percentage, 100 );
 
@@ -940,7 +959,7 @@ class GeoDir_Admin_Import_Export {
 		$chunk_per_page = isset( $_REQUEST['_n'] ) ? absint( $_REQUEST['_n'] ) : null;
 		$chunk_per_page = $chunk_per_page < 50 || $chunk_per_page > 100000 ? 5000 : $chunk_per_page;
 		$chunk_page_no  = isset( $_REQUEST['_p'] ) ? absint( $_REQUEST['_p'] ) : 1;
-		$csv_file_dir   = geodir_path_import_export( false );
+		$csv_file_dir   = self::import_export_cache_path( false );
 
 		// WPML
 		$is_wpml = geodir_is_wpml();
@@ -954,7 +973,7 @@ class GeoDir_Admin_Import_Export {
 		$file_name = $post_type . 'category_' . date( 'dmyHi' );
 
 		$terms_count    = geodir_get_terms_count( $post_type );
-		$file_url_base  = geodir_path_import_export() . '/';
+		$file_url_base  = self::import_export_cache_path() . '/';
 		$file_url       = $file_url_base . $file_name . '.csv';
 		$file_path      = $csv_file_dir . '/' . $file_name . '.csv';
 		$file_path_temp = $csv_file_dir . '/' . $post_type . 'category_' . $nonce . '.csv';
@@ -962,7 +981,7 @@ class GeoDir_Admin_Import_Export {
 		$chunk_file_paths = array();
 
 		if ( isset( $_REQUEST['_st'] ) ) {
-			$line_count = (int) geodir_import_export_line_count( $file_path_temp );
+			$line_count = (int) self::file_line_count( $file_path_temp );
 			$percentage = count( $terms_count ) > 0 && $line_count > 0 ? ceil( $line_count / $terms_count ) * 100 : 0;
 			$percentage = min( $percentage, 100 );
 
@@ -1104,7 +1123,7 @@ class GeoDir_Admin_Import_Export {
 				// WPML
 				if ( $is_wpml ) {
 					$csv_row[] = geodir_get_language_for_element( $term->term_id, 'tax_' . $taxonomy );
-					$csv_row[] = geodir_imex_original_post_id( $term->term_id, 'tax_' . $taxonomy );
+					$csv_row[] = self::wpml_original_post_id( $term->term_id, 'tax_' . $taxonomy );
 				}
 				// WPML
 				$csv_row[] = $term->description;
@@ -1533,13 +1552,106 @@ class GeoDir_Admin_Import_Export {
 		return false;
 	}
 
+	/**
+	 * Adds the .json fiel extension to the WP allowed file types on the fly.
+	 *
+	 * @param array $mimes The currently allowed file mime types.
+	 *
+	 * @return array The new array of allowed file types with json added.
+	 */
 	public static function allow_json_mime( $mimes ) {
 		$mimes['json'] = 'application/json';
 
 		return $mimes;
 	}
 
+	/**
+	 * Get WPML original translation element id.
+	 *
+	 * @global object $sitepress Sitepress WPML object.
+	 *
+	 * @param int $element_id Post ID or Term id.
+	 * @param string $element_type Element type. Ex: post_gd_place or tax_gd_placecategory.
+	 * @return Original element id.
+	 */
+	public static function wpml_original_post_id($element_id, $element_type) {
+		global $sitepress;
 
+		$original_element_id = $sitepress->get_original_element_id($element_id, $element_type);
+		$element_id = $element_id != $original_element_id ? $original_element_id : '';
+
+		return $element_id;
+	}
+
+	/**
+	 * Get the SQL where clause part to filter posts in import/export.
+	 *
+	 * @global object $wpdb WordPress Database object.
+	 *
+	 * @param string $where The SQL where clause part. Default empty.
+	 * @param string $post_type The post type.
+	 * @return string SQL where clause part.
+	 */
+	function filter_where_query($where = '', $post_type = '') {
+		global $wpdb;
+
+		$filters = !empty( $_REQUEST['gd_imex'] ) && is_array( $_REQUEST['gd_imex'] ) ? $_REQUEST['gd_imex'] : NULL;
+
+		if ( !empty( $filters ) ) {
+			foreach ( $filters as $field => $value ) {
+				switch ($field) {
+					case 'start_date':
+						$where .= " AND `" . $wpdb->posts . "`.`post_date` >= '" . sanitize_text_field( $value ) . " 00:00:00'";
+						break;
+					case 'end_date':
+						$where .= " AND `" . $wpdb->posts . "`.`post_date` <= '" . sanitize_text_field( $value ) . " 23:59:59'";
+						break;
+				}
+			}
+		}
+
+		return $where;
+	}
+
+	/**
+	 * Get the path of cache directory.
+	 *
+	 * @param  bool $relative True for relative path & False for absolute path.
+	 * @return string Path to the cache directory.
+	 */
+	public static function import_export_cache_path( $relative = true ) {
+		$upload_dir = wp_upload_dir();
+
+		return $relative ? $upload_dir['baseurl'] . '/cache' : $upload_dir['basedir'] . '/cache';
+	}
+
+	/**
+	 * Count the number of line from file.
+	 *
+	 * @since 1.4.6
+	 * @package GeoDirectory
+	 *
+	 * @global null|object $wp_filesystem WP_Filesystem object.
+	 *
+	 * @param  string $file Full path to file.
+	 * @return int No of file rows.
+	 */
+	public static function file_line_count( $file ) {
+		global $wp_filesystem;
+
+		if ( $wp_filesystem->is_file( $file ) && $wp_filesystem->exists( $file ) ) {
+			$contents = $wp_filesystem->get_contents_array( $file );
+
+			if ( !empty( $contents ) && is_array( $contents ) ) {
+				return count( $contents ) - 1;
+			}
+		}
+
+		return NULL;
+	}
+
+	
+	
 
 
 }

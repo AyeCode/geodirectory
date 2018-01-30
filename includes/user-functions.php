@@ -42,27 +42,6 @@ function geodir_get_user_favourites( $user_id = '' ) {
 
 
 /**
- * Restrict the wp-admin area from specific user roles if set to do so.
- *
- * @since   2.0.0
- * @package GeoDirectory
- */
-function geodir_restrict_wpadmin() {
-	$restricted_roles = geodir_get_option('admin_blocked_roles',array());
-	if ( !empty($restricted_roles) && is_user_logged_in() && ( ! defined( 'DOING_AJAX' ) ) ) // checking action in request to allow ajax request go through
-	{
-		$roles = wp_get_current_user()->roles;
-		foreach($restricted_roles as $role){
-			if( in_array($role, $roles)){
-				wp_safe_redirect( home_url() );
-				exit;
-			}
-		}
-	}
-}
-add_action( "admin_init", "geodir_restrict_wpadmin" );
-
-/**
  * Get user's post listing count.
  *
  * @since 1.0.0

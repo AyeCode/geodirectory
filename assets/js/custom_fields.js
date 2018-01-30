@@ -133,7 +133,7 @@ function gd_save_custom_field(id) {
 
         if (frontend_title == '') {
 
-            alert(geodir_all_js_msg.custom_field_not_blank_var);
+            alert(geodir_params.custom_field_not_blank_var);
 
             return false;
         }
@@ -198,7 +198,7 @@ function show_hide_radio(id,sh,cl) {
 
 function gd_delete_custom_field(id, nonce) {
 
-    var confarmation = confirm(geodir_all_js_msg.custom_field_delete);
+    var confarmation = confirm(geodir_params.custom_field_delete);
 
     if (confarmation == true) {
 
@@ -307,7 +307,7 @@ function gd_save_sort_field(id) {
 
 function gd_delete_sort_field(id, nonce, obj) {
 
-    var confarmation = confirm(geodir_all_js_msg.custom_field_delete);
+    var confarmation = confirm(geodir_params.custom_field_delete);
 
     if (confarmation == true) {
         // if its a new field not yet added then we just dump it, no need to run ajax

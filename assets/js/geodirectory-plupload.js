@@ -46,12 +46,12 @@ jQuery(document).ready(function ($) {
             } */
 			var allowed_exts = jQuery('#' + imgId + '_allowed_types').val();
 			allowed_exts = allowed_exts && allowed_exts != '' ? allowed_exts : '';
-			if (imgId == 'post_images' && typeof geodir_all_js_msg.gd_allowed_img_types != 'undefined' && geodir_all_js_msg.gd_allowed_img_types != '') {
-				allowed_exts = geodir_all_js_msg.gd_allowed_img_types;
+			if (imgId == 'post_images' && typeof geodir_params.gd_allowed_img_types != 'undefined' && geodir_params.gd_allowed_img_types != '') {
+				allowed_exts = geodir_params.gd_allowed_img_types;
 			}
 
 			if (allowed_exts && allowed_exts != '') {
-				var txt_all_files = (typeof geodir_all_js_msg.geodir_txt_all_files != 'undefined' && geodir_all_js_msg.geodir_txt_all_files != '') ? geodir_all_js_msg.geodir_txt_all_files : 'Allowed files'; 
+				var txt_all_files = (typeof geodir_params.txt_all_files != 'undefined' && geodir_params.txt_all_files != '') ? geodir_params.txt_all_files : 'Allowed files'; 
 				pconfig['filters'] = [{'title':txt_all_files, 'extensions':allowed_exts}];
 			}
 			
@@ -64,8 +64,8 @@ jQuery(document).ready(function ($) {
                 if (files.code == -600) {
                     jQuery('#' + imgId + 'upload-error').addClass('upload-error');
 
-                    if (typeof geodir_all_js_msg.geodir_err_max_file_size != 'undefined' && geodir_all_js_msg.geodir_err_max_file_size != '') {
-                        msgErr = geodir_all_js_msg.geodir_err_max_file_size;
+                    if (typeof geodir_params.err_max_file_size != 'undefined' && geodir_params.err_max_file_size != '') {
+                        msgErr = geodir_params.err_max_file_size;
                     } else {
                         msgErr = 'File size error : You tried to upload a file over %s';
                     }
@@ -75,8 +75,8 @@ jQuery(document).ready(function ($) {
                 } else if (files.code == -601) {
                     jQuery('#' + imgId + 'upload-error').addClass('upload-error');
 
-                    if (typeof geodir_all_js_msg.geodir_err_file_type != 'undefined' && geodir_all_js_msg.geodir_err_file_type != '') {
-                        msgErr = geodir_all_js_msg.geodir_err_file_type;
+                    if (typeof geodir_params.err_file_type != 'undefined' && geodir_params.err_file_type != '') {
+                        msgErr = geodir_params.err_file_type;
                     } else {
                         msgErr = 'File type error. Allowed file types: %s';
                     }
@@ -109,8 +109,8 @@ jQuery(document).ready(function ($) {
                             up.removeFile(up.files[0]);
                         } // remove images
 
-                        if (typeof geodir_all_js_msg.geodir_err_file_upload_limit != 'undefined' && geodir_all_js_msg.geodir_err_file_upload_limit != '') {
-                            msgErr = geodir_all_js_msg.geodir_err_file_upload_limit;
+                        if (typeof geodir_params.err_file_upload_limit != 'undefined' && geodir_params.err_file_upload_limit != '') {
+                            msgErr = geodir_params.err_file_upload_limit;
                         } else {
                             msgErr = 'You have reached your upload limit of %s files.';
                         }
@@ -127,8 +127,8 @@ jQuery(document).ready(function ($) {
                             up.removeFile(up.files[0]);
                         } // remove images
 
-                        if (typeof geodir_all_js_msg.geodir_err_pkg_upload_limit != 'undefined' && geodir_all_js_msg.geodir_err_pkg_upload_limit != '') {
-                            msgErr = geodir_all_js_msg.geodir_err_pkg_upload_limit;
+                        if (typeof geodir_params.err_pkg_upload_limit != 'undefined' && geodir_params.err_pkg_upload_limit != '') {
+                            msgErr = geodir_params.err_pkg_upload_limit;
                         } else {
                             msgErr = 'You may only upload %s files with this package, please try again.';
                         }
@@ -215,8 +215,8 @@ function plu_show_thumbs(imgId) {
     var imagesS = $("#" + imgId).val();
 
     var txtRemove = 'Remove';
-    if (typeof geodir_all_js_msg.geodir_action_remove != 'undefined' && geodir_all_js_msg.geodir_action_remove != '') {
-        txtRemove = geodir_all_js_msg.geodir_action_remove;
+    if (typeof geodir_params.action_remove != 'undefined' && geodir_params.action_remove != '') {
+        txtRemove = geodir_params.action_remove;
     }
 
     var images = imagesS.split(",");

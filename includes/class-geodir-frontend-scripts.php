@@ -354,8 +354,8 @@ class GeoDir_Frontend_Scripts {
 		self::register_scripts();
 		self::register_styles();
 
-		// geodir_all_js_msg
-		wp_localize_script('geodirectory', 'geodir_all_js_msg', geodir_localize_all_js_msg()); //@todo we need to do this the nice way
+		// geodir_params
+		wp_localize_script('geodirectory', 'geodir_params', geodir_params()); //@todo we need to do this the nice way
 		
 
 

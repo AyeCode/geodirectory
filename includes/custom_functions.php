@@ -426,8 +426,8 @@ function geodir_related_posts_display( $request ) {
 		$arr_detail_page_tabs = geodir_detail_page_tabs_list();
 
 		$related_listing_array = array();
-		if ( geodir_get_option( 'geodir_add_related_listing_posttypes' ) ) {
-			$related_listing_array = geodir_get_option( 'geodir_add_related_listing_posttypes' );
+		if ( get_option( 'geodir_add_related_listing_posttypes' ) ) {
+			$related_listing_array = get_option( 'geodir_add_related_listing_posttypes' );
 		}
 		if ( isset($post->post_type) && in_array( $post->post_type, $related_listing_array ) ) {
 			$arr_detail_page_tabs['related_listing']['is_display'] = true;
@@ -488,7 +488,7 @@ function geodir_related_posts_display( $request ) {
 		$location_url = '';
 		if ( $add_location_filter != '0' ) {
 			$location_url             = array();
-			$geodir_show_location_url = geodir_get_option( 'geodir_show_location_url' );
+			$geodir_show_location_url = get_option( 'geodir_show_location_url' );
 
 			$gd_city = get_query_var( 'gd_city' );
 
@@ -591,8 +591,21 @@ function geodir_related_posts_display( $request ) {
 			if ( $list_sort == 'nearest' ) {
 				$related_nearest = true;
 			}
-            
-			geodir_get_template( 'listing-listview.php', array( 'character_count' => $character_count, 'related_posts' => $related_posts ) );
+
+
+			/**
+			 * Filters related listing listview template.
+			 *
+			 * @since 1.0.0
+			 */
+			$template = apply_filters( "geodir_template_part-related-listing-listview", geodir_locate_template( 'widget-listing-listview' ) );
+
+			/**
+			 * Includes related listing listview template.
+			 *
+			 * @since 1.0.0
+			 */
+			include( $template );
 
 			wp_reset_query();
 			$post            = $origi_post;

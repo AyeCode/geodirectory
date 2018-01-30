@@ -1209,31 +1209,6 @@ function geodir_wpml_post_type_archive_link($link, $post_type){
 }
 add_filter( 'post_type_archive_link','geodir_wpml_post_type_archive_link', 1000, 2);
 
-add_action( "admin_init", "geodir_allow_wpadmin" ); // check user is admin
-if ( ! function_exists( 'geodir_allow_wpadmin' ) ) {
-	/**
-	 * Allow only admins to access wp-admin.
-	 *
-	 * Normal users will be redirected to home page.
-	 *
-	 * @since   1.0.0
-	 * @package GeoDirectory
-	 * @global object $wpdb WordPress Database object.
-	 */
-	function geodir_allow_wpadmin() {
-		global $wpdb;
-		if ( geodir_get_option( 'geodir_allow_wpadmin' ) == '0' && is_user_logged_in() && ( ! defined( 'DOING_AJAX' ) ) ) // checking action in request to allow ajax request go through
-		{
-			if ( current_user_can( 'administrator' ) ) {
-			} else {
-
-				wp_redirect( home_url() );
-				exit;
-			}
-
-		}
-	}
-}
 
 
 /**
@@ -3070,6 +3045,7 @@ function geodir_loginwidget_output( $args = '', $instance = '' ) {
 function geodir_popular_postview_output( $args = '', $instance = '' ) {
 	global $gd_session;
 
+
 	// prints the widget
 	extract( $args, EXTR_SKIP );
 
@@ -3131,6 +3107,14 @@ function geodir_popular_postview_output( $args = '', $instance = '' ) {
 	 * @param string $instance ['list_sort'] Listing sort by type.
 	 */
 	$list_sort             = empty( $instance['list_sort'] ) ? 'latest' : apply_filters( 'widget_list_sort', $instance['list_sort'] );
+	/**
+	 * Filter widget's "title_tag" type.
+	 *
+	 * @since 1.6.26
+	 *
+	 * @param string $instance ['title_tag'] Listing title tag.
+	 */
+	$title_tag            = empty( $instance['title_tag'] ) ? 'h3' : apply_filters( 'widget_title_tag', $instance['title_tag'] );
 	$use_viewing_post_type = ! empty( $instance['use_viewing_post_type'] ) ? true : false;
 
 	// set post type to current viewing post type
@@ -3355,7 +3339,7 @@ function geodir_popular_postview_output( $args = '', $instance = '' ) {
 		$current_map_canvas_arr   = $map_canvas_arr;
 		$geodir_is_widget_listing = true;
 
-		geodir_get_template( 'widget-listing-listview.php', array( 'widget_listings' => $widget_listings, 'character_count' => $character_count, 'gridview_columns_widget' => $gridview_columns_widget, 'before_widget' => $before_widget ) );
+		geodir_get_template( 'widget-listing-listview.php', array( 'title_tag'=>$title_tag, 'widget_listings' => $widget_listings, 'character_count' => $character_count, 'gridview_columns_widget' => $gridview_columns_widget, 'before_widget' => $before_widget ) );
 
 		$geodir_is_widget_listing = false;
 

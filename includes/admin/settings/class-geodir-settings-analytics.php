@@ -117,7 +117,7 @@ if ( ! class_exists( 'GeoDir_Settings_Analytics', false ) ) :
 						'std' => 'gridview_onehalf',
 						'type' => 'select',
 						'class' => 'geodir-select',
-						'options' => geodir_gd_accounts()
+						'options' => self::analytics_accounts()
 					),
 					array(
 						'name' => __('Add tracking code to site?', 'geodirectory'),
@@ -157,6 +157,86 @@ if ( ! class_exists( 'GeoDir_Settings_Analytics', false ) ) :
 
 			return apply_filters( 'woocommerce_get_settings_' . $this->id, $settings, $current_section );
 		}
+
+		public static function activation_url(){
+
+			return add_query_arg( array(
+				'next'          => admin_url("admin.php?page=geodirectory&active_tab=google_analytic_settings"),
+				'scope'         => GEODIR_GA_SCOPE,
+				'response_type' => 'code',
+				'redirect_uri'  => GEODIR_GA_REDIRECT,
+				'client_id'     => GEODIR_GA_CLIENTID,
+			), 'https://accounts.google.com/o/oauth2/auth' );
+		}
+
+
+		public static function analytics_accounts(){
+			$accounts = array();
+			$useAuth = ( geodir_get_option( 'ga_auth_code' ) == '' ? false : true );
+			if($useAuth){
+				try {
+					$accounts = self::get_analytics_accounts();
+				} catch (Exception $e) {
+					geodir_error_log( wp_sprintf( __( 'GD Google Analytics API Error(%s) : %s', 'geodirectory' ), $e->getCode(), $e->getMessage() ) );
+				}
+
+				if(is_array($accounts)){
+					$accounts = array_merge(array(__('Select Account','geodirectory')),$accounts);
+				}elseif(geodir_get_option('ga_account_id')){
+					$accounts = array();
+					$accounts[geodir_get_option('ga_account_id')] = __('Account re-authorization may be required','geodirectory').' ('.geodir_get_option('ga_account_id').')';
+				}else{
+					$accounts = array();
+				}
+			}
+			return $accounts;
+		}
+
+		public static function get_analytics_accounts()
+		{
+			global $gd_ga_errors;
+			$accounts = array();
+
+			if(geodir_get_option('ga_auth_token')===false){geodir_update_option('ga_auth_token','');}
+
+
+			if(geodir_get_option('ga_uids') && !isset($_POST['geodir_ga_auth_code'])){
+				return geodir_get_option('ga_uids');
+			}
+
+
+			# Create a new Gdata call
+			if ( trim(geodir_get_option('ga_auth_code')) != '' )
+				$stats = new GDGoogleAnalyticsStats();
+			else
+				return false;
+
+
+			# Check if Google sucessfully logged in
+			if ( ! $stats->checkLogin() )
+				return false;
+
+			# Get a list of accounts
+			try {
+				$accounts = $stats->getAllProfiles();
+			} catch (Exception $e) {
+				$gd_ga_errors[] = $e->getMessage();
+				return false;
+			}
+
+
+			natcasesort ($accounts);
+
+			# Return the account array if there are accounts
+			if ( count($accounts) > 0 ){
+				geodir_update_option('ga_uids',$accounts);
+				return $accounts;
+			}
+			else
+				return false;
+		}
+
+
 	}
 
 endif;

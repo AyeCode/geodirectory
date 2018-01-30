@@ -37,11 +37,11 @@ function geodir_popup_validate_field(e) {
     switch (erro_msg = "", jQuery(e).attr("field_type")) {
         case "email":
             var r = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w+)+$/;
-            "" == e.value && (erro_msg = geodir_all_js_msg.geodir_field_id_required), "" == e.value || r.test(e.value) || (erro_msg = geodir_all_js_msg.geodir_valid_email_address_msg), "" != e.value && r.test(e.value) && (i = !1);
+            "" == e.value && (erro_msg = geodir_params.field_id_required), "" == e.value || r.test(e.value) || (erro_msg = geodir_params.valid_email_address_msg), "" != e.value && r.test(e.value) && (i = !1);
             break;
         case "text":
         case "textarea":
-            "" != e.value ? i = !1 : erro_msg = geodir_all_js_msg.geodir_field_id_required
+            "" != e.value ? i = !1 : erro_msg = geodir_params.field_id_required
     }
     return i ? (erro_msg && jQuery(e).closest("div").find("span.message_error2").html(erro_msg), jQuery(e).closest("div").find("span.message_error2").fadeIn(), !1) : (jQuery(e).closest("div").find("span.message_error2").html(""), jQuery(e).closest("div").find("span.message_error2").fadeOut(), !0)
 }
