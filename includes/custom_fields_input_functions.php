@@ -2026,8 +2026,9 @@ function geodir_cfi_business_hours( $html, $cf ) {
 		$name = $cf['name'];
 		$label = __( $cf['frontend_title'], 'geodirectory' );
 		$description = __( $cf['desc'], 'geodirectory' );
-		$active = geodir_get_cf_value( $cf );
-		$display = $active == '1' ? '' : 'none';
+		$value = geodir_get_cf_value( $cf );
+		$display = ! empty( $value ) ? '' : 'none';
+		$default = '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00"],["GMT":"' . geodir_gmt_offset() . '"]';
 		
 		$weekdays = geodir_get_weekdays();
 
@@ -2098,6 +2099,7 @@ function geodir_cfi_business_hours( $html, $cf ) {
 		</style>
 		<script type="text/javascript">
 		jQuery(function($) {
+			/*
 			$('.gd-bh-row').each(function(){
 				var $row = $(this);
 
@@ -2126,42 +2128,47 @@ function geodir_cfi_business_hours( $html, $cf ) {
 					$(this).closest('.gd-bh-hours').remove();
 					console.log($('.gd-bh-hours', $item).length);
 					if ($('.gd-bh-hours', $item).length < 1) {
-						$item.html('<div class="gd-bh-closed">Closed</div>');// @todo add closed in js variable
+						$item.html('<div class="gd-bh-closed">' + geodir_params.txt_closed + '</div>');
 					}
 					e.preventDefault();
 				});
-				gdBHTimePicker();
 			}
 			if ($('.gd-bh-hours').length) {
 				gdOnAddRemoveHours();
 			}
 			function gdBHTimePicker() {
 				jQuery('.gd-bh-time [data-field="open"], .gd-bh-time [data-field="close"]').timepicker({
+					timeFormat: 'HH:mm',
 					showPeriod: true,
 					showLeadingZero: true,
 					showPeriod: true,
 				});
-			}
+			}*/
+			GeoDir_Business_Hours.init({
+				'field' : '<?php echo $htmlvar_name; ?>',
+				'value' : '<?php echo stripslashes_deep($value); ?>',
+				'default' : '<?php echo stripslashes_deep($default); ?>',
+			});
 		});
 		</script>
         <div id="<?php echo $name;?>_row" class="geodir_form_row clearfix gd-fieldset-details gd-bh-row">
             <label><?php echo $label; ?></label>
-			<div class="gd-bh-field">
-				<span class="gd-radios"><input name="<?php echo $htmlvar_name; ?>['active']" id="<?php echo $htmlvar_name; ?>_active_1" value="1" class="gd-checkbox" field_type="radio" type="radio" <?php checked( $active == '1', true ); ?> data-field="active"><?php _e( 'Yes', 'geodirectory' ); ?></span> 
-				<span class="gd-radios"><input name="<?php echo $htmlvar_name; ?>['active']" id="<?php echo $htmlvar_name; ?>_active_0" value="0" class="gd-checkbox" field_type="radio" type="radio" <?php checked( $active != '1', true ); ?> data-field="active"><?php _e( 'No', 'geodirectory' ); ?></span>
+			<div class="gd-bh-field" data-field-name="<?php echo $htmlvar_name; ?>">
+				<span class="gd-radios"><input name="<?php echo $htmlvar_name; ?>_f[active]" id="<?php echo $htmlvar_name; ?>_f_active_1" value="1" class="gd-checkbox" field_type="radio" type="radio" <?php checked( ! empty( $value ), true ); ?> data-field="active"><?php _e( 'Yes', 'geodirectory' ); ?></span> 
+				<span class="gd-radios"><input name="<?php echo $htmlvar_name; ?>_f[active]" id="<?php echo $htmlvar_name; ?>_f_active_0" value="0" class="gd-checkbox" field_type="radio" type="radio" <?php checked( empty( $value ), true ); ?> data-field="active"><?php _e( 'No', 'geodirectory' ); ?></span>
 				<div class="gd-bh-items" style="display:<?php echo $display; ?>">
 					<table class="form-table widefat fixed">
 						<thead>
 							<tr><th class="gd-bh-day"><?php _e( 'Day', 'geodirectory' ); ?></th><th class="gd-bh-time"><?php _e( 'Opening Hours', 'geodirectory' ); ?></th><th class="gd-bh-act"></th></tr>
 						</thead>
 						<tbody>
-							<tr style="display:none!important"><td colspan="3" class="gd-bh-blank"><div class="gd-bh-hours"><input type="text" data-field="open"> - <input type="text" data-field="close"> <a href="javascript:void(0);" class="gd-bh-remove"><i class="fa fa-minus-circle"></i></a></div></td></tr>
+							<tr style="display:none!important"><td colspan="3" class="gd-bh-blank"><div class="gd-bh-hours"><input type="text" data-field="open" data-bh="time"> - <input type="text" data-field="close" data-bh="time"> <a href="javascript:void(0);" class="gd-bh-remove"><i class="fa fa-minus-circle"></i></a></div></td></tr>
 							<?php foreach ( $weekdays as $day_no => $day ) { ?>
 							<tr class="gd-bh-item">
 								<td class="gd-bh-day"><?php echo $day; ?></td>
-								<td class="gd-bh-time" data-day="<?php echo $day_no; ?>" data-field="<?php echo $htmlvar_name; ?>['hours'][<?php echo $day_no; ?>]">
+								<td class="gd-bh-time" data-day="<?php echo $day_no; ?>" data-field="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>]">
 									<div class="gd-bh-hours">
-										<input type="text" name="<?php echo $htmlvar_name; ?>['hours'][<?php echo $day_no; ?>]['open'][]" data-field="open"> - <input type="text" name="<?php echo $htmlvar_name; ?>['hours'][<?php echo $day_no; ?>]['close'][]" data-field="close"> <a href="javascript:void(0);" class="gd-bh-remove"><i class="fa fa-minus-circle"></i></a>
+										<input type="text" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][open][]" data-field="open" data-bh="time"> - <input type="text" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][close][]" data-field="close" data-bh="time"> <a href="javascript:void(0);" class="gd-bh-remove"><i class="fa fa-minus-circle"></i></a>
 									</div>
 								</td>
 								<td class="gd-bh-act"><a href="javascript:void(0);" class="gd-bh-add"><i class="fa fa-plus-circle"></i></a></td>
@@ -2170,6 +2177,7 @@ function geodir_cfi_business_hours( $html, $cf ) {
 						</tbody>
 					</table>
 				</div>
+				<input type="hidden" name="<?php echo $htmlvar_name; ?>" value="<?php echo esc_attr( $value ); ?>">
 			</div>
             <span class="geodir_message_note"><?php echo $description; ?></span>
         </div>
