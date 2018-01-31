@@ -430,3 +430,61 @@ function geodir_admin_current_post_type() {
 
 	return $post_type;
 }
+
+
+
+/**
+ * Check table column exist or not.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @param string $db The table name.
+ * @param string $column The column name.
+ * @return bool If column exists returns true. Otherwise false.
+ */
+function geodir_column_exist($db, $column)
+{
+	global $wpdb;
+	$exists = false;
+	$columns = $wpdb->get_col("show columns from $db");
+	foreach ($columns as $c) {
+		if ($c == $column) {
+			$exists = true;
+			break;
+		}
+	}
+	return $exists;
+}
+
+
+/**
+ * Add column if table column not exist.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @param string $db The table name.
+ * @param string $column The column name.
+ * @param string $column_attr The column attributes.
+ */
+function geodir_add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 255 ) NOT NULL")
+{
+	global $wpdb;
+	$result = 0;// no rows affected
+	if (!geodir_column_exist($db, $column)) {
+		if (!empty($db) && !empty($column))
+			$result = $wpdb->query("ALTER TABLE `$db` ADD `$column`  $column_attr");
+	}
+	return $result;
+}
+
+/**
+ * GeoDirectory Core Supported Themes.
+ *
+ * @since 2.0.0
+ * @return string[]
+ */
+function geodir_get_core_supported_themes() {
+	return array( 'twentyseventeen', 'twentysixteen', 'twentyfifteen', 'twentyfourteen', 'twentythirteen', 'twentyeleven', 'twentytwelve', 'twentyten' );
+}

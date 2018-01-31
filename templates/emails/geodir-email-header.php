@@ -25,7 +25,7 @@ if ( !isset( $email_heading ) ) {
                     <td align="center" valign="middle" id="template_header">
                         <div id="template_header_logo">
                         <?php
-                            if ( $logo = geodir_get_email_logo() ) {
+                            if ( $logo = GeoDir_Email::get_email_logo() ) {
                                 echo '<p style="margin-top:0;">' . $logo . '</p>';
                             }
                         ?>

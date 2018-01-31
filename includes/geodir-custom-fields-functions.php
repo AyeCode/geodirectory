@@ -103,134 +103,14 @@ function geodir_post_custom_fields($package_id = '', $default = 'all', $post_typ
     return $return_arr;
 }
 
-    /**
-     * Adds admin html for custom fields.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @global object $wpdb WordPress Database object.
-     * @param string $field_type The form field type.
-     * @param object|int $result_str The custom field results object or row id.
-     * @param string $field_ins_upd When set to "submit" displays form.
-     * @param string $field_type_key The key of the custom field.
-     */
-    function geodir_custom_field_adminhtml($field_type, $result_str, $field_ins_upd = '', $field_type_key ='')
-    {
-        global $wpdb;
-        $cf = $result_str;
-        if (!is_object($cf)) {
-
-            $field_info = $wpdb->get_row($wpdb->prepare("select * from " . GEODIR_CUSTOM_FIELDS_TABLE . " where id= %d", array($cf)));
-
-        } else {
-            $field_info = $cf;
-            $result_str = $cf->id;
-        }
-
-    }
-
-
-if (!function_exists('geodir_custom_field_delete')) {
-    /**
-     * Delete custom field using field id.
-     *
-     * @since 1.0.0
-     * @since 1.5.7 Delete field from sorting fields table when custom field deleted.
-     * @package GeoDirectory
-     * @global object $wpdb WordPress Database object.
-     * @global string $plugin_prefix Geodirectory plugin table prefix.
-     * @param string $field_id The custom field ID.
-     * @return int|string If field deleted successfully, returns field id. Otherwise returns 0.
-     */
-    function geodir_custom_field_delete($field_id = '') {
-        global $wpdb, $plugin_prefix;
-
-        if ($field_id != '') {
-            $cf = trim($field_id, '_');
-
-            if ($field = $wpdb->get_row($wpdb->prepare("select htmlvar_name,post_type,field_type from " . GEODIR_CUSTOM_FIELDS_TABLE . " where id= %d", array($cf)))) {
-                $wpdb->query($wpdb->prepare("delete from " . GEODIR_CUSTOM_FIELDS_TABLE . " where id= %d ", array($cf)));
-
-                $post_type = $field->post_type;
-                $htmlvar_name = $field->htmlvar_name;
-
-                if ($post_type != '' && $htmlvar_name != '') {
-                    $wpdb->query($wpdb->prepare("DELETE FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE htmlvar_name=%s AND post_type=%s LIMIT 1", array($htmlvar_name, $post_type)));
-                }
-
-                /**
-                 * Called after a custom field is deleted.
-                 *
-                 * @since 1.0.0
-                 * @param string $cf The fields ID.
-                 * @param string $field->htmlvar_name The html variable name for the field.
-                 * @param string $post_type The post type the field belongs to.
-                 */
-                do_action('geodir_after_custom_field_deleted', $cf, $field->htmlvar_name, $post_type);
-
-                if ($field->field_type == 'address') {
-                    $wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_address`");
-                    $wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_city`");
-                    $wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_region`");
-                    $wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_country`");
-                    $wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_zip`");
-                    $wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_latitude`");
-                    $wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_longitude`");
-                    $wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_mapview`");
-                    $wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_mapzoom`");
-                } else {
-                    if ($field->field_type != 'fieldset') {
-                        $wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "`");
-                    }
-                }
-
-                return $field_id;
-            } else
-                return 0;
-        } else
-            return 0;
-    }
-}
-
 
 /**
- * Set custom field order
+ * Get the value of a custom field for a current post.
+ * 
+ * @param $cf
  *
- * @since 1.0.0
- * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
- * @param array $field_ids List of field ids.
- * @return array|bool Returns field ids when success, else returns false.
+ * @return mixed|void
  */
-function godir_set_field_order($field_ids = array())
-{
-
-    global $wpdb;
-
-    $count = 0;
-    if (!empty($field_ids)):
-        $post_meta_info = false;
-        foreach ($field_ids as $id) {
-
-            $cf = trim($id, '_');
-
-            $post_meta_info = $wpdb->query(
-                $wpdb->prepare(
-                    "update " . GEODIR_CUSTOM_FIELDS_TABLE . " set 
-															sort_order=%d 
-															where id= %d",
-                    array($count, $cf)
-                )
-            );
-            $count++;
-        }
-
-        return $post_meta_info;
-    else:
-        return false;
-    endif;
-}
-
 function geodir_get_cf_value($cf) {
     global $post,$gd_session,$gd_post;
     $value = '';
@@ -243,22 +123,6 @@ function geodir_get_cf_value($cf) {
     }elseif(!empty($gd_post)){
         $post = $gd_post;
     }
-
-//    if (isset($_REQUEST['backandedit']) && $_REQUEST['backandedit'] && $gd_ses_listing = $gd_session->get('listing')) {
-//        $post = $gd_ses_listing;
-//        $value = isset($post[$cf['name']]) ? $post[$cf['name']] : '';
-//    } elseif (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
-//        // check if post content
-//        if($cf['name']=='post_content'){
-//            $value = get_post_field('post_content', $_REQUEST['pid']);
-//        }else{
-//            $value = geodir_get_post_meta($_REQUEST['pid'], $cf['name'], true);
-//        }
-//    } else {
-//        if ($value == '') {
-//            $value = $cf['default'];
-//        }
-//    }
 
 
     // check if post content
@@ -552,52 +416,6 @@ if (!function_exists('geodir_show_listing_info')) {
     }
 }
 
-if (!function_exists('geodir_default_date_format')) {
-    /**
-     * Returns default date format.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @return mixed|string|void Returns default date format.
-     */
-    function geodir_default_date_format()
-    {
-        if ($format = get_option('date_format'))
-            return $format;
-        else
-            return 'dd-mm-yy';
-    }
-}
-
-if (!function_exists('geodir_get_formated_date')) {
-    /**
-     * Returns formatted date.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @param string $date Date string to convert.
-     * @return bool|int|string Returns formatted date.
-     */
-    function geodir_get_formated_date($date)
-    {
-        return mysql2date(get_option('date_format'), $date);
-    }
-}
-
-if (!function_exists('geodir_get_formated_time')) {
-    /**
-     * Returns formatted time.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @param string $time Time string to convert.
-     * @return bool|int|string Returns formatted time.
-     */
-    function geodir_get_formated_time($time)
-    {
-        return mysql2date(get_option('time_format'), $time, $translate = true);
-    }
-}
 
 
 if (!function_exists('geodir_save_post_file_fields')) {

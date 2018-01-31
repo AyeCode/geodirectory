@@ -7,6 +7,8 @@
  * @global array $geodir_settings Geodirectory settings array.
  */
 
+//@todo we need to decide how we are dealing with titles and meta in GDv2
+
 global $geodir_settings;
 
 $gd_wpseo_use = '';

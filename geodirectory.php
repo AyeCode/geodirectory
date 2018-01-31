@@ -197,7 +197,7 @@ final class GeoDirectory {
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/formatting-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/core-functions.php' );
 
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/settings/register-settings.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/settings/functions.php' );
         $geodir_options = geodir_get_settings();
 
         include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-post-types.php' ); // Registers post types
@@ -211,7 +211,7 @@ final class GeoDirectory {
 
 
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-session.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/email-functions.php' );
+	    GeoDir_Email::init();// set up the email class
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/helper-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/user-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-ajax-functions.php' ); // @todo remove onece replced with below class-gd-ajax.php
@@ -283,8 +283,7 @@ final class GeoDirectory {
         if ( $this->is_request( 'frontend' ) ) {
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-template-loader.php' ); // Template Loader
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-shortcodes.php' ); // Shortcodes class
-            require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/template-hooks.php' );
-            
+
             // Theme Compatibility
             $compatibility_file = geodir_theme_compatibility_file();
             

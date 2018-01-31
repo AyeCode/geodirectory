@@ -9,13 +9,7 @@
  * @author      WPGeoDirectory
  */
 
-/**
- * Contains custom post types/taxonomies related functions.
- *
- * @since 1.0.0
- * @package GeoDirectory
- */
-include_once('custom_taxonomy_hooks_actions.php');
+
 
 
 if (!function_exists('geodir_get_taxonomies')) {
@@ -709,7 +703,34 @@ function gd_wpml_slug_translation_turned_on($post_type) {
 }
 
 
+/**
+ * Retrieve the term link.
+ *
+ * @since 1.0.0
+ *
+ * @param string $termlink Term link URL.
+ * @param object $term Term object.
+ * @param string $taxonomy Taxonomy slug.
+ * @return string The term link
+ */
+function geodir_get_term_link($termlink, $term, $taxonomy)
+{
+    return geodir_term_link($termlink, $term, $taxonomy); // taxonomy_functions.php
+}
 
+/**
+ * Retrieve the post type archive permalink.
+ *
+ * @since 1.0.0
+ *
+ * @param string $link The post type archive permalink.
+ * @param string $post_type Post type name.
+ * @return string The post type archive permalink.
+ */
+function geodir_get_posttype_link($link, $post_type)
+{
+    return geodir_posttype_link($link, $post_type); // taxonomy_functions.php
+}
 
 /**
  * Returns the term link with parameters.

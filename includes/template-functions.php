@@ -166,21 +166,6 @@ function geodir_display_message_not_found_on_listing($template_listview = 'listi
 	echo '<li class="no-listing">' . $message . '</li>';
 }
 
-/**
- * Strips </li><li> tags from Breadcrumb HTML to wrap breadcrumb html.
- *
- * Using </li><li> breaks the links to a new line when window size is small(ex: in mobile device).
- *
- * @since 1.5.5
- * @param string $breadcrumb Breadcrumb HTML.
- * @param string $separator Breadcrumb separator.
- * @return string Breadcrumb HTML.
- */
-function geodir_strip_breadcrumb_li_wrappers($breadcrumb, $separator) {
-	$breadcrumb = str_replace(array('</li><li>', '</li> <li>'), '', $breadcrumb);
-	
-	return $breadcrumb;
-}
 
 /**
  * Get listing listview class for current column length.
@@ -543,16 +528,6 @@ function geodir_listing_old_classes( $classes, $post ) {
     return $classes;
 }
 
-function geodir_listing_old_attrs( $attrs, $post ) {
-    global $listing_width;
-    
-    if ( !empty( $listing_width ) && (float)$listing_width > 0 ) {
-        $attrs['style'] = 'width:' . (float)$listing_width . '%';
-    }
-    
-    return $attrs;
-}
-
 function geodir_listing_inner_old_classes( $classes, $post ) {
     /**
      * Add a class to the `article` tag inside the `li` element on the listings list template.
@@ -568,6 +543,8 @@ function geodir_listing_inner_old_classes( $classes, $post ) {
     
     return $classes;
 }
+add_filter( 'geodir_listing_classes', 'geodir_listing_old_classes', 10, 2 );
+add_filter( 'geodir_listing_inner_classes', 'geodir_listing_inner_old_classes', 10, 2 );
 
 /**
  * Handle redirects before content is output - hooked into template_redirect so is_page works.
@@ -604,13 +581,7 @@ function geodir_template_redirect() {
 add_action( 'template_redirect', 'geodir_template_redirect' );
 
 
-function geodir_add_listing_form_wrap_start( $listing_type = '', $post = array(), $package_info = array() ) {
-    ?><div class="gd-form-wrap gd-listing-form-wrap"><?php
-}
 
-function geodir_add_listing_form_wrap_end( $listing_type = '', $post = array(), $package_info = array() ) {
-    ?></div><?php
-}
 
 /**
  * Front end listing view template selection.

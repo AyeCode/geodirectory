@@ -130,202 +130,58 @@ function geodir_get_post_info($post_id = '')
 }
 
 
-if (!function_exists('geodir_save_post_info')) {
-    /**
-     * Saves post detail info in detail table.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @global object $wpdb WordPress Database object.
-     * @global string $plugin_prefix Geodirectory plugin table prefix.
-     * @param int $post_id The post ID.
-     * @param array $postinfo_array {
-     *    Post info that needs to be saved in detail table.
-     *
-     *    @type string $post_title              Listing title.
-     *    @type string $post_tags               Listing tags.
-     *    @type string $post_status             Listing post status.
-     *    @type string $post_location_id        Listing location ID.
-     *    @type string $claimed                 Todo Desc needed.
-     *    @type string $businesses              Todo Desc needed.
-     *    @type int    $submit_time             Submitted time in unix timestamp.
-     *    @type string $submit_ip               Submitted IP.
-     *    @type string $expire_date             Listing expiration date.
-     *    @type int    $package_id              Listing package ID.
-     *    @type int    $alive_days              Todo Desc needed.
-     *    @type int    $is_featured             Is this a featured listing?.
-     *    @type string $post_address            Listing address.
-     *    @type string $post_city               Listing city.
-     *    @type string $post_region             Listing region.
-     *    @type string $post_country            Listing country.
-     *    @type string $post_locations          Listing locations.
-     *    @type string $post_zip                Listing zip.
-     *    @type string $post_latitude           Listing latitude.
-     *    @type string $post_longitude          Listing longitude.
-     *    @type string $post_mapview            Listing mapview. Default "ROADMAP".
-     *    @type string $post_mapzoom            Listing mapzoom Default "9".
-     *    @type string $geodir_timing           Business timing info.
-     *    @type string $geodir_contact          Contact number.
-     *    @type string $geodir_email            Business contact email.
-     *    @type string $geodir_website          Business website.
-     *    @type string $geodir_twitter          Twitter link.
-     *    @type string $geodir_facebook         Facebook link.
-     *    @type string $geodir_video            Video link.
-     *    @type string $geodir_special_offers   Special offers.
-     *
-     * }
-     * @return bool
-     */
-    function geodir_save_post_info($post_id, $postinfo_array = array())
-    {
-        global $wpdb, $plugin_prefix;
 
-        $post_type = get_post_type($post_id);
+/**
+ * Save or update post custom fields.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @param int $post_id The post ID.
+ * @param string $postmeta Detail table column name.
+ * @param string $meta_value Detail table column value.
+ * @return void|bool
+ */
+function geodir_save_post_meta($post_id, $postmeta = '', $meta_value = '')
+{
 
-        $table = $plugin_prefix . $post_type . '_detail';
+    global $wpdb, $plugin_prefix;
 
-        /**
-         * Filter to change Post info
-         *
-         * You can use this filter to change Post info.
-         *
-         * @since 1.0.0
-         * @package GeoDirectory
-         * @param array $postinfo_array See {@see geodir_save_post_info()} for accepted args.
-         * @param int $post_id The post ID.
-         */
-        $postmeta = apply_filters('geodir_listinginfo_request', $postinfo_array, $post_id);
+    $post_type = get_post_type($post_id);
 
-        $query_string_escaped = '';
-        $query_string_array = array();
+    $table = $plugin_prefix . $post_type . '_detail';
 
-        if (!empty($postmeta) && $post_id) {
+    if ($postmeta != '' && geodir_column_exist($table, $postmeta) && $post_id) {
 
-            $columns = $wpdb->get_col("show columns from $table");
-            foreach ($postmeta as $mkey => $mval) {
-                if(in_array($mkey,$columns)) {
-                    if (is_array($mval)) {
-                        $mval = implode(",", $mval);
-                    }
-                    $query_string_escaped .= " $mkey = %s, "; // we can set the key here as we check if the column exists above
-                    $query_string_array[] = stripslashes($mval); // we strip slashes as we are using wpdb prepare
+        if (is_array($meta_value)) {
+            $meta_value = implode(",", $meta_value);
+        }
 
-                }
-            }
+        if ($wpdb->get_var($wpdb->prepare("SELECT post_id from " . $table . " where post_id = %d", array($post_id)))) {
 
-            $query_string_escaped = trim($query_string_escaped, ", ");
+            $wpdb->query(
+                $wpdb->prepare(
+                    "UPDATE " . $table . " SET " . $postmeta . " = '" . $meta_value . "' where post_id =%d",
+                    array($post_id)
+                )
+            );
 
-            if (empty($query_string_array) || trim($query_string_escaped) == '') {
-                return false;
-            }
+        } else {
 
-            $query_string_array = str_replace(array("'%", "%'"), array("'%%", "%%'"), $query_string_array);
+            $wpdb->query(
+                $wpdb->prepare(
+                    "INSERT INTO " . $table . " SET post_id = %d, " . $postmeta . " = '" . $meta_value . "'",
+                    array($post_id)
+                )
+            );
+        }
 
 
-            /**
-             * Called before saving the listing info.
-             *
-             * @since 1.0.0
-             * @package GeoDirectory
-             * @param array $postinfo_array See {@see geodir_save_post_info()} for accepted args.
-             * @param int $post_id The post ID.
-             */
-            do_action('geodir_before_save_listinginfo', $postinfo_array, $post_id);
-
-            if ($wpdb->get_var($wpdb->prepare("SELECT post_id from " . $table . " where post_id = %d", array($post_id)))) {
-
-                $query_string_array[] = $post_id;
-                $wpdb->query(
-                    $wpdb->prepare(
-                        "UPDATE " . $table . " SET " . $query_string_escaped . " where post_id =%d",
-                        $query_string_array
-                    )
-                );
-
-
-            } else {
-
-                array_unshift($query_string_array, $post_id);
-                $wpdb->query(
-                    $wpdb->prepare(
-                        "INSERT INTO " . $table . " SET post_id = %d," . $query_string_escaped,
-                        $query_string_array
-                    )
-                );
-                
-            }
-
-            /**
-             * Called after saving the listing info.
-             *
-             * @since 1.0.0
-             * @package GeoDirectory
-             * @param array $postinfo_array Post info that needs to be saved in detail table.
-             * @param int $post_id The post ID.
-             * @see 'geodir_after_save_listing'
-             */
-            do_action('geodir_after_save_listinginfo', $postinfo_array, $post_id);
-
-            return true;
-        } else
-            return false;
-
-    }
+    } else
+        return false;
 }
 
-
-if (!function_exists('geodir_save_post_meta')) {
-    /**
-     * Save or update post custom fields.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @global object $wpdb WordPress Database object.
-     * @global string $plugin_prefix Geodirectory plugin table prefix.
-     * @param int $post_id The post ID.
-     * @param string $postmeta Detail table column name.
-     * @param string $meta_value Detail table column value.
-     * @return void|bool
-     */
-    function geodir_save_post_meta($post_id, $postmeta = '', $meta_value = '')
-    {
-
-        global $wpdb, $plugin_prefix;
-
-        $post_type = get_post_type($post_id);
-
-        $table = $plugin_prefix . $post_type . '_detail';
-
-        if ($postmeta != '' && geodir_column_exist($table, $postmeta) && $post_id) {
-
-            if (is_array($meta_value)) {
-                $meta_value = implode(",", $meta_value);
-            }
-
-            if ($wpdb->get_var($wpdb->prepare("SELECT post_id from " . $table . " where post_id = %d", array($post_id)))) {
-
-                $wpdb->query(
-                    $wpdb->prepare(
-                        "UPDATE " . $table . " SET " . $postmeta . " = '" . $meta_value . "' where post_id =%d",
-                        array($post_id)
-                    )
-                );
-
-            } else {
-
-                $wpdb->query(
-                    $wpdb->prepare(
-                        "INSERT INTO " . $table . " SET post_id = %d, " . $postmeta . " = '" . $meta_value . "'",
-                        array($post_id)
-                    )
-                );
-            }
-
-
-        } else
-            return false;
-    }
-}
 
 if (!function_exists('geodir_delete_post_meta')) {
     /**
@@ -1223,198 +1079,7 @@ if (!function_exists('geodir_show_image')) {
     }
 }
 
-if (!function_exists('geodir_set_post_terms')) {
-    /**
-     * Set post Categories.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @global object $wpdb WordPress Database object.
-     * @global string $plugin_prefix Geodirectory plugin table prefix.
-     * @param int $post_id The post ID.
-     * @param array $terms An array of term objects.
-     * @param array $tt_ids An array of term taxonomy IDs.
-     * @param string $taxonomy Taxonomy slug.
-     */
-    function geodir_set_post_terms($post_id, $terms, $tt_ids, $taxonomy)
-    {
-        global $wpdb, $plugin_prefix;
 
-        $post_type = get_post_type($post_id);
-
-        $table = $plugin_prefix . $post_type . '_detail';
-
-        if (in_array($post_type, geodir_get_posttypes()) && !wp_is_post_revision($post_id)) {
-
-            if ($taxonomy == $post_type . '_tags') {
-                if (isset($_POST['action']) && $_POST['action'] == 'inline-save') {
-                    geodir_save_post_meta($post_id, 'post_tags', $terms);
-                }
-            } elseif ($taxonomy == $post_type . 'category') {
-                $srcharr = array('"', '\\');
-                $replarr = array("&quot;", '');
-
-                $post_obj = get_post($post_id);
-
-                $cat_ids = array('0');
-                if (is_array($tt_ids))
-                    $cat_ids = $tt_ids;
-
-
-                if (!empty($cat_ids)) {
-                    $cat_ids_array = $cat_ids;
-                    $cat_ids_length = count($cat_ids_array);
-                    $cat_ids_format = array_fill(0, $cat_ids_length, '%d');
-                    $format = implode(',', $cat_ids_format);
-
-                    $cat_ids_array_del = $cat_ids_array;
-                    $cat_ids_array_del[] = $post_id;
-
-//                    $wpdb->get_var(
-//                        $wpdb->prepare(
-//                            "DELETE from " . GEODIR_ICON_TABLE . " WHERE cat_id NOT IN ($format) AND post_id = %d ",
-//                            $cat_ids_array_del
-//                        )
-//                    );
-
-
-                    $post_term = $wpdb->get_col(
-                        $wpdb->prepare(
-                            "SELECT term_id FROM " . $wpdb->term_taxonomy . " WHERE term_taxonomy_id IN($format) GROUP BY term_id",
-                            $cat_ids_array
-                        )
-                    );
-
-                }
-
-                $post_marker_json = '';
-
-                if (!empty($post_term)):
-
-                    foreach ($post_term as $cat_id):
-                        $term_icon = geodir_get_cat_icon($cat_id);
-
-                        $post_title = $post_obj->title;
-                        $title = str_replace($srcharr, $replarr, $post_title);
-
-                        $lat = geodir_get_post_meta($post_id, 'post_latitude', true);
-                        $lng = geodir_get_post_meta($post_id, 'post_longitude', true);
-
-                        $timing = ' - ' . date('D M j, Y', strtotime(geodir_get_post_meta($post_id, 'st_date', true)));
-                        $timing .= ' - ' . geodir_get_post_meta($post_id, 'st_time', true);
-
-                        $json = '{';
-                        $json .= '"id":"' . $post_id . '",';
-                        $json .= '"lat_pos": "' . $lat . '",';
-                        $json .= '"long_pos": "' . $lng . '",';
-                        $json .= '"marker_id":"' . $post_id . '_' . $cat_id . '",';
-                        $json .= '"icon":"' . $term_icon . '",';
-                        $json .= '"group":"catgroup' . $cat_id . '"';
-                        $json .= '}';
-
-
-                        if ($cat_id == geodir_get_post_meta($post_id, 'default_category', true))
-                            $post_marker_json = $json;
-
-
-                        if ($wpdb->get_var($wpdb->prepare("SELECT post_id from " . GEODIR_ICON_TABLE . " WHERE post_id = %d AND cat_id = %d", array($post_id, $cat_id)))) {
-
-                            $json_query = $wpdb->prepare("UPDATE " . GEODIR_ICON_TABLE . " SET
-										post_title = %s,
-										json = %s
-										WHERE post_id = %d AND cat_id = %d ",
-                                array($post_title, $json, $post_id, $cat_id));
-
-                        } else {
-
-                            $json_query = $wpdb->prepare("INSERT INTO " . GEODIR_ICON_TABLE . " SET
-										post_id = %d,
-										post_title = %s,
-										cat_id = %d,
-										json = %s",
-                                array($post_id, $post_title, $cat_id, $json));
-
-                        }
-
-                        $wpdb->query($json_query);
-
-                    endforeach;
-
-                endif;
-
-                if (!empty($post_term) && is_array($post_term)) {
-                    $categories = implode(',', $post_term);
-
-                    if ($categories != '' && $categories != 0) $categories = ',' . $categories . ',';
-
-                    if (empty($post_marker_json))
-                        $post_marker_json = isset($json) ? $json : '';
-
-                    if ($wpdb->get_var($wpdb->prepare("SELECT post_id from " . $table . " where post_id = %d", array($post_id)))) {
-
-                        $wpdb->query(
-                            $wpdb->prepare(
-                                "UPDATE " . $table . " SET
-								" . $taxonomy . " = %s,
-								marker_json = %s
-								where post_id = %d",
-                                array($categories, $post_marker_json, $post_id)
-                            )
-                        );
-
-                        if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'inline-save') {
-
-                            $categories = trim($categories, ',');
-
-                            if ($categories) {
-
-                                $categories = explode(',', $categories);
-
-                                $default_category = geodir_get_post_meta($post_id, 'default_category', true);
-
-                                if (!in_array($default_category, $categories)) {
-
-                                    $wpdb->query(
-                                        $wpdb->prepare(
-                                            "UPDATE " . $table . " SET
-											default_category = %s
-											where post_id = %d",
-                                            array($categories[0], $post_id)
-                                        )
-                                    );
-
-                                    $default_category = $categories[0];
-
-                                }
-
-                                if ($default_category == '')
-                                    $default_category = $categories[0];
-
-                                geodir_set_postcat_structure($post_id, $taxonomy, $default_category, '');
-
-                            }
-
-                        }
-
-
-                    } else {
-
-                        $wpdb->query(
-                            $wpdb->prepare(
-                                "INSERT INTO " . $table . " SET
-								post_id = %d,
-								" . $taxonomy . " = %s,
-								marker_json = %s ",
-
-                                array($post_id, $categories, $post_marker_json)
-                            )
-                        );
-                    }
-                }
-            }
-        }
-    }
-}
 
 if (!function_exists('geodir_get_infowindow_html')) {
     /**
@@ -1614,471 +1279,130 @@ if (!function_exists('geodir_get_infowindow_html')) {
 }
 
 
-if (!function_exists('geodir_new_post_default_status')) {
-    /**
-     * Default post status for new posts.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @return string Returns the default post status for new posts. Ex: draft, publish etc.
-     */
-    function geodir_new_post_default_status()
-    {
-        return GeoDir_Post_Data::get_post_default_status();
-
-    }
-}
-
-if (!function_exists('geodir_change_post_status')) {
-    /**
-     * Change post status of a post.
-     *
-     * @global object $wpdb WordPress Database object.
-     * @global string $plugin_prefix Geodirectory plugin table prefix.
-     * @param int|string $post_id The post ID.
-     * @param string $status New post status. Ex: draft, publish etc.
-     */
-    function geodir_change_post_status($post_id = '', $status = '')
-    {
-        global $wpdb, $plugin_prefix;
-
-        $post_type = get_post_type($post_id);
-
-        $table = $plugin_prefix . $post_type . '_detail';
-
-        $wpdb->query(
-            $wpdb->prepare(
-                "UPDATE " . $table . " SET post_status=%s WHERE post_id=%d",
-                array($status, $post_id)
-            )
-        );
-
-
-    }
-}
-
 /**
- * Set post status of a post.
+ * Default post status for new posts.
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
- * @param int $pid The post ID.
- * @param string $status Post status. Ex: draft, publish etc.
+ * @return string Returns the default post status for new posts. Ex: draft, publish etc.
  */
-function geodir_set_post_status($pid, $status)
+function geodir_new_post_default_status()
 {
-    if ($pid) {
-        global $wpdb;
-        $my_post = array();
-        $my_post['post_status'] = $status;
-        $my_post['ID'] = $pid;
-        $last_postid = wp_update_post($my_post);
-    }
+    return GeoDir_Post_Data::get_post_default_status();
+
 }
+
+
+
+
+
+
+
+
+
 
 
 /**
- * Update post status of a post.
+ * This function would display the html content for add to favorite or remove from favorite.
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
- * @param string $new_status New post status. Ex: draft, publish etc.
- * @param string $old_status Old post status. Ex: draft, publish etc.
- * @param object $post The post object.
+ * @global object $current_user Current user object.
+ * @global object $post The current post object.
+ * @param int $user_id The user ID.
+ * @param int $post_id The post ID.
  */
-function geodir_update_poststatus($new_status, $old_status, $post)
+function geodir_favourite_html($user_id, $post_id)
 {
-    global $wpdb;
 
-    $geodir_posttypes = geodir_get_posttypes();
+    global $current_user, $post;
 
-    if (!wp_is_post_revision($post->ID) && in_array($post->post_type, $geodir_posttypes)) {
-
-        geodir_change_post_status($post->ID, $new_status);
-    }
-}
-
-
-if (!function_exists('geodir_update_listing_info')) {
     /**
-     * Update post info.
+     * Filter to modify "Add to Favorites" text
+     *
+     * You can use this filter to rename "Add to Favorites" text to something else.
      *
      * @since 1.0.0
      * @package GeoDirectory
-     * @global object $wpdb WordPress Database object.
-     * @global string $plugin_prefix Geodirectory plugin table prefix.
-     * @param int $updatingpost The updating post ID.
-     * @param int $temppost The temporary post ID.
-     * @todo fix post_id variable
      */
-    function geodir_update_listing_info($updatingpost, $temppost)
-    {
+    $add_favourite_text = apply_filters('geodir_add_favourite_text', ADD_FAVOURITE_TEXT);
 
-        global $wpdb, $plugin_prefix;
-
-        $post_type = get_post_type($post_id);
-
-        $table = $plugin_prefix . $post_type . '_detail';
-
-        $wpdb->query(
-            $wpdb->prepare(
-                "UPDATE " . $table . " SET `post_id` = %d WHERE `post_id` = %d",
-                array($updatingpost, $temppost)
-            )
-        );
-
-        $wpdb->query(
-            $wpdb->prepare(
-                "UPDATE " . GEODIR_ICON_TABLE . " SET `post_id` = %d WHERE `post_id` = %d",
-                array($updatingpost, $temppost)
-            )
-        );
-
-        /* Update Attachments*/
-
-        $wpdb->query(
-            $wpdb->prepare(
-                "UPDATE " . GEODIR_ATTACHMENT_TABLE . " SET `post_id` = %d WHERE `post_id` = %d",
-                array($updatingpost, $temppost)
-            )
-        );
-
-    }
-}
-
-
-if (!function_exists('geodir_delete_listing_info')) {
     /**
-     * Delete Listing info from details table for the given post id.
+     * Filter to modify "Favourite" text
+     *
+     * You can use this filter to rename "Favourite" text to something else.
      *
      * @since 1.0.0
      * @package GeoDirectory
-     * @global object $wpdb WordPress Database object.
-     * @global string $plugin_prefix Geodirectory plugin table prefix.
-     * @param int $deleted_postid The post ID.
-     * @param bool $force Optional. Do you want to force delete it? Default: false.
-     * @return bool|void
      */
-    function geodir_delete_listing_info($deleted_postid, $force = false)
-    {
-        global $wpdb, $plugin_prefix;
+    $favourite_text = apply_filters('geodir_favourite_text', FAVOURITE_TEXT);
 
-        // check for multisite deletions
-        if (strpos($plugin_prefix, $wpdb->prefix) !== false) {
-        } else {
-            return;
-        }
-
-        $post_type = get_post_type($deleted_postid);
-
-        $all_postypes = geodir_get_posttypes();
-
-        if (!in_array($post_type, $all_postypes))
-            return false;
-
-        $table = $plugin_prefix . $post_type . '_detail';
-
-        /* Delete custom post meta*/
-        $wpdb->query(
-            $wpdb->prepare(
-                "DELETE FROM " . $table . " WHERE `post_id` = %d",
-                array($deleted_postid)
-            )
-        );
-
-        /* Delete post map icons*/
-
-        $wpdb->query(
-            $wpdb->prepare(
-                "DELETE FROM " . GEODIR_ICON_TABLE . " WHERE `post_id` = %d",
-                array($deleted_postid)
-            )
-        );
-
-        /* Delete Attachments*/
-        $postcurr_images = geodir_get_images($deleted_postid);
-
-        $wpdb->query(
-            $wpdb->prepare(
-                "DELETE FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE `post_id` = %d",
-                array($deleted_postid)
-            )
-        );
-        geodir_remove_attachments($postcurr_images);
-
-    }
-}
-
-
-//if (!function_exists('geodir_add_to_favorite')) {
-//    /**
-//     * This function would add listing to favorite listing.
-//     *
-//     * @since 1.0.0
-//     * @package GeoDirectory
-//     * @global object $current_user Current user object.
-//     * @param int $post_id The post ID.
-//     */
-//    function geodir_add_to_favorite($post_id)
-//    {
-//
-//        global $current_user;
-//
-//        /**
-//         * Filter to modify "Unfavorite" text
-//         *
-//         * You can use this filter to rename "Unfavorite" text to something else.
-//         *
-//         * @since 1.0.0
-//         * @package GeoDirectory
-//         */
-//        $remove_favourite_text = apply_filters('geodir_remove_favourite_text', REMOVE_FAVOURITE_TEXT);
-//
-//        /**
-//         * Filter to modify "Remove from Favorites" text
-//         *
-//         * You can use this filter to rename "Remove from Favorites" text to something else.
-//         *
-//         * @since 1.0.0
-//         * @package GeoDirectory
-//         */
-//        $unfavourite_text = apply_filters('geodir_unfavourite_text', UNFAVOURITE_TEXT);
-//
-//        /**
-//         * Filter to modify "fa fa-heart" icon
-//         *
-//         * You can use this filter to change "fa fa-heart" icon to something else.
-//         *
-//         * @since 1.0.0
-//         * @package GeoDirectory
-//         */
-//        $favourite_icon = apply_filters('geodir_favourite_icon', 'fa fa-heart');
-//
-//        $user_meta_data = geodir_get_user_favourites($current_user->data->ID);
-//        $user_meta_data = !empty($user_meta_data) && is_array($user_meta_data) ? $user_meta_data : array();
-//
-//        if (empty($user_meta_data) || (!empty($user_meta_data) && !in_array($post_id, $user_meta_data))) {
-//            $user_meta_data[] = $post_id;
-//        }
-//
-//        $site_id = '';
-//        if ( is_multisite() ) {
-//            $blog_id = get_current_blog_id();
-//            if($blog_id && $blog_id!='1'){$site_id  = '_' . $blog_id ;}
-//        }
-//        update_user_meta($current_user->data->ID, 'gd_user_favourite_post'.$site_id, $user_meta_data);
-//
-//        /**
-//         * Called before adding the post from favourites.
-//         *
-//         * @since 1.0.0
-//         * @package GeoDirectory
-//         * @param int $post_id The post ID.
-//         */
-//        do_action('geodir_before_add_from_favorite', $post_id);
-//
-//        echo '<a href="javascript:void(0);" title="' . $remove_favourite_text . '" class="geodir-removetofav-icon" onclick="javascript:addToFavourite(\'' . $post_id . '\',\'remove\');"><i class="'. $favourite_icon .'"></i> ' . $unfavourite_text . '</a>';
-//
-//        /**
-//         * Called after adding the post from favourites.
-//         *
-//         * @since 1.0.0
-//         * @package GeoDirectory
-//         * @param int $post_id The post ID.
-//         */
-//        do_action('geodir_after_add_from_favorite', $post_id);
-//
-//    }
-//}
-//
-//if (!function_exists('geodir_remove_from_favorite')) {
-//    /**
-//     * This function would remove the favourited property earlier.
-//     *
-//     * @since 1.0.0
-//     * @package GeoDirectory
-//     * @global object $current_user Current user object.
-//     * @param int $post_id The post ID.
-//     */
-//    function geodir_remove_from_favorite($post_id)
-//    {
-//        global $current_user;
-//
-//        /**
-//         * Filter to modify "Add to Favorites" text
-//         *
-//         * You can use this filter to rename "Add to Favorites" text to something else.
-//         *
-//         * @since 1.0.0
-//         * @package GeoDirectory
-//         */
-//        $add_favourite_text = apply_filters('geodir_add_favourite_text', ADD_FAVOURITE_TEXT);
-//
-//        /**
-//         * Filter to modify "Favourite" text
-//         *
-//         * You can use this filter to rename "Favourite" text to something else.
-//         *
-//         * @since 1.0.0
-//         * @package GeoDirectory
-//         */
-//        $favourite_text = apply_filters('geodir_favourite_text', FAVOURITE_TEXT);
-//
-//        /**
-//         * Filter to modify "fa fa-heart" icon
-//         *
-//         * You can use this filter to change "fa fa-heart" icon to something else.
-//         *
-//         * @since 1.0.0
-//         * @package GeoDirectory
-//         */
-//        $favourite_icon = apply_filters('geodir_favourite_icon', 'fa fa-heart');
-//
-//        $user_meta_data = array();
-//        $user_meta_data = geodir_get_user_favourites($current_user->data->ID);
-//
-//        if (!empty($user_meta_data)) {
-//
-//            if (($key = array_search($post_id, $user_meta_data)) !== false) {
-//                unset($user_meta_data[$key]);
-//            }
-//
-//        }
-//
-//        $site_id = '';
-//        if ( is_multisite() ) {
-//            $blog_id = get_current_blog_id();
-//            if($blog_id && $blog_id!='1'){$site_id  = '_' . $blog_id ;}
-//        }
-//        update_user_meta($current_user->data->ID, 'gd_user_favourite_post'.$site_id, $user_meta_data);
-//
-//        /**
-//         * Called before removing the post from favourites.
-//         *
-//         * @since 1.0.0
-//         * @package GeoDirectory
-//         * @param int $post_id The post ID.
-//         */
-//        do_action('geodir_before_remove_from_favorite', $post_id);
-//
-//        echo '<a href="javascript:void(0);"  title="' . $add_favourite_text . '" class="geodir-addtofav-icon" onclick="javascript:addToFavourite(\'' . $post_id . '\',\'add\');"><i class="'. $favourite_icon .'"></i> ' . $favourite_text . '</a>';
-//
-//        /**
-//         * Called after removing the post from favourites.
-//         *
-//         * @since 1.0.0
-//         * @package GeoDirectory
-//         * @param int $post_id The post ID.
-//         */
-//        do_action('geodir_after_remove_from_favorite', $post_id);
-//
-//    }
-//}
-
-if (!function_exists('geodir_favourite_html')) {
     /**
-     * This function would display the html content for add to favorite or remove from favorite.
+     * Filter to modify "Unfavorite" text
+     *
+     * You can use this filter to rename "Unfavorite" text to something else.
      *
      * @since 1.0.0
      * @package GeoDirectory
-     * @global object $current_user Current user object.
-     * @global object $post The current post object.
-     * @param int $user_id The user ID.
-     * @param int $post_id The post ID.
      */
-    function geodir_favourite_html($user_id, $post_id)
-    {
+    $remove_favourite_text = apply_filters('geodir_remove_favourite_text', REMOVE_FAVOURITE_TEXT);
 
-        global $current_user, $post;
+    /**
+     * Filter to modify "Remove from Favorites" text
+     *
+     * You can use this filter to rename "Remove from Favorites" text to something else.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     */
+    $unfavourite_text = apply_filters('geodir_unfavourite_text', UNFAVOURITE_TEXT);
 
-        /**
-         * Filter to modify "Add to Favorites" text
-         *
-         * You can use this filter to rename "Add to Favorites" text to something else.
-         *
-         * @since 1.0.0
-         * @package GeoDirectory
-         */
-        $add_favourite_text = apply_filters('geodir_add_favourite_text', ADD_FAVOURITE_TEXT);
+    /**
+     * Filter to modify "fa fa-heart" icon
+     *
+     * You can use this filter to change "fa fa-heart" icon to something else.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     */
+    $favourite_icon = apply_filters('geodir_favourite_icon', 'fa fa-heart');
 
-        /**
-         * Filter to modify "Favourite" text
-         *
-         * You can use this filter to rename "Favourite" text to something else.
-         *
-         * @since 1.0.0
-         * @package GeoDirectory
-         */
-        $favourite_text = apply_filters('geodir_favourite_text', FAVOURITE_TEXT);
+    /**
+     * Filter to modify "fa fa-heart" icon for "remove from favorites" link
+     *
+     * You can use this filter to change "fa fa-heart" icon to something else.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     */
+    $unfavourite_icon = apply_filters('geodir_unfavourite_icon', 'fa fa-heart');
 
-        /**
-         * Filter to modify "Unfavorite" text
-         *
-         * You can use this filter to rename "Unfavorite" text to something else.
-         *
-         * @since 1.0.0
-         * @package GeoDirectory
-         */
-        $remove_favourite_text = apply_filters('geodir_remove_favourite_text', REMOVE_FAVOURITE_TEXT);
+    $user_meta_data = '';
+    if (isset($current_user->data->ID))
+        $user_meta_data = geodir_get_user_favourites($current_user->data->ID);
 
-        /**
-         * Filter to modify "Remove from Favorites" text
-         *
-         * You can use this filter to rename "Remove from Favorites" text to something else.
-         *
-         * @since 1.0.0
-         * @package GeoDirectory
-         */
-        $unfavourite_text = apply_filters('geodir_unfavourite_text', UNFAVOURITE_TEXT);
+    if (!empty($user_meta_data) && in_array($post_id, $user_meta_data)) {
+        ?><span class="geodir-addtofav favorite_property_<?php echo $post_id;?>"  ><a
+            class="geodir-removetofav-icon" href="javascript:void(0);"
+            onclick="javascript:gd_fav_save(<?php echo $post_id;?>);"
+            title="<?php echo $remove_favourite_text;?>"><i class="<?php echo $unfavourite_icon; ?>"></i> <?php echo $unfavourite_text;?>
+        </a>   </span><?php
 
-        /**
-         * Filter to modify "fa fa-heart" icon
-         *
-         * You can use this filter to change "fa fa-heart" icon to something else.
-         *
-         * @since 1.0.0
-         * @package GeoDirectory
-         */
-        $favourite_icon = apply_filters('geodir_favourite_icon', 'fa fa-heart');
+    } else {
 
-        /**
-         * Filter to modify "fa fa-heart" icon for "remove from favorites" link
-         *
-         * You can use this filter to change "fa fa-heart" icon to something else.
-         *
-         * @since 1.0.0
-         * @package GeoDirectory
-         */
-        $unfavourite_icon = apply_filters('geodir_unfavourite_icon', 'fa fa-heart');
+        if (!isset($current_user->data->ID) || $current_user->data->ID == '') {
+            $script_text = 'javascript:window.location.href=\'' . geodir_login_url() . '\'';
+        } else
+            $script_text = 'javascript:gd_fav_save(' . $post_id . ')';
 
-        $user_meta_data = '';
-        if (isset($current_user->data->ID))
-            $user_meta_data = geodir_get_user_favourites($current_user->data->ID);
-
-        if (!empty($user_meta_data) && in_array($post_id, $user_meta_data)) {
-            ?><span class="geodir-addtofav favorite_property_<?php echo $post_id;?>"  ><a
-                class="geodir-removetofav-icon" href="javascript:void(0);"
-                onclick="javascript:gd_fav_save(<?php echo $post_id;?>);"
-                title="<?php echo $remove_favourite_text;?>"><i class="<?php echo $unfavourite_icon; ?>"></i> <?php echo $unfavourite_text;?>
-            </a>   </span><?php
-
-        } else {
-
-            if (!isset($current_user->data->ID) || $current_user->data->ID == '') {
-                $script_text = 'javascript:window.location.href=\'' . geodir_login_url() . '\'';
-            } else
-                $script_text = 'javascript:gd_fav_save(' . $post_id . ')';
-
-            ?><span class="geodir-addtofav favorite_property_<?php echo $post_id;?>"><a class="geodir-addtofav-icon"
-                                                                                        href="javascript:void(0);"
-                                                                                        onclick="<?php echo $script_text;?>"
-                                                                                        title="<?php echo $add_favourite_text;?>"><i
-                    class="<?php echo $favourite_icon; ?>"></i> <?php echo $favourite_text;?></a></span>
-        <?php }
-    }
+        ?><span class="geodir-addtofav favorite_property_<?php echo $post_id;?>"><a class="geodir-addtofav-icon"
+                                                                                    href="javascript:void(0);"
+                                                                                    onclick="<?php echo $script_text;?>"
+                                                                                    title="<?php echo $add_favourite_text;?>"><i
+                class="<?php echo $favourite_icon; ?>"></i> <?php echo $favourite_text;?></a></span>
+    <?php }
 }
+
 
 
 /**
@@ -2145,28 +1469,7 @@ function geodir_get_cat_postcount($term = array())
 
 }
 
-//
-///**
-// * Allow add post type from front end
-// *
-// * @since 1.0.0
-// * @package GeoDirectory
-// */
-//function geodir_allow_post_type_frontend()
-//{
-//    $geodir_allow_posttype_frontend = geodir_get_option('geodir_allow_posttype_frontend');
-//
-//    if (!is_admin() && isset($_REQUEST['listing_type'])
-//        && !empty($geodir_allow_posttype_frontend)
-//        && !in_array($_REQUEST['listing_type'], $geodir_allow_posttype_frontend)
-//    ) {
-//
-//        wp_redirect(home_url());
-//        exit;
-//
-//    }
-//
-//}
+
 
 /**
  * Changing excerpt length.
@@ -2218,79 +1521,6 @@ function geodir_excerpt_more($more)
     return $more;
 }
 
-
-/**
- * Update markers on category Edit.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
- * @param string $term_id The term ID as string.
- * @param int $tt_id The term taxonomy ID.
- * @param string $taxonomy The taxonomy slug.
- */
-function geodir_update_markers_oncatedit($term_id, $tt_id, $taxonomy)
-{
-    global $plugin_prefix, $wpdb;
-
-    $gd_taxonomies = geodir_get_taxonomies();
-
-    if (is_array($gd_taxonomies) && in_array($taxonomy, $gd_taxonomies)) {
-
-        $geodir_post_type = geodir_get_taxonomy_posttype($taxonomy);
-        $table = $plugin_prefix . $geodir_post_type . '_detail';
-
-        $path_parts = pathinfo($_REQUEST['ct_cat_icon']['src']);
-        $term_icon = $path_parts['dirname'] . '/cat_icon_' . $term_id . '.png';
-
-        $posts = $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT post_id,post_title,post_latitude,post_longitude,default_category FROM " . $table . " WHERE FIND_IN_SET(%s,%1\$s ) ",
-                array($term_id, $taxonomy)
-            )
-        );
-
-        if (!empty($posts)):
-            foreach ($posts as $post_obj) {
-
-                $lat = $post_obj->post_latitude;
-                $lng = $post_obj->post_longitude;
-
-                $json = '{';
-                $json .= '"id":"' . $post_obj->post_id . '",';
-                $json .= '"lat_pos": "' . $lat . '",';
-                $json .= '"long_pos": "' . $lng . '",';
-                $json .= '"marker_id":"' . $post_obj->post_id . '_' . $term_id . '",';
-                $json .= '"icon":"' . $term_icon . '",';
-                $json .= '"group":"catgroup' . $term_id . '"';
-                $json .= '}';
-
-                if ($post_obj->default_category == $term_id) {
-
-                    $wpdb->query(
-                        $wpdb->prepare(
-                            "UPDATE " . $table . " SET marker_json = %s where post_id = %d",
-                            array($json, $post_obj->post_id)
-                        )
-                    );
-                }
-
-                $wpdb->query(
-                    $wpdb->prepare(
-                        "UPDATE " . GEODIR_ICON_TABLE . " SET json = %s WHERE post_id = %d AND cat_id = %d",
-                        array($json, $post_obj->post_id, $term_id)
-                    )
-                );
-
-            }
-
-
-        endif;
-
-    }
-
-}
 
 /**
  * Get listing author id.
@@ -2385,91 +1615,6 @@ function geodir_only_supportable_attachments_remove($file)
 }
 
 
-/**
- * Set first image as post's featured image.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
- * @param int $post_id The post ID.
- */
-function geodir_set_wp_featured_image($post_id)
-{
-
-    global $wpdb, $plugin_prefix;
-    $uploads = wp_upload_dir();
-//	print_r($uploads ) ;
-    $post_first_image = $wpdb->get_results(
-        $wpdb->prepare(
-            "SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE post_id = %d and menu_order = 1  ", array($post_id)
-        )
-    );
-
-    $old_attachment_name = '';
-    $post_thumbnail_id = '';
-    if (has_post_thumbnail($post_id)) {
-
-        if (has_post_thumbnail($post_id)) {
-
-            $post_thumbnail_id = get_post_thumbnail_id($post_id);
-
-            $old_attachment_name = basename(get_attached_file($post_thumbnail_id));
-
-        }
-    }
-
-    if (!empty($post_first_image)) {
-
-        $post_type = get_post_type($post_id);
-
-        $table_name = $plugin_prefix . $post_type . '_detail';
-
-        $wpdb->query("UPDATE " . $table_name . " SET featured_image='" . $post_first_image[0]->file . "' WHERE post_id =" . $post_id);
-
-        $new_attachment_name = basename($post_first_image[0]->file);
-
-        if (geodir_strtolower($new_attachment_name) != geodir_strtolower($old_attachment_name)) {
-
-            if (has_post_thumbnail($post_id) && $post_thumbnail_id != '' && (!isset($_REQUEST['action']) || $_REQUEST['action'] != 'delete')) {
-
-                add_filter('wp_delete_file', 'geodir_only_supportable_attachments_remove');
-
-                wp_delete_attachment($post_thumbnail_id);
-
-            }
-            $filename = $uploads['basedir'] . $post_first_image[0]->file;
-
-            $attachment = array(
-                'post_mime_type' => $post_first_image[0]->mime_type,
-                'guid' => $uploads['baseurl'] . $post_first_image[0]->file,
-                'post_parent' => $post_id,
-                'post_title' => preg_replace('/\.[^.]+$/', '', $post_first_image[0]->title),
-                'post_content' => ''
-            );
-
-
-            $id = wp_insert_attachment($attachment, $filename, $post_id);
-
-            if (!is_wp_error($id)) {
-
-                set_post_thumbnail($post_id, $id);
-
-                require_once(ABSPATH . 'wp-admin/includes/image.php');
-                wp_update_attachment_metadata($id, wp_generate_attachment_metadata($id, $filename));
-
-            }
-
-        }
-
-    } else {
-        //set_post_thumbnail($post_id,-1);
-
-        if (has_post_thumbnail($post_id) && $post_thumbnail_id != '' && (!isset($_REQUEST['action']) || $_REQUEST['action'] != 'delete'))
-            wp_delete_attachment($post_thumbnail_id);
-
-    }
-}
 
 
 /**
@@ -2537,67 +1682,6 @@ add_action('wp_ajax_gd_copy_original_translation', 'gd_copy_original_translation
 //add_action('wp_ajax_nopriv_dc_update_profile', 'dc_update_profile_callback');
 
 
-/**
- * Get custom fields info using listing post type.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
- * @param string $listing_type The listing post type.
- * @return mixed|void|array custom fields info as an array.
- */
-function geodir_get_custom_fields_type($listing_type = '')
-{
-
-    global $wpdb;
-
-    if ($listing_type == '')
-        $listing_type = 'gd_place';
-
-    $fields_info = array();
-
-    $get_data = $wpdb->get_results(
-        $wpdb->prepare(
-            "SELECT htmlvar_name, field_type, extra_fields FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE post_type=%s AND is_active='1'",
-            array($listing_type)
-        )
-    );
-
-    if (!empty($get_data)) {
-
-        foreach ($get_data as $data) {
-
-            if ($data->field_type == 'address') {
-
-                $extra_fields = unserialize($data->extra_fields);
-
-                $prefix = $data->htmlvar_name . '_';
-
-                $fields_info[$prefix . 'address'] = $data->field_type;
-
-                if (isset($extra_fields['show_zip']) && $extra_fields['show_zip'])
-                    $fields_info[$prefix . 'zip'] = $data->field_type;
-
-            } else {
-
-                $fields_info[$data->htmlvar_name] = $data->field_type;
-
-            }
-
-        }
-
-    }
-
-    /**
-     * Filter to modify custom fields info using listing post type.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @return array $fields_info Custom fields info.
-     * @param string $listing_type The listing post type.
-     */
-    return apply_filters('geodir_get_custom_fields_type', $fields_info, $listing_type);
-}
 
 
 /**
@@ -2621,7 +1705,7 @@ function geodir_function_post_updated($post_ID, $post_after, $post_before)
 				return;
 			}
 			// Send email to usre
-			geodir_send_user_publish_post_email( $post );
+			GeoDir_Email::send_user_publish_post_email( $post );
         }
     }
 }
@@ -2647,4 +1731,79 @@ function geodir_fb_like_thumbnail(){
         echo "\n\n<!-- GD Facebook Like Thumbnail -->\n<link rel=\"image_src\" href=\"$thumb\" />\n<!-- End GD Facebook Like Thumbnail -->\n\n";
 
     }
+}
+
+
+
+/**
+ * Limit the listing excerpt.
+ *
+ * This function limits excerpt characters and display "read more" link.
+ *
+ * @since   1.0.0
+ * @package GeoDirectory
+ *
+ * @param string|int $charlength The character length.
+ *
+ * @global object $post          The current post object.
+ * @return string The modified excerpt.
+ */
+function geodir_max_excerpt( $charlength ) {
+    global $post;
+    if ( $charlength == '0' ) {
+        return;
+    }
+    $out = '';
+
+    $temp_post = $post;
+    $excerpt   = get_the_excerpt();
+
+    $charlength ++;
+    $excerpt_more = function_exists( 'geodirf_excerpt_more' ) ? geodirf_excerpt_more( '' ) : geodir_excerpt_more( '' );
+    if ( geodir_utf8_strlen( $excerpt ) > $charlength ) {
+        if ( geodir_utf8_strlen( $excerpt_more ) > 0 && geodir_utf8_strpos( $excerpt, $excerpt_more ) !== false ) {
+            $excut = - ( geodir_utf8_strlen( $excerpt_more ) );
+            $subex = geodir_utf8_substr( $excerpt, 0, $excut );
+            if ( $charlength > 0 && geodir_utf8_strlen( $subex ) > $charlength ) {
+                $subex = geodir_utf8_substr( $subex, 0, $charlength );
+            }
+            $out .= $subex;
+        } else {
+            $subex   = geodir_utf8_substr( $excerpt, 0, $charlength - 5 );
+            $exwords = explode( ' ', $subex );
+            $excut   = - ( geodir_utf8_strlen( $exwords[ count( $exwords ) - 1 ] ) );
+            if ( $excut < 0 ) {
+                $out .= geodir_utf8_substr( $subex, 0, $excut );
+            } else {
+                $out .= $subex;
+            }
+        }
+        $out .= ' <a class="excerpt-read-more" href="' . get_permalink() . '" title="' . get_the_title() . '">';
+        /**
+         * Filter excerpt read more text.
+         *
+         * @since 1.0.0
+         */
+        $out .= apply_filters( 'geodir_max_excerpt_end', __( 'Read more [...]', 'geodirectory' ) );
+        $out .= '</a>';
+
+    } else {
+        if ( geodir_utf8_strlen( $excerpt_more ) > 0 && geodir_utf8_strpos( $excerpt, $excerpt_more ) !== false ) {
+            $excut = - ( geodir_utf8_strlen( $excerpt_more ) );
+            $out .= geodir_utf8_substr( $excerpt, 0, $excut );
+            $out .= ' <a class="excerpt-read-more" href="' . get_permalink() . '" title="' . get_the_title() . '">';
+            /**
+             * Filter excerpt read more text.
+             *
+             * @since 1.0.0
+             */
+            $out .= apply_filters( 'geodir_max_excerpt_end', __( 'Read more [...]', 'geodirectory' ) );
+            $out .= '</a>';
+        } else {
+            $out .= $excerpt;
+        }
+    }
+    $post = $temp_post;
+
+    return $out;
 }

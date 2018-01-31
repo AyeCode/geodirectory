@@ -106,6 +106,20 @@ function geodir_get_formated_time( $time ) {
 	return mysql2date( get_option( 'time_format' ), $time, $translate = true );
 }
 
+/**
+ * Returns default date format.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @return mixed|string|void Returns default date format.
+ */
+function geodir_default_date_format()
+{
+	if ($format = get_option('date_format'))
+		return $format;
+	else
+		return 'dd-mm-yy';
+}
 
 /**
  * let_to_num function.
