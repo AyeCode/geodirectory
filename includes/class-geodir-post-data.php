@@ -46,8 +46,6 @@ class GeoDir_Post_Data {
 
 		// set up $gd_post;
 		add_action( 'wp', array( __CLASS__, 'init_gd_post' ), 5 );
-		
-		add_filter( 'geodir_custom_field_value_business_hours', array( __CLASS__, 'parse_business_hours' ), 10, 5 );
 
 		if(!is_admin()){
 			add_filter( 'pre_get_posts', array( __CLASS__, 'show_public_preview' ) );
@@ -1132,18 +1130,6 @@ class GeoDir_Post_Data {
 
 
 		return $posts;
-	}
-	
-	public static function parse_business_hours( $value, $cf, $post_id, $post, $update = false ) {
-		$hours = $value;
-		if ( is_array( $value ) ) {
-			if ( ( isset( $value['active'] ) && empty( $value['active'] )) || empty( $value['hours'] ) ) {
-				$hours = '';
-			} else {
-				$hours = json_encode( $value );
-			}
-		}
-		return $hours;
 	}
 
 }

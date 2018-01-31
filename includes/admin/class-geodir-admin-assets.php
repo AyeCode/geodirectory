@@ -93,7 +93,7 @@ class GeoDir_Admin_Assets {
 		$screen       = get_current_screen();
 		$screen_id    = $screen ? $screen->id : '';
 		$gd_screen_id = sanitize_title( __( 'GeoDirectory', 'geodirectory' ) );
-		$suffix       = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$suffix       = '';//defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min'; @todo remove once BH done
 		$post_type   = isset($_REQUEST['post_type']) && $_REQUEST['post_type'] ? sanitize_text_field($_REQUEST['post_type']) : '';
 		$geodir_map_name = geodir_map_name();
 		
