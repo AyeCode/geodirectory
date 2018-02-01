@@ -2027,130 +2027,27 @@ function geodir_cfi_business_hours( $html, $cf ) {
 		$label = __( $cf['frontend_title'], 'geodirectory' );
 		$description = __( $cf['desc'], 'geodirectory' );
 		$value = geodir_get_cf_value( $cf );
-		$display = ! empty( $value ) ? '' : 'none';
-		$default = '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00"],["GMT":"' . geodir_gmt_offset() . '"]';
 		
 		$weekdays = geodir_get_weekdays();
-
-		ob_start(); // Start  buffering;
-		// TODO move style into file
+		$hours = array();
+		$display = 'none';
+		$gmt_offset = geodir_gmt_offset();
+		if ( ! empty( $value ) ) {
+			$display = '';
+			$value = stripslashes_deep( $value );
+			$periods = geodir_schema_to_array( $value );
+			if ( ! empty( $periods['hours'] ) ) {
+				$hours = $periods['hours'];
+			}
+			if ( ! empty( $periods['offset'] ) ) {
+				$gmt_offset = $periods['offset'];
+			}
+		} else {
+			$hours = geodir_bh_default_values(); // Default value
+		}
+		ob_start();
 		?>
-		<style>
-		.geodir_form_row .gd-bh-field {
-			float: left;
-			width: 70%;
-		}
-		.gd-bh-items {
-			max-width: 420px;
-		}
-		.gd-bh-items table {
-			width: 100%;
-			border: none;
-			margin: 1em 0;
-		}
-		.gd-bh-items table th,
-		.gd-bh-items table td {
-			padding: 10px 5px;
-			vertical-align: top;
-		}
-		.gd-bh-items table td.gd-bh-time {
-			padding-top: 2px;
-			padding-bottom: 2px
-		}
-		.gd-bh-items table td {
-			border: none;
-			border-bottom: 1px dashed #eee;
-		}
-		.gd-bh-items table th {
-			border: none;
-			border-bottom: 2px solid #eee;
-		}
-		.gd-bh-items .gd-bh-time {
-			text-align: center;
-		}
-		.gd-bh-items .gd-bh-day {
-			text-align: left;
-			width: 90px;
-			padding-left: 10px;
-		}
-		.gd-bh-items .gd-bh-act {
-			width: 25px;
-			text-align: center;
-		}
-		.gd-bh-item .gd-bh-time input[type="text"] {
-			width: 90px;
-			text-align: center;
-			display: inline-block;
-			padding: 3px 5px;
-		}
-		.gd-bh-item .gd-bh-hours {
-			padding: 5px 0;
-		}
-		.gd-bh-item .gd-bh-closed {
-			padding: 9px 0;
-		}
-		.gd-bh-item .fa {
-			font-size: 125%;
-			cursor: pointer;
-		}
-		.gd-bh-item a {
-			text-decoration: none;
-		}
-		</style>
-		<script type="text/javascript">
-		jQuery(function($) {
-			/*
-			$('.gd-bh-row').each(function(){
-				var $row = $(this);
-
-				$('[data-field="active"]', $row).on("change", function(e) {
-					if ($(this).val() == '1') {
-						$('.gd-bh-items', $row).slideDown(200);
-					} else {
-						$('.gd-bh-items', $row).slideUp(200);
-					}
-				});
-			});
-			
-			$(".gd-bh-add").on("click", function(e) {
-				var $item = $(this).closest('.gd-bh-item');
-				$('.gd-bh-closed', $item).remove();
-				var sample = $('.gd-bh-items .gd-bh-blank').html();
-				sample = sample.replace('data-field="open"', 'data-field="open" name="' + $('.gd-bh-time', $item).data('field') + '[open][]"');
-				sample = sample.replace('data-field="close"', 'data-field="close" name="' + $('.gd-bh-time', $item).data('field') + '[close][]"');
-				$('.gd-bh-time', $item).append(sample);
-				gdOnAddRemoveHours();
-				e.preventDefault();
-			});
-			function gdOnAddRemoveHours() {
-				$(".gd-bh-remove").on("click", function(e) {
-					var $item = $(this).closest('.gd-bh-time');
-					$(this).closest('.gd-bh-hours').remove();
-					console.log($('.gd-bh-hours', $item).length);
-					if ($('.gd-bh-hours', $item).length < 1) {
-						$item.html('<div class="gd-bh-closed">' + geodir_params.txt_closed + '</div>');
-					}
-					e.preventDefault();
-				});
-			}
-			if ($('.gd-bh-hours').length) {
-				gdOnAddRemoveHours();
-			}
-			function gdBHTimePicker() {
-				jQuery('.gd-bh-time [data-field="open"], .gd-bh-time [data-field="close"]').timepicker({
-					timeFormat: 'HH:mm',
-					showPeriod: true,
-					showLeadingZero: true,
-					showPeriod: true,
-				});
-			}*/
-			GeoDir_Business_Hours.init({
-				'field' : '<?php echo $htmlvar_name; ?>',
-				'value' : '<?php echo stripslashes_deep($value); ?>',
-				'default' : '<?php echo stripslashes_deep($default); ?>',
-			});
-		});
-		</script>
+		<script type="text/javascript">jQuery(function($){GeoDir_Business_Hours.init({'field':'<?php echo $htmlvar_name; ?>','value':'<?php echo $value; ?>','json':'<?php echo stripslashes_deep(json_encode($value)); ?>','offset':'<?php echo $gmt_offset; ?>'});});</script>
         <div id="<?php echo $name;?>_row" class="geodir_form_row clearfix gd-fieldset-details gd-bh-row">
             <label><?php echo $label; ?></label>
 			<div class="gd-bh-field" data-field-name="<?php echo $htmlvar_name; ?>">
@@ -2167,9 +2064,15 @@ function geodir_cfi_business_hours( $html, $cf ) {
 							<tr class="gd-bh-item">
 								<td class="gd-bh-day"><?php echo $day; ?></td>
 								<td class="gd-bh-time" data-day="<?php echo $day_no; ?>" data-field="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>]">
-									<div class="gd-bh-hours">
-										<input type="text" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][open][]" data-field="open" data-bh="time"> - <input type="text" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][close][]" data-field="close" data-bh="time"> <a href="javascript:void(0);" class="gd-bh-remove"><i class="fa fa-minus-circle"></i></a>
-									</div>
+									<?php if ( ! empty( $hours[ $day_no ] ) ) { $slots = $hours[ $day_no ]; ?>
+										<?php foreach ( $slots as $slot ) { $open = ! empty( $slot['opens'] ) ? $slot['opens'] : ''; $close = ! empty( $slot['closes'] ) ? $slot['closes'] : ''; ?>
+										<div class="gd-bh-hours">
+											<input type="text" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][open][]" data-field="open" data-bh="time" value="<?php echo $open; ?>"> - <input type="text" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][close][]" data-field="close" data-bh="time" value="<?php echo $close; ?>"> <a href="javascript:void(0);" class="gd-bh-remove"><i class="fa fa-minus-circle"></i></a>
+										</div>
+										<?php } ?>
+									<?php } else { ?>
+									<div class="gd-bh-closed"><?php _e( 'Closed', 'geodirectory' ); ?></div>
+									<?php } ?>
 								</td>
 								<td class="gd-bh-act"><a href="javascript:void(0);" class="gd-bh-add"><i class="fa fa-plus-circle"></i></a></td>
 							</tr>
