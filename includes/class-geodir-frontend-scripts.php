@@ -363,7 +363,6 @@ class GeoDir_Frontend_Scripts {
 		// for add listing page only
 		self::enqueue_script( 'geodir-plupload' );
 		self::enqueue_script( 'geodir-add-listing' );
-		self::enqueue_script( 'geodir-add-listing' );
 
 
 		self::enqueue_style( 'select2' );
