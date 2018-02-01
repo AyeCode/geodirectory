@@ -271,7 +271,7 @@ final class GeoDirectory {
                 add_action( $hook, 'geodir_admin_upgrade_notice', 20, 2 );
             }
 
-	        if( 'edit.php' === $pagenow || 'post.php' === $pagenow ) {
+	        if( 'edit.php' === $pagenow || 'post.php' === $pagenow || 'post-new.php' == $pagenow) {
 		        GeoDir_Admin_Post_View::init();
 	        }
 	        
