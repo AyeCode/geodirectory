@@ -149,6 +149,7 @@ class GeoDir_Post_Data {
 			}else{
 				$post_categories = '';
 			}
+
 			if ( $post_categories ) {
 				if ( isset( $gd_post['post_dummy'] ) && $gd_post['post_dummy'] ) {
 					$categories = array_map( 'sanitize_text_field', $post_categories );

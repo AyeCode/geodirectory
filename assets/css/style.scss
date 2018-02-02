@@ -2571,3 +2571,69 @@ body > span[style*='top: -999px']{display: none;}
     float: none;
 }
 /* select2 end */
+/* business hours start */
+.gd-bh-expand-range {
+	cursor: pointer;
+}
+.gd-bh-days-list {
+	display: block;
+	clear: both;
+	padding: 5px 10px;
+}
+.gd-bh-days-list div {
+	display: inline-block;
+}
+.gd-bh-open-hours .gd-bh-days-today {
+	font-weight: bold;
+}
+.gd-bh-days-open .gd-bh-slot-close {
+	font-weight: normal;
+}
+.gd-bh-slots .gd-bh-slot-open,
+.gd-bh-open .geodir-i-biz-hours {
+	color: #41a700;
+}
+.gd-bh-slots .gd-bh-slot-close,
+.gd-bh-close .geodir-i-biz-hours {
+	color: #d32323;
+}
+.gd-bh-days-list .gd-bh-days-d {
+	padding: 0 5px;
+	min-width: 50px;
+	vertical-align: top;
+}
+.gd-bh-days-list .gd-bh-slots {
+	padding: 0 5px;
+}
+.gd-bh-slots .gd-bh-slot {
+	display: block;
+	padding-bottom: 2px;
+}
+.gd-bh-slots .gd-bh-slot:last-child {
+	padding-bottom: 0;
+}
+.gd-bh-days-list:first-child {
+    margin-top: 7px;
+}
+.gd-bh-slot .gd-bh-slot-r {
+	min-width: 120px;
+	padding: 0 10px;
+}
+.gd-bh-slot .gd-bh-slot-l {
+	padding: 0 5px;
+}
+.gd-bh-slot .gd-bh-slot-r {
+	text-align: center;
+}
+.gd-bh-toggled .gd-bh-open-hours {
+	display: none;
+}
+.gd-bh-expand .fa {
+	font-weight: bold;
+	margin-left: 7px;
+}
+.gd-bh-toggled .fa-caret-up,
+.gd-bh-expanded .fa-caret-down {
+	display: none;
+}
+/* business hours end */

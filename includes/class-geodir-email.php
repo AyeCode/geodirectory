@@ -250,7 +250,7 @@ class GeoDir_Email {
 	 *
 	 * @return mixed|void
 	 */
-	function replace_variables( $content, $email_name = '', $email_vars = array() ) {
+	public static function replace_variables( $content, $email_name = '', $email_vars = array() ) {
 		$site_url        = home_url();
 		$blogname        = geodir_get_blogname();
 		$email_from_anme = self::get_mail_from_name();
@@ -788,7 +788,7 @@ class GeoDir_Email {
 	 *
 	 * @return bool|void
 	 */
-	function send_admin_pending_post_email( $post, $data = array() ) {
+	public static function send_admin_pending_post_email( $post, $data = array() ) {
 		$email_name = 'admin_pending_post';
 
 		if ( ! self::is_email_enabled( $email_name ) ) {

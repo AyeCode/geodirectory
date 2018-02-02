@@ -282,3 +282,115 @@ function geodir_parse_hours_range( $hours_str ) {
 	}
 	return $return;
 }
+
+function geodir_get_business_hours( $value = '' ) {
+	if ( empty( $value ) ) {
+		return NULL;
+	}
+	
+	if ( ! is_array( $value ) ) {
+		$data = geodir_schema_to_array( stripslashes_deep( $value ) );
+	} else {
+		$data = $value;
+	}
+	
+	if ( ! empty( $data['hours'] ) || ! empty( $data['offset'] ) ) {
+		$days = geodir_get_weekdays();
+		$day_nos = array_flip( geodir_day_short_names() );
+
+		$date_format = get_option( 'date_format' );
+		$time_format = get_option( 'time_format' );
+		$timestamp = current_time( 'timestamp' );
+		$time = date_i18n( 'H:i:s', $timestamp );
+		$time_int = strtotime( $time );
+		$closed_label = __( 'Closed', 'geodirectory');
+		$open_now_label = __( 'Open now', 'geodirectory');
+		$closed_now_label = __( 'Closed now', 'geodirectory');
+
+		$has_open = 0;
+		$has_closed = 0;
+		$day_slots = array();
+		$today_range = $closed_label;
+		foreach ( $days as $day => $day_name ) {
+			$is_today = date( 'N' ) == (int)$day_nos[ $day ] ? 1 : 0;
+			$day_short = date_i18n( 'D', strtotime( $day_name ) );
+			$is_open = 0; $closed = 0;
+			$values = array(); $ranges = array();
+			if ( ! empty( $data['hours'][$day] ) && is_array( $data['hours'][$day] ) ) {
+				$slots = $data['hours'][$day];
+				$day_range = array();
+				foreach ( $slots as $slot ) {
+					if ( empty( $slot['opens'] ) ) {
+						continue;
+					}
+					$opens = $slot['opens'];
+					$closes = ! empty( $slot['closes'] ) ? $slot['closes'] : '23:59';
+					$opens_time = strtotime( $opens );
+					$closes_time = strtotime( date_i18n( 'H:i:59', strtotime( $closes ) ) );
+					
+					if ( $is_today && $opens_time <= $time_int && $time_int <= $closes_time ) {
+						$is_open = 1;
+						$has_open = 1;
+					} else {
+						$is_open = 0;
+					}
+					$range = date_i18n( $time_format, $opens_time ) . ' - ' . date_i18n( $time_format, $closes_time );
+					$day_range[] = $range;
+
+					$ranges[] = array( 
+						'slot' => $opens . '-' . $closes,
+						'range' => $range,
+						'open' => $is_open,
+					);
+				}
+				if ( $is_today && ! empty( $day_range ) ) {
+					$today_range = implode( ', ', $day_range );
+				}
+			} else {
+				if ( $is_today ) {
+					$has_closed = 1;
+				}
+				$closed = 1;
+				$range = $closed_label;
+				$ranges[] = array( 
+					'slot' => NULL,
+					'range' => $closed_label,
+					'open' => 0,
+				);
+			}
+			
+			$values['today'] = $is_today;
+			$values['closed'] = $closed;
+			$values['open'] = $is_open;
+			$values['day'] = $day_name;
+			$values['day_short'] = $day_short;
+			$values['slots'] = $ranges;
+			
+			$day_slots[$day] = $values;
+		}
+		
+		$date = date_i18n( 'Y-m-d', $timestamp );
+		$date_format = date_i18n( $date_format, $timestamp );
+		$time_format = date_i18n( $time_format, $timestamp );
+
+		$hours = array();
+		$hours['days'] = $day_slots;
+		$hours['extra'] = array(
+			'has_open' => $has_open,
+			'has_closed' => $has_closed,
+			'today_range' => $today_range,
+			'current_label' => $has_open ? $open_now_label : $closed_now_label,
+			'open_now_label' => $open_now_label,
+			'closed_now_label' => $closed_now_label,
+			'date' => $date,
+			'time' => $time,
+			'full_date' => $date . ' ' . $time,
+			'date_format' => $date_format,
+			'time_format' => $time_format,
+			'full_date_format' => $date_format . ' ' . $time_format,
+			'offset' => ! empty( $data['hours']['offset'] ) ? $data['hours']['offset'] : geodir_gmt_offset()
+		);
+	}
+	
+	return apply_filters( 'geodir_get_business_hours', $hours, $data );
+}

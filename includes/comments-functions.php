@@ -1183,7 +1183,7 @@ function geodir_check_notify_moderator( $maybe_notify, $comment_id ) {
 	$comment = get_comment( $comment_id );
 
 	if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
-		$maybe_notify = '0' == $comment->comment_approved && (bool) geodir_email_is_enabled( 'admin_moderate_comment' );
+		$maybe_notify = '0' == $comment->comment_approved && (bool) GeoDir_Email::is_email_enabled( 'admin_moderate_comment' );
 	}
 
 	return $maybe_notify;
@@ -1194,7 +1194,7 @@ add_filter( 'notify_moderator', 'geodir_check_notify_moderator', 99999, 2 );
 function geodir_comment_moderation_recipients( $emails, $comment_id ) {
 	$comment = get_comment( $comment_id );
 
-	if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && geodir_email_is_enabled( 'admin_moderate_comment' ) ) {
+	if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && GeoDir_Email::is_email_enabled( 'admin_moderate_comment' ) ) {
 		$emails = array( GeoDir_Email::get_admin_email() );
 	}
 
@@ -1206,7 +1206,7 @@ add_filter( 'comment_moderation_recipients', 'geodir_comment_moderation_recipien
 function geodir_comment_moderation_subject( $subject, $comment_id ) {
 	$comment = get_comment( $comment_id );
 
-	if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && geodir_email_is_enabled( 'admin_moderate_comment' ) ) {
+	if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && GeoDir_Email::is_email_enabled( 'admin_moderate_comment' ) ) {
 		$post = geodir_get_post_info( $comment->comment_post_ID );
 
 		$email_vars = array(
@@ -1215,7 +1215,7 @@ function geodir_comment_moderation_subject( $subject, $comment_id ) {
 			'post'       => $post
 		);
 
-		$subject = geodir_email_get_subject( 'admin_moderate_comment', $email_vars );
+		$subject = GeoDir_Email::get_subject( 'admin_moderate_comment', $email_vars );
 	}
 
 	return $subject;
@@ -1226,7 +1226,7 @@ add_filter( 'comment_moderation_subject', 'geodir_comment_moderation_subject', 1
 function geodir_comment_moderation_text( $message, $comment_id ) {
 	$comment = get_comment( $comment_id );
 
-	if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && geodir_email_is_enabled( 'admin_moderate_comment' ) ) {
+	if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && GeoDir_Email::is_email_enabled( 'admin_moderate_comment' ) ) {
 		$post       = geodir_get_post_info( $comment->comment_post_ID );
 		$email_name = 'admin_moderate_comment';
 
@@ -1235,9 +1235,9 @@ function geodir_comment_moderation_text( $message, $comment_id ) {
 			'post'    => $post
 		);
 
-		$message_body  = geodir_email_get_content( $email_name, $email_vars );
+		$message_body  = GeoDir_Email::get_content( $email_name, $email_vars );
 
-		$plain_text = geodir_mail_get_email_type() != 'html' ? true : false;
+		$plain_text = GeoDir_Email::get_email_type() != 'html' ? true : false;
 		$template   = $plain_text ? 'emails/plain/geodir-email-' . $email_name . '.php' : 'emails/geodir-email-' . $email_name . '.php';
 
 		$message = geodir_get_template_html( $template, array(
@@ -1247,7 +1247,7 @@ function geodir_comment_moderation_text( $message, $comment_id ) {
 			'plain_text'    => $plain_text,
 			'message_body'  => $message_body,
 		) );
-		$message = geodir_email_style_body( $message, $email_name, $email_vars );
+		$message = GeoDir_Email::style_body( $message, $email_name, $email_vars );
 		$message = apply_filters( 'geodir_mail_content', $message, $email_name, $email_vars );
 		if ( $plain_text ) {
 			$message = wp_strip_all_tags( $message );
@@ -1262,7 +1262,7 @@ add_filter( 'comment_moderation_text', 'geodir_comment_moderation_text', 10, 2 )
 function geodir_comment_moderation_headers( $headers, $comment_id ) {
 	$comment = get_comment( $comment_id );
 
-	if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && geodir_email_is_enabled( 'admin_moderate_comment' ) ) {
+	if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && GeoDir_Email::is_email_enabled( 'admin_moderate_comment' ) ) {
 		$post = geodir_get_post_info( $comment->comment_post_ID );
 
 		$email_vars = array(
@@ -1271,7 +1271,7 @@ function geodir_comment_moderation_headers( $headers, $comment_id ) {
 			'post'       => $post
 		);
 
-		$headers = geodir_email_get_headers( 'admin_moderate_comment', $email_vars );
+		$headers = GeoDir_Email::get_headers( 'admin_moderate_comment', $email_vars );
 	}
 
 	return $headers;
@@ -1298,7 +1298,7 @@ function geodir_should_notify_comment_author( $comment ) {
 		$comment_id = $comment;
 	}
 
-	$notify      = geodir_email_is_enabled( 'author_comment_approved' );
+	$notify      = GeoDir_Email::is_email_enabled( 'author_comment_approved' );
 	$notify_sent = get_comment_meta( $comment_id, 'gd_comment_author_notified', true );
 
 	if ( ! empty( $notify ) && empty( $notify_sent ) ) {
@@ -1317,7 +1317,7 @@ function geodir_should_notify_listing_author( $comment ) {
 		$comment_id = $comment;
 	}
 
-	$notify      = geodir_email_is_enabled( 'author_comment_approved' );
+	$notify      = GeoDir_Email::is_email_enabled( 'author_comment_approved' );
 	$notify_sent = get_comment_meta( $comment_id, 'gd_listing_author_notified', true );
 
 	if ( ! empty( $notify ) && empty( $notify_sent ) ) {
@@ -1375,7 +1375,7 @@ function geodir_new_comment_notify_postauthor( $comment_ID ) {
 	$maybe_notify = get_option( 'comments_notify' );
 
 	if ( $maybe_notify && ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
-		$maybe_notify = (bool) geodir_email_is_enabled( 'owner_comment_submit' );
+		$maybe_notify = (bool) GeoDir_Email::is_email_enabled( 'owner_comment_submit' );
 	}
 
 	/**

@@ -90,11 +90,23 @@ function geodir_init_lazy_load(){
 }
 
 
-jQuery(function() {
+jQuery(function($) {
     // start lazy load if it's turned on
     if(geodirectory_params.lazy_load==1){
         geodir_init_lazy_load();
     }
+	
+	$('.gd-bh-show-field .gd-bh-expand-range').on('click', function(e){
+		var $wrap = $(this).closest('.geodir_more_info')
+		var $hours = $wrap.find('.gd-bh-open-hours')
+		if($hours.is(':visible')){
+			$hours.slideUp(200);
+			$wrap.removeClass('gd-bh-expanded').addClass('gd-bh-toggled');
+		} else {
+			$hours.slideDown(200);
+			$wrap.removeClass('gd-bh-toggled').addClass('gd-bh-expanded');
+		}
+	});
 });
 
 
