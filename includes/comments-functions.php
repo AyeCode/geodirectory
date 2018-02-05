@@ -1243,6 +1243,7 @@ function geodir_comment_moderation_text( $message, $comment_id ) {
 		$message = geodir_get_template_html( $template, array(
 			'email_name'    => $email_name,
 			'email_vars'    => $email_vars,
+			'email_heading'	=> '',
 			'sent_to_admin' => true,
 			'plain_text'    => $plain_text,
 			'message_body'  => $message_body,

@@ -274,12 +274,18 @@ ul.geodir-tabs-content {
     line-height: 22px;
 }
 
-.geodir-company_info a {
+.geodir_more_info {
+	text-indent: .25px;
+}
+
+.geodir-company_info a,
+.geodir_more_info a {
     text-decoration: none;
 }
 
-.geodir-company_info i.fa {
-    margin-right: 3px;
+.geodir-company_info i.fa,
+.geodir_more_info i.fa {
+	margin-right: 4px;
 }
 
 #geodir-post-gallery a {
@@ -2578,16 +2584,13 @@ body > span[style*='top: -999px']{display: none;}
 .gd-bh-days-list {
 	display: block;
 	clear: both;
-	padding: 5px 10px;
+	padding: 4px 10px;
 }
 .gd-bh-days-list div {
 	display: inline-block;
 }
 .gd-bh-open-hours .gd-bh-days-today {
 	font-weight: bold;
-}
-.gd-bh-days-open .gd-bh-slot-close {
-	font-weight: normal;
 }
 .gd-bh-slots .gd-bh-slot-open,
 .gd-bh-open .geodir-i-biz-hours {

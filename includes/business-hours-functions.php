@@ -277,8 +277,13 @@ function geodir_parse_hours_range( $hours_str ) {
 	
 	$return = array();
 	if ( ! empty( $hours_arr[0] ) ) {
-		$return[] = trim( $hours_arr[0] );
-		$return[] = ! empty( $hours_arr[1] ) ? trim( $hours_arr[1] ) : '23:59';
+		$opens = trim( $hours_arr[0] );
+		$closes = ! empty( $hours_arr[1] ) ? trim( $hours_arr[1] ) : '23:59';
+		if ( strpos( $closes, '00:00' ) === 0 ) {
+			$closes = '23:59';
+		}
+		$return[] = $opens;
+		$return[] = $closes;
 	}
 	return $return;
 }
@@ -312,7 +317,8 @@ function geodir_get_business_hours( $value = '' ) {
 		$day_slots = array();
 		$today_range = $closed_label;
 		foreach ( $days as $day => $day_name ) {
-			$is_today = date( 'N' ) == (int)$day_nos[ $day ] ? 1 : 0;
+			$day_no = (int)$day_nos[ $day ];
+			$is_today = date( 'N' ) == $day_no ? 1 : 0;
 			$day_short = date_i18n( 'D', strtotime( $day_name ) );
 			$is_open = 0; $closed = 0;
 			$values = array(); $ranges = array();
@@ -341,6 +347,8 @@ function geodir_get_business_hours( $value = '' ) {
 						'slot' => $opens . '-' . $closes,
 						'range' => $range,
 						'open' => $is_open,
+						'time' => array( date_i18n( 'Hi', $opens_time ) , date_i18n( 'Hi', $closes_time ) ),
+						'minutes' => array( geodir_hhmm_to_bh_minutes( $opens, $day_no ), geodir_hhmm_to_bh_minutes( $closes, $day_no ) )
 					);
 				}
 				if ( $is_today && ! empty( $day_range ) ) {
@@ -356,6 +364,8 @@ function geodir_get_business_hours( $value = '' ) {
 					'slot' => NULL,
 					'range' => $closed_label,
 					'open' => 0,
+					'time' => array(),
+					'minutes' => array()
 				);
 			}
 			
@@ -364,6 +374,7 @@ function geodir_get_business_hours( $value = '' ) {
 			$values['open'] = $is_open;
 			$values['day'] = $day_name;
 			$values['day_short'] = $day_short;
+			$values['day_no'] = $day_nos[$day];
 			$values['slots'] = $ranges;
 			
 			$day_slots[$day] = $values;
@@ -391,6 +402,89 @@ function geodir_get_business_hours( $value = '' ) {
 			'offset' => ! empty( $data['hours']['offset'] ) ? $data['hours']['offset'] : geodir_gmt_offset()
 		);
 	}
-	
+
 	return apply_filters( 'geodir_get_business_hours', $hours, $data );
 }
+
+function geodir_hhmm_to_bh_minutes( $hm, $day_no = 0 ) {
+	$hours = $hm;
+	$minutes = 0;
+
+    if ( strpos( $hm, ':' ) !== false ) {
+        list( $hours, $minutes ) = explode( ':', $hm );
+    }
+
+	$diff = 0;
+	if ( $day_no > 0 ) {
+		$diff = ( $day_no - 1 ) * 60 * 24;
+	}
+
+    return ( ( $hours * 60 ) + $minutes ) + $diff;
+}
+
+function geodir_save_business_hours( $post_ID, $data = NULL ) {
+	global $wpdb;
+
+	if ( empty( $post_ID ) ) {
+		return false;
+	}
+
+	if ( $data === NULL ) {
+		$data = get_post_meta( $post_ID, 'business_hours', true );
+	}
+
+	// clear old rows
+	$saved = geodir_delete_business_hours( $post_ID );
+
+	$business_hours = geodir_get_business_hours( $data );
+	if ( ! empty( $business_hours['days'] ) ) {
+		foreach ( $business_hours['days'] as $day => $hours ) {
+			if ( empty( $hours['closed'] ) && ! empty( $hours['slots'] ) && ! empty( $hours['day_no'] ) ) {
+				foreach ( $hours['slots'] as $slot ) {
+					if ( ! empty( $slot['minutes'] ) && is_array( $slot['minutes'] ) && count( $slot['minutes'] ) == 2 ) {
+						$saved = $wpdb->insert( GEODIR_BUSINESS_HOURS_TABLE, array( 'post_id' => $post_ID, 'open' => $slot['minutes'][0], 'close' => $slot['minutes'][1] ) );
+					}
+				}
+			}
+		}
+	}
+
+	return $saved;
+}
+
+function geodir_delete_business_hours( $post_ID ) {
+	global $wpdb;
+	
+	if ( empty( $post_ID ) ) {
+		return false;
+	}
+
+	return $wpdb->query( $wpdb->prepare( "DELETE FROM `" . GEODIR_BUSINESS_HOURS_TABLE . "` WHERE `post_id` = %d", array( $post_ID ) ) );
+}
+
+function geodir_update_business_hours( $post_data, $update = false ) {
+	global $gd_business_hours_updated;
+
+	if ( empty( $post_data['ID'] ) ) {
+		return;
+	}
+
+	$post_ID = $post_data['ID'];
+	$post    = geodir_get_post_info( $post_ID );
+	if ( empty( $post ) ) {
+		return;
+	}
+	
+	if ( empty( $gd_business_hours_updated ) ) {
+		$gd_business_hours_updated = array();
+	}
+	
+	if ( ! in_array( $post_ID, $gd_business_hours_updated ) ) {
+		$gd_business_hours_updated[] = $post_ID;
+	}
+	
+	$business_hours = isset( $post->business_hours ) ? $post->business_hours : '';
+	
+	geodir_save_business_hours( $post_ID, $business_hours );
+}
+//add_action( 'geodir_ajax_post_saved', 'geodir_update_business_hours', 0, 2 ); @remove this once we implement search by open_now

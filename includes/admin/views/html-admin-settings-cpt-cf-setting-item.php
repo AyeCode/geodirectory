@@ -464,7 +464,8 @@
 								'checkbox',
 								'file',
 								'address',
-								'taxonomy'
+								'taxonomy',
+								'business_hours'
 							) ) ) {
 							} else {
 								unset( $show_in_locations['[owntab]'] );

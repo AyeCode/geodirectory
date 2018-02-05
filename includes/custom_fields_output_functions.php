@@ -6,9 +6,6 @@
  * @package GeoDirectory
  */
 
-
-
-
 /**
  * Get the html output for the custom field: checkbox
  *
@@ -2008,19 +2005,9 @@ function geodir_cf_business_hours($html,$location,$cf,$p=''){
 			if ( empty( $business_hours['days'] ) ) {
 				return $html;
 			}
-			$frontend_title = $business_hours['extra']['current_label'];
 			$show_value = $business_hours['extra']['today_range'];
 
             if (!empty($show_value)) {
-				$extra_class = '';
-				if ( ! empty( $business_hours['extra']['has_open'] ) ) {
-					$extra_class .= ' gd-bh-open';
-				} else {
-					$extra_class .= ' gd-bh-close';
-				}
-				if ( ! empty( $business_hours['extra']['has_closed'] ) ) {
-					$extra_class .= ' gd-bh-closed';
-				}
                 $field_icon = geodir_field_icon_proccess($cf);
                 if (strpos($field_icon, 'http') !== false) {
                     $field_icon_af = '';
@@ -2031,40 +2018,28 @@ function geodir_cf_business_hours($html,$location,$cf,$p=''){
                     $field_icon = '';
                 }
 
+				$extra_class = '';
+				if ( ! empty( $business_hours['extra']['has_closed'] ) ) {
+					$extra_class .= ' gd-bh-closed';
+				}
+				
                 $html = '<div class="geodir_more_info gd-bh-show-field gd-bh-toggled ' . $cf['css_class'] . ' ' . $html_var . $extra_class . '" style="clear:both;">';
-				$html .= '<span class="geodir-i-business_hours geodir-i-biz-hours" style="' . $field_icon . '">' . $field_icon_af . $frontend_title . ': </span>';
-                $html .= '<span class="gd-bh-expand-range" title="' . esc_attr__( 'Expand opening hours' , 'geodirectory' ) . '"><span class="gd-bh-today-range">' . $show_value . '</span>';
+				$html .= '<span class="geodir-i-business_hours geodir-i-biz-hours" style="' . $field_icon . '">' . $field_icon_af . '<font></font>' . ': </span>';
+                $html .= '<span class="gd-bh-expand-range" data-offset="' . geodir_gmt_offset() . '" data-offsetsec="' . ( geodir_gmt_offset( false ) * HOUR_IN_SECONDS ) . '" title="' . esc_attr__( 'Expand opening hours' , 'geodirectory' ) . '"><span class="gd-bh-today-range">' . $show_value . '</span>';
 				$html .= '<span class="gd-bh-expand"><i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i></span></span>';
 				$html .= '<div class="gd-bh-open-hours">';
 				foreach ( $business_hours['days'] as $day => $slots ) {
 					$class = '';
-					if ( ! empty( $slots['today'] ) ) {
-						$class .= 'gd-bh-days-today ';
-
-						if ( ! empty( $slots['open'] ) ) {
-							$class .= 'gd-bh-days-open ';
-						} else {
-							$class .= 'gd-bh-days-close ';
-						}
-					}
 					if ( ! empty( $slots['closed'] ) ) {
 						$class .= 'gd-bh-days-closed ';
 					}
-					$html .= '<div class="gd-bh-days-list ' . trim( $class ) . '"><div class="gd-bh-days-d">' . $slots['day_short'] . '</div><div class="gd-bh-slots">';
-					$today_label = '';
+					$html .= '<div data-day="' . $slots['day_no'] . '" data-closed="' . $slots['closed'] . '" class="gd-bh-days-list ' . trim( $class ) . '"><div class="gd-bh-days-d">' . $slots['day_short'] . '</div><div class="gd-bh-slots">';
 					foreach ( $slots['slots'] as $i => $slot ) {
-						$class = '';
-						if ( ! empty( $slots['today'] ) ) {
-							if ( ! empty( $slot['open'] ) ) {
-								$today_label = $business_hours['extra']['open_now_label'];
-								$class .= 'gd-bh-slot-open';
-							} elseif ( $i == 0 && ! empty( $slots['today'] ) ) {
-								$today_label = $business_hours['extra']['closed_now_label'];
-								$class .= 'gd-bh-slot-close ';
-							}
+						$attrs = '';
+						if ( ! empty( $slot['time'] ) ) {
+							$attrs .= 'data-open="' . $slot['time'][0] . '"  data-close="' . $slot['time'][1] . '"';
 						}
-						$html .= '<div class="gd-bh-slot ' . $class . '"><div class="gd-bh-slot-r">' . $slot['range'] . '</div>';
-						//$html .= '<div class="gd-bh-slot-l">' . $today_label . '</div>';
+						$html .= '<div ' . $attrs . ' class="gd-bh-slot"><div class="gd-bh-slot-r">' . $slot['range'] . '</div>';
 						$html .= '</div>';
 					}
 					$html .= '</div></div>';
