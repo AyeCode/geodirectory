@@ -72,7 +72,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 		 * @return array Altered column array.
 		 * @todo we need to make this better
 		 */
-		function edit_post_columns( $columns ) {
+		public static function edit_post_columns( $columns ) {
 
 			$new_columns = array(
 				'location'  => __( 'Location (ID)', 'geodirectory' ),
@@ -101,7 +101,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 		 * @param string $column The column name.
 		 * @param int $post_id The post ID.
 		 */
-		function manage_post_columns( $column, $post_id ) {
+		public static function manage_post_columns( $column, $post_id ) {
 			global $post, $wpdb;
 
 			switch ( $column ):
@@ -185,7 +185,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 		 *
 		 * @return array Altered column array.
 		 */
-		function post_sortable_columns( $columns ) {
+		public static function post_sortable_columns( $columns ) {
 
 			$columns['expire'] = 'expire';
 
@@ -231,7 +231,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 		 * @global object $post The post object.
 		 * @global int $post_id The post ID.
 		 */
-		function listing_setting() {
+		public static function listing_setting() {
 			global $post, $post_id;
 
 			$post_type = get_post_type();
@@ -269,7 +269,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 		 * @global object $post The post object.
 		 * @global int $post_id The post ID.
 		 */
-		function attachment_settings() {
+		public static function attachment_settings() {
 			global $post, $post_id;
 
 			wp_nonce_field( plugin_basename( __FILE__ ), 'geodir_post_attachments_noncename' );

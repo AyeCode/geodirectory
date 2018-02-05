@@ -227,8 +227,8 @@ class GeoDir_Admin {
 			include( 'views/html-email-template-preview.php' );
 			$message = ob_get_clean();
 			
-			$message 	= geodir_email_wrap_message( $message, $email_name, $email_vars );
-			$message 	= geodir_email_style_body( $message, $email_name, $email_vars );
+			$message 	= GeoDir_Email::email_wrap_message( $message, $email_name, $email_vars );
+			$message 	= GeoDir_Email::style_body( $message, $email_name, $email_vars );
 			$message 	= apply_filters( 'geodir_mail_content', $message, $email_name, $email_vars );
 
 			// Print the preview email content.

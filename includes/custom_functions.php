@@ -79,7 +79,7 @@ function geodir_post_package_info( $package_info, $post = '', $post_type = '' ) 
  */
 function geodir_send_inquiry( $request ) {
 	// strip slashes from text
-	if ( ! geodir_email_is_enabled( 'send_enquiry' ) ) {
+	if ( ! GeoDir_Email::is_email_enabled( 'send_enquiry' ) ) {
 		return false;
 	}
 
@@ -165,7 +165,7 @@ function geodir_send_inquiry( $request ) {
  * }
  */
 function geodir_send_friend( $request ) {
-	if ( ! geodir_email_is_enabled( 'send_friend' ) ) {
+	if ( ! GeoDir_Email::is_email_enabled( 'send_friend' ) ) {
 		return false;
 	}
 

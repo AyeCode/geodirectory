@@ -579,6 +579,15 @@ class GeoDir_Admin_Install {
 			comment_content text NULL DEFAULT NULL,
 			PRIMARY KEY  (id)
 			) $collate; " ;
+			
+		// Table for storing business hours info
+		$tables .= " CREATE TABLE " . GEODIR_BUSINESS_HOURS_TABLE . " (
+			id int(11) NOT NULL AUTO_INCREMENT,
+			post_id int(11) DEFAULT NULL,
+			open int(11) DEFAULT NULL,
+			close int(11) DEFAULT NULL,
+			PRIMARY KEY  (id)
+			) $collate; " ;
 
 		return $tables;
 	}

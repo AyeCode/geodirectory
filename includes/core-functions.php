@@ -257,6 +257,8 @@ function geodir_params()
         'txt_choose_image' => __( 'Choose an image', 'geodirectory' ),
         'txt_use_image' => __( 'Use image', 'geodirectory' ),
         'img_spacer' => admin_url( 'images/media-button-image.gif' ),
+		'txt_open_now' => __('Open now', 'geodirectory'),
+		'txt_closed_now' => __('Closed now', 'geodirectory'),
 		'txt_closed' => __('Closed', 'geodirectory'),
 		'gmt_offset' => geodir_gmt_offset(),
     );

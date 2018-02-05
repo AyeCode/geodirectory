@@ -93,6 +93,7 @@ class GeoDir_Email {
 			geodir_get_template( 'emails/plain/geodir-email-footer.php', array(
 				'email_name'    => $email_name,
 				'email_vars'    => $email_vars,
+				'email_heading'	=> '',
 				'plain_text'    => $plain_text,
 				'sent_to_admin' => $sent_to_admin
 			) );
@@ -100,6 +101,7 @@ class GeoDir_Email {
 			geodir_get_template( 'emails/geodir-email-footer.php', array(
 				'email_name'    => $email_name,
 				'email_vars'    => $email_vars,
+				'email_heading'	=> '',
 				'plain_text'    => $plain_text,
 				'sent_to_admin' => $sent_to_admin
 			) );
@@ -183,6 +185,7 @@ class GeoDir_Email {
 		$content = geodir_get_template_html( $template, array(
 			'email_name'    => $email_name,
 			'email_vars'    => $email_vars,
+			'email_heading'	=> '',
 			'sent_to_admin' => false,
 			'plain_text'    => $plain_text,
 			'message_body'  => $message_body,
@@ -250,7 +253,7 @@ class GeoDir_Email {
 	 *
 	 * @return mixed|void
 	 */
-	function replace_variables( $content, $email_name = '', $email_vars = array() ) {
+	public static function replace_variables( $content, $email_name = '', $email_vars = array() ) {
 		$site_url        = home_url();
 		$blogname        = geodir_get_blogname();
 		$email_from_anme = self::get_mail_from_name();
@@ -610,6 +613,7 @@ class GeoDir_Email {
 		$content = geodir_get_template_html( $template, array(
 			'email_name'    => $email_name,
 			'email_vars'    => $email_vars,
+			'email_heading'	=> '',
 			'sent_to_admin' => false,
 			'plain_text'    => $plain_text,
 			'message_body'  => $message_body,
@@ -672,6 +676,7 @@ class GeoDir_Email {
 		$content = geodir_get_template_html( $template, array(
 			'email_name'    => $email_name,
 			'email_vars'    => $email_vars,
+			'email_heading'	=> '',
 			'sent_to_admin' => false,
 			'plain_text'    => $plain_text,
 			'message_body'  => $message_body,
@@ -768,6 +773,8 @@ class GeoDir_Email {
 		$content = geodir_get_template_html( $template, array(
 			'email_name'    => $email_name,
 			'email_vars'    => $email_vars,
+			'email_heading'	=> '',
+			'email_heading'	=> '',
 			'sent_to_admin' => true,
 			'plain_text'    => $plain_text,
 			'message_body'  => $message_body,
@@ -788,7 +795,7 @@ class GeoDir_Email {
 	 *
 	 * @return bool|void
 	 */
-	function send_admin_pending_post_email( $post, $data = array() ) {
+	public static function send_admin_pending_post_email( $post, $data = array() ) {
 		$email_name = 'admin_pending_post';
 
 		if ( ! self::is_email_enabled( $email_name ) ) {
@@ -818,6 +825,7 @@ class GeoDir_Email {
 		$content = geodir_get_template_html( $template, array(
 			'email_name'    => $email_name,
 			'email_vars'    => $email_vars,
+			'email_heading'	=> '',
 			'sent_to_admin' => true,
 			'plain_text'    => $plain_text,
 			'message_body'  => $message_body,
@@ -874,6 +882,7 @@ class GeoDir_Email {
 		$content = geodir_get_template_html( $template, array(
 			'email_name'    => $email_name,
 			'email_vars'    => $email_vars,
+			'email_heading'	=> '',
 			'sent_to_admin' => false,
 			'plain_text'    => $plain_text,
 			'message_body'  => $message_body,
@@ -971,6 +980,7 @@ class GeoDir_Email {
 		$content = geodir_get_template_html( $template, array(
 			'email_name'    => $email_name,
 			'email_vars'    => $email_vars,
+			'email_heading'	=> '',
 			'sent_to_admin' => false,
 			'plain_text'    => $plain_text,
 			'message_body'  => $message_body,
@@ -1039,6 +1049,7 @@ class GeoDir_Email {
 		$content = geodir_get_template_html( $template, array(
 			'email_name'    => $email_name,
 			'email_vars'    => $email_vars,
+			'email_heading'	=> '',
 			'sent_to_admin' => false,
 			'plain_text'    => $plain_text,
 			'message_body'  => $message_body,
@@ -1103,6 +1114,7 @@ class GeoDir_Email {
 		$content = geodir_get_template_html( $template, array(
 			'email_name'    => $email_name,
 			'email_vars'    => $email_vars,
+			'email_heading'	=> '',
 			'sent_to_admin' => false,
 			'plain_text'    => $plain_text,
 			'message_body'  => $message_body,
