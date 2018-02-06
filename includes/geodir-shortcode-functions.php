@@ -2698,3 +2698,17 @@ function geodir_sc_single_next_prev()
         class="geodir-post_right"><?php next_post_link('%link', __('Next', 'geodirectory') . '', false) ?></div>
     </div><?php
 }
+
+/**
+ * Outputs the closed post status text on the post details page.
+ *
+ * @since 2.0.0
+ * @package GeoDirectory
+ */
+function geodir_sc_single_closed_text() {
+    global $post;
+
+	if ( geodir_post_is_closed( $post ) ) {
+		geodir_post_closed_text( $post );
+	}
+}

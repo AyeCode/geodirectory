@@ -1807,3 +1807,53 @@ function geodir_max_excerpt( $charlength ) {
 
     return $out;
 }
+
+function geodir_get_custom_statuses() {
+	$custom_statuses = array(
+		'gd-closed' => _x( 'Closed down', 'Listing status', 'geodirectory' )
+	);
+
+    return apply_filters( 'geodir_listing_custom_statuses', $custom_statuses );
+}
+
+function geodir_get_post_statuses() {
+    $default_statuses = get_post_statuses();
+	$custom_statuses = geodir_get_custom_statuses();
+
+	$statuses = array_merge( $default_statuses, $custom_statuses );
+
+    return apply_filters( 'geodir_post_statuses', $statuses );
+}
+
+/**
+ * Get the nice name for an listing status.
+ *
+ * @since  2.0.0
+ * @param  string $status
+ * @return string
+ */
+function geodir_get_post_status_name( $status ) {
+	$statuses = geodir_get_post_statuses();
+	if ( ! empty( $statuses ) && isset( $statuses[ $status ] ) ) {
+		$status_name = $statuses[ $status ];
+	} else {
+		$status_object = get_post_status_object( $status );
+		if ( ! empty( $status_object->label ) ) {
+			$status_name = $status_object->label;
+		} else {
+			$status_name = $status;
+		}
+	}
+	return $status_name;
+}
+
+function geodir_post_is_closed( $post ) {
+	if ( empty( $post ) ) {
+		return false;
+	}
+	
+	$status = ! empty( $post->post_status ) ? $post->post_status : get_post_status( $post );
+	$closed = $status == 'gd-closed' ? true : false;
+	
+	return apply_filters( 'geodir_post_is_closed', $closed, $post );
+}

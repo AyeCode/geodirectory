@@ -1699,6 +1699,14 @@ if (!is_admin()) {
  */
 function geodir_set_status_draft_to_publish_for_own_post($post)
 {
+	if (is_single()) {
+		$current_post = ! empty( $post[0]->post_status ) ?  $post[0] :  $post;
+		if ( geodir_post_is_closed($current_post) ) {
+			add_filter( 'comments_open', '__return_false', 9999, 2 );
+			add_filter( 'pings_open', '__return_false', 9999, 2 );
+			return $post;
+		}
+	}
     $user_id = get_current_user_id();
 
     if(!$user_id){return $post;}

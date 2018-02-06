@@ -49,6 +49,8 @@ class GeoDir_Post_Data {
 
 		if(!is_admin()){
 			add_filter( 'pre_get_posts', array( __CLASS__, 'show_public_preview' ) );
+			add_filter( 'posts_results', array( __CLASS__, 'set_closed_status' ), 999, 2 );
+			add_filter( 'the_posts', array( __CLASS__, 'reset_closed_status' ), 999, 2 );
 		}
 
 		/*
@@ -1130,6 +1132,28 @@ class GeoDir_Post_Data {
 		}
 
 
+		return $posts;
+	}
+	
+	public static function set_closed_status( $posts, $wp_query ) {
+		global $wp_post_statuses, $gd_reset_closed;
+		
+		if ( isset( $wp_post_statuses['gd-closed'] ) && !empty( $wp_query->is_single ) && !empty( $posts ) && ! empty( $posts[0]->post_type ) && geodir_is_gd_post_type( $posts[0]->post_type ) && !empty( $posts[0]->post_status ) && geodir_post_is_closed( $posts[0] ) ) {
+			$wp_post_statuses['gd-closed']->public = true;
+			$gd_reset_closed = true;
+		}
+		
+		return $posts;
+	}
+
+	public static function reset_closed_status( $posts, $wp_query ) {
+		global $wp_post_statuses, $gd_reset_closed;
+		
+		if ( $gd_reset_closed && isset( $wp_post_statuses['gd-closed'] ) ) {
+			$wp_post_statuses['gd-closed']->public = false;
+			$gd_reset_closed = false;
+		}
+		
 		return $posts;
 	}
 

@@ -201,7 +201,8 @@ class GeoDir_Template_Loader {
 
         // if the content is blank then just add the main loop
         if($content==''){
-            $content = "[gd_single_slider]
+            $content = "[gd_single_closed_text]
+                        [gd_single_slider]
                         [gd_single_taxonomies]
                         [gd_single_tabs]";
         }

@@ -163,6 +163,8 @@ class GeoDir_Admin_Install {
 
 		// Register post types
 		GeoDir_Post_types::register_post_types();
+		// Register listing status
+		GeoDir_Post_types::register_post_status();
 		GeoDir_Post_types::register_taxonomies();
 
 
@@ -363,7 +365,7 @@ class GeoDir_Admin_Install {
 			'page_details' => array(
 				'name'    => _x( 'gd-details', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'GD Details', 'Page title', 'geodirectory'),
-				'content' => "[gd_single_slider]\n[gd_single_taxonomies]\n[gd_single_tabs]\n[gd_single_next_prev]",
+				'content' => "[gd_single_closed_text]\n[gd_single_slider]\n[gd_single_taxonomies]\n[gd_single_tabs]\n[gd_single_next_prev]",
 			),
 			
 		) );
