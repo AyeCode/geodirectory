@@ -46,7 +46,7 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 				''          		=> __( 'Design options', 'geodirectory' ),
 				'admin_emails'  	=> __( 'Archives', 'geodirectory' ),
 				'client_emails' 	=> __( 'Details', 'geodirectory' ),
-				'other_emails' 		=> __( 'Reviews', 'geodirectory' ),
+				'reviews' 		=> __( 'Reviews', 'geodirectory' ),
 				'email_template' 	=> __( 'Email Template', 'geodirectory' ),
 			);
 
@@ -81,21 +81,126 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 		 */
 		public function get_settings( $current_section = '' ) {
 
-			if($current_section == 'other_emails'){
-				$settings = apply_filters( 'woocommerce_other_email_settings', array(
+			if($current_section == 'reviews'){
+				$settings = apply_filters( 'geodir_reviews_settings', array(
 
 
-					array('name' => __('Send to friend', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_send_friend_settings'),
+					array('name' => __('Reviews', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_reviews_settings'),
+
+					array(
+						'id'   => 'rating_color',
+						'name' => __( 'Rating color', 'geodirectory' ),
+						'desc' => __( 'The colour for the rating stars.', 'geodirectory' ),
+						'default' => '#ff9900',
+						'type' => 'color',
+						'desc_tip' => true,
+						'advanced' => false,
+					),
+
+					array(
+						'id'   => 'rating_color_off',
+						'name' => __( 'Rating color off', 'geodirectory' ),
+						'desc' => __( 'The colour for the rating stars that are not selected.', 'geodirectory' ),
+						'default' => '#afafaf',
+						'type' => 'color',
+						'desc_tip' => true,
+						'advanced' => false,
+					),
 
 
+					array(
+						'id' => 'rating_type',
+						'type' => 'select',
+						'name' => __('Rating type', 'geodirectory'),
+						'desc' => __('Select the rating type to use, font-awesome or transparent image.', 'geodirectory'),
+						'class' => 'geodir-select',
+						'options' => array(
+							'font-awesome'  => __( 'Font Awesome', 'geodirectory' ),
+							'image'  => __( 'Transparent Image', 'geodirectory' ),
+						),
+						'default' => 'font-awesome',
+						'desc_tip' => true,
+						'advanced' => true,
+					),
 
-					array('type' => 'sectionend', 'id' => 'user_send_friend_settings'),
+					array(
+						'id'   => 'rating_icon',
+						'name' => __( 'Rating icon', 'geodirectory' ),
+						'desc' => __( 'Select the font awesome icon to use for ratings.', 'geodirectory' ),
+						'default' => 'fa-star',
+						'type' => 'font-awesome',
+						'desc_tip' => true,
+						'advanced' => true,
+					),
 
-					array('name' => __('Send enquiry', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_send_enquiry_settings'),
+					array(
+						'name' => __('Rating transparent image', 'geodirectory'),
+						'desc' => __('Used only if the transparent image option is set, this image will be used to select ratings.', 'geodirectory'),
+						'id' => 'rating_image',
+						'type' => 'image',
+						'image_size' => 'full',
+						'desc_tip' => true,
+						'advanced' => true,
+					),
+
+					array(
+						'name' => __('Rating text 1', 'geodirectory'),
+						'desc' => __('This is the text shown when a 1 star rating is selected.', 'geodirectory'),
+						'id' => 'rating_text_1',
+						'type' => 'text',
+						'placeholder' => GeoDir_Comments::rating_texts_default()[1],
+						'desc_tip' => true,
+						'default'  => '',
+						'advanced' => true
+					),
+
+					array(
+						'name' => __('Rating text 2', 'geodirectory'),
+						'desc' => __('This is the text shown when the star rating is selected.', 'geodirectory'),
+						'id' => 'rating_text_2',
+						'type' => 'text',
+						'placeholder' => GeoDir_Comments::rating_texts_default()[2],
+						'desc_tip' => true,
+						'default'  => '',
+						'advanced' => true
+					),
+
+					array(
+						'name' => __('Rating text 3', 'geodirectory'),
+						'desc' => __('This is the text shown when the star rating is selected.', 'geodirectory'),
+						'id' => 'rating_text_3',
+						'type' => 'text',
+						'placeholder' => GeoDir_Comments::rating_texts_default()[3],
+						'desc_tip' => true,
+						'default'  => '',
+						'advanced' => true
+					),
+
+					array(
+						'name' => __('Rating text 4', 'geodirectory'),
+						'desc' => __('This is the text shown when the star rating is selected.', 'geodirectory'),
+						'id' => 'rating_text_4',
+						'type' => 'text',
+						'placeholder' => GeoDir_Comments::rating_texts_default()[4],
+						'desc_tip' => true,
+						'default'  => '',
+						'advanced' => true
+					),
+
+					array(
+						'name' => __('Rating text 5', 'geodirectory'),
+						'desc' => __('This is the text shown when the star rating is selected.', 'geodirectory'),
+						'id' => 'rating_text_5',
+						'type' => 'text',
+						'placeholder' => GeoDir_Comments::rating_texts_default()[5],
+						'desc_tip' => true,
+						'default'  => '',
+						'advanced' => true
+					),
 
 
+					array('type' => 'sectionend', 'id' => 'admin_reviews_settings'),
 
-					array('type' => 'sectionend', 'id' => 'user_send_enquiry_settings'),
 
 				));
 			}
@@ -333,6 +438,7 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 
 			return $types;
 		}
+
 
 	}
 

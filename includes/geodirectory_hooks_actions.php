@@ -2393,7 +2393,7 @@ function geodir_load_gd_options_text_translation($translation_texts = array()) {
 add_filter('geodir_load_db_language', 'geodir_load_gd_options_text_translation');
 add_filter('geodir_action_get_request_info', 'geodir_attach_parent_categories', 0, 1);
 add_filter('geodir_show_listing_post_excerpt', 'geodir_show_listing_post_excerpt', 10, 3);
-add_filter('gd_rating_form_html', 'geodir_font_awesome_rating_form_html', 10, 2);
+//add_filter('gd_rating_form_html', 'geodir_font_awesome_rating_form_html', 10, 2);
 add_filter('geodir_get_rating_stars_html', 'geodir_font_awesome_rating_stars_html', 10, 3);
 add_action('wp_head', 'geodir_font_awesome_rating_css');
 add_action('admin_head', 'geodir_font_awesome_rating_css');

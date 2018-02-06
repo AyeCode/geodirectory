@@ -1,0 +1,54 @@
+// Stiofan's new rating system
+
+.gd-rating{
+
+  line-height: 0;
+  position: relative;
+  font-size: 20px;
+  margin: 10px 0;
+
+  &.gd-rating-output{
+    font-size: 16px;
+
+    img{
+      width: 20%; // if we have 5* system
+    }
+  }
+
+  .gd-rating-wrap{
+    display: inline-block;
+    max-width: max-content;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    vertical-align: middle;
+
+    .gd-rating-foreground{
+      color: orange;
+      position: absolute;
+      width: 50%;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .gd-rating-background{
+      color: #ccc;
+    }
+
+    i:before {
+      letter-spacing: 2px;
+    }
+  }
+
+  .gd-rating-text{
+    vertical-align: middle;
+  }
+
+  // image css
+  &.gd-rating-type-image{
+    .gd-rating-foreground{
+      background: orange;
+    }
+  }
+
+}

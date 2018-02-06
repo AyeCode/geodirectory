@@ -97,7 +97,7 @@ class GeoDir_Admin {
 	public function includes() {
 		include_once( dirname( __FILE__ ) . '/admin-functions.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-settings.php' );
-//		include_once( dirname( __FILE__ ) . '/wc-meta-box-functions.php' );
+		include_once( dirname( __FILE__ ) . '/class-geodir-admin-comments.php' );
 //		include_once( dirname( __FILE__ ) . '/class--admin-post-types.php' );
 //		include_once( dirname( __FILE__ ) . '/class-wc-admin-taxonomies.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-menus.php' );
