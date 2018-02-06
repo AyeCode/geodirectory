@@ -2640,3 +2640,9 @@ body > span[style*='top: -999px']{display: none;}
 	display: none;
 }
 /* business hours end */
+/ * closed down message start */
+.gd-has-closed {
+	background: red;
+	margin: 15px 0;
+}
+/ * closed down message end */

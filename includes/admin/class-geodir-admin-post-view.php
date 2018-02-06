@@ -32,9 +32,11 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 
 			// remove the default category selector
 			add_action('admin_menu', array( __CLASS__,'remove_cat_meta_box'));
-
-
-
+			
+			add_action('admin_footer-edit.php', array( __CLASS__,'posts_footer'));
+			add_action('admin_footer-post.php', array( __CLASS__,'post_form_footer'));
+			add_action('admin_footer-post-new.php', array( __CLASS__,'post_form_footer'));
+			add_action('post_date_column_status', array( __CLASS__,'posts_column_status'), 10, 4);
 
 			self::add_post_type_view_filters();
 		}
@@ -414,6 +416,72 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 
 				}
 			}
+		}
+		
+		public static function posts_footer() {
+			$screen		= get_current_screen();
+			$screen_id	= $screen ? $screen->id : '';
+		
+			if ( ! ( $screen_id && in_array( $screen_id, gd_get_screen_ids() ) ) ) {
+				return;
+			}
+			
+			$statuses = geodir_get_custom_statuses();
+			$status_list = '';
+			foreach ( $statuses as $status => $label ) {
+			  $status_list .= '<option value="' . $status . '">' . $label . '</option>';
+			}
+			?>
+			<script type="text/javascript">
+			jQuery(function($) {
+			   $('select[name="_status"]').append('<?php echo addslashes($status_list); ?>');
+			});
+			</script>
+			<?php
+		}
+		
+		public static function post_form_footer() {
+			global $post;
+
+			if ( !( ! empty( $post->post_type ) && geodir_is_gd_post_type( $post->post_type ) ) ) {
+				return;
+			}
+			 
+			$statuses = geodir_get_custom_statuses();
+			$status_list = '';
+			$current_label = '';
+			foreach ( $statuses as $status => $label ) {
+			  if ( $post->post_status == $status ) {
+				  $current_label = $label;
+			  }
+			  $status_list .= '<option data-save-text="' . wp_sprintf( __( 'Save as %s', 'geodirectory' ), $label ) . '" value="' . $status . '" ' . selected( ( $post->post_status == $status ), true, false ) . '>' . $label . '</option>';
+			}
+			?>
+			<script type="text/javascript">
+			jQuery(function($) {
+			   var $mbox = $("#submitdiv");
+			   $("select#post_status", $mbox).append('<?php echo addslashes($status_list); ?>');
+			   <?php if ( $current_label ) { ?>$(".misc-pub-section #post-status-display", $mbox).text('<?php echo $current_label; ?>');<?php } ?>
+			   $('.save-post-status', $mbox).click(function(e) {
+				   var txt = $("select#post_status option:selected", $mbox).data('save-text');
+				   if (txt) {
+					   $('#save-post', $mbox).show().val(txt);
+				   }
+			   });
+			   $('.save-post-status', $mbox).trigger('click');
+			});
+			</script>
+			<?php
+		}
+		
+		public static function posts_column_status( $status, $post, $column, $mode ) {
+			if ( $column == 'date' && ! empty( $post->post_type ) && geodir_is_gd_post_type( $post->post_type ) ) {
+				$statuses = geodir_get_custom_statuses();
+				if ( ! empty( $statuses[ $post->post_status ] ) ) {
+					$status = $statuses[ $post->post_status ];
+				}
+			}
+			return $status;
 		}
 
 	}

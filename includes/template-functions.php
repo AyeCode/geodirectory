@@ -679,3 +679,23 @@ function geodir_get_page_id( $page, $wpml = true ) {
 
 	return $page ? absint( $page ) : -1;
 }
+
+function geodir_post_closed_text( $post, $echo = true ) {
+	if ( ! empty( $post ) && ! empty( $post->post_type ) ) {
+		$cpt_name = geodir_strtolower( geodir_post_type_singular_name( $post->post_type ) );
+	} else {
+		$cpt_name = __( 'business', 'geodirectory' );
+	}
+
+    ob_start();
+
+    geodir_get_template( 'view/post-closed-text.php', array(
+		'cpt_name' => $cpt_name
+	) );
+
+    if ( $echo ) {
+        echo ob_get_clean();
+    } else {
+        return ob_get_clean();
+    }
+}

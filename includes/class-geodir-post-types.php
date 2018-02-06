@@ -26,6 +26,7 @@ class GeoDir_Post_types {
 	public static function init() {
 		add_action( 'init', array( __CLASS__, 'register_taxonomies' ), 5 );
 		add_action( 'init', array( __CLASS__, 'register_post_types' ), 5 );
+		add_action( 'init', array( __CLASS__, 'register_post_status' ), 9 );
 		add_filter( 'rest_api_allowed_post_types', array( __CLASS__, 'rest_api_allowed_post_types' ) );
 		add_action( 'geodirectory_flush_rewrite_rules', array( __CLASS__, 'flush_rewrite_rules' ) );
 	}
@@ -263,7 +264,29 @@ class GeoDir_Post_types {
 
 		do_action( 'geodirectory_after_register_post_type' );
 	}
+	
+	/**
+	 * Register our custom post statuses, used for listing status.
+	 */
+	public static function register_post_status() {
 
+		$listing_statuses = apply_filters( 'geodir_register_post_statuses',
+			array(
+				'gd-closed'    => array(
+					'label'                     => _x( 'Closed down', 'Listing status', 'geodirectory' ),
+					'public'                    => false,
+					'exclude_from_search'       => true,
+					'show_in_admin_all_list'    => true,
+					'show_in_admin_status_list' => true,
+					'label_count'               => _n_noop( 'Closed down <span class="count">(%s)</span>', 'Closed down <span class="count">(%s)</span>', 'geodirectory' ),
+				)
+			)
+		);
+
+		foreach ( $listing_statuses as $listing_status => $values ) {
+			register_post_status( $listing_status, $values );
+		}
+	}
 
 	/**
 	 * Flush rewrite rules.
