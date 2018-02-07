@@ -109,7 +109,6 @@ class GeoDir_Admin_Setup_Wizard {
 		wp_register_script('geodir-leaflet-geo-script', geodir_plugin_url() . '/assets/leaflet/osm.geocode'.$suffix.'.js', array('geodir-leaflet-script'), GEODIRECTORY_VERSION);
 		wp_register_script('select2', geodir_plugin_url() . '/assets/js/select2/select2.full' . $suffix . '.js', array(), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-admin-script', geodir_plugin_url() . '/assets/js/admin'.$suffix.'.js', array('jquery','jquery-ui-tooltip','thickbox'), GEODIRECTORY_VERSION);
-		wp_register_script('geodir-jRating-js', geodir_plugin_url() . '/assets/js/jRating.jquery'.$suffix.'.js', array( 'jquery' ), GEODIRECTORY_VERSION);
 		wp_add_inline_script( 'geodir-admin-script', "window.gdSetMap = window.gdSetMap || '".geodir_map_name()."';", 'before' );
 		wp_add_inline_script( 'geodir-admin-script', "var ajaxurl = '".admin_url( 'admin-ajax.php' )."';", 'before' );
 
@@ -123,7 +122,6 @@ class GeoDir_Admin_Setup_Wizard {
 			'jquery-ui-tooltip',
 			'select2',
 			'geodir-admin-script',
-			'geodir-jRating-js',
 			'jquery-ui-progressbar',
 		);
 
@@ -145,7 +143,7 @@ class GeoDir_Admin_Setup_Wizard {
 
 		wp_localize_script('geodir-setup', 'geodir_params', geodir_params());
 
-		wp_enqueue_style('font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css', array(), GEODIRECTORY_VERSION);
+		wp_enqueue_style('font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', array(), GEODIRECTORY_VERSION);
 		wp_enqueue_style('geodir-admin-css', geodir_plugin_url() . '/assets/css/admin.css', array(), GEODIRECTORY_VERSION);
 		wp_enqueue_style('geodir-jquery-ui-css', geodir_plugin_url() . '/assets/css/jquery-ui.css', array(), GEODIRECTORY_VERSION);
 		wp_enqueue_style('jquery-ui-core');

@@ -225,37 +225,7 @@ function geodir_show_listing_post_excerpt($display, $view, $post) {
 	return $display;
 }
 
-/**
- * Replace the font awesome rating icons in comment form.
- *
- * @since 1.5.7
- * @package GeoDirectory
- *
- * @param string $html Rating icons html.
- * @param array $star_texts Rating icons labels.
- * @param int|null $default Default rating value to get selected.
- * @return string Rating icons html content.
- */
-function geodir_font_awesome_rating_form_html($html, $star_texts = array(), $default = '') {
-	if ( geodir_get_option( 'geodir_reviewrating_enable_font_awesome' ) == '1' ) {
-		$html = '<select class="gd-fa-rating">';
-		$html .= '<option value=""></option>';
-		if (!empty($star_texts) && is_array($star_texts)) {
-			foreach ($star_texts as $i => $text) {
-				$html .= '<option ' . selected((int)($i + 1), (int)$default, false) . ' value="' . (int)($i + 1) . '">' . $text . '</option>';
-			}
-		} else {
-			$html .= '<option value="1">1</option>';
-			$html .= '<option value="2">2</option>';
-			$html .= '<option value="3">3</option>';
-			$html .= '<option value="4">4</option>';
-			$html .= '<option value="5">5</option>';
-		}
-		$html .= '</select>';
-	}
 
-	return $html;
-}
 
 /**
  * Display the font awesome rating icons in place of default rating images.

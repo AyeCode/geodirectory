@@ -230,7 +230,7 @@ function geodir_params()
         'gd_allowed_img_types' => !empty($allowed_img_types) ? implode(',', $allowed_img_types) : '',
         'txt_form_wait' => __('Wait...', 'geodirectory'),
         'txt_form_searching' => __('Searching...', 'geodirectory'),
-        'fa_rating' => (int)geodir_get_option('geodir_reviewrating_enable_font_awesome') == 1 ? 1 : '',
+        'rating_type' => geodir_get_option('rating_type') ? geodir_get_option('rating_type') : 'font-awesome',
         'reviewrating' => defined('GEODIRREVIEWRATING_VERSION') ? 1 : '',
         'multirating' => defined('GEODIRREVIEWRATING_VERSION') && geodir_get_option('geodir_reviewrating_enable_rating') ? true : false,
         'map_name' => geodir_map_name(),

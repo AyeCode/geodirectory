@@ -492,56 +492,72 @@ function gd_GA_Deauthorize(nonce){
 }
 
 
-// @todo hopefully we can remove this script so its one less script to have to load
 
 jQuery(document).ready(function($) {
-    if (geodir_params.fa_rating) { // font awesome rating
-        jQuery('.gd-fa-rating').barrating({
-            theme: 'fontawesome-stars',
-            onSelect: function(value, text, event) {
-                if (geodir_params.multirating) {
-                    if (jQuery(this.$elem).closest('form').attr('id') == 'post') {
-                        jQuery(this.$elem).closest('.br-theme-fontawesome-stars').parent().find('[name^=geodir_rating]').val(value);
-                    } else {
-                        jQuery(this.$elem).parent().parent().find('.geodir_reviewratings_current_rating').val(value);
+
+    /**
+     * Rating script for ratings inputs.
+     * @info This is shared in both post.js and admin.js any changes shoudl be made to both.
+     */
+    jQuery(".gd-rating-input").each(function () {
+
+        if (geodir_params.rating_type =='font-awesome') { // font awesome rating
+            $type = 'i'
+        }else{// image
+            $type = 'img'
+        }
+
+        $total = jQuery(this).find('.gd-rating-foreground > ' + $type).length;
+        $parent = this;
+
+        // set the current star value and text
+        $value = jQuery($parent).find('input').val();
+        if($value > 0){
+            jQuery($parent).find('.gd-rating-foreground').width( $value / $total * 100 + '%');
+            jQuery($parent).find('.gd-rating-text').text( jQuery($parent).find($type+':eq('+ ($value - 1) +')').attr("title"));
+        }
+
+        // loop all rating stars
+        jQuery(this).find($type).each(function (index) {
+            $original_rating = jQuery($parent).find('input').val();
+
+            $original_percent = $original_rating / $total * 100;
+            $rating_set = false;
+
+            jQuery(this).hover(
+                function () {
+                    $percent = 0;
+                    $rating = index + 1;
+                    $rating_text = jQuery(this).attr("title");
+                    $original_rating_text = jQuery($parent).find('.gd-rating-text').text();
+                    if ($rating > $total) {
+                        $rating = $rating - $total;
                     }
-                } else {
-                    jQuery("#geodir_overallrating").val(value);
+                    $percent = $rating / $total * 100;
+                    jQuery($parent).find('.gd-rating-foreground').width($percent + '%');
+                    jQuery($parent).find('.gd-rating-text').text($rating_text);
+                },
+                function () {
+                    if (!$rating_set) {
+                        jQuery($parent).find('.gd-rating-foreground').width($original_percent + '%');
+                        jQuery($parent).find('.gd-rating-text').text($original_rating_text);
+                    } else {
+                        $rating_set = false;
+                    }
                 }
-            }
+            );
+
+            jQuery(this).click(function () {
+                $original_percent = $percent;
+                $original_rating = $rating;
+                jQuery($parent).find('input').val($rating);
+                jQuery($parent).find('.gd-rating-text').text($rating_text);
+                $rating_set = true;
+            });
+
         });
-    } else { // default rating
-        jQuery('.gd_rating').jRating({
-            /** String vars **/
-            //bigStarsPath : geodir_params.geodir_plugin_url+'/assets/images/stars.png',
-            bigStarsPath: geodir_params.default_rating_star_icon,
-            smallStarsPath: geodir_params.plugin_url + '/assets/images/small.png',
-            phpPath: geodir_params.plugin_url + '/jRating.php',
-            type: 'big', // can be set to 'small' or 'big'
-            /** Boolean vars **/
-            step: true, // if true,  mouseover binded star by star,
-            isDisabled: false,
-            showRateInfo: true,
-            canRateAgain: true,
-            /** Integer vars **/
-            length: 5, // number of star to display
-            decimalLength: 0, // number of decimals.. Max 3, but you can complete the function 'getNote'
-            rateMax: 5, // maximal rate - integer from 0 to 9999 (or more)
-            rateInfosX: -45, // relative position in X axis of the info box when mouseover
-            rateInfosY: 5, // relative position in Y axis of the info box when mouseover
-            nbRates: 100,
-            /** Functions **/
-            onSuccess: function(element, rate) {
-                jQuery('#geodir_overallrating').val(rate);
-            },
-            onTouchstart: function(element, rate) {
-                jQuery('#geodir_overallrating').val(rate);
-            },
-            onError: function() {
-                alert(geodir_params.rating_error_msg);
-            }
-        });
-    }
+
+    });
 
     jQuery('#geodir_location_prefix').attr('disabled', 'disabled');
     jQuery('.button-primary').click(function() {

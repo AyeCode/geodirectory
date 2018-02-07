@@ -7,7 +7,7 @@
  */
 
 function geodir_get_popup_forms(e, i, r, o) {
-    var s = geodirectory_params.ajax_url,
+    var s = geodir_params.ajax_url,
         a = i.closest("li");
     i.closest(".geodir-company_info").length > 0 && (a = i.closest(".geodir-company_info"));
     var d = a.find('input[name="geodir_popup_post_id"]').val();
@@ -60,14 +60,14 @@ jQuery(document).ready(function() {
     // chrome 53 introduced a bug, so we need to repaint the slider when shown.
     jQuery('.geodir-slides').addClass('flexslider-fix-rtl');
 
-    var e = "undefined" != typeof geodirectory_params.gd_modal && 1 == parseInt(geodirectory_params.gd_modal) ? !0 : !1;
+    var e = "undefined" != typeof geodir_params.gd_modal && 1 == parseInt(geodir_params.gd_modal) ? !0 : !1;
     e || jQuery("#geodir-post-gallery a").lightBox({
         overlayOpacity: .5,
-        imageLoading: geodirectory_params.plugin_url + "/assets/images/lightbox-ico-loading.gif",
-        imageBtnNext: geodirectory_params.plugin_url + "/assets/images/lightbox-btn-next.gif",
-        imageBtnPrev: geodirectory_params.plugin_url + "/assets/images/lightbox-btn-prev.gif",
-        imageBtnClose: geodirectory_params.plugin_url + "/assets/images/lightbox-btn-close.gif",
-        imageBlank: geodirectory_params.plugin_url + "/assets/images/lightbox-blank.gif"
+        imageLoading: geodir_params.plugin_url + "/assets/images/lightbox-ico-loading.gif",
+        imageBtnNext: geodir_params.plugin_url + "/assets/images/lightbox-btn-next.gif",
+        imageBtnPrev: geodir_params.plugin_url + "/assets/images/lightbox-btn-prev.gif",
+        imageBtnClose: geodir_params.plugin_url + "/assets/images/lightbox-btn-close.gif",
+        imageBlank: geodir_params.plugin_url + "/assets/images/lightbox-blank.gif"
     }), jQuery("#geodir_carousel").flexslider({
         animation: "slide",
         namespace: "geodir-",
@@ -79,7 +79,7 @@ jQuery(document).ready(function() {
         itemWidth: 75,
         itemMargin: 5,
         asNavFor: "#geodir_slider",
-        rtl: 1 == parseInt(geodirectory_params.is_rtl) ? !0 : !1
+        rtl: 1 == parseInt(geodir_params.is_rtl) ? !0 : !1
     }), jQuery("#geodir_slider").flexslider({
         animation: "slide",
         selector: ".geodir-slides > li",
@@ -101,7 +101,7 @@ jQuery(document).ready(function() {
 
 
         },
-        rtl: 1 == parseInt(geodirectory_params.is_rtl) ? !0 : !1
+        rtl: 1 == parseInt(geodir_params.is_rtl) ? !0 : !1
     }), jQuery("a.b_sendtofriend").click(function(e) {
         geodir_get_popup_forms(e, jQuery(this), "b_sendtofriend", "basic-modal-content")
     }), jQuery("a.b_send_inquiry").click(function(e) {
@@ -121,5 +121,72 @@ jQuery(document).ready(function() {
     }else if(gdUrlParam('gd_popup')=='send_enquiry' && jQuery('a.b_send_inquiry').length){
         jQuery('.b_send_inquiry').trigger("click");
     }
+
+    /**
+     * Rating script for ratings inputs.
+     * @info This is shared in both post.js and admin.js any changes shoudl be made to both.
+     */
+    jQuery(".gd-rating-input").each(function () {
+
+        if (geodir_params.rating_type =='font-awesome') { // font awesome rating
+            $type = 'i'
+        }else{// image
+            $type = 'img'
+        }
+
+        $total = jQuery(this).find('.gd-rating-foreground > ' + $type).length;
+        $parent = this;
+
+        // set the current star value and text
+        $value = jQuery($parent).find('input').val();
+        if($value > 0){
+            jQuery($parent).find('.gd-rating-foreground').width( $value / $total * 100 + '%');
+            jQuery($parent).find('.gd-rating-text').text( jQuery($parent).find($type+':eq('+ ($value - 1) +')').attr("title"));
+        }
+
+        // loop all rating stars
+        jQuery(this).find($type).each(function (index) {
+            $original_rating = jQuery($parent).find('input').val();
+
+            $original_percent = $original_rating / $total * 100;
+            $rating_set = false;
+
+            jQuery(this).hover(
+                function () {
+                    $percent = 0;
+                    $rating = index + 1;
+                    $rating_text = jQuery(this).attr("title");
+                    $original_rating_text = jQuery($parent).find('.gd-rating-text').text();
+                    if ($rating > $total) {
+                        $rating = $rating - $total;
+                    }
+                    $percent = $rating / $total * 100;
+                    jQuery($parent).find('.gd-rating-foreground').width($percent + '%');
+                    jQuery($parent).find('.gd-rating-text').text($rating_text);
+                },
+                function () {
+                    if (!$rating_set) {
+                        jQuery($parent).find('.gd-rating-foreground').width($original_percent + '%');
+                        jQuery($parent).find('.gd-rating-text').text($original_rating_text);
+                    } else {
+                        $rating_set = false;
+                    }
+                }
+            );
+
+            jQuery(this).click(function () {
+                $original_percent = $percent;
+                $original_rating = $rating;
+                jQuery($parent).find('input').val($rating);
+                jQuery($parent).find('.gd-rating-text').text($rating_text);
+                $rating_set = true;
+            });
+
+        });
+
+    });
+
+
+
 
 });

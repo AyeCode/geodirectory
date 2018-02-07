@@ -218,16 +218,6 @@ class GeoDir_Frontend_Scripts {
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
-			'geodir-barrating' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/jquery.barrating' . $suffix . '.js',
-				'deps'    => array(),
-				'version' => GEODIRECTORY_VERSION,
-			),
-			'geodir-jRating' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/jRating.jquery' . $suffix . '.js',
-				'deps'    => array(),
-				'version' => GEODIRECTORY_VERSION,
-			),
 			'geodir-plupload' => array(
 				'src'     => geodir_plugin_url() . '/assets/js/geodirectory-plupload' . $suffix . '.js',
 				'deps'    => array('plupload','jquery','jquery-ui-sortable'),
@@ -304,7 +294,7 @@ class GeoDir_Frontend_Scripts {
 				'has_rtl' => false,
 			),
 			'font-awesome' => array(
-				'src'     => '//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css',
+				'src'     => '//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 				'has_rtl' => false,
@@ -363,6 +353,11 @@ class GeoDir_Frontend_Scripts {
 		// for add listing page only
 		self::enqueue_script( 'geodir-plupload' );
 		self::enqueue_script( 'geodir-add-listing' );
+
+
+		// detals page
+		
+
 
 
 		self::enqueue_style( 'select2' );

@@ -231,6 +231,7 @@ final class GeoDirectory {
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_fields_output_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-custom-fields-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/comments-functions.php' );
+	    GeoDir_Comments::init();
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/location_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/google_analytics.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-shortcode-functions.php' );

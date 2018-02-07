@@ -2301,7 +2301,7 @@ function geodir_wpml_duplicate_post_review($master_comment_id, $master_post_id, 
     }
     if ($review['post_id'] != $master_post_id) {
         $wpdb->query($wpdb->prepare("UPDATE " . GEODIR_REVIEW_TABLE . " SET post_id=%d WHERE comment_id=%d", $master_post_id, $master_comment_id));
-        geodir_update_postrating($master_post_id, $post_type);
+        GeoDir_Admin_Comments::update_post_rating($master_post_id, $post_type);
     }
 
     $tr_comment_id = geodir_wpml_duplicate_comment_exists($tr_post_id, $master_comment_id);
@@ -2341,7 +2341,7 @@ function geodir_wpml_duplicate_post_review($master_comment_id, $master_post_id, 
     }
 
     if ($tr_post_id) {
-        geodir_update_postrating($tr_post_id, $post_type);
+        GeoDir_Admin_Comments::update_post_rating($tr_post_id, $post_type);
         
         if (defined('GEODIRREVIEWRATING_VERSION') && geodir_get_option('geodir_reviewrating_enable_review') && $sitepress->get_setting('sync_comments_on_duplicates')) {
             $wpdb->query($wpdb->prepare("DELETE FROM " . GEODIR_COMMENTS_REVIEWS_TABLE . " WHERE comment_id = %d", array($tr_comment_id)));

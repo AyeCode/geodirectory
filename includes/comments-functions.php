@@ -6,558 +6,6 @@
  * @package GeoDirectory
  */
 
-add_filter( 'comment_row_actions', 'geodir_comment_meta_row_action', 11, 1 );
-/**
- * Add the comment meta fields to the comments admin page.
- *
- * Adds rating stars below each comment of the WP Admin Dashboard -> Comments page.
- *
- * @since 1.0.0
- * @package GeoDirectory
- *
- * @param array $a {
- *    List of comment row actions.
- *
- * @type string $approve Current comment approve HTML link string.
- * @type string $unapprove Current comment unapprove HTML link string.
- * @type string $reply Current comment reply HTML link string.
- * @type string $quickedit Current comment Quick Edit HTML link string.
- * @type string $edit Current comment Edit HTML link string.
- * @type string $spam Current comment Spam HTML link string.
- * @type string $trash Current comment Trash HTML link string.
- *
- * }
- * @global object $comment The comment object.
- * @return mixed Comment row actions.
- */
-function geodir_comment_meta_row_action( $a ) {
-	global $comment;
-
-	$rating = geodir_get_commentoverall( $comment->comment_ID );
-	if ( $rating != 0 ) {
-		echo geodir_get_rating_stars( $rating, $comment->comment_ID );
-	}
-
-	return $a;
-}
-
-add_action( 'add_meta_boxes_comment', 'geodir_comment_add_meta_box' );
-/**
- * Adds comment rating meta box.
- *
- * Adds meta box to Comments -> Edit page using hook {@see 'add_meta_boxes_comment'}.
- *
- * @since 1.0.0
- * @package GeoDirectory
- *
- * @param object $comment The comment object.
- */
-function geodir_comment_add_meta_box( $comment ) {
-	add_meta_box( 'gd-comment-rating', __( 'Comment Rating', 'geodirectory' ), 'geodir_comment_rating_meta', 'comment', 'normal', 'high' );
-}
-
-/**
- * Add comment rating meta box form fields.
- *
- * Adds form fields to the function {@see 'geodir_comment_add_meta_box'}.
- *
- * @since 1.0.0
- * @since 1.6.16 Changes for disable review stars for certain post type.
- * @package GeoDirectory
- *
- * @param object $comment The comment object.
- */
-function geodir_comment_rating_meta( $comment ) {
-	$post_type = get_post_type( $comment->comment_post_ID );
-	if ( in_array( $post_type, (array) geodir_get_posttypes() ) && (int) $comment->comment_parent == 0 && ! ( ! empty( $post_type ) && geodir_cpt_has_rating_disabled( $post_type ) ) ) {
-		$rating = geodir_get_commentoverall( $comment->comment_ID );
-
-		if ( (int) geodir_get_option( 'geodir_reviewrating_enable_font_awesome' ) == 1 ) {
-			$star_texts   = array();
-			$star_texts[] = __( 'Terrible', 'geodirectory' );
-			$star_texts[] = __( 'Poor', 'geodirectory' );
-			$star_texts[] = __( 'Average', 'geodirectory' );
-			$star_texts[] = __( 'Very Good', 'geodirectory' );
-			$star_texts[] = __( 'Excellent', 'geodirectory' );
-
-			echo geodir_font_awesome_rating_form_html( '', $star_texts, $rating );
-		} else {
-			if ( $rating ) {
-				echo '<div class="gd_rating" data-average="' . $rating . '" data-id="5">';
-
-			} else {
-				echo '<div class="gd_rating" data-average="0" data-id="5"></div>';
-			}
-		}
-		echo '<input type="hidden" id="geodir_overallrating" name="geodir_overallrating" value="' . $rating . '"  />';
-	}
-}
-
-
-add_action( 'comment_form_logged_in_after', 'geodir_comment_rating_fields' );
-add_action( 'comment_form_before_fields', 'geodir_comment_rating_fields' );
-
-/**
- * Add rating fields in comment form.
- *
- * Adds a rating input field in comment form.
- *
- * @since 1.0.0
- * @since 1.6.16 Changes for disable review stars for certain post type.
- * @package GeoDirectory
- * @global object $post The post object.
- */
-function geodir_comment_rating_fields() {
-	global $post;
-
-	$post_types = geodir_get_posttypes();
-
-	if ( ! empty( $post->post_type ) && in_array( $post->post_type, $post_types ) && ! ( ! empty( $post->post_type ) && geodir_cpt_has_rating_disabled( $post->post_type ) ) ) {
-		$star_texts   = array();
-		$star_texts[] = __( 'Terrible', 'geodirectory' );
-		$star_texts[] = __( 'Poor', 'geodirectory' );
-		$star_texts[] = __( 'Average', 'geodirectory' );
-		$star_texts[] = __( 'Very Good', 'geodirectory' );
-		$star_texts[] = __( 'Excellent', 'geodirectory' );
-
-		$gd_rating_html = apply_filters( 'gd_rating_form_html', '<div class="gd_rating" data-average="0" data-id="5"></div>', $star_texts );
-		echo $gd_rating_html;
-		?>
-		<input type="hidden" id="geodir_overallrating" name="geodir_overallrating" value="0"/>
-		<?php
-	}
-}
-
-add_filter( 'comment_reply_link', 'geodir_comment_replaylink' );
-/**
- * Wrap comment reply link with custom div.
- *
- * @since 1.0.0
- * @since 1.6.18 Replace standard login link on login to reply link.
- * @package GeoDirectory
- *
- * @param string $link The HTML link.
- *
- * @return string The HTML link.
- */
-function geodir_comment_replaylink( $link ) {
-
-	if ( strpos( $link, 'wp-login.php?' ) !== false ) {
-		$link = str_replace( wp_login_url(), geodir_login_url(), $link );
-	}
-	$link = '<div class="gd_comment_replaylink">' . $link . '</div>';
-
-	return $link;
-}
-
-add_filter( 'cancel_comment_reply_link', 'geodir_cancle_replaylink' );
-/**
- * Wrap comment cancel reply link with custom div.
- *
- * @since 1.0.0
- * @package GeoDirectory
- *
- * @param string $link The HTML link.
- *
- * @return string The HTML link.
- */
-function geodir_cancle_replaylink( $link ) {
-
-	$link = '<span class="gd-cancel-replaylink">' . $link . '</span>';
-
-	return $link;
-}
-
-add_action( 'comment_post', 'geodir_save_rating' );
-/**
- * Save rating details for a comment.
- *
- * @since 1.0.0
- * @package GeoDirectory
- *
- * @param int $comment The comment ID.
- *
- * @global object $wpdb WordPress Database object.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
- * @global int $user_ID The current user ID.
- */
-function geodir_save_rating( $comment = 0 ) {
-	global $wpdb, $user_ID, $plugin_prefix;
-
-	$comment_info = get_comment( $comment );
-
-	$post_id   = $comment_info->comment_post_ID;
-	$status    = $comment_info->comment_approved;
-	$rating_ip = getenv( "REMOTE_ADDR" );
-
-	$post = geodir_get_post_info( $post_id );
-	if ( empty( $post ) ) {
-		return;
-	}
-
-	if ( $post->post_status == 'publish' ) {
-		$post_status = '1';
-	} else {
-		$post_status = '0';
-	}
-
-	if ( isset( $_REQUEST['geodir_overallrating'] ) ) {
-		$overall_rating = $_REQUEST['geodir_overallrating'];
-
-		if ( isset( $comment_info->comment_parent ) && (int) $comment_info->comment_parent == 0 ) {
-			$overall_rating = $overall_rating > 0 ? $overall_rating : '0';
-
-			$sqlqry = $wpdb->prepare( "INSERT INTO " . GEODIR_REVIEW_TABLE . " SET
-					post_id		= %d,
-					post_type = %s,
-					post_title	= %s,
-					user_id		= %d,
-					comment_id	= %d,
-					rating_ip	= %s,
-					overall_rating = %f,
-					status		= %s,
-					post_status		= %s, 
-					post_date		= %s, 
-					post_city		= %s, 
-					post_region		= %s, 
-					post_country	= %s,
-					post_longitude	= %s,
-					post_latitude	= %s,
-					comment_content	= %s 
-					",
-				array(
-					$post_id,
-					$post->post_type,
-					$post->post_title,
-					$user_ID,
-					$comment,
-					$rating_ip,
-					$overall_rating,
-					$status,
-					$post_status,
-					date_i18n( 'Y-m-d H:i:s', current_time( 'timestamp' ) ),
-					$post->city,
-					$post->region,
-					$post->country,
-					$post->latitude,
-					$post->longitude,
-					$comment_info->comment_content
-				)
-			);
-
-			$wpdb->query( $sqlqry );
-
-			/**
-			 * Called after saving the comment.
-			 *
-			 * @since 1.0.0
-			 * @package GeoDirectory
-			 *
-			 * @param array $_REQUEST {
-			 *    Attributes of the $_REQUEST variable.
-			 *
-			 * @type string $geodir_overallrating Overall rating.
-			 * @type string $comment Comment text.
-			 * @type string $submit Submit button text.
-			 * @type string $comment_post_ID Comment post ID.
-			 * @type string $comment_parent Comment Parent ID.
-			 * @type string $_wp_unfiltered_html_comment Unfiltered html comment string.
-			 *
-			 * }
-			 */
-			do_action( 'geodir_after_save_comment', $_REQUEST, 'Comment Your Post' );
-
-			if ( $status ) {
-				geodir_update_postrating( $post_id );
-			}
-		}
-	}
-}
-
-
-add_action( 'wp_set_comment_status', 'geodir_update_rating_status_change', 10, 2 );
-/**
- * Update comment status when changing the rating.
- *
- * @since 1.0.0
- * @package GeoDirectory
- *
- * @param int $comment_id The comment ID.
- * @param int|string $status The comment status.
- *
- * @global object $wpdb WordPress Database object.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
- * @global int $user_ID The current user ID.
- */
-function geodir_update_rating_status_change( $comment_id, $status ) {
-	if ( $status == 'delete' ) {
-		return;
-	}
-	global $wpdb, $plugin_prefix, $user_ID;
-
-	$comment_info = get_comment( $comment_id );
-
-	$post_id = isset( $comment_info->comment_post_ID ) ? $comment_info->comment_post_ID : '';
-
-	if ( ! empty( $comment_info ) ) {
-		$status = $comment_info->comment_approved;
-	}
-
-	if ( $status == 'approve' || $status == 1 ) {
-		$status = 1;
-	} else {
-		$status = 0;
-	}
-
-	$comment_info_ID = isset( $comment_info->comment_ID ) ? $comment_info->comment_ID : '';
-	$old_rating      = geodir_get_commentoverall( $comment_info_ID );
-
-	$post_type = get_post_type( $post_id );
-
-	$detail_table = $plugin_prefix . $post_type . '_detail';
-
-	if ( $comment_id ) {
-
-		$overall_rating = $old_rating;
-
-		if ( isset( $old_rating ) ) {
-
-			$sqlqry = $wpdb->prepare( "UPDATE " . GEODIR_REVIEW_TABLE . " SET
-						overall_rating = %f,
-						status		= %s,
-						comment_content = %s 
-						WHERE comment_id = %d ", array(
-				$overall_rating,
-				$status,
-				$comment_info->comment_content,
-				$comment_id
-			) );
-
-			$wpdb->query( $sqlqry );
-
-			//update rating
-			geodir_update_postrating( $post_id, $post_type );
-
-		}
-
-	}
-
-}
-
-
-add_action( 'edit_comment', 'geodir_update_rating' );
-/**
- * Update comment rating.
- *
- * @since 1.0.0
- * @package GeoDirectory
- *
- * @param int $comment_id The comment ID.
- *
- * @global object $wpdb WordPress Database object.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
- * @global int $user_ID The current user ID.
- */
-function geodir_update_rating( $comment_id = 0 ) {
-
-	global $wpdb, $plugin_prefix, $user_ID;
-
-	$comment_info = get_comment( $comment_id );
-
-	$post_id    = $comment_info->comment_post_ID;
-	$status     = $comment_info->comment_approved;
-	$old_rating = geodir_get_commentoverall( $comment_info->comment_ID );
-
-	$post_type = get_post_type( $post_id );
-
-	$detail_table = $plugin_prefix . $post_type . '_detail';
-
-	if ( isset( $_REQUEST['geodir_overallrating'] ) ) {
-
-		$overall_rating = $_REQUEST['geodir_overallrating'];
-
-		if ( isset( $comment_info->comment_parent ) && (int) $comment_info->comment_parent == 0 ) {
-			$overall_rating = $overall_rating > 0 ? $overall_rating : '0';
-
-			if ( isset( $old_rating ) ) {
-
-				$sqlqry = $wpdb->prepare( "UPDATE " . GEODIR_REVIEW_TABLE . " SET
-						overall_rating = %f,
-						status		= %s,
-						comment_content	= %s 
-						WHERE comment_id = %d ", array(
-					$overall_rating,
-					$status,
-					$comment_info->comment_content,
-					$comment_id
-				) );
-
-				$wpdb->query( $sqlqry );
-
-				//update rating
-				geodir_update_postrating( $post_id, $post_type );
-
-			}
-		}
-	}
-
-
-}
-
-add_action( 'delete_comment', 'geodir_comment_delete_comment' );
-/**
- * Delete review details when deleting comment.
- *
- * @since 1.0.0
- * @package GeoDirectory
- *
- * @param int $comment_id The comment ID.
- *
- * @global object $wpdb WordPress Database object.
- */
-function geodir_comment_delete_comment( $comment_id ) {
-	global $wpdb;
-
-	$review_info = geodir_get_review( $comment_id );
-	if ( $review_info ) {
-		geodir_update_postrating( $review_info->post_id );
-	}
-
-	$wpdb->query(
-		$wpdb->prepare(
-			"DELETE FROM " . GEODIR_REVIEW_TABLE . " WHERE comment_id=%d",
-			array( $comment_id )
-		)
-	);
-
-}
-
-add_filter( 'comment_text', 'geodir_wrap_comment_text', 40, 2 );
-/**
- * Add rating information in comment text.
- *
- * @since 1.0.0
- * @since 1.6.16 Changes for disable review stars for certain post type.
- * @package GeoDirectory
- *
- * @param string $content The comment content.
- * @param object|string $comment The comment object.
- *
- * @return string The comment content.
- */
-function geodir_wrap_comment_text( $content, $comment = '' ) {
-	if ( ! empty( $comment->comment_post_ID ) && geodir_cpt_has_rating_disabled( (int) $comment->comment_post_ID ) ) {
-		if ( ! is_admin() ) {
-			return '<div class="description">' . $content . '</div>';
-		} else {
-			return $content;
-		}
-	} else {
-		$rating = 0;
-		if ( ! empty( $comment ) ) {
-			$rating = geodir_get_commentoverall( $comment->comment_ID );
-		}
-		if ( $rating != 0 && ! is_admin() ) {
-			return '<div><div class="gd-rating-text">' . __( 'Overall Rating', 'geodirectory' ) . ': <div class="rating">' . $rating . '</div></div>' . geodir_get_rating_stars( $rating, $comment->comment_ID ) . '</div><div class="description">' . $content . '</div>';
-		} else {
-			return $content;
-		}
-	}
-}
-
-
-/**
- * Update post overall rating and rating count.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
- *
- * @param int $post_id The post ID.
- * @param string $post_type The post type.
- * @param bool $delete Depreciated since ver 1.3.6.
- */
-function geodir_update_postrating( $post_id = 0, $post_type = '', $delete = false ) {
-	global $wpdb, $plugin_prefix, $comment;
-	if ( ! $post_type ) {
-		$post_type = get_post_type( $post_id );
-	}
-	$detail_table         = $plugin_prefix . $post_type . '_detail';
-	$post_newrating       = geodir_get_post_rating( $post_id, 1 );
-	$post_newrating_count = geodir_get_review_count_total( $post_id );
-
-
-	//$post_newrating = ( (float)$post_oldrating - (float)$old_rating ) + (float)$overall_rating ;
-
-	if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $detail_table . "'" ) == $detail_table ) {
-
-		$wpdb->query(
-			$wpdb->prepare(
-				"UPDATE " . $detail_table . " SET
-						overall_rating = %f,
-						rating_count = %f
-						where post_id = %d",
-				array( $post_newrating, $post_newrating_count, $post_id )
-			)
-		);
-
-		update_post_meta( $post_id, 'overall_rating', $post_newrating );
-		update_post_meta( $post_id, 'rating_count', $post_newrating_count );
-	}
-	/**
-	 * Called after Updating post overall rating and rating count.
-	 *
-	 * @since 1.0.0
-	 * @since 1.4.3 Added `$post_id` param.
-	 * @package GeoDirectory
-	 *
-	 * @param int $post_id The post ID.
-	 */
-	do_action( 'geodir_update_postrating', $post_id );
-
-}
-
-/**
- * Get post overall rating.
- *
- * Returns overall rating of a post. If no rating returns false.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
- *
- * @param int $post_id The post ID.
- *
- * @return bool|mixed|null|string
- */
-function geodir_get_postoverall( $post_id = 0 ) {
-	global $wpdb, $plugin_prefix;
-
-	$post_type    = get_post_type( $post_id );
-	$detail_table = $plugin_prefix . $post_type . '_detail';
-
-	if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $detail_table . "'" ) == $detail_table ) {
-
-		$post_ratings = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT overall_rating FROM " . $detail_table . " WHERE post_id = %d",
-				array( $post_id )
-			)
-		);
-
-
-	} else {
-		$post_ratings = get_post_meta( $post_id, 'overall_rating' );
-	}
-
-	if ( $post_ratings ) {
-		return $post_ratings;
-	} else {
-		return false;
-	}
-}
 
 
 /**
@@ -812,7 +260,7 @@ function geodir_get_commentoverall_number( $post_id = 0 ) {
  * @return string New comment template.
  */
 function geodir_comment_template( $comment_template ) {
-	global $post;
+	global $post,$gd_is_comment_template_set;
 
 	$post_types = geodir_get_posttypes();
 
@@ -820,17 +268,26 @@ function geodir_comment_template( $comment_template ) {
 		return;
 	}
 	if ( in_array( $post->post_type, $post_types ) ) { // assuming there is a post type called business
+		
+		// if we already loaded the template don't load it again
+		if($gd_is_comment_template_set){
+			return geodir_plugin_path() . '/index.php'; // a blank template to remove default if called more than once.
+		}
+		
 		if ( geodir_cpt_has_rating_disabled( $post->post_type ) ) {
 			return $comment_template;
 		}
 
 		$template = locate_template( array( "geodirectory/reviews.php" ) ); // Use theme template if available
 		if ( ! $template ) {
-			$template = geodir_plugin_path() . '/includes/templates/reviews.php';
+			$template = geodir_plugin_path() . '/templates/reviews.php';
 		}
+		$gd_is_comment_template_set = true;
 
 		return $template;
 	}
+
+	return $comment_template;
 }
 
 add_filter( "comments_template", "geodir_comment_template" );
@@ -983,50 +440,7 @@ if ( ! function_exists( 'geodir_fix_comment_count' ) ) {
 	}
 }
 
-/**
- * HTML for rating stars
- *
- * This is the main HTML markup that displays rating stars.
- *
- * @since 1.0.0
- * @since 1.6.16 Changes for disable review stars for certain post type.
- * @package GeoDirectory
- *
- * @param float $rating The post average rating.
- * @param int $post_id The post ID.
- * @param bool $small Optional. Display as small ratings? Default: false.
- *
- * @return string Rating HTML.
- */
-function geodir_get_rating_stars( $rating, $post_id, $small = false ) {
-	if ( ! empty( $post_id ) && geodir_cpt_has_rating_disabled( (int) $post_id ) ) {
-		return null;
-	}
-	$a_rating = $rating / 5 * 100;
 
-	if ( $small ) {
-		$r_html = '<div class="rating"><div class="gd_rating_map" data-average="' . $rating . '" data-id="' . $post_id . '"><div class="geodir_RatingColor" ></div><div class="geodir_RatingAverage_small" style="width: ' . $a_rating . '%;"></div><div class="geodir_Star_small"></div></div></div>';
-	} else {
-		if ( function_exists( 'geodir_reviewrating_draw_overall_rating' ) ) {
-			// Show rating stars from review rating manager
-			$r_html = geodir_reviewrating_draw_overall_rating( $rating );
-		} else {
-			$rating_img = '<img alt="rating icon" src="' . geodir_default_rating_icon( true ) . '" />';
-
-			/* fix rating star for safari */
-			$star_width = 23 * 5;
-
-			if ( $star_width > 0 ) {
-				$attach_style = 'max-width:' . $star_width . 'px';
-			} else {
-				$attach_style = '';
-			}
-			$r_html = '<div class="geodir-rating" style="' . $attach_style . '"><div class="gd_rating_show" data-average="' . $rating . '" data-id="' . $post_id . '"><div class="geodir_RatingAverage" style="width: ' . $a_rating . '%;"></div><div class="geodir_Star">' . $rating_img . $rating_img . $rating_img . $rating_img . $rating_img . '</div></div></div>';
-		}
-	}
-
-	return apply_filters( 'geodir_get_rating_stars_html', $r_html, $rating, 5 );
-}
 
 /**
  * Check whether to display ratings or not.
@@ -1454,3 +868,68 @@ function geodir_handle_comment_status_change( $comment_ID, $comment_status ) {
 }
 
 add_action( 'wp_set_comment_status', 'geodir_handle_comment_status_change', 10, 2 );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * HTML for rating stars
+ *
+ * This is the main HTML markup that displays rating stars.
+ *
+ * @since 1.0.0
+ * @since 1.6.16 Changes for disable review stars for certain post type.
+ * @since 2.0.0 $small depreciated.
+ * @package GeoDirectory
+ *
+ * @param float $rating The post average rating.
+ * @param int $post_id The post ID.
+ * @param bool $small Depreciated.
+ *
+ * @return string Rating HTML.
+ */
+function geodir_get_rating_stars( $rating, $post_id, $small = false ) {
+	if ( ! empty( $post_id ) && geodir_cpt_has_rating_disabled( (int) $post_id ) ) {
+		return null;
+	}
+
+	$r_html = GeoDir_Comments::rating_output($rating);
+
+	return apply_filters( 'geodir_get_rating_stars_html', $r_html, $rating, 5 );
+}
