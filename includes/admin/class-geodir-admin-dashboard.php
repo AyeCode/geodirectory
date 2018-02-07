@@ -156,7 +156,125 @@ class GeoDir_Admin_Dashboard {
 	/**
 	 * Handles output of the dashboard page in admin.
 	 */
-	public function output() {
+	public function output() { // @todo add hooks after done
+		do_action( 'geodir_admin_dashboard_before', $this );
+		?>
+		<div class="wrap gd-dashboard <?php echo 'gd-dasht-' . $this->type . ' gd-dashst-' . $this->subtype; ?>">
+			<div class="row gd-dash-row gd-row-title">
+				<div class="col-lg-12">
+					<h1 class="page-header">Dashboard</h1>
+				</div>
+			</div>
+			<div class="row gd-dash-row gd-row-actions">
+				<div class="col-lg-12">
+					<h2><i class="fa fa-bell fa-fw"></i> Actions Required</h2>
+					<div class="row">
+						<div class="col-lg-4 col-md-6">
+							<div class="panel panel-info">
+								<div class="panel-heading gd-collapse"><h3 class="panel-title"><i class="fa fa-th-list"></i> Pending Listings<span class="badge"><?php echo $this->get_listings_count( 'pending' ); ?></span> <a href="#" class="pull-right"><i class="fa fa-caret-down"></i></a></h3></div>
+								<div class="panel-body text-center gd-collapsable">
+									<div class="row gd-row-cpt">
+										<div class="col-xs-12 col-md-6">
+											<div class="panel panel-default">
+												<div class="panel-body">
+													<span class="gd-stat-lbl"><i class="fa fa-map-marker"></i> PLACES</span>
+													<span class="gd-stat-val"><?php echo (int)$this->get_post_type_count( 'gd_place', 'pending' ); ?></span>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-12 col-md-6">
+											<div class="panel panel-default">
+												<div class="panel-body">
+													<span class="gd-stat-lbl"><i class="fa fa-calendar"></i> EVENTS</span>
+													<span class="gd-stat-val">0</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="panel-footer gd-collapsable"><a href="#">See All</a></div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-6">
+							<div class="panel panel-info">
+								<div class="panel-heading gd-collapse"><h3 class="panel-title"><i class="fa fa-star"></i> Pending Reviews<span class="badge"><?php echo (int)$this->get_post_type_reviews_count( 'gd_place' ); ?></span> <a href="#" class="pull-right"><i class="fa fa-caret-down"></i></a></h3></div>
+								<div class="panel-body text-center gd-collapsable">
+									<div class="row gd-row-cpt">
+										<div class="col-xs-12 col-md-6">
+											<div class="panel panel-default">
+												<div class="panel-body">
+													<span class="gd-stat-lbl"><i class="fa fa-map-marker"></i> PLACES</span>
+													<span class="gd-stat-val"><?php echo (int)$this->get_post_type_reviews_count( 'gd_place' ); ?></span>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-12 col-md-6">
+											<div class="panel panel-default">
+												<div class="panel-body">
+													<span class="gd-stat-lbl"><i class="fa fa-calendar"></i> EVENTS</span>
+													<span class="gd-stat-val">0</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="panel-footer gd-collapsable"><a href="#">See All</a></div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-6">
+							<div class="panel panel-info">
+								<div class="panel-heading gd-collapse"><h3 class="panel-title"><i class="fa fa-info-circle"></i> Pending Claimed<span class="badge">0</span> <a href="#" class="pull-right"><i class="fa fa-caret-down"></i></a></h3></div>
+								<div class="panel-body text-center gd-collapsable">
+									<div class="row gd-row-cpt">
+										<div class="col-xs-12 col-md-6">
+											<div class="panel panel-default">
+												<div class="panel-body">
+													<span class="gd-stat-lbl"><i class="fa fa-map-marker"></i> PLACES</span>
+													<span class="gd-stat-val">0</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-12 col-md-6">
+											<div class="panel panel-default">
+												<div class="panel-body">
+													<span class="gd-stat-lbl"><i class="fa fa-calendar"></i> EVENTS</span>
+													<span class="gd-stat-val">0</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="panel-footer gd-collapsable"><a href="#">See All</a></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row gd-dash-row gd-row-stats">
+				<div class="col-lg-12">
+					<div class="panel panel-default gd-dash-panel">
+						<div class="panel-heading"><h2><i class="fa fa-bar-chart-o fa-fw"></i> Statistics</h2></div>
+						<div class="panel-body gd-stats-actions"> 
+							<div class="btn-group">
+								<a class="btn btn-primary" href="#">TOTAL</a>
+								<a class="btn btn-default" href="#">PLACES</a>
+								<a class="btn btn-default" href="#">EVENTS</a>
+							</div>
+						</div>
+						<div class="panel-body gd-stats-chart"> 
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php
+		do_action( 'geodir_admin_dashboard_after' );
+	}
+	
+	/**
+	 * Handles output of the dashboard page in admin.
+	 */
+	public function output_old() {
 		do_action( 'geodir_admin_dashboard_before', $this );
 		?>
 		<div class="wrap gd-dashboard <?php echo 'gd-dasht-' . $this->type . ' gd-dashst-' . $this->subtype; ?>">
@@ -375,20 +493,32 @@ class GeoDir_Admin_Dashboard {
 		return $stats;
 	}
 	
-	public function get_listings_count() {
+	public function get_listings_count( $statuses = array() ) {
         $count = 0;
 
 		foreach ( $this->gd_post_types as $post_type => $info ) {
-			$count += (int)$this->get_post_type_count( $post_type );
+			$count += (int)$this->get_post_type_count( $post_type, $statuses );
 		}
 
         return $count;
     }
 	
-	public function get_post_type_count( $post_type ) {
+	public function get_post_type_count( $post_type, $statuses = array() ) {
         $count_posts = wp_count_posts( $post_type );
 
-		$count = (int)$count_posts->publish + (int)$count_posts->draft + (int)$count_posts->trash + (int)$count_posts->pending;
+		if ( ! empty( $statuses ) ) {
+			$count = 0;
+			if ( ! is_array( $statuses ) ) {
+				$statuses = array( $statuses );
+			}
+			foreach ( $statuses as $status ) {
+				if ( isset( $count_posts->$status ) ) {
+					$count += (int)$count_posts->$status;
+				}
+			}
+		} else {
+			$count = (int)$count_posts->publish + (int)$count_posts->draft + (int)$count_posts->trash + (int)$count_posts->pending;
+		}
 		
         return $count;
     }

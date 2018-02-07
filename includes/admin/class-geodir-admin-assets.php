@@ -81,11 +81,7 @@ class GeoDir_Admin_Assets {
 		if ( $page == 'geodirectory' ) {
 			wp_register_style( 'geodir-admin-dashboard', geodir_plugin_url() . '/assets/css/admin-dashboard.css', array(), GEODIRECTORY_VERSION );
 			wp_enqueue_style( 'geodir-admin-dashboard' );
-			
-			wp_register_script( 'geodir-chart', 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js', array(), GEODIRECTORY_VERSION );
-			wp_enqueue_script( 'geodir-chart' );
 		}
-
 
 	}
 
@@ -101,6 +97,7 @@ class GeoDir_Admin_Assets {
 		$gd_screen_id = sanitize_title( __( 'GeoDirectory', 'geodirectory' ) );
 		$suffix       = '';//defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min'; @todo remove once BH done
 		$post_type   = isset($_REQUEST['post_type']) && $_REQUEST['post_type'] ? sanitize_text_field($_REQUEST['post_type']) : '';
+		$page 		  = ! empty( $_GET['page'] ) ? $_GET['page'] : '';
 		$geodir_map_name = geodir_map_name();
 		
 		// map arguments
@@ -143,6 +140,13 @@ class GeoDir_Admin_Assets {
 		wp_register_script('geodir-google-maps', 'https://maps.google.com/maps/api/js?' . $map_lang . $map_key . $map_extra , array(), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-leaflet-script', geodir_plugin_url() . '/assets/leaflet/leaflet'.$suffix.'.js', array(), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-leaflet-routing-script', geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine'.$suffix.'.js', array(), GEODIRECTORY_VERSION);
+		
+		if ( $page == 'geodirectory' ) {
+			wp_register_script( 'geodir-chart', 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js', array('jquery'), GEODIRECTORY_VERSION );
+			wp_register_script( 'geodir-admin-dashboard', geodir_plugin_url() . '/assets/js/admin-dashboard'.$suffix.'.js', array('jquery'), GEODIRECTORY_VERSION);
+			wp_enqueue_script( 'geodir-chart' );
+			wp_enqueue_script( 'geodir-admin-dashboard' );
+		}
 
 		
 		// load rating scripts on comments pages
