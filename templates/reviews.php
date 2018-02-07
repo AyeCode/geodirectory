@@ -52,7 +52,7 @@ if (post_password_required())
 
         <ol class="commentlist">
             <?php $reverse_top_level = null;// @todo we need to do this more efficient than "is_plugin_active" // is_plugin_active('geodir_review_rating_manager/geodir_review_rating_manager.php') ? false : null; ?>
-			<?php wp_list_comments(array('callback' => 'geodir_comment', 'reverse_top_level' => $reverse_top_level, 'style' => 'ol'));
+			<?php wp_list_comments(array('callback' => array('GeoDir_Comments','list_comments_callback'), 'reverse_top_level' => $reverse_top_level, 'style' => 'ol'));
             ?>
         </ol><!-- .commentlist -->
 

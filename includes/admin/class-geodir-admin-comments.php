@@ -157,7 +157,7 @@ class GeoDir_Admin_Comments {
 
 		$post_id    = $comment_info->comment_post_ID;
 		$status     = $comment_info->comment_approved;
-		$old_rating = geodir_get_commentoverall( $comment_info->comment_ID );
+		$old_rating = geodir_get_comment_rating( $comment_info->comment_ID );
 
 		$post_type = get_post_type( $post_id );
 
@@ -223,7 +223,7 @@ class GeoDir_Admin_Comments {
 		}
 
 		$comment_info_ID = isset( $comment_info->comment_ID ) ? $comment_info->comment_ID : '';
-		$old_rating      = geodir_get_commentoverall( $comment_info_ID );
+		$old_rating      = geodir_get_comment_rating( $comment_info_ID );
 		$post_type = get_post_type( $post_id );
 
 		if ( $comment_id ) {
@@ -375,7 +375,7 @@ class GeoDir_Admin_Comments {
 	function add_meta_row( $a ) {
 		global $comment;
 
-		$rating = geodir_get_commentoverall( $comment->comment_ID );
+		$rating = geodir_get_comment_rating( $comment->comment_ID );
 		if ( $rating != 0 ) {
 			echo geodir_get_rating_stars( $rating, $comment->comment_ID );
 		}

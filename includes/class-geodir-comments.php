@@ -17,6 +17,103 @@ class GeoDir_Comments {
 		// add ratings to comment text
 		add_filter( 'comment_text', array(__CLASS__, 'wrap_comment_text'), 40, 2 );
 
+		// replace comments template
+		add_filter( "comments_template", array(__CLASS__, "comments_template") ); // @todo, maybe we want to use the themes own template?
+
+		// remove replies from comments count so only to show reviews
+		add_filter( 'get_comments_number', array(__CLASS__, 'review_count_exclude_replies'), 10, 2 );
+
+		// set if listing has comments open
+		add_filter( 'comments_open', array(__CLASS__,'comments_open'), 10, 2 ); // @todo we maybe don't need this with the new preview system?
+
+
+
+
+	}
+
+	/**
+	 * Check whether the current post is open for reviews.
+	 *
+	 * @param bool $open Whether the current post is open for reviews.
+	 * @param int $post_id The post ID.
+	 *
+	 * @return bool True if allowed otherwise False.
+	 */
+	public function comments_open( $open, $post_id ) {
+		if ( $open && $post_id && geodir_is_page( 'detail' ) ) {
+			if ( in_array( get_post_status( $post_id ), array( 'draft', 'pending', 'auto-draft', 'trash' ) ) ) {
+				$open = false;
+			}
+		}
+		return $open;
+	}
+
+	/**
+	 * Fix comment count by not listing replies as reviews
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 * @global object $post The current post object.
+	 *
+	 * @param int $count The comment count.
+	 * @param int $post_id The post ID.
+	 *
+	 * @return bool|null|string The comment count.
+	 */
+	function review_count_exclude_replies( $count, $post_id ) {
+		if ( ! is_admin() || strpos( $_SERVER['REQUEST_URI'], 'admin-ajax.php' ) ) {
+			$post_types = geodir_get_posttypes();
+
+			if ( in_array( get_post_type( $post_id ), $post_types ) && ! geodir_cpt_has_rating_disabled( (int) $post_id ) ) {
+				$review_count = self::get_post_review_count_total( $post_id );
+
+				return $review_count;
+			} else {
+				return $count;
+			}
+		} else {
+			return $count;
+		}
+	}
+
+	/**
+	 * Sets the comment template.
+	 *
+	 * Sets the comment template using filter {@see 'comments_template'}.
+	 *
+	 * @global object $post The current post object.
+	 * @param string $comment_template Old comment template.
+	 * @return string New comment template.
+	 */
+	public function comments_template( $comment_template ) {
+		global $post,$gd_is_comment_template_set;
+
+		$post_types = geodir_get_posttypes();
+
+		if ( ! ( is_singular() && ( have_comments() || ( isset( $post->comment_status ) && 'open' == $post->comment_status ) ) ) ) {
+			return $comment_template;
+		}
+		if ( in_array( $post->post_type, $post_types ) ) { // assuming there is a post type called business
+
+			// if we already loaded the template don't load it again
+			if($gd_is_comment_template_set){
+				return geodir_plugin_path() . '/index.php'; // a blank template to remove default if called more than once.
+			}
+
+			if ( geodir_cpt_has_rating_disabled( $post->post_type ) ) {
+				return $comment_template;
+			}
+
+			$template = locate_template( array( "geodirectory/reviews.php" ) ); // Use theme template if available
+			if ( ! $template ) {
+				$template = geodir_plugin_path() . '/templates/reviews.php';
+			}
+			$gd_is_comment_template_set = true;
+
+			return $template;
+		}
+
+		return $comment_template;
 	}
 
 	/**
@@ -37,7 +134,7 @@ class GeoDir_Comments {
 		} else {
 			$rating = 0;
 			if ( ! empty( $comment ) ) {
-				$rating = geodir_get_commentoverall( $comment->comment_ID );
+				$rating = self::get_comment_rating( $comment->comment_ID );
 			}
 			if ( $rating != 0 && ! is_admin() ) {
 				return '<div><div class="gd-rating-text">' . __( 'Overall Rating', 'geodirectory' ) . ': <div class="rating">' . $rating . '</div></div>' . geodir_get_rating_stars( $rating, $comment->comment_ID ) . '</div><div class="description">' . $content . '</div>';
@@ -45,6 +142,109 @@ class GeoDir_Comments {
 				return $content;
 			}
 		}
+	}
+
+	/**
+	 * Comment HTML markup.
+	 *
+	 * @global object $post The current post object.
+	 *
+	 * @param object $comment The comment object.
+	 * @param string|array $args {
+	 *     Optional. Formatting options.
+	 *
+	 * @type object $walker Instance of a Walker class to list comments. Default null.
+	 * @type int $max_depth The maximum comments depth. Default empty.
+	 * @type string $style The style of list ordering. Default 'ul'. Accepts 'ul', 'ol'.
+	 * @type string $callback Callback function to use. Default null.
+	 * @type string $end -callback      Callback function to use at the end. Default null.
+	 * @type string $type Type of comments to list.
+	 *                                     Default 'all'. Accepts 'all', 'comment', 'pingback', 'trackback', 'pings'.
+	 * @type int $page Page ID to list comments for. Default empty.
+	 * @type int $per_page Number of comments to list per page. Default empty.
+	 * @type int $avatar_size Height and width dimensions of the avatar size. Default 32.
+	 * @type string $reverse_top_level Ordering of the listed comments. Default null. Accepts 'desc', 'asc'.
+	 * @type bool $reverse_children Whether to reverse child comments in the list. Default null.
+	 * @type string $format How to format the comments list.
+	 *                                     Default 'html5' if the theme supports it. Accepts 'html5', 'xhtml'.
+	 * @type bool $short_ping Whether to output short pings. Default false.
+	 * @type bool $echo Whether to echo the output or return it. Default true.
+	 * }
+	 *
+	 * @param int $depth Depth of comment.
+	 */
+	public function list_comments_callback( $comment, $args, $depth ) {
+		$GLOBALS['comment'] = $comment;
+		switch ( $comment->comment_type ) :
+			case 'pingback' :
+			case 'trackback' :
+				// Display trackbacks differently than normal comments.
+				?>
+				<li <?php comment_class( 'geodir-comment' ); ?> id="comment-<?php comment_ID(); ?>">
+				<p><?php _e( 'Pingback:', 'geodirectory' ); ?><?php comment_author_link(); ?><?php edit_comment_link( __( '(Edit)', 'geodirectory' ), '<span class="edit-link">', '</span>' ); ?></p>
+				<?php
+				break;
+			default :
+				// Proceed with normal comments.
+				global $post;
+				?>
+				<li <?php comment_class( 'geodir-comment' ); ?> id="li-comment-<?php comment_ID(); ?>">
+				<article id="comment-<?php comment_ID(); ?>" class="comment">
+					<header class="comment-meta comment-author vcard">
+						<?php
+						/**
+						 * Filter to modify comment avatar size
+						 *
+						 * You can use this filter to change comment avatar size.
+						 *
+						 * @since 1.0.0
+						 * @package GeoDirectory
+						 */
+						$avatar_size = apply_filters( 'geodir_comment_avatar_size', 44 );
+						echo get_avatar( $comment, $avatar_size );
+						printf( '<cite><b class="reviewer">%1$s</b> %2$s</cite>',
+							get_comment_author_link(),
+							// If current post author is also comment author, make it known visually.
+							( $comment->user_id === $post->post_author ) ? '<span>' . __( 'Post author', 'geodirectory' ) . '</span>' : ''
+						);
+						echo "<span class='item'><small><span class='fn'>$post->post_title</span></small></span>";
+						printf( '<a href="%1$s"><time datetime="%2$s" class="dtreviewed">%3$s<span class="value-title" title="%2$s"></span></time></a>',
+							esc_url( get_comment_link( $comment->comment_ID ) ),
+							get_comment_time( 'c' ),
+							/* translators: 1: date, 2: time */
+							sprintf( __( '%1$s at %2$s', 'geodirectory' ), get_comment_date(), get_comment_time() )
+						);
+						?>
+					</header>
+					<!-- .comment-meta -->
+
+					<?php if ( '0' == $comment->comment_approved ) : ?>
+						<p class="comment-awaiting-moderation"><?php _e( 'Your comment is awaiting moderation.', 'geodirectory' ); ?></p>
+					<?php endif; ?>
+
+					<section class="comment-content comment">
+						<?php comment_text(); ?>
+					</section>
+					<!-- .comment-content -->
+
+					<div class="comment-links">
+						<?php edit_comment_link( __( 'Edit', 'geodirectory' ), '<p class="edit-link">', '</p>' ); ?>
+						<div class="reply">
+							<?php comment_reply_link( array_merge( $args, array(
+								'reply_text' => __( 'Reply', 'geodirectory' ),
+								'after'      => ' <span>&darr;</span>',
+								'depth'      => $depth,
+								'max_depth'  => $args['max_depth']
+							) ) ); ?>
+						</div>
+					</div>
+
+					<!-- .reply -->
+				</article>
+				<!-- #comment-## -->
+				<?php
+				break;
+		endswitch; // end comment_type check
 	}
 
 	/**
@@ -74,7 +274,7 @@ class GeoDir_Comments {
 		) {
 			$rating = 0;
 			if ( isset( $comment->comment_post_ID ) && $comment->comment_post_ID ) {
-				$rating = geodir_get_commentoverall( $comment->comment_ID );
+				$rating = self::get_comment_rating( $comment->comment_ID );
 			}
 			echo self::rating_input_html( $rating );
 		}
@@ -219,6 +419,99 @@ class GeoDir_Comments {
 		);
 		
 		return apply_filters( 'geodir_rating_texts', $texts );
+	}
+
+	/**
+	 * Get average overall rating of a Post.
+	 *
+	 * Returns average overall rating of a Post. If no results, returns false.
+	 *
+	 * @param int $post_id The post ID.
+	 * @param int $force_query Optional. Do you want force run the query? Default: 0.
+	 *
+	 * @global object $wpdb WordPress Database object.
+	 * @global object $post The current post object.
+	 * @return array|bool|int|mixed|null|string
+	 */
+	public static function get_post_rating( $post_id = 0, $force_query = 0 ) {
+		global $wpdb;
+
+		$post = geodir_get_post_info( $post_id );
+
+		if ( isset( $post->ID ) && $post->ID == $post_id && ! $force_query ) {
+			if ( isset( $post->rating_count ) && $post->rating_count > 0 && isset( $post->overall_rating ) && $post->overall_rating > 0 ) {
+				return $post->overall_rating;
+			} else {
+				return 0;
+			}
+		}
+
+		$results = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COALESCE(avg(overall_rating),0) FROM " . GEODIR_REVIEW_TABLE . " WHERE post_id = %d AND status=1 AND overall_rating>0",
+				array( $post_id )
+			)
+		);
+
+		if ( ! empty( $results ) ) {
+			return $results;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Get review count of a Post.
+	 *
+	 * Returns review count of a Post. If no results, returns false.
+	 *
+	 * @param int $post_id The post ID.
+	 *
+	 * @global object $wpdb WordPress Database object.
+	 * @return bool|null|string
+	 */
+	public static function get_post_review_count_total( $post_id = 0 ) {
+		global $wpdb;
+
+		$results = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(overall_rating) FROM " . GEODIR_REVIEW_TABLE . " WHERE post_id = %d AND status=1 AND overall_rating>0",
+				array( $post_id )
+			)
+		);
+
+		if ( ! empty( $results ) ) {
+			return $results;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Get overall rating of a comment.
+	 *
+	 * Returns overall rating of a comment. If no results, returns false.
+	 *
+	 * @param int $comment_id The comment ID.
+	 *
+	 * @global object $wpdb WordPress Database object.
+	 * @return bool|null|string
+	 */
+	public static function get_comment_rating( $comment_id = 0 ) {
+		global $wpdb;
+
+		$reatings = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT overall_rating FROM " . GEODIR_REVIEW_TABLE . " WHERE comment_id = %d",
+				array( $comment_id )
+			)
+		);
+
+		if ( $reatings ) {
+			return $reatings;
+		} else {
+			return false;
+		}
 	}
 
 }

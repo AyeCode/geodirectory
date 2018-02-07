@@ -48,7 +48,7 @@ return; //@todo we need to update this
     } else {
         foreach ($post_reviews as $review) {
 
-            if($rating_value = geodir_get_commentoverall($review->comment_ID)){
+            if($rating_value = geodir_get_comment_rating($review->comment_ID)){
                 $reviews[] = array(
                     "@type" => "Review",
                     "author" => $review->comment_author,
