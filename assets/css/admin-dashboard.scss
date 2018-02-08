@@ -3350,7 +3350,7 @@ h2.gd-dash-title {
 	margin-top: -3px;
 	border-top-left-radius: 0;
 }
-.gd-stats-actions .btn {
+.gd-stats-nav .btn {
 	margin-right: 12px;
 }
 .gd-row-actions .panel-heading {
@@ -3359,11 +3359,12 @@ h2.gd-dash-title {
 .gd-row-actions .panel .panel {
 	margin-bottom: 0;
 }
-.gd-row-actions .panel-footer {
+.gd-row-actions .gd-dash-link-all {
 	text-align: center;
 	background: transparent;
 	border: none;
 	font-weight: bold;
+	padding: 15px;
 }
 .gd-row-cpt .panel {
 	border: none;
@@ -3395,4 +3396,65 @@ h2.gd-dash-title {
 }
 .gd-row-actions .gd-collapsable {
 	display: none;
+}
+.gd-collapsed .panel-heading {
+	border: none;
+}
+.gd-panel-stats > .panel-body {
+	padding: 0;
+}
+.gd-panel-stats > .panel-body > div {
+	padding: 25px;
+}
+.gd-panel-stats > .panel-body .gd-stats-details {
+	padding-bottom: 0;
+}
+.gd-stats-nav {
+	border-bottom: solid 1px #ddd;
+	padding: 15px;
+}
+.gd-m0 {
+	margin: 0;
+}
+.gd-stat span {
+	display: block;
+	vertical-align: middle;
+}
+.gd-stat .gd-stat-icon {
+	margin: 0 auto 15px auto;
+	height: 70px;
+	width: 70px;
+	vertical-align: middle;
+	border: solid 1px #ededed;
+	border-radius: 100%;
+	background: white;
+	color: orange;
+}
+.gd-stat .gd-stat-icon > .fa {
+	line-height: 70px;
+}
+.gd-stat .gd-stat-name {
+	text-transform: uppercase;
+}
+.gd-stat .gd-stat-no {
+	font-size: 18px;
+	font-weight: bold;
+	margin: 7px 0 10px 0;
+	color: #337ab7;
+}
+.gd-dash-legend {
+	margin-right: 30px;
+	padding: 10px 0;
+	vertical-align: middle;
+	display: inline-block;
+}
+.gd-dash-legend .color {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	vertical-align: middle;
+}
+.gd-dash-legend .gd-dash-label {
+	vertical-align: middle;
+	display: inline-block;
 }
