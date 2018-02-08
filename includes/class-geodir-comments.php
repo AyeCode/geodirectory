@@ -39,7 +39,7 @@ class GeoDir_Comments {
 	 *
 	 * @return bool True if allowed otherwise False.
 	 */
-	public function comments_open( $open, $post_id ) {
+	public static function comments_open( $open, $post_id ) {
 		if ( $open && $post_id && geodir_is_page( 'detail' ) ) {
 			if ( in_array( get_post_status( $post_id ), array( 'draft', 'pending', 'auto-draft', 'trash' ) ) ) {
 				$open = false;
@@ -60,7 +60,7 @@ class GeoDir_Comments {
 	 *
 	 * @return bool|null|string The comment count.
 	 */
-	function review_count_exclude_replies( $count, $post_id ) {
+	public static function review_count_exclude_replies( $count, $post_id ) {
 		if ( ! is_admin() || strpos( $_SERVER['REQUEST_URI'], 'admin-ajax.php' ) ) {
 			$post_types = geodir_get_posttypes();
 
@@ -85,7 +85,7 @@ class GeoDir_Comments {
 	 * @param string $comment_template Old comment template.
 	 * @return string New comment template.
 	 */
-	public function comments_template( $comment_template ) {
+	public static function comments_template( $comment_template ) {
 		global $post,$gd_is_comment_template_set;
 
 		$post_types = geodir_get_posttypes();
@@ -124,7 +124,7 @@ class GeoDir_Comments {
 	 *
 	 * @return string The comment content.
 	 */
-	function wrap_comment_text( $content, $comment = '' ) {
+	public static function wrap_comment_text( $content, $comment = '' ) {
 		if ( ! empty( $comment->comment_post_ID ) && geodir_cpt_has_rating_disabled( (int) $comment->comment_post_ID ) ) {
 			if ( ! is_admin() ) {
 				return '<div class="description">' . $content . '</div>';
@@ -173,7 +173,7 @@ class GeoDir_Comments {
 	 *
 	 * @param int $depth Depth of comment.
 	 */
-	public function list_comments_callback( $comment, $args, $depth ) {
+	public static function list_comments_callback( $comment, $args, $depth ) {
 		$GLOBALS['comment'] = $comment;
 		switch ( $comment->comment_type ) :
 			case 'pingback' :
@@ -257,7 +257,7 @@ class GeoDir_Comments {
 	 * @package GeoDirectory
 	 * @global object $post The post object.
 	 */
-	function rating_input( $comment = array() ) {
+	public static function rating_input( $comment = array() ) {
 		global $post;
 
 

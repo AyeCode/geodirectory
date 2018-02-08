@@ -124,7 +124,7 @@ class GeoDir_Admin_Comments {
 	 *
 	 * @global object $wpdb WordPress Database object.
 	 */
-	function delete_comment( $comment_id ) {
+	public static function delete_comment( $comment_id ) {
 		global $wpdb;
 
 		$review_info = self::get_review( $comment_id );
@@ -149,7 +149,7 @@ class GeoDir_Admin_Comments {
 	 * @global string $plugin_prefix Geodirectory plugin table prefix.
 	 * @global int $user_ID The current user ID.
 	 */
-	function edit_comment( $comment_id = 0 ) {
+	public static function edit_comment( $comment_id = 0 ) {
 
 		global $wpdb;
 
@@ -202,7 +202,7 @@ class GeoDir_Admin_Comments {
 	 * @global string $plugin_prefix Geodirectory plugin table prefix.
 	 * @global int $user_ID The current user ID.
 	 */
-	function status_change( $comment_id, $status ) {
+	public static function status_change( $comment_id, $status ) {
 		if ( $status == 'delete' ) {
 			return;
 		}
@@ -259,7 +259,7 @@ class GeoDir_Admin_Comments {
 	 * @global object $wpdb WordPress Database object.
 	 * @global int $user_ID The current user ID.
 	 */
-	public function save_rating( $comment = 0 ) {
+	public static function save_rating( $comment = 0 ) {
 		global $wpdb, $user_ID;
 
 		$comment_info = get_comment( $comment );
@@ -359,7 +359,7 @@ class GeoDir_Admin_Comments {
 	 *
 	 * @param object $comment The comment object.
 	 */
-	function add_meta_box() {
+	public static function add_meta_box() {
 		add_meta_box( 'gd-comment-rating', __( 'Comment Rating', 'geodirectory' ), array('GeoDir_Comments','rating_input'), 'comment', 'normal', 'high' );
 	}
 	
@@ -372,7 +372,7 @@ class GeoDir_Admin_Comments {
 	 *
 	 * @return mixed
 	 */
-	function add_meta_row( $a ) {
+	public static function add_meta_row( $a ) {
 		global $comment;
 
 		$rating = geodir_get_comment_rating( $comment->comment_ID );

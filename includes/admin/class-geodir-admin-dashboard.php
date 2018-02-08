@@ -156,9 +156,20 @@ class GeoDir_Admin_Dashboard {
 	/**
 	 * Handles output of the dashboard page in admin.
 	 */
-	public function output() { // @todo add hooks after done
+	public function output() { // @todo add hooks after done, move js, css file to corect location
 		do_action( 'geodir_admin_dashboard_before', $this );
+		
+		$listings = $this->get_listings_stats_by( 'this_month', 'gd_place' );
+		$reviews = $this->get_reviews_stats_by( 'this_month', 'gd_place' );
+		$users = $this->get_users_stats_by( 'this_month' );
+		$data = array();
+		foreach ( $listings as $day => $stat ) {
+			$data[] = array( 'date' => date( 'Y-m-' . $day ), 'listings' => $stat['new'], 'reviews' => $reviews[$day]['new'], 'users' => $users[$day]['new'] );
+		}
 		?>
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+		<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
 		<div class="wrap gd-dashboard <?php echo 'gd-dasht-' . $this->type . ' gd-dashst-' . $this->subtype; ?>">
 			<div class="row gd-dash-row gd-row-title">
 				<div class="col-lg-12">
@@ -170,81 +181,87 @@ class GeoDir_Admin_Dashboard {
 					<h2><i class="fa fa-bell fa-fw"></i> Actions Required</h2>
 					<div class="row">
 						<div class="col-lg-4 col-md-6">
-							<div class="panel panel-info">
-								<div class="panel-heading gd-collapse"><h3 class="panel-title"><i class="fa fa-th-list"></i> Pending Listings<span class="badge"><?php echo $this->get_listings_count( 'pending' ); ?></span> <a href="#" class="pull-right"><i class="fa fa-caret-down"></i></a></h3></div>
-								<div class="panel-body text-center gd-collapsable">
-									<div class="row gd-row-cpt">
-										<div class="col-xs-12 col-md-6">
-											<div class="panel panel-default">
-												<div class="panel-body">
-													<span class="gd-stat-lbl"><i class="fa fa-map-marker"></i> PLACES</span>
-													<span class="gd-stat-val"><?php echo (int)$this->get_post_type_count( 'gd_place', 'pending' ); ?></span>
+							<div class="panel panel-info gd-collapsed">
+								<div class="panel-heading gd-collapse"><h3 class="panel-title"><i class="fa fa-th-list"></i> Pending Listings<span class="badge"><?php echo $this->get_listings_count( 'pending' ); ?></span> <span class="pull-right"><i class="fa fa-caret-down"></i></span></h3></div>
+								<div class="gd-collapsable">
+									<div class="panel-body text-center">
+										<div class="row gd-row-cpt">
+											<div class="col-xs-12 col-md-6">
+												<div class="panel panel-default">
+													<div class="panel-body">
+														<span class="gd-stat-lbl"><i class="fa fa-map-marker"></i> PLACES</span>
+														<span class="gd-stat-val"><?php echo (int)$this->get_post_type_count( 'gd_place', 'pending' ); ?></span>
+													</div>
 												</div>
 											</div>
-										</div>
-										<div class="col-xs-12 col-md-6">
-											<div class="panel panel-default">
-												<div class="panel-body">
-													<span class="gd-stat-lbl"><i class="fa fa-calendar"></i> EVENTS</span>
-													<span class="gd-stat-val">0</span>
+											<div class="col-xs-12 col-md-6">
+												<div class="panel panel-default">
+													<div class="panel-body">
+														<span class="gd-stat-lbl"><i class="fa fa-calendar"></i> EVENTS</span>
+														<span class="gd-stat-val">0</span>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
+									<div class="panel-footer gd-dash-link-all"><a href="#">See All</a></div>
 								</div>
-								<div class="panel-footer gd-collapsable"><a href="#">See All</a></div>
 							</div>
 						</div>
 						<div class="col-lg-4 col-md-6">
-							<div class="panel panel-info">
-								<div class="panel-heading gd-collapse"><h3 class="panel-title"><i class="fa fa-star"></i> Pending Reviews<span class="badge"><?php echo (int)$this->get_post_type_reviews_count( 'gd_place' ); ?></span> <a href="#" class="pull-right"><i class="fa fa-caret-down"></i></a></h3></div>
-								<div class="panel-body text-center gd-collapsable">
-									<div class="row gd-row-cpt">
-										<div class="col-xs-12 col-md-6">
-											<div class="panel panel-default">
-												<div class="panel-body">
-													<span class="gd-stat-lbl"><i class="fa fa-map-marker"></i> PLACES</span>
-													<span class="gd-stat-val"><?php echo (int)$this->get_post_type_reviews_count( 'gd_place' ); ?></span>
+							<div class="panel panel-info gd-collapsed">
+								<div class="panel-heading gd-collapse"><h3 class="panel-title"><i class="fa fa-star"></i> Pending Reviews<span class="badge"><?php echo (int)$this->get_reviews_count( 0 ); ?></span> <span class="pull-right"><i class="fa fa-caret-down"></i></span></h3></div>
+								<div class="gd-collapsable">
+									<div class="panel-body text-center">
+										<div class="row gd-row-cpt">
+											<div class="col-xs-12 col-md-6">
+												<div class="panel panel-default">
+													<div class="panel-body">
+														<span class="gd-stat-lbl"><i class="fa fa-map-marker"></i> PLACES</span>
+														<span class="gd-stat-val"><?php echo (int)$this->get_post_type_reviews_count( 'gd_place', 0 ); ?></span>
+													</div>
 												</div>
 											</div>
-										</div>
-										<div class="col-xs-12 col-md-6">
-											<div class="panel panel-default">
-												<div class="panel-body">
-													<span class="gd-stat-lbl"><i class="fa fa-calendar"></i> EVENTS</span>
-													<span class="gd-stat-val">0</span>
+											<div class="col-xs-12 col-md-6">
+												<div class="panel panel-default">
+													<div class="panel-body">
+														<span class="gd-stat-lbl"><i class="fa fa-calendar"></i> EVENTS</span>
+														<span class="gd-stat-val">0</span>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
+									<div class="panel-footer gd-dash-link-all"><a href="#">See All</a></div>
 								</div>
-								<div class="panel-footer gd-collapsable"><a href="#">See All</a></div>
 							</div>
 						</div>
 						<div class="col-lg-4 col-md-6">
-							<div class="panel panel-info">
-								<div class="panel-heading gd-collapse"><h3 class="panel-title"><i class="fa fa-info-circle"></i> Pending Claimed<span class="badge">0</span> <a href="#" class="pull-right"><i class="fa fa-caret-down"></i></a></h3></div>
-								<div class="panel-body text-center gd-collapsable">
-									<div class="row gd-row-cpt">
-										<div class="col-xs-12 col-md-6">
-											<div class="panel panel-default">
-												<div class="panel-body">
-													<span class="gd-stat-lbl"><i class="fa fa-map-marker"></i> PLACES</span>
-													<span class="gd-stat-val">0</span>
+							<div class="panel panel-info gd-collapsed">
+								<div class="panel-heading gd-collapse"><h3 class="panel-title"><i class="fa fa-info-circle"></i> Pending Claimed<span class="badge">0</span> <span class="pull-right"><i class="fa fa-caret-down"></i></span></h3></div>
+								<div class="gd-collapsable">
+									<div class="panel-body text-center">
+										<div class="row gd-row-cpt">
+											<div class="col-xs-12 col-md-6">
+												<div class="panel panel-default">
+													<div class="panel-body">
+														<span class="gd-stat-lbl"><i class="fa fa-map-marker"></i> PLACES</span>
+														<span class="gd-stat-val">0</span>
+													</div>
 												</div>
 											</div>
-										</div>
-										<div class="col-xs-12 col-md-6">
-											<div class="panel panel-default">
-												<div class="panel-body">
-													<span class="gd-stat-lbl"><i class="fa fa-calendar"></i> EVENTS</span>
-													<span class="gd-stat-val">0</span>
+											<div class="col-xs-12 col-md-6">
+												<div class="panel panel-default">
+													<div class="panel-body">
+														<span class="gd-stat-lbl"><i class="fa fa-calendar"></i> EVENTS</span>
+														<span class="gd-stat-val">0</span>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
+									<div class="panel-footer gd-dash-link-all"><a href="#">See All</a></div>
 								</div>
-								<div class="panel-footer gd-collapsable"><a href="#">See All</a></div>
 							</div>
 						</div>
 					</div>
@@ -252,16 +269,91 @@ class GeoDir_Admin_Dashboard {
 			</div>
 			<div class="row gd-dash-row gd-row-stats">
 				<div class="col-lg-12">
-					<div class="panel panel-default gd-dash-panel">
-						<div class="panel-heading"><h2><i class="fa fa-bar-chart-o fa-fw"></i> Statistics</h2></div>
-						<div class="panel-body gd-stats-actions"> 
-							<div class="btn-group">
-								<a class="btn btn-primary" href="#">TOTAL</a>
-								<a class="btn btn-default" href="#">PLACES</a>
-								<a class="btn btn-default" href="#">EVENTS</a>
+					<div class="panel panel-default gd-dash-panel gd-panel-stats">
+						<div class="panel-heading"><h2><i class="fa fa-area-chart fa-fw"></i> Statistics</h2></div>
+						<div class="panel-body">
+							<div class="gd-stats-nav"> 
+								<div class="btn-group">
+									<a class="btn btn-primary" href="#">TOTAL</a>
+									<a class="btn btn-default" href="#">PLACES</a>
+									<a class="btn btn-default" href="#">EVENTS</a>
+								</div>
 							</div>
-						</div>
-						<div class="panel-body gd-stats-chart"> 
+							<div class="gd-stats-details">
+								<div class="row">
+									<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 gd-stat">
+										<div class="well text-center">
+											<span class="gd-stat-icon"><i class="fa fa-th-list fa-2x"></i></span>
+											<span class="gd-stat-name">LISTINGS</span>
+											<span class="gd-stat-no"><?php echo (int)$this->get_listings_count(); ?></span>
+										</div>
+									</div>
+									<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 gd-stat">
+										<div class="well text-center">
+											<span class="gd-stat-icon"><i class="fa fa-shopping-cart fa-2x"></i></span>
+											<span class="gd-stat-name">PAID LISTINGS</span>
+											<span class="gd-stat-no">345</span>
+										</div>
+									</div>
+									<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 gd-stat">
+										<div class="well text-center">
+											<span class="gd-stat-icon"><i class="fa fa-star fa-2x"></i></span>
+											<span class="gd-stat-name">REVIEWS</span>
+											<span class="gd-stat-no"><?php echo (int)$this->get_reviews_count(); ?></span>
+										</div>
+									</div>
+									<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 gd-stat">
+										<div class="well text-center">
+											<span class="gd-stat-icon"><i class="fa fa-briefcase fa-2x"></i></span>
+											<span class="gd-stat-name">CLAIMED LISTINGS</span>
+											<span class="gd-stat-no">245</span>
+										</div>
+									</div>
+									<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 gd-stat">
+										<div class="well text-center">
+											<span class="gd-stat-icon"><i class="fa fa-usd fa-2x"></i></span>
+											<span class="gd-stat-name">REVENUES</span>
+											<span class="gd-stat-no">$35.000</span>
+										</div>
+									</div>
+									<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 gd-stat">
+										<div class="well text-center">
+											<span class="gd-stat-icon"><i class="fa fa-users fa-2x"></i></span>
+											<span class="gd-stat-name">USERS</span>
+											<span class="gd-stat-no"><?php echo (int)$this->get_users_count(); ?></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="gd-stats-chart">
+								<div class="gd-chart-legends">
+								</div>
+								<div class="well gd-m0">
+									<div id="gd-dashboard-chart"></div>
+								</div>
+								<script type="text/javascript">
+								jQuery(function($) {
+									var chart = Morris.Line({
+										element: 'gd-dashboard-chart',
+										data: <?php echo json_encode( $data ); ?>,
+										xkey: 'date',
+										ykeys: ['listings', 'reviews', 'users'],
+										labels: ['Listings', 'Reviews', 'Users'],
+										pointSize: 4,
+										hideHover: 'auto',
+										resize: true,
+										xLabels: 'day',
+										//parseTime: false,
+										//xLabelFormat: function(d) { return d.getDate(); },
+										xLabelAngle: 60
+									});
+									chart.options.labels.forEach(function(label, i){
+										var legend = '<span class="gd-dash-legend"><span class="color" style="background-color:' + chart.options.lineColors[i] + '"></span> <span class="gd-dash-label">' + label + '</span></span>';
+										$('#gd-dashboard-chart').closest('.gd-stats-chart').find('.gd-chart-legends').append(legend);
+									});
+								});
+								</script>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -480,7 +572,7 @@ class GeoDir_Admin_Dashboard {
 	public function listings_post_type_stats( $stats, $instance, $current, $parent, $current_item, $parent_item ) {
 		$title = ! empty( $current_item['title'] ) ? $current_item['title'] : $current;
 		$stats[ $title  ] 														= $this->get_post_type_count( $current );
-		$stats[ wp_sprintf( __( '%s Categpries', 'geodirectory' ), $title ) ]	= wp_count_terms( $current . 'category');
+		$stats[ wp_sprintf( __( '%s Categories', 'geodirectory' ), $title ) ]	= wp_count_terms( $current . 'category');
 		$stats[ wp_sprintf( __( '%s Tags', 'geodirectory' ), $title ) ] 		= wp_count_terms( $current . '_tags');
 
 		return $stats;
@@ -529,20 +621,21 @@ class GeoDir_Admin_Dashboard {
         return (int)$count;
     }
 	
-	public function get_reviews_count() {
+	public function get_reviews_count( $status = NULL ) {
         $count = 0;
 
 		foreach ( $this->gd_post_types as $post_type => $info ) {
-			$count += (int)$this->get_post_type_reviews_count( $post_type );
+			$count += (int)$this->get_post_type_reviews_count( $post_type, $status );
 		}
 
         return $count;
     }
 	
-	public function get_post_type_reviews_count( $post_type ) {
+	public function get_post_type_reviews_count( $post_type, $status = NULL ) {
         global $wpdb;
+		$status = $status === NULL ? 1 : (int)$status;
 
-        $count = (int)$wpdb->get_var( $wpdb->prepare( "SELECT COUNT( overall_rating ) FROM " . GEODIR_REVIEW_TABLE . " WHERE post_type = %s AND post_status = 1 AND status=1 AND overall_rating > 0", $post_type ) );
+        $count = (int)$wpdb->get_var( $wpdb->prepare( "SELECT COUNT( overall_rating ) FROM " . GEODIR_REVIEW_TABLE . " WHERE post_type = %s AND post_status = 1 AND status=" . $status . " AND overall_rating > 0", $post_type ) );
 
         return $count;
     }
