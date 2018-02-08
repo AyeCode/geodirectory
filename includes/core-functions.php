@@ -215,7 +215,6 @@ function geodir_params()
         'default_marker_h' => $default_marker_height,
         'latitude_error_msg' => GEODIR_LATITUDE_ERROR_MSG,
         'longgitude_error_msg' => GEODIR_LOGNGITUDE_ERROR_MSG,
-        'default_rating_star_icon' => geodir_default_rating_icon( true ),
         'gd_cmt_btn_post_reply' => __('Post Reply', 'geodirectory'),
         'gd_cmt_btn_reply_text' => __('Reply text', 'geodirectory'),
         'gd_cmt_btn_post_review' => __('Post Review', 'geodirectory'),
