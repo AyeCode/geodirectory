@@ -79,7 +79,9 @@ class GeoDir_Admin_Assets {
 		}
 
 		if ( $page == 'geodirectory' ) {
+			wp_register_style( 'morris', '//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css', array(), '0.5.1' );
 			wp_register_style( 'geodir-admin-dashboard', geodir_plugin_url() . '/assets/css/admin-dashboard.css', array(), GEODIRECTORY_VERSION );
+			wp_enqueue_style( 'morris' );
 			wp_enqueue_style( 'geodir-admin-dashboard' );
 		}
 
@@ -142,9 +144,11 @@ class GeoDir_Admin_Assets {
 		wp_register_script('geodir-leaflet-routing-script', geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine'.$suffix.'.js', array(), GEODIRECTORY_VERSION);
 		
 		if ( $page == 'geodirectory' ) {
-			wp_register_script( 'geodir-chart', 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js', array('jquery'), GEODIRECTORY_VERSION );
-			wp_register_script( 'geodir-admin-dashboard', geodir_plugin_url() . '/assets/js/admin-dashboard'.$suffix.'.js', array('jquery'), GEODIRECTORY_VERSION);
-			wp_enqueue_script( 'geodir-chart' );
+			wp_register_script( 'raphael', '//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js', array('jquery'), '2.1.0' );
+			wp_register_script( 'morris', '//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js', array('jquery'), '0.5.1' );
+			wp_register_script( 'geodir-admin-dashboard', geodir_plugin_url() . '/assets/js/admin-dashboard'.$suffix.'.js', array('jquery', 'raphael', 'morris'), GEODIRECTORY_VERSION);
+			wp_enqueue_script( 'raphael' );
+			wp_enqueue_script( 'morris' );
 			wp_enqueue_script( 'geodir-admin-dashboard' );
 		}
 
