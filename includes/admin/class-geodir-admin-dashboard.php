@@ -1,4 +1,4 @@
-<?php
+<?php // @todo implement events data once addon done
 /**
  * GeoDirectory Admin Dashboard
  *
@@ -23,11 +23,11 @@ class GeoDir_Admin_Dashboard {
 	 * GeoDirectory Dashboard instance.
 	 */
 	private static $instance;
-	
-	public $pages;
-	public $type;
-	public $subtype;
+
 	public $gd_post_types;
+	public $period_options;
+	public $pending_stats;
+	public $navs;
 	
 	/**
 	 * Main GeoDirectory Dashboard Instance.
@@ -52,8 +52,6 @@ class GeoDir_Admin_Dashboard {
 	 */
 	private function __construct() {
 		$this->gd_post_types	= geodir_get_posttypes( 'array' );
-		$this->type 			= ! empty( $_REQUEST['type'] ) ? sanitize_text_field( $_REQUEST['type'] ) : 'index';
-		$this->subtype 			= ! empty( $_REQUEST['subtype'] ) ? sanitize_text_field( $_REQUEST['subtype'] ) : '';
 	}
 	
 	/**
@@ -62,95 +60,32 @@ class GeoDir_Admin_Dashboard {
 	 * @access private
 	 */
 	private function setup_actions() {
-		add_filter( 'geodir_admin_dashboard_pages', array( $this, 'setup_subtypes' ), 10, 2 );
-		add_action( 'geodir_admin_dashboard_top', array( $this, 'breadcrumb' ), -10, 1 );
-		add_action( 'geodir_admin_dashboard_top', array( $this, 'title' ), -10.1, 1 );
-		add_action( 'geodir_admin_dashboard_content', array( $this, 'dashboard_stats' ), 10, 1 );
-		add_action( 'geodir_admin_dashboard_bottom', array( $this, 'dashboard_chart' ), 10, 1 );
-		
-		add_filter( 'geodir_dashboard_stats_item_index_listings', array( $this, 'listings_stats' ), 10, 6 );
-		add_filter( 'geodir_dashboard_stats_item_index_reviews', array( $this, 'reviews_stats' ), 10, 6 );
-		add_filter( 'geodir_dashboard_stats_item_index_users', array( $this, 'users_stats' ), 10, 6 );
-		add_filter( 'geodir_dashboard_get_chart_js_params', array( $this, 'filter_chart_js_params' ), 10, 4 );
-		
-		foreach ( $this->gd_post_types as $post_type => $info ) {
-			add_filter( 'geodir_dashboard_stats_item_listings_' . $post_type, array( $this, 'listings_post_type_stats' ), 10, 6 );
-			add_filter( 'geodir_dashboard_stats_item_reviews_' . $post_type, array( $this, 'reviews_post_type_stats' ), 10, 6 );
-		}
-		
-		add_filter( 'geodir_dashboard_get_listings_chart_stats', array( $this, 'get_listings_chart_stats' ), 10, 1 );
-		add_filter( 'geodir_dashboard_get_reviews_chart_stats', array( $this, 'get_reviews_chart_stats' ), 10, 1 );
-		add_filter( 'geodir_dashboard_get_users_chart_stats', array( $this, 'get_users_chart_stats' ), 10, 1 );
 	}
-
+	
 	/**
 	 * Setup constants
 	 *
 	 * @access private
 	 */
 	private function setup_constants() {
-		$current_url 			= geodir_curPageURL();
+		$periods = array(
+			'this_week' => __( 'This Week', 'geodirectory' ),
+			'last_week' => __( 'Last Week', 'geodirectory' ),
+			'this_month' => __( 'This Month', 'geodirectory' ),
+			'last_month' => __( 'Last Month', 'geodirectory' ),
+			'this_year' => __( 'This Year', 'geodirectory' ),
+			'last_year' => __( 'Last Year', 'geodirectory' )
+		);
 
-		$this->pages 			= apply_filters( 'geodir_admin_dashboard_pages', array(
-			'index' => array(
-				'link' => admin_url( 'admin.php?page=geodirectory' ),
-				'title' => __( 'Dashboard', 'geodirectory' ),
-				'icon' => 'fa-tachometer'
-			),
-			'listings' => array(
-				'link' => add_query_arg( array( 'type' => 'listings', 'stats' => true ), $current_url ),
-				'title' => __( 'Listings', 'geodirectory' ),
-				'icon' => 'fa-th-list'
-			),
-			'reviews' => array(
-				'link' => add_query_arg( array( 'type' => 'reviews', 'stats' => true ), $current_url ),
-				'title' => __( 'Reviews', 'geodirectory' ),
-				'icon' => 'fa-star'
-			),
-			'users' => array(
-				'link' => add_query_arg( array( 'type' => 'users', 'chart' => true ), $current_url ),
-				'title' => __( 'Users', 'geodirectory' ),
-				'icon' => 'fa-user'
-			),
-		) );
-	}
-	
-	public function setup_subtypes( $pages ) {
-		
-		if ( ! empty( $pages['listings'] ) ) {
-			$listings_link = remove_query_arg( array( 'stats' ), $pages['listings']['link'] );
-			$listings_link = add_query_arg( array( 'chart' => true ), $listings_link );
-
-			$subtypes = array();
-			foreach ( $this->gd_post_types as $post_type => $info ) {
-				$subtypes[ $post_type ] = array(
-					'link' 		=> add_query_arg( array( 'subtype' => $post_type ), $listings_link ),
-					'title'		=> __( $info['labels']['name'], 'geodirectory' ),
-					'icon' 		=> $pages['listings']['icon'],
-					'chart' 	=> true
-				);
-			}
-
-			$pages['listings']['subtypes'] = $subtypes;
-		}
-		
-		if ( ! empty( $pages['reviews'] ) ) {
-			$reviews_link = remove_query_arg( array( 'stats' ), $pages['reviews']['link'] );
-			$reviews_link = add_query_arg( array( 'chart' => true ), $reviews_link );
-			
-			$subtypes = array();
-			foreach ( $this->gd_post_types as $post_type => $info ) {
-				$subtypes[ $post_type ] = array(
-					'link' 		=> add_query_arg( array( 'subtype' => $post_type ), $reviews_link ),
-					'title' 	=> __( $info['labels']['name'], 'geodirectory' ),
-					'icon' 		=> $pages['reviews']['icon']
-				);
-			}
-
-			$pages['reviews']['subtypes'] = $subtypes;
+		$this->period_options = apply_filters( 'geodir_dashboard_period_options', $periods );
+		$this->pending_stats = geodir_dashboard_get_pending_stats();
+		$navs = array();
+		$navs['all'] = __( 'Total', 'geodirectory' );
+		foreach ( $this->gd_post_types as $post_type => $data ) {
+			$navs[$post_type] = geodir_post_type_name( $post_type );
 		}
 
-		return $pages;
+		$this->navs = apply_filters( 'geodir_dashboard_period_options', $navs );
 	}
 	
 	/**
@@ -158,201 +93,86 @@ class GeoDir_Admin_Dashboard {
 	 */
 	public function output() { // @todo add hooks after done, move js, css file to corect location
 		do_action( 'geodir_admin_dashboard_before', $this );
-		
-		$listings = $this->get_listings_stats_by( 'this_month', 'gd_place' );
-		$reviews = $this->get_reviews_stats_by( 'this_month', 'gd_place' );
-		$users = $this->get_users_stats_by( 'this_month' );
-		$data = array();
-		foreach ( $listings as $day => $stat ) {
-			$data[] = array( 'date' => date( 'Y-m-' . $day ), 'listings' => $stat['new'], 'reviews' => $reviews[$day]['new'], 'users' => $users[$day]['new'] );
-		}
 		?>
-		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
-		<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
-		<div class="wrap gd-dashboard <?php echo 'gd-dasht-' . $this->type . ' gd-dashst-' . $this->subtype; ?>">
+		<div class="wrap gd-dashboard">
 			<div class="row gd-dash-row gd-row-title">
 				<div class="col-lg-12">
 					<h1 class="page-header">Dashboard</h1>
 				</div>
 			</div>
+			<?php if ( ! empty( $this->pending_stats ) ) { ?>
 			<div class="row gd-dash-row gd-row-actions">
 				<div class="col-lg-12">
-					<h2><i class="fa fa-bell fa-fw"></i> Actions Required</h2>
+					<h2><i class="fa fa-bell fa-fw"></i> <?php _e( 'Actions Required', 'geodirectory' ); ?></h2>
 					<div class="row">
-						<div class="col-lg-4 col-md-6">
-							<div class="panel panel-info gd-collapsed">
-								<div class="panel-heading gd-collapse"><h3 class="panel-title"><i class="fa fa-th-list"></i> Pending Listings<span class="badge"><?php echo $this->get_listings_count( 'pending' ); ?></span> <span class="pull-right"><i class="fa fa-caret-down"></i></span></h3></div>
-								<div class="gd-collapsable">
-									<div class="panel-body text-center">
-										<div class="row gd-row-cpt">
+			<?php foreach ( $this->pending_stats as $item => $item_data ) { ?>
+				<div class="col-lg-4 col-md-6" data-pending-type="<?php echo $item; ?>">
+					<div class="panel panel-info gd-collapsed">
+						<div class="panel-heading gd-collapse"><h3 class="panel-title"><i class="fa <?php echo $item_data['icon']; ?>"></i> <?php echo $item_data['label']; ?><span class="badge"><?php echo $item_data['total']; ?></span> <span class="pull-right"><i class="fa fa-caret-down"></i></span></h3></div>
+						<div class="gd-collapsable">
+							<div class="panel-body text-center">
+								<div class="row gd-row-cpt">
+									<?php if ( ! empty( $item_data['items'] ) ) { ?>
+										<?php foreach ( $item_data['items'] as $cpt => $cpt_data ) { ?>
 											<div class="col-xs-12 col-md-6">
 												<div class="panel panel-default">
 													<div class="panel-body">
-														<span class="gd-stat-lbl"><i class="fa fa-map-marker"></i> PLACES</span>
-														<span class="gd-stat-val"><?php echo (int)$this->get_post_type_count( 'gd_place', 'pending' ); ?></span>
+														<span class="gd-stat-lbl"><i class="fa <?php echo $cpt_data['icon']; ?>"></i> <?php echo $cpt_data['label']; ?></span>
+														<span class="gd-stat-val"><?php echo $cpt_data['total']; ?></span>
 													</div>
 												</div>
 											</div>
-											<div class="col-xs-12 col-md-6">
-												<div class="panel panel-default">
-													<div class="panel-body">
-														<span class="gd-stat-lbl"><i class="fa fa-calendar"></i> EVENTS</span>
-														<span class="gd-stat-val">0</span>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="panel-footer gd-dash-link-all"><a href="#">See All</a></div>
+										<?php } ?>
+									<?php } ?>
 								</div>
 							</div>
-						</div>
-						<div class="col-lg-4 col-md-6">
-							<div class="panel panel-info gd-collapsed">
-								<div class="panel-heading gd-collapse"><h3 class="panel-title"><i class="fa fa-star"></i> Pending Reviews<span class="badge"><?php echo (int)$this->get_reviews_count( 0 ); ?></span> <span class="pull-right"><i class="fa fa-caret-down"></i></span></h3></div>
-								<div class="gd-collapsable">
-									<div class="panel-body text-center">
-										<div class="row gd-row-cpt">
-											<div class="col-xs-12 col-md-6">
-												<div class="panel panel-default">
-													<div class="panel-body">
-														<span class="gd-stat-lbl"><i class="fa fa-map-marker"></i> PLACES</span>
-														<span class="gd-stat-val"><?php echo (int)$this->get_post_type_reviews_count( 'gd_place', 0 ); ?></span>
-													</div>
-												</div>
-											</div>
-											<div class="col-xs-12 col-md-6">
-												<div class="panel panel-default">
-													<div class="panel-body">
-														<span class="gd-stat-lbl"><i class="fa fa-calendar"></i> EVENTS</span>
-														<span class="gd-stat-val">0</span>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="panel-footer gd-dash-link-all"><a href="#">See All</a></div>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-4 col-md-6">
-							<div class="panel panel-info gd-collapsed">
-								<div class="panel-heading gd-collapse"><h3 class="panel-title"><i class="fa fa-info-circle"></i> Pending Claimed<span class="badge">0</span> <span class="pull-right"><i class="fa fa-caret-down"></i></span></h3></div>
-								<div class="gd-collapsable">
-									<div class="panel-body text-center">
-										<div class="row gd-row-cpt">
-											<div class="col-xs-12 col-md-6">
-												<div class="panel panel-default">
-													<div class="panel-body">
-														<span class="gd-stat-lbl"><i class="fa fa-map-marker"></i> PLACES</span>
-														<span class="gd-stat-val">0</span>
-													</div>
-												</div>
-											</div>
-											<div class="col-xs-12 col-md-6">
-												<div class="panel panel-default">
-													<div class="panel-body">
-														<span class="gd-stat-lbl"><i class="fa fa-calendar"></i> EVENTS</span>
-														<span class="gd-stat-val">0</span>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="panel-footer gd-dash-link-all"><a href="#">See All</a></div>
-								</div>
-							</div>
+							<div class="panel-footer gd-dash-link-all"><a href="javascript:void(0);"> <?php _e( 'See All', 'geodirectory' ); ?></a></div>
 						</div>
 					</div>
 				</div>
+			<?php } ?>
+					</div>
+				</div>
 			</div>
+			<?php } ?>
 			<div class="row gd-dash-row gd-row-stats">
 				<div class="col-lg-12">
 					<div class="panel panel-default gd-dash-panel gd-panel-stats">
-						<div class="panel-heading"><h2><i class="fa fa-area-chart fa-fw"></i> Statistics</h2></div>
+						<input type="hidden" id="gd_stats_type" value="all">
+						<div class="panel-heading"><h2><i class="fa fa-area-chart fa-fw"></i> <?php _e( 'Statistics', 'geodirectory' ); ?></h2></div>
 						<div class="panel-body">
 							<div class="gd-stats-nav"> 
-								<div class="btn-group">
-									<a class="btn btn-primary" href="#">TOTAL</a>
-									<a class="btn btn-default" href="#">PLACES</a>
-									<a class="btn btn-default" href="#">EVENTS</a>
-								</div>
-							</div>
-							<div class="gd-stats-details">
 								<div class="row">
-									<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 gd-stat">
-										<div class="well text-center">
-											<span class="gd-stat-icon"><i class="fa fa-th-list fa-2x"></i></span>
-											<span class="gd-stat-name">LISTINGS</span>
-											<span class="gd-stat-no"><?php echo (int)$this->get_listings_count(); ?></span>
+									<div class="col-xs-12 col-md-8">
+										<div class="btn-group">
+											<?php foreach ( $this->navs as $nave_id => $nav_label ) { ?>
+											<a class="btn btn-primary" data-type="<?php echo $nave_id; ?>" href="javascript:void(0)"><?php echo $nav_label; ?></a>
+											<?php } ?>
 										</div>
 									</div>
-									<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 gd-stat">
-										<div class="well text-center">
-											<span class="gd-stat-icon"><i class="fa fa-shopping-cart fa-2x"></i></span>
-											<span class="gd-stat-name">PAID LISTINGS</span>
-											<span class="gd-stat-no">345</span>
-										</div>
-									</div>
-									<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 gd-stat">
-										<div class="well text-center">
-											<span class="gd-stat-icon"><i class="fa fa-star fa-2x"></i></span>
-											<span class="gd-stat-name">REVIEWS</span>
-											<span class="gd-stat-no"><?php echo (int)$this->get_reviews_count(); ?></span>
-										</div>
-									</div>
-									<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 gd-stat">
-										<div class="well text-center">
-											<span class="gd-stat-icon"><i class="fa fa-briefcase fa-2x"></i></span>
-											<span class="gd-stat-name">CLAIMED LISTINGS</span>
-											<span class="gd-stat-no">245</span>
-										</div>
-									</div>
-									<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 gd-stat">
-										<div class="well text-center">
-											<span class="gd-stat-icon"><i class="fa fa-usd fa-2x"></i></span>
-											<span class="gd-stat-name">REVENUES</span>
-											<span class="gd-stat-no">$35.000</span>
-										</div>
-									</div>
-									<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 gd-stat">
-										<div class="well text-center">
-											<span class="gd-stat-icon"><i class="fa fa-users fa-2x"></i></span>
-											<span class="gd-stat-name">USERS</span>
-											<span class="gd-stat-no"><?php echo (int)$this->get_users_count(); ?></span>
-										</div>
+									<div class="col-xs-12 col-md-4 gd-stats-periods">
+										<select id="gd_stats_period" class="geodir-select" style="width:100%">
+											<?php foreach ( $this->period_options as $value => $label ) { ?>
+											<option value="<?php echo $value; ?>" <?php selected( $value, 'this_month' ); ?>><?php echo $label; ?></option>
+											<?php } ?>
+										</select>
 									</div>
 								</div>
 							</div>
-							<div class="gd-stats-chart">
-								<div class="gd-chart-legends">
+							<div class="gd-stats-data gd-stats-wait"> 
+								<div class="gd-stat-loader" style="display:none;"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span></div>
+								<div class="gd-stat-format" style="display:none!important"><div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 gd-stat  gd-stat-{stat}"><div class="well text-center"><span class="gd-stat-icon"><i class="fa {icon} fa-2x"></i></span><span class="gd-stat-name">{label}</span><span class="gd-stat-no">{value}</span></div></div></div>
+								<div class="gd-stats-details">
+									<div class="row gd-stats-items">
+									</div>
 								</div>
-								<div class="well gd-m0">
-									<div id="gd-dashboard-chart"></div>
+								<div class="gd-stats-chart">
+									<div class="gd-chart-legends">
+									</div>
+									<div class="well gd-m0">
+										<div id="gd-dashboard-chart"></div>
+									</div>
 								</div>
-								<script type="text/javascript">
-								jQuery(function($) {
-									var chart = Morris.Line({
-										element: 'gd-dashboard-chart',
-										data: <?php echo json_encode( $data ); ?>,
-										xkey: 'date',
-										ykeys: ['listings', 'reviews', 'users'],
-										labels: ['Listings', 'Reviews', 'Users'],
-										pointSize: 4,
-										hideHover: 'auto',
-										resize: true,
-										xLabels: 'day',
-										//parseTime: false,
-										//xLabelFormat: function(d) { return d.getDate(); },
-										xLabelAngle: 60
-									});
-									chart.options.labels.forEach(function(label, i){
-										var legend = '<span class="gd-dash-legend"><span class="color" style="background-color:' + chart.options.lineColors[i] + '"></span> <span class="gd-dash-label">' + label + '</span></span>';
-										$('#gd-dashboard-chart').closest('.gd-stats-chart').find('.gd-chart-legends').append(legend);
-									});
-								});
-								</script>
 							</div>
 						</div>
 					</div>
@@ -361,539 +181,6 @@ class GeoDir_Admin_Dashboard {
 		</div>
 		<?php
 		do_action( 'geodir_admin_dashboard_after' );
-	}
-	
-	/**
-	 * Handles output of the dashboard page in admin.
-	 */
-	public function output_old() {
-		do_action( 'geodir_admin_dashboard_before', $this );
-		?>
-		<div class="wrap gd-dashboard <?php echo 'gd-dasht-' . $this->type . ' gd-dashst-' . $this->subtype; ?>">
-			<div class="container">
-				<?php do_action( 'geodir_admin_dashboard_top', $this ); ?>
-				<?php do_action( 'geodir_admin_dashboard_content', $this ); ?>
-				<?php do_action( 'geodir_admin_dashboard_bottom', $this ); ?>
-			</div>
-		</div>
-		<?php
-		do_action( 'geodir_admin_dashboard_after' );
-	}
-
-	/**
-	 * Dashboard page breadcrumb.
-	 */
-	public function breadcrumb( $instance ) {
-		if ( $this->type == 'index' && empty( $this->subtype ) ) {
-			return;
-		}
-		
-		$type = isset( $this->pages[ $this->type ] ) ? $this->pages[ $this->type ] : NULL;
-		$subtype = $this->subtype && ! empty( $type ) && isset( $type['subtypes'][ $this->subtype ] ) ? $type['subtypes'][ $this->subtype ] : NULL;
-		
-		$breadcrumbs = array();
-		$breadcrumbs['index'] = array(
-			'link' => $this->pages['index']['link'],
-			'title' => $this->pages['index']['title'],
-		);
-		if ( ! empty( $type ) ) {
-			$breadcrumbs[ $this->type ] = array(
-				'link' => ! empty( $type['link'] ) ? $type['link'] : '#',
-				'title' => ! empty( $type['title'] ) ? $type['title'] : geodir_utf8_ucfirst( $this->type ),
-				'active' => false
-			);
-		}
-		
-		if ( ! empty( $subtype ) ) {
-			$breadcrumbs[ $this->subtype ] = array(
-				'link' => ! empty( $subtype['link'] ) ? $subtype['link'] : '#',
-				'title' => ! empty( $subtype['title'] ) ? $subtype['title'] : geodir_utf8_ucfirst( $this->subtype ),
-			);
-		}
-		?>
-		<div class="row breadcrumb-row">
-			<nav class="breadcrumb">
-				<?php $c = 1; foreach ( $breadcrumbs as $id => $breadcrumb ) { ?>
-					<?php if ( $c < count( $breadcrumbs ) ) { ?>
-						<a class="breadcrumb-item gd-dashb-<?php echo $id; ?>" href="<?php echo $breadcrumb['link']; ?>"><?php echo $breadcrumb['title']; ?></a> / 
-					<?php } else { ?>
-						<span class="breadcrumb-item active gd-dashb-<?php echo $id; ?>"><?php echo $breadcrumb['title'] ; ?></span>
-					<?php } ?>
-				<?php $c++; } ?>
-			</nav>
-		</div>
-		<?php
-	}
-	
-	/**
-	 * Dashboard page title.
-	 */
-	public function title( $instance ) {
-		$type = isset( $this->pages[ $this->type ] ) ? $this->pages[ $this->type ] : NULL;
-		$subtype = $this->subtype && ! empty( $type ) && isset( $type['subtypes'][ $this->subtype ] ) ? $type['subtypes'][ $this->subtype ] : NULL;
-		
-		if ( ! empty( $subtype ) ) {
-			$title = ! empty( $subtype['title'] ) ? $subtype['title'] : geodir_utf8_ucfirst( $this->subtype );
-			$url = ! empty( $subtype['link'] ) ? $subtype['link'] : '#';
-			$icon = ! empty( $subtype['icon'] ) ? $subtype['icon'] : '';
-		} else {
-			$title = ! empty( $type['title'] ) ? $type['title'] : geodir_utf8_ucfirst( $this->type );
-			$url = ! empty( $type['link'] ) ? $type['link'] : '#';
-			$icon = ! empty( $type['icon'] ) ? $type['icon'] : '';
-		}
-		$fa_icon = ! empty( $icon ) ? '<i class="fa ' . $icon . '"></i> ' : '';
-		?>
-		<div class="row title-row">
-			<h2 class="gd-dash-title"><?php echo $fa_icon; ?><?php echo apply_filters( 'geodir_dashboard_title', $title, $this ); ?></h2>
-		</div>
-		<?php
-	}
-	
-	public function get_stats() {
-		$parent = 'index';
-		
-		$parent_item = $this->pages;
-		if ( ! empty( $this->subtype ) ) {
-			$items = isset( $this->pages[ $this->type ] ) && isset( $this->pages[ $this->type ]['subtypes'][ $this->subtype ] ) ? $this->pages[ $this->type ]['subtypes'][ $this->subtype ] : array();
-			$parent = $this->type . '_' . $this->subtype;
-			$parent_item = $this->pages[ $this->type ];
-		} elseif ( ! empty( $this->type ) && $this->type != 'index' ) {
-			$items = isset( $this->pages[ $this->type ] ) && isset( $this->pages[ $this->type ]['subtypes'] ) ? $this->pages[ $this->type ]['subtypes'] : array();
-			$parent = $this->type;
-			$parent_item = $this->pages[ $this->type ];
-		} else {
-			$items = $this->pages;
-		}
-		
-		$stats = array();
-
-		if ( ! empty( $items ) ) {
-			foreach ( $items as $key => $item ) {
-				if ( ! is_array( $item ) ) {
-					continue;
-				}
-				
-				$item_stats = apply_filters( 'geodir_dashboard_stats_' . $parent, array(), $this, $key, $parent, $item, $parent_item );
-				$item_stats = apply_filters( 'geodir_dashboard_stats_item_' . $parent . '_' . $key, array(), $this, $key, $parent, $item, $parent_item );
-
-				$item_stats = array( 'stats' => $item_stats );
-				$item_stats['filters'] = array( 'geodir_dashboard_stats_' . $parent, 'geodir_dashboard_stats_item_' . $parent . '_' . $key );
-
-				$stats[ $key ] = array_merge( $item, $item_stats );
-			}
-		}
-
-		return apply_filters( 'geodir_dashboard_get_stats', $stats, $this );
-	}
-	
-	public function dashboard_stats( $instance ) {
-		if ( empty( $_GET['stats'] ) && $this->type != 'index' ) {
-			return;
-		}
-		
-		$items = $this->get_stats();
-		if ( empty( $items ) ) {
-			return;
-		}
-		?>
-		<div class="row gd-dash-stats-wrap">
-		<?php foreach ( $items as $key => $item ) { ?>
-			<?php if ( !empty( $item['stats'] ) ) { ?>
-			<?php echo $this->get_stats_grid( $key, $item ); ?>
-			<?php } ?>
-		<?php } ?>
-		</div>
-		<?php
-	}
-	
-	public function dashboard_chart( $instance ) {
-		if ( empty( $_GET['chart'] ) ) {
-			return;
-		}
-
-		?>
-		<div class="wrap gd-chart-wrap">
-			<?php echo $this->get_chart_tabs(); ?>
-			<?php echo $this->get_chart_html(); ?>
-        </div>
-		<?php
-	}
-	
-	public function get_stats_grid( $type, $args ) {
-		$defaults = array(
-            'link' => '',
-            'icon' => "fa-th-list",
-            'title' => "",
-            'stats' => array()
-        );
-        $args = wp_parse_args( $args, $defaults );
-		
-		$link = ! empty( $args['link'] ) ? $args['link'] : '#';
-		$icon = ! empty( $args['icon'] ) ? '<i class="fa ' . $args['icon'] . '"></i>' : 'fa fa-th-list';
-
-		ob_start();
-		?>
-		<div class="gd-dash-box-wrap">
-            <section class="gd-dash-box">
-                <div class="gd-dash-box-inner">
-                    <a class="gd-dash-box-icon" href="<?php echo $link; ?>"><?php echo $icon ?></a>
-                    <div class="gd-dash-box-title"><?php echo $args['title']; ?></div>
-                    <div class="gd-dash-box-sep"></div>
-                    <?php foreach ( $args['stats'] as $key => $value ) { ?>
-						<h4 class="gd-dash-box-stat"><strong><?php echo $value; ?></strong><small><?php echo $key; ?></small></h4>
-					<?php } ?>
-                </div>
-            </section>
-        </div>
-		<?php
-		$content = ob_get_contents();
-        ob_end_clean();
-		return $content;
-	}
-	
-	public function listings_stats( $stats, $instance, $current, $parent, $current_item, $parent_item ) {
-		$stats[__( 'Listings', 'geodirectory' )] = $this->get_listings_count();
-
-		return $stats;
-	}
-	
-	public function reviews_stats( $stats, $instance, $current, $parent, $current_item, $parent_item ) {
-		$stats[__( 'Reviews', 'geodirectory' )] = $this->get_reviews_count();
-
-		return $stats;
-	}
-	
-	public function users_stats( $stats, $instance, $current, $parent, $current_item, $parent_item ) {
-		$stats[__( 'Users', 'geodirectory' )] = $this->get_users_count();
-
-		return $stats;
-	}
-	
-	public function listings_post_type_stats( $stats, $instance, $current, $parent, $current_item, $parent_item ) {
-		$title = ! empty( $current_item['title'] ) ? $current_item['title'] : $current;
-		$stats[ $title  ] 														= $this->get_post_type_count( $current );
-		$stats[ wp_sprintf( __( '%s Categories', 'geodirectory' ), $title ) ]	= wp_count_terms( $current . 'category');
-		$stats[ wp_sprintf( __( '%s Tags', 'geodirectory' ), $title ) ] 		= wp_count_terms( $current . '_tags');
-
-		return $stats;
-	}
-	
-	public function reviews_post_type_stats( $stats, $instance, $current, $parent, $current_item, $parent_item ) {
-		$title = ! empty( $parent_item['title'] ) ? $parent_item['title'] : $parent;
-		$stats[ $title  ] = $this->get_post_type_reviews_count( $current );
-
-		return $stats;
-	}
-	
-	public function get_listings_count( $statuses = array() ) {
-        $count = 0;
-
-		foreach ( $this->gd_post_types as $post_type => $info ) {
-			$count += (int)$this->get_post_type_count( $post_type, $statuses );
-		}
-
-        return $count;
-    }
-	
-	public function get_post_type_count( $post_type, $statuses = array() ) {
-        $count_posts = wp_count_posts( $post_type );
-
-		if ( ! empty( $statuses ) ) {
-			$count = 0;
-			if ( ! is_array( $statuses ) ) {
-				$statuses = array( $statuses );
-			}
-			foreach ( $statuses as $status ) {
-				if ( isset( $count_posts->$status ) ) {
-					$count += (int)$count_posts->$status;
-				}
-			}
-		} else {
-			$count = (int)$count_posts->publish + (int)$count_posts->draft + (int)$count_posts->trash + (int)$count_posts->pending;
-		}
-		
-        return $count;
-    }
-	
-	public function get_users_count() {
-        global $wpdb;
-        $count = $wpdb->get_var( "SELECT COUNT(ID) FROM {$wpdb->users}" );
-        return (int)$count;
-    }
-	
-	public function get_reviews_count( $status = NULL ) {
-        $count = 0;
-
-		foreach ( $this->gd_post_types as $post_type => $info ) {
-			$count += (int)$this->get_post_type_reviews_count( $post_type, $status );
-		}
-
-        return $count;
-    }
-	
-	public function get_post_type_reviews_count( $post_type, $status = NULL ) {
-        global $wpdb;
-		$status = $status === NULL ? 1 : (int)$status;
-
-        $count = (int)$wpdb->get_var( $wpdb->prepare( "SELECT COUNT( overall_rating ) FROM " . GEODIR_REVIEW_TABLE . " WHERE post_type = %s AND post_status = 1 AND status=" . $status . " AND overall_rating > 0", $post_type ) );
-
-        return $count;
-    }
-	
-	public function get_chart_tabs() {
-		$current_url = geodir_curPageURL();
-		$duration = ! empty( $_GET['duration'] ) ? sanitize_text_field( $_GET['duration'] ) : 'this_year';
-		
-		?>
-		<div class="gd-dash-btn-group" data-toggle="buttons">
-			<label class="gd-dash-btn gd-dash-btn-sm gd-dash-btn-white <?php echo ( $duration == 'this_week' ? "active" : '' ); ?>">
-				<a href="<?php echo add_query_arg( 'duration', 'this_week', $current_url ); ?>"><?php _e( 'This Week', 'geodirectory' ); ?></a>
-			</label>
-			<label class="gd-dash-btn gd-dash-btn-sm gd-dash-btn-white <?php echo ( $duration == 'last_week' ? "active" : '' ); ?>">
-				<a href="<?php echo add_query_arg( 'duration', 'last_week', $current_url ); ?>"><?php _e( 'Last Week', 'geodirectory' ); ?></a>
-			</label>
-			<label class="gd-dash-btn gd-dash-btn-sm gd-dash-btn-white <?php echo ( $duration == 'this_month' ? "active" : '' ); ?>">
-				<a href="<?php echo add_query_arg( 'duration', 'this_month', $current_url ); ?>"><?php _e( 'This Month', 'geodirectory' ); ?></a>
-			</label>
-			<label class="gd-dash-btn gd-dash-btn-sm gd-dash-btn-white <?php echo ( $duration == 'last_month' ? "active" : '' ); ?>">
-				<a href="<?php echo add_query_arg( 'duration', 'last_month', $current_url ); ?>"><?php _e( 'Last Month', 'geodirectory' ); ?></a>
-			</label>
-			<label class="gd-dash-btn gd-dash-btn-sm gd-dash-btn-white <?php echo ( $duration == 'this_year' ? "active" : '' ); ?>">
-				<a href="<?php echo add_query_arg( 'duration', 'this_year', $current_url ); ?>"><?php _e( 'This Year', 'geodirectory' ); ?></a>
-			</label>
-			<label class="gd-dash-btn gd-dash-btn-sm gd-dash-btn-white <?php echo ( $duration == 'last_year' ? "active" : '' ); ?>">
-				<a href="<?php echo add_query_arg( 'duration', 'last_year', $current_url ); ?>"><?php _e( 'Last Year', 'geodirectory' ); ?></a>
-			</label>
-		</div>
-		<div class="gd-dash-box-sep"></div>
-		<?php
-	}
-	
-	public function get_chart_html() {
-		$chart_stats = apply_filters( 'geodir_dashboard_get_' . $this->type . '_chart_stats', array(), $this );
-		
-		if ( empty( $chart_stats ) ) {
-			return;
-		}
-		
-		$chart_js_data = $this->get_chart_js_params( $chart_stats );
-
-		?>
-		<div class="gd-chart-html">
-			<canvas id="gdDashListings"></canvas>
-			<script type="text/javascript">
-				var gdChartId = document.getElementById('gdDashListings').getContext('2d');
-				var myChart = new Chart(gdChartId, <?php echo json_encode( $chart_js_data ); ?>);
-			</script>
-		</div>
-		<?php
-	}
-	
-	public function get_chart_js_params( $stats, $chart_type = 'line' ) {
-		if ( empty( $stats ) ) {
-			return array();
-		}
-
-		$datasets_data = array();
-		foreach ( $stats as $label => $values ) {
-			foreach ( $values as $label => $value ) {
-				if ( ! isset( $datasets_data[ $label ] ) )  {
-					$datasets_data[ $label ] = array();
-				}
-				$datasets_data[ $label ][] = $value;
-			}
-		}
-
-		$data = array();
-		$data['labels'] = array_keys( $stats );
-		$data['datasets'] = array();
-		foreach ( $datasets_data as $label => $values ) {
-			$data['datasets'][] = array(
-				'label' => ucfirst( $label ),
-				'data' => $values,
-				'fillColor' => 'rgba(220,220,220,0.5)',
-				'strokeColor' => 'rgba(220,220,220,1)',
-				'pointColor' => 'rgba(220,220,220,1)',
-				'pointStrokeColor' => '#fff',
-				'backgroundColor' => 'rgba(220,220,220,0.5)'
-			);
-		}
-		
-		$js_params = array();
-		$js_params['type'] = $chart_type;
-		$js_params['data'] = $data;
-		
-		return apply_filters( 'geodir_dashboard_get_chart_js_params', $js_params, $stats, $chart_type, $this );
-	}
-	
-	public function get_listings_chart_stats() {
-		$duration 	= ! empty( $_GET['duration'] ) ? sanitize_text_field( $_GET['duration'] ) : 'this_year';
-		$post_type 	= $this->subtype;
-		if ( empty( $this->gd_post_types[ $post_type ] ) ) {
-			return;
-		}
-		
-		return $this->get_listings_stats_by( $duration, $post_type );
-	}
-	
-	public function get_reviews_chart_stats() {
-		$duration 	= ! empty( $_GET['duration'] ) ? sanitize_text_field( $_GET['duration'] ) : 'this_year';
-		$post_type 	= $this->subtype;
-		if ( empty( $this->gd_post_types[ $post_type ] ) ) {
-			return;
-		}
-		
-		return $this->get_reviews_stats_by( $duration, $post_type );
-	}
-	
-	public function get_users_chart_stats() {
-		$duration 	= ! empty( $_GET['duration'] ) ? sanitize_text_field( $_GET['duration'] ) : 'this_year';
-		
-		return $this->get_users_stats_by( $duration );
-	}
-	
-	public function get_listings_stats_by( $stats_by, $post_type ) {
-		$dates = $this->get_start_end_dates( $stats_by );
-
-		$stats = array();
-		foreach ( $dates as $day => $days ) {
-			$stats[ $day ]['total'] = $this->query_posts_count( $post_type, "AND post_date <= '" . $days['end'] . "'" );
-			$stats[ $day ]['new'] = $this->query_posts_count( $post_type, "AND post_date >= '" . $days['start'] . "' AND post_date <= '" . $days['end'] . "'" );
-		}
-		
-		return apply_filters( 'geodir_dashboard_listings_stats_by', $stats, $stats_by, $post_type );
-	}
-	
-	public function get_reviews_stats_by( $stats_by, $post_type ) {
-		$dates = $this->get_start_end_dates( $stats_by );
-
-		$stats = array();
-		foreach ( $dates as $day => $days ) {
-			$stats[ $day ]['total'] = $this->query_reviews_count( $post_type, "AND post_date <= '" . $days['end'] . "'" );
-			$stats[ $day ]['new'] = $this->query_reviews_count( $post_type, "AND post_date >= '" . $days['start'] . "' AND post_date <= '" . $days['end'] . "'" );
-		}
-		
-		return apply_filters( 'geodir_dashboard_reviews_stats_by', $stats, $stats_by, $post_type );
-	}
-	
-	public function get_users_stats_by( $stats_by ) {
-		$dates = $this->get_start_end_dates( $stats_by );
-
-		$stats = array();
-		foreach ( $dates as $day => $days ) {
-			$stats[ $day ]['total'] = $this->query_users_count( "AND user_registered <= '" . $days['end'] . "'" );
-			$stats[ $day ]['new'] = $this->query_users_count( "AND user_registered >= '" . $days['start'] . "' AND user_registered <= '" . $days['end'] . "'" );
-		}
-		
-		return apply_filters( 'geodir_dashboard_users_stats_by', $stats, $stats_by );
-	}
-	
-	public function query_posts_count( $post_type, $where ) {
-		global $wpdb;
-
-		$statuses = array_keys( get_post_statuses() );
-
-		$query = "SELECT COUNT(ID) FROM " . $wpdb->posts . " WHERE post_type = '" . $post_type . "' AND post_status IN('" . implode( "','", $statuses ) . "') " . $where;
-
-		return $wpdb->get_var( $query );
-	}
-	
-	public function query_reviews_count( $post_type, $where ) {
-		global $wpdb;
-
-		$query = "SELECT COUNT(id) FROM " . GEODIR_REVIEW_TABLE . " WHERE post_type = '" . $post_type . "' AND post_status = 1 AND status = 1 AND overall_rating > 0 " . $where;
-
-		return $wpdb->get_var( $query );
-	}
-	
-	public function query_users_count( $where ) {
-		global $wpdb;
-
-		$query = "SELECT COUNT(ID) FROM " . $wpdb->users . " WHERE 1 " . $where;
-
-		return $wpdb->get_var( $query );
-	}
-
-	public function get_start_end_dates( $type = 'this_year' ) {
-		$dates = array();
-
-		switch ( $type ) {
-			case 'this_year':
-			case 'last_year':
-				$year = $type == 'this_year' ? date( 'Y', time() ) : date( 'Y', strtotime( '-1 year' ) );
-
-				for ( $m = 1; $m <= 12; $m++ ) {
-					$time = strtotime( date( $year . '-' . $m . '-01' ) );
-					$dates[ date( 'M', $time ) ] = array (
-						'start' => date( $year . '-m-01 00:00:00', $time ),
-						'end' => date( $year . '-m-t 23:59:59', $time )
-					);
-				}
-			break;
-			case 'this_month':
-			case 'last_month':
-				$time = $type == 'this_month' ? time() : strtotime( '-1 month' );
-				$year = date( 'Y', $time );
-				$month = date( 'm', $time );
-				$last_day = date( 't', $time );
-
-				for ( $d = 1; $d <= $last_day; $d++ ) {
-					$dates[ $d ] = array (
-						'start' => $year . '-' . $month . '-' . sprintf( '%02d', $d ) . ' 00:00:00',
-						'end' => $year . '-' . $month . '-' . sprintf( '%02d', $d ) . ' 23:59:59'
-					);
-				}
-			break;
-			case 'this_week':
-			case 'last_week':
-				$time = $type == 'this_week' ? time() : strtotime( '-1 week' );
-				$year = date( 'Y', $time );
-				$month = date( 'm', $time );
-				$week = date( 'W', $time );
-
-				for ( $d = 1; $d <= 7; $d++ ) {
-					$time = strtotime( $year . '-W' . $week . '-' . $d );
-					$dates[ date( 'D', $time ) ] = array (
-						'start' => date( 'Y-m-d 00:00:00', $time ),
-						'end' => date( 'Y-m-d 23:59:59', $time ),
-					);
-				}
-			break;
-		}
-		
-		return $dates;
-	}
-	
-	public function filter_chart_js_params( $params, $stats, $chart_type, $class ) {
-		if ( ! empty( $params['data']['datasets'] ) ) {
-			$datasets = array();
-
-			foreach ( $params['data']['datasets'] as $key => $data ) {
-				$dataset = $data;
-
-				if ( ! empty( $data['label'] ) ) {
-					if ( $data['label'] == 'Total' ) {
-						$dataset['fillColor'] = 'rgba(220,220,220,0.5)';
-						$dataset['strokeColor'] = 'rgba(220,220,220,1)';
-						$dataset['pointColor'] = 'rgba(220,220,220,1)';
-						$dataset['pointStrokeColor'] = '#fff';
-						$dataset['backgroundColor'] = 'rgba(220,220,220,0.5)';
-					} elseif ( $data['label'] == 'New' ) {
-						$dataset['fillColor'] = 'rgba(151,187,205,0.5)';
-						$dataset['strokeColor'] = 'rgba(151,187,205,1)';
-						$dataset['pointColor'] = 'rgba(151,187,205,1)';
-						$dataset['pointStrokeColor'] = '#fff';
-						$dataset['backgroundColor'] = 'rgba(151,187,205,0.5)';
-					}					
-				}
-
-				$datasets[$key] = $dataset;
-			}
-
-			$params['data']['datasets'] = $datasets;
-		}
-
-		return $params;
 	}
 }
 
