@@ -227,10 +227,12 @@ final class GeoDirectory {
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post-types-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/taxonomy-functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_fields_input_functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_fields_output_functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-custom-fields-functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/comments-functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/input-functions.php' );
+	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/output-functions.php' );
+	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/output-filter-functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/functions.php' );
+	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/comments-functions.php' );
+	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-content-listing-functions.php' );
 	    GeoDir_Comments::init();
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/location_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/google_analytics.php' );
@@ -247,6 +249,8 @@ final class GeoDirectory {
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodirectory_template_actions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-frontend-scripts.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-permalinks.php' );
+
+	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/block-types.php' );
 
 
         if ( $this->is_request( 'admin' ) || $this->is_request( 'test' ) || $this->is_request( 'cli' ) ) {

@@ -2482,33 +2482,30 @@ function geodir_rating_disabled_post_types() {
  * @return bool True if review star disabled, otherwise false.
  */ 
 function geodir_cpt_has_rating_disabled( $post_type = '', $taxonomy = false ) {
-	$post_types = geodir_rating_disabled_post_types();
-	
-	if ( empty( $post_types ) ) {
+	$post_types = $post_types = geodir_get_posttypes('array');
+	if(isset($post_types[$post_type]['disable_reviews']) && $post_types[$post_type]['disable_reviews']){
+		return true;
+	}else{
 		return false;
 	}
-	
-	if ( is_int( $post_type ) ) {
-		$post_type = get_post_type( $post_type );
-	}
-	
-	if ( $taxonomy && !empty( $post_types ) ) {
-		$posttypes = array();
-		
-		foreach ( $post_types as $posttype ) {
-			$posttypes[] = $posttype . 'category';
-			$posttypes[] = $posttype . '_tags';
-		}
-		
-		$post_types = $posttypes;
-	}
+}
 
-	$return = false;
-	if ( $post_type != '' && !empty( $post_types ) && in_array( $post_type, $post_types ) ) {
-		$return = true;
-	}
 
-	return $return;
+/**
+ * Check favourite disabled for certain CPT.
+ *
+ * @since 2.0.0
+ *
+ * @param string|int $post_type WP post type or Post ID or WP texonomy. Ex: gd_place.
+ * @return bool True if review star disabled, otherwise false.
+ */ 
+function geodir_cpt_has_favourite_disabled( $post_type = '') {
+	$post_types = $post_types = geodir_get_posttypes('array');
+	if(isset($post_types[$post_type]['disable_favorites']) && $post_types[$post_type]['disable_favorites']){
+		return true;
+	}else{
+		return false;
+	}
 }
 
 /**

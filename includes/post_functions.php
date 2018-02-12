@@ -1317,6 +1317,16 @@ function geodir_favourite_html($user_id, $post_id)
 
     global $current_user, $post;
 
+    if(isset($post->post_type) && $post->post_type){
+        $post_type = $post->post_type;
+    }else{
+        $post_type = get_post_type($post_id);
+    }
+
+    if(geodir_cpt_has_favourite_disabled($post_type)){
+        return '';
+    }
+
     /**
      * Filter to modify "Add to Favorites" text
      *

@@ -1,0 +1,117 @@
+// The CSS for the listing/archive page.
+
+.geodir-category-list-view{
+	list-style: none;
+	li{
+		padding-bottom: 30px;
+
+		.gd-list-item-left{
+			display: inline-block;
+			width: 30%;
+			margin-right: 3%;
+
+			.geodir-post-img {
+				box-sizing: border-box;
+				display: inline-block;
+				position: relative;
+				width: 100%;
+				background: #fff;
+				padding: 1%;
+				float: left;
+				margin-right: 3%;
+
+				.geodir_thumbnail {
+					min-width: 100%;
+					max-width: 100%;
+					margin: 0;
+					padding: 0;
+					float: left;
+					width: 100px;
+					background-position: 50% 50%;
+					background-repeat: no-repeat;
+					background-size: cover;
+					position: absolute;
+					top: 0;
+					bottom: 0;
+					left: 0;
+					right: 0;
+					border-radius: 3px;
+					&.geodir_lazy_load_thumbnail {
+						opacity: 0;
+						transition: opacity .5s ease-in;
+						image-rendering: optimizequality;
+					}
+				}
+
+				&:after {
+					content: '';
+					display: block;
+					margin-top: 65%;
+				}
+			}
+		}
+
+		.gd-list-item-right{
+			display: inline-block;
+			vertical-align: top;
+			width: 67%;
+
+			.geodir-post-info{
+				font-size: 12px;
+				margin-top:5px;
+
+				&> span{
+					float: left;
+				}
+
+				.gd-rating{
+					margin: 0;
+				}
+
+				.gd-list-rating-stars,
+				.gd-list-rating-text{
+					display: inline-block;
+				}
+
+				.gd-list-favorite{
+					float:right;
+				}
+			}
+
+			.post_content{
+				text-align: justify;
+				max-height: 120px;
+				position: relative;
+				overflow: hidden;
+				clear: both;
+				p{
+					margin: 0;
+					padding: 0;
+				}
+
+
+				.gd-read-more {
+					display: none;
+					position: absolute;
+					bottom: 0;
+					left: 0;
+					width: 100%;
+					text-align: center;
+					margin: 0; padding: 30px 0 0 0;
+					background-image: linear-gradient(to bottom, transparent, #FFF);
+				}
+			}
+
+		}
+
+		h2 {
+			margin: 0;
+			padding: 0;
+			font-size: 14px;
+			font-weight: bold;
+			a{
+				//color: #505050;
+			}
+		}
+	}
+}
