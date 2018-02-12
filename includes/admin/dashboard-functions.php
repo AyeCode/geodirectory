@@ -103,7 +103,7 @@ function geodir_dashboard_listings_stats( $stats, $type, $period ) {
 	$stat_label = __( 'Listings', 'geodirectory' );
 
 	$stats['stats'][ $stat_key ] = array(
-		'icon' => 'fa-th-list',
+		'icon' => 'fa-list-ul',
 		'label' => $stat_label,
 		'value' => ! empty( $listing_stats['total'] ) ? (int)$listing_stats['total'] : 0
 	);
@@ -429,20 +429,23 @@ function geodir_dashboard_revenues_stats( $stats, $type, $period ) {
 function geodir_dashboard_get_pending_stats() {
 	$stats = array();
 	$stats['listings'] = array(
-		'icon' => 'fa-th-list',
+		'icon' => 'fa-list-ul',
 		'label' => __( 'Pending Listings', 'geodirectory' ),
-		'total' => 0
+		'total' => 0,
+		'url' => '',
 	);
 	$stats['reviews'] = array(
 		'icon' => 'fa-star',
 		'label' => __( 'Pending Reviews', 'geodirectory' ),
-		'total' => 0
+		'total' => 0,
+		'url' => admin_url( 'edit-comments.php?comment_type=comment&comment_status=moderated' ),
 	);
 	$stats['claim_listings'] = array(
-		'icon' => 'fa-briefcase',
+		'icon' => 'fa-exclamation-circle',
 		'label' => __( 'Pending Claimed', 'geodirectory' ),
-		'total' => 0
-	);//
+		'total' => 0,
+		'url' => '',
+	);
 	
 	$item_stats = geodir_dashboard_post_types_stats( 'all', 'all', array( 'pending' ) );
 	if ( ! empty( $item_stats['post_types'] ) ) {
@@ -451,7 +454,8 @@ function geodir_dashboard_get_pending_stats() {
 			$items[] = array(
 				'icon' => 'fa-map-marker',
 				'label' => geodir_post_type_name( $post_type ),
-				'total' => $data['total']
+				'total' => $data['total'],
+				'url' => admin_url( 'edit.php?post_status=pending&post_type=' . $post_type ),
 			);
 		}
 		$stats['listings']['items'] = $items;
@@ -465,7 +469,8 @@ function geodir_dashboard_get_pending_stats() {
 			$items[] = array(
 				'icon' => 'fa-map-marker',
 				'label' => geodir_post_type_name( $post_type ),
-				'total' => $data['total']
+				'total' => $data['total'],
+				'url' => '',
 			);
 		}
 		$stats['reviews']['items'] = $items;

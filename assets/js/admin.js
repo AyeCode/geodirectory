@@ -861,6 +861,23 @@ jQuery(function($) {
                 $select2.addClass('enhanced');
                 $select2.data('select2').$container.addClass('gd-select2-container');
                 $select2.data('select2').$dropdown.addClass('gd-select2-container');
+				if ($(this).data('sortable')) {
+					var $select = $(this);
+					var $list = $(this).next('.select2-container').find('ul.select2-selection__rendered');
+					$list.sortable({
+						placeholder: 'ui-state-highlight select2-selection__choice',
+						forcePlaceholderSize: true,
+						items: 'li:not(.select2-search__field)',
+						tolerance: 'pointer',
+						stop: function() {
+							$($list.find('.select2-selection__choice').get().reverse()).each(function() {
+								var id = $(this).data('data').id;
+								var option = $select.find('option[value="' + id + '"]')[0];
+								$select.prepend(option);
+							});
+						}
+					});
+				}
             });
             $(':input.geodir-select-nostd').filter(':not(.enhanced)').each(function() {
                 var select2_args = $.extend({
@@ -874,6 +891,23 @@ jQuery(function($) {
                 $select2.addClass('enhanced');
                 $select2.data('select2').$container.addClass('gd-select2-container');
                 $select2.data('select2').$dropdown.addClass('gd-select2-container');
+				if ($(this).data('sortable')) {
+					var $select = $(this);
+					var $list = $(this).next('.select2-container').find('ul.select2-selection__rendered');
+					$list.sortable({
+						placeholder: 'ui-state-highlight select2-selection__choice',
+						forcePlaceholderSize: true,
+						items: 'li:not(.select2-search__field)',
+						tolerance: 'pointer',
+						stop: function() {
+							$($list.find('.select2-selection__choice').get().reverse()).each(function() {
+								var id = $(this).data('data').id;
+								var option = $select.find('option[value="' + id + '"]')[0];
+								$select.prepend(option);
+							});
+						}
+					});
+				}
             });
         }).trigger('geodir-select-init');
         $('html').on('click', function(event) {
