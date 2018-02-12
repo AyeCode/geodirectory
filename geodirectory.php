@@ -250,7 +250,9 @@ final class GeoDirectory {
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-frontend-scripts.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-permalinks.php' );
 
-	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/block-types.php' );
+	    if(defined( 'GUTENBERG_DEVELOPMENT_MODE' )){
+		    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/block-types.php' );
+	    }
 
 
         if ( $this->is_request( 'admin' ) || $this->is_request( 'test' ) || $this->is_request( 'cli' ) ) {
@@ -264,7 +266,8 @@ final class GeoDirectory {
 	        //include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/class-geodir-admin.php' );
             new GeoDir_Admin(); // init the GD admin class
 
-            require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/diagnostic-functions.php' );
+	        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/admin-functions.php' );
+	        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/diagnostic-functions.php' );
 			require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/dashboard-functions.php' );
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/class.analytics.stats.php' );
             GeoDir_Admin_Install::init(); // init the install class
