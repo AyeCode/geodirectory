@@ -450,6 +450,7 @@ class GeoDir_Admin_Settings {
 								class="regular-text <?php echo esc_attr( $value['class'] ); ?>"
 								<?php echo implode( ' ', $custom_attributes ); ?>
 								<?php echo ( 'multiselect' == $value['type'] ) ? 'multiple="multiple"' : ''; ?>
+								<?php echo ! empty( $value['sortable'] ) ? ' data-sortable="true"' : ''; ?>
 								>
 								<?php
 									foreach ( $value['options'] as $key => $val ) {

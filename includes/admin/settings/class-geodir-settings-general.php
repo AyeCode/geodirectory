@@ -492,7 +492,8 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'type'       => 'multiselect',
 					'class'      => 'geodir-select',
 					'options'    => geodir_user_roles(array('administrator')),
-					'desc_tip' => true,
+					'desc_tip'   => true,
+					'sortable' 	 => true,
 					//'advanced' => true
 				),
 

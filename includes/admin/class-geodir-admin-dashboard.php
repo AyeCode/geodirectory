@@ -95,38 +95,42 @@ class GeoDir_Admin_Dashboard {
 		do_action( 'geodir_admin_dashboard_before', $this );
 		?>
 		<div class="wrap gd-dashboard">
-			<div class="row gd-dash-row gd-row-title">
+			<div class="row gd-dash-row gd-row-head">
 				<div class="col-lg-12">
-					<h1 class="page-header">Dashboard</h1>
+					<h1 class="page-header gd-dash-title"><?php _e( 'Dashboard', 'geodirectory' ); ?></h1>
 				</div>
 			</div>
 			<?php if ( ! empty( $this->pending_stats ) ) { ?>
 			<div class="row gd-dash-row gd-row-actions">
 				<div class="col-lg-12">
-					<h2><i class="fa fa-bell fa-fw"></i> <?php _e( 'Actions Required', 'geodirectory' ); ?></h2>
-					<div class="row">
+					<h1 class="gd-dash-title"><?php _e( 'Actions Required', 'geodirectory' ); ?></h1>
+					<div class="row gd-pending-items">
 			<?php foreach ( $this->pending_stats as $item => $item_data ) { ?>
 				<div class="col-lg-4 col-md-6" data-pending-type="<?php echo $item; ?>">
-					<div class="panel panel-info gd-collapsed">
-						<div class="panel-heading gd-collapse"><h3 class="panel-title"><i class="fa <?php echo $item_data['icon']; ?>"></i> <?php echo $item_data['label']; ?><span class="badge"><?php echo $item_data['total']; ?></span> <span class="pull-right"><i class="fa fa-caret-down"></i></span></h3></div>
+					<div class="panel panel-info gd-collapsed gd-pending-item">
+						<div class="panel-heading gd-collapse"><h3 class="panel-title"><span class="badge gd-icon"><i class="fa <?php echo $item_data['icon']; ?>"></i></span> <?php echo $item_data['label']; ?><span class="badge gd-stat-no"><?php echo $item_data['total']; ?></span> <span class="pull-right"><i class="fa fa-angle-down"></i></span></h3></div>
 						<div class="gd-collapsable">
 							<div class="panel-body text-center">
 								<div class="row gd-row-cpt">
 									<?php if ( ! empty( $item_data['items'] ) ) { ?>
 										<?php foreach ( $item_data['items'] as $cpt => $cpt_data ) { ?>
 											<div class="col-xs-12 col-md-6">
+												<?php if ( ! empty( $cpt_data['url'] ) ) { ?><a href="<?php echo esc_url( $cpt_data['url'] ); ?>"><?php } ?>
 												<div class="panel panel-default">
 													<div class="panel-body">
 														<span class="gd-stat-lbl"><i class="fa <?php echo $cpt_data['icon']; ?>"></i> <?php echo $cpt_data['label']; ?></span>
 														<span class="gd-stat-val"><?php echo $cpt_data['total']; ?></span>
 													</div>
 												</div>
+												<?php if ( ! empty( $cpt_data['url'] ) ) { ?></a><?php } ?>
 											</div>
 										<?php } ?>
 									<?php } ?>
 								</div>
 							</div>
-							<div class="panel-footer gd-dash-link-all"><a href="javascript:void(0);"> <?php _e( 'See All', 'geodirectory' ); ?></a></div>
+							<?php if ( ! empty( $item_data['url'] ) ) { ?>
+							<div class="panel-footer gd-dash-link-all"><a href="<?php echo esc_url( $item_data['url'] ); ?>"> <?php _e( 'See All', 'geodirectory' ); ?></a></div>
+							<?php } ?>
 						</div>
 					</div>
 				</div>
@@ -139,7 +143,7 @@ class GeoDir_Admin_Dashboard {
 				<div class="col-lg-12">
 					<div class="panel panel-default gd-dash-panel gd-panel-stats">
 						<input type="hidden" id="gd_stats_type" value="all">
-						<div class="panel-heading"><h2><i class="fa fa-area-chart fa-fw"></i> <?php _e( 'Statistics', 'geodirectory' ); ?></h2></div>
+						<div class="panel-heading"><h1 class="gd-dash-title"><?php _e( 'Statistics', 'geodirectory' ); ?></h1></div>
 						<div class="panel-body">
 							<div class="gd-stats-nav"> 
 								<div class="row">
@@ -161,7 +165,7 @@ class GeoDir_Admin_Dashboard {
 							</div>
 							<div class="gd-stats-data gd-stats-wait"> 
 								<div class="gd-stat-loader" style="display:none;"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span></div>
-								<div class="gd-stat-format" style="display:none!important"><div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 gd-stat  gd-stat-{stat}"><div class="well text-center"><span class="gd-stat-icon"><i class="fa {icon} fa-2x"></i></span><span class="gd-stat-name">{label}</span><span class="gd-stat-no">{value}</span></div></div></div>
+								<div class="gd-stat-format" style="display:none!important"><div class="col-xs-12 col-sm-6 col-md-4 col-lg-2 gd-stat gd-stat-{stat}"><div class="well text-center"><span class="gd-stat-icon"><i class="fa {icon}"></i></span><span class="gd-stat-name">{label}</span><span class="gd-stat-no">{value}</span></div></div></div>
 								<div class="gd-stats-details">
 									<div class="row gd-stats-items">
 									</div>

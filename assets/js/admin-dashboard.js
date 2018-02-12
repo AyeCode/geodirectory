@@ -5,17 +5,17 @@ jQuery(function($) {
             $('.gd-collapsable', $parent).slideUp(200, function() {
                 $parent.addClass('gd-collapsed');
             });
-            $(this).find('.fa-caret-up').addClass('fa-caret-down').removeClass('fa-caret-up');
+            $(this).find('.fa-angle-up').addClass('fa-angle-down').removeClass('fa-angle-up');
         } else {
-            $(this).find('.fa-caret-down', $parent).addClass('fa-caret-up').removeClass('fa-caret-down');
+            $(this).find('.fa-angle-down', $parent).addClass('fa-angle-up').removeClass('fa-angle-down');
             $parent.removeClass('gd-collapsed');
             $('.gd-collapsable', $parent).slideDown(200);
         }
     });
     $('.gd-stats-nav .btn').on('click', function(e) {
         var type;
-        $('.gd-stats-nav .btn').removeClass('btn-primary').addClass('btn-default');
-        $(this).addClass('btn-primary');
+        $('.gd-stats-nav .btn.btn-primary').removeClass('btn-primary').addClass('btn-default');
+        $(this).removeClass('btn-default').addClass('btn-primary');
         type = $(this).data('type');
         if (!type) {
             return false;
@@ -104,9 +104,20 @@ jQuery(function($) {
         gd_chart = Morris.Line(chart_params);
         if (gd_chart.options.labels && gd_chart.options.labels.length) {
             gd_chart.options.labels.forEach(function(label, i) {
-                labels += '<span class="gd-dash-legend"><span class="color" style="background-color:' + gd_chart.options.lineColors[i] + '"></span> <span class="gd-dash-label">' + label + '</span></span>';
+                labels += '<span class="gd-dash-legend" data-color="' + gd_chart.options.lineColors[i] + '"><span class="color" style="background-color:' + gd_chart.options.lineColors[i] + '"></span> <span class="gd-dash-label">' + label + '</span></span>';
             });
         }
         $('#gd-dashboard-chart').closest('.gd-stats-chart').find('.gd-chart-legends').html(labels);
+		$('.gd-dash-legend').bind('click', function(e) {
+			if ($(this).hasClass('gd-morris-hidden')) {
+				$(this).removeClass('gd-morris-hidden');
+				$('#gd-morris-style', $(this)).remove();
+			} else {
+				var c = $(this).data('color');
+				var cL = $(this).data('color').toLowerCase();
+				$(this).addClass('gd-morris-hidden');
+				$(this).append('<style id="gd-morris-style">#gd-dashboard-chart circle[fill="' + cL + '"],#gd-dashboard-chart .morris-hover-point[style="color: ' + c + '"],#gd-dashboard-chart path[stroke="' + cL + '"]{display:none;}</style>');
+			}
+		});
     }
 });
