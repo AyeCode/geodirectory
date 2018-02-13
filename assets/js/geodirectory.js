@@ -112,6 +112,8 @@ jQuery(function($) {
 		}, 60000);
 		geodir_refresh_business_hours();
 	}
+
+
 });
 
 
@@ -232,6 +234,11 @@ jQuery(function($) {
 }(this);
 
 jQuery(document).ready(function($) {
+
+    // ini read more
+    init_read_more();
+
+
     //toggle detail page tabs mobile menu
     jQuery('#geodir-tab-mobile-menu').click(function() {
         jQuery('#gd-tabs .geodir-tab-head').toggle();
@@ -865,3 +872,50 @@ function geodir_refresh_business_hours() {
         });
     };
 }(jQuery));
+
+
+function init_read_more(){
+    var $el, $ps, $up, totalHeight;
+
+    // Make the read more visable if the text needs it
+    jQuery('.gd-read-more-wrap').each(function() {
+        var height = jQuery( this ).height();
+        var maxHeight = parseInt(jQuery( this ).css('max-height'),10);
+        if(height >= maxHeight){
+            jQuery( this ).find('.gd-read-more').show();
+        }
+    });
+
+
+    jQuery(".gd-read-more-wrap .gd-read-more-button").click(function() {
+
+        totalHeight = 0;
+
+        $el = jQuery(this);
+        $p  = $el.parent();
+        $up = $p.parent();
+        $ps = $up.find("p:not('.gd-read-more')");
+
+        // measure how tall inside should be by adding together heights of all inside paragraphs (except read-more paragraph)
+        $ps.each(function() {
+            totalHeight += jQuery(this).outerHeight();
+        });
+
+        $up
+            .css({
+                // Set height to prevent instant jumpdown when max height is removed
+                "height": $up.height(),
+                "max-height": 9999
+            })
+            .animate({
+                "height": totalHeight
+            });
+
+        // fade out read-more
+        $p.fadeOut();
+
+        // prevent jump-down
+        return false;
+
+    });
+}

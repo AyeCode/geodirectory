@@ -227,10 +227,12 @@ final class GeoDirectory {
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post-types-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/taxonomy-functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_fields_input_functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_fields_output_functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-custom-fields-functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/comments-functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/input-functions.php' );
+	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/output-functions.php' );
+	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/output-filter-functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/functions.php' );
+	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/comments-functions.php' );
+	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-content-listing-functions.php' );
 	    GeoDir_Comments::init();
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/location_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/google_analytics.php' );
@@ -248,6 +250,10 @@ final class GeoDirectory {
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-frontend-scripts.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-permalinks.php' );
 
+	    if(defined( 'GUTENBERG_DEVELOPMENT_MODE' )){
+		    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/block-types.php' );
+	    }
+
 
         if ( $this->is_request( 'admin' ) || $this->is_request( 'test' ) || $this->is_request( 'cli' ) ) {
             if ( !empty( $_REQUEST['taxonomy'] ) ) {
@@ -260,7 +266,8 @@ final class GeoDirectory {
 	        //include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/class-geodir-admin.php' );
             new GeoDir_Admin(); // init the GD admin class
 
-            require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/diagnostic-functions.php' );
+	        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/admin-functions.php' );
+	        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/diagnostic-functions.php' );
 			require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/dashboard-functions.php' );
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/class.analytics.stats.php' );
             GeoDir_Admin_Install::init(); // init the install class
