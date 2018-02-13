@@ -850,12 +850,16 @@ jQuery(function($) {
         $(document.body).on('geodir-select-init', function() {
             // Regular select boxes
             $(':input.geodir-select').filter(':not(.enhanced)').each(function() {
-                var select2_args = $.extend({
+                var $this = $(this);
+				var select2_args = $.extend({
                     minimumResultsForSearch: 10,
                     allowClear: $(this).data('allow_clear') ? true : false,
                     containerCssClass: 'gd-select2-selection',
                     dropdownCssClass: 'gd-select2-dropdown',
-                    placeholder: $(this).data('placeholder')
+                    placeholder: $(this).data('placeholder'),
+					templateSelection: function(data) {
+						return geodirSelect2TemplateSelection($this, data);
+					},
                 }, geodirSelect2FormatString());
                 var $select2 = $(this).select2(select2_args);
                 $select2.addClass('enhanced');
@@ -878,14 +882,21 @@ jQuery(function($) {
 						}
 					});
 				}
+				$this.on('change.select2', function(e) {
+					geodirSelect2OnChange($this, $select2);
+				});
             });
             $(':input.geodir-select-nostd').filter(':not(.enhanced)').each(function() {
-                var select2_args = $.extend({
+                var $this = $(this);
+				var select2_args = $.extend({
                     minimumResultsForSearch: 10,
                     allowClear: true,
                     containerCssClass: 'gd-select2-selection',
                     dropdownCssClass: 'gd-select2-dropdown',
-                    placeholder: $(this).data('placeholder')
+                    placeholder: $(this).data('placeholder'),
+					templateSelection: function(data) {
+						return geodirSelect2TemplateSelection($this, data);
+					},
                 }, geodirSelect2FormatString());
                 var $select2 = $(this).select2(select2_args);
                 $select2.addClass('enhanced');
@@ -908,6 +919,9 @@ jQuery(function($) {
 						}
 					});
 				}
+				$this.on('change.select2', function(e) {
+					geodirSelect2OnChange($this, $select2);
+				});
             });
         }).trigger('geodir-select-init');
         $('html').on('click', function(event) {
@@ -919,6 +933,30 @@ jQuery(function($) {
         window.console.log(err);
     }
 });
+
+function geodirSelect2OnChange($this, $select2) {
+	var $cont, field, value, $radio;
+	if ($this.data('radio')) {
+		$cont = $select2.data('select2').$container;
+		field = $this.data('radio');
+		value = $this.closest('.geodir_taxonomy_field').data(field);
+		value = value != 'undefined' ? value : '';
+		if (jQuery('.select2-selection_gd_v_'+value).length > 0) {
+			$radio = jQuery('.select2-selection_gd_v_'+value);
+		} else {
+			$radio = jQuery('.select2-selection_gd_field:first', $cont).find('[type="radio"]');
+		}
+		$this.closest('.geodir_taxonomy_field').data(field, value);
+		$radio.prop('checked', true).trigger('change');
+	}
+}
+
+function geodirSelect2TemplateSelection($el, data) {
+	if (!$el.data('radio')) {
+		return data.text;
+	}
+	return jQuery('<span class="select2-selection_gd_custom"><span class="select2-selection_gd_text">' + data.text + '</span><span class="select2-selection_gd_field"><input type="radio" class="select2-selection_gd_v_' + (data.id != 'undefined' ? data.id : '') + '" onchange="jQuery(this).closest(\'.geodir_taxonomy_field\').data(\'' + $el.data('radio') + '\',jQuery(this).val());" value="' + (data.id != 'undefined' ? data.id : '') + '" name="' + $el.data('radio') + '"></span></span>');
+}
 
 jQuery(function(){
     if (window.gdMaps === 'google') {

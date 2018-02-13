@@ -97,9 +97,10 @@ class GeoDir_Admin_Dashboard {
 		<div class="wrap gd-dashboard">
 			<div class="row gd-dash-row gd-row-head">
 				<div class="col-lg-12">
-					<h1 class="page-header gd-dash-title"><?php _e( 'Dashboard', 'geodirectory' ); ?></h1>
+					<h1 class="page-header gd-dash-title"><?php _e( 'Dashboard', 'geodirectory' ); ?> <button type="button" data-handle="gd-toggle-dashboard" class="gd-handlediv"><span class="gd-toggle-indicator"><i class="fa fa-angle-down"></i><i class="fa fa-angle-up"></i></span></button></h1>
 				</div>
 			</div>
+			<div class="gd-toggle-dashboard">
 			<?php if ( ! empty( $this->pending_stats ) ) { ?>
 			<div class="row gd-dash-row gd-row-actions">
 				<div class="col-lg-12">
@@ -147,15 +148,15 @@ class GeoDir_Admin_Dashboard {
 						<div class="panel-body">
 							<div class="gd-stats-nav"> 
 								<div class="row">
-									<div class="col-xs-12 col-md-8">
+									<div class="col-xs-12 col-sm-8">
 										<div class="btn-group">
 											<?php foreach ( $this->navs as $nave_id => $nav_label ) { ?>
 											<a class="btn btn-primary" data-type="<?php echo $nave_id; ?>" href="javascript:void(0)"><?php echo $nav_label; ?></a>
 											<?php } ?>
 										</div>
 									</div>
-									<div class="col-xs-12 col-md-4 gd-stats-periods">
-										<select id="gd_stats_period" class="geodir-select" style="width:100%">
+									<div class="col-xs-12 col-sm-4 gd-stats-periods">
+										<select id="gd_stats_period" class="geodir-select">
 											<?php foreach ( $this->period_options as $value => $label ) { ?>
 											<option value="<?php echo $value; ?>" <?php selected( $value, 'this_month' ); ?>><?php echo $label; ?></option>
 											<?php } ?>
@@ -182,6 +183,7 @@ class GeoDir_Admin_Dashboard {
 					</div>
 				</div>
 			</div>
+		</div>
 		</div>
 		<?php
 		do_action( 'geodir_admin_dashboard_after' );

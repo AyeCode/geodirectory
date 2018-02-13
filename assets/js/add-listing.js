@@ -443,7 +443,7 @@ var GeoDir_Business_Hours = {
 			v = this.toSchema();
 		} else {
 			v = '';
-		}console.log(v); // @todo remove
+		}
 
 		this.$field.val(v);
 		this.$field.trigger('change');

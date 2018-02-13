@@ -12,7 +12,16 @@ jQuery(function($) {
             $('.gd-collapsable', $parent).slideDown(200);
         }
     });
-    $('.gd-stats-nav .btn').on('click', function(e) {
+    $('.gd-handlediv').on('click', function(e) {
+        if ($(this).hasClass('gd-closed')) {
+			$(this).removeClass('gd-closed');
+			$('.' + $(this).data('handle')).slideDown(200);
+		} else {
+			$(this).addClass('gd-closed');
+			$('.' + $(this).data('handle')).slideUp(200);
+		}
+    });
+	 $('.gd-stats-nav .btn').on('click', function(e) {
         var type;
         $('.gd-stats-nav .btn.btn-primary').removeClass('btn-primary').addClass('btn-default');
         $(this).removeClass('btn-default').addClass('btn-primary');
@@ -91,7 +100,8 @@ jQuery(function($) {
             xkey: 'key',
             ykeys: [],
             labels: [],
-            pointSize: 4,
+            pointSize: 3.5,
+			lineWidth: 2,
             hideHover: 'auto',
             resize: true,
             xLabelAngle: 45,
