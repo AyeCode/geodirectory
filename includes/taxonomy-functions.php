@@ -635,7 +635,7 @@ function geodir_get_catlist($cat_taxonomy, $parrent = 0, $selected = false)
         if (!$selected)
             $option_slected = ' selected="selected" ';
 
-        echo '<select field_type="select" id="' . sanitize_text_field($cat_taxonomy) . '" class="geodir-select" ' . $onchange . ' option-ajaxChosen="false" >';
+        echo '<select field_type="select" id="' . sanitize_text_field($cat_taxonomy) . '" class="geodir-select" ' . $onchange . ' option-ajaxChosen="false" data-sortable="true">';
 
         echo '<option value="" ' . $option_selected . ' >' . __('Select Category', 'geodirectory') . '</option>';
 

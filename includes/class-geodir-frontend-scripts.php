@@ -161,7 +161,7 @@ class GeoDir_Frontend_Scripts {
 		/** This filter is documented in geodirectory_template_tags.php */
 		$map_extra = apply_filters('geodir_googlemap_script_extra', '');
 
-		$suffix           = '';//defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min'; @todo remove once BH done
+		$suffix           = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		$register_scripts = array(
 			'select2' => array(
 				'src'     => geodir_plugin_url() . '/assets/js/select2/select2.full' . $suffix . '.js',
