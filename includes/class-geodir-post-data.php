@@ -151,6 +151,14 @@ class GeoDir_Post_Data {
 			}else{
 				$post_categories = '';
 			}
+			if ( empty( $post_categories ) && isset( $gd_post['post_category'] ) ) {
+                $post_categories = $gd_post['post_category'];
+            }
+			
+			// default category
+			if ( isset( $gd_post['default_category'] ) ) {
+				$postarr['default_category'] = absint( $gd_post['default_category'] );
+			}
 
 			if ( $post_categories ) {
 				if ( isset( $gd_post['post_dummy'] ) && $gd_post['post_dummy'] ) {
@@ -163,9 +171,9 @@ class GeoDir_Post_Data {
 				$categories = array_filter(array_unique($categories));// remove duplicates and empty values
 				$postarr['post_category'] = "," . implode( ",", $categories ) . ",";
 
-				if ( isset( $categories[0] ) ) {
-					$postarr['default_category'] = $categories[0];
-				} // @todo we need to get this from post
+				if ( empty( $postarr['default_category'] ) && ! empty( $categories[0] ) ) {
+					$postarr['default_category'] = $categories[0]; // set first category as a default if default category not found
+				}
 			}
 
 			// Set tags

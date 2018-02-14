@@ -156,6 +156,36 @@ function geodir_get_cf_value($cf) {
 }
 
 /**
+ * Get the value of a default category field for a current post.
+ *
+ * @return mixed|void
+ */
+function geodir_get_cf_default_category_value() {
+    global $post,$gd_session,$gd_post;
+    if (is_admin()) {
+        global $post;
+
+        if (isset($_REQUEST['post'])) {
+            $_REQUEST['pid'] = (int)$_REQUEST['post'];
+        }
+    }elseif(!empty($gd_post)){
+        $post = $gd_post;
+    }
+
+
+    $value = geodir_get_post_meta($post->ID, 'default_category', true);
+
+    /**
+     * Filter the default category field value.
+     *
+     * @since 2.0.0
+     * 
+     * @param mixed $value Custom field value.
+     */
+    return apply_filters( 'geodir_get_cf_default_category_value', $value );
+}
+
+/**
  * Displays custom fields html.
  *
  * @since 1.0.0

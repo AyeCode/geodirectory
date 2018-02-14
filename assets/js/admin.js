@@ -83,10 +83,15 @@ jQuery(window).load(function() {
         var $wrap = $this.closest('.gd-upload-img');
         var field = $wrap.data('field');
         jQuery('.gd-upload-display', $wrap).find('img').attr('src', geodir_params.img_spacer).removeAttr('width height sizes alt class');
-        if (field) {
-            jQuery('[name="' + field + '[id]"]').val('');
-            jQuery('[name="' + field + '[src]"]').val('');
-        }
+		if (field) {
+			if (jQuery('[name="' + field + '[id]"]').length > 0) {
+				jQuery('[name="' + field + '[id]"]').val('');
+				jQuery('[name="' + field + '[src]"]').val('');
+			}
+			if (jQuery('[name="' + field + '"]').length > 0) {
+				jQuery('[name="' + field + '"]').val('');
+			}
+		}
         $this.hide();
         return false;
     });
@@ -885,6 +890,7 @@ jQuery(function($) {
 				$this.on('change.select2', function(e) {
 					geodirSelect2OnChange($this, $select2);
 				});
+				$this.trigger('change.select2');
             });
             $(':input.geodir-select-nostd').filter(':not(.enhanced)').each(function() {
                 var $this = $(this);
@@ -922,6 +928,7 @@ jQuery(function($) {
 				$this.on('change.select2', function(e) {
 					geodirSelect2OnChange($this, $select2);
 				});
+				$this.trigger('change.select2');
             });
         }).trigger('geodir-select-init');
         $('html').on('click', function(event) {
@@ -934,28 +941,41 @@ jQuery(function($) {
     }
 });
 
-function geodirSelect2OnChange($this, $select2) {
-	var $cont, field, value, $radio;
-	if ($this.data('radio')) {
-		$cont = $select2.data('select2').$container;
-		field = $this.data('radio');
-		value = $this.closest('.geodir_taxonomy_field').data(field);
-		value = value != 'undefined' ? value : '';
-		if (jQuery('.select2-selection_gd_v_'+value).length > 0) {
-			$radio = jQuery('.select2-selection_gd_v_'+value);
-		} else {
-			$radio = jQuery('.select2-selection_gd_field:first', $cont).find('[type="radio"]');
-		}
-		$this.closest('.geodir_taxonomy_field').data(field, value);
-		$radio.prop('checked', true).trigger('change');
-	}
+function geodirSelect2TemplateSelection($el, data) {
+    if ($el.data('cmultiselect')) {
+        var rEl;
+        rEl = '<span class="select2-selection_gd_custom">';
+          rEl += '<span class="select2-selection_gd_text">' + data.text + '</span>';
+          rEl += '<span class="select2-selection_gd_field">';
+            rEl += '<input type="radio" class="select2-selection_gd_v_' + (data.id != 'undefined' ? data.id : '') + '" onchange="jQuery(this).closest(\'form\').find(\'input[name=' + $el.data('cmultiselect') + ']\').val(jQuery(this).val());" value="' + (data.id != 'undefined' ? data.id : '') + '" name="' + $el.data('cmultiselect') + '_radio">';
+          rEl += '</span>';
+        rEl += '</span>';
+        return jQuery(rEl);
+    }
+    return data.text;
 }
 
-function geodirSelect2TemplateSelection($el, data) {
-	if (!$el.data('radio')) {
-		return data.text;
-	}
-	return jQuery('<span class="select2-selection_gd_custom"><span class="select2-selection_gd_text">' + data.text + '</span><span class="select2-selection_gd_field"><input type="radio" class="select2-selection_gd_v_' + (data.id != 'undefined' ? data.id : '') + '" onchange="jQuery(this).closest(\'.geodir_taxonomy_field\').data(\'' + $el.data('radio') + '\',jQuery(this).val());" value="' + (data.id != 'undefined' ? data.id : '') + '" name="' + $el.data('radio') + '"></span></span>');
+function geodirSelect2OnChange($this, $select2) {
+    var $cont, $field, value, $input;
+	$cont = $select2.data('select2').$container;
+    if ($this.data('cmultiselect')) {
+        $field = $this.closest('form').find('input[name=' + $this.data('cmultiselect') + ']');
+        value = $field.val() != 'undefined' ? $field.val() : '';
+        if (jQuery('.select2-selection_gd_field', $cont).length > 0) {
+            if (jQuery('.select2-selection_gd_v_' + value).length > 0) {
+                $input = jQuery('.select2-selection_gd_v_' + value);
+            } else {
+                $input = jQuery('.select2-selection_gd_field:first', $cont).find('[type="radio"]');
+            }
+            $input.prop('checked', true).trigger('change');
+        } else {
+            $field.val('');
+        }
+    }
+	if ($this.data('cselect')) {
+        $field = $this.closest('form').find('input[name=' + $this.data('cselect') + ']');
+        $field.val($this.val());
+    }
 }
 
 jQuery(function(){

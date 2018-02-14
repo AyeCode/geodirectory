@@ -222,18 +222,25 @@ class GeoDir_Admin {
 
 			$email_name = 'preview_mail';
 			$email_vars = array();
+			$plain_text = GeoDir_Email::get_email_type() != 'html' ? true : false;
 
 			// Get the preview email content.
 			ob_start();
 			include( 'views/html-email-template-preview.php' );
 			$message = ob_get_clean();
 			
-			$message 	= GeoDir_Email::email_wrap_message( $message, $email_name, $email_vars );
+			$message 	= GeoDir_Email::email_wrap_message( $message, $email_name, $email_vars, '', $plain_text );
 			$message 	= GeoDir_Email::style_body( $message, $email_name, $email_vars );
 			$message 	= apply_filters( 'geodir_mail_content', $message, $email_name, $email_vars );
 
 			// Print the preview email content.
+			if ( $plain_text ) {
+				echo '<div style="white-space:pre-wrap;font-family:sans-serif">';
+			}
 			echo $message;
+			if ( $plain_text ) {
+				echo '</div>';
+			}
 			exit;
 		}
 	}

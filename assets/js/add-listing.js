@@ -6,7 +6,7 @@
 /**
  * Document load functions
  */
-jQuery(function() {
+jQuery(function($) {
     console.log( "ready!" );
     // Start polling the form for auto saves
     geodir_auto_save_poll(geodir_get_form_data());
@@ -20,7 +20,64 @@ jQuery(function() {
     jQuery('#geodirectory-add-post').find(".required_field:visible").find("input[type='checkbox'],input[type='radio']").click(function () {
         geodir_validate_field(this);
     });
-
+	if ($('.geodir_form_row input[data-ccheckbox]').length) {
+		$('.geodir_form_row input[data-ccheckbox]').on('change', function(e) {
+			var $this, $parent, name, $field, $input, value, c = 0;
+			$this = $(this);
+			$parent = $this.closest('.geodir_form_row');
+			$parent.removeClass('gd-term-handle');
+			$('.gd-term-checked', $parent).removeClass('gd-term-checked');
+			$('.gd-default-term', $parent).removeClass('gd-default-term');
+			$field = $this.closest('form').find('input[name=' + $this.data('ccheckbox') + ']');
+			value = $field.val() != 'undefined' ? $field.val() : '';
+			name = $this.attr('name');
+			field = $this.data('ccheckbox');
+			$('[name="' + name + '"]', $parent).each(function() {
+				if ($(this).prop("checked") == true) {
+					c++;
+					$(this).parent().addClass('gd-term-checked');
+					if (c == 1) {
+						$input = $(this);
+					}
+				} else {}
+			});
+			if (c > 1) {
+				$parent.addClass('gd-term-handle');
+			}
+			if ($('#gd-cat-' + value, $parent).prop("checked") == true) {
+				$input = $('#gd-cat-' + value, $parent);
+			}
+			if ($input) {
+				$input.parent().find('.gd-make-default-term').trigger('click');
+			} else {
+				$field.val('');
+				$field.trigger('change');
+			}
+		});
+		$('.gd-make-default-term').on('click', function() {
+			var $parent, $row, $field, $chkbox, value;
+			$row = $(this).closest('.geodir_form_row');
+			$parent = $(this).parent();
+			$chkbox = $('[type="checkbox"]', $parent);
+			$field = $(this).closest('form').find('input[name=' + $chkbox.data('ccheckbox') + ']');
+			$('.gd-default-term', $row).removeClass('gd-default-term');
+			$parent.addClass('gd-default-term');
+			value = $chkbox.val();
+			$field.val(value);
+			$field.trigger('change');
+		});
+		$('.geodir_form_row input[data-ccheckbox]:first').trigger('change');
+	}
+	if ($('.geodir_form_row input[data-cradio]').length) {
+		$('.geodir_form_row input[data-cradio]').on('change', function(e) {
+			var value = '';
+			if ($('[name="' + $(this).attr('name') + '"]:checked').length > 0) {
+				value = $('[name="' + $(this).attr('name') + '"]:checked').val();
+			}
+			$(this).closest('form').find('input[name=' + $(this).data('cradio') + ']').val(value);
+		});
+		$('.geodir_form_row input[data-cradio]:first').trigger('change');
+	}
 });
 
 /**
