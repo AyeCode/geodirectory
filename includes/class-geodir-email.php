@@ -52,6 +52,22 @@ class GeoDir_Email {
 	}
 
 	/**
+	 * The default email footer text.
+	 *
+	 * @since 2.0.0
+	 * @return string
+	 */
+	public static function email_header_text(){
+		$header_text = self::get_email_logo();
+
+		if ( empty( $header_text ) ) {
+			$header_text = geodir_get_blogname();
+		}
+
+		return apply_filters( 'geodir_email_header_text', $header_text );
+	}
+	
+	/**
 	 * Get the email header template.
 	 *
 	 * @param string $email_heading
@@ -61,23 +77,35 @@ class GeoDir_Email {
 	 * @param bool $sent_to_admin
 	 */
 	public static function email_header( $email_heading = '', $email_name = '', $email_vars = array(), $plain_text = false, $sent_to_admin = false ) {
-		if ( $plain_text ) {
-			geodir_get_template( 'emails/plain/geodir-email-header.php', array(
-				'email_heading' => $email_heading,
-				'email_name'    => $email_name,
-				'email_vars'    => $email_vars,
-				'plain_text'    => $plain_text,
-				'sent_to_admin' => $sent_to_admin
-			) );
-		} else {
+		if ( ! $plain_text ) {
+			$header_text = self::email_header_text();
+			$header_text = $header_text ? wpautop( wp_kses_post( wptexturize( $header_text ) ) ) : '';
+		
 			geodir_get_template( 'emails/geodir-email-header.php', array(
 				'email_heading' => $email_heading,
 				'email_name'    => $email_name,
 				'email_vars'    => $email_vars,
 				'plain_text'    => $plain_text,
+				'header_text' 	=> $header_text,
 				'sent_to_admin' => $sent_to_admin
 			) );
 		}
+	}
+	
+	/**
+	 * The default email footer text.
+	 *
+	 * @since 2.0.0
+	 * @return string
+	 */
+	public static function email_footer_text(){
+		$footer_text = geodir_get_option( 'email_footer_text' );
+
+		if ( empty( $footer_text ) ) {
+			$footer_text = wp_sprintf( __( '%s - Powered by GeoDirectory', 'geodirectory' ), get_bloginfo( 'name', 'display' ) );
+		}
+
+		return apply_filters( 'geodir_email_footer_text', $footer_text );
 	}
 
 	/**
@@ -89,20 +117,16 @@ class GeoDir_Email {
 	 * @param bool $sent_to_admin
 	 */
 	public static function email_footer( $email_name = '', $email_vars = array(), $plain_text = false, $sent_to_admin = false ) {
-		if ( $plain_text ) {
-			geodir_get_template( 'emails/plain/geodir-email-footer.php', array(
-				'email_name'    => $email_name,
-				'email_vars'    => $email_vars,
-				'email_heading'	=> '',
-				'plain_text'    => $plain_text,
-				'sent_to_admin' => $sent_to_admin
-			) );
-		} else {
+		if ( ! $plain_text ) {
+			$footer_text = self::email_footer_text();
+			$footer_text = $footer_text ? wpautop( wp_kses_post( wptexturize( $footer_text ) ) ) : '';
+
 			geodir_get_template( 'emails/geodir-email-footer.php', array(
 				'email_name'    => $email_name,
 				'email_vars'    => $email_vars,
 				'email_heading'	=> '',
 				'plain_text'    => $plain_text,
+				'footer_text' 	=> $footer_text,
 				'sent_to_admin' => $sent_to_admin
 			) );
 		}
@@ -124,15 +148,15 @@ class GeoDir_Email {
 		// Buffer
 		ob_start();
 
-		do_action( 'geodir_email_header', $email_heading, $email_name, $email_vars, $plain_text, $sent_to_admin );
-
 		if ( $plain_text ) {
 			echo wp_strip_all_tags( $message );
 		} else {
-			echo wpautop( wptexturize( $message ) );
-		}
+			do_action( 'geodir_email_header', $email_heading, $email_name, $email_vars, $plain_text, $sent_to_admin );
 
-		do_action( 'geodir_email_footer', $email_name, $email_vars, $plain_text, $sent_to_admin );
+			echo wpautop( wptexturize( $message ) );
+
+			do_action( 'geodir_email_footer', $email_name, $email_vars, $plain_text, $sent_to_admin );
+		}
 
 		// Get contents
 		$message = ob_get_clean();
