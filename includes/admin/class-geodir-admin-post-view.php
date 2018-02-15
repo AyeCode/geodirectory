@@ -76,20 +76,17 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 		 */
 		public static function edit_post_columns( $columns ) {
 
-			$new_columns = array(
-				'location'  => __( 'Location (ID)', 'geodirectory' ),
-				'categorys' => __( 'Categories', 'geodirectory' )
-			);
+			//print_r($columns);echo '###';
 
-			if ( ( $offset = array_search( 'author', array_keys( $columns ) ) ) === false ) // if the key doesn't exist
-			{
-				$offset = 0; // should we prepend $array with $data?
-				$offset = count( $columns ); // or should we append $array with $data? lets pick this one...
-			}
+			$new_columns = array(
+				'location'  => __( 'Location', 'geodirectory' ),
+				'gd_categories' => __( 'Categories', 'geodirectory' )
+			);
+			$offset = 2;
+
 
 			$columns = array_merge( array_slice( $columns, 0, $offset ), $new_columns, array_slice( $columns, $offset ) );
 
-			$columns = array_merge( $columns, array( 'expire' => __( 'Expires', 'geodirectory' ) ) );
 
 			return $columns;
 		}
@@ -104,52 +101,26 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 		 * @param int $post_id The post ID.
 		 */
 		public static function manage_post_columns( $column, $post_id ) {
-			global $post, $wpdb;
+			global $post, $wpdb,$gd_post;
 
 			switch ( $column ):
 				/* If displaying the 'city' column. */
 				case 'location' :
-					$location_id = geodir_get_post_meta( $post->ID, 'post_location_id', true );
-					$location    = geodir_get_location( $location_id );
+					$location    = $gd_post;
 					/* If no city is found, output a default message. */
 					if ( empty( $location ) ) {
 						_e( 'Unknown', 'geodirectory' );
 					} else {
 						/* If there is a city id, append 'city name' to the text string. */
-						$add_location_id = $location_id > 0 ? ' (' . $location_id . ')' : '';
-						echo( __( $location->country, 'geodirectory' ) . '-' . $location->region . '-' . $location->city . $add_location_id );
+						echo( __( $location->country, 'geodirectory' ) . ', ' . $location->region . ', ' . $location->city );
 					}
 					break;
 
-				/* If displaying the 'expire' column. */
-				case 'expire' :
-					$expire_date    = geodir_get_post_meta( $post->ID, 'expire_date', true );
-					$d1             = $expire_date; // get expire_date
-					$d2             = date( 'Y-m-d' ); // get current date
-					$state          = __( 'days left', 'geodirectory' );
-					$date_diff_text = '';
-					$expire_class   = 'expire_left';
-					if ( $expire_date != 'Never' ) {
-						if ( strtotime( $d1 ) < strtotime( $d2 ) ) {
-							$state        = __( 'days overdue', 'geodirectory' );
-							$expire_class = 'expire_over';
-						}
-						$date_diff      = round( abs( strtotime( $d1 ) - strtotime( $d2 ) ) / 86400 ); // get the difference in days
-						$date_diff_text = '<br /><span class="' . $expire_class . '">(' . $date_diff . ' ' . $state . ')</span>';
-					}
-					/* If no expire_date is found, output a default message. */
-					if ( empty( $expire_date ) ) {
-						echo __( 'Unknown', 'geodirectory' );
-					} /* If there is a expire_date, append 'days left' to the text string. */
-					else {
-						echo $expire_date . $date_diff_text;
-					}
-					break;
 
-				/* If displaying the 'categorys' column. */
-				case 'categorys' :
+				/* If displaying the 'categories' column. */
+				case 'gd_categories' :
 
-					/* Get the categorys for the post. */
+					/* Get the categories for the post. */
 
 
 					$terms = wp_get_object_terms( $post_id, get_object_taxonomies( $post ) );

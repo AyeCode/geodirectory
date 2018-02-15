@@ -43,3 +43,32 @@ function geodir_is_valid_lon($longitude){
         return false;
     }
 }
+
+
+/**
+ * Validate and parse the measurement value.
+ *
+ * @since 1.0.0
+ *
+ * @param string $value Input value to validate measurement.
+ * @return string The measurement value in valid format.
+ */
+function geodir_validate_measurements($value)
+{
+    if ((strlen($value) - 1) == strpos(trim($value), '%')) {
+        // $value is entered as a percent, so it can't be less than 0 or more than 100
+        $value = preg_replace('/\D/', '', $value);
+        if (100 < $value) {
+            $value = 100;
+        }
+        // Re-add the percent symbol
+        $value = $value . '%';
+    } elseif ((strlen($value) - 2) == strpos(trim($value), 'px')) {
+        // Get the absint & re-add the 'px'
+        $value = preg_replace('/\D/', '', $value) . 'px';
+    } else {
+        $value = preg_replace('/\D/', '', $value);
+    }
+
+    return $value;
+}

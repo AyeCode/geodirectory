@@ -37,6 +37,8 @@ include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-de
 include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-user-actions.php' );
 include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-rating-stars.php' );
 include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-sidebar-info.php' );
+include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-meta.php' );
+
 
 /**
  * Register Widgets.
@@ -69,6 +71,7 @@ function goedir_register_widgets() {
     register_widget( 'GeoDir_Widget_Detail_User_Actions' );
     register_widget( 'GeoDir_Widget_Detail_Rating_Stars' );
     register_widget( 'GeoDir_Widget_Detail_Sidebar_Info' );
+    register_widget( 'GeoDir_Widget_Detail_Meta' );
 }
 add_action( 'widgets_init', 'goedir_register_widgets' );
 

@@ -1450,38 +1450,7 @@ function geodir_sc_responsive_videos($atts, $content) {
     return '<div class="geodir-video-wrapper">'.$content.'</div>';
 }
 
-// If this file is called directly, abort.
-if (!defined('WPINC')) {
-    die;
-}
 
-/**
- * Validate and parse the measurement value.
- *
- * @since 1.0.0
- *
- * @param string $value Input value to validate measurement.
- * @return string The measurement value in valid format.
- */
-function gdsc_validate_measurements($value)
-{
-    if ((strlen($value) - 1) == strpos(trim($value), '%')) {
-        // $value is entered as a percent, so it can't be less than 0 or more than 100
-        $value = preg_replace('/\D/', '', $value);
-        if (100 < $value) {
-            $value = 100;
-        }
-        // Re-add the percent symbol
-        $value = $value . '%';
-    } elseif ((strlen($value) - 2) == strpos(trim($value), 'px')) {
-        // Get the absint & re-add the 'px'
-        $value = preg_replace('/\D/', '', $value) . 'px';
-    } else {
-        $value = preg_replace('/\D/', '', $value);
-    }
-
-    return $value;
-}
 
 /**
  * Validate and parse the google map parameters.
@@ -1495,8 +1464,8 @@ function gdsc_validate_measurements($value)
 function gdsc_validate_map_args($params)
 {
 
-    $params['width'] = gdsc_validate_measurements($params['width']);
-    $params['height'] = gdsc_validate_measurements($params['height']);
+    $params['width'] = geodir_validate_measurements($params['width']);
+    $params['height'] = geodir_validate_measurements($params['height']);
 
     // Only accept our 4 maptypes. Otherwise, revert to the default.
     if (!(in_array(geodir_strtoupper($params['maptype']), array('HYBRID', 'SATELLITE', 'ROADMAP', 'TERRAIN')))) {
@@ -2711,4 +2680,106 @@ function geodir_sc_single_closed_text() {
 	if ( geodir_post_is_closed( $post ) ) {
 		geodir_post_closed_text( $post );
 	}
+}
+
+
+//add_shortcode( 'gd_single_meta', 'geodir_sc_single_meta' );
+function geodir_sc_single_meta($atts, $content = '') {
+    global $post;
+    $output = '';
+    $atts = shortcode_atts( array(
+        'ID'    => $post->ID,
+        'key'    => '', // the meta key : email
+        'show'    => '', // title,value (default blank, all)
+        'display'    => 'block', // inline, block
+        'location'  => 'none',
+    ), $atts, 'gd_single_meta' );
+
+
+    //print_r($atts );
+    $post_type = isset($post->post_type) ? $post->post_type : get_post_type($atts['ID']);
+
+    if(geodir_is_gd_post_type($post_type)){
+        $fields = geodir_post_custom_fields('',  'all', $post_type , $atts['location']);
+        if(!empty($fields)){
+            $field = array();
+            foreach($fields as $field_info){
+                if($atts['key']==$field_info['htmlvar_name']){
+                    $field = $field_info;
+                }
+            }
+            if(!empty($field)){
+                if($atts['display']=='inline'){
+                    $field['css_class'] .= " geodir-meta-inline ";
+                }
+                $output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$atts['location'],$field,$atts['ID']);
+            }else{
+                $output = "there is no key";
+            }
+        }
+    }
+
+    
+    return $output;
+
+
+
+
+
+
+
+
+
+
+
+    $defaults = array(
+        'title' => '',
+        'post_type' => '', // NULL for all
+        'hide_empty' => '',
+        'show_count' => '',
+        'hide_icon' => '',
+        'cpt_left' => '',
+        'sort_by' => 'count',
+        'max_count' => 'all',
+        'max_level' => '1',
+        'no_cpt_filter' => '',
+        'no_cat_filter' => '',
+        'before_widget' => '<section id="geodir_cpt_categories_widget-1" class="widget geodir-widget geodir_cpt_categories_widget geodir_sc_cpt_categories_widget">',
+        'after_widget' => '</section>',
+        'before_title' => '<h3 class="widget-title">',
+        'after_title' => '</h3>',
+    );
+    $params = shortcode_atts($defaults, $atts);
+
+    /**
+     * Validate our incoming params
+     */
+    // Make sure we have an array
+    $params['post_type'] = !is_array($params['post_type']) && trim($params['post_type']) != '' ? explode(',', trim($params['post_type'])) : array();
+
+    // Validate the checkboxes used on the widget
+    $params['hide_empty'] 	= gdsc_to_bool_val($params['hide_empty']);
+    $params['show_count'] 	= gdsc_to_bool_val($params['show_count']);
+    $params['hide_icon'] 	= gdsc_to_bool_val($params['hide_icon']);
+    $params['cpt_left'] 	= gdsc_to_bool_val($params['cpt_left']);
+
+    if ($params['max_count'] != 'all') {
+        $params['max_count'] = absint($params['max_count']);
+    }
+
+    if ($params['max_level'] != 'all') {
+        $params['max_level'] = absint($params['max_level']);
+    }
+
+    $params['no_cpt_filter'] = gdsc_to_bool_val($params['no_cpt_filter']);
+    $params['no_cat_filter'] = gdsc_to_bool_val($params['no_cat_filter']);
+
+    $params['sort_by'] = $params['sort_by'] == 'az' ? 'az' : 'count';
+
+    ob_start();
+    the_widget('geodir_cpt_categories_widget', $params, $params);
+    $output = ob_get_contents();
+    ob_end_clean();
+
+    return $output;
 }
