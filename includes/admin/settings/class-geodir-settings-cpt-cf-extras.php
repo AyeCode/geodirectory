@@ -685,9 +685,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					<div class="gd-cf-input-wrap">
 
 						<select name="extra[cat_display_type]" id="cat_display_type">
-							<option <?php if ( $cat_display_type == 'ajax_chained' ) {
-								echo 'selected="selected"';
-							} ?> value="ajax_chained"><?php _e( 'Ajax Chained', 'geodirectory' ); ?></option>
 							<option <?php if ( $cat_display_type == 'select' ) {
 								echo 'selected="selected"';
 							} ?> value="select"><?php _e( 'Select', 'geodirectory' ); ?></option>

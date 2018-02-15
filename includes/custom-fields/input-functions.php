@@ -1319,7 +1319,7 @@ function geodir_cfi_taxonomy($html,$cf){
                 }
 
 
-                if ($cat_display != '' && $cat_display != 'ajax_chained') {
+                if ($cat_display != '') {
 
                     $required_limit_msg = '';
                     if ($catadd_limit > 0 && $cat_display != 'select' && $cat_display != 'radio') {
@@ -1359,10 +1359,6 @@ function geodir_cfi_taxonomy($html,$cf){
 
                     if ($cat_display == 'select' || $cat_display == 'multiselect')
                         echo '</select>';
-
-                } else {
-
-                    echo geodir_custom_taxonomy_walker2($taxonomy, $catadd_limit);
 
                 }
 
@@ -1496,7 +1492,7 @@ function geodir_cfi_categories($html,$cf){
                 }
 
 
-                if ($cat_display != '' && $cat_display != 'ajax_chained') {
+                if ($cat_display != '') {
 
                     $required_limit_msg = '';
                     if ($catadd_limit > 0 && $cat_display != 'select' && $cat_display != 'radio') {
@@ -1535,14 +1531,6 @@ function geodir_cfi_categories($html,$cf){
 
                     if ($cat_display == 'select' || $cat_display == 'multiselect')
                         echo '</select>';
-
-                } else {
-
-
-                    echo "ajaxed chaned, depreicated";
-                   // echo GeoDir_Admin_Taxonomies::taxonomy_walker_ajax_chained($taxonomy, $catadd_limit);
-
-                    //echo geodir_custom_taxonomy_walker2($taxonomy, $catadd_limit);
 
                 }
 

@@ -294,7 +294,7 @@ function geodir_cf_url($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_url','geodir_cf_url',10,3);
+add_filter('geodir_custom_field_output_url','geodir_cf_url',10,4);
 
 
 /**

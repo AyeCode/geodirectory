@@ -145,11 +145,26 @@ class GeoDir_Post_Data {
 			// unset the post content as we don't save it here
 			unset( $postarr['post_content'] );
 
+
+
+			//check for dummy data categories
+			if ( isset( $gd_post['post_dummy'] ) && $gd_post['post_dummy'] && isset($gd_post['post_category'])) {
+				$categories = array_map( 'sanitize_text_field', $gd_post['post_category'] );
+				$cat_ids = array();
+				foreach($categories as $cat_name){
+					$temp_term = get_term_by( 'name', $cat_name, $post_type.'category' );
+					if(isset($temp_term->term_id)) {
+						$cat_ids[] = $temp_term->term_id;
+					}
+				}
+				if(!empty($cat_ids)){ $categories = $cat_ids;}
+				$post_categories = array_map( 'trim', $categories );
+				wp_set_post_terms( $post_id, $categories, $post_type.'category' );
+			}
+
 			// Set categories
 			if( isset($gd_post['tax_input'][$post_type.'category']) && !empty($gd_post['tax_input'][$post_type.'category'])){
 				$post_categories = $gd_post['tax_input'][$post_type.'category'];
-			}else{
-				$post_categories = '';
 			}
 			if ( empty( $post_categories ) && isset( $gd_post['post_category'] ) ) {
                 $post_categories = $gd_post['post_category'];
@@ -160,14 +175,8 @@ class GeoDir_Post_Data {
 				$postarr['default_category'] = absint( $gd_post['default_category'] );
 			}
 
-			if ( $post_categories ) {
-				if ( isset( $gd_post['post_dummy'] ) && $gd_post['post_dummy'] ) {
-					$categories = array_map( 'sanitize_text_field', $post_categories );
-					$categories = array_map( 'trim', $categories );
-				} else {
-					$categories = array_map( 'absint', $post_categories );
-				}
-
+			if ( isset($post_categories) ) {
+				$categories = array_map( 'absint', $post_categories );
 				$categories = array_filter(array_unique($categories));// remove duplicates and empty values
 				$postarr['post_category'] = "," . implode( ",", $categories ) . ",";
 
@@ -177,6 +186,8 @@ class GeoDir_Post_Data {
 			}
 
 			// Set tags
+
+			// check fro dummy data tags
 			if( empty($gd_post['post_tags']) && isset($gd_post['tax_input'][$post_type.'_tags']) && !empty($gd_post['tax_input'][$post_type.'_tags'])){
 
 				// quick edit returns tag ids, we need the strings
@@ -198,6 +209,7 @@ class GeoDir_Post_Data {
 				if ( isset( $gd_post['post_dummy'] ) && $gd_post['post_dummy'] ) {
 					$tags = array_map( 'sanitize_text_field', $post_tags );
 					$tags = array_map( 'trim', $tags );
+					wp_set_post_terms( $post_id, $tags,$post_type.'_tags');
 				} else {
 					$tags = array_map( 'trim', $post_tags );
 				}

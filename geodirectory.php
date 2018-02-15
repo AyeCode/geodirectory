@@ -213,7 +213,8 @@ final class GeoDirectory {
 
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-session.php' );
 	    GeoDir_Email::init();// set up the email class
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/helper-functions.php' );
+	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/helper-functions.php' );
+	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/validation-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/user-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-ajax-functions.php' ); // @todo remove onece replced with below class-gd-ajax.php
         //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-gd-ajax.php' );
