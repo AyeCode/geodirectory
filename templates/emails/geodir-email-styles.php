@@ -96,6 +96,7 @@ if ( empty( $footer_bg_darker_10 ) ) { $footer_bg_darker_10 = 'transparent'; }
 }
 #template_header_logo > p {
 	margin: 0;
+	font-size: 1.5em;
 }
 #template_heading h1 {
     color: <?php echo esc_attr( $base_text ); ?>;

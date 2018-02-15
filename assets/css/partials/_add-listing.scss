@@ -60,3 +60,41 @@
 	text-decoration: none;
 }
 /* business hours end */
+.select2-selection_gd_field [type="radio"] {
+	margin-right: 0;
+	margin-left: 5px;
+}
+.gd-make-default-term
+.gd-is-default-term {
+	display: none;
+}
+.gd-term-handle .gd-default-term {
+    font-weight: 600;
+}
+.gd-term-handle .gd-make-default-term {
+    font-weight: normal;
+}
+.gd-make-default-term,
+.gd-is-default-term {
+	float: right;
+	margin-right: 5px;
+}
+.gd-make-default-term {
+    cursor: pointer;
+	margin: 0;
+    border: none;
+    color: #0073aa;
+    text-decoration: underline;
+    padding: 0;
+	clear: both;
+}
+.gd-make-default-term:hover {
+	text-decoration: none;
+}
+.gd-term-handle .gd-term-checked .gd-make-default-term,
+.gd-term-handle .gd-term-checked.gd-default-term .gd-is-default-term {
+	display: inline-block !important;
+}
+.gd-term-handle .gd-term-checked.gd-default-term .gd-make-default-term {
+	display: none !important;
+}

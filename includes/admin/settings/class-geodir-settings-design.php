@@ -419,7 +419,7 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 		 */
 		public function email_footer_text(){
 			return apply_filters('geodir_email_footer_text', 
-				get_bloginfo( 'name', 'display' ) . ' - ' . __( 'Powered by GeoDirectory', 'geodirectory' ) 
+				wp_sprintf( __( '%s - Powered by GeoDirectory', 'geodirectory' ), get_bloginfo( 'name', 'display' ) ) 
 			);
 		}
 		

@@ -1331,6 +1331,7 @@ function geodir_cfi_taxonomy($html,$cf){
                     }
 
                     echo '<input type="hidden" cat_limit="' . $catadd_limit . '" id="cat_limit" value="' . esc_attr($required_limit_msg) . '" name="cat_limit[' . $taxonomy . ']"  />';
+					echo '<input type="hidden" name="default_category" value="' . esc_attr( geodir_get_cf_default_category_value() ) . '">';
 
 
                     if ($cat_display == 'select' || $cat_display == 'multiselect') {
@@ -1340,7 +1341,9 @@ function geodir_cfi_taxonomy($html,$cf){
 						$default_field = '';
                         if ($cat_display == 'multiselect') {
                             $multiple = 'multiple="multiple"';
-							$default_field = 'data-radio="default_category"';
+							$default_field = 'data-cmultiselect="default_category"';
+						} else {
+							$default_field = 'data-cselect="default_category"';
 						}
 
                         //echo '<select id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="post_category[' . $taxonomy . '][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . __('Select Category', 'geodirectory') . '">';
@@ -1505,7 +1508,7 @@ function geodir_cfi_categories($html,$cf){
                     }
 
                     echo '<input type="hidden" cat_limit="' . $catadd_limit . '" id="cat_limit" value="' . esc_attr($required_limit_msg) . '" name="cat_limit[' . $taxonomy . ']"  />';
-
+					echo '<input type="hidden" name="default_category" value="' . esc_attr( geodir_get_cf_default_category_value() ) . '">';
 
                     if ($cat_display == 'select' || $cat_display == 'multiselect') {
 
@@ -1514,7 +1517,9 @@ function geodir_cfi_categories($html,$cf){
 						$default_field = '';
                         if ($cat_display == 'multiselect') {
                             $multiple = 'multiple="multiple"';
-							$default_field = 'data-radio="default_category"';
+							$default_field = 'data-cmultiselect="default_category"';
+						} else {
+							$default_field = 'data-cselect="default_category"';
 						}
 
                        // echo '<select id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="post_category[]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . __('Select Category', 'geodirectory') . '">';

@@ -21,11 +21,11 @@ if ( !isset( $email_heading ) ) {
     <body <?php echo is_rtl() ? 'rightmargin' : 'leftmargin'; ?>="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
         <div id="wrapper" dir="<?php echo is_rtl() ? 'rtl' : 'ltr'?>">
             <table border="0" cellpadding="0" cellspacing="0" height="100%" class="wrapper-table">
-                <?php if ( $logo = GeoDir_Email::get_email_logo() ) { ?>
+                <?php if ( ! empty( $header_text ) ) { ?>
 				<tr>
                     <td align="center" valign="middle" id="template_header">
                         <div id="template_header_logo">
-                        <p style="margin-top:0;"><?php echo $logo; ?></p>
+                        <p style="margin-top:0;"><?php echo $header_text; ?></p>
                         </div>
 					</td>
 				</tr>

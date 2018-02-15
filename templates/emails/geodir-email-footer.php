@@ -6,8 +6,6 @@ if ( !defined('ABSPATH') )
 if ( !isset( $email_vars ) ) {
     global $email_vars;
 }
-$email_footer = apply_filters( 'geodir_email_footer_text', geodir_get_option( 'email_footer_text' ) );
-$email_footer = $email_footer ? wpautop( wp_kses_post( wptexturize( $email_footer ) ) ) : '';
 ?>
                                                             </div>
                                                         </td>
@@ -23,14 +21,14 @@ $email_footer = $email_footer ? wpautop( wp_kses_post( wptexturize( $email_foote
                         </table>
                     </td>
                 </tr>
-				<?php if ( $email_footer ) { ?>
+				<?php if ( ! empty( $footer_text ) ) { ?>
 				<tr>
                     <td align="center" valign="middle" id="template_footer">
 						<!-- Footer -->
 						<table border="0" cellpadding="10" cellspacing="0" width="100%">
 							<tr>
 								<td colspan="2" valign="middle" id="footer_text">
-									<?php echo $email_footer; ?>
+									<?php echo $footer_text; ?>
 								</td>
 							</tr>
 						</table>
