@@ -41,9 +41,10 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 		public function get_sections() {
 
 			$sections = array(
-				''          	=> __( 'Listings', 'geodirectory' ),
-				'categories'       => __( 'Categories', 'geodirectory' ),
-				'settings' 	=> __( 'Settings', 'geodirectory' ),
+				''				=> __( 'Listings', 'geodirectory' ),
+				'categories'    => __( 'Categories', 'geodirectory' ),
+				'reviews'    	=> __( 'Reviews', 'geodirectory' ),
+				'settings' 		=> __( 'Settings', 'geodirectory' ),
 			);
 
 			return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
@@ -89,6 +90,26 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 					array(
 						'id'       => 'import_export_categories',
 						'type'     => 'import_export_categories',
+					),
+
+					array(
+						'type' 	=> 'sectionend',
+						'id' 	=> 'import_export_options',
+					),
+
+				));
+
+			} elseif ( $current_section == 'reviews' ) {
+				$settings = apply_filters( 'geodir_import_export_reviews_settings', array(
+					array(
+						'title' 	=> '',
+						'type' 		=> 'title',
+						'id' 		=> 'import_export_options',
+					),
+
+					array(
+						'id'       => 'import_export_reviews',
+						'type'     => 'import_export_reviews',
 					),
 
 					array(
@@ -549,7 +570,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 
 
 
-				jQuery(function(){
+				jQuery(function($){
 					//jQuery('.postbox.gd-hndle-pbox').addClass('closed');
 					jQuery('.gd-import-export .postbox .gd-hndle-click, .gd-import-export .postbox .button-link').click(function(e){
 						var $this = this;
@@ -593,6 +614,13 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 					jQuery('#gd_ie_imcats_sample').click(function(){
 						if (jQuery('#gd_ie_imcats_csv').val() != '') {
 							window.location.href = jQuery('#gd_ie_imcats_csv').val();
+							return false;
+						}
+					});
+					
+					$('#gd_ie_download_sample').click(function(e) {
+						if ($(this).data('sample-csv')) {
+							window.location.href = $(this).data('sample-csv');
 							return false;
 						}
 					});
