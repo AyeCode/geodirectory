@@ -174,7 +174,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 			$upload_dir = wp_sprintf( CSV_TRANSFER_IMG_FOLDER, str_replace( ABSPATH, '', $uploads['path'] ) );
 			?>
 			<script type="text/javascript">
-				var timoutC, timoutP, timoutL, timoutH;
+				var timoutC, timoutP, timoutL, timoutH, timoutR;
 
 				function gd_imex_PrepareImport(el, type) {
 					var cont = jQuery(el).closest('.gd-imex-box');
@@ -196,8 +196,8 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 							cache: false,
 							success: function(data) {
 								if(typeof data == 'object') {
-									if(data.error) {
-										jQuery('#gd-import-msg', cont).find('#message').removeClass('updated').addClass('error').html('<p>' + data.error + '</p>');
+									if(data.success == false) {
+										jQuery('#gd-import-msg', cont).find('#message').removeClass('updated').addClass('error').html('<p>' + data.data + '</p>');
 										jQuery('#gd-import-msg', cont).show();
 									} else if(!data.error && typeof data.rows != 'undefined') {
 										jQuery('#gd_total', cont).val(data.rows);
@@ -314,11 +314,11 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 
 
 							if (typeof data == 'object') {
-								if (data.error) {
+								if(data.success == false) {
 									jQuery('#gd_import_data', cont).removeAttr('disabled').show();
 									jQuery('#gd_stop_import', cont).hide();
 									jQuery('#gd_process_data', cont).hide();
-									jQuery('#gd-import-msg', cont).find('#message').removeClass('updated').addClass('error').html('<p>' + data.error + '</p>');
+									jQuery('#gd-import-msg', cont).find('#message').removeClass('updated').addClass('error').html('<p>' + data.data + '</p>');
 									jQuery('#gd-import-msg', cont).show();
 								} else {
 									//console.log(gd_processed);
@@ -400,6 +400,12 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 											if (type=='hood') {
 												clearTimeout(timoutH);
 												timoutH = setTimeout(function () {
+													gd_imex_StartImport(el, type);
+												}, 0);
+											}
+											if (type=='review') {
+												clearTimeout(timoutR);
+												timoutR = setTimeout(function () {
 													gd_imex_StartImport(el, type);
 												}, 0);
 											}
@@ -491,6 +497,12 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 					if (type=='hood') {
 						clearTimeout(timoutH);
 						timoutH = setTimeout(function () {
+							gd_imex_StartImport(el, type);
+						}, 0);
+					}
+					if (type=='review') {
+						clearTimeout(timoutR);
+						timoutR = setTimeout(function () {
 							gd_imex_StartImport(el, type);
 						}, 0);
 					}
@@ -852,6 +864,151 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 								return;
 							},
 							complete: function( jqXHR, textStatus  ) {
+								return;
+							}
+						});
+					}
+					
+					// Export
+					var timer, vSec;
+					jQuery('#gd_start_export').on('click', function(e) {
+						geodir_start_export(this);
+						e.preventDefault();
+						return false;
+					});
+					$.fn.gdtimer = function(vSec) {
+						$(this).text(vSec.toString().toHMS());
+					}
+
+					function geodir_start_export(el) {
+						var $this, $parent, sExport, fields = '', iPerPage;
+						$this = $(el);
+						$parent = $this.closest('.postbox');
+						sExport = $this.data('export'); console.log(sExport);
+						iPerPage = parseInt($('#gd_chunk_size', $parent).val());
+						if (!sExport) {
+							return false;
+						}
+						vSec = 1;
+						jQuery('[name^="gd_imex["]', $parent).each(function() {
+							v = $(this).val();
+							v = typeof v == 'string' && v !== '' ? v.trim() : '';
+							if (v != 'undefined') {
+								fields += '&' + $(this).prop('name') + '=' + v;
+							}
+						});
+						$this.prop('disabled', true);
+						window.clearInterval(timer);
+						timer = window.setInterval(function() {
+							vSec++;
+							$('.gd_timer', $parent).gdtimer(vSec);
+						}, 1000);
+						
+						gd_progressbar($parent, 0, '<i class="fa fa-refresh fa-spin"></i><?php echo esc_attr( __( 'Preparing export...', 'geodirectory' ) ); ?>');
+						$('#gd_timer', $parent).text('00:00:01');
+						$('#gd_ie_ex_files', $parent).html('');
+						
+						data = fields + '&_export=' + sExport; 
+						
+						jQuery.ajax({
+							url: ajaxurl,
+							type: "POST",
+							data: 'action=geodir_import_export&task=prepare_export&_nonce=<?php echo $nonce;?>' + data,
+							dataType: 'json',
+							cache: false,
+							beforeSend: function(xhr, settings) {},
+							success: function(res) {
+								var err = true;
+								if (typeof res == 'object') {
+									if (res.total != 'undefined') {
+										if ( parseInt(res.total) > 0) {
+											err = false;
+											$this.data('total', res.total);
+											gd_progressbar($parent, 0, '0% (0 / ' + res.total + ') <i class="fa fa-refresh fa-spin"></i><?php echo esc_attr( __( 'Exporting...', 'geodirectory' ) );?>');
+											geodir_export($parent, sExport, fields, iPerPage, 1);
+										} else {
+											gd_progressbar($parent, 0, '<i class="fa fa-info-circle"></i><?php echo esc_attr( __( 'No records to export.', 'geodirectory' ) );?>');
+										}
+									} else {
+										if (typeof res.success != 'undefined' && res.success == false) {
+											gd_progressbar($parent, 0, '<i class="fa fa-warning"></i>' + res.data);
+										}
+									}
+								}
+								if (err) {
+									$this.prop('disabled', false);
+									window.clearInterval(timer);
+								}
+							},
+							error: function(xhr, sStatus, oErr) {
+								console.log(sStatus + ': ' + oErr.message);
+								$this.prop('disabled', false);
+								gd_progressbar($parent, 0, '<i class="fa fa-warning"></i>' + sStatus + ': ' + xhr.responseText);
+								window.clearInterval(timer);
+								return;
+							},
+							complete: function(xhr, sStatus) {
+								return;
+							}
+						});
+					}
+
+					function geodir_export($parent, sExport, fields, iPerPage, iPage) {
+						var $submit, iTotal, iPages;
+						$submit = $('input[type="submit"]', $parent);
+						iTotal = parseInt($submit.data('total'));
+						iPages = Math.ceil( iTotal / iPerPage );
+						
+						data = fields + '&_export=' + sExport + '&_c=' + iTotal + '&_n=' + iPerPage + '&_p=' + iPage; 
+						
+						jQuery.ajax({
+							url: ajaxurl,
+							type: "POST",
+							data: 'action=geodir_import_export&task=export&_nonce=<?php echo $nonce;?>' + data,
+							dataType: 'json',
+							cache: false,
+							beforeSend: function(xhr, settings) {},
+							success: function(res) {
+								$submit.prop('disabled', false);
+								console.log(res);
+								if (typeof res == 'object') {
+									if (typeof res.success != 'undefined' && res.success == false) {
+										gd_progressbar($parent, 0, '<i class="fa fa-warning"></i>' + res.data);
+										window.clearInterval(timer);
+									} else {
+										if (iPages < iPage || iPages == iPage) {
+											window.clearInterval(timer);
+											gd_progressbar($parent, 100, '100% (' + iTotal + ' / ' + iTotal + ') <i class="fa fa-check"></i><?php echo esc_attr( __( 'Complete!', 'geodirectory ' ) );?>');
+										} else {
+											var percentage = Math.round(((iPage * iPerPage) / iTotal) * 100);
+											percentage = percentage > 100 ? 100 : percentage;
+											gd_progressbar($parent, percentage, percentage + '% (' + (iPage * iPerPage) + ' / ' + iTotal + ') <i class="fa fa-refresh fa-spin"></i><?php esc_attr_e( 'Exporting...', 'geodirectory ' );?>');
+										}
+										if (typeof res.files != 'undefined' && $(res.files).length) {
+											var obj_files = res.files;
+											var files = '';
+											for (var i in res.files) {
+												files += '<p>' + obj_files[i].i + ' <a class="gd-ie-file" href="' + obj_files[i].u + '" target="_blank">' + obj_files[i].u + '</a> (' + obj_files[i].s + ')</p>';
+											}
+											$('#gd_ie_ex_files', $parent).append(files);
+											if (iPages > iPage) {
+												return geodir_export($parent, sExport, fields, iPerPage, (iPage + 1));
+											}
+											return true;
+										}
+									}
+								}
+							},
+							error: function(xhr, sStatus, oErr) {
+								console.log(sStatus + ': ' + oErr.message);
+								$submit.prop('disabled', false);
+								if (page < 2) {
+									gd_progressbar($parent, 0, '<i class="fa fa-warning"></i>' + sStatus + ': ' + xhr.responseText);
+								}
+								window.clearInterval(timer);
+								return;
+							},
+							complete: function(xhr, sStatus) {
 								return;
 							}
 						});

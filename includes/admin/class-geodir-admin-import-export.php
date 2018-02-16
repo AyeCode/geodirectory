@@ -32,10 +32,11 @@ class GeoDir_Admin_Import_Export {
 			return new WP_Error( 'gd-no-auth', __( "You don't have permission to do this.", "geodirectory" ) );
 		}
 
-
 		// add filter for dates
 		add_filter('geodir_get_posts_count', array( __CLASS__ , 'filter_where_query' ), 10, 2);
 		add_filter('geodir_get_export_posts', array( __CLASS__ , 'filter_where_query' ), 10, 2);
+		add_filter('geodir_ajax_prepare_export_reviews', array( __CLASS__ , 'prepare_export_reviews' ));
+		add_filter('geodir_ajax_export_reviews', array( __CLASS__ , 'export_reviews' ));
 
 		// set the task
 		//$task = isset( $_POST['task'] ) ? esc_attr( $_POST['task'] ) : '';
@@ -86,6 +87,23 @@ class GeoDir_Admin_Import_Export {
 				break;
 			case "import_settings":
 				return self::import_settings();
+				break;
+			case "prepare_export":
+				if ( ! empty( $_POST['_export'] ) && has_filter( 'geodir_ajax_prepare_export_' . sanitize_key( $_POST['_export'] ) ) ) {
+					return apply_filters( 'geodir_ajax_prepare_export_' . sanitize_key( $_POST['_export'] ), array() );
+				} else {
+					return new WP_Error( 'gd-error', __( "Your favorite color is neither red, blue, nor green!", "geodirectory" ) );
+				}
+				break;
+			case "export":
+				if ( ! empty( $_POST['_export'] ) && has_filter( 'geodir_ajax_export_' . sanitize_key( $_POST['_export'] ) ) ) {
+					return apply_filters( 'geodir_ajax_export_' . sanitize_key( $_POST['_export'] ), array() );
+				} else {
+					return new WP_Error( 'gd-error', __( "Your favorite color is neither red, blue, nor green!", "geodirectory" ) );
+				}
+				break;
+			case "import_review":
+				return self::import_reviews();
 				break;
 			case 'import_finish': {
 				/**
@@ -1348,6 +1366,21 @@ class GeoDir_Admin_Import_Export {
 
 		return $cat_info_fixed;
 	}
+	
+	/**
+	 * Validate the review info.
+	 *
+	 * @todo make this actually validate the review info.
+	 *
+	 * @param $review_info
+	 *
+	 * @return array
+	 */
+	public static function validate_review( $review ) {
+		$review_fixed = array();
+
+		return $review_fixed;
+	}
 
 	/**
 	 * Update the post term.
@@ -1649,9 +1682,348 @@ class GeoDir_Admin_Import_Export {
 
 		return NULL;
 	}
-
 	
+	public static function switch_locale( $locale ) {
+		$active_lang = '';
+		$is_wpml = geodir_is_wpml();
+		if ( $is_wpml ) {
+			global $sitepress;
+			$active_lang = $sitepress->get_current_language();
+			$sitepress->switch_lang( 'all', true );
+		}
+		return $active_lang;
+	}
 	
+	public static function restore_locale( $locale ) {
+		if ( ! $locale ) {
+			return false;
+		}
 
+		$is_wpml = geodir_is_wpml();
+		if ( $is_wpml ) {
+			global $sitepress;
+			$sitepress->switch_lang( $locale, true );
+		}
+		return true;
+	}
+	
+	/**
+	 * Prepare export reviews.
+	 */
+	public static function get_comment_args( $count = false ) {
+		global $wpdb;
 
+		$post_types = geodir_get_posttypes();
+
+		$comment_args = array(
+			'fields'     => 'ids',
+			'count'      => $count,
+			'parent'     => 0,
+			'status'	 => 'any'
+		);
+
+		// post type
+		if ( ! empty( $_REQUEST['gd_imex']['post_type'] ) && in_array( $_REQUEST['gd_imex']['post_type'], $post_types ) ) {
+			$comment_args['post_type'] = sanitize_text_field( $_REQUEST['gd_imex']['post_type'] );
+		} else {
+			$comment_args['post_type'] = $post_types;
+		}
+
+		// date
+		if ( ! empty( $_REQUEST['gd_imex']['start_date'] ) || ! empty( $_REQUEST['gd_imex']['end_date'] ) ) {
+			$date_query = array(
+				'inclusive' => true
+			);
+			if ( ! empty( $_REQUEST['gd_imex']['start_date'] ) ) {
+				$date_query['after'] = $_REQUEST['gd_imex']['start_date'];
+			}
+			if ( ! empty( $_REQUEST['gd_imex']['end_date'] ) ) {
+				$date_query['before'] = $_REQUEST['gd_imex']['end_date'];
+			}
+			$comment_args['date_query'] = array( $date_query );
+		}
+
+		// status
+		if ( ! empty( $_REQUEST['gd_imex']['status'] ) ) {
+			$comment_args['status'] = sanitize_text_field( $_REQUEST['gd_imex']['status'] );
+		}
+
+		return apply_filters( 'geodir_export_reviews_comment_args', $comment_args, $fields );
+	}
+	
+	/**
+	 * Prepare export reviews.
+	 */
+	public static function filter_reviews( $clauses, $comment_query ) {
+		global $wpdb;
+
+		if ( empty( $comment_query->query_vars['count'] ) ) {
+			$clauses['fields'] = "{$wpdb->comments}.*, r.*, r.overall_rating AS rating";
+		}
+
+		$clauses['join'] .= " INNER JOIN " . GEODIR_REVIEW_TABLE . " AS r ON r.comment_ID = {$wpdb->comments}.comment_ID";
+
+		$where = array( "r.overall_rating > 0" );
+		if ( ! empty( $_REQUEST['gd_imex']['min_rating'] ) ) {
+			$where[] = "r.overall_rating >= " . absint( $_REQUEST['gd_imex']['min_rating'] );
+		}
+		if ( ! empty( $_REQUEST['gd_imex']['max_rating'] ) ) {
+			$where[] = "r.overall_rating <= " . absint( $_REQUEST['gd_imex']['max_rating'] );
+		}
+		$clauses['join'] .= " AND " . implode( " AND ", $where );
+
+		return $clauses;
+	}
+	
+	/**
+	 * Retrieve reviews.
+	 *
+	 */
+	public static function get_reviews( $per_page = 0, $page_no = 0 ) {
+		global $wpdb;
+
+		$comment_args = self::get_comment_args();
+		if ( $per_page > 0 && $page_no > 0 ) {
+			$comment_args['offset'] = ( $page_no - 1 ) * $per_page;
+			$comment_args['number'] = $per_page;
+		}
+
+		$comment_query = new WP_Comment_Query();
+		$comment_query->query( $comment_args );
+
+		$items = ! empty( $comment_query->request ) ? $wpdb->get_results( $comment_query->request ) : array();
+
+		$csv_rows = array();
+		if ( ! empty( $items ) ) {
+			$csv_row   = array();
+			$csv_row[] = 'comment_ID';
+			$csv_row[] = 'comment_post_ID';
+			$csv_row[] = 'rating';
+			$csv_row[] = 'comment_content';
+			$csv_row[] = 'comment_date';
+			$csv_row[] = 'comment_approved';
+			$csv_row[] = 'user_id';
+			$csv_row[] = 'comment_author';
+			$csv_row[] = 'comment_author_email';
+			$csv_row[] = 'comment_author_url';
+			$csv_row[] = 'comment_author_IP';
+			$csv_row[] = 'post_title';
+			$csv_row[] = 'post_type';
+			$csv_row[] = 'post_status';
+			$csv_row[] = 'post_date';
+			$csv_row[] = 'post_city';
+			$csv_row[] = 'post_region';
+			$csv_row[] = 'post_country';
+			$csv_row[] = 'post_latitude';
+			$csv_row[] = 'post_longitude';
+
+			$csv_rows[] = $csv_row;
+
+			foreach ( $items as $item ) {
+				$csv_row   = array();
+				$csv_row[] = $item->comment_ID;
+				$csv_row[] = $item->comment_post_ID;
+				$csv_row[] = $item->rating;
+				$csv_row[] = $item->comment_content;
+				$csv_row[] = $item->comment_date;
+				$csv_row[] = $item->comment_approved;
+				$csv_row[] = $item->user_id;
+				$csv_row[] = $item->comment_author;
+				$csv_row[] = $item->comment_author_email;
+				$csv_row[] = $item->comment_author_url;
+				$csv_row[] = $item->comment_author_IP;
+				$csv_row[] = $item->post_title;
+				$csv_row[] = $item->post_type;
+				$csv_row[] = $item->post_status;
+				$csv_row[] = $item->post_date;
+				$csv_row[] = $item->post_city;
+				$csv_row[] = $item->post_region;
+				$csv_row[] = $item->post_country;
+				$csv_row[] = $item->post_latitude;
+				$csv_row[] = $item->post_longitude;
+
+				$csv_rows[] = $csv_row;
+			}
+		}
+
+		return $csv_rows;
+	}
+	
+	/**
+	 * Prepare export reviews.
+	 */
+	public static function prepare_export_reviews() {
+		$locale = self::switch_locale( 'all' );
+
+		add_filter( 'comments_clauses', array( __CLASS__ , 'filter_reviews' ), 10, 2);
+
+		$comment_args = self::get_comment_args( true );
+		$comment_query = new WP_Comment_Query();
+
+		$json = array();
+		$json['total'] = (int)$comment_query->query( $comment_args );
+
+		self::restore_locale( $locale );
+
+		return $json;
+	}
+	
+	/**
+	 * Set filter reviews.
+	 */
+	public static function export_reviews() {
+		global $wp_filesystem;
+
+		$nonce          = isset( $_REQUEST['_nonce'] ) ? $_REQUEST['_nonce'] : null;
+		$count 			= isset( $_REQUEST['_c'] ) ? absint( $_REQUEST['_c'] ) : 0;
+		$chunk_per_page = !empty( $_REQUEST['_n'] ) ? absint( $_REQUEST['_n'] ) : 5000;
+		$chunk_page_no  = isset( $_REQUEST['_p'] ) ? absint( $_REQUEST['_p'] ) : 1;
+		$csv_file_dir   = self::import_export_cache_path( false );
+
+		$locale = self::switch_locale( 'all' );
+		
+		$file_name = 'geodir_reviews_' . date( 'dmyHi' );
+
+		$file_url_base  = self::import_export_cache_path() . '/';
+		$file_url       = $file_url_base . $file_name . '.csv';
+		$file_path      = $csv_file_dir . '/' . $file_name . '.csv';
+		$file_path_temp = $csv_file_dir . '/' . $post_type . 'category_' . $nonce . '.csv';
+
+		$chunk_file_paths = array();
+
+		if ( isset( $_REQUEST['_st'] ) ) {
+			$line_count = (int) self::file_line_count( $file_path_temp );
+			$percentage = count( $count ) > 0 && $line_count > 0 ? ceil( $line_count / $count ) * 100 : 0;
+			$percentage = min( $percentage, 100 );
+
+			$json['percentage'] = $percentage;
+
+			self::restore_locale( $locale );
+
+			return $json;
+		} else {
+			if ( ! $count > 0 ) {
+				$json['error'] = __( 'No records to export.', 'geodirectory' );
+			} else {
+				add_filter( 'comments_clauses', array( __CLASS__ , 'filter_reviews' ), 10, 2);
+
+				$total = $count;
+				if ( $chunk_per_page > $count ) {
+					$chunk_per_page = $count;
+				}
+				$chunk_total_pages = ceil( $total / $chunk_per_page );
+
+				$j      = $chunk_page_no;
+				$rows 	= self::get_reviews( $chunk_per_page, $j );
+
+				$per_page = 500;
+				if ( $per_page > $chunk_per_page ) {
+					$per_page = $chunk_per_page;
+				}
+				$total_pages = ceil( $chunk_per_page / $per_page );
+
+				for ( $i = 0; $i <= $total_pages; $i ++ ) {
+					$save_rows = array_slice( $rows, ( $i * $per_page ), $per_page );
+
+					$clear = $i == 0 ? true : false;
+					self::save_csv_data( $file_path_temp, $save_rows, $clear );
+				}
+
+				if ( $wp_filesystem->exists( $file_path_temp ) ) {
+					$chunk_page_no   = $chunk_total_pages > 1 ? '-' . $j : '';
+					$chunk_file_name = $file_name . $chunk_page_no . '.csv';
+					$file_path       = $csv_file_dir . '/' . $chunk_file_name;
+					$wp_filesystem->move( $file_path_temp, $file_path, true );
+
+					$file_url           = $file_url_base . $chunk_file_name;
+					$chunk_file_paths[] = array(
+						'i' => $j . '.',
+						'u' => $file_url,
+						's' => size_format( filesize( $file_path ), 2 )
+					);
+				}
+
+				if ( ! empty( $chunk_file_paths ) ) {
+					$json['total'] = $count;
+					$json['files'] = $chunk_file_paths;
+				} else {
+					$json['error'] = __( 'ERROR: Could not create csv file. This is usually due to inconsistent file permissions.', 'geodirectory' );
+				}
+			}
+		}
+
+		self::restore_locale( $locale );
+
+		return $json;
+	}
+	
+	/**
+	 * Import reviews.
+	 *
+	 * @return array|string
+	 */
+	public static function import_reviews() {
+
+		$limit     = isset( $_POST['limit'] ) && $_POST['limit'] ? (int) $_POST['limit'] : 1;
+		$processed = isset( $_POST['processed'] ) ? (int) $_POST['processed'] : 0;
+
+		$processed ++;
+		$rows = self::get_csv_rows( $processed, $limit );
+
+		if ( ! empty( $rows ) ) {
+			$created = 0;
+			$updated = 0;
+			$skipped = 0;
+			$invalid = 0;
+			$images  = 0;
+
+			$update_or_skip = isset( $_POST['_ch'] ) && $_POST['_ch'] == 'update' ? 'update' : 'skip';
+
+			foreach ( $rows as $row ) {
+				$row = self::validate_review( $row );
+
+				if ( $update_or_skip == 'skip' && isset( $row['comment_ID'] ) && $row['comment_ID'] ) {
+					$skipped ++;
+					continue;
+				}
+
+				if ( $row ) {
+					// Update
+					if ( isset( $row['comment_ID'] ) && $row['comment_ID'] ) {
+						$result = 0;
+
+						if ( $result ) {
+							$updated ++;
+						} else {
+							$invalid ++;
+						}
+
+						// insert
+					} else {
+						$result = 0;
+						if ( $result ) {
+							$created ++;
+						} else {
+							$invalid ++;
+						}
+					}
+				} else {
+					$invalid ++;
+				}
+			}
+
+		} else {
+			return new WP_Error( 'gd-csv-empty', __( "No data found in csv file.", "geodirectory" ) );
+		}
+
+		return array(
+			"processed" => $processed,
+			"created"   => $created,
+			"updated"   => $updated,
+			"skipped"   => $skipped,
+			"invalid"   => $invalid,
+			"images"    => $images,
+			"ID"        => 0,
+		);
+	}
 }

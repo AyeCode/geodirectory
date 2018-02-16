@@ -8,11 +8,16 @@
 
 $nonce = wp_create_nonce( 'geodir_import_export_nonce' );
 
-
 ?>
 <div class="inner_content_tab_main gd-import-export">
 	<div class="gd-content-heading">
-
+		<?php /**
+		 * Contains template for import/export requirements.
+		 *
+		 * @since 2.0.0
+		 */
+		include_once( dirname( dirname( __FILE__ ) ) . '/views/html-admin-settings-import-export-reqs.php' );
+		?>
 		<div id="gd_ie_imposts" class="metabox-holder">
 			<div class="meta-box-sortables ui-sortable">
 				<div id="gd_ie_im_posts" class="postbox gd-hndle-pbox">

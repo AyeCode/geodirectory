@@ -18,11 +18,11 @@ $sample_csv = geodir_plugin_url() . '/assets/sample_reviews.csv';
 */
 $sample_csv = apply_filters( 'geodir_export_reviews_sample_csv', $sample_csv );
 
-$gd_posttypes = geodir_get_posttypes( 'array' );
+$post_types = geodir_post_type_options( true, true );
 
-$gd_posttypes_option = '';
-foreach ( $gd_posttypes as $gd_posttype => $row ) {
-	$gd_posttypes_option .= '<option value="' . $gd_posttype . '" data-reviews="' . (int)geodir_get_terms_count( $gd_posttype ) . '">' . __( $row['labels']['name'], 'geodirectory' ) . '</option>';
+$post_type_options = '<option value="">' . __( 'All', 'geodirectory' ) . '</option>';
+foreach ( $post_types as $post_type => $name ) {
+	$post_type_options .= '<option value="' . $post_type . '">' . $name . '</option>';
 }
 wp_enqueue_script( 'jquery-ui-progressbar' );
 
@@ -52,47 +52,25 @@ $gd_chunksize_option = '';
 foreach ($gd_chunksize_options as $value => $title) {
 	$gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 5000, false) . '>' . $title . '</option>';
 }
-
+// @todo move style in css file
 ?>
+<style>
+.gd-import-export .form-table td span.description {
+	display: block;
+}
+.gd-import-export .form-table td.fld {
+	vertical-align: top;
+}
+</style>
 <div class="inner_content_tab_main gd-import-export">
 	<div class="gd-content-heading">
-
-		<?php
-		ini_set('max_execution_time', 999999);
-		$ini_max_execution_time_check = @ini_get( 'max_execution_time' );
-		ini_restore('max_execution_time');
-
-		if($ini_max_execution_time_check != 999999){ // only show these setting to the user if we can't change the ini setting
-			?>
-			<div id="gd_ie_reqs" class="metabox-holder">
-				<div class="meta-box-sortables ui-sortable">
-					<div class="postbox">
-						<h3 class="hndle"><span style='vertical-align:top;'><?php echo __( 'PHP Requirements for GD Import & Export CSV', 'geodirectory' );?></span></h3>
-						<div class="inside">
-							<span class="description"><?php echo __( 'Note: In case GD import & export csv not working for larger data then please check and configure following php settings.', 'geodirectory' );?></span>
-							<table class="form-table">
-								<thead>
-								<tr>
-									<th><?php _e( 'PHP Settings', 'geodirectory' );?></th><th><?php _e( 'Current Value', 'geodirectory' );?></th><th><?php _e( 'Recommended Value', 'geodirectory' );?></th>
-								</tr>
-								</thead>
-								<tbody>
-								<tr>
-									<td>max_input_time</td><td><?php echo @ini_get( 'max_input_time' );?></td><td>3000</td>
-								</tr>
-								<tr>
-									<td>max_execution_time</td><td><?php  echo @ini_get( 'max_execution_time' );?></td><td>3000</td>
-								</tr>
-								<tr>
-									<td>memory_limit</td><td><?php echo @ini_get( 'memory_limit' );?></td><td>256M</td>
-								</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		<?php }?>
+		<?php /**
+		 * Contains template for import/export requirements.
+		 *
+		 * @since 2.0.0
+		 */
+		include_once( dirname( dirname( __FILE__ ) ) . '/views/html-admin-settings-import-export-reqs.php' );
+		?>
 		<div id="gd_ie_imreviews" class="metabox-holder">
 			<div class="meta-box-sortables ui-sortable">
 				<div id="gd_ie_imreviews" class="postbox gd-hndle-pbox">
@@ -173,11 +151,49 @@ foreach ($gd_chunksize_options as $value => $title) {
 							<tbody>
 							<tr>
 								<td class="fld"><label for="gd_post_type"><?php _e( 'Post Type:', 'geodirectory' );?></label></td>
-								<td><select name="gd_post_type" id="gd_post_type" style="min-width:140px"><?php echo $gd_posttypes_option;?></select></td>
+								<td><select name="gd_imex[post_type]" id="gd_post_type" style="min-width:140px"><?php echo $post_type_options;?></select></td>
 							</tr>
 							<tr>
 								<td class="fld" style="vertical-align:top"><label for="gd_chunk_size"><?php _e( 'Max entries per csv file:', 'geodirectory' );?></label></td>
 								<td><select name="gd_chunk_size" id="gd_chunk_size" style="min-width:140px"><?php echo $gd_chunksize_option;?></select><span class="description"><?php _e( 'Please select the maximum number of entries per csv file (defaults to 5000, you might want to lower this to prevent memory issues on some installs)', 'geodirectory' );?></span></td>
+							</tr>
+							<tr class="gd-imex-dates">
+								<td class="fld"><label><?php _e( 'Date:', 'geodirectory' );?></label></td>
+								<td>
+									<input type="text" id="gd_imex_start_date" name="gd_imex[start_date]" data-type="date" /> - <input type="text" id="gd_imex_end_date" name="gd_imex[end_date]" data-type="date" />
+									<span class="description"><?php _e( 'The date interval of which the reviews are to be exported', 'geodirectory' );?></span>
+								</td>
+							</tr>
+							<tr class="gd-imex-ratings">
+								<td class="fld"><label><?php _e( 'Rating:', 'geodirectory' );?></label></td>
+								<td>
+									<select name="gd_imex[min_rating]" data-type="rating" style="min-width:90px">
+										<option value=""><?php _e( 'Any', 'geodirectory' );?></option>
+										<?php for ( $n = 1; $n <= 5; $n++ ) { ?>
+										<option value="<?php echo $n; ?>"><?php echo $n; ?></option>
+										<?php } ?>
+									</select> - 
+									<select name="gd_imex[max_rating]" data-type="rating" style="min-width:90px">
+										<option value=""><?php _e( 'Any', 'geodirectory' );?></option>
+										<?php for ( $n = 1; $n <= 5; $n++ ) { ?>
+										<option value="<?php echo $n; ?>"><?php echo $n; ?></option>
+										<?php } ?>
+									</select>
+									<span class="description"><?php _e( 'Min & max rating star range of which the reviews are to be exported', 'geodirectory' );?></span>
+								</td>
+							</tr>
+							<tr class="gd-imex-status">
+								<td class="fld"><label><?php _e( 'Status:', 'geodirectory' );?></label></td>
+								<td>
+									<select name="gd_imex[status]" data-type="status" style="min-width:140px">
+										<option value="any"><?php _e( 'Any', 'geodirectory' );?></option>
+										<option value="approve"><?php _e( 'Approved', 'geodirectory' );?></option>
+										<option value="hold"><?php _e( 'Pending', 'geodirectory' );?></option>
+										<option value="spam"><?php _e( 'Spam', 'geodirectory' );?></option>
+										<option value="trash"><?php _e( 'Trashed', 'geodirectory' );?></option>
+									</select>
+									<span class="description"><?php _e( 'The review status of which the reviews are to be exported', 'geodirectory' );?></span>
+								</td>
 							</tr>
 							<tr>
 								<td class="fld" style="vertical-align:top"><label><?php _e( 'Progress:', 'geodirectory' );?></label></td>
@@ -185,7 +201,7 @@ foreach ($gd_chunksize_options as $value => $title) {
 							</tr>
 							<tr class="gd-ie-actions">
 								<td style="vertical-align:top">
-									<input type="submit" value="<?php echo esc_attr( __( 'Export CSV', 'geodirectory' ) );?>" class="button-primary" name="gd_ie_exreviews_submit" id="gd_ie_exreviews_submit">
+									<input data-export="reviews" type="submit" value="<?php echo esc_attr( __( 'Export CSV', 'geodirectory' ) );?>" class="button-primary" name="gd_start_export" id="gd_start_export">
 								</td>
 								<td id="gd_ie_ex_files" class="gd-ie-files"></td>
 							</tr>
@@ -207,7 +223,7 @@ foreach ($gd_chunksize_options as $value => $title) {
 		 * @param array $gd_chunksize_options File chunk size options.
 		 * @param string $nonce Wordpress security token for GD import & export.
 		 */
-		do_action( 'geodir_import_export_reviews', $gd_posttypes, $gd_chunksize_options, $nonce );
+		do_action( 'geodir_import_export_reviews', $gd_chunksize_options, $nonce );
 		?>
 	</div>
 </div>
