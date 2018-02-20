@@ -379,14 +379,8 @@ class GeoDir_REST_System_Status_Tools_Controller extends GeoDir_REST_Controller 
 		
 		$checked = false;
 		
-		if ($wpdb->get_results("SELECT * FROM " . GEODIR_REVIEW_TABLE . " WHERE post_city='' OR post_city IS NULL OR post_latitude='' OR post_latitude IS NULL")) {
+		if ($wpdb->get_results("SELECT * FROM " . GEODIR_REVIEW_TABLE . " WHERE latitude IS NULL OR latitude = '' OR longitude IS NULL OR longitude = '' OR city IS NULL OR city = ''")) {
 			if ($this->check_reviews_location()) {
-				$checked = true;
-			}
-		}
-		
-		if ($wpdb->get_results("SELECT * FROM " . GEODIR_REVIEW_TABLE . " WHERE comment_content IS NULL")) {
-			if ($this->check_reviews_content()) {
 				$checked = true;
 			}
 		}
@@ -401,20 +395,12 @@ class GeoDir_REST_System_Status_Tools_Controller extends GeoDir_REST_Controller 
 
 		if ( !empty( $post_types ) ) {
 			foreach ( $post_types as $post_type ) {
-				$wpdb->query( "UPDATE " . GEODIR_REVIEW_TABLE . " gdr JOIN " . $wpdb->prefix . "geodir_" . $post_type . "_detail d ON gdr.post_id=d.post_id SET gdr.post_latitude=d.latitude, gdr.post_longitude=d.longitude, gdr.post_city=d.city, gdr.post_region=d.region, gdr.post_country=d.country WHERE gdr.post_latitude IS NULL OR gdr.post_city IS NULL" );
+				$wpdb->query( "UPDATE " . GEODIR_REVIEW_TABLE . " AS gdr JOIN " . $wpdb->prefix . "geodir_" . $post_type . "_detail d ON gdr.post_id=d.post_id SET gdr.latitude=d.latitude, gdr.longitude=d.longitude, gdr.city=d.city, gdr.region=d.region, gdr.country=d.country WHERE gdr.latitude IS NULL OR gdr.latitude = '' OR gdr.longitude IS NULL OR gdr.longitude = '' OR gdr.city IS NULL OR gdr.city = ''" );
 
 			}
 			return true;
 		}
 
-		return false;
-	}
-	
-	public function check_reviews_content() {
-		global $wpdb;
-		if ( $wpdb->query( "UPDATE " . GEODIR_REVIEW_TABLE . " gdr JOIN $wpdb->comments c ON gdr.comment_id=c.comment_ID SET gdr.comment_content = c.comment_content WHERE gdr.comment_content IS NULL" ) ) {
-			return true;
-		}
 		return false;
 	}
 }

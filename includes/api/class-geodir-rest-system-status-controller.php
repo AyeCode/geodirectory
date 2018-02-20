@@ -589,6 +589,7 @@ class GeoDir_REST_System_Status_Controller extends GeoDir_REST_Controller {
 		
 		$core_tables = array(
 			'attachments',
+			'business_hours',
 			'countries',
 			'custom_fields',
 			'custom_sort_fields',

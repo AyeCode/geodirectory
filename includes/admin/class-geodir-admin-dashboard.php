@@ -91,7 +91,7 @@ class GeoDir_Admin_Dashboard {
 	/**
 	 * Handles output of the dashboard page in admin.
 	 */
-	public function output() { // @todo add hooks after done, move js, css file to corect location
+	public function output() {
 		do_action( 'geodir_admin_dashboard_before', $this );
 		?>
 		<div class="wrap gd-dashboard">

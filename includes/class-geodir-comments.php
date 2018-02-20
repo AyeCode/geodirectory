@@ -448,7 +448,7 @@ class GeoDir_Comments {
 
 		$results = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COALESCE(avg(overall_rating),0) FROM " . GEODIR_REVIEW_TABLE . " WHERE post_id = %d AND status=1 AND overall_rating>0",
+				"SELECT  COALESCE(avg(r.rating),0) FROM " . GEODIR_REVIEW_TABLE . " AS r JOIN {$wpdb->comments} AS cmt ON cmt.comment_ID = r.comment_id WHERE r.post_id = %d AND cmt.comment_approved = '1' AND r.rating > 0",
 				array( $post_id )
 			)
 		);
@@ -475,7 +475,7 @@ class GeoDir_Comments {
 
 		$results = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(overall_rating) FROM " . GEODIR_REVIEW_TABLE . " WHERE post_id = %d AND status=1 AND overall_rating>0",
+				"SELECT COUNT(r.rating) FROM " . GEODIR_REVIEW_TABLE . " AS r JOIN {$wpdb->comments} AS cmt ON cmt.comment_ID = r.comment_id WHERE r.post_id = %d AND cmt.comment_approved = '1' AND r.rating > 0",
 				array( $post_id )
 			)
 		);
@@ -502,7 +502,7 @@ class GeoDir_Comments {
 
 		$reatings = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT overall_rating FROM " . GEODIR_REVIEW_TABLE . " WHERE comment_id = %d",
+				"SELECT rating FROM " . GEODIR_REVIEW_TABLE . " WHERE comment_id = %d",
 				array( $comment_id )
 			)
 		);

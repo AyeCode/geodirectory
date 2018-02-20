@@ -31,14 +31,6 @@ class GeoDir_Admin_Comments {
 		add_action( 'wp_set_comment_status', array(__CLASS__, 'status_change'), 10, 2 );
 		add_action( 'edit_comment', array(__CLASS__, 'edit_comment') );
 		add_action( 'delete_comment', array(__CLASS__, 'delete_comment') );
-
-
-
-
-
-
-
-
 	}
 
 
@@ -150,44 +142,37 @@ class GeoDir_Admin_Comments {
 	 * @global int $user_ID The current user ID.
 	 */
 	public static function edit_comment( $comment_id = 0 ) {
-
 		global $wpdb;
 
+		if ( ! isset( $_REQUEST['geodir_overallrating'] ) ) {
+			return;
+		}
+
 		$comment_info = get_comment( $comment_id );
+		if ( empty( $comment_info ) ) {
+			return;
+		}
 
 		$post_id    = $comment_info->comment_post_ID;
-		$status     = $comment_info->comment_approved;
 		$old_rating = geodir_get_comment_rating( $comment_info->comment_ID );
+		$post_type  = get_post_type( $post_id );
+		$rating 	= absint($_REQUEST['geodir_overallrating']);
 
-		$post_type = get_post_type( $post_id );
-
-
-		if ( isset( $_REQUEST['geodir_overallrating'] ) ) {
-
-			$overall_rating = absint($_REQUEST['geodir_overallrating']);
-
-			if ( isset( $comment_info->comment_parent ) && (int) $comment_info->comment_parent == 0 ) {
-				$overall_rating = $overall_rating > 0 ? $overall_rating : '0';
-
-				if ( isset( $old_rating ) ) {
-
-					$sqlqry = $wpdb->prepare( "UPDATE " . GEODIR_REVIEW_TABLE . " SET
-						overall_rating = %f,
-						status		= %s,
-						comment_content	= %s 
-						WHERE comment_id = %d ", array(
-						$overall_rating,
-						$status,
-						$comment_info->comment_content,
+		if ( isset( $comment_info->comment_parent ) && (int) $comment_info->comment_parent == 0 ) {
+			if ( isset( $old_rating ) ) {
+				$sqlqry = $wpdb->prepare( "UPDATE " . GEODIR_REVIEW_TABLE . " SET
+					rating = %f 
+					WHERE comment_id = %d ", 
+					array(
+						$rating,
 						$comment_id
-					) );
+					) 
+				);
 
-					$wpdb->query( $sqlqry );
+				$wpdb->query( $sqlqry );
 
-					//update rating
-					self::update_post_rating( $post_id, $post_type );
-
-				}
+				// update rating
+				self::update_post_rating( $post_id, $post_type );
 			}
 		}
 	}
@@ -203,49 +188,38 @@ class GeoDir_Admin_Comments {
 	 * @global int $user_ID The current user ID.
 	 */
 	public static function status_change( $comment_id, $status ) {
+		global $wpdb;
+
 		if ( $status == 'delete' ) {
 			return;
 		}
-		global $wpdb;
 
 		$comment_info = get_comment( $comment_id );
-
-		$post_id = isset( $comment_info->comment_post_ID ) ? $comment_info->comment_post_ID : '';
-
-		if ( ! empty( $comment_info ) ) {
-			$status = $comment_info->comment_approved;
+		if ( empty( $comment_info ) ) {
+			return;
 		}
 
-		if ( $status == 'approve' || $status == 1 ) {
-			$status = 1;
-		} else {
-			$status = 0;
-		}
-
+		$post_id 		 = isset( $comment_info->comment_post_ID ) ? $comment_info->comment_post_ID : '';
 		$comment_info_ID = isset( $comment_info->comment_ID ) ? $comment_info->comment_ID : '';
 		$old_rating      = geodir_get_comment_rating( $comment_info_ID );
-		$post_type = get_post_type( $post_id );
+		$post_type 		 = get_post_type( $post_id );
 
 		if ( $comment_id ) {
-
-			$overall_rating = $old_rating;
+			$rating = $old_rating;
 
 			if ( isset( $old_rating ) ) {
-
 				$sqlqry = $wpdb->prepare( "UPDATE " . GEODIR_REVIEW_TABLE . " SET
-						overall_rating = %f,
-						status		= %s,
-						comment_content = %s 
-						WHERE comment_id = %d ", array(
-					$overall_rating,
-					$status,
-					$comment_info->comment_content,
-					$comment_id
-				) );
+					rating = %f 
+					WHERE comment_id = %d ", 
+					array(
+						$rating,
+						$comment_id
+					) 
+				);
 
 				$wpdb->query( $sqlqry );
 
-				//update rating
+				// update rating
 				self::update_post_rating( $post_id, $post_type );
 			}
 		}
@@ -260,95 +234,76 @@ class GeoDir_Admin_Comments {
 	 * @global int $user_ID The current user ID.
 	 */
 	public static function save_rating( $comment = 0 ) {
-		global $wpdb, $user_ID;
+		global $wpdb, $user_ID;geodir_error_log( $comment, 'save_rating()', __FILE__, __LINE__ );geodir_error_log( $_REQUEST, 'REQUEST', __FILE__, __LINE__ );
+		
+		if ( ! isset( $_REQUEST['geodir_overallrating'] ) ) {
+			return;
+		}
 
 		$comment_info = get_comment( $comment );
+		if ( empty( $comment_info ) ) {
+			return;
+		}
 
-		$post_id   = $comment_info->comment_post_ID;
-		$status    = $comment_info->comment_approved;
-		$rating_ip = getenv( "REMOTE_ADDR" );
+		$post_id = $comment_info->comment_post_ID;
 
 		$post = geodir_get_post_info( $post_id );
 		if ( empty( $post ) ) {
 			return;
 		}
 
-		if ( $post->post_status == 'publish' ) {
-			$post_status = '1';
-		} else {
-			$post_status = '0';
-		}
+		$rating = absint($_REQUEST['geodir_overallrating']);
 
-		if ( isset( $_REQUEST['geodir_overallrating'] ) ) {
-			$overall_rating = absint($_REQUEST['geodir_overallrating']);
+		if ( isset( $comment_info->comment_parent ) && (int) $comment_info->comment_parent == 0 ) {
+			$sqlqry = $wpdb->prepare( "INSERT INTO " . GEODIR_REVIEW_TABLE . " SET
+				post_id		= %d,
+				post_type 	= %s,
+				user_id		= %d,
+				comment_id	= %d,
+				rating 		= %f,
+				city		= %s, 
+				region		= %s, 
+				country		= %s,
+				longitude	= %s,
+				latitude	= %s
+				",
+				array(
+					$post_id,
+					$post->post_type,
+					$user_ID,
+					$comment_info->comment_ID,
+					$rating,
+					$post->city,
+					$post->region,
+					$post->country,
+					$post->latitude,
+					$post->longitude
+				)
+			);
 
-			if ( isset( $comment_info->comment_parent ) && (int) $comment_info->comment_parent == 0 ) {
-				$overall_rating = $overall_rating > 0 ? $overall_rating : '0';
+			$wpdb->query( $sqlqry );
 
-				$sqlqry = $wpdb->prepare( "INSERT INTO " . GEODIR_REVIEW_TABLE . " SET
-					post_id		= %d,
-					post_type = %s,
-					post_title	= %s,
-					user_id		= %d,
-					comment_id	= %d,
-					rating_ip	= %s,
-					overall_rating = %f,
-					status		= %s,
-					post_status		= %s, 
-					post_date		= %s, 
-					post_city		= %s, 
-					post_region		= %s, 
-					post_country	= %s,
-					post_longitude	= %s,
-					post_latitude	= %s,
-					comment_content	= %s 
-					",
-					array(
-						$post_id,
-						$post->post_type,
-						$post->post_title,
-						$user_ID,
-						$comment,
-						$rating_ip,
-						$overall_rating,
-						$status,
-						$post_status,
-						date_i18n( 'Y-m-d H:i:s', current_time( 'timestamp' ) ),
-						$post->city,
-						$post->region,
-						$post->country,
-						$post->latitude,
-						$post->longitude,
-						$comment_info->comment_content
-					)
-				);
+			/**
+			 * Called after saving the comment.
+			 *
+			 * @since 1.0.0
+			 * @package GeoDirectory
+			 *
+			 * @param array $_REQUEST {
+			 *    Attributes of the $_REQUEST variable.
+			 *
+			 * @type string $geodir_overallrating Overall rating.
+			 * @type string $comment Comment text.
+			 * @type string $submit Submit button text.
+			 * @type string $comment_post_ID Comment post ID.
+			 * @type string $comment_parent Comment Parent ID.
+			 * @type string $_wp_unfiltered_html_comment Unfiltered html comment string.
+			 *
+			 * }
+			 */
+			do_action( 'geodir_after_save_comment', $_REQUEST, 'Comment Your Post' );
 
-				$wpdb->query( $sqlqry );
-
-				/**
-				 * Called after saving the comment.
-				 *
-				 * @since 1.0.0
-				 * @package GeoDirectory
-				 *
-				 * @param array $_REQUEST {
-				 *    Attributes of the $_REQUEST variable.
-				 *
-				 * @type string $geodir_overallrating Overall rating.
-				 * @type string $comment Comment text.
-				 * @type string $submit Submit button text.
-				 * @type string $comment_post_ID Comment post ID.
-				 * @type string $comment_parent Comment Parent ID.
-				 * @type string $_wp_unfiltered_html_comment Unfiltered html comment string.
-				 *
-				 * }
-				 */
-				do_action( 'geodir_after_save_comment', $_REQUEST, 'Comment Your Post' );
-
-				if ( $status ) {
-					self::update_post_rating( $post_id );
-				}
-			}
+			self::update_post_rating( $post_id );
 		}
 	}
 

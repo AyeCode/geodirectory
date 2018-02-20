@@ -249,7 +249,7 @@ function geodir_dashboard_post_type_reviews_stats( $post_type, $period = 'all', 
 		$total = 0;
 		$date_stats = array();
 		foreach ( $dates as $day => $days ) {
-			$count = geodir_dashboard_query_reviews_count( $post_type, $statuses, "AND post_date >= '" . $days['start'] . "' AND post_date <= '" . $days['end'] . "'" );
+			$count = geodir_dashboard_query_reviews_count( $post_type, $statuses, "AND cmt.comment_date >= '" . $days['start'] . "' AND cmt.comment_date <= '" . $days['end'] . "'" );
 			$date_stats[ $day ] = $count;
 			$total += $count;
 		}
@@ -275,7 +275,7 @@ function geodir_dashboard_query_reviews_count( $post_type, $statuses = array(), 
 		}
 	}
 
-	$query = "SELECT COUNT(id) FROM " . GEODIR_REVIEW_TABLE . " WHERE post_type = '" . $post_type . "' AND post_status = 1 AND status IN('" . implode( "','", $statuses ) . "') AND overall_rating > 0 " . $where;
+	$query = "SELECT COUNT(r.comment_id) FROM " . GEODIR_REVIEW_TABLE . " AS r INNER JOIN {$wpdb->comments} AS cmt ON cmt.comment_ID = r.comment_id INNER JOIN {$wpdb->posts} AS p ON p.ID = cmt.comment_post_ID WHERE p.post_type = '" . $post_type . "' AND p.post_status = 'publish' AND cmt.comment_approved IN('" . implode( "','", $statuses ) . "') AND r.rating > 0 " . $where;
 	$count = $wpdb->get_var( $query );
 
 	return apply_filters( 'geodir_dashboard_query_reviews_count', $count, $post_type, $statuses, $where );

@@ -885,6 +885,12 @@ table.gd_status_table th.run-tool {
 	font-size: 12px;
 	cursor: default;
 }
+.gd-import-export .form-table td span.description {
+	display: block;
+}
+.gd-import-export .form-table td.fld {
+	vertical-align: top;
+}
 
 /********************************************************
 Media Queries

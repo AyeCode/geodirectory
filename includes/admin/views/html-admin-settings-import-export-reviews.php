@@ -54,14 +54,6 @@ foreach ($gd_chunksize_options as $value => $title) {
 }
 // @todo move style in css file
 ?>
-<style>
-.gd-import-export .form-table td span.description {
-	display: block;
-}
-.gd-import-export .form-table td.fld {
-	vertical-align: top;
-}
-</style>
 <div class="inner_content_tab_main gd-import-export">
 	<div class="gd-content-heading">
 		<?php /**
