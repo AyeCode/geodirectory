@@ -731,6 +731,26 @@ class GeoDir_Admin_Settings {
 					<?php
 
 					break;
+					
+				// Import/Export Reviews
+				case 'import_export_reviews' :
+					?>
+
+					<tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
+						<td class="forminp" colspan="2">
+							<?php /**
+							 * Contains template for import/export reviews.
+							 *
+							 * @since 2.0.0
+							 */
+							include_once( dirname( __FILE__ ) . '/views/html-admin-settings-import-export-reviews.php' );
+							?>
+						</td>
+					</tr>
+
+					<?php
+
+					break;
 
 				// Import/Export Categories
 				case 'import_export_settings' :

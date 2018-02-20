@@ -1,0 +1,4 @@
+comment_ID,comment_post_ID,rating,comment_content,comment_date,comment_approved,user_id,comment_author,comment_author_email,comment_author_url
+14786,31995,5,This is awesome!,2018-02-08 11:27:17,1,16453,GD Smith,gdsmith@mytestwebsite.com,https://www.mygdwebsite.com
+13358,31995,5,This is good!,2018-02-08 11:24:38,1,16453,GD Smith,gdsmith@mytestwebsite.com,
+,31796,4,This is fine!,2018-02-08 11:22:29,1,16450,James Bond,jamesbond@mynewwebsite.com,https://www.mynewwebsite.com
