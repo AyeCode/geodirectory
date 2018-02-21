@@ -127,10 +127,15 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 						'id'   => 'rating_icon',
 						'name' => __( 'Rating icon', 'geodirectory' ),
 						'desc' => __( 'Select the font awesome icon to use for ratings.', 'geodirectory' ),
+						'class' => 'geodir-select',
 						'default' => 'fa-star',
 						'type' => 'font-awesome',
 						'desc_tip' => true,
 						'advanced' => true,
+						'custom_attributes' => array(
+							'data-fa-icons' => true,
+							'data-fa-color' => geodir_get_option('rating_color', '#ff9900')
+						)
 					),
 
 					array(

@@ -2112,7 +2112,7 @@ class GeoDir_Admin_Import_Export {
 
 					if ( $save_id !== false ) { // updated
 						$save_id = $row['comment_ID'];
-						GeoDir_Admin_Comments::edit_comment( $save_id );
+						GeoDir_Comments::edit_comment( $save_id );
 
 						$updated++;
 					} else { // error
@@ -2129,7 +2129,7 @@ class GeoDir_Admin_Import_Export {
 					$save_id = wp_insert_comment( $row );
 
 					if ( ! is_wp_error( $save_id ) && $save_id > 0 ) { // inserted
-						GeoDir_Admin_Comments::save_rating( $save_id );
+						GeoDir_Comments::save_rating( $save_id );
 
 						$created++;
 					} else { // error
