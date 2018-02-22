@@ -536,7 +536,7 @@ class GeoDir_Admin_Install {
 						metadata text NULL DEFAULT NULL,
 					    type varchar(254) NULL DEFAULT 'post_image',
 						PRIMARY KEY  (ID)
-						) $collate ; " ;
+						) $collate ; ";
 
 		// Table for storing custom sort fields
 		$tables .= " CREATE TABLE " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " (
@@ -555,32 +555,24 @@ class GeoDir_Admin_Install {
 			asc_title varchar(255) NOT NULL,
 			desc_title varchar(255) NOT NULL,
 			PRIMARY KEY  (id)
-			) $collate; " ;
+			) $collate; ";
 
 		// Table for storing review info
 		$tables .= " CREATE TABLE " . GEODIR_REVIEW_TABLE . " (
-			id int(11) NOT NULL AUTO_INCREMENT,
-			post_id int(11) DEFAULT NULL,
-			post_title varchar( 255 ) NULL DEFAULT NULL,
-			post_type varchar( 255 ) NULL DEFAULT NULL,
-			user_id int(11) DEFAULT NULL,
-			comment_id int(11) DEFAULT NULL,
-			rating_ip varchar( 50 ) NULL DEFAULT NULL,
-			ratings text NULL DEFAULT NULL,
-			overall_rating float(11) DEFAULT NULL,
-			comment_images text NULL DEFAULT NULL,
-			wasthis_review int(11) NOT NULL,
-			status varchar( 100 ) NOT NULL,
-			post_status int(11) DEFAULT NULL,
-			post_date datetime NOT NULL,
-			post_city varchar(50) NULL DEFAULT NULL,
-			post_region varchar(50) NULL DEFAULT NULL,
-			post_country varchar(50) NULL DEFAULT NULL,
-			post_latitude varchar(20) NULL DEFAULT NULL,
-			post_longitude varchar(20) NULL DEFAULT NULL,
-			comment_content text NULL DEFAULT NULL,
-			PRIMARY KEY  (id)
-			) $collate; " ;
+		  comment_id bigint(20) DEFAULT NULL,
+		  post_id bigint(20) DEFAULT '0',
+		  user_id bigint(20) DEFAULT '0',
+		  rating float DEFAULT '0',
+		  ratings text DEFAULT '',
+		  attachments text DEFAULT '',
+		  post_type varchar(20) DEFAULT '',
+		  city varchar(50) DEFAULT '',
+		  region varchar(50) DEFAULT '',
+		  country varchar(50) DEFAULT '',
+		  latitude varchar(20) DEFAULT '',
+		  longitude varchar(20) DEFAULT '',
+		  UNIQUE KEY comment_id (comment_id)
+		) $collate; ";
 			
 		// Table for storing business hours info
 		$tables .= " CREATE TABLE " . GEODIR_BUSINESS_HOURS_TABLE . " (
@@ -589,7 +581,7 @@ class GeoDir_Admin_Install {
 			open int(11) DEFAULT NULL,
 			close int(11) DEFAULT NULL,
 			PRIMARY KEY  (id)
-			) $collate; " ;
+			) $collate; ";
 
 		return $tables;
 	}

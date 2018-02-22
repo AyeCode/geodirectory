@@ -863,8 +863,11 @@ jQuery(function($) {
                     dropdownCssClass: 'gd-select2-dropdown',
                     placeholder: $(this).data('placeholder'),
 					templateSelection: function(data) {
-						return geodirSelect2TemplateSelection($this, data);
+						return geodirSelect2TemplateSelection($this, data, true);
 					},
+					templateResult: function(data) {
+						return geodirSelect2TemplateSelection($this, data);
+					}
                 }, geodirSelect2FormatString());
                 var $select2 = $(this).select2(select2_args);
                 $select2.addClass('enhanced');
@@ -901,8 +904,11 @@ jQuery(function($) {
                     dropdownCssClass: 'gd-select2-dropdown',
                     placeholder: $(this).data('placeholder'),
 					templateSelection: function(data) {
-						return geodirSelect2TemplateSelection($this, data);
+						return geodirSelect2TemplateSelection($this, data, true);
 					},
+					templateResult: function(data) {
+						return geodirSelect2TemplateSelection($this, data);
+					}
                 }, geodirSelect2FormatString());
                 var $select2 = $(this).select2(select2_args);
                 $select2.addClass('enhanced');
@@ -941,14 +947,30 @@ jQuery(function($) {
     }
 });
 
-function geodirSelect2TemplateSelection($el, data) {
-    if ($el.data('cmultiselect')) {
+function geodirSelect2TemplateSelection($el, data, main) {
+    if (typeof main != 'undefined' && main && $el.data('cmultiselect')) {
         var rEl;
         rEl = '<span class="select2-selection_gd_custom">';
           rEl += '<span class="select2-selection_gd_text">' + data.text + '</span>';
           rEl += '<span class="select2-selection_gd_field">';
             rEl += '<input type="radio" class="select2-selection_gd_v_' + (data.id != 'undefined' ? data.id : '') + '" onchange="jQuery(this).closest(\'form\').find(\'input[name=' + $el.data('cmultiselect') + ']\').val(jQuery(this).val());" value="' + (data.id != 'undefined' ? data.id : '') + '" name="' + $el.data('cmultiselect') + '_radio">';
           rEl += '</span>';
+        rEl += '</span>';
+        return jQuery(rEl);
+    }
+	$option = jQuery(data.element);
+	if ($el.data('fa-icons') && $option.data('fa-icon')) {
+        var style = '';
+		if (typeof main != 'undefined' && main) {
+			if ($el.data('fa-color')) {
+				style = ' style="color:' + $el.data('fa-color') + '"';
+			} else if ($option.data('fa-color')) {
+				style = ' style="color:' + $option.data('fa-color') + '"';
+			}
+		}
+		rEl = '<span class="select2-selection_gd_custom">';
+          rEl += '<i class="fa ' + $option.data('fa-icon') + '"' + style + '></i> ';
+		  rEl += data.text;
         rEl += '</span>';
         return jQuery(rEl);
     }

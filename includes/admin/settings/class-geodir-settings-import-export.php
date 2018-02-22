@@ -561,10 +561,14 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 					}
 
 					if (invalid > 0 && type!='loc') {
-						var msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) could not be added due to blank title/invalid post type/invalid characters used in data.', 'geodirectory' ), '%s', '%d' ) );?></p>';
+						var msgParse;
 
 						if (type=='hood') {
 							msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) could not be added due to invalid neighbourhood data(name, latitude, longitude) or invalid location data(either location_id or city/region/country is empty)', 'geodirectory' ), '%s', '%d' ) );?></p>';
+						} else if (type=='review') {
+							msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) could not be added due to invalid comment content / post ID / rating / user details(user id or author name, author email).', 'geodirectory' ), '%s', '%d' ) );?></p>';
+						} else {
+							msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) could not be added due to blank title/invalid post type/invalid characters used in data.', 'geodirectory' ), '%s', '%d' ) );?></p>';
 						}
 						msgParse = msgParse.replace("%s", invalid);
 						msgParse = msgParse.replace("%d", total);

@@ -1376,10 +1376,96 @@ class GeoDir_Admin_Import_Export {
 	 *
 	 * @return array
 	 */
-	public static function validate_review( $review ) {
-		$review_fixed = array();
+	public static function validate_review( $data ) {
+		global $gd_cache_user;
 
-		return $review_fixed;
+		$data = array_map( 'trim', $data );
+
+		$review_data 							= array();
+		$review_data['comment_ID'] 				= isset( $data['comment_ID'] ) ? absint( $data['comment_ID'] ) : '';
+		$review_data['comment_post_ID'] 		= isset( $data['comment_post_ID'] ) ? absint( $data['comment_post_ID'] ) : '';
+		$review_data['rating'] 					= isset( $data['rating'] ) ? absint( $data['rating'] ) : '';
+		$review_data['comment_content'] 		= isset( $data['comment_content'] ) ? $data['comment_content'] : '';
+		$review_data['comment_date'] 			= isset( $data['comment_date'] ) ? $data['comment_date'] : '';
+		$review_data['comment_date_gmt'] 		= isset( $data['comment_date_gmt'] ) ? $data['comment_date_gmt'] : '';
+		$review_data['comment_approved'] 		= isset( $data['comment_approved'] ) ? $data['comment_approved'] : 0;
+		$review_data['user_id'] 				= isset( $data['user_id'] ) ? absint( $data['user_id'] ) : 0;
+		$review_data['comment_author'] 			= isset( $data['comment_author'] ) ? $data['comment_author'] : '';
+		$review_data['comment_author_email']	= isset( $data['comment_author_email'] ) && is_email( $data['comment_author_email'] ) ? $data['comment_author_email'] : '';
+		$review_data['comment_author_url'] 		= isset( $data['comment_author_url'] ) ? $data['comment_author_url'] : '';
+		$review_data['comment_author_IP'] 		= isset( $data['comment_author_IP'] ) ? $data['comment_author_IP'] : '';
+		
+		if ( empty( $gd_cache_user ) ) {
+			$gd_cache_user = array();
+		}
+
+		$user_ID = $review_data['user_id'];
+		$user = NULL;
+		if ( ! empty( $user_ID ) ) {
+			if ( ! empty( $gd_cache_user[ $user_ID ] ) ) {
+				$user = $gd_cache_user[ $user_ID ];
+			} else {
+				$user = get_user_by( 'id', $user_ID );
+				if ( ! empty( $user ) ) {
+					if ( empty( $user->display_name ) ) {
+						$user->display_name = $user->user_login;
+					}
+					$gd_cache_user[ $user_ID ] = $user;
+				}
+			}
+		}
+
+		if ( ! empty( $user ) ) {
+			if ( empty( $review_data['comment_author'] ) ) {
+				$review_data['comment_author'] = $user->display_name;
+			}
+
+			if ( empty( $review_data['comment_author_email'] ) ) {
+				$review_data['comment_author_email'] = $user->user_email;
+			}
+
+			if ( empty( $review_data['comment_author_url'] ) ) {
+				$review_data['comment_author_url'] = $user->user_url;
+			}
+		}
+
+		if ( $review_data['comment_approved'] == 'approve' || $review_data['comment_approved'] == 'approved' ) {
+			$review_data['comment_approved'] = 1;
+		}
+
+		if ( $review_data['comment_approved'] == 'pending' || $review_data['comment_approved'] == 'unapproved' || $review_data['comment_approved'] == 'hold' ) {
+			$review_data['comment_approved'] = 0;
+		}
+
+		if ( ! empty( $review_data['comment_date'] ) ) {
+			$review_data['comment_date'] = geodir_date( $review_data['comment_date'], 'Y-m-d H:i:s' );
+		}
+
+		if ( ! empty( $review_data['comment_date_gmt'] ) ) {
+			$review_data['comment_date_gmt'] = geodir_date( $review_data['comment_date_gmt'], 'Y-m-d H:i:s' );
+		}
+
+		if ( empty( $review_data['comment_date'] ) ) {
+			$review_data['comment_date'] = current_time( 'mysql' );
+		}
+
+		if ( empty( $review_data['comment_date_gmt'] ) ) {
+			$review_data['comment_date_gmt'] = get_gmt_from_date( $review_data['comment_date'] );
+		}
+
+		$review_data = wp_filter_comment( $review_data );
+
+		if ( ! empty( $review_data['comment_ID'] ) ) {
+			$unsets = array( 'comment_date', 'comment_date_gmt', 'comment_agent', 'comment_author_IP' );
+
+			foreach ( $unsets as $unset ) {
+				if ( empty( $review_data[ $unset ] ) && isset( $review_data[ $unset ] ) ) {
+					unset( $review_data[ $unset ] );
+				}
+			}
+		}
+
+		return apply_filters( 'validate_review', $review_data, $data );
 	}
 
 	/**
@@ -1758,17 +1844,17 @@ class GeoDir_Admin_Import_Export {
 		global $wpdb;
 
 		if ( empty( $comment_query->query_vars['count'] ) ) {
-			$clauses['fields'] = "{$wpdb->comments}.*, r.*, r.overall_rating AS rating";
+			$clauses['fields'] = "{$wpdb->comments}.*, r.*";
 		}
 
-		$clauses['join'] .= " INNER JOIN " . GEODIR_REVIEW_TABLE . " AS r ON r.comment_ID = {$wpdb->comments}.comment_ID";
+		$clauses['join'] .= " INNER JOIN " . GEODIR_REVIEW_TABLE . " AS r ON r.comment_id = {$wpdb->comments}.comment_ID";
 
-		$where = array( "r.overall_rating > 0" );
+		$where = array( "r.rating > 0" );
 		if ( ! empty( $_REQUEST['gd_imex']['min_rating'] ) ) {
-			$where[] = "r.overall_rating >= " . absint( $_REQUEST['gd_imex']['min_rating'] );
+			$where[] = "r.rating >= " . absint( $_REQUEST['gd_imex']['min_rating'] );
 		}
 		if ( ! empty( $_REQUEST['gd_imex']['max_rating'] ) ) {
-			$where[] = "r.overall_rating <= " . absint( $_REQUEST['gd_imex']['max_rating'] );
+			$where[] = "r.rating <= " . absint( $_REQUEST['gd_imex']['max_rating'] );
 		}
 		$clauses['join'] .= " AND " . implode( " AND ", $where );
 
@@ -1807,15 +1893,12 @@ class GeoDir_Admin_Import_Export {
 			$csv_row[] = 'comment_author_email';
 			$csv_row[] = 'comment_author_url';
 			$csv_row[] = 'comment_author_IP';
-			$csv_row[] = 'post_title';
 			$csv_row[] = 'post_type';
-			$csv_row[] = 'post_status';
-			$csv_row[] = 'post_date';
-			$csv_row[] = 'post_city';
-			$csv_row[] = 'post_region';
-			$csv_row[] = 'post_country';
-			$csv_row[] = 'post_latitude';
-			$csv_row[] = 'post_longitude';
+			$csv_row[] = 'city';
+			$csv_row[] = 'region';
+			$csv_row[] = 'country';
+			$csv_row[] = 'latitude';
+			$csv_row[] = 'longitude';
 
 			$csv_rows[] = $csv_row;
 
@@ -1832,15 +1915,12 @@ class GeoDir_Admin_Import_Export {
 				$csv_row[] = $item->comment_author_email;
 				$csv_row[] = $item->comment_author_url;
 				$csv_row[] = $item->comment_author_IP;
-				$csv_row[] = $item->post_title;
 				$csv_row[] = $item->post_type;
-				$csv_row[] = $item->post_status;
-				$csv_row[] = $item->post_date;
-				$csv_row[] = $item->post_city;
-				$csv_row[] = $item->post_region;
-				$csv_row[] = $item->post_country;
-				$csv_row[] = $item->post_latitude;
-				$csv_row[] = $item->post_longitude;
+				$csv_row[] = $item->city;
+				$csv_row[] = $item->region;
+				$csv_row[] = $item->country;
+				$csv_row[] = $item->latitude;
+				$csv_row[] = $item->longitude;
 
 				$csv_rows[] = $csv_row;
 			}
@@ -1963,7 +2043,7 @@ class GeoDir_Admin_Import_Export {
 	 * @return array|string
 	 */
 	public static function import_reviews() {
-
+		global $user_ID;
 		$limit     = isset( $_POST['limit'] ) && $_POST['limit'] ? (int) $_POST['limit'] : 1;
 		$processed = isset( $_POST['processed'] ) ? (int) $_POST['processed'] : 0;
 
@@ -1978,37 +2058,84 @@ class GeoDir_Admin_Import_Export {
 			$images  = 0;
 
 			$update_or_skip = isset( $_POST['_ch'] ) && $_POST['_ch'] == 'update' ? 'update' : 'skip';
+			$log_error = __( 'GD IMPORT REVIEW [ROW %d]:', 'geodirectory' );
 
 			foreach ( $rows as $row ) {
+				$line_no = $processed + $i + 1;
+				$line_error = wp_sprintf( $log_error, $line_no );
 				$row = self::validate_review( $row );
-
-				if ( $update_or_skip == 'skip' && isset( $row['comment_ID'] ) && $row['comment_ID'] ) {
-					$skipped ++;
+				
+				if ( empty( $row ) ) {
+					geodir_error_log( $line_error . ' ' . __( 'data is empty.', 'geodirectory' ) );
+					$invalid++;
 					continue;
 				}
 
-				if ( $row ) {
-					// Update
-					if ( isset( $row['comment_ID'] ) && $row['comment_ID'] ) {
-						$result = 0;
+				if ( $update_or_skip == 'skip' && isset( $row['comment_ID'] ) && $row['comment_ID'] ) {
+					$skipped++;
+					continue;
+				}
+				
+				$valid = true;
+				if ( empty( $row['comment_content'] ) ) {
+					$valid = false;
+					geodir_error_log( $line_error . ' ' . __( 'invalid comment content.', 'geodirectory' ) );
+				}
+				if ( !( ! empty( $row['comment_post_ID'] ) && geodir_is_gd_post_type( get_post_type( $row['comment_post_ID'] ) ) ) ) {
+					$valid = false;
+					geodir_error_log( $line_error . ' ' . __( 'invalid comment post ID.', 'geodirectory' ) );
+				}
+				if ( empty( $row['user_id'] ) && ( empty( $row['comment_author'] ) || empty( $row['comment_author_email'] ) ) ) {
+					$valid = false;
+					geodir_error_log( $line_error . ' ' . __( 'invalid user details(user id or author name, author email).', 'geodirectory' ) );
+				}
+				if ( empty( $row['rating'] ) ) {
+					$valid = false;
+					geodir_error_log( $line_error . ' ' . __( 'invalid rating.', 'geodirectory' ) );
+				}
+				
+				if ( ! $valid ) {
+					$invalid++;
+					continue;
+				}
 
-						if ( $result ) {
-							$updated ++;
-						} else {
-							$invalid ++;
-						}
+				$user_ID = $row['user_id'];
+				$_REQUEST['geodir_overallrating'] = $row['rating'];
 
-						// insert
-					} else {
-						$result = 0;
-						if ( $result ) {
-							$created ++;
-						} else {
-							$invalid ++;
-						}
+				do_action( 'geodir_pre_import_review_data', $row );
+
+				$success = false;
+
+				// update
+				if ( ! empty( $row['comment_ID'] ) ) {
+					$save_id = wp_update_comment( $row );
+
+					if ( $save_id !== false ) { // updated
+						$save_id = $row['comment_ID'];
+						GeoDir_Comments::edit_comment( $save_id );
+
+						$updated++;
+					} else { // error
+						$invalid++;
+						geodir_error_log( $line_error . ' ' . __( 'invalid data.', 'geodirectory' ) );
 					}
+
+				// insert
 				} else {
-					$invalid ++;
+					if ( isset( $row['comment_ID'] ) ) {
+						unset( $row['comment_ID'] );
+					}
+
+					$save_id = wp_insert_comment( $row );
+
+					if ( ! is_wp_error( $save_id ) && $save_id > 0 ) { // inserted
+						GeoDir_Comments::save_rating( $save_id );
+
+						$created++;
+					} else { // error
+						$invalid++;
+						geodir_error_log( $line_error . ' ' . __( 'invalid data.', 'geodirectory' ) );
+					}
 				}
 			}
 

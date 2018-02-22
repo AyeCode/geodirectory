@@ -504,7 +504,7 @@ function geodir_diagnose_ratings()
     $output_str = '';
 
     // check review locations
-    if ($wpdb->get_results("SELECT * FROM " . GEODIR_REVIEW_TABLE . " WHERE post_city='' OR post_city IS NULL OR post_latitude='' OR post_latitude IS NULL")) {
+    if ($wpdb->get_results("SELECT * FROM " . GEODIR_REVIEW_TABLE . " WHERE city='' OR city IS NULL OR latitude='' OR latitude IS NULL")) {
         $output_str .= "<li>" . __('Review locations missing or broken', 'geodirectory') . "</li>";
         $is_error_during_diagnose = true;
 
@@ -519,24 +519,6 @@ function geodir_diagnose_ratings()
     } else {
         $output_str .= "<li>" . __('Review locations ok', 'geodirectory') . "</li>";
     }
-
-    // check review content
-    if ($wpdb->get_results("SELECT * FROM " . GEODIR_REVIEW_TABLE . " WHERE comment_content IS NULL")) {
-        $output_str .= "<li>" . __('Review content missing or broken', 'geodirectory') . "</li>";
-        $is_error_during_diagnose = true;
-
-        if ($fix) {
-            if (geodir_fix_review_content()) {
-                $output_str .= "<li><strong>" . __('-->FIXED: Review content fixed', 'geodirectory') . "</strong></li>";
-            } else {
-                $output_str .= "<li><strong>" . __('-->FAILED: Review content fix failed', 'geodirectory') . "</strong></li>";
-            }
-        }
-
-    } else {
-        $output_str .= "<li>" . __('Review content ok', 'geodirectory') . "</li>";
-    }
-
 
     if ($is_error_during_diagnose) {
         $info_div_class = "geodir_problem_info";

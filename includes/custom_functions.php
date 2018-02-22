@@ -1544,7 +1544,7 @@ function geodir_get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_le
 	$where = '';
 
 	if ( !empty( $post_type ) ) {
-		$where .= $wpdb->prepare( " AND r.post_type = %s", $post_type );
+		$where .= $wpdb->prepare( " AND p.post_type = %s", $post_type );
 	}
 
 	$location_allowed = !empty( $post_type ) && function_exists( 'geodir_cpt_no_location' ) && geodir_cpt_no_location( $post_type ) ? false : true;
@@ -1556,13 +1556,13 @@ function geodir_get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_le
 		$city = !empty( $location_terms['gd_city'] ) ? get_actual_location_name( 'city', $location_terms['gd_city'] ) : '';
 
 		if ( $country ) {
-			$where .= $wpdb->prepare( " AND r.post_country LIKE %s", $country );
+			$where .= $wpdb->prepare( " AND r.country LIKE %s", $country );
 		}
 		if ( $region ) {
-			$where .= $wpdb->prepare( " AND r.post_region LIKE %s", $region );
+			$where .= $wpdb->prepare( " AND r.region LIKE %s", $region );
 		}
 		if ( $city ) {
-			$where .= $wpdb->prepare( " AND r.post_city LIKE %s", $city );
+			$where .= $wpdb->prepare( " AND r.city LIKE %s", $city );
 		}
 	}
 
@@ -1575,24 +1575,16 @@ function geodir_get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_le
 		}
 	}
 	
-	$request = "SELECT r.id AS ID, r.post_type, r.comment_id AS comment_ID, r.post_date AS comment_date, r.overall_rating, r.user_id, r.post_id FROM " . GEODIR_REVIEW_TABLE . " AS r JOIN " . $wpdb->comments . " AS c ON c.comment_ID = r.comment_id JOIN " . $wpdb->posts . " AS p ON p.ID = c.comment_post_ID " . $join . " WHERE c.comment_parent = 0 AND c.comment_approved = 1 AND r.status = 1 AND r.overall_rating >= 1 AND p.post_status = 'publish' " . $where . " ORDER BY r.post_date DESC, r.id DESC LIMIT 5";
+	$request = "SELECT c.comment_ID, c.comment_author, c.comment_author_email, c.comment_content, c.comment_date, r.rating, r.user_id, r.post_id, r.post_type FROM " . GEODIR_REVIEW_TABLE . " AS r JOIN " . $wpdb->comments . " AS c ON c.comment_ID = r.comment_id JOIN " . $wpdb->posts . " AS p ON p.ID = c.comment_post_ID " . $join . " WHERE c.comment_parent = 0 AND c.comment_approved = 1 AND r.rating > 0 AND p.post_status = 'publish' " . $where . " ORDER BY c.comment_date DESC, c.comment_ID DESC LIMIT 5";
 	
 	$comments = $wpdb->get_results( $request );
 	
 	foreach ( $comments as $comment ) {
-		// Set the extra comment info needed.
-		$comment_extra = $wpdb->get_row( "SELECT * FROM $wpdb->comments WHERE comment_ID =$comment->comment_ID" );
-		$comment->comment_content      = $comment_extra->comment_content;
-		$comment->comment_author       = $comment_extra->comment_author;
-		$comment->comment_author_email = $comment_extra->comment_author_email;
-
-		$comment_id      = '';
 		$comment_id      = $comment->comment_ID;
 		$comment_content = strip_tags( $comment->comment_content );
-
 		$comment_content = preg_replace( '#(\\[img\\]).+(\\[\\/img\\])#', '', $comment_content );
 
-		$permalink            = get_permalink( $comment->ID ) . "#comment-" . $comment->comment_ID;
+		$permalink            = get_permalink( $comment->post_id ) . "#comment-" . $comment->comment_ID;
 		$comment_author_email = $comment->comment_author_email;
 		$comment_post_ID      = $comment->post_id;
 
@@ -1666,9 +1658,8 @@ function geodir_get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_le
 			}
 			$comments_echo .= '<span class="geodir_reviewer_reviewed">' . __( 'reviewed', 'geodirectory' ) . '</span> ';
 			$comments_echo .= '<a href="' . $permalink . '" class="geodir_reviewer_title">' . $post_title . '</a>';
-			$comments_echo .= geodir_get_rating_stars( $comment->overall_rating, $comment_post_ID );
+			$comments_echo .= geodir_get_rating_stars( $comment->rating, $comment_post_ID );
 			$comments_echo .= '<p class="geodir_reviewer_text">' . $comment_excerpt . '';
-			//echo preg_replace('#(\\[img\\]).+(\\[\\/img\\])#', '', $comment_excerpt);
 			$comments_echo .= '</p>';
 
 			$comments_echo .= "</span>\n";
@@ -2145,7 +2136,7 @@ function geodir_wpml_duplicate_listing($post_id, $request_info) {
 function geodir_wpml_duplicate_post_reviews($master_post_id, $tr_post_id, $lang) {
     global $wpdb;
 
-    $reviews = $wpdb->get_results($wpdb->prepare("SELECT comment_id FROM " . GEODIR_REVIEW_TABLE . " WHERE post_id=%d ORDER BY id ASC", $master_post_id), ARRAY_A);
+    $reviews = $wpdb->get_results($wpdb->prepare("SELECT comment_id FROM " . GEODIR_REVIEW_TABLE . " WHERE post_id=%d ORDER BY comment_id ASC", $master_post_id), ARRAY_A);
 
     if (!empty($reviews)) {
         foreach ($reviews as $review) {
@@ -2294,14 +2285,14 @@ function geodir_icl_duplicate_post_images($master_post_id, $tr_post_id, $lang) {
 function geodir_wpml_duplicate_post_review($master_comment_id, $master_post_id, $tr_post_id, $lang) {
     global $wpdb, $plugin_prefix, $sitepress;
 
-    $review = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . GEODIR_REVIEW_TABLE . " WHERE comment_id=%d ORDER BY id ASC", $master_comment_id), ARRAY_A);
+    $review = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . GEODIR_REVIEW_TABLE . " WHERE comment_id=%d ORDER BY comment_id ASC", $master_comment_id), ARRAY_A);
 
     if (empty($review)) {
         return false;
     }
     if ($review['post_id'] != $master_post_id) {
         $wpdb->query($wpdb->prepare("UPDATE " . GEODIR_REVIEW_TABLE . " SET post_id=%d WHERE comment_id=%d", $master_post_id, $master_comment_id));
-        GeoDir_Admin_Comments::update_post_rating($master_post_id, $post_type);
+        GeoDir_Comments::update_post_rating($master_post_id, $post_type);
     }
 
     $tr_comment_id = geodir_wpml_duplicate_comment_exists($tr_post_id, $master_comment_id);
@@ -2313,35 +2304,30 @@ function geodir_wpml_duplicate_post_review($master_comment_id, $master_post_id, 
     $post_type = get_post_type($master_post_id);
     $post_table = $plugin_prefix . $post_type . '_detail';
 
-    $translated_post = $wpdb->get_row($wpdb->prepare("SELECT post_title, post_latitude, post_longitude, post_city, post_region, post_country FROM " . $post_table . " WHERE post_id = %d", $tr_post_id), ARRAY_A);
+    $translated_post = $wpdb->get_row($wpdb->prepare("SELECT latitude, longitude, city, region, country FROM " . $post_table . " WHERE post_id = %d", $tr_post_id), ARRAY_A);
     if (empty($translated_post)) {
         return false;
     }
 
     $review['comment_id'] = $tr_comment_id;
     $review['post_id'] = $tr_post_id;
-    $review['post_title'] = $translated_post['post_title'];
-    $review['post_city'] = $translated_post['post_city'];
-    $review['post_region'] = $translated_post['post_region'];
-    $review['post_country'] = $translated_post['post_country'];
-    $review['post_latitude'] = $translated_post['post_latitude'];
-    $review['post_longitude'] = $translated_post['post_longitude'];
+    $review['city'] = $translated_post['city'];
+    $review['region'] = $translated_post['region'];
+    $review['country'] = $translated_post['country'];
+    $review['latitude'] = $translated_post['latitude'];
+    $review['longitude'] = $translated_post['longitude'];
 
-    if (isset($review['id'])) {
-        unset($review['id']);
-    }
-
-    $tr_review_id = $wpdb->get_var($wpdb->prepare("SELECT id FROM " . GEODIR_REVIEW_TABLE . " WHERE comment_id=%d AND post_id=%d ORDER BY id ASC", $tr_comment_id, $tr_post_id));
+    $tr_review_id = $wpdb->get_var($wpdb->prepare("SELECT comment_id FROM " . GEODIR_REVIEW_TABLE . " WHERE comment_id=%d AND post_id=%d ORDER BY comment_id ASC", $tr_comment_id, $tr_post_id));
 
     if ($tr_review_id) { // update review
-        $wpdb->update(GEODIR_REVIEW_TABLE, $review, array('id' => $tr_review_id));
+        $wpdb->update(GEODIR_REVIEW_TABLE, $review, array('comment_id' => $tr_review_id));
     } else { // insert review
         $wpdb->insert(GEODIR_REVIEW_TABLE, $review);
         $tr_review_id = $wpdb->insert_id;
     }
 
     if ($tr_post_id) {
-        GeoDir_Admin_Comments::update_post_rating($tr_post_id, $post_type);
+        GeoDir_Comments::update_post_rating($tr_post_id, $post_type);
         
         if (defined('GEODIRREVIEWRATING_VERSION') && geodir_get_option('geodir_reviewrating_enable_review') && $sitepress->get_setting('sync_comments_on_duplicates')) {
             $wpdb->query($wpdb->prepare("DELETE FROM " . GEODIR_COMMENTS_REVIEWS_TABLE . " WHERE comment_id = %d", array($tr_comment_id)));

@@ -295,18 +295,14 @@ jQuery(document).ready(function () {
 
 function best_of_show_review_in_excerpt($excerpt) {
     global $wpdb, $post;
-    $review_table = GEODIR_REVIEW_TABLE;
-    $request = "SELECT comment_ID FROM $review_table WHERE post_id = $post->ID ORDER BY post_date DESC, id DESC LIMIT 1";
-    $comments = $wpdb->get_results($request);
 
-    if ($comments) {
-        foreach ($comments as $comment) {
-            // Set the extra comment info needed.
-            $comment_extra = $wpdb->get_row("SELECT * FROM $wpdb->comments WHERE comment_ID =$comment->comment_ID");
-            $comment_content = $comment_extra->comment_content;
-            $excerpt = strip_tags($comment_content);
-        }
+    $query = $wpdb->prepare( "SELECT cmt.comment_content FROM " . GEODIR_REVIEW_TABLE . " AS r INNER JOIN {$wpdb->comments} AS cmt ON cmt.comment_ID = r.comment_id WHERE cmt.comment_post_ID = %d ORDER BY cmt.comment_date DESC, cmt.comment_id DESC", array( $post->ID ) );
+    $review = $wpdb->get_row( $query );
+
+    if ( ! empty( $review ) ) {
+        $excerpt = strip_tags( $review->comment_content );
     }
+
     return $excerpt;
 }
 
