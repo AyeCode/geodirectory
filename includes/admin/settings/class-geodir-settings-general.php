@@ -29,11 +29,11 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 		$this->id    = 'general';
 		$this->label = __( 'General', 'geodirectory' );
 
-		add_filter( 'woocommerce_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
-		add_action( 'woocommerce_settings_' . $this->id, array( $this, 'output' ) );
-		add_action( 'woocommerce_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
-		add_action( 'woocommerce_settings_save_' . $this->id, array( $this, 'save' ) );
-		add_action( 'woocommerce_sections_' . $this->id, array( $this, 'output_sections' ) );
+		add_filter( 'geodir_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
+		add_action( 'geodir_settings_' . $this->id, array( $this, 'output' ) );
+		add_action( 'geodir_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
+		add_action( 'geodir_settings_save_' . $this->id, array( $this, 'save' ) );
+		add_action( 'geodir_sections_' . $this->id, array( $this, 'output_sections' ) );
 
 
 	}
@@ -54,7 +54,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 			'uninstall' 	=> __( 'Uninstall', 'geodirectory' ),
 		);
 
-		return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
+		return apply_filters( 'geodir_get_sections_' . $this->id, $sections );
 	}
 
 	/**
@@ -618,7 +618,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 		}
 
 
-		return apply_filters( 'woocommerce_get_settings_' . $this->id, $settings );
+		return apply_filters( 'geodir_get_settings_' . $this->id, $settings );
 	}
 
 	public static function get_map_language_setting(){
@@ -674,7 +674,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 	 * @param string $desc (default: '')
 	 */
 	public function color_picker( $name, $id, $value, $desc = '' ) {
-		echo '<div class="color_box">' . wc_help_tip( $desc ) . '
+		echo '<div class="color_box">' . geodir_help_tip( $desc ) . '
 			<input name="' . esc_attr( $id ) . '" id="' . esc_attr( $id ) . '" type="text" value="' . esc_attr( $value ) . '" class="colorpick" /> <div id="colorPickerDiv_' . esc_attr( $id ) . '" class="colorpickdiv"></div>
 		</div>';
 	}

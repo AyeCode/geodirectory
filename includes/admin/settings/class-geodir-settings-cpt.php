@@ -43,14 +43,14 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			self::$sub_tab   = ! empty( $_REQUEST['tab'] ) ? sanitize_title( $_REQUEST['tab'] ) : 'general';
 
 			$this->id    = 'cpt';
-			$this->label = __( 'CPT Settings', 'woocommerce' );
+			$this->label = __( 'CPT Settings', 'geodirectory' );
 
-			add_filter( 'woocommerce_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
-			add_action( 'woocommerce_settings_' . $this->id, array( $this, 'output' ) );
-			add_action( 'woocommerce_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
+			add_filter( 'geodir_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
+			add_action( 'geodir_settings_' . $this->id, array( $this, 'output' ) );
+			add_action( 'geodir_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
 
-			add_action( 'woocommerce_settings_save_' . $this->id, array( $this, 'save' ) );
-			add_action( 'woocommerce_sections_' . $this->id, array( $this, 'output_sections' ) );
+			add_action( 'geodir_settings_save_' . $this->id, array( $this, 'save' ) );
+			add_action( 'geodir_sections_' . $this->id, array( $this, 'output_sections' ) );
 
 			add_filter( 'geodir_get_settings_'.$this->id , array( $this, 'set_current_values' ) );
 		}
@@ -63,14 +63,14 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 		public function get_sections() {
 
 			$sections = array(
-				''             => __( 'General', 'woocommerce' ),
-				'display'      => __( 'Display', 'woocommerce' ),
-				'inventory'    => __( 'Inventory', 'woocommerce' ),
-				'downloadable' => __( 'Downloadable products', 'woocommerce' ),
+				''             => __( 'General', 'geodirectory' ),
+				'display'      => __( 'Display', 'geodirectory' ),
+				'inventory'    => __( 'Inventory', 'geodirectory' ),
+				'downloadable' => __( 'Downloadable products', 'geodirectory' ),
 			);
 			$sections = array();
 
-			return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
+			return apply_filters( 'geodir_get_sections_' . $this->id, $sections );
 		}
 
 		/**
@@ -227,7 +227,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 
 
 				array(
-					'title'    => __( 'Labels', 'woocommerce' ),
+					'title'    => __( 'Labels', 'geodirectory' ),
 					'type'     => 'title',
 					'desc'     => 'Labels are used around WordPress to describe the post type and its actions.',
 					'id'       => 'cpt_settings_labels',
@@ -385,7 +385,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 
 
 				array(
-					'title'    => __( 'SEO', 'woocommerce' ),
+					'title'    => __( 'SEO', 'geodirectory' ),
 					'type'     => 'title',
 					'desc'     => '',
 					'id'       => 'cpt_settings_seo',

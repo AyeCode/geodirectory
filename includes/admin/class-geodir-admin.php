@@ -60,25 +60,25 @@ class GeoDir_Admin {
 	public function set_page_labels( $post_states, $post ) {
 		if ( $post->ID == geodir_home_page_id() ) {
 			$post_states['geodir_home_page'] = __( 'GD Home Page', 'geodirectory' ) .
-			                                   gd_help_tip( __( 'If you wish to use GD as your homepage you should use this page in the settings.', 'geodirectory' ) );
+			                                   geodir_help_tip( __( 'If you wish to use GD as your homepage you should use this page in the settings.', 'geodirectory' ) );
 		} elseif ( $post->ID == geodir_add_listing_page_id() ) {
 			$post_states['geodir_add_listing_page'] = __( 'GD Add listing page', 'geodirectory' ) .
-			                                          gd_help_tip( __( 'This is where users will add listings via the frontend if enabled.', 'geodirectory' ) );
+			                                          geodir_help_tip( __( 'This is where users will add listings via the frontend if enabled.', 'geodirectory' ) );
 		} elseif ( $post->ID == geodir_location_page_id() ) {
 			$post_states['geodir_location_page'] = __( 'GD Location page', 'geodirectory' ) .
-			                                       gd_help_tip( __( 'This page can be used as the main directory page and is also used by some addons.', 'geodirectory' ) );
+			                                       geodir_help_tip( __( 'This page can be used as the main directory page and is also used by some addons.', 'geodirectory' ) );
 		} elseif ( $post->ID == geodir_search_page_id() ) {
 			$post_states['geodir_search_page'] = __( 'GD Search page', 'geodirectory' ) .
-			                                     gd_help_tip( __( 'This is the GD search results page.', 'geodirectory' ) );
+			                                     geodir_help_tip( __( 'This is the GD search results page.', 'geodirectory' ) );
 		} elseif ( $post->ID == geodir_archive_page_id() ) {
 			$post_states['geodir_archive_page'] = __( 'GD Archive template', 'geodirectory' ) .
-			                                      gd_help_tip( __( 'Used to design the archive pages but should never be linked to directly.', 'geodirectory' ) );
+			                                      geodir_help_tip( __( 'Used to design the archive pages but should never be linked to directly.', 'geodirectory' ) );
 		} elseif ( $post->ID == geodir_details_page_id() ) {
 			$post_states['geodir_details_page'] = __( 'GD Details template', 'geodirectory' ) .
-			                                      gd_help_tip( __( 'Used to design the details page but should never be linked to directly.', 'geodirectory' ) );
+			                                      geodir_help_tip( __( 'Used to design the details page but should never be linked to directly.', 'geodirectory' ) );
 		} elseif ( $post->ID == geodir_terms_and_conditions_page_id() ) {
 			$post_states['geodir_terms_and_conditions_page'] = __( 'GD T&Cs', 'geodirectory' ) .
-			                                                   gd_help_tip( __( 'This is the page that will be used for your terms and conditions.', 'geodirectory' ) );
+			                                                   geodir_help_tip( __( 'This is the page that will be used for your terms and conditions.', 'geodirectory' ) );
 		}
 
 		return $post_states;
@@ -162,15 +162,10 @@ class GeoDir_Admin {
 	 */
 	public function admin_redirects() {
 		// Nonced plugin install redirects (whitelisted)
-		if ( ! empty( $_GET['wc-install-plugin-redirect'] ) ) {
-			$plugin_slug = geodir_clean( $_GET['wc-install-plugin-redirect'] );
+		if ( ! empty( $_GET['gd-install-plugin-redirect'] ) ) {
+			$plugin_slug = geodir_clean( $_GET['gd-install-plugin-redirect'] );
 
-			if ( current_user_can( 'install_plugins' ) && in_array( $plugin_slug, array( 'woocommerce-gateway-stripe' ) ) ) {
-				$nonce = wp_create_nonce( 'install-plugin_' . $plugin_slug );
-				$url   = self_admin_url( 'update.php?action=install-plugin&plugin=' . $plugin_slug . '&_wpnonce=' . $nonce );
-			} else {
-				$url = admin_url( 'plugin-install.php?tab=search&type=term&s=' . $plugin_slug );
-			}
+			$url = admin_url( 'plugin-install.php?tab=search&type=term&s=' . $plugin_slug );
 
 			wp_safe_redirect( $url );
 			exit;
@@ -253,17 +248,17 @@ class GeoDir_Admin {
 	 * @return string
 	 */
 	public function admin_footer_text( $footer_text ) {
-		if ( ! current_user_can( 'manage_options' ) || ! function_exists( 'gd_get_screen_ids' ) ) {
+		if ( ! current_user_can( 'manage_options' ) || ! function_exists( 'geodir_get_screen_ids' ) ) {
 			return $footer_text;
 		}
 		$current_screen = get_current_screen();
-		$gd_pages       = gd_get_screen_ids();
+		$gd_pages       = geodir_get_screen_ids();
 
 
 		// Set only GD pages.
 		$gd_pages = array_diff( $gd_pages, array( 'profile', 'user-edit' ) );
 
-		// Check to make sure we're on a WooCommerce admin page.
+		// Check to make sure we're on a GeoDirectory admin page.
 		if ( isset( $current_screen->id ) && apply_filters( 'geodirectory_display_admin_footer_text', in_array( $current_screen->id, $gd_pages ) ) ) {
 			// Change the footer text
 			if ( ! get_option( 'geodirectory_admin_footer_text_rated' ) ) {

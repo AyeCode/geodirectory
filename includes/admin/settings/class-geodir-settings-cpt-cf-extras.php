@@ -23,21 +23,21 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 		/**
 		 * The single instance of the class.
 		 *
-		 * @var WooCommerce
-		 * @since 2.1
+		 * @var GeoDirectory
+		 * @since 2.0.0
 		 */
 		protected static $_instance = null;
 
 
 		/**
-		 * Main WooCommerce Instance.
+		 * Main GeoDirectory Instance.
 		 *
-		 * Ensures only one instance of WooCommerce is loaded or can be loaded.
+		 * Ensures only one instance of GeoDirectory is loaded or can be loaded.
 		 *
-		 * @since 2.1
+		 * @since 2.0.0
 		 * @static
-		 * @see WC()
-		 * @return WooCommerce - Main instance.
+		 * @see GeoDir()
+		 * @return GeoDirectory - Main instance.
 		 */
 		public static function instance() {
 			if ( is_null( self::$_instance ) ) {

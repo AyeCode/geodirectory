@@ -2398,8 +2398,8 @@ add_filter('geodir_get_rating_stars_html', 'geodir_font_awesome_rating_stars_htm
 add_action('wp_head', 'geodir_font_awesome_rating_css');
 add_action('admin_head', 'geodir_font_awesome_rating_css');
 
-add_filter('get_comments_link', 'gd_get_comments_link', 10, 2);
-function gd_get_comments_link($comments_link, $post_id) {
+add_filter('get_comments_link', 'geodir_get_comments_link', 10, 2);
+function geodir_get_comments_link($comments_link, $post_id) {
     $post_type = get_post_type($post_id);
 
     $all_postypes = geodir_get_posttypes();

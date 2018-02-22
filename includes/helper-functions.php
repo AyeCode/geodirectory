@@ -544,14 +544,14 @@ function geodir_get_ip() {
 }
 
 /**
- * Register die handler for gd_die()
+ * Register die handler for geodir_die()
  *
  * @since 1.5.9
  * @package GeoDirectory
  */
-function _gd_die_handler() {
+function geodir_die_handler() {
     if ( defined( 'GD_TESTING_MODE' ) ) {
-        return '_gd_die_handler';
+        return 'geodir_die_handler';
     } else {
         die();
     }
@@ -560,7 +560,7 @@ function _gd_die_handler() {
 /**
  * Wrapper function for wp_die(). This function adds filters for wp_die() which
  * kills execution of the script using wp_die(). This allows us to then to work
- * with functions using gd_die() in the unit tests.
+ * with functions using geodir_die() in the unit tests.
  *
  * @since 1.5.9
  * @package GeoDirectory
@@ -568,9 +568,9 @@ function _gd_die_handler() {
  * @param string $title   Optional. Error title.
  * @param int $status     Optional. Status code.
  */
-function gd_die( $message = '', $title = '', $status = 400 ) {
-    add_filter( 'wp_die_ajax_handler', '_gd_die_handler', 10, 3 );
-    add_filter( 'wp_die_handler', '_gd_die_handler', 10, 3 );
+function geodir_die( $message = '', $title = '', $status = 400 ) {
+    add_filter( 'wp_die_ajax_handler', 'geodir_die_handler', 10, 3 );
+    add_filter( 'wp_die_handler', 'geodir_die_handler', 10, 3 );
     wp_die( $message, $title, array( 'response' => $status ));
 }
 

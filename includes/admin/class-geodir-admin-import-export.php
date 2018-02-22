@@ -1,6 +1,6 @@
 <?php
 /**
- * Handel import and exports.
+ * Handle import and exports.
  *
  * @author   AyeCode
  * @category Admin
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 /**
- * WC_Admin_Menus Class.
+ * GeoDir_Admin_Import_Export Class.
  */
 class GeoDir_Admin_Import_Export {
 
@@ -671,7 +671,7 @@ class GeoDir_Admin_Import_Export {
 			}
 			// WPML
 			wp_send_json( $json );
-			gd_die();
+			geodir_die();
 		} else if ( isset( $_REQUEST['_st'] ) ) {
 			$line_count = (int) self::file_line_count( $file_path_temp );
 			$percentage = count( $posts_count ) > 0 && $line_count > 0 ? ceil( $line_count / $posts_count ) * 100 : 0;
@@ -684,7 +684,7 @@ class GeoDir_Admin_Import_Export {
 			}
 			// WPML
 			wp_send_json( $json );
-			gd_die();
+			geodir_die();
 		} else {
 			if ( ! $posts_count > 0 ) {
 				$json['error'] = __( 'No records to export.', 'geodirectory' );

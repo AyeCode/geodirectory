@@ -71,7 +71,7 @@ class GeoDir_Admin_Settings {
 //			$settings[] = include( 'settings/class-wc-settings-api.php' );
 			}
 
-			self::$settings = apply_filters( 'woocommerce_get_settings_pages', $settings );
+			self::$settings = apply_filters( 'geodir_get_settings_pages', $settings );
 		}
 
 		return self::$settings;
@@ -83,25 +83,25 @@ class GeoDir_Admin_Settings {
 	public static function save() {
 		global $current_tab;
 
-		if ( empty( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'woocommerce-settings' ) ) {
-			die( __( 'Action failed. Please refresh the page and retry.', 'woocommerce' ) );
+		if ( empty( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'geodirectory-settings' ) ) {
+			die( __( 'Action failed. Please refresh the page and retry.', 'geodirectory' ) );
 		}
 
 		// Trigger actions
-		do_action( 'woocommerce_settings_save_' . $current_tab );
-		do_action( 'woocommerce_update_options_' . $current_tab );
-		do_action( 'woocommerce_update_options' );
+		do_action( 'geodir_settings_save_' . $current_tab );
+		do_action( 'geodir_update_options_' . $current_tab );
+		do_action( 'geodir_update_options' );
 
-		self::add_message( __( 'Your settings have been saved.', 'woocommerce' ) );
+		self::add_message( __( 'Your settings have been saved.', 'geodirectory' ) );
 		self::check_download_folder_protection();
 
 		// Clear any unwanted data and flush rules
-		delete_transient( 'woocommerce_cache_excluded_uris' );
+		delete_transient( 'geodir_cache_excluded_uris' );
 		//WC()->query->init_query_vars();
 		///WC()->query->add_endpoints();
-		wp_schedule_single_event( time(), 'woocommerce_flush_rewrite_rules' );
+		wp_schedule_single_event( time(), 'geodir_flush_rewrite_rules' );
 
-		do_action( 'woocommerce_settings_saved' );
+		do_action( 'geodir_settings_saved' );
 	}
 
 	/**
@@ -139,19 +139,19 @@ class GeoDir_Admin_Settings {
 	/**
 	 * Settings page.
 	 *
-	 * Handles the display of the main woocommerce settings page in admin.
+	 * Handles the display of the main geodirectory settings page in admin.
 	 */
 	public static function output() {
 		global $current_section, $current_tab;
 
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
-		do_action( 'woocommerce_settings_start' );
+		do_action( 'geodir_settings_start' );
 
-		//wp_enqueue_script( 'woocommerce_settings', WC()->plugin_url() . '/assets/js/admin/settings' . $suffix . '.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-sortable', 'iris', 'select2' ), WC()->version, true );
+		//wp_enqueue_script( 'geodir_settings', GeoDir()->plugin_url() . '/assets/js/admin/settings' . $suffix . '.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-sortable', 'iris', 'select2' ), GeoDir()->version, true );
 
-		wp_localize_script( 'woocommerce_settings', 'woocommerce_settings_params', array(
-			'i18n_nav_warning' => __( 'The changes you made will be lost if you navigate away from this page.', 'woocommerce' ),
+		wp_localize_script( 'geodir_settings', 'geodir_settings_params', array(
+			'i18n_nav_warning' => __( 'The changes you made will be lost if you navigate away from this page.', 'geodirectory' ),
 		) );
 
 		// Include settings pages
@@ -167,16 +167,16 @@ class GeoDir_Admin_Settings {
 		}
 
 		// Add any posted messages
-		if ( ! empty( $_GET['wc_error'] ) ) {
-			self::add_error( stripslashes( $_GET['wc_error'] ) );
+		if ( ! empty( $_GET['gd_error'] ) ) {
+			self::add_error( stripslashes( $_GET['gd_error'] ) );
 		}
 
-		if ( ! empty( $_GET['wc_message'] ) ) {
-			self::add_message( stripslashes( $_GET['wc_message'] ) );
+		if ( ! empty( $_GET['gd_message'] ) ) {
+			self::add_message( stripslashes( $_GET['gd_message'] ) );
 		}
 
 		// Get tabs for the settings page
-		$tabs = apply_filters( 'woocommerce_settings_tabs_array', array() );
+		$tabs = apply_filters( 'geodir_settings_tabs_array', array() );
 
 		include( dirname( __FILE__ ) . '/views/html-admin-settings.php' );
 	}
@@ -194,7 +194,7 @@ class GeoDir_Admin_Settings {
 	/**
 	 * Output admin fields.
 	 *
-	 * Loops though the woocommerce options array and outputs each field.
+	 * Loops though the geodirectory options array and outputs each field.
 	 *
 	 * @param array $options Opens array to output
 	 */
@@ -262,18 +262,18 @@ class GeoDir_Admin_Settings {
 					}
 					echo '<table class="form-table">' . "\n\n";
 					if ( ! empty( $value['id'] ) ) {
-						do_action( 'woocommerce_settings_' . sanitize_title( $value['id'] ) );
+						do_action( 'geodir_settings_' . sanitize_title( $value['id'] ) );
 					}
 					break;
 
 				// Section Ends
 				case 'sectionend':
 					if ( ! empty( $value['id'] ) ) {
-						do_action( 'woocommerce_settings_' . sanitize_title( $value['id'] ) . '_end' );
+						do_action( 'geodir_settings_' . sanitize_title( $value['id'] ) . '_end' );
 					}
 					echo '</table>';
 					if ( ! empty( $value['id'] ) ) {
-						do_action( 'woocommerce_settings_' . sanitize_title( $value['id'] ) . '_after' );
+						do_action( 'geodir_settings_' . sanitize_title( $value['id'] ) . '_after' );
 					}
 					break;
 
@@ -583,16 +583,16 @@ class GeoDir_Admin_Settings {
 				case 'image_width' :
 
 					$image_size       = str_replace( '_image_size', '', $value['id'] );
-					$size             = wc_get_image_size( $image_size );
+					$size             = geodir_get_image_size( $image_size );
 					$width            = isset( $size['width'] ) ? $size['width'] : $value['default']['width'];
 					$height           = isset( $size['height'] ) ? $size['height'] : $value['default']['height'];
 					$crop             = isset( $size['crop'] ) ? $size['crop'] : $value['default']['crop'];
 					$disabled_attr    = '';
 					$disabled_message = '';
 
-					if ( has_filter( 'woocommerce_get_image_size_' . $image_size ) ) {
+					if ( has_filter( 'geodir_get_image_size_' . $image_size ) ) {
 						$disabled_attr = 'disabled="disabled"';
-						$disabled_message = "<p><small>" . __( 'The settings of this image size have been disabled because its values are being overwritten by a filter.', 'woocommerce' ) . "</small></p>";
+						$disabled_message = "<p><small>" . __( 'The settings of this image size have been disabled because its values are being overwritten by a filter.', 'geodirectory' ) . "</small></p>";
 					}
 
 					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
@@ -601,7 +601,7 @@ class GeoDir_Admin_Settings {
 
 							<input name="<?php echo esc_attr( $value['id'] ); ?>[width]" <?php echo $disabled_attr; ?> id="<?php echo esc_attr( $value['id'] ); ?>-width" type="text" size="3" value="<?php echo $width; ?>" /> &times; <input name="<?php echo esc_attr( $value['id'] ); ?>[height]" <?php echo $disabled_attr; ?> id="<?php echo esc_attr( $value['id'] ); ?>-height" type="text" size="3" value="<?php echo $height; ?>" />px
 
-							<label><input name="<?php echo esc_attr( $value['id'] ); ?>[crop]" <?php echo $disabled_attr; ?> id="<?php echo esc_attr( $value['id'] ); ?>-crop" type="checkbox" value="1" <?php checked( 1, $crop ); ?> /> <?php _e( 'Hard crop?', 'woocommerce' ); ?></label>
+							<label><input name="<?php echo esc_attr( $value['id'] ); ?>[crop]" <?php echo $disabled_attr; ?> id="<?php echo esc_attr( $value['id'] ); ?>-crop" type="checkbox" value="1" <?php checked( 1, $crop ); ?> /> <?php _e( 'Hard crop?', 'geodirectory' ); ?></label>
 
 							</td>
 					</tr><?php
@@ -628,7 +628,7 @@ class GeoDir_Admin_Settings {
 					?><tr valign="top" class="single_select_page <?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
 						<th scope="row" class="titledesc"><?php echo esc_html( $value['title'] ) ?> <?php echo $tooltip_html; ?></th>
 						<td class="forminp">
-							<?php echo str_replace( ' id=', " data-placeholder='" . esc_attr__( 'Select a page&hellip;', 'woocommerce' ) . "' style='" . $value['css'] . "' class='" . $value['class'] . "' id=", wp_dropdown_pages( $args ) ); ?> <?php echo $description; ?>
+							<?php echo str_replace( ' id=', " data-placeholder='" . esc_attr__( 'Select a page&hellip;', 'geodirectory' ) . "' style='" . $value['css'] . "' class='" . $value['class'] . "' id=", wp_dropdown_pages( $args ) ); ?> <?php echo $description; ?>
 						</td>
 					</tr><?php
 					break;
@@ -651,7 +651,7 @@ class GeoDir_Admin_Settings {
 							<?php echo $tooltip_html; ?>
 						</th>
 						<td class="forminp">
-						<select id="<?php echo esc_attr( $value['id'] ); ?>" name="<?php echo esc_attr( $value['id'] ); ?>" style="<?php echo esc_attr( $value['css'] ); ?>" data-placeholder="<?php esc_attr_e( 'Choose a country&hellip;', 'woocommerce' ); ?>" aria-label="<?php esc_attr_e( 'Country', 'woocommerce' ) ?>" class="regular-text <?php echo esc_attr( $value['class'] ); ?>">
+						<select id="<?php echo esc_attr( $value['id'] ); ?>" name="<?php echo esc_attr( $value['id'] ); ?>" style="<?php echo esc_attr( $value['css'] ); ?>" data-placeholder="<?php esc_attr_e( 'Choose a country&hellip;', 'geodirectory' ); ?>" aria-label="<?php esc_attr_e( 'Country', 'geodirectory' ) ?>" class="regular-text <?php echo esc_attr( $value['class'] ); ?>">
 							<?php
 							geodir_get_country_dl($country);
 
@@ -679,7 +679,7 @@ class GeoDir_Admin_Settings {
 							<?php echo $tooltip_html; ?>
 						</th>
 						<td class="forminp">
-							<select multiple="multiple" name="<?php echo esc_attr( $value['id'] ); ?>[]" style="width:350px" data-placeholder="<?php esc_attr_e( 'Choose countries&hellip;', 'woocommerce' ); ?>" aria-label="<?php esc_attr_e( 'Country', 'woocommerce' ) ?>" class="wc-enhanced-select">
+							<select multiple="multiple" name="<?php echo esc_attr( $value['id'] ); ?>[]" style="width:350px" data-placeholder="<?php esc_attr_e( 'Choose countries&hellip;', 'geodirectory' ); ?>" aria-label="<?php esc_attr_e( 'Country', 'geodirectory' ) ?>" class="geodir-select">
 								<?php
 									if ( ! empty( $countries ) ) {
 										foreach ( $countries as $key => $val ) {
@@ -687,7 +687,7 @@ class GeoDir_Admin_Settings {
 										}
 									}
 								?>
-							</select> <?php echo ( $description ) ? $description : ''; ?> <br /><a class="select_all button" href="#"><?php _e( 'Select all', 'woocommerce' ); ?></a> <a class="select_none button" href="#"><?php _e( 'Select none', 'woocommerce' ); ?></a>
+							</select> <?php echo ( $description ) ? $description : ''; ?> <br /><a class="select_all button" href="#"><?php _e( 'Select all', 'geodirectory' ); ?></a> <a class="select_none button" href="#"><?php _e( 'Select none', 'geodirectory' ); ?></a>
 						</td>
 					</tr><?php
 					break;
@@ -929,7 +929,7 @@ class GeoDir_Admin_Settings {
 
 				// Default: run an action
 				default:
-					do_action( 'woocommerce_admin_field_' . $value['type'], $value );
+					do_action( 'geodir_admin_field_' . $value['type'], $value );
 					break;
 			}
 		}
@@ -967,7 +967,7 @@ class GeoDir_Admin_Settings {
 		if ( $tooltip_html && in_array( $value['type'], array( 'checkbox' ) ) ) {
 			$tooltip_html = '<p class="description">' . $tooltip_html . '</p>';
 		} elseif ( $tooltip_html ) {
-			$tooltip_html = gd_help_tip( $tooltip_html );
+			$tooltip_html = geodir_help_tip( $tooltip_html );
 		}
 
 		return array(
@@ -979,7 +979,7 @@ class GeoDir_Admin_Settings {
 	/**
 	 * Save admin fields.
 	 *
-	 * Loops though the woocommerce options array and outputs each field.
+	 * Loops though the geodirectory options array and outputs each field.
 	 *
 	 * @param array $options Options array to output
 	 * @param array $data Optional. Data to use for saving. Defaults to $_POST.
@@ -1057,9 +1057,9 @@ class GeoDir_Admin_Settings {
 			 * Fire an action when a certain 'type' of field is being saved.
 			 * @deprecated 2.4.0 - doesn't allow manipulation of values!
 			 */
-			if ( has_action( 'woocommerce_update_option_' . sanitize_title( $option['type'] ) ) ) {
-				wc_deprecated_function( 'The woocommerce_update_option_X action', '2.4.0', 'woocommerce_admin_settings_sanitize_option filter' );
-				do_action( 'woocommerce_update_option_' . sanitize_title( $option['type'] ), $option );
+			if ( has_action( 'geodir_update_option_' . sanitize_title( $option['type'] ) ) ) {
+				wc_deprecated_function( 'The geodir_update_option_X action', '2.4.0', 'geodir_admin_settings_sanitize_option filter' );
+				do_action( 'geodir_update_option_' . sanitize_title( $option['type'] ), $option );
 				continue;
 			}
 
@@ -1067,13 +1067,13 @@ class GeoDir_Admin_Settings {
 			 * Sanitize the value of an option.
 			 * @since 2.4.0
 			 */
-			$value = apply_filters( 'woocommerce_admin_settings_sanitize_option', $value, $option, $raw_value );
+			$value = apply_filters( 'geodir_admin_settings_sanitize_option', $value, $option, $raw_value );
 
 			/**
 			 * Sanitize the value of an option by option name.
 			 * @since 2.4.0
 			 */
-			$value = apply_filters( "woocommerce_admin_settings_sanitize_option_$option_name", $value, $option, $raw_value );
+			$value = apply_filters( "geodir_admin_settings_sanitize_option_$option_name", $value, $option, $raw_value );
 
 			if ( is_null( $value ) ) {
 				continue;
@@ -1110,8 +1110,8 @@ class GeoDir_Admin_Settings {
 	 */
 	public static function check_download_folder_protection() {
 		$upload_dir      = wp_upload_dir();
-		$downloads_url   = $upload_dir['basedir'] . '/woocommerce_uploads';
-		$download_method = get_option( 'woocommerce_file_download_method' );
+		$downloads_url   = $upload_dir['basedir'] . '/geodir_uploads';
+		$download_method = get_option( 'geodir_file_download_method' );
 
 		if ( 'redirect' == $download_method ) {
 

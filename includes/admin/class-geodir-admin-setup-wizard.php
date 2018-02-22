@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WC_Admin_Setup_Wizard class.
+ * GeoDir_Admin_Setup_Wizard class.
  */
 class GeoDir_Admin_Setup_Wizard {
 

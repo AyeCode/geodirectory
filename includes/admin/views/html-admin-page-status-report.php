@@ -41,32 +41,32 @@ $pages            = $system_status->get_pages();
 	<tbody>
 		<tr>
 			<td data-export-label="Home URL"><?php _e( 'Home URL', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'The homepage URL of your site.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'The homepage URL of your site.', 'geodirectory' ) ); ?></td>
 			<td><?php echo esc_html( $environment['home_url'] ) ?></td>
 		</tr>
 		<tr>
 			<td data-export-label="Site URL"><?php _e( 'Site URL', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'The root URL of your site.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'The root URL of your site.', 'geodirectory' ) ); ?></td>
 			<td><?php echo esc_html( $environment['site_url'] ) ?></td>
 		</tr>
 		<tr>
 			<td data-export-label="GD Version"><?php _e( 'GD version', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'The version of GeoDirectory installed on your site.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'The version of GeoDirectory installed on your site.', 'geodirectory' ) ); ?></td>
 			<td><?php echo esc_html( $environment['version'] ) ?></td>
 		</tr>
 		<tr>
 			<td data-export-label="WP Version"><?php _e( 'WP version', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'The version of WordPress installed on your site.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'The version of WordPress installed on your site.', 'geodirectory' ) ); ?></td>
 			<td><?php echo esc_html( $environment['wp_version'] ) ?></td>
 		</tr>
 		<tr>
 			<td data-export-label="WP Multisite"><?php _e( 'WP multisite', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'Whether or not you have WordPress Multisite enabled.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'Whether or not you have WordPress Multisite enabled.', 'geodirectory' ) ); ?></td>
 			<td><?php echo ( $environment['wp_multisite'] ) ? '<span class="dashicons dashicons-yes"></span>' : '&ndash;'; ?></td>
 		</tr>
 		<tr>
 			<td data-export-label="WP Memory Limit"><?php _e( 'WP memory limit', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'The maximum amount of memory (RAM) that your site can use at one time.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'The maximum amount of memory (RAM) that your site can use at one time.', 'geodirectory' ) ); ?></td>
 			<td><?php
 				if ( $environment['wp_memory_limit'] < 67108864 ) {
 					echo '<mark class="error"><span class="dashicons dashicons-warning"></span> ' . sprintf( __( '%1$s - We recommend setting memory to at least 64MB. See: %2$s', 'geodirectory' ), size_format( $environment['wp_memory_limit'] ), '<a href="https://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP" target="_blank">' . __( 'Increasing memory allocated to PHP', 'geodirectory' ) . '</a>' ) . '</mark>';
@@ -77,7 +77,7 @@ $pages            = $system_status->get_pages();
 		</tr>
 		<tr>
 			<td data-export-label="WP Debug Mode"><?php _e( 'WP debug mode', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'Displays whether or not WordPress is in Debug Mode.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'Displays whether or not WordPress is in Debug Mode.', 'geodirectory' ) ); ?></td>
 			<td>
 				<?php if ( $environment['wp_debug_mode'] ) : ?>
 					<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>
@@ -88,7 +88,7 @@ $pages            = $system_status->get_pages();
 		</tr>
 		<tr>
 			<td data-export-label="WP Cron"><?php _e( 'WP cron', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'Displays whether or not WP Cron Jobs are enabled.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'Displays whether or not WP Cron Jobs are enabled.', 'geodirectory' ) ); ?></td>
 			<td>
 				<?php if ( $environment['wp_cron'] ) : ?>
 					<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>
@@ -99,7 +99,7 @@ $pages            = $system_status->get_pages();
 		</tr>
 		<tr>
 			<td data-export-label="Language"><?php _e( 'Language', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'The current language used by WordPress. Default = English', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'The current language used by WordPress. Default = English', 'geodirectory' ) ); ?></td>
 			<td><?php echo esc_html( $environment['language'] ) ?></td>
 		</tr>
 	</tbody>
@@ -113,12 +113,12 @@ $pages            = $system_status->get_pages();
 	<tbody>
 		<tr>
 			<td data-export-label="Server Info"><?php _e( 'Server info', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'Information about the web server that is currently hosting your site.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'Information about the web server that is currently hosting your site.', 'geodirectory' ) ); ?></td>
 			<td><?php echo esc_html( $environment['server_info'] ); ?></td>
 		</tr>
 		<tr>
 			<td data-export-label="PHP Version"><?php _e( 'PHP version', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'The version of PHP installed on your hosting server.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'The version of PHP installed on your hosting server.', 'geodirectory' ) ); ?></td>
 			<td><?php
 				if ( version_compare( $environment['php_version'], '5.6', '<' ) ) {
 					echo '<mark class="error"><span class="dashicons dashicons-warning"></span> ' . sprintf( __( '%1$s - We recommend a minimum PHP version of 5.6.', 'geodirectory' ), esc_html( $environment['php_version'] ) ) . '</mark>';
@@ -130,27 +130,27 @@ $pages            = $system_status->get_pages();
 		<?php if ( function_exists( 'ini_get' ) ) : ?>
 			<tr>
 				<td data-export-label="PHP Post Max Size"><?php _e( 'PHP post max size', 'geodirectory' ); ?>:</td>
-				<td class="help"><?php echo gd_help_tip( __( 'The largest filesize that can be contained in one post.', 'geodirectory' ) ); ?></td>
+				<td class="help"><?php echo geodir_help_tip( __( 'The largest filesize that can be contained in one post.', 'geodirectory' ) ); ?></td>
 				<td><?php echo esc_html( size_format( $environment['php_post_max_size'] ) ) ?></td>
 			</tr>
 			<tr>
 				<td data-export-label="PHP Time Limit"><?php _e( 'PHP time limit', 'geodirectory' ); ?>:</td>
-				<td class="help"><?php echo gd_help_tip( __( 'The amount of time (in seconds) that your site will spend on a single operation before timing out (to avoid server lockups)', 'geodirectory' ) ); ?></td>
+				<td class="help"><?php echo geodir_help_tip( __( 'The amount of time (in seconds) that your site will spend on a single operation before timing out (to avoid server lockups)', 'geodirectory' ) ); ?></td>
 				<td><?php echo esc_html( $environment['php_max_execution_time'] ) ?></td>
 			</tr>
 			<tr>
 				<td data-export-label="PHP Max Input Vars"><?php _e( 'PHP max input vars', 'geodirectory' ); ?>:</td>
-				<td class="help"><?php echo gd_help_tip( __( 'The maximum number of variables your server can use for a single function to avoid overloads.', 'geodirectory' ) ); ?></td>
+				<td class="help"><?php echo geodir_help_tip( __( 'The maximum number of variables your server can use for a single function to avoid overloads.', 'geodirectory' ) ); ?></td>
 				<td><?php echo esc_html( $environment['php_max_input_vars'] ) ?></td>
 			</tr>
 			<tr>
 				<td data-export-label="cURL Version"><?php _e( 'cURL version', 'geodirectory' ); ?>:</td>
-				<td class="help"><?php echo gd_help_tip( __( 'The version of cURL installed on your server.', 'geodirectory' ) ); ?></td>
+				<td class="help"><?php echo geodir_help_tip( __( 'The version of cURL installed on your server.', 'geodirectory' ) ); ?></td>
 				<td><?php echo esc_html( $environment['curl_version'] ) ?></td>
 			</tr>
 			<tr>
 				<td data-export-label="SUHOSIN Installed"><?php _e( 'SUHOSIN installed', 'geodirectory' ); ?>:</td>
-				<td class="help"><?php echo gd_help_tip( __( 'Suhosin is an advanced protection system for PHP installations. It was designed to protect your servers on the one hand against a number of well known problems in PHP applications and on the other hand against potential unknown vulnerabilities within these applications or the PHP core itself. If enabled on your server, Suhosin may need to be configured to increase its data submission limits.', 'geodirectory' ) ); ?></td>
+				<td class="help"><?php echo geodir_help_tip( __( 'Suhosin is an advanced protection system for PHP installations. It was designed to protect your servers on the one hand against a number of well known problems in PHP applications and on the other hand against potential unknown vulnerabilities within these applications or the PHP core itself. If enabled on your server, Suhosin may need to be configured to increase its data submission limits.', 'geodirectory' ) ); ?></td>
 				<td><?php echo $environment['suhosin_installed'] ? '<span class="dashicons dashicons-yes"></span>' : '&ndash;'; ?></td>
 			</tr>
 		<?php endif;
@@ -162,7 +162,7 @@ $pages            = $system_status->get_pages();
 		if ( ! empty( $wpdb->is_mysql ) && ! stristr( $ver, 'MariaDB' ) ) : ?>
 			<tr>
 				<td data-export-label="MySQL Version"><?php _e( 'MySQL version', 'geodirectory' ); ?>:</td>
-				<td class="help"><?php echo gd_help_tip( __( 'The version of MySQL installed on your hosting server.', 'geodirectory' ) ); ?></td>
+				<td class="help"><?php echo geodir_help_tip( __( 'The version of MySQL installed on your hosting server.', 'geodirectory' ) ); ?></td>
 				<td>
 					<?php
 					if ( version_compare( $environment['mysql_version'], '5.6', '<' ) ) {
@@ -176,12 +176,12 @@ $pages            = $system_status->get_pages();
 		<?php endif; ?>
 		<tr>
 			<td data-export-label="Max Upload Size"><?php _e( 'Max upload size', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'The largest filesize that can be uploaded to your WordPress installation.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'The largest filesize that can be uploaded to your WordPress installation.', 'geodirectory' ) ); ?></td>
 			<td><?php echo size_format( $environment['max_upload_size'] ) ?></td>
 		</tr>
 		<tr>
 			<td data-export-label="Default Timezone is UTC"><?php _e( 'Default timezone is UTC', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'The default timezone for your server.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'The default timezone for your server.', 'geodirectory' ) ); ?></td>
 			<td><?php
 				if ( 'UTC' !== $environment['default_timezone'] ) {
 					echo '<mark class="error"><span class="dashicons dashicons-warning"></span> ' . sprintf( __( 'Default timezone is %s - it should be UTC', 'geodirectory' ), $environment['default_timezone'] ) . '</mark>';
@@ -192,7 +192,7 @@ $pages            = $system_status->get_pages();
 		</tr>
 		<tr>
 			<td data-export-label="fsockopen/cURL"><?php _e( 'fsockopen/cURL', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'Payment gateways can use cURL to communicate with remote servers to authorize payments, other plugins may also use it when communicating with remote services.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'Payment gateways can use cURL to communicate with remote servers to authorize payments, other plugins may also use it when communicating with remote services.', 'geodirectory' ) ); ?></td>
 			<td><?php
 				if ( $environment['fsockopen_or_curl_enabled'] ) {
 					echo '<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>';
@@ -203,7 +203,7 @@ $pages            = $system_status->get_pages();
 		</tr>
 		<tr>
 			<td data-export-label="SoapClient"><?php _e( 'SoapClient', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'Some webservices like shipping use SOAP to get information from remote servers, for example, live shipping quotes from FedEx require SOAP to be installed.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'Some webservices like shipping use SOAP to get information from remote servers, for example, live shipping quotes from FedEx require SOAP to be installed.', 'geodirectory' ) ); ?></td>
 			<td><?php
 				if ( $environment['soapclient_enabled'] ) {
 					echo '<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>';
@@ -214,7 +214,7 @@ $pages            = $system_status->get_pages();
 		</tr>
 		<tr>
 			<td data-export-label="DOMDocument"><?php _e( 'DOMDocument', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'HTML/Multipart emails use DOMDocument to generate inline CSS in templates.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'HTML/Multipart emails use DOMDocument to generate inline CSS in templates.', 'geodirectory' ) ); ?></td>
 			<td><?php
 				if ( $environment['domdocument_enabled'] ) {
 					echo '<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>';
@@ -225,7 +225,7 @@ $pages            = $system_status->get_pages();
 		</tr>
 		<tr>
 			<td data-export-label="GZip"><?php _e( 'GZip', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'GZip (gzopen) is used to open the GEOIP database from MaxMind.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'GZip (gzopen) is used to open the GEOIP database from MaxMind.', 'geodirectory' ) ); ?></td>
 			<td><?php
 				if ( $environment['gzip_enabled'] ) {
 					echo '<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>';
@@ -236,7 +236,7 @@ $pages            = $system_status->get_pages();
 		</tr>
 		<tr>
 			<td data-export-label="Multibyte String"><?php _e( 'Multibyte string', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'Multibyte String (mbstring) is used to convert character encoding, like for emails or converting characters to lowercase.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'Multibyte String (mbstring) is used to convert character encoding, like for emails or converting characters to lowercase.', 'geodirectory' ) ); ?></td>
 			<td><?php
 				if ( $environment['mbstring_enabled'] ) {
 					echo '<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>';
@@ -247,7 +247,7 @@ $pages            = $system_status->get_pages();
 		</tr>
 		<tr>
 			<td data-export-label="Remote Post"><?php _e( 'Remote post', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'PayPal uses this method of communicating when sending back transaction information.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'PayPal uses this method of communicating when sending back transaction information.', 'geodirectory' ) ); ?></td>
 			<td><?php
 				if ( $environment['remote_post_successful'] ) {
 					echo '<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>';
@@ -258,7 +258,7 @@ $pages            = $system_status->get_pages();
 		</tr>
 		<tr>
 			<td data-export-label="Remote Get"><?php _e( 'Remote get', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'GeoDirectory plugins may use this method of communication when checking for plugin updates.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'GeoDirectory plugins may use this method of communication when checking for plugin updates.', 'geodirectory' ) ); ?></td>
 			<td><?php
 				if ( $environment['remote_get_successful'] ) {
 					echo '<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>';
@@ -328,17 +328,17 @@ $pages            = $system_status->get_pages();
 	<tbody>
 		<tr>
 			<td data-export-label="Max upload file size(in mb)"><?php _e( 'Max upload file size(in mb)', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'Max upload file size in MB. This setting will overwrite the max upload file size limit in image/file upload & import listings for entire GeoDirectory core + GeoDirectory plugins.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'Max upload file size in MB. This setting will overwrite the max upload file size limit in image/file upload & import listings for entire GeoDirectory core + GeoDirectory plugins.', 'geodirectory' ) ); ?></td>
 			<td><?php echo esc_html( $settings['upload_max_filesize'] ) ?></td>
 		</tr>
 		<tr>
 			<td data-export-label="New listing default status"><?php _e( 'New listing default status', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'This is the post status a new listing will get when submitted from the frontend.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'This is the post status a new listing will get when submitted from the frontend.', 'geodirectory' ) ); ?></td>
 			<td><?php echo esc_html( $settings['default_status'] ) ?></td>
 		</tr>
 		<tr>
 			<td data-export-label="Google Maps API KEY"><?php _e( 'Google Maps API KEY', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'This is a requirement to use Google Maps.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'This is a requirement to use Google Maps.', 'geodirectory' ) ); ?></td>
 			<td><?php echo $settings['maps_api_key'] ? '<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>' : '<mark class="no">&ndash;</mark>'; ?></td>
 		</tr>
 		<tr>
@@ -357,7 +357,7 @@ $pages            = $system_status->get_pages();
     <tbody>
     <tr>
         <td data-export-label="GD Database Version"><?php _e( 'GD database version', 'geodirectory' ); ?>:</td>
-        <td class="help"><?php echo gd_help_tip( __( 'The version of GeoDirectory that the database is formatted for. This should be the same as your GeoDirectory version.', 'geodirectory' ) ); ?></td>
+        <td class="help"><?php echo geodir_help_tip( __( 'The version of GeoDirectory that the database is formatted for. This should be the same as your GeoDirectory version.', 'geodirectory' ) ); ?></td>
         <td><?php echo esc_html( $database['geodirectory_db_version'] ); ?></td>
     </tr>
     <tr>
@@ -444,7 +444,7 @@ $pages            = $system_status->get_pages();
 	<tbody>
 		<tr>
 			<td data-export-label="Secure connection (HTTPS)"><?php _e( 'Secure connection (HTTPS)', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'Is the connection to your store secure?', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'Is the connection to your store secure?', 'geodirectory' ) ); ?></td>
 			<td>
 				<?php if ( $security['secure_connection'] ) : ?>
 					<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>
@@ -455,7 +455,7 @@ $pages            = $system_status->get_pages();
 		</tr>
 		<tr>
 			<td data-export-label="Hide errors from visitors"><?php _e( 'Hide errors from visitors', 'geodirectory' ); ?></td>
-			<td class="help"><?php echo gd_help_tip( __( 'Error messages can contain sensitive information about your store environment. These should be hidden from untrusted visitors.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'Error messages can contain sensitive information about your store environment. These should be hidden from untrusted visitors.', 'geodirectory' ) ); ?></td>
 			<td>
 				<?php if ( $security['hide_errors'] ) : ?>
 					<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>
@@ -529,7 +529,7 @@ $pages            = $system_status->get_pages();
 				}
 
 				echo '<tr><td data-export-label="' . esc_attr( $page_name ) . '">' . $page_name . ':</td>';
-				echo '<td class="help">' . gd_help_tip( sprintf( __( 'The URL of your %s page (along with the Page ID).', 'geodirectory' ), $page_name ) ) . '</td><td>';
+				echo '<td class="help">' . geodir_help_tip( sprintf( __( 'The URL of your %s page (along with the Page ID).', 'geodirectory' ), $page_name ) ) . '</td><td>';
 
 				// Page ID check.
 				if ( ! $page['page_set'] ) {
@@ -569,12 +569,12 @@ $pages            = $system_status->get_pages();
 	<tbody>
 		<tr>
 			<td data-export-label="Name"><?php _e( 'Name', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'The name of the current active theme.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'The name of the current active theme.', 'geodirectory' ) ); ?></td>
 			<td><?php echo esc_html( $theme['name'] ) ?></td>
 		</tr>
 		<tr>
 			<td data-export-label="Version"><?php _e( 'Version', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'The installed version of the current active theme.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'The installed version of the current active theme.', 'geodirectory' ) ); ?></td>
 			<td><?php
 				echo esc_html( $theme['version'] );
 				if ( version_compare( $theme['version'], $theme['latest_verison'], '<' ) ) {
@@ -585,12 +585,12 @@ $pages            = $system_status->get_pages();
 		</tr>
 		<tr>
 			<td data-export-label="Author URL"><?php _e( 'Author URL', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'The theme developers URL.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'The theme developers URL.', 'geodirectory' ) ); ?></td>
 			<td><?php echo esc_html( $theme['author_url'] ) ?></td>
 		</tr>
 		<tr>
 			<td data-export-label="Child Theme"><?php _e( 'Child theme', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'Displays whether or not the current theme is a child theme.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'Displays whether or not the current theme is a child theme.', 'geodirectory' ) ); ?></td>
 			<td><?php
 				echo $theme['is_child_theme'] ? '<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>' : '<span class="dashicons dashicons-no-alt"></span> &ndash; ' . sprintf( __( 'If you are modifying GeoDirectory on a parent theme that you did not build personally we recommend using a child theme. See: <a href="%s" target="_blank">How to create a child theme</a>', 'geodirectory' ), 'https://codex.wordpress.org/Child_Themes' );
 			?></td>
@@ -600,12 +600,12 @@ $pages            = $system_status->get_pages();
 		?>
 		<tr>
 			<td data-export-label="Parent Theme Name"><?php _e( 'Parent theme name', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'The name of the parent theme.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'The name of the parent theme.', 'geodirectory' ) ); ?></td>
 			<td><?php echo esc_html( $theme['parent_name'] ); ?></td>
 		</tr>
 		<tr>
 			<td data-export-label="Parent Theme Version"><?php _e( 'Parent theme version', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'The installed version of the parent theme.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'The installed version of the parent theme.', 'geodirectory' ) ); ?></td>
 			<td><?php
 				echo esc_html( $theme['parent_version'] );
 				if ( version_compare( $theme['parent_version'], $theme['parent_latest_verison'], '<' ) ) {
@@ -616,13 +616,13 @@ $pages            = $system_status->get_pages();
 		</tr>
 		<tr>
 			<td data-export-label="Parent Theme Author URL"><?php _e( 'Parent theme author URL', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'The parent theme developers URL.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'The parent theme developers URL.', 'geodirectory' ) ); ?></td>
 			<td><?php echo esc_html( $theme['parent_author_url'] ) ?></td>
 		</tr>
 		<?php endif ?>
 		<tr>
 			<td data-export-label="GeoDirectory Support"><?php _e( 'GeoDirectory support', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo gd_help_tip( __( 'Displays whether or not the current active theme declares GeoDirectory support.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'Displays whether or not the current active theme declares GeoDirectory support.', 'geodirectory' ) ); ?></td>
 			<td>
 				<?php if ( ! $theme['has_geodirectory_support'] ) {
 					echo '<mark class="error"><span class="dashicons dashicons-warning"></span> ' . __( 'Not declared', 'geodirectory' ) . '</mark>';
@@ -636,7 +636,7 @@ $pages            = $system_status->get_pages();
 <table class="gd_status_table widefat" cellspacing="0">
 	<thead>
 		<tr>
-			<th colspan="3" data-export-label="Templates"><h2><?php _e( 'Templates', 'geodirectory' ); ?><?php echo gd_help_tip( __( 'This section shows any files that are overriding the default GeoDirectory template pages.', 'geodirectory' ) ); ?></h2></th>
+			<th colspan="3" data-export-label="Templates"><h2><?php _e( 'Templates', 'geodirectory' ); ?><?php echo geodir_help_tip( __( 'This section shows any files that are overriding the default GeoDirectory template pages.', 'geodirectory' ) ); ?></h2></th>
 		</tr>
 	</thead>
 	<tbody>

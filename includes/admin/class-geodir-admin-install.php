@@ -19,66 +19,10 @@ class GeoDir_Admin_Install {
 
 	/** @var array DB updates and callbacks that need to be run per version */
 	private static $db_updates = array(
-		'2.0.0' => array(
-			'wc_update_200_file_paths',
-			'wc_update_200_permalinks',
-			'wc_update_200_subcat_display',
-			'wc_update_200_taxrates',
-			'wc_update_200_line_items',
-			'wc_update_200_images',
-			'wc_update_200_db_version',
-		),
-		'2.0.9' => array(
-			'wc_update_209_brazillian_state',
-			'wc_update_209_db_version',
-		),
-		'2.1.0' => array(
-			'wc_update_210_remove_pages',
-			'wc_update_210_file_paths',
-			'wc_update_210_db_version',
-		),
-		'2.2.0' => array(
-			'wc_update_220_shipping',
-			'wc_update_220_order_status',
-			'wc_update_220_variations',
-			'wc_update_220_attributes',
-			'wc_update_220_db_version',
-		),
-		'2.3.0' => array(
-			'wc_update_230_options',
-			'wc_update_230_db_version',
-		),
-		'2.4.0' => array(
-			'wc_update_240_options',
-			'wc_update_240_shipping_methods',
-			'wc_update_240_api_keys',
-			'wc_update_240_webhooks',
-			'wc_update_240_refunds',
-			'wc_update_240_db_version',
-		),
-		'2.4.1' => array(
-			'wc_update_241_variations',
-			'wc_update_241_db_version',
-		),
-		'2.5.0' => array(
-			'wc_update_250_currency',
-			'wc_update_250_db_version',
-		),
-		'2.6.0' => array(
-			'wc_update_260_options',
-			'wc_update_260_termmeta',
-			'wc_update_260_zones',
-			'wc_update_260_zone_methods',
-			'wc_update_260_refunds',
-			'wc_update_260_db_version',
-		),
-		'3.0.0' => array(
-			'wc_update_300_webhooks',
-			'wc_update_300_grouped_products',
-			'wc_update_300_settings',
-			'wc_update_300_product_visibility',
-			'wc_update_300_db_version',
-		),
+		/*'2.0.0' => array(
+			'geodir_update_200_file_paths',
+			'geodir_update_200_permalinks',
+		)*/
 	);
 
 	/** @var object Background update class */
@@ -92,11 +36,11 @@ class GeoDir_Admin_Install {
 		//add_action( 'init', array( __CLASS__, 'init_background_updater' ), 5 );
 		add_action( 'admin_init', array( __CLASS__, 'install_actions' ) );
 		//add_action( 'in_plugin_update_message-woocommerce/woocommerce.php', array( __CLASS__, 'in_plugin_update_message' ) );
-		//add_filter( 'plugin_action_links_' . WC_PLUGIN_BASENAME, array( __CLASS__, 'plugin_action_links' ) );
+		//add_filter( 'plugin_action_links_' . GEODIRECTORY_PLUGIN_BASENAME, array( __CLASS__, 'plugin_action_links' ) );
 		add_filter( 'plugin_row_meta', array( __CLASS__, 'plugin_row_meta' ), 10, 2 );
 		add_filter( 'wpmu_drop_tables', array( __CLASS__, 'wpmu_drop_tables' ) );
 		add_filter( 'cron_schedules', array( __CLASS__, 'cron_schedules' ) );
-		//add_action( 'woocommerce_plugin_background_installer', array( __CLASS__, 'background_installer' ), 10, 2 );
+		//add_action( 'geodir_plugin_background_installer', array( __CLASS__, 'background_installer' ), 10, 2 );
 	}
 
 	/**
@@ -125,19 +69,19 @@ class GeoDir_Admin_Install {
 	 * This function is hooked into admin_init to affect admin only.
 	 */
 	public static function install_actions() {
-		if ( ! empty( $_GET['do_update_woocommerce'] ) ) {
+		if ( ! empty( $_GET['do_update_geodirectory'] ) ) {
 			self::update();
-			WC_Admin_Notices::add_notice( 'update' );
+			GeoDir_Admin_Notices::add_notice( 'update' );
 		}
-		if ( ! empty( $_GET['force_update_woocommerce'] ) ) {
-			do_action( 'wp_wc_updater_cron' );
-			wp_safe_redirect( admin_url( 'admin.php?page=wc-settings' ) );
+		if ( ! empty( $_GET['force_update_geodirectory'] ) ) {
+			do_action( 'wp_geodir_updater_cron' );
+			wp_safe_redirect( admin_url( 'admin.php?page=gd-settings' ) );
 			exit;
 		}
 	}
 
 	/**
-	 * Install WC.
+	 * Install GeoDirectory.
 	 */
 	public static function install() {
 		global $wpdb;
@@ -203,7 +147,7 @@ class GeoDir_Admin_Install {
 		self::update_gd_version();
 
 		// Flush rules after install
-		do_action( 'geodirectory_flush_rewrite_rules' );
+		do_action( 'geodir_flush_rewrite_rules' );
 
 		// Trigger action
 		do_action( 'geodirectory_installed' );
@@ -253,7 +197,7 @@ class GeoDir_Admin_Install {
 	}
 
 	/**
-	 * Update WC version to current.
+	 * Update GeoDirectory version to current.
 	 */
 	private static function update_gd_version() {
 		delete_option( 'geodirectory_version' );
@@ -283,7 +227,7 @@ class GeoDir_Admin_Install {
 				foreach ( $update_callbacks as $update_callback ) {
 					$logger->info(
 						sprintf( 'Queuing %s - %s', $version, $update_callback ),
-						array( 'source' => 'wc_db_updates' )
+						array( 'source' => 'geodir_db_updates' )
 					);
 					self::$background_updater->push_to_queue( $update_callback );
 					$update_queued = true;
@@ -313,7 +257,7 @@ class GeoDir_Admin_Install {
 	public static function cron_schedules( $schedules ) {
 		$schedules['monthly'] = array(
 			'interval' => 2635200,
-			'display'  => __( 'Monthly', 'woocommerce' ),
+			'display'  => __( 'Monthly', 'geodirectory' ),
 		);
 		return $schedules;
 	}
@@ -374,7 +318,7 @@ class GeoDir_Admin_Install {
 			geodir_create_page( esc_sql( $page['name'] ), $key , $page['title'], $page['content']);
 		}
 
-		delete_transient( 'woocommerce_cache_excluded_uris' );
+		delete_transient( 'geodir_cache_excluded_uris' );
 	}
 
 	/**
@@ -411,14 +355,12 @@ class GeoDir_Admin_Install {
 	 * Set up the database tables which the plugin needs to function.
 	 *
 	 * Tables:
-	 *		woocommerce_attribute_taxonomies - Table for storing attribute taxonomies - these are user defined
-	 *		woocommerce_termmeta - Term meta table - sadly WordPress does not have termmeta so we need our own
-	 *		woocommerce_downloadable_product_permissions - Table for storing user and guest download permissions.
-	 *			KEY(order_id, product_id, download_id) used for organizing downloads on the My Account page
-	 *		woocommerce_order_items - Order line items are stored in a table to make them easily queryable for reports
-	 *		woocommerce_order_itemmeta - Order line item meta is stored in a table for storing extra data.
-	 *		woocommerce_tax_rates - Tax Rates are stored inside 2 tables making tax queries simple and efficient.
-	 *		woocommerce_tax_rate_locations - Each rate can be applied to more than one postcode/city hence the second table.
+	 *		geodir_attachments - Listing attachments table.
+	 *		geodir_business_hours - Business hours table.
+	 *		geodir_countries - Countries table.
+	 *		geodir_custom_fields - Custom fields table.
+	 *		geodir_custom_sort_fields - Custom fields sorting table.
+	 *		geodir_post_review - Listing reviews table.
 	 */
 	private static function create_tables() {
 		global $wpdb;
@@ -433,8 +375,6 @@ class GeoDir_Admin_Install {
 
 	/**
 	 * Get Table schema.
-	 *
-	 * https://github.com/woocommerce/woocommerce/wiki/Database-Description/
 	 *
 	 * A note on indexes; Indexes have a maximum size of 767 bytes. Historically, we haven't need to be concerned about that.
 	 * As of WordPress 4.2, however, we moved to utf8mb4, which uses 4 bytes per character. This means that an index which
@@ -591,10 +531,10 @@ class GeoDir_Admin_Install {
 	 * Show plugin changes. Code adapted from W3 Total Cache.
 	 */
 	public static function in_plugin_update_message( $args ) {
-		$transient_name = 'wc_upgrade_notice_' . $args['Version'];
+		$transient_name = 'gd_upgrade_notice_' . $args['Version'];
 
 		if ( false === ( $upgrade_notice = get_transient( $transient_name ) ) ) {
-			$response = wp_safe_remote_get( 'https://plugins.svn.wordpress.org/woocommerce/trunk/readme.txt' );
+			$response = wp_safe_remote_get( 'https://plugins.svn.wordpress.org/geodirectory/trunk/readme.txt' );
 
 			if ( ! is_wp_error( $response ) && ! empty( $response['body'] ) ) {
 				$upgrade_notice = self::parse_update_notice( $response['body'], $args['new_version'] );
@@ -615,7 +555,7 @@ class GeoDir_Admin_Install {
 	private static function parse_update_notice( $content, $new_version ) {
 		// Output Upgrade Notice.
 		$matches        = null;
-		$regexp         = '~==\s*Upgrade Notice\s*==\s*=\s*(.*)\s*=(.*)(=\s*' . preg_quote( WC_VERSION ) . '\s*=|$)~Uis';
+		$regexp         = '~==\s*Upgrade Notice\s*==\s*=\s*(.*)\s*=(.*)(=\s*' . preg_quote( GEODIRECTORY_VERSION ) . '\s*=|$)~Uis';
 		$upgrade_notice = '';
 
 		if ( preg_match( $regexp, $content, $matches ) ) {
@@ -623,7 +563,7 @@ class GeoDir_Admin_Install {
 
 			// Convert the full version strings to minor versions.
 			$notice_version_parts  = explode( '.', trim( $matches[1] ) );
-			$current_version_parts = explode( '.', WC_VERSION );
+			$current_version_parts = explode( '.', GEODIRECTORY_VERSION );
 
 			if ( 3 !== sizeof( $notice_version_parts ) ) {
 				return;
@@ -635,7 +575,7 @@ class GeoDir_Admin_Install {
 			// Check the latest stable version and ignore trunk.
 			if ( version_compare( $current_version, $notice_version, '<' ) ) {
 
-				$upgrade_notice .= '</p><p class="wc_plugin_upgrade_notice">';
+				$upgrade_notice .= '</p><p class="gd_plugin_upgrade_notice">';
 
 				foreach ( $notices as $index => $line ) {
 					$upgrade_notice .= preg_replace( '~\[([^\]]*)\]\(([^\)]*)\)~', '<a href="${2}">${1}</a>', $line );
@@ -654,7 +594,7 @@ class GeoDir_Admin_Install {
 	 */
 	public static function plugin_action_links( $links ) {
 		$action_links = array(
-			'settings' => '<a href="' . admin_url( 'admin.php?page=wc-settings' ) . '" aria-label="' . esc_attr__( 'View WooCommerce settings', 'woocommerce' ) . '">' . esc_html__( 'Settings', 'woocommerce' ) . '</a>',
+			'settings' => '<a href="' . admin_url( 'admin.php?page=gd-settings' ) . '" aria-label="' . esc_attr__( 'View GeoDirectory settings', 'geodirectory' ) . '">' . esc_html__( 'Settings', 'geodirectory' ) . '</a>',
 		);
 
 		return array_merge( $action_links, $links );
@@ -689,19 +629,12 @@ class GeoDir_Admin_Install {
 	public static function wpmu_drop_tables( $tables ) {
 		global $wpdb;
 
-		$tables[] = $wpdb->prefix . 'woocommerce_sessions';
-		$tables[] = $wpdb->prefix . 'woocommerce_api_keys';
-		$tables[] = $wpdb->prefix . 'woocommerce_attribute_taxonomies';
-		$tables[] = $wpdb->prefix . 'woocommerce_downloadable_product_permissions';
-		$tables[] = $wpdb->prefix . 'woocommerce_termmeta';
-		$tables[] = $wpdb->prefix . 'woocommerce_tax_rates';
-		$tables[] = $wpdb->prefix . 'woocommerce_tax_rate_locations';
-		$tables[] = $wpdb->prefix . 'woocommerce_order_items';
-		$tables[] = $wpdb->prefix . 'woocommerce_order_itemmeta';
-		$tables[] = $wpdb->prefix . 'woocommerce_payment_tokens';
-		$tables[] = $wpdb->prefix . 'woocommerce_shipping_zones';
-		$tables[] = $wpdb->prefix . 'woocommerce_shipping_zone_locations';
-		$tables[] = $wpdb->prefix . 'woocommerce_shipping_zone_methods';
+		$tables[] = $wpdb->prefix . GEODIR_ATTACHMENT_TABLE;
+		$tables[] = $wpdb->prefix . GEODIR_BUSINESS_HOURS_TABLE;
+		$tables[] = $wpdb->prefix . GEODIR_COUNTRIES_TABLE;
+		$tables[] = $wpdb->prefix . GEODIR_CUSTOM_FIELDS_TABLE;
+		$tables[] = $wpdb->prefix . GEODIR_CUSTOM_SORT_FIELDS_TABLE;
+		$tables[] = $wpdb->prefix . GEODIR_REVIEW_TABLE;
 
 		return $tables;
 	}
@@ -726,7 +659,7 @@ class GeoDir_Admin_Install {
 	 */
 	public static function background_installer( $plugin_to_install_id, $plugin_to_install ) {
 		// Explicitly clear the event.
-		wp_clear_scheduled_hook( 'woocommerce_plugin_background_installer', func_get_args() );
+		wp_clear_scheduled_hook( 'geodir_plugin_background_installer', func_get_args() );
 
 		if ( ! empty( $plugin_to_install['repo-slug'] ) ) {
 			require_once( ABSPATH . 'wp-admin/includes/file.php' );
@@ -811,13 +744,13 @@ class GeoDir_Admin_Install {
 					$activate = true;
 
 				} catch ( Exception $e ) {
-					WC_Admin_Notices::add_custom_notice(
+					GeoDir_Admin_Notices::add_custom_notice(
 						$plugin_to_install_id . '_install_error',
 						sprintf(
-							__( '%1$s could not be installed (%2$s). <a href="%3$s">Please install it manually by clicking here.</a>', 'woocommerce' ),
+							__( '%1$s could not be installed (%2$s). <a href="%3$s">Please install it manually by clicking here.</a>', 'geodirectory' ),
 							$plugin_to_install['name'],
 							$e->getMessage(),
-							esc_url( admin_url( 'index.php?wc-install-plugin-redirect=' . $plugin_to_install['repo-slug'] ) )
+							esc_url( admin_url( 'index.php?gd-install-plugin-redirect=' . $plugin_to_install['repo-slug'] ) )
 						)
 					);
 				}
@@ -837,10 +770,10 @@ class GeoDir_Admin_Install {
 						throw new Exception( $result->get_error_message() );
 					}
 				} catch ( Exception $e ) {
-					WC_Admin_Notices::add_custom_notice(
+					GeoDir_Admin_Notices::add_custom_notice(
 						$plugin_to_install_id . '_install_error',
 						sprintf(
-							__( '%1$s was installed but could not be activated. <a href="%2$s">Please activate it manually by clicking here.</a>', 'woocommerce' ),
+							__( '%1$s was installed but could not be activated. <a href="%2$s">Please activate it manually by clicking here.</a>', 'geodirectory' ),
 							$plugin_to_install['name'],
 							admin_url( 'plugins.php' )
 						)

@@ -179,8 +179,8 @@ function geodir_get_price_decimals() {
 }
 
 /**
- * Get rounding precision for internal WC calculations.
- * Will increase the precision of wc_get_price_decimals by 2 decimals, unless GEODIR_ROUNDING_PRECISION is set to a higher number.
+ * Get rounding precision for internal GD calculations.
+ * Will increase the precision of geodir_get_price_decimals by 2 decimals, unless GEODIR_ROUNDING_PRECISION is set to a higher number.
  *
  * @since 2.0.0
  * @return int
@@ -201,7 +201,7 @@ function geodir_get_rounding_precision() {
  * This function does not remove thousands - this should be done before passing a value to the function.
  *
  * @param  float|string $number Expects either a float or a string with a decimal separator only (no thousands)
- * @param  mixed $dp number of decimal points to use, blank to use woocommerce_price_num_decimals, or false to avoid all rounding.
+ * @param  mixed $dp number of decimal points to use, blank to use geodir_get_price_decimals, or false to avoid all rounding.
  * @param  bool $trim_zeros from end of string
  * @return string
  */

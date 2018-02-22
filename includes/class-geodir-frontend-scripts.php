@@ -19,19 +19,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 class GeoDir_Frontend_Scripts {
 
 	/**
-	 * Contains an array of script handles registered by WC.
+	 * Contains an array of script handles registered by GeoDir.
 	 * @var array
 	 */
 	private static $scripts = array();
 
 	/**
-	 * Contains an array of script handles registered by WC.
+	 * Contains an array of script handles registered by GeoDir.
 	 * @var array
 	 */
 	private static $styles = array();
 
 	/**
-	 * Contains an array of script handles localized by WC.
+	 * Contains an array of script handles localized by GeoDir.
 	 * @var array
 	 */
 	private static $wp_localize_scripts = array();
@@ -152,7 +152,7 @@ class GeoDir_Frontend_Scripts {
 	}
 
 	/**
-	 * Register all WC scripts.
+	 * Register all GeoDir scripts.
 	 */
 	private static function register_scripts() {
 
@@ -265,7 +265,7 @@ class GeoDir_Frontend_Scripts {
 	}
 
 	/**
-	 * Register all WC styles.
+	 * Register all GeoDir styles.
 	 */
 	private static function register_styles() {
 		$register_styles = array(
@@ -399,7 +399,7 @@ class GeoDir_Frontend_Scripts {
 	}
 
 	/**
-	 * Localize a WC script once.
+	 * Localize a GeoDir script once.
 	 * @access private
 	 * @since  2.3.0 this needs less wp_script_is() calls due to https://core.trac.wordpress.org/ticket/28404 being added in WP 4.0.
 	 * @param  string $handle
@@ -456,14 +456,6 @@ class GeoDir_Frontend_Scripts {
 						'icon_fav'          => apply_filters('geodir_favourite_icon', 'fa fa-heart'),
 						'icon_unfav'        => apply_filters('geodir_unfavourite_icon', 'fa fa-heart'),
 					)
-				);
-			break;
-			case 'wc-geolocation' :
-				return array(
-					'wc_ajax_url'  => WC_AJAX::get_endpoint( "%%endpoint%%" ),
-					'home_url'     => home_url(),
-					'is_available' => ! ( is_cart() || is_account_page() || is_checkout() || is_customize_preview() ) ? '1' : '0',
-					'hash'         => isset( $_GET['v'] ) ? wc_clean( $_GET['v'] ) : '',
 				);
 			break;
 			case 'geodir-select2' :

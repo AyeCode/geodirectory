@@ -4,14 +4,12 @@
  *
  * The GeoDirectory tracker class adds functionality to track GeoDirectory usage based on if the customer opted in.
  * No personal information is tracked, only general GeoDirectory settings, general listing, order and user counts and admin email for discount code.
- * This is a modified version of the WooCommerce WC_Tracker class.
  *
  * @class 		GeoDir_Admin_Tracker
  * @version		2.0.0
  * @package		GeoDirectory/Classes
  * @category	Class
  * @author 		AyeCode Ltd
- * @info        Modified from WC_Tracker class.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -115,12 +113,12 @@ class GeoDir_Admin_Tracker {
 		$data['active_plugins']     = $all_plugins['active_plugins'];
 		$data['inactive_plugins']   = $all_plugins['inactive_plugins'];
 
-		// Jetpack & WooCommerce Connect
+		// Jetpack & GeoDirectory Connect
 		$data['jetpack_version']    = defined( 'JETPACK__VERSION' ) ? JETPACK__VERSION : 'none';
 		$data['jetpack_connected']  = ( class_exists( 'Jetpack' ) && is_callable( 'Jetpack::is_active' ) && Jetpack::is_active() ) ? 'yes' : 'no';
 		$data['jetpack_is_staging'] = ( class_exists( 'Jetpack' ) && is_callable( 'Jetpack::is_staging_site' ) && Jetpack::is_staging_site() ) ? 'yes' : 'no';
-		$data['connect_installed']  = class_exists( 'WC_Connect_Loader' ) ? 'yes' : 'no';
-		$data['connect_active']     = ( class_exists( 'WC_Connect_Loader' ) && wp_next_scheduled( 'wc_connect_fetch_service_schemas' ) ) ? 'yes' : 'no';
+		//$data['connect_installed']  = class_exists( 'GeoDir_Connect_Loader' ) ? 'yes' : 'no';
+		//$data['connect_active']     = ( class_exists( 'GeoDir_Connect_Loader' ) && wp_next_scheduled( 'geodir_connect_fetch_service_schemas' ) ) ? 'yes' : 'no';
 
 		// Store count info
 		$data['users']              = self::get_user_counts();
@@ -133,7 +131,7 @@ class GeoDir_Admin_Tracker {
 		// Shipping method info
 		//$data['shipping_methods']   = self::get_active_shipping_methods();
 
-		// Get all WooCommerce options info
+		// Get all GeoDirectory options info
 		$data['settings']           = self::get_all_geodirectory_options_values();
 
 		// Template overrides
@@ -152,9 +150,9 @@ class GeoDir_Admin_Tracker {
 	public static function get_theme_info() {
 		$theme_data        = wp_get_theme();
 		$theme_child_theme = is_child_theme() ? 'Yes' : 'No';
-		$theme_wc_support  = ( ! current_theme_supports( 'geodirectory' ) ) ? 'No' : 'Yes';
+		$theme_gd_support  = ( ! current_theme_supports( 'geodirectory' ) ) ? 'No' : 'Yes';
 
-		return array( 'name' => $theme_data->Name, 'version' => $theme_data->Version, 'child_theme' => $theme_child_theme, 'gd_support' => $theme_wc_support );
+		return array( 'name' => $theme_data->Name, 'version' => $theme_data->Version, 'child_theme' => $theme_child_theme, 'gd_support' => $theme_gd_support );
 	}
 
 	/**

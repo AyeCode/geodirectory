@@ -330,7 +330,7 @@ function geodir_sc_listing_map($atts) {
 
             ######### WPML #########
             if ( geodir_wpml_is_taxonomy_translated( $category_taxonomy[0] ) ) {
-                $category = gd_lang_object_ids( $params['category'], $category_taxonomy[0] );
+                $category = geodir_lang_object_ids( $params['category'], $category_taxonomy[0] );
             }
             ######### WPML #########
 
@@ -2063,7 +2063,7 @@ function geodir_sc_gd_listings_output($args = array()) {
 
         ######### WPML #########
         if (geodir_wpml_is_taxonomy_translated($category_taxonomy[0])) {
-            $category = gd_lang_object_ids($category, $category_taxonomy[0]);
+            $category = geodir_lang_object_ids($category, $category_taxonomy[0]);
         }
         ######### WPML #########
 

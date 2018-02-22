@@ -25,14 +25,14 @@ if ( ! class_exists( 'GeoDir_Settings_Analytics', false ) ) :
 		public function __construct() {
 
 			$this->id    = 'analytics';
-			$this->label = __( 'Google Analytics', 'woocommerce' );
+			$this->label = __( 'Google Analytics', 'geodirectory' );
 
-			add_filter( 'woocommerce_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
-			add_action( 'woocommerce_settings_' . $this->id, array( $this, 'output' ) );
-			add_action( 'woocommerce_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
+			add_filter( 'geodir_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
+			add_action( 'geodir_settings_' . $this->id, array( $this, 'output' ) );
+			add_action( 'geodir_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
 
-			add_action( 'woocommerce_settings_save_' . $this->id, array( $this, 'save' ) );
-			add_action( 'woocommerce_sections_' . $this->id, array( $this, 'output_sections' ) );
+			add_action( 'geodir_settings_save_' . $this->id, array( $this, 'save' ) );
+			add_action( 'geodir_sections_' . $this->id, array( $this, 'output_sections' ) );
 		}
 
 		/**
@@ -43,13 +43,13 @@ if ( ! class_exists( 'GeoDir_Settings_Analytics', false ) ) :
 		public function get_sections() {
 
 			$sections = array(
-				''          	=> __( 'General', 'woocommerce' ),
-				'display'       => __( 'Display', 'woocommerce' ),
-				'inventory' 	=> __( 'Inventory', 'woocommerce' ),
-				'downloadable' 	=> __( 'Downloadable products', 'woocommerce' ),
+				''          	=> __( 'General', 'geodirectory' ),
+				'display'       => __( 'Display', 'geodirectory' ),
+				'inventory' 	=> __( 'Inventory', 'geodirectory' ),
+				'downloadable' 	=> __( 'Downloadable products', 'geodirectory' ),
 			);
 			$sections = array();
-			return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
+			return apply_filters( 'geodir_get_sections_' . $this->id, $sections );
 		}
 
 		/**
@@ -80,7 +80,7 @@ if ( ! class_exists( 'GeoDir_Settings_Analytics', false ) ) :
 		 */
 		public function get_settings( $current_section = '' ) {
 
-				$settings = apply_filters( 'woocommerce_product_settings', array(
+				$settings = apply_filters( 'geodir_product_settings', array(
 
 
 					array('name' => __('Google Analytics', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'google_analytic_settings'),
@@ -155,7 +155,7 @@ if ( ! class_exists( 'GeoDir_Settings_Analytics', false ) ) :
 
 				));
 
-			return apply_filters( 'woocommerce_get_settings_' . $this->id, $settings, $current_section );
+			return apply_filters( 'geodir_get_settings_' . $this->id, $settings, $current_section );
 		}
 
 		public static function activation_url(){

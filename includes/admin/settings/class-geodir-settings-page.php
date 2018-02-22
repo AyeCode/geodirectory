@@ -37,11 +37,11 @@ abstract class GeoDir_Settings_Page {
 	 * Constructor.
 	 */
 	public function __construct() {
-		add_filter( 'woocommerce_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
-		add_action( 'woocommerce_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
-		add_action( 'woocommerce_sections_' . $this->id, array( $this, 'output_sections' ) );
-		add_action( 'woocommerce_settings_' . $this->id, array( $this, 'output' ) );
-		add_action( 'woocommerce_settings_save_' . $this->id, array( $this, 'save' ) );
+		add_filter( 'geodir_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
+		add_action( 'geodir_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
+		add_action( 'geodir_sections_' . $this->id, array( $this, 'output_sections' ) );
+		add_action( 'geodir_settings_' . $this->id, array( $this, 'output' ) );
+		add_action( 'geodir_settings_save_' . $this->id, array( $this, 'save' ) );
 	}
 
 	/**
@@ -77,7 +77,7 @@ abstract class GeoDir_Settings_Page {
 	 * @return array
 	 */
 	public function get_settings() {
-		return apply_filters( 'woocommerce_get_settings_' . $this->id, array() );
+		return apply_filters( 'geodir_get_settings_' . $this->id, array() );
 	}
 
 	/**
@@ -86,7 +86,7 @@ abstract class GeoDir_Settings_Page {
 	 * @return array
 	 */
 	public function get_sections() {
-		return apply_filters( 'woocommerce_get_sections_' . $this->id, array() );
+		return apply_filters( 'geodir_get_sections_' . $this->id, array() );
 	}
 
 	/**
@@ -211,7 +211,7 @@ abstract class GeoDir_Settings_Page {
 		GeoDir_Admin_Settings::save_fields( $settings );
 
 		if ( $current_section ) {
-			do_action( 'woocommerce_update_options_' . $this->id . '_' . $current_section );
+			do_action( 'geodir_update_options_' . $this->id . '_' . $current_section );
 		}
 	}
 }

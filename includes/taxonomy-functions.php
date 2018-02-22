@@ -418,7 +418,7 @@ function geodir_get_catlist($cat_taxonomy, $parrent = 0, $selected = false)
 
 
 $gd_wpml_get_languages = "";
-function gd_wpml_get_lang_from_url($url) {
+function geodir_wpml_get_lang_from_url($url) {
     global $sitepress, $gd_wpml_get_languages;
     
     if (geodir_is_wpml()) {
@@ -451,7 +451,7 @@ function gd_wpml_get_lang_from_url($url) {
     return false;
 }
 
-function gd_wpml_slug_translation_turned_on($post_type) {
+function geodir_wpml_slug_translation_turned_on($post_type) {
 
     global $sitepress;
     $settings = $sitepress->get_settings();
@@ -576,10 +576,10 @@ function geodir_term_link($termlink, $term, $taxonomy) {
             $post_type = str_replace("category","",$taxonomy);
             $post_type = str_replace("_tags","",$post_type);
             $slug = $post_types[$post_type]['rewrite']['slug'];
-            if (geodir_wpml_is_post_type_translated($post_type) && gd_wpml_slug_translation_turned_on($post_type)) {
+            if (geodir_wpml_is_post_type_translated($post_type) && geodir_wpml_slug_translation_turned_on($post_type)) {
                 global $sitepress;
                 $default_lang = $sitepress->get_default_language();
-                $language_code = gd_wpml_get_lang_from_url($termlink);
+                $language_code = geodir_wpml_get_lang_from_url($termlink);
                 if (!$language_code ) {
                     $language_code  = $default_lang;
                 }
