@@ -2686,21 +2686,44 @@ function geodir_sc_single_closed_text() {
 //add_shortcode( 'gd_single_meta', 'geodir_sc_single_meta' );
 function geodir_sc_single_meta($atts, $content = '') {
     global $post;
+    //print_r($atts );
+
+    $original_id = isset($atts['id']) ? $atts['id'] : '';
+    $atts['location'] = !empty($atts['location']) ? $atts['location'] : 'none';
     $output = '';
     $atts = shortcode_atts( array(
-        'ID'    => $post->ID,
+        'id'    => $post->ID,
         'key'    => '', // the meta key : email
         'show'    => '', // title,value (default blank, all)
-        'display'    => 'block', // inline, block
+        'alignment'    => '', // left,right,center
         'location'  => 'none',
-    ), $atts, 'gd_single_meta' );
+    ), $atts, 'gd_post_meta' );
+    $atts['id'] = !empty($atts['id']) ? $atts['id'] : $post->ID;
+
 
 
     //print_r($atts );
-    $post_type = isset($post->post_type) ? $post->post_type : get_post_type($atts['ID']);
+    $post_type = !$original_id && isset($post->post_type) ? $post->post_type : get_post_type($atts['id']);
 
+    // error checks
+    $errors = array();
+    if(empty($atts['key'])){$errors[] = __('key is missing','geodirectory');}
+    if(empty($atts['id'])){$errors[] = __('id is missing','geodirectory');}
+    if(empty($post_type)){$errors[] = __('invalid post type','geodirectory');}
+
+    if(!empty($errors)){
+        $output .= implode(", ",$errors);
+    }
+    
+    
+
+
+
+    //echo '###'.$post_type;
+   //echo '###1';
     if(geodir_is_gd_post_type($post_type)){
         $fields = geodir_post_custom_fields('',  'all', $post_type , $atts['location']);
+        //print_r($fields);
         if(!empty($fields)){
             $field = array();
             foreach($fields as $field_info){
@@ -2708,11 +2731,18 @@ function geodir_sc_single_meta($atts, $content = '') {
                     $field = $field_info;
                 }
             }
-            if(!empty($field)){
-                if($atts['display']=='inline'){
-                    $field['css_class'] .= " geodir-meta-inline ";
-                }
-                $output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$atts['location'],$field,$atts['ID']);
+            if(!empty($field)){//echo '###xxx';
+//                if($atts['display']=='inline'){
+//                    $field['css_class'] .= " geodir-meta-inline ";
+//                }
+
+                if($atts['alignment']=='left'){$field['css_class'] .= " alignleft ";}
+                if($atts['alignment']=='center'){$field['css_class'] .= " aligncenter ";}
+                if($atts['alignment']=='right'){$field['css_class'] .= " alignright ";}
+
+                //print_r($field);
+
+                $output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$atts['location'],$field,$atts['id']);
             }else{
                 $output = "there is no key";
             }

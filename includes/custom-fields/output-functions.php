@@ -19,7 +19,7 @@
 function geodir_cf_checkbox($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_int($p)){$post = geodir_get_post_info($p);}
+    if(is_numeric($p)){$post = geodir_get_post_info($p);}
     else{ global $post;}
 
     if(!is_array($cf) && $cf!=''){
@@ -113,7 +113,7 @@ add_filter('geodir_custom_field_output_checkbox','geodir_cf_checkbox',10,3);
 function geodir_cf_fieldset($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_int($p)){$post = geodir_get_post_info($p);}
+    if(is_numeric($p)){$post = geodir_get_post_info($p);}
     else{ global $post;}
 
     if(!is_array($cf) && $cf!=''){
@@ -194,7 +194,7 @@ add_filter('geodir_custom_field_output_fieldset','geodir_cf_fieldset',10,3);
 function geodir_cf_url($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_int($p)){$post = geodir_get_post_info($p);}
+    if(is_numeric($p)){$post = geodir_get_post_info($p);}
     else{ global $post;}
 
     if(!is_array($cf) && $cf!=''){
@@ -310,7 +310,7 @@ add_filter('geodir_custom_field_output_url','geodir_cf_url',10,4);
 function geodir_cf_phone($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_int($p)){$post = geodir_get_post_info($p);}
+    if(is_numeric($p)){$post = geodir_get_post_info($p);}
     else{ global $post;}
 
     if(!is_array($cf) && $cf!=''){
@@ -400,7 +400,7 @@ add_filter('geodir_custom_field_output_phone','geodir_cf_phone',10,3);
 function geodir_cf_time($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_int($p)){$post = geodir_get_post_info($p);}
+    if(is_numeric($p)){$post = geodir_get_post_info($p);}
     else{ global $post;}
 
     if(!is_array($cf) && $cf!=''){
@@ -495,7 +495,7 @@ add_filter('geodir_custom_field_output_time','geodir_cf_time',10,3);
 function geodir_cf_datepicker($html,$location,$cf,$p=''){
     global $preview;
     // check we have the post value
-    if(is_int($p)){$post = geodir_get_post_info($p);}
+    if(is_numeric($p)){$post = geodir_get_post_info($p);}
     else{ global $post;}
 
     if(!is_array($cf) && $cf!=''){
@@ -615,7 +615,7 @@ add_filter('geodir_custom_field_output_datepicker','geodir_cf_datepicker',10,3);
 function geodir_cf_text($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_int($p)){$post = geodir_get_post_info($p);}
+    if(is_numeric($p)){$post = geodir_get_post_info($p);}
     else{ global $post;}
 
     if(!is_array($cf) && $cf!=''){
@@ -722,7 +722,7 @@ add_filter('geodir_custom_field_output_text','geodir_cf_text',10,3);
 function geodir_cf_radio($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_int($p)){$post = geodir_get_post_info($p);}
+    if(is_numeric($p)){$post = geodir_get_post_info($p);}
     else{ global $post;}
 
     if(!is_array($cf) && $cf!=''){
@@ -831,7 +831,7 @@ add_filter('geodir_custom_field_output_radio','geodir_cf_radio',10,3);
 function geodir_cf_select($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_int($p)){$post = geodir_get_post_info($p);}
+    if(is_numeric($p)){$post = geodir_get_post_info($p);}
     else{ global $post;}
 
     if(!is_array($cf) && $cf!=''){
@@ -933,7 +933,7 @@ add_filter('geodir_custom_field_output_select','geodir_cf_select',10,3);
 function geodir_cf_multiselect($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_int($p)){$post = geodir_get_post_info($p);}
+    if(is_numeric($p)){$post = geodir_get_post_info($p);}
     else{ global $post;}
 
     if(!is_array($cf) && $cf!=''){
@@ -1060,7 +1060,7 @@ add_filter('geodir_custom_field_output_multiselect','geodir_cf_multiselect',10,3
 function geodir_cf_email($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_int($p)){$post = geodir_get_post_info($p);}
+    if(is_numeric($p)){$post = geodir_get_post_info($p);}
     else{ global $post;}
 
     if(!is_array($cf) && $cf!=''){
@@ -1225,7 +1225,7 @@ add_filter('geodir_custom_field_output_email','geodir_cf_email',10,3);
 function geodir_cf_file($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_int($p)){$post = geodir_get_post_info($p);}
+    if(is_numeric($p)){$post = geodir_get_post_info($p);}
     else{ global $post;}
 
     if(!is_array($cf) && $cf!=''){
@@ -1371,7 +1371,7 @@ add_filter('geodir_custom_field_output_file','geodir_cf_file',10,3);
 function geodir_cf_textarea($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_int($p)){$post = geodir_get_post_info($p);}
+    if(is_numeric($p)){$post = geodir_get_post_info($p);}
     else{ global $post;}
 
     if(!is_array($cf) && $cf!=''){
@@ -1462,7 +1462,7 @@ add_filter('geodir_custom_field_output_textarea','geodir_cf_textarea',10,3);
 function geodir_cf_html($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_int($p)){$post = geodir_get_post_info($p);}
+    if(is_numeric($p)){$post = geodir_get_post_info($p);}
     else{ global $post;}
 
     if(!is_array($cf) && $cf!=''){
@@ -1552,7 +1552,7 @@ add_filter('geodir_custom_field_output_html','geodir_cf_html',10,3);
 function geodir_cf_taxonomy($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_int($p)){$post = geodir_get_post_info($p);}
+    if(is_numeric($p)){$post = geodir_get_post_info($p);}
     else{ global $post;}
 
     if(!is_array($cf) && $cf!=''){
@@ -1676,7 +1676,7 @@ add_filter('geodir_custom_field_output_taxonomy','geodir_cf_taxonomy',10,3);
 function geodir_cf_address($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_int($p)){$post = geodir_get_post_info($p);}
+    if(is_numeric($p)){$post = geodir_get_post_info($p);}
     else{ global $post;}
 
     if(!is_array($cf) && $cf!=''){
@@ -1864,7 +1864,7 @@ add_filter('geodir_custom_field_output_address','geodir_cf_address',10,3);
  */
 function geodir_cf_business_hours($html,$location,$cf,$p=''){
     // check we have the post value
-    if(is_int($p)){$post = geodir_get_post_info($p);}
+    if(is_numeric($p)){$post = geodir_get_post_info($p);}
     else{ global $post;}
 
     if(!is_array($cf) && $cf!=''){

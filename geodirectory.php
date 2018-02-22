@@ -211,7 +211,7 @@ final class GeoDirectory {
 
 
 
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-session.php' );
+	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-session.php' );
 	    GeoDir_Email::init();// set up the email class
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/helper-functions.php' );
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/validation-functions.php' );
@@ -243,8 +243,10 @@ final class GeoDirectory {
 
         //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_taxonomy_hooks_actions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodirectory_hooks_actions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-widget-functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/maps/map_functions.php' );
+	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/libraries/wp-super-duper.php' );
+	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-widget-functions.php' );
+
+	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/maps/map_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/maps/map_template_tags.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodirectory_template_tags.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodirectory_template_actions.php' );

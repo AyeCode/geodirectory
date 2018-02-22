@@ -83,7 +83,7 @@ function geodir_set_postcat_structure($post_id, $taxonomy, $default_cat = '', $c
  */
 function geodir_get_post_info($post_id = '')
 {
-
+    
     global $wpdb, $plugin_prefix, $post, $post_info,$preview;
     
    
