@@ -41,7 +41,7 @@ class GeoDir_Shortcodes {
             'gd_loop_paging'            => __CLASS__ . '::gd_loop_paging', // only for GD archive page
             'gd_loop_actions'            => __CLASS__ . '::gd_loop_actions', // only for GD archive page
             'gd_single_closed_text'    	=> __CLASS__ . '::gd_single_closed_text', // only on GD detail page
-            'gd_single_meta'    	=> __CLASS__ . '::gd_single_meta', // only on GD detail page
+            //'gd_single_meta'    	=> __CLASS__ . '::gd_single_meta', // only on GD detail page
 
         );
 
