@@ -120,25 +120,11 @@ final class GeoDirectory {
         $this->define( 'GEODIR_ICON_TABLE', $plugin_prefix . 'post_icon' ); // post icon table
         $this->define( 'GEODIR_REVIEW_TABLE', $plugin_prefix . 'post_review' ); // post review table
 		$this->define( 'GEODIR_BUSINESS_HOURS_TABLE', $plugin_prefix . 'business_hours' ); // business hours table
-        
-        // Google Analytic app settings
-        $this->define( 'GEODIR_GA_CLIENTID', '687912069872-sdpsjssrdt7t3ao1dnv1ib71hkckbt5s.apps.googleusercontent.com' );
-        $this->define( 'GEODIR_GA_CLIENTSECRET', 'yBVkDpqJ1B9nAETHy738Zn8C' ); // don't worry - this don't need to be secret in our case
-        $this->define( 'GEODIR_GA_REDIRECT', 'urn:ietf:wg:oauth:2.0:oob' );
-        $this->define( 'GEODIR_GA_SCOPE', 'https://www.googleapis.com/auth/analytics' ); // .readonly
 		
 		$this->define( 'GEODIR_ROUNDING_PRECISION', 4 );
         
         // Do not store any revisions (except the one autosave per post).
         $this->define( 'WP_POST_REVISIONS', 0 );
-
-	    /*
-	 * Define our Google Analytic app settings
-	 */
-	    if (!defined('GEODIR_GA_CLIENTID')) define('GEODIR_GA_CLIENTID', '687912069872-sdpsjssrdt7t3ao1dnv1ib71hkckbt5s.apps.googleusercontent.com');
-	    if (!defined('GEODIR_GA_CLIENTSECRET')) define('GEODIR_GA_CLIENTSECRET', 'yBVkDpqJ1B9nAETHy738Zn8C'); //don't worry - this don't need to be secret in our case
-	    if (!defined('GEODIR_GA_REDIRECT')) define('GEODIR_GA_REDIRECT', 'urn:ietf:wg:oauth:2.0:oob');
-	    if (!defined('GEODIR_GA_SCOPE')) define('GEODIR_GA_SCOPE', 'https://www.googleapis.com/auth/analytics');//.readonly
         
         // This will store the cached post custom fields per package for each page load so not to run for each listing.
         $geodir_post_custom_fields_cache = array();
@@ -236,7 +222,6 @@ final class GeoDirectory {
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-content-listing-functions.php' );
 	    GeoDir_Comments::init();
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/location_functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/google_analytics.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-shortcode-functions.php' );
 		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/business-hours-functions.php' );
 
@@ -272,7 +257,6 @@ final class GeoDirectory {
 	        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/admin-functions.php' );
 	        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/diagnostic-functions.php' );
 			require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/dashboard-functions.php' );
-            require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/class.analytics.stats.php' );
             GeoDir_Admin_Install::init(); // init the install class
             require_once( GEODIRECTORY_PLUGIN_DIR . 'upgrade.php' );
 

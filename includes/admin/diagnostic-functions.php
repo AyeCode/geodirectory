@@ -1024,61 +1024,6 @@ function geodir_posts_clauses_request($clauses)
 
 //add_action('save_post', 'geodir_update_location_prefix',10,2);
 
-add_action( 'wp_ajax_geodir_ga_callback', 'geodir_ga_callback' );
-
-function geodir_ga_callback(){
-
-if(isset($_REQUEST['code']) && $_REQUEST['code']) {
-    $oAuthURL = "https://www.googleapis.com/oauth2/v3/token?";
-    $code = "code=".$_REQUEST['code'];
-    $grant_type = "&grant_type=authorization_code";
-    $redirect_uri = "&redirect_uri=" . admin_url('admin-ajax.php') . "?action=geodir_ga_callback";
-    $client_id = "&client_id=".geodir_get_option('geodir_ga_client_id');
-    $client_secret = "&client_secret=".geodir_get_option('geodir_ga_client_secret');
-
-    $auth_url = $oAuthURL . $code . $redirect_uri .  $grant_type . $client_id .$client_secret;
-
-    $response = wp_remote_post($auth_url, array('timeout' => 15));
-
-    //print_r($response);
-
-    $error_msg =  __('Something went wrong','geodirectory');
-    if(!empty($response['response']['code']) && $response['response']['code']==200){
-
-        $parts = json_decode($response['body']);
-        //print_r($parts);
-        if(!isset($parts->access_token)){echo $error_msg." - #1";exit;}
-        else{
-
-            geodir_update_option('gd_ga_access_token', $parts->access_token);
-            geodir_update_option('gd_ga_refresh_token', $parts->refresh_token);
-            ?><script>window.close();</script><?php
-        }
-
-
-    }
-    elseif(!empty($response['response']['code'])) {
-        $parts = json_decode($response['body']);
-
-        if(isset($parts->error)){
-            echo $parts->error.": ".$parts->error_description;exit;
-        }else{
-            echo $error_msg." - #2";exit;
-        }
-
-    }else{
-
-        echo $error_msg." - #3";exit;
-
-    }
-}
-    exit;
-}
-
-
-
-
-
 /**
  * Truncate the countries table and clear version numbers so it will be installed on refresh..
  *

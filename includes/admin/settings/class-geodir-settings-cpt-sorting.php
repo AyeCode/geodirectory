@@ -159,8 +159,10 @@ if ( ! class_exists( 'GD_Settings_Cpt', false ) ) :
 											echo '<i class="fa fa-cog" aria-hidden="true"></i>';
 										} ?>
 										<?php echo sanitize_text_field( $val['frontend_title'] ); ?>
+										<?php if ( ! empty( $val['description'] ) ) { ?>
 										<span class="gd-help-tip gd-help-tip-no-margin dashicons dashicons-editor-help"
 										      title="<?php echo sanitize_text_field( $val['description'] ); ?>">
+										<?php } ?>
 								</span>
 									</a>
 								</li>

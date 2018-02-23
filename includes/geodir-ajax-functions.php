@@ -272,25 +272,3 @@ function geodir_ajax_handler() {
 
     geodir_die();
 }
-
-
-function geodir_show_ga_stats(){
-    if (isset($_REQUEST['ga_start'])) {
-        $ga_start = $_REQUEST['ga_start'];
-    } else {
-        $ga_start = '';
-    }
-    if (isset($_REQUEST['ga_end'])) {
-        $ga_end = $_REQUEST['ga_end'];
-    } else {
-        $ga_end = '';
-    }
-    try {
-        geodir_getGoogleAnalytics($_REQUEST['ga_page'], $ga_start, $ga_end);
-    } catch (Exception $e) {
-        geodir_error_log( wp_sprintf( __( 'GD Google Analytics API Error(%s) : %s', 'geodirectory' ), $e->getCode(), $e->getMessage() ) );
-    }
-    die;
-}
-add_action( 'wp_ajax_gdga', 'geodir_show_ga_stats' );
-add_action( 'wp_ajax_nopriv_gdga', 'geodir_show_ga_stats' );
