@@ -449,8 +449,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 		public static function multiselect_input($output,$result_str,$cf,$field_info){
 			ob_start();
 
-			$extra = maybe_unserialize($field_info->extra_fields);
-			$multi_display_type = isset($extra['multi_display_type']) ? $extra['multi_display_type'] : $extra ;
+			$extra_fields = !empty($field_info->extra_fields) ? maybe_unserialize($field_info->extra_fields) : NULL;
+			$multi_display_type = isset($extra_fields['multi_display_type']) ? $extra_fields['multi_display_type'] : 'select';
 			?>
 			<li class="gd-advanced-setting">
 				<label for="multi_display_type" class="gd-cf-tooltip-wrap">
