@@ -58,8 +58,8 @@ class GeoDir_AJAX {
 			if ( $nopriv ) {
 				add_action( 'wp_ajax_nopriv_geodir_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 
-				// WC AJAX can be used for frontend ajax requests.
-				add_action( 'wc_ajax_' . $ajax_event, array( __CLASS__, $ajax_event ) );
+				// GeoDir AJAX can be used for frontend ajax requests.
+				add_action( 'geodir_ajax_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 			}
 		}
 	}

@@ -35,9 +35,9 @@ class GeoDir_WP_Dashboard {
 	 */
 	public function init() {
 		if ( current_user_can( 'manage_options' ) ) {
-			wp_add_dashboard_widget( 'woocommerce_dashboard_recent_reviews', __( 'WooCommerce recent reviews', 'woocommerce' ), array( $this, 'recent_reviews' ) );
+			wp_add_dashboard_widget( 'geodir_dashboard_recent_reviews', __( 'GeoDirectory recent reviews', 'geodirectory' ), array( $this, 'recent_reviews' ) );
 		}
-		wp_add_dashboard_widget( 'woocommerce_dashboard_status', __( 'WooCommerce status', 'woocommerce' ), array( $this, 'status_widget' ) );
+		wp_add_dashboard_widget( 'geodir_dashboard_status', __( 'GeoDirectory status', 'geodirectory' ), array( $this, 'status_widget' ) );
 	}
 
 	/**
@@ -54,7 +54,7 @@ class GeoDir_WP_Dashboard {
 		$query['join']   .= "INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS order_item_meta ON order_items.order_item_id = order_item_meta.order_item_id ";
 		$query['join']   .= "INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS order_item_meta_2 ON order_items.order_item_id = order_item_meta_2.order_item_id ";
 		$query['where']   = "WHERE posts.post_type IN ( '" . implode( "','", wc_get_order_types( 'order-count' ) ) . "' ) ";
-		$query['where']  .= "AND posts.post_status IN ( 'wc-" . implode( "','wc-", apply_filters( 'woocommerce_reports_order_statuses', array( 'completed', 'processing', 'on-hold' ) ) ) . "' ) ";
+		$query['where']  .= "AND posts.post_status IN ( 'wc-" . implode( "','wc-", apply_filters( 'geodir_reports_order_statuses', array( 'completed', 'processing', 'on-hold' ) ) ) . "' ) ";
 		$query['where']  .= "AND order_item_meta.meta_key = '_qty' ";
 		$query['where']  .= "AND order_item_meta_2.meta_key = '_product_id' ";
 		$query['where']  .= "AND posts.post_date >= '" . date( 'Y-m-01', current_time( 'timestamp' ) ) . "' ";
@@ -63,7 +63,7 @@ class GeoDir_WP_Dashboard {
 		$query['orderby'] = "ORDER BY qty DESC";
 		$query['limits']  = "LIMIT 1";
 
-		return $wpdb->get_row( implode( ' ', apply_filters( 'woocommerce_dashboard_status_widget_top_seller_query', $query ) ) );
+		return $wpdb->get_row( implode( ' ', apply_filters( 'geodir_dashboard_status_widget_top_seller_query', $query ) ) );
 	}
 
 	/**
@@ -90,9 +90,9 @@ class GeoDir_WP_Dashboard {
 		return ;
 		include_once( dirname( __FILE__ ) . '/reports/class-wc-admin-report.php' );
 
-		$reports = new WC_Admin_Report();
+		$reports = new GeoDir_Admin_Report();
 
-		echo '<ul class="wc_status_list">';
+		echo '<ul class="gd_status_list">';
 
 		if ( current_user_can( 'view_woocommerce_reports' ) && ( $report_data = $this->get_sales_report_data() ) ) {
 			?>
@@ -102,7 +102,7 @@ class GeoDir_WP_Dashboard {
 					<?php
 						/* translators: %s: net sales */
 						printf(
-							__( '%s net sales this month', 'woocommerce' ),
+							__( '%s net sales this month', 'geodirectory' ),
 							'<strong>' . wc_price( $report_data->net_sales ) . '</strong>'
 							);
 					?>
@@ -119,7 +119,7 @@ class GeoDir_WP_Dashboard {
 					<?php
 						/* translators: 1: top seller product title 2: top seller quantity */
 						printf(
-							__( '%1$s top seller this month (sold %2$d)', 'woocommerce' ),
+							__( '%1$s top seller this month (sold %2$d)', 'geodirectory' ),
 							'<strong>' . get_the_title( $top_seller->product_id ) . '</strong>',
 							$top_seller->qty
 						);
@@ -129,119 +129,16 @@ class GeoDir_WP_Dashboard {
 			<?php
 		}
 
-		$this->status_widget_order_rows();
-		$this->status_widget_stock_rows();
+		$this->status_widget_listing_rows();
 
-		do_action( 'woocommerce_after_dashboard_status_widget', $reports );
+		do_action( 'geodir_after_dashboard_status_widget', $reports );
 		echo '</ul>';
 	}
 
 	/**
 	 * Show order data is status widget.
 	 */
-	private function status_widget_order_rows() {
-		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			return;
-		}
-		$on_hold_count    = 0;
-		$processing_count = 0;
-
-		foreach ( wc_get_order_types( 'order-count' ) as $type ) {
-			$counts           = (array) wp_count_posts( $type );
-			$on_hold_count    += isset( $counts['wc-on-hold'] ) ? $counts['wc-on-hold'] : 0;
-			$processing_count += isset( $counts['wc-processing'] ) ? $counts['wc-processing'] : 0;
-		}
-		?>
-		<li class="processing-orders">
-			<a href="<?php echo admin_url( 'edit.php?post_status=wc-processing&post_type=shop_order' ); ?>">
-				<?php
-					/* translators: %s: order count */
-					printf(
-						_n( '<strong>%s order</strong> awaiting processing', '<strong>%s orders</strong> awaiting processing', $processing_count, 'woocommerce' ),
-						$processing_count
-					);
-				?>
-			</a>
-		</li>
-		<li class="on-hold-orders">
-			<a href="<?php echo admin_url( 'edit.php?post_status=wc-on-hold&post_type=shop_order' ); ?>">
-				<?php
-					/* translators: %s: order count */
-					printf(
-						_n( '<strong>%s order</strong> on-hold', '<strong>%s orders</strong> on-hold', $on_hold_count, 'woocommerce' ),
-						$on_hold_count
-					);
-				?>
-			</a>
-		</li>
-		<?php
-	}
-
-	/**
-	 * Show stock data is status widget.
-	 */
-	private function status_widget_stock_rows() {
-		global $wpdb;
-
-		// Get products using a query - this is too advanced for get_posts :(
-		$stock          = absint( max( get_option( 'woocommerce_notify_low_stock_amount' ), 1 ) );
-		$nostock        = absint( max( get_option( 'woocommerce_notify_no_stock_amount' ), 0 ) );
-		$transient_name = 'wc_low_stock_count';
-
-		if ( false === ( $lowinstock_count = get_transient( $transient_name ) ) ) {
-			$query_from = apply_filters( 'woocommerce_report_low_in_stock_query_from', "FROM {$wpdb->posts} as posts
-				INNER JOIN {$wpdb->postmeta} AS postmeta ON posts.ID = postmeta.post_id
-				INNER JOIN {$wpdb->postmeta} AS postmeta2 ON posts.ID = postmeta2.post_id
-				WHERE 1=1
-				AND posts.post_type IN ( 'product', 'product_variation' )
-				AND posts.post_status = 'publish'
-				AND postmeta2.meta_key = '_manage_stock' AND postmeta2.meta_value = 'yes'
-				AND postmeta.meta_key = '_stock' AND CAST(postmeta.meta_value AS SIGNED) <= '{$stock}'
-				AND postmeta.meta_key = '_stock' AND CAST(postmeta.meta_value AS SIGNED) > '{$nostock}'
-			" );
-			$lowinstock_count = absint( $wpdb->get_var( "SELECT COUNT( DISTINCT posts.ID ) {$query_from};" ) );
-			set_transient( $transient_name, $lowinstock_count, DAY_IN_SECONDS * 30 );
-		}
-
-		$transient_name = 'wc_outofstock_count';
-
-		if ( false === ( $outofstock_count = get_transient( $transient_name ) ) ) {
-			$query_from = apply_filters( 'woocommerce_report_out_of_stock_query_from', "FROM {$wpdb->posts} as posts
-				INNER JOIN {$wpdb->postmeta} AS postmeta ON posts.ID = postmeta.post_id
-				INNER JOIN {$wpdb->postmeta} AS postmeta2 ON posts.ID = postmeta2.post_id
-				WHERE 1=1
-				AND posts.post_type IN ( 'product', 'product_variation' )
-				AND posts.post_status = 'publish'
-				AND postmeta2.meta_key = '_manage_stock' AND postmeta2.meta_value = 'yes'
-				AND postmeta.meta_key = '_stock' AND CAST(postmeta.meta_value AS SIGNED) <= '{$nostock}'
-			" );
-			$outofstock_count = absint( $wpdb->get_var( "SELECT COUNT( DISTINCT posts.ID ) {$query_from};" ) );
-			set_transient( $transient_name, $outofstock_count, DAY_IN_SECONDS * 30 );
-		}
-		?>
-		<li class="low-in-stock">
-			<a href="<?php echo admin_url( 'admin.php?page=wc-reports&tab=stock&report=low_in_stock' ); ?>">
-				<?php
-					/* translators: %s: order count */
-					printf(
-						_n( '<strong>%s product</strong> low in stock', '<strong>%s products</strong> low in stock', $lowinstock_count, 'woocommerce' ),
-						$lowinstock_count
-					);
-				?>
-			</a>
-		</li>
-		<li class="out-of-stock">
-			<a href="<?php echo admin_url( 'admin.php?page=wc-reports&tab=stock&report=out_of_stock' ); ?>">
-				<?php
-					/* translators: %s: order count */
-					printf(
-						_n( '<strong>%s product</strong> out of stock', '<strong>%s products</strong> out of stock', $outofstock_count, 'woocommerce' ),
-						$outofstock_count
-					);
-				?>
-			</a>
-		</li>
-		<?php
+	private function status_widget_listing_rows() {
 	}
 
 	/**
@@ -273,16 +170,16 @@ class GeoDir_WP_Dashboard {
 				$rating = intval( get_comment_meta( $comment->comment_ID, 'rating', true ) );
 
 				/* translators: %s: rating */
-				echo '<div class="star-rating"><span style="width:' . ( $rating * 20 ) . '%">' . sprintf( __( '%s out of 5', 'woocommerce' ), $rating ) . '</span></div>';
+				echo '<div class="star-rating"><span style="width:' . ( $rating * 20 ) . '%">' . sprintf( __( '%s out of 5', 'geodirectory' ), $rating ) . '</span></div>';
 
 				/* translators: %s: review author */
-				echo '<h4 class="meta"><a href="' . get_permalink( $comment->ID ) . '#comment-' . absint( $comment->comment_ID ) . '">' . esc_html( apply_filters( 'woocommerce_admin_dashboard_recent_reviews', $comment->post_title, $comment ) ) . '</a> ' . sprintf( __( 'reviewed by %s', 'woocommerce' ), esc_html( $comment->comment_author ) ) . '</h4>';
+				echo '<h4 class="meta"><a href="' . get_permalink( $comment->ID ) . '#comment-' . absint( $comment->comment_ID ) . '">' . esc_html( apply_filters( 'geodir_admin_dashboard_recent_reviews', $comment->post_title, $comment ) ) . '</a> ' . sprintf( __( 'reviewed by %s', 'geodirectory' ), esc_html( $comment->comment_author ) ) . '</h4>';
 				echo '<blockquote>' . wp_kses_data( $comment->comment_excerpt ) . ' [...]</blockquote></li>';
 
 			}
 			echo '</ul>';
 		} else {
-			echo '<p>' . __( 'There are no product reviews yet.', 'woocommerce' ) . '</p>';
+			echo '<p>' . __( 'There are no product reviews yet.', 'geodirectory' ) . '</p>';
 		}
 	}
 }

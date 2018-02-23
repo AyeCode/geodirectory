@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 /**
- * WC_Admin_Menus Class.
+ * GeoDir_Admin_Dummy_Data Class.
  */
 class GeoDir_Admin_Dummy_Data {
 

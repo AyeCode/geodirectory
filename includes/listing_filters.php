@@ -55,7 +55,7 @@ function set_listing_request($query )
     global $wp_query, $wpdb, $geodir_post_type, $table, $dist, $mylat, $mylon, $s, $snear, $s, $s_A, $s_SA;
 
 
-    // fix woocommerce shop products filtered by language for GD + WPML + Woocommerce
+    // fix geodirectory listings filtered by language for GD + WPML
     if (!geodir_is_geodir_page()) {
         return;
     }

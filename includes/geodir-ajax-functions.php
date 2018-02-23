@@ -131,7 +131,7 @@ function geodir_ajax_handler() {
             //include_once(geodir_plugin_path() . '/includes/admin/geodir_admin_ajax.php');
         } else {
             wp_redirect(geodir_login_url());
-            gd_die();
+            geodir_die();
         }
     }
 
@@ -193,7 +193,7 @@ function geodir_ajax_handler() {
             geodir_get_template( 'popup-forms.php' );
         }
 
-        gd_die();
+        geodir_die();
     }
 
     /*if(isset($_REQUEST['geodir_ajax']) && $_REQUEST['geodir_ajax'] == 'filter_ajax'){
@@ -270,7 +270,7 @@ function geodir_ajax_handler() {
         }
     }
 
-    gd_die();
+    geodir_die();
 }
 
 

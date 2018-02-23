@@ -6,7 +6,7 @@
  * @category    Admin
  * @package     GeoDirectory/Admin
  * @version     2.0.0
- * @info        Uses WC_Admin_Notices class as a base.
+ * @info        Uses GeoDir_Admin_Notices class as a base.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -116,7 +116,7 @@ class GeoDir_Admin_Notices {
 	 */
 	public static function hide_notices() {
 		if ( isset( $_GET['gd-hide-notice'] ) && isset( $_GET['_gd_notice_nonce'] ) ) {
-			if ( ! wp_verify_nonce( $_GET['_gd_notice_nonce'], 'geodirectory_hide_notices_nonce' ) ) {
+			if ( ! wp_verify_nonce( $_GET['_gd_notice_nonce'], 'geodir_hide_notices_nonce' ) ) {
 				wp_die( __( 'Action failed. Please refresh the page and retry.', 'geodirectory' ) );
 			}
 

@@ -23,21 +23,21 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 		/**
 		 * The single instance of the class.
 		 *
-		 * @var WooCommerce
-		 * @since 2.1
+		 * @var GeoDirectory
+		 * @since 2.0.0
 		 */
 		protected static $_instance = null;
 
 
 		/**
-		 * Main WooCommerce Instance.
+		 * Main GeoDirectory Instance.
 		 *
-		 * Ensures only one instance of WooCommerce is loaded or can be loaded.
+		 * Ensures only one instance of GeoDirectory is loaded or can be loaded.
 		 *
-		 * @since 2.1
+		 * @since 2.0.0
 		 * @static
-		 * @see WC()
-		 * @return WooCommerce - Main instance.
+		 * @see GeoDir()
+		 * @return GeoDirectory - Main instance.
 		 */
 		public static function instance() {
 			if ( is_null( self::$_instance ) ) {
@@ -449,8 +449,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 		public static function multiselect_input($output,$result_str,$cf,$field_info){
 			ob_start();
 
-			$extra = maybe_unserialize($field_info->extra_fields);
-			$multi_display_type = isset($extra['multi_display_type']) ? $extra['multi_display_type'] : $extra ;
+			$extra_fields = !empty($field_info->extra_fields) ? maybe_unserialize($field_info->extra_fields) : NULL;
+			$multi_display_type = isset($extra_fields['multi_display_type']) ? $extra_fields['multi_display_type'] : 'select';
 			?>
 			<li class="gd-advanced-setting">
 				<label for="multi_display_type" class="gd-cf-tooltip-wrap">

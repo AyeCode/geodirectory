@@ -93,7 +93,7 @@ function geodir_is_post_type_archive( $post_types = array() ) {
  * @param  bool   $allow_html Allow sanitized HTML if true or escape
  * @return string
  */
-function gd_help_tip( $tip, $allow_html = false ) {
+function geodir_help_tip( $tip, $allow_html = false ) {
     if ( $allow_html ) {
         $tip = geodir_sanitize_tooltip( $tip );
     } else {

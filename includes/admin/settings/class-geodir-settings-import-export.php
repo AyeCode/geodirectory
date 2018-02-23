@@ -1,11 +1,11 @@
 <?php
 /**
- * WooCommerce Product Settings
+ * GeoDirectory Import/Export Settings
  *
- * @author   WooThemes
+ * @author   GeoDirectory
  * @category Admin
- * @package  WooCommerce/Admin
- * @version  2.4.0
+ * @package  GeoDirectory/Admin
+ * @version  2.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -27,10 +27,10 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 			$this->id    = 'import-export';
 			$this->label = __( 'Import/Export', 'geodirectory' );
 
-			add_filter( 'woocommerce_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
-			add_action( 'woocommerce_settings_' . $this->id, array( $this, 'output' ) );
-			add_action( 'woocommerce_settings_save_' . $this->id, array( $this, 'save' ) );
-			add_action( 'woocommerce_sections_' . $this->id, array( $this, 'output_sections' ) );
+			add_filter( 'geodir_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
+			add_action( 'geodir_settings_' . $this->id, array( $this, 'output' ) );
+			add_action( 'geodir_settings_save_' . $this->id, array( $this, 'save' ) );
+			add_action( 'geodir_sections_' . $this->id, array( $this, 'output_sections' ) );
 		}
 
 		/**
@@ -47,7 +47,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 				'settings' 		=> __( 'Settings', 'geodirectory' ),
 			);
 
-			return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
+			return apply_filters( 'geodir_get_sections_' . $this->id, $sections );
 		}
 
 		/**
@@ -161,7 +161,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 				));
 			}
 
-			return apply_filters( 'woocommerce_get_settings_' . $this->id, $settings, $current_section );
+			return apply_filters( 'geodir_get_settings_' . $this->id, $settings, $current_section );
 		}
 
 		/**
@@ -618,20 +618,6 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 								jQuery($cont).find('.gd-imex-btns').show();
 							}
 						}, 1000);
-					});
-
-					jQuery('#gd_ie_imposts_sample').click(function(){
-						if (jQuery('#gd_ie_imposts_csv').val() != '') {
-							window.location.href = jQuery('#gd_ie_imposts_csv').val();
-							return false;
-						}
-					});
-
-					jQuery('#gd_ie_imcats_sample').click(function(){
-						if (jQuery('#gd_ie_imcats_csv').val() != '') {
-							window.location.href = jQuery('#gd_ie_imcats_csv').val();
-							return false;
-						}
 					});
 					
 					$('#gd_ie_download_sample').click(function(e) {

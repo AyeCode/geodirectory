@@ -6,7 +6,7 @@
  * @category    Admin
  * @package     GeoDirectory/Admin
  * @version     2.0.0
- * @info        Uses WC_Admin_Notices class as a base.
+ * @info        Uses GeoDir_Admin_Comments class as a base.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * GeoDir_Admin_Notices Class.
+ * GeoDir_Admin_Comments Class.
  */
 class GeoDir_Admin_Comments {
 

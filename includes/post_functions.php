@@ -1636,7 +1636,7 @@ function geodir_only_supportable_attachments_remove($file)
  * @global string $table_prefix WordPress Database Table prefix.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  */
-function gd_copy_original_translation()
+function geodir_copy_original_translation()
 {
     if (function_exists('icl_object_id')) {
         global $wpdb, $table_prefix, $plugin_prefix;
@@ -1688,7 +1688,7 @@ function gd_copy_original_translation()
 }
 
 
-add_action('wp_ajax_gd_copy_original_translation', 'gd_copy_original_translation');
+add_action('wp_ajax_gd_copy_original_translation', 'geodir_copy_original_translation');
 //add_action('wp_ajax_nopriv_dc_update_profile', 'dc_update_profile_callback');
 
 

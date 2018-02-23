@@ -25,14 +25,14 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 		public function __construct() {
 
 			$this->id    = 'emails';
-			$this->label = __( 'Emails', 'woocommerce' );
+			$this->label = __( 'Emails', 'geodirectory' );
 
-			add_filter( 'woocommerce_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
-			add_action( 'woocommerce_settings_' . $this->id, array( $this, 'output' ) );
-			add_action( 'woocommerce_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
+			add_filter( 'geodir_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
+			add_action( 'geodir_settings_' . $this->id, array( $this, 'output' ) );
+			add_action( 'geodir_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
 
-			add_action( 'woocommerce_settings_save_' . $this->id, array( $this, 'save' ) );
-			add_action( 'woocommerce_sections_' . $this->id, array( $this, 'output_sections' ) );
+			add_action( 'geodir_settings_save_' . $this->id, array( $this, 'save' ) );
+			add_action( 'geodir_sections_' . $this->id, array( $this, 'output_sections' ) );
 		}
 
 		/**
@@ -43,13 +43,13 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 		public function get_sections() {
 
 			$sections = array(
-				''          	=> __( 'Email options', 'woocommerce' ),
-				'admin_emails'       => __( 'Admin emails', 'woocommerce' ),
-				'client_emails' 	=> __( 'User emails', 'woocommerce' ),
-				'other_emails' 	=> __( 'Other emails', 'woocommerce' ),
+				''          	=> __( 'Email options', 'geodirectory' ),
+				'admin_emails'       => __( 'Admin emails', 'geodirectory' ),
+				'client_emails' 	=> __( 'User emails', 'geodirectory' ),
+				'other_emails' 	=> __( 'Other emails', 'geodirectory' ),
 			);
 
-			return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
+			return apply_filters( 'geodir_get_sections_' . $this->id, $sections );
 		}
 
 		/**
@@ -81,7 +81,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 		public function get_settings( $current_section = '' ) {
 
 			if($current_section == 'other_emails'){
-				$settings = apply_filters( 'woocommerce_other_email_settings', array(
+				$settings = apply_filters( 'geodir_other_email_settings', array(
 
 
 					array('name' => __('Send to friend', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_send_friend_settings'),
@@ -153,7 +153,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 				));
 			}
 			elseif($current_section == 'client_emails'){
-				$settings = apply_filters( 'woocommerce_user_email_settings', array(
+				$settings = apply_filters( 'geodir_user_email_settings', array(
 
 
 					array('name' => __('Pending listing submitted', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_user_pending_post_settings'),
@@ -320,7 +320,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 
 				));
 			}elseif($current_section == 'admin_emails'){
-				$settings = apply_filters( 'woocommerce_admin_email_settings', array(
+				$settings = apply_filters( 'geodir_admin_email_settings', array(
 
 
 					array('name' => __('Pending listing submitted', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_email_submitted_settings'),
@@ -427,7 +427,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 
 				));
 			}else{
-				$settings = apply_filters( 'woocommerce_email_settings', array(
+				$settings = apply_filters( 'geodir_email_settings', array(
 
 
 					array('name' => __('Email sender options', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'email_settings'),
@@ -488,7 +488,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 
 
 
-			return apply_filters( 'woocommerce_get_settings_' . $this->id, $settings, $current_section );
+			return apply_filters( 'geodir_get_settings_' . $this->id, $settings, $current_section );
 		}
 
 		/**

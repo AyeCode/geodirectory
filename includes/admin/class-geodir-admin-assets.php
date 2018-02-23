@@ -57,7 +57,7 @@ class GeoDir_Admin_Assets {
 		}
 
 		// Admin styles for GD pages only
-		if ( in_array( $screen_id, gd_get_screen_ids() ) ) {
+		if ( in_array( $screen_id, geodir_get_screen_ids() ) ) {
 
 			// load OSM styles if needed.
 			if($geodir_map_name == 'osm'){
@@ -162,7 +162,7 @@ class GeoDir_Admin_Assets {
 
 
 		// Admin scripts for GD pages only
-		if ( in_array( $screen_id, gd_get_screen_ids() ) ) {
+		if ( in_array( $screen_id, geodir_get_screen_ids() ) ) {
 			wp_enqueue_script( 'wp-color-picker' );
 			
 			// timepicker

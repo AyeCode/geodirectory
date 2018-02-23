@@ -393,7 +393,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			$screen		= get_current_screen();
 			$screen_id	= $screen ? $screen->id : '';
 		
-			if ( ! ( $screen_id && in_array( $screen_id, gd_get_screen_ids() ) ) ) {
+			if ( ! ( $screen_id && in_array( $screen_id, geodir_get_screen_ids() ) ) ) {
 				return;
 			}
 			
