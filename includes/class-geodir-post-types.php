@@ -28,7 +28,7 @@ class GeoDir_Post_types {
 		add_action( 'init', array( __CLASS__, 'register_post_types' ), 5 );
 		add_action( 'init', array( __CLASS__, 'register_post_status' ), 9 );
 		add_filter( 'rest_api_allowed_post_types', array( __CLASS__, 'rest_api_allowed_post_types' ) );
-		add_action( 'geodirectory_flush_rewrite_rules', array( __CLASS__, 'flush_rewrite_rules' ) );
+		add_action( 'geodir_flush_rewrite_rules', array( __CLASS__, 'flush_rewrite_rules' ) );
 	}
 
 	/**

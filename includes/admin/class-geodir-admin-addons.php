@@ -7,7 +7,7 @@
  * @category Admin
  * @package  GeoDirectoru/Admin
  * @version  2.0.0
- * @info     Derived from WC_Admin_Addons
+ * @info     Derived from GeoDir_Admin_Addons
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -40,12 +40,12 @@ class GeoDir_Admin_Addons {
 	 * @return array of objects
 	 */
 	public static function get_featured() {
-		if ( false === ( $featured = get_transient( 'wc_addons_featured' ) ) ) {
-			$raw_featured = wp_safe_remote_get( 'https://d3t0oesq8995hv.cloudfront.net/add-ons/featured.json', array( 'user-agent' => 'WooCommerce Addons Page' ) );
+		if ( false === ( $featured = get_transient( 'geodir_addons_featured' ) ) ) {
+			$raw_featured = wp_safe_remote_get( 'https://d3t0oesq8995hv.cloudfront.net/add-ons/featured.json', array( 'user-agent' => 'GeoDirectory Addons Page' ) );
 			if ( ! is_wp_error( $raw_featured ) ) {
 				$featured = json_decode( wp_remote_retrieve_body( $raw_featured ) );
 				if ( $featured ) {
-					set_transient( 'wc_addons_featured', $featured, WEEK_IN_SECONDS );
+					set_transient( 'geodir_addons_featured', $featured, WEEK_IN_SECONDS );
 				}
 			}
 		}
@@ -65,13 +65,13 @@ class GeoDir_Admin_Addons {
 
 		return array(); //@todo we prob don't need these yet.
 
-		if ( false === ( $sections = get_transient( 'wc_addons_sections' ) ) ) {
-			$raw_sections = wp_safe_remote_get( 'https://d3t0oesq8995hv.cloudfront.net/addon-sections.json', array( 'user-agent' => 'WooCommerce Addons Page' ) );
+		if ( false === ( $sections = get_transient( 'geodir_addons_sections' ) ) ) {
+			$raw_sections = wp_safe_remote_get( 'https://d3t0oesq8995hv.cloudfront.net/addon-sections.json', array( 'user-agent' => 'GeoDirectory Addons Page' ) );
 			if ( ! is_wp_error( $raw_sections ) ) {
 				$sections = json_decode( wp_remote_retrieve_body( $raw_sections ) );
 
 				if ( $sections ) {
-					set_transient( 'wc_addons_sections', $sections, WEEK_IN_SECONDS );
+					set_transient( 'geodir_addons_sections', $sections, WEEK_IN_SECONDS );
 				}
 			}
 		}

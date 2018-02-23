@@ -48,10 +48,10 @@ class GeoDir_Widget_Features extends WP_Widget {
                     echo "<h3 class='gd-fe-title'>" . $instance['title' . $i] . "</h3>";
                 }
                 if ($instance['image' . $i]) {
-                    echo "<div class='gd-fe-image'>" . gd_features_parse_image($instance['image' . $i], $icon_color) . "</div>";
+                    echo "<div class='gd-fe-image'>" . geodir_features_parse_image($instance['image' . $i], $icon_color) . "</div>";
                 }
                 if ($instance['desc' . $i]) {
-                    echo "<div class='gd-fe-desc'>" . gd_features_parse_desc($instance['desc' . $i]) . "</div>";
+                    echo "<div class='gd-fe-desc'>" . geodir_features_parse_desc($instance['desc' . $i]) . "</div>";
                 }
                 echo "</li>";
             } else {

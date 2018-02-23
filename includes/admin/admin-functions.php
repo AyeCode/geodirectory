@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @return array
  */
-function gd_get_screen_ids() {
+function geodir_get_screen_ids() {
 
 	$screen_ids = array(
 		'geodirectory_page_gd-settings',
@@ -365,7 +365,7 @@ function geodir_in_plugin_upgrade_message( $content ) {
 
 			$notices = (array) preg_split( '~[\r\n]+~', trim( $matches[2] ) );
 			if ( version_compare( GEODIRECTORY_VERSION, $version, '<' ) ) {
-				$upgrade_notice .= '<div class="geodir_plugin_upgrade_notice">';
+				$upgrade_notice .= '<div class="gd_plugin_upgrade_notice">';
 				foreach ( $notices as $index => $line ) {
 					$upgrade_notice .= wp_kses_post( preg_replace( '~\[([^\]]*)\]\(([^\)]*)\)~', '<a href="${2}">${1}</a>', $line ) );
 				}

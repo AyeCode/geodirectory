@@ -43,13 +43,13 @@ if ( ! class_exists( 'GD_Settings_Cpt', false ) ) :
 
 
 			$this->id    = 'cpt-sorting';
-			$this->label = __( 'Sorting options', 'woocommerce' );
+			$this->label = __( 'Sorting options', 'geodirectory' );
 
-			add_filter( 'woocommerce_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
-			add_action( 'woocommerce_settings_' . $this->id, array( $this, 'output' ) );
-			//add_action( 'woocommerce_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
-			//add_action( 'woocommerce_settings_save_' . $this->id, array( $this, 'save' ) );
-			//add_action( 'woocommerce_sections_' . $this->id, array( $this, 'output_sections' ) );
+			add_filter( 'geodir_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
+			add_action( 'geodir_settings_' . $this->id, array( $this, 'output' ) );
+			//add_action( 'geodir_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
+			//add_action( 'geodir_settings_save_' . $this->id, array( $this, 'save' ) );
+			//add_action( 'geodir_sections_' . $this->id, array( $this, 'output_sections' ) );
 
 
 		}
@@ -62,14 +62,14 @@ if ( ! class_exists( 'GD_Settings_Cpt', false ) ) :
 		public function get_sections() {
 
 			$sections = array(
-				'' => __( 'Custom Fields', 'woocommerce' ),
-				//	'location'       => __( 'Custom fields', 'woocommerce' ),
-				//	'pages' 	=> __( 'Sorting options', 'woocommerce' ),
-				//'dummy_data' 	=> __( 'Dummy Data', 'woocommerce' ),
-				//'uninstall' 	=> __( 'Uninstall', 'woocommerce' ),
+				'' => __( 'Custom Fields', 'geodirectory' ),
+				//	'location'       => __( 'Custom fields', 'geodirectory' ),
+				//	'pages' 	=> __( 'Sorting options', 'geodirectory' ),
+				//'dummy_data' 	=> __( 'Dummy Data', 'geodirectory' ),
+				//'uninstall' 	=> __( 'Uninstall', 'geodirectory' ),
 			);
 
-			return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
+			return apply_filters( 'geodir_get_sections_' . $this->id, $sections );
 		}
 
 		/**

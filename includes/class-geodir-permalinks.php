@@ -28,7 +28,7 @@ class GeoDir_Permalinks {
 		add_action( 'init', array( __CLASS__, 'register_post_types' ), 5 );
 		add_action( 'init', array( __CLASS__, 'register_post_status' ), 9 );
 		add_filter( 'rest_api_allowed_post_types', array( __CLASS__, 'rest_api_allowed_post_types' ) );
-		add_action( 'geodirectory_flush_rewrite_rules', array( __CLASS__, 'flush_rewrite_rules' ) );
+		add_action( 'geodir_flush_rewrite_rules', array( __CLASS__, 'flush_rewrite_rules' ) );
 		add_filter( 'post_type_link', array( __CLASS__, 'post_permalink_structure'), 10, 4);
 		//add_action( 'registered_post_type', array( __CLASS__, 'register_post_type_rules' ), 10, 2 );
 
@@ -406,7 +406,7 @@ class GeoDir_Permalinks {
 
 			// Alter the CPT slug if WPML is set to do so
 			if(geodir_wpml_is_post_type_translated($post->post_type)){
-				if ( gd_wpml_slug_translation_turned_on( $post->post_type ) && $language_code = gd_wpml_get_lang_from_url($post_link)) {
+				if ( geodir_wpml_slug_translation_turned_on( $post->post_type ) && $language_code = geodir_wpml_get_lang_from_url($post_link)) {
 
 					$org_slug = $cpt_slug;
 					$cpt_slug = apply_filters( 'wpml_translate_single_string',

@@ -138,7 +138,7 @@ function geodir_send_inquiry( $request ) {
 	 */
 	$redirect_to = apply_filters( 'geodir_send_enquiry_after_submit_redirect', $redirect_to );
 	wp_redirect( $redirect_to );
-	gd_die();
+	geodir_die();
 }
 
 /**
@@ -223,7 +223,7 @@ function geodir_send_friend( $request ) {
 	 */
 	$redirect_to = apply_filters( 'geodir_send_to_friend_after_submit_redirect', $redirect_to );
 	wp_redirect( $redirect_to );
-	gd_die();
+	geodir_die();
 }
 
 /**

@@ -733,7 +733,7 @@ function geodir_wpml_post_type_archive_link($link, $post_type){
 
 			// Alter the CPT slug if WPML is set to do so
 			if ( geodir_wpml_is_post_type_translated( $post_type ) ) {
-				if ( gd_wpml_slug_translation_turned_on( $post_type ) && $language_code = gd_wpml_get_lang_from_url( $link) ) {
+				if ( geodir_wpml_slug_translation_turned_on( $post_type ) && $language_code = geodir_wpml_get_lang_from_url( $link) ) {
 
 					$org_slug = $slug;
 					$slug     = apply_filters( 'wpml_translate_single_string',
@@ -940,7 +940,7 @@ Language translation helper functions
  *
  * @return array Category IDs.
  */
-function gd_lang_object_ids( $ids_array, $type ) {
+function geodir_lang_object_ids( $ids_array, $type ) {
 	if ( function_exists( 'icl_object_id' ) ) {
 		$res = array();
 		foreach ( $ids_array as $id ) {
@@ -2466,7 +2466,7 @@ function geodir_popular_postview_output( $args = '', $instance = '' ) {
 		
 		######### WPML #########
 		if ( geodir_wpml_is_taxonomy_translated( $category_taxonomy[0] ) ) {
-			$category = gd_lang_object_ids( $category, $category_taxonomy[0] );
+			$category = geodir_lang_object_ids( $category, $category_taxonomy[0] );
 		}
 		######### WPML #########
 	}

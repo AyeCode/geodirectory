@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 /**
- * WC_Admin_Menus Class.
+ * GeoDir_Admin_Menus Class.
  */
 class GD_Admin_Menus {
 
@@ -106,7 +106,7 @@ class GD_Admin_Menus {
 	 * Init the reports page.
 	 */
 	public function reports_page() {
-		WC_Admin_Reports::output();
+		GeoDir_Admin_Reports::output();
 	}
 
 	/**

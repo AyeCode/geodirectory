@@ -203,7 +203,7 @@ function geodir_bestof_callback() {
     if ($excerpt_type == 'show-reviews') {
         remove_filter('get_the_excerpt', 'best_of_show_review_in_excerpt');
     }
-    gd_die();
+    geodir_die();
 }
 
 // Javascript
@@ -554,7 +554,7 @@ function geodir_cpt_categories_child_cats($parent_id, $cpt, $hide_empty, $show_c
     return $content;
 }
 
-function gd_features_parse_image($image, $icon_color) {
+function geodir_features_parse_image($image, $icon_color) {
     if (substr($image, 0, 4) === "http") {
         $image = '<img src="' . $image . '" />';
     } elseif (substr($image, 0, 3) === "fa-") {
@@ -566,7 +566,7 @@ function gd_features_parse_image($image, $icon_color) {
     return $image;
 }
 
-function gd_features_parse_desc($desc) {
+function geodir_features_parse_desc($desc) {
     return $desc;
 }
 
