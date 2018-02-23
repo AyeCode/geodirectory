@@ -33,7 +33,6 @@ include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-tw
 // Detail page widgets
 //include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-sidebar.php' );
 include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-social-sharing.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-google-analytics.php' );
 include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-user-actions.php' );
 include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-rating-stars.php' );
 include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-sidebar-info.php' );
@@ -67,7 +66,6 @@ function goedir_register_widgets() {
     // Register detail page widgets
     //register_widget( 'GeoDir_Widget_Detail_Sidebar' );
     register_widget( 'GeoDir_Widget_Detail_Social_Sharing' );
-    register_widget( 'GeoDir_Widget_Detail_Google_Analytics' );
     register_widget( 'GeoDir_Widget_Detail_User_Actions' );
     register_widget( 'GeoDir_Widget_Detail_Rating_Stars' );
     register_widget( 'GeoDir_Widget_Detail_Sidebar_Info' );
@@ -676,7 +674,6 @@ function geodir_detail_page_widget_id_bases() {
         'detail_sidebar',
         'detail_sidebar_info',
         'detail_rating_stars',
-        'detail_google_analytics',
     );
     
     return apply_filters( 'geodir_detail_page_widget_id_bases', $id_bases );

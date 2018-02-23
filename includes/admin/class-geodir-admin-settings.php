@@ -59,7 +59,6 @@ class GeoDir_Admin_Settings {
 				$settings[] = include( 'settings/class-geodir-settings-general.php' );
 				$settings[] = include( 'settings/class-geodir-settings-emails.php' );
 				$settings[] = include( 'settings/class-geodir-settings-design.php' );
-				$settings[] = include( 'settings/class-geodir-settings-analytics.php' );
 				$settings[] = include( 'settings/class-geodir-settings-import-export.php' );
 //			$settings[] = include( 'settings/class-wc-settings-products.php' );
 //			$settings[] = include( 'settings/class-wc-settings-tax.php' );
@@ -818,45 +817,6 @@ class GeoDir_Admin_Settings {
 					//geodir_autoinstall_admin_header($post_type);
 					break;
 
-					case 'google_analytics' :
-                //$selections = (array)geodir_get_option($value['id']);
-                    ?>
-                    <tr valign="top">
-                        <th scope="row" class="titledesc"><?php echo $value['name'] ?></th>
-                        <td class="forminp">
-
-
-                            <?php
-
-                            global $gd_ga_errors;
-
-
-                            if (geodir_get_option('ga_auth_token')) {
-                                ?>
-                                <span class="button-primary"
-                                      onclick="gd_GA_Deauthorize('<?php echo wp_create_nonce('gd_ga_deauthorize');?>');"><?php _e('Deauthorize', 'geodirectory'); ?></span>
-                                <span style="color: green; font-weight: bold;"><?php _e('Authorized', 'geodirectory'); ?></span>
-                            <?php
-                                global $gd_ga_errors;
-                                if(!empty($gd_ga_errors)){
-                                    print_r($gd_ga_errors);
-                                }
-                            } else {
-                                ?>
-                                <span class="button-primary"
-                                      onclick="window.open('<?php echo  GeoDir_Settings_Analytics::activation_url();?>', 'activate','width=700, height=600, menubar=0, status=0, location=0, toolbar=0')"><?php _e('Authorize', 'geodirectory');?></span>
-                            <?php
-                            }
-
-                             print_r($gd_ga_errors);
-                            ?>
-                        </td>
-                    </tr>
-
-                <?php
-
-
-                break;
 				case 'map_key' :
 					add_thickbox();// add the thickbox js/css
 					$option_value = self::get_option( $value['id'], $value['default'] );

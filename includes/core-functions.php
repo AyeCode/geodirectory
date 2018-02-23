@@ -236,7 +236,6 @@ function geodir_params()
         'osmStart' => __('Start', 'geodirectory'),
         'osmVia' => __('Via {viaNumber}', 'geodirectory'),
         'osmEnd' => __('Enter Your Location', 'geodirectory'),
-        'ga_delete_check' => __('Are you wish to Deauthorize and break Analytics?', 'geodirectory'),
         'geoMyLocation' => __('My Location', 'geodirectory'),
         'geoErrUNKNOWN_ERROR' => addslashes(__('Unable to find your location', 'geodirectory')),
         'geoErrPERMISSION_DENINED' => addslashes(__('Permission denied in finding your location', 'geodirectory')),

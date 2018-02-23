@@ -27,7 +27,6 @@ function geodir_post_package_info( $package_info, $post = '', $post_type = '' ) 
 	$package_info['amount']           = 0;
 	$package_info['is_featured']      = 0;
 	$package_info['image_limit']      = '';
-	$package_info['google_analytics'] = 1;
 	$package_info['sendtofriend']     = 1;
 
 	/**

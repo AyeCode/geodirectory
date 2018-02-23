@@ -124,7 +124,11 @@ class GeoDir_Post_Data {
 			foreach ( $custom_fields as $cf ) {
 
 				if ( isset( $gd_post[ $cf->htmlvar_name ] ) ) {
-					$postarr[ $cf->htmlvar_name ] = apply_filters("geodir_custom_field_value_{$cf->field_type}", $gd_post[ $cf->htmlvar_name ], $cf, $post_id, $post, $update);
+					$gd_post_value = $gd_post[ $cf->htmlvar_name ];
+					if ( is_array( $gd_post_value ) ) {
+						$gd_post_value = ! empty( $gd_post_value ) ? implode( ',', $gd_post_value ) : '';
+					}
+					$postarr[ $cf->htmlvar_name ] = apply_filters("geodir_custom_field_value_{$cf->field_type}", $gd_post_value, $cf, $post_id, $post, $update);
 				}
 
 			}
