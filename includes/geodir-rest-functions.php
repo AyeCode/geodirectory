@@ -15,6 +15,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Parses and formats a date for ISO8601/RFC3339.
+ *
+ * Required WP 4.4 or later.
+ * See https://developer.wordpress.org/reference/functions/mysql_to_rfc3339/
+ *
+ * @since  2.0.0
+ * @param  string|null|DateTime $date
+ * @param  bool Send false to get local/offset time.
+ * @return string|null ISO8601/RFC3339 formatted datetime.
+ */
+function geodir_rest_prepare_date_response( $date, $utc = true ) {
+	if ( is_numeric( $date ) ) {
+		$date = new DateTime( "@$date", new DateTimeZone( 'UTC' ) );
+		$date->setTimezone( new DateTimeZone( wc_timezone_string() ) );
+	} elseif ( is_string( $date ) ) {
+		$date = new DateTime( $date, new DateTimeZone( 'UTC' ) );
+		$date->setTimezone( new DateTimeZone( wc_timezone_string() ) );
+	}
+
+	if ( ! is_a( $date, 'DateTime' ) ) {
+		return null;
+	}
+
+	// Get timestamp before changing timezone to UTC.
+	return gmdate( 'Y-m-d\TH:i:s', $utc ? $date->getTimestamp() : $date->getOffsetTimestamp() );
+}
+
+/**
  * Returns image mime types users are allowed to upload via the API.
  * @since  2.0.0
  * @return array
@@ -224,28 +252,6 @@ function geodir_rest_check_post_permissions( $post_type, $context = 'read', $obj
 }
 
 /**
- * Check permissions of users on REST API.
- *
- * @since 2.0.0
- * @param string $context   Request context.
- * @param int    $object_id Post ID.
- * @return bool
- */
-function geodir_rest_check_user_permissions( $context = 'read', $object_id = 0 ) {
-	$contexts = array(
-		'read'   => 'list_users',
-		'create' => 'edit_users',
-		'edit'   => 'edit_users',
-		'delete' => 'delete_users',
-		'batch'  => 'edit_users',
-	);
-
-	$permission = current_user_can( $contexts[ $context ], $object_id );
-
-	return apply_filters( 'geodir_rest_check_permissions', $permission, $context, $object_id, 'user' );
-}
-
-/**
  * Check permissions of product terms on REST API.
  *
  * @since 2.0.0
@@ -254,7 +260,7 @@ function geodir_rest_check_user_permissions( $context = 'read', $object_id = 0 )
  * @param int    $object_id Post ID.
  * @return bool
  */
-function geodir_rest_check_product_term_permissions( $taxonomy, $context = 'read', $object_id = 0 ) {
+function geodir_rest_check_post_term_permissions( $taxonomy, $context = 'read', $object_id = 0 ) {
 	$contexts = array(
 		'read'   => 'manage_terms',
 		'create' => 'edit_terms',
@@ -286,6 +292,7 @@ function geodir_rest_check_manager_permissions( $object, $context = 'read' ) {
 	);
 
 	$permission = current_user_can( $objects[ $object ] );
+	$permission = true; // @todo remove this after testing done.
 
 	return apply_filters( 'geodir_rest_check_permissions', $permission, $context, 0, $object );
 }

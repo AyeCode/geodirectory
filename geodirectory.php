@@ -241,6 +241,12 @@ final class GeoDirectory {
 	    if(defined( 'GUTENBERG_DEVELOPMENT_MODE' )){
 		    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/block-types.php' );
 	    }
+		
+		/**
+		 * REST API.
+		 */
+		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-api.php' );
+		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-register-wp-admin-settings.php' );
 
 
         if ( $this->is_request( 'admin' ) || $this->is_request( 'test' ) || $this->is_request( 'cli' ) ) {
@@ -275,7 +281,6 @@ final class GeoDirectory {
         }
         
         $this->load_db_language();
-		$this->rest_api_includes();
         
         if ( $this->is_request( 'frontend' ) ) {
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-template-loader.php' ); // Template Loader
@@ -290,18 +295,8 @@ final class GeoDirectory {
         }
 
         $this->query = new GeoDir_Query();
+		$this->api   = new GeoDir_API();
     }
-	
-	private function rest_api_includes() {
-		include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-rest-functions.php' );
-
-		// Abstract controllers.
-		include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/abstracts/abstract-geodir-rest-controller.php' );
-
-		// REST API controllers.
-		include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/api/class-geodir-rest-system-status-controller.php' );
-		include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/api/class-geodir-rest-system-status-tools-controller.php' );
-	}
     
     /**
      * Hook into actions and filters.

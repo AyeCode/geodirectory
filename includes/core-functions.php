@@ -271,3 +271,28 @@ function geodir_params()
      */
     return apply_filters('geodir_params', $arr_alert_msg);
 }
+
+/**
+ * Define a constant if it is not already defined.
+ *
+ * @since 2.0.0
+ * @param string $name  Constant name.
+ * @param string $value Value.
+ */
+function geodir_maybe_define( $name, $value ) {
+	if ( ! defined( $name ) ) {
+		define( $name, $value );
+	}
+}
+
+/**
+ * Wrapper for nocache_headers which also disables page caching.
+ *
+ * @since 2.0.0
+ */
+function geodir_nocache_headers() {
+	geodir_maybe_define( 'DONOTCACHEPAGE', true );
+	geodir_maybe_define( 'DONOTCACHEOBJECT', true );
+	geodir_maybe_define( 'DONOTCACHEDB', true );
+	nocache_headers();
+}
