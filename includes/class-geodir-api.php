@@ -120,11 +120,13 @@ class GeoDir_API {
 		// Abstract controllers.
 		include_once( dirname( __FILE__ ) . '/abstracts/abstract-geodir-rest-controller.php' );
 		//include_once( dirname( __FILE__ ) . '/abstracts/abstract-geodir-rest-posts-controller.php' );
-		include_once( dirname( __FILE__ ) . '/abstracts/abstract-geodir-rest-terms-controller.php' );
+		//include_once( dirname( __FILE__ ) . '/abstracts/abstract-geodir-rest-terms-controller.php' );
 
 		// REST API v2 controllers.
 		//include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-post-categories-controller.php' );
 		//include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-post-tags-controller.php' );
+		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-taxonomies-controller.php' );
+		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-post-types-controller.php' );
 		//include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-post-reviews-controller.php' );
 		//include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-posts-controller.php' );
 		//include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-reports-controller.php' );
@@ -132,27 +134,34 @@ class GeoDir_API {
 		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-setting-options-controller.php' );
 		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-system-status-controller.php' );
 		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-system-status-tools-controller.php' );
+		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-countries-controller.php' );
 	}
 
 	/**
 	 * Register REST API routes.
 	 * @since 2.0.0
 	 */
-	public function register_rest_routes() {
+	public function register_rest_routes() {			
+		// Set show_in_rest for post types and taxonomies
+		$this->set_show_in_rest(); // @todo integrate this from post type settings
+
 		// Register settings to the REST API.
 		$this->register_wp_admin_settings();
 
 		$controllers = array(
 			// v2 controllers.
-			//'GeoDir_REST_Product_Categories_Controller',
-			//'GeoDir_REST_Product_Reviews_Controller',
-			//'GeoDir_REST_Product_Tags_Controller',
-			//'GeoDir_REST_Products_Controller',
-			//'GeoDir_REST_Reports_Controller',
+			'Geodir_REST_Taxonomies_Controller',
+				//'GeoDir_REST_Post_Categories_Controller',
+				//'GeoDir_REST_Post_Reviews_Controller',
+				//'GeoDir_REST_Post_Tags_Controller',
+			'GeoDir_REST_Post_Types_Controller',
+				//'GeoDir_REST_Posts_Controller',
+				//'GeoDir_REST_Reports_Controller',
 			'GeoDir_REST_Settings_Controller',
 			'GeoDir_REST_Setting_Options_Controller',
 			'GeoDir_REST_System_Status_Controller',
 			'GeoDir_REST_System_Status_Tools_Controller',
+			'GeoDir_REST_Countries_Controller',
 		);
 
 		foreach ( $controllers as $controller ) {
@@ -169,6 +178,34 @@ class GeoDir_API {
 		$pages = GeoDir_Admin_Settings::get_settings_pages();
 		foreach ( $pages as $page ) {
 			new GeoDir_Register_WP_Admin_Settings( $page, 'page' );
+		}
+	}
+	
+	public function set_show_in_rest() {
+		global $wp_post_types, $wp_taxonomies;
+
+		$post_types = geodir_get_posttypes( 'array' );
+
+		if ( ! empty( $post_types ) ) {
+			foreach ( $post_types as $post_type => $data ) {
+				if ( isset( $wp_post_types[$post_type] ) ) {
+					$wp_post_types[$post_type]->gd_listing = true;
+					$wp_post_types[$post_type]->show_in_rest = true;
+					$wp_post_types[$post_type]->rest_base = $data['has_archive'];
+					
+					if ( ! empty( $data['taxonomies'] ) ) {
+						foreach ( $data['taxonomies'] as $taxonomy ) {
+							if ( isset( $wp_taxonomies[$taxonomy] ) ) {
+								$rest_base = $taxonomy;
+								
+								$wp_taxonomies[$taxonomy]->gd_taxonomy = true;
+								$wp_taxonomies[$taxonomy]->show_in_rest = true;
+								$wp_taxonomies[$taxonomy]->rest_base = $rest_base;
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 

@@ -125,6 +125,9 @@ final class GeoDirectory {
         
         // Do not store any revisions (except the one autosave per post).
         $this->define( 'WP_POST_REVISIONS', 0 );
+		
+		$this->define( 'GEODIR_REST_SLUG', 'geodir' );
+		$this->define( 'GEODIR_REST_API_VERSION', '2' );
         
         // This will store the cached post custom fields per package for each page load so not to run for each listing.
         $geodir_post_custom_fields_cache = array();
@@ -183,7 +186,7 @@ final class GeoDirectory {
 
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/formatting-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/core-functions.php' );
-
+		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-datetime.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/settings/functions.php' );
         $geodir_options = geodir_get_settings();
 

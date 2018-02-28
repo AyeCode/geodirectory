@@ -138,7 +138,7 @@ class GeoDir_Admin_Install {
 			GeoDir_Admin_Notices::add_notice( 'install' );
 		}
 
-		if ( ! is_null( $current_db_version ) && version_compare( $current_db_version, max( array_keys( self::$db_updates ) ), '<' ) ) {
+		if ( ! is_null( $current_db_version ) && ! empty( self::$db_updates ) && version_compare( $current_db_version, max( array_keys( self::$db_updates ) ), '<' ) ) {
 			GeoDir_Admin_Notices::add_notice( 'update' );
 		} else {
 			self::update_db_version();

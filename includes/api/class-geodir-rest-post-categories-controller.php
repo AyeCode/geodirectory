@@ -54,10 +54,10 @@ class GeoDir_REST_Post_Categories_Controller extends GeoDir_REST_Terms_Controlle
 
 			$data['image'] = array(
 				'id'                => (int) $image_id,
-				'date_created'      => wc_rest_prepare_date_response( $attachment->post_date ),
-				'date_created_gmt'  => wc_rest_prepare_date_response( $attachment->post_date_gmt ),
-				'date_modified'     => wc_rest_prepare_date_response( $attachment->post_modified ),
-				'date_modified_gmt' => wc_rest_prepare_date_response( $attachment->post_modified_gmt ),
+				'date_created'      => geodir_rest_prepare_date_response( $attachment->post_date ),
+				'date_created_gmt'  => geodir_rest_prepare_date_response( $attachment->post_date_gmt ),
+				'date_modified'     => geodir_rest_prepare_date_response( $attachment->post_modified ),
+				'date_modified_gmt' => geodir_rest_prepare_date_response( $attachment->post_modified_gmt ),
 				'src'               => wp_get_attachment_url( $image_id ),
 				'title'             => get_the_title( $attachment ),
 				'alt'               => get_post_meta( $image_id, '_wp_attachment_image_alt', true ),

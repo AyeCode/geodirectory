@@ -17,24 +17,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Parses and formats a date for ISO8601/RFC3339.
  *
- * Required WP 4.4 or later.
- * See https://developer.wordpress.org/reference/functions/mysql_to_rfc3339/
- *
  * @since  2.0.0
- * @param  string|null|DateTime $date
+ * @param  string|null|GeoDir_DateTime $date
  * @param  bool Send false to get local/offset time.
  * @return string|null ISO8601/RFC3339 formatted datetime.
  */
 function geodir_rest_prepare_date_response( $date, $utc = true ) {
 	if ( is_numeric( $date ) ) {
-		$date = new DateTime( "@$date", new DateTimeZone( 'UTC' ) );
-		$date->setTimezone( new DateTimeZone( wc_timezone_string() ) );
+		$date = new GeoDir_DateTime( "@$date", new DateTimeZone( 'UTC' ) );
+		$date->setTimezone( new DateTimeZone( geodir_timezone_string() ) );
 	} elseif ( is_string( $date ) ) {
-		$date = new DateTime( $date, new DateTimeZone( 'UTC' ) );
-		$date->setTimezone( new DateTimeZone( wc_timezone_string() ) );
+		$date = new GeoDir_DateTime( $date, new DateTimeZone( 'UTC' ) );
+		$date->setTimezone( new DateTimeZone( geodir_timezone_string() ) );
 	}
 
-	if ( ! is_a( $date, 'DateTime' ) ) {
+	if ( ! is_a( $date, 'GeoDir_DateTime' ) ) {
 		return null;
 	}
 
@@ -295,4 +292,73 @@ function geodir_rest_check_manager_permissions( $object, $context = 'read' ) {
 	$permission = true; // @todo remove this after testing done.
 
 	return apply_filters( 'geodir_rest_check_permissions', $permission, $context, 0, $object );
+}
+
+function geodir_rest_get_countries( $params = array() ) {
+    global $wpdb;
+    
+    $defaults = array(
+        'fields'        => 'CountryId AS id, Country AS name, ISO2 as iso2, ISO3 as iso3, Country AS title',
+        'search'        => '',
+        'translated'    => true,
+        'order'         => 'Country',
+        'orderby'       => 'ASC',
+		'limit'			=> -1 // All
+    );
+    
+    $args = wp_parse_args( $params, $defaults );
+    
+    $where = '';
+    if ( !empty( $args['search'] ) ) {
+        $where .= "AND Country LIKE '" . wp_slash( $args['search'] ) . "%' ";
+    }
+    
+    if ( !empty( $args['where'] ) ) {
+        $where .= $args['where'];
+    }
+    
+    $sql = "SELECT " . $args['fields'] . " FROM " . GEODIR_COUNTRIES_TABLE . " WHERE 1 " . $where . " ORDER BY " . $args['order'] . " " . $args['orderby'];
+	if ( !empty( $args['limit'] ) && absint( $args['limit'] ) > 0 ) {
+        $sql .= " LIMIT " . absint( $args['limit'] );
+    }
+	
+    $items = $wpdb->get_results( $sql );
+    
+    if ( empty( $args['translated'] ) ) {
+        return $items;
+    }
+    
+    if ( !empty( $items ) ) {
+        foreach ( $items as $key => $item ) {
+            $items[ $key ]->title = __( $item->name, 'geodirectory' ); // translate
+        }
+    }
+    
+    return $items;
+}
+
+function geodir_rest_country_by_id( $value ) {
+    $rows = geodir_rest_get_countries( array( 'where' => "AND CountryId = '" . (int)$value . "'", 'limit' => 1 ) );
+    
+    if ( !empty( $rows ) ) {
+		return $rows[0];
+    }
+}
+
+function geodir_rest_country_by_name( $value ) {
+    $rows = geodir_rest_get_countries( array( 'where' => "AND Country LIKE '" . wp_slash( $value ) . "'", 'limit' => 1 ) );
+    
+    if ( !empty( $rows ) ) {
+        return $rows[0];
+    }
+}
+
+function geodir_rest_country_by_iso2( $value ) {
+    $rows = geodir_rest_get_countries( array( 'where' => "AND ISO2 LIKE '" . wp_slash( $value ) . "'", 'limit' => 1 ) );
+
+    if ( !empty( $rows ) ) {
+        return $rows[0];
+    }
+    
+    return NULL;
 }

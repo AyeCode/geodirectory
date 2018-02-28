@@ -233,3 +233,58 @@ function geodir_format_decimal( $number, $dp = false, $trim_zeros = false ) {
 
 	return $number;
 }
+
+
+/**
+ * Retrieve the timezone string for a site until.
+ *
+ * @since 2.0.0
+ * @return string PHP timezone string for the site
+ */
+function geodir_timezone_string() {
+
+	// if site timezone string exists, return it
+	if ( $timezone = get_option( 'timezone_string' ) ) {
+		return $timezone;
+	}
+
+	// get UTC offset, if it isn't set then return UTC
+	if ( 0 === ( $utc_offset = intval( get_option( 'gmt_offset', 0 ) ) ) ) {
+		return 'UTC';
+	}
+
+	// adjust UTC offset from hours to seconds
+	$utc_offset *= 3600;
+
+	// attempt to guess the timezone string from the UTC offset
+	if ( $timezone = timezone_name_from_abbr( '', $utc_offset ) ) {
+		return $timezone;
+	}
+
+	// last try, guess timezone string manually
+	foreach ( timezone_abbreviations_list() as $abbr ) {
+		foreach ( $abbr as $city ) {
+			if ( (bool) date( 'I' ) === (bool) $city['dst'] && $city['timezone_id'] && intval( $city['offset'] ) === $utc_offset ) {
+				return $city['timezone_id'];
+			}
+		}
+	}
+
+	// fallback to UTC
+	return 'UTC';
+}
+
+/**
+ * Get timezone offset in seconds.
+ *
+ * @since  2.0.0
+ * @return float
+ */
+function geodir_timezone_offset() {
+	if ( $timezone = get_option( 'timezone_string' ) ) {
+		$timezone_object = new DateTimeZone( $timezone );
+		return $timezone_object->getOffset( new DateTime( 'now' ) );
+	} else {
+		return floatval( get_option( 'gmt_offset', 0 ) ) * HOUR_IN_SECONDS;
+	}
+}
