@@ -214,7 +214,8 @@ final class GeoDirectory {
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/listing_filters.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/template-functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post_functions.php' );
+	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post_functions.php' );
+	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/image-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post-types-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/taxonomy-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/input-functions.php' );

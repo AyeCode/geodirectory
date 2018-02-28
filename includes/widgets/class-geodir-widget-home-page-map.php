@@ -26,6 +26,7 @@ class GeoDir_Widget_Main_Map extends WP_Super_Duper {
             'block-keywords'=> "['geo','geodirectory','geodir']",
             'block-output'  => array(
                 'element::img'   => array(
+                    
                     'src' => geodir_plugin_url()."/assets/images/block-placeholder-map.png",
                     'alt' => __('Placeholder','geodirectory'),
                     'width' => '[%width%]',

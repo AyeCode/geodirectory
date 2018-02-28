@@ -515,21 +515,32 @@ class GeoDir_Media {
 		return $result;
 	}
 
-	public static function get_attachments_by_type($post_id,$type = 'post_image',$revision_id =''){
+	public static function get_attachments_by_type($post_id,$type = 'post_image',$limit = '',$revision_id =''){
 		global $wpdb;
+		$limit_sql = '';
+		$sql_args = array();
+		$sql_args[] = $type;
+		$sql_args[] = $post_id;
+		if($limit){
+			$limit_sql = ' LIMIT %d ';
+			$limit = absint($limit);
+		}
 		if($revision_id ){
-			return $wpdb->get_results($wpdb->prepare("SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE type = %s AND post_id IN (%d,%d)  ORDER BY menu_order",$type , $post_id,$revision_id));
+			$sql_args[] = $revision_id;
+			if($limit){$sql_args[] = $limit;}
+			return $wpdb->get_results($wpdb->prepare("SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE type = %s AND post_id IN (%d,%d)  ORDER BY menu_order $limit_sql",$sql_args));
 		}else{
-			return $wpdb->get_results($wpdb->prepare("SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE type = %s AND post_id = %d ORDER BY menu_order",$type , $post_id));
+			if($limit){$sql_args[] = $limit;}
+			return $wpdb->get_results($wpdb->prepare("SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE type = %s AND post_id = %d ORDER BY menu_order $limit_sql",$sql_args));
 		}
 	}
 
-	public static function get_post_images($post_id,$revision_id = ''){
-		return self::get_attachments_by_type($post_id,'post_image',$revision_id );
+	public static function get_post_images($post_id,$limit = '',$revision_id = ''){
+		return self::get_attachments_by_type($post_id,'post_image',$limit,$revision_id );
 	}
 
 	public static function get_post_images_edit_string($post_id,$revision_id = ''){
-		$post_images = self::get_post_images($post_id,$revision_id);
+		$post_images = self::get_post_images($post_id,'',$revision_id);
 
 		if(!empty($post_images)){
 			$wp_upload_dir = wp_upload_dir();

@@ -106,8 +106,9 @@ function geodir_get_post_info($post_id = '')
 
     $all_postypes = geodir_get_posttypes();
 
-    if (!in_array($post_type, $all_postypes))
-        return false;
+    if (!in_array($post_type, $all_postypes)){
+        return new stdClass();
+    }
 
     $table = $plugin_prefix . $post_type . '_detail';
 
@@ -849,7 +850,7 @@ if (!function_exists('geodir_show_featured_image')) {
     }
 }
 
-if (!function_exists('geodir_get_images')) {
+if (!function_exists('geodir_get_images_old')) {
     /**
      * Gets the post images.
      *
@@ -863,7 +864,7 @@ if (!function_exists('geodir_get_images')) {
      * @param int|string $limit Optional. Number of images.
      * @return array|bool Returns images as an array. Each item is an object.
      */
-    function geodir_get_images($post_id = 0, $img_size = '', $no_images = false, $add_featured = true, $limit = '')
+    function geodir_get_images_old($post_id = 0, $img_size = '', $no_images = false, $add_featured = true, $limit = '')
     {
         global $wpdb;
         if ($limit) {
@@ -994,6 +995,9 @@ if (!function_exists('geodir_get_images')) {
         }
     }
 }
+
+
+
 
 if (!function_exists('geodir_show_image')) {
     /**

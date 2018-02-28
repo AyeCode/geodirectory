@@ -9,6 +9,41 @@
  */
 global $wpdb, $table_prefix;
 
+/**
+ * Check if we are getting demo data for the post meta.
+ *
+ * @since 2.0.0
+ * @return bool
+ */
+function geodir_is_block_demo(){
+    global $post;
+
+    if(isset($post->ID)){$post_id = $post->ID;}else{$post_id = '';}
+
+    // WP Core
+    if(empty($_POST['attributes']['id'])
+       && isset($_POST['action'])
+       && $_POST['action'] == 'super_duper_output_shortcode' 
+       && wp_doing_ajax()
+       && $post_id == geodir_details_page_id()
+    ){
+        return true;
+    }elseif(
+        isset($_POST['fl_builder_data']['fl_action'])
+        && $_POST['fl_builder_data']['fl_action']=='save_settings'
+        && isset($_POST['fl_builder_data']['post_id'])
+        && $_POST['fl_builder_data']['post_id'] == geodir_details_page_id()
+    ){
+        return true;
+    }elseif(
+        is_page(geodir_details_page_id())
+    ) {
+        return true;
+    }else{
+        return false;
+    }
+}
+
 
 /**
  * Returns custom fields based on page type. (detail page, listing page).
@@ -44,12 +79,11 @@ function geodir_post_custom_fields($package_id = '', $default = 'all', $post_typ
         $fields_location = esc_sql( $fields_location );
         $default_query .= " and show_in LIKE '%%[$fields_location]%%' ";
     }
+    
+    $post_type_sql = $post_type != 'all' ? $wpdb->prepare(" and post_type = %s ",$post_type) : '';
 
     $post_meta_info = $wpdb->get_results(
-        $wpdb->prepare(
-            "select * from " . GEODIR_CUSTOM_FIELDS_TABLE . " where is_active = '1' and post_type = %s {$default_query} order by sort_order asc,admin_title asc",
-            array($post_type)
-        )
+        "select * from " . GEODIR_CUSTOM_FIELDS_TABLE . " where is_active = '1' {$post_type_sql}  {$default_query} order by sort_order asc,admin_title asc"
     );
 
 

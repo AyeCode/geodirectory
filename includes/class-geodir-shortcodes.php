@@ -176,11 +176,7 @@ class GeoDir_Shortcodes {
 	public static function gd_single_closed_text( $atts = array(), $content = null ) {
         return self::shortcode_wrapper( 'geodir_sc_single_closed_text', $atts, $content  );
     }
-
-    public static function gd_single_meta( $atts = array(), $content = null ) {
-        return geodir_sc_single_meta( $atts, $content  );
-        //return self::shortcode_wrapper( 'geodir_sc_single_meta', $atts, $content  );
-    }
+    
 }
 
 

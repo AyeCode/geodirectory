@@ -1,0 +1,13 @@
+@import "partials/keyframes";
+@import "partials/ratings";
+
+
+.gd-fadein-animation{
+  -webkit-animation: gd-fadein 1s linear forwards;
+  animation: gd-fadein 1s linear forwards;
+}
+
+.gd-right-left-animation{
+  -webkit-animation: gd-right-left 0.2s linear forwards;
+  animation: gd-right-left 0.2s linear forwards;
+}

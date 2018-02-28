@@ -75,15 +75,16 @@ class GeoDir_Admin_Blocks {
 		wp_enqueue_script(
 			'gb-tests-gutenberg',
 			geodir_plugin_url() . '/assets/js/blocks'.$suffix.'.js',
-			array( 'wp-blocks', 'wp-element' )
+			array( 'wp-blocks', 'wp-element' ),
+			GEODIRECTORY_VERSION
 		);
 
-//		wp_enqueue_style(
-//			'gb-tests-gutenberg',
-//			plugins_url( 'css/editor.css', __FILE__ ),
-//			array( 'wp-edit-blocks' ),
-//			filemtime( plugin_dir_path( __FILE__ ) . 'css/editor.css' )
-//		);
+		wp_enqueue_style(
+			'gb-tests-gutenberg',
+			geodir_plugin_url() . '/assets/css/block_editor.css',
+			array( 'wp-edit-blocks','font-awesome' ),
+			GEODIRECTORY_VERSION
+		);
 	}
 }
 // init the class.

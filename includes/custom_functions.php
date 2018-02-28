@@ -1000,6 +1000,7 @@ function geodir_show_detail_page_tabs() {
 
 	$post_id            = ! empty( $post ) && isset( $post->ID ) ? (int) $post->ID : 0;
 	$request_post_id    = ! empty( $_REQUEST['p'] ) ? (int) $_REQUEST['p'] : 0;
+    $map_args           = array();
 	$is_backend_preview = ( is_single() && ! empty( $_REQUEST['post_type'] ) && ! empty( $_REQUEST['preview'] ) && ! empty( $_REQUEST['p'] ) ) && is_super_admin() ? true : false; // skip if preview from backend
 
 	if ( $is_backend_preview && ! $post_id > 0 && $request_post_id > 0 ) {
@@ -1054,7 +1055,6 @@ function geodir_show_detail_page_tabs() {
 			}
 		}
 
-		$map_args                    = array();
 		$map_args['map_canvas_name'] = 'detail_page_map_canvas';
 		$map_args['width']           = '600';
 		$map_args['height']          = '300';
@@ -1111,7 +1111,6 @@ function geodir_show_detail_page_tabs() {
 			$mapzoom = 12;
 		}
 
-		$map_args                             = array();
 		$map_args['map_canvas_name']          = 'preview_map_canvas';
 		$map_args['width']                    = '950';
 		$map_args['height']                   = '300';

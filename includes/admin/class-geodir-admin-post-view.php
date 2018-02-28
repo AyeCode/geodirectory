@@ -72,15 +72,16 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 		 * @param array $columns The column array.
 		 *
 		 * @return array Altered column array.
-		 * @todo we need to make this better
 		 */
 		public static function edit_post_columns( $columns ) {
 
 			//print_r($columns);echo '###';
 
 			$new_columns = array(
+				'image' => __( 'Image', 'geodirectory' ),
 				'location'  => __( 'Location', 'geodirectory' ),
-				'gd_categories' => __( 'Categories', 'geodirectory' )
+				'gd_categories' => __( 'Categories', 'geodirectory' ),
+				'gd_tags' => __( 'Tags', 'geodirectory' ),
 			);
 			$offset = 2;
 
@@ -147,6 +148,50 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 						_e( 'No Categories', 'geodirectory' );
 					}
 					break;
+
+				/* If displaying the 'tags' column. */
+				case 'gd_tags' :
+
+					/* Get the categories for the post. */
+
+
+					$terms = wp_get_object_terms( $post_id, get_object_taxonomies( $post ) );
+
+					/* If terms were found. */
+					if ( ! empty( $terms ) ) {
+						$out = array();
+						/* Loop through each term, linking to the 'edit posts' page for the specific term. */
+						foreach ( $terms as $term ) {
+							if ( strstr( $term->taxonomy, 'tag' ) ) {
+								$out[] = sprintf( '<a href="%s">%s</a>',
+									esc_url( add_query_arg( array(
+										'post_type'     => $post->post_type,
+										$term->taxonomy => $term->slug
+									), 'edit.php' ) ),
+									esc_html( sanitize_term_field( 'name', $term->name, $term->term_id, $term->taxonomy, 'display' ) )
+								);
+							}
+						}
+						/* Join the terms, separating them with a comma. */
+						echo( join( ', ', $out ) );
+					} /* If no terms were found, output a default message. */
+					else {
+						_e( 'No Tags', 'geodirectory' );
+					}
+					break;
+				/* If displaying the 'city' column. */
+				case 'image' :
+					$upload_dir = wp_upload_dir();
+					$image_raw = isset($gd_post->featured_image) && !empty($gd_post->featured_image) ? $gd_post->featured_image : '';
+					/* If no city is found, output a default message. */
+					if ( empty( $image_raw) ) {
+						_e( 'N/A', 'geodirectory' );
+					} else {
+						/* if we get tot his point then it has a featured image */
+						the_post_thumbnail('thumbnail');
+					}
+					break;
+
 
 			endswitch;
 		}

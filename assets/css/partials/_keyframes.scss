@@ -1,0 +1,30 @@
+// fade in-out
+@-webkit-keyframes gd-fadeinout {
+  0%,100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+@keyframes gd-fadeinout {
+  0%,100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+// fade in
+@-webkit-keyframes gd-fadein {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes gd-fadein {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+//
+// fade in
+@-webkit-keyframes gd-right-left {
+  0% { padding-left: 75%; }
+  100% { padding-left: 0; }
+}
+@keyframes gd-right-left {
+  0% { padding-left: 75%; }
+  100% { padding-left: 0; }
+}

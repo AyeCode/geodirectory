@@ -12,31 +12,35 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// Include widget classes.
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-advance-search.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-advertise.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-best-of.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-cpt-categories.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-features.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-flickr.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-home-page-map.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-listing-page-map.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-listing-slider.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-login.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-subscribe.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-popular-post-category.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-popular-post-view.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-recent-reviews.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-related-listing.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-social-like.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-twitter.php' );
-// Detail page widgets
-//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-sidebar.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-social-sharing.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-user-actions.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-rating-stars.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-sidebar-info.php' );
-include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-meta.php' );
+
+// the autoloader will load these now just by registering the widget
+//// Include widget classes.
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-advance-search.php' );
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-advertise.php' );
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-best-of.php' );
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-cpt-categories.php' );
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-features.php' );
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-flickr.php' );
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-home-page-map.php' );
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-listing-page-map.php' );
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-listing-slider.php' );
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-login.php' );
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-subscribe.php' );
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-popular-post-category.php' );
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-popular-post-view.php' );
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-recent-reviews.php' );
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-related-listing.php' );
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-social-like.php' );
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-twitter.php' );
+//// Detail page widgets
+////include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-sidebar.php' );
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-social-sharing.php' );
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-google-analytics.php' );
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-user-actions.php' );
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-rating-stars.php' );
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-sidebar-info.php' );
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-meta.php' );
+//include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-detail-slider.php' );
 
 
 /**
@@ -70,6 +74,7 @@ function goedir_register_widgets() {
     register_widget( 'GeoDir_Widget_Detail_Rating_Stars' );
     register_widget( 'GeoDir_Widget_Detail_Sidebar_Info' );
     register_widget( 'GeoDir_Widget_Detail_Meta' );
+    register_widget( 'GeoDir_Widget_Detail_Slider' );
 }
 add_action( 'widgets_init', 'goedir_register_widgets' );
 

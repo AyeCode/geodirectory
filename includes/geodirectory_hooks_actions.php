@@ -354,8 +354,10 @@ function geodir_social_sharing_buttons()
          *
          * @param string $content_html The output html of the geodir_social_sharing_buttons() function.
          */
-        echo $content_html = apply_filters('geodir_social_sharing_buttons_html', $content_html);
+        $content_html = apply_filters('geodir_social_sharing_buttons_html', $content_html);
     }
+
+    return $content_html;
 
 
 }

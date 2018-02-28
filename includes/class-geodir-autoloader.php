@@ -80,6 +80,8 @@ class GeoDir_Autoloader {
             $path = $this->include_path . 'shortcodes/';
         } elseif ( strpos( $class, 'geodir_admin' ) === 0 ) {
             $path = $this->include_path . 'admin/';
+        }elseif ( strpos( $class, 'geodir_widget' ) === 0 ) {
+            $path = $this->include_path . 'widgets/';
         }elseif ( strpos( $class, 'geodir_settings' ) === 0 ) {
             $path = $this->include_path . 'admin/settings/';
         }

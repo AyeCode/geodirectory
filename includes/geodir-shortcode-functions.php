@@ -2682,11 +2682,16 @@ function geodir_sc_single_closed_text() {
 	}
 }
 
-
-//add_shortcode( 'gd_single_meta', 'geodir_sc_single_meta' );
+/**
+ * Outputs single meta from a super block.
+ * 
+ * @param $atts
+ * @param string $content
+ *
+ * @return mixed|string|void
+ */
 function geodir_sc_single_meta($atts, $content = '') {
     global $post;
-    //print_r($atts );
 
     $original_id = isset($atts['id']) ? $atts['id'] : '';
     $atts['location'] = !empty($atts['location']) ? $atts['location'] : 'none';
@@ -2700,9 +2705,6 @@ function geodir_sc_single_meta($atts, $content = '') {
     ), $atts, 'gd_post_meta' );
     $atts['id'] = !empty($atts['id']) ? $atts['id'] : $post->ID;
 
-
-
-    //print_r($atts );
     $post_type = !$original_id && isset($post->post_type) ? $post->post_type : get_post_type($atts['id']);
 
     // error checks
@@ -2714,16 +2716,15 @@ function geodir_sc_single_meta($atts, $content = '') {
     if(!empty($errors)){
         $output .= implode(", ",$errors);
     }
-    
-    
 
+    // check if its demo content
+    if($post_type == 'page' && !empty($atts['id']) && geodir_is_block_demo()){
+        $post_type = 'gd_place';
+    }
 
-
-    //echo '###'.$post_type;
-   //echo '###1';
-    if(geodir_is_gd_post_type($post_type)){
+    if(geodir_is_gd_post_type($post_type)){ //echo '###2';
         $fields = geodir_post_custom_fields('',  'all', $post_type , $atts['location']);
-        //print_r($fields);
+
         if(!empty($fields)){
             $field = array();
             foreach($fields as $field_info){
@@ -2731,16 +2732,11 @@ function geodir_sc_single_meta($atts, $content = '') {
                     $field = $field_info;
                 }
             }
-            if(!empty($field)){//echo '###xxx';
-//                if($atts['display']=='inline'){
-//                    $field['css_class'] .= " geodir-meta-inline ";
-//                }
+            if(!empty($field)){
 
                 if($atts['alignment']=='left'){$field['css_class'] .= " alignleft ";}
                 if($atts['alignment']=='center'){$field['css_class'] .= " aligncenter ";}
                 if($atts['alignment']=='right'){$field['css_class'] .= " alignright ";}
-
-                //print_r($field);
 
                 $output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$atts['location'],$field,$atts['id']);
             }else{
@@ -2750,66 +2746,5 @@ function geodir_sc_single_meta($atts, $content = '') {
     }
 
     
-    return $output;
-
-
-
-
-
-
-
-
-
-
-
-    $defaults = array(
-        'title' => '',
-        'post_type' => '', // NULL for all
-        'hide_empty' => '',
-        'show_count' => '',
-        'hide_icon' => '',
-        'cpt_left' => '',
-        'sort_by' => 'count',
-        'max_count' => 'all',
-        'max_level' => '1',
-        'no_cpt_filter' => '',
-        'no_cat_filter' => '',
-        'before_widget' => '<section id="geodir_cpt_categories_widget-1" class="widget geodir-widget geodir_cpt_categories_widget geodir_sc_cpt_categories_widget">',
-        'after_widget' => '</section>',
-        'before_title' => '<h3 class="widget-title">',
-        'after_title' => '</h3>',
-    );
-    $params = shortcode_atts($defaults, $atts);
-
-    /**
-     * Validate our incoming params
-     */
-    // Make sure we have an array
-    $params['post_type'] = !is_array($params['post_type']) && trim($params['post_type']) != '' ? explode(',', trim($params['post_type'])) : array();
-
-    // Validate the checkboxes used on the widget
-    $params['hide_empty'] 	= gdsc_to_bool_val($params['hide_empty']);
-    $params['show_count'] 	= gdsc_to_bool_val($params['show_count']);
-    $params['hide_icon'] 	= gdsc_to_bool_val($params['hide_icon']);
-    $params['cpt_left'] 	= gdsc_to_bool_val($params['cpt_left']);
-
-    if ($params['max_count'] != 'all') {
-        $params['max_count'] = absint($params['max_count']);
-    }
-
-    if ($params['max_level'] != 'all') {
-        $params['max_level'] = absint($params['max_level']);
-    }
-
-    $params['no_cpt_filter'] = gdsc_to_bool_val($params['no_cpt_filter']);
-    $params['no_cat_filter'] = gdsc_to_bool_val($params['no_cat_filter']);
-
-    $params['sort_by'] = $params['sort_by'] == 'az' ? 'az' : 'count';
-
-    ob_start();
-    the_widget('geodir_cpt_categories_widget', $params, $params);
-    $output = ob_get_contents();
-    ob_end_clean();
-
     return $output;
 }

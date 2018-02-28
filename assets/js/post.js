@@ -56,6 +56,17 @@ function geodir_transliterate(e) {
     }
     return r
 }
+
+function geodir_ajax_load_slider(slide){
+    // fix the srcset
+    if(real_srcset = jQuery(slide).find('img').attr("data-srcset")){
+        jQuery(slide).find('img').attr("srcset",real_srcset);
+    }
+    // fix the src
+    if(real_src = jQuery(slide).find('img').attr("data-src")){
+        jQuery(slide).find('img').attr("src",real_src);
+    }
+}
 jQuery(document).ready(function() {
     // chrome 53 introduced a bug, so we need to repaint the slider when shown.
     jQuery('.geodir-slides').addClass('flexslider-fix-rtl');
@@ -81,14 +92,18 @@ jQuery(document).ready(function() {
         asNavFor: "#geodir_slider",
         rtl: 1 == parseInt(geodir_params.is_rtl) ? !0 : !1
     }), jQuery("#geodir_slider").flexslider({
-        animation: "slide",
+        animation: jQuery("#geodir_slider").attr("data-animation")=='fade' ? "fade" : "slide",
         selector: ".geodir-slides > li",
         namespace: "geodir-",
-        controlNav: !0,
+       // controlNav: !0,
+        controlNav: parseInt(jQuery("#geodir_slider").attr("data-controlnav")),
+        directionNav: 1,
+        prevText: "",
+        nextText: "",
         animationLoop: !0,
-        slideshow: !0,
+        slideshow: parseInt(jQuery("#geodir_slider").attr("data-slideshow")),
         sync: "#geodir_carousel",
-        start: function() {
+        start: function(slider) {
 
             // chrome 53 introduced a bug, so we need to repaint the slider when shown.
             jQuery('.geodir-slides').removeClass('flexslider-fix-rtl');
@@ -100,6 +115,23 @@ jQuery(document).ready(function() {
             });
 
 
+            // Ajaxify the slider if needed.
+            next = slider.slides.eq(slider.currentSlide + 1);
+            // fix the srcset
+            if(real_srcset = jQuery(next).find('img').attr("data-srcset")){
+                jQuery(next).find('img').attr("srcset",real_srcset);
+            }
+            // fix the src
+            if(real_src = jQuery(next).find('img').attr("data-src")){
+                jQuery(next).find('img').attr("src",real_src);
+            }
+        },
+        before: function(slider){
+            // Ajaxify the slider if needed.
+            animatingTo = slider.slides.eq(slider.animatingTo);
+            next_next = slider.slides.eq(slider.currentSlide + 2);
+            geodir_ajax_load_slider(next_next);// load the next-next slide via ajax so its always loaded early
+            geodir_ajax_load_slider(animatingTo); // double check the current slide is loaded (in-case user goes backwards)
         },
         rtl: 1 == parseInt(geodir_params.is_rtl) ? !0 : !1
     }), jQuery("a.b_sendtofriend").click(function(e) {
@@ -114,6 +146,8 @@ jQuery(document).ready(function() {
             geodir_popup_validate_field(this) || (e = geodir_popup_validate_field(this))
         }), e ? !0 : !1
     });
+
+
 
     // let the popups open via url param
     if(gdUrlParam('gd_popup')=='send_friend' && jQuery('a.b_sendtofriend').length){
