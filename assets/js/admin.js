@@ -867,7 +867,9 @@ jQuery(function($) {
 				$this.on('change.select2', function(e) {
 					geodirSelect2OnChange($this, $select2);
 				});
-				$this.trigger('change.select2');
+				if ($this.data('cmultiselect') || $this.data('cselect')) {
+					$this.trigger('change.select2');
+				}
             });
             $(':input.geodir-select-nostd').filter(':not(.enhanced)').each(function() {
                 var $this = $(this);
@@ -908,7 +910,9 @@ jQuery(function($) {
 				$this.on('change.select2', function(e) {
 					geodirSelect2OnChange($this, $select2);
 				});
-				$this.trigger('change.select2');
+				if ($this.data('cmultiselect') || $this.data('cselect')) {
+					$this.trigger('change.select2');
+				}
             });
         }).trigger('geodir-select-init');
         $('html').on('click', function(event) {

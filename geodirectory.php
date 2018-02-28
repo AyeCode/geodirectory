@@ -125,6 +125,9 @@ final class GeoDirectory {
         
         // Do not store any revisions (except the one autosave per post).
         $this->define( 'WP_POST_REVISIONS', 0 );
+		
+		$this->define( 'GEODIR_REST_SLUG', 'geodir' );
+		$this->define( 'GEODIR_REST_API_VERSION', '2' );
         
         // This will store the cached post custom fields per package for each page load so not to run for each listing.
         $geodir_post_custom_fields_cache = array();
@@ -183,7 +186,7 @@ final class GeoDirectory {
 
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/formatting-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/core-functions.php' );
-
+		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-datetime.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/settings/functions.php' );
         $geodir_options = geodir_get_settings();
 
@@ -241,6 +244,12 @@ final class GeoDirectory {
 	    if(defined( 'GUTENBERG_DEVELOPMENT_MODE' )){
 		    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/block-types.php' );
 	    }
+		
+		/**
+		 * REST API.
+		 */
+		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-api.php' );
+		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-register-wp-admin-settings.php' );
 
 
         if ( $this->is_request( 'admin' ) || $this->is_request( 'test' ) || $this->is_request( 'cli' ) ) {
@@ -275,7 +284,6 @@ final class GeoDirectory {
         }
         
         $this->load_db_language();
-		$this->rest_api_includes();
         
         if ( $this->is_request( 'frontend' ) ) {
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-template-loader.php' ); // Template Loader
@@ -290,18 +298,8 @@ final class GeoDirectory {
         }
 
         $this->query = new GeoDir_Query();
+		$this->api   = new GeoDir_API();
     }
-	
-	private function rest_api_includes() {
-		include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-rest-functions.php' );
-
-		// Abstract controllers.
-		include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/abstracts/abstract-geodir-rest-controller.php' );
-
-		// REST API controllers.
-		include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/api/class-geodir-rest-system-status-controller.php' );
-		include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/api/class-geodir-rest-system-status-tools-controller.php' );
-	}
     
     /**
      * Hook into actions and filters.
