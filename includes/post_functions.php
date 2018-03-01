@@ -768,7 +768,7 @@ if (!function_exists('geodir_get_featured_image')) {
             $img_arr['width'] = $width;
             $img_arr['height'] = $height;
             $img_arr['title'] = $post->post_title;
-        } elseif ($post_images = geodir_get_images($post_id, $size, $no_image, 1)) {
+        } elseif ($post_images = geodir_get_images($post_id, 1)) {
             foreach ($post_images as $image) {
                 return $image;
             }

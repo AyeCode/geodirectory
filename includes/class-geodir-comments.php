@@ -613,12 +613,18 @@ class GeoDir_Comments {
 				$rating_color = "background:$rating_color;";
 			}
 		} else {
+
+			if($rating_color){
+				$rating_color = " color:$rating_color; ";
+			}
+
 			while ( $i <= $rating_input_count ) {
 				$rating_title = $type == 'input' ? "title='$rating_texts[$i]'" : '';
 				$rating_html .= '<i class="fa ' . $rating_icon . '" ' . $rating_title . '></i>';
 				$i ++;
 			}
 		}
+
 
 		$rating_percent   = $type == 'output' ? 'width:' . $rating / $rating_input_count * 100 . '%;' : '';
 		$foreground_style = $rating_percent || $rating_color ? "style='$rating_percent $rating_color'" : '';

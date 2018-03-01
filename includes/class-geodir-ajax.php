@@ -69,8 +69,7 @@ class GeoDir_AJAX {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( -1 );
 		}
-
-
+		
 		$result = GeoDir_Admin_Import_Export::start_import_export();
 
 		if(is_wp_error( $result ) ){

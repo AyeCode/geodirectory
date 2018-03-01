@@ -317,21 +317,6 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 
 			<?php
 
-			$curImages = geodir_get_images( $post_id );
-
-			//print_r( $curImages );
-			$place_img_array = array();
-
-			if ( ! empty( $curImages ) ):
-				foreach ( $curImages as $p_img ):
-					$place_img_array[] = $p_img->src . "|" . $p_img->id . "|" . $p_img->title . "|" . $p_img->caption;
-				endforeach;
-			endif;
-
-			if ( ! empty( $place_img_array ) ) {
-				$curImages = implode( ',', $place_img_array );
-			}
-
 
 			$curImages = GeoDir_Media::get_post_images_edit_string( $post_id );
 
