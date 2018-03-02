@@ -124,7 +124,8 @@ class GeoDir_Shortcodes {
     }
 
     public static function gd_loop( $atts = array(), $content = null ) {
-        if(geodir_is_post_type_archive() ||  geodir_is_taxonomy() ||  geodir_is_page('search')){
+        global $wp_query;
+        if(geodir_is_post_type_archive() ||  geodir_is_taxonomy() ||  geodir_is_page('search') || (is_author() && !empty($wp_query->query['gd_favs'])) ){
             ob_start();
             // geodir_get_template_part('listing', 'listview');
             geodir_get_template_part('content', 'archive-listing');

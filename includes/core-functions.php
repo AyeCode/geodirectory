@@ -297,3 +297,14 @@ function geodir_nocache_headers() {
 	geodir_maybe_define( 'DONOTCACHEDB', true );
 	nocache_headers();
 }
+
+/**
+ * Get the slug for user favs.
+ * 
+ * @param string $cpt_slug
+ *
+ * @return mixed|void
+ */
+function geodir_favs_slug($cpt_slug = '' ){
+    return apply_filters('geodir_rewrite_favs_slug','favs',$cpt_slug);
+}

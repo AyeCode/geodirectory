@@ -98,10 +98,13 @@ class GeoDir_Query {
 		/*
 		 * If post_type or archive then add query filters
 		 */
-		if(geodir_is_page('post_type') || geodir_is_page('archive')){
+		if(geodir_is_page('post_type') || geodir_is_page('archive') ){
+
 			add_filter( 'posts_join', array( $this, 'posts_join' ) );
 			add_filter( 'posts_where', array( $this, 'posts_where' ) );
+			add_filter( 'posts_where', array( $this, 'author_where' ) );
 			add_filter( 'posts_orderby', array( $this, 'posts_orderby' ) );
+
 		}elseif(geodir_is_page('search')){
 			$q->is_page = false;
 			$q->is_singular = false;
@@ -177,6 +180,10 @@ class GeoDir_Query {
 			} else {
 				$s_SA = '';
 			}
+		}elseif(is_author()){
+			add_filter( 'posts_where', array( $this, 'author_where' ) );
+			//$q->is_archive = true;
+			//$q->is_post_type_archive = true;
 		}
 
 
@@ -288,7 +295,7 @@ class GeoDir_Query {
 	 */
 	public function posts_where($where){
 
-		global $wpdb,$geodir_post_type;
+		global $wpdb,$geodir_post_type,$wp_query;
 		//echo '###'.$where;
 
 		$table = geodir_db_cpt_table($geodir_post_type);
@@ -458,6 +465,38 @@ class GeoDir_Query {
 
 		}
 
+		return $where;
+	}
+
+	public function author_where($where){
+		global $wp_query,$wpdb;
+//echo '####';exit;
+		// author saves/favs filter
+		if(is_author() && !empty($wp_query->query['gd_favs']) ){
+
+			$author_id = isset($wp_query->query_vars['author']) ? $wp_query->query_vars['author'] : 0;
+			if($author_id){
+				$user_favs = geodir_get_user_favourites( $author_id );
+				if(empty($user_favs)){
+					$fav_in = "''"; // blank it so we get no results
+				}else{
+					$fav_in = $user_favs;
+					$prepare_ids = implode(",",array_fill(0, count($user_favs), '%d'));
+				}
+				$where .= $wpdb->prepare(" AND $wpdb->posts.ID IN ($prepare_ids)",$fav_in);
+
+				// replace 'post' with GD post types
+
+				//print_r($post_types);
+				if(!isset($wp_query->query['post_type'])){
+					$post_types = geodir_get_posttypes();
+					$prepare_cpts = implode(",",array_fill(0, count($post_types), '%s'));
+					$gd_cpt_replace = $wpdb->prepare("$wpdb->posts.post_type IN ($prepare_cpts)",$post_types);
+					$where = str_replace("$wpdb->posts.post_type = 'post'",$gd_cpt_replace,$where);
+				}
+
+			}
+		}
 
 		return $where;
 	}
@@ -686,7 +725,12 @@ class GeoDir_Query {
 
 			}
 
+
+			// author pages
 			if ( ! isset( $wp->query_vars['gd_is_geodir_page'] ) && isset( $wp->query_vars['author_name'] ) && isset( $_REQUEST['geodir_dashbord'] ) ) {
+				$wp->query_vars['gd_is_geodir_page'] = true;
+			}
+			if ( ! isset( $wp->query_vars['gd_is_geodir_page'] ) && isset( $wp->query_vars['gd_favs'] )) {
 				$wp->query_vars['gd_is_geodir_page'] = true;
 			}
 

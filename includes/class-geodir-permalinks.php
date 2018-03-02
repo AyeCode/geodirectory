@@ -24,296 +24,62 @@ class GeoDir_Permalinks {
 	 * Hook in methods.
 	 */
 	public static function init() {
-		add_action( 'init', array( __CLASS__, 'register_taxonomies' ), 5 );
-		add_action( 'init', array( __CLASS__, 'register_post_types' ), 5 );
-		add_action( 'init', array( __CLASS__, 'register_post_status' ), 9 );
-		add_filter( 'rest_api_allowed_post_types', array( __CLASS__, 'rest_api_allowed_post_types' ) );
-		add_action( 'geodir_flush_rewrite_rules', array( __CLASS__, 'flush_rewrite_rules' ) );
+
 		add_filter( 'post_type_link', array( __CLASS__, 'post_permalink_structure'), 10, 4);
 		//add_action( 'registered_post_type', array( __CLASS__, 'register_post_type_rules' ), 10, 2 );
 
 		add_action('init', array( __CLASS__, 'rewrite_tags'), 10, 0);
 		add_action('init', array( __CLASS__, 'rewrite_rules'), 10, 0);
 
+
+		//add_action('init', array( __CLASS__, 'author_cpt_rules'), 10, 0);
+
+		add_filter( 'author_rewrite_rules', array( __CLASS__, 'author_cpt_rules' ) );
+		//add_action( 'author_rewrite_rules', array( __CLASS__, 'author_cpt_rules' ) );
+
+
+
+
+
 	}
 
-
+	
 
 	/**
-	 * Register core taxonomies.
+	 * Add author page pretty urls.
+	 *
+	 * @param $rules
+	 *
+	 * @return mixed
 	 */
-	public static function register_taxonomies() {
+	public static function author_cpt_rules( $rules ){
+		global $wp_rewrite;
 
-		if ( ! is_blog_installed() ) {
-			return;
-		}
+		$post_types = geodir_get_posttypes( 'array' );
 
-		if ( taxonomy_exists( 'gd_placecategory' ) ) {
-			return;
-		}
+		if(!empty($post_types)){
+			foreach($post_types as $post_type => $cpt){
 
-		do_action( 'geodirectory_register_taxonomy' );
+				$cpt_slug = isset($cpt['rewrite']['slug']) ? $cpt['rewrite']['slug'] : '';
+				$saves_slug = self::geodir_favs_slug( $cpt_slug );
 
-		$taxonomies = self::get_taxonomy_defaults();
-		// If custom taxonomies are present, register them
-		if (is_array($taxonomies)) {
-			// Sort taxonomies
-			ksort($taxonomies);
+				// add CPT author rewrite rules
+				$rules[$wp_rewrite->author_base."/([^/]+)/$cpt_slug/?$"] = 'index.php?author_name=$matches[1]&post_type='.$post_type;
+				$rules[$wp_rewrite->author_base."/([^/]+)/$cpt_slug/page/?([0-9]{1,})/?$"] = 'index.php?author_name=$matches[1]&post_type='.$post_type.'&paged=$matches[2]';
 
-			// Register taxonomies
-			foreach ($taxonomies as $taxonomy => $args) {
-				// Allow taxonomy names to be translated
-				if (!empty($args['args']['labels'])) {
-					foreach ($args['args']['labels'] as $key => $tax_label) {
-						$args['args']['labels'][$key] = __($tax_label, 'geodirectory');
-					}
-				}
-
-				register_taxonomy($taxonomy, $args['object_type'], $args['args']);
-
-				if (taxonomy_exists($taxonomy)) {
-					register_taxonomy_for_object_type($taxonomy, $args['object_type']);
-				}
+				// favs
+				$rules[$wp_rewrite->author_base."/([^/]+)/$saves_slug/?$"] = 'index.php?author_name=$matches[1]&gd_favs=1';
+				$rules[$wp_rewrite->author_base."/([^/]+)/$saves_slug/page/?([0-9]{1,})/?$"] = 'index.php?author_name=$matches[1]&gd_favs=1&paged=$matches[2]';
+				$rules[$wp_rewrite->author_base."/([^/]+)/$saves_slug/$cpt_slug/?$"] = 'index.php?author_name=$matches[1]&gd_favs=1&post_type='.$post_type;
+				$rules[$wp_rewrite->author_base."/([^/]+)/$saves_slug/$cpt_slug/page/?([0-9]{1,})/?$"] = 'index.php?author_name=$matches[1]&gd_favs=1&post_type='.$post_type.'&paged=$matches[2]';
 			}
 		}
 
+		//if(is_admin()){print_r($rules );exit;} // for testing
 
-		do_action( 'geodirectory_after_register_taxonomy' );
+		return $rules;
 	}
 
-	/**
-	 * Get the post type defaults.
-	 */
-	private static function get_post_type_defaults() {
-
-		$post_types = geodir_get_option('post_types', array());
-		if(empty($post_types)) {
-
-			$listing_slug = 'places';
-
-
-			$labels = array(
-				'name'               => __( 'Places', 'geodirectory' ),
-				'singular_name'      => __( 'Place', 'geodirectory' ),
-				'add_new'            => __( 'Add New', 'geodirectory' ),
-				'add_new_item'       => __( 'Add New Place', 'geodirectory' ),
-				'edit_item'          => __( 'Edit Place', 'geodirectory' ),
-				'new_item'           => __( 'New Place', 'geodirectory' ),
-				'view_item'          => __( 'View Place', 'geodirectory' ),
-				'search_items'       => __( 'Search Places', 'geodirectory' ),
-				'not_found'          => __( 'No Place Found', 'geodirectory' ),
-				'not_found_in_trash' => __( 'No Place Found In Trash', 'geodirectory' )
-			);
-
-			$place_default = array(
-				'labels'          => $labels,
-				'can_export'      => true,
-				'capability_type' => 'post',
-				'description'     => 'Place post type.',
-				'has_archive'     => $listing_slug,
-				'hierarchical'    => false,  // Hierarchical causes memory issues - WP loads all records!
-				'map_meta_cap'    => true,
-				'menu_icon'       => 'dashicons-location-alt',
-				'public'          => true,
-				'query_var'       => true,
-				'rewrite'         => array(
-					'slug'         => $listing_slug,
-					'with_front'   => false,
-					'hierarchical' => true,
-					'feeds'        => true
-				),
-				'supports'        => array(
-					'title',
-					'editor',
-					'author',
-					'thumbnail',
-					'excerpt',
-					'custom-fields',
-					'comments',
-					/*'revisions', 'post-formats'*/
-				),
-				'taxonomies'      => array( 'gd_placecategory', 'gd_place_tags' )
-			);
-
-			//Update custom post types
-			$post_types['gd_place'] = $place_default;
-			geodir_update_option( 'post_types', $post_types );
-
-		}
-		
-		return $post_types;
-
-	}
-
-	/**
-	 * Get the taxonomy defaults.
-	 */
-	private static function get_taxonomy_defaults() {
-
-		$taxonomies = geodir_get_option('taxonomies', array());
-		if(empty($taxonomies)){
-
-			$post_types = geodir_get_option('post_types', array());
-			$listing_slug = isset($post_types['gd_place']['rewrite']['slug']) ? $post_types['gd_place']['rewrite']['slug'] : 'places';
-
-
-			// Place tags
-			$gd_placetags = array();
-			$gd_placetags['object_type'] = 'gd_place';
-			$gd_placetags['listing_slug'] = $listing_slug . '/tags';
-			$gd_placetags['args'] = array(
-				'public' => true,
-				'hierarchical' => false,
-				'rewrite' => array('slug' => $listing_slug . '/tags', 'with_front' => false, 'hierarchical' => true),
-				'query_var' => true,
-
-				'labels' => array(
-					'name' => __('Place Tags', 'geodirectory'),
-					'singular_name' => __('Place Tag', 'geodirectory'),
-					'search_items' => __('Search Place Tags', 'geodirectory'),
-					'popular_items' => __('Popular Place Tags', 'geodirectory'),
-					'all_items' => __('All Place Tags', 'geodirectory'),
-					'edit_item' => __('Edit Place Tag', 'geodirectory'),
-					'update_item' => __('Update Place Tag', 'geodirectory'),
-					'add_new_item' => __('Add New Place Tag', 'geodirectory'),
-					'new_item_name' => __('New Place Tag Name', 'geodirectory'),
-					'add_or_remove_items' => __('Add or remove Place tags', 'geodirectory'),
-					'choose_from_most_used' => __('Choose from the most used Place tags', 'geodirectory'),
-					'separate_items_with_commas' => __('Separate Place tags with commas', 'geodirectory'),
-				),
-			);
-
-
-			// Place Category
-			$gd_placecategory = array();
-			$gd_placecategory['object_type'] = 'gd_place';
-			$gd_placecategory['listing_slug'] = $listing_slug;
-			$gd_placecategory['args'] = array(
-				'public' => true,
-				'hierarchical' => true,
-				'rewrite' => array('slug' => $listing_slug, 'with_front' => false, 'hierarchical' => true),
-				'query_var' => true,
-				'labels' => array(
-					'name' => __('Place Categories', 'geodirectory'),
-					'singular_name' => __('Place Category', 'geodirectory'),
-					'search_items' => __('Search Place Categories', 'geodirectory'),
-					'popular_items' => __('Popular Place Categories', 'geodirectory'),
-					'all_items' => __('All Place Categories', 'geodirectory'),
-					'edit_item' => __('Edit Place Category', 'geodirectory'),
-					'update_item' => __('Update Place Category', 'geodirectory'),
-					'add_new_item' => __('Add New Place Category', 'geodirectory'),
-					'new_item_name' => __('New Place Category', 'geodirectory'),
-					'add_or_remove_items' => __('Add or remove Place categories', 'geodirectory'),
-				),
-			);
-
-
-			$taxonomies['gd_place_tags'] = $gd_placetags;
-			$taxonomies['gd_placecategory'] = $gd_placecategory;
-			geodir_update_option('taxonomies', $taxonomies);
-
-		}
-
-		return $taxonomies;
-	}
-
-	/**
-	 * Register core post types.
-	 */
-	public static function register_post_types() {
-		if ( ! is_blog_installed() || post_type_exists( 'gd_place' ) ) {
-			return;
-		}
-
-		do_action( 'geodirectory_register_post_type' );
-
-
-		/**
-		 * Get available custom posttypes and taxonomies and register them.
-		 */
-		_x('places', 'URL slug', 'geodirectory');
-
-		$post_types = self::get_post_type_defaults();
-
-		// Register each post type if array of data is returned
-		if (is_array($post_types)):
-
-			foreach ($post_types as $post_type => $args):
-
-				if (!empty($args['rewrite']['slug'])) {
-					$args['rewrite']['slug'] = _x($args['rewrite']['slug'], 'URL slug', 'geodirectory');
-				}
-				$args = stripslashes_deep($args);
-
-				if (!empty($args['labels'])) {
-					foreach ($args['labels'] as $key => $val) {
-						$args['labels'][$key] = __($val, 'geodirectory');// allow translation
-					}
-				}
-
-				/**
-				 * Filter post type args.
-				 *
-				 * @since 1.0.0
-				 * @param string $args Post type args.
-				 * @param string $post_type The post type.
-				 */
-				$args = apply_filters('geodir_post_type_args', $args, $post_type);
-
-				register_post_type($post_type, $args);
-
-			endforeach;
-		endif;
-
-
-		do_action( 'geodirectory_after_register_post_type' );
-	}
-
-	/**
-	 * Register our custom post statuses, used for listing status.
-	 */
-	public static function register_post_status() {
-
-		$listing_statuses = apply_filters( 'geodir_register_post_statuses',
-			array(
-				'gd-closed'    => array(
-					'label'                     => _x( 'Closed down', 'Listing status', 'geodirectory' ),
-					'public'                    => false,
-					'exclude_from_search'       => true,
-					'show_in_admin_all_list'    => true,
-					'show_in_admin_status_list' => true,
-					'label_count'               => _n_noop( 'Closed down <span class="count">(%s)</span>', 'Closed down <span class="count">(%s)</span>', 'geodirectory' ),
-				)
-			)
-		);
-
-		foreach ( $listing_statuses as $listing_status => $values ) {
-			register_post_status( $listing_status, $values );
-		}
-	}
-
-	/**
-	 * Flush rewrite rules.
-	 */
-	public static function flush_rewrite_rules() {
-		flush_rewrite_rules();
-	}
-
-
-	/**
-	 * Added product for Jetpack related posts.
-	 *
-	 * @param  array $post_types
-	 * @return array
-	 */
-	public static function rest_api_allowed_post_types( $post_types ) {
-		$post_types[] = 'gd_place';
-
-		return $post_types;
-	}
-
-//	$comment_post_cache = array();
-//	$gd_permalink_cache = array();
 	/**
 	 * Returns permalink structure using post link.
 	 *
@@ -563,6 +329,7 @@ class GeoDir_Permalinks {
 		add_rewrite_tag('%region%', '([^&]+)');
 		add_rewrite_tag('%city%', '([^&]+)');
 		add_rewrite_tag('%category%', '([^&]+)');
+		add_rewrite_tag('%gd_favs%', '([^&]+)');
 	}
 
 
