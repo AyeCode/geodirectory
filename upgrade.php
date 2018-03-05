@@ -30,7 +30,7 @@ if (get_option('geodirectory_db_version') != GEODIRECTORY_VERSION) {
 
     add_action('init', 'geodir_fix_cpt_rewrite_slug', 11);// this needs to be kept for a few versions
 
-    update_option('geodirectory_db_version', GEODIRECTORY_VERSION);
+    //update_option('geodirectory_db_version', GEODIRECTORY_VERSION); // @todo is this required?
 
 }
 
@@ -61,4 +61,11 @@ function geodir_upgrade_200() {
 function geodir_fix_cpt_rewrite_slug() {
     // flush the rewrite rules
     flush_rewrite_rules();
+}
+
+/**
+ * Update DB Version.
+ */
+function geodir_update_2001_dev_db_version() {
+	GeoDir_Admin_Install::update_db_version( '2.0.0.1-dev' );
 }

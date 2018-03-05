@@ -181,7 +181,7 @@ class GeoDir_Admin_Notices {
 	 */
 	public static function update_notice() {
 		if ( version_compare( get_option( 'geodirectory_db_version' ), GEODIRECTORY_VERSION, '<' ) ) {
-			$updater = new WC_Background_Updater();
+			$updater = new GeoDir_Background_Updater();
 			if ( $updater->is_updating() || ! empty( $_GET['do_update_geodirectory'] ) ) {
 				include( 'views/html-notice-updating.php' );
 			} else {

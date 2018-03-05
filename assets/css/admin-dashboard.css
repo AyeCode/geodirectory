@@ -3435,18 +3435,16 @@ a.badge:focus {
 .gd-stats-periods .select2-container--default .select2-selection--single {
 	border-radius: 0;
 	border-color: #eff0f6;
-	height: 32px;
+	height: 34px;
 }
 .gd-stats-periods .select2-container--open .select2-selection--single {
 	border-color: #aaa;
 }
 .gd-stats-periods .select2-container--default .select2-selection--single .select2-selection__arrow {
-	height: 30px;
-	right: 5px;
+	height: 28px;
 }
 .gd-stats-periods .select2-container--default .select2-selection--single .select2-selection__rendered {
 	color: #8c94a7;
-	line-height: 30px;
 }
 #select2-gd_stats_period-results .select2-results__option {
 	margin: 0;
