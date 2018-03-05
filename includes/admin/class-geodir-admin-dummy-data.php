@@ -919,7 +919,7 @@ class GeoDir_Admin_Dummy_Data {
 		                  'field_type' => 'address',
 		                  'admin_title' => __('Address', 'geodirectory'),
 		                  'frontend_desc' => __('Please enter the listing street address. eg. : 230 Vine Street', 'geodirectory'),
-		                  'frontend_title' => __('Street', 'geodirectory'),
+		                  'frontend_title' => __('Address', 'geodirectory'),
 		                  'htmlvar_name' => 'address',
 		                  'default_value' => '',
 		                  'option_values' => '',

@@ -128,6 +128,12 @@ class GeoDir_Admin {
 		if ( defined( 'WP_LOAD_IMPORTERS' ) ) {
 			//include_once( dirname( __FILE__ ) . '/class-wc-admin-importers.php' );
 		}
+
+		// load the user class only on the users.php page
+		global $pagenow;
+		if($pagenow=='users.php'){
+			new GeoDir_Admin_Users();
+		}
 	}
 
 	/**

@@ -22,6 +22,11 @@ function geodir_cf_checkbox($html,$location,$cf,$p=''){
     if(is_numeric($p)){$post = geodir_get_post_info($p);}
     else{ global $post;}
 
+    // Block demo content
+    if( geodir_is_block_demo() ){
+        $post->{$cf['htmlvar_name']} = '1';
+    }
+
     if(!is_array($cf) && $cf!=''){
         $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
         if(!$cf){return NULL;}
@@ -97,7 +102,7 @@ function geodir_cf_checkbox($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_checkbox','geodir_cf_checkbox',10,3);
+add_filter('geodir_custom_field_output_checkbox','geodir_cf_checkbox',10,4);
 
 
 /**
@@ -178,7 +183,7 @@ function geodir_cf_fieldset($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_fieldset','geodir_cf_fieldset',10,3);
+add_filter('geodir_custom_field_output_fieldset','geodir_cf_fieldset',10,4);
 
 
 /**
@@ -196,6 +201,11 @@ function geodir_cf_url($html,$location,$cf,$p=''){
     // check we have the post value
     if(is_numeric($p)){$post = geodir_get_post_info($p);}
     else{ global $post;}
+
+    // Block demo content
+    if( geodir_is_block_demo() ){
+        $post->{$cf['htmlvar_name']} = 'https://example.com';
+    }
 
     if(!is_array($cf) && $cf!=''){
         $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
@@ -313,6 +323,11 @@ function geodir_cf_phone($html,$location,$cf,$p=''){
     if(is_numeric($p)){$post = geodir_get_post_info($p);}
     else{ global $post;}
 
+    // Block demo content
+    if( geodir_is_block_demo() ){
+        $post->{$cf['htmlvar_name']} = '0001010101010';
+    }
+
     if(!is_array($cf) && $cf!=''){
         $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
         if(!$cf){return NULL;}
@@ -384,7 +399,7 @@ function geodir_cf_phone($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_phone','geodir_cf_phone',10,3);
+add_filter('geodir_custom_field_output_phone','geodir_cf_phone',10,4);
 
 
 /**
@@ -406,6 +421,11 @@ function geodir_cf_time($html,$location,$cf,$p=''){
     if(!is_array($cf) && $cf!=''){
         $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
         if(!$cf){return NULL;}
+    }
+
+    // Block demo content
+    if( geodir_is_block_demo() ){
+        $post->{$cf['htmlvar_name']} = '10:30';
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -479,7 +499,7 @@ function geodir_cf_time($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_time','geodir_cf_time',10,3);
+add_filter('geodir_custom_field_output_time','geodir_cf_time',10,4);
 
 
 /**
@@ -501,6 +521,11 @@ function geodir_cf_datepicker($html,$location,$cf,$p=''){
     if(!is_array($cf) && $cf!=''){
         $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
         if(!$cf){return NULL;}
+    }
+
+    // Block demo content
+    if( geodir_is_block_demo() ){
+        $post->{$cf['htmlvar_name']} = '25/12/2020'; // blank works to show current date
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -599,7 +624,7 @@ function geodir_cf_datepicker($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_datepicker','geodir_cf_datepicker',10,3);
+add_filter('geodir_custom_field_output_datepicker','geodir_cf_datepicker',10,4);
 
 
 /**
@@ -621,6 +646,11 @@ function geodir_cf_text($html,$location,$cf,$p=''){
     if(!is_array($cf) && $cf!=''){
         $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
         if(!$cf){return NULL;}
+    }
+
+    // Block demo content
+    if( geodir_is_block_demo() ){
+        $post->{$cf['htmlvar_name']} = __('Some demo text.','geodirectory');
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -706,7 +736,7 @@ function geodir_cf_text($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_text','geodir_cf_text',10,3);
+add_filter('geodir_custom_field_output_text','geodir_cf_text',10,4);
 
 
 /**
@@ -728,6 +758,11 @@ function geodir_cf_radio($html,$location,$cf,$p=''){
     if(!is_array($cf) && $cf!=''){
         $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
         if(!$cf){return NULL;}
+    }
+
+    // Block demo content
+    if( geodir_is_block_demo() ){
+        $post->{$cf['htmlvar_name']} = 'Yes';
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -814,7 +849,7 @@ function geodir_cf_radio($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_radio','geodir_cf_radio',10,3);
+add_filter('geodir_custom_field_output_radio','geodir_cf_radio',10,4);
 
 
 /**
@@ -837,6 +872,11 @@ function geodir_cf_select($html,$location,$cf,$p=''){
     if(!is_array($cf) && $cf!=''){
         $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
         if(!$cf){return NULL;}
+    }
+
+    // Block demo content
+    if( geodir_is_block_demo() ){
+        $post->{$cf['htmlvar_name']} = 'Yes';
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -917,7 +957,7 @@ function geodir_cf_select($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_select','geodir_cf_select',10,3);
+add_filter('geodir_custom_field_output_select','geodir_cf_select',10,4);
 
 
 /**
@@ -940,6 +980,12 @@ function geodir_cf_multiselect($html,$location,$cf,$p=''){
         $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
         if(!$cf){return NULL;}
     }
+//print_r($post);
+    // Block demo content
+    if( geodir_is_block_demo() ){
+        $post->{$cf['htmlvar_name']} = 'Swimming Pool,WiFi,Sea View';
+    }
+
 
     $html_var = $cf['htmlvar_name'];
 
@@ -1044,7 +1090,7 @@ function geodir_cf_multiselect($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_multiselect','geodir_cf_multiselect',10,3);
+add_filter('geodir_custom_field_output_multiselect','geodir_cf_multiselect',10,4);
 
 
 /**
@@ -1066,6 +1112,11 @@ function geodir_cf_email($html,$location,$cf,$p=''){
     if(!is_array($cf) && $cf!=''){
         $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
         if(!$cf){return NULL;}
+    }
+
+    // Block demo content
+    if( geodir_is_block_demo() ){
+        $post->{$cf['htmlvar_name']} = 'testing@example.com';
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -1186,7 +1237,7 @@ function geodir_cf_email($html,$location,$cf,$p=''){
                 $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
                 $html .= '</span><span class="geodir-email-address-output">';
                 $email = $post->{$cf['htmlvar_name']} ;
-                if($e_split = explode('@',$email)){
+                if($e_split = explode('@',$email) && $email!='testing@example.com'){
                     /**
                      * Filter email custom field name output.
                      *
@@ -1209,7 +1260,7 @@ function geodir_cf_email($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_email','geodir_cf_email',10,3);
+add_filter('geodir_custom_field_output_email','geodir_cf_email',10,4);
 
 
 /**
@@ -1219,6 +1270,7 @@ add_filter('geodir_custom_field_output_email','geodir_cf_email',10,3);
  * @param string $location The location to output the html.
  * @param array $cf The custom field array details.
  * @since 1.6.6
+ *
  *
  * @return string The html to output for the custom field.
  */
@@ -1231,6 +1283,12 @@ function geodir_cf_file($html,$location,$cf,$p=''){
     if(!is_array($cf) && $cf!=''){
         $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
         if(!$cf){return NULL;}
+    }
+
+    // Block demo content
+    //@todo this custom field is not working, so we need to fix it and thentest
+    if( geodir_is_block_demo() ){
+        $post->{$cf['htmlvar_name']} = 'testing@example.com';
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -1354,7 +1412,7 @@ function geodir_cf_file($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_file','geodir_cf_file',10,3);
+add_filter('geodir_custom_field_output_file','geodir_cf_file',10,4);
 
 
 
@@ -1377,6 +1435,11 @@ function geodir_cf_textarea($html,$location,$cf,$p=''){
     if(!is_array($cf) && $cf!=''){
         $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
         if(!$cf){return NULL;}
+    }
+
+    // Block demo content
+    if( geodir_is_block_demo() ){
+        $post->{$cf['htmlvar_name']} = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam risus metus, rutrum in nunc eu, vestibulum iaculis lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aenean tristique arcu et eros convallis elementum. Maecenas sit amet quam eu velit euismod viverra. Etiam magna augue, mollis id nisi sit amet, eleifend sagittis tortor. Suspendisse vitae dignissim arcu, ac elementum eros. Mauris hendrerit at massa ut pellentesque.';
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -1445,7 +1508,7 @@ function geodir_cf_textarea($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_textarea','geodir_cf_textarea',10,3);
+add_filter('geodir_custom_field_output_textarea','geodir_cf_textarea',10,4);
 
 
 
@@ -1468,6 +1531,11 @@ function geodir_cf_html($html,$location,$cf,$p=''){
     if(!is_array($cf) && $cf!=''){
         $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
         if(!$cf){return NULL;}
+    }
+
+    // Block demo content
+    if( geodir_is_block_demo() ){
+        $post->{$cf['htmlvar_name']} = '<b>This is some bold HTML</b>';
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -1535,7 +1603,7 @@ function geodir_cf_html($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_html','geodir_cf_html',10,3);
+add_filter('geodir_custom_field_output_html','geodir_cf_html',10,4);
 
 
 
@@ -1558,6 +1626,28 @@ function geodir_cf_taxonomy($html,$location,$cf,$p=''){
     if(!is_array($cf) && $cf!=''){
         $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
         if(!$cf){return NULL;}
+    }
+
+    // Block demo content
+    if( geodir_is_block_demo() ){
+        if($cf['htmlvar_name']=='post_category'){
+            $demo_tax = 'gd_placecategory';
+        }elseif($cf['htmlvar_name']=='post_tags'){
+            $demo_tax = 'gd_place_tags';
+        }
+        $demoterms = get_terms( array(
+            'taxonomy' => $demo_tax,
+            'hide_empty' => false,
+            'number'    => 2
+        ) );
+        $demo_terms = '';
+        if(!empty($demoterms)){
+            foreach($demoterms as $demoterm){
+                $demo_terms .= $demoterm->term_id.",";
+            }
+        }
+        $post->{$cf['htmlvar_name']} = $demo_terms;
+        $post->post_type  = 'gd_place';
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -1603,8 +1693,17 @@ function geodir_cf_taxonomy($html,$location,$cf,$p=''){
     // If not html then we run the standard output.
     if(empty($html)){
 
-        if ($html_var == $post->post_type . 'category' && !empty($post->{$html_var})) {
+
+        if($html_var=='post_category'){
             $post_taxonomy = $post->post_type . 'category';
+        }elseif($html_var == 'post_tags'){
+            $post_taxonomy = $post->post_type . '_tags';
+        }else{
+            $post_taxonomy = '';
+        }
+        if ($post_taxonomy && !empty($post->{$html_var})) {
+
+            //$post_taxonomy = $post->post_type . 'category';
             $field_value = $post->{$html_var};
             $links = array();
             $terms = array();
@@ -1615,12 +1714,14 @@ function geodir_cf_taxonomy($html,$location,$cf,$p=''){
 
             $field_value = array_unique($field_value);
 
+            //print_r($field_value);
+
             if (!empty($field_value)) {
                 foreach ($field_value as $term) {
                     $term = trim($term);
 
                     if ($term != '') {
-                        $term = get_term_by('id', $term, $html_var);
+                        $term = get_term_by('id', $term, $post_taxonomy);
                         if (is_object($term)) {
                             $links[] = "<a href='" . esc_attr(get_term_link($term, $post_taxonomy)) . "'>" . $term->name . "</a>";
                             $terms[] = $term;
@@ -1659,7 +1760,9 @@ function geodir_cf_taxonomy($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_taxonomy','geodir_cf_taxonomy',10,3);
+add_filter('geodir_custom_field_output_tags','geodir_cf_taxonomy',10,4);
+add_filter('geodir_custom_field_output_categories','geodir_cf_taxonomy',10,4);
+add_filter('geodir_custom_field_output_taxonomy','geodir_cf_taxonomy',10,4);
 
 
 /**
@@ -1682,6 +1785,13 @@ function geodir_cf_address($html,$location,$cf,$p=''){
     if(!is_array($cf) && $cf!=''){
         $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
         if(!$cf){return NULL;}
+    }
+
+
+    // Block demo content
+    if( geodir_is_block_demo() ){
+        $post->{$cf['htmlvar_name']} = '123 Demo Street';
+        $post->street = '123 Demo Street';
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -1848,7 +1958,7 @@ function geodir_cf_address($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_address','geodir_cf_address',10,3);
+add_filter('geodir_custom_field_output_address','geodir_cf_address',10,4);
 
 
 
@@ -1870,6 +1980,11 @@ function geodir_cf_business_hours($html,$location,$cf,$p=''){
     if(!is_array($cf) && $cf!=''){
         $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
         if(!$cf){return NULL;}
+    }
+
+    // Block demo content
+    if( geodir_is_block_demo() ){
+        $post->{$cf['htmlvar_name']} = '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00"],["GMT":"+0"]';
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -1967,4 +2082,4 @@ function geodir_cf_business_hours($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_business_hours','geodir_cf_business_hours',10,3);
+add_filter('geodir_custom_field_output_business_hours','geodir_cf_business_hours',10,4);

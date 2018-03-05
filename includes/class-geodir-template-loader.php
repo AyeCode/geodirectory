@@ -62,6 +62,7 @@ class GeoDir_Template_Loader {
      * @return string
      */
     private static function get_template_loader_default_file() {
+        global $wp_query;
         $default_file = '';
         if ( geodir_is_singular() ) { // @todo we should make it use the "GD Details template" page template.
             //$default_file = 'single-listing.php';
@@ -76,8 +77,10 @@ class GeoDir_Template_Loader {
             //$default_file = 'page.php'; // i think index.php works better here, more likely to have paging
             $default_file = 'index.php';
             self::setup_archive_loop_as_page();
-        } elseif ( geodir_is_page( 'author' ) ) {
+        } elseif ( geodir_is_page( 'author' ) && !empty($wp_query->query['gd_favs']) ) {
             //$default_file = 'author.php';
+            $default_file = 'index.php';
+            self::setup_archive_loop_as_page();
         } elseif ( geodir_is_page( 'home' ) ) {
            // $default_file = 'home.php';
         } elseif ( geodir_is_page( 'location' ) ) {

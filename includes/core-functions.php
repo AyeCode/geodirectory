@@ -242,6 +242,7 @@ function geodir_params()
         'geoErrPOSITION_UNAVAILABLE' => addslashes(__('Your location is currently unknown', 'geodirectory')),
         'geoErrBREAK' => addslashes(__('Attempt to find location took too long', 'geodirectory')),
         'geoErrDEFAULT' => addslashes(__('Location detection not supported in browser', 'geodirectory')),
+        'i18n_set_as_default' => _x( 'Set as default', 'geodir select', 'geodirectory' ),
         'i18n_no_matches' => _x( 'No matches found', 'geodir select', 'geodirectory' ),
         'i18n_ajax_error' => _x( 'Loading failed', 'geodir select', 'geodirectory' ),
         'i18n_input_too_short_1' => _x( 'Please enter 1 or more characters', 'geodir select', 'geodirectory' ),
@@ -295,4 +296,15 @@ function geodir_nocache_headers() {
 	geodir_maybe_define( 'DONOTCACHEOBJECT', true );
 	geodir_maybe_define( 'DONOTCACHEDB', true );
 	nocache_headers();
+}
+
+/**
+ * Get the slug for user favs.
+ * 
+ * @param string $cpt_slug
+ *
+ * @return mixed|void
+ */
+function geodir_favs_slug($cpt_slug = '' ){
+    return apply_filters('geodir_rewrite_favs_slug','favs',$cpt_slug);
 }

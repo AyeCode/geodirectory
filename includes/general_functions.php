@@ -343,7 +343,7 @@ function geodir_is_page( $gdpage = '' ) {
 			}
 			break;
 		case 'author':
-			if ( is_author() && isset( $_REQUEST['geodir_dashbord'] ) ) {
+			if ( is_author()) {
 				return true;
 			}
 

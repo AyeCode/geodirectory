@@ -232,15 +232,12 @@ class GeoDir_User {
 			$post_types      = geodir_get_posttypes( 'object' );
 
 			$author_link = get_author_posts_url( $user_id );
-			$author_link = geodir_getlink( $author_link, array( 'geodir_dashbord' => 'true' ), false );
+			$author_link = geodir_getlink( $author_link, array(), false );
 
 			foreach ( $post_types as $key => $postobj ) {
 				if ( in_array( $key, $show_favorite_link_user_dashboard ) && array_key_exists( $key, $user_favourite ) ) {
 					$name           = $postobj->labels->name;
-					$post_type_link = geodir_getlink( $author_link, array(
-						'stype' => $key,
-						'list'  => 'favourite'
-					), false );
+					$post_type_link = trailingslashit($author_link).geodir_favs_slug($key)."/".$postobj->rewrite->slug."/";
 
 					$selected = '';
 
@@ -318,12 +315,13 @@ class GeoDir_User {
 		$post_types = geodir_get_posttypes( 'object' );
 
 		$author_link = get_author_posts_url( $user_id );
-		$author_link = geodir_getlink( $author_link, array( 'geodir_dashbord' => 'true' ), false );
+		$author_link = geodir_getlink( $author_link, array(), false );
 
 		foreach ( $post_types as $key => $postobj ) {
 			if ( array_key_exists( $key, $user_listing ) ) {
 				$name         = $postobj->labels->name;
-				$listing_link = geodir_getlink( $author_link, array( 'stype' => $key ), false );
+				$listing_link = trailingslashit($author_link).$postobj->rewrite->slug."/";
+
 
 				$selected = '';
 				if ( ! isset( $_REQUEST['list'] ) && isset( $_REQUEST['geodir_dashbord'] ) && isset( $_REQUEST['stype'] ) && $_REQUEST['stype'] == $key ) {

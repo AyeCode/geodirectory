@@ -124,7 +124,8 @@ class GeoDir_Shortcodes {
     }
 
     public static function gd_loop( $atts = array(), $content = null ) {
-        if(geodir_is_post_type_archive() ||  geodir_is_taxonomy() ||  geodir_is_page('search')){
+        global $wp_query;
+        if(geodir_is_post_type_archive() ||  geodir_is_taxonomy() ||  geodir_is_page('search') || (is_author() && !empty($wp_query->query['gd_favs'])) ){
             ob_start();
             // geodir_get_template_part('listing', 'listview');
             geodir_get_template_part('content', 'archive-listing');
@@ -176,11 +177,7 @@ class GeoDir_Shortcodes {
 	public static function gd_single_closed_text( $atts = array(), $content = null ) {
         return self::shortcode_wrapper( 'geodir_sc_single_closed_text', $atts, $content  );
     }
-
-    public static function gd_single_meta( $atts = array(), $content = null ) {
-        return geodir_sc_single_meta( $atts, $content  );
-        //return self::shortcode_wrapper( 'geodir_sc_single_meta', $atts, $content  );
-    }
+    
 }
 
 

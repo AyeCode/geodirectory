@@ -47,6 +47,9 @@ class GeoDir_Admin_Import_Export {
 			return new WP_Error( 'gd-no-task', __( "No task is set", "geodirectory" ) );
 		}
 
+		// defer term counting
+		wp_defer_term_counting( true );
+
 		// set higher PHP limits
 		self::set_php_limits();
 
@@ -120,6 +123,8 @@ class GeoDir_Admin_Import_Export {
 			default:
 				echo "Your favorite color is neither red, blue, nor green!";
 		}
+
+		wp_defer_term_counting( false );
 
 		return false;
 	}
