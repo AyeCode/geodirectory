@@ -37,63 +37,7 @@ class GeoDir_Widget_Detail_Social_Sharing extends WP_Super_Duper {
             ),
 
             'arguments'     => array(
-                'ajax_load'  => array(
-                    'title' => __('Load via Ajax:', 'geodirectory'),
-                    'desc' => __('This will load all but the first slide via ajax for faster load times.', 'geodirectory'),
-                    'type' => 'checkbox',
-                    'desc_tip' => true,
-                    'value'  => '1',
-                    'default'  => 1,
-                    'advanced' => false
-                ),
-                'slideshow'  => array(
-                    'title' => __('Auto start:', 'geodirectory'),
-                    'desc' => __('Should the slider auto start.', 'geodirectory'),
-                    'type' => 'checkbox',
-                    'desc_tip' => true,
-                    'value'  => '1',
-                    'default'  => 1,
-                    'advanced' => false
-                ),
-                'show_title'  => array(
-                    'title' => __('Show title:', 'geodirectory'),
-                    'desc' => __('Show the titles on the image.', 'geodirectory'),
-                    'type' => 'checkbox',
-                    'desc_tip' => true,
-                    'value'  => '1',
-                    'default'  => 1,
-                    'advanced' => false
-                ),
-                'providers'  => array(
-                    'title' => __('Providers:', 'geodirectory'),
-                    'desc' => __('Slide or fade transition.', 'geodirectory'),
-                    'type' => 'select',
-                    'multiple' => 'multiple',
-                    'options'   =>  array(
-                        "slide" => __('Slide', 'geodirectory'),
-                        "fade" => __('Fade', 'geodirectory'),
-                        "fade1" => __('Fade1', 'geodirectory'),
-                        "fade2" => __('Fade2', 'geodirectory'),
-                    ),
-                    //'default'  => 'slide',
-                    'desc_tip' => true,
-                    'advanced' => false
-                ),
-
-                'controlnav'  => array(
-                    'title' => __('Control Navigation:', 'geodirectory'),
-                    'desc' => __('Image navigation controls below slider.', 'geodirectory'),
-                    'type' => 'select',
-                    'options'   =>  array(
-                        "1" => __('Default', 'geodirectory'),
-                        "0" => __('None', 'geodirectory'),
-                        "2" => __('Thumbnails (not ajax compatible)', 'geodirectory'),
-                    ),
-                    'default'  => '1',
-                    'desc_tip' => true,
-                    'advanced' => false
-                )
-            )
+			)
 
         );
 
