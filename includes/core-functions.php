@@ -110,11 +110,32 @@ function geodir_help_tip( $tip, $allow_html = false ) {
  * @return string
  */
 function geodir_get_permalink_structure() {
-    return geodir_get_option( 'permalink_structure', '');
+    return geodir_get_option( 'permalink_structure', '' );
 }
 
+/**
+ * Set permalink structure for GeoDirectory
+ *
+ * @since  2.0.0
+ * @return string
+ */
+function geodir_set_permalink_structure( $permalink_structure = '' ) {
+    $old_permalink_structure = geodir_get_option( 'permalink_structure' );
 
+	if ( $permalink_structure != $old_permalink_structure ) {
+		geodir_update_option( 'permalink_structure', $permalink_structure );
 
+		/**
+		 * Fires after the GeoDirectory permalink structure is updated.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param string $old_permalink_structure The previous permalink structure.
+		 * @param string $permalink_structure     The new permalink structure.
+		 */
+		do_action( 'geodir_permalink_structure_changed', $old_permalink_structure, $permalink_structure );
+	}
+}
 
 /**
  * Get the search form default text.

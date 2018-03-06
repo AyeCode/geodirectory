@@ -413,7 +413,7 @@ class GeoDir_Admin_Dummy_Data {
 					echo "</select>";
 
 					$select_display = $post_counts > 0 ? 'display:none;' : '';
-					echo "<select id='" . $post_type . "_data_type_count' style='$select_display' class='geodir-select'>";
+					echo "<select id='" . $post_type . "_data_type_count' style='min-width:65px;$select_display' class='geodir-select'>";
 					$x = 1;
 					while ( $x <= $count ) {
 						$selected = ( $x == $count ) ? "selected='selected'" : '';

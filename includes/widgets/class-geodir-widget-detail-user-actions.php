@@ -8,11 +8,103 @@
 */
 
 /**
- * GeoDir_Widget_Detail_Social_Sharing class.
+ * GeoDir_Widget_Detail_User_Actions class.
  *
  * @since 2.0.0
  */
-class GeoDir_Widget_Detail_User_Actions extends WP_Widget {
+class GeoDir_Widget_Detail_User_Actions extends WP_Super_Duper {
+    
+    public $arguments;
+
+	/**
+     * Sets up a new Detail User Actions widget instance.
+     *
+     * @since 2.0.0
+     * @access public
+     */
+    public function __construct() {
+
+		$options = array(
+			'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
+			'block-icon'    => 'location-alt',
+			'block-category'=> 'common',
+			'block-keywords'=> "['geodir','geodirectory','user']",
+			'class_name'    => __CLASS__,
+			'base_id'       => 'gd_detail_user_actions', // this us used as the widget id and the shortcode id.
+			'name'          => __( 'GD > Detail User Actions', 'geodirectory' ), // the name of the widget.
+			'widget_ops'    => array(
+				'classname'   	=> 'geodir-detail-user-actions', // widget class
+				'description' 	=> esc_html__( 'Display user actions on the listing detail page.', 'geodirectory' ), // widget description
+				'geodirectory' 	=> true,
+				'gd_show_pages' => array( 'detail' ),
+			),
+			'arguments'     => array(
+			)
+		);
+
+		parent::__construct( $options );
+	}
+	
+	
+	/**
+	 * The Super block output function.
+	 *
+	 * @param array $args
+	 * @param array $widget_args
+	 * @param string $content
+	 *
+	 * @return mixed|string|void
+	 */
+	public function output( $args = array(), $widget_args = array(), $content = '' ) {
+		if ( ! geodir_is_page( 'detail' ) ) {
+            return;
+        }
+        
+        /**
+         * Filters the widget title.
+         *
+         * @since 2.0.0
+         *
+         * @param string $title    The widget title. Default 'Pages'.
+         * @param array  $widget_args An array of the widget's settings.
+         * @param mixed  $id_base  The widget ID.
+         */
+        $title = apply_filters( 'widget_title', empty( $widget_args['title'] ) ? '' : $widget_args['title'], $widget_args, $this->id_base );
+        
+        ob_start();
+        
+        do_action( 'geodir_widget_before_detail_user_actions' );
+        
+        geodir_edit_post_link();
+        
+        do_action( 'geodir_widget_after_detail_user_actions' );
+        
+        $content = ob_get_clean();
+        
+        $content = trim( $content );
+        if ( empty( $content ) ) {
+            return;
+        }
+        
+		ob_start();
+
+        echo $args['before_widget'];
+
+        if ( $title ) {
+            echo $args['before_title'] . $title . $args['after_title'];
+        }
+
+        echo $content;
+
+        echo $args['after_widget'];
+
+		$output = ob_get_clean();
+		
+		return $output;
+	}
+}
+
+class GeoDir_Widget_Detail_User_Actions_OLD extends WP_Widget {
     
     /**
      * Sets up a new Detail User Actions widget instance.

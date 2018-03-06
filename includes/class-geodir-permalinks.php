@@ -128,7 +128,7 @@ class GeoDir_Permalinks {
 			 */
 
 			// Check if a pretty permalink is required
-			$permalink_structure = geodir_get_option( 'permalink_structure' );
+			$permalink_structure = geodir_get_permalink_structure();
 			if (strpos($permalink_structure, '%postname%') === false || empty($permalink_structure)) {
 				if (isset($orig_post)) {
 					$post = $orig_post;
@@ -290,30 +290,32 @@ class GeoDir_Permalinks {
 	 * Register GD rewrite rules.
 	 */
 	public static function rewrite_rules() {
-		$permalink_structure = geodir_get_option( 'permalink_structure' );
-
+		$gd_permalink_structure = geodir_get_permalink_structure();
 		$post_types = geodir_get_posttypes('array');
 
-		if(!empty($post_types) && !empty($permalink_structure)){
+		if ( ! empty( $post_types ) ) {
+			if ( empty( $gd_permalink_structure ) ) {
+				$gd_permalink_structure = '/%postname%/';
+			}
+			$permalink_arr = explode( "/", trim( $gd_permalink_structure, "/" ) );
 
-			$permalink_arr = explode("/",trim($permalink_structure,"/"));
-
-			foreach($post_types as $cpt => $post_type){
-				
+			foreach ( $post_types as $cpt => $post_type ) {
 				// add the post single permalinks
-				$regex = '^'.$post_type['rewrite']['slug'].'/'.implode("", array_fill(0,count($permalink_arr ),'([^/]*)/')).'?';
+				$regex = '^' . $post_type['rewrite']['slug'] . '/' . implode( "", array_fill( 0, count( $permalink_arr ), '([^/]*)/' ) ) . '?';
 				$redirect = 'index.php?';
 				$match = 1;
-				foreach($permalink_arr as $tag){
-					$tag = trim($tag,"%");
-					if( $tag == "postname"){
-						$redirect .= "&$cpt=".'$matches['.$match.']';
-					}else{
-						$redirect .= "&".trim($tag,"%").'=$matches['.$match.']';
+
+				foreach( $permalink_arr as $tag ) {
+					$tag = trim( $tag, "%" );
+					if ( $tag == "postname" ) {
+						$redirect .= "&$cpt=" . '$matches[' . $match . ']';
+					} else {
+						$redirect .= "&" . trim( $tag, "%" ) . '=$matches[' . $match . ']';
 					}
 					$match++;
 				}
-				add_rewrite_rule($regex,$redirect,'top');
+geodir_error_log( $redirect, $regex, __FILE__, __LINE__ );
+				add_rewrite_rule( $regex, $redirect, 'top' );
 			}
 		}
 
