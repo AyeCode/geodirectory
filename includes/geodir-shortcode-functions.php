@@ -2707,6 +2707,8 @@ function geodir_sc_single_meta($atts, $content = '') {
 
     $post_type = !$original_id && isset($post->post_type) ? $post->post_type : get_post_type($atts['id']);
 
+
+   // print_r($atts);
     // error checks
     $errors = array();
     if(empty($atts['key'])){$errors[] = __('key is missing','geodirectory');}
@@ -2723,7 +2725,7 @@ function geodir_sc_single_meta($atts, $content = '') {
     }
 
     if(geodir_is_gd_post_type($post_type)){ //echo '###2';
-        $fields = geodir_post_custom_fields('',  'all', $post_type , $atts['location']);
+        $fields = geodir_post_custom_fields('',  'all', $post_type , 'none');
 
         if(!empty($fields)){
             $field = array();
@@ -2734,11 +2736,19 @@ function geodir_sc_single_meta($atts, $content = '') {
             }
             if(!empty($field)){
 
-                if($atts['alignment']=='left'){$field['css_class'] .= " alignleft ";}
-                if($atts['alignment']=='center'){$field['css_class'] .= " aligncenter ";}
-                if($atts['alignment']=='right'){$field['css_class'] .= " alignright ";}
+                if($atts['show']=='value'){
+                    $output = geodir_sc_single_meta_value($atts['id'],$atts['key']);
+                }else{
+                    //echo '###3';
+                    //print_r($field);
+                    if($atts['alignment']=='left'){$field['css_class'] .= " alignleft ";}
+                    if($atts['alignment']=='center'){$field['css_class'] .= " aligncenter ";}
+                    if($atts['alignment']=='right'){$field['css_class'] .= " alignright ";}
 
-                $output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$atts['location'],$field,$atts['id']);
+                    $output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$atts['location'],$field,$atts['id']);
+                }
+
+
             }else{
                 $output = "there is no key";
             }
@@ -2746,5 +2756,25 @@ function geodir_sc_single_meta($atts, $content = '') {
     }
 
     
+    return $output;
+}
+
+function geodir_sc_single_meta_value($post_id,$key){
+    global $gd_post;
+    $output = '';
+
+    if($key=='post_title'){
+        //print_r($gd_post);
+        if(isset($gd_post->ID) && $gd_post->ID==$post_id ){
+            $title = $gd_post->post_title;
+        }else{
+            $title = get_the_title( $post_id );
+        }
+
+        $output = '<h2 class="geodir-meta-title"><a href="'.get_the_permalink($post_id).'" >'.esc_attr($title).'</a></h2>';
+    }else{
+        $output = 'not implemented yet'; // @todo implement
+    }
+
     return $output;
 }

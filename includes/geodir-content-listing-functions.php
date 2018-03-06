@@ -1,6 +1,7 @@
 <?php
 /**
  * This file contains functions for outputting the listing/archive content.
+ * @depreciated moved to page template
  */
 
 

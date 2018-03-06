@@ -1,11 +1,11 @@
 <?php
 
 /**
- * GeoDir_Widget_Detail_Meta class.
+ * GeoDir_Widget_Post_Image class.
  *
  * @since 2.0.0
  */
-class GeoDir_Widget_Detail_Slider extends WP_Super_Duper {
+class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 
 
 	public $arguments;
@@ -16,9 +16,9 @@ class GeoDir_Widget_Detail_Slider extends WP_Super_Duper {
 
 		$options = array(
 			'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
-			'block-icon'    => 'admin-site',
-			'block-category'=> 'widgets',
-			'block-keywords'=> "['slider','geo','geodir']",
+			'block-icon'    => 'format-image',
+			'block-category'=> 'common',
+			'block-keywords'=> "['image','geo','geodir']",
 			'block-output'   => array( // the block visual output elements as an array
 				array(
 					'element' => 'div',
@@ -65,13 +65,27 @@ class GeoDir_Widget_Detail_Slider extends WP_Super_Duper {
 				),
 			),
 			'class_name'    => __CLASS__,
-			'base_id'       => 'gd_post_slider', // this us used as the widget id and the shortcode id.
-			'name'          => __('GD > Post Slider','geodirectory'), // the name of the widget.
+			'base_id'       => 'gd_post_image', // this us used as the widget id and the shortcode id.
+			'name'          => __('GD > Post Image','geodirectory'), // the name of the widget.
+			//'disable_widget'=> true,
 			'widget_ops'    => array(
 				'classname'   => 'geodir-post-slider', // widget class
-				'description' => esc_html__('This shows a GD post image slider.','geodirectory'), // widget description
+				'description' => esc_html__('This shows a GD post image.','geodirectory'), // widget description
 			),
 			'arguments'     => array(
+				'type'  => array(
+					'title' => __('Output Type:', 'geodirectory'),
+					'desc' => __('How the images should be displayed.', 'geodirectory'),
+					'type' => 'select',
+					'options'   =>  array(
+						"image" => __('Single image', 'geodirectory'),
+						"slider" => __('Slider', 'geodirectory'),
+						"gallery" => __('Gallery', 'geodirectory'),
+					),
+					'default'  => 'image',
+					'desc_tip' => true,
+					'advanced' => false
+				),
 				'ajax_load'  => array(
 					'title' => __('Load via Ajax:', 'geodirectory'),
 					'desc' => __('This will load all but the first slide via ajax for faster load times.', 'geodirectory'),
@@ -79,7 +93,7 @@ class GeoDir_Widget_Detail_Slider extends WP_Super_Duper {
 					'desc_tip' => true,
 					'value'  => '1',
 					'default'  => 1,
-					'advanced' => false
+					'advanced' => true
 				),
 				'slideshow'  => array(
 					'title' => __('Auto start:', 'geodirectory'),
@@ -88,7 +102,8 @@ class GeoDir_Widget_Detail_Slider extends WP_Super_Duper {
 					'desc_tip' => true,
 					'value'  => '1',
 					'default'  => 1,
-					'advanced' => false
+					'element_require' => '[%type%]=="slider"',
+					'advanced' => true
 				),
 				'show_title'  => array(
 					'title' => __('Show title:', 'geodirectory'),
@@ -97,7 +112,8 @@ class GeoDir_Widget_Detail_Slider extends WP_Super_Duper {
 					'desc_tip' => true,
 					'value'  => '1',
 					'default'  => 1,
-					'advanced' => false
+					'element_require' => '[%type%]=="slider"',
+					'advanced' => true
 				),
 				'animation'  => array(
 					'title' => __('Animation:', 'geodirectory'),
@@ -109,9 +125,9 @@ class GeoDir_Widget_Detail_Slider extends WP_Super_Duper {
 					),
 					'default'  => 'slide',
 					'desc_tip' => true,
-					'advanced' => false
+					'element_require' => '[%type%]=="slider"',
+					'advanced' => true
 				),
-
 				'controlnav'  => array(
 					'title' => __('Control Navigation:', 'geodirectory'),
 					'desc' => __('Image navigation controls below slider.', 'geodirectory'),
@@ -123,7 +139,8 @@ class GeoDir_Widget_Detail_Slider extends WP_Super_Duper {
 					),
 					'default'  => '1',
 					'desc_tip' => true,
-					'advanced' => false
+					'element_require' => '[%type%]=="slider"',
+					'advanced' => true
 				)
 			)
 		);
@@ -154,7 +171,7 @@ class GeoDir_Widget_Detail_Slider extends WP_Super_Duper {
 		 */
 		extract($args, EXTR_SKIP);
 
-		return $this->output_slider($args);
+		return $this->output_images($args);
 
 	}
 
@@ -163,17 +180,20 @@ class GeoDir_Widget_Detail_Slider extends WP_Super_Duper {
 	 *
 	 * @param $options
 	 */
-	public function output_slider($options){
+	public function output_images($options){
 		global $post;
+		ob_start();
+
 
 		// options
 		$defaults = array(
+			'type'      => 'image', // image, slider, gallery
 			'ajax_load' => '1',
 			'animation' => 'fade', // fade or slide
 			'slideshow' => 'true', // auto start
 			'controlnav'=> '2', // 0 = none, 1 =  standard, 2 = thumbnails
 			'show_title'=> '1',
-			'limit'      => '',
+			'limit'     => '',
 		);
 
 		/**
@@ -181,20 +201,24 @@ class GeoDir_Widget_Detail_Slider extends WP_Super_Duper {
 		 */
 		$options = wp_parse_args( $options, $defaults );
 
-		// convert bool strings to booleans
-		foreach($options as $key => $val){
-			if($val=='false'){ $options[$key] = false;}
-			elseif($val=='true'){ $options[$key] = true;}
-		}
+		//print_r($options);echo '###';
 
 		$post_images = geodir_get_images($post->ID, $options['limit']);
 		
 
 		if (!empty($post_images)) {
+			$main_wrapper_class = "geodir-image-container";
+			$second_wrapper_class = "geodir-image-wrapper";
+			if($options['type']=='slider'){
+				$main_wrapper_class .= " geodir_flex-container ";
+				$second_wrapper_class .= " geodir_flexslider geodir-slider ";
+			}else{
+				//$main_wrapper_class = "geodir-image-container";
+			}
 			?>
-			<div class="geodir_flex-container" >
-				<div class="geodir_flex-loader"><i class="fa fa-refresh fa-spin"></i></div>
-				<div id="geodir_slider" class="geodir_flexslider " <?php
+			<div class="<?php echo $main_wrapper_class;?>" >
+				<?php if($options['type']=='slider'){ echo '<div class="geodir_flex-loader"><i class="fa fa-refresh fa-spin"></i></div>';}?>
+				<div id="geodir_images_<?php echo $post->ID;?>" class="<?php echo $second_wrapper_class;?>" <?php
 				if($options['controlnav']==1){echo "data-controlnav='1'";}
 				if($options['animation']=='fade'){echo "data-animation='fade'";}
 				if($options['slideshow']){echo "data-slideshow='1'";}
@@ -214,7 +238,7 @@ class GeoDir_Widget_Detail_Slider extends WP_Super_Duper {
 							}
 							echo $img_tag;
 
-							if($options['show_title'] && !empty($image->title)){
+							if($options['type']=='slider' && $options['show_title'] && !empty($image->title)){
 								echo '<p class="flex-caption">'.$image->title.'</p>';
 							}
 							echo "</li>";
@@ -222,8 +246,8 @@ class GeoDir_Widget_Detail_Slider extends WP_Super_Duper {
 						}
 						?></ul>
 				</div>
-				<?php if ( $image_count > 1 && $options['controlnav'] == 2 ) { ?>
-					<div id="geodir_carousel" class="geodir_flexslider">
+				<?php if ($options['type']=='slider' && $image_count > 1 && $options['controlnav'] == 2 ) { ?>
+					<div id="geodir_slider_<?php echo $post->ID;?>_carousel" class="geodir_flexslider">
 						<ul class="geodir-slides clearfix"><?php
 							foreach($post_images as $image){
 								echo "<li>";
@@ -239,6 +263,8 @@ class GeoDir_Widget_Detail_Slider extends WP_Super_Duper {
 			</div>
 			<?php
 		}
+
+		return ob_get_clean();
 	}
 
 }

@@ -137,5 +137,6 @@ class GeoDir_Widget_Detail_Meta extends WP_Super_Duper {
 		return $keys;
 
 	}
+	
 }
 

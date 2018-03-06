@@ -13,7 +13,7 @@
   margin-bottom: 10px;
   position: relative;
 
-  #geodir_slider{
+  .geodir-image-wrapper{
     .geodir-viewport{
       margin-bottom: 5px;
     }
@@ -40,7 +40,7 @@
   outline: none;
 }
 
-#geodir_slider .geodir-slides, #geodir_slider .geodir-control-nav, #geodir_slider .geodir-direction-nav {
+.geodir-image-wrapper .geodir-slides, .geodir-image-wrapper .geodir-control-nav, .geodir-image-wrapper .geodir-direction-nav {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -333,7 +333,7 @@ html[xmlns] .geodir-slides {
   cursor: default;
 }
 
-#geodir_slider {
+.geodir-image-wrapper {
   margin: 0 0 -3px !important;
 }
 
@@ -408,7 +408,7 @@ html[xmlns] .geodir-slides {
 }
 
 @media screen and (max-width: 480px) {
-  #geodir_slider .geodir-control-nav {
+  .geodir-image-wrapper .geodir-control-nav {
     bottom: 5px;
   }
 

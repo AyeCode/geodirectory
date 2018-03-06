@@ -314,7 +314,7 @@ class GeoDir_Permalinks {
 					}
 					$match++;
 				}
-geodir_error_log( $redirect, $regex, __FILE__, __LINE__ );
+//geodir_error_log( $redirect, $regex, __FILE__, __LINE__ );
 				add_rewrite_rule( $regex, $redirect, 'top' );
 			}
 		}
@@ -333,10 +333,10 @@ geodir_error_log( $redirect, $regex, __FILE__, __LINE__ );
 		add_rewrite_tag('%category%', '([^&]+)');
 		add_rewrite_tag('%gd_favs%', '([^&]+)');
 	}
-	
+
 	/**
 	 * Get the slug for user favs.
-	 * 
+	 *
 	 * @param string $cpt_slug
 	 *
 	 * @return mixed|void
@@ -344,6 +344,7 @@ geodir_error_log( $redirect, $regex, __FILE__, __LINE__ );
 	public static function favs_slug($cpt_slug = '' ){
 		return apply_filters('geodir_rewrite_favs_slug','favs',$cpt_slug);
 	}
+
 
 }
 

@@ -2,13 +2,52 @@
 
 .geodir-category-list-view{
 	list-style: none;
+	margin: 0;
+	padding: 0;
+
+	&> li{
+		margin: 0;
+		padding: 20px 0 0 0;
+		clear: both;
+		font-size: 12px;
+	}
+
 	li{
-		padding-bottom: 30px;
+
+		p{
+			clear: both;
+			font-size: 14px;
+
+		}
+
+		.gd-rating{
+			margin: 0;
+			i.fa{
+				margin: 0;
+			}
+		}
+
+		.geodir_more_info{
+			margin: 5px 0;
+		}
+
+		.geodir-control-nav{
+			li{
+				margin: 0 2px;
+				a{
+					height: 6px;
+					width: 6px;
+				}
+			}
+		}
+
 
 		.gd-list-item-left{
 			display: inline-block;
 			width: 30%;
-			margin-right: 3%;
+			//margin-right: 3%;
+			padding-right: 3%;
+			float: left;
 
 			.geodir-post-img {
 				box-sizing: border-box;
@@ -55,6 +94,7 @@
 			display: inline-block;
 			vertical-align: top;
 			width: 67%;
+			float: left;
 
 			.geodir-post-info{
 				font-size: 12px;

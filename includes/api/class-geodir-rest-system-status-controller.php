@@ -811,10 +811,6 @@ class GeoDir_REST_System_Status_Controller extends GeoDir_REST_Controller {
 	public function get_pages() {
 		// GD pages to check against
 		$check_pages = array(
-			_x( 'GD Home page', 'Page setting', 'geodirectory' ) => array(
-				'option'    => 'home',
-				'shortcode' => '',
-			),
 			_x( 'Location page', 'Page setting', 'geodirectory' ) => array(
 				'option'    => 'location',
 				'shortcode' => '',

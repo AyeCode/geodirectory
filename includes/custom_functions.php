@@ -990,6 +990,7 @@ function geodir_detail_page_tabs_list() {
  * @global string $special_offers            Special offers content.
  * @global string $related_listing           Related listing html.
  * @global string $geodir_post_detail_fields Detail field html.
+ * @todo this function needs redone
  */
 function geodir_show_detail_page_tabs() {
 	global $post,$gd_post, $post_images, $video, $special_offers, $related_listing, $geodir_post_detail_fields, $preview;

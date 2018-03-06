@@ -67,19 +67,15 @@ function geodir_ajax_load_slider(slide){
         jQuery(slide).find('img').attr("src",real_src);
     }
 }
-jQuery(document).ready(function() {
+
+function geodir_init_slider($id){
+
+   // console.log($id);
+    //return;
     // chrome 53 introduced a bug, so we need to repaint the slider when shown.
     jQuery('.geodir-slides').addClass('flexslider-fix-rtl');
 
-    var e = "undefined" != typeof geodir_params.gd_modal && 1 == parseInt(geodir_params.gd_modal) ? !0 : !1;
-    e || jQuery("#geodir-post-gallery a").lightBox({
-        overlayOpacity: .5,
-        imageLoading: geodir_params.plugin_url + "/assets/images/lightbox-ico-loading.gif",
-        imageBtnNext: geodir_params.plugin_url + "/assets/images/lightbox-btn-next.gif",
-        imageBtnPrev: geodir_params.plugin_url + "/assets/images/lightbox-btn-prev.gif",
-        imageBtnClose: geodir_params.plugin_url + "/assets/images/lightbox-btn-close.gif",
-        imageBlank: geodir_params.plugin_url + "/assets/images/lightbox-blank.gif"
-    }), jQuery("#geodir_carousel").flexslider({
+    jQuery("#"+$id+"_carousel").flexslider({
         animation: "slide",
         namespace: "geodir-",
         selector: ".geodir-slides > li",
@@ -89,26 +85,26 @@ jQuery(document).ready(function() {
         slideshow: !1,
         itemWidth: 75,
         itemMargin: 5,
-        asNavFor: "#geodir_slider",
+        asNavFor: "#"+$id,
         rtl: 1 == parseInt(geodir_params.is_rtl) ? !0 : !1
-    }), jQuery("#geodir_slider").flexslider({
-        animation: jQuery("#geodir_slider").attr("data-animation")=='fade' ? "fade" : "slide",
+    }), jQuery("#"+$id).flexslider({
+        animation: jQuery("#"+$id).attr("data-animation")=='fade' ? "fade" : "slide",
         selector: ".geodir-slides > li",
         namespace: "geodir-",
-       // controlNav: !0,
-        controlNav: parseInt(jQuery("#geodir_slider").attr("data-controlnav")),
+        // controlNav: !0,
+        controlNav: parseInt(jQuery("#"+$id).attr("data-controlnav")),
         directionNav: 1,
         prevText: "",
         nextText: "",
         animationLoop: !0,
-        slideshow: parseInt(jQuery("#geodir_slider").attr("data-slideshow")),
-        sync: "#geodir_carousel",
+        slideshow: parseInt(jQuery("#"+$id).attr("data-slideshow")),
+        sync: "#"+$id+"_carousel",
         start: function(slider) {
 
             // chrome 53 introduced a bug, so we need to repaint the slider when shown.
             jQuery('.geodir-slides').removeClass('flexslider-fix-rtl');
 
-            jQuery(".geodir_flex-loader").hide(), jQuery("#geodir_slider").css({
+            jQuery(".geodir_flex-loader").hide(), jQuery("#"+$id).css({
                 visibility: "visible"
             }), jQuery("#geodir_carousel").css({
                 visibility: "visible"
@@ -134,6 +130,28 @@ jQuery(document).ready(function() {
             geodir_ajax_load_slider(animatingTo); // double check the current slide is loaded (in-case user goes backwards)
         },
         rtl: 1 == parseInt(geodir_params.is_rtl) ? !0 : !1
+    });
+
+}
+
+
+jQuery(document).ready(function() {
+
+
+    jQuery('.geodir-slider').each(function(i, obj) {
+        // init the sliders
+        geodir_init_slider(obj.id);
+    });
+
+
+    var e = "undefined" != typeof geodir_params.gd_modal && 1 == parseInt(geodir_params.gd_modal) ? !0 : !1;
+    e || jQuery("#geodir-post-gallery a").lightBox({
+        overlayOpacity: .5,
+        imageLoading: geodir_params.plugin_url + "/assets/images/lightbox-ico-loading.gif",
+        imageBtnNext: geodir_params.plugin_url + "/assets/images/lightbox-btn-next.gif",
+        imageBtnPrev: geodir_params.plugin_url + "/assets/images/lightbox-btn-prev.gif",
+        imageBtnClose: geodir_params.plugin_url + "/assets/images/lightbox-btn-close.gif",
+        imageBlank: geodir_params.plugin_url + "/assets/images/lightbox-blank.gif"
     }), jQuery("a.b_sendtofriend").click(function(e) {
         geodir_get_popup_forms(e, jQuery(this), "b_sendtofriend", "basic-modal-content")
     }), jQuery("a.b_send_inquiry").click(function(e) {

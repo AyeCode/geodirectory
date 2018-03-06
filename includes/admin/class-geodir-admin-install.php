@@ -324,11 +324,6 @@ class GeoDir_Admin_Install {
 	public static function create_pages() {
 
 		$pages = apply_filters( 'geodirectory_create_pages', array(
-			'page_home' => array(
-				'name'    => _x( 'gd-home', 'Page slug', 'geodirectory'),
-				'title'   => _x( 'GD Home page', 'Page title', 'geodirectory'),
-				'content' => "[gd_popular_post_category category_limit=10]\n[gd_homepage_map width=100% height=300 scrollwheel=false]\n[gd_advanced_search]\n[gd_popular_post_view]",
-			),
 			'page_add' => array(
 				'name'    => _x( 'add-listing', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'Add Listing', 'Page title', 'geodirectory'),
@@ -354,11 +349,26 @@ class GeoDir_Admin_Install {
 				'title'   => _x( 'GD Archive', 'Page title', 'geodirectory'),
 				'content' => "[gd_advanced_search]\n[gd_loop_actions]\n[gd_loop]\n[gd_loop_paging]",
 			),
+			'page_archive_item' => array(
+				'name'    => _x( 'gd-archive-item', 'Page slug', 'geodirectory'),
+				'title'   => _x( 'GD Archive Item', 'Page title', 'geodirectory'),
+				'content' => "[gd_archive_item_section type='open' position='left']
+[gd_post_image type='slider' ajax_load='true' slideshow='false' show_title='false' animation='slide' controlnav='1' ]\n
+[gd_archive_item_section type='close' position='left']\n
+[gd_archive_item_section type='open' position='right']\n
+[gd_post_title tag='h2']\n
+[gd_post_rating alignment='left' ]\n
+[gd_post_fav show='' alignment='right' ]\n
+[gd_post_meta key='post_content' location='listing']\n
+[gd_post_meta key='facebook' ]\n
+[gd_archive_item_section type='close' position='right']\n",
+			),
 			'page_details' => array(
 				'name'    => _x( 'gd-details', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'GD Details', 'Page title', 'geodirectory'),
-				'content' => "[gd_single_closed_text]\n[gd_single_slider]\n[gd_single_taxonomies]\n[gd_single_tabs]\n[gd_single_next_prev]",
+				'content' => "[gd_single_closed_text]\n[gd_post_image type='slider' ajax_load='true' slideshow='true' show_title='true' animation='slide' controlnav='1' ]\n[gd_single_taxonomies]\n[gd_single_tabs]\n[gd_single_next_prev]",
 			),
+
 			
 		) );
 

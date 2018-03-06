@@ -1,18 +1,18 @@
 <?php
+return;// dont load file
+add_action( 'init', 'gb_tests_register_block_typesx' );
 
-add_action( 'init', 'gb_tests_register_block_types' );
-
-function gb_tests_register_block_types() {
+function gb_tests_register_block_typesx() {
 
 	register_block_type(
 		'geodir/home-map',
 		array(
-			'render_callback' => 'gb_tests_render_example_02'
+			'render_callback' => 'gb_tests_render_example_02x'
 		)
 	);
 }
 
-function gb_tests_render_example_02( $attr, $content ) {
+function gb_tests_render_example_02x( $attr, $content ) {
 
 	//print_r($attr);
 	

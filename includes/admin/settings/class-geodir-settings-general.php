@@ -171,15 +171,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'    => 'page_options',
 					//'desc_tip' => true,
 				),
-
-				array(
-					'name'     => __( 'GD Home page', 'geodirectory' ),
-					'desc'     => __( 'Select the page to use for the GD homepage (you must also set this page in Settings>Reading>Front page for it to work)', 'geodirectory' ),
-					'id'       => 'page_home',
-					'type'     => 'single_select_page',
-					'class'      => 'geodir-select',
-					'desc_tip' => true,
-				),
 				array(
 					'name'     => __( 'Location page', 'geodirectory' ),
 					'desc'     => __( 'Select the page to use for locations', 'geodirectory' ),
@@ -223,15 +214,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				),
 
 				array(
-					'name'     => __( 'Archive page', 'geodirectory' ),
-					'desc'     => __( 'Select the page to use for GD archives such as taxonomy and CPT pages', 'geodirectory' ),
-					'id'       => 'page_archive',
-					'type'     => 'single_select_page',
-					'class'      => 'geodir-select',
-					'desc_tip' => true,
-				),
-
-				array(
 					'name'     => __( 'Details Page', 'geodirectory' ),
 					'desc'     => __( 'Select the page to use as the GD details page template', 'geodirectory' ),
 					'id'       => 'page_details',
@@ -239,6 +221,24 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'class'      => 'geodir-select',
 					'desc_tip' => true,
 				),
+				array(
+					'name'     => __( 'Archive page', 'geodirectory' ),
+					'desc'     => __( 'Select the page to use for GD archives such as taxonomy and CPT pages', 'geodirectory' ),
+					'id'       => 'page_archive',
+					'type'     => 'single_select_page',
+					'class'      => 'geodir-select',
+					'desc_tip' => true,
+				),
+				array(
+					'name'     => __( 'Archive page item', 'geodirectory' ),
+					'desc'     => __( 'Select the page to use for GD archive items, this is the item template used on taxonomy and CPT pages', 'geodirectory' ),
+					'id'       => 'page_archive_item',
+					'type'     => 'single_select_page',
+					'class'      => 'geodir-select',
+					'desc_tip' => true,
+				),
+
+
 
 
 
