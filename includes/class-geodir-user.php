@@ -237,7 +237,7 @@ class GeoDir_User {
 			foreach ( $post_types as $key => $postobj ) {
 				if ( in_array( $key, $show_favorite_link_user_dashboard ) && array_key_exists( $key, $user_favourite ) ) {
 					$name           = $postobj->labels->name;
-					$post_type_link = trailingslashit($author_link).geodir_favs_slug($key)."/".$postobj->rewrite->slug."/";
+					$post_type_link = trailingslashit($author_link).GeoDir_Permalinks::favs_slug($key)."/".$postobj->rewrite->slug."/";
 
 					$selected = '';
 

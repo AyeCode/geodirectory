@@ -454,8 +454,8 @@ class GeoDir_Admin_Setup_Wizard {
 			<div class="geodirectory-message geodirectory-tracker">
 				<p><?php printf( __( 'Want to help make GeoDirectory even more awesome? Allow GeoDirectory to collect non-sensitive diagnostic data and usage information. %1$sFind out more%2$s.', 'geodirectory' ), '<a href="https://wpgeodirectory.com/usage-tracking/" target="_blank">', '</a>' ); ?></p>
 				<p class="submit">
-					<a class="button-primary button button-large" href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'gd_tracker_optin', 'true' ), 'gd_tracker_optin', 'gd_tracker_nonce' ) ); ?>"><?php esc_html_e( 'Allow', 'geodirectory' ); ?></a>
-					<a class="button-secondary button button-large skip"  href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'gd_tracker_optout', 'true' ), 'gd_tracker_optout', 'gd_tracker_nonce' ) ); ?>"><?php esc_html_e( 'No thanks', 'geodirectory' ); ?></a>
+					<a class="button-primary button button-large" href="<?php echo esc_url( wp_nonce_url( remove_query_arg( 'gd_tracker_optout', add_query_arg( 'gd_tracker_optin', 'true' ) ), 'gd_tracker_optin', 'gd_tracker_nonce' ) ); ?>"><?php esc_html_e( 'Allow', 'geodirectory' ); ?></a>
+					<a class="button-secondary button button-large skip"  href="<?php echo esc_url( wp_nonce_url( remove_query_arg( 'gd_tracker_optin', add_query_arg( 'gd_tracker_optout', 'true' ) ), 'gd_tracker_optout', 'gd_tracker_nonce' ) ); ?>"><?php esc_html_e( 'No thanks', 'geodirectory' ); ?></a>
 				</p>
 			</div>
 		<?php endif; ?>

@@ -23,6 +23,9 @@ class GeoDir_Admin_Install {
 			'geodir_update_200_file_paths',
 			'geodir_update_200_permalinks',
 		)*/
+		/*'2.0.0.1-dev' => array(
+			'geodir_update_2001_dev_db_version',
+		),*/
 	);
 
 	/** @var object Background update class */
@@ -33,7 +36,7 @@ class GeoDir_Admin_Install {
 	 */
 	public static function init() {
 		add_action( 'init', array( __CLASS__, 'check_version' ), 5 );
-		//add_action( 'init', array( __CLASS__, 'init_background_updater' ), 5 );
+		add_action( 'init', array( __CLASS__, 'init_background_updater' ), 5 );
 		add_action( 'admin_init', array( __CLASS__, 'install_actions' ) );
 		//add_action( 'in_plugin_update_message-woocommerce/woocommerce.php', array( __CLASS__, 'in_plugin_update_message' ) );
 		//add_filter( 'plugin_action_links_' . GEODIRECTORY_PLUGIN_BASENAME, array( __CLASS__, 'plugin_action_links' ) );
@@ -47,8 +50,8 @@ class GeoDir_Admin_Install {
 	 * Init background updates
 	 */
 	public static function init_background_updater() {
-		include_once( dirname( __FILE__ ) . '/class-wc-background-updater.php' );
-		self::$background_updater = new WC_Background_Updater();
+		include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-background-updater.php' );
+		self::$background_updater = new GeoDir_Background_Updater();
 	}
 
 	/**
@@ -98,6 +101,7 @@ class GeoDir_Admin_Install {
 		//include_once( dirname( __FILE__ ) . '/class-geodir-admin-notices.php' );
 
 
+		self::remove_admin_notices();
 		self::create_tables();
 		self::insert_countries();
 		self::create_options();
@@ -123,34 +127,65 @@ class GeoDir_Admin_Install {
 		self::create_cron_jobs();
 
 		// Queue upgrades/setup wizard
-		$current_gd_version    = get_option( 'geodirectory_version', null );
-		$current_db_version    = get_option( 'geodirectory_db_version', null );
+		self::maybe_enable_setup_wizard();
 
-		GeoDir_Admin_Notices::remove_all_notices();
-
-		// No versions? This is a new install :)
-		if ( is_null( $current_gd_version ) && is_null( $current_db_version ) && apply_filters( 'geodirectory_enable_setup_wizard', true ) ) {
-			GeoDir_Admin_Notices::add_notice( 'install' );
-			set_transient( '_gd_activation_redirect', 1, 30 );
-
-		// No archive page template? Let user run wizard again..
-		} elseif ( ! geodir_get_option( 'page_archive' ) ) {
-			GeoDir_Admin_Notices::add_notice( 'install' );
-		}
-
-		if ( ! is_null( $current_db_version ) && ! empty( self::$db_updates ) && version_compare( $current_db_version, max( array_keys( self::$db_updates ) ), '<' ) ) {
-			GeoDir_Admin_Notices::add_notice( 'update' );
-		} else {
-			self::update_db_version();
-		}
-
+		// Update GD version
 		self::update_gd_version();
+
+		// Update DB version
+		self::maybe_update_db_version();
 
 		// Flush rules after install
 		do_action( 'geodir_flush_rewrite_rules' );
 
 		// Trigger action
 		do_action( 'geodirectory_installed' );
+	}
+	
+	/**
+	 * Reset any notices added to admin.
+	 *
+	 * @since 2.0.0
+	 */
+	private static function remove_admin_notices() {
+		GeoDir_Admin_Notices::remove_all_notices();
+	}
+	
+	/**
+	 * Is this a brand new GeoDirectory install?
+	 *
+	 * @since 2.0.0
+	 * @return boolean
+	 */
+	private static function is_new_install() {
+		return is_null( get_option( 'geodirectory_version', null ) ) && is_null( get_option( 'geodirectory_db_version', null ) );
+	}
+
+	/**
+	 * Is a DB update needed?
+	 *
+	 * @since 2.0.0
+	 * @return boolean
+	 */
+	private static function needs_db_update() {
+		$current_db_version = get_option( 'geodirectory_db_version', null );
+		$updates            = self::get_db_update_callbacks();
+
+		return ! is_null( $current_db_version ) && ! empty( $updates ) && version_compare( $current_db_version, max( array_keys( $updates ) ), '<' );
+	}
+
+	/**
+	 * See if we need the wizard or not.
+	 *
+	 * @since 2.0.0
+	 */
+	private static function maybe_enable_setup_wizard() {
+		if ( apply_filters( 'geodirectory_enable_setup_wizard', self::is_new_install() ) ) {
+			GeoDir_Admin_Notices::add_notice( 'install' );
+			set_transient( '_gd_activation_redirect', 1, 30 );
+		} elseif ( ! geodir_get_option( 'page_archive' ) ) {
+			GeoDir_Admin_Notices::add_notice( 'install' );
+		}
 	}
 
 	/*
@@ -195,6 +230,23 @@ class GeoDir_Admin_Install {
 		}
 
 	}
+	
+	/**
+	 * See if we need to show or run database updates during install.
+	 *
+	 * @since 2.0.0
+	 */
+	private static function maybe_update_db_version() {
+		if ( self::needs_db_update() ) {
+			if ( apply_filters( 'geodir_enable_auto_update_db', false ) ) {
+				self::update();
+			} else {
+				GeoDir_Admin_Notices::add_notice( 'update' );
+			}
+		} else {
+			self::update_db_version();
+		}
+	}
 
 	/**
 	 * Update GeoDirectory version to current.
@@ -219,16 +271,12 @@ class GeoDir_Admin_Install {
 	 */
 	private static function update() {
 		$current_db_version = get_option( 'geodirectory_db_version' );
-		$logger             = wc_get_logger();
 		$update_queued      = false;
 
 		foreach ( self::get_db_update_callbacks() as $version => $update_callbacks ) {
 			if ( version_compare( $current_db_version, $version, '<' ) ) {
 				foreach ( $update_callbacks as $update_callback ) {
-					$logger->info(
-						sprintf( 'Queuing %s - %s', $version, $update_callback ),
-						array( 'source' => 'geodir_db_updates' )
-					);
+					geodir_error_log( sprintf( 'Queuing %s - %s', $version, $update_callback ) );
 					self::$background_updater->push_to_queue( $update_callback );
 					$update_queued = true;
 				}
@@ -850,7 +898,7 @@ class GeoDir_Admin_Install {
 		$keys = array();
 
 		// Standard keys
-		$keys['post_id'] = "PRIMARY KEY  (post_id)";
+		$keys['post_id'] = "PRIMARY KEY (post_id)";
 		$keys['is_featured'] = "KEY is_featured (is_featured)";
 
 		// Location keys
