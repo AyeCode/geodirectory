@@ -80,13 +80,13 @@ function geodir_set_postcat_structure($post_id, $taxonomy, $default_cat = '', $c
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @param int|string $post_id Optional. The post ID.
  * @return object|bool Returns full post details as an object. If no details returns false.
+ * @todo this needs caching
  */
 function geodir_get_post_info($post_id = '')
 {
     
     global $wpdb, $plugin_prefix, $post, $post_info,$preview;
-    
-   
+
 
     if ($post_id == '' && !empty($post))
         $post_id = $post->ID;
@@ -1102,7 +1102,7 @@ if (!function_exists('geodir_get_infowindow_html')) {
      * @return mixed|string|void
      */
     function geodir_get_infowindow_html($postinfo_obj, $post_preview = '') {
-        global $preview, $post, $gd_session;
+        global $preview, $gd_post, $gd_session;
         $srcharr = array("'", "/", "-", '"', '\\');
         $replarr = array("&prime;", "&frasl;", "&ndash;", "&ldquo;", '');
 
@@ -1128,8 +1128,8 @@ if (!function_exists('geodir_get_infowindow_html')) {
         }
         
         // Some theme overwrites global gd listing $post
-        if (!empty($ID) && (!empty($post->ID) && $post->ID != $ID) || empty($post)) {
-            $post = geodir_get_post_info($ID);
+        if (!empty($ID) && (!empty($gd_post->ID) && $gd_post->ID != $ID) || empty($gd_post)) {
+            $gd_post = geodir_get_post_info($ID);
         }
         
         $post_type = $ID ? get_post_type($ID) : '';
@@ -1714,12 +1714,12 @@ function geodir_function_post_updated($post_ID, $post_after, $post_before)
     if ($post_type != '' && in_array($post_type, geodir_get_posttypes())) {
         // send notification to client when post moves from draft to publish
         if (!empty($post_after->post_status) && $post_after->post_status == 'publish' && !empty($post_before->post_status) && $post_before->post_status != 'publish' && $post_before->post_status != 'trash') {
-            $post = geodir_get_post_info( $post_ID );
-			if ( empty( $post ) ) {
+            $gd_post = geodir_get_post_info( $post_ID );
+			if ( empty( $gd_post ) ) {
 				return;
 			}
 			// Send email to usre
-			GeoDir_Email::send_user_publish_post_email( $post );
+			GeoDir_Email::send_user_publish_post_email( $gd_post );
         }
     }
 }
@@ -1738,10 +1738,10 @@ function geodir_fb_like_thumbnail(){
     // return if not a single post
     if(!is_single()){return;}
 
-    global $post;
-    if(isset($post->featured_image) && $post->featured_image){
+    global $gd_post;
+    if(isset($gd_post->featured_image) && $gd_post->featured_image){
         $upload_dir = wp_upload_dir();
-        $thumb = $upload_dir['baseurl'].$post->featured_image;
+        $thumb = $upload_dir['baseurl'].$gd_post->featured_image;
         echo "\n\n<!-- GD Facebook Like Thumbnail -->\n<link rel=\"image_src\" href=\"$thumb\" />\n<!-- End GD Facebook Like Thumbnail -->\n\n";
 
     }

@@ -19,16 +19,16 @@
 function geodir_cf_checkbox($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_numeric($p)){$post = geodir_get_post_info($p);}
-    else{ global $post;}
+    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
+    else{ global $gd_post;}
 
     // Block demo content
     if( geodir_is_block_demo() ){
-        $post->{$cf['htmlvar_name']} = '1';
+        $gd_post->{$cf['htmlvar_name']} = '1';
     }
 
     if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
+        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
         if(!$cf){return NULL;}
     }
 
@@ -75,9 +75,9 @@ function geodir_cf_checkbox($html,$location,$cf,$p=''){
     // If not html then we run the standard output.
     if(empty($html)){
 
-        if ( (int) $post->{$html_var} == 1 ):
+        if ( (int) $gd_post->{$html_var} == 1 ):
 
-            if ( $post->{$html_var} == '1' ):
+            if ( $gd_post->{$html_var} == '1' ):
                 $html_val = __( 'Yes', 'geodirectory' );
             else:
                 $html_val = __( 'No', 'geodirectory' );
@@ -118,11 +118,11 @@ add_filter('geodir_custom_field_output_checkbox','geodir_cf_checkbox',10,4);
 function geodir_cf_fieldset($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_numeric($p)){$post = geodir_get_post_info($p);}
-    else{ global $post;}
+    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
+    else{ global $gd_post;}
 
     if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
+        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
         if(!$cf){return NULL;}
     }
 
@@ -199,16 +199,16 @@ add_filter('geodir_custom_field_output_fieldset','geodir_cf_fieldset',10,4);
 function geodir_cf_url($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_numeric($p)){$post = geodir_get_post_info($p);}
-    else{ global $post;}
+    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
+    else{ global $gd_post;}
 
     // Block demo content
     if( geodir_is_block_demo() ){
-        $post->{$cf['htmlvar_name']} = 'https://example.com';
+        $gd_post->{$cf['htmlvar_name']} = 'https://example.com';
     }
 
     if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
+        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
         if(!$cf){return NULL;}
     }
 
@@ -255,7 +255,7 @@ function geodir_cf_url($html,$location,$cf,$p=''){
     // If not html then we run the standard output.
     if(empty($html)){
 
-        if ($post->{$cf['htmlvar_name']}):
+        if ($gd_post->{$cf['htmlvar_name']}):
 
             $field_icon = geodir_field_icon_proccess($cf);
             if (strpos($field_icon, 'http') !== false) {
@@ -275,7 +275,7 @@ function geodir_cf_url($html,$location,$cf,$p=''){
                 $field_icon = '';
             }
 
-            $a_url = geodir_parse_custom_field_url($post->{$cf['htmlvar_name']});
+            $a_url = geodir_parse_custom_field_url($gd_post->{$cf['htmlvar_name']});
 
 
             $website = !empty($a_url['url']) ? $a_url['url'] : '';
@@ -294,9 +294,9 @@ function geodir_cf_url($html,$location,$cf,$p=''){
              *
              * @param string $title Website Title.
              * @param string $website Website URL.
-             * @param int $post->ID Post ID.
+             * @param int $gd_post->ID Post ID.
              */
-            $html = '<div class="geodir_more_info  ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '"><span class="geodir-i-website" style="' . $field_icon . '">' . $field_icon_af . '<a href="' . $website . '" target="_blank" ' . $rel . ' ><strong>' . apply_filters('geodir_custom_field_website_name', $title, $website, $post->ID) . '</strong></a></span></div>';
+            $html = '<div class="geodir_more_info  ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '"><span class="geodir-i-website" style="' . $field_icon . '">' . $field_icon_af . '<a href="' . $website . '" target="_blank" ' . $rel . ' ><strong>' . apply_filters('geodir_custom_field_website_name', $title, $website, $gd_post->ID) . '</strong></a></span></div>';
 
         endif;
 
@@ -320,16 +320,16 @@ add_filter('geodir_custom_field_output_url','geodir_cf_url',10,4);
 function geodir_cf_phone($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_numeric($p)){$post = geodir_get_post_info($p);}
-    else{ global $post;}
+    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
+    else{ global $gd_post;}
 
     // Block demo content
     if( geodir_is_block_demo() ){
-        $post->{$cf['htmlvar_name']} = '0001010101010';
+        $gd_post->{$cf['htmlvar_name']} = '0001010101010';
     }
 
     if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
+        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
         if(!$cf){return NULL;}
     }
 
@@ -376,7 +376,7 @@ function geodir_cf_phone($html,$location,$cf,$p=''){
     // If not html then we run the standard output.
     if(empty($html)){
 
-        if ($post->{$cf['htmlvar_name']}):
+        if ($gd_post->{$cf['htmlvar_name']}):
 
             $field_icon = geodir_field_icon_proccess($cf);
             if (strpos($field_icon, 'http') !== false) {
@@ -391,7 +391,7 @@ function geodir_cf_phone($html,$location,$cf,$p=''){
 
             $html = '<div class="geodir_more_info  ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-contact" style="' . $field_icon . '">' . $field_icon_af .
                     $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '&nbsp;';
-            $html .= '</span><a href="tel:' . preg_replace('/[^0-9+]/', '', $post->{$cf['htmlvar_name']}) . '">' . $post->{$cf['htmlvar_name']} . '</a></div>';
+            $html .= '</span><a href="tel:' . preg_replace('/[^0-9+]/', '', $gd_post->{$cf['htmlvar_name']}) . '">' . $gd_post->{$cf['htmlvar_name']} . '</a></div>';
 
         endif;
 
@@ -415,17 +415,17 @@ add_filter('geodir_custom_field_output_phone','geodir_cf_phone',10,4);
 function geodir_cf_time($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_numeric($p)){$post = geodir_get_post_info($p);}
-    else{ global $post;}
+    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
+    else{ global $gd_post;}
 
     if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
+        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
         if(!$cf){return NULL;}
     }
 
     // Block demo content
     if( geodir_is_block_demo() ){
-        $post->{$cf['htmlvar_name']} = '10:30';
+        $gd_post->{$cf['htmlvar_name']} = '10:30';
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -471,12 +471,12 @@ function geodir_cf_time($html,$location,$cf,$p=''){
     // If not html then we run the standard output.
     if(empty($html)){
 
-        if ($post->{$cf['htmlvar_name']}):
+        if ($gd_post->{$cf['htmlvar_name']}):
 
             $value = '';
-            if ($post->{$cf['htmlvar_name']} != '')
-                //$value = date('h:i',strtotime($post->{$cf['htmlvar_name']}));
-                $value = date(get_option('time_format'), strtotime($post->{$cf['htmlvar_name']}));
+            if ($gd_post->{$cf['htmlvar_name']} != '')
+                //$value = date('h:i',strtotime($gd_post->{$cf['htmlvar_name']}));
+                $value = date(get_option('time_format'), strtotime($gd_post->{$cf['htmlvar_name']}));
 
             $field_icon = geodir_field_icon_proccess($cf);
             if (strpos($field_icon, 'http') !== false) {
@@ -515,17 +515,17 @@ add_filter('geodir_custom_field_output_time','geodir_cf_time',10,4);
 function geodir_cf_datepicker($html,$location,$cf,$p=''){
     global $preview;
     // check we have the post value
-    if(is_numeric($p)){$post = geodir_get_post_info($p);}
-    else{ global $post;}
+    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
+    else{ global $gd_post;}
 
     if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
+        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
         if(!$cf){return NULL;}
     }
 
     // Block demo content
     if( geodir_is_block_demo() ){
-        $post->{$cf['htmlvar_name']} = '25/12/2020'; // blank works to show current date
+        $gd_post->{$cf['htmlvar_name']} = '25/12/2020'; // blank works to show current date
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -571,7 +571,7 @@ function geodir_cf_datepicker($html,$location,$cf,$p=''){
     // If not html then we run the standard output.
     if(empty($html)){
 
-        if ($post->{$cf['htmlvar_name']}):
+        if ($gd_post->{$cf['htmlvar_name']}):
 
             $date_format = geodir_default_date_format();
             if ($cf['extra_fields'] != '') {
@@ -587,12 +587,12 @@ function geodir_cf_datepicker($html,$location,$cf,$p=''){
 
                 $date_format = str_replace($search, $replace, $date_format);
 
-                $post_htmlvar_value = ($date_format == 'd/m/Y' || $date_format == 'j/n/Y' ) ? str_replace('/', '-', $post->{$cf['htmlvar_name']}) : $post->{$cf['htmlvar_name']}; // PHP doesn't work well with dd/mm/yyyy format
+                $post_htmlvar_value = ($date_format == 'd/m/Y' || $date_format == 'j/n/Y' ) ? str_replace('/', '-', $gd_post->{$cf['htmlvar_name']}) : $gd_post->{$cf['htmlvar_name']}; // PHP doesn't work well with dd/mm/yyyy format
             }else{
-                $post_htmlvar_value = $post->{$cf['htmlvar_name']};
+                $post_htmlvar_value = $gd_post->{$cf['htmlvar_name']};
             }
 
-            if ($post->{$cf['htmlvar_name']} != '' && $post->{$cf['htmlvar_name']}!="0000-00-00") {
+            if ($gd_post->{$cf['htmlvar_name']} != '' && $gd_post->{$cf['htmlvar_name']}!="0000-00-00") {
                 $date_format_from = $preview ? $date_format : 'Y-m-d';
                 $value = geodir_date($post_htmlvar_value, $date_format, $date_format_from); // save as sql format Y-m-d
                 //$post_htmlvar_value = strpos($post_htmlvar_value, '/') !== false ? str_replace('/', '-', $post_htmlvar_value) : $post_htmlvar_value;
@@ -640,17 +640,17 @@ add_filter('geodir_custom_field_output_datepicker','geodir_cf_datepicker',10,4);
 function geodir_cf_text($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_numeric($p)){$post = geodir_get_post_info($p);}
-    else{ global $post;}
+    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
+    else{ global $gd_post;}
 
     if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
+        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
         if(!$cf){return NULL;}
     }
 
     // Block demo content
     if( geodir_is_block_demo() ){
-        $post->{$cf['htmlvar_name']} = __('Some demo text.','geodirectory');
+        $gd_post->{$cf['htmlvar_name']} = __('Some demo text.','geodirectory');
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -698,7 +698,7 @@ function geodir_cf_text($html,$location,$cf,$p=''){
     // If not html then we run the standard output.
     if(empty($html)){
 
-        if (isset($post->{$cf['htmlvar_name']}) && $post->{$cf['htmlvar_name']} != '' ):
+        if (isset($gd_post->{$cf['htmlvar_name']}) && $gd_post->{$cf['htmlvar_name']} != '' ):
 
             $class = ($cf['htmlvar_name'] == 'geodir_timing') ? "geodir-i-time" : "geodir-i-text";
 
@@ -717,7 +717,7 @@ function geodir_cf_text($html,$location,$cf,$p=''){
             $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
             $html .= '</span>';
 
-            $value = $post->{$cf['htmlvar_name']};
+            $value = $gd_post->{$cf['htmlvar_name']};
             if(isset($cf['data_type']) && ($cf['data_type']=='INT' || $cf['data_type']=='FLOAT') && isset($cf['extra_fields']) && $cf['extra_fields']){
                 $extra_fields = stripslashes_deep(maybe_unserialize($cf['extra_fields']));
                 if(isset($extra_fields['is_price']) && $extra_fields['is_price']){
@@ -752,17 +752,17 @@ add_filter('geodir_custom_field_output_text','geodir_cf_text',10,4);
 function geodir_cf_radio($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_numeric($p)){$post = geodir_get_post_info($p);}
-    else{ global $post;}
+    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
+    else{ global $gd_post;}
 
     if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
+        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
         if(!$cf){return NULL;}
     }
 
     // Block demo content
     if( geodir_is_block_demo() ){
-        $post->{$cf['htmlvar_name']} = 'Yes';
+        $gd_post->{$cf['htmlvar_name']} = 'Yes';
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -808,12 +808,12 @@ function geodir_cf_radio($html,$location,$cf,$p=''){
     // If not html then we run the standard output.
     if(empty($html)){
 
-        $html_val = isset($post->{$cf['htmlvar_name']}) ? __($post->{$cf['htmlvar_name']}, 'geodirectory') : '';
-        if (isset($post->{$cf['htmlvar_name']}) && $post->{$cf['htmlvar_name']} != ''):
+        $html_val = isset($gd_post->{$cf['htmlvar_name']}) ? __($gd_post->{$cf['htmlvar_name']}, 'geodirectory') : '';
+        if (isset($gd_post->{$cf['htmlvar_name']}) && $gd_post->{$cf['htmlvar_name']} != ''):
 
-            if ($post->{$cf['htmlvar_name']} == 'f' || $post->{$cf['htmlvar_name']} == '0') {
+            if ($gd_post->{$cf['htmlvar_name']} == 'f' || $gd_post->{$cf['htmlvar_name']} == '0') {
                 $html_val = __('No', 'geodirectory');
-            } else if ($post->{$cf['htmlvar_name']} == 't' || $post->{$cf['htmlvar_name']} == '1') {
+            } else if ($gd_post->{$cf['htmlvar_name']} == 't' || $gd_post->{$cf['htmlvar_name']} == '1') {
                 $html_val = __('Yes', 'geodirectory');
             } else {
                 if (!empty($cf['option_values'])) {
@@ -821,7 +821,7 @@ function geodir_cf_radio($html,$location,$cf,$p=''){
 
                     if (!empty($cf_option_values)) {
                         foreach ($cf_option_values as $cf_option_value) {
-                            if (isset($cf_option_value['value']) && $cf_option_value['value'] == $post->{$cf['htmlvar_name']}) {
+                            if (isset($cf_option_value['value']) && $cf_option_value['value'] == $gd_post->{$cf['htmlvar_name']}) {
                                 $html_val = $cf_option_value['label'];
                             }
                         }
@@ -866,17 +866,17 @@ add_filter('geodir_custom_field_output_radio','geodir_cf_radio',10,4);
 function geodir_cf_select($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_numeric($p)){$post = geodir_get_post_info($p);}
-    else{ global $post;}
+    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
+    else{ global $gd_post;}
 
     if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
+        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
         if(!$cf){return NULL;}
     }
 
     // Block demo content
     if( geodir_is_block_demo() ){
-        $post->{$cf['htmlvar_name']} = 'Yes';
+        $gd_post->{$cf['htmlvar_name']} = 'Yes';
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -922,15 +922,15 @@ function geodir_cf_select($html,$location,$cf,$p=''){
     // If not html then we run the standard output.
     if(empty($html)){
 
-        if ($post->{$cf['htmlvar_name']}):
-            $field_value = __($post->{$cf['htmlvar_name']}, 'geodirectory');
+        if ($gd_post->{$cf['htmlvar_name']}):
+            $field_value = __($gd_post->{$cf['htmlvar_name']}, 'geodirectory');
 
             if (!empty($cf['option_values'])) {
                 $cf_option_values = geodir_string_values_to_options(stripslashes_deep($cf['option_values']), true);
 
                 if (!empty($cf_option_values)) {
                     foreach ($cf_option_values as $cf_option_value) {
-                        if (isset($cf_option_value['value']) && $cf_option_value['value'] == $post->{$cf['htmlvar_name']}) {
+                        if (isset($cf_option_value['value']) && $cf_option_value['value'] == $gd_post->{$cf['htmlvar_name']}) {
                             $field_value = $cf_option_value['label']; // no longer needed here. Removed comment because it displays number instead of label if option vales set like "Good/1,Fair/2".
                         }
                     }
@@ -973,17 +973,17 @@ add_filter('geodir_custom_field_output_select','geodir_cf_select',10,4);
 function geodir_cf_multiselect($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_numeric($p)){$post = geodir_get_post_info($p);}
-    else{ global $post;}
+    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
+    else{ global $gd_post;}
 
     if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
+        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
         if(!$cf){return NULL;}
     }
-//print_r($post);
+//print_r($gd_post);
     // Block demo content
     if( geodir_is_block_demo() ){
-        $post->{$cf['htmlvar_name']} = 'Swimming Pool,WiFi,Sea View';
+        $gd_post->{$cf['htmlvar_name']} = 'Swimming Pool,WiFi,Sea View';
     }
 
 
@@ -1031,10 +1031,10 @@ function geodir_cf_multiselect($html,$location,$cf,$p=''){
     if(empty($html)){
 
 
-        if (!empty($post->{$cf['htmlvar_name']})):
+        if (!empty($gd_post->{$cf['htmlvar_name']})):
 
-            if (is_array($post->{$cf['htmlvar_name']})) {
-                $post->{$cf['htmlvar_name']} = implode(', ', $post->{$cf['htmlvar_name']});
+            if (is_array($gd_post->{$cf['htmlvar_name']})) {
+                $gd_post->{$cf['htmlvar_name']} = implode(', ', $gd_post->{$cf['htmlvar_name']});
             }
 
             $field_icon = geodir_field_icon_proccess($cf);
@@ -1047,7 +1047,7 @@ function geodir_cf_multiselect($html,$location,$cf,$p=''){
                 $field_icon = '';
             }
 
-            $field_values = explode(',', trim($post->{$cf['htmlvar_name']}, ","));
+            $field_values = explode(',', trim($gd_post->{$cf['htmlvar_name']}, ","));
 
             if(is_array($field_values)){
                 $field_values = array_map('trim', $field_values);
@@ -1080,7 +1080,7 @@ function geodir_cf_multiselect($html,$location,$cf,$p=''){
 
                 $html .= '</ul>';
             } else {
-                $html .= __($post->{$cf['htmlvar_name']}, 'geodirectory');
+                $html .= __($gd_post->{$cf['htmlvar_name']}, 'geodirectory');
             }
 
             $html .= '</div>';
@@ -1106,17 +1106,17 @@ add_filter('geodir_custom_field_output_multiselect','geodir_cf_multiselect',10,4
 function geodir_cf_email($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_numeric($p)){$post = geodir_get_post_info($p);}
-    else{ global $post;}
+    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
+    else{ global $gd_post;}
 
     if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
+        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
         if(!$cf){return NULL;}
     }
 
     // Block demo content
     if( geodir_is_block_demo() ){
-        $post->{$cf['htmlvar_name']} = 'testing@example.com';
+        $gd_post->{$cf['htmlvar_name']} = 'testing@example.com';
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -1167,9 +1167,9 @@ function geodir_cf_email($html,$location,$cf,$p=''){
             return ''; // Remove Send Enquiry | Send To Friend from listings page
         }
 
-        $package_info = (array)geodir_post_package_info(array(), $post, $post->post_type);
+        $package_info = (array)geodir_post_package_info(array(), $gd_post, $gd_post->post_type);
 
-        if ($cf['htmlvar_name'] == 'geodir_email' && ((isset($package_info['sendtofriend']) && $package_info['sendtofriend']) || $post->{$cf['htmlvar_name']})) {
+        if ($cf['htmlvar_name'] == 'geodir_email' && ((isset($package_info['sendtofriend']) && $package_info['sendtofriend']) || $gd_post->{$cf['htmlvar_name']})) {
             global $send_to_friend;
             $send_to_friend = true;
             $b_send_inquiry = '';
@@ -1179,7 +1179,7 @@ function geodir_cf_email($html,$location,$cf,$p=''){
             if (!$preview) {
                 $b_send_inquiry = 'b_send_inquiry';
                 $b_sendtofriend = 'b_sendtofriend';
-                $html = '<input type="hidden" name="geodir_popup_post_id" value="' . $post->ID . '" /><div class="geodir_display_popup_forms"></div>';
+                $html = '<input type="hidden" name="geodir_popup_post_id" value="' . $gd_post->ID . '" /><div class="geodir_display_popup_forms"></div>';
             }
 
             $field_icon = geodir_field_icon_proccess($cf);
@@ -1194,7 +1194,7 @@ function geodir_cf_email($html,$location,$cf,$p=''){
 
             $html .= '<div class="geodir_more_info  ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '"><span class="geodir-i-email" style="' . $field_icon . '">' . $field_icon_af;
             $seperator = '';
-            if ($post->{$cf['htmlvar_name']}) {
+            if ($gd_post->{$cf['htmlvar_name']}) {
                 $b_send_inquiry_url = apply_filters('b_send_inquiry_url', 'javascript:void(0);');
                 $html .= '<a href="'.$b_send_inquiry_url.'" class="' . $b_send_inquiry . '" >' . SEND_INQUIRY . '</a>';
                 $seperator = ' | ';
@@ -1220,7 +1220,7 @@ function geodir_cf_email($html,$location,$cf,$p=''){
 
         } else {
 
-            if ($post->{$cf['htmlvar_name']}) {
+            if ($gd_post->{$cf['htmlvar_name']}) {
 
                 $field_icon = geodir_field_icon_proccess($cf);
                 if (strpos($field_icon, 'http') !== false) {
@@ -1236,7 +1236,7 @@ function geodir_cf_email($html,$location,$cf,$p=''){
                 $html = '<div class="geodir_more_info ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-email" style="' . $field_icon . '">' . $field_icon_af;
                 $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
                 $html .= '</span><span class="geodir-email-address-output">';
-                $email = $post->{$cf['htmlvar_name']} ;
+                $email = $gd_post->{$cf['htmlvar_name']} ;
                 if($e_split = explode('@',$email) && $email!='testing@example.com'){
                     /**
                      * Filter email custom field name output.
@@ -1277,18 +1277,18 @@ add_filter('geodir_custom_field_output_email','geodir_cf_email',10,4);
 function geodir_cf_file($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_numeric($p)){$post = geodir_get_post_info($p);}
-    else{ global $post;}
+    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
+    else{ global $gd_post;}
 
     if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
+        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
         if(!$cf){return NULL;}
     }
 
     // Block demo content
     //@todo this custom field is not working, so we need to fix it and thentest
     if( geodir_is_block_demo() ){
-        $post->{$cf['htmlvar_name']} = 'testing@example.com';
+        $gd_post->{$cf['htmlvar_name']} = 'testing@example.com';
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -1334,9 +1334,9 @@ function geodir_cf_file($html,$location,$cf,$p=''){
     // If not html then we run the standard output.
     if(empty($html)){
 
-        if (!empty($post->{$cf['htmlvar_name']})):
+        if (!empty($gd_post->{$cf['htmlvar_name']})):
 
-            $files = explode(",", $post->{$cf['htmlvar_name']});
+            $files = explode(",", $gd_post->{$cf['htmlvar_name']});
             if (!empty($files)):
 
                 $extra_fields = !empty($cf['extra_fields']) ? stripslashes_deep(maybe_unserialize($cf['extra_fields'])) : NULL;
@@ -1429,17 +1429,17 @@ add_filter('geodir_custom_field_output_file','geodir_cf_file',10,4);
 function geodir_cf_textarea($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_numeric($p)){$post = geodir_get_post_info($p);}
-    else{ global $post;}
+    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
+    else{ global $gd_post;}
 
     if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
+        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
         if(!$cf){return NULL;}
     }
 
     // Block demo content
     if( geodir_is_block_demo() ){
-        $post->{$cf['htmlvar_name']} = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam risus metus, rutrum in nunc eu, vestibulum iaculis lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aenean tristique arcu et eros convallis elementum. Maecenas sit amet quam eu velit euismod viverra. Etiam magna augue, mollis id nisi sit amet, eleifend sagittis tortor. Suspendisse vitae dignissim arcu, ac elementum eros. Mauris hendrerit at massa ut pellentesque.';
+        $gd_post->{$cf['htmlvar_name']} = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam risus metus, rutrum in nunc eu, vestibulum iaculis lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aenean tristique arcu et eros convallis elementum. Maecenas sit amet quam eu velit euismod viverra. Etiam magna augue, mollis id nisi sit amet, eleifend sagittis tortor. Suspendisse vitae dignissim arcu, ac elementum eros. Mauris hendrerit at massa ut pellentesque.';
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -1485,7 +1485,7 @@ function geodir_cf_textarea($html,$location,$cf,$p=''){
     // If not html then we run the standard output.
     if(empty($html)){
 
-        if (!empty($post->{$cf['htmlvar_name']})) {
+        if (!empty($gd_post->{$cf['htmlvar_name']})) {
 
             $field_icon = geodir_field_icon_proccess($cf);
             if (strpos($field_icon, 'http') !== false) {
@@ -1500,7 +1500,7 @@ function geodir_cf_textarea($html,$location,$cf,$p=''){
 
             $html = '<div class="geodir_more_info ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-text" style="' . $field_icon . '">' . $field_icon_af;
             $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
-            $html .= '</span>' . wpautop($post->{$cf['htmlvar_name']}) . '</div>';
+            $html .= '</span>' . wpautop($gd_post->{$cf['htmlvar_name']}) . '</div>';
 
         }
 
@@ -1525,17 +1525,17 @@ add_filter('geodir_custom_field_output_textarea','geodir_cf_textarea',10,4);
 function geodir_cf_html($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_numeric($p)){$post = geodir_get_post_info($p);}
-    else{ global $post;}
+    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
+    else{ global $gd_post;}
 
     if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
+        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
         if(!$cf){return NULL;}
     }
 
     // Block demo content
     if( geodir_is_block_demo() ){
-        $post->{$cf['htmlvar_name']} = '<b>This is some bold HTML</b>';
+        $gd_post->{$cf['htmlvar_name']} = '<b>This is some bold HTML</b>';
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -1581,7 +1581,7 @@ function geodir_cf_html($html,$location,$cf,$p=''){
     // If not html then we run the standard output.
     if(empty($html)){
 
-        if (!empty($post->{$cf['htmlvar_name']})) {
+        if (!empty($gd_post->{$cf['htmlvar_name']})) {
 
             $field_icon = geodir_field_icon_proccess($cf);
             if (strpos($field_icon, 'http') !== false) {
@@ -1595,7 +1595,7 @@ function geodir_cf_html($html,$location,$cf,$p=''){
 
             $html = '<div class="geodir_more_info  ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-text" style="' . $field_icon . '">' . $field_icon_af;
             $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
-            $html .= '</span>' . wpautop($post->{$cf['htmlvar_name']}) . '</div>';
+            $html .= '</span>' . wpautop($gd_post->{$cf['htmlvar_name']}) . '</div>';
 
         }
 
@@ -1620,11 +1620,11 @@ add_filter('geodir_custom_field_output_html','geodir_cf_html',10,4);
 function geodir_cf_taxonomy($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_numeric($p)){$post = geodir_get_post_info($p);}
-    else{ global $post;}
+    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
+    else{ global $gd_post;}
 
     if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
+        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
         if(!$cf){return NULL;}
     }
 
@@ -1646,8 +1646,8 @@ function geodir_cf_taxonomy($html,$location,$cf,$p=''){
                 $demo_terms .= $demoterm->term_id.",";
             }
         }
-        $post->{$cf['htmlvar_name']} = $demo_terms;
-        $post->post_type  = 'gd_place';
+        $gd_post->{$cf['htmlvar_name']} = $demo_terms;
+        $gd_post->post_type  = 'gd_place';
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -1695,16 +1695,16 @@ function geodir_cf_taxonomy($html,$location,$cf,$p=''){
 
 
         if($html_var=='post_category'){
-            $post_taxonomy = $post->post_type . 'category';
+            $post_taxonomy = $gd_post->post_type . 'category';
         }elseif($html_var == 'post_tags'){
-            $post_taxonomy = $post->post_type . '_tags';
+            $post_taxonomy = $gd_post->post_type . '_tags';
         }else{
             $post_taxonomy = '';
         }
-        if ($post_taxonomy && !empty($post->{$html_var})) {
+        if ($post_taxonomy && !empty($gd_post->{$html_var})) {
 
-            //$post_taxonomy = $post->post_type . 'category';
-            $field_value = $post->{$html_var};
+            //$post_taxonomy = $gd_post->post_type . 'category';
+            $field_value = $gd_post->{$html_var};
             $links = array();
             $terms = array();
             $termsOrdered = array();
@@ -1779,19 +1779,19 @@ add_filter('geodir_custom_field_output_taxonomy','geodir_cf_taxonomy',10,4);
 function geodir_cf_address($html,$location,$cf,$p=''){
 
     // check we have the post value
-    if(is_numeric($p)){$post = geodir_get_post_info($p);}
-    else{ global $post;}
+    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
+    else{ global $gd_post;}
 
     if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
+        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
         if(!$cf){return NULL;}
     }
 
 
     // Block demo content
     if( geodir_is_block_demo() ){
-        $post->{$cf['htmlvar_name']} = '123 Demo Street';
-        $post->street = '123 Demo Street';
+        $gd_post->{$cf['htmlvar_name']} = '123 Demo Street';
+        $gd_post->street = '123 Demo Street';
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -1898,9 +1898,9 @@ function geodir_cf_address($html,$location,$cf,$p=''){
 
         }
 
-        //print_r($post);
+        //print_r($gd_post);
 
-        if ($post->street) {
+        if ($gd_post->street) {
 
             $field_icon = geodir_field_icon_proccess( $cf );
             if ( strpos( $field_icon, 'http' ) !== false ) {
@@ -1919,33 +1919,33 @@ function geodir_cf_address($html,$location,$cf,$p=''){
             
             $address_fields = array();
 
-            if ( isset($post->street) ) {
-                $address_fields['street'] = '<span itemprop="streetAddress">' . $post->street . '</span>';
+            if ( isset($gd_post->street) ) {
+                $address_fields['street'] = '<span itemprop="streetAddress">' . $gd_post->street . '</span>';
             }
-            if ($show_city_in_address && isset( $post->city ) && $post->city ) {
-                $address_fields['city'] = '<span itemprop="addressLocality">' . $post->city. '</span>';
+            if ($show_city_in_address && isset( $gd_post->city ) && $gd_post->city ) {
+                $address_fields['city'] = '<span itemprop="addressLocality">' . $gd_post->city. '</span>';
             }
-            if ($show_region_in_address && isset( $post->region ) && $post->region ) {
-                $address_fields['region'] = '<span itemprop="addressRegion">' . $post->region . '</span>';
+            if ($show_region_in_address && isset( $gd_post->region ) && $gd_post->region ) {
+                $address_fields['region'] = '<span itemprop="addressRegion">' . $gd_post->region . '</span>';
             }
-            if ($show_zip_in_address && isset( $post->zip ) && $post->zip ) {
-                $address_fields['zip'] = '<span itemprop="postalCode">' . $post->zip . '</span>';
+            if ($show_zip_in_address && isset( $gd_post->zip ) && $gd_post->zip ) {
+                $address_fields['zip'] = '<span itemprop="postalCode">' . $gd_post->zip . '</span>';
             }
-            if ($show_country_in_address && isset( $post->country ) && $post->country ) {
-                $address_fields['country'] = '<span itemprop="addressCountry">' . __( $post->country, 'geodirectory' ) . '</span>';
+            if ($show_country_in_address && isset( $gd_post->country ) && $gd_post->country ) {
+                $address_fields['country'] = '<span itemprop="addressCountry">' . __( $gd_post->country, 'geodirectory' ) . '</span>';
             }
             
             /**
              * Filter the address fields array being displayed.
              *
              * @param array $address_fields The array of address fields.
-             * @param object $post The current post object.
+             * @param object $gd_post The current post object.
              * @param array $cf The custom field array details.
              * @param string $location The location to output the html.
              * 
              * @since 1.6.21
              */
-            $address_fields = apply_filters('geodir_custom_field_output_address_fields', $address_fields, $post, $cf, $location);
+            $address_fields = apply_filters('geodir_custom_field_output_address_fields', $address_fields, $gd_post, $cf, $location);
             
             if (!empty($address_fields) && is_array($address_fields)) {
                 $address_fields = array_values($address_fields);
@@ -1974,17 +1974,17 @@ add_filter('geodir_custom_field_output_address','geodir_cf_address',10,4);
  */
 function geodir_cf_business_hours($html,$location,$cf,$p=''){
     // check we have the post value
-    if(is_numeric($p)){$post = geodir_get_post_info($p);}
-    else{ global $post;}
+    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
+    else{ global $gd_post;}
 
     if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $post->post_type);
+        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
         if(!$cf){return NULL;}
     }
 
     // Block demo content
     if( geodir_is_block_demo() ){
-        $post->{$cf['htmlvar_name']} = '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00"],["GMT":"+0"]';
+        $gd_post->{$cf['htmlvar_name']} = '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00"],["GMT":"+0"]';
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -2029,8 +2029,8 @@ function geodir_cf_business_hours($html,$location,$cf,$p=''){
 
     // If not html then we run the standard output.
     if ( empty( $html ) ) {
-        if ( ! empty( $post->{$cf['htmlvar_name']} ) ) {
-            $value = stripslashes_deep($post->{$cf['htmlvar_name']});
+        if ( ! empty( $gd_post->{$cf['htmlvar_name']} ) ) {
+            $value = stripslashes_deep($gd_post->{$cf['htmlvar_name']});
 			$business_hours = geodir_get_business_hours( $value );
 			
 			if ( empty( $business_hours['days'] ) ) {

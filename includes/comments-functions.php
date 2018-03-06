@@ -252,12 +252,12 @@ function geodir_comment_moderation_subject( $subject, $comment_id ) {
 	$comment = get_comment( $comment_id );
 
 	if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && GeoDir_Email::is_email_enabled( 'admin_moderate_comment' ) ) {
-		$post = geodir_get_post_info( $comment->comment_post_ID );
+		$gd_post = geodir_get_post_info( $comment->comment_post_ID );
 
 		$email_vars = array(
 			'email_name' => 'admin_moderate_comment',
 			'comment'    => $comment,
-			'post'       => $post
+			'post'       => $gd_post
 		);
 
 		$subject = GeoDir_Email::get_subject( 'admin_moderate_comment', $email_vars );
@@ -272,12 +272,12 @@ function geodir_comment_moderation_text( $message, $comment_id ) {
 	$comment = get_comment( $comment_id );
 
 	if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && GeoDir_Email::is_email_enabled( 'admin_moderate_comment' ) ) {
-		$post       = geodir_get_post_info( $comment->comment_post_ID );
+		$gd_post       = geodir_get_post_info( $comment->comment_post_ID );
 		$email_name = 'admin_moderate_comment';
 
 		$email_vars = array(
 			'comment' => $comment,
-			'post'    => $post
+			'post'    => $gd_post
 		);
 
 		$message_body  = GeoDir_Email::get_content( $email_name, $email_vars );
@@ -309,12 +309,12 @@ function geodir_comment_moderation_headers( $headers, $comment_id ) {
 	$comment = get_comment( $comment_id );
 
 	if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && GeoDir_Email::is_email_enabled( 'admin_moderate_comment' ) ) {
-		$post = geodir_get_post_info( $comment->comment_post_ID );
+		$gd_post = geodir_get_post_info( $comment->comment_post_ID );
 
 		$email_vars = array(
 			'email_name' => 'admin_moderate_comment',
 			'comment'    => $comment,
-			'post'       => $post
+			'post'       => $gd_post
 		);
 
 		$headers = GeoDir_Email::get_headers( 'admin_moderate_comment', $email_vars );
@@ -468,12 +468,12 @@ function geodir_post_author_moderate_comment() {
 			exit;
 		}
 
-		$post = get_post( $comment->comment_post_ID );
-		if ( ! empty( $post ) ) {
+		$gd_post = get_post( $comment->comment_post_ID );
+		if ( ! empty( $gd_post ) ) {
 			$user     = get_userdata( $user_ID );
 			$redirect = get_permalink( $comment->comment_post_ID );
 
-			if ( ! empty( $user ) && ( (int) $user_ID === (int) $post->post_author || $user->has_cap( 'moderate_comments' ) ) && geodir_is_gd_post_type( $post->post_type ) ) {
+			if ( ! empty( $user ) && ( (int) $user_ID === (int) $gd_post->post_author || $user->has_cap( 'moderate_comments' ) ) && geodir_is_gd_post_type( $gd_post->post_type ) ) {
 				if ( $action == 'approve_comment' ) {
 					wp_set_comment_status( $comment, 'approve' );
 					$redirect = get_comment_link( $comment_ID );

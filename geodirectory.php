@@ -473,3 +473,17 @@ $GLOBALS['geodirectory'] = GeoDir();
 //    print_r($post);exit;
 //}
 //add_action( 'wp_insert_post', 'my_project_updated_send_email', 10, 3 );
+function adding_custom_meta_boxes( $post_type, $post ) {
+
+	//print_r($post);exit;
+
+	add_meta_box(
+		'my-meta-box',
+		__( 'My Meta Box' ),
+		'render_my_meta_box',
+		'post',
+		'normal',
+		'default'
+	);
+}
+add_action( 'add_meta_boxes', 'adding_custom_meta_boxes', 1, 2 );

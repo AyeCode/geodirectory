@@ -303,19 +303,19 @@ class GeoDir_Email {
 			'[#from_email#]'    => self::get_mail_from(),
 		);
 
-		$post = ! empty( $email_vars['post'] ) ? $email_vars['post'] : null;
-		if ( empty( $post ) && ! empty( $email_vars['post_id'] ) ) {
-			$post = geodir_get_post_info( $email_vars['post_id'] );
+		$gd_post = ! empty( $email_vars['post'] ) ? $email_vars['post'] : null;
+		if ( empty( $gd_post ) && ! empty( $email_vars['post_id'] ) ) {
+			$gd_post = geodir_get_post_info( $email_vars['post_id'] );
 		}
 
-		if ( ! empty( $post ) ) {
-			$post_id          = $post->ID;
-			$post_author_name = geodir_get_client_name( $post->post_author );
+		if ( ! empty( $gd_post ) ) {
+			$post_id          = $gd_post->ID;
+			$post_author_name = geodir_get_client_name( $gd_post->post_author );
 
 			$replace_array['[#post_id#]']          = $post_id;
-			$replace_array['[#post_status#]']      = $post->post_status;
-			$replace_array['[#post_date#]']        = $post->post_date;
-			$replace_array['[#post_author_ID#]']   = $post->post_author;
+			$replace_array['[#post_status#]']      = $gd_post->post_status;
+			$replace_array['[#post_date#]']        = $gd_post->post_date;
+			$replace_array['[#post_author_ID#]']   = $gd_post->post_author;
 			$replace_array['[#post_author_name#]'] = $post_author_name;
 			$replace_array['[#client_name#]']      = $post_author_name;
 			$replace_array['[#listing_title#]']    = get_the_title( $post_id );
@@ -944,18 +944,18 @@ class GeoDir_Email {
 			return false;
 		}
 
-		$post = geodir_get_post_info( $comment->comment_post_ID );
-		if ( empty( $post ) ) {
+		$gd_post = geodir_get_post_info( $comment->comment_post_ID );
+		if ( empty( $gd_post ) ) {
 			return false;
 		}
 
-		$author = get_userdata( $post->post_author );
+		$author = get_userdata( $gd_post->post_author );
 		if ( empty( $author ) ) {
 			return false;
 		}
 
 		$recipient = $author->user_email;
-		$to_name   = geodir_get_client_name( $post->post_author );
+		$to_name   = geodir_get_client_name( $gd_post->post_author );
 
 		if ( empty( $comment ) || ! is_email( $recipient ) ) {
 			return;
@@ -963,7 +963,7 @@ class GeoDir_Email {
 		$comment_ID = $comment->comment_ID;
 
 		$email_vars              = $data;
-		$email_vars['post']      = $post;
+		$email_vars['post']      = $gd_post;
 		$email_vars['comment']   = $comment;
 		$email_vars['to_name']   = $to_name;
 		$email_vars['to_email']  = $recipient;
@@ -1038,26 +1038,26 @@ class GeoDir_Email {
 			return false;
 		}
 
-		$post = geodir_get_post_info( $comment->comment_post_ID );
-		if ( empty( $post ) || empty( $comment ) ) {
+		$gd_post = geodir_get_post_info( $comment->comment_post_ID );
+		if ( empty( $gd_post ) || empty( $comment ) ) {
 			return;
 		}
 
-		$author_data = get_userdata( $post->post_author );
+		$author_data = get_userdata( $gd_post->post_author );
 		if ( empty( $author_data ) ) {
 			return false;
 		}
 
 		$recipient = ! empty( $author_data->user_email ) ? $author_data->user_email : '';
 
-		if ( empty( $post ) || ! is_email( $recipient ) ) {
+		if ( empty( $gd_post ) || ! is_email( $recipient ) ) {
 			return;
 		}
 
 		$email_vars             = $data;
-		$email_vars['post']     = $post;
+		$email_vars['post']     = $gd_post;
 		$email_vars['comment']  = $comment;
-		$email_vars['to_name']  = geodir_get_client_name( $post->post_author );
+		$email_vars['to_name']  = geodir_get_client_name( $gd_post->post_author );
 		$email_vars['to_email'] = $recipient;
 
 		do_action( 'geodir_pre_owner_comment_approved_email', $email_name, $email_vars );
@@ -1114,13 +1114,13 @@ class GeoDir_Email {
 			return;
 		}
 
-		$post = geodir_get_post_info( $comment->comment_post_ID );
-		if ( empty( $post ) ) {
+		$gd_post = geodir_get_post_info( $comment->comment_post_ID );
+		if ( empty( $gd_post ) ) {
 			return;
 		}
 
 		$email_vars             = $data;
-		$email_vars['post']     = $post;
+		$email_vars['post']     = $gd_post;
 		$email_vars['comment']  = $comment;
 		$email_vars['to_name']  = $to_name;
 		$email_vars['to_email'] = $recipient;

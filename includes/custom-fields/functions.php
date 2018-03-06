@@ -146,28 +146,33 @@ function geodir_post_custom_fields($package_id = '', $default = 'all', $post_typ
  * @return mixed|void
  */
 function geodir_get_cf_value($cf) {
-    global $post,$gd_session,$gd_post;
+    global $post,$gd_post;
     $value = '';
     if (is_admin()) {
         global $post;
+
 
         if (isset($_REQUEST['post'])) {
             $_REQUEST['pid'] = (int)$_REQUEST['post'];
         }
     }elseif(!empty($gd_post)){
-        $post = $gd_post;
+
+    }
+
+    if(empty($gd_post) && !empty($post)){
+        $gd_post = geodir_get_post_info($post->ID);
     }
 
 
     // check if post content
     if($cf['name']=='post_content'){
-        $value = get_post_field('post_content', $post->ID);
+        $value = get_post_field('post_content', $gd_post->ID);
     }else{
-        $value = geodir_get_post_meta($post->ID, $cf['name'], true);
+        $value = geodir_get_post_meta($gd_post->ID, $cf['name'], true);
     }
 
     // Set defaults
-    if ($value == '' && $post->post_status=='auto-draft') {
+    if ($value == '' && $gd_post->post_status=='auto-draft') {
         $value = $cf['default'];
     }
 
@@ -203,11 +208,15 @@ function geodir_get_cf_default_category_value() {
             $_REQUEST['pid'] = (int)$_REQUEST['post'];
         }
     }elseif(!empty($gd_post)){
-        $post = $gd_post;
+
+    }
+
+    if(empty($gd_post) && !empty($post)){
+        $gd_post = geodir_get_post_info($post->ID);
     }
 
 
-    $value = geodir_get_post_meta($post->ID, 'default_category', true);
+    $value = geodir_get_post_meta($gd_post->ID, 'default_category', true);
 
     /**
      * Filter the default category field value.
