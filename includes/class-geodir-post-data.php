@@ -186,6 +186,11 @@ class GeoDir_Post_Data {
 				if ( empty( $postarr['default_category'] ) && ! empty( $categories[0] ) ) {
 					$postarr['default_category'] = $categories[0]; // set first category as a default if default category not found
 				}
+
+				// if logged out user we need to manually add cats
+				if(!get_current_user_id()){
+					wp_set_post_terms( $post_id, $categories, $post_type.'category' );
+				}
 			}
 
 			// Set tags
@@ -209,7 +214,7 @@ class GeoDir_Post_Data {
 
 			if ( $post_tags ) {
 
-				if ( isset( $gd_post['post_dummy'] ) && $gd_post['post_dummy'] ) {
+				if ( !get_current_user_id() || (isset( $gd_post['post_dummy'] ) && $gd_post['post_dummy']) ) {
 					$tags = array_map( 'sanitize_text_field', $post_tags );
 					$tags = array_map( 'trim', $tags );
 					wp_set_post_terms( $post_id, $tags,$post_type.'_tags');
@@ -234,6 +239,11 @@ class GeoDir_Post_Data {
 			}
 			if ( isset( $gd_post['city'] ) ) {
 				$postarr['city'] = $gd_post['city'];
+			} else {
+				$default_location = geodir_get_default_location();
+				$postarr['city'] = $default_location->city;
+				$postarr['region'] = $default_location->region;
+				$postarr['country'] = $default_location->country;
 			}
 			if ( isset( $gd_post['region'] ) ) {
 				$postarr['region'] = $gd_post['region'];

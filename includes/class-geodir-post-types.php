@@ -61,6 +61,8 @@ class GeoDir_Post_types {
 					}
 				}
 
+				//print_r($args['args']);
+
 				register_taxonomy($taxonomy, $args['object_type'], $args['args']);
 
 				if (taxonomy_exists($taxonomy)) {
@@ -206,6 +208,16 @@ class GeoDir_Post_types {
 			geodir_update_option('taxonomies', $taxonomies);
 
 		}
+
+		// add capability to assign terms to any user, if not added then subscribers listings wont have terms
+		if(!empty($taxonomies)){
+			foreach($taxonomies as $key => $taxonomie){
+				$taxonomies[$key]['args']['capabilities']['assign_terms'] = 'read';
+			}
+		}
+
+		//print_r($taxonomies);
+
 
 		return $taxonomies;
 	}
