@@ -195,6 +195,24 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 				</tr>
 				</tbody>
 			</table>
+
+			<h2 class="title"><?php _e('GeoDirectory Taxonomies'); ?></h2>
+			<p><?php
+				/* translators: %s: placeholder that must come at the start of the URL */
+				printf( __( 'If you like, you may enter custom structures for your category and tag URLs here. For example, using <code>topics</code> as your category base would make your category links like <code>%s/topics/attractions/</code>. Tags can not be blank, category slug can only be blank if the main structure has more than one tag used.','geodirectory' ),  home_url()  . '/' .  $base_slug  ); ?></p>
+
+			<table class="form-table">
+				<tr>
+					<th><label for="geodirectory_category_base"><?php /* translators: prefix for category permalinks */ _e('Category base','geodirectory'); ?></label></th>
+					<td><input name="geodirectory_category_base" id="geodirectory_category_base" type="text" value="<?php echo esc_attr( geodir_get_option('permalink_category_base','category') ); ?>" class="regular-text code" /></td>
+				</tr>
+				<tr>
+					<th><label for="geodirectory_tag_base"><?php _e('Tag base','geodirectory' ); ?></label></th>
+					<td><input name="geodirectory_tag_base" id="geodirectory_tag_base" type="text" value="<?php echo esc_attr(geodir_get_option('permalink_tag_base','tags')); ?>" class="regular-text code" /></td>
+				</tr>
+			</table>
+
+
 			<style>.form-table.gd-permalink-structure .gd-available-structure-tags li{float:left;margin-right:5px}</style>
 			<script type="text/javascript">
 			var gdPermalinkStructureFocused = false,
@@ -306,8 +324,49 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 						jQuery('.gd-permalink-structure input').attr('disabled', 'disabled');
 						jQuery('.gd-available-structure-tags li button').attr('disabled', 'disabled');
 					}
+
 				});
 				jQuery('.permalink-structure input:checked').change();
+
+				jQuery('form[name="form"]').submit(function(e){
+					$return = true;
+
+					$permalink_structure = jQuery('#geodir_permalink_structure').val();
+
+					// check permalinks contain post name or post id
+					if($permalink_structure != ''){
+						if(!$permalink_structure.includes("/%postname%/") && !$permalink_structure.includes("/%post_id%/")){
+							alert("<?php _e('GeoDirectory permalinks must contain either `%postname%` or `%post_id%`, please check and try again.','geodirectory'); ?>");
+							$return = false;
+						}
+
+					}
+
+					// check tag base is not blank
+					if(jQuery('#geodirectory_tag_base').val()==''){
+						alert("<?php _e('GeoDirectory tag base can not be blank, please check and try again.','geodirectory'); ?>");
+						$return = false;
+					}
+
+					// check category base
+					if(jQuery('#geodirectory_category_base').val()==''){
+
+
+						if($permalink_structure==''){
+							$return = false;
+						}else if($permalink_structure.split("/").length-1 < 3){
+							$return = false;
+						}
+
+						if(!$return){
+							alert("<?php _e('GeoDirectory category base can only be blank if the GeoDirectory permalinks use more than one tag, please check and try again.','geodirectory'); ?>");
+						}
+					}
+
+					return $return;
+				});
+
+
 			});
 			</script>
 			<?php
@@ -320,6 +379,8 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 			if ( ! is_admin() ) {
 				return;
 			}
+
+			//print_r($_POST);exit;
 
 			// We need to save the options ourselves; settings api does not trigger save for the permalinks page.
 			if ( isset( $_POST['permalink_structure'] ) ) {
@@ -335,6 +396,16 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 
 				// Set permalink structure.
 				geodir_set_permalink_structure( $permalink_structure );
+
+				// taxonomy base
+				if ( isset( $_POST['geodirectory_category_base'] ) ) {
+					$category_base = sanitize_title_with_dashes($_POST['geodirectory_category_base']);
+					geodir_update_option('permalink_category_base',$category_base);
+				}
+				if ( isset( $_POST['geodirectory_tag_base'] ) ) {
+					$tag_base = !empty($_POST['geodirectory_tag_base']) ? sanitize_title_with_dashes($_POST['geodirectory_tag_base']) : 'tags';
+					geodir_update_option('permalink_tag_base',$tag_base);
+				}
 
 				if ( function_exists( 'restore_current_locale' ) ) {
 					restore_current_locale();

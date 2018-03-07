@@ -1019,54 +1019,7 @@ function geodir_custom_page_title($title = '', $sep = '')
 
 /*   --------- geodir remove url seperator ------- */
 
-add_action('init', 'geodir_remove_url_seperator');
-/**
- * Remove url separator.
- *
- * @since 1.0.0
- * @package GeoDirectory
- */
-function geodir_remove_url_seperator()
-{
 
-    if (!geodir_get_option('geodir_remove_url_seperator')) {
-
-        if (geodir_get_option('geodir_listingurl_separator'))
-            geodir_delete_option('geodir_listingurl_separator');
-
-        if (geodir_get_option('geodir_detailurl_separator'))
-            geodir_delete_option('geodir_detailurl_separator');
-
-        flush_rewrite_rules(false);
-
-        geodir_update_option('geodir_remove_url_seperator', '1');
-
-    }
-
-}
-
-add_filter('geodir_permalink_settings', 'geodir_remove_url_seperator_form_permalink_settings', 0, 1);
-
-/**
- * Remove url separator from permalink settings.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @param array $permalink_arr The permalink settings array ( Geodirectory -> Permalinks ).
- * @return array Modified permalink array.
- */
-function geodir_remove_url_seperator_form_permalink_settings($permalink_arr)
-{
-    foreach ($permalink_arr as $key => $value) {
-
-        if ($value['id'] == 'geodir_listingurl_separator' || $value['id'] == 'geodir_detailurl_separator')
-            unset($permalink_arr[$key]);
-
-    }
-
-    return $permalink_arr;
-
-}
 
 if (!is_admin()) {
     add_filter('posts_results', 'geodir_set_status_draft_to_publish_for_own_post');

@@ -289,9 +289,11 @@ class GeoDir_Permalinks {
 
 	/**
 	 * Register GD rewrite rules.
+	 * @todo if the cate and the place permailnks contain the same amount of arguments they can clash, we need to add js checking for it
 	 */
 	public static function rewrite_rules() {
 		$gd_permalink_structure = geodir_get_permalink_structure();
+
 		$post_types = geodir_get_posttypes('array');
 
 		if ( ! empty( $post_types ) ) {
@@ -301,15 +303,24 @@ class GeoDir_Permalinks {
 			$permalink_arr = explode( "/", trim( $gd_permalink_structure, "/" ) );
 
 			foreach ( $post_types as $cpt => $post_type ) {
+
+				$cpt_permalink_arr = $permalink_arr;
+				foreach($cpt_permalink_arr as $key => $val){
+					if($val=='%category%'){
+						$cpt_permalink_arr[$key] = "%".$cpt."category%";
+					}
+				}
+
 				// add the post single permalinks
-				$regex = '^' . $post_type['rewrite']['slug'] . '/' . implode( "", array_fill( 0, count( $permalink_arr ), '([^/]*)/' ) ) . '?';
+				//$regex = '^' . $post_type['rewrite']['slug'] . '/' . implode( "", array_fill( 0, count( $cpt_permalink_arr ), '([^/]*)/' ) ) . '?';
+				$regex = '' . $post_type['rewrite']['slug'] . '/' . implode( "", array_fill( 0, count( $cpt_permalink_arr ), '([^/]*)/' ) ) . '?';
 				$redirect = 'index.php?';
 				$match = 1;
 				$query_vars = array();
 
-				foreach( $permalink_arr as $tag ) {
+				foreach( $cpt_permalink_arr as $tag ) {
 					$tag = trim( $tag, "%" );
-					if ( $tag == "postname" ) {
+					if ( $tag == "postname") {
 						$query_vars[] = "$cpt=" . '$matches[' . $match . ']';
 					} else {
 						$query_vars[] = trim( $tag, "%" ) . '=$matches[' . $match . ']';
@@ -320,12 +331,15 @@ class GeoDir_Permalinks {
 					$redirect .= implode( '&', $query_vars );
 				}
 //geodir_error_log( $redirect, $regex, __FILE__, __LINE__ );
-				add_rewrite_rule( $regex, $redirect, 'top' );
+				//echo '###'.$redirect."\n";
+				$after = $gd_permalink_structure=="/%postname%/" ? 'bottom' : 'top';
+				add_rewrite_rule( $regex, $redirect, $after );
 			}
 		}
 
+
 		// add search paging rewrite // @todo we need to replace search with the current GD search page slug
-		add_rewrite_rule( 'search/page/([^/]+)/?', 'index.php?paged=$matches[1]', 'top' );
+		add_rewrite_rule( self::search_slug().'/page/([^/]+)/?', 'index.php?paged=$matches[1]', 'top' );
 	}
 
 	/**
@@ -348,6 +362,24 @@ class GeoDir_Permalinks {
 	 */
 	public static function favs_slug($cpt_slug = '' ){
 		return apply_filters('geodir_rewrite_favs_slug','favs',$cpt_slug);
+	}
+
+	/**
+	 * Get the slug for the search page.
+	 *
+	 * @param string $search_slug
+	 *
+	 * @return string
+	 */
+	public static function search_slug($search_slug = 'search' ){
+
+		if($page_id = geodir_search_page_id()){
+			if($slug = get_post_field( 'post_name', $page_id )){
+				$search_slug = $slug;
+			}
+		}
+
+		return apply_filters('geodir_rewrite_search_slug',$search_slug);
 	}
 
 
