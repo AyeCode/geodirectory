@@ -60,10 +60,7 @@ class GeoDir_Admin {
 	 * @return mixed
 	 */
 	public function set_page_labels( $post_states, $post ) {
-		if ( $post->ID == geodir_home_page_id() ) {
-			$post_states['geodir_home_page'] = __( 'GD Home Page', 'geodirectory' ) .
-			                                   geodir_help_tip( __( 'If you wish to use GD as your homepage you should use this page in the settings.', 'geodirectory' ) );
-		} elseif ( $post->ID == geodir_add_listing_page_id() ) {
+		if ( $post->ID == geodir_add_listing_page_id() ) {
 			$post_states['geodir_add_listing_page'] = __( 'GD Add listing page', 'geodirectory' ) .
 			                                          geodir_help_tip( __( 'This is where users will add listings via the frontend if enabled.', 'geodirectory' ) );
 		} elseif ( $post->ID == geodir_location_page_id() ) {
@@ -75,6 +72,9 @@ class GeoDir_Admin {
 		} elseif ( $post->ID == geodir_archive_page_id() ) {
 			$post_states['geodir_archive_page'] = __( 'GD Archive template', 'geodirectory' ) .
 			                                      geodir_help_tip( __( 'Used to design the archive pages but should never be linked to directly.', 'geodirectory' ) );
+		} elseif ( $post->ID == geodir_archive_item_page_id() ) {
+			$post_states['geodir_archive_item_page'] = __( 'GD Archive Item template', 'geodirectory' ) .
+			                                      geodir_help_tip( __( 'Used to design the archive items but should never be linked to directly.', 'geodirectory' ) );
 		} elseif ( $post->ID == geodir_details_page_id() ) {
 			$post_states['geodir_details_page'] = __( 'GD Details template', 'geodirectory' ) .
 			                                      geodir_help_tip( __( 'Used to design the details page but should never be linked to directly.', 'geodirectory' ) );

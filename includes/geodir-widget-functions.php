@@ -71,10 +71,16 @@ function goedir_register_widgets() {
     //register_widget( 'GeoDir_Widget_Detail_Sidebar' );
     register_widget( 'GeoDir_Widget_Detail_Social_Sharing' );
     register_widget( 'GeoDir_Widget_Detail_User_Actions' );
-    register_widget( 'GeoDir_Widget_Detail_Rating_Stars' );
     register_widget( 'GeoDir_Widget_Detail_Sidebar_Info' );
     register_widget( 'GeoDir_Widget_Detail_Meta' );
-    register_widget( 'GeoDir_Widget_Detail_Slider' );
+
+    // post widgets
+    register_widget( 'GeoDir_Widget_Post_Images' );
+    register_widget( 'GeoDir_Widget_Post_Title' );
+    register_widget( 'GeoDir_Widget_Post_Rating' );
+    register_widget( 'GeoDir_Widget_Post_Fav' );
+
+
 }
 add_action( 'widgets_init', 'goedir_register_widgets' );
 
@@ -655,7 +661,6 @@ function geodir_widget_pages_options() {
     $gd_widget_pages['gd'] = array(
         'label'     => __( 'GD Pages', 'geodirectory' ),
         'pages'     => array(
-            'home'              => __( 'GD Home Page', 'geodirectory' ),
             'add-listing'       => __( 'Add Listing Page', 'geodirectory' ),
             'author'            => __( 'Author Page', 'geodirectory' ),
             'detail'            => __( 'Listing Detail Page', 'geodirectory' ),

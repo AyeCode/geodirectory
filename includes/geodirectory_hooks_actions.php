@@ -640,48 +640,6 @@ function so_handle_038($url, $original_url, $_context)
 }
 
 
-add_action('geodir_after_main_form_fields', 'geodir_after_main_form_fields', 1);
-/**
- * Add html after main form fields.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @global object $post The current post object.
- * @global object $gd_session GeoDirectory Session object.
- */
-function geodir_after_main_form_fields() {
-	global $gd_session;
-	
-    if (geodir_get_option('geodir_accept_term_condition')) {
-        global $post;
-        $term_condition = '';
-        if (isset($_REQUEST['backandedit'])) {
-            $post = (object)$gd_session->get('listing');
-            $term_condition = isset($post->geodir_accept_term_condition) ? $post->geodir_accept_term_condition : '';
-        }
-
-        ?>
-        <div id="geodir_accept_term_condition_row" class="required_field geodir_form_row clearfix">
-            <label>&nbsp;</label>
-
-            <div class="geodir_taxonomy_field" style="float:left; width:70%;">
-				<span style="display:block"> 
-				<input class="main_list_selecter" type="checkbox" <?php if ($term_condition == '1') {
-                    echo 'checked="checked"';
-                } ?> field_type="checkbox" name="geodir_accept_term_condition" id="geodir_accept_term_condition"
-                       class="geodir_textfield" value="1"
-                       style="display:inline-block"/><a href="<?php $terms_page = geodir_get_option('geodir_term_condition_page'); if($terms_page){ echo get_permalink($terms_page);}?>" target="_blank"><?php _e('Please accept our terms and conditions', 'geodirectory'); ?></a>
-				</span>
-            </div>
-            <span class="geodir_message_error"><?php if (isset($required_msg)) {
-                    _e($required_msg, 'geodirectory');
-                } ?></span>
-        </div>
-    <?php
-
-    }
-}
-
 
 /* ------------------------------START CODE FOR HIDE/DISPLAY TABS */
 

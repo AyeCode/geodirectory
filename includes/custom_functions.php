@@ -89,19 +89,19 @@ function geodir_send_inquiry( $request ) {
 		return false;
 	}
 
-	$post = geodir_get_post_info( $post_id );
-	if ( empty( $post ) ) {
+	$gd_post = geodir_get_post_info( $post_id );
+	if ( empty( $gd_post ) ) {
 		return false;
 	}
 
 	$data = $request;
-	$data['post_id'] = $post->ID;
+	$data['post_id'] = $gd_post->ID;
 	$data['from_name'] = ! empty( $request['inq_name'] ) ? $request['inq_name'] : '';
 	$data['from_email'] = ! empty( $request['inq_email'] ) ? $request['inq_email'] : '';
 	$data['phone'] = ! empty( $request['inq_phone'] ) ? $request['inq_phone'] : '';
 	$data['comments'] = ! empty( $request['inq_msg'] ) ? $request['inq_msg'] : '';
 
-	$allow = apply_filters( 'geodir_allow_send_enquiry_email', true, $post, $data );
+	$allow = apply_filters( 'geodir_allow_send_enquiry_email', true, $gd_post, $data );
 	if ( ! $allow ) {
 		return false;
 	}
@@ -111,7 +111,7 @@ function geodir_send_inquiry( $request ) {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param object $post The post object.
+	 * @param object $gd_post The post object.
 	 * @param array $data {
 	 *     The submitted form fields as an array.
 	 *
@@ -124,7 +124,7 @@ function geodir_send_inquiry( $request ) {
 	 *
 	 * }
 	 */
-	do_action( 'geodir_send_enquiry_email', $post, $data );
+	do_action( 'geodir_send_enquiry_email', $gd_post, $data );
 	
 	$redirect_to = add_query_arg( array( 'send_inquiry' => 'success' ), get_permalink( $post_id ) );
 
@@ -175,19 +175,19 @@ function geodir_send_friend( $request ) {
 		return false;
 	}
 
-	$post = geodir_get_post_info( $post_id );
-	if ( empty( $post ) ) {
+	$gd_post = geodir_get_post_info( $post_id );
+	if ( empty( $gd_post ) ) {
 		return false;
 	}
 
 	$data = $request;
-	$data['post_id'] = $post->ID;
+	$data['post_id'] = $gd_post->ID;
 	$data['from_name'] = ! empty( $request['yourname'] ) ? $request['yourname'] : '';
 	$data['from_email'] = ! empty( $request['youremail'] ) ? $request['youremail'] : '';
 	$data['subject'] = ! empty( $request['frnd_subject'] ) ? $request['frnd_subject'] : '';
 	$data['comments'] = ! empty( $request['frnd_comments'] ) ? $request['frnd_comments'] : '';
 
-	$allow = apply_filters( 'geodir_allow_send_to_friend_email', true, $post, $data );
+	$allow = apply_filters( 'geodir_allow_send_to_friend_email', true, $gd_post, $data );
 	if ( ! $allow ) {
 		return false;
 	}
@@ -197,7 +197,7 @@ function geodir_send_friend( $request ) {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param object $post The post object.
+	 * @param object $gd_post The post object.
 	 * @param array $data {
 	 *	   The submitted form fields as an array.
 	 *
@@ -210,7 +210,7 @@ function geodir_send_friend( $request ) {
 	 *
 	 * }
 	 */
-	do_action( 'geodir_send_to_friend_email', $post, $data );
+	do_action( 'geodir_send_to_friend_email', $gd_post, $data );
 
 	$redirect_to = add_query_arg( array( 'sendtofrnd' => 'success' ), get_permalink( $post_id ) );
 	/**
@@ -990,6 +990,7 @@ function geodir_detail_page_tabs_list() {
  * @global string $special_offers            Special offers content.
  * @global string $related_listing           Related listing html.
  * @global string $geodir_post_detail_fields Detail field html.
+ * @todo this function needs redone
  */
 function geodir_show_detail_page_tabs() {
 	global $post,$gd_post, $post_images, $video, $special_offers, $related_listing, $geodir_post_detail_fields, $preview;

@@ -234,26 +234,7 @@ class GD_Admin_Menus {
 		if($add_listing_page_id){
 			$add_listing_page_url = get_page_link($add_listing_page_id);
 		}
-
-
-		// Add the GD home page menu item
-		$gd_home_page_id = geodir_home_page_id();
-		if($gd_home_page_id){
-			$item = new stdClass();
-			$item->object_id = $gd_home_page_id;
-			$item->db_id = 0;
-			$item->object =  'page';
-			$item->menu_item_parent = 0;
-			$item->type = 'post_type';
-			$item->title = __('GD Home page','geodirectory');
-			$item->url = get_page_link($gd_home_page_id);
-			$item->target = '';
-			$item->attr_title = '';
-			$item->classes = array('gd-menu-item');
-			$item->xfn = '';
-
-			$items['pages'][] = $item;
-		}
+		
 
 		// Add the Location menu item
 		$gd_location_page_id = geodir_location_page_id();

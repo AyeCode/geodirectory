@@ -104,6 +104,10 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 		public static function manage_post_columns( $column, $post_id ) {
 			global $post, $wpdb,$gd_post;
 
+			if(empty($gd_post) || $gd_post->id!=$post_id){
+				$gd_post = geodir_get_post_info($post_id);
+			}
+
 			switch ( $column ):
 				/* If displaying the 'city' column. */
 				case 'location' :
@@ -183,6 +187,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 				case 'image' :
 					$upload_dir = wp_upload_dir();
 					$image_raw = isset($gd_post->featured_image) && !empty($gd_post->featured_image) ? $gd_post->featured_image : '';
+					//print_r($gd_post);
 					/* If no city is found, output a default message. */
 					if ( empty( $image_raw) ) {
 						_e( 'N/A', 'geodirectory' );

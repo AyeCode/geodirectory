@@ -246,6 +246,60 @@ class GeoDir_Template_Loader {
 
         return array_unique( $search_files );
     }
+
+
+    /**
+     * Setup the GD Archive page content.
+     *
+     * @since 2.0.0
+     * @return string The filtered content.
+     */
+    public static function archive_item_template_content(){
+
+        // remove our filter so we don't get stuck in a loop
+       // remove_filter( 'the_content', array( __CLASS__, 'setup_archive_item_page_content' ) );
+
+        // reset the query count so the correct number of listings are output.
+       // rewind_posts();
+
+        // reset the proper loop content
+        global $wp_query,$gd_temp_wp_query;
+        $wp_query->posts = $gd_temp_wp_query;
+
+        // get the archive template page content
+       // if(geodir_is_page('search')){
+            //$archive_page_id = geodir_search_page_id();
+       // }else{
+            $archive_page_id = geodir_archive_item_page_id();
+        //}
+        $content = get_post_field('post_content', $archive_page_id  );
+
+        // if the content is blank then just add the main loop
+        if($content==''){
+            $content = "[gd_archive_item_section type='open' position='left']
+[gd_post_image type='slider' ajax_load='true' slideshow='false' show_title='false' animation='slide' controlnav='1' ]\n
+[gd_archive_item_section type='close' position='left']\n
+[gd_archive_item_section type='open' position='right']\n
+[gd_post_title tag='h2']\n
+[gd_post_rating alignment='left' ]\n
+[gd_post_fav show='' alignment='right' ]\n
+[gd_post_meta key='post_content' location='listing']\n
+[gd_post_meta key='facebook' ]\n
+[gd_archive_item_section type='close' position='right']\n";
+        }
+
+        // run the shortcodes on the content
+        $content = do_shortcode($content);
+
+        // add our filter back, not sure we even need to add it back if we are only running it once.
+        //add_filter( 'the_content', array( __CLASS__, 'setup_archive_page_content' ) );
+
+        // fake the has_posts() to false so it will not loop any more.
+        //$wp_query->current_post = $wp_query->post_count;
+
+        return $content;
+    }
+
 }
 
 GeoDir_Template_Loader::init();

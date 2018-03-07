@@ -245,8 +245,8 @@ class GeoDir_Comments {
 
 		$post_id = $comment_info->comment_post_ID;
 
-		$post = geodir_get_post_info( $post_id );
-		if ( empty( $post ) ) {
+		$gd_post = geodir_get_post_info( $post_id );
+		if ( empty( $gd_post ) ) {
 			return;
 		}
 
@@ -267,15 +267,15 @@ class GeoDir_Comments {
 				",
 				array(
 					$post_id,
-					$post->post_type,
+					$gd_post->post_type,
 					$user_ID,
 					$comment_info->comment_ID,
 					$rating,
-					$post->city,
-					$post->region,
-					$post->country,
-					$post->latitude,
-					$post->longitude
+					$gd_post->city,
+					$gd_post->region,
+					$gd_post->country,
+					$gd_post->latitude,
+					$gd_post->longitude
 				)
 			);
 
@@ -716,11 +716,11 @@ class GeoDir_Comments {
 	public static function get_post_rating( $post_id = 0, $force_query = 0 ) {
 		global $wpdb;
 
-		$post = geodir_get_post_info( $post_id );
+		$gd_post = geodir_get_post_info( $post_id );
 
-		if ( isset( $post->ID ) && $post->ID == $post_id && ! $force_query ) {
-			if ( isset( $post->rating_count ) && $post->rating_count > 0 && isset( $post->overall_rating ) && $post->overall_rating > 0 ) {
-				return $post->overall_rating;
+		if ( isset( $gd_post->ID ) && $gd_post->ID == $post_id && ! $force_query ) {
+			if ( isset( $gd_post->rating_count ) && $gd_post->rating_count > 0 && isset( $gd_post->overall_rating ) && $gd_post->overall_rating > 0 ) {
+				return $gd_post->overall_rating;
 			} else {
 				return 0;
 			}

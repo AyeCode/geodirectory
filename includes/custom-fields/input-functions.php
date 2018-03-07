@@ -1007,6 +1007,8 @@ function geodir_cfi_address($html,$cf){
         if(empty($gd_post)){
             $gd_post = geodir_get_post_info($post->ID);
         }
+//echo '###';
+        //print_r($gd_post);
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
         $name = $cf['name'];

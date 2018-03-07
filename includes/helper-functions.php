@@ -163,6 +163,23 @@ function geodir_archive_page_id(){
 }
 
 /**
+ * Get the page ID of the GD archive item page.
+ *
+ * @package Geodirectory
+ * @since 2.0.0
+ * @return int|null Return the page ID if present or null if not.
+ */
+function geodir_archive_item_page_id(){
+	$gd_page_id = geodir_get_option('page_archive_item');
+
+	if (function_exists('icl_object_id')) {
+		$gd_page_id =  icl_object_id($gd_page_id, 'page', true);
+	}
+
+	return $gd_page_id;
+}
+
+/**
  * Get the page ID of the GD search page.
  *
  * @package Geodirectory

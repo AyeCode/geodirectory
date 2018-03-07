@@ -43,6 +43,9 @@ class GeoDir_Shortcodes {
             'gd_single_closed_text'    	=> __CLASS__ . '::gd_single_closed_text', // only on GD detail page
             //'gd_single_meta'    	=> __CLASS__ . '::gd_single_meta', // only on GD detail page
 
+            'gd_archive_item_section'            => __CLASS__ . '::gd_archive_item_section',
+
+
         );
 
         foreach ( $shortcodes as $shortcode => $function ) {
@@ -155,6 +158,21 @@ class GeoDir_Shortcodes {
             return "";
         }
     }
+
+    // archive item page
+    public static function gd_archive_item_section($atts = array(), $content = null ){
+        $output = '';
+        if(isset($atts['type']) && $atts['type']=='open'){
+            $class = !empty($atts['class']) ? esc_attr($atts['class']) : '';
+            $position = isset($atts['position']) && $atts['position']=='left' ? 'left' : 'right';
+            $output = '<div class="gd-list-item-'.$position.' '.$class.'">';
+        }elseif(isset($atts['type']) && $atts['type']=='close'){
+            $output = "</div>";
+        }
+
+        return $output;//print_r($atts,true);
+    }
+
 
     // single page only shortcodes
 

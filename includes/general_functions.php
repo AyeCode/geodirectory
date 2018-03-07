@@ -330,13 +330,6 @@ function geodir_is_page( $gdpage = '' ) {
 			}
 
 			break;
-		case 'home':
-
-			if ( ( is_page() && $page_id == geodir_home_page_id() ) || is_page_geodir_home() ) {
-				return true;
-			}
-
-			break;
 		case 'location':
 			if ( is_page() && $page_id == geodir_location_page_id() ) {
 				return true;
@@ -431,9 +424,6 @@ function geodir_set_is_geodir_page( $wp ) {
 				|| $wp->query_vars['page_id'] == geodir_preview_page_id()
 				|| $wp->query_vars['page_id'] == geodir_success_page_id()
 				|| $wp->query_vars['page_id'] == geodir_location_page_id()
-				|| $wp->query_vars['page_id'] == geodir_home_page_id()
-				|| $wp->query_vars['page_id'] == geodir_info_page_id()
-				|| $wp->query_vars['page_id'] == geodir_login_page_id()
 				|| ( function_exists( 'geodir_payment_checkout_page_id' ) && $wp->query_vars['page_id'] == geodir_payment_checkout_page_id() )
 				|| ( function_exists( 'geodir_payment_invoices_page_id' ) && $wp->query_vars['page_id'] == geodir_payment_invoices_page_id() )
 			) {
@@ -449,9 +439,6 @@ function geodir_set_is_geodir_page( $wp ) {
 					|| $page->ID == geodir_preview_page_id()
 					|| $page->ID == geodir_success_page_id()
 					|| $page->ID == geodir_location_page_id()
-					|| ( isset( $wp->query_vars['page_id'] ) && $wp->query_vars['page_id'] == geodir_home_page_id() )
-					|| ( isset( $wp->query_vars['page_id'] ) && $wp->query_vars['page_id'] == geodir_info_page_id() )
-					|| ( isset( $wp->query_vars['page_id'] ) && $wp->query_vars['page_id'] == geodir_login_page_id() )
 					|| ( isset( $wp->query_vars['page_id'] ) && function_exists( 'geodir_payment_checkout_page_id' ) && $wp->query_vars['page_id'] == geodir_payment_checkout_page_id() )
 					|| ( isset( $wp->query_vars['page_id'] ) && function_exists( 'geodir_payment_invoices_page_id' ) && $wp->query_vars['page_id'] == geodir_payment_invoices_page_id() )
 				)
