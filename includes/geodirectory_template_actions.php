@@ -68,7 +68,8 @@ return; //@todo we need to update this
     }
 
     // post images
-    $post_images = geodir_get_images($post->ID, 'thumbnail', geodir_get_option('geodir_listing_no_img'));
+    //$post_images = geodir_get_images($post->ID, 'thumbnail', geodir_get_option('geodir_listing_no_img'));
+	$post_images = geodir_get_images($post->ID);
     if (empty($post_images)) {
         $images = '';
     } else {

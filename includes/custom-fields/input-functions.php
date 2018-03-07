@@ -1293,7 +1293,12 @@ function geodir_cfi_taxonomy($html,$cf){
                     }
                 }
 
-                $cat_display = unserialize($cf['extra_fields']);
+                $extra_fields = maybe_unserialize( $cf['extra_fields'] );
+				if ( is_array( $extra_fields ) && ! empty( $extra_fields['cat_display_type'] ) ) {
+					$cat_display = $extra_fields['cat_display_type'];
+				} else {
+					$cat_display = 'select';
+				}
 
                 if (isset($_REQUEST['backandedit']) && !empty($post_cat['post_category']) && is_array($post_cat['post_category'])) {
                     $post_cat = implode(",", $post_cat['post_category']);
@@ -1335,8 +1340,6 @@ function geodir_cfi_taxonomy($html,$cf){
 
 
                     if ($cat_display == 'select' || $cat_display == 'multiselect') {
-
-                        $cat_display == '';
                         $multiple = '';
 						$default_field = '';
                         if ($cat_display == 'multiselect') {
@@ -1458,12 +1461,12 @@ function geodir_cfi_categories($html,$cf){
                     }
                 }
 
-                $extra = unserialize($cf['extra_fields']);
-                if(isset($extra['cat_display_type'])){
-                    $cat_display = $extra['cat_display_type'];
-                }else{
-                    $cat_display = true;
-                }
+                $extra_fields = maybe_unserialize( $cf['extra_fields'] );
+				if ( is_array( $extra_fields ) && ! empty( $extra_fields['cat_display_type'] ) ) {
+					$cat_display = $extra_fields['cat_display_type'];
+				} else {
+					$cat_display = 'select';
+				}
                 //echo '###'.$cat_display;print_r($cf)
 
 //                if (isset($_REQUEST['backandedit']) && !empty($post_cat['post_category']) && is_array($post_cat['post_category'])) {
@@ -1507,8 +1510,6 @@ function geodir_cfi_categories($html,$cf){
 					echo '<input type="hidden" name="default_category" value="' . esc_attr( geodir_get_cf_default_category_value() ) . '">';
 
                     if ($cat_display == 'select' || $cat_display == 'multiselect') {
-
-                        $cat_display == '';
                         $multiple = '';
 						$default_field = '';
                         if ($cat_display == 'multiselect') {

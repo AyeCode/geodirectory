@@ -305,15 +305,19 @@ class GeoDir_Permalinks {
 				$regex = '^' . $post_type['rewrite']['slug'] . '/' . implode( "", array_fill( 0, count( $permalink_arr ), '([^/]*)/' ) ) . '?';
 				$redirect = 'index.php?';
 				$match = 1;
+				$query_vars = array();
 
 				foreach( $permalink_arr as $tag ) {
 					$tag = trim( $tag, "%" );
 					if ( $tag == "postname" ) {
-						$redirect .= "&$cpt=" . '$matches[' . $match . ']';
+						$query_vars[] = "$cpt=" . '$matches[' . $match . ']';
 					} else {
-						$redirect .= "&" . trim( $tag, "%" ) . '=$matches[' . $match . ']';
+						$query_vars[] = trim( $tag, "%" ) . '=$matches[' . $match . ']';
 					}
 					$match++;
+				}
+				if ( ! empty( $query_vars ) ) {
+					$redirect .= implode( '&', $query_vars );
 				}
 //geodir_error_log( $redirect, $regex, __FILE__, __LINE__ );
 				add_rewrite_rule( $regex, $redirect, 'top' );
@@ -331,7 +335,7 @@ class GeoDir_Permalinks {
 		add_rewrite_tag('%country%', '([^&]+)');
 		add_rewrite_tag('%region%', '([^&]+)');
 		add_rewrite_tag('%city%', '([^&]+)');
-		add_rewrite_tag('%category%', '([^&]+)');
+		// add_rewrite_tag('%category%', '([^&]+)'); // conflicts with standard category rewrite rule.
 		add_rewrite_tag('%gd_favs%', '([^&]+)');
 	}
 

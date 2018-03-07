@@ -102,16 +102,16 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 		 * @param int $post_id The post ID.
 		 */
 		public static function manage_post_columns( $column, $post_id ) {
-			global $post, $wpdb,$gd_post;
+			global $post, $wpdb, $gd_post;
 
-			if(empty($gd_post) || $gd_post->id!=$post_id){
-				$gd_post = geodir_get_post_info($post_id);
+			if ( ! ( ! empty( $gd_post ) && $gd_post->ID == $post_id ) ) {
+				$gd_post = geodir_get_post_info( $post_id );
 			}
 
 			switch ( $column ):
 				/* If displaying the 'city' column. */
 				case 'location' :
-					$location    = $gd_post;
+					$location = $gd_post;
 					/* If no city is found, output a default message. */
 					if ( empty( $location ) ) {
 						_e( 'Unknown', 'geodirectory' );
