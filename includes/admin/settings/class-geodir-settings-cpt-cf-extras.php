@@ -667,10 +667,10 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				//print_r($field->extra_fields);echo '###';
 				$extra = maybe_unserialize( $field->extra_fields );
 
-				if ( is_array( $extra ) && isset( $extra['cat_display_type'] ) ) {
+				if ( is_array( $extra ) && ! empty( $extra['cat_display_type'] ) ) {
 					$cat_display_type = $extra['cat_display_type'];
 				} else {
-					$cat_display_type = '';
+					$cat_display_type = 'select';
 				}
 
 				?>

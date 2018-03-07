@@ -103,7 +103,6 @@ class GeoDir_Post_Data {
 
 		// only fire if $post_temp is set
 		if ( $gd_post = self::$post_temp ) {
-
 			// POST REVISION :  grab the original info
 			if ( isset( $gd_post['ID'] ) && $gd_post['ID'] === 0 && $gd_post['post_type'] == 'revision' ) {
 				$gd_post = (array) geodir_get_post_info( $gd_post['post_parent'] );
@@ -215,6 +214,13 @@ class GeoDir_Post_Data {
 					$tags = array_map( 'trim', $tags );
 					wp_set_post_terms( $post_id, $tags,$post_type.'_tags');
 				} else {
+					$tag_terms = wp_get_object_terms( $post_id, $post_type . '_tags', array( 'fields' => 'names' ) ); // Save tag names in detail table.
+					if ( ! empty( $tag_terms ) && ! is_wp_error( $tag_terms ) ) {
+						$post_tags = $tag_terms;
+					} else {
+						$post_tags = array();
+					}
+
 					$tags = array_map( 'trim', $post_tags );
 				}
 				$tags = array_filter(array_unique($tags));

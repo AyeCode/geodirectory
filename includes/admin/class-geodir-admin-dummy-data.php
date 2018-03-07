@@ -912,7 +912,11 @@ class GeoDir_Admin_Dummy_Data {
 		                  'show_in'   =>  '[detail]',
 		                  'show_on_pkg' => $package,
 		                  'field_icon' => 'fa fa-folder-open',
-		                  'clabels' => __('Category', 'geodirectory'));
+		                  'clabels' => __('Category', 'geodirectory'),
+						  'extra' => array(
+							'cat_display_type' => 'multiselect'
+						  )
+					);
 
 		$fields[] = array('post_type' => $post_type,
 		                  'data_type' => 'VARCHAR',

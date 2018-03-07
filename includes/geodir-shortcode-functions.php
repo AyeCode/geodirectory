@@ -2551,7 +2551,8 @@ function geodir_sc_single_slider()
 
 
     if ($preview) {
-        $preview_get_images = geodir_get_images($post->ID, 'thumbnail', geodir_get_option('geodir_listing_no_img'));
+        //$preview_get_images = geodir_get_images($post->ID, 'thumbnail', geodir_get_option('geodir_listing_no_img'));
+		$preview_get_images = geodir_get_images($post->ID);
 
         $preview_post_images = array();
         if ($preview_get_images) {
@@ -2613,7 +2614,8 @@ function geodir_sc_single_slider()
          * @since 1.6.16
          */
         $use_default_image = apply_filters('geodir_details_default_image_show', false);
-        $post_images = geodir_get_images($post->ID, 'thumbnail', $use_default_image); // Hide default image on listing preview/detail page.
+        //$post_images = geodir_get_images($post->ID, 'thumbnail', $use_default_image); // Hide default image on listing preview/detail page.
+		$post_images = geodir_get_images($post->ID); // Hide default image on listing preview/detail page.
         $slides = 0;
 
         if (!empty($post_images)) {

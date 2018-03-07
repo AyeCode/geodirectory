@@ -1045,13 +1045,16 @@ function geodir_show_detail_page_tabs() {
 
 		}
 
-		$post_images = geodir_get_images( $post->ID, 'thumbnail' );
+		$post_images = geodir_get_images( $post->ID );
 		$thumb_image = '';
 		if ( ! empty( $post_images ) ) {
 			foreach ( $post_images as $image ) {
-				$caption = ( ! empty( $image->caption ) ) ? $image->caption : '';
-				$thumb_image .= '<a href="' . $image->src . '" title="' . $caption . '">';
-				$thumb_image .= geodir_show_image( $image, 'thumbnail', true, false );
+				$caption = ( ! empty( $image->title ) ) ? $image->title : '';
+				$image_tag = geodir_get_image_tag( $image, 'thumbnail' );
+				$metadata = isset( $image->metadata ) ? maybe_unserialize( $image->metadata ) : '';
+
+				$thumb_image .= '<a href="' . geodir_get_image_src( $image, 'original' ) . '" title="' . esc_attr( $caption ) . '">';
+				$thumb_image .= wp_image_add_srcset_and_sizes( $image_tag, $metadata , 0 );
 				$thumb_image .= '</a>';
 			}
 		}
