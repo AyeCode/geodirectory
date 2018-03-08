@@ -135,6 +135,7 @@ class GeoDir_API {
 		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-system-status-controller.php' );
 		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-system-status-tools-controller.php' );
 		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-countries-controller.php' );
+		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-markers-controller.php' );
 	}
 
 	/**
@@ -162,6 +163,7 @@ class GeoDir_API {
 			'GeoDir_REST_System_Status_Controller',
 			'GeoDir_REST_System_Status_Tools_Controller',
 			'GeoDir_REST_Countries_Controller',
+			'GeoDir_REST_Markers_Controller',
 		);
 
 		foreach ( $controllers as $controller ) {

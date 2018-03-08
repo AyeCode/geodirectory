@@ -255,6 +255,8 @@ class GeoDir_Admin_Dummy_Data {
 					 */
 					include_once( 'dummy-data/standard_places.php' );
 				} elseif ( $key == 'property_sale' ) {
+					add_filter( 'geodir_extra_custom_fields', 'geodir_extra_custom_fields_' . $key, 10, 3 );
+
 					/**
 					 * Contains dummy property for sale post content.
 					 *
@@ -263,6 +265,8 @@ class GeoDir_Admin_Dummy_Data {
 					 */
 					include_once( 'dummy-data/property_sale.php' );
 				} elseif ( $key == 'property_rent' ) {
+					add_filter( 'geodir_extra_custom_fields', 'geodir_extra_custom_fields_' . $key, 10, 3 );
+
 					/**
 					 * Contains dummy property for sale post content.
 					 *
