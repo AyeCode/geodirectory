@@ -90,7 +90,7 @@ class GeoDir_Admin_Setup_Wizard {
 
 		// map arguments
 		$map_lang = "&language=" . geodir_get_map_default_language();
-		$map_key = "&key=" . geodir_get_map_api_key();
+		$map_key = geodir_get_map_api_key(true);
 		/**
 		 * Filter the variables that are added to the end of the google maps script call.
 		 *

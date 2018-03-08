@@ -125,7 +125,7 @@ function geodir_pagination($before = '', $after = '', $prelabel = '', $nxtlabel 
 
         if ($max_page > 1 || $always_show) {            
             // Extra pagination info
-            $geodir_pagination_more_info = geodir_get_option('geodir_pagination_advance_info');
+            $geodir_pagination_more_info = geodir_get_option('search_advanced_pagination');
             $start_no = ( $paged - 1 ) * $posts_per_page + 1;
             $end_no = min($paged * $posts_per_page, $numposts);
 

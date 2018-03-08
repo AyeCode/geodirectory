@@ -86,8 +86,8 @@ class GeoDir_Template_Loader {
         } elseif ( geodir_is_page( 'location' ) ) {
             //$default_file = 'location.php';
         } elseif ( geodir_is_page( 'search' ) ) {
-           // $default_file = 'search.php';
-            $default_file = 'index.php';
+            $default_file = 'page.php';
+            //$default_file = 'index.php';
             //$default_file = 'search.php';
             self::setup_archive_loop_as_page();
         } elseif ( geodir_is_page( 'login' ) ) {

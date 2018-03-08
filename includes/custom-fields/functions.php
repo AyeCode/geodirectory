@@ -745,27 +745,6 @@ function geodir_get_special_offers($post_id)
 
 }
 
-if (!function_exists('geodir_max_upload_size')) {
-    /**
-     * Get max upload file size
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @return mixed|void Returns max upload file size.
-     */
-    function geodir_max_upload_size()
-    {
-        $max_filesize = (float)geodir_get_option('geodir_upload_max_filesize', 2);
-
-        if ($max_filesize > 0 && $max_filesize < 1) {
-            $max_filesize = (int)($max_filesize * 1024) . 'kb';
-        } else {
-            $max_filesize = $max_filesize > 0 ? $max_filesize . 'mb' : '2mb';
-        }
-        /** Filter documented in includes/general_functions.php **/
-        return apply_filters('geodir_default_image_upload_size_limit', $max_filesize);
-    }
-}
 
 
 add_filter('geodir_add_custom_sort_options', 'geodir_add_custom_sort_options', 0, 2);

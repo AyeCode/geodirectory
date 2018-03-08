@@ -227,7 +227,7 @@ class GeoDir_Query {
 				$mylon = $gd_session->get('user_lon');
 			}
 
-			$fields .= " , (" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(" . $table . ".post_latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(" . $table . ".post_latitude) * pi()/180) *POWER(SIN(($mylon - " . $table . ".post_longitude) * pi()/180 / 2), 2) )))as distance ";
+			$fields .= " , (" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($mylon - " . $table . ".longitude) * pi()/180 / 2), 2) )))as distance ";
 		}
 
 
@@ -434,12 +434,12 @@ class GeoDir_Query {
 							)
 						AND $wpdb->posts.post_type in ('{$post_types}')
 						AND ($wpdb->posts.post_status = 'publish')
-						AND ( " . $table . ".post_latitude between $rlat1 and $rlat2 )
-						AND ( " . $table . ".post_longitude between $rlon1 and $rlon2 ) ";
+						AND ( " . $table . ".latitude between $rlat1 and $rlat2 )
+						AND ( " . $table . ".longitude between $rlon1 and $rlon2 ) ";
 
 				if (isset($_REQUEST['sdist']) && $_REQUEST['sdist'] != 'all') {
 					$DistanceRadius = geodir_getDistanceRadius(geodir_get_option('geodir_search_dist_1'));
-					$where .= " AND CONVERT((" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(" . $table . ".post_latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(" . $table . ".post_latitude) * pi()/180) *POWER(SIN(($mylon - " . $table . ".post_longitude) * pi()/180 / 2), 2) ))),DECIMAL(64,4)) <= " . $dist;
+					$where .= " AND CONVERT((" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($mylon - " . $table . ".longitude) * pi()/180 / 2), 2) ))),DECIMAL(64,4)) <= " . $dist;
 				}
 
 			} else {

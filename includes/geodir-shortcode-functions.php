@@ -59,15 +59,15 @@ function geodir_sc_add_listing( $atts, $content = '' ) {
 
     ob_start();
 
+    //
     if ( !$user_id && !geodir_get_option('post_logged_out')) {
-        echo $params['login_msg'];
+        echo geodir_notification( array('login_msg'=>$params['login_msg']) );
         if ( $params['show_login'] ) {
             echo "<br />";
             wp_login_form();
         }
     } else {
         GeoDir_Post_Data::add_listing_form();
-        //geodir_render_add_listing_form();
     }
 
     return ob_get_clean();
@@ -2284,7 +2284,7 @@ function geodir_sc_listings_pagination($total_posts, $posts_per_page, $pageno, $
 	ob_start();
 	if ($max_page > 1 || $always_show) {
 		// Extra pagination info
-		$geodir_pagination_more_info = geodir_get_option('geodir_pagination_advance_info');
+		$geodir_pagination_more_info = geodir_get_option('search_advanced_pagination');
 		$start_no = ( $pageno - 1 ) * $posts_per_page + 1;
 		$end_no = min($pageno * $posts_per_page, $numposts);
 		

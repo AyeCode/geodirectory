@@ -16,7 +16,7 @@
  *
  * @param WP_Query $query The WP_Query instance.
  * @return WP_Query
- * @deprecated 
+ * @deprecated
  */
 function geodir_modified_query($query) {
     if ($query->is_main_query() && (

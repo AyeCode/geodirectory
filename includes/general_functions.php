@@ -852,7 +852,7 @@ function fetch_remote_file( $url ) {
  * @return string|void Max upload size.
  */
 function geodir_max_upload_size() {
-	$max_filesize = (float) geodir_get_option( 'geodir_upload_max_filesize', 2 );
+	$max_filesize = (float) geodir_get_option( 'upload_max_filesize', 2 );
 
 	if ( $max_filesize > 0 && $max_filesize < 1 ) {
 		$max_filesize = (int) ( $max_filesize * 1024 ) . 'kb';
@@ -979,6 +979,10 @@ function geodir_custom_posts_body_class( $classes ) {
 
 	if ( geodir_is_geodir_page() ) {
 		$classes[] = 'geodir-page';
+	}
+
+	if ( geodir_is_page('search') ) {
+		$classes[] = 'geodir-page-search';
 	}
 
 	return $classes;

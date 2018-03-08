@@ -157,7 +157,7 @@ class GeoDir_Frontend_Scripts {
 	private static function register_scripts() {
 
 		$map_lang = "&language=" . geodir_get_map_default_language();
-		$map_key = "&key=" . geodir_get_map_api_key();
+		$map_key = geodir_get_map_api_key(true);
 		/** This filter is documented in geodirectory_template_tags.php */
 		$map_extra = apply_filters('geodir_googlemap_script_extra', '');
 
