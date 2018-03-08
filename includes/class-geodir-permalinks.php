@@ -116,7 +116,7 @@ class GeoDir_Permalinks {
 		} else {
 			// backup the original post data first so we can restore it later
 			$orig_post = $gd_post;
-			$gd_post = $post_obj;
+			$gd_post = $post_obj;//echo '###';
 		}
 
 		// Only modify if its a GD post type.
@@ -131,9 +131,9 @@ class GeoDir_Permalinks {
 			// Check if a pretty permalink is required
 			$permalink_structure = geodir_get_permalink_structure();
 			if (strpos($permalink_structure, '%postname%') === false || empty($permalink_structure)) {
-				if (isset($orig_post)) {
+				//if (isset($orig_post)) {echo '###x';
 					$gd_post = $orig_post;
-				}
+				//}
 				return $post_link;
 			}
 

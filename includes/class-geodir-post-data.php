@@ -585,7 +585,7 @@ class GeoDir_Post_Data {
 			<?php }
 			if ( isset( $_REQUEST['pid'] ) && $_REQUEST['pid'] != '' ) { ?>
 			<?php }
-			
+
 			do_action( 'geodir_add_listing_form_start', $listing_type, $post, $package_info );
 
 

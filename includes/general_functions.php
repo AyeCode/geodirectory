@@ -1182,7 +1182,7 @@ function geodir_widget_listings_get_order( $query_args ) {
 			$orderby = "RAND(), ";
 			break;
 		default:
-			if ( $custom_orderby = geodir_prepare_custom_sorting( $sort_by, $table ) ) {
+			if ( $custom_orderby = GeoDir_Query::prepare_sort_order( $sort_by, $table ) ) {
 				$orderby = $custom_orderby . ", ";
 			} else {
 				$orderby = $wpdb->posts . ".post_title ASC, ";

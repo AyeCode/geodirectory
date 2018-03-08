@@ -325,6 +325,8 @@ class GeoDir_Admin_Dummy_Data {
 			if(!empty($dummy_posts) && isset($dummy_posts[$post_index]) ){
 				$post_info = self::add_dummy_address($dummy_posts[$post_index]);
 
+				//print_r($post_info);
+
 				// Set the status to publish
 				if(isset($post_info['post_dummy']) && $post_info['post_dummy'] && !isset($post_info['post_status'])){
 					$post_info['post_status'] = 'publish';

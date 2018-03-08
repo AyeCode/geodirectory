@@ -1582,71 +1582,6 @@ function gdsc_is_post_type_valid($incoming_post_type)
 }
 
 /**
- * Adds the filters and gets the query.
- *
- * @since 1.0.0
- *
- * @global object $wp_query WordPress Query object.
- * @todo $wp_query declared twice - fix it.
- * @global string $geodir_post_type Post type.
- * @global string $table Listing table name.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
- * @global string $term Term object.
- *
- * @param string $query Database query.
- * @return string Query.
- */
-function gdsc_listing_loop_filter($query)
-{
-    global $wp_query, $geodir_post_type, $table, $plugin_prefix, $term;
-
-    $geodir_post_type = geodir_get_current_posttype();
-
-    if (isset($wp_query->tax_query->queries) && $wp_query->tax_query->queries) {
-        $taxonomies = wp_list_pluck($wp_query->tax_query->queries, 'taxonomy');
-
-        if (isset($wp_query->query[$taxonomies[0]])) {
-            $request_term = explode("/", $wp_query->query[$taxonomies[0]]);
-            $request_term = end($request_term);
-            if (!term_exists($request_term)) {
-                $args = array('number' => '1',);
-                $terms_arr = get_terms($taxonomies[0], $args);
-                foreach ($terms_arr as $location_term) {
-                    $term_arr = $location_term;
-                    $term_arr->name = geodir_ucwords(str_replace('-', ' ', $request_term));
-                }
-                $wp_query->queried_object_id = 1;
-                $wp_query->queried_object = $term_arr;
-            }
-        }
-
-    }
-    if (isset($query->query_vars['is_geodir_loop']) && $query->query_vars['is_geodir_loop']) {
-
-        $table = $plugin_prefix . $geodir_post_type . '_detail';
-
-        add_filter('posts_fields', 'geodir_posts_fields', 1);
-        add_filter('posts_join', 'geodir_posts_join', 1);
-        geodir_post_where();
-        if (!is_admin()) {
-            add_filter('posts_orderby', 'geodir_posts_orderby', 1);
-        }
-
-        // advanced filter for popular post view widget
-        global $wp_query;
-        if (!is_admin()) {
-            if (!empty($wp_query->query['with_pics_only'])) {
-                add_filter('posts_join', 'geodir_filter_widget_join', 1000);
-            }
-            add_filter('posts_where', 'geodir_filter_widget_where', 1000);
-        }
-
-    }
-
-    return $query;
-}
-
-/**
  * Get the category id from category name/slug.
  *
  * @since 1.0.0
@@ -1902,7 +1837,7 @@ function gdsc_validate_sort_choice($sort_choice, $post_type = '')
     if (!empty($post_type)) {
         $table = $plugin_prefix . $post_type . '_detail';
         
-        if (!geodir_prepare_custom_sorting($sort_choice, $table)) {
+        if (!GeoDir_Query::prepare_sort_order($sort_choice, $table)) {
             $sort_choice = '';
         }
     }
