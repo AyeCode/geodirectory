@@ -61,6 +61,8 @@ class GeoDir_Post_types {
 					}
 				}
 
+				//print_r($args['args']);
+
 				register_taxonomy($taxonomy, $args['object_type'], $args['args']);
 
 				if (taxonomy_exists($taxonomy)) {
@@ -144,9 +146,10 @@ class GeoDir_Post_types {
 	private static function get_taxonomy_defaults() {
 
 		$taxonomies = geodir_get_option('taxonomies', array());
+		$post_types = geodir_get_option('post_types', array());
 		if(empty($taxonomies)){
 
-			$post_types = geodir_get_option('post_types', array());
+
 			$listing_slug = isset($post_types['gd_place']['rewrite']['slug']) ? $post_types['gd_place']['rewrite']['slug'] : 'places';
 
 
@@ -206,6 +209,30 @@ class GeoDir_Post_types {
 			geodir_update_option('taxonomies', $taxonomies);
 
 		}
+
+
+		// loop the taxonomies
+		if(!empty($taxonomies)){
+			$tag_slug = geodir_get_option('permalink_tag_base','tags');
+			$cat_slug = geodir_get_option('permalink_category_base','category');
+			foreach($taxonomies as $key => $taxonomy){
+
+				// add capability to assign terms to any user, if not added then subscribers listings wont have terms
+				$taxonomies[$key]['args']['capabilities']['assign_terms'] = 'read';
+
+				// adjust rewrite rules _tags
+				$listing_slug = isset($post_types[$taxonomy['object_type']]['rewrite']['slug']) ? $post_types[$taxonomy['object_type']]['rewrite']['slug'] : 'places';
+				if(stripos(strrev($key), "sgat_") === 0){ // its a tag
+					$taxonomies[$key]['args']['rewrite']['slug'] = $tag_slug ? $listing_slug.'/'.$tag_slug : $listing_slug;
+				}else{// its a category
+					$taxonomies[$key]['args']['rewrite']['slug'] = $cat_slug ? $listing_slug.'/'.$cat_slug : $listing_slug;
+				}
+			}
+		}
+
+		// add rewrite rules
+
+
 
 		return $taxonomies;
 	}

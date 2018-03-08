@@ -93,23 +93,6 @@ function geodir_location_page_id(){
 }
 
 /**
- * Get the page ID of the GD home page.
- *
- * @package Geodirectory
- * @since 1.5.4
- * @return int|null Return the page ID if present or null if not.
- */
-function geodir_home_page_id(){
-    $gd_page_id = geodir_get_option('page_home');
-
-    if (function_exists('icl_object_id')) {
-        $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
-    }
-
-    return $gd_page_id;
-}
-
-/**
  * Get the page ID of the info page.
  *
  * @package Geodirectory

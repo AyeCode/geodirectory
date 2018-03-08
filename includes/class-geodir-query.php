@@ -300,7 +300,7 @@ class GeoDir_Query {
 
 		$table = geodir_db_cpt_table($geodir_post_type);
 
-		$where = $wpdb->prepare(" AND $wpdb->posts.post_type = %s AND $wpdb->posts.post_status = 'publish' ",$geodir_post_type);
+		$where .= $wpdb->prepare(" AND $wpdb->posts.post_type = %s AND $wpdb->posts.post_status = 'publish' ",$geodir_post_type);
 
 		if(geodir_is_page('search')){
 			global $wpdb, $geodir_post_type, $plugin_prefix, $dist, $mylat, $mylon, $snear, $s, $s_A, $s_SA, $search_term, $gd_session;
