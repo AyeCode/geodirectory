@@ -23,7 +23,7 @@ $security         = $system_status->get_security_info();
 $settings         = $system_status->get_settings();
 $pages            = $system_status->get_pages();
 ?>
-<div class="updated geodirectory-message inline">
+<div class="notice">
 	<p><?php _e( 'Please copy and paste this information in your ticket when contacting support:', 'geodirectory' ); ?> </p>
 	<p class="submit"><a href="#" class="button-primary debug-report"><?php _e( 'Get system report', 'geodirectory' ); ?></a></p>
 	<div id="debug-report">
@@ -326,6 +326,11 @@ $pages            = $system_status->get_pages();
 		</tr>
 	</thead>
 	<tbody>
+		<tr>
+			<td data-export-label="API Enabled"><?php _e( 'Rest API enabled', 'geodirectory' ); ?>:</td>
+			<td class="help"><?php echo geodir_help_tip( __( 'Does site have REST API enabled?', 'geodirectory' ) ); ?></td>
+			<td><?php echo $settings['api_enabled'] ? '<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>' : '<mark class="no">&ndash;</mark>'; ?></td>
+		</tr>
 		<tr>
 			<td data-export-label="Max upload file size(in mb)"><?php _e( 'Max upload file size(in mb)', 'geodirectory' ); ?>:</td>
 			<td class="help"><?php echo geodir_help_tip( __( 'Max upload file size in MB. This setting will overwrite the max upload file size limit in image/file upload & import listings for entire GeoDirectory core + GeoDirectory plugins.', 'geodirectory' ) ); ?></td>

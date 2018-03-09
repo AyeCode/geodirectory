@@ -107,18 +107,39 @@ function geodir_get_formated_time( $time ) {
 }
 
 /**
- * Returns default date format.
+ * GeoDirectory Date Format.
  *
- * @since 1.0.0
- * @package GeoDirectory
- * @return mixed|string|void Returns default date format.
+ * @return string
  */
-function geodir_default_date_format()
-{
-	if ($format = get_option('date_format'))
-		return $format;
-	else
-		return 'dd-mm-yy';
+function geodir_date_format() {
+	$date_format = get_option( 'date_format' );
+	if ( empty( $date_format ) ) {
+		$date_format = 'F j, Y';
+	} 
+	return apply_filters( 'geodir_date_format', $date_format );
+}
+
+/**
+ * GeoDirectory Time Format.
+ *
+ * @return string
+ */
+function geodir_time_format() {
+	$time_format = get_option( 'time_format' );
+	if ( empty( $time_format ) ) {
+		$time_format = 'g:i a';
+	}
+	return apply_filters( 'geodir_time_format', $time_format );
+}
+
+/**
+ * GeoDirectory Date Time Format.
+ *
+ * @return string
+ */
+function geodir_date_time_format() {
+	$date_time_format = geodir_date_format() . ' ' . geodir_time_format();
+	return apply_filters( 'geodir_date_time_format', $date_time_format, $sep );
 }
 
 /**

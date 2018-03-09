@@ -978,6 +978,29 @@ function geodirSelect2OnChange($this, $select2) {
     }
 }
 
+function gdSetClipboard( data, $el ) {
+	if ( 'undefined' === typeof $el ) {
+		$el = jQuery( document );
+	}
+	var $temp_input = jQuery( '<textarea style="opacity:0">' );
+	jQuery( 'body' ).append( $temp_input );
+	$temp_input.val( data ).select();
+
+	$el.trigger( 'beforecopy' );
+	try {
+		document.execCommand( 'copy' );
+		$el.trigger( 'aftercopy' );
+	} catch ( err ) {
+		$el.trigger( 'aftercopyfailure' );
+	}
+
+	$temp_input.remove();
+}
+
+function gdClearClipboard() {
+	gdSetClipboard( '' );
+}
+
 jQuery(function(){
     if (window.gdMaps === 'google') {
         console.log('Google Maps API Loaded :)');

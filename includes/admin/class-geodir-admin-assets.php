@@ -252,9 +252,22 @@ class GeoDir_Admin_Assets {
 				)
 			);
 		}
-
-
-
+		
+		// API keys.
+		if ( $gd_screen_id . '_page_gd-settings' === $screen_id ) {
+			wp_register_script( 'qrcode', geodir_plugin_url() . '/assets/js/jquery.qrcode' . $suffix . '.js', array( 'jquery' ), GEODIRECTORY_VERSION );
+			wp_register_script( 'geodir-admin-api-keys', geodir_plugin_url() . '/assets/js/admin-api-keys' . $suffix . '.js', array( 'jquery', 'wp-util', 'qrcode', 'geodir-admin-script' ), GEODIRECTORY_VERSION );
+			wp_enqueue_script( 'geodir-admin-api-keys' );
+			wp_localize_script(
+				'geodir-admin-api-keys',
+				'geodir_admin_api_keys_params',
+				array(
+					'save_api_nonce' => wp_create_nonce( 'save-api-key' ),
+					'clipboard_failed' => esc_html__( 'Copying to clipboard failed. Please press Ctrl/Cmd+C to copy.', 'geodirectory' ),
+					'clipboard_copied' => esc_html__( 'Copied to clipboard!', 'geodirectory' ),
+				)
+			);
+		}
 
 	}
 

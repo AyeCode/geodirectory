@@ -335,3 +335,28 @@ function geodir_notification( $user_notes ) {
 
 	return $notes;
 }
+
+/**
+ * Generate a rand hash.
+ *
+ * @since  2.0.0
+ * @return string
+ */
+function geodir_rand_hash() {
+	if ( function_exists( 'openssl_random_pseudo_bytes' ) ) {
+		return bin2hex( openssl_random_pseudo_bytes( 20 ) );
+	} else {
+		return sha1( wp_rand() );
+	}
+}
+
+/**
+ * GeoDir API - Hash.
+ *
+ * @since  2.0.0
+ * @param  string $data
+ * @return string
+ */
+function geodir_api_hash( $data ) {
+	return hash_hmac( 'sha256', $data, 'wc-api' );
+}
