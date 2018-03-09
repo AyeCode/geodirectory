@@ -16,6 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *
  * @since 1.0.0
  * @since 1.5.1 options case added to get post type options array.
+ * @since 2.0.0 options-plural option added.
  * @package GeoDirectory
  * @param string $output The output Type.
  * @return array|object|string Post Types.
@@ -42,6 +43,17 @@ function geodir_get_posttypes($output = 'names')
                 if (!empty($post_types)) {
                     foreach ($post_types as $key => $info) {
                         $options[$key] = __($info['labels']['singular_name'], 'geodirectory');
+                    }
+                }
+                $post_types = $options;
+                break;
+            case 'options-plural':
+                $post_types = (array)$post_types;
+
+                $options = array();
+                if (!empty($post_types)) {
+                    foreach ($post_types as $key => $info) {
+                        $options[$key] = __($info['labels']['name'], 'geodirectory');
                     }
                 }
                 $post_types = $options;

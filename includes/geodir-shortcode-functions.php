@@ -1008,62 +1008,6 @@ function geodir_sc_related_listings($atts)
     return $output;
 }
 
-/**
- * The geodirectory advanced search widget shortcode.
- *
- * This implements the functionality of the shortcode for displaying advanced search widget.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @param array $atts {
- *     Attributes of the shortcode.
- *
- *     @type string $before_widget   HTML content to prepend to each widget's HTML output. Default. <section id="geodir_advanced_search-1" class="widget geodir-widget geodir_advanced_search_widget">.
- *     @type string $after_widget    HTML content to append to each widget's HTML output. Default. </section>.
- *     @type string $before_title    HTML content to prepend to the title when displayed. Default. <h3 class="widget-title">.
- *     @type string $after_title     HTML content to append to the title when displayed. Default. </h3>.
- *     @type string $show_adv_search Show advanced search? Default. default.
- *     @type string $title           Widget title. Default. Empty.
- *
- * }
- * @return string Advanced search widget HTML.
- */
-function geodir_sc_advanced_search($atts) {
-    $defaults = array(
-		'title' => '',
-		'before_widget' => '<section id="geodir_advanced_search-1" class="widget geodir-widget geodir_advance_search_widget">',
-        'after_widget' => '</section>',
-        'before_title' => '<h3 class="widget-title">',
-        'after_title' => '</h3>',
-        'show_adv_search' => 'default',
-		'post_type' => ''
-	);
-	
-	$params = shortcode_atts($defaults, $atts);
-	
-	$show_adv_search = isset($params['show_adv_search']) && in_array($params['show_adv_search'], array('default', 'always', 'searched')) ? $params['show_adv_search'] : '';
-	
-	if ($show_adv_search != '' ) {
-		$show_adv_class = 'geodir-advance-search-' . $show_adv_search . ' ';
-		if ($show_adv_search == 'searched' && geodir_is_page('search')) {
-			$show_adv_search = 'search';
-		}
-		$show_adv_attrs = 'data-show-adv="' . $show_adv_search . '"';
-		
-		$params['before_widget'] = str_replace('class="', $show_adv_attrs . ' class="' . $show_adv_class, $params['before_widget']);
-	}
-	
-	ob_start();
-	
-	geodir_get_template_part('listing', 'filter-form');
-	//the_widget('geodir_advance_search_widget', $params, $params ); //@todo will be better if we can use widget ehre to keep aparams
-    
-	
-	$output = ob_get_contents();
-    ob_end_clean();
-
-    return $output;
-}
 
 /**
  * The best of widget shortcode.

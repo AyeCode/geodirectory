@@ -20,7 +20,6 @@ class GeoDir_Shortcodes {
     public static function init() {
         $shortcodes = array(
             'gd_add_listing'            => __CLASS__ . '::gd_add_listing',
-            'gd_advanced_search'        => __CLASS__ . '::gd_advanced_search',
             'gd_bestof_widget'          => __CLASS__ . '::gd_bestof_widget',
             'gd_cpt_categories'         => __CLASS__ . '::gd_cpt_categories',
             'gd_homepage_map'           => __CLASS__ . '::gd_homepage_map',
@@ -72,10 +71,6 @@ class GeoDir_Shortcodes {
     
     public static function gd_add_listing( $atts = array(), $content = null ) {
         return self::shortcode_wrapper( 'geodir_sc_add_listing', $atts, $content  );
-    }
-    
-    public static function gd_advanced_search( $atts = array(), $content = null ) {
-        return self::shortcode_wrapper( 'geodir_sc_advanced_search', $atts, $content  );
     }
     
     public static function gd_bestof_widget( $atts = array(), $content = null ) {

@@ -332,7 +332,7 @@ class GeoDir_Admin_Install {
 			'page_search' => array(
 				'name'    => _x( 'search', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'Search page', 'Page title', 'geodirectory'),
-				'content' => "[gd_advanced_search]\n[gd_loop_actions]\n[gd_loop]\n[gd_loop_paging]",
+				'content' => "[gd_search]\n[gd_loop_actions]\n[gd_loop]\n[gd_loop_paging]",
 			),
 			'page_terms_conditions' => array(
 				'name'    => _x( 'terms-and-conditions', 'Page slug', 'geodirectory'),
@@ -342,12 +342,12 @@ class GeoDir_Admin_Install {
 			'page_location' => array(
 				'name'    => _x( 'location', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'Location', 'Page title', 'geodirectory'),
-				'content' => "[gd_popular_post_category category_limit=10]\n[gd_homepage_map width=100% height=300 scrollwheel=false]\n[gd_advanced_search]\n[gd_popular_post_view]",
+				'content' => "[gd_popular_post_category category_limit=10]\n[gd_homepage_map width=100% height=300 scrollwheel=false]\n[gd_search]\n[gd_popular_post_view]",
 			),
 			'page_archive' => array(
 				'name'    => _x( 'gd-archive', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'GD Archive', 'Page title', 'geodirectory'),
-				'content' => "[gd_advanced_search]\n[gd_loop_actions]\n[gd_loop]\n[gd_loop_paging]",
+				'content' => "[gd_search]\n[gd_loop_actions]\n[gd_loop]\n[gd_loop_paging]",
 			),
 			'page_archive_item' => array(
 				'name'    => _x( 'gd-archive-item', 'Page slug', 'geodirectory'),
