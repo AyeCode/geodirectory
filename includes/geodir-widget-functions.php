@@ -50,7 +50,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function goedir_register_widgets() {
 	register_widget( 'GeoDir_Widget_Search' );
-    register_widget( 'GeoDir_Widget_Advertise' );
     register_widget( 'GeoDir_Widget_Best_Of' );
     register_widget( 'GeoDir_Widget_CPT_Categories' );
     register_widget( 'GeoDir_Widget_Features' );
