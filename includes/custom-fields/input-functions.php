@@ -1956,6 +1956,10 @@ function geodir_cfi_images($html,$cf){
             </label>
             <span class="geodir_message_note gd_images_desc"><?php _e($cf['desc'], 'geodirectory'); ?></span>
 
+            <?php if ($cf['is_required']) { ?>
+                <span class="geodir_message_error"><?php _e($cf['required_msg'], 'geodirectory'); ?></span>
+            <?php } ?>
+
             <h5 id="geodir_form_title_row" class="geodir-form_title">
                 <?php if ( $image_limit == 1 ) {
                     echo '<br /><small>(' . __( 'You can upload', 'geodirectory' ) . ' ' . $image_limit . ' ' . __( 'image with this package', 'geodirectory' ) . ')</small>';
@@ -1968,13 +1972,13 @@ function geodir_cfi_images($html,$cf){
                 } ?>
             </h5>
 
-            <div class="geodir_form_row clearfix" id="<?php echo $id; ?>dropbox"
+            <div class="geodir_form_row clearfix " id="<?php echo $id; ?>dropbox"
                  style="border:1px solid #ccc;min-height:100px;height:auto;padding:10px;text-align:center;">
-                <input type="hidden" name="<?php echo $id; ?>" id="<?php echo $id; ?>" value="<?php echo $svalue; ?>"/>
+                <input type="hidden" name="<?php echo $id; ?>" id="<?php echo $id; ?>" value="<?php echo $svalue; ?>" class="<?php if ($cf['is_required']) echo 'gd_image_required_field'; ?>"/>
                 <input type="hidden" name="<?php echo $id; ?>image_limit" id="<?php echo $id; ?>image_limit"
                        value="<?php echo $image_limit; ?>"/>
                 <input type="hidden" name="<?php echo $id; ?>totImg" id="<?php echo $id; ?>totImg"
-                       value="<?php echo $totImg; ?>"/>
+                       value="<?php echo $totImg; ?>" />
 
                 <div
                     class="plupload-upload-uic hide-if-no-js <?php if ( $multiple ): ?>plupload-upload-uic-multiple<?php endif; ?>"

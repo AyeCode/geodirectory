@@ -130,11 +130,6 @@ class GeoDir_Permalinks {
 			// Check if a pretty permalink is required
 			$permalink_structure = geodir_get_permalink_structure();
 			if (strpos($permalink_structure, '%postname%') === false || empty($permalink_structure)) {
-//				if (isset($orig_post)) {//echo '###x';
-//					$gd_post = $orig_post;
-//				}else{
-//					$gd_post = '';
-//				}
 				return $post_link;
 			}
 
