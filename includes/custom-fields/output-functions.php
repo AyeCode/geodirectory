@@ -573,7 +573,7 @@ function geodir_cf_datepicker($html,$location,$cf,$p=''){
 
         if ($gd_post->{$cf['htmlvar_name']}):
 
-            $date_format = geodir_default_date_format();
+            $date_format = geodir_date_format();
             if ($cf['extra_fields'] != '') {
                 $date_format = stripslashes_deep(unserialize($cf['extra_fields']));
                 $date_format = $date_format['date_format'];

@@ -113,6 +113,7 @@ final class GeoDirectory {
         $this->define( 'GEODIRECTORY_TEXTDOMAIN', 'geodirectory' );
         
         // Database tables
+		$this->define( 'GEODIR_API_KEYS_TABLE', $plugin_prefix . 'api_keys' ); // rest api keys table
         $this->define( 'GEODIR_ATTACHMENT_TABLE', $plugin_prefix . 'attachments' ); // attachments table
         $this->define( 'GEODIR_COUNTRIES_TABLE', $plugin_prefix . 'countries' ); // countries table
         $this->define( 'GEODIR_CUSTOM_FIELDS_TABLE', $plugin_prefix . 'custom_fields' ); // custom fields table

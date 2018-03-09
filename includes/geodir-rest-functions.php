@@ -14,6 +14,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+function geodir_api_enabled() {
+	$api_enabled = geodir_get_option( 'rest_api_enabled' ) ? true : false;
+	return apply_filters( 'geodir_api_enabled', $api_enabled );
+}
+
 /**
  * Parses and formats a date for ISO8601/RFC3339.
  *

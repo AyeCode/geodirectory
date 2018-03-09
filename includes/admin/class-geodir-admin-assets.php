@@ -252,9 +252,18 @@ class GeoDir_Admin_Assets {
 				)
 			);
 		}
-
-
-
+		
+		// API keys.
+		if ( $gd_screen_id . '_page_gd-settings' === $screen_id ) {
+			wp_register_script( 'geodir-admin-api-keys', geodir_plugin_url() . '/assets/js/admin-api-keys' . $suffix . '.js', array( 'jquery', 'geodir-admin-script' ), GEODIRECTORY_VERSION );
+			wp_enqueue_script( 'geodir-admin-api-keys' );
+			wp_localize_script(
+				'geodir-admin-api-keys',
+				'geodir_admin_api_keys_params',
+				array(
+				)
+			);
+		}
 
 	}
 

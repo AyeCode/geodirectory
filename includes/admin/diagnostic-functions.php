@@ -553,7 +553,10 @@ function geodir_diagnose_multisite_conversion()
     $filter_arr = array();
     $filter_arr['output_str'] = $output_str;
     $filter_arr['is_error_during_diagnose'] = $is_error_during_diagnose;
-    $table_arr = array('geodir_countries' => __('Countries', 'geodirectory'),
+    $table_arr = array(
+		'geodir_api_keys' => __('API Keys', 'geodirectory'),
+		'geodir_business_hours' => __('Business Hours', 'geodirectory'),
+		'geodir_countries' => __('Countries', 'geodirectory'),
         'geodir_custom_fields' => __('Custom fields', 'geodirectory'),
         'geodir_post_icon' => __('Post icon', 'geodirectory'),
         'geodir_attachments' => __('Attachments', 'geodirectory'),
