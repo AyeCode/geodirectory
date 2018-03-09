@@ -49,7 +49,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 2.0.0
  */
 function goedir_register_widgets() {
-	register_widget( 'GeoDir_Widget_Advance_Search' );
+	register_widget( 'GeoDir_Widget_Search' );
     register_widget( 'GeoDir_Widget_Advertise' );
     register_widget( 'GeoDir_Widget_Best_Of' );
     register_widget( 'GeoDir_Widget_CPT_Categories' );

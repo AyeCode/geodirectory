@@ -8,26 +8,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class GeoDir_Widget_Advance_Search extends WP_Super_Duper {
+class GeoDir_Widget_Search extends WP_Super_Duper {
 
     /**
      * Register the advanced search widget with WordPress.
      *
-     * @since 1.0.0
-     * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
      */
     public function __construct() {
-//        return;
-//        $widget_ops = array(
-//            'classname' => 'geodir_advance_search_widget',
-//            'description' => __( 'GD > Search', 'geodirectory' ),
-//            'post_type' => '',
-//            'customize_selective_refresh' => true,
-//            'geodirectory' => true,
-//            'gd_show_pages' => array(),
-//        );
-//
-//        parent::__construct( 'geodir_advance_search', __('GD > Search', 'geodirectory'), $widget_ops );
+
 
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
@@ -117,7 +105,7 @@ class GeoDir_Widget_Advance_Search extends WP_Super_Duper {
 
         return ob_get_clean();
     }
-    
+
 
     /**
      * Get the post type options for search.
