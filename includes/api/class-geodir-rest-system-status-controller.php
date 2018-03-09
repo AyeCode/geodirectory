@@ -400,6 +400,12 @@ class GeoDir_REST_System_Status_Controller extends GeoDir_REST_Controller {
 					'context'     => array( 'view' ),
 					'readonly'    => true,
 					'properties'  => array(
+						'api_enabled' => array(
+							'description' => __( 'REST API enabled?', 'geodirectory' ),
+							'type'        => 'boolean',
+							'context'     => array( 'view' ),
+							'readonly'    => true,
+						),
 						'upload_max_filesize' => array(
 							'description' => __( 'Max upload file size(in mb)', 'geodirectory' ),
 							'type'        => 'string',
@@ -588,6 +594,7 @@ class GeoDir_REST_System_Status_Controller extends GeoDir_REST_Controller {
 		$post_types = geodir_get_posttypes();
 		
 		$core_tables = array(
+			'api_keys',
 			'attachments',
 			'business_hours',
 			'countries',
@@ -782,6 +789,7 @@ class GeoDir_REST_System_Status_Controller extends GeoDir_REST_Controller {
 	public function get_settings() {
 		// Return array of useful settings for debugging.
 		return array(
+			'api_enabled'              => geodir_get_option( 'rest_api_enabled' ) ? true : false,
 			'upload_max_filesize'      => geodir_get_option( 'upload_max_filesize' ),
 			'default_status'      	   => geodir_get_option( 'default_status' ),
 			'maps_api_key'      	   => geodir_get_option( 'google_maps_api_key' ) ? true : false,

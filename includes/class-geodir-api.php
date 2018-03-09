@@ -149,22 +149,25 @@ class GeoDir_API {
 		// Register settings to the REST API.
 		$this->register_wp_admin_settings();
 
-		$controllers = array(
-			// v2 controllers.
-			'Geodir_REST_Taxonomies_Controller',
-				//'GeoDir_REST_Post_Categories_Controller',
-				//'GeoDir_REST_Post_Reviews_Controller',
-				//'GeoDir_REST_Post_Tags_Controller',
-			'GeoDir_REST_Post_Types_Controller',
-				//'GeoDir_REST_Posts_Controller',
-				//'GeoDir_REST_Reports_Controller',
-			'GeoDir_REST_Settings_Controller',
-			'GeoDir_REST_Setting_Options_Controller',
-			'GeoDir_REST_System_Status_Controller',
-			'GeoDir_REST_System_Status_Tools_Controller',
-			'GeoDir_REST_Countries_Controller',
-			'GeoDir_REST_Markers_Controller',
-		);
+		$controllers = array();
+		if ( geodir_api_enabled() ) {
+			$controllers = array(
+				// v2 controllers.
+				'Geodir_REST_Taxonomies_Controller',
+					//'GeoDir_REST_Post_Categories_Controller',
+					//'GeoDir_REST_Post_Reviews_Controller',
+					//'GeoDir_REST_Post_Tags_Controller',
+				'GeoDir_REST_Post_Types_Controller',
+					//'GeoDir_REST_Posts_Controller',
+					//'GeoDir_REST_Reports_Controller',
+				'GeoDir_REST_Settings_Controller',
+				'GeoDir_REST_Setting_Options_Controller',
+				'GeoDir_REST_System_Status_Controller',
+				'GeoDir_REST_System_Status_Tools_Controller',
+				'GeoDir_REST_Countries_Controller',
+			);
+		}
+		$controllers[] = 'GeoDir_REST_Markers_Controller'; // Map markers api should always enabled.
 
 		foreach ( $controllers as $controller ) {
 			$this->$controller = new $controller();

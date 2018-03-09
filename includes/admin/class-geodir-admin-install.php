@@ -413,6 +413,7 @@ class GeoDir_Admin_Install {
 	 * Set up the database tables which the plugin needs to function.
 	 *
 	 * Tables:
+	 *		geodir_api_keys - API keys table.
 	 *		geodir_attachments - Listing attachments table.
 	 *		geodir_business_hours - Business hours table.
 	 *		geodir_countries - Countries table.
@@ -580,6 +581,22 @@ class GeoDir_Admin_Install {
 			close int(11) DEFAULT NULL,
 			PRIMARY KEY  (id)
 			) $collate; ";
+			
+		// Table to store api keys
+		$tables .= " CREATE TABLE " . GEODIR_API_KEYS_TABLE . " (
+			  key_id BIGINT UNSIGNED NOT NULL auto_increment,
+			  user_id BIGINT UNSIGNED NOT NULL,
+			  description varchar(200) NULL,
+			  permissions varchar(10) NOT NULL,
+			  consumer_key char(64) NOT NULL,
+			  consumer_secret char(43) NOT NULL,
+			  nonces longtext NULL,
+			  truncated_key char(7) NOT NULL,
+			  last_access datetime NULL default null,
+			  PRIMARY KEY  (key_id),
+			  KEY consumer_key (consumer_key),
+			  KEY consumer_secret (consumer_secret)
+			) $collate; ";
 
 		return $tables;
 	}
@@ -687,6 +704,7 @@ class GeoDir_Admin_Install {
 	public static function wpmu_drop_tables( $tables ) {
 		global $wpdb;
 
+		$tables[] = $wpdb->prefix . GEODIR_API_KEYS_TABLE;
 		$tables[] = $wpdb->prefix . GEODIR_ATTACHMENT_TABLE;
 		$tables[] = $wpdb->prefix . GEODIR_BUSINESS_HOURS_TABLE;
 		$tables[] = $wpdb->prefix . GEODIR_COUNTRIES_TABLE;
