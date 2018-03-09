@@ -977,7 +977,8 @@ class GeoDir_Admin_Settings {
 			// Format the value based on option type.
 			switch ( $option['type'] ) {
 				case 'checkbox' :
-					$value = '1' === $raw_value || 'yes' === $raw_value ? 'yes' : 'no';
+					//$value = '1' === $raw_value || 'yes' === $raw_value ? 'yes' : 'no';
+					$value = '1' === $raw_value ? 1 : 0;
 					break;
 				case 'textarea' :
 				case 'editor' :

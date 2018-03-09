@@ -134,8 +134,8 @@ add_filter('post_type_archive_link', 'geodir_get_posttype_link', 10, 2);
 ////////////////////////
 if (!is_admin()) {
     /** Exclude Virtual Pages From Pages List **/
-    add_action('pre_get_posts', 'set_listing_request', 0);
-    add_action('pre_get_posts', 'geodir_listing_loop_filter', 1);
+    //add_action('pre_get_posts', 'set_listing_request', 0);
+    //add_action('pre_get_posts', 'geodir_listing_loop_filter', 1);
     add_filter('excerpt_more', 'geodir_excerpt_more', 1000);
     add_filter('excerpt_length', 'geodir_excerpt_length', 1000);
     add_action('the_post', 'create_marker_jason_of_posts'); // Add marker in json array, Map related filter
@@ -585,7 +585,6 @@ function geodir_admin_bar_site_menu($wp_admin_bar) {
 
 add_action('geodir_before_listing', 'geodir_display_sort_options'); /*function in custom_functions.php*/
 
-add_filter('geodir_posts_order_by_sort', 'geodir_posts_order_by_custom_sort', 0, 3);
 
 add_filter('geodir_advance_custom_fields_heading', 'geodir_advance_customfields_heading', 0, 2);
 

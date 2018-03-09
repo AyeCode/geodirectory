@@ -549,7 +549,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 
 				array(
 					'name' => __( 'Max upload file size(in mb)', 'geodirectory' ),
-					'desc' => __( '(Maximum upload file size in MB, 1 MB = 1024 KB. Must be greater then 0(ZERO), for ex: 2. This setting will overwrite the max upload file size limit in image/file upload & import listings for entire GeoDirectory core + GeoDirectory plugins.)', 'geodirectory' ),
+					'desc' => __( '(Maximum upload file size in MB, 1 MB = 1024 KB. Must be greater then 0(ZERO), for ex: 2. This setting will overwrite the max upload file size limit in image/file upload & import listings for entire GeoDirectory core + GeoDirectory plugins.)', 'geodirectory' ).wp_max_upload_size(),
 					'id'   => 'upload_max_filesize',
 					'type' => 'number',
 					'css'  => 'min-width:300px;',

@@ -294,7 +294,7 @@ function geodir_draw_map($map_args = array())
 
                         <select id="travel-units" onchange="calcRoute('<?php echo $map_canvas_name; ?>')">
                             <option value="miles"><?php _e('Miles', 'geodirectory'); ?></option>
-                            <option <?php if (geodir_get_option('geodir_search_dist_1') == 'km') {
+                            <option <?php if (geodir_get_option('search_distance_long') == 'km') {
                                 echo 'selected="selected"';
                             } ?> value="kilometers"><?php _e('Kilometers', 'geodirectory'); ?></option>
                         </select>

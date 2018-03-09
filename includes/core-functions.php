@@ -318,3 +318,20 @@ function geodir_nocache_headers() {
 	geodir_maybe_define( 'DONOTCACHEDB', true );
 	nocache_headers();
 }
+
+/**
+ * Output a notification
+ * @param $user_notes
+ *
+ * @return string
+ */
+function geodir_notification( $user_notes ) {
+	$notes = '';
+	foreach ( $user_notes as $key => $user_note ) {
+		$notes .= "<div class='gd-notification $key'>";
+		$notes .= $user_note;
+		$notes .= "</div>";
+	}
+
+	return $notes;
+}

@@ -446,11 +446,17 @@ function geodir_get_map_default_language() {
  * Returns the Google maps api key.
  *
  * @since   1.6.4
+ * @since   2.0.0 Added $query param.
+ * @param bool $query If this is for a query and if so add the key=.
  * @package GeoDirectory
  * @return string Returns the api key.
  */
-function geodir_get_map_api_key() {
+function geodir_get_map_api_key($query = false) {
     $key = geodir_get_option( 'google_maps_api_key' );
+
+    if($key && $query){
+        $key = "&key=".$key;
+    }
 
     /**
      * Filter Google maps api key.

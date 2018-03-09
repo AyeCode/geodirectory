@@ -76,7 +76,7 @@ global $post;
                                 $endLat = $post->post_latitude;
                                 $endLon = $post->post_longitude;
                                 $endPoint = array('latitude' => $endLat, 'longitude' => $endLon);
-                                $uom = geodir_get_option('geodir_search_dist_1');
+                                $uom = geodir_get_option('search_distance_long');
                                 $distance = geodir_calculateDistanceFromLatLong($startPoint, $endPoint, $uom); ?>
                                 <h3>
                                     <?php

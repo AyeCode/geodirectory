@@ -585,11 +585,7 @@ class GeoDir_Post_Data {
 			<?php }
 			if ( isset( $_REQUEST['pid'] ) && $_REQUEST['pid'] != '' ) { ?>
 			<?php }
-			if ( isset( $_REQUEST['backandedit'] ) ) { ?>
-				<input type="hidden" name="backandedit"
-				       value="<?php echo sanitize_text_field( $_REQUEST['backandedit'] ); ?>"/>
-				<?php
-			}
+
 			do_action( 'geodir_add_listing_form_start', $listing_type, $post, $package_info );
 
 

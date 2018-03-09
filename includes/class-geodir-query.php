@@ -41,6 +41,7 @@ class GeoDir_Query {
 
 
 			//add_action( 'wp', array( $this, 'add_page_id_in_query_var' )  );
+			add_action( 'pre_get_posts', array( $this, 'set_globals' ) );
 			add_action( 'pre_get_posts', array( $this, 'pre_get_posts' ) );
 
 			//add_action( 'wp', array( $this, 'remove_product_query' ) );
@@ -48,6 +49,12 @@ class GeoDir_Query {
 		}
 
 		$this->init_query_vars();
+	}
+
+	public function set_globals(){
+		global $geodir_post_type;
+
+		$geodir_post_type = geodir_get_current_posttype();
 	}
 
 
@@ -122,7 +129,7 @@ class GeoDir_Query {
 			add_filter( 'posts_fields', array( $this, 'posts_fields' ) );
 			add_filter( 'posts_where', array( $this, 'posts_where' ) );
 			//add_filter( 'posts_limits', array( $this, 'posts_limits' ),10,2 );
-			//add_filter( 'posts_orderby', array( $this, 'posts_orderby' ) );
+			add_filter( 'posts_orderby', array( $this, 'posts_orderby' ) );
 
 			// setup search globals
 			global $wp_query, $wpdb, $geodir_post_type, $table, $dist, $mylat, $mylon, $s, $snear, $s, $s_A, $s_SA;
@@ -132,8 +139,8 @@ class GeoDir_Query {
 
 			if (isset($_REQUEST['sdist'])) {
 				($_REQUEST['sdist'] != '0' && $_REQUEST['sdist'] != '') ? $dist = esc_attr($_REQUEST['sdist']) : $dist = 25000;
-			} elseif (geodir_get_option('geodir_search_dist') != '') {
-				$dist = geodir_get_option('geodir_search_dist');
+			} elseif (geodir_get_option('search_radius') != '') {
+				$dist = geodir_get_option('search_radius');//search_radius
 
 			} else {
 				$dist = 25000;
@@ -220,14 +227,14 @@ class GeoDir_Query {
 
 
 		if ($snear != '' || $gd_session->get('all_near_me')) {
-			$DistanceRadius = geodir_getDistanceRadius(geodir_get_option('geodir_search_dist_1'));
+			$DistanceRadius = geodir_getDistanceRadius(geodir_get_option('search_distance_long'));
 
 			if ($gd_session->get('all_near_me')) {
 				$mylat = $gd_session->get('user_lat');
 				$mylon = $gd_session->get('user_lon');
 			}
 
-			$fields .= " , (" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(" . $table . ".post_latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(" . $table . ".post_latitude) * pi()/180) *POWER(SIN(($mylon - " . $table . ".post_longitude) * pi()/180 / 2), 2) )))as distance ";
+			$fields .= " , (" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($mylon - " . $table . ".longitude) * pi()/180 / 2), 2) )))as distance ";
 		}
 
 
@@ -434,12 +441,12 @@ class GeoDir_Query {
 							)
 						AND $wpdb->posts.post_type in ('{$post_types}')
 						AND ($wpdb->posts.post_status = 'publish')
-						AND ( " . $table . ".post_latitude between $rlat1 and $rlat2 )
-						AND ( " . $table . ".post_longitude between $rlon1 and $rlon2 ) ";
+						AND ( " . $table . ".latitude between $rlat1 and $rlat2 )
+						AND ( " . $table . ".longitude between $rlon1 and $rlon2 ) ";
 
 				if (isset($_REQUEST['sdist']) && $_REQUEST['sdist'] != 'all') {
-					$DistanceRadius = geodir_getDistanceRadius(geodir_get_option('geodir_search_dist_1'));
-					$where .= " AND CONVERT((" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(" . $table . ".post_latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(" . $table . ".post_latitude) * pi()/180) *POWER(SIN(($mylon - " . $table . ".post_longitude) * pi()/180 / 2), 2) ))),DECIMAL(64,4)) <= " . $dist;
+					$DistanceRadius = geodir_getDistanceRadius(geodir_get_option('search_distance_long'));
+					$where .= " AND CONVERT((" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($mylon - " . $table . ".longitude) * pi()/180 / 2), 2) ))),DECIMAL(64,4)) <= " . $dist;
 				}
 
 			} else {
@@ -533,10 +540,14 @@ class GeoDir_Query {
 	 * @return mixed
 	 */
 	public function posts_orderby($orderby){
-		global $wpdb, $table_prefix, $geodir_post_type;
+		global $wpdb, $table_prefix, $geodir_post_type,$snear;
 
 		$sort_by = '';
 		$orderby = ' ';
+
+		if ($snear != '') {
+			$orderby .= " distance,";
+		}
 
 		if ( get_query_var( 'order_by' ) ) {
 			$sort_by = get_query_var( 'order_by' );
@@ -600,7 +611,7 @@ class GeoDir_Query {
 				$orderby = " " . $table . ".overall_rating ASC, " . $table . ".rating_count ASC, ";
 				break;
 			default:
-				$orderby = $table . ".is_featured asc, $wpdb->posts.post_date desc";
+				$orderby .= $table . ".is_featured asc, $wpdb->posts.post_date desc";
 				break;
 		endswitch;
 
@@ -894,6 +905,43 @@ class GeoDir_Query {
 
 
 
+
+	/**
+	 * Make custom field order by clause for custom sorting.
+	 *
+	 * @since 1.6.18
+	 * @package GeoDirectory
+	 *
+	 * @param string $sorting Listing sort option.
+	 * @param string $table Listing table name.
+	 * @return string|null If field exists in table returns order by clause else returns empty.
+	 */
+	public static function prepare_sort_order( $sorting, $table ) {
+		$orderby = '';
+
+		if ( empty( $sorting ) || empty( $table ) ) {
+			return $orderby;
+		}
+
+		if ( strpos( strtoupper( $sorting ), '_ASC' ) !== false || strpos( strtoupper( $sorting ), '_DESC') !== false ) {
+			$sorting_array = explode( '_', $sorting );
+
+			if ( ( $count = count( $sorting_array ) ) > 1 ) {
+				$order = !empty( $sorting_array[$count - 1] ) ? strtoupper( $sorting_array[$count - 1] ) : '';
+				array_pop( $sorting_array );
+
+				if ( !empty( $sorting_array ) && ( $order == 'ASC' || $order == 'DESC' ) ) {
+					$sort_by = implode( '_', $sorting_array );
+
+					if ( geodir_column_exist( $table, $sort_by ) ) {
+						$orderby = $table . "." . $sort_by . " " . $order;
+					}
+				}
+			}
+		}
+
+		return $orderby;
+	}
 
 
 
