@@ -27,8 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</th>
 				<td class="forminp">
 					<?php
-						$curent_user_id = get_current_user_id();
-						$user_id        = ! empty( $key_data['user_id'] ) ? absint( $key_data['user_id'] ) : $curent_user_id;
+						$user_id        = ! empty( $key_data['user_id'] ) ? absint( $key_data['user_id'] ) : get_current_user_id();
 						$user           = get_user_by( 'id', $user_id );
 						/* translators: 1: user display name 2: user ID 3: user email */
 						$user_string    = sprintf(
@@ -38,9 +37,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 							$user->user_email
 						);
 					?>
-					<select class="gd-user-search geodir-select regular-text" id="key_user" data-placeholder="<?php esc_attr_e( 'Search for a user&hellip;', 'geodirectory' ); ?>" data-allow_clear="true">
-						<option value="<?php echo esc_attr( $user_id ); ?>" selected="selected"><?php echo $user_string; ?><option>
-					</select>
+					<?php geodir_dropdown_users( array(
+                            'name' => 'key_user',
+                            'selected' => $user_id,
+                            'include_selected' => true,
+                            'show' => 'name_id_email',
+                            'orderby' => 'display_name',
+                            'class' => 'gd-user-search geodir-select regular-text'
+                        ) ); ?>
 				</td>
 			</tr>
 			<tr valign="top">

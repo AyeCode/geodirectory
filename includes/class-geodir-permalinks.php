@@ -108,19 +108,18 @@ class GeoDir_Permalinks {
 		global $wpdb, $wp_query, $plugin_prefix, $post, $comment_post_cache, $gd_permalink_cache,$gd_post;
 
 		//print_r($gd_post);
+		$correct_post = true;
 
 		if (isset($post_obj->post_status) && ( $post_obj->post_status == 'auto-draft' || $post_obj->post_status == 'draft' || $post_obj->post_status == 'pending') ) {
 			return $post_link; // if draft then return default url.
 		} elseif (isset($post_obj->ID) && isset($gd_post->ID) && $post_obj->ID == $gd_post->ID) {
 			// check its the correct post.
 		} else {
-			// backup the original post data first so we can restore it later
-			$orig_post = $gd_post;
-			$gd_post = $post_obj;//echo '###';
+			$correct_post = false;
 		}
 
 		// Only modify if its a GD post type.
-		if (in_array($gd_post->post_type, geodir_get_posttypes())) {
+		if (in_array($post_obj->post_type, geodir_get_posttypes())) {
 
 
 			/*
@@ -131,10 +130,18 @@ class GeoDir_Permalinks {
 			// Check if a pretty permalink is required
 			$permalink_structure = geodir_get_permalink_structure();
 			if (strpos($permalink_structure, '%postname%') === false || empty($permalink_structure)) {
-				//if (isset($orig_post)) {echo '###x';
-					$gd_post = $orig_post;
-				//}
+//				if (isset($orig_post)) {//echo '###x';
+//					$gd_post = $orig_post;
+//				}else{
+//					$gd_post = '';
+//				}
 				return $post_link;
+			}
+
+			// backup the original post data first so we can restore it later
+			if(!$correct_post){
+				$orig_post = $gd_post;
+				$gd_post = geodir_get_post_info($post_obj->ID);
 			}
 
 

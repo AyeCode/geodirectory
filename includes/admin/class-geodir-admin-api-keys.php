@@ -167,14 +167,14 @@ class GeoDir_Admin_API_Keys {
 	 * Bulk actions.
 	 */
 	private function bulk_actions() {
-		if ( empty( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'geodir-settings' ) ) {
+		if ( empty( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'geodirectory-settings' ) ) {
 			wp_die( __( 'Action failed. Please refresh the page and retry.', 'geodirectory' ) );
 		}
 
 		$keys = array_map( 'absint', (array) $_GET['key'] );
 
-		if ( 'revoke' == $_GET['action'] ) {
-			$this->bulk_revoke_key( $keys );
+		if ( 'revoke' == $_GET['action'] || ( isset( $_GET['action2'] ) && 'revoke' == $_GET['action2'] ) ) {
+			$this->bulk_revoke_key( array_values( $keys ) );
 		}
 	}
 
