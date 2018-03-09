@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * GeoDirectory Advanced Search widget.
+ * GeoDirectory Search widget.
  *
  * @since 1.0.0
  */
