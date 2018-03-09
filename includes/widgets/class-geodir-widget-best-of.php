@@ -11,6 +11,7 @@
  * GeoDirectory Best of widget widget class.
  *
  * @since 1.3.9
+ * @todo needs super dupered and new jaax calls added
  */
 class GeoDir_Widget_Best_Of extends WP_Widget {
     
