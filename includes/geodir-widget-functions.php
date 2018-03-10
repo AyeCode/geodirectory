@@ -72,13 +72,17 @@ function goedir_register_widgets() {
     register_widget( 'GeoDir_Widget_Detail_Social_Sharing' );
     register_widget( 'GeoDir_Widget_Detail_User_Actions' );
     register_widget( 'GeoDir_Widget_Detail_Sidebar_Info' );
-    register_widget( 'GeoDir_Widget_Detail_Meta' );
 
     // post widgets
+    register_widget( 'GeoDir_Widget_Post_Meta' );
     register_widget( 'GeoDir_Widget_Post_Images' );
     register_widget( 'GeoDir_Widget_Post_Title' );
     register_widget( 'GeoDir_Widget_Post_Rating' );
     register_widget( 'GeoDir_Widget_Post_Fav' );
+
+    // Widgets
+    register_widget( 'GeoDir_Widget_Output_location' );
+
 
 
 }

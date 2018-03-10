@@ -104,7 +104,7 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
             $class = "gd-align-right";
         }
 
-        $before = '<div class="geodir_more_info gd-rating-info-wrap '. $class .'" >';
+        $before = '<div class="geodir_post_meta gd-rating-info-wrap '. $class .'" >';
         $after  = '</div>';
 
         if($args['show']=='stars'){

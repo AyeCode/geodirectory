@@ -96,7 +96,7 @@ jQuery(function($) {
     }
 	
 	$('.gd-bh-show-field .gd-bh-expand-range').on('click', function(e){
-		var $wrap = $(this).closest('.geodir_more_info')
+		var $wrap = $(this).closest('.geodir_post_meta')
 		var $hours = $wrap.find('.gd-bh-open-hours')
 		if($hours.is(':visible')){
 			$hours.slideUp(100);

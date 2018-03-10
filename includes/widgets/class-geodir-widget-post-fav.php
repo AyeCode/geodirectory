@@ -104,7 +104,7 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
             $class = "gd-align-right";
         }
 
-        $before = '<div class="geodir_more_info gd-fav-info-wrap '. $class .'" >';
+        $before = '<div class="geodir_post_meta gd-fav-info-wrap '. $class .'" >';
         $after  = '</div>';
 
         $main = $this->get_fav_html();

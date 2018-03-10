@@ -5,7 +5,7 @@
  *
  * @since 2.0.0
  */
-class GeoDir_Widget_Detail_Meta extends WP_Super_Duper {
+class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 
 
 	public $arguments;

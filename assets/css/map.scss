@@ -180,11 +180,11 @@
     margin-right: 3px;
 }
 
-.geodir-bubble-meta-side .geodir_more_info.post_address span[itemprop="addressLocality"],
-.geodir-bubble-meta-side .geodir_more_info.post_address span[itemprop="addressRegion"],
-.geodir-bubble-meta-side .geodir_more_info.post_address span[itemprop="postalCode"],
-.geodir-bubble-meta-side .geodir_more_info.post_address span[itemprop="addressCountry"],
-.geodir-bubble-meta-side .geodir_more_info.post_address br{
+.geodir-bubble-meta-side .geodir_post_meta.post_address span[itemprop="addressLocality"],
+.geodir-bubble-meta-side .geodir_post_meta.post_address span[itemprop="addressRegion"],
+.geodir-bubble-meta-side .geodir_post_meta.post_address span[itemprop="postalCode"],
+.geodir-bubble-meta-side .geodir_post_meta.post_address span[itemprop="addressCountry"],
+.geodir-bubble-meta-side .geodir_post_meta.post_address br{
    display:none;
 }
 
@@ -727,7 +727,7 @@ div.geodir_map_container.geodir-map-iphone .map_background .triggermap {
 .body_fullscreen .geodir-custom-post-gallery,
 .body_fullscreen dl.geodir-tab-head,
 .body_fullscreen .geodir-direction-nav a,
-.body_fullscreen .geodir_more_info i,
+.body_fullscreen .geodir_post_meta i,
 .body_fullscreen .geodir-company_info i,
 .body_fullscreen .b_signin {
   display: none;

@@ -6,6 +6,7 @@
 @import "partials/add-listing";
 @import "partials/listings";
 @import "partials/geodir_flexslider";
+@import "partials/output_location";
 
 
 /* ########################################
@@ -279,17 +280,17 @@ ul.geodir-tabs-content {
     line-height: 22px;
 }
 
-.geodir_more_info {
+.geodir_post_meta {
 	text-indent: .25px;
 }
 
 .geodir-company_info a,
-.geodir_more_info a {
+.geodir_post_meta a {
     text-decoration: none;
 }
 
 .geodir-company_info i.fa,
-.geodir_more_info i.fa {
+.geodir_post_meta i.fa {
 	margin-right: 4px;
 }
 
@@ -1267,27 +1268,27 @@ ul.geodir_recent_reviews li {
 
 /* ----- 18-07-2014 ----*/
 
-.geodir-company_info .geodir_more_info {
+.geodir-company_info .geodir_post_meta {
     border-bottom: 1px solid #eee;
     line-height: 19px;
     margin: 5px 0 10px;
     padding: 5px 0 15px;
 }
 
-.geodir-company_info .geodir_more_info ul {
+.geodir-company_info .geodir_post_meta ul {
     padding-left: 20px;
 }
 
-.geodir-company_info .geodir_more_info ul li {
+.geodir-company_info .geodir_post_meta ul li {
     list-style: none;
 }
 
-.geodir_category_list_view .geodir_more_info ul li {
+.geodir_category_list_view .geodir_post_meta ul li {
     margin-bottom: 0;
     padding-bottom: 0;
 }
 
-.geodir-content .geodir_more_info {
+.geodir-content .geodir_post_meta {
     font-size: 12px;
     line-height: 17px;
     margin-bottom: 0;
@@ -1797,7 +1798,7 @@ div#jquery-lightbox {
 }
 
 /* custom fields */
-.geodir_more_info.gd-comma-list{
+.geodir_post_meta.gd-comma-list{
     span{
         float: left;
     }
@@ -2150,7 +2151,7 @@ body > span[style*='top: -999px']{display: none;}
 .geodir-widget  .geodir-details-sidebar-rating .geodir-rating {
     margin: auto;
 }
-.geodir-widget  .geodir-company_info  .geodir_more_info:last-child {
+.geodir-widget  .geodir-company_info  .geodir_post_meta:last-child {
     border: 0;
     margin-bottom: 0;
 }
