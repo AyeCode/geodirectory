@@ -57,22 +57,13 @@ function goedir_register_widgets() {
     register_widget( 'GeoDir_Widget_Flickr' );
     register_widget( 'GeoDir_Widget_Home_Page_Map' );
     register_widget( 'GeoDir_Widget_Listing_Page_Map' );
-    register_widget( 'GeoDir_Widget_Listing_Slider' );
     register_widget( 'GeoDir_Widget_Login' );
-    register_widget( 'GeoDir_Widget_Subscribe' );
     register_widget( 'GeoDir_Widget_Popular_Post_Category' );
     register_widget( 'GeoDir_Widget_Popular_Post_View' );
     register_widget( 'GeoDir_Widget_Recent_Reviews' );
     register_widget( 'GeoDir_Widget_Related_Listing' );
-    register_widget( 'GeoDir_Widget_Social_Like' );
     register_widget( 'GeoDir_Widget_Twitter' );
     
-    // Register detail page widgets
-    //register_widget( 'GeoDir_Widget_Detail_Sidebar' );
-    register_widget( 'GeoDir_Widget_Detail_Social_Sharing' );
-    register_widget( 'GeoDir_Widget_Detail_User_Actions' );
-    register_widget( 'GeoDir_Widget_Detail_Sidebar_Info' );
-
     // post widgets
     register_widget( 'GeoDir_Widget_Post_Meta' );
     register_widget( 'GeoDir_Widget_Post_Images' );
@@ -82,6 +73,7 @@ function goedir_register_widgets() {
 
     // Widgets
     register_widget( 'GeoDir_Widget_Output_location' );
+    register_widget( 'GeoDir_Widget_Author_Actions' );
 
 
 

@@ -25,6 +25,9 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			'widget_ops'    => array(
 				'classname'   => 'geodir-post-meta', // widget class
 				'description' => esc_html__('This shows a post single post meta.','geodirectory'), // widget description
+				'customize_selective_refresh' => true,
+				'geodirectory' => true,
+				'gd_show_pages' => array( 'detail' ),
 			),
 			'arguments'     => array(
 				'id'  => array(

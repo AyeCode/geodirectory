@@ -272,25 +272,6 @@ function geodir_font_awesome_rating_css() {
 	}
 }
 
-function geodir_detail_page_sidebar_functions() {
-    $detail_sidebar_content = array(
-        'geodir_social_sharing_buttons',
-        'geodir_edit_post_link',
-        'geodir_detail_page_review_rating',
-        'geodir_detail_page_more_info'
-    );
-    
-    /**
-     * An array of functions to be called to be displayed on the details (post) page sidebar.
-     *
-     * This filter can be used to remove sections of the details page sidebar,
-     * add new sections or rearrange the order of the sections.
-     *
-     * @param array array('geodir_social_sharing_buttons','geodir_share_this_button','geodir_edit_post_link','geodir_detail_page_review_rating','geodir_detail_page_more_info') The array of functions that will be called.
-     * @since 1.0.0
-     */
-    return apply_filters( 'geodir_detail_page_sidebar_content', $detail_sidebar_content );
-}
 
 function geodir_page_title( $echo = true ) {
     if ( is_search() ) {
