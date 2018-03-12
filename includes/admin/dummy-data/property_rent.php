@@ -466,7 +466,7 @@ function geodir_extra_custom_fields_property_rent( $fields, $post_type, $package
 		'post_type' => $post_type,
 		'data_type' => 'VARCHAR',
 		'field_type' => 'select',
-		'field_type_key' => 'property_status',
+		'field_type_key' => 'select',
 		'is_active' => 1,
 		'for_admin_use' => 0,
 		'is_default' => 0,

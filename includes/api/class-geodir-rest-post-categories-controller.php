@@ -22,46 +22,108 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class GeoDir_REST_Post_Categories_Controller extends GeoDir_REST_Terms_Controller {
 
-	/**
-	 * Endpoint namespace.
+		/**
+	 * Prepares a single term output for response.
 	 *
-	 * @var string
-	 */
-	protected $namespace = 'geodir/v2';
-
-	/**
-	 * Prepare a single post category output for response.
+	 * @since 2.0.0
 	 *
-	 * @param WP_Term         $item    Term object.
-	 * @param WP_REST_Request $request Request instance.
-	 * @return WP_REST_Response
+	 * @param obj             $item    Term object.
+	 * @param WP_REST_Request $request Request object.
+	 * @return WP_REST_Response $response Response object.
 	 */
 	public function prepare_item_for_response( $item, $request ) {
-		$data = array(
-			'id'          => (int) $item->term_id,
-			'name'        => $item->name,
-			'slug'        => $item->slug,
-			'parent'      => (int) $item->parent,
-			'description' => $item->description,
-			'image'       => null,
-			'count'       => (int) $item->count,
-		);
 
-		// Get category image.
-		$image_id = get_term_meta( $item->term_id, 'thumbnail_id' );
-		if ( $image_id ) {
-			$attachment = get_post( $image_id );
+		$schema = $this->get_item_schema();
+		$data   = array();
 
-			$data['image'] = array(
-				'id'                => (int) $image_id,
-				'date_created'      => geodir_rest_prepare_date_response( $attachment->post_date ),
-				'date_created_gmt'  => geodir_rest_prepare_date_response( $attachment->post_date_gmt ),
-				'date_modified'     => geodir_rest_prepare_date_response( $attachment->post_modified ),
-				'date_modified_gmt' => geodir_rest_prepare_date_response( $attachment->post_modified_gmt ),
-				'src'               => wp_get_attachment_url( $image_id ),
-				'title'             => get_the_title( $attachment ),
-				'alt'               => get_post_meta( $image_id, '_wp_attachment_image_alt', true ),
-			);
+		if ( ! empty( $schema['properties']['id'] ) ) {
+			$data['id'] = (int) $item->term_id;
+		}
+		
+		if ( ! empty( $schema['properties']['name'] ) ) {
+			$data['name'] = $item->name;
+		}
+
+		if ( ! empty( $schema['properties']['slug'] ) ) {
+			$data['slug'] = $item->slug;
+		}		
+
+		if ( ! empty( $schema['properties']['taxonomy'] ) ) {
+			$data['taxonomy'] = $this->taxonomy;
+		}
+
+		if ( ! empty( $schema['properties']['count'] ) ) {
+			$data['count'] = (int) $item->count;
+		}
+
+		if ( ! empty( $schema['properties']['description'] ) ) {
+			$data['description'] = $item->description;
+		}
+
+		if ( ! empty( $schema['properties']['parent'] ) ) {
+			$data['parent'] = (int) $item->parent;
+		}
+
+		if ( ! empty( $schema['properties']['link'] ) ) {
+			$data['link'] = get_term_link( $item );
+		}
+		
+		if ( ! empty( $schema['properties']['image'] ) ) {
+			$image = array();
+
+			// Get category image.
+			$attachment_data = get_term_meta( $item->term_id, 'ct_cat_default_img', true );
+			if ( is_array( $attachment_data ) && ! empty( $attachment_data['id'] ) && ( $attachment_id = $attachment_data['id'] ) ) {
+				$attachment = get_post( $attachment_id );
+
+				if ( ! empty( $attachment ) ) {
+					$image = array(
+						'id'                => (int) $attachment_id,
+						'date_created'      => geodir_rest_prepare_date_response( $attachment->post_date ),
+						'date_created_gmt'  => geodir_rest_prepare_date_response( $attachment->post_date_gmt ),
+						'date_modified'     => geodir_rest_prepare_date_response( $attachment->post_modified ),
+						'date_modified_gmt' => geodir_rest_prepare_date_response( $attachment->post_modified_gmt ),
+						'src'               => wp_get_attachment_url( $attachment_id ),
+						'title'             => get_the_title( $attachment ),
+						'alt'               => get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ),
+					);
+				}
+			}
+			
+			$data['image'] = $image;
+		}
+		
+		if ( ! empty( $schema['properties']['icon'] ) ) {
+			$icon = array();
+
+			// Get category image.
+			$attachment_data = get_term_meta( $item->term_id, 'ct_cat_icon', true );
+			if ( is_array( $attachment_data ) && ! empty( $attachment_data['id'] ) && ( $attachment_id = $attachment_data['id'] ) ) {
+				$attachment = get_post( $attachment_id );
+
+				if ( ! empty( $attachment ) ) {
+					$icon = array(
+						'id'                => (int) $attachment_id,
+						'date_created'      => geodir_rest_prepare_date_response( $attachment->post_date ),
+						'date_created_gmt'  => geodir_rest_prepare_date_response( $attachment->post_date_gmt ),
+						'date_modified'     => geodir_rest_prepare_date_response( $attachment->post_modified ),
+						'date_modified_gmt' => geodir_rest_prepare_date_response( $attachment->post_modified_gmt ),
+						'src'               => wp_get_attachment_url( $attachment_id ),
+						'title'             => get_the_title( $attachment ),
+						'alt'               => get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ),
+					);
+				}
+			}
+			
+			$data['icon'] = $icon;
+		}
+
+		if ( ! empty( $schema['properties']['schema'] ) ) {
+			$data['schema'] = get_term_meta( $item->term_id, 'ct_cat_schema', true );
+		}
+
+		if ( ! empty( $schema['properties']['meta'] ) ) {
+			$data['meta'] = $this->meta->get_value( $item->term_id, $request );
 		}
 
 		$context = ! empty( $request['context'] ) ? $request['context'] : 'view';
@@ -70,139 +132,145 @@ class GeoDir_REST_Post_Categories_Controller extends GeoDir_REST_Terms_Controlle
 
 		$response = rest_ensure_response( $data );
 
-		$response->add_links( $this->prepare_links( $item, $request ) );
+		$response->add_links( $this->prepare_links( $item ) );
 
 		/**
-		 * Filter a term item returned from the API.
+		 * Filters a term item returned from the API.
+		 *
+		 * The dynamic portion of the hook name, `$this->taxonomy`, refers to the taxonomy slug.
 		 *
 		 * Allows modification of the term data right before it is returned.
+		 *
+		 * @since 2.0.0
 		 *
 		 * @param WP_REST_Response  $response  The response object.
 		 * @param object            $item      The original term object.
 		 * @param WP_REST_Request   $request   Request used to generate the response.
 		 */
-		return apply_filters( "geodir_rest_prepare_{$this->taxonomy}", $response, $item, $request );
+		return apply_filters( "rest_prepare_{$this->taxonomy}", $response, $item, $request );
 	}
-
+	
 	/**
-	 * Get the Category schema, conforming to JSON Schema.
+	 * Additional fields for categories.
 	 *
-	 * @return array
+	 * @since 2.0.0
+	 *
+	 * @return array Item schema data.
 	 */
-	public function get_item_schema() {
-		$schema = array(
-			'$schema'              => 'http://json-schema.org/draft-04/schema#',
-			'title'                => $this->taxonomy,
-			'type'                 => 'object',
-			'properties'           => array(
+	public function add_additional_fields_schema( $schema ) {
+
+		$schema['properties']['image'] = array(
+			'description' => __( 'Category image data.', 'geodirectory' ),
+			'type'        => 'object',
+			'context'     => array( 'view' ),
+			'properties'  => array(
 				'id' => array(
-					'description' => __( 'Unique identifier for the resource.', 'geodirectory' ),
+					'description' => __( 'Image ID.', 'geodirectory' ),
 					'type'        => 'integer',
-					'context'     => array( 'view', 'edit' ),
+					'context'     => array( 'view' ),
+				),
+				'date_created' => array(
+					'description' => __( "The date the image was created, in the site's timezone.", 'geodirectory' ),
+					'type'        => 'date-time',
+					'context'     => array( 'view' ),
 					'readonly'    => true,
 				),
-				'name' => array(
-					'description' => __( 'Category name.', 'geodirectory' ),
-					'type'        => 'string',
-					'context'     => array( 'view', 'edit' ),
-					'arg_options' => array(
-						'sanitize_callback' => 'sanitize_text_field',
-					),
-				),
-				'slug' => array(
-					'description' => __( 'An alphanumeric identifier for the resource unique to its type.', 'geodirectory' ),
-					'type'        => 'string',
-					'context'     => array( 'view', 'edit' ),
-					'arg_options' => array(
-						'sanitize_callback' => 'sanitize_title',
-					),
-				),
-				'parent' => array(
-					'description' => __( 'The ID for the parent of the resource.', 'geodirectory' ),
-					'type'        => 'integer',
-					'context'     => array( 'view', 'edit' ),
-				),
-				'description' => array(
-					'description' => __( 'HTML description of the resource.', 'geodirectory' ),
-					'type'        => 'string',
-					'context'     => array( 'view', 'edit' ),
-					'arg_options' => array(
-						'sanitize_callback' => 'wp_filter_post_kses',
-					),
-				),
-				'display' => array(
-					'description' => __( 'Category archive display type.', 'geodirectory' ),
-					'type'        => 'string',
-					'default'     => 'default',
-					'enum'        => array( 'default', 'posts', 'subcategories', 'both' ),
-					'context'     => array( 'view', 'edit' ),
-				),
-				'image' => array(
-					'description' => __( 'Image data.', 'geodirectory' ),
-					'type'        => 'object',
-					'context'     => array( 'view', 'edit' ),
-					'properties'  => array(
-						'id' => array(
-							'description' => __( 'Image ID.', 'geodirectory' ),
-							'type'        => 'integer',
-							'context'     => array( 'view', 'edit' ),
-						),
-						'date_created' => array(
-							'description' => __( "The date the image was created, in the site's timezone.", 'geodirectory' ),
-							'type'        => 'date-time',
-							'context'     => array( 'view', 'edit' ),
-							'readonly'    => true,
-						),
-						'date_created_gmt' => array(
-							'description' => __( 'The date the image was created, as GMT.', 'geodirectory' ),
-							'type'        => 'date-time',
-							'context'     => array( 'view', 'edit' ),
-							'readonly'    => true,
-						),
-						'date_modified' => array(
-							'description' => __( "The date the image was last modified, in the site's timezone.", 'geodirectory' ),
-							'type'        => 'date-time',
-							'context'     => array( 'view', 'edit' ),
-							'readonly'    => true,
-						),
-						'date_modified_gmt' => array(
-							'description' => __( 'The date the image was last modified, as GMT.', 'geodirectory' ),
-							'type'        => 'date-time',
-							'context'     => array( 'view', 'edit' ),
-							'readonly'    => true,
-						),
-						'src' => array(
-							'description' => __( 'Image URL.', 'geodirectory' ),
-							'type'        => 'string',
-							'format'      => 'uri',
-							'context'     => array( 'view', 'edit' ),
-						),
-						'title' => array(
-							'description' => __( 'Image name.', 'geodirectory' ),
-							'type'        => 'string',
-							'context'     => array( 'view', 'edit' ),
-						),
-						'alt' => array(
-							'description' => __( 'Image alternative text.', 'geodirectory' ),
-							'type'        => 'string',
-							'context'     => array( 'view', 'edit' ),
-						),
-					),
-				),
-				'menu_order' => array(
-					'description' => __( 'Menu order, used to custom sort the resource.', 'geodirectory' ),
-					'type'        => 'integer',
-					'context'     => array( 'view', 'edit' ),
-				),
-				'count' => array(
-					'description' => __( 'Number of published posts for the resource.', 'geodirectory' ),
-					'type'        => 'integer',
-					'context'     => array( 'view', 'edit' ),
+				'date_created_gmt' => array(
+					'description' => __( 'The date the image was created, as GMT.', 'geodirectory' ),
+					'type'        => 'date-time',
+					'context'     => array( 'view' ),
 					'readonly'    => true,
+				),
+				'date_modified' => array(
+					'description' => __( "The date the image was last modified, in the site's timezone.", 'geodirectory' ),
+					'type'        => 'date-time',
+					'context'     => array( 'view' ),
+					'readonly'    => true,
+				),
+				'date_modified_gmt' => array(
+					'description' => __( 'The date the image was last modified, as GMT.', 'geodirectory' ),
+					'type'        => 'date-time',
+					'context'     => array( 'view' ),
+					'readonly'    => true,
+				),
+				'src' => array(
+					'description' => __( 'Image URL.', 'geodirectory' ),
+					'type'        => 'string',
+					'format'      => 'uri',
+					'context'     => array( 'view' ),
+				),
+				'title' => array(
+					'description' => __( 'Image name.', 'geodirectory' ),
+					'type'        => 'string',
+					'context'     => array( 'view' ),
+				),
+				'alt' => array(
+					'description' => __( 'Image alternative text.', 'geodirectory' ),
+					'type'        => 'string',
+					'context'     => array( 'view' ),
 				),
 			),
 		);
+				
+		$schema['properties']['icon'] = array(
+			'description' => __( 'Category icon data.', 'geodirectory' ),
+			'type'        => 'object',
+			'context'     => array( 'view' ),
+			'properties'  => array(
+				'id' => array(
+					'description' => __( 'Image ID.', 'geodirectory' ),
+					'type'        => 'integer',
+					'context'     => array( 'view' ),
+				),
+				'date_created' => array(
+					'description' => __( "The date the image was created, in the site's timezone.", 'geodirectory' ),
+					'type'        => 'date-time',
+					'context'     => array( 'view' ),
+					'readonly'    => true,
+				),
+				'date_created_gmt' => array(
+					'description' => __( 'The date the image was created, as GMT.', 'geodirectory' ),
+					'type'        => 'date-time',
+					'context'     => array( 'view' ),
+					'readonly'    => true,
+				),
+				'date_modified' => array(
+					'description' => __( "The date the image was last modified, in the site's timezone.", 'geodirectory' ),
+					'type'        => 'date-time',
+					'context'     => array( 'view' ),
+					'readonly'    => true,
+				),
+				'date_modified_gmt' => array(
+					'description' => __( 'The date the image was last modified, as GMT.', 'geodirectory' ),
+					'type'        => 'date-time',
+					'context'     => array( 'view' ),
+					'readonly'    => true,
+				),
+				'src' => array(
+					'description' => __( 'Image URL.', 'geodirectory' ),
+					'type'        => 'string',
+					'format'      => 'uri',
+					'context'     => array( 'view' ),
+				),
+				'title' => array(
+					'description' => __( 'Image name.', 'geodirectory' ),
+					'type'        => 'string',
+					'context'     => array( 'view' ),
+				),
+				'alt' => array(
+					'description' => __( 'Image alternative text.', 'geodirectory' ),
+					'type'        => 'string',
+					'context'     => array( 'view' ),
+				),
+			),
+		);
+		
+		$schema['properties']['schema'] = array(
+			'description'  => __( 'The schema type of the category.', 'geodirectory' ),
+			'type'         => 'string',
+			'context'      => array( 'view' ),
+		);
 
-		return $this->add_additional_fields_schema( $schema );
+		return $schema;
 	}
 }
