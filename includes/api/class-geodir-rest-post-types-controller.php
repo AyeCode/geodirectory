@@ -148,9 +148,6 @@ class GeoDir_REST_Post_Types_Controller extends WP_REST_Post_Types_Controller {
 			'collection' => array(
 				'href'   => rest_url( sprintf( '%s/%s', $this->namespace, $this->rest_base ) ),
 			),
-            'about'      => array(
-                'href'   => rest_url( sprintf( '%s/%s/%s', $this->namespace, $this->rest_base, $post_type->name ) ),
-            ),
 			'https://api.w.org/items' => array(
 				'href' => rest_url( sprintf( '%s/%s', $this->namespace, $base ) ),
 			),
