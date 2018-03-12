@@ -177,16 +177,15 @@ class GeoDir_API {
 
 			$controllers = array(
 				// v2 controllers.
-				//'Geodir_REST_Taxonomies_Controller',
-				//'GeoDir_REST_Reviews_Controller',
+				'Geodir_REST_Taxonomies_Controller',
+				'GeoDir_REST_Reviews_Controller',
 				'GeoDir_REST_Post_Types_Controller',
-					//'GeoDir_REST_Posts_Controller',
-				//'GeoDir_REST_Settings_Controller', // @todo lower priority
-				//'GeoDir_REST_Setting_Options_Controller',
-				//'GeoDir_REST_System_Status_Controller',
-				//'GeoDir_REST_System_Status_Tools_Controller',
-				//'GeoDir_REST_Countries_Controller', // @todo un-comment once all done
-				//'GeoDir_REST_Markers_Controller', // Map markers api should always enabled.
+				'GeoDir_REST_Settings_Controller',
+				'GeoDir_REST_Setting_Options_Controller',
+				'GeoDir_REST_System_Status_Controller',
+				'GeoDir_REST_System_Status_Tools_Controller',
+				'GeoDir_REST_Countries_Controller', // @todo un-comment once all done
+				'GeoDir_REST_Markers_Controller', // Map markers api should always enabled.
 			);
 		} else {
 			$controllers = array(
@@ -242,7 +241,7 @@ class GeoDir_API {
 								}
 								$wp_taxonomies[$taxonomy]->rest_base = $rest_base;
 								if ( $rest_controller_class ) {
-									//$wp_taxonomies[$taxonomy]->rest_controller_class = $rest_controller_class; // @todo remove once testing done
+									$wp_taxonomies[$taxonomy]->rest_controller_class = $rest_controller_class;
 								}
 							}
 						}
