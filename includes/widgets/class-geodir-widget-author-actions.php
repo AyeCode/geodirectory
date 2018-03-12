@@ -76,13 +76,41 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
 		global $post;
 
+		//print_r($args);
+
+		$defaults = array(
+			'hide_edit'      => 0,
+			'hide_delete'      => 0,
+		);
+
+		/**
+		 * Parse incoming $args into an array and merge it with $defaults
+		 */
+		$args = wp_parse_args( $args, $defaults );
+
 		$output = '';
 		if(!empty($post->ID) && geodir_listing_belong_to_current_user($post->ID)){
 			ob_start();
 
+			echo '<div class="geodir_post_meta  gd-author-actions" ">';
+
 			do_action( 'geodir_widget_before_detail_user_actions' );
 
-			geodir_edit_post_link();
+
+			if(!$args['hide_edit']){
+				$post_id = $post->ID;
+				if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
+					$post_id = (int)$_REQUEST['pid'];
+				}
+				$editlink = geodir_edit_post_link($post_id);
+				echo ' <span class="edit_link"><i class="fa fa-pencil"></i> <a href="' . esc_url($editlink) . '">' . __('Edit', 'geodirectory') . '</a></span>';
+			}
+
+			if(!$args['hide_delete']) {
+				echo ' <span class="edit_link"><i class="fa fa-pencil"></i> <a href="' . esc_url($editlink) . '">' . __('Delete', 'geodirectory') . '</a></span>';
+			}
+
+
 
 			do_action( 'geodir_widget_after_detail_user_actions' );
 
