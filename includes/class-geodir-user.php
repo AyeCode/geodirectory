@@ -430,4 +430,23 @@ class GeoDir_User {
 
 	}
 
+
+	public static function delete_post($post_id){
+	    if(!geodir_listing_belong_to_current_user($post_id)){
+		    return new WP_Error( 'gd-delete-failed', __( "You do not have permission to delete this post.", "geodirectory" ) );
+	    }
+		$force_delete = geodir_get_option('user_trash_posts')==1 ? false : true;
+
+	    if($force_delete){
+		    $result = wp_delete_post( $post_id, $force_delete );
+	    }else{
+		    $result = wp_trash_post( $post_id );
+	    }
+	    if($result == false){
+		    return new WP_Error( 'gd-delete-failed', __( "Delete post failed.", "geodirectory" ) );
+	    }else{
+	        return true;
+        }
+    }
+
 }

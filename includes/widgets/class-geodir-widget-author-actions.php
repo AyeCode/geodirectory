@@ -103,11 +103,11 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 					$post_id = (int)$_REQUEST['pid'];
 				}
 				$editlink = geodir_edit_post_link($post_id);
-				echo ' <span class="edit_link"><i class="fa fa-pencil"></i> <a href="' . esc_url($editlink) . '">' . __('Edit', 'geodirectory') . '</a></span>';
+				echo '<span class="gd_user_action edit_link"><i class="fa fa-pencil"></i> <a href="' . esc_url($editlink) . '">' . __('Edit', 'geodirectory') . '</a></span>';
 			}
 
 			if(!$args['hide_delete']) {
-				echo ' <span class="edit_link"><i class="fa fa-pencil"></i> <a href="' . esc_url($editlink) . '">' . __('Delete', 'geodirectory') . '</a></span>';
+				echo '<span class="gd_user_action delete_link"><i class="fa fa-trash"></i> <a href="javascript:void(0);" onclick="gd_delete_post('.$post_id.');">' . __('Delete', 'geodirectory') . '</a></span>';
 			}
 
 

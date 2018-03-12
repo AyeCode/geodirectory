@@ -919,3 +919,34 @@ function init_read_more(){
 
     });
 }
+
+function gd_delete_post($post_id){
+    var message = geodir_params.my_place_listing_del;
+
+    if (confirm(message)) {
+
+        jQuery.ajax({
+            url: geodirectory_params.ajax_url,
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                action: 'geodir_user_delete_post',
+                security: geodirectory_params.basic_nonce,
+                post_id: $post_id
+            },
+            timeout: 20000,
+            success: function(data) {
+
+                if(data.success){
+                    location.reload(); // @todo we need to find a better way to do this.
+                }else{
+                    alert(data.data);
+                }
+            }
+        });
+
+        return true;
+    } else {
+        return false;
+    }
+}

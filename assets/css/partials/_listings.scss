@@ -195,3 +195,11 @@
 		}
 	}
 }
+
+
+// author actions
+.gd-author-actions{
+	&> span:nth-child(n+2){
+		padding-left: 10px;
+	}
+}
