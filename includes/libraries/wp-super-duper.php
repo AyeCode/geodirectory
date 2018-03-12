@@ -691,14 +691,17 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			// get the filtered values
 			$argument_values = $this->argument_values( $instance );
 
-			echo $args['before_widget'];
-			if ( ! empty( $instance['title'] ) ) {
-				echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
-			}
-			$argument_values = $this->string_to_bool($argument_values);
-			echo $this->output( $argument_values, $args );
-			echo $args['after_widget'];
+			$output = $this->output( $argument_values, $args );
 
+			if($output){
+				echo $args['before_widget'];
+				if ( ! empty( $instance['title'] ) ) {
+					echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
+				}
+				$argument_values = $this->string_to_bool($argument_values);
+				echo $output;
+				echo $args['after_widget'];
+            }
 		}
 
 		/**
@@ -724,10 +727,10 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 */
 		public function widget_inputs( $args, $instance ) {
 
-
+//print_r($instance );
 			if ( isset( $instance[ $args['name'] ] ) ) {
 				$value = $instance[ $args['name'] ];
-			} elseif ( ! empty( $args['default'] ) ) {
+			} elseif ( !isset( $instance[ $args['name'] ] ) && ! empty( $args['default'] ) ) {
 				$value = esc_html( $args['default'] );
 			} else {
 				$value = '';
@@ -874,6 +877,21 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		public function update( $new_instance, $old_instance ) {
 			//save the widget
 			$instance = array_merge( (array) $old_instance, (array) $new_instance );
+
+//			print_r($new_instance);
+//			print_r($old_instance);
+//			print_r($instance);
+//			print_r($this->arguments);
+//			exit;
+
+			// check for checkboxes
+			if(!empty($this->arguments)){
+			    foreach($this->arguments as $argument){
+			        if(isset($argument['type']) && $argument['type']=='checkbox' && !isset($new_instance[$argument['name']])){
+				        $instance[$argument['name']] = '0';
+                    }
+                }
+            }
 
 			return $instance;
 		}
