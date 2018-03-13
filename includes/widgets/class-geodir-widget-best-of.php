@@ -13,7 +13,7 @@
  * @since 1.3.9
  * @todo needs super dupered and new jaax calls added
  */
-class GeoDir_Widget_Best_Of extends WP_Widget {
+class GeoDir_Widget_Best_Of extends WP_Super_Duper {
     
     /**
      * Register the best of widget with WordPress.
@@ -22,15 +22,140 @@ class GeoDir_Widget_Best_Of extends WP_Widget {
      * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
      */
     public function __construct() {
-        $widget_ops = array(
-            'classname' => 'geodir_bestof_widget',
-            'description' => __( 'GD > Best of widget', 'geodirectory' ),
-            'customize_selective_refresh' => true,
-            'geodirectory' => true,
-            'gd_show_pages' => array(),
-        );
-        parent::__construct( 'bestof_widget', __( 'GD > Best of widget', 'geodirectory' ), $widget_ops );
+//        $widget_ops = array(
+//            'classname' => 'geodir_bestof_widget',
+//            'description' => __( 'GD > Best of widget', 'geodirectory' ),
+//            'customize_selective_refresh' => true,
+//            'geodirectory' => true,
+//            'gd_show_pages' => array(),
+//        );
+//        parent::__construct( 'bestof_widget', __( 'GD > Best of widget', 'geodirectory' ), $widget_ops );
+
+	    $options = array(
+		    'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
+		    'block-icon'    => 'admin-site',
+		    'block-category'=> 'widgets',
+		    'block-keywords'=> "['best','top','geo']",
+
+		    'class_name'    => __CLASS__,
+		    'base_id'       => 'gd_best_of', // this us used as the widget id and the shortcode id.
+		    'name'          => __('GD > Best of listings','geodirectory'), // the name of the widget.
+		    'widget_ops'    => array(
+			    'classname'   => 'geodir-best-of', // widget class
+			    'description' => esc_html__('Shows the best of listings from categories.','geodirectory'), // widget description
+			    'customize_selective_refresh' => true,
+			    'geodirectory' => true,
+			    'gd_show_pages' => array(),
+		    ),
+		    'arguments'     => array(
+			    'title'  => array(
+				    'title' => __('Title:', 'geodirectory'),
+				    'desc' => __('The widget title.', 'geodirectory'),
+				    'type' => 'text',
+				    //'placeholder' => __( 'My Dashboard', 'geodirectory' ),
+				    'default'  => '',
+				    'desc_tip' => true,
+				    'advanced' => false
+			    ),
+			    'post_type'  => array(
+                    'title' => __('Default Post Type:', 'geodirectory'),
+                    'desc' => __('The custom post types to show by default. Only used when there are multiple CPTs.', 'geodirectory'),
+                    'type' => 'select',
+                    'options'   =>  geodir_get_posttypes('options-plural'),
+                    'default'  => 'gd_place',
+                    'desc_tip' => true,
+                    'advanced' => true
+                ),
+			    'tab_layout'  => array(
+				    'title' => __('Default Post Type:', 'geodirectory'),
+				    'desc' => __('The custom post types to show by default. Only used when there are multiple CPTs.', 'geodirectory'),
+				    'type' => 'select',
+				    'options'   =>  array(
+					    'bestof-tabs-on-top' => __('Tabs on top','geodirectory'),
+					    'bestof-tabs-on-left' => __('Tabs on left','geodirectory'),
+					    'bestof-tabs-as-dropdown' => __('Tabs as dropdown','geodirectory'),
+                    ),
+				    'default'  => 'bestof-tabs-on-top',
+				    'desc_tip' => true,
+				    'advanced' => true
+			    ),
+			    'post_limit'  => array(
+				    'title' => __('Posts to show:', 'geodirectory'),
+				    'desc' => __('The number of posts to show by default.', 'geodirectory'),
+				    'type' => 'number',
+				    'default'  => '5',
+				    'desc_tip' => true,
+				    'advanced' => true
+			    ),
+			    'cat_limit'  => array(
+				    'title' => __('Categories to show:', 'geodirectory'),
+				    'desc' => __('The number of categories to show by default.', 'geodirectory'),
+				    'type' => 'number',
+				    'default'  => '3',
+				    'desc_tip' => true,
+				    'advanced' => true
+			    ),
+			    'add_location_filter'  => array(
+				    'title' => __("Enable location filter?", 'geodirectory'),
+				    'type' => 'checkbox',
+				    'desc_tip' => true,
+				    'value'  => '1',
+				    'default'  => '1',
+				    'advanced' => true
+			    ),
+			    'use_viewing_post_type'  => array(
+				    'title' => __("Use current viewing post type?", 'geodirectory'),
+				    'type' => 'checkbox',
+				    'desc_tip' => true,
+				    'value'  => '1',
+				    'default'  => '1',
+				    'advanced' => true
+			    ),
+
+
+
+
+		    )
+	    );
+
+
+	    parent::__construct( $options );
     }
+
+	/**
+	 * The Super block output function.
+	 *
+	 * @param array $args
+	 * @param array $widget_args
+	 * @param string $content
+	 *
+	 * @return mixed|string|void
+	 */
+	public function output($args = array(), $widget_args = array(),$content = ''){
+
+		add_action('wp_footer', array($this, 'best_of_js'));
+
+		ob_start();
+
+		// defaults
+
+//			    array(
+//				    'title' => '',
+//				    'post_type' => '',
+//				    'post_limit' => '5',
+//				    'cat_limit' => '3',
+//				    'character_count' => '20',
+//				    'add_location_filter' => '1',
+//				    'tab_layout' => 'bestof-tabs-on-top',
+//				    'excerpt_type' => 'show-desc',
+//				    'use_viewing_post_type' => ''
+//			    )
+
+
+		$this::best_of($widget_args, $args );
+
+		return ob_get_clean();
+	}
 
     /**
      * Front-end display content for best of widget.
@@ -42,7 +167,7 @@ class GeoDir_Widget_Best_Of extends WP_Widget {
      * @param array $args Widget arguments.
      * @param array $instance Saved values from database.
      */
-    public function widget($args, $instance) {
+    public static function best_of($args, $instance) {
         extract($args);
         /**
          * Filter the best of widget tab layout.
@@ -52,8 +177,8 @@ class GeoDir_Widget_Best_Of extends WP_Widget {
          * @param string $instance ['tab_layout'] Best of widget tab layout name.
          */
         $tab_layout = empty($instance['tab_layout']) ? 'bestof-tabs-on-top' : apply_filters('bestof_widget_tab_layout', $instance['tab_layout']);
-        echo '<div class="bestof-widget-tab-layout ' . $tab_layout . '">';
-        echo $before_widget;
+        if(!defined( 'DOING_AJAX' ))  echo '<div class="geodir_bestof_widget bestof-widget-tab-layout ' . $tab_layout . '">';
+
         $loc_terms = geodir_get_current_location_terms();
         if (!empty($loc_terms)) {
             $cur_location = ' : ' . geodir_ucwords(str_replace('-', ' ', end($loc_terms)));
@@ -114,7 +239,7 @@ class GeoDir_Widget_Best_Of extends WP_Widget {
          *
          * @param int $instance ['categ_limit'] No. of categories to display.
          */
-        $categ_limit = empty($instance['categ_limit']) ? '3' : apply_filters('bestof_widget_categ_limit', $instance['categ_limit']);
+        $categ_limit = empty($instance['cat_limit']) ? '3' : apply_filters('bestof_widget_cat_limit', $instance['cat_limit']);
         $use_viewing_post_type = !empty($instance['use_viewing_post_type']) ? true : false;
 
         /**
@@ -205,10 +330,10 @@ class GeoDir_Widget_Best_Of extends WP_Widget {
         }
 
 
-        echo $before_title . __($title,'geodirectory') . $after_title;
+	    if(!defined( 'DOING_AJAX' )) echo $before_title . __($title,'geodirectory') . $after_title;
 
         //term navigation - start
-        echo '<div class="geodir-tabs gd-bestof-tabs" id="gd-bestof-tabs" style="position:relative;">';
+	    if(!defined( 'DOING_AJAX' )) echo '<div class="geodir-tabs gd-bestof-tabs" id="gd-bestof-tabs" style="position:relative;">';
 
         $final_html = '';
         foreach ($layout as $tab_layout) {
@@ -273,15 +398,15 @@ class GeoDir_Widget_Best_Of extends WP_Widget {
             $final_html .= $nav_html;
         }
         if ($terms) {
-            echo $final_html;
+	        if(!defined( 'DOING_AJAX' ))echo $final_html;
         }
-        echo '</div>';
+	    if(!defined( 'DOING_AJAX' )) echo '</div>';
         //term navigation - end
 
         //first term listings by default - start
         $first_term = '';
         if ($terms) {
-            $first_term = $terms[0];
+            $first_term = defined( 'DOING_AJAX' ) && isset($instance['term_id']) ? get_term( absint($instance['term_id']), $category_taxonomy[0] ) : $terms[0];
             $tax_query = array(
                 'taxonomy' => $category_taxonomy[0],
                 'field' => 'id',
@@ -290,27 +415,33 @@ class GeoDir_Widget_Best_Of extends WP_Widget {
             $query_args['tax_query'] = array($tax_query);
         }
 
-        ?>
-        <input type="hidden" id="bestof_widget_post_type" name="bestof_widget_post_type"
-               value="<?php echo $post_type; ?>">
-        <input type="hidden" id="bestof_widget_excerpt_type" name="bestof_widget_excerpt_type"
-               value="<?php echo $excerpt_type; ?>">
-        <input type="hidden" id="bestof_widget_post_limit" name="bestof_widget_post_limit"
-               value="<?php echo $post_limit; ?>">
-        <input type="hidden" id="bestof_widget_taxonomy" name="bestof_widget_taxonomy"
-               value="<?php echo $category_taxonomy[0]; ?>">
-        <input type="hidden" id="bestof_widget_location_filter" name="bestof_widget_location_filter"
-               value="<?php if ($add_location_filter) {
-                   echo 1;
-               } else {
-                   echo 0;
-               } ?>">
-        <input type="hidden" id="bestof_widget_char_count" name="bestof_widget_char_count"
-               value="<?php echo $character_count; ?>">
-        <div class="geo-bestof-contentwrap geodir-tabs-content" style="position: relative; z-index: 0;">
+	    if(!defined( 'DOING_AJAX' )) {
+		    ?>
+            <input type="hidden" id="bestof_widget_post_type" name="bestof_widget_post_type"
+                   value="<?php echo $post_type; ?>">
+            <input type="hidden" id="bestof_widget_excerpt_type" name="bestof_widget_excerpt_type"
+                   value="<?php echo $excerpt_type; ?>">
+            <input type="hidden" id="bestof_widget_post_limit" name="bestof_widget_post_limit"
+                   value="<?php echo $post_limit; ?>">
+            <input type="hidden" id="bestof_widget_taxonomy" name="bestof_widget_taxonomy"
+                   value="<?php echo $category_taxonomy[0]; ?>">
+            <input type="hidden" id="bestof_widget_location_filter" name="bestof_widget_location_filter"
+                   value="<?php if ( $add_location_filter ) {
+			           echo 1;
+		           } else {
+			           echo 0;
+		           } ?>">
+            <input type="hidden" id="bestof_widget_char_count" name="bestof_widget_char_count"
+                   value="<?php echo $character_count; ?>">
+            <div class="geo-bestof-contentwrap geodir-tabs-content" style="position: relative; z-index: 0;">
             <p id="geodir-bestof-loading" class="geodir-bestof-loading"><i class="fa fa-cog fa-spin"></i></p>
-            <?php
+		    <?php
+	    }
+
+
             echo '<div id="geodir-bestof-places">';
+	    //print_r($instance);
+	    //print_r($query_args);
             if ($terms) {
                 $view_all_link = add_query_arg(array('sort_by' => 'rating_count_desc'), get_term_link($first_term, $first_term->taxonomy));
                 /**
@@ -334,201 +465,104 @@ class GeoDir_Widget_Best_Of extends WP_Widget {
                 remove_filter('get_the_excerpt', 'best_of_show_review_in_excerpt');
             }
             echo "</div>";
-            ?>
-        </div>
-        <?php //first term listings by default - end
-        ?>
-        <?php echo $after_widget;
-        echo "</div>";
+
+	    if(!defined( 'DOING_AJAX' )) {
+		    ?>
+            </div>
+		    <?php //first term listings by default - end
+		    ?>
+		    <?php
+		    echo "</div>";
+	    }
     }
 
-    /**
-     * Sanitize best of widget form values as they are saved.
-     *
-     * @since 1.3.9
-     * @since 1.5.1 Declare function public.
-     *
-     * @param array $new_instance Values just sent to be saved.
-     * @param array $old_instance Previously saved values from database.
-     *
-     * @return array Updated safe values to be saved.
-     */
-    public function update($new_instance, $old_instance) {
-        $instance = $old_instance;
-        $instance['title'] = strip_tags($new_instance['title']);
-        $instance['post_type'] = strip_tags($new_instance['post_type']);
-        $instance['post_limit'] = strip_tags($new_instance['post_limit']);
-        $instance['categ_limit'] = strip_tags($new_instance['categ_limit']);
-        $instance['character_count'] = $new_instance['character_count'];
-        $instance['tab_layout'] = $new_instance['tab_layout'];
-        $instance['excerpt_type'] = $new_instance['excerpt_type'];
-        if (isset($new_instance['add_location_filter']) && $new_instance['add_location_filter'] != '')
-            $instance['add_location_filter'] = strip_tags($new_instance['add_location_filter']);
-        else
-            $instance['add_location_filter'] = '0';
-        $instance['use_viewing_post_type'] = isset($new_instance['use_viewing_post_type']) && $new_instance['use_viewing_post_type'] ? 1 : 0;
-        return $instance;
-    }
+	// Javascript
 
-    /**
-     * Back-end best of widget settings form.
-     *
-     * @since 1.3.9
-     * @since 1.5.1 Declare function public.
-     *
-     * @param array $instance Previously saved values from database.
-     */
-    public function form($instance) {
-        $instance = wp_parse_args((array)$instance,
-            array(
-                'title' => '',
-                'post_type' => '',
-                'post_limit' => '5',
-                'categ_limit' => '3',
-                'character_count' => '20',
-                'add_location_filter' => '1',
-                'tab_layout' => 'bestof-tabs-on-top',
-                'excerpt_type' => 'show-desc',
-                'use_viewing_post_type' => ''
-            )
-        );
-        $title = strip_tags($instance['title']);
-        $post_type = strip_tags($instance['post_type']);
-        $post_limit = strip_tags($instance['post_limit']);
-        $categ_limit = strip_tags($instance['categ_limit']);
-        $character_count = strip_tags($instance['character_count']);
-        $tab_layout = strip_tags($instance['tab_layout']);
-        $excerpt_type = strip_tags($instance['excerpt_type']);
-        $add_location_filter = strip_tags($instance['add_location_filter']);
-        $use_viewing_post_type = isset($instance['use_viewing_post_type']) && $instance['use_viewing_post_type'] ? true : false;
 
-        ?>
-        <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'geodirectory');?>
+	/**
+	 * Adds the javascript in the footer for best of widget.
+	 *
+	 * @since 1.3.9
+	 */
+	public function best_of_js() {
+		$ajax_nonce = wp_create_nonce("geodir-bestof-nonce");
+		?>
+        <script type="text/javascript">
+            jQuery(document).ready(function () {
+                jQuery('.geodir-bestof-cat-list a, #geodir_bestof_tab_dd').on("click change", function (e) {
+                    var widgetBox = jQuery(this).closest('.geodir_bestof_widget');
+                    var loading = jQuery(widgetBox).find("#geodir-bestof-loading");
+                    var container = jQuery(widgetBox).find('#geodir-bestof-places');
 
-                <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>"
-                       name="<?php echo $this->get_field_name('title'); ?>" type="text"
-                       value="<?php echo esc_attr($title); ?>"/>
-            </label>
-        </p>
+                    jQuery(document).ajaxStart(function () {
+                        //container.hide(); // Not working when more then one widget on page
+                        //loading.show();
+                    }).ajaxStop(function () {
+                        loading.hide();
+                        container.fadeIn('slow');
+                    });
 
-        <p>
-            <label
-                for="<?php echo $this->get_field_id('post_type'); ?>"><?php _e('Post Type:', 'geodirectory');?>
+                    e.preventDefault();
 
-                <?php $postypes = geodir_get_posttypes();
-                /**
-                 * Filter the post types to display in widget.
-                 *
-                 * @since 1.3.9
-                 *
-                 * @param array $postypes Post types array.
-                 */
-                $postypes = apply_filters('geodir_post_type_list_in_p_widget', $postypes); ?>
+                    var activeTab = jQuery(this).closest('dl').find('dd.geodir-tab-active');
+                    activeTab.removeClass('geodir-tab-active');
+                    jQuery(this).parent().addClass('geodir-tab-active');
 
-                <select class="widefat" id="<?php echo $this->get_field_id('post_type'); ?>"
-                        name="<?php echo $this->get_field_name('post_type'); ?>"
-                        onchange="geodir_change_category_list(this)">
+                    var term_id = 0;
+                    if (e.type === "change") {
+                        term_id = jQuery(this).val();
+                    } else if (e.type === "click") {
+                        term_id = jQuery(this).attr('data-termid');
+                    }
 
-                    <?php foreach ($postypes as $postypes_obj) { ?>
+                    var post_type = jQuery(widgetBox).find('#bestof_widget_post_type').val();
+                    var excerpt_type = jQuery(widgetBox).find('#bestof_widget_excerpt_type').val();
+                    var post_limit = jQuery(widgetBox).find('#bestof_widget_post_limit').val();
+                    var taxonomy = jQuery(widgetBox).find('#bestof_widget_taxonomy').val();
+                    var char_count = jQuery(widgetBox).find('#bestof_widget_char_count').val();
+                    var add_location_filter = jQuery(widgetBox).find('#bestof_widget_location_filter').val();
 
-                        <option <?php if ($post_type == $postypes_obj) {
-                            echo 'selected="selected"';
-                        } ?> value="<?php echo $postypes_obj; ?>"><?php $extvalue = explode('_', $postypes_obj);
-                            echo geodir_utf8_ucfirst($extvalue[1]); ?></option>
+                    var data = {
+                        'action': 'geodir_bestof',
+                        'security': geodirectory_params.basic_nonce,
+                        'post_type': post_type,
+                        'excerpt_type': excerpt_type,
+                        'post_limit': post_limit,
+                        'taxonomy': taxonomy,
+                        'geodir_ajax': true,
+                        'term_id': term_id,
+                        'char_count': char_count,
+                        'add_location_filter': add_location_filter
+                    };
 
-                    <?php } ?>
+                    container.hide();
+                    loading.show();
 
-                </select>
-            </label>
-        </p>
+                    console.log(data );
+                    jQuery.post(geodirectory_params.ajax_url, data, function (response) {
+                        container.html(response);
+                        jQuery(widgetBox).find('.geodir_category_list_view li .geodir-post-img .geodir_thumbnail img').css('display', 'block');
 
-        <p>
+                        // start lazy load if it's turned on
+                        if(geodirectory_params.lazy_load==1){
+                            geodir_init_lazy_load();
+                        }
 
-            <label
-                for="<?php echo $this->get_field_id('post_limit'); ?>"><?php _e('Number of posts:', 'geodirectory');?>
+                    });
+                })
+            });
+            jQuery(document).ready(function () {
+                if (jQuery(window).width() < 660) {
+                    if (jQuery('.bestof-widget-tab-layout').hasClass('bestof-tabs-on-left')) {
+                        jQuery('.bestof-widget-tab-layout').removeClass('bestof-tabs-on-left').addClass('bestof-tabs-as-dropdown');
+                    } else if (jQuery('.bestof-widget-tab-layout').hasClass('bestof-tabs-on-top')) {
+                        jQuery('.bestof-widget-tab-layout').removeClass('bestof-tabs-on-top').addClass('bestof-tabs-as-dropdown');
+                    }
+                }
+            });
+        </script>
+		<?php
+	}
 
-                <input class="widefat" id="<?php echo $this->get_field_id('post_limit'); ?>"
-                       name="<?php echo $this->get_field_name('post_limit'); ?>" type="text"
-                       value="<?php echo esc_attr($post_limit); ?>"/>
-            </label>
-        </p>
 
-        <p>
-
-            <label
-                for="<?php echo $this->get_field_id('categ_limit'); ?>"><?php _e('Number of categories:', 'geodirectory');?>
-
-                <input class="widefat" id="<?php echo $this->get_field_id('categ_limit'); ?>"
-                       name="<?php echo $this->get_field_name('categ_limit'); ?>" type="text"
-                       value="<?php echo esc_attr($categ_limit); ?>"/>
-            </label>
-        </p>
-
-        <p>
-            <label
-                for="<?php echo $this->get_field_id('character_count'); ?>"><?php _e('Post Content excerpt character count :', 'geodirectory');?>
-                <input class="widefat" id="<?php echo $this->get_field_id('character_count'); ?>"
-                       name="<?php echo $this->get_field_name('character_count'); ?>" type="text"
-                       value="<?php echo esc_attr($character_count); ?>"/>
-            </label>
-        </p>
-        <p>
-            <label
-                for="<?php echo $this->get_field_id('tab_layout'); ?>"><?php _e('Tab Layout:', 'geodirectory');?>
-
-                <select class="widefat" id="<?php echo $this->get_field_id('tab_layout'); ?>"
-                        name="<?php echo $this->get_field_name('tab_layout'); ?>">
-
-                    <option <?php if ($tab_layout == 'bestof-tabs-on-top') {
-                        echo 'selected="selected"';
-                    } ?> value="bestof-tabs-on-top"><?php _e('Tabs on Top', 'geodirectory'); ?></option>
-                    <option <?php if ($tab_layout == 'bestof-tabs-on-left') {
-                        echo 'selected="selected"';
-                    } ?> value="bestof-tabs-on-left"><?php _e('Tabs on Left', 'geodirectory'); ?></option>
-                    <option <?php if ($tab_layout == 'bestof-tabs-as-dropdown') {
-                        echo 'selected="selected"';
-                    } ?>
-                        value="bestof-tabs-as-dropdown"><?php _e('Tabs as Dropdown', 'geodirectory'); ?></option>
-                </select>
-            </label>
-        </p>
-
-        <p>
-            <label
-                for="<?php echo $this->get_field_id('excerpt_type'); ?>"><?php _e('Excerpt Type:', 'geodirectory');?>
-
-                <select class="widefat" id="<?php echo $this->get_field_id('excerpt_type'); ?>"
-                        name="<?php echo $this->get_field_name('excerpt_type'); ?>">
-
-                    <option <?php if ($excerpt_type == 'show-desc') {
-                        echo 'selected="selected"';
-                    } ?> value="show-desc"><?php _e('Show Description', 'geodirectory'); ?></option>
-                    <option <?php if ($excerpt_type == 'show-reviews') {
-                        echo 'selected="selected"';
-                    } ?> value="show-reviews"><?php _e('Show Reviews if Available', 'geodirectory'); ?></option>
-                </select>
-            </label>
-        </p>
-
-        <p>
-            <label for="<?php echo $this->get_field_id('add_location_filter'); ?>">
-                <?php _e('Enable Location Filter:', 'geodirectory');?>
-                <input type="checkbox" id="<?php echo $this->get_field_id('add_location_filter'); ?>"
-                       name="<?php echo $this->get_field_name('add_location_filter'); ?>" <?php if ($add_location_filter) echo 'checked="checked"';?>
-                       value="1"/>
-            </label>
-        </p>
-
-        <p>
-            <label
-                for="<?php echo $this->get_field_id('use_viewing_post_type'); ?>"><?php _e('Use current viewing post type:', 'geodirectory'); ?>
-                <input type="checkbox" id="<?php echo $this->get_field_id('use_viewing_post_type'); ?>"
-                       name="<?php echo $this->get_field_name('use_viewing_post_type'); ?>" <?php if ($use_viewing_post_type) {
-                    echo 'checked="checked"';
-                } ?>  value="1"/>
-            </label>
-        </p>
-    <?php
-    }
 }

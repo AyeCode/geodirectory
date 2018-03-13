@@ -51,6 +51,7 @@ class GeoDir_AJAX {
 			'user_delete_post'       => false,
 			'import_export'         => false,
 			'save_api_key'			=> false,
+			'bestof'			=> true,
 		);
 
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
@@ -66,7 +67,20 @@ class GeoDir_AJAX {
 	}
 
 	/**
-	 * Auto save post revisions and auto-drafts.
+	 * Best of listings widget ajax.
+	 */
+	public static function bestof(){
+		//print_r($_REQUEST);exit;
+		// security
+		check_ajax_referer( 'geodir_basic_nonce', 'security' );
+
+		GeoDir_Widget_Best_Of::best_of(array(), $_REQUEST);
+
+		wp_die();
+	}
+
+	/**
+	 * User delete post.
 	 */
 	public static function user_delete_post(){
 		//print_r($_REQUEST);exit;
