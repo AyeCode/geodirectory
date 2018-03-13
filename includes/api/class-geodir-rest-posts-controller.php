@@ -46,6 +46,8 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 		$this->namespace = GEODIR_REST_SLUG . '/v' . GEODIR_REST_API_VERSION;
 		$obj = get_post_type_object( $post_type );
 		$this->rest_base = ! empty( $obj->rest_base ) ? $obj->rest_base : $obj->name;
+		$this->cat_taxonomy = $this->post_type . 'category';
+		$this->tag_taxonomy = $this->post_type . '_tags';
 
 		$this->meta = new WP_REST_Post_Meta_Fields( $this->post_type );
 	}
@@ -183,9 +185,6 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 			'search'         => 's',
 			'slug'           => 'post_name__in',
 			'status'         => 'post_status',
-			//'title'          => 'post_title',
-			//'content'        => 'post_content',
-			//'images'		 => 'post_images',
 		);
 
 		/*
@@ -491,7 +490,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 			return new WP_Error( 'rest_post_exists', __( 'Cannot create existing post.' ), array( 'status' => 400 ) );
 		}
 
-		$prepared_post = $this->prepare_item_for_database( $request ); geodir_error_log( $prepared_post, 'prepared_post', __FILE__, __LINE__ );
+		$prepared_post = $this->prepare_item_for_database( $request );
 
 		if ( is_wp_error( $prepared_post ) ) {
 			return $prepared_post;
@@ -1317,145 +1316,17 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 	 * @return WP_REST_Response Response object.
 	 */
 	public function prepare_item_for_response( $post, $request ) {
-		$GLOBALS['post'] = $post;
-
+		$gd_post 			= geodir_get_post_info( $post->ID );
+		$post				= $gd_post;
+		$GLOBALS['gd_post'] = $gd_post;
+		$GLOBALS['post'] 	= $post;
 		setup_postdata( $post );
 
 		$schema = $this->get_item_schema();
 
-		// Base fields for every post.
-		$data = array();
+		$data = $this->get_post_data( $post, $request );
 
-		if ( ! empty( $schema['properties']['id'] ) ) {
-			$data['id'] = $post->ID;
-		}
-		
-		if ( ! empty( $schema['properties']['title'] ) ) {
-			add_filter( 'protected_title_format', array( $this, 'protected_title_format' ) );
-
-			$data['title'] = array(
-				'raw'      => $post->post_title,
-				'rendered' => get_the_title( $post->ID ),
-			);
-
-			remove_filter( 'protected_title_format', array( $this, 'protected_title_format' ) );
-		}
-
-		if ( ! empty( $schema['properties']['slug'] ) ) {
-			$data['slug'] = $post->post_name;
-		}
-		
-		if ( ! empty( $schema['properties']['link'] ) ) {
-			$data['link'] = get_permalink( $post->ID );
-		}
-
-		if ( ! empty( $schema['properties']['date'] ) ) {
-			$data['date'] = $this->prepare_date_response( $post->post_date_gmt, $post->post_date );
-		}
-
-		if ( ! empty( $schema['properties']['date_gmt'] ) ) {
-			// For drafts, `post_date_gmt` may not be set, indicating that the
-			// date of the draft should be updated each time it is saved (see
-			// #38883).  In this case, shim the value based on the `post_date`
-			// field with the site's timezone offset applied.
-			if ( '0000-00-00 00:00:00' === $post->post_date_gmt ) {
-				$post_date_gmt = get_gmt_from_date( $post->post_date );
-			} else {
-				$post_date_gmt = $post->post_date_gmt;
-			}
-			$data['date_gmt'] = $this->prepare_date_response( $post_date_gmt );
-		}
-
-		if ( ! empty( $schema['properties']['modified'] ) ) {
-			$data['modified'] = $this->prepare_date_response( $post->post_modified_gmt, $post->post_modified );
-		}
-
-		if ( ! empty( $schema['properties']['modified_gmt'] ) ) {
-			// For drafts, `post_modified_gmt` may not be set (see
-			// `post_date_gmt` comments above).  In this case, shim the value
-			// based on the `post_modified` field with the site's timezone
-			// offset applied.
-			if ( '0000-00-00 00:00:00' === $post->post_modified_gmt ) {
-				$post_modified_gmt = date( 'Y-m-d H:i:s', strtotime( $post->post_modified ) - ( get_option( 'gmt_offset' ) * 3600 ) );
-			} else {
-				$post_modified_gmt = $post->post_modified_gmt;
-			}
-			$data['modified_gmt'] = $this->prepare_date_response( $post_modified_gmt );
-		}
-
-		if ( ! empty( $schema['properties']['password'] ) ) {
-			$data['password'] = $post->post_password;
-		}
-
-		if ( ! empty( $schema['properties']['status'] ) ) {
-			$data['status'] = $post->post_status;
-		}
-
-		if ( ! empty( $schema['properties']['type'] ) ) {
-			$data['type'] = $post->post_type;
-		}
-		
-		$has_password_filter = false;
-
-		if ( $this->can_access_password_content( $post, $request ) ) {
-			// Allow access to the post, permissions already checked before.
-			add_filter( 'post_password_required', '__return_false' );
-
-			$has_password_filter = true;
-		}
-
-		if ( ! empty( $schema['properties']['content'] ) ) {
-			$data['content'] = array(
-				'raw'       => $post->post_content,
-				/** This filter is documented in wp-includes/post-template.php */
-				'rendered'  => post_password_required( $post ) ? '' : apply_filters( 'the_content', $post->post_content ),
-				'protected' => (bool) $post->post_password,
-			);
-		}
-
-		if ( ! empty( $schema['properties']['excerpt'] ) ) {
-			/** This filter is documented in wp-includes/post-template.php */
-			$excerpt = apply_filters( 'the_excerpt', apply_filters( 'get_the_excerpt', $post->post_excerpt, $post ) );
-			$data['excerpt'] = array(
-				'raw'       => $post->post_excerpt,
-				'rendered'  => post_password_required( $post ) ? '' : $excerpt,
-				'protected' => (bool) $post->post_password,
-			);
-		}
-
-		if ( $has_password_filter ) {
-			// Reset filter.
-			remove_filter( 'post_password_required', '__return_false' );
-		}
-		
-		$taxonomies = wp_list_filter( get_object_taxonomies( $this->post_type, 'objects' ), array( 'show_in_rest' => true ) );
-
-		foreach ( $taxonomies as $taxonomy ) {
-			$base = $taxonomy->name;
-
-			if ( $base == $this->post_type . 'category' ) {
-				$base = 'post_category';
-			} else if ( $base == $this->post_type . '_tags' ) {
-				$base = 'post_tags';
-			}
-
-			if ( ! empty( $schema['properties'][ $base ] ) ) {
-				$data[ $base ] = $this->get_taxonomy_terms( $post, $taxonomy->name );
-			}
-		}
-
-		if ( ! empty( $schema['properties']['author'] ) ) {
-			$data['author'] = (int) $post->post_author;
-		}
-
-		if ( ! empty( $schema['properties']['featured_media'] ) ) {
-			$data['featured_media'] = (int) get_post_thumbnail_id( $post->ID );
-		}
-		
-		if ( ! empty( $schema['properties']['images'] ) ) {
-			$data['images'] = $this->get_post_images( $post );
-		}
-
+		// Default fields
 		if ( ! empty( $schema['properties']['parent'] ) ) {
 			$data['parent'] = (int) $post->post_parent;
 		}
@@ -1766,12 +1637,6 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 								'context'     => array( 'view', 'edit' ),
 								'readonly'    => true,
 							),
-							'count' => array(
-								'description' => __( 'Post count.', 'geodirectory' ),
-								'type'        => 'string',
-								'context'     => array( 'view', 'edit' ),
-								'readonly'    => true,
-							),
 						),
 					),
 				);
@@ -1796,12 +1661,6 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 							),
 							'slug' => array(
 								'description' => __( 'Tag slug.', 'geodirectory' ),
-								'type'        => 'string',
-								'context'     => array( 'view', 'edit' ),
-								'readonly'    => true,
-							),
-							'count' => array(
-								'description' => __( 'Post count.', 'geodirectory' ),
 								'type'        => 'string',
 								'context'     => array( 'view', 'edit' ),
 								'readonly'    => true,
@@ -2279,99 +2138,144 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                     $longitude  		= !empty( $default_location->longitude ) ? $default_location->longitude : '';
                     
                     $schema[ $name ] 	= $args;
-                    
-                    if ( !empty( $extra_fields['show_zip'] ) ) {
-						$schema[ 'country' ] = array(
-							'type'          => 'string',
-							'context'       => array( 'view', 'edit' ),
-							'title'         => !empty( $extra_fields['country_lable'] ) ? __( $extra_fields['country_lable'], 'geodirectory' ) : __( 'Country', 'geodirectory' ),
-							'description'   => __( 'Choose a country', 'geodirectory' ),
-							'required'      => (bool)$required,
-							'default'       => $country,
-						);
-					}
-                    
-					if ( !empty( $extra_fields['show_zip'] ) ) {
-						$schema[ 'region' ] = array(
-							'type'          => 'string',
-							'context'       => array( 'view', 'edit' ),
-							'title'         => !empty( $extra_fields['region_lable'] ) ? __( $extra_fields['region_lable'], 'geodirectory' ) : __( 'Region', 'geodirectory' ),
-							'description'   => __( 'Choose a region', 'geodirectory' ),
-							'required'      => (bool)$required,
-							'default'       => $region,
-						);
-					}
-                    
-					if ( !empty( $extra_fields['show_zip'] ) ) {
-						$schema[ 'city' ] = array(
-							'type'          => 'string',
-							'context'       => array( 'view', 'edit' ),
-							'title'         => !empty( $extra_fields['city_lable'] ) ? __( $extra_fields['city_lable'], 'geodirectory' ) : __( 'City', 'geodirectory' ),
-							'description'   => __( 'Choose a city', 'geodirectory' ),
-							'required'      => (bool)$required,
-							'default'       => $city,
-						);
-					}
-                    
-                    if ( !empty( $extra_fields['show_zip'] ) ) {
-                        $schema[ 'zip' ] = array(
-                            'type'          => 'string',
-                            'context'       => array( 'view', 'edit' ),
-                            'title'         => !empty( $extra_fields['zip_lable'] ) ? __( $extra_fields['zip_lable'], 'geodirectory' ) : __( 'Zip/Post Code', 'geodirectory' ),
-                            'required'      => (bool)$required,
-                        );
-                    }
-                    
-                    if ( !empty( $extra_fields['show_map'] ) ) {
-                        $schema[ 'map' ] = array(
-                            'type'          => 'string',
-                            'context'       => array( 'view', 'edit' ),
-                            'title'         => !empty( $extra_fields['map_lable'] ) ? __( $extra_fields['map_lable'], 'geodirectory' ) : __( 'Map', 'geodirectory' ),
-                            'description'   => __( 'Click on "Set Address on Map" and then you can also drag pinpoint to locate the correct address', 'geodirectory' ),
-                            'readonly'      => true,
-                        );
-                    }
+
+					$schema[ 'country' ] = array(
+						'type'          => 'string',
+						'field_type'   => $field_type,
+						'data_type'    => $data_type,
+						'context'       => array( 'view', 'edit' ),
+						'title'         => !empty( $extra_fields['country_lable'] ) ? __( $extra_fields['country_lable'], 'geodirectory' ) : __( 'Country', 'geodirectory' ),
+						'description'   => __( 'Choose a country', 'geodirectory' ),
+						'required'      => (bool) ( $required && !empty( $extra_fields['show_region'] ) ),
+						'default'       => $country,
+						'extra_fields'  => array(
+							'show' => (bool) ! empty( $extra_fields['show_country'] )
+						)
+					);
+
+					$schema[ 'region' ] = array(
+						'type'          => 'string',
+						'field_type'   => $field_type,
+						'data_type'    => $data_type,
+						'context'       => array( 'view', 'edit' ),
+						'title'         => !empty( $extra_fields['region_lable'] ) ? __( $extra_fields['region_lable'], 'geodirectory' ) : __( 'Region', 'geodirectory' ),
+						'description'   => __( 'Choose a region', 'geodirectory' ),
+						'required'      => (bool) ( $required && !empty( $extra_fields['show_region'] ) ),
+						'default'       => $region,
+						'extra_fields'  => array(
+							'show' => (bool) ! empty( $extra_fields['show_region'] )
+						)
+					);
+
+					$schema[ 'city' ] = array(
+						'type'          => 'string',
+						'field_type'   => $field_type,
+						'data_type'    => $data_type,
+						'context'       => array( 'view', 'edit' ),
+						'title'         => !empty( $extra_fields['city_lable'] ) ? __( $extra_fields['city_lable'], 'geodirectory' ) : __( 'City', 'geodirectory' ),
+						'description'   => __( 'Choose a city', 'geodirectory' ),
+						'required'      => (bool) ( $required && !empty( $extra_fields['show_city'] ) ),
+						'default'       => $city,
+						'extra_fields'  => array(
+							'show' => (bool) ! empty( $extra_fields['show_city'] )
+						)
+					);
+				
+					$schema[ 'zip' ] = array(
+						'type'          => 'string',
+						'field_type'   => $field_type,
+						'data_type'    => $data_type,
+						'context'       => array( 'view', 'edit' ),
+						'title'         => !empty( $extra_fields['zip_lable'] ) ? __( $extra_fields['zip_lable'], 'geodirectory' ) : __( 'Zip/Post Code', 'geodirectory' ),
+						'required'      => (bool) ( $required && !empty( $extra_fields['show_zip'] ) ),
+						'extra_fields'  => array(
+							'show' => (bool) ! empty( $extra_fields['show_zip'] )
+						)
+					);
+				
+					$schema[ 'map' ] = array(
+						'type'          => 'string',
+						'field_type'   => $field_type,
+						'data_type'    => $data_type,
+						'context'       => array( 'view', 'edit' ),
+						'title'         => !empty( $extra_fields['map_lable'] ) ? __( $extra_fields['map_lable'], 'geodirectory' ) : __( 'Map', 'geodirectory' ),
+						'description'   => __( 'Click on "Set Address on Map" and then you can also drag pinpoint to locate the correct address', 'geodirectory' ),
+						'readonly'      => true,
+						'extra_fields'  => array(
+							'show' => (bool) ! empty( $extra_fields['show_map'] )
+						)
+					);
+				
+					$schema[ 'latitude' ] = array(
+						'type'          => 'string',
+						'field_type'   => $field_type,
+						'data_type'    => $data_type,
+						'context'       => array( 'view', 'edit' ),
+						'title'         => __( 'Address Latitude', 'geodirectory' ),
+						'description'   => __( 'Please enter latitude for google map perfection. eg. : <b>39.955823048131286</b>', 'geodirectory' ),
+						'required'      => (bool) ( $required && !empty( $extra_fields['show_latlng'] ) ),
+						'default'       => $latitude,
+						'readonly'      => empty( $extra_fields['show_latlng'] ) ? true : false,
+						'extra_fields'  => array(
+							'show' => (bool) ! empty( $extra_fields['show_latlng'] )
+						)
+					);
 					
-					if ( !empty( $extra_fields['show_latlng'] ) ) {
-                        $schema[ 'latitude' ] = array(
-                            'type'          => 'string',
-                            'context'       => array( 'view', 'edit' ),
-                            'title'         => __( 'Address Latitude', 'geodirectory' ),
-                            'description'   => __( 'Please enter latitude for google map perfection. eg. : <b>39.955823048131286</b>', 'geodirectory' ),
-                            'required'      => (bool)$required,
-                            'default'       => $latitude,
-                            'readonly'      => empty( $extra_fields['show_latlng'] ) ? true : false,
-                        );
-                        
-                        $schema[ 'longitude' ] = array(
-                            'type'          => 'string',
-                            'context'       => array( 'view', 'edit' ),
-                            'title'         => __( 'Address Longitude', 'geodirectory' ),
-                            'description'   => __( 'Please enter longitude for google map perfection. eg. : <b>-75.14408111572266</b>', 'geodirectory' ),
-                            'required'      => (bool)$required,
-                            'default'       => $longitude,
-                            'readonly'      => empty( $extra_fields['show_latlng'] ) ? true : false,
-                        );
-                    }
+					$schema[ 'longitude' ] = array(
+						'type'          => 'string',
+						'field_type'   => $field_type,
+						'data_type'    => $data_type,
+						'context'       => array( 'view', 'edit' ),
+						'title'         => __( 'Address Longitude', 'geodirectory' ),
+						'description'   => __( 'Please enter longitude for google map perfection. eg. : <b>-75.14408111572266</b>', 'geodirectory' ),
+						'required'      => (bool) ( $required && !empty( $extra_fields['show_latlng'] ) ),
+						'default'       => $longitude,
+						'readonly'      => empty( $extra_fields['show_latlng'] ) ? true : false,
+						'extra_fields'  => array(
+							'show' => (bool) ! empty( $extra_fields['show_latlng'] )
+						)
+					);
                     
-                    if ( !empty( $extra_fields['show_mapview'] ) ) {
-                        $schema[ 'mapview' ] = array(
-                            'type'          => 'string',
-                            'context'       => array( 'view', 'edit' ),
-                            'title'         => !empty( $extra_fields['mapview_lable'] ) ? __( $extra_fields['mapview_lable'], 'geodirectory' ) : __( 'Map View', 'geodirectory' ),
-                            'default'       => 'ROADMAP',
-                            'enum'          => array( 'ROADMAP', 'SATELLITE', 'HYBRID', 'TERRAIN' ),
-                        );
-                    }
+					$schema[ 'mapview' ] = array(
+						'type'          => 'string',
+						'field_type'   => $field_type,
+						'data_type'    => $data_type,
+						'context'       => array( 'view', 'edit' ),
+						'title'         => !empty( $extra_fields['mapview_lable'] ) ? __( $extra_fields['mapview_lable'], 'geodirectory' ) : __( 'Map View', 'geodirectory' ),
+						'default'       => 'ROADMAP',
+						'enum'          => array( 'ROADMAP', 'SATELLITE', 'HYBRID', 'TERRAIN' ),
+						'extra_fields'  => array(
+							'show' => (bool) ! empty( $extra_fields['show_mapview'] )
+						)
+					);
                     
-                    if ( !empty( $extra_fields['show_mapzoom'] ) ) {
-                        $schema[ 'mapzoom' ] = array(
-                            'type'          => 'string',
-                            'context'       => array( 'view', 'edit' ),
-                            'title'         => __( 'Map Zoom', 'geodirectory' ),
-                            'readonly'      => true,
-                        );
-                    }
+					$schema[ 'mapzoom' ] = array(
+						'type'          => 'string',
+						'field_type'   => $field_type,
+						'data_type'    => $data_type,
+						'context'       => array( 'view', 'edit' ),
+						'title'         => __( 'Map Zoom', 'geodirectory' ),
+						'readonly'      => true,
+						'extra_fields'  => array(
+							'show' => (bool) ! empty( $extra_fields['show_mapzoom'] )
+						)
+					);
+                    break;
+				case 'business_hours':
+                    $args['type']       = 'string';
+                    $args['properties'] = array(
+                        'raw' => array(
+                            'description' => __( 'Field for the object, as it exists in the database.' ),
+                            'type'        => 'string',
+                            'context'     => array( 'view', 'edit' ),
+                        ),
+                        'rendered' => array(
+                            'description' => __( 'Field for the object, transformed for display.' ),
+                            'type'        => 'string',
+                            'context'     => array( 'view', 'edit' ),
+                            'readonly'    => true,
+                        ),
+                    );
                     break;
                 case 'checkbox':
                     $args['type']   = geodir_rest_data_type_to_field_type( $data_type );
@@ -2609,12 +2513,24 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 					'id'   => $term->term_id,
 					'name' => $term->name,
 					'slug' => $term->slug,
-					'count' => $term->count,
 				);
 			}
 		}
 
 		return $terms;
+	}
+	
+	public function get_featured_image( $post ) {
+		$image = geodir_get_featured_image( $post->ID, 'thumbnail' );
+
+		$featured_image = array();
+		if ( ! empty( $image ) ) {
+			$featured_image['title'] = $image->title;
+			$featured_image['src'] = $image->src;
+			$featured_image['width'] = $image->width;
+			$featured_image['height'] = $image->height;
+		}
+		return $featured_image;
 	}
 	
 	public function get_post_images( $post ) {
@@ -2635,5 +2551,288 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 			}
 		}
 		return $images;
+	}
+	
+	public function get_taxonomies() {
+		$taxonomies = wp_list_filter( get_object_taxonomies( $this->post_type, 'objects' ), array( 'show_in_rest' => true ) );
+
+		return $taxonomies;
+	}
+	
+	public function get_post_data( $post, $request ) {
+		$data = array();
+
+		$schema 		= $this->get_item_schema();
+		$taxonomies 	= $this->get_taxonomies();
+		$post_fields 	= array_keys( (array) $post );
+
+		// ID
+		if ( ! empty( $schema['properties']['id'] ) ) {
+			$data['id'] = $post->ID;
+		}
+		
+		// Title
+		if ( ! empty( $schema['properties']['title'] ) ) {
+			add_filter( 'protected_title_format', array( $this, 'protected_title_format' ) );
+
+			$data['title'] = array(
+				'raw'      => $post->post_title,
+				'rendered' => get_the_title( $post->ID ),
+			);
+
+			remove_filter( 'protected_title_format', array( $this, 'protected_title_format' ) );
+		}
+		
+		// Slug
+		if ( ! empty( $schema['properties']['slug'] ) ) {
+			$data['slug'] = $post->post_name;
+		}
+		
+		// Link
+		if ( ! empty( $schema['properties']['link'] ) ) {
+			$data['link'] = get_permalink( $post->ID );
+		}
+		
+		// Status
+		if ( ! empty( $schema['properties']['status'] ) ) {
+			$data['status'] = $post->post_status;
+		}
+
+		// Type
+		if ( ! empty( $schema['properties']['type'] ) ) {
+			$data['type'] = $post->post_type;
+		}
+		
+		// Author
+		if ( ! empty( $schema['properties']['author'] ) ) {
+			$data['author'] = (int) $post->post_author;
+		}
+
+		// Date
+		if ( ! empty( $schema['properties']['date'] ) ) {
+			$data['date'] = $this->prepare_date_response( $post->post_date_gmt, $post->post_date );
+		}
+
+		// Date GMT
+		if ( ! empty( $schema['properties']['date_gmt'] ) ) {
+			// For drafts, `post_date_gmt` may not be set, indicating that the
+			// date of the draft should be updated each time it is saved (see
+			// #38883).  In this case, shim the value based on the `post_date`
+			// field with the site's timezone offset applied.
+			if ( '0000-00-00 00:00:00' === $post->post_date_gmt ) {
+				$post_date_gmt = get_gmt_from_date( $post->post_date );
+			} else {
+				$post_date_gmt = $post->post_date_gmt;
+			}
+			$data['date_gmt'] = $this->prepare_date_response( $post_date_gmt );
+		}
+
+		// Modified Date
+		if ( ! empty( $schema['properties']['modified'] ) ) {
+			$data['modified'] = $this->prepare_date_response( $post->post_modified_gmt, $post->post_modified );
+		}
+
+		// Modified Date GMT
+		if ( ! empty( $schema['properties']['modified_gmt'] ) ) {
+			// For drafts, `post_modified_gmt` may not be set (see
+			// `post_date_gmt` comments above).  In this case, shim the value
+			// based on the `post_modified` field with the site's timezone
+			// offset applied.
+			if ( '0000-00-00 00:00:00' === $post->post_modified_gmt ) {
+				$post_modified_gmt = date( 'Y-m-d H:i:s', strtotime( $post->post_modified ) - ( get_option( 'gmt_offset' ) * 3600 ) );
+			} else {
+				$post_modified_gmt = $post->post_modified_gmt;
+			}
+			$data['modified_gmt'] = $this->prepare_date_response( $post_modified_gmt );
+		}
+		
+		// Content
+		$has_password_filter = false;
+
+		if ( $this->can_access_password_content( $post, $request ) ) {
+			// Allow access to the post, permissions already checked before.
+			add_filter( 'post_password_required', '__return_false' );
+
+			$has_password_filter = true;
+		}
+
+		if (  empty( $schema['properties']['content'] ) ) {
+			$data['content'] = array(
+				'raw'       => $post->post_content,
+				/** This filter is documented in wp-includes/post-template.php */
+				'rendered'  => post_password_required( $post ) ? '' : apply_filters( 'the_content', $post->post_content ),
+				'protected' => (bool) $post->post_password,
+			);
+		}
+
+		if ( ! empty( $schema['properties']['excerpt'] ) ) {
+			/** This filter is documented in wp-includes/post-template.php */
+			$excerpt = apply_filters( 'the_excerpt', apply_filters( 'get_the_excerpt', $post->post_excerpt, $post ) );
+			$data['excerpt'] = array(
+				'raw'       => $post->post_excerpt,
+				'rendered'  => post_password_required( $post ) ? '' : $excerpt,
+				'protected' => (bool) $post->post_password,
+			);
+		}
+
+		if ( $has_password_filter ) {
+			// Reset filter.
+			remove_filter( 'post_password_required', '__return_false' );
+		}
+		
+		// Categories
+		if ( isset( $taxonomies[ $this->cat_taxonomy ] ) && ! empty( $schema['properties']['post_category'] ) ) {
+			$data['default_category'] = $post->default_category;
+			$data['post_category'] = $this->get_taxonomy_terms( $post, $this->cat_taxonomy );
+		}
+		
+		// Tags
+		if ( isset( $taxonomies[ $this->tag_taxonomy ] ) && ! empty( $schema['properties']['post_tags'] ) ) {
+			$data['post_tags'] = $this->get_taxonomy_terms( $post, $this->tag_taxonomy );
+		}
+		
+		// Custom fields
+		foreach ( $schema['properties'] as $field_name => $field_info ) {
+			if ( empty( $field_name ) || empty( $field_info['field_type'] ) ) {
+				continue;
+			}
+			
+			if ( in_array( $field_name, array( 'title', 'post_title', 'content', 'post_content', 'post_tags', 'post_category', 'images', 'post_images' ) ) || ! in_array( $field_name, $post_fields ) ) {
+				continue;
+			}
+
+			$extra_fields 	= ! empty( $field_info['extra_fields'] ) ? $field_info['extra_fields'] : NULL;
+			$option_values 	= ! empty( $field_info['arg_options']['rendered_options'] ) ? $field_info['arg_options']['rendered_options'] : NULL;
+			$field_value 	= $post->{$field_name};
+
+			switch ( $field_info['field_type'] ) {
+				case 'business_hours':
+					if ( ! empty( $field_value ) ) {
+						$data[ $field_name ] = array(
+							'raw'		=> stripslashes( $field_value ),
+							'rendered' 	=> geodir_get_business_hours( $field_value )
+						);
+					} else {
+						$data[ $field_name ] = NULL;
+					}
+					break;
+				case 'checkbox':
+					$data[ $field_name ] = array(
+						'raw'		=> $field_value,
+						'rendered' 	=> $field_value == 1 ? __( 'Yes', 'geodirectory' ) : __( 'No', 'geodirectory' )
+					);
+					break;
+				case 'datepicker':
+					if ( ! empty( $field_value ) ) {
+						$date_format = ! empty( $extra_fields['date_format'] ) ? $extra_fields['date_format'] : geodir_date_format();
+						$data[ $field_name ] = array(
+							'raw'		=> $field_value,
+							'rendered' 	=> geodir_date( $field_value, 'Y-m-d', $date_format )
+						);
+					} else {
+						$data[ $field_name ] = NULL;
+					}
+					break;
+				case 'multiselect':
+					$rendered_value = array();
+					$field_values = ! empty( $field_value ) ? explode( ',', trim( $field_value, ',' ) ) : array();
+					if ( is_array( $field_values ) ) {
+						$field_values = array_map( 'trim', array_values( $field_values ) );
+					}
+
+					if ( ! empty( $option_values ) ) {
+						foreach ( $option_values as $option_value ) {
+							if ( isset ( $option_value['value'] ) && in_array( $option_value['value'], $field_values ) ) {
+								$rendered_value[] = $option_value['label'];
+							}
+						}
+					}
+			
+					$data[ $field_name ] = array(
+						'raw'		=> $field_value,
+						'rendered' 	=> $rendered_value
+					);
+					break;
+				case 'radio':
+					$rendered_value = $field_value;
+
+					if ( $rendered_value == 'f' || $rendered_value == '0' ) {
+						$rendered_value = __( 'No', 'geodirectory' );
+					} else if ( $rendered_value == 't' || $rendered_value == '1' ) {
+						$rendered_value = __( 'Yes', 'geodirectory' );
+					} else {
+						if ( ! empty( $option_values ) ) {
+							foreach ( $option_values as $option_value ) {
+								if ( isset ( $option_value['value'] ) && $option_value['value'] == $rendered_value ) {
+									$rendered_value = $option_value['label'];
+								}
+							}
+						}
+					}
+
+					$data[ $field_name ] = array(
+						'raw'		=> $field_value,
+						'rendered' 	=> $rendered_value
+					);
+					break;
+				case 'select':
+					$rendered_value = $field_value;
+
+					if ( ! empty( $option_values ) ) {
+						foreach ( $option_values as $option_value ) {
+							if ( isset ( $option_value['value'] ) && $option_value['value'] == $rendered_value ) {
+								$rendered_value = $option_value['label'];
+							}
+						}
+					}
+			
+					$data[ $field_name ] = array(
+						'raw'		=> $field_value,
+						'rendered' 	=> $rendered_value
+					);
+					break;
+				case 'time':
+					if ( ! empty( $field_value ) ) {
+						$time_format = ! empty( $extra_fields['time_format'] ) ? $extra_fields['time_format'] : geodir_time_format();
+						$data[ $field_name ] = array(
+							'raw'		=> $field_value,
+							'rendered' 	=> date_i18n( 'H:i:s', strtotime( $field_value ) )
+						);
+					} else {
+						$data[ $field_name ] = NULL;
+					}
+					break;
+				case 'address':
+				case 'email':
+				case 'file':
+				case 'html':
+				case 'phone':
+                case 'text':
+				case 'textarea':
+				case 'url':
+				default:
+					$data[ $field_name ] = $field_value;
+					break;
+			}
+
+		}
+		
+		// Extra fields
+		$data['featured'] 		= (bool) $post->is_featured;
+		$data['rating'] 		= (float) $post->overall_rating;
+		$data['rating_count'] 	= (int) $post->rating_count;
+		
+		// Featured image
+		if ( ! empty( $schema['properties']['featured_media'] ) ) {
+			$data['featured_media'] = (int) get_post_thumbnail_id( $post->ID );
+			$data['featured_image'] = $this->get_featured_image( $post );
+		}
+		
+		// Images
+		if ( ! empty( $schema['properties']['post_images'] ) ) {
+			$data['images'] = $this->get_post_images( $post );
+		}
+
+		return apply_filters( 'geodir_rest_get_post_data', $data, $post, $request, $this );
 	}
 }
