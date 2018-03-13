@@ -120,6 +120,9 @@ class GeoDir_API {
 	private function rest_api_includes() {
 		include_once( dirname( __FILE__ ) . '/geodir-rest-functions.php' );
 
+		// Authentication.
+		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-authentication.php' );
+		
 		// Abstract controllers.
 		include_once( dirname( __FILE__ ) . '/abstracts/abstract-geodir-rest-controller.php' );
 		include_once( dirname( __FILE__ ) . '/abstracts/abstract-geodir-rest-terms-controller.php' );
@@ -171,8 +174,6 @@ class GeoDir_API {
                 if ( ! ( is_subclass_of( $controller, 'WP_REST_Posts_Controller' ) || is_subclass_of( $controller, 'WP_REST_Controller' ) ) ) {
                     continue;
                 }
-                
-                //$this->register_fields( $post_type->name );
             }
 
 			$controllers = array(
@@ -184,7 +185,7 @@ class GeoDir_API {
 				'GeoDir_REST_Setting_Options_Controller',
 				'GeoDir_REST_System_Status_Controller',
 				'GeoDir_REST_System_Status_Tools_Controller',
-				'GeoDir_REST_Countries_Controller', // @todo un-comment once all done
+				'GeoDir_REST_Countries_Controller',
 				'GeoDir_REST_Markers_Controller', // Map markers api should always enabled.
 			);
 		} else {

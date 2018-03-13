@@ -20,6 +20,13 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 	class GeoDir_Settings_Cpt_Cf extends GeoDir_Settings_Page {
 
 		/**
+		 * Page.
+		 *
+		 * @var string
+		 */
+		private static $page = '';
+		
+		/**
 		 * Post type.
 		 *
 		 * @var string
@@ -38,6 +45,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 */
 		public function __construct() {
 
+			self::$page = ! empty( $_REQUEST['page'] ) ? sanitize_title( $_REQUEST['page'] ) : '';
 			self::$post_type = ! empty( $_REQUEST['post_type'] ) ? sanitize_title( $_REQUEST['post_type'] ) : 'gd_place';
 			self::$sub_tab   = ! empty( $_REQUEST['tab'] ) ? sanitize_title( $_REQUEST['tab'] ) : 'general';
 
@@ -48,17 +56,18 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			// init the CF extra fields
 			GeoDir_Settings_Cpt_Cf_Extras::instance();
 
-			add_filter( 'geodir_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
-			add_action( 'geodir_settings_' . $this->id, array( $this, 'output' ) );
-			add_action( 'geodir_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
-			//add_action( 'geodir_settings_save_' . $this->id, array( $this, 'save' ) );
-			//add_action( 'geodir_sections_' . $this->id, array( $this, 'output_sections' ) );
-			//add_action( 'geodir_manage_available_fields', array( $this, 'standard_fields' ) );
+			if ( self::$page == 'gd-cpt-settings' ) {
+				add_filter( 'geodir_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
+				add_action( 'geodir_settings_' . $this->id, array( $this, 'output' ) );
+				add_action( 'geodir_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
+				//add_action( 'geodir_settings_save_' . $this->id, array( $this, 'save' ) );
+				//add_action( 'geodir_sections_' . $this->id, array( $this, 'output_sections' ) );
+				//add_action( 'geodir_manage_available_fields', array( $this, 'standard_fields' ) );
 
-			add_action( 'geodir_manage_available_fields', array( $this, 'output_standard_fields' ) );
-			add_action( 'geodir_manage_available_fields_predefined', array( $this, 'output_predefined_fields' ) );
-			add_action( 'geodir_manage_available_fields_custom', array( $this, 'output_custom_fields' ) );
-
+				add_action( 'geodir_manage_available_fields', array( $this, 'output_standard_fields' ) );
+				add_action( 'geodir_manage_available_fields_predefined', array( $this, 'output_predefined_fields' ) );
+				add_action( 'geodir_manage_available_fields_custom', array( $this, 'output_custom_fields' ) );
+			}
 
 		}
 
