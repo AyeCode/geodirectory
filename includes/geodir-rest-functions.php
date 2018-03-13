@@ -541,3 +541,16 @@ function geodir_rest_validate_value_from_schema( $value, $args, $param = '' ) {
 
     return true;
 }
+
+function geodir_rest_markers_url( $query_args = array() ) {
+	$namespace = GEODIR_REST_SLUG . '/v' . GEODIR_REST_API_VERSION;
+	$rest_base = 'markers';
+
+	$url = rest_url( sprintf( '%s/%s/', $namespace, $rest_base ) );
+
+	if ( ! empty( $query_args ) && is_array( $query_args ) ) {
+		$url = add_query_arg( $query_args, $url );
+	}
+
+	return apply_filters( 'geodir_rest_markers_url', $url, $query_args );
+}
