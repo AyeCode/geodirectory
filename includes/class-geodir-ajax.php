@@ -48,6 +48,7 @@ class GeoDir_AJAX {
 			'save_post'       => true,
 			'auto_save_post'       => true,
 			'delete_revision'       => true,
+			'user_delete_post'       => false,
 			'import_export'         => false,
 			'save_api_key'			=> false,
 		);
@@ -62,6 +63,31 @@ class GeoDir_AJAX {
 				add_action( 'geodir_ajax_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 			}
 		}
+	}
+
+	/**
+	 * Auto save post revisions and auto-drafts.
+	 */
+	public static function user_delete_post(){
+		//print_r($_REQUEST);exit;
+		// security
+		check_ajax_referer( 'geodir_basic_nonce', 'security' );
+
+		$post_id = isset($_POST['post_id']) && $_POST['post_id'] ? absint($_POST['post_id']) : 0;
+
+		if(!$post_id){
+			wp_send_json_error( __("No post_id provided.","geodirectory") );
+		}else{
+			$result = GeoDir_User::delete_post( $post_id );
+
+			if(is_wp_error( $result ) ){
+				wp_send_json_error( $result->get_error_message() );
+			}else{
+				wp_send_json_success();
+			}
+		}
+
+		wp_die();
 	}
 
 	public static function import_export(){

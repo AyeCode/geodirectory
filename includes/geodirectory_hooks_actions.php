@@ -363,59 +363,6 @@ function geodir_social_sharing_buttons()
 }
 
 
-/**
- * Outputs the edit post link.
- *
- * Outputs the edit post link if the current logged in user owns the post.
- *
- * @global bool $preview True if the current page is add listing preview page. False if not.
- * @global WP_Post|null $post The current post, if available.
- * @since 1.0.0
- * @package GeoDirectory
- */
-function geodir_edit_post_link()
-{
-    global $post, $preview;
-    ob_start(); // Start buffering;
-    /**
-     * This is called before the edit post link html in the function geodir_edit_post_link()
-     *
-     * @since 1.0.0
-     */
-    do_action('geodir_before_edit_post_link');
-    if (!$preview) {
-        $is_current_user_owner = geodir_listing_belong_to_current_user();
-        
-        if ($is_current_user_owner) {
-            $post_id = $post->ID;
-            
-            if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
-                $post_id = (int)$_REQUEST['pid'];
-            }
-
-            $postlink = get_permalink(geodir_add_listing_page_id());
-            $editlink = geodir_getlink($postlink, array('pid' => $post_id), false);
-            echo ' <p class="edit_link"><i class="fa fa-pencil"></i> <a href="' . esc_url($editlink) . '">' . __('Edit this Post', 'geodirectory') . '</a></p>';
-        }
-    }// end of if, if its a preview or not
-    /**
-     * This is called after the edit post link html in the function geodir_edit_post_link()
-     *
-     * @since 1.0.0
-     */
-    do_action('geodir_after_edit_post_link');
-    $content_html = ob_get_clean();
-    if (trim($content_html) != '')
-        $content_html = '<div class="geodir-company_info geodir-details-sidebar-user-links">' . $content_html . '</div>';
-    if ((int)geodir_get_option('geodir_disable_user_links_section') != 1) {
-        /**
-         * Filter the geodir_edit_post_link() function content.
-         *
-         * @param string $content_html The output html of the geodir_edit_post_link() function.
-         */
-        echo $content_html = apply_filters('geodir_edit_post_link_html', $content_html);
-    }
-}
 
 /**
  * Output the current post overall review and a small image compatible with google hreviews.

@@ -54,16 +54,14 @@ function goedir_register_widgets() {
     register_widget( 'GeoDir_Widget_Categories' );
 
     register_widget( 'GeoDir_Widget_Features' );
-    register_widget( 'GeoDir_Widget_Flickr' );
     register_widget( 'GeoDir_Widget_Home_Page_Map' );
     register_widget( 'GeoDir_Widget_Listing_Page_Map' );
-    register_widget( 'GeoDir_Widget_Login' );
+    register_widget( 'GeoDir_Widget_Dashboard' );
     register_widget( 'GeoDir_Widget_Popular_Post_Category' );
     register_widget( 'GeoDir_Widget_Popular_Post_View' );
     register_widget( 'GeoDir_Widget_Recent_Reviews' );
     register_widget( 'GeoDir_Widget_Related_Listing' );
-    register_widget( 'GeoDir_Widget_Twitter' );
-    
+
     // post widgets
     register_widget( 'GeoDir_Widget_Post_Meta' );
     register_widget( 'GeoDir_Widget_Post_Images' );

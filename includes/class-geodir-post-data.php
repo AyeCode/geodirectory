@@ -1062,7 +1062,7 @@ class GeoDir_Post_Data {
 	 */
 	public static function delete_post( $id ) {
 		if ( ! current_user_can( 'delete_posts' ) || ! $id ) {
-			return;
+			return false;
 		}
 
 		global $wpdb, $plugin_prefix;
@@ -1070,7 +1070,7 @@ class GeoDir_Post_Data {
 		// check for multisite deletions
 		if (strpos($plugin_prefix, $wpdb->prefix) !== false) {
 		} else {
-			return;
+			return false;
 		}
 
 		$post_type = get_post_type($id);
