@@ -55,6 +55,15 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                     'desc_tip' => true,
                     'advanced' => true
                 ),
+				'cpt_ajax'  => array(
+                    'title' => __('Add CPT ajax select:', 'geodirectory'),
+                    'desc' => __('Add CPT list as a dropdown.', 'geodirectory'),
+                    'type' => 'checkbox',
+                    'desc_tip' => true,
+                    'value'  => '1',
+                    'default'  => 0,
+                    'advanced' => true
+                ),
                 'hide_empty'  => array(
                     'title' => __('Hide empty:', 'geodirectory'),
                     'desc' => __('This will hide categories that do not have any listings.', 'geodirectory'),
@@ -84,7 +93,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                 ),
                 'cpt_left'  => array(
                     'title' => __('Show single column:', 'geodirectory'),
-                    'desc' => __('This will hide the category icons from the list.', 'geodirectory'),
+                    'desc' => __('This will show list in single column.', 'geodirectory'),
                     'type' => 'checkbox',
                     'desc_tip' => true,
                     'value'  => '1',
@@ -156,12 +165,14 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
      */
     public function output($args = array(), $widget_args = array(),$content = ''){
 
+		add_action('wp_footer', array($this, 'add_js'));
+		
         ob_start();
         // options
         $defaults = array(
-            'post_type'      => '0', // 0 =  all
+            'post_type' => '0', // 0 =  all
             'hide_empty' => '0',
-           
+			'cpt_ajax' => '0'
         );
 
         /**
@@ -171,7 +182,9 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
         $output = geodir_cpt_categories_output($options );
 
-        echo '<div class="gd-cptcats-widget">';
+		$ajax_class = ! empty( $options['cpt_ajax'] ) ? ' gd-wgt-cpt-ajax' : '';
+
+        echo '<div class="gd-cptcats-widget' . $ajax_class . '">';
         echo $output;
         echo '</div>';
 
@@ -196,4 +209,53 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
         return $options;
     }
+	
+	public static function get_categories( $params ) {
+		$params['via_ajax'] = true;
+		$output = geodir_cpt_categories_output( $params );
+		if ( ! empty( $output ) ) {
+			echo $output;
+		} else {
+			echo '<div class="gd-cptcats-empty">' . __( 'No categories found','geodirectory' ) . '</div>';
+		}
+	}
+	
+	/**
+	 * Adds the javascript in the footer for best of widget.
+	 *
+	 * @since 2.0.0
+	 */
+	public function add_js() {
+		$ajax_nonce = wp_create_nonce("geodir-categories-nonce");
+		?>
+        <script type="text/javascript">
+            if (!window.gdCategoriesJs) {
+                jQuery(document).ready(function() {
+                    jQuery('.geodir-cat-list-tax').on("change", function(e) {
+                        e.preventDefault();
+                        var $widgetBox = jQuery(this).closest('.geodir-categories-container');
+                        var $container = jQuery('.gd-cptcat-rows', $widgetBox);
+                        $container.addClass('gd-loading');
+                        $container.html('<i class="fa fa-cog fa-spin"></i>');
+                        var data = {
+                            'action': 'geodir_cpt_categories',
+                            'security': geodirectory_params.basic_nonce,
+                            'ajax_cpt': jQuery(this).val()
+                        };
+                        jQuery('.gd-wgt-params', $widgetBox).find('input').each(function() {
+                            if (jQuery(this).attr('name')) {
+                                data[jQuery(this).attr('name')] = jQuery(this).val();
+                            }
+                        });
+                        jQuery.post(geodirectory_params.ajax_url, data, function(response) {
+                            $container.html(response);
+                            $container.removeClass('gd-loading');
+                        });
+                    })
+                });
+                window.gdCategoriesJs = true;
+			}
+        </script>
+		<?php
+	}
 }

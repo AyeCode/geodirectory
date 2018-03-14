@@ -1072,10 +1072,11 @@ function geodir_show_detail_page_tabs() {
 		$map_args['enable_text_search']       = false;
 		$map_args['enable_post_type_filters'] = false;
 		$map_args['enable_location_filters']  = false;
-		$map_args['enable_jason_on_load']     = true;
+		$map_args['enable_jason_on_load']     = false;
 		$map_args['enable_map_direction']     = true;
 		$map_args['map_class_name']           = 'geodir-map-detail-page';
 		$map_args['maptype']                  = ( ! empty( $post->post_mapview ) ) ? $post->post_mapview : 'ROADMAP';
+		$map_args['posts']           		  = $post->ID;
 	} else if ( geodir_is_page( 'preview' ) ) {
 		$video          = isset( $post->geodir_video ) ? $post->geodir_video : '';
 		$special_offers = isset( $post->geodir_special_offers ) ? $post->geodir_special_offers : '';
@@ -1128,9 +1129,10 @@ function geodir_show_detail_page_tabs() {
 		$map_args['enable_text_search']       = false;
 		$map_args['enable_post_type_filters'] = false;
 		$map_args['enable_location_filters']  = false;
-		$map_args['enable_jason_on_load']     = true;
+		$map_args['enable_jason_on_load']     = false;
 		$map_args['enable_map_direction']     = true;
 		$map_args['map_class_name']           = 'geodir-map-preview-page';
+		$map_args['posts']           		  = $post->ID;
 	}
 
 	$arr_detail_page_tabs = geodir_detail_page_tabs_list();// get this sooner so we can get the active tab for the user

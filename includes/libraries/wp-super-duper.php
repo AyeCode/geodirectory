@@ -758,7 +758,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						<input <?php echo $placeholder; ?> class="widefat"
 						                                   id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
 						                                   name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>"
-						                                   type="<?php esc_attr( $args['type'] ); ?>"
+						                                   type="<?php echo esc_attr( $args['type'] ); ?>"
 						                                   value="<?php echo esc_attr( $value ); ?>">
 					</p>
 					<?php
