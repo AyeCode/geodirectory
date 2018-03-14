@@ -52,6 +52,7 @@ class GeoDir_AJAX {
 			'import_export'         => false,
 			'save_api_key'			=> false,
 			'bestof'			=> true,
+			'cpt_categories' => true,
 		);
 
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
@@ -75,6 +76,18 @@ class GeoDir_AJAX {
 		check_ajax_referer( 'geodir_basic_nonce', 'security' );
 
 		GeoDir_Widget_Best_Of::best_of(array(), $_REQUEST);
+
+		wp_die();
+	}
+	
+	/**
+	 * GD Categories widget ajax.
+	 */
+	public static function cpt_categories(){
+		// security
+		check_ajax_referer( 'geodir_basic_nonce', 'security' );
+
+		GeoDir_Widget_Categories::get_categories($_POST);
 
 		wp_die();
 	}

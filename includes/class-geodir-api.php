@@ -215,6 +215,10 @@ class GeoDir_API {
 	public function setup_show_in_rest() {
 		global $wp_post_types, $wp_taxonomies;
 
+		if ( ! geodir_api_enabled() ) {
+			return;
+		}
+
 		$post_types = geodir_get_posttypes( 'array' );
 
 		if ( ! empty( $post_types ) ) {

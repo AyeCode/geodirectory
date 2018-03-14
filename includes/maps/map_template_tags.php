@@ -122,6 +122,13 @@ function geodir_draw_map($map_args = array())
         'navigationControlOptions' => array('position' => 'TOP_LEFT', 'style' => 'ZOOM_PAN'),
 		'map_ajax_url' => geodir_rest_markers_url()
     );
+	// Terms.
+	$terms = ! empty( $map_args['terms'] ) ? $map_args['terms'] : '';
+	$terms = is_array( $terms ) ? implode( ',', $terms ) : $terms;
+	
+	// Posts.
+	$posts = ! empty( $map_args['posts'] ) ? $map_args['posts'] : '';
+	$posts = is_array( $posts ) ? implode( ',', $posts ) : $posts;
 
     if (!empty($map_args)) {
         foreach ($map_args as $map_option_key => $map_option_value) {
@@ -400,7 +407,12 @@ function geodir_draw_map($map_args = array())
                 <?php }?>
 
                 <input type="hidden" id="<?php echo $map_canvas_name;?>_posttype" name="gd_posttype" value="<?php echo $map_search_pt;?>"/>
-
+				<?php if ( ! empty( $terms ) ) { ?>
+				<input type="hidden" name="terms" value="<?php echo $terms; ?>"/>
+				<?php } ?>
+				<?php if ( ! empty( $posts ) ) { ?>
+				<input type="hidden" name="posts" value="<?php echo $posts; ?>"/>
+				<?php } ?>
                 <input type="hidden" name="limitstart" value=""/>
 
 

@@ -12,108 +12,91 @@
  *
  * @since 1.0.0
  */
-class GeoDir_Widget_Popular_Post_Category extends WP_Widget {
+class GeoDir_Widget_Popular_Post_Category extends WP_Super_Duper {
     
     /**
-     * Register the popular post category widget.
+     * Register the categories with WordPress.
      *
-     * @since 1.0.0
-     * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
      */
     public function __construct() {
-        $widget_ops = array(
-            'classname' => 'geodir_popular_post_category',
-            'description' => __( 'GD > Popular Post Category', 'geodirectory' ),
-            'customize_selective_refresh' => true,
-            'geodirectory' => true,
-            'gd_show_pages' => array(),
+
+        $options = array(
+            'textdomain'    	=> GEODIRECTORY_TEXTDOMAIN,
+            'block-icon'    	=> 'admin-site',
+            'block-category'	=> 'widgets',
+            'block-keywords'	=> "['category','geo','popular']",
+            'class_name'    	=> __CLASS__,
+            'base_id'       	=> 'gd_popular_post_category', // this us used as the widget id and the shortcode id.
+            'name'          	=> __('GD > Popular Post Category','geodirectory'), // the name of the widget.
+            'widget_ops'    	=> array(
+                'classname'   => 'gd-wgt-popular-post-category', // widget class
+                'description' => esc_html__('Shows a list of popular GeoDirectory categories.','geodirectory'), // widget description
+                'customize_selective_refresh' => true,
+                'geodirectory' => true,
+                'gd_show_pages' => array(),
+            ),
+            'arguments'     	=> array(
+                'title'  => array(
+                    'title' => __('Title:', 'geodirectory'),
+                    'desc' => __('The widget title.', 'geodirectory'),
+                    'type' => 'text',
+                    'default'  => '',
+                    'desc_tip' => true,
+                    'advanced' => false
+                ),
+                'default_post_type'  => array(
+                    'title' => __('Default post type:', 'geodirectory'),
+                    'desc' => __('The default post type to use if current post type not set by the page.', 'geodirectory'),
+                    'type' => 'select',
+                    'options' => geodir_get_posttypes('options-plural'),
+                    'default'  => '',
+                    'desc_tip' => true,
+                    'advanced' => true
+                ),
+				'category_limit'  => array(
+                    'title' => __('Customize categories count to appear by default:', 'geodirectory'),
+                    'desc' => __('After categories count reaches this limit option More Categories / Less Categoris will be displayed to show/hide categories. Default: 15', 'geodirectory'),
+                    'type' => 'text',
+                    'default'  => '15',
+                    'desc_tip' => true,
+                    'advanced' => false
+                ),
+			    'parent_only'  => array(
+				    'title' => __("Show parent categories only", 'geodirectory'),
+				    'type' => 'checkbox',
+				    'desc_tip' => true,
+				    'value'  => '1',
+				    'default'  => 0,
+				    'advanced' => true
+			    )
+            )
         );
-        parent::__construct( 'popular_post_category', __( 'GD > Popular Post Category', 'geodirectory' ), $widget_ops );
+
+        parent::__construct( $options );
     }
 
     /**
-     * Front-end display content for popular post category widget.
-     *
-     * @since 1.0.0
-     * @since 1.5.1 Declare function public.
-     *
-     * @param array $args     Widget arguments.
-     * @param array $instance Saved values from database.
-     */
-    public function widget($args, $instance) {
-        geodir_popular_post_category_output($args, $instance);
-    }
+	 * The Super block output function.
+	 *
+	 * @param array $args
+	 * @param array $widget_args
+	 * @param string $content
+	 *
+	 * @return mixed|string|void
+	 */
+	public function output($args = array(), $widget_args = array(),$content = '') {
+		ob_start();
+		
+		//	defaults
+		//	array(
+		//		'title' => '',
+		//		'default_post_type' => '',
+		//		'category_limit' => '15',
+		//		'parent_only' => '0'
+		//	)
 
-    /**
-     * Sanitize popular post category widget form values as they are saved.
-     *
-     * @since 1.0.0
-     * @since 1.5.1 Declare function public.
-     * @since 1.5.1 Added default_post_type parameter.
-     * @since 1.6.9 Added parent_only parameter.
-     *
-     * @param array $new_instance Values just sent to be saved.
-     * @param array $old_instance Previously saved values from database.
-     *
-     * @return array Updated safe values to be saved.
-     */ 
-    public function update($new_instance, $old_instance) {
-        //save the widget
-        $instance = $old_instance;
-        $instance['title'] = strip_tags($new_instance['title']);
-        $category_limit = (int)$new_instance['category_limit'];
-        $instance['category_limit'] = $category_limit > 0 ? $category_limit : 15;
-        $instance['default_post_type'] = isset($new_instance['default_post_type']) ? $new_instance['default_post_type'] : '';
-        $instance['parent_only'] = !empty($new_instance['parent_only']) ? true : false;
-        return $instance;
-    }
+		geodir_popular_post_category_output($args, $args);
 
-    /**
-     * Back-end popular post category widget settings form.
-     *
-     * @since 1.0.0
-     * @since 1.5.1 Declare function public.
-     * @since 1.5.1 Added option to set default post type.
-     * @since 1.6.9 Added option to show parent categories only.
-     *
-     * @param array $instance Previously saved values from database.
-     */
-    public function form($instance) {
-        //widgetform in backend
-        $instance = wp_parse_args((array)$instance, array('title' => '', 'category_limit' => 15, 'default_post_type' => '', 'parent_only' => false));
-
-        $title = strip_tags($instance['title']);
-        $category_limit = (int)$instance['category_limit'];
-        $category_limit = $category_limit > 0 ? $category_limit : 15;
-        $default_post_type = isset($instance['default_post_type']) ? $instance['default_post_type'] : '';
-        $parent_only = !empty($instance['parent_only']) ? true: false;
-        
-        $post_type_options = geodir_get_posttypes('options');
-        ?>
-        <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'geodirectory'); ?>
-                <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>"/>
-            </label>
-        </p>
-        <p>
-            <label for="<?php echo $this->get_field_id('post_type'); ?>"><?php _e('Default post type to use (if not set by page)', 'geodirectory');?>
-                <select class="widefat" id="<?php echo $this->get_field_id('default_post_type'); ?>" name="<?php echo $this->get_field_name('default_post_type'); ?>">
-                <?php foreach ($post_type_options as $name => $title) { ?>
-                    <option value="<?php echo $name;?>" <?php selected($name, $default_post_type);?>><?php echo $title; ?></option>
-                <?php } ?>
-                </select>
-            </label>
-        </p>
-        <p>
-            <label for="<?php echo $this->get_field_id('category_limit'); ?>"><?php _e('Customize categories count to appear by default:', 'geodirectory'); ?>
-                <input class="widefat" id="<?php echo $this->get_field_id('category_limit'); ?>" name="<?php echo $this->get_field_name('category_limit'); ?>" type="text" value="<?php echo (int)esc_attr($category_limit); ?>"/>
-                <p class="description" style="padding:0"><?php _e('After categories count reaches this limit option More Categories / Less Categoris will be displayed to show/hide categories. Default: 15', 'geodirectory'); ?></p>
-            </label>
-        </p>
-        <p>
-            <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('parent_only'); ?>" name="<?php echo $this->get_field_name('parent_only'); ?>"<?php checked( $parent_only ); ?> value="1" />
-            <label for="<?php echo $this->get_field_id('parent_only'); ?>"><?php _e( 'Show parent categories only', 'geodirectory' ); ?></label>
-        </p>
-    <?php
-    }
+		return ob_get_clean();
+	}
 }

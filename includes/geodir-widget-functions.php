@@ -256,12 +256,14 @@ function geodir_cpt_categories_output($params) {
             'max_level' => '1',
             'no_cpt_filter' => '',
             'no_cat_filter' => '',
+			'cpt_ajax' => '',
         )
     );
 
     $sort_by = isset($args['sort_by']) && in_array($args['sort_by'], array('az', 'count')) ? $args['sort_by'] : 'count';
     $cpt_filter = empty($args['no_cpt_filter']) ? true : false;
     $cat_filter = empty($args['no_cat_filter']) ? true : false;
+	$cpt_ajax = ! empty( $args['cpt_ajax'] ) ? true : false;
 
     $gd_post_types = geodir_get_posttypes('array');
 
@@ -328,9 +330,9 @@ function geodir_cpt_categories_output($params) {
     $cpt_left = !empty($args['cpt_left']) ? true : false;
 
     if(!$cpt_left){
-        $cpt_left = "gd-cpt-flat";
+        $cpt_left_class = "gd-cpt-flat";
     }else{
-        $cpt_left = '';
+        $cpt_left_class = '';
     }
 
     $orderby = 'count';
@@ -339,11 +341,37 @@ function geodir_cpt_categories_output($params) {
         $orderby = 'name';
         $order = 'ASC';
     }
+	
+	$via_ajax = ! empty($params['via_ajax']) && wp_doing_ajax() ? $params['via_ajax'] : false;
+	$ajax_cpt = ! empty($params['ajax_cpt']) && $via_ajax ? $params['ajax_cpt'] : '';
+	if ( $via_ajax ) {
+		if ( ! empty( $params['ajax_is_listing'] ) ) {
+			$is_listing = true;
+		}
+		if ( ! empty( $params['ajax_is_detail'] ) ) {
+			$is_detail = true;
+		}
+		if ( ! empty( $params['ajax_is_category'] ) ) {
+			$is_category = true;
+		}
+		if ( ! empty( $params['ajax_post_ID'] ) ) {
+			$post_ID = $params['ajax_post_ID'];
+		}
+		if ( ! empty( $params['ajax_current_term_id'] ) ) {
+			$current_term_id = $params['ajax_current_term_id'];
+		}
+	}
 
     $output = '';
     if (!empty($post_types)) {
+		$cpt_options = array('<option value="post">' . wp_sprintf( __( '%s Categories', 'geodirectory' ), 'Post' ) . '</option>');
+		$cpt_list = '';
         foreach ($post_types as $cpt => $cpt_info) {
-            $parent_category = ($is_category && $cat_filter && $cpt == $current_posttype) ? $current_term_id : 0;
+			if ($ajax_cpt && $ajax_cpt !== $cpt) {
+				continue;
+			}
+            $cpt_options[] = '<option value="' . $cpt . '" ' . selected( $cpt, $current_posttype, false ) . '>' . wp_sprintf( __( '%s Categories', 'geodirectory' ), $cpt_info['labels']['singular_name'] ) . '</option>';
+			$parent_category = ($is_category && $cat_filter && $cpt == $current_posttype) ? $current_term_id : 0;
             $cat_taxonomy = $cpt . 'category';
             $skip_childs = false;
             if ($cat_filter && $cpt == $current_posttype && $is_detail && $post_ID) {
@@ -367,7 +395,7 @@ function geodir_cpt_categories_output($params) {
                 if ($is_listing) {
                     $row_class = $is_category ? ' gd-cptcat-categ' : ' gd-cptcat-listing';
                 }
-                $cpt_row = '<div class="gd-cptcat-row gd-cptcat-' . $cpt . $row_class . ' '.$cpt_left.'">';
+                $cpt_row = '<div class="gd-cptcat-row gd-cptcat-' . $cpt . $row_class . ' '.$cpt_left_class.'">';
 
                 if ($is_category && $cat_filter && $cpt == $current_posttype) {
                     $term_info = get_term($current_term_id, $cat_taxonomy);
@@ -388,7 +416,7 @@ function geodir_cpt_categories_output($params) {
                     /** Filter documented in includes/general_functions.php **/
                     $term_link = apply_filters( 'geodir_category_term_link', $term_link, $category->term_id, $cpt );
 
-                    $cpt_row .= '<ul class="gd-cptcat-ul gd-cptcat-parent  '.$cpt_left.'">';
+                    $cpt_row .= '<ul class="gd-cptcat-ul gd-cptcat-parent  '.$cpt_left_class.'">';
                     $cpt_row .= '<li class="gd-cptcat-li gd-cptcat-li-main">';
                     $count = $show_count ? ' <span class="gd-cptcat-count">(' . $category->count . ')</span>' : '';
                     $cpt_row .= '<h3 class="gd-cptcat-cat"><a href="' . esc_url($term_link) . '" title="' . esc_attr($category->name) . '">'  .$term_icon_url . $category->name . $count . '</a></h3>';
@@ -400,13 +428,39 @@ function geodir_cpt_categories_output($params) {
                 }
                 $cpt_row .= '</div>';
 
-                $output .= $cpt_row;
+                $cpt_list .= $cpt_row;
             }
         }
+		if ( !$via_ajax && $cpt_ajax && ! empty( $cpt_options ) ) {
+			$post_type = is_array( $args['post_type'] ) ? implode( ',', $args['post_type'] ) : (! empty($args['post_type']) ? $args['post_type'] : '0');
+			$output .= '<div class="gd-cptcats-select"><div class="gd-wgt-params">';
+			$output .= '<input type="hidden" name="post_type" value="' . $post_type . '">';
+			$output .= '<input type="hidden" name="cpt_ajax" value="' . $cpt_ajax . '">';
+			$output .= '<input type="hidden" name="hide_empty" value="' . $hide_empty . '">';
+			$output .= '<input type="hidden" name="show_count" value="' . $show_count . '">';
+			$output .= '<input type="hidden" name="hide_icon" value="' . $hide_icon . '">';
+			$output .= '<input type="hidden" name="cpt_left" value="' . $cpt_left . '">';
+			$output .= '<input type="hidden" name="sort_by" value="' . $sort_by . '">';
+			$output .= '<input type="hidden" name="max_level" value="' . $max_level . '">';
+			$output .= '<input type="hidden" name="max_count" value="' . $max_count . '">';
+			$output .= '<input type="hidden" name="no_cpt_filter" value="' . $args['no_cpt_filter'] . '">';
+			$output .= '<input type="hidden" name="no_cat_filter" value="' . $args['no_cat_filter'] . '">';
+			$output .= '<input type="hidden" name="ajax_is_listing" value="' . $is_listing . '">';
+			$output .= '<input type="hidden" name="ajax_is_detail" value="' . $is_detail . '">';
+			$output .= '<input type="hidden" name="ajax_is_category" value="' . $is_category . '">';
+			$output .= '<input type="hidden" name="ajax_post_ID" value="' . $post_ID . '">';
+			$output .= '<input type="hidden" name="ajax_current_term_id" value="' . $current_term_id . '">';
+			$output .= '</div><select class="geodir-cat-list-tax geodir-select">' . implode( '', $cpt_options ) . '</select>';
+			$output .= '</div><div class="gd-cptcat-rows">';
+		}
+		$output .= $cpt_list;
+		if ( !$via_ajax && $cpt_ajax && ! empty( $cpt_options ) ) {
+			$output .= '</div>';
+		}
     }
         
     $gd_use_query_vars = $old_gd_use_query_vars;
-    
+
     return $output;
 }
 

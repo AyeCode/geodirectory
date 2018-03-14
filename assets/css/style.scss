@@ -2553,3 +2553,30 @@ body > span[style*='top: -999px']{display: none;}
 	margin: 15px 0;
 }
 /* closed down message end */
+.gd-cptcat-rows.gd-loading {
+	min-height: 45px;
+	text-align: center;
+	padding-top: 15px;
+}
+.gd-cptcats-empty {
+	padding: 10px;
+}
+.gd-wgt-cpt-ajax .gd-cptcat-rows {
+	border: 1px #e1e1e1 solid;
+    border-top: none;
+}
+.gd-wgt-cpt-ajax .gd-cptcat-rows > .gd-cptcat-row {
+	margin: 0;
+	width: 100%;
+	padding: 10px;
+}
+.gd-wgt-cpt-ajax .gd-cptcat-rows > .gd-cptcat-row > ul {
+	padding: 0;
+}
+.gd-wgt-cpt-ajax .gd-cptcat-rows > .gd-cptcat-row > ul li {
+	margin-top: -1px;
+	margin-bottom: 0;
+}
+.gd-wgt-cpt-ajax .gd-cptcat-row:last-child .gd-cptcat-li:last-child {
+	border-bottom: 0;
+}
