@@ -3,12 +3,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// load via plugin just now @todo update this before release
-if(!class_exists('WP_Super_Duper') && file_exists(dirname( __FILE__ ) . "/../../../wp-super-duper/wp-super-duper.php")) {
-	include_once( dirname( __FILE__ ) . "/../../../wp-super-duper/wp-super-duper.php" );
-	return;
-}
-
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 
@@ -42,7 +36,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			$this->options = $options;
 
 			$this->base_id   = $options['base_id'];
-			$this->arguments = isset($options['arguments']) ? $options['arguments'] : '';
+			$this->arguments = isset($options['arguments']) ? $options['arguments'] : array();
 
 
 			// init parent
@@ -72,10 +66,14 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 *
 		 * @return mixed
 		 */
-		private function add_name_from_key($options){
+		private function add_name_from_key($options,$arguments = false){
 			if(!empty($options['arguments'])){
 				foreach($options['arguments'] as $key => $val){
 					$options['arguments'][$key]['name'] = $key;
+				}
+			}elseif($arguments && is_array($options) && !empty($options)){
+				foreach($options as $key => $val){
+					$options[$key]['name'] = $key;
 				}
 			}
 			return $options;
@@ -179,6 +177,10 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		public function argument_values( $instance ) {
 			$argument_values = array();
 
+			if ( empty( $this->arguments ) ) {
+				$this->arguments = $this->set_arguments();
+			}
+
 			if ( ! empty( $this->arguments ) ) {
 				foreach ( $this->arguments as $key => $args ) {
 					// set the input name from the key
@@ -192,6 +194,17 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 
 			return $argument_values;
+		}
+		
+		public function set_arguments(){
+			return $this->arguments;
+		}
+
+		public function get_arguments(){
+			if(empty($this->arguments)){
+				$this->arguments = $this->add_name_from_key($this->set_arguments(), true);
+			}
+			return $this->arguments;
 		}
 
 		/**
@@ -317,6 +330,10 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 								}elseif ( $args['type'] == 'select' && !empty($args['multiple'])) {
 									$type    = 'array';
 									$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
+								}
+								elseif ( $args['type'] == 'multiselect') {
+									$type    = 'array';
+									$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
 								} else {
 									$type    = 'string';
 									$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
@@ -418,6 +435,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 									$extra = '';
 									$require = '';
 									$onchange = "props.setAttributes({ $key: $key } )";
+									$value = "props.attributes.$key";
 									$text_type = array( 'text', 'password', 'number', 'email', 'tel', 'url', 'color' );
 									if ( in_array( $args['type'], $text_type ) ) {
 										$type = 'TextControl';
@@ -425,7 +443,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 										$type = 'CheckboxControl';
 										$extra .= "checked: props.attributes.$key,";
 										$onchange = "props.setAttributes({ $key: ! props.attributes.$key } )";
-									} elseif ( $args['type'] == 'select' ) {
+									} elseif ( $args['type'] == 'select' || $args['type'] == 'multiselect' ) {
 										$type = 'SelectControl';
 										if ( ! empty( $args['options'] ) ) {
 											$options .= "options  : [";
@@ -434,7 +452,13 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 											}
 											$options .= "],";
 										}
-									} elseif ( $args['type'] == 'alignment' ) {
+										if(isset($args['multiple']) && $args['multiple']){ //@todo multiselect does not work at the moment: https://github.com/WordPress/gutenberg/issues/5550
+											$extra .= ' multiple: true, ';
+											//$onchange = "props.setAttributes({ $key: ['edit'] } )";
+											//$value = "['edit', 'delete']";
+										}
+									}
+									elseif ( $args['type'] == 'alignment' ) {
 										$type = 'AlignmentToolbar'; // @todo this does not seem to work but cant find a example
 									} else {
 										continue;// if we have not implemented the control then don't break the JS.
@@ -454,7 +478,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 										{
 											label: '<?php echo esc_attr( $args['title'] );?>',
 											help: '<?php if(isset($args['desc'] )) echo esc_attr( $args['desc'] );?>',
-											value: props.attributes.<?php echo $key;?>,
+											value: <?php echo $value ;?>,
 											<?php if ( $type == 'TextControl' && $args['type'] != 'text' ) {
 											echo "type: '" . esc_attr( $args['type'] ) . "',";
 										}?>
@@ -701,7 +725,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				$argument_values = $this->string_to_bool($argument_values);
 				echo $output;
 				echo $args['after_widget'];
-            }
+			}
 		}
 
 		/**
@@ -710,12 +734,12 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 * @param array $instance The widget options.
 		 */
 		public function form( $instance ) {
-			if ( is_array( $this->arguments ) ) {
-				foreach ( $this->arguments as $key => $args ) {
+			echo "<p>".esc_attr($this->options['widget_ops']['description'])."</p>";
+			$arguments = $this->get_arguments();
+			if ( is_array( $arguments ) ) {
+				foreach ( $arguments as $key => $args ) {
 					$this->widget_inputs( $args, $instance );
 				}
-			}else{
-				echo "<p>".esc_attr($this->options['widget_ops']['description'])."</p>";
 			}
 		}
 
@@ -771,11 +795,14 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
 						<select <?php echo $placeholder; ?> class="widefat"
 						                                    id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
-						                                    name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>">
+						                                    name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>"
+							<?php if(isset($args['multiple']) && $args['multiple']){echo "multiple";} //@todo not implemented yet due to gutenberg not supporting it?>
+						>
 							<?php
+
 							if ( ! empty( $args['options'] ) ) {
 								foreach ( $args['options'] as $val => $label ) {
-									echo "<option value='$val' " . selected( $value, $val ) . ">$label</option>";
+									echo "<option value='$val' " . selected( $value, $val, false ) . ">$label</option>";
 								}
 							}
 							?>
@@ -886,12 +913,12 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 			// check for checkboxes
 			if(!empty($this->arguments)){
-			    foreach($this->arguments as $argument){
-			        if(isset($argument['type']) && $argument['type']=='checkbox' && !isset($new_instance[$argument['name']])){
-				        $instance[$argument['name']] = '0';
-                    }
-                }
-            }
+				foreach($this->arguments as $argument){
+					if(isset($argument['type']) && $argument['type']=='checkbox' && !isset($new_instance[$argument['name']])){
+						$instance[$argument['name']] = '0';
+					}
+				}
+			}
 
 			return $instance;
 		}

@@ -1062,8 +1062,8 @@ function geodir_show_detail_page_tabs() {
 		$map_args['map_canvas_name'] = 'detail_page_map_canvas';
 		$map_args['width']           = '600';
 		$map_args['height']          = '300';
-		if ( $post->post_mapzoom ) {
-			$map_args['zoom'] = '' . $post->post_mapzoom . '';
+		if ( $gd_post->mapzoom ) {
+			$map_args['zoom'] = '' . $gd_post->mapzoom . '';
 		}
 		$map_args['autozoom']                 = false;
 		$map_args['scrollwheel']              = ( geodir_get_option( 'geodir_add_listing_mouse_scroll' ) ) ? 0 : 1;

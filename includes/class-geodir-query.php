@@ -192,9 +192,7 @@ class GeoDir_Query {
 			//$q->is_archive = true;
 			//$q->is_post_type_archive = true;
 		}
-
-
-
+		
 		//print_r($q);
 
 

@@ -1857,7 +1857,7 @@ function geodir_cfi_tags($html,$cf){
 add_filter('geodir_custom_field_input_tags','geodir_cfi_tags',10,2);
 
 /**
- * Get the html input for the custom field: tags
+ * Get the html input for the custom field: images
  *
  * @param string $html The html to be filtered.
  * @param array $cf The custom field array details.
@@ -1898,14 +1898,7 @@ function geodir_cfi_images($html,$cf){
         //print_r($cf);exit;
 
         $curImages = '';
-
-        $thumb_img_arr = geodir_get_images($gd_post->ID);
-        if ($thumb_img_arr) {
-            foreach ($thumb_img_arr as $post_img) {
-                $curImages .= $post_img->src . ',';
-            }
-        }
-
+        
 
         $package_info = array();
         $package_info = geodir_post_package_info($package_info, $post->ID);

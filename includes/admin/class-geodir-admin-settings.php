@@ -50,7 +50,7 @@ class GeoDir_Admin_Settings {
 
 			// CPT Settings
 			if(isset($_REQUEST['page']) && $_REQUEST['page']=='gd-cpt-settings'){
-				$settings[] = include( 'settings/class-geodir-settings-cpt-cf.php' );
+				//$settings[] = include( 'settings/class-geodir-settings-cpt-cf.php' );
 				$settings[] = include( 'settings/class-geodir-settings-cpt-sorting.php' );
 				$settings[] = include( 'settings/class-geodir-settings-cpt.php' );
 			} else {
@@ -59,13 +59,6 @@ class GeoDir_Admin_Settings {
 				$settings[] = include( 'settings/class-geodir-settings-design.php' );
 				$settings[] = include( 'settings/class-geodir-settings-import-export.php' );
 				$settings[] = include( 'settings/class-geodir-settings-api.php' );
-//			$settings[] = include( 'settings/class-wc-settings-products.php' );
-//			$settings[] = include( 'settings/class-wc-settings-tax.php' );
-//			$settings[] = include( 'settings/class-wc-settings-shipping.php' );
-//			$settings[] = include( 'settings/class-wc-settings-checkout.php' );
-//			$settings[] = include( 'settings/class-wc-settings-accounts.php' );
-//			$settings[] = include( 'settings/class-wc-settings-emails.php' );
-//			$settings[] = include( 'settings/class-wc-settings-integrations.php' );
 			}
 
 			self::$settings = apply_filters( 'geodir_get_settings_pages', $settings );

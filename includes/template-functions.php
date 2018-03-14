@@ -556,37 +556,45 @@ function geodir_list_view_select() {
 				return;
 			}
 
-			var listSel = jQuery(list).parent().parent().next('.geodir_category_list_view');
+			var listSel = jQuery(list).parent().parent().next('.geodir-category-list-view');
+			console.log(listSel);
 			if (val != 1) {
-				jQuery(listSel).children('li').addClass('geodir-gridview');
-				jQuery(listSel).children('li').removeClass('geodir-listview');
+				jQuery(listSel).addClass('geodir-gridview');
+				jQuery(listSel).removeClass('geodir-listview');
 			} else {
-				jQuery(listSel).children('li').addClass('geodir-listview');
+				jQuery(listSel).addClass('geodir-listview');
 			}
 
 			if (val == 1) {
-				jQuery(listSel).children('li').removeClass('geodir-gridview gridview_onehalf gridview_onethird gridview_onefourth gridview_onefifth');
+				jQuery(listSel).removeClass('geodir-gridview gridview_onehalf gridview_onethird gridview_onefourth gridview_onefifth');
 			}
 			else if (val == 2) {
-				jQuery(listSel).children('li').GDswitchClass('gridview_onethird gridview_onefourth gridview_onefifth', 'gridview_onehalf', 600);
+				jQuery(listSel).GDswitchClass('gridview_onethird gridview_onefourth gridview_onefifth', 'gridview_onehalf', 600);
 			}
 			else if (val == 3) {
-				jQuery(listSel).children('li').GDswitchClass('gridview_onehalf gridview_onefourth gridview_onefifth', 'gridview_onethird', 600);
+				jQuery(listSel).GDswitchClass('gridview_onehalf gridview_onefourth gridview_onefifth', 'gridview_onethird', 600);
 			}
 			else if (val == 4) {
-				jQuery(listSel).children('li').GDswitchClass('gridview_onehalf gridview_onethird gridview_onefifth', 'gridview_onefourth', 600);
+				jQuery(listSel).GDswitchClass('gridview_onehalf gridview_onethird gridview_onefifth', 'gridview_onefourth', 600);
 			}
 			else if (val == 5) {
-				jQuery(listSel).children('li').GDswitchClass('gridview_onehalf gridview_onethird gridview_onefourth', 'gridview_onefifth', 600);
+				jQuery(listSel).GDswitchClass('gridview_onehalf gridview_onethird gridview_onefourth', 'gridview_onefifth', 600);
 			}
 
 			jQuery.post("<?php echo geodir_get_ajax_url();?>&gd_listing_view=" + val, function (data) {
 				//alert(data );
 			});
+
+
+			// animation takes 0.6s
+			jQuery(window).trigger('resize');
+			setTimeout(function(){jQuery(window).trigger('resize');}, 600);
+
+
 		}
 	</script>
 	<div class="geodir-list-view-select">
-		<select name="gd_list_view" id="gd_list_view" onchange="geodir_list_view_select(this);">
+		<select name="gd_list_view" id="gd_list_view" onchange="geodir_list_view_select(this);" class="geodir-select" style="min-width: 130px;    border-radius: 4px;">
 			<?php $listing_view = (int) $gd_session->get( 'gd_listing_view' ); ?>
 			<option value=""><?php _e( 'View:', 'geodirectory' ); ?></option>
 			<option

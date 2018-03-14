@@ -11,7 +11,7 @@
  * GeoDirectory Best of widget widget class.
  *
  * @since 1.3.9
- * @todo needs super dupered and new jaax calls added
+ * @todo needs some styling and a bit of code tidying
  */
 class GeoDir_Widget_Best_Of extends WP_Super_Duper {
     
@@ -22,14 +22,6 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
      * @since 1.5.1 Changed from PHP4 style constructors to PHP5 __construct.
      */
     public function __construct() {
-//        $widget_ops = array(
-//            'classname' => 'geodir_bestof_widget',
-//            'description' => __( 'GD > Best of widget', 'geodirectory' ),
-//            'customize_selective_refresh' => true,
-//            'geodirectory' => true,
-//            'gd_show_pages' => array(),
-//        );
-//        parent::__construct( 'bestof_widget', __( 'GD > Best of widget', 'geodirectory' ), $widget_ops );
 
 	    $options = array(
 		    'textdomain'    => GEODIRECTORY_TEXTDOMAIN,

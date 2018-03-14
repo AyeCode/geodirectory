@@ -44,9 +44,9 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 
 			$sections = array(
 				''          		=> __( 'Design options', 'geodirectory' ),
-				'admin_emails'  	=> __( 'Archives', 'geodirectory' ),
-				'client_emails' 	=> __( 'Details', 'geodirectory' ),
-				'reviews' 		=> __( 'Reviews', 'geodirectory' ),
+				'archives'      	=> __( 'Archives', 'geodirectory' ),
+				'details' 	        => __( 'Details', 'geodirectory' ),
+				'reviews' 		    => __( 'Reviews', 'geodirectory' ),
 				'email_template' 	=> __( 'Email Template', 'geodirectory' ),
 			);
 
@@ -209,36 +209,24 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 
 				));
 			}
-			elseif($current_section == 'client_emails'){
+			elseif($current_section == 'details'){
 				$settings = apply_filters( 'geodir_user_email_settings', array(
 
 
-					array('name' => __('Listing submitted', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_user_pending_post_settings'),
+					array('name' => __('Details page', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_design_details_settings'),
+
+					array(
+						'name' => __( 'Disable theme feature image output?', 'geodirectory' ),
+						'desc' => __( 'This will try to disable the theme featured image output, this can be useful if you are seeing double images on the details page.', 'geodirectory' ),
+						'id'   => 'details_disable_featured',
+						'type' => 'checkbox',
+						'default'  => '1',
+						'advanced' => false
+					),
+
+					array('type' => 'sectionend', 'id' => 'admin_design_details_settings'),
 
 
-
-					array('type' => 'sectionend', 'id' => 'user_email_submitted_settings'),
-
-
-					array('name' => __('Listing published', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'user_email_published_settings'),
-
-
-
-
-					array('type' => 'sectionend', 'id' => 'user_email_published_settings'),
-
-					array('name' => __('Listing owner comment submitted', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'owner_email_comment_settings'),
-
-					array('type' => 'sectionend', 'id' => 'owner_email_comment_settings'),
-
-
-					array('name' => __('Listing owner comment approved', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'owner_email_comment_approved_settings'),
-
-					array('type' => 'sectionend', 'id' => 'owner_email_comment_approved_settings'),
-
-					array('name' => __('Comment author comment approved', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'author_email_comment_approved_settings'),
-
-					array('type' => 'sectionend', 'id' => 'author_email_comment_approved_settings'),
 
 				));
 			}elseif($current_section == 'admin_emails'){

@@ -866,7 +866,7 @@ class GeoDir_Admin_Dummy_Data {
 		                  'is_default' => '1',
 		                  'is_active' => '1',
 		                  'is_required' => '1',
-		                  'show_in' =>  '[detail],[mapbubble]',
+		                  'show_in' =>  '[mapbubble]',
 		                  'show_on_pkg' => $package,
 		                  'field_icon' => 'fa fa-minus',
 		                  'clabels' => __('Title', 'geodirectory'));
@@ -883,7 +883,7 @@ class GeoDir_Admin_Dummy_Data {
 		                  'is_default' => '1',
 		                  'is_active' => '1',
 		                  'is_required' => '1',
-		                  'show_in' => '[detail]',
+		                  'show_in' => '',
 		                  'show_on_pkg' => $package,
 		                  'field_icon' => 'fa fa-minus',
 		                  'clabels' => __('Description', 'geodirectory'));

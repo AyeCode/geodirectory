@@ -31,7 +31,6 @@ global $gridview_columns, $gd_session, $related_nearest, $related_parent_lat, $r
 ?>
 
 	<ul class="geodir-category-list-view clearfix <?php echo apply_filters('geodir_listing_listview_ul_extra_class', '', 'listing'); ?>">
-
 		<?php if (have_posts()) :
 
 			/**
