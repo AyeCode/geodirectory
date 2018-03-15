@@ -274,6 +274,7 @@ function geodir_cpt_categories_output($params) {
     $is_listing = false;
     $is_detail = false;
     $is_category = false;
+	$current_term_id = 0;
     $post_ID = 0;
     $is_listing_page = geodir_is_page('listing');
     $is_detail_page = geodir_is_page('detail');
