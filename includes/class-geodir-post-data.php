@@ -101,8 +101,13 @@ class GeoDir_Post_Data {
 
 	//echo '###';print_r($_REQUEST);print_r(self::$post_temp);print_r($post);exit;
 
+
+
 		// only fire if $post_temp is set
 		if ( $gd_post = self::$post_temp ) {
+
+			$is_dummy = isset($gd_post['post_dummy']) && $gd_post['post_dummy'] && isset($_REQUEST['action']) && $_REQUEST['action']=='geodir_insert_dummy_data' ? true : false;
+
 			// POST REVISION :  grab the original info
 			if ( isset( $gd_post['ID'] ) && $gd_post['ID'] === 0 && $gd_post['post_type'] == 'revision' ) {
 				$gd_post = (array) geodir_get_post_info( $gd_post['post_parent'] );
@@ -151,7 +156,7 @@ class GeoDir_Post_Data {
 
 
 			//check for dummy data categories
-			if ( isset( $gd_post['post_dummy'] ) && $gd_post['post_dummy'] && isset($gd_post['post_category'])) {
+			if ( $is_dummy && isset($gd_post['post_category'])) {
 				$categories = array_map( 'sanitize_text_field', $gd_post['post_category'] );
 				$cat_ids = array();
 				foreach($categories as $cat_name){
@@ -178,7 +183,9 @@ class GeoDir_Post_Data {
 				$postarr['default_category'] = absint( $gd_post['default_category'] );
 			}
 
+			//echo '###'.$post_categories.'###';exit;
 			if ( isset($post_categories) ) {
+				$post_categories = !is_array($post_categories) ? array_filter(explode(",",$post_categories)) : $post_categories;
 				$categories = array_map( 'absint', $post_categories );
 				$categories = array_filter(array_unique($categories));// remove duplicates and empty values
 				$postarr['post_category'] = "," . implode( ",", $categories ) . ",";
@@ -214,7 +221,7 @@ class GeoDir_Post_Data {
 
 			if ( $post_tags ) {
 
-				if ( !get_current_user_id() || (isset( $gd_post['post_dummy'] ) && $gd_post['post_dummy']) ) {
+				if ( !get_current_user_id() || $is_dummy ) {
 					$tags = array_map( 'sanitize_text_field', $post_tags );
 					$tags = array_map( 'trim', $tags );
 					wp_set_post_terms( $post_id, $tags,$post_type.'_tags');
@@ -273,7 +280,7 @@ class GeoDir_Post_Data {
 
 			// set post images
 			if ( isset( $gd_post['post_images'] ) ) {
-				$featured_image = self::save_post_images( $post_id, $gd_post['post_images'], isset( $gd_post['post_dummy'] ) );
+				$featured_image = self::save_post_images( $post_id, $gd_post['post_images'], $is_dummy);
 				if ( $featured_image !== false ) {
 					$postarr['featured_image'] = $featured_image;
 				}

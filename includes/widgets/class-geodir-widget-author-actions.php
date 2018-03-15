@@ -114,6 +114,8 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 
 			do_action( 'geodir_widget_after_detail_user_actions' );
 
+			echo "</div>";
+
 			$output .= ob_get_clean();
 		}
 

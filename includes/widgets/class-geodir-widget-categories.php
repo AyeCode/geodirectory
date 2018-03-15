@@ -226,7 +226,6 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 	 * @since 2.0.0
 	 */
 	public function add_js() {
-		$ajax_nonce = wp_create_nonce("geodir-categories-nonce");
 		?>
         <script type="text/javascript">
             if (!window.gdCategoriesJs) {

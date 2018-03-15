@@ -2321,11 +2321,11 @@ function geodir_popular_postview_output( $args = '', $instance = '' ) {
 
 	$title = str_replace( "%posttype_plural_label%", $posttype_plural_label, $title );
 	$title = str_replace( "%posttype_singular_label%", $posttype_singular_label, $title );
-    
+
 	$categories = $category;
 	if ( ! empty( $category ) && $category[0] != '0' ) {
 		$category_taxonomy = geodir_get_taxonomies( $post_type );
-		
+
 		######### WPML #########
 		if ( geodir_wpml_is_taxonomy_translated( $category_taxonomy[0] ) ) {
 			$category = geodir_lang_object_ids( $category, $category_taxonomy[0] );
@@ -2388,8 +2388,8 @@ function geodir_popular_postview_output( $args = '', $instance = '' ) {
 	}
 
 	if ( $location_allowed && $add_location_filter && $gd_session->get( 'all_near_me' ) && geodir_is_page( 'location' ) ) {
-		$viewall_url = add_query_arg( array( 
-			'geodir_search' => 1, 
+		$viewall_url = add_query_arg( array(
+			'geodir_search' => 1,
 			'stype' => $post_type,
 			's' => '',
 			'snear' => __( 'Near:', 'geodiradvancesearch' ) . ' ' . __( 'Me', 'geodiradvancesearch' ),
@@ -2473,11 +2473,11 @@ function geodir_popular_postview_output( $args = '', $instance = '' ) {
 	global $gridview_columns_widget, $geodir_is_widget_listing;
 
 	$widget_listings = geodir_get_widget_listings( $query_args );
-    
+
 	if ( $hide_if_empty && empty( $widget_listings ) ) {
 		return;
 	}
-    
+
 	echo $before_widget;
 
 	?>

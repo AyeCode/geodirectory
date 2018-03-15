@@ -14,7 +14,12 @@ class GeoDir_Template_Loader {
      * Hook in methods.
      */
     public static function init() {
+        // filter the templates
         add_filter( 'template_include', array( __CLASS__, 'template_loader' ) );
+
+        // remove the theme featured output
+        add_action( "wp", array(__CLASS__,'disable_theme_featured_output') );
+
     }
 
     /**
@@ -67,15 +72,23 @@ class GeoDir_Template_Loader {
         if ( geodir_is_singular() ) { // @todo we should make it use the "GD Details template" page template.
             //$default_file = 'single-listing.php';
             $default_file = 'page.php';
+            $page_id = geodir_details_page_id();
+            if($page_id &&  $template = get_page_template_slug( $page_id )){
+                if(is_page_template( $template )){
+                    $default_file = $template;
+                }
+            }
+            //echo '###'.$default_file;
             //self::setup_singular_page();
+            //$default_file = 'index.php';
             add_filter( 'the_content', array( __CLASS__, 'setup_singular_page' ) );
         } elseif ( geodir_is_taxonomy() ) {// @todo we should make it use the "GD Archive template" page template.
-            //$default_file = 'page.php'; // i think index.php works better here, more likely to have paging
-            $default_file = 'index.php';
+            $default_file = 'page.php'; // i think index.php works better here, more likely to have paging
+            //$default_file = 'index.php';
             self::setup_archive_loop_as_page();
         } elseif ( geodir_is_post_type_archive() ) {// @todo we should make it use the "GD Archive template" page template.
-            //$default_file = 'page.php'; // i think index.php works better here, more likely to have paging
-            $default_file = 'index.php';
+            $default_file = 'page.php'; // i think index.php works better here, more likely to have paging
+            //$default_file = 'index.php';
             self::setup_archive_loop_as_page();
         } elseif ( geodir_is_page( 'author' ) && !empty($wp_query->query['gd_favs']) ) {
             //$default_file = 'author.php';
@@ -298,6 +311,38 @@ class GeoDir_Template_Loader {
         //$wp_query->current_post = $wp_query->post_count;
 
         return $content;
+    }
+
+
+    /**
+     * Attempt to remove the theme featured image output if set to do so.
+     */
+    public static function disable_theme_featured_output(){
+        if(geodir_is_singular() && geodir_get_option('details_disable_featured',true) ){
+            add_filter( "get_post_metadata", array(__CLASS__,'filter_thumbnail_id'), 10, 4 );
+        }
+    }
+
+    /**
+     * Filter the post_meta _thumbnail_id
+     * 
+     * @param $metadata
+     * @param $object_id
+     * @param $meta_key
+     * @param $single
+     *
+     * @return bool
+     */
+    public static function filter_thumbnail_id($metadata, $object_id, $meta_key, $single){
+
+        if($meta_key=='_thumbnail_id'){
+            $metadata = false;
+        }
+
+        // should only need to fire once:
+        remove_action( "wp", array(__CLASS__,'disable_theme_featured_output') );
+
+        return $metadata;
     }
 
 }

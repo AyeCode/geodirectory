@@ -492,3 +492,9 @@ $GLOBALS['geodirectory'] = GeoDir();
 //function render_my_meta_box(){
 //	echo 'zzzz';
 //}
+
+//@todo we should add a dydanmic text to the theme sidebars that will allow a user to one click add recomended widgets
+add_action('dynamic_sidebar_before','xzxzxxz');
+function xzxzxxz(){
+	//echo '###';
+}

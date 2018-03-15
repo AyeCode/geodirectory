@@ -57,7 +57,6 @@ function goedir_register_widgets() {
     register_widget( 'GeoDir_Widget_Home_Page_Map' );
     register_widget( 'GeoDir_Widget_Listing_Page_Map' );
     register_widget( 'GeoDir_Widget_Dashboard' );
-    register_widget( 'GeoDir_Widget_Popular_Post_Category' );
     register_widget( 'GeoDir_Widget_Popular_Post_View' );
     register_widget( 'GeoDir_Widget_Recent_Reviews' );
     register_widget( 'GeoDir_Widget_Related_Listing' );
@@ -72,6 +71,8 @@ function goedir_register_widgets() {
     // Widgets
     register_widget( 'GeoDir_Widget_Output_location' );
     register_widget( 'GeoDir_Widget_Author_Actions' );
+    register_widget( 'GeoDir_Widget_Listings' );
+
 
 
 
@@ -364,7 +365,7 @@ function geodir_cpt_categories_output($params) {
 
     $output = '';
     if (!empty($post_types)) {
-		$cpt_options = array('<option value="post">' . wp_sprintf( __( '%s Categories', 'geodirectory' ), 'Post' ) . '</option>');
+		$cpt_options = array();//array('<option value="post">' . wp_sprintf( __( '%s Categories', 'geodirectory' ), 'Post' ) . '</option>');
 		$cpt_list = '';
         foreach ($post_types as $cpt => $cpt_info) {
 			if ($ajax_cpt && $ajax_cpt !== $cpt) {
