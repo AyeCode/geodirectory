@@ -488,5 +488,5 @@ function geodir_add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 2
  * @return string[]
  */
 function geodir_get_core_supported_themes() {
-	return array( 'twentyseventeen', 'twentysixteen', 'twentyfifteen', 'twentyfourteen', 'twentythirteen', 'twentyeleven', 'twentytwelve', 'twentyten' );
+	return array( 'directory-starter', 'twentyseventeen', 'twentysixteen', 'twentyfifteen', 'twentyfourteen', 'twentythirteen', 'twentyeleven', 'twentytwelve', 'twentyten' );
 }

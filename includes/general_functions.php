@@ -1461,7 +1461,7 @@ function geodir_function_widget_listings_where( $where ) {
 		}
 
 		if ( ! empty( $query_args['show_special_only'] ) ) {
-			$where .= " AND ( " . $table . ".geodir_special_offers != '' AND " . $table . ".geodir_special_offers IS NOT NULL )";
+			$where .= " AND ( " . $table . ".special_offers != '' AND " . $table . ".special_offers IS NOT NULL )";
 		}
 
 		if ( ! empty( $query_args['with_pics_only'] ) ) {
@@ -1473,7 +1473,7 @@ function geodir_function_widget_listings_where( $where ) {
 		}
 
 		if ( ! empty( $query_args['with_videos_only'] ) ) {
-			$where .= " AND ( " . $table . ".geodir_video != '' AND " . $table . ".geodir_video IS NOT NULL )";
+			$where .= " AND ( " . $table . ".video != '' AND " . $table . ".video IS NOT NULL )";
 		}
         
 		if ( ! empty( $query_args['show_favorites_only'] ) ) {

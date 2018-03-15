@@ -85,6 +85,19 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'desc_tip' => true,
                 'advanced' => true
             ),
+            'related_to'  => array(
+                'title' => __('Filter listings related to:', 'geodirectory'),
+                'desc' => __('Select to filter the listings related to current listing categories/tags on detail page.', 'geodirectory'),
+                'type' => 'select',
+                'options'   =>  array(
+                    '' => __('No filter', 'geodirectory'),
+                    'category' => __('Categories', 'geodirectory'),
+					'tags' => __('Tags', 'geodirectory')
+                ),
+                'default'  => '',
+                'desc_tip' => true,
+                'advanced' => true
+            ),
             'sort_by'  => array(
                 'title' => __('Sort by:', 'geodirectory'),
                 'desc' => __('How the listings should be sorted.', 'geodirectory'),
@@ -201,6 +214,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             array('title' => '',
                   'post_type' => '',
                   'category' => array(),
+				  'related_to' => '',
                   'category_title' => '',
                   'sort_by' => 'az',
                   'title_tag' => 'h3',
@@ -244,7 +258,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
      * @param array|string $instance           The settings for the particular instance of the widget.
      */
     public function output_html( $args = '', $instance = '' ) {
-        global $gd_session;
+        global $gd_session, $gd_post;
 
 
         // prints the widget
@@ -268,6 +282,14 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
          * @param string $instance ['category'] Filter by term. Can be any valid term.
          */
         $category = empty( $instance['category'] ) ? '0' : apply_filters( 'widget_category', $instance['category'] );
+		/**
+         * Filter the widget related_to param.
+         *
+         * @since 2.0.0
+         *
+         * @param string $instance ['related_to'] Filter by related to categories/tags.
+         */
+        $related_to = empty( $instance['related_to'] ) ? '' : apply_filters( 'widget_related_to', $instance['related_to'], $instance, $this->id_base );
         /**
          * Filter the widget listings limit.
          *
@@ -326,6 +348,12 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 $category  = array(); // old post type category will not work for current changed post type
             }
         }
+		if ( ( $related_to == 'category' || $related_to == 'tags' ) && ! empty( $gd_post->ID ) ) {
+			if ( $post_type != $gd_post->post_type ) {
+				$post_type = $gd_post->post_type;
+				$category = array();
+			}
+		}
         // replace widget title dynamically
         $posttype_plural_label   = __( get_post_type_plural_label( $post_type ), 'geodirectory' );
         $posttype_singular_label = __( get_post_type_singular_label( $post_type ), 'geodirectory' );
@@ -449,8 +477,6 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             'order_by'       => $list_sort
         );
 
-
-
         if ( $character_count ) {
             $query_args['excerpt_length'] = $character_count;
         }
@@ -483,8 +509,30 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             $query_args['tax_query'] = array( $tax_query );
         }
 
+		if ( ( $related_to == 'category' || $related_to == 'tags' ) && ! empty( $gd_post->ID ) ) {
+			$terms = array();
+			$term_field = 'id';
+			$term_taxonomy = $post_type . 'category'; 
+			if ( $related_to == 'category' && ! empty( $gd_post->post_category ) ) {
+				$terms = explode( ',', trim( $gd_post->post_category, ',' ) );
+			} else if ( $related_to == 'tags' && ! empty( $gd_post->post_tags ) ) {
+				$term_taxonomy = $post_type . '_tags'; 
+				$term_field = 'name';
+				$terms = explode( ',', trim( $gd_post->post_tags, ',' ) );
+			}
+			$query_args['post__not_in'] = $gd_post->ID;
+
+			$query_args['tax_query'] = array( 
+				array(
+					'taxonomy' => $term_taxonomy,
+					'field'    => $term_field,
+					'terms'    => $terms
+				)
+			);
+		}
+
         global $gridview_columns_widget, $geodir_is_widget_listing;
- //print_r($query_args );
+
         $widget_listings = geodir_get_widget_listings( $query_args );
 
         if ( $hide_if_empty && empty( $widget_listings ) ) {
