@@ -1,0 +1,114 @@
+body{
+    background:#f1f1f1;
+    box-shadow:none;
+    margin:100px auto 24px;
+    padding:0
+}
+#geodir-logo{
+    border:0;
+    margin:0 0 24px;
+    padding:0;
+    text-align:center
+}
+#geodir-logo img{
+    max-width:50%
+}
+.geodir-auth-content{
+    background:#fff;
+    box-shadow:0 1px 3px rgba(0,0,0,.13);
+    overflow:hidden;
+    padding:24px 24px 0;
+    zoom:1
+}
+.geodir-auth-content h1,.geodir-auth-content h2,.geodir-auth-content h3,.geodir-auth-content table{
+    border:0;
+    clear:none;
+    color:#666;
+    margin:0 0 24px;
+    padding:0
+}
+.geodir-auth-content p,.geodir-auth-content ul{
+    color:#666;
+    font-size:1em;
+    line-height:1.75em;
+    margin:0 0 24px
+}
+.geodir-auth-content p{
+    padding:0
+}
+.geodir-auth-content a{
+    color:#a16696
+}
+.geodir-auth-content a:focus,.geodir-auth-content a:hover{
+    color:#111
+}
+.geodir-auth-content .geodir-auth-login label{
+    color:#999;
+    display:block;
+    margin-bottom:.5em
+}
+.geodir-auth-content .geodir-auth-login input{
+    box-sizing:border-box;
+    font-size:1.3em;
+    padding:.5em;
+    width:100%
+}
+.geodir-auth-content .geodir-auth-login .geodir-auth-actions{
+    padding:0
+}
+.geodir-auth-content .geodir-auth-login .geodir-auth-actions .geodir-auth-login-button{
+    float:none;
+    width:100%
+}
+.geodir-auth-permissions{
+    list-style:disc inside;
+    padding:0
+}
+.geodir-auth-permissions li{
+    font-size:1em
+}
+.geodir-auth-logged-in-as{
+    background:#f5f5f5;
+    border-bottom:2px solid #eee;
+    line-height:70px;
+    margin:0 0 24px;
+    padding:0 1em 0 0
+}
+.geodir-auth-logged-in-as p{
+    margin:0;
+    line-height:70px
+}
+.geodir-auth-logged-in-as img{
+    float:left;
+    height:70px;
+    margin:0 1em 0 0
+}
+.geodir-auth-logged-in-as .geodir-auth-logout{
+    float:right
+}
+.geodir-auth .geodir-auth-actions{
+    overflow:hidden;
+    padding-left:24px
+}
+.geodir-auth .geodir-auth-actions .button{
+    float:right;
+    font-size:1.25em;
+    height:auto;
+    line-height:1em;
+    padding:1em 2em;
+    text-align:center;
+    width:50%
+}
+.geodir-auth .geodir-auth-actions .button:focus,.geodir-auth .geodir-auth-actions .button:hover{
+}
+.geodir-auth .geodir-auth-actions .button-primary{
+}
+.geodir-auth .geodir-auth-actions .button-primary:focus,.geodir-auth .geodir-auth-actions .button-primary:hover{
+}
+.geodir-auth .geodir-auth-actions .geodir-auth-approve{
+    float:right
+}
+.geodir-auth .geodir-auth-actions .geodir-auth-deny{
+    float:left;
+    margin-left:-24px
+}

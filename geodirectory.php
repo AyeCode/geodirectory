@@ -251,6 +251,7 @@ final class GeoDirectory {
 		 * REST API.
 		 */
 		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-api.php' );
+		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-auth.php' );
 		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-register-wp-admin-settings.php' );
 
 
