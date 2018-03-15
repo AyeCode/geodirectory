@@ -64,12 +64,15 @@ body{
     }
 
     .gd-dummy-table{
-      .select2-container{
-        &.select2-container--default{
-          //min-width: 150px;
-          width: auto !important;
+      &:not(.gd-dummy-widgets){
+        .select2-container{
+          &.select2-container--default{
+            //min-width: 150px;
+            width: auto !important;
+          }
         }
       }
+
     }
 
 

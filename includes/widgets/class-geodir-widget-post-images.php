@@ -18,7 +18,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
 			'block-icon'    => 'format-image',
 			'block-category'=> 'common',
-			'block-keywords'=> "['image','geo','geodir']",
+			'block-keywords'=> "['images','geo','geodir']",
 			'block-output'   => array( // the block visual output elements as an array
 				array(
 					'element' => 'div',
@@ -65,8 +65,8 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 				),
 			),
 			'class_name'    => __CLASS__,
-			'base_id'       => 'gd_post_image', // this us used as the widget id and the shortcode id.
-			'name'          => __('GD > Post Image','geodirectory'), // the name of the widget.
+			'base_id'       => 'gd_post_images', // this us used as the widget id and the shortcode id.
+			'name'          => __('GD > Post Images','geodirectory'), // the name of the widget.
 			//'disable_widget'=> true,
 			'widget_ops'    => array(
 				'classname'   => 'geodir-post-slider', // widget class

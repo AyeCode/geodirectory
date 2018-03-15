@@ -290,12 +290,13 @@ class GeoDir_Template_Loader {
         // if the content is blank then just add the main loop
         if($content==''){
             $content = "[gd_archive_item_section type='open' position='left']
-[gd_post_image type='slider' ajax_load='true' slideshow='false' show_title='false' animation='slide' controlnav='1' ]\n
+[gd_post_images type='slider' ajax_load='true' slideshow='false' show_title='false' animation='slide' controlnav='1' ]\n
 [gd_archive_item_section type='close' position='left']\n
 [gd_archive_item_section type='open' position='right']\n
 [gd_post_title tag='h2']\n
 [gd_post_rating alignment='left' ]\n
 [gd_post_fav show='' alignment='right' ]\n
+[gd_post_meta key='business_hours' location='listing']\n
 [gd_post_meta key='post_content' location='listing']\n
 [gd_post_meta key='facebook' ]\n
 [gd_archive_item_section type='close' position='right']\n";

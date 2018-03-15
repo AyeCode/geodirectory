@@ -48,11 +48,11 @@ class GeoDir_Admin_Help {
 				) . '</p>' .
 				'<p>' . sprintf(
 					/* translators: %s: Forum URL */
-					__( 'For further assistance with GeoDirectory core or with premium extensions sold by GeoDirectory you can use the <a href="%1$s">community forum</a>.', 'geodirectory' ),
+					__( 'For further assistance with GeoDirectory core or with premium extensions sold by GeoDirectory you can use our <a href="%1$s">support forums</a>.', 'geodirectory' ),
 					'https://wpgeodirectory.com/support/forum/?utm_source=helptab&utm_medium=product&utm_content=forum&utm_campaign=geodirectoryplugin'
 				) . '</p>' .
 				'<p>' . __( 'Before asking for help we recommend checking the system status page to identify any problems with your configuration.', 'geodirectory' ) . '</p>' .
-				'<p><a href="' . admin_url( 'admin.php?page=gd-status' ) . '" class="button button-primary">' . __( 'System status', 'geodirectory' ) . '</a> <a href="https://wpgeodirectory.com/support/forum/?utm_source=helptab&utm_medium=product&utm_content=forum&utm_campaign=geodirectoryplugin" class="button">' . __( 'GeoDirectory helpdesk', 'geodirectory' ) . '</a></p>',
+				'<p><a href="' . admin_url( 'admin.php?page=gd-status' ) . '" class="button button-primary">' . __( 'System status', 'geodirectory' ) . '</a> <a href="https://wpgeodirectory.com/support/?utm_source=helptab&utm_medium=product&utm_content=forum&utm_campaign=geodirectoryplugin" class="button">' . __( 'GeoDirectory support', 'geodirectory' ) . '</a></p>',
 		) );
 
 		$screen->add_help_tab( array(
