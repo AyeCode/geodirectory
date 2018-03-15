@@ -1499,3 +1499,44 @@ function geodir_user_roles($exclude = array()){
 	}
 	return $user_roles;
 }
+
+/**
+ * Get endpoint URL.
+ *
+ * Gets the URL for an endpoint, which varies depending on permalink settings.
+ *
+ * @param  string $endpoint  Endpoint slug.
+ * @param  string $value     Query param value.
+ * @param  string $permalink Permalink.
+ *
+ * @return string
+ */
+function geodir_get_endpoint_url( $endpoint, $value = '', $permalink = '' ) {
+	if ( ! $permalink ) {
+		$permalink = get_permalink();
+	}
+
+	// Map endpoint to options.
+	$query_vars = array();//GeoDir_Query()->query->get_query_vars();
+	$endpoint   = ! empty( $query_vars[ $endpoint ] ) ? $query_vars[ $endpoint ] : $endpoint;
+
+	if ( get_option( 'permalink_structure' ) ) {
+		if ( strstr( $permalink, '?' ) ) {
+			$query_string = '?' . wp_parse_url( $permalink, PHP_URL_QUERY );
+			$permalink    = current( explode( '?', $permalink ) );
+		} else {
+			$query_string = '';
+		}
+		$url = trailingslashit( $permalink ) . trailingslashit( $endpoint );
+
+		if ( $value ) {
+			$url .= trailingslashit( $value );
+		}
+
+		$url .= $query_string;
+	} else {
+		$url = add_query_arg( $endpoint, $value, $permalink );
+	}
+
+	return apply_filters( 'geodir_get_endpoint_url', $url, $endpoint, $value, $permalink );
+}

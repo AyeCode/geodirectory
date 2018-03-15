@@ -153,6 +153,8 @@ class GeoDir_REST_Reviews_Controller extends WP_REST_Comments_Controller {
 	 */
 	public function get_items( $request ) {
 
+		global $wpdb;
+
 		// Retrieve the list of registered collection query parameters.
 		$registered = $this->get_collection_params();
 
@@ -238,6 +240,8 @@ class GeoDir_REST_Reviews_Controller extends WP_REST_Comments_Controller {
 		 * @param WP_REST_Request $request       The current request.
 		 */
 		$prepared_args = apply_filters( 'rest_comment_query', $prepared_args, $request );
+
+		add_filter( 'comments_clauses', array( $this , 'reviews_clauses' ), 10, 2 );
 
 		$query = new WP_Comment_Query;
 		$query_result = $query->query( $prepared_args );
@@ -777,6 +781,17 @@ class GeoDir_REST_Reviews_Controller extends WP_REST_Comments_Controller {
 			'type'               => get_comment_type( $comment->comment_ID ),
 		);
 
+		$review = $this->get_review( $comment->comment_ID );
+		if ( ! empty( $review ) ) {
+			$data['post_type'] = $review->post_type;
+			$data['rating'] = (float) $review->rating;
+			$data['country'] = $review->country;
+			$data['region'] = $review->region;
+			$data['city'] = $review->city;
+			$data['latitude'] = $review->latitude;
+			$data['longitude'] = $review->longitude;
+		}
+	
 		$schema = $this->get_item_schema();
 
 		if ( ! empty( $schema['properties']['author_avatar_urls'] ) ) {
@@ -843,7 +858,7 @@ class GeoDir_REST_Reviews_Controller extends WP_REST_Comments_Controller {
 				$base = ! empty( $obj->rest_base ) ? $obj->rest_base : $obj->name;
 
 				$links['up'] = array(
-					'href'       => rest_url( 'wp/v2/' . $base . '/' . $comment->comment_post_ID ),
+					'href'       => rest_url( $this->namespace . '/' . $base . '/' . $comment->comment_post_ID ),
 					'embeddable' => true,
 					'post_type'  => $post->post_type,
 				);
@@ -1519,5 +1534,32 @@ class GeoDir_REST_Reviews_Controller extends WP_REST_Comments_Controller {
 		}
 
 		return $email;
+	}
+	
+	/**
+	 * Prepare export reviews.
+	 */
+	public static function reviews_clauses( $clauses, $comment_query ) {
+		global $wpdb;
+
+		if ( empty( $comment_query->query_vars['count'] ) ) {
+			$clauses['fields'] = "{$wpdb->comments}.*, r.*";
+		}
+
+		$clauses['join'] .= " INNER JOIN `" . GEODIR_REVIEW_TABLE . "` AS r ON r.comment_id = {$wpdb->comments}.comment_ID";
+
+		$where = array();
+		if ( ! empty( $where ) ) {
+			$clauses['where'] .= " AND " . implode( " AND ", $where );
+		}
+
+		return $clauses;
+	}
+	
+	public static function get_review( $comment_ID ) {
+		global $wpdb;
+
+		$sql = $wpdb->prepare( "SELECT rating, ratings, attachments, post_type, city, region, country, latitude, longitude FROM `" . GEODIR_REVIEW_TABLE . "` WHERE comment_id = %d", array( $comment_ID ) );
+		return $wpdb->get_row( $sql );
 	}
 }

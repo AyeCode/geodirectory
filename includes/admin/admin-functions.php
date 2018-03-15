@@ -19,11 +19,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function geodir_get_screen_ids() {
 
+	$geodir_screen_id = sanitize_title( __( 'GeoDirectory', 'geodirectory' ) );
+
 	$screen_ids = array(
+		'toplevel_page_' . $geodir_screen_id,
 		'geodirectory_page_gd-settings',
 		'geodirectory_page_gd-status',
 		'geodirectory_page_gd-addons',
-		'toplevel_page_geodirectory',
 	);
 
 

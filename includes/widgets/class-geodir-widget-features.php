@@ -1,57 +1,142 @@
 <?php
+/**
+ * GeoDirectory features widget.
+ *
+ * @package GeoDirectory
+ * @since 1.5.4
+ */
 
-class GeoDir_Widget_Features extends WP_Widget {
+/**
+ * GeoDirectory categories widget class.
+ *
+ * @since 1.5.4
+ */
+class GeoDir_Widget_Features extends WP_Super_Duper {
 
     /**
-     * Class constructor.
+     * Register the categories with WordPress.
+     *
      */
     public function __construct() {
-        $widget_ops = array(
-            'description' => __( 'Displays "GD Features" widget', 'geodirectory' ),
-            'classname' => 'widget_gd_features',
-            'customize_selective_refresh' => true,
-            'geodirectory' => true,
-            'gd_show_pages' => array(),
-        );
-        parent::__construct( false, $name = _x( 'GD > Features', 'widget name', 'geodirectory' ), $widget_ops );
 
+        $options = array(
+            'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
+            'block-icon'    => 'admin-site',
+            'block-category'=> 'widgets',
+            'block-keywords'=> "['features','geo']",
+
+            'class_name'    => __CLASS__,
+            'base_id'       => 'gd_features', // this us used as the widget id and the shortcode id.
+            'name'          => __('GD > Features','geodirectory'), // the name of the widget.
+            //'disable_widget'=> true,
+            'widget_ops'    => array(
+                'classname'   => 'geodir-wgt-features-container', // widget class
+                'description' => esc_html__('Display your product/listing features on the site.','geodirectory'), // widget description
+                'customize_selective_refresh' => true,
+                'geodirectory' => true,
+                'gd_show_pages' => array(),
+            ),
+            'arguments'     => array(
+                'title'  => array(
+                    'title' => __('Title:', 'geodirectory'),
+                    'desc' => __('The widget title.', 'geodirectory'),
+                    'type' => 'text',
+                    'default'  => '',
+                    'desc_tip' => true,
+                    'advanced' => false
+                ),
+                'icon_color'  => array(
+                    'title' => __('Icon Color:', 'geodirectory'),
+                    'desc' => __('Font awesome icon color.', 'geodirectory'),
+                    'type' => 'text',
+                    'default'  => '#757575',
+                    'desc_tip' => true,
+                    'advanced' => true
+                ),
+				'title1'  => array(
+                    'title' => __('Title:', 'geodirectory'),
+                    'desc' => __('The feature title.', 'geodirectory'),
+                    'type' => 'text',
+                    'default'  => '',
+                    'desc_tip' => true,
+                    'advanced' => false
+                ),
+				'title1'  => array(
+                    'title' => __('Feature 1 Title:', 'geodirectory'),
+                    'desc' => __('Title for feature 1.', 'geodirectory'),
+                    'type' => 'text',
+                    'default'  => '',
+                    'desc_tip' => true,
+                    'advanced' => false
+                ),
+				'image1'  => array(
+                    'title' => __('Feature 1 Image:', 'geodirectory'),
+                    'desc' => __('Image for feature 1.', 'geodirectory'),
+                    'type' => 'text',
+                    'default'  => '',
+                    'desc_tip' => true,
+                    'advanced' => false
+                ),
+				'desc1'  => array(
+                    'title' => __('Feature 1 Description:', 'geodirectory'),
+                    'desc' => __('Description for feature 1.', 'geodirectory'),
+                    'type' => 'text',
+                    'default'  => '',
+                    'desc_tip' => true,
+                    'advanced' => false
+                ),
+            )
+        );
+
+        parent::__construct( $options );
     }
 
     /**
-     * Display the widget.
+     * The Super block output function.
      *
-     * @param array $args Widget arguments.
-     * @param array $instance The widget settings, as saved by the user.
+     * @param array $args
+     * @param array $widget_args
+     * @param string $content
+     *
+     * @return mixed|string|void
      */
-    public function widget($args, $instance) {
-        extract($args);
+    public function output( $args = array(), $widget_args = array(), $content = '' ) {
+        $defaults = array(
+            'title' => '',
+            'icon_color' => '#757575',
+        );
+        $options = wp_parse_args( $args, $defaults );
+		
+		extract($options);
 
-        $title = empty($instance['title']) ? '' : apply_filters('gd_features_widget_title', __($instance['title'], 'geodirectory'));
-        $icon_color = empty($instance['icon_color']) ? '#757575' : apply_filters('gd_features_widget_icon_color', __($instance['icon_color'], 'geodirectory'));
+        $title = empty($options['title']) ? '' : apply_filters('gd_features_widget_title', __($options['title'], 'geodirectory'));
+        $icon_color = empty($options['icon_color']) ? '#757575' : apply_filters('gd_features_widget_icon_color', __($options['icon_color'], 'geodirectory'));
 
-        echo $before_widget;
-        ?>
-        <?php if ($title) {
-        echo '<div class="geodir_list_heading clearfix">';
-        echo $before_title . $title . $after_title;
-        echo '</div>';
-    } ?>
-        <?php
+		ob_start();
+
+		echo $before_widget;
+        
+		if ($title) {
+			echo '<div class="geodir_list_heading clearfix">';
+			echo $before_title . $title . $after_title;
+			echo '</div>';
+		}
+
         echo "<ul class='gd-features'>";
 
         $i = 1;
         while ($i < 100) {
 
-            if (isset($instance['title' . $i]) || isset($instance['image' . $i]) || isset($instance['desc' . $i])) {
+            if (isset($options['title' . $i]) || isset($options['image' . $i]) || isset($options['desc' . $i])) {
                 echo "<li>";
-                if ($instance['title' . $i]) {
-                    echo "<h3 class='gd-fe-title'>" . $instance['title' . $i] . "</h3>";
+                if ($options['title' . $i]) {
+                    echo "<h3 class='gd-fe-title'>" . $options['title' . $i] . "</h3>";
                 }
-                if ($instance['image' . $i]) {
-                    echo "<div class='gd-fe-image'>" . geodir_features_parse_image($instance['image' . $i], $icon_color) . "</div>";
+                if ($options['image' . $i]) {
+                    echo "<div class='gd-fe-image'>" . geodir_features_parse_image($options['image' . $i], $icon_color) . "</div>";
                 }
-                if ($instance['desc' . $i]) {
-                    echo "<div class='gd-fe-desc'>" . geodir_features_parse_desc($instance['desc' . $i]) . "</div>";
+                if ($options['desc' . $i]) {
+                    echo "<div class='gd-fe-desc'>" . geodir_features_parse_desc($options['desc' . $i]) . "</div>";
                 }
                 echo "</li>";
             } else {
@@ -62,124 +147,9 @@ class GeoDir_Widget_Features extends WP_Widget {
         }
 
         echo "</ul>";
-        ?>
-        <?php echo $after_widget; ?>
-    <?php
-    }
+        
+		echo $after_widget;
 
-    public function update($new_instance, $old_instance) {
-        //save the widget
-        $instance = $old_instance;
-
-        $instance['title'] = strip_tags($new_instance['title']);
-        $instance['icon_color'] = strip_tags($new_instance['icon_color']);
-
-        $i = 1;
-        while ($i < 100) {
-
-            if (isset($new_instance['title' . $i]) || isset($new_instance['image' . $i]) || isset($new_instance['desc' . $i])) {
-                if ($new_instance['title' . $i]) {
-                    $instance['title' . $i] = $new_instance['title' . $i];
-                }
-                if ($new_instance['image' . $i]) {
-                    $instance['image' . $i] = $new_instance['image' . $i];
-                }
-                if ($new_instance['desc' . $i]) {
-                    $instance['desc' . $i] = $new_instance['desc' . $i];
-                }
-            } else {
-                break;
-            }
-
-            $i++;
-        }
-
-        return $instance;
-    }
-
-    public function form($instance) {
-        //widgetform in backend
-        $instance = wp_parse_args((array)$instance, array(
-            'title' => '',
-            'icon_color' => '#757575',
-            'title1' => '',
-            'image1' => '',
-            'desc1' => '',
-        ));
-
-
-        $title = strip_tags($instance['title']);
-        $icon_color = strip_tags($instance['icon_color']);
-
-        ?>
-        <p>
-            <b>Heads Up!</b> If you don't have enough content, You can keep some boxes blank.
-        </p>
-        <p>
-            For font awesome icons refer <a href="https://fortawesome.github.io/Font-Awesome/icons/" target="_blank">this
-                page</a>. You must enter "icon class" if you are planning to use font awesome icons.
-            For example if you planning to use "recycle" icon as your image, then you have to enter "fa-recycle" as
-            class name which you can find in <a href="http://fortawesome.github.io/Font-Awesome/icon/recycle/"
-                                                target="_blank">this page</a>
-        </p>
-
-        <p>
-            <label><?php echo __("Widget Title (Optional):", 'geodirectory'); ?></label>
-            <input name="<?php echo $this->get_field_name('title'); ?>" type="text"
-                   value="<?php echo esc_attr($title); ?>" class="widefat"/>
-        </p>
-
-        <p>
-            <label><?php echo __("Font Awesome Icon Color:", 'geodirectory'); ?></label>
-            <input name="<?php echo $this->get_field_name('icon_color'); ?>" type="text"
-                   value="<?php echo esc_attr($icon_color); ?>" class="widefat"/>
-        </p>
-
-
-        <div class="gd-fet-rep-<?php echo $this->get_field_id('xxx');?>">
-            <?php
-
-            $i = 1;
-            while ($i < 100) {
-
-                if ( $i==1 || (isset($instance['title' . $i]) || isset($instance['image' . $i]) || isset($instance['desc' . $i])) && ($instance['title' . $i] || $instance['image' . $i] || $instance['desc' . $i])) {
-                    ?>
-                    <div class="gdrep<?php echo $i;?>">
-                        <p class="features-title">
-                            <label
-                                data-gdrep-title-num="1"><?php printf(__('Title %d:', 'geodirectory'), $i); ?></label>
-                            <input data-gdrep-title="1" name="<?php echo $this->get_field_name('title' . $i); ?>"
-                                   type="text" value="<?php echo esc_attr(strip_tags($instance['title' . $i])); ?>"
-                                   class="widefat"/>
-                        </p>
-
-                        <p class="features-image">
-                            <label><?php echo __('Image URL:', 'geodirectory'); ?></label>
-                            <input data-gdrep-image="1" type="text" class="widefat"
-                                   name="<?php echo $this->get_field_name('image' . $i); ?>"
-                                   value="<?php echo esc_attr(strip_tags($instance['image' . $i])); ?>"/>
-                        </p>
-
-                        <p class="features-desc">
-                            <label><?php echo __('Description:', 'geodirectory'); ?></label>
-                            <textarea data-gdrep-desc="1" name="<?php echo $this->get_field_name('desc' . $i); ?>"
-                                      rows="3"
-                                      class="widefat"><?php echo esc_attr(strip_tags($instance['desc' . $i])); ?></textarea>
-                        </p>
-                    </div>
-                <?php
-                } else {
-                    break;
-                }
-
-                $i++;
-            }
-
-            ?>
-            <input class="button button-primary left"
-                   onclick="gd_featured_widget_repeat('gd-fet-rep-<?php echo $this->get_field_id('xxx');?>','<?php echo $this->get_field_name('xxx');?>')"
-                   type="button" value="<?php _e('Add item', 'geodirectory');?>"/>
-        </div>
-    <?php
+		return ob_get_clean();
     }
 }

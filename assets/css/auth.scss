@@ -1,0 +1,131 @@
+body {
+	background: #f1f1f1;
+	box-shadow: none;
+	margin: 100px auto 24px;
+	padding: 0;
+}
+
+#geodir-logo {
+	border: 0;
+	margin: 0 0 24px;
+	padding: 0;
+	text-align: center;
+
+	img {
+		max-width: 50%;
+	}
+}
+
+.geodir-auth-content {
+	background: #fff;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.13);
+	overflow: hidden;
+	padding: 24px 24px 0;
+	zoom: 1;
+
+	h1, h2, h3, table {
+		border: 0;
+		clear: none;
+		color: #666;
+		margin: 0 0 24px;
+		padding: 0;
+	}
+
+	p, ul {
+		color: #666;
+		font-size: 1em;
+		line-height: 1.75em;
+		margin: 0 0 24px;
+	}
+
+	p {
+		padding: 0;
+	}
+
+	a {
+		color: #a16696;
+		&:hover, &:focus {
+			color: #111;
+		}
+	}
+
+	.geodir-auth-login {
+		label {
+			color: #999;
+			display: block;
+			margin-bottom: 0.5em;
+		}
+
+		input {
+			box-sizing: border-box;
+			font-size: 1.3em;
+			padding: 0.5em;
+			width: 100%;
+		}
+
+		.geodir-auth-actions {
+			padding: 0;
+
+			.geodir-auth-login-button {
+				float: none;
+				width: 100%;
+			}
+		}
+	}
+}
+.geodir-auth-permissions {
+	list-style: disc inside;
+	padding: 0;
+
+	li {
+		font-size: 1em;
+	}
+}
+.geodir-auth-logged-in-as {
+	background: #f5f5f5;
+	border-bottom: 2px solid #eee;
+	line-height: 70px;
+	margin: 0 0 24px;
+	padding: 0 1em 0 0;
+
+	p {
+		margin: 0;
+		line-height: 70px;
+	}
+
+	img {
+		float: left;
+		height: 70px;
+		margin: 0 1em 0 0;
+	}
+
+	.geodir-auth-logout {
+		float: right;
+	}
+}
+.geodir-auth .geodir-auth-actions {
+	overflow: hidden;
+	padding-left: 24px;
+
+	.button {
+		float: right;
+		font-size: 1.25em;
+		height: auto;
+		line-height: 1em;
+		padding: 1em 2em;
+		text-align: center;
+		width: 50%;
+
+		&:hover, &:focus {
+		}
+	}
+	.button-primary {
+	}
+	.geodir-auth-approve {
+		float: right;
+	}
+	.geodir-auth-deny {
+		float: left;
+		margin-left: -24px;
+	}
+}

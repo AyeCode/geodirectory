@@ -708,3 +708,19 @@ function geodir_previous_next_post_where( $where, $in_same_term, $excluded_terms
 }
 add_filter( 'get_previous_post_where', 'geodir_previous_next_post_where', 10, 5 );
 add_filter( 'get_next_post_where', 'geodir_previous_next_post_where', 10, 5 );
+
+/**
+ * Output the Auth header.
+ */
+function geodir_output_auth_header() {
+	geodir_get_template( 'auth/header.php' );
+}
+add_action( 'geodir_auth_page_header', 'geodir_output_auth_header', 10 );
+
+/**
+ * Output the Auth footer.
+ */
+function geodir_output_auth_footer() {
+	geodir_get_template( 'auth/footer.php' );
+}
+add_action( 'geodir_auth_page_footer', 'geodir_output_auth_footer', 10 );
