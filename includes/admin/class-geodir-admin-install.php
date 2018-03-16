@@ -353,12 +353,13 @@ class GeoDir_Admin_Install {
 				'name'    => _x( 'gd-archive-item', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'GD Archive Item', 'Page title', 'geodirectory'),
 				'content' => "[gd_archive_item_section type='open' position='left']
-[gd_post_image type='slider' ajax_load='true' slideshow='false' show_title='false' animation='slide' controlnav='1' ]\n
+[gd_post_images type='slider' ajax_load='true' slideshow='false' show_title='false' animation='slide' controlnav='1' ]\n
 [gd_archive_item_section type='close' position='left']\n
 [gd_archive_item_section type='open' position='right']\n
 [gd_post_title tag='h2']\n
 [gd_post_rating alignment='left' ]\n
 [gd_post_fav show='' alignment='right' ]\n
+[gd_post_meta key='business_hours' location='listing']\n
 [gd_post_meta key='post_content' location='listing']\n
 [gd_post_meta key='facebook' ]\n
 [gd_archive_item_section type='close' position='right']\n",
@@ -366,7 +367,7 @@ class GeoDir_Admin_Install {
 			'page_details' => array(
 				'name'    => _x( 'gd-details', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'GD Details', 'Page title', 'geodirectory'),
-				'content' => "[gd_single_closed_text]\n[gd_post_image type='slider' ajax_load='true' slideshow='true' show_title='true' animation='slide' controlnav='1' ]\n[gd_single_taxonomies]\n[gd_single_tabs]\n[gd_single_next_prev]",
+				'content' => "[gd_single_closed_text]\n[gd_post_images type='slider' ajax_load='true' slideshow='true' show_title='true' animation='slide' controlnav='1' ]\n[gd_single_taxonomies]\n[gd_single_tabs]\n[gd_single_next_prev]",
 			),
 
 			

@@ -209,8 +209,9 @@ final class GeoDirectory {
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-ajax-functions.php' ); // @todo remove onece replced with below class-gd-ajax.php
         //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-gd-ajax.php' );
         GeoDir_AJAX::init();
-        GeoDir_Post_Data::init(); // post data
-	    
+	    GeoDir_Post_Data::init(); // post data
+	    GeoDir_Compatibility::init(); // plugin/theme comaptibility checks
+
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/general_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/listing_filters.php' );
@@ -499,3 +500,4 @@ add_action('dynamic_sidebar_before','xzxzxxz');
 function xzxzxxz(){
 	//echo '###';
 }
+

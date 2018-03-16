@@ -836,7 +836,9 @@ jQuery(function($) {
                     containerCssClass: 'gd-select2-selection',
                     dropdownCssClass: 'gd-select2-dropdown',
                     placeholder: $(this).data('placeholder'),
-					templateSelection: function(data) {
+                    width: 'element',
+                    dropdownAutoWidth : true,
+                    templateSelection: function(data) {
 						return geodirSelect2TemplateSelection($this, data, true);
 					},
 					templateResult: function(data) {

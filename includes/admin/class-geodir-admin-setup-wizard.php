@@ -65,10 +65,10 @@ class GeoDir_Admin_Setup_Wizard {
 				'view'    => array( $this, 'setup_default_location' ),
 				'handler' => array( $this, 'setup_default_location_save' ),
 			),
-			'dummy_data' => array(
-				'name'    => __( 'Dummy Data', 'geodirectory' ),
-				'view'    => array( $this, 'setup_dummy_data' ),
-				'handler' => array( $this, 'setup_dummy_data_save' ),
+			'content' => array(
+				'name'    => __( 'Content', 'geodirectory' ),
+				'view'    => array( $this, 'setup_content' ),
+				'handler' => array( $this, 'setup_content_save' ),
 			),
 			'next_steps' => array(
 				'name'    => __( 'Ready!', 'geodirectory' ),
@@ -405,7 +405,7 @@ class GeoDir_Admin_Setup_Wizard {
 	/**
 	 * Dummy Data setup.
 	 */
-	public function setup_dummy_data() {
+	public function setup_content() {
 		?>
 		<form method="post">
 
@@ -416,10 +416,61 @@ class GeoDir_Admin_Setup_Wizard {
 				$settings = $generalSettings->get_settings('dummy_data');
 
 				// Change the description
-				$settings[0]['title'] = '';
+				$settings[0]['title'] = __("Demo content","geodirectory");
 				//$settings[0]['desc'] = __( 'Drag the map or the marker to set the city/town you wish to use as the default location.', 'geodirectory' );
 				GeoDir_Admin_Settings::output_fields($settings);
 				?>
+
+
+			<h2 class="gd-settings-title "><?php _e("Widgets","geodirectory");?></h2>
+
+			<table class="form-table gd-dummy-table gd-dummy-widgets">
+				<tbody>
+				<tr>
+					<td><strong><?php _e("Select the theme sidebar","geodirectory");?></strong></td>
+					<td><strong><?php _e("Action","geodirectory");?></strong></td>
+				</tr>
+
+				<tr>
+					<td>
+						<select class="geodir-select" style="width: 300px;">
+							<?php foreach ( $GLOBALS['wp_registered_sidebars'] as $sidebar ) { ?>
+								<option value="<?php echo esc_attr( $sidebar['id'] ); ?>">
+									<?php echo esc_attr( ucwords( $sidebar['name'] )); ?>
+								</option>
+							<?php } ?>
+						</select>
+					</td>
+					<td><input type="button" value="<?php _e("Insert widgets","geodirectory");?>" class="button-primary geodir_dummy_button" onclick="return false;"></td>
+				</tr>
+				</tbody>
+			</table>
+
+
+			<h2 class="gd-settings-title "><?php _e("Menu items","geodirectory");?></h2>
+
+			<table class="form-table gd-dummy-table gd-dummy-widgets">
+				<tbody>
+				<tr>
+					<td><strong><?php _e("Select the theme main menu","geodirectory");?></strong></td>
+					<td><strong><?php _e("Action","geodirectory");?></strong></td>
+				</tr>
+
+				<tr>
+					<td>
+						<select class="geodir-select" style="width: 300px;">
+							<option>Main menu</option>
+							<?php foreach ( $GLOBALS['wp_registered_sidebars'] as $sidebar ) { ?>
+								<option value="<?php echo esc_attr( $sidebar['id'] ); ?>">
+									<?php echo esc_attr( ucwords( $sidebar['name'] )); ?>
+								</option>
+							<?php } ?>
+						</select>
+					</td>
+					<td><input type="button" value="<?php _e("Insert menu items","geodirectory");?>" class="button-primary geodir_dummy_button" onclick="return false;"></td>
+				</tr>
+				</tbody>
+			</table>
 
 			<p class="gd-setup-actions step">
 				<input type="submit" class="button-primary button button-large button-next" value="<?php esc_attr_e( 'Continue', 'geodirectory' ); ?>" name="save_step" />
@@ -435,7 +486,7 @@ class GeoDir_Admin_Setup_Wizard {
 	 *
 	 * This is done via ajax so we just pass onto the next step.
 	 */
-	public function setup_dummy_data_save() {
+	public function setup_content_save() {
 		check_admin_referer( 'gd-setup' );
 		wp_redirect( esc_url_raw( $this->get_next_step_link() ) );
 		exit;
