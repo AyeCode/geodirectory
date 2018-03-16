@@ -157,12 +157,12 @@ class GeoDir_Widget_Main_Map extends WP_Super_Duper {
         $map_args['child_collapse'] = $child_collapse;
         $map_args['enable_cat_filters'] = true;
         $map_args['enable_text_search'] = true;
-        $map_args['enable_post_type_filters'] = true;
+        $map_args['post_type_filter'] = true;
         /** This action is documented in geodirectory_shortcodes.php */
-        $map_args['enable_location_filters'] = apply_filters('geodir_home_map_enable_location_filters', false);
-        $map_args['enable_jason_on_load'] = false;
-        $map_args['enable_marker_cluster'] = false;
-        $map_args['enable_map_resize_button'] = true;
+        $map_args['location_filter'] = apply_filters('geodir_home_map_enable_location_filters', false);
+        $map_args['jason_on_load'] = false;
+        $map_args['marker_cluster'] = false;
+        $map_args['map_resize_button'] = true;
         $map_args['map_class_name'] = 'geodir-map-home-page';
 
         $is_geodir_home_map_widget = true;
@@ -360,12 +360,12 @@ class GeoDir_Widget_Home_Page_Map extends WP_Widget {
         $map_args['child_collapse'] = $child_collapse;
         $map_args['enable_cat_filters'] = true;
         $map_args['enable_text_search'] = true;
-        $map_args['enable_post_type_filters'] = true;
+        $map_args['post_type_filter'] = true;
         /** This action is documented in geodirectory_shortcodes.php */
-        $map_args['enable_location_filters'] = apply_filters('geodir_home_map_enable_location_filters', false);
-        $map_args['enable_jason_on_load'] = false;
-        $map_args['enable_marker_cluster'] = false;
-        $map_args['enable_map_resize_button'] = true;
+        $map_args['location_filter'] = apply_filters('geodir_home_map_enable_location_filters', false);
+        $map_args['jason_on_load'] = false;
+        $map_args['marker_cluster'] = false;
+        $map_args['map_resize_button'] = true;
         $map_args['map_class_name'] = 'geodir-map-home-page';
 
         $is_geodir_home_map_widget = true;

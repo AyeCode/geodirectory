@@ -33,7 +33,7 @@ function initMap(map_options) {
     var map_canvas = options.map_canvas_name;
     var enable_map_direction = options.enable_map_direction;
     var enable_cat_filters = options.enable_cat_filters;
-    var enable_marker_cluster = options.enable_marker_cluster;
+    var marker_cluster = options.marker_cluster;
 	var map_ajax_url = options.map_ajax_url;
     options.token = '68f48005e256696074e1da9bf9f67f06';
     options.navigationControlOptions = { position: 'TOP_LEFT', style: 'ZOOM_PAN' };
@@ -428,7 +428,7 @@ function parse_marker_jason(json, map_canvas_var) {
 	jQuery("#" + map_canvas_var).goMap();
 	// get the bounds of the map
 	bounds = new google.maps.LatLngBounds();
-	if (options.enable_marker_cluster) {
+	if (options.marker_cluster) {
 		if (typeof remove_cluster_markers == 'function') {
 			remove_cluster_markers(map_canvas_var)
 		}
@@ -465,7 +465,7 @@ function parse_marker_jason(json, map_canvas_var) {
 			jQuery.goMap.map.setZoom(options.zoom);
 		}
 	}
-	if (options.enable_marker_cluster) {
+	if (options.marker_cluster) {
 		if (typeof create_marker_cluster == 'function') {
 			create_marker_cluster(map_canvas_var)
 		}
@@ -991,7 +991,7 @@ function initMapOSM(map_options) {
     var map_canvas = options.map_canvas_name;
     var enable_map_direction = options.enable_map_direction;
     var enable_cat_filters = options.enable_cat_filters;
-    var enable_marker_cluster = options.enable_marker_cluster;
+    var marker_cluster = options.marker_cluster;
     options.token = '68f48005e256696074e1da9bf9f67f06';
     options.navigationControlOptions = { position: 'topleft' };
     
@@ -1173,10 +1173,10 @@ function create_marker_osm(input, map_canvas_var) {
             label: cs,
             w: input.w,
             h: input.h,
-            clustered: (parseInt(eval(map_canvas_var).enable_marker_cluster) === 1) && typeof input.cs !== 'undefined' ? true : false
+            clustered: (parseInt(eval(map_canvas_var).marker_cluster) === 1) && typeof input.cs !== 'undefined' ? true : false
         });
         
-        if ((parseInt(eval(map_canvas_var).enable_marker_cluster) === 1) && cs) {
+        if ((parseInt(eval(map_canvas_var).marker_cluster) === 1) && cs) {
             var labels = cs.split("_");
             bounds.extend(new L.latLng(labels[1], labels[2]));
             if (labels[1] != labels[3] && labels[2] != labels[4]) {

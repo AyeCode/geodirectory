@@ -30,14 +30,14 @@ require_once('map_functions.php');
  *    @type string $height Map height.
  *    @type string $child_collapse Collapse filter div?.
  *    @type string $sticky Todo: desc needed.
- *    @type bool $enable_map_resize_button Do you want to enable map resize button?.
+ *    @type bool $map_resize_button Do you want to enable map resize button?.
  *    @type bool $enable_cat_filters Do you want to enable category filters?.
  *    @type bool $enable_text_search Do you want to enable text search?.
- *    @type bool $enable_post_type_filters Do you want to enable post type filters?.
- *    @type bool $enable_location_filters Do you want to enable location filters?.
- *    @type bool $enable_jason_on_load Do you want to enable json on load?.
+ *    @type bool $post_type_filter Do you want to enable post type filters?.
+ *    @type bool $location_filter Do you want to enable location filters?.
+ *    @type bool $jason_on_load Do you want to enable json on load?.
  *    @type bool $enable_map_direction Do you want to enable map directions?.
- *    @type bool $enable_marker_cluster Do you want to enable marker cluster?.
+ *    @type bool $marker_cluster Do you want to enable marker cluster?.
  *    @type string $ajax_url Map ajax url.
  *    @type string $map_canvas_name Map canvas name.
  *    @type string $inputText Text search placeholder.
@@ -83,12 +83,12 @@ function geodir_draw_map($map_args = array())
     $sticky = '';
     $enable_cat_filters = false;
     $enable_text_search = false;
-    $enable_post_type_filters = false;
-    $enable_location_filters = false;
-    $enable_jason_on_load = false;
+    $post_type_filter = false;
+    $location_filter = false;
+    $jason_on_load = false;
     $enable_map_direction = false;
-    $enable_marker_cluster = false;
-    $enable_map_resize_button = false;
+    $marker_cluster = false;
+    $map_resize_button = false;
     $maptype = 'ROADMAP';
 
     $geodir_map_options = array(
@@ -96,14 +96,14 @@ function geodir_draw_map($map_args = array())
         'height' => $height,
         'child_collapse' => $child_collapse,
         'sticky' => $sticky,
-        'enable_map_resize_button' => $enable_map_resize_button,
+        'map_resize_button' => $map_resize_button,
         'enable_cat_filters' => $enable_cat_filters,
         'enable_text_search' => $enable_text_search,
-        'enable_post_type_filters' => $enable_post_type_filters,
-        'enable_location_filters' => $enable_location_filters,
-        'enable_jason_on_load' => $enable_jason_on_load,
+        'post_type_filter' => $post_type_filter,
+        'location_filter' => $location_filter,
+        'jason_on_load' => $jason_on_load,
         'enable_map_direction' => $enable_map_direction,
-        'enable_marker_cluster' => $enable_marker_cluster,
+        'marker_cluster' => $marker_cluster,
         'ajax_url' => admin_url( 'admin-ajax.php' ),
         'map_canvas_name' => $map_canvas_name,
         'inputText' => __('Title or Keyword', 'geodirectory'),
@@ -177,7 +177,7 @@ function geodir_draw_map($map_args = array())
 	 */
 	$exclude_post_types = apply_filters("geodir_exclude_post_type_on_map_{$map_canvas_name}", $exclude_post_types);
 
-    if (count((array)$post_types) != count($exclude_post_types) || ($enable_jason_on_load)):
+    if (count((array)$post_types) != count($exclude_post_types) || ($jason_on_load)):
         // Set default map options
 
         wp_enqueue_script('geodir-map-widget', geodir_plugin_url() . '/includes/maps/js/map.js',array(),false,true); // @TODO change to map.min.js
@@ -208,7 +208,7 @@ function geodir_draw_map($map_args = array())
 
                 <div class="map_background">
                     <div class="top_banner_section_in clearfix">
-                        <div class="<?php echo $map_canvas_name;?>_TopLeft TopLeft"><span class="triggermap" id="<?php echo $map_canvas_name;?>_triggermap" <?php if (!$geodir_map_options['enable_map_resize_button']) { ?> <?php }?>><i class="fa fa-arrows-alt"></i></span></div>
+                        <div class="<?php echo $map_canvas_name;?>_TopLeft TopLeft"><span class="triggermap" id="<?php echo $map_canvas_name;?>_triggermap" <?php if (!$geodir_map_options['map_resize_button']) { ?> <?php }?>><i class="fa fa-arrows-alt"></i></span></div>
                         <div class="<?php echo $map_canvas_name;?>_TopRight TopRight"></div>
                         <div id="<?php echo $map_canvas_name;?>_wrapper" class="main_map_wrapper"
                              style="height:<?php echo $geodir_map_options['height'];?>;width:<?php echo $map_width;?>;">
@@ -229,7 +229,7 @@ function geodir_draw_map($map_args = array())
                         <div class="<?php echo $map_canvas_name;?>_BottomLeft BottomLeft"></div>
                     </div>
                 </div>
-                <?php if ($geodir_map_options['enable_jason_on_load']) { ?>
+                <?php if ($geodir_map_options['jason_on_load']) { ?>
                     <input type="hidden" id="<?php echo $map_canvas_name;?>_jason_enabled" value="1"/>
                 <?php } else {
                     ?>
@@ -337,7 +337,7 @@ function geodir_draw_map($map_args = array())
                     $exclude_post_types = geodir_get_option('geodir_exclude_post_type_on_map');
                     $geodir_available_pt_on_map = count(geodir_get_posttypes('array')) - count($exclude_post_types);
 					$map_cat_class = '';
-					if ($geodir_map_options['enable_post_type_filters']) {
+					if ($geodir_map_options['post_type_filter']) {
 						$map_cat_class = $geodir_available_pt_on_map > 1 ? ' map-cat-ptypes' : ' map-cat-floor';
 					}
                     ?>
@@ -380,7 +380,7 @@ function geodir_draw_map($map_args = array())
                 <!-- map-category-listings-->
 
                 <?php
-                if ($geodir_map_options['enable_location_filters']) {
+                if ($geodir_map_options['location_filter']) {
                     $country = get_query_var('gd_country');
 					$region = get_query_var('gd_region');
 					$city = get_query_var('gd_city');
@@ -417,7 +417,7 @@ function geodir_draw_map($map_args = array())
 
 
 
-                <?php if ($geodir_map_options['enable_post_type_filters']) {
+                <?php if ($geodir_map_options['post_type_filter']) {
                     $post_types = geodir_get_posttypes('object');
                     $all_post_types = geodir_get_posttypes('names');
                     $exclude_post_types = geodir_get_option('geodir_exclude_post_type_on_map');

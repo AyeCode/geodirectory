@@ -1984,7 +1984,7 @@ function geodir_cf_business_hours($html,$location,$cf,$p=''){
 
     // Block demo content
     if( geodir_is_block_demo() ){
-        $gd_post->{$cf['htmlvar_name']} = '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00"],["GMT":"+0"]';
+        $gd_post->{$cf['htmlvar_name']} = '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00"],["UTC":"+0"]';
     }
 
     $html_var = $cf['htmlvar_name'];

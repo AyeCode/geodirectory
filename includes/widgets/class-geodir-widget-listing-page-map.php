@@ -97,9 +97,9 @@ class GeoDir_Widget_Listing_Page_Map extends WP_Widget {
             $map_args['sticky'] = $sticky;
             $map_args['enable_cat_filters'] = false;
             $map_args['enable_text_search'] = false;
-            $map_args['enable_post_type_filters'] = false;
-            $map_args['enable_location_filters'] = false;
-            $map_args['enable_jason_on_load'] = true;
+            $map_args['post_type_filter'] = false;
+            $map_args['location_filter'] = false;
+            $map_args['jason_on_load'] = true;
 			
             if (is_single()) {
 
@@ -136,7 +136,7 @@ class GeoDir_Widget_Listing_Page_Map extends WP_Widget {
             $map_args['autozoom'] = $autozoom;
             $map_args['bubble_size'] = 'small';
             
-            $map_args['enable_marker_cluster'] = defined('GDCLUSTER_VERSION') && !empty($instance['marker_cluster']) ? true : false;
+            $map_args['marker_cluster'] = defined('GDCLUSTER_VERSION') && !empty($instance['marker_cluster']) ? true : false;
 
             echo $before_widget;
             geodir_draw_map($map_args);
