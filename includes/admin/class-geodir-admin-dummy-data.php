@@ -431,9 +431,9 @@ class GeoDir_Admin_Dummy_Data {
 
 
 					if ( $post_counts > 0 ) {
-						echo '<td><input type="button" value="' . __( 'Remove data', 'geodirectory' ) . '" class="button-primary geodir_dummy_button gd-remove-data" onclick="gdInstallDummyData(this,\'' . $nonce . '\',\'' . $post_type . '\'); return false;" ></td>';
+						echo '<td><input type="button" value="' . __( 'Remove posts', 'geodirectory' ) . '" class="button-primary geodir_dummy_button gd-remove-data" onclick="gdInstallDummyData(this,\'' . $nonce . '\',\'' . $post_type . '\'); return false;" ></td>';
 					} else {
-						echo '<td><input type="button" value="' . __( 'Insert data', 'geodirectory' ) . '" class="button-primary geodir_dummy_button" onclick="gdInstallDummyData(this,\'' . $nonce . '\',\'' . $post_type . '\'); return false;" ></td>';
+						echo '<td><input type="button" value="' . __( 'Insert posts', 'geodirectory' ) . '" class="button-primary geodir_dummy_button" onclick="gdInstallDummyData(this,\'' . $nonce . '\',\'' . $post_type . '\'); return false;" ></td>';
 					}
 
 					echo "</tr>";
@@ -980,4 +980,250 @@ class GeoDir_Admin_Dummy_Data {
 		return  $fields;
 	}
 
+	/**
+	 * Insert our dummy widgets.
+	 *
+	 * @param $sidebar_id
+	 *
+	 * @return string|void|WP_Error
+	 */
+	public static function insert_widgets($sidebar_id){
+
+		$sidebar_id = sanitize_title_with_dashes($sidebar_id);
+
+		// confirm the sidebar_id is valid
+		if(empty($sidebar_id) || !array_key_exists($sidebar_id,$GLOBALS['wp_registered_sidebars'])){
+			return new WP_Error( 'gd-dummy-widgets-insert', __( "The sidebar id is not valid.", "geodirectory" ) );
+		}
+
+		$widgets = self::get_dummy_widgets();
+		$sidebars_widgets = get_option( 'sidebars_widgets', array() );
+		$inserted = 0;
+		$exist = 0;
+
+		if(!empty($widgets)){
+			foreach($widgets as $widget_id => $widget_data){
+
+				// only add if not already there:
+				if(isset($sidebars_widgets[$sidebar_id]) && !empty($sidebars_widgets[$sidebar_id])){
+					foreach($sidebars_widgets[$sidebar_id] as $current_widget_id){
+						if(strpos($current_widget_id, $widget_id) !== false){
+							// it already exists so continue
+							$exist++; continue 2;
+						}
+					}
+				}
+
+				self::insert_widget_in_sidebar( $widget_id, $widget_data, $sidebar_id );
+				$inserted++;
+			}
+		}
+
+//
+//		$sidebars_widgets = get_option( 'sidebars_widgets', array() );
+//		print_r($sidebars_widgets);
+//		$widget_id = "gd_dashboard";
+//		$widget_instances = get_option( 'widget_' . $widget_id, array() );
+//		print_r($widget_instances);
+
+		if($inserted == 0 && $exist > 0){
+			return __( 'Widgets already exist, none added.' , 'geodirectory' );
+		}elseif($inserted > 0){
+			return __( 'Widgets inserted' , 'geodirectory' );
+		}else{
+			return __( 'Something went wrong and no inserted, you can do this manually in Appearance > Widgets' , 'geodirectory' );
+		}
+
+	}
+
+	/**
+	 * The dummy widgets we want to install.
+	 *
+	 * @return mixed|void
+	 */
+	public static function get_dummy_widgets(){
+
+		$widgets = array(
+			// show the authro action on the details sidebar
+			'gd_author_actions' => array(
+				'hide_edit'          => false,
+				'hide_delete'          => false,
+				'gd_wgt_showhide'   => 'show_on',
+				'gd_wgt_restrict'   => array('gd-detail'),
+			),
+			// show details sidebar
+			'gd_output_location' => array(
+				'location'          => '[detail]',
+				'gd_wgt_showhide'   => 'show_on',
+				'gd_wgt_restrict'   => array('gd-detail'),
+			),
+			//@todo insert the map in auto mode here once the map widget is finished
+			// show GD Dashboard
+			'gd_dashboard' => array(
+				'dashboard_title'   => __('GD Dashboard','geodirectory'),
+				'show_login'        => true,
+				'login_title'        => __('Login','geodirectory'),
+				'gd_wgt_showhide'   => 'show',
+				'gd_wgt_restrict'   => array(),
+			),
+
+		);
+		return apply_filters('geodir_dummy_widgets',$widgets);
+	}
+
+	/**
+	 * Insert a widget in a sidebar.
+	 *
+	 * @param string $widget_id   ID of the widget (search, recent-posts, etc.)
+	 * @param array $widget_data  Widget settings.
+	 * @param string $sidebar     ID of the sidebar.
+	 */
+	public static function insert_widget_in_sidebar( $widget_id, $widget_data, $sidebar ) {
+		// Retrieve sidebars, widgets and their instances
+		$sidebars_widgets = get_option( 'sidebars_widgets', array() );
+		$widget_instances = get_option( 'widget_' . $widget_id, array() );
+		// Retrieve the key of the next widget instance
+		$numeric_keys = array_filter( array_keys( $widget_instances ), 'is_int' );
+		$next_key = $numeric_keys ? max( $numeric_keys ) + 1 : 2;
+		// Add this widget to the sidebar
+		if ( ! isset( $sidebars_widgets[ $sidebar ] ) ) {
+			$sidebars_widgets[ $sidebar ] = array();
+		}
+		$sidebars_widgets[ $sidebar ][] = $widget_id . '-' . $next_key;
+		// Add the new widget instance
+		$widget_instances[ $next_key ] = $widget_data;
+		// Store updated sidebars, widgets and their instances
+		update_option( 'sidebars_widgets', $sidebars_widgets );
+		update_option( 'widget_' . $widget_id, $widget_instances );
+	}
+
+	public static function setup_menu($menu_id = '',$menu_location = ''){
+
+		$menu_id = sanitize_title_with_dashes($menu_id);
+		$menu_location = sanitize_title_with_dashes($menu_location);
+
+		// confirm the sidebar_id is valid
+		if(!$menu_id && !$menu_location){
+			return new WP_Error( 'gd-wizard-setup-menu', __( "The menu is not valid.", "geodirectory" ) );
+		}
+
+		$items_added = 0;
+		$items_exist= 0;
+
+		if($menu_id){
+
+
+
+			$menu_exists = wp_get_nav_menu_object( $menu_id );
+
+			if(!$menu_exists){
+				return new WP_Error( 'gd-wizard-setup-menu', __( "The menu is not valid.", "geodirectory" ) );
+			}
+
+			$current_menu_items = wp_get_nav_menu_items( $menu_id );
+//			print_r($current_menu_items);exit;
+			$current_menu_titles = array();
+			// get a list of current slugs so we don't add things twice.
+			if(!empty($current_menu_items)){
+				foreach($current_menu_items as $current_menu_item){
+					if(!empty($current_menu_item->post_name)){
+						$current_menu_titles[] = $current_menu_item->title;
+					}
+				}
+			}
+
+			$gd_menus = new GeoDir_Admin_Menus();
+
+			$gd_menu_items = $gd_menus->get_endpoints();
+			//print_r($gd_menu_items);
+
+			if(!empty($gd_menu_items)){
+				foreach($gd_menu_items as $menu_item_type){
+					if(!empty($menu_item_type)){
+
+//						print_r($menu_item_type);
+
+
+						$menu_item_type = array_map('wp_setup_nav_menu_item', $menu_item_type);
+//						echo '###';
+//						print_r($menu_item_type);
+						//echo '##############';
+
+						foreach($menu_item_type as $menu_item){
+
+//							print_r($current_menu_titles);//exit;
+
+//							echo '###'.$menu_item->title.'###';
+
+							if(!empty($current_menu_titles) && (in_array($menu_item->title,$current_menu_titles) || in_array(str_replace(" page",'',$menu_item->title),$current_menu_titles))){
+								$items_exist++; continue 2;
+							}
+//							print_r($menu_item);
+
+							// setup standard menu stuff
+							$menu_item->{'menu-item-object-id'} = $menu_item->object_id;
+							$menu_item->{'menu-item-object'} = $menu_item->object;
+							$menu_item->{'menu-item-type'} = $menu_item->type;
+							$menu_item->{'menu-item-status'} = 'publish';
+							$menu_item->{'menu-item-classes'} = !empty($menu_item->classes) ? implode(" ",$menu_item->classes) : 'gd-menu-item';
+							if($menu_item->type=='custom'){
+								$menu_item->{'menu-item-url'} = $menu_item->url;
+								$menu_item->{'menu-item-title'} = $menu_item->title;
+							}
+//
+//							echo '###';
+//							print_r($menu_item);
+							// insert the menu item
+							wp_update_nav_menu_item($menu_id, 0, $menu_item);
+							$items_added++;
+						}
+					}
+				}
+			}
+
+//			$menu_exists = wp_get_nav_menu_object( $menu_id );
+//			print_r( $menu_exists );
+//			$menu_exists = wp_get_nav_menu_items( $menu_id );
+//			print_r( $menu_exists );
+
+
+		}elseif($menu_location){
+
+			$menuname = "GD Menu";
+
+			// Does the menu exist already?
+			$menu_exists = wp_get_nav_menu_object( $menuname );
+
+			// If it doesn't exist, let's create it.
+			if( !$menu_exists) {
+				$menu_id = wp_create_nav_menu( $menuname );
+
+				$locations = get_theme_mod( 'nav_menu_locations' );
+
+				if($menu_id){
+					$locations[$menu_location] = $menu_id;
+					set_theme_mod('nav_menu_locations', $locations);
+					return self::setup_menu($menu_id);
+				}
+
+				//echo '##'.$menu_id.'##';
+			}else{
+				//print_r($menu_exists);
+				return new WP_Error( 'gd-wizard-setup-menu', __( "Menu already exists.", "geodirectory" ) );
+			}
+		}
+
+
+		if($items_added == 0 && $items_exist > 0){
+			return __( 'Menu items already exist, none added.' , 'geodirectory' );
+		}elseif($items_added  > 0){
+			return __( 'Menu items added successfully.' , 'geodirectory' );
+		}else{
+			return __( 'Something went wrong, you can manually add items in Appearance > Menus' , 'geodirectory' );
+		}
+
+
+//		return "yeah!";
+		print_r($_REQUEST);exit;
+	}
 }
